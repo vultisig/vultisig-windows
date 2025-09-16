@@ -50,12 +50,12 @@ export const useAutoDiscoverTokens = ({ chain }: Props) => {
     const out: Coin[] = []
     for (const w of whitelisted) {
       const k = coinKeyToString(w)
-      if (seen.has(k)) continue
+      if (seen.has(k) || vaultSet.has(k)) continue
       seen.add(k)
       out.push({ ...w, ...(metaByKey.get(k) ?? {}) })
     }
     return out
-  }, [whitelisted, metaByKey])
+  }, [whitelisted, vaultSet, metaByKey])
 
   const discoveredAccountCoins: AccountCoin[] = useMemo(() => {
     if (!accountAddress) return []

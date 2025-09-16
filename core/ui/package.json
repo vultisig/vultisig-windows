@@ -7,16 +7,16 @@
     "validate-public": "npx tsx scripts/validatePublic.ts"
   },
   "dependencies": {
-    "@bufbuild/protobuf": "^2.2.4",
-    "@core/chain": "workspace:*",
-    "@core/config": "workspace:*",
-    "@core/mpc": "workspace:*",
-    "@lib/codegen": "workspace:*",
-    "@lib/ui": "workspace:*",
-    "@lib/utils": "workspace:*",
-    "@trustwallet/wallet-core": "^4.3.3",
-    "react": "^19.0.0",
+    "@bufbuild/protobuf": "^2.7.0",
+    "@core/chain": "workspace:^",
+    "@core/config": "workspace:^",
+    "@core/mpc": "workspace:^",
+    "@lib/codegen": "workspace:^",
+    "@lib/ui": "workspace:^",
+    "@lib/utils": "workspace:^",
+    "@trustwallet/wallet-core": "^4.3.6",
+    "react": "^19.1.1",
     "react-circular-progressbar": "^2.2.0",
-    "styled-components": "^6.1.16"
+    "styled-components": "^6.1.19"
   }
 }

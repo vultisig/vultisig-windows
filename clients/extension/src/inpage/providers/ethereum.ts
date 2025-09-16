@@ -6,6 +6,7 @@ import {
 } from '@core/chain/chains/evm/chainInfo'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { callBackground } from '@core/inpage-provider/background'
+import { addBackgroundEventListener } from '@core/inpage-provider/background/events/inpage'
 import { callPopup } from '@core/inpage-provider/popup'
 import { Eip712V4Payload } from '@core/inpage-provider/popup/interface'
 import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
@@ -13,14 +14,12 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { attempt, withFallback } from '@lib/utils/attempt'
 import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
-import { getUrlHost } from '@lib/utils/url/host'
 import { validateUrl } from '@lib/utils/validation/url'
 import { ethers, getBytes, isHexString, Signature } from 'ethers'
 import EventEmitter from 'events'
 import { BlockTag, type RpcTransactionRequest } from 'viem'
 
 import { EIP1193Error } from '../../background/handlers/errorHandler'
-import { messengers } from '../messenger'
 import { requestAccount } from './core/requestAccount'
 
 const processSignature = (signature: string) => {
@@ -62,32 +61,11 @@ export class Ethereum extends EventEmitter {
     this.sendAsync = this.request
 
     if (!validateUrl(window.location.href)) {
-      const host = getUrlHost(window.location.href)
-      messengers.popup?.reply(
-        `${EventMethod.ACCOUNTS_CHANGED}:${host}`,
-        async address => {
-          this.selectedAddress = address as string
-          this.emit(EventMethod.ACCOUNTS_CHANGED, [address])
-        }
-      )
-      messengers.popup?.reply(
-        `${EventMethod.CHAIN_CHANGED}:${host}`,
-        async (chainId: number) => {
-          this.emit(EventMethod.CHAIN_CHANGED, chainId)
-        }
-      )
-      messengers.popup?.reply(`${EventMethod.DISCONNECT}:${host}`, async () => {
+      addBackgroundEventListener('disconnect', () => {
         this.connected = false
         this.emit(EventMethod.ACCOUNTS_CHANGED, [])
         this.emit(EventMethod.DISCONNECT, [])
       })
-      messengers.popup?.reply(
-        `${EventMethod.CONNECT}:${host}`,
-        async connectionInfo => {
-          this.connected = true
-          this.emit(EventMethod.CONNECT, connectionInfo)
-        }
-      )
     }
   }
 
@@ -342,7 +320,6 @@ export class Ethereum extends EventEmitter {
                   from,
                   to: tx.to ?? undefined,
                   asset: {
-                    chain: chain,
                     ticker,
                   },
                   amount: tx.value

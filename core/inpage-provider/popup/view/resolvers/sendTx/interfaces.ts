@@ -1,5 +1,4 @@
 import { Chain } from '@core/chain/Chain'
-import { ParsedMemoParams } from '@core/chain/chains/evm/tx/getParsedMemo'
 
 export enum CosmosMsgType {
   MSG_SEND = 'cosmos-sdk/MsgSend',
@@ -90,10 +89,8 @@ export type CosmosMsgPayload =
       value: IMsgDeposit
     }
 
-export type TransactionDetailsAsset = {
-  chain: string
+type TransactionDetailsAsset = {
   ticker: string
-  symbol?: string
   mint?: string
 }
 
@@ -117,13 +114,8 @@ export type IKeysignTransactionPayload = {
   transactionDetails: TransactionDetails
   chain: Chain
   contract?: string
-  memo?: {
-    isParsed: boolean
-    value: string | ParsedMemoParams | undefined
-  }
   gas?: string
   gasLimit?: string
-  txFee?: string
   maxFeePerGas?: string
   maxPriorityFeePerGas?: string
   isDeposit?: boolean

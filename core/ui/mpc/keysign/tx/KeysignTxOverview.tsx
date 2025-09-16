@@ -89,7 +89,7 @@ export const KeysignTxOverview = () => {
               <Text>{toAddress}</Text>
             </VStack>
           )}
-          {memo && <TxOverviewMemo value={memo} />}
+          {memo && <TxOverviewMemo value={memo} chain={chain} />}
           <HStack alignItems="center" gap={4} justifyContent="space-between">
             <Text color="shy" weight="500">
               {t('network')}

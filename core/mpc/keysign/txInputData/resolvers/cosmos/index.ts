@@ -5,7 +5,10 @@ import { getCosmosChainKind } from '@core/chain/chains/cosmos/utils/getCosmosCha
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { areEqualCoins } from '@core/chain/coin/Coin'
 import { nativeSwapChainIds } from '@core/chain/swap/native/NativeSwapChain'
-import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+import {
+  THORChainSpecific,
+  TransactionType,
+} from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
@@ -91,28 +94,40 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
         txMemo: memo,
       }
     },
-    vaultBased: ({ isDeposit }) => {
+    vaultBased: ({ isDeposit, ...rest }) => {
+      const txType =
+        (rest as Partial<THORChainSpecific>).transactionType ??
+        TransactionType.UNSPECIFIED
+
       const fromAddress = toTwAddress({
         address: coin.address,
         walletCore,
         chain,
       })
 
-      if (
-        keysignPayload.contractPayload &&
-        keysignPayload.contractPayload.case === 'wasmExecuteContractPayload'
-      ) {
-        const contractPayload = keysignPayload.contractPayload.value
+      // iOS sometimes attaches an EMPTY wasm payload for memo-based TCY flows.
+      const potentialContractPayload =
+        keysignPayload.contractPayload?.case === 'wasmExecuteContractPayload'
+          ? keysignPayload.contractPayload.value
+          : undefined
 
+      const hasMeaningfulWasm =
+        txType === TransactionType.GENERIC_CONTRACT &&
+        !!potentialContractPayload &&
+        !!potentialContractPayload.senderAddress?.trim() &&
+        !!potentialContractPayload.contractAddress?.trim() &&
+        !!potentialContractPayload.executeMsg?.trim()
+
+      if (hasMeaningfulWasm) {
         return {
           messages: [
             TW.Cosmos.Proto.Message.create({
               wasmExecuteContractGeneric:
                 TW.Cosmos.Proto.Message.WasmExecuteContractGeneric.create({
-                  senderAddress: contractPayload.senderAddress,
-                  contractAddress: contractPayload.contractAddress,
-                  executeMsg: contractPayload.executeMsg,
-                  coins: contractPayload.coins,
+                  senderAddress: potentialContractPayload!.senderAddress,
+                  contractAddress: potentialContractPayload!.contractAddress,
+                  executeMsg: potentialContractPayload!.executeMsg,
+                  coins: potentialContractPayload!.coins ?? [],
                 }),
             }),
           ],
@@ -177,22 +192,16 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
 
       const swapPayload = getSwapPayload()
 
-      const getDepositAmount = () => {
-        if (isDeposit) {
-          return shouldBePresent(keysignPayload.toAmount)
-        }
+      if (
+        isDeposit ||
+        (swapPayload && areEqualCoins(coin, chainFeeCoin[swapPayload.chain]))
+      ) {
+        const amountStr = isDeposit
+          ? (keysignPayload.toAmount ?? '0')
+          : swapPayload!.fromAmount
 
-        if (
-          swapPayload &&
-          areEqualCoins(coin, chainFeeCoin[swapPayload.chain])
-        ) {
-          return swapPayload.fromAmount
-        }
-      }
+        const isPositive = +/^[0-9]+$/.test(amountStr) && BigInt(amountStr) > 0n
 
-      const depositAmount = getDepositAmount()
-
-      if (depositAmount) {
         const depositCoin = TW.Cosmos.Proto.THORChainCoin.create({
           asset: TW.Cosmos.Proto.THORChainAsset.create({
             chain: nativeSwapChainIds[chain as VaultBasedCosmosChain],
@@ -200,8 +209,9 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
             ticker: coin.ticker,
             synth: false,
           }),
-          amount: depositAmount,
-          decimals: new Long(coin.decimals),
+          ...(isPositive
+            ? { amount: amountStr, decimals: new Long(coin.decimals) }
+            : {}),
         })
 
         return {

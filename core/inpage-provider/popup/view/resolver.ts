@@ -7,10 +7,7 @@ import { OnFinishProp } from '@lib/ui/props'
 import { Resolver } from '@lib/utils/types/Resolver'
 import { ReactNode } from 'react'
 
-import {
-  AuthorizedCallContext,
-  UnauthorizedCallContext,
-} from '../../call/context'
+import { MethodBasedContext } from '../../call/context'
 import { PopupResponse } from '../resolver'
 
 export type ResolvePopupInput<M extends PopupMethod> = Pick<
@@ -22,9 +19,7 @@ export type PopupResolver<M extends PopupMethod> = Resolver<
   {
     input: PopupInterface[M]['input']
   } & OnFinishProp<ResolvePopupInput<M>> & {
-      context: M extends AuthorizedPopupMethod
-        ? AuthorizedCallContext
-        : UnauthorizedCallContext
+      context: MethodBasedContext<M, AuthorizedPopupMethod>
     },
   ReactNode
 >

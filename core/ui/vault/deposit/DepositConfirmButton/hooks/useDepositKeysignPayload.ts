@@ -5,7 +5,6 @@ import {
   kujiraCoinMigratedToThorChainDestinationId,
   kujiraCoinThorChainMergeContracts,
 } from '@core/chain/chains/cosmos/thor/kujira-merge'
-import { rujiraStakingConfig } from '@core/chain/chains/cosmos/thor/rujira/config'
 import {
   yieldBearingAssetsAffiliateAddress,
   yieldBearingAssetsAffiliateContract,
@@ -21,6 +20,8 @@ import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysig
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { attempt } from '@lib/utils/attempt'
+import { match } from '@lib/utils/match'
 import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -30,7 +31,14 @@ import { useCurrentVault } from '../../../state/currentVault'
 import { ChainAction } from '../../ChainAction'
 import { useDepositCoin } from '../../providers/DepositCoinProvider'
 import { useDepositChainSpecificQuery } from '../../queries/useDepositChainSpecificQuery'
-import { transactionConfig } from '../config'
+import { stakeModeById } from '../../staking/config'
+import { resolvers, selectStakeId } from '../../staking/resolvers'
+import {
+  NativeTcyInput,
+  RujiInput,
+  StakeKind,
+  StcyInput,
+} from '../../staking/types'
 
 type DepositKeysignPayloadProps = {
   depositFormData: Record<string, unknown>
@@ -44,40 +52,55 @@ export function useDepositKeysignPayload({
   const { t } = useTranslation()
 
   const isUnmerge = action === 'unmerge'
-  const txType =
-    action === 'ibc_transfer'
-      ? TransactionType.IBC_TRANSFER
-      : isUnmerge
-        ? TransactionType.THOR_UNMERGE
-        : action === 'merge'
-          ? TransactionType.THOR_MERGE
-          : action === 'stake_ruji' ||
-              action === 'unstake_ruji' ||
-              action === 'withdraw_ruji_rewards' ||
-              action === 'mint' ||
-              action === 'redeem'
-            ? TransactionType.GENERIC_CONTRACT
-            : undefined
+  const isStake = isOneOf(action, ['stake', 'unstake', 'withdraw_ruji_rewards'])
 
   const [coin] = useDepositCoin()
   const vault = useCurrentVault()
   const walletCore = useAssertWalletCore()
+
+  const autocompound = Boolean(depositFormData['autoCompound'])
+
+  let stakeId: ReturnType<typeof selectStakeId> | undefined = undefined
+  let isStakeContractFlow = false
+
+  if (isStake) {
+    const result = attempt(() => selectStakeId(coin, { autocompound }))
+    if ('data' in result) {
+      stakeId = shouldBePresent(result.data)
+      isStakeContractFlow = stakeModeById[stakeId] === 'wasm'
+    } else {
+      isStakeContractFlow = false
+    }
+  }
+
+  let txType: TransactionType | undefined
+  if (action === 'ibc_transfer') txType = TransactionType.IBC_TRANSFER
+  else if (action === 'merge') txType = TransactionType.THOR_MERGE
+  else if (action === 'unmerge') txType = TransactionType.THOR_UNMERGE
+  else if (action === 'mint' || action === 'redeem' || isStakeContractFlow)
+    txType = TransactionType.GENERIC_CONTRACT
+
   const chainSpecificQuery = useDepositChainSpecificQuery(coin, txType)
+
   const isTonFunction = coin.chain === Chain.Ton
-  const cfg = transactionConfig(coin.chain)[action] || {}
-  const amount = cfg.requiresAmount ? Number(depositFormData['amount']) : 0
   const slippage = Number(depositFormData['slippage'] ?? 0)
   const memo = (depositFormData['memo'] as string) ?? ''
-  const invalid = cfg.requiresAmount && (!Number.isFinite(amount) || amount < 0)
+  const validatorAddress = depositFormData['validatorAddress'] as
+    | string
+    | undefined
+
+  const hasAmount = 'amount' in depositFormData
+  const amount = hasAmount ? Number(depositFormData['amount']) : undefined
+
+  const nodeAddressRaw = depositFormData['nodeAddress']
+  const receiver =
+    typeof nodeAddressRaw === 'string' && nodeAddressRaw.length > 0
+      ? nodeAddressRaw
+      : undefined
+
+  const invalid =
+    hasAmount && (amount == null || !Number.isFinite(amount) || amount <= 0)
   const invalidMessage = invalid ? t('required_field_missing') : undefined
-  const validatorAddress = depositFormData['validatorAddress'] as string
-  const isRujiAction =
-    action === 'stake_ruji' ||
-    action === 'unstake_ruji' ||
-    action === 'withdraw_ruji_rewards'
-  const receiver = cfg.requiresNodeAddress
-    ? (depositFormData['nodeAddress'] as string)
-    : ''
 
   const keysignPayloadQuery = useTransformQueryData(
     chainSpecificQuery,
@@ -103,50 +126,85 @@ export function useDepositKeysignPayload({
           libType: vault.libType,
         }
 
-        if (
-          isOneOf(action, [
-            'stake_ruji',
-            'unstake_ruji',
-            'withdraw_ruji_rewards',
-          ])
-        ) {
-          const amount = Number(depositFormData['amount'] ?? 0)
-          const amountUnits =
-            action === 'stake_ruji'
-              ? toChainAmount(amount, coin.decimals).toString()
-              : action === 'unstake_ruji'
-                ? toChainAmount(amount, coin.decimals).toString()
-                : '0'
+        if (receiver) basePayload.toAddress = receiver
+        if (hasAmount && Number.isFinite(amount)) {
+          basePayload.toAmount = toChainAmount(
+            amount!,
+            coin.decimals
+          ).toString()
+        }
 
-          const executeInnerObj =
-            action === 'stake_ruji'
-              ? { account: { bond: {} } }
-              : action === 'unstake_ruji'
-                ? { account: { withdraw: { amount: amountUnits } } }
-                : { account: { claim: {} } }
+        if (isStake && stakeId) {
+          const actionAsStakeAction =
+            action === 'withdraw_ruji_rewards' ? 'claim' : (action as StakeKind)
 
-          const executeInner = JSON.stringify(executeInnerObj)
+          const stakeSpecific = resolvers[stakeId]
 
-          basePayload.contractPayload = {
-            case: 'wasmExecuteContractPayload',
-            value: {
-              senderAddress: coin.address,
-              contractAddress: rujiraStakingConfig.contract,
-              executeMsg: executeInner,
-              coins:
-                action === 'stake_ruji'
-                  ? [
-                      {
-                        denom: rujiraStakingConfig.bondDenom,
-                        amount: amountUnits,
-                      },
-                    ]
-                  : [],
+          let input: RujiInput | NativeTcyInput | StcyInput | null = null
+
+          match(actionAsStakeAction, {
+            stake: () => {
+              input = { kind: 'stake', amount: shouldBePresent(amount) }
             },
-          }
-          basePayload.toAddress = rujiraStakingConfig.contract
-          basePayload.toAmount = action === 'stake_ruji' ? amountUnits : '0'
+            unstake: () => {
+              if (stakeId === 'stcy') {
+                input = { kind: 'unstake', amount: shouldBePresent(amount) }
+              } else if (stakeId === 'native-tcy') {
+                const raw = depositFormData['percentage']
 
+                const pct =
+                  typeof raw === 'string' && raw.trim() === ''
+                    ? NaN
+                    : Number(raw)
+
+                const pctValid = Number.isFinite(pct) && pct > 0 && pct <= 100
+                input = pctValid
+                  ? { kind: 'unstake', percentage: pct }
+                  : { kind: 'unstake', amount: shouldBePresent(amount) }
+              } else {
+                input = {
+                  kind: 'unstake',
+                  amount: shouldBePresent(amount),
+                }
+              }
+            },
+            claim: () => {
+              input = { kind: 'claim' }
+            },
+          })
+
+          if (!input) {
+            throw new Error('Failed to construct stake input')
+          }
+
+          const intent = stakeSpecific({
+            coin,
+            input,
+          })
+
+          if (intent.kind === 'wasm') {
+            basePayload.memo = ''
+            basePayload.toAddress = ''
+            basePayload.toAmount = '0'
+            basePayload.contractPayload = {
+              case: 'wasmExecuteContractPayload',
+              value: {
+                senderAddress: coin.address,
+                contractAddress: intent.contract,
+                executeMsg:
+                  typeof intent.executeMsg === 'string'
+                    ? intent.executeMsg
+                    : JSON.stringify(intent.executeMsg),
+                coins: intent.funds,
+              },
+            }
+            return { keysign: create(KeysignPayloadSchema, basePayload) }
+          }
+
+          delete basePayload.contractPayload
+          basePayload.memo = intent.memo
+          basePayload.toAddress = ''
+          basePayload.toAmount = intent.toAmount ?? '0'
           return { keysign: create(KeysignPayloadSchema, basePayload) }
         }
 
@@ -183,6 +241,7 @@ export function useDepositKeysignPayload({
 
             funds = [{ denom: baseDenom, amount: amountUnits }]
 
+            basePayload.memo = ''
             basePayload.contractPayload = {
               case: 'wasmExecuteContractPayload',
               value: {
@@ -208,6 +267,7 @@ export function useDepositKeysignPayload({
               },
             ]
 
+            basePayload.memo = ''
             basePayload.contractPayload = {
               case: 'wasmExecuteContractPayload',
               value: {
@@ -220,35 +280,31 @@ export function useDepositKeysignPayload({
           }
 
           basePayload.toAmount = amountUnits
-          basePayload.memo = memo
-
           return { keysign: create(KeysignPayloadSchema, basePayload) }
         }
 
         if (
           isOneOf(action, [
-            'unstake',
             'leave',
             'unbound',
-            'stake',
             'bond',
             'ibc_transfer',
             'switch',
             'merge',
-            'unmerge_ruji',
           ])
         ) {
-          basePayload.toAddress = shouldBePresent(
-            isRujiAction
-              ? rujiraStakingConfig.contract
-              : isTonFunction
-                ? validatorAddress
-                : receiver
-          )
-          basePayload.toAmount = toChainAmount(
-            shouldBePresent(amount),
-            coin.decimals
-          ).toString()
+          delete basePayload.contractPayload
+          if (isTonFunction) {
+            basePayload.toAddress = shouldBePresent(validatorAddress)
+          } else if (receiver) {
+            basePayload.toAddress = receiver
+          }
+          if (hasAmount && Number.isFinite(amount)) {
+            basePayload.toAmount = toChainAmount(
+              shouldBePresent(amount),
+              coin.decimals
+            ).toString()
+          }
         } else if (isUnmerge) {
           let contractAddress: string
 
@@ -270,10 +326,12 @@ export function useDepositKeysignPayload({
             coin.decimals
           ).toString()
         } else if (!isOneOf(action, ['vote'])) {
-          basePayload.toAmount = toChainAmount(
-            shouldBePresent(amount),
-            coin.decimals
-          ).toString()
+          if (hasAmount && Number.isFinite(amount)) {
+            basePayload.toAmount = toChainAmount(
+              shouldBePresent(amount),
+              coin.decimals
+            ).toString()
+          }
         }
 
         return { keysign: create(KeysignPayloadSchema, basePayload) }
@@ -283,12 +341,14 @@ export function useDepositKeysignPayload({
         amount,
         coin,
         depositFormData,
-        isRujiAction,
+        hasAmount,
+        isStake,
         isTonFunction,
         isUnmerge,
         memo,
         receiver,
         slippage,
+        stakeId,
         validatorAddress,
         vault.hexChainCode,
         vault.libType,

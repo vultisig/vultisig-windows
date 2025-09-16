@@ -8,7 +8,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { FailedQueryOverlay } from '@lib/ui/query/components/overlay/FailedQueryOverlay'
 import { PendingQueryOverlay } from '@lib/ui/query/components/overlay/PendingQueryOverlay'
 import { StrictText } from '@lib/ui/text'
-import { t } from 'i18next'
+import { useTranslation } from 'react-i18next'
 
 type ManageFeeSettingsFrameProps = {
   render: (props: OnCloseProp) => React.ReactNode
@@ -17,6 +17,7 @@ type ManageFeeSettingsFrameProps = {
 export const ManageFeeSettingsFrame = ({
   render,
 }: ManageFeeSettingsFrameProps) => {
+  const { t } = useTranslation()
   const chainSpecificQuery = useSendChainSpecificQuery()
 
   return (

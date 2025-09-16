@@ -10,7 +10,7 @@ type ParseSolanaTxInput = { walletCore: WalletCore; inputTx: Uint8Array }
 export const parseSolanaTx = async ({
   walletCore,
   inputTx,
-}: ParseSolanaTxInput): Promise<ParsedResult | null> => {
+}: ParseSolanaTxInput): Promise<ParsedResult> => {
   const connection = new Connection(solanaRpcUrl)
   const txInputDataArray = Object.values(inputTx)
   const txInputDataBuffer = new Uint8Array(txInputDataArray as any)
@@ -26,7 +26,9 @@ export const parseSolanaTx = async ({
     throw new Error('Invalid Solana transaction: missing v0 transaction data')
 
   const v0 = decodedTx.transaction?.v0
-  if (!v0) return null
+  if (!v0) {
+    throw new Error('Invalid Solana transaction: missing v0 transaction data')
+  }
 
   const staticKeys = (v0.accountKeys ?? []).map(k => new PublicKey(k))
   const resolvedKeys = await resolveAddressTableKeys(

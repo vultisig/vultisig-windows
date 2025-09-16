@@ -37,7 +37,7 @@ export const TxSuccess = ({
   const { openUrl } = useCore()
 
   const formattedToAmount = useMemo(() => {
-    if (!toAmount) return null
+    if (!toAmount) return 0
 
     return fromChainAmount(BigInt(toAmount), coin.decimals)
   }, [toAmount, coin.decimals])
@@ -52,7 +52,7 @@ export const TxSuccess = ({
     <>
       <TransactionSuccessAnimation />
       <VStack gap={8}>
-        {formattedToAmount !== null && (
+        {formattedToAmount > 0 && (
           <TxOverviewAmount amount={formattedToAmount} value={coin} />
         )}
         <List>
@@ -66,7 +66,9 @@ export const TxSuccess = ({
                 justifyContent="flex-end"
               >
                 <TruncatedTextWrapper>
-                  <MiddleTruncate text={txHash} />
+                  <Text size={14}>
+                    <MiddleTruncate width={85} text={txHash} />
+                  </Text>
                 </TruncatedTextWrapper>
                 <TxRowIconButton onClick={() => copyToClipboard(txHash)}>
                   <ClipboardCopyIcon />
@@ -114,7 +116,5 @@ const TxRowIconButton = styled(IconWrapper).attrs({
 const TruncatedTextWrapper = styled.div`
   ${hStack({
     justifyContent: 'flex-end',
-  })}
-  max-width: 85px;
-  overflow-x: hidden;
+  })};
 `

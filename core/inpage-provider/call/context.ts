@@ -9,6 +9,13 @@ export type AuthorizedCallContext = BridgeContext & {
   appSession: VaultAppSession
 }
 
-export type UnauthorizedCallContext = BridgeContext
+type UnauthorizedCallContext = BridgeContext
 
 export type CallContext = UnauthorizedCallContext | AuthorizedCallContext
+
+export type MethodBasedContext<
+  K extends string,
+  AuthorizedMethods extends string,
+> = K extends AuthorizedMethods
+  ? AuthorizedCallContext
+  : UnauthorizedCallContext
