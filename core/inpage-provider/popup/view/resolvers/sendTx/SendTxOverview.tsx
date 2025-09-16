@@ -114,9 +114,23 @@ export const SendTxOverview = () => {
     )
   )
 
+  const adjustedFeeSettingsQuery = useTransformQueryData(
+    initialFeeSettingsQuery,
+    useCallback(
+      initialFeeSettings => {
+        if (feeSettings) {
+          return feeSettings
+        }
+
+        return initialFeeSettings
+      },
+      [feeSettings]
+    )
+  )
+
   const keysignPayloadQuery = useStateDependentQuery(
     {
-      feeSettings,
+      feeSettings: adjustedFeeSettingsQuery.data,
       transactionPayload,
       walletCore,
       vault,
