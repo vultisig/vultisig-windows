@@ -153,8 +153,11 @@ export const SendTxOverview = () => {
             <Spinner />
           </VStack>
         )}
-        error={() => (
-          <FlowErrorPageContent title="Failed to process transaction" />
+        error={error => (
+          <FlowErrorPageContent
+            error={error}
+            title="Failed to process transaction"
+          />
         )}
         success={keysignPayload => (
           <List>
