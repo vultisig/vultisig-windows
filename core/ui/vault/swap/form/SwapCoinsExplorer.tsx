@@ -106,6 +106,7 @@ export const SwapCoinsExplorer = ({
                 role="tablist"
                 aria-label={t('select_network')}
                 onKeyDown={onKeyDown}
+                tabIndex={0}
               >
                 {coinOptions.map(c => {
                   const chain = c.chain
@@ -157,22 +158,17 @@ const CarouselWrapper = styled.div`
   overflow-x: auto;
   ${hideScrollbars};
   -webkit-overflow-scrolling: touch;
-  contain: content;
 
   scroll-snap-type: x mandatory;
-  scroll-snap-stop: always;
   scroll-padding: 0 50%;
 
-  &::before,
-  &::after {
-    content: '';
-    flex: 0 0 50%;
-  }
+  padding-inline: 50%;
 `
 
 const FooterItem = styled.div<IsActiveProp>`
   ${hStack({ gap: 6, alignItems: 'center' })};
   flex-shrink: 0;
+  scroll-snap-stop: always;
   cursor: pointer;
   padding: 8px 12px 8px 8px;
   border-radius: 99px;
@@ -211,6 +207,7 @@ const CenterStroke = styled.div`
     width 200ms ease,
     box-shadow 200ms ease;
   will-change: width;
+  width: 44px;
 `
 
 const FooterText = styled(Text)`
