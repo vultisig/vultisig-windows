@@ -1,3 +1,4 @@
+import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { Vault } from '@core/ui/vault/Vault'
@@ -18,13 +19,20 @@ type Input = {
   vault: Vault
   parsedTx: ParsedTx
   transactionPayload: ITransactionPayload
+  coin: AccountCoin
 }
 
 export const getTxKeysignPayloadQuery = ({ walletCore, ...input }: Input) => ({
   queryKey: ['tx-keysign-payload', input],
   queryFn: () => {
-    const { feeSettings, parsedTx, requestOrigin, vault, transactionPayload } =
-      input
+    const {
+      feeSettings,
+      parsedTx,
+      requestOrigin,
+      vault,
+      transactionPayload,
+      coin,
+    } = input
     return matchRecordUnion<ParsedTx, Promise<KeysignPayload>>(parsedTx, {
       tx: transaction =>
         getKeysignPayload({
@@ -32,20 +40,22 @@ export const getTxKeysignPayloadQuery = ({ walletCore, ...input }: Input) => ({
           vault,
           walletCore,
           feeSettings,
+          coin,
         }),
       psbt: psbt => {
         const { skipBroadcast, params } = getRecordUnionValue(
           transactionPayload,
           'serialized'
         )
-        return getPsbtKeysignPayload(
+        return getPsbtKeysignPayload({
           psbt,
           walletCore,
           vault,
           feeSettings,
+          coin,
+          params,
           skipBroadcast,
-          params
-        )
+        })
       },
       solanaTx: solanaTx => {
         const { data, skipBroadcast } = getRecordUnionValue(
@@ -60,6 +70,7 @@ export const getTxKeysignPayloadQuery = ({ walletCore, ...input }: Input) => ({
           walletCore,
           skipBroadcast,
           requestOrigin,
+          coin,
         })
       },
     })

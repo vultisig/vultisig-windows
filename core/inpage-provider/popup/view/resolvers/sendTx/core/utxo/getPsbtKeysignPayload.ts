@@ -3,12 +3,12 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
 import { getPsbtTransferInfo } from '@core/chain/chains/utxo/tx/getPsbtTransferInfo'
 import { getUtxos } from '@core/chain/chains/utxo/tx/getUtxos'
+import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { assertChainField } from '@core/chain/utils/assertChainField'
 import { storage } from '@core/extension/storage'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
-import { CoinSchema } from '@core/mpc/types/vultisig/keysign/v1/coin_pb'
 import {
   KeysignPayload,
   KeysignPayloadSchema,
@@ -21,14 +21,25 @@ import { WalletCore } from '@trustwallet/wallet-core'
 import { Psbt } from 'bitcoinjs-lib'
 
 import { restrictPsbtToInputs } from './restrictPsbt'
-export const getPsbtKeysignPayload = async (
-  psbtB64: string,
-  walletCore: WalletCore,
-  vault: Vault,
-  gasSettings: FeeSettings | null,
-  skipBroadcast?: boolean,
+
+type GetPsbtKeysignPayloadInput = {
+  psbt: Psbt
+  walletCore: WalletCore
+  vault: Vault
+  feeSettings: FeeSettings | null
+  coin: AccountCoin
   params?: Record<string, any>[]
-): Promise<KeysignPayload> => {
+  skipBroadcast?: boolean
+}
+export const getPsbtKeysignPayload = async ({
+  psbt,
+  walletCore,
+  vault,
+  feeSettings,
+  coin,
+  params,
+  skipBroadcast,
+}: GetPsbtKeysignPayloadInput): Promise<KeysignPayload> => {
   const vaultsCoins = await storage.getCoins()
   const accountCoin = shouldBePresent(
     vaultsCoins[getVaultId(vault)].find(
@@ -50,16 +61,15 @@ export const getPsbtKeysignPayload = async (
       throw new Error('No entries for wallet address')
     }
     const limitedPsbtB64 = restrictPsbtToInputs(
-      psbtB64,
+      psbt,
       currentWalletEntries.map(p => ({
         signingIndexes: p.signingIndexes,
         sigHash: p.sigHash,
       })),
       Buffer.from(publicKey.data())
     )
-    psbtB64 = limitedPsbtB64
+    psbt = limitedPsbtB64
   }
-  const psbt = Psbt.fromBase64(psbtB64)
 
   const { recipient, sendAmount } = getPsbtTransferInfo(
     psbt,
@@ -67,24 +77,11 @@ export const getPsbtKeysignPayload = async (
   )
 
   const chainSpecific = await getChainSpecific({
-    coin: accountCoin,
-    amount: fromChainAmount(Number(sendAmount) || 0, accountCoin.decimals),
-    feeSettings: gasSettings,
-    psbt,
+    coin,
+    amount: fromChainAmount(Number(sendAmount) || 0, coin.decimals),
+    feeSettings,
+    psbt: psbt,
   })
-
-  const coin = create(CoinSchema, {
-    chain: Chain.Bitcoin,
-    ticker: accountCoin.ticker,
-    address: accountCoin.address,
-    decimals: accountCoin.decimals,
-    hexPublicKey: Buffer.from(publicKey.data()).toString('hex'),
-    isNativeToken: isFeeCoin(accountCoin),
-    logo: accountCoin.logo,
-    priceProviderId: accountCoin.priceProviderId ?? '',
-    contractAddress: accountCoin.id,
-  })
-
   const keysignPayload = create(KeysignPayloadSchema, {
     toAddress: recipient,
     toAmount: sendAmount.toString(),

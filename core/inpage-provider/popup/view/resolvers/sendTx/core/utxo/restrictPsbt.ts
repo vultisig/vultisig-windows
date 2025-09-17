@@ -6,12 +6,10 @@ type InputsToSign = Array<{
 }>
 
 export const restrictPsbtToInputs = (
-  psbtBase64: string,
+  psbt: Psbt,
   entries: InputsToSign,
   ourPubkey: Buffer
-): string => {
-  const psbt = Psbt.fromBase64(psbtBase64)
-
+): Psbt => {
   const perIndex: Map<number, { sigHash?: number }> = new Map()
   for (const e of entries) {
     for (const idx of e.signingIndexes || []) {
@@ -65,5 +63,5 @@ export const restrictPsbtToInputs = (
     }
   })
 
-  return psbt.toBase64()
+  return psbt
 }

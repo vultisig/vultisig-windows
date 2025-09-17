@@ -2,6 +2,7 @@ import { Chain } from '@core/chain/Chain'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useQuery } from '@tanstack/react-query'
+import { Psbt } from 'bitcoinjs-lib'
 
 import { usePopupInput } from '../../../state/input'
 import { parseSolanaTx } from '../core/solana/parser'
@@ -16,7 +17,7 @@ type ParsedTx =
       solanaTx: ParsedResult
     }
   | {
-      psbt: string
+      psbt: Psbt
     }
 
 export const useParsedTxQuery = () => {
@@ -34,7 +35,7 @@ export const useParsedTxQuery = () => {
           }),
           serialized: async ({ data, chain }) => {
             if (chain === Chain.Bitcoin) {
-              return { psbt: data }
+              return { psbt: Psbt.fromBase64(data) }
             }
 
             const serialized = Uint8Array.from(Buffer.from(data, 'base64'))
@@ -48,5 +49,6 @@ export const useParsedTxQuery = () => {
         }
       )
     },
+    retry: false,
   })
 }
