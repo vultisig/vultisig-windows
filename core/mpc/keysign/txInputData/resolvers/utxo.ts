@@ -19,7 +19,6 @@ export const getUtxoTxInputData = ({
   chain,
   publicKey,
 }: GetTxInputDataInput<'utxo'>) => {
-  // @ts-expect-error - @Ehsan-saradar remove this comment when commondata is updated
   const { byteFee, sendMaxAmount, psbt } = getBlockchainSpecificValue(
     keysignPayload.blockchainSpecific,
     'utxoSpecific'

@@ -35,10 +35,7 @@ export const useParsedTxQuery = () => {
           }),
           serialized: async ({ data, chain }) => {
             if (chain === Chain.Bitcoin) {
-              const dataBuffer = Buffer.from(data, 'base64')
-              const psbt = Psbt.fromBuffer(Buffer.from(dataBuffer))
-
-              return { psbt }
+              return { psbt: Psbt.fromBase64(data) }
             }
 
             const serialized = Uint8Array.from(Buffer.from(data, 'base64'))

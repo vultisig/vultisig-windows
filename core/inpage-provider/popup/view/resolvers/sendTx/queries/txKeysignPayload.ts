@@ -42,8 +42,21 @@ export const getTxKeysignPayloadQuery = ({ walletCore, ...input }: Input) => ({
           feeSettings,
           coin,
         }),
-      psbt: psbt =>
-        getPsbtKeysignPayload({ psbt, walletCore, vault, feeSettings, coin }),
+      psbt: psbt => {
+        const { skipBroadcast, params } = getRecordUnionValue(
+          transactionPayload,
+          'serialized'
+        )
+        return getPsbtKeysignPayload({
+          psbt,
+          walletCore,
+          vault,
+          feeSettings,
+          coin,
+          params,
+          skipBroadcast,
+        })
+      },
       solanaTx: solanaTx => {
         const { data, skipBroadcast } = getRecordUnionValue(
           transactionPayload,
