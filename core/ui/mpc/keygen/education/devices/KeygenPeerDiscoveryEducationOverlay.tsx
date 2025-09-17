@@ -2,6 +2,7 @@ import { Animation } from '@lib/ui/animations/Animation'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
 import { OnFinishProp } from '@lib/ui/props'
+import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { GradientText, Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { FC } from 'react'
@@ -19,7 +20,7 @@ export const KeygenPeerDiscoveryEducationOverlay: FC<OnFinishProp> = ({
         <OverlayContentWrapper justifyContent="center" gap={36}>
           <PhoneImageWrapper>
             <PhoneImageOverlay />
-            <img src="/assets/images/vultisig-peak.svg" alt="" />
+            <img src="/assets/images/vultisig-peak.png" alt="" />
             <RiveWrapper>
               <Animation src="/core/animations/pulse.riv" />
             </RiveWrapper>
@@ -29,7 +30,7 @@ export const KeygenPeerDiscoveryEducationOverlay: FC<OnFinishProp> = ({
               {t('scanThe')}{' '}
               <GradientText as="span">{t('qrCode')}</GradientText>
             </Text>
-            <Text centerHorizontally size={14} weight={500} color="supporting">
+            <Text centerHorizontally size={14} weight={500} color="shyExtra">
               {t('downloadVultisig')}
             </Text>
           </VStack>
@@ -78,8 +79,8 @@ const PhoneImageWrapper = styled(VStack)`
   border-bottom-left-radius: 44px;
   border-bottom-right-radius: 44px;
   object-fit: contain;
-  width: 600px;
-  height: 450px;
+  width: 100%;
+  height: 260px;
   overflow: hidden;
   box-shadow:
     0px -1.284px 5.136px 0px rgba(255, 255, 255, 0.2) inset,
@@ -87,7 +88,21 @@ const PhoneImageWrapper = styled(VStack)`
   padding: 0px 24px 24px 24px;
   background-color: ${getColor('foregroundExtra')};
 
+  @media ${mediaQuery.tabletDeviceAndUp} {
+    width: 600px;
+    height: 450px;
+  }
+
   & > img {
-    margin-top: -50px;
+    opacity: 0.75;
+    width: 100%;
+    object-fit: cover;
+    margin-top: -407px;
+
+    @media ${mediaQuery.tabletDeviceAndUp} {
+      margin-top: -780px;
+      width: auto;
+      height: auto;
+    }
   }
 `
