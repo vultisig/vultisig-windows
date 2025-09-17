@@ -60,11 +60,11 @@ export const SendTxOverview = () => {
   const initialFeeSettingsQuery = useTxInitialFeeSettings()
 
   const [feeSettings, setFeeSettings] = useStateCorrector(
-    useState<FeeSettings | undefined | null>(null),
+    useState<FeeSettings | null>(null),
     useCallback(
       state => {
         const { data } = initialFeeSettingsQuery
-        if (data !== undefined && state === undefined) {
+        if (data && state === null) {
           return data
         }
 
@@ -117,7 +117,7 @@ export const SendTxOverview = () => {
     initialFeeSettingsQuery,
     useCallback(
       initialFeeSettings => {
-        if (feeSettings !== undefined) {
+        if (feeSettings !== null) {
           return feeSettings
         }
 
