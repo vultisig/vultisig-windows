@@ -7,6 +7,7 @@ import { rippleTxFee } from '@core/chain/tx/fee/ripple'
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 
+import { suiAverageSendGas } from '../../chains/sui/config'
 import { nativeTxFeeRune } from './thorchain/config'
 
 export const getFeeAmount = (chainSpecific: KeysignChainSpecific): bigint =>
@@ -14,7 +15,8 @@ export const getFeeAmount = (chainSpecific: KeysignChainSpecific): bigint =>
     utxoSpecific: ({ byteFee }) => BigInt(byteFee) * BigInt(250), // assume the average size of an UTXO transaction is 250 vbytes
     ethereumSpecific: ({ maxFeePerGasWei, gasLimit }) =>
       BigInt(maxFeePerGasWei) * BigInt(gasLimit),
-    suicheSpecific: ({ referenceGasPrice }) => BigInt(referenceGasPrice),
+    suicheSpecific: ({ referenceGasPrice }) =>
+      BigInt(referenceGasPrice) * suiAverageSendGas,
     solanaSpecific: ({ priorityFee }) =>
       BigInt(priorityFee) == BigInt(0)
         ? BigInt(solanaConfig.priorityFeeLimit)
