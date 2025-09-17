@@ -15,29 +15,32 @@ export const runBridgeBackgroundAgent = <
 }: {
   handleRequest: (input: BackgroundRequestHandler<TMessage, TResponse>) => void
 }) => {
-  chrome.runtime.onMessage.addListener((request, { origin }, sendResponse) => {
-    if (!origin) return
+  chrome.runtime.onMessage.addListener(
+    (request, { origin, tab }, sendResponse) => {
+      if (!origin) return
 
-    if (!isBridgeMessage(request, 'inpage')) {
-      return
+      if (!isBridgeMessage(request, 'inpage')) {
+        return
+      }
+
+      const { id, message } = request
+
+      handleRequest({
+        message: message as TMessage,
+        context: {
+          requestFavicon: tab?.favIconUrl,
+          requestOrigin: origin,
+        },
+        reply: (response: TResponse) => {
+          sendResponse({
+            id,
+            sourceId: getBridgeMessageSourceId('background'),
+            message: response,
+          })
+        },
+      })
+
+      return true
     }
-
-    const { id, message } = request
-
-    handleRequest({
-      message: message as TMessage,
-      context: {
-        requestOrigin: origin,
-      },
-      reply: (response: TResponse) => {
-        sendResponse({
-          id,
-          sourceId: getBridgeMessageSourceId('background'),
-          message: response,
-        })
-      },
-    })
-
-    return true
-  })
+  )
 }

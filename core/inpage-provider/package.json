@@ -14,6 +14,7 @@
     "@lib/utils": "workspace:^",
     "@solana/spl-token": "^0.4.14",
     "@solana/web3.js": "^1.98.4",
-    "bitcoinjs-lib": "^6.1.7"
+    "bitcoinjs-lib": "^6.1.7",
+    "styled-components": "^6.1.19"
   }
 }
