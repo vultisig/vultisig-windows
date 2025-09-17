@@ -28,6 +28,7 @@ const defaultGasRecord: Record<CosmosSpecificChain, number> = {
 export const getCosmosSpecific: ChainSpecificResolver<CosmosSpecific> = async ({
   coin,
   transactionType = TransactionType.UNSPECIFIED,
+  timeoutTimestamp,
 }) => {
   const chain = coin.chain as CosmosSpecificChain
   const { accountNumber, sequence, latestBlock } = await getCosmosAccountInfo({
@@ -37,13 +38,20 @@ export const getCosmosSpecific: ChainSpecificResolver<CosmosSpecific> = async ({
 
   const gas = BigInt(defaultGasRecord[chain])
 
+  // latestBlock carries "height_timeoutNs". If a Cosmos timeout timestamp is provided,
+  // honor it by replacing the suffix while keeping the height prefix.
+  const latestBlockStr = latestBlock.toString()
+  const latestBlockWithTimeout = timeoutTimestamp
+    ? `${latestBlockStr.split('_')[0]}_${timeoutTimestamp}`
+    : latestBlockStr
+
   return create(CosmosSpecificSchema, {
     accountNumber: BigInt(accountNumber),
     sequence: BigInt(sequence),
     gas,
     transactionType,
     ibcDenomTraces: {
-      latestBlock: latestBlock.toString(),
+      latestBlock: latestBlockWithTimeout,
       baseDenom: '',
       path: '',
     },

@@ -45,6 +45,7 @@ import { CosmosMsgType } from './interfaces'
 import { ManageEvmFee } from './ManageEvmFee'
 import { useGetCoinQuery } from './queries/coin'
 import { useParsedTxQuery } from './queries/parsedTx'
+import { getTxChainSpecificQuery } from './queries/txChainSpecific'
 import { useTxInitialFeeSettings } from './queries/txInitialFeeSettings'
 import { getTxKeysignPayloadQuery } from './queries/txKeysignPayload'
 
@@ -126,21 +127,30 @@ export const SendTxOverview = () => {
     )
   )
 
-  const keysignPayloadQuery = useQueriesDependentQuery(
+  const chainSpecificQuery = useQueriesDependentQuery(
     {
       feeSettings: adjustedFeeSettingsQuery,
       parsedTx: parsedTxQuery,
       coin: accountCoinQuery,
     },
-    ({ feeSettings, parsedTx, coin }) =>
+    getTxChainSpecificQuery
+  )
+
+  const keysignPayloadQuery = useQueriesDependentQuery(
+    {
+      chainSpecific: chainSpecificQuery,
+      parsedTx: parsedTxQuery,
+      coin: accountCoinQuery,
+    },
+    ({ chainSpecific, parsedTx, coin }) =>
       getTxKeysignPayloadQuery({
-        feeSettings,
         transactionPayload,
         walletCore,
         vault,
         requestOrigin,
         parsedTx,
         coin,
+        chainSpecific,
       })
   )
 
