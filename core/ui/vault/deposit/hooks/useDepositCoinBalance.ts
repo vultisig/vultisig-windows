@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 
 import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'
 import { useVaultChainCoinsQuery } from '../../queries/useVaultChainCoinsQuery'
-import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
+import { useCurrentVaultAddress } from '../../state/currentVaultCoins'
 import { ChainAction } from '../ChainAction'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
 import { useMergeableTokenBalancesQuery } from './useMergeableTokenBalancesQuery'
@@ -18,7 +18,7 @@ export const useDepositCoinBalance = ({ action, chain }: Params) => {
   const [selectedCoin] = useDepositCoin()
   const { data: vaultCoins = [] } = useVaultChainCoinsQuery(chain)
   const vaultEntry = vaultCoins.find(c => c.id === selectedCoin.id)
-  const thorAddr = useCurrentVaultCoin(selectedCoin)?.address
+  const thorAddr = useCurrentVaultAddress(Chain.THORChain)
 
   const { data: yTokenRawBalance = 0n } = useBalanceQuery({
     chain: Chain.THORChain,

@@ -23,17 +23,16 @@ import {
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
-import { Center } from '@lib/ui/layout/Center'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
+import { useQueriesDependentQuery } from '@lib/ui/query/hooks/useQueriesDependentQuery'
+import { useQueryDependentQuery } from '@lib/ui/query/hooks/useQueryDependentQuery'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
 import { Text } from '@lib/ui/text'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { formatUnits } from 'ethers'
 import { useCallback, useState } from 'react'
@@ -83,45 +82,66 @@ export const SendTxOverview = () => {
 
   const getCoinQuery = useGetCoinQuery()
 
-  const coinQuery = useStateDependentQuery(
-    { coinKey: coinKeyQuery.data },
-    ({ coinKey }) => getCoinQuery(coinKey)
+  const coinQuery = useQueryDependentQuery(coinKeyQuery, coinKey =>
+    getCoinQuery(coinKey)
   )
 
   const accountCoinQuery = useTransformQueryData(
     coinQuery,
-    (coin): AccountCoin => {
-      const publicKey = getPublicKey({
-        chain: coin.chain,
-        walletCore,
-        hexChainCode: vault.hexChainCode,
-        publicKeys: vault.publicKeys,
-      })
+    useCallback(
+      (coin): AccountCoin => {
+        const publicKey = getPublicKey({
+          chain: coin.chain,
+          walletCore,
+          hexChainCode: vault.hexChainCode,
+          publicKeys: vault.publicKeys,
+        })
 
-      const address = deriveAddress({
-        chain: coin.chain,
-        publicKey,
-        walletCore,
-      })
+        const address = deriveAddress({
+          chain: coin.chain,
+          publicKey,
+          walletCore,
+        })
 
-      return {
-        ...coin,
-        address,
-      }
-    }
+        return {
+          ...coin,
+          address,
+        }
+      },
+      [vault.hexChainCode, vault.publicKeys, walletCore]
+    )
   )
 
-  const keysignPayloadQuery = useStateDependentQuery(
+  const adjustedFeeSettingsQuery = useTransformQueryData(
+    initialFeeSettingsQuery,
+    useCallback(
+      initialFeeSettings => {
+        if (feeSettings !== undefined) {
+          return feeSettings
+        }
+
+        return initialFeeSettings
+      },
+      [feeSettings]
+    )
+  )
+
+  const keysignPayloadQuery = useQueriesDependentQuery(
     {
-      feeSettings,
-      transactionPayload,
-      walletCore,
-      vault,
-      requestOrigin,
-      parsedTx: parsedTxQuery.data,
-      coin: accountCoinQuery.data,
+      feeSettings: adjustedFeeSettingsQuery,
+      parsedTx: parsedTxQuery,
+      coin: accountCoinQuery,
     },
-    getTxKeysignPayloadQuery
+    ({ feeSettings, parsedTx, coin }) =>
+      getTxKeysignPayloadQuery({
+        feeSettings,
+        transactionPayload,
+        walletCore,
+        vault,
+        requestOrigin,
+        parsedTx,
+        coin,
+      })
   )
 
   return (
@@ -129,12 +149,15 @@ export const SendTxOverview = () => {
       <MatchQuery
         value={keysignPayloadQuery}
         pending={() => (
-          <Center>
+          <VStack flexGrow alignItems="center" justifyContent="center">
             <Spinner />
-          </Center>
+          </VStack>
         )}
-        error={() => (
-          <FlowErrorPageContent title="Failed to process transaction" />
+        error={error => (
+          <FlowErrorPageContent
+            error={error}
+            title="Failed to process transaction"
+          />
         )}
         success={keysignPayload => (
           <List>
@@ -229,13 +252,9 @@ export const SendTxOverview = () => {
                               chainFeeCoin[chain].ticker
                             )}
                             extra={
-                              isChainOfKind(chain, 'evm') ? (
+                              isChainOfKind(chain, 'evm') && feeSettings ? (
                                 <ManageEvmFee
-                                  value={
-                                    shouldBePresent(
-                                      feeSettings
-                                    ) as EvmFeeSettings
-                                  }
+                                  value={feeSettings as EvmFeeSettings}
                                   chain={chain}
                                   onChange={setFeeSettings}
                                 />

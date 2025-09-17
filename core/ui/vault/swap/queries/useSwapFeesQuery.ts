@@ -1,7 +1,7 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { getNativeSwapDecimals } from '@core/chain/swap/native/utils/getNativeSwapDecimals'
 import { SwapFees } from '@core/chain/swap/SwapFee'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
-import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
@@ -14,7 +14,6 @@ export const useSwapFeesQuery = () => {
   const swapQuoteQuery = useSwapQuoteQuery()
   const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
   const [toCoinKey] = useToCoin()
-  const toCoin = useCurrentVaultCoin(toCoinKey)
   const chainSpecificQuery = useSwapChainSpecificQuery()
 
   return useTransformQueriesData(
@@ -34,7 +33,7 @@ export const useSwapFeesQuery = () => {
             swap: {
               ...toCoinKey,
               amount: swapAmount,
-              decimals: toCoin.decimals,
+              decimals: getNativeSwapDecimals(toCoinKey),
             },
             network: {
               ...fromFeeCoin,

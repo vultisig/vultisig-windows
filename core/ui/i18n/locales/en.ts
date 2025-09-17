@@ -1,4 +1,7 @@
 export const en = {
+  app_permissions: 'App Permissions',
+  dapp_name: 'dApp Name',
+  description: 'Description',
   onboarding_greeting: 'Say goodbye to <g>seed phrases</g>',
   onboarding_step_1:
     'Say hello to <g>vault shares,</g> your new <g>recovery method</g>',
@@ -11,6 +14,14 @@ export const en = {
   onboarding_step_5:
     '<g>Always backup each vault share</g> separately in a <g>different location</g>',
   onboarding_step_6: 'These shares collaborate to <g>unlock your vault</g>',
+  personal_sign: 'Personal Sign',
+  request_from: 'Request from',
+  rules: 'Rules',
+  rule_item: 'Rule {{number}}',
+  sign_request: 'Sign Request',
+  signed_signature: 'Signed Signature',
+  signing_address: 'Signing Address',
+  verify_identity_sign: 'Sign in to verify your identity',
   incorrect_url: 'Incorrect URL',
   developer_options: 'Developer Options',
   plugin_server_url: 'Plugin Server URL',

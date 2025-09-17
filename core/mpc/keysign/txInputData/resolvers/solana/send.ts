@@ -84,6 +84,7 @@ export const getSolanaSendTxInputData = ({
     }
 
   const signingInput = TW.Solana.Proto.SigningInput.create({
+    v0Msg: true,
     recentBlockhash: recentBlockHash,
     sender,
     priorityFeePrice: TW.Solana.Proto.PriorityFeePrice.create({
