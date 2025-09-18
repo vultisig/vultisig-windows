@@ -217,10 +217,7 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
               </ContentWrapper>
             ) : (
               <>
-                <ListItem
-                  description={keysignPayload.coin!.address}
-                  title={t('from')}
-                />
+                <ListItem description={address} title={t('from')} />
                 {keysignPayload.toAddress && (
                   <ListItem
                     description={keysignPayload.toAddress}
@@ -244,7 +241,6 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                   value={transactionPayload}
                   handlers={{
                     keysign: transactionPayload => {
-                      const chain = getKeysignChain(keysignPayload)
                       const feeAmount = getFeeAmount(
                         keysignPayload.blockchainSpecific as KeysignChainSpecific
                       )
