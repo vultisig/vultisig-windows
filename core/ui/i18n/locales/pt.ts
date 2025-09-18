@@ -87,6 +87,7 @@ export const pt = {
   start_transaction: 'Iniciar transação',
   youre_swapping: 'Você está trocando',
   referrals_default_title: 'Indicação',
+  your_referrals: 'Suas indicações',
   title_2: 'Vultisig - Indicações',
   header_tooltip_title: 'Programa de Indicações',
   header_tooltip_content:
