@@ -50,6 +50,7 @@ export const getSolanaTxInputData: TxInputDataResolver<'solana'> = ({
         }
 
         const signingInput = TW.Solana.Proto.SigningInput.create({
+          v0Msg: true,
           recentBlockhash: recentBlockHash,
           rawMessage: transaction,
         })
