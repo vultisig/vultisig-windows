@@ -1,0 +1,1 @@
+export const oneInchSwapProgram = 'HNarfxC3kYMMhFkxUFeYb8wHVdPzY5t9pupqW5fL2meM'

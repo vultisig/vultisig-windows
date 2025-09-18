@@ -46,7 +46,9 @@ export const useParsedTxQuery = () => {
               walletCore,
               inputTx: serialized,
             })
-
+            if (!solanaTx) {
+              throw new Error('Failed to parse Solana transaction')
+            }
             return { solanaTx }
           },
         }
