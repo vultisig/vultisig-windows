@@ -12,63 +12,57 @@ import { getTokenMetadata } from '@core/chain/coin/token/metadata'
 import { chainsWithTokenMetadataDiscovery } from '@core/chain/coin/token/metadata/chains'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { isOneOf } from '@lib/utils/array/isOneOf'
-import { UseQueryOptions } from '@tanstack/react-query'
-import { useCallback } from 'react'
+import { useQuery } from '@tanstack/react-query'
 
-type CoinQueryKey = readonly ['coin', CoinKey]
-
-export const useGetCoinQuery = () => {
+export const useCoinQuery = (coinKey: CoinKey) => {
   const coins = useCurrentVaultCoins()
 
-  return useCallback(
-    (coinKey: CoinKey): UseQueryOptions<Coin, Error, Coin, CoinQueryKey> => ({
-      queryKey: ['coin', coinKey],
-      queryFn: async (): Promise<Coin> => {
-        const { id, chain } = coinKey
+  return useQuery({
+    queryKey: ['coin', coinKey],
+    queryFn: async (): Promise<Coin> => {
+      const { id, chain } = coinKey
 
-        if (!id) {
-          return chainFeeCoin[chain]
-        }
+      if (!id) {
+        return chainFeeCoin[chain]
+      }
 
-        const knownToken = knownTokens[chain].find(token =>
-          areEqualCoins(token, coinKey)
-        )
+      const knownToken = knownTokens[chain].find(token =>
+        areEqualCoins(token, coinKey)
+      )
 
-        if (knownToken) {
-          return knownToken
-        }
+      if (knownToken) {
+        return knownToken
+      }
 
-        if (chain === Chain.THORChain) {
-          const token = thorchainNativeTokensMetadata[id.toLowerCase()]
-          if (token) {
-            return {
-              ...coinKey,
-              ...token,
-            }
-          }
-        }
-
-        const existingCoin = coins.find(coin => areEqualCoins(coin, coinKey))
-
-        if (existingCoin) {
-          return existingCoin
-        }
-
-        if (isOneOf(chain, chainsWithTokenMetadataDiscovery)) {
-          const metadata = await getTokenMetadata({ id, chain })
+      if (chain === Chain.THORChain) {
+        const token = thorchainNativeTokensMetadata[id.toLowerCase()]
+        if (token) {
           return {
             ...coinKey,
-            ...metadata,
+            ...token,
           }
         }
+      }
 
-        throw new Error(
-          `Failed to get coin info for coinKey: ${coinKeyToString(coinKey)}`
-        )
-      },
-      retry: false,
-      retryOnMount: false,
-    }),
-    [coins]
-  )
+      const existingCoin = coins.find(coin => areEqualCoins(coin, coinKey))
+
+      if (existingCoin) {
+        return existingCoin
+      }
+
+      if (isOneOf(chain, chainsWithTokenMetadataDiscovery)) {
+        const metadata = await getTokenMetadata({ id, chain })
+        return {
+          ...coinKey,
+          ...metadata,
+        }
+      }
+
+      throw new Error(
+        `Failed to get coin info for coinKey: ${coinKeyToString(coinKey)}`
+      )
+    },
+    retry: false,
+    retryOnMount: false,
+  })
 }
