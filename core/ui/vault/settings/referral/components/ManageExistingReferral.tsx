@@ -57,7 +57,7 @@ export const ManageExistingReferral = ({
             }
           />
         }
-        title={t('title_1')}
+        title={t('referrals_default_title')}
       />
       <ReferralPageWrapper>
         <AnimatedVisibility
