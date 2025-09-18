@@ -1,3 +1,4 @@
+import { suiGasBudget } from '@core/chain/chains/sui/config'
 import { SuiCoin } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
@@ -16,7 +17,7 @@ export const getSuiTxInputData: TxInputDataResolver<'sui'> = ({
   const inputData = TW.Sui.Proto.SigningInput.create({
     referenceGasPrice: Long.fromString(referenceGasPrice),
     signer: keysignPayload.coin?.address,
-    gasBudget: Long.fromString('3000000'),
+    gasBudget: Long.fromBigInt(suiGasBudget),
 
     paySui: TW.Sui.Proto.PaySui.create({
       inputCoins: coins.map((coin: SuiCoin) => {
