@@ -61,7 +61,7 @@ export const de = {
   expiration_date: 'Ablaufdatum',
   choose_payout_asset: 'Auszahlungs-Asset wählen',
   tx_hash: 'Transaktions-Hash',
-  title_1: 'Empfehlung',
+  referrals_default_title: 'Empfehlung',
   title_2: 'Vultisig - Empfehlungen',
   header_tooltip_title: 'Empfehlungsprogramm',
   header_tooltip_content:

@@ -80,7 +80,7 @@ export const es = {
   asset_selection: 'Selección de activos',
   chain: 'Cadena',
   staked: 'Apostado',
-  title_1: 'Referencia',
+  referrals_default_title: 'Referencia',
   title_2: 'Vultisig - Referencias',
   header_tooltip_title: 'Programa de Referidos',
   header_tooltip_content:
