@@ -69,6 +69,7 @@ export const hr = {
     'Mala napojnica za ubrzanje vaše transakcije. Veće napojnice mogu ubrzati obradu.',
   you_are_sending: 'Šalješ',
   referrals_default_title: 'Preporuka',
+  ypur_referrals: 'Tvoje preporuke',
   title_2: 'Vultisig - Preporuke',
   header_tooltip_title: 'Program Preporuka',
   header_tooltip_content:

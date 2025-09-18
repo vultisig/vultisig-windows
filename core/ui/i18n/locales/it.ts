@@ -94,6 +94,7 @@ export const it = {
   price_impact_good: 'Buono',
   select_token: 'Seleziona token',
   referrals_default_title: 'Referral',
+  your_referrals: 'I tuoi referral',
   referrals_create_page_title: 'Vultisig - Referrals',
   title_2: 'Vultisig - Referral',
   header_tooltip_title: 'Programma di Referral',

@@ -60,6 +60,7 @@ export const de = {
   pick_referral_code: 'Referral-Code auswählen',
   referral_status: 'Status',
   referral_costs: 'Kosten',
+  your_referrals: 'Deine Empfehlungen',
   set_expiration: 'Ablauf festlegen (in Jahren)',
   expiration_date: 'Ablaufdatum',
   choose_payout_asset: 'Auszahlungs-Asset wählen',

@@ -547,6 +547,7 @@ export const en = {
   secure: 'Secure',
   generating_eddsa_key: 'Generating EdDSA Key',
   referrals_default_title: 'Referral',
+  your_referrals: 'Your Referrals',
   title_2: 'Vultisig - Referrals',
   header_tooltip_title: 'Referral Program',
   header_tooltip_content:

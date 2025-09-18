@@ -76,6 +76,7 @@ export const es = {
     'Una pequeña propina para acelerar tu transacción. Propinas más altas pueden hacer que se procese más rápido.',
   percentage: 'Porcentaje',
   send_overview: 'Enviar resumen',
+  your_referrals: 'Tus recomendaciones',
   percentage_to_unstake: 'Porcentaje para retirar',
   staked_amount: 'Cantidad apostada',
   signing_transaction: 'Firma de la transacción',
