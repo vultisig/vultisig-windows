@@ -10,7 +10,7 @@ const endpoints: Record<string, string> = {
 
 type YPrices = Record<string, number | undefined>
 
-export function useYieldBearingTokensPrices(tickers: string[]) {
+export const useYieldBearingTokensPrices = (tickers: string[]) => {
   const wanted = tickers.filter(t => t in endpoints).sort()
   const enabled = wanted.length > 0
 
