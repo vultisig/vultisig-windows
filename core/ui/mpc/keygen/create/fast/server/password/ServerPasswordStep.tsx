@@ -57,7 +57,7 @@ export const ServerPasswordStep: React.FC<ServerPasswordStepProps> = ({
     handleSubmit,
     register,
   } = useForm<Schema>({
-    mode: 'onBlur',
+    mode: 'onChange',
     resolver: zodResolver(schema),
   })
 
