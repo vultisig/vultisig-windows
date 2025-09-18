@@ -83,7 +83,7 @@ export const es = {
   enter_percentage: 'Ingrese el porcentaje',
   chain: 'Cadena',
   staked: 'Apostado',
-  title_1: 'Referencia',
+  referrals_default_title: 'Referencia',
   title_2: 'Vultisig - Referencias',
   header_tooltip_title: 'Programa de Referidos',
   header_tooltip_content:

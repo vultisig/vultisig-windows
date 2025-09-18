@@ -88,7 +88,7 @@ export const pt = {
   enter_percentage: 'Insira a porcentagem',
   start_transaction: 'Iniciar transação',
   youre_swapping: 'Você está trocando',
-  title_1: 'Indicação',
+  referrals_default_title: 'Indicação',
   title_2: 'Vultisig - Indicações',
   header_tooltip_title: 'Programa de Indicações',
   header_tooltip_content:

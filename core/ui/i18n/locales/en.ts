@@ -60,6 +60,7 @@ export const en = {
   digit_input_error_validation: 'Error verifying code, please re-try',
   digit_input_loading_validation: 'Verifying code, please wait',
   create_referral_title: 'Create Referral',
+  referrals_create_page_title: 'Vultisig - Referrals',
   use_referral_code: 'Use referral Code',
   save_code: 'Save code',
   used_referral_error:
@@ -73,7 +74,7 @@ export const en = {
   expires_on: 'Expires on',
   edit_referral: 'Edit Referral',
   edit_friends_referral: 'Edit Friend Referral',
-  add_referral_code: 'Add Referral Code',
+  add_referral_code: 'Save referral code',
   your_friends_referral_code: 'Your friends referral code',
   change_your_friends_referral: 'Change friends Referral Code used for swaps',
   plugin_policy_desc:
@@ -545,7 +546,7 @@ export const en = {
   vault_missing_public_key: 'Vault missing public key',
   secure: 'Secure',
   generating_eddsa_key: 'Generating EdDSA Key',
-  title_1: 'Referral',
+  referrals_default_title: 'Referral',
   title_2: 'Vultisig - Referrals',
   header_tooltip_title: 'Referral Program',
   header_tooltip_content:
@@ -555,6 +556,10 @@ export const en = {
   invite_friends: 'Invite frwiends',
   earn_rewards: 'Earn rewards',
   save_on_fees: 'Save on fees',
+  save_swap_fees_with_referral:
+    'Save <blue>10%</blue> on swaps - Add a Referral',
+  create_own_referral:
+    'Create your own code and earn <blue>20%</blue> on referred swaps',
   unmerge_ruji: 'Unmerge',
   referral_reg_fee: 'Registration Fee',
   create_referral: 'Create Referral',
