@@ -103,7 +103,7 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
     <VStack flexGrow gap={40}>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={t('title_1')}
+        title={t('referrals_default_title')}
       />
       <ReferralPageWrapper
         onSubmit={onFinish}
