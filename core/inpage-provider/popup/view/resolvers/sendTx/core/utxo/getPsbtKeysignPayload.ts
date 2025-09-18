@@ -1,10 +1,8 @@
 import { create } from '@bufbuild/protobuf'
 import { Chain } from '@core/chain/Chain'
 import { getPsbtTransferInfo } from '@core/chain/chains/utxo/tx/getPsbtTransferInfo'
-import { getUtxos } from '@core/chain/chains/utxo/tx/getUtxos'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
-import { assertChainField } from '@core/chain/utils/assertChainField'
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import {
@@ -49,7 +47,6 @@ export const getPsbtKeysignPayload = async ({
       hexPublicKey: Buffer.from(publicKey.data()).toString('hex'),
     }),
     blockchainSpecific: chainSpecific,
-    utxoInfo: await getUtxos(assertChainField(coin)),
     memo: '',
   })
 

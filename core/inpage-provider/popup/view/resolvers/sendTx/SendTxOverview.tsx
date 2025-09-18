@@ -14,6 +14,7 @@ import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
+import { useKeysignUtxoInfo } from '@core/ui/mpc/keysign/utxo/queries/keysignUtxoInfo'
 import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import {
@@ -130,12 +131,15 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
       })
   )
 
+  const utxoInfoQuery = useKeysignUtxoInfo({ chain, address })
+
   const keysignPayloadQuery = useQueriesDependentQuery(
     {
       chainSpecific: chainSpecificQuery,
       coin: coinQuery,
+      utxoInfo: utxoInfoQuery,
     },
-    ({ chainSpecific, coin }) =>
+    ({ chainSpecific, coin, utxoInfo }) =>
       getTxKeysignPayloadQuery({
         transactionPayload,
         walletCore,
@@ -147,6 +151,7 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
           address,
         },
         chainSpecific,
+        utxoInfo,
       })
   )
 

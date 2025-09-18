@@ -1,13 +1,9 @@
 import { create } from '@bufbuild/protobuf'
-import { OtherChain, UtxoChain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
-import { getCardanoUtxos } from '@core/chain/chains/cardano/utxo/getCardanoUtxos'
 import { getEvmContractCallHexSignature } from '@core/chain/chains/evm/contract/call/hexSignature'
 import { getEvmContractCallSignatures } from '@core/chain/chains/evm/contract/call/signatures'
-import { getUtxos } from '@core/chain/chains/utxo/tx/getUtxos'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
-import { assertChainField } from '@core/chain/utils/assertChainField'
 import {
   CosmosMsgType,
   IKeysignTransactionPayload,
@@ -20,7 +16,6 @@ import {
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { WasmExecuteContractPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { Vault } from '@core/ui/vault/Vault'
-import { isOneOf } from '@lib/utils/array/isOneOf'
 import { attempt } from '@lib/utils/attempt'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { toUtf8String } from 'ethers'
@@ -106,12 +101,6 @@ export const getKeysignPayload = async ({
       : undefined,
     skipBroadcast: transaction.transactionDetails.skipBroadcast,
   })
-
-  if (isOneOf(transaction.chain, Object.values(UtxoChain))) {
-    keysignPayload.utxoInfo = await getUtxos(assertChainField(coin))
-  } else if (transaction.chain === OtherChain.Cardano) {
-    keysignPayload.utxoInfo = await getCardanoUtxos(coin.address)
-  }
 
   return keysignPayload
 }
