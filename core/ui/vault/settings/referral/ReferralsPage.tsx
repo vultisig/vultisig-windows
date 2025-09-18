@@ -57,7 +57,7 @@ export const ReferralPage = () => {
             <>
               <PageHeader
                 primaryControls={<PageHeaderBackButton />}
-                title={t('title_1')}
+                title={t('referrals_default_title')}
               />
               <ContentWrapper>
                 <Match
