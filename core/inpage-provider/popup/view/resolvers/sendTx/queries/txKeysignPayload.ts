@@ -1,6 +1,10 @@
+import { create } from '@bufbuild/protobuf'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
-import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import {
+  KeysignPayload,
+  KeysignPayloadSchema,
+} from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { UtxoInfo } from '@core/mpc/types/vultisig/keysign/v1/utxo_info_pb'
 import { Vault } from '@core/ui/vault/Vault'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
@@ -26,7 +30,7 @@ type Input = {
 
 export const getTxKeysignPayloadQuery = ({ walletCore, ...input }: Input) => ({
   queryKey: ['tx-keysign-payload', input],
-  queryFn: () => {
+  queryFn: async () => {
     const {
       parsedTx,
       requestOrigin,
@@ -36,48 +40,48 @@ export const getTxKeysignPayloadQuery = ({ walletCore, ...input }: Input) => ({
       chainSpecific,
       utxoInfo,
     } = input
-    const keysignPayload = matchRecordUnion<ParsedTx, Promise<KeysignPayload>>(
-      parsedTx,
-      {
-        tx: transaction =>
-          getKeysignPayload({
-            transaction,
-            vault,
-            walletCore,
-            coin,
-            chainSpecific,
-          }),
-        psbt: psbt =>
-          getPsbtKeysignPayload({
-            psbt,
-            walletCore,
-            vault,
-            coin,
-            chainSpecific,
-          }),
-        solanaTx: solanaTx => {
-          const { data, skipBroadcast } = getRecordUnionValue(
-            transactionPayload,
-            'serialized'
-          )
+    const keysignPayload = await matchRecordUnion<
+      ParsedTx,
+      Promise<KeysignPayload>
+    >(parsedTx, {
+      tx: transaction =>
+        getKeysignPayload({
+          transaction,
+          vault,
+          walletCore,
+          coin,
+          chainSpecific,
+        }),
+      psbt: psbt =>
+        getPsbtKeysignPayload({
+          psbt,
+          walletCore,
+          vault,
+          coin,
+          chainSpecific,
+        }),
+      solanaTx: solanaTx => {
+        const { data, skipBroadcast } = getRecordUnionValue(
+          transactionPayload,
+          'serialized'
+        )
 
-          return getSolanaKeysignPayload({
-            parsed: solanaTx,
-            serialized: Uint8Array.from(Buffer.from(data, 'base64')),
-            vault,
-            walletCore,
-            skipBroadcast,
-            requestOrigin,
-            coin,
-            chainSpecific,
-          })
-        },
-      }
-    )
+        return getSolanaKeysignPayload({
+          parsed: solanaTx,
+          serialized: Uint8Array.from(Buffer.from(data, 'base64')),
+          vault,
+          walletCore,
+          skipBroadcast,
+          requestOrigin,
+          coin,
+          chainSpecific,
+        })
+      },
+    })
 
-    return {
+    return create(KeysignPayloadSchema, {
       ...keysignPayload,
-      utxoInfo,
-    }
+      utxoInfo: utxoInfo ?? [],
+    })
   },
 })
