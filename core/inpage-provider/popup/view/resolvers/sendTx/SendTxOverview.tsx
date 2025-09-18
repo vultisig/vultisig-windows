@@ -81,33 +81,24 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
     [parsedTx]
   )
 
+  const { chain } = coinKey
+
   const coinQuery = useCoinQuery(coinKey)
 
-  const accountCoinQuery = useTransformQueryData(
-    coinQuery,
-    useCallback(
-      (coin): AccountCoin => {
-        const publicKey = getPublicKey({
-          chain: coin.chain,
-          walletCore,
-          hexChainCode: vault.hexChainCode,
-          publicKeys: vault.publicKeys,
-        })
+  const address = useMemo(() => {
+    const publicKey = getPublicKey({
+      chain,
+      walletCore,
+      hexChainCode: vault.hexChainCode,
+      publicKeys: vault.publicKeys,
+    })
 
-        const address = deriveAddress({
-          chain: coin.chain,
-          publicKey,
-          walletCore,
-        })
-
-        return {
-          ...coin,
-          address,
-        }
-      },
-      [vault.hexChainCode, vault.publicKeys, walletCore]
-    )
-  )
+    return deriveAddress({
+      chain,
+      publicKey,
+      walletCore,
+    })
+  }, [chain, vault.hexChainCode, vault.publicKeys, walletCore])
 
   const adjustedFeeSettingsQuery = useTransformQueryData(
     initialFeeSettingsQuery,
@@ -126,20 +117,23 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
   const chainSpecificQuery = useQueriesDependentQuery(
     {
       feeSettings: adjustedFeeSettingsQuery,
-      coin: accountCoinQuery,
+      coin: coinQuery,
     },
     ({ feeSettings, coin }) =>
       getTxChainSpecificQuery({
         parsedTx,
         feeSettings,
-        coin,
+        coin: {
+          ...coin,
+          address,
+        },
       })
   )
 
   const keysignPayloadQuery = useQueriesDependentQuery(
     {
       chainSpecific: chainSpecificQuery,
-      coin: accountCoinQuery,
+      coin: coinQuery,
     },
     ({ chainSpecific, coin }) =>
       getTxKeysignPayloadQuery({
@@ -148,7 +142,10 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
         vault,
         requestOrigin,
         parsedTx,
-        coin,
+        coin: {
+          ...coin,
+          address,
+        },
         chainSpecific,
       })
   )
