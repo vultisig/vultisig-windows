@@ -21,13 +21,13 @@ type GetPsbtKeysignPayloadInput = {
   chainSpecific: KeysignChainSpecific
 }
 
-export const getPsbtKeysignPayload = async ({
+export const getPsbtKeysignPayload = ({
   psbt,
   walletCore,
   vault,
   coin,
   chainSpecific,
-}: GetPsbtKeysignPayloadInput): Promise<KeysignPayload> => {
+}: GetPsbtKeysignPayloadInput): KeysignPayload => {
   const { recipient, sendAmount } = getPsbtTransferInfo(psbt, coin.address)
 
   const publicKey = getPublicKey({

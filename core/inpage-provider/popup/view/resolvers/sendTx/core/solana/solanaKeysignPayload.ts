@@ -28,7 +28,7 @@ type GetSolanaKeysignPayloadInput = {
   chainSpecific: KeysignChainSpecific
 }
 
-export const getSolanaKeysignPayload = async ({
+export const getSolanaKeysignPayload = ({
   parsed,
   serialized,
   vault,
@@ -37,7 +37,7 @@ export const getSolanaKeysignPayload = async ({
   requestOrigin,
   coin,
   chainSpecific,
-}: GetSolanaKeysignPayloadInput): Promise<KeysignPayload> => {
+}: GetSolanaKeysignPayloadInput): KeysignPayload => {
   const txInputDataArray = Object.values(serialized)
   const txInputDataBuffer = new Uint8Array(txInputDataArray as any)
   const dataBuffer = Buffer.from(txInputDataBuffer)

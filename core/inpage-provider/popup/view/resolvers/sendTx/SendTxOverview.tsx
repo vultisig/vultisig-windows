@@ -1,3 +1,4 @@
+import { create } from '@bufbuild/protobuf'
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
@@ -8,6 +9,10 @@ import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
+import {
+  KeysignPayload,
+  KeysignPayloadSchema,
+} from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
@@ -29,24 +34,29 @@ import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useQueriesDependentQuery } from '@lib/ui/query/hooks/useQueriesDependentQuery'
+import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
 import { Text } from '@lib/ui/text'
 import { formatAmount } from '@lib/utils/formatAmount'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
+import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { formatUnits } from 'ethers'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { usePopupContext } from '../../state/context'
 import { usePopupInput } from '../../state/input'
+import { getKeysignPayload } from './core/getKeySignPayload'
 import { extractCoinKeyFromParsedTx, ParsedTx } from './core/parsedTx'
+import { getSolanaKeysignPayload } from './core/solana/solanaKeysignPayload'
+import { getPsbtKeysignPayload } from './core/utxo/getPsbtKeysignPayload'
 import { CosmosMsgType } from './interfaces'
 import { ManageEvmFee } from './ManageEvmFee'
 import { PendingState } from './PendingState'
 import { useCoinQuery } from './queries/coin'
 import { getTxChainSpecificQuery } from './queries/txChainSpecific'
 import { useTxInitialFeeSettings } from './queries/txInitialFeeSettings'
-import { getTxKeysignPayloadQuery } from './queries/txKeysignPayload'
 
 type SendTxOverviewProps = {
   parsedTx: ParsedTx
@@ -133,26 +143,61 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
 
   const utxoInfoQuery = useKeysignUtxoInfo({ chain, address })
 
-  const keysignPayloadQuery = useQueriesDependentQuery(
+  const keysignPayloadQuery = useTransformQueriesData(
     {
       chainSpecific: chainSpecificQuery,
       coin: coinQuery,
       utxoInfo: utxoInfoQuery,
     },
-    ({ chainSpecific, coin, utxoInfo }) =>
-      getTxKeysignPayloadQuery({
-        transactionPayload,
-        walletCore,
-        vault,
-        requestOrigin,
+    ({ chainSpecific, coin, utxoInfo }) => {
+      const accountCoin = {
+        ...coin,
+        address,
+      }
+      const keysignPayload = matchRecordUnion<ParsedTx, KeysignPayload>(
         parsedTx,
-        coin: {
-          ...coin,
-          address,
-        },
-        chainSpecific,
-        utxoInfo,
+        {
+          tx: transaction =>
+            getKeysignPayload({
+              transaction,
+              vault,
+              walletCore,
+              coin: accountCoin,
+              chainSpecific,
+            }),
+          psbt: psbt =>
+            getPsbtKeysignPayload({
+              psbt,
+              walletCore,
+              vault,
+              coin: accountCoin,
+              chainSpecific,
+            }),
+          solanaTx: solanaTx => {
+            const { data, skipBroadcast } = getRecordUnionValue(
+              transactionPayload,
+              'serialized'
+            )
+
+            return getSolanaKeysignPayload({
+              parsed: solanaTx,
+              serialized: Uint8Array.from(Buffer.from(data, 'base64')),
+              vault,
+              walletCore,
+              skipBroadcast,
+              requestOrigin,
+              coin: accountCoin,
+              chainSpecific,
+            })
+          },
+        }
+      )
+
+      return create(KeysignPayloadSchema, {
+        ...keysignPayload,
+        utxoInfo: utxoInfo ?? [],
       })
+    }
   )
 
   return (

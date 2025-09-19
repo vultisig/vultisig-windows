@@ -24,13 +24,13 @@ type GetKeysignPayloadProps = {
   chainSpecific: KeysignChainSpecific
 }
 
-export const getKeysignPayload = async ({
+export const getKeysignPayload = ({
   transaction,
   vault,
   walletCore,
   coin,
   chainSpecific,
-}: GetKeysignPayloadProps): Promise<KeysignPayload> => {
+}: GetKeysignPayloadProps): KeysignPayload => {
   const publicKey = getPublicKey({
     chain: transaction.chain,
     walletCore,
@@ -38,7 +38,7 @@ export const getKeysignPayload = async ({
     publicKeys: vault.publicKeys,
   })
 
-  const getMemo = async () => {
+  const getMemo = () => {
     const txData = transaction.transactionDetails.data
 
     if (
@@ -72,7 +72,7 @@ export const getKeysignPayload = async ({
     toAmount: BigInt(
       parseInt(transaction.transactionDetails.amount?.amount ?? '0')
     ).toString(),
-    memo: await getMemo(),
+    memo: getMemo(),
     vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
     vaultLocalPartyId: 'VultiConnect',
     coin: toCommCoin({
