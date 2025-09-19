@@ -1,5 +1,3 @@
-// hooks/useAvailableChainActions.ts
-import { Chain } from '@core/chain/Chain'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { findByTicker } from '@core/chain/coin/utils/findByTicker'
 import { match } from '@lib/utils/match'
@@ -15,8 +13,8 @@ import { useMergeOptions } from './useMergeOptions'
 import { useMintOptions } from './useMintOptions'
 import { useRedeemOptions } from './useRedeemOptions'
 
-const hasTicker = (coins?: AccountCoin[], ticker?: string) =>
-  !!(ticker && findByTicker({ coins: coins ?? [], ticker }))
+const hasTicker = (coins: AccountCoin[], ticker?: string) =>
+  !!(ticker && findByTicker({ coins, ticker }))
 
 const hasAnyStakeable = (coins?: AccountCoin[]) =>
   (coins ?? []).some(c => isStakeableCoin(c.ticker))
@@ -47,15 +45,15 @@ export const useAvailableChainActions = () => {
         unbond_with_lp: () => true,
         vote: () => true,
         stake: () =>
-          chain === Chain.THORChain ? hasAnyStakeable(coins) : true,
+          hasAnyStakeable(coins.filter(coin => coin.chain === chain)),
         unstake: () =>
-          chain === Chain.THORChain ? hasAnyStakeable(coins) : true,
+          hasAnyStakeable(coins.filter(coin => coin.chain === chain)),
         ibc_transfer: () => true,
-        merge: () => (mergeOptions?.length ?? 0) > 0,
+        merge: () => mergeOptions.length > 0,
         switch: () => true,
-        unmerge: () => (unmergeOptions?.length ?? 0) > 0,
-        mint: () => (mintOptions?.length ?? 0) > 0,
-        redeem: () => (redeemOptions?.length ?? 0) > 0,
+        unmerge: () => unmergeOptions.length > 0,
+        mint: () => mintOptions.length > 0,
+        redeem: () => redeemOptions.length > 0,
         withdraw_ruji_rewards: () => hasTicker(coins, 'RUJI'),
       }
       return match<ChainAction, boolean>(action, handlers)
@@ -63,10 +61,10 @@ export const useAvailableChainActions = () => {
     [
       chain,
       coins,
-      mergeOptions?.length,
-      mintOptions?.length,
-      redeemOptions?.length,
-      unmergeOptions?.length,
+      mergeOptions.length,
+      mintOptions.length,
+      redeemOptions.length,
+      unmergeOptions.length,
     ]
   )
 

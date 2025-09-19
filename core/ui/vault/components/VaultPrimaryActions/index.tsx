@@ -8,6 +8,7 @@ import { isOneOf } from '@lib/utils/array/isOneOf'
 
 import { CoreViewState } from '../../../navigation/CoreView'
 import { depositEnabledChains } from '../../deposit/DepositEnabledChain'
+import { DepositCoinProvider } from '../../deposit/providers/DepositCoinProvider'
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 
 export const VaultPrimaryActions = (state: CoreViewState<'send'>) => {
@@ -16,12 +17,18 @@ export const VaultPrimaryActions = (state: CoreViewState<'send'>) => {
   const feeCoin = useCurrentVaultCoin({ chain, id: chainFeeCoin[chain].id })
 
   const coin = 'coin' in state ? state.coin : feeCoin
+  const accountCoin = useCurrentVaultCoin(coin)
 
+  if (!coin) return null
   return (
     <UniformColumnGrid fullWidth gap={12}>
       <SendPrompt {...state} />
       {isOneOf(chain, swapEnabledChains) && <SwapPrompt coin={coin} />}
-      {isOneOf(chain, depositEnabledChains) && <DepositPrompt coin={coin} />}
+      {isOneOf(chain, depositEnabledChains) && (
+        <DepositCoinProvider initialValue={accountCoin}>
+          <DepositPrompt coin={coin} />
+        </DepositCoinProvider>
+      )}
     </UniformColumnGrid>
   )
 }
