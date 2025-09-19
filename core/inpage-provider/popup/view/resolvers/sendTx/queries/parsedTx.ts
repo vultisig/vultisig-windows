@@ -1,4 +1,6 @@
 import { Chain } from '@core/chain/Chain'
+import { isChainOfKind } from '@core/chain/ChainKind'
+import { getEvmContractCallInfo } from '@core/chain/chains/evm/contract/call/info'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useQuery } from '@tanstack/react-query'
@@ -19,9 +21,29 @@ export const useParsedTxQuery = () => {
       return matchRecordUnion<ITransactionPayload, Promise<ParsedTx>>(
         transactionPayload,
         {
-          keysign: async tx => ({
-            tx,
-          }),
+          keysign: async tx => {
+            if (!isChainOfKind(tx.chain, 'evm')) {
+              return { tx }
+            }
+
+            const { data } = tx.transactionDetails
+            if (!data || data === '0x') {
+              return { tx }
+            }
+
+            const evmContractCallInfo = await getEvmContractCallInfo(data)
+
+            if (!evmContractCallInfo) {
+              return { tx }
+            }
+
+            return {
+              tx: {
+                ...tx,
+                evmContractCallInfo,
+              },
+            }
+          },
           serialized: async ({ data, chain }) => {
             if (chain === Chain.Bitcoin) {
               const dataBuffer = Buffer.from(data, 'base64')

@@ -1,11 +1,13 @@
+import { Coin } from '@core/chain/coin/Coin'
+
 export type ParsedResult =
   | {
       kind: 'swap'
       authority: string
       inputMint: string
-      outputMint: string
       inAmount: string
       outAmount: string
+      outputCoin: Coin
     }
   | {
       kind: 'transfer'

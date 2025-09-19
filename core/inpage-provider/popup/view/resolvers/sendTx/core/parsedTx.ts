@@ -1,6 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
+import { EvmContractCallInfo } from '@core/chain/chains/evm/contract/call/info'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { CoinKey } from '@core/chain/coin/Coin'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
@@ -11,9 +12,13 @@ import { Psbt } from 'bitcoinjs-lib'
 import { IKeysignTransactionPayload } from '../interfaces'
 import { ParsedResult } from './solana/types/types'
 
+export type RegularParsedTx = IKeysignTransactionPayload & {
+  evmContractCallInfo?: EvmContractCallInfo
+}
+
 export type ParsedTx =
   | {
-      tx: IKeysignTransactionPayload
+      tx: RegularParsedTx
     }
   | {
       solanaTx: ParsedResult

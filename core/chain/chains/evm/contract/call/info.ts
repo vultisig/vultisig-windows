@@ -4,7 +4,7 @@ import { Interface } from 'ethers'
 import { getEvmContractCallHexSignature } from './hexSignature'
 import { getEvmContractCallSignatures } from './signatures'
 
-type EvmContractCallInfo = {
+export type EvmContractCallInfo = {
   functionSignature: string
   functionArguments: string
 }

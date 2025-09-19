@@ -1,5 +1,9 @@
+import { Chain } from '@core/chain/Chain'
 import { solanaRpcUrl } from '@core/chain/chains/solana/client'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { getSolanaTokenMetadata } from '@core/chain/coin/token/metadata/resolvers/solana'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { NATIVE_MINT } from '@solana/spl-token'
 import { Connection, PublicKey, VersionedTransaction } from '@solana/web3.js'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 
@@ -48,12 +52,24 @@ export const parseSolanaTx = async ({
   const { inputs, outputs, authority } = simulationParams
   const primaryIn = shouldBePresent(inputs[0])
   const primaryOut = shouldBePresent(outputs[0])
+  const outputCoin =
+    primaryOut.mint === NATIVE_MINT.toBase58()
+      ? chainFeeCoin[Chain.Solana]
+      : {
+          chain: Chain.Solana,
+          id: primaryOut.mint,
+          ...(await getSolanaTokenMetadata({
+            chain: Chain.Solana,
+            id: primaryOut.mint,
+          })),
+        }
+
   return {
     authority,
     inAmount: primaryIn.amount.toString(),
     inputMint: primaryIn.mint,
     kind: 'swap',
     outAmount: primaryOut.amount.toString(),
-    outputMint: primaryOut.mint,
+    outputCoin,
   }
 }
