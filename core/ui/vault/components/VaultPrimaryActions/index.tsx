@@ -13,13 +13,10 @@ import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 
 export const VaultPrimaryActions = (state: CoreViewState<'send'>) => {
   const chain = 'fromChain' in state ? state.fromChain : state.coin.chain
-
   const feeCoin = useCurrentVaultCoin({ chain, id: chainFeeCoin[chain].id })
-
   const coin = 'coin' in state ? state.coin : feeCoin
   const accountCoin = useCurrentVaultCoin(coin)
 
-  if (!coin) return null
   return (
     <UniformColumnGrid fullWidth gap={12}>
       <SendPrompt {...state} />
