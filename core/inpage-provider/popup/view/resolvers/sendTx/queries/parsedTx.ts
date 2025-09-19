@@ -2,6 +2,7 @@ import { Chain } from '@core/chain/Chain'
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { getEvmContractCallSignatures } from '@core/chain/chains/evm/contract/call/signatures'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { attempt } from '@lib/utils/attempt'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useQuery } from '@tanstack/react-query'
 import { Psbt } from 'bitcoinjs-lib'
@@ -31,12 +32,14 @@ export const useParsedTxQuery = () => {
               return { tx }
             }
 
-            const { count } = await getEvmContractCallSignatures(data)
+            const { data: potentialData } = await attempt(
+              getEvmContractCallSignatures(data)
+            )
 
             return {
               tx: {
                 ...tx,
-                isEvmContractCall: count > 0,
+                isEvmContractCall: potentialData && potentialData.count > 0,
               },
             }
           },
