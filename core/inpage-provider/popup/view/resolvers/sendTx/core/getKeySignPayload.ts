@@ -45,7 +45,7 @@ export const getKeysignPayload = ({
       txData &&
       getChainKind(transaction.chain) === 'evm' &&
       txData !== '0x' &&
-      (!txData.startsWith('0x') || !transaction.evmContractCallInfo)
+      (!txData.startsWith('0x') || !transaction.isEvmContractCall)
     ) {
       return toUtf8String(txData)
     }

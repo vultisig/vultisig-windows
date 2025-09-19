@@ -1,6 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { isChainOfKind } from '@core/chain/ChainKind'
-import { getEvmContractCallInfo } from '@core/chain/chains/evm/contract/call/info'
+import { getEvmContractCallSignatures } from '@core/chain/chains/evm/contract/call/signatures'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useQuery } from '@tanstack/react-query'
@@ -31,16 +31,12 @@ export const useParsedTxQuery = () => {
               return { tx }
             }
 
-            const evmContractCallInfo = await getEvmContractCallInfo(data)
-
-            if (!evmContractCallInfo) {
-              return { tx }
-            }
+            const { count } = await getEvmContractCallSignatures(data)
 
             return {
               tx: {
                 ...tx,
-                evmContractCallInfo,
+                isEvmContractCall: count > 0,
               },
             }
           },
