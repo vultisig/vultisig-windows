@@ -22,6 +22,8 @@ export const es = {
   mint: 'Recibir',
   redeem: 'Vender',
   merged: 'Combinado',
+  function_unavailble:
+    'Función no disponible para las monedas de cadena existentes. Agrega monedas que puedan usarse con FUNCTION:',
   onboarding_description_1:
     'Vultisig es una bóveda segura de criptomonedas multi-dispositivo, compatible con todas las principales blockchains y más de 10,000 tokens. Vultisig es totalmente autogestionado.',
   onboarding_description_2:
