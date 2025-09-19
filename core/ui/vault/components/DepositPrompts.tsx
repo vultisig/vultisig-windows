@@ -22,7 +22,7 @@ export const DepositPrompt = (state: CoreViewState<'deposit'>) => {
       onClick={() => {
         if (actions.length === 0) {
           addToast({
-            message: `Feature unavailable for existing chain coins. Please add coins that can be used with FUNCTION: ${chainActionsRecord[state.coin.chain as DepositEnabledChain]}`,
+            message: `${t('function_unavailble')} ${chainActionsRecord[state.coin.chain as DepositEnabledChain]}`,
             duration: toastDuration,
           })
 
