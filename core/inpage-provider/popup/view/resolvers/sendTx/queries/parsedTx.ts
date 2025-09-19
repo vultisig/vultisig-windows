@@ -1,5 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { isChainOfKind } from '@core/chain/ChainKind'
+import { getEvmContractCallHexSignature } from '@core/chain/chains/evm/contract/call/hexSignature'
 import { getEvmContractCallSignatures } from '@core/chain/chains/evm/contract/call/signatures'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { attempt } from '@lib/utils/attempt'
@@ -33,7 +34,7 @@ export const useParsedTxQuery = () => {
             }
 
             const { data: potentialData } = await attempt(
-              getEvmContractCallSignatures(data)
+              getEvmContractCallSignatures(getEvmContractCallHexSignature(data))
             )
 
             return {
