@@ -4,21 +4,14 @@ import { ChildrenProp } from '@lib/ui/props'
 import { useLayoutEffect, useMemo } from 'react'
 
 import { useCurrentVaultCoins } from '../state/currentVaultCoins'
-import { ChainAction } from './ChainAction'
 import { useCorrectSelectedCoin } from './hooks/useCorrectSelectedCoin'
 import { useDepositCoin } from './providers/DepositCoinProvider'
 
-export const DepositCoinManager = ({
-  action,
-  children,
-}: ChildrenProp & { action: ChainAction }) => {
+export const DepositCoinManager = ({ children }: ChildrenProp) => {
   const [coin, setCoin] = useDepositCoin()
   const coins = useCurrentVaultCoins()
-  const chain = coin?.chain
 
   const { correctedCoin, isReady } = useCorrectSelectedCoin({
-    chain,
-    action,
     selected: coin,
     coins,
   })

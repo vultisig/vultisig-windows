@@ -1,28 +1,22 @@
-import { Chain } from '@core/chain/Chain'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { findByTicker } from '@core/chain/coin/utils/findByTicker'
 import { useMemo } from 'react'
 
-import { ChainAction } from '../ChainAction'
-import { isStakeableCoin, stakeableAssetsTickers } from '../config'
+import { isStakeableCoin } from '../config'
 import { useUnmergeOptions } from '../DepositForm/ActionSpecific/UnmergeSpecific/hooks/useUnmergeOptions'
+import { useDepositAction } from '../providers/DepositActionProvider'
 import { useMergeOptions } from './useMergeOptions'
 import { useMintOptions } from './useMintOptions'
 import { useRedeemOptions } from './useRedeemOptions'
 
 type Props = {
-  chain?: Chain
-  action: ChainAction
   selected?: AccountCoin
   coins?: AccountCoin[]
 }
 
-export const useCorrectSelectedCoin = ({
-  chain,
-  action,
-  selected,
-  coins,
-}: Props) => {
+export const useCorrectSelectedCoin = ({ selected, coins }: Props) => {
+  const [action] = useDepositAction()
+
   const unmergeOptions = useUnmergeOptions()
   const mergeOptions = useMergeOptions()
   const redeemOptions = useRedeemOptions()
@@ -85,23 +79,28 @@ export const useCorrectSelectedCoin = ({
     }
 
     if (action === 'stake' || action === 'unstake') {
-      if (chain !== Chain.THORChain) return selected
+      const fallbackStakeableCoin = coins.find(coin =>
+        isStakeableCoin(coin.ticker)
+      )
+
+      if (!fallbackStakeableCoin) {
+        throw new Error('No stakeable coin found')
+      }
+
       return currentTicker && isStakeableCoin(currentTicker)
         ? selected
-        : (findByTicker({ coins, ticker: stakeableAssetsTickers[0] }) ??
-            selected)
+        : fallbackStakeableCoin
     }
 
     return selected
   }, [
-    isReady,
-    coins,
-    selected,
     action,
-    chain,
+    coins,
+    isReady,
     mergeOptions,
     mintOptions,
     redeemOptions,
+    selected,
     unmergeOptions,
   ])
 

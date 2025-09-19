@@ -6,6 +6,7 @@ import { FieldValues } from 'react-hook-form'
 import { useCoreViewState } from '../../navigation/hooks/useCoreViewState'
 import { useCore } from '../../state/core'
 import { useCurrentVaultCoin } from '../state/currentVaultCoins'
+import { DepositCoinManager } from './DepositCoinManager'
 import { DepositForm } from './DepositForm'
 import { DepositVerify } from './DepositVerify'
 import { useAvailableChainActions } from './hooks/useAvailableChainActions'
@@ -37,22 +38,24 @@ export const DepositFlowController = () => {
 
   return (
     <DepositActionProvider initialValue={availableActions[0]}>
-      <Match
-        value={step}
-        form={() => (
-          <DepositForm
-            onSubmit={handleDepositFormSubmit}
-            chainActionOptions={availableActions}
-            chain={coin.chain}
-          />
-        )}
-        verify={() => (
-          <DepositVerify
-            onBack={toPreviousStep}
-            depositFormData={state.depositFormData}
-          />
-        )}
-      />
+      <DepositCoinManager>
+        <Match
+          value={step}
+          form={() => (
+            <DepositForm
+              onSubmit={handleDepositFormSubmit}
+              chainActionOptions={availableActions}
+              chain={coin.chain}
+            />
+          )}
+          verify={() => (
+            <DepositVerify
+              onBack={toPreviousStep}
+              depositFormData={state.depositFormData}
+            />
+          )}
+        />
+      </DepositCoinManager>
     </DepositActionProvider>
   )
 }
