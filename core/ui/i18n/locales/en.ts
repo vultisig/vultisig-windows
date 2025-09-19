@@ -1035,4 +1035,6 @@ export const en = {
   scanning: 'scanning...',
   go_back: 'Go Back',
   continue_anyway: 'Continue Anyway',
+  processing_transaction: 'Processing transaction...',
+  failed_to_process_transaction: 'Failed to process transaction',
 }

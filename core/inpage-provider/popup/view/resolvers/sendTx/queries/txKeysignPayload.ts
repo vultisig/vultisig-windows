@@ -1,6 +1,11 @@
+import { create } from '@bufbuild/protobuf'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
-import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import {
+  KeysignPayload,
+  KeysignPayloadSchema,
+} from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { UtxoInfo } from '@core/mpc/types/vultisig/keysign/v1/utxo_info_pb'
 import { Vault } from '@core/ui/vault/Vault'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
@@ -20,11 +25,12 @@ type Input = {
   transactionPayload: ITransactionPayload
   coin: AccountCoin
   chainSpecific: KeysignChainSpecific
+  utxoInfo: UtxoInfo[] | null
 }
 
 export const getTxKeysignPayloadQuery = ({ walletCore, ...input }: Input) => ({
   queryKey: ['tx-keysign-payload', input],
-  queryFn: () => {
+  queryFn: async () => {
     const {
       parsedTx,
       requestOrigin,
@@ -32,8 +38,12 @@ export const getTxKeysignPayloadQuery = ({ walletCore, ...input }: Input) => ({
       transactionPayload,
       coin,
       chainSpecific,
+      utxoInfo,
     } = input
-    return matchRecordUnion<ParsedTx, Promise<KeysignPayload>>(parsedTx, {
+    const keysignPayload = await matchRecordUnion<
+      ParsedTx,
+      Promise<KeysignPayload>
+    >(parsedTx, {
       tx: transaction =>
         getKeysignPayload({
           transaction,
@@ -67,6 +77,11 @@ export const getTxKeysignPayloadQuery = ({ walletCore, ...input }: Input) => ({
           chainSpecific,
         })
       },
+    })
+
+    return create(KeysignPayloadSchema, {
+      ...keysignPayload,
+      utxoInfo: utxoInfo ?? [],
     })
   },
 })

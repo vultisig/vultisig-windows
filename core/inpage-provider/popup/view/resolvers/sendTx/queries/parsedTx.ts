@@ -5,20 +5,9 @@ import { useQuery } from '@tanstack/react-query'
 import { Psbt } from 'bitcoinjs-lib'
 
 import { usePopupInput } from '../../../state/input'
+import { ParsedTx } from '../core/parsedTx'
 import { parseSolanaTx } from '../core/solana/parser'
-import { ParsedResult } from '../core/solana/types/types'
-import { IKeysignTransactionPayload, ITransactionPayload } from '../interfaces'
-
-type ParsedTx =
-  | {
-      tx: IKeysignTransactionPayload
-    }
-  | {
-      solanaTx: ParsedResult
-    }
-  | {
-      psbt: Psbt
-    }
+import { ITransactionPayload } from '../interfaces'
 
 export const useParsedTxQuery = () => {
   const transactionPayload = usePopupInput<'sendTx'>()

@@ -14,6 +14,7 @@ import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
+import { useKeysignUtxoInfo } from '@core/ui/mpc/keysign/utxo/queries/keysignUtxoInfo'
 import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import {
@@ -26,30 +27,32 @@ import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
-import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useQueriesDependentQuery } from '@lib/ui/query/hooks/useQueriesDependentQuery'
-import { useQueryDependentQuery } from '@lib/ui/query/hooks/useQueryDependentQuery'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
 import { Text } from '@lib/ui/text'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { formatUnits } from 'ethers'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { usePopupContext } from '../../state/context'
 import { usePopupInput } from '../../state/input'
-import { extractCoinKeyFromParsedTx } from './core/parsedTx'
+import { extractCoinKeyFromParsedTx, ParsedTx } from './core/parsedTx'
 import { CosmosMsgType } from './interfaces'
 import { ManageEvmFee } from './ManageEvmFee'
-import { useGetCoinQuery } from './queries/coin'
-import { useParsedTxQuery } from './queries/parsedTx'
+import { PendingState } from './PendingState'
+import { useCoinQuery } from './queries/coin'
 import { getTxChainSpecificQuery } from './queries/txChainSpecific'
 import { useTxInitialFeeSettings } from './queries/txInitialFeeSettings'
 import { getTxKeysignPayloadQuery } from './queries/txKeysignPayload'
 
-export const SendTxOverview = () => {
+type SendTxOverviewProps = {
+  parsedTx: ParsedTx
+}
+
+export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
   const vault = useCurrentVault()
   const walletCore = useAssertWalletCore()
   const { requestOrigin } = usePopupContext()
@@ -74,44 +77,29 @@ export const SendTxOverview = () => {
     )
   )
 
-  const parsedTxQuery = useParsedTxQuery()
-
-  const coinKeyQuery = useTransformQueryData(
-    parsedTxQuery,
-    extractCoinKeyFromParsedTx
+  const coinKey = useMemo(
+    () => extractCoinKeyFromParsedTx(parsedTx),
+    [parsedTx]
   )
 
-  const getCoinQuery = useGetCoinQuery()
+  const { chain } = coinKey
 
-  const coinQuery = useQueryDependentQuery(coinKeyQuery, coinKey =>
-    getCoinQuery(coinKey)
-  )
+  const coinQuery = useCoinQuery(coinKey)
 
-  const accountCoinQuery = useTransformQueryData(
-    coinQuery,
-    useCallback(
-      (coin): AccountCoin => {
-        const publicKey = getPublicKey({
-          chain: coin.chain,
-          walletCore,
-          hexChainCode: vault.hexChainCode,
-          publicKeys: vault.publicKeys,
-        })
+  const address = useMemo(() => {
+    const publicKey = getPublicKey({
+      chain,
+      walletCore,
+      hexChainCode: vault.hexChainCode,
+      publicKeys: vault.publicKeys,
+    })
 
-        const address = deriveAddress({
-          chain: coin.chain,
-          publicKey,
-          walletCore,
-        })
-
-        return {
-          ...coin,
-          address,
-        }
-      },
-      [vault.hexChainCode, vault.publicKeys, walletCore]
-    )
-  )
+    return deriveAddress({
+      chain,
+      publicKey,
+      walletCore,
+    })
+  }, [chain, vault.hexChainCode, vault.publicKeys, walletCore])
 
   const adjustedFeeSettingsQuery = useTransformQueryData(
     initialFeeSettingsQuery,
@@ -130,27 +118,40 @@ export const SendTxOverview = () => {
   const chainSpecificQuery = useQueriesDependentQuery(
     {
       feeSettings: adjustedFeeSettingsQuery,
-      parsedTx: parsedTxQuery,
-      coin: accountCoinQuery,
+      coin: coinQuery,
     },
-    getTxChainSpecificQuery
+    ({ feeSettings, coin }) =>
+      getTxChainSpecificQuery({
+        parsedTx,
+        feeSettings,
+        coin: {
+          ...coin,
+          address,
+        },
+      })
   )
+
+  const utxoInfoQuery = useKeysignUtxoInfo({ chain, address })
 
   const keysignPayloadQuery = useQueriesDependentQuery(
     {
       chainSpecific: chainSpecificQuery,
-      parsedTx: parsedTxQuery,
-      coin: accountCoinQuery,
+      coin: coinQuery,
+      utxoInfo: utxoInfoQuery,
     },
-    ({ chainSpecific, parsedTx, coin }) =>
+    ({ chainSpecific, coin, utxoInfo }) =>
       getTxKeysignPayloadQuery({
         transactionPayload,
         walletCore,
         vault,
         requestOrigin,
         parsedTx,
-        coin,
+        coin: {
+          ...coin,
+          address,
+        },
         chainSpecific,
+        utxoInfo,
       })
   )
 
@@ -158,15 +159,11 @@ export const SendTxOverview = () => {
     <VerifyKeysignStart keysignPayloadQuery={keysignPayloadQuery}>
       <MatchQuery
         value={keysignPayloadQuery}
-        pending={() => (
-          <VStack flexGrow alignItems="center" justifyContent="center">
-            <Spinner />
-          </VStack>
-        )}
+        pending={() => <PendingState />}
         error={error => (
           <FlowErrorPageContent
             error={error}
-            title="Failed to process transaction"
+            title={t('failed_to_process_transaction')}
           />
         )}
         success={keysignPayload => (
@@ -220,10 +217,7 @@ export const SendTxOverview = () => {
               </ContentWrapper>
             ) : (
               <>
-                <ListItem
-                  description={keysignPayload.coin!.address}
-                  title={t('from')}
-                />
+                <ListItem description={address} title={t('from')} />
                 {keysignPayload.toAddress && (
                   <ListItem
                     description={keysignPayload.toAddress}
@@ -247,7 +241,6 @@ export const SendTxOverview = () => {
                   value={transactionPayload}
                   handlers={{
                     keysign: transactionPayload => {
-                      const chain = getKeysignChain(keysignPayload)
                       const feeAmount = getFeeAmount(
                         keysignPayload.blockchainSpecific as KeysignChainSpecific
                       )
