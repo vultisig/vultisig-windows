@@ -1,18 +1,16 @@
 import { create } from '@bufbuild/protobuf'
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
 import { getPsbtTransferInfo } from '@core/chain/chains/utxo/tx/getPsbtTransferInfo'
 import { getUtxos } from '@core/chain/chains/utxo/tx/getUtxos'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { assertChainField } from '@core/chain/utils/assertChainField'
-import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
+import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import {
   KeysignPayload,
   KeysignPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { Vault } from '@core/ui/vault/Vault'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { Psbt } from 'bitcoinjs-lib'
@@ -21,25 +19,18 @@ type GetPsbtKeysignPayloadInput = {
   psbt: Psbt
   walletCore: WalletCore
   vault: Vault
-  feeSettings: FeeSettings | null
   coin: AccountCoin
+  chainSpecific: KeysignChainSpecific
 }
 
 export const getPsbtKeysignPayload = async ({
   psbt,
   walletCore,
   vault,
-  feeSettings,
   coin,
+  chainSpecific,
 }: GetPsbtKeysignPayloadInput): Promise<KeysignPayload> => {
   const { recipient, sendAmount } = getPsbtTransferInfo(psbt, coin.address)
-
-  const chainSpecific = await getChainSpecific({
-    coin,
-    amount: fromChainAmount(Number(sendAmount) || 0, coin.decimals),
-    feeSettings,
-    psbt: psbt,
-  })
 
   const publicKey = getPublicKey({
     chain: Chain.Bitcoin,

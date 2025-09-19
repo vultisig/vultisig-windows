@@ -5,10 +5,9 @@ import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getSolanaTokenMetadata } from '@core/chain/coin/token/metadata/resolvers/solana'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
-import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
+import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { OneInchSwapPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
-import { SolanaSpecific } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import {
   KeysignPayload,
   KeysignPayloadSchema,
@@ -29,6 +28,7 @@ type GetSolanaKeysignPayloadInput = {
   skipBroadcast?: boolean
   requestOrigin: string
   coin: AccountCoin
+  chainSpecific: KeysignChainSpecific
 }
 
 export const getSolanaKeysignPayload = async ({
@@ -39,6 +39,7 @@ export const getSolanaKeysignPayload = async ({
   skipBroadcast,
   requestOrigin,
   coin,
+  chainSpecific,
 }: GetSolanaKeysignPayloadInput): Promise<KeysignPayload> => {
   const txInputDataArray = Object.values(serialized)
   const txInputDataBuffer = new Uint8Array(txInputDataArray as any)
@@ -53,21 +54,6 @@ export const getSolanaKeysignPayload = async ({
   })
 
   const hexPublicKey = Buffer.from(publicKey.data()).toString('hex')
-
-  const chainSpecific = await getChainSpecific({
-    coin,
-    amount: parsed.inAmount ? Number(parsed.inAmount) : 0,
-    isDeposit: false,
-    receiver: parsed.kind === 'transfer' ? (parsed.receiverAddress ?? '') : '',
-  })
-
-  chainSpecific.value = {
-    ...(chainSpecific.value as SolanaSpecific),
-    priorityFee:
-      (chainSpecific.value as SolanaSpecific).priorityFee === '0'
-        ? '1000000'
-        : (chainSpecific.value as SolanaSpecific).priorityFee,
-  }
 
   const fromCoin = toCommCoin({
     ...coin,
