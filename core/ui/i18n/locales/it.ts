@@ -19,6 +19,8 @@ export const it = {
     'Vultisig è una cassaforte sicura per criptovalute multi-dispositivo, compatibile con tutte le principali blockchain e oltre 10.000 token. Vultisig è completamente autogestito.',
   onboarding_description_2:
     'Vultisig non traccia le tue attività né richiede alcuna registrazione. Vultisig è open-source, garantendo trasparenza e fiducia.',
+  function_unavailble:
+    'Funzionalità non disponibile per le monete della catena esistenti. Aggiungi monete che possono essere utilizzate con FUNCTION:',
   onboarding_description_3:
     "Vultisig è, per natura, un'applicazione multi-dispositivo. Richiede almeno due dispositivi per creare una cassaforte sicura: un dispositivo iniziale e un dispositivo di accoppiamento.",
   onboarding_description_4:

@@ -24,6 +24,8 @@ export const hr = {
     'Vultisig je novčanik bez seed fraza. Umjesto toga koristi lako upravljive dijelove trezora. Svaki uređaj ima svoj jedinstveni dio koji treba zasebno sigurnosno kopirati.',
   search_field_placeholder: 'Pretraži..',
   merged: 'Spojeno',
+  function_unavailble:
+    'Značajka nije dostupna za postojeće kovanice lanca. Dodajte kovanice koje se mogu koristiti s FUNCTION:',
   create_referral_title: 'Stvori preporuku',
   use_referral_code: 'Upotrijebi kod preporuke',
   save_code: 'Spremi kod',

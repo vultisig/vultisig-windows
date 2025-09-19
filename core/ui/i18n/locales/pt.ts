@@ -23,6 +23,8 @@ export const pt = {
     'O Vultisig é uma carteira sem frases-semente. Em vez disso, usa fragmentos fáceis de gerenciar. Cada dispositivo tem seu próprio fragmento exclusivo que precisa de backup separado.',
   moreInfo: 'Mais informações',
   merged: 'Combinado',
+  function_unavailble:
+    'Recurso não disponível para moedas de cadeia existentes. Adicione moedas que possam ser usadas com FUNCTION:',
   incorrect_passcode: 'Código incorreto',
   create_referral_title: 'Criar indicação',
   use_referral_code: 'Usar código de indicação',

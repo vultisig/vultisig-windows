@@ -21,6 +21,8 @@ export const de = {
   vultisig: 'Vultisig',
   merged: 'Zusammengeführt',
   mint: 'Erhalten',
+  function_unavailble:
+    'Funktion für bestehende Chain-Coins nicht verfügbar. Bitte fügen Sie Coins hinzu, die mit FUNCTION: verwendet werden können',
   redeem: 'Verkaufen',
   onboarding_description_1:
     'Vultisig ist ein sicherer, mehrgerätefähiger Krypto-Tresor, kompatibel mit allen führenden Blockchains und über 10.000 Tokens. Vultisig ist vollständig selbstverwaltet.',
