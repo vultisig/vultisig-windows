@@ -1,11 +1,10 @@
 import { CosmosChain } from '@core/chain/Chain'
+import { cosmosRpcUrl } from '@core/chain/chains/cosmos/cosmosRpcUrl'
+import { TokenMetadataResolver } from '@core/chain/coin/token/metadata/resolver'
 import { getLastItem } from '@lib/utils/array/getLastItem'
 import { attempt } from '@lib/utils/attempt'
 import { asyncFallbackChain } from '@lib/utils/promise/asyncFallbackChain'
 import { queryUrl } from '@lib/utils/query/queryUrl'
-
-import { cosmosRpcUrl } from '../../../../chains/cosmos/cosmosRpcUrl'
-import { TokenMetadataResolver } from '../resolver'
 
 type DenomUnits = { denom: string; exponent: number }
 type DenomMetadata = {
@@ -69,12 +68,9 @@ export const getCosmosTokenMetadata: TokenMetadataResolver<
 > = async ({ chain, id }) => {
   const lcd = cosmosRpcUrl[chain as CosmosChain]
   const meta = await getDenomMetaFromLCD(lcd, id)
-
-  if (!meta) throw new Error(`No denom meta information available for  ${id}`)
+  if (!meta) throw new Error(`No denom meta information available for ${id}`)
   const decimals = decimalsFromMeta(meta)
-  if (!decimals) {
-    throw new Error(`Could not fetch decimal for ${id}`)
-  }
+  if (!decimals) throw new Error(`Could not fetch decimal for ${id}`)
   const ticker = deriveTicker(id, meta)
 
   return {
