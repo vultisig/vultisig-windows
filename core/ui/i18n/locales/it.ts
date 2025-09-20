@@ -92,7 +92,9 @@ export const it = {
   chain: 'Catena',
   price_impact_good: 'Buono',
   select_token: 'Seleziona token',
-  title_1: 'Referral',
+  referrals_default_title: 'Referral',
+  your_referrals: 'I tuoi referral',
+  referrals_create_page_title: 'Vultisig - Referrals',
   title_2: 'Vultisig - Referral',
   header_tooltip_title: 'Programma di Referral',
   header_tooltip_content:

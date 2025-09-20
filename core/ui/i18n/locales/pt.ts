@@ -87,7 +87,8 @@ export const pt = {
   percentage_limit: 'A porcentagem deve estar entre 0 e 100',
   start_transaction: 'Iniciar transação',
   youre_swapping: 'Você está trocando',
-  title_1: 'Indicação',
+  referrals_default_title: 'Indicação',
+  your_referrals: 'Suas indicações',
   title_2: 'Vultisig - Indicações',
   header_tooltip_title: 'Programa de Indicações',
   header_tooltip_content:
