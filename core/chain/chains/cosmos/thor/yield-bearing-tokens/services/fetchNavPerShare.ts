@@ -1,21 +1,19 @@
+import { queryUrl } from '@lib/utils/query/queryUrl'
+
 type StatusResponse = { data?: { nav_per_share?: string } }
 
 export const fetchNavPerShare = async (
-  id: string
+  contractId: string
 ): Promise<number | undefined> => {
-  const url = `https://thornode-mainnet-api.bryanlabs.net/cosmwasm/wasm/v1/contract/${id}/smart/eyJzdGF0dXMiOiB7fX0`
+  const url = `https://thornode-mainnet-api.bryanlabs.net/cosmwasm/wasm/v1/contract/${contractId}/smart/eyJzdGF0dXMiOiB7fX0`
 
-  const res = await fetch(url)
-  if (!res.ok) return undefined
-
-  let json: StatusResponse
   try {
-    json = (await res.json()) as StatusResponse
+    const json = await queryUrl<StatusResponse>(url)
+
+    const s = json?.data?.nav_per_share
+    const n = s == null ? undefined : Number(s)
+    return Number.isFinite(n!) ? (n as number) : undefined
   } catch {
     return undefined
   }
-
-  const s = json?.data?.nav_per_share
-  const n = s != null ? Number(s) : undefined
-  return Number.isFinite(n!) ? (n as number) : undefined
 }
