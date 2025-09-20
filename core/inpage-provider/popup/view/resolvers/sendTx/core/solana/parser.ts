@@ -1,20 +1,26 @@
 import { Chain } from '@core/chain/Chain'
 import { solanaRpcUrl } from '@core/chain/chains/solana/client'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { getSolanaTokenMetadata } from '@core/chain/coin/token/metadata/resolvers/solana'
+import { Coin, CoinKey } from '@core/chain/coin/Coin'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { NATIVE_MINT } from '@solana/spl-token'
 import { Connection, PublicKey, VersionedTransaction } from '@solana/web3.js'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 
 import { simulateSolanaTransaction } from './simulate'
-import { AddressTableLookup, ParsedResult } from './types/types'
+import { AddressTableLookup, SolanaSwapTxData } from './types/types'
 import { mergedKeys, resolveAddressTableKeys } from './utils'
-type ParseSolanaTxInput = { walletCore: WalletCore; inputTx: Uint8Array }
+
+type ParseSolanaTxInput = {
+  walletCore: WalletCore
+  inputTx: Uint8Array
+  getCoin: (coinKey: CoinKey) => Promise<Coin>
+}
+
 export const parseSolanaTx = async ({
   walletCore,
   inputTx,
-}: ParseSolanaTxInput): Promise<ParsedResult> => {
+  getCoin,
+}: ParseSolanaTxInput): Promise<SolanaSwapTxData> => {
   const connection = new Connection(solanaRpcUrl)
   const txInputDataArray = Object.values(inputTx)
   const txInputDataBuffer = new Uint8Array(txInputDataArray as any)
@@ -52,23 +58,18 @@ export const parseSolanaTx = async ({
   const { inputs, outputs, authority } = simulationParams
   const primaryIn = shouldBePresent(inputs[0])
   const primaryOut = shouldBePresent(outputs[0])
-  const outputCoin =
-    primaryOut.mint === NATIVE_MINT.toBase58()
-      ? chainFeeCoin[Chain.Solana]
-      : {
-          chain: Chain.Solana,
-          id: primaryOut.mint,
-          ...(await getSolanaTokenMetadata({
-            chain: Chain.Solana,
-            id: primaryOut.mint,
-          })),
-        }
+  const [inputCoin, outputCoin] = await Promise.all(
+    [primaryIn, primaryOut].map(({ mint }) => {
+      const id = mint === NATIVE_MINT.toBase58() ? undefined : mint
+
+      return getCoin({ chain: Chain.Solana, id })
+    })
+  )
 
   return {
     authority,
     inAmount: primaryIn.amount.toString(),
-    inputMint: primaryIn.mint,
-    kind: 'swap',
+    inputCoin,
     outAmount: primaryOut.amount.toString(),
     outputCoin,
   }

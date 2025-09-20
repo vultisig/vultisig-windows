@@ -12,14 +12,13 @@ import { getTokenMetadata } from '@core/chain/coin/token/metadata'
 import { chainsWithTokenMetadataDiscovery } from '@core/chain/coin/token/metadata/chains'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { isOneOf } from '@lib/utils/array/isOneOf'
-import { useQuery } from '@tanstack/react-query'
+import { useCallback } from 'react'
 
-export const useCoinQuery = (coinKey: CoinKey) => {
+export const useGetCoin = () => {
   const coins = useCurrentVaultCoins()
 
-  return useQuery({
-    queryKey: ['coin', coinKey],
-    queryFn: async (): Promise<Coin> => {
+  return useCallback(
+    async (coinKey: CoinKey): Promise<Coin> => {
       const { id, chain } = coinKey
 
       if (!id) {
@@ -62,7 +61,6 @@ export const useCoinQuery = (coinKey: CoinKey) => {
         `Failed to get coin info for coinKey: ${coinKeyToString(coinKey)}`
       )
     },
-    retry: false,
-    retryOnMount: false,
-  })
+    [coins]
+  )
 }

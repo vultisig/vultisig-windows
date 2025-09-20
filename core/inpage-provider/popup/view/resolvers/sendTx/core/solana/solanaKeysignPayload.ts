@@ -15,10 +15,10 @@ import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { formatUnits } from 'ethers'
 
-import { ParsedResult } from './types/types'
+import { SolanaSwapTxData } from './types/types'
 
 type GetSolanaKeysignPayloadInput = {
-  parsed: ParsedResult
+  parsed: SolanaSwapTxData
   serialized: Uint8Array
   vault: Vault
   walletCore: WalletCore
@@ -57,34 +57,29 @@ export const getSolanaKeysignPayload = ({
     hexPublicKey,
   })
 
-  let swapPayload = null
-  if (parsed.kind === 'swap') {
-    const toCoin = parsed.outputCoin
-
-    swapPayload = create(OneInchSwapPayloadSchema, {
-      provider: getUrlBaseDomain(requestOrigin),
-      fromCoin: fromCoin,
-      toCoin: toCommCoin({
-        ...toCoin,
-        address: parsed.authority,
-        hexPublicKey,
-      }),
-      fromAmount: String(parsed.inAmount),
-      toAmountDecimal: formatUnits(
-        String(parsed.outAmount ?? 0),
-        toCoin.decimals
-      ),
-      quote: {
-        dstAmount: String(parsed.outAmount ?? 0),
-        tx: {
-          data: base64Data,
-          value: '0',
-          gasPrice: '0',
-          swapFee: '25000',
-        },
+  const swapPayload = create(OneInchSwapPayloadSchema, {
+    provider: getUrlBaseDomain(requestOrigin),
+    fromCoin: fromCoin,
+    toCoin: toCommCoin({
+      ...parsed.outputCoin,
+      address: parsed.authority,
+      hexPublicKey,
+    }),
+    fromAmount: String(parsed.inAmount),
+    toAmountDecimal: formatUnits(
+      String(parsed.outAmount ?? 0),
+      parsed.outputCoin.decimals
+    ),
+    quote: {
+      dstAmount: String(parsed.outAmount ?? 0),
+      tx: {
+        data: base64Data,
+        value: '0',
+        gasPrice: '0',
+        swapFee: '25000',
       },
-    })
-  }
+    },
+  })
 
   const keysignPayload = create(KeysignPayloadSchema, {
     toAmount: String(parsed.inAmount),
@@ -92,10 +87,7 @@ export const getSolanaKeysignPayload = ({
     vaultLocalPartyId: 'VultiConnect',
     coin: fromCoin,
     blockchainSpecific: chainSpecific,
-    swapPayload: swapPayload
-      ? { case: 'oneinchSwapPayload', value: swapPayload }
-      : undefined,
-    toAddress: parsed.kind === 'transfer' ? parsed.receiverAddress : undefined,
+    swapPayload: { case: 'oneinchSwapPayload', value: swapPayload },
     skipBroadcast,
   })
 

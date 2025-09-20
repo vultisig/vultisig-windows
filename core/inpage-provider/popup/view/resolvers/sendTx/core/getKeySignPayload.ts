@@ -14,10 +14,10 @@ import { Vault } from '@core/ui/vault/Vault'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { toUtf8String } from 'ethers'
 
-import { RegularParsedTx } from './parsedTx'
+import { RegularTxData } from './customTxData'
 
 type GetKeysignPayloadProps = {
-  transaction: RegularParsedTx
+  transaction: RegularTxData
   vault: Vault
   walletCore: WalletCore
   coin: AccountCoin
