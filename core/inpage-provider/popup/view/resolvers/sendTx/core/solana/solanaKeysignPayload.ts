@@ -2,8 +2,6 @@ import { create } from '@bufbuild/protobuf'
 import { base64 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
 import { Chain } from '@core/chain/Chain'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { getSolanaTokenMetadata } from '@core/chain/coin/token/metadata/resolvers/solana'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
@@ -14,14 +12,13 @@ import {
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { Vault } from '@core/ui/vault/Vault'
 import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
-import { NATIVE_MINT } from '@solana/spl-token'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { formatUnits } from 'ethers'
 
-import { ParsedResult } from './types/types'
+import { SolanaSwapTxData } from './types/types'
 
 type GetSolanaKeysignPayloadInput = {
-  parsed: ParsedResult
+  parsed: SolanaSwapTxData
   serialized: Uint8Array
   vault: Vault
   walletCore: WalletCore
@@ -31,7 +28,7 @@ type GetSolanaKeysignPayloadInput = {
   chainSpecific: KeysignChainSpecific
 }
 
-export const getSolanaKeysignPayload = async ({
+export const getSolanaKeysignPayload = ({
   parsed,
   serialized,
   vault,
@@ -40,7 +37,7 @@ export const getSolanaKeysignPayload = async ({
   requestOrigin,
   coin,
   chainSpecific,
-}: GetSolanaKeysignPayloadInput): Promise<KeysignPayload> => {
+}: GetSolanaKeysignPayloadInput): KeysignPayload => {
   const txInputDataArray = Object.values(serialized)
   const txInputDataBuffer = new Uint8Array(txInputDataArray as any)
   const dataBuffer = Buffer.from(txInputDataBuffer)
@@ -60,52 +57,29 @@ export const getSolanaKeysignPayload = async ({
     hexPublicKey,
   })
 
-  let swapPayload = null
-  if (parsed.kind === 'swap') {
-    const getToCoin = async () => {
-      if (parsed.outputMint === NATIVE_MINT.toBase58()) {
-        return chainFeeCoin[Chain.Solana]
-      }
-
-      const coinKey = {
-        chain: Chain.Solana,
-        id: parsed.outputMint,
-      } as const
-
-      const metadata = await getSolanaTokenMetadata(coinKey)
-
-      return {
-        ...coinKey,
-        ...metadata,
-      }
-    }
-
-    const toCoin = await getToCoin()
-
-    swapPayload = create(OneInchSwapPayloadSchema, {
-      provider: getUrlBaseDomain(requestOrigin),
-      fromCoin: fromCoin,
-      toCoin: toCommCoin({
-        ...toCoin,
-        address: parsed.authority,
-        hexPublicKey,
-      }),
-      fromAmount: String(parsed.inAmount),
-      toAmountDecimal: formatUnits(
-        String(parsed.outAmount ?? 0),
-        toCoin.decimals
-      ),
-      quote: {
-        dstAmount: String(parsed.outAmount ?? 0),
-        tx: {
-          data: base64Data,
-          value: '0',
-          gasPrice: '0',
-          swapFee: '25000',
-        },
+  const swapPayload = create(OneInchSwapPayloadSchema, {
+    provider: getUrlBaseDomain(requestOrigin),
+    fromCoin: fromCoin,
+    toCoin: toCommCoin({
+      ...parsed.outputCoin,
+      address: parsed.authority,
+      hexPublicKey,
+    }),
+    fromAmount: String(parsed.inAmount),
+    toAmountDecimal: formatUnits(
+      String(parsed.outAmount ?? 0),
+      parsed.outputCoin.decimals
+    ),
+    quote: {
+      dstAmount: String(parsed.outAmount ?? 0),
+      tx: {
+        data: base64Data,
+        value: '0',
+        gasPrice: '0',
+        swapFee: '25000',
       },
-    })
-  }
+    },
+  })
 
   const keysignPayload = create(KeysignPayloadSchema, {
     toAmount: String(parsed.inAmount),
@@ -113,10 +87,7 @@ export const getSolanaKeysignPayload = async ({
     vaultLocalPartyId: 'VultiConnect',
     coin: fromCoin,
     blockchainSpecific: chainSpecific,
-    swapPayload: swapPayload
-      ? { case: 'oneinchSwapPayload', value: swapPayload }
-      : undefined,
-    toAddress: parsed.kind === 'transfer' ? parsed.receiverAddress : undefined,
+    swapPayload: { case: 'oneinchSwapPayload', value: swapPayload },
     skipBroadcast,
   })
 

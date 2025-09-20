@@ -30,7 +30,7 @@ export const getCosmosSpecific: ChainSpecificResolver<CosmosSpecific> = async ({
   transactionType = TransactionType.UNSPECIFIED,
   timeoutTimestamp,
 }) => {
-  const chain = coin.chain as CosmosSpecificChain
+  const { chain } = coin
   const { accountNumber, sequence, latestBlock } = await getCosmosAccountInfo({
     address: coin.address,
     chain,

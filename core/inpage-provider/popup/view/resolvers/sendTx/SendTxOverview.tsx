@@ -1,13 +1,16 @@
+import { create } from '@bufbuild/protobuf'
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
-import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
+import {
+  KeysignPayload,
+  KeysignPayloadSchema,
+} from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
@@ -15,7 +18,6 @@ import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
 import { useKeysignUtxoInfo } from '@core/ui/mpc/keysign/utxo/queries/keysignUtxoInfo'
-import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import {
   ContentWrapper,
@@ -28,31 +30,34 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { useQueriesDependentQuery } from '@lib/ui/query/hooks/useQueriesDependentQuery'
-import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
-import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
+import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { Text } from '@lib/ui/text'
 import { formatAmount } from '@lib/utils/formatAmount'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
+import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { formatUnits } from 'ethers'
-import { useCallback, useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { usePopupContext } from '../../state/context'
 import { usePopupInput } from '../../state/input'
-import { extractCoinKeyFromParsedTx, ParsedTx } from './core/parsedTx'
+import { CustomTxData } from './core/customTxData'
+import { getKeysignPayload } from './core/getKeySignPayload'
+import { ParsedTx } from './core/parsedTx'
+import { getSolanaKeysignPayload } from './core/solana/solanaKeysignPayload'
+import { getPsbtKeysignPayload } from './core/utxo/getPsbtKeysignPayload'
 import { CosmosMsgType } from './interfaces'
 import { ManageEvmFee } from './ManageEvmFee'
 import { PendingState } from './PendingState'
-import { useCoinQuery } from './queries/coin'
-import { getTxChainSpecificQuery } from './queries/txChainSpecific'
-import { useTxInitialFeeSettings } from './queries/txInitialFeeSettings'
-import { getTxKeysignPayloadQuery } from './queries/txKeysignPayload'
+import { useChainSpecificQuery } from './queries/txChainSpecific'
 
 type SendTxOverviewProps = {
   parsedTx: ParsedTx
 }
 
-export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
+export const SendTxOverview = ({
+  parsedTx: { customTxData, feeSettings: initialFeeSettings, coin },
+}: SendTxOverviewProps) => {
   const vault = useCurrentVault()
   const walletCore = useAssertWalletCore()
   const { requestOrigin } = usePopupContext()
@@ -60,99 +65,68 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
 
   const transactionPayload = usePopupInput<'sendTx'>()
 
-  const initialFeeSettingsQuery = useTxInitialFeeSettings()
+  const { chain, address } = coin
 
-  const [feeSettings, setFeeSettings] = useStateCorrector(
-    useState<FeeSettings | null>(null),
-    useCallback(
-      state => {
-        const { data } = initialFeeSettingsQuery
-        if (data && state === null) {
-          return data
-        }
+  const [feeSettings, setFeeSettings] = useState(initialFeeSettings)
 
-        return state
-      },
-      [initialFeeSettingsQuery]
-    )
-  )
-
-  const coinKey = useMemo(
-    () => extractCoinKeyFromParsedTx(parsedTx),
-    [parsedTx]
-  )
-
-  const { chain } = coinKey
-
-  const coinQuery = useCoinQuery(coinKey)
-
-  const address = useMemo(() => {
-    const publicKey = getPublicKey({
-      chain,
-      walletCore,
-      hexChainCode: vault.hexChainCode,
-      publicKeys: vault.publicKeys,
-    })
-
-    return deriveAddress({
-      chain,
-      publicKey,
-      walletCore,
-    })
-  }, [chain, vault.hexChainCode, vault.publicKeys, walletCore])
-
-  const adjustedFeeSettingsQuery = useTransformQueryData(
-    initialFeeSettingsQuery,
-    useCallback(
-      initialFeeSettings => {
-        if (feeSettings !== null) {
-          return feeSettings
-        }
-
-        return initialFeeSettings
-      },
-      [feeSettings]
-    )
-  )
-
-  const chainSpecificQuery = useQueriesDependentQuery(
-    {
-      feeSettings: adjustedFeeSettingsQuery,
-      coin: coinQuery,
-    },
-    ({ feeSettings, coin }) =>
-      getTxChainSpecificQuery({
-        parsedTx,
-        feeSettings,
-        coin: {
-          ...coin,
-          address,
-        },
-      })
-  )
+  const chainSpecificQuery = useChainSpecificQuery({
+    customTxData,
+    feeSettings,
+    coin,
+  })
 
   const utxoInfoQuery = useKeysignUtxoInfo({ chain, address })
 
-  const keysignPayloadQuery = useQueriesDependentQuery(
+  const keysignPayloadQuery = useTransformQueriesData(
     {
       chainSpecific: chainSpecificQuery,
-      coin: coinQuery,
       utxoInfo: utxoInfoQuery,
     },
-    ({ chainSpecific, coin, utxoInfo }) =>
-      getTxKeysignPayloadQuery({
-        transactionPayload,
-        walletCore,
-        vault,
-        requestOrigin,
-        parsedTx,
-        coin: {
-          ...coin,
-          address,
-        },
-        chainSpecific,
-        utxoInfo,
+    ({ chainSpecific, utxoInfo }) => {
+      const keysignPayload = matchRecordUnion<CustomTxData, KeysignPayload>(
+        customTxData,
+        {
+          regular: transaction =>
+            getKeysignPayload({
+              transaction,
+              vault,
+              walletCore,
+              coin,
+              chainSpecific,
+            }),
+          psbt: psbt =>
+            getPsbtKeysignPayload({
+              psbt,
+              walletCore,
+              vault,
+              coin,
+              chainSpecific,
+            }),
+          solanaSwap: solanaTx => {
+            const { data, skipBroadcast } = getRecordUnionValue(
+              transactionPayload,
+              'serialized'
+            )
+
+            return getSolanaKeysignPayload({
+              parsed: solanaTx,
+              serialized: Uint8Array.from(Buffer.from(data, 'base64')),
+              vault,
+              walletCore,
+              skipBroadcast,
+              requestOrigin,
+              coin,
+              chainSpecific,
+            })
+          },
+        }
+      )
+
+      return create(KeysignPayloadSchema, {
+        ...keysignPayload,
+        utxoInfo: utxoInfo ?? [],
       })
+    }
   )
 
   return (
