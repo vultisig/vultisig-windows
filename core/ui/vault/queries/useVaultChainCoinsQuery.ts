@@ -1,5 +1,4 @@
 import { Chain } from '@core/chain/Chain'
-import { useYieldBearingTokensPrices } from '@core/chain/chains/cosmos/thor/yield-bearing-tokens/hooks/useYieldBearingTokensPrices'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { CoinAmount, CoinKey, coinKeyToString } from '@core/chain/coin/Coin'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
@@ -28,29 +27,19 @@ export const useVaultChainCoinsQuery = (chain: Chain) => {
 
   const balancesQuery = useBalancesQuery(coins.map(extractAccountCoinKey))
 
-  const tickers = coins.map(c => c.ticker)
-  const yPricesQuery = useYieldBearingTokensPrices(tickers)
-
   return useMemo((): Query<VaultChainCoin[]> => {
-    if (
-      pricesQuery.isPending ||
-      balancesQuery.isPending ||
-      yPricesQuery.isPending
-    ) {
+    if (pricesQuery.isPending || balancesQuery.isPending) {
       return pendingQuery
     }
 
     if (pricesQuery.data && balancesQuery.data) {
       const basePrices = shouldBePresent(pricesQuery.data)
       const balances = shouldBePresent(balancesQuery.data)
-      const yPrices = yPricesQuery.data ?? {}
 
       const data = without(
         coins.map(coin => {
           const amount = balances[coinKeyToString(coin)] ?? BigInt(0)
-          const basePrice = basePrices[coinKeyToString(coin)]
-          const overridePrice = yPrices[coin.ticker]
-          const price = overridePrice ?? basePrice
+          const price = basePrices[coinKeyToString(coin)]
 
           return { ...coin, amount, price }
         }),
@@ -65,5 +54,5 @@ export const useVaultChainCoinsQuery = (chain: Chain) => {
       data: undefined,
       error: [...balancesQuery.errors, ...pricesQuery.errors][0],
     }
-  }, [balancesQuery, coins, pricesQuery, yPricesQuery])
+  }, [balancesQuery, coins, pricesQuery])
 }
