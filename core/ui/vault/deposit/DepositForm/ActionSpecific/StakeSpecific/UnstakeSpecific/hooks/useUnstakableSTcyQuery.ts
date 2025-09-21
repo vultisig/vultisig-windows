@@ -1,3 +1,4 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { cosmosRpcUrl } from '@core/chain/chains/cosmos/cosmosRpcUrl'
 import { tcyAutoCompounderConfig } from '@core/chain/chains/cosmos/thor/tcy-autocompound/config'
 import { queryUrl } from '@lib/utils/query/queryUrl'
@@ -25,4 +26,14 @@ export const useUnstakableStcyQuery = ({
       return BigInt(balance?.amount ?? '0')
     },
     ...options,
+    select: (data = 0n) => ({
+      chainBalance: fromChainAmount(
+        data,
+        tcyAutoCompounderConfig.shareDecimals
+      ),
+      humanReadableBalance: fromChainAmount(
+        data,
+        tcyAutoCompounderConfig.shareDecimals
+      ),
+    }),
   })
