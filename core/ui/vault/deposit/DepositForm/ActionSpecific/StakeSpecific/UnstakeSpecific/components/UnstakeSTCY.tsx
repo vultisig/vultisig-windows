@@ -17,11 +17,10 @@ export const UnstakeSTCY = () => {
   const { t } = useTranslation()
   const address = useCurrentVaultAddress(Chain.THORChain)
 
-  const { data: { humanReadableBalance = 0, chainBalance = 0n } = {} } =
-    useUnstakableStcyQuery({
-      address,
-      options: { enabled: !!address },
-    })
+  const { data: { humanReadableBalance = 0 } = {} } = useUnstakableStcyQuery({
+    address,
+    options: { enabled: !!address },
+  })
 
   const error =
     getValues('amount') > humanReadableBalance ? 'Invalid amount' : null
@@ -54,7 +53,7 @@ export const UnstakeSTCY = () => {
         action={
           <MaxButton
             onClick={() =>
-              setValue('amount', chainBalance.toString(), {
+              setValue('amount', humanReadableBalance, {
                 shouldValidate: true,
               })
             }

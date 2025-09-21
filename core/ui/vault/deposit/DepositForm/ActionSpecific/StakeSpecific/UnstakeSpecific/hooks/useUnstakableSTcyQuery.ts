@@ -27,10 +27,7 @@ export const useUnstakableStcyQuery = ({
     },
     ...options,
     select: (data = 0n) => ({
-      chainBalance: fromChainAmount(
-        data,
-        tcyAutoCompounderConfig.shareDecimals
-      ),
+      chainBalance: data,
       humanReadableBalance: fromChainAmount(
         data,
         tcyAutoCompounderConfig.shareDecimals
