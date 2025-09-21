@@ -17,7 +17,6 @@ const depositSteps = ['form', 'verify'] as const
 export const DepositFlowController = () => {
   const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
   const coin = useCurrentVaultCoin(coinKey)
-
   const availableActions = useAvailableChainActions()
 
   const { goBack } = useCore()
