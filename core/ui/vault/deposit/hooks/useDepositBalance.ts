@@ -4,7 +4,6 @@ import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { useGetTotalAmountAvailableForChain } from '@core/ui/vault/deposit/hooks/useGetAmountTotalBalance'
 import { useMemo } from 'react'
 
-import { useCurrentVaultAddress } from '../../state/currentVaultCoins'
 import { useUnstakableStcyQuery } from '../DepositForm/ActionSpecific/StakeSpecific/UnstakeSpecific/hooks/useUnstakableSTcyQuery'
 import { useDepositAction } from '../providers/DepositActionProvider'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
@@ -24,7 +23,6 @@ const getPrecisionForAction = (action: ChainAction) =>
   actionPrecision[action] ?? defaultPrecision
 
 export const useDepositBalance = ({ selectedChainAction }: Params) => {
-  const address = useCurrentVaultAddress(Chain.THORChain)
   const [selectedCoin] = useDepositCoin()
   const chain = selectedCoin.chain
   const { data: totalAmountAvailableForChainData } =
@@ -32,10 +30,10 @@ export const useDepositBalance = ({ selectedChainAction }: Params) => {
   const [action] = useDepositAction()
 
   const { data: { humanReadableBalance = 0 } = {} } = useUnstakableStcyQuery({
-    address,
+    address: selectedCoin.address,
     options: {
       enabled: Boolean(
-        address &&
+        selectedCoin.address &&
           action === 'unstake' &&
           selectedCoin.ticker === knownCosmosTokens.THORChain.tcy.ticker
       ),
