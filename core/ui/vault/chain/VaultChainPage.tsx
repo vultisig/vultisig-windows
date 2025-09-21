@@ -31,6 +31,7 @@ export const VaultChainPage = () => {
   const { t } = useTranslation()
   const chain = useCurrentVaultChain()
   const vaultCoins = useCurrentVaultChainCoins(chain)
+
   const address = useCurrentVaultAddress(chain)
   const hasMultipleCoinsSupport = knownTokens[chain].length > 0
   const navigate = useCoreNavigate()
