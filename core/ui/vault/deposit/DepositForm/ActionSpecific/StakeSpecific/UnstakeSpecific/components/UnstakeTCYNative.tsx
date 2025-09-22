@@ -35,7 +35,7 @@ export const UnstakeTCYNative = () => {
     <InputContainer>
       <Text size={15}>
         {t('percentage_to_unstake')} ({t('staked_amount')}: {maxDisplay}{' '}
-        {ticker}
+        {ticker})
       </Text>
       <ActionInsideInteractiveElement
         render={() => (
