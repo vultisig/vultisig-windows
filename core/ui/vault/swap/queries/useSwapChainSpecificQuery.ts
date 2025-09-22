@@ -4,7 +4,7 @@ import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { areEqualCoins } from '@core/chain/coin/Coin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { getSwapKeysignPayloadFields } from '@core/chain/swap/keysign/getSwapKeysignPayloadFields'
-import { defaultEvmSwapGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
+import { getEvmSwapGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/resolver'
 import { getChainSpecificQueryKey } from '@core/ui/chain/coin/queries/useChainSpecificQuery'
@@ -88,7 +88,7 @@ export const useSwapChainSpecificQuery = () => {
 
       if (isOneOf(fromCoin.chain, Object.values(EvmChain))) {
         input.feeSettings = {
-          gasLimit: defaultEvmSwapGasLimit,
+          gasLimit: getEvmSwapGasLimit(fromCoin.chain),
         }
       }
 
