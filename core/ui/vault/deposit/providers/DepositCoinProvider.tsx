@@ -24,9 +24,7 @@ export const DepositCoinProvider = ({ children }: ChildrenProp) => {
 
   const [coin, setCoin] = state
 
-  const correctedCoin = useCorrectSelectedCoin({
-    currentDepositCoin: coin,
-  })
+  const correctedCoin = useCorrectSelectedCoin(coin)
 
   if (correctedCoin && coin !== correctedCoin) {
     setCoin(correctedCoin)

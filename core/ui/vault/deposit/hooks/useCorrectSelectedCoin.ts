@@ -12,11 +12,7 @@ import { useMergeOptions } from './useMergeOptions'
 import { useMintOptions } from './useMintOptions'
 import { useRedeemOptions } from './useRedeemOptions'
 
-type Props = {
-  currentDepositCoin: AccountCoin
-}
-
-export const useCorrectSelectedCoin = ({ currentDepositCoin }: Props) => {
+export const useCorrectSelectedCoin = (currentDepositCoin: AccountCoin) => {
   const [action] = useDepositAction()
   const coins = useCurrentVaultCoins()
   const unmergeOptions = useUnmergeOptions()
