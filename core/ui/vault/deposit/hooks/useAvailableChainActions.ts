@@ -1,8 +1,7 @@
 import { Chain } from '@core/chain/Chain'
-import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { findByTicker } from '@core/chain/coin/utils/findByTicker'
 import { match } from '@lib/utils/match'
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 
 import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 import { ChainAction, chainActionsRecord } from '../ChainAction'
@@ -12,9 +11,6 @@ import { useUnmergeOptions } from '../DepositForm/ActionSpecific/UnmergeSpecific
 import { useMergeOptions } from './useMergeOptions'
 import { useMintOptions } from './useMintOptions'
 import { useRedeemOptions } from './useRedeemOptions'
-
-const hasTicker = (coins: AccountCoin[], ticker?: string) =>
-  !!(ticker && findByTicker({ coins, ticker }))
 
 export const useAvailableChainActions = (chain: Chain) => {
   const coins = useCurrentVaultCoins()
@@ -29,28 +25,32 @@ export const useAvailableChainActions = (chain: Chain) => {
     [chain]
   )
 
-  const isActionAvailable = useCallback(
-    (action: ChainAction): boolean => {
-      return match<ChainAction, boolean>(action, {
-        bond: () => true,
-        unbond: () => true,
-        leave: () => true,
-        custom: () => true,
-        bond_with_lp: () => hasTicker(coins, 'CACAO'),
-        unbond_with_lp: () => hasTicker(coins, 'CACAO'),
-        vote: () => true,
-        stake: () => !!chain && isStakeableChain(chain),
-        unstake: () => !!chain && isStakeableChain(chain),
-        ibc_transfer: () => true,
-        merge: () => mergeOptions.length > 0,
-        switch: () => true,
-        unmerge: () => unmergeOptions.length > 0,
-        mint: () => mintOptions.length > 0,
-        redeem: () => redeemOptions.length > 0,
-        withdraw_ruji_rewards: () => hasTicker(coins, 'RUJI'),
-      })
-    },
+  return useMemo(
+    () =>
+      allActions.filter(action =>
+        match<ChainAction, boolean>(action, {
+          bond: () => true,
+          unbond: () => true,
+          leave: () => true,
+          custom: () => true,
+          bond_with_lp: () => !!findByTicker({ coins, ticker: 'CACAO' }),
+          unbond_with_lp: () => !!findByTicker({ coins, ticker: 'CACAO' }),
+          vote: () => true,
+          stake: () => isStakeableChain(chain),
+          unstake: () => isStakeableChain(chain),
+          ibc_transfer: () => true,
+          merge: () => mergeOptions.length > 0,
+          switch: () => true,
+          unmerge: () => unmergeOptions.length > 0,
+          mint: () => mintOptions.length > 0,
+          redeem: () => redeemOptions.length > 0,
+          withdraw_ruji_rewards: () =>
+            !!findByTicker({ coins, ticker: 'RUJI' }),
+        })
+      ),
+
     [
+      allActions,
       chain,
       coins,
       mergeOptions.length,
@@ -59,12 +59,4 @@ export const useAvailableChainActions = (chain: Chain) => {
       unmergeOptions.length,
     ]
   )
-
-  const availableActions = useMemo(
-    () => allActions.filter(isActionAvailable),
-
-    [allActions, isActionAvailable]
-  )
-
-  return availableActions
 }
