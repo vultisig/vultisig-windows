@@ -1,3 +1,4 @@
+import { Chain } from '@core/chain/Chain'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { findByTicker } from '@core/chain/coin/utils/findByTicker'
 import { match } from '@lib/utils/match'
@@ -8,7 +9,6 @@ import { ChainAction, chainActionsRecord } from '../ChainAction'
 import { isStakeableChain } from '../config'
 import { DepositEnabledChain } from '../DepositEnabledChain'
 import { useUnmergeOptions } from '../DepositForm/ActionSpecific/UnmergeSpecific/hooks/useUnmergeOptions'
-import { useDepositCoin } from '../providers/DepositCoinProvider'
 import { useMergeOptions } from './useMergeOptions'
 import { useMintOptions } from './useMintOptions'
 import { useRedeemOptions } from './useRedeemOptions'
@@ -16,9 +16,7 @@ import { useRedeemOptions } from './useRedeemOptions'
 const hasTicker = (coins: AccountCoin[], ticker?: string) =>
   !!(ticker && findByTicker({ coins, ticker }))
 
-export const useAvailableChainActions = () => {
-  const [coin] = useDepositCoin()
-  const chain = coin.chain
+export const useAvailableChainActions = (chain: Chain) => {
   const coins = useCurrentVaultCoins()
   const mintOptions = useMintOptions()
   const redeemOptions = useRedeemOptions()
@@ -33,13 +31,13 @@ export const useAvailableChainActions = () => {
 
   const isActionAvailable = useCallback(
     (action: ChainAction): boolean => {
-      const handlers: Record<ChainAction, () => boolean> = {
-        bond: () => hasTicker(coins, 'RUNE'),
+      return match<ChainAction, boolean>(action, {
+        bond: () => true,
         unbond: () => true,
         leave: () => true,
         custom: () => true,
-        bond_with_lp: () => true,
-        unbond_with_lp: () => true,
+        bond_with_lp: () => hasTicker(coins, 'CACAO'),
+        unbond_with_lp: () => hasTicker(coins, 'CACAO'),
         vote: () => true,
         stake: () => !!chain && isStakeableChain(chain),
         unstake: () => !!chain && isStakeableChain(chain),
@@ -50,8 +48,7 @@ export const useAvailableChainActions = () => {
         mint: () => mintOptions.length > 0,
         redeem: () => redeemOptions.length > 0,
         withdraw_ruji_rewards: () => hasTicker(coins, 'RUJI'),
-      }
-      return match<ChainAction, boolean>(action, handlers)
+      })
     },
     [
       chain,
