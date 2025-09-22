@@ -125,6 +125,7 @@ type ISerializedTransactionPayload = {
   data: string
   skipBroadcast?: boolean
   chain: Chain
+  params?: Record<string, any>[]
 }
 
 export type ITransactionPayload =

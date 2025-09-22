@@ -13,7 +13,7 @@ import { Psbt } from 'bitcoinjs-lib'
 
 import { IKeysignTransactionPayload, ITransactionPayload } from '../interfaces'
 import { parseSolanaTx } from './solana/parser'
-import { SolanaSwapTxData } from './solana/types/types'
+import { SolanaTxData } from './solana/types/types'
 
 export type RegularTxData = IKeysignTransactionPayload & {
   isEvmContractCall?: boolean
@@ -25,7 +25,7 @@ export type CustomTxData =
       regular: RegularTxData
     }
   | {
-      solanaSwap: SolanaSwapTxData
+      solanaTx: SolanaTxData
     }
   | {
       psbt: Psbt
@@ -108,7 +108,7 @@ export const getCustomTxData = ({
         const serialized = Uint8Array.from(Buffer.from(data, 'base64'))
 
         return {
-          solanaSwap: await parseSolanaTx({
+          solanaTx: await parseSolanaTx({
             walletCore,
             inputTx: serialized,
             getCoin,

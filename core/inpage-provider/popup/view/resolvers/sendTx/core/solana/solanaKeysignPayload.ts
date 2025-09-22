@@ -11,14 +11,15 @@ import {
   KeysignPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { Vault } from '@core/ui/vault/Vault'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { formatUnits } from 'ethers'
 
-import { SolanaSwapTxData } from './types/types'
+import { SolanaTxData } from './types/types'
 
 type GetSolanaKeysignPayloadInput = {
-  parsed: SolanaSwapTxData
+  parsed: SolanaTxData
   serialized: Uint8Array
   vault: Vault
   walletCore: WalletCore
@@ -57,39 +58,52 @@ export const getSolanaKeysignPayload = ({
     hexPublicKey,
   })
 
-  const swapPayload = create(OneInchSwapPayloadSchema, {
-    provider: getUrlBaseDomain(requestOrigin),
-    fromCoin: fromCoin,
-    toCoin: toCommCoin({
-      ...parsed.outputCoin,
-      address: parsed.authority,
-      hexPublicKey,
-    }),
-    fromAmount: String(parsed.inAmount),
-    toAmountDecimal: formatUnits(
-      String(parsed.outAmount ?? 0),
-      parsed.outputCoin.decimals
-    ),
-    quote: {
-      dstAmount: String(parsed.outAmount ?? 0),
-      tx: {
-        data: base64Data,
-        value: '0',
-        gasPrice: '0',
-        swapFee: '25000',
-      },
+  return matchRecordUnion(parsed, {
+    swap: swap => {
+      const swapPayload = create(OneInchSwapPayloadSchema, {
+        provider: getUrlBaseDomain(requestOrigin),
+        fromCoin: fromCoin,
+        toCoin: toCommCoin({
+          ...swap.outputCoin,
+          address: swap.authority,
+          hexPublicKey,
+        }),
+        fromAmount: String(swap.inAmount),
+        toAmountDecimal: formatUnits(
+          String(swap.outAmount ?? 0),
+          swap.outputCoin.decimals
+        ),
+        quote: {
+          dstAmount: String(swap.outAmount ?? 0),
+          tx: {
+            data: base64Data,
+            value: '0',
+            gasPrice: '0',
+            swapFee: '25000',
+          },
+        },
+      })
+
+      return create(KeysignPayloadSchema, {
+        toAmount: String(swap.inAmount),
+        vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
+        vaultLocalPartyId: 'VultiConnect',
+        coin: fromCoin,
+        blockchainSpecific: chainSpecific,
+        swapPayload: { case: 'oneinchSwapPayload', value: swapPayload },
+        skipBroadcast,
+      })
+    },
+    transfer: transfer => {
+      return create(KeysignPayloadSchema, {
+        toAmount: String(transfer.inAmount),
+        toAddress: transfer.receiverAddress,
+        vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
+        vaultLocalPartyId: 'VultiConnect',
+        coin: fromCoin,
+        blockchainSpecific: chainSpecific,
+        skipBroadcast,
+      })
     },
   })
-
-  const keysignPayload = create(KeysignPayloadSchema, {
-    toAmount: String(parsed.inAmount),
-    vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
-    vaultLocalPartyId: 'VultiConnect',
-    coin: fromCoin,
-    blockchainSpecific: chainSpecific,
-    swapPayload: { case: 'oneinchSwapPayload', value: swapPayload },
-    skipBroadcast,
-  })
-
-  return keysignPayload
 }
