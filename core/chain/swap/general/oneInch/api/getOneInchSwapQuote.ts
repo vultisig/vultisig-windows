@@ -5,7 +5,7 @@ import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { GeneralSwapQuote } from '@core/chain/swap/general/GeneralSwapQuote'
 import { OneInchSwapQuoteResponse } from '@core/chain/swap/general/oneInch/api/OneInchSwapQuoteResponse'
 import { oneInchAffiliateConfig } from '@core/chain/swap/general/oneInch/oneInchAffiliateConfig'
-import { defaultEvmSwapGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
+import { getEvmSwapGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
 import { rootApiUrl } from '@core/config'
 import { hexToNumber } from '@lib/utils/hex/hexToNumber'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
@@ -32,7 +32,8 @@ export const getOneInchSwapQuote = async ({
   amount,
   isAffiliate,
 }: Input): Promise<GeneralSwapQuote> => {
-  const chainId = hexToNumber(getEvmChainId(account.chain as EvmChain))
+  const chain = account.chain as EvmChain
+  const chainId = hexToNumber(getEvmChainId(chain))
 
   const params = {
     src: isFeeCoin({ id: fromCoinId, chain: account.chain })
@@ -60,7 +61,7 @@ export const getOneInchSwapQuote = async ({
     tx: {
       evm: {
         ...tx,
-        gas: tx.gas || defaultEvmSwapGasLimit,
+        gas: tx.gas || getEvmSwapGasLimit(chain),
       },
     },
   }

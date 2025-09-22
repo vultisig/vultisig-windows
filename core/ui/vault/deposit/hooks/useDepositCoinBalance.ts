@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 
 import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'
 import { useVaultChainCoinsQuery } from '../../queries/useVaultChainCoinsQuery'
-import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
+import { useCurrentVaultAddress } from '../../state/currentVaultCoins'
 import { ChainAction } from '../ChainAction'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
 import { useMergeableTokenBalancesQuery } from './useMergeableTokenBalancesQuery'
@@ -18,7 +18,7 @@ export const useDepositCoinBalance = ({ action, chain }: Params) => {
   const [selectedCoin] = useDepositCoin()
   const { data: vaultCoins = [] } = useVaultChainCoinsQuery(chain)
   const vaultEntry = vaultCoins.find(c => c.id === selectedCoin.id)
-  const thorAddr = useCurrentVaultCoin(selectedCoin)?.address
+  const thorAddr = useCurrentVaultAddress(Chain.THORChain)
 
   const { data: yTokenRawBalance = 0n } = useBalanceQuery({
     chain: Chain.THORChain,
@@ -26,7 +26,7 @@ export const useDepositCoinBalance = ({ action, chain }: Params) => {
     id: selectedCoin.id,
   })
 
-  const { data: mergeBalances = [] } = useMergeableTokenBalancesQuery(
+  const { data: { balances = [] } = {} } = useMergeableTokenBalancesQuery(
     thorAddr ?? ''
   )
 
@@ -34,9 +34,7 @@ export const useDepositCoinBalance = ({ action, chain }: Params) => {
     if (!selectedCoin) return 0
 
     if (action === 'unmerge') {
-      const shares =
-        mergeBalances.find(b => b.symbol === selectedCoin.ticker)?.shares ?? 0
-      return fromChainAmount(shares, 8)
+      return balances.find(b => b.symbol === selectedCoin.ticker)?.shares ?? 0
     }
 
     if (!vaultEntry) {
@@ -44,5 +42,5 @@ export const useDepositCoinBalance = ({ action, chain }: Params) => {
     }
 
     return fromChainAmount(vaultEntry.amount, vaultEntry.decimals)
-  }, [action, mergeBalances, selectedCoin, vaultEntry, yTokenRawBalance])
+  }, [action, balances, selectedCoin, vaultEntry, yTokenRawBalance])
 }

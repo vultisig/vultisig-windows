@@ -1,14 +1,18 @@
+import { Chain } from '@core/chain/Chain'
+import { Coin, CoinKey } from '@core/chain/coin/Coin'
 import { rootApiUrl } from '@core/config'
-import { ParsedResult } from '@core/inpage-provider/popup/view/resolvers/sendTx/core/solana/types/types'
 import { ASSOCIATED_TOKEN_PROGRAM_ID, getAccount } from '@solana/spl-token'
 import { Connection, PublicKey } from '@solana/web3.js'
 import { TW } from '@trustwallet/wallet-core'
 
+import { SolanaTxData } from '../../types/types'
+
 export const parseTokenInstruction = async (
   tx: TW.Solana.Proto.RawMessage.IMessageLegacy,
   instruction: TW.Solana.Proto.RawMessage.IInstruction,
-  keys: PublicKey[]
-): Promise<ParsedResult> => {
+  keys: PublicKey[],
+  getCoin: (coinKey: CoinKey) => Promise<Coin>
+): Promise<SolanaTxData> => {
   const debugPrefix = '[parseTokenInstruction]'
   if (
     !instruction.accounts ||
@@ -63,13 +67,17 @@ export const parseTokenInstruction = async (
     0,
     true
   )
+  const inputCoin = await getCoin({
+    chain: Chain.Solana,
+    id: senderTokenAccountInfo.mint.toBase58(),
+  })
 
-  const result: ParsedResult = {
-    authority: senderTokenAccountInfo.owner.toBase58(),
-    inAmount: amount.toString(),
-    receiverAddress: recipient,
-    inputMint: senderTokenAccountInfo.mint.toBase58(),
-    kind: 'transfer',
+  return {
+    transfer: {
+      authority: senderTokenAccountInfo.owner.toBase58(),
+      inAmount: amount.toString(),
+      receiverAddress: recipient,
+      inputCoin,
+    },
   }
-  return result
 }

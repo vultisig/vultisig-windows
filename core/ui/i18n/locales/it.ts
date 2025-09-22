@@ -6,6 +6,7 @@ export const it = {
     'Sono <g>divisi in parti</g> per aumentare la sicurezza e, <g>eliminare il singolo punto di guasto</g>',
   onboarding_step_3:
     '<g>Ogni dispositivo</g> nel tuo caveau contiene <g>una quota del caveau</g>',
+  positions: 'Posizioni',
   onboarding_step_4:
     'Recupera la tua cassaforte anche <g>se un dispositivo è perso o danneggiato</g>',
   onboarding_step_5:
@@ -18,11 +19,14 @@ export const it = {
     'Vultisig è una cassaforte sicura per criptovalute multi-dispositivo, compatibile con tutte le principali blockchain e oltre 10.000 token. Vultisig è completamente autogestito.',
   onboarding_description_2:
     'Vultisig non traccia le tue attività né richiede alcuna registrazione. Vultisig è open-source, garantendo trasparenza e fiducia.',
+  function_unavailble:
+    'Funzionalità non disponibile per le monete della catena esistenti. Aggiungi monete che possono essere utilizzate con FUNCTION:',
   onboarding_description_3:
     "Vultisig è, per natura, un'applicazione multi-dispositivo. Richiede almeno due dispositivi per creare una cassaforte sicura: un dispositivo iniziale e un dispositivo di accoppiamento.",
   onboarding_description_4:
     'Vultisig è un portafoglio senza frasi seed. Utilizza invece frammenti facili da gestire. Ogni dispositivo ha il proprio frammento unico che necessita di un backup separato.',
   moreInfo: 'Maggiori informazioni',
+  merged: 'Combinato',
   incorrect_passcode: 'Codice errato',
   create_referral_title: 'Crea referral',
   use_referral_code: 'Usa codice referral',
@@ -514,7 +518,6 @@ export const it = {
         'Questo codice confermerà che hai ricevuto la tua quota del vault 1 via e-mail',
       verifyingCode: 'Verifica del codice in corso, attendere',
       backupVault: 'Esegui il backup del vault',
-      shareOnlineBackup: 'preferibilmente online.',
       shareSecurely: "per garantire l'accesso,",
       securely: 'in modo sicuro, preferibilmente',
       online: 'online',
@@ -712,7 +715,6 @@ export const it = {
   normal: 'Normale',
   priority: 'Priorità',
   gas_limit: 'Limite del gas',
-  current_base_fee: 'Tariffa base attuale',
   gwei: 'Ciao',
   total_fee: 'Tariffa totale',
   network_rate: 'Tasso di rete',
@@ -1038,8 +1040,6 @@ export const it = {
     "Questa transazione IBC include un promemoria, ma Vultisig attualmente non supporta l'incorporamento di promemoria nei messaggi di trasferimento IBC.<br> Procedere con questa transazione potrebbe comportare una <b>perdita irreversibile di fondi</b>.",
   go_back: 'Torna indietro',
   continue_anyway: 'Continua comunque',
-  stake_ruji: 'Palo RUJI',
-  unstake_ruji: 'Togliere RUJI',
   withdraw_ruji_rewards: 'Ritira i premi RUJI',
   tns_max_4_chars:
     'Il codice di riferimento non deve contenere più di 4 caratteri',
@@ -1056,4 +1056,22 @@ export const it = {
   entity_scanned: '{{entity}} scansionata da <provider></provider>',
   site_has_risk: 'Sito dannoso rilevato da <provider></provider>',
   risky_site_detected: 'Sito dannoso rilevato',
+  app_permissions: "Autorizzazioni dell'app",
+  dapp_name: 'Nome dApp',
+  description: 'Descrizione',
+  personal_sign: 'Segno personale',
+  request_from: 'Richiesta da',
+  rules: 'Regole',
+  rule_item: 'Regola {{numero}}',
+  sign_request: 'Richiesta di firma',
+  signed_signature: 'Firma firmata',
+  signing_address: 'Indirizzo di firma',
+  verify_identity_sign: 'Accedi per verificare la tua identità',
+  incorrect_url: 'URL errato',
+  developer_options: 'Opzioni sviluppatore',
+  plugin_server_url: 'URL del server del plugin',
+  base_fee: 'Tariffa base',
+  backupShare2: 'Condivisione di backup 2',
+  processing_transaction: 'Elaborazione della transazione in corso...',
+  failed_to_process_transaction: 'Impossibile elaborare la transazione',
 }

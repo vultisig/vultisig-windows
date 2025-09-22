@@ -177,7 +177,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
           <SettingsSection title={t('support')}>
             <ListItem
               icon={<MessageCircleQuestionIcon fontSize={iconSize} />}
-              onClick={() => openUrl('https://vultisig.com/faq')}
+              onClick={() => openUrl('https://vultisig.com/support#faq')}
               title={t('faq')}
               hoverable
               showArrow

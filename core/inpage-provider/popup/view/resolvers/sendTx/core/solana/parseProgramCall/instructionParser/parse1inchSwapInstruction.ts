@@ -1,8 +1,11 @@
+import { Chain } from '@core/chain/Chain'
+import { Coin, CoinKey } from '@core/chain/coin/Coin'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { NATIVE_MINT } from '@solana/spl-token'
 import { PublicKey } from '@solana/web3.js'
 import { TW } from '@trustwallet/wallet-core'
 
-import { ParsedResult } from '../../types/types'
+import { SolanaTxData } from '../../types/types'
 import { readU64LE } from '../../utils'
 
 const oneInchSwapInstructionAccountsIndexes = {
@@ -13,8 +16,9 @@ const oneInchSwapInstructionAccountsIndexes = {
 
 export const parseOneInchSwapInstruction = async (
   instruction: TW.Solana.Proto.RawMessage.IInstruction,
-  keys: PublicKey[]
-): Promise<ParsedResult> => {
+  keys: PublicKey[],
+  getCoin: (coinKey: CoinKey) => Promise<Coin>
+): Promise<SolanaTxData> => {
   if (!instruction.accounts || !instruction.programData)
     throw new Error('invalid 1inch instruction')
   const inputAmount = readU64LE(Buffer.from(instruction.programData), 12)
@@ -37,13 +41,21 @@ export const parseOneInchSwapInstruction = async (
         instruction.accounts[oneInchSwapInstructionAccountsIndexes.maker]
       )
     ]
+  const [inputCoin, outputCoin] = await Promise.all(
+    [srcMint, dstMint].map(mint => {
+      const id =
+        mint.toBase58() === NATIVE_MINT.toBase58() ? undefined : mint.toBase58()
 
+      return getCoin({ chain: Chain.Solana, id })
+    })
+  )
   return {
-    authority: maker.toBase58(),
-    inAmount: inputAmount.toString(),
-    inputMint: srcMint.toBase58(),
-    kind: 'swap',
-    outAmount: outputAmount.toString(),
-    outputMint: dstMint.toBase58(),
+    swap: {
+      authority: maker.toBase58(),
+      inAmount: inputAmount.toString(),
+      inputCoin,
+      outAmount: outputAmount.toString(),
+      outputCoin,
+    },
   }
 }
