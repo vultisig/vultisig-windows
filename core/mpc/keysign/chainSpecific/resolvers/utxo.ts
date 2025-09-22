@@ -36,7 +36,7 @@ export const getUtxoSpecific: ChainSpecificResolver<
 
   const result = create(UTXOSpecificSchema, {
     byteFee: byteFee.toString(),
-    // @ts-expect-error - @Ehsan-saradar remove this comment when commondata is updated
+
     psbt: psbt?.toBase64(),
   })
 

@@ -94,14 +94,22 @@ export const SendTxOverview = ({
               coin,
               chainSpecific,
             }),
-          psbt: psbt =>
-            getPsbtKeysignPayload({
+          psbt: psbt => {
+            const { skipBroadcast, params } = getRecordUnionValue(
+              transactionPayload,
+              'serialized'
+            )
+
+            return getPsbtKeysignPayload({
               psbt,
               walletCore,
               vault,
               coin,
               chainSpecific,
-            }),
+              skipBroadcast,
+              params,
+            })
+          },
           solanaSwap: solanaTx => {
             const { data, skipBroadcast } = getRecordUnionValue(
               transactionPayload,
