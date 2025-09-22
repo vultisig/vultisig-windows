@@ -663,7 +663,13 @@ export const getDepositFormConfig = ({
                         amount: z
                           .string()
                           .transform(Number)
-                          .pipe(z.number().positive()),
+                          .pipe(
+                            z
+                              .number()
+                              .positive()
+                              .min(0.001)
+                              .max(totalAmountAvailable)
+                          ),
                       }),
                       z.object({
                         autoCompound: z.literal(false),

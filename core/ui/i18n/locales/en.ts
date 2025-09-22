@@ -1,4 +1,10 @@
 export const en = {
+  accept_continue: 'Accept & continue',
+  allow_app_access: 'Allow app access to',
+  app_store: 'App Store',
+  developer_options: 'Developer Options',
+  incorrect_url: 'Incorrect URL',
+  install_app: 'Install app',
   app_permissions: 'App Permissions',
   dapp_name: 'dApp Name',
   description: 'Description',
@@ -14,7 +20,10 @@ export const en = {
   onboarding_step_5:
     '<g>Always backup each vault share</g> separately in a <g>different location</g>',
   onboarding_step_6: 'These shares collaborate to <g>unlock your vault</g>',
+  permissions: 'Permissions',
   personal_sign: 'Personal Sign',
+  function_unavailble:
+    'Feature unavailable for existing chain coins. Please add coins that can be used with FUNCTION:',
   request_from: 'Request from',
   rules: 'Rules',
   rule_item: 'Rule {{number}}',
@@ -22,8 +31,6 @@ export const en = {
   signed_signature: 'Signed Signature',
   signing_address: 'Signing Address',
   verify_identity_sign: 'Sign in to verify your identity',
-  incorrect_url: 'Incorrect URL',
-  developer_options: 'Developer Options',
   plugin_server_url: 'Plugin Server URL',
   connecting_to_verifier: 'Connecting to Verifier',
   connecting_to_plugin: 'Connecting to Plugin',
@@ -1028,4 +1035,6 @@ export const en = {
   scanning: 'scanning...',
   go_back: 'Go Back',
   continue_anyway: 'Continue Anyway',
+  processing_transaction: 'Processing transaction...',
+  failed_to_process_transaction: 'Failed to process transaction',
 }

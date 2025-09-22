@@ -19,7 +19,8 @@
     "test": "vitest",
     "knip": "knip",
     "check:all": "yarn lint && yarn typecheck && yarn test && yarn knip",
-    "knip:fix": "knip --fix --allow-remove-files"
+    "knip:fix": "knip --fix --allow-remove-files",
+    "check": "yarn typecheck && yarn lint:fix && yarn knip"
   },
   "dependencies": {
     "7z-wasm": "^1.2.0",
