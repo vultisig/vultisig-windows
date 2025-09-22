@@ -66,6 +66,7 @@ export const UnstakeSpecific = () => {
               value={selectedCoinTicker as StakeableAssetTicker}
               TCY={() => <UnstakeTCYSpecific />}
               RUJI={() => null}
+              TON={() => null}
             />
           </>
         )}
