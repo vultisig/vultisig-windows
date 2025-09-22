@@ -1,13 +1,8 @@
 import { create } from '@bufbuild/protobuf'
 import { getChainKind } from '@core/chain/ChainKind'
-import { getEvmContractCallHexSignature } from '@core/chain/chains/evm/contract/call/hexSignature'
-import { getEvmContractCallSignatures } from '@core/chain/chains/evm/contract/call/signatures'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
-import {
-  CosmosMsgType,
-  IKeysignTransactionPayload,
-} from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
+import { CosmosMsgType } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import {
@@ -16,37 +11,26 @@ import {
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { WasmExecuteContractPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { Vault } from '@core/ui/vault/Vault'
-import { attempt } from '@lib/utils/attempt'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { toUtf8String } from 'ethers'
 
-const isEvmContractCall = async (inputHex: string): Promise<boolean> => {
-  const hexSignature = getEvmContractCallHexSignature(inputHex)
-
-  const { data } = await attempt(getEvmContractCallSignatures(hexSignature))
-
-  if (data) {
-    return data.count > 0
-  }
-
-  return false
-}
+import { RegularTxData } from './customTxData'
 
 type GetKeysignPayloadProps = {
-  transaction: IKeysignTransactionPayload
+  transaction: RegularTxData
   vault: Vault
   walletCore: WalletCore
   coin: AccountCoin
   chainSpecific: KeysignChainSpecific
 }
 
-export const getKeysignPayload = async ({
+export const getKeysignPayload = ({
   transaction,
   vault,
   walletCore,
   coin,
   chainSpecific,
-}: GetKeysignPayloadProps): Promise<KeysignPayload> => {
+}: GetKeysignPayloadProps): KeysignPayload => {
   const publicKey = getPublicKey({
     chain: transaction.chain,
     walletCore,
@@ -54,14 +38,14 @@ export const getKeysignPayload = async ({
     publicKeys: vault.publicKeys,
   })
 
-  const getMemo = async () => {
+  const getMemo = () => {
     const txData = transaction.transactionDetails.data
 
     if (
       txData &&
       getChainKind(transaction.chain) === 'evm' &&
       txData !== '0x' &&
-      (!txData.startsWith('0x') || !(await isEvmContractCall(txData)))
+      (!txData.startsWith('0x') || !transaction.isEvmContractCall)
     ) {
       return toUtf8String(txData)
     }
@@ -88,7 +72,7 @@ export const getKeysignPayload = async ({
     toAmount: BigInt(
       parseInt(transaction.transactionDetails.amount?.amount ?? '0')
     ).toString(),
-    memo: await getMemo(),
+    memo: getMemo(),
     vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
     vaultLocalPartyId: 'VultiConnect',
     coin: toCommCoin({
