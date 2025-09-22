@@ -46,7 +46,12 @@ export const useParsedTxQuery = (): Query<ParsedTx> => {
     ({ feeSettings, customTxData }) => {
       const coin = matchRecordUnion<CustomTxData, Coin>(customTxData, {
         regular: ({ coin }) => coin,
-        solanaSwap: ({ inputCoin }) => inputCoin,
+        solanaTx: solanaTx => {
+          return matchRecordUnion(solanaTx, {
+            swap: ({ inputCoin }) => inputCoin,
+            transfer: ({ inputCoin }) => inputCoin,
+          })
+        },
         psbt: () => chainFeeCoin[Chain.Bitcoin],
       })
 

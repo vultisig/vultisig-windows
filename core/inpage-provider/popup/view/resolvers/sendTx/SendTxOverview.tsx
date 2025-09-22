@@ -110,7 +110,7 @@ export const SendTxOverview = ({
               params,
             })
           },
-          solanaSwap: solanaTx => {
+          solanaTx: solanaTx => {
             const { data, skipBroadcast } = getRecordUnionValue(
               transactionPayload,
               'serialized'

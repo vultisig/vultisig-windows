@@ -48,8 +48,15 @@ export const useChainSpecificQuery = (input: ParsedTx) => {
             Number(transactionDetails.amount?.amount) || 0,
             coin.decimals
           ),
-        solanaSwap: ({ inAmount }) =>
-          fromChainAmount(Number(inAmount) || 0, coin.decimals),
+        solanaTx: solanaTx =>
+          matchRecordUnion(solanaTx, {
+            swap: ({ inAmount }) => {
+              return fromChainAmount(Number(inAmount) || 0, coin.decimals)
+            },
+            transfer: ({ inAmount }) => {
+              return fromChainAmount(Number(inAmount) || 0, coin.decimals)
+            },
+          }),
         psbt: psbt => {
           const { sendAmount } = getPsbtTransferInfo(psbt, coin.address)
 
@@ -62,13 +69,17 @@ export const useChainSpecificQuery = (input: ParsedTx) => {
           isDeposit ||
           transactionDetails.cosmosMsgPayload?.case ===
             CosmosMsgType.THORCHAIN_MSG_DEPOSIT,
-        solanaSwap: () => false,
+        solanaTx: () => false,
         psbt: () => false,
       })
 
       const receiver = matchRecordUnion<CustomTxData, string>(customTxData, {
         regular: ({ transactionDetails }) => transactionDetails.to ?? '',
-        solanaSwap: ({ authority }) => authority,
+        solanaTx: solanaTx =>
+          matchRecordUnion(solanaTx, {
+            swap: ({ authority }) => authority,
+            transfer: ({ receiverAddress }) => receiverAddress,
+          }),
         psbt: () => '',
       })
 
