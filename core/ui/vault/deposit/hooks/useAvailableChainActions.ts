@@ -5,7 +5,7 @@ import { useCallback, useMemo } from 'react'
 
 import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 import { ChainAction, chainActionsRecord } from '../ChainAction'
-import { isStakeableCoin } from '../config'
+import { isStakeableChain } from '../config'
 import { DepositEnabledChain } from '../DepositEnabledChain'
 import { useUnmergeOptions } from '../DepositForm/ActionSpecific/UnmergeSpecific/hooks/useUnmergeOptions'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
@@ -15,9 +15,6 @@ import { useRedeemOptions } from './useRedeemOptions'
 
 const hasTicker = (coins: AccountCoin[], ticker?: string) =>
   !!(ticker && findByTicker({ coins, ticker }))
-
-const hasAnyStakeable = (coins?: AccountCoin[]) =>
-  (coins ?? []).some(c => isStakeableCoin(c.ticker))
 
 export const useAvailableChainActions = () => {
   const [coin] = useDepositCoin()
@@ -44,10 +41,8 @@ export const useAvailableChainActions = () => {
         bond_with_lp: () => true,
         unbond_with_lp: () => true,
         vote: () => true,
-        stake: () =>
-          hasAnyStakeable(coins.filter(coin => coin.chain === chain)),
-        unstake: () =>
-          hasAnyStakeable(coins.filter(coin => coin.chain === chain)),
+        stake: () => !!chain && isStakeableChain(chain),
+        unstake: () => !!chain && isStakeableChain(chain),
         ibc_transfer: () => true,
         merge: () => mergeOptions.length > 0,
         switch: () => true,
