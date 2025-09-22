@@ -11,6 +11,7 @@ export const darkTheme: DefaultTheme = {
     text: new HSLA(220, 67, 96),
     textSupporting: new HSLA(211, 10, 43),
     textShy: new HSLA(214, 21, 60),
+    textShyExtra: new HSLA(214, 40, 85, 1),
 
     primary: new HSLA(167, 78, 55),
     primaryAlt: new HSLA(224, 98, 64),

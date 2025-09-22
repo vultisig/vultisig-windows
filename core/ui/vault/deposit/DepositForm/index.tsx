@@ -136,10 +136,7 @@ export const DepositForm: FC<DepositFormProps> = ({
                 const ticker =
                   selectedChainAction !== 'ibc_transfer' &&
                   selectedChainAction !== 'merge' &&
-                  !(
-                    selectedChainAction === 'stake' ||
-                    selectedChainAction === 'unstake'
-                  ) &&
+                  !(selectedChainAction === 'stake') &&
                   coin.ticker
 
                 return (

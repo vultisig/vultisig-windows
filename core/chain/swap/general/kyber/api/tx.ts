@@ -6,7 +6,7 @@ import { convertDuration } from '@lib/utils/time/convertDuration'
 import { EvmChain } from '../../../../Chain'
 import { AccountCoin } from '../../../../coin/AccountCoin'
 import { isFeeCoin } from '../../../../coin/utils/isFeeCoin'
-import { defaultEvmSwapGasLimit } from '../../../../tx/fee/evm/evmGasLimit'
+import { getEvmSwapGasLimit } from '../../../../tx/fee/evm/evmGasLimit'
 import { GeneralSwapQuote } from '../../GeneralSwapQuote'
 import { KyberSwapEnabledChain } from '../chains'
 import {
@@ -109,7 +109,7 @@ export const getKyberSwapTx = async ({
 
   const { amountOut, data, gas } = buildResponse.data
 
-  const baseGas = parseInt(gas) || defaultEvmSwapGasLimit
+  const baseGas = parseInt(gas) || getEvmSwapGasLimit(from.chain)
 
   return {
     dstAmount: amountOut,

@@ -28,4 +28,5 @@ export const evmTokenGasLimit: Record<EvmChain, bigint> = {
   [EvmChain.Mantle]: 90_000_000n,
 }
 
-export const defaultEvmSwapGasLimit = 600000
+export const getEvmSwapGasLimit = (chain: EvmChain): number =>
+  chain === EvmChain.Mantle ? 1_500_000_000 : 600_000

@@ -1,6 +1,7 @@
 import { create } from '@bufbuild/protobuf'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { Chain, CosmosChain } from '@core/chain/Chain'
+import { isChainOfKind } from '@core/chain/ChainKind'
 import {
   kujiraCoinMigratedToThorChainDestinationId,
   kujiraCoinThorChainMergeContracts,
@@ -8,8 +9,8 @@ import {
 import {
   yieldBearingAssetsAffiliateAddress,
   yieldBearingAssetsAffiliateContract,
-  yieldBearingAssetsContracts,
-  yieldBearingAssetsReceiptDenoms,
+  yieldBearingTokensIdToContractMap,
+  yieldContractsByBaseDenom,
 } from '@core/chain/chains/cosmos/thor/yield-bearing-tokens/config'
 import { CoinKey } from '@core/chain/coin/Coin'
 import { getDenom } from '@core/chain/coin/utils/getDenom'
@@ -215,19 +216,21 @@ export function useDepositKeysignPayload({
             coin.decimals
           ).toString()
 
-          let contractAddress: string
           let funds: Array<{ denom: string; amount: string }>
 
           if (isDeposit) {
+            if (!isChainOfKind(coin.chain, 'cosmos')) {
+              throw new Error(
+                'Only Cosmos chains support Mint / Redeem actions'
+              )
+            }
+
             const baseDenom = getDenom(coin as CoinKey<CosmosChain>)
             if (baseDenom !== 'rune' && baseDenom !== 'tcy') {
               throw new Error('Mint supports RUNE/TCY only')
             }
-            contractAddress = yieldBearingAssetsAffiliateContract
-            const targetYContract =
-              yieldBearingAssetsContracts[
-                baseDenom === 'rune' ? 'yRUNE' : 'yTCY'
-              ]
+
+            const targetYContract = yieldContractsByBaseDenom[baseDenom]
 
             const executeInner = {
               execute: {
@@ -239,22 +242,26 @@ export function useDepositKeysignPayload({
               },
             }
 
-            funds = [{ denom: baseDenom, amount: amountUnits }]
+            const funds = [{ denom: baseDenom, amount: amountUnits }]
 
             basePayload.memo = ''
             basePayload.contractPayload = {
               case: 'wasmExecuteContractPayload',
               value: {
                 senderAddress: coin.address,
-                contractAddress,
+                contractAddress: yieldBearingAssetsAffiliateContract,
                 executeMsg: JSON.stringify(executeInner),
                 coins: funds,
               },
             }
+
+            basePayload.toAmount = amountUnits
+            return { keysign: create(KeysignPayloadSchema, basePayload) }
           } else {
-            const isYRUNE = coin.id === yieldBearingAssetsReceiptDenoms.yRUNE
-            const yContract =
-              yieldBearingAssetsContracts[isYRUNE ? 'yRUNE' : 'yTCY']
+            const assertedCoinId = shouldBePresent(coin.id)
+
+            const contractAddress =
+              yieldBearingTokensIdToContractMap[assertedCoinId]
 
             const executeInner = {
               withdraw: { slippage: (slippage / 100).toFixed(2) },
@@ -272,7 +279,7 @@ export function useDepositKeysignPayload({
               case: 'wasmExecuteContractPayload',
               value: {
                 senderAddress: coin.address,
-                contractAddress: yContract,
+                contractAddress: shouldBePresent(contractAddress),
                 executeMsg: JSON.stringify(executeInner),
                 coins: funds,
               },

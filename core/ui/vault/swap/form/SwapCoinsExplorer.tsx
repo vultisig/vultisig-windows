@@ -55,7 +55,7 @@ export const SwapCoinsExplorer = ({
     [discoveredCoins, sortedSwapCoins]
   )
 
-  const { footerRef, itemRefs, scrollToKey, strokeRef } =
+  const { footerRef, itemRefs, scrollToKey, strokeRef, onKeyDown } =
     useCenteredSnapCarousel({
       chain: currentChain,
       onSelect: chain => {
@@ -80,12 +80,10 @@ export const SwapCoinsExplorer = ({
         try {
           if (newValue) {
             await ensureSaved(newValue)
-
             await queryClient.refetchQueries({
               queryKey: [StorageKey.vaultsCoins],
               type: 'active',
             })
-
             onChange(newValue)
           }
         } finally {
@@ -103,7 +101,13 @@ export const SwapCoinsExplorer = ({
             </FooterText>
 
             <CarouselViewport>
-              <CarouselWrapper ref={footerRef}>
+              <CarouselWrapper
+                ref={footerRef}
+                role="tablist"
+                aria-label={t('select_network')}
+                onKeyDown={onKeyDown}
+                tabIndex={0}
+              >
                 {coinOptions.map(c => {
                   const chain = c.chain
                   const isActive =
@@ -117,13 +121,15 @@ export const SwapCoinsExplorer = ({
                         itemRefs.current[chain] = el
                       }}
                       tabIndex={0}
-                      role="button"
+                      role="tab"
+                      aria-selected={isActive}
                       onClick={() => {
-                        scrollToKey(chain, 'smooth')
+                        scrollToKey(chain)
                         if (!isActive) onChange(c)
                       }}
                       isActive={isActive}
                       key={chain}
+                      data-key={chain}
                     >
                       <CoinIcon coin={c} style={{ fontSize: 16 }} />
                       <Text size={12} weight={500}>
@@ -133,6 +139,7 @@ export const SwapCoinsExplorer = ({
                   )
                 })}
               </CarouselWrapper>
+
               <CenterStroke ref={strokeRef} aria-hidden />
             </CarouselViewport>
           </VStack>
@@ -150,30 +157,26 @@ const CarouselWrapper = styled.div`
   ${hStack({ alignItems: 'center', gap: 10 })};
   overflow-x: auto;
   ${hideScrollbars};
+  -webkit-overflow-scrolling: touch;
 
-  /* Snap config */
   scroll-snap-type: x mandatory;
-  scroll-snap-stop: always;
   scroll-padding: 0 50%;
-  scroll-behavior: smooth;
 
-  /* Ensure first/last items can reach the center */
-  &::before,
-  &::after {
-    content: '';
-    flex: 0 0 50%;
-  }
+  padding-inline: 50%;
 `
 
 const FooterItem = styled.div<IsActiveProp>`
   ${hStack({ gap: 6, alignItems: 'center' })};
   flex-shrink: 0;
+  scroll-snap-stop: always;
   cursor: pointer;
   padding: 8px 12px 8px 8px;
   border-radius: 99px;
-  transition: background 0.3s;
+  transition: background 0.2s ease;
+  outline: none;
 
   scroll-snap-align: center;
+  scroll-snap-stop: always;
 
   &:hover {
     ${({ isActive, theme }) =>
@@ -181,6 +184,11 @@ const FooterItem = styled.div<IsActiveProp>`
       `
         background: ${getColor('foregroundExtra')({ theme })};
       `}
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px
+      ${({ theme }) => theme.colors.buttonPrimary.toCssValue()};
   }
 `
 
@@ -190,13 +198,16 @@ const CenterStroke = styled.div`
   bottom: 0;
   left: 50%;
   translate: -50%;
-  width: 100px;
   pointer-events: none;
   border: 1px solid ${({ theme }) => theme.colors.buttonPrimary.toCssValue()};
   border-radius: 99px;
-  background: rgba(6, 27, 58, 0.01);
-  box-shadow: 0 0 13.7px 0 rgba(33, 85, 223, 0.68);
-  transform: translateX(-0.5px);
+  background: rgba(6, 27, 58, 0.02);
+  box-shadow: 0 0 14px 0 rgba(33, 85, 223, 0.45);
+  transition:
+    width 200ms ease,
+    box-shadow 200ms ease;
+  will-change: width;
+  width: 44px;
 `
 
 const FooterText = styled(Text)`

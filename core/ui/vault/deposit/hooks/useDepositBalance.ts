@@ -4,6 +4,8 @@ import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { useGetTotalAmountAvailableForChain } from '@core/ui/vault/deposit/hooks/useGetAmountTotalBalance'
 import { useMemo } from 'react'
 
+import { useUnstakableStcyQuery } from '../DepositForm/ActionSpecific/StakeSpecific/UnstakeSpecific/hooks/useUnstakableSTcyQuery'
+import { useDepositAction } from '../providers/DepositActionProvider'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
 import { useDepositCoinBalance } from './useDepositCoinBalance'
 import { useRujiraStakeQuery } from './useRujiraStakeQuery'
@@ -25,6 +27,18 @@ export const useDepositBalance = ({ selectedChainAction }: Params) => {
   const chain = selectedCoin.chain
   const { data: totalAmountAvailableForChainData } =
     useGetTotalAmountAvailableForChain(chain)
+  const [action] = useDepositAction()
+
+  const { data: { humanReadableBalance = 0 } = {} } = useUnstakableStcyQuery({
+    address: selectedCoin.address,
+    options: {
+      enabled: Boolean(
+        selectedCoin.address &&
+          action === 'unstake' &&
+          selectedCoin.ticker === knownCosmosTokens.THORChain.tcy.ticker
+      ),
+    },
+  })
 
   const { data: stakeAndRewards } = useRujiraStakeQuery()
 
@@ -34,23 +48,34 @@ export const useDepositBalance = ({ selectedChainAction }: Params) => {
   })
 
   const totalTokenAmount = useMemo(() => {
-    if (
-      selectedChainAction === 'unstake' &&
-      selectedCoin.ticker ===
+    if (selectedChainAction === 'unstake') {
+      if (
+        selectedCoin.ticker ===
         knownCosmosTokens[Chain.THORChain]['x/ruji'].ticker
-    ) {
-      return stakeAndRewards?.bonded ?? 0
+      ) {
+        return stakeAndRewards?.bonded ?? 0
+      }
+
+      if (selectedCoin.ticker === knownCosmosTokens.THORChain.tcy.ticker) {
+        return humanReadableBalance
+      }
     }
-    if (selectedChainAction === 'withdraw_ruji_rewards')
+
+    if (selectedChainAction === 'withdraw_ruji_rewards') {
       return stakeAndRewards?.rewardsUSDC ?? 0
+    }
+
     if (selectedCoin) return selectedCoinBalance
-    return totalAmountAvailableForChainData?.totalTokenAmount ?? 0
+    {
+      return totalAmountAvailableForChainData?.totalTokenAmount ?? 0
+    }
   }, [
     selectedChainAction,
-    stakeAndRewards?.bonded,
-    stakeAndRewards?.rewardsUSDC,
     selectedCoin,
     selectedCoinBalance,
+    stakeAndRewards?.bonded,
+    stakeAndRewards?.rewardsUSDC,
+    humanReadableBalance,
     totalAmountAvailableForChainData?.totalTokenAmount,
   ])
 

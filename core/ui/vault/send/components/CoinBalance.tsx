@@ -46,7 +46,7 @@ export const CoinBalance = ({ value }: ValueProp<CoinKey>) => {
         error={() => t('failed_to_load')}
         success={amount => (
           <BalancesWrapper gap={2}>
-            <Text size={14} color="supporting" weight={500}>
+            <Text size={14} color="shyExtra" weight={500}>
               {t('balance')}:{' '}
               {formatTokenAmount(fromChainAmount(amount, coin.decimals))}
               {` ${coin.ticker}`}

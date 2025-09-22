@@ -1,15 +1,10 @@
-import { Psbt } from 'bitcoinjs-lib'
+import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 
-import { IKeysignTransactionPayload } from '../interfaces'
-import { ParsedResult } from './solana/types/types'
+import { CustomTxData } from './customTxData'
 
-export type ParsedTx =
-  | {
-      tx: IKeysignTransactionPayload
-    }
-  | {
-      solanaTx: ParsedResult
-    }
-  | {
-      psbt: Psbt
-    }
+export type ParsedTx = {
+  feeSettings: FeeSettings | null
+  customTxData: CustomTxData
+  coin: AccountCoin
+}

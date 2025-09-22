@@ -6,6 +6,7 @@ import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
+import { useTranslation } from 'react-i18next'
 
 import { getChainLogoSrc } from '../../../../chain/metadata/getChainLogoSrc'
 import { CoinBalance } from '../CoinBalance'
@@ -24,11 +25,15 @@ export const SendCoinInputField = ({
   onCoinClick,
 }: CoinInputContainerProps) => {
   const { chain } = value
+  const { t } = useTranslation()
 
   return (
     <VStack justifyContent="center" gap={16}>
       <HStack justifyContent="space-between" alignItems="center">
         <HStack gap={6} alignItems="center">
+          <Text size={12} color="shy">
+            {t('from')}
+          </Text>
           <HStack gap={4} alignItems="center">
             <ChainEntityIcon
               value={getChainLogoSrc(chain)}

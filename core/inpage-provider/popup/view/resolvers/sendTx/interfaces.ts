@@ -89,10 +89,8 @@ export type CosmosMsgPayload =
       value: IMsgDeposit
     }
 
-export type TransactionDetailsAsset = {
-  chain: string
+type TransactionDetailsAsset = {
   ticker: string
-  symbol?: string
   mint?: string
 }
 
@@ -127,6 +125,7 @@ type ISerializedTransactionPayload = {
   data: string
   skipBroadcast?: boolean
   chain: Chain
+  params?: Record<string, any>[]
 }
 
 export type ITransactionPayload =
