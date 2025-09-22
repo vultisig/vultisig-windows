@@ -50,7 +50,6 @@ export const formatAmount = (
     return formatter.format(amount)
   } else {
     const formatter = new Intl.NumberFormat(validLocale, {
-      minimumFractionDigits: 2,
       maximumFractionDigits: tokenMaxDecimalPlaces,
     })
     return `${formatter.format(amount)} ${currency}`
