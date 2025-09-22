@@ -78,7 +78,7 @@ export const useChainSpecificQuery = (input: ParsedTx) => {
         solanaTx: solanaTx =>
           matchRecordUnion(solanaTx, {
             swap: ({ authority }) => authority,
-            transfer: ({ authority }) => authority,
+            transfer: ({ receiverAddress }) => receiverAddress,
           }),
         psbt: () => '',
       })

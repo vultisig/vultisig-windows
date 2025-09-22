@@ -100,7 +100,7 @@ export const getSolanaKeysignPayload = ({
         toAddress: transfer.receiverAddress,
         vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
         vaultLocalPartyId: 'VultiConnect',
-        coin: transfer.inputCoin,
+        coin: fromCoin,
         blockchainSpecific: chainSpecific,
         skipBroadcast,
       })

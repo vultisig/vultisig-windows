@@ -2,6 +2,7 @@ import { Chain } from '@core/chain/Chain'
 import { solanaRpcUrl } from '@core/chain/chains/solana/client'
 import { Coin, CoinKey } from '@core/chain/coin/Coin'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { attempt } from '@lib/utils/attempt'
 import { NATIVE_MINT } from '@solana/spl-token'
 import { Connection, PublicKey, VersionedTransaction } from '@solana/web3.js'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
@@ -49,36 +50,35 @@ export const parseSolanaTx = async ({
     connection
   )
   const keys = mergedKeys(staticKeys, resolvedKeys)
-  try {
-    const simulationParams = await simulateSolanaTransaction({
+
+  const sim = await attempt(
+    simulateSolanaTransaction({
       conn: connection,
       tx: VersionedTransaction.deserialize(buffer),
       keysIn: keys,
     })
-    if (!simulationParams) {
-      throw new Error('Could not simulate transaction')
-    }
-    const { inputs, outputs, authority } = simulationParams
-    const primaryIn = shouldBePresent(inputs[0])
-    const primaryOut = shouldBePresent(outputs[0])
-    const [inputCoin, outputCoin] = await Promise.all(
-      [primaryIn, primaryOut].map(({ mint }) => {
-        const id = mint === NATIVE_MINT.toBase58() ? undefined : mint
-
-        return getCoin({ chain: Chain.Solana, id })
-      })
-    )
-    return {
-      swap: {
-        authority,
-        inAmount: primaryIn.amount.toString(),
-        inputCoin,
-        outAmount: primaryOut.amount.toString(),
-        outputCoin,
-      },
-    }
-  } catch (error) {
-    console.warn('Error simulating transaction', error)
+  )
+  if (!sim.data) {
+    console.warn('Error simulating transaction', sim.error)
     return await parseProgramCall(tx, keys, getCoin)
+  }
+  const { inputs, outputs, authority } = sim.data
+  const primaryIn = shouldBePresent(inputs[0])
+  const primaryOut = shouldBePresent(outputs[0])
+  const [inputCoin, outputCoin] = await Promise.all(
+    [primaryIn, primaryOut].map(({ mint }) => {
+      const id = mint === NATIVE_MINT.toBase58() ? undefined : mint
+
+      return getCoin({ chain: Chain.Solana, id })
+    })
+  )
+  return {
+    swap: {
+      authority,
+      inAmount: primaryIn.amount.toString(),
+      inputCoin,
+      outAmount: primaryOut.amount.toString(),
+      outputCoin,
+    },
   }
 }
