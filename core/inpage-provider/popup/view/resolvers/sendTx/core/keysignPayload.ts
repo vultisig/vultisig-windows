@@ -58,7 +58,11 @@ export const getKeysignPayload = ({
     customTxData,
     {
       regular: ({ transactionDetails }) => transactionDetails.to,
-      solana: () => undefined,
+      solana: tx =>
+        matchRecordUnion(tx, {
+          swap: () => undefined,
+          transfer: ({ receiverAddress }) => receiverAddress,
+        }),
       psbt: psbt => getPsbtTransferInfo(psbt, coin.address).recipient,
     }
   )
