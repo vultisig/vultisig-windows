@@ -8,11 +8,21 @@ import { parseOneInchSwapInstruction } from './instructionParser/parse1inchSwapI
 import { parseTokenInstruction } from './instructionParser/parseTokenInstruction'
 import { oneInchSwapProgram } from './swapPrograms'
 
-const parseProgramCall = async (
-  tx: TW.Solana.Proto.RawMessage.IMessageLegacy,
-  keys: PublicKey[],
+type Input = {
+  tx: TW.Solana.Proto.RawMessage.IMessageLegacy
+  keys: PublicKey[]
   getCoin: (coinKey: CoinKey) => Promise<Coin>
-) => {
+  swapProvider: string
+  data: string
+}
+
+export const parseProgramCall = async ({
+  tx,
+  keys,
+  getCoin,
+  swapProvider,
+  data,
+}: Input) => {
   if (!tx.instructions || tx.instructions.length === 0)
     throw new Error('Instructions not found')
 
@@ -20,12 +30,16 @@ const parseProgramCall = async (
     const program = keys[shouldBePresent(instruction.programId)]
     // parse 1inch swap instruction
     if (program.toBase58() === oneInchSwapProgram) {
-      return await parseOneInchSwapInstruction(instruction, keys, getCoin)
+      return await parseOneInchSwapInstruction({
+        instruction,
+        keys,
+        getCoin,
+        swapProvider,
+        data,
+      })
     } else if (program.toBase58() === TOKEN_PROGRAM_ID.toBase58()) {
       return await parseTokenInstruction(tx, instruction, keys, getCoin)
     }
   }
   throw new Error('Invalid Solana transaction: no supported instruction found')
 }
-
-export default parseProgramCall
