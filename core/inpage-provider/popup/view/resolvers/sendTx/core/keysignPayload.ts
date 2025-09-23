@@ -14,6 +14,7 @@ import { UtxoInfo } from '@core/mpc/types/vultisig/keysign/v1/utxo_info_pb'
 import { WasmExecuteContractPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { Vault } from '@core/ui/vault/Vault'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
+import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { toUtf8String } from 'ethers'
 
@@ -57,7 +58,7 @@ export const getKeysignPayload = ({
     customTxData,
     {
       regular: ({ transactionDetails }) => transactionDetails.to,
-      solanaSwap: () => undefined,
+      solana: () => undefined,
       psbt: psbt => getPsbtTransferInfo(psbt, coin.address).recipient,
     }
   )
@@ -65,7 +66,7 @@ export const getKeysignPayload = ({
   const toAmount = matchRecordUnion<CustomTxData, string>(customTxData, {
     regular: ({ transactionDetails }) =>
       BigInt(parseInt(transactionDetails.amount?.amount ?? '0')).toString(),
-    solanaSwap: ({ inAmount }) => inAmount.toString(),
+    solana: tx => getRecordUnionValue(tx).inAmount.toString(),
     psbt: psbt => getPsbtTransferInfo(psbt, coin.address).sendAmount.toString(),
   })
 
@@ -86,7 +87,7 @@ export const getKeysignPayload = ({
 
         return data
       },
-      solanaSwap: () => undefined,
+      solana: () => undefined,
       psbt: () => undefined,
     }
   )
@@ -113,7 +114,7 @@ export const getKeysignPayload = ({
         }
       }
     },
-    solanaSwap: () => undefined,
+    solana: () => undefined,
     psbt: () => undefined,
   })
 
@@ -122,39 +123,43 @@ export const getKeysignPayload = ({
     KeysignPayload['swapPayload'] | undefined
   >(customTxData, {
     regular: () => undefined,
-    solanaSwap: ({
-      outputCoin,
-      inAmount,
-      outAmount,
-      authority,
-      data,
-      swapProvider,
-    }) => ({
-      case: 'oneinchSwapPayload',
-      value: create(OneInchSwapPayloadSchema, {
-        provider: swapProvider,
-        fromCoin,
-        toCoin: toCommCoin({
-          ...outputCoin,
-          address: authority,
-          hexPublicKey,
-        }),
-        fromAmount: String(inAmount),
-        toAmountDecimal: fromChainAmount(
+    solana: tx =>
+      matchRecordUnion(tx, {
+        swap: ({
+          outputCoin,
+          inAmount,
           outAmount,
-          outputCoin.decimals
-        ).toString(),
-        quote: {
-          dstAmount: outAmount,
-          tx: {
-            data,
-            value: '0',
-            gasPrice: '0',
-            swapFee: '25000',
-          },
-        },
+          authority,
+          data,
+          swapProvider,
+        }) => ({
+          case: 'oneinchSwapPayload',
+          value: create(OneInchSwapPayloadSchema, {
+            provider: swapProvider,
+            fromCoin,
+            toCoin: toCommCoin({
+              ...outputCoin,
+              address: authority,
+              hexPublicKey,
+            }),
+            fromAmount: String(inAmount),
+            toAmountDecimal: fromChainAmount(
+              outAmount,
+              outputCoin.decimals
+            ).toString(),
+            quote: {
+              dstAmount: outAmount,
+              tx: {
+                data,
+                value: '0',
+                gasPrice: '0',
+                swapFee: '25000',
+              },
+            },
+          }),
+        }),
+        transfer: () => undefined,
       }),
-    }),
     psbt: () => undefined,
   })
 

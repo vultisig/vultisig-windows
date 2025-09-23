@@ -26,7 +26,7 @@ export type CustomTxData =
       regular: RegularTxData
     }
   | {
-      solanaTx: SolanaTxData
+      solana: SolanaTxData
     }
   | {
       psbt: Psbt
@@ -109,7 +109,7 @@ export const getCustomTxData = ({
         }
 
         return {
-          solanaTx: await parseSolanaTx({
+          solana: await parseSolanaTx({
             walletCore,
             data,
             getCoin,

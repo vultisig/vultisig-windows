@@ -9,6 +9,7 @@ import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueries
 import { Query } from '@lib/ui/query/Query'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
+import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useQuery } from '@tanstack/react-query'
 import { useCallback, useMemo } from 'react'
 
@@ -70,7 +71,11 @@ export const useParsedTxQuery = (): Query<ParsedTx> => {
       ({ feeSettings, customTxData }) => {
         const coin = matchRecordUnion<CustomTxData, Coin>(customTxData, {
           regular: ({ coin }) => coin,
-          solanaSwap: ({ inputCoin }) => inputCoin,
+          solana: tx => {
+            const { inputCoin } = getRecordUnionValue(tx, 'swap')
+
+            return inputCoin
+          },
           psbt: () => chainFeeCoin[Chain.Bitcoin],
         })
 

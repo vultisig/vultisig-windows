@@ -7,6 +7,7 @@ import {
   TransactionType,
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
+import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 
 import { CustomTxData } from '../core/customTxData'
 import { ParsedTx } from '../core/parsedTx'
@@ -34,8 +35,10 @@ export const getChainSpecificInput = (input: ParsedTx) => {
         Number(transactionDetails.amount?.amount) || 0,
         coin.decimals
       ),
-    solanaSwap: ({ inAmount }) =>
-      fromChainAmount(Number(inAmount) || 0, coin.decimals),
+    solana: tx => {
+      const { inAmount } = getRecordUnionValue(tx)
+      return fromChainAmount(Number(inAmount) || 0, coin.decimals)
+    },
     psbt: psbt => {
       const { sendAmount } = getPsbtTransferInfo(psbt, coin.address)
 
@@ -48,13 +51,13 @@ export const getChainSpecificInput = (input: ParsedTx) => {
       isDeposit ||
       transactionDetails.cosmosMsgPayload?.case ===
         CosmosMsgType.THORCHAIN_MSG_DEPOSIT,
-    solanaSwap: () => false,
+    solana: () => false,
     psbt: () => false,
   })
 
   const receiver = matchRecordUnion<CustomTxData, string>(customTxData, {
     regular: ({ transactionDetails }) => transactionDetails.to ?? '',
-    solanaSwap: ({ authority }) => authority,
+    solana: tx => getRecordUnionValue(tx).authority,
     psbt: () => '',
   })
 
