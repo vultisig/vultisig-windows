@@ -7,23 +7,26 @@ import { NATIVE_MINT } from '@solana/spl-token'
 import { Connection, PublicKey, VersionedTransaction } from '@solana/web3.js'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 
-import parseProgramCall from './parseProgramCall'
+import { parseProgramCall } from './parseProgramCall'
 import { simulateSolanaTransaction } from './simulate'
 import { AddressTableLookup, SolanaTxData } from './types/types'
 import { mergedKeys, resolveAddressTableKeys } from './utils'
 
 type ParseSolanaTxInput = {
   walletCore: WalletCore
-  inputTx: Uint8Array
+  data: string
   getCoin: (coinKey: CoinKey) => Promise<Coin>
+  swapProvider: string
 }
 
 export const parseSolanaTx = async ({
   walletCore,
-  inputTx,
+  data,
   getCoin,
+  swapProvider,
 }: ParseSolanaTxInput): Promise<SolanaTxData> => {
   const connection = new Connection(solanaRpcUrl)
+  const inputTx = Uint8Array.from(Buffer.from(data, 'base64'))
   const txInputDataArray = Object.values(inputTx)
   const txInputDataBuffer = new Uint8Array(txInputDataArray as any)
   const buffer = Buffer.from(txInputDataBuffer)
@@ -60,7 +63,13 @@ export const parseSolanaTx = async ({
   )
   if (!sim.data) {
     console.warn('Error simulating transaction', sim.error)
-    return await parseProgramCall(tx, keys, getCoin)
+    return await parseProgramCall({
+      tx,
+      keys,
+      getCoin,
+      swapProvider,
+      data,
+    })
   }
   const { inputs, outputs, authority } = sim.data
   const primaryIn = shouldBePresent(inputs[0])
@@ -79,6 +88,8 @@ export const parseSolanaTx = async ({
       inputCoin,
       outAmount: primaryOut.amount.toString(),
       outputCoin,
+      data,
+      swapProvider,
     },
   }
 }

@@ -8,6 +8,8 @@ export type SolanaTxData =
         outputCoin: Coin
         inAmount: string
         outAmount: string
+        data: string
+        swapProvider: string
       }
     }
   | {
