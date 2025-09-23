@@ -2,7 +2,7 @@ import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { findByTicker } from '@core/chain/coin/utils/findByTicker'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 
 import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 import { isStakeableCoin } from '../config'
@@ -12,7 +12,7 @@ import { useMergeOptions } from './useMergeOptions'
 import { useMintOptions } from './useMintOptions'
 import { useRedeemOptions } from './useRedeemOptions'
 
-export const useCorrectSelectedCoin = (currentDepositCoin: AccountCoin) => {
+export const useCorrectSelectedCoin = () => {
   const [action] = useDepositAction()
   const coins = useCurrentVaultCoins()
   const unmergeOptions = useUnmergeOptions()
@@ -20,28 +20,29 @@ export const useCorrectSelectedCoin = (currentDepositCoin: AccountCoin) => {
   const redeemOptions = useRedeemOptions()
   const mintOptions = useMintOptions()
 
-  const fallbackStakeableCoin = coins.find(
-    coin =>
-      coin.chain === currentDepositCoin.chain && isStakeableCoin(coin.ticker)
-  )
+  return useCallback(
+    (currentDepositCoin: AccountCoin) => {
+      const fallbackStakeableCoin = coins.find(
+        coin =>
+          coin.chain === currentDepositCoin.chain &&
+          isStakeableCoin(coin.ticker)
+      )
 
-  const ticker = currentDepositCoin.ticker
-  const potentialRUNECoin = findByTicker({ coins, ticker: 'RUNE' })
-  const potentialCACAOCoin = findByTicker({ coins, ticker: 'CACAO' })
+      const selectStakeableCoin = () => {
+        if (!fallbackStakeableCoin) {
+          throw new Error('No stakeable coin found')
+        }
 
-  const selectStakeableCoin = useCallback(() => {
-    if (!fallbackStakeableCoin) {
-      throw new Error('No stakeable coin found')
-    }
+        return isStakeableCoin(currentDepositCoin.ticker)
+          ? currentDepositCoin
+          : fallbackStakeableCoin
+      }
 
-    return isStakeableCoin(currentDepositCoin.ticker)
-      ? currentDepositCoin
-      : fallbackStakeableCoin
-  }, [currentDepositCoin, fallbackStakeableCoin])
+      const ticker = currentDepositCoin.ticker
+      const potentialRUNECoin = findByTicker({ coins, ticker: 'RUNE' })
+      const potentialCACAOCoin = findByTicker({ coins, ticker: 'CACAO' })
 
-  return useMemo(
-    () =>
-      match(action, {
+      return match(action, {
         ibc_transfer: () => currentDepositCoin,
         switch: () => currentDepositCoin,
         bond_with_lp: () => shouldBePresent(potentialCACAOCoin),
@@ -84,19 +85,8 @@ export const useCorrectSelectedCoin = (currentDepositCoin: AccountCoin) => {
         leave: () =>
           findByTicker({ coins, ticker: 'RUNE' }) ||
           findByTicker({ coins, ticker: 'CACAO' }),
-      }),
-    [
-      action,
-      coins,
-      currentDepositCoin,
-      selectStakeableCoin,
-      mergeOptions,
-      mintOptions,
-      potentialCACAOCoin,
-      potentialRUNECoin,
-      redeemOptions,
-      ticker,
-      unmergeOptions,
-    ]
+      })
+    },
+    [action, coins, mergeOptions, mintOptions, redeemOptions, unmergeOptions]
   )
 }

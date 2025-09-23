@@ -1,9 +1,11 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { ChildrenProp } from '@lib/ui/props'
+import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
 import {
   createContext,
   Dispatch,
   SetStateAction,
+  useCallback,
   useContext,
   useState,
 } from 'react'
@@ -19,17 +21,23 @@ const DepositCoinContext = createContext<
 export const DepositCoinProvider = ({ children }: ChildrenProp) => {
   const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
   const initialCoin = useCurrentVaultCoin(coinKey)
+  const correctCoin = useCorrectSelectedCoin()
 
-  const state = useState(initialCoin)
+  const state = useStateCorrector(
+    useState(initialCoin),
+    useCallback(
+      value => {
+        const correctedCoin = correctCoin(value)
 
-  const [coin, setCoin] = state
+        if (!correctedCoin || correctedCoin.ticker === value.ticker) {
+          return value
+        }
 
-  const correctedCoin = useCorrectSelectedCoin(coin)
-
-  if (correctedCoin && coin !== correctedCoin) {
-    setCoin(correctedCoin)
-    return
-  }
+        return correctedCoin
+      },
+      [correctCoin]
+    )
+  )
 
   return (
     <DepositCoinContext.Provider value={state}>
