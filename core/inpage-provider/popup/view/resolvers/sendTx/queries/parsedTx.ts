@@ -72,7 +72,7 @@ export const useParsedTxQuery = (): Query<ParsedTx> => {
         const coin = matchRecordUnion<CustomTxData, Coin>(customTxData, {
           regular: ({ coin }) => coin,
           solana: tx => {
-            const { inputCoin } = getRecordUnionValue(tx, 'swap')
+            const { inputCoin } = getRecordUnionValue(tx)
 
             return inputCoin
           },

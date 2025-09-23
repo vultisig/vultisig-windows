@@ -1,10 +1,11 @@
 import { Coin, CoinKey } from '@core/chain/coin/Coin'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
-import { PublicKey } from '@solana/web3.js'
+import { PublicKey, SystemProgram } from '@solana/web3.js'
 import { TW } from '@trustwallet/wallet-core'
 
 import { parseOneInchSwapInstruction } from './instructionParser/parse1inchSwapInstruction'
+import { parseSystemInstruction } from './instructionParser/parseSystemInstruction'
 import { parseTokenInstruction } from './instructionParser/parseTokenInstruction'
 import { oneInchSwapProgram } from './swapPrograms'
 
@@ -38,7 +39,9 @@ export const parseProgramCall = async ({
         data,
       })
     } else if (program.toBase58() === TOKEN_PROGRAM_ID.toBase58()) {
-      return await parseTokenInstruction(tx, instruction, keys, getCoin)
+      return await parseTokenInstruction({ tx, instruction, keys, getCoin })
+    } else if (program.toBase58() === SystemProgram.programId.toBase58()) {
+      return await parseSystemInstruction({ instruction, keys })
     }
   }
   throw new Error('Invalid Solana transaction: no supported instruction found')
