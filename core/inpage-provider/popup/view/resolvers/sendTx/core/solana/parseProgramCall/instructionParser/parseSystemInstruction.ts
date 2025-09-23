@@ -21,9 +21,9 @@ export const parseSystemInstruction = async ({
 
   return {
     transfer: {
-      authority: keys[instruction.accounts[0]].toString(),
+      authority: keys[instruction.accounts[0]].toBase58(),
       inAmount: lamports.toString(),
-      receiverAddress: keys[instruction.accounts[1]].toString(),
+      receiverAddress: keys[instruction.accounts[1]].toBase58(),
       inputCoin: chainFeeCoin.Solana,
     },
   }
