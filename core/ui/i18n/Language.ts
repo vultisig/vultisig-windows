@@ -9,7 +9,7 @@ export const languageName: Record<Language, string> = {
   es: 'Español',
   it: 'Italiano',
   hr: 'Hrvatski',
-  pt: 'Portuges',
+  pt: 'Português',
 }
 
 export const languageRegion: Record<Language, string> = {
