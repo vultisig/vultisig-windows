@@ -1,13 +1,18 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { Chain } from '@core/chain/Chain'
 import { fetchMergeableTokenBalances } from '@core/chain/chains/thorchain/ruji/services/fetchMergeableTokenBalances'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { bigIntSum } from '@lib/utils/bigint/bigIntSum'
 import { useQuery } from '@tanstack/react-query'
 
+import { useCurrentVaultAddresses } from '../../state/currentVaultCoins'
+
 const staleTime = 30_000
 
-export const useMergeableTokenBalancesQuery = (address: string) =>
-  useQuery({
+export const useMergeableTokenBalancesQuery = () => {
+  const address = useCurrentVaultAddresses()[Chain.THORChain]
+
+  return useQuery({
     queryKey: ['mergeableTokenBalances', address],
     staleTime,
     queryFn: () => fetchMergeableTokenBalances(address),
@@ -31,3 +36,4 @@ export const useMergeableTokenBalancesQuery = (address: string) =>
       }
     },
   })
+}
