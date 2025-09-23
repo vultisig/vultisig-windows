@@ -1,4 +1,3 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { getPsbtTransferInfo } from '@core/chain/chains/utxo/tx/getPsbtTransferInfo'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/resolver'
 import {
@@ -29,20 +28,16 @@ const cosmosMsgTypeToTransactionType: Record<CosmosMsgType, TransactionType> = {
 export const getChainSpecificInput = (input: ParsedTx) => {
   const { coin, customTxData, feeSettings } = input
 
-  const amount = matchRecordUnion<CustomTxData, number>(customTxData, {
+  const amount = matchRecordUnion<CustomTxData, bigint>(customTxData, {
     regular: ({ transactionDetails }) =>
-      fromChainAmount(
-        Number(transactionDetails.amount?.amount) || 0,
-        coin.decimals
-      ),
+      BigInt(transactionDetails.amount?.amount ?? 0),
     solana: tx => {
       const { inAmount } = getRecordUnionValue(tx)
-      return fromChainAmount(Number(inAmount) || 0, coin.decimals)
+      return BigInt(inAmount ?? 0)
     },
     psbt: psbt => {
       const { sendAmount } = getPsbtTransferInfo(psbt, coin.address)
-
-      return fromChainAmount(Number(sendAmount) || 0, coin.decimals)
+      return sendAmount
     },
   })
 

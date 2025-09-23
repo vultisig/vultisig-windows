@@ -1,4 +1,5 @@
 import { formatFee } from '@core/chain/tx/fee/format/formatFee'
+import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
@@ -20,7 +21,7 @@ export const KeysignEstimatedFee = () => {
 
     return formatFee({
       chain,
-      chainSpecific: blockchainSpecific,
+      amount: getFeeAmount(blockchainSpecific),
     })
   }, [blockchainSpecific, chain])
 
