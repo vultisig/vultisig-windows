@@ -9,13 +9,17 @@ import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueries
 import { Query } from '@lib/ui/query/Query'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
+import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useQuery } from '@tanstack/react-query'
+import { useCallback, useMemo } from 'react'
 
+import { usePopupContext } from '../../../state/context'
 import { usePopupInput } from '../../../state/input'
 import { useGetCoin } from '../core/coin'
 import { CustomTxData, getCustomTxData } from '../core/customTxData'
 import { getFeeSettings } from '../core/feeSettings'
 import { ParsedTx } from '../core/parsedTx'
+import { ITransactionPayload } from '../interfaces'
 
 export const useParsedTxQuery = (): Query<ParsedTx> => {
   const transactionPayload = usePopupInput<'sendTx'>()
@@ -24,9 +28,17 @@ export const useParsedTxQuery = (): Query<ParsedTx> => {
 
   const getCoin = useGetCoin()
 
+  const { requestOrigin } = usePopupContext()
+
   const customTxDataQuery = useQuery({
     queryKey: ['custom-tx-data', transactionPayload],
-    queryFn: () => getCustomTxData({ walletCore, transactionPayload, getCoin }),
+    queryFn: () =>
+      getCustomTxData({
+        walletCore,
+        transactionPayload,
+        getCoin,
+        requestOrigin,
+      }),
     ...noRefetchQueryOptions,
     retry: false,
   })
@@ -38,46 +50,61 @@ export const useParsedTxQuery = (): Query<ParsedTx> => {
     retry: false,
   })
 
+  const skipBroadcast = useMemo(
+    () =>
+      matchRecordUnion<ITransactionPayload, boolean | undefined>(
+        transactionPayload,
+        {
+          keysign: ({ transactionDetails }) => transactionDetails.skipBroadcast,
+          serialized: ({ skipBroadcast }) => skipBroadcast,
+        }
+      ),
+    [transactionPayload]
+  )
+
   return useTransformQueriesData(
     {
       feeSettings: feeSettingsQuery,
       customTxData: customTxDataQuery,
     },
-    ({ feeSettings, customTxData }) => {
-      const coin = matchRecordUnion<CustomTxData, Coin>(customTxData, {
-        regular: ({ coin }) => coin,
-        solanaTx: solanaTx => {
-          return matchRecordUnion(solanaTx, {
-            swap: ({ inputCoin }) => inputCoin,
-            transfer: ({ inputCoin }) => inputCoin,
-          })
-        },
-        psbt: () => chainFeeCoin[Chain.Bitcoin],
-      })
+    useCallback(
+      ({ feeSettings, customTxData }) => {
+        const coin = matchRecordUnion<CustomTxData, Coin>(customTxData, {
+          regular: ({ coin }) => coin,
+          solana: tx => {
+            const { inputCoin } = getRecordUnionValue(tx, 'swap')
 
-      const { chain } = coin
+            return inputCoin
+          },
+          psbt: () => chainFeeCoin[Chain.Bitcoin],
+        })
 
-      const publicKey = getPublicKey({
-        chain,
-        walletCore,
-        hexChainCode: vault.hexChainCode,
-        publicKeys: vault.publicKeys,
-      })
+        const { chain } = coin
 
-      const address = deriveAddress({
-        chain,
-        publicKey,
-        walletCore,
-      })
+        const publicKey = getPublicKey({
+          chain,
+          walletCore,
+          hexChainCode: vault.hexChainCode,
+          publicKeys: vault.publicKeys,
+        })
 
-      return {
-        feeSettings,
-        customTxData,
-        coin: {
-          ...coin,
-          address,
-        },
-      }
-    }
+        const address = deriveAddress({
+          chain,
+          publicKey,
+          walletCore,
+        })
+
+        return {
+          feeSettings,
+          customTxData,
+          skipBroadcast,
+          coin: {
+            ...coin,
+            address,
+          },
+        }
+      },
+      [vault.hexChainCode, vault.publicKeys, walletCore, skipBroadcast]
+    )
   )
 }

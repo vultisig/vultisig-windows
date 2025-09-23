@@ -14,11 +14,21 @@ const oneInchSwapInstructionAccountsIndexes = {
   maker: 5,
 }
 
-export const parseOneInchSwapInstruction = async (
-  instruction: TW.Solana.Proto.RawMessage.IInstruction,
-  keys: PublicKey[],
+type Input = {
+  instruction: TW.Solana.Proto.RawMessage.IInstruction
+  keys: PublicKey[]
   getCoin: (coinKey: CoinKey) => Promise<Coin>
-): Promise<SolanaTxData> => {
+  swapProvider: string
+  data: string
+}
+
+export const parseOneInchSwapInstruction = async ({
+  instruction,
+  keys,
+  getCoin,
+  swapProvider,
+  data,
+}: Input): Promise<SolanaTxData> => {
   if (!instruction.accounts || !instruction.programData)
     throw new Error('invalid 1inch instruction')
   const inputAmount = readU64LE(Buffer.from(instruction.programData), 12)
@@ -56,6 +66,8 @@ export const parseOneInchSwapInstruction = async (
       inputCoin,
       outAmount: outputAmount.toString(),
       outputCoin,
+      data,
+      swapProvider,
     },
   }
 }

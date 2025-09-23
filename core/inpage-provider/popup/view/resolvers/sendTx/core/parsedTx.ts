@@ -7,4 +7,5 @@ export type ParsedTx = {
   feeSettings: FeeSettings | null
   customTxData: CustomTxData
   coin: AccountCoin
+  skipBroadcast?: boolean
 }
