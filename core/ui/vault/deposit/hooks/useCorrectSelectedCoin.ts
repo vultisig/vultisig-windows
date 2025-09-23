@@ -20,7 +20,10 @@ export const useCorrectSelectedCoin = (currentDepositCoin: AccountCoin) => {
   const redeemOptions = useRedeemOptions()
   const mintOptions = useMintOptions()
 
-  const fallbackStakeableCoin = coins.find(coin => isStakeableCoin(coin.ticker))
+  const fallbackStakeableCoin = coins.find(
+    coin =>
+      coin.chain === currentDepositCoin.chain && isStakeableCoin(coin.ticker)
+  )
 
   const ticker = currentDepositCoin.ticker
   const potentialRUNECoin = findByTicker({ coins, ticker: 'RUNE' })
