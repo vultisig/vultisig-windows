@@ -5,7 +5,7 @@ import { useMemo } from 'react'
 
 import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 import { ChainAction, chainActionsRecord } from '../ChainAction'
-import { isStakeableChain } from '../config'
+import { isStakeableChain, isStakeableCoin } from '../config'
 import { DepositEnabledChain } from '../DepositEnabledChain'
 import { useUnmergeOptions } from '../DepositForm/ActionSpecific/UnmergeSpecific/hooks/useUnmergeOptions'
 import { useMergeOptions } from './useMergeOptions'
@@ -18,6 +18,16 @@ export const useAvailableChainActions = (chain: Chain) => {
   const redeemOptions = useRedeemOptions()
   const mergeOptions = useMergeOptions()
   const unmergeOptions = useUnmergeOptions()
+
+  const hasStakeableCoins = useMemo(
+    () =>
+      coins
+        .filter(({ chain: currentCoinChain }) => currentCoinChain === chain)
+        .some(coin => isStakeableCoin(coin.ticker)),
+    [chain, coins]
+  )
+
+  const areStakeActionsAvailable = hasStakeableCoins && isStakeableChain(chain)
 
   const allActions = useMemo<ChainAction[]>(
     () =>
@@ -36,8 +46,8 @@ export const useAvailableChainActions = (chain: Chain) => {
           bond_with_lp: () => !!findByTicker({ coins, ticker: 'CACAO' }),
           unbond_with_lp: () => !!findByTicker({ coins, ticker: 'CACAO' }),
           vote: () => true,
-          stake: () => isStakeableChain(chain),
-          unstake: () => isStakeableChain(chain),
+          stake: () => areStakeActionsAvailable,
+          unstake: () => areStakeActionsAvailable,
           ibc_transfer: () => true,
           merge: () => mergeOptions.length > 0,
           switch: () => true,
@@ -50,8 +60,8 @@ export const useAvailableChainActions = (chain: Chain) => {
       ),
 
     [
+      areStakeActionsAvailable,
       allActions,
-      chain,
       coins,
       mergeOptions.length,
       mintOptions.length,
