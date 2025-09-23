@@ -1,3 +1,15 @@
+const fiatCurrencies = [
+  'usd',
+  'eur',
+  'gbp',
+  'chf',
+  'jpy',
+  'cny',
+  'cad',
+  'aud',
+  'sgd',
+  'sek',
+]
 const million = 1000000
 const billion = 1000000000
 
@@ -27,19 +39,19 @@ export const formatAmount = (
     )
   }
 
-  try {
+  const isFiat = fiatCurrencies.includes(currency.toLowerCase())
+
+  if (isFiat) {
     const formatter = new Intl.NumberFormat(validLocale, {
       style: 'currency',
-      currency: currency,
+      currency: currency.toUpperCase(),
       maximumFractionDigits: fiatMaxDecimalPlaces,
     })
-
     return formatter.format(amount)
-  } catch {
+  } else {
     const formatter = new Intl.NumberFormat(validLocale, {
       maximumFractionDigits: tokenMaxDecimalPlaces,
     })
-
     return `${formatter.format(amount)} ${currency}`
   }
 }
