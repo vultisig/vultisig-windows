@@ -13,7 +13,7 @@ const toastDuration = 3000
 export const DepositPrompt = (state: CoreViewState<'deposit'>) => {
   const navigate = useCoreNavigate()
   const { t } = useTranslation()
-  const actions = useAvailableChainActions()
+  const actions = useAvailableChainActions(state.coin.chain)
   const { addToast } = useToast()
 
   return (

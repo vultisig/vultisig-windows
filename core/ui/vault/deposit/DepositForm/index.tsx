@@ -1,6 +1,4 @@
-import { Chain } from '@core/chain/Chain'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { DepositActionSpecific } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/DepositActionSpecific'
 import { DepositActionItemExplorer } from '@core/ui/vault/deposit/DepositForm/DepositActionItemExplorer'
 import {
@@ -24,6 +22,7 @@ import { FC } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { useAvailableChainActions } from '../hooks/useAvailableChainActions'
 import { useDepositBalance } from '../hooks/useDepositBalance'
 import { useDepositFormConfig } from '../hooks/useDepositFormConfig'
 import { useDepositAction } from '../providers/DepositActionProvider'
@@ -31,19 +30,15 @@ import { useDepositCoin } from '../providers/DepositCoinProvider'
 
 export type FormData = Record<string, any>
 type DepositFormProps = {
-  onSubmit: (data: FieldValues, selectedChainAction: ChainAction) => void
-  chainActionOptions: ChainAction[]
-  chain: Chain
+  onSubmit: (data: FieldValues) => void
 }
 
-export const DepositForm: FC<DepositFormProps> = ({
-  onSubmit,
-  chainActionOptions,
-  chain,
-}) => {
+export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
   const [selectedChainAction, setSelectedChainAction] = useDepositAction()
+
   const { t } = useTranslation()
   const [coin] = useDepositCoin()
+  const availableActions = useAvailableChainActions(coin.chain)
 
   const { balanceFormatted } = useDepositBalance({
     selectedChainAction,
@@ -66,12 +61,19 @@ export const DepositForm: FC<DepositFormProps> = ({
   })
 
   const handleFormSubmit = (data: FieldValues) => {
-    onSubmit(data, selectedChainAction as ChainAction)
+    onSubmit(data)
   }
 
   return (
     <DepositFormHandlersProvider
-      initialValue={{ setValue, getValues, watch, chain, register, control }}
+      initialValue={{
+        setValue,
+        getValues,
+        watch,
+        chain: coin.chain,
+        register,
+        control,
+      }}
     >
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
@@ -83,7 +85,7 @@ export const DepositForm: FC<DepositFormProps> = ({
           <InputContainer>
             <InputFieldWrapper>
               {t('chain_message_deposit', {
-                chain,
+                chain: coin.chain,
               })}
             </InputFieldWrapper>
           </InputContainer>
@@ -104,7 +106,7 @@ export const DepositForm: FC<DepositFormProps> = ({
               <DepositActionItemExplorer
                 onClose={onClose}
                 activeOption={selectedChainAction}
-                options={chainActionOptions}
+                options={availableActions}
                 onOptionClick={option => {
                   onClose()
                   setSelectedChainAction(option)
