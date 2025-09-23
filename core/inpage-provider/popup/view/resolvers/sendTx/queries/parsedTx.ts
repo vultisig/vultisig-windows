@@ -35,6 +35,7 @@ export const useParsedTxQuery = (): Query<ParsedTx> => {
     queryFn: () =>
       getCustomTxData({
         walletCore,
+        vault,
         transactionPayload,
         getCoin,
         requestOrigin,
