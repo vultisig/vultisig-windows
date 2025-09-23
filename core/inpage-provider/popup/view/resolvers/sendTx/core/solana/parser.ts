@@ -9,21 +9,24 @@ import { TW, WalletCore } from '@trustwallet/wallet-core'
 
 import parseProgramCall from './parseProgramCall'
 import { simulateSolanaTransaction } from './simulate'
-import { AddressTableLookup, SolanaTxData } from './types/types'
+import { AddressTableLookup } from './types/types'
 import { mergedKeys, resolveAddressTableKeys } from './utils'
 
 type ParseSolanaTxInput = {
   walletCore: WalletCore
-  inputTx: Uint8Array
+  data: string
   getCoin: (coinKey: CoinKey) => Promise<Coin>
+  swapProvider: string
 }
 
 export const parseSolanaTx = async ({
   walletCore,
-  inputTx,
+  data,
   getCoin,
-}: ParseSolanaTxInput): Promise<SolanaTxData> => {
+  swapProvider,
+}: ParseSolanaTxInput): Promise<SolanaSwapTxData> => {
   const connection = new Connection(solanaRpcUrl)
+  const inputTx = Uint8Array.from(Buffer.from(data, 'base64'))
   const txInputDataArray = Object.values(inputTx)
   const txInputDataBuffer = new Uint8Array(txInputDataArray as any)
   const buffer = Buffer.from(txInputDataBuffer)
@@ -73,12 +76,12 @@ export const parseSolanaTx = async ({
     })
   )
   return {
-    swap: {
-      authority,
-      inAmount: primaryIn.amount.toString(),
-      inputCoin,
-      outAmount: primaryOut.amount.toString(),
-      outputCoin,
-    },
+    authority,
+    inAmount: primaryIn.amount.toString(),
+    inputCoin,
+    outAmount: primaryOut.amount.toString(),
+    outputCoin,
+    data,
+    swapProvider,
   }
 }

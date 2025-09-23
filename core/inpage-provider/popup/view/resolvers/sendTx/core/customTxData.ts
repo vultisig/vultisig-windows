@@ -8,6 +8,7 @@ import { Coin, CoinKey } from '@core/chain/coin/Coin'
 import { attempt } from '@lib/utils/attempt'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
+import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { Psbt } from 'bitcoinjs-lib'
 
@@ -15,7 +16,7 @@ import { IKeysignTransactionPayload, ITransactionPayload } from '../interfaces'
 import { parseSolanaTx } from './solana/parser'
 import { SolanaTxData } from './solana/types/types'
 
-export type RegularTxData = IKeysignTransactionPayload & {
+type RegularTxData = IKeysignTransactionPayload & {
   isEvmContractCall?: boolean
   coin: Coin
 }
@@ -35,12 +36,14 @@ type GetCustomTxDataInput = {
   walletCore: WalletCore
   transactionPayload: ITransactionPayload
   getCoin: (coinKey: CoinKey) => Promise<Coin>
+  requestOrigin: string
 }
 
 export const getCustomTxData = ({
   walletCore,
   transactionPayload,
   getCoin,
+  requestOrigin,
 }: GetCustomTxDataInput) =>
   matchRecordUnion<ITransactionPayload, Promise<CustomTxData>>(
     transactionPayload,
@@ -105,13 +108,12 @@ export const getCustomTxData = ({
           return { psbt }
         }
 
-        const serialized = Uint8Array.from(Buffer.from(data, 'base64'))
-
         return {
           solanaTx: await parseSolanaTx({
             walletCore,
-            inputTx: serialized,
+            data,
             getCoin,
+            swapProvider: getUrlBaseDomain(requestOrigin),
           }),
         }
       },
