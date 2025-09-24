@@ -17,12 +17,18 @@ import { publicActionsL2 } from 'viem/zksync'
 import { ChainSpecificResolver } from '../resolver'
 
 const baseFeeMultiplier = (value: bigint) => (value * 15n) / 10n
-const minMaxFeePerGasWei = 1n
+const minMaxFeePerGas = 1n
+
+type EvmFee = {
+  gasLimit: bigint
+  maxPriorityFeePerGas: bigint
+  maxFeePerGas: bigint
+}
 
 export const getEthereumSpecific: ChainSpecificResolver<
   EthereumSpecific,
   EvmFeeSettings
-> = async ({ coin, feeSettings, amount, receiver, data }) => {
+> = async ({ coin, feeSettings = {}, amount, receiver, data }) => {
   const { chain } = coin
 
   const client = getEvmClient(chain)
@@ -33,39 +39,42 @@ export const getEthereumSpecific: ChainSpecificResolver<
     })
   )
 
-  if (chain === Chain.Zksync) {
-    const { maxFeePerGas, maxPriorityFeePerGas, gasLimit } = await client
-      .extend(publicActionsL2())
-      .estimateFee({
+  const getEvmFee = async (): Promise<EvmFee> => {
+    if (chain === Chain.Zksync) {
+      return client.extend(publicActionsL2()).estimateFee({
         chain: evmChainInfo[chain],
         account: coin.address as `0x${string}`,
         to: shouldBePresent(receiver) as `0x${string}`,
         value: amount,
         data: data as `0x${string}` | undefined,
       })
+    }
 
-    return create(EthereumSpecificSchema, {
-      maxFeePerGasWei: maxFeePerGas.toString(),
-      priorityFee: maxPriorityFeePerGas.toString(),
-      gasLimit: gasLimit.toString(),
-      nonce,
-    })
+    const baseFee = await getEvmBaseFee(chain)
+    const maxPriorityFeePerGas = await getEvmMaxPriorityFeePerGas(chain)
+
+    const maxFeePerGas = bigIntMax(
+      baseFeeMultiplier(baseFee) + maxPriorityFeePerGas,
+      minMaxFeePerGas
+    )
+
+    return {
+      maxFeePerGas,
+      maxPriorityFeePerGas,
+      gasLimit: getEvmGasLimit(coin),
+    }
   }
 
-  const gasLimit = feeSettings?.gasLimit ?? getEvmGasLimit(coin)
+  const estimatedFee = await getEvmFee()
 
-  const baseFee = await getEvmBaseFee(chain)
-  const defaultPriorityFee = await getEvmMaxPriorityFeePerGas(chain)
-  const priorityFee = feeSettings?.priorityFee ?? defaultPriorityFee
-
-  const maxFeePerGasWei = bigIntMax(
-    baseFeeMultiplier(baseFee) + priorityFee,
-    minMaxFeePerGasWei
-  )
+  const { maxFeePerGas, maxPriorityFeePerGas, gasLimit } = {
+    ...estimatedFee,
+    ...feeSettings,
+  }
 
   return create(EthereumSpecificSchema, {
-    maxFeePerGasWei: maxFeePerGasWei.toString(),
-    priorityFee: priorityFee.toString(),
+    maxFeePerGasWei: maxFeePerGas.toString(),
+    priorityFee: maxPriorityFeePerGas.toString(),
     nonce,
     gasLimit: gasLimit.toString(),
   })
