@@ -7,12 +7,18 @@ import { TW } from '@trustwallet/wallet-core'
 
 import { SolanaTxData } from '../../types/types'
 
-export const parseTokenInstruction = async (
-  tx: TW.Solana.Proto.RawMessage.IMessageLegacy,
-  instruction: TW.Solana.Proto.RawMessage.IInstruction,
-  keys: PublicKey[],
+type Input = {
+  tx: TW.Solana.Proto.RawMessage.IMessageLegacy
+  instruction: TW.Solana.Proto.RawMessage.IInstruction
+  keys: PublicKey[]
   getCoin: (coinKey: CoinKey) => Promise<Coin>
-): Promise<SolanaTxData> => {
+}
+export const parseTokenInstruction = async ({
+  tx,
+  instruction,
+  keys,
+  getCoin,
+}: Input): Promise<SolanaTxData> => {
   const debugPrefix = '[parseTokenInstruction]'
   if (
     !instruction.accounts ||
