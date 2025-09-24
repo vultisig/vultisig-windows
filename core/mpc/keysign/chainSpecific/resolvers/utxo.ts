@@ -1,5 +1,4 @@
 import { create } from '@bufbuild/protobuf'
-import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { UtxoChain } from '@core/chain/Chain'
 import { getUtxoStats } from '@core/chain/chains/utxo/client/getUtxoStats'
 import { getCoinBalance } from '@core/chain/coin/balance'
@@ -42,8 +41,7 @@ export const getUtxoSpecific: ChainSpecificResolver<
 
   if (amount) {
     const balance = await getCoinBalance(coin)
-    const requested = toChainAmount(amount, coin.decimals)
-    result.sendMaxAmount = balance - requested <= dustStats
+    result.sendMaxAmount = balance - amount <= dustStats
   }
 
   return result
