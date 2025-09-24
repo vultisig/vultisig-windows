@@ -69,7 +69,7 @@ export const useSwapChainSpecificQuery = () => {
 
       const input: ChainSpecificResolverInput = {
         coin: fromCoin,
-        amount: fromAmount,
+        amount: toChainAmount(fromAmount, fromCoin.decimals),
         receiver: toAddress,
       }
 

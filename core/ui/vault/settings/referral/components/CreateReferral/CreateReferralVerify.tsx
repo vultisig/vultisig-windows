@@ -1,5 +1,6 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { formatFee } from '@core/chain/tx/fee/format/formatFee'
+import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
@@ -129,7 +130,7 @@ export const CreateReferralVerify = ({ onBack }: OnBackProp) => {
               {t('est_network_fee')}
             </Text>
             <Text size={14}>
-              {formatFee({ chain, chainSpecific: chainSpecific.data })}
+              {formatFee({ chain, amount: getFeeAmount(chainSpecific.data) })}
             </Text>
           </TxOverviewRow>
           <TxOverviewMemo value={memo} chain={chain} />
