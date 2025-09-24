@@ -62,23 +62,18 @@ export const UnstakeSTCY = () => {
               </HStack>
             }
             type="number"
-            placeholder={t('enter_amount')}
+            placeholder={t('enter_percentage')}
+            shouldBePositive
             value={getValues('percentage')}
-            onChange={e => {
-              const percentage = Number(e.target.value)
-              setValue('percentage', percentage, {
-                shouldValidate: true,
-              })
-
+            onValueChange={value => {
+              const percentage = value ?? 0
+              setValue('percentage', percentage, { shouldValidate: true })
               const amount = Number(
                 ((percentage / 100) * humanReadableBalance).toFixed(
                   knownCosmosTokens.THORChain['x/staking-tcy'].decimals
                 )
               )
-
-              setValue('amount', amount, {
-                shouldValidate: true,
-              })
+              setValue('amount', amount, { shouldValidate: true })
             }}
           />
         )}
