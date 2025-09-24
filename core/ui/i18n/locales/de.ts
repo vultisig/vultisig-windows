@@ -55,6 +55,7 @@ export const de = {
   passcodes_do_not_match: 'Passcodes stimmen nicht überein',
   search_field_placeholder: 'Suchen..',
   referral_reg_fee: 'Registrierungsgebühr',
+  enter_percentage: 'Prozentangabe eingeben',
   select: 'Auswählen',
   pick_referral_code: 'Referral-Code auswählen',
   referral_status: 'Status',
