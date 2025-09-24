@@ -94,7 +94,7 @@ export const getDepositFormConfig = ({
         amount: z
           .string()
           .transform(Number)
-          .pipe(z.number().min(0.0001).positive().max(totalAmountAvailable)),
+          .pipe(z.number().positive().max(totalAmountAvailable)),
       }),
     }),
     redeem: () => ({
@@ -149,7 +149,7 @@ export const getDepositFormConfig = ({
         amount: z
           .string()
           .transform(val => Number(val))
-          .pipe(z.number().positive().min(0.001).max(totalAmountAvailable)),
+          .pipe(z.number().positive().max(totalAmountAvailable)),
       }),
     }),
     switch: () => ({
@@ -165,7 +165,7 @@ export const getDepositFormConfig = ({
         amount: z
           .string()
           .transform(val => Number(val))
-          .pipe(z.number().positive().min(0.01).max(totalAmountAvailable)),
+          .pipe(z.number().positive().max(totalAmountAvailable)),
         nodeAddress: z.string().min(1, 'Required'),
         thorchainAddress: z.string().min(1, 'Required'),
       }),
@@ -189,7 +189,6 @@ export const getDepositFormConfig = ({
             z
               .number()
               .positive()
-              .min(0.001, 'Amount must be greater than 0')
               .max(totalAmountAvailable, 'Amount exceeds balance')
           ),
       }),
@@ -251,7 +250,6 @@ export const getDepositFormConfig = ({
             z
               .number()
               .positive()
-              .min(0.01, t('amount'))
               .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
               .refine(val => val > 0, {
                 message: t('amount'),
@@ -307,7 +305,6 @@ export const getDepositFormConfig = ({
             z
               .number()
               .positive()
-              .min(0.01, t('lp_units'))
               // TODO: need to find out how to find the max amount of LP tokens
               // .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
               .refine(val => val > 0, {
@@ -325,7 +322,6 @@ export const getDepositFormConfig = ({
             z
               .number()
               .positive()
-              .min(0.01, t('amount'))
               .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
               .optional()
           ),
@@ -421,7 +417,6 @@ export const getDepositFormConfig = ({
             z
               .number()
               .positive()
-              .min(0.01, t('lp_units'))
               // TODO: need to find out how to find the max amount of LP tokens
               // .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
               .refine(val => val > 0, {
@@ -440,7 +435,6 @@ export const getDepositFormConfig = ({
             z
               .number()
               .positive()
-              .min(0.01, t('amount'))
               .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
               .optional()
           ),
@@ -501,7 +495,6 @@ export const getDepositFormConfig = ({
             z
               .number()
               .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
-              .min(0, t('amount'))
               .refine(val => val >= 0, {
                 message: t('amount'),
               })
@@ -574,7 +567,6 @@ export const getDepositFormConfig = ({
                         z
                           .number()
                           .positive()
-                          .min(0.0001, t('amount'))
                           .max(
                             totalAmountAvailable,
                             t('chainFunctions.amountExceeded')
@@ -590,7 +582,6 @@ export const getDepositFormConfig = ({
                           z
                             .number()
                             .positive()
-                            .min(0.0001, t('amount'))
                             .max(
                               totalAmountAvailable,
                               t('chainFunctions.amountExceeded')
@@ -604,7 +595,7 @@ export const getDepositFormConfig = ({
                 amount: z
                   .string()
                   .transform(val => Number(val))
-                  .pipe(z.number().positive().min(0.01, t('amount'))),
+                  .pipe(z.number().positive()),
                 validatorAddress: z.string().min(1, t('validator_address')),
               }) as any,
           }),
@@ -658,13 +649,7 @@ export const getDepositFormConfig = ({
                     amount: z
                       .string()
                       .transform(Number)
-                      .pipe(
-                        z
-                          .number()
-                          .positive()
-                          .min(0.001)
-                          .max(totalAmountAvailable)
-                      ),
+                      .pipe(z.number().positive().max(totalAmountAvailable)),
                   })
                 : coin.ticker === 'TCY'
                   ? z.discriminatedUnion('autoCompound', [
@@ -674,11 +659,7 @@ export const getDepositFormConfig = ({
                           .number()
                           .transform(Number)
                           .pipe(
-                            z
-                              .number()
-                              .positive()
-                              .min(0.001)
-                              .max(totalAmountAvailable)
+                            z.number().positive().max(totalAmountAvailable)
                           ),
                         percentage: z
                           .number()
@@ -710,7 +691,7 @@ export const getDepositFormConfig = ({
                 amount: z
                   .string()
                   .transform(Number)
-                  .pipe(z.number().positive().min(0.0001, t('amount'))),
+                  .pipe(z.number().positive()),
               }) as any,
           }),
     }),
