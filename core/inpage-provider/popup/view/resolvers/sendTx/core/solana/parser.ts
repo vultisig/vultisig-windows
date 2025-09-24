@@ -54,26 +54,31 @@ export const parseSolanaTx = async ({
   )
   const keys = mergedKeys(staticKeys, resolvedKeys)
 
-  const sim = await attempt(
-    simulateSolanaTransaction({
-      conn: connection,
-      tx: VersionedTransaction.deserialize(buffer),
-      keysIn: keys,
-    })
-  )
-  if (!sim.data) {
-    console.warn('Error simulating transaction', sim.error)
-    return await parseProgramCall({
+  const { data: parsedTx, error } = await attempt(
+    parseProgramCall({
       tx,
       keys,
       getCoin,
       swapProvider,
       data,
     })
+  )
+  if (!error && parsedTx) {
+    return parsedTx
   }
-  const { inputs, outputs, authority } = sim.data
-  const primaryIn = shouldBePresent(inputs[0])
-  const primaryOut = shouldBePresent(outputs[0])
+  const { data: sim, error: simError } = await attempt(
+    simulateSolanaTransaction({
+      conn: connection,
+      tx: VersionedTransaction.deserialize(buffer),
+      keysIn: keys,
+    })
+  )
+  if (simError || !sim) {
+    throw new Error('Error simulating transaction')
+  }
+  const { inputs, outputs, authority } = sim
+  const primaryOut = shouldBePresent(inputs[0])
+  const primaryIn = shouldBePresent(outputs[0])
   const [inputCoin, outputCoin] = await Promise.all(
     [primaryIn, primaryOut].map(({ mint }) => {
       const id = mint === NATIVE_MINT.toBase58() ? undefined : mint
