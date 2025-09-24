@@ -11,11 +11,13 @@ import {
   EthereumSpecificSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { bigIntMax } from '@lib/utils/bigint/bigIntMax'
 import { publicActionsL2 } from 'viem/zksync'
 
 import { ChainSpecificResolver } from '../resolver'
 
-const baseFeeMultiplier = 1.5
+const baseFeeMultiplier = (value: bigint) => (value * 15n) / 10n
+const minMaxFeePerGasWei = 1n
 
 export const getEthereumSpecific: ChainSpecificResolver<
   EthereumSpecific,
@@ -56,13 +58,10 @@ export const getEthereumSpecific: ChainSpecificResolver<
   const defaultPriorityFee = await getEvmMaxPriorityFeePerGas(chain)
   const priorityFee = feeSettings?.priorityFee ?? defaultPriorityFee
 
-  let maxFeePerGasWei = Number(
-    BigInt(
-      Math.round(Number(baseFee) * baseFeeMultiplier + Number(priorityFee))
-    )
+  const maxFeePerGasWei = bigIntMax(
+    baseFeeMultiplier(baseFee) + priorityFee,
+    minMaxFeePerGasWei
   )
-
-  if (maxFeePerGasWei < 1) maxFeePerGasWei = 1
 
   return create(EthereumSpecificSchema, {
     maxFeePerGasWei: maxFeePerGasWei.toString(),
