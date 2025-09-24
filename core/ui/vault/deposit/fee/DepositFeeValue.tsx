@@ -1,4 +1,5 @@
 import { formatFee } from '@core/chain/tx/fee/format/formatFee'
+import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useTranslation } from 'react-i18next'
@@ -16,9 +17,12 @@ export const DepositFeeValue = () => {
       value={query}
       pending={() => <Spinner />}
       error={() => t('failed_to_load')}
-      success={chainSpecific => (
-        <>{formatFee({ chain: coin.chain, chainSpecific })}</>
-      )}
+      success={chainSpecific =>
+        formatFee({
+          chain: coin.chain,
+          amount: getFeeAmount(chainSpecific),
+        })
+      }
     />
   )
 }
