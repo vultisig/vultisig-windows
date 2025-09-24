@@ -26,11 +26,11 @@ export const getFeeSettings = async (
       const gasLimit =
         BigInt(gasSettings?.gasLimit ?? '') || getEvmGasLimit({ chain })
 
-      const priorityFee =
+      const maxPriorityFeePerGas =
         BigInt(gasSettings?.maxPriorityFeePerGas ?? '') ||
         (await getEvmMaxPriorityFeePerGas(chain))
 
-      return { gasLimit, priorityFee }
+      return { gasLimit, maxPriorityFeePerGas }
     },
     serialized: () => null,
   })
