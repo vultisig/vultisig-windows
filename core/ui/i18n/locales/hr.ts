@@ -275,6 +275,7 @@ export const hr = {
   join_keygen_slider7_note1:
     'Višeslojna kompatibilnost. Pristupite svom Vultisig trezoru ',
   join_keygen_slider7_note2: 's više uređaja',
+  enter_percentage: 'Unesite postotak',
   join_keygen_slider7_note3:
     'povećavajući fleksibilnost bez kompromisa u sigurnosti.',
   generating_ecdsa_key: 'Generiranje ECDSA ključa',
