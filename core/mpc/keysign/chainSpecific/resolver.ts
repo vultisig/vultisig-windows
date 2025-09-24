@@ -26,7 +26,7 @@ export type ChainSpecificResolverInput<
   receiver?: string
   feeSettings?: T
   isDeposit?: boolean
-  amount?: number
+  amount?: bigint
   transactionType?: TransactionType
   psbt?: Psbt
 } & (R extends EthereumSpecific ? { data?: string } : {}) &

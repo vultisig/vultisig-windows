@@ -75,7 +75,7 @@ export const DecryptVaultView = ({
         </Button>
         {error?.message && (
           <Text color="danger" size={12}>
-            {error.message}
+            {t('incorrect_password')}
           </Text>
         )}
       </PageFooter>

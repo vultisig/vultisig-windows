@@ -5,7 +5,6 @@ import { Text } from '@lib/ui/text'
 import { ComponentType, FC, PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useSwapChainSpecificQuery } from '../../queries/useSwapChainSpecificQuery'
 import { useSwapFeesQuery } from '../../queries/useSwapFeesQuery'
 import { SwapFeeFiatValue } from './SwapTotalFeeFiatValue'
 
@@ -16,32 +15,20 @@ type VerifySwapFeesProps = {
 export const VerifySwapFees: FC<VerifySwapFeesProps> = ({ RowComponent }) => {
   const { t } = useTranslation()
   const query = useSwapFeesQuery()
-  const chainSpecificQuery = useSwapChainSpecificQuery()
 
   return (
     <>
       <MatchQuery
         value={query}
-        success={({ network }) => {
-          if (!network) return null
-
-          return (
-            <MatchQuery
-              value={chainSpecificQuery}
-              success={chainSpecific => {
-                return (
-                  <RowComponent>
-                    <span>{t('network_fee')}</span>
-                    <Text color="supporting">
-                      {formatFee({ ...network, chainSpecific })} (~
-                      <SwapFeeFiatValue value={[network]} />)
-                    </Text>
-                  </RowComponent>
-                )
-              }}
-            />
-          )
-        }}
+        success={({ network }) => (
+          <RowComponent>
+            <span>{t('network_fee')}</span>
+            <Text color="supporting">
+              {formatFee(network)} (~
+              <SwapFeeFiatValue value={[network]} />)
+            </Text>
+          </RowComponent>
+        )}
       />
       <RowComponent>
         <Text>{t('swap_fee')}</Text>
