@@ -12,6 +12,7 @@ import {
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { bigIntMax } from '@lib/utils/bigint/bigIntMax'
+import { isHex, stringToHex } from 'viem'
 import { publicActionsL2 } from 'viem/zksync'
 
 import { ChainSpecificResolver } from '../resolver'
@@ -25,10 +26,18 @@ type EvmFee = {
   maxFeePerGas: bigint
 }
 
+const formatData = (data: string): `0x${string}` => {
+  if (isHex(data)) {
+    return data
+  }
+
+  return stringToHex(data)
+}
+
 export const getEthereumSpecific: ChainSpecificResolver<
   EthereumSpecific,
   EvmFeeSettings
-> = async ({ coin, feeSettings = {}, amount, receiver, data }) => {
+> = async ({ coin, feeSettings = {}, amount, receiver, data: stringData }) => {
   const { chain } = coin
 
   const client = getEvmClient(chain)
@@ -40,6 +49,8 @@ export const getEthereumSpecific: ChainSpecificResolver<
   )
 
   const getEvmFee = async (): Promise<EvmFee> => {
+    const data = stringData ? formatData(stringData) : undefined
+
     if (chain === Chain.Zksync) {
       return client.extend(publicActionsL2()).estimateFee({
         chain: evmChainInfo[chain],
