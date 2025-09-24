@@ -40,7 +40,7 @@ export const UnstakeTCYNative = () => {
       <ActionInsideInteractiveElement
         render={() => (
           <AmountTextInput
-            placeholder={t('enter_amount')}
+            placeholder={t('enter_percentage')}
             value={getValues('percentage')}
             onChange={e =>
               setValue('percentage', e.target.value, {
