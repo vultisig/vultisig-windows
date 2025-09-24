@@ -67,7 +67,7 @@ export const UnstakeTCYNative = () => {
         action={
           <MaxButton
             onClick={() =>
-              setValue('percentage', '100', { shouldValidate: true })
+              setValue('percentage', 100, { shouldValidate: true })
             }
           >
             {t('max')}

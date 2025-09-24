@@ -80,7 +80,7 @@ export const UnstakeSTCY = () => {
         action={
           <MaxButton
             onClick={() => {
-              setValue('percentage', '100', {
+              setValue('percentage', 100, {
                 shouldValidate: true,
               })
 
