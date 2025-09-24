@@ -24,9 +24,14 @@ export const useSwapFeesQuery = () => {
     ({ swapQuote, chainSpecific }): SwapFees => {
       const fromFeeCoin = chainFeeCoin[fromCoinKey.chain]
 
+      const network = {
+        ...fromFeeCoin,
+        amount: getFeeAmount(chainSpecific),
+        decimals: fromFeeCoin.decimals,
+      }
+
       return matchRecordUnion(swapQuote, {
         native: ({ fees }) => {
-          const networkFeeAmount = getFeeAmount(chainSpecific)
           const swapAmount = BigInt(fees.total)
 
           return {
@@ -35,11 +40,7 @@ export const useSwapFeesQuery = () => {
               amount: swapAmount,
               decimals: getNativeSwapDecimals(toCoinKey),
             },
-            network: {
-              ...fromFeeCoin,
-              amount: networkFeeAmount,
-              decimals: fromFeeCoin.decimals,
-            },
+            network,
           }
         },
         general: ({ tx }) => {
@@ -51,6 +52,7 @@ export const useSwapFeesQuery = () => {
                 amount: BigInt(gasPrice) * BigInt(gas),
                 decimals: fromFeeCoin.decimals,
               },
+              network,
             }),
             solana: ({ networkFee, swapFee }) => ({
               network: {
