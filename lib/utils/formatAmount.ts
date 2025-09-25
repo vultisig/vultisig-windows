@@ -41,11 +41,16 @@ export const formatAmount = (
     return isCurrency ? 'medium' : 'high'
   }
 
-  const formatter = new Intl.NumberFormat(locale, {
-    style: 'currency',
-    currency: isCurrency ? options.currency.toUpperCase() : undefined,
+  const formatOptions: Intl.NumberFormatOptions = {
     maximumFractionDigits: maximumFractionDigitsRecord[getPrecision()],
-  })
+  }
+
+  if (isCurrency) {
+    formatOptions.currency = options.currency.toUpperCase()
+    formatOptions.style = 'currency'
+  }
+
+  const formatter = new Intl.NumberFormat(locale, formatOptions)
 
   const formattedAmount = formatter.format(amount)
 
