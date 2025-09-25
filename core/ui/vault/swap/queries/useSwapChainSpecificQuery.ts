@@ -1,16 +1,18 @@
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
-import { EvmChain, UtxoChain } from '@core/chain/Chain'
+import { UtxoChain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { areEqualCoins } from '@core/chain/coin/Coin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { getSwapKeysignPayloadFields } from '@core/chain/swap/keysign/getSwapKeysignPayloadFields'
-import { getEvmSwapGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
+import { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/resolver'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
 import { isOneOf } from '@lib/utils/array/isOneOf'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
+import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
 
 import { getChainSpecificQuery } from '../../../chain/coin/queries/useChainSpecificQuery'
@@ -76,24 +78,20 @@ export const useSwapChainSpecificQuery = () => {
       coin: fromCoin,
       amount: toChainAmount(fromAmount, fromCoin.decimals),
       receiver: toAddress,
-    }
-
-    if ('native' in swapQuote) {
-      const { swapChain } = swapQuote.native
-      const nativeFeeCoin = chainFeeCoin[swapChain]
-
-      input.isDeposit = areEqualCoins(fromCoinKey, nativeFeeCoin)
+      data: matchRecordUnion<SwapQuote, string | undefined>(swapQuote, {
+        native: () => undefined,
+        general: ({ tx }) => getRecordUnionValue(tx).data,
+      }),
+      isDeposit: matchRecordUnion<SwapQuote, boolean>(swapQuote, {
+        native: ({ swapChain }) =>
+          areEqualCoins(fromCoinKey, chainFeeCoin[swapChain]),
+        general: () => false,
+      }),
     }
 
     if (isOneOf(fromCoin.chain, Object.values(UtxoChain))) {
       input.feeSettings = {
         priority: 'fast',
-      }
-    }
-
-    if (isOneOf(fromCoin.chain, Object.values(EvmChain))) {
-      input.feeSettings = {
-        gasLimit: getEvmSwapGasLimit(fromCoin.chain),
       }
     }
 
