@@ -40,7 +40,7 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
   const { t } = useTranslation()
   const { ticker, decimals } = chainFeeCoin[chain]
   const priorityFeeInGwei = fromChainAmount(
-    BigInt(value.priorityFee),
+    BigInt(value.maxPriorityFeePerGas),
     gwei.decimals
   )
 
@@ -85,7 +85,7 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
             onValueChange={priorityFee =>
               onChange({
                 ...value,
-                priorityFee: priorityFee
+                maxPriorityFeePerGas: priorityFee
                   ? toChainAmount(priorityFee, gwei.decimals)
                   : 0n,
               })

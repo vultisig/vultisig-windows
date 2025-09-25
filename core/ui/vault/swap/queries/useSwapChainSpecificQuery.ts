@@ -5,15 +5,15 @@ import { areEqualCoins } from '@core/chain/coin/Coin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { getSwapKeysignPayloadFields } from '@core/chain/swap/keysign/getSwapKeysignPayloadFields'
 import { getEvmSwapGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
-import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/resolver'
-import { getChainSpecificQueryKey } from '@core/ui/chain/coin/queries/useChainSpecificQuery'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
-import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
+import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
 import { isOneOf } from '@lib/utils/array/isOneOf'
+import { useMemo } from 'react'
 
+import { getChainSpecificQuery } from '../../../chain/coin/queries/useChainSpecificQuery'
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useFromAmount } from '../state/fromAmount'
 import { useToCoin } from '../state/toCoin'
@@ -34,68 +34,80 @@ export const useSwapChainSpecificQuery = () => {
 
   const vault = useCurrentVault()
 
-  return useStateDependentQuery(
-    {
-      swapQuote: swapQuoteQuery.data,
-      fromAmount: fromAmount ?? undefined,
-    },
-    ({ swapQuote, fromAmount }) => {
-      const fromPublicKey = getPublicKey({
-        chain: fromCoin.chain,
-        walletCore,
-        hexChainCode: vault.hexChainCode,
-        publicKeys: vault.publicKeys,
-      })
+  const queryInput: ChainSpecificResolverInput | undefined = useMemo(() => {
+    const { data: swapQuote } = swapQuoteQuery
 
-      const toPublicKey = getPublicKey({
-        chain: toCoin.chain,
-        walletCore,
-        hexChainCode: vault.hexChainCode,
-        publicKeys: vault.publicKeys,
-      })
+    if (!swapQuote) {
+      return
+    }
 
-      const { toAddress } = getSwapKeysignPayloadFields({
-        amount: toChainAmount(fromAmount, fromCoin.decimals),
-        quote: swapQuote,
-        fromCoin: {
-          ...fromCoin,
-          hexPublicKey: Buffer.from(fromPublicKey.data()).toString('hex'),
-        },
-        toCoin: {
-          ...toCoin,
-          hexPublicKey: Buffer.from(toPublicKey.data()).toString('hex'),
-        },
-      })
+    if (!fromAmount) {
+      return
+    }
 
-      const input: ChainSpecificResolverInput = {
-        coin: fromCoin,
-        amount: toChainAmount(fromAmount, fromCoin.decimals),
-        receiver: toAddress,
-      }
+    const fromPublicKey = getPublicKey({
+      chain: fromCoin.chain,
+      walletCore,
+      hexChainCode: vault.hexChainCode,
+      publicKeys: vault.publicKeys,
+    })
 
-      if ('native' in swapQuote) {
-        const { swapChain } = swapQuote.native
-        const nativeFeeCoin = chainFeeCoin[swapChain]
+    const toPublicKey = getPublicKey({
+      chain: toCoin.chain,
+      walletCore,
+      hexChainCode: vault.hexChainCode,
+      publicKeys: vault.publicKeys,
+    })
 
-        input.isDeposit = areEqualCoins(fromCoinKey, nativeFeeCoin)
-      }
+    const { toAddress } = getSwapKeysignPayloadFields({
+      amount: toChainAmount(fromAmount, fromCoin.decimals),
+      quote: swapQuote,
+      fromCoin: {
+        ...fromCoin,
+        hexPublicKey: Buffer.from(fromPublicKey.data()).toString('hex'),
+      },
+      toCoin: {
+        ...toCoin,
+        hexPublicKey: Buffer.from(toPublicKey.data()).toString('hex'),
+      },
+    })
 
-      if (isOneOf(fromCoin.chain, Object.values(UtxoChain))) {
-        input.feeSettings = {
-          priority: 'fast',
-        }
-      }
+    const input: ChainSpecificResolverInput = {
+      coin: fromCoin,
+      amount: toChainAmount(fromAmount, fromCoin.decimals),
+      receiver: toAddress,
+    }
 
-      if (isOneOf(fromCoin.chain, Object.values(EvmChain))) {
-        input.feeSettings = {
-          gasLimit: getEvmSwapGasLimit(fromCoin.chain),
-        }
-      }
+    if ('native' in swapQuote) {
+      const { swapChain } = swapQuote.native
+      const nativeFeeCoin = chainFeeCoin[swapChain]
 
-      return {
-        queryKey: getChainSpecificQueryKey(input),
-        queryFn: () => getChainSpecific(input),
+      input.isDeposit = areEqualCoins(fromCoinKey, nativeFeeCoin)
+    }
+
+    if (isOneOf(fromCoin.chain, Object.values(UtxoChain))) {
+      input.feeSettings = {
+        priority: 'fast',
       }
     }
-  )
+
+    if (isOneOf(fromCoin.chain, Object.values(EvmChain))) {
+      input.feeSettings = {
+        gasLimit: getEvmSwapGasLimit(fromCoin.chain),
+      }
+    }
+
+    return input
+  }, [
+    fromAmount,
+    fromCoin,
+    fromCoinKey,
+    swapQuoteQuery,
+    toCoin,
+    vault.hexChainCode,
+    vault.publicKeys,
+    walletCore,
+  ])
+
+  return usePotentialQuery(queryInput, getChainSpecificQuery)
 }
