@@ -33,7 +33,7 @@ export const VaultTotalBalance = () => {
           <Text color="contrast" weight="700" size={26} centerVertically>
             <BalanceVisibilityAware size="l">
               {formatFiatAmount(value)}
-            </BalanceVisibilityAware>{' '}
+            </BalanceVisibilityAware>
           </Text>
         )}
       />
