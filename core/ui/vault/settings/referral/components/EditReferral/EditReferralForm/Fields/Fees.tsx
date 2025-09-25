@@ -8,7 +8,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
 import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { formatAmount } from '@lib/utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -77,7 +77,7 @@ export const Fees = () => {
                 </Text>
                 <VStack alignItems="flex-end">
                   <Text size={14}>
-                    {formatTokenAmount(perYearFee, 'RUNE')} / yr
+                    {formatAmount(perYearFee, { ticker: 'RUNE' })} / yr
                   </Text>
                   <Text size={14} color="supporting">
                     {perYearFiat}
@@ -91,7 +91,7 @@ export const Fees = () => {
                 </Text>
                 <VStack alignItems="flex-end">
                   <Text size={14}>
-                    {formatTokenAmount(extensionFee, 'RUNE')}
+                    {formatAmount(extensionFee, { ticker: 'RUNE' })}
                   </Text>
                   <Text size={14} color="supporting">
                     {totalFiat}

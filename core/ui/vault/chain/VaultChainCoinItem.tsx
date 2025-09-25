@@ -8,7 +8,7 @@ import { Text } from '@lib/ui/text'
 import { EntityWithLogo } from '@lib/utils/entities/EntityWithLogo'
 import { EntityWithPrice } from '@lib/utils/entities/EntityWithPrice'
 import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { formatAmount } from '@lib/utils/formatAmount'
 
 import { useFormatFiatAmount } from '../../chain/hooks/useFormatFiatAmount'
 
@@ -41,7 +41,7 @@ export const VaultChainCoinItem = ({
         </HStack>
         <Text color="contrast" size={18} weight="500" centerVertically>
           <BalanceVisibilityAware>
-            {formatTokenAmount(balance)}
+            {formatAmount(balance)}
           </BalanceVisibilityAware>
         </Text>
       </VStack>

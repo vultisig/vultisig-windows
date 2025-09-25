@@ -14,7 +14,7 @@ import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { sum } from '@lib/utils/array/sum'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { formatAmount } from '@lib/utils/formatAmount'
 import styled from 'styled-components'
 
 import { useHandleVaultChainItemPress } from './useHandleVaultChainItemPress'
@@ -79,7 +79,7 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
               {singleCoin ? (
                 <Text color="contrast" weight="400" size={12} centerVertically>
                   <BalanceVisibilityAware>
-                    {formatTokenAmount(
+                    {formatAmount(
                       fromChainAmount(singleCoin.amount, singleCoin.decimals)
                     )}
                   </BalanceVisibilityAware>

@@ -3,7 +3,7 @@ import { Chain, EvmChain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { gwei } from '@core/chain/tx/fee/evm/gwei'
 import { isOneOf } from '@lib/utils/array/isOneOf'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { formatAmount } from '@lib/utils/formatAmount'
 
 import { getFeeUnit } from './feeUnit'
 
@@ -17,5 +17,7 @@ export const formatFee = ({ chain, amount }: FormatFeeInput) => {
     ? gwei.decimals
     : chainFeeCoin[chain].decimals
 
-  return formatTokenAmount(fromChainAmount(amount, decimals), getFeeUnit(chain))
+  return formatAmount(fromChainAmount(amount, decimals), {
+    ticker: getFeeUnit(chain),
+  })
 }

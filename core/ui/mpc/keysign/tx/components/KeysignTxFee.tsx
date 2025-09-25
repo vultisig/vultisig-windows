@@ -3,7 +3,7 @@ import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { formatAmount } from '@lib/utils/formatAmount'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useTranslation } from 'react-i18next'
 
@@ -34,7 +34,7 @@ export const KeysignTxFee = () => {
       )}
       success={actualFee => (
         <TxFeeRow label={t('network_fee')}>
-          {formatTokenAmount(fromChainAmount(actualFee, decimals), ticker)}
+          {formatAmount(fromChainAmount(actualFee, decimals), { ticker })}
         </TxFeeRow>
       )}
     />

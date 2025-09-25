@@ -6,7 +6,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { formatAmount } from '@lib/utils/formatAmount'
 
 import { useFormatFiatAmount } from '../../../chain/hooks/useFormatFiatAmount'
 import { useCurrentSendCoin } from '../state/sendCoin'
@@ -39,7 +39,7 @@ export const SendFiatFeeValue = () => {
       success={price => (
         <VStack alignItems="flex-end">
           <Text size={14}>
-            {formatTokenAmount(humanReadableFeeValue, ticker)}
+            {formatAmount(humanReadableFeeValue, { ticker })}
           </Text>
           <Text size={14} color="shy">
             {formatFiatAmount(humanReadableFeeValue * price)}

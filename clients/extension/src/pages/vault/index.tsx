@@ -25,7 +25,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { sum } from '@lib/utils/array/sum'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { formatAmount } from '@lib/utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -130,7 +130,7 @@ export const VaultPage = () => {
                       <Text weight={500} size={12} color="light">
                         {assets > 1
                           ? `${assets} ${t('assets')}`
-                          : formatTokenAmount(
+                          : formatAmount(
                               fromChainAmount(coin.amount, coin.decimals)
                             )}
                       </Text>
