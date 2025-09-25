@@ -29,7 +29,7 @@ export const getUtxoAddressInfo = ({
   address,
   chain,
 }: ChainAccount<UtxoChain>) => {
-  const url = `${getBlockchairBaseUrl(chain)}/dashboards/address/${address}?state=latest`
+  const url = `${getBlockchairBaseUrl(chain)}/dashboards/address/${address}`
 
   return queryUrl<BlockchairAddressResponse>(url)
 }
