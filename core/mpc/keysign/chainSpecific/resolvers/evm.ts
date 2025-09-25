@@ -12,6 +12,8 @@ import {
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { bigIntMax } from '@lib/utils/bigint/bigIntMax'
+import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
+import { asyncFallbackChain } from '@lib/utils/promise/asyncFallbackChain'
 import { isHex, stringToHex } from 'viem'
 import { publicActionsL2 } from 'viem/zksync'
 
@@ -19,12 +21,6 @@ import { ChainSpecificResolver } from '../resolver'
 
 const baseFeeMultiplier = (value: bigint) => (value * 15n) / 10n
 const minMaxFeePerGas = 1n
-
-type EvmFee = {
-  gasLimit: bigint
-  maxPriorityFeePerGas: bigint
-  maxFeePerGas: bigint
-}
 
 const formatData = (data: string): `0x${string}` => {
   if (isHex(data)) {
@@ -47,36 +43,38 @@ export const getEthereumSpecific: ChainSpecificResolver<
       address: coin.address as `0x${string}`,
     })
   )
+  const data = stringData ? formatData(stringData) : undefined
 
-  const getEvmFee = async (): Promise<EvmFee> => {
-    const data = stringData ? formatData(stringData) : undefined
+  const estimatedFee = await asyncFallbackChain(
+    () => {
+      if (chain === Chain.Zksync) {
+        return client.extend(publicActionsL2()).estimateFee({
+          chain: evmChainInfo[chain],
+          account: coin.address as `0x${string}`,
+          to: shouldBePresent(receiver) as `0x${string}`,
+          value: amount,
+          data: data as `0x${string}` | undefined,
+        })
+      }
 
-    if (chain === Chain.Zksync) {
-      return client.extend(publicActionsL2()).estimateFee({
-        chain: evmChainInfo[chain],
-        account: coin.address as `0x${string}`,
-        to: shouldBePresent(receiver) as `0x${string}`,
-        value: amount,
-        data: data as `0x${string}` | undefined,
-      })
+      throw new NotImplementedError(`${chain} fee estimation`)
+    },
+    async () => {
+      const baseFee = await getEvmBaseFee(chain)
+      const maxPriorityFeePerGas = await getEvmMaxPriorityFeePerGas(chain)
+
+      const maxFeePerGas = bigIntMax(
+        baseFeeMultiplier(baseFee) + maxPriorityFeePerGas,
+        minMaxFeePerGas
+      )
+
+      return {
+        maxFeePerGas,
+        maxPriorityFeePerGas,
+        gasLimit: getEvmGasLimit(coin),
+      }
     }
-
-    const baseFee = await getEvmBaseFee(chain)
-    const maxPriorityFeePerGas = await getEvmMaxPriorityFeePerGas(chain)
-
-    const maxFeePerGas = bigIntMax(
-      baseFeeMultiplier(baseFee) + maxPriorityFeePerGas,
-      minMaxFeePerGas
-    )
-
-    return {
-      maxFeePerGas,
-      maxPriorityFeePerGas,
-      gasLimit: getEvmGasLimit(coin),
-    }
-  }
-
-  const estimatedFee = await getEvmFee()
+  )
 
   const { maxFeePerGas, maxPriorityFeePerGas, gasLimit } = {
     ...estimatedFee,
