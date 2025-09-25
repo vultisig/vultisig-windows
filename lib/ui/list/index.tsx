@@ -3,7 +3,12 @@ import { FC, HTMLAttributes } from 'react'
 import styled, { css } from 'styled-components'
 
 const StyledList = styled.div<{ bordered?: boolean }>`
-  background-color: ${getColor('foregroundExtra')};
+  background-image: linear-gradient(
+    90deg,
+    ${getColor('foreground')} 0%,
+    ${getColor('foregroundExtra')} 49.5%,
+    ${getColor('foreground')} 100%
+  );
   border-radius: 12px;
   display: flex;
   flex-direction: column;
