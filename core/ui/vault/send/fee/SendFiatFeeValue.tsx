@@ -2,22 +2,21 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
-import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
-import { formatAmount } from '@lib/utils/formatAmount'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 
+import { useFormatFiatAmount } from '../../../chain/hooks/useFormatFiatAmount'
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { useSendChainSpecific } from './SendChainSpecificProvider'
 
 export const SendFiatFeeValue = () => {
   const { chain } = useCurrentSendCoin()
-  const fiatCurrency = useFiatCurrency()
   const chainSpecific = useSendChainSpecific()
   const fee = getFeeAmount(chainSpecific)
+  const formatFiatAmount = useFormatFiatAmount()
 
   const coin = chainFeeCoin[chain]
   const feeCoinPriceQuery = useCoinPriceQuery({
@@ -43,7 +42,7 @@ export const SendFiatFeeValue = () => {
             {formatTokenAmount(humanReadableFeeValue, ticker)}
           </Text>
           <Text size={14} color="shy">
-            {formatAmount(humanReadableFeeValue * price, fiatCurrency)}
+            {formatFiatAmount(humanReadableFeeValue * price)}
           </Text>
         </VStack>
       )}
