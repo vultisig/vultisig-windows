@@ -131,7 +131,8 @@ export const VaultPage = () => {
                         {assets > 1
                           ? `${assets} ${t('assets')}`
                           : formatAmount(
-                              fromChainAmount(coin.amount, coin.decimals)
+                              fromChainAmount(coin.amount, coin.decimals),
+                              { precision: 'high' }
                             )}
                       </Text>
                     </VStack>

@@ -69,7 +69,9 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
             <MatchQuery
               value={baseFeeQuery}
               success={baseFee =>
-                formatAmount(fromChainAmount(baseFee, decimals))
+                formatAmount(fromChainAmount(baseFee, decimals), {
+                  precision: 'high',
+                })
               }
               pending={() => <Spinner />}
               error={() => t('failed_to_load')}

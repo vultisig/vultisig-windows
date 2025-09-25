@@ -80,7 +80,8 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
                 <Text color="contrast" weight="400" size={12} centerVertically>
                   <BalanceVisibilityAware>
                     {formatAmount(
-                      fromChainAmount(singleCoin.amount, singleCoin.decimals)
+                      fromChainAmount(singleCoin.amount, singleCoin.decimals),
+                      { precision: 'high' }
                     )}
                   </BalanceVisibilityAware>
                 </Text>

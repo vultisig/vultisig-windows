@@ -1,8 +1,12 @@
 const million = 1000000
 const billion = 1000000000
 
-const currencyMaxDecimalPlaces = 3
-const tickerMaxDecimalPlaces = 8
+type Precision = 'medium' | 'high'
+
+const maximumFractionDigitsRecord: Record<Precision, number> = {
+  medium: 3,
+  high: 8,
+}
 
 const locale = 'en-US'
 
@@ -13,10 +17,13 @@ type FormatAmountOptions =
   | {
       ticker: string
     }
+  | {
+      precision: Precision
+    }
 
 export const formatAmount = (
   amount: number,
-  options?: FormatAmountOptions
+  options: FormatAmountOptions = { precision: 'medium' }
 ): string => {
   if (amount > billion) {
     return `${formatAmount(amount / billion, options)}B`
@@ -27,12 +34,17 @@ export const formatAmount = (
 
   const isCurrency = options && 'currency' in options
 
+  const getPrecision = (): Precision => {
+    if ('precision' in options) {
+      return options.precision
+    }
+    return isCurrency ? 'medium' : 'high'
+  }
+
   const formatter = new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: isCurrency ? options.currency.toUpperCase() : undefined,
-    maximumFractionDigits: isCurrency
-      ? currencyMaxDecimalPlaces
-      : tickerMaxDecimalPlaces,
+    maximumFractionDigits: maximumFractionDigitsRecord[getPrecision()],
   })
 
   const formattedAmount = formatter.format(amount)
@@ -40,5 +52,6 @@ export const formatAmount = (
   if (options && 'ticker' in options) {
     return `${formattedAmount} ${options.ticker}`
   }
+
   return formattedAmount
 }

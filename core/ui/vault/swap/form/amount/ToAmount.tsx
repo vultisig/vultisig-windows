@@ -40,7 +40,7 @@ export const ToAmount = () => {
           )}
           error={() => formatAmount(0)}
           inactive={() => formatAmount(0)}
-          success={value => formatAmount(value)}
+          success={value => formatAmount(value, { precision: 'high' })}
         />
       </Value>
       <MatchQuery

@@ -90,7 +90,7 @@ export const getNativeSwapQuote = async ({
       fromDecimals
     )
 
-    const formattedMinAmount = formatAmount(minAmount)
+    const formattedMinAmount = formatAmount(minAmount, from)
 
     const msg = `Swap amount too small. Recommended amount ${formattedMinAmount}`
 

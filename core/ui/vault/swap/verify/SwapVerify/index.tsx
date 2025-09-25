@@ -68,9 +68,7 @@ export const SwapVerify = () => {
               pending={() => t('loading')}
               success={amount => (
                 <Text weight="500" size={17} color="contrast">
-                  {formatAmount(amount, {
-                    ticker: toCoin.ticker.toUpperCase(),
-                  })}
+                  {formatAmount(amount, toCoin)}
                 </Text>
               )}
             />
