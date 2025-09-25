@@ -89,7 +89,9 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
           </TxOverviewRow>
           <TxOverviewRow>
             <RowTitle>{t('to')}</RowTitle>
-            <Text size={14}>{receiver}</Text>
+            <Text size={14} width={280} style={{ textAlign: 'right' }}>
+              {receiver}
+            </Text>
           </TxOverviewRow>
           <TxOverviewRow>
             <RowTitle>{t('network')}</RowTitle>

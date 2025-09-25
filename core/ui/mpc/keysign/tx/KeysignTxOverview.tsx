@@ -62,9 +62,7 @@ export const KeysignTxOverview = () => {
               {t('tx_hash')}
             </Text>
             <HStack alignItems="center" gap={4}>
-              <Text>
-                <MiddleTruncate text={txHash} width={140} />
-              </Text>
+              <Text as={MiddleTruncate} text={txHash} width={140} />
               <IconButton onClick={() => openUrl(blockExplorerUrl)}>
                 <SquareArrowOutUpRightIcon />
               </IconButton>
@@ -76,9 +74,13 @@ export const KeysignTxOverview = () => {
             </Text>
             <HStack alignItems="center" gap={4}>
               <Text>{name}</Text>
-              <Text color="shy" weight="500">
-                <MiddleTruncate text={`(${address})`} width={80} />
-              </Text>
+              <Text
+                as={MiddleTruncate}
+                color="shy"
+                text={`(${address})`}
+                width={80}
+                weight="500"
+              />
             </HStack>
           </HStack>
           {toAddress && (
@@ -86,7 +88,9 @@ export const KeysignTxOverview = () => {
               <Text color="shy" weight="500">
                 {t('to')}
               </Text>
-              <Text>{toAddress}</Text>
+              <Text width={280} style={{ textAlign: 'right' }}>
+                {toAddress}
+              </Text>
             </HStack>
           )}
           {memo && <TxOverviewMemo value={memo} chain={chain} />}

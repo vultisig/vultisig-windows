@@ -70,6 +70,7 @@ export type TextProps = {
   family?: TextFontFamily
   as?: React.ElementType
   variant?: TextVariant
+  width?: number
 }
 
 export const text = ({
@@ -84,6 +85,7 @@ export const text = ({
   cropped,
   nowrap,
   family = 'regular',
+  width,
 }: TextProps) => {
   const variantStyles = variant ? textVariantsRecord[variant] : {}
 
@@ -142,6 +144,11 @@ export const text = ({
       mono: () => 'Menlo, monospace',
       regular: () => 'inherit',
     })};
+
+    ${!!width &&
+    css`
+      width: ${toSizeUnit(width)};
+    `}
   `
 }
 
