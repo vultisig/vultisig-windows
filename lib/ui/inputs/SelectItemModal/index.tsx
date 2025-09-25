@@ -23,6 +23,11 @@ type SelectItemModalProps<T> = OnFinishProp<T, 'optional'> &
     getKey?: (option: T, index: number) => string
   }
 
+const modalOptionsListHeight = 400
+const offset = 100
+const defaultIncreaseViewportForVirtualizedList =
+  modalOptionsListHeight + offset
+
 export const SelectItemModal = <T extends { id?: string; chain?: string }>(
   props: SelectItemModalProps<T>
 ) => {
@@ -57,10 +62,12 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>(
         <ListWrapper>
           {useVirtual ? (
             <Virtuoso
-              style={{ height: 400 }}
+              style={{ height: modalOptionsListHeight }}
               totalCount={filtered.length}
               data={filtered}
-              increaseViewportBy={virtualizePageSize ?? 500}
+              increaseViewportBy={
+                virtualizePageSize ?? defaultIncreaseViewportForVirtualizedList
+              }
               itemContent={(index, item) => (
                 <OptionComponent value={item} onClick={() => onFinish(item)} />
               )}
@@ -88,7 +95,7 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>(
 }
 
 const ListWrapper = styled.div`
-  max-height: 400px;
+  max-height: ${modalOptionsListHeight}px;
   overflow-y: auto;
 `
 
