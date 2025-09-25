@@ -80,6 +80,7 @@ export const es = {
   staked_amount: 'Cantidad apostada',
   signing_transaction: 'Firma de la transacción',
   asset_selection: 'Selección de activos',
+  enter_percentage: 'Ingrese el porcentaje',
   chain: 'Cadena',
   staked: 'Apostado',
   title_1: 'Referencia',

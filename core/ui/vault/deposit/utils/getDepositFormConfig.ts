@@ -59,6 +59,7 @@ type ChainActionConfig = {
     type: string
     label: string
     required?: boolean
+    hidden?: boolean
   }>
   schema: z.ZodTypeAny
 }
@@ -145,7 +146,6 @@ export const getDepositFormConfig = ({
       ],
       schema: z.object({
         nodeAddress: z.string().min(1, 'Required'),
-
         amount: z
           .string()
           .transform(val => Number(val))
@@ -636,7 +636,17 @@ export const getDepositFormConfig = ({
                       required: true,
                     },
                   ]
-                : [],
+                : coin.ticker === 'TCY'
+                  ? [
+                      {
+                        hidden: true,
+                        name: 'percentage',
+                        type: 'number',
+                        label: t('percentage'),
+                        required: true,
+                      },
+                    ]
+                  : [],
           })
         : [],
       schema: !isStakeableChain(chain)
@@ -661,7 +671,7 @@ export const getDepositFormConfig = ({
                       z.object({
                         autoCompound: z.literal(true),
                         amount: z
-                          .string()
+                          .number()
                           .transform(Number)
                           .pipe(
                             z
@@ -669,6 +679,15 @@ export const getDepositFormConfig = ({
                               .positive()
                               .min(0.001)
                               .max(totalAmountAvailable)
+                          ),
+                        percentage: z
+                          .number()
+                          .optional()
+                          .pipe(
+                            z
+                              .number()
+                              .positive()
+                              .max(100, 'Percentage must be 0-100')
                           ),
                       }),
                       z.object({

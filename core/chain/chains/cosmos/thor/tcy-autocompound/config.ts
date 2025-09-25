@@ -4,5 +4,5 @@ export const tcyAutoCompounderConfig = {
   depositDecimals: 8,
   shareDenom: 'x/staking-tcy',
   shareTicker: 'sTCY',
-  shareDecimals: 0,
+  shareDecimals: 8,
 } as const

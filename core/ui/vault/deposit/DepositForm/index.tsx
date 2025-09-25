@@ -119,79 +119,83 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
 
           {selectedChainAction && fields.length > 0 && (
             <VStack gap={12}>
-              {fields.map(field => {
-                const showBalance =
-                  field.name === 'amount' &&
-                  [
-                    'bond',
-                    'ibc_transfer',
-                    'switch',
-                    'merge',
-                    'stake',
-                    'unmerge',
-                    'unstake',
-                    'mint',
-                    'redeem',
-                    'withdraw_ruji_rewards',
-                  ].includes(selectedChainAction)
+              {fields
+                .filter(field => !field.hidden)
+                .map(field => {
+                  const showBalance =
+                    field.name === 'amount' &&
+                    [
+                      'bond',
+                      'ibc_transfer',
+                      'switch',
+                      'merge',
+                      'stake',
+                      'unmerge',
+                      'unstake',
+                      'mint',
+                      'redeem',
+                      'withdraw_ruji_rewards',
+                    ].includes(selectedChainAction)
 
-                const ticker =
-                  selectedChainAction !== 'ibc_transfer' &&
-                  selectedChainAction !== 'merge' &&
-                  !(selectedChainAction === 'stake') &&
-                  coin.ticker
+                  const ticker =
+                    selectedChainAction !== 'ibc_transfer' &&
+                    selectedChainAction !== 'merge' &&
+                    !(selectedChainAction === 'stake') &&
+                    coin.ticker
 
-                return (
-                  <InputContainer key={field.name}>
-                    <Text size={15} weight="400">
-                      {field.label}{' '}
-                      {showBalance && (
-                        <>
-                          (
-                          {selectedChainAction === 'unmerge' ? (
-                            <>
-                              {t('shares')}: {balanceFormatted}
-                            </>
-                          ) : (
-                            <>
-                              {t('balance')}: {balanceFormatted}{' '}
-                              {ticker && ` ${ticker}`}
-                            </>
-                          )}
-                          )
-                        </>
+                  return (
+                    <InputContainer key={field.name}>
+                      <Text size={15} weight="400">
+                        {field.label}{' '}
+                        {showBalance && (
+                          <>
+                            (
+                            {selectedChainAction === 'unmerge' ? (
+                              <>
+                                {t('shares')}: {balanceFormatted}
+                              </>
+                            ) : (
+                              <>
+                                {t('balance')}: {balanceFormatted}{' '}
+                                {ticker && ` ${ticker}`}
+                              </>
+                            )}
+                            )
+                          </>
+                        )}
+                        {field.required ? (
+                          <Text as="span" color="danger" size={14}>
+                            *
+                          </Text>
+                        ) : (
+                          <Text as="span" size={14}>
+                            ({t('chainFunctions.optional_validation')})
+                          </Text>
+                        )}
+                      </Text>
+
+                      <InputFieldWrapper
+                        as="input"
+                        onWheel={e => e.currentTarget.blur()}
+                        type={field.type}
+                        step="0.0001"
+                        min={0}
+                        {...register(field.name)}
+                        required={field.required}
+                      />
+
+                      {errors[field.name] && (
+                        <ErrorText color="danger" size={13} className="error">
+                          {t(errors[field.name]?.message as string, {
+                            defaultValue: t(
+                              'chainFunctions.default_validation'
+                            ),
+                          })}
+                        </ErrorText>
                       )}
-                      {field.required ? (
-                        <Text as="span" color="danger" size={14}>
-                          *
-                        </Text>
-                      ) : (
-                        <Text as="span" size={14}>
-                          ({t('chainFunctions.optional_validation')})
-                        </Text>
-                      )}
-                    </Text>
-
-                    <InputFieldWrapper
-                      as="input"
-                      onWheel={e => e.currentTarget.blur()}
-                      type={field.type}
-                      step="0.0001"
-                      min={0}
-                      {...register(field.name)}
-                      required={field.required}
-                    />
-
-                    {errors[field.name] && (
-                      <ErrorText color="danger" size={13} className="error">
-                        {t(errors[field.name]?.message as string, {
-                          defaultValue: t('chainFunctions.default_validation'),
-                        })}
-                      </ErrorText>
-                    )}
-                  </InputContainer>
-                )
-              })}
+                    </InputContainer>
+                  )
+                })}
             </VStack>
           )}
         </WithProgressIndicator>

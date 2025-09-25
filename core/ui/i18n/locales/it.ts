@@ -87,6 +87,7 @@ export const it = {
   percentage_to_unstake: 'Percentuale da dismettere',
   staked_amount: 'Importo puntato',
   percentage_limit: 'La percentuale deve essere compresa tra 0 e 100',
+  enter_percentage: 'Inserisci la percentuale',
   selected_chain_missing_in_your_vault:
     'La blockchain selezionata manca nel tuo caveau',
   chain: 'Catena',
