@@ -1,5 +1,6 @@
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { tcyAutoCompounderConfig } from '@core/chain/chains/cosmos/thor/tcy-autocompound/config'
+import { knownCosmosTokens } from '@core/chain/coin/knownTokens/cosmos'
 import { match } from '@lib/utils/match'
 
 import type { StakeSpecific, StcyPayload } from '../types'
@@ -26,7 +27,7 @@ export const getStcySpecific = ({ input }: StcyPayload): StakeSpecific => {
 
       const units = toChainAmount(
         input.amount,
-        tcyAutoCompounderConfig.shareDecimals
+        knownCosmosTokens.THORChain['x/staking-tcy'].decimals
       ).toString()
 
       return {
