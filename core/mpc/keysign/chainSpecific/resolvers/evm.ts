@@ -43,6 +43,7 @@ export const getEthereumSpecific: ChainSpecificResolver<
       address: coin.address as `0x${string}`,
     })
   )
+
   const data = stringData ? formatData(stringData) : undefined
 
   const estimatedFee = await asyncFallbackChain(
