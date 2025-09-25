@@ -21,6 +21,7 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 export const KeysignTxOverview = () => {
   const { t } = useTranslation()
@@ -84,13 +85,16 @@ export const KeysignTxOverview = () => {
             </HStack>
           </HStack>
           {toAddress && (
-            <HStack alignItems="center" gap={4} justifyContent="space-between">
+            <HStack
+              alignItems="center"
+              gap={4}
+              justifyContent="space-between"
+              wrap="nowrap"
+            >
               <Text color="shy" weight="500">
                 {t('to')}
               </Text>
-              <Text width={280} style={{ textAlign: 'right' }}>
-                {toAddress}
-              </Text>
+              <AddressWrapper>{toAddress}</AddressWrapper>
             </HStack>
           )}
           {memo && <TxOverviewMemo value={memo} chain={chain} />}
@@ -112,3 +116,8 @@ export const KeysignTxOverview = () => {
     </>
   )
 }
+
+const AddressWrapper = styled(Text)`
+  overflow: hidden;
+  text-align: right;
+`
