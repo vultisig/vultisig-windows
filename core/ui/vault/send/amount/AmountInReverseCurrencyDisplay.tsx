@@ -1,6 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
-import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -8,6 +7,7 @@ import { formatAmount } from '@lib/utils/formatAmount'
 import { match } from '@lib/utils/match'
 import { AnimatePresence, motion } from 'framer-motion'
 
+import { useFormatFiatAmount } from '../../../chain/hooks/useFormatFiatAmount'
 import { useSendAmount } from '../state/amount'
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { CurrencyInputMode } from './ManageAmountInputField'
@@ -17,8 +17,7 @@ export const AmountInReverseCurrencyDisplay = ({
 }: ValueProp<CurrencyInputMode>) => {
   const [sendAmount] = useSendAmount()
   const coin = useCurrentSendCoin()
-  const fiatCurrency = useFiatCurrency()
-
+  const formatFiatAmount = useFormatFiatAmount()
   const priceQuery = useCoinPriceQuery({
     coin,
   })
@@ -35,10 +34,9 @@ export const AmountInReverseCurrencyDisplay = ({
           <Text color="shy" size={14}>
             {match(value, {
               base: () =>
-                formatAmount(
+                formatFiatAmount(
                   shouldBePresent(priceQuery.data) *
-                    fromChainAmount(sendAmount, coin.decimals),
-                  fiatCurrency
+                    fromChainAmount(sendAmount, coin.decimals)
                 ),
               fiat: () =>
                 formatAmount(

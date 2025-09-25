@@ -1,8 +1,8 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
-import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { VaultChainBalance } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
@@ -14,7 +14,6 @@ import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { sum } from '@lib/utils/array/sum'
-import { formatAmount } from '@lib/utils/formatAmount'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import styled from 'styled-components'
 
@@ -35,7 +34,6 @@ type VaultChainItemProps = {
 
 export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
   const { chain, coins } = balance
-  const fiatCurrency = useFiatCurrency()
 
   const addresses = useCurrentVaultAddresses()
   const address = addresses[chain]
@@ -44,6 +42,8 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
     chain,
     address,
   })
+
+  const formatFiatAmount = useFormatFiatAmount()
 
   const singleCoin = coins.length === 1 ? coins[0] : null
 
@@ -93,7 +93,7 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
               ) : null}
               <Text centerVertically color="contrast" weight="700" size={16}>
                 <BalanceVisibilityAware>
-                  {formatAmount(totalAmount, fiatCurrency)}
+                  {formatFiatAmount(totalAmount)}
                 </BalanceVisibilityAware>
               </Text>
             </HStack>

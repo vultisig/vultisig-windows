@@ -1,7 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { CoinAmount, CoinKey } from '@core/chain/coin/Coin'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
-import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
@@ -9,8 +8,9 @@ import { Text } from '@lib/ui/text'
 import { EntityWithLogo } from '@lib/utils/entities/EntityWithLogo'
 import { EntityWithPrice } from '@lib/utils/entities/EntityWithPrice'
 import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker'
-import { formatAmount } from '@lib/utils/formatAmount'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+
+import { useFormatFiatAmount } from '../../chain/hooks/useFormatFiatAmount'
 
 export const VaultChainCoinItem = ({
   value,
@@ -22,8 +22,8 @@ export const VaultChainCoinItem = ({
     CoinKey
 >) => {
   const { ticker, amount, decimals, price } = value
-  const fiatCurrency = useFiatCurrency()
   const balance = fromChainAmount(amount, decimals)
+  const formatFiatAmount = useFormatFiatAmount()
 
   return (
     <HStack fullWidth alignItems="center" gap={12}>
@@ -35,7 +35,7 @@ export const VaultChainCoinItem = ({
           </Text>
           <Text color="contrast" size={18} weight="500" centerVertically>
             <BalanceVisibilityAware>
-              {formatAmount(balance * (price || 0), fiatCurrency)}
+              {formatFiatAmount(balance * (price || 0))}
             </BalanceVisibilityAware>
           </Text>
         </HStack>

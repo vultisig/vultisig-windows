@@ -1,4 +1,5 @@
 import { fiatCurrencySymbolRecord } from '@core/config/FiatCurrency'
+import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { useVaultTotalBalanceQuery } from '@core/ui/vault/queries/useVaultTotalBalanceQuery'
@@ -6,7 +7,6 @@ import { HStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
-import { formatAmount } from '@lib/utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 
 import { ManageVaultBalanceVisibility } from './visibility/ManageVaultBalanceVisibility'
@@ -14,7 +14,7 @@ import { ManageVaultBalanceVisibility } from './visibility/ManageVaultBalanceVis
 export const VaultTotalBalance = () => {
   const query = useVaultTotalBalanceQuery()
   const fiatCurrency = useFiatCurrency()
-  const currencySymbol = fiatCurrencySymbolRecord[fiatCurrency]
+  const formatFiatAmount = useFormatFiatAmount()
 
   const { t } = useTranslation()
 
@@ -25,14 +25,14 @@ export const VaultTotalBalance = () => {
         error={() => t('failed_to_load')}
         pending={() => (
           <HStack gap={6} alignItems="center">
-            {currencySymbol}
+            {fiatCurrencySymbolRecord[fiatCurrency]}
             <Spinner size="1.5em" />
           </HStack>
         )}
         success={value => (
           <Text color="contrast" weight="700" size={26} centerVertically>
             <BalanceVisibilityAware size="l">
-              {formatAmount(value, fiatCurrency)}
+              {formatFiatAmount(value)}
             </BalanceVisibilityAware>{' '}
           </Text>
         )}

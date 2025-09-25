@@ -3,8 +3,8 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { useCurrentVaultAppSessionsQuery } from '@core/extension/storage/hooks/appSessions'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
-import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { VaultSigners } from '@core/ui/vault/signers'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -25,7 +25,6 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { sum } from '@lib/utils/array/sum'
-import { formatAmount } from '@lib/utils/formatAmount'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -61,7 +60,7 @@ export const VaultPage = () => {
   const { data: sessions = {} } = useCurrentVaultAppSessionsQuery()
   const { data: vaultChainBalances = [] } = useVaultChainsBalancesQuery()
   const addresses = useCurrentVaultAddresses()
-  const fiatCurrency = useFiatCurrency()
+  const formatFiatAmount = useFormatFiatAmount()
 
   return (
     <VStack fullHeight>
@@ -116,7 +115,7 @@ export const VaultPage = () => {
                   extra={
                     <VStack gap={4} alignItems="end">
                       <Text weight={500} size={14} color="contrast">
-                        {formatAmount(
+                        {formatFiatAmount(
                           sum(
                             coins.map(coin =>
                               getCoinValue({
@@ -125,8 +124,7 @@ export const VaultPage = () => {
                                 decimals: coin.decimals,
                               })
                             )
-                          ),
-                          fiatCurrency
+                          )
                         )}
                       </Text>
                       <Text weight={500} size={12} color="light">
