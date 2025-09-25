@@ -531,6 +531,7 @@ export const en = {
   reshare: 'Reshare',
   ibc_transfer: 'IBC Transfer',
   reshare_your_vault: 'Reshare your vault',
+  enter_percentage: 'Enter percentage',
   reshare_explanation:
     'Reshare can be used to refresh, expand or reduce the amount of devices in a Vault.',
   reshare_disclaimer:
