@@ -14,19 +14,19 @@ import { useCurrentSendCoin } from '../state/sendCoin'
 import { useSendChainSpecific } from './SendChainSpecificProvider'
 
 export const SendFiatFeeValue = () => {
-  const coin = useCurrentSendCoin()
+  const { chain } = useCurrentSendCoin()
   const fiatCurrency = useFiatCurrency()
   const chainSpecific = useSendChainSpecific()
   const fee = getFeeAmount(chainSpecific)
 
-  const feeCoin = chainFeeCoin[coin.chain]
+  const coin = chainFeeCoin[chain]
   const feeCoinPriceQuery = useCoinPriceQuery({
-    coin: feeCoin,
+    coin,
   })
 
-  const { decimals: feeCoinDecimals, ticker: feeCoinTicker } = feeCoin
+  const { decimals, ticker } = coin
 
-  const humanReadableFeeValue = fromChainAmount(fee, feeCoinDecimals)
+  const humanReadableFeeValue = fromChainAmount(fee, decimals)
 
   return (
     <MatchQuery
@@ -40,7 +40,7 @@ export const SendFiatFeeValue = () => {
       success={price => (
         <VStack alignItems="flex-end">
           <Text size={14}>
-            {formatTokenAmount(humanReadableFeeValue, feeCoinTicker)}
+            {formatTokenAmount(humanReadableFeeValue, ticker)}
           </Text>
           <Text size={14} color="shy">
             {formatAmount(humanReadableFeeValue * price, fiatCurrency)}
