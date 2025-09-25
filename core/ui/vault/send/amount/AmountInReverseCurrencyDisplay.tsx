@@ -39,10 +39,7 @@ export const AmountInReverseCurrencyDisplay = ({
                     fromChainAmount(sendAmount, coin.decimals)
                 ),
               fiat: () =>
-                formatAmount(
-                  fromChainAmount(sendAmount, coin.decimals),
-                  coin.ticker
-                ),
+                formatAmount(fromChainAmount(sendAmount, coin.decimals), coin),
             })}
           </Text>
         )}
