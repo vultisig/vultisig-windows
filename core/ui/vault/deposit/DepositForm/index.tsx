@@ -27,6 +27,7 @@ import { useDepositBalance } from '../hooks/useDepositBalance'
 import { useDepositFormConfig } from '../hooks/useDepositFormConfig'
 import { useDepositAction } from '../providers/DepositActionProvider'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
+import { stepFromDecimals } from '../utils/stepFromDecimals'
 
 export type FormData = Record<string, any>
 type DepositFormProps = {
@@ -40,7 +41,7 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
   const [coin] = useDepositCoin()
   const availableActions = useAvailableChainActions(coin.chain)
 
-  const { balanceFormatted } = useDepositBalance({
+  const { balance } = useDepositBalance({
     selectedChainAction,
   })
 
@@ -152,11 +153,11 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
                             (
                             {selectedChainAction === 'unmerge' ? (
                               <>
-                                {t('shares')}: {balanceFormatted}
+                                {t('shares')}: {balance}
                               </>
                             ) : (
                               <>
-                                {t('balance')}: {balanceFormatted}{' '}
+                                {t('balance')}: {balance}{' '}
                                 {ticker && ` ${ticker}`}
                               </>
                             )}
@@ -178,7 +179,11 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
                         as="input"
                         onWheel={e => e.currentTarget.blur()}
                         type={field.type}
-                        step="0.0001"
+                        step={
+                          field.name === 'amount'
+                            ? stepFromDecimals(coin.decimals)
+                            : undefined
+                        }
                         min={0}
                         {...register(field.name)}
                         required={field.required}
