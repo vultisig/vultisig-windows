@@ -2,11 +2,11 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
+import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
-import { formatAmount } from '@lib/utils/formatAmount'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -20,6 +20,8 @@ export const DepositFiatFeeValue = () => {
     coin,
     fiatCurrency,
   })
+
+  const formatFiatAmount = useFormatFiatAmount()
 
   const chainSpecificQuery = useDepositChainSpecificQuery(coin)
   const { decimals } = chainFeeCoin[coin.chain]
@@ -35,9 +37,9 @@ export const DepositFiatFeeValue = () => {
 
         const feeAmount = fromChainAmount(fee, decimals)
 
-        return formatAmount(feeAmount * price, fiatCurrency)
+        return formatFiatAmount(feeAmount * price)
       },
-      [decimals, fiatCurrency]
+      [decimals, formatFiatAmount]
     )
   )
 
