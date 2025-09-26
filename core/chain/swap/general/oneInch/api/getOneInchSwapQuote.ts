@@ -58,7 +58,11 @@ export const getOneInchSwapQuote = async ({
     dstAmount,
     provider: '1inch',
     tx: {
-      evm: tx,
+      evm: {
+        ...tx,
+        gasPrice: BigInt(tx.gasPrice),
+        gas: BigInt(tx.gas),
+      },
     },
   }
 }

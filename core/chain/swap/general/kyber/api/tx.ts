@@ -102,8 +102,10 @@ export const getKyberSwapTx = async ({
         to: routerAddress,
         data,
         value: isFeeCoin(from) ? amount.toString() : '0',
-        gasPrice: routeSummary?.gasPrice || '0',
-        gas: parseInt(gas),
+        gasPrice: routeSummary?.gasPrice
+          ? BigInt(routeSummary?.gasPrice)
+          : undefined,
+        gas: gas ? BigInt(gas) : undefined,
       },
     },
   }
