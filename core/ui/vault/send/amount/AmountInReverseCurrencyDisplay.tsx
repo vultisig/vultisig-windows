@@ -1,8 +1,8 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { ValueProp } from '@lib/ui/props'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { match } from '@lib/utils/match'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -30,19 +30,26 @@ export const AmountInReverseCurrencyDisplay = ({
         exit={{ y: 20, opacity: 0 }}
         transition={{ duration: 0.18 }}
       >
-        {!sendAmount ? null : (
-          <Text color="shy" size={14}>
-            {match(value, {
-              base: () =>
-                formatFiatAmount(
-                  shouldBePresent(priceQuery.data) *
-                    fromChainAmount(sendAmount, coin.decimals)
-                ),
-              fiat: () =>
-                formatAmount(fromChainAmount(sendAmount, coin.decimals), coin),
-            })}
-          </Text>
-        )}
+        <MatchQuery
+          value={priceQuery}
+          success={priceData =>
+            sendAmount && (
+              <Text color="shy" size={14}>
+                {match(value, {
+                  base: () =>
+                    formatFiatAmount(
+                      priceData * fromChainAmount(sendAmount, coin.decimals)
+                    ),
+                  fiat: () =>
+                    formatAmount(
+                      fromChainAmount(sendAmount, coin.decimals),
+                      coin
+                    ),
+                })}
+              </Text>
+            )
+          }
+        />
       </motion.span>
     </AnimatePresence>
   )
