@@ -86,7 +86,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
           </TxOverviewRow>
           <TxOverviewRow>
             <RowTitle>{t('to')}</RowTitle>
-            <Text size={14}>{receiver}</Text>
+            <AddressWrapper size={14}>{receiver}</AddressWrapper>
           </TxOverviewRow>
           <TxOverviewRow>
             <RowTitle>{t('network')}</RowTitle>
@@ -107,6 +107,11 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
     </>
   )
 }
+
+const AddressWrapper = styled(Text)`
+  overflow: hidden;
+  text-align: right;
+`
 
 const AmountWrapper = styled(VStack)`
   padding-bottom: 20px !important;
