@@ -4,7 +4,10 @@ import {
   FeePriority,
 } from '@core/chain/tx/fee/FeePriority'
 import { adjustByteFee } from '@core/chain/tx/fee/utxo/adjustByteFee'
-import { UtxoFeeSettings } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
+import {
+  byteFeeMultiplier,
+  UtxoFeeSettings,
+} from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { useSendChainSpecific } from '@core/ui/vault/send/fee/SendChainSpecificProvider'
 import { useFeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
@@ -17,6 +20,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
+import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue'
 import { useMemo, useState } from 'react'
@@ -100,7 +104,12 @@ export const ManageUtxoFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
           }
           value={
             value.priority
-              ? adjustByteFee(Number(byteFee), { priority: value.priority })
+              ? adjustByteFee(
+                  Number(byteFee),
+                  isOneOf(value.priority, feePriorities)
+                    ? byteFeeMultiplier[value.priority]
+                    : value.priority
+                )
               : null
           }
           onValueChange={priority => setValue({ ...value, priority })}

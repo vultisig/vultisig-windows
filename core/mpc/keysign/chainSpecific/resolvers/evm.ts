@@ -3,7 +3,6 @@ import { Chain } from '@core/chain/Chain'
 import { evmChainInfo } from '@core/chain/chains/evm/chainInfo'
 import { getEvmClient } from '@core/chain/chains/evm/client'
 import { getEvmBaseFee } from '@core/chain/tx/fee/evm/baseFee'
-import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { deriveEvmGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
 import { getEvmMaxPriorityFeePerGas } from '@core/chain/tx/fee/evm/maxPriorityFeePerGas'
 import {
@@ -31,9 +30,8 @@ const formatData = (data: string): `0x${string}` => {
 }
 
 export const getEthereumSpecific: ChainSpecificResolver<
-  EthereumSpecific,
-  EvmFeeSettings
-> = async ({ coin, feeSettings = {}, amount, receiver, data }) => {
+  EthereumSpecific
+> = async ({ coin, feeQuote = {}, amount, receiver, data }) => {
   const { chain } = coin
 
   const client = getEvmClient(chain)
@@ -77,7 +75,7 @@ export const getEthereumSpecific: ChainSpecificResolver<
 
   const { maxFeePerGas, maxPriorityFeePerGas, gasLimit } = {
     ...estimatedFee,
-    ...feeSettings,
+    ...feeQuote,
   }
 
   return create(EthereumSpecificSchema, {
