@@ -1,5 +1,4 @@
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
-import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useDebounce } from '@lib/ui/hooks/useDebounce'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { hStack, VStack } from '@lib/ui/layout/Stack'
@@ -9,10 +8,10 @@ import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
 import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { formatAmount } from '@lib/utils/formatAmount'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useFormatFiatAmount } from '../../../../../../../chain/hooks/useFormatFiatAmount'
 import { useCreateReferralForm } from '../../../../providers/CreateReferralFormProvider'
 import { useReferralPayoutAsset } from '../../../../providers/ReferralPayoutAssetProvider'
 import { useTnsFeesQuery } from '../../../../queries/useTnsFeesQuery'
@@ -26,7 +25,7 @@ export const Fees = () => {
   const expiration = watch('expiration')
   const debouncedExpiration = useDebounce(expiration, debounceDelayMs)
   const tnsFees = useTnsFeesQuery(debouncedExpiration)
-  const currency = useFiatCurrency()
+  const formatFiatAmount = useFormatFiatAmount()
   const [coin] = useReferralPayoutAsset()
   const coinPrice = useCoinPriceQuery({
     coin,
@@ -62,14 +61,10 @@ export const Fees = () => {
           }
 
           const yearlyFee = (runeFee - registerFee) / debouncedExpiration
-          const registerFeeFiat = formatAmount(
-            registerFee * coinPrice,
-            currency
-          )
+          const registerFeeFiat = formatFiatAmount(registerFee * coinPrice)
 
-          const yearlyFeeFiat = formatAmount(
-            yearlyFee * debouncedExpiration * coinPrice,
-            currency
+          const yearlyFeeFiat = formatFiatAmount(
+            yearlyFee * debouncedExpiration * coinPrice
           )
 
           return (
@@ -81,7 +76,7 @@ export const Fees = () => {
                 </Text>
                 <VStack alignItems="flex-end">
                   <Text size={14}>
-                    {formatTokenAmount(registerFee, 'RUNE')}
+                    {formatAmount(registerFee, { ticker: 'RUNE' })}
                   </Text>
                   <Text size={14} color="supporting">
                     {registerFeeFiat}
@@ -97,7 +92,7 @@ export const Fees = () => {
                 <VStack alignItems="flex-end">
                   <Text size={14}>
                     {debouncedExpiration} ×{' '}
-                    {formatTokenAmount(yearlyFee, 'RUNE')}
+                    {formatAmount(yearlyFee, { ticker: 'RUNE' })}
                   </Text>
                   <Text size={14} color="supporting">
                     {yearlyFeeFiat}

@@ -16,7 +16,7 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnBackProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { formatAmount } from '@lib/utils/formatAmount'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -97,12 +97,7 @@ export const CreateReferralVerify = ({ onBack }: OnBackProp) => {
             </Text>
             <HStack alignItems="center" gap={8}>
               <CoinIcon coin={thorchainCoin} style={{ fontSize: 24 }} />
-              <Text size={17}>
-                {formatTokenAmount(referralAmount)}
-                <Text as="span" color="shy">
-                  {ticker}
-                </Text>
-              </Text>
+              <Text size={17}>{formatAmount(referralAmount, { ticker })}</Text>
             </HStack>
           </AmountWrapper>
           <TxOverviewRow>

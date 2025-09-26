@@ -20,7 +20,7 @@ import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { formatAmount } from '@lib/utils/formatAmount'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -69,12 +69,9 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
                   error={() => <Text>{t('failed_to_load')}</Text>}
                   pending={() => <Spinner />}
                   success={({ amount, decimals }) =>
-                    formatTokenAmount(fromChainAmount(amount, decimals))
+                    formatAmount(fromChainAmount(amount, decimals), { ticker })
                   }
                 />
-                <Text as="span" color="shy">
-                  {ticker}
-                </Text>
               </Text>
             </HStack>
           </AmountWrapper>

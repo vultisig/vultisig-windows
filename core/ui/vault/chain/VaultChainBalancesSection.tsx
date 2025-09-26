@@ -6,7 +6,6 @@ import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { useCopyAddress } from '@core/ui/chain/hooks/useCopyAddress'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { adjustVaultChainCoinsLogos } from '@core/ui/vault/chain/manage/coin/adjustVaultChainCoinsLogos'
 import { useCurrentVaultChain } from '@core/ui/vault/chain/useCurrentVaultChain'
@@ -26,14 +25,15 @@ import { Text } from '@lib/ui/text'
 import { splitBy } from '@lib/utils/array/splitBy'
 import { sum } from '@lib/utils/array/sum'
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
-import { formatAmount } from '@lib/utils/formatAmount'
 import { useTranslation } from 'react-i18next'
+
+import { useFormatFiatAmount } from '../../chain/hooks/useFormatFiatAmount'
 
 export const VaultChainBalancesSection = () => {
   const chain = useCurrentVaultChain()
   const address = useCurrentVaultAddress(chain)
   const vaultCoinsQuery = useVaultChainCoinsQuery(chain)
-  const fiatCurrency = useFiatCurrency()
+  const formatFiatAmount = useFormatFiatAmount()
   const copyAddress = useCopyAddress()
   const navigate = useCoreNavigate()
   const { t } = useTranslation()
@@ -85,7 +85,7 @@ export const VaultChainBalancesSection = () => {
             return (
               <Text size={20} weight="700" color="contrast" centerVertically>
                 <BalanceVisibilityAware>
-                  {formatAmount(total, fiatCurrency)}
+                  {formatFiatAmount(total)}
                 </BalanceVisibilityAware>
               </Text>
             )
