@@ -5,6 +5,7 @@ import { areEqualCoins } from '@core/chain/coin/Coin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { getSwapKeysignPayloadFields } from '@core/chain/swap/keysign/getSwapKeysignPayloadFields'
 import { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
+import { EvmFeeQuote } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { byteFeeMultiplier } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/resolver'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
@@ -90,6 +91,17 @@ export const useSwapChainSpecificQuery = () => {
       byteFeeMultiplier: isChainOfKind(fromCoin.chain, 'utxo')
         ? byteFeeMultiplier.fast
         : undefined,
+      feeQuote: matchRecordUnion<SwapQuote, Partial<EvmFeeQuote> | undefined>(
+        swapQuote,
+        {
+          native: () => undefined,
+          general: ({ tx }) =>
+            matchRecordUnion(tx, {
+              evm: ({ feeQuote }) => feeQuote,
+              solana: () => undefined,
+            }),
+        }
+      ),
     }
 
     return input
