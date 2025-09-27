@@ -1,18 +1,49 @@
-import { Chain } from '@core/chain/Chain'
-import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord'
-import { polkadotConfig } from '@core/chain/chains/polkadot/config'
-import { solanaConfig } from '@core/chain/chains/solana/solanaConfig'
-import { tonConfig } from '@core/chain/chains/ton/config'
-import { rippleTxFee } from '@core/chain/tx/fee/ripple'
+import { Chain, UtxoChain } from '@core/chain/Chain'
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 
+import { cosmosGasLimitRecord } from '../../chains/cosmos/cosmosGasLimitRecord'
+import { polkadotConfig } from '../../chains/polkadot/config'
+import { solanaConfig } from '../../chains/solana/solanaConfig'
 import { suiAverageSendGas } from '../../chains/sui/config'
+import { tonConfig } from '../../chains/ton/config'
+import { rippleTxFee } from './ripple'
 import { nativeTxFeeRune } from './thorchain/config'
+import { getUTXOBasedFee } from './utxo/getUTXOBasedFee'
 
-export const getFeeAmount = (chainSpecific: KeysignChainSpecific): bigint =>
+type GetFeeAmountInput = {
+  chainSpecific: KeysignChainSpecific
+  utxoInfo?: Array<{ hash: string; amount: bigint; index: number }> | null
+  amount?: bigint | null // The amount being sent
+  chain?: Chain
+}
+
+export const getFeeAmount = ({
+  chainSpecific,
+  utxoInfo,
+  amount,
+  chain,
+}: GetFeeAmountInput): bigint =>
   matchDiscriminatedUnion(chainSpecific, 'case', 'value', {
-    utxoSpecific: ({ byteFee }) => BigInt(byteFee) * BigInt(250), // assume the average size of an UTXO transaction is 250 vbytes
+    utxoSpecific: ({ byteFee, sendMaxAmount }) => {
+      if (
+        utxoInfo &&
+        utxoInfo.length > 0 &&
+        chain &&
+        amount !== undefined &&
+        amount !== null
+      ) {
+        return getUTXOBasedFee({
+          utxoInfo,
+          amount,
+          byteFee: Number(byteFee),
+          chain: chain as UtxoChain,
+          sendMaxAmount,
+        })
+      }
+
+      return BigInt(byteFee) * BigInt(250) // assume the average size of an UTXO transaction is 250 vbytes
+    },
     ethereumSpecific: ({ maxFeePerGasWei, gasLimit }) =>
       BigInt(maxFeePerGasWei) * BigInt(gasLimit),
     suicheSpecific: ({ referenceGasPrice }) =>

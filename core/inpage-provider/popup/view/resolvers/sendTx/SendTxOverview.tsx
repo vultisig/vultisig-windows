@@ -170,9 +170,16 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                   value={transactionPayload}
                   handlers={{
                     keysign: transactionPayload => {
-                      const feeAmount = getFeeAmount(
-                        keysignPayload.blockchainSpecific as KeysignChainSpecific
-                      )
+                      const feeAmount = getFeeAmount({
+                        chainSpecific:
+                          keysignPayload.blockchainSpecific as KeysignChainSpecific,
+                        utxoInfo: utxoInfoQuery.data,
+                        amount: keysignPayload.toAmount
+                          ? BigInt(keysignPayload.toAmount)
+                          : null,
+                        chain,
+                      })
+
                       return (
                         <>
                           <ListItem

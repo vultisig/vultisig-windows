@@ -104,11 +104,19 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
             title={t('memo')}
           />
           <ListItem
-            description={<DepositFeeValue />}
+            description={
+              <DepositFeeValue
+                amount={(depositFormData.amount as bigint) ?? 0n}
+              />
+            }
             title={`${t('gas')} (${t('auto')})`}
           />
           <ListItem
-            description={<DepositFiatFeeValue />}
+            description={
+              <DepositFiatFeeValue
+                amount={(depositFormData.amount as bigint) ?? 0n}
+              />
+            }
             title={t('network_fee')}
           />
         </List>

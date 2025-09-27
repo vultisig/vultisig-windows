@@ -10,6 +10,8 @@ import { formatAmount } from '@lib/utils/formatAmount'
 import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useEffect } from 'react'
 
+import { useKeysignUtxoInfo } from '../../../mpc/keysign/utxo/queries/keysignUtxoInfo'
+import { useSendAmount } from '../state/amount'
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { useSendFees } from '../state/sendFees'
 import { useSendChainSpecific } from './SendChainSpecificProvider'
@@ -19,7 +21,17 @@ export const SendFiatFeeValue = () => {
   const [, setFees] = useSendFees()
   const fiatCurrency = useFiatCurrency()
   const chainSpecific = useSendChainSpecific()
-  const fee = getFeeAmount(chainSpecific)
+  const { data: utxoInfo } = useKeysignUtxoInfo({
+    chain: coin.chain,
+    address: coin.address,
+  })
+  const [sendAmount] = useSendAmount()
+  const fee = getFeeAmount({
+    chainSpecific,
+    utxoInfo,
+    amount: sendAmount,
+    chain: coin.chain,
+  })
 
   const feeCoin = chainFeeCoin[coin.chain]
   const { isPending, data: price } = useCoinPriceQuery({
