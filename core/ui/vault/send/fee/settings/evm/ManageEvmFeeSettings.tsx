@@ -24,7 +24,7 @@ export const ManageEvmFeeSettings: FC<OnCloseProp> = ({ onClose }) => {
   const [value, setValue] = useState<EvmFeeSettings>(
     () =>
       persistentValue ?? {
-        priorityFee: BigInt(priorityFee),
+        maxPriorityFeePerGas: BigInt(priorityFee),
         gasLimit: BigInt(gasLimit),
       }
   )

@@ -16,12 +16,11 @@ import {
 import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { formatAmount } from '@lib/utils/formatAmount'
 import { assertField } from '@lib/utils/record/assertField'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useFiatCurrency } from '../../../../storage/fiatCurrency'
+import { useFormatFiatAmount } from '../../../../chain/hooks/useFormatFiatAmount'
 import { useKeysignUtxoInfo } from '../../utxo/queries/keysignUtxoInfo'
 
 export const JoinKeysignTxPrimaryInfo = ({
@@ -39,11 +38,12 @@ export const JoinKeysignTxPrimaryInfo = ({
     coin,
   })
 
-  const fiatCurrency = useFiatCurrency()
   const { data: utxoInfo } = useKeysignUtxoInfo({
     chain: coin.chain,
     address: coin.address,
   })
+  const formatFiatAmount = useFormatFiatAmount()
+
   const networkFeesFormatted = useMemo(() => {
     if (!blockchainSpecific.value) return null
 
@@ -81,9 +81,8 @@ export const JoinKeysignTxPrimaryInfo = ({
             <TxOverviewRow>
               <span>{t('value')}</span>
               <span>
-                {formatAmount(
-                  fromChainAmount(BigInt(toAmount), decimals) * price,
-                  fiatCurrency
+                {formatFiatAmount(
+                  fromChainAmount(BigInt(toAmount), decimals) * price
                 )}
               </span>
             </TxOverviewRow>

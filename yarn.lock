@@ -10665,6 +10665,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-virtuoso@npm:^4.14.0":
+  version: 4.14.0
+  resolution: "react-virtuoso@npm:4.14.0"
+  peerDependencies:
+    react: ">=16 || >=17 || >= 18 || >= 19"
+    react-dom: ">=16 || >=17 || >= 18 || >=19"
+  checksum: 10c0/5d34a1c6eb1de84618d51f73e5ec7f21f4979263809a0ce2fbb0554100bdc46ea1d07eeb78d407515735918b3df398ac1207ddb9f77905c6e3789dc51ca384db
+  languageName: node
+  linkType: hard
+
 "react@npm:^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0, react@npm:^19.1.1":
   version: 19.1.1
   resolution: "react@npm:19.1.1"
@@ -12965,6 +12975,7 @@ __metadata:
     react-i18next: "npm:^15.7.3"
     react-qr-code: "npm:^2.0.18"
     react-use: "npm:^17.6.0"
+    react-virtuoso: "npm:^4.14.0"
     syncpack: "npm:^13.0.4"
     typescript: "npm:^5.9.2"
     uuid: "npm:^13.0.0"

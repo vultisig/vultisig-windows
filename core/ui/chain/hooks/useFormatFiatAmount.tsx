@@ -3,10 +3,10 @@ import { formatAmount } from '@lib/utils/formatAmount'
 import { useCallback } from 'react'
 
 export const useFormatFiatAmount = () => {
-  const fiatCurrency = useFiatCurrency()
+  const currency = useFiatCurrency()
 
   return useCallback(
-    (value: number) => formatAmount(value, fiatCurrency),
-    [fiatCurrency]
+    (value: number) => formatAmount(value, { currency }),
+    [currency]
   )
 }

@@ -1,6 +1,7 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { cosmosRpcUrl } from '@core/chain/chains/cosmos/cosmosRpcUrl'
 import { tcyAutoCompounderConfig } from '@core/chain/chains/cosmos/thor/tcy-autocompound/config'
+import { knownCosmosTokens } from '@core/chain/coin/knownTokens/cosmos'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 
@@ -30,7 +31,7 @@ export const useUnstakableStcyQuery = ({
       chainBalance: data,
       humanReadableBalance: fromChainAmount(
         data,
-        tcyAutoCompounderConfig.shareDecimals
+        knownCosmosTokens.THORChain['x/staking-tcy'].decimals
       ),
     }),
   })

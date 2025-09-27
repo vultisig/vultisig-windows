@@ -1,6 +1,5 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
-import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useDebounce } from '@lib/ui/hooks/useDebounce'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { hStack, VStack } from '@lib/ui/layout/Stack'
@@ -10,10 +9,10 @@ import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
 import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { formatAmount } from '@lib/utils/formatAmount'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useFormatFiatAmount } from '../../../../../../../chain/hooks/useFormatFiatAmount'
 import { useEditReferralFormData } from '../../../../providers/EditReferralFormProvider'
 import { useTnsFeesQuery } from '../../../../queries/useTnsFeesQuery'
 import { useUserValidThorchainNameQuery } from '../../../../queries/useUserValidThorchainNameQuery'
@@ -24,7 +23,7 @@ export const Fees = () => {
   const existing = useUserValidThorchainNameQuery()
   const runeCoin = chainFeeCoin.THORChain
   const runePrice = useCoinPriceQuery({ coin: runeCoin })
-  const currency = useFiatCurrency()
+  const formatFiatAmount = useFormatFiatAmount()
 
   const requestedYears = useDebounce(watch('expiration'), 300)
 
@@ -60,8 +59,8 @@ export const Fees = () => {
             })
           }
 
-          const perYearFiat = formatAmount(perYearFee * runePrice, currency)
-          const totalFiat = formatAmount(extensionFee * runePrice, currency)
+          const perYearFiat = formatFiatAmount(perYearFee * runePrice)
+          const totalFiat = formatFiatAmount(extensionFee * runePrice)
 
           return (
             <>
@@ -78,7 +77,7 @@ export const Fees = () => {
                 </Text>
                 <VStack alignItems="flex-end">
                   <Text size={14}>
-                    {formatTokenAmount(perYearFee, 'RUNE')} / yr
+                    {formatAmount(perYearFee, { ticker: 'RUNE' })} / yr
                   </Text>
                   <Text size={14} color="supporting">
                     {perYearFiat}
@@ -92,7 +91,7 @@ export const Fees = () => {
                 </Text>
                 <VStack alignItems="flex-end">
                   <Text size={14}>
-                    {formatTokenAmount(extensionFee, 'RUNE')}
+                    {formatAmount(extensionFee, { ticker: 'RUNE' })}
                   </Text>
                   <Text size={14} color="supporting">
                     {totalFiat}

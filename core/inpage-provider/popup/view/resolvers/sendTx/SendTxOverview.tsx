@@ -188,7 +188,7 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                                 feeAmount,
                                 chainFeeCoin[chain].decimals
                               ),
-                              chainFeeCoin[chain].ticker
+                              chainFeeCoin[chain]
                             )}
                             extra={
                               isChainOfKind(chain, 'evm') && feeSettings ? (

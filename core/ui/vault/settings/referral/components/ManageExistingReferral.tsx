@@ -11,7 +11,7 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { formatAmount } from '@lib/utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 import { useCopyToClipboard } from 'react-use'
 import styled, { useTheme } from 'styled-components'
@@ -104,7 +104,7 @@ export const ManageExistingReferral = ({
               <Text size={14} color="shy">
                 {t('collected_rewards')}
               </Text>
-              <Text>{formatTokenAmount(collectedRune, 'RUNE')}</Text>
+              <Text>{formatAmount(collectedRune, { ticker: 'RUNE' })}</Text>
             </VStack>
           </FieldWrapper>
           <FieldWrapper gap={10}>
