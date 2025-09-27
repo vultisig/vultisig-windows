@@ -2,6 +2,7 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
 import { formatFee } from '@core/chain/tx/fee/format/formatFee'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
+import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
@@ -20,6 +21,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFormatFiatAmount } from '../../../../chain/hooks/useFormatFiatAmount'
+import { useKeysignUtxoInfo } from '../../utxo/queries/keysignUtxoInfo'
 
 export const JoinKeysignTxPrimaryInfo = ({
   value,
@@ -36,6 +38,10 @@ export const JoinKeysignTxPrimaryInfo = ({
     coin,
   })
 
+  const { data: utxoInfo } = useKeysignUtxoInfo({
+    chain: coin.chain,
+    address: coin.address,
+  })
   const formatFiatAmount = useFormatFiatAmount()
 
   const networkFeesFormatted = useMemo(() => {
@@ -43,9 +49,14 @@ export const JoinKeysignTxPrimaryInfo = ({
 
     return formatFee({
       chain: coin.chain as Chain,
-      amount: getFeeAmount(blockchainSpecific),
+      amount: getFeeAmount({
+        chainSpecific: blockchainSpecific as KeysignChainSpecific,
+        utxoInfo,
+        amount: toAmount ? BigInt(toAmount) : null,
+        chain: coin.chain,
+      }),
     })
-  }, [blockchainSpecific, coin.chain])
+  }, [blockchainSpecific, coin.chain, utxoInfo, toAmount])
 
   return (
     <>

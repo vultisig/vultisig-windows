@@ -9,21 +9,33 @@ import { Text } from '@lib/ui/text'
 import { formatAmount } from '@lib/utils/formatAmount'
 
 import { useFormatFiatAmount } from '../../../chain/hooks/useFormatFiatAmount'
+import { useKeysignUtxoInfo } from '../../../mpc/keysign/utxo/queries/keysignUtxoInfo'
+import { useSendAmount } from '../state/amount'
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { useSendChainSpecific } from './SendChainSpecificProvider'
 
 export const SendFiatFeeValue = () => {
-  const { chain } = useCurrentSendCoin()
+  const coin = useCurrentSendCoin()
   const chainSpecific = useSendChainSpecific()
-  const fee = getFeeAmount(chainSpecific)
-  const formatFiatAmount = useFormatFiatAmount()
-
-  const coin = chainFeeCoin[chain]
-  const feeCoinPriceQuery = useCoinPriceQuery({
-    coin,
+  const { data: utxoInfo } = useKeysignUtxoInfo({
+    chain: coin.chain,
+    address: coin.address,
+  })
+  const [sendAmount] = useSendAmount()
+  const fee = getFeeAmount({
+    chainSpecific,
+    utxoInfo,
+    amount: sendAmount,
+    chain: coin.chain,
   })
 
-  const { decimals, ticker } = coin
+  const formatFiatAmount = useFormatFiatAmount()
+  const feeCoin = chainFeeCoin[coin.chain]
+  const feeCoinPriceQuery = useCoinPriceQuery({
+    coin: feeCoin,
+  })
+
+  const { decimals, ticker } = feeCoin
 
   const humanReadableFeeValue = fromChainAmount(fee, decimals)
 

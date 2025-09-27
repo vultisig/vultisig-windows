@@ -19,7 +19,8 @@ const getByteFee = async (chain: UtxoChain) => {
   }
 
   const { data } = await getUtxoStats(chain)
-  return data.suggested_transaction_fee_per_byte_sat
+  const rawByteFee = data.suggested_transaction_fee_per_byte_sat
+  return Math.floor(rawByteFee * 2.5)
 }
 
 export const getUtxoSpecific: ChainSpecificResolver<
