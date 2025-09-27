@@ -1,5 +1,4 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { TransferDirection } from '@lib/utils/TransferDirection'
@@ -43,8 +42,8 @@ export const getKyberSwapRoute = async ({
   amount,
   isAffiliate,
 }: Input): Promise<KyberSwapRoute> => {
-  const [tokenIn, tokenOut] = [from, to].map(coin =>
-    isFeeCoin(coin) ? evmNativeCoinAddress : coin.ticker
+  const [tokenIn, tokenOut] = [from, to].map(
+    ({ id }) => id || evmNativeCoinAddress
   )
 
   const routeParams: KyberSwapRouteParams = {

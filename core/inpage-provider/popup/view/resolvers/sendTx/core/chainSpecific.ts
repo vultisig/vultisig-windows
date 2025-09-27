@@ -1,4 +1,6 @@
+import { isChainOfKind } from '@core/chain/ChainKind'
 import { getPsbtTransferInfo } from '@core/chain/chains/utxo/tx/getPsbtTransferInfo'
+import { byteFeeMultiplier } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/resolver'
 import {
   CosmosSpecific,
@@ -26,7 +28,7 @@ const cosmosMsgTypeToTransactionType: Record<CosmosMsgType, TransactionType> = {
 }
 
 export const getChainSpecificInput = (input: ParsedTx) => {
-  const { coin, customTxData, feeSettings } = input
+  const { coin, customTxData } = input
 
   const amount = matchRecordUnion<CustomTxData, bigint>(customTxData, {
     regular: ({ transactionDetails }) =>
@@ -61,11 +63,10 @@ export const getChainSpecificInput = (input: ParsedTx) => {
     amount,
     isDeposit,
     receiver,
-    feeSettings,
-  }
-
-  if ('psbt' in customTxData) {
-    result.psbt = customTxData.psbt
+    psbt: 'psbt' in customTxData ? customTxData.psbt : undefined,
+    byteFeeMultiplier: isChainOfKind(coin.chain, 'utxo')
+      ? byteFeeMultiplier.fast
+      : undefined,
   }
 
   if ('regular' in customTxData) {
@@ -80,11 +81,11 @@ export const getChainSpecificInput = (input: ParsedTx) => {
       const { timeoutTimestamp } = cosmosMsgPayload.value
       if (timeoutTimestamp) {
         ;(
-          result as ChainSpecificResolverInput<any, CosmosSpecific>
+          result as ChainSpecificResolverInput<CosmosSpecific>
         ).timeoutTimestamp = timeoutTimestamp
       }
     }
-    ;(result as ChainSpecificResolverInput<any, EthereumSpecific>).data =
+    ;(result as ChainSpecificResolverInput<EthereumSpecific>).data =
       regular.transactionDetails.data
   }
 
