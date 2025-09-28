@@ -88,6 +88,8 @@ export const it = {
   staked_amount: 'Importo puntato',
   percentage_limit: 'La percentuale deve essere compresa tra 0 e 100',
   enter_percentage: 'Inserisci la percentuale',
+  thorchain_address_required_for_referrals:
+    'Hai bisogno di un indirizzo THORChain per utilizzare il programma di referral',
   selected_chain_missing_in_your_vault:
     'La blockchain selezionata manca nel tuo caveau',
   chain: 'Catena',

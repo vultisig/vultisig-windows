@@ -86,6 +86,8 @@ export const pt = {
   staked_amount: 'Valor em staking',
   percentage_limit: 'A porcentagem deve estar entre 0 e 100',
   enter_percentage: 'Insira a porcentagem',
+  thorchain_address_required_for_referrals:
+    'Você precisa ter um endereço THORChain para usar o programa de referência',
   start_transaction: 'Iniciar transação',
   youre_swapping: 'Você está trocando',
   referrals_default_title: 'Indicação',

@@ -72,6 +72,8 @@ export const hr = {
   ypur_referrals: 'Tvoje preporuke',
   title_2: 'Vultisig - Preporuke',
   header_tooltip_title: 'Program Preporuka',
+  thorchain_address_required_for_referrals:
+    'Moraš imati THORChain adresu za korištenje programa preporuka',
   header_tooltip_content:
     'Program preporuka se primjenjuje na THORChain zamjene i temelji se na načelu najbolje namjere. Moraš registrirati THORName kako bi koristio Vultisig preporuke. Naknada za registraciju je 10 RUNE te 1 RUNE godišnje, što se plaća THORChain mreži.',
   invite_friends: 'Pozovi prijatelje',
