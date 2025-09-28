@@ -90,9 +90,11 @@ export const ManageExistingReferral = ({
                 <Text size={16}>{vaultName}</Text>
               </HStack>
               <UnstyledButton
-                onClick={() => {
-                  // TODO: Open vault selection overlay
-                }}
+                onClick={() =>
+                  navigate({
+                    id: 'vaults',
+                  })
+                }
               >
                 <IconWrapper
                   style={{
@@ -118,6 +120,17 @@ export const ManageExistingReferral = ({
                 </Text>
                 <Text>{formatAmount(collectedRune, { ticker: 'RUNE' })}</Text>
               </VStack>
+              <ReferralsThorchainLogoWrapper>
+                <Image
+                  src="/core/images/referrals-thorchain-logo.png"
+                  style={{
+                    objectFit: 'contain',
+                    width: '100%',
+                    height: '100%',
+                  }}
+                  alt=""
+                />
+              </ReferralsThorchainLogoWrapper>
             </RewardsCollectedWrapper>
             <Text size={14}>{t('your_referral_code')}</Text>
             <HorizontalFieldWrapper>
@@ -216,6 +229,7 @@ const VaultFieldWrapper = styled(HorizontalFieldWrapper)`
 
 const RewardsCollectedWrapper = styled(VStack)`
   position: relative;
+  overflow: hidden;
 
   &::before {
     border-radius: 12px;
@@ -230,12 +244,7 @@ const RewardsCollectedWrapper = styled(VStack)`
       ),
       #02122b;
 
-    z-index: 1;
-
-    > * {
-      position: relative;
-      z-index: 2;
-    }
+    z-index: -1;
   }
 
   ${fieldWrapperStyles};
@@ -268,4 +277,13 @@ const FriendsReferralCode = styled(VStack)`
   padding: 16px;
   border: 1px solid ${getColor('foregroundExtra')};
   border-radius: 12px;
+`
+
+const ReferralsThorchainLogoWrapper = styled.div`
+  width: 145px;
+  height: 145px;
+
+  position: absolute;
+  right: -45px;
+  bottom: -45px;
 `
