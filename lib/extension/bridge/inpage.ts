@@ -4,14 +4,35 @@ import {
   isBridgeMessage,
 } from './core'
 
-const listeners: Record<string, (result: unknown) => void> = {}
+const listeners: Record<
+  string,
+  {
+    resolve: (result: unknown) => void
+    reject: (error: Error) => void
+    timeout?: NodeJS.Timeout
+  }
+> = {}
 
 export const sendToBackground = <T>(message: unknown): Promise<T> =>
-  new Promise(resolve => {
+  new Promise((resolve, reject) => {
     const id = crypto.randomUUID()
 
-    listeners[id] = response => {
-      resolve(response as T)
+    // Set up timeout for requests (30 seconds)
+    const timeout = setTimeout(() => {
+      delete listeners[id]
+      reject(new Error('Request timeout after 30 seconds'))
+    }, 30000)
+
+    listeners[id] = {
+      resolve: response => {
+        clearTimeout(timeout)
+        resolve(response as T)
+      },
+      reject: error => {
+        clearTimeout(timeout)
+        reject(error)
+      },
+      timeout,
     }
 
     const request: BridgeMessage = {
@@ -35,7 +56,12 @@ export const runBridgeInpageAgent = () => {
 
     const listener = listeners[id]
     if (listener) {
-      listener(message)
+      // Check if this is an error response
+      if ('error' in data && data.error) {
+        listener.reject(new Error(data.error as string))
+      } else {
+        listener.resolve(message)
+      }
       delete listeners[id]
     }
   })

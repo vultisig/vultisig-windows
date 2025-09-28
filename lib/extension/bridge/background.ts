@@ -1,5 +1,6 @@
 import { BridgeContext } from './context'
 import { getBridgeMessageSourceId, isBridgeMessage } from './core'
+import { KeepaliveMessage } from './keepalive'
 
 type BackgroundRequestHandler<TMessage = unknown, TResponse = unknown> = {
   context: BridgeContext
@@ -25,6 +26,20 @@ export const runBridgeBackgroundAgent = <
 
       const { id, message } = request
 
+      // Handle keepalive ping/pong messages
+      if (isKeepaliveMessage(message)) {
+        console.log('[Background] Received keepalive ping')
+        sendResponse({
+          id,
+          sourceId: getBridgeMessageSourceId('background'),
+          message: {
+            type: 'pong',
+            timestamp: Date.now(),
+          } as KeepaliveMessage,
+        })
+        return true
+      }
+
       handleRequest({
         message: message as TMessage,
         context: {
@@ -42,5 +57,17 @@ export const runBridgeBackgroundAgent = <
 
       return true
     }
+  )
+}
+
+/**
+ * Check if a message is a keepalive ping
+ */
+const isKeepaliveMessage = (message: unknown): message is KeepaliveMessage => {
+  return (
+    typeof message === 'object' &&
+    message !== null &&
+    'type' in message &&
+    (message.type === 'ping' || message.type === 'pong')
   )
 }
