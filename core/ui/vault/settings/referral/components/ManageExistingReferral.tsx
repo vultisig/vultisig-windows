@@ -17,7 +17,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 import { useCopyToClipboard } from 'react-use'
-import styled, { css, useTheme } from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 
 import { useCoreNavigate } from '../../../../navigation/hooks/useCoreNavigate'
 import { useAssertCurrentVaultId } from '../../../../storage/currentVaultId'
@@ -26,7 +26,14 @@ import { VaultsPage } from '../../../../vaultsOrganisation'
 import { useCurrentVault } from '../../../state/currentVault'
 import { ValidThorchainNameDetails } from '../services/getUserValidThorchainName'
 import { formatReferralDateExpiration } from '../utils/formatReferralDateExpiration'
-import { DecorationLine, ReferralPageWrapper } from './Referrals.styled'
+import {
+  DecorationLine,
+  fieldWrapperStyles,
+  HorizontalFieldWrapper,
+  ReferralPageWrapper,
+  VaultFieldWrapper,
+  VerticalFieldWrapper,
+} from './Referrals.styled'
 
 type Props = {
   onEditReferral: () => void
@@ -219,32 +226,6 @@ const Wrapper = styled(VStack)`
   padding: 14px;
   border-radius: 12px;
   background: rgba(2, 18, 43, 0.5);
-`
-
-const fieldWrapperStyles = css`
-  border-radius: 12px;
-  border: 1px solid ${getColor('foregroundExtra')};
-  padding: 14px;
-`
-
-const VerticalFieldWrapper = styled(VStack)`
-  ${fieldWrapperStyles};
-`
-
-const HorizontalFieldWrapper = styled(HStack)`
-  ${fieldWrapperStyles};
-  justify-content: space-between;
-  align-items: center;
-`
-
-const VaultFieldWrapper = styled(HorizontalFieldWrapper)`
-  border-radius: 99px;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-
-  &:hover {
-    background-color: ${getColor('foregroundExtra')};
-  }
 `
 
 const RewardsCollectedWrapper = styled(VStack)`

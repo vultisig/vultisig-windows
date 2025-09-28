@@ -44,6 +44,7 @@ export const ManageReferrals = () => {
 
   const { data: validNameDetails, status } = useUserValidThorchainNameQuery()
 
+  // TODO: check why when I click on 'Change Friends Referral Code..." I don't get to: EditFriendReferralForm but rather I again see ManageExistingReferral?
   useEffect(() => {
     if (status === 'pending') return
 
@@ -70,6 +71,7 @@ export const ManageReferrals = () => {
         manageMissingReferral={() => (
           <ManageMissingReferral
             onCreateReferral={() => setUiState('create')}
+            onEditFriendReferral={() => setUiState('editFriendReferral')}
           />
         )}
         value={uiState}
