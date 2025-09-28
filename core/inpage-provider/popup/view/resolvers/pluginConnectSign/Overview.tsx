@@ -124,14 +124,6 @@ export const Overview = () => {
   )
 }
 
-const StyledDescription = styled(VStack)`
-  background-color: ${getColor('foregroundExtra')};
-  border: 1px dashed ${getColor('foregroundSuper')};
-  border-radius: 16px;
-  gap: 12px;
-  padding: 12px;
-`
-
 const StyledDivider = styled.div`
   background-image: linear-gradient(
     90deg,
