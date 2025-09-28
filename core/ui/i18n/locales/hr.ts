@@ -8,11 +8,13 @@ export const hr = {
     '<g>Minden eszköz</g> a tárhelyedben tartalmaz <g>egy tárhelyrészt</g>',
   onboarding_step_4:
     'Állítsd helyre a széfet még akkor is <g>ha egy eszköz elveszik vagy megsérül</g>',
+  add_friends_referral: 'Adj hozzá egy barátságos hivatkozást',
   onboarding_step_5:
     '<g>Mindig készíts biztonsági másolatot minden tárhelyrészről</g> külön egy <g>másik helyszínen</g>',
   onboarding_step_6:
     'Ezek a részek együttműködnek, hogy <g>feloldják a tárhelyed zárolását</g>',
   secure_crypto_vault: 'Sigurni kripto trezor',
+  save_10_percent_on_swaps: 'Mentsd el <blue>10%</blue> a swap-okkal most',
   vultisig: 'Vultisig',
   onboarding_description_1:
     'Vultisig je sigurni, višeslojni kripto trezor, kompatibilan sa svim glavnim blockchainima i preko 10.000 tokena. Vultisig je potpuno samostalni.',

@@ -15,6 +15,8 @@ export const es = {
     'Estas partes colaboran para <g>desbloquear su depósito</g>',
   secure_crypto_vault: 'Bóveda segura de criptomonedas',
   vultisig: 'Vultisig',
+  add_friends_referral: 'Agregar una referencia de amigos',
+  save_10_percent_on_swaps: 'Ahorra <blue>10%</blue> en intercambios ahora',
   digit_input_success_validation: 'Verificación exitosa',
   digit_input_error_validation:
     'Error al verificar el código, por favor intenta de nuevo',

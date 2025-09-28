@@ -9,12 +9,14 @@ export const it = {
   positions: 'Posizioni',
   onboarding_step_4:
     'Recupera la tua cassaforte anche <g>se un dispositivo è perso o danneggiato</g>',
+  add_friends_referral: 'Aggiungi una referenza dei amici',
   onboarding_step_5:
     '<g>Esegui sempre il backup di ogni quota del caveau</g> separatamente in una <g>posizione diversa</g>',
   onboarding_step_6:
     'Queste quote collaborano per <g>sbloccare il tuo caveau</g>',
   secure_crypto_vault: 'Cassaforte sicura per criptovalute',
   vultisig: 'Vultisig',
+  save_10_percent_on_swaps: 'Risparmia <blue>10%</blue> su swap ora',
   onboarding_description_1:
     'Vultisig è una cassaforte sicura per criptovalute multi-dispositivo, compatibile con tutte le principali blockchain e oltre 10.000 token. Vultisig è completamente autogestito.',
   onboarding_description_2:

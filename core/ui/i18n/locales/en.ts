@@ -550,6 +550,7 @@ export const en = {
   secure: 'Secure',
   generating_eddsa_key: 'Generating EdDSA Key',
   referrals_default_title: 'Referral',
+  add_friends_referral: 'Add a Friends Referral',
   your_referrals: 'Your Referrals',
   title_2: 'Vultisig - Referrals',
   header_tooltip_title: 'Referral Program',
@@ -557,6 +558,7 @@ export const en = {
     'The referral program is applied on THORChain swaps and is on a best effort basis. You need to register a THORName to use the Vultisig referral. The registration fee is 10 RUNE and 1 RUNE for each year, which is paid to the THORChain network.',
   referral_landing_title:
     '<0>Invite friends</0>. <1>Earn rewards</1>. Save on fees.',
+  save_10_percent_on_swaps: 'Save <blue>10%</blue> on swaps now',
   invite_friends: 'Invite frwiends',
   earn_rewards: 'Earn rewards',
   save_on_fees: 'Save on fees',
