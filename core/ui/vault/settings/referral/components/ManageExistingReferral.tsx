@@ -146,7 +146,7 @@ export const ManageExistingReferral = ({
               <DecorationLine />
               <VerticalFieldWrapper
                 style={{
-                  cursor: 'ponter',
+                  cursor: 'pointer',
                 }}
                 tabIndex={0}
                 role="button"
