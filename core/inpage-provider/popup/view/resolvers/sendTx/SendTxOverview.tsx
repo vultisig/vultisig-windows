@@ -166,6 +166,11 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                   description={getKeysignChain(keysignPayload)}
                   title={t('network')}
                 />
+                {keysignPayload.memo && (
+                  <TxOverviewPanel>
+                    <TxOverviewMemo value={keysignPayload.memo} chain={chain} />
+                  </TxOverviewPanel>
+                )}
                 <MatchRecordUnion
                   value={transactionPayload}
                   handlers={{
@@ -194,14 +199,6 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                             }
                             title={t('est_network_fee')}
                           />
-                          {keysignPayload.memo && (
-                            <TxOverviewPanel>
-                              <TxOverviewMemo
-                                value={keysignPayload.memo}
-                                chain={chain}
-                              />
-                            </TxOverviewPanel>
-                          )}
                           {transactionPayload.transactionDetails
                             .cosmosMsgPayload?.case ===
                             CosmosMsgType.MSG_EXECUTE_CONTRACT && (

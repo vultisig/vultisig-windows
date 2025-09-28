@@ -1,20 +1,28 @@
-import { address, networks, Psbt } from 'bitcoinjs-lib'
+import {
+  address,
+  networks,
+  Psbt,
+  script as bscript,
+  opcodes,
+} from 'bitcoinjs-lib'
 
 const isOpReturn = (script: Buffer): boolean => {
-  return script.length > 0 && script[0] === 0x6a // OP_RETURN opcode
+  const chunks = bscript.decompile(script)
+  return chunks?.[0] === opcodes.OP_RETURN
 }
 
 /**
  * Extract OP_RETURN data as hex string
  */
 const getOpReturnData = (script: Buffer): string | null => {
-  if (!isOpReturn(script)) return null
-  if (script.length < 2) return null
+  const chunks = bscript.decompile(script)
+  if (!chunks || chunks[0] !== opcodes.OP_RETURN) return null
+  const dataChunks = chunks
+    .slice(1)
+    .filter((chunk): chunk is Buffer => Buffer.isBuffer(chunk))
+  if (dataChunks.length === 0) return null
 
-  const dataLength = script[1]
-  if (script.length < 2 + dataLength) return null
-
-  return script.slice(2, 2 + dataLength).toString('hex')
+  return Buffer.concat(dataChunks).toString('hex')
 }
 
 export const getPsbtTransferInfo = (psbt: Psbt, senderAddress: string) => {
