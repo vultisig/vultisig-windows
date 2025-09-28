@@ -57,6 +57,8 @@ export const de = {
   referral_reg_fee: 'Registrierungsgebühr',
   enter_percentage: 'Prozentangabe eingeben',
   select: 'Auswählen',
+  thorchain_address_required_for_referrals:
+    'Sie müssen eine THORChain-Adresse haben, um das Referral-Programm zu verwenden',
   pick_referral_code: 'Referral-Code auswählen',
   referral_status: 'Status',
   referral_costs: 'Kosten',

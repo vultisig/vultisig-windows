@@ -79,6 +79,8 @@ export const es = {
   your_referrals: 'Tus recomendaciones',
   percentage_to_unstake: 'Porcentaje para retirar',
   staked_amount: 'Cantidad apostada',
+  thorchain_address_required_for_referrals:
+    'Necesitas una dirección de THORChain para usar el programa de recomendaciones',
   signing_transaction: 'Firma de la transacción',
   asset_selection: 'Selección de activos',
   enter_percentage: 'Ingrese el porcentaje',

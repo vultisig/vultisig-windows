@@ -262,6 +262,8 @@ export const en = {
   initiating_device: 'Initiating device',
   pairing_device: 'Pairing device',
   add_new_vault: 'Add New Vault',
+  thorchain_address_required_for_referrals:
+    'You need to have a THORChain address to use the referral program',
   shares: 'Shares',
   backupnow_note:
     'Note: Never store Vault Shares from different devices in the same location.',
