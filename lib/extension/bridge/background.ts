@@ -28,7 +28,6 @@ export const runBridgeBackgroundAgent = <
 
       // Handle keepalive ping/pong messages
       if (isKeepaliveMessage(message)) {
-        console.log('[Background] Received keepalive ping')
         sendResponse({
           id,
           sourceId: getBridgeMessageSourceId('background'),
