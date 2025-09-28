@@ -116,7 +116,7 @@ export const ManageExistingReferral = ({
                 <Text size={14} color="shy">
                   {t('collected_rewards')}
                 </Text>
-                <Text>{formatTokenAmount(collectedRune, 'RUNE')}</Text>
+                <Text>{formatAmount(collectedRune, { ticker: 'RUNE' })}</Text>
               </VStack>
             </RewardsCollectedWrapper>
             <Text size={14}>{t('your_referral_code')}</Text>
