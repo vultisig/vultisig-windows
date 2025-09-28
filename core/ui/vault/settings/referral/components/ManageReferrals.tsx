@@ -20,6 +20,7 @@ import { EditFriendReferralForm } from './EditFriendReferralForm'
 import { EditReferralForm } from './EditReferral/EditReferralForm'
 import { EditReferralVerify } from './EditReferral/EditReferralVerify'
 import { ManageExistingReferral } from './ManageExistingReferral'
+import { ManageMissingReferral } from './ManageMissingReferral'
 import { ManageReferralsForm } from './ManageReferralsForm'
 
 type ManageReferralUIState =
@@ -29,6 +30,7 @@ type ManageReferralUIState =
   | 'loading'
   | 'existingReferral'
   | 'editFriendReferral'
+  | 'manageMissingReferral'
 
 export const ManageReferrals = () => {
   const [uiState, setUiState] = useState<ManageReferralUIState>('loading')
@@ -45,17 +47,31 @@ export const ManageReferrals = () => {
   useEffect(() => {
     if (status === 'pending') return
 
+    if (uiState === 'existingReferral' && !validNameDetails) {
+      setUiState('manageMissingReferral')
+      return
+    }
+
+    if (uiState === 'manageMissingReferral' && !validNameDetails) {
+      return
+    }
+
     if (validNameDetails) {
       setUiState('existingReferral')
       return
     }
 
     setUiState('default')
-  }, [status, validNameDetails])
+  }, [status, uiState, validNameDetails])
 
   return (
     <ReferralPayoutAssetProvider>
       <Match
+        manageMissingReferral={() => (
+          <ManageMissingReferral
+            onCreateReferral={() => setUiState('create')}
+          />
+        )}
         value={uiState}
         editFriendReferral={() => (
           <EditFriendReferralForm

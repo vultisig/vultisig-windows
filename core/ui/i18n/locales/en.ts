@@ -255,6 +255,7 @@ export const en = {
   upload_file_or_drag_and_drop: 'Upload file or drag & drop here',
   upload_vulttshare: 'Upload your Vultishare QR',
   getting_video_permission: 'Getting video permission...',
+  vault_selected: 'Vault selected',
   failed_to_get_video_permission: 'Failed to get video permission',
   processing_url: 'Processing URL...',
   failed_to_process_url: 'Failed to process URL',

@@ -52,6 +52,7 @@ export const de = {
   change_your_friends_referral:
     'Ändere den Empfehlungs­code deines Freundes für Swaps',
   incorrect_passcode: 'Falscher Passcode',
+  vault_selected: 'Vault ausgewählt',
   passcodes_do_not_match: 'Passcodes stimmen nicht überein',
   search_field_placeholder: 'Suchen..',
   referral_reg_fee: 'Registrierungsgebühr',

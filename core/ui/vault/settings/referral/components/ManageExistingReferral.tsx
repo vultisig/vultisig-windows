@@ -1,4 +1,5 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { Opener } from '@lib/ui/base/Opener'
 import { Button } from '@lib/ui/buttons/Button'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { ArrowUndoIcon } from '@lib/ui/icons/ArrowUndoIcon'
@@ -8,6 +9,7 @@ import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { TrophyIcon } from '@lib/ui/icons/TrophyIcon'
 import { Image } from '@lib/ui/image/Image'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
+import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
@@ -20,6 +22,7 @@ import styled, { css, useTheme } from 'styled-components'
 import { useCoreNavigate } from '../../../../navigation/hooks/useCoreNavigate'
 import { useAssertCurrentVaultId } from '../../../../storage/currentVaultId'
 import { useFriendReferralQuery } from '../../../../storage/referrals'
+import { VaultsPage } from '../../../../vaultsOrganisation'
 import { useCurrentVault } from '../../../state/currentVault'
 import { ValidThorchainNameDetails } from '../services/getUserValidThorchainName'
 import { formatReferralDateExpiration } from '../utils/formatReferralDateExpiration'
@@ -49,154 +52,165 @@ export const ManageExistingReferral = ({
   const { name: vaultName } = useCurrentVault()
 
   return (
-    <>
-      <PageHeader
-        primaryControls={
-          <PageHeaderBackButton
-            onClick={() =>
-              navigate({
-                id: 'settings',
-              })
-            }
-          />
-        }
-        title={t('your_referrals')}
-      />
-      <ReferralPageWrapper>
-        <AnimatedVisibility
-          animationConfig="bottomToTop"
-          config={{ duration: 1000 }}
-          delay={300}
-          overlayStyles={{
-            flexGrow: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 14,
-          }}
-        >
-          <Wrapper gap={14}>
-            <Overlay />
-            <VaultFieldWrapper>
-              <HStack alignItems="center" gap={10}>
-                <Image
-                  style={{
-                    objectFit: 'contain',
-                  }}
-                  src="/core/images/vault-image-placeholder.png"
-                  alt=""
-                  width={28}
-                  height={28}
-                />
-                <Text size={16}>{vaultName}</Text>
-              </HStack>
-              <UnstyledButton
+    <Opener
+      renderOpener={({ onOpen }) => (
+        <>
+          <PageHeader
+            primaryControls={
+              <PageHeaderBackButton
                 onClick={() =>
                   navigate({
-                    id: 'vaults',
+                    id: 'settings',
                   })
                 }
-              >
-                <IconWrapper
-                  style={{
-                    fontSize: 16,
-                  }}
-                >
-                  <ChevronRightIcon />
-                </IconWrapper>
-              </UnstyledButton>
-            </VaultFieldWrapper>
-
-            <RewardsCollectedWrapper>
-              <FieldIconWrapper
-                style={{
-                  color: colors.buttonPrimary.toCssValue(),
-                }}
-              >
-                <TrophyIcon />
-              </FieldIconWrapper>
-              <VStack>
-                <Text size={14} color="shy">
-                  {t('collected_rewards')}
-                </Text>
-                <Text>{formatAmount(collectedRune, { ticker: 'RUNE' })}</Text>
-              </VStack>
-              <ReferralsThorchainLogoWrapper>
-                <Image
-                  src="/core/images/referrals-thorchain-logo.png"
-                  style={{
-                    objectFit: 'contain',
-                    width: '100%',
-                    height: '100%',
-                  }}
-                  alt=""
-                />
-              </ReferralsThorchainLogoWrapper>
-            </RewardsCollectedWrapper>
-            <Text size={14}>{t('your_referral_code')}</Text>
-            <HorizontalFieldWrapper>
-              <Text>{name}</Text>
-              <FieldIconWrapper>
-                <UnstyledButton onClick={() => copyToClipboard(name)}>
-                  <CopyIcon />
-                </UnstyledButton>
-              </FieldIconWrapper>
-            </HorizontalFieldWrapper>
-            <VerticalFieldWrapper gap={10}>
-              <Text size={14} color="shy">
-                {t('expires_on')}
-              </Text>
-              <Text size={18}>{formatReferralDateExpiration(expiresOn)}</Text>
-            </VerticalFieldWrapper>
-            <Button onClick={onEditReferral}>{t('edit_referral')}</Button>
-            <DecorationLine />
-            <VStack gap={14}>
-              <VStack gap={8}>
-                <Text>{t('your_friends_referral_code')}</Text>
-                <FriendsReferralCode>
-                  <Text>{friendsReferralCode || '--'}</Text>
-                </FriendsReferralCode>
-              </VStack>
-              <DecorationLine />
-              <VerticalFieldWrapper
-                style={{
-                  cursor: 'pointer',
-                }}
-                tabIndex={0}
-                role="button"
-                onClick={onEditFriendReferral}
-              >
-                <HStack justifyContent="space-between" alignItems="center">
-                  <VStack
-                    gap={12}
-                    style={{
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <FieldIconWrapper
+              />
+            }
+            title={t('your_referrals')}
+          />
+          <ReferralPageWrapper>
+            <AnimatedVisibility
+              animationConfig="bottomToTop"
+              config={{ duration: 1000 }}
+              delay={300}
+              overlayStyles={{
+                flexGrow: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 14,
+              }}
+            >
+              <Wrapper gap={14}>
+                <Overlay />
+                <Text size={14}>{t('vault_selected')}</Text>
+                <VaultFieldWrapper onClick={onOpen}>
+                  <HStack alignItems="center" gap={10}>
+                    <Image
                       style={{
-                        color: colors.buttonPrimary.toCssValue(),
+                        objectFit: 'contain',
                       }}
-                    >
-                      <ArrowUndoIcon />
-                    </FieldIconWrapper>
-                    <Text>{t('change_your_friends_referral')}</Text>
-                  </VStack>
+                      src="/core/images/vault-image-placeholder.png"
+                      alt=""
+                      width={28}
+                      height={28}
+                    />
+                    <Text size={16}>{vaultName}</Text>
+                  </HStack>
                   <IconWrapper
                     style={{
-                      fontSize: 24,
+                      fontSize: 16,
                     }}
                   >
                     <ChevronRightIcon />
                   </IconWrapper>
-                </HStack>
-              </VerticalFieldWrapper>
-            </VStack>
-          </Wrapper>
-        </AnimatedVisibility>
-      </ReferralPageWrapper>
-    </>
+                </VaultFieldWrapper>
+
+                <RewardsCollectedWrapper>
+                  <FieldIconWrapper
+                    style={{
+                      color: colors.buttonPrimary.toCssValue(),
+                    }}
+                  >
+                    <TrophyIcon />
+                  </FieldIconWrapper>
+                  <VStack>
+                    <Text size={14} color="shy">
+                      {t('collected_rewards')}
+                    </Text>
+                    <Text>
+                      {formatAmount(collectedRune, { ticker: 'RUNE' })}
+                    </Text>
+                  </VStack>
+                  <ReferralsThorchainLogoWrapper>
+                    <Image
+                      src="/core/images/referrals-thorchain-logo.png"
+                      style={{
+                        objectFit: 'contain',
+                        width: '100%',
+                        height: '100%',
+                      }}
+                      alt=""
+                    />
+                  </ReferralsThorchainLogoWrapper>
+                </RewardsCollectedWrapper>
+                <Text size={14}>{t('your_referral_code')}</Text>
+                <HorizontalFieldWrapper>
+                  <Text>{name}</Text>
+                  <FieldIconWrapper>
+                    <UnstyledButton onClick={() => copyToClipboard(name)}>
+                      <CopyIcon />
+                    </UnstyledButton>
+                  </FieldIconWrapper>
+                </HorizontalFieldWrapper>
+                <VerticalFieldWrapper gap={10}>
+                  <Text size={14} color="shy">
+                    {t('expires_on')}
+                  </Text>
+                  <Text size={18}>
+                    {formatReferralDateExpiration(expiresOn)}
+                  </Text>
+                </VerticalFieldWrapper>
+                <Button onClick={onEditReferral}>{t('edit_referral')}</Button>
+                <DecorationLine />
+                <VStack gap={14}>
+                  <VStack gap={8}>
+                    <Text>{t('your_friends_referral_code')}</Text>
+                    <FriendsReferralCode>
+                      <Text>{friendsReferralCode || '--'}</Text>
+                    </FriendsReferralCode>
+                  </VStack>
+                  <DecorationLine />
+                  <VerticalFieldWrapper
+                    style={{
+                      cursor: 'pointer',
+                    }}
+                    tabIndex={0}
+                    role="button"
+                    onClick={onEditFriendReferral}
+                  >
+                    <HStack justifyContent="space-between" alignItems="center">
+                      <VStack
+                        gap={12}
+                        style={{
+                          cursor: 'pointer',
+                        }}
+                      >
+                        <FieldIconWrapper
+                          style={{
+                            color: colors.buttonPrimary.toCssValue(),
+                          }}
+                        >
+                          <ArrowUndoIcon />
+                        </FieldIconWrapper>
+                        <Text>{t('change_your_friends_referral')}</Text>
+                      </VStack>
+                      <IconWrapper
+                        style={{
+                          fontSize: 24,
+                        }}
+                      >
+                        <ChevronRightIcon />
+                      </IconWrapper>
+                    </HStack>
+                  </VerticalFieldWrapper>
+                </VStack>
+              </Wrapper>
+            </AnimatedVisibility>
+          </ReferralPageWrapper>
+        </>
+      )}
+      renderContent={({ onClose }) => (
+        <FixedWrapper>
+          <VaultsPage onFinish={onClose} />
+        </FixedWrapper>
+      )}
+    />
   )
 }
+
+const FixedWrapper = styled(CenterAbsolutely)`
+  position: fixed;
+  background-color: ${getColor('background')};
+`
 
 const Wrapper = styled(VStack)`
   position: relative;
@@ -225,6 +239,12 @@ const HorizontalFieldWrapper = styled(HStack)`
 
 const VaultFieldWrapper = styled(HorizontalFieldWrapper)`
   border-radius: 99px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: ${getColor('foregroundExtra')};
+  }
 `
 
 const RewardsCollectedWrapper = styled(VStack)`

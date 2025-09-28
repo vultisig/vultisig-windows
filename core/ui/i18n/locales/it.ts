@@ -84,6 +84,7 @@ export const it = {
   ibc_transfer: 'Trasferimento IBC',
   staked: 'Puntato',
   percentage: 'Percentuale',
+  vault_selected: 'Vault selezionato',
   percentage_to_unstake: 'Percentuale da dismettere',
   staked_amount: 'Importo puntato',
   percentage_limit: 'La percentuale deve essere compresa tra 0 e 100',

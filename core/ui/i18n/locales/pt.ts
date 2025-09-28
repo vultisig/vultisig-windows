@@ -82,6 +82,7 @@ export const pt = {
   verify_password_periodic_message:
     'Verifique sua senha de compartilhamento do servidor',
   staked: 'Apostado',
+  vault_selected: 'Cofre selecionado',
   percentage_to_unstake: 'Percentual para desinvestir',
   staked_amount: 'Valor em staking',
   percentage_limit: 'A porcentagem deve estar entre 0 e 100',

@@ -70,6 +70,7 @@ export const hr = {
   you_are_sending: 'Šalješ',
   referrals_default_title: 'Preporuka',
   ypur_referrals: 'Tvoje preporuke',
+  vault_selected: 'Vault odabran',
   title_2: 'Vultisig - Preporuke',
   header_tooltip_title: 'Program Preporuka',
   thorchain_address_required_for_referrals:

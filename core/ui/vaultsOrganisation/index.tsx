@@ -19,10 +19,11 @@ import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
+import { OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-export const VaultsPage = () => {
+export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
   const { t } = useTranslation()
   const { mutate } = useSetCurrentVaultIdMutation()
   const navigate = useCoreNavigate()
@@ -85,7 +86,7 @@ export const VaultsPage = () => {
                     }
                     onClick={() =>
                       mutate(vaultId, {
-                        onSuccess: goBack,
+                        onSuccess: onFinish ? onFinish : goBack,
                       })
                     }
                     title={vault.name}
