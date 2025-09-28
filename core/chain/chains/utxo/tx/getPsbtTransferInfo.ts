@@ -1,9 +1,9 @@
 import {
   address,
   networks,
+  opcodes,
   Psbt,
   script as bscript,
-  opcodes,
 } from 'bitcoinjs-lib'
 
 const isOpReturn = (script: Buffer): boolean => {
