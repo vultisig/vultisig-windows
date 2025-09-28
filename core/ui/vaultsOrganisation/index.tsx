@@ -15,6 +15,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { ListItemTag } from '@lib/ui/list/item/tag'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -28,6 +29,8 @@ export const VaultsPage = () => {
   const folders = useVaultFolders()
   const vaults = useFolderlessVaults()
   const currentVaultId = useCurrentVaultId()
+
+  const goBack = useNavigateBack()
 
   return (
     <VStack fullHeight>
@@ -82,7 +85,7 @@ export const VaultsPage = () => {
                     }
                     onClick={() =>
                       mutate(vaultId, {
-                        onSuccess: () => navigate({ id: 'vault' }),
+                        onSuccess: goBack,
                       })
                     }
                     title={vault.name}
