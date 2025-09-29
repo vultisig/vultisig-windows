@@ -12,7 +12,7 @@ import { AppViewId } from '@clients/extension/src/navigation/AppView'
 import { ConnectedDappsPage } from '@clients/extension/src/pages/connected-dapps'
 import { SetupVaultPageController } from '@clients/extension/src/pages/setup-vault/SetupVaultPageController'
 import { VaultPage } from '@clients/extension/src/pages/vault'
-import { StartKeysignView } from '@core/extension/keysign/start/StartKeysignView'
+import { StartKeysignViewWithResultProvider } from '@core/extension/keysign/start/StartKeysignViewWithResultProvider'
 import { SharedViewId, sharedViews } from '@core/ui/navigation/sharedViews'
 import { OnboardingPage } from '@core/ui/onboarding/components/OnboardingPage'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
@@ -30,7 +30,7 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   ),
   joinKeygen: JoinKeygenPage,
   joinKeysign: JoinKeysignPage,
-  keysign: StartKeysignView,
+  keysign: StartKeysignViewWithResultProvider,
   onboarding: () => (
     <IncompleteOnboardingOnly>
       <OnboardingPage />

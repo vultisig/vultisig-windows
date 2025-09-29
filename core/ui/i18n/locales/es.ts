@@ -15,6 +15,7 @@ export const es = {
     'Estas partes colaboran para <g>desbloquear su depósito</g>',
   secure_crypto_vault: 'Bóveda segura de criptomonedas',
   vultisig: 'Vultisig',
+  by_vultisig: 'por Vultisig',
   digit_input_success_validation: 'Verificación exitosa',
   digit_input_error_validation:
     'Error al verificar el código, por favor intenta de nuevo',
@@ -1078,4 +1079,5 @@ export const es = {
   backupShare2: 'Copia de seguridad compartida 2',
   processing_transaction: 'Procesando transacción...',
   failed_to_process_transaction: 'No se pudo procesar la transacción',
+  signature_successful: 'Firma exitosa',
 }

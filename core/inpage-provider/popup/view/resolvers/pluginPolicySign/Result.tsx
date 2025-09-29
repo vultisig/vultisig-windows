@@ -1,45 +1,47 @@
-import { create, fromBinary } from '@bufbuild/protobuf'
+import { fromBinary } from '@bufbuild/protobuf'
 import { base64Decode } from '@bufbuild/protobuf/wire'
+import { Tx } from '@core/chain/tx'
 import { usePopupContext } from '@core/inpage-provider/popup/view/state/context'
 import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
 import { Policy, PolicySchema } from '@core/mpc/types/plugin/policy_pb'
-import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { StartKeysignPrompt } from '@core/ui/mpc/keysign/prompt/StartKeysignPrompt'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
+import { Animation } from '@lib/ui/animations/Animation'
+import { Button } from '@lib/ui/buttons/Button'
 import { BadgeCheckIcon } from '@lib/ui/icons/BadgeCheckIcon'
 import { SafeImage } from '@lib/ui/images/SafeImage'
+import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
-import { PageHeader } from '@lib/ui/page/PageHeader'
-import { Text } from '@lib/ui/text'
+import { GradientText, Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { MiddleTruncate } from '@lib/ui/truncate'
+import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-export const Overview = () => {
-  const { t } = useTranslation()
+type ResultProps = {
+  result:
+    | {
+        txs: Tx[]
+      }
+    | {
+        signature: string
+      }
+}
+
+export const Result = ({ result }: ResultProps) => {
   const [policy, setPolicy] = useState<Policy | undefined>(undefined)
-  const { bytesCount, chain, message } = usePopupInput<'pluginPolicySign'>()
+  const { chain, message } = usePopupInput<'pluginPolicySign'>()
   const { requestFavicon, requestOrigin } =
     usePopupContext<'pluginPolicySign'>()
+  const { t } = useTranslation()
+
   const address = useCurrentVaultAddress(chain)
 
-  const keysignMessagePayload = useMemo(
-    () => ({
-      custom: create(CustomMessagePayloadSchema, {
-        chain,
-        message: `\x19Ethereum Signed Message:\n${bytesCount}${message}`,
-        method: 'personal_sign',
-      }),
-    }),
-    [bytesCount, chain, message]
-  )
-
+  const signature = getRecordUnionValue(result, 'signature')
   useEffect(() => {
     const [recipe] = message.split('*#*')
 
@@ -48,15 +50,22 @@ export const Overview = () => {
 
     setPolicy(policy)
   }, [message])
-
   return (
     <>
-      <PageHeader
-        primaryControls={<PageHeaderBackButton />}
-        title={t('sign_request')}
-        hasBorder
-      />
       <PageContent gap={16} scrollable>
+        <VStack style={{ height: 220, position: 'relative' }} fullWidth>
+          <Animation src="/core/animations/vault-created.riv" />
+          <AnimatedVisibility delay={300}>
+            <GradientText
+              as="span"
+              size={24}
+              style={{ bottom: 40, left: 0, position: 'absolute', right: 0 }}
+              centerHorizontally
+            >
+              {t('signature_successful')}
+            </GradientText>
+          </AnimatedVisibility>
+        </VStack>
         <StyledSection>
           <Text as="span" color="shy" size={14} weight={500}>
             {t(`request_from`)}
@@ -198,9 +207,17 @@ export const Overview = () => {
             <></>
           )}
         </StyledSection>
+        <StyledSection>
+          <Text as="span" size={14} weight={500}>
+            {t(`signed_signature`)}
+          </Text>
+          <Text as="span" color="info" size={13} weight={500}>
+            {signature}
+          </Text>
+        </StyledSection>
       </PageContent>
-      <PageFooter>
-        <StartKeysignPrompt keysignPayload={keysignMessagePayload} />
+      <PageFooter alignItems="center">
+        <Button onClick={() => window.close()}>{t('done')}</Button>
       </PageFooter>
     </>
   )
@@ -213,22 +230,6 @@ const StyledDescription = styled(VStack)`
   gap: 12px;
   padding: 12px;
 `
-
-const StyledDivider = styled.div`
-  background-image: linear-gradient(
-    90deg,
-    ${getColor('foreground')} 0%,
-    ${getColor('foregroundExtra')} 49.5%,
-    ${getColor('foreground')} 100%
-  );
-  height: 1px;
-`
-
-const StyledImage = styled.img`
-  height: 36px;
-  width: 36px;
-`
-
 const StyledSection = styled(VStack)`
   background-color: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
@@ -244,4 +245,19 @@ const StyledVerify = styled(HStack)`
   height: 28px;
   padding-left: 6px;
   padding-right: 8px;
+`
+
+const StyledImage = styled.img`
+  height: 36px;
+  width: 36px;
+`
+
+const StyledDivider = styled.div`
+  background-image: linear-gradient(
+    90deg,
+    ${getColor('foreground')} 0%,
+    ${getColor('foregroundExtra')} 49.5%,
+    ${getColor('foreground')} 100%
+  );
+  height: 1px;
 `

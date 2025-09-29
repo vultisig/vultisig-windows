@@ -19,6 +19,7 @@ export const de = {
     'Fehler bei der Code-Verifizierung, bitte erneut versuchen',
   digit_input_loading_validation: 'Code wird überprüft, bitte warten',
   vultisig: 'Vultisig',
+  by_vultisig: 'von Vultisig',
   merged: 'Zusammengeführt',
   mint: 'Erhalten',
   function_unavailble:
@@ -1082,4 +1083,5 @@ export const de = {
   backupShare2: 'Sicherungsfreigabe 2',
   processing_transaction: 'Transaktion wird verarbeitet...',
   failed_to_process_transaction: 'Transaktion konnte nicht verarbeitet werden',
+  signature_successful: 'Signatur erfolgreich',
 }

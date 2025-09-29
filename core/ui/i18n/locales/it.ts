@@ -15,6 +15,7 @@ export const it = {
     'Queste quote collaborano per <g>sbloccare il tuo caveau</g>',
   secure_crypto_vault: 'Cassaforte sicura per criptovalute',
   vultisig: 'Vultisig',
+  by_vultisig: 'da Vultisig',
   onboarding_description_1:
     'Vultisig è una cassaforte sicura per criptovalute multi-dispositivo, compatibile con tutte le principali blockchain e oltre 10.000 token. Vultisig è completamente autogestito.',
   onboarding_description_2:
@@ -1075,4 +1076,5 @@ export const it = {
   backupShare2: 'Condivisione di backup 2',
   processing_transaction: 'Elaborazione della transazione in corso...',
   failed_to_process_transaction: 'Impossibile elaborare la transazione',
+  signature_successful: 'Firma riuscita',
 }

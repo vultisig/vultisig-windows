@@ -13,6 +13,7 @@ export const pt = {
   onboarding_step_6: 'Essas partes colaboram para <g>desbloquear seu cofre</g>',
   secure_crypto_vault: 'Cofre seguro de cripto',
   vultisig: 'Vultisig',
+  by_vultisig: 'por Vultisig',
   onboarding_description_1:
     'O Vultisig é um cofre seguro de cripto multi-dispositivo, compatível com todas as principais blockchains e mais de 10.000 tokens. O Vultisig é totalmente auto-hospedado.',
   onboarding_description_2:
@@ -1066,4 +1067,5 @@ export const pt = {
   backupShare2: 'Compartilhamento de backup 2',
   processing_transaction: 'Processando transação...',
   failed_to_process_transaction: 'Falha ao processar a transação',
+  signature_successful: 'Assinatura bem-sucedida',
 }
