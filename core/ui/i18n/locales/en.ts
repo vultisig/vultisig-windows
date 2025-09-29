@@ -139,6 +139,9 @@ export const en = {
   staked_amount: 'Staked Amount',
   send_overview: 'Send Overview',
   add_address: 'Add Address',
+  no_referral_yet: 'No referral yet.',
+  turn_your_vault_into_rewards_machine:
+    'Turn your vault into a rewards machine. Create your referral now and start earning.',
   selected_chain_missing_in_your_vault: 'Selected chain missing in your vault',
   vultisig: 'Vultisig',
   missing_thorchain_address: 'Missing THORChain Address',
@@ -262,6 +265,8 @@ export const en = {
   this_device_is_the: 'This device is the',
   initiating_device: 'Initiating device',
   pairing_device: 'Pairing device',
+  expiration_must_extend_by_exactly_one_year:
+    'Expiration can only be extended by exactly 1 year',
   add_new_vault: 'Add New Vault',
   thorchain_address_required_for_referrals:
     'You need to have a THORChain address to use the referral program',

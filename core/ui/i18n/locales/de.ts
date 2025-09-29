@@ -932,12 +932,17 @@ export const de = {
   prioritize_vultisig: 'Priorisieren Sie Vultisig',
   referral_code: 'Empfehlungscode',
   rename: 'Umbenennen',
+  turn_your_vault_into_rewards_machine:
+    'Ihr Tresor in eine Belohnungsmaschine umwandeln. Erstellen Sie jetzt Ihre Empfehlung und beginnen Sie mit dem Erhalten von Belohnungen.',
   support: 'Unterstützung',
   terms: 'Bedingungen',
+  expiration_must_extend_by_exactly_one_year:
+    'Ablaufdatum kann nur um 1 Jahr erhöht werden',
   twitter: 'Twitter',
   vultisig_community: 'Vultisig-Gemeinschaft',
   remove: 'Entfernen',
   share_vault: 'Tresor teilen',
+  no_referral_yet: 'Noch keine Empfehlung',
   missing_thorchain_address: 'Fehlende THORChain-Adresse',
   missing_destination_address: 'Fehlende Zieladresse',
   upgrade_shares_info:

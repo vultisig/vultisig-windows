@@ -932,8 +932,13 @@ export const es = {
   terms: 'Términos',
   twitter: 'Gorjeo',
   vultisig_community: 'Comunidad Vultisig',
+  expiration_must_extend_by_exactly_one_year:
+    'La vencimiento solo puede extenderse por un año',
+  turn_your_vault_into_rewards_machine:
+    'Convierta tu bóveda en una máquina de recompensas. Cree tu referencia ahora y comience a ganar.',
   remove: 'Eliminar',
   share_vault: 'Bóveda compartida',
+  no_referral_yet: 'Aún no hay referencia',
   missing_thorchain_address: 'Falta la dirección de THORChain',
   missing_destination_address: 'Dirección de destino faltante',
   upgrade_shares_info:
