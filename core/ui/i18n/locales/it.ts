@@ -927,9 +927,14 @@ export const it = {
   support: 'Supporto',
   terms: 'Termini',
   twitter: 'Cinguettio',
+  expiration_must_extend_by_exactly_one_year:
+    'La scadenza può essere estesa solo per un anno',
+  turn_your_vault_into_rewards_machine:
+    'Trasforma il tuo vault in una macchina di premi. Crea la tua referenza ora e inizia a guadagnare.',
   vultisig_community: 'Comunità di Vultisig',
   remove: 'Rimuovere',
   share_vault: 'Condividi Vault',
+  no_referral_yet: 'Nessuna referenza',
   missing_thorchain_address: 'Indirizzo THORChain mancante',
   missing_destination_address: 'Indirizzo di destinazione mancante',
   upgrade_shares_info:

@@ -915,11 +915,16 @@ export const pt = {
   referral_code: 'Código de referência',
   rename: 'Renomear',
   support: 'Apoiar',
+  turn_your_vault_into_rewards_machine:
+    'Transforme seu cofre em uma máquina de recompensas',
   terms: 'Termos',
   twitter: 'Twitter',
+  expiration_must_extend_by_exactly_one_year:
+    'A expiração só pode ser estendida por um ano',
   vultisig_community: 'Comunidade Vultisig',
   remove: 'Remover',
   share_vault: 'Compartilhar Cofre',
+  no_referral_yet: 'Nenhuma referência ainda',
   missing_thorchain_address: 'Endereço THORChain ausente',
   missing_destination_address: 'Endereço de destino ausente',
   upgrade_shares_info:

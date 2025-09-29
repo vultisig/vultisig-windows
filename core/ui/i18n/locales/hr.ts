@@ -906,12 +906,16 @@ export const hr = {
   prioritize_vultisig: 'Dajte prioritet Vultisigu',
   referral_code: 'Referral kod',
   rename: 'Preimenovati',
+  turn_your_vault_into_rewards_machine: 'Pretvorite svoju trezor u nagrade',
   support: 'Podrška',
+  expiration_must_extend_by_exactly_one_year:
+    'Ističe se može proširiti samo jednom godinom',
   terms: 'Uvjeti',
   twitter: 'Cvrkut',
   vultisig_community: 'Vultisig zajednica',
   remove: 'Ukloniti',
   share_vault: 'Dijeli trezor',
+  no_referral_yet: 'Nema preporuke',
   missing_thorchain_address: 'Nedostaje THORChain adresa',
   missing_destination_address: 'Nedostaje odredišna adresa',
   upgrade_shares_info:
