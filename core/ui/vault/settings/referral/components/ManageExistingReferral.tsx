@@ -9,7 +9,6 @@ import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { TrophyIcon } from '@lib/ui/icons/TrophyIcon'
 import { Image } from '@lib/ui/image/Image'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
-import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
@@ -26,10 +25,13 @@ import { VaultsPage } from '../../../../vaultsOrganisation'
 import { useCurrentVault } from '../../../state/currentVault'
 import { ValidThorchainNameDetails } from '../services/getUserValidThorchainName'
 import { formatReferralDateExpiration } from '../utils/formatReferralDateExpiration'
+import { AddFriendsReferralPrompt } from './AddFriendsReferralPrompt'
 import {
   DecorationLine,
   fieldWrapperStyles,
+  FixedWrapper,
   HorizontalFieldWrapper,
+  Overlay,
   ReferralPageWrapper,
   VaultFieldWrapper,
   VerticalFieldWrapper,
@@ -63,6 +65,7 @@ export const ManageExistingReferral = ({
       renderOpener={({ onOpen }) => (
         <>
           <PageHeader
+            hasBorder
             primaryControls={
               <PageHeaderBackButton
                 onClick={() =>
@@ -88,6 +91,11 @@ export const ManageExistingReferral = ({
             >
               <Wrapper gap={14}>
                 <Overlay />
+                {!friendsReferralCode && (
+                  <AddFriendsReferralPrompt
+                    onUpdateFriendReferral={onEditFriendReferral}
+                  />
+                )}
                 <Text size={14}>{t('vault_selected')}</Text>
                 <VaultFieldWrapper onClick={onOpen}>
                   <HStack alignItems="center" gap={10}>
@@ -158,48 +166,53 @@ export const ManageExistingReferral = ({
                 </VerticalFieldWrapper>
                 <Button onClick={onEditReferral}>{t('edit_referral')}</Button>
                 <DecorationLine />
-                <VStack gap={14}>
-                  <VStack gap={8}>
-                    <Text>{t('your_friends_referral_code')}</Text>
-                    <FriendsReferralCode>
-                      <Text>{friendsReferralCode || '--'}</Text>
-                    </FriendsReferralCode>
-                  </VStack>
-                  <DecorationLine />
-                  <VerticalFieldWrapper
-                    style={{
-                      cursor: 'pointer',
-                    }}
-                    tabIndex={0}
-                    role="button"
-                    onClick={onEditFriendReferral}
-                  >
-                    <HStack justifyContent="space-between" alignItems="center">
-                      <VStack
-                        gap={12}
-                        style={{
-                          cursor: 'pointer',
-                        }}
+                {Boolean(friendsReferralCode) && (
+                  <VStack gap={14}>
+                    <VStack gap={8}>
+                      <Text>{t('your_friends_referral_code')}</Text>
+                      <FriendsReferralCode>
+                        <Text>{friendsReferralCode || '--'}</Text>
+                      </FriendsReferralCode>
+                    </VStack>
+                    <DecorationLine />
+                    <VerticalFieldWrapper
+                      style={{
+                        cursor: 'pointer',
+                      }}
+                      tabIndex={0}
+                      role="button"
+                      onClick={onEditFriendReferral}
+                    >
+                      <HStack
+                        justifyContent="space-between"
+                        alignItems="center"
                       >
-                        <FieldIconWrapper
+                        <VStack
+                          gap={12}
                           style={{
-                            color: colors.buttonPrimary.toCssValue(),
+                            cursor: 'pointer',
                           }}
                         >
-                          <ArrowUndoIcon />
-                        </FieldIconWrapper>
-                        <Text>{t('change_your_friends_referral')}</Text>
-                      </VStack>
-                      <IconWrapper
-                        style={{
-                          fontSize: 24,
-                        }}
-                      >
-                        <ChevronRightIcon />
-                      </IconWrapper>
-                    </HStack>
-                  </VerticalFieldWrapper>
-                </VStack>
+                          <FieldIconWrapper
+                            style={{
+                              color: colors.buttonPrimary.toCssValue(),
+                            }}
+                          >
+                            <ArrowUndoIcon />
+                          </FieldIconWrapper>
+                          <Text>{t('change_your_friends_referral')}</Text>
+                        </VStack>
+                        <IconWrapper
+                          style={{
+                            fontSize: 24,
+                          }}
+                        >
+                          <ChevronRightIcon />
+                        </IconWrapper>
+                      </HStack>
+                    </VerticalFieldWrapper>
+                  </VStack>
+                )}
               </Wrapper>
             </AnimatedVisibility>
           </ReferralPageWrapper>
@@ -213,11 +226,6 @@ export const ManageExistingReferral = ({
     />
   )
 }
-
-const FixedWrapper = styled(CenterAbsolutely)`
-  position: fixed;
-  background-color: ${getColor('background')};
-`
 
 const Wrapper = styled(VStack)`
   position: relative;
@@ -251,23 +259,6 @@ const RewardsCollectedWrapper = styled(VStack)`
   ${fieldWrapperStyles};
   gap: 12px;
   height: 108px;
-`
-
-const Overlay = styled.div`
-  position: absolute;
-  width: 374px;
-  height: 416px;
-  left: 50%;
-  bottom: 50%;
-  transform: translate(-50%, 50%);
-  flex-shrink: 0;
-  border-radius: 416px;
-  background: linear-gradient(
-    82deg,
-    rgba(51, 230, 191, 0.15) 8.02%,
-    rgba(4, 57, 199, 0.15) 133.75%
-  );
-  filter: blur(126.94499969482422px);
 `
 
 const FieldIconWrapper = styled(IconWrapper)`
