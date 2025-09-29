@@ -23,10 +23,10 @@ export const AddFriendsReferralPrompt = ({ onUpdateFriendReferral }: Props) => {
       role="button"
       onClick={onUpdateFriendReferral}
     >
-      <FriendsReferralPromptOverlay />
       <FriendReferralPromptImageWrapper>
         <Image src="/core/images/referral-friend-decoration.png" alt="" />
       </FriendReferralPromptImageWrapper>
+      <FriendsReferralPromptOverlay />
       <Text size={12} color="shy">
         <Trans
           i18nKey="save_10_percent_on_swaps"
