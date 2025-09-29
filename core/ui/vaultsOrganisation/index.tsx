@@ -36,7 +36,7 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
   return (
     <VStack fullHeight>
       <PageHeader
-        primaryControls={<PageHeaderBackButton />}
+        primaryControls={!onFinish && <PageHeaderBackButton />}
         secondaryControls={
           <IconButton onClick={() => navigate({ id: 'manageVaults' })}>
             <SquarePenIcon />
