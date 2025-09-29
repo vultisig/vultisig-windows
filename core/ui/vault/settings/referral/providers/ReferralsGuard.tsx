@@ -1,5 +1,5 @@
-import { useAppNavigate } from '@clients/desktop/src/navigation/hooks/useAppNavigate'
 import { Chain } from '@core/chain/Chain'
+import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { ChildrenProp } from '@lib/ui/props'
 import { useToast } from '@lib/ui/toast/ToastProvider'
 import { useEffect } from 'react'
@@ -11,7 +11,7 @@ export const ReferralsGuard = ({ children }: ChildrenProp) => {
   const hasThorchainAddress = useCurrentVaultAddresses()[Chain.THORChain]
   const notEligibleForReferrals = !hasThorchainAddress
 
-  const navigate = useAppNavigate()
+  const navigate = useNavigate()
   const { addToast } = useToast()
   const { t } = useTranslation()
 
