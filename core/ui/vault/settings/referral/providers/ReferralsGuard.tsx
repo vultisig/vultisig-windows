@@ -2,27 +2,32 @@ import { useAppNavigate } from '@clients/desktop/src/navigation/hooks/useAppNavi
 import { Chain } from '@core/chain/Chain'
 import { ChildrenProp } from '@lib/ui/props'
 import { useToast } from '@lib/ui/toast/ToastProvider'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useCurrentVaultAddresses } from '../../../state/currentVaultCoins'
 
 export const ReferralsGuard = ({ children }: ChildrenProp) => {
   const hasThorchainAddress = useCurrentVaultAddresses()[Chain.THORChain]
+  const notEligibleForReferrals = !hasThorchainAddress
+
   const navigate = useAppNavigate()
   const { addToast } = useToast()
   const { t } = useTranslation()
 
-  if (!hasThorchainAddress) {
-    addToast({
-      message: t('thorchain_address_required_for_referrals'),
-    })
+  useEffect(() => {
+    if (notEligibleForReferrals) {
+      addToast({
+        message: t('thorchain_address_required_for_referrals'),
+      })
 
-    navigate({
-      id: 'settings',
-    })
+      navigate({
+        id: 'settings',
+      })
+    }
+  }, [addToast, notEligibleForReferrals, navigate, t])
 
-    return null
-  }
+  if (notEligibleForReferrals) return null
 
   return children
 }
