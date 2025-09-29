@@ -1,3 +1,4 @@
+import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
@@ -39,6 +40,29 @@ export const FormFieldErrorText = styled.span`
     size: 10,
     color: 'danger',
   })}
+`
+
+export const FixedWrapper = styled(CenterAbsolutely)`
+  position: fixed;
+  background-color: ${getColor('background')};
+`
+
+export const Overlay = styled.div`
+  position: absolute;
+  width: 374px;
+  height: 416px;
+  left: 50%;
+  bottom: 50%;
+  transform: translate(-50%, 50%);
+  flex-shrink: 0;
+  border-radius: 416px;
+  background: linear-gradient(
+    82deg,
+    rgba(51, 230, 191, 0.15) 8.02%,
+    rgba(4, 57, 199, 0.15) 133.75%
+  );
+  filter: blur(126.94499969482422px);
+  pointer-events: none;
 `
 
 export const fieldWrapperStyles = css`
