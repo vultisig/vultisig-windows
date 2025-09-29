@@ -16,7 +16,7 @@ import { InputProps, OnCloseProp, OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { formatAmount } from '@lib/utils/formatAmount'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -40,7 +40,7 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
   const { t } = useTranslation()
   const { ticker, decimals } = chainFeeCoin[chain]
   const priorityFeeInGwei = fromChainAmount(
-    BigInt(value.priorityFee),
+    BigInt(value.maxPriorityFeePerGas),
     gwei.decimals
   )
 
@@ -69,7 +69,9 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
             <MatchQuery
               value={baseFeeQuery}
               success={baseFee =>
-                formatTokenAmount(fromChainAmount(baseFee, decimals))
+                formatAmount(fromChainAmount(baseFee, decimals), {
+                  precision: 'high',
+                })
               }
               pending={() => <Spinner />}
               error={() => t('failed_to_load')}
@@ -85,7 +87,7 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
             onValueChange={priorityFee =>
               onChange({
                 ...value,
-                priorityFee: priorityFee
+                maxPriorityFeePerGas: priorityFee
                   ? toChainAmount(priorityFee, gwei.decimals)
                   : 0n,
               })

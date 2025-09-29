@@ -93,16 +93,18 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
           {selectedChainAction === 'leave' && (
             <ListItem description={`0 ${coin.ticker}`} title={t('amount')} />
           )}
-          <ListItem
-            description={
-              <VStack as="pre" scrollable>
-                <Text as="code" family="mono">
-                  {String(formattedDepositFormData['memo'])}
-                </Text>
-              </VStack>
-            }
-            title={t('memo')}
-          />
+          {Boolean(formattedDepositFormData['memo']) && (
+            <ListItem
+              description={
+                <VStack as="pre" scrollable>
+                  <Text as="code" family="mono">
+                    {String(formattedDepositFormData['memo'])}
+                  </Text>
+                </VStack>
+              }
+              title={t('memo')}
+            />
+          )}
           <ListItem
             description={<DepositFeeValue />}
             title={`${t('gas')} (${t('auto')})`}

@@ -85,6 +85,7 @@ export const pt = {
   percentage_to_unstake: 'Percentual para desinvestir',
   staked_amount: 'Valor em staking',
   percentage_limit: 'A porcentagem deve estar entre 0 e 100',
+  enter_percentage: 'Insira a porcentagem',
   start_transaction: 'Iniciar transação',
   youre_swapping: 'Você está trocando',
   title_1: 'Indicação',

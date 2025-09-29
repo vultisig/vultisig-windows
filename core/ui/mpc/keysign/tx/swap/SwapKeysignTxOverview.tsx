@@ -146,20 +146,14 @@ export const SwapKeysignTxOverview = ({
               fullWidth
               justifyContent="space-between"
               alignItems="center"
+              wrap="nowrap"
             >
               <Text weight="500" size={14} color="shy">
                 {t('to')}
               </Text>
-
-              <TrimmedText
-                cropped
-                width={170}
-                weight={500}
-                size={14}
-                color="contrast"
-              >
+              <AddressWrapper color="contrast" size={14} weight={500}>
                 {toCoin.address}
-              </TrimmedText>
+              </AddressWrapper>
             </HStack>
           )}
           <KeysignTxFee />
@@ -180,14 +174,9 @@ export const SwapKeysignTxOverview = ({
   )
 }
 
-const TrimmedText = styled(Text)<{
-  width?: number
-}>`
-  display: inline-block;
-  max-width: ${({ width }) => (width ? `${width}px` : null)};
+const AddressWrapper = styled(Text)`
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  text-align: right;
 `
 
 const SwapInfoWrapper = styled(SeparatedByLine)`
