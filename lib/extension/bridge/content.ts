@@ -6,6 +6,9 @@ import {
   isBridgeMessage,
 } from './core'
 
+const sendMaxAttempts = 3
+const sendInitialDelay = 75
+
 export const runBridgeContentAgent = () => {
   window.addEventListener('message', ({ source, data }) => {
     if (source !== window) return
@@ -28,7 +31,7 @@ export const runBridgeContentAgent = () => {
             id,
             sourceId: getBridgeMessageSourceId('background'),
             message: {
-              error,
+              error: `Failed to send message to background script after ${sendMaxAttempts} attempts: ${error}`,
             },
           }
 
@@ -40,6 +43,6 @@ export const runBridgeContentAgent = () => {
       })
     }
 
-    trySend(2, 75)
+    trySend(sendMaxAttempts, sendInitialDelay)
   })
 }
