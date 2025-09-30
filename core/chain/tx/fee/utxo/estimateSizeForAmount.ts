@@ -10,7 +10,13 @@ export type UtxoInput = {
   amount: bigint
   index: number
 }
-
+type EstimateSizeForAmountInput = {
+  utxoInfo: UtxoInput[]
+  amount: bigint
+  byteFee: number
+  chain: UtxoChain
+  sendMaxAmount?: boolean
+}
 /**
  * Performs coin selection to determine which UTXOs to use for a transaction
  * This mimics wallet core real UTXO behavior for better fee calculation
@@ -21,13 +27,7 @@ export const estimateSizeForAmount = ({
   byteFee,
   chain,
   sendMaxAmount = false,
-}: {
-  utxoInfo: UtxoInput[]
-  amount: bigint
-  byteFee: number
-  chain: UtxoChain
-  sendMaxAmount?: boolean
-}): number => {
+}: EstimateSizeForAmountInput): number => {
   if (sendMaxAmount) {
     return estimateTransactionSize({
       inputCount: utxoInfo.length,
@@ -76,11 +76,18 @@ const largestFirstSelection = (
       // If change is too small (dust), add it to fee
       const dustThreshold = getDustThreshold(chain)
       if (changeAmount < dustThreshold) {
-        return estimateTransactionSize({
+        // Size for one-output tx
+        const oneOutSize = estimateTransactionSize({
           inputCount: selectedUtxos.length,
-          outputCount: 1, // no change output
+          outputCount: 1,
           chain,
         })
+        // Effective fee if we drop change: fee = totalInput - amount
+        const effectiveFee = totalInput - amount
+        const requiredSizeByFee = Number(
+          (effectiveFee + BigInt(byteFee) - 1n) / BigInt(byteFee)
+        )
+        return Math.max(oneOutSize, requiredSizeByFee)
       }
       return currentSize
     }

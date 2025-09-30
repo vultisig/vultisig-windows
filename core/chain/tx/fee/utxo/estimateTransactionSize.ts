@@ -18,18 +18,18 @@ export const estimateTransactionSize = ({
   const baseOverhead = 10 // version + locktime + input count + output count
 
   // Input size (P2WPKH)
-  const inputSize = 148 // txid + vout + scriptSig + sequence
+  const inputSize = 41 // outpoint(36) + scriptSig len(1, empty) + sequence(4)
   const witnessSize = 107 // signature + pubkey for P2WPKH
 
   // Output size
-  const outputSize = 34 // value + scriptPubKey
+  const outputSize = 31 // value(8) + scriptPubKey len(1) + p2wpkh script(22)
 
   // Calculate base size (non-witness)
   const baseSize =
     baseOverhead + inputSize * inputCount + outputSize * outputCount
 
   // Calculate witness size
-  const totalWitnessSize = 1 + witnessSize * inputCount
+  const totalWitnessSize = 2 /* marker+flag */ + witnessSize * inputCount
 
   // Calculate vbytes
   const vbytes = Math.ceil((baseSize * 4 + totalWitnessSize) / 4)
