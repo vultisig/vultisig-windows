@@ -10,8 +10,8 @@ type BridgeMessageKey = {
   sourceId: BridgeMessageSourceId
 }
 
-export type BridgeMessage = BridgeMessageKey & {
-  message: unknown
+export type BridgeMessage<T = unknown> = BridgeMessageKey & {
+  message: T
 }
 
 export const isBridgeMessage = (
