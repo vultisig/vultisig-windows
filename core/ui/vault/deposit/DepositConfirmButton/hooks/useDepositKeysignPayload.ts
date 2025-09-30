@@ -30,6 +30,7 @@ import { useTranslation } from 'react-i18next'
 import { useAssertWalletCore } from '../../../../chain/providers/WalletCoreProvider'
 import { useCurrentVault } from '../../../state/currentVault'
 import { ChainAction } from '../../ChainAction'
+import { useDepositFormConfig } from '../../hooks/useDepositFormConfig'
 import { useDepositCoin } from '../../providers/DepositCoinProvider'
 import { useDepositChainSpecificQuery } from '../../queries/useDepositChainSpecificQuery'
 import { stakeModeById } from '../../staking/config'
@@ -82,6 +83,8 @@ export function useDepositKeysignPayload({
     txType = TransactionType.GENERIC_CONTRACT
 
   const chainSpecificQuery = useDepositChainSpecificQuery(coin, txType)
+  const config = useDepositFormConfig()
+  const amountFieldConfig = config.fields.find(field => field.name === 'amount')
 
   const isTonFunction = coin.chain === Chain.Ton
   const slippage = Number(depositFormData['slippage'] ?? 0)
@@ -100,7 +103,9 @@ export function useDepositKeysignPayload({
       : undefined
 
   const invalid =
-    hasAmount && (amount == null || !Number.isFinite(amount) || amount <= 0)
+    hasAmount &&
+    amountFieldConfig?.required &&
+    (amount == null || !Number.isFinite(amount) || amount <= 0)
   const invalidMessage = invalid ? t('required_field_missing') : undefined
 
   const keysignPayloadQuery = useTransformQueryData(
