@@ -4,16 +4,18 @@ import { KeysignActionProvider } from '@core/ui/mpc/keysign/action/KeysignAction
 import { JoinKeysignProviders } from '@core/ui/mpc/keysign/join/JoinKeysignProviders'
 import { JoinKeysignVerifyStep } from '@core/ui/mpc/keysign/join/JoinKeysignVerifyStep'
 import { KeysignSigningStep } from '@core/ui/mpc/keysign/KeysignSigningStep'
+import { KeysignResultProvider } from '@core/ui/mpc/keysign/result/KeysignResultProvider'
 import { KeysignMessagePayloadProvider } from '@core/ui/mpc/keysign/state/keysignMessagePayload'
 import { JoinMpcSessionFlow } from '@core/ui/mpc/session/join/JoinMpcSessionFlow'
 import { MpcServerUrlProvider } from '@core/ui/mpc/state/mpcServerUrl'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
+import { useCore } from '@core/ui/state/core'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { useMemo } from 'react'
 
 export const JoinKeysignPage = () => {
   const [{ keysignMsg }] = useCoreViewState<'joinKeysign'>()
-
+  const { goHome } = useCore()
   const keysignMessagePayload = useMemo(
     () => getKeysignMessagePayload(keysignMsg),
     [keysignMsg]
@@ -21,23 +23,33 @@ export const JoinKeysignPage = () => {
 
   return (
     <JoinKeysignProviders>
-      <MpcServerUrlProvider value={mpcServerUrl.relay}>
-        <StepTransition
-          from={({ onFinish }) => <JoinKeysignVerifyStep onFinish={onFinish} />}
-          to={({ onBack }) => (
-            <JoinMpcSessionFlow
-              value="keysign"
-              render={() => (
-                <KeysignActionProvider>
-                  <KeysignMessagePayloadProvider value={keysignMessagePayload}>
-                    <KeysignSigningStep onBack={onBack} />
-                  </KeysignMessagePayloadProvider>
-                </KeysignActionProvider>
-              )}
-            />
-          )}
-        />
-      </MpcServerUrlProvider>
+      <KeysignResultProvider
+        value={{
+          onComplete: () => goHome(),
+        }}
+      >
+        <MpcServerUrlProvider value={mpcServerUrl.relay}>
+          <StepTransition
+            from={({ onFinish }) => (
+              <JoinKeysignVerifyStep onFinish={onFinish} />
+            )}
+            to={({ onBack }) => (
+              <JoinMpcSessionFlow
+                value="keysign"
+                render={() => (
+                  <KeysignActionProvider>
+                    <KeysignMessagePayloadProvider
+                      value={keysignMessagePayload}
+                    >
+                      <KeysignSigningStep onBack={onBack} />
+                    </KeysignMessagePayloadProvider>
+                  </KeysignActionProvider>
+                )}
+              />
+            )}
+          />
+        </MpcServerUrlProvider>
+      </KeysignResultProvider>
     </JoinKeysignProviders>
   )
 }
