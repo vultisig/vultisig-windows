@@ -17,6 +17,7 @@ import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { toUtf8String } from 'ethers'
+import { hexToString } from 'viem'
 
 import { CosmosMsgType } from '../interfaces'
 import { CustomTxData } from './customTxData'
@@ -63,7 +64,8 @@ export const getKeysignPayload = ({
           swap: () => undefined,
           transfer: ({ receiverAddress }) => receiverAddress,
         }),
-      psbt: psbt => getPsbtTransferInfo(psbt, coin.address).recipient,
+      psbt: psbt =>
+        getPsbtTransferInfo(psbt, coin.address).recipient ?? undefined,
     }
   )
 
@@ -92,7 +94,13 @@ export const getKeysignPayload = ({
         return data
       },
       solana: () => undefined,
-      psbt: () => undefined,
+      psbt: psbt => {
+        const { memo } = getPsbtTransferInfo(psbt, coin.address)
+        if (memo) {
+          return hexToString(`0x${memo}`)
+        }
+        return undefined
+      },
     }
   )
 
