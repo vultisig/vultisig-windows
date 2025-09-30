@@ -44,13 +44,6 @@ export const useParsedTxQuery = (): Query<ParsedTx> => {
     retry: false,
   })
 
-  const feeSettingsQuery = useQuery({
-    queryKey: ['fee-settings', transactionPayload],
-    queryFn: () => getFeeSettings(transactionPayload),
-    ...noRefetchQueryOptions,
-    retry: false,
-  })
-
   const skipBroadcast = useMemo(
     () =>
       matchRecordUnion<ITransactionPayload, boolean | undefined>(
@@ -65,11 +58,10 @@ export const useParsedTxQuery = (): Query<ParsedTx> => {
 
   return useTransformQueriesData(
     {
-      feeSettings: feeSettingsQuery,
       customTxData: customTxDataQuery,
     },
     useCallback(
-      ({ feeSettings, customTxData }) => {
+      ({ customTxData }) => {
         const coin = matchRecordUnion<CustomTxData, Coin>(customTxData, {
           regular: ({ coin }) => coin,
           solana: tx => {
@@ -96,7 +88,7 @@ export const useParsedTxQuery = (): Query<ParsedTx> => {
         })
 
         return {
-          feeSettings,
+          feeSettings: getFeeSettings(transactionPayload),
           customTxData,
           skipBroadcast,
           coin: {
@@ -105,7 +97,13 @@ export const useParsedTxQuery = (): Query<ParsedTx> => {
           },
         }
       },
-      [vault.hexChainCode, vault.publicKeys, walletCore, skipBroadcast]
+      [
+        vault.hexChainCode,
+        vault.publicKeys,
+        walletCore,
+        skipBroadcast,
+        transactionPayload,
+      ]
     )
   )
 }

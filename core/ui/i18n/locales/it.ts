@@ -9,12 +9,14 @@ export const it = {
   positions: 'Posizioni',
   onboarding_step_4:
     'Recupera la tua cassaforte anche <g>se un dispositivo è perso o danneggiato</g>',
+  add_friends_referral: 'Aggiungi una referenza dei amici',
   onboarding_step_5:
     '<g>Esegui sempre il backup di ogni quota del caveau</g> separatamente in una <g>posizione diversa</g>',
   onboarding_step_6:
     'Queste quote collaborano per <g>sbloccare il tuo caveau</g>',
   secure_crypto_vault: 'Cassaforte sicura per criptovalute',
   vultisig: 'Vultisig',
+  save_10_percent_on_swaps: 'Risparmia <blue>10%</blue> su swap ora',
   onboarding_description_1:
     'Vultisig è una cassaforte sicura per criptovalute multi-dispositivo, compatibile con tutte le principali blockchain e oltre 10.000 token. Vultisig è completamente autogestito.',
   onboarding_description_2:
@@ -84,16 +86,21 @@ export const it = {
   ibc_transfer: 'Trasferimento IBC',
   staked: 'Puntato',
   percentage: 'Percentuale',
+  vault_selected: 'Vault selezionato',
   percentage_to_unstake: 'Percentuale da dismettere',
   staked_amount: 'Importo puntato',
   percentage_limit: 'La percentuale deve essere compresa tra 0 e 100',
   enter_percentage: 'Inserisci la percentuale',
+  thorchain_address_required_for_referrals:
+    'Hai bisogno di un indirizzo THORChain per utilizzare il programma di referral',
   selected_chain_missing_in_your_vault:
     'La blockchain selezionata manca nel tuo caveau',
   chain: 'Catena',
   price_impact_good: 'Buono',
   select_token: 'Seleziona token',
-  title_1: 'Referral',
+  referrals_default_title: 'Referral',
+  your_referrals: 'I tuoi referral',
+  referrals_create_page_title: 'Vultisig - Referrals',
   title_2: 'Vultisig - Referral',
   header_tooltip_title: 'Programma di Referral',
   header_tooltip_content:
@@ -920,9 +927,14 @@ export const it = {
   support: 'Supporto',
   terms: 'Termini',
   twitter: 'Cinguettio',
+  expiration_must_extend_by_exactly_one_year:
+    'La scadenza può essere estesa solo per un anno',
+  turn_your_vault_into_rewards_machine:
+    'Trasforma il tuo vault in una macchina di premi. Crea la tua referenza ora e inizia a guadagnare.',
   vultisig_community: 'Comunità di Vultisig',
   remove: 'Rimuovere',
   share_vault: 'Condividi Vault',
+  no_referral_yet: 'Nessuna referenza',
   missing_thorchain_address: 'Indirizzo THORChain mancante',
   missing_destination_address: 'Indirizzo di destinazione mancante',
   upgrade_shares_info:
@@ -1075,4 +1087,10 @@ export const it = {
   backupShare2: 'Condivisione di backup 2',
   processing_transaction: 'Elaborazione della transazione in corso...',
   failed_to_process_transaction: 'Impossibile elaborare la transazione',
+  accept_continue: 'Accetta e continua',
+  allow_app_access: "Consenti l'accesso all'app a",
+  app_store: 'App Store',
+  install_app: "Installa l'app",
+  permissions: 'Permessi',
+  same_vault_share: 'Stessa condivisione del vault',
 }

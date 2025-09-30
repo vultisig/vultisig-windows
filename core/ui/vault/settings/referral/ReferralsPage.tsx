@@ -5,6 +5,7 @@ import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -35,7 +36,8 @@ export const ReferralPage = () => {
   })
 
   // Hard refetch in case the user just created/edited a referral and is coming back from Keysign
-  const { refetch } = useUserValidThorchainNameQuery()
+  const validThorchainNameQuery = useUserValidThorchainNameQuery()
+  const { refetch } = validThorchainNameQuery
 
   useEffect(() => {
     if (isOnboarded) {
@@ -57,7 +59,7 @@ export const ReferralPage = () => {
             <>
               <PageHeader
                 primaryControls={<PageHeaderBackButton />}
-                title={t('title_1')}
+                title={t('referrals_default_title')}
               />
               <ContentWrapper>
                 <Match
@@ -77,7 +79,18 @@ export const ReferralPage = () => {
           )
         }
 
-        return <ManageReferrals />
+        return (
+          <MatchQuery
+            value={validThorchainNameQuery}
+            pending={() => (
+              <CenterAbsolutely>
+                <Spinner size="3em" />
+              </CenterAbsolutely>
+            )}
+            success={data => <ManageReferrals value={data} />}
+            error={() => <ManageReferrals />}
+          />
+        )
       }}
     />
   )

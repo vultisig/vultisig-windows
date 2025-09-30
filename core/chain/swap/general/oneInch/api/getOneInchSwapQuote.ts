@@ -5,7 +5,6 @@ import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { GeneralSwapQuote } from '@core/chain/swap/general/GeneralSwapQuote'
 import { OneInchSwapQuoteResponse } from '@core/chain/swap/general/oneInch/api/OneInchSwapQuoteResponse'
 import { oneInchAffiliateConfig } from '@core/chain/swap/general/oneInch/oneInchAffiliateConfig'
-import { getEvmSwapGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
 import { rootApiUrl } from '@core/config'
 import { hexToNumber } from '@lib/utils/hex/hexToNumber'
 import { addQueryParams } from '@lib/utils/query/addQueryParams'
@@ -13,6 +12,7 @@ import { queryUrl } from '@lib/utils/query/queryUrl'
 import { pick } from '@lib/utils/record/pick'
 
 import { evmNativeCoinAddress } from '../../../../chains/evm/config'
+import { EvmFeeQuote } from '../../../../tx/fee/evm/EvmFeeSettings'
 
 type Input = {
   account: ChainAccount
@@ -55,13 +55,21 @@ export const getOneInchSwapQuote = async ({
   const { dstAmount, tx }: OneInchSwapQuoteResponse =
     await queryUrl<OneInchSwapQuoteResponse>(url)
 
+  const feeQuote: Partial<EvmFeeQuote> = {}
+  if (tx.gasPrice) {
+    feeQuote.maxFeePerGas = BigInt(tx.gasPrice)
+  }
+  if (tx.gas) {
+    feeQuote.gasLimit = BigInt(tx.gas)
+  }
+
   return {
     dstAmount,
     provider: '1inch',
     tx: {
       evm: {
         ...tx,
-        gas: tx.gas || getEvmSwapGasLimit(chain),
+        feeQuote,
       },
     },
   }

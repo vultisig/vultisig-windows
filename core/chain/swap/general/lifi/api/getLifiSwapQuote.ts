@@ -13,6 +13,7 @@ import { TransferDirection } from '@lib/utils/TransferDirection'
 import { createConfig, getQuote } from '@lifi/sdk'
 
 import { AccountCoinKey } from '../../../../coin/AccountCoin'
+import { EvmFeeQuote } from '../../../../tx/fee/evm/EvmFeeSettings'
 import { GeneralSwapQuote } from '../../GeneralSwapQuote'
 
 type Input = Record<TransferDirection, AccountCoinKey<LifiSwapEnabledChain>> & {
@@ -94,16 +95,24 @@ export const getLifiSwapQuote = async ({
             },
           }
         },
-        evm: () => ({
-          evm: {
-            from: shouldBePresent(from),
-            to: shouldBePresent(to),
-            data: shouldBePresent(data),
-            value: BigInt(shouldBePresent(value)).toString(),
-            gasPrice: BigInt(shouldBePresent(gasPrice)).toString(),
-            gas: Number(shouldBePresent(gasLimit)),
-          },
-        }),
+        evm: () => {
+          const feeQuote: Partial<EvmFeeQuote> = {}
+          if (gasPrice) {
+            feeQuote.maxFeePerGas = BigInt(gasPrice)
+          }
+          if (gasLimit) {
+            feeQuote.gasLimit = BigInt(gasLimit)
+          }
+          return {
+            evm: {
+              from: shouldBePresent(from),
+              to: shouldBePresent(to),
+              data: shouldBePresent(data),
+              value: BigInt(shouldBePresent(value)).toString(),
+              feeQuote,
+            },
+          }
+        },
       }
     ),
   }

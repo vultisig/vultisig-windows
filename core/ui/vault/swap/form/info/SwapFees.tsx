@@ -63,32 +63,38 @@ export const SwapFees: FC<SwapFeesProps> = ({ RowComponent }) => {
             style={{ overflow: 'hidden' }}
           >
             <FeesWrapper gap={10}>
-              <RowComponent>
-                <Text>{t('swap_fee')}</Text>
-                <MatchQuery
-                  value={query}
-                  pending={() => <Skeleton width="48px" height="12px" />}
-                  error={() => (
-                    <Text color="danger">{t('failed_to_load')}</Text>
-                  )}
-                  success={({ swap }) => (
-                    <Text color="shy">
-                      <SwapFeeFiatValue value={[swap]} />
-                    </Text>
-                  )}
-                />
-              </RowComponent>
-
               <MatchQuery
                 value={query}
-                success={({ network }) => (
+                pending={() => (
                   <RowComponent>
-                    <span>{t('network_fee')}</span>
-                    <Text color="shy">
-                      {formatFee(network)} (~
-                      <SwapFeeFiatValue value={[network]} />)
-                    </Text>
+                    <Text>{t('swap_fee')}</Text>
+                    <Skeleton width="48px" height="12px" />
                   </RowComponent>
+                )}
+                error={() => (
+                  <RowComponent>
+                    <Text>{t('swap_fee')}</Text>
+                    <Text color="danger">{t('failed_to_load')}</Text>
+                  </RowComponent>
+                )}
+                success={({ network, swap }) => (
+                  <>
+                    {swap && (
+                      <RowComponent>
+                        <Text>{t('swap_fee')}</Text>
+                        <Text color="shy">
+                          <SwapFeeFiatValue value={[swap]} />
+                        </Text>
+                      </RowComponent>
+                    )}
+                    <RowComponent>
+                      <span>{t('network_fee')}</span>
+                      <Text color="shy">
+                        {formatFee(network)} (~
+                        <SwapFeeFiatValue value={[network]} />)
+                      </Text>
+                    </RowComponent>
+                  </>
                 )}
               />
             </FeesWrapper>

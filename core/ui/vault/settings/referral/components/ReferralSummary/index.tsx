@@ -96,7 +96,7 @@ export const ReferralsSummary = ({ onFinish }: OnFinishProp) => {
                         <Text color="contrast" weight={500} size={13}>
                           {t(title)}
                         </Text>
-                        <Text color="shy" weight={500} size={13}>
+                        <Text color="shyExtra" weight={500} size={13}>
                           {t(description)}
                         </Text>
                       </VStack>
