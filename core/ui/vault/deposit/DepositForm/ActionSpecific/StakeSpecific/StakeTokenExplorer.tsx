@@ -4,12 +4,14 @@ import {
   StakeableAssetTicker,
 } from '@core/ui/vault/deposit/config'
 import { DepositActionOption } from '@core/ui/vault/deposit/DepositForm/DepositActionOption'
-import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
+import { useCurrentVaultChainCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { Text } from '@lib/ui/text'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { useDepositCoin } from '../../../providers/DepositCoinProvider'
 
 type Props = {
   activeOption?: AccountCoin
@@ -22,7 +24,8 @@ export const StakeTokenExplorer: FC<Props> = ({
   onOptionClick,
   activeOption,
 }) => {
-  const coins = useCurrentVaultCoins().filter(coin =>
+  const [depositCoin] = useDepositCoin()
+  const coins = useCurrentVaultChainCoins(depositCoin.chain).filter(coin =>
     stakeableAssetsTickers.includes(coin.ticker as StakeableAssetTicker)
   )
   const { t } = useTranslation()

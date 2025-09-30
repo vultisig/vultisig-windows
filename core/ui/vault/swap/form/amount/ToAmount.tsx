@@ -3,7 +3,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { text } from '@lib/ui/text'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { formatAmount } from '@lib/utils/formatAmount'
 import styled from 'styled-components'
 
 import { useSwapOutputAmountQuery } from '../../queries/useSwapOutputAmountQuery'
@@ -38,9 +38,9 @@ export const ToAmount = () => {
               <Skeleton width="50px" height="12px" />
             </VStack>
           )}
-          error={() => formatTokenAmount(0)}
-          inactive={() => formatTokenAmount(0)}
-          success={value => formatTokenAmount(value)}
+          error={() => formatAmount(0)}
+          inactive={() => formatAmount(0)}
+          success={value => formatAmount(value, { precision: 'high' })}
         />
       </Value>
       <MatchQuery

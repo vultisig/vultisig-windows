@@ -6,7 +6,7 @@ import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
 import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { ValueProp } from '@lib/ui/props'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FlowErrorPageContent } from '../../../flow/FlowErrorPageContent'
@@ -17,7 +17,7 @@ export const SaveImportedVaultStep = ({ value }: ValueProp<Vault>) => {
   const navigate = useCoreNavigate()
   const override = useVaultBackupOverride()
 
-  const vaults = useVaults()
+  const initialVaults = useRef(useVaults()).current
 
   const vaultOrders = useVaultOrders()
 
@@ -30,13 +30,13 @@ export const SaveImportedVaultStep = ({ value }: ValueProp<Vault>) => {
   )
 
   const error = useMemo(() => {
-    if (vaults.find(v => getVaultId(v) === getVaultId(finalValue))) {
+    if (initialVaults.find(v => getVaultId(v) === getVaultId(finalValue))) {
       return t('vault_already_exists')
     }
     if (client === 'extension' && value.libType === 'GG20') {
       return t('extension_vault_import_restriction')
     }
-  }, [client, finalValue, t, value.libType, vaults])
+  }, [client, finalValue, t, value.libType, initialVaults])
 
   if (error) {
     return (

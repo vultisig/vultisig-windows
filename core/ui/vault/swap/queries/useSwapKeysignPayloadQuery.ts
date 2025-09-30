@@ -1,7 +1,9 @@
 import { create } from '@bufbuild/protobuf'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
+import type { GeneralSwapTx } from '@core/chain/swap/general/GeneralSwapQuote'
 import { getSwapKeysignPayloadFields } from '@core/chain/swap/keysign/getSwapKeysignPayloadFields'
+import type { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
@@ -19,8 +21,6 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { pick } from '@lib/utils/record/pick'
 import { useMemo } from 'react'
-import type { GeneralSwapTx } from '@core/chain/swap/general/GeneralSwapQuote'
-import type { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
 
 export const useSwapKeysignPayloadQuery = () => {
   const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
