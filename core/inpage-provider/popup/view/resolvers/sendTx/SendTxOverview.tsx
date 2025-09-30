@@ -4,7 +4,10 @@ import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
-import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
+import {
+  getBlockchainSpecificValue,
+  KeysignChainSpecific,
+} from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useChainSpecificQuery } from '@core/ui/chain/coin/queries/useChainSpecificQuery'
@@ -173,6 +176,30 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                       const feeAmount = getFeeAmount(
                         keysignPayload.blockchainSpecific as KeysignChainSpecific
                       )
+
+                      const getEvmFeeSettings = (): EvmFeeSettings | null => {
+                        if (!isChainOfKind(chain, 'evm')) {
+                          return null
+                        }
+
+                        if (feeSettings) {
+                          return feeSettings as EvmFeeSettings
+                        }
+
+                        const { priorityFee, gasLimit } =
+                          getBlockchainSpecificValue(
+                            keysignPayload.blockchainSpecific,
+                            'ethereumSpecific'
+                          )
+
+                        return {
+                          maxPriorityFeePerGas: BigInt(priorityFee),
+                          gasLimit: BigInt(gasLimit),
+                        }
+                      }
+
+                      const evmFeeSettings = getEvmFeeSettings()
+
                       return (
                         <>
                           <ListItem
@@ -184,9 +211,9 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                               chainFeeCoin[chain]
                             )}
                             extra={
-                              isChainOfKind(chain, 'evm') && feeSettings ? (
+                              isChainOfKind(chain, 'evm') && evmFeeSettings ? (
                                 <ManageEvmFee
-                                  value={feeSettings as EvmFeeSettings}
+                                  value={evmFeeSettings}
                                   chain={chain}
                                   onChange={setFeeSettings}
                                 />
