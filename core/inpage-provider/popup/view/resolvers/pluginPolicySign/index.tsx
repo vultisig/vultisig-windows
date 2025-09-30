@@ -1,6 +1,7 @@
 import { StartKeysignView } from '@core/extension/keysign/start/StartKeysignView'
 import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
 import { Overview } from '@core/inpage-provider/popup/view/resolvers/pluginPolicySign/Overview'
+import { Result } from '@core/inpage-provider/popup/view/resolvers/pluginPolicySign/Result'
 import {
   KeysignMutationListener,
   KeysignMutationListenerProvider,
@@ -12,8 +13,6 @@ import { NavigationProvider } from '@lib/ui/navigation/state'
 import { Views } from '@lib/ui/navigation/Views'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
-
-import { Result } from './Result'
 
 type PluginSignView = { id: 'overview' } | Extract<CoreView, { id: 'keysign' }>
 
