@@ -15,13 +15,15 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { ListItemTag } from '@lib/ui/list/item/tag'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
+import { OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-export const VaultsPage = () => {
+export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
   const { t } = useTranslation()
   const { mutate } = useSetCurrentVaultIdMutation()
   const navigate = useCoreNavigate()
@@ -29,10 +31,12 @@ export const VaultsPage = () => {
   const vaults = useFolderlessVaults()
   const currentVaultId = useCurrentVaultId()
 
+  const goBack = useNavigateBack()
+
   return (
     <VStack fullHeight>
       <PageHeader
-        primaryControls={<PageHeaderBackButton />}
+        primaryControls={!onFinish && <PageHeaderBackButton />}
         secondaryControls={
           <IconButton onClick={() => navigate({ id: 'manageVaults' })}>
             <SquarePenIcon />
@@ -82,7 +86,7 @@ export const VaultsPage = () => {
                     }
                     onClick={() =>
                       mutate(vaultId, {
-                        onSuccess: () => navigate({ id: 'vault' }),
+                        onSuccess: onFinish ? onFinish : goBack,
                       })
                     }
                     title={vault.name}
