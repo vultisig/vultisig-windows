@@ -19,7 +19,6 @@ export const DepositConfirmButton = ({
   const { t } = useTranslation()
   const { invalid, invalidMessage, keysignPayloadQuery } =
     useDepositKeysignPayload({ depositFormData, action })
-  console.log('🚀 ~ DepositConfirmButton ~ invalidMessage:', invalidMessage)
 
   if (invalid) {
     return <Text color="danger">{invalidMessage}</Text>
