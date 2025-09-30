@@ -1075,4 +1075,10 @@ export const it = {
   backupShare2: 'Condivisione di backup 2',
   processing_transaction: 'Elaborazione della transazione in corso...',
   failed_to_process_transaction: 'Impossibile elaborare la transazione',
+  accept_continue: 'Accetta e continua',
+  allow_app_access: "Consenti l'accesso all'app a",
+  app_store: 'App Store',
+  install_app: "Installa l'app",
+  permissions: 'Permessi',
+  same_vault_share: 'Stessa condivisione del vault',
 }

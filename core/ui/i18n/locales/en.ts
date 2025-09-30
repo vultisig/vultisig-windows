@@ -1038,4 +1038,5 @@ export const en = {
   continue_anyway: 'Continue Anyway',
   processing_transaction: 'Processing transaction...',
   failed_to_process_transaction: 'Failed to process transaction',
+  same_vault_share: 'Same vault share',
 }

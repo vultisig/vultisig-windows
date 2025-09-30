@@ -1066,4 +1066,10 @@ export const pt = {
   backupShare2: 'Compartilhamento de backup 2',
   processing_transaction: 'Processando transação...',
   failed_to_process_transaction: 'Falha ao processar a transação',
+  accept_continue: 'Aceitar e continuar',
+  allow_app_access: 'Permitir acesso do aplicativo a',
+  app_store: 'Loja de aplicativos',
+  install_app: 'Instalar aplicativo',
+  permissions: 'Permissões',
+  same_vault_share: 'Mesmo compartilhamento de cofre',
 }
