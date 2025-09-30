@@ -16,6 +16,8 @@ export const es = {
   secure_crypto_vault: 'Bóveda segura de criptomonedas',
   vultisig: 'Vultisig',
   by_vultisig: 'por Vultisig',
+  add_friends_referral: 'Agregar una referencia de amigos',
+  save_10_percent_on_swaps: 'Ahorra <blue>10%</blue> en intercambios ahora',
   digit_input_success_validation: 'Verificación exitosa',
   digit_input_error_validation:
     'Error al verificar el código, por favor intenta de nuevo',
@@ -77,14 +79,18 @@ export const es = {
     'Una pequeña propina para acelerar tu transacción. Propinas más altas pueden hacer que se procese más rápido.',
   percentage: 'Porcentaje',
   send_overview: 'Enviar resumen',
+  vault_selected: 'Bóveda seleccionada',
+  your_referrals: 'Tus recomendaciones',
   percentage_to_unstake: 'Porcentaje para retirar',
   staked_amount: 'Cantidad apostada',
+  thorchain_address_required_for_referrals:
+    'Necesitas una dirección de THORChain para usar el programa de recomendaciones',
   signing_transaction: 'Firma de la transacción',
   asset_selection: 'Selección de activos',
   enter_percentage: 'Ingrese el porcentaje',
   chain: 'Cadena',
   staked: 'Apostado',
-  title_1: 'Referencia',
+  referrals_default_title: 'Referencia',
   title_2: 'Vultisig - Referencias',
   header_tooltip_title: 'Programa de Referidos',
   header_tooltip_content:
@@ -927,8 +933,13 @@ export const es = {
   terms: 'Términos',
   twitter: 'Gorjeo',
   vultisig_community: 'Comunidad Vultisig',
+  expiration_must_extend_by_exactly_one_year:
+    'La vencimiento solo puede extenderse por un año',
+  turn_your_vault_into_rewards_machine:
+    'Convierta tu bóveda en una máquina de recompensas. Cree tu referencia ahora y comience a ganar.',
   remove: 'Eliminar',
   share_vault: 'Bóveda compartida',
+  no_referral_yet: 'Aún no hay referencia',
   missing_thorchain_address: 'Falta la dirección de THORChain',
   missing_destination_address: 'Dirección de destino faltante',
   upgrade_shares_info:
@@ -1080,4 +1091,10 @@ export const es = {
   processing_transaction: 'Procesando transacción...',
   failed_to_process_transaction: 'No se pudo procesar la transacción',
   signature_successful: 'Firma exitosa',
+  accept_continue: 'Aceptar y continuar',
+  allow_app_access: 'Permitir el acceso de la aplicación a',
+  app_store: 'Tienda de aplicaciones',
+  install_app: 'Instalar aplicación',
+  permissions: 'Permisos',
+  same_vault_share: 'Misma bóveda compartida',
 }

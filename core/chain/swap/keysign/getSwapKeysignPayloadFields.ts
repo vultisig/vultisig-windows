@@ -47,7 +47,11 @@ export const getSwapKeysignPayloadFields = ({
         GeneralSwapTx,
         Omit<OneInchTransaction, '$typeName' | 'swapFee'>
       >(quote.tx, {
-        evm: ({ gas, ...tx }) => ({ ...tx, gas: BigInt(gas) }),
+        evm: ({ feeQuote, ...tx }) => ({
+          ...tx,
+          gasPrice: feeQuote.maxFeePerGas?.toString() ?? '0',
+          gas: feeQuote.gasLimit ?? BigInt(0),
+        }),
         solana: ({ data }) => ({
           from: '',
           to: '',

@@ -13,6 +13,8 @@ export const de = {
   onboarding_step_6:
     'Diese Freigaben arbeiten zusammen, um <g>Ihren Tresor zu entsperren</g>',
   positions: 'Positionen',
+  save_10_percent_on_swaps: 'Speichern Sie <blue>10%</blue> auf Swaps jetzt',
+  add_friends_referral: 'Fügen Sie eine Freunde-Referenz hinzu',
   secure_crypto_vault: 'Sicherer Krypto-Tresor',
   digit_input_success_validation: 'Verifizierung erfolgreich',
   digit_input_error_validation:
@@ -53,19 +55,23 @@ export const de = {
   change_your_friends_referral:
     'Ändere den Empfehlungs­code deines Freundes für Swaps',
   incorrect_passcode: 'Falscher Passcode',
+  vault_selected: 'Vault ausgewählt',
   passcodes_do_not_match: 'Passcodes stimmen nicht überein',
   search_field_placeholder: 'Suchen..',
   referral_reg_fee: 'Registrierungsgebühr',
   enter_percentage: 'Prozentangabe eingeben',
   select: 'Auswählen',
+  thorchain_address_required_for_referrals:
+    'Sie müssen eine THORChain-Adresse haben, um das Referral-Programm zu verwenden',
   pick_referral_code: 'Referral-Code auswählen',
   referral_status: 'Status',
   referral_costs: 'Kosten',
+  your_referrals: 'Deine Empfehlungen',
   set_expiration: 'Ablauf festlegen (in Jahren)',
   expiration_date: 'Ablaufdatum',
   choose_payout_asset: 'Auszahlungs-Asset wählen',
   tx_hash: 'Transaktions-Hash',
-  title_1: 'Empfehlung',
+  referrals_default_title: 'Empfehlung',
   title_2: 'Vultisig - Empfehlungen',
   header_tooltip_title: 'Empfehlungsprogramm',
   header_tooltip_content:
@@ -927,12 +933,17 @@ export const de = {
   prioritize_vultisig: 'Priorisieren Sie Vultisig',
   referral_code: 'Empfehlungscode',
   rename: 'Umbenennen',
+  turn_your_vault_into_rewards_machine:
+    'Ihr Tresor in eine Belohnungsmaschine umwandeln. Erstellen Sie jetzt Ihre Empfehlung und beginnen Sie mit dem Erhalten von Belohnungen.',
   support: 'Unterstützung',
   terms: 'Bedingungen',
+  expiration_must_extend_by_exactly_one_year:
+    'Ablaufdatum kann nur um 1 Jahr erhöht werden',
   twitter: 'Twitter',
   vultisig_community: 'Vultisig-Gemeinschaft',
   remove: 'Entfernen',
   share_vault: 'Tresor teilen',
+  no_referral_yet: 'Noch keine Empfehlung',
   missing_thorchain_address: 'Fehlende THORChain-Adresse',
   missing_destination_address: 'Fehlende Zieladresse',
   upgrade_shares_info:
@@ -1084,4 +1095,10 @@ export const de = {
   processing_transaction: 'Transaktion wird verarbeitet...',
   failed_to_process_transaction: 'Transaktion konnte nicht verarbeitet werden',
   signature_successful: 'Signatur erfolgreich',
+  accept_continue: 'Akzeptieren und fortfahren',
+  allow_app_access: 'App-Zugriff erlauben auf',
+  app_store: 'App Store',
+  install_app: 'App installieren',
+  permissions: 'Berechtigungen',
+  same_vault_share: 'Gleiche Tresorfreigabe',
 }

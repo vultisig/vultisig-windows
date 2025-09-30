@@ -2,7 +2,7 @@ import { create, fromBinary } from '@bufbuild/protobuf'
 import { base64Decode } from '@bufbuild/protobuf/wire'
 import { usePopupContext } from '@core/inpage-provider/popup/view/state/context'
 import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
-import { Policy, PolicySchema } from '@core/mpc/types/plugin/policy_pb'
+import { PolicySchema } from '@core/mpc/types/plugin/policy_pb'
 import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { StartKeysignPrompt } from '@core/ui/mpc/keysign/prompt/StartKeysignPrompt'
@@ -17,17 +17,22 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 export const Overview = () => {
   const { t } = useTranslation()
-  const [policy, setPolicy] = useState<Policy | undefined>(undefined)
   const { bytesCount, chain, message } = usePopupInput<'pluginPolicySign'>()
   const { requestFavicon, requestOrigin } =
     usePopupContext<'pluginPolicySign'>()
   const address = useCurrentVaultAddress(chain)
+
+  const policy = useMemo(() => {
+    const [recipe] = message.split('*#*')
+
+    return fromBinary(PolicySchema, base64Decode(recipe))
+  }, [message])
 
   const keysignMessagePayload = useMemo(
     () => ({
@@ -39,15 +44,6 @@ export const Overview = () => {
     }),
     [bytesCount, chain, message]
   )
-
-  useEffect(() => {
-    const [recipe] = message.split('*#*')
-
-    const decoded = base64Decode(recipe)
-    const policy = fromBinary(PolicySchema, decoded)
-
-    setPolicy(policy)
-  }, [message])
 
   return (
     <>
@@ -74,7 +70,7 @@ export const Overview = () => {
             <StyledVerify alignItems="center" gap={4}>
               <Text as={BadgeCheckIcon} color="success" size={16} />
               <Text as="span" size={12} weight={500}>
-                {t('by_vultisig')}
+                By Vultisig
               </Text>
             </StyledVerify>
           </HStack>

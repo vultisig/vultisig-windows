@@ -6,6 +6,9 @@ import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/
 import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 import EventEmitter from 'events'
 
+type SignType = 'connect' | 'policy'
+type SignHandler = () => Promise<string>
+
 export class Plugin extends EventEmitter {
   constructor() {
     super()
@@ -16,37 +19,26 @@ export class Plugin extends EventEmitter {
       personal_sign: async ([rawMessage, account, type]: [
         string,
         string,
-        'connect' | 'policy',
+        SignType,
       ]) => {
-        const message = new TextEncoder().encode(rawMessage)
-
         const params: PersonalSign = {
-          bytesCount: message.length,
+          bytesCount: new TextEncoder().encode(rawMessage).length,
           chain: Chain.Ethereum,
-          message: new TextDecoder().decode(message),
+          message: rawMessage,
         }
 
-        switch (type) {
-          case 'connect': {
-            const connectSignature = await callPopup(
-              { pluginConnectSign: params },
-              { account }
-            )
-
-            return processSignature(connectSignature)
-          }
-          case 'policy': {
-            const policySignature = await callPopup(
-              { pluginPolicySign: params },
-              { account }
-            )
-
-            return processSignature(policySignature)
-          }
-          default: {
-            throw new NotImplementedError(`Plugin sign type ${type}`)
-          }
+        const signHandlers: Record<SignType, SignHandler> = {
+          connect: () => callPopup({ pluginConnectSign: params }, { account }),
+          policy: () => callPopup({ pluginPolicySign: params }, { account }),
         }
+
+        if (type in signHandlers) {
+          const signature = await signHandlers[type]()
+
+          return processSignature(signature)
+        }
+
+        throw new NotImplementedError(`Plugin sign type ${type}`)
       },
       reshare_sign: async ([{ id }]: [{ id: string }]) => {
         const { joinUrl } = await callPopup({ pluginReshare: { pluginId: id } })

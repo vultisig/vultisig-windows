@@ -8,11 +8,13 @@ export const hr = {
     '<g>Minden eszköz</g> a tárhelyedben tartalmaz <g>egy tárhelyrészt</g>',
   onboarding_step_4:
     'Állítsd helyre a széfet még akkor is <g>ha egy eszköz elveszik vagy megsérül</g>',
+  add_friends_referral: 'Adj hozzá egy barátságos hivatkozást',
   onboarding_step_5:
     '<g>Mindig készíts biztonsági másolatot minden tárhelyrészről</g> külön egy <g>másik helyszínen</g>',
   onboarding_step_6:
     'Ezek a részek együttműködnek, hogy <g>feloldják a tárhelyed zárolását</g>',
   secure_crypto_vault: 'Sigurni kripto trezor',
+  save_10_percent_on_swaps: 'Mentsd el <blue>10%</blue> a swap-okkal most',
   vultisig: 'Vultisig',
   by_vultisig: 'od Vultisig',
   onboarding_description_1:
@@ -69,9 +71,13 @@ export const hr = {
   base_fee_tooltip_content:
     'Mala napojnica za ubrzanje vaše transakcije. Veće napojnice mogu ubrzati obradu.',
   you_are_sending: 'Šalješ',
-  title_1: 'Preporuka',
+  referrals_default_title: 'Preporuka',
+  ypur_referrals: 'Tvoje preporuke',
+  vault_selected: 'Vault odabran',
   title_2: 'Vultisig - Preporuke',
   header_tooltip_title: 'Program Preporuka',
+  thorchain_address_required_for_referrals:
+    'Moraš imati THORChain adresu za korištenje programa preporuka',
   header_tooltip_content:
     'Program preporuka se primjenjuje na THORChain zamjene i temelji se na načelu najbolje namjere. Moraš registrirati THORName kako bi koristio Vultisig preporuke. Naknada za registraciju je 10 RUNE te 1 RUNE godišnje, što se plaća THORChain mreži.',
   invite_friends: 'Pozovi prijatelje',
@@ -901,12 +907,16 @@ export const hr = {
   prioritize_vultisig: 'Dajte prioritet Vultisigu',
   referral_code: 'Referral kod',
   rename: 'Preimenovati',
+  turn_your_vault_into_rewards_machine: 'Pretvorite svoju trezor u nagrade',
   support: 'Podrška',
+  expiration_must_extend_by_exactly_one_year:
+    'Ističe se može proširiti samo jednom godinom',
   terms: 'Uvjeti',
   twitter: 'Cvrkut',
   vultisig_community: 'Vultisig zajednica',
   remove: 'Ukloniti',
   share_vault: 'Dijeli trezor',
+  no_referral_yet: 'Nema preporuke',
   missing_thorchain_address: 'Nedostaje THORChain adresa',
   missing_destination_address: 'Nedostaje odredišna adresa',
   upgrade_shares_info:
@@ -1052,4 +1062,10 @@ export const hr = {
   processing_transaction: 'Obrada transakcije...',
   failed_to_process_transaction: 'Obrada transakcije nije uspjela',
   signature_successful: 'Potpis uspješan',
+  accept_continue: 'Prihvati i nastavi',
+  allow_app_access: 'Dopusti aplikaciji pristup',
+  app_store: 'Trgovina aplikacija',
+  install_app: 'Instaliraj aplikaciju',
+  permissions: 'Dozvole',
+  same_vault_share: 'Isti trezorski udio',
 }
