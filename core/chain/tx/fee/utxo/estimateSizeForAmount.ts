@@ -84,9 +84,7 @@ const largestFirstSelection = (
         })
         // Effective fee if we drop change: fee = totalInput - amount
         const effectiveFee = totalInput - amount
-        const requiredSizeByFee = Number(
-          (effectiveFee + BigInt(byteFee) - 1n) / BigInt(byteFee)
-        )
+        const requiredSizeByFee = Math.ceil(Number(effectiveFee) / byteFee)
         return Math.max(oneOutSize, requiredSizeByFee)
       }
       return currentSize
