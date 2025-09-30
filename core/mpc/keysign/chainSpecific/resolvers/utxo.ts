@@ -3,7 +3,6 @@ import { UtxoChain } from '@core/chain/Chain'
 import { getUtxoStats } from '@core/chain/chains/utxo/client/getUtxoStats'
 import { getCoinBalance } from '@core/chain/coin/balance'
 import { adjustByteFee } from '@core/chain/tx/fee/utxo/adjustByteFee'
-import { UtxoFeeSettings } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
 import {
   UTXOSpecific,
   UTXOSpecificSchema,
@@ -23,16 +22,15 @@ const getByteFee = async (chain: UtxoChain) => {
   return Math.floor(rawByteFee * 2.5)
 }
 
-export const getUtxoSpecific: ChainSpecificResolver<
-  UTXOSpecific,
-  UtxoFeeSettings
-> = async ({ coin, feeSettings, amount, psbt }) => {
+export const getUtxoSpecific: ChainSpecificResolver<UTXOSpecific> = async ({
+  coin,
+  byteFeeMultiplier = 1,
+  amount,
+  psbt,
+}) => {
   const chain = coin.chain as UtxoChain
 
-  let byteFee = await getByteFee(chain)
-  if (feeSettings) {
-    byteFee = adjustByteFee(byteFee, feeSettings)
-  }
+  const byteFee = adjustByteFee(await getByteFee(chain), byteFeeMultiplier)
 
   const result = create(UTXOSpecificSchema, {
     byteFee: byteFee.toString(),

@@ -62,13 +62,7 @@ export const useSwapFeesQuery = () => {
         },
         general: ({ tx }) => {
           return matchRecordUnion(tx, {
-            evm: ({ gasPrice, gas }) => ({
-              swap: {
-                chain: fromCoinKey.chain,
-                id: fromCoinKey.id,
-                amount: BigInt(gasPrice) * BigInt(gas),
-                decimals: fromFeeCoin.decimals,
-              },
+            evm: () => ({
               network,
             }),
             solana: ({ networkFee, swapFee }) => ({

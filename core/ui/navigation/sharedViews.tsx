@@ -36,6 +36,7 @@ import { PasscodeAutoLockPage } from '../passcodeEncryption/autoLock/PasscodeAut
 import { ManagePasscodeEncryptionPage } from '../passcodeEncryption/manage/ManagePasscodeEncryptionPage'
 import { DepositActionProvider } from '../vault/deposit/providers/DepositActionProvider'
 import { DepositCoinProvider } from '../vault/deposit/providers/DepositCoinProvider'
+import { ReferralsGuard } from '../vault/settings/referral/providers/ReferralsGuard'
 import { ReferralPage } from '../vault/settings/referral/ReferralsPage'
 
 export type SharedViewId = Extract<
@@ -77,7 +78,11 @@ export type SharedViewId = Extract<
 >
 
 export const sharedViews: Views<SharedViewId> = {
-  referral: ReferralPage,
+  referral: () => (
+    <ReferralsGuard>
+      <ReferralPage />
+    </ReferralsGuard>
+  ),
   addCustomToken: AddCustomTokenPage,
   address: AddressPage,
   addressBook: AddressBookPage,
