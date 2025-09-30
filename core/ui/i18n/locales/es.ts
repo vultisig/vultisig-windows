@@ -1089,4 +1089,10 @@ export const es = {
   backupShare2: 'Copia de seguridad compartida 2',
   processing_transaction: 'Procesando transacción...',
   failed_to_process_transaction: 'No se pudo procesar la transacción',
+  accept_continue: 'Aceptar y continuar',
+  allow_app_access: 'Permitir el acceso de la aplicación a',
+  app_store: 'Tienda de aplicaciones',
+  install_app: 'Instalar aplicación',
+  permissions: 'Permisos',
+  same_vault_share: 'Misma bóveda compartida',
 }

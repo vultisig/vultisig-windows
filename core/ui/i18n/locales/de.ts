@@ -1093,4 +1093,10 @@ export const de = {
   backupShare2: 'Sicherungsfreigabe 2',
   processing_transaction: 'Transaktion wird verarbeitet...',
   failed_to_process_transaction: 'Transaktion konnte nicht verarbeitet werden',
+  accept_continue: 'Akzeptieren und fortfahren',
+  allow_app_access: 'App-Zugriff erlauben auf',
+  app_store: 'App Store',
+  install_app: 'App installieren',
+  permissions: 'Berechtigungen',
+  same_vault_share: 'Gleiche Tresorfreigabe',
 }

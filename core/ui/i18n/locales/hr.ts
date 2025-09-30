@@ -1060,4 +1060,10 @@ export const hr = {
   backupShare2: 'Sigurnosno dijeljenje 2',
   processing_transaction: 'Obrada transakcije...',
   failed_to_process_transaction: 'Obrada transakcije nije uspjela',
+  accept_continue: 'Prihvati i nastavi',
+  allow_app_access: 'Dopusti aplikaciji pristup',
+  app_store: 'Trgovina aplikacija',
+  install_app: 'Instaliraj aplikaciju',
+  permissions: 'Dozvole',
+  same_vault_share: 'Isti trezorski udio',
 }
