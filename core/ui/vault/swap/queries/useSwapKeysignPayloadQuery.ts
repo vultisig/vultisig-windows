@@ -39,7 +39,7 @@ export const useSwapKeysignPayloadQuery = () => {
     const swapQuote = swapQuoteQuery.data
     if (!swapQuote) return ''
     return matchRecordUnion<SwapQuote, string>(swapQuote, {
-      native: () => '',
+      native: ({ router }) => router ?? '',
       general: ({ tx }) =>
         matchRecordUnion<GeneralSwapTx, string>(tx, {
           evm: ({ to }) => to,
