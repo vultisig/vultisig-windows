@@ -17,13 +17,13 @@ export const runBridgeContentAgent = () => {
 
     const { id } = data
 
-    const trySend = (attemptsLeft: number, delayMs: number) => {
+    const send = (attemptsLeft: number, delayMs: number) => {
       chrome.runtime.sendMessage(data, response => {
         const error = chrome.runtime.lastError?.message
 
         if (error) {
           if (attemptsLeft > 0 && /Receiving end does not exist/i.test(error)) {
-            setTimeout(() => trySend(attemptsLeft - 1, delayMs * 2), delayMs)
+            setTimeout(() => send(attemptsLeft - 1, delayMs * 2), delayMs)
             return
           }
 
@@ -43,6 +43,6 @@ export const runBridgeContentAgent = () => {
       })
     }
 
-    trySend(sendMaxAttempts, sendInitialDelay)
+    send(sendMaxAttempts, sendInitialDelay)
   })
 }
