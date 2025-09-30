@@ -1,9 +1,6 @@
-import { fromBinary } from '@bufbuild/protobuf'
-import { base64Decode } from '@bufbuild/protobuf/wire'
 import { Tx } from '@core/chain/tx'
 import { usePopupContext } from '@core/inpage-provider/popup/view/state/context'
 import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
-import { Policy, PolicySchema } from '@core/mpc/types/plugin/policy_pb'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { Animation } from '@lib/ui/animations/Animation'
 import { Button } from '@lib/ui/buttons/Button'
@@ -18,38 +15,19 @@ import { getColor } from '@lib/ui/theme/getters'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
-import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-type ResultProps = {
-  result:
-    | {
-        txs: Tx[]
-      }
-    | {
-        signature: string
-      }
-}
+type ResultProps = { result: { txs: Tx[] } | { signature: string } }
 
 export const Result = ({ result }: ResultProps) => {
-  const [policy, setPolicy] = useState<Policy | undefined>(undefined)
-  const { chain, message } = usePopupInput<'pluginPolicySign'>()
+  const { t } = useTranslation()
+  const { chain } = usePopupInput<'pluginPolicySign'>()
   const { requestFavicon, requestOrigin } =
     usePopupContext<'pluginPolicySign'>()
-  const { t } = useTranslation()
-
   const address = useCurrentVaultAddress(chain)
-
   const signature = getRecordUnionValue(result, 'signature')
-  useEffect(() => {
-    const [recipe] = message.split('*#*')
 
-    const decoded = base64Decode(recipe)
-    const policy = fromBinary(PolicySchema, decoded)
-
-    setPolicy(policy)
-  }, [message])
   return (
     <>
       <PageContent gap={16} scrollable>
@@ -122,93 +100,6 @@ export const Result = ({ result }: ResultProps) => {
         </StyledSection>
         <StyledSection>
           <Text as="span" size={14} weight={500}>
-            {t(`app_permissions`)}
-          </Text>
-          {policy ? (
-            <VStack gap={16}>
-              <HStack
-                alignItems="center"
-                gap={8}
-                justifyContent="space-between"
-              >
-                <Text as="span" color="shy" size={14} weight={500}>
-                  ID
-                </Text>
-                <Text as="span" size={14} weight={500}>
-                  {policy.id}
-                </Text>
-              </HStack>
-              <StyledDivider />
-              <HStack
-                alignItems="center"
-                gap={8}
-                justifyContent="space-between"
-              >
-                <Text as="span" color="shy" size={14} weight={500}>
-                  {t('dapp_name')}
-                </Text>
-                <Text as="span" size={14} weight={500}>
-                  {policy.name}
-                </Text>
-              </HStack>
-              <StyledDivider />
-              {policy.description ? (
-                <>
-                  <VStack gap={4}>
-                    <Text as="span" color="shy" size={14} weight={500}>
-                      {t('description')}
-                    </Text>
-                    <Text as="span" size={13} weight={500}>
-                      {policy.description}
-                    </Text>
-                  </VStack>
-                  <StyledDivider />
-                </>
-              ) : (
-                <></>
-              )}
-              <HStack
-                alignItems="center"
-                gap={8}
-                justifyContent="space-between"
-              >
-                <Text as="span" color="shy" size={14} weight={500}>
-                  {t('version')}
-                </Text>
-                <Text as="span" size={14} weight={500}>
-                  {policy.version}
-                </Text>
-              </HStack>
-              {policy.rules?.length ? (
-                <StyledDescription>
-                  <Text as="span" size={14} weight={500}>
-                    {t('rules')}
-                  </Text>
-                  {policy.rules.map((rule, index) => {
-                    const number = `${index < 9 ? '0' : ''}${index + 1}`
-
-                    return (
-                      <VStack gap={4} key={number}>
-                        <Text as="span" color="shy" size={14} weight={500}>
-                          {t('rule_item', { number })}
-                        </Text>
-                        <Text as="span" size={13} weight={500}>
-                          {rule.resource}
-                        </Text>
-                      </VStack>
-                    )
-                  })}
-                </StyledDescription>
-              ) : (
-                <></>
-              )}
-            </VStack>
-          ) : (
-            <></>
-          )}
-        </StyledSection>
-        <StyledSection>
-          <Text as="span" size={14} weight={500}>
             {t(`signed_signature`)}
           </Text>
           <Text as="span" color="info" size={13} weight={500}>
@@ -223,13 +114,6 @@ export const Result = ({ result }: ResultProps) => {
   )
 }
 
-const StyledDescription = styled(VStack)`
-  background-color: ${getColor('foregroundExtra')};
-  border: 1px dashed ${getColor('foregroundSuper')};
-  border-radius: 16px;
-  gap: 12px;
-  padding: 12px;
-`
 const StyledSection = styled(VStack)`
   background-color: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};

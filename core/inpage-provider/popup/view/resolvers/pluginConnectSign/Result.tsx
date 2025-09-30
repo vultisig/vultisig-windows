@@ -18,24 +18,14 @@ import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-type ResultProps = {
-  result:
-    | {
-        txs: Tx[]
-      }
-    | {
-        signature: string
-      }
-}
+type ResultProps = { result: { txs: Tx[] } | { signature: string } }
 
 export const Result = ({ result }: ResultProps) => {
+  const { t } = useTranslation()
   const { chain } = usePopupInput<'pluginConnectSign'>()
   const { requestFavicon, requestOrigin } =
     usePopupContext<'pluginConnectSign'>()
-  const { t } = useTranslation()
-
   const address = useCurrentVaultAddress(chain)
-
   const signature = getRecordUnionValue(result, 'signature')
 
   return (
