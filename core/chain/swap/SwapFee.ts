@@ -4,5 +4,5 @@ export type SwapFee = CoinKey & CoinAmount
 
 export type SwapFees = {
   network: SwapFee
-  swap: SwapFee
+  swap?: SwapFee
 }

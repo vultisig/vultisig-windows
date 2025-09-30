@@ -1,36 +1,40 @@
 import { isChainOfKind } from '@core/chain/ChainKind'
-import { getEvmGasLimit } from '@core/chain/tx/fee/evm/getEvmGasLimit'
-import { getEvmMaxPriorityFeePerGas } from '@core/chain/tx/fee/evm/maxPriorityFeePerGas'
 import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 
 import { ITransactionPayload } from '../interfaces'
 
-export const getFeeSettings = async (
+export const getFeeSettings = (
   transactionPayload: ITransactionPayload
-): Promise<FeeSettings | null> => {
+): FeeSettings | null => {
   const { chain } = getRecordUnionValue(transactionPayload)
   if (isChainOfKind(chain, 'utxo')) {
     return { priority: 'fast' }
   }
 
   return matchRecordUnion(transactionPayload, {
-    keysign: async transaction => {
+    keysign: transaction => {
       if (!isChainOfKind(chain, 'evm')) {
         return null
       }
 
       const { gasSettings } = transaction.transactionDetails
 
-      const gasLimit =
-        BigInt(gasSettings?.gasLimit ?? '') || getEvmGasLimit({ chain })
+      if (!gasSettings) {
+        return null
+      }
 
-      const maxPriorityFeePerGas =
-        BigInt(gasSettings?.maxPriorityFeePerGas ?? '') ||
-        (await getEvmMaxPriorityFeePerGas(chain))
+      const { gasLimit, maxPriorityFeePerGas } = gasSettings
 
-      return { gasLimit, maxPriorityFeePerGas }
+      if (!gasLimit || !maxPriorityFeePerGas) {
+        return null
+      }
+
+      return {
+        gasLimit: BigInt(gasLimit),
+        maxPriorityFeePerGas: BigInt(maxPriorityFeePerGas),
+      }
     },
     serialized: () => null,
   })
