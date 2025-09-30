@@ -60,6 +60,7 @@ export const en = {
   digit_input_error_validation: 'Error verifying code, please re-try',
   digit_input_loading_validation: 'Verifying code, please wait',
   create_referral_title: 'Create Referral',
+  referrals_create_page_title: 'Vultisig - Referrals',
   use_referral_code: 'Use referral Code',
   save_code: 'Save code',
   used_referral_error:
@@ -73,7 +74,7 @@ export const en = {
   expires_on: 'Expires on',
   edit_referral: 'Edit Referral',
   edit_friends_referral: 'Edit Friend Referral',
-  add_referral_code: 'Add Referral Code',
+  add_referral_code: 'Save referral code',
   your_friends_referral_code: 'Your friends referral code',
   change_your_friends_referral: 'Change friends Referral Code used for swaps',
   plugin_policy_desc:
@@ -138,6 +139,9 @@ export const en = {
   staked_amount: 'Staked Amount',
   send_overview: 'Send Overview',
   add_address: 'Add Address',
+  no_referral_yet: 'No referral yet.',
+  turn_your_vault_into_rewards_machine:
+    'Turn your vault into a rewards machine. Create your referral now and start earning.',
   selected_chain_missing_in_your_vault: 'Selected chain missing in your vault',
   vultisig: 'Vultisig',
   missing_thorchain_address: 'Missing THORChain Address',
@@ -254,13 +258,18 @@ export const en = {
   upload_file_or_drag_and_drop: 'Upload file or drag & drop here',
   upload_vulttshare: 'Upload your Vultishare QR',
   getting_video_permission: 'Getting video permission...',
+  vault_selected: 'Vault selected',
   failed_to_get_video_permission: 'Failed to get video permission',
   processing_url: 'Processing URL...',
   failed_to_process_url: 'Failed to process URL',
   this_device_is_the: 'This device is the',
   initiating_device: 'Initiating device',
   pairing_device: 'Pairing device',
+  expiration_must_extend_by_exactly_one_year:
+    'Expiration can only be extended by exactly 1 year',
   add_new_vault: 'Add New Vault',
+  thorchain_address_required_for_referrals:
+    'You need to have a THORChain address to use the referral program',
   shares: 'Shares',
   backupnow_note:
     'Note: Never store Vault Shares from different devices in the same location.',
@@ -545,16 +554,23 @@ export const en = {
   vault_missing_public_key: 'Vault missing public key',
   secure: 'Secure',
   generating_eddsa_key: 'Generating EdDSA Key',
-  title_1: 'Referral',
+  referrals_default_title: 'Referral',
+  add_friends_referral: 'Add a Friends Referral',
+  your_referrals: 'Your Referrals',
   title_2: 'Vultisig - Referrals',
   header_tooltip_title: 'Referral Program',
   header_tooltip_content:
     'The referral program is applied on THORChain swaps and is on a best effort basis. You need to register a THORName to use the Vultisig referral. The registration fee is 10 RUNE and 1 RUNE for each year, which is paid to the THORChain network.',
   referral_landing_title:
     '<0>Invite friends</0>. <1>Earn rewards</1>. Save on fees.',
+  save_10_percent_on_swaps: 'Save <blue>10%</blue> on swaps now',
   invite_friends: 'Invite frwiends',
   earn_rewards: 'Earn rewards',
   save_on_fees: 'Save on fees',
+  save_swap_fees_with_referral:
+    'Save <blue>10%</blue> on swaps - Add a Referral',
+  create_own_referral:
+    'Create your own code and earn <blue>20%</blue> on referred swaps',
   unmerge_ruji: 'Unmerge',
   referral_reg_fee: 'Registration Fee',
   create_referral: 'Create Referral',
