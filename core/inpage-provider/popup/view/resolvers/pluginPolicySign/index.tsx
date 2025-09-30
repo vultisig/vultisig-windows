@@ -1,6 +1,6 @@
 import { StartKeysignView } from '@core/extension/keysign/start/StartKeysignView'
 import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
-import { Overview } from '@core/inpage-provider/popup/view/resolvers/policySign/Overview'
+import { Overview } from '@core/inpage-provider/popup/view/resolvers/pluginPolicySign/Overview'
 import {
   KeysignMutationListener,
   KeysignMutationListenerProvider,
@@ -12,14 +12,16 @@ import { Views } from '@lib/ui/navigation/Views'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
 
-type PolicySignView = { id: 'overview' } | Extract<CoreView, { id: 'keysign' }>
+type PluginSignView = { id: 'overview' } | Extract<CoreView, { id: 'keysign' }>
 
-const views: Views<PolicySignView['id']> = {
+const views: Views<PluginSignView['id']> = {
   overview: Overview,
   keysign: StartKeysignView,
 }
 
-export const PolicySign: PopupResolver<'policySign'> = ({ onFinish }) => {
+export const PluginPolicySign: PopupResolver<'pluginPolicySign'> = ({
+  onFinish,
+}) => {
   const keysignMutationListener: KeysignMutationListener = useMemo(
     () => ({
       onSuccess: result => {
