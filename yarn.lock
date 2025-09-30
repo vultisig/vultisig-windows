@@ -1618,6 +1618,8 @@ __metadata:
 "@lib/extension@workspace:^, @lib/extension@workspace:lib/extension":
   version: 0.0.0-use.local
   resolution: "@lib/extension@workspace:lib/extension"
+  dependencies:
+    "@lib/utils": "workspace:^"
   languageName: unknown
   linkType: soft
 
