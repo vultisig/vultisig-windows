@@ -1095,4 +1095,6 @@ export const es = {
   install_app: 'Instalar aplicación',
   permissions: 'Permisos',
   same_vault_share: 'Misma bóveda compartida',
+  signature_successful: 'Firma exitosa',
+  by_vultisig: 'por Vultisig',
 }

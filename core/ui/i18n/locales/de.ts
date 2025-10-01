@@ -1015,7 +1015,7 @@ export const de = {
   go_to_wallet: 'Zur Brieftasche',
   install_plugin: 'Plugin installieren',
   installing_plugin: 'Plugin installieren',
-  plugin_info: 'Plugin-Informationen',
+  plugin_info: 'Plugin Informationen',
   plugin_info_desc: 'Sie installieren das {{name}}-Plugin',
   plugin_success_desc: 'Die Installation von {{name}} ist abgeschlossen',
   plugin_password_desc:
@@ -1075,7 +1075,7 @@ export const de = {
   entity_scanned: '{{entity}} gescannt von <provider></provider>',
   site_has_risk: 'Schädliche Site erkannt von <provider></provider>',
   risky_site_detected: 'Schädliche Site erkannt',
-  app_permissions: 'App-Berechtigungen',
+  app_permissions: 'App Berechtigungen',
   dapp_name: 'dApp-Name',
   description: 'Beschreibung',
   personal_sign: 'Persönliches Zeichen',
@@ -1099,4 +1099,6 @@ export const de = {
   install_app: 'App installieren',
   permissions: 'Berechtigungen',
   same_vault_share: 'Gleiche Tresorfreigabe',
+  signature_successful: 'Signatur erfolgreich',
+  by_vultisig: 'von Vultisig',
 }

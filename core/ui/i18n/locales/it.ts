@@ -1093,4 +1093,6 @@ export const it = {
   install_app: "Installa l'app",
   permissions: 'Permessi',
   same_vault_share: 'Stessa condivisione del vault',
+  signature_successful: 'Firma riuscita',
+  by_vultisig: 'da Vultisig',
 }

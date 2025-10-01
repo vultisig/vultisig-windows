@@ -1066,4 +1066,6 @@ export const hr = {
   install_app: 'Instaliraj aplikaciju',
   permissions: 'Dozvole',
   same_vault_share: 'Isti trezorski udio',
+  signature_successful: 'Potpis uspješan',
+  by_vultisig: 'od Vultisig',
 }

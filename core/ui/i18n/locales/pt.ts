@@ -1081,4 +1081,6 @@ export const pt = {
   install_app: 'Instalar aplicativo',
   permissions: 'Permissões',
   same_vault_share: 'Mesmo compartilhamento de cofre',
+  signature_successful: 'Assinatura bem-sucedida',
+  by_vultisig: 'por Vultisig',
 }
