@@ -25,6 +25,7 @@ export const DepositFiatFeeValue = () => {
 
   const chainSpecificQuery = useDepositChainSpecificQuery(coin)
   const { decimals } = chainFeeCoin[coin.chain]
+
   const query = useTransformQueriesData(
     {
       price: priceQuery,

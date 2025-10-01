@@ -77,6 +77,7 @@ export const ManageAmountInputField = () => {
   ] = useSendFormFieldState()
 
   const chainSpecificQuery = useSendChainSpecificQuery()
+
   const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
 
   const maxAmountQuery = useTransformQueriesData(
@@ -91,7 +92,6 @@ export const ManageAmountInputField = () => {
         !isOneOf(coin.chain, Object.values(UtxoBasedChain))
       ) {
         const feeAmount = getFeeAmount(chainSpecific)
-
         return feeAmount > balance ? 0n : balance - feeAmount
       }
 

@@ -1,6 +1,5 @@
 import { formatFee } from '@core/chain/tx/fee/format/formatFee'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
-import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
@@ -14,6 +13,7 @@ export const KeysignEstimatedFee = () => {
   const payload = getRecordUnionValue(useKeysignMessagePayload(), 'keysign')
   const { blockchainSpecific } = payload
   const chain = getKeysignChain(payload)
+
   const networkFeesFormatted = useMemo(() => {
     if (!blockchainSpecific.value) {
       throw new Error('Invalid blockchainSpecific in keysign payload')
@@ -21,7 +21,7 @@ export const KeysignEstimatedFee = () => {
 
     return formatFee({
       chain,
-      amount: getFeeAmount(blockchainSpecific as KeysignChainSpecific),
+      amount: getFeeAmount(blockchainSpecific),
     })
   }, [blockchainSpecific, chain])
 

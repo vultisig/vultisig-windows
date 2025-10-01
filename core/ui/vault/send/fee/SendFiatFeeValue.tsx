@@ -13,17 +13,17 @@ import { useCurrentSendCoin } from '../state/sendCoin'
 import { useSendChainSpecific } from './SendChainSpecificProvider'
 
 export const SendFiatFeeValue = () => {
-  const coin = useCurrentSendCoin()
+  const { chain } = useCurrentSendCoin()
   const chainSpecific = useSendChainSpecific()
   const fee = getFeeAmount(chainSpecific)
 
+  const coin = chainFeeCoin[chain]
   const formatFiatAmount = useFormatFiatAmount()
-  const feeCoin = chainFeeCoin[coin.chain]
   const feeCoinPriceQuery = useCoinPriceQuery({
-    coin: feeCoin,
+    coin,
   })
 
-  const { decimals, ticker } = feeCoin
+  const { decimals, ticker } = coin
 
   const humanReadableFeeValue = fromChainAmount(fee, decimals)
 

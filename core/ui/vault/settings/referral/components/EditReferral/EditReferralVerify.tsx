@@ -89,12 +89,12 @@ export const EditReferralVerify = ({ onBack }: OnBackProp) => {
     amount: referralAmount,
   })
 
-  const { data: chainSpecific } = useChainSpecificQuery({
+  const chainSpecific = useChainSpecificQuery({
     coin: thorchainCoin,
     isDeposit: true,
   })
 
-  if (!keysignPayload || !chainSpecific) {
+  if (!keysignPayload || !chainSpecific.data) {
     return (
       <CenterAbsolutely>
         <Spinner size="3em" />
@@ -145,7 +145,7 @@ export const EditReferralVerify = ({ onBack }: OnBackProp) => {
               {t('est_network_fee')}
             </Text>
             <Text size={14}>
-              {formatFee({ chain, amount: getFeeAmount(chainSpecific) })}
+              {formatFee({ chain, amount: getFeeAmount(chainSpecific.data) })}
             </Text>
           </TxOverviewRow>
           <TxOverviewMemo value={memo} chain={chain} />
