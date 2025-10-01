@@ -13,6 +13,7 @@ import { KeysignActionProvider } from '../action/KeysignActionProvider'
 
 export const JoinKeysignPage = () => {
   const [{ keysignMsg }] = useCoreViewState<'joinKeysign'>()
+
   const keysignMessagePayload = useMemo(
     () => getKeysignMessagePayload(keysignMsg),
     [keysignMsg]

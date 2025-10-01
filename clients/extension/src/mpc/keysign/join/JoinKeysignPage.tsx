@@ -13,6 +13,7 @@ import { useMemo } from 'react'
 
 export const JoinKeysignPage = () => {
   const [{ keysignMsg }] = useCoreViewState<'joinKeysign'>()
+
   const keysignMessagePayload = useMemo(
     () => getKeysignMessagePayload(keysignMsg),
     [keysignMsg]
