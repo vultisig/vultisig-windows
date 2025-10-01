@@ -10,11 +10,10 @@ import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueries
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useKeysignUtxoInfo } from '../../../mpc/keysign/utxo/queries/keysignUtxoInfo'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
 import { useDepositChainSpecificQuery } from '../queries/useDepositChainSpecificQuery'
 
-export const DepositFiatFeeValue = ({ amount }: { amount: bigint }) => {
+export const DepositFiatFeeValue = () => {
   const [coin] = useDepositCoin()
   const fiatCurrency = useFiatCurrency()
   const priceQuery = useCoinPriceQuery({
@@ -26,30 +25,20 @@ export const DepositFiatFeeValue = ({ amount }: { amount: bigint }) => {
 
   const chainSpecificQuery = useDepositChainSpecificQuery(coin)
   const { decimals } = chainFeeCoin[coin.chain]
-  const utxoInfoQuery = useKeysignUtxoInfo({
-    chain: coin.chain,
-    address: coin.address,
-  })
   const query = useTransformQueriesData(
     {
       price: priceQuery,
       chainSpecific: chainSpecificQuery,
-      utxoInfo: utxoInfoQuery,
     },
     useCallback(
-      ({ price, chainSpecific, utxoInfo }) => {
-        const fee = getFeeAmount({
-          chainSpecific,
-          utxoInfo,
-          amount,
-          chain: coin.chain,
-        })
+      ({ price, chainSpecific }) => {
+        const fee = getFeeAmount(chainSpecific)
 
         const feeAmount = fromChainAmount(fee, decimals)
 
         return formatFiatAmount(feeAmount * price)
       },
-      [decimals, formatFiatAmount, amount, coin.chain]
+      [decimals, formatFiatAmount]
     )
   )
 

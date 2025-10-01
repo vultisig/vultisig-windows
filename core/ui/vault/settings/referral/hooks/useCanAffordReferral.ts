@@ -19,7 +19,7 @@ export const useCanAffordReferral = (requestedRune = 0) => {
     ? fromChainAmount(balanceQuery.data, runeCoin.decimals)
     : 0
 
-  const chainFeeAmount = chainSpecific ? getFeeAmount({ chainSpecific }) : 0n
+  const chainFeeAmount = chainSpecific ? getFeeAmount(chainSpecific) : 0
   const feeAmount = fromChainAmount(chainFeeAmount, runeCoin.decimals)
   const totalRequired = requestedRune + feeAmount
 

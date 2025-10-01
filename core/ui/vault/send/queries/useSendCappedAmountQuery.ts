@@ -5,7 +5,6 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useCallback } from 'react'
 
 import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'
-import { useKeysignUtxoInfo } from '../../../mpc/keysign/utxo/queries/keysignUtxoInfo'
 import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery'
 import { useSendAmount } from '../state/amount'
 import { useCurrentSendCoin } from '../state/sendCoin'
@@ -17,24 +16,15 @@ export const useSendCappedAmountQuery = () => {
 
   const chainSpecificQuery = useSendChainSpecificQuery()
   const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
-  const utxoInfoQuery = useKeysignUtxoInfo({
-    chain: coin.chain,
-    address: coin.address,
-  })
+
   return useTransformQueriesData(
     {
       chainSpecific: chainSpecificQuery,
       balance: balanceQuery,
-      utxoInfo: utxoInfoQuery,
     },
     useCallback(
-      ({ chainSpecific, balance, utxoInfo }) => {
-        const feeAmount = getFeeAmount({
-          chainSpecific,
-          utxoInfo,
-          amount,
-          chain: coin.chain,
-        })
+      ({ chainSpecific, balance }) => {
+        const feeAmount = getFeeAmount(chainSpecific)
 
         return {
           decimals: coin.decimals,

@@ -1,4 +1,4 @@
-import { Chain, UtxoChain } from '@core/chain/Chain'
+import { Chain } from '@core/chain/Chain'
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 
@@ -9,41 +9,10 @@ import { suiAverageSendGas } from '../../chains/sui/config'
 import { tonConfig } from '../../chains/ton/config'
 import { rippleTxFee } from './ripple'
 import { nativeTxFeeRune } from './thorchain/config'
-import { getUTXOBasedFee } from './utxo/getUTXOBasedFee'
 
-type GetFeeAmountInput = {
-  chainSpecific: KeysignChainSpecific
-  utxoInfo?: Array<{ hash: string; amount: bigint; index: number }> | null
-  amount?: bigint | null // The amount being sent
-  chain?: Chain
-}
-
-export const getFeeAmount = ({
-  chainSpecific,
-  utxoInfo,
-  amount,
-  chain,
-}: GetFeeAmountInput): bigint =>
+export const getFeeAmount = (chainSpecific: KeysignChainSpecific): bigint =>
   matchDiscriminatedUnion(chainSpecific, 'case', 'value', {
-    utxoSpecific: ({ byteFee, sendMaxAmount }) => {
-      if (
-        utxoInfo &&
-        utxoInfo.length > 0 &&
-        chain &&
-        amount !== undefined &&
-        amount !== null
-      ) {
-        return getUTXOBasedFee({
-          utxoInfo,
-          amount,
-          byteFee: Number(byteFee),
-          chain: chain as UtxoChain,
-          sendMaxAmount,
-        })
-      }
-
-      return BigInt(byteFee) * BigInt(250) // assume the average size of an UTXO transaction is 250 vbytes
-    },
+    utxoSpecific: ({ byteFee }) => BigInt(byteFee) * BigInt(250), // assume the average size of an UTXO transaction is 250 vbytes
     ethereumSpecific: ({ maxFeePerGasWei, gasLimit }) =>
       BigInt(maxFeePerGasWei) * BigInt(gasLimit),
     suicheSpecific: ({ referenceGasPrice }) =>

@@ -9,25 +9,13 @@ import { Text } from '@lib/ui/text'
 import { formatAmount } from '@lib/utils/formatAmount'
 
 import { useFormatFiatAmount } from '../../../chain/hooks/useFormatFiatAmount'
-import { useKeysignUtxoInfo } from '../../../mpc/keysign/utxo/queries/keysignUtxoInfo'
-import { useSendAmount } from '../state/amount'
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { useSendChainSpecific } from './SendChainSpecificProvider'
 
 export const SendFiatFeeValue = () => {
   const coin = useCurrentSendCoin()
   const chainSpecific = useSendChainSpecific()
-  const { data: utxoInfo } = useKeysignUtxoInfo({
-    chain: coin.chain,
-    address: coin.address,
-  })
-  const [sendAmount] = useSendAmount()
-  const fee = getFeeAmount({
-    chainSpecific,
-    utxoInfo,
-    amount: sendAmount,
-    chain: coin.chain,
-  })
+  const fee = getFeeAmount(chainSpecific)
 
   const formatFiatAmount = useFormatFiatAmount()
   const feeCoin = chainFeeCoin[coin.chain]

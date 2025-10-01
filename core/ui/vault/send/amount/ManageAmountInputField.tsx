@@ -41,7 +41,6 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'
-import { useKeysignUtxoInfo } from '../../../mpc/keysign/utxo/queries/keysignUtxoInfo'
 import { useSendAmount } from '../state/amount'
 import { FiatSendAmountInput } from './FiatSendAmountInput'
 
@@ -78,30 +77,20 @@ export const ManageAmountInputField = () => {
   ] = useSendFormFieldState()
 
   const chainSpecificQuery = useSendChainSpecificQuery()
-  const utxoInfoQuery = useKeysignUtxoInfo({
-    chain: coin.chain,
-    address: coin.address,
-  })
   const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
 
   const maxAmountQuery = useTransformQueriesData(
     {
       chainSpecific: chainSpecificQuery,
       balance: balanceQuery,
-      utxoInfo: utxoInfoQuery,
     },
-    ({ balance, chainSpecific, utxoInfo }) => {
+    ({ balance, chainSpecific }) => {
       if (
         balance > 0n &&
         isFeeCoin(coin) &&
         !isOneOf(coin.chain, Object.values(UtxoBasedChain))
       ) {
-        const feeAmount = getFeeAmount({
-          chainSpecific,
-          utxoInfo: utxoInfo,
-          amount: value,
-          chain: coin.chain,
-        })
+        const feeAmount = getFeeAmount(chainSpecific)
 
         return feeAmount > balance ? 0n : balance - feeAmount
       }

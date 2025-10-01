@@ -21,7 +21,6 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFormatFiatAmount } from '../../../../chain/hooks/useFormatFiatAmount'
-import { useKeysignUtxoInfo } from '../../utxo/queries/keysignUtxoInfo'
 
 export const JoinKeysignTxPrimaryInfo = ({
   value,
@@ -38,10 +37,6 @@ export const JoinKeysignTxPrimaryInfo = ({
     coin,
   })
 
-  const { data: utxoInfo } = useKeysignUtxoInfo({
-    chain: coin.chain,
-    address: coin.address,
-  })
   const formatFiatAmount = useFormatFiatAmount()
 
   const networkFeesFormatted = useMemo(() => {
@@ -49,14 +44,9 @@ export const JoinKeysignTxPrimaryInfo = ({
 
     return formatFee({
       chain: coin.chain as Chain,
-      amount: getFeeAmount({
-        chainSpecific: blockchainSpecific as KeysignChainSpecific,
-        utxoInfo,
-        amount: toAmount ? BigInt(toAmount) : null,
-        chain: coin.chain,
-      }),
+      amount: getFeeAmount(blockchainSpecific as KeysignChainSpecific),
     })
-  }, [blockchainSpecific, coin.chain, utxoInfo, toAmount])
+  }, [blockchainSpecific, coin.chain])
 
   return (
     <>

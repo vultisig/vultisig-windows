@@ -145,7 +145,7 @@ export const EditReferralVerify = ({ onBack }: OnBackProp) => {
               {t('est_network_fee')}
             </Text>
             <Text size={14}>
-              {formatFee({ chain, amount: getFeeAmount({ chainSpecific }) })}
+              {formatFee({ chain, amount: getFeeAmount(chainSpecific) })}
             </Text>
           </TxOverviewRow>
           <TxOverviewMemo value={memo} chain={chain} />
