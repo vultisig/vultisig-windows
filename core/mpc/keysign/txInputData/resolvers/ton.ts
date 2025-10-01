@@ -1,3 +1,4 @@
+import { numberToEvenHex } from '@lib/utils/hex/numberToHex'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
@@ -11,21 +12,27 @@ export const getTonTxInputData: TxInputDataResolver<'ton'> = ({
   const { expireAt, sequenceNumber, bounceable, sendMaxAmount } =
     getBlockchainSpecificValue(keysignPayload.blockchainSpecific, 'tonSpecific')
 
-  const isMax = Boolean(sendMaxAmount)
+  const isStakeOp =
+    !!keysignPayload.memo && ['d', 'w'].includes(keysignPayload.memo.trim())
+  const shouldBounce = isStakeOp ? true : !!bounceable
+
+  const mode =
+    (sendMaxAmount
+      ? TW.TheOpenNetwork.Proto.SendMode.ATTACH_ALL_CONTRACT_BALANCE
+      : TW.TheOpenNetwork.Proto.SendMode.PAY_FEES_SEPARATELY) |
+    TW.TheOpenNetwork.Proto.SendMode.IGNORE_ACTION_PHASE_ERRORS
+
+  // For send-max, amount must be 0 (balance is attached by mode)
+  const amount = sendMaxAmount
+    ? new Long(0)
+    : new Long(Number(keysignPayload.toAmount))
+
   const tokenTransferMessage = TW.TheOpenNetwork.Proto.Transfer.create({
     dest: keysignPayload.toAddress,
-    amount: isMax ? Long.UZERO : new Long(Number(keysignPayload.toAmount)),
-    bounceable:
-      bounceable ??
-      ((keysignPayload.memo &&
-        ['d', 'w'].includes(keysignPayload.memo.trim())) ||
-        false),
+    amount: Buffer.from(numberToEvenHex(amount), 'hex'),
+    bounceable: shouldBounce,
     comment: keysignPayload.memo ?? undefined,
-    mode:
-      (isMax
-        ? TW.TheOpenNetwork.Proto.SendMode.ATTACH_ALL_CONTRACT_BALANCE
-        : TW.TheOpenNetwork.Proto.SendMode.PAY_FEES_SEPARATELY) |
-      TW.TheOpenNetwork.Proto.SendMode.IGNORE_ACTION_PHASE_ERRORS,
+    mode,
   })
 
   const inputObject = {

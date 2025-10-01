@@ -1,8 +1,5 @@
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
-import {
-  noPersistQueryOptions,
-  noRefetchQueryOptions,
-} from '@lib/ui/query/utils/options'
+import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { useCore } from '../state/core'
@@ -32,7 +29,6 @@ export const useFriendReferralQuery = (vaultId: string) => {
     queryKey: [StorageKey.friendReferral, vaultId],
     queryFn: () => getFriendReferral(vaultId),
     ...noRefetchQueryOptions,
-    ...noPersistQueryOptions,
   })
 }
 
@@ -43,7 +39,6 @@ export const useHasFinishedReferralsOnboardingQuery = () => {
     queryKey: [StorageKey.hasFinishedReferralsOnboarding],
     queryFn: getHasFinishedReferralsOnboarding,
     ...noRefetchQueryOptions,
-    ...noPersistQueryOptions,
   })
 }
 

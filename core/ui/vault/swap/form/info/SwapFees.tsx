@@ -13,7 +13,6 @@ import { ComponentType, FC, PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useSwapChainSpecificQuery } from '../../queries/useSwapChainSpecificQuery'
 import { useSwapFeesQuery } from '../../queries/useSwapFeesQuery'
 import { useSwapQuoteQuery } from '../../queries/useSwapQuoteQuery'
 import { SwapFeeFiatValue } from './SwapTotalFeeFiatValue'
@@ -28,7 +27,6 @@ export const SwapFees: FC<SwapFeesProps> = ({ RowComponent }) => {
 
   const { t } = useTranslation()
   const query = useSwapFeesQuery()
-  const chainSpecificQuery = useSwapChainSpecificQuery()
   const swapQuoteQuery = useSwapQuoteQuery()
 
   return (
@@ -65,41 +63,39 @@ export const SwapFees: FC<SwapFeesProps> = ({ RowComponent }) => {
             style={{ overflow: 'hidden' }}
           >
             <FeesWrapper gap={10}>
-              <RowComponent>
-                <Text>{t('swap_fee')}</Text>
-                <MatchQuery
-                  value={query}
-                  pending={() => <Skeleton width="48px" height="12px" />}
-                  error={() => (
-                    <Text color="danger">{t('failed_to_load')}</Text>
-                  )}
-                  success={({ swap }) => (
-                    <Text color="shy">
-                      <SwapFeeFiatValue value={[swap]} />
-                    </Text>
-                  )}
-                />
-              </RowComponent>
-
               <MatchQuery
                 value={query}
-                success={({ network }) => {
-                  if (!network) return null
-                  return (
-                    <MatchQuery
-                      value={chainSpecificQuery}
-                      success={chainSpecific => (
-                        <RowComponent>
-                          <span>{t('network_fee')}</span>
-                          <Text color="shy">
-                            {formatFee({ ...network, chainSpecific })} (~
-                            <SwapFeeFiatValue value={[network]} />)
-                          </Text>
-                        </RowComponent>
-                      )}
-                    />
-                  )
-                }}
+                pending={() => (
+                  <RowComponent>
+                    <Text>{t('swap_fee')}</Text>
+                    <Skeleton width="48px" height="12px" />
+                  </RowComponent>
+                )}
+                error={() => (
+                  <RowComponent>
+                    <Text>{t('swap_fee')}</Text>
+                    <Text color="danger">{t('failed_to_load')}</Text>
+                  </RowComponent>
+                )}
+                success={({ network, swap }) => (
+                  <>
+                    {swap && (
+                      <RowComponent>
+                        <Text>{t('swap_fee')}</Text>
+                        <Text color="shy">
+                          <SwapFeeFiatValue value={[swap]} />
+                        </Text>
+                      </RowComponent>
+                    )}
+                    <RowComponent>
+                      <span>{t('network_fee')}</span>
+                      <Text color="shy">
+                        {formatFee(network)} (~
+                        <SwapFeeFiatValue value={[network]} />)
+                      </Text>
+                    </RowComponent>
+                  </>
+                )}
               />
             </FeesWrapper>
           </motion.div>

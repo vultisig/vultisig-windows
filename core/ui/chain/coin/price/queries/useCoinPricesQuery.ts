@@ -1,10 +1,13 @@
-import { EvmChain } from '@core/chain/Chain'
+import { CosmosChain, EvmChain } from '@core/chain/Chain'
 import { isChainOfKind } from '@core/chain/ChainKind'
+import { fetchNavPerShare } from '@core/chain/chains/cosmos/thor/yield-bearing-tokens/services/fetchNavPerShare'
+import { yieldBearingThorChainTokens } from '@core/chain/chains/cosmos/thor/yield-bearing-tokens/yAssetsOnThorChain'
 import { CoinKey, coinKeyToString, Token } from '@core/chain/coin/Coin'
 import { getErc20Prices } from '@core/chain/coin/price/evm/getErc20Prices'
 import { getCoinPrices } from '@core/chain/coin/price/getCoinPrices'
 import { FiatCurrency } from '@core/config/FiatCurrency'
 import { useQueriesToEagerQuery } from '@lib/ui/query/hooks/useQueriesToEagerQuery'
+import { persistQueryOptions } from '@lib/ui/query/utils/options'
 import { groupItems } from '@lib/utils/array/groupItems'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { without } from '@lib/utils/array/without'
@@ -40,10 +43,17 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
 
   const coinsWithPriceProviderId: (CoinKey & { priceProviderId: string })[] = []
   const erc20sWithoutPriceProviderId: Token<CoinKey<EvmChain>>[] = []
+  const yieldBearingTokens: Token<CoinKey<CosmosChain>>[] = []
 
   input.coins.forEach(({ id, priceProviderId, chain }) => {
     if (priceProviderId) {
       coinsWithPriceProviderId.push({ id, priceProviderId, chain })
+    } else if (
+      id &&
+      id in yieldBearingThorChainTokens &&
+      isChainOfKind(chain, 'cosmos')
+    ) {
+      yieldBearingTokens.push({ id, chain })
     } else if (isChainOfKind(chain, 'evm') && id) {
       erc20sWithoutPriceProviderId.push({ id, chain })
     }
@@ -82,6 +92,7 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
 
           return result
         },
+        ...persistQueryOptions,
       })
     })
   }
@@ -119,6 +130,37 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
 
         return result
       },
+      ...persistQueryOptions,
+    })
+  }
+
+  if (!isEmpty(yieldBearingTokens)) {
+    const yieldBearingTokensIds = yieldBearingTokens.map(c => c.id)
+
+    queries.push({
+      queryKey: ['yieldNavPrices', yieldBearingTokensIds],
+      queryFn: async () => {
+        const navPairs = await Promise.all(
+          yieldBearingTokensIds.map(
+            async id => [id, await fetchNavPerShare(id)] as const
+          )
+        )
+
+        const result: Record<string, number> = {}
+
+        for (const [id, nav] of navPairs) {
+          if (nav == null) continue
+          const matched = yieldBearingTokens.filter(c =>
+            areLowerCaseEqual(shouldBePresent(c.id), id)
+          )
+
+          for (const coin of matched) {
+            result[coinKeyToString(coin)] = nav
+          }
+        }
+        return result
+      },
+      ...persistQueryOptions,
     })
   }
 

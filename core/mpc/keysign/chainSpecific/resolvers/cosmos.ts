@@ -28,8 +28,9 @@ const defaultGasRecord: Record<CosmosSpecificChain, number> = {
 export const getCosmosSpecific: ChainSpecificResolver<CosmosSpecific> = async ({
   coin,
   transactionType = TransactionType.UNSPECIFIED,
+  timeoutTimestamp,
 }) => {
-  const chain = coin.chain as CosmosSpecificChain
+  const { chain } = coin
   const { accountNumber, sequence, latestBlock } = await getCosmosAccountInfo({
     address: coin.address,
     chain,
@@ -43,7 +44,9 @@ export const getCosmosSpecific: ChainSpecificResolver<CosmosSpecific> = async ({
     gas,
     transactionType,
     ibcDenomTraces: {
-      latestBlock: latestBlock.toString(),
+      latestBlock: timeoutTimestamp
+        ? `${latestBlock.split('_')[0]}_${timeoutTimestamp}`
+        : latestBlock,
       baseDenom: '',
       path: '',
     },

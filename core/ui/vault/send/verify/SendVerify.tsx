@@ -20,7 +20,7 @@ import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { formatAmount } from '@lib/utils/formatAmount'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -69,12 +69,9 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
                   error={() => <Text>{t('failed_to_load')}</Text>}
                   pending={() => <Spinner />}
                   success={({ amount, decimals }) =>
-                    formatTokenAmount(fromChainAmount(amount, decimals))
+                    formatAmount(fromChainAmount(amount, decimals), { ticker })
                   }
                 />
-                <Text as="span" color="shy">
-                  {ticker}
-                </Text>
               </Text>
             </HStack>
           </AmountWrapper>
@@ -89,7 +86,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
           </TxOverviewRow>
           <TxOverviewRow>
             <RowTitle>{t('to')}</RowTitle>
-            <Text size={14}>{receiver}</Text>
+            <AddressWrapper size={14}>{receiver}</AddressWrapper>
           </TxOverviewRow>
           <TxOverviewRow>
             <RowTitle>{t('network')}</RowTitle>
@@ -101,7 +98,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
               <Text size={14}>{chain}</Text>
             </HStack>
           </TxOverviewRow>
-          {memo && <TxOverviewMemo value={memo} />}
+          {memo && <TxOverviewMemo value={memo} chain={chain} />}
           <TxOverviewRow>
             <SendFiatFee />
           </TxOverviewRow>
@@ -110,6 +107,11 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
     </>
   )
 }
+
+const AddressWrapper = styled(Text)`
+  overflow: hidden;
+  text-align: right;
+`
 
 const AmountWrapper = styled(VStack)`
   padding-bottom: 20px !important;

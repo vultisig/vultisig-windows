@@ -33,19 +33,15 @@ export const useVaultChainCoinsQuery = (chain: Chain) => {
     }
 
     if (pricesQuery.data && balancesQuery.data) {
+      const basePrices = shouldBePresent(pricesQuery.data)
+      const balances = shouldBePresent(balancesQuery.data)
+
       const data = without(
         coins.map(coin => {
-          const amount =
-            shouldBePresent(balancesQuery.data)[coinKeyToString(coin)] ||
-            BigInt(0)
+          const amount = balances[coinKeyToString(coin)] ?? BigInt(0)
+          const price = basePrices[coinKeyToString(coin)]
 
-          const price = shouldBePresent(pricesQuery.data)[coinKeyToString(coin)]
-
-          return {
-            ...coin,
-            amount,
-            price,
-          }
+          return { ...coin, amount, price }
         }),
         undefined
       )

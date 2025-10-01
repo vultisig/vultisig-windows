@@ -5,14 +5,12 @@ import { SearchField } from '@lib/ui/search/SearchField'
 import React, {
   FC,
   ReactNode,
-  useCallback,
-  useEffect,
+  useDeferredValue,
   useMemo,
   useState,
 } from 'react'
+import { Virtuoso } from 'react-virtuoso'
 import styled from 'styled-components'
-
-import { useIntersection } from '../../hooks/useIntersection'
 
 type SelectItemModalProps<T> = OnFinishProp<T, 'optional'> &
   OptionsProp<T> &
@@ -24,6 +22,11 @@ type SelectItemModalProps<T> = OnFinishProp<T, 'optional'> &
     virtualizePageSize?: number
     getKey?: (option: T, index: number) => string
   }
+
+const modalOptionsListHeight = 400
+const offset = 100
+const defaultIncreaseViewportForVirtualizedList =
+  modalOptionsListHeight + offset
 
 export const SelectItemModal = <T extends { id?: string; chain?: string }>(
   props: SelectItemModalProps<T>
@@ -41,48 +44,14 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>(
   } = props
 
   const [searchQuery, setSearchQuery] = useState('')
+  const deferredQuery = useDeferredValue(searchQuery)
+
   const filtered = useMemo(
-    () => options.filter(o => filterFunction(o, searchQuery)),
-    [options, filterFunction, searchQuery]
+    () => options.filter(o => filterFunction(o, deferredQuery)),
+    [options, filterFunction, deferredQuery]
   )
 
-  const pageSize = virtualizePageSize ?? filtered.length
-  const [visibleCount, setVisibleCount] = useState(
-    Math.min(pageSize, filtered.length)
-  )
-  useEffect(
-    () => setVisibleCount(Math.min(pageSize, filtered.length)),
-    [filtered.length, pageSize]
-  )
-
-  const [rootEl, setRootEl] = useState<HTMLDivElement | null>(null)
-  const [sentinelEl, setSentinelEl] = useState<HTMLDivElement | null>(null)
-
-  const loadMore = useCallback(() => {
-    setVisibleCount(c => Math.min(c + pageSize, filtered.length))
-  }, [pageSize, filtered.length])
-
-  const intersection = useIntersection({
-    target: sentinelEl,
-    root: rootEl,
-    rootMargin: '0px 0px 200px 0px',
-    threshold: 0,
-  })
-
-  useEffect(() => {
-    if (!virtualizePageSize) return
-    if (intersection?.isIntersecting && visibleCount < filtered.length) {
-      loadMore()
-    }
-  }, [
-    intersection?.isIntersecting,
-    virtualizePageSize,
-    visibleCount,
-    filtered.length,
-    loadMore,
-  ])
-
-  const slice = virtualizePageSize ? filtered.slice(0, visibleCount) : filtered
+  const useVirtual = Boolean(virtualizePageSize) && filtered.length > 30
 
   return (
     <Modal onClose={() => onFinish()} title={title}>
@@ -90,16 +59,32 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>(
         {options.length > 1 && <SearchField onSearch={setSearchQuery} />}
         {renderListHeader?.() || <div />}
 
-        <ListWrapper ref={setRootEl}>
-          {slice.map((option, index) => (
-            <OptionComponent
-              key={getKey?.(option, index) || option?.id || index}
-              value={option}
-              onClick={() => onFinish(option)}
+        <ListWrapper>
+          {useVirtual ? (
+            <Virtuoso
+              style={{ height: modalOptionsListHeight }}
+              totalCount={filtered.length}
+              data={filtered}
+              increaseViewportBy={
+                virtualizePageSize ?? defaultIncreaseViewportForVirtualizedList
+              }
+              itemContent={(index, item) => (
+                <OptionComponent value={item} onClick={() => onFinish(item)} />
+              )}
+              components={{
+                List: StyledList,
+              }}
             />
-          ))}
-          {virtualizePageSize && visibleCount < filtered.length && (
-            <Sentinel ref={setSentinelEl} />
+          ) : (
+            <NonVirtualList>
+              {filtered.map((option, index) => (
+                <OptionComponent
+                  key={getKey?.(option, index) || option?.id || index}
+                  value={option}
+                  onClick={() => onFinish(option)}
+                />
+              ))}
+            </NonVirtualList>
           )}
         </ListWrapper>
 
@@ -109,13 +94,17 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>(
   )
 }
 
-// Use a DOM element to guarantee the ref is forwarded
 const ListWrapper = styled.div`
+  max-height: ${modalOptionsListHeight}px;
+  overflow-y: auto;
+`
+
+const NonVirtualList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  max-height: 400px;
-  overflow-y: auto;
+  & > * + * {
+    margin-top: 8px;
+  }
 
   & > :first-child {
     border-top-left-radius: 12px;
@@ -127,7 +116,17 @@ const ListWrapper = styled.div`
   }
 `
 
-const Sentinel = styled.div`
-  height: 2px;
-  width: 100%;
+const StyledList = styled.div`
+  & > * + * {
+    margin-top: 8px;
+  }
+
+  & > :first-child > * {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+  }
+  & > :last-child > * {
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+  }
 `

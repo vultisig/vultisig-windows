@@ -1,4 +1,5 @@
 import { Chain } from '@core/chain/Chain'
+import { desktopDownloadUrl } from '@core/config'
 import { ManageBlockaid } from '@core/ui/chain/security/blockaid/ManageBlockaid'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { languageName } from '@core/ui/i18n/Language'
@@ -8,8 +9,8 @@ import { Client, useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useLanguage } from '@core/ui/storage/language'
 import { useHasPasscodeEncryption } from '@core/ui/storage/passcodeEncryption'
+import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { BookMarkedIcon } from '@lib/ui/icons/BookMarkedIcon'
 import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
@@ -40,18 +41,17 @@ import { useToast } from '@lib/ui/toast/ToastProvider'
 import { FC, ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useCurrentVaultAddresses } from '../vault/state/currentVaultCoins'
-
 type ExtensionSettings = {
   client: Extract<Client, 'extension'>
   expandView: ReactNode
+  insiderOptions: ReactNode
   prioritize: ReactNode
 }
 
 type DesktopSettings = {
   client: Extract<Client, 'desktop'>
   checkUpdate: ReactNode
-  manageMpcLib: ReactNode
+  insiderOptions: ReactNode
 }
 
 const iconSize = 20
@@ -60,13 +60,13 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
   const { t } = useTranslation()
   const [visible, setVisible] = useState(false)
   const { addToast } = useToast()
-  const { openUrl, version } = useCore()
+  const { openUrl } = useCore()
   const navigate = useCoreNavigate()
   const currency = useFiatCurrency()
   const language = useLanguage()
   const shareURL =
     props.client === 'desktop'
-      ? 'https://vultisig.com/download/vultisig'
+      ? desktopDownloadUrl
       : 'https://chromewebstore.google.com/detail/ggafhcdaplkhmmnlbfjpnnkepdfjaelb'
 
   const handleCopy = () => {
@@ -177,7 +177,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
           <SettingsSection title={t('support')}>
             <ListItem
               icon={<MessageCircleQuestionIcon fontSize={iconSize} />}
-              onClick={() => openUrl('https://vultisig.com/faq')}
+              onClick={() => openUrl('https://vultisig.com/support#faq')}
               title={t('faq')}
               hoverable
               showArrow
@@ -234,12 +234,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
           </SettingsSection>
         </PageContent>
         <PageFooter alignItems="center" gap={8}>
-          {props.client === 'extension' && (
-            <UnstyledButton onClick={() => openUrl(shareURL)}>
-              {`VULTISIG EXTENSION V${version}`}
-            </UnstyledButton>
-          )}
-          {props.client === 'desktop' && props.manageMpcLib}
+          {props.insiderOptions}
         </PageFooter>
       </VStack>
       {visible && (

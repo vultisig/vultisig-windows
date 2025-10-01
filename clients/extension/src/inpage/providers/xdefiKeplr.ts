@@ -489,15 +489,7 @@ export class XDEFIKeplrProvider extends Keplr {
       undefined
     )
 
-    await Promise.all(
-      chains.map(chain =>
-        callBackground({
-          getAccount: {
-            chain,
-          },
-        })
-      )
-    )
+    await Promise.all(chains.map(chain => requestAccount(chain)))
   }
 
   getOfflineSigner(

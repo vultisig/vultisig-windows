@@ -14,7 +14,7 @@ export const ManageSendCoinInputField = () => {
 
   return (
     <SendInputContainer>
-      <InputLabel>{t('asset_selection')}</InputLabel>
+      <InputLabel>{t('asset')}</InputLabel>
       <HorizontalLine />
       <SendCoinInput
         value={coin}

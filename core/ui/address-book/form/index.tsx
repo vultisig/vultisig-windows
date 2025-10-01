@@ -141,6 +141,7 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
         <ChainInput
           value={watch('chain')}
           onChange={newChain => setValue('chain', newChain)}
+          options={Object.values(Chain)}
         />
         <VStack gap={8}>
           <TextInput

@@ -1,5 +1,6 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { formatFee } from '@core/chain/tx/fee/format/formatFee'
+import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
@@ -16,7 +17,7 @@ import { OnBackProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { formatAmount } from '@lib/utils/formatAmount'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -116,12 +117,7 @@ export const EditReferralVerify = ({ onBack }: OnBackProp) => {
             </Text>
             <HStack alignItems="center" gap={8}>
               <CoinIcon coin={thorchainCoin} style={{ fontSize: 24 }} />
-              <Text size={17}>
-                {formatTokenAmount(referralAmount)}
-                <Text as="span" color="shy">
-                  {ticker}
-                </Text>
-              </Text>
+              <Text size={17}>{formatAmount(referralAmount, { ticker })}</Text>
             </HStack>
           </AmountWrapper>
           <TxOverviewRow>
@@ -149,10 +145,10 @@ export const EditReferralVerify = ({ onBack }: OnBackProp) => {
               {t('est_network_fee')}
             </Text>
             <Text size={14}>
-              {formatFee({ chain, chainSpecific: chainSpecific.data })}
+              {formatFee({ chain, amount: getFeeAmount(chainSpecific.data) })}
             </Text>
           </TxOverviewRow>
-          <TxOverviewMemo value={memo} />
+          <TxOverviewMemo value={memo} chain={chain} />
         </TxOverviewPanel>
         <VStack
           style={{

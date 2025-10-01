@@ -2,21 +2,22 @@ import { Cosmos } from '@clients/extension/src/inpage/providers/cosmos'
 import { Dash } from '@clients/extension/src/inpage/providers/dash'
 import { Ethereum } from '@clients/extension/src/inpage/providers/ethereum'
 import { MAYAChain } from '@clients/extension/src/inpage/providers/maya'
+import { Plugin } from '@clients/extension/src/inpage/providers/plugin'
 import { Polkadot } from '@clients/extension/src/inpage/providers/polkadot'
 import { Ripple } from '@clients/extension/src/inpage/providers/ripple'
 import { Solana } from '@clients/extension/src/inpage/providers/solana'
+import { registerWallet } from '@clients/extension/src/inpage/providers/solana/register'
 import { THORChain } from '@clients/extension/src/inpage/providers/thorchain'
 import { UTXO } from '@clients/extension/src/inpage/providers/utxo'
 import { XDEFIKeplrProvider } from '@clients/extension/src/inpage/providers/xdefiKeplr'
 import { UtxoChain } from '@core/chain/Chain'
-import { callPopup } from '@core/inpage-provider/popup'
-
-import { registerWallet } from './solana/register'
 
 export const createProviders = () => {
   const cosmosProvider = Cosmos.getInstance()
   const solanaProvider = new Solana()
+
   registerWallet(solanaProvider)
+
   return {
     bitcoin: new UTXO(UtxoChain.Bitcoin),
     bitcoincash: new UTXO(UtxoChain.BitcoinCash),
@@ -28,16 +29,7 @@ export const createProviders = () => {
     ethereum: new Ethereum(),
     keplr: XDEFIKeplrProvider.getInstance(cosmosProvider),
     mayachain: MAYAChain.getInstance(),
-    plugin: {
-      request: async ({ params }: { params: [{ id: string }] }) => {
-        const [{ id }] = params
-        const { joinUrl } = await callPopup({
-          pluginReshare: { pluginId: id },
-        })
-
-        return joinUrl
-      },
-    },
+    plugin: new Plugin(),
     polkadot: Polkadot.getInstance(),
     ripple: Ripple.getInstance(),
     solana: solanaProvider,

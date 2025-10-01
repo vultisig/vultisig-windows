@@ -13,10 +13,14 @@ import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export const ExportVaults: PopupResolver<'exportVaults'> = ({ onFinish }) => {
+export const ExportVaults: PopupResolver<'exportVaults'> = ({
+  onFinish,
+  context: { requestOrigin },
+}) => {
   const { t } = useTranslation()
   const [vaultIds, setVaultIds] = useState<string[]>([])
   const vaults = useVaults()
@@ -42,7 +46,7 @@ export const ExportVaults: PopupResolver<'exportVaults'> = ({ onFinish }) => {
         secondaryControls={<PageHeaderBackButton />}
         title={
           <Text color="contrast" size={18} weight={500}>
-            {t('connect_with_vultisig')}
+            {t('connect_to_site', { site: getUrlBaseDomain(requestOrigin) })}
           </Text>
         }
         hasBorder

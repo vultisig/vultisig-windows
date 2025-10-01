@@ -1,24 +1,49 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { ChildrenProp } from '@lib/ui/props'
-import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
+import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useContext,
+  useState,
+} from 'react'
 
-import { DepositCoinManager } from '../DepositCoinManager'
-import { useDepositAction } from './DepositActionProvider'
+import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
+import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
+import { useCorrectSelectedCoin } from '../hooks/useCorrectSelectedCoin'
 
-export const {
-  useState: useDepositCoin,
-  provider: InternalDepositCoinProvider,
-} = getStateProviderSetup<AccountCoin>('DepositCoin')
+const DepositCoinContext = createContext<
+  [AccountCoin, Dispatch<SetStateAction<AccountCoin>>]
+>(null!)
 
-export const DepositCoinProvider = ({
-  children,
-  initialCoin,
-}: ChildrenProp & { initialCoin: AccountCoin }) => {
-  const [action] = useDepositAction()
+export const DepositCoinProvider = ({ children }: ChildrenProp) => {
+  const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
+  const initialCoin = useCurrentVaultCoin(coinKey)
+  const correctCoin = useCorrectSelectedCoin()
+
+  const state = useStateCorrector(
+    useState(initialCoin),
+    useCallback(
+      value => {
+        const correctedCoin = correctCoin(value)
+
+        if (!correctedCoin || correctedCoin.ticker === value.ticker) {
+          return value
+        }
+
+        return correctedCoin
+      },
+      [correctCoin]
+    )
+  )
 
   return (
-    <InternalDepositCoinProvider initialValue={initialCoin}>
-      <DepositCoinManager action={action}>{children}</DepositCoinManager>
-    </InternalDepositCoinProvider>
+    <DepositCoinContext.Provider value={state}>
+      {children}
+    </DepositCoinContext.Provider>
   )
 }
+
+export const useDepositCoin = () => useContext(DepositCoinContext)

@@ -74,7 +74,7 @@ export const SetServerPasswordStep = ({
       <PageHeader
         primaryControls={<PageHeaderBackButton onClick={onBack} />}
         secondaryControls={<KeygenEducationPrompt />}
-        title={t('vultiserver_password')}
+        title={t('backup_password')}
         hasBorder
       />
       <PageContent gap={8} flexGrow scrollable>

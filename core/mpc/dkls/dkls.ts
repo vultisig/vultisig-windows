@@ -163,7 +163,7 @@ export class DKLS {
     console.log('session id:', this.sessionId)
     this.isKeygenComplete = false
     try {
-      if (this.isInitiateDevice) {
+      if (this.isInitiateDevice && attempt === 0) {
         const threshold = getKeygenThreshold(this.keygenCommittee.length)
         this.setupMessage = KeygenSession.setup(
           undefined,
@@ -260,7 +260,7 @@ export class DKLS {
     }
     try {
       let setupMessage: Uint8Array = new Uint8Array()
-      if (this.isInitiateDevice) {
+      if (this.isInitiateDevice && attempt === 0) {
         if (localKeyshare === null) {
           throw new Error('local keyshare is null')
         }

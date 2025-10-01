@@ -13,7 +13,7 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIcon'
 import { SeparatedByLine } from '@lib/ui/layout/SeparatedByLine'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { HStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
@@ -21,6 +21,7 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 export const KeysignTxOverview = () => {
   const { t } = useTranslation()
@@ -62,9 +63,7 @@ export const KeysignTxOverview = () => {
               {t('tx_hash')}
             </Text>
             <HStack alignItems="center" gap={4}>
-              <Text>
-                <MiddleTruncate text={txHash} width={140} />
-              </Text>
+              <Text as={MiddleTruncate} text={txHash} width={140} />
               <IconButton onClick={() => openUrl(blockExplorerUrl)}>
                 <SquareArrowOutUpRightIcon />
               </IconButton>
@@ -76,20 +75,29 @@ export const KeysignTxOverview = () => {
             </Text>
             <HStack alignItems="center" gap={4}>
               <Text>{name}</Text>
-              <Text color="shy" weight="500">
-                <MiddleTruncate text={`(${address})`} width={80} />
-              </Text>
+              <Text
+                as={MiddleTruncate}
+                color="shy"
+                text={`(${address})`}
+                width={80}
+                weight="500"
+              />
             </HStack>
           </HStack>
           {toAddress && (
-            <VStack gap={4}>
+            <HStack
+              alignItems="center"
+              gap={4}
+              justifyContent="space-between"
+              wrap="nowrap"
+            >
               <Text color="shy" weight="500">
                 {t('to')}
               </Text>
-              <Text>{toAddress}</Text>
-            </VStack>
+              <AddressWrapper>{toAddress}</AddressWrapper>
+            </HStack>
           )}
-          {memo && <TxOverviewMemo value={memo} />}
+          {memo && <TxOverviewMemo value={memo} chain={chain} />}
           <HStack alignItems="center" gap={4} justifyContent="space-between">
             <Text color="shy" weight="500">
               {t('network')}
@@ -108,3 +116,8 @@ export const KeysignTxOverview = () => {
     </>
   )
 }
+
+const AddressWrapper = styled(Text)`
+  overflow: hidden;
+  text-align: right;
+`

@@ -1,7 +1,6 @@
-import { Chain } from '@core/chain/Chain'
 import { formatFee } from '@core/chain/tx/fee/format/formatFee'
-import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
+import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -11,13 +10,9 @@ import { TxFeeRow } from './TxFeeRow'
 
 export const KeysignEstimatedFee = () => {
   const { t } = useTranslation()
-  const payload = useKeysignMessagePayload()
-  const { blockchainSpecific, coin: potentialCoin } = getRecordUnionValue(
-    payload,
-    'keysign'
-  )
-  const coin = fromCommCoin(shouldBePresent(potentialCoin))
-  const { chain } = shouldBePresent(coin)
+  const payload = getRecordUnionValue(useKeysignMessagePayload(), 'keysign')
+  const { blockchainSpecific } = payload
+  const chain = getKeysignChain(payload)
 
   const networkFeesFormatted = useMemo(() => {
     if (!blockchainSpecific.value) {
@@ -25,8 +20,8 @@ export const KeysignEstimatedFee = () => {
     }
 
     return formatFee({
-      chain: chain as Chain,
-      chainSpecific: blockchainSpecific,
+      chain,
+      amount: getFeeAmount(blockchainSpecific),
     })
   }, [blockchainSpecific, chain])
 

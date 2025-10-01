@@ -9,5 +9,14 @@ export const languageName: Record<Language, string> = {
   es: 'Español',
   it: 'Italiano',
   hr: 'Hrvatski',
+  pt: 'Português',
+}
+
+export const languageRegion: Record<Language, string> = {
+  en: 'United Kingdom',
+  de: 'German',
+  es: 'Spanish',
+  it: 'Italian',
+  hr: 'Croatian',
   pt: 'Portuguese',
 }

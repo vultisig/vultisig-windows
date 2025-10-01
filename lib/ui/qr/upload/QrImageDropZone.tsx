@@ -1,6 +1,7 @@
 import { ComputerUploadIcon } from '@lib/ui/icons/ComputerUploadIcon'
 import { InteractiveDropZoneContainer } from '@lib/ui/inputs/upload/DropZoneContainer'
 import { DropZoneContent } from '@lib/ui/inputs/upload/DropZoneContent'
+import { useEffect } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useTranslation } from 'react-i18next'
 
@@ -9,7 +10,7 @@ type QrImageDropZoneProps = {
 }
 
 export const QrImageDropZone = ({ onFinish }: QrImageDropZoneProps) => {
-  const { getRootProps, getInputProps } = useDropzone({
+  const { getRootProps, getInputProps, inputRef } = useDropzone({
     accept: {
       'image/jpeg': ['.jpeg', '.jpg'],
       'image/png': ['.png'],
@@ -26,6 +27,25 @@ export const QrImageDropZone = ({ onFinish }: QrImageDropZoneProps) => {
       }
     },
   })
+
+  useEffect(() => {
+    const input = inputRef.current
+
+    if (!input) return
+
+    const handlePaste = async (event: ClipboardEvent) => {
+      if (event.clipboardData?.files) {
+        input.files = event.clipboardData.files
+        input.dispatchEvent(new Event('change', { bubbles: true }))
+      }
+    }
+
+    window.addEventListener('paste', handlePaste)
+
+    return () => {
+      window.removeEventListener('paste', handlePaste)
+    }
+  }, [inputRef])
 
   const { t } = useTranslation()
 

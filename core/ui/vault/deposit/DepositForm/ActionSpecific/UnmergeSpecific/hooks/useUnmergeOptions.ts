@@ -20,7 +20,7 @@ import { makeUnmergeSpecificPlaceholderCoin } from '../utils'
 export const useUnmergeOptions = (): AccountCoin[] => {
   const coins = useCurrentVaultChainCoins(Chain.THORChain)
   const address = useCurrentVaultAddresses()[Chain.THORChain]
-  const { data: balances = [] } = useMergeableTokenBalancesQuery(address)
+  const { data: { balances = [] } = {} } = useMergeableTokenBalancesQuery()
 
   const tokens = useMemo(() => {
     const kujiraTokens = coins.filter(

@@ -15,8 +15,7 @@ export const UnmergeTokenExplorer = ({
   onClose,
 }: OnCloseProp & ValueProp<AccountCoin[]>) => {
   const [coin, setDepositCoin] = useDepositCoin()
-  const { address } = coin
-  const { data: balances = [] } = useMergeableTokenBalancesQuery(address)
+  const { data: { balances = [] } = {} } = useMergeableTokenBalancesQuery()
   const { t } = useTranslation()
 
   return (

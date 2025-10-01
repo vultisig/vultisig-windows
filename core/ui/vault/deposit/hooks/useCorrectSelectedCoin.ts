@@ -1,116 +1,92 @@
-import { Chain } from '@core/chain/Chain'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { findByTicker } from '@core/chain/coin/utils/findByTicker'
-import { useMemo } from 'react'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { match } from '@lib/utils/match'
+import { useCallback } from 'react'
 
-import { ChainAction } from '../ChainAction'
+import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 import { isStakeableCoin } from '../config'
 import { useUnmergeOptions } from '../DepositForm/ActionSpecific/UnmergeSpecific/hooks/useUnmergeOptions'
+import { useDepositAction } from '../providers/DepositActionProvider'
 import { useMergeOptions } from './useMergeOptions'
 import { useMintOptions } from './useMintOptions'
 import { useRedeemOptions } from './useRedeemOptions'
 
-type Props = {
-  chain?: Chain
-  action: ChainAction
-  selected?: AccountCoin
-  coins?: AccountCoin[]
-}
-
-export const useCorrectSelectedCoin = ({
-  chain,
-  action,
-  selected,
-  coins,
-}: Props) => {
+export const useCorrectSelectedCoin = () => {
+  const [action] = useDepositAction()
+  const coins = useCurrentVaultCoins()
   const unmergeOptions = useUnmergeOptions()
   const mergeOptions = useMergeOptions()
   const redeemOptions = useRedeemOptions()
   const mintOptions = useMintOptions()
 
-  const isReady = useMemo(() => {
-    if (!coins || !selected) return false
-    switch (action) {
-      case 'mint':
-        return mintOptions.length > 0
-      case 'redeem':
-        return redeemOptions.length > 0
-      case 'merge':
-        return mergeOptions.length > 0
-      case 'unmerge':
-        return unmergeOptions.length > 0
-      default:
-        return true
-    }
-  }, [
-    action,
-    coins,
-    selected,
-    mergeOptions,
-    mintOptions,
-    redeemOptions,
-    unmergeOptions,
-  ])
+  return useCallback(
+    (currentDepositCoin: AccountCoin) => {
+      const fallbackStakeableCoin = coins.find(
+        coin =>
+          coin.chain === currentDepositCoin.chain &&
+          isStakeableCoin(coin.ticker)
+      )
 
-  const correctedCoin = useMemo(() => {
-    if (!isReady || !coins || !selected) return undefined
+      const selectStakeableCoin = () => {
+        if (!fallbackStakeableCoin) {
+          throw new Error('No stakeable coin found')
+        }
 
-    const currentTicker = selected.ticker
-
-    if (
-      action === 'stake_ruji' ||
-      action === 'unstake_ruji' ||
-      action === 'withdraw_ruji_rewards'
-    ) {
-      return findByTicker({ coins, ticker: 'RUJI' }) ?? selected
-    }
-
-    if (action === 'mint') {
-      const ok = findByTicker({ coins: mintOptions, ticker: currentTicker })
-      return ok ?? mintOptions[0] ?? selected
-    }
-
-    if (action === 'redeem') {
-      const ok = findByTicker({ coins: redeemOptions, ticker: currentTicker })
-      return ok ?? redeemOptions[0] ?? selected
-    }
-
-    if (action === 'bond') {
-      if (currentTicker !== 'RUNE') {
-        return findByTicker({ coins, ticker: 'RUNE' }) ?? selected
+        return isStakeableCoin(currentDepositCoin.ticker)
+          ? currentDepositCoin
+          : fallbackStakeableCoin
       }
-      return selected
-    }
 
-    if (action === 'merge') {
-      const ok = findByTicker({ coins: mergeOptions, ticker: currentTicker })
-      return ok ?? mergeOptions[0] ?? selected
-    }
+      const ticker = currentDepositCoin.ticker
+      const potentialRUNECoin = findByTicker({ coins, ticker: 'RUNE' })
+      const potentialCACAOCoin = findByTicker({ coins, ticker: 'CACAO' })
 
-    if (action === 'unmerge') {
-      const ok = findByTicker({ coins: unmergeOptions, ticker: currentTicker })
-      return ok ?? unmergeOptions[0] ?? selected
-    }
-
-    if (action === 'stake' || action === 'unstake') {
-      if (chain !== Chain.THORChain) return selected
-      return currentTicker && isStakeableCoin(currentTicker)
-        ? selected
-        : (findByTicker({ coins, ticker: 'TCY' }) ?? selected)
-    }
-
-    return selected
-  }, [
-    isReady,
-    coins,
-    selected,
-    action,
-    chain,
-    mergeOptions,
-    mintOptions,
-    redeemOptions,
-    unmergeOptions,
-  ])
-
-  return { correctedCoin, isReady }
+      return match(action, {
+        ibc_transfer: () => currentDepositCoin,
+        switch: () => currentDepositCoin,
+        bond_with_lp: () => shouldBePresent(potentialCACAOCoin),
+        unbond_with_lp: () => shouldBePresent(potentialCACAOCoin),
+        vote: () => shouldBePresent(potentialRUNECoin),
+        custom: () => shouldBePresent(potentialRUNECoin),
+        mint: () => {
+          const currentCoin = findByTicker({
+            coins: mintOptions,
+            ticker,
+          })
+          return shouldBePresent(currentCoin || mintOptions[0])
+        },
+        redeem: () => {
+          const currentCoin = findByTicker({
+            coins: redeemOptions,
+            ticker,
+          })
+          return shouldBePresent(currentCoin || redeemOptions[0])
+        },
+        bond: () => shouldBePresent(potentialRUNECoin),
+        merge: () => {
+          const currentCoin = findByTicker({
+            coins: mergeOptions,
+            ticker,
+          })
+          return shouldBePresent(currentCoin || mergeOptions[0])
+        },
+        unmerge: () => {
+          const currentCoin = findByTicker({
+            coins: unmergeOptions,
+            ticker,
+          })
+          return shouldBePresent(currentCoin || unmergeOptions[0])
+        },
+        stake: selectStakeableCoin,
+        withdraw_ruji_rewards: () => currentDepositCoin,
+        unstake: selectStakeableCoin,
+        unbond: () => shouldBePresent(findByTicker({ coins, ticker: 'RUNE' })),
+        leave: () =>
+          findByTicker({ coins, ticker: 'RUNE' }) ||
+          findByTicker({ coins, ticker: 'CACAO' }),
+      })
+    },
+    [action, coins, mergeOptions, mintOptions, redeemOptions, unmergeOptions]
+  )
 }

@@ -1,18 +1,24 @@
-export type ParsedResult =
+import { Coin } from '@core/chain/coin/Coin'
+
+export type SolanaTxData =
   | {
-      kind: 'swap'
-      authority: string
-      inputMint: string
-      outputMint: string
-      inAmount: string
-      outAmount: string
+      swap: {
+        authority: string
+        inputCoin: Coin
+        outputCoin: Coin
+        inAmount: string
+        outAmount: string
+        data: string
+        swapProvider: string
+      }
     }
   | {
-      kind: 'transfer'
-      authority: string
-      inputMint: string
-      inAmount: string
-      receiverAddress: string
+      transfer: {
+        authority: string
+        inputCoin: Coin
+        inAmount: string
+        receiverAddress: string
+      }
     }
 
 export type AddressTableLookup = {

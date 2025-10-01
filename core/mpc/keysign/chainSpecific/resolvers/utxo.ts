@@ -1,10 +1,8 @@
 import { create } from '@bufbuild/protobuf'
-import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { UtxoChain } from '@core/chain/Chain'
 import { getUtxoStats } from '@core/chain/chains/utxo/client/getUtxoStats'
 import { getCoinBalance } from '@core/chain/coin/balance'
 import { adjustByteFee } from '@core/chain/tx/fee/utxo/adjustByteFee'
-import { UtxoFeeSettings } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
 import {
   UTXOSpecific,
   UTXOSpecificSchema,
@@ -23,26 +21,25 @@ const getByteFee = async (chain: UtxoChain) => {
   return data.suggested_transaction_fee_per_byte_sat
 }
 
-export const getUtxoSpecific: ChainSpecificResolver<
-  UTXOSpecific,
-  UtxoFeeSettings
-> = async ({ coin, feeSettings, amount, psbt }) => {
+export const getUtxoSpecific: ChainSpecificResolver<UTXOSpecific> = async ({
+  coin,
+  byteFeeMultiplier = 1,
+  amount,
+  psbt,
+}) => {
   const chain = coin.chain as UtxoChain
 
-  let byteFee = await getByteFee(chain)
-  if (feeSettings) {
-    byteFee = adjustByteFee(byteFee, feeSettings)
-  }
+  const byteFee = adjustByteFee(await getByteFee(chain), byteFeeMultiplier)
 
   const result = create(UTXOSpecificSchema, {
     byteFee: byteFee.toString(),
+
     psbt: psbt?.toBase64(),
   })
 
   if (amount) {
     const balance = await getCoinBalance(coin)
-    const requested = toChainAmount(amount, coin.decimals)
-    result.sendMaxAmount = balance - requested <= dustStats
+    result.sendMaxAmount = balance - amount <= dustStats
   }
 
   return result

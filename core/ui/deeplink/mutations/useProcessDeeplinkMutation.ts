@@ -4,6 +4,7 @@ import {
   tssMessageSchema,
   TssType,
 } from '@core/mpc/types/utils/tssType'
+import { LibType } from '@core/mpc/types/vultisig/keygen/v1/lib_type_message_pb'
 import {
   KeysignMessageSchema,
   KeysignPayloadSchema,
@@ -34,7 +35,7 @@ type DeeplinkParams = DeeplinkSharedData & {
 export const useProcessDeeplinkMutation = () => {
   const navigate = useCoreNavigate()
 
-  const { getMpcServerUrl } = useCore()
+  const { getMpcServerUrl, mpcDevice } = useCore()
 
   return useMutation({
     mutationFn: async (url: string) => {
@@ -49,7 +50,13 @@ export const useProcessDeeplinkMutation = () => {
               tssMessageSchema[queryParams.tssType],
               payload
             )
-
+            const libType =
+              'libType' in keygenMsg ? keygenMsg.libType : LibType.GG20
+            if (libType === LibType.GG20 && mpcDevice === 'extension') {
+              throw new Error(
+                'GG20 vault type is not supported on extension. Please use desktop app or mobile app.'
+              )
+            }
             const keygenOperation = fromTssType(queryParams.tssType)
             navigate(
               {

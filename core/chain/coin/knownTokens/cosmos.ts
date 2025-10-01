@@ -42,6 +42,12 @@ export const knownCosmosTokens: Record<
       decimals: 8,
       priceProviderId: 'rujira',
     },
+    'x/staking-tcy': {
+      ticker: 'sTCY',
+      logo: 'tcy.png',
+      decimals: 8,
+      priceProviderId: 'tcy',
+    },
     ...kujiraCoinsOnThorChain,
     ...yieldBearingThorChainTokens,
   },
@@ -162,6 +168,13 @@ export const knownCosmosTokens: Record<
       ...kujiraCoinsMigratedToThorChainMetadata.lvn,
       decimals: 6,
     },
+    'factory/kujira13x2l25mpkhwnwcwdzzd34cr8fyht9jlj7xu9g4uffe36g3fmln8qkvm3qn/uauto':
+      {
+        ticker: 'AUTO',
+        logo: 'auto.png',
+        decimals: 6,
+        priceProviderId: 'auto-2',
+      },
   },
   [Chain.Terra]: {
     terra13j2k5rfkg0qhk58vz63cze0uze4hwswlrfnm0fa4rnyggjyfrcnqcrs5z2: {

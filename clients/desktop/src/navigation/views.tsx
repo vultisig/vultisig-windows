@@ -1,28 +1,27 @@
+import { CheckUpdate } from '@clients/desktop/src/components/check-update'
+import { ManageMpcLib } from '@clients/desktop/src/components/manage-mpc-lib'
+import { AppViewId } from '@clients/desktop/src/navigation/AppView'
+import { FaqVaultPage } from '@clients/desktop/src/pages/vaultSettings/vaultFaq/FaqVaultPage'
+import { VaultPage } from '@clients/desktop/src/vault/components/VaultPage'
+import { ImportVaultFromFilePage } from '@clients/desktop/src/vault/import/components/ImportVaultFromFilePage'
+import { JoinKeygenPage } from '@clients/desktop/src/vault/keygen/join/JoinKeygenPage'
+import { JoinKeysignPage } from '@clients/desktop/src/vault/keysign/join/JoinKeysignPage'
+import { StartKeysignPage } from '@clients/desktop/src/vault/keysign/start/StartKeysignPage'
+import { MigrateVaultPage } from '@clients/desktop/src/vault/migrate/MigrateVaultPage'
+import { FastReshareVaultPage } from '@clients/desktop/src/vault/reshare/fast/FastReshareVaultPage'
+import { SecureReshareVaultPage } from '@clients/desktop/src/vault/reshare/secure/SecureReshareVaultPage'
+import { SetupFastVaultPage } from '@clients/desktop/src/vault/setup/fast/SetupFastVaultPage'
+import { SetupSecureVaultPage } from '@clients/desktop/src/vault/setup/secure/SetupSecureVaultPage'
+import { SetupVaultPageController } from '@clients/desktop/src/vault/setup/SetupVaultPageController'
+import { CheckUpdatePage } from '@clients/desktop/src/versioning/CheckUpdatePage'
 import { SharedViewId, sharedViews } from '@core/ui/navigation/sharedViews'
 import { OnboardingPage } from '@core/ui/onboarding/components/OnboardingPage'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
-import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProivder'
+import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProvider'
 import { SettingsPage } from '@core/ui/settings'
 import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPage'
 import { ShareVaultPage } from '@core/ui/vault/share/ShareVaultPage'
 import { Views } from '@lib/ui/navigation/Views'
-
-import { CheckUpdate } from '../components/check-update'
-import { ManageMpcLib } from '../components/manage-mpc-lib'
-import FaqVaultPage from '../pages/vaultSettings/vaultFaq/FaqVaultPage'
-import { VaultPage } from '../vault/components/VaultPage'
-import { ImportVaultFromFilePage } from '../vault/import/components/ImportVaultFromFilePage'
-import { JoinKeygenPage } from '../vault/keygen/join/JoinKeygenPage'
-import { JoinKeysignPage } from '../vault/keysign/join/JoinKeysignPage'
-import { StartKeysignPage } from '../vault/keysign/start/StartKeysignPage'
-import { MigrateVaultPage } from '../vault/migrate/MigrateVaultPage'
-import { FastReshareVaultPage } from '../vault/reshare/fast/FastReshareVaultPage'
-import { SecureReshareVaultPage } from '../vault/reshare/secure/SecureReshareVaultPage'
-import { SetupFastVaultPage } from '../vault/setup/fast/SetupFastVaultPage'
-import { SetupSecureVaultPage } from '../vault/setup/secure/SetupSecureVaultPage'
-import { SetupVaultPageController } from '../vault/setup/SetupVaultPageController'
-import { CheckUpdatePage } from '../versioning/CheckUpdatePage'
-import { AppViewId } from './AppView'
 
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   checkUpdate: CheckUpdatePage,
@@ -44,7 +43,7 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
     <SettingsPage
       client="desktop"
       checkUpdate={<CheckUpdate />}
-      manageMpcLib={<ManageMpcLib />}
+      insiderOptions={<ManageMpcLib />}
     />
   ),
   setupFastVault: SetupFastVaultPage,

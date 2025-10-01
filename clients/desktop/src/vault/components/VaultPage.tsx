@@ -42,13 +42,11 @@ export const VaultPage = () => {
           }
           title={
             <PageHeaderToggleTitle
-              value={false}
-              onChange={() => {
+              value={name}
+              onClick={() => {
                 navigate({ id: 'vaults' })
               }}
-            >
-              {name}
-            </PageHeaderToggleTitle>
+            />
           }
         />
 
