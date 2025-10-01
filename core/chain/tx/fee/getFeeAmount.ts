@@ -2,12 +2,13 @@ import { Chain } from '@core/chain/Chain'
 import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord'
 import { polkadotConfig } from '@core/chain/chains/polkadot/config'
 import { solanaConfig } from '@core/chain/chains/solana/solanaConfig'
-import { suiAverageSendGas } from '@core/chain/chains/sui/config'
 import { tonConfig } from '@core/chain/chains/ton/config'
 import { rippleTxFee } from '@core/chain/tx/fee/ripple'
-import { nativeTxFeeRune } from '@core/chain/tx/fee/thorchain/config'
 import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
+
+import { suiAverageSendGas } from '../../chains/sui/config'
+import { nativeTxFeeRune } from './thorchain/config'
 
 export const getFeeAmount = (chainSpecific: KeysignChainSpecific): bigint =>
   matchDiscriminatedUnion(chainSpecific, 'case', 'value', {
