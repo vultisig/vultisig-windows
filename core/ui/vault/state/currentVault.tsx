@@ -21,7 +21,19 @@ export const { useValue: useCurrentVault, provider: CurrentVaultProvider } =
 export const useCurrentVaultSecurityType = (): VaultSecurityType => {
   const { signers, localPartyId } = useCurrentVault()
 
-  return hasServer(signers) && !isServer(localPartyId) ? 'fast' : 'secure'
+  if (hasServer(signers)) {
+    if (isServer(localPartyId)) {
+      return 'secure'
+    }
+
+    const nonServerSignerCount = signers.filter(
+      signer => !isServer(signer)
+    ).length
+
+    return nonServerSignerCount < 2 ? 'fast' : 'secure'
+  }
+
+  return 'secure'
 }
 
 export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
