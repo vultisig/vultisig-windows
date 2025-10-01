@@ -1,4 +1,3 @@
-import { Tx } from '@core/chain/tx'
 import { usePopupContext } from '@core/inpage-provider/popup/view/state/context'
 import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
@@ -8,26 +7,23 @@ import { BadgeCheckIcon } from '@lib/ui/icons/BadgeCheckIcon'
 import { SafeImage } from '@lib/ui/images/SafeImage'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { useViewState } from '@lib/ui/navigation/hooks/useViewState'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { GradientText, Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { MiddleTruncate } from '@lib/ui/truncate'
-import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-type ResultProps = { result: { txs: Tx[] } | { signature: string } }
-
-export const Result = ({ result }: ResultProps) => {
+export const Result = () => {
   const { t } = useTranslation()
   const { chain } = usePopupInput<'pluginConnectSign'>()
   const { requestFavicon, requestOrigin } =
     usePopupContext<'pluginConnectSign'>()
   const address = useCurrentVaultAddress(chain)
-  const signature = getRecordUnionValue(result, 'signature')
-
+  const [{ signature }] = useViewState<{ signature?: string }>()
   return (
     <>
       <PageContent gap={16} scrollable>
