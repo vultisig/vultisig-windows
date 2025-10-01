@@ -971,7 +971,7 @@ export const en = {
   took_too_long_to_respond: 'Took too long to respond',
   backup_password: 'Backup Password',
   backup_without_password: 'Backup without password',
-  use_password: 'Use password',
+  backup_with_password: 'Backup with password',
   upgrade_vault: 'Upgrade your vault',
   upgrade_now: 'Upgrade now',
   got_it: 'Got it',
@@ -983,10 +983,14 @@ export const en = {
     "<b>You'll create new Vault Share backups</b>, store them as you did before",
   upgrade_success: 'Vault upgraded <b>successfully</b>',
   go_to_vault: 'Go to vault',
-  backup_password_prompt:
-    'Do you want to add a password to your device vault shares?',
-  backup_password_info:
-    "We recommend that you do not set a backup password for device vault shares-your data is safe if the backups are properly stored in different locations, which is already a significant protection. Remember, backup passwords can't be recovered if you forget them. Your choice!",
+  backup_password_confirmation_title:
+    'Do you want to encrypt your backup with a password?',
+  backup_password_info_secure_without_password:
+    'By default, your backup is <b>secure without</b> an extra password, since you store Vault shares in different locations.',
+  backup_password_info_encrypt_with_password:
+    'If you choose to add a password, this will be used to <b>encrypt</b> the backup file.',
+  backup_password_info_cannot_be_reset:
+    'Remember: if you forget your vault password, it <b>cannot</b> be reset or recovered.',
   upgrade_your_vault_now: 'Upgrade your vault now',
   version: 'Version',
   vulti_share_not_saved_hint:

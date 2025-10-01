@@ -71,7 +71,6 @@ export const hr = {
     'Mala napojnica za ubrzanje vaše transakcije. Veće napojnice mogu ubrzati obradu.',
   you_are_sending: 'Šalješ',
   referrals_default_title: 'Preporuka',
-  ypur_referrals: 'Tvoje preporuke',
   vault_selected: 'Vault odabran',
   title_2: 'Vultisig - Preporuke',
   header_tooltip_title: 'Program Preporuka',
@@ -857,11 +856,6 @@ export const hr = {
   took_too_long_to_respond: 'Predugo je trebalo za odgovor',
   backup_password: 'Lozinka sigurnosne kopije',
   backup_without_password: 'Sigurnosna kopija bez lozinke',
-  use_password: 'Koristi lozinku',
-  backup_password_prompt:
-    'Želite li dodati lozinku dijeljenjima trezora uređaja?',
-  backup_password_info:
-    'Preporučujemo da ne postavljate sigurnosnu lozinku za dijeljenje trezora uređaja - vaši su podaci sigurni ako su sigurnosne kopije pravilno pohranjene na različitim lokacijama, što je već značajna zaštita. Upamtite, sigurnosne lozinke nije moguće vratiti ako ih zaboravite. Vaš izbor!',
   upgrade_your_vault_now: 'Nadogradite svoj trezor sada',
   upgrade_vault: 'Nadogradite svoj trezor',
   upgrade_now: 'Nadogradite sada',
@@ -1066,4 +1060,19 @@ export const hr = {
   install_app: 'Instaliraj aplikaciju',
   permissions: 'Dozvole',
   same_vault_share: 'Isti trezorski udio',
+  referrals_create_page_title: 'Vultisig - Preporuke',
+  your_referrals: 'Vaše preporuke',
+  save_swap_fees_with_referral:
+    'Uštedite <blue>10%</blue> na zamjenama - Dodajte preporuku',
+  create_own_referral:
+    'Izradite vlastiti kod i zaradite <blue>20%</blue> na preporučenim zamjenama',
+  backup_with_password: 'Sigurnosna kopija s lozinkom',
+  backup_password_confirmation_title:
+    'Želite li šifrirati sigurnosnu kopiju lozinkom?',
+  backup_password_info_secure_without_password:
+    'Prema zadanim postavkama, vaša sigurnosna kopija je <b>sigurna bez</b> dodatne lozinke jer dijeljene datoteke Vaulta pohranjujete na različitim lokacijama.',
+  backup_password_info_encrypt_with_password:
+    'Ako odaberete dodati lozinku, ona će se koristiti za <b>šifriranje</b> sigurnosne kopije datoteke.',
+  backup_password_info_cannot_be_reset:
+    'Zapamtite: ako zaboravite lozinku za trezor, ona se *ne može* resetirati ili oporaviti.',
 }
