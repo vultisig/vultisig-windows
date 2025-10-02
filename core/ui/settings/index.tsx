@@ -18,6 +18,7 @@ import { DiscordIcon } from '@lib/ui/icons/DiscordIcon'
 import { FacebookIcon } from '@lib/ui/icons/FacebookIcon'
 import { FileTextIcon } from '@lib/ui/icons/FileTextIcon'
 import { GithubIcon } from '@lib/ui/icons/GithubIcon'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { LanguagesIcon } from '@lib/ui/icons/LanguagesIcon'
 import { LinkedinIcon } from '@lib/ui/icons/LinkedinIcon'
 import { LockKeyholeIcon } from '@lib/ui/icons/LockKeyholeIcon'
@@ -28,7 +29,7 @@ import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { ShareTwoIcon } from '@lib/ui/icons/ShareTwoIcon'
 import { ShieldCheckIcon } from '@lib/ui/icons/ShieldCheckIcon'
 import { TwitterIcon } from '@lib/ui/icons/TwitterIcon'
-import { VultisigLogoIcon } from '@lib/ui/icons/VultisigLogoIcon'
+import { VultisigLeanLogoIcon } from '@lib/ui/icons/VultisigLeanLogoIcon'
 import { WhatsAppIcon } from '@lib/ui/icons/WhatsAppIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
@@ -37,9 +38,11 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { useToast } from '@lib/ui/toast/ToastProvider'
 import { FC, ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 type ExtensionSettings = {
   client: Extract<Client, 'extension'>
@@ -104,18 +107,24 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
           <SettingsSection title={t('vault')}>
             {props.client === 'extension' && props.prioritize}
             <ListItem
-              icon={<SettingsIcon fontSize={iconSize} />}
+              icon={
+                <ListItemIconWrapper>
+                  <SettingsIcon />
+                </ListItemIconWrapper>
+              }
               onClick={() => navigate({ id: 'vaultSettings' })}
               title={t('vault_settings')}
-              hoverable
               showArrow
             />
-            <ListItem
-              icon={<VultisigLogoIcon fontSize={iconSize} />}
+            <PrimaryListItem
+              icon={
+                <IconWrapper size={iconSize}>
+                  <VultisigLeanLogoIcon />
+                </IconWrapper>
+              }
               onClick={() => navigate({ id: 'airdropRegister' })}
-              status="success"
               title={t('register_your_vaults')}
-              hoverable
+              status="success"
               showArrow
             />
           </SettingsSection>
@@ -123,33 +132,45 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
           <SettingsSection title={t('general')}>
             <ListItem
               extra={languageName[language]}
-              icon={<LanguagesIcon fontSize={iconSize} />}
+              icon={
+                <ListItemIconWrapper>
+                  <LanguagesIcon />
+                </ListItemIconWrapper>
+              }
               onClick={() => navigate({ id: 'languageSettings' })}
               title={t('language')}
-              hoverable
               showArrow
             />
             <ListItem
               extra={currency.toUpperCase()}
-              icon={<CircleDollarSignIcon fontSize={iconSize} />}
+              icon={
+                <ListItemIconWrapper>
+                  <CircleDollarSignIcon />
+                </ListItemIconWrapper>
+              }
               onClick={() => navigate({ id: 'currencySettings' })}
               title={t('currency')}
-              hoverable
               showArrow
             />
             <ListItem
-              icon={<BookMarkedIcon fontSize={iconSize} />}
+              icon={
+                <ListItemIconWrapper>
+                  <BookMarkedIcon />
+                </ListItemIconWrapper>
+              }
               onClick={() => navigate({ id: 'addressBook' })}
               title={t('address_book')}
-              hoverable
               showArrow
             />
             {areReferralEnabled && (
               <ListItem
-                icon={<MegaphoneIcon fontSize={iconSize} />}
+                icon={
+                  <ListItemIconWrapper>
+                    <MegaphoneIcon />
+                  </ListItemIconWrapper>
+                }
                 onClick={() => navigate({ id: 'referral' })}
                 title={t('referral_code')}
-                hoverable
                 showArrow
               />
             )}
@@ -157,18 +178,24 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
           </SettingsSection>
           <SettingsSection title={t('security')}>
             <ListItem
-              icon={<ShieldCheckIcon fontSize={iconSize} />}
+              icon={
+                <ListItemIconWrapper>
+                  <ShieldCheckIcon />
+                </ListItemIconWrapper>
+              }
               onClick={() => navigate({ id: 'managePasscodeEncryption' })}
               title={t('security')}
-              hoverable
               showArrow
             />
             {hasPasscodeEncryption && (
               <ListItem
-                icon={<LockKeyholeIcon fontSize={iconSize} />}
+                icon={
+                  <ListItemIconWrapper>
+                    <LockKeyholeIcon />
+                  </ListItemIconWrapper>
+                }
                 onClick={() => navigate({ id: 'passcodeAutoLock' })}
                 title={t('lock_time')}
-                hoverable
                 showArrow
               />
             )}
@@ -176,59 +203,80 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
           </SettingsSection>
           <SettingsSection title={t('support')}>
             <ListItem
-              icon={<MessageCircleQuestionIcon fontSize={iconSize} />}
+              icon={
+                <ListItemIconWrapper>
+                  <MessageCircleQuestionIcon />
+                </ListItemIconWrapper>
+              }
               onClick={() => openUrl('https://vultisig.com/support#faq')}
               title={t('faq')}
-              hoverable
               showArrow
             />
             {props.client === 'desktop' && props.checkUpdate}
             <ListItem
-              icon={<ShareTwoIcon fontSize={iconSize} />}
+              icon={
+                <ListItemIconWrapper>
+                  <ShareTwoIcon />
+                </ListItemIconWrapper>
+              }
               onClick={() => setVisible(true)}
               title={t('share_app')}
-              hoverable
               showArrow
             />
           </SettingsSection>
           <SettingsSection title={t('vultisig_community')}>
             <ListItem
-              icon={<TwitterIcon fontSize={iconSize} />}
+              icon={
+                <ListItemIconWrapper>
+                  <TwitterIcon />
+                </ListItemIconWrapper>
+              }
               onClick={() => openUrl('https://x.com/vultisig')}
               title={t('twitter')}
-              hoverable
               showArrow
             />
             <ListItem
-              icon={<DiscordIcon fontSize={iconSize} />}
+              icon={
+                <ListItemIconWrapper>
+                  <DiscordIcon />
+                </ListItemIconWrapper>
+              }
               onClick={() => openUrl('https://discord.gg/ngvW8tRRfB')}
               title={t('discord')}
-              hoverable
               showArrow
             />
             <ListItem
-              icon={<GithubIcon fontSize={iconSize} />}
+              icon={
+                <ListItemIconWrapper>
+                  <GithubIcon />
+                </ListItemIconWrapper>
+              }
               onClick={() =>
                 openUrl('https://github.com/vultisig/vultisig-windows')
               }
               title={t('github')}
-              hoverable
               showArrow
             />
           </SettingsSection>
           <SettingsSection title={t('legal')}>
             <ListItem
-              icon={<ShieldCheckIcon fontSize={iconSize} />}
+              icon={
+                <ListItemIconWrapper>
+                  <ShieldCheckIcon />
+                </ListItemIconWrapper>
+              }
               onClick={() => openUrl('https://vultisig.com/privacy')}
               title={t('privacy_policy')}
-              hoverable
               showArrow
             />
             <ListItem
-              icon={<FileTextIcon fontSize={iconSize} />}
+              icon={
+                <ListItemIconWrapper>
+                  <FileTextIcon />
+                </ListItemIconWrapper>
+              }
               onClick={() => openUrl('https://vultisig.com/termofservice')}
               title={t('terms_of_service')}
-              hoverable
               showArrow
             />
           </SettingsSection>
@@ -311,3 +359,12 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
     </>
   )
 }
+
+const PrimaryListItem = styled(ListItem)`
+  background-color: ${getColor('buttonPrimary')};
+`
+
+const ListItemIconWrapper = styled(IconWrapper)`
+  font-size: 20px;
+  color: ${getColor('primaryAlt')};
+`
