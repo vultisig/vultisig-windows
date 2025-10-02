@@ -69,10 +69,7 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
     }
 
     if (Object.keys(constraints).length > 0) {
-      void withFallback(
-        attempt(() => track.applyConstraints(constraints)),
-        undefined
-      )
+      attempt(() => track.applyConstraints(constraints))
     }
   }, [stream])
 
