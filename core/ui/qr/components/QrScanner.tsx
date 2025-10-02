@@ -10,7 +10,7 @@ import { Center } from '@lib/ui/layout/Center'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { attempt, withFallback } from '@lib/utils/attempt'
+import { attempt } from '@lib/utils/attempt'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -115,20 +115,17 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
           canvas.width = bitmap.width
           canvas.height = bitmap.height
 
-          const scanData = withFallback(
-            attempt(() =>
-              readQrCode({
-                canvasContext: context,
-                image: bitmap,
-              })
-            ),
-            undefined
+          const { data } = attempt(() =>
+            readQrCode({
+              canvasContext: context,
+              image: bitmap,
+            })
           )
 
-          if (scanData) {
+          if (data) {
             stopped = true
             stream.getTracks().forEach(track => track.stop())
-            onFinish(scanData)
+            onFinish(data)
             return
           }
         }
@@ -152,20 +149,17 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
       canvas.width = video.videoWidth
       canvas.height = video.videoHeight
 
-      const scanData = withFallback(
-        attempt(() =>
-          readQrCode({
-            canvasContext: context,
-            image: video,
-          })
-        ),
-        undefined
+      const { data } = attempt(() =>
+        readQrCode({
+          canvasContext: context,
+          image: video,
+        })
       )
 
-      if (scanData) {
+      if (data) {
         stopped = true
         stream.getTracks().forEach(track => track.stop())
-        onFinish(scanData)
+        onFinish(data)
       } else {
         animationFrameId = requestAnimationFrame(scanFallback)
       }
