@@ -52,13 +52,13 @@ export class UTXO extends EventEmitter {
     }
     return [address]
   }
-
+  // Keplr
   async signPSBT(
     psbt: Buffer,
     {
       inputsToSign,
     }: {
-      inputsToSign: {
+      inputsToSign?: {
         address: string
         signingIndexes: number[]
         sigHash?: number
@@ -79,6 +79,35 @@ export class UTXO extends EventEmitter {
     const rebuiltPsbt = rebuildPsbtWithPartialSigsFromWC(data, psbt)
     return rebuiltPsbt
   }
+  // CTRL
+  async signPsbt({
+    allowedSignHash = 1,
+    psbt,
+    broadcast = false,
+    signInputs,
+  }: {
+    allowedSignHash?: number
+    psbt: string
+    broadcast?: boolean
+    signInputs?: Record<string, number[]>
+  }) {
+    let inputsToSign = undefined
+    if (signInputs) {
+      inputsToSign = Object.entries(signInputs).map(
+        ([address, signingIndexes]) => ({
+          address,
+          signingIndexes,
+          sigHash: allowedSignHash,
+        })
+      )
+    }
+
+    return this.signPSBT(
+      Buffer.from(psbt, 'base64'),
+      { inputsToSign },
+      broadcast
+    )
+  }
 
   async request(data: RequestInput, callback?: Callback) {
     const processRequest = async () => {
@@ -89,33 +118,8 @@ export class UTXO extends EventEmitter {
           data.params as any
         )
       }
-
       if (data.method === XDEFIBitcoinPayloadMethods.SignPsbt) {
-        const {
-          psbt,
-          broadcast = false,
-          signInputs,
-          allowedSignHash,
-        } = data.params as unknown as {
-          psbt: string
-          broadcast?: boolean
-          allowedSignHash?: number
-          signInputs: Record<string, number[]>
-        }
-
-        const inputsToSign = Object.entries(signInputs).map(
-          ([address, signingIndexes]) => ({
-            address,
-            signingIndexes,
-            sigHash: allowedSignHash,
-          })
-        )
-
-        return this.signPSBT(
-          Buffer.from(psbt, 'base64'),
-          { inputsToSign },
-          Boolean(broadcast)
-        )
+        return this.signPsbt({ ...(data.params as any) })
       }
       throw new NotImplementedError(`UTXO method ${data.method}`)
     }
