@@ -1,5 +1,6 @@
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { getPsbtTransferInfo } from '@core/chain/chains/utxo/tx/getPsbtTransferInfo'
+import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { byteFeeMultiplier } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/resolver'
 import {
@@ -28,7 +29,7 @@ const cosmosMsgTypeToTransactionType: Record<CosmosMsgType, TransactionType> = {
 }
 
 export const getChainSpecificInput = (input: ParsedTx) => {
-  const { coin, customTxData } = input
+  const { coin, customTxData, feeSettings } = input
 
   const amount = matchRecordUnion<CustomTxData, bigint>(customTxData, {
     regular: ({ transactionDetails }) =>
@@ -67,6 +68,7 @@ export const getChainSpecificInput = (input: ParsedTx) => {
     byteFeeMultiplier: isChainOfKind(coin.chain, 'utxo')
       ? byteFeeMultiplier.fast
       : undefined,
+    feeQuote: feeSettings ? (feeSettings as EvmFeeSettings) : undefined,
   }
 
   if ('regular' in customTxData) {
