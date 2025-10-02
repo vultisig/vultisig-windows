@@ -1,4 +1,4 @@
-import { ZXING_WASM_VERSION } from 'zxing-wasm'
+import { memoizeAsync } from '@lib/utils/memoizeAsync'
 import { prepareZXingModule, readBarcodes } from 'zxing-wasm/reader'
 
 type Input = {
@@ -6,21 +6,16 @@ type Input = {
   image: CanvasImageSource
 }
 
-let zxingReadyPromise: Promise<void> | null = null
-
-const ensureZxingReady = () => {
-  if (!zxingReadyPromise) {
-    const wasmUrl = `https://cdn.jsdelivr.net/npm/zxing-wasm@${ZXING_WASM_VERSION}/dist/reader/zxing_reader.wasm`
-    zxingReadyPromise = prepareZXingModule({
-      overrides: {
-        locateFile: (path, prefix) =>
-          path.endsWith('.wasm') ? wasmUrl : prefix + path,
-      },
-      fireImmediately: true,
-    }).then(() => void 0)
-  }
-  return zxingReadyPromise
-}
+const initZxing = memoizeAsync(() => {
+  const wasmUrl = '/core/wasm/zxing_reader.wasm'
+  return prepareZXingModule({
+    overrides: {
+      locateFile: (path, prefix) =>
+        path.endsWith('.wasm') ? wasmUrl : prefix + path,
+    },
+    fireImmediately: true,
+  })
+})
 
 export const readQrCode = async ({
   canvasContext,
@@ -32,7 +27,7 @@ export const readQrCode = async ({
 
   const imageData = canvasContext.getImageData(0, 0, width, height)
 
-  await ensureZxingReady()
+  await initZxing()
 
   const results = await readBarcodes(imageData, {
     formats: ['QRCode'],
