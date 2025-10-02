@@ -6,8 +6,9 @@ type Input = {
   image: CanvasImageSource
 }
 
+const wasmUrl = '/core/wasm/zxing_reader.wasm'
+
 const initZxing = memoizeAsync(() => {
-  const wasmUrl = '/core/wasm/zxing_reader.wasm'
   return prepareZXingModule({
     overrides: {
       locateFile: (path, prefix) =>
@@ -34,10 +35,9 @@ export const readQrCode = async ({
     tryHarder: true,
   })
 
-  const first = results[0]
-  if (!first || !first.text) {
+  if (results.length === 0) {
     throw new Error('Failed to read QR code')
   }
 
-  return first.text
+  return results[0].text
 }
