@@ -1061,6 +1061,4 @@ export const en = {
   failed_to_process_transaction: 'Failed to process transaction',
   signature_successful: 'Signature Successful',
   same_vault_share: 'Same vault share',
-  signature_successful: 'Signature Successful',
-  by_vultisig: 'by Vultisig',
 }
