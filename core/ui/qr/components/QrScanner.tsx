@@ -6,7 +6,7 @@ import {
 import { readQrCode } from '@core/ui/qr/utils/readQrCode'
 import { Button } from '@lib/ui/buttons/Button'
 import { Image } from '@lib/ui/image/Image'
-import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
+import { Center } from '@lib/ui/layout/Center'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -110,9 +110,9 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
         </VideoWrapper>
       )}
       pending={() => (
-        <CenterAbsolutely>
+        <Center>
           <Spinner size="3em" />
-        </CenterAbsolutely>
+        </Center>
       )}
       error={error => (
         <FlowErrorPageContent
