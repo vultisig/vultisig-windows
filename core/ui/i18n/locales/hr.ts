@@ -16,6 +16,7 @@ export const hr = {
   secure_crypto_vault: 'Sigurni kripto trezor',
   save_10_percent_on_swaps: 'Mentsd el <blue>10%</blue> a swap-okkal most',
   vultisig: 'Vultisig',
+  by_vultisig: 'od Vultisig',
   onboarding_description_1:
     'Vultisig je sigurni, višeslojni kripto trezor, kompatibilan sa svim glavnim blockchainima i preko 10.000 tokena. Vultisig je potpuno samostalni.',
   onboarding_description_2:
@@ -1054,6 +1055,7 @@ export const hr = {
   backupShare2: 'Sigurnosno dijeljenje 2',
   processing_transaction: 'Obrada transakcije...',
   failed_to_process_transaction: 'Obrada transakcije nije uspjela',
+  signature_successful: 'Potpis uspješan',
   accept_continue: 'Prihvati i nastavi',
   allow_app_access: 'Dopusti aplikaciji pristup',
   app_store: 'Trgovina aplikacija',

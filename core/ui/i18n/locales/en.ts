@@ -144,6 +144,7 @@ export const en = {
     'Turn your vault into a rewards machine. Create your referral now and start earning.',
   selected_chain_missing_in_your_vault: 'Selected chain missing in your vault',
   vultisig: 'Vultisig',
+  by_vultisig: 'by Vultisig',
   missing_thorchain_address: 'Missing THORChain Address',
   missing_destination_address: 'Missing Destination Address',
   onboarding_description_1:
@@ -1058,5 +1059,6 @@ export const en = {
   continue_anyway: 'Continue Anyway',
   processing_transaction: 'Processing transaction...',
   failed_to_process_transaction: 'Failed to process transaction',
+  signature_successful: 'Signature Successful',
   same_vault_share: 'Same vault share',
 }
