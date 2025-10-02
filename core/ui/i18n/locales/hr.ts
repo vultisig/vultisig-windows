@@ -19,10 +19,12 @@ export const hr = {
   by_vultisig: 'od Vultisig',
   onboarding_description_1:
     'Vultisig je sigurni, višeslojni kripto trezor, kompatibilan sa svim glavnim blockchainima i preko 10.000 tokena. Vultisig je potpuno samostalni.',
+  vultisig_website: 'Vultisig web-lokacija',
   onboarding_description_2:
     'Vultisig ne prati vaše aktivnosti niti zahtijeva bilo kakvu registraciju. Vultisig je otvorenog koda, što osigurava transparentnost i povjerenje.',
   onboarding_description_3:
     'Vultisig je po prirodi višeslojna aplikacija. Zahtijeva najmanje dva uređaja za stvaranje sigurnog trezora: inicijalni uređaj i uređaj za uparivanje.',
+  vult: '$VULT',
   onboarding_description_4:
     'Vultisig je novčanik bez seed fraza. Umjesto toga koristi lako upravljive dijelove trezora. Svaki uređaj ima svoj jedinstveni dio koji treba zasebno sigurnosno kopirati.',
   search_field_placeholder: 'Pretraži..',
