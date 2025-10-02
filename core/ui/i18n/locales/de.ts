@@ -20,6 +20,7 @@ export const de = {
   digit_input_error_validation:
     'Fehler bei der Code-Verifizierung, bitte erneut versuchen',
   digit_input_loading_validation: 'Code wird überprüft, bitte warten',
+  vult: '$VULT',
   vultisig: 'Vultisig',
   by_vultisig: 'von Vultisig',
   merged: 'Zusammengeführt',

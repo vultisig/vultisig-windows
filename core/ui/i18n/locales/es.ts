@@ -23,7 +23,9 @@ export const es = {
     'Error al verificar el código, por favor intenta de nuevo',
   digit_input_loading_validation: 'Verificando código, por favor espera',
   mint: 'Recibir',
+  vultisig_website: 'Sitio web de Vultisig',
   redeem: 'Vender',
+  vult: '$VULT',
   merged: 'Combinado',
   function_unavailble:
     'Función no disponible para las monedas de cadena existentes. Agrega monedas que puedan usarse con FUNCTION:',

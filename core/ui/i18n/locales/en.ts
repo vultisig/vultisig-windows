@@ -22,6 +22,8 @@ export const en = {
   onboarding_step_6: 'These shares collaborate to <g>unlock your vault</g>',
   permissions: 'Permissions',
   personal_sign: 'Personal Sign',
+  vultisig_website: 'Vultisig Website',
+  vult: '$VULT',
   function_unavailble:
     'Feature unavailable for existing chain coins. Please add coins that can be used with FUNCTION:',
   request_from: 'Request from',
