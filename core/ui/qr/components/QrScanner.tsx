@@ -91,13 +91,13 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
   useEffect(getStream, [getStream])
 
   useEffect(() => {
+    if (!video) return
+
     const canvas = document.createElement('canvas')
     const context = canvas.getContext('2d')
     if (!context) return
 
     let animationFrameId: number
-
-    if (!video) return
 
     const scan = () => {
       canvas.width = video.videoWidth
