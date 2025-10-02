@@ -437,7 +437,7 @@ export class Solana implements Wallet {
 
         const rawData = bs58.decode(encoded)
 
-        return Transaction.from(rawData)
+        return VersionedTransaction.deserialize(rawData)
       }
     }
   }
@@ -493,14 +493,9 @@ export class Solana implements Wallet {
         VersionedTransaction.deserialize(transaction)
       )
 
-      const serializedTransaction = isVersionedTransaction(signedTransaction)
-        ? signedTransaction.serialize()
-        : new Uint8Array(
-            (signedTransaction as Transaction).serialize({
-              requireAllSignatures: false,
-              verifySignatures: false,
-            })
-          )
+      const serializedTransaction = shouldBePresent(
+        signedTransaction?.serialize()
+      )
 
       outputs.push({ signedTransaction: serializedTransaction })
     } else if (inputs.length > 1) {
