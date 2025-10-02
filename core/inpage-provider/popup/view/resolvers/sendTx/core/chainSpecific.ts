@@ -68,7 +68,10 @@ export const getChainSpecificInput = (input: ParsedTx) => {
     byteFeeMultiplier: isChainOfKind(coin.chain, 'utxo')
       ? byteFeeMultiplier.fast
       : undefined,
-    feeQuote: feeSettings ? (feeSettings as EvmFeeSettings) : undefined,
+    feeQuote:
+      feeSettings && isChainOfKind(coin.chain, 'evm')
+        ? (feeSettings as EvmFeeSettings)
+        : undefined,
   }
 
   if ('regular' in customTxData) {
