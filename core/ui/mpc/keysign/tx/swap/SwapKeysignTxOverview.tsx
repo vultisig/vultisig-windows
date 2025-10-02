@@ -7,7 +7,6 @@ import { KeysignSwapPayload } from '@core/mpc/keysign/swap/KeysignSwapPayload'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { SwapCoinItem } from '@core/ui/mpc/keysign/tx/swap/SwapCoinItem'
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
@@ -39,8 +38,7 @@ export const SwapKeysignTxOverview = ({
   txHashes: string[]
 }) => {
   const { t } = useTranslation()
-  const { openUrl } = useCore()
-  const navigate = useCoreNavigate()
+  const { openUrl, goHome } = useCore()
   const vault = useCurrentVault()
   const { coin: potentialFromCoin } = value
   const swapPayload = shouldBePresent(getKeysignSwapPayload(value))
@@ -165,9 +163,7 @@ export const SwapKeysignTxOverview = ({
           >
             {t('track')}
           </Button>
-          <Button onClick={() => navigate({ id: 'vault' }, { replace: true })}>
-            {t('done')}
-          </Button>
+          <Button onClick={goHome}>{t('done')}</Button>
         </HStack>
       </VStack>
     </>

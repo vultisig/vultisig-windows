@@ -13,6 +13,7 @@ export const pt = {
   onboarding_step_6: 'Essas partes colaboram para <g>desbloquear seu cofre</g>',
   secure_crypto_vault: 'Cofre seguro de cripto',
   vultisig: 'Vultisig',
+  by_vultisig: 'por Vultisig',
   onboarding_description_1:
     'O Vultisig é um cofre seguro de cripto multi-dispositivo, compatível com todas as principais blockchains e mais de 10.000 tokens. O Vultisig é totalmente auto-hospedado.',
   onboarding_description_2:
@@ -866,11 +867,6 @@ export const pt = {
   took_too_long_to_respond: 'Demorou muito para responder',
   backup_password: 'Senha de backup',
   backup_without_password: 'Backup sem senha',
-  use_password: 'Usar senha',
-  backup_password_prompt:
-    'Deseja adicionar uma senha aos compartilhamentos do cofre do seu dispositivo?',
-  backup_password_info:
-    'Recomendamos que você não defina uma senha de backup para compartilhamentos de cofre de dispositivos - seus dados estarão seguros se os backups forem armazenados adequadamente em locais diferentes, o que já é uma proteção significativa. Lembre-se, as senhas de backup não podem ser recuperadas se você as esquecer. A escolha é sua!',
   upgrade_your_vault_now: 'Atualize seu cofre agora',
   upgrade_vault: 'Atualize seu cofre',
   upgrade_now: 'Atualize agora',
@@ -1075,12 +1071,27 @@ export const pt = {
   backupShare2: 'Compartilhamento de backup 2',
   processing_transaction: 'Processando transação...',
   failed_to_process_transaction: 'Falha ao processar a transação',
+  signature_successful: 'Assinatura bem-sucedida',
   accept_continue: 'Aceitar e continuar',
   allow_app_access: 'Permitir acesso do aplicativo a',
   app_store: 'Loja de aplicativos',
   install_app: 'Instalar aplicativo',
   permissions: 'Permissões',
   same_vault_share: 'Mesmo compartilhamento de cofre',
-  signature_successful: 'Assinatura bem-sucedida',
-  by_vultisig: 'por Vultisig',
+  referrals_create_page_title: 'Vultisig - Referências',
+  add_friends_referral: 'Adicionar uma indicação de amigo',
+  save_10_percent_on_swaps: 'Economize <blue>10%</blue> em trocas agora',
+  save_swap_fees_with_referral:
+    'Economize <blue>10%</blue> em trocas - Adicione uma indicação',
+  create_own_referral:
+    'Crie seu próprio código e ganhe <blue>20%</blue> em swaps indicados',
+  backup_with_password: 'Backup com senha',
+  backup_password_confirmation_title:
+    'Você quer criptografar seu backup com uma senha?',
+  backup_password_info_secure_without_password:
+    'Por padrão, seu backup é <b>seguro sem</b> uma senha extra, já que você armazena compartilhamentos do Vault em locais diferentes.',
+  backup_password_info_encrypt_with_password:
+    'Se você optar por adicionar uma senha, ela será usada para <b>criptografar</b> o arquivo de backup.',
+  backup_password_info_cannot_be_reset:
+    'Lembre-se: se você esquecer a senha do seu cofre, ela <b>não poderá</b> ser redefinida ou recuperada.',
 }
