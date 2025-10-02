@@ -98,28 +98,35 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
     if (!context) return
 
     let animationFrameId: number
+    let stopped = false
 
-    const scan = () => {
+    const scan = async () => {
+      if (stopped) return
       canvas.width = video.videoWidth
       canvas.height = video.videoHeight
 
-      const { data } = attempt(() =>
+      const result = await attempt(async () =>
         readQrCode({
           canvasContext: context,
           image: video,
         })
       )
 
-      if (data) {
-        onFinish(data)
-      } else {
-        animationFrameId = requestAnimationFrame(scan)
+      if ('data' in result && result.data) {
+        onFinish(result.data)
+      } else if (!stopped) {
+        animationFrameId = requestAnimationFrame(() => {
+          void scan()
+        })
       }
     }
 
-    animationFrameId = requestAnimationFrame(scan)
+    animationFrameId = requestAnimationFrame(() => {
+      void scan()
+    })
 
     return () => {
+      stopped = true
       cancelAnimationFrame(animationFrameId)
     }
   }, [onFinish, stream, video])

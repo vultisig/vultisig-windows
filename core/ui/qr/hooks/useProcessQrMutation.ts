@@ -18,7 +18,7 @@ export const useProcessQrMutation = () => {
         throw new Error('Could not get canvas context')
       }
 
-      const url = readQrCode({
+      const url = await readQrCode({
         canvasContext: context,
         image: imageBitmap,
       })

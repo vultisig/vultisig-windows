@@ -44,7 +44,6 @@
     "html-to-image": "^1.11.13",
     "i18next": "^25.5.2",
     "i18next-http-backend": "^3.0.2",
-    "jsqr": "^1.4.0",
     "long": "^5.3.2",
     "lottie-react": "^2.4.1",
     "react": "^19.1.1",
