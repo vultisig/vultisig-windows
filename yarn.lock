@@ -691,7 +691,7 @@ __metadata:
     react: "npm:^19.1.1"
     react-circular-progressbar: "npm:^2.2.0"
     styled-components: "npm:^6.1.19"
-    zxing-wasm: "npm:^2.2.2"
+    zxing-wasm: "npm:2.2.2"
   languageName: unknown
   linkType: soft
 
@@ -13389,7 +13389,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zxing-wasm@npm:^2.2.2":
+"zxing-wasm@npm:2.2.2":
   version: 2.2.2
   resolution: "zxing-wasm@npm:2.2.2"
   dependencies:
