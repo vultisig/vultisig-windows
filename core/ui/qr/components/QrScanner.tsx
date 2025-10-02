@@ -25,18 +25,19 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
     mutationFn: () =>
       navigator.mediaDevices.getUserMedia({
         video: {
+          facingMode: { ideal: 'environment' },
           width: {
             min: 640,
-            ideal: 1920,
-            max: 3840,
+            ideal: 3840,
+            max: 4096,
           },
           height: {
             min: 480,
-            ideal: 1080,
-            max: 2160,
+            ideal: 2160,
+            max: 4096,
           },
           frameRate: {
-            ideal: 30,
+            ideal: 60,
             max: 60,
           },
         },
@@ -44,6 +45,36 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
   })
 
   const { data: stream, reset: resetStreamState } = streamMutationState
+
+  useEffect(() => {
+    if (!stream) return
+
+    const [track] = stream.getVideoTracks()
+    if (!track) return
+
+    const capabilities = track.getCapabilities()
+    const constraints: MediaTrackConstraints = {}
+
+    if (capabilities.width && typeof capabilities.width.max === 'number') {
+      constraints.width = { ideal: capabilities.width.max }
+    }
+    if (capabilities.height && typeof capabilities.height.max === 'number') {
+      constraints.height = { ideal: capabilities.height.max }
+    }
+    if (
+      Array.isArray(capabilities.facingMode) &&
+      capabilities.facingMode.includes('environment')
+    ) {
+      constraints.facingMode = 'environment'
+    }
+
+    if (Object.keys(constraints).length > 0) {
+      void withFallback(
+        attempt(() => track.applyConstraints(constraints)),
+        undefined
+      )
+    }
+  }, [stream])
 
   useEffect(() => {
     if (!stream || !video) return
@@ -63,16 +94,64 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
   useEffect(getStream, [getStream])
 
   useEffect(() => {
-    if (!video) return
+    if (!stream) return
 
     const canvas = document.createElement('canvas')
     const context = canvas.getContext('2d')
-
     if (!context) return
 
     let animationFrameId: number
+    let stopped = false
 
-    const scan = () => {
+    const [track] = stream.getVideoTracks()
+    const hasImageCapture = Boolean(window.ImageCapture) && Boolean(track)
+
+    if (hasImageCapture) {
+      const imageCapture = new window.ImageCapture(track)
+
+      const loop = async () => {
+        if (stopped) return
+
+        const { data: bitmap } = await attempt(() => imageCapture.grabFrame())
+
+        if (bitmap) {
+          canvas.width = bitmap.width
+          canvas.height = bitmap.height
+
+          const scanData = withFallback(
+            attempt(() =>
+              readQrCode({
+                canvasContext: context,
+                image: bitmap,
+              })
+            ),
+            undefined
+          )
+
+          if (scanData) {
+            stopped = true
+            stream.getTracks().forEach(track => track.stop())
+            onFinish(scanData)
+            return
+          }
+        }
+
+        animationFrameId = requestAnimationFrame(loop)
+      }
+
+      animationFrameId = requestAnimationFrame(loop)
+
+      return () => {
+        stopped = true
+        cancelAnimationFrame(animationFrameId)
+      }
+    }
+
+    if (!video) return
+
+    const scanFallback = () => {
+      if (stopped) return
+
       canvas.width = video.videoWidth
       canvas.height = video.videoHeight
 
@@ -87,16 +166,21 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
       )
 
       if (scanData) {
+        stopped = true
+        stream.getTracks().forEach(track => track.stop())
         onFinish(scanData)
       } else {
-        animationFrameId = requestAnimationFrame(scan)
+        animationFrameId = requestAnimationFrame(scanFallback)
       }
     }
 
-    animationFrameId = requestAnimationFrame(scan)
+    animationFrameId = requestAnimationFrame(scanFallback)
 
-    return () => cancelAnimationFrame(animationFrameId)
-  }, [onFinish, video])
+    return () => {
+      stopped = true
+      cancelAnimationFrame(animationFrameId)
+    }
+  }, [onFinish, stream, video])
 
   return (
     <MatchQuery
