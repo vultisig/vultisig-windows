@@ -22,6 +22,10 @@ export type ProviderId =
   | 'keplr-override'
   | 'ctrl-override'
 
+export enum XDEFIBitcoinPayloadMethods {
+  SignPsbt = 'sign_psbt',
+}
+
 type BitcoinAccountPurpose = 'payment' | 'ordinals'
 
 export type BitcoinAccount = {

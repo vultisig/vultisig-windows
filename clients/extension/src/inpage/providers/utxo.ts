@@ -4,6 +4,7 @@ import {
   BitcoinAccount,
   ProviderId,
   RequestInput,
+  XDEFIBitcoinPayloadMethods,
 } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 import EventEmitter from 'events'
@@ -86,6 +87,34 @@ export class UTXO extends EventEmitter {
       if (data.method in handlers) {
         return handlers[data.method as keyof typeof handlers](
           data.params as any
+        )
+      }
+
+      if (data.method === XDEFIBitcoinPayloadMethods.SignPsbt) {
+        const {
+          psbt,
+          broadcast = false,
+          signInputs,
+          allowedSignHash,
+        } = data.params as unknown as {
+          psbt: string
+          broadcast?: boolean
+          allowedSignHash?: number
+          signInputs: Record<string, number[]>
+        }
+
+        const inputsToSign = Object.entries(signInputs).map(
+          ([address, signingIndexes]) => ({
+            address,
+            signingIndexes,
+            sigHash: allowedSignHash,
+          })
+        )
+
+        return this.signPSBT(
+          Buffer.from(psbt, 'base64'),
+          { inputsToSign },
+          Boolean(broadcast)
         )
       }
       throw new NotImplementedError(`UTXO method ${data.method}`)
