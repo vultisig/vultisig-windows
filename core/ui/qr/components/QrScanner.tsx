@@ -100,50 +100,9 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
     let animationFrameId: number
     let stopped = false
 
-    const [track] = stream.getVideoTracks()
-    const hasImageCapture = Boolean(window.ImageCapture) && Boolean(track)
-
-    if (hasImageCapture) {
-      const imageCapture = new window.ImageCapture(track)
-
-      const loop = async () => {
-        if (stopped) return
-
-        const { data: bitmap } = await attempt(() => imageCapture.grabFrame())
-
-        if (bitmap) {
-          canvas.width = bitmap.width
-          canvas.height = bitmap.height
-
-          const { data } = attempt(() =>
-            readQrCode({
-              canvasContext: context,
-              image: bitmap,
-            })
-          )
-
-          if (data) {
-            stopped = true
-            stream.getTracks().forEach(track => track.stop())
-            onFinish(data)
-            return
-          }
-        }
-
-        animationFrameId = requestAnimationFrame(loop)
-      }
-
-      animationFrameId = requestAnimationFrame(loop)
-
-      return () => {
-        stopped = true
-        cancelAnimationFrame(animationFrameId)
-      }
-    }
-
     if (!video) return
 
-    const scanFallback = () => {
+    const scan = () => {
       if (stopped) return
 
       canvas.width = video.videoWidth
@@ -161,11 +120,11 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
         stream.getTracks().forEach(track => track.stop())
         onFinish(data)
       } else {
-        animationFrameId = requestAnimationFrame(scanFallback)
+        animationFrameId = requestAnimationFrame(scan)
       }
     }
 
-    animationFrameId = requestAnimationFrame(scanFallback)
+    animationFrameId = requestAnimationFrame(scan)
 
     return () => {
       stopped = true
