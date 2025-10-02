@@ -1,25 +1,49 @@
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultMutation'
 import { Button } from '@lib/ui/buttons/Button'
-import { LockKeyholeIcon } from '@lib/ui/icons/LockKeyholeIcon'
+import { centerContent } from '@lib/ui/css/centerContent'
+import { sameDimensions } from '@lib/ui/css/sameDimensions'
+import { FileWarningIcon } from '@lib/ui/icons/FileWarningIcon'
+import { FolderLockIcon } from '@lib/ui/icons/FolderLockIcon'
+import { LockKeyholeOpenIcon } from '@lib/ui/icons/LockKeyholeOpenIcon'
+import { UserLockIcon } from '@lib/ui/icons/UserLockIcon'
+import { InfoItem } from '@lib/ui/info/InfoItem'
 import { VStack } from '@lib/ui/layout/Stack'
-import { PageContent } from '@lib/ui/page/PageContent'
+import { FitPageContent } from '@lib/ui/page/PageContent'
 import { OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
+import { Trans } from 'react-i18next'
 import styled from 'styled-components'
 
-const StyledIcon = styled(LockKeyholeIcon)`
-  background: ${getColor('foreground')};
+const IconContainer = styled.div`
+  ${sameDimensions(64)};
+  ${centerContent};
+  font-size: 32px;
   border-radius: 16px;
-  font-size: 64px;
-  padding: 16px;
+  align-self: center;
+  background: ${getColor('foregroundExtra')};
 `
 
 type VaultBackupWithoutPasswordProps = OnFinishProp & {
   onPasswordRequest: () => void
 }
+
+const infoItems = [
+  {
+    icon: <LockKeyholeOpenIcon />,
+    i18nKey: 'backup_password_info_secure_without_password',
+  },
+  {
+    icon: <FolderLockIcon />,
+    i18nKey: 'backup_password_info_encrypt_with_password',
+  },
+  {
+    icon: <FileWarningIcon />,
+    i18nKey: 'backup_password_info_cannot_be_reset',
+  },
+] as const
 
 export const VaultBackupWithoutPassword = ({
   onFinish,
@@ -33,26 +57,22 @@ export const VaultBackupWithoutPassword = ({
   return (
     <VStack fullHeight>
       <FlowPageHeader title={t('backup')} />
-      <PageContent
-        alignItems="center"
-        justifyContent="center"
-        flexGrow
-        scrollable
-      >
-        <VStack gap={36} style={{ maxWidth: 360 }}>
-          <VStack alignItems="center" gap={16}>
-            <StyledIcon />
-            <Text size={22} centerHorizontally>
-              {t('backup_password_prompt')}
-            </Text>
-            <Text
-              color="supporting"
-              height="large"
-              size={14}
-              centerHorizontally
-            >
-              {t('backup_password_info')}
-            </Text>
+      <FitPageContent contentMaxWidth={360}>
+        <VStack gap={68} justifyContent="center">
+          <VStack gap={36}>
+            <IconContainer>
+              <UserLockIcon />
+            </IconContainer>
+            <VStack alignItems="center" gap={16}>
+              <Text size={22} centerHorizontally>
+                {t('backup_password_confirmation_title')}
+              </Text>
+              {infoItems.map(({ i18nKey, icon }) => (
+                <InfoItem key={i18nKey} icon={icon}>
+                  <Trans i18nKey={i18nKey} components={{ b: <b /> }} />
+                </InfoItem>
+              ))}
+            </VStack>
           </VStack>
           <VStack gap={12}>
             <Button loading={isPending} onClick={() => backupVault({})}>
@@ -63,11 +83,11 @@ export const VaultBackupWithoutPassword = ({
               kind="secondary"
               onClick={onPasswordRequest}
             >
-              {t('use_password')}
+              {t('backup_with_password')}
             </Button>
           </VStack>
         </VStack>
-      </PageContent>
+      </FitPageContent>
     </VStack>
   )
 }

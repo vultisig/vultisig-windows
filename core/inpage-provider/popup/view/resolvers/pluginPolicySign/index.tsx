@@ -1,27 +1,55 @@
 import { StartKeysignView } from '@core/extension/keysign/start/StartKeysignView'
-import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
+import {
+  PopupResolver,
+  ResolvePopupInput,
+} from '@core/inpage-provider/popup/view/resolver'
 import { Overview } from '@core/inpage-provider/popup/view/resolvers/pluginPolicySign/Overview'
+import { Result } from '@core/inpage-provider/popup/view/resolvers/pluginPolicySign/Result'
 import {
   KeysignMutationListener,
   KeysignMutationListenerProvider,
 } from '@core/ui/mpc/keysign/action/state/keysignMutationListener'
 import { CoreView } from '@core/ui/navigation/CoreView'
 import { ActiveView } from '@lib/ui/navigation/ActiveView'
+import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { NavigationProvider } from '@lib/ui/navigation/state'
 import { Views } from '@lib/ui/navigation/Views'
+import { OnFinishProp } from '@lib/ui/props'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
 
-type PluginSignView = { id: 'overview' } | Extract<CoreView, { id: 'keysign' }>
+type PluginPolicySignView =
+  | { id: 'overview' }
+  | Extract<CoreView, { id: 'keysign' }>
+  | {
+      id: 'result'
+      state: { signature: string }
+    }
 
-const views: Views<PluginSignView['id']> = {
+const views: Views<PluginPolicySignView['id']> = {
   overview: Overview,
   keysign: StartKeysignView,
+  result: Result,
 }
 
 export const PluginPolicySign: PopupResolver<'pluginPolicySign'> = ({
   onFinish,
 }) => {
+  return (
+    <NavigationProvider
+      initialValue={{
+        history: [{ id: 'overview' }],
+      }}
+    >
+      <NavigationWrapper onFinish={onFinish} />
+    </NavigationProvider>
+  )
+}
+
+const NavigationWrapper = ({
+  onFinish,
+}: OnFinishProp<ResolvePopupInput<'pluginPolicySign'>>) => {
+  const navigate = useNavigate<PluginPolicySignView>()
   const keysignMutationListener: KeysignMutationListener = useMemo(
     () => ({
       onSuccess: result => {
@@ -31,20 +59,21 @@ export const PluginPolicySign: PopupResolver<'pluginPolicySign'> = ({
           },
           shouldClosePopup: false,
         })
+        navigate(
+          {
+            id: 'result',
+            state: { signature: getRecordUnionValue(result, 'signature') },
+          },
+          { replace: true }
+        )
       },
     }),
-    [onFinish]
+    [onFinish, navigate]
   )
 
   return (
-    <NavigationProvider
-      initialValue={{
-        history: [{ id: 'overview' }],
-      }}
-    >
-      <KeysignMutationListenerProvider value={keysignMutationListener}>
-        <ActiveView views={views} />
-      </KeysignMutationListenerProvider>
-    </NavigationProvider>
+    <KeysignMutationListenerProvider value={keysignMutationListener}>
+      <ActiveView views={views} />
+    </KeysignMutationListenerProvider>
   )
 }

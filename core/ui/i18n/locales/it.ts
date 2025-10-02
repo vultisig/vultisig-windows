@@ -16,6 +16,7 @@ export const it = {
     'Queste quote collaborano per <g>sbloccare il tuo caveau</g>',
   secure_crypto_vault: 'Cassaforte sicura per criptovalute',
   vultisig: 'Vultisig',
+  by_vultisig: 'da Vultisig',
   save_10_percent_on_swaps: 'Risparmia <blue>10%</blue> su swap ora',
   onboarding_description_1:
     'Vultisig è una cassaforte sicura per criptovalute multi-dispositivo, compatibile con tutte le principali blockchain e oltre 10.000 token. Vultisig è completamente autogestito.',
@@ -876,11 +877,6 @@ export const it = {
   took_too_long_to_respond: 'Ci è voluto troppo tempo per rispondere',
   backup_password: 'Password di backup',
   backup_without_password: 'Backup senza password',
-  use_password: 'Usa la password',
-  backup_password_prompt:
-    'Vuoi aggiungere una password alle condivisioni del vault del tuo dispositivo?',
-  backup_password_info:
-    'Ti consigliamo di non impostare una password di backup per le condivisioni del vault del dispositivo: i tuoi dati sono al sicuro se i backup sono correttamente archiviati in posizioni diverse, il che è già una protezione significativa. Ricorda, le password di backup non possono essere recuperate se le dimentichi. La scelta è tua!',
   upgrade_your_vault_now: 'Aggiorna il tuo caveau ora',
   upgrade_vault: 'Aggiorna il tuo caveau',
   upgrade_now: 'Aggiorna ora',
@@ -1087,10 +1083,24 @@ export const it = {
   backupShare2: 'Condivisione di backup 2',
   processing_transaction: 'Elaborazione della transazione in corso...',
   failed_to_process_transaction: 'Impossibile elaborare la transazione',
+  signature_successful: 'Firma riuscita',
   accept_continue: 'Accetta e continua',
   allow_app_access: "Consenti l'accesso all'app a",
   app_store: 'App Store',
   install_app: "Installa l'app",
   permissions: 'Permessi',
   same_vault_share: 'Stessa condivisione del vault',
+  save_swap_fees_with_referral:
+    'Risparmia il <blue>10%</blue> sugli scambi - Aggiungi un referral',
+  create_own_referral:
+    'Crea il tuo codice e guadagna il <blue>20%</blue> sugli scambi segnalati',
+  backup_with_password: 'Backup con password',
+  backup_password_confirmation_title:
+    'Vuoi crittografare il tuo backup con una password?',
+  backup_password_info_secure_without_password:
+    'Per impostazione predefinita, il backup è <b>sicuro</b> senza una password aggiuntiva, poiché le condivisioni Vault vengono archiviate in posizioni diverse.',
+  backup_password_info_encrypt_with_password:
+    'Se si sceglie di aggiungere una password, questa verrà utilizzata per <b>crittografare</b> il file di backup.',
+  backup_password_info_cannot_be_reset:
+    'Ricorda: se dimentichi la password del tuo vault, non potrai reimpostarla o recuperarla.',
 }

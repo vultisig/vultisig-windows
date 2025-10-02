@@ -15,6 +15,7 @@ export const es = {
     'Estas partes colaboran para <g>desbloquear su depósito</g>',
   secure_crypto_vault: 'Bóveda segura de criptomonedas',
   vultisig: 'Vultisig',
+  by_vultisig: 'por Vultisig',
   add_friends_referral: 'Agregar una referencia de amigos',
   save_10_percent_on_swaps: 'Ahorra <blue>10%</blue> en intercambios ahora',
   digit_input_success_validation: 'Verificación exitosa',
@@ -880,11 +881,6 @@ export const es = {
   took_too_long_to_respond: 'Tardó demasiado en responder',
   backup_password: 'Contraseña de respaldo',
   backup_without_password: 'Copia de seguridad sin contraseña',
-  use_password: 'Usar contraseña',
-  backup_password_prompt:
-    '¿Quieres agregar una contraseña a los recursos compartidos de la bóveda de tu dispositivo?',
-  backup_password_info:
-    'Le recomendamos no establecer una contraseña de respaldo para los recursos compartidos de la bóveda del dispositivo. Sus datos estarán seguros si las copias de seguridad se almacenan correctamente en diferentes ubicaciones, lo cual ya constituye una protección considerable. Recuerde que las contraseñas de respaldo no se pueden recuperar si las olvida. ¡Usted decide!',
   upgrade_your_vault_now: 'Actualice su bóveda ahora',
   upgrade_vault: 'Mejora tu bóveda',
   upgrade_now: 'Actualice ahora',
@@ -1089,10 +1085,25 @@ export const es = {
   backupShare2: 'Copia de seguridad compartida 2',
   processing_transaction: 'Procesando transacción...',
   failed_to_process_transaction: 'No se pudo procesar la transacción',
+  signature_successful: 'Firma exitosa',
   accept_continue: 'Aceptar y continuar',
   allow_app_access: 'Permitir el acceso de la aplicación a',
   app_store: 'Tienda de aplicaciones',
   install_app: 'Instalar aplicación',
   permissions: 'Permisos',
   same_vault_share: 'Misma bóveda compartida',
+  referrals_create_page_title: 'Vultisig - Referencias',
+  save_swap_fees_with_referral:
+    'Ahorre <blue>10%</blue> en intercambios - Agregar una referencia',
+  create_own_referral:
+    'Crea tu propio código y gana un <blue>20%</blue> en intercambios referidos',
+  backup_with_password: 'Copia de seguridad con contraseña',
+  backup_password_confirmation_title:
+    '¿Quieres cifrar tu copia de seguridad con una contraseña?',
+  backup_password_info_secure_without_password:
+    'De forma predeterminada, su copia de seguridad es <b>segura</b> sin una contraseña adicional, ya que almacena los recursos compartidos de Vault en diferentes ubicaciones.',
+  backup_password_info_encrypt_with_password:
+    'Si decide agregar una contraseña, esta se utilizará para <b>encriptar</b> el archivo de respaldo.',
+  backup_password_info_cannot_be_reset:
+    'Recuerde: si olvida la contraseña de su bóveda, no podrá restablecerla ni recuperarla.',
 }
