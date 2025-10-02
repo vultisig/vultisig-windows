@@ -63,26 +63,22 @@ const StyledListItem = styled.div<{
   justify-content: space-between;
   min-height: 58px;
   padding: 12px 16px;
-  ${({ status }) => {
-    switch (status) {
-      case 'error':
-        return css`
-          color: ${getColor('danger')};
-        `
-      case 'success':
-        return css`
-          color: ${getColor('primary')};
-        `
-      case 'warning':
-        return css`
-          color: ${getColor('idle')};
-        `
-      default:
-        return css`
-          color: ${getColor('text')};
-        `
-    }
-  }}
+  ${({ status }) =>
+    match(status, {
+      error: () => css`
+        color: ${getColor('danger')};
+      `,
+      success: () => css`
+        background-color: ${getColor('buttonPrimary')};
+      `,
+      warning: () => css`
+        color: ${getColor('idle')};
+      `,
+      default: () => css`
+        color: ${getColor('text')};
+      `,
+    })};
+
   ${({ hoverable }) => {
     return (
       hoverable &&
@@ -107,7 +103,8 @@ type ListItemProps = {
   status?: Status
   styles?: { description?: Partial<Styles>; title?: Partial<Styles> }
   title: ReactNode
-} & Pick<HTMLAttributes<HTMLDivElement>, 'onClick' | 'style'>
+} & Pick<HTMLAttributes<HTMLDivElement>, 'onClick' | 'style'> &
+  Partial<UiProps>
 
 export const ListItem: FC<ListItemProps> = ({
   description,
@@ -117,6 +114,7 @@ export const ListItem: FC<ListItemProps> = ({
   status = 'default',
   title,
   styles,
+  hoverable = true,
   ...rest
 }) => {
   const titleRender = isValidElement(title) ? (
