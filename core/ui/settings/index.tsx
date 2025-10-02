@@ -17,6 +17,7 @@ import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { DiscordIcon } from '@lib/ui/icons/DiscordIcon'
 import { FacebookIcon } from '@lib/ui/icons/FacebookIcon'
 import { FileTextIcon } from '@lib/ui/icons/FileTextIcon'
+import { FinanceCoinsIcon } from '@lib/ui/icons/FinanceCoinsIcon'
 import { GithubIcon } from '@lib/ui/icons/GithubIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { LanguagesIcon } from '@lib/ui/icons/LanguagesIcon'
@@ -43,6 +44,16 @@ import { useToast } from '@lib/ui/toast/ToastProvider'
 import { FC, ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+
+import {
+  discordReferralUrl,
+  vultisigPrivacyPolicyUrl,
+  vultisigTermsOfServiceUrl,
+  vultisigTwitterUrl,
+  vultisigWebsite,
+  vultisigWindowsGithubUrl,
+  vultUrl,
+} from './constants'
 
 type ExtensionSettings = {
   client: Extract<Client, 'extension'>
@@ -231,7 +242,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
                   <TwitterIcon />
                 </ListItemIconWrapper>
               }
-              onClick={() => openUrl('https://x.com/vultisig')}
+              onClick={() => openUrl(vultisigTwitterUrl)}
               title={t('twitter')}
               showArrow
             />
@@ -241,7 +252,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
                   <DiscordIcon />
                 </ListItemIconWrapper>
               }
-              onClick={() => openUrl('https://discord.gg/ngvW8tRRfB')}
+              onClick={() => openUrl(discordReferralUrl)}
               title={t('discord')}
               showArrow
             />
@@ -251,9 +262,27 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
                   <GithubIcon />
                 </ListItemIconWrapper>
               }
-              onClick={() =>
-                openUrl('https://github.com/vultisig/vultisig-windows')
+              onClick={() => openUrl(vultisigWindowsGithubUrl)}
+              title={t('github')}
+              showArrow
+            />
+            <ListItem
+              icon={
+                <ListItemIconWrapper>
+                  <FinanceCoinsIcon />
+                </ListItemIconWrapper>
               }
+              onClick={() => openUrl(vultUrl)}
+              title={t('vult')}
+              showArrow
+            />
+            <ListItem
+              icon={
+                <ListItemIconWrapper>
+                  <GithubIcon />
+                </ListItemIconWrapper>
+              }
+              onClick={() => openUrl(vultisigWebsite)}
               title={t('github')}
               showArrow
             />
@@ -265,7 +294,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
                   <ShieldCheckIcon />
                 </ListItemIconWrapper>
               }
-              onClick={() => openUrl('https://vultisig.com/privacy')}
+              onClick={() => openUrl(vultisigPrivacyPolicyUrl)}
               title={t('privacy_policy')}
               showArrow
             />
@@ -275,7 +304,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
                   <FileTextIcon />
                 </ListItemIconWrapper>
               }
-              onClick={() => openUrl('https://vultisig.com/termofservice')}
+              onClick={() => openUrl(vultisigTermsOfServiceUrl)}
               title={t('terms_of_service')}
               showArrow
             />
