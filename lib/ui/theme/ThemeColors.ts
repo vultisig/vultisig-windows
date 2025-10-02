@@ -32,6 +32,7 @@ export type ThemeColors = {
   buttonHover: HSLA
   buttonTextDisabled: HSLA
   primaryAccentTwo: HSLA
+  primaryAccentFour: HSLA
 
   transparent: HSLA
   white: HSLA
