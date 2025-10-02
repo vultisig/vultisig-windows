@@ -91,20 +91,15 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
   useEffect(getStream, [getStream])
 
   useEffect(() => {
-    if (!stream) return
-
     const canvas = document.createElement('canvas')
     const context = canvas.getContext('2d')
     if (!context) return
 
     let animationFrameId: number
-    let stopped = false
 
     if (!video) return
 
     const scan = () => {
-      if (stopped) return
-
       canvas.width = video.videoWidth
       canvas.height = video.videoHeight
 
@@ -116,8 +111,6 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
       )
 
       if (data) {
-        stopped = true
-        stream.getTracks().forEach(track => track.stop())
         onFinish(data)
       } else {
         animationFrameId = requestAnimationFrame(scan)
@@ -127,7 +120,6 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
     animationFrameId = requestAnimationFrame(scan)
 
     return () => {
-      stopped = true
       cancelAnimationFrame(animationFrameId)
     }
   }, [onFinish, stream, video])
