@@ -17,6 +17,7 @@
     "@trustwallet/wallet-core": "^4.3.6",
     "react": "^19.1.1",
     "react-circular-progressbar": "^2.2.0",
-    "styled-components": "^6.1.19"
+    "styled-components": "^6.1.19",
+    "zxing-wasm": "2.2.2"
   }
 }
