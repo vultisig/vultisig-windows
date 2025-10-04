@@ -1,12 +1,15 @@
 import { useBackupOverviewStepsAnimations } from '@core/ui/vault/backup/fast/BackupOverviewSlidesPartOne/hooks/useBackupOverviewStepsAnimations'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
+import { applyResponsiveLayoutWidth } from '@lib/ui/css/getResponsiveLayoutWidth'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { PageContent } from '@lib/ui/page/PageContent'
 import { OnFinishProp } from '@lib/ui/props'
+import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { GradientText, Text } from '@lib/ui/text'
 import { match } from '@lib/utils/match'
 import { FC } from 'react'
@@ -26,7 +29,7 @@ export const BackupOverviewSlidesPartOne: FC<OnFinishProp> = ({ onFinish }) => {
   const fontSize = 28
 
   return (
-    <StyledLayout maxWidth={400} fullSize>
+    <StyledLayout fullSize>
       <StyledHeader gap={16}>
         <HStack justifyContent="space-between">
           <StyledButton
@@ -104,21 +107,29 @@ const StyledButton = styled(Button)`
 `
 
 const StyledContent = styled(VStack)`
-  height: 400px;
   padding: 0;
+  height: 100%;
+  flex: 1;
+
+  @media ${mediaQuery.mobileDeviceAndDown} {
+    height: 400px;
+  }
 `
 
 const StyledFooter = styled(VStack)`
-  bottom: 0px;
-  padding: 0 24px 36px;
-  position: absolute;
+  @media ${mediaQuery.mobileDeviceAndDown} {
+    padding: 0 24px 20px;
+  }
 `
 
 const StyledHeader = styled(VStack)`
-  padding: 36px 24px 0;
+  @media ${mediaQuery.mobileDeviceAndDown} {
+    padding: 20px 24px 0;
+  }
 `
 
-const StyledLayout = styled(VStack)`
+const StyledLayout = styled(PageContent)`
   margin: 0 auto;
   position: relative;
+  ${applyResponsiveLayoutWidth};
 `

@@ -9,7 +9,7 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text, text } from '@lib/ui/text'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { formatAmount } from '@lib/utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -46,10 +46,9 @@ export const CoinBalance = ({ value }: ValueProp<CoinKey>) => {
         error={() => t('failed_to_load')}
         success={amount => (
           <BalancesWrapper gap={2}>
-            <Text size={14} color="supporting" weight={500}>
+            <Text size={14} color="shyExtra" weight={500}>
               {t('balance')}:{' '}
-              {formatTokenAmount(fromChainAmount(amount, coin.decimals))}
-              {` ${coin.ticker}`}
+              {formatAmount(fromChainAmount(amount, coin.decimals), coin)}
             </Text>
             <MatchQuery
               value={priceQuery}

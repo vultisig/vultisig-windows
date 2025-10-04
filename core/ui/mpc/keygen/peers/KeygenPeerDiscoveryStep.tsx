@@ -1,5 +1,6 @@
 import { parseLocalPartyId } from '@core/mpc/devices/localPartyId'
 import { KeygenType } from '@core/mpc/keygen/KeygenType'
+import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { MpcPeersCorrector } from '@core/ui/mpc/devices/MpcPeersCorrector'
 import { InitiatingDevice } from '@core/ui/mpc/devices/peers/InitiatingDevice'
 import { PeerOption } from '@core/ui/mpc/devices/peers/option/PeerOption'
@@ -27,11 +28,9 @@ import { InfoIcon } from '@lib/ui/icons/InfoIcon'
 import { FitPageContent } from '@lib/ui/page/PageContent'
 import { PageFormFrame } from '@lib/ui/page/PageFormFrame'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { QueryBasedQrCode } from '@lib/ui/qr/QueryBasedQrCode'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { useIsTabletDeviceAndUp } from '@lib/ui/responsive/mediaQuery'
 import { range } from '@lib/utils/array/range'
 import { without } from '@lib/utils/array/without'
 import { getRecordUnionKey } from '@lib/utils/record/union/getRecordUnionKey'
@@ -59,7 +58,6 @@ export const KeygenPeerDiscoveryStep = ({
   const [serverType] = useMpcServerType()
   const selectedPeers = useMpcPeers()
   const peerOptionsQuery = useMpcPeerOptionsQuery()
-  const isLargeScreen = useIsTabletDeviceAndUp()
   const joinUrlQuery = useJoinKeygenUrlQuery()
   const keygenVault = useKeygenVault()
   const localPartyId = useMpcLocalPartyId()
@@ -199,8 +197,7 @@ export const KeygenPeerDiscoveryStep = ({
           <PeerDiscoveryFormFooter isDisabled={isDisabled} />
         </PageFormFrame>
       </FitPageContent>
-      {/* FIXME: only show the overlay on desktop for now. Antonio to make it responsive and add it back for Extension as well. */}
-      {isLargeScreen && <KeygenPeerDiscoveryEducation />}
+      <KeygenPeerDiscoveryEducation />
     </>
   )
 }

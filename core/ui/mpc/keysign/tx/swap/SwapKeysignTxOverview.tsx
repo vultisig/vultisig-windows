@@ -7,7 +7,6 @@ import { KeysignSwapPayload } from '@core/mpc/keysign/swap/KeysignSwapPayload'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { SwapCoinItem } from '@core/ui/mpc/keysign/tx/swap/SwapCoinItem'
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
@@ -39,8 +38,7 @@ export const SwapKeysignTxOverview = ({
   txHashes: string[]
 }) => {
   const { t } = useTranslation()
-  const { openUrl } = useCore()
-  const navigate = useCoreNavigate()
+  const { openUrl, goHome } = useCore()
   const vault = useCurrentVault()
   const { coin: potentialFromCoin } = value
   const swapPayload = shouldBePresent(getKeysignSwapPayload(value))
@@ -78,22 +76,27 @@ export const SwapKeysignTxOverview = ({
     <>
       <TransactionSuccessAnimation />
       <VStack alignItems="center" gap={8}>
-        <HStack gap={8} style={{ position: 'relative' }}>
-          {fromCoin && (
-            <SwapCoinItem coin={fromCoin} tokenAmount={formattedFromAmount} />
-          )}
-          {toCoin && (
-            <SwapCoinItem
-              coin={toCoin}
-              tokenAmount={parseFloat(toAmountDecimal)}
-            />
-          )}
-          <IconWrapper alignItems="center" justifyContent="center">
-            <IconInternalWrapper>
-              <ChevronRightIcon />
-            </IconInternalWrapper>
-          </IconWrapper>
-        </HStack>
+        <VStack gap={8}>
+          <Text centerHorizontally color="shy" size={10} height="large">
+            {t('swap')}
+          </Text>
+          <HStack gap={8} style={{ position: 'relative' }}>
+            {fromCoin && (
+              <SwapCoinItem coin={fromCoin} tokenAmount={formattedFromAmount} />
+            )}
+            {toCoin && (
+              <SwapCoinItem
+                coin={toCoin}
+                tokenAmount={parseFloat(toAmountDecimal)}
+              />
+            )}
+            <IconWrapper alignItems="center" justifyContent="center">
+              <IconInternalWrapper>
+                <ChevronRightIcon />
+              </IconInternalWrapper>
+            </IconWrapper>
+          </HStack>
+        </VStack>
         <SwapInfoWrapper gap={16} fullWidth>
           <TrackTxPrompt
             title={t('transaction')}
@@ -141,20 +144,14 @@ export const SwapKeysignTxOverview = ({
               fullWidth
               justifyContent="space-between"
               alignItems="center"
+              wrap="nowrap"
             >
               <Text weight="500" size={14} color="shy">
                 {t('to')}
               </Text>
-
-              <TrimmedText
-                cropped
-                width={170}
-                weight={500}
-                size={14}
-                color="contrast"
-              >
+              <AddressWrapper color="contrast" size={14} weight={500}>
                 {toCoin.address}
-              </TrimmedText>
+              </AddressWrapper>
             </HStack>
           )}
           <KeysignTxFee />
@@ -166,23 +163,16 @@ export const SwapKeysignTxOverview = ({
           >
             {t('track')}
           </Button>
-          <Button onClick={() => navigate({ id: 'vault' }, { replace: true })}>
-            {t('done')}
-          </Button>
+          <Button onClick={goHome}>{t('done')}</Button>
         </HStack>
       </VStack>
     </>
   )
 }
 
-const TrimmedText = styled(Text)<{
-  width?: number
-}>`
-  display: inline-block;
-  max-width: ${({ width }) => (width ? `${width}px` : null)};
+const AddressWrapper = styled(Text)`
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  text-align: right;
 `
 
 const SwapInfoWrapper = styled(SeparatedByLine)`

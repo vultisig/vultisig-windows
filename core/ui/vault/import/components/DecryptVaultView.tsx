@@ -1,6 +1,6 @@
+import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
-import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -75,7 +75,7 @@ export const DecryptVaultView = ({
         </Button>
         {error?.message && (
           <Text color="danger" size={12}>
-            {error.message}
+            {t('incorrect_password')}
           </Text>
         )}
       </PageFooter>

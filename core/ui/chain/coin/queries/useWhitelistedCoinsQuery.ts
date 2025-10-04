@@ -8,18 +8,20 @@ import {
   fromOneInchTokens,
   OneInchTokensResponse,
 } from '@core/chain/coin/oneInch/token'
+import { baseJupiterTokensUrl } from '@core/chain/coin/token/metadata/resolvers/solana'
 import { rootApiUrl } from '@core/config'
 import { hexToNumber } from '@lib/utils/hex/hexToNumber'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { useQuery } from '@tanstack/react-query'
 
-export const useWhitelistedCoinsQuery = (chain: Chain) => {
+export const useWhitelistedCoinsQuery = (chain: Chain, enabled?: boolean) => {
   return useQuery({
     queryKey: ['whitelistedCoins', chain],
+    enabled,
     queryFn: async () => {
       if (chain === Chain.Solana) {
-        const url = 'https://tokens.jup.ag/tokens?tags=verified'
-        const data = await queryUrl<SolanaJupiterToken[]>(url) // Jupiter API returns an array
+        const url = `${baseJupiterTokensUrl}/tag?query=verified`
+        const data = await queryUrl<SolanaJupiterToken[]>(url)
 
         return fromSolanaJupiterTokens({
           tokens: data,

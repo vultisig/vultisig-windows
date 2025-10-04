@@ -1,4 +1,4 @@
-import { CoinBalanceResolverInput } from '@core/chain/coin/balance/CoinBalanceResolver'
+import { CoinBalanceResolverInput } from '@core/chain/coin/balance/resolver'
 import { coinKeyToString } from '@core/chain/coin/Coin'
 import { Exact } from '@lib/utils/types/Exact'
 import { useMemo } from 'react'

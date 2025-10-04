@@ -1,4 +1,7 @@
-export type EvmFeeSettings = {
-  priorityFee: number
-  gasLimit: number
+export type EvmFeeQuote = {
+  maxPriorityFeePerGas: bigint
+  gasLimit: bigint
+  maxFeePerGas: bigint
 }
+
+export type EvmFeeSettings = Omit<EvmFeeQuote, 'maxFeePerGas'>

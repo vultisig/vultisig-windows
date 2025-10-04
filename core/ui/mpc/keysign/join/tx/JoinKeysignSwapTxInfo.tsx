@@ -9,7 +9,7 @@ import {
 import { ValueProp } from '@lib/ui/props'
 import { without } from '@lib/utils/array/without'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { formatAmount } from '@lib/utils/formatAmount'
 import { assertField } from '@lib/utils/record/assertField'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useTranslation } from 'react-i18next'
@@ -46,16 +46,16 @@ export const JoinKeysignSwapTxInfo = ({ value }: ValueProp<KeysignPayload>) => {
       <TxOverviewRow>
         <span>{t('from_asset')}</span>
         <span>
-          {formatTokenAmount(
+          {formatAmount(
             fromChainAmount(fromAmount, fromCoin.decimals),
-            fromCoin.ticker
+            fromCoin
           )}
         </span>
       </TxOverviewRow>
       {toCoin && (
         <TxOverviewRow>
           <span>{t('to_asset')}</span>
-          <span>{formatTokenAmount(toAmount, toCoin.ticker)}</span>
+          <span>{formatAmount(toAmount, toCoin)}</span>
         </TxOverviewRow>
       )}
 
@@ -68,9 +68,9 @@ export const JoinKeysignSwapTxInfo = ({ value }: ValueProp<KeysignPayload>) => {
           <TxOverviewChainDataRow>
             <span>{t('allowance_amount')}</span>
             <span>
-              {formatTokenAmount(
+              {formatAmount(
                 fromChainAmount(erc20ApprovePayload.amount, fromCoin.decimals),
-                fromCoin.ticker
+                fromCoin
               )}
             </span>
           </TxOverviewChainDataRow>

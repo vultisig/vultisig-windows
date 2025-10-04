@@ -1,13 +1,14 @@
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
-import { NavigationProvider } from '@lib/ui/navigation/state'
+import { ErrorBoundary } from '@lib/ui/errors/ErrorBoundary'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
 
-import { RootErrorBoundary } from '../errors/RootErrorBoundary'
+import { RootErrorFallback } from '../errors/RootErrorFallback'
 import { FlowErrorPageContent } from '../flow/FlowErrorPageContent'
 import { I18nProvider } from '../i18n/I18nProvider'
 import { PasscodeProvider } from '../passcodeEncryption/state/passcode'
+import { useCore } from '../state/core'
 import { RootCurrentVaultProvider } from '../vault/state/currentVault'
 import { useAddressBookItemsQuery } from './addressBook'
 import { useIsBalanceVisibleQuery } from './balanceVisibility'
@@ -19,7 +20,6 @@ import {
 } from './currentVaultId'
 import { useDefaultChainsQuery } from './defaultChains'
 import { useFiatCurrencyQuery } from './fiatCurrency'
-import { useInitialViewQuery } from './initialView'
 import { useLanguageQuery } from './language'
 import { useHasFinishedOnboardingQuery } from './onboarding'
 import { usePasscodeAutoLockQuery } from './passcodeAutoLock'
@@ -37,11 +37,12 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   const language = useLanguageQuery()
   const isBalanceVisible = useIsBalanceVisibleQuery()
   const hasFinishedOnboarding = useHasFinishedOnboardingQuery()
-  const initialView = useInitialViewQuery()
   const coinFinderIgnore = useCoinFinderIgnoreQuery()
   const passcodeEncryption = usePasscodeEncryptionQuery()
   const passcodeAutoLock = usePasscodeAutoLockQuery()
   const isBlockaidEnabled = useIsBlockaidEnabledQuery()
+
+  const { processError, targetVaultId } = useCore()
 
   const query = useMergeQueries({
     vaults,
@@ -53,7 +54,6 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
     language,
     isBalanceVisible,
     hasFinishedOnboarding,
-    initialView,
     coinFinderIgnore,
     passcodeEncryption,
     passcodeAutoLock,
@@ -63,21 +63,22 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   return (
     <MatchQuery
       value={query}
-      success={({ currentVaultId, vaults, initialView }) => (
+      success={({ currentVaultId, vaults }) => (
         <I18nProvider>
-          <NavigationProvider initialValue={{ history: [initialView] }}>
-            <RootErrorBoundary>
-              <VaultsProvider value={vaults}>
-                <CurrentVaultIdProvider value={currentVaultId}>
-                  <PasscodeProvider initialValue={null}>
-                    <RootCurrentVaultProvider>
-                      {children}
-                    </RootCurrentVaultProvider>
-                  </PasscodeProvider>
-                </CurrentVaultIdProvider>
-              </VaultsProvider>
-            </RootErrorBoundary>
-          </NavigationProvider>
+          <ErrorBoundary
+            fallback={RootErrorFallback}
+            processError={processError}
+          >
+            <VaultsProvider value={vaults}>
+              <CurrentVaultIdProvider value={targetVaultId ?? currentVaultId}>
+                <PasscodeProvider initialValue={null}>
+                  <RootCurrentVaultProvider>
+                    {children}
+                  </RootCurrentVaultProvider>
+                </PasscodeProvider>
+              </CurrentVaultIdProvider>
+            </VaultsProvider>
+          </ErrorBoundary>
         </I18nProvider>
       )}
       error={error => (

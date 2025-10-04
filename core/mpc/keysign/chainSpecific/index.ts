@@ -1,26 +1,23 @@
-import { getCardanoSpecific } from './cardano'
-import {
-  ChainSpecificResolver,
-  ChainSpecificResolverInput,
-} from './ChainSpecificResolver'
-import { getCosmosSpecific } from './cosmos'
-import { getEthereumSpecific } from './evm'
 import {
   chainSpecificRecord,
   KeysignChainSpecific,
   KeysignChainSpecificKey,
 } from './KeysignChainSpecific'
-import { getMayaSpecific } from './maya'
-import { getPolkadotSpecific } from './polkadot'
-import { getRippleSpecific } from './ripple'
-import { getSolanaSpecific } from './solana'
-import { getSuiSpecific } from './sui'
-import { getThorchainSpecific } from './thor'
-import { getTonSpecific } from './ton'
-import { getTronSpecific } from './tron'
-import { getUtxoSpecific } from './utxo'
+import { ChainSpecificResolver, ChainSpecificResolverInput } from './resolver'
+import { getCardanoSpecific } from './resolvers/cardano'
+import { getCosmosSpecific } from './resolvers/cosmos'
+import { getEthereumSpecific } from './resolvers/evm'
+import { getMayaSpecific } from './resolvers/maya'
+import { getPolkadotSpecific } from './resolvers/polkadot'
+import { getRippleSpecific } from './resolvers/ripple'
+import { getSolanaSpecific } from './resolvers/solana'
+import { getSuiSpecific } from './resolvers/sui'
+import { getThorchainSpecific } from './resolvers/thor'
+import { getTonSpecific } from './resolvers/ton'
+import { getTronSpecific } from './resolvers/tron'
+import { getUtxoSpecific } from './resolvers/utxo'
 
-const handlers: Record<KeysignChainSpecificKey, ChainSpecificResolver> = {
+const resolvers: Record<KeysignChainSpecificKey, ChainSpecificResolver<any>> = {
   ethereumSpecific: getEthereumSpecific,
   utxoSpecific: getUtxoSpecific,
   thorchainSpecific: getThorchainSpecific,
@@ -39,7 +36,7 @@ export const getChainSpecific = async (
   input: ChainSpecificResolverInput
 ): Promise<KeysignChainSpecific> => {
   const chainSpecificCase = chainSpecificRecord[input.coin.chain]
-  const value = await handlers[chainSpecificCase](input)
+  const value = await resolvers[chainSpecificCase](input)
 
   return {
     case: chainSpecificCase,

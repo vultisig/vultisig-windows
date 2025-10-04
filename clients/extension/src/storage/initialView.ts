@@ -1,25 +1,14 @@
-import { CoreView, initialCoreView } from '@core/ui/navigation/CoreView'
-import { StorageKey } from '@core/ui/storage/StorageKey'
+import { AppView } from '@clients/extension/src/navigation/AppView'
+import { getStorageValue } from '@lib/extension/storage/get'
+import { removeStorageValue } from '@lib/extension/storage/remove'
+import { setStorageValue } from '@lib/extension/storage/set'
 
-import { AppView } from '../navigation/AppView'
-import { getPersistentState } from '../state/persistent/getPersistentState'
-import { removePersistentState } from '../state/persistent/removePersistentState'
-import { setPersistentState } from '../state/persistent/setPersistentState'
+const initialViewKey = 'initialView'
 
-export const initialViewStorage = {
-  getInitialView: async () => {
-    const value = await getPersistentState(StorageKey.initialView, undefined)
+export const getInitialView = async () =>
+  getStorageValue<AppView | null>(initialViewKey, null)
 
-    if (value === undefined) {
-      return initialCoreView
-    }
+export const setInitialView = async (view: AppView) =>
+  setStorageValue(initialViewKey, view)
 
-    await removePersistentState(StorageKey.initialView)
-
-    return value
-  },
-}
-
-export const setInitialView = async (view: AppView | CoreView) => {
-  await setPersistentState(StorageKey.initialView, view)
-}
+export const removeInitialView = async () => removeStorageValue(initialViewKey)

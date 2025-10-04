@@ -5,15 +5,15 @@ import { useCallback } from 'react'
 const stateMachineName = 'State Machine 1'
 const inputName = 'Index'
 
-const onboardingAnimations = [0, 1, 2, 3, 4, 5] as const
+const animations = [1, 2, 3, 4, 5, 6] as const
 
 export const useOnboardingStepsAnimations = () => {
   const {
     step: currentAnimation,
     toNextStep: toNextAnimation,
-    toFirstStep: toFirstAnimation,
+    toPreviousStep: toPreviousAnimation,
   } = useStepNavigation({
-    steps: onboardingAnimations,
+    steps: animations,
   })
 
   const { RiveComponent, rive } = useRive({
@@ -29,7 +29,10 @@ export const useOnboardingStepsAnimations = () => {
   )
 
   const handleNextAnimation = useCallback(() => {
-    if (stateMachineInput && typeof stateMachineInput.value === 'number') {
+    if (
+      typeof stateMachineInput?.value === 'number' &&
+      stateMachineInput.value < animations.length
+    ) {
       stateMachineInput.value += 1
       toNextAnimation()
     }
@@ -38,17 +41,16 @@ export const useOnboardingStepsAnimations = () => {
   // TODO: tony to refactor when the designer gives us the animations that work backwards
   const handlePrevAnimation = useCallback(() => {
     if (
-      stateMachineInput &&
-      typeof stateMachineInput.value === 'number' &&
-      stateMachineInput.value - 1 >= 0
+      typeof stateMachineInput?.value === 'number' &&
+      stateMachineInput.value > 0
     ) {
       stateMachineInput.value -= 1
-      toFirstAnimation()
+      toPreviousAnimation()
     }
-  }, [stateMachineInput, toFirstAnimation])
+  }, [stateMachineInput, toPreviousAnimation])
 
   return {
-    animations: onboardingAnimations,
+    animations,
     animationComponent: RiveComponent,
     currentAnimation,
     handlePrevAnimation,

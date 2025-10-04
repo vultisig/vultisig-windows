@@ -9,10 +9,7 @@ import { useMpcServiceName } from '@core/ui/mpc/state/mpcServiceName'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
-import {
-  noPersistQueryOptions,
-  noRefetchQueryOptions,
-} from '@lib/ui/query/utils/options'
+import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
@@ -49,6 +46,5 @@ export const useJoinKeysignUrlQuery = (
     queryKey: ['joinKeysignUrl', input],
     queryFn: async () => getJoinKeysignUrl(input),
     ...noRefetchQueryOptions,
-    ...noPersistQueryOptions,
   })
 }

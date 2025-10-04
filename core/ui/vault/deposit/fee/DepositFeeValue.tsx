@@ -1,23 +1,28 @@
 import { formatFee } from '@core/chain/tx/fee/format/formatFee'
-import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
+import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { t } from 'i18next'
+import { useTranslation } from 'react-i18next'
 
+import { useDepositCoin } from '../providers/DepositCoinProvider'
 import { useDepositChainSpecificQuery } from '../queries/useDepositChainSpecificQuery'
 
 export const DepositFeeValue = () => {
-  const query = useDepositChainSpecificQuery()
-  const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
+  const [coin] = useDepositCoin()
+  const query = useDepositChainSpecificQuery(coin)
+  const { t } = useTranslation()
 
   return (
     <MatchQuery
       value={query}
       pending={() => <Spinner />}
       error={() => t('failed_to_load')}
-      success={chainSpecific => (
-        <>{formatFee({ chain: coinKey.chain, chainSpecific })}</>
-      )}
+      success={chainSpecific =>
+        formatFee({
+          chain: coin.chain,
+          amount: getFeeAmount(chainSpecific),
+        })
+      }
     />
   )
 }

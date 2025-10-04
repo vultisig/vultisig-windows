@@ -1,4 +1,3 @@
-import { useIsSwapFormDisabled } from '@core/ui/vault/swap/form/hooks/useIsSwapFormDisabled'
 import { SwapInfo } from '@core/ui/vault/swap/form/info/SwapInfo'
 import { ManageFromCoin } from '@core/ui/vault/swap/form/ManageFromCoin'
 import { ManageToCoin } from '@core/ui/vault/swap/form/ManageToCoin'
@@ -8,12 +7,15 @@ import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { OnFinishProp } from '@lib/ui/props'
-import { t } from 'i18next'
 import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useSwapFormStates } from './hooks/useSwapFormStates'
+
 export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
-  const isDisabled = useIsSwapFormDisabled()
+  const { t } = useTranslation()
+  const { isDisabled } = useSwapFormStates()
 
   return (
     <>

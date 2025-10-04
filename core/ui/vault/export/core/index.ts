@@ -4,4 +4,5 @@ export type VaultExport = {
   publicKeyEcdsa: string
   publicKeyEddsa: string
   hexChainCode: string
+  isFastVault: boolean
 }

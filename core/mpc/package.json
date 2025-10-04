@@ -8,18 +8,19 @@
     "format:types": "prettier --write 'types/**/*.ts'"
   },
   "devDependencies": {
-    "@bufbuild/buf": "^1.54.0",
-    "@bufbuild/protoc-gen-es": "^2.4.0",
-    "vitest": "^3.0.9"
+    "@bufbuild/buf": "^1.57.0",
+    "@bufbuild/protoc-gen-es": "^2.7.0",
+    "vitest": "^3.2.4"
   },
   "dependencies": {
-    "7z-wasm": "^1.1.0",
-    "@bufbuild/protobuf": "^2.2.4",
-    "@core/chain": "workspace:*",
-    "@core/config": "workspace:*",
-    "@lib/dkls": "workspace:*",
-    "@lib/schnorr": "workspace:*",
-    "@lib/utils": "workspace:*",
-    "@solana/web3.js": "^2.0.0"
+    "7z-wasm": "^1.2.0",
+    "@bufbuild/protobuf": "^2.7.0",
+    "@core/chain": "workspace:^",
+    "@core/config": "workspace:^",
+    "@lib/dkls": "workspace:^",
+    "@lib/schnorr": "workspace:^",
+    "@lib/utils": "workspace:^",
+    "@solana/web3.js": "^2.0.0",
+    "bitcoinjs-lib": "^6.1.7"
   }
 }

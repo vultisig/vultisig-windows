@@ -1,5 +1,7 @@
+import { Chain } from '@core/chain/Chain'
+import { desktopDownloadUrl } from '@core/config'
 import { ManageBlockaid } from '@core/ui/chain/security/blockaid/ManageBlockaid'
-import { featureFlags } from '@core/ui/config'
+import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { languageName } from '@core/ui/i18n/Language'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { SettingsSection } from '@core/ui/settings/SettingsSection'
@@ -7,8 +9,8 @@ import { Client, useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useLanguage } from '@core/ui/storage/language'
 import { useHasPasscodeEncryption } from '@core/ui/storage/passcodeEncryption'
+import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { BookMarkedIcon } from '@lib/ui/icons/BookMarkedIcon'
 import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
@@ -34,7 +36,6 @@ import { Modal } from '@lib/ui/modal'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { Text } from '@lib/ui/text'
 import { useToast } from '@lib/ui/toast/ToastProvider'
 import { FC, ReactNode, useState } from 'react'
@@ -43,13 +44,14 @@ import { useTranslation } from 'react-i18next'
 type ExtensionSettings = {
   client: Extract<Client, 'extension'>
   expandView: ReactNode
+  insiderOptions: ReactNode
   prioritize: ReactNode
 }
 
 type DesktopSettings = {
   client: Extract<Client, 'desktop'>
   checkUpdate: ReactNode
-  manageMpcLib: ReactNode
+  insiderOptions: ReactNode
 }
 
 const iconSize = 20
@@ -58,13 +60,13 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
   const { t } = useTranslation()
   const [visible, setVisible] = useState(false)
   const { addToast } = useToast()
-  const { openUrl, version } = useCore()
+  const { openUrl } = useCore()
   const navigate = useCoreNavigate()
   const currency = useFiatCurrency()
   const language = useLanguage()
   const shareURL =
     props.client === 'desktop'
-      ? 'https://vultisig.com/download/vultisig'
+      ? desktopDownloadUrl
       : 'https://chromewebstore.google.com/detail/ggafhcdaplkhmmnlbfjpnnkepdfjaelb'
 
   const handleCopy = () => {
@@ -79,6 +81,8 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
   }
 
   const hasPasscodeEncryption = useHasPasscodeEncryption()
+  const addresses = useCurrentVaultAddresses()
+  const areReferralEnabled = Boolean(addresses[Chain.THORChain])
 
   return (
     <>
@@ -140,7 +144,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
               hoverable
               showArrow
             />
-            {featureFlags.referrals && (
+            {areReferralEnabled && (
               <ListItem
                 icon={<MegaphoneIcon fontSize={iconSize} />}
                 onClick={() => navigate({ id: 'referral' })}
@@ -173,7 +177,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
           <SettingsSection title={t('support')}>
             <ListItem
               icon={<MessageCircleQuestionIcon fontSize={iconSize} />}
-              onClick={() => openUrl('https://vultisig.com/faq')}
+              onClick={() => openUrl('https://vultisig.com/support#faq')}
               title={t('faq')}
               hoverable
               showArrow
@@ -230,12 +234,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
           </SettingsSection>
         </PageContent>
         <PageFooter alignItems="center" gap={8}>
-          {props.client === 'extension' && (
-            <UnstyledButton onClick={() => openUrl(shareURL)}>
-              {`VULTISIG EXTENSION V${version}`}
-            </UnstyledButton>
-          )}
-          {props.client === 'desktop' && props.manageMpcLib}
+          {props.insiderOptions}
         </PageFooter>
       </VStack>
       {visible && (

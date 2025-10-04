@@ -1,8 +1,7 @@
-import { Coin } from '@core/chain/coin/Coin'
 import { PartialMatch } from '@lib/ui/base/PartialMatch'
+import { ValueProp } from '@lib/ui/props'
 
 import { ChainAction } from '../../ChainAction'
-import { useDepositCoinCorrector } from '../../hooks/useDepositCoinCorrector'
 import { useGetMayaChainBondableAssetsQuery } from '../../hooks/useGetMayaChainBondableAssetsQuery'
 import { useDepositFormHandlers } from '../../providers/DepositFormHandlersProvider'
 import { BondUnbondLPSpecific } from './BondUnboldLPSpecific/BondUnbondLPSpecific'
@@ -14,21 +13,16 @@ import { StakeSpecific } from './StakeSpecific/StakeSpecific'
 import { UnstakeSpecific } from './StakeSpecific/UnstakeSpecific/UnstakeSpecific'
 import { SwitchSpecific } from './SwitchSpecific'
 import { UnmergeSpecific } from './UnmergeSpecific/UnmergeSpecific'
+import { WithdrawRujiRewardsSpecific } from './WithdrawRujiRewardsSpecific'
 
-type Props = {
-  action: ChainAction
-}
-
-export const DepositActionSpecific = ({ action }: Props) => {
-  useDepositCoinCorrector(action)
+export const DepositActionSpecific = ({ value }: ValueProp<ChainAction>) => {
   const { data: bondableAssets = [] } = useGetMayaChainBondableAssetsQuery()
   const [{ getValues }] = useDepositFormHandlers()
   const selectedBondableAsset = getValues('bondableAsset')
-  const selectedCoin = getValues('selectedCoin') as Coin | null
 
   return (
     <PartialMatch
-      value={action}
+      value={value}
       if={{
         bond_with_lp: () => (
           <BondUnbondLPSpecific
@@ -43,13 +37,14 @@ export const DepositActionSpecific = ({ action }: Props) => {
           />
         ),
         ibc_transfer: () => <IBCTransferSpecific />,
-        merge: () => <MergeSpecific selectedCoin={selectedCoin} />,
+        merge: () => <MergeSpecific />,
         switch: () => <SwitchSpecific />,
         unstake: () => <UnstakeSpecific />,
         stake: () => <StakeSpecific />,
-        unmerge: () => <UnmergeSpecific selectedCoin={selectedCoin} />,
+        unmerge: () => <UnmergeSpecific />,
         mint: () => <MintSpecific />,
         redeem: () => <RedeemSpecific />,
+        withdraw_ruji_rewards: () => <WithdrawRujiRewardsSpecific />,
       }}
       else={() => null}
     />

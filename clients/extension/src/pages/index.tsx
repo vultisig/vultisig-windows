@@ -1,46 +1,21 @@
+import { NavigationProvider } from '@clients/extension/src/navigation/NavigationProvider'
 import { views } from '@clients/extension/src/navigation/views'
-import { getManifestVersion } from '@clients/extension/src/state/utils/getManifestVersion'
-import { storage } from '@clients/extension/src/storage'
-import { StorageMigrationsManager } from '@clients/extension/src/storage/migrations/StorageMigrationManager'
+import { renderExtensionPage } from '@clients/extension/src/pages/core/render'
 import { isPopupView } from '@clients/extension/src/utils/functions'
-import { mpcServerUrl } from '@core/mpc/MpcServerType'
-import { CoreApp } from '@core/ui/CoreApp'
-import { CoreState } from '@core/ui/state/core'
+import { ExtensionCoreApp } from '@core/extension/ExtensionCoreApp'
+import { useProcessAppError } from '@core/ui/errors/hooks/useProcessAppError'
+import { initialCoreView } from '@core/ui/navigation/CoreView'
 import { ActiveView } from '@lib/ui/navigation/ActiveView'
-import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
-import { StrictMode } from 'react'
-import ReactDOM from 'react-dom/client'
+import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { createGlobalStyle, css } from 'styled-components'
-
-import { queriesPersister } from '../storage/queriesPersister'
-
-const coreState: CoreState = {
-  ...storage,
-  client: 'extension',
-  openUrl: url => window.open(url, '_blank', 'noopener,noreferrer'),
-  saveFile: async ({ name, blob }) => {
-    initiateFileDownload({ name, blob })
-  },
-  mpcDevice: 'extension',
-  getClipboardText: () => navigator.clipboard.readText(),
-  version: getManifestVersion(),
-  isLocalModeAvailable: false,
-  getMpcServerUrl: async ({ serverType }) => {
-    if (serverType === 'relay') {
-      return mpcServerUrl.relay
-    }
-
-    throw new Error('Local mode is not available in extension')
-  },
-  vaultCreationMpcLib: 'DKLS',
-}
 
 const isPopup = isPopupView()
 
 const ExtensionGlobalStyle = createGlobalStyle`
   body {
     min-height: 600px;
-    min-width: 400px;
+    min-width: 480px;
     overflow: hidden;
 
     ${
@@ -54,15 +29,27 @@ const ExtensionGlobalStyle = createGlobalStyle`
   }
 `
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <ExtensionGlobalStyle />
-    <CoreApp
-      migrationsManager={StorageMigrationsManager}
-      coreState={coreState}
-      queriesPersister={queriesPersister}
+const App = () => {
+  const processError = useProcessAppError()
+  const goBack = useNavigateBack()
+  const navigate = useNavigate()
+
+  return (
+    <ExtensionCoreApp
+      processError={processError}
+      goBack={goBack}
+      goHome={() => navigate(initialCoreView)}
     >
       <ActiveView views={views} />
-    </CoreApp>
-  </StrictMode>
+    </ExtensionCoreApp>
+  )
+}
+
+renderExtensionPage(
+  <>
+    <ExtensionGlobalStyle />
+    <NavigationProvider>
+      <App />
+    </NavigationProvider>
+  </>
 )

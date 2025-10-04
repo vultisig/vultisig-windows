@@ -1,4 +1,5 @@
 import { getVaultFromServer } from '@core/mpc/fast/api/getVaultFromServer'
+import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { passwordLenghtConfig } from '@core/ui/security/password/config'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
@@ -9,7 +10,6 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { useMutation } from '@tanstack/react-query'
@@ -57,7 +57,7 @@ export const ServerPasswordStep: React.FC<ServerPasswordStepProps> = ({
     handleSubmit,
     register,
   } = useForm<Schema>({
-    mode: 'onBlur',
+    mode: 'onChange',
     resolver: zodResolver(schema),
   })
 

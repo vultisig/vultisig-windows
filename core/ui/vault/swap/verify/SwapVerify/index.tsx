@@ -4,7 +4,7 @@ import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { formatAmount } from '@lib/utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 
 import { VerifyKeysignStart } from '../../../../mpc/keysign/start/VerifyKeysignStart'
@@ -68,10 +68,7 @@ export const SwapVerify = () => {
               pending={() => t('loading')}
               success={amount => (
                 <Text weight="500" size={17} color="contrast">
-                  {formatTokenAmount(amount)}{' '}
-                  <Text as="span" color="shy" size={17}>
-                    {toCoin.ticker.toUpperCase()}
-                  </Text>
+                  {formatAmount(amount, toCoin)}
                 </Text>
               )}
             />

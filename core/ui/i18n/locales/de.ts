@@ -1,11 +1,31 @@
 export const de = {
+  onboarding_greeting: 'Auf Wiedersehen zu <g>Seed-Wörter</g>',
+  onboarding_step_1:
+    'Sag hallo zu <g>Tresoranteile,</g> deine neue <g>Wiederherstellungsmethode</g>',
+  onboarding_step_2:
+    'Sie sind <g>in Teile aufgeteilt</g> um die Sicherheit zu erhöhen und, <g>den Single Point of Failure zu entfernen</g>',
+  onboarding_step_3:
+    '<g>Jedes Gerät</g> in Ihrem Tresor enthält <g>eine Tresorfreigabe</g>',
+  onboarding_step_4:
+    'Stelle deinen Tresor wieder her, sogar <g>wenn ein Gerät verloren geht oder beschädigt wird</g>',
+  onboarding_step_5:
+    '<g>Sichern Sie jede Tresorfreigabe immer</g> separat in einer <g>anderen Location</g>',
+  onboarding_step_6:
+    'Diese Freigaben arbeiten zusammen, um <g>Ihren Tresor zu entsperren</g>',
+  positions: 'Positionen',
+  save_10_percent_on_swaps: 'Speichern Sie <blue>10%</blue> auf Swaps jetzt',
+  add_friends_referral: 'Fügen Sie eine Freunde-Referenz hinzu',
   secure_crypto_vault: 'Sicherer Krypto-Tresor',
   digit_input_success_validation: 'Verifizierung erfolgreich',
   digit_input_error_validation:
     'Fehler bei der Code-Verifizierung, bitte erneut versuchen',
   digit_input_loading_validation: 'Code wird überprüft, bitte warten',
   vultisig: 'Vultisig',
+  by_vultisig: 'von Vultisig',
+  merged: 'Zusammengeführt',
   mint: 'Erhalten',
+  function_unavailble:
+    'Funktion für bestehende Chain-Coins nicht verfügbar. Bitte fügen Sie Coins hinzu, die mit FUNCTION: verwendet werden können',
   redeem: 'Verkaufen',
   onboarding_description_1:
     'Vultisig ist ein sicherer, mehrgerätefähiger Krypto-Tresor, kompatibel mit allen führenden Blockchains und über 10.000 Tokens. Vultisig ist vollständig selbstverwaltet.',
@@ -18,7 +38,11 @@ export const de = {
   moreInfo: 'Mehr Info',
   create_referral_title: 'Empfehlung erstellen',
   use_referral_code: 'Empfehlungscode verwenden',
+  amount_to_unstake: 'Menge zur Aufhebung',
   save_code: 'Code speichern',
+  unstake_share_token_label: 'Unstake {{ticker}}',
+  sent: 'Gesendet',
+  auto_compound_into_label: 'Auto-compound into {{ticker}}',
   used_referral_error:
     'Verwendeter Empfehlungs­code darf nicht derselbe sein wie dein Empfehlungs­code',
   your_referral_code: 'Dein Empfehlungscode',
@@ -31,18 +55,23 @@ export const de = {
   change_your_friends_referral:
     'Ändere den Empfehlungs­code deines Freundes für Swaps',
   incorrect_passcode: 'Falscher Passcode',
+  vault_selected: 'Vault ausgewählt',
   passcodes_do_not_match: 'Passcodes stimmen nicht überein',
   search_field_placeholder: 'Suchen..',
   referral_reg_fee: 'Registrierungsgebühr',
+  enter_percentage: 'Prozentangabe eingeben',
   select: 'Auswählen',
+  thorchain_address_required_for_referrals:
+    'Sie müssen eine THORChain-Adresse haben, um das Referral-Programm zu verwenden',
   pick_referral_code: 'Referral-Code auswählen',
   referral_status: 'Status',
   referral_costs: 'Kosten',
+  your_referrals: 'Deine Empfehlungen',
   set_expiration: 'Ablauf festlegen (in Jahren)',
   expiration_date: 'Ablaufdatum',
   choose_payout_asset: 'Auszahlungs-Asset wählen',
   tx_hash: 'Transaktions-Hash',
-  title_1: 'Empfehlung',
+  referrals_default_title: 'Empfehlung',
   title_2: 'Vultisig - Empfehlungen',
   header_tooltip_title: 'Empfehlungsprogramm',
   header_tooltip_content:
@@ -136,29 +165,10 @@ export const de = {
   qrCode: 'den QR-Code',
   downloadVultisig:
     'Laden Sie Vultisig auf Ihr anderes Gerät(e) herunter und wählen Sie "QR-Code scannen"',
-  sayHelloTo: 'Sag hallo zu',
-  alwaysBackUpEachVaultShare: 'Sichern Sie jede Tresorfreigabe immer',
-  separatelyIna: 'separat in einer',
-  differentLocation: 'anderen Location',
-  eachDevice: 'Jedes Gerät',
   chooseSetup: 'Setup wählen',
   introOnboarding: 'Intro',
-  inYourVaultHolds: 'in Ihrem Tresor enthält',
-  oneVaultShare: 'eine Tresorfreigabe',
-  theyRe: 'Sie sind',
-  splitIntoParts: 'in Teile aufgeteilt',
-  toIncreaseSecurity: 'um die Sicherheit zu erhöhen und',
-  removeSinglePointOfFailure: 'den Single Point of Failure zu entfernen',
-  theseSharesCollaborate: 'Diese Freigaben arbeiten zusammen, um',
-  unlockYourVault: 'Ihren Tresor zu entsperren',
-  recoverYourVault: 'Stelle deinen Tresor wieder her, sogar',
-  deviceLostOrDamaged: 'wenn ein Gerät verloren geht oder beschädigt wird',
-  vaultShares: 'Tresoranteile',
-  yourNewRecoveryMethod: 'deine neue Wiederherstellungsmethode',
   tokens: 'Token',
   selected: 'ausgewählt',
-  sayGoodbyeTo: 'Auf Wiedersehen zu',
-  seedPhrases: 'Seed-Wörter',
   required_field_missing: 'Erforderliches Feld fehlt',
   email_confirmation_code_label:
     'Geben Sie den Code ein, den Sie mit Ihrem Backup per E-Mail erhalten haben',
@@ -513,7 +523,6 @@ export const de = {
         'Dieser Code bestätigt, dass Sie Ihren Tresoranteil 1 per E-Mail erhalten haben',
       verifyingCode: 'Code wird überprüft, bitte warten',
       backupVault: 'Tresor sichern',
-      shareOnlineBackup: 'vorzugsweise online.',
       shareSecurely: 'um den Zugriff zu gewährleisten,',
       securely: 'sicher, vorzugsweise',
       online: 'online',
@@ -535,6 +544,7 @@ export const de = {
       agreementText: 'Ich habe gelesen und verstanden, was zu tun ist',
       ctaText: 'Erstellen Sie Ihren Tresor',
       start_using_vault: 'Beginnen Sie mit der Nutzung Ihres Tresors',
+      select_preferred_chains: 'Wählen Sie Ihre bevorzugten Ketten',
     },
     preparingVault: 'Tresor wird vorbereitet',
     createVault: {
@@ -642,10 +652,11 @@ export const de = {
       'Fehler beim Abrufen der neuesten Version: {{error}}',
     fetchingLatestVersion: 'Neueste Version wird abgerufen...',
     applicationUpToDate: 'Anwendung ist auf dem neuesten Stand.',
-    newVersionAvailable: 'Eine neue Version ({{latestVersion}}) ist verfügbar!',
-    downloadButton: 'Jetzt herunterladen.',
     currentVersion: '{{localVersion}}',
     title: 'Update prüfen',
+    version: 'Version {{latestVersion}}',
+    downloadButton: 'Jetzt aktualisieren',
+    update_is_available: 'Ein Update ist verfügbar',
   },
   updatePopup: {
     updateAvailableMessage:
@@ -713,7 +724,6 @@ export const de = {
   normal: 'Normal',
   priority: 'Priorität',
   gas_limit: 'Gasgrenze',
-  current_base_fee: 'Aktuelle Grundgebühr',
   gwei: 'GWEI',
   gas_limit_tooltip_content:
     'Der maximale Gasbetrag, den Sie bezahlen. Kann erhöht werden, wenn das Gaslimit nicht ausreicht, um Transaktionen zu senden.',
@@ -828,7 +838,6 @@ export const de = {
   get_vault_failed: 'Tresore konnten nicht abgerufen werden',
   get_vault_failed_description:
     'Stellen Sie sicher, dass Sie Ihre Tresore bereits in VultiConnect importiert haben',
-  connect_with_vultisig: 'Verbinden Sie sich mit Vultisig',
   select_vault: 'Wählen Sie einen Tresor aus',
   connect: 'Verbinden',
   link_copied: 'Link in die Zwischenablage kopiert',
@@ -872,14 +881,9 @@ export const de = {
   vault_overview: 'Vault-Übersicht',
   tap: 'Klopfen',
   took_too_long_to_respond: 'Die Antwort hat zu lange gedauert',
-  vultiserver_password: 'Vultiserver-Passwort',
+  backup_password: 'Backup-Passwort',
   signing_transaction: 'Signieren einer Transaktion',
   backup_without_password: 'Backup ohne Passwort',
-  use_password: 'Passwort verwenden',
-  backup_password_prompt:
-    'Möchten Sie den Tresorfreigaben Ihres Geräts ein Kennwort hinzufügen?',
-  backup_password_info:
-    'Wir empfehlen, für Geräte-Tresorfreigaben kein Backup-Passwort festzulegen. Ihre Daten sind sicher, wenn die Backups ordnungsgemäß an verschiedenen Orten gespeichert werden, was bereits einen erheblichen Schutz darstellt. Denken Sie daran: Backup-Passwörter können nicht wiederhergestellt werden, wenn Sie sie vergessen. Sie haben die Wahl!',
   upgrade_your_vault_now: 'Aktualisieren Sie Ihren Tresor jetzt',
   upgrade_vault: 'Aktualisieren Sie Ihren Tresor',
   upgrade_now: 'Jetzt upgraden',
@@ -924,12 +928,17 @@ export const de = {
   prioritize_vultisig: 'Priorisieren Sie Vultisig',
   referral_code: 'Empfehlungscode',
   rename: 'Umbenennen',
+  turn_your_vault_into_rewards_machine:
+    'Ihr Tresor in eine Belohnungsmaschine umwandeln. Erstellen Sie jetzt Ihre Empfehlung und beginnen Sie mit dem Erhalten von Belohnungen.',
   support: 'Unterstützung',
   terms: 'Bedingungen',
+  expiration_must_extend_by_exactly_one_year:
+    'Ablaufdatum kann nur um 1 Jahr erhöht werden',
   twitter: 'Twitter',
   vultisig_community: 'Vultisig-Gemeinschaft',
   remove: 'Entfernen',
   share_vault: 'Tresor teilen',
+  no_referral_yet: 'Noch keine Empfehlung',
   missing_thorchain_address: 'Fehlende THORChain-Adresse',
   missing_destination_address: 'Fehlende Zieladresse',
   upgrade_shares_info:
@@ -1002,7 +1011,7 @@ export const de = {
   go_to_wallet: 'Zur Brieftasche',
   install_plugin: 'Plugin installieren',
   installing_plugin: 'Plugin installieren',
-  plugin_info: 'Plugin-Informationen',
+  plugin_info: 'Plugin Informationen',
   plugin_info_desc: 'Sie installieren das {{name}}-Plugin',
   plugin_success_desc: 'Die Installation von {{name}} ist abgeschlossen',
   plugin_password_desc:
@@ -1033,9 +1042,6 @@ export const de = {
   search: 'Suchen',
   create_referral_form: 'Empfehlung erstellen',
   blockaid_security_scan: 'Blockaid-Sicherheitsscan',
-  transaction_not_scanned:
-    'Transaktion nicht von <provider></provider> gescannt',
-  transaction_scanned: 'Transaktion gescannt von <provider></provider>',
   transaction_has_risk:
     '{{riskLevel}} Risikotransaktion erkannt von <provider></provider>',
   scanning: 'Scannen...',
@@ -1050,4 +1056,58 @@ export const de = {
     'Diese IBC-Transaktion enthält ein Memo, aber Vultisig unterstützt derzeit nicht das Einbetten von Memos in IBC-Übertragungsnachrichten.<br> Das Fortsetzen dieser Transaktion kann zu einem <b>irreversiblen Verlust von Geldern</b> führen.',
   go_back: 'Geh zurück',
   continue_anyway: 'Trotzdem fortfahren',
+  withdraw_ruji_rewards: 'RUJI-Prämien abheben',
+  tns_max_4_chars: 'Der Empfehlungscode darf nicht länger als 4 Zeichen sein',
+  tns_alnum_only:
+    'Der Empfehlungscode darf nur alphanumerische Zeichen enthalten',
+  tns_not_found: 'Empfehlungscode nicht gefunden',
+  tns_missing_thor_alias:
+    'Der Empfehlungscode muss einen THOR-Kettenalias haben',
+  site: 'Website',
+  send_receiver_address_same_as_sender:
+    'Empfängeradresse darf nicht mit Absenderadresse identisch sein',
+  connect_to_site: 'Verbinden Sie sich mit {{site}}',
+  entity_not_scanned: '{{entity}} nicht von <provider></provider> gescannt',
+  entity_scanned: '{{entity}} gescannt von <provider></provider>',
+  site_has_risk: 'Schädliche Site erkannt von <provider></provider>',
+  risky_site_detected: 'Schädliche Site erkannt',
+  app_permissions: 'App Berechtigungen',
+  dapp_name: 'dApp-Name',
+  description: 'Beschreibung',
+  personal_sign: 'Persönliches Zeichen',
+  request_from: 'Anfrage von',
+  rules: 'Regeln',
+  rule_item: 'Regel {{number}}',
+  sign_request: 'Anfrage unterzeichnen',
+  signed_signature: 'Unterschrift',
+  signing_address: 'Unterschriftsadresse',
+  verify_identity_sign: 'Melden Sie sich an, um Ihre Identität zu bestätigen',
+  incorrect_url: 'Falsche URL',
+  developer_options: 'Entwickleroptionen',
+  plugin_server_url: 'Plugin-Server-URL',
+  base_fee: 'Grundgebühr',
+  backupShare2: 'Sicherungsfreigabe 2',
+  processing_transaction: 'Transaktion wird verarbeitet...',
+  failed_to_process_transaction: 'Transaktion konnte nicht verarbeitet werden',
+  signature_successful: 'Signatur erfolgreich',
+  accept_continue: 'Akzeptieren und fortfahren',
+  allow_app_access: 'App-Zugriff erlauben auf',
+  app_store: 'App Store',
+  install_app: 'App installieren',
+  permissions: 'Berechtigungen',
+  same_vault_share: 'Gleiche Tresorfreigabe',
+  referrals_create_page_title: 'Vultisig - Empfehlungen',
+  save_swap_fees_with_referral:
+    'Sparen Sie <blue>10 %</blue> beim Tausch – Fügen Sie eine Empfehlung hinzu',
+  create_own_referral:
+    'Erstellen Sie Ihren eigenen Code und verdienen Sie <blue>20 %</blue> auf vermittelte Swaps',
+  backup_with_password: 'Backup mit Passwort',
+  backup_password_confirmation_title:
+    'Möchten Sie Ihr Backup mit einem Passwort verschlüsseln?',
+  backup_password_info_secure_without_password:
+    'Standardmäßig ist Ihr Backup <b>ohne</b> ein zusätzliches Kennwort sicher, da Sie Vault-Freigaben an verschiedenen Orten speichern.',
+  backup_password_info_encrypt_with_password:
+    'Wenn Sie ein Kennwort hinzufügen, wird dieses zum <b>Verschlüsseln</b> der Sicherungsdatei verwendet.',
+  backup_password_info_cannot_be_reset:
+    'Denken Sie daran: Wenn Sie Ihr Tresorkennwort vergessen, kann es <b>nicht</b> zurückgesetzt oder wiederhergestellt werden.',
 }

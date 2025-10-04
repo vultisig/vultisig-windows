@@ -6,10 +6,10 @@ import {
   CoinFinderChainKind,
   coinFinderChainKinds,
 } from './CoinFinderChainKind'
-import { findCosmosCoins } from './cosmos'
-import { findEvmCoins } from './evm'
-import { FindCoinsResolver } from './FindCoinsResolver'
-import { findSolanaCoins } from './solana'
+import { FindCoinsResolver } from './resolver'
+import { findCosmosCoins } from './resolvers/cosmos'
+import { findEvmCoins } from './resolvers/evm'
+import { findSolanaCoins } from './resolvers/solana'
 
 const resolvers: Record<CoinFinderChainKind, FindCoinsResolver<any>> = {
   cosmos: findCosmosCoins,

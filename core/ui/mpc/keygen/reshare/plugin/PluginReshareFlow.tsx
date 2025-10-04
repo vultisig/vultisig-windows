@@ -13,8 +13,8 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { ValueProp } from '@lib/ui/props'
 import { GradientText, Text } from '@lib/ui/text'
+import { NameProp } from '@lib/utils/entities/props'
 import { useTranslation } from 'react-i18next'
 
 import { KeygenFlow } from '../../flow/KeygenFlow'
@@ -22,29 +22,14 @@ import { WaitForPluginAndVerifier } from './WaitForPluginAndVerifier'
 
 const steps = ['info', 'password', 'keygen'] as const
 
-export type PluginMetadata = {
-  id: string
-  title: string
-  description: string
-  server_endpoint: string
-  pricing_id: string
-  category_id: string
-  created_at: string // ISO date string
-  updated_at: string // ISO date string
-}
-
-export const PluginReshareFlow = ({
-  value: pluginInfo,
-}: ValueProp<PluginMetadata>) => {
+export const PluginReshareFlow = ({ name }: NameProp) => {
   const { t } = useTranslation()
   const { step, toPreviousStep, toNextStep } = useStepNavigation({ steps })
 
   return (
     <Match
       value={step}
-      info={() => (
-        <PreviewInfo value={pluginInfo.title} onFinish={toNextStep} />
-      )}
+      info={() => <PreviewInfo value={name} onFinish={toNextStep} />}
       password={() => (
         <ValueTransfer<{ password: string }>
           key="password"
@@ -96,7 +81,7 @@ export const PluginReshareFlow = ({
                         centerHorizontally
                       >{`${t('success')}.`}</GradientText>
                       <Text as="span" size={28} weight={500} centerHorizontally>
-                        {t('plugin_success_desc', { name: pluginInfo.title })}
+                        {t('plugin_success_desc', { name })}
                       </Text>
                     </PageContent>
                     <PageFooter>

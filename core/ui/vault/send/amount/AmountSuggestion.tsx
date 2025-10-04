@@ -3,16 +3,14 @@ import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { OnClickProp, ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { getHoverVariant } from '@lib/ui/theme/getHoverVariant'
 import { getColor } from '@lib/ui/theme/getters'
 import { toPercents } from '@lib/utils/toPercents'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 const Container = styled(UnstyledButton)<{
   isActive?: boolean
-  isInteractive?: boolean
 }>`
   width: 56px;
   height: 30px;
@@ -20,17 +18,6 @@ const Container = styled(UnstyledButton)<{
   ${centerContent};
   background-color: ${({ isActive }) =>
     isActive ? getColor('buttonPrimary') : getColor('foreground')};
-
-  ${({ isInteractive }) =>
-    isInteractive
-      ? css`
-          &:hover {
-            background: ${() => getHoverVariant('foreground')};
-          }
-        `
-      : css`
-          cursor: default;
-        `}
 `
 
 export const AmountSuggestion: FC<
@@ -47,7 +34,6 @@ export const AmountSuggestion: FC<
     <Container
       className={className}
       isActive={isActive}
-      isInteractive={!!onClick}
       onClick={onClick ? () => onClick() : undefined}
     >
       <Text size={14} weight="500">

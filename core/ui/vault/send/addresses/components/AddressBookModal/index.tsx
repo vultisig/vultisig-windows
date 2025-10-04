@@ -1,3 +1,5 @@
+import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
+import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { Match } from '@lib/ui/base/Match'
 import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
@@ -17,6 +19,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { AddressBookListItem } from '../../../../../address-book/item'
+import { useAssertWalletCore } from '../../../../../chain/providers/WalletCoreProvider'
 import { useAddressBookItems } from '../../../../../storage/addressBook'
 import { useVaults } from '../../../../../storage/vaults'
 import { useCurrentSendCoin } from '../../../state/sendCoin'
@@ -33,7 +36,7 @@ export const AddressBookModal = ({ onSelect, onClose }: Props) => {
   const coin = useCurrentSendCoin()
   const addressBookItems = useAddressBookItems()
   const vaults = useVaults()
-
+  const walletCore = useAssertWalletCore()
   const options: Readonly<ToggleSwitchOption<AddressBookOption>[]> = [
     { label: t('address_book_saved'), value: 'saved' },
     { label: t('address_book_vault'), value: 'all' },
@@ -44,16 +47,28 @@ export const AddressBookModal = ({ onSelect, onClose }: Props) => {
 
   const vaultsAndAddressForSelectedCoin = useMemo(() => {
     return vaults.reduce<VaultAddressBookItem[]>((acc, vault) => {
-      const match = vault.coins.find(
-        c => c.chain === coin.chain && (coin.id ? c.id === coin.id : !c.id)
-      )
+      const match = vault.coins.find(c => c.chain === coin.chain)
 
       if (match?.address) {
         acc.push({ name: vault.name, address: match.address })
+      } else {
+        const publicKey = getPublicKey({
+          chain: coin.chain,
+          walletCore,
+          hexChainCode: vault.hexChainCode,
+          publicKeys: vault.publicKeys,
+        })
+
+        const address = deriveAddress({
+          chain: coin.chain,
+          publicKey,
+          walletCore,
+        })
+        acc.push({ name: vault.name, address })
       }
       return acc
     }, [])
-  }, [coin.chain, coin.id, vaults])
+  }, [coin.chain, vaults, walletCore])
 
   return (
     <Modal withDefaultStructure={false} onClose={onClose}>

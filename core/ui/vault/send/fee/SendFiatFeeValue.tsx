@@ -2,62 +2,50 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
-import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { formatAmount } from '@lib/utils/formatAmount'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
-import { useEffect } from 'react'
 
+import { useFormatFiatAmount } from '../../../chain/hooks/useFormatFiatAmount'
 import { useCurrentSendCoin } from '../state/sendCoin'
-import { useSendFees } from '../state/sendFees'
 import { useSendChainSpecific } from './SendChainSpecificProvider'
 
 export const SendFiatFeeValue = () => {
-  const coin = useCurrentSendCoin()
-  const [, setFees] = useSendFees()
-  const fiatCurrency = useFiatCurrency()
+  const { chain } = useCurrentSendCoin()
   const chainSpecific = useSendChainSpecific()
   const fee = getFeeAmount(chainSpecific)
+  const formatFiatAmount = useFormatFiatAmount()
 
-  const { isPending, data: price } = useCoinPriceQuery({
+  const coin = chainFeeCoin[chain]
+  const feeCoinPriceQuery = useCoinPriceQuery({
     coin,
   })
 
-  const { decimals } = chainFeeCoin[coin.chain]
+  const { decimals, ticker } = coin
+
   const humanReadableFeeValue = fromChainAmount(fee, decimals)
 
-  let formattedAmount: string | null = null
-
-  useEffect(() => {
-    if (!formattedAmount) return
-
-    setFees({
-      type: 'send',
-      networkFeesFormatted: formattedAmount,
-    })
-  }, [formattedAmount, setFees])
-
-  if (isPending)
-    return (
-      <VStack>
-        <Skeleton width="88" height="12" />
-        <Skeleton width="48" height="12" />
-      </VStack>
-    )
-
-  if (!price || !humanReadableFeeValue) return null
-
-  formattedAmount = formatAmount(humanReadableFeeValue * price, fiatCurrency)
   return (
-    <VStack alignItems="flex-end">
-      <Text size={14}>
-        {formatTokenAmount(humanReadableFeeValue, coin.ticker)}
-      </Text>
-      <Text size={14} color="shy">
-        {formattedAmount}
-      </Text>
-    </VStack>
+    <MatchQuery
+      value={feeCoinPriceQuery}
+      pending={() => (
+        <VStack>
+          <Skeleton width="88" height="12" />
+          <Skeleton width="48" height="12" />
+        </VStack>
+      )}
+      success={price => (
+        <VStack alignItems="flex-end">
+          <Text size={14}>
+            {formatAmount(humanReadableFeeValue, { ticker })}
+          </Text>
+          <Text size={14} color="shy">
+            {formatFiatAmount(humanReadableFeeValue * price)}
+          </Text>
+        </VStack>
+      )}
+    />
   )
 }

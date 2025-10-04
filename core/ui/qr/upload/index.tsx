@@ -1,3 +1,4 @@
+import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ScanQrView } from '@core/ui/qr/components/ScanQrView'
@@ -9,20 +10,9 @@ import { getVaultId } from '@core/ui/vault/Vault'
 import { Match } from '@lib/ui/base/Match'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { useToast } from '@lib/ui/toast/ToastProvider'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { createGlobalStyle } from 'styled-components'
-
-const GlobalStyle = createGlobalStyle`
-  body {
-    background-image: url('/core/images/scanQRCodeBackground.png');
-    background-position: 0% 40%;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-`
 
 export const UploadQrPage = () => {
   const { t } = useTranslation()
@@ -83,7 +73,6 @@ export const UploadQrPage = () => {
           upload={() => <UploadQrView />}
         />
       </VStack>
-      <GlobalStyle />
     </>
   )
 }

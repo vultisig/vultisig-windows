@@ -1,31 +1,36 @@
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { formatFee } from '@core/chain/tx/fee/format/formatFee'
+import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { TxOverviewRow } from '@core/ui/chain/tx/TxOverviewRow'
+import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { OnBackProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { formatAmount } from '@lib/utils/formatAmount'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useChainSpecificQuery } from '../../../../../chain/coin/queries/useChainSpecificQuery'
 import { StartKeysignPrompt } from '../../../../../mpc/keysign/prompt/StartKeysignPrompt'
+import { useCurrentVaultCoin } from '../../../../state/currentVaultCoins'
 import { useReferralKeysignPayload } from '../../hooks/useReferralKeysignPayload'
 import { useReferralSender } from '../../hooks/useReferralSender'
 import { useCreateReferralForm } from '../../providers/CreateReferralFormProvider'
 import { useReferralPayoutAsset } from '../../providers/ReferralPayoutAssetProvider'
+import { useActivePoolsQuery } from '../../queries/useActivePoolsQuery'
 import { buildCreateReferralMemo } from '../../utils/buildReferralMemos'
+import { normaliseChainToMatchPoolChain } from '../EditReferral/EditReferralForm/config'
 import { ReferralPageWrapper } from '../Referrals.styled'
 
 export const CreateReferralVerify = ({ onBack }: OnBackProp) => {
@@ -37,21 +42,35 @@ export const CreateReferralVerify = ({ onBack }: OnBackProp) => {
   const referralAmount = watch('referralFeeAmount')
   const name = watch('referralName')
 
+  const { data: allowedPools = [] } = useActivePoolsQuery()
+
+  const preferredAsset = allowedPools.find(pool => {
+    const [poolChain, tail] = pool.asset.split('.')
+    const poolTicker = tail.split('-')[0]
+    return (
+      normaliseChainToMatchPoolChain(poolChain) ===
+        normaliseChainToMatchPoolChain(coin.chain) &&
+      poolTicker.toUpperCase() === coin.ticker.toUpperCase()
+    )
+  })?.asset
+
   const memo = buildCreateReferralMemo({
     name,
-    payoutAddress: sender,
-    ownerThorAddr: sender,
+    thorAliasAddress: sender,
+    preferredAsset: preferredAsset || undefined,
   })
-  const { chain, ticker } = coin
+
+  const thorchainCoin = useCurrentVaultCoin(chainFeeCoin.THORChain)
+  const { chain, ticker } = thorchainCoin
 
   const { keysignPayload } = useReferralKeysignPayload({
-    coin,
+    coin: thorchainCoin,
     memo,
     amount: referralAmount,
   })
 
   const chainSpecific = useChainSpecificQuery({
-    coin,
+    coin: thorchainCoin,
     isDeposit: true,
   })
 
@@ -77,13 +96,8 @@ export const CreateReferralVerify = ({ onBack }: OnBackProp) => {
               {t('you_are_sending')}
             </Text>
             <HStack alignItems="center" gap={8}>
-              <CoinIcon coin={coin} style={{ fontSize: 24 }} />
-              <Text size={17}>
-                {formatTokenAmount(referralAmount)}
-                <Text as="span" color="shy">
-                  {ticker}
-                </Text>
-              </Text>
+              <CoinIcon coin={thorchainCoin} style={{ fontSize: 24 }} />
+              <Text size={17}>{formatAmount(referralAmount, { ticker })}</Text>
             </HStack>
           </AmountWrapper>
           <TxOverviewRow>
@@ -111,10 +125,10 @@ export const CreateReferralVerify = ({ onBack }: OnBackProp) => {
               {t('est_network_fee')}
             </Text>
             <Text size={14}>
-              {formatFee({ chain, chainSpecific: chainSpecific.data })}
+              {formatFee({ chain, amount: getFeeAmount(chainSpecific.data) })}
             </Text>
           </TxOverviewRow>
-          <TxOverviewMemo value={memo} />
+          <TxOverviewMemo value={memo} chain={chain} />
         </TxOverviewPanel>
         <VStack
           style={{

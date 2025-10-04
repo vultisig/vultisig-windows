@@ -1,30 +1,38 @@
 import { isPopupView } from '@clients/extension/src/utils/functions'
-import { useCore } from '@core/ui/state/core'
 import { VStack } from '@lib/ui/layout/Stack'
+import { useNavigation } from '@lib/ui/navigation/state'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { ChildrenProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { FC, useEffect, useState } from 'react'
+import { getLastItem } from '@lib/utils/array/getLastItem'
+import { FC, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UAParser } from 'ua-parser-js'
 
+import { useOpenInExpandedViewMutation } from '../../expanded-view/mutations/openInExpandedView'
+import { AppView } from '../../navigation/AppView'
+
 export const ExpandViewGuard: FC<ChildrenProp> = ({ children }) => {
   const { t } = useTranslation()
-  const [expandView, setExpandView] = useState(false)
-  const { openUrl } = useCore()
+  const { mutate: openInExpandedView } = useOpenInExpandedViewMutation()
 
-  useEffect(() => {
+  const shouldRedirect = useMemo(() => {
     const parser = new UAParser()
     const parserResult = parser.getResult()
 
-    if (parserResult.os.name !== 'Windows' && isPopupView()) {
-      setExpandView(true)
+    return parserResult.os.name !== 'Windows' && isPopupView()
+  }, [])
 
-      openUrl(`chrome-extension://${chrome.runtime.id}/index.html`)
+  const [{ history }] = useNavigation()
+  const currentView = getLastItem(history) as AppView
+
+  useEffect(() => {
+    if (shouldRedirect) {
+      openInExpandedView(currentView)
     }
-  }, [openUrl])
+  }, [currentView, openInExpandedView, shouldRedirect])
 
-  return expandView ? (
+  return shouldRedirect ? (
     <VStack fullHeight>
       <PageContent
         alignItems="center"

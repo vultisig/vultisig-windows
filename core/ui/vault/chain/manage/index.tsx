@@ -2,6 +2,7 @@ import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { areEqualCoins, Coin } from '@core/chain/coin/Coin'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
+import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import {
   useCreateCoinMutation,
   useDeleteCoinMutation,
@@ -15,10 +16,11 @@ import { ListItem } from '@lib/ui/list/item'
 import { ListItemTag } from '@lib/ui/list/item/tag'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { Text } from '@lib/ui/text'
 import { FC, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 
 const NativeCoinItem: FC<Coin> = coin => {
   const currentCoins = useCurrentVaultNativeCoins()
@@ -69,7 +71,7 @@ export const ManageVaultChainsPage = () => {
   const [search, setSearch] = useState<string | undefined>(undefined)
   const nativeCoins = Object.values(chainFeeCoin)
   const currentNativeCoins = useCurrentVaultNativeCoins()
-
+  const navigate = useCoreNavigate()
   const filteredNativeCoins = useMemo(() => {
     if (!search) return nativeCoins
 
@@ -97,7 +99,9 @@ export const ManageVaultChainsPage = () => {
   return (
     <VStack fullHeight>
       <PageHeader
-        primaryControls={<PageHeaderBackButton />}
+        primaryControls={
+          <PageHeaderBackButton onClick={() => navigate({ id: 'vault' })} />
+        }
         title={t('manage_chains')}
         hasBorder
       />

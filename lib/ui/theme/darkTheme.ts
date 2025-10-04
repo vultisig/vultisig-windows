@@ -10,7 +10,9 @@ export const darkTheme: DefaultTheme = {
 
     text: new HSLA(220, 67, 96),
     textSupporting: new HSLA(211, 10, 43),
+    // Text/Tertiary
     textShy: new HSLA(214, 21, 60),
+    textShyExtra: new HSLA(214, 40, 85, 1),
 
     primary: new HSLA(167, 78, 55),
     primaryAlt: new HSLA(224, 98, 64),
@@ -23,6 +25,7 @@ export const darkTheme: DefaultTheme = {
     background: new HSLA(217, 91, 9),
     foreground: new HSLA(216, 81, 13),
     foregroundDark: new HSLA(213, 80, 14),
+    // Backgrounds/surface-2
     foregroundExtra: new HSLA(216, 63, 18),
     foregroundSuper: new HSLA(215, 62, 28),
     foregroundSuperContrast: new HSLA(207, 42, 40),
@@ -37,15 +40,10 @@ export const darkTheme: DefaultTheme = {
     buttonPrimary: new HSLA(224, 75, 50),
     buttonHover: new HSLA(215, 75, 47),
     buttonTextDisabled: new HSLA(216, 15, 52),
+    primaryAccentTwo: new HSLA(224, 96, 40),
+    primaryAccentFour: new HSLA(224, 96, 64),
 
     transparent: new HSLA(0, 0, 0, 0),
     white: new HSLA(0, 0, 100),
-  },
-
-  gradients: {
-    primary: `linear-gradient(135deg, #0339C7, #2155DF)`,
-    button: `linear-gradient(90deg,  #11C89C, #FFC25C)`,
-    alert: `linear-gradient(45deg,  #FF5C5C, #5CA7FF)`,
-    overlay: `linear-gradient(0deg,   rgba(0,0,0,.6), rgba(0,0,0,.8))`,
   },
 }

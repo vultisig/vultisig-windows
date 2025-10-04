@@ -1,7 +1,7 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { getNativeSwapDecimals } from '@core/chain/swap/native/utils/getNativeSwapDecimals'
 import { SwapFees } from '@core/chain/swap/SwapFee'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
-import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
@@ -12,11 +12,8 @@ import { useSwapQuoteQuery } from './useSwapQuoteQuery'
 
 export const useSwapFeesQuery = () => {
   const swapQuoteQuery = useSwapQuoteQuery()
-
   const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
   const [toCoinKey] = useToCoin()
-  const toCoin = useCurrentVaultCoin(toCoinKey)
-
   const chainSpecificQuery = useSwapChainSpecificQuery()
 
   return useTransformQueriesData(
@@ -27,34 +24,29 @@ export const useSwapFeesQuery = () => {
     ({ swapQuote, chainSpecific }): SwapFees => {
       const fromFeeCoin = chainFeeCoin[fromCoinKey.chain]
 
+      const network = {
+        ...fromFeeCoin,
+        amount: getFeeAmount(chainSpecific),
+        decimals: fromFeeCoin.decimals,
+      }
+
       return matchRecordUnion(swapQuote, {
         native: ({ fees }) => {
-          const feeAmount = getFeeAmount(chainSpecific)
+          const swapAmount = BigInt(fees.total)
 
-          const result: SwapFees = {
+          return {
             swap: {
               ...toCoinKey,
-              amount: BigInt(fees.total),
-              decimals: toCoin.decimals,
+              amount: swapAmount,
+              decimals: getNativeSwapDecimals(toCoinKey),
             },
-            network: {
-              ...fromFeeCoin,
-              amount: feeAmount,
-              decimals: fromFeeCoin.decimals,
-            },
+            network,
           }
-
-          return result
         },
         general: ({ tx }) => {
           return matchRecordUnion(tx, {
-            evm: ({ gasPrice, gas }) => ({
-              swap: {
-                chain: fromCoinKey.chain,
-                id: fromCoinKey.id,
-                amount: BigInt(gasPrice) * BigInt(gas),
-                decimals: fromFeeCoin.decimals,
-              },
+            evm: () => ({
+              network,
             }),
             solana: ({ networkFee, swapFee }) => ({
               network: {

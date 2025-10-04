@@ -74,7 +74,7 @@ export const nativeSwapChainIds: Record<NativeSwapEnabledChain, string> = {
   [Chain.Noble]: 'NOBLE',
 }
 
-export type NativeSwapPayloadCase = Extract<
+type NativeSwapPayloadCase = Extract<
   NonNullable<KeysignPayload['swapPayload']['case']>,
   'thorchainSwapPayload' | 'mayachainSwapPayload'
 >

@@ -1,50 +1,37 @@
-import { Coin } from '@core/chain/coin/Coin'
-import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
-import {
-  TxOverviewColumn,
-  TxOverviewRow,
-  TxOverviewRowDepositsFlow,
-} from '@core/ui/chain/tx/TxOverviewRow'
-import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
-import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
+import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { DepositConfirmButton } from '@core/ui/vault/deposit/DepositConfirmButton'
-import { getRequiredFieldsPerChainAction } from '@core/ui/vault/deposit/DepositForm/chainOptionsConfig'
-import { StrictTextContrast } from '@core/ui/vault/deposit/DepositVerify/DepositVerify.styled'
 import { getFormattedFormData } from '@core/ui/vault/deposit/DepositVerify/utils'
-import { DepositFee } from '@core/ui/vault/deposit/fee/DepositFee'
-import { DepositFiatFee } from '@core/ui/vault/deposit/fee/DepositFiatFee'
+import { DepositFeeValue } from '@core/ui/vault/deposit/fee/DepositFeeValue'
+import { DepositFiatFeeValue } from '@core/ui/vault/deposit/fee/DepositFiatFeeValue'
 import { useMemoGenerator } from '@core/ui/vault/deposit/hooks/useMemoGenerator'
 import { useSender } from '@core/ui/vault/deposit/hooks/useSender'
-import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
-import { WithProgressIndicator } from '@lib/ui/flow/WithProgressIndicator'
+import { ProgressLine } from '@lib/ui/flow/ProgressLine'
+import { VStack } from '@lib/ui/layout/Stack'
+import { List } from '@lib/ui/list'
+import { ListItem } from '@lib/ui/list/item'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
-import { StrictText, Text } from '@lib/ui/text'
-import { MiddleTruncate } from '@lib/ui/truncate'
+import { Text } from '@lib/ui/text'
 import { FC } from 'react'
 import { FieldValues } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { useDepositFormConfig } from '../hooks/useDepositFormConfig'
+import { useDepositAction } from '../providers/DepositActionProvider'
+import { useDepositCoin } from '../providers/DepositCoinProvider'
+
 type DepositVerifyProps = {
   depositFormData: FieldValues
-  selectedChainAction: ChainAction
   onBack: () => void
 }
 
 export const DepositVerify: FC<DepositVerifyProps> = ({
   onBack,
   depositFormData,
-  selectedChainAction,
 }) => {
-  const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
-  const selectedCoin =
-    depositFormData?.selectedCoin &&
-    typeof depositFormData.selectedCoin === 'object'
-      ? (depositFormData.selectedCoin as Coin)
-      : undefined
-  const currentCoin = useCurrentVaultCoin(coinKey)
-  const coin = selectedCoin || currentCoin
+  const [selectedChainAction] = useDepositAction()
+  const [coin] = useDepositCoin()
 
   const depositFormDataWithMemo = useMemoGenerator({
     depositFormData: depositFormData,
@@ -61,10 +48,7 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
 
   const sender = useSender()
   const { t } = useTranslation()
-  const actionFields = selectedChainAction
-    ? getRequiredFieldsPerChainAction(t, coin.chain)[selectedChainAction]
-        ?.fields
-    : []
+  const { fields: actionFields } = useDepositFormConfig()
 
   return (
     <>
@@ -73,85 +57,70 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
         title={t('verify')}
         hasBorder
       />
-      <PageContent gap={40}>
-        <WithProgressIndicator value={0.3}>
-          <TxOverviewPanel>
-            <TxOverviewColumn key="from">
-              <Text size={18} weight={700}>
-                {t('from')}
-              </Text>
-              <StrictTextContrast as={MiddleTruncate} text={sender} />
-            </TxOverviewColumn>
-            {actionFields.map(field => {
-              if (
-                formattedDepositFormData[field.name] == null ||
-                formattedDepositFormData[field.name] === '' ||
-                field?.name === 'memo'
-              ) {
-                return null
-              }
+      <PageContent gap={16} scrollable>
+        <ProgressLine value={0.3} />
+        <List>
+          <ListItem description={sender} title={t('from')} />
+          {actionFields.map(field => {
+            if (
+              formattedDepositFormData[field.name] == null ||
+              formattedDepositFormData[field.name] === '' ||
+              field?.name === 'memo'
+            ) {
+              return null
+            }
 
-              return field.type === 'number' || field.type === 'percentage' ? (
-                <TxOverviewRowDepositsFlow key={field.name}>
-                  <Text size={18} weight={700}>
-                    {field.label}
+            return field.type === 'number' || field.type === 'percentage' ? (
+              <ListItem
+                description={`${String(formattedDepositFormData[field.name])}${field.name === 'amount' ? ` ${coin.ticker}` : ''}`}
+                key={field.name}
+                title={field.label}
+              />
+            ) : (
+              <ListItem
+                description={String(formattedDepositFormData[field.name])}
+                key={field.name}
+                title={field.label}
+              />
+            )
+          })}
+          {selectedChainAction === 'merge' && (
+            <ListItem
+              description={String(formattedDepositFormData.nodeAddress)}
+              title={t('to')}
+            />
+          )}
+          {selectedChainAction === 'leave' && (
+            <ListItem description={`0 ${coin.ticker}`} title={t('amount')} />
+          )}
+          {Boolean(formattedDepositFormData['memo']) && (
+            <ListItem
+              description={
+                <VStack as="pre" scrollable>
+                  <Text as="code" family="mono">
+                    {String(formattedDepositFormData['memo'])}
                   </Text>
-                  <StrictText family="mono">
-                    {String(formattedDepositFormData[field.name])}{' '}
-                    {field.name === 'amount' && coin.ticker}
-                  </StrictText>
-                </TxOverviewRowDepositsFlow>
-              ) : (
-                <TxOverviewColumn key={field.name}>
-                  <Text size={18} weight={700}>
-                    {field.label}
-                  </Text>
-                  <StrictTextContrast>
-                    {String(formattedDepositFormData[field.name])}
-                  </StrictTextContrast>
-                </TxOverviewColumn>
-              )
-            })}
-            {selectedChainAction === 'merge' && (
-              <TxOverviewColumn>
-                <Text size={18} weight={700}>
-                  {t('to')}
-                </Text>
-                <StrictTextContrast
-                  as={MiddleTruncate}
-                  text={String(formattedDepositFormData.nodeAddress)}
-                />
-              </TxOverviewColumn>
-            )}
-            {selectedChainAction === 'leave' && (
-              <TxOverviewRowDepositsFlow>
-                <Text size={18} weight={700}>
-                  {t('amount')}
-                </Text>
-                <StrictText family="mono">0 {coin.ticker}</StrictText>
-              </TxOverviewRowDepositsFlow>
-            )}
-            <TxOverviewRow key="memo">
-              <Text size={18} weight={700}>
-                {t('memo')}
-              </Text>
-              <StrictTextContrast>
-                {String(formattedDepositFormData['memo'])}
-              </StrictTextContrast>
-            </TxOverviewRow>
-            <TxOverviewRow>
-              <DepositFee />
-            </TxOverviewRow>
-            <TxOverviewRow>
-              <DepositFiatFee />
-            </TxOverviewRow>
-          </TxOverviewPanel>
-        </WithProgressIndicator>
+                </VStack>
+              }
+              title={t('memo')}
+            />
+          )}
+          <ListItem
+            description={<DepositFeeValue />}
+            title={`${t('gas')} (${t('auto')})`}
+          />
+          <ListItem
+            description={<DepositFiatFeeValue />}
+            title={t('network_fee')}
+          />
+        </List>
+      </PageContent>
+      <PageFooter>
         <DepositConfirmButton
           action={selectedChainAction}
           depositFormData={formattedDepositFormData}
         />
-      </PageContent>
+      </PageFooter>
     </>
   )
 }

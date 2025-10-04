@@ -276,8 +276,8 @@ const leanTokens: Partial<LeanChainTokensRecord> = {
     '0x4c5d8A75F3762c1561D96f177694f67378705E98': {
       ticker: 'PYTH',
       logo: 'pyth',
-      decimals: 18,
-      priceProviderId: 'pyth',
+      decimals: 6,
+      priceProviderId: 'pyth-network',
     },
     '0xB0fFa8000886e57F86dd5264b9582b2Ad87b2b91': {
       ticker: 'W',
@@ -381,7 +381,7 @@ const leanTokens: Partial<LeanChainTokensRecord> = {
       ticker: 'PYTH',
       logo: 'pyth',
       decimals: 6,
-      priceProviderId: 'PYTH',
+      priceProviderId: 'pyth-network',
     },
     '0x13Ad51ed4F1B7e9Dc168d8a00cB3f4dDD85EfA60': {
       ticker: 'LDO',
@@ -440,6 +440,7 @@ const leanTokens: Partial<LeanChainTokensRecord> = {
       ticker: 'PYTH',
       logo: 'pyth',
       decimals: 6,
+      priceProviderId: 'pyth-network',
     },
     '0xFdb794692724153d1488CcdBE0C56c252596735F': {
       ticker: 'LDO',
@@ -567,6 +568,20 @@ const leanTokens: Partial<LeanChainTokensRecord> = {
       priceProviderId: 'zksync',
     },
   },
+  [Chain.Mantle]: {
+    '0x201EBa5CC46D216Ce6DC03F6a759e8E766e956aE': {
+      ticker: 'USDT',
+      logo: 'usdt',
+      decimals: 6,
+      priceProviderId: 'tether',
+    },
+    '0x09bc4e0d864854c6afb6eb9a9cdf58ac190d0df9': {
+      ticker: 'USDC',
+      logo: 'usdc',
+      decimals: 6,
+      priceProviderId: 'usd-coin',
+    },
+  },
   ...knownCosmosTokens,
 }
 
@@ -586,3 +601,17 @@ export const knownTokens = makeRecord(Object.values(Chain), chain => {
 
   return result
 })
+
+type KnownIndex = Record<Chain, Record<string, KnownCoin>>
+
+export const knownTokensIndex: KnownIndex = makeRecord(
+  Object.values(Chain),
+  chain => {
+    const byId: Record<string, KnownCoin> = {}
+    for (const coin of knownTokens[chain] ?? []) {
+      if (!coin.id) continue
+      byId[coin.id.toLowerCase()] = coin
+    }
+    return byId
+  }
+)

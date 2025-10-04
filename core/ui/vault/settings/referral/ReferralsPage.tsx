@@ -1,11 +1,11 @@
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -14,7 +14,6 @@ import {
   useHasFinishedReferralsOnboardingQuery,
   useSetHasFinishedReferralsOnboardingMutation,
 } from '../../../storage/referrals'
-import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { ManageReferrals } from './components/ManageReferrals'
 import { ReferralLanding } from './components/ReferralLanding'
 import { ReferralsSummary } from './components/ReferralSummary'
@@ -36,13 +35,9 @@ export const ReferralPage = () => {
     initialStep: isOnboarded ? 'manage' : 'landing',
   })
 
-  const { address } = useCurrentVaultCoin({
-    chain: chainFeeCoin.THORChain.chain,
-    id: 'RUNE',
-  })
-
   // Hard refetch in case the user just created/edited a referral and is coming back from Keysign
-  const { refetch } = useUserValidThorchainNameQuery(address)
+  const validThorchainNameQuery = useUserValidThorchainNameQuery()
+  const { refetch } = validThorchainNameQuery
 
   useEffect(() => {
     if (isOnboarded) {
@@ -64,7 +59,7 @@ export const ReferralPage = () => {
             <>
               <PageHeader
                 primaryControls={<PageHeaderBackButton />}
-                title={t('title_1')}
+                title={t('referrals_default_title')}
               />
               <ContentWrapper>
                 <Match
@@ -84,7 +79,18 @@ export const ReferralPage = () => {
           )
         }
 
-        return <ManageReferrals />
+        return (
+          <MatchQuery
+            value={validThorchainNameQuery}
+            pending={() => (
+              <CenterAbsolutely>
+                <Spinner size="3em" />
+              </CenterAbsolutely>
+            )}
+            success={data => <ManageReferrals value={data} />}
+            error={() => <ManageReferrals />}
+          />
+        )
       }}
     />
   )

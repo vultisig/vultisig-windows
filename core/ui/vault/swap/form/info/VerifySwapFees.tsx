@@ -5,7 +5,6 @@ import { Text } from '@lib/ui/text'
 import { ComponentType, FC, PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useSwapChainSpecificQuery } from '../../queries/useSwapChainSpecificQuery'
 import { useSwapFeesQuery } from '../../queries/useSwapFeesQuery'
 import { SwapFeeFiatValue } from './SwapTotalFeeFiatValue'
 
@@ -16,46 +15,43 @@ type VerifySwapFeesProps = {
 export const VerifySwapFees: FC<VerifySwapFeesProps> = ({ RowComponent }) => {
   const { t } = useTranslation()
   const query = useSwapFeesQuery()
-  const chainSpecificQuery = useSwapChainSpecificQuery()
 
   return (
     <>
       <MatchQuery
         value={query}
-        success={({ network }) => {
-          if (!network) return null
-
-          return (
-            <MatchQuery
-              value={chainSpecificQuery}
-              success={chainSpecific => {
-                return (
-                  <RowComponent>
-                    <span>{t('network_fee')}</span>
-                    <Text color="supporting">
-                      {formatFee({ ...network, chainSpecific })} (~
-                      <SwapFeeFiatValue value={[network]} />)
-                    </Text>
-                  </RowComponent>
-                )
-              }}
-            />
-          )
-        }}
+        pending={() => (
+          <RowComponent>
+            <Text>{t('swap_fee')}</Text>
+            <Skeleton width="48px" height="12px" />
+          </RowComponent>
+        )}
+        error={() => (
+          <RowComponent>
+            <Text>{t('swap_fee')}</Text>
+            <Text color="danger">{t('failed_to_load')}</Text>
+          </RowComponent>
+        )}
+        success={({ network, swap }) => (
+          <>
+            {swap && (
+              <RowComponent>
+                <Text>{t('swap_fee')}</Text>
+                <Text color="shy">
+                  <SwapFeeFiatValue value={[swap]} />
+                </Text>
+              </RowComponent>
+            )}
+            <RowComponent>
+              <span>{t('network_fee')}</span>
+              <Text color="shy">
+                {formatFee(network)} (~
+                <SwapFeeFiatValue value={[network]} />)
+              </Text>
+            </RowComponent>
+          </>
+        )}
       />
-      <RowComponent>
-        <Text>{t('swap_fee')}</Text>
-        <MatchQuery
-          value={query}
-          pending={() => <Skeleton width="48px" height="12px" />}
-          error={() => <Text color="danger">{t('failed_to_load')}</Text>}
-          success={({ swap }) => (
-            <Text color="supporting">
-              <SwapFeeFiatValue value={[swap]} />
-            </Text>
-          )}
-        />
-      </RowComponent>
       <RowComponent>
         <span>{t('max_total_fees')}</span>
         <MatchQuery

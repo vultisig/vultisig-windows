@@ -17,6 +17,7 @@ export type ChainAction =
   | 'unmerge'
   | 'mint'
   | 'redeem'
+  | 'withdraw_ruji_rewards'
 
 export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
   [Chain.THORChain]: [
@@ -30,6 +31,7 @@ export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
     'unmerge',
     'mint',
     'redeem',
+    'withdraw_ruji_rewards',
   ],
   [Chain.MayaChain]: ['bond_with_lp', 'unbond_with_lp', 'leave', 'custom'],
   [Chain.Dydx]: ['vote'],

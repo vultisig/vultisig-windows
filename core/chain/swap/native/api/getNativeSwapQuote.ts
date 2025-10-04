@@ -2,8 +2,7 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { isInError } from '@lib/utils/error/isInError'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
-import { addQueryParams } from '@lib/utils/query/addQueryParams'
+import { formatAmount } from '@lib/utils/formatAmount'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { TransferDirection } from '@lib/utils/TransferDirection'
 
@@ -14,14 +13,14 @@ import {
   NativeSwapChain,
   nativeSwapStreamingInterval,
 } from '../NativeSwapChain'
-import { NativeSwapQuote } from '../NativeSwapQuote'
+import { AffiliateParam, NativeSwapQuote } from '../NativeSwapQuote'
 import { getNativeSwapDecimals } from '../utils/getNativeSwapDecimals'
 
 type GetNativeSwapQuoteInput = Record<TransferDirection, AccountCoin> & {
   swapChain: NativeSwapChain
   destination: string
   amount: number
-  isAffiliate: boolean
+  affiliates: AffiliateParam[]
 }
 
 type NativeSwapQuoteErrorResponse = {
@@ -36,7 +35,7 @@ export const getNativeSwapQuote = async ({
   from,
   to,
   amount,
-  isAffiliate,
+  affiliates,
 }: GetNativeSwapQuoteInput): Promise<NativeSwapQuote> => {
   const [fromAsset, toAsset] = [from, to].map(asset => toNativeSwapAsset(asset))
 
@@ -45,19 +44,34 @@ export const getNativeSwapQuote = async ({
   const chainAmount = toChainAmount(amount, fromDecimals)
 
   const swapBaseUrl = `${nativeSwapApiBaseUrl[swapChain]}/quote/swap`
-  const params = {
+  const params = new URLSearchParams({
     from_asset: fromAsset,
     to_asset: toAsset,
     amount: chainAmount.toString(),
     destination,
-    streaming_interval: nativeSwapStreamingInterval[swapChain],
-    affiliate: nativeSwapAffiliateConfig.affiliateFeeAddress,
-    affiliate_bps: isAffiliate
-      ? nativeSwapAffiliateConfig.affiliateFeeRateBps
-      : 0,
+    streaming_interval: String(nativeSwapStreamingInterval[swapChain]),
+  })
+
+  // THORChain supports nested affiliates; Maya supports single affiliate only
+  if (swapChain === 'THORChain') {
+    for (const a of affiliates) {
+      params.append('affiliate', a.name)
+      params.append('affiliate_bps', String(a.bps))
+    }
+  } else {
+    const app = affiliates.find(
+      a => a.name === nativeSwapAffiliateConfig.affiliateFeeAddress
+    )
+    if (app) {
+      params.append('affiliate', app.name)
+      params.append('affiliate_bps', String(app.bps))
+    } else if (affiliates.length) {
+      params.append('affiliate', affiliates[0].name)
+      params.append('affiliate_bps', String(affiliates[0].bps))
+    }
   }
 
-  const url = addQueryParams(swapBaseUrl, params)
+  const url = `${swapBaseUrl}?${params.toString()}`
 
   const result = await queryUrl<
     NativeSwapQuoteResponse | NativeSwapQuoteErrorResponse
@@ -76,7 +90,7 @@ export const getNativeSwapQuote = async ({
       fromDecimals
     )
 
-    const formattedMinAmount = formatTokenAmount(minAmount)
+    const formattedMinAmount = formatAmount(minAmount, from)
 
     const msg = `Swap amount too small. Recommended amount ${formattedMinAmount}`
 

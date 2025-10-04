@@ -1,29 +1,52 @@
 import { EvmChain } from '@core/chain/Chain'
+import { isHex } from 'viem'
 
-export const evmNativeTokenGasLimit: Record<EvmChain, number> = {
-  [EvmChain.Ethereum]: 23000,
-  [EvmChain.Base]: 40000,
-  [EvmChain.Arbitrum]: 120000,
-  [EvmChain.Polygon]: 23000,
-  [EvmChain.Optimism]: 40000,
-  [EvmChain.CronosChain]: 40000,
-  [EvmChain.Blast]: 40000,
-  [EvmChain.BSC]: 40000,
-  [EvmChain.Avalanche]: 23000,
-  [EvmChain.Zksync]: 200000,
+import { CoinKey } from '../../../coin/Coin'
+
+const zkSyncTransferGasLimit = 200000n
+const mantleTransferGasLimit = 90_000_000n
+
+const feeCoinTransferGasLimit: Record<EvmChain, bigint> = {
+  [EvmChain.Ethereum]: 23000n,
+  [EvmChain.Base]: 40000n,
+  [EvmChain.Arbitrum]: 120000n,
+  [EvmChain.Polygon]: 23000n,
+  [EvmChain.Optimism]: 40000n,
+  [EvmChain.CronosChain]: 40000n,
+  [EvmChain.Blast]: 40000n,
+  [EvmChain.BSC]: 40000n,
+  [EvmChain.Avalanche]: 23000n,
+  [EvmChain.Zksync]: zkSyncTransferGasLimit,
+  [EvmChain.Mantle]: mantleTransferGasLimit,
 }
 
-export const evmTokenGasLimit: Record<EvmChain, number> = {
-  [EvmChain.Ethereum]: 120000,
-  [EvmChain.Base]: 120000,
-  [EvmChain.Arbitrum]: 120000,
-  [EvmChain.Polygon]: 120000,
-  [EvmChain.Optimism]: 120000,
-  [EvmChain.CronosChain]: 120000,
-  [EvmChain.Blast]: 120000,
-  [EvmChain.BSC]: 120000,
-  [EvmChain.Avalanche]: 120000,
-  [EvmChain.Zksync]: 200000,
+const defaultErc20TransferGasLimit = 120000n
+
+const erc20TransferGasLimit: Record<EvmChain, bigint> = {
+  [EvmChain.Ethereum]: defaultErc20TransferGasLimit,
+  [EvmChain.Base]: defaultErc20TransferGasLimit,
+  [EvmChain.Arbitrum]: defaultErc20TransferGasLimit,
+  [EvmChain.Polygon]: defaultErc20TransferGasLimit,
+  [EvmChain.Optimism]: defaultErc20TransferGasLimit,
+  [EvmChain.CronosChain]: defaultErc20TransferGasLimit,
+  [EvmChain.Blast]: defaultErc20TransferGasLimit,
+  [EvmChain.BSC]: defaultErc20TransferGasLimit,
+  [EvmChain.Avalanche]: defaultErc20TransferGasLimit,
+  [EvmChain.Zksync]: zkSyncTransferGasLimit,
+  [EvmChain.Mantle]: mantleTransferGasLimit,
 }
 
-export const defaultEvmSwapGasLimit = 600000
+type DeriveEvmGasLimitInput = {
+  coin: CoinKey<EvmChain>
+  data?: string
+}
+
+// If data is a hex string, we treat it as a contract call; otherwise, it's considered a simple memo
+export const deriveEvmGasLimit = ({ coin, data }: DeriveEvmGasLimitInput) => {
+  const { id, chain } = coin
+  if (data && isHex(data)) {
+    return chain === EvmChain.Mantle ? 1_500_000_000n : 600_000n
+  }
+
+  return (id ? erc20TransferGasLimit : feeCoinTransferGasLimit)[chain]
+}

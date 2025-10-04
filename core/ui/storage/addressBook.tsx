@@ -2,10 +2,7 @@ import { AddressBookItem } from '@core/ui/address-book/model'
 import { useCore } from '@core/ui/state/core'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
-import {
-  noPersistQueryOptions,
-  noRefetchQueryOptions,
-} from '@lib/ui/query/utils/options'
+import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -50,7 +47,6 @@ export const useAddressBookItemsQuery = () => {
       return sortEntitiesWithOrder(addresses)
     },
     ...noRefetchQueryOptions,
-    ...noPersistQueryOptions,
   })
 }
 

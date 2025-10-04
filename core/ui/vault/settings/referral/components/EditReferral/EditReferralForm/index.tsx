@@ -1,19 +1,24 @@
 import { Chain } from '@core/chain/Chain'
 import { areEqualCoins } from '@core/chain/coin/Coin'
+import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
 import { StackSeparatedBy } from '@lib/ui/layout/StackSeparatedBy'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { OnFinishProp } from '@lib/ui/props'
 import { useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useCurrentVaultCoins } from '../../../../../state/currentVaultCoins'
+import { useCanAffordReferral } from '../../../hooks/useCanAffordReferral'
 import { useEditReferralFormData } from '../../../providers/EditReferralFormProvider'
 import { useReferralPayoutAsset } from '../../../providers/ReferralPayoutAssetProvider'
 import { ValidThorchainNameDetails } from '../../../services/getUserValidThorchainName'
-import { DecorationLine, ReferralPageWrapper } from '../../Referrals.styled'
+import {
+  DecorationLine,
+  FormFieldErrorText,
+  ReferralPageWrapper,
+} from '../../Referrals.styled'
 import { ExpirationField } from './Fields/ExpirationField'
 import { Fees } from './Fields/Fees'
 import { PayoutAssetField } from './Fields/PayoutAssetField'
@@ -40,6 +45,13 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
     [nameDetails.remainingYears]
   )
 
+  const maxExtension = initialExpiration + 1
+
+  const feeAmount = watch('referralFeeAmount')
+
+  const canAfford = useCanAffordReferral(feeAmount)
+  const error = canAfford ? undefined : t('insufficient_balance')
+
   const coins = useCurrentVaultCoins()
   const prefCoin = useMemo(() => {
     if (!nameDetails?.preferred_asset) return undefined
@@ -61,9 +73,12 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
   }, [coins, nameDetails?.preferred_asset])
 
   const currentExpiration = watch('expiration')
+  const isExactlyOneYearExtension = currentExpiration === maxExtension
+
   const expirationChanged =
     currentExpiration !== initialExpiration &&
     currentExpiration > initialExpiration
+
   const assetChanged = prefCoin
     ? referralPayoutAsset !== prefCoin
     : referralPayoutAsset !== initialReferralPayoutAsset.current
@@ -77,16 +92,27 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
   const isDisabled = useMemo(() => {
     if (currentExpiration <= initialExpiration) {
       return `Expiration must be greater than ${initialExpiration}`
-    } else if (!isValid || isSubmitting || !hasChanges) {
+    } else if (!isExactlyOneYearExtension) {
+      return t('expiration_must_extend_by_exactly_one_year')
+    } else if (!isValid || isSubmitting || !hasChanges || error) {
       return true
     }
-  }, [currentExpiration, hasChanges, initialExpiration, isSubmitting, isValid])
+  }, [
+    currentExpiration,
+    error,
+    hasChanges,
+    initialExpiration,
+    isExactlyOneYearExtension,
+    isSubmitting,
+    isValid,
+    t,
+  ])
 
   return (
     <VStack flexGrow gap={40}>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={t('title_1')}
+        title={t('referrals_default_title')}
       />
       <ReferralPageWrapper
         onSubmit={onFinish}
@@ -106,9 +132,12 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
             <ExpirationField initialExpiration={initialExpiration} />
             <Fees />
           </StackSeparatedBy>
-          <Button disabled={isDisabled} type="submit">
-            {t('edit_referral')}
-          </Button>
+          <VStack gap={4}>
+            <Button disabled={isDisabled} type="submit">
+              {t('edit_referral')}
+            </Button>
+            {error && <FormFieldErrorText>{error}</FormFieldErrorText>}
+          </VStack>
         </VStack>
       </ReferralPageWrapper>
     </VStack>

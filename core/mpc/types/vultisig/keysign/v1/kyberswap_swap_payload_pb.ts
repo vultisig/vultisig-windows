@@ -2,129 +2,121 @@
 // @generated from file vultisig/keysign/v1/kyberswap_swap_payload.proto (package vultisig.keysign.v1, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage } from '@bufbuild/protobuf/codegenv1'
-import { fileDesc, messageDesc } from '@bufbuild/protobuf/codegenv1'
-import type { Coin } from './coin_pb'
-import { file_vultisig_keysign_v1_coin } from './coin_pb'
-import type { Message } from '@bufbuild/protobuf'
+import type { GenFile, GenMessage } from "@bufbuild/protobuf/codegenv1";
+import { fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv1";
+import type { Coin } from "./coin_pb";
+import { file_vultisig_keysign_v1_coin } from "./coin_pb";
+import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file vultisig/keysign/v1/kyberswap_swap_payload.proto.
  */
-export const file_vultisig_keysign_v1_kyberswap_swap_payload: GenFile =
-  /*@__PURE__*/
-  fileDesc(
-    'CjB2dWx0aXNpZy9rZXlzaWduL3YxL2t5YmVyc3dhcF9zd2FwX3BheWxvYWQucHJvdG8SE3Z1bHRpc2lnLmtleXNpZ24udjEiegoUS3liZXJTd2FwVHJhbnNhY3Rpb24SDAoEZnJvbRgBIAEoCRIKCgJ0bxgCIAEoCRIMCgRkYXRhGAMgASgJEg0KBXZhbHVlGAQgASgJEhEKCWdhc19wcmljZRgFIAEoCRILCgNnYXMYBiABKAMSCwoDZmVlGAcgASgDIlsKDkt5YmVyU3dhcFF1b3RlEhIKCmRzdF9hbW91bnQYASABKAkSNQoCdHgYAiABKAsyKS52dWx0aXNpZy5rZXlzaWduLnYxLkt5YmVyU3dhcFRyYW5zYWN0aW9uItABChBLeWJlclN3YXBQYXlsb2FkEiwKCWZyb21fY29pbhgBIAEoCzIZLnZ1bHRpc2lnLmtleXNpZ24udjEuQ29pbhIqCgd0b19jb2luGAIgASgLMhkudnVsdGlzaWcua2V5c2lnbi52MS5Db2luEhMKC2Zyb21fYW1vdW50GAMgASgJEhkKEXRvX2Ftb3VudF9kZWNpbWFsGAQgASgJEjIKBXF1b3RlGAUgASgLMiMudnVsdGlzaWcua2V5c2lnbi52MS5LeWJlclN3YXBRdW90ZUJUChN2dWx0aXNpZy5rZXlzaWduLnYxWjhnaXRodWIuY29tL3Z1bHRpc2lnL2NvbW1vbmRhdGEvZ28vdnVsdGlzaWcva2V5c2lnbi92MTt2MboCAlZTYgZwcm90bzM',
-    [file_vultisig_keysign_v1_coin]
-  )
+export const file_vultisig_keysign_v1_kyberswap_swap_payload: GenFile = /*@__PURE__*/
+  fileDesc("CjB2dWx0aXNpZy9rZXlzaWduL3YxL2t5YmVyc3dhcF9zd2FwX3BheWxvYWQucHJvdG8SE3Z1bHRpc2lnLmtleXNpZ24udjEiegoUS3liZXJTd2FwVHJhbnNhY3Rpb24SDAoEZnJvbRgBIAEoCRIKCgJ0bxgCIAEoCRIMCgRkYXRhGAMgASgJEg0KBXZhbHVlGAQgASgJEhEKCWdhc19wcmljZRgFIAEoCRILCgNnYXMYBiABKAMSCwoDZmVlGAcgASgDIlsKDkt5YmVyU3dhcFF1b3RlEhIKCmRzdF9hbW91bnQYASABKAkSNQoCdHgYAiABKAsyKS52dWx0aXNpZy5rZXlzaWduLnYxLkt5YmVyU3dhcFRyYW5zYWN0aW9uItABChBLeWJlclN3YXBQYXlsb2FkEiwKCWZyb21fY29pbhgBIAEoCzIZLnZ1bHRpc2lnLmtleXNpZ24udjEuQ29pbhIqCgd0b19jb2luGAIgASgLMhkudnVsdGlzaWcua2V5c2lnbi52MS5Db2luEhMKC2Zyb21fYW1vdW50GAMgASgJEhkKEXRvX2Ftb3VudF9kZWNpbWFsGAQgASgJEjIKBXF1b3RlGAUgASgLMiMudnVsdGlzaWcua2V5c2lnbi52MS5LeWJlclN3YXBRdW90ZUJUChN2dWx0aXNpZy5rZXlzaWduLnYxWjhnaXRodWIuY29tL3Z1bHRpc2lnL2NvbW1vbmRhdGEvZ28vdnVsdGlzaWcva2V5c2lnbi92MTt2MboCAlZTYgZwcm90bzM", [file_vultisig_keysign_v1_coin]);
 
 /**
  * @generated from message vultisig.keysign.v1.KyberSwapTransaction
  */
-export type KyberSwapTransaction =
-  Message<'vultisig.keysign.v1.KyberSwapTransaction'> & {
-    /**
-     * @generated from field: string from = 1;
-     */
-    from: string
+export type KyberSwapTransaction = Message<"vultisig.keysign.v1.KyberSwapTransaction"> & {
+  /**
+   * @generated from field: string from = 1;
+   */
+  from: string;
 
-    /**
-     * @generated from field: string to = 2;
-     */
-    to: string
+  /**
+   * @generated from field: string to = 2;
+   */
+  to: string;
 
-    /**
-     * @generated from field: string data = 3;
-     */
-    data: string
+  /**
+   * @generated from field: string data = 3;
+   */
+  data: string;
 
-    /**
-     * @generated from field: string value = 4;
-     */
-    value: string
+  /**
+   * @generated from field: string value = 4;
+   */
+  value: string;
 
-    /**
-     * @generated from field: string gas_price = 5;
-     */
-    gasPrice: string
+  /**
+   * @generated from field: string gas_price = 5;
+   */
+  gasPrice: string;
 
-    /**
-     * @generated from field: int64 gas = 6;
-     */
-    gas: bigint
+  /**
+   * @generated from field: int64 gas = 6;
+   */
+  gas: bigint;
 
-    /**
-     * @generated from field: int64 fee = 7;
-     */
-    fee: bigint
-  }
+  /**
+   * @generated from field: int64 fee = 7;
+   */
+  fee: bigint;
+};
 
 /**
  * Describes the message vultisig.keysign.v1.KyberSwapTransaction.
  * Use `create(KyberSwapTransactionSchema)` to create a new message.
  */
-export const KyberSwapTransactionSchema: GenMessage<KyberSwapTransaction> =
-  /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_kyberswap_swap_payload, 0)
+export const KyberSwapTransactionSchema: GenMessage<KyberSwapTransaction> = /*@__PURE__*/
+  messageDesc(file_vultisig_keysign_v1_kyberswap_swap_payload, 0);
 
 /**
  * @generated from message vultisig.keysign.v1.KyberSwapQuote
  */
-export type KyberSwapQuote = Message<'vultisig.keysign.v1.KyberSwapQuote'> & {
+export type KyberSwapQuote = Message<"vultisig.keysign.v1.KyberSwapQuote"> & {
   /**
    * @generated from field: string dst_amount = 1;
    */
-  dstAmount: string
+  dstAmount: string;
 
   /**
    * @generated from field: vultisig.keysign.v1.KyberSwapTransaction tx = 2;
    */
-  tx?: KyberSwapTransaction
-}
+  tx?: KyberSwapTransaction;
+};
 
 /**
  * Describes the message vultisig.keysign.v1.KyberSwapQuote.
  * Use `create(KyberSwapQuoteSchema)` to create a new message.
  */
-export const KyberSwapQuoteSchema: GenMessage<KyberSwapQuote> =
-  /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_kyberswap_swap_payload, 1)
+export const KyberSwapQuoteSchema: GenMessage<KyberSwapQuote> = /*@__PURE__*/
+  messageDesc(file_vultisig_keysign_v1_kyberswap_swap_payload, 1);
 
 /**
  * @generated from message vultisig.keysign.v1.KyberSwapPayload
  */
-export type KyberSwapPayload =
-  Message<'vultisig.keysign.v1.KyberSwapPayload'> & {
-    /**
-     * @generated from field: vultisig.keysign.v1.Coin from_coin = 1;
-     */
-    fromCoin?: Coin
+export type KyberSwapPayload = Message<"vultisig.keysign.v1.KyberSwapPayload"> & {
+  /**
+   * @generated from field: vultisig.keysign.v1.Coin from_coin = 1;
+   */
+  fromCoin?: Coin;
 
-    /**
-     * @generated from field: vultisig.keysign.v1.Coin to_coin = 2;
-     */
-    toCoin?: Coin
+  /**
+   * @generated from field: vultisig.keysign.v1.Coin to_coin = 2;
+   */
+  toCoin?: Coin;
 
-    /**
-     * @generated from field: string from_amount = 3;
-     */
-    fromAmount: string
+  /**
+   * @generated from field: string from_amount = 3;
+   */
+  fromAmount: string;
 
-    /**
-     * @generated from field: string to_amount_decimal = 4;
-     */
-    toAmountDecimal: string
+  /**
+   * @generated from field: string to_amount_decimal = 4;
+   */
+  toAmountDecimal: string;
 
-    /**
-     * @generated from field: vultisig.keysign.v1.KyberSwapQuote quote = 5;
-     */
-    quote?: KyberSwapQuote
-  }
+  /**
+   * @generated from field: vultisig.keysign.v1.KyberSwapQuote quote = 5;
+   */
+  quote?: KyberSwapQuote;
+};
 
 /**
  * Describes the message vultisig.keysign.v1.KyberSwapPayload.
  * Use `create(KyberSwapPayloadSchema)` to create a new message.
  */
-export const KyberSwapPayloadSchema: GenMessage<KyberSwapPayload> =
-  /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_kyberswap_swap_payload, 2)
+export const KyberSwapPayloadSchema: GenMessage<KyberSwapPayload> = /*@__PURE__*/
+  messageDesc(file_vultisig_keysign_v1_kyberswap_swap_payload, 2);
+

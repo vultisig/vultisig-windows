@@ -1,6 +1,7 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
 import { formatFee } from '@core/chain/tx/fee/format/formatFee'
+import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
@@ -14,12 +15,11 @@ import {
 import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { formatAmount } from '@lib/utils/formatAmount'
 import { assertField } from '@lib/utils/record/assertField'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useFiatCurrency } from '../../../../storage/fiatCurrency'
+import { useFormatFiatAmount } from '../../../../chain/hooks/useFormatFiatAmount'
 
 export const JoinKeysignTxPrimaryInfo = ({
   value,
@@ -36,13 +36,14 @@ export const JoinKeysignTxPrimaryInfo = ({
     coin,
   })
 
-  const fiatCurrency = useFiatCurrency()
+  const formatFiatAmount = useFormatFiatAmount()
 
   const networkFeesFormatted = useMemo(() => {
     if (!blockchainSpecific.value) return null
-    formatFee({
+
+    return formatFee({
       chain: coin.chain as Chain,
-      chainSpecific: blockchainSpecific,
+      amount: getFeeAmount(blockchainSpecific),
     })
   }, [blockchainSpecific, coin.chain])
 
@@ -57,7 +58,7 @@ export const JoinKeysignTxPrimaryInfo = ({
         <TxOverviewPrimaryRowTitle>{t('to')}</TxOverviewPrimaryRowTitle>
         <span>{toAddress}</span>
       </TxOverviewChainDataRow>
-      {memo && <TxOverviewMemo value={memo} />}
+      {memo && <TxOverviewMemo value={memo} chain={coin.chain} />}
       <TxOverviewAmount
         value={fromChainAmount(BigInt(toAmount), decimals)}
         ticker={ticker}
@@ -69,9 +70,8 @@ export const JoinKeysignTxPrimaryInfo = ({
             <TxOverviewRow>
               <span>{t('value')}</span>
               <span>
-                {formatAmount(
-                  fromChainAmount(BigInt(toAmount), decimals) * price,
-                  fiatCurrency
+                {formatFiatAmount(
+                  fromChainAmount(BigInt(toAmount), decimals) * price
                 )}
               </span>
             </TxOverviewRow>

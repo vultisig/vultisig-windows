@@ -1,26 +1,28 @@
 import { ChainKind, getChainKind } from '@core/chain/ChainKind'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { WalletCore } from '@trustwallet/wallet-core'
+import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 
 import { getKeysignChain } from '../utils/getKeysignChain'
-import { getCardanoTxInputData } from './cardano'
-import { getCosmosTxInputData } from './cosmos'
-import { getEvmTxInputData } from './evm'
-import { getPolkadotTxInputData } from './polkadot'
-import { getRippleTxInputData } from './ripple'
-import { getSolanaTxInputData } from './solana'
-import { getSuiTxInputData } from './sui'
-import { getTonTxInputData } from './ton'
-import { getTronTxInputData } from './tron'
-import { TxInputDataResolver } from './TxInputDataResolver'
-import { getUtxoTxInputData } from './utxo'
+import { TxInputDataResolver } from './resolver'
+import { getCardanoTxInputData } from './resolvers/cardano'
+import { getCosmosTxInputData } from './resolvers/cosmos'
+import { getEvmTxInputData } from './resolvers/evm'
+import { getPolkadotTxInputData } from './resolvers/polkadot'
+import { getRippleTxInputData } from './resolvers/ripple'
+import { getSolanaTxInputData } from './resolvers/solana'
+import { getSuiTxInputData } from './resolvers/sui'
+import { getTonTxInputData } from './resolvers/ton'
+import { getTronTxInputData } from './resolvers/tron'
+import { getUtxoTxInputData } from './resolvers/utxo'
 
 type Input = {
   keysignPayload: KeysignPayload
   walletCore: WalletCore
+  publicKey?: PublicKey
 }
 
-const handlers: Record<ChainKind, TxInputDataResolver<any>> = {
+const resolvers: Record<ChainKind, TxInputDataResolver<any>> = {
   cardano: getCardanoTxInputData,
   cosmos: getCosmosTxInputData,
   evm: getEvmTxInputData,
@@ -31,7 +33,7 @@ const handlers: Record<ChainKind, TxInputDataResolver<any>> = {
   ton: getTonTxInputData,
   utxo: getUtxoTxInputData,
   tron: getTronTxInputData,
-}
+} as Record<ChainKind, TxInputDataResolver<any>>
 
 export const getTxInputData = (input: Input) => {
   const { blockchainSpecific } = input.keysignPayload
@@ -42,7 +44,7 @@ export const getTxInputData = (input: Input) => {
   const chain = getKeysignChain(input.keysignPayload)
   const chainKind = getChainKind(chain)
 
-  return handlers[chainKind]({
+  return resolvers[chainKind]({
     ...input,
     chain,
   })

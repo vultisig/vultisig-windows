@@ -1,5 +1,4 @@
 import { Chain } from '@core/chain/Chain'
-import { Coin } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { Opener } from '@lib/ui/base/Opener'
@@ -12,8 +11,9 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useIBCAcceptedTokens } from '../../../hooks/useIBCAcceptedTokens'
+import { useDepositCoin } from '../../../providers/DepositCoinProvider'
 import { useDepositFormHandlers } from '../../../providers/DepositFormHandlersProvider'
-import { getIbcDropdownOptions } from '../../chainOptionsConfig'
+import { getIbcDropdownOptions } from '../../../utils/getDepositFormConfig'
 import {
   AssetRequiredLabel,
   Container,
@@ -31,7 +31,7 @@ export const IBCTransferSpecific = () => {
     token =>
       selectedDestinationChain === Chain.Osmosis || token.ticker !== 'LVN'
   )
-  const selectedCoin = getValues('selectedCoin') as Coin
+  const [selectedCoin, setDepositCoin] = useDepositCoin()
   const vaultCoins = useCurrentVaultCoins()
   const selectedAddress = getValues('nodeAddress') as string
   const ibcOptions = useMemo(() => getIbcDropdownOptions(chain), [chain])
@@ -83,7 +83,7 @@ export const IBCTransferSpecific = () => {
           <Container onClick={onOpen}>
             <HStack alignItems="center" gap={4}>
               <Text weight="400" family="mono" size={16}>
-                {selectedCoin?.ticker || t('select_token')}
+                {selectedCoin.ticker || t('select_token')}
               </Text>
               {!selectedCoin && (
                 <AssetRequiredLabel as="span" color="danger" size={14}>
@@ -100,11 +100,9 @@ export const IBCTransferSpecific = () => {
           <TokenExplorer
             options={filteredTokens}
             onClose={onClose}
-            activeOption={watch('selectedCoin')}
+            activeOption={selectedCoin}
             onOptionClick={selectedCoin => {
-              setValue('selectedCoin', selectedCoin, {
-                shouldValidate: true,
-              })
+              setDepositCoin(selectedCoin)
               onClose()
             }}
           />

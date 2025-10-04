@@ -1,6 +1,7 @@
 import { isValidAddress } from '@core/chain/utils/isValidAddress'
 import { CustomToken } from '@core/ui/chain/coin/addCustomToken/CustomToken'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCore } from '@core/ui/state/core'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
@@ -10,7 +11,6 @@ import {
   textInputHeight,
   textInputHorizontalPadding,
 } from '@lib/ui/css/textInput'
-import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
 import { PasteIcon } from '@lib/ui/icons/PasteIcon'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -68,7 +68,7 @@ export const AddCustomTokenPage = () => {
               address: value,
               walletCore,
             }) ? (
-              <CustomToken address={value} />
+              <CustomToken id={value} />
             ) : (
               <Text>{t('invalid_token_address')}</Text>
             )

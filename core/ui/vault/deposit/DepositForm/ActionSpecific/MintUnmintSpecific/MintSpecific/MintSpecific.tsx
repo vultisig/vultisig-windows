@@ -1,4 +1,3 @@
-import { Coin } from '@core/chain/coin/Coin'
 import { Opener } from '@lib/ui/base/Opener'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -6,14 +5,15 @@ import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { useDepositFormHandlers } from '../../../../providers/DepositFormHandlersProvider'
+import { useMintOptions } from '../../../../hooks/useMintOptions'
+import { useDepositCoin } from '../../../../providers/DepositCoinProvider'
 import { AssetRequiredLabel, Container } from '../../../DepositForm.styled'
 import { MintTokenExplorer } from './MintTokenExplorer'
 
 export const MintSpecific = () => {
-  const [{ setValue, watch, getValues }] = useDepositFormHandlers()
+  const [selectedCoin, setSelectedCoin] = useDepositCoin()
   const { t } = useTranslation()
-  const selectedCoin = getValues('selectedCoin') as Coin | null
+  const options = useMintOptions()
 
   return (
     <Opener
@@ -21,7 +21,7 @@ export const MintSpecific = () => {
         <Container onClick={onOpen}>
           <HStack alignItems="center" gap={4}>
             <Text weight="400" family="mono" size={16}>
-              {selectedCoin?.ticker || t('select_token')}
+              {selectedCoin.ticker || t('select_token')}
             </Text>
             {!selectedCoin && (
               <AssetRequiredLabel as="span" color="danger" size={14}>
@@ -36,12 +36,10 @@ export const MintSpecific = () => {
       )}
       renderContent={({ onClose }) => (
         <MintTokenExplorer
-          setValue={setValue}
-          activeOption={watch('selectedCoin')}
+          options={options}
+          activeOption={selectedCoin}
           onOptionClick={token => {
-            setValue('selectedCoin', token, {
-              shouldValidate: true,
-            })
+            setSelectedCoin(token)
             onClose()
           }}
           onClose={onClose}

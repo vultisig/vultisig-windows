@@ -1,3 +1,5 @@
+import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { useCore } from '@core/ui/state/core'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
@@ -5,11 +7,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { Text } from '@lib/ui/text'
 import { TFunction } from 'i18next'
 import { useEffect, useMemo } from 'react'
@@ -30,7 +30,7 @@ type Schema = z.infer<ReturnType<typeof createSchema>>
 
 export const VaultRenamePage = () => {
   const { t } = useTranslation()
-  const navigateBack = useNavigateBack()
+  const { goBack } = useCore()
   const currentVault = useCurrentVault()
   const updateVaultMutation = useUpdateVaultMutation()
   const schema = useMemo(() => createSchema(t), [t])
@@ -54,8 +54,8 @@ export const VaultRenamePage = () => {
   }
 
   useEffect(() => {
-    if (updateVaultMutation.isSuccess) navigateBack()
-  }, [updateVaultMutation.isSuccess, navigateBack])
+    if (updateVaultMutation.isSuccess) goBack()
+  }, [updateVaultMutation.isSuccess, goBack])
 
   return (
     <VStack as="form" onSubmit={handleSubmit(onSubmit)} fullHeight>

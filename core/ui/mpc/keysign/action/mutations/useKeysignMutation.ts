@@ -3,10 +3,10 @@ import { getCoinType } from '@core/chain/coin/coinType'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { signatureFormats } from '@core/chain/signing/SignatureFormat'
+import { decodeSigningOutput } from '@core/chain/tw/signingOutput'
 import { Tx } from '@core/chain/tx'
 import { broadcastTx } from '@core/chain/tx/broadcast'
 import { compileTx } from '@core/chain/tx/compile/compileTx'
-import { decodeTx } from '@core/chain/tx/decode'
 import { getTxHash } from '@core/chain/tx/hash'
 import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { generateSignature } from '@core/chain/tx/signature/generateSignature'
@@ -17,13 +17,18 @@ import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useKeysignAction } from '@core/ui/mpc/keysign/action/state/keysignAction'
 import { useKeysignMutationListener } from '@core/ui/mpc/keysign/action/state/keysignMutationListener'
-import { customMessageConfig } from '@core/ui/mpc/keysign/customMessage/config'
+import {
+  customMessageDefaultChain,
+  customMessageSupportedChains,
+} from '@core/ui/mpc/keysign/customMessage/chains'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { isOneOf } from '@lib/utils/array/isOneOf'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { chainPromises } from '@lib/utils/promise/chainPromises'
 import { recordFromItems } from '@lib/utils/record/recordFromItems'
 import { useMutation } from '@tanstack/react-query'
-import { keccak256 } from 'js-sha3'
+
+import { getCustomMessageHex } from '../../customMessage/getCustomMessageHex'
 
 export const useKeysignMutation = (payload: KeysignMessagePayload) => {
   const walletCore = useAssertWalletCore()
@@ -39,10 +44,17 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
         {
           keysign: async payload => {
             const chain = getKeysignChain(payload)
+            const publicKey = getPublicKey({
+              chain,
+              walletCore,
+              hexChainCode: vault.hexChainCode,
+              publicKeys: vault.publicKeys,
+            })
 
             const inputs = getTxInputData({
               keysignPayload: payload,
               walletCore,
+              publicKey,
             })
 
             const groupedMsgs = inputs.map(txInputData =>
@@ -67,13 +79,6 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
               Buffer.from(msg, 'base64').toString('hex')
             )
 
-            const publicKey = getPublicKey({
-              chain,
-              walletCore,
-              hexChainCode: vault.hexChainCode,
-              publicKeys: vault.publicKeys,
-            })
-
             const compiledTxs = inputs.map(txInputData =>
               compileTx({
                 walletCore,
@@ -86,11 +91,11 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
 
             const txs: Tx[] = await Promise.all(
               compiledTxs.map(async compiledTx => {
-                const tx = decodeTx({ chain, compiledTx })
-                const hash = await getTxHash({ chain, tx })
+                const data = decodeSigningOutput(chain, compiledTx)
+                const hash = await getTxHash({ chain, tx: data })
 
                 return {
-                  ...tx,
+                  data,
                   hash,
                 }
               })
@@ -98,37 +103,40 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
 
             if (!payload.skipBroadcast) {
               await chainPromises(
-                txs.map(tx => () => broadcastTx({ chain, tx }))
+                txs.map(
+                  ({ data }) =>
+                    () =>
+                      broadcastTx({ chain, tx: data })
+                )
               )
             }
 
             return { txs }
           },
-          custom: async ({ message }) => {
-            const messageToHash = message.startsWith('0x')
-              ? Buffer.from(message.slice(2), 'hex')
-              : message
+          custom: async ({ message, chain = customMessageDefaultChain }) => {
+            if (!isOneOf(chain, customMessageSupportedChains)) {
+              throw new Error(`Unsupported chain ${chain}`)
+            }
 
-            const { chain } = customMessageConfig
+            const chainKind = getChainKind(chain)
+
+            const hexMessage = getCustomMessageHex({ chain, message })
 
             const [signature] = await keysignAction({
-              msgs: [keccak256(messageToHash)],
-              signatureAlgorithm: signatureAlgorithms[getChainKind(chain)],
-              coinType: getCoinType({
-                walletCore,
-                chain,
-              }),
+              msgs: [hexMessage],
+              signatureAlgorithm: signatureAlgorithms[chainKind],
+              coinType: getCoinType({ walletCore, chain }),
             })
-
-            const signatureFormat = signatureFormats[getChainKind(chain)]
 
             const result = generateSignature({
               walletCore,
               signature,
-              signatureFormat,
+              signatureFormat: signatureFormats[chainKind],
             })
 
-            return { signature: Buffer.from(result).toString('hex') }
+            return {
+              signature: Buffer.from(result).toString('hex'),
+            }
           },
         }
       )

@@ -1,17 +1,19 @@
-import { EvmChain } from '@core/chain/Chain'
-import { CoinKey, coinKeyToString } from '@core/chain/coin/Coin'
+import { CosmosChain, EvmChain } from '@core/chain/Chain'
+import { isChainOfKind } from '@core/chain/ChainKind'
+import { fetchNavPerShare } from '@core/chain/chains/cosmos/thor/yield-bearing-tokens/services/fetchNavPerShare'
+import { yieldBearingThorChainTokens } from '@core/chain/chains/cosmos/thor/yield-bearing-tokens/yAssetsOnThorChain'
+import { CoinKey, coinKeyToString, Token } from '@core/chain/coin/Coin'
 import { getErc20Prices } from '@core/chain/coin/price/evm/getErc20Prices'
 import { getCoinPrices } from '@core/chain/coin/price/getCoinPrices'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { FiatCurrency } from '@core/config/FiatCurrency'
 import { useQueriesToEagerQuery } from '@lib/ui/query/hooks/useQueriesToEagerQuery'
+import { persistQueryOptions } from '@lib/ui/query/utils/options'
 import { groupItems } from '@lib/utils/array/groupItems'
 import { isEmpty } from '@lib/utils/array/isEmpty'
-import { isOneOf } from '@lib/utils/array/isOneOf'
-import { splitBy } from '@lib/utils/array/splitBy'
 import { without } from '@lib/utils/array/without'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { mergeRecords } from '@lib/utils/record/mergeRecords'
+import { toEntries } from '@lib/utils/record/toEntries'
 import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
 import { useQueries } from '@tanstack/react-query'
 
@@ -39,14 +41,31 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
 
   const queries = []
 
-  const [regularCoins, erc20Coins] = splitBy(input.coins, coin =>
-    isOneOf(coin.chain, Object.values(EvmChain)) && !isFeeCoin(coin) ? 1 : 0
-  )
+  const coinsWithPriceProviderId: (CoinKey & { priceProviderId: string })[] = []
+  const erc20sWithoutPriceProviderId: Token<CoinKey<EvmChain>>[] = []
+  const yieldBearingTokens: Token<CoinKey<CosmosChain>>[] = []
 
-  if (!isEmpty(erc20Coins)) {
-    const groupedByChain = groupItems(erc20Coins, coin => coin.chain)
+  input.coins.forEach(({ id, priceProviderId, chain }) => {
+    if (priceProviderId) {
+      coinsWithPriceProviderId.push({ id, priceProviderId, chain })
+    } else if (
+      id &&
+      id in yieldBearingThorChainTokens &&
+      isChainOfKind(chain, 'cosmos')
+    ) {
+      yieldBearingTokens.push({ id, chain })
+    } else if (isChainOfKind(chain, 'evm') && id) {
+      erc20sWithoutPriceProviderId.push({ id, chain })
+    }
+  })
 
-    Object.entries(groupedByChain).forEach(([chain, coins]) => {
+  if (!isEmpty(erc20sWithoutPriceProviderId)) {
+    const groupedByChain = groupItems(
+      erc20sWithoutPriceProviderId,
+      coin => coin.chain
+    )
+
+    toEntries(groupedByChain).forEach(({ key: chain, value: coins }) => {
       queries.push({
         queryKey: getCoinPricesQueryKeys({
           coins,
@@ -54,8 +73,8 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
         }),
         queryFn: async () => {
           const prices = await getErc20Prices({
-            ids: coins.map(coin => shouldBePresent(coin.id)),
-            chain: chain as EvmChain,
+            ids: coins.map(({ id }) => id),
+            chain,
             fiatCurrency,
           })
 
@@ -73,20 +92,21 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
 
           return result
         },
+        ...persistQueryOptions,
       })
     })
   }
 
-  if (!isEmpty(regularCoins)) {
+  if (!isEmpty(coinsWithPriceProviderId)) {
     queries.push({
       queryKey: getCoinPricesQueryKeys({
-        coins: regularCoins,
+        coins: coinsWithPriceProviderId,
         fiatCurrency,
       }),
       queryFn: async () => {
         const prices = await getCoinPrices({
           ids: without(
-            regularCoins.map(coin => coin.priceProviderId),
+            coinsWithPriceProviderId.map(coin => coin.priceProviderId),
             undefined
           ),
           fiatCurrency,
@@ -99,7 +119,9 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
           // so we need to find all coins with the same price provider
           // for example: ETH.ETH, ARBITRUM.ETH, OPTIMISM.ETH there are all ETH , so they have the same price provider
           const matchedCoins = shouldBePresent(
-            regularCoins.filter(coin => coin.priceProviderId == priceProviderId)
+            coinsWithPriceProviderId.filter(
+              coin => coin.priceProviderId == priceProviderId
+            )
           )
           matchedCoins.forEach(coin => {
             result[coinKeyToString(coin)] = price
@@ -108,6 +130,37 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
 
         return result
       },
+      ...persistQueryOptions,
+    })
+  }
+
+  if (!isEmpty(yieldBearingTokens)) {
+    const yieldBearingTokensIds = yieldBearingTokens.map(c => c.id)
+
+    queries.push({
+      queryKey: ['yieldNavPrices', yieldBearingTokensIds],
+      queryFn: async () => {
+        const navPairs = await Promise.all(
+          yieldBearingTokensIds.map(
+            async id => [id, await fetchNavPerShare(id)] as const
+          )
+        )
+
+        const result: Record<string, number> = {}
+
+        for (const [id, nav] of navPairs) {
+          if (nav == null) continue
+          const matched = yieldBearingTokens.filter(c =>
+            areLowerCaseEqual(shouldBePresent(c.id), id)
+          )
+
+          for (const coin of matched) {
+            result[coinKeyToString(coin)] = nav
+          }
+        }
+        return result
+      },
+      ...persistQueryOptions,
     })
   }
 

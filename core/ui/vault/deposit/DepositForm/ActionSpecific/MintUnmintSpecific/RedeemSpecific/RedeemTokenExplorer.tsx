@@ -1,51 +1,35 @@
-import { yieldBearingAssetsIds } from '@core/chain/chains/cosmos/thor/yield-bearing-tokens/config'
-import { yieldBearingAssetsReceiptDenoms } from '@core/chain/chains/cosmos/thor/yield-bearing-tokens/config'
-import { Coin } from '@core/chain/coin/Coin'
-import { FormData } from '@core/ui/vault/deposit/DepositForm'
+import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { DepositActionOption } from '@core/ui/vault/deposit/DepositForm/DepositActionOption'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
-import { FC, useMemo } from 'react'
-import { UseFormSetValue } from 'react-hook-form'
+import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useCurrentVaultCoins } from '../../../../../state/currentVaultCoins'
-import { createMintUnmintCoin } from '../utils'
+import { useDepositCoin } from '../../../../providers/DepositCoinProvider'
 
 type Props = {
-  activeOption?: Coin
-  onOptionClick: (option: Coin) => void
+  onOptionClick: (option: AccountCoin) => void
   onClose: () => void
-  setValue: UseFormSetValue<FormData>
+  options: AccountCoin[]
 }
 
 export const RedeemTokenExplorer: FC<Props> = ({
   onClose,
   onOptionClick,
-  activeOption,
+  options,
 }) => {
+  const [selectedCoin] = useDepositCoin()
   const { t } = useTranslation()
-  const coins = useCurrentVaultCoins()
-  const coinById = useMemo(() => new Map(coins.map(c => [c.id, c])), [coins])
-
-  const tokens = useMemo(
-    () =>
-      yieldBearingAssetsIds.map(asset => {
-        const denom = yieldBearingAssetsReceiptDenoms[asset]
-        return coinById.get(denom) ?? createMintUnmintCoin(denom)
-      }),
-    [coinById]
-  )
 
   return (
     <Modal onClose={onClose} title={t('select_token')}>
       <VStack gap={20}>
-        {tokens.map((token, index) => {
+        {options.map((token, index) => {
           return (
             <DepositActionOption
               key={index}
               value={token.ticker}
-              isActive={activeOption?.ticker === token.ticker}
+              isActive={selectedCoin.ticker === token.ticker}
               onClick={() => onOptionClick(token)}
             />
           )

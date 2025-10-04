@@ -1,9 +1,9 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { formatAmount } from '@lib/utils/formatAmount'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useTranslation } from 'react-i18next'
 
@@ -15,13 +15,13 @@ import { TxFeeRow } from './TxFeeRow'
 
 export const KeysignTxFee = () => {
   const payload = useKeysignMessagePayload()
-  const { coin: potentialCoin } = getRecordUnionValue(payload, 'keysign')
-  const coin = fromCommCoin(shouldBePresent(potentialCoin))
-  const { chain, decimals, ticker } = shouldBePresent(coin)
+  const chain = getKeysignChain(getRecordUnionValue(payload, 'keysign'))
 
   const txHash = useTxHash()
   const query = useTxFeeQuery({ txHash, chain })
   const { t } = useTranslation()
+
+  const { ticker, decimals } = chainFeeCoin[chain]
 
   return (
     <MatchQuery
@@ -34,10 +34,7 @@ export const KeysignTxFee = () => {
       )}
       success={actualFee => (
         <TxFeeRow label={t('network_fee')}>
-          {formatTokenAmount(
-            fromChainAmount(BigInt(actualFee), decimals),
-            ticker
-          )}
+          {formatAmount(fromChainAmount(actualFee, decimals), { ticker })}
         </TxFeeRow>
       )}
     />

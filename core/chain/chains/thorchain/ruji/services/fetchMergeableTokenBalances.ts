@@ -1,6 +1,6 @@
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
-import { rujiGraphQlEndpoint } from '../../../cosmos/thor/ruji-unmerge/config'
+import { rujiraGraphQlEndpoint } from '../../../cosmos/thor/rujira/config'
 
 type MergeAccount = {
   shares: string
@@ -19,17 +19,16 @@ type Gql = {
   errors?: unknown[]
 }
 
-export type TokenBalance = {
+type TokenBalance = {
   symbol: string
-  shares: number
-  amount: number
-  price: number
+  sharesChain: string
+  sizeAmountChain: string
 }
 
 export const fetchMergeableTokenBalances = async (
   thorAddr: string
 ): Promise<TokenBalance[]> => {
-  const { data, errors } = await queryUrl<Gql>(rujiGraphQlEndpoint, {
+  const { data, errors } = await queryUrl<Gql>(rujiraGraphQlEndpoint, {
     body: {
       query: `
         query ($id: ID!) {
@@ -57,15 +56,11 @@ export const fetchMergeableTokenBalances = async (
   const accounts = data?.node?.merge?.accounts ?? []
 
   return accounts.map(account => {
-    const shares = Number(account.shares)
-    const amount = Number(account.size.amount)
-    const price = shares ? amount / shares : 0
-
     return {
       symbol: account.pool.mergeAsset.metadata.symbol,
-      shares,
-      amount,
-      price,
+
+      sharesChain: account.shares,
+      sizeAmountChain: account.size.amount,
     }
   })
 }

@@ -5,16 +5,16 @@ import {
   HorizontalLine,
   Row,
 } from '@clients/desktop/src/pages/vaultSettings/vaultFaq/FaqVaultPage.styles'
-import { FlowPageHeader } from '@lib/ui/flow/FlowPageHeader'
+import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import CaretDownIcon from '@lib/ui/icons/CaretDownIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageSlice } from '@lib/ui/page/PageSlice'
 import { Text } from '@lib/ui/text'
-import { motion } from 'framer-motion'
+import { motion, Transition } from 'framer-motion'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-const faqContentTransition = {
+const faqContentTransition: Transition = {
   duration: 0.3,
   ease: 'easeInOut',
 }
@@ -23,7 +23,7 @@ type RowsOpenState = {
   [key: number]: boolean
 }
 
-const FaqVaultPage = () => {
+export const FaqVaultPage = () => {
   const { t } = useTranslation()
 
   const faqData = getFaqData(t)
@@ -85,5 +85,3 @@ const FaqVaultPage = () => {
     </VStack>
   )
 }
-
-export default FaqVaultPage

@@ -1,95 +1,104 @@
+import { UtxoChain } from '@core/chain/Chain'
+import { callPopup } from '@core/inpage-provider/popup'
+import {
+  BitcoinAccount,
+  ProviderId,
+  RequestInput,
+} from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
+import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 import EventEmitter from 'events'
-import { v4 as uuidv4 } from 'uuid'
 
-import { EventMethod, MessageKey, RequestMethod } from '../../utils/constants'
-import { processBackgroundResponse } from '../../utils/functions'
-import { Messaging } from '../../utils/interfaces'
-import { Callback, Network } from '../constants'
-import { messengers } from '../messenger'
+import { rebuildPsbtWithPartialSigsFromWC } from '../../utils/functions'
+import { Callback } from '../constants'
+import { requestAccount } from './core/requestAccount'
+import { getSharedHandlers } from './core/sharedHandlers'
+
+type SupportedUtxoChain =
+  | UtxoChain.Bitcoin
+  | UtxoChain.BitcoinCash
+  | UtxoChain.Dogecoin
+  | UtxoChain.Litecoin
+  | UtxoChain.Zcash
 
 export class UTXO extends EventEmitter {
-  public chainId: string
-  public network: Network
-  private providerType: MessageKey
+  public chain: UtxoChain
   public static instances: Map<string, UTXO>
-  constructor(providerType: string, chainId: string) {
+  private providerId: ProviderId
+  constructor(chain: SupportedUtxoChain, providerId: ProviderId = 'vultisig') {
     super()
-    this.providerType = providerType as MessageKey
-    this.chainId = chainId
-    this.network = 'mainnet'
+    this.chain = chain
+    this.providerId = providerId
   }
 
-  static getInstance(providerType: string, chainId: string): UTXO {
+  static getInstance(chain: SupportedUtxoChain, providerId: ProviderId): UTXO {
     if (!UTXO.instances) {
       UTXO.instances = new Map<string, UTXO>()
     }
 
-    if (!UTXO.instances.has(providerType)) {
-      UTXO.instances.set(providerType, new UTXO(providerType, chainId))
+    if (!UTXO.instances.has(chain)) {
+      UTXO.instances.set(chain, new UTXO(chain, providerId))
     }
-    return UTXO.instances.get(providerType)!
+    return UTXO.instances.get(chain)!
   }
 
-  async requestAccounts() {
-    return await this.request({
-      method: RequestMethod.VULTISIG.REQUEST_ACCOUNTS,
-      params: [],
-    })
+  async requestAccounts(): Promise<BitcoinAccount[] | string[]> {
+    const { address, publicKey } = await requestAccount(this.chain)
+    if (this.providerId === 'phantom-override') {
+      return [
+        { address, publicKey, addressType: 'p2wpkh', purpose: 'payment' },
+        { address, publicKey, addressType: 'p2wpkh', purpose: 'ordinals' },
+      ]
+    }
+    return [address]
   }
 
-  async getAccounts() {
-    return await this.request({
-      method: RequestMethod.VULTISIG.GET_ACCOUNTS,
-      params: [],
-    })
-  }
-
-  async signPsbt(_psbt: string | Buffer) {
-    return await this.request({
-      method: RequestMethod.CTRL.SIGN_PSBT,
-      params: [],
-    })
-  }
-
-  changeNetwork(network: Network) {
-    if (network !== 'mainnet' && network !== 'testnet')
-      throw Error(`Invalid network ${network}`)
-    else if (network === 'testnet')
-      throw Error(`We only support the mainnet network.`)
-
-    this.chainId = `Bitcoin_bitcoin-${network}`
-    this.network = network
-    this.emit(EventMethod.CHAIN_CHANGED, { chainId: this.chainId, network })
-  }
-
-  emitAccountsChanged() {
-    this.emit(EventMethod.ACCOUNTS_CHANGED, {})
-  }
-
-  async request(data: Messaging.Chain.Request, callback?: Callback) {
-    try {
-      const response = await messengers.background.send<
-        any,
-        Messaging.Chain.Response
-      >(
-        'providerRequest',
-        {
-          type: this.providerType,
-          message: data,
+  async signPSBT(
+    psbt: Buffer,
+    {
+      inputsToSign,
+    }: {
+      inputsToSign: {
+        address: string
+        signingIndexes: number[]
+        sigHash?: number
+      }[]
+    },
+    broadcast: boolean = false
+  ) {
+    const { data } = await callPopup({
+      sendTx: {
+        serialized: {
+          data: Buffer.from(psbt).toString('base64'),
+          chain: this.chain,
+          skipBroadcast: !broadcast,
+          params: inputsToSign,
         },
-        { id: uuidv4() }
-      )
+      },
+    })
+    const rebuiltPsbt = rebuildPsbtWithPartialSigsFromWC(data, psbt)
+    return rebuiltPsbt
+  }
 
-      const result = processBackgroundResponse(
-        data,
-        this.providerType,
-        response
-      )
+  async request(data: RequestInput, callback?: Callback) {
+    const processRequest = async () => {
+      const handlers = getSharedHandlers(this.chain)
 
-      if (callback) callback(null, result)
+      if (data.method in handlers) {
+        return handlers[data.method as keyof typeof handlers](
+          data.params as any
+        )
+      }
+      throw new NotImplementedError(`UTXO method ${data.method}`)
+    }
+
+    try {
+      const result = await processRequest()
+
+      callback?.(null, result)
+
       return result
     } catch (error) {
-      if (callback) callback(error as Error)
+      callback?.(error as Error)
       throw error
     }
   }

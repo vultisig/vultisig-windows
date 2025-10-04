@@ -1,0 +1,20 @@
+{
+  "name": "@core/inpage-provider",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "@bufbuild/protobuf": "^2.7.0",
+    "@core/chain": "workspace:^",
+    "@core/config": "workspace:^",
+    "@core/extension": "workspace:^",
+    "@core/mpc": "workspace:^",
+    "@core/ui": "workspace:^",
+    "@lib/extension": "workspace:^",
+    "@lib/ui": "workspace:^",
+    "@lib/utils": "workspace:^",
+    "@solana/spl-token": "^0.4.14",
+    "@solana/web3.js": "^1.98.4",
+    "bitcoinjs-lib": "^6.1.7",
+    "styled-components": "^6.1.19"
+  }
+}

@@ -3,6 +3,7 @@ import { isValidAddress } from '@core/chain/utils/isValidAddress'
 import { AddressBookItem } from '@core/ui/address-book/model'
 import { ChainInput } from '@core/ui/chain/inputs/ChainInput'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { ScanQrView } from '@core/ui/qr/components/ScanQrView'
 import { useAddressBookItems } from '@core/ui/storage/addressBook'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -20,7 +21,6 @@ import { Modal } from '@lib/ui/modal'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderBackButton } from '@lib/ui/page/PageHeaderBackButton'
 import { Text } from '@lib/ui/text'
 import { attempt } from '@lib/utils/attempt'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
@@ -141,6 +141,7 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
         <ChainInput
           value={watch('chain')}
           onChange={newChain => setValue('chain', newChain)}
+          options={Object.values(Chain)}
         />
         <VStack gap={8}>
           <TextInput
