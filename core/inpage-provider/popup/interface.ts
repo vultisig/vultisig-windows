@@ -7,11 +7,7 @@ import { VaultExport } from '@core/ui/vault/export/core'
 import { Method } from '@lib/utils/types/Method'
 import { TypedDataDomain, TypedDataField } from 'ethers'
 
-export type PersonalSign = {
-  chain: EvmChain
-  message: string
-  bytesCount: number
-}
+export type SignMessageType = 'connect' | 'default' | 'policy'
 
 export type Eip712V4Payload = {
   domain: TypedDataDomain
@@ -21,15 +17,20 @@ export type Eip712V4Payload = {
 
 export type SignMessageInput =
   | { eth_signTypedData_v4: { chain: EvmChain; message: Eip712V4Payload } }
-  | { personal_sign: PersonalSign }
+  | {
+      personal_sign: {
+        bytesCount: number
+        chain: EvmChain
+        message: string
+        type: SignMessageType
+      }
+    }
   | { sign_message: { chain: OtherChain.Solana; message: string } }
 
 export type PopupInterface = {
   grantVaultAccess: Method<{}, { appSession: VaultAppSession }>
   exportVaults: Method<{}, VaultExport[]>
   pluginReshare: Method<{ pluginId: string }, { joinUrl: string }>
-  pluginConnectSign: Method<PersonalSign, string>
-  pluginPolicySign: Method<PersonalSign, string>
   signMessage: Method<SignMessageInput, string>
   sendTx: Method<
     ITransactionPayload,
@@ -45,8 +46,6 @@ export const authorizedPopupMethods = [
   'signMessage',
   'sendTx',
   'pluginReshare',
-  'pluginConnectSign',
-  'pluginPolicySign',
 ] as const satisfies readonly PopupMethod[]
 
 export type AuthorizedPopupMethod = (typeof authorizedPopupMethods)[number]

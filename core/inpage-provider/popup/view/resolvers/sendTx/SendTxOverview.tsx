@@ -61,8 +61,8 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
   const [feeSettings, setFeeSettings] = useState(initialFeeSettings)
 
   const chainSpecificInput = useMemo(
-    () => getChainSpecificInput(parsedTx),
-    [parsedTx]
+    () => getChainSpecificInput({ ...parsedTx, feeSettings }),
+    [parsedTx, feeSettings]
   )
 
   const chainSpecificQuery = useChainSpecificQuery(chainSpecificInput)

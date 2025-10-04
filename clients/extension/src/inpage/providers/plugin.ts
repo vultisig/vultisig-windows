@@ -1,13 +1,10 @@
 import { processSignature } from '@clients/extension/src/inpage/providers/ethereum'
 import { Chain } from '@core/chain/Chain'
 import { callPopup } from '@core/inpage-provider/popup'
-import { PersonalSign } from '@core/inpage-provider/popup/interface'
+import { SignMessageType } from '@core/inpage-provider/popup/interface'
 import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 import EventEmitter from 'events'
-
-type SignType = 'connect' | 'policy'
-type SignHandler = () => Promise<string>
 
 export class Plugin extends EventEmitter {
   constructor() {
@@ -16,29 +13,26 @@ export class Plugin extends EventEmitter {
 
   async request({ method, params }: RequestInput) {
     const handlers = {
-      personal_sign: async ([rawMessage, account, type]: [
+      personal_sign: async ([rawMessage, account, type = 'default']: [
         string,
         string,
-        SignType,
+        SignMessageType,
       ]) => {
-        const params: PersonalSign = {
-          bytesCount: new TextEncoder().encode(rawMessage).length,
-          chain: Chain.Ethereum,
-          message: rawMessage,
-        }
+        const signature = await callPopup(
+          {
+            signMessage: {
+              personal_sign: {
+                bytesCount: new TextEncoder().encode(rawMessage).length,
+                chain: Chain.Ethereum,
+                message: rawMessage,
+                type,
+              },
+            },
+          },
+          { account }
+        )
 
-        const signHandlers: Record<SignType, SignHandler> = {
-          connect: () => callPopup({ pluginConnectSign: params }, { account }),
-          policy: () => callPopup({ pluginPolicySign: params }, { account }),
-        }
-
-        if (type in signHandlers) {
-          const signature = await signHandlers[type]()
-
-          return processSignature(signature)
-        }
-
-        throw new NotImplementedError(`Plugin sign type ${type}`)
+        return processSignature(signature)
       },
       reshare_sign: async ([{ id }]: [{ id: string }]) => {
         const { joinUrl } = await callPopup({ pluginReshare: { pluginId: id } })

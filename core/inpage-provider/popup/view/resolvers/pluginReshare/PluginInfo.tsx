@@ -24,48 +24,44 @@ export const PluginInfo = ({
   const { t } = useTranslation()
   const query = useQuery({
     queryKey: [pluginId, pluginMarketplaceBaseUrl],
-    queryFn: () => {
-      return getPlugin(pluginMarketplaceBaseUrl, pluginId)
-    },
+    queryFn: () => getPlugin(pluginMarketplaceBaseUrl, pluginId),
   })
 
   return (
-    <>
-      <MatchQuery
-        value={query}
-        success={({ title }) => (
-          <ReshareVaultFlowProviders>
-            <KeygenOperationProvider value={{ reshare: 'plugin' }}>
-              <ReshareVaultKeygenActionProvider>
-                <StepTransition
-                  from={({ onFinish: onNextStep }) => (
-                    <PluginJoinKeygenUrl
-                      onFinish={joinUrl => {
-                        onFinish({
-                          result: { data: { joinUrl } },
-                          shouldClosePopup: false,
-                        })
-                        onNextStep()
-                      }}
-                    />
-                  )}
-                  to={() => <PluginReshareFlow name={title} />}
-                />
-              </ReshareVaultKeygenActionProvider>
-            </KeygenOperationProvider>
-          </ReshareVaultFlowProviders>
-        )}
-        pending={() => (
-          <PopupDeadEnd>
-            <Spinner />
-          </PopupDeadEnd>
-        )}
-        error={() => (
-          <Center>
-            <StrictText>{t('failed_to_load')}</StrictText>
-          </Center>
-        )}
-      />
-    </>
+    <MatchQuery
+      value={query}
+      success={({ title }) => (
+        <ReshareVaultFlowProviders>
+          <KeygenOperationProvider value={{ reshare: 'plugin' }}>
+            <ReshareVaultKeygenActionProvider>
+              <StepTransition
+                from={({ onFinish: onNextStep }) => (
+                  <PluginJoinKeygenUrl
+                    onFinish={joinUrl => {
+                      onFinish({
+                        result: { data: { joinUrl } },
+                        shouldClosePopup: false,
+                      })
+                      onNextStep()
+                    }}
+                  />
+                )}
+                to={() => <PluginReshareFlow name={title} />}
+              />
+            </ReshareVaultKeygenActionProvider>
+          </KeygenOperationProvider>
+        </ReshareVaultFlowProviders>
+      )}
+      pending={() => (
+        <PopupDeadEnd>
+          <Spinner />
+        </PopupDeadEnd>
+      )}
+      error={() => (
+        <Center>
+          <StrictText>{t('failed_to_load')}</StrictText>
+        </Center>
+      )}
+    />
   )
 }

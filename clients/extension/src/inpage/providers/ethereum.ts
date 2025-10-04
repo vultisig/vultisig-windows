@@ -288,22 +288,21 @@ export class Ethereum extends EventEmitter {
           ? getBytes(rawMessage)
           : new TextEncoder().encode(rawMessage)
 
-        const result = await callPopup(
+        const signature = await callPopup(
           {
             signMessage: {
               personal_sign: {
+                bytesCount: message.length,
                 chain,
                 message: new TextDecoder().decode(message),
-                bytesCount: message.length,
+                type: 'default',
               },
             },
           },
-          {
-            account,
-          }
+          { account }
         )
 
-        return processSignature(result)
+        return processSignature(signature)
       },
       eth_sendTransaction: async ([tx]: [RpcTransactionRequest]) => {
         const chain = await getChain()
