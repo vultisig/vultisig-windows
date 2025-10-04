@@ -28,7 +28,6 @@ export const Section = styled(VStack)`
   background-color: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
   border-radius: 16px;
-  padding: 24px;
 `
 
 export const Verify = styled(HStack)`

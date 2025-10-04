@@ -9,8 +9,8 @@ import {
   Description,
   Divider,
 } from '@core/inpage-provider/popup/view/resolvers/signMessage/styles'
+import { usePopupContext } from '@core/inpage-provider/popup/view/state/context'
 import { PolicySchema } from '@core/mpc/types/plugin/policy_pb'
-import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
@@ -18,13 +18,13 @@ import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const PolicyOverview: FC<SignMessageOverview> = ({
-  chain,
+  address,
   message,
   method,
   signature,
 }) => {
   const { t } = useTranslation()
-  const address = useCurrentVaultAddress(chain)
+  const { requestFavicon, requestOrigin } = usePopupContext<'signMessage'>()
   const isFinished = useMemo(() => !!signature, [signature])
 
   const camelCaseToTitle = (input: string) => {
@@ -42,7 +42,7 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
   return (
     <>
       <Animation isVisible={isFinished} />
-      <Sender isValidated />
+      <Sender favicon={requestFavicon} origin={requestOrigin} isValidated />
       <Request
         address={address}
         message={t('verify_identity_sign')}

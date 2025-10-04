@@ -18,7 +18,7 @@ export const Request: FC<RequestProps> = ({ address, message, method }) => {
   const { t } = useTranslation()
 
   return (
-    <Section gap={12}>
+    <Section gap={12} padding={24}>
       <HStack alignItems="center" gap={8} justifyContent="space-between">
         <Text as="span" color="shy" size={14} weight={500}>
           {t('method')}

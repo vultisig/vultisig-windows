@@ -4,7 +4,7 @@ import { ChevronUpIcon } from '@lib/ui/icons/ChevronUpIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { AnimatePresence, motion } from 'framer-motion'
-import { FC, ReactNode, useState } from 'react'
+import { FC, ReactNode, useEffect, useRef, useState } from 'react'
 
 type CollapseProps = {
   children: ReactNode
@@ -17,59 +17,39 @@ export const Collapse: FC<CollapseProps> = ({
   collapsed = false,
   title,
 }) => {
-  const [open, setOpen] = useState(collapsed)
+  const [isOpen, setIsOpen] = useState(collapsed)
+  const [height, setHeight] = useState(0)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (ref.current) setHeight(ref.current.scrollHeight)
+  }, [isOpen])
 
   return (
-    <VStack position="relative">
-      <AnimatePresence initial={open}>
+    <Section onClick={() => setIsOpen(!isOpen)} style={{ cursor: 'pointer' }}>
+      <HStack alignItems="center" justifyContent="space-between" padding={24}>
+        <Text as="span" size={14} weight={500}>
+          {title}
+        </Text>
+        {isOpen ? (
+          <ChevronUpIcon fontSize={16} strokeWidth={2} />
+        ) : (
+          <ChevronDownIcon fontSize={16} strokeWidth={2} />
+        )}
+      </HStack>
+      <AnimatePresence initial={false}>
         <motion.div
-          animate={{ opacity: open ? 1 : 0 }}
-          exit={{ opacity: 0 }}
-          key="open"
-          initial={{ opacity: 0 }}
-          style={{
-            position: open ? 'relative' : 'absolute',
-            width: '100%',
-          }}
-          transition={{ duration: 0.4, ease: 'easeInOut' }}
-          layout
+          initial={{ height: 0 }}
+          animate={{ height: isOpen ? height : 0 }}
+          exit={{ height: 0 }}
+          transition={{ duration: 0.3 }}
+          style={{ overflow: 'hidden' }}
         >
-          <Section
-            gap={24}
-            onClick={() => setOpen(!open)}
-            style={{ cursor: 'pointer' }}
-          >
-            <HStack alignItems="center" justifyContent="space-between">
-              <Text as="span" size={14} weight={500}>
-                {title}
-              </Text>
-              <ChevronUpIcon fontSize={16} strokeWidth={2} />
-            </HStack>
-            <VStack gap={12}>{children}</VStack>
-          </Section>
-        </motion.div>
-        <motion.div
-          key="closed"
-          layout
-          initial={{ opacity: 0 }}
-          animate={{ opacity: open ? 0 : 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.4, ease: 'easeInOut' }}
-          style={{
-            position: open ? 'absolute' : 'relative',
-            width: '100%',
-          }}
-        >
-          <Section onClick={() => setOpen(!open)} style={{ cursor: 'pointer' }}>
-            <HStack alignItems="center" justifyContent="space-between">
-              <Text as="span" size={14} weight={500}>
-                {title}
-              </Text>
-              <ChevronDownIcon fontSize={16} strokeWidth={2} />
-            </HStack>
-          </Section>
+          <VStack gap={12} padding="0 24px 24px" ref={ref}>
+            {children}
+          </VStack>
         </motion.div>
       </AnimatePresence>
-    </VStack>
+    </Section>
   )
 }

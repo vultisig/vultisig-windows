@@ -1,34 +1,33 @@
-import { Chain } from '@core/chain/Chain'
 import { Animation } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Animation'
 import { Collapse } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Collapse'
 import { Request } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Request'
 import { Sender } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Sender'
-import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
+import { usePopupContext } from '@core/inpage-provider/popup/view/state/context'
 import { Text } from '@lib/ui/text'
 import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export type SignMessageOverview = {
-  chain: Chain
+  address: string
   message: string
   method: string
   signature?: string
 }
 
 export const DefaultOverview: FC<SignMessageOverview> = ({
-  chain,
+  address,
   message,
   method,
   signature,
 }) => {
   const { t } = useTranslation()
-  const address = useCurrentVaultAddress(chain)
+  const { requestFavicon, requestOrigin } = usePopupContext<'signMessage'>()
   const isFinished = useMemo(() => !!signature, [signature])
 
   return (
     <>
       <Animation isVisible={isFinished} />
-      <Sender />
+      <Sender favicon={requestFavicon} origin={requestOrigin} />
       <Request address={address} method={method} />
       {isFinished ? (
         <Collapse title={t('signed_signature')}>

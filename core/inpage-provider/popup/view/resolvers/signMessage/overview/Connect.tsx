@@ -3,25 +3,28 @@ import { Collapse } from '@core/inpage-provider/popup/view/resolvers/signMessage
 import { Request } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Request'
 import { Sender } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Sender'
 import { SignMessageOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Default'
-import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
+import { usePopupContext } from '@core/inpage-provider/popup/view/state/context'
 import { Text } from '@lib/ui/text'
+import { attempt } from '@lib/utils/attempt'
 import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const ConnectOverview: FC<SignMessageOverview> = ({
-  chain,
+  address,
   message,
   method,
   signature,
 }) => {
   const { t } = useTranslation()
-  const address = useCurrentVaultAddress(chain)
+  const { requestFavicon, requestOrigin } = usePopupContext<'signMessage'>()
   const isFinished = useMemo(() => !!signature, [signature])
 
   const displayMessage = useMemo(() => {
-    const parsed = JSON.parse(message)
+    const { data, error } = attempt(() => JSON.parse(message))
 
-    return parsed.message as string
+    if (error) return ''
+
+    return data.message as string
   }, [message])
 
   const parsedMessage = useMemo(() => {
@@ -33,7 +36,7 @@ export const ConnectOverview: FC<SignMessageOverview> = ({
   return (
     <>
       <Animation isVisible={isFinished} />
-      <Sender isValidated />
+      <Sender favicon={requestFavicon} origin={requestOrigin} isValidated />
       <Request address={address} message={displayMessage} method={method} />
       {isFinished ? (
         <Collapse title={t('signed_signature')}>
