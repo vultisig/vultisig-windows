@@ -92,6 +92,7 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
           ),
         }),
         expiration: Long.fromString(tronSpecific.expiration.toString()),
+        memo: keysignPayload.memo,
       }),
     })
 
@@ -103,7 +104,7 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
     'hex'
   )
 
-  const trc20 = TW.Tron.Proto.TransferTRC20Contract.create({
+  const contract = TW.Tron.Proto.TransferTRC20Contract.create({
     ownerAddress: keysignPayload?.coin?.address ?? '',
     toAddress: keysignPayload?.toAddress,
     contractAddress: keysignPayload?.coin?.contractAddress ?? '',
@@ -112,7 +113,8 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
 
   const input = TW.Tron.Proto.SigningInput.create({
     transaction: TW.Tron.Proto.Transaction.create({
-      transferTrc20Contract: trc20,
+      feeLimit: Long.fromString(tronSpecific.gasEstimation.toString()),
+      transferTrc20Contract: contract,
       timestamp: Long.fromString(tronSpecific.timestamp.toString()),
       blockHeader: TW.Tron.Proto.BlockHeader.create({
         timestamp: Long.fromString(
@@ -128,6 +130,7 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
         ),
       }),
       expiration: Long.fromString(tronSpecific.expiration.toString()),
+      memo: keysignPayload.memo,
     }),
   })
 
