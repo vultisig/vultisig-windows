@@ -46,7 +46,7 @@ export const FaqVaultPage = () => {
       <FlowPageHeader title={t('vault_rename_page_header_title')} />
       <PageContent>
         <RowsWrapper>
-          {faqData.map(({ id, title, content }) => {
+          {faqData.map(({ id, title, content }, idx) => {
             const isCurrentRowExpanded = rowsExpanded[id]
 
             return (
@@ -88,7 +88,7 @@ export const FaqVaultPage = () => {
                     </FaqContent>
                   </motion.div>
                 </RowWrapper>
-                <Divider />
+                {idx < faqData.length - 1 && <Divider />}
               </>
             )
           })}
@@ -127,11 +127,12 @@ const RowsWrapper = styled.div`
   border-radius: 12px;
   background-color: ${getColor('foreground')};
 
-  & > ${RowWrapper}:first-child {
+  & > ${RowWrapper}:first-of-type {
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
   }
-  & > ${RowWrapper}:last-child {
+
+  & > ${RowWrapper}:last-of-type {
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
   }
