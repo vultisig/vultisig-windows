@@ -25,11 +25,9 @@ const Container = styled(UnstyledButton)`
     alignItems: 'center',
   })}
   ${borderRadius.l};
-  background-color: ${getColor('foreground')};
+  background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
   padding: 16px;
-
-  cursor: pointer;
 
   &:hover ${InteractiveIndicator} {
     color: ${getColor('text')};
