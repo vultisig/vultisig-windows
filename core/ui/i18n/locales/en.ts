@@ -266,6 +266,7 @@ export const en = {
   processing_url: 'Processing URL...',
   failed_to_process_url: 'Failed to process URL',
   this_device_is_the: 'This device is the',
+  version: 'Version',
   initiating_device: 'Initiating device',
   pairing_device: 'Pairing device',
   expiration_must_extend_by_exactly_one_year:
@@ -994,7 +995,6 @@ export const en = {
   backup_password_info_cannot_be_reset:
     'Remember: if you forget your vault password, it <b>cannot</b> be reset or recovered.',
   upgrade_your_vault_now: 'Upgrade your vault now',
-  version: 'Version',
   vulti_share_not_saved_hint:
     "If you didn't save your VultiShare QR yet, go to the app and click on the QR icon in the upper right corner.",
   delete_folder_confirmation:
