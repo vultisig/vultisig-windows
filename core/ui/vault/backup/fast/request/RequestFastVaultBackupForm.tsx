@@ -48,8 +48,6 @@ export const RequestFastVaultBackupForm = ({ onFinish }: OnFinishProp) => {
     onSuccess: onFinish,
   })
 
-  console.log(error)
-
   const {
     register,
     handleSubmit,
