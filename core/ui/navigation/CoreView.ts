@@ -73,6 +73,7 @@ export type CoreView =
   | { id: 'manageVaults' }
   | { id: 'managePasscodeEncryption' }
   | { id: 'passcodeAutoLock' }
+  | { id: 'requestFastVaultBackup' }
 
 export type CoreViewId = CoreView['id']
 

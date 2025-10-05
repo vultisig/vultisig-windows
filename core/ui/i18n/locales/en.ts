@@ -1061,4 +1061,9 @@ export const en = {
   failed_to_process_transaction: 'Failed to process transaction',
   signature_successful: 'Signature Successful',
   same_vault_share: 'Same vault share',
+  device_backup: 'Device Backup',
+  device_backup_description: 'Store the vault share of this device.',
+  server_backup: 'Server Backup',
+  server_backup_description: 'Request Server Vault Share again.',
+  choose_backup_method: 'Choose Backup Method',
 }
