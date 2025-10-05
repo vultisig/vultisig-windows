@@ -390,29 +390,40 @@ export const en = {
   save: 'Save',
   settings_vault_page_footer: 'VULTISIG APP V',
   clear: 'Clear',
-  faq_setup_crypto_vault_title: 'How do I set up my crypto vault?',
+  faq_setup_crypto_vault_title: 'What is Vultisig?',
   faq_setup_crypto_vault_content:
-    'Get 2 or more of your devices together and connected to your local WiFi, Hotspot or internet. Then simply pair them via QR code and create a new vault. You can then send funds in.',
+    'It is a secure, multi-authentication wallet based on MPC technology that is used to manage digital assets. Transactions require approval from multiple devices.',
   faq_supported_cryptocurrencies_title:
-    'What cryptocurrencies are supported by Vultisig?',
+    'What are the benefits of using Vultisig?',
   faq_supported_cryptocurrencies_content:
-    'All assets supported by Trust Wallet Core are supported in Vultisig.',
-  faq_secure_crypto_vault_title:
-    'How does the crypto vault app secure my cryptocurrencies?',
+    'Vultisig offers enhanced security with multi-device authentication, support for many blockchains, easy recovery options, and no seed phrases or user tracking.',
+  faq_secure_crypto_vault_title: 'Can I recover my assets if I lose a device?',
   faq_secure_crypto_vault_content:
-    'Vultisig is audited, open-source and uses a very well-proven TSS library.',
-  faq_vultisig_make_money_title: 'How does Vultisig make money?',
+    'Yes, as long as you saved and have access to your backups when creating the vault. You can import these backups on a new device to regain access to your assets.',
+  faq_vultisig_make_money_title: 'How is Vultisig used?',
   faq_vultisig_make_money_content:
-    'Vultisig only charges a flat fee on swap and bridging. There are no other hidden fees.',
-  faq_recover_assets_title: 'Can I recover my assets if I lose a device?',
+    'Vultisig securely stores and manages digital assets. All actions, such as sending or swapping, require the threshold of devices to sign transactions.',
+  faq_recover_assets_title: 'What are the fees and costs?',
   faq_recover_assets_content:
-    'You can backup your vault by exporting the vault shares.',
-  faq_need_to_register_title: 'Do I need to register?',
-  faq_need_to_register_content: 'No, there are no registration requirements.',
+    "Vultisig is free to use. Only standard network fees apply to sending. And for swaps and bridges, there's a 0.5% (50 bps) fee.",
+  faq_need_to_register_title:
+    'What cryptocurrencies are supported by Vultisig?',
+  faq_need_to_register_content:
+    'Vultisig supports major cryptocurrencies and tokens, with over 30 chains and their tokens, currently available.',
   vault_settings_address_book_no_addresses_title: 'No saved addresses',
   or: 'or',
+  faq_is_open_source_title: 'Is Vultisig open source and audited?',
+  faq_is_open_source_content:
+    'Yes, Vultisig is open source and has undergone security audits. Both the audit reports and the source code are accessible.',
   enter_vault_name: 'Enter Vault Name',
+  faq_data_protection_title:
+    'How does Vultisig handle privacy and data protection?',
+  faq_data_protection_content:
+    'Vultisig does not store any user information from its mobile apps.',
   vault_name_required: 'Vault name is required',
+  faq_comparison_title: 'How does Vultisig compare to other multisig wallets?',
+  faq_comparison_content:
+    'It is built on MPC technology, which eliminates the need for seed phrases and supports multiple blockchains, making Vultisig flexible and chain-agnostic.',
   vault_name_already_exists: 'Vault name must be unique',
   vault_name_max_length_error: 'Vault name must be less than 50 characters',
   edit_address: 'Edit Address',
