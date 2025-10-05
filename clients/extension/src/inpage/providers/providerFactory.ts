@@ -11,6 +11,7 @@ import { THORChain } from '@clients/extension/src/inpage/providers/thorchain'
 import { UTXO } from '@clients/extension/src/inpage/providers/utxo'
 import { XDEFIKeplrProvider } from '@clients/extension/src/inpage/providers/xdefiKeplr'
 import { UtxoChain } from '@core/chain/Chain'
+
 import { TronLink } from './tronLink'
 
 export const createProviders = () => {
