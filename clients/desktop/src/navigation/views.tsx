@@ -55,7 +55,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   ),
   shareVault: ShareVaultPage,
   vault: VaultPage,
-  vaultFAQ: FaqVaultPage,
 }
 
 export const views: Views<AppViewId> = {
