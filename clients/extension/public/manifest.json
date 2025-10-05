@@ -63,7 +63,8 @@
       ],
       "resources": [
         "wallet-core.wasm",
-        "popup.html"
+        "popup.html",
+        "core/wasm/zxing_reader.wasm"
       ],
       "use_dynamic_url": false
     },
