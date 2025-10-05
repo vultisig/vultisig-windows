@@ -1,3 +1,4 @@
+import { hasServer } from '@core/mpc/devices/localPartyId'
 import { Opener } from '@lib/ui/base/Opener'
 import { CloudIcon } from '@lib/ui/icons/CloudIcon'
 import { HardDriveDownloadIcon } from '@lib/ui/icons/HardDriveDownloadIcon'
@@ -10,6 +11,7 @@ import { useTranslation } from 'react-i18next'
 
 import { CoreView } from '../../../navigation/CoreView'
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
+import { useCurrentVault } from '../../state/currentVault'
 import { BackupOption } from './BackupOption'
 
 const backupOptions = ['device', 'server'] as const
@@ -30,12 +32,18 @@ export const VaultSettingsBackup = () => {
 
   const { t } = useTranslation()
 
+  const vault = useCurrentVault()
+
   return (
     <Opener
       renderOpener={({ onOpen }) => (
         <ListItem
           icon={<HardDriveDownloadIcon fontSize={20} />}
-          onClick={onOpen}
+          onClick={() =>
+            hasServer(vault.signers)
+              ? onOpen()
+              : navigate(backupOptionView.device)
+          }
           title={t('backup')}
           hoverable
           showArrow

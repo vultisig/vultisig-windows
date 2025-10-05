@@ -703,8 +703,6 @@ export const en = {
     connectionSuccess: 'Connection successful!',
     takeMinute: 'This should only take a second',
     vaultInitializationStarting: 'Vault initiation starting...',
-    emailRequired: 'Email is required',
-    emailIncorrect: 'Incorrect e-mail, please check',
     enterEmail: 'Enter your e-mail',
     emailSetupTitle: 'This email is only used to send the server backup',
     passwordCannotBeRecovered: 'Password cannot be reset or recovered',
@@ -715,6 +713,7 @@ export const en = {
     enterHint: 'Enter hint',
   },
   password_required: 'Password is required',
+  email_required: 'Email is required',
   fast_vault_setup_title: 'Quick, 1 device setup',
   vault_setup_prop: {
     fast: {
