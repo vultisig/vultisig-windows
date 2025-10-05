@@ -566,8 +566,6 @@ export const pt = {
     connectionSuccess: 'Conexão bem-sucedida!',
     takeMinute: 'Isso deve levar apenas um segundo',
     vaultInitializationStarting: 'Iniciando a inicialização do cofre...',
-    emailRequired: 'E-mail é obrigatório',
-    emailIncorrect: 'E-mail incorreto, por favor verifique',
     enterEmail: 'Digite seu e-mail',
     emailSetupTitle:
       'Este email é usado apenas para enviar o backup do servidor',
@@ -1094,4 +1092,20 @@ export const pt = {
     'Se você optar por adicionar uma senha, ela será usada para <b>criptografar</b> o arquivo de backup.',
   backup_password_info_cannot_be_reset:
     'Lembre-se: se você esquecer a senha do seu cofre, ela <b>não poderá</b> ser redefinida ou recuperada.',
+  email_required: 'E-mail é obrigatório',
+  device_backup: 'Backup do dispositivo',
+  device_backup_description:
+    'Armazene o compartilhamento do cofre deste dispositivo.',
+  server_backup: 'Backup do servidor',
+  server_backup_description:
+    'Solicite o compartilhamento do Vault do servidor novamente.',
+  choose_backup_method: 'Escolha o método de backup',
+  vault_server_share_too_many_requests:
+    'Você solicitou seu compartilhamento de backup muitas vezes em um curto espaço de tempo. Aguarde antes de tentar novamente.',
+  vault_server_share_bad_request:
+    'Algo deu errado. Verifique sua senha novamente e tente novamente.',
+  backup_share_sent: 'Compartilhamento de backup enviado!',
+  check_email: 'Verifique o e-mail',
+  backup_share_sent_description:
+    'Acabamos de enviar seu compartilhamento de backup para o seu e-mail. Caso não o encontre, verifique sua caixa de spam.',
 }
