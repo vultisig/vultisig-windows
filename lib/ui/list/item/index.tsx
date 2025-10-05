@@ -1,3 +1,4 @@
+import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { getColor } from '@lib/ui/theme/getters'
 import { ThemeColors } from '@lib/ui/theme/ThemeColors'
@@ -9,7 +10,6 @@ import {
   ReactNode,
 } from 'react'
 import styled, { css } from 'styled-components'
-import { toSizeUnit } from '../../css/toSizeUnit'
 
 type Styles = {
   color: ThemeColor
