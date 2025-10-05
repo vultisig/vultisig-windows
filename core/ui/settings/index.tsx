@@ -219,7 +219,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
                   <MessageCircleQuestionIcon />
                 </ListItemIconWrapper>
               }
-              onClick={() => openUrl('https://vultisig.com/support#faq')}
+              onClick={() => navigate({ id: 'faq' })}
               title={t('faq')}
               showArrow
             />
