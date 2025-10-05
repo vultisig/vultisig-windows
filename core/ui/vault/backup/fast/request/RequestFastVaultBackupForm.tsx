@@ -14,7 +14,9 @@ import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { OnFinishProp } from '@lib/ui/props'
+import { ErrorBlock } from '@lib/ui/status/ErrorBlock'
 import { Text } from '@lib/ui/text'
+import { isInError } from '@lib/utils/error/isInError'
 import { useMutation } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 import { useMemo } from 'react'
@@ -46,6 +48,8 @@ export const RequestFastVaultBackupForm = ({ onFinish }: OnFinishProp) => {
     onSuccess: onFinish,
   })
 
+  console.log(error)
+
   const {
     register,
     handleSubmit,
@@ -55,6 +59,14 @@ export const RequestFastVaultBackupForm = ({ onFinish }: OnFinishProp) => {
     resolver: zodResolver(schema),
   })
 
+  const errorMessage = useMemo(() => {
+    if (isInError(error, '429')) {
+      return t('vault_server_share_too_many_requests')
+    }
+
+    return t('vault_server_share_bad_request')
+  }, [error, t])
+
   return (
     <VStack
       as="form"
@@ -63,6 +75,7 @@ export const RequestFastVaultBackupForm = ({ onFinish }: OnFinishProp) => {
       )}
       gap={24}
     >
+      {errorMessage && <ErrorBlock>{errorMessage}</ErrorBlock>}
       <VStack gap={4}>
         <ActionInsideInteractiveElement
           render={() => (
@@ -103,11 +116,6 @@ export const RequestFastVaultBackupForm = ({ onFinish }: OnFinishProp) => {
       <Button disabled={!isValid} loading={isPending} type="submit">
         {t('next')}
       </Button>
-      {error && (
-        <Text color="danger" size={12}>
-          {t('error')}
-        </Text>
-      )}
     </VStack>
   )
 }

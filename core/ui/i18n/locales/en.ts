@@ -1065,4 +1065,12 @@ export const en = {
   server_backup: 'Server Backup',
   server_backup_description: 'Request Server Vault Share again.',
   choose_backup_method: 'Choose Backup Method',
+  vault_server_share_too_many_requests:
+    'You’ve requested your backup share too often in a short time. Please wait before trying again.',
+  vault_server_share_bad_request:
+    'Something went wrong. Please recheck your password and try again.',
+  backup_share_sent: 'Backup share sent!',
+  check_email: 'Check email',
+  backup_share_sent_description:
+    'We just sent your backup share to your email. If you don’t see it, check your spam folder.',
 }
