@@ -20,7 +20,7 @@ export const useClickGate = (
 
   useEffect(() => reset, [])
 
-  const register = useCallback(
+  return useCallback(
     (action: () => void) => {
       if (timerRef.current != null) clearTimeout(timerRef.current)
       timerRef.current = window.setTimeout(reset, windowMs)
@@ -33,6 +33,4 @@ export const useClickGate = (
     },
     [windowMs, minNumberOfClicks]
   )
-
-  return register
 }
