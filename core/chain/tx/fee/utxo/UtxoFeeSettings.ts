@@ -5,7 +5,7 @@ export type UtxoFeeSettings = {
 }
 
 export const byteFeeMultiplier: Record<FeePriority, number> = {
-  low: 3,
-  normal: 5,
-  fast: 12,
+  low: 1.875,
+  normal: 2.5,
+  fast: 6.25,
 }
