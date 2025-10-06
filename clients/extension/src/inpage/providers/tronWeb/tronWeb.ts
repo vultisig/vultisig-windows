@@ -24,18 +24,32 @@ export class VultisigTronWebTrx extends Trx {
       if (!isTransaction(transaction))
         throw new Error('Unsupported transaction shape')
 
-      const contract = transaction.raw_data.contract[0]
-      if (contract.type === Types.ContractType.TransferContract) {
-        const transferContract = contract.parameter
-          .value as Types.TransferContract
-        return {
-          asset: { ticker: 'TRX' },
-          to: fromHex(transferContract.to_address),
-          from: fromHex(transferContract.owner_address),
-          amount: {
-            amount: transferContract.amount.toString(),
-            decimals: chainFeeCoin.Tron.decimals,
-          },
+      const [contract] = transaction.raw_data.contract
+
+      switch (contract.type) {
+        case Types.ContractType.TransferContract: {
+          const transferContract = contract.parameter
+            .value as Types.TransferContract
+          return {
+            asset: { ticker: 'TRX' },
+            to: fromHex(transferContract.to_address),
+            from: fromHex(transferContract.owner_address),
+            amount: {
+              amount: transferContract.amount.toString(),
+              decimals: chainFeeCoin.Tron.decimals,
+            },
+          }
+        }
+        case Types.ContractType.TriggerSmartContract: {
+          const triggerSmartContract = contract.parameter
+            .value as Types.TriggerSmartContract
+
+          return {
+            asset: { ticker: 'TRX' },
+            to: fromHex(triggerSmartContract.contract_address),
+            from: fromHex(triggerSmartContract.owner_address),
+            data: triggerSmartContract.data,
+          }
         }
       }
 
