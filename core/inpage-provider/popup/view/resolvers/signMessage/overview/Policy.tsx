@@ -229,17 +229,17 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
                             justifyContent="space-between"
                             wrap="nowrap"
                           >
-                            <HStack alignItems="center" gap={4} wrap="nowrap">
-                              <Text
-                                as="span"
-                                color="shy"
-                                size={12}
-                                weight={500}
-                                nowrap
-                              >
-                                {t('target')}
-                              </Text>
-                              {target.target.case && (
+                            {target.target.case ? (
+                              <HStack alignItems="center" gap={4} wrap="nowrap">
+                                <Text
+                                  as="span"
+                                  color="shy"
+                                  size={12}
+                                  weight={500}
+                                  nowrap
+                                >
+                                  {t('target')}
+                                </Text>
                                 <Text
                                   as="span"
                                   color="shy"
@@ -249,8 +249,18 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
                                 >
                                   {`(${camelCaseToTitle(target.target.case)})`}
                                 </Text>
-                              )}
-                            </HStack>
+                              </HStack>
+                            ) : (
+                              <Text
+                                as="span"
+                                color="shy"
+                                size={12}
+                                weight={500}
+                                nowrap
+                              >
+                                {t('target')}
+                              </Text>
+                            )}
                             {isHexString(target.target.value) ? (
                               <MiddleTruncate
                                 justifyContent="end"

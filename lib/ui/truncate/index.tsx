@@ -91,14 +91,17 @@ export const MiddleTruncate: FC<MiddleTruncateProps> = ({
     wrapperWidth: 0,
   })
   const { counter, ellipsis, truncating, wrapperWidth } = state
-  const elmRef = useResizeObserver(({ width = 0 }) => {
-    setState(prevState => ({
-      ...prevState,
-      wrapperWidth: width,
-      ellipsis: text,
-      truncating: true,
-    }))
-  }, 'width')
+  const elmRef = useResizeObserver({
+    callback: ({ width = 0 }) => {
+      setState(prevState => ({
+        ...prevState,
+        wrapperWidth: width,
+        ellipsis: text,
+        truncating: true,
+      }))
+    },
+    track: 'width',
+  })
 
   const handleClick = () => {
     if (onClick) onClick()
