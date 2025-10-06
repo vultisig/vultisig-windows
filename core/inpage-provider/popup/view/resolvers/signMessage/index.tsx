@@ -1,49 +1,67 @@
 import { StartKeysignView } from '@core/extension/keysign/start/StartKeysignView'
-import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
+import {
+  PopupResolver,
+  ResolvePopupInput,
+} from '@core/inpage-provider/popup/view/resolver'
+import { Overview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview'
 import {
   KeysignMutationListener,
   KeysignMutationListenerProvider,
 } from '@core/ui/mpc/keysign/action/state/keysignMutationListener'
 import { CoreView } from '@core/ui/navigation/CoreView'
 import { ActiveView } from '@lib/ui/navigation/ActiveView'
+import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { NavigationProvider } from '@lib/ui/navigation/state'
 import { Views } from '@lib/ui/navigation/Views'
+import { OnFinishProp } from '@lib/ui/props'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
 
-import { Overview } from './Overview'
-
 type SignMessageView =
-  | {
-      id: 'overview'
-    }
+  | { id: 'overview'; state: { signature?: string } }
   | Extract<CoreView, { id: 'keysign' }>
 
 const views: Views<SignMessageView['id']> = {
-  overview: Overview,
   keysign: StartKeysignView,
+  overview: Overview,
 }
 
-export const SignMessage: PopupResolver<'signMessage'> = ({ onFinish }) => {
+const NavigationWrapper = ({
+  onFinish,
+}: OnFinishProp<ResolvePopupInput<'signMessage'>>) => {
+  const navigate = useNavigate<SignMessageView>()
   const keysignMutationListener: KeysignMutationListener = useMemo(
     () => ({
-      onSuccess: result => {
+      onSuccess: signature => {
         onFinish({
           result: {
-            data: getRecordUnionValue(result, 'signature'),
+            data: getRecordUnionValue(signature, 'signature'),
           },
           shouldClosePopup: false,
         })
+        navigate(
+          {
+            id: 'overview',
+            state: { signature: getRecordUnionValue(signature, 'signature') },
+          },
+          { replace: true }
+        )
       },
     }),
-    [onFinish]
+    [onFinish, navigate]
   )
 
   return (
-    <NavigationProvider initialValue={{ history: [{ id: 'overview' }] }}>
-      <KeysignMutationListenerProvider value={keysignMutationListener}>
-        <ActiveView views={views} />
-      </KeysignMutationListenerProvider>
-    </NavigationProvider>
+    <KeysignMutationListenerProvider value={keysignMutationListener}>
+      <ActiveView views={views} />
+    </KeysignMutationListenerProvider>
   )
 }
+
+export const SignMessage: PopupResolver<'signMessage'> = ({ onFinish }) => (
+  <NavigationProvider
+    initialValue={{ history: [{ id: 'overview', state: {} }] }}
+  >
+    <NavigationWrapper onFinish={onFinish} />
+  </NavigationProvider>
+)
