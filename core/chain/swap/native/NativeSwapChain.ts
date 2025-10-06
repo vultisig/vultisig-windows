@@ -28,6 +28,8 @@ const thorChainSwapEnabledChains = [
   Chain.THORChain,
   Chain.Ripple,
   Chain.Base,
+  Chain.Tron,
+  Chain.Noble,
 ] as const
 
 export const nativeSwapEnabledChainsRecord = {
@@ -68,6 +70,8 @@ export const nativeSwapChainIds: Record<NativeSwapEnabledChain, string> = {
   [Chain.Zcash]: 'ZEC',
   [Chain.Ripple]: 'XRP',
   [Chain.Base]: 'BASE',
+  [Chain.Tron]: 'TRX',
+  [Chain.Noble]: 'NOBLE',
 }
 
 type NativeSwapPayloadCase = Extract<
