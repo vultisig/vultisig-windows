@@ -386,7 +386,10 @@ export const pt = {
     'Você pode fazer backup do seu cofre exportando os fragmentos do cofre.',
   faq_need_to_register_title: 'Preciso me registrar?',
   faq_need_to_register_content: 'Não, não há requisitos de registro.',
-  vault_settings_address_book_no_addresses_title: 'Nenhum endereço salvo',
+  vault_settings_address_book_no_addresses_title:
+    'Seu livro de endereços está vazio',
+  vault_settings_address_book_no_addresses_description:
+    'Organize todos os seus endereços importantes em um lugar.',
   or: 'ou',
   enter_vault_name: 'Insira o nome do cofre',
   vault_name_required: 'Nome do cofre obrigatório',

@@ -381,6 +381,8 @@ export const hr = {
   faq_need_to_register_title: 'Moram li se registrirati?',
   faq_need_to_register_content: 'Ne, nema zahtjeva za registraciju.',
   vault_settings_address_book_no_addresses_title: 'Nema spremljenih adresa',
+  vault_settings_address_book_no_addresses_description:
+    'Organizirajte sve vaše važne adrese u jednom mjestu.',
   or: 'ili',
   enter_vault_name: 'Unesite naziv trezora',
   vault_name_required: 'Naziv trezora je obavezan',

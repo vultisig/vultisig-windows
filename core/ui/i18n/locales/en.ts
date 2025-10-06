@@ -410,7 +410,9 @@ export const en = {
     'What cryptocurrencies are supported by Vultisig?',
   faq_need_to_register_content:
     'Vultisig supports major cryptocurrencies and tokens, with over 30 chains and their tokens, currently available.',
-  vault_settings_address_book_no_addresses_title: 'No saved addresses',
+  vault_settings_address_book_no_addresses_title: 'Your Address Book is empty',
+  vault_settings_address_book_no_addresses_description:
+    'Keep all your important addresses organized in one place.',
   or: 'or',
   faq_is_open_source_title: 'Is Vultisig open source and audited?',
   faq_is_open_source_content:
@@ -1020,7 +1022,7 @@ export const en = {
   failed_to_get_camera_permission: 'Failed to get camera permission',
   address_book_empty_instruction:
     'Click "Add Address" to add your favorite addresses',
-  select_chains: 'Select Chains',
+  select_chains: 'Select',
   chains: 'Chains',
   custom_token: 'Custom Token',
   find_custom_token: 'Find Your Custom Token',

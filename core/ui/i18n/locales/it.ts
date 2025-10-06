@@ -398,7 +398,9 @@ export const it = {
     'Puoi eseguire il backup della tua cassaforte esportando i frammenti della cassaforte.',
   faq_need_to_register_title: 'Devo registrarmi?',
   faq_need_to_register_content: 'No, non ci sono requisiti di registrazione.',
-  vault_settings_address_book_no_addresses_title: 'Nessun indirizzo salvato',
+  vault_settings_address_book_no_addresses_title: 'Il tuo rubrica è vuota',
+  vault_settings_address_book_no_addresses_description:
+    'Organizza tutti i tuoi indirizzi importanti in un posto.',
   or: 'o',
   enter_vault_name: 'Inserisci il nome della cassaforte',
   vault_name_required: 'Il nome della cassaforte è obbligatorio',

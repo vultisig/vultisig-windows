@@ -401,7 +401,9 @@ export const es = {
   faq_need_to_register_title: '¿Necesito registrarme?',
   faq_need_to_register_content: 'No, no hay requisitos de registro.',
   vault_settings_address_book_no_addresses_title:
-    'No hay direcciones guardadas',
+    'Su libreta de direcciones está vacía',
+  vault_settings_address_book_no_addresses_description:
+    'Organice todas sus direcciones importantes en un lugar.',
   or: 'o',
   enter_vault_name: 'Ingrese el nombre de la bóveda',
   vault_name_required: 'Se requiere el nombre de la bóveda',

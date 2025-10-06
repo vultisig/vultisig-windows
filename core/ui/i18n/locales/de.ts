@@ -396,8 +396,9 @@ export const de = {
   faq_need_to_register_title: 'Muss ich mich registrieren?',
   faq_need_to_register_content:
     'Nein, es gibt keine Registrierungsanforderungen.',
-  vault_settings_address_book_no_addresses_title:
-    'Keine gespeicherten Adressen',
+  vault_settings_address_book_no_addresses_title: 'Ihr Adressbuch ist leer',
+  vault_settings_address_book_no_addresses_description:
+    'Ordnen Sie alle Ihre wichtigen Adressen in einem Ort.',
   or: 'oder',
   enter_vault_name: 'Tresorname eingeben',
   vault_name_required: 'Tresorname ist erforderlich',
