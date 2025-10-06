@@ -19,7 +19,7 @@ export const AirdropRegisterPage = () => {
 
   return (
     <VStack fullHeight>
-      <PageHeader
+      <StyledHeader
         primaryControls={<PageHeaderBackButton />}
         title={t('vault_register_for_airdrop_title')}
       />
@@ -59,4 +59,9 @@ export const AirdropRegisterPage = () => {
 
 const ImageWrapper = styled.div`
   position: relative;
+`
+
+const StyledHeader = styled(PageHeader)`
+  position: relative;
+  z-index: 1;
 `
