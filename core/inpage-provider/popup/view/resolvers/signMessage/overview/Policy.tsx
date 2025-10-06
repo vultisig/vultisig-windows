@@ -33,6 +33,12 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
   const address = useCurrentVaultAddress(chain)
   const isFinished = useMemo(() => !!signature, [signature])
 
+  const camelCaseToTitle = (input: string) => {
+    return input
+      .replace(/([a-z])([A-Z])/g, '$1 $2')
+      .replace(/\b\w/g, char => char.toUpperCase())
+  }
+
   const policy = useMemo(() => {
     const [recipe] = message.split('*#*')
 
@@ -111,12 +117,45 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
         </HStack>
       </StyledSection>
       <StyledSection>
-        <Text as="span" size={14} weight={500}>
-          {t(`message`)}
-        </Text>
-        <Text as="span" color="info" size={14} weight={500}>
-          {message}
-        </Text>
+        <HStack alignItems="center" gap={8} justifyContent="space-between">
+          <Text as="span" color="shy" size={14} weight={500}>
+            {t('dapp_name')}
+          </Text>
+          <Text as="span" size={14} weight={500}>
+            {policy.name}
+          </Text>
+        </HStack>
+        <StyledDivider />
+        {!!policy.description && (
+          <>
+            <VStack gap={4}>
+              <Text as="span" color="shy" size={14} weight={500}>
+                {t('description')}
+              </Text>
+              <Text as="span" size={13} weight={500}>
+                {policy.description}
+              </Text>
+            </VStack>
+            <StyledDivider />
+          </>
+        )}
+        <HStack alignItems="center" gap={8} justifyContent="space-between">
+          <Text as="span" color="shy" size={14} weight={500}>
+            ID
+          </Text>
+          <Text as="span" size={14} weight={500}>
+            {policy.id}
+          </Text>
+        </HStack>
+        <StyledDivider />
+        <HStack alignItems="center" gap={8} justifyContent="space-between">
+          <Text as="span" color="shy" size={14} weight={500}>
+            {t('version')}
+          </Text>
+          <Text as="span" size={14} weight={500}>
+            {policy.version}
+          </Text>
+        </HStack>
       </StyledSection>
       {isFinished ? (
         <StyledSection>
@@ -129,50 +168,6 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
         </StyledSection>
       ) : (
         <>
-          <StyledSection>
-            <Text as="span" size={14} weight={500}>
-              {t(`plugin_info`)}
-            </Text>
-            <HStack alignItems="center" gap={8} justifyContent="space-between">
-              <Text as="span" color="shy" size={14} weight={500}>
-                ID
-              </Text>
-              <Text as="span" size={14} weight={500}>
-                {policy.id}
-              </Text>
-            </HStack>
-            <StyledDivider />
-            <HStack alignItems="center" gap={8} justifyContent="space-between">
-              <Text as="span" color="shy" size={14} weight={500}>
-                {t('dapp_name')}
-              </Text>
-              <Text as="span" size={14} weight={500}>
-                {policy.name}
-              </Text>
-            </HStack>
-            <StyledDivider />
-            {!!policy.description && (
-              <>
-                <VStack gap={4}>
-                  <Text as="span" color="shy" size={14} weight={500}>
-                    {t('description')}
-                  </Text>
-                  <Text as="span" size={13} weight={500}>
-                    {policy.description}
-                  </Text>
-                </VStack>
-                <StyledDivider />
-              </>
-            )}
-            <HStack alignItems="center" gap={8} justifyContent="space-between">
-              <Text as="span" color="shy" size={14} weight={500}>
-                {t('version')}
-              </Text>
-              <Text as="span" size={14} weight={500}>
-                {policy.version}
-              </Text>
-            </HStack>
-          </StyledSection>
           {policy.rules?.length > 0 && (
             <StyledSection>
               <Text as="span" size={14} weight={500}>
@@ -205,7 +200,7 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
                                   size={12}
                                   weight={500}
                                 >
-                                  {parameterName}
+                                  {camelCaseToTitle(parameterName)}
                                 </Text>
                                 <Text
                                   as="span"
@@ -213,7 +208,7 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
                                   size={12}
                                   weight={500}
                                 >
-                                  {`(${constraint.value.case})`}
+                                  {`(${camelCaseToTitle(constraint.value.case)})`}
                                 </Text>
                               </HStack>
                             ) : (
@@ -223,7 +218,7 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
                                 size={12}
                                 weight={500}
                               >
-                                {parameterName}
+                                {camelCaseToTitle(parameterName)}
                               </Text>
                             )}
                             {value.startsWith('0x') ? (
@@ -249,6 +244,14 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
           )}
         </>
       )}
+      <StyledSection>
+        <Text as="span" size={14} weight={500}>
+          {t(`message`)}
+        </Text>
+        <Text as="span" color="info" size={14} weight={500}>
+          {message}
+        </Text>
+      </StyledSection>
     </>
   )
 }
