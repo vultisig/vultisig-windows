@@ -16,9 +16,9 @@ export const SendFiatFeeValue = () => {
   const { chain } = useCurrentSendCoin()
   const chainSpecific = useSendChainSpecific()
   const fee = getFeeAmount(chainSpecific)
-  const formatFiatAmount = useFormatFiatAmount()
 
   const coin = chainFeeCoin[chain]
+  const formatFiatAmount = useFormatFiatAmount()
   const feeCoinPriceQuery = useCoinPriceQuery({
     coin,
   })
