@@ -124,7 +124,7 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
     if (data) {
       setValue('address', data, { shouldValidate: true })
     }
-  }gi
+  }
 
   const handleScanSuccess = (address: string) => {
     setValue('address', address)
