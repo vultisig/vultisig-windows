@@ -2,7 +2,6 @@ import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { getColor } from '@lib/ui/theme/getters'
 import { ThemeColors } from '@lib/ui/theme/ThemeColors'
-import { match } from '@lib/utils/match'
 import {
   CSSProperties,
   FC,
@@ -11,6 +10,8 @@ import {
   ReactNode,
 } from 'react'
 import styled, { css } from 'styled-components'
+
+import { UiProps } from '../../props'
 
 type Styles = {
   color: ThemeColor
@@ -64,21 +65,26 @@ const StyledListItem = styled.div<{
   justify-content: space-between;
   min-height: 58px;
   padding: 12px 16px;
-  ${({ status }) =>
-    match(status, {
-      error: () => css`
-        color: ${getColor('danger')};
-      `,
-      success: () => css`
-        background-color: ${getColor('buttonPrimary')};
-      `,
-      warning: () => css`
-        color: ${getColor('idle')};
-      `,
-      default: () => css`
-        color: ${getColor('text')};
-      `,
-    })};
+  ${({ status }) => {
+    switch (status) {
+      case 'error':
+        return css`
+          color: ${getColor('danger')};
+        `
+      case 'success':
+        return css`
+          color: ${getColor('primary')};
+        `
+      case 'warning':
+        return css`
+          color: ${getColor('idle')};
+        `
+      default:
+        return css`
+          color: ${getColor('text')};
+        `
+    }
+  }}
 
   ${({ hoverable }) => {
     return (
@@ -98,7 +104,6 @@ const StyledListItem = styled.div<{
 type ListItemProps = {
   description?: ReactNode
   extra?: ReactNode
-  hoverable?: boolean
   icon?: ReactNode
   showArrow?: boolean
   status?: Status
@@ -115,7 +120,6 @@ export const ListItem: FC<ListItemProps> = ({
   status = 'default',
   title,
   styles,
-  hoverable = true,
   ...rest
 }) => {
   const titleRender = isValidElement(title) ? (
