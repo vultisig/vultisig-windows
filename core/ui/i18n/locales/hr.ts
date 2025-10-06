@@ -911,6 +911,7 @@ export const hr = {
   remove: 'Ukloniti',
   share_vault: 'Dijeli trezor',
   no_referral_yet: 'Nema preporuke',
+  register_guide: 'Registracijski vodič',
   missing_thorchain_address: 'Nedostaje THORChain adresa',
   missing_destination_address: 'Nedostaje odredišna adresa',
   upgrade_shares_info:

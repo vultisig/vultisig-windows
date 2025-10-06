@@ -931,6 +931,7 @@ export const it = {
   remove: 'Rimuovere',
   share_vault: 'Condividi Vault',
   no_referral_yet: 'Nessuna referenza',
+  register_guide: 'Guida di registrazione',
   missing_thorchain_address: 'Indirizzo THORChain mancante',
   missing_destination_address: 'Indirizzo di destinazione mancante',
   upgrade_shares_info:
