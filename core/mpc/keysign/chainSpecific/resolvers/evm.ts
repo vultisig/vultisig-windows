@@ -13,6 +13,7 @@ import {
   EthereumSpecific,
   EthereumSpecificSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+import { without } from '@lib/utils/array/without'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { attempt, withFallback } from '@lib/utils/attempt'
 import { bigIntMax } from '@lib/utils/bigint/bigIntMax'
@@ -56,19 +57,26 @@ export const getEthereumSpecific: ChainSpecificResolver<
       }
     }
 
-    const gasLimit =
-      feeQuote.gasLimit ??
-      (await withFallback(
-        attempt(
-          client.estimateGas({
-            account: coin.address as `0x${string}`,
-            to: shouldBePresent(receiver) as `0x${string}`,
-            value: amount,
-            data: data ? formatData(data) : undefined,
-          })
-        ),
-        deriveEvmGasLimit({ coin, data })
-      ))
+    const gasLimit = bigIntMax(
+      ...without(
+        [
+          feeQuote.gasLimit,
+          deriveEvmGasLimit({ coin, data }),
+          await withFallback(
+            attempt(
+              client.estimateGas({
+                account: coin.address as `0x${string}`,
+                to: shouldBePresent(receiver) as `0x${string}`,
+                value: amount,
+                data: data ? formatData(data) : undefined,
+              })
+            ),
+            undefined
+          ),
+        ],
+        undefined
+      )
+    )
 
     const maxPriorityFeePerGas =
       (feeQuote as Partial<EvmFeeSettings>).maxPriorityFeePerGas ??
