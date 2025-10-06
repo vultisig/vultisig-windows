@@ -50,26 +50,45 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
         method={method}
       />
       <Collapse title={t('plugin_info')} collapsed>
-        <HStack alignItems="center" gap={8} justifyContent="space-between">
-          <Text as="span" color="shy" size={14} weight={500}>
+        <HStack
+          alignItems="center"
+          gap={8}
+          justifyContent="space-between"
+          wrap="nowrap"
+        >
+          <Text as="span" color="shy" size={14} weight={500} nowrap>
             {t('name')}
           </Text>
           <Text as="span" size={14} weight={500}>
             {policy.name}
           </Text>
         </HStack>
+        {policy.description && (
+          <>
+            <Divider />
+            <HStack
+              alignItems="center"
+              gap={8}
+              justifyContent="space-between"
+              wrap="nowrap"
+            >
+              <Text as="span" color="shy" size={14} weight={500} nowrap>
+                {t('description')}
+              </Text>
+              <Text as="span" size={13} weight={500}>
+                {policy.description}
+              </Text>
+            </HStack>
+          </>
+        )}
         <Divider />
-        <HStack alignItems="center" gap={8} justifyContent="space-between">
-          <Text as="span" color="shy" size={14} weight={500}>
-            {t('description')}
-          </Text>
-          <Text as="span" size={13} weight={500}>
-            {policy.description}
-          </Text>
-        </HStack>
-        <Divider />
-        <HStack alignItems="center" gap={8} justifyContent="space-between">
-          <Text as="span" color="shy" size={14} weight={500}>
+        <HStack
+          alignItems="center"
+          gap={8}
+          justifyContent="space-between"
+          wrap="nowrap"
+        >
+          <Text as="span" color="shy" size={14} weight={500} nowrap>
             ID
           </Text>
           <Text as="span" size={14} weight={500}>
@@ -77,8 +96,13 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
           </Text>
         </HStack>
         <Divider />
-        <HStack alignItems="center" gap={8} justifyContent="space-between">
-          <Text as="span" color="shy" size={14} weight={500}>
+        <HStack
+          alignItems="center"
+          gap={8}
+          justifyContent="space-between"
+          wrap="nowrap"
+        >
+          <Text as="span" color="shy" size={14} weight={500} nowrap>
             {t('version')}
           </Text>
           <Text as="span" size={14} weight={500}>
