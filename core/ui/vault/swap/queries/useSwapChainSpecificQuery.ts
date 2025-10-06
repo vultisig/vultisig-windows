@@ -4,7 +4,7 @@ import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { areEqualCoins } from '@core/chain/coin/Coin'
 import { getSwapDestinationAddress } from '@core/chain/swap/keysign/getSwapDestinationAddress'
 import { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
-import { EvmFeeQuote } from '@core/chain/tx/fee/evm/EvmFeeSettings'
+import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { byteFeeMultiplier } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/resolver'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
@@ -58,17 +58,17 @@ export const useSwapChainSpecificQuery = () => {
       byteFeeMultiplier: isChainOfKind(fromCoin.chain, 'utxo')
         ? byteFeeMultiplier.fast
         : undefined,
-      feeQuote: matchRecordUnion<SwapQuote, Partial<EvmFeeQuote> | undefined>(
-        swapQuote,
-        {
-          native: () => undefined,
-          general: ({ tx }) =>
-            matchRecordUnion(tx, {
-              evm: ({ feeQuote }) => feeQuote,
-              solana: () => undefined,
-            }),
-        }
-      ),
+      feeQuote: matchRecordUnion<
+        SwapQuote,
+        Partial<EvmFeeSettings> | undefined
+      >(swapQuote, {
+        native: () => undefined,
+        general: ({ tx }) =>
+          matchRecordUnion(tx, {
+            evm: ({ feeQuote }) => feeQuote,
+            solana: () => undefined,
+          }),
+      }),
     }
 
     return input

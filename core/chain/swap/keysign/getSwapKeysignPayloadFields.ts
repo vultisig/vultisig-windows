@@ -2,6 +2,10 @@ import { create } from '@bufbuild/protobuf'
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
+import {
+  getBlockchainSpecificValue,
+  type KeysignChainSpecific,
+} from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { CommKeysignSwapPayload } from '@core/mpc/keysign/swap/KeysignSwapPayload'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import {
@@ -26,6 +30,7 @@ type Input = {
   quote: SwapQuote
   fromCoin: AccountCoin & { hexPublicKey: string }
   toCoin: AccountCoin & { hexPublicKey: string }
+  chainSpecific: KeysignChainSpecific
 }
 
 type Output = Pick<KeysignPayload, 'toAddress' | 'memo'> &
@@ -36,6 +41,7 @@ export const getSwapKeysignPayloadFields = ({
   quote,
   fromCoin,
   toCoin,
+  chainSpecific,
 }: Input): Output => {
   const destinationAddress = getSwapDestinationAddress({ quote, fromCoin })
 
@@ -45,11 +51,20 @@ export const getSwapKeysignPayloadFields = ({
         GeneralSwapTx,
         Omit<OneInchTransaction, '$typeName' | 'swapFee'>
       >(quote.tx, {
-        evm: ({ feeQuote, ...tx }) => ({
-          ...tx,
-          gasPrice: feeQuote.maxFeePerGas?.toString() ?? '0',
-          gas: feeQuote.gasLimit ?? BigInt(0),
-        }),
+        evm: ({ from, to, data, value }) => {
+          const { maxFeePerGasWei, gasLimit } = getBlockchainSpecificValue(
+            chainSpecific,
+            'ethereumSpecific'
+          )
+          return {
+            from,
+            to,
+            data,
+            value,
+            gasPrice: maxFeePerGasWei,
+            gas: BigInt(gasLimit),
+          }
+        },
         solana: ({ data }) => ({
           from: '',
           to: '',

@@ -3,7 +3,10 @@ import { Chain } from '@core/chain/Chain'
 import { evmChainInfo } from '@core/chain/chains/evm/chainInfo'
 import { getEvmClient } from '@core/chain/chains/evm/client'
 import { getEvmBaseFee } from '@core/chain/tx/fee/evm/baseFee'
-import { EvmFeeQuote } from '@core/chain/tx/fee/evm/EvmFeeSettings'
+import type {
+  EvmFeeQuote,
+  EvmFeeSettings,
+} from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { deriveEvmGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
 import { getEvmMaxPriorityFeePerGas } from '@core/chain/tx/fee/evm/maxPriorityFeePerGas'
 import {
@@ -68,14 +71,13 @@ export const getEthereumSpecific: ChainSpecificResolver<
       ))
 
     const maxPriorityFeePerGas =
-      feeQuote.maxPriorityFeePerGas ?? (await getEvmMaxPriorityFeePerGas(chain))
+      (feeQuote as Partial<EvmFeeSettings>).maxPriorityFeePerGas ??
+      (await getEvmMaxPriorityFeePerGas(chain))
 
-    const maxFeePerGas =
-      feeQuote.maxFeePerGas ??
-      bigIntMax(
-        baseFeeMultiplier(await getEvmBaseFee(chain)) + maxPriorityFeePerGas,
-        minMaxFeePerGas
-      )
+    const maxFeePerGas = bigIntMax(
+      baseFeeMultiplier(await getEvmBaseFee(chain)) + maxPriorityFeePerGas,
+      minMaxFeePerGas
+    )
 
     return {
       maxPriorityFeePerGas,
