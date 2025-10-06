@@ -884,11 +884,6 @@ export const de = {
   backup_password: 'Backup-Passwort',
   signing_transaction: 'Signieren einer Transaktion',
   backup_without_password: 'Backup ohne Passwort',
-  use_password: 'Passwort verwenden',
-  backup_password_prompt:
-    'Möchten Sie den Tresorfreigaben Ihres Geräts ein Kennwort hinzufügen?',
-  backup_password_info:
-    'Wir empfehlen, für Geräte-Tresorfreigaben kein Backup-Passwort festzulegen. Ihre Daten sind sicher, wenn die Backups ordnungsgemäß an verschiedenen Orten gespeichert werden, was bereits einen erheblichen Schutz darstellt. Denken Sie daran: Backup-Passwörter können nicht wiederhergestellt werden, wenn Sie sie vergessen. Sie haben die Wahl!',
   upgrade_your_vault_now: 'Aktualisieren Sie Ihren Tresor jetzt',
   upgrade_vault: 'Aktualisieren Sie Ihren Tresor',
   upgrade_now: 'Jetzt upgraden',
@@ -1016,7 +1011,7 @@ export const de = {
   go_to_wallet: 'Zur Brieftasche',
   install_plugin: 'Plugin installieren',
   installing_plugin: 'Plugin installieren',
-  plugin_info: 'Plugin-Informationen',
+  plugin_info: 'Plugin Informationen',
   plugin_info_desc: 'Sie installieren das {{name}}-Plugin',
   plugin_success_desc: 'Die Installation von {{name}} ist abgeschlossen',
   plugin_password_desc:
@@ -1076,7 +1071,7 @@ export const de = {
   entity_scanned: '{{entity}} gescannt von <provider></provider>',
   site_has_risk: 'Schädliche Site erkannt von <provider></provider>',
   risky_site_detected: 'Schädliche Site erkannt',
-  app_permissions: 'App-Berechtigungen',
+  app_permissions: 'App Berechtigungen',
   dapp_name: 'dApp-Name',
   description: 'Beschreibung',
   personal_sign: 'Persönliches Zeichen',
@@ -1101,4 +1096,18 @@ export const de = {
   install_app: 'App installieren',
   permissions: 'Berechtigungen',
   same_vault_share: 'Gleiche Tresorfreigabe',
+  referrals_create_page_title: 'Vultisig - Empfehlungen',
+  save_swap_fees_with_referral:
+    'Sparen Sie <blue>10 %</blue> beim Tausch – Fügen Sie eine Empfehlung hinzu',
+  create_own_referral:
+    'Erstellen Sie Ihren eigenen Code und verdienen Sie <blue>20 %</blue> auf vermittelte Swaps',
+  backup_with_password: 'Backup mit Passwort',
+  backup_password_confirmation_title:
+    'Möchten Sie Ihr Backup mit einem Passwort verschlüsseln?',
+  backup_password_info_secure_without_password:
+    'Standardmäßig ist Ihr Backup <b>ohne</b> ein zusätzliches Kennwort sicher, da Sie Vault-Freigaben an verschiedenen Orten speichern.',
+  backup_password_info_encrypt_with_password:
+    'Wenn Sie ein Kennwort hinzufügen, wird dieses zum <b>Verschlüsseln</b> der Sicherungsdatei verwendet.',
+  backup_password_info_cannot_be_reset:
+    'Denken Sie daran: Wenn Sie Ihr Tresorkennwort vergessen, kann es <b>nicht</b> zurückgesetzt oder wiederhergestellt werden.',
 }

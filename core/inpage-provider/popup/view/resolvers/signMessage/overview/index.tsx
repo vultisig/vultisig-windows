@@ -1,11 +1,19 @@
 import { create } from '@bufbuild/protobuf'
+import {
+  SignMessageInput,
+  SignMessageType,
+} from '@core/inpage-provider/popup/interface'
+import { ConnectOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Connect'
+import { DefaultOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Default'
+import { PolicyOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Policy'
 import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
 import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { StartKeysignPrompt } from '@core/ui/mpc/keysign/prompt/StartKeysignPrompt'
-import { VStack } from '@lib/ui/layout/Stack'
-import { List } from '@lib/ui/list'
-import { ListItem } from '@lib/ui/list/item'
+import { useCore } from '@core/ui/state/core'
+import { Match } from '@lib/ui/base/Match'
+import { Button } from '@lib/ui/buttons/Button'
+import { useViewState } from '@lib/ui/navigation/hooks/useViewState'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -17,14 +25,13 @@ import { TypedDataEncoder } from 'ethers'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { SignMessageInput } from '../../../interface'
-
 export const Overview = () => {
-  const input = usePopupInput<'signMessage'>()
   const { t } = useTranslation()
-
+  const { goHome } = useCore()
+  const input = usePopupInput<'signMessage'>()
   const method = getRecordUnionKey(input)
   const { chain } = getRecordUnionValue(input)
+  const [{ signature }] = useViewState<{ signature?: string }>()
 
   const message = matchRecordUnion<SignMessageInput, string>(input, {
     eth_signTypedData_v4: ({ message: { domain, types, message } }) =>
@@ -45,35 +52,62 @@ export const Overview = () => {
     personal_sign: ({ message }) => message,
   })
 
+  const type = matchRecordUnion<SignMessageInput, SignMessageType>(input, {
+    eth_signTypedData_v4: () => 'default',
+    sign_message: () => 'default',
+    personal_sign: ({ type }) => type,
+  })
+
   const keysignMessagePayload = useMemo(
     () => ({
-      custom: create(CustomMessagePayloadSchema, {
-        method,
-        message,
-        chain,
-      }),
+      custom: create(CustomMessagePayloadSchema, { method, message, chain }),
     }),
     [method, message, chain]
   )
 
   return (
-    <VStack fullHeight>
+    <>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={t('sign_message')}
+        title={t(signature ? 'overview' : 'sign_message')}
         hasBorder
       />
-      <PageContent flexGrow scrollable>
-        <List>
-          <>
-            <ListItem description={method} title={t('method')} />
-            <ListItem description={displayMessage} title={t('message')} />
-          </>
-        </List>
+      <PageContent gap={16} scrollable>
+        <Match
+          value={type}
+          connect={() => (
+            <ConnectOverview
+              chain={chain}
+              message={displayMessage}
+              method={method}
+              signature={signature}
+            />
+          )}
+          default={() => (
+            <DefaultOverview
+              chain={chain}
+              message={displayMessage}
+              method={method}
+              signature={signature}
+            />
+          )}
+          policy={() => (
+            <PolicyOverview
+              chain={chain}
+              message={displayMessage}
+              method={method}
+              signature={signature}
+            />
+          )}
+        />
       </PageContent>
       <PageFooter>
-        <StartKeysignPrompt keysignPayload={keysignMessagePayload} />
+        {signature ? (
+          <Button onClick={goHome}>{t('complete')}</Button>
+        ) : (
+          <StartKeysignPrompt keysignPayload={keysignMessagePayload} />
+        )}
       </PageFooter>
-    </VStack>
+    </>
   )
 }
