@@ -104,6 +104,7 @@ const StyledListItem = styled.div<{
 type ListItemProps = {
   description?: ReactNode
   extra?: ReactNode
+  hoverable?: boolean
   icon?: ReactNode
   showArrow?: boolean
   status?: Status
@@ -120,6 +121,7 @@ export const ListItem: FC<ListItemProps> = ({
   status = 'default',
   title,
   styles,
+  hoverable = true,
   ...rest
 }) => {
   const titleRender = isValidElement(title) ? (
@@ -134,7 +136,7 @@ export const ListItem: FC<ListItemProps> = ({
   )
 
   return (
-    <StyledListItem status={status} {...rest}>
+    <StyledListItem hoverable={hoverable} status={status} {...rest}>
       <StyledContent>
         {icon}
         {description ? (
