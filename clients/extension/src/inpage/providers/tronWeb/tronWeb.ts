@@ -46,6 +46,10 @@ export class VultisigTronWebTrx extends Trx {
 
           return {
             asset: { ticker: 'TRX' },
+            amount: {
+              amount: triggerSmartContract.call_value?.toString() ?? '0',
+              decimals: chainFeeCoin.Tron.decimals,
+            },
             to: fromHex(triggerSmartContract.contract_address),
             from: fromHex(triggerSmartContract.owner_address),
             data: triggerSmartContract.data,
