@@ -1,7 +1,6 @@
 import { CheckUpdate } from '@clients/desktop/src/components/check-update'
 import { ManageMpcLib } from '@clients/desktop/src/components/manage-mpc-lib'
 import { AppViewId } from '@clients/desktop/src/navigation/AppView'
-import { FaqVaultPage } from '@clients/desktop/src/pages/vaultSettings/vaultFaq/FaqVaultPage'
 import { VaultPage } from '@clients/desktop/src/vault/components/VaultPage'
 import { ImportVaultFromFilePage } from '@clients/desktop/src/vault/import/components/ImportVaultFromFilePage'
 import { JoinKeygenPage } from '@clients/desktop/src/vault/keygen/join/JoinKeygenPage'
