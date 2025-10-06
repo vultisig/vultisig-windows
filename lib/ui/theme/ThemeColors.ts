@@ -37,3 +37,5 @@ export type ThemeColors = {
   transparent: HSLA
   white: HSLA
 }
+
+export type ThemeColor = keyof ThemeColors

@@ -97,9 +97,12 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
           />
           <ListItem
             extra={
-              <Text as="span" size={14} weight={500}>
-                <MiddleTruncate text={receiver} width={200} />
-              </Text>
+              <MiddleTruncate
+                size={14}
+                text={receiver}
+                weight={500}
+                width={200}
+              />
             }
             title={t('to')}
             styles={{ title: { color: 'textShy' } }}

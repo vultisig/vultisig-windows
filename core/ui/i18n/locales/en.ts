@@ -1061,4 +1061,5 @@ export const en = {
   signature_successful: 'Signature Successful',
   same_vault_share: 'Same vault share',
   resource: 'Resource',
+  target: 'Target',
 }

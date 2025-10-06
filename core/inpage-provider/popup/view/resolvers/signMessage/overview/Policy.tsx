@@ -14,6 +14,7 @@ import { PolicySchema } from '@core/mpc/types/plugin/policy_pb'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
+import { isHexString } from 'ethers'
 import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -95,85 +96,165 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
         <>
           {policy.rules?.length > 0 && (
             <Collapse title={t('plugin_rules')}>
-              {policy.rules.map(({ parameterConstraints, resource }, index) => {
-                const number = `${index < 9 ? '0' : ''}${index + 1}`
+              {policy.rules.map(
+                ({ parameterConstraints, resource, target }, index) => {
+                  const number = `${index < 9 ? '0' : ''}${index + 1}`
 
-                return (
-                  <Description key={number}>
-                    <HStack
-                      alignItems="center"
-                      gap={8}
-                      justifyContent="space-between"
-                    >
-                      <Text as="span" color="shy" size={12} weight={500}>
-                        {t('resource')}
-                      </Text>
-                      <Text as="span" size={12} weight={500}>
-                        {resource}
-                      </Text>
-                    </HStack>
-                    {parameterConstraints.map(
-                      ({ constraint, parameterName }) => {
-                        const value = String(constraint?.value.value || '')
+                  return (
+                    <Description key={number}>
+                      <HStack
+                        alignItems="center"
+                        gap={8}
+                        justifyContent="space-between"
+                        wrap="nowrap"
+                      >
+                        <Text
+                          as="span"
+                          color="shy"
+                          size={12}
+                          weight={500}
+                          nowrap
+                        >
+                          {t('resource')}
+                        </Text>
+                        <Text as="span" size={12} weight={500}>
+                          {resource}
+                        </Text>
+                      </HStack>
+                      {parameterConstraints.map(
+                        ({ constraint, parameterName }) => {
+                          const value = String(constraint?.value.value || '')
 
-                        return (
-                          <>
-                            <Divider />
-                            <HStack
-                              alignItems="center"
-                              gap={8}
-                              justifyContent="space-between"
-                              key={parameterName}
-                            >
-                              {constraint?.value.case ? (
-                                <HStack alignItems="center" gap={4}>
+                          return (
+                            <>
+                              <Divider />
+                              <HStack
+                                alignItems="center"
+                                gap={8}
+                                justifyContent="space-between"
+                                key={parameterName}
+                                wrap="nowrap"
+                              >
+                                {constraint?.value.case ? (
+                                  <HStack
+                                    alignItems="center"
+                                    gap={4}
+                                    wrap="nowrap"
+                                  >
+                                    <Text
+                                      as="span"
+                                      color="shy"
+                                      size={12}
+                                      weight={500}
+                                      nowrap
+                                    >
+                                      {camelCaseToTitle(parameterName)}
+                                    </Text>
+                                    <Text
+                                      as="span"
+                                      color="shy"
+                                      size={10}
+                                      weight={500}
+                                      nowrap
+                                    >
+                                      {`(${camelCaseToTitle(constraint.value.case)})`}
+                                    </Text>
+                                  </HStack>
+                                ) : (
                                   <Text
                                     as="span"
                                     color="shy"
                                     size={12}
                                     weight={500}
+                                    cropped
+                                    nowrap
                                   >
                                     {camelCaseToTitle(parameterName)}
                                   </Text>
+                                )}
+                                {isHexString(value) ? (
+                                  <MiddleTruncate
+                                    justifyContent="end"
+                                    size={12}
+                                    text={value}
+                                    weight={500}
+                                    flexGrow
+                                  />
+                                ) : (
                                   <Text
                                     as="span"
-                                    color="shy"
                                     size={12}
                                     weight={500}
+                                    cropped
+                                    nowrap
                                   >
-                                    {`(${camelCaseToTitle(constraint.value.case)})`}
+                                    {value}
                                   </Text>
-                                </HStack>
-                              ) : (
+                                )}
+                              </HStack>
+                            </>
+                          )
+                        }
+                      )}
+                      {target ? (
+                        <>
+                          <Divider />
+                          <HStack
+                            alignItems="center"
+                            gap={8}
+                            justifyContent="space-between"
+                            wrap="nowrap"
+                          >
+                            <HStack alignItems="center" gap={4} wrap="nowrap">
+                              <Text
+                                as="span"
+                                color="shy"
+                                size={12}
+                                weight={500}
+                                nowrap
+                              >
+                                {t('target')}
+                              </Text>
+                              {target.target.case && (
                                 <Text
                                   as="span"
                                   color="shy"
-                                  size={12}
+                                  size={10}
                                   weight={500}
+                                  nowrap
                                 >
-                                  {camelCaseToTitle(parameterName)}
-                                </Text>
-                              )}
-                              {value.startsWith('0x') ? (
-                                <Text
-                                  as={MiddleTruncate}
-                                  size={12}
-                                  text={value}
-                                  weight={500}
-                                />
-                              ) : (
-                                <Text as="span" size={12} weight={500}>
-                                  {value}
+                                  {`(${camelCaseToTitle(target.target.case)})`}
                                 </Text>
                               )}
                             </HStack>
-                          </>
-                        )
-                      }
-                    )}
-                  </Description>
-                )
-              })}
+                            {isHexString(target.target.value) ? (
+                              <MiddleTruncate
+                                justifyContent="end"
+                                size={12}
+                                text={target.target.value}
+                                weight={500}
+                                flexGrow
+                              />
+                            ) : (
+                              <Text
+                                as="span"
+                                size={12}
+                                weight={500}
+                                cropped
+                                nowrap
+                              >
+                                {target.target.value || '-'}
+                              </Text>
+                            )}
+                          </HStack>
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                    </Description>
+                  )
+                }
+              )}
             </Collapse>
           )}
           <Collapse title={t(`message`)}>

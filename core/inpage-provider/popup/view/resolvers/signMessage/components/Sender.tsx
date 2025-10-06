@@ -22,11 +22,16 @@ export const Sender: FC<SenderProps> = ({ favicon, isValidated, origin }) => {
 
   return (
     <Section gap={24} padding={24}>
-      <Text as="span" color="shy" size={14} weight={500}>
+      <Text as="span" color="shy" size={14} weight={500} nowrap>
         {t(`request_from`)}
       </Text>
-      <HStack gap={12} alignItems="center" justifyContent="space-between">
-        <HStack alignItems="center" gap={12}>
+      <HStack
+        gap={12}
+        alignItems="center"
+        justifyContent="space-between"
+        wrap="nowrap"
+      >
+        <HStack alignItems="center" gap={12} wrap="nowrap">
           <SafeImage
             src={favicon}
             render={props => <Image alt="" {...props} />}
@@ -36,7 +41,7 @@ export const Sender: FC<SenderProps> = ({ favicon, isValidated, origin }) => {
           </Text>
         </HStack>
         {isValidated && (
-          <Verify alignItems="center" gap={4}>
+          <Verify alignItems="center" gap={4} wrap="nowrap">
             <Text as={BadgeCheckIcon} color="success" size={16} />
             <Text as="span" size={12} weight={500}>
               {t('by_vultisig')}

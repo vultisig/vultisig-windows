@@ -19,19 +19,29 @@ export const Request: FC<RequestProps> = ({ address, message, method }) => {
 
   return (
     <Section gap={12} padding={24}>
-      <HStack alignItems="center" gap={8} justifyContent="space-between">
-        <Text as="span" color="shy" size={14} weight={500}>
+      <HStack
+        alignItems="center"
+        gap={8}
+        justifyContent="space-between"
+        wrap="nowrap"
+      >
+        <Text as="span" color="shy" size={14} weight={500} nowrap>
           {t('method')}
         </Text>
-        <Text as="span" size={14} weight={500}>
+        <Text as="span" size={14} weight={500} nowrap>
           {method}
         </Text>
       </HStack>
       <Divider />
       {!!message && (
         <>
-          <HStack alignItems="center" gap={8} justifyContent="space-between">
-            <Text as="span" color="shy" size={14} weight={500}>
+          <HStack
+            alignItems="center"
+            gap={8}
+            justifyContent="space-between"
+            wrap="nowrap"
+          >
+            <Text as="span" color="shy" size={14} weight={500} nowrap>
               {t('message')}
             </Text>
             <Text as="span" size={14} weight={500}>
@@ -41,16 +51,21 @@ export const Request: FC<RequestProps> = ({ address, message, method }) => {
           <Divider />
         </>
       )}
-      <HStack alignItems="center" gap={8} justifyContent="space-between">
-        <Text as="span" color="shy" size={14} weight={500}>
+      <HStack
+        alignItems="center"
+        gap={8}
+        justifyContent="space-between"
+        wrap="nowrap"
+      >
+        <Text as="span" color="shy" size={14} weight={500} nowrap>
           {t('signing_address')}
         </Text>
-        <Text
-          as={MiddleTruncate}
+        <MiddleTruncate
+          justifyContent="end"
           size={14}
           text={address}
           weight={500}
-          width={200}
+          flexGrow
         />
       </HStack>
     </Section>
