@@ -143,7 +143,7 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
         />
         <VStack gap={8}>
           <TextInput
-            label={t('title')}
+            label={t('label')}
             placeholder={t('type_here')}
             {...register('title')}
           />

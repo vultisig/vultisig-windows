@@ -429,6 +429,7 @@ export const en = {
   vault_name_already_exists: 'Vault name must be unique',
   vault_name_max_length_error: 'Vault name must be less than 50 characters',
   edit_address: 'Edit Address',
+  label: 'Label',
   title: 'Title',
   type_here: 'Type Here',
   vault_settings_address_book_invalid_address_error:
