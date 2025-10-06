@@ -19,6 +19,7 @@ import { EvmChain } from '../../Chain'
 import { isFeeCoin } from '../../coin/utils/isFeeCoin'
 import { GeneralSwapTx } from '../general/GeneralSwapQuote'
 import { nativeSwapQuoteToSwapPayload } from '../native/utils/nativeSwapQuoteToSwapPayload'
+import { getSwapDestinationAddress } from './getSwapDestinationAddress'
 
 type Input = {
   amount: bigint
@@ -36,13 +37,10 @@ export const getSwapKeysignPayloadFields = ({
   fromCoin,
   toCoin,
 }: Input): Output => {
+  const destinationAddress = getSwapDestinationAddress({ quote, fromCoin })
+
   const result = matchRecordUnion<SwapQuote, Output>(quote, {
     general: quote => {
-      const toAddress = matchRecordUnion<GeneralSwapTx, string>(quote.tx, {
-        evm: ({ to }) => to,
-        solana: () => '',
-      })
-
       const txMsg = matchRecordUnion<
         GeneralSwapTx,
         Omit<OneInchTransaction, '$typeName' | 'swapFee'>
@@ -83,7 +81,7 @@ export const getSwapKeysignPayloadFields = ({
       }
 
       return {
-        toAddress,
+        toAddress: destinationAddress,
         swapPayload,
       }
     },
@@ -95,14 +93,8 @@ export const getSwapKeysignPayloadFields = ({
         toCoin,
       })
 
-      const isErc20 =
-        isOneOf(fromCoin.chain, Object.values(EvmChain)) && !isFeeCoin(fromCoin)
-
-      const toAddress =
-        (isErc20 ? quote.router : quote.inbound_address) || fromCoin.address
-
       return {
-        toAddress,
+        toAddress: destinationAddress,
         swapPayload,
         memo: quote.memo,
       }
