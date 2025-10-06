@@ -936,6 +936,7 @@ export const de = {
   twitter: 'Twitter',
   vultisig_community: 'Vultisig-Gemeinschaft',
   remove: 'Entfernen',
+  register_guide: 'Registrierungsanleitung',
   share_vault: 'Tresor teilen',
   no_referral_yet: 'Noch keine Empfehlung',
   missing_thorchain_address: 'Fehlende THORChain-Adresse',

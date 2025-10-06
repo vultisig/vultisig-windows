@@ -934,6 +934,7 @@ export const es = {
     'Convierta tu bóveda en una máquina de recompensas. Cree tu referencia ahora y comience a ganar.',
   remove: 'Eliminar',
   share_vault: 'Bóveda compartida',
+  register_guide: 'Guía de registro',
   no_referral_yet: 'Aún no hay referencia',
   missing_thorchain_address: 'Falta la dirección de THORChain',
   missing_destination_address: 'Dirección de destino faltante',
