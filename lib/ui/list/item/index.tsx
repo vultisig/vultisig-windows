@@ -1,14 +1,26 @@
+import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { getColor } from '@lib/ui/theme/getters'
-import { FC, HTMLAttributes, ReactNode } from 'react'
+import { ThemeColors } from '@lib/ui/theme/ThemeColors'
+import {
+  CSSProperties,
+  FC,
+  HTMLAttributes,
+  isValidElement,
+  ReactNode,
+} from 'react'
 import styled, { css } from 'styled-components'
 
+type Styles = {
+  color: ThemeColor
+  fontSize: NonNullable<CSSProperties['fontSize']>
+}
 type Status = 'default' | 'error' | 'success' | 'warning'
+type ThemeColor = keyof ThemeColors
 
-const StyledDesc = styled.span`
-  color: ${getColor('textShy')};
-  flex: 1;
-  font-size: 12px;
+const StyledDesc = styled.span<Styles>`
+  color: ${({ color }) => getColor(color)};
+  font-size: ${({ fontSize }) => toSizeUnit(fontSize)};
   font-weight: 500;
   line-height: 16px;
   overflow: hidden;
@@ -16,18 +28,23 @@ const StyledDesc = styled.span`
   width: 100%;
 `
 
+const StyledContent = styled.div`
+  align-items: center;
+  display: flex;
+  gap: 8px;
+`
+
 const StyledMeta = styled.span`
   display: flex;
-  flex: 1;
   flex-direction: column;
   gap: 4px;
   max-width: 100%;
   overflow: auto;
 `
 
-const StyledTitle = styled.span`
-  flex: 1;
-  font-size: ${14};
+const StyledTitle = styled.span<Styles>`
+  color: ${({ color }) => getColor(color)};
+  font-size: ${({ fontSize }) => toSizeUnit(fontSize)};
   font-weight: 500;
   line-height: 20px;
   overflow: hidden;
@@ -43,6 +60,7 @@ const StyledListItem = styled.div<{
   background-color: ${getColor('foreground')};
   display: flex;
   gap: 8px;
+  justify-content: space-between;
   min-height: 58px;
   padding: 12px 16px;
   ${({ status }) => {
@@ -87,6 +105,7 @@ type ListItemProps = {
   icon?: ReactNode
   showArrow?: boolean
   status?: Status
+  styles?: { description?: Partial<Styles>; title?: Partial<Styles> }
   title: ReactNode
 } & Pick<HTMLAttributes<HTMLDivElement>, 'onClick' | 'style'>
 
@@ -97,21 +116,48 @@ export const ListItem: FC<ListItemProps> = ({
   showArrow,
   status = 'default',
   title,
+  styles,
   ...rest
 }) => {
+  const titleRender = isValidElement(title) ? (
+    title
+  ) : (
+    <StyledTitle
+      color={styles?.title?.color || 'text'}
+      fontSize={styles?.title?.fontSize || 14}
+    >
+      {title}
+    </StyledTitle>
+  )
+
   return (
     <StyledListItem status={status} {...rest}>
-      {icon && icon}
-      {description ? (
-        <StyledMeta>
-          <StyledTitle>{title}</StyledTitle>
-          <StyledDesc>{description}</StyledDesc>
-        </StyledMeta>
-      ) : (
-        <StyledTitle>{title}</StyledTitle>
+      <StyledContent>
+        {icon}
+        {description ? (
+          <StyledMeta>
+            {titleRender}
+            {isValidElement(description) ? (
+              description
+            ) : (
+              <StyledDesc
+                color={styles?.description?.color || 'textShy'}
+                fontSize={styles?.description?.fontSize || 12}
+              >
+                {description}
+              </StyledDesc>
+            )}
+          </StyledMeta>
+        ) : (
+          titleRender
+        )}
+      </StyledContent>
+      {(extra || showArrow) && (
+        <StyledContent>
+          {extra}
+          {showArrow && <ChevronRightIcon fontSize={16} />}
+        </StyledContent>
       )}
-      {extra && extra}
-      {showArrow && <ChevronRightIcon fontSize={16} />}
     </StyledListItem>
   )
 }
