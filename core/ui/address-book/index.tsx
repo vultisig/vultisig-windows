@@ -24,6 +24,7 @@ import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { getNewOrder } from '@lib/utils/order/getNewOrder'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 export const AddressBookPage = () => {
   const { t } = useTranslation()
@@ -75,7 +76,9 @@ export const AddressBookPage = () => {
                 )
               )
             }}
-            renderList={({ props: { children } }) => <List>{children}</List>}
+            renderList={({ props: { children } }) => (
+              <AddressBookEditList>{children}</AddressBookEditList>
+            )}
             renderItem={({ item, draggableProps, dragHandleProps, status }) => (
               <DnDItemContainer
                 {...draggableProps}
@@ -140,3 +143,7 @@ export const AddressBookPage = () => {
     </VStack>
   )
 }
+
+const AddressBookEditList = styled(List)`
+  background: none;
+`
