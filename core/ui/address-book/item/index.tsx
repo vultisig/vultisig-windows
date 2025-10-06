@@ -56,8 +56,7 @@ export const AddressBookListItem: FC<AddressBookListItemProps> = ({
     />
   ) : (
     <StyledListItem
-      description={<MiddleTruncate text={address} width={80} />}
-      extra={<Text color="shy">{`${chain} ${t('network')}`}</Text>}
+      description={<MiddleTruncate text={address} width={200} />}
       icon={
         <ChainEntityIcon
           value={getChainLogoSrc(chain)}

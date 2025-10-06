@@ -9,7 +9,7 @@ import {
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { DnDList } from '@lib/ui/dnd/DnDList'
-import { SquarePenIcon } from '@lib/ui/icons/SquarePenIcon'
+import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import {
@@ -46,7 +46,7 @@ export const AddressBookPage = () => {
         secondaryControls={
           !isEditMode && (
             <IconButton onClick={() => setIsEditMode(true)}>
-              <SquarePenIcon />
+              <PencilIcon />
             </IconButton>
           )
         }
