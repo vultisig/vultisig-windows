@@ -1,24 +1,21 @@
 import { Chain } from '@core/chain/Chain'
 import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
-import { TronWeb } from 'tronweb'
 
 import { requestAccount } from './core/requestAccount'
+import { VultisigTronWeb } from './tronWeb/tronWeb'
 
 export class TronLink {
   public isVultiConnect: boolean
   public isTronLink: boolean
-  public tronWeb: TronWeb
+  public tronWeb: VultisigTronWeb
   public ready: boolean
 
   constructor() {
     this.ready = false
     this.isVultiConnect = true
     this.isTronLink = true
-    this.tronWeb = new TronWeb({
-      solidityNode: 'https://api.trongrid.io',
-      fullHost: 'https://api.trongrid.io',
-    })
+    this.tronWeb = new VultisigTronWeb()
   }
 
   init() {
