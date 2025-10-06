@@ -326,10 +326,18 @@ export class Solana implements Wallet {
         }
       )
 
-      const { encoded } = deserializeSigningOutput(Chain.Solana, data)
+      const { signatures } = deserializeSigningOutput(Chain.Solana, data)
 
-      const rawData = bs58.decode(String(encoded))
-      return VersionedTransaction.deserialize(rawData)
+      for (const sig of signatures) {
+        const { pubkey, signature } = sig
+        if (pubkey && signature)
+          transaction.addSignature(
+            new PublicKey(pubkey),
+            bs58.decode(signature)
+          )
+      }
+
+      return transaction
     } else {
       const connection = new Connection(`${rootApiUrl}/solana/`)
       for (const instruction of transaction.instructions) {
@@ -437,7 +445,7 @@ export class Solana implements Wallet {
 
         const rawData = bs58.decode(encoded)
 
-        return Transaction.from(rawData)
+        return VersionedTransaction.deserialize(rawData)
       }
     }
   }
@@ -493,14 +501,9 @@ export class Solana implements Wallet {
         VersionedTransaction.deserialize(transaction)
       )
 
-      const serializedTransaction = isVersionedTransaction(signedTransaction)
-        ? signedTransaction.serialize()
-        : new Uint8Array(
-            (signedTransaction as Transaction).serialize({
-              requireAllSignatures: false,
-              verifySignatures: false,
-            })
-          )
+      const serializedTransaction = shouldBePresent(
+        signedTransaction?.serialize()
+      )
 
       outputs.push({ signedTransaction: serializedTransaction })
     } else if (inputs.length > 1) {
