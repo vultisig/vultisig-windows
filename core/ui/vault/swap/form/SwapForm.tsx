@@ -22,7 +22,9 @@ export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
       return t('loading')
     }
 
-    return extractErrorMsg(error)
+    if (error) {
+      return extractErrorMsg(error)
+    }
   }, [error, isPending])
 
   return (
