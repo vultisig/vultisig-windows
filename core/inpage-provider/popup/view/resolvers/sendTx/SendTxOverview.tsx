@@ -49,7 +49,7 @@ type SendTxOverviewProps = {
 }
 
 export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
-  const { feeSettings: initialFeeSettings, coin } = parsedTx
+  const { coin } = parsedTx
   const vault = useCurrentVault()
   const walletCore = useAssertWalletCore()
   const { t } = useTranslation()
@@ -58,7 +58,7 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
 
   const { chain, address } = coin
 
-  const [feeSettings, setFeeSettings] = useState(initialFeeSettings)
+  const [feeSettings, setFeeSettings] = useState<EvmFeeSettings | null>(null)
 
   const chainSpecificInput = useMemo(
     () => getChainSpecificInput({ ...parsedTx, feeSettings }),

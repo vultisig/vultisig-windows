@@ -38,7 +38,7 @@ export const getEthereumSpecific: ChainSpecificResolver<
   const client = getEvmClient(chain)
 
   const estimateFee = async (): Promise<EvmFeeQuote> => {
-    if (chain === Chain.Zksync && !feeQuote.gasLimit) {
+    if (chain === Chain.Zksync && !feeQuote.gasLimit && !feeQuote.isOverride) {
       const result = await attempt(
         client.extend(publicActionsL2()).estimateFee({
           chain: evmChainInfo[chain],
@@ -54,26 +54,29 @@ export const getEthereumSpecific: ChainSpecificResolver<
       }
     }
 
-    const gasLimit = bigIntMax(
-      ...without(
-        [
-          feeQuote.gasLimit,
-          deriveEvmGasLimit({ coin, data }),
-          await withFallback(
-            attempt(
-              client.estimateGas({
-                account: coin.address as `0x${string}`,
-                to: shouldBePresent(receiver) as `0x${string}`,
-                value: amount,
-                data: data ? formatData(data) : undefined,
-              })
-            ),
-            undefined
-          ),
-        ],
-        undefined
-      )
-    )
+    const gasLimit =
+      feeQuote.gasLimit && feeQuote.isOverride
+        ? feeQuote.gasLimit
+        : bigIntMax(
+            ...without(
+              [
+                feeQuote.gasLimit,
+                deriveEvmGasLimit({ coin, data }),
+                await withFallback(
+                  attempt(
+                    client.estimateGas({
+                      account: coin.address as `0x${string}`,
+                      to: shouldBePresent(receiver) as `0x${string}`,
+                      value: amount,
+                      data: data ? formatData(data) : undefined,
+                    })
+                  ),
+                  undefined
+                ),
+              ],
+              undefined
+            )
+          )
 
     const maxPriorityFeePerGas =
       feeQuote.maxPriorityFeePerGas ?? (await getEvmMaxPriorityFeePerGas(chain))

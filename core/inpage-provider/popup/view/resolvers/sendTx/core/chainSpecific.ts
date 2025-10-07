@@ -1,6 +1,6 @@
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { getPsbtTransferInfo } from '@core/chain/chains/utxo/tx/getPsbtTransferInfo'
-import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
+import { EvmFeeInput } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { byteFeeMultiplier } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/resolver'
 import {
@@ -70,7 +70,7 @@ export const getChainSpecificInput = (input: ParsedTx) => {
       : undefined,
     feeQuote:
       feeSettings && isChainOfKind(coin.chain, 'evm')
-        ? (feeSettings as EvmFeeSettings)
+        ? ({ ...feeSettings, isOverride: true } as EvmFeeInput)
         : undefined,
   }
 
