@@ -1,4 +1,3 @@
-import { GenMessage } from '@bufbuild/protobuf/codegenv1'
 import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 

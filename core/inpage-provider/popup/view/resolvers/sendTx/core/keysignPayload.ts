@@ -10,6 +10,7 @@ import {
   KeysignPayload,
   KeysignPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { TronTransferContractPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/tron_contract_payload_pb'
 import { UtxoInfo } from '@core/mpc/types/vultisig/keysign/v1/utxo_info_pb'
 import { WasmExecuteContractPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { Vault } from '@core/ui/vault/Vault'
@@ -18,11 +19,10 @@ import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue
 import { WalletCore } from '@trustwallet/wallet-core'
 import { toUtf8String } from 'ethers'
 import { hexToString } from 'viem'
-import { Types } from 'tronweb'
-import { CosmosMsgType } from '../interfaces'
+
+import { CosmosMsgType, TronMsgType } from '../interfaces'
 import { CustomTxData } from './customTxData'
 import { ParsedTx } from './parsedTx'
-import { TronTransferContractPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/tron_contract_payload_pb'
 
 type Input = {
   chainSpecific: KeysignChainSpecific
@@ -128,7 +128,7 @@ export const getKeysignPayload = ({
       }
       if (
         transactionDetails.msgPayload?.case ===
-        Types.ContractType.TransferContract
+        TronMsgType.MSG_TRANSFER_CONTRACT
       ) {
         const msgPayload = transactionDetails.msgPayload.value
         return {

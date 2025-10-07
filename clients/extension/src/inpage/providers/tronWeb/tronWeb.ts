@@ -1,7 +1,10 @@
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { callPopup } from '@core/inpage-provider/popup'
-import { TransactionDetails } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
+import {
+  TransactionDetails,
+  TronMsgType,
+} from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import { TronWeb, Trx, Types } from 'tronweb'
 import { fromHex } from 'tronweb/utils'
 
@@ -40,7 +43,7 @@ export class VultisigTronWebTrx extends Trx {
               decimals: chainFeeCoin.Tron.decimals,
             },
             msgPayload: {
-              case: Types.ContractType.TransferContract,
+              case: TronMsgType.MSG_TRANSFER_CONTRACT,
               value: transferContract,
             },
             data: transaction.raw_data.data as string,
@@ -60,7 +63,7 @@ export class VultisigTronWebTrx extends Trx {
             from: fromHex(triggerSmartContract.owner_address),
             data: transaction.raw_data.data as string,
             msgPayload: {
-              case: Types.ContractType.TriggerSmartContract,
+              case: TronMsgType.MSG_TRIGGER_SMART_CONTRACT,
               value: triggerSmartContract,
             },
           }

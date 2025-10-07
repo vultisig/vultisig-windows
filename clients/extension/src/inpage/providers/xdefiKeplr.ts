@@ -6,8 +6,8 @@ import { deserializeSigningOutput } from '@core/chain/tw/signingOutput'
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
 import {
-  MsgPayload,
   CosmosMsgType,
+  MsgPayload,
   TransactionDetails,
 } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import { AminoMsg, StdFee } from '@cosmjs/amino'

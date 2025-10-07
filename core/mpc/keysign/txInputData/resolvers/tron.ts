@@ -2,6 +2,7 @@ import { toTronData } from '@core/chain/chains/tron/tx/toTronData'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { bigIntToHex } from '@lib/utils/bigint/bigIntToHex'
 import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
+import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
@@ -9,8 +10,6 @@ import Long from 'long'
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
 import { getKeysignSwapPayload } from '../../swap/getKeysignSwapPayload'
 import { TxInputDataResolver } from '../resolver'
-import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
-import { KeysignPayload } from '../../../types/vultisig/keysign/v1/keysign_message_pb'
 
 export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
   keysignPayload,
