@@ -29,6 +29,12 @@ export const ConnectOverview: FC<SignMessageOverview> = ({
   const address = useCurrentVaultAddress(chain)
   const isFinished = useMemo(() => !!signature, [signature])
 
+  const displayMessage = useMemo(() => {
+    const parsed = JSON.parse(message)
+
+    return parsed.message as string
+  }, [message])
+
   const parsedMessage = useMemo(() => {
     const parsed = JSON.parse(message)
 
@@ -89,44 +95,44 @@ export const ConnectOverview: FC<SignMessageOverview> = ({
             {t('message')}
           </Text>
           <Text as="span" size={14} weight={500}>
-            {t('verify_identity_sign')}
+            {displayMessage}
           </Text>
         </HStack>
         <StyledDivider />
-        <HStack alignItems="center" gap={8} justifyContent="space-between">
+        <HStack
+          alignItems="center"
+          gap={8}
+          justifyContent="space-between"
+          wrap="nowrap"
+        >
           <Text as="span" color="shy" size={14} weight={500}>
             {t('signing_address')}
           </Text>
-          <Text
-            as={MiddleTruncate}
-            size={14}
-            text={address}
-            weight={500}
-            width={200}
-          />
+          <Text as={MiddleTruncate} size={14} text={address} weight={500} />
         </HStack>
       </StyledSection>
-      <StyledSection>
-        <Text as="span" size={14} weight={500}>
-          {t(`message`)}
-        </Text>
-        <Text color="info" family="mono" size={14} weight={500}>
-          <pre style={{ width: '100%' }}>
-            <code
-              style={{ display: 'block', overflowX: 'auto', width: '100%' }}
-            >
-              {parsedMessage}
-            </code>
-          </pre>
-        </Text>
-      </StyledSection>
-      {isFinished && (
+      {isFinished ? (
         <StyledSection>
           <Text as="span" size={14} weight={500}>
             {t(`signed_signature`)}
           </Text>
           <Text as="span" color="info" size={14} weight={500}>
             {signature}
+          </Text>
+        </StyledSection>
+      ) : (
+        <StyledSection>
+          <Text as="span" size={14} weight={500}>
+            {t(`message`)}
+          </Text>
+          <Text color="info" family="mono" size={14} weight={500}>
+            <pre style={{ width: '100%' }}>
+              <code
+                style={{ display: 'block', overflowX: 'auto', width: '100%' }}
+              >
+                {parsedMessage}
+              </code>
+            </pre>
           </Text>
         </StyledSection>
       )}

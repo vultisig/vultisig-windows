@@ -1,17 +1,10 @@
-import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import styled from 'styled-components'
 
-import { qrCodeDefaultSize } from './config'
-
-export const Wrapper = styled.div<{
-  scale: number
-}>`
+export const Wrapper = styled.div`
   position: relative;
   box-sizing: border-box;
-  width: ${toSizeUnit(qrCodeDefaultSize)};
-  padding: 24px;
-  transition: transform 0.3s ease-in-out;
-  transform: scale(${({ scale }) => scale});
+  width: 100%;
+  padding: 5%;
 `
 
 export const RiveWrapper = styled.div`
@@ -21,4 +14,5 @@ export const RiveWrapper = styled.div`
 
 export const QRCodeWrapper = styled.div`
   position: relative;
+  width: 100%;
 `
