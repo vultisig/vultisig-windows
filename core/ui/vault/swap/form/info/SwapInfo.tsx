@@ -9,6 +9,10 @@ import { SwapProvider } from './SwapProvider'
 export const SwapInfo = () => {
   const query = useSwapQuoteQuery()
 
+  if (query.error) {
+    return null
+  }
+
   return (
     <ActiveQueryOnly value={query}>
       <SwapProvider />
