@@ -1,4 +1,5 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import {
   CosmosSpecific,
   EthereumSpecific,
@@ -6,7 +7,6 @@ import {
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import type { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { Resolver } from '@lib/utils/types/Resolver'
 import { Psbt } from 'bitcoinjs-lib'
 
@@ -29,7 +29,7 @@ export type ChainSpecificResolverInput<R = KeysignChainSpecificValue> = {
 } & (R extends EthereumSpecific
   ? {
       data?: string
-      feeQuote?: FeeSettings<'evm'>
+      feeQuote?: Partial<EvmFeeSettings>
     }
   : R extends UTXOSpecific
     ? { byteFeeMultiplier?: number; psbt?: Psbt }
