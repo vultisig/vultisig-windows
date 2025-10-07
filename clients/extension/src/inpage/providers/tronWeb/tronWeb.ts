@@ -21,8 +21,9 @@ export class VultisigTronWebTrx extends Trx {
     transaction: T
   ): Promise<SignedStringOrSignedTransaction<T>> => {
     const getTransactionDetails = (): TransactionDetails => {
+      console.log('transaction', transaction)
       if (!isTransaction(transaction))
-        throw new Error('Unsupported transaction shape')
+        throw new Error('Unsupported transaction type')
 
       const [contract] = transaction.raw_data.contract
 
@@ -38,6 +39,11 @@ export class VultisigTronWebTrx extends Trx {
               amount: transferContract.amount.toString(),
               decimals: chainFeeCoin.Tron.decimals,
             },
+            msgPayload: {
+              case: Types.ContractType.TransferContract,
+              value: transferContract,
+            },
+            data: transaction.raw_data.data as string,
           }
         }
         case Types.ContractType.TriggerSmartContract: {
@@ -52,7 +58,11 @@ export class VultisigTronWebTrx extends Trx {
             },
             to: fromHex(triggerSmartContract.contract_address),
             from: fromHex(triggerSmartContract.owner_address),
-            data: triggerSmartContract.data,
+            data: transaction.raw_data.data as string,
+            msgPayload: {
+              case: Types.ContractType.TriggerSmartContract,
+              value: triggerSmartContract,
+            },
           }
         }
       }

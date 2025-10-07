@@ -29,8 +29,8 @@ export const fromTssType = (tssType: TssType): KeygenOperation => {
   })
 }
 
-export const tssMessageSchema: Record<TssType, GenMessage<any>> = {
+export const tssMessageSchema = {
   Keygen: KeygenMessageSchema,
   Reshare: ReshareMessageSchema,
   Migrate: ReshareMessageSchema,
-}
+} as const

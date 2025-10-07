@@ -9,6 +9,8 @@ import Long from 'long'
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
 import { getKeysignSwapPayload } from '../../swap/getKeysignSwapPayload'
 import { TxInputDataResolver } from '../resolver'
+import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
+import { KeysignPayload } from '../../../types/vultisig/keysign/v1/keysign_message_pb'
 
 export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
   keysignPayload,
@@ -20,6 +22,53 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
 
   const isNative = keysignPayload?.coin?.isNativeToken
   const swapPayload = getKeysignSwapPayload(keysignPayload)
+
+  const contractPayload = keysignPayload.contractPayload
+
+  if (contractPayload && contractPayload.value && contractPayload.case) {
+    const contract: { transfer: TW.Tron.Proto.TransferContract } =
+      matchDiscriminatedUnion(contractPayload, 'case', 'value', {
+        tronTransferContractPayload: value => {
+          return {
+            transfer: TW.Tron.Proto.TransferContract.create({
+              ownerAddress: value.ownerAddress,
+              toAddress: value.toAddress,
+              amount: Long.fromString(value.amount),
+            }),
+          }
+        },
+
+        wasmExecuteContractPayload: () => {
+          throw new Error(
+            'WASM execute contract payload not supported for Tron'
+          )
+        },
+      })
+
+    const input = TW.Tron.Proto.SigningInput.create({
+      transaction: TW.Tron.Proto.Transaction.create({
+        ...contract,
+        timestamp: Long.fromString(tronSpecific.timestamp.toString()),
+        blockHeader: TW.Tron.Proto.BlockHeader.create({
+          timestamp: Long.fromString(
+            tronSpecific.blockHeaderTimestamp.toString()
+          ),
+          number: Long.fromString(tronSpecific.blockHeaderNumber.toString()),
+          version: Number(tronSpecific.blockHeaderVersion.toString()),
+          txTrieRoot: Buffer.from(tronSpecific.blockHeaderTxTrieRoot, 'hex'),
+          parentHash: Buffer.from(tronSpecific.blockHeaderParentHash, 'hex'),
+          witnessAddress: Buffer.from(
+            tronSpecific.blockHeaderWitnessAddress,
+            'hex'
+          ),
+        }),
+        expiration: Long.fromString(tronSpecific.expiration.toString()),
+        memo: keysignPayload.memo,
+      }),
+    })
+
+    return [TW.Tron.Proto.SigningInput.encode(input).finish()]
+  }
 
   if (swapPayload) {
     return matchRecordUnion(swapPayload, {

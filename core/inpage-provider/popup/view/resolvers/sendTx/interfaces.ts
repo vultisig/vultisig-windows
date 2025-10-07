@@ -1,5 +1,5 @@
 import { Chain } from '@core/chain/Chain'
-
+import { Types } from 'tronweb'
 export enum CosmosMsgType {
   MSG_SEND = 'cosmos-sdk/MsgSend',
   THORCHAIN_MSG_SEND = 'thorchain/MsgSend',
@@ -9,6 +9,10 @@ export enum CosmosMsgType {
   MSG_SEND_URL = '/cosmos.bank.v1beta1.MsgSend',
   THORCHAIN_MSG_DEPOSIT = 'thorchain/MsgDeposit',
   THORCHAIN_MSG_DEPOSIT_URL = '/types.MsgDeposit',
+}
+export enum TronMsgType {
+  MSG_TRANSFER_CONTRACT = Types.ContractType.TransferContract,
+  MSG_TRIGGER_SMART_CONTRACT = Types.ContractType.TriggerSmartContract,
 }
 
 export type RequestInput = {
@@ -57,7 +61,7 @@ type IMsgDeposit = {
   memo: string
 }
 
-export type CosmosMsgPayload =
+export type MsgPayload =
   | {
       case:
         | CosmosMsgType.MSG_SEND
@@ -88,6 +92,11 @@ export type CosmosMsgPayload =
       case: CosmosMsgType.THORCHAIN_MSG_DEPOSIT
       value: IMsgDeposit
     }
+  | { case: Types.ContractType.TransferContract; value: Types.TransferContract }
+  | {
+      case: Types.ContractType.TriggerSmartContract
+      value: Types.TriggerSmartContract
+    }
 
 type TransactionDetailsAsset = {
   ticker: string
@@ -106,7 +115,7 @@ export type TransactionDetails = {
     maxFeePerGas?: string
     maxPriorityFeePerGas?: string
   }
-  cosmosMsgPayload?: CosmosMsgPayload
+  msgPayload?: MsgPayload
   skipBroadcast?: boolean
 }
 

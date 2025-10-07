@@ -18,10 +18,11 @@ import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue
 import { WalletCore } from '@trustwallet/wallet-core'
 import { toUtf8String } from 'ethers'
 import { hexToString } from 'viem'
-
+import { Types } from 'tronweb'
 import { CosmosMsgType } from '../interfaces'
 import { CustomTxData } from './customTxData'
 import { ParsedTx } from './parsedTx'
+import { TronTransferContractPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/tron_contract_payload_pb'
 
 type Input = {
   chainSpecific: KeysignChainSpecific
@@ -110,10 +111,10 @@ export const getKeysignPayload = ({
   >(customTxData, {
     regular: ({ transactionDetails }) => {
       if (
-        transactionDetails.cosmosMsgPayload?.case ===
+        transactionDetails.msgPayload?.case ===
         CosmosMsgType.MSG_EXECUTE_CONTRACT
       ) {
-        const msgPayload = transactionDetails.cosmosMsgPayload.value
+        const msgPayload = transactionDetails.msgPayload.value
 
         return {
           case: 'wasmExecuteContractPayload',
@@ -122,6 +123,20 @@ export const getKeysignPayload = ({
             executeMsg: msgPayload.msg,
             senderAddress: msgPayload.sender,
             coins: msgPayload.funds,
+          }),
+        }
+      }
+      if (
+        transactionDetails.msgPayload?.case ===
+        Types.ContractType.TransferContract
+      ) {
+        const msgPayload = transactionDetails.msgPayload.value
+        return {
+          case: 'tronTransferContractPayload',
+          value: create(TronTransferContractPayloadSchema, {
+            toAddress: msgPayload.to_address,
+            ownerAddress: msgPayload.owner_address,
+            amount: msgPayload.amount.toString(),
           }),
         }
       }

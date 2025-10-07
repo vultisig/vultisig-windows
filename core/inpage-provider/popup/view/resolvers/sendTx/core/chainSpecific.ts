@@ -10,14 +10,16 @@ import {
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
-
 import { CustomTxData } from '../core/customTxData'
 import { ParsedTx } from '../core/parsedTx'
-import { CosmosMsgType } from '../interfaces'
+import { CosmosMsgType, TronMsgType } from '../interfaces'
 
 const defaultTransactionType = TransactionType.UNSPECIFIED
 
-const cosmosMsgTypeToTransactionType: Record<CosmosMsgType, TransactionType> = {
+const cosmosMsgTypeToTransactionType: Record<
+  CosmosMsgType | TronMsgType,
+  TransactionType
+> = {
   [CosmosMsgType.MSG_SEND]: defaultTransactionType,
   [CosmosMsgType.THORCHAIN_MSG_SEND]: defaultTransactionType,
   [CosmosMsgType.MSG_SEND_URL]: defaultTransactionType,
@@ -26,6 +28,8 @@ const cosmosMsgTypeToTransactionType: Record<CosmosMsgType, TransactionType> = {
   [CosmosMsgType.MSG_EXECUTE_CONTRACT_URL]: TransactionType.GENERIC_CONTRACT,
   [CosmosMsgType.THORCHAIN_MSG_DEPOSIT]: defaultTransactionType,
   [CosmosMsgType.THORCHAIN_MSG_DEPOSIT_URL]: defaultTransactionType,
+  [TronMsgType.MSG_TRANSFER_CONTRACT]: TransactionType.GENERIC_CONTRACT,
+  [TronMsgType.MSG_TRIGGER_SMART_CONTRACT]: TransactionType.GENERIC_CONTRACT,
 }
 
 export const getChainSpecificInput = (input: ParsedTx) => {
@@ -47,7 +51,7 @@ export const getChainSpecificInput = (input: ParsedTx) => {
   const isDeposit = matchRecordUnion<CustomTxData, boolean>(customTxData, {
     regular: ({ transactionDetails, isDeposit }) =>
       isDeposit ||
-      transactionDetails.cosmosMsgPayload?.case ===
+      transactionDetails.msgPayload?.case ===
         CosmosMsgType.THORCHAIN_MSG_DEPOSIT,
     solana: () => false,
     psbt: () => false,
@@ -77,13 +81,13 @@ export const getChainSpecificInput = (input: ParsedTx) => {
   if ('regular' in customTxData) {
     const { regular } = customTxData
     const { transactionDetails } = regular
-    const { cosmosMsgPayload } = transactionDetails
-    result.transactionType = cosmosMsgPayload?.case
-      ? cosmosMsgTypeToTransactionType[cosmosMsgPayload.case]
+    const { msgPayload } = transactionDetails
+    result.transactionType = msgPayload?.case
+      ? cosmosMsgTypeToTransactionType[msgPayload.case]
       : defaultTransactionType
 
-    if (cosmosMsgPayload?.case === CosmosMsgType.MSG_TRANSFER_URL) {
-      const { timeoutTimestamp } = cosmosMsgPayload.value
+    if (msgPayload?.case === CosmosMsgType.MSG_TRANSFER_URL) {
+      const { timeoutTimestamp } = msgPayload.value
       if (timeoutTimestamp) {
         ;(
           result as ChainSpecificResolverInput<CosmosSpecific>

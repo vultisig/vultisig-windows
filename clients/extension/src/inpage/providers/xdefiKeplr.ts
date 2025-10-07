@@ -6,7 +6,7 @@ import { deserializeSigningOutput } from '@core/chain/tw/signingOutput'
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
 import {
-  CosmosMsgPayload,
+  MsgPayload,
   CosmosMsgType,
   TransactionDetails,
 } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
@@ -123,7 +123,7 @@ const keplrHandler = (
           from_address: message.value.from_address,
           to_address: message.value.to_address,
         },
-      } as CosmosMsgPayload,
+      } as MsgPayload,
       skipBroadcast,
     }
   }
@@ -149,7 +149,7 @@ const keplrHandler = (
           from_address: decodedMessage.fromAddress,
           to_address: decodedMessage.toAddress,
         },
-      } as CosmosMsgPayload,
+      } as MsgPayload,
       skipBroadcast,
     }
   }
@@ -186,7 +186,7 @@ const keplrHandler = (
             funds: message.value.funds,
             msg: formattedMessage,
           },
-        } as CosmosMsgPayload,
+        } as MsgPayload,
         skipBroadcast,
       }
     },
@@ -220,7 +220,7 @@ const keplrHandler = (
             funds: decodedMessage.funds,
             msg: formattedMessage,
           },
-        } as CosmosMsgPayload,
+        } as MsgPayload,
         skipBroadcast,
       }
     },
@@ -257,7 +257,7 @@ const keplrHandler = (
             },
             timeoutTimestamp: msg.timeoutTimestamp.toString(),
           },
-        } as CosmosMsgPayload,
+        } as MsgPayload,
         skipBroadcast,
       }
     },
@@ -288,7 +288,7 @@ const keplrHandler = (
             memo: message.value.memo,
             signer: message.value.signer,
           },
-        } as CosmosMsgPayload,
+        } as MsgPayload,
         skipBroadcast,
       }
     },
@@ -329,7 +329,7 @@ const keplrHandler = (
             memo: decodedMessage.memo,
             signer: thorAddress,
           },
-        } as CosmosMsgPayload,
+        } as MsgPayload,
         skipBroadcast,
       }
     },
