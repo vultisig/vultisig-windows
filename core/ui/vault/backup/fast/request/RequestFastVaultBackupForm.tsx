@@ -58,6 +58,10 @@ export const RequestFastVaultBackupForm = ({ onFinish }: OnFinishProp) => {
   })
 
   const errorMessage = useMemo(() => {
+    if (!error) {
+      return
+    }
+
     if (isInError(error, '429')) {
       return t('vault_server_share_too_many_requests')
     }
