@@ -14,15 +14,15 @@ import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '../../state/currentVault'
 import { BackupOption } from './BackupOption'
 
-const backupOptions = ['device', 'server'] as const
-type BackupOption = (typeof backupOptions)[number]
+const backupOptionTypes = ['device', 'server'] as const
+type BackupOptionType = (typeof backupOptionTypes)[number]
 
-const backupOptionIcon: Record<BackupOption, React.FC> = {
+const backupOptionIcon: Record<BackupOptionType, React.FC> = {
   device: TabletSmartphoneIcon,
   server: CloudIcon,
 }
 
-const backupOptionView: Record<BackupOption, CoreView> = {
+const backupOptionView: Record<BackupOptionType, CoreView> = {
   device: { id: 'vaultBackup' },
   server: { id: 'requestFastVaultBackup' },
 }
@@ -52,7 +52,7 @@ export const VaultSettingsBackup = () => {
       renderContent={({ onClose }) => (
         <Modal title={t('choose_backup_method')} onClose={onClose}>
           <VStack gap={16}>
-            {backupOptions.map(option => {
+            {backupOptionTypes.map(option => {
               const Icon = backupOptionIcon[option]
               return (
                 <BackupOption
