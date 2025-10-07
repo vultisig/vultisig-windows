@@ -23,14 +23,7 @@ export const AirdropRegisterPage = () => {
         primaryControls={<PageHeaderBackButton />}
         title={t('vault_register_for_airdrop_title')}
       />
-      <PageContent
-        style={{
-          position: 'relative',
-          top: -75,
-        }}
-        alignItems="center"
-        flexGrow
-      >
+      <StyledPageContent alignItems="center" flexGrow>
         <ImageWrapper>
           <Image
             src="/core/images/register-vault-bg.png"
@@ -41,7 +34,7 @@ export const AirdropRegisterPage = () => {
         </ImageWrapper>
 
         <RegisterGuideBulletPoints />
-      </PageContent>
+      </StyledPageContent>
       <PageFooter>
         <SaveAsImage
           fileName={vault.name}
@@ -64,4 +57,9 @@ const ImageWrapper = styled.div`
 const StyledHeader = styled(PageHeader)`
   position: relative;
   z-index: 1;
+`
+
+const StyledPageContent = styled(PageContent)`
+  position: relative;
+  top: -75px;
 `
