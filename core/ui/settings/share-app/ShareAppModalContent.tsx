@@ -1,104 +1,46 @@
-import { desktopDownloadUrl, extensionDownloadUrl } from '@core/config'
-import { IconButton } from '@lib/ui/buttons/IconButton'
-import { CopyIcon } from '@lib/ui/icons/CopyIcon'
-import { FacebookIcon } from '@lib/ui/icons/FacebookIcon'
-import { LinkedinIcon } from '@lib/ui/icons/LinkedinIcon'
-import { RedditIcon } from '@lib/ui/icons/RedditIcon'
-import { TwitterIcon } from '@lib/ui/icons/TwitterIcon'
-import { WhatsAppIcon } from '@lib/ui/icons/WhatsAppIcon'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
-import { useToast } from '@lib/ui/toast/ToastProvider'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { useCore } from '../../state/core'
+import { useExternalLinks } from './hooks/useExternalLinks'
+import { ShareAppPrompt } from './ShareAppPrompt'
 
 export const ShareAppModalContent = () => {
-  const { openUrl, client } = useCore()
+  const { openUrl } = useCore()
   const { t } = useTranslation()
-  const { addToast } = useToast()
-
-  const shareURL =
-    client === 'desktop' ? desktopDownloadUrl : extensionDownloadUrl
-
-  const handleCopy = () => {
-    navigator.clipboard
-      .writeText(shareURL)
-      .then(() => {
-        addToast({ message: t('link_copied') })
-      })
-      .catch(() => {
-        addToast({ message: t('failed_to_copy_link') })
-      })
-  }
+  const links = useExternalLinks()
 
   return (
     <VStack gap={24}>
-      <VStack gap={14}>
-        <Text color="light" size={13} weight={500}>
-          {t('share_app')}
-        </Text>
-        <HStack gap={8} alignItems="center">
-          <IconButton
-            onClick={() =>
-              openUrl(
-                `https://linkedin.com/sharing/share-offsite/?url=${shareURL}?utm_source=item-share-linkedin`
-              )
-            }
-            size="lg"
-          >
-            <LinkedinIcon fontSize={24} />
-          </IconButton>
-          <IconButton
-            onClick={() =>
-              openUrl(
-                `https://facebook.com/sharer/sharer.php?u=${shareURL}?utm_source=item-share-facebook`
-              )
-            }
-            size="lg"
-          >
-            <FacebookIcon fontSize={24} />
-          </IconButton>
-          <IconButton
-            onClick={() =>
-              openUrl(
-                `https://reddit.com/submit?url=${shareURL}?utm_source=item-share-reddit`
-              )
-            }
-            size="lg"
-          >
-            <RedditIcon fontSize={24} />
-          </IconButton>
-          <IconButton
-            onClick={() =>
-              openUrl(
-                `https://wa.me/?text=${shareURL}?utm_source=item-share-whatsapp`
-              )
-            }
-            size="lg"
-          >
-            <WhatsAppIcon fontSize={24} />
-          </IconButton>
-          <IconButton
-            onClick={() =>
-              openUrl(
-                `https://twitter.com/intent/tweet?url=${shareURL}?utm_source=item-share-x`
-              )
-            }
-            size="lg"
-          >
-            <TwitterIcon fontSize={24} />
-          </IconButton>
-        </HStack>
+      <Divider />
+      <VStack gap={24}>
+        <VStack gap={14}>
+          <Text color="light" size={13} weight={500}>
+            {t('share_app')}
+          </Text>
+          <HStack gap={14} alignItems="center">
+            {links.map(({ icon: Icon, url }) => (
+              <IconButton as="button" key={url} onClick={() => openUrl(url)}>
+                <Icon />
+              </IconButton>
+            ))}
+          </HStack>
+        </VStack>
+        <ShareAppPrompt />
       </VStack>
-      <HStack gap={8} alignItems="center">
-        <Text color="contrast" size={13} weight={500} cropped>
-          {shareURL}
-        </Text>
-        <IconButton onClick={handleCopy}>
-          <CopyIcon />
-        </IconButton>
-      </HStack>
     </VStack>
   )
 }
+
+const IconButton = styled(UnstyledButton)`
+  font-size: 38px;
+  cursor: pointer;
+`
+
+const Divider = styled.div`
+  height: 1px;
+  background: linear-gradient(90deg, #061b3a 0%, #284570 49.5%, #061b3a 100%);
+`
