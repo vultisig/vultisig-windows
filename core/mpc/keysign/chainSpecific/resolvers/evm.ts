@@ -32,13 +32,17 @@ const formatData = (data: string): `0x${string}` => {
 
 export const getEthereumSpecific: ChainSpecificResolver<
   EthereumSpecific
-> = async ({ coin, feeQuote = {}, amount, receiver, data }) => {
+> = async ({ coin, feeQuote, amount, receiver, data }) => {
   const { chain } = coin
 
   const client = getEvmClient(chain)
 
   const estimateFee = async (): Promise<EvmFeeQuote> => {
-    if (chain === Chain.Zksync && !feeQuote.gasLimit && !feeQuote.isOverride) {
+    if (
+      chain === Chain.Zksync &&
+      !feeQuote?.gasLimit &&
+      !feeQuote?.isOverride
+    ) {
       const result = await attempt(
         client.extend(publicActionsL2()).estimateFee({
           chain: evmChainInfo[chain],
@@ -54,32 +58,38 @@ export const getEthereumSpecific: ChainSpecificResolver<
       }
     }
 
-    const gasLimit =
-      feeQuote.gasLimit && feeQuote.isOverride
-        ? feeQuote.gasLimit
-        : bigIntMax(
-            ...without(
-              [
-                feeQuote.gasLimit,
-                deriveEvmGasLimit({ coin, data }),
-                await withFallback(
-                  attempt(
-                    client.estimateGas({
-                      account: coin.address as `0x${string}`,
-                      to: shouldBePresent(receiver) as `0x${string}`,
-                      value: amount,
-                      data: data ? formatData(data) : undefined,
-                    })
-                  ),
-                  undefined
-                ),
-              ],
+    const getGasLimit = async () => {
+      if (feeQuote?.gasLimit && feeQuote?.isOverride) {
+        return feeQuote.gasLimit
+      }
+
+      return bigIntMax(
+        ...without(
+          [
+            feeQuote?.gasLimit,
+            deriveEvmGasLimit({ coin, data }),
+            await withFallback(
+              attempt(
+                client.estimateGas({
+                  account: coin.address as `0x${string}`,
+                  to: shouldBePresent(receiver) as `0x${string}`,
+                  value: amount,
+                  data: data ? formatData(data) : undefined,
+                })
+              ),
               undefined
-            )
-          )
+            ),
+          ],
+          undefined
+        )
+      )
+    }
+
+    const gasLimit = await getGasLimit()
 
     const maxPriorityFeePerGas =
-      feeQuote.maxPriorityFeePerGas ?? (await getEvmMaxPriorityFeePerGas(chain))
+      feeQuote?.maxPriorityFeePerGas ??
+      (await getEvmMaxPriorityFeePerGas(chain))
 
     const maxFeePerGas = bigIntMax(
       baseFeeMultiplier(await getEvmBaseFee(chain)) + maxPriorityFeePerGas,
