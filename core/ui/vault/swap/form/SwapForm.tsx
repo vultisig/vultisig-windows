@@ -7,15 +7,23 @@ import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { OnFinishProp } from '@lib/ui/props'
-import { FC } from 'react'
-import { useTranslation } from 'react-i18next'
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { t } from 'i18next'
+import { FC, useMemo } from 'react'
 import styled from 'styled-components'
 
-import { useSwapFormStates } from './hooks/useSwapFormStates'
+import { useSwapValidationQuery } from '../queries/useSwapValidationQuery'
 
 export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
-  const { t } = useTranslation()
-  const { isDisabled } = useSwapFormStates()
+  const { error, isPending } = useSwapValidationQuery()
+
+  const errorMessage = useMemo(() => {
+    if (isPending) {
+      return t('loading')
+    }
+
+    return extractErrorMsg(error)
+  }, [error, isPending])
 
   return (
     <>
@@ -24,7 +32,7 @@ export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
         gap={40}
         {...getFormProps({
           onSubmit: onFinish,
-          isDisabled,
+          isDisabled: !!errorMessage,
         })}
         justifyContent="space-between"
         scrollable
@@ -41,8 +49,8 @@ export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
             <SwapInfo />
           </VStack>
         </VStack>
-        <Button disabled={isDisabled} type="submit">
-          {typeof isDisabled === 'string' ? isDisabled : t('continue')}
+        <Button disabled={errorMessage} type="submit">
+          {errorMessage || t('continue')}
         </Button>
       </PageContent>
     </>
