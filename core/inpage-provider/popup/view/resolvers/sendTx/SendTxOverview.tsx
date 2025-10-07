@@ -61,7 +61,13 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
   const [feeSettings, setFeeSettings] = useState<EvmFeeSettings | null>(null)
 
   const chainSpecificInput = useMemo(
-    () => getChainSpecificInput({ ...parsedTx, feeSettings }),
+    () =>
+      getChainSpecificInput({
+        ...parsedTx,
+        feeSettings: feeSettings
+          ? { ...feeSettings, isOverride: true }
+          : parsedTx.feeSettings,
+      }),
     [parsedTx, feeSettings]
   )
 

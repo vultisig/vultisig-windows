@@ -1,6 +1,5 @@
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { getPsbtTransferInfo } from '@core/chain/chains/utxo/tx/getPsbtTransferInfo'
-import { EvmFeeInput } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { byteFeeMultiplier } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/resolver'
 import {
@@ -8,6 +7,7 @@ import {
   EthereumSpecific,
   TransactionType,
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 
@@ -70,7 +70,7 @@ export const getChainSpecificInput = (input: ParsedTx) => {
       : undefined,
     feeQuote:
       feeSettings && isChainOfKind(coin.chain, 'evm')
-        ? ({ ...feeSettings, isOverride: true } as EvmFeeInput)
+        ? (feeSettings as FeeSettings<'evm'>)
         : undefined,
   }
 

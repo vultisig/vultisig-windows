@@ -4,6 +4,6 @@ export type EvmFeeQuote = {
   maxFeePerGas: bigint
 }
 
-export type EvmFeeSettings = Omit<EvmFeeQuote, 'maxFeePerGas'>
-
-export type EvmFeeInput = Partial<EvmFeeSettings> & { isOverride?: boolean }
+export type EvmFeeSettings = Omit<EvmFeeQuote, 'maxFeePerGas'> & {
+  isOverride?: boolean
+}
