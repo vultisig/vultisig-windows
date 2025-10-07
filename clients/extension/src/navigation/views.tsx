@@ -40,7 +40,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   reshareVaultSecure: ReshareSecureVault,
   settings: () => (
     <SettingsPage
-      client="extension"
       insiderOptions={<ExtensionDeveloperOptions />}
       prioritize={<Prioritize />}
       expandView={<ExpandView />}
