@@ -1,7 +1,6 @@
 import { CheckUpdate } from '@clients/desktop/src/components/check-update'
 import { ManageMpcLib } from '@clients/desktop/src/components/manage-mpc-lib'
 import { AppViewId } from '@clients/desktop/src/navigation/AppView'
-import { FaqVaultPage } from '@clients/desktop/src/pages/vaultSettings/vaultFaq/FaqVaultPage'
 import { VaultPage } from '@clients/desktop/src/vault/components/VaultPage'
 import { ImportVaultFromFilePage } from '@clients/desktop/src/vault/import/components/ImportVaultFromFilePage'
 import { JoinKeygenPage } from '@clients/desktop/src/vault/keygen/join/JoinKeygenPage'
@@ -25,7 +24,6 @@ import { Views } from '@lib/ui/navigation/Views'
 
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   checkUpdate: CheckUpdatePage,
-  faq: FaqVaultPage,
   importVault: ImportVaultPage,
   importVaultFromFile: ImportVaultFromFilePage,
   joinKeygen: JoinKeygenPage,
@@ -55,7 +53,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   ),
   shareVault: ShareVaultPage,
   vault: VaultPage,
-  vaultFAQ: FaqVaultPage,
 }
 
 export const views: Views<AppViewId> = {

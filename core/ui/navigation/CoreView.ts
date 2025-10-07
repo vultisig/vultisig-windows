@@ -12,6 +12,7 @@ export type CoreView =
   | { id: 'addCustomToken'; state: { chain: ChainWithTokenMetadataDiscovery } }
   | { id: 'address'; state: { address: string } }
   | { id: 'addressBook' }
+  | { id: 'faq' }
   | { id: 'airdropRegister' }
   | { id: 'createAddressBookItem' }
   | { id: 'createVaultFolder' }
@@ -73,6 +74,7 @@ export type CoreView =
   | { id: 'manageVaults' }
   | { id: 'managePasscodeEncryption' }
   | { id: 'passcodeAutoLock' }
+  | { id: 'requestFastVaultBackup' }
 
 export type CoreViewId = CoreView['id']
 

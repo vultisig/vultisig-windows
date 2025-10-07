@@ -22,6 +22,8 @@ export const en = {
   onboarding_step_6: 'These shares collaborate to <g>unlock your vault</g>',
   permissions: 'Permissions',
   personal_sign: 'Personal Sign',
+  vultisig_website: 'Vultisig Website',
+  vult: '$VULT',
   function_unavailble:
     'Feature unavailable for existing chain coins. Please add coins that can be used with FUNCTION:',
   request_from: 'Request from',
@@ -263,6 +265,7 @@ export const en = {
   processing_url: 'Processing URL...',
   failed_to_process_url: 'Failed to process URL',
   this_device_is_the: 'This device is the',
+  version: 'Version',
   initiating_device: 'Initiating device',
   pairing_device: 'Pairing device',
   expiration_must_extend_by_exactly_one_year:
@@ -386,32 +389,46 @@ export const en = {
   save: 'Save',
   settings_vault_page_footer: 'VULTISIG APP V',
   clear: 'Clear',
-  faq_setup_crypto_vault_title: 'How do I set up my crypto vault?',
+  faq_setup_crypto_vault_title: 'What is Vultisig?',
   faq_setup_crypto_vault_content:
-    'Get 2 or more of your devices together and connected to your local WiFi, Hotspot or internet. Then simply pair them via QR code and create a new vault. You can then send funds in.',
+    'It is a secure, multi-authentication wallet based on MPC technology that is used to manage digital assets. Transactions require approval from multiple devices.',
   faq_supported_cryptocurrencies_title:
-    'What cryptocurrencies are supported by Vultisig?',
+    'What are the benefits of using Vultisig?',
   faq_supported_cryptocurrencies_content:
-    'All assets supported by Trust Wallet Core are supported in Vultisig.',
-  faq_secure_crypto_vault_title:
-    'How does the crypto vault app secure my cryptocurrencies?',
+    'Vultisig offers enhanced security with multi-device authentication, support for many blockchains, easy recovery options, and no seed phrases or user tracking.',
+  faq_secure_crypto_vault_title: 'Can I recover my assets if I lose a device?',
   faq_secure_crypto_vault_content:
-    'Vultisig is audited, open-source and uses a very well-proven TSS library.',
-  faq_vultisig_make_money_title: 'How does Vultisig make money?',
+    'Yes, as long as you saved and have access to your backups when creating the vault. You can import these backups on a new device to regain access to your assets.',
+  faq_vultisig_make_money_title: 'How is Vultisig used?',
   faq_vultisig_make_money_content:
-    'Vultisig only charges a flat fee on swap and bridging. There are no other hidden fees.',
-  faq_recover_assets_title: 'Can I recover my assets if I lose a device?',
+    'Vultisig securely stores and manages digital assets. All actions, such as sending or swapping, require the threshold of devices to sign transactions.',
+  faq_recover_assets_title: 'What are the fees and costs?',
   faq_recover_assets_content:
-    'You can backup your vault by exporting the vault shares.',
-  faq_need_to_register_title: 'Do I need to register?',
-  faq_need_to_register_content: 'No, there are no registration requirements.',
-  vault_settings_address_book_no_addresses_title: 'No saved addresses',
+    "Vultisig is free to use. Only standard network fees apply to sending. And for swaps and bridges, there's a 0.5% (50 bps) fee.",
+  faq_need_to_register_title:
+    'What cryptocurrencies are supported by Vultisig?',
+  faq_need_to_register_content:
+    'Vultisig supports major cryptocurrencies and tokens, with over 30 chains and their tokens, currently available.',
+  vault_settings_address_book_no_addresses_title: 'Your Address Book is empty',
+  vault_settings_address_book_no_addresses_description:
+    'Keep all your important addresses organized in one place.',
   or: 'or',
+  faq_is_open_source_title: 'Is Vultisig open source and audited?',
+  faq_is_open_source_content:
+    'Yes, Vultisig is open source and has undergone security audits. Both the audit reports and the source code are accessible.',
   enter_vault_name: 'Enter Vault Name',
+  faq_data_protection_title:
+    'How does Vultisig handle privacy and data protection?',
+  faq_data_protection_content:
+    'Vultisig does not store any user information from its mobile apps.',
   vault_name_required: 'Vault name is required',
+  faq_comparison_title: 'How does Vultisig compare to other multisig wallets?',
+  faq_comparison_content:
+    'It is built on MPC technology, which eliminates the need for seed phrases and supports multiple blockchains, making Vultisig flexible and chain-agnostic.',
   vault_name_already_exists: 'Vault name must be unique',
   vault_name_max_length_error: 'Vault name must be less than 50 characters',
   edit_address: 'Edit Address',
+  label: 'Label',
   title: 'Title',
   type_here: 'Type Here',
   vault_settings_address_book_invalid_address_error:
@@ -702,8 +719,6 @@ export const en = {
     connectionSuccess: 'Connection successful!',
     takeMinute: 'This should only take a second',
     vaultInitializationStarting: 'Vault initiation starting...',
-    emailRequired: 'Email is required',
-    emailIncorrect: 'Incorrect e-mail, please check',
     enterEmail: 'Enter your e-mail',
     emailSetupTitle: 'This email is only used to send the server backup',
     passwordCannotBeRecovered: 'Password cannot be reset or recovered',
@@ -714,6 +729,7 @@ export const en = {
     enterHint: 'Enter hint',
   },
   password_required: 'Password is required',
+  email_required: 'Email is required',
   fast_vault_setup_title: 'Quick, 1 device setup',
   vault_setup_prop: {
     fast: {
@@ -792,11 +808,13 @@ export const en = {
   new_vault_setup: 'New Vault Setup',
   new_vault_setup_disclaimer: 'Your configuration changed, make a new backup.',
   vault_register_for_airdrop_title: 'Register Vault',
+  register_guide: 'Register Guide',
   vault_register_for_airdrop_list_item_1: 'Save your Vault QR',
   vault_register_for_airdrop_list_item_2_part_1: 'Go to',
   vault_register_for_airdrop_list_item_2_part_2: 'Vultisig Web',
   vault_register_for_airdrop_list_item_3: 'Upload your Vault QR Code',
-  vault_register_for_airdrop_list_item_4: 'Track your VULTIES (Vault Points) !',
+  vault_register_for_airdrop_list_item_4:
+    'Track your VULTIES (Airdrop Points) !',
   vault_register_for_airdrop_save_vault_QR_button: 'Save Vault QR',
   vault_qr_share: 'Share',
   vault_qr_share_title: 'Vault QR Code',
@@ -992,7 +1010,6 @@ export const en = {
   backup_password_info_cannot_be_reset:
     'Remember: if you forget your vault password, it <b>cannot</b> be reset or recovered.',
   upgrade_your_vault_now: 'Upgrade your vault now',
-  version: 'Version',
   vulti_share_not_saved_hint:
     "If you didn't save your VultiShare QR yet, go to the app and click on the QR icon in the upper right corner.",
   delete_folder_confirmation:
@@ -1005,7 +1022,7 @@ export const en = {
   failed_to_get_camera_permission: 'Failed to get camera permission',
   address_book_empty_instruction:
     'Click "Add Address" to add your favorite addresses',
-  select_chains: 'Select Chains',
+  select_chains: 'Select',
   chains: 'Chains',
   custom_token: 'Custom Token',
   find_custom_token: 'Find Your Custom Token',
@@ -1062,4 +1079,17 @@ export const en = {
   same_vault_share: 'Same vault share',
   resource: 'Resource',
   target: 'Target',
+  device_backup: 'Device Backup',
+  device_backup_description: 'Store the vault share of this device.',
+  server_backup: 'Server Backup',
+  server_backup_description: 'Request Server Vault Share again.',
+  choose_backup_method: 'Choose Backup Method',
+  vault_server_share_too_many_requests:
+    'You’ve requested your backup share too often in a short time. Please wait before trying again.',
+  vault_server_share_bad_request:
+    'Something went wrong. Please recheck your password and try again.',
+  backup_share_sent: 'Backup share sent!',
+  check_email: 'Check email',
+  backup_share_sent_description:
+    'We just sent your backup share to your email. If you don’t see it, check your spam folder.',
 }

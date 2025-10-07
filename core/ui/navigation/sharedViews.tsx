@@ -34,10 +34,12 @@ import { Views } from '@lib/ui/navigation/Views'
 
 import { PasscodeAutoLockPage } from '../passcodeEncryption/autoLock/PasscodeAutoLockPage'
 import { ManagePasscodeEncryptionPage } from '../passcodeEncryption/manage/ManagePasscodeEncryptionPage'
+import { RequestFastVaultBackup } from '../vault/backup/fast/request'
 import { DepositActionProvider } from '../vault/deposit/providers/DepositActionProvider'
 import { DepositCoinProvider } from '../vault/deposit/providers/DepositCoinProvider'
 import { ReferralsGuard } from '../vault/settings/referral/providers/ReferralsGuard'
 import { ReferralPage } from '../vault/settings/referral/ReferralsPage'
+import { FaqVaultPage } from '../vault/settings/vaultFaq/FaqVaultPage'
 
 export type SharedViewId = Extract<
   CoreViewId,
@@ -75,6 +77,8 @@ export type SharedViewId = Extract<
   | 'managePasscodeEncryption'
   | 'passcodeAutoLock'
   | 'referral'
+  | 'requestFastVaultBackup'
+  | 'faq'
 >
 
 export const sharedViews: Views<SharedViewId> = {
@@ -129,4 +133,6 @@ export const sharedViews: Views<SharedViewId> = {
   vaults: VaultsPage,
   managePasscodeEncryption: ManagePasscodeEncryptionPage,
   passcodeAutoLock: PasscodeAutoLockPage,
+  requestFastVaultBackup: RequestFastVaultBackup,
+  faq: FaqVaultPage,
 }

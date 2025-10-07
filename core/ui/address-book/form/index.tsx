@@ -28,7 +28,7 @@ import { UseMutationResult } from '@tanstack/react-query'
 import { FC, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 import { z } from 'zod'
 
 import { useCore } from '../../state/core'
@@ -64,6 +64,7 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
   const [showScanner, setShowScanner] = useState(false)
   const walletCore = useAssertWalletCore()
   const { getClipboardText } = useCore()
+  const { colors } = useTheme()
 
   const schema = z
     .object({
@@ -132,20 +133,17 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
 
   return (
     <VStack as="form" onSubmit={handleSubmit(onSubmit)} fullHeight>
-      <PageHeader
-        primaryControls={<PageHeaderBackButton />}
-        title={title}
-        hasBorder
-      />
+      <PageHeader primaryControls={<PageHeaderBackButton />} title={title} />
       <PageContent gap={16} flexGrow scrollable>
         <ChainInput
+          titleColor="contrast"
           value={watch('chain')}
           onChange={newChain => setValue('chain', newChain)}
           options={Object.values(Chain)}
         />
         <VStack gap={8}>
           <TextInput
-            label={t('title')}
+            label={t('label')}
             placeholder={t('type_here')}
             {...register('title')}
           />
@@ -168,12 +166,18 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
               />
             )}
             action={
-              <HStack gap={8}>
-                <IconButton onClick={handlePaste}>
-                  <PasteIcon />
-                </IconButton>
-                <IconButton onClick={() => setShowScanner(true)}>
+              <HStack>
+                <IconButton size="sm" onClick={() => setShowScanner(true)}>
                   <CameraIcon />
+                </IconButton>
+                <IconButton
+                  style={{
+                    color: colors.textShyExtra.toCssValue(),
+                  }}
+                  size="sm"
+                  onClick={handlePaste}
+                >
+                  <PasteIcon />
                 </IconButton>
               </HStack>
             }
