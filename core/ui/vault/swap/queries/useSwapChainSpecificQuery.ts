@@ -8,15 +8,15 @@ import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { byteFeeMultiplier } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/resolver'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
-import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
 
-import { getChainSpecificQuery } from '../../../chain/coin/queries/useChainSpecificQuery'
+import { useChainSpecificQuery } from '../../../chain/coin/queries/useChainSpecificQuery'
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useFromAmount } from '../state/fromAmount'
-import { useSwapQuoteQuery } from './useSwapQuoteQuery'
+import { useSwapQuote } from './useSwapQuoteQuery'
 
 export const useSwapChainSpecificQuery = () => {
   const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
@@ -24,19 +24,11 @@ export const useSwapChainSpecificQuery = () => {
 
   const [fromAmount] = useFromAmount()
 
-  const swapQuoteQuery = useSwapQuoteQuery()
+  const swapQuote = useSwapQuote()
 
-  const queryInput: ChainSpecificResolverInput | undefined = useMemo(() => {
-    const { data: swapQuote } = swapQuoteQuery
+  const amount = shouldBePresent(fromAmount, 'swap from amount')
 
-    if (!swapQuote) {
-      return
-    }
-
-    if (!fromAmount) {
-      return
-    }
-
+  const queryInput: ChainSpecificResolverInput = useMemo(() => {
     const destinationAddress = getSwapDestinationAddress({
       quote: swapQuote,
       fromCoin,
@@ -44,7 +36,7 @@ export const useSwapChainSpecificQuery = () => {
 
     const input: ChainSpecificResolverInput = {
       coin: fromCoin,
-      amount: toChainAmount(fromAmount, fromCoin.decimals),
+      amount: toChainAmount(amount, fromCoin.decimals),
       receiver: destinationAddress,
       data: matchRecordUnion<SwapQuote, string | undefined>(swapQuote, {
         native: () => undefined,
@@ -72,7 +64,7 @@ export const useSwapChainSpecificQuery = () => {
     }
 
     return input
-  }, [fromAmount, fromCoin, fromCoinKey, swapQuoteQuery])
+  }, [amount, fromCoin, fromCoinKey, swapQuote])
 
-  return usePotentialQuery(queryInput, getChainSpecificQuery)
+  return useChainSpecificQuery(queryInput)
 }
