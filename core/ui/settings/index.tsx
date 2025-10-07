@@ -4,7 +4,7 @@ import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { languageName } from '@core/ui/i18n/Language'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { SettingsSection } from '@core/ui/settings/SettingsSection'
-import { Client, useCore } from '@core/ui/state/core'
+import { useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useLanguage } from '@core/ui/storage/language'
 import { useHasPasscodeEncryption } from '@core/ui/storage/passcodeEncryption'
@@ -47,24 +47,18 @@ import {
 } from './constants'
 import { ShareAppModal } from './share-app/ShareAppModal'
 
-type ExtensionSettings = {
-  client: Extract<Client, 'extension'>
-  expandView: ReactNode
-  insiderOptions: ReactNode
-  prioritize: ReactNode
-}
-
-type DesktopSettings = {
-  client: Extract<Client, 'desktop'>
-  checkUpdate: ReactNode
-  insiderOptions: ReactNode
+type Props = {
+  expandView?: ReactNode
+  insiderOptions?: ReactNode
+  prioritize?: ReactNode
+  checkUpdate?: ReactNode
 }
 
 const iconSize = 20
 
-export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
+export const SettingsPage: FC<Props> = props => {
   const { t } = useTranslation()
-  const { openUrl } = useCore()
+  const { openUrl, client } = useCore()
   const navigate = useCoreNavigate()
   const currency = useFiatCurrency()
   const language = useLanguage()
@@ -91,7 +85,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
         />
         <PageContent gap={24} flexGrow scrollable>
           <SettingsSection title={t('vault')}>
-            {props.client === 'extension' && props.prioritize}
+            {client === 'extension' && props.prioritize}
             <ListItem
               icon={
                 <ListItemIconWrapper>
@@ -160,7 +154,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
                 showArrow
               />
             )}
-            {props.client === 'extension' && props.expandView}
+            {client === 'extension' && props.expandView}
           </SettingsSection>
           <SettingsSection title={t('security')}>
             <ListItem
@@ -198,7 +192,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
               title={t('faq')}
               showArrow
             />
-            {props.client === 'desktop' && props.checkUpdate}
+            {client === 'desktop' && props.checkUpdate}
             <Opener
               renderOpener={({ onOpen }) => (
                 <ListItem
@@ -213,7 +207,7 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
                 />
               )}
               renderContent={({ onClose }) => (
-                <ShareAppModal clientType={props.client} onClose={onClose} />
+                <ShareAppModal onClose={onClose} />
               )}
             />
           </SettingsSection>
