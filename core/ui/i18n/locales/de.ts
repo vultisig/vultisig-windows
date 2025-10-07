@@ -573,8 +573,6 @@ export const de = {
     connectionSuccess: 'Verbindung erfolgreich!',
     takeMinute: 'Dies sollte nur eine Sekunde dauern',
     vaultInitializationStarting: 'Tresor-Initialisierung startet...',
-    emailRequired: 'E-Mail ist erforderlich',
-    emailIncorrect: 'Falsche E-Mail, bitte überprüfen',
     enterEmail: 'Geben Sie Ihre E-Mail ein',
     emailSetupTitle:
       'Diese E-Mail wird nur verwendet, um das Server-Backup zu senden',
@@ -1110,4 +1108,18 @@ export const de = {
     'Wenn Sie ein Kennwort hinzufügen, wird dieses zum <b>Verschlüsseln</b> der Sicherungsdatei verwendet.',
   backup_password_info_cannot_be_reset:
     'Denken Sie daran: Wenn Sie Ihr Tresorkennwort vergessen, kann es <b>nicht</b> zurückgesetzt oder wiederhergestellt werden.',
+  email_required: 'E-Mail ist erforderlich',
+  device_backup: 'Gerätesicherung',
+  device_backup_description: 'Speichern Sie die Tresorfreigabe dieses Geräts.',
+  server_backup: 'Serversicherung',
+  server_backup_description: 'Fordern Sie Server Vault Share erneut an.',
+  choose_backup_method: 'Wählen Sie eine Sicherungsmethode',
+  vault_server_share_too_many_requests:
+    'Sie haben Ihre Sicherungsfreigabe in kurzer Zeit zu oft angefordert. Bitte warten Sie, bevor Sie es erneut versuchen.',
+  vault_server_share_bad_request:
+    'Etwas ist schiefgelaufen. Bitte überprüfen Sie Ihr Passwort und versuchen Sie es erneut.',
+  backup_share_sent: 'Backup-Freigabe gesendet!',
+  check_email: 'E-Mails abrufen',
+  backup_share_sent_description:
+    'Wir haben Ihre Sicherungsfreigabe gerade an Ihre E-Mail-Adresse gesendet. Wenn Sie sie nicht sehen, überprüfen Sie Ihren Spam-Ordner.',
 }

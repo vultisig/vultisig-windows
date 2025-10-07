@@ -703,8 +703,6 @@ export const en = {
     connectionSuccess: 'Connection successful!',
     takeMinute: 'This should only take a second',
     vaultInitializationStarting: 'Vault initiation starting...',
-    emailRequired: 'Email is required',
-    emailIncorrect: 'Incorrect e-mail, please check',
     enterEmail: 'Enter your e-mail',
     emailSetupTitle: 'This email is only used to send the server backup',
     passwordCannotBeRecovered: 'Password cannot be reset or recovered',
@@ -715,6 +713,7 @@ export const en = {
     enterHint: 'Enter hint',
   },
   password_required: 'Password is required',
+  email_required: 'Email is required',
   fast_vault_setup_title: 'Quick, 1 device setup',
   vault_setup_prop: {
     fast: {
@@ -1061,4 +1060,17 @@ export const en = {
   failed_to_process_transaction: 'Failed to process transaction',
   signature_successful: 'Signature Successful',
   same_vault_share: 'Same vault share',
+  device_backup: 'Device Backup',
+  device_backup_description: 'Store the vault share of this device.',
+  server_backup: 'Server Backup',
+  server_backup_description: 'Request Server Vault Share again.',
+  choose_backup_method: 'Choose Backup Method',
+  vault_server_share_too_many_requests:
+    'You’ve requested your backup share too often in a short time. Please wait before trying again.',
+  vault_server_share_bad_request:
+    'Something went wrong. Please recheck your password and try again.',
+  backup_share_sent: 'Backup share sent!',
+  check_email: 'Check email',
+  backup_share_sent_description:
+    'We just sent your backup share to your email. If you don’t see it, check your spam folder.',
 }

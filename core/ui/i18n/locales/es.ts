@@ -575,8 +575,6 @@ export const es = {
     connectionSuccess: '¡Conexión exitosa!',
     takeMinute: 'Esto solo tomará un segundo',
     vaultInitializationStarting: 'Iniciando la inicialización del baúl...',
-    emailRequired: 'Correo electrónico es obligatorio',
-    emailIncorrect: 'Correo electrónico incorrecto, por favor verifique',
     enterEmail: 'Ingrese su correo electrónico',
     emailSetupTitle:
       'Este correo electrónico solo se usa para enviar la copia de seguridad del servidor.',
@@ -1106,4 +1104,20 @@ export const es = {
     'Si decide agregar una contraseña, esta se utilizará para <b>encriptar</b> el archivo de respaldo.',
   backup_password_info_cannot_be_reset:
     'Recuerde: si olvida la contraseña de su bóveda, no podrá restablecerla ni recuperarla.',
+  email_required: 'Se requiere correo electrónico',
+  device_backup: 'Copia de seguridad del dispositivo',
+  device_backup_description:
+    'Almacenar el recurso compartido de bóveda de este dispositivo.',
+  server_backup: 'Copia de seguridad del servidor',
+  server_backup_description:
+    'Solicitar nuevamente el uso compartido de Server Vault.',
+  choose_backup_method: 'Elija el método de copia de seguridad',
+  vault_server_share_too_many_requests:
+    'Has solicitado tu copia de seguridad compartida con demasiada frecuencia en poco tiempo. Espera antes de volver a intentarlo.',
+  vault_server_share_bad_request:
+    'Algo salió mal. Por favor, revisa tu contraseña e inténtalo de nuevo.',
+  backup_share_sent: '¡Respaldo compartido enviado!',
+  check_email: 'Revisar el correo electrónico',
+  backup_share_sent_description:
+    'Acabamos de enviarte tu copia de seguridad a tu correo electrónico. Si no la encuentras, revisa tu carpeta de correo no deseado.',
 }

@@ -555,8 +555,6 @@ export const hr = {
     connectionSuccess: 'Sikeres csatlakozás!',
     takeMinute: 'Ovo traje samo jednu sekundu',
     vaultInitializationStarting: 'Tároló inicializálásának indítása...',
-    emailRequired: 'E-mail szükséges',
-    emailIncorrect: 'Hibás e-mail, kérjük, ellenőrizze',
     enterEmail: 'Adja meg az e-mail címét',
     emailSetupTitle:
       'Ez az e-mail csak a szerver biztonsági mentésének küldésére szolgál',
@@ -1077,4 +1075,19 @@ export const hr = {
     'Ako odaberete dodati lozinku, ona će se koristiti za <b>šifriranje</b> sigurnosne kopije datoteke.',
   backup_password_info_cannot_be_reset:
     'Zapamtite: ako zaboravite lozinku za trezor, ona se *ne može* resetirati ili oporaviti.',
+  email_required: 'E-pošta je obavezna',
+  device_backup: 'Sigurnosna kopija uređaja',
+  device_backup_description: 'Pohrani dijeljeni trezor ovog uređaja.',
+  server_backup: 'Sigurnosna kopija poslužitelja',
+  server_backup_description:
+    'Ponovno zatražite dijeljenje trezora poslužitelja.',
+  choose_backup_method: 'Odaberite metodu sigurnosne kopije',
+  vault_server_share_too_many_requests:
+    'Prečesto ste tražili sigurnosnu kopiju u kratkom vremenu. Pričekajte prije ponovnog pokušaja.',
+  vault_server_share_bad_request:
+    'Nešto je pošlo po zlu. Molimo vas da ponovno provjerite lozinku i pokušate ponovno.',
+  backup_share_sent: 'Dijeljenje sigurnosne kopije poslano!',
+  check_email: 'Provjerite e-poštu',
+  backup_share_sent_description:
+    'Upravo smo vam poslali sigurnosnu kopiju na vašu e-poštu. Ako je ne vidite, provjerite mapu neželjene pošte.',
 }
