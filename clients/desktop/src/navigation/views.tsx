@@ -39,7 +39,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   reshareVaultSecure: SecureReshareVaultPage,
   settings: () => (
     <SettingsPage
-      client="desktop"
       checkUpdate={<CheckUpdate />}
       insiderOptions={<ManageMpcLib />}
     />
