@@ -22,6 +22,8 @@ export const it = {
     'Vultisig è una cassaforte sicura per criptovalute multi-dispositivo, compatibile con tutte le principali blockchain e oltre 10.000 token. Vultisig è completamente autogestito.',
   onboarding_description_2:
     'Vultisig non traccia le tue attività né richiede alcuna registrazione. Vultisig è open-source, garantendo trasparenza e fiducia.',
+  vult: '$VULT',
+  vultisig_website: 'Sito web di Vultisig',
   function_unavailble:
     'Funzionalità non disponibile per le monete della catena esistenti. Aggiungi monete che possono essere utilizzate con FUNCTION:',
   onboarding_description_3:
@@ -396,7 +398,9 @@ export const it = {
     'Puoi eseguire il backup della tua cassaforte esportando i frammenti della cassaforte.',
   faq_need_to_register_title: 'Devo registrarmi?',
   faq_need_to_register_content: 'No, non ci sono requisiti di registrazione.',
-  vault_settings_address_book_no_addresses_title: 'Nessun indirizzo salvato',
+  vault_settings_address_book_no_addresses_title: 'Il tuo rubrica è vuota',
+  vault_settings_address_book_no_addresses_description:
+    'Organizza tutti i tuoi indirizzi importanti in un posto.',
   or: 'o',
   enter_vault_name: 'Inserisci il nome della cassaforte',
   vault_name_required: 'Il nome della cassaforte è obbligatorio',
@@ -929,6 +933,7 @@ export const it = {
   remove: 'Rimuovere',
   share_vault: 'Condividi Vault',
   no_referral_yet: 'Nessuna referenza',
+  register_guide: 'Guida di registrazione',
   missing_thorchain_address: 'Indirizzo THORChain mancante',
   missing_destination_address: 'Indirizzo di destinazione mancante',
   upgrade_shares_info:

@@ -9,8 +9,7 @@ import {
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { DnDList } from '@lib/ui/dnd/DnDList'
-import { SquarePenIcon } from '@lib/ui/icons/SquarePenIcon'
-import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
+import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import {
@@ -21,16 +20,11 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { getNewOrder } from '@lib/utils/order/getNewOrder'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-const StyledIcon = styled(TriangleAlertIcon)`
-  color: ${getColor('idle')};
-`
 
 export const AddressBookPage = () => {
   const { t } = useTranslation()
@@ -53,7 +47,7 @@ export const AddressBookPage = () => {
         secondaryControls={
           !isEditMode && (
             <IconButton onClick={() => setIsEditMode(true)}>
-              <SquarePenIcon />
+              <PencilIcon />
             </IconButton>
           )
         }
@@ -82,7 +76,9 @@ export const AddressBookPage = () => {
                 )
               )
             }}
-            renderList={({ props: { children } }) => <List>{children}</List>}
+            renderList={({ props: { children } }) => (
+              <AddressBookEditList>{children}</AddressBookEditList>
+            )}
             renderItem={({ item, draggableProps, dragHandleProps, status }) => (
               <DnDItemContainer
                 {...draggableProps}
@@ -117,17 +113,37 @@ export const AddressBookPage = () => {
         title={t('address_book')}
         hasBorder
       />
-      <PageContent alignItems="center" justifyContent="center" flexGrow>
-        <StyledIcon fontSize={120} />
-        <Text color="contrast" size={18} weight={600}>
+      <PageContent
+        style={{
+          maxWidth: 265,
+          marginInline: 'auto',
+        }}
+        gap={12}
+        alignItems="center"
+        justifyContent="center"
+        flexGrow
+      >
+        <Text centerHorizontally color="contrast" size={16} weight={500}>
           {t('vault_settings_address_book_no_addresses_title')}
         </Text>
-      </PageContent>
-      <PageFooter>
-        <Button onClick={() => navigate({ id: 'createAddressBookItem' })}>
+        <Text centerHorizontally color="shy" size={14} weight={500}>
+          {t('vault_settings_address_book_no_addresses_description')}
+        </Text>
+        <Button
+          style={{
+            alignSelf: 'center',
+            width: 151,
+            fontSize: 14,
+          }}
+          onClick={() => navigate({ id: 'createAddressBookItem' })}
+        >
           {t('add_address')}
         </Button>
-      </PageFooter>
+      </PageContent>
     </VStack>
   )
 }
+
+const AddressBookEditList = styled(List)`
+  background: none;
+`

@@ -19,10 +19,12 @@ export const hr = {
   by_vultisig: 'od Vultisig',
   onboarding_description_1:
     'Vultisig je sigurni, višeslojni kripto trezor, kompatibilan sa svim glavnim blockchainima i preko 10.000 tokena. Vultisig je potpuno samostalni.',
+  vultisig_website: 'Vultisig web-lokacija',
   onboarding_description_2:
     'Vultisig ne prati vaše aktivnosti niti zahtijeva bilo kakvu registraciju. Vultisig je otvorenog koda, što osigurava transparentnost i povjerenje.',
   onboarding_description_3:
     'Vultisig je po prirodi višeslojna aplikacija. Zahtijeva najmanje dva uređaja za stvaranje sigurnog trezora: inicijalni uređaj i uređaj za uparivanje.',
+  vult: '$VULT',
   onboarding_description_4:
     'Vultisig je novčanik bez seed fraza. Umjesto toga koristi lako upravljive dijelove trezora. Svaki uređaj ima svoj jedinstveni dio koji treba zasebno sigurnosno kopirati.',
   search_field_placeholder: 'Pretraži..',
@@ -379,6 +381,8 @@ export const hr = {
   faq_need_to_register_title: 'Moram li se registrirati?',
   faq_need_to_register_content: 'Ne, nema zahtjeva za registraciju.',
   vault_settings_address_book_no_addresses_title: 'Nema spremljenih adresa',
+  vault_settings_address_book_no_addresses_description:
+    'Organizirajte sve vaše važne adrese u jednom mjestu.',
   or: 'ili',
   enter_vault_name: 'Unesite naziv trezora',
   vault_name_required: 'Naziv trezora je obavezan',
@@ -909,6 +913,7 @@ export const hr = {
   remove: 'Ukloniti',
   share_vault: 'Dijeli trezor',
   no_referral_yet: 'Nema preporuke',
+  register_guide: 'Registracijski vodič',
   missing_thorchain_address: 'Nedostaje THORChain adresa',
   missing_destination_address: 'Nedostaje odredišna adresa',
   upgrade_shares_info:

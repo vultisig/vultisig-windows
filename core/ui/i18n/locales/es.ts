@@ -23,7 +23,9 @@ export const es = {
     'Error al verificar el código, por favor intenta de nuevo',
   digit_input_loading_validation: 'Verificando código, por favor espera',
   mint: 'Recibir',
+  vultisig_website: 'Sitio web de Vultisig',
   redeem: 'Vender',
+  vult: '$VULT',
   merged: 'Combinado',
   function_unavailble:
     'Función no disponible para las monedas de cadena existentes. Agrega monedas que puedan usarse con FUNCTION:',
@@ -399,7 +401,9 @@ export const es = {
   faq_need_to_register_title: '¿Necesito registrarme?',
   faq_need_to_register_content: 'No, no hay requisitos de registro.',
   vault_settings_address_book_no_addresses_title:
-    'No hay direcciones guardadas',
+    'Su libreta de direcciones está vacía',
+  vault_settings_address_book_no_addresses_description:
+    'Organice todas sus direcciones importantes en un lugar.',
   or: 'o',
   enter_vault_name: 'Ingrese el nombre de la bóveda',
   vault_name_required: 'Se requiere el nombre de la bóveda',
@@ -932,6 +936,7 @@ export const es = {
     'Convierta tu bóveda en una máquina de recompensas. Cree tu referencia ahora y comience a ganar.',
   remove: 'Eliminar',
   share_vault: 'Bóveda compartida',
+  register_guide: 'Guía de registro',
   no_referral_yet: 'Aún no hay referencia',
   missing_thorchain_address: 'Falta la dirección de THORChain',
   missing_destination_address: 'Dirección de destino faltante',
