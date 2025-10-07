@@ -114,6 +114,14 @@ export type TransactionDetails = {
   skipBroadcast?: boolean
 }
 
+export type DepositTransactionDetails = {
+  asset: { chain: string; ticker: string; symbol: string }
+  from: string
+  recipient?: string
+  amount?: { amount: string; decimals: number }
+  memo?: string
+}
+
 export type IKeysignTransactionPayload = {
   transactionDetails: TransactionDetails
   chain: Chain
