@@ -10,6 +10,8 @@ import { CurrencyPage } from '@core/ui/preferences/currency'
 import { LanguagePage } from '@core/ui/preferences/language'
 import { UploadQrPage } from '@core/ui/qr/upload'
 import { VaultBackupPage } from '@core/ui/vault/backup'
+import { SelectVaultsBackupPage } from '@core/ui/vault/backup/SelectVaultsBackupPage'
+import { VaultsBackupPage } from '@core/ui/vault/backup/VaultsBackupPage'
 import { VaultChainCoinPage } from '@core/ui/vault/chain/coin/VaultChainCoinPage'
 import { ManageVaultChainsPage } from '@core/ui/vault/chain/manage'
 import { ManageVaultChainCoinsPage } from '@core/ui/vault/chain/manage/coin'
@@ -68,6 +70,8 @@ export type SharedViewId = Extract<
   | 'updateVaultFolder'
   | 'uploadQr'
   | 'vaultBackup'
+  | 'vaultsBackup'
+  | 'selectVaultsBackup'
   | 'vaultChainDetail'
   | 'vaultChainCoinDetail'
   | 'vaultDetails'
@@ -121,6 +125,8 @@ export const sharedViews: Views<SharedViewId> = {
   ),
   uploadQr: UploadQrPage,
   vaultBackup: VaultBackupPage,
+  vaultsBackup: VaultsBackupPage,
+  selectVaultsBackup: SelectVaultsBackupPage,
   vaultChainCoinDetail: VaultChainCoinPage,
   vaultChainDetail: VaultChainPage,
   vaultDetails: VaultDetailsPage,

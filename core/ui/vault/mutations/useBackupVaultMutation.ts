@@ -1,9 +1,9 @@
 import { create, toBinary } from '@bufbuild/protobuf'
+import { getSevenZip } from '@core/mpc/compression/getSevenZip'
 import { toCommVault } from '@core/mpc/types/utils/commVault'
 import { VaultContainerSchema } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
 import { VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGcm'
 import { match } from '@lib/utils/match'
@@ -11,7 +11,7 @@ import { useMutation } from '@tanstack/react-query'
 
 import { useCore } from '../../state/core'
 
-const getExportName = (vault: Vault) => {
+export const getExportName = (vault: Vault) => {
   const totalSigners = vault.signers.length
   const localPartyIndex = vault.signers.indexOf(vault.localPartyId) + 1
   return match(vault.libType, {
@@ -24,7 +24,7 @@ const getExportName = (vault: Vault) => {
   })
 }
 
-const createBackup = async (vault: Vault, password?: string) => {
+export const createBackup = async (vault: Vault, password?: string) => {
   const commVault = toCommVault(vault)
   const vaultData = toBinary(VaultSchema, commVault)
 
@@ -51,30 +51,60 @@ const createBackup = async (vault: Vault, password?: string) => {
 
 export const useBackupVaultMutation = ({
   onSuccess,
+  vaults,
 }: {
   onSuccess?: () => void
-} = {}) => {
-  const vault = useCurrentVault()
-
+  vaults: Vault[]
+}) => {
   const { mutateAsync: updateVault } = useUpdateVaultMutation()
 
   const { saveFile } = useCore()
 
   return useMutation({
     mutationFn: async ({ password }: { password?: string }) => {
-      const base64Data = await createBackup(vault, password)
+      const selectedVaults = vaults
 
-      const blob = new Blob([base64Data], { type: 'application/octet-stream' })
+      if (selectedVaults.length === 1) {
+        const single = selectedVaults[0]
+        const base64Data = await createBackup(single, password)
+        const blob = new Blob([base64Data], {
+          type: 'application/octet-stream',
+        })
 
-      await saveFile({
-        name: getExportName(vault),
-        blob,
-      })
+        await saveFile({ name: getExportName(single), blob })
 
-      await updateVault({
-        vaultId: getVaultId(vault),
-        fields: { isBackedUp: true },
-      })
+        await updateVault({
+          vaultId: getVaultId(single),
+          fields: { isBackedUp: true },
+        })
+        return
+      }
+
+      const sevenZip = await getSevenZip()
+      const fileNames: string[] = []
+      for (const v of selectedVaults) {
+        const base64 = await createBackup(v, password)
+        const bytes = Buffer.from(base64, 'base64')
+        const name = getExportName(v)
+        sevenZip.FS.writeFile(name, bytes)
+        fileNames.push(name)
+      }
+
+      const archiveName = 'vultisig-vaults-backup.zip'
+      sevenZip.callMain(['a', archiveName, ...fileNames])
+      const archiveBytes = sevenZip.FS.readFile(archiveName)
+      const arrayBuffer = new Uint8Array(archiveBytes).buffer as ArrayBuffer
+      const blob = new Blob([arrayBuffer], { type: 'application/zip' })
+      await saveFile({ name: archiveName, blob })
+
+      await Promise.all(
+        selectedVaults.map(v =>
+          updateVault({
+            vaultId: getVaultId(v),
+            fields: { isBackedUp: true },
+          })
+        )
+      )
     },
     onSuccess,
   })

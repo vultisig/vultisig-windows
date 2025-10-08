@@ -65,6 +65,8 @@ export type CoreView =
   | { id: 'uploadQr'; state: { title?: string } }
   | { id: 'vault' }
   | { id: 'vaultBackup' }
+  | { id: 'vaultsBackup' }
+  | { id: 'selectVaultsBackup' }
   | { id: 'vaultDetails' }
   | { id: 'vaultChainDetail'; state: { chain: Chain } }
   | { id: 'vaultChainCoinDetail'; state: { coin: CoinKey } }

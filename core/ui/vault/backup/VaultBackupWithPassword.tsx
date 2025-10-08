@@ -1,5 +1,6 @@
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultMutation'
+import { Vault } from '@core/ui/vault/Vault'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
@@ -39,13 +40,15 @@ type Schema = z.infer<ReturnType<typeof createSchema>>
 export const VaultBackupWithPassword = ({
   onFinish,
   onBack,
-}: OnFinishProp & OnBackProp) => {
+  vaults,
+}: OnFinishProp & OnBackProp & { vaults: Vault[] }) => {
   const { t } = useTranslation()
 
   const schema = useMemo(() => createSchema(t), [t])
 
   const { error, isPending, mutate } = useBackupVaultMutation({
     onSuccess: onFinish,
+    vaults,
   })
 
   const {
