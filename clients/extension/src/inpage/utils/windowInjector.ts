@@ -78,7 +78,7 @@ async function setupContentScriptMessenger(
     })
     Object.defineProperties(window, {
       tronLink: {
-        value: providers.tronLink,
+        value: providers.tron,
         configurable: false,
         writable: false,
       },
@@ -125,5 +125,4 @@ async function setupContentScriptMessenger(
       },
     })
   }
-  providers.tronLink.init()
 }

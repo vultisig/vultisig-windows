@@ -18,29 +18,6 @@ export class TronLink {
     this.tronWeb = new VultisigTronWeb()
   }
 
-  init() {
-    this.injectTronLink()
-  }
-
-  injectTronLink() {
-    if (typeof window !== 'undefined') {
-      const tronLinkObj = {
-        ready: false,
-        request: this.request.bind(this),
-        isVultiConnect: true,
-        isTronLink: true,
-      }
-
-      window.tronLink = tronLinkObj
-      window.tronWeb = this.tronWeb
-
-      this.ready = true
-      tronLinkObj.ready = true
-
-      window.dispatchEvent(new CustomEvent('tronLink#initialized'))
-    }
-  }
-
   request = async (data: RequestInput) => {
     const handlers = {
       tron_requestAccounts: async () => {

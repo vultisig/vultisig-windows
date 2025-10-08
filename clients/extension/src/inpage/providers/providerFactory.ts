@@ -36,6 +36,6 @@ export const createProviders = () => {
     ripple: Ripple.getInstance(),
     solana: solanaProvider,
     thorchain: THORChain.getInstance(),
-    tronLink: new TronLink(),
+    tron: new TronLink(),
   }
 }
