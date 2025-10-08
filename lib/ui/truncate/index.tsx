@@ -1,8 +1,8 @@
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
-import { useResizeObserver } from '@lib/ui/hooks/useResizeObserver'
+import { useElementSize } from '@lib/ui/hooks/useElementSize'
 import { getColor } from '@lib/ui/theme/getters'
 import { ThemeColor } from '@lib/ui/theme/ThemeColors'
-import { CSSProperties, FC, useEffect, useState } from 'react'
+import { CSSProperties, FC, useEffect, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 
 type Styles = {
@@ -91,17 +91,8 @@ export const MiddleTruncate: FC<MiddleTruncateProps> = ({
     wrapperWidth: 0,
   })
   const { counter, ellipsis, truncating, wrapperWidth } = state
-  const elmRef = useResizeObserver({
-    callback: ({ width = 0 }) => {
-      setState(prevState => ({
-        ...prevState,
-        wrapperWidth: width,
-        ellipsis: text,
-        truncating: true,
-      }))
-    },
-    track: 'width',
-  })
+  const elmRef = useRef<HTMLElement | null>(null)
+  const { width = 0 } = useElementSize(elmRef.current) ?? {}
 
   const handleClick = () => {
     if (onClick) onClick()
@@ -135,8 +126,9 @@ export const MiddleTruncate: FC<MiddleTruncateProps> = ({
       ...prevState,
       ellipsis: text,
       truncating: true,
+      wrapperWidth: width,
     }))
-  }, [text])
+  }, [text, width])
 
   return onClick ? (
     <StyledMiddleTruncate

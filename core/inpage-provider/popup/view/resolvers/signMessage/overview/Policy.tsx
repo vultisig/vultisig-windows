@@ -42,7 +42,7 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
 
   return (
     <>
-      <Animation isVisible={isFinished} />
+      {isFinished && <Animation />}
       <Sender favicon={requestFavicon} origin={requestOrigin} isValidated />
       <Request
         address={address}

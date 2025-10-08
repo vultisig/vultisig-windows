@@ -1,6 +1,5 @@
 import { Section } from '@core/inpage-provider/popup/view/resolvers/signMessage/styles'
-import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
-import { ChevronUpIcon } from '@lib/ui/icons/ChevronUpIcon'
+import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndicator'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -31,11 +30,7 @@ export const Collapse: FC<CollapseProps> = ({
         <Text as="span" size={14} weight={500}>
           {title}
         </Text>
-        {isOpen ? (
-          <ChevronUpIcon fontSize={16} strokeWidth={2} />
-        ) : (
-          <ChevronDownIcon fontSize={16} strokeWidth={2} />
-        )}
+        <CollapsableStateIndicator isOpen={isOpen} />
       </HStack>
       <AnimatePresence initial={false}>
         <motion.div

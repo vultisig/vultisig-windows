@@ -26,7 +26,7 @@ export const DefaultOverview: FC<SignMessageOverview> = ({
 
   return (
     <>
-      <Animation isVisible={isFinished} />
+      {isFinished && <Animation />}
       <Sender favicon={requestFavicon} origin={requestOrigin} />
       <Request address={address} method={method} />
       {isFinished ? (

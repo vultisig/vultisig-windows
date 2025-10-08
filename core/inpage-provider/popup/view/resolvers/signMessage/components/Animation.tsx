@@ -2,17 +2,12 @@ import { Animation as RivAnimation } from '@lib/ui/animations/Animation'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { VStack } from '@lib/ui/layout/Stack'
 import { GradientText } from '@lib/ui/text'
-import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
-type AnimationProps = {
-  isVisible?: boolean
-}
-
-export const Animation: FC<AnimationProps> = ({ isVisible }) => {
+export const Animation = () => {
   const { t } = useTranslation()
 
-  return isVisible ? (
+  return (
     <VStack style={{ height: 220, position: 'relative' }} fullWidth>
       <RivAnimation src="/core/animations/vault-created.riv" />
       <AnimatedVisibility delay={300}>
@@ -26,7 +21,5 @@ export const Animation: FC<AnimationProps> = ({ isVisible }) => {
         </GradientText>
       </AnimatedVisibility>
     </VStack>
-  ) : (
-    <></>
   )
 }
