@@ -1,8 +1,4 @@
-export type EvmFeeQuote = {
-  maxPriorityFeePerGas: bigint
-  gasLimit: bigint
-  maxFeePerGas: bigint
-}
+import { EvmFeeQuote } from '@core/chain/fee-quote/core'
 
 export type EvmFeeSettings = Omit<EvmFeeQuote, 'maxFeePerGas'> & {
   isOverride?: boolean
