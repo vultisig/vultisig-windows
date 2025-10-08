@@ -23,10 +23,9 @@ export class VultisigTronWebTrx extends Trx {
   sign = async <T extends Types.SignedTransaction | Types.Transaction | string>(
     transaction: T
   ): Promise<SignedStringOrSignedTransaction<T>> => {
+    if (!isTransaction(transaction))
+      throw new Error('Unsupported transaction type')
     const getTransactionDetails = async (): Promise<TransactionDetails> => {
-      if (!isTransaction(transaction))
-        throw new Error('Unsupported transaction type')
-
       const [contract] = transaction.raw_data.contract
 
       switch (contract.type) {
@@ -128,7 +127,10 @@ export class VultisigTronWebTrx extends Trx {
       }
     )
 
-    return hash as SignedStringOrSignedTransaction<T>
+    return {
+      ...(transaction as Types.Transaction),
+      signature: [hash],
+    } as SignedStringOrSignedTransaction<T>
   }
 }
 
