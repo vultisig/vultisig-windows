@@ -1125,4 +1125,23 @@ export const es = {
   check_email: 'Revisar el correo electrónico',
   backup_share_sent_description:
     'Acabamos de enviarte tu copia de seguridad a tu correo electrónico. Si no la encuentras, revisa tu carpeta de correo no deseado.',
+  faq_is_open_source_title: '¿Vultisig es de código abierto y auditado?',
+  faq_is_open_source_content:
+    'Sí, Vultisig es de código abierto y ha sido sometido a auditorías de seguridad. Tanto los informes de auditoría como el código fuente son accesibles.',
+  faq_data_protection_title:
+    '¿Cómo gestiona Vultisig la privacidad y la protección de datos?',
+  faq_data_protection_content:
+    'Vultisig no almacena ninguna información del usuario de sus aplicaciones móviles.',
+  faq_comparison_title:
+    '¿Cómo se compara Vultisig con otras billeteras multifirma?',
+  faq_comparison_content:
+    'Está construido sobre tecnología MPC, que elimina la necesidad de frases semilla y admite múltiples cadenas de bloques, lo que hace que Vultisig sea flexible y agnóstico en cuanto a cadena.',
+  label: 'Etiqueta',
+  select_vaults_to_backup:
+    'Seleccionar bóvedas para realizar copias de seguridad',
+  select_vaults_to_backup_description:
+    'Elija si desea realizar una copia de seguridad solo de esta bóveda o de todas las bóvedas de su aplicación.',
+  this_vault_only: 'Sólo esta bóveda',
+  all_vaults: 'Todas las bóvedas',
+  more: 'más',
 }

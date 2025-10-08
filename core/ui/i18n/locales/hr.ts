@@ -1095,4 +1095,22 @@ export const hr = {
   check_email: 'Provjerite e-poštu',
   backup_share_sent_description:
     'Upravo smo vam poslali sigurnosnu kopiju na vašu e-poštu. Ako je ne vidite, provjerite mapu neželjene pošte.',
+  faq_is_open_source_title: 'Je li Vultisig otvorenog koda i revidiran?',
+  faq_is_open_source_content:
+    'Da, Vultisig je otvorenog koda i prošao je sigurnosne revizije. I izvješća revizije i izvorni kod su dostupni.',
+  faq_data_protection_title:
+    'Kako Vultisig rješava probleme s privatnošću i zaštitom podataka?',
+  faq_data_protection_content:
+    'Vultisig ne pohranjuje nikakve korisničke podatke iz svojih mobilnih aplikacija.',
+  faq_comparison_title:
+    'Kako se Vultisig uspoređuje s drugim multisign novčanicima?',
+  faq_comparison_content:
+    'Izgrađen je na MPC tehnologiji, koja eliminira potrebu za početnim frazama i podržava više blockchaina, čineći Vultisig fleksibilnim i neovisnim o lancu.',
+  label: 'Označiti',
+  select_vaults_to_backup: 'Odaberite trezore za sigurnosno kopiranje',
+  select_vaults_to_backup_description:
+    'Odaberite želite li sigurnosno kopirati samo ovaj trezor ili sve trezore u aplikaciji.',
+  this_vault_only: 'Samo ovaj trezor',
+  all_vaults: 'Svi trezori',
+  more: 'više',
 }
