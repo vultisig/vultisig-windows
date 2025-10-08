@@ -40,6 +40,7 @@ import { DepositCoinProvider } from '../vault/deposit/providers/DepositCoinProvi
 import { ReferralsGuard } from '../vault/settings/referral/providers/ReferralsGuard'
 import { ReferralPage } from '../vault/settings/referral/ReferralsPage'
 import { FaqVaultPage } from '../vault/settings/vaultFaq/FaqVaultPage'
+import { ShareVaultPage } from '../vault/share/ShareVaultPage'
 
 export type SharedViewId = Extract<
   CoreViewId,
@@ -79,6 +80,7 @@ export type SharedViewId = Extract<
   | 'referral'
   | 'requestFastVaultBackup'
   | 'faq'
+  | 'shareVault'
 >
 
 export const sharedViews: Views<SharedViewId> = {
@@ -135,4 +137,5 @@ export const sharedViews: Views<SharedViewId> = {
   passcodeAutoLock: PasscodeAutoLockPage,
   requestFastVaultBackup: RequestFastVaultBackup,
   faq: FaqVaultPage,
+  shareVault: ShareVaultPage,
 }

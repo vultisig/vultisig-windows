@@ -7,10 +7,10 @@ import { ComponentProps, useRef } from 'react'
 import styled from 'styled-components'
 
 const Container = styled.div`
-  z-index: 1;
   position: fixed;
   left: 0;
   top: 0;
+  z-index: 1;
   ${takeWholeSpace};
   ${centerContent};
   background: ${getColor('overlay')};
