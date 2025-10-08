@@ -1,4 +1,5 @@
 import { create, toBinary } from '@bufbuild/protobuf'
+import { productName } from '@core/config'
 import { getSevenZip } from '@core/mpc/compression/getSevenZip'
 import { toCommVault } from '@core/mpc/types/utils/commVault'
 import { VaultContainerSchema } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
@@ -108,7 +109,11 @@ export const useBackupVaultMutation = ({
 
         const sevenZip = await getSevenZip()
         const fileNames: string[] = []
-        const archiveName = 'vultisig-vaults-backup.zip'
+        const archiveName = [
+          productName.toLowerCase(),
+          'backups',
+          Math.floor(Date.now() / 1000),
+        ].join('_')
 
         try {
           vaultIds.forEach(vaultId => {
