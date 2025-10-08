@@ -10,6 +10,7 @@ import { useLanguage } from '@core/ui/storage/language'
 import { useHasPasscodeEncryption } from '@core/ui/storage/passcodeEncryption'
 import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
 import { Opener } from '@lib/ui/base/Opener'
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { BookMarkedIcon } from '@lib/ui/icons/BookMarkedIcon'
 import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
 import { DiscordIcon } from '@lib/ui/icons/DiscordIcon'
@@ -21,6 +22,7 @@ import { LanguagesIcon } from '@lib/ui/icons/LanguagesIcon'
 import { LockKeyholeIcon } from '@lib/ui/icons/LockKeyholeIcon'
 import { MegaphoneIcon } from '@lib/ui/icons/MegaphoneIcon'
 import { MessageCircleQuestionIcon } from '@lib/ui/icons/MessageCircleQuestionIcon'
+import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { ShareTwoIcon } from '@lib/ui/icons/ShareTwoIcon'
 import { ShieldCheckIcon } from '@lib/ui/icons/ShieldCheckIcon'
@@ -79,6 +81,11 @@ export const SettingsPage: FC<Props> = props => {
                 })
               }
             />
+          }
+          secondaryControls={
+            <IconButton onClick={() => navigate({ id: 'shareVault' })}>
+              <QrCodeIcon />
+            </IconButton>
           }
           title={t('settings')}
           hasBorder
