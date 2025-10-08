@@ -83,9 +83,8 @@ export const useBackupVaultMutation = ({
         try {
           vaults.forEach(vault => {
             const base64 = createBackup(vault, password)
-            const bytes = Buffer.from(base64, 'base64')
             const name = getExportName(vault)
-            sevenZip.FS.writeFile(name, bytes)
+            sevenZip.FS.writeFile(name, base64)
             fileNames.push(name)
           })
 
