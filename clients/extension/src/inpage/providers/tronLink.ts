@@ -18,7 +18,6 @@ export class TronLink {
     this.ready = false
   }
   init = () => {
-    this.ready = true
     window.tronWeb = this.tronWeb
   }
   request = async (data: RequestInput) => {
