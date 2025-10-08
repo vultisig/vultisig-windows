@@ -25,7 +25,9 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
   const contractPayload = keysignPayload.contractPayload
 
   if (contractPayload && contractPayload.value && contractPayload.case) {
-    const contract: { transfer: TW.Tron.Proto.TransferContract } =
+    const contract:
+      | { transfer: TW.Tron.Proto.TransferContract }
+      | { triggerSmartContract: TW.Tron.Proto.TriggerSmartContract } =
       matchDiscriminatedUnion(contractPayload, 'case', 'value', {
         tronTransferContractPayload: value => {
           return {
@@ -36,7 +38,24 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
             }),
           }
         },
-
+        tronTriggerSmartContractPayload: value => {
+          return {
+            triggerSmartContract: TW.Tron.Proto.TriggerSmartContract.create({
+              ownerAddress: value.ownerAddress,
+              contractAddress: value.contractAddress,
+              callValue: value.callValue
+                ? Long.fromString(value.callValue?.toString())
+                : undefined,
+              data: value.data ? toTronData(value.data) : undefined,
+              callTokenValue: value.callTokenValue
+                ? Long.fromString(value.callTokenValue?.toString())
+                : undefined,
+              tokenId: value.tokenId
+                ? Long.fromString(value.tokenId?.toString())
+                : undefined,
+            }),
+          }
+        },
         wasmExecuteContractPayload: () => {
           throw new Error(
             'WASM execute contract payload not supported for Tron'
