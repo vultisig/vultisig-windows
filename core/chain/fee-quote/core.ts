@@ -1,4 +1,5 @@
-import { ChainKind } from '../ChainKind'
+import { Chain } from '../Chain'
+import { ChainKind, DeriveChainKind } from '../ChainKind'
 
 export type EvmFeeQuote = {
   maxPriorityFeePerGas: bigint
@@ -18,24 +19,22 @@ type GasFeeQuote = {
   gas: bigint
 }
 
-export type FeeQuote<T extends ChainKind> = T extends 'evm'
-  ? EvmFeeQuote
-  : T extends 'utxo'
-    ? UtxoFeeQuote
-    : T extends 'cosmos'
-      ? GasFeeQuote
-      : T extends 'solana'
-        ? SolanaFeeQuote
-        : T extends 'ripple'
-          ? GasFeeQuote
-          : T extends 'cardano'
-            ? UtxoFeeQuote
-            : T extends 'polkadot'
-              ? GasFeeQuote
-              : T extends 'ton'
-                ? GasFeeQuote
-                : T extends 'tron'
-                  ? GasFeeQuote
-                  : T extends 'sui'
-                    ? GasFeeQuote
-                    : never
+type EnsureAllKindsCovered<T extends Record<ChainKind, unknown>> = T
+
+type FeeQuoteByKind = EnsureAllKindsCovered<{
+  evm: EvmFeeQuote
+  utxo: UtxoFeeQuote
+  cosmos: GasFeeQuote
+  solana: SolanaFeeQuote
+  ripple: GasFeeQuote
+  cardano: UtxoFeeQuote
+  polkadot: GasFeeQuote
+  ton: GasFeeQuote
+  tron: GasFeeQuote
+  sui: GasFeeQuote
+}>
+
+export type FeeQuote<T extends ChainKind = ChainKind> = FeeQuoteByKind[T]
+
+export type FeeQuoteForChain<C extends Chain = Chain> =
+  FeeQuoteByKind[DeriveChainKind<C>]
