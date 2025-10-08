@@ -74,31 +74,24 @@ export const useBackupVaultMutation = ({
           name: getExportName(vault),
           blob,
         })
+      } else {
+        const sevenZip = await getSevenZip()
+        const fileNames: string[] = []
+        for (const v of vaults) {
+          const base64 = await createBackup(v, password)
+          const bytes = Buffer.from(base64, 'base64')
+          const name = getExportName(v)
+          sevenZip.FS.writeFile(name, bytes)
+          fileNames.push(name)
+        }
 
-        await updateVault({
-          vaultId: getVaultId(vault),
-          fields: { isBackedUp: true },
-        })
-
-        return
+        const archiveName = 'vultisig-vaults-backup.zip'
+        sevenZip.callMain(['a', archiveName, ...fileNames])
+        const archiveBytes = sevenZip.FS.readFile(archiveName)
+        const arrayBuffer = new Uint8Array(archiveBytes).buffer as ArrayBuffer
+        const blob = new Blob([arrayBuffer], { type: 'application/zip' })
+        await saveFile({ name: archiveName, blob })
       }
-
-      const sevenZip = await getSevenZip()
-      const fileNames: string[] = []
-      for (const v of vaults) {
-        const base64 = await createBackup(v, password)
-        const bytes = Buffer.from(base64, 'base64')
-        const name = getExportName(v)
-        sevenZip.FS.writeFile(name, bytes)
-        fileNames.push(name)
-      }
-
-      const archiveName = 'vultisig-vaults-backup.zip'
-      sevenZip.callMain(['a', archiveName, ...fileNames])
-      const archiveBytes = sevenZip.FS.readFile(archiveName)
-      const arrayBuffer = new Uint8Array(archiveBytes).buffer as ArrayBuffer
-      const blob = new Blob([arrayBuffer], { type: 'application/zip' })
-      await saveFile({ name: archiveName, blob })
 
       await Promise.all(
         vaults.map(v =>
