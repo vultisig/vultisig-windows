@@ -22,6 +22,7 @@ export type CoreView =
   | { id: 'deposit'; state: { coin: CoinKey } }
   | { id: 'referral' }
   | { id: 'importVault' }
+  | { id: 'shareVault' }
   | {
       id: 'joinKeygen'
       state: {

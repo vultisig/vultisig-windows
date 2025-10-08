@@ -19,7 +19,6 @@ import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardi
 import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProvider'
 import { SettingsPage } from '@core/ui/settings'
 import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPage'
-import { ShareVaultPage } from '@core/ui/vault/share/ShareVaultPage'
 import { Views } from '@lib/ui/navigation/Views'
 
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
@@ -39,7 +38,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   reshareVaultSecure: SecureReshareVaultPage,
   settings: () => (
     <SettingsPage
-      client="desktop"
       checkUpdate={<CheckUpdate />}
       insiderOptions={<ManageMpcLib />}
     />
@@ -51,7 +49,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
       <SetupVaultPageController />
     </ResponsivenessProvider>
   ),
-  shareVault: ShareVaultPage,
   vault: VaultPage,
 }
 

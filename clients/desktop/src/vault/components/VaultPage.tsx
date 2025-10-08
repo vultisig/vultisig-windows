@@ -8,7 +8,6 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { MenuIcon } from '@lib/ui/icons/MenuIcon'
-import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { PageHeaderToggleTitle } from '@lib/ui/page/PageHeaderToggleTitle'
@@ -32,14 +31,7 @@ export const VaultPage = () => {
               <MenuIcon />
             </IconButton>
           }
-          secondaryControls={
-            <>
-              <IconButton onClick={() => navigate({ id: 'shareVault' })}>
-                <QrCodeIcon />
-              </IconButton>
-              <RefreshVaultBalance />
-            </>
-          }
+          secondaryControls={<RefreshVaultBalance />}
           title={
             <PageHeaderToggleTitle
               value={name}

@@ -7,6 +7,8 @@ export const en = {
   install_app: 'Install app',
   app_permissions: 'App Permissions',
   dapp_name: 'dApp Name',
+  vault_share_banner:
+    'This QR Code lets you share a view-only version of your Vault',
   description: 'Description',
   onboarding_greeting: 'Say goodbye to <g>seed phrases</g>',
   onboarding_step_1:

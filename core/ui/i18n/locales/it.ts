@@ -9,6 +9,8 @@ export const it = {
   positions: 'Posizioni',
   onboarding_step_4:
     'Recupera la tua cassaforte anche <g>se un dispositivo è perso o danneggiato</g>',
+  vault_share_banner:
+    'Questo QR Code consente di condividere una versione di vista del caveau',
   add_friends_referral: 'Aggiungi una referenza dei amici',
   onboarding_step_5:
     '<g>Esegui sempre il backup di ogni quota del caveau</g> separatamente in una <g>posizione diversa</g>',
