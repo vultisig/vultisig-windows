@@ -62,27 +62,30 @@ export const useBackupVaultMutation = ({
 
   return useMutation({
     mutationFn: async ({ password }: { password?: string }) => {
-      const selectedVaults = vaults
+      if (vaults.length === 1) {
+        const [vault] = vaults
+        const base64Data = await createBackup(vault, password)
 
-      if (selectedVaults.length === 1) {
-        const single = selectedVaults[0]
-        const base64Data = await createBackup(single, password)
         const blob = new Blob([base64Data], {
           type: 'application/octet-stream',
         })
 
-        await saveFile({ name: getExportName(single), blob })
+        await saveFile({
+          name: getExportName(vault),
+          blob,
+        })
 
         await updateVault({
-          vaultId: getVaultId(single),
+          vaultId: getVaultId(vault),
           fields: { isBackedUp: true },
         })
+
         return
       }
 
       const sevenZip = await getSevenZip()
       const fileNames: string[] = []
-      for (const v of selectedVaults) {
+      for (const v of vaults) {
         const base64 = await createBackup(v, password)
         const bytes = Buffer.from(base64, 'base64')
         const name = getExportName(v)
@@ -98,7 +101,7 @@ export const useBackupVaultMutation = ({
       await saveFile({ name: archiveName, blob })
 
       await Promise.all(
-        selectedVaults.map(v =>
+        vaults.map(v =>
           updateVault({
             vaultId: getVaultId(v),
             fields: { isBackedUp: true },
