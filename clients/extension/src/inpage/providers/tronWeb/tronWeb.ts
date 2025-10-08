@@ -42,7 +42,11 @@ export class VultisigTronWebTrx extends Trx {
             },
             msgPayload: {
               case: TronMsgType.TRON_TRANSFER_CONTRACT,
-              value: transferContract,
+              value: {
+                ...transferContract,
+                owner_address: fromHex(transferContract.owner_address),
+                to_address: fromHex(transferContract.to_address),
+              },
             },
             data: transaction.raw_data.data as string,
           }
@@ -70,7 +74,13 @@ export class VultisigTronWebTrx extends Trx {
             data: transaction.raw_data.data as string,
             msgPayload: {
               case: TronMsgType.TRON_TRIGGER_SMART_CONTRACT,
-              value: triggerSmartContract,
+              value: {
+                ...triggerSmartContract,
+                owner_address: fromHex(triggerSmartContract.owner_address),
+                contract_address: fromHex(
+                  triggerSmartContract.contract_address
+                ),
+              },
             },
           }
         }
@@ -101,7 +111,11 @@ export class VultisigTronWebTrx extends Trx {
             },
             msgPayload: {
               case: TronMsgType.TRON_TRANSFER_ASSET_CONTRACT,
-              value: transferAssetContract,
+              value: {
+                ...transferAssetContract,
+                owner_address: fromHex(transferAssetContract.owner_address),
+                to_address: fromHex(transferAssetContract.to_address),
+              },
             },
             data: transaction.raw_data.data as string,
           }
@@ -130,7 +144,8 @@ export class VultisigTronWebTrx extends Trx {
     return {
       ...(transaction as Types.Transaction),
       signature: [hash],
-    } as SignedStringOrSignedTransaction<T>
+      txId: hash,
+    } as unknown as SignedStringOrSignedTransaction<T>
   }
 }
 
