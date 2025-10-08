@@ -1,6 +1,5 @@
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultMutation'
-import { Vault } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
@@ -49,12 +48,12 @@ const infoItems = [
 export const VaultBackupWithoutPassword = ({
   onFinish,
   onPasswordRequest,
-  vaults,
-}: VaultBackupWithoutPasswordProps & { vaults: Vault[] }) => {
+  vaultIds,
+}: VaultBackupWithoutPasswordProps & { vaultIds: string[] }) => {
   const { t } = useTranslation()
   const { mutate: backupVault, isPending } = useBackupVaultMutation({
     onSuccess: onFinish,
-    vaults,
+    vaultIds,
   })
 
   return (

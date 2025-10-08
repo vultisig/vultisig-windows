@@ -13,6 +13,8 @@ import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { useRive } from '@rive-app/react-canvas'
 import { useTranslation } from 'react-i18next'
 
+import { getVaultId } from '../../Vault'
+
 const steps = [
   'backupSlideshowPartOne',
   'emailVerification',
@@ -66,7 +68,7 @@ export const BackupFastVault = ({
       )}
       backupPage={() => (
         <VaultBackupFlow
-          vaults={[vault]}
+          vaultIds={[getVaultId(vault)]}
           onFinish={() => {
             if (shouldShowBackupSummary) {
               toNextStep()

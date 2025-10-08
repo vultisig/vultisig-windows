@@ -5,12 +5,16 @@ import { VaultContainerSchema } from '@core/mpc/types/vultisig/vault/v1/vault_co
 import { VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { getVaultId, Vault } from '@core/ui/vault/Vault'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { attempt } from '@lib/utils/attempt'
 import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGcm'
 import { match } from '@lib/utils/match'
 import { useMutation } from '@tanstack/react-query'
 
+import { decryptVaultKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
+import { usePasscode } from '../../passcodeEncryption/state/passcode'
 import { useCore } from '../../state/core'
+import { useVaults } from '../../storage/vaults'
 
 const getExportName = (vault: Vault) => {
   const totalSigners = vault.signers.length
@@ -52,20 +56,44 @@ const createBackup = (vault: Vault, password?: string) => {
 
 export const useBackupVaultMutation = ({
   onSuccess,
-  vaults,
+  vaultIds,
 }: {
   onSuccess?: () => void
-  vaults: Vault[]
+  vaultIds: string[]
 }) => {
   const { mutateAsync: updateVault } = useUpdateVaultMutation()
 
   const { saveFile } = useCore()
 
+  const vaults = useVaults()
+
+  const [passcode] = usePasscode()
+
   return useMutation({
     mutationFn: async ({ password }: { password?: string }) => {
+      const getVault = (id: string) => {
+        const vault = shouldBePresent(
+          vaults.find(vault => getVaultId(vault) === id),
+          `Vault with id ${id}`
+        )
+
+        if (!passcode) {
+          return vault
+        }
+
+        return {
+          ...vault,
+          keyShares: decryptVaultKeyShares({
+            keyShares: vault.keyShares,
+            key: passcode,
+          }),
+        }
+      }
+
       const getFile = async () => {
-        if (vaults.length === 1) {
-          const [vault] = vaults
+        if (vaultIds.length === 1) {
+          const [vaultId] = vaultIds
+          const vault = getVault(vaultId)
           const base64Data = createBackup(vault, password)
 
           const blob = new Blob([base64Data], {
@@ -83,7 +111,8 @@ export const useBackupVaultMutation = ({
         const archiveName = 'vultisig-vaults-backup.zip'
 
         try {
-          vaults.forEach(vault => {
+          vaultIds.forEach(vaultId => {
+            const vault = getVault(vaultId)
             const base64 = createBackup(vault, password)
             const name = getExportName(vault)
             sevenZip.FS.writeFile(name, base64)
