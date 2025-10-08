@@ -65,7 +65,7 @@ export const useBackupVaultMutation = ({
     mutationFn: async ({ password }: { password?: string }) => {
       if (vaults.length === 1) {
         const [vault] = vaults
-        const base64Data = await createBackup(vault, password)
+        const base64Data = createBackup(vault, password)
 
         const blob = new Blob([base64Data], {
           type: 'application/octet-stream',
