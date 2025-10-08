@@ -10,6 +10,7 @@ export type ThemeColors = {
   primaryAlt: HSLA
   success: HSLA
   danger: HSLA
+  dangerBackground: HSLA
   idle: HSLA
   idleDark: HSLA
   info: HSLA

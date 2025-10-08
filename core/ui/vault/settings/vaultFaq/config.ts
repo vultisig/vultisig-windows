@@ -37,4 +37,19 @@ export const getFaqData = (t: TFunction): FaqItem[] => [
     title: t('faq_need_to_register_title'),
     content: t('faq_need_to_register_content'),
   },
+  {
+    id: 7,
+    title: t('faq_is_open_source_title'),
+    content: t('faq_is_open_source_content'),
+  },
+  {
+    id: 8,
+    title: t('faq_data_protection_title'),
+    content: t('faq_data_protection_content'),
+  },
+  {
+    id: 9,
+    title: t('faq_comparison_title'),
+    content: t('faq_comparison_content'),
+  },
 ]

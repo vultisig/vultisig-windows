@@ -6,12 +6,10 @@ export type AppView =
   | { id: 'checkUpdate' }
   | { id: 'createVaultFolder' }
   | { id: 'deeplink'; state: { url: string } }
-  | { id: 'faq' }
   | { id: 'importVaultFromFile'; state: { filePath: string } }
   | { id: 'migrateVault' }
   | { id: 'onboarding' }
   | { id: 'shareVault' }
-  | { id: 'vaultFAQ' }
   | { id: 'vaultFolder'; state: { id: string } }
 
 export type AppViewId = AppView['id']

@@ -11,6 +11,8 @@ import {
 } from 'react'
 import styled, { css } from 'styled-components'
 
+import { UiProps } from '../../props'
+
 type Styles = {
   color: ThemeColor
   fontSize: NonNullable<CSSProperties['fontSize']>
@@ -83,6 +85,7 @@ const StyledListItem = styled.div<{
         `
     }
   }}
+
   ${({ hoverable }) => {
     return (
       hoverable &&
@@ -107,7 +110,8 @@ type ListItemProps = {
   status?: Status
   styles?: { description?: Partial<Styles>; title?: Partial<Styles> }
   title: ReactNode
-} & Pick<HTMLAttributes<HTMLDivElement>, 'onClick' | 'style'>
+} & Pick<HTMLAttributes<HTMLDivElement>, 'onClick' | 'style'> &
+  Partial<UiProps>
 
 export const ListItem: FC<ListItemProps> = ({
   description,
@@ -117,6 +121,7 @@ export const ListItem: FC<ListItemProps> = ({
   status = 'default',
   title,
   styles,
+  hoverable = true,
   ...rest
 }) => {
   const titleRender = isValidElement(title) ? (
@@ -131,7 +136,7 @@ export const ListItem: FC<ListItemProps> = ({
   )
 
   return (
-    <StyledListItem status={status} {...rest}>
+    <StyledListItem hoverable={hoverable} status={status} {...rest}>
       <StyledContent>
         {icon}
         {description ? (

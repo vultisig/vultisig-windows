@@ -19,10 +19,12 @@ export const hr = {
   by_vultisig: 'od Vultisig',
   onboarding_description_1:
     'Vultisig je sigurni, višeslojni kripto trezor, kompatibilan sa svim glavnim blockchainima i preko 10.000 tokena. Vultisig je potpuno samostalni.',
+  vultisig_website: 'Vultisig web-lokacija',
   onboarding_description_2:
     'Vultisig ne prati vaše aktivnosti niti zahtijeva bilo kakvu registraciju. Vultisig je otvorenog koda, što osigurava transparentnost i povjerenje.',
   onboarding_description_3:
     'Vultisig je po prirodi višeslojna aplikacija. Zahtijeva najmanje dva uređaja za stvaranje sigurnog trezora: inicijalni uređaj i uređaj za uparivanje.',
+  vult: '$VULT',
   onboarding_description_4:
     'Vultisig je novčanik bez seed fraza. Umjesto toga koristi lako upravljive dijelove trezora. Svaki uređaj ima svoj jedinstveni dio koji treba zasebno sigurnosno kopirati.',
   search_field_placeholder: 'Pretraži..',
@@ -379,6 +381,8 @@ export const hr = {
   faq_need_to_register_title: 'Moram li se registrirati?',
   faq_need_to_register_content: 'Ne, nema zahtjeva za registraciju.',
   vault_settings_address_book_no_addresses_title: 'Nema spremljenih adresa',
+  vault_settings_address_book_no_addresses_description:
+    'Organizirajte sve vaše važne adrese u jednom mjestu.',
   or: 'ili',
   enter_vault_name: 'Unesite naziv trezora',
   vault_name_required: 'Naziv trezora je obavezan',
@@ -555,8 +559,6 @@ export const hr = {
     connectionSuccess: 'Sikeres csatlakozás!',
     takeMinute: 'Ovo traje samo jednu sekundu',
     vaultInitializationStarting: 'Tároló inicializálásának indítása...',
-    emailRequired: 'E-mail szükséges',
-    emailIncorrect: 'Hibás e-mail, kérjük, ellenőrizze',
     enterEmail: 'Adja meg az e-mail címét',
     emailSetupTitle:
       'Ez az e-mail csak a szerver biztonsági mentésének küldésére szolgál',
@@ -911,6 +913,7 @@ export const hr = {
   remove: 'Ukloniti',
   share_vault: 'Dijeli trezor',
   no_referral_yet: 'Nema preporuke',
+  register_guide: 'Registracijski vodič',
   missing_thorchain_address: 'Nedostaje THORChain adresa',
   missing_destination_address: 'Nedostaje odredišna adresa',
   upgrade_shares_info:
@@ -1077,4 +1080,19 @@ export const hr = {
     'Ako odaberete dodati lozinku, ona će se koristiti za <b>šifriranje</b> sigurnosne kopije datoteke.',
   backup_password_info_cannot_be_reset:
     'Zapamtite: ako zaboravite lozinku za trezor, ona se *ne može* resetirati ili oporaviti.',
+  email_required: 'E-pošta je obavezna',
+  device_backup: 'Sigurnosna kopija uređaja',
+  device_backup_description: 'Pohrani dijeljeni trezor ovog uređaja.',
+  server_backup: 'Sigurnosna kopija poslužitelja',
+  server_backup_description:
+    'Ponovno zatražite dijeljenje trezora poslužitelja.',
+  choose_backup_method: 'Odaberite metodu sigurnosne kopije',
+  vault_server_share_too_many_requests:
+    'Prečesto ste tražili sigurnosnu kopiju u kratkom vremenu. Pričekajte prije ponovnog pokušaja.',
+  vault_server_share_bad_request:
+    'Nešto je pošlo po zlu. Molimo vas da ponovno provjerite lozinku i pokušate ponovno.',
+  backup_share_sent: 'Dijeljenje sigurnosne kopije poslano!',
+  check_email: 'Provjerite e-poštu',
+  backup_share_sent_description:
+    'Upravo smo vam poslali sigurnosnu kopiju na vašu e-poštu. Ako je ne vidite, provjerite mapu neželjene pošte.',
 }
