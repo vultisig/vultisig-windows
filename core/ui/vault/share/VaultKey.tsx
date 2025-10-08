@@ -9,8 +9,15 @@ const StyledText = styled(Text)`
 
 export const VaultKey = ({ value, title }: ValueProp<string> & TitleProp) => (
   <HStack alignItems="center" gap={4}>
-    <StyledText size={16}>{title}:</StyledText>
-    <Text size={16} style={{ overflowWrap: 'anywhere' }} centerHorizontally>
+    <StyledText color="shyExtra" size={13}>
+      {title}:
+    </StyledText>
+    <Text
+      size={13}
+      color="shyExtra"
+      style={{ overflowWrap: 'anywhere' }}
+      centerHorizontally
+    >
       {value}
     </Text>
   </HStack>
