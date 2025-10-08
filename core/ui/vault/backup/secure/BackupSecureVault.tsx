@@ -10,6 +10,8 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { OnFinishProp } from '@lib/ui/props'
 import { useRive } from '@rive-app/react-canvas'
 
+import { useCurrentVault } from '../../state/currentVault'
+
 const steps = [
   'backupSlideshowPartOne',
   'backupConfirmation',
@@ -26,6 +28,8 @@ export const BackupSecureVault = ({ onFinish }: OnFinishProp) => {
   const vaults = useVaults()
   const shouldShowBackupSummary = vaults.length > 1
   const isInitiatingDevice = useIsInitiatingDevice()
+
+  const vault = useCurrentVault()
 
   return (
     <Match
@@ -45,6 +49,7 @@ export const BackupSecureVault = ({ onFinish }: OnFinishProp) => {
       )}
       backupPage={() => (
         <VaultBackupFlow
+          vaults={[vault]}
           onFinish={() => {
             if (shouldShowBackupSummary) {
               toNextStep()

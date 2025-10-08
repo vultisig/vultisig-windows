@@ -66,6 +66,7 @@ export const BackupFastVault = ({
       )}
       backupPage={() => (
         <VaultBackupFlow
+          vaults={[vault]}
           onFinish={() => {
             if (shouldShowBackupSummary) {
               toNextStep()

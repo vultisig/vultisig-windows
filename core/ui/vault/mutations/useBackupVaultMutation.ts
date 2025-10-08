@@ -11,7 +11,7 @@ import { useMutation } from '@tanstack/react-query'
 
 import { useCore } from '../../state/core'
 
-export const getExportName = (vault: Vault) => {
+const getExportName = (vault: Vault) => {
   const totalSigners = vault.signers.length
   const localPartyIndex = vault.signers.indexOf(vault.localPartyId) + 1
   return match(vault.libType, {
@@ -24,7 +24,7 @@ export const getExportName = (vault: Vault) => {
   })
 }
 
-export const createBackup = async (vault: Vault, password?: string) => {
+const createBackup = async (vault: Vault, password?: string) => {
   const commVault = toCommVault(vault)
   const vaultData = toBinary(VaultSchema, commVault)
 
