@@ -6,7 +6,6 @@ import { hStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useToast } from '@lib/ui/toast/ToastProvider'
-import { attempt } from '@lib/utils/attempt'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -21,13 +20,10 @@ export const ShareAppPrompt = () => {
     client === 'desktop' ? desktopDownloadUrl : extensionDownloadUrl
 
   const handleCopy = () => {
-    const result = await attempt(() => navigator.clipboard.writeText(shareURL))
-
-    if ('data' in result) {
-      addToast({ message: t('link_copied') })
-    } else {
-      addToast({ message: t('failed_to_copy_link') })
-    }
+    navigator.clipboard
+      .writeText(shareURL)
+      .then(() => addToast({ message: t('link_copied') }))
+      .catch(() => addToast({ message: t('failed_to_copy_link') }))
   }
 
   return (
