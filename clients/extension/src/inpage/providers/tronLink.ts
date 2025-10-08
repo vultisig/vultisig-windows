@@ -17,7 +17,10 @@ export class TronLink {
     this.tronWeb = new VultisigTronWeb()
     this.ready = false
   }
-
+  init = () => {
+    this.ready = true
+    window.tronWeb = this.tronWeb
+  }
   request = async (data: RequestInput) => {
     const handlers = {
       tron_requestAccounts: async () => {

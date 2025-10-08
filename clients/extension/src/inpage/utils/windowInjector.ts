@@ -18,7 +18,7 @@ export const injectToWindow = () => {
     getVault: async () => callBackground({ exportVault: {} }),
     getVaults: async () => callPopup({ exportVaults: {} }),
   }
-
+  providers.tron.init()
   Object.defineProperty(window, 'vultisig', {
     value: vultisigProvider,
     configurable: false,
