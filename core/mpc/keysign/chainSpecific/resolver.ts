@@ -1,5 +1,5 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { EvmFeeQuote } from '@core/chain/tx/fee/evm/EvmFeeSettings'
+import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import {
   CosmosSpecific,
   EthereumSpecific,
@@ -27,7 +27,10 @@ export type ChainSpecificResolverInput<R = KeysignChainSpecificValue> = {
   amount?: bigint
   transactionType?: TransactionType
 } & (R extends EthereumSpecific
-  ? { data?: string; feeQuote?: Partial<EvmFeeQuote> }
+  ? {
+      data?: string
+      feeQuote?: Partial<EvmFeeSettings>
+    }
   : R extends UTXOSpecific
     ? { byteFeeMultiplier?: number; psbt?: Psbt }
     : R extends CosmosSpecific

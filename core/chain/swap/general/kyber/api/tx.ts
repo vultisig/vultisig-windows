@@ -5,7 +5,7 @@ import { convertDuration } from '@lib/utils/time/convertDuration'
 
 import { AccountCoin } from '../../../../coin/AccountCoin'
 import { isFeeCoin } from '../../../../coin/utils/isFeeCoin'
-import { EvmFeeQuote } from '../../../../tx/fee/evm/EvmFeeSettings'
+import { EvmFeeSettings } from '../../../../tx/fee/evm/EvmFeeSettings'
 import { GeneralSwapQuote } from '../../GeneralSwapQuote'
 import { KyberSwapEnabledChain } from '../chains'
 import {
@@ -94,10 +94,7 @@ export const getKyberSwapTx = async ({
 
   const { amountOut, data, gas } = buildResponse.data
 
-  const feeQuote: Partial<EvmFeeQuote> = {}
-  if (routeSummary?.gasPrice) {
-    feeQuote.maxFeePerGas = BigInt(routeSummary?.gasPrice)
-  }
+  const feeQuote: Partial<EvmFeeSettings> = {}
   if (gas) {
     feeQuote.gasLimit = BigInt(gas)
   }
