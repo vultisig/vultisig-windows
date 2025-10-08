@@ -27,7 +27,8 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
   if (contractPayload && contractPayload.value && contractPayload.case) {
     const contract:
       | { transfer: TW.Tron.Proto.TransferContract }
-      | { triggerSmartContract: TW.Tron.Proto.TriggerSmartContract } =
+      | { triggerSmartContract: TW.Tron.Proto.TriggerSmartContract }
+      | { transferAsset: TW.Tron.Proto.TransferAssetContract } =
       matchDiscriminatedUnion(contractPayload, 'case', 'value', {
         tronTransferContractPayload: value => {
           return {
@@ -53,6 +54,16 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
               tokenId: value.tokenId
                 ? Long.fromString(value.tokenId?.toString())
                 : undefined,
+            }),
+          }
+        },
+        tronTransferAssetContractPayload: value => {
+          return {
+            transferAsset: TW.Tron.Proto.TransferAssetContract.create({
+              ownerAddress: value.ownerAddress,
+              toAddress: value.toAddress,
+              amount: Long.fromString(value.amount),
+              assetName: value.assetName,
             }),
           }
         },

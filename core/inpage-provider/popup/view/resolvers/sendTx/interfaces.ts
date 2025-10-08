@@ -11,8 +11,9 @@ export enum CosmosMsgType {
   THORCHAIN_MSG_DEPOSIT_URL = '/types.MsgDeposit',
 }
 export enum TronMsgType {
-  MSG_TRANSFER_CONTRACT = 'TransferContract',
-  MSG_TRIGGER_SMART_CONTRACT = 'TriggerSmartContract',
+  TRON_TRANSFER_CONTRACT = 'TransferContract',
+  TRON_TRIGGER_SMART_CONTRACT = 'TriggerSmartContract',
+  TRON_TRANSFER_ASSET_CONTRACT = 'TransferAssetContract',
 }
 
 type TronTransferContract = {
@@ -29,6 +30,14 @@ type TronTriggerSmartContract = {
   token_id?: number
   data?: string
 }
+
+type TronTransferAssetContract = {
+  to_address: string
+  owner_address: string
+  amount: number
+  asset_name: string
+}
+
 export type RequestInput = {
   method: string
   params: Record<string, any>[]
@@ -106,10 +115,14 @@ export type MsgPayload =
       case: CosmosMsgType.THORCHAIN_MSG_DEPOSIT
       value: IMsgDeposit
     }
-  | { case: TronMsgType.MSG_TRANSFER_CONTRACT; value: TronTransferContract }
+  | { case: TronMsgType.TRON_TRANSFER_CONTRACT; value: TronTransferContract }
   | {
-      case: TronMsgType.MSG_TRIGGER_SMART_CONTRACT
+      case: TronMsgType.TRON_TRIGGER_SMART_CONTRACT
       value: TronTriggerSmartContract
+    }
+  | {
+      case: TronMsgType.TRON_TRANSFER_ASSET_CONTRACT
+      value: TronTransferAssetContract
     }
 
 type TransactionDetailsAsset = {

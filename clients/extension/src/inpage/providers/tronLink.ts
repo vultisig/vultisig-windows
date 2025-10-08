@@ -12,10 +12,10 @@ export class TronLink {
   public ready: boolean
 
   constructor() {
-    this.ready = false
     this.isVultiConnect = true
     this.isTronLink = true
     this.tronWeb = new VultisigTronWeb()
+    this.ready = false
   }
 
   request = async (data: RequestInput) => {

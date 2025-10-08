@@ -29,8 +29,9 @@ const cosmosMsgTypeToTransactionType: Record<
   [CosmosMsgType.MSG_EXECUTE_CONTRACT_URL]: TransactionType.GENERIC_CONTRACT,
   [CosmosMsgType.THORCHAIN_MSG_DEPOSIT]: defaultTransactionType,
   [CosmosMsgType.THORCHAIN_MSG_DEPOSIT_URL]: defaultTransactionType,
-  [TronMsgType.MSG_TRANSFER_CONTRACT]: TransactionType.GENERIC_CONTRACT,
-  [TronMsgType.MSG_TRIGGER_SMART_CONTRACT]: TransactionType.GENERIC_CONTRACT,
+  [TronMsgType.TRON_TRANSFER_CONTRACT]: defaultTransactionType,
+  [TronMsgType.TRON_TRIGGER_SMART_CONTRACT]: defaultTransactionType,
+  [TronMsgType.TRON_TRANSFER_ASSET_CONTRACT]: defaultTransactionType,
 }
 
 export const getChainSpecificInput = (input: ParsedTx) => {

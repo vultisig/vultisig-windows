@@ -10,7 +10,11 @@ import {
   KeysignPayload,
   KeysignPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { TronTransferContractPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/tron_contract_payload_pb'
+import {
+  TronTransferAssetContractPayloadSchema,
+  TronTransferContractPayloadSchema,
+  TronTriggerSmartContractPayloadSchema,
+} from '@core/mpc/types/vultisig/keysign/v1/tron_contract_payload_pb'
 import { UtxoInfo } from '@core/mpc/types/vultisig/keysign/v1/utxo_info_pb'
 import { WasmExecuteContractPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { Vault } from '@core/ui/vault/Vault'
@@ -110,34 +114,56 @@ export const getKeysignPayload = ({
     KeysignPayload['contractPayload'] | undefined
   >(customTxData, {
     regular: ({ transactionDetails }) => {
-      if (
-        transactionDetails.msgPayload?.case ===
-        CosmosMsgType.MSG_EXECUTE_CONTRACT
-      ) {
-        const msgPayload = transactionDetails.msgPayload.value
+      switch (transactionDetails.msgPayload?.case) {
+        case CosmosMsgType.MSG_EXECUTE_CONTRACT: {
+          const msgPayload = transactionDetails.msgPayload.value
 
-        return {
-          case: 'wasmExecuteContractPayload',
-          value: create(WasmExecuteContractPayloadSchema, {
-            contractAddress: msgPayload.contract,
-            executeMsg: msgPayload.msg,
-            senderAddress: msgPayload.sender,
-            coins: msgPayload.funds,
-          }),
+          return {
+            case: 'wasmExecuteContractPayload',
+            value: create(WasmExecuteContractPayloadSchema, {
+              contractAddress: msgPayload.contract,
+              executeMsg: msgPayload.msg,
+              senderAddress: msgPayload.sender,
+              coins: msgPayload.funds,
+            }),
+          }
         }
-      }
-      if (
-        transactionDetails.msgPayload?.case ===
-        TronMsgType.MSG_TRANSFER_CONTRACT
-      ) {
-        const msgPayload = transactionDetails.msgPayload.value
-        return {
-          case: 'tronTransferContractPayload',
-          value: create(TronTransferContractPayloadSchema, {
-            toAddress: msgPayload.to_address,
-            ownerAddress: msgPayload.owner_address,
-            amount: msgPayload.amount.toString(),
-          }),
+        case TronMsgType.TRON_TRANSFER_CONTRACT: {
+          const msgPayload = transactionDetails.msgPayload.value
+          return {
+            case: 'tronTransferContractPayload',
+            value: create(TronTransferContractPayloadSchema, {
+              toAddress: msgPayload.to_address,
+              ownerAddress: msgPayload.owner_address,
+              amount: msgPayload.amount.toString(),
+            }),
+          }
+        }
+        case TronMsgType.TRON_TRIGGER_SMART_CONTRACT: {
+          const msgPayload = transactionDetails.msgPayload.value
+          return {
+            case: 'tronTriggerSmartContractPayload',
+            value: create(TronTriggerSmartContractPayloadSchema, {
+              ownerAddress: msgPayload.owner_address,
+              contractAddress: msgPayload.contract_address,
+              callValue: msgPayload.call_value?.toString(),
+              callTokenValue: msgPayload.call_token_value?.toString(),
+              tokenId: msgPayload.token_id,
+              data: msgPayload.data,
+            }),
+          }
+        }
+        case TronMsgType.TRON_TRANSFER_ASSET_CONTRACT: {
+          const msgPayload = transactionDetails.msgPayload.value
+          return {
+            case: 'tronTransferAssetContractPayload',
+            value: create(TronTransferAssetContractPayloadSchema, {
+              toAddress: msgPayload.to_address,
+              ownerAddress: msgPayload.owner_address,
+              amount: msgPayload.amount.toString(),
+              assetName: msgPayload.asset_name,
+            }),
+          }
         }
       }
     },

@@ -6,7 +6,7 @@ import {
   TronMsgType,
 } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import { TronWeb, Trx, Types } from 'tronweb'
-import { fromHex } from 'tronweb/utils'
+import { fromHex, isArray } from 'tronweb/utils'
 
 type SignedStringOrSignedTransaction<
   T extends string | Types.Transaction | Types.SignedTransaction,
@@ -23,8 +23,7 @@ export class VultisigTronWebTrx extends Trx {
   sign = async <T extends Types.SignedTransaction | Types.Transaction | string>(
     transaction: T
   ): Promise<SignedStringOrSignedTransaction<T>> => {
-    const getTransactionDetails = (): TransactionDetails => {
-      console.log('transaction', transaction)
+    const getTransactionDetails = async (): Promise<TransactionDetails> => {
       if (!isTransaction(transaction))
         throw new Error('Unsupported transaction type')
 
@@ -43,7 +42,7 @@ export class VultisigTronWebTrx extends Trx {
               decimals: chainFeeCoin.Tron.decimals,
             },
             msgPayload: {
-              case: TronMsgType.MSG_TRANSFER_CONTRACT,
+              case: TronMsgType.TRON_TRANSFER_CONTRACT,
               value: transferContract,
             },
             data: transaction.raw_data.data as string,
@@ -53,8 +52,16 @@ export class VultisigTronWebTrx extends Trx {
           const triggerSmartContract = contract.parameter
             .value as Types.TriggerSmartContract
 
+          let asset = { ticker: 'TRX' }
+          if (triggerSmartContract.token_id) {
+            const tokenInfo = await this.getTokenByID(
+              triggerSmartContract.token_id
+            )
+            asset = { ticker: tokenInfo.abbr }
+          }
+
           return {
-            asset: { ticker: 'TRX' },
+            asset,
             amount: {
               amount: triggerSmartContract.call_value?.toString() ?? '0',
               decimals: chainFeeCoin.Tron.decimals,
@@ -63,9 +70,41 @@ export class VultisigTronWebTrx extends Trx {
             from: fromHex(triggerSmartContract.owner_address),
             data: transaction.raw_data.data as string,
             msgPayload: {
-              case: TronMsgType.MSG_TRIGGER_SMART_CONTRACT,
+              case: TronMsgType.TRON_TRIGGER_SMART_CONTRACT,
               value: triggerSmartContract,
             },
+          }
+        }
+        case Types.ContractType.TransferAssetContract: {
+          const transferAssetContract = contract.parameter
+            .value as Types.TransferAssetContract
+
+          const tokenInfo = await this.getTokenListByName(
+            transferAssetContract.asset_name
+          )
+
+          if (!tokenInfo || (isArray(tokenInfo) && tokenInfo.length === 0)) {
+            throw new Error(
+              `Token ${transferAssetContract.asset_name} not found`
+            )
+          }
+          const ticker = isArray(tokenInfo) ? tokenInfo[0].abbr : tokenInfo.abbr
+
+          return {
+            asset: {
+              ticker,
+            },
+            to: fromHex(transferAssetContract.to_address),
+            from: fromHex(transferAssetContract.owner_address),
+            amount: {
+              amount: transferAssetContract.amount.toString(),
+              decimals: chainFeeCoin.Tron.decimals,
+            },
+            msgPayload: {
+              case: TronMsgType.TRON_TRANSFER_ASSET_CONTRACT,
+              value: transferAssetContract,
+            },
+            data: transaction.raw_data.data as string,
           }
         }
       }
@@ -73,7 +112,7 @@ export class VultisigTronWebTrx extends Trx {
       throw new Error('Unsupported contract type')
     }
 
-    const details = getTransactionDetails()
+    const details = await getTransactionDetails()
 
     const { hash } = await callPopup(
       {

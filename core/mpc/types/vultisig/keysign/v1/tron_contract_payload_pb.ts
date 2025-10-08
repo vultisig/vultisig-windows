@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file vultisig/keysign/v1/tron_contract_payload.proto.
  */
 export const file_vultisig_keysign_v1_tron_contract_payload: GenFile = /*@__PURE__*/
-  fileDesc("Ci92dWx0aXNpZy9rZXlzaWduL3YxL3Ryb25fY29udHJhY3RfcGF5bG9hZC5wcm90bxITdnVsdGlzaWcua2V5c2lnbi52MSJYChtUcm9uVHJhbnNmZXJDb250cmFjdFBheWxvYWQSEgoKdG9fYWRkcmVzcxgBIAEoCRIVCg1vd25lcl9hZGRyZXNzGAIgASgJEg4KBmFtb3VudBgDIAEoCSLuAQofVHJvblRyaWdnZXJTbWFydENvbnRyYWN0UGF5bG9hZBIVCg1vd25lcl9hZGRyZXNzGAEgASgJEhgKEGNvbnRyYWN0X2FkZHJlc3MYAiABKAkSFwoKY2FsbF92YWx1ZRgDIAEoCUgAiAEBEh0KEGNhbGxfdG9rZW5fdmFsdWUYBCABKAlIAYgBARIVCgh0b2tlbl9pZBgFIAEoBEgCiAEBEhEKBGRhdGEYBiABKAlIA4gBAUINCgtfY2FsbF92YWx1ZUITChFfY2FsbF90b2tlbl92YWx1ZUILCglfdG9rZW5faWRCBwoFX2RhdGFCVAoTdnVsdGlzaWcua2V5c2lnbi52MVo4Z2l0aHViLmNvbS92dWx0aXNpZy9jb21tb25kYXRhL2dvL3Z1bHRpc2lnL2tleXNpZ24vdjE7djG6AgJWU2IGcHJvdG8z");
+  fileDesc("Ci92dWx0aXNpZy9rZXlzaWduL3YxL3Ryb25fY29udHJhY3RfcGF5bG9hZC5wcm90bxITdnVsdGlzaWcua2V5c2lnbi52MSJYChtUcm9uVHJhbnNmZXJDb250cmFjdFBheWxvYWQSEgoKdG9fYWRkcmVzcxgBIAEoCRIVCg1vd25lcl9hZGRyZXNzGAIgASgJEg4KBmFtb3VudBgDIAEoCSLuAQofVHJvblRyaWdnZXJTbWFydENvbnRyYWN0UGF5bG9hZBIVCg1vd25lcl9hZGRyZXNzGAEgASgJEhgKEGNvbnRyYWN0X2FkZHJlc3MYAiABKAkSFwoKY2FsbF92YWx1ZRgDIAEoCUgAiAEBEh0KEGNhbGxfdG9rZW5fdmFsdWUYBCABKAlIAYgBARIVCgh0b2tlbl9pZBgFIAEoBUgCiAEBEhEKBGRhdGEYBiABKAlIA4gBAUINCgtfY2FsbF92YWx1ZUITChFfY2FsbF90b2tlbl92YWx1ZUILCglfdG9rZW5faWRCBwoFX2RhdGEicQogVHJvblRyYW5zZmVyQXNzZXRDb250cmFjdFBheWxvYWQSEgoKdG9fYWRkcmVzcxgBIAEoCRIVCg1vd25lcl9hZGRyZXNzGAIgASgJEg4KBmFtb3VudBgDIAEoCRISCgphc3NldF9uYW1lGAQgASgJQlQKE3Z1bHRpc2lnLmtleXNpZ24udjFaOGdpdGh1Yi5jb20vdnVsdGlzaWcvY29tbW9uZGF0YS9nby92dWx0aXNpZy9rZXlzaWduL3YxO3YxugICVlNiBnByb3RvMw");
 
 /**
  * @generated from message vultisig.keysign.v1.TronTransferContractPayload
@@ -64,9 +64,9 @@ export type TronTriggerSmartContractPayload = Message<"vultisig.keysign.v1.TronT
   callTokenValue?: string;
 
   /**
-   * @generated from field: optional uint64 token_id = 5;
+   * @generated from field: optional int32 token_id = 5;
    */
-  tokenId?: bigint;
+  tokenId?: number;
 
   /**
    * @generated from field: optional string data = 6;
@@ -80,4 +80,36 @@ export type TronTriggerSmartContractPayload = Message<"vultisig.keysign.v1.TronT
  */
 export const TronTriggerSmartContractPayloadSchema: GenMessage<TronTriggerSmartContractPayload> = /*@__PURE__*/
   messageDesc(file_vultisig_keysign_v1_tron_contract_payload, 1);
+
+/**
+ * @generated from message vultisig.keysign.v1.TronTransferAssetContractPayload
+ */
+export type TronTransferAssetContractPayload = Message<"vultisig.keysign.v1.TronTransferAssetContractPayload"> & {
+  /**
+   * @generated from field: string to_address = 1;
+   */
+  toAddress: string;
+
+  /**
+   * @generated from field: string owner_address = 2;
+   */
+  ownerAddress: string;
+
+  /**
+   * @generated from field: string amount = 3;
+   */
+  amount: string;
+
+  /**
+   * @generated from field: string asset_name = 4;
+   */
+  assetName: string;
+};
+
+/**
+ * Describes the message vultisig.keysign.v1.TronTransferAssetContractPayload.
+ * Use `create(TronTransferAssetContractPayloadSchema)` to create a new message.
+ */
+export const TronTransferAssetContractPayloadSchema: GenMessage<TronTransferAssetContractPayload> = /*@__PURE__*/
+  messageDesc(file_vultisig_keysign_v1_tron_contract_payload, 2);
 
