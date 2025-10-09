@@ -8,7 +8,6 @@ import { ListItem } from '@lib/ui/list/item'
 import { Modal } from '@lib/ui/modal'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useTheme } from 'styled-components'
 
 import { CoreView } from '../../../navigation/CoreView'
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
@@ -31,9 +30,7 @@ const backupOptionView: Record<BackupOptionType, CoreView> = {
 
 export const VaultSettingsBackup = () => {
   const navigate = useCoreNavigate()
-
   const { t } = useTranslation()
-  const { colors } = useTheme()
   const vault = useCurrentVault()
 
   return (
