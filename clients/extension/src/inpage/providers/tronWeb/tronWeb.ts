@@ -156,15 +156,10 @@ export class VultisigTronWebTrx extends Trx {
       }
     )
 
-    console.log('returning hash', {
-      ...(transaction as Types.Transaction),
-      signature: [hash],
-      txID: hash,
-    } as unknown as SignedStringOrSignedTransaction<T>)
-
     return {
       ...(transaction as Types.Transaction),
       signature: [hash],
+      // This is a temporary workaround for some dApps until we fix the issue with the txID result to match expected one
       txID: hash,
     } as unknown as SignedStringOrSignedTransaction<T>
   }
