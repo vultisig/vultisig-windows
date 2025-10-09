@@ -1,29 +1,19 @@
-import { useId } from 'react'
-
 export const PencilIcon = () => {
-  const id = useId()
-
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1em"
-      height="1em"
+      width="1EM"
+      height="1EM"
+      viewBox="0 0 20 20"
       fill="none"
     >
-      <g clipPath={`url(#${id})`}>
-        <path
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M10 3.333 12.667 6m1.449-1.459a1.88 1.88 0 0 0-2.657-2.658l-8.898 8.9c-.154.154-.269.344-.333.553l-.88 2.901a.333.333 0 0 0 .415.415l2.902-.88c.208-.064.398-.177.553-.331l8.898-8.9Z"
-        />
-      </g>
-      <defs>
-        <clipPath id={id}>
-          <path fill="currentColor" d="M0 0h16v16H0z" />
-        </clipPath>
-      </defs>
+      <path
+        d="M11.0417 5.20873L13.4049 2.84558C14.0557 2.1947 15.111 2.1947 15.7619 2.84558L17.1549 4.23855C17.8057 4.88943 17.8057 5.9447 17.1549 6.59558L14.7917 8.95873M11.0417 5.20873L2.77985 13.4706C2.46728 13.7831 2.29169 14.2071 2.29169 14.6491V17.7087H5.35133C5.79336 17.7087 6.21728 17.5331 6.52985 17.2206L14.7917 8.95873M11.0417 5.20873L14.7917 8.95873"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   )
 }
