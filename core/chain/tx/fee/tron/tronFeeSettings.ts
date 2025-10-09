@@ -1,4 +1,4 @@
-export type TronFeeQuote = {
+type TronFeeQuote = {
   gasLimit: bigint
 }
 
