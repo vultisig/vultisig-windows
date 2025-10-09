@@ -1,10 +1,10 @@
 import { Chain } from '../Chain'
 import { ChainKind, DeriveChainKind } from '../ChainKind'
 
-export type EvmFeeQuote = {
+type EvmFeeQuote = {
   maxPriorityFeePerGas: bigint
   gasLimit: bigint
-  maxFeePerGas: bigint
+  baseFeePerGas: bigint
 }
 
 type UtxoFeeQuote = {
