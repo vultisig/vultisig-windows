@@ -9,6 +9,8 @@ export const es = {
   onboarding_step_4:
     'Recupera tu bóveda incluso <g>si un dispositivo se pierde o se daña</g>',
   positions: 'Posiciones',
+  vault_share_banner:
+    'Este código QR le permite compartir una versión de vista de su bóveda',
   onboarding_step_5:
     '<g>Siempre haga una copia de seguridad de cada parte del depósito</g> separadamente en una <g>ubicación diferente</g>',
   onboarding_step_6:
@@ -23,7 +25,9 @@ export const es = {
     'Error al verificar el código, por favor intenta de nuevo',
   digit_input_loading_validation: 'Verificando código, por favor espera',
   mint: 'Recibir',
+  vultisig_website: 'Sitio web de Vultisig',
   redeem: 'Vender',
+  vult: '$VULT',
   merged: 'Combinado',
   function_unavailble:
     'Función no disponible para las monedas de cadena existentes. Agrega monedas que puedan usarse con FUNCTION:',
@@ -399,7 +403,9 @@ export const es = {
   faq_need_to_register_title: '¿Necesito registrarme?',
   faq_need_to_register_content: 'No, no hay requisitos de registro.',
   vault_settings_address_book_no_addresses_title:
-    'No hay direcciones guardadas',
+    'Su libreta de direcciones está vacía',
+  vault_settings_address_book_no_addresses_description:
+    'Organice todas sus direcciones importantes en un lugar.',
   or: 'o',
   enter_vault_name: 'Ingrese el nombre de la bóveda',
   vault_name_required: 'Se requiere el nombre de la bóveda',
@@ -575,8 +581,6 @@ export const es = {
     connectionSuccess: '¡Conexión exitosa!',
     takeMinute: 'Esto solo tomará un segundo',
     vaultInitializationStarting: 'Iniciando la inicialización del baúl...',
-    emailRequired: 'Correo electrónico es obligatorio',
-    emailIncorrect: 'Correo electrónico incorrecto, por favor verifique',
     enterEmail: 'Ingrese su correo electrónico',
     emailSetupTitle:
       'Este correo electrónico solo se usa para enviar la copia de seguridad del servidor.',
@@ -934,6 +938,7 @@ export const es = {
     'Convierta tu bóveda en una máquina de recompensas. Cree tu referencia ahora y comience a ganar.',
   remove: 'Eliminar',
   share_vault: 'Bóveda compartida',
+  register_guide: 'Guía de registro',
   no_referral_yet: 'Aún no hay referencia',
   missing_thorchain_address: 'Falta la dirección de THORChain',
   missing_destination_address: 'Dirección de destino faltante',
@@ -1106,4 +1111,20 @@ export const es = {
     'Si decide agregar una contraseña, esta se utilizará para <b>encriptar</b> el archivo de respaldo.',
   backup_password_info_cannot_be_reset:
     'Recuerde: si olvida la contraseña de su bóveda, no podrá restablecerla ni recuperarla.',
+  email_required: 'Se requiere correo electrónico',
+  device_backup: 'Copia de seguridad del dispositivo',
+  device_backup_description:
+    'Almacenar el recurso compartido de bóveda de este dispositivo.',
+  server_backup: 'Copia de seguridad del servidor',
+  server_backup_description:
+    'Solicitar nuevamente el uso compartido de Server Vault.',
+  choose_backup_method: 'Elija el método de copia de seguridad',
+  vault_server_share_too_many_requests:
+    'Has solicitado tu copia de seguridad compartida con demasiada frecuencia en poco tiempo. Espera antes de volver a intentarlo.',
+  vault_server_share_bad_request:
+    'Algo salió mal. Por favor, revisa tu contraseña e inténtalo de nuevo.',
+  backup_share_sent: '¡Respaldo compartido enviado!',
+  check_email: 'Revisar el correo electrónico',
+  backup_share_sent_description:
+    'Acabamos de enviarte tu copia de seguridad a tu correo electrónico. Si no la encuentras, revisa tu carpeta de correo no deseado.',
 }

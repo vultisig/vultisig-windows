@@ -1,7 +1,7 @@
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { getColor } from '@lib/ui/theme/getters'
-import { ThemeColors } from '@lib/ui/theme/ThemeColors'
+import { ThemeColor } from '@lib/ui/theme/ThemeColors'
 import {
   CSSProperties,
   FC,
@@ -11,12 +11,13 @@ import {
 } from 'react'
 import styled, { css } from 'styled-components'
 
+import { UiProps } from '../../props'
+
 type Styles = {
   color: ThemeColor
   fontSize: NonNullable<CSSProperties['fontSize']>
 }
 type Status = 'default' | 'error' | 'success' | 'warning'
-type ThemeColor = keyof ThemeColors
 
 const StyledDesc = styled.span<Styles>`
   color: ${({ color }) => getColor(color)};
@@ -83,6 +84,7 @@ const StyledListItem = styled.div<{
         `
     }
   }}
+
   ${({ hoverable }) => {
     return (
       hoverable &&
@@ -107,7 +109,8 @@ type ListItemProps = {
   status?: Status
   styles?: { description?: Partial<Styles>; title?: Partial<Styles> }
   title: ReactNode
-} & Pick<HTMLAttributes<HTMLDivElement>, 'onClick' | 'style'>
+} & Pick<HTMLAttributes<HTMLDivElement>, 'onClick' | 'style'> &
+  Partial<UiProps>
 
 export const ListItem: FC<ListItemProps> = ({
   description,
@@ -117,6 +120,7 @@ export const ListItem: FC<ListItemProps> = ({
   status = 'default',
   title,
   styles,
+  hoverable = true,
   ...rest
 }) => {
   const titleRender = isValidElement(title) ? (
@@ -131,7 +135,7 @@ export const ListItem: FC<ListItemProps> = ({
   )
 
   return (
-    <StyledListItem status={status} {...rest}>
+    <StyledListItem hoverable={hoverable} status={status} {...rest}>
       <StyledContent>
         {icon}
         {description ? (

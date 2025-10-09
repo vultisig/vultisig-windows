@@ -9,6 +9,7 @@ import {
   EthereumSpecific,
   TransactionType,
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 

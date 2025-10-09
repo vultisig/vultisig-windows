@@ -11,12 +11,12 @@ import { getColor } from '@lib/ui/theme/getters'
 import { motion, useReducedMotion } from 'framer-motion'
 import styled from 'styled-components'
 
-import { useSwapFormStates } from './hooks/useSwapFormStates'
+import { useSwapQuoteQuery } from '../queries/useSwapQuoteQuery'
 
 export const ReverseSwap = () => {
   const [{ coin: fromCoin }, setViewState] = useCoreViewState<'swap'>()
   const [toCoin, setToCoin] = useToCoin()
-  const { isLoading } = useSwapFormStates()
+  const { isPending } = useSwapQuoteQuery()
   const prefersReducedMotion = useReducedMotion()
 
   return (
@@ -30,7 +30,7 @@ export const ReverseSwap = () => {
           setToCoin(fromCoin)
         }}
       >
-        {isLoading ? (
+        {isPending ? (
           <motion.span
             key="spinner"
             role="img"

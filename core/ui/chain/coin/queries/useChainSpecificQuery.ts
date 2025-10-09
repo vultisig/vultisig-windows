@@ -9,12 +9,10 @@ export const chainSpecificQueryKeyPrefix = 'chainSpecific'
 const getChainSpecificQueryKey = (input: ChainSpecificResolverInput) =>
   without([chainSpecificQueryKeyPrefix, ...Object.values(input)], undefined)
 
-export const getChainSpecificQuery = (input: ChainSpecificResolverInput) => ({
-  queryKey: getChainSpecificQueryKey(input),
-  queryFn: () => getChainSpecific(input),
-  ...noRefetchQueryOptions,
-})
-
 export const useChainSpecificQuery = (input: ChainSpecificResolverInput) => {
-  return useQuery(getChainSpecificQuery(input))
+  return useQuery({
+    queryKey: getChainSpecificQueryKey(input),
+    queryFn: () => getChainSpecific(input),
+    ...noRefetchQueryOptions,
+  })
 }

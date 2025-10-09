@@ -1,63 +1,109 @@
-import { FC, useEffect, useRef, useState } from 'react'
+import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
+import { useElementSize } from '@lib/ui/hooks/useElementSize'
+import { getColor } from '@lib/ui/theme/getters'
+import { ThemeColor } from '@lib/ui/theme/ThemeColors'
+import { CSSProperties, FC, useEffect, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
+
+type Styles = {
+  justifyContent?: CSSProperties['justifyContent']
+  color?: ThemeColor
+  flexGrow?: boolean
+  size?: CSSProperties['fontSize']
+  weight?: CSSProperties['fontWeight']
+  width?: CSSProperties['width']
+}
 
 const StyledTruncate = styled.span`
   position: absolute;
   visibility: hidden;
 `
 
-const StyledMiddleTruncate = styled.span<{ width?: number }>`
-  display: block;
+const StyledMiddleTruncate = styled.span<Styles>`
+  ${({ color }) => {
+    return (
+      color &&
+      css`
+        color: ${getColor(color)};
+      `
+    )
+  }};
+  display: flex;
+  ${({ flexGrow }) => {
+    return (
+      flexGrow &&
+      css`
+        flex-grow: 1;
+      `
+    )
+  }};
+  ${({ size }) => {
+    return (
+      size &&
+      css`
+        font-size: ${toSizeUnit(size)};
+      `
+    )
+  }};
+  ${({ weight }) => {
+    return (
+      weight &&
+      css`
+        font-weight: ${weight};
+      `
+    )
+  }};
+  ${({ justifyContent }) => {
+    return (
+      justifyContent &&
+      css`
+        justify-content: ${justifyContent};
+      `
+    )
+  }};
+  overflow: hidden;
   position: relative;
   white-space: nowrap;
   ${({ width }) => {
-    return width
-      ? css`
-          width: ${width}px;
-        `
-      : css``
+    return (
+      width &&
+      css`
+        width: ${toSizeUnit(width)};
+      `
+    )
   }};
 `
 
 type MiddleTruncateProps = {
   onClick?: () => void
   text: string
-  width?: number
-}
-
-type InitialState = {
-  counter: number
-  ellipsis: string
-  truncating: boolean
-}
+} & Styles
 
 export const MiddleTruncate: FC<MiddleTruncateProps> = ({
   onClick,
   text,
-  width,
+  ...rest
 }) => {
-  const initialState: InitialState = {
+  const [state, setState] = useState({
     counter: 0,
     ellipsis: '',
     truncating: true,
-  }
-  const [state, setState] = useState(initialState)
-  const { counter, ellipsis, truncating } = state
-  const elmRef = useRef<HTMLSpanElement>(null)
+    wrapperWidth: 0,
+  })
+  const { counter, ellipsis, truncating, wrapperWidth } = state
+  const elmRef = useRef<HTMLElement | null>(null)
+  const { width = 0 } = useElementSize(elmRef.current) ?? {}
 
   const handleClick = () => {
     if (onClick) onClick()
   }
 
-  const ellipsisDidUpdate = (): void => {
+  useEffect(() => {
     if (elmRef.current) {
       const [child] = elmRef.current.children
-      if (!elmRef.current) return
-      const parentWidth = elmRef.current.clientWidth
-      if (!parentWidth) return
-      const childWidth = child?.clientWidth ?? 0
+      const clientWidth = child?.clientWidth ?? 0
 
-      if (childWidth > parentWidth) {
+      if (clientWidth > wrapperWidth) {
         const chunkLen = Math.ceil(text.length / 2) - counter
 
         setState(prevState => ({
@@ -73,34 +119,30 @@ export const MiddleTruncate: FC<MiddleTruncateProps> = ({
         }))
       }
     }
-  }
+  }, [ellipsis, counter, elmRef, text, wrapperWidth])
 
-  const componentDidUpdate = (): void => {
+  useEffect(() => {
     setState(prevState => ({
       ...prevState,
       ellipsis: text,
       truncating: true,
+      wrapperWidth: width,
     }))
-  }
-
-  useEffect(ellipsisDidUpdate, [ellipsis, counter, text])
-  useEffect(componentDidUpdate, [text])
+  }, [text, width])
 
   return onClick ? (
     <StyledMiddleTruncate
       ref={elmRef}
       onClick={handleClick}
-      onKeyDown={e => {
-        if (e.key === 'Enter' || e.key === ' ') handleClick()
-      }}
-      tabIndex={0}
+      onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && handleClick()}
       role="button"
-      width={width}
+      tabIndex={0}
+      {...rest}
     >
       {truncating ? <StyledTruncate>{ellipsis}</StyledTruncate> : ellipsis}
     </StyledMiddleTruncate>
   ) : (
-    <StyledMiddleTruncate ref={elmRef} width={width}>
+    <StyledMiddleTruncate ref={elmRef} {...rest}>
       {truncating ? <StyledTruncate>{ellipsis}</StyledTruncate> : ellipsis}
     </StyledMiddleTruncate>
   )

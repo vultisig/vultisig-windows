@@ -3,7 +3,6 @@ import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
-import { HardDriveDownloadIcon } from '@lib/ui/icons/HardDriveDownloadIcon'
 import { ShareIcon } from '@lib/ui/icons/ShareIcon'
 import { SignatureIcon } from '@lib/ui/icons/SignatureIcon'
 import { SquarePenIcon } from '@lib/ui/icons/SquarePenIcon'
@@ -14,6 +13,8 @@ import { ListItem } from '@lib/ui/list/item'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { useTranslation } from 'react-i18next'
+
+import { VaultSettingsBackup } from './backup'
 
 export const VaultSettingsPage = () => {
   const { t } = useTranslation()
@@ -37,13 +38,7 @@ export const VaultSettingsPage = () => {
             hoverable
             showArrow
           />
-          <ListItem
-            icon={<HardDriveDownloadIcon fontSize={20} />}
-            onClick={() => navigate({ id: 'vaultBackup' })}
-            title={t('backup')}
-            hoverable
-            showArrow
-          />
+          <VaultSettingsBackup />
           <ListItem
             icon={<SquarePenIcon fontSize={20} />}
             onClick={() => navigate({ id: 'renameVault' })}

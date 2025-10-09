@@ -4,6 +4,7 @@ import {
   BitcoinAccount,
   ProviderId,
   RequestInput,
+  XDEFIBitcoinPayloadMethods,
 } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 import EventEmitter from 'events'
@@ -51,13 +52,13 @@ export class UTXO extends EventEmitter {
     }
     return [address]
   }
-
+  // Keplr
   async signPSBT(
     psbt: Buffer,
     {
       inputsToSign,
     }: {
-      inputsToSign: {
+      inputsToSign?: {
         address: string
         signingIndexes: number[]
         sigHash?: number
@@ -78,6 +79,35 @@ export class UTXO extends EventEmitter {
     const rebuiltPsbt = rebuildPsbtWithPartialSigsFromWC(data, psbt)
     return rebuiltPsbt
   }
+  // CTRL
+  async signPsbt({
+    allowedSignHash = 1,
+    psbt,
+    broadcast = false,
+    signInputs,
+  }: {
+    allowedSignHash?: number
+    psbt: string
+    broadcast?: boolean
+    signInputs?: Record<string, number[]>
+  }) {
+    let inputsToSign = undefined
+    if (signInputs) {
+      inputsToSign = Object.entries(signInputs).map(
+        ([address, signingIndexes]) => ({
+          address,
+          signingIndexes,
+          sigHash: allowedSignHash,
+        })
+      )
+    }
+
+    return this.signPSBT(
+      Buffer.from(psbt, 'base64'),
+      { inputsToSign },
+      broadcast
+    )
+  }
 
   async request(data: RequestInput, callback?: Callback) {
     const processRequest = async () => {
@@ -87,6 +117,9 @@ export class UTXO extends EventEmitter {
         return handlers[data.method as keyof typeof handlers](
           data.params as any
         )
+      }
+      if (data.method === XDEFIBitcoinPayloadMethods.SignPsbt) {
+        return this.signPsbt({ ...(data.params as any) })
       }
       throw new NotImplementedError(`UTXO method ${data.method}`)
     }

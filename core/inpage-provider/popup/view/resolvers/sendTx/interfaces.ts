@@ -49,6 +49,10 @@ export type ProviderId =
   | 'keplr-override'
   | 'ctrl-override'
 
+export enum XDEFIBitcoinPayloadMethods {
+  SignPsbt = 'sign_psbt',
+}
+
 type BitcoinAccountPurpose = 'payment' | 'ordinals'
 
 export type BitcoinAccount = {
@@ -144,6 +148,14 @@ export type TransactionDetails = {
   }
   msgPayload?: MsgPayload
   skipBroadcast?: boolean
+}
+
+export type DepositTransactionDetails = {
+  asset: { chain: string; ticker: string; symbol: string }
+  from: string
+  recipient?: string
+  amount?: { amount: string; decimals: number }
+  memo?: string
 }
 
 export type IKeysignTransactionPayload = {

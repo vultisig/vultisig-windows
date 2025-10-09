@@ -10,6 +10,8 @@ export const de = {
     'Stelle deinen Tresor wieder her, sogar <g>wenn ein Gerät verloren geht oder beschädigt wird</g>',
   onboarding_step_5:
     '<g>Sichern Sie jede Tresorfreigabe immer</g> separat in einer <g>anderen Location</g>',
+  vault_share_banner:
+    'Dieser QR Code ermöglicht Ihnen, eine Ansichtsversion Ihres Tresors zu teilen',
   onboarding_step_6:
     'Diese Freigaben arbeiten zusammen, um <g>Ihren Tresor zu entsperren</g>',
   positions: 'Positionen',
@@ -20,6 +22,7 @@ export const de = {
   digit_input_error_validation:
     'Fehler bei der Code-Verifizierung, bitte erneut versuchen',
   digit_input_loading_validation: 'Code wird überprüft, bitte warten',
+  vult: '$VULT',
   vultisig: 'Vultisig',
   by_vultisig: 'von Vultisig',
   merged: 'Zusammengeführt',
@@ -395,8 +398,9 @@ export const de = {
   faq_need_to_register_title: 'Muss ich mich registrieren?',
   faq_need_to_register_content:
     'Nein, es gibt keine Registrierungsanforderungen.',
-  vault_settings_address_book_no_addresses_title:
-    'Keine gespeicherten Adressen',
+  vault_settings_address_book_no_addresses_title: 'Ihr Adressbuch ist leer',
+  vault_settings_address_book_no_addresses_description:
+    'Ordnen Sie alle Ihre wichtigen Adressen in einem Ort.',
   or: 'oder',
   enter_vault_name: 'Tresorname eingeben',
   vault_name_required: 'Tresorname ist erforderlich',
@@ -573,8 +577,6 @@ export const de = {
     connectionSuccess: 'Verbindung erfolgreich!',
     takeMinute: 'Dies sollte nur eine Sekunde dauern',
     vaultInitializationStarting: 'Tresor-Initialisierung startet...',
-    emailRequired: 'E-Mail ist erforderlich',
-    emailIncorrect: 'Falsche E-Mail, bitte überprüfen',
     enterEmail: 'Geben Sie Ihre E-Mail ein',
     emailSetupTitle:
       'Diese E-Mail wird nur verwendet, um das Server-Backup zu senden',
@@ -937,6 +939,7 @@ export const de = {
   twitter: 'Twitter',
   vultisig_community: 'Vultisig-Gemeinschaft',
   remove: 'Entfernen',
+  register_guide: 'Registrierungsanleitung',
   share_vault: 'Tresor teilen',
   no_referral_yet: 'Noch keine Empfehlung',
   missing_thorchain_address: 'Fehlende THORChain-Adresse',
@@ -1110,4 +1113,18 @@ export const de = {
     'Wenn Sie ein Kennwort hinzufügen, wird dieses zum <b>Verschlüsseln</b> der Sicherungsdatei verwendet.',
   backup_password_info_cannot_be_reset:
     'Denken Sie daran: Wenn Sie Ihr Tresorkennwort vergessen, kann es <b>nicht</b> zurückgesetzt oder wiederhergestellt werden.',
+  email_required: 'E-Mail ist erforderlich',
+  device_backup: 'Gerätesicherung',
+  device_backup_description: 'Speichern Sie die Tresorfreigabe dieses Geräts.',
+  server_backup: 'Serversicherung',
+  server_backup_description: 'Fordern Sie Server Vault Share erneut an.',
+  choose_backup_method: 'Wählen Sie eine Sicherungsmethode',
+  vault_server_share_too_many_requests:
+    'Sie haben Ihre Sicherungsfreigabe in kurzer Zeit zu oft angefordert. Bitte warten Sie, bevor Sie es erneut versuchen.',
+  vault_server_share_bad_request:
+    'Etwas ist schiefgelaufen. Bitte überprüfen Sie Ihr Passwort und versuchen Sie es erneut.',
+  backup_share_sent: 'Backup-Freigabe gesendet!',
+  check_email: 'E-Mails abrufen',
+  backup_share_sent_description:
+    'Wir haben Ihre Sicherungsfreigabe gerade an Ihre E-Mail-Adresse gesendet. Wenn Sie sie nicht sehen, überprüfen Sie Ihren Spam-Ordner.',
 }

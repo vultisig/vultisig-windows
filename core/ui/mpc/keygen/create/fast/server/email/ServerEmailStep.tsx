@@ -26,9 +26,9 @@ const getEmailSchema = (t: TFunction) =>
   z.object({
     email: z
       .string()
-      .min(1, { message: t('fastVaultSetup.emailRequired') })
+      .min(1, { message: t('email_required') })
       .refine(val => !validateEmail(val), {
-        message: t('fastVaultSetup.emailIncorrect'),
+        message: t('invalid_email'),
       }),
   })
 

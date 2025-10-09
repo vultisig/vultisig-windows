@@ -11,6 +11,8 @@ export const pt = {
   onboarding_step_5:
     '<g>Sempre faça backup de cada parte do cofre</g> separadamente em um <g>local diferente</g>',
   onboarding_step_6: 'Essas partes colaboram para <g>desbloquear seu cofre</g>',
+  vault_share_banner:
+    'Este QR Code permite compartilhar uma versão de visualização do seu cofre',
   secure_crypto_vault: 'Cofre seguro de cripto',
   vultisig: 'Vultisig',
   by_vultisig: 'por Vultisig',
@@ -18,12 +20,14 @@ export const pt = {
     'O Vultisig é um cofre seguro de cripto multi-dispositivo, compatível com todas as principais blockchains e mais de 10.000 tokens. O Vultisig é totalmente auto-hospedado.',
   onboarding_description_2:
     'O Vultisig não rastreia suas atividades nem exige nenhum registro. O Vultisig é de código aberto, garantindo transparência e confiança.',
+  vultisig_website: 'Site do Vultisig',
   onboarding_description_3:
     'O Vultisig é, por natureza, um aplicativo multi-dispositivo. Exige pelo menos dois dispositivos para criar um cofre seguro: um dispositivo inicializador e um dispositivo de pareamento.',
   onboarding_description_4:
     'O Vultisig é uma carteira sem frases-semente. Em vez disso, usa fragmentos fáceis de gerenciar. Cada dispositivo tem seu próprio fragmento exclusivo que precisa de backup separado.',
   moreInfo: 'Mais informações',
   merged: 'Combinado',
+  vult: '$VULT',
   function_unavailble:
     'Recurso não disponível para moedas de cadeia existentes. Adicione moedas que possam ser usadas com FUNCTION:',
   incorrect_passcode: 'Código incorreto',
@@ -384,7 +388,10 @@ export const pt = {
     'Você pode fazer backup do seu cofre exportando os fragmentos do cofre.',
   faq_need_to_register_title: 'Preciso me registrar?',
   faq_need_to_register_content: 'Não, não há requisitos de registro.',
-  vault_settings_address_book_no_addresses_title: 'Nenhum endereço salvo',
+  vault_settings_address_book_no_addresses_title:
+    'Seu livro de endereços está vazio',
+  vault_settings_address_book_no_addresses_description:
+    'Organize todos os seus endereços importantes em um lugar.',
   or: 'ou',
   enter_vault_name: 'Insira o nome do cofre',
   vault_name_required: 'Nome do cofre obrigatório',
@@ -566,8 +573,6 @@ export const pt = {
     connectionSuccess: 'Conexão bem-sucedida!',
     takeMinute: 'Isso deve levar apenas um segundo',
     vaultInitializationStarting: 'Iniciando a inicialização do cofre...',
-    emailRequired: 'E-mail é obrigatório',
-    emailIncorrect: 'E-mail incorreto, por favor verifique',
     enterEmail: 'Digite seu e-mail',
     emailSetupTitle:
       'Este email é usado apenas para enviar o backup do servidor',
@@ -920,6 +925,7 @@ export const pt = {
   vultisig_community: 'Comunidade Vultisig',
   remove: 'Remover',
   share_vault: 'Compartilhar Cofre',
+  register_guide: 'Guia de registro',
   no_referral_yet: 'Nenhuma referência ainda',
   missing_thorchain_address: 'Endereço THORChain ausente',
   missing_destination_address: 'Endereço de destino ausente',
@@ -1094,4 +1100,20 @@ export const pt = {
     'Se você optar por adicionar uma senha, ela será usada para <b>criptografar</b> o arquivo de backup.',
   backup_password_info_cannot_be_reset:
     'Lembre-se: se você esquecer a senha do seu cofre, ela <b>não poderá</b> ser redefinida ou recuperada.',
+  email_required: 'E-mail é obrigatório',
+  device_backup: 'Backup do dispositivo',
+  device_backup_description:
+    'Armazene o compartilhamento do cofre deste dispositivo.',
+  server_backup: 'Backup do servidor',
+  server_backup_description:
+    'Solicite o compartilhamento do Vault do servidor novamente.',
+  choose_backup_method: 'Escolha o método de backup',
+  vault_server_share_too_many_requests:
+    'Você solicitou seu compartilhamento de backup muitas vezes em um curto espaço de tempo. Aguarde antes de tentar novamente.',
+  vault_server_share_bad_request:
+    'Algo deu errado. Verifique sua senha novamente e tente novamente.',
+  backup_share_sent: 'Compartilhamento de backup enviado!',
+  check_email: 'Verifique o e-mail',
+  backup_share_sent_description:
+    'Acabamos de enviar seu compartilhamento de backup para o seu e-mail. Caso não o encontre, verifique sua caixa de spam.',
 }

@@ -95,6 +95,7 @@ export const useSwapKeysignPayloadQuery = () => {
           ...toCoin,
           hexPublicKey: toCoinHexPublicKey,
         },
+        chainSpecific,
       })
 
       return create(KeysignPayloadSchema, {
