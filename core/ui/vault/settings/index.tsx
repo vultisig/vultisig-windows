@@ -12,6 +12,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
+import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -87,15 +88,15 @@ export const VaultSettingsPage = () => {
             showArrow
           />
         </SettingsSection>
-        <ListItem
+        <DeleteItem
           icon={
-            <ListItemIconWrapper>
+            <DeleteButtonIconWrapper>
               <TrashCanIcon />
-            </ListItemIconWrapper>
+            </DeleteButtonIconWrapper>
           }
           onClick={() => navigate({ id: 'deleteVault' })}
           status="error"
-          title={t('delete')}
+          title={<Text size={14}>{t('delete')}</Text>}
           hoverable
           showArrow
         />
@@ -107,4 +108,12 @@ export const VaultSettingsPage = () => {
 export const ListItemIconWrapper = styled(IconWrapper)`
   font-size: 20px;
   color: ${getColor('primaryAlt')};
+`
+
+const DeleteButtonIconWrapper = styled(ListItemIconWrapper)`
+  color: ${getColor('danger')};
+`
+
+const DeleteItem = styled(ListItem)`
+  border-radius: 12px;
 `
