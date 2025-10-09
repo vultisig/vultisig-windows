@@ -22,6 +22,7 @@ import { TFunction } from 'i18next'
 import { useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { useTheme } from 'styled-components'
 import { z } from 'zod'
 
 const createSchema = (t: TFunction) => {
@@ -38,6 +39,7 @@ type Schema = z.infer<ReturnType<typeof createSchema>>
 export const VaultRenamePage = () => {
   const { t } = useTranslation()
   const { goBack } = useCore()
+  const { colors } = useTheme()
   const currentVault = useCurrentVault()
   const updateVaultMutation = useUpdateVaultMutation()
   const schema = useMemo(() => createSchema(t), [t])
@@ -76,7 +78,12 @@ export const VaultRenamePage = () => {
         <ActionInsideInteractiveElement
           render={() => <TextInput {...register('name')} />}
           action={
-            <IconButton onClick={() => setValue('name', '')}>
+            <IconButton
+              style={{
+                color: colors.textShy.toCssValue(),
+              }}
+              onClick={() => setValue('name', '')}
+            >
               <CloseIcon />
             </IconButton>
           }
