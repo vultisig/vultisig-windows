@@ -1,6 +1,7 @@
 import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { DeviceIcon } from '@lib/ui/icons/DeviceIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -18,6 +19,9 @@ export const VaultDetailsPage = () => {
   const totalSigners = signers.length
   const localPartyIndex = signers.indexOf(localPartyId) + 1
   const threshold = getKeygenThreshold(totalSigners)
+
+  const handleCopyToClipboard = (value: string) =>
+    navigator.clipboard.writeText(value)
 
   return (
     <VStack fullHeight>
@@ -58,9 +62,13 @@ export const VaultDetailsPage = () => {
                 {publicKeys.ecdsa}
               </Text>
             </TruncatingCol>
-            <IconWrapper size={20}>
-              <CopyIcon />
-            </IconWrapper>
+            <UnstyledButton
+              onClick={() => handleCopyToClipboard(publicKeys.ecdsa)}
+            >
+              <IconWrapper size={20}>
+                <CopyIcon />
+              </IconWrapper>
+            </UnstyledButton>
           </Item>
           <Item>
             <TruncatingCol flexGrow>
@@ -69,9 +77,13 @@ export const VaultDetailsPage = () => {
                 {publicKeys.eddsa}
               </Text>
             </TruncatingCol>
-            <IconWrapper size={20}>
-              <CopyIcon />
-            </IconWrapper>
+            <UnstyledButton
+              onClick={() => handleCopyToClipboard(publicKeys.eddsa)}
+            >
+              <IconWrapper size={20}>
+                <CopyIcon />
+              </IconWrapper>
+            </UnstyledButton>
           </Item>
         </VStack>
         <VStack gap={12}>
