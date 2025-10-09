@@ -1,17 +1,19 @@
 import { hasServer } from '@core/mpc/devices/localPartyId'
 import { Opener } from '@lib/ui/base/Opener'
 import { CloudIcon } from '@lib/ui/icons/CloudIcon'
-import { HardDriveDownloadIcon } from '@lib/ui/icons/HardDriveDownloadIcon'
+import { FolderUploadIcon } from '@lib/ui/icons/FolderUploadIcon'
 import { TabletSmartphoneIcon } from '@lib/ui/icons/TabletSmartphoneIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
 import { Modal } from '@lib/ui/modal'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { useTheme } from 'styled-components'
 
 import { CoreView } from '../../../navigation/CoreView'
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '../../state/currentVault'
+import { ListItemIconWrapper } from '..'
 import { BackupOption } from './BackupOption'
 
 const backupOptionTypes = ['device', 'server'] as const
@@ -31,14 +33,18 @@ export const VaultSettingsBackup = () => {
   const navigate = useCoreNavigate()
 
   const { t } = useTranslation()
-
+  const { colors } = useTheme()
   const vault = useCurrentVault()
 
   return (
     <Opener
       renderOpener={({ onOpen }) => (
         <ListItem
-          icon={<HardDriveDownloadIcon fontSize={20} />}
+          icon={
+            <ListItemIconWrapper>
+              <FolderUploadIcon />
+            </ListItemIconWrapper>
+          }
           onClick={() =>
             hasServer(vault.signers)
               ? onOpen()
