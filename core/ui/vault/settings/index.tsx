@@ -8,12 +8,12 @@ import { SignatureIcon } from '@lib/ui/icons/SignatureIcon'
 import { SquarePenIcon } from '@lib/ui/icons/SquarePenIcon'
 import { TrashIcon } from '@lib/ui/icons/TrashIcon'
 import { VStack } from '@lib/ui/layout/Stack'
-import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { useTranslation } from 'react-i18next'
 
+import { SettingsSection } from '../../settings/SettingsSection'
 import { VaultSettingsBackup } from './backup'
 
 export const VaultSettingsPage = () => {
@@ -27,10 +27,9 @@ export const VaultSettingsPage = () => {
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         title={t('vault_settings')}
-        hasBorder
       />
-      <PageContent flexGrow scrollable>
-        <List>
+      <PageContent gap={14} flexGrow scrollable>
+        <SettingsSection title={t('vault')}>
           <ListItem
             icon={<CircleInfoIcon fontSize={20} />}
             onClick={() => navigate({ id: 'vaultDetails' })}
@@ -38,7 +37,6 @@ export const VaultSettingsPage = () => {
             hoverable
             showArrow
           />
-          <VaultSettingsBackup />
           <ListItem
             icon={<SquarePenIcon fontSize={20} />}
             onClick={() => navigate({ id: 'renameVault' })}
@@ -46,6 +44,13 @@ export const VaultSettingsPage = () => {
             hoverable
             showArrow
           />
+        </SettingsSection>
+
+        <SettingsSection title={t('security')}>
+          <VaultSettingsBackup />
+        </SettingsSection>
+
+        <SettingsSection title={t('other')}>
           {!isFastVault && (
             <ListItem
               icon={<ShareIcon fontSize={20} />}
@@ -62,15 +67,15 @@ export const VaultSettingsPage = () => {
             hoverable
             showArrow
           />
-          <ListItem
-            icon={<TrashIcon fontSize={20} />}
-            onClick={() => navigate({ id: 'deleteVault' })}
-            status="error"
-            title={t('delete')}
-            hoverable
-            showArrow
-          />
-        </List>
+        </SettingsSection>
+        <ListItem
+          icon={<TrashIcon fontSize={20} />}
+          onClick={() => navigate({ id: 'deleteVault' })}
+          status="error"
+          title={t('delete')}
+          hoverable
+          showArrow
+        />
       </PageContent>
     </VStack>
   )
