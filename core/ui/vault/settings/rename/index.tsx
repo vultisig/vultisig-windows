@@ -4,7 +4,14 @@ import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultM
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Button } from '@lib/ui/buttons/Button'
+import { IconButton, iconButtonSize } from '@lib/ui/buttons/IconButton'
+import {
+  textInputHeight,
+  textInputHorizontalPadding,
+} from '@lib/ui/css/textInput'
+import { CloseIcon } from '@lib/ui/icons/CloseIcon'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -37,6 +44,7 @@ export const VaultRenamePage = () => {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isValid, isDirty },
   } = useForm<Schema>({
     defaultValues: { name: currentVault.name },
@@ -65,7 +73,18 @@ export const VaultRenamePage = () => {
         hasBorder
       />
       <PageContent gap={12} flexGrow scrollable>
-        <TextInput {...register('name')} />
+        <ActionInsideInteractiveElement
+          render={() => <TextInput {...register('name')} />}
+          action={
+            <IconButton onClick={() => setValue('name', '')}>
+              <CloseIcon />
+            </IconButton>
+          }
+          actionPlacerStyles={{
+            bottom: (textInputHeight - iconButtonSize.md) / 2,
+            right: textInputHorizontalPadding,
+          }}
+        />
         {typeof errors.name?.message === 'string' && (
           <Text color="danger" size={12}>
             {errors.name.message}
