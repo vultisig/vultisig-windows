@@ -26,7 +26,7 @@ export const VaultSettingsPage = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={vault.name}
+        title={t('vault_settings')}
         hasBorder
       />
       <PageContent flexGrow scrollable>
