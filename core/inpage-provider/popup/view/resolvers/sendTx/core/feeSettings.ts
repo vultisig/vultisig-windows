@@ -15,7 +15,7 @@ export const getFeeSettings = (
 
   return matchRecordUnion(transactionPayload, {
     keysign: transaction => {
-      if (!isChainOfKind(chain, 'evm')) {
+      if (!isChainOfKind(chain, 'evm') && !isChainOfKind(chain, 'tron')) {
         return null
       }
 
@@ -26,6 +26,12 @@ export const getFeeSettings = (
       }
 
       const { gasLimit, maxPriorityFeePerGas } = gasSettings
+
+      if (gasLimit && isChainOfKind(chain, 'tron')) {
+        return {
+          gasLimit: BigInt(gasLimit),
+        }
+      }
 
       if (!gasLimit || !maxPriorityFeePerGas) {
         return null

@@ -49,6 +49,11 @@ export class VultisigTronWebTrx extends Trx {
               },
             },
             data: transaction.raw_data.data as string,
+            gasSettings: {
+              gasLimit: transaction.raw_data.fee_limit
+                ? transaction.raw_data.fee_limit.toString()
+                : undefined,
+            },
           }
         }
         case Types.ContractType.TriggerSmartContract: {
@@ -81,6 +86,11 @@ export class VultisigTronWebTrx extends Trx {
                   triggerSmartContract.contract_address
                 ),
               },
+            },
+            gasSettings: {
+              gasLimit: transaction.raw_data.fee_limit
+                ? transaction.raw_data.fee_limit.toString()
+                : undefined,
             },
           }
         }
@@ -118,6 +128,11 @@ export class VultisigTronWebTrx extends Trx {
               },
             },
             data: transaction.raw_data.data as string,
+            gasSettings: {
+              gasLimit: transaction.raw_data.fee_limit
+                ? transaction.raw_data.fee_limit.toString()
+                : undefined,
+            },
           }
         }
       }
@@ -141,10 +156,16 @@ export class VultisigTronWebTrx extends Trx {
       }
     )
 
+    console.log('returning hash', {
+      ...(transaction as Types.Transaction),
+      signature: [hash],
+      txID: hash,
+    } as unknown as SignedStringOrSignedTransaction<T>)
+
     return {
       ...(transaction as Types.Transaction),
       signature: [hash],
-      txId: hash,
+      txID: hash,
     } as unknown as SignedStringOrSignedTransaction<T>
   }
 }

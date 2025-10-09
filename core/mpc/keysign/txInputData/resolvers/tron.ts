@@ -47,7 +47,7 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
               callValue: value.callValue
                 ? Long.fromString(value.callValue?.toString())
                 : undefined,
-              data: value.data ? toTronData(value.data) : undefined,
+              data: value.data ? Buffer.from(value.data, 'hex') : undefined,
               callTokenValue: value.callTokenValue
                 ? Long.fromString(value.callTokenValue?.toString())
                 : undefined,
@@ -77,6 +77,7 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
     const input = TW.Tron.Proto.SigningInput.create({
       transaction: TW.Tron.Proto.Transaction.create({
         ...contract,
+        feeLimit: Long.fromString(tronSpecific.gasEstimation.toString()),
         timestamp: Long.fromString(tronSpecific.timestamp.toString()),
         blockHeader: TW.Tron.Proto.BlockHeader.create({
           timestamp: Long.fromString(

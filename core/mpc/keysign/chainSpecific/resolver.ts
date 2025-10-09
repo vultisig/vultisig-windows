@@ -1,8 +1,10 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { EvmFeeQuote } from '@core/chain/tx/fee/evm/EvmFeeSettings'
+import { TronFeeQuote } from '@core/chain/tx/fee/tron/tronFeeSettings'
 import {
   CosmosSpecific,
   EthereumSpecific,
+  TronSpecific,
   UTXOSpecific,
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
@@ -28,11 +30,13 @@ export type ChainSpecificResolverInput<R = KeysignChainSpecificValue> = {
   transactionType?: TransactionType
 } & (R extends EthereumSpecific
   ? { data?: string; feeQuote?: Partial<EvmFeeQuote> }
-  : R extends UTXOSpecific
-    ? { byteFeeMultiplier?: number; psbt?: Psbt }
-    : R extends CosmosSpecific
-      ? { timeoutTimestamp?: string }
-      : {})
+  : R extends TronSpecific
+    ? { data?: string; feeQuote?: Partial<TronFeeQuote> }
+    : R extends UTXOSpecific
+      ? { byteFeeMultiplier?: number; psbt?: Psbt }
+      : R extends CosmosSpecific
+        ? { timeoutTimestamp?: string }
+        : {})
 
 export type ChainSpecificResolver<R = KeysignChainSpecificValue> = Resolver<
   ChainSpecificResolverInput<R>,

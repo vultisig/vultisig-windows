@@ -1,6 +1,7 @@
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { getPsbtTransferInfo } from '@core/chain/chains/utxo/tx/getPsbtTransferInfo'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
+import { TronFeeSettings } from '@core/chain/tx/fee/tron/tronFeeSettings'
 import { byteFeeMultiplier } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/resolver'
 import {
@@ -65,6 +66,12 @@ export const getChainSpecificInput = (input: ParsedTx) => {
     psbt: () => '',
   })
 
+  const feeQuote = isChainOfKind(coin.chain, 'evm')
+    ? (feeSettings as EvmFeeSettings)
+    : isChainOfKind(coin.chain, 'tron')
+      ? (feeSettings as TronFeeSettings)
+      : undefined
+
   const result: ChainSpecificResolverInput = {
     coin,
     amount,
@@ -74,10 +81,7 @@ export const getChainSpecificInput = (input: ParsedTx) => {
     byteFeeMultiplier: isChainOfKind(coin.chain, 'utxo')
       ? byteFeeMultiplier.fast
       : undefined,
-    feeQuote:
-      feeSettings && isChainOfKind(coin.chain, 'evm')
-        ? (feeSettings as EvmFeeSettings)
-        : undefined,
+    feeQuote,
   }
 
   if ('regular' in customTxData) {
