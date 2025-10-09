@@ -2,15 +2,14 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-export const StyledDescription = styled(VStack)`
-  background-color: ${getColor('foregroundExtra')};
+export const Description = styled(VStack)`
   border: 1px dashed ${getColor('foregroundSuper')};
   border-radius: 16px;
-  gap: 12px;
+  gap: 8px;
   padding: 12px;
 `
 
-export const StyledDivider = styled.div`
+export const Divider = styled.div`
   background-image: linear-gradient(
     90deg,
     ${getColor('foreground')} 0%,
@@ -20,20 +19,18 @@ export const StyledDivider = styled.div`
   height: 1px;
 `
 
-export const StyledImage = styled.img`
+export const Image = styled.img`
   height: 36px;
   width: 36px;
 `
 
-export const StyledSection = styled(VStack)`
+export const Section = styled(VStack)`
   background-color: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
   border-radius: 16px;
-  gap: 16px;
-  padding: 24px;
 `
 
-export const StyledVerify = styled(HStack)`
+export const Verify = styled(HStack)`
   background-color: ${getColor('background')};
   border: 1px solid ${getColor('foregroundExtra')};
   border-radius: 16px;

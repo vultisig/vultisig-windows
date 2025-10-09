@@ -1,36 +1,31 @@
 import { fromBinary } from '@bufbuild/protobuf'
 import { base64Decode } from '@bufbuild/protobuf/wire'
+import { Animation } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Animation'
+import { Collapse } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Collapse'
+import { Request } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Request'
+import { Sender } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Sender'
 import { SignMessageOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Default'
 import {
-  StyledDescription,
-  StyledDivider,
-  StyledImage,
-  StyledSection,
-  StyledVerify,
-} from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/styles'
+  Description,
+  Divider,
+} from '@core/inpage-provider/popup/view/resolvers/signMessage/styles'
 import { usePopupContext } from '@core/inpage-provider/popup/view/state/context'
 import { PolicySchema } from '@core/mpc/types/plugin/policy_pb'
-import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
-import { Animation } from '@lib/ui/animations/Animation'
-import { BadgeCheckIcon } from '@lib/ui/icons/BadgeCheckIcon'
-import { SafeImage } from '@lib/ui/images/SafeImage'
-import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { GradientText, Text } from '@lib/ui/text'
+import { HStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
-import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
+import { isHexString } from 'ethers'
 import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const PolicyOverview: FC<SignMessageOverview> = ({
-  chain,
+  address,
   message,
   method,
   signature,
 }) => {
   const { t } = useTranslation()
   const { requestFavicon, requestOrigin } = usePopupContext<'signMessage'>()
-  const address = useCurrentVaultAddress(chain)
   const isFinished = useMemo(() => !!signature, [signature])
 
   const camelCaseToTitle = (input: string) => {
@@ -47,168 +42,212 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
 
   return (
     <>
-      {isFinished && (
-        <VStack style={{ height: 220, position: 'relative' }} fullWidth>
-          <Animation src="/core/animations/vault-created.riv" />
-          <AnimatedVisibility delay={300}>
-            <GradientText
-              as="span"
-              size={24}
-              style={{ bottom: 40, left: 0, position: 'absolute', right: 0 }}
-              centerHorizontally
-            >
-              {t('signature_successful')}
-            </GradientText>
-          </AnimatedVisibility>
-        </VStack>
-      )}
-      <StyledSection>
-        <Text as="span" color="shy" size={14} weight={500}>
-          {t(`request_from`)}
-        </Text>
-        <HStack gap={12} alignItems="center" justifyContent="space-between">
-          <HStack alignItems="center" gap={12}>
-            <SafeImage
-              src={requestFavicon}
-              render={props => <StyledImage alt="" {...props} />}
-            />
-            <Text as="span" size={14} weight={500}>
-              {getUrlBaseDomain(requestOrigin)}
-            </Text>
-          </HStack>
-          <StyledVerify alignItems="center" gap={4}>
-            <Text as={BadgeCheckIcon} color="success" size={16} />
-            <Text as="span" size={12} weight={500}>
-              {t('by_vultisig')}
-            </Text>
-          </StyledVerify>
-        </HStack>
-      </StyledSection>
-      <StyledSection>
-        <HStack alignItems="center" gap={8} justifyContent="space-between">
-          <Text as="span" color="shy" size={14} weight={500}>
-            {t('method')}
-          </Text>
-          <Text as="span" size={14} weight={500}>
-            {method}
-          </Text>
-        </HStack>
-        <StyledDivider />
-        <HStack alignItems="center" gap={8} justifyContent="space-between">
-          <Text as="span" color="shy" size={14} weight={500}>
-            {t('message')}
-          </Text>
-          <Text as="span" size={14} weight={500}>
-            {t('verify_identity_sign')}
-          </Text>
-        </HStack>
-        <StyledDivider />
-        <HStack alignItems="center" gap={8} justifyContent="space-between">
-          <Text as="span" color="shy" size={14} weight={500}>
-            {t('signing_address')}
-          </Text>
-          <Text
-            as={MiddleTruncate}
-            size={14}
-            text={address}
-            weight={500}
-            width={200}
-          />
-        </HStack>
-      </StyledSection>
-      <StyledSection>
-        <HStack alignItems="center" gap={8} justifyContent="space-between">
-          <Text as="span" color="shy" size={14} weight={500}>
-            {t('dapp_name')}
+      {isFinished && <Animation />}
+      <Sender favicon={requestFavicon} origin={requestOrigin} isValidated />
+      <Request
+        address={address}
+        message={t('verify_identity_sign')}
+        method={method}
+      />
+      <Collapse title={t('plugin_info')} collapsed>
+        <HStack
+          alignItems="center"
+          gap={8}
+          justifyContent="space-between"
+          wrap="nowrap"
+        >
+          <Text as="span" color="shy" size={14} weight={500} nowrap>
+            {t('name')}
           </Text>
           <Text as="span" size={14} weight={500}>
             {policy.name}
           </Text>
         </HStack>
-        <StyledDivider />
-        {!!policy.description && (
+        {policy.description && (
           <>
-            <VStack gap={4}>
-              <Text as="span" color="shy" size={14} weight={500}>
+            <Divider />
+            <HStack
+              alignItems="center"
+              gap={8}
+              justifyContent="space-between"
+              wrap="nowrap"
+            >
+              <Text as="span" color="shy" size={14} weight={500} nowrap>
                 {t('description')}
               </Text>
               <Text as="span" size={13} weight={500}>
                 {policy.description}
               </Text>
-            </VStack>
-            <StyledDivider />
+            </HStack>
           </>
         )}
-        <HStack alignItems="center" gap={8} justifyContent="space-between">
-          <Text as="span" color="shy" size={14} weight={500}>
+        <Divider />
+        <HStack
+          alignItems="center"
+          gap={8}
+          justifyContent="space-between"
+          wrap="nowrap"
+        >
+          <Text as="span" color="shy" size={14} weight={500} nowrap>
             ID
           </Text>
           <Text as="span" size={14} weight={500}>
             {policy.id}
           </Text>
         </HStack>
-        <StyledDivider />
-        <HStack alignItems="center" gap={8} justifyContent="space-between">
-          <Text as="span" color="shy" size={14} weight={500}>
+        <Divider />
+        <HStack
+          alignItems="center"
+          gap={8}
+          justifyContent="space-between"
+          wrap="nowrap"
+        >
+          <Text as="span" color="shy" size={14} weight={500} nowrap>
             {t('version')}
           </Text>
           <Text as="span" size={14} weight={500}>
             {policy.version}
           </Text>
         </HStack>
-      </StyledSection>
+      </Collapse>
       {isFinished ? (
-        <StyledSection>
-          <Text as="span" size={14} weight={500}>
-            {t(`signed_signature`)}
-          </Text>
+        <Collapse title={t('signed_signature')}>
           <Text as="span" color="info" size={14} weight={500}>
             {signature}
           </Text>
-        </StyledSection>
+        </Collapse>
       ) : (
         <>
           {policy.rules?.length > 0 && (
-            <StyledSection>
-              <Text as="span" size={14} weight={500}>
-                {t('rules')}
-              </Text>
-              {policy.rules.map(({ parameterConstraints, resource }, index) => {
-                const number = `${index < 9 ? '0' : ''}${index + 1}`
+            <Collapse title={t('plugin_rules')}>
+              {policy.rules.map(
+                ({ parameterConstraints, resource, target }, index) => {
+                  const number = `${index < 9 ? '0' : ''}${index + 1}`
 
-                return (
-                  <StyledDescription key={number}>
-                    <VStack gap={4}>
-                      <Text as="span" color="shy" size={12} weight={500}>
-                        {t('rule_item', { number })}
-                      </Text>
-                      <Text as="span" size={12} weight={500}>
-                        {resource}
-                      </Text>
-                    </VStack>
-                    {parameterConstraints.map(
-                      ({ constraint, parameterName }) => {
-                        const value = String(constraint?.value.value || '')
+                  return (
+                    <Description key={number}>
+                      <HStack
+                        alignItems="center"
+                        gap={8}
+                        justifyContent="space-between"
+                        wrap="nowrap"
+                      >
+                        <Text
+                          as="span"
+                          color="shy"
+                          size={12}
+                          weight={500}
+                          nowrap
+                        >
+                          {t('resource')}
+                        </Text>
+                        <Text as="span" size={12} weight={500}>
+                          {resource}
+                        </Text>
+                      </HStack>
+                      {parameterConstraints.map(
+                        ({ constraint, parameterName }) => {
+                          const value = String(constraint?.value.value || '')
 
-                        return (
-                          <VStack gap={4} key={parameterName}>
-                            {constraint?.value.case ? (
-                              <HStack alignItems="center" gap={4}>
+                          return (
+                            <>
+                              <Divider />
+                              <HStack
+                                alignItems="center"
+                                gap={8}
+                                justifyContent="space-between"
+                                key={parameterName}
+                                wrap="nowrap"
+                              >
+                                {constraint?.value.case ? (
+                                  <HStack
+                                    alignItems="center"
+                                    gap={4}
+                                    wrap="nowrap"
+                                  >
+                                    <Text
+                                      as="span"
+                                      color="shy"
+                                      size={12}
+                                      weight={500}
+                                      nowrap
+                                    >
+                                      {camelCaseToTitle(parameterName)}
+                                    </Text>
+                                    <Text
+                                      as="span"
+                                      color="shy"
+                                      size={10}
+                                      weight={500}
+                                      nowrap
+                                    >
+                                      {`(${camelCaseToTitle(constraint.value.case)})`}
+                                    </Text>
+                                  </HStack>
+                                ) : (
+                                  <Text
+                                    as="span"
+                                    color="shy"
+                                    size={12}
+                                    weight={500}
+                                    cropped
+                                    nowrap
+                                  >
+                                    {camelCaseToTitle(parameterName)}
+                                  </Text>
+                                )}
+                                {isHexString(value) ? (
+                                  <MiddleTruncate
+                                    justifyContent="end"
+                                    size={12}
+                                    text={value}
+                                    weight={500}
+                                    flexGrow
+                                  />
+                                ) : (
+                                  <Text
+                                    as="span"
+                                    size={12}
+                                    weight={500}
+                                    cropped
+                                    nowrap
+                                  >
+                                    {value}
+                                  </Text>
+                                )}
+                              </HStack>
+                            </>
+                          )
+                        }
+                      )}
+                      {target ? (
+                        <>
+                          <Divider />
+                          <HStack
+                            alignItems="center"
+                            gap={8}
+                            justifyContent="space-between"
+                            wrap="nowrap"
+                          >
+                            {target.target.case ? (
+                              <HStack alignItems="center" gap={4} wrap="nowrap">
                                 <Text
                                   as="span"
                                   color="shy"
                                   size={12}
                                   weight={500}
+                                  nowrap
                                 >
-                                  {camelCaseToTitle(parameterName)}
+                                  {t('target')}
                                 </Text>
                                 <Text
                                   as="span"
                                   color="shy"
-                                  size={12}
+                                  size={10}
                                   weight={500}
+                                  nowrap
                                 >
-                                  {`(${camelCaseToTitle(constraint.value.case)})`}
+                                  {`(${camelCaseToTitle(target.target.case)})`}
                                 </Text>
                               </HStack>
                             ) : (
@@ -217,41 +256,48 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
                                 color="shy"
                                 size={12}
                                 weight={500}
+                                nowrap
                               >
-                                {camelCaseToTitle(parameterName)}
+                                {t('target')}
                               </Text>
                             )}
-                            {value.startsWith('0x') ? (
-                              <Text
-                                as={MiddleTruncate}
+                            {isHexString(target.target.value) ? (
+                              <MiddleTruncate
+                                justifyContent="end"
                                 size={12}
-                                text={value}
+                                text={target.target.value}
                                 weight={500}
+                                flexGrow
                               />
                             ) : (
-                              <Text as="span" size={12} weight={500}>
-                                {value}
+                              <Text
+                                as="span"
+                                size={12}
+                                weight={500}
+                                cropped
+                                nowrap
+                              >
+                                {target.target.value || '-'}
                               </Text>
                             )}
-                          </VStack>
-                        )
-                      }
-                    )}
-                  </StyledDescription>
-                )
-              })}
-            </StyledSection>
+                          </HStack>
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                    </Description>
+                  )
+                }
+              )}
+            </Collapse>
           )}
+          <Collapse title={t(`message`)}>
+            <Text as="span" color="info" size={14} weight={500}>
+              {message}
+            </Text>
+          </Collapse>
         </>
       )}
-      <StyledSection>
-        <Text as="span" size={14} weight={500}>
-          {t(`message`)}
-        </Text>
-        <Text as="span" color="info" size={14} weight={500}>
-          {message}
-        </Text>
-      </StyledSection>
     </>
   )
 }
