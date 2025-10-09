@@ -12,6 +12,7 @@ export const de = {
     '<g>Sichern Sie jede Tresorfreigabe immer</g> separat in einer <g>anderen Location</g>',
   vault_share_banner:
     'Dieser QR Code ermöglicht Ihnen, eine Ansichtsversion Ihres Tresors zu teilen',
+  vault_info: 'Tresorinformationen',
   vault_details_description: 'Name, Anteil und Typ des Tresors anzeigen',
   vault_details_edit_vault_description: 'Deinen Tresornamen bearbeiten',
   reshare_vault_description: 'Tresor erneut mit einem neuen Komitee teilen',
@@ -29,6 +30,7 @@ export const de = {
   digit_input_loading_validation: 'Code wird überprüft, bitte warten',
   vult: '$VULT',
   vultisig: 'Vultisig',
+  keys: 'Schlüssel',
   by_vultisig: 'von Vultisig',
   merged: 'Zusammengeführt',
   mint: 'Erhalten',

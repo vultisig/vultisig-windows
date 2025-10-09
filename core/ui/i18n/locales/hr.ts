@@ -4,6 +4,7 @@ export const hr = {
     'Mondd, hogy helló <g>széf részvények,</g> az új <g>helyreállítási módszered</g>',
   onboarding_step_2:
     'Ezek <g>részekre vannak osztva</g> a biztonság növelése érdekében és, <g>az egyetlen meghibásodási pont eltávolítása érdekében</g>',
+  keys: 'Kulcsák',
   onboarding_step_3:
     '<g>Minden eszköz</g> a tárhelyedben tartalmaz <g>egy tárhelyrészt</g>',
   onboarding_step_4:
@@ -17,6 +18,7 @@ export const hr = {
     'Ez a QR kód lehetővé teszi, hogy megoszthasd egy nézeti változatot a tárhelyed',
   secure_crypto_vault: 'Sigurni kripto trezor',
   save_10_percent_on_swaps: 'Mentsd el <blue>10%</blue> a swap-okkal most',
+  vault_info: 'Tárhelyinformáció',
   vultisig: 'Vultisig',
   vault_details_description: 'Prikazati naziv, dio i vrstu trezora',
   vault_details_edit_vault_description: 'Urediti naziv svog trezora',

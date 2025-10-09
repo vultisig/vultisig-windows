@@ -12,6 +12,7 @@ import {
 import styled, { css } from 'styled-components'
 
 import { IconWrapper } from '../../icons/IconWrapper'
+import { HStack } from '../../layout/Stack'
 import { UiProps } from '../../props'
 
 type Styles = {
@@ -28,12 +29,6 @@ const StyledDesc = styled.span<Styles>`
   overflow: hidden;
   text-overflow: ellipsis;
   width: 100%;
-`
-
-const StyledContent = styled.div`
-  align-items: center;
-  display: flex;
-  gap: 8px;
 `
 
 const StyledMeta = styled.span`
@@ -137,7 +132,7 @@ export const ListItem: FC<ListItemProps> = ({
 
   return (
     <StyledListItem hoverable={hoverable} status={status} {...rest}>
-      <StyledContent>
+      <HStack alignItems="center" gap={12}>
         {icon}
         {description ? (
           <StyledMeta>
@@ -156,16 +151,16 @@ export const ListItem: FC<ListItemProps> = ({
         ) : (
           titleRender
         )}
-      </StyledContent>
+      </HStack>
       {(extra || showArrow) && (
-        <StyledContent>
+        <HStack alignItems="center" gap={8}>
           {extra}
           {showArrow && (
             <IconWrapper size={16} color="textShy">
               <ChevronRightIcon />
             </IconWrapper>
           )}
-        </StyledContent>
+        </HStack>
       )}
     </StyledListItem>
   )

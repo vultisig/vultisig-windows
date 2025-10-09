@@ -7,6 +7,7 @@ export const it = {
   onboarding_step_3:
     '<g>Ogni dispositivo</g> nel tuo caveau contiene <g>una quota del caveau</g>',
   positions: 'Posizioni',
+  keys: 'Chiavi',
   onboarding_step_4:
     'Recupera la tua cassaforte anche <g>se un dispositivo è perso o danneggiato</g>',
   vault_share_banner:
@@ -19,6 +20,7 @@ export const it = {
   secure_crypto_vault: 'Cassaforte sicura per criptovalute',
   vultisig: 'Vultisig',
   by_vultisig: 'da Vultisig',
+  vault_info: 'Informazioni sul caveau',
   vault_details_description:
     'Visualizzare il nome, la parte e il tipo della cassaforte',
   vault_details_edit_vault_description:
