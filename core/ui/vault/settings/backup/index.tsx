@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next'
 import { CoreView } from '../../../navigation/CoreView'
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '../../state/currentVault'
-import { ListItemIconWrapper } from '..'
+import { DescriptionText, ListItemIconWrapper } from '..'
 import { BackupOption } from './BackupOption'
 
 const backupOptionTypes = ['device', 'server'] as const
@@ -41,6 +41,11 @@ export const VaultSettingsBackup = () => {
             <ListItemIconWrapper>
               <FolderUploadIcon />
             </ListItemIconWrapper>
+          }
+          description={
+            <DescriptionText>
+              Back up your Vault Share to a preferred location
+            </DescriptionText>
           }
           onClick={() =>
             hasServer(vault.signers)

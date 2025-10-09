@@ -18,6 +18,11 @@ export const hr = {
   secure_crypto_vault: 'Sigurni kripto trezor',
   save_10_percent_on_swaps: 'Mentsd el <blue>10%</blue> a swap-okkal most',
   vultisig: 'Vultisig',
+  vault_details_description: 'Prikazati naziv, dio i vrstu trezora',
+  vault_details_edit_vault_description: 'Urediti naziv svog trezora',
+  reshare_vault_description: 'Ponovno podijeliti trezor s novim odborom',
+  sign_custom_message_description: 'Potpisati prilagođenu poruku',
+  delete_vault_description: 'Trajno izbrisati svoj trezor',
   by_vultisig: 'od Vultisig',
   onboarding_description_1:
     'Vultisig je sigurni, višeslojni kripto trezor, kompatibilan sa svim glavnim blockchainima i preko 10.000 tokena. Vultisig je potpuno samostalni.',

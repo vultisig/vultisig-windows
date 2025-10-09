@@ -35,6 +35,11 @@ export const VaultSettingsPage = () => {
       <PageContent gap={14} flexGrow scrollable>
         <SettingsSection title={t('vault')}>
           <ListItem
+            description={
+              <DescriptionText>
+                {t('vault_details_description')}
+              </DescriptionText>
+            }
             icon={
               <ListItemIconWrapper>
                 <CircleInfoIcon />
@@ -46,6 +51,11 @@ export const VaultSettingsPage = () => {
             showArrow
           />
           <ListItem
+            description={
+              <DescriptionText>
+                {t('vault_details_edit_vault_description')}
+              </DescriptionText>
+            }
             icon={
               <ListItemIconWrapper>
                 <PencilIcon />
@@ -70,6 +80,11 @@ export const VaultSettingsPage = () => {
                   <IconShareAndroid />
                 </ListItemIconWrapper>
               }
+              description={
+                <DescriptionText>
+                  {t('reshare_vault_description')}
+                </DescriptionText>
+              }
               onClick={() => navigate({ id: 'reshareVault' })}
               title={t('reshare')}
               hoverable
@@ -82,6 +97,11 @@ export const VaultSettingsPage = () => {
                 <IconFileEdit />
               </ListItemIconWrapper>
             }
+            description={
+              <DescriptionText>
+                {t('sign_custom_message_description')}
+              </DescriptionText>
+            }
             onClick={() => navigate({ id: 'signCustomMessage' })}
             title={t('sign')}
             hoverable
@@ -93,6 +113,11 @@ export const VaultSettingsPage = () => {
             <DeleteButtonIconWrapper>
               <TrashCanIcon />
             </DeleteButtonIconWrapper>
+          }
+          description={
+            <Text color="danger" size={12}>
+              {t('delete_vault_description')}
+            </Text>
           }
           onClick={() => navigate({ id: 'deleteVault' })}
           status="error"
@@ -116,4 +141,9 @@ const DeleteButtonIconWrapper = styled(ListItemIconWrapper)`
 
 const DeleteItem = styled(ListItem)`
   border-radius: 12px;
+`
+
+export const DescriptionText = styled(Text)`
+  color: ${getColor('textShyExtra')};
+  font-size: 12px;
 `
