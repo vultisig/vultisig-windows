@@ -148,14 +148,15 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
 
   if (isNative) {
     const contract = TW.Tron.Proto.TransferContract.create({
-      ownerAddress: keysignPayload?.coin?.address ?? '',
-      toAddress: keysignPayload?.toAddress,
-      amount: Long.fromString(keysignPayload?.toAmount ?? '0'),
+      ownerAddress: shouldBePresent(keysignPayload?.coin?.address),
+      toAddress: shouldBePresent(keysignPayload?.toAddress),
+      amount: Long.fromString(shouldBePresent(keysignPayload?.toAmount)),
     })
 
     const input = TW.Tron.Proto.SigningInput.create({
       transaction: TW.Tron.Proto.Transaction.create({
         transfer: contract,
+        feeLimit: Long.fromString(tronSpecific.gasEstimation.toString()),
         timestamp: Long.fromString(tronSpecific.timestamp.toString()),
         blockHeader: TW.Tron.Proto.BlockHeader.create({
           timestamp: Long.fromString(
@@ -184,9 +185,9 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
   )
 
   const contract = TW.Tron.Proto.TransferTRC20Contract.create({
-    ownerAddress: keysignPayload?.coin?.address ?? '',
-    toAddress: keysignPayload?.toAddress,
-    contractAddress: keysignPayload?.coin?.contractAddress ?? '',
+    ownerAddress: shouldBePresent(keysignPayload?.coin?.address),
+    toAddress: shouldBePresent(keysignPayload?.toAddress),
+    contractAddress: shouldBePresent(keysignPayload?.coin?.contractAddress),
     amount: amountHex,
   })
 

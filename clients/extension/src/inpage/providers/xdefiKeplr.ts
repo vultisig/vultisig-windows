@@ -116,7 +116,7 @@ const keplrHandler = (
       from: message.value.from_address,
       to: message.value.to_address,
       data: memo,
-      cosmosMsgPayload: {
+      msgPayload: {
         case: message.type,
         value: {
           amount: message.value.amount,
@@ -142,7 +142,7 @@ const keplrHandler = (
       from: decodedMessage.fromAddress,
       to: decodedMessage.toAddress,
       data: memo,
-      cosmosMsgPayload: {
+      msgPayload: {
         case: message.typeUrl,
         value: {
           amount: decodedMessage.amount,
@@ -178,7 +178,7 @@ const keplrHandler = (
         from: message.value.sender,
         to: message.value.contract,
         data: memo,
-        cosmosMsgPayload: {
+        msgPayload: {
           case: CosmosMsgType.MSG_EXECUTE_CONTRACT,
           value: {
             sender: message.value.sender,
@@ -212,7 +212,7 @@ const keplrHandler = (
         from: decodedMessage.sender,
         to: decodedMessage.contract,
         data: memo,
-        cosmosMsgPayload: {
+        msgPayload: {
           case: CosmosMsgType.MSG_EXECUTE_CONTRACT,
           value: {
             sender: decodedMessage.sender,
@@ -247,7 +247,7 @@ const keplrHandler = (
         from: msg.sender,
         to: msg.receiver,
         data: `${receiverChain}:${msg.sourceChannel}:${msg.receiver}:${msg.memo}`,
-        cosmosMsgPayload: {
+        msgPayload: {
           case: CosmosMsgType.MSG_TRANSFER_URL,
           value: {
             ...msg,
@@ -281,7 +281,7 @@ const keplrHandler = (
         },
         from: message.value.signer,
         data: memo,
-        cosmosMsgPayload: {
+        msgPayload: {
           case: CosmosMsgType.THORCHAIN_MSG_DEPOSIT,
           value: {
             coins: message.value.coins,
@@ -319,7 +319,7 @@ const keplrHandler = (
         },
         from: thorAddress,
         data: memo,
-        cosmosMsgPayload: {
+        msgPayload: {
           case: CosmosMsgType.THORCHAIN_MSG_DEPOSIT,
           value: {
             coins: decodedMessage.coins.map(coin => ({
