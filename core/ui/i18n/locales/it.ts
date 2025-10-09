@@ -19,6 +19,14 @@ export const it = {
   secure_crypto_vault: 'Cassaforte sicura per criptovalute',
   vultisig: 'Vultisig',
   by_vultisig: 'da Vultisig',
+  vault_details_description:
+    'Visualizzare il nome, la parte e il tipo della cassaforte',
+  vault_details_edit_vault_description:
+    'Modificare il nome della tua cassaforte',
+  reshare_vault_description:
+    'Condividere di nuovo la cassaforte con un nuovo comitato',
+  sign_custom_message_description: 'Firmare un messaggio personalizzato',
+  delete_vault_description: 'Eliminare definitivamente la tua cassaforte',
   save_10_percent_on_swaps: 'Risparmia <blue>10%</blue> su swap ora',
   onboarding_description_1:
     'Vultisig è una cassaforte sicura per criptovalute multi-dispositivo, compatibile con tutte le principali blockchain e oltre 10.000 token. Vultisig è completamente autogestito.',

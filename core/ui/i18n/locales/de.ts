@@ -12,6 +12,11 @@ export const de = {
     '<g>Sichern Sie jede Tresorfreigabe immer</g> separat in einer <g>anderen Location</g>',
   vault_share_banner:
     'Dieser QR Code ermöglicht Ihnen, eine Ansichtsversion Ihres Tresors zu teilen',
+  vault_details_description: 'Name, Anteil und Typ des Tresors anzeigen',
+  vault_details_edit_vault_description: 'Deinen Tresornamen bearbeiten',
+  reshare_vault_description: 'Tresor erneut mit einem neuen Komitee teilen',
+  sign_custom_message_description: 'Benutzerdefinierte Nachricht signieren',
+  delete_vault_description: 'Deinen Tresor dauerhaft löschen',
   onboarding_step_6:
     'Diese Freigaben arbeiten zusammen, um <g>Ihren Tresor zu entsperren</g>',
   positions: 'Positionen',
