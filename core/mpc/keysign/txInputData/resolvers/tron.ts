@@ -156,7 +156,6 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
     const input = TW.Tron.Proto.SigningInput.create({
       transaction: TW.Tron.Proto.Transaction.create({
         transfer: contract,
-        feeLimit: Long.fromString(tronSpecific.gasEstimation.toString()),
         timestamp: Long.fromString(tronSpecific.timestamp.toString()),
         blockHeader: TW.Tron.Proto.BlockHeader.create({
           timestamp: Long.fromString(
