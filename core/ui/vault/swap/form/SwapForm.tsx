@@ -8,14 +8,16 @@ import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { OnFinishProp } from '@lib/ui/props'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
-import { t } from 'i18next'
 import { FC, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useSwapValidationQuery } from '../queries/useSwapValidationQuery'
 
 export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
   const { error, isPending } = useSwapValidationQuery()
+
+  const { t } = useTranslation()
 
   const errorMessage = useMemo(() => {
     if (isPending) {
@@ -25,7 +27,7 @@ export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
     if (error) {
       return extractErrorMsg(error)
     }
-  }, [error, isPending])
+  }, [error, isPending, t])
 
   return (
     <>
