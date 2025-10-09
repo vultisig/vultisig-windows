@@ -15,7 +15,7 @@ import styled from 'styled-components'
 import { useSwapValidationQuery } from '../queries/useSwapValidationQuery'
 
 export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
-  const { error, isPending } = useSwapValidationQuery()
+  const { error, data, isPending } = useSwapValidationQuery()
 
   const { t } = useTranslation()
 
@@ -27,7 +27,9 @@ export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
     if (error) {
       return extractErrorMsg(error)
     }
-  }, [error, isPending, t])
+
+    return data ?? undefined
+  }, [data, error, isPending, t])
 
   return (
     <>
