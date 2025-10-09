@@ -29,8 +29,7 @@ export const en = {
   function_unavailble:
     'Feature unavailable for existing chain coins. Please add coins that can be used with FUNCTION:',
   request_from: 'Request from',
-  rules: 'Rules',
-  rule_item: 'Rule {{number}}',
+  plugin_rules: 'Plugin Rules',
   sign_request: 'Sign Request',
   signed_signature: 'Signed Signature',
   signing_address: 'Signing Address',
@@ -1080,6 +1079,8 @@ export const en = {
   failed_to_process_transaction: 'Failed to process transaction',
   signature_successful: 'Signature Successful',
   same_vault_share: 'Same vault share',
+  resource: 'Resource',
+  target: 'Target',
   device_backup: 'Device Backup',
   device_backup_description: 'Store the vault share of this device.',
   server_backup: 'Server Backup',
