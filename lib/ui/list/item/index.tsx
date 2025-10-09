@@ -11,6 +11,7 @@ import {
 } from 'react'
 import styled, { css } from 'styled-components'
 
+import { IconWrapper } from '../../icons/IconWrapper'
 import { UiProps } from '../../props'
 
 type Styles = {
@@ -159,7 +160,11 @@ export const ListItem: FC<ListItemProps> = ({
       {(extra || showArrow) && (
         <StyledContent>
           {extra}
-          {showArrow && <ChevronRightIcon fontSize={16} />}
+          {showArrow && (
+            <IconWrapper size={16} color="textShy">
+              <ChevronRightIcon />
+            </IconWrapper>
+          )}
         </StyledContent>
       )}
     </StyledListItem>
