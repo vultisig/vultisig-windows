@@ -9,6 +9,8 @@ export const es = {
   onboarding_step_4:
     'Recupera tu bóveda incluso <g>si un dispositivo se pierde o se daña</g>',
   positions: 'Posiciones',
+  vault_info: 'Información de la bóveda',
+  keys: 'Claves',
   vault_share_banner:
     'Este código QR le permite compartir una versión de vista de su bóveda',
   onboarding_step_5:
