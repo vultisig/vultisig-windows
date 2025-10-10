@@ -13,6 +13,8 @@ import { publicActionsL2 } from 'viem/zksync'
 
 import { FeeQuoteResolver } from '../resolver'
 
+const baseFeeMultiplier = (value: bigint) => (value * 15n) / 10n
+
 const formatData = (data: string): `0x${string}` => {
   if (isHex(data)) return data
   return stringToHex(data)
@@ -28,71 +30,52 @@ export const getEvmFeeQuote: FeeQuoteResolver<'evm'> = async ({
   const { chain } = coin
   const client = getEvmClient(chain)
 
-  let zkEstimate:
-    | {
-        gasLimit?: bigint
-        maxFeePerGas?: bigint
-        maxPriorityFeePerGas?: bigint
-      }
-    | undefined
-
-  const estimateGasLimit = async (): Promise<bigint> => {
-    if (thirdPartyGasLimitEstimation && chain === Chain.Zksync) {
-      const result = await attempt(
-        client.extend(publicActionsL2()).estimateFee({
-          chain: evmChainInfo[chain as EvmChain],
-          account: coin.address as `0x${string}`,
-          to: receiver
-            ? (shouldBePresent(receiver) as `0x${string}`)
-            : undefined,
-          value: amount,
-          data: data ? formatData(data) : undefined,
-        })
+  const capGasLimit = (estimatedGasLimit: bigint | undefined): bigint =>
+    bigIntMax(
+      ...without(
+        [
+          estimatedGasLimit,
+          thirdPartyGasLimitEstimation,
+          deriveEvmGasLimit({ coin, data }),
+        ],
+        undefined
       )
-      if (result.data) {
-        zkEstimate = {
-          gasLimit: result.data.gasLimit,
-          maxFeePerGas: result.data.maxFeePerGas,
-          maxPriorityFeePerGas: result.data.maxPriorityFeePerGas,
-        }
-      }
-    }
-
-    const candidates = without<bigint | undefined>(
-      [
-        await withFallback(
-          attempt(
-            client.estimateGas({
-              account: coin.address as `0x${string}`,
-              to: receiver
-                ? (shouldBePresent(receiver) as `0x${string}`)
-                : undefined,
-              value: amount,
-              data: data ? formatData(data) : undefined,
-            })
-          ),
-          undefined
-        ),
-        deriveEvmGasLimit({ coin: coin as any, data }),
-        thirdPartyGasLimitEstimation ? zkEstimate?.gasLimit : undefined,
-      ],
-      undefined
     )
 
-    return bigIntMax(...(candidates as bigint[]))
+  if (chain === Chain.Zksync) {
+    const result = await attempt(
+      client.extend(publicActionsL2()).estimateFee({
+        chain: evmChainInfo[chain as EvmChain],
+        account: coin.address as `0x${string}`,
+        to: receiver ? (shouldBePresent(receiver) as `0x${string}`) : undefined,
+        value: amount,
+        data: data ? formatData(data) : undefined,
+      })
+    )
+    if (result.data) {
+      const { gasLimit, maxFeePerGas, maxPriorityFeePerGas } = result.data
+      return {
+        gasLimit: capGasLimit(gasLimit),
+        baseFeePerGas: maxFeePerGas - maxPriorityFeePerGas,
+        maxPriorityFeePerGas,
+      }
+    }
   }
 
-  const [fallbackBaseFeePerGas, maxPriorityFeePerGas, gasLimit] =
-    await Promise.all([
-      getEvmBaseFee(chain as EvmChain),
-      getEvmMaxPriorityFeePerGas(chain as EvmChain),
-      estimateGasLimit(),
-    ])
+  const gasLimit = capGasLimit(
+    await withFallback(
+      attempt(
+        client.estimateGas({
+          account: coin.address as `0x${string}`,
+        })
+      ),
+      undefined
+    )
+  )
 
-  const baseFeePerGas =
-    zkEstimate?.maxFeePerGas && zkEstimate?.maxPriorityFeePerGas
-      ? zkEstimate.maxFeePerGas - zkEstimate.maxPriorityFeePerGas
-      : fallbackBaseFeePerGas
+  const baseFeePerGas = baseFeeMultiplier(await getEvmBaseFee(chain))
+
+  const maxPriorityFeePerGas = await getEvmMaxPriorityFeePerGas(chain)
 
   return {
     baseFeePerGas,

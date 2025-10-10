@@ -11,7 +11,7 @@ export type FeeQuoteResolverInput<K extends ChainKind = ChainKind> = {
       amount: bigint
       receiver: string
       data?: string
-      thirdPartyGasLimitEstimation?: boolean
+      thirdPartyGasLimitEstimation?: bigint
     }
   : {})
 
