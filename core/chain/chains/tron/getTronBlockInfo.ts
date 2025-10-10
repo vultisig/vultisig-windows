@@ -1,4 +1,4 @@
-import { Coin } from '@core/mpc/types/vultisig/keysign/v1/coin_pb'
+import type { AccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
 import { tronRpcUrl } from './config'
@@ -31,7 +31,7 @@ type BlockChainSpecificTron = {
 }
 
 export async function getTronBlockInfo(
-  coin: Coin
+  coin: AccountCoinKey
 ): Promise<BlockChainSpecificTron> {
   const url = `${tronRpcUrl}/wallet/getnowblock`
 
@@ -45,10 +45,12 @@ export async function getTronBlockInfo(
   const expiration = nowMillis + oneHourMillis
 
   let estimation = '800000' // Default TRX fee
-  if (!coin.isNativeToken) {
+  const isNativeToken = !coin.id
+  if (!isNativeToken) {
+    const contractAddress = coin.id as string
     estimation = await getTriggerConstantContractFee(
       coin.address,
-      coin.contractAddress,
+      contractAddress,
       '0x9c9d70d46934c98fd3d7c302c4e0b924da7a4fdf',
       BigInt('1000000')
     )
