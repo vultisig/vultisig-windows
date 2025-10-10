@@ -18,7 +18,9 @@ export const SendFiatFeeValue = () => {
   const coin = useCurrentSendCoin()
   const { chain } = coin
 
-  const feeQuoteQuery = useFeeQuoteQuery()
+  const feeQuoteQuery = useFeeQuoteQuery({
+    coin,
+  })
   const formatFiatAmount = useFormatFiatAmount()
 
   const { decimals, ticker } = chainFeeCoin[chain]
