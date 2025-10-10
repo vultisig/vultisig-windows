@@ -1,11 +1,12 @@
 import { ChildrenProp } from '@lib/ui/props'
+import { isRecordEmpty } from '@lib/utils/record/isRecordEmpty'
 
-import { useSendFormValidation } from '../queries/useSendFormValidation'
+import { useSendValidationQuery } from '../queries/useSendValidationQuery'
 
 export const ValidSendFormOnly = ({ children }: ChildrenProp) => {
-  const { isValid, isPending } = useSendFormValidation()
+  const { data } = useSendValidationQuery()
 
-  if (isPending || !isValid) return null
+  if (!data || !isRecordEmpty(data)) return null
 
   return <>{children}</>
 }

@@ -16,7 +16,6 @@ import { SendGasFeeWrapper } from '@core/ui/vault/send/fee/SendGasFeeWrapper'
 import { ManageFeeSettings } from '@core/ui/vault/send/fee/settings/ManageFeeSettings'
 import { ManageMemo } from '@core/ui/vault/send/memo/ManageMemo'
 import { useSendChainSpecificQuery } from '@core/ui/vault/send/queries/useSendChainSpecificQuery'
-import { useSendFormFieldState } from '@core/ui/vault/send/state/formFields'
 import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Match } from '@lib/ui/base/Match'
@@ -41,6 +40,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'
+import { useSendValidationQuery } from '../queries/useSendValidationQuery'
 import { useSendAmount } from '../state/amount'
 import { FiatSendAmountInput } from './FiatSendAmountInput'
 
@@ -70,11 +70,8 @@ export const ManageAmountInputField = () => {
     )
   )
 
-  const [
-    {
-      errors: { amount: amountError },
-    },
-  ] = useSendFormFieldState()
+  const { data } = useSendValidationQuery()
+  const amountError = data?.amount
 
   const chainSpecificQuery = useSendChainSpecificQuery()
 
