@@ -1,5 +1,6 @@
 import { StrictInfoRow } from '@lib/ui/layout/StrictInfoRow'
 import { ActiveQueryOnly } from '@lib/ui/query/components/ActiveQueryOnly'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 
 import { useSwapQuoteQuery } from '../../queries/useSwapQuoteQuery'
 import { SwapFees } from './SwapFees'
@@ -15,7 +16,10 @@ export const SwapInfo = () => {
   return (
     <ActiveQueryOnly value={query}>
       <SwapProvider />
-      <SwapFees RowComponent={StrictInfoRow} />
+      <MatchQuery
+        value={query}
+        success={() => <SwapFees RowComponent={StrictInfoRow} />}
+      />
     </ActiveQueryOnly>
   )
 }

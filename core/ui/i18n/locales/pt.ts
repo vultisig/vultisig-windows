@@ -11,6 +11,8 @@ export const pt = {
   onboarding_step_5:
     '<g>Sempre faça backup de cada parte do cofre</g> separadamente em um <g>local diferente</g>',
   onboarding_step_6: 'Essas partes colaboram para <g>desbloquear seu cofre</g>',
+  vault_share_banner:
+    'Este QR Code permite compartilhar uma versão de visualização do seu cofre',
   secure_crypto_vault: 'Cofre seguro de cripto',
   vultisig: 'Vultisig',
   by_vultisig: 'por Vultisig',

@@ -1,7 +1,7 @@
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { getColor } from '@lib/ui/theme/getters'
-import { ThemeColors } from '@lib/ui/theme/ThemeColors'
+import { ThemeColor } from '@lib/ui/theme/ThemeColors'
 import {
   CSSProperties,
   FC,
@@ -18,7 +18,6 @@ type Styles = {
   fontSize: NonNullable<CSSProperties['fontSize']>
 }
 type Status = 'default' | 'error' | 'success' | 'warning'
-type ThemeColor = keyof ThemeColors
 
 const StyledDesc = styled.span<Styles>`
   color: ${({ color }) => getColor(color)};
