@@ -9,6 +9,7 @@ import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { Divider } from '@lib/ui/divider'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { CheckStatus } from '@lib/ui/inputs/checkbox/CheckStatus'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -18,17 +19,12 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 const StyledCheck = styled(CheckStatus)`
   ${sameDimensions(14)};
-`
-
-const StyledIcon = styled(TriangleAlertIcon)`
-  color: ${getColor('danger')};
 `
 
 const terms = [
@@ -69,11 +65,18 @@ export const DeleteVaultPage = () => {
         hasBorder
       />
       <PageContent gap={24} flexGrow scrollable>
-        <VStack alignItems="center" gap={24}>
-          <StyledIcon fontSize={66} />
-          <Text color="contrast" size={16} weight={700} centerHorizontally>
-            {t('vault_delete_page_header_subtitle')}
-          </Text>
+        <VStack alignItems="center" gap={14}>
+          <IconWrapper size={24} color="danger">
+            <TriangleAlertIcon />
+          </IconWrapper>
+          <VStack gap={8}>
+            <Text color="danger" size={22} weight={500} centerHorizontally>
+              {t('vault_delete_page_header_title')}
+            </Text>
+            <Text color="shy" size={13} weight={500} centerHorizontally>
+              {t('vault_delete_page_header_subtitle')}
+            </Text>
+          </VStack>
         </VStack>
         <List>
           <ListItem title={t('vault_name')} description={vault.name} />
