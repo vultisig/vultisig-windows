@@ -12,6 +12,10 @@ type UtxoFeeQuote = {
   byteFeeMultiplier: number
 }
 
+type CardanoFeeQuote = {
+  byteFee: bigint
+}
+
 type SolanaFeeQuote = {
   priorityFee: bigint
 }
@@ -28,7 +32,7 @@ type FeeQuoteByKind = EnsureAllKindsCovered<{
   cosmos: GasFeeQuote
   solana: SolanaFeeQuote
   ripple: GasFeeQuote
-  cardano: UtxoFeeQuote
+  cardano: CardanoFeeQuote
   polkadot: GasFeeQuote
   ton: GasFeeQuote
   tron: GasFeeQuote
