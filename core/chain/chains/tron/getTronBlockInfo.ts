@@ -45,12 +45,10 @@ export async function getTronBlockInfo(
   const expiration = nowMillis + oneHourMillis
 
   let estimation = '800000' // Default TRX fee
-  const isNativeToken = !coin.id
-  if (!isNativeToken) {
-    const contractAddress = coin.id as string
+  if (coin.id) {
     estimation = await getTriggerConstantContractFee(
       coin.address,
-      contractAddress,
+      coin.id,
       '0x9c9d70d46934c98fd3d7c302c4e0b924da7a4fdf',
       BigInt('1000000')
     )
