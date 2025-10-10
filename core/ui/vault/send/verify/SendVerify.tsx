@@ -5,7 +5,6 @@ import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
-import { SendChainSpecificProvider } from '@core/ui/vault/send/fee/SendChainSpecificProvider'
 import { SendFiatFeeValue } from '@core/ui/vault/send/fee/SendFiatFeeValue'
 import { useSendCappedAmountQuery } from '@core/ui/vault/send/queries/useSendCappedAmountQuery'
 import { useSender } from '@core/ui/vault/send/sender/hooks/useSender'
@@ -123,11 +122,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
             styles={{ title: { color: 'textShy' } }}
           />
           <ListItem
-            extra={
-              <SendChainSpecificProvider>
-                <SendFiatFeeValue />
-              </SendChainSpecificProvider>
-            }
+            extra={<SendFiatFeeValue />}
             title={t('est_network_fee')}
             styles={{ title: { color: 'textShy' } }}
           />
