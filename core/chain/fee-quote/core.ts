@@ -1,5 +1,5 @@
 import { Chain } from '../Chain'
-import { ChainKind, DeriveChainKind } from '../ChainKind'
+import { ChainKind, DeriveChainKind, getChainKind } from '../ChainKind'
 
 type EvmFeeQuote = {
   maxPriorityFeePerGas: bigint
@@ -43,3 +43,15 @@ export type FeeQuote<T extends ChainKind = ChainKind> = FeeQuoteByKind[T]
 
 export type FeeQuoteForChain<C extends Chain = Chain> =
   FeeQuoteByKind[DeriveChainKind<C>]
+
+export type FeeQuoteRecordUnion<K extends ChainKind = ChainKind> = {
+  [Kind in K]: Record<Kind, FeeQuoteByKind[Kind]>
+}[K]
+
+export function toFeeQuoteRecordUnion<C extends Chain>(
+  chain: C,
+  quote: FeeQuoteForChain<C>
+): FeeQuoteRecordUnion<DeriveChainKind<C>> {
+  const kind = getChainKind(chain)
+  return { [kind]: quote } as unknown as FeeQuoteRecordUnion<DeriveChainKind<C>>
+}
