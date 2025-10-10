@@ -1124,4 +1124,22 @@ export const it = {
   check_email: 'Controlla la posta elettronica',
   backup_share_sent_description:
     'Abbiamo appena inviato la condivisione di backup al tuo indirizzo email. Se non la vedi, controlla la cartella spam.',
+  faq_is_open_source_title: 'Vultisig è open source e sottoposto a verifica?',
+  faq_is_open_source_content:
+    'Sì, Vultisig è open source ed è stato sottoposto a controlli di sicurezza. Sia i report di audit che il codice sorgente sono accessibili.',
+  faq_data_protection_title:
+    'Come gestisce Vultisig la privacy e la protezione dei dati?',
+  faq_data_protection_content:
+    'Vultisig non memorizza alcuna informazione utente dalle sue app mobili.',
+  faq_comparison_title:
+    'Come si confronta Vultisig con altri portafogli multisig?',
+  faq_comparison_content:
+    'È basato sulla tecnologia MPC, che elimina la necessità di frasi seed e supporta più blockchain, rendendo Vultisig flessibile e indipendente dalla catena.',
+  label: 'Etichetta',
+  select_vaults_to_backup: 'Seleziona i Vault di cui eseguire il backup',
+  select_vaults_to_backup_description:
+    'Scegli se eseguire il backup solo di questo vault o di tutti i vault nella tua app.',
+  this_vault_only: 'Solo questo caveau',
+  all_vaults: 'Tutti i caveau',
+  more: 'Di più',
 }

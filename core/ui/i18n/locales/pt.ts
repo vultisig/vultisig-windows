@@ -1116,4 +1116,22 @@ export const pt = {
   check_email: 'Verifique o e-mail',
   backup_share_sent_description:
     'Acabamos de enviar seu compartilhamento de backup para o seu e-mail. Caso não o encontre, verifique sua caixa de spam.',
+  faq_is_open_source_title: 'O Vultisig é de código aberto e auditado?',
+  faq_is_open_source_content:
+    'Sim, o Vultisig é de código aberto e passou por auditorias de segurança. Tanto os relatórios de auditoria quanto o código-fonte são acessíveis.',
+  faq_data_protection_title:
+    'Como a Vultisig lida com privacidade e proteção de dados?',
+  faq_data_protection_content:
+    'A Vultisig não armazena nenhuma informação do usuário em seus aplicativos móveis.',
+  faq_comparison_title:
+    'Como a Vultisig se compara a outras carteiras multiassinadas?',
+  faq_comparison_content:
+    'Ele é construído com base na tecnologia MPC, que elimina a necessidade de frases-semente e oferece suporte a vários blockchains, tornando o Vultisig flexível e independente de cadeia.',
+  label: 'Rótulo',
+  select_vaults_to_backup: 'Selecione os cofres para fazer backup',
+  select_vaults_to_backup_description:
+    'Escolha se deseja fazer backup apenas deste cofre ou de todos os cofres do seu aplicativo.',
+  this_vault_only: 'Somente este cofre',
+  all_vaults: 'Todos os cofres',
+  more: 'mais',
 }

@@ -23,7 +23,7 @@ const backupOptionIcon: Record<BackupOptionType, React.FC> = {
 }
 
 const backupOptionView: Record<BackupOptionType, CoreView> = {
-  device: { id: 'vaultBackup' },
+  device: { id: 'selectVaultsBackup' },
   server: { id: 'requestFastVaultBackup' },
 }
 
