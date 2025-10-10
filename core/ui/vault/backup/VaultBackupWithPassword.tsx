@@ -39,13 +39,15 @@ type Schema = z.infer<ReturnType<typeof createSchema>>
 export const VaultBackupWithPassword = ({
   onFinish,
   onBack,
-}: OnFinishProp & OnBackProp) => {
+  vaultIds,
+}: OnFinishProp & OnBackProp & { vaultIds: string[] }) => {
   const { t } = useTranslation()
 
   const schema = useMemo(() => createSchema(t), [t])
 
   const { error, isPending, mutate } = useBackupVaultMutation({
     onSuccess: onFinish,
+    vaultIds,
   })
 
   const {

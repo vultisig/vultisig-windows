@@ -1094,4 +1094,10 @@ export const en = {
   check_email: 'Check email',
   backup_share_sent_description:
     'We just sent your backup share to your email. If you don’t see it, check your spam folder.',
+  select_vaults_to_backup: 'Select Vaults to Back Up',
+  select_vaults_to_backup_description:
+    'Choose whether to back up just this vault or all vaults in your app.',
+  this_vault_only: 'This Vault Only',
+  all_vaults: 'All Vaults',
+  more: 'more',
 }

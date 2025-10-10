@@ -48,10 +48,12 @@ const infoItems = [
 export const VaultBackupWithoutPassword = ({
   onFinish,
   onPasswordRequest,
-}: VaultBackupWithoutPasswordProps) => {
+  vaultIds,
+}: VaultBackupWithoutPasswordProps & { vaultIds: string[] }) => {
   const { t } = useTranslation()
   const { mutate: backupVault, isPending } = useBackupVaultMutation({
     onSuccess: onFinish,
+    vaultIds,
   })
 
   return (
