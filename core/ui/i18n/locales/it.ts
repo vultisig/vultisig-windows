@@ -25,6 +25,8 @@ export const it = {
     'Visualizzare il nome, la parte e il tipo della cassaforte',
   vault_details_edit_vault_description:
     'Modificare il nome della tua cassaforte',
+  backup_description:
+    'Fai una copia di sicurezza della tua Cassaforte in un luogo preferito',
   reshare_vault_description:
     'Condividere di nuovo la cassaforte con un nuovo comitato',
   sign_custom_message_description: 'Firmare un messaggio personalizzato',

@@ -25,6 +25,7 @@ export const hr = {
   reshare_vault_description: 'Ponovno podijeliti trezor s novim odborom',
   sign_custom_message_description: 'Potpisati prilagođenu poruku',
   delete_vault_description: 'Trajno izbrisati svoj trezor',
+  backup_description: 'Sigurno podijeliti svoj trezor u odabranom mjestu',
   by_vultisig: 'od Vultisig',
   onboarding_description_1:
     'Vultisig je sigurni, višeslojni kripto trezor, kompatibilan sa svim glavnim blockchainima i preko 10.000 tokena. Vultisig je potpuno samostalni.',
