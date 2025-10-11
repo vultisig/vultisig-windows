@@ -1,6 +1,6 @@
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { getPsbtTransferInfo } from '@core/chain/chains/utxo/tx/getPsbtTransferInfo'
-import { FeeSettings } from '@core/chain/fee-quote/settings/core'
+import { FeeSettings } from '@core/chain/feeQuote/settings/core'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/resolver'
 import {
   CosmosSpecific,

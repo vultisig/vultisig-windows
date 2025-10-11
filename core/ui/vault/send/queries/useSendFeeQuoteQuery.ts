@@ -1,10 +1,10 @@
 import { ChainKind, getChainKind } from '@core/chain/ChainKind'
-import { applyFeeSettings } from '@core/chain/fee-quote/applyFeeSettings'
-import { FeeQuote } from '@core/chain/fee-quote/core'
+import { applyFeeSettings } from '@core/chain/feeQuote/applyFeeSettings'
+import { FeeQuote } from '@core/chain/feeQuote/core'
 import {
   FeeSettingsChainKind,
   feeSettingsChainKinds,
-} from '@core/chain/fee-quote/settings/core'
+} from '@core/chain/feeQuote/settings/core'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMemo } from 'react'
