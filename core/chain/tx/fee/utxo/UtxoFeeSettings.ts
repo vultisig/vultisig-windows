@@ -1,8 +1,6 @@
 import { FeePriority } from '../../fee/FeePriority'
 
-export type UtxoFeeSettings = {
-  priority: FeePriority | number
-}
+export type UtxoFeeSettings = { priority: FeePriority } | { byteFee: bigint }
 
 export const complexUtxoTxMultiplier = 2.5
 

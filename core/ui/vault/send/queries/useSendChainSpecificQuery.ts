@@ -1,8 +1,5 @@
 import { getChainKind } from '@core/chain/ChainKind'
-import { feePriorities } from '@core/chain/tx/fee/FeePriority'
-import { byteFeeMultiplier } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/resolver'
-import { UTXOSpecific } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { match } from '@lib/utils/match'
 import { useMemo } from 'react'
@@ -44,12 +41,8 @@ export const useSendChainSpecificQuery = () => {
           result.feeQuote = feeSettings as FeeSettings<'evm'>
         },
         utxo: () => {
-          const { priority } = feeSettings as FeeSettings<'utxo'>
-          ;(
-            result as ChainSpecificResolverInput<UTXOSpecific>
-          ).byteFeeMultiplier = isOneOf(priority, feePriorities)
-            ? byteFeeMultiplier[priority]
-            : priority
+          // Reminder: do not apply UTXO fee settings to chain-specific input yet.
+          // We'll wire byteFee/priority in a follow-up change.
         },
         tron: () => {
           result.feeQuote = feeSettings as FeeSettings<'tron'>

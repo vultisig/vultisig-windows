@@ -1,13 +1,11 @@
-import { Chain } from '@core/chain/Chain'
 import { ChainKind } from '@core/chain/ChainKind'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { TronFeeSettings } from '@core/chain/tx/fee/tron/tronFeeSettings'
 import { UtxoFeeSettings } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
 import { ChildrenProp } from '@lib/ui/props'
 import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
 import { omit } from '@lib/utils/record/omit'
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 
 import { useCurrentSendCoin } from '../../../state/sendCoin'
 
@@ -28,14 +26,6 @@ export type FeeSettings<T extends FeeSettingsChainKind = FeeSettingsChainKind> =
 
 type FeeSettingsRecord = Record<string, FeeSettings>
 
-type FeeSettingsKey = {
-  chain: Chain
-  isNativeToken: boolean
-}
-
-const feeSettingsKeyToString = (key: FeeSettingsKey): string =>
-  `${key.chain}:${key.isNativeToken}`
-
 const { useState: useFeeSettingsRecord, provider: FeeSettingsRecordProvider } =
   getStateProviderSetup<FeeSettingsRecord>('FeeSettings')
 
@@ -46,41 +36,25 @@ export const FeeSettingsProvider = ({ children }: ChildrenProp) => (
 )
 
 export const useFeeSettings = <T extends FeeSettings>() => {
-  const coin = useCurrentSendCoin()
+  const { chain } = useCurrentSendCoin()
   const [record, setRecord] = useFeeSettingsRecord()
 
-  const value = useMemo(() => {
-    const stringKey = feeSettingsKeyToString({
-      chain: coin.chain,
-      isNativeToken: isFeeCoin(coin),
-    })
-
-    if (stringKey in record) {
-      return record[stringKey] as T
-    }
-
-    return null
-  }, [coin, record])
+  const value = record[chain] as T | null
 
   const setValue = useCallback(
     (value: T | null) => {
-      const stringKey = feeSettingsKeyToString({
-        chain: coin.chain,
-        isNativeToken: isFeeCoin(coin),
-      })
-
       setRecord(record => {
         if (value) {
           return {
             ...record,
-            [stringKey]: value,
+            [chain]: value,
           }
         }
 
-        return omit(record, stringKey)
+        return omit(record, chain)
       })
     },
-    [coin, setRecord]
+    [chain, setRecord]
   )
 
   return [value, setValue] as const
