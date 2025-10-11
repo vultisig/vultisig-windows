@@ -1106,5 +1106,6 @@ export const en = {
     'Choose whether to back up just this vault or all vaults in your app.',
   this_vault_only: 'This Vault Only',
   all_vaults: 'All Vaults',
+  backup_description: 'Back up your Vault Share to a preferred location',
   more: 'more',
 }

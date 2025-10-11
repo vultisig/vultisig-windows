@@ -28,6 +28,8 @@ export const es = {
   add_friends_referral: 'Agregar una referencia de amigos',
   save_10_percent_on_swaps: 'Ahorra <blue>10%</blue> en intercambios ahora',
   digit_input_success_validation: 'Verificación exitosa',
+  backup_description:
+    'Haz una copia de seguridad de tu bóveda en un lugar preferido',
   digit_input_error_validation:
     'Error al verificar el código, por favor intenta de nuevo',
   digit_input_loading_validation: 'Verificando código, por favor espera',

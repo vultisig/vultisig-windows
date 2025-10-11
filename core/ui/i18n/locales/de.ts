@@ -25,6 +25,8 @@ export const de = {
   add_friends_referral: 'Fügen Sie eine Freunde-Referenz hinzu',
   secure_crypto_vault: 'Sicherer Krypto-Tresor',
   digit_input_success_validation: 'Verifizierung erfolgreich',
+  backup_description:
+    'Sichern Sie Ihren Tresor teilen in einem bevorzugten Ort',
   digit_input_error_validation:
     'Fehler bei der Code-Verifizierung, bitte erneut versuchen',
   digit_input_loading_validation: 'Code wird überprüft, bitte warten',
