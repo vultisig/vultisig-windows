@@ -100,7 +100,9 @@ export const SignCustomMessagePage = () => {
       </PageContent>
       <PageFooter>
         {isFillingForm ? (
-          <Button onClick={toNextStep}>{t('continue')}</Button>
+          <Button disabled={isDisabled} onClick={toNextStep}>
+            {t('continue')}
+          </Button>
         ) : (
           <StartKeysignPrompt {...startKeysignPromptProps} />
         )}
