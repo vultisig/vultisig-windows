@@ -5,6 +5,7 @@ import {
   TransactionDetails,
   TronMsgType,
 } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
+import { match } from '@lib/utils/match'
 import { TronWeb, Trx, Types } from 'tronweb'
 import { fromHex, isArray } from 'tronweb/utils'
 
@@ -27,9 +28,8 @@ export class VultisigTronWebTrx extends Trx {
       throw new Error('Unsupported transaction type')
     const getTransactionDetails = async (): Promise<TransactionDetails> => {
       const [contract] = transaction.raw_data.contract
-
-      switch (contract.type) {
-        case Types.ContractType.TransferContract: {
+      return match(contract.type as unknown as TronMsgType, {
+        TransferContract: async () => {
           const transferContract = contract.parameter
             .value as Types.TransferContract
           return {
@@ -54,9 +54,9 @@ export class VultisigTronWebTrx extends Trx {
                 ? transaction.raw_data.fee_limit.toString()
                 : undefined,
             },
-          }
-        }
-        case Types.ContractType.TriggerSmartContract: {
+          } as TransactionDetails
+        },
+        TriggerSmartContract: async () => {
           const triggerSmartContract = contract.parameter
             .value as Types.TriggerSmartContract
 
@@ -92,9 +92,9 @@ export class VultisigTronWebTrx extends Trx {
                 ? transaction.raw_data.fee_limit.toString()
                 : undefined,
             },
-          }
-        }
-        case Types.ContractType.TransferAssetContract: {
+          } as TransactionDetails
+        },
+        TransferAssetContract: async () => {
           const transferAssetContract = contract.parameter
             .value as Types.TransferAssetContract
 
@@ -133,11 +133,9 @@ export class VultisigTronWebTrx extends Trx {
                 ? transaction.raw_data.fee_limit.toString()
                 : undefined,
             },
-          }
-        }
-      }
-
-      throw new Error('Unsupported contract type')
+          } as TransactionDetails
+        },
+      })
     }
 
     const details = await getTransactionDetails()
