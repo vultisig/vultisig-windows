@@ -4,22 +4,25 @@ import { chainSpecificQueryKeyPrefix } from '@core/ui/chain/coin/queries/useChai
 import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { RefreshCwIcon } from '@lib/ui/icons/RefreshCwIcon'
-import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
-import { useMutation } from '@tanstack/react-query'
+import { useInvalidateQueriesMutation } from '@lib/ui/query/hooks/useInvalidateQueriesMutation'
+
+import { feeQuoteQueryKeyPrefix } from '../../chain/fee-quote/query'
 
 export const RefreshSend = () => {
   const coin = useCurrentSendCoin()
-  const invalidateQueries = useInvalidateQueries()
-
-  const { mutate: refresh, isPending } = useMutation({
-    mutationFn: () =>
-      invalidateQueries(getBalanceQueryKey(extractAccountCoinKey(coin)), [
-        chainSpecificQueryKeyPrefix,
-      ]),
-  })
+  const { mutate: refresh, isPending } = useInvalidateQueriesMutation()
 
   return (
-    <IconButton loading={isPending} onClick={() => refresh()}>
+    <IconButton
+      loading={isPending}
+      onClick={() => {
+        refresh([
+          getBalanceQueryKey(extractAccountCoinKey(coin)),
+          [chainSpecificQueryKeyPrefix],
+          [feeQuoteQueryKeyPrefix],
+        ])
+      }}
+    >
       <RefreshCwIcon />
     </IconButton>
   )
