@@ -7,9 +7,9 @@ import { useVaultTotalBalanceQuery } from '@core/ui/vault/queries/useVaultTotalB
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
-import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
+import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
 import { HStack, hStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
@@ -128,14 +128,12 @@ export const DeleteVaultPage = () => {
         </VStack>
         <VStack gap={8}>
           {terms.map((term, index) => (
-            <HStack key={index} gap={8} alignItems="center">
-              <IconWrapper size={24} color="primary">
-                <CheckmarkIcon />
-              </IconWrapper>
-              <Text size={12} weight={500}>
-                {t(term)}
-              </Text>
-            </HStack>
+            <Checkbox
+              key={index}
+              onChange={() => toggleCheckbox(index)}
+              label={t(term)}
+              value={termsAccepted[index]}
+            />
           ))}
         </VStack>
         {error?.message && (
