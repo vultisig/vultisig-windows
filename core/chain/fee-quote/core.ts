@@ -9,6 +9,7 @@ type EvmFeeQuote = {
 
 type UtxoFeeQuote = {
   byteFee: bigint
+  txSize: bigint
 }
 
 type CardanoFeeQuote = {
