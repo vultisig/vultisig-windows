@@ -44,7 +44,7 @@ export type FeeQuote<T extends ChainKind = ChainKind> = FeeQuoteByKind[T]
 export type FeeQuoteForChain<C extends Chain = Chain> =
   FeeQuoteByKind[DeriveChainKind<C>]
 
-export type FeeQuoteRecordUnion<K extends ChainKind = ChainKind> = {
+type FeeQuoteRecordUnion<K extends ChainKind = ChainKind> = {
   [Kind in K]: Record<Kind, FeeQuoteByKind[Kind]>
 }[K]
 
