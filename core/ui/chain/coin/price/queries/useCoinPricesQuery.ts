@@ -6,7 +6,8 @@ import { CoinKey, coinKeyToString, Token } from '@core/chain/coin/Coin'
 import { getErc20Prices } from '@core/chain/coin/price/evm/getErc20Prices'
 import { getCoinPrices } from '@core/chain/coin/price/getCoinPrices'
 import { FiatCurrency } from '@core/config/FiatCurrency'
-import { useQueriesToEagerQuery } from '@lib/ui/query/hooks/useQueriesToEagerQuery'
+import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
+import { EagerQuery, Query } from '@lib/ui/query/Query'
 import { persistQueryOptions } from '@lib/ui/query/utils/options'
 import { groupItems } from '@lib/utils/array/groupItems'
 import { isEmpty } from '@lib/utils/array/isEmpty'
@@ -32,12 +33,21 @@ export const getCoinPricesQueryKeys = (input: GetCoinPricesQueryKeysInput) => [
 type UseCoinPricesQueryInput = {
   coins: (CoinKey & { priceProviderId?: string })[]
   fiatCurrency?: FiatCurrency
+  eager?: boolean
 }
 
-export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
+export function useCoinPricesQuery(
+  input: Omit<UseCoinPricesQueryInput, 'eager'> & { eager?: true }
+): EagerQuery<Record<string, number>>
+export function useCoinPricesQuery(
+  input: Omit<UseCoinPricesQueryInput, 'eager'> & { eager: false }
+): Query<Record<string, number>>
+export function useCoinPricesQuery(
+  input: UseCoinPricesQueryInput
+): EagerQuery<Record<string, number>> | Query<Record<string, number>> {
   const defaultFiatCurrency = useFiatCurrency()
 
-  const fiatCurrency = input.fiatCurrency ?? defaultFiatCurrency
+  const { eager = true, fiatCurrency = defaultFiatCurrency, coins } = input
 
   const queries = []
 
@@ -45,7 +55,7 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
   const erc20sWithoutPriceProviderId: Token<CoinKey<EvmChain>>[] = []
   const yieldBearingTokens: Token<CoinKey<CosmosChain>>[] = []
 
-  input.coins.forEach(({ id, priceProviderId, chain }) => {
+  coins.forEach(({ id, priceProviderId, chain }) => {
     if (priceProviderId) {
       coinsWithPriceProviderId.push({ id, priceProviderId, chain })
     } else if (
@@ -168,8 +178,9 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
     queries,
   })
 
-  return useQueriesToEagerQuery({
+  return useCombineQueries({
     queries: queryResults,
     joinData: data => mergeRecords(...data),
+    eager,
   })
 }

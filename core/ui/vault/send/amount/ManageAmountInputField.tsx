@@ -11,12 +11,9 @@ import { CurrencySwitch } from '@core/ui/vault/send/amount/AmountSwitch'
 import { AnimatedSendFormInputError } from '@core/ui/vault/send/components/AnimatedSendFormInputError'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { SendInputContainer } from '@core/ui/vault/send/components/SendInputContainer'
-import { SendFiatFee } from '@core/ui/vault/send/fee/SendFiatFeeWrapper'
-import { SendGasFeeWrapper } from '@core/ui/vault/send/fee/SendGasFeeWrapper'
 import { ManageFeeSettings } from '@core/ui/vault/send/fee/settings/ManageFeeSettings'
 import { ManageMemo } from '@core/ui/vault/send/memo/ManageMemo'
 import { useSendChainSpecificQuery } from '@core/ui/vault/send/queries/useSendChainSpecificQuery'
-import { useSendFormFieldState } from '@core/ui/vault/send/state/formFields'
 import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Match } from '@lib/ui/base/Match'
@@ -41,6 +38,9 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'
+import { ValidSendFormOnly } from '../components/ValidSendFormOnly'
+import { SendFee } from '../fee/SendFee'
+import { useSendValidationQuery } from '../queries/useSendValidationQuery'
 import { useSendAmount } from '../state/amount'
 import { FiatSendAmountInput } from './FiatSendAmountInput'
 
@@ -70,11 +70,8 @@ export const ManageAmountInputField = () => {
     )
   )
 
-  const [
-    {
-      errors: { amount: amountError },
-    },
-  ] = useSendFormFieldState()
+  const { data } = useSendValidationQuery()
+  const amountError = data?.amount
 
   const chainSpecificQuery = useSendChainSpecificQuery()
 
@@ -117,7 +114,9 @@ export const ManageAmountInputField = () => {
     <SendInputContainer flexGrow>
       <HStack justifyContent="space-between" alignItems="center">
         <InputLabel>{t('amount')}</InputLabel>
-        <ManageFeeSettings />
+        <ValidSendFormOnly>
+          <ManageFeeSettings />
+        </ValidSendFormOnly>
       </HStack>
       <HorizontalLine />
       <VStack gap={8}>
@@ -237,10 +236,7 @@ export const ManageAmountInputField = () => {
       <ManageMemo />
       <HorizontalLine />
       <StrictInfoRow>
-        <SendFiatFee />
-      </StrictInfoRow>
-      <StrictInfoRow>
-        <SendGasFeeWrapper />
+        <SendFee />
       </StrictInfoRow>
     </SendInputContainer>
   )

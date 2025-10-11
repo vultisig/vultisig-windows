@@ -1,13 +1,12 @@
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { getPsbtTransferInfo } from '@core/chain/chains/utxo/tx/getPsbtTransferInfo'
-import { byteFeeMultiplier } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
+import { FeeSettings } from '@core/chain/feeQuote/settings/core'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/resolver'
 import {
   CosmosSpecific,
   EthereumSpecific,
   TransactionType,
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
-import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 
@@ -65,9 +64,7 @@ export const getChainSpecificInput = (input: ParsedTx) => {
     isDeposit,
     receiver,
     psbt: 'psbt' in customTxData ? customTxData.psbt : undefined,
-    byteFeeMultiplier: isChainOfKind(coin.chain, 'utxo')
-      ? byteFeeMultiplier.fast
-      : undefined,
+    isComplexTx: isChainOfKind(coin.chain, 'utxo') ? true : undefined,
     feeQuote:
       feeSettings && isChainOfKind(coin.chain, 'evm')
         ? (feeSettings as FeeSettings<'evm'>)

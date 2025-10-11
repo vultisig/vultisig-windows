@@ -32,7 +32,7 @@ export type ChainSpecificResolverInput<R = KeysignChainSpecificValue> = {
       feeQuote?: Partial<EvmFeeSettings>
     }
   : R extends UTXOSpecific
-    ? { byteFeeMultiplier?: number; psbt?: Psbt }
+    ? { isComplexTx?: boolean; psbt?: Psbt }
     : R extends CosmosSpecific
       ? { timeoutTimestamp?: string }
       : {})

@@ -26,6 +26,7 @@ import styled from 'styled-components'
 import { useAssertWalletCore } from '../../../../chain/providers/WalletCoreProvider'
 import { AnimatedSendFormInputError } from '../../components/AnimatedSendFormInputError'
 import { validateSendForm } from '../../form/validateSendForm'
+import { useSendValidationQuery } from '../../queries/useSendValidationQuery'
 import { useCurrentSendCoin } from '../../state/sendCoin'
 import { AddressBookModal } from './AddressBookModal'
 
@@ -41,14 +42,11 @@ export const ManageReceiverAddressInputField = () => {
   const [viewState, setViewState] = useState<MangeReceiverViewState>('default')
   const walletCore = useAssertWalletCore()
 
-  const [
-    {
-      errors: { receiverAddress: addressError },
-    },
-    setFocusedSendField,
-  ] = useSendFormFieldState()
+  const { data } = useSendValidationQuery()
 
-  const error = !!addressError && value ? addressError : undefined
+  const [, setFocusedSendField] = useSendFormFieldState()
+
+  const error = data?.receiverAddress
 
   const handleUpdateReceiverAddress = useCallback(
     (value: string) => {

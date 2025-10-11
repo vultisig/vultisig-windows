@@ -1,39 +1,31 @@
 import { create } from '@bufbuild/protobuf'
-import { UtxoChain } from '@core/chain/Chain'
-import { getUtxoStats } from '@core/chain/chains/utxo/client/getUtxoStats'
+import { getUtxoByteFee } from '@core/chain/chains/utxo/fee/byteFee'
 import { getCoinBalance } from '@core/chain/coin/balance'
-import { adjustByteFee } from '@core/chain/tx/fee/utxo/adjustByteFee'
+import { complexUtxoTxMultiplier } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
 import {
   UTXOSpecific,
   UTXOSpecificSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+import { multiplyBigInt } from '@lib/utils/bigint/bigIntMultiplyByNumber'
 
 import { ChainSpecificResolver } from '../resolver'
 
 const dustStats = 600n
 
-const getByteFee = async (chain: UtxoChain) => {
-  if (chain === UtxoChain.Zcash) {
-    return 1000
-  }
-
-  const { data } = await getUtxoStats(chain)
-  const rawByteFee = data.suggested_transaction_fee_per_byte_sat
-  return Math.floor(rawByteFee * 2.5)
-}
-
 export const getUtxoSpecific: ChainSpecificResolver<UTXOSpecific> = async ({
   coin,
-  byteFeeMultiplier = 1,
+  isComplexTx,
   amount,
   psbt,
 }) => {
-  const chain = coin.chain as UtxoChain
+  const byteFee = await getUtxoByteFee(coin.chain)
 
-  const byteFee = adjustByteFee(await getByteFee(chain), byteFeeMultiplier)
+  const adjustedByteFee = isComplexTx
+    ? multiplyBigInt(byteFee, complexUtxoTxMultiplier)
+    : byteFee
 
   const result = create(UTXOSpecificSchema, {
-    byteFee: byteFee.toString(),
+    byteFee: adjustedByteFee.toString(),
 
     psbt: psbt?.toBase64(),
   })

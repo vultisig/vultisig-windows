@@ -1,15 +1,9 @@
 import {
   defaultFeePriority,
   feePriorities,
-  FeePriority,
 } from '@core/chain/tx/fee/FeePriority'
-import { adjustByteFee } from '@core/chain/tx/fee/utxo/adjustByteFee'
-import {
-  byteFeeMultiplier,
-  UtxoFeeSettings,
-} from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
+import { UtxoFeeSettings } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
-import { useSendChainSpecific } from '@core/ui/vault/send/fee/SendChainSpecificProvider'
 import { useFeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
@@ -20,16 +14,11 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { isOneOf } from '@lib/utils/array/isOneOf'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-type FormShape = {
-  priority: FeePriority | number | null
-}
+import { useSendFeeQuote } from '../../../queries/useSendFeeQuoteQuery'
 
 export const ManageUtxoFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
   const { t } = useTranslation()
@@ -37,36 +26,24 @@ export const ManageUtxoFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
   const [persistentValue, setPersistentValue] =
     useFeeSettings<UtxoFeeSettings>()
 
-  const chainSpecific = useSendChainSpecific()
+  const { byteFee: estimatedByteFee } = useSendFeeQuote<'utxo'>()
 
-  const { byteFee } = getDiscriminatedUnionValue(
-    chainSpecific,
-    'case',
-    'value',
-    'utxoSpecific'
-  )
-
-  const [value, setValue] = useState<FormShape>(
-    () =>
-      persistentValue ?? {
-        priority: defaultFeePriority,
-      }
+  const [value, setValue] = useState<UtxoFeeSettings>(
+    () => persistentValue ?? { priority: defaultFeePriority }
   )
 
   const isDisabled = useMemo(() => {
-    if (!value.priority) {
+    if (!value) {
       return t('network_rate_required')
     }
-  }, [t, value.priority])
+  }, [t, value])
 
   return (
     <Modal
       as="form"
       {...getFormProps({
         onSubmit: () => {
-          setPersistentValue({
-            priority: shouldBePresent(value.priority),
-          })
+          setPersistentValue(value)
           onClose()
         },
         onClose,
@@ -90,8 +67,8 @@ export const ManageUtxoFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
           </Text>
           <RadioInput
             options={feePriorities}
-            value={typeof value.priority === 'number' ? null : value.priority}
-            onChange={priority => setValue({ ...value, priority })}
+            value={value && 'priority' in value ? value.priority : null}
+            onChange={priority => setValue({ priority })}
             renderOption={t}
           />
         </InputContainer>
@@ -103,16 +80,10 @@ export const ManageUtxoFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
             </Text>
           }
           value={
-            value.priority
-              ? adjustByteFee(
-                  Number(byteFee),
-                  isOneOf(value.priority, feePriorities)
-                    ? byteFeeMultiplier[value.priority]
-                    : value.priority
-                )
-              : null
+            Number('byteFee' in value ? value.byteFee : estimatedByteFee) ||
+            null
           }
-          onValueChange={priority => setValue({ ...value, priority })}
+          onValueChange={n => setValue({ byteFee: BigInt(n || 0) })}
           shouldBeInteger
           shouldBePositive
         />

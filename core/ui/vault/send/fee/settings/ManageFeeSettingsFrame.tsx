@@ -1,5 +1,3 @@
-import { SendChainSpecificValueProvider } from '@core/ui/vault/send/fee/SendChainSpecificProvider'
-import { useSendChainSpecificQuery } from '@core/ui/vault/send/queries/useSendChainSpecificQuery'
 import { Opener } from '@lib/ui/base/Opener'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { FuelIcon } from '@lib/ui/icons/FuelIcon'
@@ -10,6 +8,8 @@ import { PendingQueryOverlay } from '@lib/ui/query/components/overlay/PendingQue
 import { StrictText } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
+import { useSendFeeQuoteQuery } from '../../queries/useSendFeeQuoteQuery'
+
 type ManageFeeSettingsFrameProps = {
   render: (props: OnCloseProp) => React.ReactNode
 }
@@ -18,7 +18,7 @@ export const ManageFeeSettingsFrame = ({
   render,
 }: ManageFeeSettingsFrameProps) => {
   const { t } = useTranslation()
-  const chainSpecificQuery = useSendChainSpecificQuery()
+  const feeQuoteQuery = useSendFeeQuoteQuery()
 
   return (
     <Opener
@@ -29,14 +29,8 @@ export const ManageFeeSettingsFrame = ({
       )}
       renderContent={({ onClose }) => (
         <MatchQuery
-          value={chainSpecificQuery}
-          success={value => {
-            return (
-              <SendChainSpecificValueProvider value={value}>
-                {render({ onClose })}
-              </SendChainSpecificValueProvider>
-            )
-          }}
+          value={feeQuoteQuery}
+          success={() => render({ onClose })}
           pending={() => (
             <PendingQueryOverlay
               onClose={onClose}
