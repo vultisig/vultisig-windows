@@ -1,5 +1,6 @@
 export const pt = {
   onboarding_greeting: 'Adeus às <g>frases semente</g>',
+  keys: 'Chaves',
   onboarding_step_1:
     'Diga olá para <g>ações do cofre,</g> seu novo <g>método de recuperação</g>',
   onboarding_step_2:
@@ -16,6 +17,14 @@ export const pt = {
   secure_crypto_vault: 'Cofre seguro de cripto',
   vultisig: 'Vultisig',
   by_vultisig: 'por Vultisig',
+  vault_info: 'Informações do cofre',
+  vault_details_description: 'Visualizar o nome, a parte e o tipo do cofre',
+  vault_details_edit_vault_description: 'Editar o nome do seu cofre',
+  reshare_vault_description:
+    'Compartilhar novamente o cofre com um novo comitê',
+  sign_custom_message_description: 'Assinar mensagem personalizada',
+  delete_vault_description: 'Excluir seu cofre permanentemente',
+  backup_description: 'Faça backup do seu cofre em um local preferido',
   onboarding_description_1:
     'O Vultisig é um cofre seguro de cripto multi-dispositivo, compatível com todas as principais blockchains e mais de 10.000 tokens. O Vultisig é totalmente auto-hospedado.',
   onboarding_description_2:

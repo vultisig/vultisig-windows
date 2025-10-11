@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 const StyledSuccessIcon = styled(ShieldIcon)`
-  color: ${getColor('idle')};
+  color: ${getColor('success')};
 `
 
 const StyledWarningIcon = styled(ZapIcon)`

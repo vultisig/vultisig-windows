@@ -9,6 +9,8 @@ export const es = {
   onboarding_step_4:
     'Recupera tu bóveda incluso <g>si un dispositivo se pierde o se daña</g>',
   positions: 'Posiciones',
+  vault_info: 'Información de la bóveda',
+  keys: 'Claves',
   vault_share_banner:
     'Este código QR le permite compartir una versión de vista de su bóveda',
   onboarding_step_5:
@@ -17,10 +19,17 @@ export const es = {
     'Estas partes colaboran para <g>desbloquear su depósito</g>',
   secure_crypto_vault: 'Bóveda segura de criptomonedas',
   vultisig: 'Vultisig',
+  vault_details_description: 'Ver el nombre, la parte y el tipo de la bóveda',
+  vault_details_edit_vault_description: 'Editar el nombre de tu bóveda',
+  reshare_vault_description: 'Volver a compartir la bóveda con un nuevo comité',
+  sign_custom_message_description: 'Firmar mensaje personalizado',
+  delete_vault_description: 'Eliminar tu bóveda de forma permanente',
   by_vultisig: 'por Vultisig',
   add_friends_referral: 'Agregar una referencia de amigos',
   save_10_percent_on_swaps: 'Ahorra <blue>10%</blue> en intercambios ahora',
   digit_input_success_validation: 'Verificación exitosa',
+  backup_description:
+    'Haz una copia de seguridad de tu bóveda en un lugar preferido',
   digit_input_error_validation:
     'Error al verificar el código, por favor intenta de nuevo',
   digit_input_loading_validation: 'Verificando código, por favor espera',

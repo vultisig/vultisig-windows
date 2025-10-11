@@ -139,6 +139,7 @@ const StyledButton = styled(UnstyledButton)<{
               }
             `}
       `,
+      action: () => css``,
       secondary: () => css`
         ${match(size, {
           sm: () => css`
