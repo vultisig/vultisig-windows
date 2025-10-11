@@ -1,5 +1,5 @@
 import { isChainOfKind } from '@core/chain/ChainKind'
-import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
+import { FeeSettings } from '@core/chain/fee-quote/settings/core'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 

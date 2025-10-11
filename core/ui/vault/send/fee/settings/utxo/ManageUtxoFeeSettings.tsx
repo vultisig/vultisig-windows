@@ -1,4 +1,3 @@
-import { UtxoChain } from '@core/chain/Chain'
 import {
   defaultFeePriority,
   feePriorities,
@@ -12,26 +11,22 @@ import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { RadioInput } from '@lib/ui/inputs/RadioInput'
 import { VStack } from '@lib/ui/layout/Stack'
-import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Modal } from '@lib/ui/modal'
 import { OnCloseProp } from '@lib/ui/props'
-import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useUtxoByteFeeQuery } from '../../../../../chain/utxo/queries/byteFee'
-import { useCurrentSendCoin } from '../../../state/sendCoin'
+import { useSendFeeQuote } from '../../../queries/useSendFeeQuoteQuery'
 
 export const ManageUtxoFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
   const { t } = useTranslation()
-  const { chain } = useCurrentSendCoin()
 
   const [persistentValue, setPersistentValue] =
     useFeeSettings<UtxoFeeSettings>()
 
-  const byteFeeQuery = useUtxoByteFeeQuery(chain as UtxoChain)
+  const { byteFee: estimatedByteFee } = useSendFeeQuote<'utxo'>()
 
   const [value, setValue] = useState<UtxoFeeSettings>(
     () => persistentValue ?? { priority: defaultFeePriority }
@@ -77,28 +72,20 @@ export const ManageUtxoFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
             renderOption={t}
           />
         </InputContainer>
-        <MatchQuery
-          value={byteFeeQuery}
-          pending={() => <Spinner />}
-          success={byteFee => {
-            const inputValue = Number(
-              'byteFee' in value ? value.byteFee : byteFee
-            )
-            return (
-              <AmountTextInput
-                labelPosition="left"
-                label={
-                  <Text size={14} color="supporting">
-                    {t('network_rate')} (sats/vbyte)
-                  </Text>
-                }
-                value={inputValue || null}
-                onValueChange={n => setValue({ byteFee: BigInt(n || 0) })}
-                shouldBeInteger
-                shouldBePositive
-              />
-            )
-          }}
+        <AmountTextInput
+          labelPosition="left"
+          label={
+            <Text size={14} color="supporting">
+              {t('network_rate')} (sats/vbyte)
+            </Text>
+          }
+          value={
+            Number('byteFee' in value ? value.byteFee : estimatedByteFee) ||
+            null
+          }
+          onValueChange={n => setValue({ byteFee: BigInt(n || 0) })}
+          shouldBeInteger
+          shouldBePositive
         />
       </VStack>
     </Modal>

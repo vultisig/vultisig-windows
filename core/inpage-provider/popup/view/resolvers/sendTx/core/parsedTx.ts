@@ -1,5 +1,5 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
+import { FeeSettings } from '@core/chain/fee-quote/settings/core'
 
 import { CustomTxData } from './customTxData'
 

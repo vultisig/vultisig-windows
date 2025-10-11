@@ -9,13 +9,9 @@ import { ChainSpecificResolver } from '../resolver'
 
 export const getTronSpecific: ChainSpecificResolver<TronSpecific> = async ({
   coin,
-  feeQuote,
+  thirdPartyGasLimitEstimation,
 }) => {
   const blockInfo = await getTronBlockInfo(coin)
-
-  const gasEstimation = feeQuote?.gasLimit
-    ? parseInt(feeQuote.gasLimit.toString())
-    : blockInfo.gasFeeEstimation
 
   return create(TronSpecificSchema, {
     timestamp: BigInt(blockInfo.timestamp),
@@ -26,6 +22,7 @@ export const getTronSpecific: ChainSpecificResolver<TronSpecific> = async ({
     blockHeaderTxTrieRoot: blockInfo.blockHeaderTxTrieRoot,
     blockHeaderParentHash: blockInfo.blockHeaderParentHash,
     blockHeaderWitnessAddress: blockInfo.blockHeaderWitnessAddress,
-    gasEstimation: BigInt(gasEstimation),
+    gasEstimation:
+      thirdPartyGasLimitEstimation || BigInt(blockInfo.gasFeeEstimation),
   })
 }

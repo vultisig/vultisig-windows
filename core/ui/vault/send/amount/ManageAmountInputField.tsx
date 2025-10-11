@@ -38,6 +38,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'
+import { ValidSendFormOnly } from '../components/ValidSendFormOnly'
 import { SendFee } from '../fee/SendFee'
 import { useSendValidationQuery } from '../queries/useSendValidationQuery'
 import { useSendAmount } from '../state/amount'
@@ -113,7 +114,9 @@ export const ManageAmountInputField = () => {
     <SendInputContainer flexGrow>
       <HStack justifyContent="space-between" alignItems="center">
         <InputLabel>{t('amount')}</InputLabel>
-        <ManageFeeSettings />
+        <ValidSendFormOnly>
+          <ManageFeeSettings />
+        </ValidSendFormOnly>
       </HStack>
       <HorizontalLine />
       <VStack gap={8}>
