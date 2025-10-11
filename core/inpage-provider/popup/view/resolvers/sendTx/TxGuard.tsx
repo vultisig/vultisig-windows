@@ -19,21 +19,21 @@ export const TxGuard = ({ children }: ChildrenProp) => {
     () =>
       matchRecordUnion(transactionPayload, {
         keysign: ({ transactionDetails }) => {
-          if (!('cosmosMsgPayload' in transactionDetails)) {
+          if (!('msgPayload' in transactionDetails)) {
             return false
           }
 
-          const { cosmosMsgPayload } = transactionDetails
-          if (!cosmosMsgPayload) {
+          const { msgPayload } = transactionDetails
+          if (!msgPayload) {
             return false
           }
 
-          const { case: msgCase } = cosmosMsgPayload
+          const { case: msgCase } = msgPayload
           if (msgCase !== CosmosMsgType.MSG_TRANSFER_URL) {
             return false
           }
 
-          return !!cosmosMsgPayload.value.memo
+          return !!msgPayload.value.memo
         },
         serialized: () => false,
       }),

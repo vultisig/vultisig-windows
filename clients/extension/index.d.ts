@@ -28,4 +28,6 @@ interface Window {
   isCtrl: boolean
   windowKeplr: any
   keplrRequestAccountsCallback: any
+  tronWeb: any
+  tronLink: any
 }

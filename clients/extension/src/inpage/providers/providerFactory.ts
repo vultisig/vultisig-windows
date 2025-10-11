@@ -12,6 +12,8 @@ import { UTXO } from '@clients/extension/src/inpage/providers/utxo'
 import { XDEFIKeplrProvider } from '@clients/extension/src/inpage/providers/xdefiKeplr'
 import { UtxoChain } from '@core/chain/Chain'
 
+import { TronLink } from './tronLink'
+
 export const createProviders = () => {
   const cosmosProvider = Cosmos.getInstance()
   const solanaProvider = new Solana()
@@ -34,5 +36,6 @@ export const createProviders = () => {
     ripple: Ripple.getInstance(),
     solana: solanaProvider,
     thorchain: THORChain.getInstance(),
+    tron: new TronLink(),
   }
 }

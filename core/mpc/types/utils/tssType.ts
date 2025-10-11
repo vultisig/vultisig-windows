@@ -1,4 +1,3 @@
-import { GenMessage } from '@bufbuild/protobuf/codegenv1'
 import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
@@ -29,8 +28,8 @@ export const fromTssType = (tssType: TssType): KeygenOperation => {
   })
 }
 
-export const tssMessageSchema: Record<TssType, GenMessage<any>> = {
+export const tssMessageSchema = {
   Keygen: KeygenMessageSchema,
   Reshare: ReshareMessageSchema,
   Migrate: ReshareMessageSchema,
-}
+} as const

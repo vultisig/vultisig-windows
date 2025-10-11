@@ -18,7 +18,7 @@ export const injectToWindow = () => {
     getVault: async () => callBackground({ exportVault: {} }),
     getVaults: async () => callPopup({ exportVaults: {} }),
   }
-
+  providers.tron.init()
   Object.defineProperty(window, 'vultisig', {
     value: vultisigProvider,
     configurable: false,
@@ -77,6 +77,11 @@ async function setupContentScriptMessenger(
       provider: ethereumProvider as unknown as EIP1193Provider,
     })
     Object.defineProperties(window, {
+      tronLink: {
+        value: providers.tron,
+        configurable: false,
+        writable: false,
+      },
       ethereum: {
         get: () => window.vultiConnectRouter.currentProvider,
         set: newProvider => window.vultiConnectRouter.addProvider(newProvider),

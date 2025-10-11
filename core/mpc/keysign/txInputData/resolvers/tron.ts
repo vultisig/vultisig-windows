@@ -2,6 +2,7 @@ import { toTronData } from '@core/chain/chains/tron/tx/toTronData'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { bigIntToHex } from '@lib/utils/bigint/bigIntToHex'
 import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
+import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
@@ -20,6 +21,84 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
 
   const isNative = keysignPayload?.coin?.isNativeToken
   const swapPayload = getKeysignSwapPayload(keysignPayload)
+
+  const contractPayload = keysignPayload.contractPayload
+
+  if (contractPayload && contractPayload.value && contractPayload.case) {
+    const contract:
+      | { transfer: TW.Tron.Proto.TransferContract }
+      | { triggerSmartContract: TW.Tron.Proto.TriggerSmartContract }
+      | { transferAsset: TW.Tron.Proto.TransferAssetContract } =
+      matchDiscriminatedUnion(contractPayload, 'case', 'value', {
+        tronTransferContractPayload: value => {
+          return {
+            transfer: TW.Tron.Proto.TransferContract.create({
+              ownerAddress: value.ownerAddress,
+              toAddress: value.toAddress,
+              amount: Long.fromString(value.amount),
+            }),
+          }
+        },
+        tronTriggerSmartContractPayload: value => {
+          return {
+            triggerSmartContract: TW.Tron.Proto.TriggerSmartContract.create({
+              ownerAddress: value.ownerAddress,
+              contractAddress: value.contractAddress,
+              callValue: value.callValue
+                ? Long.fromString(value.callValue?.toString())
+                : undefined,
+              data: value.data ? Buffer.from(value.data, 'hex') : undefined,
+              callTokenValue: value.callTokenValue
+                ? Long.fromString(value.callTokenValue?.toString())
+                : undefined,
+              tokenId: value.tokenId
+                ? Long.fromString(value.tokenId?.toString())
+                : undefined,
+            }),
+          }
+        },
+        tronTransferAssetContractPayload: value => {
+          return {
+            transferAsset: TW.Tron.Proto.TransferAssetContract.create({
+              ownerAddress: value.ownerAddress,
+              toAddress: value.toAddress,
+              amount: Long.fromString(value.amount),
+              assetName: value.assetName,
+            }),
+          }
+        },
+        wasmExecuteContractPayload: () => {
+          throw new Error(
+            'WASM execute contract payload not supported for Tron'
+          )
+        },
+      })
+
+    const input = TW.Tron.Proto.SigningInput.create({
+      transaction: TW.Tron.Proto.Transaction.create({
+        ...contract,
+        feeLimit: Long.fromString(tronSpecific.gasEstimation.toString()),
+        timestamp: Long.fromString(tronSpecific.timestamp.toString()),
+        blockHeader: TW.Tron.Proto.BlockHeader.create({
+          timestamp: Long.fromString(
+            tronSpecific.blockHeaderTimestamp.toString()
+          ),
+          number: Long.fromString(tronSpecific.blockHeaderNumber.toString()),
+          version: Number(tronSpecific.blockHeaderVersion.toString()),
+          txTrieRoot: Buffer.from(tronSpecific.blockHeaderTxTrieRoot, 'hex'),
+          parentHash: Buffer.from(tronSpecific.blockHeaderParentHash, 'hex'),
+          witnessAddress: Buffer.from(
+            tronSpecific.blockHeaderWitnessAddress,
+            'hex'
+          ),
+        }),
+        expiration: Long.fromString(tronSpecific.expiration.toString()),
+        memo: keysignPayload.memo,
+      }),
+    })
+
+    return [TW.Tron.Proto.SigningInput.encode(input).finish()]
+  }
 
   if (swapPayload) {
     return matchRecordUnion(swapPayload, {
@@ -69,9 +148,9 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
 
   if (isNative) {
     const contract = TW.Tron.Proto.TransferContract.create({
-      ownerAddress: keysignPayload?.coin?.address ?? '',
-      toAddress: keysignPayload?.toAddress,
-      amount: Long.fromString(keysignPayload?.toAmount ?? '0'),
+      ownerAddress: shouldBePresent(keysignPayload?.coin?.address),
+      toAddress: shouldBePresent(keysignPayload?.toAddress),
+      amount: Long.fromString(shouldBePresent(keysignPayload?.toAmount)),
     })
 
     const input = TW.Tron.Proto.SigningInput.create({
@@ -105,9 +184,9 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
   )
 
   const contract = TW.Tron.Proto.TransferTRC20Contract.create({
-    ownerAddress: keysignPayload?.coin?.address ?? '',
-    toAddress: keysignPayload?.toAddress,
-    contractAddress: keysignPayload?.coin?.contractAddress ?? '',
+    ownerAddress: shouldBePresent(keysignPayload?.coin?.address),
+    toAddress: shouldBePresent(keysignPayload?.toAddress),
+    contractAddress: shouldBePresent(keysignPayload?.coin?.contractAddress),
     amount: amountHex,
   })
 

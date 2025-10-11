@@ -1,5 +1,7 @@
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { getPsbtTransferInfo } from '@core/chain/chains/utxo/tx/getPsbtTransferInfo'
+import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
+import { TronFeeSettings } from '@core/chain/tx/fee/tron/tronFeeSettings'
 import { byteFeeMultiplier } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/resolver'
 import {
@@ -7,17 +9,19 @@ import {
   EthereumSpecific,
   TransactionType,
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
-import { FeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 
 import { CustomTxData } from '../core/customTxData'
 import { ParsedTx } from '../core/parsedTx'
-import { CosmosMsgType } from '../interfaces'
+import { CosmosMsgType, TronMsgType } from '../interfaces'
 
 const defaultTransactionType = TransactionType.UNSPECIFIED
 
-const cosmosMsgTypeToTransactionType: Record<CosmosMsgType, TransactionType> = {
+const cosmosMsgTypeToTransactionType: Record<
+  CosmosMsgType | TronMsgType,
+  TransactionType
+> = {
   [CosmosMsgType.MSG_SEND]: defaultTransactionType,
   [CosmosMsgType.THORCHAIN_MSG_SEND]: defaultTransactionType,
   [CosmosMsgType.MSG_SEND_URL]: defaultTransactionType,
@@ -26,6 +30,9 @@ const cosmosMsgTypeToTransactionType: Record<CosmosMsgType, TransactionType> = {
   [CosmosMsgType.MSG_EXECUTE_CONTRACT_URL]: TransactionType.GENERIC_CONTRACT,
   [CosmosMsgType.THORCHAIN_MSG_DEPOSIT]: defaultTransactionType,
   [CosmosMsgType.THORCHAIN_MSG_DEPOSIT_URL]: defaultTransactionType,
+  [TronMsgType.TRON_TRANSFER_CONTRACT]: defaultTransactionType,
+  [TronMsgType.TRON_TRIGGER_SMART_CONTRACT]: defaultTransactionType,
+  [TronMsgType.TRON_TRANSFER_ASSET_CONTRACT]: defaultTransactionType,
 }
 
 export const getChainSpecificInput = (input: ParsedTx) => {
@@ -47,7 +54,7 @@ export const getChainSpecificInput = (input: ParsedTx) => {
   const isDeposit = matchRecordUnion<CustomTxData, boolean>(customTxData, {
     regular: ({ transactionDetails, isDeposit }) =>
       isDeposit ||
-      transactionDetails.cosmosMsgPayload?.case ===
+      transactionDetails.msgPayload?.case ===
         CosmosMsgType.THORCHAIN_MSG_DEPOSIT,
     solana: () => false,
     psbt: () => false,
@@ -59,6 +66,12 @@ export const getChainSpecificInput = (input: ParsedTx) => {
     psbt: () => '',
   })
 
+  const feeQuote = isChainOfKind(coin.chain, 'evm')
+    ? (feeSettings as EvmFeeSettings)
+    : isChainOfKind(coin.chain, 'tron')
+      ? (feeSettings as TronFeeSettings)
+      : undefined
+
   const result: ChainSpecificResolverInput = {
     coin,
     amount,
@@ -68,22 +81,19 @@ export const getChainSpecificInput = (input: ParsedTx) => {
     byteFeeMultiplier: isChainOfKind(coin.chain, 'utxo')
       ? byteFeeMultiplier.fast
       : undefined,
-    feeQuote:
-      feeSettings && isChainOfKind(coin.chain, 'evm')
-        ? (feeSettings as FeeSettings<'evm'>)
-        : undefined,
+    feeQuote,
   }
 
   if ('regular' in customTxData) {
     const { regular } = customTxData
     const { transactionDetails } = regular
-    const { cosmosMsgPayload } = transactionDetails
-    result.transactionType = cosmosMsgPayload?.case
-      ? cosmosMsgTypeToTransactionType[cosmosMsgPayload.case]
+    const { msgPayload } = transactionDetails
+    result.transactionType = msgPayload?.case
+      ? cosmosMsgTypeToTransactionType[msgPayload.case]
       : defaultTransactionType
 
-    if (cosmosMsgPayload?.case === CosmosMsgType.MSG_TRANSFER_URL) {
-      const { timeoutTimestamp } = cosmosMsgPayload.value
+    if (msgPayload?.case === CosmosMsgType.MSG_TRANSFER_URL) {
+      const { timeoutTimestamp } = msgPayload.value
       if (timeoutTimestamp) {
         ;(
           result as ChainSpecificResolverInput<CosmosSpecific>
