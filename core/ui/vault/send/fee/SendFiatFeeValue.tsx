@@ -10,17 +10,15 @@ import { Text } from '@lib/ui/text'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { useCallback } from 'react'
 
-import { useFeeQuoteQuery } from '../../../chain/fee-quote/query'
 import { useFormatFiatAmount } from '../../../chain/hooks/useFormatFiatAmount'
+import { useSendFeeQuoteQuery } from '../queries/useSendFeeQuoteQuery'
 import { useCurrentSendCoin } from '../state/sendCoin'
 
 export const SendFiatFeeValue = () => {
   const coin = useCurrentSendCoin()
   const { chain } = coin
 
-  const feeQuoteQuery = useFeeQuoteQuery({
-    coin,
-  })
+  const feeQuoteQuery = useSendFeeQuoteQuery()
   const formatFiatAmount = useFormatFiatAmount()
 
   const { decimals, ticker } = chainFeeCoin[chain]
