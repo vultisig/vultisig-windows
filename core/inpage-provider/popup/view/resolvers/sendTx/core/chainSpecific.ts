@@ -1,6 +1,5 @@
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { getPsbtTransferInfo } from '@core/chain/chains/utxo/tx/getPsbtTransferInfo'
-import { byteFeeMultiplier } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/resolver'
 import {
   CosmosSpecific,
@@ -65,9 +64,7 @@ export const getChainSpecificInput = (input: ParsedTx) => {
     isDeposit,
     receiver,
     psbt: 'psbt' in customTxData ? customTxData.psbt : undefined,
-    byteFeeMultiplier: isChainOfKind(coin.chain, 'utxo')
-      ? byteFeeMultiplier.fast
-      : undefined,
+    isComplexTx: isChainOfKind(coin.chain, 'utxo') ? true : undefined,
     feeQuote:
       feeSettings && isChainOfKind(coin.chain, 'evm')
         ? (feeSettings as FeeSettings<'evm'>)

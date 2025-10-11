@@ -1,5 +1,4 @@
 import { Chain } from '@core/chain/Chain'
-import { multiplyBigInt } from '@lib/utils/bigint/bigIntMultiplyByNumber'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
 import { suiAverageSendGas } from '../chains/sui/config'
@@ -12,8 +11,7 @@ export const getFeeAmount = (
   matchRecordUnion(toFeeQuoteRecordUnion(chain, quote), {
     evm: ({ baseFeePerGas, maxPriorityFeePerGas, gasLimit }) =>
       (baseFeePerGas + maxPriorityFeePerGas) * gasLimit,
-    utxo: ({ byteFee, byteFeeMultiplier }) =>
-      multiplyBigInt(byteFee * 250n, byteFeeMultiplier),
+    utxo: ({ byteFee }) => byteFee * 250n,
     cosmos: ({ gas }) => gas,
     sui: ({ gas }) => gas * suiAverageSendGas,
     solana: ({ priorityFee }) => priorityFee,
