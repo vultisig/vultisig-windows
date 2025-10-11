@@ -1,15 +1,15 @@
 import { getChainKind } from '@core/chain/ChainKind'
+import {
+  FeeSettings,
+  feeSettingsChainKinds,
+} from '@core/chain/fee-quote/settings/core'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/resolver'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { match } from '@lib/utils/match'
 import { useMemo } from 'react'
 
 import { useChainSpecificQuery } from '../../../chain/coin/queries/useChainSpecificQuery'
-import {
-  FeeSettings,
-  feeSettingsChainKinds,
-  useFeeSettings,
-} from '../fee/settings/state/feeSettings'
+import { useFeeSettings } from '../fee/settings/state/feeSettings'
 import { useSendAmount } from '../state/amount'
 import { useSendMemo } from '../state/memo'
 import { useSendReceiver } from '../state/receiver'

@@ -1,22 +1,10 @@
-import { ChainKind } from '@core/chain/ChainKind'
-import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
-import { UtxoFeeSettings } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
+import type { FeeSettings } from '@core/chain/fee-quote/settings/core'
 import { ChildrenProp } from '@lib/ui/props'
 import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
 import { omit } from '@lib/utils/record/omit'
 import { useCallback } from 'react'
 
 import { useCurrentSendCoin } from '../../../state/sendCoin'
-
-export const feeSettingsChainKinds = [
-  'evm',
-  'utxo',
-] as const satisfies ChainKind[]
-
-type FeeSettingsChainKind = (typeof feeSettingsChainKinds)[number]
-
-export type FeeSettings<T extends FeeSettingsChainKind = FeeSettingsChainKind> =
-  T extends 'evm' ? EvmFeeSettings : UtxoFeeSettings
 
 type FeeSettingsRecord = Record<string, FeeSettings>
 
