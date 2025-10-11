@@ -70,15 +70,15 @@ export const buildChainSpecific = ({
 
   return matchRecordUnion(toBuildKindRecordUnion({ chain, feeQuote, txData }), {
     evm: ({ feeQuote, txData }) => {
-      const maxFeePerGasWei = (
-        feeQuote.baseFeePerGas + feeQuote.maxPriorityFeePerGas
-      ).toString()
+      const { baseFeePerGas, maxPriorityFeePerGas, gasLimit } = feeQuote
+
+      const maxFeePerGas = baseFeePerGas + maxPriorityFeePerGas
 
       const value = create(EthereumSpecificSchema, {
-        maxFeePerGasWei,
-        priorityFee: feeQuote.maxPriorityFeePerGas.toString(),
-        nonce: txData.nonce,
-        gasLimit: feeQuote.gasLimit.toString(),
+        ...txData,
+        maxFeePerGasWei: maxFeePerGas.toString(),
+        priorityFee: maxPriorityFeePerGas.toString(),
+        gasLimit: gasLimit.toString(),
       })
 
       return { case: specificCase, value } as KeysignChainSpecific
