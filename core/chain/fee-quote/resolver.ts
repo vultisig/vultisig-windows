@@ -13,7 +13,11 @@ type FeeQuoteResolverInput<K extends ChainKind = ChainKind> = {
       data?: string
       thirdPartyGasLimitEstimation?: bigint
     }
-  : {})
+  : K extends 'utxo'
+    ? {
+        isComplexTx?: boolean
+      }
+    : {})
 
 export type FeeQuoteResolver<K extends ChainKind = ChainKind> = Resolver<
   FeeQuoteResolverInput<K>,

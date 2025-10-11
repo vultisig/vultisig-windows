@@ -1,3 +1,4 @@
+import { UtxoChain } from '@core/chain/Chain'
 import {
   defaultFeePriority,
   feePriorities,
@@ -9,7 +10,6 @@ import {
   UtxoFeeSettings,
 } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
-import { useSendChainSpecific } from '@core/ui/vault/send/fee/SendChainSpecificProvider'
 import { useFeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
@@ -22,10 +22,12 @@ import { OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { getDiscriminatedUnionValue } from '@lib/utils/getDiscriminatedUnionValue'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+
+import { useUtxoByteFeeQuery } from '../../../../../chain/utxo/queries/byteFee'
+import { useCurrentSendCoin } from '../../../state/sendCoin'
 
 type FormShape = {
   priority: FeePriority | number | null
@@ -33,18 +35,12 @@ type FormShape = {
 
 export const ManageUtxoFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
   const { t } = useTranslation()
+  const { chain } = useCurrentSendCoin()
 
   const [persistentValue, setPersistentValue] =
     useFeeSettings<UtxoFeeSettings>()
 
-  const chainSpecific = useSendChainSpecific()
-
-  const { byteFee } = getDiscriminatedUnionValue(
-    chainSpecific,
-    'case',
-    'value',
-    'utxoSpecific'
-  )
+  const { data: byteFee } = useUtxoByteFeeQuery(chain as UtxoChain)
 
   const [value, setValue] = useState<FormShape>(
     () =>
@@ -95,27 +91,29 @@ export const ManageUtxoFeeSettings: React.FC<OnCloseProp> = ({ onClose }) => {
             renderOption={t}
           />
         </InputContainer>
-        <AmountTextInput
-          labelPosition="left"
-          label={
-            <Text size={14} color="supporting">
-              {t('network_rate')} (sats/vbyte)
-            </Text>
-          }
-          value={
-            value.priority
-              ? adjustByteFee(
-                  Number(byteFee),
-                  isOneOf(value.priority, feePriorities)
-                    ? byteFeeMultiplier[value.priority]
-                    : value.priority
-                )
-              : null
-          }
-          onValueChange={priority => setValue({ ...value, priority })}
-          shouldBeInteger
-          shouldBePositive
-        />
+        {byteFee && (
+          <AmountTextInput
+            labelPosition="left"
+            label={
+              <Text size={14} color="supporting">
+                {t('network_rate')} (sats/vbyte)
+              </Text>
+            }
+            value={
+              value.priority
+                ? adjustByteFee(
+                    Number(byteFee),
+                    isOneOf(value.priority, feePriorities)
+                      ? byteFeeMultiplier[value.priority]
+                      : value.priority
+                  )
+                : null
+            }
+            onValueChange={priority => setValue({ ...value, priority })}
+            shouldBeInteger
+            shouldBePositive
+          />
+        )}
       </VStack>
     </Modal>
   )
