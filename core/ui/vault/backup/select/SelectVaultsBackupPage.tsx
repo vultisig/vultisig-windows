@@ -64,7 +64,11 @@ export const SelectVaultsBackupPage = () => {
               <VStack fullWidth gap={12}>
                 <VaultList vaults={vaults.slice(0, maxPreview)} />
                 {vaults.length > maxPreview && (
-                  <Text style={{ alignSelf: 'center' }} color="shy" size={13}>
+                  <Text
+                    style={{ alignSelf: 'center' }}
+                    color="shyExtra"
+                    size={13}
+                  >
                     +{vaults.length - maxPreview} {t('more')}
                   </Text>
                 )}
