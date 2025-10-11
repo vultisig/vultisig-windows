@@ -8,7 +8,6 @@ import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData
 import { sum } from '@lib/utils/array/sum'
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { getRecordSize } from '@lib/utils/record/getRecordSize'
 import { useCallback, useMemo } from 'react'
 
 export const useSwapFiatFeesQuery = (value: SwapFee[]) => {
@@ -31,13 +30,9 @@ export const useSwapFiatFeesQuery = (value: SwapFee[]) => {
   const formatAmount = useFormatFiatAmount()
 
   return useTransformQueryData(
-    useCoinPricesQuery({ coins }),
+    useCoinPricesQuery({ coins, eager: false }),
     useCallback(
       prices => {
-        if (coins.length !== getRecordSize(prices)) {
-          throw new Error('Failed to load prices')
-        }
-
         const total = sum(
           value.map(({ amount, decimals, ...coinKey }) => {
             const key = coinKeyToString(coinKey)
@@ -49,7 +44,7 @@ export const useSwapFiatFeesQuery = (value: SwapFee[]) => {
 
         return formatAmount(total)
       },
-      [coins.length, formatAmount, value]
+      [formatAmount, value]
     )
   )
 }
