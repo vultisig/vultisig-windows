@@ -31,9 +31,7 @@ export const VaultSettingsBackup = () => {
             </ListItemIconWrapper>
           }
           description={
-            <DescriptionText>
-              Back up your Vault Share to a preferred location
-            </DescriptionText>
+            <DescriptionText>{t('backup_description')}</DescriptionText>
           }
           onClick={() =>
             hasServer(vault.signers)
