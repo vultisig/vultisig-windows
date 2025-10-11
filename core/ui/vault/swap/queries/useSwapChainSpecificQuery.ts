@@ -5,7 +5,6 @@ import { areEqualCoins } from '@core/chain/coin/Coin'
 import { getSwapDestinationAddress } from '@core/chain/swap/keysign/getSwapDestinationAddress'
 import { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
-import { byteFeeMultiplier } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/resolver'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -47,9 +46,7 @@ export const useSwapChainSpecificQuery = () => {
           areEqualCoins(fromCoinKey, chainFeeCoin[swapChain]),
         general: () => false,
       }),
-      byteFeeMultiplier: isChainOfKind(fromCoin.chain, 'utxo')
-        ? byteFeeMultiplier.fast
-        : undefined,
+      isComplexTx: isChainOfKind(fromCoin.chain, 'utxo') ? true : undefined,
       feeQuote: matchRecordUnion<
         SwapQuote,
         Partial<EvmFeeSettings> | undefined
