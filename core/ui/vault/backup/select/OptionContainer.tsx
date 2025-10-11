@@ -22,6 +22,7 @@ const Header = styled.div`
 const Container = styled(UnstyledButton)`
   padding: 12px;
   ${borderRadius.m};
+  font-size: 14px;
   border: 1px solid ${getColor('foregroundExtra')};
   ${vStack({
     gap: 12,
