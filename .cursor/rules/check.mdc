@@ -1,0 +1,15 @@
+---
+globs: *.ts,*.tsx
+description: Run pnpm check for multi-file changes; skip trivial edits
+---
+
+## Run pnpm check when changes may affect correctness across files
+
+- **Use it** for multi-file edits, shared types/utils, refactors, import/export changes, or public API updates.
+- **Skip it** for trivial, isolated edits (styling, markup-only changes, small single-file fixes that don't change interfaces).
+
+This runs TypeScript type checks, ESLint, and unused code detection in one step.
+
+```bash
+pnpm check
+```

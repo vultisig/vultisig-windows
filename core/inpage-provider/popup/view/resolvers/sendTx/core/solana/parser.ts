@@ -77,8 +77,8 @@ export const parseSolanaTx = async ({
     throw new Error('Error simulating transaction')
   }
   const { inputs, outputs, authority } = sim
-  const primaryOut = shouldBePresent(inputs[0])
-  const primaryIn = shouldBePresent(outputs[0])
+  const primaryIn = shouldBePresent(inputs[0])
+  const primaryOut = shouldBePresent(outputs[0])
   const [inputCoin, outputCoin] = await Promise.all(
     [primaryIn, primaryOut].map(({ mint }) => {
       const id = mint === NATIVE_MINT.toBase58() ? undefined : mint

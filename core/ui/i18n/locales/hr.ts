@@ -13,15 +13,20 @@ export const hr = {
     '<g>Mindig készíts biztonsági másolatot minden tárhelyrészről</g> külön egy <g>másik helyszínen</g>',
   onboarding_step_6:
     'Ezek a részek együttműködnek, hogy <g>feloldják a tárhelyed zárolását</g>',
+  vault_share_banner:
+    'Ez a QR kód lehetővé teszi, hogy megoszthasd egy nézeti változatot a tárhelyed',
   secure_crypto_vault: 'Sigurni kripto trezor',
   save_10_percent_on_swaps: 'Mentsd el <blue>10%</blue> a swap-okkal most',
   vultisig: 'Vultisig',
+  by_vultisig: 'od Vultisig',
   onboarding_description_1:
     'Vultisig je sigurni, višeslojni kripto trezor, kompatibilan sa svim glavnim blockchainima i preko 10.000 tokena. Vultisig je potpuno samostalni.',
+  vultisig_website: 'Vultisig web-lokacija',
   onboarding_description_2:
     'Vultisig ne prati vaše aktivnosti niti zahtijeva bilo kakvu registraciju. Vultisig je otvorenog koda, što osigurava transparentnost i povjerenje.',
   onboarding_description_3:
     'Vultisig je po prirodi višeslojna aplikacija. Zahtijeva najmanje dva uređaja za stvaranje sigurnog trezora: inicijalni uređaj i uređaj za uparivanje.',
+  vult: '$VULT',
   onboarding_description_4:
     'Vultisig je novčanik bez seed fraza. Umjesto toga koristi lako upravljive dijelove trezora. Svaki uređaj ima svoj jedinstveni dio koji treba zasebno sigurnosno kopirati.',
   search_field_placeholder: 'Pretraži..',
@@ -71,7 +76,6 @@ export const hr = {
     'Mala napojnica za ubrzanje vaše transakcije. Veće napojnice mogu ubrzati obradu.',
   you_are_sending: 'Šalješ',
   referrals_default_title: 'Preporuka',
-  ypur_referrals: 'Tvoje preporuke',
   vault_selected: 'Vault odabran',
   title_2: 'Vultisig - Preporuke',
   header_tooltip_title: 'Program Preporuka',
@@ -379,6 +383,8 @@ export const hr = {
   faq_need_to_register_title: 'Moram li se registrirati?',
   faq_need_to_register_content: 'Ne, nema zahtjeva za registraciju.',
   vault_settings_address_book_no_addresses_title: 'Nema spremljenih adresa',
+  vault_settings_address_book_no_addresses_description:
+    'Organizirajte sve vaše važne adrese u jednom mjestu.',
   or: 'ili',
   enter_vault_name: 'Unesite naziv trezora',
   vault_name_required: 'Naziv trezora je obavezan',
@@ -555,8 +561,6 @@ export const hr = {
     connectionSuccess: 'Sikeres csatlakozás!',
     takeMinute: 'Ovo traje samo jednu sekundu',
     vaultInitializationStarting: 'Tároló inicializálásának indítása...',
-    emailRequired: 'E-mail szükséges',
-    emailIncorrect: 'Hibás e-mail, kérjük, ellenőrizze',
     enterEmail: 'Adja meg az e-mail címét',
     emailSetupTitle:
       'Ez az e-mail csak a szerver biztonsági mentésének küldésére szolgál',
@@ -857,11 +861,6 @@ export const hr = {
   took_too_long_to_respond: 'Predugo je trebalo za odgovor',
   backup_password: 'Lozinka sigurnosne kopije',
   backup_without_password: 'Sigurnosna kopija bez lozinke',
-  use_password: 'Koristi lozinku',
-  backup_password_prompt:
-    'Želite li dodati lozinku dijeljenjima trezora uređaja?',
-  backup_password_info:
-    'Preporučujemo da ne postavljate sigurnosnu lozinku za dijeljenje trezora uređaja - vaši su podaci sigurni ako su sigurnosne kopije pravilno pohranjene na različitim lokacijama, što je već značajna zaštita. Upamtite, sigurnosne lozinke nije moguće vratiti ako ih zaboravite. Vaš izbor!',
   upgrade_your_vault_now: 'Nadogradite svoj trezor sada',
   upgrade_vault: 'Nadogradite svoj trezor',
   upgrade_now: 'Nadogradite sada',
@@ -916,6 +915,7 @@ export const hr = {
   remove: 'Ukloniti',
   share_vault: 'Dijeli trezor',
   no_referral_yet: 'Nema preporuke',
+  register_guide: 'Registracijski vodič',
   missing_thorchain_address: 'Nedostaje THORChain adresa',
   missing_destination_address: 'Nedostaje odredišna adresa',
   upgrade_shares_info:
@@ -1060,10 +1060,59 @@ export const hr = {
   backupShare2: 'Sigurnosno dijeljenje 2',
   processing_transaction: 'Obrada transakcije...',
   failed_to_process_transaction: 'Obrada transakcije nije uspjela',
+  signature_successful: 'Potpis uspješan',
   accept_continue: 'Prihvati i nastavi',
   allow_app_access: 'Dopusti aplikaciji pristup',
   app_store: 'Trgovina aplikacija',
   install_app: 'Instaliraj aplikaciju',
   permissions: 'Dozvole',
   same_vault_share: 'Isti trezorski udio',
+  referrals_create_page_title: 'Vultisig - Preporuke',
+  your_referrals: 'Vaše preporuke',
+  save_swap_fees_with_referral:
+    'Uštedite <blue>10%</blue> na zamjenama - Dodajte preporuku',
+  create_own_referral:
+    'Izradite vlastiti kod i zaradite <blue>20%</blue> na preporučenim zamjenama',
+  backup_with_password: 'Sigurnosna kopija s lozinkom',
+  backup_password_confirmation_title:
+    'Želite li šifrirati sigurnosnu kopiju lozinkom?',
+  backup_password_info_secure_without_password:
+    'Prema zadanim postavkama, vaša sigurnosna kopija je <b>sigurna bez</b> dodatne lozinke jer dijeljene datoteke Vaulta pohranjujete na različitim lokacijama.',
+  backup_password_info_encrypt_with_password:
+    'Ako odaberete dodati lozinku, ona će se koristiti za <b>šifriranje</b> sigurnosne kopije datoteke.',
+  backup_password_info_cannot_be_reset:
+    'Zapamtite: ako zaboravite lozinku za trezor, ona se *ne može* resetirati ili oporaviti.',
+  email_required: 'E-pošta je obavezna',
+  device_backup: 'Sigurnosna kopija uređaja',
+  device_backup_description: 'Pohrani dijeljeni trezor ovog uređaja.',
+  server_backup: 'Sigurnosna kopija poslužitelja',
+  server_backup_description:
+    'Ponovno zatražite dijeljenje trezora poslužitelja.',
+  choose_backup_method: 'Odaberite metodu sigurnosne kopije',
+  vault_server_share_too_many_requests:
+    'Prečesto ste tražili sigurnosnu kopiju u kratkom vremenu. Pričekajte prije ponovnog pokušaja.',
+  vault_server_share_bad_request:
+    'Nešto je pošlo po zlu. Molimo vas da ponovno provjerite lozinku i pokušate ponovno.',
+  backup_share_sent: 'Dijeljenje sigurnosne kopije poslano!',
+  check_email: 'Provjerite e-poštu',
+  backup_share_sent_description:
+    'Upravo smo vam poslali sigurnosnu kopiju na vašu e-poštu. Ako je ne vidite, provjerite mapu neželjene pošte.',
+  faq_is_open_source_title: 'Je li Vultisig otvorenog koda i revidiran?',
+  faq_is_open_source_content:
+    'Da, Vultisig je otvorenog koda i prošao je sigurnosne revizije. I izvješća revizije i izvorni kod su dostupni.',
+  faq_data_protection_title:
+    'Kako Vultisig rješava probleme s privatnošću i zaštitom podataka?',
+  faq_data_protection_content:
+    'Vultisig ne pohranjuje nikakve korisničke podatke iz svojih mobilnih aplikacija.',
+  faq_comparison_title:
+    'Kako se Vultisig uspoređuje s drugim multisign novčanicima?',
+  faq_comparison_content:
+    'Izgrađen je na MPC tehnologiji, koja eliminira potrebu za početnim frazama i podržava više blockchaina, čineći Vultisig fleksibilnim i neovisnim o lancu.',
+  label: 'Označiti',
+  select_vaults_to_backup: 'Odaberite trezore za sigurnosno kopiranje',
+  select_vaults_to_backup_description:
+    'Odaberite želite li sigurnosno kopirati samo ovaj trezor ili sve trezore u aplikaciji.',
+  this_vault_only: 'Samo ovaj trezor',
+  all_vaults: 'Svi trezori',
+  more: 'više',
 }

@@ -45,7 +45,7 @@ type DeriveEvmGasLimitInput = {
 export const deriveEvmGasLimit = ({ coin, data }: DeriveEvmGasLimitInput) => {
   const { id, chain } = coin
   if (data && isHex(data)) {
-    return chain === EvmChain.Mantle ? 1_500_000_000n : 600_000n
+    return chain === EvmChain.Mantle ? 3_00_000_0000n : 600_000n
   }
 
   return (id ? erc20TransferGasLimit : feeCoinTransferGasLimit)[chain]

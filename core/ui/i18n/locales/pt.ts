@@ -11,18 +11,23 @@ export const pt = {
   onboarding_step_5:
     '<g>Sempre faça backup de cada parte do cofre</g> separadamente em um <g>local diferente</g>',
   onboarding_step_6: 'Essas partes colaboram para <g>desbloquear seu cofre</g>',
+  vault_share_banner:
+    'Este QR Code permite compartilhar uma versão de visualização do seu cofre',
   secure_crypto_vault: 'Cofre seguro de cripto',
   vultisig: 'Vultisig',
+  by_vultisig: 'por Vultisig',
   onboarding_description_1:
     'O Vultisig é um cofre seguro de cripto multi-dispositivo, compatível com todas as principais blockchains e mais de 10.000 tokens. O Vultisig é totalmente auto-hospedado.',
   onboarding_description_2:
     'O Vultisig não rastreia suas atividades nem exige nenhum registro. O Vultisig é de código aberto, garantindo transparência e confiança.',
+  vultisig_website: 'Site do Vultisig',
   onboarding_description_3:
     'O Vultisig é, por natureza, um aplicativo multi-dispositivo. Exige pelo menos dois dispositivos para criar um cofre seguro: um dispositivo inicializador e um dispositivo de pareamento.',
   onboarding_description_4:
     'O Vultisig é uma carteira sem frases-semente. Em vez disso, usa fragmentos fáceis de gerenciar. Cada dispositivo tem seu próprio fragmento exclusivo que precisa de backup separado.',
   moreInfo: 'Mais informações',
   merged: 'Combinado',
+  vult: '$VULT',
   function_unavailble:
     'Recurso não disponível para moedas de cadeia existentes. Adicione moedas que possam ser usadas com FUNCTION:',
   incorrect_passcode: 'Código incorreto',
@@ -383,7 +388,10 @@ export const pt = {
     'Você pode fazer backup do seu cofre exportando os fragmentos do cofre.',
   faq_need_to_register_title: 'Preciso me registrar?',
   faq_need_to_register_content: 'Não, não há requisitos de registro.',
-  vault_settings_address_book_no_addresses_title: 'Nenhum endereço salvo',
+  vault_settings_address_book_no_addresses_title:
+    'Seu livro de endereços está vazio',
+  vault_settings_address_book_no_addresses_description:
+    'Organize todos os seus endereços importantes em um lugar.',
   or: 'ou',
   enter_vault_name: 'Insira o nome do cofre',
   vault_name_required: 'Nome do cofre obrigatório',
@@ -565,8 +573,6 @@ export const pt = {
     connectionSuccess: 'Conexão bem-sucedida!',
     takeMinute: 'Isso deve levar apenas um segundo',
     vaultInitializationStarting: 'Iniciando a inicialização do cofre...',
-    emailRequired: 'E-mail é obrigatório',
-    emailIncorrect: 'E-mail incorreto, por favor verifique',
     enterEmail: 'Digite seu e-mail',
     emailSetupTitle:
       'Este email é usado apenas para enviar o backup do servidor',
@@ -866,11 +872,6 @@ export const pt = {
   took_too_long_to_respond: 'Demorou muito para responder',
   backup_password: 'Senha de backup',
   backup_without_password: 'Backup sem senha',
-  use_password: 'Usar senha',
-  backup_password_prompt:
-    'Deseja adicionar uma senha aos compartilhamentos do cofre do seu dispositivo?',
-  backup_password_info:
-    'Recomendamos que você não defina uma senha de backup para compartilhamentos de cofre de dispositivos - seus dados estarão seguros se os backups forem armazenados adequadamente em locais diferentes, o que já é uma proteção significativa. Lembre-se, as senhas de backup não podem ser recuperadas se você as esquecer. A escolha é sua!',
   upgrade_your_vault_now: 'Atualize seu cofre agora',
   upgrade_vault: 'Atualize seu cofre',
   upgrade_now: 'Atualize agora',
@@ -924,6 +925,7 @@ export const pt = {
   vultisig_community: 'Comunidade Vultisig',
   remove: 'Remover',
   share_vault: 'Compartilhar Cofre',
+  register_guide: 'Guia de registro',
   no_referral_yet: 'Nenhuma referência ainda',
   missing_thorchain_address: 'Endereço THORChain ausente',
   missing_destination_address: 'Endereço de destino ausente',
@@ -1075,10 +1077,61 @@ export const pt = {
   backupShare2: 'Compartilhamento de backup 2',
   processing_transaction: 'Processando transação...',
   failed_to_process_transaction: 'Falha ao processar a transação',
+  signature_successful: 'Assinatura bem-sucedida',
   accept_continue: 'Aceitar e continuar',
   allow_app_access: 'Permitir acesso do aplicativo a',
   app_store: 'Loja de aplicativos',
   install_app: 'Instalar aplicativo',
   permissions: 'Permissões',
   same_vault_share: 'Mesmo compartilhamento de cofre',
+  referrals_create_page_title: 'Vultisig - Referências',
+  add_friends_referral: 'Adicionar uma indicação de amigo',
+  save_10_percent_on_swaps: 'Economize <blue>10%</blue> em trocas agora',
+  save_swap_fees_with_referral:
+    'Economize <blue>10%</blue> em trocas - Adicione uma indicação',
+  create_own_referral:
+    'Crie seu próprio código e ganhe <blue>20%</blue> em swaps indicados',
+  backup_with_password: 'Backup com senha',
+  backup_password_confirmation_title:
+    'Você quer criptografar seu backup com uma senha?',
+  backup_password_info_secure_without_password:
+    'Por padrão, seu backup é <b>seguro sem</b> uma senha extra, já que você armazena compartilhamentos do Vault em locais diferentes.',
+  backup_password_info_encrypt_with_password:
+    'Se você optar por adicionar uma senha, ela será usada para <b>criptografar</b> o arquivo de backup.',
+  backup_password_info_cannot_be_reset:
+    'Lembre-se: se você esquecer a senha do seu cofre, ela <b>não poderá</b> ser redefinida ou recuperada.',
+  email_required: 'E-mail é obrigatório',
+  device_backup: 'Backup do dispositivo',
+  device_backup_description:
+    'Armazene o compartilhamento do cofre deste dispositivo.',
+  server_backup: 'Backup do servidor',
+  server_backup_description:
+    'Solicite o compartilhamento do Vault do servidor novamente.',
+  choose_backup_method: 'Escolha o método de backup',
+  vault_server_share_too_many_requests:
+    'Você solicitou seu compartilhamento de backup muitas vezes em um curto espaço de tempo. Aguarde antes de tentar novamente.',
+  vault_server_share_bad_request:
+    'Algo deu errado. Verifique sua senha novamente e tente novamente.',
+  backup_share_sent: 'Compartilhamento de backup enviado!',
+  check_email: 'Verifique o e-mail',
+  backup_share_sent_description:
+    'Acabamos de enviar seu compartilhamento de backup para o seu e-mail. Caso não o encontre, verifique sua caixa de spam.',
+  faq_is_open_source_title: 'O Vultisig é de código aberto e auditado?',
+  faq_is_open_source_content:
+    'Sim, o Vultisig é de código aberto e passou por auditorias de segurança. Tanto os relatórios de auditoria quanto o código-fonte são acessíveis.',
+  faq_data_protection_title:
+    'Como a Vultisig lida com privacidade e proteção de dados?',
+  faq_data_protection_content:
+    'A Vultisig não armazena nenhuma informação do usuário em seus aplicativos móveis.',
+  faq_comparison_title:
+    'Como a Vultisig se compara a outras carteiras multiassinadas?',
+  faq_comparison_content:
+    'Ele é construído com base na tecnologia MPC, que elimina a necessidade de frases-semente e oferece suporte a vários blockchains, tornando o Vultisig flexível e independente de cadeia.',
+  label: 'Rótulo',
+  select_vaults_to_backup: 'Selecione os cofres para fazer backup',
+  select_vaults_to_backup_description:
+    'Escolha se deseja fazer backup apenas deste cofre ou de todos os cofres do seu aplicativo.',
+  this_vault_only: 'Somente este cofre',
+  all_vaults: 'Todos os cofres',
+  more: 'mais',
 }

@@ -2,6 +2,7 @@ import { Chain } from '@core/chain/Chain'
 import { ChainKind } from '@core/chain/ChainKind'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
+import { TronFeeSettings } from '@core/chain/tx/fee/tron/tronFeeSettings'
 import { UtxoFeeSettings } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
 import { ChildrenProp } from '@lib/ui/props'
 import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
@@ -13,12 +14,17 @@ import { useCurrentSendCoin } from '../../../state/sendCoin'
 export const feeSettingsChainKinds = [
   'evm',
   'utxo',
+  'tron',
 ] as const satisfies ChainKind[]
 
 type FeeSettingsChainKind = (typeof feeSettingsChainKinds)[number]
 
 export type FeeSettings<T extends FeeSettingsChainKind = FeeSettingsChainKind> =
-  T extends 'evm' ? EvmFeeSettings : UtxoFeeSettings
+  T extends 'evm'
+    ? EvmFeeSettings
+    : T extends 'tron'
+      ? TronFeeSettings
+      : UtxoFeeSettings
 
 type FeeSettingsRecord = Record<string, FeeSettings>
 

@@ -4,4 +4,6 @@ export type EvmFeeQuote = {
   maxFeePerGas: bigint
 }
 
-export type EvmFeeSettings = Omit<EvmFeeQuote, 'maxFeePerGas'>
+export type EvmFeeSettings = Omit<EvmFeeQuote, 'maxFeePerGas'> & {
+  isOverride?: boolean
+}

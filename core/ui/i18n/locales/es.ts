@@ -9,12 +9,15 @@ export const es = {
   onboarding_step_4:
     'Recupera tu bóveda incluso <g>si un dispositivo se pierde o se daña</g>',
   positions: 'Posiciones',
+  vault_share_banner:
+    'Este código QR le permite compartir una versión de vista de su bóveda',
   onboarding_step_5:
     '<g>Siempre haga una copia de seguridad de cada parte del depósito</g> separadamente en una <g>ubicación diferente</g>',
   onboarding_step_6:
     'Estas partes colaboran para <g>desbloquear su depósito</g>',
   secure_crypto_vault: 'Bóveda segura de criptomonedas',
   vultisig: 'Vultisig',
+  by_vultisig: 'por Vultisig',
   add_friends_referral: 'Agregar una referencia de amigos',
   save_10_percent_on_swaps: 'Ahorra <blue>10%</blue> en intercambios ahora',
   digit_input_success_validation: 'Verificación exitosa',
@@ -22,7 +25,9 @@ export const es = {
     'Error al verificar el código, por favor intenta de nuevo',
   digit_input_loading_validation: 'Verificando código, por favor espera',
   mint: 'Recibir',
+  vultisig_website: 'Sitio web de Vultisig',
   redeem: 'Vender',
+  vult: '$VULT',
   merged: 'Combinado',
   function_unavailble:
     'Función no disponible para las monedas de cadena existentes. Agrega monedas que puedan usarse con FUNCTION:',
@@ -398,7 +403,9 @@ export const es = {
   faq_need_to_register_title: '¿Necesito registrarme?',
   faq_need_to_register_content: 'No, no hay requisitos de registro.',
   vault_settings_address_book_no_addresses_title:
-    'No hay direcciones guardadas',
+    'Su libreta de direcciones está vacía',
+  vault_settings_address_book_no_addresses_description:
+    'Organice todas sus direcciones importantes en un lugar.',
   or: 'o',
   enter_vault_name: 'Ingrese el nombre de la bóveda',
   vault_name_required: 'Se requiere el nombre de la bóveda',
@@ -574,8 +581,6 @@ export const es = {
     connectionSuccess: '¡Conexión exitosa!',
     takeMinute: 'Esto solo tomará un segundo',
     vaultInitializationStarting: 'Iniciando la inicialización del baúl...',
-    emailRequired: 'Correo electrónico es obligatorio',
-    emailIncorrect: 'Correo electrónico incorrecto, por favor verifique',
     enterEmail: 'Ingrese su correo electrónico',
     emailSetupTitle:
       'Este correo electrónico solo se usa para enviar la copia de seguridad del servidor.',
@@ -880,11 +885,6 @@ export const es = {
   took_too_long_to_respond: 'Tardó demasiado en responder',
   backup_password: 'Contraseña de respaldo',
   backup_without_password: 'Copia de seguridad sin contraseña',
-  use_password: 'Usar contraseña',
-  backup_password_prompt:
-    '¿Quieres agregar una contraseña a los recursos compartidos de la bóveda de tu dispositivo?',
-  backup_password_info:
-    'Le recomendamos no establecer una contraseña de respaldo para los recursos compartidos de la bóveda del dispositivo. Sus datos estarán seguros si las copias de seguridad se almacenan correctamente en diferentes ubicaciones, lo cual ya constituye una protección considerable. Recuerde que las contraseñas de respaldo no se pueden recuperar si las olvida. ¡Usted decide!',
   upgrade_your_vault_now: 'Actualice su bóveda ahora',
   upgrade_vault: 'Mejora tu bóveda',
   upgrade_now: 'Actualice ahora',
@@ -938,6 +938,7 @@ export const es = {
     'Convierta tu bóveda en una máquina de recompensas. Cree tu referencia ahora y comience a ganar.',
   remove: 'Eliminar',
   share_vault: 'Bóveda compartida',
+  register_guide: 'Guía de registro',
   no_referral_yet: 'Aún no hay referencia',
   missing_thorchain_address: 'Falta la dirección de THORChain',
   missing_destination_address: 'Dirección de destino faltante',
@@ -1089,10 +1090,60 @@ export const es = {
   backupShare2: 'Copia de seguridad compartida 2',
   processing_transaction: 'Procesando transacción...',
   failed_to_process_transaction: 'No se pudo procesar la transacción',
+  signature_successful: 'Firma exitosa',
   accept_continue: 'Aceptar y continuar',
   allow_app_access: 'Permitir el acceso de la aplicación a',
   app_store: 'Tienda de aplicaciones',
   install_app: 'Instalar aplicación',
   permissions: 'Permisos',
   same_vault_share: 'Misma bóveda compartida',
+  referrals_create_page_title: 'Vultisig - Referencias',
+  save_swap_fees_with_referral:
+    'Ahorre <blue>10%</blue> en intercambios - Agregar una referencia',
+  create_own_referral:
+    'Crea tu propio código y gana un <blue>20%</blue> en intercambios referidos',
+  backup_with_password: 'Copia de seguridad con contraseña',
+  backup_password_confirmation_title:
+    '¿Quieres cifrar tu copia de seguridad con una contraseña?',
+  backup_password_info_secure_without_password:
+    'De forma predeterminada, su copia de seguridad es <b>segura</b> sin una contraseña adicional, ya que almacena los recursos compartidos de Vault en diferentes ubicaciones.',
+  backup_password_info_encrypt_with_password:
+    'Si decide agregar una contraseña, esta se utilizará para <b>encriptar</b> el archivo de respaldo.',
+  backup_password_info_cannot_be_reset:
+    'Recuerde: si olvida la contraseña de su bóveda, no podrá restablecerla ni recuperarla.',
+  email_required: 'Se requiere correo electrónico',
+  device_backup: 'Copia de seguridad del dispositivo',
+  device_backup_description:
+    'Almacenar el recurso compartido de bóveda de este dispositivo.',
+  server_backup: 'Copia de seguridad del servidor',
+  server_backup_description:
+    'Solicitar nuevamente el uso compartido de Server Vault.',
+  choose_backup_method: 'Elija el método de copia de seguridad',
+  vault_server_share_too_many_requests:
+    'Has solicitado tu copia de seguridad compartida con demasiada frecuencia en poco tiempo. Espera antes de volver a intentarlo.',
+  vault_server_share_bad_request:
+    'Algo salió mal. Por favor, revisa tu contraseña e inténtalo de nuevo.',
+  backup_share_sent: '¡Respaldo compartido enviado!',
+  check_email: 'Revisar el correo electrónico',
+  backup_share_sent_description:
+    'Acabamos de enviarte tu copia de seguridad a tu correo electrónico. Si no la encuentras, revisa tu carpeta de correo no deseado.',
+  faq_is_open_source_title: '¿Vultisig es de código abierto y auditado?',
+  faq_is_open_source_content:
+    'Sí, Vultisig es de código abierto y ha sido sometido a auditorías de seguridad. Tanto los informes de auditoría como el código fuente son accesibles.',
+  faq_data_protection_title:
+    '¿Cómo gestiona Vultisig la privacidad y la protección de datos?',
+  faq_data_protection_content:
+    'Vultisig no almacena ninguna información del usuario de sus aplicaciones móviles.',
+  faq_comparison_title:
+    '¿Cómo se compara Vultisig con otras billeteras multifirma?',
+  faq_comparison_content:
+    'Está construido sobre tecnología MPC, que elimina la necesidad de frases semilla y admite múltiples cadenas de bloques, lo que hace que Vultisig sea flexible y agnóstico en cuanto a cadena.',
+  label: 'Etiqueta',
+  select_vaults_to_backup:
+    'Seleccionar bóvedas para realizar copias de seguridad',
+  select_vaults_to_backup_description:
+    'Elija si desea realizar una copia de seguridad solo de esta bóveda o de todas las bóvedas de su aplicación.',
+  this_vault_only: 'Sólo esta bóveda',
+  all_vaults: 'Todas las bóvedas',
+  more: 'más',
 }

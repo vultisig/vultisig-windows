@@ -10,16 +10,21 @@ import {
   KeysignPayload,
   KeysignPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import {
+  TronTransferAssetContractPayloadSchema,
+  TronTransferContractPayloadSchema,
+  TronTriggerSmartContractPayloadSchema,
+} from '@core/mpc/types/vultisig/keysign/v1/tron_contract_payload_pb'
 import { UtxoInfo } from '@core/mpc/types/vultisig/keysign/v1/utxo_info_pb'
 import { WasmExecuteContractPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { Vault } from '@core/ui/vault/Vault'
+import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { toUtf8String } from 'ethers'
 import { hexToString } from 'viem'
 
-import { CosmosMsgType } from '../interfaces'
 import { CustomTxData } from './customTxData'
 import { ParsedTx } from './parsedTx'
 
@@ -110,21 +115,76 @@ export const getKeysignPayload = ({
   >(customTxData, {
     regular: ({ transactionDetails }) => {
       if (
-        transactionDetails.cosmosMsgPayload?.case ===
-        CosmosMsgType.MSG_EXECUTE_CONTRACT
+        !transactionDetails.msgPayload ||
+        !transactionDetails.msgPayload.case ||
+        !transactionDetails.msgPayload.value
       ) {
-        const msgPayload = transactionDetails.cosmosMsgPayload.value
-
-        return {
-          case: 'wasmExecuteContractPayload',
-          value: create(WasmExecuteContractPayloadSchema, {
-            contractAddress: msgPayload.contract,
-            executeMsg: msgPayload.msg,
-            senderAddress: msgPayload.sender,
-            coins: msgPayload.funds,
-          }),
-        }
+        return undefined
       }
+      return matchDiscriminatedUnion(
+        transactionDetails.msgPayload,
+        'case',
+        'value',
+        {
+          'wasm/MsgExecuteContract': (msgPayload: {
+            sender: string
+            contract: string
+            funds: { denom: string; amount: string }[]
+            msg: string
+          }) => {
+            return {
+              case: 'wasmExecuteContractPayload',
+              value: create(WasmExecuteContractPayloadSchema, {
+                contractAddress: msgPayload.contract,
+                executeMsg: msgPayload.msg,
+                senderAddress: msgPayload.sender,
+                coins: msgPayload.funds,
+              }),
+            }
+          },
+          TransferContract: msgPayload => {
+            return {
+              case: 'tronTransferContractPayload',
+              value: create(TronTransferContractPayloadSchema, {
+                toAddress: msgPayload.to_address,
+                ownerAddress: msgPayload.owner_address,
+                amount: msgPayload.amount.toString(),
+              }),
+            }
+          },
+          TriggerSmartContract: msgPayload => {
+            return {
+              case: 'tronTriggerSmartContractPayload',
+              value: create(TronTriggerSmartContractPayloadSchema, {
+                ownerAddress: msgPayload.owner_address,
+                contractAddress: msgPayload.contract_address,
+                callValue: msgPayload.call_value?.toString(),
+                callTokenValue: msgPayload.call_token_value?.toString(),
+                tokenId: msgPayload.token_id,
+                data: msgPayload.data,
+              }),
+            }
+          },
+          TransferAssetContract: msgPayload => {
+            return {
+              case: 'tronTransferAssetContractPayload',
+              value: create(TronTransferAssetContractPayloadSchema, {
+                toAddress: msgPayload.to_address,
+                ownerAddress: msgPayload.owner_address,
+                amount: msgPayload.amount.toString(),
+                assetName: msgPayload.asset_name,
+              }),
+            }
+          },
+          '/cosmos.bank.v1beta1.MsgSend': () => undefined,
+          '/cosmwasm.wasm.v1.MsgExecuteContract': () => undefined,
+          '/ibc.applications.transfer.v1.MsgTransfer': () => undefined,
+          'cosmos-sdk/MsgSend': () => undefined,
+          'thorchain/MsgSend': () => undefined,
+          'thorchain/MsgDeposit': () => undefined,
+          '/types.MsgSend': () => undefined,
+        }
+      )
     },
     solana: () => undefined,
     psbt: () => undefined,

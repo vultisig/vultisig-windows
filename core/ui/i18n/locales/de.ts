@@ -10,6 +10,8 @@ export const de = {
     'Stelle deinen Tresor wieder her, sogar <g>wenn ein Gerät verloren geht oder beschädigt wird</g>',
   onboarding_step_5:
     '<g>Sichern Sie jede Tresorfreigabe immer</g> separat in einer <g>anderen Location</g>',
+  vault_share_banner:
+    'Dieser QR Code ermöglicht Ihnen, eine Ansichtsversion Ihres Tresors zu teilen',
   onboarding_step_6:
     'Diese Freigaben arbeiten zusammen, um <g>Ihren Tresor zu entsperren</g>',
   positions: 'Positionen',
@@ -20,7 +22,9 @@ export const de = {
   digit_input_error_validation:
     'Fehler bei der Code-Verifizierung, bitte erneut versuchen',
   digit_input_loading_validation: 'Code wird überprüft, bitte warten',
+  vult: '$VULT',
   vultisig: 'Vultisig',
+  by_vultisig: 'von Vultisig',
   merged: 'Zusammengeführt',
   mint: 'Erhalten',
   function_unavailble:
@@ -394,8 +398,9 @@ export const de = {
   faq_need_to_register_title: 'Muss ich mich registrieren?',
   faq_need_to_register_content:
     'Nein, es gibt keine Registrierungsanforderungen.',
-  vault_settings_address_book_no_addresses_title:
-    'Keine gespeicherten Adressen',
+  vault_settings_address_book_no_addresses_title: 'Ihr Adressbuch ist leer',
+  vault_settings_address_book_no_addresses_description:
+    'Ordnen Sie alle Ihre wichtigen Adressen in einem Ort.',
   or: 'oder',
   enter_vault_name: 'Tresorname eingeben',
   vault_name_required: 'Tresorname ist erforderlich',
@@ -572,8 +577,6 @@ export const de = {
     connectionSuccess: 'Verbindung erfolgreich!',
     takeMinute: 'Dies sollte nur eine Sekunde dauern',
     vaultInitializationStarting: 'Tresor-Initialisierung startet...',
-    emailRequired: 'E-Mail ist erforderlich',
-    emailIncorrect: 'Falsche E-Mail, bitte überprüfen',
     enterEmail: 'Geben Sie Ihre E-Mail ein',
     emailSetupTitle:
       'Diese E-Mail wird nur verwendet, um das Server-Backup zu senden',
@@ -883,11 +886,6 @@ export const de = {
   backup_password: 'Backup-Passwort',
   signing_transaction: 'Signieren einer Transaktion',
   backup_without_password: 'Backup ohne Passwort',
-  use_password: 'Passwort verwenden',
-  backup_password_prompt:
-    'Möchten Sie den Tresorfreigaben Ihres Geräts ein Kennwort hinzufügen?',
-  backup_password_info:
-    'Wir empfehlen, für Geräte-Tresorfreigaben kein Backup-Passwort festzulegen. Ihre Daten sind sicher, wenn die Backups ordnungsgemäß an verschiedenen Orten gespeichert werden, was bereits einen erheblichen Schutz darstellt. Denken Sie daran: Backup-Passwörter können nicht wiederhergestellt werden, wenn Sie sie vergessen. Sie haben die Wahl!',
   upgrade_your_vault_now: 'Aktualisieren Sie Ihren Tresor jetzt',
   upgrade_vault: 'Aktualisieren Sie Ihren Tresor',
   upgrade_now: 'Jetzt upgraden',
@@ -941,6 +939,7 @@ export const de = {
   twitter: 'Twitter',
   vultisig_community: 'Vultisig-Gemeinschaft',
   remove: 'Entfernen',
+  register_guide: 'Registrierungsanleitung',
   share_vault: 'Tresor teilen',
   no_referral_yet: 'Noch keine Empfehlung',
   missing_thorchain_address: 'Fehlende THORChain-Adresse',
@@ -1015,7 +1014,7 @@ export const de = {
   go_to_wallet: 'Zur Brieftasche',
   install_plugin: 'Plugin installieren',
   installing_plugin: 'Plugin installieren',
-  plugin_info: 'Plugin-Informationen',
+  plugin_info: 'Plugin Informationen',
   plugin_info_desc: 'Sie installieren das {{name}}-Plugin',
   plugin_success_desc: 'Die Installation von {{name}} ist abgeschlossen',
   plugin_password_desc:
@@ -1075,7 +1074,7 @@ export const de = {
   entity_scanned: '{{entity}} gescannt von <provider></provider>',
   site_has_risk: 'Schädliche Site erkannt von <provider></provider>',
   risky_site_detected: 'Schädliche Site erkannt',
-  app_permissions: 'App-Berechtigungen',
+  app_permissions: 'App Berechtigungen',
   dapp_name: 'dApp-Name',
   description: 'Beschreibung',
   personal_sign: 'Persönliches Zeichen',
@@ -1093,10 +1092,58 @@ export const de = {
   backupShare2: 'Sicherungsfreigabe 2',
   processing_transaction: 'Transaktion wird verarbeitet...',
   failed_to_process_transaction: 'Transaktion konnte nicht verarbeitet werden',
+  signature_successful: 'Signatur erfolgreich',
   accept_continue: 'Akzeptieren und fortfahren',
   allow_app_access: 'App-Zugriff erlauben auf',
   app_store: 'App Store',
   install_app: 'App installieren',
   permissions: 'Berechtigungen',
   same_vault_share: 'Gleiche Tresorfreigabe',
+  referrals_create_page_title: 'Vultisig - Empfehlungen',
+  save_swap_fees_with_referral:
+    'Sparen Sie <blue>10 %</blue> beim Tausch – Fügen Sie eine Empfehlung hinzu',
+  create_own_referral:
+    'Erstellen Sie Ihren eigenen Code und verdienen Sie <blue>20 %</blue> auf vermittelte Swaps',
+  backup_with_password: 'Backup mit Passwort',
+  backup_password_confirmation_title:
+    'Möchten Sie Ihr Backup mit einem Passwort verschlüsseln?',
+  backup_password_info_secure_without_password:
+    'Standardmäßig ist Ihr Backup <b>ohne</b> ein zusätzliches Kennwort sicher, da Sie Vault-Freigaben an verschiedenen Orten speichern.',
+  backup_password_info_encrypt_with_password:
+    'Wenn Sie ein Kennwort hinzufügen, wird dieses zum <b>Verschlüsseln</b> der Sicherungsdatei verwendet.',
+  backup_password_info_cannot_be_reset:
+    'Denken Sie daran: Wenn Sie Ihr Tresorkennwort vergessen, kann es <b>nicht</b> zurückgesetzt oder wiederhergestellt werden.',
+  email_required: 'E-Mail ist erforderlich',
+  device_backup: 'Gerätesicherung',
+  device_backup_description: 'Speichern Sie die Tresorfreigabe dieses Geräts.',
+  server_backup: 'Serversicherung',
+  server_backup_description: 'Fordern Sie Server Vault Share erneut an.',
+  choose_backup_method: 'Wählen Sie eine Sicherungsmethode',
+  vault_server_share_too_many_requests:
+    'Sie haben Ihre Sicherungsfreigabe in kurzer Zeit zu oft angefordert. Bitte warten Sie, bevor Sie es erneut versuchen.',
+  vault_server_share_bad_request:
+    'Etwas ist schiefgelaufen. Bitte überprüfen Sie Ihr Passwort und versuchen Sie es erneut.',
+  backup_share_sent: 'Backup-Freigabe gesendet!',
+  check_email: 'E-Mails abrufen',
+  backup_share_sent_description:
+    'Wir haben Ihre Sicherungsfreigabe gerade an Ihre E-Mail-Adresse gesendet. Wenn Sie sie nicht sehen, überprüfen Sie Ihren Spam-Ordner.',
+  vultisig_website: 'Vultisig Website',
+  faq_is_open_source_title: 'Ist Vultisig Open Source und geprüft?',
+  faq_is_open_source_content:
+    'Ja, Vultisig ist Open Source und wurde Sicherheitsüberprüfungen unterzogen. Sowohl die Prüfberichte als auch der Quellcode sind zugänglich.',
+  faq_data_protection_title:
+    'Wie geht Vultisig mit Privatsphäre und Datenschutz um?',
+  faq_data_protection_content:
+    'Vultisig speichert keine Benutzerinformationen aus seinen mobilen Apps.',
+  faq_comparison_title:
+    'Wie schneidet Vultisig im Vergleich zu anderen Multisig-Wallets ab?',
+  faq_comparison_content:
+    'Es basiert auf der MPC-Technologie, die Seed-Phrasen überflüssig macht und mehrere Blockchains unterstützt, wodurch Vultisig flexibel und kettenunabhängig ist.',
+  label: 'Etikett',
+  select_vaults_to_backup: 'Wählen Sie Tresore zum Sichern aus',
+  select_vaults_to_backup_description:
+    'Wählen Sie, ob nur dieser Tresor oder alle Tresore in Ihrer App gesichert werden sollen.',
+  this_vault_only: 'Nur dieser Tresor',
+  all_vaults: 'Alle Tresore',
+  more: 'mehr',
 }

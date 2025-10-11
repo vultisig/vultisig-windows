@@ -10,6 +10,8 @@ import { CurrencyPage } from '@core/ui/preferences/currency'
 import { LanguagePage } from '@core/ui/preferences/language'
 import { UploadQrPage } from '@core/ui/qr/upload'
 import { VaultBackupPage } from '@core/ui/vault/backup'
+import { SelectVaultsBackupPage } from '@core/ui/vault/backup/select/SelectVaultsBackupPage'
+import { VaultsBackupPage } from '@core/ui/vault/backup/VaultsBackupPage'
 import { VaultChainCoinPage } from '@core/ui/vault/chain/coin/VaultChainCoinPage'
 import { ManageVaultChainsPage } from '@core/ui/vault/chain/manage'
 import { ManageVaultChainCoinsPage } from '@core/ui/vault/chain/manage/coin'
@@ -34,10 +36,13 @@ import { Views } from '@lib/ui/navigation/Views'
 
 import { PasscodeAutoLockPage } from '../passcodeEncryption/autoLock/PasscodeAutoLockPage'
 import { ManagePasscodeEncryptionPage } from '../passcodeEncryption/manage/ManagePasscodeEncryptionPage'
+import { RequestFastVaultBackup } from '../vault/backup/fast/request'
 import { DepositActionProvider } from '../vault/deposit/providers/DepositActionProvider'
 import { DepositCoinProvider } from '../vault/deposit/providers/DepositCoinProvider'
 import { ReferralsGuard } from '../vault/settings/referral/providers/ReferralsGuard'
 import { ReferralPage } from '../vault/settings/referral/ReferralsPage'
+import { FaqVaultPage } from '../vault/settings/vaultFaq/FaqVaultPage'
+import { ShareVaultPage } from '../vault/share/ShareVaultPage'
 
 export type SharedViewId = Extract<
   CoreViewId,
@@ -66,6 +71,8 @@ export type SharedViewId = Extract<
   | 'updateVaultFolder'
   | 'uploadQr'
   | 'vaultBackup'
+  | 'vaultsBackup'
+  | 'selectVaultsBackup'
   | 'vaultChainDetail'
   | 'vaultChainCoinDetail'
   | 'vaultDetails'
@@ -75,6 +82,9 @@ export type SharedViewId = Extract<
   | 'managePasscodeEncryption'
   | 'passcodeAutoLock'
   | 'referral'
+  | 'requestFastVaultBackup'
+  | 'faq'
+  | 'shareVault'
 >
 
 export const sharedViews: Views<SharedViewId> = {
@@ -117,6 +127,8 @@ export const sharedViews: Views<SharedViewId> = {
   ),
   uploadQr: UploadQrPage,
   vaultBackup: VaultBackupPage,
+  vaultsBackup: VaultsBackupPage,
+  selectVaultsBackup: SelectVaultsBackupPage,
   vaultChainCoinDetail: VaultChainCoinPage,
   vaultChainDetail: VaultChainPage,
   vaultDetails: VaultDetailsPage,
@@ -129,4 +141,7 @@ export const sharedViews: Views<SharedViewId> = {
   vaults: VaultsPage,
   managePasscodeEncryption: ManagePasscodeEncryptionPage,
   passcodeAutoLock: PasscodeAutoLockPage,
+  requestFastVaultBackup: RequestFastVaultBackup,
+  faq: FaqVaultPage,
+  shareVault: ShareVaultPage,
 }

@@ -1,9 +1,7 @@
-import { ProductSimpleLogo } from '@core/ui/product/logo/ProductSimpleLogo'
 import { VaultKey } from '@core/ui/vault/share/VaultKey'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { centerContent } from '@lib/ui/css/centerContent'
-import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -13,15 +11,17 @@ import styled, { useTheme } from 'styled-components'
 
 import { getVaultExportUid } from '../export/core/uid'
 
-const cardWidth = 320
-const qrCodeSize = cardWidth - 80
-const logoSize = 46
+const cardWidth = 345
+const qrCodeSize = cardWidth - 105
 
 const Container = styled.div`
-  background: linear-gradient(180deg, #33e6bf 0%, #0439c7 50%);
   max-width: ${toSizeUnit(cardWidth)};
+  border-radius: 24px;
+  border: 1px solid ${getColor('foregroundExtra')};
+  background: rgba(6, 27, 58, 0.6);
+
   width: 100%;
-  padding: 12px 20px;
+  padding: 24px;
   ${borderRadius.l};
   color: ${getColor('contrast')};
 
@@ -32,21 +32,21 @@ const Container = styled.div`
 
   displaY: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 12px;
 `
 
 const QrCodeWrapper = styled.div`
   position: relative;
   ${centerContent};
-`
+  padding: 24px;
+  width: 270px;
+  height: 270px;
+  border-radius: 27.692px;
+  border: 1px solid ${getColor('foregroundExtra')};
 
-const LogoContainer = styled.div`
-  position: absolute;
-  background: ${getColor('contrast')};
-  ${borderRadius.m};
-  ${sameDimensions(logoSize)};
-  ${centerContent};
-  font-size: 24px;
+  & > svg {
+    border-radius: 27.692px;
+  }
 `
 
 export const ShareVaultCard = () => {
@@ -68,7 +68,7 @@ export const ShareVaultCard = () => {
   return (
     <Container>
       <VStack gap={4} alignItems="center">
-        <Text weight={600} size={22} cropped>
+        <Text weight={500} height="large" size={16} cropped>
           {name}
         </Text>
         <VaultKey title="UID" value={uid} />
@@ -80,11 +80,8 @@ export const ShareVaultCard = () => {
           size={qrCodeSize}
           value={qrCodeValue}
         />
-        <LogoContainer>
-          <ProductSimpleLogo />
-        </LogoContainer>
       </QrCodeWrapper>
-      <Text weight={500} size={20} cropped>
+      <Text color="shyExtra" weight={500} size={13} cropped>
         vultisig.com
       </Text>
     </Container>

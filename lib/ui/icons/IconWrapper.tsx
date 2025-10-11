@@ -1,6 +1,11 @@
 import styled from 'styled-components'
 
-export const IconWrapper = styled.span`
+import { ThemeColors } from '../theme/ThemeColors'
+
+export const IconWrapper = styled.span<{
+  size?: number
+  color?: keyof ThemeColors
+}>`
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -9,4 +14,6 @@ export const IconWrapper = styled.span`
   height: fit-content;
   overflow: hidden;
   flex-shrink: 0;
+  ${({ size }) => size && `font-size: ${size}px;`}
+  color: ${({ color, theme }) => color && theme.colors[color].toCssValue()};
 `

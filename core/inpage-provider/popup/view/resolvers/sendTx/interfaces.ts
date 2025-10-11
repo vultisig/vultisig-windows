@@ -11,6 +11,33 @@ export enum CosmosMsgType {
   THORCHAIN_MSG_DEPOSIT_URL = '/types.MsgDeposit',
   THORCHAIN_MSG_SEND_URL = '/types.MsgSend',
 }
+export enum TronMsgType {
+  TRON_TRANSFER_CONTRACT = 'TransferContract',
+  TRON_TRIGGER_SMART_CONTRACT = 'TriggerSmartContract',
+  TRON_TRANSFER_ASSET_CONTRACT = 'TransferAssetContract',
+}
+
+type TronTransferContract = {
+  to_address: string
+  owner_address: string
+  amount: number
+}
+
+type TronTriggerSmartContract = {
+  owner_address: string
+  contract_address: string
+  call_value?: number
+  call_token_value?: number
+  token_id?: number
+  data?: string
+}
+
+type TronTransferAssetContract = {
+  to_address: string
+  owner_address: string
+  amount: number
+  asset_name: string
+}
 
 export type RequestInput = {
   method: string
@@ -22,6 +49,10 @@ export type ProviderId =
   | 'phantom-override'
   | 'keplr-override'
   | 'ctrl-override'
+
+export enum XDEFIBitcoinPayloadMethods {
+  SignPsbt = 'sign_psbt',
+}
 
 type BitcoinAccountPurpose = 'payment' | 'ordinals'
 
@@ -58,7 +89,7 @@ type IMsgDeposit = {
   memo: string
 }
 
-export type CosmosMsgPayload =
+export type MsgPayload =
   | {
       case:
         | CosmosMsgType.MSG_SEND
@@ -97,6 +128,15 @@ export type CosmosMsgPayload =
         toAddress: string
       }
     }
+  | { case: TronMsgType.TRON_TRANSFER_CONTRACT; value: TronTransferContract }
+  | {
+      case: TronMsgType.TRON_TRIGGER_SMART_CONTRACT
+      value: TronTriggerSmartContract
+    }
+  | {
+      case: TronMsgType.TRON_TRANSFER_ASSET_CONTRACT
+      value: TronTransferAssetContract
+    }
 
 type TransactionDetailsAsset = {
   ticker: string
@@ -115,8 +155,16 @@ export type TransactionDetails = {
     maxFeePerGas?: string
     maxPriorityFeePerGas?: string
   }
-  cosmosMsgPayload?: CosmosMsgPayload
+  msgPayload?: MsgPayload
   skipBroadcast?: boolean
+}
+
+export type DepositTransactionDetails = {
+  asset: { chain: string; ticker: string; symbol: string }
+  from: string
+  recipient?: string
+  amount?: { amount: string; decimals: number }
+  memo?: string
 }
 
 export type IKeysignTransactionPayload = {

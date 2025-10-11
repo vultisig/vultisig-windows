@@ -3,46 +3,42 @@ import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
-import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
-import { TxOverviewRow } from '@core/ui/chain/tx/TxOverviewRow'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { SendFiatFee } from '@core/ui/vault/send/fee/SendFiatFeeWrapper'
+import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
+import { SendChainSpecificProvider } from '@core/ui/vault/send/fee/SendChainSpecificProvider'
+import { SendFiatFeeValue } from '@core/ui/vault/send/fee/SendFiatFeeValue'
 import { useSendCappedAmountQuery } from '@core/ui/vault/send/queries/useSendCappedAmountQuery'
 import { useSender } from '@core/ui/vault/send/sender/hooks/useSender'
 import { useSendMemo } from '@core/ui/vault/send/state/memo'
 import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
 import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
+import { useSendTxKeysignPayloadQuery } from '@core/ui/vault/send/state/useSendTxKeysignPayloadQuery'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { List } from '@lib/ui/list'
+import { ListItem } from '@lib/ui/list/item'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
+import { MiddleTruncate } from '@lib/ui/truncate'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
-
-import { VerifyKeysignStart } from '../../../mpc/keysign/start/VerifyKeysignStart'
-import { useSendTxKeysignPayloadQuery } from '../state/useSendTxKeysignPayloadQuery'
 
 const sendTerms = ['send_terms_1', 'send_terms_0'] as const
 
 export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const { t } = useTranslation()
-  const coin = useCurrentSendCoin()
-  const sender = useSender()
   const { name } = useCurrentVault()
   const [receiver] = useSendReceiver()
   const [memo] = useSendMemo()
+  const coin = useCurrentSendCoin()
+  const sender = useSender()
   const cappedAmountQuery = useSendCappedAmountQuery()
-  const { chain, ticker } = coin
-
   const keysignPayloadQuery = useSendTxKeysignPayloadQuery()
-
   const translatedTerms = sendTerms.map(term => t(term))
 
   return (
@@ -50,75 +46,98 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
       <PageHeader
         primaryControls={<PageHeaderBackButton onClick={onBack} />}
         title={t('send_overview')}
-        hasBorder
       />
       <VerifyKeysignStart
         keysignPayloadQuery={keysignPayloadQuery}
         terms={translatedTerms}
       >
-        <TxOverviewPanel>
-          <AmountWrapper gap={24}>
-            <Text size={15} color="supporting">
-              {t('you_are_sending')}
-            </Text>
-            <HStack gap={8}>
-              <CoinIcon coin={coin} style={{ fontSize: 32 }} />
-              <Text size={17}>
-                <MatchQuery
-                  value={cappedAmountQuery}
-                  error={() => <Text>{t('failed_to_load')}</Text>}
-                  pending={() => <Spinner />}
-                  success={({ amount, decimals }) =>
-                    formatAmount(fromChainAmount(amount, decimals), { ticker })
-                  }
-                />
-              </Text>
-            </HStack>
-          </AmountWrapper>
-          <TxOverviewRow>
-            <RowTitle>{t('from')}</RowTitle>
-            <Text size={14}>
-              {name}{' '}
-              <Text size={14} as="span" color="shy">
-                ({formatWalletAddress(sender)})
-              </Text>
-            </Text>
-          </TxOverviewRow>
-          <TxOverviewRow>
-            <RowTitle>{t('to')}</RowTitle>
-            <AddressWrapper size={14}>{receiver}</AddressWrapper>
-          </TxOverviewRow>
-          <TxOverviewRow>
-            <RowTitle>{t('network')}</RowTitle>
-            <HStack gap={8}>
-              <ChainEntityIcon
-                value={getChainLogoSrc(chain)}
-                style={{ fontSize: 16 }}
+        <List border="gradient">
+          <ListItem
+            title={
+              <VStack gap={24}>
+                <Text as="span" color="shyExtra" size={15} weight={500}>
+                  {t('you_are_sending')}
+                </Text>
+                <HStack alignItems="center" gap={8}>
+                  <CoinIcon coin={coin} style={{ fontSize: 24 }} />
+                  <MatchQuery
+                    value={cappedAmountQuery}
+                    error={() => (
+                      <Text color="danger">{t('failed_to_load')}</Text>
+                    )}
+                    pending={() => <Spinner />}
+                    success={({ amount, decimals }) => (
+                      <HStack alignItems="center" gap={4}>
+                        <Text as="span" size={17}>
+                          {formatAmount(fromChainAmount(amount, decimals))}
+                        </Text>
+                        <Text as="span" color="shy" size={17}>
+                          {coin.ticker}
+                        </Text>
+                      </HStack>
+                    )}
+                  />
+                </HStack>
+              </VStack>
+            }
+          />
+          <ListItem
+            extra={
+              <HStack alignItems="center" gap={8}>
+                <Text as="span" size={14} weight={500}>
+                  {name}
+                </Text>
+                <Text as="span" color="shy" size={14} weight={500}>
+                  ({formatWalletAddress(sender)})
+                </Text>
+              </HStack>
+            }
+            title={t('from')}
+            styles={{ title: { color: 'textShy' } }}
+          />
+          <ListItem
+            extra={
+              <MiddleTruncate
+                size={14}
+                text={receiver}
+                weight={500}
+                width={200}
               />
-              <Text size={14}>{chain}</Text>
-            </HStack>
-          </TxOverviewRow>
-          {memo && <TxOverviewMemo value={memo} chain={chain} />}
-          <TxOverviewRow>
-            <SendFiatFee />
-          </TxOverviewRow>
-        </TxOverviewPanel>
+            }
+            title={t('to')}
+            styles={{ title: { color: 'textShy' } }}
+          />
+          <ListItem
+            extra={
+              <HStack alignItems="center" gap={4}>
+                <ChainEntityIcon
+                  value={getChainLogoSrc(coin.chain)}
+                  style={{ fontSize: 16 }}
+                />
+                <Text size={14} weight={500}>
+                  {coin.chain}
+                </Text>
+              </HStack>
+            }
+            title={t('network')}
+            styles={{ title: { color: 'textShy' } }}
+          />
+          <ListItem
+            extra={
+              <SendChainSpecificProvider>
+                <SendFiatFeeValue />
+              </SendChainSpecificProvider>
+            }
+            title={t('est_network_fee')}
+            styles={{ title: { color: 'textShy' } }}
+          />
+          {memo && (
+            <ListItem
+              title={<TxOverviewMemo value={memo} chain={coin.chain} />}
+            />
+          )}
+        </List>
       </VerifyKeysignStart>
     </>
   )
 }
-
-const AddressWrapper = styled(Text)`
-  overflow: hidden;
-  text-align: right;
-`
-
-const AmountWrapper = styled(VStack)`
-  padding-bottom: 20px !important;
-  margin-bottom: 12px;
-`
-
-const RowTitle = styled(Text)`
-  font-size: 13px;
-  color: ${getColor('textShy')};
-`
