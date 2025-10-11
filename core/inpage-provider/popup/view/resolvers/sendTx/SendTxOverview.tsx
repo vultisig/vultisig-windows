@@ -232,13 +232,12 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                             }
                             title={t('est_network_fee')}
                           />
-                          {transactionPayload.transactionDetails
-                            .cosmosMsgPayload?.case ===
-                            CosmosMsgType.MSG_EXECUTE_CONTRACT && (
+                          {transactionPayload.transactionDetails.msgPayload
+                            ?.case === CosmosMsgType.MSG_EXECUTE_CONTRACT && (
                             <ListItem
                               description={
-                                transactionPayload.transactionDetails
-                                  .cosmosMsgPayload.value.msg
+                                transactionPayload.transactionDetails.msgPayload
+                                  .value.msg
                               }
                               title={t('message')}
                             />

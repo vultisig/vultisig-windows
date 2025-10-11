@@ -51,6 +51,9 @@ export const useSendChainSpecificQuery = () => {
             ? byteFeeMultiplier[priority]
             : priority
         },
+        tron: () => {
+          result.feeQuote = feeSettings as FeeSettings<'tron'>
+        },
       })
     }
 

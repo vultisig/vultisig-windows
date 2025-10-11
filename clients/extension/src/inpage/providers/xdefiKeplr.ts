@@ -6,8 +6,8 @@ import { deserializeSigningOutput } from '@core/chain/tw/signingOutput'
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
 import {
-  CosmosMsgPayload,
   CosmosMsgType,
+  MsgPayload,
   TransactionDetails,
 } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import { AminoMsg, StdFee } from '@cosmjs/amino'
@@ -116,14 +116,14 @@ const keplrHandler = (
       from: message.value.from_address,
       to: message.value.to_address,
       data: memo,
-      cosmosMsgPayload: {
+      msgPayload: {
         case: message.type,
         value: {
           amount: message.value.amount,
           from_address: message.value.from_address,
           to_address: message.value.to_address,
         },
-      } as CosmosMsgPayload,
+      } as MsgPayload,
       skipBroadcast,
     }
   }
@@ -142,14 +142,14 @@ const keplrHandler = (
       from: decodedMessage.fromAddress,
       to: decodedMessage.toAddress,
       data: memo,
-      cosmosMsgPayload: {
+      msgPayload: {
         case: message.typeUrl,
         value: {
           amount: decodedMessage.amount,
           from_address: decodedMessage.fromAddress,
           to_address: decodedMessage.toAddress,
         },
-      } as CosmosMsgPayload,
+      } as MsgPayload,
       skipBroadcast,
     }
   }
@@ -178,7 +178,7 @@ const keplrHandler = (
         from: message.value.sender,
         to: message.value.contract,
         data: memo,
-        cosmosMsgPayload: {
+        msgPayload: {
           case: CosmosMsgType.MSG_EXECUTE_CONTRACT,
           value: {
             sender: message.value.sender,
@@ -186,7 +186,7 @@ const keplrHandler = (
             funds: message.value.funds,
             msg: formattedMessage,
           },
-        } as CosmosMsgPayload,
+        } as MsgPayload,
         skipBroadcast,
       }
     },
@@ -212,7 +212,7 @@ const keplrHandler = (
         from: decodedMessage.sender,
         to: decodedMessage.contract,
         data: memo,
-        cosmosMsgPayload: {
+        msgPayload: {
           case: CosmosMsgType.MSG_EXECUTE_CONTRACT,
           value: {
             sender: decodedMessage.sender,
@@ -220,7 +220,7 @@ const keplrHandler = (
             funds: decodedMessage.funds,
             msg: formattedMessage,
           },
-        } as CosmosMsgPayload,
+        } as MsgPayload,
         skipBroadcast,
       }
     },
@@ -247,7 +247,7 @@ const keplrHandler = (
         from: msg.sender,
         to: msg.receiver,
         data: `${receiverChain}:${msg.sourceChannel}:${msg.receiver}:${msg.memo}`,
-        cosmosMsgPayload: {
+        msgPayload: {
           case: CosmosMsgType.MSG_TRANSFER_URL,
           value: {
             ...msg,
@@ -257,7 +257,7 @@ const keplrHandler = (
             },
             timeoutTimestamp: msg.timeoutTimestamp.toString(),
           },
-        } as CosmosMsgPayload,
+        } as MsgPayload,
         skipBroadcast,
       }
     },
@@ -281,14 +281,14 @@ const keplrHandler = (
         },
         from: message.value.signer,
         data: memo,
-        cosmosMsgPayload: {
+        msgPayload: {
           case: CosmosMsgType.THORCHAIN_MSG_DEPOSIT,
           value: {
             coins: message.value.coins,
             memo: message.value.memo,
             signer: message.value.signer,
           },
-        } as CosmosMsgPayload,
+        } as MsgPayload,
         skipBroadcast,
       }
     },
@@ -319,7 +319,7 @@ const keplrHandler = (
         },
         from: thorAddress,
         data: memo,
-        cosmosMsgPayload: {
+        msgPayload: {
           case: CosmosMsgType.THORCHAIN_MSG_DEPOSIT,
           value: {
             coins: decodedMessage.coins.map(coin => ({
@@ -329,7 +329,7 @@ const keplrHandler = (
             memo: decodedMessage.memo,
             signer: thorAddress,
           },
-        } as CosmosMsgPayload,
+        } as MsgPayload,
         skipBroadcast,
       }
     },

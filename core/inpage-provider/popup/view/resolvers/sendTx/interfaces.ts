@@ -10,6 +10,33 @@ export enum CosmosMsgType {
   THORCHAIN_MSG_DEPOSIT = 'thorchain/MsgDeposit',
   THORCHAIN_MSG_DEPOSIT_URL = '/types.MsgDeposit',
 }
+export enum TronMsgType {
+  TRON_TRANSFER_CONTRACT = 'TransferContract',
+  TRON_TRIGGER_SMART_CONTRACT = 'TriggerSmartContract',
+  TRON_TRANSFER_ASSET_CONTRACT = 'TransferAssetContract',
+}
+
+type TronTransferContract = {
+  to_address: string
+  owner_address: string
+  amount: number
+}
+
+type TronTriggerSmartContract = {
+  owner_address: string
+  contract_address: string
+  call_value?: number
+  call_token_value?: number
+  token_id?: number
+  data?: string
+}
+
+type TronTransferAssetContract = {
+  to_address: string
+  owner_address: string
+  amount: number
+  asset_name: string
+}
 
 export type RequestInput = {
   method: string
@@ -61,7 +88,7 @@ type IMsgDeposit = {
   memo: string
 }
 
-export type CosmosMsgPayload =
+export type MsgPayload =
   | {
       case:
         | CosmosMsgType.MSG_SEND
@@ -92,6 +119,15 @@ export type CosmosMsgPayload =
       case: CosmosMsgType.THORCHAIN_MSG_DEPOSIT
       value: IMsgDeposit
     }
+  | { case: TronMsgType.TRON_TRANSFER_CONTRACT; value: TronTransferContract }
+  | {
+      case: TronMsgType.TRON_TRIGGER_SMART_CONTRACT
+      value: TronTriggerSmartContract
+    }
+  | {
+      case: TronMsgType.TRON_TRANSFER_ASSET_CONTRACT
+      value: TronTransferAssetContract
+    }
 
 type TransactionDetailsAsset = {
   ticker: string
@@ -110,7 +146,7 @@ export type TransactionDetails = {
     maxFeePerGas?: string
     maxPriorityFeePerGas?: string
   }
-  cosmosMsgPayload?: CosmosMsgPayload
+  msgPayload?: MsgPayload
   skipBroadcast?: boolean
 }
 
