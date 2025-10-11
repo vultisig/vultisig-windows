@@ -14,7 +14,7 @@ import { useFormatFiatAmount } from '../../../chain/hooks/useFormatFiatAmount'
 import { useSendFeeQuoteQuery } from '../queries/useSendFeeQuoteQuery'
 import { useCurrentSendCoin } from '../state/sendCoin'
 
-export const SendFiatFeeValue = () => {
+export const SendFeeValue = () => {
   const coin = useCurrentSendCoin()
   const { chain } = coin
 

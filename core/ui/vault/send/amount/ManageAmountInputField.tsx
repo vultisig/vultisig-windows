@@ -11,8 +11,6 @@ import { CurrencySwitch } from '@core/ui/vault/send/amount/AmountSwitch'
 import { AnimatedSendFormInputError } from '@core/ui/vault/send/components/AnimatedSendFormInputError'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { SendInputContainer } from '@core/ui/vault/send/components/SendInputContainer'
-import { SendFiatFee } from '@core/ui/vault/send/fee/SendFiatFeeWrapper'
-import { SendGasFeeWrapper } from '@core/ui/vault/send/fee/SendGasFeeWrapper'
 import { ManageFeeSettings } from '@core/ui/vault/send/fee/settings/ManageFeeSettings'
 import { ManageMemo } from '@core/ui/vault/send/memo/ManageMemo'
 import { useSendChainSpecificQuery } from '@core/ui/vault/send/queries/useSendChainSpecificQuery'
@@ -40,6 +38,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'
+import { SendFee } from '../fee/SendFee'
 import { useSendValidationQuery } from '../queries/useSendValidationQuery'
 import { useSendAmount } from '../state/amount'
 import { FiatSendAmountInput } from './FiatSendAmountInput'
@@ -234,10 +233,7 @@ export const ManageAmountInputField = () => {
       <ManageMemo />
       <HorizontalLine />
       <StrictInfoRow>
-        <SendFiatFee />
-      </StrictInfoRow>
-      <StrictInfoRow>
-        <SendGasFeeWrapper />
+        <SendFee />
       </StrictInfoRow>
     </SendInputContainer>
   )
