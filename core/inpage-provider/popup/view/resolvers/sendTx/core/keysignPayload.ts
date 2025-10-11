@@ -182,6 +182,7 @@ export const getKeysignPayload = ({
           'cosmos-sdk/MsgSend': () => undefined,
           'thorchain/MsgSend': () => undefined,
           'thorchain/MsgDeposit': () => undefined,
+          '/types.MsgSend': () => undefined,
         }
       )
     },

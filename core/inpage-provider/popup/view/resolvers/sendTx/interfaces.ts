@@ -9,6 +9,7 @@ export enum CosmosMsgType {
   MSG_SEND_URL = '/cosmos.bank.v1beta1.MsgSend',
   THORCHAIN_MSG_DEPOSIT = 'thorchain/MsgDeposit',
   THORCHAIN_MSG_DEPOSIT_URL = '/types.MsgDeposit',
+  THORCHAIN_MSG_SEND_URL = '/types.MsgSend',
 }
 export enum TronMsgType {
   TRON_TRANSFER_CONTRACT = 'TransferContract',
@@ -118,6 +119,14 @@ export type MsgPayload =
   | {
       case: CosmosMsgType.THORCHAIN_MSG_DEPOSIT
       value: IMsgDeposit
+    }
+  | {
+      case: CosmosMsgType.THORCHAIN_MSG_SEND_URL
+      value: {
+        amount: { denom: string; amount: string }[]
+        fromAddress: string
+        toAddress: string
+      }
     }
   | { case: TronMsgType.TRON_TRANSFER_CONTRACT; value: TronTransferContract }
   | {

@@ -30,6 +30,7 @@ const cosmosMsgTypeToTransactionType: Record<
   [CosmosMsgType.MSG_EXECUTE_CONTRACT_URL]: TransactionType.GENERIC_CONTRACT,
   [CosmosMsgType.THORCHAIN_MSG_DEPOSIT]: defaultTransactionType,
   [CosmosMsgType.THORCHAIN_MSG_DEPOSIT_URL]: defaultTransactionType,
+  [CosmosMsgType.THORCHAIN_MSG_SEND_URL]: defaultTransactionType,
   [TronMsgType.TRON_TRANSFER_CONTRACT]: defaultTransactionType,
   [TronMsgType.TRON_TRIGGER_SMART_CONTRACT]: defaultTransactionType,
   [TronMsgType.TRON_TRANSFER_ASSET_CONTRACT]: defaultTransactionType,
