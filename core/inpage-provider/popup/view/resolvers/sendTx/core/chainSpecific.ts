@@ -1,7 +1,6 @@
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { getPsbtTransferInfo } from '@core/chain/chains/utxo/tx/getPsbtTransferInfo'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
-import { TronFeeSettings } from '@core/chain/tx/fee/tron/tronFeeSettings'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/resolver'
 import {
   CosmosSpecific,
@@ -35,8 +34,13 @@ const cosmosMsgTypeToTransactionType: Record<
   [TronMsgType.TRON_TRANSFER_ASSET_CONTRACT]: defaultTransactionType,
 }
 
-export const getChainSpecificInput = (input: ParsedTx) => {
-  const { coin, customTxData, feeSettings } = input
+type GetChainSpecificInput = ParsedTx & {
+  evmFeeSettings?: EvmFeeSettings
+}
+
+export const getChainSpecificInput = (input: GetChainSpecificInput) => {
+  const { coin, customTxData, thirdPartyGasLimitEstimation, evmFeeSettings } =
+    input
 
   const amount = matchRecordUnion<CustomTxData, bigint>(customTxData, {
     regular: ({ transactionDetails }) =>
@@ -66,12 +70,6 @@ export const getChainSpecificInput = (input: ParsedTx) => {
     psbt: () => '',
   })
 
-  const feeQuote = isChainOfKind(coin.chain, 'evm')
-    ? (feeSettings as EvmFeeSettings)
-    : isChainOfKind(coin.chain, 'tron')
-      ? (feeSettings as TronFeeSettings)
-      : undefined
-
   const result: ChainSpecificResolverInput = {
     coin,
     amount,
@@ -79,7 +77,12 @@ export const getChainSpecificInput = (input: ParsedTx) => {
     receiver,
     psbt: 'psbt' in customTxData ? customTxData.psbt : undefined,
     isComplexTx: isChainOfKind(coin.chain, 'utxo') ? true : undefined,
-    feeQuote,
+    thirdPartyGasLimitEstimation,
+    feeQuote:
+      evmFeeSettings ||
+      (thirdPartyGasLimitEstimation
+        ? { gasLimit: thirdPartyGasLimitEstimation }
+        : undefined),
   }
 
   if ('regular' in customTxData) {

@@ -1,6 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { getFeeAmount } from '@core/chain/fee-quote/getFeeAmount'
+import { getFeeAmount } from '@core/chain/feeQuote/getFeeAmount'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'

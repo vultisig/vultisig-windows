@@ -1,4 +1,4 @@
-import { getFeeQuote } from '@core/chain/fee-quote'
+import { getFeeQuote } from '@core/chain/feeQuote'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/resolver'
 import { useQuery } from '@tanstack/react-query'
 

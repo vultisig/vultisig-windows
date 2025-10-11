@@ -2,7 +2,7 @@ import { getChainKind } from '@core/chain/ChainKind'
 import {
   FeeSettingsChainKind,
   feeSettingsChainKinds,
-} from '@core/chain/fee-quote/settings/core'
+} from '@core/chain/feeQuote/settings/core'
 import { OnCloseProp } from '@lib/ui/props'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import React from 'react'

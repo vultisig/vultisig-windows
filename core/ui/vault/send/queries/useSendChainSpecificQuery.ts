@@ -2,7 +2,7 @@ import { getChainKind } from '@core/chain/ChainKind'
 import {
   FeeSettings,
   feeSettingsChainKinds,
-} from '@core/chain/fee-quote/settings/core'
+} from '@core/chain/feeQuote/settings/core'
 import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/resolver'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { match } from '@lib/utils/match'
