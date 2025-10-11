@@ -24,6 +24,7 @@ export const pt = {
     'Compartilhar novamente o cofre com um novo comitê',
   sign_custom_message_description: 'Assinar mensagem personalizada',
   delete_vault_description: 'Excluir seu cofre permanentemente',
+  backup_description: 'Faça backup do seu cofre em um local preferido',
   onboarding_description_1:
     'O Vultisig é um cofre seguro de cripto multi-dispositivo, compatível com todas as principais blockchains e mais de 10.000 tokens. O Vultisig é totalmente auto-hospedado.',
   onboarding_description_2:
