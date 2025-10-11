@@ -2,9 +2,9 @@ import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
 import { ValidSendFormOnly } from '../components/ValidSendFormOnly'
-import { SendFiatFeeValue } from './SendFiatFeeValue'
+import { SendFeeValue } from './SendFeeValue'
 
-export const SendFiatFee = () => {
+export const SendFee = () => {
   const { t } = useTranslation()
 
   return (
@@ -12,7 +12,7 @@ export const SendFiatFee = () => {
       <Text size={13} color="shy">
         {t('est_network_fee')}
       </Text>
-      <SendFiatFeeValue />
+      <SendFeeValue />
     </ValidSendFormOnly>
   )
 }
