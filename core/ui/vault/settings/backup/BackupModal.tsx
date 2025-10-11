@@ -1,5 +1,4 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { CloseIcon } from '@lib/ui/icons/CloseIcon'
 import { CloudIcon } from '@lib/ui/icons/CloudIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -56,16 +55,11 @@ export const BackupModal = ({ onClose }: OnCloseProp) => {
         <Wrapper>
           <VStack gap={26}>
             <HStack justifyContent="space-between">
-              <CancelButton>
+              <CancelButton onClick={onClose}>
                 <IconWrapper size={44} color="textSupporting">
                   <CloseIcon />
                 </IconWrapper>
               </CancelButton>
-              <CheckButton>
-                <IconWrapper size={44} color="white">
-                  <CheckmarkIcon />
-                </IconWrapper>
-              </CheckButton>
             </HStack>
             <Text size={22} weight={500}>
               {t('choose_backup_method')}
@@ -117,8 +111,4 @@ const CancelButton = styled(ActionButton)`
   &:hover {
     color: ${getColor('contrast')};
   }
-`
-
-const CheckButton = styled(ActionButton)`
-  background-color: ${getColor('buttonPrimary')};
 `
