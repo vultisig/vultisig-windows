@@ -16,5 +16,5 @@ export const getTronTxData: KeysignTxDataResolver<'tron'> = async ({
     blockHeaderTxTrieRoot: blockInfo.blockHeaderTxTrieRoot,
     blockHeaderParentHash: blockInfo.blockHeaderParentHash,
     blockHeaderWitnessAddress: blockInfo.blockHeaderWitnessAddress,
-  } as any
+  }
 }
