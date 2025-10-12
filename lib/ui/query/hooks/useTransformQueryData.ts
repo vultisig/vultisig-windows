@@ -22,7 +22,9 @@ export const useTransformQueryData = <
       }
     }
 
-    const { data, error } = attempt<TOutput>(() => transform(initialData))
+    const { data, error = null } = attempt<TOutput>(() =>
+      transform(initialData)
+    )
 
     return {
       ...queryResult,
