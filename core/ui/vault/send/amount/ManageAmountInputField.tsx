@@ -1,9 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
-import { UtxoBasedChain } from '@core/chain/Chain'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
-import { getFeeAmount } from '@core/chain/feeQuote/getFeeAmount'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { AmountInReverseCurrencyDisplay } from '@core/ui/vault/send/amount/AmountInReverseCurrencyDisplay'
 import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
@@ -13,7 +10,6 @@ import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { SendInputContainer } from '@core/ui/vault/send/components/SendInputContainer'
 import { ManageFeeSettings } from '@core/ui/vault/send/fee/settings/ManageFeeSettings'
 import { ManageMemo } from '@core/ui/vault/send/memo/ManageMemo'
-import { useSendFeeQuoteQuery } from '@core/ui/vault/send/queries/useSendFeeQuoteQuery'
 import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Match } from '@lib/ui/base/Match'
@@ -26,11 +22,9 @@ import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import { StrictInfoRow } from '@lib/ui/layout/StrictInfoRow'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useCallback, useMemo, useState } from 'react'
@@ -73,28 +67,7 @@ export const ManageAmountInputField = () => {
   const { data } = useSendValidationQuery()
   const amountError = data?.amount
 
-  const feeQuoteQuery = useSendFeeQuoteQuery()
-
   const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
-
-  const maxAmountQuery = useTransformQueriesData(
-    {
-      feeQuote: feeQuoteQuery,
-      balance: balanceQuery,
-    },
-    ({ balance, feeQuote }) => {
-      if (
-        balance > 0n &&
-        isFeeCoin(coin) &&
-        !isOneOf(coin.chain, Object.values(UtxoBasedChain))
-      ) {
-        const feeAmount = getFeeAmount(coin.chain, feeQuote)
-        return feeAmount > balance ? 0n : balance - feeAmount
-      }
-
-      return balance
-    }
-  )
 
   const error = !!amountError && value ? amountError : undefined
 
@@ -188,7 +161,7 @@ export const ManageAmountInputField = () => {
             <HStack justifyContent="space-between" alignItems="center" gap={4}>
               {suggestions.map(suggestion => {
                 const getProps = () => {
-                  const { data } = maxAmountQuery
+                  const { data } = balanceQuery
                   if (!data) {
                     return {}
                   }
