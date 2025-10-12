@@ -23,5 +23,5 @@ export const getPolkadotTxData: KeysignTxDataResolver<'polkadot'> = async ({
     specVersion: specVersion.toNumber(),
     transactionVersion: transactionVersion.toNumber(),
     genesisHash,
-  } as any
+  }
 }

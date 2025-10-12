@@ -18,7 +18,7 @@ type EvmKeysignTxData = {
   nonce: bigint
 }
 
-type PolkadotKeysignTxData = Omit<PolkadotSpecific, '$typeName'>
+type PolkadotKeysignTxData = Omit<PolkadotSpecific, 'gas' | '$typeName'>
 
 type UtxoKeysignTxData = Omit<UTXOSpecific, 'byteFee' | '$typeName'> & {
   utxoInfo: UtxoInfo[]
