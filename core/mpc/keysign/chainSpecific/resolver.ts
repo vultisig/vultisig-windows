@@ -34,7 +34,13 @@ export type ChainSpecificResolverInput<R = KeysignChainSpecificValue> = {
       feeQuote?: Partial<EvmFeeSettings>
     }
   : R extends TronSpecific
-    ? { feeQuote?: Partial<TronFeeSettings> }
+    ? {
+        feeQuote?: Partial<TronFeeSettings>
+        expiration?: number
+        timestamp?: number
+        refBlockBytesHex?: string
+        refBlockHashHex?: string
+      }
     : R extends UTXOSpecific
       ? { byteFeeMultiplier?: number; psbt?: Psbt }
       : R extends CosmosSpecific

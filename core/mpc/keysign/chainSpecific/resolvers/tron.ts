@@ -1,5 +1,8 @@
 import { create } from '@bufbuild/protobuf'
-import { getTronBlockInfo } from '@core/chain/chains/tron/getTronBlockInfo'
+import {
+  getTronBlockInfo,
+  resolveRefBlock,
+} from '@core/chain/chains/tron/getTronBlockInfo'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import {
   TronSpecific,
@@ -12,6 +15,10 @@ import { ChainSpecificResolver } from '../resolver'
 export const getTronSpecific: ChainSpecificResolver<TronSpecific> = async ({
   coin,
   feeQuote,
+  expiration,
+  timestamp,
+  refBlockBytesHex,
+  refBlockHashHex,
 }) => {
   const isNative = isFeeCoin(coin)
 
@@ -27,7 +34,13 @@ export const getTronSpecific: ChainSpecificResolver<TronSpecific> = async ({
     priceProviderId: coin.priceProviderId ?? '',
   })
 
-  const blockInfo = await getTronBlockInfo(coinObject)
+  const blockInfo = await getTronBlockInfo(coinObject, {
+    expiration,
+    timestamp,
+    refBlockBytesHex,
+    refBlockHashHex,
+  })
+
   const gasEstimation = feeQuote?.gasLimit
     ? parseInt(feeQuote.gasLimit.toString())
     : blockInfo.gasFeeEstimation

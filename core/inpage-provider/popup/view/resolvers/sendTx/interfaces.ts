@@ -88,6 +88,12 @@ type IMsgDeposit = {
   signer: string
   memo: string
 }
+export interface TronTxMeta {
+  timestamp: number
+  expiration: number
+  refBlockBytesHex: string
+  refBlockHashHex: string
+}
 
 export type MsgPayload =
   | {
@@ -128,14 +134,20 @@ export type MsgPayload =
         toAddress: string
       }
     }
-  | { case: TronMsgType.TRON_TRANSFER_CONTRACT; value: TronTransferContract }
+  | {
+      case: TronMsgType.TRON_TRANSFER_CONTRACT
+      value: TronTransferContract
+      meta?: TronTxMeta
+    }
   | {
       case: TronMsgType.TRON_TRIGGER_SMART_CONTRACT
       value: TronTriggerSmartContract
+      meta?: TronTxMeta
     }
   | {
       case: TronMsgType.TRON_TRANSFER_ASSET_CONTRACT
       value: TronTransferAssetContract
+      meta?: TronTxMeta
     }
 
 type TransactionDetailsAsset = {
