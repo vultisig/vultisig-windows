@@ -45,8 +45,8 @@ export const useSendTxKeysignPayloadQuery = () => {
 
         const blockchainSpecific = buildChainSpecific({
           chain: coin.chain,
-          txData: txData as any,
-          feeQuote: feeQuote as any,
+          txData,
+          feeQuote,
         })
 
         return create(KeysignPayloadSchema, {
@@ -61,7 +61,7 @@ export const useSendTxKeysignPayloadQuery = () => {
           vaultLocalPartyId: vault.localPartyId,
           vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
           libType: vault.libType,
-          utxoInfo: (txData as any)?.utxoInfo ?? undefined,
+          utxoInfo: txData.utxoInfo,
         })
       },
       [
