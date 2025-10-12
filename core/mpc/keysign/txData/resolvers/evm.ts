@@ -1,14 +1,15 @@
-import { EvmChain } from '@core/chain/Chain'
 import { getEvmClient } from '@core/chain/chains/evm/client'
 
 import { KeysignTxDataResolver } from '../resolver'
 
-export const getEvmTxData: KeysignTxDataResolver<'evm'> = async ({ coin }) => {
-  const client = getEvmClient(coin.chain as EvmChain)
+export const getEvmTxData: KeysignTxDataResolver<'evm'> = async ({
+  coin: { chain, address },
+}) => {
+  const client = getEvmClient(chain)
 
   const nonce = BigInt(
     await client.getTransactionCount({
-      address: coin.address as `0x${string}`,
+      address: address as `0x${string}`,
     })
   )
 
