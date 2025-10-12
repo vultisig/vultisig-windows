@@ -62,7 +62,10 @@ type TonKeysignTxData = Omit<TonSpecific, '$typeName'>
 
 type TronKeysignTxData = Omit<TronSpecific, 'gasEstimation' | '$typeName'>
 
-type SuiKeysignTxData = Omit<SuiSpecific, 'referenceGasPrice' | '$typeName'>
+type SuiKeysignTxData = Omit<
+  SuiSpecific,
+  'referenceGasPrice' | 'gasBudget' | '$typeName'
+>
 
 type KeysignTxDataByKind = EnsureAllKindsCovered<{
   evm: EvmKeysignTxData
