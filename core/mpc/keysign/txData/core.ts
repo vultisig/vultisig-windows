@@ -51,7 +51,10 @@ type CosmosKeysignTxData<T extends CosmosChain = CosmosChain> = {
 
 type RippleKeysignTxData = Omit<RippleSpecific, 'gas' | '$typeName'>
 
-type SolanaKeysignTxData = Omit<SolanaSpecific, 'priorityFe' | '$typeName'>
+export type SolanaKeysignTxData = Omit<
+  SolanaSpecific,
+  'priorityFee' | '$typeName'
+>
 
 type EnsureAllKindsCovered<T extends Record<ChainKind, unknown>> = T
 
