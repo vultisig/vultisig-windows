@@ -1,6 +1,7 @@
-import { Chain, CosmosChain } from '@core/chain/Chain'
+import { VaultBasedCosmosChain } from '@core/chain/Chain'
 import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo'
 import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+import { isOneOf } from '@lib/utils/array/isOneOf'
 
 import { KeysignTxDataResolver } from '../resolver'
 
@@ -10,10 +11,8 @@ export const getCosmosTxData: KeysignTxDataResolver<'cosmos'> = async ({
   timeoutTimestamp,
   isDeposit,
 }) => {
-  const { accountNumber, sequence, latestBlock } = await getCosmosAccountInfo({
-    address: coin.address,
-    chain: coin.chain as CosmosChain,
-  })
+  const { accountNumber, sequence, latestBlock } =
+    await getCosmosAccountInfo(coin)
 
   const base = {
     accountNumber: BigInt(accountNumber),
@@ -21,11 +20,11 @@ export const getCosmosTxData: KeysignTxDataResolver<'cosmos'> = async ({
     transactionType,
   }
 
-  if (coin.chain === Chain.THORChain || coin.chain === Chain.MayaChain) {
+  if (isOneOf(coin.chain, Object.values(VaultBasedCosmosChain))) {
     return {
       ...base,
       isDeposit: Boolean(isDeposit),
-    } as any
+    }
   }
 
   return {
@@ -37,5 +36,5 @@ export const getCosmosTxData: KeysignTxDataResolver<'cosmos'> = async ({
       baseDenom: '',
       path: '',
     },
-  } as any
+  }
 }
