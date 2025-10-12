@@ -34,7 +34,7 @@ type BlockChainSpecificTron = {
 
 const getBlockByNum = async (num: number) => {
   return await queryUrl<TronBlock>(`${tronRpcUrl}/wallet/getblockbynum`, {
-    body: JSON.stringify({ num }),
+    body: { num },
   })
 }
 
