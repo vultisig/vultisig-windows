@@ -88,7 +88,8 @@ type IMsgDeposit = {
   signer: string
   memo: string
 }
-export interface TronTxMeta {
+
+type TronTxMeta = {
   timestamp: number
   expiration: number
   refBlockBytesHex: string

@@ -15,7 +15,7 @@ import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue
 
 import { CustomTxData } from '../core/customTxData'
 import { ParsedTx } from '../core/parsedTx'
-import { CosmosMsgType, TronMsgType, TronTxMeta } from '../interfaces'
+import { CosmosMsgType, TronMsgType } from '../interfaces'
 
 const defaultTransactionType = TransactionType.UNSPECIFIED
 

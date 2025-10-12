@@ -1,8 +1,8 @@
 import { Coin } from '@core/mpc/types/vultisig/keysign/v1/coin_pb'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
 import { tronRpcUrl } from './config'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 type TronBlockHeader = {
   raw_data?: {
@@ -43,7 +43,7 @@ const deriveRefBlockHashFromBlockID = (blockID: string): string => {
   return id.substring(16, 32)
 }
 
-export const resolveRefBlock = async (
+const resolveRefBlock = async (
   nowNum: number,
   refBlockBytesHex: string,
   refBlockHashHex: string

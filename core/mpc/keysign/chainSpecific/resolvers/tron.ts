@@ -1,8 +1,5 @@
 import { create } from '@bufbuild/protobuf'
-import {
-  getTronBlockInfo,
-  resolveRefBlock,
-} from '@core/chain/chains/tron/getTronBlockInfo'
+import { getTronBlockInfo } from '@core/chain/chains/tron/getTronBlockInfo'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import {
   TronSpecific,
