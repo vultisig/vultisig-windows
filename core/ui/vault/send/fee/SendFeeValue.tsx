@@ -4,11 +4,10 @@ import { getFeeAmount } from '@core/chain/feeQuote/getFeeAmount'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { Text } from '@lib/ui/text'
 import { formatAmount } from '@lib/utils/formatAmount'
-import { useCallback } from 'react'
 
 import { useFormatFiatAmount } from '../../../chain/hooks/useFormatFiatAmount'
 import { useSendFeeQuoteQuery } from '../queries/useSendFeeQuoteQuery'
@@ -23,40 +22,33 @@ export const SendFeeValue = () => {
 
   const { decimals, ticker } = chainFeeCoin[chain]
 
-  const feePriceQuery = useCoinPriceQuery({ coin: chainFeeCoin[chain] })
-
-  const query = useTransformQueriesData(
-    { feeQuote: feeQuoteQuery, price: feePriceQuery },
-    useCallback(
-      ({ feeQuote, price }) => {
-        const fee = getFeeAmount(chain, feeQuote)
-        const humanReadableFeeValue = fromChainAmount(fee, decimals)
-        return {
-          display: formatAmount(humanReadableFeeValue, { ticker }),
-          fiat: formatFiatAmount(humanReadableFeeValue * price),
-        }
-      },
-      [chain, decimals, formatFiatAmount, ticker]
-    )
-  )
+  const feeCoinPriceQuery = useCoinPriceQuery({ coin: chainFeeCoin[chain] })
 
   return (
     <MatchQuery
-      value={query}
+      value={feeQuoteQuery}
       pending={() => (
         <VStack>
           <Skeleton width="88" height="12" />
           <Skeleton width="48" height="12" />
         </VStack>
       )}
-      success={({ display, fiat }) => (
-        <VStack alignItems="flex-end">
-          <Text size={14}>{display}</Text>
-          <Text size={14} color="shy">
-            {fiat}
-          </Text>
-        </VStack>
-      )}
+      success={feeQuote => {
+        const fee = fromChainAmount(getFeeAmount(chain, feeQuote), decimals)
+
+        return (
+          <VStack alignItems="flex-end">
+            <Text size={14}>{formatAmount(fee, { ticker })}</Text>
+            <Text size={14} color="shy">
+              <MatchQuery
+                value={feeCoinPriceQuery}
+                pending={() => <Spinner />}
+                success={price => formatFiatAmount(fee * price)}
+              />
+            </Text>
+          </VStack>
+        )
+      }}
     />
   )
 }
