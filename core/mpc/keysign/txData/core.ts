@@ -58,7 +58,10 @@ export type SolanaKeysignTxData = Omit<
 
 type EnsureAllKindsCovered<T extends Record<ChainKind, unknown>> = T
 
-type TonKeysignTxData = Omit<TonSpecific, '$typeName'>
+type TonKeysignTxData = Omit<
+  TonSpecific,
+  '$typeName' | 'sendMaxAmount' | 'jettonAddress' | 'isActiveDestination'
+>
 
 type TronKeysignTxData = Omit<TronSpecific, 'gasEstimation' | '$typeName'>
 

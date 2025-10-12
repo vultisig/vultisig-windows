@@ -10,5 +10,5 @@ export const getTonTxData: KeysignTxDataResolver<'ton'> = async ({ coin }) => {
     sequenceNumber,
     expireAt: BigInt(Math.floor(Date.now() / 1000) + 600),
     bounceable: false,
-  } as any
+  }
 }
