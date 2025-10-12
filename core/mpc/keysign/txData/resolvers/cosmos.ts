@@ -1,32 +1,35 @@
-import { create } from '@bufbuild/protobuf'
+import { Chain, CosmosChain } from '@core/chain/Chain'
 import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo'
-import { cosmosGasRecord } from '@core/chain/chains/cosmos/gas'
-import {
-  CosmosSpecific,
-  CosmosSpecificSchema,
-  TransactionType,
-} from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 
-import { ChainSpecificResolver } from '../resolver'
+import { KeysignTxDataResolver } from '../resolver'
 
-export const getCosmosSpecific: ChainSpecificResolver<CosmosSpecific> = async ({
+export const getCosmosTxData: KeysignTxDataResolver<'cosmos'> = async ({
   coin,
   transactionType = TransactionType.UNSPECIFIED,
   timeoutTimestamp,
+  isDeposit,
 }) => {
-  const { chain } = coin
   const { accountNumber, sequence, latestBlock } = await getCosmosAccountInfo({
     address: coin.address,
-    chain,
+    chain: coin.chain as CosmosChain,
   })
 
-  const gas = cosmosGasRecord[chain]
-
-  return create(CosmosSpecificSchema, {
+  const base = {
     accountNumber: BigInt(accountNumber),
     sequence: BigInt(sequence),
-    gas,
     transactionType,
+  }
+
+  if (coin.chain === Chain.THORChain || coin.chain === Chain.MayaChain) {
+    return {
+      ...base,
+      isDeposit: Boolean(isDeposit),
+    } as any
+  }
+
+  return {
+    ...base,
     ibcDenomTraces: {
       latestBlock: timeoutTimestamp
         ? `${latestBlock.split('_')[0]}_${timeoutTimestamp}`
@@ -34,5 +37,5 @@ export const getCosmosSpecific: ChainSpecificResolver<CosmosSpecific> = async ({
       baseDenom: '',
       path: '',
     },
-  })
+  } as any
 }

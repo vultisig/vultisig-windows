@@ -6,7 +6,7 @@ import { IconButton } from '@lib/ui/buttons/IconButton'
 import { RefreshCwIcon } from '@lib/ui/icons/RefreshCwIcon'
 import { useInvalidateQueriesMutation } from '@lib/ui/query/hooks/useInvalidateQueriesMutation'
 
-import { feeQuoteQueryKeyPrefix } from '../../chain/fee-quote/query'
+import { feeQuoteQueryKeyPrefix } from '../../chain/feeQuote/query'
 
 export const RefreshSend = () => {
   const coin = useCurrentSendCoin()

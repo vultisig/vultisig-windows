@@ -2,7 +2,6 @@ import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { ManageAddresses } from '@core/ui/vault/send/addresses/ManageAddresses'
 import { ManageAmount } from '@core/ui/vault/send/amount/ManageAmount'
 import { ManageSendCoin } from '@core/ui/vault/send/coin/ManageSendCoin'
-import { useSendChainSpecificQuery } from '@core/ui/vault/send/queries/useSendChainSpecificQuery'
 import { RefreshSend } from '@core/ui/vault/send/RefreshSend'
 import { Button } from '@lib/ui/buttons/Button'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
@@ -20,7 +19,6 @@ import styled from 'styled-components'
 import { useSendValidationQuery } from '../queries/useSendValidationQuery'
 
 export const SendForm = ({ onFinish }: OnFinishProp) => {
-  useSendChainSpecificQuery()
   const { t } = useTranslation()
   const { data, error, isPending } = useSendValidationQuery()
 

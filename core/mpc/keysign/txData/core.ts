@@ -1,5 +1,5 @@
 import { Chain, CosmosChain, IbcEnabledCosmosChain } from '@core/chain/Chain'
-import { ChainKind, DeriveChainKind, getChainKind } from '@core/chain/ChainKind'
+import { ChainKind, DeriveChainKind } from '@core/chain/ChainKind'
 
 import {
   CardanoChainSpecific,
@@ -18,13 +18,16 @@ type EvmKeysignTxData = {
   nonce: bigint
 }
 
-type PolkadotKeysignTxData = PolkadotSpecific
+type PolkadotKeysignTxData = Omit<PolkadotSpecific, '$typeName'>
 
-type UtxoKeysignTxData = Omit<UTXOSpecific, 'byteFee'> & {
+type UtxoKeysignTxData = Omit<UTXOSpecific, 'byteFee' | '$typeName'> & {
   utxoInfo: UtxoInfo[]
 }
 
-type CardanoKeysignTxData = Omit<CardanoChainSpecific, 'byteFee'> & {
+type CardanoKeysignTxData = Omit<
+  CardanoChainSpecific,
+  'byteFee' | '$typeName'
+> & {
   utxoInfo: UtxoInfo[]
 }
 
@@ -46,17 +49,17 @@ type CosmosKeysignTxData<T extends CosmosChain = CosmosChain> = {
       isDeposit: boolean
     })
 
-type RippleKeysignTxData = Omit<RippleSpecific, 'gas'>
+type RippleKeysignTxData = Omit<RippleSpecific, 'gas' | '$typeName'>
 
-type SolanaKeysignTxData = Omit<SolanaSpecific, 'priorityFe'>
+type SolanaKeysignTxData = Omit<SolanaSpecific, 'priorityFe' | '$typeName'>
 
 type EnsureAllKindsCovered<T extends Record<ChainKind, unknown>> = T
 
-type TonKeysignTxData = TonSpecific
+type TonKeysignTxData = Omit<TonSpecific, '$typeName'>
 
-type TronKeysignTxData = Omit<TronSpecific, 'gasEstimation'>
+type TronKeysignTxData = Omit<TronSpecific, 'gasEstimation' | '$typeName'>
 
-type SuiKeysignTxData = Omit<SuiSpecific, 'referenceGasPrice'>
+type SuiKeysignTxData = Omit<SuiSpecific, 'referenceGasPrice' | '$typeName'>
 
 type KeysignTxDataByKind = EnsureAllKindsCovered<{
   evm: EvmKeysignTxData
@@ -76,17 +79,3 @@ export type KeysignTxData<T extends ChainKind = ChainKind> =
 
 export type KeysignTxDataForChain<C extends Chain = Chain> =
   KeysignTxDataByKind[DeriveChainKind<C>]
-
-type KeysignTxDataRecordUnion<K extends ChainKind = ChainKind> = {
-  [Kind in K]: Record<Kind, KeysignTxDataByKind[Kind]>
-}[K]
-
-export function toKeysignTxDataRecordUnion<C extends Chain>(
-  chain: C,
-  quote: KeysignTxDataForChain<C>
-): KeysignTxDataRecordUnion<DeriveChainKind<C>> {
-  const kind = getChainKind(chain)
-  return { [kind]: quote } as unknown as KeysignTxDataRecordUnion<
-    DeriveChainKind<C>
-  >
-}

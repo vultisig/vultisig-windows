@@ -3,7 +3,7 @@ import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { UtxoBasedChain } from '@core/chain/Chain'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
-import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
+import { getFeeAmount } from '@core/chain/feeQuote/getFeeAmount'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { AmountInReverseCurrencyDisplay } from '@core/ui/vault/send/amount/AmountInReverseCurrencyDisplay'
 import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
@@ -13,7 +13,7 @@ import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { SendInputContainer } from '@core/ui/vault/send/components/SendInputContainer'
 import { ManageFeeSettings } from '@core/ui/vault/send/fee/settings/ManageFeeSettings'
 import { ManageMemo } from '@core/ui/vault/send/memo/ManageMemo'
-import { useSendChainSpecificQuery } from '@core/ui/vault/send/queries/useSendChainSpecificQuery'
+import { useSendFeeQuoteQuery } from '@core/ui/vault/send/queries/useSendFeeQuoteQuery'
 import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Match } from '@lib/ui/base/Match'
@@ -73,22 +73,22 @@ export const ManageAmountInputField = () => {
   const { data } = useSendValidationQuery()
   const amountError = data?.amount
 
-  const chainSpecificQuery = useSendChainSpecificQuery()
+  const feeQuoteQuery = useSendFeeQuoteQuery()
 
   const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
 
   const maxAmountQuery = useTransformQueriesData(
     {
-      chainSpecific: chainSpecificQuery,
+      feeQuote: feeQuoteQuery,
       balance: balanceQuery,
     },
-    ({ balance, chainSpecific }) => {
+    ({ balance, feeQuote }) => {
       if (
         balance > 0n &&
         isFeeCoin(coin) &&
         !isOneOf(coin.chain, Object.values(UtxoBasedChain))
       ) {
-        const feeAmount = getFeeAmount(chainSpecific)
+        const feeAmount = getFeeAmount(coin.chain, feeQuote)
         return feeAmount > balance ? 0n : balance - feeAmount
       }
 

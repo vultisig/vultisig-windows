@@ -5,16 +5,16 @@ import {
   FeeSettingsChainKind,
   feeSettingsChainKinds,
 } from '@core/chain/feeQuote/settings/core'
+import { useFeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
+import { useSendAmount } from '@core/ui/vault/send/state/amount'
+import { useSendMemo } from '@core/ui/vault/send/state/memo'
+import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
+import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMemo } from 'react'
 
-import { useFeeQuoteQuery } from '../../../chain/fee-quote/query'
-import { useFeeSettings } from '../fee/settings/state/feeSettings'
-import { useSendAmount } from '../state/amount'
-import { useSendMemo } from '../state/memo'
-import { useSendReceiver } from '../state/receiver'
-import { useCurrentSendCoin } from '../state/sendCoin'
+import { useFeeQuoteQuery } from '../../../chain/feeQuote/query'
 
 export const useSendFeeQuoteQuery = () => {
   const coin = useCurrentSendCoin()

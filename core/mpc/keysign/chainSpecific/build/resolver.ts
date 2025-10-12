@@ -21,7 +21,7 @@ type ValueForCase<C extends KeysignChainSpecificKey> = Extract<
   { case: C }
 >['value']
 
-export type BuildInputByCase<
+type BuildInputByCase<
   CS extends KeysignChainSpecificKey,
   SC extends Chain = ChainsBySpecific<CS>,
 > = {

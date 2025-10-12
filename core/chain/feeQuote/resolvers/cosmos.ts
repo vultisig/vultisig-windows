@@ -1,16 +1,22 @@
 import { Chain } from '@core/chain/Chain'
-import { cosmosGasLimitRecord } from '@core/chain/chains/cosmos/cosmosGasLimitRecord'
 
+import { cosmosGasLimitRecord } from '../../chains/cosmos/cosmosGasLimitRecord'
+import { cosmosGasRecord } from '../../chains/cosmos/gas'
 import { getThorNetworkInfo } from '../../chains/cosmos/thor/getThorNetworkInfo'
 import { FeeQuoteResolver } from '../resolver'
 
 export const getCosmosFeeQuote: FeeQuoteResolver<'cosmos'> = async ({
-  coin,
+  coin: { chain },
 }) => {
-  if (coin.chain === Chain.THORChain) {
+  if (chain === Chain.THORChain) {
     const { native_tx_fee_rune } = await getThorNetworkInfo()
 
     return { gas: BigInt(native_tx_fee_rune) }
   }
-  return { gas: cosmosGasLimitRecord[coin.chain] }
+
+  if (chain === Chain.MayaChain) {
+    return { gas: cosmosGasLimitRecord[chain] }
+  }
+
+  return { gas: cosmosGasRecord[chain] }
 }
