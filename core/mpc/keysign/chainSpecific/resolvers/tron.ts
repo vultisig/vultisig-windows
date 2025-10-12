@@ -31,7 +31,8 @@ export const getTronSpecific: ChainSpecificResolver<TronSpecific> = async ({
     priceProviderId: coin.priceProviderId ?? '',
   })
 
-  const blockInfo = await getTronBlockInfo(coinObject, {
+  const blockInfo = await getTronBlockInfo({
+    coin: coinObject,
     expiration,
     timestamp,
     refBlockBytesHex,

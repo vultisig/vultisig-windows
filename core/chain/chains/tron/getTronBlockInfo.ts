@@ -32,6 +32,20 @@ type BlockChainSpecificTron = {
   gasFeeEstimation: number
 }
 
+type ResolveRefBlockInput = {
+  nowNum: number
+  refBlockBytesHex: string
+  refBlockHashHex: string
+}
+
+type GetTronBlockInfoInput = {
+  coin: Coin
+  expiration?: number
+  timestamp?: number
+  refBlockBytesHex?: string
+  refBlockHashHex?: string
+}
+
 const getBlockByNum = async (num: number) => {
   return await queryUrl<TronBlock>(`${tronRpcUrl}/wallet/getblockbynum`, {
     body: { num },
@@ -43,11 +57,11 @@ const deriveRefBlockHashFromBlockID = (blockID: string): string => {
   return id.substring(16, 32)
 }
 
-const resolveRefBlock = async (
-  nowNum: number,
-  refBlockBytesHex: string,
-  refBlockHashHex: string
-) => {
+const resolveRefBlock = async ({
+  nowNum,
+  refBlockBytesHex,
+  refBlockHashHex,
+}: ResolveRefBlockInput) => {
   const low16 = parseInt(refBlockBytesHex, 16)
   // snap to the most recent block whose (blockNum % 65536) === low16
   let candidate = Math.floor(nowNum / 65536) * 65536 + low16
@@ -65,31 +79,24 @@ const resolveRefBlock = async (
   throw new Error('Could not resolve ref block')
 }
 
-export async function getTronBlockInfo(
-  coin: Coin,
-  {
-    expiration,
-    timestamp,
-    refBlockBytesHex,
-    refBlockHashHex,
-  }: {
-    expiration?: number
-    timestamp?: number
-    refBlockBytesHex?: string
-    refBlockHashHex?: string
-  }
-): Promise<BlockChainSpecificTron> {
+export async function getTronBlockInfo({
+  coin,
+  expiration,
+  timestamp,
+  refBlockBytesHex,
+  refBlockHashHex,
+}: GetTronBlockInfoInput): Promise<BlockChainSpecificTron> {
   const url = `${tronRpcUrl}/wallet/getnowblock`
 
   let currentBlock = await queryUrl<TronBlock>(url, {
     body: {},
   })
   if (refBlockBytesHex && refBlockHashHex) {
-    currentBlock = await resolveRefBlock(
-      shouldBePresent(currentBlock.block_header?.raw_data?.number),
+    currentBlock = await resolveRefBlock({
+      nowNum: shouldBePresent(currentBlock.block_header?.raw_data?.number),
       refBlockBytesHex,
-      refBlockHashHex
-    )
+      refBlockHashHex,
+    })
   }
   const currentTimestampMillis = Math.floor(Date.now())
   const nowMillis = Math.floor(Date.now())
