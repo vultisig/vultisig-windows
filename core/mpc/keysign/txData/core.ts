@@ -24,7 +24,9 @@ type UtxoKeysignTxData = Omit<UTXOSpecific, 'byteFee'> & {
   utxoInfo: UtxoInfo[]
 }
 
-type CardanoKeysignTxData = Omit<CardanoChainSpecific, 'byteFee'>
+type CardanoKeysignTxData = Omit<CardanoChainSpecific, 'byteFee'> & {
+  utxoInfo: UtxoInfo[]
+}
 
 type IbcDenomTrace = {
   latestBlock: string
