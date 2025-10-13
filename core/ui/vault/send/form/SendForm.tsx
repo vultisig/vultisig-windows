@@ -2,8 +2,6 @@ import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { ManageAddresses } from '@core/ui/vault/send/addresses/ManageAddresses'
 import { ManageAmount } from '@core/ui/vault/send/amount/ManageAmount'
 import { ManageSendCoin } from '@core/ui/vault/send/coin/ManageSendCoin'
-import { useSendChainSpecificQuery } from '@core/ui/vault/send/queries/useSendChainSpecificQuery'
-import { useSendFormValidation } from '@core/ui/vault/send/queries/useSendFormValidation'
 import { RefreshSend } from '@core/ui/vault/send/RefreshSend'
 import { Button } from '@lib/ui/buttons/Button'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
@@ -12,13 +10,29 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { isRecordEmpty } from '@lib/utils/record/isRecordEmpty'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useSendValidationQuery } from '../queries/useSendValidationQuery'
+
 export const SendForm = ({ onFinish }: OnFinishProp) => {
-  useSendChainSpecificQuery()
   const { t } = useTranslation()
-  const { isDisabled, isPending } = useSendFormValidation()
+  const { data, error, isPending } = useSendValidationQuery()
+
+  const isDisabled = useMemo(() => {
+    if (data && !isRecordEmpty(data)) {
+      return Object.values(data)[0]
+    }
+
+    if (error) {
+      return extractErrorMsg(error)
+    }
+
+    return isPending
+  }, [data, error, isPending])
 
   return (
     <>

@@ -1,47 +1,28 @@
 import { create } from '@bufbuild/protobuf'
 import { getTronBlockInfo } from '@core/chain/chains/tron/getTronBlockInfo'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import {
   TronSpecific,
   TronSpecificSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
-import { CoinSchema } from '@core/mpc/types/vultisig/keysign/v1/coin_pb' // Import the Coin schema
 
 import { ChainSpecificResolver } from '../resolver'
 
 export const getTronSpecific: ChainSpecificResolver<TronSpecific> = async ({
   coin,
-  feeQuote,
   expiration,
   timestamp,
   refBlockBytesHex,
   refBlockHashHex,
+  thirdPartyGasLimitEstimation,
 }) => {
-  const isNative = isFeeCoin(coin)
-
-  const coinObject = create(CoinSchema, {
-    address: coin.address,
-    chain: coin.chain,
-    contractAddress: coin.id,
-    decimals: coin.decimals,
-    hexPublicKey: '',
-    isNativeToken: isNative ?? false,
-    ticker: coin.ticker,
-    logo: coin.logo,
-    priceProviderId: coin.priceProviderId ?? '',
-  })
-
   const blockInfo = await getTronBlockInfo({
-    coin: coinObject,
+    coin,
     expiration,
     timestamp,
     refBlockBytesHex,
     refBlockHashHex,
   })
 
-  const gasEstimation = feeQuote?.gasLimit
-    ? parseInt(feeQuote.gasLimit.toString())
-    : blockInfo.gasFeeEstimation
   return create(TronSpecificSchema, {
     timestamp: BigInt(blockInfo.timestamp),
     expiration: BigInt(blockInfo.expiration),
@@ -51,6 +32,7 @@ export const getTronSpecific: ChainSpecificResolver<TronSpecific> = async ({
     blockHeaderTxTrieRoot: blockInfo.blockHeaderTxTrieRoot,
     blockHeaderParentHash: blockInfo.blockHeaderParentHash,
     blockHeaderWitnessAddress: blockInfo.blockHeaderWitnessAddress,
-    gasEstimation: BigInt(gasEstimation),
+    gasEstimation:
+      thirdPartyGasLimitEstimation || BigInt(blockInfo.gasFeeEstimation),
   })
 }

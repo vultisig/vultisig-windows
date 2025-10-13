@@ -1,7 +1,7 @@
-import { Coin } from '@core/mpc/types/vultisig/keysign/v1/coin_pb'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
+import { AccountCoinKey } from '../../coin/AccountCoin'
 import { tronRpcUrl } from './config'
 
 type TronBlockHeader = {
@@ -39,7 +39,7 @@ type ResolveRefBlockInput = {
 }
 
 type GetTronBlockInfoInput = {
-  coin: Coin
+  coin: AccountCoinKey
   expiration?: number
   timestamp?: number
   refBlockBytesHex?: string
@@ -104,10 +104,10 @@ export async function getTronBlockInfo({
   expiration = expiration ?? nowMillis + oneHourMillis
 
   let estimation = '800000' // Default TRX fee
-  if (!coin.isNativeToken) {
+  if (coin.id) {
     estimation = await getTriggerConstantContractFee(
       coin.address,
-      coin.contractAddress,
+      coin.id,
       '0x9c9d70d46934c98fd3d7c302c4e0b924da7a4fdf',
       BigInt('1000000')
     )

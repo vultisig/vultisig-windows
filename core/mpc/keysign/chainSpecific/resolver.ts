@@ -1,6 +1,5 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
-import { TronFeeSettings } from '@core/chain/tx/fee/tron/tronFeeSettings'
 import {
   CosmosSpecific,
   EthereumSpecific,
@@ -35,14 +34,14 @@ export type ChainSpecificResolverInput<R = KeysignChainSpecificValue> = {
     }
   : R extends TronSpecific
     ? {
-        feeQuote?: Partial<TronFeeSettings>
+        thirdPartyGasLimitEstimation?: bigint
         expiration?: number
         timestamp?: number
         refBlockBytesHex?: string
         refBlockHashHex?: string
       }
     : R extends UTXOSpecific
-      ? { byteFeeMultiplier?: number; psbt?: Psbt }
+      ? { isComplexTx?: boolean; psbt?: Psbt }
       : R extends CosmosSpecific
         ? { timeoutTimestamp?: string }
         : {})
