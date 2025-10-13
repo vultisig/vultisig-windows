@@ -117,7 +117,7 @@ export const VaultSettingsPage = () => {
             description={
               <DescriptionText>{t('circle_description')}</DescriptionText>
             }
-            onClick={() => navigate({ id: 'signCustomMessage' })}
+            onClick={() => navigate({ id: 'circle' })}
             title={t('circle_title')}
             hoverable
             showArrow
