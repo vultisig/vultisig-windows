@@ -21,6 +21,8 @@ export const it = {
   vultisig: 'Vultisig',
   by_vultisig: 'da Vultisig',
   vault_info: 'Informazioni sul caveau',
+  circle_title: 'Conti Circle',
+  circle_description: 'Deposita $USDC in un contratto Circle',
   vault_details_description:
     'Visualizzare il nome, la parte e il tipo della cassaforte',
   vault_details_edit_vault_description:

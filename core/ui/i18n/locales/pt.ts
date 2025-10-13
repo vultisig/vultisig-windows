@@ -30,6 +30,8 @@ export const pt = {
   onboarding_description_2:
     'O Vultisig não rastreia suas atividades nem exige nenhum registro. O Vultisig é de código aberto, garantindo transparência e confiança.',
   vultisig_website: 'Site do Vultisig',
+  circle_title: 'Contas Circle',
+  circle_description: 'Deposite $USDC em um contrato da Circle',
   onboarding_description_3:
     'O Vultisig é, por natureza, um aplicativo multi-dispositivo. Exige pelo menos dois dispositivos para criar um cofre seguro: um dispositivo inicializador e um dispositivo de pareamento.',
   onboarding_description_4:
