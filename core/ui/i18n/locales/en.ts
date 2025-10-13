@@ -1099,6 +1099,8 @@ export const en = {
     'Something went wrong. Please recheck your password and try again.',
   backup_share_sent: 'Backup share sent!',
   check_email: 'Check email',
+  circle_title: 'Circle Accounts',
+  circle_description: 'Deposit $USDC into A Circle Contract',
   backup_share_sent_description:
     'We just sent your backup share to your email. If you don’t see it, check your spam folder.',
   select_vaults_to_backup: 'Select Vaults to Back Up',

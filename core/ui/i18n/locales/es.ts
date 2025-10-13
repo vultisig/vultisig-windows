@@ -19,6 +19,8 @@ export const es = {
     'Estas partes colaboran para <g>desbloquear su depósito</g>',
   secure_crypto_vault: 'Bóveda segura de criptomonedas',
   vultisig: 'Vultisig',
+  circle_title: 'Cuentas Circle',
+  circle_description: 'Deposita $USDC en un contrato de Circle',
   vault_details_description: 'Ver el nombre, la parte y el tipo de la bóveda',
   vault_details_edit_vault_description: 'Editar el nombre de tu bóveda',
   reshare_vault_description: 'Volver a compartir la bóveda con un nuevo comité',

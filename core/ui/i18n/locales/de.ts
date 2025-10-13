@@ -13,6 +13,8 @@ export const de = {
   vault_share_banner:
     'Dieser QR Code ermöglicht Ihnen, eine Ansichtsversion Ihres Tresors zu teilen',
   vault_info: 'Tresorinformationen',
+  circle_title: 'Circle-Konten',
+  circle_description: 'Zahle $USDC in einen Circle-Vertrag ein',
   vault_details_description: 'Name, Anteil und Typ des Tresors anzeigen',
   vault_details_edit_vault_description: 'Deinen Tresornamen bearbeiten',
   reshare_vault_description: 'Tresor erneut mit einem neuen Komitee teilen',
