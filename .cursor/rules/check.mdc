@@ -1,15 +1,12 @@
 ---
-globs: *.ts,*.tsx
-description: Run pnpm check for multi-file changes; skip trivial edits
+alwaysApply: false
 ---
 
-## Run pnpm check when changes may affect correctness across files
+Run yarn check until clean.
 
-- **Use it** for multi-file edits, shared types/utils, refactors, import/export changes, or public API updates.
-- **Skip it** for trivial, isolated edits (styling, markup-only changes, small single-file fixes that don't change interfaces).
-
-This runs TypeScript type checks, ESLint, and unused code detection in one step.
+- When this rule is present, always run the command below. No heuristics or skipping.
+- If it fails, fix issues and rerun. Repeat until it exits with no errors.
 
 ```bash
-pnpm check
+yarn check
 ```

@@ -1,10 +1,19 @@
 import { Chain } from '@core/chain/Chain'
 import { makeRecord } from '@lib/utils/record/makeRecord'
+import { omit } from '@lib/utils/record/omit'
 
-import { KnownCoin, KnownCoinMetadata } from '../Coin'
+import { CoinKey, KnownCoin, KnownCoinMetadata, Token } from '../Coin'
 import { knownCosmosTokens } from './cosmos'
 
 type LeanChainTokensRecord = Record<Chain, Record<string, KnownCoinMetadata>>
+
+export const vult: Token<CoinKey> & KnownCoinMetadata = {
+  id: '0xb788144DF611029C60b859DF47e79B7726C4DEBa',
+  chain: Chain.Ethereum,
+  ticker: 'VULT',
+  logo: 'vult',
+  decimals: 18,
+}
 
 const leanTokens: Partial<LeanChainTokensRecord> = {
   [Chain.Tron]: {
@@ -24,11 +33,7 @@ const leanTokens: Partial<LeanChainTokensRecord> = {
     },
   },
   [Chain.Ethereum]: {
-    '0xb788144DF611029C60b859DF47e79B7726C4DEBa': {
-      ticker: 'VULT',
-      logo: 'vult',
-      decimals: 18,
-    },
+    [vult.id]: omit(vult, 'id', 'chain'),
     '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48': {
       ticker: 'USDC',
       logo: 'usdc',

@@ -27,5 +27,3 @@ type NativeSwapFees = {
   total: string
   total_bps?: number
 }
-
-export type AffiliateParam = { name: string; bps: number }

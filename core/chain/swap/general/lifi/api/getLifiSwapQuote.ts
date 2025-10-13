@@ -1,5 +1,6 @@
 import { DeriveChainKind, getChainKind } from '@core/chain/ChainKind'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+// affiliate bps is passed in as a required input; no dynamic fetching here
 import { lifiConfig } from '@core/chain/swap/general/lifi/config'
 import {
   lifiSwapChainId,
@@ -18,6 +19,7 @@ import { GeneralSwapQuote } from '../../GeneralSwapQuote'
 
 type Input = Record<TransferDirection, AccountCoinKey<LifiSwapEnabledChain>> & {
   amount: bigint
+  affiliateBps?: number
 }
 
 const setupLifi = memoize(() => {
@@ -28,6 +30,7 @@ const setupLifi = memoize(() => {
 
 export const getLifiSwapQuote = async ({
   amount,
+  affiliateBps,
   ...transfer
 }: Input): Promise<GeneralSwapQuote> => {
   setupLifi()
@@ -51,7 +54,7 @@ export const getLifiSwapQuote = async ({
     fromAmount: amount.toString(),
     fromAddress,
     toAddress,
-    fee: lifiConfig.afffiliateFee,
+    fee: affiliateBps ? affiliateBps / 10000 : undefined,
   })
 
   const { transactionRequest, estimate } = quote
