@@ -1,5 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { deserializeSigningOutput } from '@core/chain/tw/signingOutput'
 import { callPopup } from '@core/inpage-provider/popup'
 import {
   TransactionDetails,
@@ -47,6 +48,12 @@ export class VultisigTronWebTrx extends Trx {
                 owner_address: fromHex(transferContract.owner_address),
                 to_address: fromHex(transferContract.to_address),
               },
+              meta: {
+                expiration: transaction.raw_data.expiration,
+                timestamp: transaction.raw_data.timestamp,
+                refBlockBytesHex: transaction.raw_data.ref_block_bytes,
+                refBlockHashHex: transaction.raw_data.ref_block_hash,
+              },
             },
             data: transaction.raw_data.data as string,
             gasSettings: {
@@ -85,6 +92,12 @@ export class VultisigTronWebTrx extends Trx {
                 contract_address: fromHex(
                   triggerSmartContract.contract_address
                 ),
+              },
+              meta: {
+                expiration: transaction.raw_data.expiration,
+                timestamp: transaction.raw_data.timestamp,
+                refBlockBytesHex: transaction.raw_data.ref_block_bytes,
+                refBlockHashHex: transaction.raw_data.ref_block_hash,
               },
             },
             gasSettings: {
@@ -126,6 +139,12 @@ export class VultisigTronWebTrx extends Trx {
                 owner_address: fromHex(transferAssetContract.owner_address),
                 to_address: fromHex(transferAssetContract.to_address),
               },
+              meta: {
+                expiration: transaction.raw_data.expiration,
+                timestamp: transaction.raw_data.timestamp,
+                refBlockBytesHex: transaction.raw_data.ref_block_bytes,
+                refBlockHashHex: transaction.raw_data.ref_block_hash,
+              },
             },
             data: transaction.raw_data.data as string,
             gasSettings: {
@@ -140,7 +159,7 @@ export class VultisigTronWebTrx extends Trx {
 
     const details = await getTransactionDetails()
 
-    const { hash } = await callPopup(
+    const { data } = await callPopup(
       {
         sendTx: {
           keysign: {
@@ -153,12 +172,10 @@ export class VultisigTronWebTrx extends Trx {
         account: details.from,
       }
     )
-
+    const { signature } = deserializeSigningOutput(Chain.Tron, data)
     return {
       ...(transaction as Types.Transaction),
-      signature: [hash],
-      // This is a temporary workaround for some dApps until we fix the issue with the txID result to match expected one
-      txID: hash,
+      signature: [Buffer.from(signature).toString('hex')],
     } as unknown as SignedStringOrSignedTransaction<T>
   }
 }
