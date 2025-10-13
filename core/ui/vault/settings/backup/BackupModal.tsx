@@ -14,8 +14,8 @@ import styled from 'styled-components'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { useResponsiveness } from '../../../providers/ResponsivenessProvider'
-import { backupOptionView } from '.'
 import { BackupOption } from './BackupOption'
+import { backupOptionView } from './routes'
 
 const backupOptionTypes = ['device', 'server'] as const
 export type BackupOptionType = (typeof backupOptionTypes)[number]
