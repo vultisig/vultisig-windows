@@ -7,7 +7,7 @@ export const getSwapAffiliateBps = (chainBalance: bigint): number => {
   const balance = fromChainAmount(chainBalance, vult.decimals)
 
   const discount = vultBasedSwapAffiliateBpsDiscounts.find(
-    ([amount]) => balance > amount
+    ([amount]) => balance >= amount
   )
 
   return discount ? baseAffiliateBps - discount[1] : baseAffiliateBps
