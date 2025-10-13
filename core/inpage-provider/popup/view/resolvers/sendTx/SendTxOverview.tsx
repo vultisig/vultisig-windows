@@ -64,9 +64,9 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
     () =>
       getChainSpecificInput({
         ...parsedTx,
-        feeSettings: feeSettings
+        evmFeeSettings: feeSettings
           ? { ...feeSettings, isOverride: true }
-          : parsedTx.feeSettings,
+          : undefined,
       }),
     [parsedTx, feeSettings]
   )

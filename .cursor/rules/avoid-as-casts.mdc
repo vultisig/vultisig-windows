@@ -1,0 +1,17 @@
+---
+globs: *.ts,*.tsx
+description: Prefer type-safe designs over assertions; use `as` only as a last resort.
+---
+
+### Safe typing over `as`
+
+- Design APIs and types so consumers don’t need `as`.
+- Route by discriminants and thread precise types (e.g., ChainKind → ChainOfKind<K>), not broad unions.
+- Prefer generics and conditional types to model per-kind inputs/outputs.
+- If a cast is unavoidable, constrain it narrowly at a single routing boundary (never at leaf resolvers or call sites).
+
+Guidelines:
+
+- Resolver generics should carry the discriminant kind and specialize inputs/outputs.
+- Avoid optional chaining/fallbacks for non-optional types; assert earlier when needed.
+- Don’t suppress type errors with `as any`; fix the types or localize the cast in the router.
