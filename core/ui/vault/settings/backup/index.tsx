@@ -1,44 +1,32 @@
 import { hasServer } from '@core/mpc/devices/localPartyId'
 import { Opener } from '@lib/ui/base/Opener'
-import { CloudIcon } from '@lib/ui/icons/CloudIcon'
-import { HardDriveDownloadIcon } from '@lib/ui/icons/HardDriveDownloadIcon'
-import { TabletSmartphoneIcon } from '@lib/ui/icons/TabletSmartphoneIcon'
-import { VStack } from '@lib/ui/layout/Stack'
+import { FolderUploadIcon } from '@lib/ui/icons/FolderUploadIcon'
 import { ListItem } from '@lib/ui/list/item'
-import { Modal } from '@lib/ui/modal'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CoreView } from '../../../navigation/CoreView'
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '../../state/currentVault'
-import { BackupOption } from './BackupOption'
-
-const backupOptionTypes = ['device', 'server'] as const
-type BackupOptionType = (typeof backupOptionTypes)[number]
-
-const backupOptionIcon: Record<BackupOptionType, React.FC> = {
-  device: TabletSmartphoneIcon,
-  server: CloudIcon,
-}
-
-const backupOptionView: Record<BackupOptionType, CoreView> = {
-  device: { id: 'selectVaultsBackup' },
-  server: { id: 'requestFastVaultBackup' },
-}
+import { DescriptionText, ListItemIconWrapper } from '..'
+import { BackupModal } from './BackupModal'
+import { backupOptionView } from './routes'
 
 export const VaultSettingsBackup = () => {
   const navigate = useCoreNavigate()
-
   const { t } = useTranslation()
-
   const vault = useCurrentVault()
 
   return (
     <Opener
       renderOpener={({ onOpen }) => (
         <ListItem
-          icon={<HardDriveDownloadIcon fontSize={20} />}
+          icon={
+            <ListItemIconWrapper>
+              <FolderUploadIcon />
+            </ListItemIconWrapper>
+          }
+          description={
+            <DescriptionText>{t('backup_description')}</DescriptionText>
+          }
           onClick={() =>
             hasServer(vault.signers)
               ? onOpen()
@@ -49,25 +37,7 @@ export const VaultSettingsBackup = () => {
           showArrow
         />
       )}
-      renderContent={({ onClose }) => (
-        <Modal title={t('choose_backup_method')} onClose={onClose}>
-          <VStack gap={16}>
-            {backupOptionTypes.map(option => {
-              const Icon = backupOptionIcon[option]
-              return (
-                <BackupOption
-                  title={t(`${option}_backup`)}
-                  key={option}
-                  icon={<Icon />}
-                  onClick={() => navigate(backupOptionView[option])}
-                >
-                  {t(`${option}_backup_description`)}
-                </BackupOption>
-              )
-            })}
-          </VStack>
-        </Modal>
-      )}
+      renderContent={({ onClose }) => <BackupModal onClose={onClose} />}
     />
   )
 }

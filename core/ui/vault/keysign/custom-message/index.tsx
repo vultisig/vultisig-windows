@@ -1,30 +1,36 @@
 import { create } from '@bufbuild/protobuf'
 import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
-import { ChainInput } from '@core/ui/chain/inputs/ChainInput'
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
-import {
-  customMessageDefaultChain,
-  CustomMessageSupportedChain,
-  customMessageSupportedChains,
-} from '@core/ui/mpc/keysign/customMessage/chains'
-import { ProgressLine } from '@lib/ui/flow/ProgressLine'
+import { Button } from '@lib/ui/buttons/Button'
+import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { TextInput } from '@lib/ui/inputs/TextInput'
-import { VStack } from '@lib/ui/layout/Stack'
+import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
+import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { StartKeysignPrompt } from '../../../mpc/keysign/prompt/StartKeysignPrompt'
 import { StartKeysignPromptProps } from '../../../mpc/keysign/prompt/StartKeysignPromptProps'
+import { useCurrentVault } from '../../state/currentVault'
+import { getVaultId } from '../../Vault'
+
+const steps = ['form', 'verify'] as const
 
 export const SignCustomMessagePage = () => {
+  const { step, toNextStep, toPreviousStep } = useStepNavigation({
+    steps,
+  })
   const { t } = useTranslation()
-  const [chain, setChain] = useState<CustomMessageSupportedChain>(
-    customMessageDefaultChain
-  )
+
   const [method, setMethod] = useState('')
   const [message, setMessage] = useState('')
+  const vault = useCurrentVault()
+
+  const isFillingForm = step === 'form'
 
   const isDisabled = useMemo(() => {
     if (!method) return t('method_required')
@@ -34,12 +40,12 @@ export const SignCustomMessagePage = () => {
   const keysignPayload = useMemo(() => {
     return {
       custom: create(CustomMessagePayloadSchema, {
-        chain,
         method,
         message,
+        vaultPublicKeyEcdsa: getVaultId(vault),
       }),
     }
-  }, [chain, method, message])
+  }, [method, message, vault])
 
   const startKeysignPromptProps: StartKeysignPromptProps = useMemo(() => {
     if (isDisabled) {
@@ -55,32 +61,79 @@ export const SignCustomMessagePage = () => {
 
   return (
     <VStack fullHeight>
-      <FlowPageHeader title={t('sign_message')} />
+      <FlowPageHeader
+        onBack={!isFillingForm ? toPreviousStep : undefined}
+        title={isFillingForm ? t('sign_message') : t('verify')}
+      />
       <PageContent gap={24} flexGrow scrollable>
-        <ProgressLine value={0.2} />
         <VStack gap={16}>
-          <ChainInput
-            value={chain}
-            onChange={setChain}
-            options={customMessageSupportedChains}
-          />
-          <TextInput
-            label={t('method')}
-            value={method}
-            onValueChange={setMethod}
-            placeholder={t('signing_method')}
-          />
-          <TextInput
-            label={t('message')}
-            value={message}
-            onValueChange={setMessage}
-            placeholder={t('message_to_sign')}
-          />
+          {isFillingForm ? (
+            <>
+              <StyledTextInput
+                value={method}
+                onValueChange={setMethod}
+                placeholder={t('signing_method')}
+              />
+              <StyledTextInput
+                value={message}
+                onValueChange={setMessage}
+                placeholder={t('message_to_sign')}
+              />
+            </>
+          ) : (
+            <>
+              <ReviewItem>
+                <Text size={12} color="shy" weight={500}>
+                  {t('signing_method')}
+                </Text>
+                <Text size={14} weight={500}>
+                  {method}
+                </Text>
+              </ReviewItem>
+              <ReviewItem>
+                <Text size={12} color="shy" weight={500}>
+                  {t('message_to_sign')}
+                </Text>
+                <Text size={14} weight={500}>
+                  {message}
+                </Text>
+              </ReviewItem>
+            </>
+          )}
         </VStack>
       </PageContent>
       <PageFooter>
-        <StartKeysignPrompt {...startKeysignPromptProps} />
+        {isFillingForm ? (
+          <Button disabled={isDisabled} onClick={toNextStep}>
+            {t('continue')}
+          </Button>
+        ) : (
+          <StartKeysignPrompt {...startKeysignPromptProps} />
+        )}
       </PageFooter>
     </VStack>
   )
 }
+
+const StyledTextInput = styled(TextInput)`
+  font-weight: 500;
+  padding-left: 16px;
+  border: 1px solid ${getColor('foregroundExtra')};
+
+  &::placeholder {
+    font-weight: 500;
+    font-size: 16px;
+  }
+`
+
+const ReviewItem = styled.div`
+  ${vStack({
+    gap: 12,
+  })};
+
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid ${getColor('foregroundExtra')};
+  background: rgba(11, 26, 58, 0.5);
+  min-width: 0;
+`

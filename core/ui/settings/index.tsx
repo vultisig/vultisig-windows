@@ -90,7 +90,7 @@ export const SettingsPage: FC<Props> = props => {
           title={t('settings')}
           hasBorder
         />
-        <PageContent gap={24} flexGrow scrollable>
+        <PageContent gap={14} flexGrow scrollable>
           <SettingsSection title={t('vault')}>
             {client === 'extension' && props.prioritize}
             <ListItem

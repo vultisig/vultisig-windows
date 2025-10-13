@@ -27,8 +27,11 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
   if (contractPayload && contractPayload.value && contractPayload.case) {
     const contract:
       | { transfer: TW.Tron.Proto.TransferContract }
-      | { triggerSmartContract: TW.Tron.Proto.TriggerSmartContract }
-      | { transferAsset: TW.Tron.Proto.TransferAssetContract } =
+      | {
+          triggerSmartContract: TW.Tron.Proto.TriggerSmartContract
+          feeLimit: Long
+        }
+      | { transferAsset: TW.Tron.Proto.TransferAssetContract; feeLimit: Long } =
       matchDiscriminatedUnion(contractPayload, 'case', 'value', {
         tronTransferContractPayload: value => {
           return {
@@ -55,6 +58,7 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
                 ? Long.fromString(value.tokenId?.toString())
                 : undefined,
             }),
+            feeLimit: Long.fromString(tronSpecific.gasEstimation.toString()),
           }
         },
         tronTransferAssetContractPayload: value => {
@@ -65,6 +69,7 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
               amount: Long.fromString(value.amount),
               assetName: value.assetName,
             }),
+            feeLimit: Long.fromString(tronSpecific.gasEstimation.toString()),
           }
         },
         wasmExecuteContractPayload: () => {
@@ -77,7 +82,6 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
     const input = TW.Tron.Proto.SigningInput.create({
       transaction: TW.Tron.Proto.Transaction.create({
         ...contract,
-        feeLimit: Long.fromString(tronSpecific.gasEstimation.toString()),
         timestamp: Long.fromString(tronSpecific.timestamp.toString()),
         blockHeader: TW.Tron.Proto.BlockHeader.create({
           timestamp: Long.fromString(
