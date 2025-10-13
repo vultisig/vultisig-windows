@@ -17,6 +17,8 @@ import { useTranslation } from 'react-i18next'
 
 import { StartKeysignPrompt } from '../../../mpc/keysign/prompt/StartKeysignPrompt'
 import { StartKeysignPromptProps } from '../../../mpc/keysign/prompt/StartKeysignPromptProps'
+import { useCurrentVault } from '../../state/currentVault'
+import { getVaultId } from '../../Vault'
 
 export const SignCustomMessagePage = () => {
   const { t } = useTranslation()
@@ -25,7 +27,7 @@ export const SignCustomMessagePage = () => {
   )
   const [method, setMethod] = useState('')
   const [message, setMessage] = useState('')
-
+  const vault = useCurrentVault()
   const isDisabled = useMemo(() => {
     if (!method) return t('method_required')
     if (!message) return t('message_required')
@@ -37,9 +39,10 @@ export const SignCustomMessagePage = () => {
         chain,
         method,
         message,
+        vaultPublicKeyEcdsa: getVaultId(vault),
       }),
     }
-  }, [chain, method, message])
+  }, [chain, method, message, vault])
 
   const startKeysignPromptProps: StartKeysignPromptProps = useMemo(() => {
     if (isDisabled) {
