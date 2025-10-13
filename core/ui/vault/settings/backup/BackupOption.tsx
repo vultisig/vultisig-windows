@@ -53,7 +53,7 @@ export const BackupOption = ({
         <Text size={15} weight="500">
           {title}
         </Text>
-        <Text size={13} weight="500" color="shy">
+        <Text size={13} weight="500" color="shyExtra">
           {children}
         </Text>
       </VStack>

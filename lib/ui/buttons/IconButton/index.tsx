@@ -63,6 +63,9 @@ const StyledIconButton = styled(UnstyledButton)<{
             secondary: () => css`
               background-color: ${getColor('buttonBackgroundDisabled')};
             `,
+            action: () => css`
+              background-color: ${getColor('buttonBackgroundDisabled')};
+            `,
           })}
         `
       : match(kind, {
@@ -146,6 +149,19 @@ const StyledIconButton = styled(UnstyledButton)<{
                 `,
               })}
             }
+          `,
+          action: () => css`
+            border-radius: 1000px;
+            opacity: 0.67;
+            background:
+              linear-gradient(
+                0deg,
+                rgba(255, 255, 255, 0.06) 0%,
+                rgba(255, 255, 255, 0.06) 100%
+              ),
+              linear-gradient(0deg, #11284a 0%, #11284a 100%),
+              rgba(204, 204, 204, 0.5);
+            background-blend-mode: normal, normal, color-burn;
           `,
         })}
   `}
