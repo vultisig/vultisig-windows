@@ -1,11 +1,11 @@
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
-import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
+import { getFeeAmount } from '@core/chain/feeQuote/getFeeAmount'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useCallback } from 'react'
 
 import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'
-import { useSendChainSpecificQuery } from '../queries/useSendChainSpecificQuery'
+import { useSendFeeQuoteQuery } from '../queries/useSendFeeQuoteQuery'
 import { useSendAmount } from '../state/amount'
 import { useCurrentSendCoin } from '../state/sendCoin'
 import { capSendAmountToMax } from '../utils/capSendAmountToMax'
@@ -14,17 +14,17 @@ export const useSendCappedAmountQuery = () => {
   const coin = useCurrentSendCoin()
   const [amount] = useSendAmount()
 
-  const chainSpecificQuery = useSendChainSpecificQuery()
+  const feeQuoteQuery = useSendFeeQuoteQuery()
   const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
 
   return useTransformQueriesData(
     {
-      chainSpecific: chainSpecificQuery,
+      feeQuote: feeQuoteQuery,
       balance: balanceQuery,
     },
     useCallback(
-      ({ chainSpecific, balance }) => {
-        const feeAmount = getFeeAmount(chainSpecific)
+      ({ feeQuote, balance }) => {
+        const feeAmount = getFeeAmount(coin.chain, feeQuote)
 
         return {
           decimals: coin.decimals,

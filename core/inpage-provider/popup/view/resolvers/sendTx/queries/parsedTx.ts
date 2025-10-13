@@ -17,8 +17,8 @@ import { usePopupContext } from '../../../state/context'
 import { usePopupInput } from '../../../state/input'
 import { useGetCoin } from '../core/coin'
 import { CustomTxData, getCustomTxData } from '../core/customTxData'
-import { getFeeSettings } from '../core/feeSettings'
 import { ParsedTx } from '../core/parsedTx'
+import { getThirdPartyGasLimitEstimation } from '../core/thirdPartyGasLimitEstimation'
 import { ITransactionPayload } from '../interfaces'
 
 export const useParsedTxQuery = (): Query<ParsedTx> => {
@@ -88,7 +88,8 @@ export const useParsedTxQuery = (): Query<ParsedTx> => {
         })
 
         return {
-          feeSettings: getFeeSettings(transactionPayload),
+          thirdPartyGasLimitEstimation:
+            getThirdPartyGasLimitEstimation(transactionPayload),
           customTxData,
           skipBroadcast,
           coin: {
