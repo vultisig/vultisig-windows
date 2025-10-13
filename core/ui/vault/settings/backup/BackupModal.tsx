@@ -15,10 +15,8 @@ import styled from 'styled-components'
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { useResponsiveness } from '../../../providers/ResponsivenessProvider'
 import { BackupOption } from './BackupOption'
+import { BackupOptionType, backupOptionTypes } from './options'
 import { backupOptionView } from './routes'
-
-const backupOptionTypes = ['device', 'server'] as const
-export type BackupOptionType = (typeof backupOptionTypes)[number]
 
 const backupOptionIcon: Record<BackupOptionType, React.FC> = {
   device: TabletSmartphoneIcon,
