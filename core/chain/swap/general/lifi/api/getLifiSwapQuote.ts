@@ -1,6 +1,5 @@
 import { DeriveChainKind, getChainKind } from '@core/chain/ChainKind'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-// affiliate bps is passed in as a required input; no dynamic fetching here
 import { lifiConfig } from '@core/chain/swap/general/lifi/config'
 import {
   lifiSwapChainId,
