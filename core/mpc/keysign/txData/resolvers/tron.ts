@@ -5,7 +5,7 @@ import { KeysignTxDataResolver } from '../resolver'
 export const getTronTxData: KeysignTxDataResolver<'tron'> = async ({
   coin,
 }) => {
-  const blockInfo = await getTronBlockInfo(coin)
+  const blockInfo = await getTronBlockInfo({ coin })
 
   return {
     timestamp: BigInt(blockInfo.timestamp),

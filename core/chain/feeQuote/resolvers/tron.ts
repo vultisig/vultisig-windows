@@ -9,6 +9,6 @@ export const getTronFeeQuote: FeeQuoteResolver<'tron'> = async ({
   return {
     gas:
       thirdPartyGasLimitEstimation ||
-      BigInt((await getTronBlockInfo(coin)).gasFeeEstimation),
+      BigInt((await getTronBlockInfo({ coin })).gasFeeEstimation),
   }
 }

@@ -6,6 +6,7 @@ import {
   CosmosSpecific,
   EthereumSpecific,
   TransactionType,
+  TronSpecific,
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
@@ -103,6 +104,24 @@ export const getChainSpecificInput = (input: GetChainSpecificInput) => {
     }
     ;(result as ChainSpecificResolverInput<EthereumSpecific>).data =
       regular.transactionDetails.data
+
+    if (
+      isChainOfKind(coin.chain, 'tron') &&
+      regular.transactionDetails.msgPayload &&
+      'meta' in regular.transactionDetails.msgPayload
+    ) {
+      const meta = regular.transactionDetails.msgPayload.meta
+      if (meta) {
+        ;(result as ChainSpecificResolverInput<TronSpecific>).expiration =
+          meta.expiration
+        ;(result as ChainSpecificResolverInput<TronSpecific>).timestamp =
+          meta.timestamp
+        ;(result as ChainSpecificResolverInput<TronSpecific>).refBlockBytesHex =
+          meta.refBlockBytesHex
+        ;(result as ChainSpecificResolverInput<TronSpecific>).refBlockHashHex =
+          meta.refBlockHashHex
+      }
+    }
   }
 
   return result
