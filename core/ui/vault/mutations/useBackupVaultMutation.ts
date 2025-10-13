@@ -109,11 +109,11 @@ export const useBackupVaultMutation = ({
 
         const sevenZip = await getSevenZip()
         const fileNames: string[] = []
-        const archiveName = [
+        const archiveName = `${[
           productName.toLowerCase(),
           'backups',
           Math.floor(Date.now() / 1000),
-        ].join('_')
+        ].join('_')}.zip`
 
         try {
           vaultIds.forEach(vaultId => {
