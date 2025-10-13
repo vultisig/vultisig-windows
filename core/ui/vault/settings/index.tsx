@@ -2,6 +2,7 @@ import { hasServer } from '@core/mpc/devices/localPartyId'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { CircleIcon } from '@lib/ui/icons/CircleIcon'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { IconFileEdit } from '@lib/ui/icons/IconFileEdit'
 import { IconShareAndroid } from '@lib/ui/icons/IconShareAndroid'
@@ -95,6 +96,22 @@ export const VaultSettingsPage = () => {
             icon={
               <ListItemIconWrapper>
                 <IconFileEdit />
+              </ListItemIconWrapper>
+            }
+            description={
+              <DescriptionText>
+                {t('sign_custom_message_description')}
+              </DescriptionText>
+            }
+            onClick={() => navigate({ id: 'signCustomMessage' })}
+            title={t('sign')}
+            hoverable
+            showArrow
+          />
+          <ListItem
+            icon={
+              <ListItemIconWrapper>
+                <CircleIcon />
               </ListItemIconWrapper>
             }
             description={
