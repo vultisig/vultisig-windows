@@ -15,6 +15,19 @@ export const de = {
   vault_info: 'Tresorinformationen',
   circle_title: 'Circle-Konten',
   circle_description: 'Zahle $USDC in einen Circle-Vertrag ein',
+  circle: {
+    introduction:
+      'Zahlen Sie Ihre $USDC auf ein Circle-Konto ein und verdienen Sie Zinsen. Sicher in Ihrem Vultisig-Tresor.',
+    balance_title: 'Kontostand Übersicht',
+    total_deposit: 'Gesamteinzahlung',
+    rewards: 'Belohnungen',
+    apy: 'APY',
+    claim: 'Belohnungen einfordern',
+    banner_text:
+      'Die Gelder bleiben vollständig unter der Kontrolle Ihres Tresors. Die Circle-Rendite wird durch sichere Off-Chain-Treasuries generiert. Abhebung jederzeit nach Abrechnung möglich.',
+    deposit: 'Einzahlen',
+    withdraw: 'Abheben',
+  },
   vault_details_description: 'Name, Anteil und Typ des Tresors anzeigen',
   vault_details_edit_vault_description: 'Deinen Tresornamen bearbeiten',
   reshare_vault_description: 'Tresor erneut mit einem neuen Komitee teilen',

@@ -23,6 +23,19 @@ export const en = {
     '<g>Always backup each vault share</g> separately in a <g>different location</g>',
   onboarding_step_6: 'These shares collaborate to <g>unlock your vault</g>',
   permissions: 'Permissions',
+  circle: {
+    introduction:
+      'Deposit your $USDC into a Circle account and earn yield. Securely within your Vultisig vault.',
+    balance_title: 'Balance Overview',
+    total_deposit: 'Total Deposit',
+    rewards: 'Rewards',
+    apy: 'APY',
+    claim: 'Claim Rewards',
+    banner_text:
+      'Funds remain fully under your vault’s control. Circle yield is generated through secure off-chain treasuries. Withdraw anytime after settlement.',
+    deposit: 'Deposit',
+    withdraw: 'Withdraw',
+  },
   personal_sign: 'Personal Sign',
   vultisig_website: 'Vultisig Website',
   vult: '$VULT',
