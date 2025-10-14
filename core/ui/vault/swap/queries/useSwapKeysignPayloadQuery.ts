@@ -4,6 +4,7 @@ import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import type { GeneralSwapTx } from '@core/chain/swap/general/GeneralSwapQuote'
 import { getSwapKeysignPayloadFields } from '@core/chain/swap/keysign/getSwapKeysignPayloadFields'
 import type { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
+import { buildChainSpecific } from '@core/mpc/keysign/chainSpecific/build'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
@@ -12,7 +13,6 @@ import { useKeysignUtxoInfo } from '@core/ui/mpc/keysign/utxo/queries/keysignUtx
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
-import { useSwapChainSpecificQuery } from '@core/ui/vault/swap/queries/useSwapChainSpecificQuery'
 import { useSwapQuoteQuery } from '@core/ui/vault/swap/queries/useSwapQuoteQuery'
 import { useFromAmount } from '@core/ui/vault/swap/state/fromAmount'
 import { useToCoin } from '@core/ui/vault/swap/state/toCoin'
@@ -22,18 +22,22 @@ import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { pick } from '@lib/utils/record/pick'
 import { useMemo } from 'react'
 
+import { useSwapFeeQuoteQuery } from './useSwapFeeQuoteQuery'
+import { useSwapKeysignTxDataQuery } from './useSwapKeysignTxDataQuery'
+
 export const useSwapKeysignPayloadQuery = () => {
   const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
   const [toCoinKey] = useToCoin()
   const [fromAmount] = useFromAmount()
-  const chainSpecificQuery = useSwapChainSpecificQuery()
   const swapQuoteQuery = useSwapQuoteQuery()
-  const vault = useCurrentVault()
-  const walletCore = useAssertWalletCore()
   const fromCoin = useCurrentVaultCoin(fromCoinKey)
   const toCoin = useCurrentVaultCoin(toCoinKey)
   const amount = toChainAmount(shouldBePresent(fromAmount), fromCoin.decimals)
   const utxoInfo = useKeysignUtxoInfo(pick(fromCoin, ['chain', 'address']))
+  const feeQuoteQuery = useSwapFeeQuoteQuery()
+  const txDataQuery = useSwapKeysignTxDataQuery()
+  const vault = useCurrentVault()
+  const walletCore = useAssertWalletCore()
 
   const spender = useMemo(() => {
     const swapQuote = swapQuoteQuery.data
@@ -48,8 +52,10 @@ export const useSwapKeysignPayloadQuery = () => {
     })
   }, [swapQuoteQuery.data])
 
+  const { chain } = fromCoinKey
+
   const erc20ApprovePayloadQuery = useErc20ApprovePayloadQuery({
-    chain: fromCoin.chain,
+    chain,
     address: fromCoin.address,
     id: fromCoin.id,
     spender,
@@ -59,13 +65,14 @@ export const useSwapKeysignPayloadQuery = () => {
   return useTransformQueriesData(
     {
       swapQuote: swapQuoteQuery,
-      chainSpecific: chainSpecificQuery,
+      feeQuote: feeQuoteQuery,
+      txData: txDataQuery,
       erc20ApprovePayload: erc20ApprovePayloadQuery,
       utxoInfo,
     },
-    ({ swapQuote, chainSpecific, utxoInfo, erc20ApprovePayload }) => {
+    ({ swapQuote, feeQuote, txData, utxoInfo, erc20ApprovePayload }) => {
       const fromPublicKey = getPublicKey({
-        chain: fromCoin.chain,
+        chain,
         walletCore,
         hexChainCode: vault.hexChainCode,
         publicKeys: vault.publicKeys,
@@ -83,6 +90,12 @@ export const useSwapKeysignPayloadQuery = () => {
       )
 
       const toCoinHexPublicKey = Buffer.from(toPublicKey.data()).toString('hex')
+
+      const chainSpecific = buildChainSpecific({
+        chain,
+        txData,
+        feeQuote,
+      })
 
       const swapSpecificFields = getSwapKeysignPayloadFields({
         amount,

@@ -4,7 +4,7 @@ import { ChainKind, ChainOfKind } from '../ChainKind'
 import { AccountCoin } from '../coin/AccountCoin'
 import { FeeQuote } from './core'
 
-type FeeQuoteResolverInput<K extends ChainKind = ChainKind> = {
+export type FeeQuoteResolverInput<K extends ChainKind = ChainKind> = {
   coin: AccountCoin<ChainOfKind<K>>
 } & (K extends 'evm'
   ? {
