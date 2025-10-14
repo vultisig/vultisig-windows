@@ -54,7 +54,9 @@ export const useSwapChainSpecificQuery = () => {
         native: () => undefined,
         general: ({ tx }) =>
           matchRecordUnion(tx, {
-            evm: ({ feeQuote }) => feeQuote,
+            evm: ({ gasLimit }) => ({
+              gasLimit,
+            }),
             solana: () => undefined,
           }),
       }),
