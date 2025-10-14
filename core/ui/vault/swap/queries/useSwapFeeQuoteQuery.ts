@@ -48,5 +48,5 @@ export const useSwapFeeQuoteQuery = () => {
     }
   }, [fromAmount, fromCoin, swapQuote])
 
-  return useFeeQuoteQuery(input as any)
+  return useFeeQuoteQuery(input)
 }
