@@ -1123,4 +1123,5 @@ export const en = {
   all_vaults: 'All Vaults',
   backup_description: 'Back up your Vault Share to a preferred location',
   more: 'more',
+  discount_tiers: 'Discount Tiers',
 }
