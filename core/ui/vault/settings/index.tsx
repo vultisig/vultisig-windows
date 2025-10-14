@@ -18,6 +18,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { featureFlags } from '../../constants'
 import { SettingsSection } from '../../settings/SettingsSection'
 import { VaultSettingsBackup } from './backup'
 
@@ -108,20 +109,22 @@ export const VaultSettingsPage = () => {
             hoverable
             showArrow
           />
-          <ListItem
-            icon={
-              <ListItemIconWrapper>
-                <CircleIcon />
-              </ListItemIconWrapper>
-            }
-            description={
-              <DescriptionText>{t('circle_description')}</DescriptionText>
-            }
-            onClick={() => navigate({ id: 'circle' })}
-            title={t('circle_title')}
-            hoverable
-            showArrow
-          />
+          {featureFlags.circle && (
+            <ListItem
+              icon={
+                <ListItemIconWrapper>
+                  <CircleIcon />
+                </ListItemIconWrapper>
+              }
+              description={
+                <DescriptionText>{t('circle_description')}</DescriptionText>
+              }
+              onClick={() => navigate({ id: 'circle' })}
+              title={t('circle_title')}
+              hoverable
+              showArrow
+            />
+          )}
         </SettingsSection>
         <DeleteItem
           icon={
