@@ -1,4 +1,3 @@
-export const vultUrl = 'https://vult.network'
 export const vultisigWindowsGithubUrl =
   'https://github.com/vultisig/vultisig-windows'
 

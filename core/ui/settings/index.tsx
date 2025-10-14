@@ -15,7 +15,6 @@ import { BookMarkedIcon } from '@lib/ui/icons/BookMarkedIcon'
 import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
 import { DiscordIcon } from '@lib/ui/icons/DiscordIcon'
 import { FileTextIcon } from '@lib/ui/icons/FileTextIcon'
-import { FinanceCoinsIcon } from '@lib/ui/icons/FinanceCoinsIcon'
 import { GithubIcon } from '@lib/ui/icons/GithubIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { LanguagesIcon } from '@lib/ui/icons/LanguagesIcon'
@@ -45,7 +44,6 @@ import {
   vultisigTwitterUrl,
   vultisigWebsite,
   vultisigWindowsGithubUrl,
-  vultUrl,
 } from './constants'
 import { ShareAppModal } from './share-app/ShareAppModal'
 
@@ -247,16 +245,6 @@ export const SettingsPage: FC<Props> = props => {
               }
               onClick={() => openUrl(vultisigWindowsGithubUrl)}
               title={t('github')}
-              showArrow
-            />
-            <ListItem
-              icon={
-                <ListItemIconWrapper>
-                  <FinanceCoinsIcon />
-                </ListItemIconWrapper>
-              }
-              onClick={() => openUrl(vultUrl)}
-              title={t('vult')}
               showArrow
             />
             <ListItem
