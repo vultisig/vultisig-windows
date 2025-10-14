@@ -1,3 +1,4 @@
+import { productRootDomain } from '@core/config'
 import { VaultKey } from '@core/ui/vault/share/VaultKey'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { borderRadius } from '@lib/ui/css/borderRadius'
@@ -82,7 +83,7 @@ export const ShareVaultCard = () => {
         />
       </QrCodeWrapper>
       <Text color="shyExtra" weight={500} size={13} cropped>
-        vultisig.com
+        {productRootDomain}
       </Text>
     </Container>
   )

@@ -1,5 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { vult } from '@core/chain/coin/knownTokens'
+import { productWebsiteUrl } from '@core/config'
 import { ManageBlockaid } from '@core/ui/chain/security/blockaid/ManageBlockaid'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { languageName } from '@core/ui/i18n/Language'
@@ -44,7 +45,6 @@ import {
   vultisigPrivacyPolicyUrl,
   vultisigTermsOfServiceUrl,
   vultisigTwitterUrl,
-  vultisigWebsite,
   vultisigWindowsGithubUrl,
 } from './constants'
 import { ShareAppModal } from './share-app/ShareAppModal'
@@ -265,7 +265,7 @@ export const SettingsPage: FC<Props> = props => {
                   <GithubIcon />
                 </ListItemIconWrapper>
               }
-              onClick={() => openUrl(vultisigWebsite)}
+              onClick={() => openUrl(productWebsiteUrl)}
               title={t('github')}
               showArrow
             />
