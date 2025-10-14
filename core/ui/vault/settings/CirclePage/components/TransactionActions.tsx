@@ -4,9 +4,12 @@ import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { PlusSmallIcon } from '@lib/ui/icons/PlusSmallIcon'
 import { HStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 export const TransactionActions = () => {
+  const { t } = useTranslation()
+
   return (
     <HStack>
       <StyledButton
@@ -16,7 +19,7 @@ export const TransactionActions = () => {
           </ButtonIconWrapper>
         }
       >
-        Deposit
+        {t('circle.deposit')}
       </StyledButton>
       <WithdrawButton
         kind="secondary"
@@ -26,7 +29,7 @@ export const TransactionActions = () => {
           </ButtonIconWrapper>
         }
       >
-        Withdraw
+        {t('circle.withdraw')}
       </WithdrawButton>
     </HStack>
   )
