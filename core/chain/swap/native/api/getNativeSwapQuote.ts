@@ -6,6 +6,7 @@ import { formatAmount } from '@lib/utils/formatAmount'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { TransferDirection } from '@lib/utils/TransferDirection'
 
+import { Chain } from '../../../Chain'
 import { toNativeSwapAsset } from '../asset/toNativeSwapAsset'
 import { nativeSwapAffiliateConfig } from '../nativeSwapAffiliateConfig'
 import {
@@ -13,14 +14,15 @@ import {
   NativeSwapChain,
   nativeSwapStreamingInterval,
 } from '../NativeSwapChain'
-import { AffiliateParam, NativeSwapQuote } from '../NativeSwapQuote'
+import { NativeSwapQuote } from '../NativeSwapQuote'
 import { getNativeSwapDecimals } from '../utils/getNativeSwapDecimals'
 
 type GetNativeSwapQuoteInput = Record<TransferDirection, AccountCoin> & {
   swapChain: NativeSwapChain
   destination: string
   amount: number
-  affiliates: AffiliateParam[]
+  referral?: string
+  affiliateBps?: number
 }
 
 type NativeSwapQuoteErrorResponse = {
@@ -35,7 +37,8 @@ export const getNativeSwapQuote = async ({
   from,
   to,
   amount,
-  affiliates,
+  affiliateBps,
+  referral,
 }: GetNativeSwapQuoteInput): Promise<NativeSwapQuote> => {
   const [fromAsset, toAsset] = [from, to].map(asset => toNativeSwapAsset(asset))
 
@@ -52,23 +55,18 @@ export const getNativeSwapQuote = async ({
     streaming_interval: String(nativeSwapStreamingInterval[swapChain]),
   })
 
+  if (affiliateBps) {
+    params.append('affiliate', nativeSwapAffiliateConfig.affiliateFeeAddress)
+    params.append('affiliate_bps', affiliateBps.toString())
+  }
+
   // THORChain supports nested affiliates; Maya supports single affiliate only
-  if (swapChain === 'THORChain') {
-    for (const a of affiliates) {
-      params.append('affiliate', a.name)
-      params.append('affiliate_bps', String(a.bps))
-    }
-  } else {
-    const app = affiliates.find(
-      a => a.name === nativeSwapAffiliateConfig.affiliateFeeAddress
+  if (referral && !(swapChain === Chain.MayaChain && affiliateBps)) {
+    params.append('affiliate', referral)
+    params.append(
+      'affiliate_bps',
+      nativeSwapAffiliateConfig.referralDiscountAffiliateFeeRateBps.toString()
     )
-    if (app) {
-      params.append('affiliate', app.name)
-      params.append('affiliate_bps', String(app.bps))
-    } else if (affiliates.length) {
-      params.append('affiliate', affiliates[0].name)
-      params.append('affiliate_bps', String(affiliates[0].bps))
-    }
   }
 
   const url = `${swapBaseUrl}?${params.toString()}`

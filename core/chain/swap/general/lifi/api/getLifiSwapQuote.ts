@@ -18,6 +18,7 @@ import { GeneralSwapQuote } from '../../GeneralSwapQuote'
 
 type Input = Record<TransferDirection, AccountCoinKey<LifiSwapEnabledChain>> & {
   amount: bigint
+  affiliateBps?: number
 }
 
 const setupLifi = memoize(() => {
@@ -28,6 +29,7 @@ const setupLifi = memoize(() => {
 
 export const getLifiSwapQuote = async ({
   amount,
+  affiliateBps,
   ...transfer
 }: Input): Promise<GeneralSwapQuote> => {
   setupLifi()
@@ -51,7 +53,7 @@ export const getLifiSwapQuote = async ({
     fromAmount: amount.toString(),
     fromAddress,
     toAddress,
-    fee: lifiConfig.afffiliateFee,
+    fee: affiliateBps ? affiliateBps / 10000 : undefined,
   })
 
   const { transactionRequest, estimate } = quote
