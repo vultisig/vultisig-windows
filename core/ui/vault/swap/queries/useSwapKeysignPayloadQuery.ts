@@ -9,7 +9,6 @@ import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useErc20ApprovePayloadQuery } from '@core/ui/mpc/keysign/evm/queries/erc20ApprovePayload'
-import { useKeysignUtxoInfo } from '@core/ui/mpc/keysign/utxo/queries/keysignUtxoInfo'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
@@ -19,7 +18,6 @@ import { useToCoin } from '@core/ui/vault/swap/state/toCoin'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
-import { pick } from '@lib/utils/record/pick'
 import { useMemo } from 'react'
 
 import { useSwapFeeQuoteQuery } from './useSwapFeeQuoteQuery'
@@ -33,7 +31,6 @@ export const useSwapKeysignPayloadQuery = () => {
   const fromCoin = useCurrentVaultCoin(fromCoinKey)
   const toCoin = useCurrentVaultCoin(toCoinKey)
   const amount = toChainAmount(shouldBePresent(fromAmount), fromCoin.decimals)
-  const utxoInfo = useKeysignUtxoInfo(pick(fromCoin, ['chain', 'address']))
   const feeQuoteQuery = useSwapFeeQuoteQuery()
   const txDataQuery = useSwapKeysignTxDataQuery()
   const vault = useCurrentVault()
@@ -68,9 +65,8 @@ export const useSwapKeysignPayloadQuery = () => {
       feeQuote: feeQuoteQuery,
       txData: txDataQuery,
       erc20ApprovePayload: erc20ApprovePayloadQuery,
-      utxoInfo,
     },
-    ({ swapQuote, feeQuote, txData, utxoInfo, erc20ApprovePayload }) => {
+    ({ swapQuote, feeQuote, txData, erc20ApprovePayload }) => {
       const fromPublicKey = getPublicKey({
         chain,
         walletCore,
@@ -122,7 +118,7 @@ export const useSwapKeysignPayloadQuery = () => {
         vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
         libType: vault.libType,
         erc20ApprovePayload: erc20ApprovePayload ?? undefined,
-        utxoInfo: utxoInfo ?? undefined,
+        utxoInfo: 'utxoInfo' in txData ? txData.utxoInfo : undefined,
         ...swapSpecificFields,
       })
     }
