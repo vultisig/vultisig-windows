@@ -3,9 +3,12 @@ import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { TrophyIcon } from '@lib/ui/icons/TrophyIcon'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 export const BalanceOverviewTable = () => {
+  const { t } = useTranslation()
+
   return (
     <HStack gap={8}>
       <ItemWrapper>
@@ -14,9 +17,11 @@ export const BalanceOverviewTable = () => {
         </DollarIconWrapper>
         <VStack gap={4}>
           <Text size={13} color="shyExtra">
-            Total Deposit
+            {t('circle.total_deposit')}
           </Text>
-          <Text size={16}>$2,192.12</Text>
+          <Text size={16}>
+            {/* TODO: tony to fill in with real values when API is available */}
+          </Text>
         </VStack>
       </ItemWrapper>
       <ItemWrapper>
@@ -25,9 +30,11 @@ export const BalanceOverviewTable = () => {
         </TrohpyIconWrapper>
         <VStack gap={4}>
           <Text size={13} color="shyExtra">
-            Total Deposit
+            {t('circle.rewards')}
           </Text>
-          <Text size={16}>$2,192.12</Text>
+          <Text size={16}>
+            {/* TODO: tony to fill in with real values when API is available */}
+          </Text>
         </VStack>
       </ItemWrapper>
     </HStack>
