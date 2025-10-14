@@ -1124,4 +1124,10 @@ export const en = {
   backup_description: 'Back up your Vault Share to a preferred location',
   more: 'more',
   discount_tiers: 'Discount Tiers',
+  discount_tiers_description: `Hold $VULT to unlock lower trading fees.`,
+  bronze: 'Bronze',
+  silver: 'Silver',
+  gold: 'Gold',
+  platinum: 'Platinum',
+  discount: 'Discount',
 }
