@@ -35,13 +35,18 @@ const chainActionConfig: Record<ChainAction, BalanceDisplayConfig> = {
   vote: { showBalance: false, showTicker: false },
 }
 
-export const getBalanceDisplayConfig = (
-  chainAction: ChainAction,
+type GetBalanceDisplayConfigInput = {
+  chainAction: ChainAction
   chain: Chain
-): BalanceDisplayConfig => {
+}
+
+export const getBalanceDisplayConfig = ({
+  chainAction,
+  chain,
+}: GetBalanceDisplayConfigInput): BalanceDisplayConfig => {
   const baseConfig = chainActionConfig[chainAction]
 
-  if (chainAction === 'stake' && chain === Chain.Ton) {
+  if (chainAction === 'stake' && chain !== Chain.Ton) {
     return {
       ...baseConfig,
       showTicker: false,
@@ -51,24 +56,31 @@ export const getBalanceDisplayConfig = (
   return baseConfig
 }
 
-export const shouldShowBalance = (
-  fieldName: string,
+type ShouldShowBalanceInput = {
+  fieldName: string
   chainAction: ChainAction
-): boolean => {
+}
+
+export const shouldShowBalance = ({
+  fieldName,
+  chainAction,
+}: ShouldShowBalanceInput): boolean => {
   if (fieldName !== 'amount') return false
   return chainActionConfig[chainAction].showBalance
 }
 
-export const shouldShowTicker = (
-  fieldName: string,
-  chainAction: ChainAction,
+type ShouldShowTickerInput = {
+  fieldName: string
+  chainAction: ChainAction
   chain: Chain
-): boolean => {
-  if (fieldName !== 'amount') return false
-  const config = getBalanceDisplayConfig(chainAction, chain)
-  return config.showTicker
 }
 
-export const getBalanceLabel = (chainAction: ChainAction): string => {
-  return chainActionConfig[chainAction].balanceLabel || 'balance'
+export const shouldShowTicker = ({
+  fieldName,
+  chainAction,
+  chain,
+}: ShouldShowTickerInput): boolean => {
+  if (fieldName !== 'amount') return false
+  const config = getBalanceDisplayConfig({ chainAction, chain })
+  return config.showTicker
 }
