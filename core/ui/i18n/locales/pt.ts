@@ -1087,8 +1087,6 @@ export const pt = {
   description: 'Descrição',
   personal_sign: 'Sinal Pessoal',
   request_from: 'Solicitação de',
-  rules: 'Regras',
-  rule_item: 'Regra {{número}}',
   sign_request: 'Solicitação de assinatura',
   signed_signature: 'Assinatura assinada',
   signing_address: 'Endereço de Assinatura',
@@ -1158,4 +1156,19 @@ export const pt = {
   this_vault_only: 'Somente este cofre',
   all_vaults: 'Todos os cofres',
   more: 'mais',
+  plugin_rules: 'Regras do plugin',
+  resource: 'Recurso',
+  target: 'Alvo',
+  discount_tiers: 'Níveis de desconto',
+  discount_tiers_description:
+    'Mantenha $VULT para desbloquear taxas de negociação mais baixas.',
+  bronze: 'Bronze',
+  silver: 'Prata',
+  gold: 'Ouro',
+  platinum: 'Platina',
+  discount: 'Desconto',
+  unlock_tier: 'Desbloquear nível',
+  unlock_discount_tier: 'Desbloquear nível <b>{{tier}}</b>',
+  unlock_discount_tier_description:
+    'Ao manter {{minBalance}}, você desbloqueará o nível {{tier}} e receberá um desconto de <b>{{bps}} bps na taxa de negociação</b> em todas as trocas.',
 }
