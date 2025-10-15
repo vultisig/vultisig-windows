@@ -7,7 +7,7 @@ type Props = {
 
 const strokeAdditionalSpace = 12
 const minStrokeWidth = 44
-const idleTimeAfterScrollStop = 240
+const idleTimeAfterScrollStop = 450
 const behavior: ScrollBehavior = 'smooth'
 
 export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
