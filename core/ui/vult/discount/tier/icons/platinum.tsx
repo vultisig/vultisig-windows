@@ -1,6 +1,6 @@
 import { SvgProps } from '@lib/ui/props'
 
-export const PlatinumIcon = (props: SvgProps) => (
+export const PlatinumTierIcon = (props: SvgProps) => (
   <svg
     width="1em"
     height="1em"

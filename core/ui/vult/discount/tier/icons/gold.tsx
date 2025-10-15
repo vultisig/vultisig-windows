@@ -1,6 +1,6 @@
 import { SvgProps } from '@lib/ui/props'
 
-export const GoldIcon = (props: SvgProps) => (
+export const GoldTierIcon = (props: SvgProps) => (
   <svg
     width="1em"
     height="1em"

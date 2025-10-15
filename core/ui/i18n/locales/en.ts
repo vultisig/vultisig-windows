@@ -1130,4 +1130,5 @@ export const en = {
   gold: 'Gold',
   platinum: 'Platinum',
   discount: 'Discount',
+  unlock_tier: 'Unlock Tier',
 }

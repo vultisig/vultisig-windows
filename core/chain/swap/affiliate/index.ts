@@ -5,20 +5,27 @@ import { toEntries } from '@lib/utils/record/toEntries'
 import { fromChainAmount } from '../../amount/fromChainAmount'
 import {
   baseAffiliateBps,
+  VultDiscountTier,
   vultDiscountTierDiscounts,
   vultDiscountTierMinBalances,
 } from './config'
 
-export const getSwapAffiliateBps = (chainBalance: bigint): number => {
+export const getVultDiscountTier = (
+  chainBalance: bigint
+): VultDiscountTier | undefined => {
   const balance = fromChainAmount(chainBalance, vult.decimals)
 
-  const discountTier = order(
+  return order(
     toEntries(vultDiscountTierMinBalances),
     ({ value }) => value,
     'desc'
-  ).find(({ value }) => balance >= value)
+  ).find(({ value }) => balance >= value)?.key
+}
+
+export const getSwapAffiliateBps = (balance: bigint): number => {
+  const discountTier = getVultDiscountTier(balance)
 
   return discountTier
-    ? baseAffiliateBps - vultDiscountTierDiscounts[discountTier.key]
+    ? baseAffiliateBps - vultDiscountTierDiscounts[discountTier]
     : baseAffiliateBps
 }
