@@ -15,7 +15,7 @@ export const vultDiscountTierMinBalances: Record<VultDiscountTier, number> = {
   platinum: 10000,
 }
 
-export const vultDiscountTierDiscounts: Record<VultDiscountTier, number> = {
+export const vultDiscountTierBps: Record<VultDiscountTier, number> = {
   bronze: 10,
   silver: 20,
   gold: 30,

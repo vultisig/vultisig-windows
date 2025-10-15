@@ -6,7 +6,7 @@ import { fromChainAmount } from '../../amount/fromChainAmount'
 import {
   baseAffiliateBps,
   VultDiscountTier,
-  vultDiscountTierDiscounts,
+  vultDiscountTierBps,
   vultDiscountTierMinBalances,
 } from './config'
 
@@ -26,6 +26,6 @@ export const getSwapAffiliateBps = (balance: bigint): number => {
   const discountTier = getVultDiscountTier(balance)
 
   return discountTier
-    ? baseAffiliateBps - vultDiscountTierDiscounts[discountTier]
+    ? baseAffiliateBps - vultDiscountTierBps[discountTier]
     : baseAffiliateBps
 }

@@ -4,7 +4,7 @@ import { ValueProp } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-import { discountTierColors } from './color'
+import { discountTierColors } from './colors'
 
 const containerBorderRadius = 16
 

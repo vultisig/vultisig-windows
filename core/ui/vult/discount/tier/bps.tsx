@@ -1,6 +1,6 @@
 import {
   VultDiscountTier,
-  vultDiscountTierDiscounts,
+  vultDiscountTierBps,
 } from '@core/chain/swap/affiliate/config'
 import { ValueProp } from '@lib/ui/props'
 import { text } from '@lib/ui/text'
@@ -23,7 +23,7 @@ export const DiscountTierBps = ({ value }: ValueProp<VultDiscountTier>) => {
 
   return (
     <Container>
-      {t('discount')}: {vultDiscountTierDiscounts[value]}bps
+      {t('discount')}: {vultDiscountTierBps[value]}bps
     </Container>
   )
 }
