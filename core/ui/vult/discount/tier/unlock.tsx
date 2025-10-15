@@ -1,3 +1,4 @@
+import { extractCoinKey } from '@core/chain/coin/Coin'
 import { vult } from '@core/chain/coin/knownTokens'
 import {
   VultDiscountTier,
@@ -16,7 +17,7 @@ import { Trans, useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
-import { useCurrentVaultChains } from '../../../vault/state/currentVaultCoins'
+import { useCreateCoinMutation } from '../../../storage/coins'
 import { discountTierColors } from './colors'
 import { discountTierIcons } from './icons'
 
@@ -50,9 +51,9 @@ export const UnlockDiscountTier = ({ value }: ValueProp<VultDiscountTier>) => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
 
-  const [chain] = useCurrentVaultChains()
-
   const Icon = discountTierIcons[value]
+
+  const { mutate: createCoin } = useCreateCoinMutation()
 
   return (
     <Opener
@@ -65,9 +66,13 @@ export const UnlockDiscountTier = ({ value }: ValueProp<VultDiscountTier>) => {
           footer={
             <Button
               onClick={() =>
-                navigate({
-                  id: 'swap',
-                  state: { coin: { chain } },
+                createCoin(vult, {
+                  onSuccess: coin => {
+                    navigate({
+                      id: 'swap',
+                      state: { toCoin: extractCoinKey(coin) },
+                    })
+                  },
                 })
               }
             >
