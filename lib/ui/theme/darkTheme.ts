@@ -24,6 +24,7 @@ export const darkTheme: DefaultTheme = {
     info: new HSLA(212, 100, 68),
 
     background: new HSLA(217, 91, 9),
+    // Backgrounds/surface-1
     foreground: new HSLA(216, 81, 13),
     foregroundDark: new HSLA(213, 80, 14),
     // Backgrounds/surface-2
