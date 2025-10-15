@@ -22,8 +22,11 @@ export const VultDiscountTierHeader = ({
   const Icon = discountTierIcons[value]
 
   return (
-    <Container style={onClick ? { cursor: 'pointer' } : undefined}>
-      <HStack onClick={onClick} alignItems="center" gap={12}>
+    <Container
+      onClick={onClick}
+      style={onClick ? { cursor: 'pointer' } : undefined}
+    >
+      <HStack alignItems="center" gap={12}>
         <Icon fontSize={40} />
         <Text size={28} weight="500">
           {t(value)}

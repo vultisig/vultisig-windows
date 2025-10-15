@@ -4,12 +4,14 @@ import { ValueProp } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
+import { discountTierColors } from './color'
+
 const containerBorderRadius = 16
 
 const gradientColors: Record<VultDiscountTier, [string, string]> = {
   bronze: ['hsla(16, 71%, 51%, 1)', 'hsla(215, 69%, 53%, 0.21)'],
-  silver: ['hsla(215, 40%, 85%, 1)', 'hsla(215, 69%, 53%, 0.22)'],
-  gold: ['hsla(38, 100%, 68%, 1)', 'hsla(215, 69%, 53%, 0.2)'],
+  silver: [discountTierColors.silver.toCssValue(), 'hsla(215, 69%, 53%, 0.22)'],
+  gold: [discountTierColors.gold.toCssValue(), 'hsla(215, 69%, 53%, 0.2)'],
   platinum: ['hsla(167, 78%, 55%, 1)', 'hsla(224, 98%, 64%, 1)'],
 }
 
