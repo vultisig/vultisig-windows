@@ -4,7 +4,7 @@ import { ChildrenProp } from '@lib/ui/props'
 import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
 import { useMemo } from 'react'
 
-import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
+import { useSwapFromCoin } from './fromCoin'
 
 const { useState: useToCoin, provider: ToCoinInternalProvider } =
   getStateProviderSetup<CoinKey>('ToCoin')
@@ -12,7 +12,7 @@ const { useState: useToCoin, provider: ToCoinInternalProvider } =
 export { useToCoin }
 
 export const ToCoinProvider: React.FC<ChildrenProp> = ({ children }) => {
-  const [{ coin: fromCoin }] = useCoreViewState<'swap'>()
+  const [fromCoin] = useSwapFromCoin()
 
   const nativeCoins = useCurrentVaultNativeCoins()
 

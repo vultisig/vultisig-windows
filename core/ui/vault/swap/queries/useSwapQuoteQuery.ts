@@ -8,17 +8,17 @@ import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
-import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useAssertCurrentVaultId } from '../../../storage/currentVaultId'
 import { useFriendReferralQuery } from '../../../storage/referrals'
 import { useFromAmount } from '../state/fromAmount'
+import { useSwapFromCoin } from '../state/fromCoin'
 import { useToCoin } from '../state/toCoin'
 import { useSwapAffiliateBpsQuery } from './useSwapAffiliateBpsQuery'
 
 export const swapQuoteQueryKeyPrefix = 'swapQuote'
 
 export const useSwapQuoteQuery = () => {
-  const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
+  const [fromCoinKey] = useSwapFromCoin()
   const [toCoinKey] = useToCoin()
   const [fromAmount] = useFromAmount()
   const vaultId = useAssertCurrentVaultId()

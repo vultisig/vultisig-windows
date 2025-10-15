@@ -16,12 +16,12 @@ import styled from 'styled-components'
 import { CoinIcon } from '../../../chain/coin/icon/CoinIcon'
 import { CoinOption } from '../../../chain/coin/inputs/CoinOption'
 import { useAutoDiscoverTokens } from '../../../chain/hooks/useAutoDiscoverTokens'
-import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useTransferDirection } from '../../../state/transferDirection'
 import { StorageKey } from '../../../storage/StorageKey'
 import { useSortedByBalanceCoins } from '../../chain/coin/hooks/useSortedByBalanceCoins'
 import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 import { SwapHorizontalDivider } from '../components/SwapHorizontalDivider'
+import { useSwapFromCoin } from '../state/fromCoin'
 import { useToCoin } from '../state/toCoin'
 import { useCenteredSnapCarousel } from './hooks/useScrollSelectedChainIntoView'
 
@@ -30,7 +30,7 @@ export const SwapCoinsExplorer = ({
   value,
   onClose,
 }: OnCloseProp & InputProps<CoinKey>) => {
-  const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
+  const [fromCoinKey] = useSwapFromCoin()
   const [currentToCoin] = useToCoin()
   const side = useTransferDirection()
   const coins = useCurrentVaultCoins()

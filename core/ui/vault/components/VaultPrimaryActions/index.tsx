@@ -18,7 +18,7 @@ export const VaultPrimaryActions = (state: CoreViewState<'send'>) => {
   return (
     <UniformColumnGrid fullWidth gap={12}>
       <SendPrompt {...state} />
-      {isOneOf(chain, swapEnabledChains) && <SwapPrompt coin={coin} />}
+      {isOneOf(chain, swapEnabledChains) && <SwapPrompt fromCoin={coin} />}
       {isOneOf(chain, depositEnabledChains) && <DepositPrompt coin={coin} />}
     </UniformColumnGrid>
   )
