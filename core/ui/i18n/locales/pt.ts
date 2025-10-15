@@ -19,6 +19,19 @@ export const pt = {
   by_vultisig: 'por Vultisig',
   vault_info: 'Informações do cofre',
   vault_details_description: 'Visualizar o nome, a parte e o tipo do cofre',
+  circle: {
+    introduction:
+      'Deposite seus $USDC em uma conta Circle e ganhe rendimento. Com segurança dentro do seu cofre Vultisig.',
+    balance_title: 'Visão geral do saldo',
+    total_deposit: 'Depósito total',
+    rewards: 'Recompensas',
+    apy: 'APY',
+    claim: 'Resgatar recompensas',
+    banner_text:
+      'Os fundos permanecem totalmente sob o controle do seu cofre. O rendimento da Circle é gerado por tesourarias seguras fora da cadeia. Retire a qualquer momento após a liquidação.',
+    deposit: 'Depositar',
+    withdraw: 'Retirar',
+  },
   vault_details_edit_vault_description: 'Editar o nome do seu cofre',
   reshare_vault_description:
     'Compartilhar novamente o cofre com um novo comitê',
@@ -30,6 +43,8 @@ export const pt = {
   onboarding_description_2:
     'O Vultisig não rastreia suas atividades nem exige nenhum registro. O Vultisig é de código aberto, garantindo transparência e confiança.',
   vultisig_website: 'Site do Vultisig',
+  circle_title: 'Contas Circle',
+  circle_description: 'Deposite $USDC em um contrato da Circle',
   onboarding_description_3:
     'O Vultisig é, por natureza, um aplicativo multi-dispositivo. Exige pelo menos dois dispositivos para criar um cofre seguro: um dispositivo inicializador e um dispositivo de pareamento.',
   onboarding_description_4:

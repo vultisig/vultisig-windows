@@ -19,6 +19,21 @@ export const es = {
     'Estas partes colaboran para <g>desbloquear su depósito</g>',
   secure_crypto_vault: 'Bóveda segura de criptomonedas',
   vultisig: 'Vultisig',
+  circle: {
+    introduction:
+      'Deposita tus $USDC en una cuenta Circle y gana rendimiento. De forma segura dentro de tu bóveda Vultisig.',
+    balance_title: 'Resumen de saldo',
+    total_deposit: 'Depósito total',
+    rewards: 'Recompensas',
+    apy: 'APY',
+    claim: 'Reclamar recompensas',
+    banner_text:
+      'Los fondos permanecen totalmente bajo el control de tu bóveda. El rendimiento de Circle se genera mediante tesorerías seguras fuera de la cadena. Retira en cualquier momento después de la liquidación.',
+    deposit: 'Depositar',
+    withdraw: 'Retirar',
+  },
+  circle_title: 'Cuentas Circle',
+  circle_description: 'Deposita $USDC en un contrato de Circle',
   vault_details_description: 'Ver el nombre, la parte y el tipo de la bóveda',
   vault_details_edit_vault_description: 'Editar el nombre de tu bóveda',
   reshare_vault_description: 'Volver a compartir la bóveda con un nuevo comité',

@@ -23,6 +23,21 @@ export const hr = {
   vault_details_description: 'Prikazati naziv, dio i vrstu trezora',
   vault_details_edit_vault_description: 'Urediti naziv svog trezora',
   reshare_vault_description: 'Ponovno podijeliti trezor s novim odborom',
+  circle_title: 'Circle računi',
+  circle: {
+    introduction:
+      'Uložite svoje $USDC na Circle račun i ostvarite prinos. Sigurno unutar vašeg Vultisig trezora.',
+    balance_title: 'Pregled stanja',
+    total_deposit: 'Ukupni depozit',
+    rewards: 'Nagrade',
+    apy: 'APY',
+    claim: 'Preuzmi nagrade',
+    banner_text:
+      'Sredstva ostaju potpuno pod kontrolom vašeg trezora. Circle prinos se ostvaruje putem sigurnih off-chain trezora. Povlačenje je moguće bilo kada nakon namire.',
+    deposit: 'Uplati',
+    withdraw: 'Povuci',
+  },
+  circle_description: 'Uplati $USDC u Circle ugovor',
   sign_custom_message_description: 'Potpisati prilagođenu poruku',
   delete_vault_description: 'Trajno izbrisati svoj trezor',
   backup_description: 'Sigurno podijeliti svoj trezor u odabranom mjestu',

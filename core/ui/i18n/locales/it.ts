@@ -20,7 +20,22 @@ export const it = {
   secure_crypto_vault: 'Cassaforte sicura per criptovalute',
   vultisig: 'Vultisig',
   by_vultisig: 'da Vultisig',
+  circle: {
+    introduction:
+      "Deposita i tuoi $USDC in un conto Circle e guadagna rendimento. In sicurezza all'interno del tuo caveau Vultisig.",
+    balance_title: 'Panoramica del saldo',
+    total_deposit: 'Deposito totale',
+    rewards: 'Ricompense',
+    apy: 'APY',
+    claim: 'Richiedi ricompense',
+    banner_text:
+      'I fondi rimangono completamente sotto il controllo del tuo caveau. Il rendimento Circle è generato tramite tesorerie sicure off-chain. Puoi prelevare in qualsiasi momento dopo la liquidazione.',
+    deposit: 'Deposita',
+    withdraw: 'Preleva',
+  },
   vault_info: 'Informazioni sul caveau',
+  circle_title: 'Conti Circle',
+  circle_description: 'Deposita $USDC in un contratto Circle',
   vault_details_description:
     'Visualizzare il nome, la parte e il tipo della cassaforte',
   vault_details_edit_vault_description:

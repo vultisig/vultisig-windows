@@ -23,6 +23,19 @@ export const en = {
     '<g>Always backup each vault share</g> separately in a <g>different location</g>',
   onboarding_step_6: 'These shares collaborate to <g>unlock your vault</g>',
   permissions: 'Permissions',
+  circle: {
+    introduction:
+      'Deposit your $USDC into a Circle account and earn yield. Securely within your Vultisig vault.',
+    balance_title: 'Balance Overview',
+    total_deposit: 'Total Deposit',
+    rewards: 'Rewards',
+    apy: 'APY',
+    claim: 'Claim Rewards',
+    banner_text:
+      'Funds remain fully under your vault’s control. Circle yield is generated through secure off-chain treasuries. Withdraw anytime after settlement.',
+    deposit: 'Deposit',
+    withdraw: 'Withdraw',
+  },
   personal_sign: 'Personal Sign',
   vultisig_website: 'Vultisig Website',
   vult: '$VULT',
@@ -1099,6 +1112,8 @@ export const en = {
     'Something went wrong. Please recheck your password and try again.',
   backup_share_sent: 'Backup share sent!',
   check_email: 'Check email',
+  circle_title: 'Circle Accounts',
+  circle_description: 'Deposit $USDC into A Circle Contract',
   backup_share_sent_description:
     'We just sent your backup share to your email. If you don’t see it, check your spam folder.',
   select_vaults_to_backup: 'Select Vaults to Back Up',
