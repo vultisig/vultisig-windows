@@ -1,10 +1,10 @@
 import { getFeeQuote } from '@core/chain/feeQuote'
-import { ChainSpecificResolverInput } from '@core/mpc/keysign/chainSpecific/resolver'
+import { FeeQuoteResolverInput } from '@core/chain/feeQuote/resolver'
 import { useQuery } from '@tanstack/react-query'
 
 export const feeQuoteQueryKeyPrefix = 'feeQuote'
 
-export const useFeeQuoteQuery = (input: ChainSpecificResolverInput) => {
+export const useFeeQuoteQuery = (input: FeeQuoteResolverInput) => {
   return useQuery({
     queryKey: [feeQuoteQueryKeyPrefix, input],
     queryFn: () => getFeeQuote(input),
