@@ -8,13 +8,13 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useMemo } from 'react'
 
-import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { useFromAmount } from '../state/fromAmount'
+import { useSwapFromCoin } from '../state/fromCoin'
 import { useSwapQuote } from './useSwapQuoteQuery'
 
 export const useSwapKeysignTxDataQuery = () => {
-  const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
+  const [fromCoinKey] = useSwapFromCoin()
   const fromCoin = useCurrentVaultCoin(fromCoinKey)
   const [fromAmount] = useFromAmount()
   const swapQuote = useSwapQuote()

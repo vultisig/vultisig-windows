@@ -9,12 +9,12 @@ import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useErc20ApprovePayloadQuery } from '@core/ui/mpc/keysign/evm/queries/erc20ApprovePayload'
-import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useSwapQuoteQuery } from '@core/ui/vault/swap/queries/useSwapQuoteQuery'
 import { useFromAmount } from '@core/ui/vault/swap/state/fromAmount'
-import { useToCoin } from '@core/ui/vault/swap/state/toCoin'
+import { useSwapFromCoin } from '@core/ui/vault/swap/state/fromCoin'
+import { useSwapToCoin } from '@core/ui/vault/swap/state/toCoin'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
@@ -24,8 +24,8 @@ import { useSwapFeeQuoteQuery } from './useSwapFeeQuoteQuery'
 import { useSwapKeysignTxDataQuery } from './useSwapKeysignTxDataQuery'
 
 export const useSwapKeysignPayloadQuery = () => {
-  const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
-  const [toCoinKey] = useToCoin()
+  const [fromCoinKey] = useSwapFromCoin()
+  const [toCoinKey] = useSwapToCoin()
   const [fromAmount] = useFromAmount()
   const swapQuoteQuery = useSwapQuoteQuery()
   const fromCoin = useCurrentVaultCoin(fromCoinKey)

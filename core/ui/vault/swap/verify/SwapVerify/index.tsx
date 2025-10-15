@@ -8,12 +8,12 @@ import { formatAmount } from '@lib/utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 
 import { VerifyKeysignStart } from '../../../../mpc/keysign/start/VerifyKeysignStart'
-import { useCoreViewState } from '../../../../navigation/hooks/useCoreViewState'
 import { VerifySwapFees } from '../../form/info/VerifySwapFees'
 import { useSwapKeysignPayloadQuery } from '../../queries/useSwapKeysignPayloadQuery'
 import { useSwapOutputAmountQuery } from '../../queries/useSwapOutputAmountQuery'
 import { useFromAmount } from '../../state/fromAmount'
-import { useToCoin } from '../../state/toCoin'
+import { useSwapFromCoin } from '../../state/fromCoin'
+import { useSwapToCoin } from '../../state/toCoin'
 import {
   ContentWrapper,
   HorizontalLine,
@@ -25,8 +25,8 @@ const swapTerms = ['input', 'output'] as const
 
 export const SwapVerify = () => {
   const { t } = useTranslation()
-  const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
-  const [toCoinKey] = useToCoin()
+  const [fromCoinKey] = useSwapFromCoin()
+  const [toCoinKey] = useSwapToCoin()
   const fromCoin = useCurrentVaultCoin(fromCoinKey)
   const toCoin = useCurrentVaultCoin(toCoinKey)
   const [fromAmount] = useFromAmount()
