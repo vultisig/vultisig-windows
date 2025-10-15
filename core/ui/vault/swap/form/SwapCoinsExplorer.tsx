@@ -22,7 +22,7 @@ import { useSortedByBalanceCoins } from '../../chain/coin/hooks/useSortedByBalan
 import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 import { SwapHorizontalDivider } from '../components/SwapHorizontalDivider'
 import { useSwapFromCoin } from '../state/fromCoin'
-import { useToCoin } from '../state/toCoin'
+import { useSwapToCoin } from '../state/toCoin'
 import { useCenteredSnapCarousel } from './hooks/useScrollSelectedChainIntoView'
 
 export const SwapCoinsExplorer = ({
@@ -31,7 +31,7 @@ export const SwapCoinsExplorer = ({
   onClose,
 }: OnCloseProp & InputProps<CoinKey>) => {
   const [fromCoinKey] = useSwapFromCoin()
-  const [currentToCoin] = useToCoin()
+  const [currentToCoin] = useSwapToCoin()
   const side = useTransferDirection()
   const coins = useCurrentVaultCoins()
   const queryClient = useQueryClient()

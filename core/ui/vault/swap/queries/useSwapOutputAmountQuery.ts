@@ -7,11 +7,11 @@ import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useCallback } from 'react'
 
-import { useToCoin } from '../state/toCoin'
+import { useSwapToCoin } from '../state/toCoin'
 import { useSwapQuoteQuery } from './useSwapQuoteQuery'
 
 export const useSwapOutputAmountQuery = () => {
-  const [toCoinKey] = useToCoin()
+  const [toCoinKey] = useSwapToCoin()
 
   const toCoin = useCurrentVaultCoin(toCoinKey)
 

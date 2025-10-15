@@ -13,7 +13,7 @@ import { useSwapKeysignPayloadQuery } from '../../queries/useSwapKeysignPayloadQ
 import { useSwapOutputAmountQuery } from '../../queries/useSwapOutputAmountQuery'
 import { useFromAmount } from '../../state/fromAmount'
 import { useSwapFromCoin } from '../../state/fromCoin'
-import { useToCoin } from '../../state/toCoin'
+import { useSwapToCoin } from '../../state/toCoin'
 import {
   ContentWrapper,
   HorizontalLine,
@@ -26,7 +26,7 @@ const swapTerms = ['input', 'output'] as const
 export const SwapVerify = () => {
   const { t } = useTranslation()
   const [fromCoinKey] = useSwapFromCoin()
-  const [toCoinKey] = useToCoin()
+  const [toCoinKey] = useSwapToCoin()
   const fromCoin = useCurrentVaultCoin(fromCoinKey)
   const toCoin = useCurrentVaultCoin(toCoinKey)
   const [fromAmount] = useFromAmount()

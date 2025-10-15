@@ -6,14 +6,14 @@ import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueries
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
 import { useSwapFromCoin } from '../state/fromCoin'
-import { useToCoin } from '../state/toCoin'
+import { useSwapToCoin } from '../state/toCoin'
 import { useSwapFeeQuoteQuery } from './useSwapFeeQuoteQuery'
 import { useSwapQuoteQuery } from './useSwapQuoteQuery'
 
 export const useSwapFeesQuery = () => {
   const swapQuoteQuery = useSwapQuoteQuery()
   const [fromCoinKey] = useSwapFromCoin()
-  const [toCoinKey] = useToCoin()
+  const [toCoinKey] = useSwapToCoin()
   const feeQuoteQuery = useSwapFeeQuoteQuery()
 
   return useTransformQueriesData(

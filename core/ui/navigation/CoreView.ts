@@ -61,7 +61,7 @@ export type CoreView =
   | { id: 'setupVault'; state: { type?: VaultSecurityType } }
   | { id: 'signCustomMessage' }
   | { id: 'circle' }
-  | { id: 'swap'; state: { fromCoin?: CoinKey } }
+  | { id: 'swap'; state: { fromCoin?: CoinKey; toCoin?: CoinKey } }
   | { id: 'updateAddressBookItem'; state: { id: string } }
   | { id: 'updateVaultFolder'; state: { id: string } }
   | { id: 'uploadQr'; state: { title?: string } }

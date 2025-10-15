@@ -14,7 +14,7 @@ import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useSwapQuoteQuery } from '@core/ui/vault/swap/queries/useSwapQuoteQuery'
 import { useFromAmount } from '@core/ui/vault/swap/state/fromAmount'
 import { useSwapFromCoin } from '@core/ui/vault/swap/state/fromCoin'
-import { useToCoin } from '@core/ui/vault/swap/state/toCoin'
+import { useSwapToCoin } from '@core/ui/vault/swap/state/toCoin'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
@@ -25,7 +25,7 @@ import { useSwapKeysignTxDataQuery } from './useSwapKeysignTxDataQuery'
 
 export const useSwapKeysignPayloadQuery = () => {
   const [fromCoinKey] = useSwapFromCoin()
-  const [toCoinKey] = useToCoin()
+  const [toCoinKey] = useSwapToCoin()
   const [fromAmount] = useFromAmount()
   const swapQuoteQuery = useSwapQuoteQuery()
   const fromCoin = useCurrentVaultCoin(fromCoinKey)

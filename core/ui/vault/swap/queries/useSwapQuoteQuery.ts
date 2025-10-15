@@ -12,14 +12,14 @@ import { useAssertCurrentVaultId } from '../../../storage/currentVaultId'
 import { useFriendReferralQuery } from '../../../storage/referrals'
 import { useFromAmount } from '../state/fromAmount'
 import { useSwapFromCoin } from '../state/fromCoin'
-import { useToCoin } from '../state/toCoin'
+import { useSwapToCoin } from '../state/toCoin'
 import { useSwapAffiliateBpsQuery } from './useSwapAffiliateBpsQuery'
 
 export const swapQuoteQueryKeyPrefix = 'swapQuote'
 
 export const useSwapQuoteQuery = () => {
   const [fromCoinKey] = useSwapFromCoin()
-  const [toCoinKey] = useToCoin()
+  const [toCoinKey] = useSwapToCoin()
   const [fromAmount] = useFromAmount()
   const vaultId = useAssertCurrentVaultId()
   const referralQuery = useFriendReferralQuery(vaultId)

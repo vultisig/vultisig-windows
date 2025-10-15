@@ -20,7 +20,7 @@ import { useTransferDirection } from '../../../state/transferDirection'
 import { ChainOption } from '../components/ChainOption'
 import { SwapCoinInputField } from '../components/SwapCoinInputField'
 import { useSwapFromCoin } from '../state/fromCoin'
-import { useToCoin } from '../state/toCoin'
+import { useSwapToCoin } from '../state/toCoin'
 import { useChainSummaries } from './hooks/useChainSummaries'
 import { SwapCoinsExplorer } from './SwapCoinsExplorer'
 
@@ -31,7 +31,7 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
   const coins = useCurrentVaultCoins()
   const coin = shouldBePresent(useCurrentVaultCoin(value))
   const [fromCoinKey] = useSwapFromCoin()
-  const [currentToCoin] = useToCoin()
+  const [currentToCoin] = useSwapToCoin()
   const side = useTransferDirection()
   const chainSummaries = useChainSummaries()
 
