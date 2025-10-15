@@ -11,7 +11,6 @@ import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
 import { evmNativeCoinAddress } from '../../../../chains/evm/config'
-import { EvmFeeSettings } from '../../../../tx/fee/evm/EvmFeeSettings'
 
 type Input = {
   account: ChainAccount
@@ -59,18 +58,13 @@ export const getOneInchSwapQuote = async ({
   const { dstAmount, tx }: OneInchSwapQuoteResponse =
     await queryUrl<OneInchSwapQuoteResponse>(url)
 
-  const feeQuote: Partial<EvmFeeSettings> = {}
-  if (tx.gas) {
-    feeQuote.gasLimit = BigInt(tx.gas)
-  }
-
   return {
     dstAmount,
     provider: '1inch',
     tx: {
       evm: {
         ...tx,
-        feeQuote,
+        gasLimit: tx.gas ? BigInt(tx.gas) : undefined,
       },
     },
   }

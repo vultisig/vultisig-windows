@@ -1,6 +1,5 @@
 import { SwapFee } from '@core/chain/swap/SwapFee'
 
-import { EvmFeeSettings } from '../../tx/fee/evm/EvmFeeSettings'
 import { GeneralSwapProvider } from './GeneralSwapProvider'
 
 export type GeneralSwapTx =
@@ -10,7 +9,7 @@ export type GeneralSwapTx =
         to: string
         data: string
         value: string
-        feeQuote: Partial<EvmFeeSettings>
+        gasLimit?: bigint
       }
     }
   | {

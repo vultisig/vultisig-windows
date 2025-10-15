@@ -1,32 +1,33 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { getFeeAmount } from '@core/chain/feeQuote/getFeeAmount'
 import { getNativeSwapDecimals } from '@core/chain/swap/native/utils/getNativeSwapDecimals'
 import { SwapFees } from '@core/chain/swap/SwapFee'
-import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useToCoin } from '../state/toCoin'
-import { useSwapChainSpecificQuery } from './useSwapChainSpecificQuery'
+import { useSwapFeeQuoteQuery } from './useSwapFeeQuoteQuery'
 import { useSwapQuoteQuery } from './useSwapQuoteQuery'
 
 export const useSwapFeesQuery = () => {
   const swapQuoteQuery = useSwapQuoteQuery()
   const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
   const [toCoinKey] = useToCoin()
-  const chainSpecificQuery = useSwapChainSpecificQuery()
+  const feeQuoteQuery = useSwapFeeQuoteQuery()
 
   return useTransformQueriesData(
     {
       swapQuote: swapQuoteQuery,
-      chainSpecific: chainSpecificQuery,
+      feeQuote: feeQuoteQuery,
     },
-    ({ swapQuote, chainSpecific }): SwapFees => {
-      const fromFeeCoin = chainFeeCoin[fromCoinKey.chain]
+    ({ swapQuote, feeQuote }): SwapFees => {
+      const { chain } = fromCoinKey
+      const fromFeeCoin = chainFeeCoin[chain]
 
       const network = {
         ...fromFeeCoin,
-        amount: getFeeAmount(chainSpecific),
+        amount: getFeeAmount(chain, feeQuote),
         decimals: fromFeeCoin.decimals,
       }
 
@@ -50,7 +51,7 @@ export const useSwapFeesQuery = () => {
             }),
             solana: ({ networkFee, swapFee }) => ({
               network: {
-                chain: fromCoinKey.chain,
+                chain: chain,
                 id: fromCoinKey.id,
                 amount: BigInt(networkFee),
                 decimals: fromFeeCoin.decimals,
