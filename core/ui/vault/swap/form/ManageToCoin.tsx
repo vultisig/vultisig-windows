@@ -1,10 +1,10 @@
 import { TransferDirectionProvider } from '@core/ui/state/transferDirection'
 
-import { useToCoin } from '../state/toCoin'
+import { useSwapToCoin } from '../state/toCoin'
 import { SwapCoinInput } from './SwapCoinInput'
 
 export const ManageToCoin = () => {
-  const [value, setValue] = useToCoin()
+  const [value, setValue] = useSwapToCoin()
 
   return (
     <TransferDirectionProvider value="to">

@@ -1123,4 +1123,15 @@ export const en = {
   all_vaults: 'All Vaults',
   backup_description: 'Back up your Vault Share to a preferred location',
   more: 'more',
+  discount_tiers: 'Discount Tiers',
+  discount_tiers_description: `Hold $VULT to unlock lower trading fees.`,
+  bronze: 'Bronze',
+  silver: 'Silver',
+  gold: 'Gold',
+  platinum: 'Platinum',
+  discount: 'Discount',
+  unlock_tier: 'Unlock Tier',
+  unlock_discount_tier: 'Unlock <b>{{tier}}</b> Tier',
+  unlock_discount_tier_description:
+    'By holding {{minBalance}}, you’ll unlock the {{tier}} Tier and receive a <b>{{bps}} bps trading fee discount</b> on all swaps.',
 }

@@ -7,13 +7,13 @@ import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
 
-import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { useFromAmount } from '../state/fromAmount'
+import { useSwapFromCoin } from '../state/fromCoin'
 import { useSwapQuote } from './useSwapQuoteQuery'
 
 export const useSwapFeeQuoteQuery = () => {
-  const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
+  const [fromCoinKey] = useSwapFromCoin()
   const fromCoin = useCurrentVaultCoin(fromCoinKey)
   const [fromAmount] = useFromAmount()
   const swapQuote = useSwapQuote()

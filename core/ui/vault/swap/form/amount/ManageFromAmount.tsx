@@ -7,15 +7,15 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
-import { useCoreViewState } from '../../../../navigation/hooks/useCoreViewState'
 import { useFromAmount } from '../../state/fromAmount'
+import { useSwapFromCoin } from '../../state/fromCoin'
 import { SwapCoinBalanceDependant } from '../balance/SwapCoinBalanceDependant'
 import { AmountContainer } from './AmountContainer'
 import { SwapFiatAmount } from './SwapFiatAmount'
 
 export const ManageFromAmount = () => {
   const [value, setValue] = useFromAmount()
-  const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
+  const [fromCoinKey] = useSwapFromCoin()
   const valueAsString = value?.toString() ?? ''
   const [inputValue, setInputValue] = useState<string>(valueAsString)
   const isFeeCoinSelected = isFeeCoin(fromCoinKey)

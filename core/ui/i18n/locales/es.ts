@@ -1101,8 +1101,6 @@ export const es = {
   description: 'Descripción',
   personal_sign: 'Signo personal',
   request_from: 'Solicitud de',
-  rules: 'Normas',
-  rule_item: 'Regla {{number}}',
   sign_request: 'Solicitud de firma',
   signed_signature: 'Firma firmada',
   signing_address: 'Dirección de firma',
@@ -1170,4 +1168,19 @@ export const es = {
   this_vault_only: 'Sólo esta bóveda',
   all_vaults: 'Todas las bóvedas',
   more: 'más',
+  plugin_rules: 'Reglas del complemento',
+  resource: 'Recurso',
+  target: 'Objetivo',
+  discount_tiers: 'Niveles de descuento',
+  discount_tiers_description:
+    'Mantenga $VULT para desbloquear tarifas comerciales más bajas.',
+  bronze: 'Bronce',
+  silver: 'Plata',
+  gold: 'Oro',
+  platinum: 'Platino',
+  discount: 'Descuento',
+  unlock_tier: 'Desbloquear nivel',
+  unlock_discount_tier: 'Desbloquear <b>{{tier}}</b> nivel',
+  unlock_discount_tier_description:
+    'Al mantener {{minBalance}}, desbloquearás el nivel {{tier}} y recibirás un descuento de <b>{{bps}} bps en la tarifa de negociación</b> en todos los swaps.',
 }

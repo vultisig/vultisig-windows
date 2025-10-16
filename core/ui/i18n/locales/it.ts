@@ -1102,8 +1102,6 @@ export const it = {
   description: 'Descrizione',
   personal_sign: 'Segno personale',
   request_from: 'Richiesta da',
-  rules: 'Regole',
-  rule_item: 'Regola {{numero}}',
   sign_request: 'Richiesta di firma',
   signed_signature: 'Firma firmata',
   signing_address: 'Indirizzo di firma',
@@ -1169,4 +1167,19 @@ export const it = {
   this_vault_only: 'Solo questo caveau',
   all_vaults: 'Tutti i caveau',
   more: 'Di più',
+  plugin_rules: 'Regole del plugin',
+  resource: 'Risorsa',
+  target: 'Bersaglio',
+  discount_tiers: 'Livelli di sconto',
+  discount_tiers_description:
+    'Mantieni $VULT per sbloccare commissioni di trading più basse.',
+  bronze: 'Bronzo',
+  silver: 'Argento',
+  gold: 'Oro',
+  platinum: 'Platino',
+  discount: 'Sconto',
+  unlock_tier: 'Sblocca livello',
+  unlock_discount_tier: 'Sblocca il livello <b>{{tier}}</b>',
+  unlock_discount_tier_description:
+    'Mantenendo {{minBalance}}, sbloccherai il livello {{tier}} e riceverai uno sconto sulle commissioni di trading di <b>{{bps}} bps</b> su tutti gli swap.',
 }

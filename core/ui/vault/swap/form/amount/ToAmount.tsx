@@ -7,7 +7,7 @@ import { formatAmount } from '@lib/utils/formatAmount'
 import styled from 'styled-components'
 
 import { useSwapOutputAmountQuery } from '../../queries/useSwapOutputAmountQuery'
-import { useToCoin } from '../../state/toCoin'
+import { useSwapToCoin } from '../../state/toCoin'
 import { AmountContainer } from './AmountContainer'
 import { SwapFiatAmount } from './SwapFiatAmount'
 
@@ -25,7 +25,7 @@ const Value = styled.div`
 
 export const ToAmount = () => {
   const query = useSwapOutputAmountQuery()
-  const [toCoin] = useToCoin()
+  const [toCoin] = useSwapToCoin()
 
   return (
     <AmountContainer gap={6} alignItems="flex-end">

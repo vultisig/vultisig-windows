@@ -4,14 +4,14 @@ import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { QueryKey, useMutation } from '@tanstack/react-query'
 
 import { feeQuoteQueryKeyPrefix } from '../../../chain/feeQuote/query'
-import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { swapQuoteQueryKeyPrefix } from '../queries/useSwapQuoteQuery'
 import { useFromAmount } from '../state/fromAmount'
+import { useSwapFromCoin } from '../state/fromCoin'
 
 export const useRefreshSwapQuoteMutation = () => {
   const invalidateQueries = useInvalidateQueries()
 
-  const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
+  const [fromCoinKey] = useSwapFromCoin()
   const [fromAmount] = useFromAmount()
 
   const address = useCurrentVaultAddress(fromCoinKey.chain)
