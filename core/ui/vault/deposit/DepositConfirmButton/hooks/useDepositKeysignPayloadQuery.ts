@@ -15,25 +15,24 @@ import {
 import { CoinKey } from '@core/chain/coin/Coin'
 import { getDenom } from '@core/chain/coin/utils/getDenom'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
+import { buildChainSpecific } from '@core/mpc/keysign/chainSpecific/build'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
-import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
+import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { attempt } from '@lib/utils/attempt'
+import { attempt, withFallback } from '@lib/utils/attempt'
 import { match } from '@lib/utils/match'
 import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
 import { useCallback } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { useAssertWalletCore } from '../../../../chain/providers/WalletCoreProvider'
 import { useCurrentVault } from '../../../state/currentVault'
-import { ChainAction } from '../../ChainAction'
-import { useDepositFormConfig } from '../../hooks/useDepositFormConfig'
+import { useDepositReceiver } from '../../hooks/useDepositReceiver'
+import { useDepositAction } from '../../providers/DepositActionProvider'
 import { useDepositCoin } from '../../providers/DepositCoinProvider'
-import { useDepositChainSpecificQuery } from '../../queries/useDepositChainSpecificQuery'
-import { stakeModeById } from '../../staking/config'
+import { useDepositFeeQuoteQuery } from '../../queries/useDepositFeeQuoteQuery'
+import { useDepositKeysignTxDataQuery } from '../../queries/useDepositKeysignTxDataQuery'
 import { resolvers, selectStakeId } from '../../staking/resolvers'
 import {
   NativeTcyInput,
@@ -41,17 +40,11 @@ import {
   StakeKind,
   StcyInput,
 } from '../../staking/types'
+import { useDepositData } from '../../state/data'
 
-type DepositKeysignPayloadProps = {
-  depositFormData: Record<string, unknown>
-  action: ChainAction
-}
-
-export function useDepositKeysignPayload({
-  depositFormData,
-  action,
-}: DepositKeysignPayloadProps) {
-  const { t } = useTranslation()
+export function useDepositKeysignPayloadQuery() {
+  const [action] = useDepositAction()
+  const depositData = useDepositData()
 
   const isUnmerge = action === 'unmerge'
   const isStake = isOneOf(action, ['stake', 'unstake', 'withdraw_ruji_rewards'])
@@ -60,63 +53,36 @@ export function useDepositKeysignPayload({
   const vault = useCurrentVault()
   const walletCore = useAssertWalletCore()
 
-  const autocompound = Boolean(depositFormData['autoCompound'])
-
-  let stakeId: ReturnType<typeof selectStakeId> | undefined = undefined
-  let isStakeContractFlow = false
-
-  if (isStake) {
-    const result = attempt(() => selectStakeId(coin, { autocompound }))
-    if ('data' in result) {
-      stakeId = shouldBePresent(result.data)
-      isStakeContractFlow = stakeModeById[stakeId] === 'wasm'
-    } else {
-      isStakeContractFlow = false
-    }
-  }
-
-  let txType: TransactionType | undefined
-  if (action === 'ibc_transfer') txType = TransactionType.IBC_TRANSFER
-  else if (action === 'merge') txType = TransactionType.THOR_MERGE
-  else if (action === 'unmerge') txType = TransactionType.THOR_UNMERGE
-  else if (action === 'mint' || action === 'redeem' || isStakeContractFlow)
-    txType = TransactionType.GENERIC_CONTRACT
-
-  const chainSpecificQuery = useDepositChainSpecificQuery(coin, txType)
-  const config = useDepositFormConfig()
-  const amountFieldConfig = config.fields.find(field => field.name === 'amount')
-
   const isTonFunction = coin.chain === Chain.Ton
-  const slippage = Number(depositFormData['slippage'] ?? 0)
-  const memo = (depositFormData['memo'] as string) ?? ''
-  const validatorAddress = depositFormData['validatorAddress'] as
-    | string
-    | undefined
+  const slippage = Number(depositData['slippage'] ?? 0)
+  const memo = (depositData['memo'] as string) ?? ''
+  const validatorAddress = depositData['validatorAddress'] as string | undefined
 
-  const hasAmount = 'amount' in depositFormData
-  const amount = hasAmount ? Number(depositFormData['amount']) : undefined
+  const autocompound = Boolean(depositData['autoCompound'])
 
-  const nodeAddressRaw = depositFormData['nodeAddress']
-  const receiver =
-    typeof nodeAddressRaw === 'string' && nodeAddressRaw.length > 0
-      ? nodeAddressRaw
-      : undefined
+  const hasAmount = 'amount' in depositData
+  const amount = hasAmount ? Number(depositData['amount']) : undefined
 
-  const invalid =
-    hasAmount &&
-    amountFieldConfig?.required &&
-    (amount == null || !Number.isFinite(amount) || amount <= 0)
-  const invalidMessage = invalid ? t('required_field_missing') : undefined
+  const receiver = useDepositReceiver()
 
-  const keysignPayloadQuery = useTransformQueryData(
-    chainSpecificQuery,
+  const txData = useDepositKeysignTxDataQuery()
+  const feeQuote = useDepositFeeQuoteQuery()
+
+  return useTransformQueriesData(
+    { txData, feeQuote },
     useCallback(
-      chainSpecific => {
+      ({ txData, feeQuote }) => {
         const publicKey = getPublicKey({
           chain: coin.chain,
           walletCore,
           hexChainCode: vault.hexChainCode,
           publicKeys: vault.publicKeys,
+        })
+
+        const blockchainSpecific = buildChainSpecific({
+          chain: coin.chain,
+          txData,
+          feeQuote,
         })
 
         const basePayload: any = {
@@ -126,10 +92,11 @@ export function useDepositKeysignPayload({
             hexPublicKey: Buffer.from(publicKey.data()).toString('hex'),
           }),
           memo,
-          blockchainSpecific: chainSpecific,
+          blockchainSpecific,
           vaultLocalPartyId: vault.localPartyId,
           vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
           libType: vault.libType,
+          utxoInfo: txData.utxoInfo,
         }
 
         if (receiver) basePayload.toAddress = receiver
@@ -139,6 +106,13 @@ export function useDepositKeysignPayload({
             coin.decimals
           ).toString()
         }
+
+        const stakeId = isStake
+          ? withFallback(
+              attempt(() => selectStakeId(coin, { autocompound })),
+              undefined
+            )
+          : undefined
 
         if (isStake && stakeId) {
           const actionAsStakeAction =
@@ -156,7 +130,7 @@ export function useDepositKeysignPayload({
               if (stakeId === 'stcy') {
                 input = { kind: 'unstake', amount: shouldBePresent(amount) }
               } else if (stakeId === 'native-tcy') {
-                const raw = depositFormData['percentage']
+                const raw = depositData['percentage']
 
                 const pct =
                   typeof raw === 'string' && raw.trim() === ''
@@ -351,8 +325,9 @@ export function useDepositKeysignPayload({
       [
         action,
         amount,
+        autocompound,
         coin,
-        depositFormData,
+        depositData,
         hasAmount,
         isStake,
         isTonFunction,
@@ -360,7 +335,6 @@ export function useDepositKeysignPayload({
         memo,
         receiver,
         slippage,
-        stakeId,
         validatorAddress,
         vault.hexChainCode,
         vault.libType,
@@ -370,6 +344,4 @@ export function useDepositKeysignPayload({
       ]
     )
   )
-
-  return { invalid, invalidMessage, keysignPayloadQuery }
 }
