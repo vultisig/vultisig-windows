@@ -97,15 +97,7 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
               title={t('memo')}
             />
           )}
-          <ListItem
-            description={
-              <DepositFee
-                depositFormData={formattedDepositFormData}
-                action={selectedChainAction}
-              />
-            }
-            title={t('est_network_fee')}
-          />
+          <ListItem description={<DepositFee />} title={t('est_network_fee')} />
         </List>
       </PageContent>
       <PageFooter>
