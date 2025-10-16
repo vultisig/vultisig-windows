@@ -27,6 +27,11 @@ import { useDepositBalance } from '../hooks/useDepositBalance'
 import { useDepositFormConfig } from '../hooks/useDepositFormConfig'
 import { useDepositAction } from '../providers/DepositActionProvider'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
+import {
+  getBalanceDisplayConfig,
+  shouldShowBalance,
+  shouldShowTicker,
+} from '../utils/chainActionConfig'
 import { stepFromDecimals } from '../utils/stepFromDecimals'
 
 export type FormData = Record<string, any>
@@ -123,26 +128,19 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
               {fields
                 .filter(field => !field.hidden)
                 .map(field => {
-                  const showBalance =
-                    field.name === 'amount' &&
-                    [
-                      'bond',
-                      'ibc_transfer',
-                      'switch',
-                      'merge',
-                      'stake',
-                      'unmerge',
-                      'unstake',
-                      'mint',
-                      'redeem',
-                      'withdraw_ruji_rewards',
-                    ].includes(selectedChainAction)
-
-                  const ticker =
-                    selectedChainAction !== 'ibc_transfer' &&
-                    selectedChainAction !== 'merge' &&
-                    !(selectedChainAction === 'stake') &&
-                    coin.ticker
+                  const config = getBalanceDisplayConfig({
+                    chainAction: selectedChainAction,
+                    chain: coin.chain,
+                  })
+                  const showBalance = shouldShowBalance({
+                    fieldName: field.name,
+                    chainAction: selectedChainAction,
+                  })
+                  const showTickerWithBalance = shouldShowTicker({
+                    fieldName: field.name,
+                    chainAction: selectedChainAction,
+                    chain: coin.chain,
+                  })
 
                   return (
                     <InputContainer key={field.name}>
@@ -151,14 +149,16 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
                         {showBalance && (
                           <>
                             (
-                            {selectedChainAction === 'unmerge' ? (
+                            {config.balanceLabel === 'shares' ? (
                               <>
                                 {t('shares')}: {balance}
                               </>
                             ) : (
                               <>
-                                {t('balance')}: {balance}{' '}
-                                {ticker && ` ${ticker}`}
+                                {t('balance')}: {balance}
+                                {showTickerWithBalance &&
+                                  coin.ticker &&
+                                  ` ${coin.ticker}`}
                               </>
                             )}
                             )
