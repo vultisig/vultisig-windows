@@ -16,6 +16,8 @@ import { useSwapValidationQuery } from '../queries/useSwapValidationQuery'
 
 export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
   const { error, data, isPending } = useSwapValidationQuery()
+  console.log('🚀 ~ SwapForm ~ data:', data)
+  console.log('🚀 ~ SwapForm ~ error:', error)
 
   const { t } = useTranslation()
 
@@ -28,7 +30,9 @@ export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
       return extractErrorMsg(error)
     }
 
-    return data ?? undefined
+    if (!data) {
+      return t('fill_the_form')
+    }
   }, [data, error, isPending, t])
 
   return (
