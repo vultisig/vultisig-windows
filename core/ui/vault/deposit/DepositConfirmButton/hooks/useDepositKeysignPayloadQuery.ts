@@ -178,14 +178,14 @@ export function useDepositKeysignPayloadQuery() {
                 coins: intent.funds,
               },
             }
-            return { keysign: create(KeysignPayloadSchema, basePayload) }
+            return create(KeysignPayloadSchema, basePayload)
           }
 
           delete basePayload.contractPayload
           basePayload.memo = intent.memo
           basePayload.toAddress = ''
           basePayload.toAmount = intent.toAmount ?? '0'
-          return { keysign: create(KeysignPayloadSchema, basePayload) }
+          return create(KeysignPayloadSchema, basePayload)
         }
 
         if (action === 'mint' || action === 'redeem') {
@@ -235,7 +235,7 @@ export function useDepositKeysignPayloadQuery() {
             }
 
             basePayload.toAmount = amountUnits
-            return { keysign: create(KeysignPayloadSchema, basePayload) }
+            return create(KeysignPayloadSchema, basePayload)
           } else {
             const assertedCoinId = shouldBePresent(coin.id)
 
@@ -266,7 +266,7 @@ export function useDepositKeysignPayloadQuery() {
           }
 
           basePayload.toAmount = amountUnits
-          return { keysign: create(KeysignPayloadSchema, basePayload) }
+          return create(KeysignPayloadSchema, basePayload)
         }
 
         if (
@@ -320,7 +320,7 @@ export function useDepositKeysignPayloadQuery() {
           }
         }
 
-        return { keysign: create(KeysignPayloadSchema, basePayload) }
+        return create(KeysignPayloadSchema, basePayload)
       },
       [
         action,
