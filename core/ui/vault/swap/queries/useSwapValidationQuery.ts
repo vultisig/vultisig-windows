@@ -5,15 +5,15 @@ import { t } from 'i18next'
 import { useCallback } from 'react'
 
 import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'
-import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { useSwapQuoteQuery } from '../queries/useSwapQuoteQuery'
 import { useFromAmount } from '../state/fromAmount'
+import { useSwapFromCoin } from '../state/fromCoin'
 
 export const useSwapValidationQuery = () => {
   const [amount] = useFromAmount()
 
-  const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
+  const [fromCoinKey] = useSwapFromCoin()
   const coin = useCurrentVaultCoin(fromCoinKey)
   const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
   const swapQuoteQuery = useSwapQuoteQuery()

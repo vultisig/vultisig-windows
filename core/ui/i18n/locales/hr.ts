@@ -1070,8 +1070,6 @@ export const hr = {
   description: 'Opis',
   personal_sign: 'Osobni znak',
   request_from: 'Zahtjev od',
-  rules: 'Pravila',
-  rule_item: 'Pravilo {{broj}}',
   sign_request: 'Zahtjev za potpis',
   signed_signature: 'Potpis',
   signing_address: 'Adresa za potpisivanje',
@@ -1138,4 +1136,19 @@ export const hr = {
   this_vault_only: 'Samo ovaj trezor',
   all_vaults: 'Svi trezori',
   more: 'više',
+  plugin_rules: 'Pravila dodataka',
+  resource: 'Resurs',
+  target: 'Cilj',
+  discount_tiers: 'Razine popusta',
+  discount_tiers_description:
+    'Držite $VULT kako biste otključali niže naknade za trgovanje.',
+  bronze: 'Bronza',
+  silver: 'Srebro',
+  gold: 'Zlato',
+  platinum: 'Platina',
+  discount: 'Popust',
+  unlock_tier: 'Otključaj razinu',
+  unlock_discount_tier: 'Otključaj <b>{{tier}}<b> razinu',
+  unlock_discount_tier_description:
+    'Držanjem {{minBalance}} otključat ćete {{tier}} razinu i ostvariti popust od <b>{{bps}} bps naknade za trgovanje</b> na sve swapove.',
 }

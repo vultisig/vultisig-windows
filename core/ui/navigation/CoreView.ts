@@ -61,7 +61,7 @@ export type CoreView =
   | { id: 'setupVault'; state: { type?: VaultSecurityType } }
   | { id: 'signCustomMessage' }
   | { id: 'circle' }
-  | { id: 'swap'; state: { coin: CoinKey } }
+  | { id: 'swap'; state: { fromCoin?: CoinKey; toCoin?: CoinKey } }
   | { id: 'updateAddressBookItem'; state: { id: string } }
   | { id: 'updateVaultFolder'; state: { id: string } }
   | { id: 'uploadQr'; state: { title?: string } }
@@ -79,6 +79,7 @@ export type CoreView =
   | { id: 'managePasscodeEncryption' }
   | { id: 'passcodeAutoLock' }
   | { id: 'requestFastVaultBackup' }
+  | { id: 'vultDiscount' }
 
 export type CoreViewId = CoreView['id']
 

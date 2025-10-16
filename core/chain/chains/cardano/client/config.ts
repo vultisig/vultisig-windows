@@ -1,1 +1,3 @@
-export const cardanoApiUrl = 'https://api.vultisig.com/cardano'
+import { rootApiUrl } from '@core/config'
+
+export const cardanoApiUrl = `${rootApiUrl}/cardano`

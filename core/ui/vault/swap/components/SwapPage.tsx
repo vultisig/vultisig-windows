@@ -8,7 +8,6 @@ import { useTranslation } from 'react-i18next'
 import { useCore } from '../../../state/core'
 import { SwapForm } from '../form/SwapForm'
 import { FromAmountProvider } from '../state/fromAmount'
-import { ToCoinProvider } from '../state/toCoin'
 import { SwapVerify } from '../verify/SwapVerify'
 import { RefreshSwap } from './RefreshSwap'
 
@@ -36,19 +35,17 @@ export const SwapPage = () => {
 
   return (
     <FromAmountProvider initialValue={null}>
-      <ToCoinProvider>
-        <PageHeader
-          primaryControls={primaryControls}
-          secondaryControls={<RefreshSwap />}
-          title={title}
-          hasBorder
-        />
-        <Match
-          value={step}
-          form={() => <SwapForm onFinish={toNextStep} />}
-          verify={() => <SwapVerify />}
-        />
-      </ToCoinProvider>
+      <PageHeader
+        primaryControls={primaryControls}
+        secondaryControls={<RefreshSwap />}
+        title={title}
+        hasBorder
+      />
+      <Match
+        value={step}
+        form={() => <SwapForm onFinish={toNextStep} />}
+        verify={() => <SwapVerify />}
+      />
     </FromAmountProvider>
   )
 }

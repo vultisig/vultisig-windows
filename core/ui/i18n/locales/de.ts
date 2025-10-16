@@ -1103,8 +1103,6 @@ export const de = {
   description: 'Beschreibung',
   personal_sign: 'Persönliches Zeichen',
   request_from: 'Anfrage von',
-  rules: 'Regeln',
-  rule_item: 'Regel {{number}}',
   sign_request: 'Anfrage unterzeichnen',
   signed_signature: 'Unterschrift',
   signing_address: 'Unterschriftsadresse',
@@ -1170,4 +1168,19 @@ export const de = {
   this_vault_only: 'Nur dieser Tresor',
   all_vaults: 'Alle Tresore',
   more: 'mehr',
+  plugin_rules: 'Plugin-Regeln',
+  resource: 'Ressource',
+  target: 'Ziel',
+  discount_tiers: 'Rabattstufen',
+  discount_tiers_description:
+    'Halten Sie $VULT, um niedrigere Handelsgebühren freizuschalten.',
+  bronze: 'Bronze',
+  silver: 'Silber',
+  gold: 'Gold',
+  platinum: 'Platin',
+  discount: 'Rabatt',
+  unlock_tier: 'Stufe freischalten',
+  unlock_discount_tier: 'Schalte die Stufe <b>{{tier}}</b> frei',
+  unlock_discount_tier_description:
+    'Indem Sie {{minBalance}} halten, schalten Sie die Stufe {{tier}} frei und erhalten einen <b>Rabatt auf die Handelsgebühr von {{bps}} bps</b> auf alle Swaps.',
 }

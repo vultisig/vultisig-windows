@@ -44,6 +44,7 @@ import { ReferralsGuard } from '../vault/settings/referral/providers/ReferralsGu
 import { ReferralPage } from '../vault/settings/referral/ReferralsPage'
 import { FaqVaultPage } from '../vault/settings/vaultFaq/FaqVaultPage'
 import { ShareVaultPage } from '../vault/share/ShareVaultPage'
+import { VultDiscountPage } from '../vult/discount/page'
 
 export type SharedViewId = Extract<
   CoreViewId,
@@ -87,6 +88,7 @@ export type SharedViewId = Extract<
   | 'requestFastVaultBackup'
   | 'faq'
   | 'shareVault'
+  | 'vultDiscount'
 >
 
 export const sharedViews: Views<SharedViewId> = {
@@ -147,4 +149,5 @@ export const sharedViews: Views<SharedViewId> = {
   requestFastVaultBackup: RequestFastVaultBackup,
   faq: FaqVaultPage,
   shareVault: ShareVaultPage,
+  vultDiscount: VultDiscountPage,
 }

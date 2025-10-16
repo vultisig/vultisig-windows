@@ -1,19 +1,16 @@
 import { TransferDirectionProvider } from '@core/ui/state/transferDirection'
 
-import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
+import { useSwapFromCoin } from '../state/fromCoin'
 import { SwapCoinInput } from './SwapCoinInput'
 
 export const ManageFromCoin = () => {
-  const [{ coin: fromCoinKey }, setViewState] = useCoreViewState<'swap'>()
+  const [fromCoinKey, setFromCoinKey] = useSwapFromCoin()
   const fromCoin = useCurrentVaultCoin(fromCoinKey)
 
   return (
     <TransferDirectionProvider value="from">
-      <SwapCoinInput
-        value={fromCoin}
-        onChange={coin => setViewState(prev => ({ ...prev, coin }))}
-      />
+      <SwapCoinInput value={fromCoin} onChange={setFromCoinKey} />
     </TransferDirectionProvider>
   )
 }

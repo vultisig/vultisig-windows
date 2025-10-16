@@ -1,5 +1,4 @@
-import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
-import { useToCoin } from '@core/ui/vault/swap/state/toCoin'
+import { useSwapToCoin } from '@core/ui/vault/swap/state/toCoin'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
@@ -12,10 +11,11 @@ import { motion, useReducedMotion } from 'framer-motion'
 import styled from 'styled-components'
 
 import { useSwapQuoteQuery } from '../queries/useSwapQuoteQuery'
+import { useSwapFromCoin } from '../state/fromCoin'
 
 export const ReverseSwap = () => {
-  const [{ coin: fromCoin }, setViewState] = useCoreViewState<'swap'>()
-  const [toCoin, setToCoin] = useToCoin()
+  const [fromCoinKey, setFromCoinKey] = useSwapFromCoin()
+  const [toCoin, setToCoin] = useSwapToCoin()
   const { isPending } = useSwapQuoteQuery()
   const prefersReducedMotion = useReducedMotion()
 
@@ -23,11 +23,8 @@ export const ReverseSwap = () => {
     <Wrapper justifyContent="center" alignItems="center">
       <Button
         onClick={() => {
-          setViewState(prev => ({
-            ...prev,
-            coin: toCoin,
-          }))
-          setToCoin(fromCoin)
+          setFromCoinKey(toCoin)
+          setToCoin(fromCoinKey)
         }}
       >
         {isPending ? (

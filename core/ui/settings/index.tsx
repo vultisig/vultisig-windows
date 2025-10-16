@@ -1,4 +1,6 @@
 import { Chain } from '@core/chain/Chain'
+import { vult } from '@core/chain/coin/knownTokens'
+import { productWebsiteUrl } from '@core/config'
 import { ManageBlockaid } from '@core/ui/chain/security/blockaid/ManageBlockaid'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { languageName } from '@core/ui/i18n/Language'
@@ -13,9 +15,9 @@ import { Opener } from '@lib/ui/base/Opener'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { BookMarkedIcon } from '@lib/ui/icons/BookMarkedIcon'
 import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
+import { CoinsIcon } from '@lib/ui/icons/CoinsIcon'
 import { DiscordIcon } from '@lib/ui/icons/DiscordIcon'
 import { FileTextIcon } from '@lib/ui/icons/FileTextIcon'
-import { FinanceCoinsIcon } from '@lib/ui/icons/FinanceCoinsIcon'
 import { GithubIcon } from '@lib/ui/icons/GithubIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { LanguagesIcon } from '@lib/ui/icons/LanguagesIcon'
@@ -43,9 +45,7 @@ import {
   vultisigPrivacyPolicyUrl,
   vultisigTermsOfServiceUrl,
   vultisigTwitterUrl,
-  vultisigWebsite,
   vultisigWindowsGithubUrl,
-  vultUrl,
 } from './constants'
 import { ShareAppModal } from './share-app/ShareAppModal'
 
@@ -101,6 +101,16 @@ export const SettingsPage: FC<Props> = props => {
               }
               onClick={() => navigate({ id: 'vaultSettings' })}
               title={t('vault_settings')}
+              showArrow
+            />
+            <ListItem
+              icon={
+                <ListItemIconWrapper>
+                  <CoinsIcon />
+                </ListItemIconWrapper>
+              }
+              onClick={() => navigate({ id: 'vultDiscount' })}
+              title={`$${vult.ticker} ${t('discount_tiers')}`}
               showArrow
             />
             <PrimaryListItem
@@ -252,20 +262,10 @@ export const SettingsPage: FC<Props> = props => {
             <ListItem
               icon={
                 <ListItemIconWrapper>
-                  <FinanceCoinsIcon />
-                </ListItemIconWrapper>
-              }
-              onClick={() => openUrl(vultUrl)}
-              title={t('vult')}
-              showArrow
-            />
-            <ListItem
-              icon={
-                <ListItemIconWrapper>
                   <GithubIcon />
                 </ListItemIconWrapper>
               }
-              onClick={() => openUrl(vultisigWebsite)}
+              onClick={() => openUrl(productWebsiteUrl)}
               title={t('github')}
               showArrow
             />
