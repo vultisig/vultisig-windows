@@ -151,8 +151,8 @@ const StyledIconButton = styled(UnstyledButton)<{
             }
           `,
           action: () => css`
+            position: relative;
             border-radius: 1000px;
-            opacity: 0.67;
             background:
               linear-gradient(
                 0deg,
@@ -162,6 +162,32 @@ const StyledIconButton = styled(UnstyledButton)<{
               linear-gradient(0deg, #11284a 0%, #11284a 100%),
               rgba(204, 204, 204, 0.5);
             background-blend-mode: normal, normal, color-burn;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            color: ${getColor('contrast')};
+
+            box-shadow:
+              0 0 2px rgba(255, 255, 255, 0.6),
+              0 0 4px rgba(255, 255, 255, 0.4),
+              0 0 8px rgba(255, 255, 255, 0.25),
+              0 0 16px rgba(255, 255, 255, 0.15),
+              inset 0 1px 2px rgba(255, 255, 255, 0.2),
+              inset 0 -1px 2px rgba(0, 0, 0, 0.5);
+
+            & > * {
+              position: relative;
+              z-index: 1;
+            }
+
+            &:hover {
+              border-color: rgba(255, 255, 255, 0.45);
+              box-shadow:
+                0 0 2px rgba(255, 255, 255, 0.7),
+                0 0 5px rgba(255, 255, 255, 0.5),
+                0 0 10px rgba(255, 255, 255, 0.3),
+                0 0 20px rgba(255, 255, 255, 0.2),
+                inset 0 1px 2px rgba(255, 255, 255, 0.25),
+                inset 0 -1px 2px rgba(0, 0, 0, 0.5);
+            }
           `,
         })}
   `}
