@@ -2,7 +2,6 @@ import { Chain, CosmosChain, VaultBasedCosmosChain } from '@core/chain/Chain'
 import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
 import { getCosmosGasLimit } from '@core/chain/chains/cosmos/cosmosGasLimitRecord'
 import { getCosmosChainKind } from '@core/chain/chains/cosmos/utils/getCosmosChainKind'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { areEqualCoins } from '@core/chain/coin/Coin'
 import { nativeSwapChainIds } from '@core/chain/swap/native/NativeSwapChain'
 import {
@@ -192,10 +191,7 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
 
       const swapPayload = getSwapPayload()
 
-      if (
-        isDeposit ||
-        (swapPayload && areEqualCoins(coin, chainFeeCoin[swapPayload.chain]))
-      ) {
+      if (isDeposit || (swapPayload && coin.chain === chain)) {
         const amountStr = isDeposit
           ? (keysignPayload.toAmount ?? '0')
           : swapPayload!.fromAmount
