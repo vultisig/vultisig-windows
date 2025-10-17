@@ -533,6 +533,7 @@ export const en = {
   tx_hash: 'Transaction hash',
   asset: 'Asset',
   balance: 'Balance',
+  fill_the_form: 'Fill the form',
   sent: 'Sent',
   staked: 'Staked',
   failed_to_load: 'Failed to load',

@@ -483,6 +483,7 @@ export const it = {
   transaction_hash_copied: 'Hash della transazione copiato',
   asset: 'Asset',
   balance: 'Saldo',
+  fill_the_form: 'Compila il modulo',
   failed_to_load: 'Impossibile caricare',
   enter_address: 'Inserisci indirizzo',
   enter_amount: 'Inserisci importo',

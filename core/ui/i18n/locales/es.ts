@@ -481,6 +481,7 @@ export const es = {
   transaction_hash_copied: 'Hash de la transacción copiado',
   asset: 'Activo',
   balance: 'Saldo',
+  fill_the_form: 'Completa el formulario',
   failed_to_load: 'No se pudo cargar',
   enter_address: 'Ingrese dirección',
   enter_amount: 'Ingrese monto',

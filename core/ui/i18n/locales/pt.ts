@@ -467,6 +467,7 @@ export const pt = {
   transaction_hash_copied: 'Hash da transação copiado',
   asset: 'Ativo',
   balance: 'Saldo',
+  fill_the_form: 'Preencha o formulário',
   overview: 'Visão geral',
   signing_transaction: 'Assinatura da transação',
   failed_to_load: 'Falha ao carregar',

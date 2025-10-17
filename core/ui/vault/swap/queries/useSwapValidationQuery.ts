@@ -25,7 +25,11 @@ export const useSwapValidationQuery = () => {
     },
     useCallback(
       ({ balance }) => {
-        if (!amount) {
+        if (amount === null || amount === undefined) {
+          return t('amount_required')
+        }
+
+        if (amount <= 0) {
           return t('amount_required')
         }
 

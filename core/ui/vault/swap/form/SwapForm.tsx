@@ -28,7 +28,9 @@ export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
       return extractErrorMsg(error)
     }
 
-    return data ?? undefined
+    if (!data) {
+      return t('fill_the_form')
+    }
   }, [data, error, isPending, t])
 
   return (
