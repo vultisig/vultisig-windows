@@ -20,6 +20,7 @@ export const it = {
   secure_crypto_vault: 'Cassaforte sicura per criptovalute',
   vultisig: 'Vultisig',
   by_vultisig: 'da Vultisig',
+  failed_to_read_qr_code: 'Impossibile leggere il codice QR',
   circle: {
     introduction:
       "Deposita i tuoi $USDC in un conto Circle e guadagna rendimento. In sicurezza all'interno del tuo caveau Vultisig.",
