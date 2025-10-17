@@ -476,6 +476,7 @@ export const de = {
   transaction_hash_copied: 'Transaktionshash kopiert',
   asset: 'Asset',
   balance: 'Kontostand',
+  fill_the_form: 'Formular ausfüllen',
   failed_to_load: 'Laden fehlgeschlagen',
   enter_address: 'Adresse eingeben',
   enter_amount: 'Betrag eingeben',
