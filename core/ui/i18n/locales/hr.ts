@@ -457,6 +457,7 @@ export const hr = {
   transaction_hash_copied: 'Hash transakcije kopiran',
   asset: 'Sredstvo',
   balance: 'Stanje',
+  fill_the_form: 'Ispunite obrazac',
   failed_to_load: 'Učitavanje nije uspjelo',
   enter_address: 'Unesite adresu',
   enter_amount: 'Unesite iznos',
