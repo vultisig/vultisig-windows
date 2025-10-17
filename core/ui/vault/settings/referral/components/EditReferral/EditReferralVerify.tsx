@@ -1,6 +1,4 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { formatFee } from '@core/chain/tx/fee/format/formatFee'
-import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
@@ -9,27 +7,28 @@ import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { TxOverviewRow } from '@core/ui/chain/tx/TxOverviewRow'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnBackProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useChainSpecificQuery } from '../../../../../chain/coin/queries/useChainSpecificQuery'
+import { FeeAmount } from '../../../../../chain/feeQuote/amount'
 import { StartKeysignPrompt } from '../../../../../mpc/keysign/prompt/StartKeysignPrompt'
 import { useCurrentVaultCoin } from '../../../../state/currentVaultCoins'
-import { useReferralKeysignPayload } from '../../hooks/useReferralKeysignPayload'
 import { useReferralSender } from '../../hooks/useReferralSender'
 import { useEditReferralFormData } from '../../providers/EditReferralFormProvider'
 import { useReferralPayoutAsset } from '../../providers/ReferralPayoutAssetProvider'
 import { useActivePoolsQuery } from '../../queries/useActivePoolsQuery'
+import { useReferralFeeQuoteQuery } from '../../queries/useReferralFeeQuoteQuery'
+import { useReferralKeysignPayloadQuery } from '../../queries/useReferralKeysignPayloadQuery'
 import { useUserValidThorchainNameQuery } from '../../queries/useUserValidThorchainNameQuery'
 import {
   buildRenewalMemo,
@@ -83,25 +82,30 @@ export const EditReferralVerify = ({ onBack }: OnBackProp) => {
 
   const { chain, ticker } = thorchainCoin
 
-  const { keysignPayload } = useReferralKeysignPayload({
-    coin: thorchainCoin,
+  const feeQuoteQuery = useReferralFeeQuoteQuery()
+
+  const { isPending, error, data } = useReferralKeysignPayloadQuery({
     memo,
     amount: referralAmount,
   })
 
-  const chainSpecific = useChainSpecificQuery({
-    coin: thorchainCoin,
-    isDeposit: true,
-  })
+  const startKeysignPromptProps = useMemo(() => {
+    if (isPending) {
+      return {
+        disabledMessage: t('loading'),
+      }
+    }
 
-  if (!keysignPayload || !chainSpecific.data) {
-    return (
-      <CenterAbsolutely>
-        <Spinner size="3em" />
-      </CenterAbsolutely>
-    )
-  }
+    if (error) {
+      return {
+        disabledMessage: extractErrorMsg(error),
+      }
+    }
 
+    return {
+      keysignPayload: { keysign: data },
+    }
+  }, [data, error, isPending, t])
   return (
     <>
       <PageHeader
@@ -144,9 +148,7 @@ export const EditReferralVerify = ({ onBack }: OnBackProp) => {
             <Text color="shy" size={14}>
               {t('est_network_fee')}
             </Text>
-            <Text size={14}>
-              {formatFee({ chain, amount: getFeeAmount(chainSpecific.data) })}
-            </Text>
+            <FeeAmount feeQuoteQuery={feeQuoteQuery} chain={chain} />
           </TxOverviewRow>
           <TxOverviewMemo value={memo} chain={chain} />
         </TxOverviewPanel>
@@ -156,7 +158,7 @@ export const EditReferralVerify = ({ onBack }: OnBackProp) => {
           }}
           gap={20}
         >
-          <StartKeysignPrompt keysignPayload={{ keysign: keysignPayload }} />
+          <StartKeysignPrompt {...startKeysignPromptProps} />
         </VStack>
       </ReferralPageWrapper>
     </>
