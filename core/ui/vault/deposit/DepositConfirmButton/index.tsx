@@ -1,41 +1,31 @@
-import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StartKeysignPrompt } from '../../../mpc/keysign/prompt/StartKeysignPrompt'
-import { ChainAction } from '../ChainAction'
-import { useDepositKeysignPayload } from './hooks/useDepositKeysignPayload'
+import { useDepositKeysignPayloadQuery } from './hooks/useDepositKeysignPayloadQuery'
 
-type DepositConfirmButtonProps = {
-  depositFormData: Record<string, unknown>
-  action: ChainAction
-}
-
-export const DepositConfirmButton = ({
-  depositFormData,
-  action,
-}: DepositConfirmButtonProps) => {
+export const DepositConfirmButton = () => {
   const { t } = useTranslation()
-  const { invalid, invalidMessage, keysignPayloadQuery } =
-    useDepositKeysignPayload({ depositFormData, action })
+  const { data, error, isPending } = useDepositKeysignPayloadQuery()
 
-  if (invalid) {
-    return <Text color="danger">{invalidMessage}</Text>
-  }
+  const startKeysignPromptProps = useMemo(() => {
+    if (isPending) {
+      return {
+        disabledMessage: t('loading'),
+      }
+    }
 
-  return (
-    <MatchQuery
-      value={keysignPayloadQuery}
-      pending={() => <Text>{t('loading')}</Text>}
-      error={error => (
-        <Text>
-          {t('failed_to_load')}: {extractErrorMsg(error)}
-        </Text>
-      )}
-      success={keysignPayload => (
-        <StartKeysignPrompt keysignPayload={keysignPayload} />
-      )}
-    />
-  )
+    if (error) {
+      return {
+        disabledMessage: extractErrorMsg(error),
+      }
+    }
+
+    return {
+      keysignPayload: { keysign: data },
+    }
+  }, [data, error, isPending, t])
+
+  return <StartKeysignPrompt {...startKeysignPromptProps} />
 }
