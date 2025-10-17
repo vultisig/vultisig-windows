@@ -539,6 +539,7 @@ export const en = {
   failed_to_load: 'Failed to load',
   enter_address: 'Enter Address',
   enter_amount: 'Enter Amount',
+  failed_to_read_qr_code: 'Failed to read QR code',
   send_pending_validation: 'Validating your transaction...',
   send_validation_failed: 'Failed to validate transaction',
   send_invalid_receiver_address: 'Enter a valid receiver address',

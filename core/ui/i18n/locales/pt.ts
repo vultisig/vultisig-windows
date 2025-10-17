@@ -17,6 +17,7 @@ export const pt = {
   secure_crypto_vault: 'Cofre seguro de cripto',
   vultisig: 'Vultisig',
   by_vultisig: 'por Vultisig',
+  failed_to_read_qr_code: 'Impossível ler o código QR',
   vault_info: 'Informações do cofre',
   vault_details_description: 'Visualizar o nome, a parte e o tipo do cofre',
   circle: {

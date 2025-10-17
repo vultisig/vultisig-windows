@@ -19,6 +19,7 @@ export const hr = {
   secure_crypto_vault: 'Sigurni kripto trezor',
   save_10_percent_on_swaps: 'Mentsd el <blue>10%</blue> a swap-okkal most',
   vault_info: 'Tárhelyinformáció',
+  failed_to_read_qr_code: 'Nem sikerült olvasni a QR kódot',
   vultisig: 'Vultisig',
   vault_details_description: 'Prikazati naziv, dio i vrstu trezora',
   vault_details_edit_vault_description: 'Urediti naziv svog trezora',
