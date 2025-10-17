@@ -12,7 +12,6 @@ export type KeysignTxDataResolverInput<
   C extends Chain = ChainOfKind<K>,
 > = {
   coin: AccountCoin<C>
-  receiver: string
   amount?: bigint
 } & (K extends 'utxo'
   ? { psbt?: Psbt }
@@ -22,7 +21,11 @@ export type KeysignTxDataResolverInput<
         transactionType?: TransactionType
         isDeposit?: boolean
       }
-    : {})
+    : K extends 'solana'
+      ? {
+          receiver: string
+        }
+      : {})
 
 export type KeysignTxDataResolver<K extends ChainKind = ChainKind> = Resolver<
   KeysignTxDataResolverInput<K>,
