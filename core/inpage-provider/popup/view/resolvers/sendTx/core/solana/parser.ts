@@ -1,18 +1,30 @@
+import { create } from '@bufbuild/protobuf'
 import { Chain } from '@core/chain/Chain'
 import { solanaRpcUrl } from '@core/chain/chains/solana/client'
 import { Coin, CoinKey } from '@core/chain/coin/Coin'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { getTxBlockaidSimulation } from '@core/chain/security/blockaid/tx/simulation'
+import { parseBlockaidSimulation } from '@core/chain/security/blockaid/tx/simulation/api/core'
+import { getBlockaidTxSimulationInput } from '@core/chain/security/blockaid/tx/simulation/input'
+import { getSolanaSpecific } from '@core/mpc/keysign/chainSpecific/resolvers/solana'
+import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
+import {
+  OneInchQuoteSchema,
+  OneInchSwapPayloadSchema,
+  OneInchTransactionSchema,
+} from '@core/mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
+import { Coin as CommCoin } from '@core/mpc/types/vultisig/keysign/v1/coin_pb'
+import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { attempt } from '@lib/utils/attempt'
 import { NATIVE_MINT } from '@solana/spl-token'
-import { Connection, PublicKey, VersionedTransaction } from '@solana/web3.js'
+import { Connection, PublicKey } from '@solana/web3.js'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 
 import { parseProgramCall } from './parseProgramCall'
-import { simulateSolanaTransaction } from './simulate'
 import { AddressTableLookup, SolanaTxData } from './types/types'
 import { mergedKeys, resolveAddressTableKeys } from './utils'
 
 type ParseSolanaTxInput = {
+  fromCoin: CommCoin
   walletCore: WalletCore
   data: string
   getCoin: (coinKey: CoinKey) => Promise<Coin>
@@ -20,6 +32,7 @@ type ParseSolanaTxInput = {
 }
 
 export const parseSolanaTx = async ({
+  fromCoin,
   walletCore,
   data,
   getCoin,
@@ -66,32 +79,65 @@ export const parseSolanaTx = async ({
   if (!error && parsedTx) {
     return parsedTx
   }
-  const { data: sim, error: simError } = await attempt(
-    simulateSolanaTransaction({
-      conn: connection,
-      tx: VersionedTransaction.deserialize(buffer),
-      keysIn: keys,
-    })
-  )
-  if (simError || !sim) {
+
+  const chainSpecific = await getSolanaSpecific({
+    coin: fromCommCoin(fromCoin),
+  })
+  const keysignPayload = create(KeysignPayloadSchema, {
+    coin: fromCoin,
+    blockchainSpecific: { case: 'solanaSpecific', value: chainSpecific },
+    swapPayload: {
+      case: 'oneinchSwapPayload',
+      value: create(OneInchSwapPayloadSchema, {
+        fromCoin,
+        toCoin: fromCoin,
+        fromAmount: '0',
+        toAmountDecimal: '0',
+        quote: create(OneInchQuoteSchema, {
+          dstAmount: '0',
+          tx: create(OneInchTransactionSchema, {
+            data: Buffer.from(buffer).toString('base64'),
+            value: '0',
+            gasPrice: '0',
+            gas: BigInt(0),
+          }),
+        }),
+        provider: '1inch',
+      }),
+    },
+  })
+
+  const blockaidTxSimulationInput = getBlockaidTxSimulationInput({
+    payload: keysignPayload,
+    walletCore,
+  })
+  if (!blockaidTxSimulationInput) {
+    throw new Error('Error getting blockaid tx simulation input')
+  }
+  const sim = await getTxBlockaidSimulation({
+    chain: Chain.Solana,
+    data: blockaidTxSimulationInput.data,
+  })
+  if (!sim) {
     throw new Error('Error simulating transaction')
   }
-  const { inputs, outputs, authority } = sim
-  const primaryIn = shouldBePresent(inputs[0])
-  const primaryOut = shouldBePresent(outputs[0])
-  const [inputCoin, outputCoin] = await Promise.all(
-    [primaryIn, primaryOut].map(({ mint }) => {
-      const id = mint === NATIVE_MINT.toBase58() ? undefined : mint
 
+  const { fromMint, toMint, fromAmount, toAmount } =
+    await parseBlockaidSimulation(sim)
+
+  const [inputCoin, outputCoin] = await Promise.all(
+    [fromMint, toMint].map(mint => {
+      const id = mint === NATIVE_MINT.toBase58() ? undefined : mint
       return getCoin({ chain: Chain.Solana, id })
     })
   )
+
   return {
     swap: {
-      authority,
-      inAmount: primaryIn.amount.toString(),
+      authority: fromCoin.address,
+      inAmount: fromAmount.toString(),
       inputCoin,
-      outAmount: primaryOut.amount.toString(),
+      outAmount: toAmount.toString(),
       outputCoin,
       data,
       swapProvider,
