@@ -34,7 +34,7 @@ export const parseBlockaidSimulation = async (
   simulation: BlockaidSimulation
 ): Promise<BlockaidSolanaSwapSimulationInfo> => {
   const assetDiffs = simulation.account_summary.account_assets_diff
-  if (assetDiffs.length === 2) {
+  if (assetDiffs.length > 1) {
     const [potentialOutAsset, potentialInAsset] = assetDiffs
     const { inAsset, inValue } = potentialInAsset.in
       ? {
