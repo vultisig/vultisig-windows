@@ -118,9 +118,6 @@ export const parseSolanaTx = async ({
     chain: Chain.Solana,
     data: blockaidTxSimulationInput.data,
   })
-  if (!sim) {
-    throw new Error('Error simulating transaction')
-  }
 
   const { fromMint, toMint, fromAmount, toAmount } =
     await parseBlockaidSimulation(sim)

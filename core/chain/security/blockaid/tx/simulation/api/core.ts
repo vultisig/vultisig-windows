@@ -58,11 +58,11 @@ export const parseBlockaidSimulation = async (
 
     return {
       fromMint:
-        outAsset.type == 'SOL'
+        outAsset.type === 'SOL'
           ? 'So11111111111111111111111111111111111111112'
           : shouldBePresent(outAsset.address),
       toMint:
-        inAsset.type == 'SOL'
+        inAsset.type === 'SOL'
           ? 'So11111111111111111111111111111111111111112'
           : shouldBePresent(inAsset.address),
       fromAmount: shouldBePresent(outValue).raw_value,
