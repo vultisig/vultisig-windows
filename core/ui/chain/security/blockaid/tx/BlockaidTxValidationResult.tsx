@@ -1,4 +1,4 @@
-import { BlockaidTxScanResult as BlockaidTxScanResultType } from '@core/chain/security/blockaid/tx/core'
+import { BlockaidValidationResult as BlockaidValidationResultType } from '@core/chain/security/blockaid/tx/validation/core'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { ValueProp } from '@lib/ui/props'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
@@ -13,9 +13,9 @@ import { BlockaidScanStatusContainer } from '../scan/BlockaidScanStatusContainer
 import { getBlockaidScanEntityName } from '../utils/entity'
 import { getRiskyTxColor } from './utils/color'
 
-export const BlockaidTxScanResult = ({
+export const BlockaidTxValidationResult = ({
   value,
-}: ValueProp<BlockaidTxScanResultType>) => {
+}: ValueProp<BlockaidValidationResultType>) => {
   const { colors } = useTheme()
 
   const { t } = useTranslation()

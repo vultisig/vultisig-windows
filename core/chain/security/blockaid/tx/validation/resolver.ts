@@ -1,6 +1,6 @@
 import { Resolver } from '@lib/utils/types/Resolver'
 
-import { BlockaidSupportedChain } from '../chains'
+import { BlockaidSupportedChain } from '../../chains'
 import { BlockaidValidation } from './api/core'
 
 export type BlockaidTxValidationInput<

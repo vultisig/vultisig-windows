@@ -1,4 +1,4 @@
-import { queryBlockaid } from '../../core/query'
+import { queryBlockaid } from '../../../core/query'
 import { BlockaidValidation } from '../api/core'
 import { BlockaidTxValidationResolver } from '../resolver'
 
