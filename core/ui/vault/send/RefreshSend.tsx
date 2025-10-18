@@ -1,6 +1,5 @@
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { getBalanceQueryKey } from '@core/ui/chain/coin/queries/useBalancesQuery'
-import { chainSpecificQueryKeyPrefix } from '@core/ui/chain/coin/queries/useChainSpecificQuery'
 import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { RefreshCwIcon } from '@lib/ui/icons/RefreshCwIcon'
@@ -18,7 +17,6 @@ export const RefreshSend = () => {
       onClick={() => {
         refresh([
           getBalanceQueryKey(extractAccountCoinKey(coin)),
-          [chainSpecificQueryKeyPrefix],
           [feeQuoteQueryKeyPrefix],
         ])
       }}
