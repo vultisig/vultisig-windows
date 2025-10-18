@@ -18,7 +18,11 @@ export const NewVaultPage = () => {
   return (
     <VStack fullHeight>
       {vaults.length > 0 && (
-        <PageHeader primaryControls={<PageHeaderBackButton />} />
+        <PageHeader
+          primaryControls={
+            <PageHeaderBackButton onClick={() => navigate({ id: 'vaults' })} />
+          }
+        />
       )}
       <PageContent alignItems="center" justifyContent="center" scrollable>
         <ProductLogoBlock />

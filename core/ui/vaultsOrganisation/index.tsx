@@ -23,6 +23,8 @@ import { OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
+import { useCore } from '../state/core'
+
 export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
   const { t } = useTranslation()
   const { mutate } = useSetCurrentVaultIdMutation()
@@ -30,13 +32,15 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
   const folders = useVaultFolders()
   const vaults = useFolderlessVaults()
   const currentVaultId = useCurrentVaultId()
-
+  const { goHome } = useCore()
   const goBack = useNavigateBack()
 
   return (
     <VStack fullHeight>
       <PageHeader
-        primaryControls={!onFinish && <PageHeaderBackButton />}
+        primaryControls={
+          !onFinish && <PageHeaderBackButton onClick={() => goHome()} />
+        }
         secondaryControls={
           <IconButton onClick={() => navigate({ id: 'manageVaults' })}>
             <SquarePenIcon />
