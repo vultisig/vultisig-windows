@@ -1,8 +1,6 @@
-import { pick } from '@lib/utils/record/pick'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 import { PopupOptions } from '../../resolver'
-import { UAParser } from 'ua-parser-js'
 
 type ExecuteInput = {
   abortSignal: AbortSignal
