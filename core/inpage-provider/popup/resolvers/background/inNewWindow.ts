@@ -18,13 +18,6 @@ export const inNewWindow = async <T>({
 }: Input<T>): Promise<T> => {
   const currentWindow = await chrome.windows.getCurrent()
 
-  const platform =
-    'userAgentData' in navigator
-      ? (navigator.userAgentData as any).platform
-      : navigator.platform
-
-  const isMacOs = platform.toLowerCase().includes('mac')
-
   const newWindow = await new Promise<chrome.windows.Window | undefined>(
     resolve =>
       chrome.windows.create(
@@ -32,11 +25,9 @@ export const inNewWindow = async <T>({
           url,
           type: 'panel',
           top: currentWindow.top,
-          height: isMacOs ? currentWindow.height : 600,
-          width: isMacOs ? currentWindow.width : 480,
-          left: isMacOs
-            ? currentWindow.left
-            : shouldBePresent(currentWindow.width) - 500,
+          height: 600,
+          width: 480,
+          left: currentWindow.width ? currentWindow.width - 500 : undefined,
         },
         resolve
       )
