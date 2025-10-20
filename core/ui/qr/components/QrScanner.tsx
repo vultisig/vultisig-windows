@@ -17,7 +17,11 @@ import { useTranslation } from 'react-i18next'
 
 import { FlowErrorPageContent } from '../../flow/FlowErrorPageContent'
 
-export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
+type QrScannerProps = OnFinishProp<string> & {
+  onError?: (error: Error) => void
+}
+
+export const QrScanner = ({ onFinish, onError }: QrScannerProps) => {
   const { t } = useTranslation()
   const [video, setVideo] = useState<HTMLVideoElement | null>(null)
 
@@ -105,7 +109,7 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
       canvas.width = video.videoWidth
       canvas.height = video.videoHeight
 
-      const { data } = await attempt(
+      const { data, error } = await attempt(
         readQrCode({
           canvasContext: context,
           image: video,
@@ -114,6 +118,8 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
 
       if (data) {
         onFinish(data)
+      } else if (error && onError) {
+        onError(error instanceof Error ? error : new Error(String(error)))
       } else if (!stopped) {
         animationFrameId = requestAnimationFrame(() => {
           scan()
@@ -127,7 +133,7 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
       stopped = true
       cancelAnimationFrame(animationFrameId)
     }
-  }, [onFinish, stream, video])
+  }, [onFinish, onError, stream, video])
 
   return (
     <MatchQuery

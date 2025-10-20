@@ -41,7 +41,7 @@ export const UploadQrPage = () => {
         if (coin) {
           navigate({ id: 'send', state: { coin, address: value } })
         } else {
-          addToast({ message: t('coin_not_found_in_current_vault') })
+          addToast({ message: t('failed_to_read_qr_code') })
         }
       } else {
         navigate({ id: 'deeplink', state: { url: value } })

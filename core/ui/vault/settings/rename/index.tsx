@@ -1,5 +1,6 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCore } from '@core/ui/state/core'
+import { useVaults } from '@core/ui/storage/vaults'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
@@ -25,12 +26,26 @@ import { useTranslation } from 'react-i18next'
 import { useTheme } from 'styled-components'
 import { z } from 'zod'
 
-const createSchema = (t: TFunction) => {
+type CreateSchemaInput = {
+  t: TFunction
+  existingNames: string[]
+  currentName: string
+}
+
+const createSchema = ({ t, existingNames, currentName }: CreateSchemaInput) => {
   return z.object({
     name: z
       .string()
       .min(2, t('vault_rename_page_name_error'))
-      .max(50, t('vault_rename_page_name_error')),
+      .max(50, t('vault_rename_page_name_error'))
+      .refine(
+        name =>
+          name === currentName ||
+          !existingNames.some(
+            existingName => existingName.toLowerCase() === name.toLowerCase()
+          ),
+        { message: t('vault_name_already_exists') }
+      ),
   })
 }
 
@@ -41,8 +56,15 @@ export const VaultRenamePage = () => {
   const { goBack } = useCore()
   const { colors } = useTheme()
   const currentVault = useCurrentVault()
+  const vaults = useVaults()
   const updateVaultMutation = useUpdateVaultMutation()
-  const schema = useMemo(() => createSchema(t), [t])
+
+  const existingNames = useMemo(() => vaults.map(vault => vault.name), [vaults])
+
+  const schema = useMemo(
+    () => createSchema({ t, existingNames, currentName: currentVault.name }),
+    [t, existingNames, currentVault.name]
+  )
   const {
     register,
     handleSubmit,
