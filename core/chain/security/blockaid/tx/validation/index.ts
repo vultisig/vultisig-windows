@@ -1,6 +1,6 @@
 import { DeriveChainKind, getChainKind } from '@core/chain/ChainKind'
 
-import { BlockaidSupportedChain } from '../../chains'
+import { BlockaidValidationSupportedChain } from '../../validationChains'
 import { BlockaidValidation } from './api/core'
 import {
   BlockaidTxValidationInput,
@@ -12,7 +12,7 @@ import { getSuiTxBlockaidValidation } from './resolvers/sui'
 import { getUtxoTxBlockaidValidation } from './resolvers/utxo'
 
 const resolvers: Record<
-  DeriveChainKind<BlockaidSupportedChain>,
+  DeriveChainKind<BlockaidValidationSupportedChain>,
   BlockaidTxValidationResolver<any>
 > = {
   evm: getEvmTxBlockaidValidation,

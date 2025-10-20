@@ -2,11 +2,11 @@ import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_mess
 import { Resolver } from '@lib/utils/types/Resolver'
 import { WalletCore } from '@trustwallet/wallet-core'
 
-import { BlockaidSupportedChain } from '../../../chains'
+import { BlockaidSimulationSupportedChain } from '../../../simulationChains'
 import { BlockaidTxSimulationInput } from '../resolver'
 
 export type BlockaidTxSimulationInputResolverInput<
-  T extends BlockaidSupportedChain = BlockaidSupportedChain,
+  T extends BlockaidSimulationSupportedChain = BlockaidSimulationSupportedChain,
 > = {
   payload: KeysignPayload
   walletCore: WalletCore
@@ -14,7 +14,7 @@ export type BlockaidTxSimulationInputResolverInput<
 }
 
 export type BlockaidTxSimulationInputResolver<
-  T extends BlockaidSupportedChain = BlockaidSupportedChain,
+  T extends BlockaidSimulationSupportedChain = BlockaidSimulationSupportedChain,
 > = Resolver<
   {
     payload: KeysignPayload

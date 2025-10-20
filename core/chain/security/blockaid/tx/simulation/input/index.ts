@@ -1,8 +1,8 @@
 import { getChainKind } from '@core/chain/ChainKind'
 import {
-  BlockaidSupportedChainKind,
-  blockaidSupportedChains,
-} from '@core/chain/security/blockaid/chains'
+  BlockaidSimulationSupportedChainKind,
+  blockaidSimulationSupportedChains,
+} from '@core/chain/security/blockaid/simulationChains'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 
@@ -14,26 +14,17 @@ import {
 import { getSolanaBlockaidTxSimulationInput } from './resolvers/solana'
 
 const resolvers: Record<
-  BlockaidSupportedChainKind,
+  BlockaidSimulationSupportedChainKind,
   BlockaidTxSimulationInputResolver<any>
 > = {
   solana: getSolanaBlockaidTxSimulationInput,
-  evm: () => {
-    throw new Error('EVM simulation not supported')
-  },
-  utxo: () => {
-    throw new Error('Utxo simulation not supported')
-  },
-  sui: () => {
-    throw new Error('Sui simulation not supported')
-  },
 }
 
 export const getBlockaidTxSimulationInput = (
   input: Omit<BlockaidTxSimulationInputResolverInput, 'chain'>
 ): BlockaidTxSimulationInput | null => {
   const chain = getKeysignChain(input.payload)
-  if (!isOneOf(chain, blockaidSupportedChains)) {
+  if (!isOneOf(chain, blockaidSimulationSupportedChains)) {
     return null
   }
 
