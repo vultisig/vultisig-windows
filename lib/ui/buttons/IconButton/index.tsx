@@ -155,12 +155,12 @@ const StyledIconButton = styled(UnstyledButton)<{
             border-radius: 1000px;
             background:
               linear-gradient(
-                0deg,
-                rgba(255, 255, 255, 0.06) 0%,
+                90deg,
+                rgba(255, 255, 255, 0.02) 0%,
                 rgba(255, 255, 255, 0.06) 100%
               ),
-              linear-gradient(0deg, #11284a 0%, #11284a 100%),
-              rgba(204, 204, 204, 0.5);
+              linear-gradient(0deg, #0d1f35 0%, #0d1f35 100%),
+              rgba(204, 204, 204, 0.3);
             background-blend-mode: normal, normal, color-burn;
             border: none;
             color: ${getColor('contrast')};
