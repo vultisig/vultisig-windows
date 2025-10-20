@@ -17,6 +17,7 @@ export const pt = {
   secure_crypto_vault: 'Cofre seguro de cripto',
   vultisig: 'Vultisig',
   by_vultisig: 'por Vultisig',
+  failed_to_read_qr_code: 'Impossível ler o código QR',
   vault_info: 'Informações do cofre',
   vault_details_description: 'Visualizar o nome, a parte e o tipo do cofre',
   circle: {
@@ -466,6 +467,7 @@ export const pt = {
   transaction_hash_copied: 'Hash da transação copiado',
   asset: 'Ativo',
   balance: 'Saldo',
+  fill_the_form: 'Preencha o formulário',
   overview: 'Visão geral',
   signing_transaction: 'Assinatura da transação',
   failed_to_load: 'Falha ao carregar',

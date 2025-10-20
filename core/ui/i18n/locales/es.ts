@@ -19,6 +19,7 @@ export const es = {
     'Estas partes colaboran para <g>desbloquear su depósito</g>',
   secure_crypto_vault: 'Bóveda segura de criptomonedas',
   vultisig: 'Vultisig',
+  failed_to_read_qr_code: 'No se pudo leer el código QR',
   circle: {
     introduction:
       'Deposita tus $USDC en una cuenta Circle y gana rendimiento. De forma segura dentro de tu bóveda Vultisig.',
@@ -480,6 +481,7 @@ export const es = {
   transaction_hash_copied: 'Hash de la transacción copiado',
   asset: 'Activo',
   balance: 'Saldo',
+  fill_the_form: 'Completa el formulario',
   failed_to_load: 'No se pudo cargar',
   enter_address: 'Ingrese dirección',
   enter_amount: 'Ingrese monto',
