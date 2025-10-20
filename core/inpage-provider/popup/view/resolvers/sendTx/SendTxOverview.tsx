@@ -5,6 +5,7 @@ import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { applyFeeSettings } from '@core/chain/feeQuote/applyFeeSettings'
 import { FeeQuote } from '@core/chain/feeQuote/core'
 import {
+  FeeSettings,
   FeeSettingsChainKind,
   feeSettingsChainKinds,
 } from '@core/chain/feeQuote/settings/core'
@@ -64,7 +65,7 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
 
   const { chain, address } = coin
 
-  const [evmFeeSettings, setEvmFeeSettings] = useState<EvmFeeSettings | null>(
+  const [feeSettings, setFeeSettings] = useState<FeeSettings<'evm'> | null>(
     null
   )
 
@@ -88,11 +89,11 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
         return getKeysignPayload({
           keysignTxData,
           feeQuote:
-            isOneOf(chainKind, feeSettingsChainKinds) && evmFeeSettings
+            isOneOf(chainKind, feeSettingsChainKinds) && feeSettings
               ? applyFeeSettings({
                   chainKind,
                   quote: feeQuote as FeeQuote<FeeSettingsChainKind>,
-                  settings: evmFeeSettings,
+                  settings: feeSettings,
                 })
               : feeQuote,
           tx: parsedTx,
@@ -100,7 +101,7 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
           walletCore,
         })
       },
-      [chain, evmFeeSettings, parsedTx, vault, walletCore]
+      [chain, feeSettings, parsedTx, vault, walletCore]
     )
   )
 
@@ -204,8 +205,8 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                           return null
                         }
 
-                        if (evmFeeSettings) {
-                          return evmFeeSettings
+                        if (feeSettings) {
+                          return feeSettings
                         }
 
                         return shouldBePresent(feeQuote.data) as FeeQuote<'evm'>
@@ -228,7 +229,7 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                                 <ManageEvmFee
                                   value={evmFeeSettings}
                                   chain={chain}
-                                  onChange={setEvmFeeSettings}
+                                  onChange={setFeeSettings}
                                 />
                               ) : null
                             }
