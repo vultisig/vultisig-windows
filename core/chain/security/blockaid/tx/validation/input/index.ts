@@ -1,8 +1,8 @@
 import { getChainKind } from '@core/chain/ChainKind'
 import {
-  BlockaidSupportedChainKind,
-  blockaidSupportedChains,
-} from '@core/chain/security/blockaid/chains'
+  BlockaidValidationSupportedChainKind,
+  blockaidValidationSupportedChains,
+} from '@core/chain/security/blockaid/validationChains'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 
@@ -17,7 +17,7 @@ import { getSuiBlockaidTxValidationInput } from './resolvers/sui'
 import { getUtxoBlockaidTxValidationInput } from './resolvers/utxo'
 
 const resolvers: Record<
-  BlockaidSupportedChainKind,
+  BlockaidValidationSupportedChainKind,
   BlockaidTxValidationInputResolver<any>
 > = {
   evm: getEvmBlockaidTxValidationInput,
@@ -30,7 +30,7 @@ export const getBlockaidTxValidationInput = (
   input: Omit<BlockaidTxValidationInputResolverInput, 'chain'>
 ): BlockaidTxValidationInput | null => {
   const chain = getKeysignChain(input.payload)
-  if (!isOneOf(chain, blockaidSupportedChains)) {
+  if (!isOneOf(chain, blockaidValidationSupportedChains)) {
     return null
   }
 

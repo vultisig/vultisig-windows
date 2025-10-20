@@ -1,8 +1,8 @@
 import { assertField } from '@lib/utils/record/assertField'
 
-import { OtherChain } from '../../../../../Chain'
-import { decodeSigningOutput } from '../../../../../tw/signingOutput'
-import { getCompiledTxsForBlockaidInput } from '../../utils/getCompiledTxsForBlockaidInput'
+import { OtherChain } from '../../../../../../Chain'
+import { decodeSigningOutput } from '../../../../../../tw/signingOutput'
+import { getCompiledTxsForBlockaidInput } from '../../../utils/getCompiledTxsForBlockaidInput'
 import { BlockaidTxValidationInputResolver } from '../resolver'
 
 export const getSuiBlockaidTxValidationInput: BlockaidTxValidationInputResolver<

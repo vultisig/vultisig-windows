@@ -1,6 +1,6 @@
-import { getBlockaidTxValidationInput } from '@core/chain/security/blockaid/tx/input'
+import { getBlockaidTxValidationInput } from '@core/chain/security/blockaid/tx/validation/input'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { getBlockaidTxScanQuery } from '@core/ui/chain/security/blockaid/tx/queries/blockaidTxScan'
+import { getBlockaidTxValidationQuery } from '@core/ui/chain/security/blockaid/tx/queries/blockaidTxValidation'
 import { StartKeysignPrompt } from '@core/ui/mpc/keysign/prompt/StartKeysignPrompt'
 import { StartKeysignPromptProps } from '@core/ui/mpc/keysign/prompt/StartKeysignPromptProps'
 import { useIsBlockaidEnabled } from '@core/ui/storage/blockaid'
@@ -22,7 +22,7 @@ import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider
 import { BlockaidNoScanStatus } from '../../../chain/security/blockaid/scan/BlockaidNoScanStatus'
 import { BlockaidScanning } from '../../../chain/security/blockaid/scan/BlockaidScanning'
 import { BlockaidScanStatusContainer } from '../../../chain/security/blockaid/scan/BlockaidScanStatusContainer'
-import { BlockaidTxScanResult } from '../../../chain/security/blockaid/tx/BlockaidTxScanResult'
+import { BlockaidTxValidationResult } from '../../../chain/security/blockaid/tx/BlockaidTxValidationResult'
 
 type VerifyKeysignStartInput = {
   children: ReactNode
@@ -69,7 +69,7 @@ export const VerifyKeysignStart = ({
 
   const txScanQuery = usePotentialQuery(
     txScanInput.data || undefined,
-    getBlockaidTxScanQuery
+    getBlockaidTxValidationQuery
   )
 
   const startKeysignPromptProps: StartKeysignPromptProps = useMemo(() => {
@@ -119,7 +119,7 @@ export const VerifyKeysignStart = ({
         {isBlockaidEnabled && (
           <MatchQuery
             value={txScanQuery}
-            success={value => <BlockaidTxScanResult value={value} />}
+            success={value => <BlockaidTxValidationResult value={value} />}
             pending={() => <BlockaidScanning />}
             error={() => <BlockaidNoScanStatus entity="tx" />}
             inactive={() => <BlockaidScanStatusContainer />}
