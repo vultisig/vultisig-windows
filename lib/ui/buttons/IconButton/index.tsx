@@ -162,31 +162,61 @@ const StyledIconButton = styled(UnstyledButton)<{
               linear-gradient(0deg, #11284a 0%, #11284a 100%),
               rgba(204, 204, 204, 0.5);
             background-blend-mode: normal, normal, color-burn;
-            border: 1px solid rgba(255, 255, 255, 0.35);
+            border: none;
             color: ${getColor('contrast')};
 
             box-shadow:
-              0 0 2px rgba(255, 255, 255, 0.6),
-              0 0 4px rgba(255, 255, 255, 0.4),
-              0 0 8px rgba(255, 255, 255, 0.25),
-              0 0 16px rgba(255, 255, 255, 0.15),
-              inset 0 1px 2px rgba(255, 255, 255, 0.2),
-              inset 0 -1px 2px rgba(0, 0, 0, 0.5);
+              inset 0 1px 1px rgba(255, 255, 255, 0.15),
+              inset 0 -1px 1px rgba(0, 0, 0, 0.3);
 
             & > * {
               position: relative;
               z-index: 1;
             }
 
+            &::before {
+              content: '';
+              position: absolute;
+              inset: 0;
+              border-radius: 1000px;
+              padding: 1px;
+              background: conic-gradient(
+                from 0deg,
+                rgba(255, 255, 255, 0.35) 0deg,
+                rgba(255, 255, 255, 0.05) 20deg,
+                rgba(255, 255, 255, 0.05) 90deg,
+                rgba(255, 255, 255, 0.35) 145deg,
+                rgba(255, 255, 255, 0.05) 200deg,
+                rgba(255, 255, 255, 0.05) 270deg,
+                rgba(255, 255, 255, 0.35) 325deg,
+                rgba(255, 255, 255, 0.35) 360deg
+              );
+              -webkit-mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+              -webkit-mask-composite: xor;
+              mask-composite: exclude;
+              pointer-events: none;
+            }
+
             &:hover {
-              border-color: rgba(255, 255, 255, 0.45);
               box-shadow:
-                0 0 2px rgba(255, 255, 255, 0.7),
-                0 0 5px rgba(255, 255, 255, 0.5),
-                0 0 10px rgba(255, 255, 255, 0.3),
-                0 0 20px rgba(255, 255, 255, 0.2),
-                inset 0 1px 2px rgba(255, 255, 255, 0.25),
-                inset 0 -1px 2px rgba(0, 0, 0, 0.5);
+                inset 0 1px 1px rgba(255, 255, 255, 0.2),
+                inset 0 -1px 1px rgba(0, 0, 0, 0.3);
+
+              &::before {
+                background: conic-gradient(
+                  from 0deg,
+                  rgba(255, 255, 255, 0.45) 0deg,
+                  rgba(255, 255, 255, 0.08) 20deg,
+                  rgba(255, 255, 255, 0.08) 90deg,
+                  rgba(255, 255, 255, 0.45) 145deg,
+                  rgba(255, 255, 255, 0.08) 200deg,
+                  rgba(255, 255, 255, 0.08) 270deg,
+                  rgba(255, 255, 255, 0.45) 325deg,
+                  rgba(255, 255, 255, 0.45) 360deg
+                );
+              }
             }
           `,
         })}
