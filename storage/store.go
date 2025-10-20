@@ -442,7 +442,7 @@ func generatePlaceholders(count int) string {
 
 func (s *Store) SaveCoin(vaultPublicKeyECDSA string, coin Coin) (string, error) {
 	if coin.ID == "" {
-		coin.ID = uuid.New().String()
+		return "", fmt.Errorf("coin ID is required")
 	}
 	columns := []string{
 		"id",
@@ -505,7 +505,7 @@ func (s *Store) SaveCoins(vaultPublicKeyECDSA string, coins []Coin) ([]string, e
 	coinIDs := make([]string, len(coins))
 	for i, coin := range coins {
 		if coin.ID == "" {
-			coin.ID = uuid.New().String()
+			return nil, fmt.Errorf("coin ID is required for coin at index %d", i)
 		}
 		coinIDs[i] = coin.ID
 
