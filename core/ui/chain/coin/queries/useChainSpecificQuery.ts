@@ -4,7 +4,7 @@ import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { without } from '@lib/utils/array/without'
 import { useQuery } from '@tanstack/react-query'
 
-export const chainSpecificQueryKeyPrefix = 'chainSpecific'
+const chainSpecificQueryKeyPrefix = 'chainSpecific'
 
 const getChainSpecificQueryKey = (input: ChainSpecificResolverInput) =>
   without([chainSpecificQueryKeyPrefix, ...Object.values(input)], undefined)
