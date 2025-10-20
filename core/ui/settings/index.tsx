@@ -19,6 +19,7 @@ import { CoinsIcon } from '@lib/ui/icons/CoinsIcon'
 import { DiscordIcon } from '@lib/ui/icons/DiscordIcon'
 import { FileTextIcon } from '@lib/ui/icons/FileTextIcon'
 import { GithubIcon } from '@lib/ui/icons/GithubIcon'
+import { GlobusIcon } from '@lib/ui/icons/GlobusIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { LanguagesIcon } from '@lib/ui/icons/LanguagesIcon'
 import { LockKeyholeIcon } from '@lib/ui/icons/LockKeyholeIcon'
@@ -265,11 +266,11 @@ export const SettingsPage: FC<Props> = props => {
             <ListItem
               icon={
                 <ListItemIconWrapper>
-                  <GithubIcon />
+                  <GlobusIcon />
                 </ListItemIconWrapper>
               }
               onClick={() => openUrl(productWebsiteUrl)}
-              title={t('github')}
+              title={t('vultisig_website')}
               showArrow
             />
           </SettingsSection>
