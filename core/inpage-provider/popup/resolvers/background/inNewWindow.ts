@@ -25,7 +25,9 @@ export const inNewWindow = async <T>({
           top: currentWindow.top,
           height: 600,
           width: 480,
-          left: currentWindow.width ? currentWindow.width - 500 : undefined,
+          left: currentWindow.width
+            ? Math.max(0, currentWindow.width - 500)
+            : 0,
         },
         resolve
       )
