@@ -21,12 +21,11 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { omit } from '@lib/utils/record/omit'
 import { getRecordUnionKey } from '@lib/utils/record/union/getRecordUnionKey'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
-import { getBytes, TypedDataEncoder } from 'ethers'
+import { getBytes, hexlify, TypedDataEncoder } from 'ethers'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -56,9 +55,11 @@ export const Overview = () => {
 
       if (isHex) {
         const prefixBytes = new TextEncoder().encode(prefix)
-        const msgBytes = Buffer.from(stripHexPrefix(message), 'hex')
-        const combined = Buffer.concat([Buffer.from(prefixBytes), msgBytes])
-        return `0x${combined.toString('hex')}`
+        const msgBytes = getBytes(message)
+        const combined = new Uint8Array(prefixBytes.length + msgBytes.length)
+        combined.set(prefixBytes)
+        combined.set(msgBytes, prefixBytes.length)
+        return hexlify(combined)
       }
 
       return `${prefix}${message}`
@@ -68,7 +69,13 @@ export const Overview = () => {
   const displayMessage = matchRecordUnion<SignMessageInput, string>(input, {
     eth_signTypedData_v4: () => message,
     sign_message: () => message,
-    personal_sign: ({ message }) => toDisplayMessageString(getBytes(message)),
+    personal_sign: ({ message }) => {
+      const bytes =
+        message.startsWith('0x') || message.startsWith('0X')
+          ? getBytes(message)
+          : new TextEncoder().encode(message)
+      return toDisplayMessageString(bytes)
+    },
   })
 
   const type = matchRecordUnion<SignMessageInput, SignMessageType>(input, {
