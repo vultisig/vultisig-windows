@@ -1,3 +1,3 @@
 import { FeeQuote } from '../../../feeQuote/core'
 
-export type EvmFeeSettings = Omit<FeeQuote<'evm'>, 'maxFeePerGas'>
+export type EvmFeeSettings = Omit<FeeQuote<'evm'>, 'baseFeePerGas'>
