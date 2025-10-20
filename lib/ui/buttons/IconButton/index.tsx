@@ -156,18 +156,26 @@ const StyledIconButton = styled(UnstyledButton)<{
             background:
               linear-gradient(
                 90deg,
-                rgba(255, 255, 255, 0.02) 0%,
-                rgba(255, 255, 255, 0.06) 100%
+                ${({ theme }) =>
+                    theme.colors.white.withAlpha(0.02).toCssValue()}
+                  0%,
+                ${({ theme }) =>
+                    theme.colors.white.withAlpha(0.06).toCssValue()}
+                  100%
               ),
               linear-gradient(0deg, #0d1f35 0%, #0d1f35 100%),
-              rgba(204, 204, 204, 0.3);
+              ${({ theme }) => theme.colors.white.withAlpha(0.3).toCssValue()};
             background-blend-mode: normal, normal, color-burn;
             border: none;
             color: ${getColor('contrast')};
 
             box-shadow:
-              inset 0 1px 1px rgba(255, 255, 255, 0.15),
-              inset 0 -1px 1px rgba(0, 0, 0, 0.3);
+              inset 0 1px 1px
+                ${({ theme }) =>
+                  theme.colors.white.withAlpha(0.15).toCssValue()},
+              inset 0 -1px 1px
+                ${({ theme }) =>
+                  theme.colors.background.withAlpha(0.3).toCssValue()};
 
             & > * {
               position: relative;
@@ -182,18 +190,39 @@ const StyledIconButton = styled(UnstyledButton)<{
               padding: 1px;
               background: conic-gradient(
                 from 0deg,
-                rgba(255, 255, 255, 0.35) 0deg,
-                rgba(255, 255, 255, 0.05) 20deg,
-                rgba(255, 255, 255, 0.05) 90deg,
-                rgba(255, 255, 255, 0.35) 145deg,
-                rgba(255, 255, 255, 0.05) 200deg,
-                rgba(255, 255, 255, 0.05) 270deg,
-                rgba(255, 255, 255, 0.35) 325deg,
-                rgba(255, 255, 255, 0.35) 360deg
+                ${({ theme }) =>
+                    theme.colors.white.withAlpha(0.35).toCssValue()}
+                  0deg,
+                ${({ theme }) =>
+                    theme.colors.white.withAlpha(0.05).toCssValue()}
+                  20deg,
+                ${({ theme }) =>
+                    theme.colors.white.withAlpha(0.05).toCssValue()}
+                  90deg,
+                ${({ theme }) =>
+                    theme.colors.white.withAlpha(0.35).toCssValue()}
+                  145deg,
+                ${({ theme }) =>
+                    theme.colors.white.withAlpha(0.05).toCssValue()}
+                  200deg,
+                ${({ theme }) =>
+                    theme.colors.white.withAlpha(0.05).toCssValue()}
+                  270deg,
+                ${({ theme }) =>
+                    theme.colors.white.withAlpha(0.35).toCssValue()}
+                  325deg,
+                ${({ theme }) =>
+                    theme.colors.white.withAlpha(0.35).toCssValue()}
+                  360deg
               );
               -webkit-mask:
-                linear-gradient(#fff 0 0) content-box,
-                linear-gradient(#fff 0 0);
+                linear-gradient(
+                    ${({ theme }) => theme.colors.white.toCssValue()} 0 0
+                  )
+                  content-box,
+                linear-gradient(
+                  ${({ theme }) => theme.colors.white.toCssValue()} 0 0
+                );
               -webkit-mask-composite: xor;
               mask-composite: exclude;
               pointer-events: none;
@@ -201,20 +230,40 @@ const StyledIconButton = styled(UnstyledButton)<{
 
             &:hover {
               box-shadow:
-                inset 0 1px 1px rgba(255, 255, 255, 0.2),
-                inset 0 -1px 1px rgba(0, 0, 0, 0.3);
+                inset 0 1px 1px
+                  ${({ theme }) =>
+                    theme.colors.white.withAlpha(0.2).toCssValue()},
+                inset 0 -1px 1px
+                  ${({ theme }) =>
+                    theme.colors.background.withAlpha(0.3).toCssValue()};
 
               &::before {
                 background: conic-gradient(
                   from 0deg,
-                  rgba(255, 255, 255, 0.45) 0deg,
-                  rgba(255, 255, 255, 0.08) 20deg,
-                  rgba(255, 255, 255, 0.08) 90deg,
-                  rgba(255, 255, 255, 0.45) 145deg,
-                  rgba(255, 255, 255, 0.08) 200deg,
-                  rgba(255, 255, 255, 0.08) 270deg,
-                  rgba(255, 255, 255, 0.45) 325deg,
-                  rgba(255, 255, 255, 0.45) 360deg
+                  ${({ theme }) =>
+                      theme.colors.white.withAlpha(0.45).toCssValue()}
+                    0deg,
+                  ${({ theme }) =>
+                      theme.colors.white.withAlpha(0.08).toCssValue()}
+                    20deg,
+                  ${({ theme }) =>
+                      theme.colors.white.withAlpha(0.08).toCssValue()}
+                    90deg,
+                  ${({ theme }) =>
+                      theme.colors.white.withAlpha(0.45).toCssValue()}
+                    145deg,
+                  ${({ theme }) =>
+                      theme.colors.white.withAlpha(0.08).toCssValue()}
+                    200deg,
+                  ${({ theme }) =>
+                      theme.colors.white.withAlpha(0.08).toCssValue()}
+                    270deg,
+                  ${({ theme }) =>
+                      theme.colors.white.withAlpha(0.45).toCssValue()}
+                    325deg,
+                  ${({ theme }) =>
+                      theme.colors.white.withAlpha(0.45).toCssValue()}
+                    360deg
                 );
               }
             }
