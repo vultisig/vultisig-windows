@@ -7,6 +7,7 @@ import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin, CoinKey } from '@core/chain/coin/Coin'
 import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
+import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { Vault } from '@core/ui/vault/Vault'
 import { attempt } from '@lib/utils/attempt'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
@@ -107,21 +108,22 @@ export const getCustomTxData = ({
         }
       },
       serialized: async ({ data, chain, params }) => {
+        const publicKey = getPublicKey({
+          chain,
+          walletCore,
+          hexChainCode: vault.hexChainCode,
+          publicKeys: vault.publicKeys,
+        })
+        const address = deriveAddress({
+          chain,
+          publicKey,
+          walletCore,
+        })
+
         if (chain === Chain.Bitcoin) {
           const dataBuffer = Buffer.from(data, 'base64')
           let psbt = Psbt.fromBuffer(Buffer.from(dataBuffer))
           if (params && params.length > 0) {
-            const publicKey = getPublicKey({
-              chain: Chain.Bitcoin,
-              walletCore,
-              hexChainCode: vault.hexChainCode,
-              publicKeys: vault.publicKeys,
-            })
-            const address = deriveAddress({
-              chain,
-              publicKey,
-              walletCore,
-            })
             const currentWalletEntries = params.filter(e =>
               areLowerCaseEqual(e.address, address)
             )
@@ -142,6 +144,11 @@ export const getCustomTxData = ({
 
         return {
           solana: await parseSolanaTx({
+            fromCoin: toCommCoin({
+              ...(await getCoin({ chain: Chain.Solana })),
+              hexPublicKey: Buffer.from(publicKey.data()).toString('hex'),
+              address,
+            }),
             walletCore,
             data,
             getCoin,
