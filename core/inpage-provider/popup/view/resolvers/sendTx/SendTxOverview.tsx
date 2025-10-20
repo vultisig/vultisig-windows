@@ -1,22 +1,25 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { isChainOfKind } from '@core/chain/ChainKind'
+import { getChainKind, isChainOfKind } from '@core/chain/ChainKind'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { applyFeeSettings } from '@core/chain/feeQuote/applyFeeSettings'
+import { FeeQuote } from '@core/chain/feeQuote/core'
+import {
+  FeeSettingsChainKind,
+  feeSettingsChainKinds,
+} from '@core/chain/feeQuote/settings/core'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
-import {
-  getBlockchainSpecificValue,
-  KeysignChainSpecific,
-} from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
+import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
-import { useChainSpecificQuery } from '@core/ui/chain/coin/queries/useChainSpecificQuery'
+import { useFeeQuoteQuery } from '@core/ui/chain/feeQuote/query'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
-import { useKeysignUtxoInfo } from '@core/ui/mpc/keysign/utxo/queries/keysignUtxoInfo'
+import { useKeysignTxDataQuery } from '@core/ui/mpc/keysign/txData/query'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import {
   ContentWrapper,
@@ -31,14 +34,17 @@ import { ListItem } from '@lib/ui/list/item'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { Text } from '@lib/ui/text'
+import { isOneOf } from '@lib/utils/array/isOneOf'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { formatUnits } from 'ethers'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { usePopupInput } from '../../state/input'
-import { getChainSpecificInput } from './core/chainSpecific'
+import { getFeeQuoteInput } from './core/feeQuote'
 import { getKeysignPayload } from './core/keysignPayload'
+import { getKeysignTxDataInput } from './core/keysignTxData'
 import { ParsedTx } from './core/parsedTx'
 import { CosmosMsgType } from './interfaces'
 import { ManageEvmFee } from './ManageEvmFee'
@@ -58,38 +64,43 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
 
   const { chain, address } = coin
 
-  const [feeSettings, setFeeSettings] = useState<EvmFeeSettings | null>(null)
-
-  const chainSpecificInput = useMemo(
-    () =>
-      getChainSpecificInput({
-        ...parsedTx,
-        evmFeeSettings: feeSettings
-          ? { ...feeSettings, isOverride: true }
-          : undefined,
-      }),
-    [parsedTx, feeSettings]
+  const [evmFeeSettings, setEvmFeeSettings] = useState<EvmFeeSettings | null>(
+    null
   )
 
-  const chainSpecificQuery = useChainSpecificQuery(chainSpecificInput)
+  const keysignTxData = useKeysignTxDataQuery(
+    useMemo(() => getKeysignTxDataInput(parsedTx), [parsedTx])
+  )
 
-  const utxoInfoQuery = useKeysignUtxoInfo({ chain, address })
+  const feeQuote = useFeeQuoteQuery(
+    useMemo(() => getFeeQuoteInput(parsedTx), [parsedTx])
+  )
 
   const keysignPayloadQuery = useTransformQueriesData(
     {
-      chainSpecific: chainSpecificQuery,
-      utxoInfo: utxoInfoQuery,
+      keysignTxData,
+      feeQuote,
     },
     useCallback(
-      ({ chainSpecific, utxoInfo }) =>
-        getKeysignPayload({
-          chainSpecific,
-          utxoInfo,
+      ({ keysignTxData, feeQuote }) => {
+        const chainKind = getChainKind(chain)
+
+        return getKeysignPayload({
+          keysignTxData,
+          feeQuote:
+            isOneOf(chainKind, feeSettingsChainKinds) && evmFeeSettings
+              ? applyFeeSettings({
+                  chainKind,
+                  quote: feeQuote as FeeQuote<FeeSettingsChainKind>,
+                  settings: evmFeeSettings,
+                })
+              : feeQuote,
           tx: parsedTx,
           vault,
           walletCore,
-        }),
-      [parsedTx, vault, walletCore]
+        })
+      },
+      [chain, evmFeeSettings, parsedTx, vault, walletCore]
     )
   )
 
@@ -193,20 +204,11 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                           return null
                         }
 
-                        if (feeSettings) {
-                          return feeSettings as EvmFeeSettings
+                        if (evmFeeSettings) {
+                          return evmFeeSettings
                         }
 
-                        const { priorityFee, gasLimit } =
-                          getBlockchainSpecificValue(
-                            keysignPayload.blockchainSpecific,
-                            'ethereumSpecific'
-                          )
-
-                        return {
-                          maxPriorityFeePerGas: BigInt(priorityFee),
-                          gasLimit: BigInt(gasLimit),
-                        }
+                        return shouldBePresent(feeQuote.data) as FeeQuote<'evm'>
                       }
 
                       const evmFeeSettings = getEvmFeeSettings()
@@ -226,7 +228,7 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                                 <ManageEvmFee
                                   value={evmFeeSettings}
                                   chain={chain}
-                                  onChange={setFeeSettings}
+                                  onChange={setEvmFeeSettings}
                                 />
                               ) : null
                             }
