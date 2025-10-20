@@ -284,7 +284,7 @@ export class Ethereum extends EventEmitter {
       personal_sign: async ([rawMessage, account]: [string, string]) => {
         const chain = await getChain()
 
-        const message = isHexString(rawMessage)
+        const messageBytes = isHexString(rawMessage)
           ? getBytes(rawMessage)
           : new TextEncoder().encode(rawMessage)
 
@@ -292,9 +292,9 @@ export class Ethereum extends EventEmitter {
           {
             signMessage: {
               personal_sign: {
-                bytesCount: message.length,
+                bytesCount: messageBytes.length,
                 chain,
-                message: new TextDecoder().decode(message),
+                message: rawMessage,
                 type: 'default',
               },
             },
