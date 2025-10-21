@@ -25,7 +25,6 @@ export const VaultPage = () => {
           vault={vault}
           scrollContainerRef={scrollContainerRef}
         />
-
         <VaultOverview />
       </Wrapper>
       <UpdatePrompt />
