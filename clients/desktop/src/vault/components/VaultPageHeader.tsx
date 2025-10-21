@@ -1,5 +1,6 @@
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { useVaultTotalBalanceQuery } from '@core/ui/vault/queries/useVaultTotalBalanceQuery'
+import { Vault } from '@core/ui/vault/Vault'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { verticalPadding } from '@lib/ui/css/verticalPadding'
 import { useScroll } from '@lib/ui/hooks/useScroll'
@@ -46,7 +47,7 @@ const NormalContent = styled.div<{ isVisible: boolean }>`
 `
 
 type VaultPageHeaderProps = {
-  vault: any
+  vault: Vault
   scrollContainerRef: RefObject<HTMLElement>
 }
 
