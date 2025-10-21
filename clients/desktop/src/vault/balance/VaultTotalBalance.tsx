@@ -3,7 +3,7 @@ import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { useVaultTotalBalanceQuery } from '@core/ui/vault/queries/useVaultTotalBalanceQuery'
-import { HStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
@@ -19,7 +19,7 @@ export const VaultTotalBalance = () => {
   const { t } = useTranslation()
 
   return (
-    <HStack alignItems="center" gap={4}>
+    <VStack alignItems="center" gap={12}>
       <MatchQuery
         value={query}
         error={() => t('failed_to_load')}
@@ -30,7 +30,7 @@ export const VaultTotalBalance = () => {
           </HStack>
         )}
         success={value => (
-          <Text color="contrast" weight="700" size={26} centerVertically>
+          <Text color="contrast" size={28} centerVertically>
             <BalanceVisibilityAware size="l">
               {formatFiatAmount(value)}
             </BalanceVisibilityAware>
@@ -38,6 +38,6 @@ export const VaultTotalBalance = () => {
         )}
       />
       <ManageVaultBalanceVisibility />
-    </HStack>
+    </VStack>
   )
 }
