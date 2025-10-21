@@ -35,9 +35,7 @@ export const VultDiscountTier = ({
     return activeDiscountTierIndex < vultDiscountTiers.indexOf(value)
   }, [activeDiscountTier, value])
 
-  const [isExpanded, setIsExpanded] = useState(
-    () => isActive || !activeDiscountTier
-  )
+  const [isExpanded, setIsExpanded] = useState(isActive)
 
   return (
     <DiscountTierContainer value={value}>

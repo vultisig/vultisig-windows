@@ -1,8 +1,8 @@
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
-import { RiskLevel } from '../../core/riskLevel'
-import { BlockaidTxScanResult } from '../core'
+import { RiskLevel } from '../../../core/riskLevel'
+import { BlockaidValidationResult } from '../core'
 
 const blockaidRiskyTxLevels = ['Warning', 'Malicious', 'Spam'] as const
 
@@ -59,7 +59,7 @@ const getDescriptionFromBlockaidValidation = ({
 
 export const parseBlockaidValidation = (
   validation: BlockaidValidation
-): BlockaidTxScanResult => {
+): BlockaidValidationResult => {
   const level = getRiskLevelFromBlockaidValidation(validation)
   if (level === null) {
     return null
