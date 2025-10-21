@@ -16,7 +16,7 @@ const StyledPageHeader = styled(HStack)<{ hasBorder?: boolean }>`
   ${({ hasBorder }) =>
     hasBorder &&
     css`
-      border-bottom: 1px solid ${getColor('mistExtra')};
+      border-bottom: 1px solid ${getColor('foregroundExtra')};
     `};
 `
 

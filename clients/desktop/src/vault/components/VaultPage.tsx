@@ -26,11 +26,11 @@ export const VaultPage = () => {
           title={<VaultSelector value={vault} />}
         />
 
-        <UploadQrPrompt />
         <VaultOverview />
       </VStack>
       <UpdatePrompt />
       {isFastVault && <FastVaultPasswordVerification key={vaultId} />}
+      <UploadQrPrompt />
     </>
   )
 }
