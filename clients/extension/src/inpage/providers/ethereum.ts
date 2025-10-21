@@ -8,6 +8,7 @@ import {
 } from '@core/chain/chains/evm/chainInfo'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { callBackground } from '@core/inpage-provider/background'
+import { BackgroundError } from '@core/inpage-provider/background/error'
 import { addBackgroundEventListener } from '@core/inpage-provider/background/events/inpage'
 import { callPopup } from '@core/inpage-provider/popup'
 import { Eip712V4Payload } from '@core/inpage-provider/popup/interface'
@@ -114,6 +115,9 @@ export class Ethereum extends EventEmitter {
     }
     return this
   }
+  enable = () => {
+    return this.request({ method: 'eth_requestAccounts', params: [] })
+  }
 
   async request(data: RequestInput) {
     const getChain = async () => {
@@ -129,9 +133,17 @@ export class Ethereum extends EventEmitter {
         throw new EIP1193Error('UnrecognizedChain')
       }
 
-      await callBackground({
-        setAppChain: { evm: chain },
-      })
+      try {
+        await callBackground({
+          setAppChain: { evm: chain },
+        })
+      } catch (err) {
+        if (err === BackgroundError.Unauthorized) {
+          await callBackground({
+            setVaultChain: { evm: chain },
+          })
+        }
+      }
 
       this.emitUpdateNetwork({ chainId })
 
