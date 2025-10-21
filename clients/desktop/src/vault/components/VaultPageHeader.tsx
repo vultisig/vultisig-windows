@@ -9,6 +9,7 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { RefObject } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { VaultPageHeaderControls } from './VaultPageHeaderControls'
@@ -57,6 +58,7 @@ export const VaultPageHeader = ({
 }: VaultPageHeaderProps) => {
   const scroll = useScroll(scrollContainerRef)
   const isCollapsed = scroll.y > collapseThreshold
+  const { t } = useTranslation()
 
   const { data: totalBalance = 0 } = useVaultTotalBalanceQuery()
   const formatFiatAmount = useFormatFiatAmount()
@@ -68,7 +70,7 @@ export const VaultPageHeader = ({
         <VaultSelector value={vault} />
         <VStack alignItems="flex-end" gap={2}>
           <Text size={12} color="shy">
-            Portfolio Balance
+            {t('portfolio_balance')}
           </Text>
           <Text size={14}>{formattedBalance}</Text>
         </VStack>
