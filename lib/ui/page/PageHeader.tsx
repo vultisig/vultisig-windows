@@ -7,7 +7,11 @@ import { getColor } from '@lib/ui/theme/getters'
 import { isValidElement, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
-const StyledPageHeader = styled(HStack)<{ hasBorder?: boolean }>`
+import { UiProps } from '../props'
+
+const StyledPageHeader = styled(HStack)<{
+  hasBorder?: boolean
+}>`
   ${horizontalPadding(pageConfig.horizontalPadding)};
   ${verticalPadding(pageConfig.verticalPadding)};
   min-height: 60px;
@@ -16,7 +20,7 @@ const StyledPageHeader = styled(HStack)<{ hasBorder?: boolean }>`
   ${({ hasBorder }) =>
     hasBorder &&
     css`
-      border-bottom: 1px solid ${getColor('mistExtra')};
+      border-bottom: 1px solid ${getColor('foregroundExtra')};
     `};
 `
 
@@ -39,7 +43,7 @@ type PageHeaderProps = {
   primaryControls?: ReactNode
   secondaryControls?: ReactNode
   title?: ReactNode
-}
+} & UiProps
 
 export const PageHeader = ({
   hasBorder = false,
