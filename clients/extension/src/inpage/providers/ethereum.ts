@@ -133,15 +133,14 @@ export class Ethereum extends EventEmitter {
         throw new EIP1193Error('UnrecognizedChain')
       }
 
-      try {
-        await callBackground({
-          setAppChain: { evm: chain },
-        })
-      } catch (err) {
-        if (err === BackgroundError.Unauthorized) {
-          await callBackground({
-            setVaultChain: { evm: chain },
-          })
+      const { error } = await attempt(async () =>
+        callBackground({ setAppChain: { evm: chain } })
+      )
+      if (error) {
+        if (error === BackgroundError.Unauthorized) {
+          await callBackground({ setVaultChain: { evm: chain } })
+        } else {
+          throw error
         }
       }
 
