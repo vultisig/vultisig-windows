@@ -31,7 +31,7 @@ export const VaultSelector = ({ value }: ValueProp<Vault>) => {
         <IconWrapper color={isFastVault ? 'idle' : 'primary'} size={16}>
           {isFastVault ? <LightningIcon /> : <ShieldIcon />}
         </IconWrapper>
-        <Text>{value.name}</Text>
+        <Text size={14}>{value.name}</Text>
       </HStack>
       <Indicator />
     </Wrapper>
