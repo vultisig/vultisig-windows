@@ -1,5 +1,3 @@
-import { useAppNavigate } from '@clients/desktop/src/navigation/hooks/useAppNavigate'
-import { RefreshVaultBalance } from '@clients/desktop/src/vault/balance/RefreshVaultBalance'
 import { UploadQrPrompt } from '@clients/desktop/src/vault/components/UploadQrPrompt'
 import { VaultOverview } from '@clients/desktop/src/vault/components/VaultOverview'
 import { hasServer } from '@core/mpc/devices/localPartyId'
