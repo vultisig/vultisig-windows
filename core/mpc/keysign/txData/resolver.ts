@@ -25,7 +25,14 @@ export type KeysignTxDataResolverInput<
       ? {
           receiver: string
         }
-      : {})
+      : K extends 'tron'
+        ? {
+            expiration?: number
+            timestamp?: number
+            refBlockBytesHex?: string
+            refBlockHashHex?: string
+          }
+        : {})
 
 export type KeysignTxDataResolver<K extends ChainKind = ChainKind> = Resolver<
   KeysignTxDataResolverInput<K>,
