@@ -10,13 +10,13 @@ import { IconButton } from '@lib/ui/buttons/IconButton'
 import { MenuIcon } from '@lib/ui/icons/MenuIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { PageHeaderToggleTitle } from '@lib/ui/page/PageHeaderToggleTitle'
 
 import { UpdatePrompt } from '../../versioning/UpdatePrompt'
+import { VaultSelector } from './VaultSelector'
 
 export const VaultPage = () => {
   const vault = useCurrentVault()
-  const { name, signers } = vault
+  const { signers } = vault
   const isFastVault = hasServer(signers)
   const navigate = useAppNavigate()
   const vaultId = getVaultId(vault)
@@ -32,14 +32,7 @@ export const VaultPage = () => {
             </IconButton>
           }
           secondaryControls={<RefreshVaultBalance />}
-          title={
-            <PageHeaderToggleTitle
-              value={name}
-              onClick={() => {
-                navigate({ id: 'vaults' })
-              }}
-            />
-          }
+          title={<VaultSelector value={vault} />}
         />
 
         <UploadQrPrompt />
