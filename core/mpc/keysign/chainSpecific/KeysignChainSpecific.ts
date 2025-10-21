@@ -9,8 +9,6 @@ export type KeysignChainSpecific = Exclude<
 
 export type KeysignChainSpecificKey = KeysignChainSpecific['case']
 
-export type KeysignChainSpecificValue = KeysignChainSpecific['value']
-
 export const chainSpecificRecord = {
   [Chain.Arbitrum]: 'ethereumSpecific',
   [Chain.Avalanche]: 'ethereumSpecific',

@@ -2,8 +2,10 @@ import { create } from '@bufbuild/protobuf'
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getPsbtTransferInfo } from '@core/chain/chains/utxo/tx/getPsbtTransferInfo'
+import { FeeQuote } from '@core/chain/feeQuote/core'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
-import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
+import { buildChainSpecific } from '@core/mpc/keysign/chainSpecific/build'
+import { KeysignTxData } from '@core/mpc/keysign/txData/core'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { OneInchSwapPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
 import {
@@ -15,30 +17,29 @@ import {
   TronTransferContractPayloadSchema,
   TronTriggerSmartContractPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/tron_contract_payload_pb'
-import { UtxoInfo } from '@core/mpc/types/vultisig/keysign/v1/utxo_info_pb'
 import { WasmExecuteContractPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { Vault } from '@core/ui/vault/Vault'
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
-import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { toUtf8String } from 'ethers'
 import { hexToString } from 'viem'
 
+import { getTxAmount } from './amount'
 import { CustomTxData } from './customTxData'
 import { ParsedTx } from './parsedTx'
 
 type Input = {
-  chainSpecific: KeysignChainSpecific
-  utxoInfo: UtxoInfo[] | null
+  keysignTxData: KeysignTxData
+  feeQuote: FeeQuote
   tx: ParsedTx
   vault: Vault
   walletCore: WalletCore
 }
 
 export const getKeysignPayload = ({
-  chainSpecific,
-  utxoInfo,
+  keysignTxData,
+  feeQuote,
   tx,
   vault,
   walletCore,
@@ -51,6 +52,12 @@ export const getKeysignPayload = ({
     walletCore,
     hexChainCode: vault.hexChainCode,
     publicKeys: vault.publicKeys,
+  })
+
+  const blockchainSpecific = buildChainSpecific({
+    chain,
+    txData: keysignTxData,
+    feeQuote,
   })
 
   const hexPublicKey = Buffer.from(publicKey.data()).toString('hex')
@@ -73,13 +80,6 @@ export const getKeysignPayload = ({
         getPsbtTransferInfo(psbt, coin.address).recipient ?? undefined,
     }
   )
-
-  const toAmount = matchRecordUnion<CustomTxData, string>(customTxData, {
-    regular: ({ transactionDetails }) =>
-      BigInt(parseInt(transactionDetails.amount?.amount ?? '0')).toString(),
-    solana: tx => getRecordUnionValue(tx).inAmount.toString(),
-    psbt: psbt => getPsbtTransferInfo(psbt, coin.address).sendAmount.toString(),
-  })
 
   const memo = matchRecordUnion<CustomTxData, string | undefined>(
     customTxData,
@@ -237,10 +237,10 @@ export const getKeysignPayload = ({
 
   return create(KeysignPayloadSchema, {
     toAddress,
-    toAmount,
+    toAmount: getTxAmount(tx).toString(),
     coin: fromCoin,
-    blockchainSpecific: chainSpecific,
-    utxoInfo: utxoInfo ?? undefined,
+    blockchainSpecific,
+    utxoInfo: 'utxoInfo' in keysignTxData ? keysignTxData.utxoInfo : undefined,
     vaultLocalPartyId: vault.localPartyId,
     vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
     skipBroadcast,

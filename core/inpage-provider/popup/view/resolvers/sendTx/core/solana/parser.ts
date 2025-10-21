@@ -1,11 +1,14 @@
 import { create } from '@bufbuild/protobuf'
-import { Chain } from '@core/chain/Chain'
+import { Chain, OtherChain } from '@core/chain/Chain'
 import { solanaRpcUrl } from '@core/chain/chains/solana/client'
+import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { Coin, CoinKey } from '@core/chain/coin/Coin'
+import { getSolanaFeeQuote } from '@core/chain/feeQuote/resolvers/solana'
 import { getTxBlockaidSimulation } from '@core/chain/security/blockaid/tx/simulation'
 import { parseBlockaidSimulation } from '@core/chain/security/blockaid/tx/simulation/api/core'
 import { getBlockaidTxSimulationInput } from '@core/chain/security/blockaid/tx/simulation/input'
-import { getSolanaSpecific } from '@core/mpc/keysign/chainSpecific/resolvers/solana'
+import { buildChainSpecific } from '@core/mpc/keysign/chainSpecific/build'
+import { getKeysignTxData } from '@core/mpc/keysign/txData'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import {
   OneInchQuoteSchema,
@@ -80,12 +83,25 @@ export const parseSolanaTx = async ({
     return parsedTx
   }
 
-  const chainSpecific = await getSolanaSpecific({
-    coin: fromCommCoin(fromCoin),
+  const coin = fromCommCoin(fromCoin) as AccountCoin<OtherChain.Solana>
+
+  const feeQuote = await getSolanaFeeQuote({
+    coin,
   })
+
+  const txData = await getKeysignTxData({
+    coin,
+  })
+
+  const blockchainSpecific = buildChainSpecific({
+    chain: Chain.Solana,
+    txData,
+    feeQuote,
+  })
+
   const keysignPayload = create(KeysignPayloadSchema, {
     coin: fromCoin,
-    blockchainSpecific: { case: 'solanaSpecific', value: chainSpecific },
+    blockchainSpecific,
     swapPayload: {
       case: 'oneinchSwapPayload',
       value: create(OneInchSwapPayloadSchema, {
