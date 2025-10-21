@@ -5,32 +5,37 @@ import { FastVaultPasswordVerification } from '@core/ui/mpc/fast/FastVaultPasswo
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { getVaultId } from '@core/ui/vault/Vault'
 import { VStack } from '@lib/ui/layout/Stack'
-import { PageHeader } from '@lib/ui/page/PageHeader'
+import { useRef } from 'react'
+import styled from 'styled-components'
 
 import { UpdatePrompt } from '../../versioning/UpdatePrompt'
-import { VaultPageHeaderControls } from './VaultPageHeaderControls'
-import { VaultSelector } from './VaultSelector'
+import { VaultPageHeader } from './VaultPageHeader'
 
 export const VaultPage = () => {
   const vault = useCurrentVault()
   const { signers } = vault
   const isFastVault = hasServer(signers)
   const vaultId = getVaultId(vault)
+  const scrollContainerRef = useRef<HTMLDivElement>(null!)
 
   return (
     <>
-      <VStack flexGrow>
-        <PageHeader
-          hasBorder
-          secondaryControls={<VaultPageHeaderControls />}
-          title={<VaultSelector value={vault} />}
+      <Wrapper ref={scrollContainerRef} flexGrow>
+        <VaultPageHeader
+          vault={vault}
+          scrollContainerRef={scrollContainerRef}
         />
 
         <VaultOverview />
-      </VStack>
+      </Wrapper>
       <UpdatePrompt />
       {isFastVault && <FastVaultPasswordVerification key={vaultId} />}
       <UploadQrPrompt />
     </>
   )
 }
+
+const Wrapper = styled(VStack)`
+  position: relative;
+  overflow-y: auto;
+`
