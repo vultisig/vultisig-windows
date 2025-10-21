@@ -4,8 +4,18 @@ import { KeysignTxDataResolver } from '../resolver'
 
 export const getTronTxData: KeysignTxDataResolver<'tron'> = async ({
   coin,
+  expiration,
+  timestamp,
+  refBlockBytesHex,
+  refBlockHashHex,
 }) => {
-  const blockInfo = await getTronBlockInfo({ coin })
+  const blockInfo = await getTronBlockInfo({
+    coin,
+    expiration,
+    timestamp,
+    refBlockBytesHex,
+    refBlockHashHex,
+  })
 
   return {
     timestamp: BigInt(blockInfo.timestamp),
