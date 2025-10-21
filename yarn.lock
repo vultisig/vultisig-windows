@@ -680,7 +680,6 @@ __metadata:
     "@lib/dkls": "workspace:^"
     "@lib/schnorr": "workspace:^"
     "@lib/utils": "workspace:^"
-    "@solana/web3.js": "npm:^2.0.0"
     bitcoinjs-lib: "npm:^6.1.7"
     vitest: "npm:^3.2.4"
   languageName: unknown
