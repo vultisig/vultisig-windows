@@ -272,6 +272,7 @@ export const en = {
   deeplink: 'Deeplink',
   upload_qr_code_to_join_keysign: 'Upload QR Code to join Keysign',
   upload_qr_code_image: 'Upload QR',
+  upload_qr_code_with_address: 'Upload QR code with address',
   upload_file_or_drag_and_drop: 'Upload file or drag & drop here',
   upload_vulttshare: 'Upload your Vultishare QR',
   getting_video_permission: 'Getting video permission...',

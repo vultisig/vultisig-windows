@@ -32,6 +32,7 @@ import styled, { useTheme } from 'styled-components'
 import { z } from 'zod'
 
 import { useCore } from '../../state/core'
+import { UploadAddressQrView } from './UploadAddressQrView'
 
 const FullHeightScanQRView = styled(ScanQrView)`
   height: 100%;
@@ -61,7 +62,7 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
 }) => {
   const { t } = useTranslation()
   const addressBookItems = useAddressBookItems()
-  const [showScanner, setShowScanner] = useState(false)
+  const [qrView, setQrView] = useState<null | 'scan' | 'upload'>(null)
   const walletCore = useAssertWalletCore()
   const { getClipboardText } = useCore()
   const { colors } = useTheme()
@@ -127,8 +128,8 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
   }
 
   const handleScanSuccess = (address: string) => {
-    setValue('address', address)
-    setShowScanner(false)
+    setValue('address', address, { shouldValidate: true })
+    setQrView(null)
   }
 
   return (
@@ -167,7 +168,7 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
             )}
             action={
               <HStack>
-                <IconButton size="sm" onClick={() => setShowScanner(true)}>
+                <IconButton size="sm" onClick={() => setQrView('scan')}>
                   <CameraIcon />
                 </IconButton>
                 <IconButton
@@ -207,13 +208,23 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
           {t('save')}
         </Button>
       </PageFooter>
-      {showScanner && (
+      {qrView && (
         <Modal
           title=""
-          onClose={() => setShowScanner(false)}
+          onClose={() => setQrView(null)}
           withDefaultStructure={false}
         >
-          <FullHeightScanQRView onFinish={handleScanSuccess} />
+          {qrView === 'scan' ? (
+            <FullHeightScanQRView
+              onFinish={handleScanSuccess}
+              onUploadQrViewRequest={() => setQrView('upload')}
+            />
+          ) : (
+            <UploadAddressQrView
+              onFinish={handleScanSuccess}
+              onBack={() => setQrView('scan')}
+            />
+          )}
         </Modal>
       )}
     </VStack>
