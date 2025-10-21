@@ -16,7 +16,6 @@ const Indicator = styled(CollapsableStateIndicator)`
 `
 
 export const VaultSelector = ({ value }: ValueProp<Vault>) => {
-  console.log('🚀 ~ VaultSelector ~ value:', value)
   const navigate = useAppNavigate()
   const isFastVault = hasServer(value.signers)
 
