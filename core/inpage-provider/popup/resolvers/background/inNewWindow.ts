@@ -1,5 +1,3 @@
-import { pick } from '@lib/utils/record/pick'
-
 import { PopupOptions } from '../../resolver'
 
 type ExecuteInput = {
@@ -17,13 +15,19 @@ export const inNewWindow = async <T>({
   execute,
 }: Input<T>): Promise<T> => {
   const currentWindow = await chrome.windows.getCurrent()
+
   const newWindow = await new Promise<chrome.windows.Window | undefined>(
     resolve =>
       chrome.windows.create(
         {
           url,
           type: 'panel',
-          ...pick(currentWindow, ['height', 'left', 'top', 'width']),
+          top: currentWindow.top,
+          height: 600,
+          width: 480,
+          left: currentWindow.width
+            ? Math.max(0, currentWindow.width - 500)
+            : 0,
         },
         resolve
       )
