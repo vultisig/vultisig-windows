@@ -70,7 +70,12 @@ export const UploadQrPage = () => {
               onFinish={onScanSuccess}
             />
           )}
-          upload={() => <UploadQrView />}
+          upload={() => (
+            <UploadQrView
+              title={t('upload_qr_code_to_join_keysign')}
+              onFinish={onScanSuccess}
+            />
+          )}
         />
       </VStack>
     </>
