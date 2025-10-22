@@ -94,9 +94,9 @@ export const getKeysignPayload = ({
           data !== '0x' &&
           (!data.startsWith('0x') || !isEvmContractCall)
         ) {
-          const { data: utf8String } = attempt(() => toUtf8String(data))
-          if (utf8String) {
-            return utf8String
+          const result = attempt(() => toUtf8String(data))
+          if ('data' in result) {
+            return result.data
           }
         }
         return data
