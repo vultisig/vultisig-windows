@@ -1,10 +1,7 @@
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { readQrCode } from '@core/ui/qr/utils/readQrCode'
 import { useMutation } from '@tanstack/react-query'
 
 export const useProcessQrMutation = () => {
-  const navigate = useCoreNavigate()
-
   return useMutation({
     mutationFn: async (file: File) => {
       const imageBitmap = await createImageBitmap(file)
@@ -18,12 +15,10 @@ export const useProcessQrMutation = () => {
         throw new Error('Could not get canvas context')
       }
 
-      const url = await readQrCode({
+      return readQrCode({
         canvasContext: context,
         image: imageBitmap,
       })
-
-      navigate({ id: 'deeplink', state: { url } })
     },
   })
 }
