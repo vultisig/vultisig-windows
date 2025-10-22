@@ -10,6 +10,7 @@ import { getAppChain } from './getAppChain'
 import { getAppChainId } from './getAppChainId'
 import { getTx } from './getTx'
 import { setAppChain } from './setAppChain'
+import { setVaultChain } from './setVaultChain'
 import { signOut } from './signOut'
 
 type BackgroundResolvers = {
@@ -20,6 +21,7 @@ export const backgroundResolvers: BackgroundResolvers = {
   getAppChainId,
   getAppChain,
   setAppChain,
+  setVaultChain,
   getAccount,
   signOut,
   evmClientRequest,
