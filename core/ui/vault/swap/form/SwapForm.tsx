@@ -15,7 +15,11 @@ import styled from 'styled-components'
 import { useSwapValidationQuery } from '../queries/useSwapValidationQuery'
 
 export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
-  const { error, data, isPending } = useSwapValidationQuery()
+  const {
+    error,
+    data: validationErrorMessage,
+    isPending,
+  } = useSwapValidationQuery()
 
   const { t } = useTranslation()
 
@@ -28,10 +32,16 @@ export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
       return extractErrorMsg(error)
     }
 
-    if (!data) {
+    // validationErrorMessage is undefined when queries aren't ready (e.g., no amount entered)
+    // validationErrorMessage is null when validation passes
+    // validationErrorMessage is a string when validation fails
+    if (validationErrorMessage === undefined) {
       return t('fill_the_form')
     }
-  }, [data, error, isPending, t])
+
+    // Return the validation error message if present, otherwise null (no error)
+    return validationErrorMessage || null
+  }, [validationErrorMessage, error, isPending, t])
 
   return (
     <>
@@ -57,7 +67,7 @@ export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
             <SwapInfo />
           </VStack>
         </VStack>
-        <Button disabled={errorMessage} type="submit">
+        <Button disabled={Boolean(errorMessage)} type="submit">
           {errorMessage || t('continue')}
         </Button>
       </PageContent>
