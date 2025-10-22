@@ -42,5 +42,5 @@ export const hexStr2byteArray = (str: string, strict = false) => {
       }
     } else throw new Error('The passed hex char is not a valid hex string')
   }
-  return byteArray
+  return new Uint8Array(byteArray)
 }
