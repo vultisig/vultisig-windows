@@ -1,5 +1,4 @@
 import { EvmChain } from '@core/chain/Chain'
-import { isHex } from 'viem'
 
 import { CoinKey } from '../../../coin/Coin'
 
@@ -44,7 +43,7 @@ type DeriveEvmGasLimitInput = {
 // If data is a hex string, we treat it as a contract call; otherwise, it's considered a simple memo
 export const deriveEvmGasLimit = ({ coin, data }: DeriveEvmGasLimitInput) => {
   const { id, chain } = coin
-  if (data && isHex(data)) {
+  if (data) {
     return chain === EvmChain.Mantle ? 3_00_000_0000n : 600_000n
   }
 

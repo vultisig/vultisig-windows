@@ -1188,4 +1188,5 @@ export const es = {
   unlock_discount_tier: 'Desbloquear <b>{{tier}}</b> nivel',
   unlock_discount_tier_description:
     'Al mantener {{minBalance}}, desbloquearás el nivel {{tier}} y recibirás un descuento de <b>{{bps}} bps en la tarifa de negociación</b> en todos los swaps.',
+  upload_qr_code_with_address: 'Subir código QR con dirección',
 }

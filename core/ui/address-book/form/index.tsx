@@ -8,20 +8,22 @@ import { ScanQrView } from '@core/ui/qr/components/ScanQrView'
 import { useAddressBookItems } from '@core/ui/storage/addressBook'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
+import { Match } from '@lib/ui/base/Match'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { iconButtonSize } from '@lib/ui/buttons/IconButton'
+import { takeWholeSpaceAbsolutely } from '@lib/ui/css/takeWholeSpaceAbsolutely'
 import { textInputHorizontalPadding } from '@lib/ui/css/textInput'
 import { textInputHeight } from '@lib/ui/css/textInput'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 import { PasteIcon } from '@lib/ui/icons/PasteIcon'
 import { TextInput } from '@lib/ui/inputs/TextInput'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { Modal } from '@lib/ui/modal'
+import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { attempt } from '@lib/utils/attempt'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { UseMutationResult } from '@tanstack/react-query'
@@ -31,12 +33,14 @@ import { useTranslation } from 'react-i18next'
 import styled, { useTheme } from 'styled-components'
 import { z } from 'zod'
 
+import { UploadQrView } from '../../qr/components/UploadQrView'
 import { useCore } from '../../state/core'
 
-const FullHeightScanQRView = styled(ScanQrView)`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+const PositionQrCodeOverlay = styled.div`
+  ${takeWholeSpaceAbsolutely}
+  background: ${getColor('background')};
+  isolation: isolate;
+  ${vStack()}
 `
 
 export type AddressBookFormValues = Pick<
@@ -61,7 +65,7 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
 }) => {
   const { t } = useTranslation()
   const addressBookItems = useAddressBookItems()
-  const [showScanner, setShowScanner] = useState(false)
+  const [qrView, setQrView] = useState<null | 'scan' | 'upload'>(null)
   const walletCore = useAssertWalletCore()
   const { getClipboardText } = useCore()
   const { colors } = useTheme()
@@ -127,95 +131,114 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
   }
 
   const handleScanSuccess = (address: string) => {
-    setValue('address', address)
-    setShowScanner(false)
+    setValue('address', address, { shouldValidate: true })
+    setQrView(null)
   }
 
   return (
     <VStack as="form" onSubmit={handleSubmit(onSubmit)} fullHeight>
-      <PageHeader primaryControls={<PageHeaderBackButton />} title={title} />
-      <PageContent gap={16} flexGrow scrollable>
-        <ChainInput
-          titleColor="contrast"
-          value={watch('chain')}
-          onChange={newChain => setValue('chain', newChain)}
-          options={Object.values(Chain)}
-        />
-        <VStack gap={8}>
-          <TextInput
-            label={t('label')}
-            placeholder={t('type_here')}
-            {...register('title')}
+      <PageHeader
+        primaryControls={
+          <PageHeaderBackButton
+            onClick={qrView ? () => setQrView(null) : undefined}
           />
-          {errors.title && (
-            <Text color="danger" size={12}>
-              {errors.title.message}
-            </Text>
-          )}
-        </VStack>
-        <VStack gap={8}>
-          <ActionInsideInteractiveElement
-            render={({ actionSize }) => (
-              <TextInput
-                label={t('address')}
-                placeholder={t('type_here')}
-                {...register('address')}
-                style={{
-                  paddingRight: actionSize.width + textInputHorizontalPadding,
-                }}
-              />
+        }
+        title={title}
+      />
+      <VStack fullHeight style={{ position: 'relative' }}>
+        <PageContent gap={16} flexGrow scrollable>
+          <ChainInput
+            titleColor="contrast"
+            value={watch('chain')}
+            onChange={newChain => setValue('chain', newChain)}
+            options={Object.values(Chain)}
+          />
+          <VStack gap={8}>
+            <TextInput
+              label={t('label')}
+              placeholder={t('type_here')}
+              {...register('title')}
+            />
+            {errors.title && (
+              <Text color="danger" size={12}>
+                {errors.title.message}
+              </Text>
             )}
-            action={
-              <HStack>
-                <IconButton size="sm" onClick={() => setShowScanner(true)}>
-                  <CameraIcon />
-                </IconButton>
-                <IconButton
+          </VStack>
+          <VStack gap={8}>
+            <ActionInsideInteractiveElement
+              render={({ actionSize }) => (
+                <TextInput
+                  label={t('address')}
+                  placeholder={t('type_here')}
+                  {...register('address')}
                   style={{
-                    color: colors.textShyExtra.toCssValue(),
+                    paddingRight: actionSize.width + textInputHorizontalPadding,
                   }}
-                  size="sm"
-                  onClick={handlePaste}
-                >
-                  <PasteIcon />
-                </IconButton>
-              </HStack>
-            }
-            actionPlacerStyles={{
-              bottom: (textInputHeight - iconButtonSize.md) / 2,
-              right: textInputHorizontalPadding,
-            }}
-          />
-          {errors.address && (
-            <Text color="danger" size={12}>
-              {errors.address.message}
+                />
+              )}
+              action={
+                <HStack>
+                  <IconButton size="sm" onClick={() => setQrView('scan')}>
+                    <CameraIcon />
+                  </IconButton>
+                  <IconButton
+                    style={{
+                      color: colors.textShyExtra.toCssValue(),
+                    }}
+                    size="sm"
+                    onClick={handlePaste}
+                  >
+                    <PasteIcon />
+                  </IconButton>
+                </HStack>
+              }
+              actionPlacerStyles={{
+                bottom: (textInputHeight - iconButtonSize.md) / 2,
+                right: textInputHorizontalPadding,
+              }}
+            />
+            {errors.address && (
+              <Text color="danger" size={12}>
+                {errors.address.message}
+              </Text>
+            )}
+          </VStack>
+          {error && (
+            <Text color="danger" size={14}>
+              {extractErrorMsg(error)}
             </Text>
           )}
-        </VStack>
-        {error && (
-          <Text color="danger" size={14}>
-            {extractErrorMsg(error)}
-          </Text>
+        </PageContent>
+        <PageFooter>
+          <Button
+            disabled={!isValid || !isDirty}
+            loading={isLoading || isPending}
+            type="submit"
+          >
+            {t('save')}
+          </Button>
+        </PageFooter>
+        {qrView && (
+          <PositionQrCodeOverlay>
+            <Match
+              value={qrView}
+              scan={() => (
+                <ScanQrView
+                  onFinish={handleScanSuccess}
+                  onUploadQrViewRequest={() => setQrView('upload')}
+                />
+              )}
+              upload={() => (
+                <UploadQrView
+                  title={t('upload_qr_code_with_address')}
+                  onFinish={handleScanSuccess}
+                />
+              )}
+            />
+          </PositionQrCodeOverlay>
         )}
-      </PageContent>
-      <PageFooter>
-        <Button
-          disabled={!isValid || !isDirty}
-          loading={isLoading || isPending}
-          type="submit"
-        >
-          {t('save')}
-        </Button>
-      </PageFooter>
-      {showScanner && (
-        <Modal
-          title=""
-          onClose={() => setShowScanner(false)}
-          withDefaultStructure={false}
-        >
-          <FullHeightScanQRView onFinish={handleScanSuccess} />
-        </Modal>
-      )}
+      </VStack>
     </VStack>
   )
 }
