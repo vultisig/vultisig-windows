@@ -9,6 +9,10 @@ type CollapsableStateIndicatorProps = UiProps & {
 
 const Container = styled(IconWrapper)<{ isOpen?: boolean }>`
   transform: rotateZ(${({ isOpen }) => (isOpen ? '-180deg' : '0deg')});
+
+  & > svg {
+    stroke-width: 5px;
+  }
 `
 
 export const CollapsableStateIndicator = (
