@@ -1,11 +1,9 @@
-import { FeeQuote } from '@core/chain/feeQuote/core'
+import { mayaGas } from '@core/chain/feeQuote/resolvers/cosmos'
 
-import { ExtractFeeQuoteByCaseResolver } from '../resolver'
+import { ExtractFeeQuoteResolver } from '../resolver'
 
-export const extractMayaFeeQuote: ExtractFeeQuoteByCaseResolver<
+export const extractMayaFeeQuote: ExtractFeeQuoteResolver<
   'mayaSpecific'
-> = (): FeeQuote<'cosmos'> => {
-  return {
-    gas: BigInt(0),
-  }
-}
+> = () => ({
+  gas: mayaGas,
+})

@@ -1,11 +1,7 @@
-import { FeeQuote } from '@core/chain/feeQuote/core'
+import { tonConfig } from '@core/chain/chains/ton/config'
 
-import { ExtractFeeQuoteByCaseResolver } from '../resolver'
+import { ExtractFeeQuoteResolver } from '../resolver'
 
-export const extractTonFeeQuote: ExtractFeeQuoteByCaseResolver<
+export const extractTonFeeQuote: ExtractFeeQuoteResolver<
   'tonSpecific'
-> = (): FeeQuote<'ton'> => {
-  return {
-    gas: BigInt(0),
-  }
-}
+> = () => ({ gas: tonConfig.fee })

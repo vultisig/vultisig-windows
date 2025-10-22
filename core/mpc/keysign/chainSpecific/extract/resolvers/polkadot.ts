@@ -1,11 +1,9 @@
-import { FeeQuote } from '@core/chain/feeQuote/core'
+import { polkadotConfig } from '@core/chain/chains/polkadot/config'
 
-import { ExtractFeeQuoteByCaseResolver } from '../resolver'
+import { ExtractFeeQuoteResolver } from '../resolver'
 
-export const extractPolkadotFeeQuote: ExtractFeeQuoteByCaseResolver<
+export const extractPolkadotFeeQuote: ExtractFeeQuoteResolver<
   'polkadotSpecific'
-> = (): FeeQuote<'polkadot'> => {
-  return {
-    gas: BigInt(0),
-  }
-}
+> = ({ gas }) => ({
+  gas: gas || polkadotConfig.fee,
+})

@@ -1,5 +1,4 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getFeeAmount } from '@core/chain/feeQuote/getFeeAmount'
 import { extractFeeQuote } from '@core/mpc/keysign/chainSpecific/extract'
@@ -43,16 +42,10 @@ export const JoinKeysignTxPrimaryInfo = ({
   const networkFeesFormatted = useMemo(() => {
     if (!blockchainSpecific.value) return null
 
-    const quote = extractFeeQuote({
-      chain: coin.chain as Chain,
-      blockchainSpecific: blockchainSpecific as any,
-    })
+    const quote = extractFeeQuote(blockchainSpecific)
 
-    const { decimals, ticker } = chainFeeCoin[coin.chain as Chain]
-    const fee = fromChainAmount(
-      getFeeAmount(coin.chain as Chain, quote),
-      decimals
-    )
+    const { decimals, ticker } = chainFeeCoin[coin.chain]
+    const fee = fromChainAmount(getFeeAmount(coin.chain, quote), decimals)
     return formatAmount(fee, { ticker })
   }, [blockchainSpecific, coin.chain])
 

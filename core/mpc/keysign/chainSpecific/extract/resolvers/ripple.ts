@@ -1,11 +1,5 @@
-import { FeeQuote } from '@core/chain/feeQuote/core'
+import { ExtractFeeQuoteResolver } from '../resolver'
 
-import { ExtractFeeQuoteByCaseResolver } from '../resolver'
-
-export const extractRippleFeeQuote: ExtractFeeQuoteByCaseResolver<
+export const extractRippleFeeQuote: ExtractFeeQuoteResolver<
   'rippleSpecific'
-> = ({ value }): FeeQuote<'ripple'> => {
-  return {
-    gas: BigInt(value.gas),
-  }
-}
+> = ({ gas }) => ({ gas })

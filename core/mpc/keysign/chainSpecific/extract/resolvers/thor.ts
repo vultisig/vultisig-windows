@@ -1,11 +1,5 @@
-import { FeeQuote } from '@core/chain/feeQuote/core'
+import { ExtractFeeQuoteResolver } from '../resolver'
 
-import { ExtractFeeQuoteByCaseResolver } from '../resolver'
-
-export const extractThorchainFeeQuote: ExtractFeeQuoteByCaseResolver<
+export const extractThorchainFeeQuote: ExtractFeeQuoteResolver<
   'thorchainSpecific'
-> = ({ value }): FeeQuote<'cosmos'> => {
-  return {
-    gas: BigInt(value.fee),
-  }
-}
+> = ({ fee }) => ({ gas: fee })

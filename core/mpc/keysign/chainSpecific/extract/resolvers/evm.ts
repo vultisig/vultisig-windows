@@ -1,15 +1,11 @@
 import { FeeQuote } from '@core/chain/feeQuote/core'
 
-import { ExtractFeeQuoteByCaseResolver } from '../resolver'
+import { ExtractFeeQuoteResolver } from '../resolver'
 
-export const extractEvmFeeQuote: ExtractFeeQuoteByCaseResolver<
+export const extractEvmFeeQuote: ExtractFeeQuoteResolver<
   'ethereumSpecific'
-> = ({ value }): FeeQuote<'evm'> => {
-  const baseFeePerGas =
-    BigInt(value.maxFeePerGasWei) - BigInt(value.priorityFee)
-  return {
-    baseFeePerGas,
-    maxPriorityFeePerGas: BigInt(value.priorityFee),
-    gasLimit: BigInt(value.gasLimit),
-  }
-}
+> = ({ maxFeePerGasWei, priorityFee, gasLimit }): FeeQuote<'evm'> => ({
+  baseFeePerGas: BigInt(maxFeePerGasWei) - BigInt(priorityFee),
+  maxPriorityFeePerGas: BigInt(priorityFee),
+  gasLimit: BigInt(gasLimit),
+})

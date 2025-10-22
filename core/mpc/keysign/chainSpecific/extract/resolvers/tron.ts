@@ -1,11 +1,5 @@
-import { FeeQuote } from '@core/chain/feeQuote/core'
+import { ExtractFeeQuoteResolver } from '../resolver'
 
-import { ExtractFeeQuoteByCaseResolver } from '../resolver'
-
-export const extractTronFeeQuote: ExtractFeeQuoteByCaseResolver<
-  'tronSpecific'
-> = ({ value }): FeeQuote<'tron'> => {
-  return {
-    gas: BigInt(value.gasEstimation ?? 0),
-  }
-}
+export const extractTronFeeQuote: ExtractFeeQuoteResolver<'tronSpecific'> = ({
+  gasEstimation,
+}) => ({ gas: gasEstimation })

@@ -1,11 +1,5 @@
-import { FeeQuote } from '@core/chain/feeQuote/core'
+import { ExtractFeeQuoteResolver } from '../resolver'
 
-import { ExtractFeeQuoteByCaseResolver } from '../resolver'
-
-export const extractSolanaFeeQuote: ExtractFeeQuoteByCaseResolver<
+export const extractSolanaFeeQuote: ExtractFeeQuoteResolver<
   'solanaSpecific'
-> = ({ value }): FeeQuote<'solana'> => {
-  return {
-    priorityFee: BigInt(value.priorityFee),
-  }
-}
+> = ({ priorityFee }) => ({ priorityFee: BigInt(priorityFee) })

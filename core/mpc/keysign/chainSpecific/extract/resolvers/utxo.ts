@@ -1,13 +1,7 @@
-import { FeeQuote } from '@core/chain/feeQuote/core'
+import { utxoTxSize } from '@core/chain/feeQuote/resolvers/utxo'
 
-import { ExtractFeeQuoteByCaseResolver } from '../resolver'
+import { ExtractFeeQuoteResolver } from '../resolver'
 
-export const extractUtxoFeeQuote: ExtractFeeQuoteByCaseResolver<
-  'utxoSpecific'
-> = ({ value }): FeeQuote<'utxo'> => {
-  return {
-    byteFee: BigInt(value.byteFee),
-    // txSize isn't known from payload; set 0 to leave amount calc to caller when needed
-    txSize: BigInt(0),
-  }
-}
+export const extractUtxoFeeQuote: ExtractFeeQuoteResolver<'utxoSpecific'> = ({
+  byteFee,
+}) => ({ byteFee: BigInt(byteFee), txSize: utxoTxSize })

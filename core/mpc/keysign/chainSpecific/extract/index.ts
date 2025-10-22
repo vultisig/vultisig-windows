@@ -1,14 +1,8 @@
-import { Chain } from '@core/chain/Chain'
-import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-
 import {
   KeysignChainSpecific,
   KeysignChainSpecificKey,
 } from '../KeysignChainSpecific'
-import {
-  ExtractFeeQuoteByCaseResolver,
-  ExtractFeeQuoteResolver,
-} from './resolver'
+import { ExtractFeeQuoteResolver } from './resolver'
 import { extractCardanoFeeQuote } from './resolvers/cardano'
 import { extractCosmosFeeQuote } from './resolvers/cosmos'
 import { extractEvmFeeQuote } from './resolvers/evm'
@@ -24,7 +18,7 @@ import { extractUtxoFeeQuote } from './resolvers/utxo'
 
 const resolvers: Record<
   KeysignChainSpecificKey,
-  ExtractFeeQuoteByCaseResolver<any>
+  ExtractFeeQuoteResolver<any>
 > = {
   ethereumSpecific: extractEvmFeeQuote,
   utxoSpecific: extractUtxoFeeQuote,
@@ -40,21 +34,5 @@ const resolvers: Record<
   cardano: extractCardanoFeeQuote,
 }
 
-export const extractFeeQuote: ExtractFeeQuoteResolver<Chain> = ({
-  chain,
-  blockchainSpecific,
-}) => {
-  const hasCase = Boolean(
-    (blockchainSpecific as KeysignPayload['blockchainSpecific']).case
-  )
-  const hasValue = Boolean(
-    (blockchainSpecific as KeysignPayload['blockchainSpecific']).value
-  )
-  if (!hasCase || !hasValue) {
-    throw new Error('Invalid blockchainSpecific in keysign payload')
-  }
-
-  const specific = blockchainSpecific as KeysignChainSpecific
-  const resolver = resolvers[specific.case]
-  return resolver({ chain, value: specific.value } as any)
-}
+export const extractFeeQuote = (value: KeysignChainSpecific) =>
+  resolvers[value.case](value.value)

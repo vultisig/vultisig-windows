@@ -1,11 +1,5 @@
-import { FeeQuote } from '@core/chain/feeQuote/core'
+import { ExtractFeeQuoteResolver } from '../resolver'
 
-import { ExtractFeeQuoteByCaseResolver } from '../resolver'
-
-export const extractCardanoFeeQuote: ExtractFeeQuoteByCaseResolver<
-  'cardano'
-> = ({ value }): FeeQuote<'cardano'> => {
-  return {
-    byteFee: BigInt(value.byteFee),
-  }
-}
+export const extractCardanoFeeQuote: ExtractFeeQuoteResolver<'cardano'> = ({
+  byteFee,
+}) => ({ byteFee })

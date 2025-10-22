@@ -1,5 +1,4 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getFeeAmount } from '@core/chain/feeQuote/getFeeAmount'
 import { extractFeeQuote } from '@core/mpc/keysign/chainSpecific/extract'
@@ -23,13 +22,10 @@ export const KeysignEstimatedFee = () => {
       throw new Error('Invalid blockchainSpecific in keysign payload')
     }
 
-    const quote = extractFeeQuote({
-      chain: chain as Chain,
-      blockchainSpecific: blockchainSpecific as any,
-    })
+    const quote = extractFeeQuote(blockchainSpecific)
 
     const { decimals, ticker } = chainFeeCoin[chain]
-    const fee = fromChainAmount(getFeeAmount(chain as Chain, quote), decimals)
+    const fee = fromChainAmount(getFeeAmount(chain, quote), decimals)
     return formatAmount(fee, { ticker })
   }, [blockchainSpecific, chain])
 

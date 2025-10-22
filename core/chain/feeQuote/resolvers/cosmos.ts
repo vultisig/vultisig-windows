@@ -1,9 +1,10 @@
 import { Chain } from '@core/chain/Chain'
 
-import { cosmosGasLimitRecord } from '../../chains/cosmos/cosmosGasLimitRecord'
 import { cosmosGasRecord } from '../../chains/cosmos/gas'
 import { getThorNetworkInfo } from '../../chains/cosmos/thor/getThorNetworkInfo'
 import { FeeQuoteResolver } from '../resolver'
+
+export const mayaGas = 2000000000n
 
 export const getCosmosFeeQuote: FeeQuoteResolver<'cosmos'> = async ({
   coin: { chain },
@@ -15,7 +16,7 @@ export const getCosmosFeeQuote: FeeQuoteResolver<'cosmos'> = async ({
   }
 
   if (chain === Chain.MayaChain) {
-    return { gas: cosmosGasLimitRecord[chain] }
+    return { gas: mayaGas }
   }
 
   return { gas: cosmosGasRecord[chain] }
