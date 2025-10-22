@@ -1156,4 +1156,5 @@ export const hr = {
   unlock_discount_tier: 'Otključaj <b>{{tier}}<b> razinu',
   unlock_discount_tier_description:
     'Držanjem {{minBalance}} otključat ćete {{tier}} razinu i ostvariti popust od <b>{{bps}} bps naknade za trgovanje</b> na sve swapove.',
+  upload_qr_code_with_address: 'Prenesite QR kod s adresom',
 }
