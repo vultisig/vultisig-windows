@@ -481,6 +481,9 @@ export const es = {
   transaction_hash_copied: 'Hash de la transacción copiado',
   asset: 'Activo',
   balance: 'Saldo',
+  portfolio_balance: 'Saldo de Cartera',
+  hide_balance: 'Ocultar Saldo',
+  show_balance: 'Mostrar Saldo',
   fill_the_form: 'Completa el formulario',
   failed_to_load: 'No se pudo cargar',
   enter_address: 'Ingrese dirección',
@@ -1185,4 +1188,5 @@ export const es = {
   unlock_discount_tier: 'Desbloquear <b>{{tier}}</b> nivel',
   unlock_discount_tier_description:
     'Al mantener {{minBalance}}, desbloquearás el nivel {{tier}} y recibirás un descuento de <b>{{bps}} bps en la tarifa de negociación</b> en todos los swaps.',
+  upload_qr_code_with_address: 'Subir código QR con dirección',
 }

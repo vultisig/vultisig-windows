@@ -467,6 +467,9 @@ export const pt = {
   transaction_hash_copied: 'Hash da transação copiado',
   asset: 'Ativo',
   balance: 'Saldo',
+  portfolio_balance: 'Saldo da Carteira',
+  hide_balance: 'Ocultar Saldo',
+  show_balance: 'Mostrar Saldo',
   fill_the_form: 'Preencha o formulário',
   overview: 'Visão geral',
   signing_transaction: 'Assinatura da transação',
@@ -1173,4 +1176,5 @@ export const pt = {
   unlock_discount_tier: 'Desbloquear nível <b>{{tier}}</b>',
   unlock_discount_tier_description:
     'Ao manter {{minBalance}}, você desbloqueará o nível {{tier}} e receberá um desconto de <b>{{bps}} bps na taxa de negociação</b> em todas as trocas.',
+  upload_qr_code_with_address: 'Carregar código QR com endereço',
 }

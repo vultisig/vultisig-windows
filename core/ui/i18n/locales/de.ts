@@ -476,6 +476,9 @@ export const de = {
   transaction_hash_copied: 'Transaktionshash kopiert',
   asset: 'Asset',
   balance: 'Kontostand',
+  portfolio_balance: 'Portfolio-Saldo',
+  hide_balance: 'Saldo ausblenden',
+  show_balance: 'Saldo anzeigen',
   fill_the_form: 'Formular ausfüllen',
   failed_to_load: 'Laden fehlgeschlagen',
   enter_address: 'Adresse eingeben',
@@ -1184,4 +1187,6 @@ export const de = {
   unlock_discount_tier: 'Schalte die Stufe <b>{{tier}}</b> frei',
   unlock_discount_tier_description:
     'Indem Sie {{minBalance}} halten, schalten Sie die Stufe {{tier}} frei und erhalten einen <b>Rabatt auf die Handelsgebühr von {{bps}} bps</b> auf alle Swaps.',
+  upload_qr_code_with_address: 'QR-Code mit Adresse hochladen',
+  failed_to_read_qr_code: 'Der QR-Code konnte nicht gelesen werden.',
 }

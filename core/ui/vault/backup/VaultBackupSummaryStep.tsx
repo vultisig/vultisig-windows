@@ -38,6 +38,7 @@ const Wrapper = styled(PageContent)`
 
 const LightningIconWrapper = styled.div`
   font-size: 20px;
+  color: ${getColor('idle')};
 `
 
 const ContentWrapper = styled(VStack)`
@@ -147,7 +148,7 @@ export const VaultBackupSummaryStep: FC<SetupVaultSummaryStepProps> = ({
             gap={8}
           >
             <LightningIconWrapper>
-              <LightningIcon color="#FFC25C" />
+              <LightningIcon />
             </LightningIconWrapper>
             <Text size={12} color="shy">
               {t('fastVault')}
