@@ -1,6 +1,7 @@
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { hStack, VStack } from '@lib/ui/layout/Stack'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
@@ -13,6 +14,8 @@ import styled from 'styled-components'
 import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
 
 export const MigrateVaultPrompt = () => {
+  const [isOpen, { toggle }] = useBoolean(true)
+
   const { RiveComponent } = useRive({
     src: '/core/animations/upgrade_animation.riv',
     autoplay: true,
@@ -20,6 +23,8 @@ export const MigrateVaultPrompt = () => {
 
   const { t } = useTranslation()
   const navigate = useAppNavigate()
+
+  if (isOpen) return null
 
   return (
     <Container onClick={() => navigate({ id: 'migrateVault' })}>
@@ -32,7 +37,14 @@ export const MigrateVaultPrompt = () => {
         </VStack>
         <MigrateButton kind="secondary">{t('upgrade_now')}</MigrateButton>
       </VStack>
-      <CloseButton kind="action">
+      <CloseButton
+        onClick={e => {
+          e.stopPropagation()
+
+          toggle()
+        }}
+        kind="action"
+      >
         <CrossIcon />
       </CloseButton>
       <LightingBackground />
