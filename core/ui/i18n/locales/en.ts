@@ -1037,6 +1037,8 @@ export const en = {
     'Do you want to encrypt your backup with a password?',
   backup_password_info_secure_without_password:
     'By default, your backup is <b>secure without</b> an extra password, since you store Vault shares in different locations.',
+  sign_faster: 'Sign faster than ever before',
+  upgrade_now_prompt: 'Upgrade your vault now',
   backup_password_info_encrypt_with_password:
     'If you choose to add a password, this will be used to <b>encrypt</b> the backup file.',
   backup_password_info_cannot_be_reset:

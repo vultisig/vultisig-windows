@@ -928,6 +928,8 @@ export const de = {
     'Stellen Sie sicher, dass beim Upgrade <b>alle ursprünglichen Geräte</b> vorhanden sind',
   upgrade_success: 'Vault wurde <b>erfolgreich</b> aktualisiert',
   go_to_vault: 'Zum Tresor gehen',
+  sign_faster: 'Schneller unterschreiben als je zuvor',
+  upgrade_now_prompt: 'Aktualisieren Sie Ihren Tresor jetzt',
   upgrade: 'Upgrade',
   scan_with_device_index: 'Mit {{index}}-Gerät scannen',
   scan_with_device_name: 'Scannen mit {{name}}',

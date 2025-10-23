@@ -928,6 +928,8 @@ export const es = {
     'Asegúrese de que <b>todos los dispositivos iniciales</b> estén presentes al realizar la actualización',
   upgrade_success: 'Bóveda actualizada correctamente',
   go_to_vault: 'Ir a la bóveda',
+  sign_faster: 'Firma más rápido que nunca',
+  upgrade_now_prompt: 'Actualiza tu bóveda ahora',
   upgrade: 'Mejora',
   scan_with_device_index: 'Escanear con el dispositivo {{index}}',
   scan_with_device_name: 'Escanear con {{name}}',
