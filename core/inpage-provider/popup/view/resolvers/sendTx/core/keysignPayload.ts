@@ -19,6 +19,7 @@ import {
 } from '@core/mpc/types/vultisig/keysign/v1/tron_contract_payload_pb'
 import { WasmExecuteContractPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { Vault } from '@core/ui/vault/Vault'
+import { attempt } from '@lib/utils/attempt'
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { WalletCore } from '@trustwallet/wallet-core'
@@ -93,9 +94,11 @@ export const getKeysignPayload = ({
           data !== '0x' &&
           (!data.startsWith('0x') || !isEvmContractCall)
         ) {
-          return toUtf8String(data)
+          const result = attempt(() => toUtf8String(data))
+          if ('data' in result) {
+            return result.data
+          }
         }
-
         return data
       },
       solana: () => undefined,

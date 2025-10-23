@@ -25,9 +25,11 @@ import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { omit } from '@lib/utils/record/omit'
 import { getRecordUnionKey } from '@lib/utils/record/union/getRecordUnionKey'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
-import { TypedDataEncoder } from 'ethers'
+import { getBytes, hexlify, TypedDataEncoder } from 'ethers'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { toDisplayMessageString } from '../../../utils/toDisplayMessage'
 
 export const Overview = () => {
   const { t } = useTranslation()
@@ -47,14 +49,33 @@ export const Overview = () => {
         message
       ),
     sign_message: ({ message }) => message,
-    personal_sign: ({ message, bytesCount }) =>
-      `\x19Ethereum Signed Message:\n${bytesCount}${message}`,
+    personal_sign: ({ message, bytesCount }) => {
+      const isHex = message.startsWith('0x') || message.startsWith('0X')
+      const prefix = `\x19Ethereum Signed Message:\n${bytesCount}`
+
+      if (isHex) {
+        const prefixBytes = new TextEncoder().encode(prefix)
+        const msgBytes = getBytes(message)
+        const combined = new Uint8Array(prefixBytes.length + msgBytes.length)
+        combined.set(prefixBytes)
+        combined.set(msgBytes, prefixBytes.length)
+        return hexlify(combined)
+      }
+
+      return `${prefix}${message}`
+    },
   })
 
   const displayMessage = matchRecordUnion<SignMessageInput, string>(input, {
     eth_signTypedData_v4: () => message,
     sign_message: () => message,
-    personal_sign: ({ message }) => message,
+    personal_sign: ({ message }) => {
+      const bytes =
+        message.startsWith('0x') || message.startsWith('0X')
+          ? getBytes(message)
+          : new TextEncoder().encode(message)
+      return toDisplayMessageString(bytes)
+    },
   })
 
   const type = matchRecordUnion<SignMessageInput, SignMessageType>(input, {
