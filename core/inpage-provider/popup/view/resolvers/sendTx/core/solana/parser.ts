@@ -70,6 +70,86 @@ export const parseSolanaTx = async ({
   )
   const keys = mergedKeys(staticKeys, resolvedKeys)
 
+  const { data: parsedSimulation } = await attempt(async () => {
+    const coin = fromCommCoin(fromCoin) as AccountCoin<OtherChain.Solana>
+
+    const feeQuote = await getSolanaFeeQuote({
+      coin,
+    })
+
+    const txData = await getKeysignTxData({
+      coin,
+    })
+
+    const blockchainSpecific = buildChainSpecific({
+      chain: Chain.Solana,
+      txData,
+      feeQuote,
+    })
+
+    const keysignPayload = create(KeysignPayloadSchema, {
+      coin: fromCoin,
+      blockchainSpecific,
+      swapPayload: {
+        case: 'oneinchSwapPayload',
+        value: create(OneInchSwapPayloadSchema, {
+          fromCoin,
+          toCoin: fromCoin,
+          fromAmount: '0',
+          toAmountDecimal: '0',
+          quote: create(OneInchQuoteSchema, {
+            dstAmount: '0',
+            tx: create(OneInchTransactionSchema, {
+              data: Buffer.from(buffer).toString('base64'),
+              value: '0',
+              gasPrice: '0',
+              gas: BigInt(0),
+            }),
+          }),
+          provider: '1inch',
+        }),
+      },
+    })
+
+    const blockaidTxSimulationInput = getBlockaidTxSimulationInput({
+      payload: keysignPayload,
+      walletCore,
+    })
+
+    if (!blockaidTxSimulationInput) {
+      throw new Error('Error getting blockaid tx simulation input')
+    }
+    const sim = await getTxBlockaidSimulation({
+      chain: Chain.Solana,
+      data: blockaidTxSimulationInput.data,
+    })
+
+    const { fromMint, toMint, fromAmount, toAmount } =
+      await parseBlockaidSimulation(sim)
+
+    const [inputCoin, outputCoin] = await Promise.all(
+      [fromMint, toMint].map(mint => {
+        const id = mint === NATIVE_MINT.toBase58() ? undefined : mint
+        return getCoin({ chain: Chain.Solana, id })
+      })
+    )
+
+    return {
+      swap: {
+        authority: fromCoin.address,
+        inAmount: fromAmount.toString(),
+        inputCoin,
+        outAmount: toAmount.toString(),
+        outputCoin,
+        data,
+        swapProvider,
+      },
+    }
+  })
+
+  if (parsedSimulation) {
+    return parsedSimulation
+  }
   const { data: parsedTx, error } = await attempt(
     parseProgramCall({
       tx,
@@ -79,81 +159,9 @@ export const parseSolanaTx = async ({
       data,
     })
   )
+
   if (!error && parsedTx) {
     return parsedTx
   }
-
-  const coin = fromCommCoin(fromCoin) as AccountCoin<OtherChain.Solana>
-
-  const feeQuote = await getSolanaFeeQuote({
-    coin,
-  })
-
-  const txData = await getKeysignTxData({
-    coin,
-  })
-
-  const blockchainSpecific = buildChainSpecific({
-    chain: Chain.Solana,
-    txData,
-    feeQuote,
-  })
-
-  const keysignPayload = create(KeysignPayloadSchema, {
-    coin: fromCoin,
-    blockchainSpecific,
-    swapPayload: {
-      case: 'oneinchSwapPayload',
-      value: create(OneInchSwapPayloadSchema, {
-        fromCoin,
-        toCoin: fromCoin,
-        fromAmount: '0',
-        toAmountDecimal: '0',
-        quote: create(OneInchQuoteSchema, {
-          dstAmount: '0',
-          tx: create(OneInchTransactionSchema, {
-            data: Buffer.from(buffer).toString('base64'),
-            value: '0',
-            gasPrice: '0',
-            gas: BigInt(0),
-          }),
-        }),
-        provider: '1inch',
-      }),
-    },
-  })
-
-  const blockaidTxSimulationInput = getBlockaidTxSimulationInput({
-    payload: keysignPayload,
-    walletCore,
-  })
-  if (!blockaidTxSimulationInput) {
-    throw new Error('Error getting blockaid tx simulation input')
-  }
-  const sim = await getTxBlockaidSimulation({
-    chain: Chain.Solana,
-    data: blockaidTxSimulationInput.data,
-  })
-
-  const { fromMint, toMint, fromAmount, toAmount } =
-    await parseBlockaidSimulation(sim)
-
-  const [inputCoin, outputCoin] = await Promise.all(
-    [fromMint, toMint].map(mint => {
-      const id = mint === NATIVE_MINT.toBase58() ? undefined : mint
-      return getCoin({ chain: Chain.Solana, id })
-    })
-  )
-
-  return {
-    swap: {
-      authority: fromCoin.address,
-      inAmount: fromAmount.toString(),
-      inputCoin,
-      outAmount: toAmount.toString(),
-      outputCoin,
-      data,
-      swapProvider,
-    },
-  }
+  throw new Error('failed to parse transaction')
 }
