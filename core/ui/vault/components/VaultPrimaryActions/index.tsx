@@ -16,7 +16,7 @@ export const VaultPrimaryActions = (state: CoreViewState<'send'>) => {
   const coin = 'coin' in state ? state.coin : feeCoin
 
   return (
-    <ActionsWrapper justifyContent="center" gap={12}>
+    <ActionsWrapper justifyContent="center" gap={20}>
       {isOneOf(chain, swapEnabledChains) && <SwapPrompt fromCoin={coin} />}
       <SendPrompt {...state} />
       {isOneOf(chain, depositEnabledChains) && <DepositPrompt coin={coin} />}
