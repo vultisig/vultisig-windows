@@ -9,7 +9,7 @@ import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueries
 import { useCallback } from 'react'
 
 import { useSendCappedAmountQuery } from '../queries/useSendCappedAmountQuery'
-import { useSendFeeQuote } from '../queries/useSendFeeQuoteQuery'
+import { useSendFeeQuoteQuery } from '../queries/useSendFeeQuoteQuery'
 import { useSendKeysignTxDataQuery } from '../queries/useSendKeysignTxDataQuery'
 import { useSendMemo } from './memo'
 import { useSendReceiver } from './receiver'
@@ -23,7 +23,7 @@ export const useSendTxKeysignPayloadQuery = () => {
   const vault = useCurrentVault()
 
   const txData = useSendKeysignTxDataQuery()
-  const feeQuote = useSendFeeQuote()
+  const feeQuote = useSendFeeQuoteQuery()
 
   const cappedAmount = useSendCappedAmountQuery()
 
@@ -33,9 +33,10 @@ export const useSendTxKeysignPayloadQuery = () => {
     {
       txData,
       cappedAmount,
+      feeQuote,
     },
     useCallback(
-      ({ txData, cappedAmount }) => {
+      ({ txData, cappedAmount, feeQuote }) => {
         const publicKey = getPublicKey({
           chain: coin.chain,
           walletCore,
@@ -67,7 +68,6 @@ export const useSendTxKeysignPayloadQuery = () => {
       [
         coin,
         memo,
-        feeQuote,
         receiver,
         vault.hexChainCode,
         vault.libType,

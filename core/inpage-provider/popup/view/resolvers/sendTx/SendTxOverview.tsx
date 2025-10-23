@@ -4,14 +4,13 @@ import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { applyFeeSettings } from '@core/chain/feeQuote/applyFeeSettings'
 import { FeeQuote } from '@core/chain/feeQuote/core'
+import { getFeeAmount } from '@core/chain/feeQuote/getFeeAmount'
 import {
   FeeSettings,
   FeeSettingsChainKind,
   feeSettingsChainKinds,
 } from '@core/chain/feeQuote/settings/core'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
-import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
-import { KeysignChainSpecific } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useFeeQuoteQuery } from '@core/ui/chain/feeQuote/query'
@@ -197,7 +196,8 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                   handlers={{
                     keysign: transactionPayload => {
                       const feeAmount = getFeeAmount(
-                        keysignPayload.blockchainSpecific as KeysignChainSpecific
+                        chain,
+                        shouldBePresent(feeQuote.data)
                       )
 
                       const getEvmFeeSettings = (): EvmFeeSettings | null => {
