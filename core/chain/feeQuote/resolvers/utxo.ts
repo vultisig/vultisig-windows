@@ -4,7 +4,7 @@ import { multiplyBigInt } from '@lib/utils/bigint/bigIntMultiplyByNumber'
 import { complexUtxoTxMultiplier } from '../../tx/fee/utxo/UtxoFeeSettings'
 import { FeeQuoteResolver } from '../resolver'
 
-const txSize = 250n
+export const utxoTxSize = 250n
 
 export const getUtxoFeeQuote: FeeQuoteResolver<'utxo'> = async ({
   coin,
@@ -16,6 +16,6 @@ export const getUtxoFeeQuote: FeeQuoteResolver<'utxo'> = async ({
     byteFee: isComplexTx
       ? multiplyBigInt(byteFee, complexUtxoTxMultiplier)
       : byteFee,
-    txSize,
+    txSize: utxoTxSize,
   }
 }
