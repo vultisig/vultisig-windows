@@ -8,6 +8,6 @@ export const depositEnabledChains = [
   Chain.Kujira,
   Chain.Osmosis,
   Chain.Cosmos,
-] as const
+] as const satisfies readonly Chain[]
 
 export type DepositEnabledChain = (typeof depositEnabledChains)[number]
