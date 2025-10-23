@@ -903,6 +903,8 @@ export const hr = {
     'Provjerite jesu li <b>svi početni uređaji</b> prisutni prilikom nadogradnje',
   upgrade_success: 'Vault je <b>uspješno</b> nadograđen',
   go_to_vault: 'Idi u trezor',
+  sign_faster: 'Potpišite brže nego ikad prije',
+  upgrade_now_prompt: 'Nadogradite svoj trezor sada',
   upgrade: 'Nadogradnja',
   scan_with_device_index: 'Skeniraj s {{index}} uređajem',
   scan_with_device_name: 'Skeniraj s {{name}}',
