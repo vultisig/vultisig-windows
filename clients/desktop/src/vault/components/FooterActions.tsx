@@ -51,6 +51,7 @@ const SecondaryItemWrapper = styled(Button)<IsActiveProp>`
   font-size: 24px;
   border-radius: 99px;
   transition: background 0.2s ease-in-out;
+  background: none;
 
   ${vStack({
     gap: 2,

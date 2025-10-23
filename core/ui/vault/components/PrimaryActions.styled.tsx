@@ -7,7 +7,7 @@ export const ActionsWrapper = styled(HStack)`
   padding-inline: 24px;
 `
 
-export const ActionWrapper = styled(UnstyledButton)`
+const ActionWrapper = styled(UnstyledButton)`
   min-width: 52px;
   max-height: 52px;
   display: flex;
