@@ -1,6 +1,9 @@
-import { formatFee } from '@core/chain/tx/fee/format/formatFee'
-import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { getFeeAmount } from '@core/chain/feeQuote/getFeeAmount'
+import { extractFeeQuote } from '@core/mpc/keysign/chainSpecific/extract'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
+import { formatAmount } from '@lib/utils/formatAmount'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -19,10 +22,11 @@ export const KeysignEstimatedFee = () => {
       throw new Error('Invalid blockchainSpecific in keysign payload')
     }
 
-    return formatFee({
-      chain,
-      amount: getFeeAmount(blockchainSpecific),
-    })
+    const quote = extractFeeQuote(blockchainSpecific)
+
+    const { decimals, ticker } = chainFeeCoin[chain]
+    const fee = fromChainAmount(getFeeAmount(chain, quote), decimals)
+    return formatAmount(fee, { ticker })
   }, [blockchainSpecific, chain])
 
   return (

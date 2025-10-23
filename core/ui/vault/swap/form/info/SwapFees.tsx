@@ -1,4 +1,5 @@
-import { formatFee } from '@core/chain/tx/fee/format/formatFee'
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndicator'
@@ -7,6 +8,7 @@ import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text, TextColor } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { formatAmount } from '@lib/utils/formatAmount'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { TFunction } from 'i18next'
 import { ComponentType, FC, PropsWithChildren } from 'react'
@@ -15,6 +17,7 @@ import styled from 'styled-components'
 
 import { useSwapFeesQuery } from '../../queries/useSwapFeesQuery'
 import { useSwapQuoteQuery } from '../../queries/useSwapQuoteQuery'
+import { useSwapFromCoin } from '../../state/fromCoin'
 import { SwapFeeFiatValue } from './SwapTotalFeeFiatValue'
 
 type SwapFeesProps = {
@@ -28,6 +31,8 @@ export const SwapFees: FC<SwapFeesProps> = ({ RowComponent }) => {
   const { t } = useTranslation()
   const query = useSwapFeesQuery()
   const swapQuoteQuery = useSwapQuoteQuery()
+
+  const [fromCoinKey] = useSwapFromCoin()
 
   return (
     <>
@@ -77,25 +82,32 @@ export const SwapFees: FC<SwapFeesProps> = ({ RowComponent }) => {
                     <Text color="danger">{t('failed_to_load')}</Text>
                   </RowComponent>
                 )}
-                success={({ network, swap }) => (
-                  <>
-                    {swap && (
+                success={({ network, swap }) => {
+                  const { ticker, decimals } = chainFeeCoin[fromCoinKey.chain]
+                  return (
+                    <>
+                      {swap && (
+                        <RowComponent>
+                          <Text>{t('swap_fee')}</Text>
+                          <Text color="shy">
+                            <SwapFeeFiatValue value={[swap]} />
+                          </Text>
+                        </RowComponent>
+                      )}
                       <RowComponent>
-                        <Text>{t('swap_fee')}</Text>
+                        <span>{t('network_fee')}</span>
                         <Text color="shy">
-                          <SwapFeeFiatValue value={[swap]} />
+                          {formatAmount(
+                            fromChainAmount(network.amount, decimals),
+                            { ticker }
+                          )}{' '}
+                          (~
+                          <SwapFeeFiatValue value={[network]} />)
                         </Text>
                       </RowComponent>
-                    )}
-                    <RowComponent>
-                      <span>{t('network_fee')}</span>
-                      <Text color="shy">
-                        {formatFee(network)} (~
-                        <SwapFeeFiatValue value={[network]} />)
-                      </Text>
-                    </RowComponent>
-                  </>
-                )}
+                    </>
+                  )
+                }}
               />
             </FeesWrapper>
           </motion.div>
