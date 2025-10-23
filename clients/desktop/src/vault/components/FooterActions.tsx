@@ -12,7 +12,7 @@ import { IsActiveProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 const Container = styled(UnstyledButton)`
   ${round};
@@ -58,9 +58,13 @@ const SecondaryItemWrapper = styled(Button)<IsActiveProp>`
     alignItems: 'center',
   })};
 
-  &:hover {
-    background: ${getColor('primaryAccentFour')};
-  }
+  ${({ isActive }) =>
+    isActive &&
+    css`
+      &:hover {
+        background: ${getColor('primaryAccentFour')};
+      }
+    `}
 `
 
 export const FooterActions = () => {
