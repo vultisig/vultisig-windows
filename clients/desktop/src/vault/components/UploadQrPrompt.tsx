@@ -4,16 +4,15 @@ import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
-import { CameraIcon } from '@lib/ui/icons/CameraIcon'
+import { Camera2Icon } from '@lib/ui/icons/Camera2Icon'
 import { pageConfig } from '@lib/ui/page/config'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
 const Container = styled(UnstyledButton)`
   ${round};
-  background: ${getColor('primary')};
+  background: ${getColor('primaryAccentFour')};
   ${centerContent};
-  color: ${getColor('foreground')};
   ${sameDimensions(64)};
   font-size: 24px;
 `
@@ -33,7 +32,7 @@ export const UploadQrPrompt = () => {
   return (
     <Position>
       <Container onClick={() => navigate({ id: 'uploadQr', state: {} })}>
-        <CameraIcon />
+        <Camera2Icon />
       </Container>
     </Position>
   )
