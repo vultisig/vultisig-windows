@@ -24,7 +24,7 @@ export const MigrateVaultPrompt = () => {
   const { t } = useTranslation()
   const navigate = useAppNavigate()
 
-  if (isOpen) return null
+  if (!isOpen) return null
 
   return (
     <Container onClick={() => navigate({ id: 'migrateVault' })}>
@@ -37,6 +37,11 @@ export const MigrateVaultPrompt = () => {
         </VStack>
         <MigrateButton kind="secondary">{t('upgrade_now')}</MigrateButton>
       </VStack>
+
+      <LightingBackground />
+      <AnimationWrapper>
+        <RiveComponent />
+      </AnimationWrapper>
       <CloseButton
         onClick={e => {
           e.stopPropagation()
@@ -47,10 +52,6 @@ export const MigrateVaultPrompt = () => {
       >
         <CrossIcon />
       </CloseButton>
-      <LightingBackground />
-      <AnimationWrapper>
-        <RiveComponent />
-      </AnimationWrapper>
     </Container>
   )
 }
