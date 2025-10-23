@@ -38,4 +38,5 @@ const Wrapper = styled.div`
   gap: 4px;
   border-radius: 8px;
   background: rgba(81, 128, 252, 0.12);
+  cursor: pointer;
 `
