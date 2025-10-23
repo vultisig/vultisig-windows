@@ -1,4 +1,5 @@
 import { create } from '@bufbuild/protobuf'
+import { Chain } from '@core/chain/Chain'
 import {
   SignMessageInput,
   SignMessageType,
@@ -25,10 +26,11 @@ import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { omit } from '@lib/utils/record/omit'
 import { getRecordUnionKey } from '@lib/utils/record/union/getRecordUnionKey'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
-import { getBytes, hexlify, TypedDataEncoder } from 'ethers'
+import { getBytes, hexlify, toUtf8Bytes, TypedDataEncoder } from 'ethers'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { hexStr2byteArray } from '../../../utils/hexStr2byteArray'
 import { toDisplayMessageString } from '../../../utils/toDisplayMessage'
 
 export const Overview = () => {
@@ -48,7 +50,18 @@ export const Overview = () => {
         omit(types, 'EIP712Domain'),
         message
       ),
-    sign_message: ({ message }) => message,
+    sign_message: ({ message, chain, useTronHeader }) => {
+      const tronMessageHeader = '\x19TRON Signed Message:\n32'
+      const ethMessageHeader = '\x19Ethereum Signed Message:\n32'
+      if (chain === Chain.Tron) {
+        const messageBytes = [
+          ...toUtf8Bytes(useTronHeader ? tronMessageHeader : ethMessageHeader),
+          ...hexStr2byteArray(message),
+        ]
+        return hexlify(new Uint8Array(messageBytes))
+      }
+      return message
+    },
     personal_sign: ({ message, bytesCount }) => {
       const isHex = message.startsWith('0x') || message.startsWith('0X')
       const prefix = `\x19Ethereum Signed Message:\n${bytesCount}`
