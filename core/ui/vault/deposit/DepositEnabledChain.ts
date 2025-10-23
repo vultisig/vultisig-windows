@@ -1,6 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 
-export const depositEnabledChains = [
+export const depositEnabledChains: Chain[] = [
   Chain.THORChain,
   Chain.MayaChain,
   Chain.Dydx,
@@ -8,6 +8,6 @@ export const depositEnabledChains = [
   Chain.Kujira,
   Chain.Osmosis,
   Chain.Cosmos,
-] as const
+]
 
 export type DepositEnabledChain = (typeof depositEnabledChains)[number]
