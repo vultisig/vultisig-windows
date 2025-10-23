@@ -13,7 +13,7 @@ export const DecryptVaultContainerStep = ({
   value,
   onFinish,
 }: ValueProp<string> & OnFinishProp<Vault>) => {
-  const { mutate, error, isPending } = useMutation({
+  const mutation = useMutation({
     mutationFn: async (password: string) =>
       pipe(
         value,
@@ -31,7 +31,5 @@ export const DecryptVaultContainerStep = ({
     onSuccess: onFinish,
   })
 
-  return (
-    <DecryptVaultView isPending={isPending} error={error} onSubmit={mutate} />
-  )
+  return <DecryptVaultView mutation={mutation} />
 }
