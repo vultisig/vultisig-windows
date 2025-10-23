@@ -466,6 +466,7 @@ export const hr = {
   enter_amount: 'Unesite iznos',
   send_pending_validation: 'Provjera vaše transakcije...',
   send_validation_failed: 'Provjera transakcije nije uspjela',
+  receive: 'Primiti',
   send_invalid_receiver_address: 'Unesite važeću adresu primatelja',
   amount_required: 'Iznos je obavezan',
   send_amount_exceeds_balance: 'Iznos premašuje stanje',

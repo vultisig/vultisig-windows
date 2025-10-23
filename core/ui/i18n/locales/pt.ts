@@ -478,6 +478,7 @@ export const pt = {
   enter_amount: 'Inserir valor',
   send_pending_validation: 'Validando sua transação...',
   send_validation_failed: 'Falha na validação da transação',
+  receive: 'Receber',
   send_invalid_receiver_address: 'Insira um endereço de destinatário válido',
   amount_required: 'Valor obrigatório',
   send_amount_exceeds_balance: 'O valor excede o saldo',
