@@ -1,7 +1,7 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { Chain } from '@core/chain/Chain'
-import { formatFee } from '@core/chain/tx/fee/format/formatFee'
-import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { getFeeAmount } from '@core/chain/feeQuote/getFeeAmount'
+import { extractFeeQuote } from '@core/mpc/keysign/chainSpecific/extract'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
@@ -15,6 +15,7 @@ import {
 import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { formatAmount } from '@lib/utils/formatAmount'
 import { assertField } from '@lib/utils/record/assertField'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -41,10 +42,11 @@ export const JoinKeysignTxPrimaryInfo = ({
   const networkFeesFormatted = useMemo(() => {
     if (!blockchainSpecific.value) return null
 
-    return formatFee({
-      chain: coin.chain as Chain,
-      amount: getFeeAmount(blockchainSpecific),
-    })
+    const quote = extractFeeQuote(blockchainSpecific)
+
+    const { decimals, ticker } = chainFeeCoin[coin.chain]
+    const fee = fromChainAmount(getFeeAmount(coin.chain, quote), decimals)
+    return formatAmount(fee, { ticker })
   }, [blockchainSpecific, coin.chain])
 
   return (
