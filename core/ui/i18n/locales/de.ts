@@ -485,6 +485,7 @@ export const de = {
   enter_amount: 'Betrag eingeben',
   send_pending_validation: 'Ihre Transaktion wird validiert...',
   send_validation_failed: 'Transaktion konnte nicht validiert werden',
+  receive: 'Empfangen',
   send_invalid_receiver_address: 'Geben Sie eine gültige Empfängeradresse ein',
   amount_required: 'Betrag ist erforderlich',
   send_amount_exceeds_balance: 'Betrag übersteigt Kontostand',

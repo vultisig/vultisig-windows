@@ -546,6 +546,7 @@ export const en = {
   failed_to_read_qr_code: 'Failed to read QR code',
   send_pending_validation: 'Validating your transaction...',
   send_validation_failed: 'Failed to validate transaction',
+  receive: 'Receive',
   send_invalid_receiver_address: 'Enter a valid receiver address',
   send_receiver_address_same_as_sender:
     'Receiver address cannot be the same as sender address',

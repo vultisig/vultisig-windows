@@ -490,6 +490,7 @@ export const es = {
   enter_amount: 'Ingrese monto',
   send_pending_validation: 'Validando su transacción...',
   send_validation_failed: 'No se pudo validar la transacción',
+  receive: 'Recibir',
   send_invalid_receiver_address: 'Ingrese una dirección de receptor válida',
   amount_required: 'Se requiere monto',
   send_amount_exceeds_balance: 'El monto excede el saldo',
