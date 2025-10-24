@@ -25,7 +25,13 @@ export type SignMessageInput =
         type: SignMessageType
       }
     }
-  | { sign_message: { chain: OtherChain.Solana; message: string } }
+  | {
+      sign_message: {
+        chain: OtherChain.Solana | OtherChain.Tron
+        useTronHeader?: boolean
+        message: string
+      }
+    }
 
 export type PopupInterface = {
   grantVaultAccess: Method<{}, { appSession: VaultAppSession }>

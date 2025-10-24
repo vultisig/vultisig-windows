@@ -1,6 +1,6 @@
 export const productRootDomain = 'vultisig.com'
 export const rootApiUrl = `https://api.${productRootDomain}`
-export const deepLinkBaseUrl = `vultisig://${productRootDomain}`
+export const deepLinkBaseUrl = `https://${productRootDomain}`
 export const productName = 'Vultisig'
 export const productWebsiteUrl = `https://${productRootDomain}`
 export const desktopDownloadUrl = `${productWebsiteUrl}/downloads`
