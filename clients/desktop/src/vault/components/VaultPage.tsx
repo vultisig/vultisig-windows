@@ -1,4 +1,7 @@
-import { FooterActions } from '@clients/desktop/src/vault/components/FooterActions'
+import {
+  FooterActions,
+  footerActionsHeight,
+} from '@clients/desktop/src/vault/components/FooterActions'
 import { VaultOverview } from '@clients/desktop/src/vault/components/VaultOverview'
 import { hasServer } from '@core/mpc/devices/localPartyId'
 import { FastVaultPasswordVerification } from '@core/ui/mpc/fast/FastVaultPasswordVerification'
@@ -37,4 +40,5 @@ export const VaultPage = () => {
 const Wrapper = styled(VStack)`
   position: relative;
   overflow-y: auto;
+  margin-bottom: ${footerActionsHeight}px;
 `
