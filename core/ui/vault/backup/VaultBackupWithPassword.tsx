@@ -1,3 +1,4 @@
+import { passwordLenghtConfig } from '@core/security/password/config'
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultMutation'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -14,8 +15,6 @@ import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
-
-import { passwordLenghtConfig } from '../../security/password/config'
 
 const createSchema = (t: TFunction) => {
   const message = t('password_pattern_error', passwordLenghtConfig)

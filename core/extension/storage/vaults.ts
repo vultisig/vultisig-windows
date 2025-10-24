@@ -1,6 +1,6 @@
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { vaultsInitialValue, VaultsStorage } from '@core/ui/storage/vaults'
-import { getVaultId, Vault } from '@core/ui/vault/Vault'
+import { getVaultId, Vault } from '@core/vault/Vault'
 import { getStorageValue } from '@lib/extension/storage/get'
 import { setStorageValue } from '@lib/extension/storage/set'
 import { updateAtIndex } from '@lib/utils/array/updateAtIndex'

@@ -3,7 +3,7 @@ import { CoreApp } from '@core/ui/CoreApp'
 import { CoreState } from '@core/ui/state/core'
 import { ErrorBoundaryProcessError } from '@lib/ui/errors/ErrorBoundary'
 import { ChildrenProp } from '@lib/ui/props'
-import { initiateFileDownload } from '@lib/ui/utils/initiateFileDownload'
+import { initiateFileDownload } from '@lib/utils/file/initiateFileDownload'
 import { useMemo } from 'react'
 
 import { storage } from './storage'

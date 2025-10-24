@@ -1,10 +1,10 @@
+import { getVaultId, Vault } from '@core/vault/Vault'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { LineSeparator } from '@lib/ui/layout/LineSeparator'
 import { StackSeparatedBy } from '@lib/ui/layout/StackSeparatedBy'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-import { getVaultId, Vault } from '../../Vault'
 import { VaultItem } from './VaultItem'
 
 const Container = styled(StackSeparatedBy)`

@@ -7,13 +7,12 @@ import { VaultBackupFlow } from '@core/ui/vault/backup/VaultBackupFlow'
 import { VaultBackupSummaryStep } from '@core/ui/vault/backup/VaultBackupSummaryStep'
 import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { getVaultId } from '@core/vault/Vault'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { useRive } from '@rive-app/react-canvas'
 import { useTranslation } from 'react-i18next'
-
-import { getVaultId } from '../../Vault'
 
 const steps = [
   'backupSlideshowPartOne',

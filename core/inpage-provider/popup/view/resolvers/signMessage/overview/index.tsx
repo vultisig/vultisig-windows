@@ -14,7 +14,7 @@ import { StartKeysignPrompt } from '@core/ui/mpc/keysign/prompt/StartKeysignProm
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
-import { getVaultId } from '@core/ui/vault/Vault'
+import { getVaultId } from '@core/vault/Vault'
 import { Match } from '@lib/ui/base/Match'
 import { Button } from '@lib/ui/buttons/Button'
 import { useViewState } from '@lib/ui/navigation/hooks/useViewState'

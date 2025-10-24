@@ -1,8 +1,7 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useVaults } from '@core/ui/storage/vaults'
 import { VaultBackupFlow } from '@core/ui/vault/backup/VaultBackupFlow'
-
-import { getVaultId } from '../Vault'
+import { getVaultId } from '@core/vault/Vault'
 
 export const VaultsBackupPage = () => {
   const navigate = useCoreNavigate()
