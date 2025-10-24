@@ -11,7 +11,6 @@ import { JoinKeysignPage } from '@clients/extension/src/mpc/keysign/join/JoinKey
 import { AppViewId } from '@clients/extension/src/navigation/AppView'
 import { ConnectedDappsPage } from '@clients/extension/src/pages/connected-dapps'
 import { SetupVaultPageController } from '@clients/extension/src/pages/setup-vault/SetupVaultPageController'
-import { VaultPage } from '@clients/extension/src/pages/vault'
 import { StartKeysignView } from '@core/extension/keysign/start/StartKeysignView'
 import { SharedViewId, sharedViews } from '@core/ui/navigation/sharedViews'
 import { OnboardingPage } from '@core/ui/onboarding/components/OnboardingPage'
@@ -54,7 +53,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
       </ResponsivenessProvider>
     </ExpandViewGuard>
   ),
-  vault: VaultPage,
 }
 
 export const views: Views<AppViewId> = {
