@@ -28,7 +28,7 @@ export const useSwapQuoteQuery = () => {
   const toCoin = useCurrentVaultCoin(toCoinKey)
 
   const fromCoinUsdPrice = useCoinPriceQuery({
-    coin: fromCoin,
+    coin: fromCoinKey,
     fiatCurrency: 'usd',
   })
 

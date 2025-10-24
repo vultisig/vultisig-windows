@@ -1,11 +1,11 @@
-import { Coin, coinKeyToString } from '@core/chain/coin/Coin'
+import { CoinKey, coinKeyToString } from '@core/chain/coin/Coin'
 import { FiatCurrency } from '@core/config/FiatCurrency'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { useCallback } from 'react'
 
 type UseCoinPricesQueryInput = {
-  coin: Coin
+  coin: CoinKey
   fiatCurrency?: FiatCurrency
 }
 
