@@ -18,12 +18,16 @@ export const VaultTabs = () => {
       onValueChange={setActiveTab}
       triggerSlot={({ tab: { label, disabled }, isActive }) => (
         <TriggerItem isActive={isActive} isDisabled={disabled}>
-          <Text as="span" color={isActive ? 'contrast' : 'supporting'}>
+          <Text
+            size={14}
+            as="span"
+            color={isActive ? 'contrast' : 'supporting'}
+          >
             {label}
           </Text>
           {disabled && (
             <ComingSoonWrapper>
-              <Text as="span" color="info">
+              <Text size={10} as="span" color="info">
                 Soon
               </Text>
             </ComingSoonWrapper>

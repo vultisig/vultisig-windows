@@ -3,17 +3,24 @@ import { CryptoWalletPenIcon } from '@lib/ui/icons/CryptoWalletPenIcon'
 import { SearchIcon } from '@lib/ui/icons/SearchIcon'
 import { HStack, hStack } from '@lib/ui/layout/Stack'
 import { ChildrenProp } from '@lib/ui/props'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 
 export const VaultTabsHeader = ({ children }: ChildrenProp) => {
+  const { colors } = useTheme()
+
   return (
     <Wrapper>
       <TabsHeaderContainer>{children}</TabsHeaderContainer>
       <HStack gap={8} alignItems="center">
-        <IconButton>
+        <IconButton size="lg">
           <SearchIcon />
         </IconButton>
-        <IconButton>
+        <IconButton
+          style={{
+            color: colors.buttonPrimary.toCssValue(),
+          }}
+          size="lg"
+        >
           <CryptoWalletPenIcon />
         </IconButton>
       </HStack>
