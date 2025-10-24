@@ -19,7 +19,7 @@ import { VaultOverviewPrimaryActions } from './VaultOverviewPrimaryActions'
 const PromptsContainer = styled.div`
   padding-inline: 20px;
   margin-top: 12px;
-  ${vStack({ gap: 20 })}
+  ${vStack({ gap: 20 })};
 `
 
 const PromptsWrapper = ({ children }: ChildrenProp) => {
