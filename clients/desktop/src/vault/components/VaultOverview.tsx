@@ -31,7 +31,7 @@ export const VaultOverview = () => {
   return (
     <VStack fullHeight>
       <Wrap wrap={PromptsWrapper}>{!isBackedUp && <VaultBackupBanner />}</Wrap>
-      <PageContent scrollable gap={32} flexGrow>
+      <PageContent gap={32} flexGrow>
         <VStack alignItems="center" gap={24}>
           <VaultTotalBalance />
           <VaultOverviewPrimaryActions />

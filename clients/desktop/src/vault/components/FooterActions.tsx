@@ -14,6 +14,8 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
+export const footerActionsHeight = 75
+
 const Container = styled(UnstyledButton)`
   ${round};
   background: ${getColor('primaryAccentFour')};
@@ -26,6 +28,13 @@ const Container = styled(UnstyledButton)`
 `
 
 const Position = styled.div`
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: ${footerActionsHeight}px;
+
   ${hStack({
     gap: 3,
     justifyContent: 'center',
