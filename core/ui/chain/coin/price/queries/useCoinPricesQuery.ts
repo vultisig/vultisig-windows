@@ -8,10 +8,7 @@ import { getCoinPrices } from '@core/chain/coin/price/getCoinPrices'
 import { FiatCurrency } from '@core/config/FiatCurrency'
 import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
 import { EagerQuery, Query } from '@lib/ui/query/Query'
-import {
-  noRefetchQueryOptions,
-  persistQueryOptions,
-} from '@lib/ui/query/utils/options'
+import { persistQueryOptions } from '@lib/ui/query/utils/options'
 import { groupItems } from '@lib/utils/array/groupItems'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { without } from '@lib/utils/array/without'
@@ -54,6 +51,11 @@ export function useCoinPricesQuery(
   const { eager = true, fiatCurrency = defaultFiatCurrency, coins } = input
 
   const queries = []
+  const staticUnsupportedResults: {
+    data: Record<string, number> | undefined
+    isPending: boolean
+    error: unknown | null
+  }[] = []
 
   const coinsWithPriceProviderId: (CoinKey & { priceProviderId: string })[] = []
   const erc20sWithoutPriceProviderId: Token<CoinKey<EvmChain>>[] = []
@@ -71,18 +73,12 @@ export function useCoinPricesQuery(
     } else if (isChainOfKind(chain, 'evm') && id) {
       erc20sWithoutPriceProviderId.push({ id, chain })
     } else if (!eager) {
-      queries.push({
-        queryKey: getCoinPricesQueryKeys({
-          coins: [{ id, chain }],
-          fiatCurrency,
-        }),
-        queryFn: async () => {
-          throw new NotImplementedError(
-            `price resolution for ${coinKeyToString({ id, chain })}`
-          )
-        },
-        ...noRefetchQueryOptions,
-        retry: false,
+      staticUnsupportedResults.push({
+        data: undefined,
+        isPending: false,
+        error: new NotImplementedError(
+          `price resolution for ${coinKeyToString({ id, chain })}`
+        ),
       })
     }
   })
@@ -197,7 +193,7 @@ export function useCoinPricesQuery(
   })
 
   return useCombineQueries({
-    queries: queryResults,
+    queries: [...queryResults, ...staticUnsupportedResults],
     joinData: data => mergeRecords(...data),
     eager,
   })
