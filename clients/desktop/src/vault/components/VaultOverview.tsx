@@ -1,20 +1,17 @@
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Wrap } from '@lib/ui/base/Wrap'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
-import { ListAddButton } from '@lib/ui/list/ListAddButton'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { ChildrenProp } from '@lib/ui/props'
+import { getColor } from '@lib/ui/theme/getters'
 import { areEmptyChildren } from '@lib/ui/utils/areEmptyChildren'
-import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import VaultBackupBanner from '../../components/vaultBackupBanner/VaultBackupBanner/VaultBackupBanner'
 import { VaultTotalBalance } from '../balance/VaultTotalBalance'
 import { MigrateVaultPrompt } from '../keygen/migrate/MigrateVaultPrompt'
-import { VaultChainItem } from './VaultChainItem'
 import { VaultOverviewPrimaryActions } from './VaultOverviewPrimaryActions'
+import { VaultTabs } from './VaultTabs/VaultTabs'
 
 const PromptsContainer = styled.div`
   padding-inline: 20px;
@@ -29,9 +26,6 @@ const PromptsWrapper = ({ children }: ChildrenProp) => {
 }
 
 export const VaultOverview = () => {
-  const { t } = useTranslation()
-  const navigate = useCoreNavigate()
-  const { data: vaultChainBalances = [] } = useVaultChainsBalancesQuery()
   const { isBackedUp, libType } = useCurrentVault()
 
   return (
@@ -43,15 +37,15 @@ export const VaultOverview = () => {
           <VaultOverviewPrimaryActions />
           {libType !== 'DKLS' && <MigrateVaultPrompt />}
         </VStack>
-        <VStack gap={16}>
-          {vaultChainBalances.map(balance => (
-            <VaultChainItem key={balance.chain} balance={balance} />
-          ))}
-          <ListAddButton onClick={() => navigate({ id: 'manageVaultChains' })}>
-            {t('choose_chains')}
-          </ListAddButton>
-        </VStack>
+        <Divider />
+        <VaultTabs />
       </PageContent>
     </VStack>
   )
 }
+
+const Divider = styled.div`
+  height: 1px;
+  align-self: stretch;
+  background: ${getColor('foregroundExtra')};
+`
