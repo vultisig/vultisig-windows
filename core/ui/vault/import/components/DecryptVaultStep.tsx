@@ -9,7 +9,7 @@ export const DecryptVaultStep = ({
   value,
   onFinish,
 }: ValueProp<ArrayBuffer> & OnFinishProp<Vault>) => {
-  const { mutate, error, isPending } = useMutation({
+  const mutation = useMutation({
     mutationFn: async (password: string) => {
       const decrypted = await decryptDatBackup({
         backup: value,
@@ -23,7 +23,5 @@ export const DecryptVaultStep = ({
     onSuccess: onFinish,
   })
 
-  return (
-    <DecryptVaultView isPending={isPending} error={error} onSubmit={mutate} />
-  )
+  return <DecryptVaultView mutation={mutation} />
 }
