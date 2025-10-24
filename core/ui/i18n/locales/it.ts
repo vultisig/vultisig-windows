@@ -927,6 +927,7 @@ export const it = {
     "Assicurarsi che <b>tutti i dispositivi iniziali</b> siano presenti durante l'aggiornamento",
   upgrade_success: 'Vault aggiornato <b>con successo</b>',
   go_to_vault: 'Vai al caveau',
+  soon: 'Presto',
   sign_faster: 'Firma più velocemente che mai',
   upgrade_now_prompt: 'Aggiorna il tuo vault ora',
   upgrade: 'Aggiornamento',

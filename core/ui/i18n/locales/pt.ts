@@ -915,6 +915,7 @@ export const pt = {
     'Certifique-se de que <b>todos os dispositivos iniciais</b> estejam presentes ao atualizar',
   upgrade_success: 'O Vault foi atualizado <b>com sucesso</b>',
   go_to_vault: 'Ir para o cofre',
+  soon: 'Em breve',
   sign_faster: 'Assine mais rápido do que nunca',
   upgrade_now_prompt: 'Atualize seu cofre agora',
   upgrade: 'Atualizar',
