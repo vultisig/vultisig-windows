@@ -27,17 +27,22 @@ export const useSwapQuoteQuery = () => {
   const fromCoin = useCurrentVaultCoin(fromCoinKey)
   const toCoin = useCurrentVaultCoin(toCoinKey)
 
-  const fromCoinUsdPrice = useCoinPriceQuery({
+  const fromCoinUsdPriceQuery = useCoinPriceQuery({
     coin: fromCoinKey,
     fiatCurrency: 'usd',
   })
 
   const appAffiliateBpsQuery = useSwapAffiliateBpsQuery()
 
+  // If the price fails to load, proceed without the affiliate.
+  const fromCoinUsdPrice = fromCoinUsdPriceQuery.error
+    ? null
+    : fromCoinUsdPriceQuery.data
+
   return useStateDependentQuery(
     {
       fromAmount: fromAmount || undefined,
-      fromCoinUsdPrice: fromCoinUsdPrice.error ? null : fromCoinUsdPrice.data,
+      fromCoinUsdPrice,
       referral: referralQuery.data,
       affiliateBps: appAffiliateBpsQuery.data,
     },
