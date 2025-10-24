@@ -542,10 +542,14 @@ export const en = {
   staked: 'Staked',
   failed_to_load: 'Failed to load',
   enter_address: 'Enter Address',
+  wallet: 'Wallet',
+  earn: 'Earn',
+  coming_soon: 'Coming Soon',
   enter_amount: 'Enter Amount',
   failed_to_read_qr_code: 'Failed to read QR code',
   send_pending_validation: 'Validating your transaction...',
   send_validation_failed: 'Failed to validate transaction',
+  receive: 'Receive',
   send_invalid_receiver_address: 'Enter a valid receiver address',
   send_receiver_address_same_as_sender:
     'Receiver address cannot be the same as sender address',
@@ -1033,6 +1037,9 @@ export const en = {
     'Do you want to encrypt your backup with a password?',
   backup_password_info_secure_without_password:
     'By default, your backup is <b>secure without</b> an extra password, since you store Vault shares in different locations.',
+  soon: 'Soon',
+  sign_faster: 'Sign faster than ever before',
+  upgrade_now_prompt: 'Upgrade your vault now',
   backup_password_info_encrypt_with_password:
     'If you choose to add a password, this will be used to <b>encrypt</b> the backup file.',
   backup_password_info_cannot_be_reset:

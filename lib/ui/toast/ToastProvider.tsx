@@ -8,9 +8,11 @@ type Toast = {
   createdAt: number
   message: string
   duration: number
+  renderContent?: (message: string) => React.ReactNode
 }
 
-type AddToastParams = Pick<Toast, 'message'> & Partial<Pick<Toast, 'duration'>>
+type AddToastParams = Pick<Toast, 'message'> &
+  Partial<Pick<Toast, 'duration' | 'renderContent'>>
 
 type ToastContextState = {
   addToast: (params: AddToastParams) => void
@@ -39,11 +41,12 @@ export const ToastProvider = ({ children }: ChildrenProp) => {
   }, [toast])
 
   const addToast: ToastContextState['addToast'] = useCallback(
-    ({ message, duration = toastDefaultDuration }) => {
+    ({ message, duration = toastDefaultDuration, renderContent }) => {
       setToast({
         createdAt: Date.now(),
         message,
         duration,
+        renderContent,
       })
     },
     []
@@ -52,7 +55,12 @@ export const ToastProvider = ({ children }: ChildrenProp) => {
   return (
     <ToastContext.Provider value={{ addToast }}>
       {children}
-      {toast && <ToastItem>{toast.message}</ToastItem>}
+      {toast &&
+        (toast.renderContent ? (
+          toast.renderContent(toast.message)
+        ) : (
+          <ToastItem>{toast.message}</ToastItem>
+        ))}
     </ToastContext.Provider>
   )
 }

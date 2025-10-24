@@ -52,7 +52,6 @@ export const useSwapFeesQuery = () => {
             solana: ({ networkFee, swapFee }) => ({
               network: {
                 chain: chain,
-                id: fromCoinKey.id,
                 amount: BigInt(networkFee),
                 decimals: fromFeeCoin.decimals,
               },
