@@ -26,12 +26,6 @@ const Container = styled(UnstyledButton)`
 `
 
 const Position = styled.div`
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-
   ${hStack({
     gap: 3,
     justifyContent: 'center',
