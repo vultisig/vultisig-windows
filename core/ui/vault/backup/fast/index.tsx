@@ -1,7 +1,7 @@
 import { verifyVaultEmailCode } from '@core/mpc/fast/api/verifyVaultEmailCode'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { getVaultId } from '@core/ui/vault/Vault'
+import { getVaultId } from '@core/vault/Vault'
 import {
   MultiCharacterInput,
   MultiCharacterInputProps,

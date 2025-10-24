@@ -1,6 +1,6 @@
 import { useVaults } from '@core/ui/storage/vaults'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
-import { Vault } from '@core/ui/vault/Vault'
+import { Vault } from '@core/vault/Vault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
