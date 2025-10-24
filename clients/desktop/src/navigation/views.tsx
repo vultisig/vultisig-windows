@@ -1,7 +1,6 @@
 import { CheckUpdate } from '@clients/desktop/src/components/check-update'
 import { ManageMpcLib } from '@clients/desktop/src/components/manage-mpc-lib'
 import { AppViewId } from '@clients/desktop/src/navigation/AppView'
-import { VaultPage } from '@clients/desktop/src/vault/components/VaultPage'
 import { ImportVaultFromFilePage } from '@clients/desktop/src/vault/import/components/ImportVaultFromFilePage'
 import { JoinKeygenPage } from '@clients/desktop/src/vault/keygen/join/JoinKeygenPage'
 import { JoinKeysignPage } from '@clients/desktop/src/vault/keysign/join/JoinKeysignPage'
@@ -49,7 +48,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
       <SetupVaultPageController />
     </ResponsivenessProvider>
   ),
-  vault: VaultPage,
 }
 
 export const views: Views<AppViewId> = {
