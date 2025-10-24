@@ -3,6 +3,7 @@ import { hStack } from '@lib/ui/layout/Stack'
 import { IsActiveProp, IsDisabledProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 import { VaultPageTab, vaultTabs } from './config'
@@ -10,6 +11,7 @@ import { VaultTabsHeader } from './VaultTabsHeader'
 
 export const VaultTabs = () => {
   const [activeTab, setActiveTab] = useState<VaultPageTab>('portfolio')
+  const { t } = useTranslation()
 
   return (
     <Tabs
@@ -28,7 +30,7 @@ export const VaultTabs = () => {
           {disabled && (
             <ComingSoonWrapper>
               <Text size={10} as="span" color="info">
-                Soon
+                {t('soon')}
               </Text>
             </ComingSoonWrapper>
           )}

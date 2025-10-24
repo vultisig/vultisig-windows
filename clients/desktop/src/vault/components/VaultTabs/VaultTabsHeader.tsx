@@ -1,3 +1,4 @@
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CryptoWalletPenIcon } from '@lib/ui/icons/CryptoWalletPenIcon'
 import { SearchIcon } from '@lib/ui/icons/SearchIcon'
@@ -7,6 +8,7 @@ import styled, { useTheme } from 'styled-components'
 
 export const VaultTabsHeader = ({ children }: ChildrenProp) => {
   const { colors } = useTheme()
+  const navigate = useCoreNavigate()
 
   return (
     <Wrapper>
@@ -16,6 +18,7 @@ export const VaultTabsHeader = ({ children }: ChildrenProp) => {
           <SearchIcon />
         </IconButton>
         <IconButton
+          onClick={() => navigate({ id: 'manageVaultChains' })}
           style={{
             color: colors.buttonPrimary.toCssValue(),
           }}
