@@ -16,6 +16,8 @@ export const useSwapFeesQuery = () => {
   const [toCoinKey] = useSwapToCoin()
   const feeQuoteQuery = useSwapFeeQuoteQuery()
 
+  console.log('swap fees query', swapQuoteQuery, feeQuoteQuery)
+
   return useTransformQueriesData(
     {
       swapQuote: swapQuoteQuery,
@@ -52,7 +54,6 @@ export const useSwapFeesQuery = () => {
             solana: ({ networkFee, swapFee }) => ({
               network: {
                 chain: chain,
-                id: fromCoinKey.id,
                 amount: BigInt(networkFee),
                 decimals: fromFeeCoin.decimals,
               },

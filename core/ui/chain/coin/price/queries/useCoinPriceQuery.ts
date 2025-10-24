@@ -1,8 +1,8 @@
 import { Coin, coinKeyToString } from '@core/chain/coin/Coin'
 import { FiatCurrency } from '@core/config/FiatCurrency'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
-import { Query } from '@lib/ui/query/Query'
-import { useMemo } from 'react'
+import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
+import { useCallback } from 'react'
 
 type UseCoinPricesQueryInput = {
   coin: Coin
@@ -12,21 +12,15 @@ type UseCoinPricesQueryInput = {
 export const useCoinPriceQuery = ({
   coin,
   fiatCurrency,
-}: UseCoinPricesQueryInput): Query<number> => {
+}: UseCoinPricesQueryInput) => {
   const query = useCoinPricesQuery({
     coins: [coin],
     fiatCurrency,
+    eager: false,
   })
 
-  return useMemo(() => {
-    const error = query.errors[0] ?? null
-
-    const data = query.data?.[coinKeyToString(coin)]
-
-    return {
-      data,
-      isPending: query.isPending,
-      error,
-    }
-  }, [query, coin])
+  return useTransformQueryData(
+    query,
+    useCallback(data => data[coinKeyToString(coin)], [coin])
+  )
 }

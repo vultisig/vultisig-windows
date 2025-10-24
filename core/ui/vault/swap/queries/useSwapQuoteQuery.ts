@@ -37,13 +37,14 @@ export const useSwapQuoteQuery = () => {
   return useStateDependentQuery(
     {
       fromAmount: fromAmount || undefined,
-      fromCoinUsdPrice: fromCoinUsdPrice.data,
+      fromCoinUsdPrice: fromCoinUsdPrice.error ? null : fromCoinUsdPrice.data,
       referral: referralQuery.data,
       affiliateBps: appAffiliateBpsQuery.data,
     },
     ({ fromAmount, fromCoinUsdPrice, referral, affiliateBps }) => {
-      const usdAmount = fromAmount * fromCoinUsdPrice
-      const isAffiliate = usdAmount >= swapConfig.minUsdAffiliateAmount
+      const isAffiliate =
+        fromCoinUsdPrice &&
+        fromAmount * fromCoinUsdPrice >= swapConfig.minUsdAffiliateAmount
 
       const input: FindSwapQuoteInput = {
         from: fromCoin,

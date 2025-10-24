@@ -13,6 +13,7 @@ import { groupItems } from '@lib/utils/array/groupItems'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { without } from '@lib/utils/array/without'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 import { mergeRecords } from '@lib/utils/record/mergeRecords'
 import { toEntries } from '@lib/utils/record/toEntries'
 import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
@@ -66,6 +67,18 @@ export function useCoinPricesQuery(
       yieldBearingTokens.push({ id, chain })
     } else if (isChainOfKind(chain, 'evm') && id) {
       erc20sWithoutPriceProviderId.push({ id, chain })
+    } else if (!eager) {
+      queries.push({
+        queryKey: getCoinPricesQueryKeys({
+          coins: [{ id, chain }],
+          fiatCurrency,
+        }),
+        queryFn: async () => {
+          throw new NotImplementedError(
+            `price resolution for ${coinKeyToString({ id, chain })}`
+          )
+        },
+      })
     }
   })
 
