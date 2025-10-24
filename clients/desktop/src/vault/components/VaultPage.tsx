@@ -19,18 +19,18 @@ export const VaultPage = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null!)
 
   return (
-    <>
-      <Wrapper ref={scrollContainerRef} flexGrow>
+    <Wrapper justifyContent="space-between" ref={scrollContainerRef} flexGrow>
+      <VStack flexGrow>
         <VaultPageHeader
           vault={vault}
           scrollContainerRef={scrollContainerRef}
         />
         <VaultOverview />
-      </Wrapper>
-      <UpdatePrompt />
-      {isFastVault && <FastVaultPasswordVerification key={vaultId} />}
+        <UpdatePrompt />
+        {isFastVault && <FastVaultPasswordVerification key={vaultId} />}
+      </VStack>
       <FooterActions />
-    </>
+    </Wrapper>
   )
 }
 
