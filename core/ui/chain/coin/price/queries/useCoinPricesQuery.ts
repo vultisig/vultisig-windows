@@ -8,7 +8,10 @@ import { getCoinPrices } from '@core/chain/coin/price/getCoinPrices'
 import { FiatCurrency } from '@core/config/FiatCurrency'
 import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
 import { EagerQuery, Query } from '@lib/ui/query/Query'
-import { persistQueryOptions } from '@lib/ui/query/utils/options'
+import {
+  noRefetchQueryOptions,
+  persistQueryOptions,
+} from '@lib/ui/query/utils/options'
 import { groupItems } from '@lib/utils/array/groupItems'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { without } from '@lib/utils/array/without'
@@ -78,6 +81,8 @@ export function useCoinPricesQuery(
             `price resolution for ${coinKeyToString({ id, chain })}`
           )
         },
+        ...noRefetchQueryOptions,
+        retry: false,
       })
     }
   })
