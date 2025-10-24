@@ -13,6 +13,7 @@ import { groupItems } from '@lib/utils/array/groupItems'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { without } from '@lib/utils/array/without'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 import { mergeRecords } from '@lib/utils/record/mergeRecords'
 import { toEntries } from '@lib/utils/record/toEntries'
 import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
@@ -50,6 +51,11 @@ export function useCoinPricesQuery(
   const { eager = true, fiatCurrency = defaultFiatCurrency, coins } = input
 
   const queries = []
+  const staticUnsupportedResults: {
+    data: Record<string, number> | undefined
+    isPending: boolean
+    error: unknown | null
+  }[] = []
 
   const coinsWithPriceProviderId: (CoinKey & { priceProviderId: string })[] = []
   const erc20sWithoutPriceProviderId: Token<CoinKey<EvmChain>>[] = []
@@ -66,6 +72,14 @@ export function useCoinPricesQuery(
       yieldBearingTokens.push({ id, chain })
     } else if (isChainOfKind(chain, 'evm') && id) {
       erc20sWithoutPriceProviderId.push({ id, chain })
+    } else if (!eager) {
+      staticUnsupportedResults.push({
+        data: undefined,
+        isPending: false,
+        error: new NotImplementedError(
+          `price resolution for ${coinKeyToString({ id, chain })}`
+        ),
+      })
     }
   })
 
@@ -179,7 +193,7 @@ export function useCoinPricesQuery(
   })
 
   return useCombineQueries({
-    queries: queryResults,
+    queries: [...queryResults, ...staticUnsupportedResults],
     joinData: data => mergeRecords(...data),
     eager,
   })
