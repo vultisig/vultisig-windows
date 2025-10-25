@@ -10,7 +10,6 @@ import {
   KeygenActionProvider,
 } from '@core/ui/mpc/keygen/state/keygenAction'
 import { useKeygenVault } from '@core/ui/mpc/keygen/state/keygenVault'
-import { getMpcSessionSigners } from '@core/ui/mpc/session/utils/getMpcSessionSigners'
 import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
@@ -39,10 +38,8 @@ export const MigrateVaultKeygenActionProvider = ({
   const keygenVault = useKeygenVault()
 
   const keygenAction: KeygenAction = useCallback(
-    async ({ onStepChange }) => {
+    async ({ onStepChange, signers }) => {
       onStepChange('ecdsa')
-
-      const signers = await getMpcSessionSigners({ serverUrl, sessionId })
 
       const sharedFinalVaultFields = {
         signers,

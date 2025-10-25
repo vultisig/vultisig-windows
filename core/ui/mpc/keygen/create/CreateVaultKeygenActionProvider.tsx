@@ -17,7 +17,6 @@ import { without } from '@lib/utils/array/without'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { useCallback } from 'react'
 
-import { getMpcSessionSigners } from '../../session/utils/getMpcSessionSigners'
 import { KeygenAction, KeygenActionProvider } from '../state/keygenAction'
 import { useKeygenVaultName } from '../state/keygenVault'
 
@@ -32,10 +31,8 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
   const vaultOrders = useVaultOrders()
 
   const keygenAction: KeygenAction = useCallback(
-    async ({ onStepChange }) => {
+    async ({ onStepChange, signers }) => {
       onStepChange('ecdsa')
-
-      const signers = await getMpcSessionSigners({ serverUrl, sessionId })
 
       const sharedFinalVaultFields = {
         signers,
