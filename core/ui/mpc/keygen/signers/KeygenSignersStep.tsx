@@ -7,7 +7,6 @@ import { PeerDiscoveryFormFooter } from '@core/ui/mpc/devices/peers/PeerDiscover
 import { PeerPlaceholder } from '@core/ui/mpc/devices/peers/PeerPlaceholder'
 import { PeersContainer } from '@core/ui/mpc/devices/peers/PeersContainer'
 import { PeersManagerFrame } from '@core/ui/mpc/devices/peers/PeersManagerFrame'
-import { PeersManagerTitle } from '@core/ui/mpc/devices/peers/PeersManagerTitle'
 import { PeersPageContentFrame } from '@core/ui/mpc/devices/peers/PeersPageContentFrame'
 import { KeygenPeerDiscoveryEducation } from '@core/ui/mpc/keygen/education/devices/KeygenPeerDiscoveryEducation'
 import { DownloadKeygenQrCode } from '@core/ui/mpc/keygen/qr/DownloadKeygenQrCode'
@@ -36,6 +35,7 @@ import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { MpcSignersTitle } from '../../devices/peers/MpcSignersTitle'
 import { useMpcSignersQuery } from '../../devices/queries/useMpcSignersQuery'
 import { minKeygenDevices } from './config'
 import { KeygenDevicesRequirementsInfo } from './KeygenDevicesRequirementsInfo'
@@ -153,7 +153,10 @@ export const KeygenSignersStep = ({
                   isMigrate ? null : <KeygenDevicesRequirementsInfo />
                 }
               />
-              <PeersManagerTitle target={devicesTarget} />
+              <MpcSignersTitle
+                target={devicesTarget}
+                current={selectedPeers.length}
+              />
               <PeersContainer>
                 <InitiatingDevice />
                 <MatchQuery

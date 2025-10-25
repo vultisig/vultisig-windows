@@ -7,7 +7,6 @@ import { PeerDiscoveryFormFooter } from '@core/ui/mpc/devices/peers/PeerDiscover
 import { PeerPlaceholder } from '@core/ui/mpc/devices/peers/PeerPlaceholder'
 import { PeersContainer } from '@core/ui/mpc/devices/peers/PeersContainer'
 import { PeersManagerFrame } from '@core/ui/mpc/devices/peers/PeersManagerFrame'
-import { PeersManagerTitle } from '@core/ui/mpc/devices/peers/PeersManagerTitle'
 import { PeersPageContentFrame } from '@core/ui/mpc/devices/peers/PeersPageContentFrame'
 import { DownloadKeysignQrCode } from '@core/ui/mpc/keysign/DownloadKeysignQrCode'
 import { useJoinKeysignUrlQuery } from '@core/ui/mpc/keysign/queries/useJoinKeysignUrlQuery'
@@ -24,8 +23,9 @@ import { without } from '@lib/utils/array/without'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { MpcSignersTitle } from '../../devices/peers/MpcSignersTitle'
 import { useMpcSignersQuery } from '../../devices/queries/queries/useMpcSignersQuery'
-import { useMpcSigners } from '../../state/mpcSigners'
+import { useMpcLocalPartyId } from '../../state/mpcLocalPartyId'
 
 type KeysignSignersStepProps = {
   payload: KeysignMessagePayload
@@ -38,8 +38,16 @@ export const KeysignSignersStep = ({
 }: KeysignSignersStepProps) => {
   const { t } = useTranslation()
 
-  const sessionSigners = useMpcSigners()
   const { signers } = useCurrentVault()
+
+  const signersQuery = useMpcSignersQuery()
+
+  const [excludedPeers, setExcludedPeers] = useState<string[]>([])
+
+  const sessionSigners = useMemo(
+    () => without(signersQuery.data ?? [], ...excludedPeers),
+    [signersQuery.data, excludedPeers]
+  )
 
   const isDisabled = useMemo(() => {
     const requiredDevicesNumber = getKeygenThreshold(signers.length)
@@ -63,9 +71,7 @@ export const KeysignSignersStep = ({
   const requiredSigners = getKeygenThreshold(signers.length)
   const requiredPeers = requiredSigners - 1
 
-  const signersQuery = useMpcSignersQuery()
-
-  const [excludedPeers, setExcludedPeers] = useState<string[]>([])
+  const localPartyId = useMpcLocalPartyId()
 
   return (
     <>
@@ -81,12 +87,16 @@ export const KeysignSignersStep = ({
             <QueryBasedQrCode value={joinUrlQuery} />
             <PeersManagerFrame>
               {serverType === 'local' && <MpcLocalServerIndicator />}
-              <PeersManagerTitle target={requiredSigners} />
+              <MpcSignersTitle
+                target={requiredSigners}
+                current={sessionSigners.length}
+              />
               <PeersContainer>
                 <InitiatingDevice />
                 <MatchQuery
                   value={signersQuery}
-                  success={peerOptions => {
+                  success={signers => {
+                    const peerOptions = without(signers, localPartyId)
                     return (
                       <>
                         {peerOptions.map(id => (
