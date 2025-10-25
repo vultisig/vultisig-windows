@@ -8,13 +8,12 @@ import { KeysignTxDataResolver } from '../resolver'
 export const getSolanaTxData: KeysignTxDataResolver<'solana'> = async ({
   coin,
   receiver,
-  recentBlockHash: inputRecentBlockHash,
 }) => {
   const client = getSolanaClient()
 
-  const recentBlockHash =
-    inputRecentBlockHash ??
-    (await client.getLatestBlockhash().send()).value.blockhash.toString()
+  const recentBlockHash = (
+    await client.getLatestBlockhash().send()
+  ).value.blockhash.toString()
 
   const result: SolanaKeysignTxData = {
     recentBlockHash,

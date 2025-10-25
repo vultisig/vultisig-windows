@@ -326,8 +326,13 @@ export class Solana implements Wallet {
         }
       )
 
-      const { signatures } = deserializeSigningOutput(Chain.Solana, data)
-
+      const { signatures, encoded } = deserializeSigningOutput(
+        Chain.Solana,
+        data
+      )
+      const { message: signedMessage } = VersionedTransaction.deserialize(
+        bs58.decode(encoded)
+      )
       for (const sig of signatures) {
         const { pubkey, signature } = sig
         if (pubkey && signature)
@@ -336,6 +341,7 @@ export class Solana implements Wallet {
             bs58.decode(signature)
           )
       }
+      transaction.message.recentBlockhash = signedMessage.recentBlockhash
 
       return transaction
     } else {
