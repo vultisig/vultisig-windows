@@ -1,7 +1,8 @@
-import { useMpcPeers } from '@core/ui/mpc/state/mpcPeers'
 import { Text } from '@lib/ui/text'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { useMpcPeers } from '../../state/mpcSigners'
 
 type PeersManagerTitleProps = {
   target: number

@@ -1,14 +1,14 @@
 import { parseLocalPartyId } from '@core/mpc/devices/localPartyId'
 import { formatMpcDeviceName } from '@core/mpc/devices/MpcDevice'
-import { useMpcPeersSelectionRecord } from '@core/ui/mpc/state/mpcSelectedPeers'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { HStack } from '@lib/ui/layout/Stack'
-import { ValueProp } from '@lib/ui/props'
+import { InputProps } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { IdProp } from '@lib/utils/entities/props'
 import styled from 'styled-components'
 
 import { PeerOptionContainer } from './PeerOptionContainer'
@@ -22,22 +22,16 @@ const IconContainer = styled.div`
   font-size: 16px;
 `
 
-export const PeerOption = ({ value }: ValueProp<string>) => {
-  const [record, setRecord] = useMpcPeersSelectionRecord()
-  const isSelected = record[value]
-  const { deviceName, hash } = parseLocalPartyId(value)
+export const PeerOption = ({
+  value,
+  onChange,
+  id,
+}: InputProps<boolean> & IdProp) => {
+  const { deviceName, hash } = parseLocalPartyId(id)
   const formattedDeviceName = formatMpcDeviceName(deviceName)
 
   return (
-    <PeerOptionContainer
-      onClick={() =>
-        setRecord(prev => ({
-          ...prev,
-          [value]: !prev[value],
-        }))
-      }
-      isActive={isSelected}
-    >
+    <PeerOptionContainer onClick={() => onChange(!value)} isActive={value}>
       <HStack flexGrow justifyContent="space-between" alignItems="center">
         <div>
           <Text color="contrast" weight={500}>
@@ -47,7 +41,7 @@ export const PeerOption = ({ value }: ValueProp<string>) => {
             {hash}
           </Text>
         </div>
-        {isSelected && (
+        {value && (
           <IconContainer>
             <CheckIcon />
           </IconContainer>

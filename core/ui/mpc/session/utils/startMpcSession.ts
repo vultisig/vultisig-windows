@@ -3,15 +3,15 @@ import { queryUrl } from '@lib/utils/query/queryUrl'
 type StartMpcSessionInput = {
   serverUrl: string
   sessionId: string
-  devices: string[]
+  signers: string[]
 }
 
 export const startMpcSession = async ({
   serverUrl,
   sessionId,
-  devices,
+  signers,
 }: StartMpcSessionInput) =>
   queryUrl(`${serverUrl}/start/${sessionId}`, {
-    body: devices,
+    body: signers,
     responseType: 'none',
   })

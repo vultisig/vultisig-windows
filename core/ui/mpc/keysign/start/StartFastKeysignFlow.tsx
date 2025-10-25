@@ -4,13 +4,13 @@ import { FastKeysignServerStep } from '@core/ui/mpc/keysign/fast/FastKeysignServ
 import { KeysignSigningStep } from '@core/ui/mpc/keysign/KeysignSigningStep'
 import { KeysignActionProviderProp } from '@core/ui/mpc/keysign/start/KeysignActionProviderProp'
 import { StartMpcSessionFlow } from '@core/ui/mpc/session/StartMpcSessionFlow'
-import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCore } from '@core/ui/state/core'
 import { Match } from '@lib/ui/base/Match'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 
+import { MpcSignersProvider } from '../../state/mpcSigners'
 import { KeysignMessagePayloadProvider } from '../state/keysignMessagePayload'
 
 const keysignSteps = ['server', 'keysign'] as const
@@ -42,7 +42,7 @@ export const StartFastKeysignFlow = ({
           from={({ onFinish }) => <WaitForServerStep onFinish={onFinish} />}
           key="peers"
           to={({ value }) => (
-            <MpcPeersProvider value={value}>
+            <MpcSignersProvider value={value}>
               <StartMpcSessionFlow
                 render={() => (
                   <KeysignActionProvider>
@@ -53,7 +53,7 @@ export const StartFastKeysignFlow = ({
                 )}
                 value="keysign"
               />
-            </MpcPeersProvider>
+            </MpcSignersProvider>
           )}
         />
       )}

@@ -3,7 +3,6 @@ import { FastKeygenServerActionStep } from '@core/ui/mpc/keygen/fast/FastKeygenS
 import { PreviewInfo } from '@core/ui/mpc/keygen/reshare/plugin/PreviewInfo'
 import { PluginReshareFastKeygenServerActionProvider } from '@core/ui/mpc/keygen/reshare/PluginReshareFastKeygenServerActionProvider'
 import { StartMpcSessionFlow } from '@core/ui/mpc/session/StartMpcSessionFlow'
-import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
 import { PasswordProvider } from '@core/ui/state/password'
 import { Match } from '@lib/ui/base/Match'
 import { StepTransition } from '@lib/ui/base/StepTransition'
@@ -17,6 +16,7 @@ import { GradientText, Text } from '@lib/ui/text'
 import { NameProp } from '@lib/utils/entities/props'
 import { useTranslation } from 'react-i18next'
 
+import { MpcSignersProvider } from '../../../state/mpcSigners'
 import { KeygenFlow } from '../../flow/KeygenFlow'
 import { WaitForPluginAndVerifier } from './WaitForPluginAndVerifier'
 
@@ -59,7 +59,7 @@ export const PluginReshareFlow = ({ name }: NameProp) => {
             to={({ value }) => (
               <StepTransition
                 from={({ onFinish }) => (
-                  <MpcPeersProvider value={value}>
+                  <MpcSignersProvider value={value}>
                     <StartMpcSessionFlow
                       render={() => (
                         <KeygenFlow
@@ -69,7 +69,7 @@ export const PluginReshareFlow = ({ name }: NameProp) => {
                       )}
                       value="keygen"
                     />
-                  </MpcPeersProvider>
+                  </MpcSignersProvider>
                 )}
                 to={() => (
                   <>

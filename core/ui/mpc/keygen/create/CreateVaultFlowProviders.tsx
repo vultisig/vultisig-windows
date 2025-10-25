@@ -5,7 +5,6 @@ import { GeneratedHexChainCodeProvider } from '@core/ui/mpc/state/currentHexChai
 import { GeneratedHexEncryptionKeyProvider } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
 import { GeneratedMpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
-import { MpcPeersSelectionProvider } from '@core/ui/mpc/state/mpcSelectedPeers'
 import { MpcServerTypeProvider } from '@core/ui/mpc/state/mpcServerType'
 import { GeneratedMpcServiceNameProvider } from '@core/ui/mpc/state/mpcServiceName'
 import { GeneratedMpcSessionIdProvider } from '@core/ui/mpc/state/mpcSession'
@@ -25,9 +24,7 @@ export const CreateVaultFlowProviders = ({ children }: ChildrenProp) => {
                     <KeygenOperationProvider value={{ create: true }}>
                       <GeneratedVaultNameProvider>
                         <CreateFlowKeygenVaultProvider>
-                          <MpcPeersSelectionProvider>
-                            {children}
-                          </MpcPeersSelectionProvider>
+                          {children}
                         </CreateFlowKeygenVaultProvider>
                       </GeneratedVaultNameProvider>
                     </KeygenOperationProvider>

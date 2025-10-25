@@ -8,13 +8,14 @@ import { PluginReshareFastKeygenServerActionProvider } from '@core/ui/mpc/keygen
 import { ReshareFastKeygenServerActionProvider } from '@core/ui/mpc/keygen/reshare/ReshareFastKeygenServerActionProvider'
 import { useKeygenOperation } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { StartMpcSessionFlow } from '@core/ui/mpc/session/StartMpcSessionFlow'
-import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { OnBackProp } from '@lib/ui/props'
 import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { ComponentType } from 'react'
+
+import { MpcSignersProvider } from '../../state/mpcSigners'
 
 export const FastKeygenFlow = ({ onBack }: OnBackProp) => {
   const keygenOperation = useKeygenOperation()
@@ -46,12 +47,12 @@ export const FastKeygenFlow = ({ onBack }: OnBackProp) => {
         <ValueTransfer<string[]>
           from={({ onFinish }) => <WaitForServerStep onFinish={onFinish} />}
           to={({ value }) => (
-            <MpcPeersProvider value={value}>
+            <MpcSignersProvider value={value}>
               <StartMpcSessionFlow
                 render={() => <KeygenFlow onBack={onBack} />}
                 value="keygen"
               />
-            </MpcPeersProvider>
+            </MpcSignersProvider>
           )}
         />
       )}

@@ -1,5 +1,4 @@
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
-import { useMpcPeerOptionsQuery } from '@core/ui/mpc/devices/queries/useMpcPeerOptionsQuery'
 import { FlowPendingPageContent } from '@lib/ui/flow/FlowPendingPageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
@@ -7,19 +6,21 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { FC, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useMpcSignersQuery } from '../devices/queries/queries/useMpcSignersQuery'
+
 export const WaitForServerStep: FC<OnFinishProp<string[]>> = ({ onFinish }) => {
   const { t } = useTranslation()
-  const peersQuery = useMpcPeerOptionsQuery()
+  const signersQuery = useMpcSignersQuery()
 
   useEffect(() => {
-    if (peersQuery.data) onFinish(peersQuery.data)
-  }, [onFinish, peersQuery.data])
+    if (signersQuery.data) onFinish(signersQuery.data)
+  }, [onFinish, signersQuery.data])
 
   return (
     <>
       <PageHeader title={t('connecting_to_server')} hasBorder />
       <MatchQuery
-        value={peersQuery}
+        value={signersQuery}
         error={error => (
           <FlowErrorPageContent
             title={t('failed_to_connect_with_server')}

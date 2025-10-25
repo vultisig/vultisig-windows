@@ -1,7 +1,6 @@
 import { parseLocalPartyId } from '@core/mpc/devices/localPartyId'
 import { KeygenType } from '@core/mpc/keygen/KeygenType'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { MpcPeersCorrector } from '@core/ui/mpc/devices/MpcPeersCorrector'
 import { InitiatingDevice } from '@core/ui/mpc/devices/peers/InitiatingDevice'
 import { PeerOption } from '@core/ui/mpc/devices/peers/option/PeerOption'
 import { PeerDiscoveryFormFooter } from '@core/ui/mpc/devices/peers/PeerDiscoveryFormFooter'
@@ -10,7 +9,6 @@ import { PeersContainer } from '@core/ui/mpc/devices/peers/PeersContainer'
 import { PeersManagerFrame } from '@core/ui/mpc/devices/peers/PeersManagerFrame'
 import { PeersManagerTitle } from '@core/ui/mpc/devices/peers/PeersManagerTitle'
 import { PeersPageContentFrame } from '@core/ui/mpc/devices/peers/PeersPageContentFrame'
-import { useMpcPeerOptionsQuery } from '@core/ui/mpc/devices/queries/useMpcPeerOptionsQuery'
 import { KeygenPeerDiscoveryEducation } from '@core/ui/mpc/keygen/education/devices/KeygenPeerDiscoveryEducation'
 import { DownloadKeygenQrCode } from '@core/ui/mpc/keygen/qr/DownloadKeygenQrCode'
 import { useJoinKeygenUrlQuery } from '@core/ui/mpc/keygen/queries/useJoinKeygenUrlQuery'
@@ -18,7 +16,6 @@ import { useKeygenOperation } from '@core/ui/mpc/keygen/state/currentKeygenOpera
 import { useKeygenVault } from '@core/ui/mpc/keygen/state/keygenVault'
 import { MpcLocalServerIndicator } from '@core/ui/mpc/server/MpcLocalServerIndicator'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
-import { useMpcPeers } from '@core/ui/mpc/state/mpcPeers'
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
 import { useCore } from '@core/ui/state/core'
 import { Match } from '@lib/ui/base/Match'
@@ -33,15 +30,19 @@ import { QueryBasedQrCode } from '@lib/ui/qr/QueryBasedQrCode'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { range } from '@lib/utils/array/range'
 import { without } from '@lib/utils/array/without'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { getRecordUnionKey } from '@lib/utils/record/union/getRecordUnionKey'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useMpcSignersQuery } from '../../devices/queries/useMpcSignersQuery'
 import { minKeygenDevices } from './config'
 import { KeygenDevicesRequirementsInfo } from './KeygenDevicesRequirementsInfo'
 
-type KeygenPeerDiscoveryStepProps = OnFinishProp & Partial<OnBackProp>
+type KeygenSignersStepProps = OnFinishProp<string[]> & Partial<OnBackProp>
+
+const recommendedPeers = 2
 
 const educationUrl: Record<KeygenType, string> = {
   create: 'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault',
@@ -49,23 +50,24 @@ const educationUrl: Record<KeygenType, string> = {
     'https://docs.vultisig.com/vultisig-vault-user-actions/managing-your-vault/vault-reshare',
 }
 
-export const KeygenPeerDiscoveryStep = ({
+export const KeygenSignersStep = ({
   onFinish,
   onBack,
-}: KeygenPeerDiscoveryStepProps) => {
+}: KeygenSignersStepProps) => {
   const { t } = useTranslation()
   const { openUrl } = useCore()
   const [serverType] = useMpcServerType()
-  const selectedPeers = useMpcPeers()
-  const peerOptionsQuery = useMpcPeerOptionsQuery()
+  const signersQuery = useMpcSignersQuery()
   const joinUrlQuery = useJoinKeygenUrlQuery()
   const keygenVault = useKeygenVault()
   const localPartyId = useMpcLocalPartyId()
   const opertaionType = useKeygenOperation()
+  const [excludedPeers, setExcludedPeers] = useState<string[]>([])
 
-  const recommendedPeers = useMemo(() => {
-    return !selectedPeers.length ? 2 : selectedPeers.length + 1
-  }, [selectedPeers])
+  const selectedPeers = useMemo(
+    () => without(signersQuery.data || [], ...excludedPeers, localPartyId),
+    [signersQuery.data, excludedPeers, localPartyId]
+  )
 
   const isMigrate = useMemo(() => {
     return 'reshare' in opertaionType && opertaionType.reshare === 'migrate'
@@ -89,12 +91,12 @@ export const KeygenPeerDiscoveryStep = ({
       return Math.max(signers.length, selectedPeers.length + 1)
     }
 
-    if (peerOptionsQuery.data === undefined) {
+    if (signersQuery.data === undefined) {
       return minKeygenDevices
     }
 
-    return Math.max(peerOptionsQuery.data.length + 1, minKeygenDevices)
-  }, [isMigrate, keygenVault, peerOptionsQuery.data, selectedPeers.length])
+    return Math.max(signersQuery.data.length, minKeygenDevices)
+  }, [isMigrate, keygenVault, signersQuery.data, selectedPeers.length])
 
   const isDisabled = useMemo(() => {
     if (!selectedPeers.length) {
@@ -108,7 +110,6 @@ export const KeygenPeerDiscoveryStep = ({
 
   return (
     <>
-      <MpcPeersCorrector />
       <PageHeader
         primaryControls={<PageHeaderBackButton onClick={onBack} />}
         secondaryControls={
@@ -134,7 +135,10 @@ export const KeygenPeerDiscoveryStep = ({
       <FitPageContent
         as="form"
         {...getFormProps({
-          onSubmit: onFinish,
+          onSubmit: () =>
+            onFinish(
+              without(shouldBePresent(signersQuery.data), ...excludedPeers)
+            ),
           isDisabled,
         })}
       >
@@ -153,18 +157,33 @@ export const KeygenPeerDiscoveryStep = ({
               <PeersContainer>
                 <InitiatingDevice />
                 <MatchQuery
-                  value={peerOptionsQuery}
-                  success={peerOptions => {
-                    const placeholderCount = isMigrate
-                      ? missingPeers.length
-                      : recommendedPeers - peerOptions.length
+                  value={signersQuery}
+                  success={signers => {
+                    const getPlaceholderCount = () => {
+                      if (isMigrate) {
+                        return missingPeers.length
+                      }
+
+                      return recommendedPeers - selectedPeers.length
+                    }
+
+                    const peerOptions = without(signers, localPartyId)
 
                     return (
                       <>
-                        {peerOptions.map(value => (
-                          <PeerOption key={value} value={value} />
+                        {peerOptions.map(id => (
+                          <PeerOption
+                            key={id}
+                            id={id}
+                            value={!excludedPeers.includes(id)}
+                            onChange={value =>
+                              setExcludedPeers(prev =>
+                                value ? without(prev, id) : [...prev, id]
+                              )
+                            }
+                          />
                         ))}
-                        {range(placeholderCount).map(index => {
+                        {range(getPlaceholderCount()).map(index => {
                           return (
                             <PeerPlaceholder key={index}>
                               {isMigrate

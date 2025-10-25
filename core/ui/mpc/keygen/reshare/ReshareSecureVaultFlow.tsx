@@ -1,18 +1,21 @@
-import { KeygenPeerDiscoveryStep } from '@core/ui/mpc/keygen/peers/KeygenPeerDiscoveryStep'
-import { StepTransition } from '@lib/ui/base/StepTransition'
+import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 
 import { StartMpcSessionFlow } from '../../session/StartMpcSessionFlow'
+import { MpcSignersProvider } from '../../state/mpcSigners'
 import { KeygenFlow } from '../flow/KeygenFlow'
+import { KeygenSignersStep } from '../signers/KeygenSignersStep'
 
 export const ReshareSecureVaultFlow = () => {
   return (
-    <StepTransition
-      from={({ onFinish }) => <KeygenPeerDiscoveryStep onFinish={onFinish} />}
-      to={({ onBack }) => (
-        <StartMpcSessionFlow
-          value="keygen"
-          render={() => <KeygenFlow onBack={onBack} />}
-        />
+    <ValueTransfer<string[]>
+      from={({ onFinish }) => <KeygenSignersStep onFinish={onFinish} />}
+      to={({ onBack, value }) => (
+        <MpcSignersProvider value={value}>
+          <StartMpcSessionFlow
+            value="keygen"
+            render={() => <KeygenFlow onBack={onBack} />}
+          />
+        </MpcSignersProvider>
       )}
     />
   )

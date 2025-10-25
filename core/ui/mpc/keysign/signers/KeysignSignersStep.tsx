@@ -1,7 +1,6 @@
 import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { MpcPeersCorrector } from '@core/ui/mpc/devices/MpcPeersCorrector'
 import { InitiatingDevice } from '@core/ui/mpc/devices/peers/InitiatingDevice'
 import { PeerOption } from '@core/ui/mpc/devices/peers/option/PeerOption'
 import { PeerDiscoveryFormFooter } from '@core/ui/mpc/devices/peers/PeerDiscoveryFormFooter'
@@ -10,7 +9,6 @@ import { PeersContainer } from '@core/ui/mpc/devices/peers/PeersContainer'
 import { PeersManagerFrame } from '@core/ui/mpc/devices/peers/PeersManagerFrame'
 import { PeersManagerTitle } from '@core/ui/mpc/devices/peers/PeersManagerTitle'
 import { PeersPageContentFrame } from '@core/ui/mpc/devices/peers/PeersPageContentFrame'
-import { useMpcPeerOptionsQuery } from '@core/ui/mpc/devices/queries/useMpcPeerOptionsQuery'
 import { DownloadKeysignQrCode } from '@core/ui/mpc/keysign/DownloadKeysignQrCode'
 import { useJoinKeysignUrlQuery } from '@core/ui/mpc/keysign/queries/useJoinKeysignUrlQuery'
 import { MpcLocalServerIndicator } from '@core/ui/mpc/server/MpcLocalServerIndicator'
@@ -22,39 +20,41 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { QueryBasedQrCode } from '@lib/ui/qr/QueryBasedQrCode'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { range } from '@lib/utils/array/range'
-import { useEffect, useMemo } from 'react'
+import { without } from '@lib/utils/array/without'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useMpcPeers } from '../../state/mpcPeers'
+import { useMpcSignersQuery } from '../../devices/queries/queries/useMpcSignersQuery'
+import { useMpcSigners } from '../../state/mpcSigners'
 
-type KeysignPeerDiscoveryStepProps = {
+type KeysignSignersStepProps = {
   payload: KeysignMessagePayload
   onFinish: (peers: string[]) => void
 }
 
-export const KeysignPeerDiscoveryStep = ({
+export const KeysignSignersStep = ({
   onFinish,
   payload,
-}: KeysignPeerDiscoveryStepProps) => {
+}: KeysignSignersStepProps) => {
   const { t } = useTranslation()
 
-  const peers = useMpcPeers()
+  const sessionSigners = useMpcSigners()
   const { signers } = useCurrentVault()
 
   const isDisabled = useMemo(() => {
     const requiredDevicesNumber = getKeygenThreshold(signers.length)
 
     const requiredPeersNumber = requiredDevicesNumber - 1
-    if (peers.length < requiredPeersNumber) {
+    if (sessionSigners.length < requiredDevicesNumber) {
       return t('select_n_devices', { count: requiredPeersNumber })
     }
-  }, [peers.length, signers.length, t])
+  }, [sessionSigners.length, signers.length, t])
 
   useEffect(() => {
     if (!isDisabled) {
-      onFinish(peers)
+      onFinish(sessionSigners)
     }
-  }, [isDisabled, onFinish, peers])
+  }, [isDisabled, onFinish, sessionSigners])
 
   const joinUrlQuery = useJoinKeysignUrlQuery(payload)
 
@@ -63,11 +63,12 @@ export const KeysignPeerDiscoveryStep = ({
   const requiredSigners = getKeygenThreshold(signers.length)
   const requiredPeers = requiredSigners - 1
 
-  const peerOptionsQuery = useMpcPeerOptionsQuery()
+  const signersQuery = useMpcSignersQuery()
+
+  const [excludedPeers, setExcludedPeers] = useState<string[]>([])
 
   return (
     <>
-      <MpcPeersCorrector />
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         secondaryControls={<DownloadKeysignQrCode />}
@@ -84,12 +85,21 @@ export const KeysignPeerDiscoveryStep = ({
               <PeersContainer>
                 <InitiatingDevice />
                 <MatchQuery
-                  value={peerOptionsQuery}
+                  value={signersQuery}
                   success={peerOptions => {
                     return (
                       <>
-                        {peerOptions.map(value => (
-                          <PeerOption key={value} value={value} />
+                        {peerOptions.map(id => (
+                          <PeerOption
+                            key={id}
+                            id={id}
+                            value={!excludedPeers.includes(id)}
+                            onChange={value =>
+                              setExcludedPeers(prev =>
+                                value ? without(prev, id) : [...prev, id]
+                              )
+                            }
+                          />
                         ))}
                         {range(requiredPeers - peerOptions.length).map(
                           index => (

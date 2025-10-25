@@ -8,9 +8,9 @@ import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider
 import { useCurrentVault } from '../../../vault/state/currentVault'
 import { useCurrentHexEncryptionKey } from '../../state/currentHexEncryptionKey'
 import { useIsInitiatingDevice } from '../../state/isInitiatingDevice'
-import { useMpcPeers } from '../../state/mpcPeers'
 import { useMpcServerUrl } from '../../state/mpcServerUrl'
 import { useMpcSessionId } from '../../state/mpcSession'
+import { useMpcPeers } from '../../state/mpcSigners'
 import {
   KeysignAction,
   KeysignActionProvider as BaseKeysignActionProvider,

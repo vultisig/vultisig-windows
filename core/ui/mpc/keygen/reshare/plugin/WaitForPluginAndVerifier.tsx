@@ -1,5 +1,4 @@
 import { hasServer } from '@core/mpc/devices/localPartyId'
-import { useMpcPeerOptionsQuery } from '@core/ui/mpc/devices/queries/useMpcPeerOptionsQuery'
 import { pluginPeersConfig } from '@core/ui/mpc/fast/config'
 import { FlowPendingPageContent } from '@lib/ui/flow/FlowPendingPageContent'
 import { OnFinishProp } from '@lib/ui/props'
@@ -8,6 +7,7 @@ import { FC, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FlowErrorPageContent } from '../../../../flow/FlowErrorPageContent'
+import { useMpcSignersQuery } from '../../../devices/queries/useMpcSignersQuery'
 import { InstallPluginPendingState } from './InstallPluginPendingState'
 import { InstallPluginStep } from './InstallPluginStep'
 
@@ -15,7 +15,7 @@ export const WaitForPluginAndVerifier: FC<OnFinishProp<string[]>> = ({
   onFinish,
 }) => {
   const { t } = useTranslation()
-  const peersQuery = useMpcPeerOptionsQuery()
+  const peersQuery = useMpcSignersQuery()
   const [step, setStep] = useState<InstallPluginStep | null>(null)
 
   const peers = useMemo(() => peersQuery.data ?? [], [peersQuery.data])

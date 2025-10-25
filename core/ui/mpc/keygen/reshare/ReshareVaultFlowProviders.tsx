@@ -5,7 +5,6 @@ import { ChildrenProp } from '@lib/ui/props'
 
 import { CurrentVaultHexChainCodeProvider } from '../../state/currentHexChainCode'
 import { CurrentVaultLocalPartyIdProvider } from '../../state/mpcLocalPartyId'
-import { MpcPeersSelectionProvider } from '../../state/mpcSelectedPeers'
 import { MpcServerTypeProvider } from '../../state/mpcServerType'
 import { GeneratedMpcServiceNameProvider } from '../../state/mpcServiceName'
 import { ServerUrlDerivedFromServerTypeProvider } from '../../state/serverUrlDerivedFromServerType'
@@ -22,9 +21,7 @@ export const ReshareVaultFlowProviders = ({ children }: ChildrenProp) => {
                 <CurrentVaultHexChainCodeProvider>
                   <IsInitiatingDeviceProvider value={true}>
                     <GeneratedMpcServiceNameProvider>
-                      <MpcPeersSelectionProvider>
-                        {children}
-                      </MpcPeersSelectionProvider>
+                      {children}
                     </GeneratedMpcServiceNameProvider>
                   </IsInitiatingDeviceProvider>
                 </CurrentVaultHexChainCodeProvider>

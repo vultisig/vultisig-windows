@@ -2,7 +2,7 @@ import { StepTransition } from '@lib/ui/base/StepTransition'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { RenderProp, ValueProp } from '@lib/ui/props'
 
-import { MpcPeersProvider } from '../../state/mpcPeers'
+import { MpcSignersProvider } from '../../state/mpcSigners'
 import { MpcSession } from '../MpcSession'
 import { WaitMpcSessionStart } from '../WaitMpcSessionStart'
 import { JoinMpcSessionStep } from './JoinMpcSessionStep'
@@ -20,7 +20,7 @@ export const JoinMpcSessionFlow = ({
             <WaitMpcSessionStart value={value} onFinish={onFinish} />
           )}
           to={({ value }) => (
-            <MpcPeersProvider value={value}>{render()}</MpcPeersProvider>
+            <MpcSignersProvider value={value}>{render()}</MpcSignersProvider>
           )}
         />
       )}

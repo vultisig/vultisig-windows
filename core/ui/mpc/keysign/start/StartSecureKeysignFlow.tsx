@@ -1,12 +1,11 @@
 import { KeysignSigningStep } from '@core/ui/mpc/keysign/KeysignSigningStep'
-import { KeysignPeerDiscoveryStep } from '@core/ui/mpc/keysign/peers/KeysignPeerDiscoveryStep'
 import { KeysignActionProviderProp } from '@core/ui/mpc/keysign/start/KeysignActionProviderProp'
 import { StartMpcSessionFlow } from '@core/ui/mpc/session/StartMpcSessionFlow'
-import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
-import { MpcPeersSelectionProvider } from '@core/ui/mpc/state/mpcSelectedPeers'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 
+import { MpcSignersProvider } from '../../state/mpcSigners'
+import { KeysignSignersStep } from '../signers/KeysignSignersStep'
 import { KeysignMessagePayloadProvider } from '../state/keysignMessagePayload'
 
 export const StartSecureKeysignFlow = ({
@@ -17,15 +16,10 @@ export const StartSecureKeysignFlow = ({
   return (
     <ValueTransfer<string[]>
       from={({ onFinish }) => (
-        <MpcPeersSelectionProvider>
-          <KeysignPeerDiscoveryStep
-            payload={keysignPayload}
-            onFinish={onFinish}
-          />
-        </MpcPeersSelectionProvider>
+        <KeysignSignersStep payload={keysignPayload} onFinish={onFinish} />
       )}
       to={({ onBack, value }) => (
-        <MpcPeersProvider value={value}>
+        <MpcSignersProvider value={value}>
           <StartMpcSessionFlow
             value="keysign"
             render={() => (
@@ -36,7 +30,7 @@ export const StartSecureKeysignFlow = ({
               </KeysignActionProvider>
             )}
           />
-        </MpcPeersProvider>
+        </MpcSignersProvider>
       )}
     />
   )

@@ -1,6 +1,7 @@
 import { create, toBinary } from '@bufbuild/protobuf'
 import { productName } from '@core/config'
 import { getSevenZip } from '@core/mpc/compression/getSevenZip'
+import { MpcLib } from '@core/mpc/mpcLib'
 import { toCommVault } from '@core/mpc/types/utils/commVault'
 import { VaultContainerSchema } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
 import { VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
@@ -9,7 +10,6 @@ import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { attempt } from '@lib/utils/attempt'
 import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGcm'
-import { match } from '@lib/utils/match'
 import { useMutation } from '@tanstack/react-query'
 
 import { decryptVaultKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
@@ -17,17 +17,16 @@ import { usePasscode } from '../../passcodeEncryption/state/passcode'
 import { useCore } from '../../state/core'
 import { useVaults } from '../../storage/vaults'
 
-const getExportName = (vault: Vault) => {
-  const totalSigners = vault.signers.length
-  const localPartyIndex = vault.signers.indexOf(vault.localPartyId) + 1
-  return match(vault.libType, {
-    GG20: () => {
-      return `${vault.name}-${vault.localPartyId}-part${localPartyIndex}of${totalSigners}.vult`
-    },
-    DKLS: () => {
-      return `${vault.name}-${vault.localPartyId}-share${localPartyIndex}of${totalSigners}.vult`
-    },
-  })
+const shareName: Record<MpcLib, string> = {
+  GG20: 'part',
+  DKLS: 'share',
+}
+
+const getExportName = ({ libType, localPartyId, name, signers }: Vault) => {
+  const totalSigners = signers.length
+  const localPartyIndex = signers.indexOf(localPartyId) + 1
+
+  return `${name}-${localPartyId}-${shareName[libType]}${localPartyIndex}of${totalSigners}.vult`
 }
 
 const createBackup = (vault: Vault, password?: string) => {
