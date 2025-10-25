@@ -5,9 +5,10 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { ChildrenProp } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import { areEmptyChildren } from '@lib/ui/utils/areEmptyChildren'
+import { RefObject } from 'react'
 import styled from 'styled-components'
 
-import VaultBackupBanner from '../../components/vaultBackupBanner/VaultBackupBanner/VaultBackupBanner'
+import VaultBackupBanner from '../backup/vaultBackupBanner/VaultBackupBanner/VaultBackupBanner'
 import { VaultTotalBalance } from '../balance/VaultTotalBalance'
 import { MigrateVaultPrompt } from '../keygen/migrate/MigrateVaultPrompt'
 import { VaultOverviewPrimaryActions } from './VaultOverviewPrimaryActions'
@@ -25,13 +26,17 @@ const PromptsWrapper = ({ children }: ChildrenProp) => {
   )
 }
 
-export const VaultOverview = () => {
+type VaultOverviewProps = {
+  scrollContainerRef: RefObject<HTMLDivElement>
+}
+
+export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
   const { isBackedUp, libType } = useCurrentVault()
 
   return (
     <VStack fullHeight>
       <Wrap wrap={PromptsWrapper}>{!isBackedUp && <VaultBackupBanner />}</Wrap>
-      <PageContent gap={32} flexGrow>
+      <PageContent ref={scrollContainerRef} scrollable gap={32} flexGrow>
         <VStack alignItems="center" gap={24}>
           <VaultTotalBalance />
           <VaultOverviewPrimaryActions />
