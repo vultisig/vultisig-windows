@@ -155,7 +155,7 @@ export const KeygenSignersStep = ({
               />
               <MpcSignersTitle
                 target={devicesTarget}
-                current={selectedPeers.length}
+                current={selectedPeers.length + 1}
               />
               <PeersContainer>
                 <InitiatingDevice />
@@ -167,7 +167,7 @@ export const KeygenSignersStep = ({
                         return missingPeers.length
                       }
 
-                      return recommendedPeers - selectedPeers.length
+                      return recommendedPeers - signers.length
                     }
 
                     const peerOptions = without(signers, localPartyId)
