@@ -13,6 +13,7 @@ import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useVaultOrders } from '@core/ui/storage/vaults'
 import { ChildrenProp } from '@lib/ui/props'
+import { without } from '@lib/utils/array/without'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { useCallback } from 'react'
 
@@ -30,10 +31,8 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
   const vaultOrders = useVaultOrders()
 
   const keygenAction: KeygenAction = useCallback(
-    async ({ onStepChange, peers }) => {
+    async ({ onStepChange, signers }) => {
       onStepChange('ecdsa')
-
-      const signers = [localPartyId, ...peers]
 
       const sharedFinalVaultFields = {
         signers,
@@ -101,7 +100,7 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
       await waitForKeygenComplete({
         serverURL: serverUrl,
         sessionId: sessionId,
-        peers,
+        peers: without(signers, localPartyId),
       })
 
       return vault

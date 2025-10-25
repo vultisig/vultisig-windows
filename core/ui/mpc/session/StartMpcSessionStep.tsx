@@ -17,20 +17,21 @@ import { FlowErrorPageContent } from '../../flow/FlowErrorPageContent'
 export const StartMpcSessionStep = ({
   onFinish,
   value,
-}: OnFinishProp & ValueProp<MpcSession>) => {
+}: OnFinishProp<string[]> & ValueProp<MpcSession>) => {
   const { t } = useTranslation()
   const sessionId = useMpcSessionId()
   const serverUrl = useMpcServerUrl()
   const devices = useMpcDevices()
   const { mutate: start, ...status } = useMutation({
-    mutationFn: () => {
-      return startMpcSession({
+    mutationFn: async () => {
+      await startMpcSession({
         serverUrl,
         sessionId,
         devices,
       })
+      return devices
     },
-    onSuccess: () => onFinish(),
+    onSuccess: onFinish,
   })
 
   useEffect(() => start(), [start])
