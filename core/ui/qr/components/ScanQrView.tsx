@@ -11,9 +11,6 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { useToast } from '@lib/ui/toast/ToastProvider'
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
-import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
 type ScanQrViewProps = OnFinishProp<string> & {
@@ -27,17 +24,6 @@ export const ScanQrView = ({
   const { t } = useTranslation()
   const permissionsQuery = useCameraPermissionQuery()
 
-  const { addToast } = useToast()
-
-  const onScanError = useCallback(
-    (error: Error) => {
-      addToast({
-        message: extractErrorMsg(error) || t('failed_to_read_qr_code'),
-      })
-    },
-    [addToast, t]
-  )
-
   return (
     <>
       <PageContent scrollable>
@@ -46,9 +32,7 @@ export const ScanQrView = ({
           success={permission => (
             <Match
               value={permission}
-              granted={() => (
-                <QrScanner onFinish={onFinish} onError={onScanError} />
-              )}
+              granted={() => <QrScanner onFinish={onFinish} />}
               prompt={() => <CameraPermission />}
               denied={() => <CameraPermission />}
             />
