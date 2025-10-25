@@ -24,6 +24,7 @@ export type KeysignTxDataResolverInput<
     : K extends 'solana'
       ? {
           receiver: string
+          recentBlockHash?: string
         }
       : K extends 'tron'
         ? {

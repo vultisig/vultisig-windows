@@ -79,6 +79,7 @@ export const parseSolanaTx = async ({
 
     const txData = await getKeysignTxData({
       coin,
+      recentBlockHash: tx.recentBlockhash ?? undefined,
     })
 
     const blockchainSpecific = buildChainSpecific({
