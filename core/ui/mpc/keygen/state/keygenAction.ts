@@ -5,7 +5,6 @@ import { Vault } from '../../../vault/Vault'
 
 type KeygenActionInput = {
   onStepChange: (step: KeygenStep) => void
-  peers: string[]
 }
 
 export type KeygenAction = (input: KeygenActionInput) => Promise<Vault>
