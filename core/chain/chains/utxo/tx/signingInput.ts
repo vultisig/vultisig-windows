@@ -19,9 +19,9 @@ type GetUtxoTxSigningInputInput = {
   walletCore: WalletCore
   byteFee: bigint
   sendMaxAmount: boolean
-  psbt: string
-  amount: bigint
-  receiver: string
+  psbt?: string
+  amount?: bigint
+  receiver?: string
   utxoInfo: UtxoInfo[]
   memo?: string
 }
@@ -100,7 +100,7 @@ export const getUtxoTxSigningInput = ({
 
   const input = TW.Bitcoin.Proto.SigningInput.create({
     hashType: walletCore.BitcoinScript.hashTypeForCoin(coinType),
-    amount: Long.fromBigInt(amount),
+    amount: amount ? Long.fromBigInt(amount) : undefined,
     useMaxAmount: sendMaxAmount,
     toAddress: receiver,
     changeAddress: coin.address,
