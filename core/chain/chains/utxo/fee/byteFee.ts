@@ -10,5 +10,11 @@ export const getUtxoByteFee = async (chain: UtxoChain) => {
     data: { suggested_transaction_fee_per_byte_sat },
   } = await getUtxoStats(chain)
 
-  return byteFeeMultiplier(BigInt(suggested_transaction_fee_per_byte_sat))
+  const base = BigInt(suggested_transaction_fee_per_byte_sat)
+
+  if (chain === UtxoChain.Dogecoin) {
+    return base / 10n
+  }
+
+  return byteFeeMultiplier(base)
 }
