@@ -11,7 +11,7 @@ export const getFeeAmount = (
   matchRecordUnion(toFeeQuoteRecordUnion(chain, quote), {
     evm: ({ baseFeePerGas, maxPriorityFeePerGas, gasLimit }) =>
       (baseFeePerGas + maxPriorityFeePerGas) * gasLimit,
-    utxo: ({ byteFee, txSize }) => byteFee * txSize,
+    utxo: ({ fee }) => fee,
     cosmos: ({ gas }) => gas,
     sui: ({ gas }) => gas * suiAverageSendGas,
     solana: ({ priorityFee }) => priorityFee,

@@ -4,4 +4,4 @@ import { ExtractFeeQuoteResolver } from '../resolver'
 
 export const extractUtxoFeeQuote: ExtractFeeQuoteResolver<'utxoSpecific'> = ({
   byteFee,
-}) => ({ byteFee: BigInt(byteFee), txSize: utxoTxSize })
+}) => ({ byteFee: BigInt(byteFee), fee: BigInt(byteFee) * utxoTxSize })
