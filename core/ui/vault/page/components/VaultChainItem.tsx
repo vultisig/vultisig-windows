@@ -6,9 +6,8 @@ import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { VaultChainBalance } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
-import { centerContent } from '@lib/ui/css/centerContent'
-import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
-import { round } from '@lib/ui/css/round'
+import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
@@ -20,15 +19,6 @@ import styled from 'styled-components'
 
 import { useHandleVaultChainItemPress } from './useHandleVaultChainItemPress'
 import { VaultAddressCopyButton } from './VaultAddressCopyButton'
-
-const Pill = styled.div`
-  height: 24px;
-  ${round};
-  ${horizontalPadding(12)};
-  font-size: 12px;
-  ${centerContent};
-  background: ${getColor('mist')};
-`
 
 type VaultChainItemProps = {
   balance: VaultChainBalance
@@ -79,7 +69,7 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
                 {chain}
               </Text>
               <HStack alignItems="center" gap={4}>
-                <Text color="shy" size={12}>
+                <Text weight={500} color="shy" size={12}>
                   {formatWalletAddress(address)}
                 </Text>
                 <VaultAddressCopyButton
@@ -90,28 +80,37 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
                 />
               </HStack>
             </VStack>
-            <HStack alignItems="center" gap={12}>
-              {singleCoin ? (
-                <Text color="contrast" weight="400" size={12} centerVertically>
+            <HStack gap={8} alignItems="center">
+              <VStack
+                gap={8}
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Text centerVertically color="contrast" weight="550" size={14}>
                   <BalanceVisibilityAware>
-                    {formatAmount(
-                      fromChainAmount(singleCoin.amount, singleCoin.decimals),
-                      { precision: 'high' }
-                    )}
+                    {formatFiatAmount(totalAmount)}
                   </BalanceVisibilityAware>
                 </Text>
-              ) : coins.length > 1 ? (
-                <Pill>
+                {singleCoin ? (
+                  <Text color="shy" weight="500" size={12} centerVertically>
+                    <BalanceVisibilityAware>
+                      {formatAmount(
+                        fromChainAmount(singleCoin.amount, singleCoin.decimals),
+                        { precision: 'high', ticker: singleCoin.ticker }
+                      )}
+                    </BalanceVisibilityAware>
+                  </Text>
+                ) : coins.length > 1 ? (
                   <BalanceVisibilityAware>
-                    {coins.length} assets
+                    <Text color="shy" weight="500" size={12} centerVertically>
+                      {coins.length} assets
+                    </Text>
                   </BalanceVisibilityAware>
-                </Pill>
-              ) : null}
-              <Text centerVertically color="contrast" weight="700" size={16}>
-                <BalanceVisibilityAware>
-                  {formatFiatAmount(totalAmount)}
-                </BalanceVisibilityAware>
-              </Text>
+                ) : null}
+              </VStack>
+              <IconWrapper>
+                <ChevronRightIcon />
+              </IconWrapper>
             </HStack>
           </HStack>
         </VStack>
