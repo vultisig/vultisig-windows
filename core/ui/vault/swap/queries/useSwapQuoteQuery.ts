@@ -27,23 +27,29 @@ export const useSwapQuoteQuery = () => {
   const fromCoin = useCurrentVaultCoin(fromCoinKey)
   const toCoin = useCurrentVaultCoin(toCoinKey)
 
-  const fromCoinUsdPrice = useCoinPriceQuery({
-    coin: fromCoin,
+  const fromCoinUsdPriceQuery = useCoinPriceQuery({
+    coin: fromCoinKey,
     fiatCurrency: 'usd',
   })
 
   const appAffiliateBpsQuery = useSwapAffiliateBpsQuery()
 
+  // If the price fails to load, proceed without the affiliate.
+  const fromCoinUsdPrice = fromCoinUsdPriceQuery.error
+    ? null
+    : fromCoinUsdPriceQuery.data
+
   return useStateDependentQuery(
     {
       fromAmount: fromAmount || undefined,
-      fromCoinUsdPrice: fromCoinUsdPrice.data,
+      fromCoinUsdPrice,
       referral: referralQuery.data,
       affiliateBps: appAffiliateBpsQuery.data,
     },
     ({ fromAmount, fromCoinUsdPrice, referral, affiliateBps }) => {
-      const usdAmount = fromAmount * fromCoinUsdPrice
-      const isAffiliate = usdAmount >= swapConfig.minUsdAffiliateAmount
+      const isAffiliate =
+        fromCoinUsdPrice &&
+        fromAmount * fromCoinUsdPrice >= swapConfig.minUsdAffiliateAmount
 
       const input: FindSwapQuoteInput = {
         from: fromCoin,

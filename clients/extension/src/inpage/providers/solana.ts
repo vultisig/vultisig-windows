@@ -326,8 +326,13 @@ export class Solana implements Wallet {
         }
       )
 
-      const { signatures } = deserializeSigningOutput(Chain.Solana, data)
-
+      const { signatures, encoded } = deserializeSigningOutput(
+        Chain.Solana,
+        data
+      )
+      const { message: signedMessage } = VersionedTransaction.deserialize(
+        bs58.decode(encoded)
+      )
       for (const sig of signatures) {
         const { pubkey, signature } = sig
         if (pubkey && signature)
@@ -336,12 +341,15 @@ export class Solana implements Wallet {
             bs58.decode(signature)
           )
       }
+      transaction.message.recentBlockhash = signedMessage.recentBlockhash
 
       return transaction
     } else {
       const connection = new Connection(`${rootApiUrl}/solana/`)
       for (const instruction of transaction.instructions) {
-        const getTransactionDetails = async (): Promise<TransactionDetails> => {
+        const getTransactionDetails = async (): Promise<
+          TransactionDetails | undefined
+        > => {
           if (instruction.programId.equals(SystemProgram.programId)) {
             // Handle Native SOL Transfers
             const decodedTransfer =
@@ -419,14 +427,12 @@ export class Solana implements Wallet {
               skipBroadcast,
             }
           }
-
-          throw new NotImplementedError(
-            `Solana transaction details not implemented for instruction ${instruction.programId.toString()}`
-          )
         }
 
         const transactionDetails = await getTransactionDetails()
-
+        if (!transactionDetails) {
+          continue
+        }
         const { data } = await callPopup(
           {
             sendTx: {
@@ -447,6 +453,7 @@ export class Solana implements Wallet {
 
         return VersionedTransaction.deserialize(rawData)
       }
+      throw new Error('Failed to get transaction details')
     }
   }
 

@@ -15,9 +15,11 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { sum } from '@lib/utils/array/sum'
 import { formatAmount } from '@lib/utils/formatAmount'
+import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
 import styled from 'styled-components'
 
 import { useHandleVaultChainItemPress } from './useHandleVaultChainItemPress'
+import { VaultAddressCopyButton } from './VaultAddressCopyButton'
 
 const Pill = styled.div`
   height: 24px;
@@ -59,7 +61,7 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
 
   return (
     <StyledPanel data-testid="VaultChainItem-Panel" {...pressHandlers}>
-      <HStack fullWidth alignItems="center" gap={16}>
+      <HStack fullWidth alignItems="center" gap={12}>
         <ChainEntityIcon
           value={getChainLogoSrc(chain)}
           style={{ fontSize: 32 }}
@@ -72,9 +74,22 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
             justifyContent="space-between"
             gap={20}
           >
-            <Text color="contrast" weight="700" size={16}>
-              {chain}
-            </Text>
+            <VStack>
+              <Text color="contrast" size={14}>
+                {chain}
+              </Text>
+              <HStack alignItems="center" gap={4}>
+                <Text color="shy" size={12}>
+                  {formatWalletAddress(address)}
+                </Text>
+                <VaultAddressCopyButton
+                  value={{
+                    address,
+                    chain,
+                  }}
+                />
+              </HStack>
+            </VStack>
             <HStack alignItems="center" gap={12}>
               {singleCoin ? (
                 <Text color="contrast" weight="400" size={12} centerVertically>
@@ -99,11 +114,6 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
               </Text>
             </HStack>
           </HStack>
-          <Text color="primary" weight="400" size={12}>
-            <BalanceVisibilityAware size="xxxl">
-              {address}
-            </BalanceVisibilityAware>
-          </Text>
         </VStack>
       </HStack>
     </StyledPanel>
@@ -111,6 +121,10 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
 }
 
 const StyledPanel = styled(Panel)`
+  cursor: pointer;
+
+  transition: background-color 0.3s ease;
+
   &:hover {
     background-color: ${getColor('foregroundExtra')};
   }
