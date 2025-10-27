@@ -5,13 +5,13 @@ import { BackupOverviewSlidesPartOne } from '@core/ui/vault/backup/secure/Backup
 import { PairingDeviceBackupOverviewSlidesPartOne } from '@core/ui/vault/backup/secure/PairingDeviceBackupOverviewSlidesPartOne'
 import { VaultBackupFlow } from '@core/ui/vault/backup/VaultBackupFlow'
 import { VaultBackupSummaryStep } from '@core/ui/vault/backup/VaultBackupSummaryStep'
+import { getVaultId } from '@core/vault/Vault'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { OnFinishProp } from '@lib/ui/props'
 import { useRive } from '@rive-app/react-canvas'
 
 import { useCurrentVault } from '../../state/currentVault'
-import { getVaultId } from '../../Vault'
 
 const steps = [
   'backupSlideshowPartOne',

@@ -3,8 +3,8 @@ import styled from 'styled-components'
 export const Wrapper = styled.div`
   position: relative;
   box-sizing: border-box;
-  width: 100%;
-  padding: 5%;
+  width: min(100%, 80vmin);
+  padding: 4vmin;
 `
 
 export const RiveWrapper = styled.div`
@@ -15,4 +15,5 @@ export const RiveWrapper = styled.div`
 export const QRCodeWrapper = styled.div`
   position: relative;
   width: 100%;
+  aspect-ratio: 1 / 1;
 `

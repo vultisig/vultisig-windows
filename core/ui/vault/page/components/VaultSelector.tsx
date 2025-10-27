@@ -1,6 +1,6 @@
 import { hasServer } from '@core/mpc/devices/localPartyId'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { Vault } from '@core/ui/vault/Vault'
+import { Vault } from '@core/vault/Vault'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { LightningIcon } from '@lib/ui/icons/LightningIcon'
 import { ShieldIcon } from '@lib/ui/icons/ShieldIcon'
