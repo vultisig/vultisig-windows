@@ -30,6 +30,7 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   joinKeygen: JoinKeygenPage,
   joinKeysign: JoinKeysignPage,
   keysign: StartKeysignView,
+  migrateVault: () => null,
   onboarding: () => (
     <IncompleteOnboardingOnly>
       <OnboardingPage />
