@@ -1,3 +1,4 @@
+import { getVaultId } from '@core/mpc/vault/Vault'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import {
   GetVaultFoldersFunction,
@@ -5,7 +6,6 @@ import {
   VaultFoldersStorage,
 } from '@core/ui/storage/vaultFolders'
 import { VaultFolder } from '@core/ui/vault/VaultFolder'
-import { getVaultId } from '@core/vault/Vault'
 import { getStorageValue } from '@lib/extension/storage/get'
 import { setStorageValue } from '@lib/extension/storage/set'
 import { updateAtIndex } from '@lib/utils/array/updateAtIndex'

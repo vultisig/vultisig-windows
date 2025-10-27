@@ -1,6 +1,6 @@
+import { Vault } from '@core/mpc/vault/Vault'
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { useCreateVaultMutation } from '@core/ui/vault/mutations/useCreateVaultMutation'
-import { Vault } from '@core/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { FlowPendingPageContent } from '@lib/ui/flow/FlowPendingPageContent'
 import { OnBackProp, OnFinishProp, TitleProp, ValueProp } from '@lib/ui/props'

@@ -1,4 +1,4 @@
-import { Vault } from '@core/vault/Vault'
+import { Vault } from '@core/mpc/vault/Vault'
 import { createHash } from 'crypto'
 
 export const getVaultExportUid = ({ name, publicKeys, hexChainCode }: Vault) =>

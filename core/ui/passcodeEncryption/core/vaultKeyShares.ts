@@ -1,4 +1,4 @@
-import { VaultKeyShares } from '@core/vault/Vault'
+import { VaultKeyShares } from '@core/mpc/vault/Vault'
 import { decryptWithAesGcm } from '@lib/utils/encryption/aesGcm/decryptWithAesGcm'
 import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGcm'
 import {
