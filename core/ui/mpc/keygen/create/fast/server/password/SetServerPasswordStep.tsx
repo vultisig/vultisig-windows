@@ -1,6 +1,6 @@
+import { passwordLenghtConfig } from '@core/security/password/config'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { KeygenEducationPrompt } from '@core/ui/mpc/keygen/education/KeygenEducationPrompt'
-import { passwordLenghtConfig } from '@core/ui/security/password/config'
 import { usePassword } from '@core/ui/state/password'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'

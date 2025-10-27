@@ -2,7 +2,6 @@ import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { isEmpty } from '@lib/utils/array/isEmpty'
-import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { useQuery } from '@tanstack/react-query'
 
@@ -17,13 +16,11 @@ export const useMpcSignersQuery = () => {
         `${serverUrl}/start/${sessionId}`
       )
 
-      const uniqueSigners = withoutDuplicates(signers)
-
-      if (isEmpty(uniqueSigners)) {
+      if (isEmpty(signers)) {
         throw new Error('Session have not started yet')
       }
 
-      return uniqueSigners
+      return signers
     },
     retry: true,
     retryDelay: 1000,

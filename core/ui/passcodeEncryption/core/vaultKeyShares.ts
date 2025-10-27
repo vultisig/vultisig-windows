@@ -1,3 +1,4 @@
+import { VaultKeyShares } from '@core/vault/Vault'
 import { decryptWithAesGcm } from '@lib/utils/encryption/aesGcm/decryptWithAesGcm'
 import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGcm'
 import {
@@ -5,8 +6,6 @@ import {
   plainTextEncoding,
 } from '@lib/utils/encryption/config'
 import { recordMap } from '@lib/utils/record/recordMap'
-
-import { VaultKeyShares } from '../../vault/Vault'
 
 type Input = {
   keyShares: VaultKeyShares

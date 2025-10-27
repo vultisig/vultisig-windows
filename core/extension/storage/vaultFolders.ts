@@ -4,8 +4,8 @@ import {
   vaultFoldersInitialValue,
   VaultFoldersStorage,
 } from '@core/ui/storage/vaultFolders'
-import { getVaultId } from '@core/ui/vault/Vault'
 import { VaultFolder } from '@core/ui/vault/VaultFolder'
+import { getVaultId } from '@core/vault/Vault'
 import { getStorageValue } from '@lib/extension/storage/get'
 import { setStorageValue } from '@lib/extension/storage/set'
 import { updateAtIndex } from '@lib/utils/array/updateAtIndex'

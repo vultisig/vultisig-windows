@@ -1,5 +1,5 @@
+import { startMpcSession } from '@core/mpc/session/startMpcSession'
 import { MpcSession } from '@core/ui/mpc/session/MpcSession'
-import { startMpcSession } from '@core/ui/mpc/session/utils/startMpcSession'
 import { useMpcDevices } from '@core/ui/mpc/state/mpcDevices'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
@@ -17,20 +17,21 @@ import { FlowErrorPageContent } from '../../flow/FlowErrorPageContent'
 export const StartMpcSessionStep = ({
   onFinish,
   value,
-}: OnFinishProp & ValueProp<MpcSession>) => {
+}: OnFinishProp<string[]> & ValueProp<MpcSession>) => {
   const { t } = useTranslation()
   const sessionId = useMpcSessionId()
   const serverUrl = useMpcServerUrl()
   const devices = useMpcDevices()
   const { mutate: start, ...status } = useMutation({
-    mutationFn: () => {
-      return startMpcSession({
+    mutationFn: async () => {
+      await startMpcSession({
         serverUrl,
         sessionId,
         devices,
       })
+      return devices
     },
-    onSuccess: () => onFinish(),
+    onSuccess: onFinish,
   })
 
   useEffect(() => start(), [start])

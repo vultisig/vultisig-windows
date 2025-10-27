@@ -1,6 +1,5 @@
+import { Vault } from '@core/vault/Vault'
 import { createHash } from 'crypto'
-
-import { Vault } from '../../Vault'
 
 export const getVaultExportUid = ({ name, publicKeys, hexChainCode }: Vault) =>
   createHash('sha256')

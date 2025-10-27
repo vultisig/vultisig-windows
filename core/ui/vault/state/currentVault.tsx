@@ -1,7 +1,7 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { hasServer, isServer } from '@core/mpc/devices/localPartyId'
-import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
+import { getVaultId, Vault } from '@core/vault/Vault'
 import { ChildrenProp } from '@lib/ui/props'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { useMemo } from 'react'
