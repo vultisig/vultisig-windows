@@ -1,6 +1,6 @@
 import { passwordLenghtConfig } from '@core/security/password/config'
-import { Vault } from '@core/vault/Vault'
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
+import { Vault } from '@core/vault/Vault'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
