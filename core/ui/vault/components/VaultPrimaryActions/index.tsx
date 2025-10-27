@@ -6,6 +6,7 @@ import { isOneOf } from '@lib/utils/array/isOneOf'
 import { CoreViewState } from '../../../navigation/CoreView'
 import { depositEnabledChains } from '../../deposit/DepositEnabledChain'
 import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
+import { BuyPrompt } from '../BuyPrompt'
 import { DepositPrompt } from '../DepositPrompt'
 import { ActionsWrapper } from '../PrimaryActions.styled'
 import { SwapPrompt } from '../SwapPrompt'
@@ -19,6 +20,7 @@ export const VaultPrimaryActions = (state: CoreViewState<'send'>) => {
     <ActionsWrapper justifyContent="center" gap={20}>
       {isOneOf(chain, swapEnabledChains) && <SwapPrompt fromCoin={coin} />}
       <SendPrompt {...state} />
+      <BuyPrompt coin={coin} />
       {isOneOf(chain, depositEnabledChains) && <DepositPrompt coin={coin} />}
     </ActionsWrapper>
   )

@@ -1,4 +1,4 @@
-import { Coin, CoinKey } from '@core/chain/coin/Coin'
+import { CoinKey, CoinMetadata } from '@core/chain/coin/Coin'
 import { without } from '@lib/utils/array/without'
 import { pick } from '@lib/utils/record/pick'
 
@@ -8,7 +8,8 @@ export type AccountCoinKey<T extends Chain = Chain> = CoinKey<T> & {
   address: string
 }
 
-export type AccountCoin<T extends Chain = Chain> = Coin & AccountCoinKey<T>
+export type AccountCoin<T extends Chain = Chain> = CoinMetadata &
+  AccountCoinKey<T>
 
 export const extractAccountCoinKey = <T extends AccountCoinKey>(
   coin: T
