@@ -4,7 +4,7 @@ export const Wrapper = styled.div`
   position: relative;
   box-sizing: border-box;
   width: min(100%, 80vmin);
-  padding: min(4vmin);
+  padding: 4vmin;
 `
 
 export const RiveWrapper = styled.div`
