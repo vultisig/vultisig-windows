@@ -1,27 +1,51 @@
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { banxaSupportedChains } from '@core/chain/banxa'
+import { Chain } from '@core/chain/Chain'
+import { CoinKey } from '@core/chain/coin/Coin'
 import { swapEnabledChains } from '@core/chain/swap/swapEnabledChains'
 import { SendPrompt } from '@core/ui/vault/send/SendPrompt'
 import { isOneOf } from '@lib/utils/array/isOneOf'
+import { without } from '@lib/utils/array/without'
+import { useCallback, useMemo } from 'react'
 
-import { CoreViewState } from '../../../navigation/CoreView'
 import { depositEnabledChains } from '../../deposit/DepositEnabledChain'
-import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
+import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 import { BuyPrompt } from '../BuyPrompt'
 import { DepositPrompt } from '../DepositPrompt'
 import { ActionsWrapper } from '../PrimaryActions.styled'
 import { SwapPrompt } from '../SwapPrompt'
 
-export const VaultPrimaryActions = (state: CoreViewState<'send'>) => {
-  const chain = 'fromChain' in state ? state.fromChain : state.coin.chain
-  const feeCoin = useCurrentVaultCoin({ chain, id: chainFeeCoin[chain].id })
-  const coin = 'coin' in state ? state.coin : feeCoin
+type VaultPrimaryActionsProps = {
+  coin?: CoinKey
+}
+
+export const VaultPrimaryActions = ({
+  coin: potentialCoin,
+}: VaultPrimaryActionsProps) => {
+  const coins = useCurrentVaultCoins()
+
+  const sendCoin = useMemo(
+    () => potentialCoin || coins[0],
+    [coins, potentialCoin]
+  )
+
+  const getCoin = useCallback(
+    (supportedChains: readonly Chain[]) =>
+      without([potentialCoin, ...coins], undefined).find(coin =>
+        isOneOf(coin.chain, supportedChains)
+      ),
+    [coins, potentialCoin]
+  )
+
+  const swapCoin = useMemo(() => getCoin(swapEnabledChains), [getCoin])
+  const buyCoin = useMemo(() => getCoin(banxaSupportedChains), [getCoin])
+  const depositCoin = useMemo(() => getCoin(depositEnabledChains), [getCoin])
 
   return (
     <ActionsWrapper justifyContent="center" gap={20}>
-      {isOneOf(chain, swapEnabledChains) && <SwapPrompt fromCoin={coin} />}
-      <SendPrompt {...state} />
-      <BuyPrompt coin={coin} />
-      {isOneOf(chain, depositEnabledChains) && <DepositPrompt coin={coin} />}
+      {swapCoin && <SwapPrompt fromCoin={swapCoin} />}
+      <SendPrompt coin={sendCoin} />
+      {buyCoin && <BuyPrompt coin={buyCoin} />}
+      {depositCoin && <DepositPrompt coin={depositCoin} />}
     </ActionsWrapper>
   )
 }

@@ -4,7 +4,7 @@ import { getRecordKeys } from '@lib/utils/record/getRecordKeys'
 import { Chain } from '../Chain'
 import { AccountCoin } from '../coin/AccountCoin'
 
-export const banxaChainCode = {
+const banxaChainCode = {
   [Chain.Bitcoin]: 'BTC',
   [Chain.BitcoinCash]: 'BCH',
   [Chain.Litecoin]: 'LTC',
@@ -33,7 +33,7 @@ export const banxaChainCode = {
 } as const satisfies Partial<Record<Chain, string>>
 
 export const banxaSupportedChains = getRecordKeys(banxaChainCode)
-export type BanxaSupportedChain = (typeof banxaSupportedChains)[number]
+type BanxaSupportedChain = (typeof banxaSupportedChains)[number]
 
 export const getBanxaBuyUrl = ({
   address,
