@@ -426,6 +426,9 @@ export const de = {
   vault_settings_address_book_no_addresses_description:
     'Ordnen Sie alle Ihre wichtigen Adressen in einem Ort.',
   vault_search_no_matches: 'Keine Übereinstimmungen',
+  vault_search_updating: 'Aktualisierung...',
+  vault_search_filtered: 'Gefiltert',
+  vault_search_close: 'Schließen',
   or: 'oder',
   enter_vault_name: 'Tresorname eingeben',
   vault_name_required: 'Tresorname ist erforderlich',

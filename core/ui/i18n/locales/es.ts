@@ -432,6 +432,9 @@ export const es = {
   vault_settings_address_book_no_addresses_description:
     'Organice todas sus direcciones importantes en un lugar.',
   vault_search_no_matches: 'Sin coincidencias',
+  vault_search_updating: 'Actualizando...',
+  vault_search_filtered: 'Filtrado',
+  vault_search_close: 'Cerrar',
   or: 'o',
   enter_vault_name: 'Ingrese el nombre de la bóveda',
   vault_name_required: 'Se requiere el nombre de la bóveda',

@@ -410,6 +410,9 @@ export const hr = {
   vault_settings_address_book_no_addresses_description:
     'Organizirajte sve vaše važne adrese u jednom mjestu.',
   vault_search_no_matches: 'Nema podudaranja',
+  vault_search_updating: 'Ažuriranje...',
+  vault_search_filtered: 'Filtrirano',
+  vault_search_close: 'Zatvori',
   or: 'ili',
   enter_vault_name: 'Unesite naziv trezora',
   vault_name_required: 'Naziv trezora je obavezan',

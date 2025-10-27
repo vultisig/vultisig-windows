@@ -430,6 +430,9 @@ export const en = {
   vault_settings_address_book_no_addresses_description:
     'Keep all your important addresses organized in one place.',
   vault_search_no_matches: 'No matches',
+  vault_search_updating: 'Updating...',
+  vault_search_filtered: 'Filtered',
+  vault_search_close: 'Close',
   or: 'or',
   faq_is_open_source_title: 'Is Vultisig open source and audited?',
   faq_is_open_source_content:
