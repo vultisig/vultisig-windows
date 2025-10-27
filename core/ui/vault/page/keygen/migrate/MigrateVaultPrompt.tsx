@@ -26,7 +26,7 @@ export const MigrateVaultPrompt = () => {
   if (!isOpen) return null
 
   return (
-    <Container onClick={() => navigate({ id: 'migrateVault' } as any)}>
+    <Container onClick={() => navigate({ id: 'migrateVault' })}>
       <VStack gap={16}>
         <VStack gap={2}>
           <Text size={12} color="shy">

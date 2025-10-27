@@ -9,6 +9,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useDeferredValue, useEffect, useState, useTransition } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useSearchChain } from '../../../state/searchChainProvider'
@@ -22,6 +23,7 @@ export const SearchChain = () => {
   const debouncedValue = useDebounce(inputValue, debounceDelayMs)
   const deferredValue = useDeferredValue(debouncedValue)
   const [isPending, startTransition] = useTransition()
+  const { t } = useTranslation()
 
   useEffect(() => {
     setInputValue(searchQuery)
@@ -58,11 +60,13 @@ export const SearchChain = () => {
             </SearchFieldWrapper>
             {hasActiveQuery && (
               <StatusText color="supporting" size={10}>
-                {isPending ? 'Updating...' : 'Filtered'}
+                {isPending
+                  ? t('vault_search_updating')
+                  : t('vault_search_filtered')}
               </StatusText>
             )}
             <UnstyledButton onClick={handleClose}>
-              <Text>Close</Text>
+              <Text>{t('vault_search_close')}</Text>
             </UnstyledButton>
           </HStack>
         </motion.div>
