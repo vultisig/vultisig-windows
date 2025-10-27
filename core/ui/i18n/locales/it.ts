@@ -1195,4 +1195,5 @@ export const it = {
   unlock_discount_tier_description:
     'Mantenendo {{minBalance}}, sbloccherai il livello {{tier}} e riceverai uno sconto sulle commissioni di trading di <b>{{bps}} bps</b> su tutti gli swap.',
   upload_qr_code_with_address: "Carica il codice QR con l'indirizzo",
+  buy: 'Acquistare',
 }
