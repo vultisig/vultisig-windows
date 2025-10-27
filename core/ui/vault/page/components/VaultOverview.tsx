@@ -1,5 +1,6 @@
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Wrap } from '@lib/ui/base/Wrap'
+import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { ChildrenProp } from '@lib/ui/props'
@@ -36,7 +37,7 @@ export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
   return (
     <VStack fullHeight>
       <Wrap wrap={PromptsWrapper}>{!isBackedUp && <VaultBackupBanner />}</Wrap>
-      <PageContent ref={scrollContainerRef} scrollable gap={32} flexGrow>
+      <StyledPageContent ref={scrollContainerRef} scrollable gap={32} flexGrow>
         <VStack alignItems="center" gap={24}>
           <VaultTotalBalance />
           <VaultOverviewPrimaryActions />
@@ -44,10 +45,14 @@ export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
         </VStack>
         <Divider />
         <VaultTabs />
-      </PageContent>
+      </StyledPageContent>
     </VStack>
   )
 }
+
+const StyledPageContent = styled(PageContent)`
+  ${hideScrollbars};
+`
 
 const Divider = styled.div`
   height: 1px;
