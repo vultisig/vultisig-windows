@@ -1,8 +1,3 @@
-import {
-  FooterActions,
-  footerActionsHeight,
-} from '@clients/desktop/src/vault/components/FooterActions'
-import { VaultOverview } from '@clients/desktop/src/vault/components/VaultOverview'
 import { hasServer } from '@core/mpc/devices/localPartyId'
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { FastVaultPasswordVerification } from '@core/ui/mpc/fast/FastVaultPasswordVerification'
@@ -11,7 +6,8 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { useRef } from 'react'
 import styled from 'styled-components'
 
-import { UpdatePrompt } from '../../versioning/UpdatePrompt'
+import { FooterActions, footerActionsHeight } from './FooterActions'
+import { VaultOverview } from './VaultOverview'
 import { VaultPageHeader } from './VaultPageHeader'
 
 export const VaultPage = () => {
@@ -22,14 +18,13 @@ export const VaultPage = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null!)
 
   return (
-    <Wrapper justifyContent="space-between" ref={scrollContainerRef} flexGrow>
+    <Wrapper justifyContent="space-between" flexGrow>
       <VStack flexGrow>
         <VaultPageHeader
           vault={vault}
           scrollContainerRef={scrollContainerRef}
         />
-        <VaultOverview />
-        <UpdatePrompt />
+        <VaultOverview scrollContainerRef={scrollContainerRef} />
         {isFastVault && <FastVaultPasswordVerification key={vaultId} />}
       </VStack>
       <FooterActions />
@@ -39,6 +34,5 @@ export const VaultPage = () => {
 
 const Wrapper = styled(VStack)`
   position: relative;
-  overflow-y: auto;
   margin-bottom: ${footerActionsHeight}px;
 `

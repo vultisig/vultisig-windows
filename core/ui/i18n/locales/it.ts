@@ -431,6 +431,10 @@ export const it = {
   vault_settings_address_book_no_addresses_title: 'Il tuo rubrica è vuota',
   vault_settings_address_book_no_addresses_description:
     'Organizza tutti i tuoi indirizzi importanti in un posto.',
+  vault_search_no_matches: 'Nessuna corrispondenza',
+  vault_search_updating: 'Aggiornamento...',
+  vault_search_filtered: 'Filtrato',
+  vault_search_close: 'Chiudi',
   or: 'o',
   enter_vault_name: 'Inserisci il nome della cassaforte',
   vault_name_required: 'Il nome della cassaforte è obbligatorio',

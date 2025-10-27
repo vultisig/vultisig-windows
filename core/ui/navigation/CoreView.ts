@@ -49,6 +49,7 @@ export type CoreView =
   | { id: 'reshareVault' }
   | { id: 'reshareVaultFast' }
   | { id: 'reshareVaultSecure' }
+  | { id: 'migrateVault' }
   | {
       id: 'send'
       state: ({ fromChain: Chain } | { coin: CoinKey }) & {

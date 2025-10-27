@@ -1,5 +1,6 @@
 import { hasServer } from '@core/mpc/devices/localPartyId'
 import { Vault } from '@core/mpc/vault/Vault'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { LightningIcon } from '@lib/ui/icons/LightningIcon'
 import { ShieldIcon } from '@lib/ui/icons/ShieldIcon'
@@ -9,14 +10,12 @@ import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import styled from 'styled-components'
 
-import { useAppNavigate } from '../../navigation/hooks/useAppNavigate'
-
 const Indicator = styled(CollapsableStateIndicator)`
   font-size: 12px;
 `
 
 export const VaultSelector = ({ value }: ValueProp<Vault>) => {
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
   const isFastVault = hasServer(value.signers)
 
   return (

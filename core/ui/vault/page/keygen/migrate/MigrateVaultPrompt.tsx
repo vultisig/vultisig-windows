@@ -1,3 +1,4 @@
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
@@ -11,8 +12,6 @@ import { useRive } from '@rive-app/react-canvas'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useAppNavigate } from '../../../navigation/hooks/useAppNavigate'
-
 export const MigrateVaultPrompt = () => {
   const [isOpen, { toggle }] = useBoolean(true)
 
@@ -22,7 +21,7 @@ export const MigrateVaultPrompt = () => {
   })
 
   const { t } = useTranslation()
-  const navigate = useAppNavigate()
+  const navigate = useCoreNavigate()
 
   if (!isOpen) return null
 

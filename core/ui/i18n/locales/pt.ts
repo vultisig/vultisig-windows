@@ -417,6 +417,10 @@ export const pt = {
     'Seu livro de endereços está vazio',
   vault_settings_address_book_no_addresses_description:
     'Organize todos os seus endereços importantes em um lugar.',
+  vault_search_no_matches: 'Sem correspondências',
+  vault_search_updating: 'Atualizando...',
+  vault_search_filtered: 'Filtrado',
+  vault_search_close: 'Fechar',
   or: 'ou',
   enter_vault_name: 'Insira o nome do cofre',
   vault_name_required: 'Nome do cofre obrigatório',
