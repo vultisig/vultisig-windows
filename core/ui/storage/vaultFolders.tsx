@@ -1,4 +1,5 @@
 import { useCore } from '@core/ui/state/core'
+import { getVaultId } from '@core/vault/Vault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { isEmpty } from '@lib/utils/array/isEmpty'
@@ -10,7 +11,6 @@ import { useMemo } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
 import { useUpdateVaultMutation } from '../vault/mutations/useUpdateVaultMutation'
-import { getVaultId } from '../vault/Vault'
 import { VaultFolder } from '../vault/VaultFolder'
 import { StorageKey } from './StorageKey'
 import { useVaults } from './vaults'

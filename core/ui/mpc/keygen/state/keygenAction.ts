@@ -1,7 +1,6 @@
 import { KeygenStep } from '@core/mpc/keygen/KeygenStep'
+import { Vault } from '@core/vault/Vault'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
-
-import { Vault } from '../../../vault/Vault'
 
 type KeygenActionInput = {
   onStepChange: (step: KeygenStep) => void
