@@ -1197,4 +1197,5 @@ export const de = {
     'Indem Sie {{minBalance}} halten, schalten Sie die Stufe {{tier}} frei und erhalten einen <b>Rabatt auf die Handelsgebühr von {{bps}} bps</b> auf alle Swaps.',
   upload_qr_code_with_address: 'QR-Code mit Adresse hochladen',
   failed_to_read_qr_code: 'Der QR-Code konnte nicht gelesen werden.',
+  buy: 'Kaufen',
 }

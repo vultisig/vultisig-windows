@@ -1,5 +1,5 @@
 import { KeygenStep } from '@core/mpc/keygen/KeygenStep'
-import { Vault } from '@core/vault/Vault'
+import { Vault } from '@core/mpc/vault/Vault'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 
 type KeygenActionInput = {

@@ -1,7 +1,7 @@
 import { getVaultFromServer } from '@core/mpc/fast/api/getVaultFromServer'
+import { getVaultId } from '@core/mpc/vault/Vault'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { getVaultId } from '@core/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
 import { VStack } from '@lib/ui/layout/Stack'

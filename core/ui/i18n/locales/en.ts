@@ -77,6 +77,7 @@ export const en = {
   digit_input_loading_validation: 'Verifying code, please wait',
   create_referral_title: 'Create Referral',
   referrals_create_page_title: 'Vultisig - Referrals',
+  buy: 'Buy',
   use_referral_code: 'Use referral Code',
   save_code: 'Save code',
   used_referral_error:

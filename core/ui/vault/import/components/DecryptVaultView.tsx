@@ -1,6 +1,6 @@
-import { passwordLenghtConfig } from '@core/security/password/config'
+import { passwordLengthConfig } from '@core/config/password'
+import { Vault } from '@core/mpc/vault/Vault'
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
-import { Vault } from '@core/vault/Vault'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
@@ -16,13 +16,13 @@ import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 
 const createSchema = (t: TFunction) => {
-  const message = t('password_pattern_error', passwordLenghtConfig)
+  const message = t('password_pattern_error', passwordLengthConfig)
 
   return z.object({
     password: z
       .string()
-      .min(passwordLenghtConfig.min, message)
-      .max(passwordLenghtConfig.max, message),
+      .min(passwordLengthConfig.min, message)
+      .max(passwordLengthConfig.max, message),
   })
 }
 

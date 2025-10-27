@@ -1,7 +1,7 @@
 import { hasServer } from '@core/mpc/devices/localPartyId'
+import { getVaultId } from '@core/mpc/vault/Vault'
 import { FastVaultPasswordVerification } from '@core/ui/mpc/fast/FastVaultPasswordVerification'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { getVaultId } from '@core/vault/Vault'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useRef } from 'react'
 import styled from 'styled-components'

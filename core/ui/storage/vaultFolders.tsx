@@ -1,5 +1,5 @@
+import { getVaultId } from '@core/mpc/vault/Vault'
 import { useCore } from '@core/ui/state/core'
-import { getVaultId } from '@core/vault/Vault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { isEmpty } from '@lib/utils/array/isEmpty'
