@@ -1,3 +1,4 @@
+import { getVaultId, Vault } from '@core/mpc/vault/Vault'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import {
@@ -8,7 +9,6 @@ import { useFolderlessVaults } from '@core/ui/storage/vaults'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { VaultSigners } from '@core/ui/vault/signers'
 import { VaultFolder } from '@core/ui/vault/VaultFolder'
-import { getVaultId, Vault } from '@core/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { DnDList } from '@lib/ui/dnd/DnDList'
 import { MenuIcon } from '@lib/ui/icons/MenuIcon'

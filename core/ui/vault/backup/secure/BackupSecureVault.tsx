@@ -1,3 +1,4 @@
+import { getVaultId } from '@core/mpc/vault/Vault'
 import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
 import { useVaults } from '@core/ui/storage/vaults'
 import { BackupConfirmation } from '@core/ui/vault/backup/confirmation'
@@ -5,7 +6,6 @@ import { BackupOverviewSlidesPartOne } from '@core/ui/vault/backup/secure/Backup
 import { PairingDeviceBackupOverviewSlidesPartOne } from '@core/ui/vault/backup/secure/PairingDeviceBackupOverviewSlidesPartOne'
 import { VaultBackupFlow } from '@core/ui/vault/backup/VaultBackupFlow'
 import { VaultBackupSummaryStep } from '@core/ui/vault/backup/VaultBackupSummaryStep'
-import { getVaultId } from '@core/vault/Vault'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { OnFinishProp } from '@lib/ui/props'
