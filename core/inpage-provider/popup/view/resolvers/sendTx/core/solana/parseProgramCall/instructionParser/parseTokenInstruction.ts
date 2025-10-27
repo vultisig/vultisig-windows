@@ -20,12 +20,7 @@ export const parseTokenInstruction = async ({
   getCoin,
 }: Input): Promise<SolanaTxData> => {
   const debugPrefix = '[parseTokenInstruction]'
-  if (
-    !instruction.accounts ||
-    instruction.accounts.length !== 3 ||
-    !tx.instructions ||
-    !tx.accountKeys
-  )
+  if (!instruction.accounts || !tx.instructions || !tx.accountKeys)
     throw new Error('invalid token instruction')
   const connection = new Connection(`${rootApiUrl}/solana/`)
   const senderTokenAccountInfo = await getAccount(
@@ -38,7 +33,7 @@ export const parseTokenInstruction = async ({
     // Try fetching receiver account
     const receiverTokenAccountInfo = await getAccount(
       connection,
-      keys[instruction.accounts[1]]
+      keys[instruction.accounts[2]]
     )
     recipient = receiverTokenAccountInfo.owner.toString()
   } catch {

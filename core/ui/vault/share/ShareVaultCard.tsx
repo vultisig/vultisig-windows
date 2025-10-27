@@ -44,10 +44,6 @@ const QrCodeWrapper = styled.div`
   height: 270px;
   border-radius: 27.692px;
   border: 1px solid ${getColor('foregroundExtra')};
-
-  & > svg {
-    border-radius: 27.692px;
-  }
 `
 
 export const ShareVaultCard = () => {

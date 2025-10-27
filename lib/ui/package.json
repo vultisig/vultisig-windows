@@ -10,6 +10,8 @@
   "dependencies": {
     "@floating-ui/react": "^0.27.16",
     "@lib/utils": "workspace:^",
+    "@radix-ui/react-roving-focus": "^1.1.11",
+    "@radix-ui/react-tabs": "^1.1.13",
     "@tanstack/query-core": "^5.87.1",
     "styled-components": "^6.1.19"
   },
