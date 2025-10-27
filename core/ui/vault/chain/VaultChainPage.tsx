@@ -65,7 +65,7 @@ export const VaultChainPage = () => {
         hasBorder
       />
       <PageContent gap={16} scrollable>
-        <VaultPrimaryActions fromChain={chain} coin={vaultCoins[0]} />
+        <VaultPrimaryActions coin={{ chain }} />
         <VaultChainBalancesSection />
         <VaultChainPositionsSection />
       </PageContent>

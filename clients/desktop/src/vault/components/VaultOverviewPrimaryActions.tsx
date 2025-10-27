@@ -9,5 +9,5 @@ export const VaultOverviewPrimaryActions = () => {
     return null
   }
 
-  return <VaultPrimaryActions fromChain={chains[0]} />
+  return <VaultPrimaryActions />
 }
