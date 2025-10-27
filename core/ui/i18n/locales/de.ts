@@ -425,6 +425,7 @@ export const de = {
   vault_settings_address_book_no_addresses_title: 'Ihr Adressbuch ist leer',
   vault_settings_address_book_no_addresses_description:
     'Ordnen Sie alle Ihre wichtigen Adressen in einem Ort.',
+  vault_search_no_matches: 'Keine Übereinstimmungen',
   or: 'oder',
   enter_vault_name: 'Tresorname eingeben',
   vault_name_required: 'Tresorname ist erforderlich',
