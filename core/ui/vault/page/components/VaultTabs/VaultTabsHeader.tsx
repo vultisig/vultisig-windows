@@ -1,10 +1,11 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CryptoWalletPenIcon } from '@lib/ui/icons/CryptoWalletPenIcon'
-import { SearchIcon } from '@lib/ui/icons/SearchIcon'
 import { HStack, hStack } from '@lib/ui/layout/Stack'
 import { ChildrenProp } from '@lib/ui/props'
 import styled, { useTheme } from 'styled-components'
+
+import { SearchChain } from './controls/SearchChain'
 
 export const VaultTabsHeader = ({ children }: ChildrenProp) => {
   const { colors } = useTheme()
@@ -14,9 +15,7 @@ export const VaultTabsHeader = ({ children }: ChildrenProp) => {
     <Wrapper>
       <TabsHeaderContainer>{children}</TabsHeaderContainer>
       <HStack gap={8} alignItems="center">
-        <IconButton size="lg">
-          <SearchIcon />
-        </IconButton>
+        <SearchChain />
         <IconButton
           onClick={() => navigate({ id: 'manageVaultChains' })}
           style={{
