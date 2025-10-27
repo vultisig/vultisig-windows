@@ -17,6 +17,7 @@ import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { ChildrenProp } from '@lib/ui/props'
+import { without } from '@lib/utils/array/without'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useCallback } from 'react'
 
@@ -37,10 +38,8 @@ export const MigrateVaultKeygenActionProvider = ({
   const keygenVault = useKeygenVault()
 
   const keygenAction: KeygenAction = useCallback(
-    async ({ onStepChange, peers }) => {
+    async ({ onStepChange, signers }) => {
       onStepChange('ecdsa')
-
-      const signers = [localPartyId, ...peers]
 
       const sharedFinalVaultFields = {
         signers,
@@ -113,7 +112,7 @@ export const MigrateVaultKeygenActionProvider = ({
       await waitForKeygenComplete({
         serverURL: serverUrl,
         sessionId: sessionId,
-        peers,
+        peers: without(signers, localPartyId),
       })
 
       return vault

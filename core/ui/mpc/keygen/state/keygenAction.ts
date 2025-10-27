@@ -4,7 +4,7 @@ import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 
 type KeygenActionInput = {
   onStepChange: (step: KeygenStep) => void
-  peers: string[]
+  signers: string[]
 }
 
 export type KeygenAction = (input: KeygenActionInput) => Promise<Vault>
