@@ -1,4 +1,4 @@
-import { Vault } from '@core/ui/vault/Vault'
+import { Vault } from '@core/vault/Vault'
 import { ChildrenProp } from '@lib/ui/props'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'

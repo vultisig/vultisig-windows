@@ -6,7 +6,7 @@ import { VaultOverview } from '@clients/desktop/src/vault/components/VaultOvervi
 import { hasServer } from '@core/mpc/devices/localPartyId'
 import { FastVaultPasswordVerification } from '@core/ui/mpc/fast/FastVaultPasswordVerification'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { getVaultId } from '@core/ui/vault/Vault'
+import { getVaultId } from '@core/vault/Vault'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useRef } from 'react'
 import styled from 'styled-components'

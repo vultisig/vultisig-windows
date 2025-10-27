@@ -1,4 +1,5 @@
 import { useCore } from '@core/ui/state/core'
+import { getVaultId } from '@core/vault/Vault'
 import { ChildrenProp, ValueProp } from '@lib/ui/props'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
@@ -11,7 +12,6 @@ import {
 } from '@tanstack/react-query'
 import { useEffect, useMemo } from 'react'
 
-import { getVaultId } from '../vault/Vault'
 import { StorageKey } from './StorageKey'
 import { useVaults } from './vaults'
 
