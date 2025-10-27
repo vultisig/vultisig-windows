@@ -7,7 +7,6 @@
     "@core/config": "workspace:^",
     "@core/mpc": "workspace:^",
     "@core/ui": "workspace:^",
-    "@core/vault": "workspace:^",
     "@lib/extension": "workspace:^",
     "@lib/ui": "workspace:^",
     "@lib/utils": "workspace:^"

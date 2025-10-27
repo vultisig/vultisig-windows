@@ -1,3 +1,4 @@
+import { getVaultId } from '@core/mpc/vault/Vault'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import {
@@ -7,7 +8,6 @@ import {
 import { useFolderVaults } from '@core/ui/storage/vaults'
 import { VaultSigners } from '@core/ui/vault/signers'
 import { useCurrentVaultFolder } from '@core/ui/vaultsOrganisation/folder/state/currentVaultFolder'
-import { getVaultId } from '@core/vault/Vault'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { SquarePenIcon } from '@lib/ui/icons/SquarePenIcon'
 import { VStack } from '@lib/ui/layout/Stack'
