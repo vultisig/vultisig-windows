@@ -7,6 +7,7 @@ import { queryUrl } from '@lib/utils/query/queryUrl'
 import { TransferDirection } from '@lib/utils/TransferDirection'
 
 import { Chain } from '../../../Chain'
+import { chainFeeCoin } from '../../../coin/chainFeeCoin'
 import { toNativeSwapAsset } from '../asset/toNativeSwapAsset'
 import { nativeSwapAffiliateConfig } from '../nativeSwapAffiliateConfig'
 import {
@@ -77,7 +78,8 @@ export const getNativeSwapQuote = async ({
 
   if ('error' in result) {
     if (isInError(result.error, 'not enough asset to pay for fees')) {
-      throw new Error('Not enough funds to cover gas')
+      const { ticker } = chainFeeCoin[from.chain]
+      throw new Error(`Not enough ${ticker} to cover gas fees`)
     }
     throw new Error(result.error)
   }
