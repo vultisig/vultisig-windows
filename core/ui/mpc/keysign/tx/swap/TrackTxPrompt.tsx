@@ -6,6 +6,7 @@ import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIc
 import { HStack } from '@lib/ui/layout/Stack'
 import { TitleProp, ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
+import { truncateId } from '@lib/utils/string/truncate'
 
 type TrackTxPromptProps = TitleProp &
   ValueProp<string> & {
@@ -30,16 +31,8 @@ export const TrackTxPrompt = ({ title, value, chain }: TrackTxPromptProps) => {
         {title}
       </Text>
       <HStack gap={4} alignItems="center">
-        <Text
-          style={{
-            width: 100,
-          }}
-          cropped
-          weight="500"
-          size={14}
-          color="contrast"
-        >
-          {value}
+        <Text weight="500" size={14} color="contrast">
+          {truncateId(value)}
         </Text>
         <IconButton onClick={() => trackTransaction(value)} size="sm">
           <SquareArrowOutUpRightIcon />
