@@ -434,6 +434,7 @@ export const it = {
   vault_search_no_matches: 'Nessuna corrispondenza',
   make_sure_chains: 'Assicurati che la catena che stai cercando sia abilitata.',
   no_chains_found: 'Nessuna catena trovata',
+  customize_chains: 'Personalizza catene',
   vault_search_updating: 'Aggiornamento...',
   vault_search_filtered: 'Filtrato',
   vault_search_close: 'Chiudi',

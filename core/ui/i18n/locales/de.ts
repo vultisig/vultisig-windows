@@ -429,6 +429,7 @@ export const de = {
   make_sure_chains:
     'Stellen Sie sicher, dass die gesuchte Chain aktiviert ist.',
   no_chains_found: 'Keine Chains gefunden',
+  customize_chains: 'Chains anpassen',
   vault_search_updating: 'Aktualisierung...',
   vault_search_filtered: 'Gefiltert',
   vault_search_close: 'Schließen',

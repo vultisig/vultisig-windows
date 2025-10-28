@@ -434,6 +434,7 @@ export const es = {
   vault_search_no_matches: 'Sin coincidencias',
   make_sure_chains: 'Asegúrese de que la cadena que busca esté habilitada.',
   no_chains_found: 'No se encontraron cadenas',
+  customize_chains: 'Personalizar cadenas',
   vault_search_updating: 'Actualizando...',
   vault_search_filtered: 'Filtrado',
   vault_search_close: 'Cerrar',

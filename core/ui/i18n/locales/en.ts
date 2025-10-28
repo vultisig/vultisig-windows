@@ -426,6 +426,7 @@ export const en = {
     'What cryptocurrencies are supported by Vultisig?',
   faq_need_to_register_content:
     'Vultisig supports major cryptocurrencies and tokens, with over 30 chains and their tokens, currently available.',
+  customize_chains: 'Customize chains',
   vault_settings_address_book_no_addresses_title: 'Your Address Book is empty',
   vault_settings_address_book_no_addresses_description:
     'Keep all your important addresses organized in one place.',

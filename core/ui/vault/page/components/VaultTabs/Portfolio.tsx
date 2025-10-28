@@ -69,7 +69,7 @@ export const Portfolio = () => {
             </IconWrapper>
           }
         >
-          <Text size={12}>Customize chains</Text>
+          <Text size={12}>{t('customize_chains')}</Text>
         </Button>
       </EmptyWrapper>
     )

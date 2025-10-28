@@ -420,6 +420,7 @@ export const pt = {
   vault_search_no_matches: 'Sem correspondências',
   make_sure_chains: 'Certifique-se de que a cadeia que procura está ativada.',
   no_chains_found: 'Nenhuma cadeia encontrada',
+  customize_chains: 'Personalizar cadeias',
   vault_search_updating: 'Atualizando...',
   vault_search_filtered: 'Filtrado',
   vault_search_close: 'Fechar',
