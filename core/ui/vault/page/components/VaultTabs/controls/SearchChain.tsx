@@ -79,9 +79,9 @@ export const SearchChain = ({
                   : t('vault_search_filtered')}
               </StatusText>
             )}
-            <UnstyledButton onClick={handleClose}>
+            <CloseButton onClick={handleClose}>
               <Text size={14}>{t('vault_search_close')}</Text>
-            </UnstyledButton>
+            </CloseButton>
           </HStack>
         </motion.div>
       ) : (
@@ -104,7 +104,7 @@ export const SearchChain = ({
 const SearchFieldWrapper = styled.div<{ $fullWidth: boolean }>`
   display: flex;
   flex-direction: column;
-  max-height: 30px;
+  max-height: 42px;
   flex: 1;
   width: ${({ $fullWidth }) => ($fullWidth ? '100%' : 'auto')};
 
@@ -118,4 +118,11 @@ const StatusText = styled(Text)`
   min-width: 60px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
+`
+
+const CloseButton = styled(UnstyledButton)`
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  white-space: nowrap;
 `
