@@ -62,6 +62,7 @@ export const Portfolio = () => {
           onClick={() => navigate({ id: 'manageVaultChains' })}
           style={{
             maxWidth: 'fit-content',
+            maxHeight: 32,
           }}
           icon={
             <IconWrapper size={16}>
