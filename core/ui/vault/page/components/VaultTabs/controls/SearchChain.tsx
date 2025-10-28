@@ -30,7 +30,7 @@ export const SearchChain = ({
   const [inputValue, setInputValue] = useState(searchQuery)
   const debouncedValue = useDebounce(inputValue, debounceDelayMs)
   const deferredValue = useDeferredValue(debouncedValue)
-  const [isPending, startTransition] = useTransition()
+  const [, startTransition] = useTransition()
   const { t } = useTranslation()
 
   useEffect(() => {
@@ -53,8 +53,6 @@ export const SearchChain = ({
     onOpenChange?.(false)
   }
 
-  const hasActiveQuery = inputValue.trim().length > 0
-
   return (
     <AnimatePresence mode="wait">
       {isOpen ? (
@@ -72,13 +70,6 @@ export const SearchChain = ({
                 onSearch={nextValue => setInputValue(nextValue)}
               />
             </SearchFieldWrapper>
-            {hasActiveQuery && (
-              <StatusText color="supporting" size={10}>
-                {isPending
-                  ? t('vault_search_updating')
-                  : t('vault_search_filtered')}
-              </StatusText>
-            )}
             <CloseButton onClick={handleClose}>
               <Text size={14}>{t('vault_search_close')}</Text>
             </CloseButton>
@@ -112,12 +103,6 @@ const SearchFieldWrapper = styled.div<{ $fullWidth: boolean }>`
     font-size: 12px;
     color: ${getColor('contrast')};
   }
-`
-
-const StatusText = styled(Text)`
-  min-width: 60px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
 `
 
 const CloseButton = styled(UnstyledButton)`
