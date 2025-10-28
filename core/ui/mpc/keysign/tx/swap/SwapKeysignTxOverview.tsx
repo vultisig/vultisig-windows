@@ -23,6 +23,7 @@ import { getLastItem } from '@lib/utils/array/getLastItem'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
+import { truncateId } from '@lib/utils/string/truncate'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -124,18 +125,10 @@ export const SwapKeysignTxOverview = ({
               {t('from')}
             </Text>
 
-            <Text
-              style={{
-                width: 170,
-              }}
-              weight={500}
-              size={14}
-              color="contrast"
-              cropped
-            >
+            <Text weight={500} size={14} color="contrast">
               {vault.name}{' '}
               <Text cropped as="span" color="shy">
-                ({fromCoin.address})
+                ({truncateId(fromCoin.address)})
               </Text>
             </Text>
           </HStack>
@@ -150,7 +143,7 @@ export const SwapKeysignTxOverview = ({
                 {t('to')}
               </Text>
               <AddressWrapper color="contrast" size={14} weight={500}>
-                {toCoin.address}
+                {truncateId(toCoin.address)}
               </AddressWrapper>
             </HStack>
           )}
