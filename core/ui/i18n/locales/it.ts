@@ -432,6 +432,8 @@ export const it = {
   vault_settings_address_book_no_addresses_description:
     'Organizza tutti i tuoi indirizzi importanti in un posto.',
   vault_search_no_matches: 'Nessuna corrispondenza',
+  make_sure_chains: 'Assicurati che la catena che stai cercando sia abilitata.',
+  no_chains_found: 'Nessuna catena trovata',
   vault_search_updating: 'Aggiornamento...',
   vault_search_filtered: 'Filtrato',
   vault_search_close: 'Chiudi',
