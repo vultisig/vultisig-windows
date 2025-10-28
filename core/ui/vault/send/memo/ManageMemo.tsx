@@ -1,22 +1,16 @@
-import { InputPasteAction } from '@core/ui/components/InputPasteAction'
 import { useSendMemo } from '@core/ui/vault/send/state/memo'
-import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
-import { iconButtonSize } from '@lib/ui/buttons/IconButton'
 import { interactive } from '@lib/ui/css/interactive'
-import {
-  textInputHeight,
-  textInputHorizontalPadding,
-} from '@lib/ui/css/textInput'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
-import { TextInput } from '@lib/ui/inputs/TextInput'
 import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndicator'
 import { Text, text } from '@lib/ui/text'
 import { motion } from 'framer-motion'
 import { AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+
+import { TextInputWithPasteAction } from '../../../components/TextInputWithPasteAction'
 
 export const ManageMemo = () => {
   const [value, setValue] = useSendMemo()
@@ -41,19 +35,10 @@ export const ManageMemo = () => {
             transition={{ duration: 0.2, ease: 'easeInOut' }}
             style={{ overflow: 'hidden' }}
           >
-            <ActionInsideInteractiveElement
-              render={() => (
-                <TextInput
-                  placeholder={t('enter_memo')}
-                  value={value}
-                  onValueChange={setValue}
-                />
-              )}
-              action={<InputPasteAction onPaste={setValue} />}
-              actionPlacerStyles={{
-                bottom: (textInputHeight - iconButtonSize.md) / 2,
-                right: textInputHorizontalPadding,
-              }}
+            <TextInputWithPasteAction
+              placeholder={t('enter_memo')}
+              value={value}
+              onValueChange={setValue}
             />
           </motion.div>
         )}
