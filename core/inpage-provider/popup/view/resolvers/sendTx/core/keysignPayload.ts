@@ -18,7 +18,7 @@ import {
   TronTriggerSmartContractPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/tron_contract_payload_pb'
 import { WasmExecuteContractPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
-import { Vault } from '@core/vault/Vault'
+import { Vault } from '@core/mpc/vault/Vault'
 import { attempt } from '@lib/utils/attempt'
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'

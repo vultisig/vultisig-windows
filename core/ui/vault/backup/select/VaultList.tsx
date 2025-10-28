@@ -1,4 +1,4 @@
-import { getVaultId, Vault } from '@core/vault/Vault'
+import { getVaultId, Vault } from '@core/mpc/vault/Vault'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { LineSeparator } from '@lib/ui/layout/LineSeparator'
 import { StackSeparatedBy } from '@lib/ui/layout/StackSeparatedBy'

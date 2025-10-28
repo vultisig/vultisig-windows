@@ -1,6 +1,6 @@
 import { resendVaultShare } from '@core/mpc/fast/api/resendVaultShare'
+import { getVaultId } from '@core/mpc/vault/Vault'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { getVaultId } from '@core/vault/Vault'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Button } from '@lib/ui/buttons/Button'

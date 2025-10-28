@@ -8,20 +8,27 @@ import { HStack } from '../layout/Stack'
 
 type SearchFieldProps = {
   placeholderKey?: string
+  value?: string
   onSearch?: (query: string) => void
 }
 
-export const SearchField: React.FC<SearchFieldProps> = ({ onSearch }) => {
-  const [query, setQuery] = useState('')
+export const SearchField: React.FC<SearchFieldProps> = ({
+  onSearch,
+  value,
+}) => {
+  const [uncontrolledValue, setUncontrolledValue] = useState('')
   const [isFocused, setIsFocused] = useState(false)
   const { t } = useTranslation()
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value)
-    if (onSearch) {
-      onSearch(event.target.value)
+    const nextValue = event.target.value
+    if (value === undefined) {
+      setUncontrolledValue(nextValue)
     }
+    onSearch?.(nextValue)
   }
+
+  const query = value ?? uncontrolledValue
 
   return (
     <Wrapper justifyContent="center" alignItems="center" gap={8}>

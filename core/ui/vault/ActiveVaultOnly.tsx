@@ -1,4 +1,4 @@
-import { getVaultId } from '@core/vault/Vault'
+import { getVaultId } from '@core/mpc/vault/Vault'
 import { ChildrenProp } from '@lib/ui/props'
 
 import { useCurrentVaultId } from '../storage/currentVaultId'

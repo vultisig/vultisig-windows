@@ -1,7 +1,7 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { getVaultId, Vault, VaultKeyShares } from '@core/mpc/vault/Vault'
 import { useCore } from '@core/ui/state/core'
-import { getVaultId, Vault, VaultKeyShares } from '@core/vault/Vault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'

@@ -1,3 +1,4 @@
+import { getVaultId } from '@core/mpc/vault/Vault'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import {
   useCreateVaultFolderMutation,
@@ -5,7 +6,6 @@ import {
 } from '@core/ui/storage/vaultFolders'
 import { useFolderlessVaults } from '@core/ui/storage/vaults'
 import { VaultSigners } from '@core/ui/vault/signers'
-import { getVaultId } from '@core/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { Switch } from '@lib/ui/inputs/switch'

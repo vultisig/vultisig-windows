@@ -19,6 +19,7 @@ import { VaultChainPage } from '@core/ui/vault/chain/VaultChainPage'
 import { DepositPage } from '@core/ui/vault/deposit/DepositPage'
 import { SignCustomMessagePage } from '@core/ui/vault/keysign/custom-message'
 import { NewVaultPage } from '@core/ui/vault/new'
+import { VaultPage } from '@core/ui/vault/page'
 import { SendPage } from '@core/ui/vault/send/SendPage'
 import { VaultSettingsPage } from '@core/ui/vault/settings'
 import { AirdropRegisterPage } from '@core/ui/vault/settings/airdrop-register'
@@ -73,6 +74,7 @@ export type SharedViewId = Extract<
   | 'updateAddressBookItem'
   | 'updateVaultFolder'
   | 'uploadQr'
+  | 'vault'
   | 'vaultBackup'
   | 'vaultsBackup'
   | 'selectVaultsBackup'
@@ -131,6 +133,7 @@ export const sharedViews: Views<SharedViewId> = {
     </CurrentVaultFolderPageProvider>
   ),
   uploadQr: UploadQrPage,
+  vault: VaultPage,
   vaultBackup: VaultBackupPage,
   vaultsBackup: VaultsBackupPage,
   selectVaultsBackup: SelectVaultsBackupPage,

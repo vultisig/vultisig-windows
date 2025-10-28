@@ -1,5 +1,5 @@
+import { Vault } from '@core/mpc/vault/Vault'
 import { FileBasedVaultBackupResult } from '@core/ui/vault/import/VaultBackupResult'
-import { Vault } from '@core/vault/Vault'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 

@@ -1,4 +1,4 @@
-import { getVaultId } from '@core/vault/Vault'
+import { getVaultId } from '@core/mpc/vault/Vault'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { recordFromItems } from '@lib/utils/record/recordFromItems'
 import { recordMap } from '@lib/utils/record/recordMap'

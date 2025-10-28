@@ -425,6 +425,10 @@ export const de = {
   vault_settings_address_book_no_addresses_title: 'Ihr Adressbuch ist leer',
   vault_settings_address_book_no_addresses_description:
     'Ordnen Sie alle Ihre wichtigen Adressen in einem Ort.',
+  vault_search_no_matches: 'Keine Übereinstimmungen',
+  vault_search_updating: 'Aktualisierung...',
+  vault_search_filtered: 'Gefiltert',
+  vault_search_close: 'Schließen',
   or: 'oder',
   enter_vault_name: 'Tresorname eingeben',
   vault_name_required: 'Tresorname ist erforderlich',
@@ -1196,4 +1200,5 @@ export const de = {
     'Indem Sie {{minBalance}} halten, schalten Sie die Stufe {{tier}} frei und erhalten einen <b>Rabatt auf die Handelsgebühr von {{bps}} bps</b> auf alle Swaps.',
   upload_qr_code_with_address: 'QR-Code mit Adresse hochladen',
   failed_to_read_qr_code: 'Der QR-Code konnte nicht gelesen werden.',
+  buy: 'Kaufen',
 }
