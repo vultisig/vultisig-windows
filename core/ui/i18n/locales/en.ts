@@ -122,7 +122,7 @@ export const en = {
   github: 'Github',
   legal: 'Legal',
   balance_available: 'Balance available',
-  not_enough_for_gas: 'Not enough funds available to cover gas fees',
+  not_enough_asset_to_cover_gas_fees: 'Not enough {{asset}} to cover gas fees',
   wrong_address_for_chain: 'Wrong address for selected Chain',
   advanced_gas_fee: 'Advanced gas fee',
   manage_chains: 'Manage Chains',

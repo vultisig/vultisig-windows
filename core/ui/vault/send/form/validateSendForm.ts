@@ -26,7 +26,9 @@ export const validateSendForm = (
   if (!amount) {
     errors.amount = t('amount_required')
   } else if (balance !== undefined) {
-    if (amount > balance) errors.amount = t('not_enough_for_gas')
+    if (amount > balance) {
+      errors.amount = t('insufficient_balance')
+    }
 
     if (
       isOneOf(chain, Object.values(UtxoBasedChain)) &&
