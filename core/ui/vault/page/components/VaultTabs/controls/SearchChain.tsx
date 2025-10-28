@@ -16,7 +16,15 @@ import { useSearchChain } from '../../../state/searchChainProvider'
 
 const debounceDelayMs = 250
 
-export const SearchChain = () => {
+type SearchChainProps = {
+  onOpenChange?: (isOpen: boolean) => void
+  isFullWidth?: boolean
+}
+
+export const SearchChain = ({
+  onOpenChange,
+  isFullWidth = false,
+}: SearchChainProps) => {
   const [isOpen, { set, unset }] = useBoolean(false)
   const [searchQuery, setSearchQuery] = useSearchChain()
   const [inputValue, setInputValue] = useState(searchQuery)
@@ -33,10 +41,16 @@ export const SearchChain = () => {
     startTransition(() => setSearchQuery(deferredValue))
   }, [deferredValue, setSearchQuery, startTransition])
 
+  const handleOpen = () => {
+    set()
+    onOpenChange?.(true)
+  }
+
   const handleClose = () => {
     setInputValue('')
     startTransition(() => setSearchQuery(''))
     unset()
+    onOpenChange?.(false)
   }
 
   const hasActiveQuery = inputValue.trim().length > 0
@@ -47,12 +61,12 @@ export const SearchChain = () => {
         <motion.div
           key="search-field"
           initial={{ opacity: 0, width: 0 }}
-          animate={{ opacity: 1, width: 'auto' }}
+          animate={{ opacity: 1, width: isFullWidth ? '100%' : 'auto' }}
           exit={{ opacity: 0, width: 0 }}
           transition={{ duration: 0.2, ease: 'easeInOut' }}
         >
           <HStack gap={8} alignItems="center">
-            <SearchFieldWrapper>
+            <SearchFieldWrapper $fullWidth={isFullWidth}>
               <SearchField
                 value={inputValue}
                 onSearch={nextValue => setInputValue(nextValue)}
@@ -66,7 +80,7 @@ export const SearchChain = () => {
               </StatusText>
             )}
             <UnstyledButton onClick={handleClose}>
-              <Text>{t('vault_search_close')}</Text>
+              <Text size={14}>{t('vault_search_close')}</Text>
             </UnstyledButton>
           </HStack>
         </motion.div>
@@ -78,7 +92,7 @@ export const SearchChain = () => {
           exit={{ opacity: 0, scale: 0.8 }}
           transition={{ duration: 0.2, ease: 'easeInOut' }}
         >
-          <IconButton onClick={set} size="lg">
+          <IconButton onClick={handleOpen} size="lg">
             <SearchIcon />
           </IconButton>
         </motion.div>
@@ -87,10 +101,12 @@ export const SearchChain = () => {
   )
 }
 
-const SearchFieldWrapper = styled.div`
+const SearchFieldWrapper = styled.div<{ $fullWidth: boolean }>`
   display: flex;
   flex-direction: column;
   max-height: 30px;
+  flex: 1;
+  width: ${({ $fullWidth }) => ($fullWidth ? '100%' : 'auto')};
 
   & input {
     font-size: 12px;
