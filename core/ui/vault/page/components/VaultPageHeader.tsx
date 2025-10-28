@@ -51,7 +51,7 @@ type VaultPageHeaderProps = {
   scrollContainerRef: RefObject<HTMLElement>
 }
 
-const collapseThreshold = 75
+const collapseThreshold = 1
 
 export const VaultPageHeader = ({
   vault,

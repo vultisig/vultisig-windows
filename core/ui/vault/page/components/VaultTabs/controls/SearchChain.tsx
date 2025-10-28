@@ -58,22 +58,34 @@ export const SearchChain = ({
       {isOpen ? (
         <motion.div
           key="search-field"
-          initial={{ opacity: 0, width: 0 }}
-          animate={{ opacity: 1, width: isFullWidth ? '100%' : 'auto' }}
-          exit={{ opacity: 0, width: 0 }}
-          transition={{ duration: 0.2, ease: 'easeInOut' }}
+          initial={{ width: 0 }}
+          animate={{ width: isFullWidth ? '100%' : 'auto' }}
+          exit={{ width: 0 }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+          style={{ overflow: 'hidden' }}
         >
-          <HStack gap={8} alignItems="center">
-            <SearchFieldWrapper $fullWidth={isFullWidth}>
-              <SearchField
-                value={inputValue}
-                onSearch={nextValue => setInputValue(nextValue)}
-              />
-            </SearchFieldWrapper>
-            <CloseButton onClick={handleClose}>
-              <Text size={14}>{t('vault_search_close')}</Text>
-            </CloseButton>
-          </HStack>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.1 }}
+          >
+            <HStack
+              gap={8}
+              alignItems="center"
+              style={{ minWidth: 'max-content' }}
+            >
+              <SearchFieldWrapper $fullWidth={isFullWidth}>
+                <SearchField
+                  value={inputValue}
+                  onSearch={nextValue => setInputValue(nextValue)}
+                />
+              </SearchFieldWrapper>
+              <CloseButton onClick={handleClose}>
+                <Text size={14}>{t('vault_search_close')}</Text>
+              </CloseButton>
+            </HStack>
+          </motion.div>
         </motion.div>
       ) : (
         <motion.div
@@ -110,4 +122,6 @@ const CloseButton = styled(UnstyledButton)`
   align-items: center;
   flex-shrink: 0;
   white-space: nowrap;
+  min-width: fit-content;
+  width: fit-content;
 `
