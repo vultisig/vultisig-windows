@@ -1,6 +1,6 @@
 import { hasServer, isServer } from '@core/mpc/devices/localPartyId'
 import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
-import { Vault } from '@core/vault/Vault'
+import { Vault } from '@core/mpc/vault/Vault'
 import { ShieldIcon } from '@lib/ui/icons/ShieldIcon'
 import { ZapIcon } from '@lib/ui/icons/ZapIcon'
 import { getColor } from '@lib/ui/theme/getters'

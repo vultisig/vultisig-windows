@@ -1,3 +1,4 @@
+import { getVaultId } from '@core/mpc/vault/Vault'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import {
   useUpdateVaultFolderMutation,
@@ -10,7 +11,6 @@ import { DeleteVaultFolder } from '@core/ui/vaultsOrganisation/folder/delete'
 import { useAddVaultToFolderMutation } from '@core/ui/vaultsOrganisation/folder/mutations/useAddVaultToFolderMutation'
 import { useRemoveVaultFromFolderMutation } from '@core/ui/vaultsOrganisation/folder/mutations/useRemoveVaultFromFolderMutation'
 import { useCurrentVaultFolder } from '@core/ui/vaultsOrganisation/folder/state/currentVaultFolder'
-import { getVaultId } from '@core/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { DnDList } from '@lib/ui/dnd/DnDList'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'

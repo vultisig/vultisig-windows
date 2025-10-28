@@ -1,7 +1,7 @@
+import { vaultContainerFromString } from '@core/mpc/vault/utils/vaultContainerFromString'
 import { fromDatBackupString } from '@core/ui/vault/import/utils/fromDatBackupString'
 import { VaultBackupExtension } from '@core/ui/vault/import/VaultBackupExtension'
 import { VaultBackupResult } from '@core/ui/vault/import/VaultBackupResult'
-import { vaultContainerFromString } from '@core/vault/utils/vaultContainerFromString'
 
 type Input = {
   extension: VaultBackupExtension

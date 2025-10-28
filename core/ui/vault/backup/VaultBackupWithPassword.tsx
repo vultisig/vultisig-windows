@@ -1,4 +1,4 @@
-import { passwordLenghtConfig } from '@core/security/password/config'
+import { passwordLengthConfig } from '@core/config/password'
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultMutation'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -17,14 +17,14 @@ import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 
 const createSchema = (t: TFunction) => {
-  const message = t('password_pattern_error', passwordLenghtConfig)
+  const message = t('password_pattern_error', passwordLengthConfig)
 
   return z
     .object({
       password: z
         .string()
-        .min(passwordLenghtConfig.min, message)
-        .max(passwordLenghtConfig.max, message),
+        .min(passwordLengthConfig.min, message)
+        .max(passwordLengthConfig.max, message),
       confirmPassword: z.string(),
     })
     .refine(data => data.password === data.confirmPassword, {

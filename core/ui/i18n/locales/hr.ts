@@ -409,6 +409,10 @@ export const hr = {
   vault_settings_address_book_no_addresses_title: 'Nema spremljenih adresa',
   vault_settings_address_book_no_addresses_description:
     'Organizirajte sve vaše važne adrese u jednom mjestu.',
+  vault_search_no_matches: 'Nema podudaranja',
+  vault_search_updating: 'Ažuriranje...',
+  vault_search_filtered: 'Filtrirano',
+  vault_search_close: 'Zatvori',
   or: 'ili',
   enter_vault_name: 'Unesite naziv trezora',
   vault_name_required: 'Naziv trezora je obavezan',
@@ -1164,4 +1168,5 @@ export const hr = {
   unlock_discount_tier_description:
     'Držanjem {{minBalance}} otključat ćete {{tier}} razinu i ostvariti popust od <b>{{bps}} bps naknade za trgovanje</b> na sve swapove.',
   upload_qr_code_with_address: 'Prenesite QR kod s adresom',
+  buy: 'Kupiti',
 }

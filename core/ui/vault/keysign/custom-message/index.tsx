@@ -1,7 +1,7 @@
 import { create } from '@bufbuild/protobuf'
 import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
+import { getVaultId } from '@core/mpc/vault/Vault'
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
-import { getVaultId } from '@core/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { TextInput } from '@lib/ui/inputs/TextInput'

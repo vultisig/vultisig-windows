@@ -431,6 +431,10 @@ export const it = {
   vault_settings_address_book_no_addresses_title: 'Il tuo rubrica è vuota',
   vault_settings_address_book_no_addresses_description:
     'Organizza tutti i tuoi indirizzi importanti in un posto.',
+  vault_search_no_matches: 'Nessuna corrispondenza',
+  vault_search_updating: 'Aggiornamento...',
+  vault_search_filtered: 'Filtrato',
+  vault_search_close: 'Chiudi',
   or: 'o',
   enter_vault_name: 'Inserisci il nome della cassaforte',
   vault_name_required: 'Il nome della cassaforte è obbligatorio',
@@ -1195,4 +1199,5 @@ export const it = {
   unlock_discount_tier_description:
     'Mantenendo {{minBalance}}, sbloccherai il livello {{tier}} e riceverai uno sconto sulle commissioni di trading di <b>{{bps}} bps</b> su tutti gli swap.',
   upload_qr_code_with_address: "Carica il codice QR con l'indirizzo",
+  buy: 'Acquistare',
 }

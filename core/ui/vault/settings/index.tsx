@@ -18,7 +18,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { featureFlags } from '../../constants'
+import { featureFlags } from '../../featureFlags'
 import { SettingsSection } from '../../settings/SettingsSection'
 import { VaultSettingsBackup } from './backup'
 

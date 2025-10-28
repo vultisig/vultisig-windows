@@ -1,4 +1,4 @@
-import { Vault } from '@core/vault/Vault'
+import { Vault } from '@core/mpc/vault/Vault'
 import { hStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
