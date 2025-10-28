@@ -430,6 +430,8 @@ export const en = {
   vault_settings_address_book_no_addresses_description:
     'Keep all your important addresses organized in one place.',
   vault_search_no_matches: 'No matches',
+  make_sure_chains: 'Make sure that the chain you’re looking for is enabled.',
+  no_chains_found: 'No chains found',
   vault_search_updating: 'Updating...',
   vault_search_filtered: 'Filtered',
   vault_search_close: 'Close',

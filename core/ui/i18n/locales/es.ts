@@ -432,6 +432,8 @@ export const es = {
   vault_settings_address_book_no_addresses_description:
     'Organice todas sus direcciones importantes en un lugar.',
   vault_search_no_matches: 'Sin coincidencias',
+  make_sure_chains: 'Asegúrese de que la cadena que busca esté habilitada.',
+  no_chains_found: 'No se encontraron cadenas',
   vault_search_updating: 'Actualizando...',
   vault_search_filtered: 'Filtrado',
   vault_search_close: 'Cerrar',
