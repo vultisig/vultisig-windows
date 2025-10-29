@@ -25,6 +25,7 @@ export type FeeQuoteResolverInput<K extends ChainKind = ChainKind> = {
         ? {
             amount: bigint
             receiver: string
+            hexPublicKey?: string
           }
         : {})
 

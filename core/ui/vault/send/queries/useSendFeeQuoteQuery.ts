@@ -1,15 +1,18 @@
-import { ChainKind, getChainKind } from '@core/chain/ChainKind'
+import { ChainKind, getChainKind, isChainOfKind } from '@core/chain/ChainKind'
 import { applyFeeSettings } from '@core/chain/feeQuote/applyFeeSettings'
 import { FeeQuote } from '@core/chain/feeQuote/core'
 import {
   FeeSettingsChainKind,
   feeSettingsChainKinds,
 } from '@core/chain/feeQuote/settings/core'
+import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { useFeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { useSendAmount } from '@core/ui/vault/send/state/amount'
 import { useSendMemo } from '@core/ui/vault/send/state/memo'
 import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
 import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMemo } from 'react'
@@ -21,12 +24,26 @@ export const useSendFeeQuoteQuery = () => {
   const [receiver] = useSendReceiver()
   const [amount] = useSendAmount()
   const [memo] = useSendMemo()
+  const vault = useCurrentVault()
+  const walletCore = useAssertWalletCore()
+
+  const hexPublicKey = useMemo(() => {
+    if (!isChainOfKind(coin.chain, 'sui')) return undefined
+    const publicKey = getPublicKey({
+      chain: coin.chain,
+      walletCore,
+      hexChainCode: vault.hexChainCode,
+      publicKeys: vault.publicKeys,
+    })
+    return Buffer.from(publicKey.data()).toString('hex')
+  }, [coin.chain, vault.hexChainCode, vault.publicKeys, walletCore])
 
   return useFeeQuoteQuery({
     coin,
     receiver,
     amount: shouldBePresent(amount),
     data: memo,
+    hexPublicKey,
   })
 }
 
