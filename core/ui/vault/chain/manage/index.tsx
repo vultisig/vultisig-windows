@@ -8,19 +8,19 @@ import {
   useDeleteCoinMutation,
 } from '@core/ui/storage/coins'
 import { useCurrentVaultNativeCoins } from '@core/ui/vault/state/currentVaultCoins'
-import { Switch } from '@lib/ui/inputs/switch'
-import { TextInput } from '@lib/ui/inputs/TextInput'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { List } from '@lib/ui/list'
-import { ListItem } from '@lib/ui/list/item'
-import { ListItemTag } from '@lib/ui/list/item/tag'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { CheckIcon } from '@lib/ui/icons/CheckIcon'
+import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { FC, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
+import { ChainSearch } from './ChainSearch'
 
 const NativeCoinItem: FC<Coin> = coin => {
   const currentCoins = useCurrentVaultNativeCoins()
@@ -31,7 +31,11 @@ const NativeCoinItem: FC<Coin> = coin => {
     return currentCoins.find(c => areEqualCoins(c, coin))
   }, [currentCoins, coin])
 
-  const handleChange = () => {
+  const isSelected = !!currentCoin
+  const isLoading = createCoin.isPending || deleteCoin.isPending
+
+  const handleClick = () => {
+    if (isLoading) return
     if (currentCoin) {
       deleteCoin.mutate(currentCoin)
     } else {
@@ -40,38 +44,36 @@ const NativeCoinItem: FC<Coin> = coin => {
   }
 
   return (
-    <ListItem
-      extra={
-        <Switch
-          checked={!!currentCoin}
-          onChange={handleChange}
-          loading={createCoin.isPending || deleteCoin.isPending}
-        />
-      }
-      icon={
+    <ChainCard
+      onClick={handleClick}
+      $isSelected={isSelected}
+      $isLoading={isLoading}
+    >
+      <ChainIconWrapper>
         <ChainEntityIcon
           value={getChainLogoSrc(coin.chain)}
-          style={{ fontSize: 32 }}
+          style={{ fontSize: 27.5 }}
         />
-      }
-      title={
-        <HStack gap={12} alignItems="center">
-          <Text color="contrast" size={14} weight={500}>
-            {coin.ticker}
-          </Text>
-          <ListItemTag title={coin.chain} />
-        </HStack>
-      }
-    />
+        {isSelected && (
+          <CheckBadge>
+            <CheckIcon style={{ fontSize: 16 }} />
+          </CheckBadge>
+        )}
+      </ChainIconWrapper>
+      <Text color="contrast" size={16} weight={500}>
+        {coin.chain}
+      </Text>
+    </ChainCard>
   )
 }
 
 export const ManageVaultChainsPage = () => {
   const { t } = useTranslation()
-  const [search, setSearch] = useState<string | undefined>(undefined)
+  const [search, setSearch] = useState('')
   const nativeCoins = Object.values(chainFeeCoin)
   const currentNativeCoins = useCurrentVaultNativeCoins()
   const navigate = useCoreNavigate()
+
   const filteredNativeCoins = useMemo(() => {
     if (!search) return nativeCoins
 
@@ -102,25 +104,28 @@ export const ManageVaultChainsPage = () => {
         primaryControls={
           <PageHeaderBackButton onClick={() => navigate({ id: 'vault' })} />
         }
+        secondaryControls={
+          <DoneButton onClick={() => navigate({ id: 'vault' })}>
+            <Text color="primaryAlt" as="span" size={14} weight={400}>
+              {t('done')}
+            </Text>
+          </DoneButton>
+        }
         title={t('manage_chains')}
         hasBorder
       />
       <PageContent gap={24} flexGrow scrollable>
-        <TextInput
-          placeholder={t('search_field_placeholder')}
-          onValueChange={setSearch}
-          value={search}
-        />
+        <ChainSearch value={search} onChange={setSearch} />
         {activeNativeCoins.length ? (
           <VStack gap={12}>
             <Text color="light" size={12} weight={500}>
               {t('active')}
             </Text>
-            <List>
+            <ChainGrid>
               {activeNativeCoins.map((coin, index) => (
                 <NativeCoinItem key={index} {...coin} />
               ))}
-            </List>
+            </ChainGrid>
           </VStack>
         ) : null}
         {availableNativeCoins.length ? (
@@ -128,14 +133,83 @@ export const ManageVaultChainsPage = () => {
             <Text color="light" size={12} weight={500}>
               {t('available')}
             </Text>
-            <List>
+            <ChainGrid>
               {availableNativeCoins.map((coin, index) => (
                 <NativeCoinItem key={index} {...coin} />
               ))}
-            </List>
+            </ChainGrid>
           </VStack>
         ) : null}
       </PageContent>
     </VStack>
   )
 }
+
+const ChainGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+`
+
+const ChainCard = styled(UnstyledButton)<{
+  $isSelected: boolean
+  $isLoading: boolean
+}>`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 16px;
+  border-radius: 20px;
+  background: ${getColor('foreground')};
+  border: 2px solid
+    ${({ $isSelected }) => ($isSelected ? getColor('primary') : 'transparent')};
+  transition: all 0.2s ease;
+  opacity: ${({ $isLoading }) => ($isLoading ? 0.5 : 1)};
+  cursor: ${({ $isLoading }) => ($isLoading ? 'not-allowed' : 'pointer')};
+
+  &:hover {
+    background: ${({ $isLoading }) =>
+      $isLoading ? getColor('foreground') : getColor('foregroundDark')};
+  }
+`
+
+const ChainIconWrapper = styled.div`
+  position: relative;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
+const CheckBadge = styled.div`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: ${getColor('primary')};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${getColor('contrast')};
+  border: 2px solid ${getColor('foreground')};
+`
+
+const DoneButton = styled(UnstyledButton)`
+  display: flex;
+  padding: 6px 12px;
+  align-items: center;
+  gap: 6px;
+
+  border-radius: 99px;
+  background: ${getColor('foreground')};
+
+  transition: background 0.3s ease;
+
+  &:hover {
+    background: ${getColor('foregroundDark')};
+  }
+`
