@@ -6,6 +6,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { ChildrenProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getLastItem } from '@lib/utils/array/getLastItem'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { FC, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UAParser } from 'ua-parser-js'
@@ -18,7 +19,7 @@ export const ExpandViewGuard: FC<ChildrenProp> = ({ children }) => {
   const { mutate: openInExpandedView } = useOpenInExpandedViewMutation()
 
   const [{ history }] = useNavigation()
-  const currentView = getLastItem(history) as AppView
+  const currentView = shouldBePresent(getLastItem(history)) as AppView
 
   const shouldRedirect = useMemo(() => {
     const alwaysExpand = shouldAlwaysExpand(currentView.id)
