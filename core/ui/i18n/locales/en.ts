@@ -1155,4 +1155,9 @@ export const en = {
   unlock_discount_tier: 'Unlock <b>{{tier}}</b> Tier',
   unlock_discount_tier_description:
     'By holding {{minBalance}}, you’ll unlock the {{tier}} Tier and receive a <b>{{bps}} bps trading fee discount</b> on all swaps.',
+  back_up_now: 'Back Up Now',
+  fast_vault_backup_title:
+    'Back up your vault share online  using the same vault password you created earlier.',
+  fast_vault_backup_description:
+    'Online storage is recommended and safe - vault shares are designed for this.',
 }
