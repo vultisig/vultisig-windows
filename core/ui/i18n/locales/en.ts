@@ -172,7 +172,7 @@ export const en = {
     'Vultisig is natively a multi-device application. Requiring at least two devices to create a secure vault. One initiating and one pairing device.',
   onboarding_description_4:
     'Vultisig is a wallet without seed phrases. It uses easy-to-manage vault shares instead. Every device has its unique vault share that needs a separate backup.',
-  search_field_placeholder: 'Search..',
+  search_field_placeholder: 'Search',
   create_new_vault: 'Create a New Vault',
   start_transaction: 'Start transaction',
   unexpected_error: 'Unexpected Error',
