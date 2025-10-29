@@ -982,7 +982,6 @@ export const hr = {
   camera_access_blocked:
     'Pristup kameri je blokiran. Molimo omogućite ga u postavkama preglednika.',
   balance_available: 'Raspoloživi saldo',
-  not_enough_for_gas: 'Nema dovoljno sredstava za pokrivanje troškova goriva',
   wrong_address_for_chain: 'Pogrešna adresa za odabrani lanac',
   advanced_gas_fee: 'Naknada za gorivo',
   add_memo: 'Dodaj MEMO',
@@ -1169,4 +1168,6 @@ export const hr = {
     'Držanjem {{minBalance}} otključat ćete {{tier}} razinu i ostvariti popust od <b>{{bps}} bps naknade za trgovanje</b> na sve swapove.',
   upload_qr_code_with_address: 'Prenesite QR kod s adresom',
   buy: 'Kupiti',
+  not_enough_asset_to_cover_gas_fees:
+    'Nema dovoljno {{asset}} za pokrivanje troškova goriva',
 }
