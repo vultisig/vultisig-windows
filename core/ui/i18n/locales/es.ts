@@ -175,7 +175,7 @@ export const es = {
   price_impact_good: 'Bueno',
   price_impact_average: 'Promedio',
   price_impact_high: 'Alto Impacto',
-  search_field_placeholder: 'Buscar..',
+  search_field_placeholder: 'Buscar',
   max_total_fees: 'Tarifa Total Máx.',
   coin_not_found_in_current_vault: 'Moneda no encontrada en la bóveda actual',
   waiting_for_devices_to_join: 'Esperando a que otros dispositivos se unan',

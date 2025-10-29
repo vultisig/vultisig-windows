@@ -84,7 +84,7 @@ export const de = {
   incorrect_passcode: 'Falscher Passcode',
   vault_selected: 'Vault ausgewählt',
   passcodes_do_not_match: 'Passcodes stimmen nicht überein',
-  search_field_placeholder: 'Suchen..',
+  search_field_placeholder: 'Suchen',
   referral_reg_fee: 'Registrierungsgebühr',
   enter_percentage: 'Prozentangabe eingeben',
   select: 'Auswählen',
