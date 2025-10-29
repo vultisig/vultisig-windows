@@ -1,3 +1,4 @@
+import { shouldAlwaysExpand } from '@clients/extension/src/navigation/alwaysExpandViews'
 import { isPopupView } from '@clients/extension/src/utils/functions'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useNavigation } from '@lib/ui/navigation/state'
@@ -16,15 +17,22 @@ export const ExpandViewGuard: FC<ChildrenProp> = ({ children }) => {
   const { t } = useTranslation()
   const { mutate: openInExpandedView } = useOpenInExpandedViewMutation()
 
+  const [{ history }] = useNavigation()
+  const currentView = getLastItem(history) as AppView
+
   const shouldRedirect = useMemo(() => {
+    const alwaysExpand = shouldAlwaysExpand(currentView.id)
+    const isPopup = isPopupView()
+
+    if (alwaysExpand && isPopup) {
+      return true
+    }
+
     const parser = new UAParser()
     const parserResult = parser.getResult()
 
-    return parserResult.os.name !== 'Windows' && isPopupView()
-  }, [])
-
-  const [{ history }] = useNavigation()
-  const currentView = getLastItem(history) as AppView
+    return parserResult.os.name !== 'Windows' && isPopup
+  }, [currentView.id])
 
   useEffect(() => {
     if (shouldRedirect) {
