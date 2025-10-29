@@ -1014,8 +1014,6 @@ export const de = {
   camera_access_blocked:
     'Der Kamerazugriff ist blockiert. Bitte aktivieren Sie ihn in Ihren Browsereinstellungen.',
   balance_available: 'Verfügbares Guthaben',
-  not_enough_for_gas:
-    'Nicht genügend Geld vorhanden, um die Gasgebühren zu decken',
   wrong_address_for_chain: 'Falsche Adresse für ausgewählte Kette',
   advanced_gas_fee: 'Vorab-Gasgebühr',
   add_memo: 'MEMO hinzufügen',
@@ -1205,4 +1203,6 @@ export const de = {
   upload_qr_code_with_address: 'QR-Code mit Adresse hochladen',
   failed_to_read_qr_code: 'Der QR-Code konnte nicht gelesen werden.',
   buy: 'Kaufen',
+  not_enough_asset_to_cover_gas_fees:
+    'Nicht genug {{asset}}, um die Gasgebühren zu decken',
 }

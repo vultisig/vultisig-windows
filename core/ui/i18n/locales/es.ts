@@ -1010,8 +1010,6 @@ export const es = {
   camera_access_blocked:
     'El acceso a la cámara está bloqueado. Habilítalo en la configuración de tu navegador.',
   balance_available: 'Saldo disponible',
-  not_enough_for_gas:
-    'No hay suficientes fondos disponibles para cubrir las tarifas del gas',
   wrong_address_for_chain: 'Dirección incorrecta para la cadena seleccionada',
   advanced_gas_fee: 'Tarifa de gas anticipada',
   add_memo: 'Añadir MEMO',
@@ -1204,4 +1202,6 @@ export const es = {
     'Al mantener {{minBalance}}, desbloquearás el nivel {{tier}} y recibirás un descuento de <b>{{bps}} bps en la tarifa de negociación</b> en todos los swaps.',
   upload_qr_code_with_address: 'Subir código QR con dirección',
   buy: 'Comprar',
+  not_enough_asset_to_cover_gas_fees:
+    'No hay suficientes {{asset}} para cubrir las tarifas del gas',
 }

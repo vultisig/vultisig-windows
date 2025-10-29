@@ -5,8 +5,10 @@ import { isInError } from '@lib/utils/error/isInError'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { TransferDirection } from '@lib/utils/TransferDirection'
+import { t } from 'i18next'
 
 import { Chain } from '../../../Chain'
+import { chainFeeCoin } from '../../../coin/chainFeeCoin'
 import { toNativeSwapAsset } from '../asset/toNativeSwapAsset'
 import { nativeSwapAffiliateConfig } from '../nativeSwapAffiliateConfig'
 import {
@@ -77,7 +79,10 @@ export const getNativeSwapQuote = async ({
 
   if ('error' in result) {
     if (isInError(result.error, 'not enough asset to pay for fees')) {
-      throw new Error('Not enough funds to cover gas')
+      const { ticker } = chainFeeCoin[from.chain]
+      throw new Error(
+        t('not_enough_asset_to_cover_gas_fees', { asset: ticker })
+      )
     }
     throw new Error(result.error)
   }
