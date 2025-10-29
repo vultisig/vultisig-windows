@@ -39,7 +39,7 @@ export const TextInputWithPasteAction = ({ ref, ...props }: TextInputProps) => {
             />
           }
           actionPlacerStyles={{
-            bottom: (textInputHeight - iconButtonSize.md) / 2,
+            bottom: (textInputHeight - iconButtonSize.sm) / 2,
             right: textInputHorizontalPadding,
           }}
         />
