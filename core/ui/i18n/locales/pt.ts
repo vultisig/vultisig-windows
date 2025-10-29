@@ -1204,4 +1204,9 @@ export const pt = {
   not_enough_asset_to_cover_gas_fees:
     'Não há {{ativo}} suficiente para cobrir as taxas de gás',
   import_key: 'Importar chave',
+  back_up_now: 'Voltar ao início',
+  fast_vault_backup_title:
+    'Faça backup do seu compartilhamento do cofre online usando a mesma senha que você criou anteriormente.',
+  fast_vault_backup_description:
+    'O armazenamento online é recomendado e seguro - os cofres compartilhados são projetados para isso.',
 }

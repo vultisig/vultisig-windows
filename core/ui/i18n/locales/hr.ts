@@ -1185,4 +1185,9 @@ export const hr = {
   not_enough_asset_to_cover_gas_fees:
     'Nema dovoljno {{asset}} za pokrivanje troškova goriva',
   import_key: 'Uvezi ključ',
+  back_up_now: 'Sigurnosno kopiraj sada',
+  fast_vault_backup_title:
+    'Napravite sigurnosnu kopiju svog trezora na mreži koristeći istu lozinku za trezor koju ste ranije kreirali.',
+  fast_vault_backup_description:
+    'Preporučuje se i sigurna je online pohrana - dijeljeni trezori su namijenjeni za to.',
 }
