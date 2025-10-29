@@ -1,10 +1,8 @@
-import { getVaultId } from '@core/mpc/vault/Vault'
 import { useVaults } from '@core/ui/storage/vaults'
 import { BackupConfirmation } from '@core/ui/vault/backup/confirmation'
 import { EmailConfirmation } from '@core/ui/vault/backup/fast'
 import { BackupOverviewSlidesPartOne } from '@core/ui/vault/backup/fast/BackupOverviewSlidesPartOne'
 import { BackupOverviewSlidesPartTwo } from '@core/ui/vault/backup/fast/BackupOverviewSlidesPartTwo'
-import { VaultBackupFlow } from '@core/ui/vault/backup/VaultBackupFlow'
 import { VaultBackupSummaryStep } from '@core/ui/vault/backup/VaultBackupSummaryStep'
 import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -13,6 +11,8 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { useRive } from '@rive-app/react-canvas'
 import { useTranslation } from 'react-i18next'
+
+import { InitiateFastVaultBackup } from './InitiateFastVaultBackup'
 
 const steps = [
   'backupSlideshowPartOne',
@@ -66,8 +66,7 @@ export const BackupFastVault = ({
         />
       )}
       backupPage={() => (
-        <VaultBackupFlow
-          vaultIds={[getVaultId(vault)]}
+        <InitiateFastVaultBackup
           onFinish={() => {
             if (shouldShowBackupSummary) {
               toNextStep()
