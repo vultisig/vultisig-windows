@@ -1,7 +1,9 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { VStack } from '@lib/ui/layout/Stack'
+import { CryptoIcon } from '@lib/ui/icons/CryptoIcon'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
@@ -35,6 +37,10 @@ export const ManageVaultChainsPage = () => {
     return coins.sort((a, b) => a.chain.localeCompare(b.chain))
   }, [nativeCoins, search])
 
+  console.log(
+    '🚀 ~ ManageVaultChainsPage ~ sortedNativeCoins:',
+    sortedNativeCoins
+  )
   return (
     <VStack fullHeight>
       <PageHeader
@@ -53,11 +59,26 @@ export const ManageVaultChainsPage = () => {
       />
       <PageContent gap={24} flexGrow scrollable>
         <ChainSearch value={search} onChange={setSearch} />
-        <ChainGrid>
-          {sortedNativeCoins.map((coin, index) => (
-            <ChainItem key={index} value={coin} />
-          ))}
-        </ChainGrid>
+        {sortedNativeCoins.length > 0 ? (
+          <ChainGrid>
+            {sortedNativeCoins.map((coin, index) => (
+              <ChainItem key={index} value={coin} />
+            ))}
+          </ChainGrid>
+        ) : (
+          <EmptyWrapper>
+            <VStack gap={12} alignItems="center">
+              <IconWrapper size={24} color="buttonHover">
+                <CryptoIcon />
+              </IconWrapper>
+              <VStack gap={8}>
+                <Text centerHorizontally size={15}>
+                  {t('no_chains_found')}
+                </Text>
+              </VStack>
+            </VStack>
+          </EmptyWrapper>
+        )}
       </PageContent>
     </VStack>
   )
@@ -83,4 +104,15 @@ const DoneButton = styled(UnstyledButton)`
   &:hover {
     background: ${getColor('foregroundDark')};
   }
+`
+
+const EmptyWrapper = styled.div`
+  ${vStack({
+    gap: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  })};
+  padding: 32px 40px;
+  border-radius: 16px;
+  background: ${getColor('foreground')};
 `
