@@ -410,6 +410,9 @@ export const hr = {
   vault_settings_address_book_no_addresses_description:
     'Organizirajte sve vaše važne adrese u jednom mjestu.',
   vault_search_no_matches: 'Nema podudaranja',
+  make_sure_chains: 'Provjerite je li lanac koji tražite omogućen.',
+  no_chains_found: 'Nema pronađenih lanaca',
+  customize_chains: 'Prilagodi lance',
   vault_search_updating: 'Ažuriranje...',
   vault_search_filtered: 'Filtrirano',
   vault_search_close: 'Zatvori',

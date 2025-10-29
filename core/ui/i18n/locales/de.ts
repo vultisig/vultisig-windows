@@ -426,6 +426,10 @@ export const de = {
   vault_settings_address_book_no_addresses_description:
     'Ordnen Sie alle Ihre wichtigen Adressen in einem Ort.',
   vault_search_no_matches: 'Keine Übereinstimmungen',
+  make_sure_chains:
+    'Stellen Sie sicher, dass die gesuchte Chain aktiviert ist.',
+  no_chains_found: 'Keine Chains gefunden',
+  customize_chains: 'Chains anpassen',
   vault_search_updating: 'Aktualisierung...',
   vault_search_filtered: 'Gefiltert',
   vault_search_close: 'Schließen',
