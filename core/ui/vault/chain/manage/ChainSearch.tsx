@@ -1,3 +1,7 @@
+import { InputPasteAction } from '@core/ui/components/InputPasteAction'
+import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
+import { IconButton } from '@lib/ui/buttons/IconButton'
+import { CloseIcon } from '@lib/ui/icons/CloseIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { MagnifyingGlassIcon } from '@lib/ui/icons/MagnifyingGlassIcon'
 import { TextInput } from '@lib/ui/inputs/TextInput'
@@ -14,21 +18,47 @@ export const ChainSearch = ({ onChange, value }: InputProps<string>) => {
   const { t } = useTranslation()
 
   return (
-    <StyledTextInput
-      inputOverlay={
-        !isFocused ? (
-          <InputOverlayWr gap={8} alignItems="center">
-            <IconWrapper size={16}>
-              <MagnifyingGlassIcon />
-            </IconWrapper>
-            <Text color="shy">{t('search_field_placeholder')}</Text>
-          </InputOverlayWr>
-        ) : null
+    <ActionInsideInteractiveElement
+      render={({ actionSize }) => (
+        <StyledTextInput
+          inputOverlay={
+            !isFocused &&
+            !value && (
+              <InputOverlayWr gap={8} alignItems="center">
+                <IconWrapper size={16}>
+                  <MagnifyingGlassIcon />
+                </IconWrapper>
+                <Text color="shy">{t('search_field_placeholder')}</Text>
+              </InputOverlayWr>
+            )
+          }
+          onValueChange={onChange}
+          value={value}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          style={{
+            paddingRight: actionSize.width + 8,
+          }}
+        />
+      )}
+      action={
+        value ? (
+          <StyledIconButton size="sm" onClick={() => onChange('')}>
+            <CloseIcon />
+          </StyledIconButton>
+        ) : (
+          <StyledInputPasteAction
+            onPaste={value => {
+              onChange(value.trim())
+            }}
+          />
+        )
       }
-      onValueChange={onChange}
-      value={value}
-      onFocus={() => setIsFocused(true)}
-      onBlur={() => setIsFocused(false)}
+      actionPlacerStyles={{
+        top: '50%',
+        transform: 'translateY(-50%)',
+        right: 8,
+      }}
     />
   )
 }
@@ -45,4 +75,14 @@ const InputOverlayWr = styled(HStack)`
   left: 12px;
   top: 50%;
   transform: translateY(-50%);
+`
+
+const StyledInputPasteAction = styled(InputPasteAction)`
+  color: ${getColor('textShy')};
+  font-size: 20;
+`
+
+const StyledIconButton = styled(IconButton)`
+  color: ${getColor('textShy')};
+  font-size: 20;
 `
