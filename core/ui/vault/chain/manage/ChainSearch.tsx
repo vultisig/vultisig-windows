@@ -79,10 +79,10 @@ const InputOverlayWr = styled(HStack)`
 
 const StyledInputPasteAction = styled(InputPasteAction)`
   color: ${getColor('textShy')};
-  font-size: 20;
+  font-size: 20px;
 `
 
 const StyledIconButton = styled(IconButton)`
   color: ${getColor('textShy')};
-  font-size: 20;
+  font-size: 20px;
 `
