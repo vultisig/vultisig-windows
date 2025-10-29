@@ -1,4 +1,5 @@
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
+import { MergeRefs } from '@lib/ui/base/MergeRefs'
 import { iconButtonSize } from '@lib/ui/buttons/IconButton'
 import {
   textInputHeight,
@@ -9,35 +10,40 @@ import { useRef } from 'react'
 
 import { InputPasteAction } from './InputPasteAction'
 
-export const TextInputWithPasteAction = (props: TextInputProps) => {
+export const TextInputWithPasteAction = ({ ref, ...props }: TextInputProps) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
   return (
-    <ActionInsideInteractiveElement
-      render={({ actionSize }) => (
-        <TextInput
-          {...props}
-          ref={inputRef}
-          style={{
-            paddingRight: actionSize.width + textInputHorizontalPadding,
+    <MergeRefs
+      refs={[ref, inputRef]}
+      render={ref => (
+        <ActionInsideInteractiveElement
+          render={({ actionSize }) => (
+            <TextInput
+              {...props}
+              ref={ref}
+              style={{
+                paddingRight: actionSize.width + textInputHorizontalPadding,
+              }}
+            />
+          )}
+          action={
+            <InputPasteAction
+              onPaste={value => {
+                if (inputRef.current) {
+                  inputRef.current.value = value
+                  const event = new Event('input', { bubbles: true })
+                  inputRef.current.dispatchEvent(event)
+                }
+              }}
+            />
+          }
+          actionPlacerStyles={{
+            bottom: (textInputHeight - iconButtonSize.md) / 2,
+            right: textInputHorizontalPadding,
           }}
         />
       )}
-      action={
-        <InputPasteAction
-          onPaste={value => {
-            if (inputRef.current) {
-              inputRef.current.value = value
-              const event = new Event('input', { bubbles: true })
-              inputRef.current.dispatchEvent(event)
-            }
-          }}
-        />
-      }
-      actionPlacerStyles={{
-        bottom: (textInputHeight - iconButtonSize.md) / 2,
-        right: textInputHorizontalPadding,
-      }}
     />
   )
 }
