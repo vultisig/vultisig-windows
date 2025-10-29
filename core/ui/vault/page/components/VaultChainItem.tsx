@@ -84,7 +84,7 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
               <VStack
                 gap={8}
                 justifyContent="space-between"
-                alignItems="center"
+                alignItems="flex-end"
               >
                 <Text centerVertically color="contrast" weight="550" size={14}>
                   <BalanceVisibilityAware>
