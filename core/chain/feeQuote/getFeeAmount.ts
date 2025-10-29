@@ -1,7 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
-import { suiAverageSendGas } from '../chains/sui/config'
 import { FeeQuoteForChain, toFeeQuoteRecordUnion } from './core'
 
 export const getFeeAmount = (
@@ -13,7 +12,7 @@ export const getFeeAmount = (
       (baseFeePerGas + maxPriorityFeePerGas) * gasLimit,
     utxo: ({ byteFee, txSize }) => byteFee * txSize,
     cosmos: ({ gas }) => gas,
-    sui: ({ gas }) => gas * suiAverageSendGas,
+    sui: ({ gasBudget }) => gasBudget,
     solana: ({ priorityFee }) => priorityFee,
     polkadot: ({ gas }) => gas,
     ton: ({ gas }) => gas,
