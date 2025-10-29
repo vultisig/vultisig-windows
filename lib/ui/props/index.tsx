@@ -94,6 +94,6 @@ export type MessageProp = {
   message: ReactNode
 }
 
-export type RenderProp = {
-  render: () => ReactNode
-}
+export type RenderProp<T = void> = [T] extends [void]
+  ? { render: () => ReactNode }
+  : { render: (value: T) => ReactNode }

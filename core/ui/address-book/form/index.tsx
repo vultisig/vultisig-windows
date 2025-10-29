@@ -16,7 +16,6 @@ import { takeWholeSpaceAbsolutely } from '@lib/ui/css/takeWholeSpaceAbsolutely'
 import { textInputHorizontalPadding } from '@lib/ui/css/textInput'
 import { textInputHeight } from '@lib/ui/css/textInput'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
-import { PasteIcon } from '@lib/ui/icons/PasteIcon'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -24,17 +23,16 @@ import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { attempt } from '@lib/utils/attempt'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { UseMutationResult } from '@tanstack/react-query'
 import { FC, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import styled, { useTheme } from 'styled-components'
+import styled from 'styled-components'
 import { z } from 'zod'
 
+import { InputPasteAction } from '../../components/InputPasteAction'
 import { UploadQrView } from '../../qr/components/UploadQrView'
-import { useCore } from '../../state/core'
 
 const PositionQrCodeOverlay = styled.div`
   ${takeWholeSpaceAbsolutely}
@@ -67,8 +65,6 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
   const addressBookItems = useAddressBookItems()
   const [qrView, setQrView] = useState<null | 'scan' | 'upload'>(null)
   const walletCore = useAssertWalletCore()
-  const { getClipboardText } = useCore()
-  const { colors } = useTheme()
 
   const schema = z
     .object({
@@ -123,12 +119,6 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
     mode: 'onBlur',
     defaultValues,
   })
-  const handlePaste = async () => {
-    const { data } = await attempt(getClipboardText)
-    if (data) {
-      setValue('address', data, { shouldValidate: true })
-    }
-  }
 
   const handleScanSuccess = (address: string) => {
     setValue('address', address, { shouldValidate: true })
@@ -182,15 +172,11 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
                   <IconButton size="sm" onClick={() => setQrView('scan')}>
                     <CameraIcon />
                   </IconButton>
-                  <IconButton
-                    style={{
-                      color: colors.textShyExtra.toCssValue(),
-                    }}
-                    size="sm"
-                    onClick={handlePaste}
-                  >
-                    <PasteIcon />
-                  </IconButton>
+                  <InputPasteAction
+                    onPaste={value =>
+                      setValue('address', value, { shouldValidate: true })
+                    }
+                  />
                 </HStack>
               }
               actionPlacerStyles={{

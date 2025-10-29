@@ -22,6 +22,7 @@ import { FC } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { TextInputWithPasteAction } from '../../../components/TextInputWithPasteAction'
 import { useAvailableChainActions } from '../hooks/useAvailableChainActions'
 import { useDepositBalance } from '../hooks/useDepositBalance'
 import { useDepositFormConfig } from '../hooks/useDepositFormConfig'
@@ -175,8 +176,7 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
                         )}
                       </Text>
 
-                      <InputFieldWrapper
-                        as="input"
+                      <TextInputWithPasteAction
                         onWheel={e => e.currentTarget.blur()}
                         type={field.type}
                         step={
