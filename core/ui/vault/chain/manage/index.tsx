@@ -37,7 +37,6 @@ export const ManageVaultChainsPage = () => {
     return coins.sort((a, b) => a.chain.localeCompare(b.chain))
   }, [nativeCoins, search])
 
- 
   return (
     <VStack fullHeight>
       <PageHeader
