@@ -93,7 +93,7 @@ export const pt = {
   waiting_for_devices_to_join: 'Aguardando outros dispositivos se conectarem',
   waiting_for_devices_to_join_description:
     'Seu cofre começará a ser gerado assim que você finalizar a configuração em seu dispositivo principal',
-  search_field_placeholder: 'Pesquisar..',
+  search_field_placeholder: 'Pesquisar',
   tx_hash: 'Hash da transação',
   gas_limit_tooltip_content:
     'A quantidade máxima de gás que você pagará. Pode ser aumentada se o limite de gás não for suficiente para enviar transações.',

@@ -82,7 +82,7 @@ export const it = {
   change_your_friends_referral:
     'Cambia il codice referral del tuo amico usato per gli scambi',
   passcodes_do_not_match: 'I codici non corrispondono',
-  search_field_placeholder: 'Cerca..',
+  search_field_placeholder: 'Cerca',
   start_transaction: 'Avvia transazione',
   digit_input_success_validation: 'Verifica riuscita',
   digit_input_error_validation: 'Errore nella verifica del codice, riprova',
