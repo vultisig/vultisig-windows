@@ -1203,4 +1203,9 @@ export const it = {
   buy: 'Acquistare',
   not_enough_asset_to_cover_gas_fees:
     'Non abbastanza {{asset}} per coprire le spese del carburante',
+  back_up_now: 'Esegui il backup ora',
+  fast_vault_backup_title:
+    'Esegui il backup della condivisione del vault online utilizzando la stessa password del vault creata in precedenza.',
+  fast_vault_backup_description:
+    "L'archiviazione online è consigliata e sicura: le condivisioni Vault sono progettate per questo scopo.",
 }

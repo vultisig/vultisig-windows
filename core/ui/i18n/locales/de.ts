@@ -1205,4 +1205,9 @@ export const de = {
   buy: 'Kaufen',
   not_enough_asset_to_cover_gas_fees:
     'Nicht genug {{asset}}, um die Gasgebühren zu decken',
+  back_up_now: 'Jetzt sichern',
+  fast_vault_backup_title:
+    'Sichern Sie Ihre Tresorfreigabe online mit demselben Tresorpasswort, das Sie zuvor erstellt haben.',
+  fast_vault_backup_description:
+    'Online-Speicher ist empfehlenswert und sicher – Vault-Speicher sind genau dafür konzipiert.',
 }
