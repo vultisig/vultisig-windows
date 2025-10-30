@@ -1,4 +1,7 @@
 import { ChainKind, getChainKind } from '@core/chain/ChainKind'
+import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { WalletCore } from '@trustwallet/wallet-core'
+import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 
 import { getKeysignChain } from '../utils/getKeysignChain'
 import { GetFeeAmountResolver } from './resolver'
@@ -13,7 +16,13 @@ import { getTonFeeAmount } from './resolvers/ton'
 import { getTronFeeAmount } from './resolvers/tron'
 import { getUtxoFeeAmount } from './resolvers/utxo'
 
-const resolvers: Record<ChainKind, GetFeeAmountResolver> = {
+type Input = {
+  keysignPayload: KeysignPayload
+  walletCore: WalletCore
+  publicKey?: PublicKey
+}
+
+const resolvers: Record<ChainKind, GetFeeAmountResolver<any>> = {
   cardano: getCardanoFeeAmount,
   cosmos: getCosmosFeeAmount,
   evm: getEvmFeeAmount,
@@ -26,8 +35,9 @@ const resolvers: Record<ChainKind, GetFeeAmountResolver> = {
   tron: getTronFeeAmount,
 }
 
-export const getFeeAmount: GetFeeAmountResolver = keysignPayload => {
-  const chain = getKeysignChain(keysignPayload)
+export const getFeeAmount = (input: Input): bigint => {
+  const chain = getKeysignChain(input.keysignPayload)
   const kind = getChainKind(chain)
-  return resolvers[kind](keysignPayload)
+
+  return resolvers[kind](input as any)
 }

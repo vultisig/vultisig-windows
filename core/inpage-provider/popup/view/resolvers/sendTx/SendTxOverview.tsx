@@ -9,6 +9,7 @@ import {
   FeeSettingsChainKind,
   feeSettingsChainKinds,
 } from '@core/chain/feeQuote/settings/core'
+import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { getFeeAmount } from '@core/mpc/keysign/fee'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
@@ -195,7 +196,20 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                   value={transactionPayload}
                   handlers={{
                     keysign: transactionPayload => {
-                      const feeAmount = getFeeAmount(keysignPayload)
+                      const publicKey = isChainOfKind(chain, 'utxo')
+                        ? getPublicKey({
+                            chain,
+                            walletCore,
+                            hexChainCode: vault.hexChainCode,
+                            publicKeys: vault.publicKeys,
+                          })
+                        : undefined
+
+                      const feeAmount = getFeeAmount({
+                        keysignPayload,
+                        walletCore,
+                        publicKey,
+                      })
 
                       const getEvmFeeSettings = (): EvmFeeSettings | null => {
                         if (!isChainOfKind(chain, 'evm')) {

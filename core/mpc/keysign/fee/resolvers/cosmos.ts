@@ -1,3 +1,4 @@
+import { CosmosChain } from '@core/chain/Chain'
 import { mayaGas } from '@core/chain/feeQuote/resolvers/cosmos'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
@@ -5,8 +6,10 @@ import { getCosmosChainSpecific } from '../../signingInputs/resolvers/cosmos/cha
 import { getKeysignChain } from '../../utils/getKeysignChain'
 import { GetFeeAmountResolver } from '../resolver'
 
-export const getCosmosFeeAmount: GetFeeAmountResolver = keysignPayload => {
-  const chain = getKeysignChain<'cosmos'>(keysignPayload)
+export const getCosmosFeeAmount: GetFeeAmountResolver<'cosmos'> = ({
+  keysignPayload,
+}) => {
+  const chain = getKeysignChain(keysignPayload) as CosmosChain
 
   const chainSpecific = getCosmosChainSpecific(
     chain,

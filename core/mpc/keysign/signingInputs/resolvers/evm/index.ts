@@ -1,4 +1,5 @@
 import { create } from '@bufbuild/protobuf'
+import { EvmChain } from '@core/chain/Chain'
 import {
   getEvmTwFeeFields,
   GetEvmTwFeeFieldsInput,
@@ -18,6 +19,7 @@ import { getBlockchainSpecificValue } from '../../../chainSpecific/KeysignChainS
 import { getKeysignSwapPayload } from '../../../swap/getKeysignSwapPayload'
 import { KeysignSwapPayload } from '../../../swap/KeysignSwapPayload'
 import { toTwAddress } from '../../../tw/toTwAddress'
+import { getKeysignChain } from '../../../utils/getKeysignChain'
 import { SigningInputsResolver } from '../../resolver'
 import { getErc20ApproveSigningInput } from './erc20'
 
@@ -27,8 +29,8 @@ const memoToTxData = (memo: string) =>
 export const getEvmSigningInputs: SigningInputsResolver<'evm'> = ({
   keysignPayload,
   walletCore,
-  chain,
 }) => {
+  const chain = getKeysignChain(keysignPayload) as EvmChain
   const coin = assertField(keysignPayload, 'coin')
 
   const { erc20ApprovePayload, ...restOfKeysignPayload } = keysignPayload
@@ -44,7 +46,6 @@ export const getEvmSigningInputs: SigningInputsResolver<'evm'> = ({
         create(KeysignPayloadSchema, restOfKeysignPayload)
       ),
       walletCore,
-      chain,
     })
 
     return [approveSigningInput, ...restOfSigningInputs]

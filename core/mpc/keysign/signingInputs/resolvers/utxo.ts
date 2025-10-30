@@ -12,14 +12,16 @@ import Long from 'long'
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
 import { getKeysignSwapPayload } from '../../swap/getKeysignSwapPayload'
 import { KeysignSwapPayload } from '../../swap/KeysignSwapPayload'
+import { getKeysignChain } from '../../utils/getKeysignChain'
 import { SigningInputsResolver } from '../resolver'
 
 export const getUtxoSigningInputs: SigningInputsResolver<'utxo'> = ({
   keysignPayload,
   walletCore,
-  chain,
   publicKey,
 }) => {
+  const chain = getKeysignChain(keysignPayload) as UtxoChain
+
   const { byteFee, sendMaxAmount, psbt } = getBlockchainSpecificValue(
     keysignPayload.blockchainSpecific,
     'utxoSpecific'

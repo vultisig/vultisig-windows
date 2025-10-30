@@ -1,11 +1,11 @@
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
 import { GetFeeAmountResolver } from '../resolver'
 
-export const getSolanaFeeAmount: GetFeeAmountResolver = ({
-  blockchainSpecific,
+export const getSolanaFeeAmount: GetFeeAmountResolver<'solana'> = ({
+  keysignPayload,
 }) => {
   const { priorityFee } = getBlockchainSpecificValue(
-    blockchainSpecific,
+    keysignPayload.blockchainSpecific,
     'solanaSpecific'
   )
 

@@ -40,10 +40,7 @@ export const getEncodedSigningInputs = (input: Input): Uint8Array[] => {
   const chain = getKeysignChain(input.keysignPayload)
   const chainKind = getChainKind(chain)
 
-  const signingInputs = resolvers[chainKind]({
-    ...input,
-    chain,
-  })
+  const signingInputs = resolvers[chainKind](input as any)
 
   return signingInputs.map(signingInput => {
     const SigningInputClass = signingInputClasses[chainKind]

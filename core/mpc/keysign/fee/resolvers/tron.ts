@@ -1,11 +1,11 @@
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
 import { GetFeeAmountResolver } from '../resolver'
 
-export const getTronFeeAmount: GetFeeAmountResolver = ({
-  blockchainSpecific,
+export const getTronFeeAmount: GetFeeAmountResolver<'tron'> = ({
+  keysignPayload,
 }) => {
   const { gasEstimation } = getBlockchainSpecificValue(
-    blockchainSpecific,
+    keysignPayload.blockchainSpecific,
     'tronSpecific'
   )
 

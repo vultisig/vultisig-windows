@@ -1,15 +1,21 @@
-import { utxoTxSize } from '@core/chain/feeQuote/resolvers/utxo'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
-import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
+import { getUtxoSigningInputs } from '../../signingInputs/resolvers/utxo'
 import { GetFeeAmountResolver } from '../resolver'
 
-export const getUtxoFeeAmount: GetFeeAmountResolver = ({
-  blockchainSpecific,
+export const getUtxoFeeAmount: GetFeeAmountResolver<'utxo'> = ({
+  keysignPayload,
+  walletCore,
+  publicKey,
 }) => {
-  const { byteFee } = getBlockchainSpecificValue(
-    blockchainSpecific,
-    'utxoSpecific'
-  )
+  const [input] = getUtxoSigningInputs({
+    keysignPayload,
+    walletCore,
+    publicKey,
+  })
 
-  return BigInt(byteFee) * utxoTxSize
+  const plan = shouldBePresent(input.plan, 'input.plan')
+  const fee = shouldBePresent(plan.fee, 'input.plan.fee')
+
+  return BigInt(fee.toString())
 }
