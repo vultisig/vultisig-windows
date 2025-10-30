@@ -3,7 +3,6 @@ import {
   getEvmTwFeeFields,
   GetEvmTwFeeFieldsInput,
 } from '@core/chain/chains/evm/tx/fee/tw/getEvmTwFeeFields'
-import { getErc20ApproveTxInputData } from '@core/chain/chains/evm/tx/getErc20ApproveTxInputData'
 import { incrementKeysignPayloadNonce } from '@core/chain/chains/evm/tx/incrementKeysignPayloadNonce'
 import { getEvmTwChainId } from '@core/chain/chains/evm/tx/tw/getEvmTwChainId'
 import { getEvmTwNonce } from '@core/chain/chains/evm/tx/tw/getEvmTwNonce'
@@ -14,12 +13,13 @@ import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { assertField } from '@lib/utils/record/assertField'
 import { TW } from '@trustwallet/wallet-core'
 
-import { KeysignPayloadSchema } from '../../../types/vultisig/keysign/v1/keysign_message_pb'
-import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
-import { getKeysignSwapPayload } from '../../swap/getKeysignSwapPayload'
-import { KeysignSwapPayload } from '../../swap/KeysignSwapPayload'
-import { toTwAddress } from '../../tw/toTwAddress'
-import { GetSigningInputInput, SigningInputResolver } from '../resolver'
+import { KeysignPayloadSchema } from '../../../../types/vultisig/keysign/v1/keysign_message_pb'
+import { getBlockchainSpecificValue } from '../../../chainSpecific/KeysignChainSpecific'
+import { getKeysignSwapPayload } from '../../../swap/getKeysignSwapPayload'
+import { KeysignSwapPayload } from '../../../swap/KeysignSwapPayload'
+import { toTwAddress } from '../../../tw/toTwAddress'
+import { GetSigningInputInput, SigningInputResolver } from '../../resolver'
+import { getErc20ApproveSigningInput } from './erc20'
 
 const memoToTxData = (memo: string) =>
   memo.startsWith('0x') ? toEvmTxData(memo) : Buffer.from(memo, 'utf8')
@@ -30,7 +30,7 @@ export const getEvmSigningInputs = (
   const { erc20ApprovePayload, ...restOfKeysignPayload } = input.keysignPayload
 
   if (erc20ApprovePayload) {
-    const approveSigningInput = getErc20ApproveTxInputData({
+    const approveSigningInput = getErc20ApproveSigningInput({
       keysignPayload: input.keysignPayload,
       walletCore: input.walletCore,
     })
