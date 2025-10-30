@@ -9,5 +9,6 @@ export const buildSuiSpecific: BuildChainSpecificResolver<'suicheSpecific'> = ({
 }) =>
   create(SuiSpecificSchema, {
     ...txData,
-    referenceGasPrice: feeQuote.gas.toString(),
+    referenceGasPrice: feeQuote.referenceGasPrice.toString(),
+    gasBudget: feeQuote.gasBudget.toString(),
   })
