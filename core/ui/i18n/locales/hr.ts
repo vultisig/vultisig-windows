@@ -53,7 +53,7 @@ export const hr = {
   vult: '$VULT',
   onboarding_description_4:
     'Vultisig je novčanik bez seed fraza. Umjesto toga koristi lako upravljive dijelove trezora. Svaki uređaj ima svoj jedinstveni dio koji treba zasebno sigurnosno kopirati.',
-  search_field_placeholder: 'Pretraži..',
+  search_field_placeholder: 'Pretraži',
   merged: 'Spojeno',
   function_unavailble:
     'Značajka nije dostupna za postojeće kovanice lanca. Dodajte kovanice koje se mogu koristiti s FUNCTION:',
@@ -410,6 +410,9 @@ export const hr = {
   vault_settings_address_book_no_addresses_description:
     'Organizirajte sve vaše važne adrese u jednom mjestu.',
   vault_search_no_matches: 'Nema podudaranja',
+  make_sure_chains: 'Provjerite je li lanac koji tražite omogućen.',
+  no_chains_found: 'Nema pronađenih lanaca',
+  customize_chains: 'Prilagodi lance',
   vault_search_updating: 'Ažuriranje...',
   vault_search_filtered: 'Filtrirano',
   vault_search_close: 'Zatvori',
@@ -982,7 +985,6 @@ export const hr = {
   camera_access_blocked:
     'Pristup kameri je blokiran. Molimo omogućite ga u postavkama preglednika.',
   balance_available: 'Raspoloživi saldo',
-  not_enough_for_gas: 'Nema dovoljno sredstava za pokrivanje troškova goriva',
   wrong_address_for_chain: 'Pogrešna adresa za odabrani lanac',
   advanced_gas_fee: 'Naknada za gorivo',
   add_memo: 'Dodaj MEMO',
@@ -1169,4 +1171,6 @@ export const hr = {
     'Držanjem {{minBalance}} otključat ćete {{tier}} razinu i ostvariti popust od <b>{{bps}} bps naknade za trgovanje</b> na sve swapove.',
   upload_qr_code_with_address: 'Prenesite QR kod s adresom',
   buy: 'Kupiti',
+  not_enough_asset_to_cover_gas_fees:
+    'Nema dovoljno {{asset}} za pokrivanje troškova goriva',
 }

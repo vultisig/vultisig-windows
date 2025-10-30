@@ -16,13 +16,21 @@ import { useSearchChain } from '../../../state/searchChainProvider'
 
 const debounceDelayMs = 250
 
-export const SearchChain = () => {
+type SearchChainProps = {
+  onOpenChange?: (isOpen: boolean) => void
+  isFullWidth?: boolean
+}
+
+export const SearchChain = ({
+  onOpenChange,
+  isFullWidth = false,
+}: SearchChainProps) => {
   const [isOpen, { set, unset }] = useBoolean(false)
   const [searchQuery, setSearchQuery] = useSearchChain()
   const [inputValue, setInputValue] = useState(searchQuery)
   const debouncedValue = useDebounce(inputValue, debounceDelayMs)
   const deferredValue = useDeferredValue(debouncedValue)
-  const [isPending, startTransition] = useTransition()
+  const [, startTransition] = useTransition()
   const { t } = useTranslation()
 
   useEffect(() => {
@@ -33,42 +41,51 @@ export const SearchChain = () => {
     startTransition(() => setSearchQuery(deferredValue))
   }, [deferredValue, setSearchQuery, startTransition])
 
+  const handleOpen = () => {
+    set()
+    onOpenChange?.(true)
+  }
+
   const handleClose = () => {
     setInputValue('')
     startTransition(() => setSearchQuery(''))
     unset()
+    onOpenChange?.(false)
   }
-
-  const hasActiveQuery = inputValue.trim().length > 0
 
   return (
     <AnimatePresence mode="wait">
       {isOpen ? (
         <motion.div
           key="search-field"
-          initial={{ opacity: 0, width: 0 }}
-          animate={{ opacity: 1, width: 'auto' }}
-          exit={{ opacity: 0, width: 0 }}
-          transition={{ duration: 0.2, ease: 'easeInOut' }}
+          initial={{ width: 0 }}
+          animate={{ width: isFullWidth ? '100%' : 'auto' }}
+          exit={{ width: 0 }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+          style={{ overflow: 'hidden' }}
         >
-          <HStack gap={8} alignItems="center">
-            <SearchFieldWrapper>
-              <SearchField
-                value={inputValue}
-                onSearch={nextValue => setInputValue(nextValue)}
-              />
-            </SearchFieldWrapper>
-            {hasActiveQuery && (
-              <StatusText color="supporting" size={10}>
-                {isPending
-                  ? t('vault_search_updating')
-                  : t('vault_search_filtered')}
-              </StatusText>
-            )}
-            <UnstyledButton onClick={handleClose}>
-              <Text>{t('vault_search_close')}</Text>
-            </UnstyledButton>
-          </HStack>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.1 }}
+          >
+            <HStack
+              gap={8}
+              alignItems="center"
+              style={{ minWidth: 'max-content' }}
+            >
+              <SearchFieldWrapper $fullWidth={isFullWidth}>
+                <SearchField
+                  value={inputValue}
+                  onSearch={nextValue => setInputValue(nextValue)}
+                />
+              </SearchFieldWrapper>
+              <CloseButton onClick={handleClose}>
+                <Text size={14}>{t('vault_search_close')}</Text>
+              </CloseButton>
+            </HStack>
+          </motion.div>
         </motion.div>
       ) : (
         <motion.div
@@ -78,7 +95,7 @@ export const SearchChain = () => {
           exit={{ opacity: 0, scale: 0.8 }}
           transition={{ duration: 0.2, ease: 'easeInOut' }}
         >
-          <IconButton onClick={set} size="lg">
+          <IconButton onClick={handleOpen} size="lg">
             <SearchIcon />
           </IconButton>
         </motion.div>
@@ -87,10 +104,12 @@ export const SearchChain = () => {
   )
 }
 
-const SearchFieldWrapper = styled.div`
+const SearchFieldWrapper = styled.div<{ $fullWidth: boolean }>`
   display: flex;
   flex-direction: column;
-  max-height: 30px;
+  max-height: 42px;
+  flex: 1;
+  width: ${({ $fullWidth }) => ($fullWidth ? '100%' : 'auto')};
 
   & input {
     font-size: 12px;
@@ -98,8 +117,11 @@ const SearchFieldWrapper = styled.div`
   }
 `
 
-const StatusText = styled(Text)`
-  min-width: 60px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+const CloseButton = styled(UnstyledButton)`
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  white-space: nowrap;
+  min-width: fit-content;
+  width: fit-content;
 `
