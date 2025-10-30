@@ -52,7 +52,13 @@ export const UploadBackupFileStep = ({
           {file ? (
             <UploadedBackupFile value={file} />
           ) : (
-            <BackupFileDropzone onFinish={setFile} onError={setError} />
+            <BackupFileDropzone
+              onFinish={file => {
+                setFile(file)
+                setError(null)
+              }}
+              onError={setError}
+            />
           )}
           {error && (
             <Text centerHorizontally color="danger">
