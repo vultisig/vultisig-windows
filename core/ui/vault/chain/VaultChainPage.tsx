@@ -5,7 +5,6 @@ import { getBalanceQueryKey } from '@core/ui/chain/coin/queries/useBalancesQuery
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { getCoinFinderQueryKey } from '@core/ui/vault/chain/coin/finder/queries/useCoinFinderQuery'
 import { useCurrentVaultChain } from '@core/ui/vault/chain/useCurrentVaultChain'
-import { VaultPrimaryActions } from '@core/ui/vault/components/VaultPrimaryActions'
 import {
   useCurrentVaultAddress,
   useCurrentVaultChainCoins,
@@ -17,13 +16,13 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { useInvalidateQueriesMutation } from '@lib/ui/query/hooks/useInvalidateQueriesMutation'
-import { getColor } from '@lib/ui/theme/getters'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { QueryKey } from '@tanstack/react-query'
 import { useCallback } from 'react'
 import styled from 'styled-components'
 
 import { VaultChainTabs } from './tabs/VaultChainTabs'
+import { VaultChainOverview } from './VaultChainOverview'
 
 export const VaultChainPage = () => {
   const chain = useCurrentVaultChain()
@@ -60,10 +59,7 @@ export const VaultChainPage = () => {
         hasBorder
       />
       <StyledPageContent scrollable gap={32} flexGrow>
-        <VStack alignItems="center" gap={24}>
-          <VaultPrimaryActions coin={{ chain }} />
-        </VStack>
-        <Divider />
+        <VaultChainOverview />
         <VaultChainTabs />
       </StyledPageContent>
     </VStack>
@@ -72,10 +68,4 @@ export const VaultChainPage = () => {
 
 const StyledPageContent = styled(PageContent)`
   ${hideScrollbars};
-`
-
-const Divider = styled.div`
-  height: 1px;
-  align-self: stretch;
-  background: ${getColor('foregroundExtra')};
 `
