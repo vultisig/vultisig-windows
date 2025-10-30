@@ -24,6 +24,11 @@ type GasFeeQuote = {
   gas: bigint
 }
 
+type SuiFeeQuote = {
+  referenceGasPrice: bigint
+  gasBudget: bigint
+}
+
 type EnsureAllKindsCovered<T extends Record<ChainKind, unknown>> = T
 
 type FeeQuoteByKind = EnsureAllKindsCovered<{
@@ -36,7 +41,7 @@ type FeeQuoteByKind = EnsureAllKindsCovered<{
   polkadot: GasFeeQuote
   ton: GasFeeQuote
   tron: GasFeeQuote
-  sui: GasFeeQuote
+  sui: SuiFeeQuote
 }>
 
 export type FeeQuote<T extends ChainKind = ChainKind> = FeeQuoteByKind[T]
