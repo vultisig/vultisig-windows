@@ -8,14 +8,11 @@ export const getUtxoFeeAmount: GetFeeAmountResolver = ({
   walletCore,
   publicKey,
 }) => {
-  const [input] = getUtxoSigningInputs({
+  const [{ plan }] = getUtxoSigningInputs({
     keysignPayload,
     walletCore,
     publicKey,
   })
 
-  const plan = shouldBePresent(input.plan, 'input.plan')
-  const fee = shouldBePresent(plan.fee, 'input.plan.fee')
-
-  return BigInt(fee.toString())
+  return shouldBePresent(plan?.fee, `UTXO signing input plan fee`).toBigInt()
 }
