@@ -1,7 +1,7 @@
 import { mayaGas } from '@core/chain/feeQuote/resolvers/cosmos'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
-import { getCosmosChainSpecific } from '../../signingInput/resolvers/cosmos/chainSpecific'
+import { getCosmosChainSpecific } from '../../signingInputs/resolvers/cosmos/chainSpecific'
 import { getKeysignChain } from '../../utils/getKeysignChain'
 import { GetFeeAmountResolver } from '../resolver'
 

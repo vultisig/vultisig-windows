@@ -1,17 +1,13 @@
-import { ChainKind, ChainOfKind, getChainKind } from '@core/chain/ChainKind'
+import { ChainKind, getChainKind } from '@core/chain/ChainKind'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 
 import { getKeysignChain } from '../utils/getKeysignChain'
-import {
-  SigningInputResolver,
-  SigningInputType,
-  signingInputTypes,
-} from './resolver'
+import { SigningInputResolver, signingInputTypes } from './resolver'
 import { getCardanoSigningInput } from './resolvers/cardano'
 import { getCosmosSigningInput } from './resolvers/cosmos'
-import { getEvmSigningInput, getEvmSigningInputs } from './resolvers/evm'
+import { getEvmSigningInput } from './resolvers/evm'
 import { getPolkadotSigningInput } from './resolvers/polkadot'
 import { getRippleSigningInput } from './resolvers/ripple'
 import { getSolanaSigningInput } from './resolvers/solana'
@@ -39,45 +35,17 @@ const resolvers: Record<ChainKind, SigningInputResolver<any>> = {
   tron: getTronSigningInput,
 } as Record<ChainKind, SigningInputResolver<any>>
 
-export const getSigningInput = <T extends ChainKind>(
-  input: Input
-): SigningInputType<T> => {
-  const { blockchainSpecific } = input.keysignPayload
-  if (!blockchainSpecific.case) {
-    throw new Error('Invalid blockchain specific')
-  }
-
+export const getEncodedSigningInputs = (input: Input): Uint8Array[] => {
   const chain = getKeysignChain(input.keysignPayload)
   const chainKind = getChainKind(chain)
 
-  return resolvers[chainKind]({
+  const signingInputs = resolvers[chainKind]({
     ...input,
     chain,
-  }) as SigningInputType<T>
-}
+  })
 
-export const getSigningInputs = <T extends ChainKind>(
-  input: Input
-): SigningInputType<T>[] => {
-  const chain = getKeysignChain(input.keysignPayload)
-  const chainKind = getChainKind(chain)
-
-  if (chainKind === 'evm') {
-    return getEvmSigningInputs({
-      keysignPayload: input.keysignPayload,
-      walletCore: input.walletCore,
-      chain: chain as ChainOfKind<'evm'>,
-      ...(input.publicKey ? { publicKey: input.publicKey } : {}),
-    }) as SigningInputType<T>[]
-  }
-
-  return [getSigningInput(input)]
-}
-
-export const encodeSigningInput = <T extends ChainKind>(
-  signingInput: SigningInputType<T>,
-  chainKind: T
-): Uint8Array => {
-  const SigningInputClass = signingInputTypes[chainKind]
-  return SigningInputClass.encode(signingInput as any).finish()
+  return signingInputs.map(signingInput => {
+    const SigningInputClass = signingInputTypes[chainKind]
+    return SigningInputClass.encode(signingInput as any).finish()
+  })
 }

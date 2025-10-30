@@ -141,5 +141,5 @@ export const getUtxoSigningInput = ({
     input.plan.branchId = Buffer.from('5510e7c8', 'hex')
   }
 
-  return input
+  return [input]
 }

@@ -294,5 +294,5 @@ export const getCosmosSigningInput = ({
     fee: getFee(),
   })
 
-  return input
+  return [input]
 }

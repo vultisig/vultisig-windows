@@ -2,10 +2,7 @@ import { getChainKind } from '@core/chain/ChainKind'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { getTwPublicKeyType } from '@core/chain/publicKey/tw/getTwPublicKeyType'
 import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
-import {
-  encodeSigningInput,
-  getSigningInputs,
-} from '@core/mpc/keysign/signingInput'
+import { getEncodedSigningInputs } from '@core/mpc/keysign/signingInputs'
 import { getKeysignTwPublicKey } from '@core/mpc/keysign/tw/getKeysignTwPublicKey'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
@@ -37,14 +34,13 @@ export const getCompiledTxsForBlockaidInput = ({
     walletCore,
   })
 
-  const signingInputs = getSigningInputs({
+  const inputs = getEncodedSigningInputs({
     keysignPayload: payload,
     walletCore,
     publicKey,
   })
 
-  return signingInputs.map(signingInput => {
-    const txInputData = encodeSigningInput(signingInput, chainKind)
+  return inputs.map(txInputData => {
     const preHashes = getPreSigningHashes({
       walletCore,
       txInputData,

@@ -1,11 +1,10 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-import { getChainKind } from '@core/chain/ChainKind'
 import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { initWasm, WalletCore } from '@trustwallet/wallet-core'
 
-import { encodeSigningInput, getSigningInputs } from '../signingInput'
+import { getEncodedSigningInputs } from '../signingInputs'
 import { normalizeKeysignPayloadFromJson } from './helpers/normalizeKeysignPayloadFromJson'
 import { resolveChainFromFixture } from './helpers/resolveChainFromFixture'
 
@@ -37,15 +36,10 @@ describe('iOS fixtures parity', () => {
   it.each(cases)('%s', ({ keysign_payload, expected_image_hash }) => {
     const keysignPayload = normalizeKeysignPayloadFromJson(keysign_payload)
     const chain = resolveChainFromFixture(keysign_payload.coin.chain)
-    const chainKind = getChainKind(chain)
-    const signingInputs = getSigningInputs({
+    const inputs = getEncodedSigningInputs({
       keysignPayload,
       walletCore,
     })
-
-    const inputs = signingInputs.map(signingInput =>
-      encodeSigningInput(signingInput, chainKind)
-    )
 
     const hashes = inputs
       .flatMap(txInputData =>

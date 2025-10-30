@@ -18,36 +18,11 @@ import { getBlockchainSpecificValue } from '../../../chainSpecific/KeysignChainS
 import { getKeysignSwapPayload } from '../../../swap/getKeysignSwapPayload'
 import { KeysignSwapPayload } from '../../../swap/KeysignSwapPayload'
 import { toTwAddress } from '../../../tw/toTwAddress'
-import { GetSigningInputInput, SigningInputResolver } from '../../resolver'
+import { SigningInputResolver } from '../../resolver'
 import { getErc20ApproveSigningInput } from './erc20'
 
 const memoToTxData = (memo: string) =>
   memo.startsWith('0x') ? toEvmTxData(memo) : Buffer.from(memo, 'utf8')
-
-export const getEvmSigningInputs = (
-  input: GetSigningInputInput<'evm'>
-): TW.Ethereum.Proto.SigningInput[] => {
-  const { erc20ApprovePayload, ...restOfKeysignPayload } = input.keysignPayload
-
-  if (erc20ApprovePayload) {
-    const approveSigningInput = getErc20ApproveSigningInput({
-      keysignPayload: input.keysignPayload,
-      walletCore: input.walletCore,
-    })
-
-    const restOfSigningInput = getEvmSigningInput({
-      keysignPayload: incrementKeysignPayloadNonce(
-        create(KeysignPayloadSchema, restOfKeysignPayload)
-      ),
-      walletCore: input.walletCore,
-      chain: input.chain,
-    })
-
-    return [approveSigningInput, restOfSigningInput]
-  }
-
-  return [getEvmSigningInput(input)]
-}
 
 export const getEvmSigningInput: SigningInputResolver<'evm'> = ({
   keysignPayload,
@@ -55,6 +30,25 @@ export const getEvmSigningInput: SigningInputResolver<'evm'> = ({
   chain,
 }) => {
   const coin = assertField(keysignPayload, 'coin')
+
+  const { erc20ApprovePayload, ...restOfKeysignPayload } = keysignPayload
+
+  if (erc20ApprovePayload) {
+    const approveSigningInput = getErc20ApproveSigningInput({
+      keysignPayload,
+      walletCore,
+    })
+
+    const [restOfSigningInput] = getEvmSigningInput({
+      keysignPayload: incrementKeysignPayloadNonce(
+        create(KeysignPayloadSchema, restOfKeysignPayload)
+      ),
+      walletCore,
+      chain,
+    })
+
+    return [approveSigningInput, restOfSigningInput]
+  }
 
   const evmSpecific = getBlockchainSpecificValue(
     keysignPayload.blockchainSpecific,
@@ -198,5 +192,5 @@ export const getEvmSigningInput: SigningInputResolver<'evm'> = ({
     ...getFeeFields(),
   })
 
-  return input
+  return [input]
 }

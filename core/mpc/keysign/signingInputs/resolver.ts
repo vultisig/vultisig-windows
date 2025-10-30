@@ -24,11 +24,11 @@ export const signingInputTypes = {
   utxo: TW.Bitcoin.Proto.SigningInput,
 } as const satisfies Record<ChainKind, unknown>
 
-export type SigningInputType<T extends ChainKind> = InstanceType<
+type SigningInputType<T extends ChainKind> = InstanceType<
   (typeof signingInputTypes)[T]
 >
 
 export type SigningInputResolver<T extends ChainKind> = Resolver<
   GetSigningInputInput<T>,
-  SigningInputType<T>
+  SigningInputType<T>[]
 >

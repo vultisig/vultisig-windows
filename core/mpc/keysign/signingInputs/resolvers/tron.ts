@@ -101,7 +101,7 @@ export const getTronSigningInput = ({
       }),
     })
 
-    return input
+    return [input]
   }
 
   if (swapPayload) {
@@ -141,7 +141,7 @@ export const getTronSigningInput = ({
         })
 
         const input = TW.Tron.Proto.SigningInput.create({ transaction: tx })
-        return input
+        return [input]
       },
 
       general: () => {
@@ -179,7 +179,7 @@ export const getTronSigningInput = ({
       }),
     })
 
-    return input
+    return [input]
   }
 
   const amountHex = Buffer.from(
@@ -217,5 +217,5 @@ export const getTronSigningInput = ({
     }),
   })
 
-  return input
+  return [input]
 }

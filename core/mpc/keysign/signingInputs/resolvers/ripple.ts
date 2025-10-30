@@ -83,5 +83,5 @@ export const getRippleSigningInput = ({
     ...getPayment(),
   })
 
-  return input
+  return [input]
 }

@@ -33,5 +33,5 @@ export const getSuiSigningInput = ({
     }),
   })
 
-  return inputData
+  return [inputData]
 }

@@ -55,10 +55,10 @@ export const getSolanaSigningInput = ({
           rawMessage: transaction,
         })
 
-        return signingInput
+        return [signingInput]
       },
     })
   }
 
-  return getSolanaSendSigningInput({ keysignPayload, walletCore })
+  return [getSolanaSendSigningInput({ keysignPayload, walletCore })]
 }

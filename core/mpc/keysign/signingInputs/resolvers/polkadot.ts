@@ -70,5 +70,5 @@ export const getPolkadotSigningInput = ({
     balanceCall: balance,
   })
 
-  return input
+  return [input]
 }

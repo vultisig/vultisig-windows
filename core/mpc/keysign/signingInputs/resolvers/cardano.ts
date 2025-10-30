@@ -38,5 +38,5 @@ export const getCardanoSigningInput = ({
     ),
   })
 
-  return input
+  return [input]
 }

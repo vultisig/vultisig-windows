@@ -46,5 +46,5 @@ export const getTonSigningInput = ({
   // Native token transfer
   const input = TW.TheOpenNetwork.Proto.SigningInput.create(inputObject)
 
-  return input
+  return [input]
 }
