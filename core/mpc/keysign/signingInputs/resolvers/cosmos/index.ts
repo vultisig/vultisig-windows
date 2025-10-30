@@ -28,7 +28,7 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
   keysignPayload,
   walletCore,
 }) => {
-  const chain = getKeysignChain(keysignPayload) as CosmosChain
+  const chain = getKeysignChain<'cosmos'>(keysignPayload)
   const coin = getKeysignCoin<CosmosChain>(keysignPayload)
 
   const chainKind = getCosmosChainKind(chain)

@@ -20,7 +20,7 @@ export const getUtxoSigningInputs: SigningInputsResolver<'utxo'> = ({
   walletCore,
   publicKey,
 }) => {
-  const chain = getKeysignChain(keysignPayload) as UtxoChain
+  const chain = getKeysignChain<'utxo'>(keysignPayload)
 
   const { byteFee, sendMaxAmount, psbt } = getBlockchainSpecificValue(
     keysignPayload.blockchainSpecific,

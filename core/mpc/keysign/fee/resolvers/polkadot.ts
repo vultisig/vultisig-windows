@@ -5,7 +5,6 @@ import { GetFeeAmountResolver } from '../resolver'
 
 export const getPolkadotFeeAmount: GetFeeAmountResolver = ({
   keysignPayload,
-  publicKey: _publicKey,
 }) => {
   const { gas } = getBlockchainSpecificValue(
     keysignPayload.blockchainSpecific,

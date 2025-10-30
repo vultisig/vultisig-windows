@@ -1,5 +1,4 @@
 import { create } from '@bufbuild/protobuf'
-import { EvmChain } from '@core/chain/Chain'
 import {
   getEvmTwFeeFields,
   GetEvmTwFeeFieldsInput,
@@ -30,7 +29,7 @@ export const getEvmSigningInputs: SigningInputsResolver<'evm'> = ({
   keysignPayload,
   walletCore,
 }) => {
-  const chain = getKeysignChain(keysignPayload) as EvmChain
+  const chain = getKeysignChain<'evm'>(keysignPayload)
   const coin = assertField(keysignPayload, 'coin')
 
   const { erc20ApprovePayload, ...restOfKeysignPayload } = keysignPayload
