@@ -20,6 +20,7 @@ import styled from 'styled-components'
 
 import { VaultChainPositionsSection } from '../positions/VaultChainPositionsSection'
 import { useSearchChainToken } from '../state/searchChainTokenProvider'
+import { TokensEmptyState } from './TokensEmptyState'
 
 const StyledPanel = styled(Panel)`
   cursor: pointer;
@@ -73,6 +74,10 @@ export const Tokens = () => {
               .flat(),
             (one, another) => one.ticker === another.ticker
           ).map(adjustVaultChainCoinsLogos)
+
+          if (orderedCoins.length === 0) {
+            return <TokensEmptyState />
+          }
 
           return (
             <List>
