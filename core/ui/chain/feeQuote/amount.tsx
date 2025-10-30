@@ -39,7 +39,7 @@ export const FeeAmount = ({ feeQuoteQuery, chain }: FeeAmountProps) => {
         const fee = fromChainAmount(getFeeAmount(chain, feeQuote), decimals)
 
         return (
-          <VStack alignItems="flex-end">
+          <VStack alignItems="flex-start">
             <Text size={14}>{formatAmount(fee, { ticker })}</Text>
             <Text size={14} color="shy">
               <MatchQuery

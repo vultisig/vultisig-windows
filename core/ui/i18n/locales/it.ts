@@ -82,7 +82,7 @@ export const it = {
   change_your_friends_referral:
     'Cambia il codice referral del tuo amico usato per gli scambi',
   passcodes_do_not_match: 'I codici non corrispondono',
-  search_field_placeholder: 'Cerca..',
+  search_field_placeholder: 'Cerca',
   start_transaction: 'Avvia transazione',
   digit_input_success_validation: 'Verifica riuscita',
   digit_input_error_validation: 'Errore nella verifica del codice, riprova',
@@ -432,6 +432,9 @@ export const it = {
   vault_settings_address_book_no_addresses_description:
     'Organizza tutti i tuoi indirizzi importanti in un posto.',
   vault_search_no_matches: 'Nessuna corrispondenza',
+  make_sure_chains: 'Assicurati che la catena che stai cercando sia abilitata.',
+  no_chains_found: 'Nessuna catena trovata',
+  customize_chains: 'Personalizza catene',
   vault_search_updating: 'Aggiornamento...',
   vault_search_filtered: 'Filtrato',
   vault_search_close: 'Chiudi',
@@ -1007,8 +1010,6 @@ export const it = {
   camera_access_blocked:
     "L'accesso alla telecamera è bloccato. Abilitalo nelle impostazioni del browser.",
   balance_available: 'Saldo disponibile',
-  not_enough_for_gas:
-    'Non ci sono fondi sufficienti per coprire le spese del carburante',
   wrong_address_for_chain: 'Indirizzo errato per la catena selezionata',
   advanced_gas_fee: 'Commissione gas anticipata',
   add_memo: 'Aggiungi MEMO',
@@ -1200,4 +1201,6 @@ export const it = {
     'Mantenendo {{minBalance}}, sbloccherai il livello {{tier}} e riceverai uno sconto sulle commissioni di trading di <b>{{bps}} bps</b> su tutti gli swap.',
   upload_qr_code_with_address: "Carica il codice QR con l'indirizzo",
   buy: 'Acquistare',
+  not_enough_asset_to_cover_gas_fees:
+    'Non abbastanza {{asset}} per coprire le spese del carburante',
 }

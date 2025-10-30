@@ -122,7 +122,7 @@ export const en = {
   github: 'Github',
   legal: 'Legal',
   balance_available: 'Balance available',
-  not_enough_for_gas: 'Not enough funds available to cover gas fees',
+  not_enough_asset_to_cover_gas_fees: 'Not enough {{asset}} to cover gas fees',
   wrong_address_for_chain: 'Wrong address for selected Chain',
   advanced_gas_fee: 'Advanced gas fee',
   manage_chains: 'Manage Chains',
@@ -172,7 +172,7 @@ export const en = {
     'Vultisig is natively a multi-device application. Requiring at least two devices to create a secure vault. One initiating and one pairing device.',
   onboarding_description_4:
     'Vultisig is a wallet without seed phrases. It uses easy-to-manage vault shares instead. Every device has its unique vault share that needs a separate backup.',
-  search_field_placeholder: 'Search..',
+  search_field_placeholder: 'Search',
   create_new_vault: 'Create a New Vault',
   start_transaction: 'Start transaction',
   unexpected_error: 'Unexpected Error',
@@ -426,10 +426,13 @@ export const en = {
     'What cryptocurrencies are supported by Vultisig?',
   faq_need_to_register_content:
     'Vultisig supports major cryptocurrencies and tokens, with over 30 chains and their tokens, currently available.',
+  customize_chains: 'Customize chains',
   vault_settings_address_book_no_addresses_title: 'Your Address Book is empty',
   vault_settings_address_book_no_addresses_description:
     'Keep all your important addresses organized in one place.',
   vault_search_no_matches: 'No matches',
+  make_sure_chains: 'Make sure that the chain you’re looking for is enabled.',
+  no_chains_found: 'No chains found',
   vault_search_updating: 'Updating...',
   vault_search_filtered: 'Filtered',
   vault_search_close: 'Close',
