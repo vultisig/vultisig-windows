@@ -4,7 +4,12 @@ import { getUtxoSigningInputs } from '../../signingInputs/resolvers/utxo'
 import { FeeAmountResolver } from '../resolver'
 
 export const getUtxoFeeAmount: FeeAmountResolver = input => {
-  const [{ plan }] = getUtxoSigningInputs(input)
+  const [signingInput] = getUtxoSigningInputs(input)
 
-  return shouldBePresent(plan?.fee, `UTXO signing input plan fee`).toBigInt()
+  return BigInt(
+    shouldBePresent(
+      signingInput?.plan?.fee?.toString(),
+      `UTXO signing input plan fee`
+    )
+  )
 }
