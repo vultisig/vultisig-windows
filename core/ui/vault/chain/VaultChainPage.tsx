@@ -9,6 +9,7 @@ import {
   BottomNavigation,
   bottomNavigationHeight,
 } from '@core/ui/vault/components/BottomNavigation'
+import { VaultHeader } from '@core/ui/vault/components/VaultHeader'
 import {
   useCurrentVaultAddress,
   useCurrentVaultChainCoins,
@@ -18,7 +19,6 @@ import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { RefreshCwIcon } from '@lib/ui/icons/RefreshCwIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
-import { PageHeader } from '@lib/ui/page/PageHeader'
 import { useInvalidateQueriesMutation } from '@lib/ui/query/hooks/useInvalidateQueriesMutation'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { QueryKey } from '@tanstack/react-query'
@@ -53,15 +53,14 @@ export const VaultChainPage = () => {
   return (
     <Wrapper justifyContent="space-between" flexGrow>
       <VStack flexGrow>
-        <PageHeader
+        <VaultHeader
           primaryControls={<PageHeaderBackButton />}
-          secondaryControls={
+          showRefresh
+          refreshButton={
             <IconButton loading={isPending} onClick={refresh}>
               <RefreshCwIcon />
             </IconButton>
           }
-          title={chain}
-          hasBorder
         />
         <StyledPageContent scrollable gap={32} flexGrow>
           <VaultChainOverview />
