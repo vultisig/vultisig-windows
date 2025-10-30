@@ -6,6 +6,10 @@ import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { getCoinFinderQueryKey } from '@core/ui/vault/chain/coin/finder/queries/useCoinFinderQuery'
 import { useCurrentVaultChain } from '@core/ui/vault/chain/useCurrentVaultChain'
 import {
+  BottomNavigation,
+  bottomNavigationHeight,
+} from '@core/ui/vault/components/BottomNavigation'
+import {
   useCurrentVaultAddress,
   useCurrentVaultChainCoins,
 } from '@core/ui/vault/state/currentVaultCoins'
@@ -47,24 +51,32 @@ export const VaultChainPage = () => {
   }, [address, chain, invalidateQueries, vaultCoins])
 
   return (
-    <VStack fullHeight>
-      <PageHeader
-        primaryControls={<PageHeaderBackButton />}
-        secondaryControls={
-          <IconButton loading={isPending} onClick={refresh}>
-            <RefreshCwIcon />
-          </IconButton>
-        }
-        title={chain}
-        hasBorder
-      />
-      <StyledPageContent scrollable gap={32} flexGrow>
-        <VaultChainOverview />
-        <VaultChainTabs />
-      </StyledPageContent>
-    </VStack>
+    <Wrapper justifyContent="space-between" flexGrow>
+      <VStack flexGrow>
+        <PageHeader
+          primaryControls={<PageHeaderBackButton />}
+          secondaryControls={
+            <IconButton loading={isPending} onClick={refresh}>
+              <RefreshCwIcon />
+            </IconButton>
+          }
+          title={chain}
+          hasBorder
+        />
+        <StyledPageContent scrollable gap={32} flexGrow>
+          <VaultChainOverview />
+          <VaultChainTabs />
+        </StyledPageContent>
+      </VStack>
+      <BottomNavigation />
+    </Wrapper>
   )
 }
+
+const Wrapper = styled(VStack)`
+  position: relative;
+  margin-bottom: ${bottomNavigationHeight}px;
+`
 
 const StyledPageContent = styled(PageContent)`
   ${hideScrollbars};
