@@ -20,7 +20,6 @@ import styled from 'styled-components'
 
 import { VaultChainPositionsSection } from '../positions/VaultChainPositionsSection'
 import { useSearchChainToken } from '../state/searchChainTokenProvider'
-import { TokensEmptyState } from './TokensEmptyState'
 
 const StyledPanel = styled(Panel)`
   cursor: pointer;
@@ -74,13 +73,6 @@ export const Tokens = () => {
               .flat(),
             (one, another) => one.ticker === another.ticker
           ).map(adjustVaultChainCoinsLogos)
-
-          // Show empty state if no coins, or only the fee coin exists (user disabled all optional tokens)
-          const hasOnlyFeeCoin =
-            orderedCoins.length === 1 && isFeeCoin(orderedCoins[0])
-          if (orderedCoins.length === 0 || hasOnlyFeeCoin) {
-            return <TokensEmptyState />
-          }
 
           return (
             <List>
