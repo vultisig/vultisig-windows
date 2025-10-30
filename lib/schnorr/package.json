@@ -1,5 +1,5 @@
 {
-  "name": "@lib/schnorr",
+  "name": "vs-schnorr-wasm",
   "type": "module",
   "collaborators": [
     "Artem Mironov <artem.mironov@gmail.com>"

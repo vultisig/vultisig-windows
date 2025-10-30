@@ -1,5 +1,5 @@
 {
-  "name": "@lib/dkls",
+  "name": "vs-wasm",
   "type": "module",
   "collaborators": [
     "Artem Mironov <artem.mironov@gmail.com>"

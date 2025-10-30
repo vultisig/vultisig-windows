@@ -315,8 +315,8 @@ export interface InitOutput {
   readonly keygensession_inputMessage: (a: number, b: number, c: number) => number;
   readonly keygensession_finish: (a: number) => [number, number, number];
   readonly __wbg_signsession_free: (a: number, b: number) => void;
-  readonly signsession_new: (a: any, b: number, c: number, d: number) => [number, number, number];
-  readonly signsession_setup: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number) => [number, number, number];
+  readonly signsession_new: (a: number, b: number, c: number, d: number, e: number) => [number, number, number];
+  readonly signsession_setup: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number) => [number, number, number, number];
   readonly signsession_setupMessageHash: (a: number, b: number) => [number, number];
   readonly signsession_outputMessage: (a: number) => number;
   readonly signsession_inputMessage: (a: number, b: number, c: number) => number;
