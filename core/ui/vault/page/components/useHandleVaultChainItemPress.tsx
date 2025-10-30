@@ -3,7 +3,6 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 
 type Input = {
   chain: string
-  address?: string
 }
 
 export const useHandleVaultChainItemPress = ({ chain }: Input) => {

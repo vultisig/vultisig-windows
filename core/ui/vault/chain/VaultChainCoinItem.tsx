@@ -66,7 +66,7 @@ export const VaultChainCoinItem = ({
             >
               <Text centerVertically color="contrast" weight="550" size={14}>
                 <BalanceVisibilityAware>
-                  {formatFiatAmount(balance * (price || 0))}
+                  {formatFiatAmount(price || 0)}
                 </BalanceVisibilityAware>
               </Text>
               <Text weight={500} color="shy" size={12} centerVertically>
