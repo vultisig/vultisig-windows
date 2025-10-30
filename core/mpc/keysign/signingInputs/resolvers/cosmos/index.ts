@@ -19,11 +19,11 @@ import { getKeysignTwPublicKey } from '../../../tw/getKeysignTwPublicKey'
 import { getTwChainId } from '../../../tw/getTwChainId'
 import { toTwAddress } from '../../../tw/toTwAddress'
 import { getKeysignCoin } from '../../../utils/getKeysignCoin'
-import { SigningInputResolver } from '../../resolver'
+import { SigningInputsResolver } from '../../resolver'
 import { CosmosChainSpecific, getCosmosChainSpecific } from './chainSpecific'
 import { getCosmosCoinAmount } from './coinAmount'
 
-export const getCosmosSigningInput: SigningInputResolver<'cosmos'> = ({
+export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
   keysignPayload,
   walletCore,
   chain,

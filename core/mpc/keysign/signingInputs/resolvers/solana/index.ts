@@ -5,10 +5,10 @@ import { TW } from '@trustwallet/wallet-core'
 
 import { getBlockchainSpecificValue } from '../../../chainSpecific/KeysignChainSpecific'
 import { getKeysignSwapPayload } from '../../../swap/getKeysignSwapPayload'
-import { SigningInputResolver } from '../../resolver'
+import { SigningInputsResolver } from '../../resolver'
 import { getSolanaSendSigningInput } from './send'
 
-export const getSolanaSigningInput: SigningInputResolver<'solana'> = ({
+export const getSolanaSigningInputs: SigningInputsResolver<'solana'> = ({
   keysignPayload,
   walletCore,
   chain,

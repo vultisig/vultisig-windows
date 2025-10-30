@@ -18,13 +18,13 @@ import { getBlockchainSpecificValue } from '../../../chainSpecific/KeysignChainS
 import { getKeysignSwapPayload } from '../../../swap/getKeysignSwapPayload'
 import { KeysignSwapPayload } from '../../../swap/KeysignSwapPayload'
 import { toTwAddress } from '../../../tw/toTwAddress'
-import { SigningInputResolver } from '../../resolver'
+import { SigningInputsResolver } from '../../resolver'
 import { getErc20ApproveSigningInput } from './erc20'
 
 const memoToTxData = (memo: string) =>
   memo.startsWith('0x') ? toEvmTxData(memo) : Buffer.from(memo, 'utf8')
 
-export const getEvmSigningInput: SigningInputResolver<'evm'> = ({
+export const getEvmSigningInputs: SigningInputsResolver<'evm'> = ({
   keysignPayload,
   walletCore,
   chain,
@@ -39,7 +39,7 @@ export const getEvmSigningInput: SigningInputResolver<'evm'> = ({
       walletCore,
     })
 
-    const [restOfSigningInput] = getEvmSigningInput({
+    const restOfSigningInputs = getEvmSigningInputs({
       keysignPayload: incrementKeysignPayloadNonce(
         create(KeysignPayloadSchema, restOfKeysignPayload)
       ),
@@ -47,7 +47,7 @@ export const getEvmSigningInput: SigningInputResolver<'evm'> = ({
       chain,
     })
 
-    return [approveSigningInput, restOfSigningInput]
+    return [approveSigningInput, ...restOfSigningInputs]
   }
 
   const evmSpecific = getBlockchainSpecificValue(

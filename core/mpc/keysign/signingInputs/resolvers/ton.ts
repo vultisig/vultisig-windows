@@ -4,9 +4,9 @@ import Long from 'long'
 
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
 import { getKeysignTwPublicKey } from '../../tw/getKeysignTwPublicKey'
-import { SigningInputResolver } from '../resolver'
+import { SigningInputsResolver } from '../resolver'
 
-export const getTonSigningInput: SigningInputResolver<'ton'> = ({
+export const getTonSigningInputs: SigningInputsResolver<'ton'> = ({
   keysignPayload,
 }) => {
   const { expireAt, sequenceNumber, bounceable, sendMaxAmount } =

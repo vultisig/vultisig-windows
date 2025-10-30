@@ -5,9 +5,9 @@ import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
-import { SigningInputResolver } from '../resolver'
+import { SigningInputsResolver } from '../resolver'
 
-export const getPolkadotSigningInput: SigningInputResolver<'polkadot'> = ({
+export const getPolkadotSigningInputs: SigningInputsResolver<'polkadot'> = ({
   keysignPayload,
   walletCore,
   chain,
