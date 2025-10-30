@@ -1,100 +1,41 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { areEqualCoins, Coin } from '@core/chain/coin/Coin'
-import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
-import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import {
-  useCreateCoinMutation,
-  useDeleteCoinMutation,
-} from '@core/ui/storage/coins'
-import { useCurrentVaultNativeCoins } from '@core/ui/vault/state/currentVaultCoins'
-import { Switch } from '@lib/ui/inputs/switch'
-import { TextInput } from '@lib/ui/inputs/TextInput'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { List } from '@lib/ui/list'
-import { ListItem } from '@lib/ui/list/item'
-import { ListItemTag } from '@lib/ui/list/item/tag'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { CryptoIcon } from '@lib/ui/icons/CryptoIcon'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
-import { FC, useMemo, useState } from 'react'
+import { getColor } from '@lib/ui/theme/getters'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
-
-const NativeCoinItem: FC<Coin> = coin => {
-  const currentCoins = useCurrentVaultNativeCoins()
-  const createCoin = useCreateCoinMutation()
-  const deleteCoin = useDeleteCoinMutation()
-
-  const currentCoin = useMemo(() => {
-    return currentCoins.find(c => areEqualCoins(c, coin))
-  }, [currentCoins, coin])
-
-  const handleChange = () => {
-    if (currentCoin) {
-      deleteCoin.mutate(currentCoin)
-    } else {
-      createCoin.mutate(coin)
-    }
-  }
-
-  return (
-    <ListItem
-      extra={
-        <Switch
-          checked={!!currentCoin}
-          onChange={handleChange}
-          loading={createCoin.isPending || deleteCoin.isPending}
-        />
-      }
-      icon={
-        <ChainEntityIcon
-          value={getChainLogoSrc(coin.chain)}
-          style={{ fontSize: 32 }}
-        />
-      }
-      title={
-        <HStack gap={12} alignItems="center">
-          <Text color="contrast" size={14} weight={500}>
-            {coin.ticker}
-          </Text>
-          <ListItemTag title={coin.chain} />
-        </HStack>
-      }
-    />
-  )
-}
+import { ChainItem } from './ChainItem'
+import { ChainSearch } from './ChainSearch'
 
 export const ManageVaultChainsPage = () => {
   const { t } = useTranslation()
-  const [search, setSearch] = useState<string | undefined>(undefined)
+  const [search, setSearch] = useState('')
   const nativeCoins = Object.values(chainFeeCoin)
-  const currentNativeCoins = useCurrentVaultNativeCoins()
   const navigate = useCoreNavigate()
-  const filteredNativeCoins = useMemo(() => {
-    if (!search) return nativeCoins
 
-    const normalizedSearch = search.toLowerCase()
+  const sortedNativeCoins = useMemo(() => {
+    let coins = nativeCoins
 
-    return nativeCoins.filter(
-      ({ chain, ticker }) =>
-        chain.toLowerCase().includes(normalizedSearch) ||
-        ticker.toLowerCase().includes(normalizedSearch)
-    )
+    if (search) {
+      const normalizedSearch = search.toLowerCase()
+      coins = nativeCoins.filter(
+        ({ chain, ticker }) =>
+          chain.toLowerCase().includes(normalizedSearch) ||
+          ticker.toLowerCase().includes(normalizedSearch)
+      )
+    }
+
+    return coins.sort((a, b) => a.chain.localeCompare(b.chain))
   }, [nativeCoins, search])
-
-  const activeNativeCoins = useMemo(() => {
-    return filteredNativeCoins.filter(coin =>
-      currentNativeCoins.some(c => areEqualCoins(c, coin))
-    )
-  }, [currentNativeCoins, filteredNativeCoins])
-
-  const availableNativeCoins = useMemo(() => {
-    return filteredNativeCoins.filter(coin =>
-      currentNativeCoins.every(c => !areEqualCoins(c, coin))
-    )
-  }, [currentNativeCoins, filteredNativeCoins])
 
   return (
     <VStack fullHeight>
@@ -102,40 +43,72 @@ export const ManageVaultChainsPage = () => {
         primaryControls={
           <PageHeaderBackButton onClick={() => navigate({ id: 'vault' })} />
         }
+        secondaryControls={
+          <DoneButton onClick={() => navigate({ id: 'vault' })}>
+            <Text color="primaryAlt" as="span" size={14} weight={400}>
+              {t('done')}
+            </Text>
+          </DoneButton>
+        }
         title={t('manage_chains')}
         hasBorder
       />
       <PageContent gap={24} flexGrow scrollable>
-        <TextInput
-          placeholder={t('search_field_placeholder')}
-          onValueChange={setSearch}
-          value={search}
-        />
-        {activeNativeCoins.length ? (
-          <VStack gap={12}>
-            <Text color="light" size={12} weight={500}>
-              {t('active')}
-            </Text>
-            <List>
-              {activeNativeCoins.map((coin, index) => (
-                <NativeCoinItem key={index} {...coin} />
-              ))}
-            </List>
-          </VStack>
-        ) : null}
-        {availableNativeCoins.length ? (
-          <VStack gap={12}>
-            <Text color="light" size={12} weight={500}>
-              {t('available')}
-            </Text>
-            <List>
-              {availableNativeCoins.map((coin, index) => (
-                <NativeCoinItem key={index} {...coin} />
-              ))}
-            </List>
-          </VStack>
-        ) : null}
+        <ChainSearch value={search} onChange={setSearch} />
+        {sortedNativeCoins.length > 0 ? (
+          <ChainGrid>
+            {sortedNativeCoins.map((coin, index) => (
+              <ChainItem key={index} value={coin} />
+            ))}
+          </ChainGrid>
+        ) : (
+          <EmptyWrapper>
+            <VStack gap={12} alignItems="center">
+              <IconWrapper size={24} color="buttonHover">
+                <CryptoIcon />
+              </IconWrapper>
+              <VStack gap={8}>
+                <Text centerHorizontally size={15}>
+                  {t('no_chains_found')}
+                </Text>
+              </VStack>
+            </VStack>
+          </EmptyWrapper>
+        )}
       </PageContent>
     </VStack>
   )
 }
+
+const ChainGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(74px, 1fr));
+  gap: 16px;
+`
+
+const DoneButton = styled(UnstyledButton)`
+  display: flex;
+  padding: 6px 12px;
+  align-items: center;
+  gap: 6px;
+
+  border-radius: 99px;
+  background: ${getColor('foreground')};
+
+  transition: background 0.3s ease;
+
+  &:hover {
+    background: ${getColor('foregroundDark')};
+  }
+`
+
+const EmptyWrapper = styled.div`
+  ${vStack({
+    gap: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  })};
+  padding: 32px 40px;
+  border-radius: 16px;
+  background: ${getColor('foreground')};
+`

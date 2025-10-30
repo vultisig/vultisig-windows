@@ -53,7 +53,7 @@ export const hr = {
   vult: '$VULT',
   onboarding_description_4:
     'Vultisig je novčanik bez seed fraza. Umjesto toga koristi lako upravljive dijelove trezora. Svaki uređaj ima svoj jedinstveni dio koji treba zasebno sigurnosno kopirati.',
-  search_field_placeholder: 'Pretraži..',
+  search_field_placeholder: 'Pretraži',
   merged: 'Spojeno',
   function_unavailble:
     'Značajka nije dostupna za postojeće kovanice lanca. Dodajte kovanice koje se mogu koristiti s FUNCTION:',
