@@ -4,11 +4,11 @@ import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
-import { GetSigningInputInput } from '../resolver'
+import { SigningInputResolver } from '../resolver'
 
-export const getSuiSigningInput = ({
+export const getSuiSigningInput: SigningInputResolver<'sui'> = ({
   keysignPayload,
-}: GetSigningInputInput<'sui'>) => {
+}) => {
   const { coins, referenceGasPrice } = getBlockchainSpecificValue(
     keysignPayload.blockchainSpecific,
     'suicheSpecific'

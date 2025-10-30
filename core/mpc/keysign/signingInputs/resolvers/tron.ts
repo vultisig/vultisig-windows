@@ -9,11 +9,11 @@ import Long from 'long'
 
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
 import { getKeysignSwapPayload } from '../../swap/getKeysignSwapPayload'
-import { GetSigningInputInput } from '../resolver'
+import { SigningInputResolver } from '../resolver'
 
-export const getTronSigningInput = ({
+export const getTronSigningInput: SigningInputResolver<'tron'> = ({
   keysignPayload,
-}: GetSigningInputInput<'tron'>) => {
+}) => {
   const tronSpecific = getBlockchainSpecificValue(
     keysignPayload.blockchainSpecific,
     'tronSpecific'

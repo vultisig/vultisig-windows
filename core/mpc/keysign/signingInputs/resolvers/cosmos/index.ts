@@ -19,15 +19,15 @@ import { getKeysignTwPublicKey } from '../../../tw/getKeysignTwPublicKey'
 import { getTwChainId } from '../../../tw/getTwChainId'
 import { toTwAddress } from '../../../tw/toTwAddress'
 import { getKeysignCoin } from '../../../utils/getKeysignCoin'
-import { GetSigningInputInput } from '../../resolver'
+import { SigningInputResolver } from '../../resolver'
 import { CosmosChainSpecific, getCosmosChainSpecific } from './chainSpecific'
 import { getCosmosCoinAmount } from './coinAmount'
 
-export const getCosmosSigningInput = ({
+export const getCosmosSigningInput: SigningInputResolver<'cosmos'> = ({
   keysignPayload,
   walletCore,
   chain,
-}: GetSigningInputInput<'cosmos'>) => {
+}) => {
   const coin = getKeysignCoin<CosmosChain>(keysignPayload)
 
   const chainKind = getCosmosChainKind(chain)

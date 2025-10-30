@@ -4,12 +4,12 @@ import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
-import { GetSigningInputInput } from '../resolver'
+import { SigningInputResolver } from '../resolver'
 
-export const getCardanoSigningInput = ({
+export const getCardanoSigningInput: SigningInputResolver<'cardano'> = ({
   keysignPayload,
   walletCore,
-}: GetSigningInputInput<'cardano'>) => {
+}) => {
   const { sendMaxAmount, ttl } = getBlockchainSpecificValue(
     keysignPayload.blockchainSpecific,
     'cardano'

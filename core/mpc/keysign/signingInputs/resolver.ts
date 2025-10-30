@@ -5,7 +5,7 @@ import { TW } from '@trustwallet/wallet-core'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 
-export type GetSigningInputInput<T extends ChainKind> = {
+type GetSigningInputInput<T extends ChainKind> = {
   keysignPayload: KeysignPayload
   walletCore: WalletCore
   chain: ChainOfKind<T>
