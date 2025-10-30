@@ -3,7 +3,7 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { getUtxoSigningInputs } from '../../signingInputs/resolvers/utxo'
 import { GetFeeAmountResolver } from '../resolver'
 
-export const getUtxoFeeAmount: GetFeeAmountResolver<'utxo'> = ({
+export const getUtxoFeeAmount: GetFeeAmountResolver = ({
   keysignPayload,
   walletCore,
   publicKey,

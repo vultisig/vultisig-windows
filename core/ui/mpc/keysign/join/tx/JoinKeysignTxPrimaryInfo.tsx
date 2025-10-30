@@ -1,7 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { isChainOfKind } from '@core/chain/ChainKind'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { getFeeAmount } from '@core/mpc/keysign/fee'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
@@ -14,7 +12,7 @@ import {
   TxOverviewPrimaryRowTitle,
   TxOverviewRow,
 } from '@core/ui/chain/tx/TxOverviewRow'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { useCurrentVaultPublicKey } from '@core/ui/vault/state/currentVault'
 import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -43,18 +41,10 @@ export const JoinKeysignTxPrimaryInfo = ({
   const formatFiatAmount = useFormatFiatAmount()
 
   const walletCore = useAssertWalletCore()
-  const vault = useCurrentVault()
+  const publicKey = useCurrentVaultPublicKey(coin.chain)
 
   const networkFeesFormatted = useMemo(() => {
     const { decimals, ticker } = chainFeeCoin[coin.chain]
-    const publicKey = isChainOfKind(coin.chain, 'utxo')
-      ? getPublicKey({
-          chain: coin.chain,
-          walletCore,
-          hexChainCode: vault.hexChainCode,
-          publicKeys: vault.publicKeys,
-        })
-      : undefined
 
     const fee = fromChainAmount(
       getFeeAmount({
@@ -65,7 +55,7 @@ export const JoinKeysignTxPrimaryInfo = ({
       decimals
     )
     return formatAmount(fee, { ticker })
-  }, [coin.chain, value, walletCore, vault])
+  }, [coin.chain, value, walletCore, publicKey])
 
   return (
     <>

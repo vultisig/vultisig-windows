@@ -19,10 +19,10 @@ import { getUtxoFeeAmount } from './resolvers/utxo'
 type Input = {
   keysignPayload: KeysignPayload
   walletCore: WalletCore
-  publicKey?: PublicKey
+  publicKey: PublicKey
 }
 
-const resolvers: Record<ChainKind, GetFeeAmountResolver<any>> = {
+const resolvers: Record<ChainKind, GetFeeAmountResolver> = {
   cardano: getCardanoFeeAmount,
   cosmos: getCosmosFeeAmount,
   evm: getEvmFeeAmount,

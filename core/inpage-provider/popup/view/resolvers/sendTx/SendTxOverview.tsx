@@ -9,7 +9,6 @@ import {
   FeeSettingsChainKind,
   feeSettingsChainKinds,
 } from '@core/chain/feeQuote/settings/core'
-import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { getFeeAmount } from '@core/mpc/keysign/fee'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
@@ -22,6 +21,7 @@ import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
 import { useKeysignTxDataQuery } from '@core/ui/mpc/keysign/txData/query'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { useCurrentVaultPublicKey } from '@core/ui/vault/state/currentVault'
 import {
   ContentWrapper,
   HorizontalLine,
@@ -59,6 +59,7 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
   const { coin } = parsedTx
   const vault = useCurrentVault()
   const walletCore = useAssertWalletCore()
+  const publicKey = useCurrentVaultPublicKey(coin.chain)
   const { t } = useTranslation()
 
   const transactionPayload = usePopupInput<'sendTx'>()
@@ -196,15 +197,6 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                   value={transactionPayload}
                   handlers={{
                     keysign: transactionPayload => {
-                      const publicKey = isChainOfKind(chain, 'utxo')
-                        ? getPublicKey({
-                            chain,
-                            walletCore,
-                            hexChainCode: vault.hexChainCode,
-                            publicKeys: vault.publicKeys,
-                          })
-                        : undefined
-
                       const feeAmount = getFeeAmount({
                         keysignPayload,
                         walletCore,

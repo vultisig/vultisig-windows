@@ -6,8 +6,9 @@ import { getCosmosChainSpecific } from '../../signingInputs/resolvers/cosmos/cha
 import { getKeysignChain } from '../../utils/getKeysignChain'
 import { GetFeeAmountResolver } from '../resolver'
 
-export const getCosmosFeeAmount: GetFeeAmountResolver<'cosmos'> = ({
+export const getCosmosFeeAmount: GetFeeAmountResolver = ({
   keysignPayload,
+  publicKey: _publicKey,
 }) => {
   const chain = getKeysignChain(keysignPayload) as CosmosChain
 

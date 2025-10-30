@@ -1,8 +1,9 @@
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
 import { GetFeeAmountResolver } from '../resolver'
 
-export const getCardanoFeeAmount: GetFeeAmountResolver<'cardano'> = ({
+export const getCardanoFeeAmount: GetFeeAmountResolver = ({
   keysignPayload,
+  publicKey: _publicKey,
 }) => {
   const { byteFee } = getBlockchainSpecificValue(
     keysignPayload.blockchainSpecific,
