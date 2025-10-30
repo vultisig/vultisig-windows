@@ -3,10 +3,10 @@ import { Resolver } from '@lib/utils/types/Resolver'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 
-type GetFeeAmountResolverInput = {
+type FeeAmountResolverInput = {
   keysignPayload: KeysignPayload
   walletCore: WalletCore
   publicKey: PublicKey
 }
 
-export type GetFeeAmountResolver = Resolver<GetFeeAmountResolverInput, bigint>
+export type FeeAmountResolver = Resolver<FeeAmountResolverInput, bigint>

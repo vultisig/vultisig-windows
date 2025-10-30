@@ -3,11 +3,9 @@ import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
 import { getCosmosChainSpecific } from '../../signingInputs/resolvers/cosmos/chainSpecific'
 import { getKeysignChain } from '../../utils/getKeysignChain'
-import { GetFeeAmountResolver } from '../resolver'
+import { FeeAmountResolver } from '../resolver'
 
-export const getCosmosFeeAmount: GetFeeAmountResolver = ({
-  keysignPayload,
-}) => {
+export const getCosmosFeeAmount: FeeAmountResolver = ({ keysignPayload }) => {
   const chain = getKeysignChain<'cosmos'>(keysignPayload)
 
   const chainSpecific = getCosmosChainSpecific(

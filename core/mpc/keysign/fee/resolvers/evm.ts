@@ -1,7 +1,7 @@
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
-import { GetFeeAmountResolver } from '../resolver'
+import { FeeAmountResolver } from '../resolver'
 
-export const getEvmFeeAmount: GetFeeAmountResolver = ({ keysignPayload }) => {
+export const getEvmFeeAmount: FeeAmountResolver = ({ keysignPayload }) => {
   const { maxFeePerGasWei, gasLimit } = getBlockchainSpecificValue(
     keysignPayload.blockchainSpecific,
     'ethereumSpecific'

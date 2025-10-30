@@ -4,7 +4,7 @@ import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 
 import { getKeysignChain } from '../utils/getKeysignChain'
-import { GetFeeAmountResolver } from './resolver'
+import { FeeAmountResolver } from './resolver'
 import { getCardanoFeeAmount } from './resolvers/cardano'
 import { getCosmosFeeAmount } from './resolvers/cosmos'
 import { getEvmFeeAmount } from './resolvers/evm'
@@ -22,7 +22,7 @@ type Input = {
   publicKey: PublicKey
 }
 
-const resolvers: Record<ChainKind, GetFeeAmountResolver> = {
+const resolvers: Record<ChainKind, FeeAmountResolver> = {
   cardano: getCardanoFeeAmount,
   cosmos: getCosmosFeeAmount,
   evm: getEvmFeeAmount,

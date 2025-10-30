@@ -1,7 +1,7 @@
 import { tonConfig } from '@core/chain/chains/ton/config'
 
-import { GetFeeAmountResolver } from '../resolver'
+import { FeeAmountResolver } from '../resolver'
 
-export const getTonFeeAmount: GetFeeAmountResolver = () => {
+export const getTonFeeAmount: FeeAmountResolver = () => {
   return tonConfig.fee
 }
