@@ -6,15 +6,15 @@ import Long from 'long'
 import { getBlockchainSpecificValue } from '../../../chainSpecific/KeysignChainSpecific'
 import { getKeysignCoin } from '../../../utils/getKeysignCoin'
 
-type GetSolanaSendTxInputDataInput = {
+type GetSolanaSendSigningInputInput = {
   keysignPayload: KeysignPayload
   walletCore: WalletCore
 }
 
-export const getSolanaSendTxInputData = ({
+export const getSolanaSendSigningInput = ({
   keysignPayload,
   walletCore,
-}: GetSolanaSendTxInputDataInput): Uint8Array<ArrayBufferLike> => {
+}: GetSolanaSendSigningInputInput): TW.Solana.Proto.SigningInput => {
   const coin = getKeysignCoin(keysignPayload)
 
   const {
@@ -96,5 +96,5 @@ export const getSolanaSendTxInputData = ({
     ...getSigningInputCoinSpecificFields(),
   })
 
-  return TW.Solana.Proto.SigningInput.encode(signingInput).finish()
+  return signingInput
 }

@@ -12,7 +12,10 @@ import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { generateSignature } from '@core/chain/tx/signature/generateSignature'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { KeysignResult } from '@core/mpc/keysign/KeysignResult'
-import { getTxInputData } from '@core/mpc/keysign/txInputData'
+import {
+  encodeSigningInput,
+  getSigningInputs,
+} from '@core/mpc/keysign/signingInput'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useKeysignAction } from '@core/ui/mpc/keysign/action/state/keysignAction'
@@ -51,11 +54,16 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
               publicKeys: vault.publicKeys,
             })
 
-            const inputs = getTxInputData({
+            const chainKind = getChainKind(chain)
+            const signingInputs = getSigningInputs({
               keysignPayload: payload,
               walletCore,
               publicKey,
             })
+
+            const inputs = signingInputs.map(signingInput =>
+              encodeSigningInput(signingInput, chainKind)
+            )
 
             const groupedMsgs = inputs.map(txInputData =>
               getPreSigningHashes({
@@ -67,7 +75,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
 
             const msgs = groupedMsgs.flat().sort()
 
-            const signatureAlgorithm = signatureAlgorithms[getChainKind(chain)]
+            const signatureAlgorithm = signatureAlgorithms[chainKind]
 
             const coinType = getCoinType({ walletCore, chain })
             const signatures = await keysignAction({

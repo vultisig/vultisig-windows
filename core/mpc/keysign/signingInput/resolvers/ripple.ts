@@ -4,11 +4,11 @@ import Long from 'long'
 
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
 import { getKeysignTwPublicKey } from '../../tw/getKeysignTwPublicKey'
-import { TxInputDataResolver } from '../resolver'
+import { GetSigningInputInput } from '../resolver'
 
-export const getRippleTxInputData: TxInputDataResolver<'ripple'> = ({
+export const getRippleSigningInput = ({
   keysignPayload,
-}) => {
+}: GetSigningInputInput<'ripple'>) => {
   const { gas, sequence, lastLedgerSequence } = getBlockchainSpecificValue(
     keysignPayload.blockchainSpecific,
     'rippleSpecific'
@@ -83,5 +83,5 @@ export const getRippleTxInputData: TxInputDataResolver<'ripple'> = ({
     ...getPayment(),
   })
 
-  return [TW.Ripple.Proto.SigningInput.encode(input).finish()]
+  return input
 }

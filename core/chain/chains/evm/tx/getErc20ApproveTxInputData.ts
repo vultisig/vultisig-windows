@@ -17,7 +17,7 @@ type Input = {
 export const getErc20ApproveTxInputData = ({
   keysignPayload,
   walletCore,
-}: Input) => {
+}: Input): TW.Ethereum.Proto.SigningInput => {
   const { amount, spender } = shouldBePresent(
     keysignPayload.erc20ApprovePayload
   )
@@ -57,5 +57,5 @@ export const getErc20ApproveTxInputData = ({
     }),
   })
 
-  return TW.Ethereum.Proto.SigningInput.encode(signingInput).finish()
+  return signingInput
 }

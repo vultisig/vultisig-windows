@@ -19,35 +19,42 @@ import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpec
 import { getKeysignSwapPayload } from '../../swap/getKeysignSwapPayload'
 import { KeysignSwapPayload } from '../../swap/KeysignSwapPayload'
 import { toTwAddress } from '../../tw/toTwAddress'
-import { TxInputDataResolver } from '../resolver'
+import { GetSigningInputInput, SigningInputResolver } from '../resolver'
 
 const memoToTxData = (memo: string) =>
   memo.startsWith('0x') ? toEvmTxData(memo) : Buffer.from(memo, 'utf8')
 
-export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
+export const getEvmSigningInputs = (
+  input: GetSigningInputInput<'evm'>
+): TW.Ethereum.Proto.SigningInput[] => {
+  const { erc20ApprovePayload, ...restOfKeysignPayload } = input.keysignPayload
+
+  if (erc20ApprovePayload) {
+    const approveSigningInput = getErc20ApproveTxInputData({
+      keysignPayload: input.keysignPayload,
+      walletCore: input.walletCore,
+    })
+
+    const restOfSigningInput = getEvmSigningInput({
+      keysignPayload: incrementKeysignPayloadNonce(
+        create(KeysignPayloadSchema, restOfKeysignPayload)
+      ),
+      walletCore: input.walletCore,
+      chain: input.chain,
+    })
+
+    return [approveSigningInput, restOfSigningInput]
+  }
+
+  return [getEvmSigningInput(input)]
+}
+
+export const getEvmSigningInput: SigningInputResolver<'evm'> = ({
   keysignPayload,
   walletCore,
   chain,
 }) => {
   const coin = assertField(keysignPayload, 'coin')
-
-  const { erc20ApprovePayload, ...restOfKeysignPayload } = keysignPayload
-  if (erc20ApprovePayload) {
-    const approveTxInputData = getErc20ApproveTxInputData({
-      keysignPayload,
-      walletCore,
-    })
-
-    const restOfTxInputData = getEvmTxInputData({
-      keysignPayload: incrementKeysignPayloadNonce(
-        create(KeysignPayloadSchema, restOfKeysignPayload)
-      ),
-      walletCore,
-      chain,
-    })
-
-    return [approveTxInputData, ...restOfTxInputData]
-  }
 
   const evmSpecific = getBlockchainSpecificValue(
     keysignPayload.blockchainSpecific,
@@ -191,5 +198,5 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
     ...getFeeFields(),
   })
 
-  return [TW.Ethereum.Proto.SigningInput.encode(input).finish()]
+  return input
 }
