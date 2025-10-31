@@ -1,4 +1,6 @@
+import { Chain } from '@core/chain/Chain'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { hasServer, isServer } from '@core/mpc/devices/localPartyId'
 import { getVaultId, Vault } from '@core/mpc/vault/Vault'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
@@ -6,6 +8,7 @@ import { ChildrenProp } from '@lib/ui/props'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { useMemo } from 'react'
 
+import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
 import { decryptVaultKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
 import { usePasscode } from '../../passcodeEncryption/state/passcode'
 import { useCurrentVaultId } from '../../storage/currentVaultId'
@@ -62,4 +65,20 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   }, [vaults, id, passcode])
 
   return <CurrentVaultProvider value={value}>{children}</CurrentVaultProvider>
+}
+
+export const useCurrentVaultPublicKey = (chain: Chain) => {
+  const walletCore = useAssertWalletCore()
+  const { hexChainCode, publicKeys } = useCurrentVault()
+
+  return useMemo(
+    () =>
+      getPublicKey({
+        chain,
+        walletCore,
+        hexChainCode,
+        publicKeys,
+      }),
+    [chain, hexChainCode, publicKeys, walletCore]
+  )
 }

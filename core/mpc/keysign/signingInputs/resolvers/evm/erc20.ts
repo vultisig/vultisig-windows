@@ -1,3 +1,7 @@
+import { EvmChain } from '@core/chain/Chain'
+import { getEvmTwFeeFields } from '@core/chain/chains/evm/tx/fee/tw/getEvmTwFeeFields'
+import { getEvmTwChainId } from '@core/chain/chains/evm/tx/tw/getEvmTwChainId'
+import { getEvmTwNonce } from '@core/chain/chains/evm/tx/tw/getEvmTwNonce'
 import { EthereumSpecific } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -5,16 +9,12 @@ import { bigIntToHex } from '@lib/utils/bigint/bigIntToHex'
 import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
 
-import { EvmChain } from '../../../Chain'
-import { getEvmTwFeeFields } from './fee/tw/getEvmTwFeeFields'
-import { getEvmTwChainId } from './tw/getEvmTwChainId'
-import { getEvmTwNonce } from './tw/getEvmTwNonce'
 type Input = {
   keysignPayload: KeysignPayload
   walletCore: WalletCore
 }
 
-export const getErc20ApproveTxInputData = ({
+export const getErc20ApproveSigningInput = ({
   keysignPayload,
   walletCore,
 }: Input) => {
@@ -36,7 +36,7 @@ export const getErc20ApproveTxInputData = ({
 
   const { nonce, maxFeePerGasWei, priorityFee, gasLimit } = evmSpecific
 
-  const signingInput = TW.Ethereum.Proto.SigningInput.create({
+  return TW.Ethereum.Proto.SigningInput.create({
     transaction: {
       erc20Approve: {
         amount: amountHex,
@@ -56,6 +56,4 @@ export const getErc20ApproveTxInputData = ({
       gasLimit: BigInt(gasLimit),
     }),
   })
-
-  return TW.Ethereum.Proto.SigningInput.encode(signingInput).finish()
 }

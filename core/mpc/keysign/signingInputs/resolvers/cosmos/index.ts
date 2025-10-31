@@ -18,16 +18,17 @@ import { getKeysignSwapPayload } from '../../../swap/getKeysignSwapPayload'
 import { getKeysignTwPublicKey } from '../../../tw/getKeysignTwPublicKey'
 import { getTwChainId } from '../../../tw/getTwChainId'
 import { toTwAddress } from '../../../tw/toTwAddress'
+import { getKeysignChain } from '../../../utils/getKeysignChain'
 import { getKeysignCoin } from '../../../utils/getKeysignCoin'
-import { TxInputDataResolver } from '../../resolver'
+import { SigningInputsResolver } from '../../resolver'
 import { CosmosChainSpecific, getCosmosChainSpecific } from './chainSpecific'
 import { getCosmosCoinAmount } from './coinAmount'
 
-export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
+export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
   keysignPayload,
   walletCore,
-  chain,
 }) => {
+  const chain = getKeysignChain<'cosmos'>(keysignPayload)
   const coin = getKeysignCoin<CosmosChain>(keysignPayload)
 
   const chainKind = getCosmosChainKind(chain)
@@ -294,5 +295,5 @@ export const getCosmosTxInputData: TxInputDataResolver<'cosmos'> = ({
     fee: getFee(),
   })
 
-  return [TW.Cosmos.Proto.SigningInput.encode(input).finish()]
+  return [input]
 }

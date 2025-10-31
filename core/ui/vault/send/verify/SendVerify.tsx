@@ -5,6 +5,7 @@ import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
+import { KeysignFeeAmount } from '@core/ui/mpc/keysign/tx/FeeAmount'
 import { useSendCappedAmountQuery } from '@core/ui/vault/send/queries/useSendCappedAmountQuery'
 import { useSender } from '@core/ui/vault/send/sender/hooks/useSender'
 import { useSendMemo } from '@core/ui/vault/send/state/memo'
@@ -25,8 +26,6 @@ import { formatAmount } from '@lib/utils/formatAmount'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { SendFeeValue } from '../fee/SendFeeValue'
 
 const sendTerms = ['send_terms_1', 'send_terms_0'] as const
 
@@ -123,7 +122,15 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
             styles={{ title: { color: 'textShy' } }}
           />
           <ListItem
-            extra={<SendFeeValue />}
+            extra={
+              <MatchQuery
+                value={keysignPayloadQuery}
+                pending={() => <Spinner />}
+                success={keysignPayload => (
+                  <KeysignFeeAmount keysignPayload={keysignPayload} />
+                )}
+              />
+            }
             title={t('est_network_fee')}
             styles={{ title: { color: 'textShy' } }}
           />

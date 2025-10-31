@@ -9,9 +9,9 @@ import Long from 'long'
 
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
 import { getKeysignSwapPayload } from '../../swap/getKeysignSwapPayload'
-import { TxInputDataResolver } from '../resolver'
+import { SigningInputsResolver } from '../resolver'
 
-export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
+export const getTronSigningInputs: SigningInputsResolver<'tron'> = ({
   keysignPayload,
 }) => {
   const tronSpecific = getBlockchainSpecificValue(
@@ -101,7 +101,7 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
       }),
     })
 
-    return [TW.Tron.Proto.SigningInput.encode(input).finish()]
+    return [input]
   }
 
   if (swapPayload) {
@@ -141,7 +141,7 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
         })
 
         const input = TW.Tron.Proto.SigningInput.create({ transaction: tx })
-        return [TW.Tron.Proto.SigningInput.encode(input).finish()]
+        return [input]
       },
 
       general: () => {
@@ -179,7 +179,7 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
       }),
     })
 
-    return [TW.Tron.Proto.SigningInput.encode(input).finish()]
+    return [input]
   }
 
   const amountHex = Buffer.from(
@@ -217,5 +217,5 @@ export const getTronTxInputData: TxInputDataResolver<'tron'> = ({
     }),
   })
 
-  return [TW.Tron.Proto.SigningInput.encode(input).finish()]
+  return [input]
 }

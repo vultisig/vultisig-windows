@@ -5,13 +5,15 @@ import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
-import { GetTxInputDataInput } from '../resolver'
+import { getKeysignChain } from '../../utils/getKeysignChain'
+import { SigningInputsResolver } from '../resolver'
 
-export const getPolkadotTxInputData = ({
+export const getPolkadotSigningInputs: SigningInputsResolver<'polkadot'> = ({
   keysignPayload,
   walletCore,
-  chain,
-}: GetTxInputDataInput<'polkadot'>) => {
+}) => {
+  const chain = getKeysignChain(keysignPayload)
+
   const {
     recentBlockHash,
     nonce,
@@ -70,5 +72,5 @@ export const getPolkadotTxInputData = ({
     balanceCall: balance,
   })
 
-  return [TW.Polkadot.Proto.SigningInput.encode(input).finish()]
+  return [input]
 }

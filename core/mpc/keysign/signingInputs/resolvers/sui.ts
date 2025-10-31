@@ -4,9 +4,9 @@ import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
-import { TxInputDataResolver } from '../resolver'
+import { SigningInputsResolver } from '../resolver'
 
-export const getSuiTxInputData: TxInputDataResolver<'sui'> = ({
+export const getSuiSigningInputs: SigningInputsResolver<'sui'> = ({
   keysignPayload,
 }) => {
   const { coins, referenceGasPrice } = getBlockchainSpecificValue(
@@ -33,5 +33,5 @@ export const getSuiTxInputData: TxInputDataResolver<'sui'> = ({
     }),
   })
 
-  return [TW.Sui.Proto.SigningInput.encode(inputData).finish()]
+  return [inputData]
 }

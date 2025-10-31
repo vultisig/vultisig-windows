@@ -3,7 +3,6 @@ import {
   getEvmTwFeeFields,
   GetEvmTwFeeFieldsInput,
 } from '@core/chain/chains/evm/tx/fee/tw/getEvmTwFeeFields'
-import { getErc20ApproveTxInputData } from '@core/chain/chains/evm/tx/getErc20ApproveTxInputData'
 import { incrementKeysignPayloadNonce } from '@core/chain/chains/evm/tx/incrementKeysignPayloadNonce'
 import { getEvmTwChainId } from '@core/chain/chains/evm/tx/tw/getEvmTwChainId'
 import { getEvmTwNonce } from '@core/chain/chains/evm/tx/tw/getEvmTwNonce'
@@ -14,39 +13,41 @@ import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { assertField } from '@lib/utils/record/assertField'
 import { TW } from '@trustwallet/wallet-core'
 
-import { KeysignPayloadSchema } from '../../../types/vultisig/keysign/v1/keysign_message_pb'
-import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
-import { getKeysignSwapPayload } from '../../swap/getKeysignSwapPayload'
-import { KeysignSwapPayload } from '../../swap/KeysignSwapPayload'
-import { toTwAddress } from '../../tw/toTwAddress'
-import { TxInputDataResolver } from '../resolver'
+import { KeysignPayloadSchema } from '../../../../types/vultisig/keysign/v1/keysign_message_pb'
+import { getBlockchainSpecificValue } from '../../../chainSpecific/KeysignChainSpecific'
+import { getKeysignSwapPayload } from '../../../swap/getKeysignSwapPayload'
+import { KeysignSwapPayload } from '../../../swap/KeysignSwapPayload'
+import { toTwAddress } from '../../../tw/toTwAddress'
+import { getKeysignChain } from '../../../utils/getKeysignChain'
+import { SigningInputsResolver } from '../../resolver'
+import { getErc20ApproveSigningInput } from './erc20'
 
 const memoToTxData = (memo: string) =>
   memo.startsWith('0x') ? toEvmTxData(memo) : Buffer.from(memo, 'utf8')
 
-export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
+export const getEvmSigningInputs: SigningInputsResolver<'evm'> = ({
   keysignPayload,
   walletCore,
-  chain,
 }) => {
+  const chain = getKeysignChain<'evm'>(keysignPayload)
   const coin = assertField(keysignPayload, 'coin')
 
   const { erc20ApprovePayload, ...restOfKeysignPayload } = keysignPayload
+
   if (erc20ApprovePayload) {
-    const approveTxInputData = getErc20ApproveTxInputData({
+    const approveSigningInput = getErc20ApproveSigningInput({
       keysignPayload,
       walletCore,
     })
 
-    const restOfTxInputData = getEvmTxInputData({
+    const restOfSigningInputs = getEvmSigningInputs({
       keysignPayload: incrementKeysignPayloadNonce(
         create(KeysignPayloadSchema, restOfKeysignPayload)
       ),
       walletCore,
-      chain,
     })
 
-    return [approveTxInputData, ...restOfTxInputData]
+    return [approveSigningInput, ...restOfSigningInputs]
   }
 
   const evmSpecific = getBlockchainSpecificValue(
@@ -191,5 +192,5 @@ export const getEvmTxInputData: TxInputDataResolver<'evm'> = ({
     ...getFeeFields(),
   })
 
-  return [TW.Ethereum.Proto.SigningInput.encode(input).finish()]
+  return [input]
 }
