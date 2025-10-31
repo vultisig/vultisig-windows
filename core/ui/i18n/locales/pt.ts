@@ -93,7 +93,7 @@ export const pt = {
   waiting_for_devices_to_join: 'Aguardando outros dispositivos se conectarem',
   waiting_for_devices_to_join_description:
     'Seu cofre começará a ser gerado assim que você finalizar a configuração em seu dispositivo principal',
-  search_field_placeholder: 'Pesquisar..',
+  search_field_placeholder: 'Pesquisar',
   tx_hash: 'Hash da transação',
   gas_limit_tooltip_content:
     'A quantidade máxima de gás que você pagará. Pode ser aumentada se o limite de gás não for suficiente para enviar transações.',
@@ -418,6 +418,9 @@ export const pt = {
   vault_settings_address_book_no_addresses_description:
     'Organize todos os seus endereços importantes em um lugar.',
   vault_search_no_matches: 'Sem correspondências',
+  make_sure_chains: 'Certifique-se de que a cadeia que procura está ativada.',
+  no_chains_found: 'Nenhuma cadeia encontrada',
+  customize_chains: 'Personalizar cadeias',
   vault_search_updating: 'Atualizando...',
   vault_search_filtered: 'Filtrado',
   vault_search_close: 'Fechar',
@@ -994,8 +997,6 @@ export const pt = {
   camera_access_blocked:
     'O acesso à câmera está bloqueado. Ative-o nas configurações do seu navegador.',
   balance_available: 'Saldo disponível',
-  not_enough_for_gas:
-    'Não há fundos suficientes disponíveis para cobrir as taxas de gás',
   wrong_address_for_chain: 'Endereço errado para a cadeia selecionada',
   advanced_gas_fee: 'Taxa de gás antecipada',
   add_memo: 'Adicionar MEMO',
@@ -1189,4 +1190,6 @@ export const pt = {
     'Ao manter {{minBalance}}, você desbloqueará o nível {{tier}} e receberá um desconto de <b>{{bps}} bps na taxa de negociação</b> em todas as trocas.',
   upload_qr_code_with_address: 'Carregar código QR com endereço',
   buy: 'Comprar',
+  not_enough_asset_to_cover_gas_fees:
+    'Não há {{ativo}} suficiente para cobrir as taxas de gás',
 }

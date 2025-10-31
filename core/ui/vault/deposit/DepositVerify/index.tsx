@@ -5,14 +5,12 @@ import { DepositFee } from '@core/ui/vault/deposit/fee/DepositFee'
 import { useMemoGenerator } from '@core/ui/vault/deposit/hooks/useMemoGenerator'
 import { useSender } from '@core/ui/vault/deposit/hooks/useSender'
 import { ProgressLine } from '@lib/ui/flow/ProgressLine'
-import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnBackProp } from '@lib/ui/props'
-import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
 import { useDepositFormConfig } from '../hooks/useDepositFormConfig'
@@ -87,13 +85,7 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
           )}
           {Boolean(formattedDepositFormData['memo']) && (
             <ListItem
-              description={
-                <VStack as="pre" scrollable>
-                  <Text as="code" family="mono">
-                    {String(formattedDepositFormData['memo'])}
-                  </Text>
-                </VStack>
-              }
+              description={String(formattedDepositFormData['memo'])}
               title={t('memo')}
             />
           )}

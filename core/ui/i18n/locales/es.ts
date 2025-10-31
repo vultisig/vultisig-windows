@@ -175,7 +175,7 @@ export const es = {
   price_impact_good: 'Bueno',
   price_impact_average: 'Promedio',
   price_impact_high: 'Alto Impacto',
-  search_field_placeholder: 'Buscar..',
+  search_field_placeholder: 'Buscar',
   max_total_fees: 'Tarifa Total Máx.',
   coin_not_found_in_current_vault: 'Moneda no encontrada en la bóveda actual',
   waiting_for_devices_to_join: 'Esperando a que otros dispositivos se unan',
@@ -432,6 +432,9 @@ export const es = {
   vault_settings_address_book_no_addresses_description:
     'Organice todas sus direcciones importantes en un lugar.',
   vault_search_no_matches: 'Sin coincidencias',
+  make_sure_chains: 'Asegúrese de que la cadena que busca esté habilitada.',
+  no_chains_found: 'No se encontraron cadenas',
+  customize_chains: 'Personalizar cadenas',
   vault_search_updating: 'Actualizando...',
   vault_search_filtered: 'Filtrado',
   vault_search_close: 'Cerrar',
@@ -1007,8 +1010,6 @@ export const es = {
   camera_access_blocked:
     'El acceso a la cámara está bloqueado. Habilítalo en la configuración de tu navegador.',
   balance_available: 'Saldo disponible',
-  not_enough_for_gas:
-    'No hay suficientes fondos disponibles para cubrir las tarifas del gas',
   wrong_address_for_chain: 'Dirección incorrecta para la cadena seleccionada',
   advanced_gas_fee: 'Tarifa de gas anticipada',
   add_memo: 'Añadir MEMO',
@@ -1201,4 +1202,6 @@ export const es = {
     'Al mantener {{minBalance}}, desbloquearás el nivel {{tier}} y recibirás un descuento de <b>{{bps}} bps en la tarifa de negociación</b> en todos los swaps.',
   upload_qr_code_with_address: 'Subir código QR con dirección',
   buy: 'Comprar',
+  not_enough_asset_to_cover_gas_fees:
+    'No hay suficientes {{asset}} para cubrir las tarifas del gas',
 }

@@ -84,7 +84,7 @@ export const de = {
   incorrect_passcode: 'Falscher Passcode',
   vault_selected: 'Vault ausgewählt',
   passcodes_do_not_match: 'Passcodes stimmen nicht überein',
-  search_field_placeholder: 'Suchen..',
+  search_field_placeholder: 'Suchen',
   referral_reg_fee: 'Registrierungsgebühr',
   enter_percentage: 'Prozentangabe eingeben',
   select: 'Auswählen',
@@ -426,6 +426,10 @@ export const de = {
   vault_settings_address_book_no_addresses_description:
     'Ordnen Sie alle Ihre wichtigen Adressen in einem Ort.',
   vault_search_no_matches: 'Keine Übereinstimmungen',
+  make_sure_chains:
+    'Stellen Sie sicher, dass die gesuchte Chain aktiviert ist.',
+  no_chains_found: 'Keine Chains gefunden',
+  customize_chains: 'Chains anpassen',
   vault_search_updating: 'Aktualisierung...',
   vault_search_filtered: 'Gefiltert',
   vault_search_close: 'Schließen',
@@ -1010,8 +1014,6 @@ export const de = {
   camera_access_blocked:
     'Der Kamerazugriff ist blockiert. Bitte aktivieren Sie ihn in Ihren Browsereinstellungen.',
   balance_available: 'Verfügbares Guthaben',
-  not_enough_for_gas:
-    'Nicht genügend Geld vorhanden, um die Gasgebühren zu decken',
   wrong_address_for_chain: 'Falsche Adresse für ausgewählte Kette',
   advanced_gas_fee: 'Vorab-Gasgebühr',
   add_memo: 'MEMO hinzufügen',
@@ -1201,4 +1203,6 @@ export const de = {
   upload_qr_code_with_address: 'QR-Code mit Adresse hochladen',
   failed_to_read_qr_code: 'Der QR-Code konnte nicht gelesen werden.',
   buy: 'Kaufen',
+  not_enough_asset_to_cover_gas_fees:
+    'Nicht genug {{asset}}, um die Gasgebühren zu decken',
 }
