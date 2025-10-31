@@ -1,10 +1,11 @@
 import { create } from '@bufbuild/protobuf'
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { getChainKind } from '@core/chain/ChainKind'
+import { getChainKind, isChainOfKind } from '@core/chain/ChainKind'
 import { getPsbtTransferInfo } from '@core/chain/chains/utxo/tx/getPsbtTransferInfo'
 import { FeeQuote } from '@core/chain/feeQuote/core'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { buildChainSpecific } from '@core/mpc/keysign/chainSpecific/build'
+import { refineKeysignUtxo } from '@core/mpc/keysign/refine/utxo'
 import { KeysignTxData } from '@core/mpc/keysign/txData/core'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { OneInchSwapPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
@@ -238,7 +239,7 @@ export const getKeysignPayload = ({
     psbt: () => undefined,
   })
 
-  return create(KeysignPayloadSchema, {
+  const keysignPayload = create(KeysignPayloadSchema, {
     toAddress,
     toAmount: getTxAmount(tx).toString(),
     coin: fromCoin,
@@ -251,4 +252,14 @@ export const getKeysignPayload = ({
     contractPayload,
     swapPayload,
   })
+
+  if (isChainOfKind(chain, 'utxo')) {
+    return refineKeysignUtxo({
+      keysignPayload,
+      walletCore,
+      publicKey,
+    })
+  }
+
+  return keysignPayload
 }

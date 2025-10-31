@@ -1,6 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { getFeeAmount } from '@core/mpc/keysign/fee'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -10,8 +9,7 @@ import { formatAmount } from '@lib/utils/formatAmount'
 
 import { useCoinPriceQuery } from '../../../chain/coin/price/queries/useCoinPriceQuery'
 import { useFormatFiatAmount } from '../../../chain/hooks/useFormatFiatAmount'
-import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
-import { useCurrentVaultPublicKey } from '../../../vault/state/currentVault'
+import { useKeysignFee } from '../fee/useKeysignFee'
 
 type KeysignFeeAmountProps = {
   keysignPayload: KeysignPayload
@@ -25,14 +23,7 @@ export const KeysignFeeAmount = ({ keysignPayload }: KeysignFeeAmountProps) => {
 
   const feeCoinPriceQuery = useCoinPriceQuery({ coin: chainFeeCoin[chain] })
 
-  const publicKey = useCurrentVaultPublicKey(chain)
-
-  const walletCore = useAssertWalletCore()
-
-  const fee = fromChainAmount(
-    getFeeAmount({ keysignPayload, walletCore, publicKey }),
-    decimals
-  )
+  const fee = fromChainAmount(useKeysignFee(keysignPayload), decimals)
 
   return (
     <Text size={14} centerVertically={{ gap: 8 }}>
