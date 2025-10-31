@@ -1,9 +1,13 @@
-import { areEqualCoins } from '@core/chain/coin/Coin'
+import { areEqualCoins, extractCoinKey } from '@core/chain/coin/Coin'
 import { knownTokens } from '@core/chain/coin/knownTokens'
 import { sortCoinsAlphabetically } from '@core/chain/coin/utils/sortCoinsAlphabetically'
 import { useWhitelistedCoinsQuery } from '@core/ui/chain/coin/queries/useWhitelistedCoinsQuery'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCore } from '@core/ui/state/core'
+import {
+  useAddToCoinFinderIgnoreMutation,
+  useRemoveFromCoinFinderIgnoreMutation,
+} from '@core/ui/storage/coinFinderIgnore'
 import {
   useCreateCoinMutation,
   useDeleteCoinMutation,
@@ -34,8 +38,14 @@ export const ManageVaultChainCoinsPage = () => {
   const whitelistedQuery = useWhitelistedCoinsQuery(currentchain)
   const createCoin = useCreateCoinMutation()
   const deleteCoin = useDeleteCoinMutation()
+  const addToCoinFinderIgnore = useAddToCoinFinderIgnoreMutation()
+  const removeFromCoinFinderIgnore = useRemoveFromCoinFinderIgnoreMutation()
 
-  const isLoading = createCoin.isPending || deleteCoin.isPending
+  const isLoading =
+    createCoin.isPending ||
+    deleteCoin.isPending ||
+    addToCoinFinderIgnore.isPending ||
+    removeFromCoinFinderIgnore.isPending
 
   const coins = useMemo(() => {
     const currentChainCoins = sortCoinsAlphabetically(knownTokens[currentchain])
@@ -63,9 +73,13 @@ export const ManageVaultChainCoinsPage = () => {
     if (isLoading) return
     const currentCoin = currentCoins.find(c => areEqualCoins(c, coin))
     if (currentCoin) {
-      deleteCoin.mutate(currentCoin)
+      addToCoinFinderIgnore.mutate(extractCoinKey(currentCoin), {
+        onSuccess: () => deleteCoin.mutate(currentCoin),
+      })
     } else {
-      createCoin.mutate(coin)
+      removeFromCoinFinderIgnore.mutate(extractCoinKey(coin), {
+        onSuccess: () => createCoin.mutate(coin),
+      })
     }
   }
 
