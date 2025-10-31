@@ -28,7 +28,8 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { KeysignTxFee } from '../components/KeysignTxFee'
+import { TxFeeRow } from '../components/TxFeeRow'
+import { KeysignFeeAmount } from '../FeeAmount'
 import { TransactionSuccessAnimation } from '../TransactionSuccessAnimation'
 import { TrackTxPrompt } from './TrackTxPrompt'
 
@@ -147,7 +148,9 @@ export const SwapKeysignTxOverview = ({
               </AddressWrapper>
             </HStack>
           )}
-          <KeysignTxFee />
+          <TxFeeRow label={t('network_fee')}>
+            <KeysignFeeAmount keysignPayload={value} />
+          </TxFeeRow>
         </SwapInfoWrapper>
         <HStack gap={8} fullWidth>
           <Button
