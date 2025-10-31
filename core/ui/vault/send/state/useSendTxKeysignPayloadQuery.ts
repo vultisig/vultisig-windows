@@ -1,6 +1,8 @@
 import { create } from '@bufbuild/protobuf'
+import { isChainOfKind } from '@core/chain/ChainKind'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { buildChainSpecific } from '@core/mpc/keysign/chainSpecific/build'
+import { refineKeysignUtxo } from '@core/mpc/keysign/refine/utxo'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
@@ -50,7 +52,7 @@ export const useSendTxKeysignPayloadQuery = () => {
           feeQuote,
         })
 
-        return create(KeysignPayloadSchema, {
+        const keysignPayload = create(KeysignPayloadSchema, {
           coin: toCommCoin({
             ...coin,
             hexPublicKey: Buffer.from(publicKey.data()).toString('hex'),
@@ -64,6 +66,16 @@ export const useSendTxKeysignPayloadQuery = () => {
           libType: vault.libType,
           utxoInfo: txData.utxoInfo,
         })
+
+        if (isChainOfKind(coin.chain, 'utxo')) {
+          return refineKeysignUtxo({
+            keysignPayload,
+            walletCore,
+            publicKey,
+          })
+        }
+
+        return keysignPayload
       },
       [
         coin,
