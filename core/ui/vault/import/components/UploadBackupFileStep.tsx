@@ -22,12 +22,13 @@ export const UploadBackupFileStep = ({
 }: OnFinishProp<FileBasedVaultBackupResult>) => {
   const { t } = useTranslation()
   const [file, setFile] = useState<File | null>(null)
-
+  const [error, setError] = useState<Error | null>(null)
   const navigate = useCoreNavigate()
 
-  const { mutate, isPending, error } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: vaultBackupResultFromFile,
     onSuccess: onFinish,
+    onError: setError,
   })
 
   const isDisabled = !file
@@ -51,7 +52,13 @@ export const UploadBackupFileStep = ({
           {file ? (
             <UploadedBackupFile value={file} />
           ) : (
-            <BackupFileDropzone onFinish={setFile} />
+            <BackupFileDropzone
+              onFinish={file => {
+                setFile(file)
+                setError(null)
+              }}
+              onError={setError}
+            />
           )}
           {error && (
             <Text centerHorizontally color="danger">
