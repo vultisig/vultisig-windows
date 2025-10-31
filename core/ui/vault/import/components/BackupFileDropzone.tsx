@@ -8,9 +8,13 @@ import { useTranslation } from 'react-i18next'
 
 type BackupFileDropzoneProps = {
   onFinish: (data: File) => void
+  onError: (error: Error) => void
 }
 
-export const BackupFileDropzone = ({ onFinish }: BackupFileDropzoneProps) => {
+export const BackupFileDropzone = ({
+  onFinish,
+  onError,
+}: BackupFileDropzoneProps) => {
   const { t } = useTranslation()
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
@@ -22,6 +26,8 @@ export const BackupFileDropzone = ({ onFinish }: BackupFileDropzoneProps) => {
       const [file] = acceptedFiles
       if (file) {
         onFinish(file)
+      } else {
+        onError(new Error(t('invalid_file_format')))
       }
     },
   })
