@@ -9,6 +9,7 @@ import { TxOverviewRow } from '@core/ui/chain/tx/TxOverviewRow'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -22,14 +23,13 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { FeeAmount } from '../../../../../chain/feeQuote/amount'
 import { StartKeysignPrompt } from '../../../../../mpc/keysign/prompt/StartKeysignPrompt'
+import { KeysignFeeAmount } from '../../../../../mpc/keysign/tx/FeeAmount'
 import { useCurrentVaultCoin } from '../../../../state/currentVaultCoins'
 import { useReferralSender } from '../../hooks/useReferralSender'
 import { useEditReferralFormData } from '../../providers/EditReferralFormProvider'
 import { useReferralPayoutAsset } from '../../providers/ReferralPayoutAssetProvider'
 import { useActivePoolsQuery } from '../../queries/useActivePoolsQuery'
-import { useReferralFeeQuoteQuery } from '../../queries/useReferralFeeQuoteQuery'
 import { useReferralKeysignPayloadQuery } from '../../queries/useReferralKeysignPayloadQuery'
 import { useUserValidThorchainNameQuery } from '../../queries/useUserValidThorchainNameQuery'
 import {
@@ -83,8 +83,6 @@ export const EditReferralVerify = ({ onBack }: OnBackProp) => {
   const thorchainCoin = useCurrentVaultCoin(chainFeeCoin.THORChain)
 
   const { chain, ticker } = thorchainCoin
-
-  const feeQuoteQuery = useReferralFeeQuoteQuery()
 
   const keysignPayloadQuery = useReferralKeysignPayloadQuery({
     memo,
@@ -163,7 +161,13 @@ export const EditReferralVerify = ({ onBack }: OnBackProp) => {
             <Text color="shy" size={14}>
               {t('est_network_fee')}
             </Text>
-            <FeeAmount feeQuoteQuery={feeQuoteQuery} chain={chain} />
+            <MatchQuery
+              value={keysignPayloadQuery}
+              pending={() => <Spinner />}
+              success={keysignPayload => (
+                <KeysignFeeAmount keysignPayload={keysignPayload} />
+              )}
+            />
           </TxOverviewRow>
           <TxOverviewMemo value={memo} chain={chain} />
         </TxOverviewPanel>
