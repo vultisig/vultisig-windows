@@ -484,6 +484,9 @@ export const pt = {
   enter_address: 'Inserir endereço',
   wallet: 'Carteira',
   earn: 'Ganhar',
+  no_tokens_selected: 'Nenhum token selecionado',
+  no_tokens_selected_description:
+    'Você desabilitou todos os tokens. Certifique-se de que o token que você está procurando esteja habilitado.',
   coming_soon: 'Em Breve',
   enter_amount: 'Inserir valor',
   send_pending_validation: 'Validando sua transação...',

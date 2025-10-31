@@ -472,6 +472,9 @@ export const hr = {
   enter_address: 'Unesite adresu',
   wallet: 'Novčanik',
   earn: 'Zaraditi',
+  no_tokens_selected: 'Nema odabranih tokena',
+  no_tokens_selected_description:
+    'Onemogućili ste sve tokene. Provjerite je li token koji tražite omogućen.',
   coming_soon: 'Uskoro',
   enter_amount: 'Unesite iznos',
   send_pending_validation: 'Provjera vaše transakcije...',
