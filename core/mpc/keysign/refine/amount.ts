@@ -32,11 +32,17 @@ export const refineKeysignAmount = (input: RefineKeysignAmountInput) => {
 
   const fee = getFeeAmount(input)
 
+  const refinedAmount = minBigInt(
+    BigInt(input.keysignPayload.toAmount),
+    input.balance - fee
+  )
+
+  if (refinedAmount <= 0n) {
+    throw new Error('Insufficient balance')
+  }
+
   return {
     ...input.keysignPayload,
-    toAmount: minBigInt(
-      BigInt(input.keysignPayload.toAmount),
-      input.balance - fee
-    ).toString(),
+    toAmount: refinedAmount.toString(),
   }
 }
