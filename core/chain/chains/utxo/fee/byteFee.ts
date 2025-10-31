@@ -10,5 +10,14 @@ export const getUtxoByteFee = async (chain: UtxoChain) => {
     data: { suggested_transaction_fee_per_byte_sat },
   } = await getUtxoStats(chain)
 
+  const base = BigInt(suggested_transaction_fee_per_byte_sat)
+
+  if (chain === UtxoChain.Dogecoin) {
+    // According to iOS codebase
+    //// For DOGE, the API returns 500k sats/byte which is too high for WalletCore
+    // Use a much lower value that WalletCore can work with: divide by 10
+    return base / 10n
+  }
+
   return byteFeeMultiplier(BigInt(suggested_transaction_fee_per_byte_sat))
 }
