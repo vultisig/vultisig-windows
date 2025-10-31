@@ -13,6 +13,7 @@ type RefineKeysignAmountInput = {
   keysignPayload: KeysignPayload
   walletCore: WalletCore
   publicKey: PublicKey
+  balance: bigint
 }
 
 export const refineKeysignAmount = (input: RefineKeysignAmountInput) => {
@@ -35,7 +36,7 @@ export const refineKeysignAmount = (input: RefineKeysignAmountInput) => {
     ...input.keysignPayload,
     toAmount: minBigInt(
       BigInt(input.keysignPayload.toAmount),
-      BigInt(input.keysignPayload.toAmount) - fee
+      input.balance - fee
     ).toString(),
   }
 }

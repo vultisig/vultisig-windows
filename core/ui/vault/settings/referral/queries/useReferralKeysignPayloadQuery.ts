@@ -1,5 +1,6 @@
 import { create } from '@bufbuild/protobuf'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
+import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { buildChainSpecific } from '@core/mpc/keysign/chainSpecific/build'
 import { refineKeysignAmount } from '@core/mpc/keysign/refine/amount'
@@ -8,6 +9,7 @@ import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysig
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 
+import { useBalanceQuery } from '../../../../chain/coin/queries/useBalanceQuery'
 import { useCurrentVault } from '../../../state/currentVault'
 import { useReferralCoin } from '../hooks/useReferralCoin'
 import { useReferralFeeQuoteQuery } from './useReferralFeeQuoteQuery'
@@ -32,13 +34,15 @@ export const useReferralKeysignPayloadQuery = ({
 
   const feeQuote = useReferralFeeQuoteQuery()
   const txData = useReferralKeysignTxDataQuery()
+  const balance = useBalanceQuery(extractAccountCoinKey(coin))
 
   return useTransformQueriesData(
     {
       feeQuote,
       txData,
+      balance,
     },
-    ({ feeQuote, txData }) => {
+    ({ feeQuote, txData, balance }) => {
       const blockchainSpecific = buildChainSpecific({
         chain: coin.chain,
         txData,
@@ -62,6 +66,7 @@ export const useReferralKeysignPayloadQuery = ({
         keysignPayload,
         walletCore,
         publicKey,
+        balance,
       })
     }
   )

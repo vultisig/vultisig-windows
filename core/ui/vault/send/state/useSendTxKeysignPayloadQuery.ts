@@ -1,5 +1,6 @@
 import { create } from '@bufbuild/protobuf'
 import { isChainOfKind } from '@core/chain/ChainKind'
+import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { buildChainSpecific } from '@core/mpc/keysign/chainSpecific/build'
 import { refineKeysignAmount } from '@core/mpc/keysign/refine/amount'
@@ -11,6 +12,7 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { useCallback } from 'react'
 
+import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'
 import { useSendFeeQuoteQuery } from '../queries/useSendFeeQuoteQuery'
 import { useSendKeysignTxDataQuery } from '../queries/useSendKeysignTxDataQuery'
 import { useSendMemo } from './memo'
@@ -24,6 +26,8 @@ export const useSendTxKeysignPayloadQuery = () => {
 
   const vault = useCurrentVault()
 
+  const balance = useBalanceQuery(extractAccountCoinKey(coin))
+
   const txData = useSendKeysignTxDataQuery()
   const feeQuote = useSendFeeQuoteQuery()
 
@@ -33,9 +37,10 @@ export const useSendTxKeysignPayloadQuery = () => {
     {
       txData,
       feeQuote,
+      balance,
     },
     useCallback(
-      ({ txData, cappedAmount, feeQuote }) => {
+      ({ txData, cappedAmount, feeQuote, balance }) => {
         const publicKey = getPublicKey({
           chain: coin.chain,
           walletCore,
@@ -76,6 +81,7 @@ export const useSendTxKeysignPayloadQuery = () => {
               keysignPayload,
               walletCore,
               publicKey,
+              balance,
             }),
           keysignPayload
         )
