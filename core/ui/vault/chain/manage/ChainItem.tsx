@@ -99,7 +99,6 @@ const CheckBadge = styled(IconWrapper)`
   right: 0;
   height: 24px;
   padding: 8px;
-  border-radius: 50%;
   border-radius: 40px 0 25px 0;
   background: ${getColor('foregroundSuper')};
   font-weight: 600;

@@ -46,13 +46,11 @@ const CustomIconWrapper = styled.div`
     justifyContent: 'center',
   })};
   position: relative;
-  border-radius: 24px;
   background: rgba(11, 26, 58, 0.5);
   height: 74px;
   padding: 17px;
   font-size: 27.5px;
   color: ${getColor('buttonPrimary')};
-
   border-radius: 24px;
   border: 1.5px dashed ${getColor('foregroundSuper')};
   opacity: 0.6;
