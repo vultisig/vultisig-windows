@@ -1,15 +1,14 @@
 import { isValidAddress } from '@core/chain/utils/isValidAddress'
 import { CustomToken } from '@core/ui/chain/coin/addCustomToken/CustomToken'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
+import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
+import { SearchInput } from '@core/ui/vault/chain/manage/shared/SearchInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
-import { Text } from '@lib/ui/text'
+import { PageHeader } from '@lib/ui/page/PageHeader'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { TextInputWithPasteAction } from '../../../components/TextInputWithPasteAction'
 
 export const AddCustomTokenPage = () => {
   const { t } = useTranslation()
@@ -19,29 +18,25 @@ export const AddCustomTokenPage = () => {
 
   const [value, setValue] = useState('')
 
+  const isValid = value
+    ? isValidAddress({
+        chain,
+        address: value,
+        walletCore,
+      })
+    : false
+
   return (
-    <>
-      <FlowPageHeader title={t('find_custom_token')} />
-      <PageContent>
-        <VStack gap={40}>
-          <TextInputWithPasteAction
-            placeholder={t('enter_contract_address')}
-            value={value}
-            onValueChange={setValue}
-          />
-          {value ? (
-            isValidAddress({
-              chain,
-              address: value,
-              walletCore,
-            }) ? (
-              <CustomToken id={value} />
-            ) : (
-              <Text>{t('invalid_token_address')}</Text>
-            )
-          ) : null}
-        </VStack>
+    <VStack fullHeight>
+      <PageHeader
+        primaryControls={<PageHeaderBackButton />}
+        title={t('find_custom_token')}
+        hasBorder
+      />
+      <PageContent gap={24} flexGrow scrollable>
+        <SearchInput value={value} onChange={setValue} />
+        {value && isValid && <CustomToken id={value} />}
       </PageContent>
-    </>
+    </VStack>
   )
 }
