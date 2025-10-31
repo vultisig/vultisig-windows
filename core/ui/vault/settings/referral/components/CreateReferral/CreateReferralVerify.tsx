@@ -1,3 +1,4 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
@@ -8,8 +9,10 @@ import { TxOverviewRow } from '@core/ui/chain/tx/TxOverviewRow'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnBackProp } from '@lib/ui/props'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
@@ -19,14 +22,13 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { FeeAmount } from '../../../../../chain/feeQuote/amount'
 import { StartKeysignPrompt } from '../../../../../mpc/keysign/prompt/StartKeysignPrompt'
+import { KeysignFeeAmount } from '../../../../../mpc/keysign/tx/FeeAmount'
 import { useCurrentVaultCoin } from '../../../../state/currentVaultCoins'
 import { useReferralSender } from '../../hooks/useReferralSender'
 import { useCreateReferralForm } from '../../providers/CreateReferralFormProvider'
 import { useReferralPayoutAsset } from '../../providers/ReferralPayoutAssetProvider'
 import { useActivePoolsQuery } from '../../queries/useActivePoolsQuery'
-import { useReferralFeeQuoteQuery } from '../../queries/useReferralFeeQuoteQuery'
 import { useReferralKeysignPayloadQuery } from '../../queries/useReferralKeysignPayloadQuery'
 import { buildCreateReferralMemo } from '../../utils/buildReferralMemos'
 import { normaliseChainToMatchPoolChain } from '../EditReferral/EditReferralForm/config'
@@ -62,12 +64,12 @@ export const CreateReferralVerify = ({ onBack }: OnBackProp) => {
   const thorchainCoin = useCurrentVaultCoin(chainFeeCoin.THORChain)
   const { chain, ticker } = thorchainCoin
 
-  const feeQuoteQuery = useReferralFeeQuoteQuery()
-
-  const { isPending, error, data } = useReferralKeysignPayloadQuery({
+  const keysignPayloadQuery = useReferralKeysignPayloadQuery({
     memo,
     amount: referralAmount,
   })
+
+  const { isPending, error, data } = keysignPayloadQuery
 
   const startKeysignPromptProps = useMemo(() => {
     if (isPending) {
@@ -102,7 +104,16 @@ export const CreateReferralVerify = ({ onBack }: OnBackProp) => {
             </Text>
             <HStack alignItems="center" gap={8}>
               <CoinIcon coin={thorchainCoin} style={{ fontSize: 24 }} />
-              <Text size={17}>{formatAmount(referralAmount, { ticker })}</Text>
+              <MatchQuery
+                value={keysignPayloadQuery}
+                success={({ toAmount }) => (
+                  <Text size={17}>
+                    {formatAmount(fromChainAmount(toAmount, coin.decimals), {
+                      ticker,
+                    })}
+                  </Text>
+                )}
+              />
             </HStack>
           </AmountWrapper>
           <TxOverviewRow>
@@ -129,7 +140,13 @@ export const CreateReferralVerify = ({ onBack }: OnBackProp) => {
             <Text color="shy" size={14}>
               {t('est_network_fee')}
             </Text>
-            <FeeAmount feeQuoteQuery={feeQuoteQuery} chain={chain} />
+            <MatchQuery
+              value={keysignPayloadQuery}
+              pending={() => <Spinner />}
+              success={keysignPayload => (
+                <KeysignFeeAmount keysignPayload={keysignPayload} />
+              )}
+            />
           </TxOverviewRow>
           <TxOverviewMemo value={memo} chain={chain} />
         </TxOverviewPanel>

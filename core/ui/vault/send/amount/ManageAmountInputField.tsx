@@ -20,7 +20,6 @@ import {
 } from '@lib/ui/inputs/AmountTextInput'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
-import { StrictInfoRow } from '@lib/ui/layout/StrictInfoRow'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
 import { Text } from '@lib/ui/text'
@@ -33,7 +32,6 @@ import styled from 'styled-components'
 
 import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'
 import { ValidSendFormOnly } from '../components/ValidSendFormOnly'
-import { SendFee } from '../fee/SendFee'
 import { useSendValidationQuery } from '../queries/useSendValidationQuery'
 import { useSendAmount } from '../state/amount'
 import { FiatSendAmountInput } from './FiatSendAmountInput'
@@ -207,10 +205,6 @@ export const ManageAmountInputField = () => {
         </HStack>
       </VStack>
       <ManageMemo />
-      <HorizontalLine />
-      <StrictInfoRow>
-        <SendFee />
-      </StrictInfoRow>
     </SendInputContainer>
   )
 }

@@ -492,6 +492,9 @@ export const de = {
   enter_address: 'Adresse eingeben',
   wallet: 'Geldbörse',
   earn: 'Verdienen',
+  no_tokens_selected: 'Keine Token ausgewählt',
+  no_tokens_selected_description:
+    'Sie haben alle Token deaktiviert. Stellen Sie sicher, dass der gesuchte Token aktiviert ist.',
   coming_soon: 'Demnächst',
   enter_amount: 'Betrag eingeben',
   send_pending_validation: 'Ihre Transaktion wird validiert...',
