@@ -6,7 +6,6 @@ import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
 import { KeysignFeeAmount } from '@core/ui/mpc/keysign/tx/FeeAmount'
-import { useSendCappedAmountQuery } from '@core/ui/vault/send/queries/useSendCappedAmountQuery'
 import { useSender } from '@core/ui/vault/send/sender/hooks/useSender'
 import { useSendMemo } from '@core/ui/vault/send/state/memo'
 import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
@@ -36,7 +35,6 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const [memo] = useSendMemo()
   const coin = useCurrentSendCoin()
   const sender = useSender()
-  const cappedAmountQuery = useSendCappedAmountQuery()
   const keysignPayloadQuery = useSendTxKeysignPayloadQuery()
   const translatedTerms = sendTerms.map(term => t(term))
 
@@ -60,15 +58,17 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
                 <HStack alignItems="center" gap={8}>
                   <CoinIcon coin={coin} style={{ fontSize: 24 }} />
                   <MatchQuery
-                    value={cappedAmountQuery}
+                    value={keysignPayloadQuery}
                     error={() => (
                       <Text color="danger">{t('failed_to_load')}</Text>
                     )}
                     pending={() => <Spinner />}
-                    success={({ amount, decimals }) => (
+                    success={({ toAmount }) => (
                       <HStack alignItems="center" gap={4}>
                         <Text as="span" size={17}>
-                          {formatAmount(fromChainAmount(amount, decimals))}
+                          {formatAmount(
+                            fromChainAmount(toAmount, coin.decimals)
+                          )}
                         </Text>
                         <Text as="span" color="shy" size={17}>
                           {coin.ticker}

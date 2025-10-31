@@ -1,10 +1,8 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { getFeeAmount } from '@core/mpc/keysign/fee'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
-import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { TxOverviewAmount } from '@core/ui/chain/tx/TxOverviewAmount'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import {
@@ -12,7 +10,6 @@ import {
   TxOverviewPrimaryRowTitle,
   TxOverviewRow,
 } from '@core/ui/chain/tx/TxOverviewRow'
-import { useCurrentVaultPublicKey } from '@core/ui/vault/state/currentVault'
 import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -22,6 +19,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFormatFiatAmount } from '../../../../chain/hooks/useFormatFiatAmount'
+import { useKeysignFee } from '../../fee/useKeysignFee'
 
 export const JoinKeysignTxPrimaryInfo = ({
   value,
@@ -40,22 +38,13 @@ export const JoinKeysignTxPrimaryInfo = ({
 
   const formatFiatAmount = useFormatFiatAmount()
 
-  const walletCore = useAssertWalletCore()
-  const publicKey = useCurrentVaultPublicKey(coin.chain)
+  const fee = useKeysignFee(value)
 
   const networkFeesFormatted = useMemo(() => {
     const { decimals, ticker } = chainFeeCoin[coin.chain]
 
-    const fee = fromChainAmount(
-      getFeeAmount({
-        keysignPayload: value,
-        walletCore,
-        publicKey,
-      }),
-      decimals
-    )
-    return formatAmount(fee, { ticker })
-  }, [coin.chain, value, walletCore, publicKey])
+    return formatAmount(fromChainAmount(fee, decimals), { ticker })
+  }, [coin.chain, fee])
 
   return (
     <>

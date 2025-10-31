@@ -6,7 +6,6 @@ import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useTxHash } from '@core/ui/chain/state/txHash'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { useKeysignMessagePayload } from '@core/ui/mpc/keysign/state/keysignMessagePayload'
-import { KeysignTxFee } from '@core/ui/mpc/keysign/tx/components/KeysignTxFee'
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -23,17 +22,18 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { TxFeeRow } from './components/TxFeeRow'
+import { KeysignFeeAmount } from './FeeAmount'
+
 export const KeysignTxOverview = () => {
   const { t } = useTranslation()
   const { openUrl } = useCore()
   const { name } = useCurrentVault()
-  const payload = useKeysignMessagePayload()
-  const {
-    toAddress,
-    memo,
-    toAmount,
-    coin: potentialCoin,
-  } = getRecordUnionValue(payload, 'keysign')
+  const keysignPayload = getRecordUnionValue(
+    useKeysignMessagePayload(),
+    'keysign'
+  )
+  const { toAddress, memo, toAmount, coin: potentialCoin } = keysignPayload
   const coin = fromCommCoin(shouldBePresent(potentialCoin))
   const { address, chain, decimals } = shouldBePresent(coin)
 
@@ -109,7 +109,9 @@ export const KeysignTxOverview = () => {
               <Text>{chain}</Text>
             </HStack>
           </HStack>
-          <KeysignTxFee />
+          <TxFeeRow label={t('network_fee')}>
+            <KeysignFeeAmount keysignPayload={keysignPayload} />
+          </TxFeeRow>
         </SeparatedByLine>
       </Panel>
     </>

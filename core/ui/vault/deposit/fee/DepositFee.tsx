@@ -1,11 +1,19 @@
-import { FeeAmount } from '../../../chain/feeQuote/amount'
-import { useDepositCoin } from '../providers/DepositCoinProvider'
-import { useDepositFeeQuoteQuery } from '../queries/useDepositFeeQuoteQuery'
+import { Spinner } from '@lib/ui/loaders/Spinner'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+
+import { KeysignFeeAmount } from '../../../mpc/keysign/tx/FeeAmount'
+import { useDepositKeysignPayloadQuery } from '../DepositConfirmButton/hooks/useDepositKeysignPayloadQuery'
 
 export const DepositFee = () => {
-  const [{ chain }] = useDepositCoin()
+  const keysignPayloadQuery = useDepositKeysignPayloadQuery()
 
-  const feeQuoteQuery = useDepositFeeQuoteQuery()
-
-  return <FeeAmount feeQuoteQuery={feeQuoteQuery} chain={chain} />
+  return (
+    <MatchQuery
+      value={keysignPayloadQuery}
+      pending={() => <Spinner />}
+      success={keysignPayload => (
+        <KeysignFeeAmount keysignPayload={keysignPayload} />
+      )}
+    />
+  )
 }
