@@ -1,3 +1,4 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
@@ -10,6 +11,7 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnBackProp } from '@lib/ui/props'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
@@ -64,10 +66,12 @@ export const CreateReferralVerify = ({ onBack }: OnBackProp) => {
 
   const feeQuoteQuery = useReferralFeeQuoteQuery()
 
-  const { isPending, error, data } = useReferralKeysignPayloadQuery({
+  const keysignPayloadQuery = useReferralKeysignPayloadQuery({
     memo,
     amount: referralAmount,
   })
+
+  const { isPending, error, data } = keysignPayloadQuery
 
   const startKeysignPromptProps = useMemo(() => {
     if (isPending) {
@@ -102,7 +106,16 @@ export const CreateReferralVerify = ({ onBack }: OnBackProp) => {
             </Text>
             <HStack alignItems="center" gap={8}>
               <CoinIcon coin={thorchainCoin} style={{ fontSize: 24 }} />
-              <Text size={17}>{formatAmount(referralAmount, { ticker })}</Text>
+              <MatchQuery
+                value={keysignPayloadQuery}
+                success={({ toAmount }) => (
+                  <Text size={17}>
+                    {formatAmount(fromChainAmount(toAmount, coin.decimals), {
+                      ticker,
+                    })}
+                  </Text>
+                )}
+              />
             </HStack>
           </AmountWrapper>
           <TxOverviewRow>
