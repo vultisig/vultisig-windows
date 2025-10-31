@@ -51,7 +51,11 @@ export const VaultChainPage = () => {
   }, [address, chain, invalidateQueries, vaultCoins])
 
   return (
-    <Wrapper justifyContent="space-between" flexGrow>
+    <Wrapper
+      data-testid="VaultChainPage-Wrapper"
+      justifyContent="space-between"
+      flexGrow
+    >
       <VStack flexGrow>
         <VaultHeader
           primaryControls={<PageHeaderBackButton />}
