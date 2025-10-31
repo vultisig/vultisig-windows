@@ -205,7 +205,6 @@ export const ManageAmountInputField = () => {
         </HStack>
       </VStack>
       <ManageMemo />
-      <HorizontalLine />
     </SendInputContainer>
   )
 }
