@@ -12,14 +12,16 @@ import Long from 'long'
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
 import { getKeysignSwapPayload } from '../../swap/getKeysignSwapPayload'
 import { KeysignSwapPayload } from '../../swap/KeysignSwapPayload'
-import { GetTxInputDataInput } from '../resolver'
+import { getKeysignChain } from '../../utils/getKeysignChain'
+import { SigningInputsResolver } from '../resolver'
 
-export const getUtxoTxInputData = ({
+export const getUtxoSigningInputs: SigningInputsResolver<'utxo'> = ({
   keysignPayload,
   walletCore,
-  chain,
   publicKey,
-}: GetTxInputDataInput<'utxo'>) => {
+}) => {
+  const chain = getKeysignChain<'utxo'>(keysignPayload)
+
   const { byteFee, sendMaxAmount, psbt } = getBlockchainSpecificValue(
     keysignPayload.blockchainSpecific,
     'utxoSpecific'
@@ -141,5 +143,5 @@ export const getUtxoTxInputData = ({
     input.plan.branchId = Buffer.from('5510e7c8', 'hex')
   }
 
-  return [TW.Bitcoin.Proto.SigningInput.encode(input).finish()]
+  return [input]
 }

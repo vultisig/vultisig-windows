@@ -4,9 +4,9 @@ import Long from 'long'
 
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
 import { getKeysignTwPublicKey } from '../../tw/getKeysignTwPublicKey'
-import { TxInputDataResolver } from '../resolver'
+import { SigningInputsResolver } from '../resolver'
 
-export const getTonTxInputData: TxInputDataResolver<'ton'> = ({
+export const getTonSigningInputs: SigningInputsResolver<'ton'> = ({
   keysignPayload,
 }) => {
   const { expireAt, sequenceNumber, bounceable, sendMaxAmount } =
@@ -46,9 +46,5 @@ export const getTonTxInputData: TxInputDataResolver<'ton'> = ({
   // Native token transfer
   const input = TW.TheOpenNetwork.Proto.SigningInput.create(inputObject)
 
-  // Encode the input
-  const encodedInput =
-    TW.TheOpenNetwork.Proto.SigningInput.encode(input).finish()
-
-  return [encodedInput]
+  return [input]
 }

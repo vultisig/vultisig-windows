@@ -5,7 +5,7 @@ import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { assertChainField } from '@core/chain/utils/assertChainField'
 import { signWithServer } from '@core/mpc/fast/api/signWithServer'
-import { getTxInputData } from '@core/mpc/keysign/txInputData'
+import { getEncodedSigningInputs } from '@core/mpc/keysign/signingInputs'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
@@ -60,7 +60,7 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
             hexChainCode,
             publicKeys,
           })
-          const inputs = getTxInputData({
+          const inputs = getEncodedSigningInputs({
             keysignPayload,
             walletCore,
             publicKey,

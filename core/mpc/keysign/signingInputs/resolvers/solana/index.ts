@@ -5,14 +5,16 @@ import { TW } from '@trustwallet/wallet-core'
 
 import { getBlockchainSpecificValue } from '../../../chainSpecific/KeysignChainSpecific'
 import { getKeysignSwapPayload } from '../../../swap/getKeysignSwapPayload'
-import { TxInputDataResolver } from '../../resolver'
-import { getSolanaSendTxInputData } from './send'
+import { getKeysignChain } from '../../../utils/getKeysignChain'
+import { SigningInputsResolver } from '../../resolver'
+import { getSolanaSendSigningInput } from './send'
 
-export const getSolanaTxInputData: TxInputDataResolver<'solana'> = ({
+export const getSolanaSigningInputs: SigningInputsResolver<'solana'> = ({
   keysignPayload,
   walletCore,
-  chain,
 }) => {
+  const chain = getKeysignChain(keysignPayload)
+
   const { recentBlockHash } = getBlockchainSpecificValue(
     keysignPayload.blockchainSpecific,
     'solanaSpecific'
@@ -55,10 +57,10 @@ export const getSolanaTxInputData: TxInputDataResolver<'solana'> = ({
           rawMessage: transaction,
         })
 
-        return [TW.Solana.Proto.SigningInput.encode(signingInput).finish()]
+        return [signingInput]
       },
     })
   }
 
-  return [getSolanaSendTxInputData({ keysignPayload, walletCore })]
+  return [getSolanaSendSigningInput({ keysignPayload, walletCore })]
 }

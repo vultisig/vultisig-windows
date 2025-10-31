@@ -4,9 +4,9 @@ import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
-import { TxInputDataResolver } from '../resolver'
+import { SigningInputsResolver } from '../resolver'
 
-export const getCardanoTxInputData: TxInputDataResolver<'cardano'> = ({
+export const getCardanoSigningInputs: SigningInputsResolver<'cardano'> = ({
   keysignPayload,
   walletCore,
 }) => {
@@ -38,5 +38,5 @@ export const getCardanoTxInputData: TxInputDataResolver<'cardano'> = ({
     ),
   })
 
-  return [TW.Cardano.Proto.SigningInput.encode(input).finish()]
+  return [input]
 }
