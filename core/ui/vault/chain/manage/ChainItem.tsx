@@ -83,6 +83,7 @@ const ChainIconWrapper = styled.div<IsActiveProp>`
   background: rgba(11, 26, 58, 0.5);
   height: 74px;
   padding: 17px;
+  opacity: ${({ isActive }) => (isActive ? 1 : 0.5)};
 
   ${({ isActive }) =>
     isActive &&
