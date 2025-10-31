@@ -13,33 +13,35 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-export const ChainSearch = ({ onChange, value }: InputProps<string>) => {
+export const SearchInput = ({ onChange, value }: InputProps<string>) => {
   const [isFocused, setIsFocused] = useState(false)
   const { t } = useTranslation()
 
   return (
     <ActionInsideInteractiveElement
       render={({ actionSize }) => (
-        <StyledTextInput
-          inputOverlay={
-            !isFocused &&
-            !value && (
-              <InputOverlayWr gap={8} alignItems="center">
-                <IconWrapper size={16}>
-                  <MagnifyingGlassIcon />
-                </IconWrapper>
-                <Text color="shy">{t('search_field_placeholder')}</Text>
-              </InputOverlayWr>
-            )
-          }
-          onValueChange={onChange}
-          value={value}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          style={{
-            paddingRight: actionSize.width + 8,
-          }}
-        />
+        <InputWrapper hasBorder={!!value}>
+          <StyledTextInput
+            inputOverlay={
+              !isFocused &&
+              !value && (
+                <InputOverlayWr gap={8} alignItems="center">
+                  <IconWrapper size={16}>
+                    <MagnifyingGlassIcon />
+                  </IconWrapper>
+                  <Text color="shy">{t('search_field_placeholder')}</Text>
+                </InputOverlayWr>
+              )
+            }
+            onValueChange={onChange}
+            value={value}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            style={{
+              paddingRight: actionSize.width + 8,
+            }}
+          />
+        </InputWrapper>
       )}
       action={
         value ? (
@@ -62,6 +64,12 @@ export const ChainSearch = ({ onChange, value }: InputProps<string>) => {
     />
   )
 }
+
+const InputWrapper = styled.div<{ hasBorder?: boolean }>`
+  border-radius: 99px;
+  border: ${({ hasBorder, theme }) =>
+    hasBorder ? `1.5px solid ${getColor('primary')({ theme })}` : 'none'};
+`
 
 const StyledTextInput = styled(TextInput)`
   border-radius: 99px;

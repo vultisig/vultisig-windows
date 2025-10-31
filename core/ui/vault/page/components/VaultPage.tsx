@@ -6,7 +6,10 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { useRef } from 'react'
 import styled from 'styled-components'
 
-import { FooterActions, footerActionsHeight } from './FooterActions'
+import {
+  BottomNavigation,
+  bottomNavigationHeight,
+} from '../../components/BottomNavigation'
 import { VaultOverview } from './VaultOverview'
 import { VaultPageHeader } from './VaultPageHeader'
 
@@ -27,12 +30,12 @@ export const VaultPage = () => {
         <VaultOverview scrollContainerRef={scrollContainerRef} />
         {isFastVault && <FastVaultPasswordVerification key={vaultId} />}
       </VStack>
-      <FooterActions />
+      <BottomNavigation />
     </Wrapper>
   )
 }
 
 const Wrapper = styled(VStack)`
   position: relative;
-  margin-bottom: ${footerActionsHeight}px;
+  margin-bottom: ${bottomNavigationHeight}px;
 `

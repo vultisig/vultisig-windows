@@ -1,11 +1,6 @@
 import { areEqualCoins, Coin } from '@core/chain/coin/Coin'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
-import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
-import {
-  useCreateCoinMutation,
-  useDeleteCoinMutation,
-} from '@core/ui/storage/coins'
-import { useCurrentVaultNativeCoins } from '@core/ui/vault/state/currentVaultCoins'
+import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -14,39 +9,40 @@ import { IsActiveProp, ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useMemo } from 'react'
-import styled from 'styled-components'
-import { css } from 'styled-components'
+import styled, { css } from 'styled-components'
 
-export const ChainItem = ({ value: coin }: ValueProp<Coin>) => {
-  const currentCoins = useCurrentVaultNativeCoins()
-  const createCoin = useCreateCoinMutation()
-  const deleteCoin = useDeleteCoinMutation()
+type TokenItemProps = ValueProp<Coin> & {
+  currentCoins: Coin[]
+  onToggle: (coin: Coin) => void
+  isLoading?: boolean
+}
 
+export const TokenItem = ({
+  value: coin,
+  currentCoins,
+  onToggle,
+  isLoading = false,
+}: TokenItemProps) => {
   const currentCoin = useMemo(() => {
     return currentCoins.find(c => areEqualCoins(c, coin))
   }, [currentCoins, coin])
 
   const isSelected = !!currentCoin
-  const isLoading = createCoin.isPending || deleteCoin.isPending
 
   const handleClick = () => {
     if (isLoading) return
-    if (currentCoin) {
-      deleteCoin.mutate(currentCoin)
-    } else {
-      createCoin.mutate(coin)
-    }
+    onToggle(coin)
   }
 
   return (
-    <ChainCard
+    <TokenCard
       onClick={handleClick}
       isSelected={isSelected}
       isLoading={isLoading}
     >
-      <ChainIconWrapper isActive={isSelected}>
+      <TokenIconWrapper isActive={isSelected}>
         <ChainEntityIcon
-          value={getChainLogoSrc(coin.chain)}
+          value={coin.logo ? getCoinLogoSrc(coin.logo) : undefined}
           style={{ fontSize: 27.5 }}
         />
         {isSelected && (
@@ -54,15 +50,15 @@ export const ChainItem = ({ value: coin }: ValueProp<Coin>) => {
             <CheckmarkIcon />
           </CheckBadge>
         )}
-      </ChainIconWrapper>
+      </TokenIconWrapper>
       <Text cropped color="contrast" size={12} weight={500}>
-        {coin.chain}
+        {coin.ticker}
       </Text>
-    </ChainCard>
+    </TokenCard>
   )
 }
 
-const ChainCard = styled(UnstyledButton)<{
+const TokenCard = styled(UnstyledButton)<{
   isSelected: boolean
   isLoading: boolean
 }>`
@@ -73,7 +69,7 @@ const ChainCard = styled(UnstyledButton)<{
   width: 74px;
 `
 
-const ChainIconWrapper = styled.div<IsActiveProp>`
+const TokenIconWrapper = styled.div<IsActiveProp>`
   ${vStack({
     alignItems: 'center',
     justifyContent: 'center',
