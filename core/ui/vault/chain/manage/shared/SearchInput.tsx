@@ -20,7 +20,7 @@ export const SearchInput = ({ onChange, value }: InputProps<string>) => {
   return (
     <ActionInsideInteractiveElement
       render={({ actionSize }) => (
-        <InputWrapper $hasBorder={!!value}>
+        <InputWrapper hasBorder={!!value}>
           <StyledTextInput
             inputOverlay={
               !isFocused &&
@@ -65,10 +65,10 @@ export const SearchInput = ({ onChange, value }: InputProps<string>) => {
   )
 }
 
-const InputWrapper = styled.div<{ $hasBorder?: boolean }>`
+const InputWrapper = styled.div<{ hasBorder?: boolean }>`
   border-radius: 99px;
-  border: ${({ $hasBorder }) =>
-    $hasBorder ? `1.5px solid ${getColor('primary')}` : 'none'};
+  border: ${({ hasBorder, theme }) =>
+    hasBorder ? `1.5px solid ${getColor('primary')({ theme })}` : 'none'};
 `
 
 const StyledTextInput = styled(TextInput)`
