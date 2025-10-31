@@ -3,7 +3,6 @@ import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getFeeAmount } from '@core/mpc/keysign/fee'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
@@ -36,15 +35,15 @@ export const KeysignFeeAmount = ({ keysignPayload }: KeysignFeeAmountProps) => {
   )
 
   return (
-    <VStack alignItems="flex-start">
-      <Text size={14}>{formatAmount(fee, { ticker })}</Text>
-      <Text size={14} color="shy">
+    <Text size={14} centerVertically={{ gap: 8 }}>
+      <span>{formatAmount(fee, { ticker })}</span>
+      <Text as="span" color="shy">
         <MatchQuery
           value={feeCoinPriceQuery}
           pending={() => <Spinner />}
           success={price => formatFiatAmount(fee * price)}
         />
       </Text>
-    </VStack>
+    </Text>
   )
 }
