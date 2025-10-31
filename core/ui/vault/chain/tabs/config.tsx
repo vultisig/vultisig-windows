@@ -8,6 +8,6 @@ export const vaultChainTabs: Tab<VaultChainPageTab>[] = [
   {
     value: 'tokens',
     label: 'Tokens',
-    renderContent: () => <Tokens />,
+    renderContent: Tokens,
   },
 ]

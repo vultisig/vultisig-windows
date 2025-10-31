@@ -32,7 +32,6 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
 
   const pressHandlers = useHandleVaultChainItemPress({
     chain,
-    address,
   })
 
   const formatFiatAmount = useFormatFiatAmount()

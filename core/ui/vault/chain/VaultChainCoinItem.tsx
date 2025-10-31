@@ -54,7 +54,7 @@ export const VaultChainCoinItem = ({
             </Text>
             <PriceBadge>
               <Text weight={500} color="shyExtra" size={12}>
-                {price ? formatFiatAmount(price) : '$0.00'}
+                {formatFiatAmount(price ?? 0)}
               </Text>
             </PriceBadge>
           </VStack>
@@ -66,7 +66,7 @@ export const VaultChainCoinItem = ({
             >
               <Text centerVertically color="contrast" weight="550" size={14}>
                 <BalanceVisibilityAware>
-                  {formatFiatAmount(price || 0)}
+                  {formatFiatAmount((price || 0) * balance)}
                 </BalanceVisibilityAware>
               </Text>
               <Text weight={500} color="shy" size={12} centerVertically>
