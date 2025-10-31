@@ -552,6 +552,9 @@ export const en = {
   enter_address: 'Enter Address',
   wallet: 'Wallet',
   earn: 'Earn',
+  no_tokens_selected: 'No tokens selected',
+  no_tokens_selected_description:
+    "You've disabled all tokens. Make sure that the token you're looking for is enabled.",
   coming_soon: 'Coming Soon',
   enter_amount: 'Enter Amount',
   failed_to_read_qr_code: 'Failed to read QR code',

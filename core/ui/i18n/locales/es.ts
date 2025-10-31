@@ -496,6 +496,9 @@ export const es = {
   enter_address: 'Ingrese dirección',
   wallet: 'Billetera',
   earn: 'Ganar',
+  no_tokens_selected: 'No hay tokens seleccionados',
+  no_tokens_selected_description:
+    'Has deshabilitado todos los tokens. Asegúrate de que el token que buscas esté habilitado.',
   coming_soon: 'Próximamente',
   enter_amount: 'Ingrese monto',
   send_pending_validation: 'Validando su transacción...',

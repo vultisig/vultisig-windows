@@ -498,6 +498,9 @@ export const it = {
   enter_address: 'Inserisci indirizzo',
   wallet: 'Portafoglio',
   earn: 'Guadagna',
+  no_tokens_selected: 'Nessun token selezionato',
+  no_tokens_selected_description:
+    'Hai disabilitato tutti i token. Assicurati che il token che stai cercando sia abilitato.',
   coming_soon: 'Prossimamente',
   enter_amount: 'Inserisci importo',
   send_pending_validation: 'Validazione della tua transazione in corso...',
