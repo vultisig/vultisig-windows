@@ -2,23 +2,27 @@ import { create } from '@bufbuild/protobuf'
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { getFeeQuote } from '@core/chain/feeQuote'
-import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { buildChainSpecific } from '@core/mpc/keysign/chainSpecific/build'
 import { refineKeysignAmount } from '@core/mpc/keysign/refine/amount'
 import { refineKeysignUtxo } from '@core/mpc/keysign/refine/utxo'
 import { getKeysignTxData } from '@core/mpc/keysign/txData'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { Vault } from '@core/mpc/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { WalletCore } from '@trustwallet/wallet-core'
+import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 
-type BuildSendKeysignPayloadInput = {
+import { MpcLib } from '../../mpcLib'
+
+export type BuildSendKeysignPayloadInput = {
   coin: AccountCoin
   receiver: string
   amount: bigint
-  memo: string | undefined
-  vault: Pick<Vault, 'hexChainCode' | 'publicKeys' | 'localPartyId' | 'libType'>
+  memo?: string
+  vaultId: string
+  localPartyId: string
+  publicKey: PublicKey
+  libType: MpcLib
   walletCore: WalletCore
   balance: bigint
 }
@@ -28,9 +32,12 @@ export const buildSendKeysignPayload = async ({
   receiver,
   amount,
   memo,
-  vault,
+  vaultId,
+  localPartyId,
+  publicKey,
   walletCore,
   balance,
+  libType,
 }: BuildSendKeysignPayloadInput) => {
   const txData = await getKeysignTxData({
     coin,
@@ -43,13 +50,6 @@ export const buildSendKeysignPayload = async ({
     receiver,
     amount: shouldBePresent(amount),
     data: memo,
-  })
-
-  const publicKey = getPublicKey({
-    chain: coin.chain,
-    walletCore,
-    hexChainCode: vault.hexChainCode,
-    publicKeys: vault.publicKeys,
   })
 
   const blockchainSpecific = buildChainSpecific({
@@ -67,9 +67,9 @@ export const buildSendKeysignPayload = async ({
     toAmount: shouldBePresent(amount).toString(),
     blockchainSpecific,
     memo,
-    vaultLocalPartyId: vault.localPartyId,
-    vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
-    libType: vault.libType,
+    vaultLocalPartyId: localPartyId,
+    vaultPublicKeyEcdsa: vaultId,
+    libType,
     utxoInfo: 'utxoInfo' in txData ? txData.utxoInfo : undefined,
   })
 
