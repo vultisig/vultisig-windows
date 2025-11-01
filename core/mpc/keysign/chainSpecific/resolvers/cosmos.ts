@@ -1,45 +1,37 @@
 import { create } from '@bufbuild/protobuf'
-import { IbcEnabledCosmosChain, VaultBasedCosmosChain } from '@core/chain/Chain'
+import { IbcEnabledCosmosChain } from '@core/chain/Chain'
 import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo'
 import { cosmosGasRecord } from '@core/chain/chains/cosmos/gas'
-import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
-import { CosmosSpecificSchema } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
-import { isOneOf } from '@lib/utils/array/isOneOf'
+import {
+  CosmosSpecificSchema,
+  TransactionType,
+} from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 
 import { getKeysignCoin } from '../../utils/getKeysignCoin'
 import { GetChainSpecificResolver } from '../resolver'
 
 export const getCosmosChainSpecific: GetChainSpecificResolver<
   'cosmosSpecific'
-> = async ({ keysignPayload }) => {
+> = async ({
+  keysignPayload,
+  transactionType = TransactionType.UNSPECIFIED,
+  timeoutTimestamp,
+}) => {
   const coin = getKeysignCoin<IbcEnabledCosmosChain>(keysignPayload)
-  const cosmosCoin = coin as AccountCoin<IbcEnabledCosmosChain>
   const { accountNumber, sequence, latestBlock } =
-    await getCosmosAccountInfo(cosmosCoin)
-
-  const base = {
-    accountNumber: BigInt(accountNumber),
-    sequence: BigInt(sequence),
-    transactionType: TransactionType.UNSPECIFIED,
-  }
-
-  const gas = cosmosGasRecord[coin.chain]
-
-  if (isOneOf(coin.chain, Object.values(VaultBasedCosmosChain))) {
-    return create(CosmosSpecificSchema, {
-      ...base,
-      gas,
-    })
-  }
+    await getCosmosAccountInfo(coin)
 
   return create(CosmosSpecificSchema, {
-    ...base,
+    accountNumber: BigInt(accountNumber),
+    sequence: BigInt(sequence),
+    transactionType,
+    gas: cosmosGasRecord[coin.chain],
     ibcDenomTraces: {
-      latestBlock: latestBlock,
+      latestBlock: timeoutTimestamp
+        ? `${latestBlock.split('_')[0]}_${timeoutTimestamp}`
+        : latestBlock,
       baseDenom: '',
       path: '',
     },
-    gas,
   })
 }

@@ -1,6 +1,7 @@
 import { create } from '@bufbuild/protobuf'
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { getCoinBalance } from '@core/chain/coin/balance'
 import { FeeSettings } from '@core/chain/feeQuote/settings/core'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import { refineKeysignAmount } from '@core/mpc/keysign/refine/amount'
@@ -57,10 +58,13 @@ export const buildSendKeysignPayload = async ({
     feeSettings,
   })
 
-  keysignPayload = await refineKeysignAmount({
+  const balance = await getCoinBalance(coin)
+
+  keysignPayload = refineKeysignAmount({
     keysignPayload,
     walletCore,
     publicKey,
+    balance,
   })
 
   if (isChainOfKind(coin.chain, 'utxo')) {
