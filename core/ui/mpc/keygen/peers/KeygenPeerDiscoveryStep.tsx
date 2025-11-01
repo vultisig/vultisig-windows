@@ -47,7 +47,7 @@ const educationUrl: Record<KeygenType, string> = {
   create: 'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault',
   reshare:
     'https://docs.vultisig.com/vultisig-vault-user-actions/managing-your-vault/vault-reshare',
-  keyimport: 'https://docs.vultisig.com/vultisig-user-actions/importing-a-key', // TODO : Update URL when key import docs are available
+  keyimport: 'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault', // TODO : Update URL when key import docs are available
 }
 
 export const KeygenPeerDiscoveryStep = ({
