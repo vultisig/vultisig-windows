@@ -2,16 +2,14 @@ import { EvmChain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { deriveEvmGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
-import { useEvmBaseFeeQuery } from '@core/ui/chain/evm/queries/baseFee'
 import { useEvmMaxPriorityFeePerGasQuery } from '@core/ui/chain/evm/queries/maxPriorityFeePerGas'
 import { useFeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { OnCloseProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { FailedQueryOverlay } from '@lib/ui/query/components/overlay/FailedQueryOverlay'
 import { PendingQueryOverlay } from '@lib/ui/query/components/overlay/PendingQueryOverlay'
-import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { StrictText } from '@lib/ui/text'
-import { FC, useCallback, useState } from 'react'
+import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { EvmFeeSettingsForm } from './EvmFeeSettingsForm'
@@ -27,7 +25,6 @@ export const ManageEvmFeeSettings: FC<ManageEvmFeeSettingsProps> = ({
   const { t } = useTranslation()
   const [persistentValue, setPersistentValue] = useFeeSettings<EvmFeeSettings>()
 
-  const baseFeeQuery = useEvmBaseFeeQuery(chain)
   const priorityFeeQuery = useEvmMaxPriorityFeePerGasQuery(chain)
 
   const defaultGasLimit = deriveEvmGasLimit({
@@ -49,24 +46,10 @@ export const ManageEvmFeeSettings: FC<ManageEvmFeeSettingsProps> = ({
     onClose()
   }
 
-  const queries = useTransformQueriesData(
-    {
-      baseFee: baseFeeQuery,
-      priorityFee: priorityFeeQuery,
-    },
-    useCallback(
-      ({ baseFee, priorityFee }) => ({
-        baseFeePerGas: baseFee,
-        maxPriorityFeePerGas: priorityFee,
-      }),
-      []
-    )
-  )
-
   return (
     <MatchQuery
-      value={queries}
-      success={({ baseFeePerGas, maxPriorityFeePerGas }) => {
+      value={priorityFeeQuery}
+      success={maxPriorityFeePerGas => {
         const currentValue =
           value.maxPriorityFeePerGas ||
           (persistentValue?.maxPriorityFeePerGas ?? maxPriorityFeePerGas)
@@ -81,7 +64,6 @@ export const ManageEvmFeeSettings: FC<ManageEvmFeeSettingsProps> = ({
             onFinish={handleSave}
             onClose={onClose}
             chain={chain}
-            baseFeePerGas={baseFeePerGas}
           />
         )
       }}
