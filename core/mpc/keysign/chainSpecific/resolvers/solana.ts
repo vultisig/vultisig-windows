@@ -3,10 +3,14 @@ import { OtherChain } from '@core/chain/Chain'
 import { getSolanaClient } from '@core/chain/chains/solana/client'
 import { solanaConfig } from '@core/chain/chains/solana/solanaConfig'
 import { getSplAssociatedAccount } from '@core/chain/chains/solana/spl/getSplAssociatedAccount'
-import { SolanaSpecificSchema } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { attempt } from '@lib/utils/attempt'
+import { address } from '@solana/web3.js'
 
+import {
+  SolanaSpecific,
+  SolanaSpecificSchema,
+} from '../../../types/vultisig/keysign/v1/blockchain_specific_pb'
 import { getKeysignCoin } from '../../utils/getKeysignCoin'
 import { GetChainSpecificResolver } from '../resolver'
 
@@ -21,14 +25,20 @@ export const getSolanaChainSpecific: GetChainSpecificResolver<
     await client.getLatestBlockhash().send()
   ).value.blockhash.toString()
 
-  const result: {
-    recentBlockHash: string
-    fromTokenAssociatedAddress?: string
-    toTokenAssociatedAddress?: string
-    programId?: boolean
-  } = {
+  const prioritizationFees = await client
+    .getRecentPrioritizationFees([address(coin.address)])
+    .send()
+
+  const highPriorityFee =
+    Math.max(
+      ...prioritizationFees.map(fee => Number(fee.prioritizationFee.valueOf())),
+      solanaConfig.priorityFeeLimit
+    ) + solanaConfig.baseFee
+
+  const result: SolanaSpecific = create(SolanaSpecificSchema, {
     recentBlockHash,
-  }
+    priorityFee: highPriorityFee.toString(),
+  })
 
   if (coin.id) {
     const fromAccount = await getSplAssociatedAccount({
@@ -48,18 +58,5 @@ export const getSolanaChainSpecific: GetChainSpecificResolver<
     }
   }
 
-  const prioritizationFees = await client
-    .getRecentPrioritizationFees([coin.address as any])
-    .send()
-
-  const highPriorityFee =
-    Math.max(
-      ...prioritizationFees.map(fee => Number(fee.prioritizationFee.valueOf())),
-      solanaConfig.priorityFeeLimit
-    ) + solanaConfig.baseFee
-
-  return create(SolanaSpecificSchema, {
-    ...result,
-    priorityFee: BigInt(highPriorityFee).toString(),
-  })
+  return result
 }
