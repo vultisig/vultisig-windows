@@ -1,5 +1,4 @@
 import { create } from '@bufbuild/protobuf'
-import { OtherChain } from '@core/chain/Chain'
 import { getSuiClient } from '@core/chain/chains/sui/client'
 import { suiGasBudget } from '@core/chain/chains/sui/config'
 import {
@@ -13,7 +12,7 @@ import { GetChainSpecificResolver } from '../resolver'
 export const getSuiChainSpecific: GetChainSpecificResolver<
   'suicheSpecific'
 > = async ({ keysignPayload }) => {
-  const coin = getKeysignCoin<OtherChain.Sui>(keysignPayload)
+  const coin = getKeysignCoin(keysignPayload)
   const { address } = coin
   const client = getSuiClient()
 
