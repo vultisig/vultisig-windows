@@ -3,12 +3,13 @@ import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { deriveEvmGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
 import { useEvmMaxPriorityFeePerGasQuery } from '@core/ui/chain/evm/queries/maxPriorityFeePerGas'
 import { useFeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
+import { ControlledValue } from '@lib/ui/base/ControlledValue'
 import { OnCloseProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { FailedQueryOverlay } from '@lib/ui/query/components/overlay/FailedQueryOverlay'
 import { PendingQueryOverlay } from '@lib/ui/query/components/overlay/PendingQueryOverlay'
 import { StrictText } from '@lib/ui/text'
-import { FC, useState } from 'react'
+import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { EvmFeeSettingsForm } from './EvmFeeSettingsForm'
@@ -26,43 +27,32 @@ export const ManageEvmFeeSettings: FC<ManageEvmFeeSettingsProps> = ({
 
   const priorityFeeQuery = useEvmMaxPriorityFeePerGasQuery(chain)
 
-  const defaultGasLimit = deriveEvmGasLimit({
-    coin: { chain },
-    data: undefined,
-  })
-
-  const [value, setValue] = useState<EvmFeeSettings>(() => {
-    if (persistentValue) return persistentValue
-
-    return {
-      maxPriorityFeePerGas: priorityFeeQuery.data ?? 0n,
-      gasLimit: defaultGasLimit,
-    }
-  })
-
-  const handleSave = () => {
-    setPersistentValue(value)
-    onClose()
-  }
-
   return (
     <MatchQuery
       value={priorityFeeQuery}
       success={maxPriorityFeePerGas => {
-        const currentValue =
-          value.maxPriorityFeePerGas ||
-          (persistentValue?.maxPriorityFeePerGas ?? maxPriorityFeePerGas)
+        const initialValue = persistentValue ?? {
+          maxPriorityFeePerGas: maxPriorityFeePerGas,
+          gasLimit: deriveEvmGasLimit({
+            coin: { chain },
+          }),
+        }
 
         return (
-          <EvmFeeSettingsForm
-            value={{
-              ...value,
-              maxPriorityFeePerGas: currentValue,
-            }}
-            onChange={setValue}
-            onFinish={handleSave}
-            onClose={onClose}
-            chain={chain}
+          <ControlledValue
+            initialValue={initialValue}
+            render={({ value, onChange }) => (
+              <EvmFeeSettingsForm
+                value={value}
+                onChange={onChange}
+                onFinish={() => {
+                  setPersistentValue(value)
+                  onClose()
+                }}
+                onClose={onClose}
+                chain={chain}
+              />
+            )}
           />
         )
       }}
