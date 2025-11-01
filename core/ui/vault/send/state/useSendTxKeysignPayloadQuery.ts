@@ -12,7 +12,7 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { useCallback } from 'react'
 
-import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'
+import { useBalance } from '../../../chain/coin/queries/useBalanceQuery'
 import { useSendFeeQuoteQuery } from '../queries/useSendFeeQuoteQuery'
 import { useSendKeysignTxDataQuery } from '../queries/useSendKeysignTxDataQuery'
 import { useSendMemo } from './memo'
@@ -26,7 +26,7 @@ export const useSendTxKeysignPayloadQuery = () => {
 
   const vault = useCurrentVault()
 
-  const balance = useBalanceQuery(extractAccountCoinKey(coin))
+  const balance = useBalance(extractAccountCoinKey(coin))
 
   const txData = useSendKeysignTxDataQuery()
   const feeQuote = useSendFeeQuoteQuery()
@@ -37,10 +37,9 @@ export const useSendTxKeysignPayloadQuery = () => {
     {
       txData,
       feeQuote,
-      balance,
     },
     useCallback(
-      ({ txData, cappedAmount, feeQuote, balance }) => {
+      ({ txData, cappedAmount, feeQuote }) => {
         const publicKey = getPublicKey({
           chain: coin.chain,
           walletCore,
@@ -95,6 +94,7 @@ export const useSendTxKeysignPayloadQuery = () => {
         vault.localPartyId,
         vault.publicKeys,
         walletCore,
+        balance,
       ]
     )
   )

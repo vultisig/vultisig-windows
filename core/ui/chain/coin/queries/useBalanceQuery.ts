@@ -1,5 +1,6 @@
 import { CoinBalanceResolverInput } from '@core/chain/coin/balance/resolver'
 import { coinKeyToString } from '@core/chain/coin/Coin'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { Exact } from '@lib/utils/types/Exact'
 import { useMemo } from 'react'
 
@@ -21,4 +22,12 @@ export const useBalanceQuery = <T extends CoinBalanceResolverInput>(
       error,
     }
   }, [query, input])
+}
+
+export const useBalance = <T extends CoinBalanceResolverInput>(
+  input: Exact<CoinBalanceResolverInput, T>
+) => {
+  const { data } = useBalanceQuery(input)
+
+  return shouldBePresent(data, `${coinKeyToString(input)} balance`)
 }
