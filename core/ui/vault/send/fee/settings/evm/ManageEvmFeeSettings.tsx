@@ -1,5 +1,4 @@
 import { EvmChain } from '@core/chain/Chain'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { deriveEvmGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
 import { useEvmMaxPriorityFeePerGasQuery } from '@core/ui/chain/evm/queries/maxPriorityFeePerGas'
@@ -28,7 +27,7 @@ export const ManageEvmFeeSettings: FC<ManageEvmFeeSettingsProps> = ({
   const priorityFeeQuery = useEvmMaxPriorityFeePerGasQuery(chain)
 
   const defaultGasLimit = deriveEvmGasLimit({
-    coin: chainFeeCoin[chain] as { chain: EvmChain },
+    coin: { chain },
     data: undefined,
   })
 
