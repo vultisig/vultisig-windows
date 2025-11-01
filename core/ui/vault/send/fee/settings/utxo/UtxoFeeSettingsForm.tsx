@@ -2,7 +2,10 @@ import {
   defaultFeePriority,
   feePriorities,
 } from '@core/chain/tx/fee/FeePriority'
-import { UtxoFeeSettings } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
+import {
+  byteFeeMultiplier,
+  UtxoFeeSettings,
+} from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { useFeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { Button } from '@lib/ui/buttons/Button'
@@ -14,7 +17,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -83,11 +86,11 @@ export const UtxoFeeSettingsForm: React.FC<UtxoFeeSettingsFormProps> = ({
               {t('network_rate')} (sats/vbyte)
             </Text>
           }
-          value={
-            Number(
-              'byteFee' in value ? value.byteFee : shouldBePresent(byteFee)
-            ) || null
-          }
+          value={matchRecordUnion(value, {
+            byteFee: value => Number(value),
+            priority: priority =>
+              Math.round(byteFeeMultiplier[priority] * Number(byteFee)),
+          })}
           onValueChange={n => setValue({ byteFee: BigInt(n || 0) })}
           shouldBeInteger
           shouldBePositive

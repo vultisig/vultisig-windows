@@ -39,6 +39,18 @@ export const buildSendKeysignPayload = async ({
   libType,
   feeSettings,
 }: BuildSendKeysignPayloadInput) => {
+  console.log('build keysign payload: ', {
+    coin,
+    receiver,
+    amount,
+    memo,
+    vaultId,
+    localPartyId,
+    publicKey,
+    walletCore,
+    libType,
+    feeSettings,
+  })
   let keysignPayload = create(KeysignPayloadSchema, {
     coin: toCommCoin({
       ...coin,
