@@ -29,6 +29,7 @@ type GetChainSpecificInput<C extends KeysignChainSpecificKey> = {
       : C extends 'thorchainSpecific'
         ? {
             isDeposit?: boolean
+            transactionType?: TransactionType
           }
         : C extends 'mayaSpecific'
           ? {
