@@ -44,6 +44,7 @@ export const KeygenFlow = ({
         plugin: () => t('install_plugin'),
         regular: () => t('reshare'),
       }),
+    keyimport: () => t('import_key'),
   })
 
   const isPluginReshare = useMemo(() => {
@@ -91,6 +92,7 @@ export const KeygenFlow = ({
                   />
                 ),
                 reshare: renderEnding,
+                keyimport: renderEnding, // TODO: Handle key import specific ending if needed
               }}
             />
           </CurrentVaultProvider>

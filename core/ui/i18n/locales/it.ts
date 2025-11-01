@@ -1214,4 +1214,5 @@ export const it = {
   buy: 'Acquistare',
   not_enough_asset_to_cover_gas_fees:
     'Non abbastanza {{asset}} per coprire le spese del carburante',
+  import_key: 'Importa chiave',
 }

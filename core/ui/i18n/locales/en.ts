@@ -1166,4 +1166,5 @@ export const en = {
   unlock_discount_tier: 'Unlock <b>{{tier}}</b> Tier',
   unlock_discount_tier_description:
     'By holding {{minBalance}}, you’ll unlock the {{tier}} Tier and receive a <b>{{bps}} bps trading fee discount</b> on all swaps.',
+  import_key: 'Import Key',
 }

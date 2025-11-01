@@ -18,7 +18,7 @@ import { ComponentType } from 'react'
 
 export const FastKeygenFlow = ({ onBack }: OnBackProp) => {
   const keygenOperation = useKeygenOperation()
-
+  const EmptyComponent: ComponentType<any> = () => null
   const ServerActionProvider = matchRecordUnion<
     KeygenOperation,
     ComponentType<any>
@@ -31,6 +31,7 @@ export const FastKeygenFlow = ({ onBack }: OnBackProp) => {
         plugin: () => PluginReshareFastKeygenServerActionProvider,
       })
     },
+    keyimport: () => EmptyComponent,
   })
 
   return (

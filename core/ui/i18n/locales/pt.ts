@@ -1203,4 +1203,5 @@ export const pt = {
   buy: 'Comprar',
   not_enough_asset_to_cover_gas_fees:
     'Não há {{ativo}} suficiente para cobrir as taxas de gás',
+  import_key: 'Importar chave',
 }
