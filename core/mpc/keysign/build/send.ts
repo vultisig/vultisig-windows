@@ -64,7 +64,7 @@ export const buildSendKeysignPayload = async ({
       hexPublicKey: Buffer.from(publicKey.data()).toString('hex'),
     }),
     toAddress: receiver,
-    toAmount: shouldBePresent(amount).toString(),
+    toAmount: amount.toString(),
     blockchainSpecific,
     memo,
     vaultLocalPartyId: localPartyId,
