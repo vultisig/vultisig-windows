@@ -14,7 +14,9 @@ type ValueForCase<C extends KeysignChainSpecificKey> = Extract<
   { case: C }
 >['value']
 
-type GetChainSpecificInput<C extends KeysignChainSpecificKey> = {
+export type GetChainSpecificInput<
+  C extends KeysignChainSpecificKey = KeysignChainSpecificKey,
+> = {
   keysignPayload: KeysignPayload
 } & (C extends 'ethereumSpecific'
   ? { feeSettings?: FeeSettings<'evm'> }
@@ -44,5 +46,6 @@ type GetChainSpecificInput<C extends KeysignChainSpecificKey> = {
               }
             : {})
 
-export type GetChainSpecificResolver<C extends KeysignChainSpecificKey> =
-  Resolver<GetChainSpecificInput<C>, Promise<ValueForCase<C>>>
+export type GetChainSpecificResolver<
+  C extends KeysignChainSpecificKey = KeysignChainSpecificKey,
+> = Resolver<GetChainSpecificInput<C>, Promise<ValueForCase<C>>>

@@ -1,12 +1,9 @@
-import { FeeSettings } from '@core/chain/feeQuote/settings/core'
-import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-
 import { getKeysignCoin } from '../utils/getKeysignCoin'
 import {
   chainSpecificRecord,
   KeysignChainSpecific,
 } from './KeysignChainSpecific'
-import { GetChainSpecificResolver } from './resolver'
+import { GetChainSpecificInput, GetChainSpecificResolver } from './resolver'
 import { getCardanoChainSpecific } from './resolvers/cardano'
 import { getCosmosChainSpecific } from './resolvers/cosmos'
 import { getEvmChainSpecific } from './resolvers/evm'
@@ -38,19 +35,13 @@ const resolvers: Record<
   cardano: getCardanoChainSpecific,
 }
 
-export const getChainSpecific = async ({
-  keysignPayload,
-  feeSettings,
-}: {
-  keysignPayload: KeysignPayload
-  feeSettings?: FeeSettings
-}): Promise<KeysignChainSpecific> => {
+export const getChainSpecific = async (
+  input: GetChainSpecificInput
+): Promise<KeysignChainSpecific> => {
+  const { keysignPayload } = input
   const coin = getKeysignCoin(keysignPayload)
   const chainSpecificCase = chainSpecificRecord[coin.chain]
-  const value = await resolvers[chainSpecificCase]({
-    keysignPayload,
-    feeSettings,
-  })
+  const value = await resolvers[chainSpecificCase](input)
 
   return { case: chainSpecificCase, value } as KeysignChainSpecific
 }
