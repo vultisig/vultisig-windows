@@ -1,13 +1,17 @@
-import { ChainKind } from '@core/chain/ChainKind'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { UtxoFeeSettings } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
 
-export const feeSettingsChainKinds = [
-  'evm',
-  'utxo',
-] as const satisfies ChainKind[]
+import { Chain, EvmChain, UtxoChain } from '../../Chain'
+import { DeriveChainKind } from '../../ChainKind'
 
-export type FeeSettingsChainKind = (typeof feeSettingsChainKinds)[number]
+export const feeSettingsChains = [
+  ...Object.values(EvmChain),
+  ...Object.values(UtxoChain),
+] as const satisfies Chain[]
+
+type FeeSettingsChain = (typeof feeSettingsChains)[number]
+
+export type FeeSettingsChainKind = DeriveChainKind<FeeSettingsChain>
 
 export type FeeSettings<T extends FeeSettingsChainKind = FeeSettingsChainKind> =
   T extends 'evm' ? EvmFeeSettings : UtxoFeeSettings
