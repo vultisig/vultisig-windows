@@ -38,7 +38,7 @@ export const buildSendKeysignPayload = async ({
   libType,
   feeSettings,
 }: BuildSendKeysignPayloadInput) => {
-  const keysignPayload = create(KeysignPayloadSchema, {
+  let keysignPayload = create(KeysignPayloadSchema, {
     coin: toCommCoin({
       ...coin,
       hexPublicKey: Buffer.from(publicKey.data()).toString('hex'),
@@ -57,19 +57,19 @@ export const buildSendKeysignPayload = async ({
     feeSettings,
   })
 
-  let refinedPayload = await refineKeysignAmount({
+  keysignPayload = await refineKeysignAmount({
     keysignPayload,
     walletCore,
     publicKey,
   })
 
   if (isChainOfKind(coin.chain, 'utxo')) {
-    refinedPayload = refineKeysignUtxo({
-      keysignPayload: refinedPayload,
+    keysignPayload = refineKeysignUtxo({
+      keysignPayload,
       walletCore,
       publicKey,
     })
   }
 
-  return refinedPayload
+  return keysignPayload
 }
