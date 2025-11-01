@@ -3,7 +3,7 @@ import { UtxoChain } from '@core/chain/Chain'
 import { getUtxoByteFee } from '@core/chain/chains/utxo/fee/byteFee'
 import {
   byteFeeMultiplier,
-  complexUtxoTxMultiplier,
+  UtxoFeeSettings,
 } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
 import { UTXOSpecificSchema } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { multiplyBigInt } from '@lib/utils/bigint/bigIntMultiplyByNumber'
@@ -25,26 +25,19 @@ export const getUtxoChainSpecific: GetChainSpecificResolver<
 
   const utxoInfo = keysignPayload.utxoInfo || []
 
-  let byteFee: bigint
+  const getByteFee = () => {
+    if (feeSettings) {
+      return matchRecordUnion<UtxoFeeSettings, Promise<bigint>>(feeSettings, {
+        byteFee: async value => value,
+        priority: async priority =>
+          multiplyBigInt(
+            await getUtxoByteFee(coin.chain),
+            byteFeeMultiplier[priority]
+          ),
+      })
+    }
 
-  if (feeSettings) {
-    const baseByteFee = await getUtxoByteFee(coin.chain)
-    const isComplexTx = !!keysignPayload.memo
-    const adjustedByteFee = isComplexTx
-      ? multiplyBigInt(baseByteFee, complexUtxoTxMultiplier)
-      : baseByteFee
-
-    byteFee = matchRecordUnion(feeSettings, {
-      byteFee: byteFee => byteFee,
-      priority: priority =>
-        multiplyBigInt(adjustedByteFee, byteFeeMultiplier[priority]),
-    })
-  } else {
-    const baseByteFee = await getUtxoByteFee(coin.chain)
-    const isComplexTx = !!keysignPayload.memo
-    byteFee = isComplexTx
-      ? multiplyBigInt(baseByteFee, complexUtxoTxMultiplier)
-      : baseByteFee
+    return getUtxoByteFee(coin.chain)
   }
 
   const balance = bigIntSum(utxoInfo.map(({ amount }) => amount))
@@ -53,6 +46,6 @@ export const getUtxoChainSpecific: GetChainSpecificResolver<
   return create(UTXOSpecificSchema, {
     psbt: undefined,
     sendMaxAmount,
-    byteFee: byteFee.toString(),
+    byteFee: (await getByteFee()).toString(),
   })
 }
