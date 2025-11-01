@@ -1,5 +1,4 @@
 import { create } from '@bufbuild/protobuf'
-import { OtherChain } from '@core/chain/Chain'
 import { getPolkadotClient } from '@core/chain/chains/polkadot/client'
 import { polkadotConfig } from '@core/chain/chains/polkadot/config'
 import { PolkadotSpecificSchema } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
@@ -10,7 +9,7 @@ import { GetChainSpecificResolver } from '../resolver'
 export const getPolkadotChainSpecific: GetChainSpecificResolver<
   'polkadotSpecific'
 > = async ({ keysignPayload }) => {
-  const coin = getKeysignCoin<OtherChain.Polkadot>(keysignPayload)
+  const coin = getKeysignCoin(keysignPayload)
   const client = await getPolkadotClient()
   const recentBlockHash = (await client.rpc.chain.getBlockHash()).toHex()
   const nonce = (
