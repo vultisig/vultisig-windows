@@ -1,11 +1,10 @@
 import { create } from '@bufbuild/protobuf'
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { getFeeQuote } from '@core/chain/feeQuote'
-import { buildChainSpecific } from '@core/mpc/keysign/chainSpecific/build'
+import { FeeSettings } from '@core/chain/feeQuote/settings/core'
+import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import { refineKeysignAmount } from '@core/mpc/keysign/refine/amount'
 import { refineKeysignUtxo } from '@core/mpc/keysign/refine/utxo'
-import { getKeysignTxData } from '@core/mpc/keysign/txData'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -26,6 +25,7 @@ export type BuildSendKeysignPayloadInput = {
   libType: MpcLib
   walletCore: WalletCore
   balance: bigint
+  feeSettings?: FeeSettings
 }
 
 export const buildSendKeysignPayload = async ({
@@ -39,26 +39,8 @@ export const buildSendKeysignPayload = async ({
   walletCore,
   balance,
   libType,
+  feeSettings,
 }: BuildSendKeysignPayloadInput) => {
-  const txData = await getKeysignTxData({
-    coin,
-    amount: shouldBePresent(amount),
-    receiver,
-  })
-
-  const feeQuote = await getFeeQuote({
-    coin,
-    receiver,
-    amount: shouldBePresent(amount),
-    data: memo,
-  })
-
-  const blockchainSpecific = buildChainSpecific({
-    chain: coin.chain,
-    txData,
-    feeQuote,
-  })
-
   const keysignPayload = create(KeysignPayloadSchema, {
     coin: toCommCoin({
       ...coin,
@@ -66,7 +48,6 @@ export const buildSendKeysignPayload = async ({
     }),
     toAddress: receiver,
     toAmount: amount.toString(),
-    blockchainSpecific,
     memo,
     vaultLocalPartyId: localPartyId,
     vaultPublicKeyEcdsa: vaultId,
@@ -74,20 +55,25 @@ export const buildSendKeysignPayload = async ({
     utxoInfo: await getKeysignUtxoInfo(coin),
   })
 
-  const refiners = [refineKeysignAmount]
+  keysignPayload.blockchainSpecific = await getChainSpecific({
+    keysignPayload,
+    feeSettings,
+  })
+
+  let refinedPayload = refineKeysignAmount({
+    keysignPayload,
+    walletCore,
+    publicKey,
+    balance: shouldBePresent(balance),
+  })
 
   if (isChainOfKind(coin.chain, 'utxo')) {
-    refiners.push(refineKeysignUtxo)
+    refinedPayload = refineKeysignUtxo({
+      keysignPayload: refinedPayload,
+      walletCore,
+      publicKey,
+    })
   }
 
-  return refiners.reduce(
-    (keysignPayload, refiner) =>
-      refiner({
-        keysignPayload,
-        walletCore,
-        publicKey,
-        balance: shouldBePresent(balance),
-      }),
-    keysignPayload
-  )
+  return refinedPayload
 }

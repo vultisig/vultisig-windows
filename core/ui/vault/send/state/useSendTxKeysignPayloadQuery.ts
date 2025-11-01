@@ -16,6 +16,7 @@ import { omit } from '@lib/utils/record/omit'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
+import { useFeeSettings } from '../fee/settings/state/feeSettings'
 import { useSendAmount } from './amount'
 import { useSendMemo } from './memo'
 import { useSendReceiver } from './receiver'
@@ -26,6 +27,7 @@ export const useSendTxKeysignPayloadQuery = () => {
   const [receiver] = useSendReceiver()
   const [memo] = useSendMemo()
   const [amount] = useSendAmount()
+  const [feeSettings] = useFeeSettings()
 
   const vault = useCurrentVault()
 
@@ -46,11 +48,13 @@ export const useSendTxKeysignPayloadQuery = () => {
       libType: vault.libType,
       walletCore,
       balance: shouldBePresent(balanceQuery.data),
+      feeSettings: feeSettings ?? undefined,
     }),
     [
       amount,
       balanceQuery.data,
       coin,
+      feeSettings,
       memo,
       publicKey,
       receiver,
