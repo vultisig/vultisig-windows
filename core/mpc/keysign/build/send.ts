@@ -13,6 +13,7 @@ import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 
 import { MpcLib } from '../../mpcLib'
+import { getKeysignUtxoInfo } from '../utxo/getKeysignUtxoInfo'
 
 export type BuildSendKeysignPayloadInput = {
   coin: AccountCoin
@@ -70,7 +71,7 @@ export const buildSendKeysignPayload = async ({
     vaultLocalPartyId: localPartyId,
     vaultPublicKeyEcdsa: vaultId,
     libType,
-    utxoInfo: 'utxoInfo' in txData ? txData.utxoInfo : undefined,
+    utxoInfo: await getKeysignUtxoInfo(coin),
   })
 
   const refiners = [refineKeysignAmount]
