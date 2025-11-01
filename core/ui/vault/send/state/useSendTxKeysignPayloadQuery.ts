@@ -1,10 +1,8 @@
-import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import {
   buildSendKeysignPayload,
   BuildSendKeysignPayloadInput,
 } from '@core/mpc/keysign/build/send'
 import { getVaultId } from '@core/mpc/vault/Vault'
-import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
   useCurrentVault,
@@ -31,8 +29,6 @@ export const useSendTxKeysignPayloadQuery = () => {
 
   const vault = useCurrentVault()
 
-  const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
-
   const walletCore = useAssertWalletCore()
   const publicKey = useCurrentVaultPublicKey(coin.chain)
 
@@ -47,27 +43,13 @@ export const useSendTxKeysignPayloadQuery = () => {
       publicKey,
       libType: vault.libType,
       walletCore,
-      balance: shouldBePresent(balanceQuery.data),
       feeSettings: feeSettings ?? undefined,
     }),
-    [
-      amount,
-      balanceQuery.data,
-      coin,
-      feeSettings,
-      memo,
-      publicKey,
-      receiver,
-      vault,
-      walletCore,
-    ]
+    [amount, coin, feeSettings, memo, publicKey, receiver, vault, walletCore]
   )
 
   return useQuery({
-    queryKey: [
-      'sendTxKeysignPayload',
-      omit(input, 'walletCore', 'publicKey', 'balance'),
-    ],
+    queryKey: ['sendTxKeysignPayload', omit(input, 'walletCore', 'publicKey')],
     queryFn: () => buildSendKeysignPayload(input),
     ...noRefetchQueryOptions,
   })

@@ -7,7 +7,6 @@ import { refineKeysignAmount } from '@core/mpc/keysign/refine/amount'
 import { refineKeysignUtxo } from '@core/mpc/keysign/refine/utxo'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 
@@ -24,7 +23,6 @@ export type BuildSendKeysignPayloadInput = {
   publicKey: PublicKey
   libType: MpcLib
   walletCore: WalletCore
-  balance: bigint
   feeSettings?: FeeSettings
 }
 
@@ -37,7 +35,6 @@ export const buildSendKeysignPayload = async ({
   localPartyId,
   publicKey,
   walletCore,
-  balance,
   libType,
   feeSettings,
 }: BuildSendKeysignPayloadInput) => {
@@ -60,11 +57,10 @@ export const buildSendKeysignPayload = async ({
     feeSettings,
   })
 
-  let refinedPayload = refineKeysignAmount({
+  let refinedPayload = await refineKeysignAmount({
     keysignPayload,
     walletCore,
     publicKey,
-    balance: shouldBePresent(balance),
   })
 
   if (isChainOfKind(coin.chain, 'utxo')) {

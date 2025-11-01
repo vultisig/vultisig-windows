@@ -1,4 +1,5 @@
 import { UtxoBasedChain } from '@core/chain/Chain'
+import { getCoinBalance } from '@core/chain/coin/balance'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { minBigInt } from '@lib/utils/math/minBigInt'
@@ -13,10 +14,9 @@ type RefineKeysignAmountInput = {
   keysignPayload: KeysignPayload
   walletCore: WalletCore
   publicKey: PublicKey
-  balance: bigint
 }
 
-export const refineKeysignAmount = (input: RefineKeysignAmountInput) => {
+export const refineKeysignAmount = async (input: RefineKeysignAmountInput) => {
   if (!input.keysignPayload.toAmount) {
     return input.keysignPayload
   }
@@ -30,11 +30,12 @@ export const refineKeysignAmount = (input: RefineKeysignAmountInput) => {
     return input.keysignPayload
   }
 
+  const balance = await getCoinBalance(coin)
   const fee = getFeeAmount(input)
 
   const refinedAmount = minBigInt(
     BigInt(input.keysignPayload.toAmount),
-    input.balance - fee
+    balance - fee
   )
 
   if (refinedAmount <= 0n) {
