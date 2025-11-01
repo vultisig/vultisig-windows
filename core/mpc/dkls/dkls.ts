@@ -1,6 +1,11 @@
 import { base64Encode } from '@lib/utils/base64Encode'
 
-import { KeygenSession, Keyshare, QcSession } from '../../../lib/dkls/vs_wasm'
+import {
+  KeygenSession,
+  KeyImportInitiator,
+  Keyshare,
+  QcSession,
+} from '../../../lib/dkls/vs_wasm'
 import { getKeygenThreshold } from '../getKeygenThreshold'
 import { getMessageHash } from '../getMessageHash'
 import { KeygenOperation } from '../keygen/KeygenOperation'
@@ -58,7 +63,7 @@ export class DKLS {
   }
 
   private async processOutbound(
-    session: KeygenSession | QcSession
+    session: KeygenSession | QcSession | KeyImportInitiator
   ): Promise<boolean> {
     try {
       const message = session.outputMessage()
@@ -101,7 +106,7 @@ export class DKLS {
   }
 
   private async processInbound(
-    session: KeygenSession | QcSession,
+    session: KeygenSession | QcSession | KeyImportInitiator,
     start: number
   ): Promise<boolean> {
     try {
@@ -192,7 +197,7 @@ export class DKLS {
           this.hexEncryptionKey
         )
       }
-      let session: KeygenSession
+      let session: KeygenSession | KeyImportInitiator
       if ('create' in this.keygenOperation) {
         session = new KeygenSession(this.setupMessage, this.localPartyId)
       } else if (
@@ -208,7 +213,7 @@ export class DKLS {
         )
         console.log('migrate session:', session)
       } else {
-        throw new Error('invalid keygen type')
+        throw new Error('Invalid keygen operation')
       }
       const start = Date.now()
       const outbound = this.processOutbound(session)
@@ -353,5 +358,91 @@ export class DKLS {
       }
     }
     throw new Error('DKLS reshare failed')
+  }
+  private async startKeyImport(
+    hexPrivateKey: string,
+    hexChainCode: string,
+    attempt: number
+  ) {
+    console.log('startKeyImport attempt:', attempt)
+    this.isKeygenComplete = false
+    if (this.keygenCommittee.length != 3) {
+      throw new Error('DKLS key import requires exactly 3 committee members')
+    }
+    try {
+      let session: KeygenSession | KeyImportInitiator
+      if (this.isInitiateDevice && attempt === 0) {
+        const threshold = getKeygenThreshold(this.keygenCommittee.length)
+        const privateKey = Buffer.from(hexPrivateKey, 'hex')
+        const chainCode = Buffer.from(hexChainCode, 'hex')
+
+        const keyImportSession = new KeyImportInitiator(
+          Uint8Array.from(privateKey),
+          Uint8Array.from(chainCode),
+          threshold,
+          this.keygenCommittee
+        )
+        this.setupMessage = keyImportSession.setup
+        session = keyImportSession
+        // upload setup message to server
+        const encryptedSetupMsg = toMpcServerMessage(
+          this.setupMessage,
+          this.hexEncryptionKey
+        )
+
+        await uploadMpcSetupMessage({
+          serverUrl: this.serverURL,
+          message: encryptedSetupMsg,
+          sessionId: this.sessionId,
+        })
+        console.log('uploaded setup message successfully')
+      } else {
+        const encodedEncryptedSetupMsg = await waitForSetupMessage({
+          serverUrl: this.serverURL,
+          sessionId: this.sessionId,
+        })
+        this.setupMessage = fromMpcServerMessage(
+          encodedEncryptedSetupMsg,
+          this.hexEncryptionKey
+        )
+      }
+      if ('keyimport' in this.keygenOperation) {
+        session = new KeygenSession(this.setupMessage, this.localPartyId)
+      } else {
+        throw new Error('Invalid keygen operation')
+      }
+      const start = Date.now()
+      const outbound = this.processOutbound(session)
+      const inbound = this.processInbound(session, start)
+      const [, inboundResult] = await Promise.all([outbound, inbound])
+      if (inboundResult) {
+        const keyShare = session.finish()
+        return {
+          keyshare: base64Encode(keyShare.toBytes()),
+          publicKey: Buffer.from(keyShare.publicKey()).toString('hex'),
+          chaincode: Buffer.from(keyShare.rootChainCode()).toString('hex'),
+        }
+      }
+      throw new Error('DKLS key import failed')
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('DKLS key import error:', error)
+        console.error('DKLS key import error:', error.stack)
+      }
+      throw error
+    }
+  }
+
+  public async startKeyImportWithRetry(privateKey: string, chainCode: string) {
+    await initializeMpcLib('ecdsa')
+    for (let i = 0; i < 3; i++) {
+      try {
+        const result = await this.startKeyImport(privateKey, chainCode, i)
+        return result
+      } catch (error) {
+        console.error('DKLS key import error:', error)
+      }
+    }
+    throw new Error('DKLS key import failed')
   }
 }

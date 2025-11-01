@@ -1216,4 +1216,5 @@ export const de = {
   buy: 'Kaufen',
   not_enough_asset_to_cover_gas_fees:
     'Nicht genug {{asset}}, um die Gasgebühren zu decken',
+  import_key: 'Schlüsselimport',
 }
