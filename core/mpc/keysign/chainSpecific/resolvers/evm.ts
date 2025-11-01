@@ -2,7 +2,6 @@ import { create } from '@bufbuild/protobuf'
 import { Chain, EvmChain } from '@core/chain/Chain'
 import { evmChainInfo } from '@core/chain/chains/evm/chainInfo'
 import { getEvmClient } from '@core/chain/chains/evm/client'
-import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { getEvmBaseFee } from '@core/chain/tx/fee/evm/baseFee'
 import { deriveEvmGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
 import { getEvmMaxPriorityFeePerGas } from '@core/chain/tx/fee/evm/maxPriorityFeePerGas'
@@ -14,6 +13,7 @@ import { bigIntMax } from '@lib/utils/bigint/bigIntMax'
 import { isHex, stringToHex } from 'viem'
 import { publicActionsL2 } from 'viem/zksync'
 
+import { getKeysignAmount } from '../../utils/getKeysignAmount'
 import { getKeysignCoin } from '../../utils/getKeysignCoin'
 import { GetChainSpecificResolver } from '../resolver'
 
@@ -30,8 +30,8 @@ export const getEvmChainSpecific: GetChainSpecificResolver<
   const coin = getKeysignCoin<EvmChain>(keysignPayload)
   const { chain, address } = coin
   const client = getEvmClient(chain)
-  const amount = BigInt(shouldBePresent(keysignPayload.toAmount))
-  const receiver = shouldBePresent(keysignPayload.toAddress)
+  const amount = getKeysignAmount(keysignPayload)
+  const receiver = keysignPayload.toAddress
   const data = keysignPayload.memo ? formatData(keysignPayload.memo) : undefined
 
   const nonce = BigInt(
@@ -40,66 +40,68 @@ export const getEvmChainSpecific: GetChainSpecificResolver<
     })
   )
 
-  const evmCoin = coin as AccountCoin<EvmChain>
   const capGasLimit = (estimatedGasLimit: bigint | undefined): bigint =>
     bigIntMax(
       ...without(
-        [
-          estimatedGasLimit,
-          undefined,
-          deriveEvmGasLimit({ coin: evmCoin, data }),
-        ],
+        [estimatedGasLimit, undefined, deriveEvmGasLimit({ coin, data })],
         undefined
       )
     )
 
-  let gasLimit: bigint
-  let baseFeePerGas: bigint
-  let maxPriorityFeePerGas: bigint
+  const getBaseFee = async () => baseFeeMultiplier(await getEvmBaseFee(chain))
 
-  if (feeSettings) {
-    gasLimit = feeSettings.gasLimit
-    maxPriorityFeePerGas = feeSettings.maxPriorityFeePerGas
-    baseFeePerGas = baseFeeMultiplier(await getEvmBaseFee(chain))
-  } else if (chain === Chain.Zksync) {
-    const result = await attempt(
-      client.extend(publicActionsL2()).estimateFee({
-        chain: evmChainInfo[chain],
-        account: coin.address as `0x${string}`,
-        to: receiver as `0x${string}`,
-        value: amount,
-        data: data,
-      })
-    )
-    if ('data' in result && result.data) {
-      const {
-        gasLimit: limit,
-        maxFeePerGas,
-        maxPriorityFeePerGas: priorityFee,
-      } = result.data
-      gasLimit = capGasLimit(limit)
-      baseFeePerGas = maxFeePerGas - priorityFee
-      maxPriorityFeePerGas = priorityFee
-    } else {
-      gasLimit = capGasLimit(undefined)
-      baseFeePerGas = baseFeeMultiplier(await getEvmBaseFee(chain))
-      maxPriorityFeePerGas = await getEvmMaxPriorityFeePerGas(chain)
+  const getFeeData = async () => {
+    if (feeSettings) {
+      return {
+        ...feeSettings,
+        baseFeePerGas: await getBaseFee(),
+      }
     }
-  } else {
-    gasLimit = capGasLimit(
+    if (chain === Chain.Zksync) {
+      const result = await attempt(
+        client.extend(publicActionsL2()).estimateFee({
+          chain: evmChainInfo[chain as EvmChain],
+          account: coin.address as `0x${string}`,
+          to: receiver
+            ? (shouldBePresent(receiver) as `0x${string}`)
+            : undefined,
+          value: amount,
+          data: data ? formatData(data) : undefined,
+        })
+      )
+      if (result.data) {
+        const { gasLimit, maxFeePerGas, maxPriorityFeePerGas } = result.data
+        return {
+          gasLimit: capGasLimit(gasLimit),
+          baseFeePerGas: maxFeePerGas - maxPriorityFeePerGas,
+          maxPriorityFeePerGas,
+        }
+      }
+    }
+
+    const gasLimit = capGasLimit(
       await withFallback(
         attempt(
           client.estimateGas({
-            account: address as `0x${string}`,
+            account: coin.address as `0x${string}`,
           })
         ),
         undefined
       )
     )
 
-    baseFeePerGas = baseFeeMultiplier(await getEvmBaseFee(chain))
-    maxPriorityFeePerGas = await getEvmMaxPriorityFeePerGas(chain)
+    const baseFeePerGas = baseFeeMultiplier(await getEvmBaseFee(chain))
+
+    const maxPriorityFeePerGas = await getEvmMaxPriorityFeePerGas(chain)
+
+    return {
+      gasLimit,
+      baseFeePerGas,
+      maxPriorityFeePerGas,
+    }
   }
+
+  const { gasLimit, baseFeePerGas, maxPriorityFeePerGas } = await getFeeData()
 
   const maxFeePerGas = baseFeePerGas + maxPriorityFeePerGas
 
