@@ -19,7 +19,10 @@ export type GetChainSpecificInput<
 > = {
   keysignPayload: KeysignPayload
 } & (C extends 'ethereumSpecific'
-  ? { feeSettings?: FeeSettings<'evm'> }
+  ? {
+      feeSettings?: FeeSettings<'evm'>
+      thirdPartyGasLimitEstimation?: bigint
+    }
   : C extends 'utxoSpecific'
     ? { feeSettings?: FeeSettings<'utxo'>; psbt?: Psbt }
     : C extends 'cosmosSpecific'
@@ -43,6 +46,7 @@ export type GetChainSpecificInput<
                 timestamp?: number
                 refBlockBytesHex?: string
                 refBlockHashHex?: string
+                thirdPartyGasLimitEstimation?: bigint
               }
             : {})
 

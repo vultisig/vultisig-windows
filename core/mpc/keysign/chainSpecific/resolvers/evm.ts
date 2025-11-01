@@ -26,7 +26,7 @@ const formatData = (data: string): `0x${string}` => {
 
 export const getEvmChainSpecific: GetChainSpecificResolver<
   'ethereumSpecific'
-> = async ({ keysignPayload, feeSettings }) => {
+> = async ({ keysignPayload, feeSettings, thirdPartyGasLimitEstimation }) => {
   const coin = getKeysignCoin<EvmChain>(keysignPayload)
   const { chain, address } = coin
   const client = getEvmClient(chain)
@@ -43,7 +43,11 @@ export const getEvmChainSpecific: GetChainSpecificResolver<
   const capGasLimit = (estimatedGasLimit: bigint | undefined): bigint =>
     bigIntMax(
       ...without(
-        [estimatedGasLimit, undefined, deriveEvmGasLimit({ coin, data })],
+        [
+          estimatedGasLimit,
+          thirdPartyGasLimitEstimation,
+          deriveEvmGasLimit({ coin, data }),
+        ],
         undefined
       )
     )

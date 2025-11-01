@@ -7,7 +7,7 @@ import { GetChainSpecificResolver } from '../resolver'
 
 export const getTronChainSpecific: GetChainSpecificResolver<
   'tronSpecific'
-> = async ({ keysignPayload }) => {
+> = async ({ keysignPayload, thirdPartyGasLimitEstimation }) => {
   const coin = getKeysignCoin(keysignPayload)
 
   const blockInfo = await getTronBlockInfo({ coin })
@@ -21,6 +21,7 @@ export const getTronChainSpecific: GetChainSpecificResolver<
     blockHeaderTxTrieRoot: blockInfo.blockHeaderTxTrieRoot,
     blockHeaderParentHash: blockInfo.blockHeaderParentHash,
     blockHeaderWitnessAddress: blockInfo.blockHeaderWitnessAddress,
-    gasEstimation: BigInt(blockInfo.gasFeeEstimation),
+    gasEstimation:
+      thirdPartyGasLimitEstimation || BigInt(blockInfo.gasFeeEstimation),
   })
 }
