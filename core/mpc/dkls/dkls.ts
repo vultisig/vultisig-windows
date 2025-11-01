@@ -370,8 +370,8 @@ export class DKLS {
       throw new Error('DKLS key import requires exactly 3 committee members')
     }
     try {
-      let session: KeygenSession | KeyImportInitiator
-      if (this.isInitiateDevice && attempt === 0) {
+      let session: KeygenSession | KeyImportInitiator | null = null
+      if (this.isInitiateDevice) {
         const threshold = getKeygenThreshold(this.keygenCommittee.length)
         const privateKey = Buffer.from(hexPrivateKey, 'hex')
         const chainCode = Buffer.from(hexChainCode, 'hex')
@@ -407,9 +407,14 @@ export class DKLS {
         )
       }
       if ('keyimport' in this.keygenOperation) {
-        session = new KeygenSession(this.setupMessage, this.localPartyId)
+        if (!this.isInitiateDevice) {
+          session = new KeygenSession(this.setupMessage, this.localPartyId)
+        }
       } else {
         throw new Error('Invalid keygen operation')
+      }
+      if (session === null) {
+        throw new Error('DKLS key import session is null')
       }
       const start = Date.now()
       const outbound = this.processOutbound(session)

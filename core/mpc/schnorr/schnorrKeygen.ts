@@ -342,7 +342,7 @@ export class Schnorr {
     console.log('startKeyImport schnorr, attempt:', attempt)
     this.isKeygenComplete = false
     try {
-      let session: KeygenSession | KeyImportInitiator
+      let session: KeygenSession | KeyImportInitiator | null = null
       if (this.isInitiateDevice && attempt === 0) {
         const privateKey = Buffer.from(hexPrivateKey, 'hex')
         const chainCode = Buffer.from(hexChainCode, 'hex')
@@ -378,9 +378,14 @@ export class Schnorr {
         )
       }
       if ('keyimport' in this.keygenOperation) {
-        session = new KeygenSession(this.setupMessage, this.localPartyId)
+        if (!this.isInitiateDevice) {
+          session = new KeygenSession(this.setupMessage, this.localPartyId)
+        }
       } else {
         throw new Error('invalid keygen type')
+      }
+      if (session === null) {
+        throw new Error('Schnorr key import session is null')
       }
       const start = Date.now()
       const outbound = this.processOutbound(session)
