@@ -1184,4 +1184,5 @@ export const hr = {
   buy: 'Kupiti',
   not_enough_asset_to_cover_gas_fees:
     'Nema dovoljno {{asset}} za pokrivanje troškova goriva',
+  import_key: 'Uvezi ključ',
 }

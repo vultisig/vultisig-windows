@@ -29,6 +29,7 @@ export const KeygenFlowEnding = ({ onBack }: OnBackProp) => {
                 regular={() => <KeygenFlowSuccess />}
               />
             ),
+            keyimport: () => <KeygenFlowSuccess />, // TODO: Create a KeyImportSuccess component if needed
           }}
         />
       )}
