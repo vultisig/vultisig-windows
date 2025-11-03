@@ -3,9 +3,8 @@ import { getNativeSwapDecimals } from '@core/chain/swap/native/utils/getNativeSw
 import { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
 import { SwapFees } from '@core/chain/swap/SwapFee'
 import { getFeeAmount } from '@core/mpc/keysign/fee'
-import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
+import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
-import { useMemo } from 'react'
 
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
 import { useCurrentVaultPublicKey } from '../../state/currentVault'
@@ -20,21 +19,9 @@ export const useSwapFeesQuery = (swapQuote: SwapQuote) => {
   const publicKey = useCurrentVaultPublicKey(fromCoinKey.chain)
   const walletCore = useAssertWalletCore()
 
-  const swapQuoteQueryValue = useMemo(
-    () => ({
-      data: swapQuote,
-      isPending: false,
-      error: null,
-    }),
-    [swapQuote]
-  )
-
-  return useTransformQueriesData(
-    {
-      swapQuote: swapQuoteQueryValue,
-      keysignPayload: keysignPayloadQuery,
-    },
-    ({ swapQuote, keysignPayload }): SwapFees => {
+  return useTransformQueryData(
+    keysignPayloadQuery,
+    (keysignPayload): SwapFees => {
       const { chain } = fromCoinKey
       const fromFeeCoin = chainFeeCoin[chain]
 
