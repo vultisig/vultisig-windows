@@ -3,6 +3,7 @@ import { base64Encode } from '@lib/utils/base64Encode'
 import {
   KeygenSession,
   KeyImportInitiator,
+  KeyImportSession,
   Keyshare,
   QcSession,
 } from '../../../lib/dkls/vs_wasm'
@@ -370,7 +371,7 @@ export class DKLS {
       throw new Error('DKLS key import requires exactly 3 committee members')
     }
     try {
-      let session: KeygenSession | KeyImportInitiator | null = null
+      let session: KeyImportInitiator | KeyImportSession | null = null
       if (this.isInitiateDevice) {
         const threshold = getKeygenThreshold(this.keygenCommittee.length)
         const privateKey = Buffer.from(hexPrivateKey, 'hex')
@@ -408,7 +409,7 @@ export class DKLS {
       }
       if ('keyimport' in this.keygenOperation) {
         if (!this.isInitiateDevice) {
-          session = new KeygenSession(this.setupMessage, this.localPartyId)
+          session = new KeyImportSession(this.setupMessage, this.localPartyId)
         }
       } else {
         throw new Error('Invalid keygen operation')

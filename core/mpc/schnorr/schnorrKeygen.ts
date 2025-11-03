@@ -3,6 +3,7 @@ import { base64Encode } from '@lib/utils/base64Encode'
 import {
   KeygenSession,
   KeyImportInitiator,
+  KeyImportSession,
   Keyshare,
   QcSession,
 } from '../../../lib/schnorr/vs_schnorr_wasm'
@@ -342,7 +343,7 @@ export class Schnorr {
     console.log('startKeyImport schnorr, attempt:', attempt)
     this.isKeygenComplete = false
     try {
-      let session: KeygenSession | KeyImportInitiator | null = null
+      let session: KeyImportSession | KeyImportInitiator | null = null
       if (this.isInitiateDevice && attempt === 0) {
         const privateKey = Buffer.from(hexPrivateKey, 'hex')
         const chainCode = Buffer.from(hexChainCode, 'hex')
@@ -363,14 +364,14 @@ export class Schnorr {
           serverUrl: this.serverURL,
           message: encryptedSetupMsg,
           sessionId: this.sessionId,
-          messageId: 'key-import-eddsa',
+          messageId: 'eddsa_key_import',
         })
         console.log('uploaded setup message successfully')
       } else {
         const encodedEncryptedSetupMsg = await waitForSetupMessage({
           serverUrl: this.serverURL,
           sessionId: this.sessionId,
-          messageId: 'key-import-eddsa',
+          messageId: 'eddsa_key_import',
         })
         this.setupMessage = fromMpcServerMessage(
           encodedEncryptedSetupMsg,
@@ -379,7 +380,7 @@ export class Schnorr {
       }
       if ('keyimport' in this.keygenOperation) {
         if (!this.isInitiateDevice) {
-          session = new KeygenSession(this.setupMessage, this.localPartyId)
+          session = new KeyImportSession(this.setupMessage, this.localPartyId)
         }
       } else {
         throw new Error('invalid keygen type')
