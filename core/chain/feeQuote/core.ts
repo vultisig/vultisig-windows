@@ -1,5 +1,4 @@
-import { Chain } from '../Chain'
-import { ChainKind, DeriveChainKind } from '../ChainKind'
+import { ChainKind } from '../ChainKind'
 
 type EvmFeeQuote = {
   maxPriorityFeePerGas: bigint
@@ -44,6 +43,3 @@ type FeeQuoteByKind = EnsureAllKindsCovered<{
 }>
 
 export type FeeQuote<T extends ChainKind = ChainKind> = FeeQuoteByKind[T]
-
-export type FeeQuoteForChain<C extends Chain = Chain> =
-  FeeQuoteByKind[DeriveChainKind<C>]
