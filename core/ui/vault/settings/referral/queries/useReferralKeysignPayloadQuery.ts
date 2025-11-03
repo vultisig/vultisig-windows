@@ -1,19 +1,19 @@
-import { create } from '@bufbuild/protobuf'
-import { toChainAmount } from '@core/chain/amount/toChainAmount'
-import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
-import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
-import { buildChainSpecific } from '@core/mpc/keysign/chainSpecific/build'
-import { refineKeysignAmount } from '@core/mpc/keysign/refine/amount'
-import { toCommCoin } from '@core/mpc/types/utils/commCoin'
-import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import {
+  buildReferralKeysignPayload,
+  BuildReferralKeysignPayloadInput,
+} from '@core/mpc/keysign/build/referral'
+import { getVaultId } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
+import {
+  useCurrentVault,
+  useCurrentVaultPublicKey,
+} from '@core/ui/vault/state/currentVault'
+import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
+import { omit } from '@lib/utils/record/omit'
+import { useQuery } from '@tanstack/react-query'
+import { useMemo } from 'react'
 
-import { useBalanceQuery } from '../../../../chain/coin/queries/useBalanceQuery'
-import { useCurrentVault } from '../../../state/currentVault'
 import { useReferralCoin } from '../hooks/useReferralCoin'
-import { useReferralFeeQuoteQuery } from './useReferralFeeQuoteQuery'
-import { useReferralKeysignTxDataQuery } from './useReferralKeysignTxDataQuery'
 
 export const useReferralKeysignPayloadQuery = ({
   memo,
@@ -25,49 +25,28 @@ export const useReferralKeysignPayloadQuery = ({
   const vault = useCurrentVault()
   const coin = useReferralCoin()
   const walletCore = useAssertWalletCore()
-  const publicKey = getPublicKey({
-    chain: coin.chain,
-    walletCore,
-    hexChainCode: vault.hexChainCode,
-    publicKeys: vault.publicKeys,
-  })
+  const publicKey = useCurrentVaultPublicKey(coin.chain)
 
-  const feeQuote = useReferralFeeQuoteQuery()
-  const txData = useReferralKeysignTxDataQuery()
-  const balance = useBalanceQuery(extractAccountCoinKey(coin))
-
-  return useTransformQueriesData(
-    {
-      feeQuote,
-      txData,
-      balance,
-    },
-    ({ feeQuote, txData, balance }) => {
-      const blockchainSpecific = buildChainSpecific({
-        chain: coin.chain,
-        txData,
-        feeQuote,
-      })
-      const keysignPayload = create(KeysignPayloadSchema, {
-        coin: toCommCoin({
-          ...coin,
-          hexPublicKey: Buffer.from(publicKey.data()).toString('hex'),
-        }),
-        memo,
-        toAmount: toChainAmount(amount, coin.decimals).toString(),
-        blockchainSpecific,
-        utxoInfo: 'utxoInfo' in txData ? txData.utxoInfo : undefined,
-        vaultLocalPartyId: vault.localPartyId,
-        vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
-        libType: vault.libType,
-      })
-
-      return refineKeysignAmount({
-        keysignPayload,
-        walletCore,
-        publicKey,
-        balance,
-      })
-    }
+  const input: BuildReferralKeysignPayloadInput = useMemo(
+    () => ({
+      coin,
+      memo,
+      amount,
+      vaultId: getVaultId(vault),
+      localPartyId: vault.localPartyId,
+      publicKey,
+      libType: vault.libType,
+      walletCore,
+    }),
+    [amount, coin, memo, publicKey, vault, walletCore]
   )
+
+  return useQuery({
+    queryKey: [
+      'referralKeysignPayload',
+      omit(input, 'walletCore', 'publicKey'),
+    ],
+    queryFn: () => buildReferralKeysignPayload(input),
+    ...noRefetchQueryOptions,
+  })
 }
