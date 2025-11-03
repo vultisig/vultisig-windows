@@ -43,7 +43,7 @@ export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
       return t('fill_the_form')
     }
 
-    return validationErrorMessage || null
+    return validationErrorMessage
   }, [validationErrorMessage, error, isPending, t])
 
   const handleSubmit = () => {
@@ -66,7 +66,7 @@ export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
         gap={40}
         {...getFormProps({
           onSubmit: handleSubmit,
-          isDisabled: !!errorMessage || !!validationErrorMessage,
+          isDisabled: !!errorMessage,
         })}
         justifyContent="space-between"
         scrollable
@@ -83,10 +83,7 @@ export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
             <SwapInfo />
           </VStack>
         </VStack>
-        <Button
-          disabled={Boolean(errorMessage) || !!validationErrorMessage}
-          type="submit"
-        >
+        <Button disabled={errorMessage || undefined} type="submit">
           {errorMessage || t('continue')}
         </Button>
       </PageContent>
