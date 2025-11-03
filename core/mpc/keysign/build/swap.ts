@@ -4,6 +4,8 @@ import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { getErc20Allowance } from '@core/chain/chains/evm/erc20/getErc20Allowance'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { areEqualCoins } from '@core/chain/coin/Coin'
 import { GeneralSwapTx } from '@core/chain/swap/general/GeneralSwapQuote'
 import { getSwapDestinationAddress } from '@core/chain/swap/keysign/getSwapDestinationAddress'
 import { nativeSwapQuoteToSwapPayload } from '@core/chain/swap/native/utils/nativeSwapQuoteToSwapPayload'
@@ -93,6 +95,11 @@ export const buildSwapKeysignPayload = async ({
   keysignPayload.blockchainSpecific = await getChainSpecific({
     keysignPayload,
     thirdPartyGasLimitEstimation,
+    isDeposit: matchRecordUnion<SwapQuote, boolean>(swapQuote, {
+      native: ({ swapChain }) =>
+        areEqualCoins(fromCoin, chainFeeCoin[swapChain]),
+      general: () => false,
+    }),
   })
 
   keysignPayload.swapPayload = matchRecordUnion<
@@ -163,7 +170,7 @@ export const buildSwapKeysignPayload = async ({
           ...fromCoin,
           hexPublicKey: fromCoinHexPublicKey,
         },
-        amount: toChainAmount(amount, fromCoin.decimals),
+        amount: chainAmount,
         toCoin: {
           ...toCoin,
           hexPublicKey: toCoinHexPublicKey,
