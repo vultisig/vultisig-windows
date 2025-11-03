@@ -65,7 +65,7 @@ export class Schnorr {
   }
 
   private async processOutbound(
-    session: KeygenSession | QcSession
+    session: KeygenSession | QcSession | KeyImportInitiator | KeyImportSession
   ): Promise<boolean> {
     try {
       const message = session.outputMessage()
@@ -109,7 +109,7 @@ export class Schnorr {
   }
 
   private async processInbound(
-    session: KeygenSession | QcSession,
+    session: KeygenSession | QcSession | KeyImportInitiator | KeyImportSession,
     start: number
   ): Promise<boolean> {
     try {

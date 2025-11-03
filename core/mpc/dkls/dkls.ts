@@ -64,7 +64,7 @@ export class DKLS {
   }
 
   private async processOutbound(
-    session: KeygenSession | QcSession | KeyImportInitiator
+    session: KeygenSession | QcSession | KeyImportInitiator | KeyImportSession
   ): Promise<boolean> {
     try {
       const message = session.outputMessage()
@@ -107,7 +107,7 @@ export class DKLS {
   }
 
   private async processInbound(
-    session: KeygenSession | QcSession | KeyImportInitiator,
+    session: KeygenSession | QcSession | KeyImportInitiator | KeyImportSession,
     start: number
   ): Promise<boolean> {
     try {
