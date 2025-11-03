@@ -2,12 +2,11 @@ import { create } from '@bufbuild/protobuf'
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { getChainKind, isChainOfKind } from '@core/chain/ChainKind'
 import { getPsbtTransferInfo } from '@core/chain/chains/utxo/tx/getPsbtTransferInfo'
+import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import {
   FeeSettings,
   FeeSettingsChainKind,
-} from '@core/chain/feeQuote/settings/core'
-import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
-import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
+} from '@core/mpc/keysign/chainSpecific/FeeSettings'
 import { refineKeysignUtxo } from '@core/mpc/keysign/refine/utxo'
 import { getKeysignUtxoInfo } from '@core/mpc/keysign/utxo/getKeysignUtxoInfo'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
@@ -26,11 +25,11 @@ import {
   CosmosCoinSchema,
   WasmExecuteContractPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
-import { Vault } from '@core/mpc/vault/Vault'
 import { attempt } from '@lib/utils/attempt'
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { WalletCore } from '@trustwallet/wallet-core'
+import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { toUtf8String } from 'ethers'
 import { hexToString } from 'viem'
 
@@ -42,50 +41,43 @@ import { CosmosMsgType, TronMsgType } from '../interfaces'
 export type BuildSendTxKeysignPayloadInput = {
   parsedTx: ParsedTx
   feeSettings?: FeeSettings<FeeSettingsChainKind> | null
-  vault: Vault
+  publicKey: PublicKey
   walletCore: WalletCore
+  vaultId: string
+  localPartyId: string
+}
+
+const defaultTransactionType = TransactionType.UNSPECIFIED
+
+const cosmosMsgTypeToTransactionType: Record<
+  CosmosMsgType | TronMsgType,
+  TransactionType
+> = {
+  [CosmosMsgType.MSG_SEND]: defaultTransactionType,
+  [CosmosMsgType.THORCHAIN_MSG_SEND]: defaultTransactionType,
+  [CosmosMsgType.MSG_SEND_URL]: defaultTransactionType,
+  [CosmosMsgType.MSG_TRANSFER_URL]: TransactionType.IBC_TRANSFER,
+  [CosmosMsgType.MSG_EXECUTE_CONTRACT]: TransactionType.GENERIC_CONTRACT,
+  [CosmosMsgType.MSG_EXECUTE_CONTRACT_URL]: TransactionType.GENERIC_CONTRACT,
+  [CosmosMsgType.THORCHAIN_MSG_DEPOSIT]: defaultTransactionType,
+  [CosmosMsgType.THORCHAIN_MSG_DEPOSIT_URL]: defaultTransactionType,
+  [CosmosMsgType.THORCHAIN_MSG_SEND_URL]: defaultTransactionType,
+  [TronMsgType.TRON_TRANSFER_CONTRACT]: defaultTransactionType,
+  [TronMsgType.TRON_TRIGGER_SMART_CONTRACT]: defaultTransactionType,
+  [TronMsgType.TRON_TRANSFER_ASSET_CONTRACT]: defaultTransactionType,
 }
 
 export const buildSendTxKeysignPayload = async ({
   parsedTx,
   feeSettings,
-  vault,
+  vaultId,
+  publicKey,
   walletCore,
+  localPartyId,
 }: BuildSendTxKeysignPayloadInput) => {
   const { coin, customTxData, skipBroadcast, thirdPartyGasLimitEstimation } =
     parsedTx
   const { chain } = coin
-
-  const defaultTransactionType = TransactionType.UNSPECIFIED
-
-  const cosmosMsgTypeToTransactionType: Record<
-    CosmosMsgType | TronMsgType,
-    TransactionType
-  > = {
-    [CosmosMsgType.MSG_SEND]: defaultTransactionType,
-    [CosmosMsgType.THORCHAIN_MSG_SEND]: defaultTransactionType,
-    [CosmosMsgType.MSG_SEND_URL]: defaultTransactionType,
-    [CosmosMsgType.MSG_TRANSFER_URL]: TransactionType.IBC_TRANSFER,
-    [CosmosMsgType.MSG_EXECUTE_CONTRACT]: TransactionType.GENERIC_CONTRACT,
-    [CosmosMsgType.MSG_EXECUTE_CONTRACT_URL]: TransactionType.GENERIC_CONTRACT,
-    [CosmosMsgType.THORCHAIN_MSG_DEPOSIT]: defaultTransactionType,
-    [CosmosMsgType.THORCHAIN_MSG_DEPOSIT_URL]: defaultTransactionType,
-    [CosmosMsgType.THORCHAIN_MSG_SEND_URL]: defaultTransactionType,
-    [TronMsgType.TRON_TRANSFER_CONTRACT]: defaultTransactionType,
-    [TronMsgType.TRON_TRIGGER_SMART_CONTRACT]: defaultTransactionType,
-    [TronMsgType.TRON_TRANSFER_ASSET_CONTRACT]: defaultTransactionType,
-  }
-
-  const getIsDeposit = () => {
-    return matchRecordUnion<CustomTxData, boolean>(customTxData, {
-      regular: ({ transactionDetails, isDeposit }) =>
-        isDeposit ||
-        transactionDetails.msgPayload?.case ===
-          CosmosMsgType.THORCHAIN_MSG_DEPOSIT,
-      solana: () => false,
-      psbt: () => false,
-    })
-  }
 
   const getTransactionType = () => {
     if ('regular' in customTxData) {
@@ -125,17 +117,6 @@ export const buildSendTxKeysignPayload = async ({
       }
     }
   }
-
-  const getPsbt = () => {
-    return 'psbt' in customTxData ? customTxData.psbt : undefined
-  }
-
-  const publicKey = getPublicKey({
-    chain,
-    walletCore,
-    hexChainCode: vault.hexChainCode,
-    publicKeys: vault.publicKeys,
-  })
 
   const hexPublicKey = Buffer.from(publicKey.data()).toString('hex')
 
@@ -323,32 +304,30 @@ export const buildSendTxKeysignPayload = async ({
     toAmount: getTxAmount(parsedTx).toString(),
     coin: fromCoin,
     utxoInfo: await getKeysignUtxoInfo(coin),
-    vaultLocalPartyId: vault.localPartyId,
-    vaultPublicKeyEcdsa: vault.publicKeys.ecdsa,
+    vaultLocalPartyId: localPartyId,
+    vaultPublicKeyEcdsa: vaultId,
     skipBroadcast,
     memo,
     contractPayload,
     swapPayload,
   })
 
-  const isDeposit = getIsDeposit()
-  const transactionType = getTransactionType()
-  const timeoutTimestamp = getTimeoutTimestamp()
-  const tronMeta = getTronMeta()
-  const psbt = getPsbt()
-
   keysignPayload.blockchainSpecific = await getChainSpecific({
     keysignPayload,
     feeSettings: feeSettings ?? undefined,
     thirdPartyGasLimitEstimation,
-    isDeposit,
-    transactionType,
-    timeoutTimestamp,
-    expiration: tronMeta?.expiration,
-    timestamp: tronMeta?.timestamp,
-    refBlockBytesHex: tronMeta?.refBlockBytesHex,
-    refBlockHashHex: tronMeta?.refBlockHashHex,
-    psbt,
+    isDeposit: matchRecordUnion<CustomTxData, boolean>(customTxData, {
+      regular: ({ transactionDetails, isDeposit }) =>
+        isDeposit ||
+        transactionDetails.msgPayload?.case ===
+          CosmosMsgType.THORCHAIN_MSG_DEPOSIT,
+      solana: () => false,
+      psbt: () => false,
+    }),
+    transactionType: getTransactionType(),
+    timeoutTimestamp: getTimeoutTimestamp(),
+    ...getTronMeta(),
+    psbt: 'psbt' in customTxData ? customTxData.psbt : undefined,
   })
 
   if (isChainOfKind(chain, 'utxo')) {

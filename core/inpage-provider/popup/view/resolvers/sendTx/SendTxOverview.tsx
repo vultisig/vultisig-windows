@@ -2,8 +2,10 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { FeeSettings } from '@core/chain/feeQuote/settings/core'
-import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
+import {
+  EvmFeeSettings,
+  FeeSettings,
+} from '@core/mpc/keysign/chainSpecific/FeeSettings'
 import { getBlockchainSpecificValue } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { getFeeAmount } from '@core/mpc/keysign/fee'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
@@ -58,7 +60,7 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
 
   const keysignPayloadQuery = useSendTxKeysignPayloadQuery({
     parsedTx,
-    feeSettings,
+    feeSettings: feeSettings || undefined,
   })
 
   return (

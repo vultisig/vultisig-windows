@@ -1,6 +1,10 @@
-import { FeeSettings } from '@core/chain/feeQuote/settings/core'
+import { FeeSettings } from '@core/mpc/keysign/chainSpecific/FeeSettings'
+import { getVaultId } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import {
+  useCurrentVault,
+  useCurrentVaultPublicKey,
+} from '@core/ui/vault/state/currentVault'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { omit } from '@lib/utils/record/omit'
 import { useQuery } from '@tanstack/react-query'
@@ -17,10 +21,11 @@ export const useSendTxKeysignPayloadQuery = ({
   feeSettings,
 }: {
   parsedTx: ParsedTx
-  feeSettings?: FeeSettings<any> | null
+  feeSettings?: FeeSettings
 }) => {
   const vault = useCurrentVault()
   const walletCore = useAssertWalletCore()
+  const publicKey = useCurrentVaultPublicKey(parsedTx.coin.chain)
 
   const input: BuildSendTxKeysignPayloadInput = useMemo(
     () => ({
@@ -28,17 +33,15 @@ export const useSendTxKeysignPayloadQuery = ({
       feeSettings,
       vault,
       walletCore,
+      vaultId: getVaultId(vault),
+      localPartyId: vault.localPartyId,
+      publicKey,
     }),
-    [feeSettings, parsedTx, vault, walletCore]
+    [feeSettings, parsedTx, publicKey, vault, walletCore]
   )
 
   return useQuery({
-    queryKey: [
-      'sendTxKeysignPayload',
-      parsedTx,
-      feeSettings,
-      omit(input, 'walletCore', 'vault'),
-    ],
+    queryKey: ['sendTxKeysignPayload', omit(input, 'walletCore', 'publicKey')],
     queryFn: () => buildSendTxKeysignPayload(input),
     ...noRefetchQueryOptions,
   })
