@@ -1,25 +1,34 @@
 import { create } from '@bufbuild/protobuf'
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
-import { EvmChain } from '@core/chain/Chain'
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { getErc20Allowance } from '@core/chain/chains/evm/erc20/getErc20Allowance'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
-import { FeeSettings } from '@core/chain/feeQuote/settings/core'
 import { GeneralSwapTx } from '@core/chain/swap/general/GeneralSwapQuote'
-import { getSwapKeysignPayloadFields } from '@core/chain/swap/keysign/getSwapKeysignPayloadFields'
+import { getSwapDestinationAddress } from '@core/chain/swap/keysign/getSwapDestinationAddress'
+import { nativeSwapQuoteToSwapPayload } from '@core/chain/swap/native/utils/nativeSwapQuoteToSwapPayload'
 import { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import { refineKeysignUtxo } from '@core/mpc/keysign/refine/utxo'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { Erc20ApprovePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/erc20_approve_payload_pb'
-import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { isOneOf } from '@lib/utils/array/isOneOf'
+import {
+  KeysignPayload,
+  KeysignPayloadSchema,
+} from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 
 import { MpcLib } from '../../mpcLib'
+import {
+  OneInchQuoteSchema,
+  OneInchSwapPayloadSchema,
+  OneInchTransaction,
+  OneInchTransactionSchema,
+} from '../../types/vultisig/keysign/v1/1inch_swap_payload_pb'
+import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
+import { CommKeysignSwapPayload } from '../swap/KeysignSwapPayload'
 import { getKeysignUtxoInfo } from '../utxo/getKeysignUtxoInfo'
 
 export type BuildSwapKeysignPayloadInput = {
@@ -33,7 +42,6 @@ export type BuildSwapKeysignPayloadInput = {
   toPublicKey: PublicKey
   libType: MpcLib
   walletCore: WalletCore
-  feeSettings?: FeeSettings
 }
 
 export const buildSwapKeysignPayload = async ({
@@ -47,7 +55,6 @@ export const buildSwapKeysignPayload = async ({
   toPublicKey,
   libType,
   walletCore,
-  feeSettings,
 }: BuildSwapKeysignPayloadInput) => {
   const chainAmount = toChainAmount(amount, fromCoin.decimals)
 
@@ -75,41 +82,102 @@ export const buildSwapKeysignPayload = async ({
     vaultLocalPartyId: localPartyId,
     vaultPublicKeyEcdsa: vaultId,
     libType,
+    toAddress: getSwapDestinationAddress({ quote: swapQuote, fromCoin }),
     utxoInfo: await getKeysignUtxoInfo(fromCoin),
+    memo: matchRecordUnion<SwapQuote, string | undefined>(swapQuote, {
+      native: ({ memo }) => memo,
+      general: () => undefined,
+    }),
   })
 
   keysignPayload.blockchainSpecific = await getChainSpecific({
     keysignPayload,
-    feeSettings,
     thirdPartyGasLimitEstimation,
   })
 
-  const swapSpecificFields = getSwapKeysignPayloadFields({
-    amount: chainAmount,
-    quote: swapQuote,
-    fromCoin: {
-      ...fromCoin,
-      hexPublicKey: fromCoinHexPublicKey,
+  keysignPayload.swapPayload = matchRecordUnion<
+    SwapQuote,
+    KeysignPayload['swapPayload']
+  >(swapQuote, {
+    general: quote => {
+      const txMsg = matchRecordUnion<
+        GeneralSwapTx,
+        Omit<OneInchTransaction, '$typeName' | 'swapFee'>
+      >(quote.tx, {
+        evm: ({ from, to, data, value }) => {
+          const { maxFeePerGasWei, gasLimit } = getBlockchainSpecificValue(
+            keysignPayload.blockchainSpecific,
+            'ethereumSpecific'
+          )
+          return {
+            from,
+            to,
+            data,
+            value,
+            gasPrice: maxFeePerGasWei,
+            gas: BigInt(gasLimit),
+          }
+        },
+        solana: ({ data }) => ({
+          from: '',
+          to: '',
+          data,
+          value: '',
+          gasPrice: '',
+          gas: BigInt(0),
+        }),
+      })
+
+      const tx = create(OneInchTransactionSchema, txMsg)
+
+      const swapPayload: CommKeysignSwapPayload = {
+        case: 'oneinchSwapPayload',
+        value: create(OneInchSwapPayloadSchema, {
+          fromCoin: toCommCoin({
+            ...fromCoin,
+            hexPublicKey: fromCoinHexPublicKey,
+          }),
+          toCoin: toCommCoin({
+            ...toCoin,
+            hexPublicKey: toCoinHexPublicKey,
+          }),
+          fromAmount: amount.toString(),
+          toAmountDecimal: fromChainAmount(
+            quote.dstAmount,
+            toCoin.decimals
+          ).toFixed(toCoin.decimals),
+          quote: create(OneInchQuoteSchema, {
+            dstAmount: quote.dstAmount,
+            tx,
+          }),
+          provider: quote.provider,
+        }),
+      }
+
+      return swapPayload
     },
-    toCoin: {
-      ...toCoin,
-      hexPublicKey: toCoinHexPublicKey,
+    native: quote => {
+      return nativeSwapQuoteToSwapPayload({
+        quote,
+        fromCoin: {
+          ...fromCoin,
+          hexPublicKey: fromCoinHexPublicKey,
+        },
+        amount: toChainAmount(amount, fromCoin.decimals),
+        toCoin: {
+          ...toCoin,
+          hexPublicKey: toCoinHexPublicKey,
+        },
+      })
     },
-    chainSpecific: keysignPayload.blockchainSpecific,
   })
 
-  keysignPayload = {
-    ...keysignPayload,
-    ...swapSpecificFields,
-  }
+  const { chain } = fromCoin
 
-  const isErc20 =
-    isOneOf(fromCoin.chain, Object.values(EvmChain)) && !isFeeCoin(fromCoin)
-
-  if (isErc20 && fromCoin.id) {
-    const spender = swapSpecificFields.toAddress
+  if (isChainOfKind(chain, 'evm') && fromCoin.id) {
+    const spender = keysignPayload.toAddress
     const allowance = await getErc20Allowance({
-      chain: fromCoin.chain as EvmChain,
+      chain,
       id: fromCoin.id,
       address: fromCoin.address,
       spender,
