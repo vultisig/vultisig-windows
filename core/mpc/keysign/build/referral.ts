@@ -1,18 +1,15 @@
 import { create } from '@bufbuild/protobuf'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
-import { isChainOfKind } from '@core/chain/ChainKind'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { getCoinBalance } from '@core/chain/coin/balance'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import { refineKeysignAmount } from '@core/mpc/keysign/refine/amount'
-import { refineKeysignUtxo } from '@core/mpc/keysign/refine/utxo'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 
 import { MpcLib } from '../../mpcLib'
-import { getKeysignUtxoInfo } from '../utxo/getKeysignUtxoInfo'
 
 export type BuildReferralKeysignPayloadInput = {
   coin: AccountCoin
@@ -45,7 +42,6 @@ export const buildReferralKeysignPayload = async ({
     vaultLocalPartyId: localPartyId,
     vaultPublicKeyEcdsa: vaultId,
     libType,
-    utxoInfo: await getKeysignUtxoInfo(coin),
   })
 
   keysignPayload.blockchainSpecific = await getChainSpecific({
@@ -61,14 +57,6 @@ export const buildReferralKeysignPayload = async ({
     publicKey,
     balance,
   })
-
-  if (isChainOfKind(coin.chain, 'utxo')) {
-    keysignPayload = refineKeysignUtxo({
-      keysignPayload,
-      walletCore,
-      publicKey,
-    })
-  }
 
   return keysignPayload
 }
