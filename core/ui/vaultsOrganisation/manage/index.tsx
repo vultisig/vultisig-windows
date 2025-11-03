@@ -1,42 +1,91 @@
 import { getVaultId, Vault } from '@core/mpc/vault/Vault'
+import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import {
   useUpdateVaultFolderMutation,
   useVaultFolders,
 } from '@core/ui/storage/vaultFolders'
-import { useFolderlessVaults } from '@core/ui/storage/vaults'
+import { useFolderlessVaults, useVaults } from '@core/ui/storage/vaults'
+import { DoneButton } from '@core/ui/vault/chain/manage/shared/DoneButton'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { VaultSigners } from '@core/ui/vault/signers'
-import { VaultFolder } from '@core/ui/vault/VaultFolder'
+import {
+  LeadingIconBadge,
+  VaultListRow,
+} from '@core/ui/vaultsOrganisation/components'
+import { useVaultsTotalBalances } from '@core/ui/vaultsOrganisation/hooks/useVaultsTotalBalances'
+import { getVaultSecurityTone } from '@core/ui/vaultsOrganisation/utils/getVaultSecurityTone'
 import { Button } from '@lib/ui/buttons/Button'
 import { DnDList } from '@lib/ui/dnd/DnDList'
+import { FolderLockIcon } from '@lib/ui/icons/FolderLockIcon'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { MenuIcon } from '@lib/ui/icons/MenuIcon'
-import { VStack } from '@lib/ui/layout/Stack'
-import { List } from '@lib/ui/list'
-import { ListItem } from '@lib/ui/list/item'
+import { PlusIcon } from '@lib/ui/icons/PlusIcon'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import {
   DnDItemContainer,
   DnDItemHighlight,
 } from '@lib/ui/list/item/DnDItemContainer'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
-import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { getNewOrder } from '@lib/utils/order/getNewOrder'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
+
+const DragHandle = styled.div`
+  display: flex;
+  align-items: center;
+  color: ${getColor('textShy')};
+  cursor: grab;
+  padding: 4px 0;
+`
+
+const LeadingGroup = styled(HStack)`
+  gap: 12px;
+  align-items: center;
+`
+
+const AddFolderButton = styled(Button)`
+  border-radius: 40px;
+  border: 1px solid ${getColor('foregroundExtra')};
+  background: ${({ theme }) =>
+    theme.colors.background.withAlpha(0.05).toCssValue()};
+
+  &:hover {
+    background: ${({ theme }) =>
+      theme.colors.background.withAlpha(0.1).toCssValue()};
+  }
+`
 
 const ManageFolders = () => {
   const { t } = useTranslation()
   const { mutate } = useUpdateVaultFolderMutation()
-  const [items, setItems] = useState<VaultFolder[]>([])
   const folders = useVaultFolders()
+  const allVaults = useVaults()
+  const [items, setItems] = useState(folders)
 
   useEffect(() => setItems(folders), [folders])
 
-  return items.length ? (
+  const vaultCountByFolder = useMemo(() => {
+    const map = new Map<string, number>()
+    allVaults.forEach(vault => {
+      if (!vault.folderId) return
+      map.set(vault.folderId, (map.get(vault.folderId) ?? 0) + 1)
+    })
+    return map
+  }, [allVaults])
+
+  if (!items.length) {
+    return null
+  }
+
+  return (
     <DnDList
       items={items}
       getItemId={item => item.id}
@@ -56,41 +105,60 @@ const ManageFolders = () => {
         )
       }}
       renderList={({ props: { children } }) => (
-        <VStack gap={12}>
-          <Text color="light" size={12} weight={500}>
+        <VStack gap={16}>
+          <Text
+            size={13}
+            weight={600}
+            color="shy"
+            style={{ textTransform: 'uppercase' }}
+          >
             {t('folders')}
           </Text>
-          <List>{children}</List>
+          <VStack gap={12}>{children}</VStack>
         </VStack>
       )}
       renderItem={({ item, draggableProps, dragHandleProps, status }) => (
-        <DnDItemContainer
-          {...draggableProps}
-          {...dragHandleProps}
-          status={status}
-        >
-          <ListItem
-            icon={<MenuIcon fontSize={20} />}
-            key={item.id}
+        <DnDItemContainer key={item.id} {...draggableProps} status={status}>
+          <VaultListRow
+            leading={
+              <LeadingGroup>
+                <DragHandle {...dragHandleProps}>
+                  <MenuIcon fontSize={20} />
+                </DragHandle>
+                <LeadingIconBadge tone="neutral">
+                  <FolderLockIcon style={{ fontSize: 20 }} />
+                </LeadingIconBadge>
+              </LeadingGroup>
+            }
             title={item.name}
-            hoverable
+            subtitle={t('vault_count', {
+              count: vaultCountByFolder.get(item.id) ?? 0,
+            })}
+            disabled
           />
           {status === 'overlay' && <DnDItemHighlight />}
         </DnDItemContainer>
       )}
     />
-  ) : null
+  )
 }
 
-const ManageVaults = () => {
+const ManageVaultsList = () => {
   const { t } = useTranslation()
   const { mutate } = useUpdateVaultMutation()
-  const [items, setItems] = useState<Vault[]>([])
   const vaults = useFolderlessVaults()
+  const [items, setItems] = useState<Vault[]>(vaults)
+  const { totals: vaultTotals, isPending: isTotalsPending } =
+    useVaultsTotalBalances()
+  const formatFiatAmount = useFormatFiatAmount()
 
   useEffect(() => setItems(vaults), [vaults])
 
-  return items.length ? (
+  if (!items.length) {
+    return null
+  }
+
+  return (
     <DnDList
       items={items}
       getItemId={getVaultId}
@@ -112,57 +180,78 @@ const ManageVaults = () => {
         )
       }}
       renderList={({ props: { children } }) => (
-        <VStack gap={12}>
-          <Text color="light" size={12} weight={500}>
+        <VStack gap={16}>
+          <Text
+            size={13}
+            weight={600}
+            color="shy"
+            style={{ textTransform: 'uppercase' }}
+          >
             {t('vaults')}
           </Text>
-          <List>{children}</List>
+          <VStack gap={12}>{children}</VStack>
         </VStack>
       )}
       renderItem={({ item, draggableProps, dragHandleProps, status }) => {
         const vaultId = getVaultId(item)
+        const { tone, icon } = getVaultSecurityTone(item)
+        const value = vaultTotals?.[vaultId]
 
         return (
-          <DnDItemContainer
-            {...draggableProps}
-            {...dragHandleProps}
-            status={status}
-            key={vaultId}
-          >
-            <ListItem
-              icon={<MenuIcon fontSize={20} />}
-              extra={<VaultSigners vault={item} />}
+          <DnDItemContainer key={vaultId} {...draggableProps} status={status}>
+            <VaultListRow
+              leading={
+                <LeadingGroup>
+                  <DragHandle {...dragHandleProps}>
+                    <MenuIcon fontSize={20} />
+                  </DragHandle>
+                  <LeadingIconBadge tone={tone}>{icon}</LeadingIconBadge>
+                </LeadingGroup>
+              }
               title={item.name}
-              hoverable
+              subtitle={
+                !isTotalsPending && value !== undefined
+                  ? formatFiatAmount(value)
+                  : undefined
+              }
+              meta={<VaultSigners vault={item} />}
+              disabled
             />
             {status === 'overlay' && <DnDItemHighlight />}
           </DnDItemContainer>
         )
       }}
     />
-  ) : null
+  )
 }
 
 export const ManageVaultsPage = () => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
+  const goBack = useNavigateBack()
 
   return (
     <VStack fullHeight>
       <PageHeader
-        primaryControls={<PageHeaderBackButton />}
-        title={t('vaults')}
-        hasBorder
+        primaryControls={<PageHeaderBackButton onClick={goBack} />}
+        secondaryControls={<DoneButton onClick={goBack} />}
+        title={t('edit_vaults')}
       />
-      <PageContent gap={24} flexGrow scrollable>
+      <PageContent gap={32} flexGrow scrollable>
         <ManageFolders />
-        <ManageVaults />
-      </PageContent>
-      <PageFooter>
-        <Button onClick={() => navigate({ id: 'createVaultFolder' })}>
+        <ManageVaultsList />
+        <AddFolderButton
+          kind="secondary"
+          onClick={() => navigate({ id: 'createVaultFolder' })}
+          icon={
+            <IconWrapper size={18}>
+              <PlusIcon />
+            </IconWrapper>
+          }
+        >
           {t('create_folder')}
-        </Button>
-      </PageFooter>
+        </AddFolderButton>
+      </PageContent>
     </VStack>
   )
 }
