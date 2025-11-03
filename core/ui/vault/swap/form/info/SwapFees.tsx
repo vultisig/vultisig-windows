@@ -1,5 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndicator'
@@ -22,14 +23,15 @@ import { SwapFeeFiatValue } from './SwapTotalFeeFiatValue'
 
 type SwapFeesProps = {
   RowComponent: ComponentType<PropsWithChildren>
+  swapQuote: SwapQuote
 }
 
-export const SwapFees: FC<SwapFeesProps> = ({ RowComponent }) => {
+export const SwapFees: FC<SwapFeesProps> = ({ RowComponent, swapQuote }) => {
   const [showFeesBreakdown, { toggle }] = useBoolean(false)
   const prefersReduced = useReducedMotion()
 
   const { t } = useTranslation()
-  const query = useSwapFeesQuery()
+  const query = useSwapFeesQuery(swapQuote)
   const swapQuoteQuery = useSwapQuoteQuery()
 
   const [fromCoinKey] = useSwapFromCoin()

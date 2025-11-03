@@ -1,6 +1,7 @@
 import { StrictInfoRow } from '@lib/ui/layout/StrictInfoRow'
 import { ActiveQueryOnly } from '@lib/ui/query/components/ActiveQueryOnly'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 import { useSwapQuoteQuery } from '../../queries/useSwapQuoteQuery'
 import { SwapFees } from './SwapFees'
@@ -18,7 +19,12 @@ export const SwapInfo = () => {
       <SwapProvider />
       <MatchQuery
         value={query}
-        success={() => <SwapFees RowComponent={StrictInfoRow} />}
+        success={swapQuote => (
+          <SwapFees
+            RowComponent={StrictInfoRow}
+            swapQuote={shouldBePresent(swapQuote, 'swap quote')}
+          />
+        )}
       />
     </ActiveQueryOnly>
   )

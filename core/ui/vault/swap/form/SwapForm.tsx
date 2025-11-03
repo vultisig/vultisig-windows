@@ -1,3 +1,5 @@
+import { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
+import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { SwapInfo } from '@core/ui/vault/swap/form/info/SwapInfo'
 import { ManageFromCoin } from '@core/ui/vault/swap/form/ManageFromCoin'
 import { ManageToCoin } from '@core/ui/vault/swap/form/ManageToCoin'
@@ -6,20 +8,25 @@ import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { RefreshSwap } from '../components/RefreshSwap'
+import { useSwapQuoteQuery } from '../queries/useSwapQuoteQuery'
 import { useSwapValidationQuery } from '../queries/useSwapValidationQuery'
 
-export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
+export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
   const {
     error,
     data: validationErrorMessage,
     isPending,
   } = useSwapValidationQuery()
+  const swapQuoteQuery = useSwapQuoteQuery()
 
   const { t } = useTranslation()
 
@@ -32,25 +39,34 @@ export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
       return extractErrorMsg(error)
     }
 
-    // validationErrorMessage is undefined when queries aren't ready (e.g., no amount entered)
-    // validationErrorMessage is null when validation passes
-    // validationErrorMessage is a string when validation fails
     if (validationErrorMessage === undefined) {
       return t('fill_the_form')
     }
 
-    // Return the validation error message if present, otherwise null (no error)
     return validationErrorMessage || null
   }, [validationErrorMessage, error, isPending, t])
 
+  const handleSubmit = () => {
+    if (!errorMessage) {
+      const swapQuote = shouldBePresent(swapQuoteQuery.data, 'swap quote')
+      onFinish(swapQuote)
+    }
+  }
+
   return (
     <>
+      <PageHeader
+        primaryControls={<PageHeaderBackButton />}
+        secondaryControls={<RefreshSwap />}
+        title={t('swap')}
+        hasBorder
+      />
       <PageContent
         as="form"
         gap={40}
         {...getFormProps({
-          onSubmit: onFinish,
-          isDisabled: !!errorMessage,
+          onSubmit: handleSubmit,
+          isDisabled: !!errorMessage || !!validationErrorMessage,
         })}
         justifyContent="space-between"
         scrollable
@@ -67,7 +83,10 @@ export const SwapForm: FC<OnFinishProp> = ({ onFinish }) => {
             <SwapInfo />
           </VStack>
         </VStack>
-        <Button disabled={Boolean(errorMessage)} type="submit">
+        <Button
+          disabled={Boolean(errorMessage) || !!validationErrorMessage}
+          type="submit"
+        >
           {errorMessage || t('continue')}
         </Button>
       </PageContent>
