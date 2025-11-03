@@ -1,7 +1,3 @@
-import {
-  buildSendKeysignPayload,
-  BuildSendKeysignPayloadInput,
-} from '@core/mpc/keysign/build/send'
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
@@ -15,12 +11,13 @@ import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
 import { useFeeSettings } from '../fee/settings/state/feeSettings'
-import { useSendAmount } from './amount'
-import { useSendMemo } from './memo'
-import { useSendReceiver } from './receiver'
-import { useCurrentSendCoin } from './sendCoin'
+import { useSendAmount } from '../state/amount'
+import { useSendMemo } from '../state/memo'
+import { useSendReceiver } from '../state/receiver'
+import { useCurrentSendCoin } from '../state/sendCoin'
+import { buildSendKeysignPayload, BuildSendKeysignPayloadInput } from './build'
 
-export const useSendTxKeysignPayloadQuery = () => {
+export const useSendKeysignPayloadQuery = () => {
   const coin = useCurrentSendCoin()
   const [receiver] = useSendReceiver()
   const [memo] = useSendMemo()

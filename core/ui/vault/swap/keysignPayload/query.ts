@@ -1,8 +1,4 @@
 import { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
-import {
-  buildSwapKeysignPayload,
-  BuildSwapKeysignPayloadInput,
-} from '@core/mpc/keysign/build/swap'
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
@@ -19,6 +15,7 @@ import { useMemo } from 'react'
 import { useFromAmount } from '../state/fromAmount'
 import { useSwapFromCoin } from '../state/fromCoin'
 import { useSwapToCoin } from '../state/toCoin'
+import { buildSwapKeysignPayload, BuildSwapKeysignPayloadInput } from './build'
 
 export const useSwapKeysignPayloadQuery = (swapQuote: SwapQuote) => {
   const [fromCoinKey] = useSwapFromCoin()

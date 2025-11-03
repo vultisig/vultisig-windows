@@ -11,8 +11,18 @@ import { getSwapDestinationAddress } from '@core/chain/swap/keysign/getSwapDesti
 import { nativeSwapQuoteToSwapPayload } from '@core/chain/swap/native/utils/nativeSwapQuoteToSwapPayload'
 import { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
+import { getBlockchainSpecificValue } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { refineKeysignUtxo } from '@core/mpc/keysign/refine/utxo'
+import { CommKeysignSwapPayload } from '@core/mpc/keysign/swap/KeysignSwapPayload'
+import { getKeysignUtxoInfo } from '@core/mpc/keysign/utxo/getKeysignUtxoInfo'
+import { MpcLib } from '@core/mpc/mpcLib'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
+import {
+  OneInchQuoteSchema,
+  OneInchSwapPayloadSchema,
+  OneInchTransaction,
+  OneInchTransactionSchema,
+} from '@core/mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
 import { Erc20ApprovePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/erc20_approve_payload_pb'
 import {
   KeysignPayload,
@@ -21,17 +31,6 @@ import {
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
-
-import { MpcLib } from '../../mpcLib'
-import {
-  OneInchQuoteSchema,
-  OneInchSwapPayloadSchema,
-  OneInchTransaction,
-  OneInchTransactionSchema,
-} from '../../types/vultisig/keysign/v1/1inch_swap_payload_pb'
-import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
-import { CommKeysignSwapPayload } from '../swap/KeysignSwapPayload'
-import { getKeysignUtxoInfo } from '../utxo/getKeysignUtxoInfo'
 
 export type BuildSwapKeysignPayloadInput = {
   fromCoin: AccountCoin

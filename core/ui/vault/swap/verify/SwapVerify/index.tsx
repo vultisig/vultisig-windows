@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next'
 
 import { VerifyKeysignStart } from '../../../../mpc/keysign/start/VerifyKeysignStart'
 import { VerifySwapFees } from '../../form/info/VerifySwapFees'
-import { useSwapKeysignPayloadQuery } from '../../queries/useSwapKeysignPayloadQuery'
+import { useSwapKeysignPayloadQuery } from '../../keysignPayload/query'
 import { useFromAmount } from '../../state/fromAmount'
 import { useSwapFromCoin } from '../../state/fromCoin'
 import { useSwapToCoin } from '../../state/toCoin'

@@ -8,9 +8,9 @@ import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
 import { useCurrentVaultPublicKey } from '../../state/currentVault'
+import { useSwapKeysignPayloadQuery } from '../keysignPayload/query'
 import { useSwapFromCoin } from '../state/fromCoin'
 import { useSwapToCoin } from '../state/toCoin'
-import { useSwapKeysignPayloadQuery } from './useSwapKeysignPayloadQuery'
 
 export const useSwapFeesQuery = (swapQuote: SwapQuote) => {
   const [fromCoinKey] = useSwapFromCoin()

@@ -6,11 +6,11 @@ import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
 import { KeysignFeeAmount } from '@core/ui/mpc/keysign/tx/FeeAmount'
+import { useSendKeysignPayloadQuery } from '@core/ui/vault/send/keysignPayload/query'
 import { useSender } from '@core/ui/vault/send/sender/hooks/useSender'
 import { useSendMemo } from '@core/ui/vault/send/state/memo'
 import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
 import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
-import { useSendTxKeysignPayloadQuery } from '@core/ui/vault/send/state/useSendTxKeysignPayloadQuery'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
@@ -35,7 +35,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const [memo] = useSendMemo()
   const coin = useCurrentSendCoin()
   const sender = useSender()
-  const keysignPayloadQuery = useSendTxKeysignPayloadQuery()
+  const keysignPayloadQuery = useSendKeysignPayloadQuery()
   const translatedTerms = sendTerms.map(term => t(term))
 
   return (
