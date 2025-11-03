@@ -4,6 +4,7 @@ import { EvmChain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { gwei } from '@core/chain/tx/fee/evm/gwei'
+import { useEvmBaseFeeQuery } from '@core/ui/chain/evm/queries/baseFee'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
@@ -21,7 +22,6 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useEvmBaseFeeQuery } from '../../../../../chain/evm/queries/baseFee'
 import { FeeContainer } from '../FeeContainer'
 
 type EvmFeeSettingsFormProps = InputProps<EvmFeeSettings> &

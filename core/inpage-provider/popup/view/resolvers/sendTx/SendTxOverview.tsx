@@ -7,7 +7,7 @@ import { FeeQuote } from '@core/chain/feeQuote/core'
 import {
   FeeSettings,
   FeeSettingsChainKind,
-  feeSettingsChainKinds,
+  feeSettingsChains,
 } from '@core/chain/feeQuote/settings/core'
 import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { getFeeAmount } from '@core/mpc/keysign/fee'
@@ -85,14 +85,12 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
     },
     useCallback(
       ({ keysignTxData, feeQuote }) => {
-        const chainKind = getChainKind(chain)
-
         return getKeysignPayload({
           keysignTxData,
           feeQuote:
-            isOneOf(chainKind, feeSettingsChainKinds) && feeSettings
+            isOneOf(chain, feeSettingsChains) && feeSettings
               ? applyFeeSettings({
-                  chainKind,
+                  chainKind: getChainKind(chain),
                   quote: feeQuote as FeeQuote<FeeSettingsChainKind>,
                   settings: feeSettings,
                 })

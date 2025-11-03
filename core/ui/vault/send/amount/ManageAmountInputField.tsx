@@ -31,7 +31,6 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'
-import { ValidSendFormOnly } from '../components/ValidSendFormOnly'
 import { useSendValidationQuery } from '../queries/useSendValidationQuery'
 import { useSendAmount } from '../state/amount'
 import { FiatSendAmountInput } from './FiatSendAmountInput'
@@ -85,9 +84,7 @@ export const ManageAmountInputField = () => {
     <SendInputContainer flexGrow>
       <HStack justifyContent="space-between" alignItems="center">
         <InputLabel>{t('amount')}</InputLabel>
-        <ValidSendFormOnly>
-          <ManageFeeSettings />
-        </ValidSendFormOnly>
+        <ManageFeeSettings />
       </HStack>
       <HorizontalLine />
       <VStack gap={8}>
