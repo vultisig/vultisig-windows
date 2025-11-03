@@ -84,7 +84,7 @@ export const buildDepositKeysignPayload = async ({
     ? toChainAmount(shouldBePresent(amount), coin.decimals).toString()
     : undefined
 
-  const basePayload: any = {
+  let keysignPayload = create(KeysignPayloadSchema, {
     coin: toCommCoin({
       ...coin,
       address: coin.address,
@@ -95,14 +95,9 @@ export const buildDepositKeysignPayload = async ({
     vaultPublicKeyEcdsa: vaultId,
     libType,
     utxoInfo: await getKeysignUtxoInfo(coin),
-  }
-
-  if (receiver) basePayload.toAddress = receiver
-  if (hasAmount && amountUnits) {
-    basePayload.toAmount = amountUnits
-  }
-
-  let keysignPayload = create(KeysignPayloadSchema, basePayload)
+    toAddress: receiver,
+    toAmount: hasAmount && amountUnits ? amountUnits : undefined,
+  })
 
   keysignPayload.blockchainSpecific = await getChainSpecific({
     keysignPayload,
