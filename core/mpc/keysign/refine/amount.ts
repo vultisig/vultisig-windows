@@ -38,7 +38,7 @@ export const refineKeysignAmount = (input: RefineKeysignAmountInput) => {
   )
 
   if (refinedAmount <= 0n) {
-    throw new Error('Insufficient balance')
+    throw new Error('Not enough funds')
   }
 
   return {
