@@ -1240,4 +1240,5 @@ export const it = {
     'Esegui il backup della condivisione del vault online utilizzando la stessa password del vault creata in precedenza.',
   fast_vault_backup_description:
     "L'archiviazione online è consigliata e sicura: le condivisioni Vault sono progettate per questo scopo.",
+  not_enough_funds: 'Fondi insufficienti',
 }

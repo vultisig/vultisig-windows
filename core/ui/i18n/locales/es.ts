@@ -1241,4 +1241,5 @@ export const es = {
     'Realice una copia de seguridad de su recurso compartido en línea utilizando la misma contraseña que creó anteriormente.',
   fast_vault_backup_description:
     'Se recomienda y es seguro el almacenamiento en línea; las acciones de bóveda están diseñadas para ello.',
+  not_enough_funds: 'No hay fondos suficientes',
 }
