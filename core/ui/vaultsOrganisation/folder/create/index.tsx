@@ -23,6 +23,7 @@ import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { Switch } from '@lib/ui/inputs/switch'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
+import { List } from '@lib/ui/list'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -128,7 +129,7 @@ export const CreateVaultFolderPage = () => {
             {t('add_vaults_to_folder')}
           </Text>
           {vaults.length ? (
-            <VStack gap={12}>
+            <StyledList>
               {vaults.map(vault => {
                 const vaultId = getVaultId(vault)
                 const checked = vaultIds.includes(vaultId)
@@ -159,11 +160,13 @@ export const CreateVaultFolderPage = () => {
                         />
                       </SwitchWrapper>
                     }
+                    selected={checked}
+                    dimmed={!checked}
                     onClick={() => toggleVault(vaultId)}
                   />
                 )
               })}
-            </VStack>
+            </StyledList>
           ) : (
             <EmptyStateCard gap={12} alignItems="center">
               <IconWrapper size={28} color="textShy">
@@ -196,6 +199,13 @@ export const CreateVaultFolderPage = () => {
 
 const Container = styled(VStack)`
   gap: 0;
+`
+
+const StyledList = styled(List)`
+  background-image: none;
+  border: none;
+  gap: 12px;
+  padding: 0;
 `
 
 const StyledTextInput = styled(TextInput)`
