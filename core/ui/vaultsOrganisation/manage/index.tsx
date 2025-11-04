@@ -39,7 +39,7 @@ export const ManageVaultsPage = () => {
             </IconWrapper>
           }
         >
-          {t('create_folder')}
+          {t('add_folder')}
         </AddFolderButton>
       </PageContent>
     </VStack>
@@ -48,12 +48,12 @@ export const ManageVaultsPage = () => {
 
 const AddFolderButton = styled(Button)`
   border-radius: 40px;
-  border: 1px solid ${getColor('foregroundExtra')};
-  background: ${({ theme }) =>
-    theme.colors.background.withAlpha(0.05).toCssValue()};
+  border: 1px solid ${getColor('buttonPrimary')};
+  background: transparent;
 
   &:hover {
-    background: ${({ theme }) =>
-      theme.colors.background.withAlpha(0.1).toCssValue()};
+    border-color: ${({ theme }) =>
+      theme.colors.buttonPrimary.withAlpha(0.7).toCssValue()};
+    background: transparent;
   }
 `
