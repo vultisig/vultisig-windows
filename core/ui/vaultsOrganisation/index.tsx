@@ -85,7 +85,8 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
 
     const parts = [vaultCountLabel]
 
-    if (!isTotalsPending && vaultTotals) {
+    // Only show cumulative balance if there's more than 1 vault
+    if (totalVaultsCount > 1 && !isTotalsPending && vaultTotals) {
       const totalBalance = Object.values(vaultTotals).reduce(
         (sum, value) => sum + value,
         0
@@ -127,14 +128,17 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
           subtitle={summarySubtitle}
           actions={
             <>
-              <IconButton
-                kind="action"
-                size="md"
-                onClick={handleManage}
-                aria-label={t('edit_vaults')}
-              >
-                <SquarePenIcon />
-              </IconButton>
+              {/* Only show Edit button if there's more than 1 vault */}
+              {totalVaultsCount > 1 && (
+                <IconButton
+                  kind="action"
+                  size="md"
+                  onClick={handleManage}
+                  aria-label={t('edit_vaults')}
+                >
+                  <SquarePenIcon />
+                </IconButton>
+              )}
               <IconButton
                 kind="action"
                 size="md"
