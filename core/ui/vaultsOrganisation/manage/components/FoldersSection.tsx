@@ -8,7 +8,7 @@ import {
   VaultListRow,
 } from '@core/ui/vaultsOrganisation/components'
 import { DnDList } from '@lib/ui/dnd/DnDList'
-import { FolderLockIcon } from '@lib/ui/icons/FolderLockIcon'
+import { FolderIcon } from '@lib/ui/icons/FolderIcon'
 import { MenuIcon } from '@lib/ui/icons/MenuIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import {
@@ -66,12 +66,7 @@ export const FoldersSection = () => {
       }}
       renderList={({ props: { children } }) => (
         <VStack gap={16}>
-          <Text
-            size={13}
-            weight={600}
-            color="shy"
-            style={{ textTransform: 'uppercase' }}
-          >
+          <Text size={13} weight={600} color="shy">
             {t('folders')}
           </Text>
           <VStack gap={12}>{children}</VStack>
@@ -85,8 +80,8 @@ export const FoldersSection = () => {
                 <DragHandle {...dragHandleProps}>
                   <MenuIcon fontSize={20} />
                 </DragHandle>
-                <LeadingIconBadge tone="neutral">
-                  <FolderLockIcon style={{ fontSize: 20 }} />
+                <LeadingIconBadge tone="info">
+                  <FolderIcon />
                 </LeadingIconBadge>
               </LeadingGroup>
             }
