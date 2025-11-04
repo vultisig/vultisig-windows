@@ -728,6 +728,7 @@ export const it = {
     updateButton: 'Aggiorna',
   },
   create_folder: 'Crea cartella',
+  add_folder: 'Aggiungi cartella',
   folder_name: 'Nome cartella',
   enter_folder_name: 'Inserisci il nome della cartella',
   folder_name_required: 'Il nome della cartella è obbligatorio',

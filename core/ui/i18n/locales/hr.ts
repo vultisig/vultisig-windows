@@ -698,6 +698,7 @@ export const hr = {
     updateButton: 'Ažuriraj',
   },
   create_folder: 'Stvori mapu',
+  add_folder: 'Dodaj mapu',
   folder_name: 'Naziv mape',
   enter_folder_name: 'Unesite naziv mape',
   folder_name_required: 'Potreban je naziv mape',

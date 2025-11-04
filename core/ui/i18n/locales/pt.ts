@@ -715,6 +715,7 @@ export const pt = {
     updateButton: 'Atualizar',
   },
   create_folder: 'Criar pasta',
+  add_folder: 'Adicionar pasta',
   folder_name: 'Nome da pasta',
   enter_folder_name: 'Digite o nome da pasta',
   folder_name_required: 'O nome da pasta é obrigatório',

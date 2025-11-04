@@ -883,6 +883,7 @@ export const en = {
     updateButton: 'Update',
   },
   create_folder: 'Create Folder',
+  add_folder: 'Add Folder',
   folder_name: 'Folder name',
   enter_folder_name: 'Enter folder name',
   folder_name_required: 'Folder name is required',

@@ -719,6 +719,7 @@ export const de = {
     updateButton: 'Aktualisieren',
   },
   create_folder: 'Ordner erstellen',
+  add_folder: 'Ordner hinzufügen',
   folder_name: 'Ordnername',
   enter_folder_name: 'Geben Sie den Ordnernamen ein',
   folder_name_required: 'Ordnername ist erforderlich',

@@ -725,6 +725,7 @@ export const es = {
     updateButton: 'Actualizar',
   },
   create_folder: 'Crear carpeta',
+  add_folder: 'Añadir carpeta',
   folder_name: 'Nombre de la carpeta',
   enter_folder_name: 'Introduzca el nombre de la carpeta',
   folder_name_required: 'El nombre de la carpeta es obligatorio',
