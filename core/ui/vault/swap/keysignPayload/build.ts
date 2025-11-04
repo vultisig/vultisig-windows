@@ -147,7 +147,7 @@ export const buildSwapKeysignPayload = async ({
             ...toCoin,
             hexPublicKey: toCoinHexPublicKey,
           }),
-          fromAmount: amount.toString(),
+          fromAmount: chainAmount.toString(),
           toAmountDecimal: fromChainAmount(
             quote.dstAmount,
             toCoin.decimals
