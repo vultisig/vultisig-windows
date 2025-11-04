@@ -1,9 +1,9 @@
-import { FeeSettings } from '@core/chain/feeQuote/settings/core'
 import type { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { Resolver } from '@lib/utils/types/Resolver'
 import { Psbt } from 'bitcoinjs-lib'
 
 import { KeysignPayload } from '../../types/vultisig/keysign/v1/keysign_message_pb'
+import { FeeSettings } from './FeeSettings'
 import {
   KeysignChainSpecific,
   KeysignChainSpecificKey,

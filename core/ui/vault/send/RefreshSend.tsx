@@ -5,8 +5,6 @@ import { IconButton } from '@lib/ui/buttons/IconButton'
 import { RefreshCwIcon } from '@lib/ui/icons/RefreshCwIcon'
 import { useInvalidateQueriesMutation } from '@lib/ui/query/hooks/useInvalidateQueriesMutation'
 
-import { feeQuoteQueryKeyPrefix } from '../../chain/feeQuote/query'
-
 export const RefreshSend = () => {
   const coin = useCurrentSendCoin()
   const { mutate: refresh, isPending } = useInvalidateQueriesMutation()
@@ -15,10 +13,7 @@ export const RefreshSend = () => {
     <IconButton
       loading={isPending}
       onClick={() => {
-        refresh([
-          getBalanceQueryKey(extractAccountCoinKey(coin)),
-          [feeQuoteQueryKeyPrefix],
-        ])
+        refresh([getBalanceQueryKey(extractAccountCoinKey(coin))])
       }}
     >
       <RefreshCwIcon />

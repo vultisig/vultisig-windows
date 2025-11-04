@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StartKeysignPrompt } from '../../../mpc/keysign/prompt/StartKeysignPrompt'
-import { useDepositKeysignPayloadQuery } from './hooks/useDepositKeysignPayloadQuery'
+import { useDepositKeysignPayloadQuery } from '../keysignPayload/query'
 
 export const DepositConfirmButton = () => {
   const { t } = useTranslation()
