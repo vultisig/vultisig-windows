@@ -28,9 +28,8 @@ import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
-import { SearchField } from '@lib/ui/search/SearchField'
 import { Text } from '@lib/ui/text'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useCore } from '../state/core'
@@ -53,9 +52,6 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
   const folders = useVaultFolders()
   const vaults = useVaults()
 
-  const [searchQuery, setSearchQuery] = useState('')
-  const normalizedSearch = searchQuery.trim().toLowerCase()
-
   const folderEntries = useMemo<FolderEntry[]>(() => {
     return folders.map(folder => {
       const vaultCount = vaults.filter(
@@ -74,22 +70,6 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
     () => vaults.filter(vault => !vault.folderId),
     [vaults]
   )
-
-  const filteredFolders = useMemo(() => {
-    if (!normalizedSearch) return folderEntries
-
-    return folderEntries.filter(entry =>
-      entry.name.toLowerCase().includes(normalizedSearch)
-    )
-  }, [folderEntries, normalizedSearch])
-
-  const filteredVaults = useMemo(() => {
-    if (!normalizedSearch) return folderlessVaults
-
-    return folderlessVaults.filter(vault =>
-      vault.name.toLowerCase().includes(normalizedSearch)
-    )
-  }, [folderlessVaults, normalizedSearch])
 
   const { totals: vaultTotals, isPending: isTotalsPending } =
     useVaultsTotalBalances()
@@ -142,35 +122,32 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
         title={t('vaults')}
       />
       <PageContent gap={28} flexGrow scrollable>
-        <VStack gap={16}>
-          <SearchField onSearch={setSearchQuery} value={searchQuery} />
-          <SectionHeader
-            title={t('vaults')}
-            subtitle={summarySubtitle}
-            actions={
-              <>
-                <IconButton
-                  kind="action"
-                  size="md"
-                  onClick={handleManage}
-                  aria-label={t('edit_vaults')}
-                >
-                  <SquarePenIcon />
-                </IconButton>
-                <IconButton
-                  kind="action"
-                  size="md"
-                  onClick={handleCreateVault}
-                  aria-label={t('add_new_vault')}
-                >
-                  <PlusIcon />
-                </IconButton>
-              </>
-            }
-          />
-        </VStack>
+        <SectionHeader
+          title={t('vaults')}
+          subtitle={summarySubtitle}
+          actions={
+            <>
+              <IconButton
+                kind="action"
+                size="md"
+                onClick={handleManage}
+                aria-label={t('edit_vaults')}
+              >
+                <SquarePenIcon />
+              </IconButton>
+              <IconButton
+                kind="action"
+                size="md"
+                onClick={handleCreateVault}
+                aria-label={t('add_new_vault')}
+              >
+                <PlusIcon />
+              </IconButton>
+            </>
+          }
+        />
 
-        {filteredFolders.length > 0 && (
+        {folderEntries.length > 0 && (
           <VStack gap={16}>
             <Text
               size={13}
@@ -181,7 +158,7 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
               {t('folders')}
             </Text>
             <VStack gap={12}>
-              {filteredFolders.map(folder => (
+              {folderEntries.map(folder => (
                 <VaultListRow
                   key={folder.id}
                   leading={
@@ -205,7 +182,7 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
           </VStack>
         )}
 
-        {filteredVaults.length > 0 && (
+        {folderlessVaults.length > 0 && (
           <VStack gap={16}>
             <Text
               size={13}
@@ -216,7 +193,7 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
               {t('vaults')}
             </Text>
             <VStack gap={12}>
-              {filteredVaults.map(vault => {
+              {folderlessVaults.map(vault => {
                 const vaultId = getVaultId(vault)
                 const { tone, icon } = getVaultSecurityTone(vault)
                 const value = vaultTotals?.[vaultId]
@@ -245,13 +222,13 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
           </VStack>
         )}
 
-        {filteredFolders.length === 0 && filteredVaults.length === 0 && (
+        {folderEntries.length === 0 && folderlessVaults.length === 0 && (
           <VStack gap={12} alignItems="center" justifyContent="center">
             <Text size={16} weight={500}>
-              {t('no_results')}
+              {t('no_vaults')}
             </Text>
             <Text size={13} color="shy" centerHorizontally>
-              {t('adjust_search_query')}
+              {t('create_new_vault')}
             </Text>
           </VStack>
         )}
