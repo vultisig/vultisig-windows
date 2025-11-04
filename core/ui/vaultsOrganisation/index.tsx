@@ -128,7 +128,6 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
           subtitle={summarySubtitle}
           actions={
             <>
-              {/* Only show Edit button if there's more than 1 vault */}
               {totalVaultsCount > 1 && (
                 <IconButton
                   kind="action"
