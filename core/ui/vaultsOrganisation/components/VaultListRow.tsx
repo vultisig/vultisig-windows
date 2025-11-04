@@ -136,7 +136,7 @@ const LeadingSlot = styled.div`
 
 type LeadingIconProps = {
   children: ReactNode
-  tone?: 'primary' | 'warning' | 'neutral'
+  tone?: 'primary' | 'warning' | 'neutral' | 'info'
 }
 
 export const LeadingIconBadge = ({
@@ -162,6 +162,8 @@ const IconBadge = styled.div.withConfig({
         return theme.colors.success.toCssValue()
       case 'warning':
         return theme.colors.idle.toCssValue()
+      case 'info':
+        return theme.colors.info.toCssValue()
       default:
         return theme.colors.textSupporting.toCssValue()
     }

@@ -19,7 +19,7 @@ import { useVaultsTotalBalances } from '@core/ui/vaultsOrganisation/hooks/useVau
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
-import { FolderLockIcon } from '@lib/ui/icons/FolderLockIcon'
+import { FolderIcon } from '@lib/ui/icons/FolderIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { PlusIcon } from '@lib/ui/icons/PlusIcon'
 import { SquarePenIcon } from '@lib/ui/icons/SquarePenIcon'
@@ -132,7 +132,7 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
               {totalVaultsCount > 1 && (
                 <IconButton
                   kind="action"
-                  size="md"
+                  size="lg"
                   onClick={handleManage}
                   aria-label={t('edit_vaults')}
                 >
@@ -140,8 +140,8 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
                 </IconButton>
               )}
               <IconButton
-                kind="action"
-                size="md"
+                kind="primary"
+                size="lg"
                 onClick={handleCreateVault}
                 aria-label={t('add_new_vault')}
               >
@@ -152,37 +152,27 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
         />
 
         {folderEntries.length > 0 && (
-          <VStack gap={16}>
-            <Text
-              size={13}
-              weight={600}
-              color="shy"
-              style={{ textTransform: 'uppercase' }}
-            >
-              {t('folders')}
-            </Text>
-            <VStack gap={12}>
-              {folderEntries.map(folder => (
-                <VaultListRow
-                  key={folder.id}
-                  leading={
-                    <LeadingIconBadge tone="neutral">
-                      <FolderLockIcon style={{ fontSize: 20 }} />
-                    </LeadingIconBadge>
-                  }
-                  title={folder.name}
-                  subtitle={t('vault_count', { count: folder.vaultCount })}
-                  trailing={
-                    <IconWrapper size={18} color="textShy">
-                      <ChevronRightIcon />
-                    </IconWrapper>
-                  }
-                  onClick={() =>
-                    navigate({ id: 'vaultFolder', state: { id: folder.id } })
-                  }
-                />
-              ))}
-            </VStack>
+          <VStack gap={12}>
+            {folderEntries.map(folder => (
+              <VaultListRow
+                key={folder.id}
+                leading={
+                  <LeadingIconBadge tone="info">
+                    <FolderIcon />
+                  </LeadingIconBadge>
+                }
+                title={folder.name}
+                subtitle={t('vault_count', { count: folder.vaultCount })}
+                trailing={
+                  <IconWrapper size={18} color="textShy">
+                    <ChevronRightIcon />
+                  </IconWrapper>
+                }
+                onClick={() =>
+                  navigate({ id: 'vaultFolder', state: { id: folder.id } })
+                }
+              />
+            ))}
           </VStack>
         )}
 

@@ -22,7 +22,7 @@ export const SectionHeader = ({
     <Header gap={12} alignItems="center" justifyContent="space-between">
       <VStack gap={4} alignItems="flex-start">
         {title && (
-          <Text size={18} weight={600} color="contrast">
+          <Text size={17} weight={600} color="contrast">
             {title}
           </Text>
         )}
