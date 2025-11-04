@@ -9,15 +9,15 @@ import {
 import { useVaultFolders } from '@core/ui/storage/vaultFolders'
 import { useVaults } from '@core/ui/storage/vaults'
 import { DoneButton } from '@core/ui/vault/chain/manage/shared/DoneButton'
-import { VaultSigners } from '@core/ui/vault/signers'
 import {
   LeadingIconBadge,
   SectionHeader,
-  SelectionIndicator,
   VaultListRow,
+  VaultSignersPill,
 } from '@core/ui/vaultsOrganisation/components'
 import { useVaultsTotalBalances } from '@core/ui/vaultsOrganisation/hooks/useVaultsTotalBalances'
 import { IconButton } from '@lib/ui/buttons/IconButton'
+import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { FolderLockIcon } from '@lib/ui/icons/FolderLockIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -210,10 +210,13 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
                         ? formatFiatAmount(value)
                         : undefined
                     }
-                    meta={<VaultSigners vault={vault} />}
-                    trailing={
-                      vaultId === currentVaultId ? <SelectionIndicator /> : null
+                    meta={
+                      <IconWrapper size={20} color="primary">
+                        <CheckIcon />
+                      </IconWrapper>
                     }
+                    selected={vaultId === currentVaultId}
+                    trailing={<VaultSignersPill vault={vault} />}
                     onClick={() => handleSelectVault(vaultId)}
                   />
                 )

@@ -81,14 +81,11 @@ const Row = styled.div.withConfig({
     !['clickable', 'selected', 'disabled', 'dimmed'].includes(prop as string),
 })<RowStyleProps>`
   align-items: center;
-  background: ${({ theme }) =>
-    theme.colors.foregroundDark.withAlpha(0.65).toCssValue()};
+  background: ${({ theme, selected }) =>
+    selected && theme.colors.foregroundDark.withAlpha(0.65).toCssValue()};
   border-radius: 18px;
   border: 1px solid
-    ${({ selected, theme }) =>
-      selected
-        ? theme.colors.primary.withAlpha(0.8).toCssValue()
-        : theme.colors.foregroundExtra.withAlpha(0.7).toCssValue()};
+    ${({ theme }) => theme.colors.foregroundExtra.withAlpha(0.7).toCssValue()};
   display: flex;
   justify-content: space-between;
   padding: 16px 20px;
@@ -113,12 +110,6 @@ const Row = styled.div.withConfig({
           border-color: ${getColor('primary')};
         }
       `}
-    `}
-
-  ${({ selected }) =>
-    selected &&
-    css`
-      box-shadow: 0 0 0 1px ${getColor('primary')};
     `}
 
   ${({ disabled }) =>
@@ -159,12 +150,12 @@ const IconBadge = styled.div.withConfig({
   shouldForwardProp: prop => prop !== 'tone',
 })<{ tone: LeadingIconProps['tone'] }>`
   align-items: center;
-  border-radius: 14px;
+  border-radius: 99px;
   display: flex;
-  font-size: 22px;
-  height: 44px;
+  font-size: 16px;
+  height: 40px;
   justify-content: center;
-  width: 44px;
+  width: 40px;
   color: ${({ tone, theme }) => {
     switch (tone) {
       case 'primary':
