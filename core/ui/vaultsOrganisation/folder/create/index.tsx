@@ -41,6 +41,7 @@ export const CreateVaultFolderPage = () => {
   const { mutate, isPending } = useCreateVaultFolderMutation()
   const [name, setName] = useState<string>('')
   const [vaultIds, setVaultIds] = useState<string[]>([])
+  const [touched, setTouched] = useState(false)
   const { goBack } = useCore()
   const folders = useVaultFolders()
   const vaults = useFolderlessVaults()
