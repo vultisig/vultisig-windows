@@ -1,31 +1,27 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getNativeSwapDecimals } from '@core/chain/swap/native/utils/getNativeSwapDecimals'
+import { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
 import { SwapFees } from '@core/chain/swap/SwapFee'
 import { getFeeAmount } from '@core/mpc/keysign/fee'
-import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
+import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
 import { useCurrentVaultPublicKey } from '../../state/currentVault'
+import { useSwapKeysignPayloadQuery } from '../keysignPayload/query'
 import { useSwapFromCoin } from '../state/fromCoin'
 import { useSwapToCoin } from '../state/toCoin'
-import { useSwapKeysignPayloadQuery } from './useSwapKeysignPayloadQuery'
-import { useSwapQuoteQuery } from './useSwapQuoteQuery'
 
-export const useSwapFeesQuery = () => {
-  const swapQuoteQuery = useSwapQuoteQuery()
+export const useSwapFeesQuery = (swapQuote: SwapQuote) => {
   const [fromCoinKey] = useSwapFromCoin()
   const [toCoinKey] = useSwapToCoin()
-  const keysignPayloadQuery = useSwapKeysignPayloadQuery()
+  const keysignPayloadQuery = useSwapKeysignPayloadQuery(swapQuote)
   const publicKey = useCurrentVaultPublicKey(fromCoinKey.chain)
   const walletCore = useAssertWalletCore()
 
-  return useTransformQueriesData(
-    {
-      swapQuote: swapQuoteQuery,
-      keysignPayload: keysignPayloadQuery,
-    },
-    ({ swapQuote, keysignPayload }): SwapFees => {
+  return useTransformQueryData(
+    keysignPayloadQuery,
+    (keysignPayload): SwapFees => {
       const { chain } = fromCoinKey
       const fromFeeCoin = chainFeeCoin[chain]
 

@@ -1,5 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
@@ -13,11 +14,15 @@ import { SwapFeeFiatValue } from './SwapTotalFeeFiatValue'
 
 type VerifySwapFeesProps = {
   RowComponent: ComponentType<PropsWithChildren>
+  swapQuote: SwapQuote
 }
 
-export const VerifySwapFees: FC<VerifySwapFeesProps> = ({ RowComponent }) => {
+export const VerifySwapFees: FC<VerifySwapFeesProps> = ({
+  RowComponent,
+  swapQuote,
+}) => {
   const { t } = useTranslation()
-  const query = useSwapFeesQuery()
+  const query = useSwapFeesQuery(swapQuote)
 
   const [fromCoinKey] = useSwapFromCoin()
 

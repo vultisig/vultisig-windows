@@ -18,7 +18,9 @@ export const SwapInfo = () => {
       <SwapProvider />
       <MatchQuery
         value={query}
-        success={() => <SwapFees RowComponent={StrictInfoRow} />}
+        success={swapQuote => (
+          <SwapFees RowComponent={StrictInfoRow} swapQuote={swapQuote} />
+        )}
       />
     </ActiveQueryOnly>
   )

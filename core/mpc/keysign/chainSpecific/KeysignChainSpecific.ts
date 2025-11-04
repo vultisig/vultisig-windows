@@ -57,12 +57,6 @@ export const chainSpecificRecord = {
   [Chain.Cardano]: 'cardano',
 } as const satisfies Record<Chain, KeysignChainSpecificKey>
 
-export type ChainsBySpecific<T extends KeysignChainSpecificKey> = {
-  [K in keyof typeof chainSpecificRecord]: (typeof chainSpecificRecord)[K] extends T
-    ? K
-    : never
-}[keyof typeof chainSpecificRecord]
-
 export const getBlockchainSpecificValue = <T extends KeysignChainSpecificKey>(
   blockchainSpecific: KeysignPayload['blockchainSpecific'],
   expectedCase: T
