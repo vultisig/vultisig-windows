@@ -14,6 +14,7 @@ type VaultListRowProps = {
   onClick?: () => void
   selected?: boolean
   disabled?: boolean
+  dimmed?: boolean
 }
 
 export const VaultListRow = ({
@@ -25,12 +26,14 @@ export const VaultListRow = ({
   onClick,
   selected = false,
   disabled = false,
+  dimmed = false,
 }: VaultListRowProps) => {
   return (
     <Row
-      $clickable={!!onClick}
-      $selected={selected}
-      $disabled={disabled}
+      clickable={!!onClick}
+      selected={selected}
+      disabled={disabled}
+      dimmed={dimmed}
       role={onClick ? 'button' : undefined}
       tabIndex={onClick && !disabled ? 0 : undefined}
       onClick={disabled ? undefined : onClick}
@@ -66,18 +69,24 @@ export const VaultListRow = ({
   )
 }
 
-const Row = styled.div<{
-  $clickable?: boolean
-  $selected?: boolean
-  $disabled?: boolean
-}>`
+type RowStyleProps = {
+  clickable?: boolean
+  selected?: boolean
+  disabled?: boolean
+  dimmed?: boolean
+}
+
+const Row = styled.div.withConfig({
+  shouldForwardProp: prop =>
+    !['clickable', 'selected', 'disabled', 'dimmed'].includes(prop as string),
+})<RowStyleProps>`
   align-items: center;
   background: ${({ theme }) =>
     theme.colors.foregroundDark.withAlpha(0.65).toCssValue()};
   border-radius: 18px;
   border: 1px solid
-    ${({ $selected, theme }) =>
-      $selected
+    ${({ selected, theme }) =>
+      selected
         ? theme.colors.primary.withAlpha(0.8).toCssValue()
         : theme.colors.foregroundExtra.withAlpha(0.7).toCssValue()};
   display: flex;
@@ -89,11 +98,11 @@ const Row = styled.div<{
     transform 0.25s ease,
     opacity 0.25s ease;
 
-  ${({ $clickable, $disabled }) =>
-    $clickable &&
+  ${({ clickable, disabled }) =>
+    clickable &&
     css`
-      cursor: ${$disabled ? 'not-allowed' : 'pointer'};
-      ${!$disabled &&
+      cursor: ${disabled ? 'not-allowed' : 'pointer'};
+      ${!disabled &&
       css`
         &:hover {
           background: ${getColor('foreground')};
@@ -106,16 +115,22 @@ const Row = styled.div<{
       `}
     `}
 
-  ${({ $selected }) =>
-    $selected &&
+  ${({ selected }) =>
+    selected &&
     css`
       box-shadow: 0 0 0 1px ${getColor('primary')};
     `}
 
-  ${({ $disabled }) =>
-    $disabled &&
+  ${({ disabled }) =>
+    disabled &&
     css`
       opacity: 0.4;
+    `}
+
+  ${({ dimmed }) =>
+    dimmed &&
+    css`
+      opacity: 0.6;
     `}
 `
 
@@ -137,10 +152,12 @@ export const LeadingIconBadge = ({
   children,
   tone = 'neutral',
 }: LeadingIconProps) => {
-  return <IconBadge $tone={tone}>{children}</IconBadge>
+  return <IconBadge tone={tone}>{children}</IconBadge>
 }
 
-const IconBadge = styled.div<{ $tone: LeadingIconProps['tone'] }>`
+const IconBadge = styled.div.withConfig({
+  shouldForwardProp: prop => prop !== 'tone',
+})<{ tone: LeadingIconProps['tone'] }>`
   align-items: center;
   border-radius: 14px;
   display: flex;
@@ -148,8 +165,8 @@ const IconBadge = styled.div<{ $tone: LeadingIconProps['tone'] }>`
   height: 44px;
   justify-content: center;
   width: 44px;
-  color: ${({ $tone, theme }) => {
-    switch ($tone) {
+  color: ${({ tone, theme }) => {
+    switch (tone) {
       case 'primary':
         return theme.colors.success.toCssValue()
       case 'warning':
@@ -158,9 +175,9 @@ const IconBadge = styled.div<{ $tone: LeadingIconProps['tone'] }>`
         return theme.colors.textSupporting.toCssValue()
     }
   }};
-  background: ${({ $tone, theme }) => {
+  background: ${({ tone, theme }) => {
     const base = (() => {
-      switch ($tone) {
+      switch (tone) {
         case 'primary':
           return theme.colors.success
         case 'warning':
@@ -170,7 +187,7 @@ const IconBadge = styled.div<{ $tone: LeadingIconProps['tone'] }>`
       }
     })()
 
-    return base.withAlpha($tone === 'neutral' ? 0.18 : 0.16).toCssValue()
+    return base.withAlpha(tone === 'neutral' ? 0.18 : 0.16).toCssValue()
   }};
 `
 
