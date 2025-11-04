@@ -97,7 +97,8 @@ export const CreateVaultFolderPage = () => {
             onValueChange={setName}
             placeholder={t('enter_folder_name')}
             value={name}
-            validation={validationMessage ? 'invalid' : undefined}
+            validation={touched && validationMessage ? 'invalid' : undefined}
+            onBlur={() => setTouched(true)}
             inputOverlay={
               name ? (
                 <InputOverlay>
@@ -113,7 +114,7 @@ export const CreateVaultFolderPage = () => {
               ) : null
             }
           />
-          {validationMessage && (
+          {touched && validationMessage && (
             <Text size={12} color="danger">
               {validationMessage}
             </Text>

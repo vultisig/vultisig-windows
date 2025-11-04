@@ -1,8 +1,8 @@
 import { getVaultId, Vault } from '@core/mpc/vault/Vault'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
+import { useCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { useFolderlessVaults } from '@core/ui/storage/vaults'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
-import { VaultSigners } from '@core/ui/vault/signers'
 import {
   LeadingIconBadge,
   VaultListRow,
@@ -10,6 +10,8 @@ import {
 import { useVaultsTotalBalances } from '@core/ui/vaultsOrganisation/hooks/useVaultsTotalBalances'
 import { getVaultSecurityTone } from '@core/ui/vaultsOrganisation/utils/getVaultSecurityTone'
 import { DnDList } from '@lib/ui/dnd/DnDList'
+import { CheckIcon } from '@lib/ui/icons/CheckIcon'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { MenuIcon } from '@lib/ui/icons/MenuIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import {
@@ -28,6 +30,7 @@ export const VaultsSection = () => {
   const { t } = useTranslation()
   const { mutate } = useUpdateVaultMutation()
   const vaults = useFolderlessVaults()
+  const currentVaultId = useCurrentVaultId()
   const [items, setItems] = useState<Vault[]>(vaults)
   const { totals: vaultTotals, isPending: isTotalsPending } =
     useVaultsTotalBalances()
@@ -62,12 +65,7 @@ export const VaultsSection = () => {
       }}
       renderList={({ props: { children } }) => (
         <VStack gap={16}>
-          <Text
-            size={13}
-            weight={600}
-            color="shy"
-            style={{ textTransform: 'uppercase' }}
-          >
+          <Text size={13} weight={600} color="shy">
             {t('vaults')}
           </Text>
           <VStack gap={12}>{children}</VStack>
@@ -95,7 +93,13 @@ export const VaultsSection = () => {
                   ? formatFiatAmount(value)
                   : undefined
               }
-              meta={<VaultSigners vault={item} />}
+              meta={
+                vaultId === currentVaultId ? (
+                  <IconWrapper size={20} color="primary">
+                    <CheckIcon />
+                  </IconWrapper>
+                ) : undefined
+              }
             />
             {status === 'overlay' && <DnDItemHighlight />}
           </DnDItemContainer>
