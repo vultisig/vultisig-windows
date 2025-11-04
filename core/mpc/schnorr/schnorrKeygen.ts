@@ -2,6 +2,8 @@ import { base64Encode } from '@lib/utils/base64Encode'
 
 import {
   KeygenSession,
+  KeyImportInitiator,
+  KeyImportSession,
   Keyshare,
   QcSession,
 } from '../../../lib/schnorr/vs_schnorr_wasm'
@@ -63,7 +65,7 @@ export class Schnorr {
   }
 
   private async processOutbound(
-    session: KeygenSession | QcSession
+    session: KeygenSession | QcSession | KeyImportInitiator | KeyImportSession
   ): Promise<boolean> {
     try {
       const message = session.outputMessage()
@@ -107,7 +109,7 @@ export class Schnorr {
   }
 
   private async processInbound(
-    session: KeygenSession | QcSession,
+    session: KeygenSession | QcSession | KeyImportInitiator | KeyImportSession,
     start: number
   ): Promise<boolean> {
     try {
@@ -332,5 +334,96 @@ export class Schnorr {
       }
     }
     throw new Error('schnorr reshare failed')
+  }
+  private async startKeyImport(
+    hexPrivateKey: string,
+    hexChainCode: string,
+    attempt: number
+  ) {
+    console.log('startKeyImport schnorr, attempt:', attempt)
+    this.isKeygenComplete = false
+    try {
+      let session: KeyImportSession | KeyImportInitiator | null = null
+      if (this.isInitiateDevice && attempt === 0) {
+        const privateKey = Buffer.from(hexPrivateKey, 'hex')
+        const chainCode = Buffer.from(hexChainCode, 'hex')
+        const initiatorSession = new KeyImportInitiator(
+          Uint8Array.from(privateKey),
+          Uint8Array.from(chainCode),
+          getKeygenThreshold(this.keygenCommittee.length),
+          this.keygenCommittee
+        )
+        this.setupMessage = initiatorSession.setup
+        session = initiatorSession
+        // upload setup message to server
+        const encryptedSetupMsg = toMpcServerMessage(
+          this.setupMessage,
+          this.hexEncryptionKey
+        )
+        await uploadMpcSetupMessage({
+          serverUrl: this.serverURL,
+          message: encryptedSetupMsg,
+          sessionId: this.sessionId,
+          messageId: 'eddsa_key_import',
+        })
+        console.log('uploaded setup message successfully')
+      } else {
+        const encodedEncryptedSetupMsg = await waitForSetupMessage({
+          serverUrl: this.serverURL,
+          sessionId: this.sessionId,
+          messageId: 'eddsa_key_import',
+        })
+        this.setupMessage = fromMpcServerMessage(
+          encodedEncryptedSetupMsg,
+          this.hexEncryptionKey
+        )
+      }
+      if ('keyimport' in this.keygenOperation) {
+        if (!this.isInitiateDevice) {
+          session = new KeyImportSession(this.setupMessage, this.localPartyId)
+        }
+      } else {
+        throw new Error('invalid keygen type')
+      }
+      if (session === null) {
+        throw new Error('Schnorr key import session is null')
+      }
+      const start = Date.now()
+      const outbound = this.processOutbound(session)
+      const inbound = this.processInbound(session, start)
+      const [, inboundResult] = await Promise.all([outbound, inbound])
+      if (inboundResult) {
+        const keyShare = session.finish()
+        return {
+          keyshare: base64Encode(keyShare.toBytes()),
+          publicKey: Buffer.from(keyShare.publicKey()).toString('hex'),
+          chaincode: Buffer.from(keyShare.rootChainCode()).toString('hex'),
+        }
+      }
+      throw new Error('Schnorr keygen failed')
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('Schnorr keygen error:', error)
+        console.error('Schnorr keygen error:', error.stack)
+      }
+      throw error
+    }
+  }
+  public async startKeyImportWithRetry(
+    hexPrivateKey: string,
+    hexChainCode: string
+  ) {
+    await initializeMpcLib('eddsa')
+    for (let i = 0; i < 3; i++) {
+      try {
+        const result = await this.startKeyImport(hexPrivateKey, hexChainCode, i)
+        if (result !== undefined) {
+          return result
+        }
+      } catch (error) {
+        console.error('schnorr key import error:', error)
+      }
+    }
+    throw new Error('schnorr key import failed')
   }
 }
