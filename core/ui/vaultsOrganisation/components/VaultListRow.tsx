@@ -2,6 +2,7 @@ import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { match } from '@lib/utils/match'
 import { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
@@ -156,29 +157,20 @@ const IconBadge = styled.div.withConfig({
   height: 40px;
   justify-content: center;
   width: 40px;
-  color: ${({ tone, theme }) => {
-    switch (tone) {
-      case 'primary':
-        return theme.colors.success.toCssValue()
-      case 'warning':
-        return theme.colors.idle.toCssValue()
-      case 'info':
-        return theme.colors.info.toCssValue()
-      default:
-        return theme.colors.textSupporting.toCssValue()
-    }
-  }};
+  color: ${({ tone, theme }) =>
+    match(tone ?? 'neutral', {
+      primary: () => theme.colors.success.toCssValue(),
+      warning: () => theme.colors.idle.toCssValue(),
+      info: () => theme.colors.info.toCssValue(),
+      neutral: () => theme.colors.textSupporting.toCssValue(),
+    })};
   background: ${({ tone, theme }) => {
-    const base = (() => {
-      switch (tone) {
-        case 'primary':
-          return theme.colors.success
-        case 'warning':
-          return theme.colors.idle
-        default:
-          return theme.colors.foregroundExtra
-      }
-    })()
+    const base = match(tone ?? 'neutral', {
+      primary: () => theme.colors.success,
+      warning: () => theme.colors.idle,
+      info: () => theme.colors.foregroundExtra,
+      neutral: () => theme.colors.foregroundExtra,
+    })
 
     return base.withAlpha(tone === 'neutral' ? 0.18 : 0.16).toCssValue()
   }};
