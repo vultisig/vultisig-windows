@@ -1,9 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 export class KeyExportSession {
-  private constructor();
   free(): void;
-  static new(share: Keyshare, ids: string[]): KeyExportSession;
+  constructor(share: Keyshare, ids: string[]);
   /**
    * Handle an input message. If processing of the input message moves the
    * session into some final state then it will return `true`.
@@ -354,6 +353,17 @@ export interface InitOutput {
   readonly message_body: (a: number) => [number, number];
   readonly message_receivers: (a: number) => [number, number];
   readonly signsession_setupKeyId: (a: number, b: number) => [number, number];
+  readonly __wbg_keyimportsession_free: (a: number, b: number) => void;
+  readonly keyimportsession_new: (a: number, b: number, c: number, d: number) => [number, number, number];
+  readonly keyimportsession_outputMessage: (a: number) => number;
+  readonly keyimportsession_inputMessage: (a: number, b: number, c: number) => number;
+  readonly keyimportsession_finish: (a: number) => [number, number, number];
+  readonly __wbg_keyimportinitiator_free: (a: number, b: number) => void;
+  readonly keyimportinitiator_new: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => [number, number, number];
+  readonly keyimportinitiator_setup: (a: number) => [number, number];
+  readonly keyimportinitiator_outputMessage: (a: number) => number;
+  readonly keyimportinitiator_inputMessage: (a: number, b: number, c: number) => number;
+  readonly keyimportinitiator_finish: (a: number) => [number, number, number];
   readonly __wbg_keyexportsession_free: (a: number, b: number) => void;
   readonly keyexportsession_new: (a: number, b: number, c: number) => number;
   readonly keyexportsession_setup: (a: number) => [number, number];
@@ -373,17 +383,6 @@ export interface InitOutput {
   readonly qcsession_outputMessage: (a: number) => number;
   readonly qcsession_inputMessage: (a: number, b: number, c: number) => number;
   readonly qcsession_finish: (a: number) => [number, number, number];
-  readonly __wbg_keyimportsession_free: (a: number, b: number) => void;
-  readonly keyimportsession_new: (a: number, b: number, c: number, d: number) => [number, number, number];
-  readonly keyimportsession_outputMessage: (a: number) => number;
-  readonly keyimportsession_inputMessage: (a: number, b: number, c: number) => number;
-  readonly keyimportsession_finish: (a: number) => [number, number, number];
-  readonly __wbg_keyimportinitiator_free: (a: number, b: number) => void;
-  readonly keyimportinitiator_new: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => [number, number, number];
-  readonly keyimportinitiator_setup: (a: number) => [number, number];
-  readonly keyimportinitiator_outputMessage: (a: number) => number;
-  readonly keyimportinitiator_inputMessage: (a: number, b: number, c: number) => number;
-  readonly keyimportinitiator_finish: (a: number) => [number, number, number];
   readonly __wbindgen_exn_store: (a: number) => void;
   readonly __externref_table_alloc: () => number;
   readonly __wbindgen_export_2: WebAssembly.Table;
