@@ -31,4 +31,3 @@ describe('maxBigInt', () => {
     expect(maxBigInt(-10n, 5n, 15n, -20n)).toBe(15n)
   })
 })
-

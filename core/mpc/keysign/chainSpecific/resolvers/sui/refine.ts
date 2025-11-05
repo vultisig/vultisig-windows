@@ -13,7 +13,7 @@ import { WalletCore } from '@trustwallet/wallet-core'
 import { getPreSigningOutput } from '../../../preSigningOutput'
 import { getEncodedSigningInputs } from '../../../signingInputs'
 
-const gasBudgetMultiplier = (value: bigint) => (value * 15n) / 100n
+const gasBudgetMultiplier = (value: bigint) => (value * 115n) / 100n
 
 type RefineSuiChainSpecificInput = {
   keysignPayload: KeysignPayload
