@@ -1,5 +1,5 @@
 import { Chain } from '@core/chain/Chain'
-import { CoinKey } from '@core/chain/coin/Coin'
+import { CoinKey, CoinMetadata } from '@core/chain/coin/Coin'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
@@ -21,7 +21,7 @@ import styled from 'styled-components'
 
 type AddressQRCardProps = {
   chain: Chain
-  coin?: CoinKey & { ticker?: string; logo?: string }
+  coin?: CoinKey & Partial<Pick<CoinMetadata, 'logo' | 'ticker'>>
   onShare?: () => void
 }
 
@@ -136,20 +136,20 @@ export const AddressQRCard = ({ chain, coin, onShare }: AddressQRCardProps) => {
     }
   }, [address, addToast, chain])
 
-  const handleShare = useCallback(async () => {
+  const handleShare = useCallback(() => {
     if (onShare) {
       onShare()
-    } else if (navigator.share && address) {
-      try {
-        await navigator.share({
-          title: `Receive ${chain}`,
-          text: address,
-        })
-      } catch (err) {
-        // User cancelled or share failed
-        console.error('Share failed:', err)
-      }
+      return
     }
+
+    if (!navigator.share || !address) return
+
+    void navigator
+      .share({
+        title: `Receive ${chain}`,
+        text: address,
+      })
+      .catch(() => undefined)
   }, [address, chain, onShare])
 
   if (!address) return null
@@ -171,7 +171,7 @@ export const AddressQRCard = ({ chain, coin, onShare }: AddressQRCardProps) => {
           />
           <ChainIconOverlay>
             {coin?.logo ? (
-              <CoinIcon coin={coin as any} />
+              <CoinIcon coin={coin} />
             ) : (
               <ChainEntityIcon value={getChainLogoSrc(chain)} />
             )}
@@ -190,7 +190,7 @@ export const AddressQRCard = ({ chain, coin, onShare }: AddressQRCardProps) => {
 
       <ButtonsRow>
         <ShareButton onClick={handleShare}>{t('share')}</ShareButton>
-        <CopyButton onClick={handleCopy}>Copy Address</CopyButton>
+        <CopyButton onClick={handleCopy}>{t('copy_address')}</CopyButton>
       </ButtonsRow>
     </Container>
   )
