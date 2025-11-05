@@ -300,7 +300,7 @@ const leanTokens: Partial<LeanChainTokensRecord> = {
       ticker: 'SNX',
       logo: 'snx',
       decimals: 18,
-      priceProviderId: 'SNX',
+      priceProviderId: 'havven',
     },
   },
   [Chain.Arbitrum]: {
