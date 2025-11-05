@@ -94,6 +94,15 @@ export const pt = {
   waiting_for_devices_to_join_description:
     'Seu cofre começará a ser gerado assim que você finalizar a configuração em seu dispositivo principal',
   search_field_placeholder: 'Pesquisar',
+  edit_vaults: 'Editar cofres',
+  vault_count_one: '{{count}} Cofre',
+  vault_count_other: '{{count}} Cofres',
+  no_results: 'Nenhum resultado encontrado',
+  adjust_search_query: 'Tente ajustar sua busca',
+  save: 'Salvar',
+  nothing_to_add: 'Nada para adicionar',
+  nothing_to_add_hint:
+    'Todos os seus cofres já estão organizados. Crie um novo cofre para adicioná-lo aqui.',
   tx_hash: 'Hash da transação',
   gas_limit_tooltip_content:
     'A quantidade máxima de gás que você pagará. Pode ser aumentada se o limite de gás não for suficiente para enviar transações.',
@@ -390,7 +399,6 @@ export const pt = {
   vault_delete_page_term_2: 'Estou ciente de que posso perder fundos',
   vault_delete_page_term_3: 'Fiz backup do cofre',
   share_vault_qr: 'Compartilhar QR do cofre',
-  save: 'Salvar',
   settings_vault_page_footer: 'APLICAÇÃO VULTISIG V',
   clear: 'Limpar',
   faq_setup_crypto_vault_title: 'Como configurar meu cofre seguro de cripto?',
@@ -707,6 +715,7 @@ export const pt = {
     updateButton: 'Atualizar',
   },
   create_folder: 'Criar pasta',
+  add_folder: 'Adicionar pasta',
   folder_name: 'Nome da pasta',
   enter_folder_name: 'Digite o nome da pasta',
   folder_name_required: 'O nome da pasta é obrigatório',
@@ -1204,4 +1213,9 @@ export const pt = {
   not_enough_asset_to_cover_gas_fees:
     'Não há {{ativo}} suficiente para cobrir as taxas de gás',
   import_key: 'Importar chave',
+  back_up_now: 'Voltar ao início',
+  fast_vault_backup_title:
+    'Faça backup do seu compartilhamento do cofre online usando a mesma senha que você criou anteriormente.',
+  fast_vault_backup_description:
+    'O armazenamento online é recomendado e seguro - os cofres compartilhados são projetados para isso.',
 }

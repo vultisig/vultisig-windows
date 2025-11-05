@@ -54,6 +54,15 @@ export const hr = {
   onboarding_description_4:
     'Vultisig je novčanik bez seed fraza. Umjesto toga koristi lako upravljive dijelove trezora. Svaki uređaj ima svoj jedinstveni dio koji treba zasebno sigurnosno kopirati.',
   search_field_placeholder: 'Pretraži',
+  edit_vaults: 'Uredi trezore',
+  vault_count_one: '{{count}} trezor',
+  vault_count_other: '{{count}} trezora',
+  no_results: 'Nema rezultata',
+  adjust_search_query: 'Pokušaj prilagoditi pretragu',
+  save: 'Spremi',
+  nothing_to_add: 'Ništa za dodati',
+  nothing_to_add_hint:
+    'Svi tvoji trezori su već raspoređeni. Stvori novi trezor i dodaj ga ovdje.',
   merged: 'Spojeno',
   function_unavailble:
     'Značajka nije dostupna za postojeće kovanice lanca. Dodajte kovanice koje se mogu koristiti s FUNCTION:',
@@ -384,7 +393,6 @@ export const hr = {
   vault_delete_page_term_2: 'Svjestan sam da mogu izgubiti sredstva',
   vault_delete_page_term_3: 'Napravio sam sigurnosnu kopiju trezora',
   share_vault_qr: 'Podijeli QR trezora',
-  save: 'Spremi',
   settings_vault_page_footer: 'VULTISIG APLIKACIJA V',
   clear: 'Očisti',
   faq_setup_crypto_vault_title: 'Kako postaviti svoj sigurni kripto trezor?',
@@ -690,6 +698,7 @@ export const hr = {
     updateButton: 'Ažuriraj',
   },
   create_folder: 'Stvori mapu',
+  add_folder: 'Dodaj mapu',
   folder_name: 'Naziv mape',
   enter_folder_name: 'Unesite naziv mape',
   folder_name_required: 'Potreban je naziv mape',
@@ -1185,4 +1194,9 @@ export const hr = {
   not_enough_asset_to_cover_gas_fees:
     'Nema dovoljno {{asset}} za pokrivanje troškova goriva',
   import_key: 'Uvezi ključ',
+  back_up_now: 'Sigurnosno kopiraj sada',
+  fast_vault_backup_title:
+    'Napravite sigurnosnu kopiju svog trezora na mreži koristeći istu lozinku za trezor koju ste ranije kreirali.',
+  fast_vault_backup_description:
+    'Preporučuje se i sigurna je online pohrana - dijeljeni trezori su namijenjeni za to.',
 }

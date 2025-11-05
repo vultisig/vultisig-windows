@@ -25,13 +25,14 @@ const StyledText = styled.span`
 
 const StyledVaultSigners = styled.div`
   align-items: center;
-  background-color: ${getColor('foreground')};
-  border: solid 1px ${getColor('foregroundExtra')};
-  border-radius: 16px;
+  border-radius: 20px;
+  background: ${({ theme }) =>
+    theme.colors.foreground.withAlpha(0.35).toCssValue()};
+  border: 1px solid ${getColor('foregroundExtra')};
   display: flex;
-  gap: 8px;
-  height: 32px;
-  padding: 12px 16px;
+  gap: 6px;
+  min-height: 30px;
+  padding: 6px 12px;
 `
 
 type VaultSignersProps = {
