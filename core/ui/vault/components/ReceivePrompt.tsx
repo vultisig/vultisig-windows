@@ -1,4 +1,3 @@
-import { CoinKey } from '@core/chain/coin/Coin'
 import { ArrowWallDownIcon } from '@lib/ui/icons/ArrowWallDownIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -7,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 import { SecondaryActionWrapper } from './PrimaryActions.styled'
 
 type ReceivePromptProps = {
-  coin: CoinKey
   onClick: () => void
 }
 
