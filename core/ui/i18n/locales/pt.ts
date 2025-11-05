@@ -15,6 +15,7 @@ export const pt = {
   vault_share_banner:
     'Este código QR permite que você compartilhe uma versão somente de visualização do seu Cofre',
   actions: 'Ações',
+  copy_address: 'Copy Address',
   vault_info: 'Informações do Cofre',
   secure_crypto_vault: 'Cofre seguro de cripto',
   vultisig: 'Vultisig',

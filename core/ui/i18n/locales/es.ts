@@ -14,6 +14,7 @@ export const es = {
   vault_share_banner:
     'Este código QR te permite compartir una versión de solo lectura de tu Bóveda',
   actions: 'Acciones',
+  copy_address: 'Copy Address',
   onboarding_step_5:
     '<g>Siempre haga una copia de seguridad de cada parte del depósito</g> separadamente en una <g>ubicación diferente</g>',
   onboarding_step_6:

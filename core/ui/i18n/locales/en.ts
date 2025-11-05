@@ -12,6 +12,7 @@ export const en = {
   description: 'Description',
   onboarding_greeting: 'Say goodbye to <g>seed phrases</g>',
   actions: 'Actions',
+  copy_address: 'Copy Address',
   onboarding_step_1:
     'Say hello to <g>vault shares,</g> your new <g>recovery method</g>',
   onboarding_step_2:
