@@ -48,7 +48,7 @@ export const VaultPrimaryActions = ({
       {swapCoin && <SwapPrompt fromCoin={swapCoin} />}
       {buyCoin && <BuyPrompt coin={buyCoin} />}
       <SendPrompt coin={sendCoin} />
-      {onReceive && <ReceivePrompt coin={sendCoin} onClick={onReceive} />}
+      {onReceive && <ReceivePrompt onClick={onReceive} />}
       {depositCoin && <DepositPrompt coin={depositCoin} />}
     </ActionsWrapper>
   )
