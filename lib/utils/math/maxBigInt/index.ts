@@ -11,4 +11,3 @@ export function maxBigInt(...args: bigint[]): bigint {
   }
   return maxValue
 }
-
