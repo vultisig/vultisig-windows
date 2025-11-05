@@ -32,6 +32,12 @@ const ContentContainer = styled(VStack)`
     rgba(6, 27, 58, 0) 100%
   );
 
+  /* Create stacking context for children */
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+
   &::before {
     position: absolute;
     top: 0;
@@ -44,7 +50,7 @@ const ContentContainer = styled(VStack)`
     background-size: cover;
     background-position: center;
     mix-blend-mode: overlay;
-    z-index: -1;
+    z-index: 0;
   }
 
   &::after {
@@ -59,7 +65,7 @@ const ContentContainer = styled(VStack)`
     background-size: cover;
     background-position: center;
     mix-blend-mode: overlay;
-    z-index: -1;
+    z-index: 0;
   }
 `
 

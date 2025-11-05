@@ -35,8 +35,7 @@ const QRContainer = styled.div`
   position: relative;
   width: 100%;
   max-width: 360px;
-  height: 405px;
-  padding: 20px;
+  padding: 20px 20px 64px;
   border-radius: 24px;
   border: 4px solid ${({ theme }) => theme.colors.buttonPrimary.toCssValue()};
   background: ${getColor('foreground')};
