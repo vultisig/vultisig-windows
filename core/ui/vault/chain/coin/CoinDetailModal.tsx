@@ -12,6 +12,7 @@ import { OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { formatAmount } from '@lib/utils/formatAmount'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 type CoinDetailModalProps = OnCloseProp & {
@@ -97,6 +98,7 @@ const NetworkBadge = styled.div`
 `
 
 export const CoinDetailModal = ({ coin, onClose }: CoinDetailModalProps) => {
+  const { t } = useTranslation()
   const formatFiatAmount = useFormatFiatAmount()
   const balance = fromChainAmount(coin.amount, coin.decimals)
   const fiatValue = (coin.price || 0) * balance
@@ -140,7 +142,7 @@ export const CoinDetailModal = ({ coin, onClose }: CoinDetailModalProps) => {
         <InfoSection>
           <InfoRow>
             <Text size={14} weight={500}>
-              Price
+              {t('price')}
             </Text>
             <NetworkBadge>
               <Text size={13} color="shyExtra">
@@ -151,7 +153,7 @@ export const CoinDetailModal = ({ coin, onClose }: CoinDetailModalProps) => {
 
           <InfoRow>
             <Text size={14} weight={500}>
-              Network
+              {t('network')}
             </Text>
             <NetworkBadge>
               <Text size={13} color="shyExtra">
