@@ -5,6 +5,7 @@ import {
   SuiCoinSchema,
   SuiSpecificSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+import { attempt, withFallback } from '@lib/utils/attempt'
 
 import { getKeysignCoin } from '../../../utils/getKeysignCoin'
 import { GetChainSpecificResolver } from '../../resolver'
@@ -25,15 +26,20 @@ export const getSuiChainSpecific: GetChainSpecificResolver<
 
   const referenceGasPrice = await client.getReferenceGasPrice()
 
-  const suiChainSpecific = create(SuiSpecificSchema, {
+  const chainSpecific = create(SuiSpecificSchema, {
     coins,
     referenceGasPrice: referenceGasPrice.toString(),
     gasBudget: suiGasBudget.toString(),
   })
 
-  return refineSuiChainSpecific({
-    keysignPayload,
-    suiChainSpecific,
-    walletCore,
-  })
+  return withFallback(
+    attempt(
+      refineSuiChainSpecific({
+        keysignPayload,
+        chainSpecific,
+        walletCore,
+      })
+    ),
+    chainSpecific
+  )
 }

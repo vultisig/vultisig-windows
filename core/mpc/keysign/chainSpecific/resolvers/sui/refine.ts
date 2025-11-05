@@ -1,92 +1,68 @@
 import { create } from '@bufbuild/protobuf'
 import { Chain } from '@core/chain/Chain'
 import { getSuiClient } from '@core/chain/chains/sui/client'
-import { getCoinType } from '@core/chain/coin/coinType'
 import { SuiSpecific } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import {
   KeysignPayload,
   KeysignPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { TW } from '@trustwallet/wallet-core'
 import { WalletCore } from '@trustwallet/wallet-core'
 
-import { getSuiSigningInputs } from '../../../signingInputs/resolvers/sui'
+import { getPreSigningOutput } from '../../../preSigningOutput'
+import { getEncodedSigningInputs } from '../../../signingInputs'
 
 const minNetworkGasBudget = 2000n
 const safetyMarginPercent = 15n
 
 type RefineSuiChainSpecificInput = {
   keysignPayload: KeysignPayload
-  suiChainSpecific: SuiSpecific
+  chainSpecific: SuiSpecific
   walletCore: WalletCore
 }
 
 export const refineSuiChainSpecific = async ({
   keysignPayload,
-  suiChainSpecific,
+  chainSpecific,
   walletCore,
 }: RefineSuiChainSpecificInput): Promise<SuiSpecific> => {
-  try {
-    const client = getSuiClient()
+  const client = getSuiClient()
 
-    const tempPayload = create(KeysignPayloadSchema, {
+  const [txInputData] = getEncodedSigningInputs({
+    keysignPayload: create(KeysignPayloadSchema, {
       ...keysignPayload,
       blockchainSpecific: {
         case: 'suicheSpecific',
-        value: suiChainSpecific,
+        value: chainSpecific,
       },
-    })
+    }),
+    walletCore,
+  })
 
-    const inputs = getSuiSigningInputs({
-      keysignPayload: tempPayload,
-      walletCore,
-    })
+  const { data } = getPreSigningOutput({
+    walletCore,
+    txInputData,
+    chain: Chain.Sui,
+  })
 
-    const txInputData = TW.Sui.Proto.SigningInput.encode(inputs[0]).finish()
+  const txBytes = Buffer.from(data).subarray(3).toString('base64')
 
-    const coinType = getCoinType({
-      chain: Chain.Sui,
-      walletCore,
-    })
+  const dryRunResult = await client.dryRunTransactionBlock({
+    transactionBlock: txBytes,
+  })
 
-    const preHashes = walletCore.TransactionCompiler.preImageHashes(
-      coinType,
-      txInputData
-    )
+  const gasUsed = dryRunResult.effects.gasUsed
+  const computationCost = BigInt(gasUsed.computationCost)
+  const storageCost = BigInt(gasUsed.storageCost)
 
-    const preSigningOutput =
-      TW.TxCompiler.Proto.PreSigningOutput.decode(preHashes)
+  const gasBudget = computationCost + storageCost
 
-    if (preSigningOutput.errorMessage) {
-      throw new Error(
-        `Failed to get pre-signing output: ${preSigningOutput.errorMessage}`
-      )
-    }
+  const safeGasBudget = gasBudget + (gasBudget * safetyMarginPercent) / 100n
 
-    const txBytes = Buffer.from(preSigningOutput.data)
-      .subarray(3)
-      .toString('base64')
+  const estimatedGasBudget =
+    safeGasBudget < minNetworkGasBudget ? minNetworkGasBudget : safeGasBudget
 
-    const dryRunResult = await client.dryRunTransactionBlock({
-      transactionBlock: txBytes,
-    })
-
-    const gasUsed = dryRunResult.effects.gasUsed
-    const computationCost = BigInt(gasUsed.computationCost)
-    const storageCost = BigInt(gasUsed.storageCost)
-
-    const gasBudget = computationCost + storageCost
-
-    const safeGasBudget = gasBudget + (gasBudget * safetyMarginPercent) / 100n
-
-    const estimatedGasBudget =
-      safeGasBudget < minNetworkGasBudget ? minNetworkGasBudget : safeGasBudget
-
-    return {
-      ...suiChainSpecific,
-      gasBudget: estimatedGasBudget.toString(),
-    }
-  } catch {
-    return suiChainSpecific
+  return {
+    ...chainSpecific,
+    gasBudget: estimatedGasBudget.toString(),
   }
 }
