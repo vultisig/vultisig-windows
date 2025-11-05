@@ -18,6 +18,7 @@ export const hr = {
     'Ovaj QR kod vam omogućuje dijeljenje verzije vašeg trezora samo za pregled',
   actions: 'Akcije',
   copy_address: 'Copy Address',
+  price: 'Price',
   vault_info: 'Informacije o trezoru',
   secure_crypto_vault: 'Sigurni kripto trezor',
   save_10_percent_on_swaps: 'Spremi 10% na zamjenama sada',

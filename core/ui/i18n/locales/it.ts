@@ -10,6 +10,7 @@ export const it = {
   keys: 'Chiavi',
   actions: 'Azioni',
   copy_address: 'Copy Address',
+  price: 'Price',
   onboarding_step_4:
     'Recupera la tua cassaforte anche <g>se un dispositivo è perso o danneggiato</g>',
   vault_share_banner:

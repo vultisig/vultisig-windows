@@ -14,6 +14,7 @@ export const de = {
     'Dieser QR Code ermöglicht Ihnen, eine Ansichtsversion Ihres Tresors zu teilen',
   actions: 'Aktionen',
   copy_address: 'Copy Address',
+  price: 'Price',
   vault_info: 'Tresorinformationen',
   circle_title: 'Circle-Konten',
   circle_description: 'Zahle $USDC in einen Circle-Vertrag ein',
