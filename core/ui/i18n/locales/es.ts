@@ -1225,4 +1225,9 @@ export const es = {
   not_enough_asset_to_cover_gas_fees:
     'No hay suficientes {{asset}} para cubrir las tarifas del gas',
   import_key: 'Importar clave',
+  back_up_now: 'Retroceda ahora',
+  fast_vault_backup_title:
+    'Realice una copia de seguridad de su recurso compartido en línea utilizando la misma contraseña que creó anteriormente.',
+  fast_vault_backup_description:
+    'Se recomienda y es seguro el almacenamiento en línea; las acciones de bóveda están diseñadas para ello.',
 }
