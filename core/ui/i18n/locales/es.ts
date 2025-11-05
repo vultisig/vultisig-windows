@@ -12,7 +12,10 @@ export const es = {
   vault_info: 'Información de la bóveda',
   keys: 'Claves',
   vault_share_banner:
-    'Este código QR le permite compartir una versión de vista de su bóveda',
+    'Este código QR te permite compartir una versión de solo lectura de tu Bóveda',
+  actions: 'Acciones',
+  copy_address: 'Copy Address',
+  price: 'Price',
   onboarding_step_5:
     '<g>Siempre haga una copia de seguridad de cada parte del depósito</g> separadamente en una <g>ubicación diferente</g>',
   onboarding_step_6:

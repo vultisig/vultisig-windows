@@ -11,10 +11,13 @@ export const vaultTabs: Tab<VaultPageTab>[] = [
     label: 'Portfolio',
     renderContent: () => <Portfolio />,
   },
-  {
-    value: 'nft',
-    label: 'NFT',
-    renderContent: () => null,
-    disabled: !featureFlags.nftTab,
-  },
+  ...(featureFlags.nftTab
+    ? [
+        {
+          value: 'nft' as const,
+          label: 'NFT',
+          renderContent: () => null,
+        },
+      ]
+    : []),
 ]
