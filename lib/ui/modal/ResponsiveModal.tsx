@@ -29,7 +29,6 @@ const MobileDrawer = styled(VStack)`
   padding: 32px 20px;
   max-height: 90vh;
   overflow-y: auto;
-  overflow-x: hidden;
   z-index: 1000;
 
   @media ${mediaQuery.tabletDeviceAndUp} {

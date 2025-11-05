@@ -23,9 +23,10 @@ const ContentContainer = styled(VStack)`
   position: relative;
   gap: 32px;
   align-items: center;
-  padding: 20px 0;
-  margin-inline: -32px;
-  margin-bottom: -20px;
+  padding: 20px 0px;
+  margin-inline: -20px;
+  margin-bottom: -32px;
+  overflow-x: hidden;
   background: linear-gradient(
     0deg,
     #061b3a 50%,
@@ -33,7 +34,6 @@ const ContentContainer = styled(VStack)`
     rgba(6, 27, 58, 0) 100%
   );
 
-  /* Create stacking context for children */
   > * {
     position: relative;
     z-index: 1;
