@@ -8,6 +8,7 @@ export const it = {
     '<g>Ogni dispositivo</g> nel tuo caveau contiene <g>una quota del caveau</g>',
   positions: 'Posizioni',
   keys: 'Chiavi',
+  actions: 'Azioni',
   onboarding_step_4:
     'Recupera la tua cassaforte anche <g>se un dispositivo è perso o danneggiato</g>',
   vault_share_banner:

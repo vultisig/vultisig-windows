@@ -15,11 +15,12 @@ export const hr = {
   onboarding_step_6:
     'Ezek a részek együttműködnek, hogy <g>feloldják a tárhelyed zárolását</g>',
   vault_share_banner:
-    'Ez a QR kód lehetővé teszi, hogy megoszthasd egy nézeti változatot a tárhelyed',
+    'Ovaj QR kod vam omogućuje dijeljenje verzije vašeg trezora samo za pregled',
+  actions: 'Akcije',
+  vault_info: 'Informacije o trezoru',
   secure_crypto_vault: 'Sigurni kripto trezor',
-  save_10_percent_on_swaps: 'Mentsd el <blue>10%</blue> a swap-okkal most',
-  vault_info: 'Tárhelyinformáció',
-  failed_to_read_qr_code: 'Nem sikerült olvasni a QR kódot',
+  save_10_percent_on_swaps: 'Spremi 10% na zamjenama sada',
+  failed_to_read_qr_code: 'Nije uspjelo čitanje QR koda',
   vultisig: 'Vultisig',
   vault_details_description: 'Prikazati naziv, dio i vrstu trezora',
   vault_details_edit_vault_description: 'Urediti naziv svog trezora',

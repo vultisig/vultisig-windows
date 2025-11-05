@@ -13,12 +13,13 @@ export const pt = {
     '<g>Sempre faça backup de cada parte do cofre</g> separadamente em um <g>local diferente</g>',
   onboarding_step_6: 'Essas partes colaboram para <g>desbloquear seu cofre</g>',
   vault_share_banner:
-    'Este QR Code permite compartilhar uma versão de visualização do seu cofre',
+    'Este código QR permite que você compartilhe uma versão somente de visualização do seu Cofre',
+  actions: 'Ações',
+  vault_info: 'Informações do Cofre',
   secure_crypto_vault: 'Cofre seguro de cripto',
   vultisig: 'Vultisig',
   by_vultisig: 'por Vultisig',
   failed_to_read_qr_code: 'Impossível ler o código QR',
-  vault_info: 'Informações do cofre',
   vault_details_description: 'Visualizar o nome, a parte e o tipo do cofre',
   circle: {
     introduction:
