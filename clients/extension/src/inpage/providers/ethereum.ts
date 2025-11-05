@@ -68,6 +68,9 @@ export class Ethereum extends EventEmitter {
         this.emit(EventMethod.DISCONNECT, [])
       })
     }
+
+    // Initialize connection state on page load
+    this.#initializeConnection()
   }
 
   static getInstance(_chain: string): Ethereum {
@@ -103,6 +106,31 @@ export class Ethereum extends EventEmitter {
 
   isConnected() {
     return this.connected
+  }
+
+  #initializeConnection = async () => {
+    // Check if there's an existing connection by attempting to get accounts
+    // This will set connected state and emit events if a session exists
+    const accounts = await this.request({ method: 'eth_accounts', params: [] })
+
+    if (Array.isArray(accounts) && accounts.length > 0) {
+      const [address] = accounts
+
+      // Initialize chainId from session
+      const { data: chainId } = await attempt(
+        callBackground({ getAppChainId: { chainKind: 'evm' } })
+      )
+      if (chainId && this.chainId !== chainId) {
+        this.chainId = chainId
+        this.networkVersion = parseInt(chainId, 16).toString()
+        this.emitUpdateNetwork({ chainId })
+      }
+
+      // Emit events to notify dApps that connection is restored
+      const finalChainId = chainId ?? this.chainId
+      this.emit(EventMethod.CONNECT, { chainId: finalChainId })
+      this.emitAccountsChanged([address])
+    }
   }
 
   on = (event: string, callback: (data: any) => void): this => {
@@ -153,23 +181,56 @@ export class Ethereum extends EventEmitter {
         callBackground({
           getAppChainId: { chainKind: 'evm' },
         }),
-      eth_accounts: async () =>
-        withFallback(
-          attempt(async () => {
-            const chain = await getChain()
+      eth_accounts: async () => {
+        const { data, error } = await attempt(async () => {
+          const chain = await getChain()
 
-            const { address } = await callBackground({
-              getAccount: { chain },
-            })
+          const { address } = await callBackground({
+            getAccount: { chain },
+          })
 
-            return [address]
-          }),
-          []
-        ),
+          return [address]
+        })
+
+        if (data && Array.isArray(data) && data.length > 0) {
+          const [address] = data
+          // Update connection state when accounts are available
+          // We don't emit accounts_changed here to avoid duplicate events
+          // Events are emitted during initialization or when explicitly connecting
+          this.connected = true
+          this.selectedAddress = address ?? ''
+          return [address]
+        }
+
+        // If no account, ensure disconnected state
+        if (error === BackgroundError.Unauthorized) {
+          this.connected = false
+          this.selectedAddress = ''
+        }
+
+        return []
+      },
       eth_requestAccounts: async () => {
         const chain = await getChain()
 
         const { address } = await requestAccount(chain)
+
+        // Set connected state and emit events
+        this.connected = true
+        this.selectedAddress = address ?? ''
+
+        const { data: chainId } = await attempt(
+          callBackground({ getAppChainId: { chainKind: 'evm' } })
+        )
+        if (chainId && this.chainId !== chainId) {
+          this.chainId = chainId
+          this.networkVersion = parseInt(chainId, 16).toString()
+          this.emitUpdateNetwork({ chainId })
+        }
+
+        const finalChainId = chainId ?? this.chainId
+        this.emit(EventMethod.CONNECT, { chainId: finalChainId })
+        this.emitAccountsChanged([address])
 
         return [address]
       },
