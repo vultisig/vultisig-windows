@@ -1,3 +1,4 @@
+import { suiGasBudget } from '@core/chain/chains/sui/config'
 import { SuiCoin } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
@@ -33,7 +34,9 @@ export const getSuiSigningInputs: SigningInputsResolver<'sui'> = ({
   const baseInput = {
     referenceGasPrice: Long.fromString(referenceGasPrice),
     signer: coin.address,
-    gasBudget: Long.fromString(gasBudget),
+    gasBudget: gasBudget
+      ? Long.fromString(gasBudget)
+      : Long.fromBigInt(suiGasBudget),
   }
 
   const inputCoins = coins
