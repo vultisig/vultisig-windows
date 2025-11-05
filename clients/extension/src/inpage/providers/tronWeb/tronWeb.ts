@@ -59,7 +59,12 @@ export class VultisigTronWebTrx extends Trx {
                   refBlockHashHex: transaction.raw_data.ref_block_hash,
                 },
               },
-              data: transaction.raw_data.data as string,
+              data: transaction.raw_data.data
+                ? Buffer.from(
+                    transaction.raw_data.data as string,
+                    'hex'
+                  ).toString('utf8')
+                : undefined,
               gasSettings: {
                 gasLimit: transaction.raw_data.fee_limit
                   ? transaction.raw_data.fee_limit.toString()
@@ -87,7 +92,12 @@ export class VultisigTronWebTrx extends Trx {
               },
               to: fromHex(triggerSmartContract.contract_address),
               from: fromHex(triggerSmartContract.owner_address),
-              data: transaction.raw_data.data as string,
+              data: transaction.raw_data.data
+                ? Buffer.from(
+                    transaction.raw_data.data as string,
+                    'hex'
+                  ).toString('utf8')
+                : undefined,
               msgPayload: {
                 case: TronMsgType.TRON_TRIGGER_SMART_CONTRACT,
                 value: {
@@ -152,7 +162,12 @@ export class VultisigTronWebTrx extends Trx {
                   refBlockHashHex: transaction.raw_data.ref_block_hash,
                 },
               },
-              data: transaction.raw_data.data as string,
+              data: transaction.raw_data.data
+                ? Buffer.from(
+                    transaction.raw_data.data as string,
+                    'hex'
+                  ).toString('utf8')
+                : undefined,
               gasSettings: {
                 gasLimit: transaction.raw_data.fee_limit
                   ? transaction.raw_data.fee_limit.toString()

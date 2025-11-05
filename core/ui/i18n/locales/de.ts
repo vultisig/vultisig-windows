@@ -85,6 +85,15 @@ export const de = {
   vault_selected: 'Vault ausgewählt',
   passcodes_do_not_match: 'Passcodes stimmen nicht überein',
   search_field_placeholder: 'Suchen',
+  edit_vaults: 'Tresore bearbeiten',
+  vault_count_one: '{{count}} Tresor',
+  vault_count_other: '{{count}} Tresore',
+  no_results: 'Keine Ergebnisse gefunden',
+  adjust_search_query: 'Versuche, deine Suche anzupassen',
+  save: 'Speichern',
+  nothing_to_add: 'Nichts hinzuzufügen',
+  nothing_to_add_hint:
+    'Alle deine Tresore sind bereits sortiert. Erstelle einen neuen Tresor, um ihn hier hinzuzufügen.',
   referral_reg_fee: 'Registrierungsgebühr',
   enter_percentage: 'Prozentangabe eingeben',
   select: 'Auswählen',
@@ -397,7 +406,6 @@ export const de = {
     'Ich bin mir bewusst, dass ich Gelder verlieren kann',
   vault_delete_page_term_3: 'Ich habe ein Tresor-Backup erstellt',
   share_vault_qr: 'Tresor-QR teilen',
-  save: 'Speichern',
   settings_vault_page_footer: 'VULTISIG APP V',
   clear: 'Löschen',
   faq_setup_crypto_vault_title:
@@ -711,6 +719,7 @@ export const de = {
     updateButton: 'Aktualisieren',
   },
   create_folder: 'Ordner erstellen',
+  add_folder: 'Ordner hinzufügen',
   folder_name: 'Ordnername',
   enter_folder_name: 'Geben Sie den Ordnernamen ein',
   folder_name_required: 'Ordnername ist erforderlich',
@@ -1217,4 +1226,9 @@ export const de = {
   not_enough_asset_to_cover_gas_fees:
     'Nicht genug {{asset}}, um die Gasgebühren zu decken',
   import_key: 'Schlüsselimport',
+  back_up_now: 'Jetzt sichern',
+  fast_vault_backup_title:
+    'Sichern Sie Ihre Tresorfreigabe online mit demselben Tresorpasswort, das Sie zuvor erstellt haben.',
+  fast_vault_backup_description:
+    'Online-Speicher ist empfehlenswert und sicher – Vault-Speicher sind genau dafür konzipiert.',
 }
