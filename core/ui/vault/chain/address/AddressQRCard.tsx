@@ -1,0 +1,198 @@
+import { Chain } from '@core/chain/Chain'
+import { CoinKey } from '@core/chain/coin/Coin'
+import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
+import { VaultAddressCopyToast } from '@core/ui/vault/page/components/VaultAddressCopyToast'
+import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
+import { Button } from '@lib/ui/buttons/Button'
+import { centerContent } from '@lib/ui/css/centerContent'
+import { round } from '@lib/ui/css/round'
+import { sameDimensions } from '@lib/ui/css/sameDimensions'
+import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
+import { useToast } from '@lib/ui/toast/ToastProvider'
+import { useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
+import QRCode from 'react-qr-code'
+import styled from 'styled-components'
+
+type AddressQRCardProps = {
+  chain: Chain
+  coin?: CoinKey & { ticker?: string; logo?: string }
+  onShare?: () => void
+}
+
+const Container = styled(VStack)`
+  gap: 24px;
+  align-items: center;
+  width: 100%;
+`
+
+const QRContainer = styled.div`
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  height: 405px;
+  padding: 20px;
+  border-radius: 24px;
+  border: 4px solid ${({ theme }) => theme.colors.buttonPrimary.toCssValue()};
+  background: ${getColor('foreground')};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
+const QRWrapper = styled.div`
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 16px;
+  overflow: hidden;
+  background: white;
+  padding: 16px;
+  position: relative;
+`
+
+const ChainIconOverlay = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  ${sameDimensions(toSizeUnit(76))};
+  ${round};
+  ${centerContent};
+  background: ${getColor('background')};
+  border: 4px solid white;
+  font-size: 48.5px;
+  z-index: 1;
+`
+
+const ReceiveLabel = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: ${({ theme }) => theme.colors.buttonPrimary.toCssValue()};
+  padding: 12px;
+  border-radius: 0 0 20px 20px;
+  text-align: center;
+`
+
+const AddressText = styled(Text)`
+  word-break: break-all;
+  text-align: center;
+  max-width: 220px;
+`
+
+const ButtonsRow = styled(HStack)`
+  gap: 12px;
+  width: 100%;
+  max-width: 360px;
+  margin-top: 8px;
+`
+
+const ShareButton = styled(Button)`
+  flex: 1;
+  border-radius: 40px;
+  border: 2px solid ${({ theme }) => theme.colors.buttonPrimary.toCssValue()};
+  background: transparent;
+  color: ${getColor('contrast')};
+  font-size: 14px;
+
+  &:hover {
+    background: ${({ theme }) =>
+      theme.colors.buttonPrimary.withAlpha(0.1).toCssValue()};
+  }
+`
+
+const CopyButton = styled(Button)`
+  flex: 1;
+  border-radius: 40px;
+  background: ${({ theme }) => theme.colors.buttonPrimary.toCssValue()};
+  color: ${getColor('contrast')};
+  font-size: 14px;
+
+  &:hover {
+    background: ${({ theme }) =>
+      theme.colors.buttonPrimary.withAlpha(0.8).toCssValue()};
+  }
+`
+
+export const AddressQRCard = ({ chain, coin, onShare }: AddressQRCardProps) => {
+  const { t } = useTranslation()
+  const address = useCurrentVaultAddress(chain)
+  const { addToast } = useToast()
+
+  const displayName = coin?.ticker || chain
+
+  const handleCopy = useCallback(async () => {
+    if (address) {
+      await navigator.clipboard.writeText(address)
+      addToast({
+        message: '',
+        renderContent: () => <VaultAddressCopyToast value={chain} />,
+      })
+    }
+  }, [address, addToast, chain])
+
+  const handleShare = useCallback(async () => {
+    if (onShare) {
+      onShare()
+    } else if (navigator.share && address) {
+      try {
+        await navigator.share({
+          title: `Receive ${chain}`,
+          text: address,
+        })
+      } catch (err) {
+        // User cancelled or share failed
+        console.error('Share failed:', err)
+      }
+    }
+  }, [address, chain, onShare])
+
+  if (!address) return null
+
+  return (
+    <Container>
+      <QRContainer>
+        <QRWrapper>
+          <QRCode
+            value={address}
+            size={256}
+            style={{
+              height: 'auto',
+              maxWidth: '100%',
+              width: '100%',
+            }}
+            fgColor="#000000"
+            bgColor="#FFFFFF"
+          />
+          <ChainIconOverlay>
+            {coin?.logo ? (
+              <CoinIcon coin={coin as any} />
+            ) : (
+              <ChainEntityIcon value={getChainLogoSrc(chain)} />
+            )}
+          </ChainIconOverlay>
+        </QRWrapper>
+        <ReceiveLabel>
+          <Text size={16} color="contrast">
+            {t('receive')} {displayName}
+          </Text>
+        </ReceiveLabel>
+      </QRContainer>
+
+      <AddressText size={13} weight={500} color="contrast">
+        {address}
+      </AddressText>
+
+      <ButtonsRow>
+        <ShareButton onClick={handleShare}>{t('share')}</ShareButton>
+        <CopyButton onClick={handleCopy}>Copy Address</CopyButton>
+      </ButtonsRow>
+    </Container>
+  )
+}
