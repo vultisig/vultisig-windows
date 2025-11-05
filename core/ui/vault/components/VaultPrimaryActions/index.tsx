@@ -12,14 +12,17 @@ import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 import { BuyPrompt } from '../BuyPrompt'
 import { DepositPrompt } from '../DepositPrompt'
 import { ActionsWrapper } from '../PrimaryActions.styled'
+import { ReceivePrompt } from '../ReceivePrompt'
 import { SwapPrompt } from '../SwapPrompt'
 
 type VaultPrimaryActionsProps = {
   coin?: CoinKey
+  onReceive?: () => void
 }
 
 export const VaultPrimaryActions = ({
   coin: potentialCoin,
+  onReceive,
 }: VaultPrimaryActionsProps) => {
   const coins = useCurrentVaultCoins()
 
@@ -43,8 +46,9 @@ export const VaultPrimaryActions = ({
   return (
     <ActionsWrapper justifyContent="center" gap={20}>
       {swapCoin && <SwapPrompt fromCoin={swapCoin} />}
-      <SendPrompt coin={sendCoin} />
       {buyCoin && <BuyPrompt coin={buyCoin} />}
+      <SendPrompt coin={sendCoin} />
+      {onReceive && <ReceivePrompt coin={sendCoin} onClick={onReceive} />}
       {depositCoin && <DepositPrompt coin={depositCoin} />}
     </ActionsWrapper>
   )
