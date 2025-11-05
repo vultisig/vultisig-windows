@@ -1,18 +1,19 @@
 import { create } from '@bufbuild/protobuf'
 import { Chain } from '@core/chain/Chain'
 import { getSuiClient } from '@core/chain/chains/sui/client'
+import { suiMinGasBudget } from '@core/chain/chains/sui/config'
 import { SuiSpecific } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import {
   KeysignPayload,
   KeysignPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { maxBigInt } from '@lib/utils/math/maxBigInt'
 import { WalletCore } from '@trustwallet/wallet-core'
 
 import { getPreSigningOutput } from '../../../preSigningOutput'
 import { getEncodedSigningInputs } from '../../../signingInputs'
 
-const minNetworkGasBudget = 2000n
-const safetyMarginPercent = 15n
+const gasBudgetMultiplier = (value: bigint) => (value * 15n) / 100n
 
 type RefineSuiChainSpecificInput = {
   keysignPayload: KeysignPayload
@@ -46,23 +47,21 @@ export const refineSuiChainSpecific = async ({
 
   const txBytes = Buffer.from(data).subarray(3).toString('base64')
 
-  const dryRunResult = await client.dryRunTransactionBlock({
+  const {
+    effects: {
+      gasUsed: { computationCost, storageCost },
+    },
+  } = await client.dryRunTransactionBlock({
     transactionBlock: txBytes,
   })
 
-  const gasUsed = dryRunResult.effects.gasUsed
-  const computationCost = BigInt(gasUsed.computationCost)
-  const storageCost = BigInt(gasUsed.storageCost)
-
-  const gasBudget = computationCost + storageCost
-
-  const safeGasBudget = gasBudget + (gasBudget * safetyMarginPercent) / 100n
-
-  const estimatedGasBudget =
-    safeGasBudget < minNetworkGasBudget ? minNetworkGasBudget : safeGasBudget
+  const gasBudget = BigInt(computationCost) + BigInt(storageCost)
 
   return {
     ...chainSpecific,
-    gasBudget: estimatedGasBudget.toString(),
+    gasBudget: maxBigInt(
+      gasBudgetMultiplier(gasBudget),
+      suiMinGasBudget
+    ).toString(),
   }
 }
