@@ -14,8 +14,6 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
-import { featureFlags } from '../../featureFlags'
-
 export const bottomNavigationHeight = 75
 
 const Container = styled(UnstyledButton)`
@@ -99,14 +97,13 @@ export const BottomNavigation = () => {
         <Container onClick={() => navigate({ id: 'uploadQr', state: {} })}>
           <Camera2Icon />
         </Container>
-        {featureFlags.earn && (
-          <SecondaryItemWrapper disabled={t('coming_soon')}>
-            <CoinsAddIcon />
-            <Text as="span" size={10}>
-              {t('earn')}
-            </Text>
-          </SecondaryItemWrapper>
-        )}
+
+        <SecondaryItemWrapper disabled={t('coming_soon')}>
+          <CoinsAddIcon />
+          <Text as="span" size={10}>
+            {t('defi')}
+          </Text>
+        </SecondaryItemWrapper>
       </InnerContainer>
     </Position>
   )
