@@ -1,9 +1,14 @@
 import { create } from '@bufbuild/protobuf'
 import { getTronBlockInfo } from '@core/chain/chains/tron/getTronBlockInfo'
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { TronSpecificSchema } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 
-import { getKeysignCoin } from '../../utils/getKeysignCoin'
-import { GetChainSpecificResolver } from '../resolver'
+import { getKeysignAmount } from '../../../utils/getKeysignAmount'
+import { getKeysignCoin } from '../../../utils/getKeysignCoin'
+import { GetChainSpecificResolver } from '../../resolver'
+import { getTrc20TransferFee } from './fee'
+
+const nativeTronSendFee = 800000n
 
 export const getTronChainSpecific: GetChainSpecificResolver<
   'tronSpecific'
@@ -12,9 +17,22 @@ export const getTronChainSpecific: GetChainSpecificResolver<
 
   const blockInfo = await getTronBlockInfo({
     coin,
-    toAddress: keysignPayload.toAddress,
-    toAmount: keysignPayload.toAmount,
   })
+
+  const getGasEstimation = async () => {
+    if (thirdPartyGasLimitEstimation) {
+      return thirdPartyGasLimitEstimation
+    }
+    if (isFeeCoin(coin)) {
+      return nativeTronSendFee
+    }
+
+    return getTrc20TransferFee({
+      coin,
+      receiver: keysignPayload.toAddress,
+      amount: getKeysignAmount(keysignPayload),
+    })
+  }
 
   return create(TronSpecificSchema, {
     timestamp: BigInt(blockInfo.timestamp),
@@ -25,7 +43,6 @@ export const getTronChainSpecific: GetChainSpecificResolver<
     blockHeaderTxTrieRoot: blockInfo.blockHeaderTxTrieRoot,
     blockHeaderParentHash: blockInfo.blockHeaderParentHash,
     blockHeaderWitnessAddress: blockInfo.blockHeaderWitnessAddress,
-    gasEstimation:
-      thirdPartyGasLimitEstimation || BigInt(blockInfo.gasFeeEstimation),
+    gasEstimation: await getGasEstimation(),
   })
 }

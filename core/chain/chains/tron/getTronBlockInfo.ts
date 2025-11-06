@@ -1,6 +1,5 @@
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { queryUrl } from '@lib/utils/query/queryUrl'
-import base58 from 'bs58'
 
 import { AccountCoinKey } from '../../coin/AccountCoin'
 import { tronRpcUrl } from './config'
@@ -30,7 +29,6 @@ type BlockChainSpecificTron = {
   blockHeaderTxTrieRoot: string
   blockHeaderParentHash: string
   blockHeaderWitnessAddress: string
-  gasFeeEstimation: number
 }
 
 type ResolveRefBlockInput = {
@@ -40,13 +38,11 @@ type ResolveRefBlockInput = {
 }
 
 type GetTronBlockInfoInput = {
-  coin: AccountCoinKey
+  coin?: AccountCoinKey
   expiration?: number
   timestamp?: number
   refBlockBytesHex?: string
   refBlockHashHex?: string
-  toAddress?: string
-  toAmount?: string
 }
 
 const getBlockByNum = async (num: number) => {
@@ -83,13 +79,11 @@ const resolveRefBlock = async ({
 }
 
 export async function getTronBlockInfo({
-  coin,
+  coin: _coin,
   expiration,
   timestamp,
   refBlockBytesHex,
   refBlockHashHex,
-  toAddress,
-  toAmount,
 }: GetTronBlockInfoInput): Promise<BlockChainSpecificTron> {
   const url = `${tronRpcUrl}/wallet/getnowblock`
 
@@ -108,17 +102,6 @@ export async function getTronBlockInfo({
   const oneHourMillis = 60 * 60 * 1000
   expiration = expiration ?? nowMillis + oneHourMillis
 
-  let estimation = '800000' // Default TRX fee
-  if (coin.id && toAddress && toAmount) {
-    const recipientAddressHex = base58ToHex(toAddress)
-    estimation = await getTriggerConstantContractFee(
-      coin.address,
-      coin.id,
-      recipientAddressHex,
-      BigInt(toAmount)
-    )
-  }
-
   return {
     timestamp: timestamp ?? currentTimestampMillis,
     expiration,
@@ -131,71 +114,5 @@ export async function getTronBlockInfo({
       currentBlock.block_header?.raw_data?.parentHash ?? '',
     blockHeaderWitnessAddress:
       currentBlock.block_header?.raw_data?.witness_address ?? '',
-    gasFeeEstimation: parseInt(estimation || '0'),
   }
-}
-
-function base58ToHex(address: string): string {
-  const decoded = base58.decode(address)
-  const addressBytes = decoded.slice(0, -4)
-  const hex = Buffer.from(addressBytes).toString('hex')
-  return hex
-}
-
-function buildTrc20TransferParameter(
-  recipientBaseHex: string,
-  amount: bigint
-): string {
-  const cleanRecipientHex = recipientBaseHex.replace(/^0x/, '')
-  const addressWithoutPrefix = cleanRecipientHex.slice(2)
-  const paddedAddressHex = addressWithoutPrefix.padStart(64, '0')
-  const amountHex = amount.toString(16)
-  const paddedAmountHex = amountHex.padStart(64, '0')
-  return paddedAddressHex + paddedAmountHex
-}
-
-/**
- * Computes the TRX fee for calling the TRC20 `transfer(address,uint256)` method.
- * @param ownerAddressBase58 Sender's address in base58
- * @param contractAddressBase58 Token contract address in base58
- * @param recipientAddressHex Recipient's address in hex
- * @param amount Amount to transfer
- * @returns Estimated fee in SUN
- */
-async function getTriggerConstantContractFee(
-  ownerAddressBase58: string,
-  contractAddressBase58: string,
-  recipientAddressHex: string,
-  amount: bigint
-): Promise<string> {
-  const functionSelector = 'transfer(address,uint256)'
-
-  const parameter = buildTrc20TransferParameter(recipientAddressHex, amount)
-
-  const url = 'https://api.trongrid.io/walletsolidity/triggerconstantcontract'
-
-  type TriggerContractResponse = {
-    energy_used?: number
-    energy_penalty?: number
-  }
-
-  const responseData = await queryUrl<TriggerContractResponse>(url, {
-    headers: {
-      accept: 'application/json',
-    },
-    body: {
-      owner_address: ownerAddressBase58,
-      contract_address: contractAddressBase58,
-      function_selector: functionSelector,
-      parameter: parameter,
-      visible: true,
-    },
-  })
-
-  const energyUsed = responseData.energy_used ?? 0
-  const energyPenalty = responseData.energy_penalty ?? 0
-  const totalEnergy = energyUsed + energyPenalty
-  const totalSun = totalEnergy * 280
-
-  return totalSun.toString()
 }
