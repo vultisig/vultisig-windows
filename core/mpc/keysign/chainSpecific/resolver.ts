@@ -1,5 +1,6 @@
 import type { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { Resolver } from '@lib/utils/types/Resolver'
+import { WalletCore } from '@trustwallet/wallet-core'
 import { Psbt } from 'bitcoinjs-lib'
 
 import { KeysignPayload } from '../../types/vultisig/keysign/v1/keysign_message_pb'
@@ -18,6 +19,7 @@ export type GetChainSpecificInput<
   C extends KeysignChainSpecificKey = KeysignChainSpecificKey,
 > = {
   keysignPayload: KeysignPayload
+  walletCore: WalletCore
 } & (C extends 'ethereumSpecific'
   ? {
       feeSettings?: FeeSettings<'evm'>
