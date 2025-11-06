@@ -1,5 +1,6 @@
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { queryUrl } from '@lib/utils/query/queryUrl'
+import base58 from 'bs58'
 
 import { AccountCoinKey } from '../../coin/AccountCoin'
 import { tronRpcUrl } from './config'
@@ -44,6 +45,8 @@ type GetTronBlockInfoInput = {
   timestamp?: number
   refBlockBytesHex?: string
   refBlockHashHex?: string
+  toAddress?: string
+  toAmount?: string
 }
 
 const getBlockByNum = async (num: number) => {
@@ -85,6 +88,8 @@ export async function getTronBlockInfo({
   timestamp,
   refBlockBytesHex,
   refBlockHashHex,
+  toAddress,
+  toAmount,
 }: GetTronBlockInfoInput): Promise<BlockChainSpecificTron> {
   const url = `${tronRpcUrl}/wallet/getnowblock`
 
@@ -104,12 +109,13 @@ export async function getTronBlockInfo({
   expiration = expiration ?? nowMillis + oneHourMillis
 
   let estimation = '800000' // Default TRX fee
-  if (coin.id) {
+  if (coin.id && toAddress && toAmount) {
+    const recipientAddressHex = base58ToHex(toAddress)
     estimation = await getTriggerConstantContractFee(
       coin.address,
       coin.id,
-      '0x9c9d70d46934c98fd3d7c302c4e0b924da7a4fdf',
-      BigInt('1000000')
+      recipientAddressHex,
+      BigInt(toAmount)
     )
   }
 
@@ -129,27 +135,22 @@ export async function getTronBlockInfo({
   }
 }
 
-/**
- * Builds the 64-byte hex parameter for `transfer(address,uint256)`.
- * @param recipientBaseHex TRON base58-check encoded address (e.g., "TVNtPmF7...")
- * @param amount The amount to transfer (in decimal), e.g. 1000000
- * @returns A 64-byte hex string suitable for the TRC20 `parameter` field
- */
+function base58ToHex(address: string): string {
+  const decoded = base58.decode(address)
+  const addressBytes = decoded.slice(0, -4)
+  const hex = Buffer.from(addressBytes).toString('hex')
+  return hex
+}
+
 function buildTrc20TransferParameter(
   recipientBaseHex: string,
   amount: bigint
 ): string {
-  // Remove 0x prefix if present and ensure it's a valid hex
   const cleanRecipientHex = recipientBaseHex.replace(/^0x/, '')
-
-  // Pad address to 64 hex chars (24 zeros + 40 hex address)
-  const paddedAddressHex = '0'.repeat(24) + cleanRecipientHex
-
-  // Convert amount to hex and pad to 64 hex digits
+  const addressWithoutPrefix = cleanRecipientHex.slice(2)
+  const paddedAddressHex = addressWithoutPrefix.padStart(64, '0')
   const amountHex = amount.toString(16)
   const paddedAmountHex = amountHex.padStart(64, '0')
-
-  // Concatenate the two 32-byte segments
   return paddedAddressHex + paddedAmountHex
 }
 

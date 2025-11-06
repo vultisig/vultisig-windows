@@ -10,7 +10,11 @@ export const getTronChainSpecific: GetChainSpecificResolver<
 > = async ({ keysignPayload, thirdPartyGasLimitEstimation }) => {
   const coin = getKeysignCoin(keysignPayload)
 
-  const blockInfo = await getTronBlockInfo({ coin })
+  const blockInfo = await getTronBlockInfo({
+    coin,
+    toAddress: keysignPayload.toAddress,
+    toAmount: keysignPayload.toAmount,
+  })
 
   return create(TronSpecificSchema, {
     timestamp: BigInt(blockInfo.timestamp),
