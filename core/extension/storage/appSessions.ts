@@ -14,6 +14,7 @@ export type AppSession = {
   url: string
   selectedEVMChainId?: string
   selectedCosmosChainId?: string
+  icon?: string
 }
 
 export type VaultAppSession = {

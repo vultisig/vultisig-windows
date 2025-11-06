@@ -15,6 +15,8 @@ import styled from 'styled-components'
 
 import { VaultPageHeaderControls } from './VaultPageHeaderControls'
 import { VaultSelector } from './VaultSelector'
+import { DappsButton } from './DappsButton'
+import { useCore } from '../../../state/core'
 
 const HeaderContainer = styled.div`
   position: sticky;
@@ -60,6 +62,8 @@ export const VaultPageHeader = ({
   const scroll = useScroll(scrollContainerRef)
   const isCollapsed = scroll.y > collapseThreshold
   const { t } = useTranslation()
+  const { client } = useCore()
+  const isExtension = client === 'extension'
 
   const { data: totalBalance = 0 } = useVaultTotalBalanceQuery()
   const formatFiatAmount = useFormatFiatAmount()
@@ -80,6 +84,7 @@ export const VaultPageHeader = ({
       <NormalContent isVisible={!isCollapsed}>
         <PageHeader
           hasBorder
+          primaryControls={isExtension && <DappsButton />}
           secondaryControls={<VaultPageHeaderControls />}
           title={<VaultSelector value={vault} />}
         />
