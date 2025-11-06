@@ -2,6 +2,7 @@ export const es = {
   onboarding_greeting: 'Adiós a <g>frases semilla</g>',
   onboarding_step_1:
     'Di hola a <g>acciones de la bóveda,</g> tu nuevo <g>método de recuperación</g>',
+  defi: 'DeFi',
   onboarding_step_2:
     'Están <g>divididos en partes</g> para aumentar la seguridad y, <g>eliminar un único punto de fallo</g>',
   onboarding_step_3:

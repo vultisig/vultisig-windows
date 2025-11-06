@@ -16,6 +16,7 @@ export const en = {
   price: 'Price',
   onboarding_step_1:
     'Say hello to <g>vault shares,</g> your new <g>recovery method</g>',
+  defi: 'DeFi',
   onboarding_step_2:
     "They're <g>split into parts</g> to increase security, <g>removing the single point-of-failure</g>",
   onboarding_step_3:
