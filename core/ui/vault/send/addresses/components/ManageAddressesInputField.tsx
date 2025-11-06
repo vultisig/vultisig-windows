@@ -46,7 +46,7 @@ export const ManageReceiverAddressInputField = () => {
 
   const [, setFocusedSendField] = useSendFormFieldState()
 
-  const error = data?.receiverAddress
+  const error = value ? data?.receiverAddress : undefined
 
   const handleUpdateReceiverAddress = useCallback(
     (value: string) => {
