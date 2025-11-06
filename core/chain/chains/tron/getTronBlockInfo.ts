@@ -1,7 +1,6 @@
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
-import { AccountCoinKey } from '../../coin/AccountCoin'
 import { tronRpcUrl } from './config'
 
 type TronBlockHeader = {
@@ -38,7 +37,6 @@ type ResolveRefBlockInput = {
 }
 
 type GetTronBlockInfoInput = {
-  coin?: AccountCoinKey
   expiration?: number
   timestamp?: number
   refBlockBytesHex?: string
@@ -79,7 +77,6 @@ const resolveRefBlock = async ({
 }
 
 export async function getTronBlockInfo({
-  coin: _coin,
   expiration,
   timestamp,
   refBlockBytesHex,
