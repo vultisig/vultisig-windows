@@ -4,7 +4,6 @@ import { CoinKey } from '@core/chain/coin/Coin'
 import { swapEnabledChains } from '@core/chain/swap/swapEnabledChains'
 import { SendPrompt } from '@core/ui/vault/send/SendPrompt'
 import { isOneOf } from '@lib/utils/array/isOneOf'
-import { without } from '@lib/utils/array/without'
 import { useCallback, useMemo } from 'react'
 
 import { depositEnabledChains } from '../../deposit/DepositEnabledChain'
@@ -33,7 +32,7 @@ export const VaultPrimaryActions = ({
 
   const getCoin = useCallback(
     (supportedChains: readonly Chain[]) =>
-      without([potentialCoin, ...coins], undefined).find(coin =>
+      (potentialCoin ? [potentialCoin] : coins).find(coin =>
         isOneOf(coin.chain, supportedChains)
       ),
     [coins, potentialCoin]
