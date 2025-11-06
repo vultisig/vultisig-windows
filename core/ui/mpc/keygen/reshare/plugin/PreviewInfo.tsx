@@ -4,6 +4,7 @@ import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { LogoBoxIcon } from '@lib/ui/icons/LogoBoxIcon'
 import { PlusIcon } from '@lib/ui/icons/PlusIcon'
 import { ShieldCheckIcon } from '@lib/ui/icons/ShieldCheckIcon'
+import { SafeImage } from '@lib/ui/images/SafeImage'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
@@ -27,45 +28,58 @@ export const PreviewInfo: FC<OnFinishProp & ValueProp<string>> = ({
     <>
       <PageHeader
         primaryControls={<PageHeaderBackButton onClick={() => setStep(1)} />}
-        title={t('permissions')}
-        hasBorder
       />
-      <PageContent alignItems="center" justifyContent="center" scrollable>
+      <StyledPageContent
+        alignItems="center"
+        gap={24}
+        justifyContent="center"
+        scrollable
+      >
+        <SafeImage
+          src="/assets/app-permissions.png"
+          render={props => (
+            <VStack as="img" alt={name} height={126} width={126} {...props} />
+          )}
+        />
         <VStack gap={24} maxWidth={576} fullWidth>
+          <Text as="span" size={22} weight={500} centerHorizontally>
+            {t('app_permissions')}
+          </Text>
           <VStack gap={12}>
-            <Text as="span" size={22} weight={500} centerHorizontally>
-              {t('allow_app_access')}
-            </Text>
+            <Panel>
+              <VStack gap={16}>
+                {[
+                  'Access to transaction signing',
+                  'Fee deduction authorization',
+                  'Vault balance visibility',
+                ].map((item, index) => (
+                  <HStack alignItems="center" gap={4} key={index}>
+                    <Text
+                      as={ShieldCheckIcon}
+                      color="primaryAlt"
+                      size={16}
+                    />
+                    <Text as="span" size={14}>
+                      {item}
+                    </Text>
+                    <Text as={CircleInfoIcon} color="shy" size={16} />
+                  </HStack>
+                ))}
+              </VStack>
+            </Panel>
             <Text
               as="span"
-              color="shy"
               size={14}
+              color="shy"
               weight={500}
               centerHorizontally
             >
-              These actions are required to let the ..., they’re using the
-              Vultisig SDK, which is ...
+              Permissions are needed to let the app function properly, they
+              still use Vultisig’s golden multi-sig-only standard.
             </Text>
           </VStack>
-          <Panel>
-            <VStack gap={12}>
-              {[
-                'Access to transaction signing',
-                'Fee deduction authorization',
-                'Vault balance visibility',
-              ].map((item, index) => (
-                <HStack alignItems="center" gap={4} key={index}>
-                  <Text as={ShieldCheckIcon} color="warning" size={16} />
-                  <Text as="span" size={14}>
-                    {item}
-                  </Text>
-                  <Text as={CircleInfoIcon} color="shy" size={16} />
-                </HStack>
-              ))}
-            </VStack>
-          </Panel>
         </VStack>
-      </PageContent>
+      </StyledPageContent>
       <PageFooter alignItems="center">
         <VStack maxWidth={576} fullWidth>
           <Button kind="primary" onClick={onFinish}>
@@ -75,8 +89,9 @@ export const PreviewInfo: FC<OnFinishProp & ValueProp<string>> = ({
       </PageFooter>
     </>
   ) : (
-    <Layout fullHeight>
-      <PageContent alignItems="center" justifyContent="center" scrollable>
+    <>
+      <PageHeader />
+      <StyledPageContent alignItems="center" justifyContent="center" scrollable>
         <VStack alignItems="center" gap={48} maxWidth={576} fullWidth>
           <VStack position="relative">
             <Text as={LogoBoxIcon} color="contrast" size={100} />
@@ -98,7 +113,7 @@ export const PreviewInfo: FC<OnFinishProp & ValueProp<string>> = ({
             </Text>
           </VStack>
         </VStack>
-      </PageContent>
+      </StyledPageContent>
       <PageFooter alignItems="center">
         <VStack maxWidth={576} fullWidth>
           <Button kind="primary" onClick={() => setStep(2)}>
@@ -106,13 +121,13 @@ export const PreviewInfo: FC<OnFinishProp & ValueProp<string>> = ({
           </Button>
         </VStack>
       </PageFooter>
-    </Layout>
+    </>
   )
 }
 
-const Layout = styled(VStack)`
+const StyledPageContent = styled(PageContent)`
   background-image: url('assets/plugin_flow_bg.png');
-  background-position: 50% 30%;
+  background-position: center top;
   background-repeat: repeat-x;
 `
 
@@ -121,9 +136,9 @@ const Plus = styled(PlusIcon)`
   border: 6px solid ${getColor('background')};
   border-radius: 50%;
   color: ${getColor('background')};
-  bottom: -6px;
+  bottom: -12px;
   font-size: 44px;
   padding: 6px;
   position: absolute;
-  right: -14px;
+  right: -12px;
 `
