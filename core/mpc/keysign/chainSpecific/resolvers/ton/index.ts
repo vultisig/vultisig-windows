@@ -37,6 +37,7 @@ export const getTonChainSpecific: GetChainSpecificResolver<
     sequenceNumber,
     expireAt: BigInt(Math.floor(Date.now() / 1000) + 600),
     bounceable: await getIsBounceable(),
+    sendMaxAmount: false,
     jettonAddress: '',
     isActiveDestination: false,
   })

@@ -28,7 +28,7 @@ export const buildNativeTonTransfer = ({
     dest: keysignPayload.toAddress,
     amount: Buffer.from(numberToEvenHex(amount), 'hex'),
     bounceable,
-    comment: keysignPayload.memo ?? undefined,
+    comment: keysignPayload.memo || '',
     mode,
   })
 }
