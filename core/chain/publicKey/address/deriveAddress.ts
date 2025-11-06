@@ -40,6 +40,17 @@ export const deriveAddress = ({
     })
   }
 
+  if (chain === Chain.Sei) {
+    const evmCoinType = getCoinType({
+      chain: Chain.Ethereum,
+      walletCore,
+    })
+    return walletCore.CoinTypeExt.deriveAddressFromPublicKey(
+      evmCoinType,
+      publicKey
+    )
+  }
+
   const address = walletCore.CoinTypeExt.deriveAddressFromPublicKey(
     coinType,
     publicKey

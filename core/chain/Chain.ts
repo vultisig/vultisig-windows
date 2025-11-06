@@ -6,6 +6,7 @@ export const EthereumL2Chain = {
   Optimism: 'Optimism',
   Zksync: 'Zksync',
   Mantle: 'Mantle',
+  Sei: 'Sei',
 } as const
 
 export type EthereumL2Chain =
