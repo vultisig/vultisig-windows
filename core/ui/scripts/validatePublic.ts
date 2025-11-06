@@ -1,5 +1,6 @@
 import { EthereumL2Chain } from '@core/chain/Chain'
 import { coins } from '@core/chain/coin/coins'
+import { thorchainNativeTokensMetadata } from '@core/chain/coin/knownTokens/thorchain'
 import { getLastItem } from '@lib/utils/array/getLastItem'
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { readdir } from 'fs/promises'
@@ -101,7 +102,9 @@ const main = async () => {
     )
 
     const expectedCoins = withoutDuplicates(
-      coins.map(coin => coin.logo).filter(logo => !logo.startsWith('http'))
+      [...Object.values(thorchainNativeTokensMetadata), ...Object.values(coins)]
+        .map(coin => coin.logo)
+        .filter(logo => logo && !logo.startsWith('http'))
     )
       .map(getCoinLogoSrc)
       .map(logo => getLastItem(logo.split('/')))
