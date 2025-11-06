@@ -13,12 +13,12 @@ export const thorchainNativeTokensMetadata: Record<string, CoinMetadata> = {
   },
   'thor.lqdy': {
     ticker: 'LQDY',
-    logo: 'ruji',
+    logo: 'lqdy.png',
     decimals: 8,
   },
   'thor.auto': {
     ticker: 'AUTO',
-    logo: 'ruji',
+    logo: 'auto.png',
     decimals: 8,
   },
   'x/nami-index-fixed-thor1yqf5spdv8c4088zmvqsg32eq63fzepsjvntahdk0ek0yjnkt3qdqftp3lc-rcpt':

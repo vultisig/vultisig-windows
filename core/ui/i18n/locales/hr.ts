@@ -15,11 +15,14 @@ export const hr = {
   onboarding_step_6:
     'Ezek a részek együttműködnek, hogy <g>feloldják a tárhelyed zárolását</g>',
   vault_share_banner:
-    'Ez a QR kód lehetővé teszi, hogy megoszthasd egy nézeti változatot a tárhelyed',
+    'Ovaj QR kod vam omogućuje dijeljenje verzije vašeg trezora samo za pregled',
+  actions: 'Akcije',
+  copy_address: 'Copy Address',
+  price: 'Price',
+  vault_info: 'Informacije o trezoru',
   secure_crypto_vault: 'Sigurni kripto trezor',
-  save_10_percent_on_swaps: 'Mentsd el <blue>10%</blue> a swap-okkal most',
-  vault_info: 'Tárhelyinformáció',
-  failed_to_read_qr_code: 'Nem sikerült olvasni a QR kódot',
+  save_10_percent_on_swaps: 'Spremi 10% na zamjenama sada',
+  failed_to_read_qr_code: 'Nije uspjelo čitanje QR koda',
   vultisig: 'Vultisig',
   vault_details_description: 'Prikazati naziv, dio i vrstu trezora',
   vault_details_edit_vault_description: 'Urediti naziv svog trezora',
@@ -54,6 +57,15 @@ export const hr = {
   onboarding_description_4:
     'Vultisig je novčanik bez seed fraza. Umjesto toga koristi lako upravljive dijelove trezora. Svaki uređaj ima svoj jedinstveni dio koji treba zasebno sigurnosno kopirati.',
   search_field_placeholder: 'Pretraži',
+  edit_vaults: 'Uredi trezore',
+  vault_count_one: '{{count}} trezor',
+  vault_count_other: '{{count}} trezora',
+  no_results: 'Nema rezultata',
+  adjust_search_query: 'Pokušaj prilagoditi pretragu',
+  save: 'Spremi',
+  nothing_to_add: 'Ništa za dodati',
+  nothing_to_add_hint:
+    'Svi tvoji trezori su već raspoređeni. Stvori novi trezor i dodaj ga ovdje.',
   merged: 'Spojeno',
   function_unavailble:
     'Značajka nije dostupna za postojeće kovanice lanca. Dodajte kovanice koje se mogu koristiti s FUNCTION:',
@@ -384,7 +396,6 @@ export const hr = {
   vault_delete_page_term_2: 'Svjestan sam da mogu izgubiti sredstva',
   vault_delete_page_term_3: 'Napravio sam sigurnosnu kopiju trezora',
   share_vault_qr: 'Podijeli QR trezora',
-  save: 'Spremi',
   settings_vault_page_footer: 'VULTISIG APLIKACIJA V',
   clear: 'Očisti',
   faq_setup_crypto_vault_title: 'Kako postaviti svoj sigurni kripto trezor?',
@@ -690,6 +701,7 @@ export const hr = {
     updateButton: 'Ažuriraj',
   },
   create_folder: 'Stvori mapu',
+  add_folder: 'Dodaj mapu',
   folder_name: 'Naziv mape',
   enter_folder_name: 'Unesite naziv mape',
   folder_name_required: 'Potreban je naziv mape',
@@ -1185,4 +1197,9 @@ export const hr = {
   not_enough_asset_to_cover_gas_fees:
     'Nema dovoljno {{asset}} za pokrivanje troškova goriva',
   import_key: 'Uvezi ključ',
+  back_up_now: 'Sigurnosno kopiraj sada',
+  fast_vault_backup_title:
+    'Napravite sigurnosnu kopiju svog trezora na mreži koristeći istu lozinku za trezor koju ste ranije kreirali.',
+  fast_vault_backup_description:
+    'Preporučuje se i sigurna je online pohrana - dijeljeni trezori su namijenjeni za to.',
 }

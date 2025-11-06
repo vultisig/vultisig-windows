@@ -15,7 +15,7 @@ import { convertDuration } from '@lib/utils/time/convertDuration'
 import { useQueries } from '@tanstack/react-query'
 import { useCallback, useMemo } from 'react'
 
-export const getCoinFinderQueryKey = (input: FindCoinsResolverInput) => [
+const getCoinFinderQueryKey = (input: FindCoinsResolverInput) => [
   'coinFinder',
   input,
 ]

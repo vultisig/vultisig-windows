@@ -1,11 +1,9 @@
-import { Chain } from '@core/chain/Chain'
-import { ChainKind, getChainKind } from '@core/chain/ChainKind'
+import { getPreSigningOutput } from '@core/mpc/keysign/preSigningOutput'
 import { without } from '@lib/utils/array/without'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { assertErrorMessage } from '@lib/utils/error/assertErrorMessage'
-import { TW, WalletCore } from '@trustwallet/wallet-core'
+import { WalletCore } from '@trustwallet/wallet-core'
 
-import { getCoinType } from '../../coin/coinType'
+import { Chain } from '../../Chain'
 
 type Input = {
   walletCore: WalletCore
@@ -13,47 +11,17 @@ type Input = {
   txInputData: Uint8Array
 }
 
-const decoders: Record<
-  ChainKind,
-  (
-    preHashes: Uint8Array
-  ) =>
-    | TW.Bitcoin.Proto.PreSigningOutput
-    | TW.Solana.Proto.PreSigningOutput
-    | TW.TxCompiler.Proto.PreSigningOutput
-> = {
-  utxo: TW.Bitcoin.Proto.PreSigningOutput.decode,
-  solana: TW.Solana.Proto.PreSigningOutput.decode,
-  evm: TW.TxCompiler.Proto.PreSigningOutput.decode,
-  cosmos: TW.TxCompiler.Proto.PreSigningOutput.decode,
-  polkadot: TW.TxCompiler.Proto.PreSigningOutput.decode,
-  ton: TW.TxCompiler.Proto.PreSigningOutput.decode,
-  sui: TW.TxCompiler.Proto.PreSigningOutput.decode,
-  ripple: TW.TxCompiler.Proto.PreSigningOutput.decode,
-  tron: TW.TxCompiler.Proto.PreSigningOutput.decode,
-  cardano: TW.TxCompiler.Proto.PreSigningOutput.decode,
-}
-
 export const getPreSigningHashes = ({
   walletCore,
   txInputData,
   chain,
 }: Input) => {
-  const preHashes = walletCore.TransactionCompiler.preImageHashes(
-    getCoinType({
-      walletCore,
-      chain,
-    }),
-    txInputData
-  )
+  const output = getPreSigningOutput({
+    walletCore,
+    txInputData,
+    chain,
+  })
 
-  const chainKind = getChainKind(chain)
-
-  const decoder = decoders[chainKind]
-
-  const output = decoder(preHashes)
-
-  assertErrorMessage(output.errorMessage)
   if ('preSigningResultV2' in output && output.preSigningResultV2 !== null) {
     const preSigningResultV2 = shouldBePresent(output.preSigningResultV2)
     const sighashes = shouldBePresent(preSigningResultV2.sighashes)

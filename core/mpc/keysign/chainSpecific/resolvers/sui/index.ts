@@ -5,13 +5,15 @@ import {
   SuiCoinSchema,
   SuiSpecificSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+import { attempt, withFallback } from '@lib/utils/attempt'
 
-import { getKeysignCoin } from '../../utils/getKeysignCoin'
-import { GetChainSpecificResolver } from '../resolver'
+import { getKeysignCoin } from '../../../utils/getKeysignCoin'
+import { GetChainSpecificResolver } from '../../resolver'
+import { refineSuiChainSpecific } from './refine'
 
 export const getSuiChainSpecific: GetChainSpecificResolver<
   'suicheSpecific'
-> = async ({ keysignPayload }) => {
+> = async ({ keysignPayload, walletCore }) => {
   const coin = getKeysignCoin(keysignPayload)
   const { address } = coin
   const client = getSuiClient()
@@ -20,15 +22,24 @@ export const getSuiChainSpecific: GetChainSpecificResolver<
     owner: address,
   })
 
-  const coins = data
-    .filter(f => f.coinType == '0x2::sui::SUI')
-    .map(coin => create(SuiCoinSchema, coin))
+  const coins = data.map(coin => create(SuiCoinSchema, coin))
 
   const referenceGasPrice = await client.getReferenceGasPrice()
 
-  return create(SuiSpecificSchema, {
+  const chainSpecific = create(SuiSpecificSchema, {
     coins,
     referenceGasPrice: referenceGasPrice.toString(),
     gasBudget: suiGasBudget.toString(),
   })
+
+  return withFallback(
+    attempt(
+      refineSuiChainSpecific({
+        keysignPayload,
+        chainSpecific,
+        walletCore,
+      })
+    ),
+    chainSpecific
+  )
 }

@@ -1,4 +1,5 @@
 import { getVaultId } from '@core/mpc/vault/Vault'
+import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import {
@@ -6,107 +7,228 @@ import {
   useSetCurrentVaultIdMutation,
 } from '@core/ui/storage/currentVaultId'
 import { useVaultFolders } from '@core/ui/storage/vaultFolders'
-import { useFolderlessVaults } from '@core/ui/storage/vaults'
-import { VaultSigners } from '@core/ui/vault/signers'
-import { Button } from '@lib/ui/buttons/Button'
+import { useVaults } from '@core/ui/storage/vaults'
+import { DoneButton } from '@core/ui/vault/chain/manage/shared/DoneButton'
+import {
+  LeadingIconBadge,
+  SectionHeader,
+  VaultListRow,
+  VaultSignersPill,
+} from '@core/ui/vaultsOrganisation/components'
+import { useVaultsTotalBalances } from '@core/ui/vaultsOrganisation/hooks/useVaultsTotalBalances'
 import { IconButton } from '@lib/ui/buttons/IconButton'
+import { CheckIcon } from '@lib/ui/icons/CheckIcon'
+import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
+import { FolderIcon } from '@lib/ui/icons/FolderIcon'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { PlusIcon } from '@lib/ui/icons/PlusIcon'
 import { SquarePenIcon } from '@lib/ui/icons/SquarePenIcon'
 import { VStack } from '@lib/ui/layout/Stack'
-import { List } from '@lib/ui/list'
-import { ListItem } from '@lib/ui/list/item'
-import { ListItemTag } from '@lib/ui/list/item/tag'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
-import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useCore } from '../state/core'
+import { getVaultSecurityTone } from './utils/getVaultSecurityTone'
+
+type FolderEntry = {
+  id: string
+  name: string
+  vaultCount: number
+}
 
 export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
   const { t } = useTranslation()
-  const { mutate } = useSetCurrentVaultIdMutation()
-  const navigate = useCoreNavigate()
-  const folders = useVaultFolders()
-  const vaults = useFolderlessVaults()
-  const currentVaultId = useCurrentVaultId()
   const { goHome } = useCore()
   const goBack = useNavigateBack()
+  const navigate = useCoreNavigate()
+
+  const { mutate } = useSetCurrentVaultIdMutation()
+  const currentVaultId = useCurrentVaultId()
+  const folders = useVaultFolders()
+  const vaults = useVaults()
+
+  const folderEntries = useMemo<FolderEntry[]>(() => {
+    return folders.map(folder => {
+      const vaultCount = vaults.filter(
+        vault => vault.folderId === folder.id
+      ).length
+
+      return {
+        id: folder.id,
+        name: folder.name,
+        vaultCount,
+      }
+    })
+  }, [folders, vaults])
+
+  const folderlessVaults = useMemo(
+    () => vaults.filter(vault => !vault.folderId),
+    [vaults]
+  )
+
+  const { totals: vaultTotals, isPending: isTotalsPending } =
+    useVaultsTotalBalances()
+  const formatFiatAmount = useFormatFiatAmount()
+
+  const totalVaultsCount = vaults.length
+  const vaultCountLabel = t('vault_count', { count: totalVaultsCount })
+
+  const summarySubtitle = useMemo(() => {
+    if (totalVaultsCount === 0) {
+      return t('no_vaults')
+    }
+
+    const parts = [vaultCountLabel]
+
+    // Only show cumulative balance if there's more than 1 vault
+    if (totalVaultsCount > 1 && !isTotalsPending && vaultTotals) {
+      const totalBalance = Object.values(vaultTotals).reduce(
+        (sum, value) => sum + value,
+        0
+      )
+
+      parts.push(formatFiatAmount(totalBalance))
+    }
+
+    return parts.join(' • ')
+  }, [
+    formatFiatAmount,
+    isTotalsPending,
+    t,
+    totalVaultsCount,
+    vaultCountLabel,
+    vaultTotals,
+  ])
+
+  const handleBack = () => (onFinish ? goBack() : goHome())
+  const handleDone = () => (onFinish ? onFinish() : goBack())
+  const handleManage = () => navigate({ id: 'manageVaults' })
+  const handleCreateVault = () => navigate({ id: 'newVault' })
+
+  const handleSelectVault = (vaultId: string) =>
+    mutate(vaultId, {
+      onSuccess: onFinish ?? goBack,
+    })
 
   return (
     <VStack fullHeight>
       <PageHeader
-        primaryControls={
-          !onFinish && <PageHeaderBackButton onClick={() => goHome()} />
-        }
-        secondaryControls={
-          <IconButton onClick={() => navigate({ id: 'manageVaults' })}>
-            <SquarePenIcon />
-          </IconButton>
-        }
+        primaryControls={<PageHeaderBackButton onClick={handleBack} />}
+        secondaryControls={<DoneButton onClick={handleDone} />}
         title={t('vaults')}
-        hasBorder
       />
-      <PageContent gap={24} flexGrow scrollable>
-        {folders.length ? (
+      <PageContent gap={28} flexGrow scrollable>
+        <SectionHeader
+          title={t('vaults')}
+          subtitle={summarySubtitle}
+          actions={
+            <>
+              {totalVaultsCount > 1 && (
+                <IconButton
+                  kind="action"
+                  size="lg"
+                  onClick={handleManage}
+                  aria-label={t('edit_vaults')}
+                >
+                  <SquarePenIcon />
+                </IconButton>
+              )}
+              <IconButton
+                kind="primary"
+                size="lg"
+                onClick={handleCreateVault}
+                aria-label={t('add_new_vault')}
+              >
+                <PlusIcon />
+              </IconButton>
+            </>
+          }
+        />
+
+        {folderEntries.length > 0 && (
           <VStack gap={12}>
-            <Text color="light" size={12} weight={500}>
-              {t('folders')}
-            </Text>
-            <List>
-              {folders.map(({ id, name }) => (
-                <ListItem
-                  key={id}
-                  onClick={() => navigate({ id: 'vaultFolder', state: { id } })}
-                  title={name}
-                  hoverable
-                  showArrow
-                />
-              ))}
-            </List>
+            {folderEntries.map(folder => (
+              <VaultListRow
+                key={folder.id}
+                leading={
+                  <LeadingIconBadge tone="info">
+                    <FolderIcon />
+                  </LeadingIconBadge>
+                }
+                title={folder.name}
+                subtitle={t('vault_count', { count: folder.vaultCount })}
+                trailing={
+                  <IconWrapper size={18} color="textShy">
+                    <ChevronRightIcon />
+                  </IconWrapper>
+                }
+                onClick={() =>
+                  navigate({ id: 'vaultFolder', state: { id: folder.id } })
+                }
+              />
+            ))}
           </VStack>
-        ) : null}
-        {vaults.length ? (
-          <VStack gap={12}>
-            <Text color="light" size={12} weight={500}>
+        )}
+
+        {folderlessVaults.length > 0 && (
+          <VStack gap={16}>
+            <Text
+              size={13}
+              weight={600}
+              color="shy"
+              style={{ textTransform: 'uppercase' }}
+            >
               {t('vaults')}
             </Text>
-            <List>
-              {vaults.map(vault => {
+            <VStack gap={12}>
+              {folderlessVaults.map(vault => {
                 const vaultId = getVaultId(vault)
+                const { tone, icon } = getVaultSecurityTone(vault)
+                const value = vaultTotals?.[vaultId]
 
                 return (
-                  <ListItem
+                  <VaultListRow
                     key={vaultId}
-                    extra={
-                      <>
-                        {vaultId === currentVaultId && (
-                          <ListItemTag status="success" title={t('active')} />
-                        )}
-                        <VaultSigners vault={vault} />
-                      </>
-                    }
-                    onClick={() =>
-                      mutate(vaultId, {
-                        onSuccess: onFinish ? onFinish : goBack,
-                      })
+                    leading={
+                      <LeadingIconBadge tone={tone}>{icon}</LeadingIconBadge>
                     }
                     title={vault.name}
-                    hoverable
+                    subtitle={
+                      !isTotalsPending && value !== undefined
+                        ? formatFiatAmount(value)
+                        : undefined
+                    }
+                    meta={
+                      <IconWrapper size={20} color="primary">
+                        <CheckIcon />
+                      </IconWrapper>
+                    }
+                    selected={vaultId === currentVaultId}
+                    trailing={<VaultSignersPill vault={vault} />}
+                    onClick={() => handleSelectVault(vaultId)}
                   />
                 )
               })}
-            </List>
+            </VStack>
           </VStack>
-        ) : null}
+        )}
+
+        {folderEntries.length === 0 && folderlessVaults.length === 0 && (
+          <VStack gap={12} alignItems="center" justifyContent="center">
+            <Text size={16} weight={500}>
+              {t('no_vaults')}
+            </Text>
+            <Text size={13} color="shy" centerHorizontally>
+              {t('create_new_vault')}
+            </Text>
+          </VStack>
+        )}
       </PageContent>
-      <PageFooter>
-        <Button onClick={() => navigate({ id: 'newVault' })}>
-          {t('add_new_vault')}
-        </Button>
-      </PageFooter>
     </VStack>
   )
 }

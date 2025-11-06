@@ -1,4 +1,5 @@
 import { getVaultId } from '@core/mpc/vault/Vault'
+import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
   useCurrentVault,
   useCurrentVaultPublicKey,
@@ -24,6 +25,7 @@ export const useDepositKeysignPayloadQuery = () => {
   const [coin] = useDepositCoin()
   const vault = useCurrentVault()
   const publicKey = useCurrentVaultPublicKey(coin.chain)
+  const walletCore = useAssertWalletCore()
 
   const receiver = useDepositReceiver()
   const transactionType = useDepositTxType()
@@ -52,12 +54,14 @@ export const useDepositKeysignPayloadQuery = () => {
       localPartyId: vault.localPartyId,
       publicKey,
       libType: vault.libType,
+      walletCore,
     }),
     [
       action,
       amount,
       autocompound,
       coin,
+      walletCore,
       depositData,
       memo,
       publicKey,

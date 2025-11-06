@@ -4,34 +4,67 @@ import { TW } from '@trustwallet/wallet-core'
 import Long from 'long'
 
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
+import { getKeysignCoin } from '../../utils/getKeysignCoin'
 import { SigningInputsResolver } from '../resolver'
+
+const suiContractAddress = '0x2::sui::SUI'
 
 export const getSuiSigningInputs: SigningInputsResolver<'sui'> = ({
   keysignPayload,
 }) => {
-  const { coins, referenceGasPrice } = getBlockchainSpecificValue(
+  const coin = getKeysignCoin(keysignPayload)
+  const { coins, referenceGasPrice, gasBudget } = getBlockchainSpecificValue(
     keysignPayload.blockchainSpecific,
     'suicheSpecific'
   )
 
-  const inputData = TW.Sui.Proto.SigningInput.create({
+  const coinType = coin.id || suiContractAddress
+
+  const createObjectRef = (coin: SuiCoin) =>
+    TW.Sui.Proto.ObjectRef.create({
+      objectDigest: coin.digest,
+      objectId: coin.coinObjectId,
+      version: Long.fromString(coin.version),
+    })
+
+  const gasCoins = coins
+    .filter(c => c.coinType === suiContractAddress)
+    .map(createObjectRef)
+
+  const baseInput = {
     referenceGasPrice: Long.fromString(referenceGasPrice),
-    signer: keysignPayload.coin?.address,
-    gasBudget: Long.fromBigInt(suiGasBudget),
+    signer: coin.address,
+    gasBudget: gasBudget
+      ? Long.fromString(gasBudget)
+      : Long.fromBigInt(suiGasBudget),
+  }
 
-    paySui: TW.Sui.Proto.PaySui.create({
-      inputCoins: coins.map((coin: SuiCoin) => {
-        const obj = TW.Sui.Proto.ObjectRef.create({
-          objectDigest: coin.digest,
-          objectId: coin.coinObjectId,
-          version: Long.fromString(coin.version),
-        })
-        return obj
+  const inputCoins = coins
+    .filter(c => c.coinType === coinType)
+    .map(createObjectRef)
+
+  if (coin.id) {
+    return [
+      TW.Sui.Proto.SigningInput.create({
+        ...baseInput,
+        pay: TW.Sui.Proto.Pay.create({
+          gas: gasCoins[0],
+          inputCoins: inputCoins,
+          recipients: [keysignPayload.toAddress],
+          amounts: [Long.fromString(keysignPayload.toAmount)],
+        }),
       }),
-      recipients: [keysignPayload.toAddress],
-      amounts: [Long.fromString(keysignPayload.toAmount)],
-    }),
-  })
+    ]
+  }
 
-  return [inputData]
+  return [
+    TW.Sui.Proto.SigningInput.create({
+      ...baseInput,
+      paySui: TW.Sui.Proto.PaySui.create({
+        inputCoins: inputCoins,
+        recipients: [keysignPayload.toAddress],
+        amounts: [Long.fromString(keysignPayload.toAmount)],
+      }),
+    }),
+  ]
 }

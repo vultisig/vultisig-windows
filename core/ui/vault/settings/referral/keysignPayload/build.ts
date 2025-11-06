@@ -45,6 +45,7 @@ export const buildReferralKeysignPayload = async ({
 
   keysignPayload.blockchainSpecific = await getChainSpecific({
     keysignPayload,
+    walletCore,
     isDeposit: true,
   })
 
