@@ -6,9 +6,8 @@ import { FeeAmountResolver } from '../resolver'
 
 export const getTonFeeAmount: FeeAmountResolver = ({ keysignPayload }) => {
   const coin = getKeysignCoin(keysignPayload)
-  const isNativeTon = isFeeCoin(coin)
 
-  return isNativeTon
+  return isFeeCoin(coin)
     ? tonConfig.baseFee
     : tonConfig.baseFee + tonConfig.jettonAmount
 }
