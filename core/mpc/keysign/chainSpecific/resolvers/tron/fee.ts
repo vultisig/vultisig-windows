@@ -58,8 +58,8 @@ export const getTrc20TransferFee = async ({
 
   const energyUsed = responseData.energy_used ?? 0
   const energyPenalty = responseData.energy_penalty ?? 0
-  const totalEnergy = energyUsed + energyPenalty
-  const totalSun = totalEnergy * 280
+  const totalEnergy = BigInt(energyUsed) + BigInt(energyPenalty)
+  const totalSun = totalEnergy * 280n
 
-  return BigInt(totalSun)
+  return totalSun
 }

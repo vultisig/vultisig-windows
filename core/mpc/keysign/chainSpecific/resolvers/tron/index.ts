@@ -12,11 +12,21 @@ const nativeTronSendFee = 800000n
 
 export const getTronChainSpecific: GetChainSpecificResolver<
   'tronSpecific'
-> = async ({ keysignPayload, thirdPartyGasLimitEstimation }) => {
+> = async ({
+  keysignPayload,
+  thirdPartyGasLimitEstimation,
+  expiration,
+  timestamp,
+  refBlockBytesHex,
+  refBlockHashHex,
+}) => {
   const coin = getKeysignCoin(keysignPayload)
 
   const blockInfo = await getTronBlockInfo({
-    coin,
+    expiration,
+    timestamp,
+    refBlockBytesHex,
+    refBlockHashHex,
   })
 
   const getGasEstimation = async () => {
