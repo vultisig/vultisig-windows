@@ -11,6 +11,9 @@ export const en = {
     'This QR Code lets you share a view-only version of your Vault',
   description: 'Description',
   onboarding_greeting: 'Say goodbye to <g>seed phrases</g>',
+  actions: 'Actions',
+  copy_address: 'Copy Address',
+  price: 'Price',
   onboarding_step_1:
     'Say hello to <g>vault shares,</g> your new <g>recovery method</g>',
   onboarding_step_2:
