@@ -2,6 +2,7 @@ export const it = {
   onboarding_greeting: 'Addio a <g>frasi semina</g>',
   onboarding_step_1:
     'Dì ciao a <g>azioni della cassaforte,</g> il tuo nuovo <g>metodo di recupero</g>',
+  defi: 'DeFi',
   onboarding_step_2:
     'Sono <g>divisi in parti</g> per aumentare la sicurezza e, <g>eliminare il singolo punto di guasto</g>',
   onboarding_step_3:
