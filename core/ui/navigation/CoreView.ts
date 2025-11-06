@@ -72,7 +72,6 @@ export type CoreView =
   | { id: 'selectVaultsBackup' }
   | { id: 'vaultDetails' }
   | { id: 'vaultChainDetail'; state: { chain: Chain } }
-  | { id: 'vaultChainCoinDetail'; state: { coin: CoinKey } }
   | { id: 'vaultFolder'; state: { id: string } }
   | { id: 'vaults' }
   | { id: 'vaultSettings' }

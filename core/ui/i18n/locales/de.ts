@@ -12,6 +12,9 @@ export const de = {
     '<g>Sichern Sie jede Tresorfreigabe immer</g> separat in einer <g>anderen Location</g>',
   vault_share_banner:
     'Dieser QR Code ermöglicht Ihnen, eine Ansichtsversion Ihres Tresors zu teilen',
+  actions: 'Aktionen',
+  copy_address: 'Copy Address',
+  price: 'Price',
   vault_info: 'Tresorinformationen',
   circle_title: 'Circle-Konten',
   circle_description: 'Zahle $USDC in einen Circle-Vertrag ein',
