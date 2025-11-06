@@ -11,7 +11,7 @@ import { SendFormShape, ValidationResult } from './formShape'
 export const validateSendForm = (
   values: SendFormShape,
   helpers: {
-    balance: bigint | undefined
+    balance: bigint
     walletCore: WalletCore
     t: TFunction
   }
@@ -25,16 +25,12 @@ export const validateSendForm = (
 
   if (!amount) {
     errors.amount = t('amount_required')
-  } else if (balance !== undefined) {
+  } else {
     if (amount > balance) {
       errors.amount = t('insufficient_balance')
     }
 
-    if (
-      isOneOf(chain, Object.values(UtxoBasedChain)) &&
-      amount &&
-      balance !== undefined
-    ) {
+    if (isOneOf(chain, Object.values(UtxoBasedChain)) && amount) {
       const errorMsg = validateUtxoRequirements({
         amount,
         balance,
