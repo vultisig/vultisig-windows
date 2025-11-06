@@ -3,6 +3,7 @@ export const hr = {
   onboarding_step_1:
     'Mondd, hogy helló <g>széf részvények,</g> az új <g>helyreállítási módszered</g>',
   defi: 'DeFi',
+  select_chain: 'Odaberi Lanac',
   onboarding_step_2:
     'Ezek <g>részekre vannak osztva</g> a biztonság növelése érdekében és, <g>az egyetlen meghibásodási pont eltávolítása érdekében</g>',
   keys: 'Kulcsák',

@@ -3,6 +3,7 @@ export const de = {
   onboarding_step_1:
     'Sag hallo zu <g>Tresoranteile,</g> deine neue <g>Wiederherstellungsmethode</g>',
   defi: 'DeFi',
+  select_chain: 'Kette auswählen',
   onboarding_step_2:
     'Sie sind <g>in Teile aufgeteilt</g> um die Sicherheit zu erhöhen und, <g>den Single Point of Failure zu entfernen</g>',
   onboarding_step_3:

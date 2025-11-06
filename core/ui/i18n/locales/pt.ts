@@ -4,6 +4,7 @@ export const pt = {
   onboarding_step_1:
     'Diga olá para <g>ações do cofre,</g> seu novo <g>método de recuperação</g>',
   defi: 'DeFi',
+  select_chain: 'Selecionar Cadeia',
   onboarding_step_2:
     'Eles estão <g>divididos em partes</g> para aumentar a segurança e, <g>remover um único ponto de falha</g>',
   onboarding_step_3:
