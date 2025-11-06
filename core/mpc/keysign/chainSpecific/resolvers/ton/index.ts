@@ -22,17 +22,24 @@ export const getTonChainSpecific: GetChainSpecificResolver<
   const { account_state } = await getTonAccountInfo(address)
   const sequenceNumber = BigInt(account_state.seqno || 0)
 
-  let isBounceable = false
-  if (receiver) {
-    const { data: walletState } = await attempt(getTonWalletState(receiver))
-    const isUninitialized = walletState === tonWalletStateUninitialized
-    if (!isUninitialized && receiver.startsWith('E')) {
-      isBounceable = true
+  const getIsBounceable = async () => {
+    if (receiver) {
+      const { data: walletState } = await attempt(getTonWalletState(receiver))
+      const isUninitialized = walletState === tonWalletStateUninitialized
+      if (!isUninitialized && receiver.startsWith('E')) {
+        return true
+      }
     }
+    return false
   }
 
-  let jettonAddress = ''
-  let isActiveDestination = false
+  const result = create(TonSpecificSchema, {
+    sequenceNumber,
+    expireAt: BigInt(Math.floor(Date.now() / 1000) + 600),
+    bounceable: await getIsBounceable(),
+    jettonAddress: '',
+    isActiveDestination: false,
+  })
 
   if (coin.id) {
     const { data: jettonWallet } = await attempt(
@@ -43,22 +50,17 @@ export const getTonChainSpecific: GetChainSpecificResolver<
     )
 
     if (jettonWallet) {
-      jettonAddress = jettonWallet
+      result.jettonAddress = jettonWallet
     }
 
     if (receiver) {
       const { data: destWalletState } = await attempt(
         getTonWalletState(receiver)
       )
-      isActiveDestination = destWalletState !== tonWalletStateUninitialized
+      result.isActiveDestination =
+        destWalletState !== tonWalletStateUninitialized
     }
   }
 
-  return create(TonSpecificSchema, {
-    sequenceNumber,
-    expireAt: BigInt(Math.floor(Date.now() / 1000) + 600),
-    bounceable: isBounceable,
-    jettonAddress,
-    isActiveDestination,
-  })
+  return result
 }
