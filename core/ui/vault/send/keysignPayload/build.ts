@@ -55,6 +55,7 @@ export const buildSendKeysignPayload = async ({
   keysignPayload.blockchainSpecific = await getChainSpecific({
     keysignPayload,
     feeSettings,
+    walletCore,
   })
 
   const balance = await getCoinBalance(coin)

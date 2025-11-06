@@ -30,6 +30,7 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { attempt, withFallback } from '@lib/utils/attempt'
 import { match } from '@lib/utils/match'
 import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
+import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { FieldValues } from 'react-hook-form'
 
@@ -57,6 +58,7 @@ export type BuildDepositKeysignPayloadInput = {
   localPartyId: string
   publicKey: PublicKey
   libType: MpcLib
+  walletCore: WalletCore
 }
 
 export const buildDepositKeysignPayload = async ({
@@ -67,6 +69,7 @@ export const buildDepositKeysignPayload = async ({
   amount,
   memo = '',
   validatorAddress,
+  walletCore,
   slippage = 0,
   autocompound = false,
   transactionType,
@@ -101,6 +104,7 @@ export const buildDepositKeysignPayload = async ({
 
   keysignPayload.blockchainSpecific = await getChainSpecific({
     keysignPayload,
+    walletCore,
     isDeposit: true,
     transactionType,
   })
