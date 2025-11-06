@@ -1,9 +1,11 @@
 import { tonConfig } from '@core/chain/chains/ton/config'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { numberToEvenHex } from '@lib/utils/hex/numberToHex'
 import { TW } from '@trustwallet/wallet-core'
 import { WalletCore } from '@trustwallet/wallet-core'
 
+import { getKeysignAmount } from '../../../utils/getKeysignAmount'
 import { getKeysignCoin } from '../../../utils/getKeysignCoin'
 
 type BuildJettonTransferInput = {
@@ -31,7 +33,7 @@ export const buildJettonTransfer = ({
 
   const jettonTransfer = TW.TheOpenNetwork.Proto.JettonTransfer.create({
     jettonAmount: Buffer.from(
-      numberToEvenHex(BigInt(keysignPayload.toAmount)),
+      numberToEvenHex(shouldBePresent(getKeysignAmount(keysignPayload))),
       'hex'
     ),
     toOwner: destinationAddress,
@@ -47,7 +49,7 @@ export const buildJettonTransfer = ({
     dest: jettonAddress,
     amount: Buffer.from(numberToEvenHex(tonConfig.jettonAmount), 'hex'),
     bounceable: true,
-    comment: keysignPayload.memo || '',
+    comment: keysignPayload.memo,
     mode,
     jettonTransfer,
   })
