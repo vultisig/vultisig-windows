@@ -8,6 +8,7 @@ import { OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 const ChainItem = styled.button`
@@ -38,6 +39,7 @@ const ChainList = styled.div`
 export const ReceiveModal = ({ onClose }: OnCloseProp) => {
   const chains = useCurrentVaultChains()
   const [selectedChain, setSelectedChain] = useState<Chain | null>(null)
+  const { t } = useTranslation()
 
   if (selectedChain) {
     return <AddressQRModal chain={selectedChain} onClose={onClose} />
@@ -47,7 +49,7 @@ export const ReceiveModal = ({ onClose }: OnCloseProp) => {
     <ResponsiveModal isOpen onClose={onClose}>
       <ChainList>
         <Text size={20} weight="600" color="contrast">
-          Select Chain
+          {t('select_chain')}
         </Text>
         {chains.map(chain => (
           <ChainItem key={chain} onClick={() => setSelectedChain(chain)}>
