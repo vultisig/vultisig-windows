@@ -12,7 +12,7 @@ import { getPolkadotFeeAmount } from './resolvers/polkadot'
 import { getRippleFeeAmount } from './resolvers/ripple'
 import { getSolanaFeeAmount } from './resolvers/solana'
 import { getSuiFeeAmount } from './resolvers/sui'
-import { getTonFeeAmount } from './resolvers/ton'
+import { tonFeeAmountResolver } from './resolvers/ton'
 import { getTronFeeAmount } from './resolvers/tron'
 import { getUtxoFeeAmount } from './resolvers/utxo'
 
@@ -30,7 +30,7 @@ const resolvers: Record<ChainKind, FeeAmountResolver> = {
   ripple: getRippleFeeAmount,
   solana: getSolanaFeeAmount,
   sui: getSuiFeeAmount,
-  ton: getTonFeeAmount,
+  ton: tonFeeAmountResolver,
   utxo: getUtxoFeeAmount,
   tron: getTronFeeAmount,
 }

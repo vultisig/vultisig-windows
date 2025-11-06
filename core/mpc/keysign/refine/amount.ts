@@ -1,4 +1,4 @@
-import { UtxoBasedChain } from '@core/chain/Chain'
+import { Chain, UtxoBasedChain } from '@core/chain/Chain'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { minBigInt } from '@lib/utils/math/minBigInt'
@@ -26,7 +26,10 @@ export const refineKeysignAmount = (input: RefineKeysignAmountInput) => {
     return input.keysignPayload
   }
 
-  if (isOneOf(coin.chain, Object.values(UtxoBasedChain))) {
+  if (
+    isOneOf(coin.chain, Object.values(UtxoBasedChain)) ||
+    coin.chain === Chain.Ton
+  ) {
     return input.keysignPayload
   }
 

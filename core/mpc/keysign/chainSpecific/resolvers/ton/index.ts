@@ -4,9 +4,12 @@ import {
   getJettonWalletAddress,
   getTonWalletState,
 } from '@core/chain/chains/ton/api'
+import { getCoinBalance } from '@core/chain/coin/balance'
 import { TonSpecificSchema } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { attempt } from '@lib/utils/attempt'
 
+import { getTonFeeAmount } from '../../../fee/resolvers/ton'
+import { getKeysignAmount } from '../../../utils/getKeysignAmount'
 import { getKeysignCoin } from '../../../utils/getKeysignCoin'
 import { GetChainSpecificResolver } from '../../resolver'
 
@@ -21,6 +24,18 @@ export const getTonChainSpecific: GetChainSpecificResolver<
 
   const { account_state } = await getTonAccountInfo(address)
   const sequenceNumber = BigInt(account_state.seqno || 0)
+
+  const getSendMaxAmount = async () => {
+    if (coin.id) return false
+
+    const amount = getKeysignAmount(keysignPayload)
+    if (!amount) return false
+
+    const balance = await getCoinBalance(coin)
+    const fee = getTonFeeAmount(coin)
+
+    return amount + fee >= balance
+  }
 
   const getIsBounceable = async () => {
     if (receiver) {
@@ -37,7 +52,7 @@ export const getTonChainSpecific: GetChainSpecificResolver<
     sequenceNumber,
     expireAt: BigInt(Math.floor(Date.now() / 1000) + 600),
     bounceable: await getIsBounceable(),
-    sendMaxAmount: false,
+    sendMaxAmount: await getSendMaxAmount(),
     jettonAddress: '',
     isActiveDestination: false,
   })
