@@ -4,7 +4,7 @@ export const en = {
   app_store: 'App Store',
   developer_options: 'Developer Options',
   incorrect_url: 'Incorrect URL',
-  install_app: 'Install app',
+  install_app: 'Install ‘{{name}}’ App',
   app_permissions: 'App Permissions',
   dapp_name: 'dApp Name',
   vault_share_banner:

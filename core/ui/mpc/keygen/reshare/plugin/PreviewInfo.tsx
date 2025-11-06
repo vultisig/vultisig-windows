@@ -1,11 +1,9 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { Button } from '@lib/ui/buttons/Button'
-import { CircleArrowDownIcon } from '@lib/ui/icons/CircleArrowDownIcon'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { LogoBoxIcon } from '@lib/ui/icons/LogoBoxIcon'
+import { PlusIcon } from '@lib/ui/icons/PlusIcon'
 import { ShieldCheckIcon } from '@lib/ui/icons/ShieldCheckIcon'
-import { StarIcon } from '@lib/ui/icons/StarIcon'
-import { VultisigLogoIcon } from '@lib/ui/icons/VultisigLogoIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
@@ -78,51 +76,27 @@ export const PreviewInfo: FC<OnFinishProp & ValueProp<string>> = ({
     </>
   ) : (
     <Layout fullHeight>
-      <PageHeader
-        title={
-          <HStack gap={10} alignItems="center" position="relative">
-            <LogoBox />
-            <LogoIcon />
-            <Text as="span" size={22} weight={500}>
-              {t('app_store')}
-            </Text>
-          </HStack>
-        }
-      />
       <PageContent alignItems="center" justifyContent="center" scrollable>
-        <VStack gap={24} maxWidth={576} fullWidth>
-          <Text as="span" size={22} weight={500} centerHorizontally>
-            {t('install_app')}
-          </Text>
-          <AppInfo>
-            <HStack alignItems="center" gap={12}>
-              <Text as={LogoBoxIcon} color="contrast" size={56} />
-              <VStack gap={8} justifyContent="center">
-                <Text as="span" size={17} weight={500}>
-                  {name}
-                </Text>
-                <HStack alignItems="center" gap={8}>
-                  <HStack alignItems="center" gap={2}>
-                    <Text as={CircleArrowDownIcon} color="shy" size={16} />
-                    <Text as="span" color="shy" size={16} weight={500}>
-                      {1258}
-                    </Text>
-                  </HStack>
-                  <Divider />
-                  <HStack alignItems="center" gap={2}>
-                    <Text as={StarIcon} color="warning" size={16} />
-                    <Text as="span" color="shy" size={16} weight={500}>
-                      {`${4}/5 (${10})`}
-                    </Text>
-                  </HStack>
-                </HStack>
-              </VStack>
-            </HStack>
-            <Text as="span" size={14} weight={500}>
+        <VStack alignItems="center" gap={48} maxWidth={576} fullWidth>
+          <VStack position="relative">
+            <Text as={LogoBoxIcon} color="contrast" size={100} />
+            <Plus />
+          </VStack>
+          <VStack gap={16} fullWidth>
+            <Text as="span" size={22} weight={500} centerHorizontally>
+              {t('install_app', { name })}
+            </Text>
+            <Text
+              as="span"
+              size={12}
+              color="shy"
+              weight={500}
+              centerHorizontally
+            >
               Automate your salaries. Set and forget payroll for your team. It
               was never this easy.
             </Text>
-          </AppInfo>
+          </VStack>
         </VStack>
       </PageContent>
       <PageFooter alignItems="center">
@@ -136,41 +110,20 @@ export const PreviewInfo: FC<OnFinishProp & ValueProp<string>> = ({
   )
 }
 
-const AppInfo = styled.div`
-  background-color: ${getColor('foreground')};
-  border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 16px 16px 24px;
-`
-
-const Divider = styled.div`
-  background-color: ${getColor('foregroundExtra')};
-  height: 3px;
-  width: 3px;
-`
-
 const Layout = styled(VStack)`
-  background-image: url('assets/plugin_flow_bg.jpg');
-  background-position: top center;
+  background-image: url('assets/plugin_flow_bg.png');
+  background-position: 50% 30%;
   background-repeat: repeat-x;
 `
 
-const LogoIcon = styled(VultisigLogoIcon)`
-  font-size: 24px;
-  left: 8px;
+const Plus = styled(PlusIcon)`
+  background-color: ${getColor('success')};
+  border: 6px solid ${getColor('background')};
+  border-radius: 50%;
+  color: ${getColor('background')};
+  bottom: -6px;
+  font-size: 44px;
+  padding: 6px;
   position: absolute;
-  top: 8px;
-
-  path {
-    fill: ${getColor('white')};
-  }
-`
-
-const LogoBox = styled(LogoBoxIcon)`
-  color: ${getColor('buttonPrimary')};
-  height: 40px;
-  width: 40px;
+  right: -14px;
 `
