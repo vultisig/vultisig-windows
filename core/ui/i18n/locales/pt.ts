@@ -730,7 +730,7 @@ export const pt = {
   follow_banner_subtitle: 'Vultisig está construindo com você.',
   follow_banner_title: 'Siga-nos no X',
   follow_banner_button: 'Seguir @Vultisig',
-  deposit: 'Depósito',
+  deposit: 'Depositar',
   add_vaults_to_folder: 'Selecione Cofres para adicionar à pasta.',
   chain_message_deposit: 'Depósito de mensagem {{chain}}',
   thorchain_message_deposit: 'Depósito de mensagem THORChain',
