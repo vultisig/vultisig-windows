@@ -1,23 +1,20 @@
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import styled from 'styled-components'
 
 export const BannerContainer = styled.div`
   position: relative;
   width: 100%;
-  padding: 20px 16px;
+  padding: 24px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #1a3a6e 0%, #2d5aa0 100%);
+  background: linear-gradient(59deg, #061b3a 27.59%, #2155df 96.16%);
   overflow: hidden;
 `
 
 export const BackgroundPattern = styled.div`
   position: absolute;
-  right: -20px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 280px;
-  height: 280px;
-  opacity: 0.3;
+  right: -10px;
+  top: -10px;
   pointer-events: none;
 `
 
@@ -32,7 +29,7 @@ export const ContentWrapper = styled.div`
 export const TextContent = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
 `
 
 export const ButtonsRow = styled.div`
@@ -42,11 +39,11 @@ export const ButtonsRow = styled.div`
 `
 
 export const FollowButton = styled(UnstyledButton)`
-  padding: 12px 32px;
+  padding: 10px 28px;
   border-radius: 24px;
   background: linear-gradient(135deg, #4ade80 0%, #22d3ee 100%);
   color: #0f172a;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   transition:
     transform 0.2s,
@@ -62,44 +59,19 @@ export const FollowButton = styled(UnstyledButton)`
   }
 `
 
-export const PaginationDot = styled.button<{ $isActive: boolean }>`
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  border: none;
-  background: ${({ $isActive }) => ($isActive ? '#ffffff' : '#ffffff40')};
-  cursor: pointer;
-  padding: 0;
-  transition: background 0.2s;
+export const CloseButton = styled(IconButton)`
+  display: flex;
+  width: 40px;
+  height: 40px;
+  padding: 12px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 77px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
 
-  &:hover {
-    background: ${({ $isActive }) => ($isActive ? '#ffffff' : '#ffffff60')};
-  }
-`
-
-export const CloseButton = styled(UnstyledButton)`
   position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #4ade80 0%, #22d3ee 100%);
-  display: grid;
-  place-items: center;
-  color: #0f172a;
-  font-size: 18px;
-  transition:
-    transform 0.2s,
-    opacity 0.2s;
-  z-index: 2;
-
-  &:hover {
-    transform: scale(1.05);
-    opacity: 0.9;
-  }
-
-  &:active {
-    transform: scale(0.95);
-  }
+  right: 6px;
+  top: 6px;
 `

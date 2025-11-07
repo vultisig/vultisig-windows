@@ -1,4 +1,6 @@
-import { CloseIcon } from '@lib/ui/icons/CloseIcon'
+import { vultisigTwitterUrl } from '@core/ui/settings/constants'
+import { CrossIcon } from '@lib/ui/icons/CrossIcon'
+import { Image } from '@lib/ui/image/Image'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
@@ -11,7 +13,6 @@ import {
   FollowButton,
   TextContent,
 } from './FollowOnXBanner.styles'
-import { VultisigLogoPattern } from './VultisigLogoPattern'
 
 type FollowOnXBannerProps = {
   onDismiss: () => void
@@ -21,37 +22,42 @@ export const FollowOnXBanner = ({ onDismiss }: FollowOnXBannerProps) => {
   const { t } = useTranslation()
 
   const handleFollowClick = () => {
-    window.open('https://x.com/Vultisig', '_blank', 'noopener,noreferrer')
+    window.open(vultisigTwitterUrl, '_blank', 'noopener,noreferrer')
   }
 
   return (
     <BannerContainer>
       <BackgroundPattern>
-        <VultisigLogoPattern />
+        <Image
+          src="/core/images/thorchain-banner-bg.png"
+          width={186}
+          alt=""
+          height={156}
+        />
       </BackgroundPattern>
 
-      <CloseButton onClick={onDismiss} aria-label="Close banner">
-        <CloseIcon />
+      <CloseButton onClick={onDismiss} kind="action">
+        <CrossIcon />
       </CloseButton>
 
       <ContentWrapper>
         <TextContent>
           <Text
-            size={14}
+            size={13}
             color="contrast"
             weight="400"
-            style={{ opacity: 0.8 }}
+            style={{ opacity: 0.7 }}
           >
-            {t('follow_banner_subtitle', 'Vultisig is building with you')}
+            {t('follow_banner_subtitle')}
           </Text>
-          <Text size={20} color="contrast" weight="600">
-            {t('follow_banner_title', 'Follow us on X')}
+          <Text size={18} color="contrast" weight="600">
+            {t('follow_banner_title')}
           </Text>
         </TextContent>
 
         <ButtonsRow>
           <FollowButton onClick={handleFollowClick}>
-            {t('follow_banner_button', 'Follow @Vultisig')}
+            {t('follow_banner_button')}
           </FollowButton>
         </ButtonsRow>
       </ContentWrapper>
