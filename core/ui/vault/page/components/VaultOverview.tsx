@@ -11,6 +11,8 @@ import styled from 'styled-components'
 
 import VaultBackupBanner from '../backup/vaultBackupBanner/VaultBackupBanner/VaultBackupBanner'
 import { VaultTotalBalance } from '../balance/VaultTotalBalance'
+import { BannerCarousel } from '../banners/BannerCarousel/BannerCarousel'
+import { FollowOnXBanner } from '../banners/FollowOnXBanner/FollowOnXBanner'
 import { MigrateVaultPrompt } from '../keygen/migrate/MigrateVaultPrompt'
 import { VaultOverviewPrimaryActions } from './VaultOverviewPrimaryActions'
 import { VaultTabs } from './VaultTabs/VaultTabs'
@@ -34,9 +36,28 @@ type VaultOverviewProps = {
 export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
   const { isBackedUp, libType } = useCurrentVault()
 
+  const banners = [
+    ...(!isBackedUp
+      ? [
+          {
+            id: 'backup' as const,
+            component: <VaultBackupBanner />,
+          },
+        ]
+      : []),
+    {
+      id: 'followOnX' as const,
+      component: (props: { onDismiss: () => void }) => (
+        <FollowOnXBanner onDismiss={props.onDismiss} />
+      ),
+    },
+  ]
+
   return (
     <VStack fullHeight>
-      <Wrap wrap={PromptsWrapper}>{!isBackedUp && <VaultBackupBanner />}</Wrap>
+      <Wrap wrap={PromptsWrapper}>
+        <BannerCarousel banners={banners} />
+      </Wrap>
       <StyledPageContent ref={scrollContainerRef} scrollable gap={32} flexGrow>
         <VStack alignItems="center" gap={24}>
           <VaultTotalBalance />
