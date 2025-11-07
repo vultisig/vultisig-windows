@@ -15,7 +15,7 @@ export const VaultOverviewPrimaryActions = () => {
   return (
     <Opener
       renderOpener={({ onOpen }) => (
-        <VaultPrimaryActions showActions={false} onReceive={onOpen} />
+        <VaultPrimaryActions showDepositAction={false} onReceive={onOpen} />
       )}
       renderContent={({ onClose }) => <ReceiveModal onClose={onClose} />}
     />
