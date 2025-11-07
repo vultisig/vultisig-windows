@@ -731,6 +731,9 @@ export const de = {
   folders: 'Ordner',
   check_for_update: 'Nach Updates suchen',
   delete_folder: 'Ordner löschen',
+  follow_banner_subtitle: 'Vultisig baut mit Ihnen.',
+  follow_banner_title: 'Folgen Sie uns auf X',
+  follow_banner_button: 'Folgen Sie @Vultisig',
   deposit: 'Einzahlung',
   add_vaults_to_folder:
     'Wählen Sie Tresore aus, die dem Ordner hinzugefügt werden sollen.',
