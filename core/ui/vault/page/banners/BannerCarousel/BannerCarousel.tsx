@@ -4,7 +4,7 @@ import {
   useDismissedBanners,
 } from '@core/ui/storage/dismissedBanners'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useEffect, useMemo, useState } from 'react'
 
 import {
   CarouselContainer,
@@ -29,7 +29,10 @@ export const BannerCarousel = ({ banners }: BannerCarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState(0)
 
   // Filter out dismissed banners
-  const activeBanners = banners.filter(banner => !isBannerDismissed(banner.id))
+  const activeBanners = useMemo(
+    () => banners.filter(banner => !isBannerDismissed(banner.id)),
+    [banners, isBannerDismissed]
+  )
 
   // Adjust current index if it's out of bounds
   useEffect(() => {
