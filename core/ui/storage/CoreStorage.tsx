@@ -5,6 +5,7 @@ import { CoinFinderIgnoreStorage } from './coinFinderIgnore'
 import { CoinsStorage } from './coins'
 import { CurrentVaultIdStorage } from './currentVaultId'
 import { DefaultChainsStorage } from './defaultChains'
+import { DismissedBannersStorage } from './dismissedBanners'
 import { FiatCurrencyStorage } from './fiatCurrency'
 import { LanguageStorage } from './language'
 import { OnboardingStorage } from './onboarding'
@@ -28,4 +29,5 @@ export type CoreStorage = CoinFinderIgnoreStorage &
   OnboardingStorage &
   ReferralsStorage &
   PasscodeEncryptionStorage &
-  PasscodeAutoLockStorage
+  PasscodeAutoLockStorage &
+  DismissedBannersStorage

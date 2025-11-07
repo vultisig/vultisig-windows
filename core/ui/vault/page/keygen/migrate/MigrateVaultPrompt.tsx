@@ -2,7 +2,6 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { hStack, VStack } from '@lib/ui/layout/Stack'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
@@ -12,9 +11,13 @@ import { useRive } from '@rive-app/react-canvas'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-export const MigrateVaultPrompt = () => {
-  const [isOpen, { toggle }] = useBoolean(true)
+type MigrateVaultPromptProps = {
+  onDismiss?: () => void
+}
 
+export const MigrateVaultPrompt = ({
+  onDismiss,
+}: MigrateVaultPromptProps = {}) => {
   const { RiveComponent } = useRive({
     src: '/core/animations/upgrade_animation.riv',
     autoplay: true,
@@ -22,8 +25,6 @@ export const MigrateVaultPrompt = () => {
 
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
-
-  if (!isOpen) return null
 
   return (
     <Container onClick={() => navigate({ id: 'migrateVault' })}>
@@ -42,10 +43,14 @@ export const MigrateVaultPrompt = () => {
         <RiveComponent />
       </AnimationWrapper>
       <CloseButton
+        aria-label={t('close')}
+        title={t('close')}
         onClick={e => {
           e.stopPropagation()
 
-          toggle()
+          if (onDismiss) {
+            onDismiss()
+          }
         }}
         kind="action"
       >
@@ -85,8 +90,8 @@ const MigrateButton = styled(Button)`
 
 const CloseButton = styled(IconButton)`
   display: flex;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   padding: 12px;
   justify-content: center;
   align-items: center;
@@ -96,8 +101,8 @@ const CloseButton = styled(IconButton)`
   backdrop-filter: blur(8px);
 
   position: absolute;
-  right: -7px;
-  top: 8px;
+  right: 6px;
+  top: 6px;
 `
 
 const AnimationWrapper = styled.div`
