@@ -42,6 +42,8 @@ export const MigrateVaultPrompt = () => {
         <RiveComponent />
       </AnimationWrapper>
       <CloseButton
+        aria-label={t('close')}
+        title={t('close')}
         onClick={e => {
           e.stopPropagation()
 
@@ -85,8 +87,8 @@ const MigrateButton = styled(Button)`
 
 const CloseButton = styled(IconButton)`
   display: flex;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   padding: 12px;
   justify-content: center;
   align-items: center;
