@@ -25,7 +25,7 @@ import styled from 'styled-components'
 
 import { useAssertWalletCore } from '../../../../chain/providers/WalletCoreProvider'
 import { AnimatedSendFormInputError } from '../../components/AnimatedSendFormInputError'
-import { validateSendForm } from '../../form/validateSendForm'
+import { validateSendReceiver } from '../../form/validateSendForm'
 import { useSendValidationQuery } from '../../queries/useSendValidationQuery'
 import { useCurrentSendCoin } from '../../state/sendCoin'
 import { AddressBookModal } from './AddressBookModal'
@@ -51,24 +51,19 @@ export const ManageReceiverAddressInputField = () => {
   const handleUpdateReceiverAddress = useCallback(
     (value: string) => {
       setValue(value)
-      const validation = validateSendForm(
-        {
-          coin,
-          amount: 0n,
-          senderAddress: coin.address,
-          receiverAddress: value,
-        },
-        {
-          balance: undefined,
-          walletCore,
-          t,
-        }
-      )
-      setFocusedSendField(state => ({
-        ...state,
-        errors: validation,
-        field: validation.receiverAddress ? state.field : 'amount',
-      }))
+      const receiverError = validateSendReceiver({
+        receiverAddress: value,
+        chain: coin.chain,
+        senderAddress: coin.address,
+        walletCore,
+        t,
+      })
+      if (!receiverError) {
+        setFocusedSendField(state => ({
+          ...state,
+          field: 'amount',
+        }))
+      }
     },
     [coin, setValue, setFocusedSendField, walletCore, t]
   )
