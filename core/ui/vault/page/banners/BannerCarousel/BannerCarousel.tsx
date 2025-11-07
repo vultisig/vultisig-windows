@@ -65,7 +65,11 @@ export const BannerCarousel = ({ banners }: BannerCarouselProps) => {
     setCurrentIndex(prev => (prev === 0 ? activeBanners.length - 1 : prev - 1))
   }
 
-  const currentBanner = activeBanners[currentIndex]
+  const safeIndex = Math.min(
+    currentIndex,
+    Math.max(0, activeBanners.length - 1)
+  )
+  const currentBanner = activeBanners[safeIndex]
   const showNavigation = activeBanners.length > 1
 
   return (
