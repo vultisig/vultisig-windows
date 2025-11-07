@@ -96,8 +96,8 @@ const CloseButton = styled(IconButton)`
   backdrop-filter: blur(8px);
 
   position: absolute;
-  right: -7px;
-  top: 8px;
+  right: 6px;
+  top: 6px;
 `
 
 const AnimationWrapper = styled.div`

@@ -9,7 +9,6 @@ import { areEmptyChildren } from '@lib/ui/utils/areEmptyChildren'
 import { RefObject } from 'react'
 import styled from 'styled-components'
 
-import VaultBackupBanner from '../backup/vaultBackupBanner/VaultBackupBanner/VaultBackupBanner'
 import { VaultTotalBalance } from '../balance/VaultTotalBalance'
 import { BannerCarousel } from '../banners/BannerCarousel/BannerCarousel'
 import { FollowOnXBanner } from '../banners/FollowOnXBanner/FollowOnXBanner'
@@ -34,14 +33,14 @@ type VaultOverviewProps = {
 }
 
 export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
-  const { isBackedUp, libType } = useCurrentVault()
+  const { libType } = useCurrentVault()
 
   const banners = [
-    ...(!isBackedUp
+    ...(libType !== 'DKLS'
       ? [
           {
-            id: 'backup' as const,
-            component: <VaultBackupBanner />,
+            id: 'migrate' as const,
+            component: <MigrateVaultPrompt />,
           },
         ]
       : []),
@@ -55,15 +54,14 @@ export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
 
   return (
     <VStack fullHeight>
-      <Wrap wrap={PromptsWrapper}>
-        <BannerCarousel banners={banners} />
-      </Wrap>
       <StyledPageContent ref={scrollContainerRef} scrollable gap={32} flexGrow>
         <VStack alignItems="center" gap={24}>
           <VaultTotalBalance />
           <VaultOverviewPrimaryActions />
-          {libType !== 'DKLS' && <MigrateVaultPrompt />}
         </VStack>
+        <Wrap wrap={PromptsWrapper}>
+          <BannerCarousel banners={banners} />
+        </Wrap>
         <Divider />
         <VaultTabs />
       </StyledPageContent>
