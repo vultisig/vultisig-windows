@@ -5,7 +5,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'
 
-export type BannerId = 'backup' | 'followOnX'
+export type BannerId = 'followOnX' | 'migrate'
 
 type GetDismissedBannersFunction = () => Promise<BannerId[]>
 type SetDismissedBannersFunction = (banners: BannerId[]) => Promise<void>
