@@ -4,7 +4,8 @@ import styled from 'styled-components'
 export const CarouselContainer = styled.div`
   position: relative;
   width: 100%;
-  overflow: hidden;
+  max-width: 450px;
+  margin: 0 auto;
 `
 
 export const CarouselTrack = styled.div`

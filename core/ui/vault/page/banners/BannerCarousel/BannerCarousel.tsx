@@ -14,7 +14,7 @@ import {
   PaginationDot,
 } from './BannerCarousel.styles'
 
-export type BannerConfig = {
+type BannerConfig = {
   id: BannerId
   component: ReactNode | ((props: { onDismiss: () => void }) => ReactNode)
 }
