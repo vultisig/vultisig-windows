@@ -17,13 +17,13 @@ import { SwapPrompt } from '../SwapPrompt'
 type VaultPrimaryActionsProps = {
   coin?: CoinKey
   onReceive?: () => void
-  showActions?: boolean
+  showDepositAction?: boolean
 }
 
 export const VaultPrimaryActions = ({
   coin: potentialCoin,
   onReceive,
-  showActions = true,
+  showDepositAction = true,
 }: VaultPrimaryActionsProps) => {
   const coins = useCurrentVaultCoins()
 
@@ -50,7 +50,7 @@ export const VaultPrimaryActions = ({
       <SendPrompt coin={sendCoin} />
       {buyCoin && <BuyPrompt coin={buyCoin} />}
       {onReceive && <ReceivePrompt onClick={onReceive} />}
-      {showActions && depositCoin && <DepositPrompt coin={depositCoin} />}
+      {showDepositAction && depositCoin && <DepositPrompt coin={depositCoin} />}
     </ActionsWrapper>
   )
 }
