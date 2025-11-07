@@ -93,6 +93,7 @@ export const parseSolanaTx = async ({
 
     keysignPayload.blockchainSpecific = await getChainSpecific({
       keysignPayload,
+      walletCore,
     })
 
     const blockaidTxSimulationInput = getBlockaidTxSimulationInput({

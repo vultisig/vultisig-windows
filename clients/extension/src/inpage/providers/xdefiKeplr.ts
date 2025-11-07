@@ -712,6 +712,10 @@ export class XDEFIKeplrProvider extends Keplr {
   async getKey(chainId: string): Promise<Key> {
     const [{ pubkey, address, algo }] = await getAccounts(chainId)
 
+    const vault = await callBackground({
+      exportVault: {},
+    })
+
     const addressBytes = new Uint8Array(
       bech32.fromWords(bech32.decode(address).words)
     )
@@ -723,7 +727,7 @@ export class XDEFIKeplrProvider extends Keplr {
       address: addressBytes,
       isNanoLedger: false,
       isKeystone: false,
-      name: '',
+      name: vault.name,
       algo,
     }
   }

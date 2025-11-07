@@ -7,6 +7,7 @@ import { useCurrentVaultChain } from '@core/ui/vault/chain/useCurrentVaultChain'
 import { VaultPrimaryActions } from '@core/ui/vault/components/VaultPrimaryActions'
 import { useVaultChainCoinsQuery } from '@core/ui/vault/queries/useVaultChainCoinsQuery'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
+import { Opener } from '@lib/ui/base/Opener'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -18,6 +19,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { VaultAddressCopyButton } from '../page/components/VaultAddressCopyButton'
+import { AddressQRModal } from './address/AddressQRModal'
 
 const AddressPill = styled(HStack)`
   padding: 4px 6px;
@@ -86,7 +88,14 @@ export const VaultChainOverview = () => {
           </AddressPill>
         </VStack>
       </VStack>
-      <VaultPrimaryActions coin={{ chain }} />
+      <Opener
+        renderOpener={({ onOpen }) => (
+          <VaultPrimaryActions coin={{ chain }} onReceive={onOpen} />
+        )}
+        renderContent={({ onClose }) => (
+          <AddressQRModal chain={chain} onClose={onClose} />
+        )}
+      />
     </VStack>
   )
 }

@@ -93,6 +93,7 @@ export const buildSwapKeysignPayload = async ({
 
   keysignPayload.blockchainSpecific = await getChainSpecific({
     keysignPayload,
+    walletCore,
     thirdPartyGasLimitEstimation,
     isDeposit: matchRecordUnion<SwapQuote, boolean>(swapQuote, {
       native: ({ swapChain }) =>

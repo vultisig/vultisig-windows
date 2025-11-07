@@ -12,7 +12,10 @@ export const es = {
   vault_info: 'Información de la bóveda',
   keys: 'Claves',
   vault_share_banner:
-    'Este código QR le permite compartir una versión de vista de su bóveda',
+    'Este código QR te permite compartir una versión de solo lectura de tu Bóveda',
+  actions: 'Acciones',
+  copy_address: 'Copy Address',
+  price: 'Price',
   onboarding_step_5:
     '<g>Siempre haga una copia de seguridad de cada parte del depósito</g> separadamente en una <g>ubicación diferente</g>',
   onboarding_step_6:
@@ -176,6 +179,15 @@ export const es = {
   price_impact_average: 'Promedio',
   price_impact_high: 'Alto Impacto',
   search_field_placeholder: 'Buscar',
+  edit_vaults: 'Editar bóvedas',
+  vault_count_one: '{{count}} bóveda',
+  vault_count_other: '{{count}} bóvedas',
+  no_results: 'No se encontraron resultados',
+  adjust_search_query: 'Intenta ajustar tu búsqueda',
+  save: 'Guardar',
+  nothing_to_add: 'Nada que añadir',
+  nothing_to_add_hint:
+    'Todas tus bóvedas ya están organizadas. Crea una nueva bóveda para agregarla aquí.',
   max_total_fees: 'Tarifa Total Máx.',
   coin_not_found_in_current_vault: 'Moneda no encontrada en la bóveda actual',
   waiting_for_devices_to_join: 'Esperando a que otros dispositivos se unan',
@@ -404,7 +416,6 @@ export const es = {
   vault_delete_page_term_2: 'Soy consciente de que puedo perder fondos',
   vault_delete_page_term_3: 'He hecho una copia de seguridad de la bóveda',
   share_vault_qr: 'Compartir QR de la bóveda',
-  save: 'Guardar',
   settings_vault_page_footer: 'APLICACIÓN VULTISIG V',
   clear: 'Limpiar',
   faq_setup_crypto_vault_title:
@@ -717,6 +728,7 @@ export const es = {
     updateButton: 'Actualizar',
   },
   create_folder: 'Crear carpeta',
+  add_folder: 'Añadir carpeta',
   folder_name: 'Nombre de la carpeta',
   enter_folder_name: 'Introduzca el nombre de la carpeta',
   folder_name_required: 'El nombre de la carpeta es obligatorio',
@@ -1216,4 +1228,9 @@ export const es = {
   not_enough_asset_to_cover_gas_fees:
     'No hay suficientes {{asset}} para cubrir las tarifas del gas',
   import_key: 'Importar clave',
+  back_up_now: 'Retroceda ahora',
+  fast_vault_backup_title:
+    'Realice una copia de seguridad de su recurso compartido en línea utilizando la misma contraseña que creó anteriormente.',
+  fast_vault_backup_description:
+    'Se recomienda y es seguro el almacenamiento en línea; las acciones de bóveda están diseñadas para ello.',
 }

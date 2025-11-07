@@ -314,6 +314,7 @@ export const buildSendTxKeysignPayload = async ({
 
   keysignPayload.blockchainSpecific = await getChainSpecific({
     keysignPayload,
+    walletCore,
     feeSettings: feeSettings ?? undefined,
     thirdPartyGasLimitEstimation,
     isDeposit: matchRecordUnion<CustomTxData, boolean>(customTxData, {
