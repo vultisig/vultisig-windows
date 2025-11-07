@@ -38,6 +38,7 @@ export const SearchField: React.FC<SearchFieldProps> = ({
         </SearchIconWrapper>
       )}
       <StyledInput
+        autoFocus
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         type="text"
