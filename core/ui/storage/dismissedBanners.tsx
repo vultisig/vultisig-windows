@@ -15,7 +15,7 @@ export type DismissedBannersStorage = {
   setDismissedBanners: SetDismissedBannersFunction
 }
 
-export const useDismissedBannersQuery = () => {
+const useDismissedBannersQuery = () => {
   const { getDismissedBanners } = useCore()
 
   return useQuery({
@@ -35,7 +35,7 @@ export const useDismissedBanners = () => {
   }
 }
 
-export const useSetDismissedBannersMutation = () => {
+const useSetDismissedBannersMutation = () => {
   const { setDismissedBanners } = useCore()
   const invalidateQueries = useInvalidateQueries()
 
