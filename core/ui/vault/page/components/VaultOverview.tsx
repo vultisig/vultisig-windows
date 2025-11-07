@@ -40,7 +40,9 @@ export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
       ? [
           {
             id: 'migrate' as const,
-            component: <MigrateVaultPrompt />,
+            component: (props: { onDismiss: () => void }) => (
+              <MigrateVaultPrompt onDismiss={props.onDismiss} />
+            ),
           },
         ]
       : []),
