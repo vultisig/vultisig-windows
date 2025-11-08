@@ -2,6 +2,8 @@ export const es = {
   onboarding_greeting: 'Adiós a <g>frases semilla</g>',
   onboarding_step_1:
     'Di hola a <g>acciones de la bóveda,</g> tu nuevo <g>método de recuperación</g>',
+  defi: 'DeFi',
+  select_chain: 'Seleccionar Cadena',
   onboarding_step_2:
     'Están <g>divididos en partes</g> para aumentar la seguridad y, <g>eliminar un único punto de fallo</g>',
   onboarding_step_3:
@@ -737,6 +739,9 @@ export const es = {
   folders: 'Carpetas',
   check_for_update: 'Buscar actualizaciones',
   delete_folder: 'Eliminar carpeta',
+  follow_banner_subtitle: 'Vultisig está construyendo contigo.',
+  follow_banner_title: 'Síguenos en X',
+  follow_banner_button: 'Seguir @Vultisig',
   deposit: 'Depositar',
   add_vaults_to_folder: 'Seleccione Bóvedas para agregarlas a la carpeta.',
   chain_message_deposit: 'Depósito de mensajes de {{chain}}',

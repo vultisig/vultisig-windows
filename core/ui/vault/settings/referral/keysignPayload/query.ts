@@ -1,3 +1,7 @@
+import {
+  buildReferralKeysignPayload,
+  BuildReferralKeysignPayloadInput,
+} from '@core/mpc/keysign/send/build'
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
@@ -10,10 +14,6 @@ import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
 import { useReferralCoin } from '../hooks/useReferralCoin'
-import {
-  buildReferralKeysignPayload,
-  BuildReferralKeysignPayloadInput,
-} from './build'
 
 export const useReferralKeysignPayloadQuery = ({
   memo,

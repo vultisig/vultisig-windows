@@ -16,6 +16,8 @@ export const en = {
   price: 'Price',
   onboarding_step_1:
     'Say hello to <g>vault shares,</g> your new <g>recovery method</g>',
+  defi: 'DeFi',
+  select_chain: 'Select Chain',
   onboarding_step_2:
     "They're <g>split into parts</g> to increase security, <g>removing the single point-of-failure</g>",
   onboarding_step_3:
@@ -895,6 +897,9 @@ export const en = {
   delete_folder: 'Delete Folder',
   folders: 'Folders',
   add_vaults_to_folder: 'Select Vaults to add to the folder.',
+  follow_banner_subtitle: 'Vultisig is building with you.',
+  follow_banner_title: 'Follow us on X',
+  follow_banner_button: 'Follow @Vultisig',
   deposit: 'Function',
   chain_message_deposit: '{{chain}} message deposit',
   thorchain_message_deposit: 'THORChain message deposit',

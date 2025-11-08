@@ -73,7 +73,7 @@ export const VaultPageHeader = ({
     <HeaderContainer>
       <CollapsedContent isVisible={isCollapsed}>
         <VaultSelector value={vault} />
-        <VStack alignItems="flex-end" gap={2}>
+        <VStack alignItems="flex-end" gap={2} style={{ flexShrink: 0 }}>
           <Text size={12} color="shy">
             {t('portfolio_balance')}
           </Text>

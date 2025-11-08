@@ -25,6 +25,7 @@ import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { multiplyBigInt } from '@lib/utils/bigint/bigIntMultiplyByNumber'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -160,9 +161,7 @@ export const ManageAmountInputField = () => {
                   if (!data) {
                     return {}
                   }
-                  const suggestionValue = BigInt(
-                    Math.round(Number(data) * suggestion)
-                  )
+                  const suggestionValue = multiplyBigInt(data, suggestion)
 
                   return {
                     onClick: () => {
