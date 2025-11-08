@@ -15,6 +15,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { sum } from '@lib/utils/array/sum'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useHandleVaultChainItemPress } from './useHandleVaultChainItemPress'
@@ -33,6 +34,8 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
   const pressHandlers = useHandleVaultChainItemPress({
     chain,
   })
+
+  const { t } = useTranslation()
 
   const formatFiatAmount = useFormatFiatAmount()
 
@@ -90,22 +93,22 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
                     {formatFiatAmount(totalAmount)}
                   </BalanceVisibilityAware>
                 </Text>
-                {singleCoin ? (
-                  <Text color="shy" weight="500" size={12} centerVertically>
+                <Text color="shy" weight="500" size={12} centerVertically>
+                  {singleCoin ? (
                     <BalanceVisibilityAware>
                       {formatAmount(
                         fromChainAmount(singleCoin.amount, singleCoin.decimals),
                         { precision: 'high', ticker: singleCoin.ticker }
                       )}
                     </BalanceVisibilityAware>
-                  </Text>
-                ) : coins.length > 1 ? (
-                  <BalanceVisibilityAware>
-                    <Text color="shy" weight="500" size={12} centerVertically>
-                      {coins.length} assets
-                    </Text>
-                  </BalanceVisibilityAware>
-                ) : null}
+                  ) : coins.length > 1 ? (
+                    <BalanceVisibilityAware>
+                      <>
+                        {coins.length} {t('assets')}
+                      </>
+                    </BalanceVisibilityAware>
+                  ) : null}
+                </Text>
               </VStack>
               <IconWrapper>
                 <ChevronRightIcon />

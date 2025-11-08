@@ -3,6 +3,8 @@ export const pt = {
   keys: 'Chaves',
   onboarding_step_1:
     'Diga olá para <g>ações do cofre,</g> seu novo <g>método de recuperação</g>',
+  defi: 'DeFi',
+  select_chain: 'Selecionar Cadeia',
   onboarding_step_2:
     'Eles estão <g>divididos em partes</g> para aumentar a segurança e, <g>remover um único ponto de falha</g>',
   onboarding_step_3:
@@ -727,6 +729,9 @@ export const pt = {
   folders: 'Pastas',
   check_for_update: 'Verificar atualizações',
   delete_folder: 'Excluir pasta',
+  follow_banner_subtitle: 'Vultisig está construindo com você.',
+  follow_banner_title: 'Siga-nos no X',
+  follow_banner_button: 'Seguir @Vultisig',
   deposit: 'Depositar',
   add_vaults_to_folder: 'Selecione Cofres para adicionar à pasta.',
   chain_message_deposit: 'Depósito de mensagem {{chain}}',
