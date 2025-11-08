@@ -9,12 +9,10 @@ import { pageConfig } from '@lib/ui/page/config'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { RefObject } from 'react'
+import { ReactNode, RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useCore } from '../../../state/core'
-import { DappsButton } from './DappsButton'
 import { VaultPageHeaderControls } from './VaultPageHeaderControls'
 import { VaultSelector } from './VaultSelector'
 
@@ -51,6 +49,7 @@ const NormalContent = styled.div<{ isVisible: boolean }>`
 type VaultPageHeaderProps = {
   vault: Vault
   scrollContainerRef: RefObject<HTMLElement>
+  primaryControls?: ReactNode
 }
 
 const collapseThreshold = 1
@@ -58,12 +57,11 @@ const collapseThreshold = 1
 export const VaultPageHeader = ({
   vault,
   scrollContainerRef,
+  primaryControls,
 }: VaultPageHeaderProps) => {
   const scroll = useScroll(scrollContainerRef)
   const isCollapsed = scroll.y > collapseThreshold
   const { t } = useTranslation()
-  const { client } = useCore()
-  const isExtension = client === 'extension'
 
   const { data: totalBalance = 0 } = useVaultTotalBalanceQuery()
   const formatFiatAmount = useFormatFiatAmount()
@@ -84,7 +82,7 @@ export const VaultPageHeader = ({
       <NormalContent isVisible={!isCollapsed}>
         <PageHeader
           hasBorder
-          primaryControls={isExtension && <DappsButton />}
+          primaryControls={primaryControls}
           secondaryControls={<VaultPageHeaderControls />}
           title={<VaultSelector value={vault} />}
         />
