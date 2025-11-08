@@ -13,10 +13,10 @@ import { RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useCore } from '../../../state/core'
+import { DappsButton } from './DappsButton'
 import { VaultPageHeaderControls } from './VaultPageHeaderControls'
 import { VaultSelector } from './VaultSelector'
-import { DappsButton } from './DappsButton'
-import { useCore } from '../../../state/core'
 
 const HeaderContainer = styled.div`
   position: sticky;
