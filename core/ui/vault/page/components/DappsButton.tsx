@@ -12,22 +12,22 @@ import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 const Icon = styled(ContainImage)`
-  ${sameDimensions('1.7em')};
+  ${sameDimensions('36px')};
   ${round};
-  border: 0.1em solid ${getColor('foreground')};
+  border: 1px solid rgba(255, 255, 255, 0.1);
 `
 
 const IconContainer = styled.div`
   position: relative;
-  ${sameDimensions('1.7em')};
+  ${sameDimensions('36px')};
 `
 
 const Badge = styled.div<{ isConnected: boolean }>`
   position: absolute;
-  top: 0;
-  right: 0;
-  width: 0.7em;
-  height: 0.7em;
+  top: -0.15em;
+  right: -0.1em;
+  width: 1em;
+  height: 1em;
   ${round};
   background-color: ${({ isConnected }) =>
     isConnected ? getColor('success') : getColor('idle')};
@@ -75,7 +75,7 @@ export const DappsButton = () => {
 
   return tabInfo ? (
     <IconButton onClick={() => navigate({ id: 'connectedDapps' })}>
-      <IconWrapper size={26}>
+      <IconWrapper>
         <IconContainer>
           <SafeImage
             src={tabInfo.favicon}
