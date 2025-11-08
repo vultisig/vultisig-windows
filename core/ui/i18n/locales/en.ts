@@ -1189,4 +1189,7 @@ export const en = {
     'Back up your vault share online  using the same vault password you created earlier.',
   fast_vault_backup_description:
     'Online storage is recommended and safe - vault shares are designed for this.',
+  connected_with_server: 'Connected with server',
+  server_connection_estimation:
+    'This usually doesn’t take longer than 30 seconds',
 }

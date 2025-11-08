@@ -54,11 +54,7 @@ export const PreviewInfo: FC<OnFinishProp & ValueProp<string>> = ({
                   'Vault balance visibility',
                 ].map((item, index) => (
                   <HStack alignItems="center" gap={4} key={index}>
-                    <Text
-                      as={ShieldCheckIcon}
-                      color="primaryAlt"
-                      size={16}
-                    />
+                    <Text as={ShieldCheckIcon} color="primaryAlt" size={16} />
                     <Text as="span" size={14}>
                       {item}
                     </Text>
