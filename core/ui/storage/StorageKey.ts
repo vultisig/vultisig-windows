@@ -18,4 +18,5 @@ export enum StorageKey {
   latestInstalledVersion = 'latestInstalledVersion',
   friendReferral = 'friendReferral',
   developerOptions = 'developerOptions',
+  dismissedBanners = 'dismissedBanners',
 }
