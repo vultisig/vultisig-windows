@@ -29,7 +29,7 @@ import styled from 'styled-components'
 const Icon = styled(ContainImage)`
   ${sameDimensions('2.7em')};
   ${round};
-  border: 0.1em solid ${getColor('foreground')};
+  border: 1px solid rgba(255, 255, 255, 0.1);
 `
 export const ConnectedDappsPage = () => {
   const { t } = useTranslation()
