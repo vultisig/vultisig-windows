@@ -9,7 +9,7 @@ type BuildAffiliateParamsInput = {
   affiliateBps: number
 }
 
-export type AffiliateParams = {
+type AffiliateParams = {
   affiliate: string
   affiliate_bps: string
 }
