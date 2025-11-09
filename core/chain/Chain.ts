@@ -6,7 +6,6 @@ export const EthereumL2Chain = {
   Optimism: 'Optimism',
   Zksync: 'Zksync',
   Mantle: 'Mantle',
-  Sei: 'Sei',
 } as const
 
 export type EthereumL2Chain =
@@ -19,6 +18,7 @@ export const EvmChain = {
   BSC: 'BSC',
   Ethereum: 'Ethereum',
   Polygon: 'Polygon',
+  Sei: 'Sei',
 } as const
 
 export type EvmChain = (typeof EvmChain)[keyof typeof EvmChain]
