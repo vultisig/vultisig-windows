@@ -5,6 +5,7 @@ import { getCosmosChainKind } from '@core/chain/chains/cosmos/utils/getCosmosCha
 import { areEqualCoins } from '@core/chain/coin/Coin'
 import { nativeSwapChainIds } from '@core/chain/swap/native/NativeSwapChain'
 import {
+  SingingMode,
   THORChainSpecific,
   TransactionType,
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
@@ -38,7 +39,7 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
     keysignPayload.blockchainSpecific
   )
 
-  const { memo, toAddress } = keysignPayload
+  const { memo, toAddress, signingMode } = keysignPayload
 
   const { messages, txMemo } = matchRecordUnion<
     CosmosChainSpecific,
@@ -283,9 +284,14 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
 
   const { accountNumber, sequence } = getRecordUnionValue(chainSpecific)
 
+  const signingModeEnum =
+    signingMode && signingMode === SingingMode.SIGNING_MODE_AMINO
+      ? TW.Cosmos.Proto.SigningMode.JSON
+      : TW.Cosmos.Proto.SigningMode.Protobuf
+
   const input = TW.Cosmos.Proto.SigningInput.create({
     publicKey: getKeysignTwPublicKey(keysignPayload),
-    signingMode: TW.Cosmos.Proto.SigningMode.Protobuf,
+    signingMode: signingModeEnum,
     chainId: getTwChainId({ walletCore, chain }),
     accountNumber: new Long(Number(accountNumber)),
     sequence: new Long(Number(sequence)),

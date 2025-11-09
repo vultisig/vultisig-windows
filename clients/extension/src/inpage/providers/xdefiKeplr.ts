@@ -10,6 +10,7 @@ import {
   MsgPayload,
   TransactionDetails,
 } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
+import { SingingMode } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { AminoMsg, StdFee } from '@cosmjs/amino'
 import {
   CosmJSOfflineSigner,
@@ -91,7 +92,8 @@ const extractKeplrMessages = (
 
 const keplrHandler = (
   tx: KeplrTransaction,
-  chain: Chain
+  chain: Chain,
+  signingMode?: SingingMode
 ): TransactionDetails => {
   const { messages, memo, chainId, skipBroadcast } = extractKeplrMessages(tx)
   const [message] = messages
@@ -125,6 +127,7 @@ const keplrHandler = (
         },
       } as MsgPayload,
       skipBroadcast,
+      signingMode,
     }
   }
 
@@ -151,6 +154,7 @@ const keplrHandler = (
         },
       } as MsgPayload,
       skipBroadcast,
+      signingMode,
     }
   }
   return match(message.type ?? message.typeUrl, {
@@ -188,6 +192,7 @@ const keplrHandler = (
           },
         } as MsgPayload,
         skipBroadcast,
+        signingMode,
       }
     },
     [CosmosMsgType.MSG_EXECUTE_CONTRACT_URL]: () => {
@@ -222,6 +227,7 @@ const keplrHandler = (
           },
         } as MsgPayload,
         skipBroadcast,
+        signingMode,
       }
     },
     [CosmosMsgType.MSG_TRANSFER_URL]: () => {
@@ -259,6 +265,7 @@ const keplrHandler = (
           },
         } as MsgPayload,
         skipBroadcast,
+        signingMode,
       }
     },
     [CosmosMsgType.THORCHAIN_MSG_DEPOSIT]: () => {
@@ -331,6 +338,7 @@ const keplrHandler = (
           },
         } as MsgPayload,
         skipBroadcast,
+        signingMode,
       }
     },
     [CosmosMsgType.THORCHAIN_MSG_SEND_URL]: () => {
@@ -376,6 +384,7 @@ const keplrHandler = (
           },
         } as MsgPayload,
         skipBroadcast,
+        signingMode,
       }
     },
   })
@@ -659,7 +668,8 @@ export class XDEFIKeplrProvider extends Keplr {
           ...signDoc,
           skipBroadcast: true,
         },
-        chain
+        chain,
+        SingingMode.SIGNING_MODE_AMINO
       )
 
       const { data } = await callPopup(
@@ -760,7 +770,8 @@ export class XDEFIKeplrProvider extends Keplr {
           accountNumber: signDoc.accountNumber.toString(),
           skipBroadcast: true,
         },
-        chain
+        chain,
+        SingingMode.SIGNING_MODE_DIRECT
       )
 
       const { data } = await callPopup(

@@ -46,7 +46,7 @@ export const getKeysignPayload = ({
   vault,
   walletCore,
 }: Input) => {
-  const { coin, customTxData, skipBroadcast } = tx
+  const { coin, customTxData, skipBroadcast, signingMode } = tx
   const { chain } = coin
 
   const publicKey = getPublicKey({
@@ -251,6 +251,7 @@ export const getKeysignPayload = ({
     memo,
     contractPayload,
     swapPayload,
+    signingMode,
   })
 
   if (isChainOfKind(chain, 'utxo')) {
