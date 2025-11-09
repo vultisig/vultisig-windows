@@ -1,6 +1,6 @@
 import { EvmChain } from '@core/chain/Chain'
-import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { deriveEvmGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
+import { EvmFeeSettings } from '@core/mpc/keysign/chainSpecific/FeeSettings'
 import { useEvmMaxPriorityFeePerGasQuery } from '@core/ui/chain/evm/queries/maxPriorityFeePerGas'
 import { useFeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { ControlledValue } from '@lib/ui/base/ControlledValue'

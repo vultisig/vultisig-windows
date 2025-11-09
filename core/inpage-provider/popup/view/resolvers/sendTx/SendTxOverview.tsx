@@ -1,26 +1,20 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { getChainKind, isChainOfKind } from '@core/chain/ChainKind'
+import { isChainOfKind } from '@core/chain/ChainKind'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { applyFeeSettings } from '@core/chain/feeQuote/applyFeeSettings'
-import { FeeQuote } from '@core/chain/feeQuote/core'
 import {
+  EvmFeeSettings,
   FeeSettings,
-  FeeSettingsChainKind,
-  feeSettingsChains,
-} from '@core/chain/feeQuote/settings/core'
-import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
+} from '@core/mpc/keysign/chainSpecific/FeeSettings'
+import { getBlockchainSpecificValue } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { getFeeAmount } from '@core/mpc/keysign/fee'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
-import { useFeeQuoteQuery } from '@core/ui/chain/feeQuote/query'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
-import { useKeysignTxDataQuery } from '@core/ui/mpc/keysign/txData/query'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultPublicKey } from '@core/ui/vault/state/currentVault'
 import {
   ContentWrapper,
@@ -33,21 +27,16 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { Text } from '@lib/ui/text'
-import { isOneOf } from '@lib/utils/array/isOneOf'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { formatUnits } from 'ethers'
-import { useCallback, useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { usePopupInput } from '../../state/input'
-import { getFeeQuoteInput } from './core/feeQuote'
-import { getKeysignPayload } from './core/keysignPayload'
-import { getKeysignTxDataInput } from './core/keysignTxData'
 import { ParsedTx } from './core/parsedTx'
 import { CosmosMsgType } from './interfaces'
+import { useSendTxKeysignPayloadQuery } from './keysignPayload/query'
 import { ManageEvmFee } from './ManageEvmFee'
 import { PendingState } from './PendingState'
 
@@ -57,7 +46,6 @@ type SendTxOverviewProps = {
 
 export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
   const { coin } = parsedTx
-  const vault = useCurrentVault()
   const walletCore = useAssertWalletCore()
   const publicKey = useCurrentVaultPublicKey(coin.chain)
   const { t } = useTranslation()
@@ -70,39 +58,10 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
     null
   )
 
-  const keysignTxData = useKeysignTxDataQuery(
-    useMemo(() => getKeysignTxDataInput(parsedTx), [parsedTx])
-  )
-
-  const feeQuote = useFeeQuoteQuery(
-    useMemo(() => getFeeQuoteInput(parsedTx), [parsedTx])
-  )
-
-  const keysignPayloadQuery = useTransformQueriesData(
-    {
-      keysignTxData,
-      feeQuote,
-    },
-    useCallback(
-      ({ keysignTxData, feeQuote }) => {
-        return getKeysignPayload({
-          keysignTxData,
-          feeQuote:
-            isOneOf(chain, feeSettingsChains) && feeSettings
-              ? applyFeeSettings({
-                  chainKind: getChainKind(chain),
-                  quote: feeQuote as FeeQuote<FeeSettingsChainKind>,
-                  settings: feeSettings,
-                })
-              : feeQuote,
-          tx: parsedTx,
-          vault,
-          walletCore,
-        })
-      },
-      [chain, feeSettings, parsedTx, vault, walletCore]
-    )
-  )
+  const keysignPayloadQuery = useSendTxKeysignPayloadQuery({
+    parsedTx,
+    feeSettings: feeSettings || undefined,
+  })
 
   return (
     <VerifyKeysignStart keysignPayloadQuery={keysignPayloadQuery}>
@@ -210,7 +169,15 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                           return feeSettings
                         }
 
-                        return shouldBePresent(feeQuote.data) as FeeQuote<'evm'>
+                        const evmSpecific = getBlockchainSpecificValue(
+                          keysignPayload.blockchainSpecific,
+                          'ethereumSpecific'
+                        )
+
+                        return {
+                          maxPriorityFeePerGas: BigInt(evmSpecific.priorityFee),
+                          gasLimit: BigInt(evmSpecific.gasLimit),
+                        }
                       }
 
                       const evmFeeSettings = getEvmFeeSettings()

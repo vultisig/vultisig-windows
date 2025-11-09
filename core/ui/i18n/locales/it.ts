@@ -2,12 +2,17 @@ export const it = {
   onboarding_greeting: 'Addio a <g>frasi semina</g>',
   onboarding_step_1:
     'Dì ciao a <g>azioni della cassaforte,</g> il tuo nuovo <g>metodo di recupero</g>',
+  defi: 'DeFi',
+  select_chain: 'Seleziona Catena',
   onboarding_step_2:
     'Sono <g>divisi in parti</g> per aumentare la sicurezza e, <g>eliminare il singolo punto di guasto</g>',
   onboarding_step_3:
     '<g>Ogni dispositivo</g> nel tuo caveau contiene <g>una quota del caveau</g>',
   positions: 'Posizioni',
   keys: 'Chiavi',
+  actions: 'Azioni',
+  copy_address: 'Copy Address',
+  price: 'Price',
   onboarding_step_4:
     'Recupera la tua cassaforte anche <g>se un dispositivo è perso o danneggiato</g>',
   vault_share_banner:
@@ -83,6 +88,15 @@ export const it = {
     'Cambia il codice referral del tuo amico usato per gli scambi',
   passcodes_do_not_match: 'I codici non corrispondono',
   search_field_placeholder: 'Cerca',
+  edit_vaults: 'Modifica vault',
+  vault_count_one: '{{count}} vault',
+  vault_count_other: '{{count}} vault',
+  no_results: 'Nessun risultato trovato',
+  adjust_search_query: 'Prova a modificare i criteri di ricerca',
+  save: 'Salva',
+  nothing_to_add: 'Nulla da aggiungere',
+  nothing_to_add_hint:
+    'Tutti i tuoi vault sono già organizzati. Crea un nuovo vault per aggiungerlo qui.',
   start_transaction: 'Avvia transazione',
   digit_input_success_validation: 'Verifica riuscita',
   digit_input_error_validation: 'Errore nella verifica del codice, riprova',
@@ -405,7 +419,6 @@ export const it = {
   vault_delete_page_term_2: 'Sono consapevole che potrei perdere fondi',
   vault_delete_page_term_3: 'Ho eseguito il backup della cassaforte',
   share_vault_qr: 'Condividi QR della cassaforte',
-  save: 'Salva',
   settings_vault_page_footer: 'APP VULTISIG V',
   clear: 'Cancella',
   faq_setup_crypto_vault_title:
@@ -720,16 +733,20 @@ export const it = {
     updateButton: 'Aggiorna',
   },
   create_folder: 'Crea cartella',
+  add_folder: 'Aggiungi cartella',
   folder_name: 'Nome cartella',
   enter_folder_name: 'Inserisci il nome della cartella',
   folder_name_required: 'Il nome della cartella è obbligatorio',
   folder_name_already_exists: 'Il nome della cartella deve essere univoco',
   create: 'Creare',
   folders: 'Cartelle',
-  check_for_update: 'Controlla gli aggiornamenti',
+  check_for_update: 'Verifica aggiornamenti',
   delete_folder: 'Elimina cartella',
+  follow_banner_subtitle: 'Vultisig sta costruendo con te.',
+  follow_banner_title: 'Seguici su X',
+  follow_banner_button: 'Segui @Vultisig',
   deposit: 'Deposito',
-  add_vaults_to_folder: 'Selezionare Vault da aggiungere alla cartella.',
+  add_vaults_to_folder: 'Seleziona i Vault da aggiungere alla cartella.',
   chain_message_deposit: 'Deposito messaggio {{chain}}',
   thorchain_message_deposit: 'Deposito messaggio THORChain',
   bond_with_lp: 'Legame',
@@ -1215,4 +1232,9 @@ export const it = {
   not_enough_asset_to_cover_gas_fees:
     'Non abbastanza {{asset}} per coprire le spese del carburante',
   import_key: 'Importa chiave',
+  back_up_now: 'Esegui il backup ora',
+  fast_vault_backup_title:
+    'Esegui il backup della condivisione del vault online utilizzando la stessa password del vault creata in precedenza.',
+  fast_vault_backup_description:
+    "L'archiviazione online è consigliata e sicura: le condivisioni Vault sono progettate per questo scopo.",
 }

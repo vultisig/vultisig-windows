@@ -4,7 +4,6 @@ import { CoinKey } from '@core/chain/coin/Coin'
 import { swapEnabledChains } from '@core/chain/swap/swapEnabledChains'
 import { SendPrompt } from '@core/ui/vault/send/SendPrompt'
 import { isOneOf } from '@lib/utils/array/isOneOf'
-import { without } from '@lib/utils/array/without'
 import { useCallback, useMemo } from 'react'
 
 import { depositEnabledChains } from '../../deposit/DepositEnabledChain'
@@ -12,14 +11,19 @@ import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 import { BuyPrompt } from '../BuyPrompt'
 import { DepositPrompt } from '../DepositPrompt'
 import { ActionsWrapper } from '../PrimaryActions.styled'
+import { ReceivePrompt } from '../ReceivePrompt'
 import { SwapPrompt } from '../SwapPrompt'
 
 type VaultPrimaryActionsProps = {
   coin?: CoinKey
+  onReceive?: () => void
+  showDepositAction?: boolean
 }
 
 export const VaultPrimaryActions = ({
   coin: potentialCoin,
+  onReceive,
+  showDepositAction = true,
 }: VaultPrimaryActionsProps) => {
   const coins = useCurrentVaultCoins()
 
@@ -30,7 +34,7 @@ export const VaultPrimaryActions = ({
 
   const getCoin = useCallback(
     (supportedChains: readonly Chain[]) =>
-      without([potentialCoin, ...coins], undefined).find(coin =>
+      (potentialCoin ? [potentialCoin] : coins).find(coin =>
         isOneOf(coin.chain, supportedChains)
       ),
     [coins, potentialCoin]
@@ -45,7 +49,8 @@ export const VaultPrimaryActions = ({
       {swapCoin && <SwapPrompt fromCoin={swapCoin} />}
       <SendPrompt coin={sendCoin} />
       {buyCoin && <BuyPrompt coin={buyCoin} />}
-      {depositCoin && <DepositPrompt coin={depositCoin} />}
+      {onReceive && <ReceivePrompt onClick={onReceive} />}
+      {showDepositAction && depositCoin && <DepositPrompt coin={depositCoin} />}
     </ActionsWrapper>
   )
 }

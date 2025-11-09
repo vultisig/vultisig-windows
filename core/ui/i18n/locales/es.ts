@@ -2,6 +2,8 @@ export const es = {
   onboarding_greeting: 'Adiós a <g>frases semilla</g>',
   onboarding_step_1:
     'Di hola a <g>acciones de la bóveda,</g> tu nuevo <g>método de recuperación</g>',
+  defi: 'DeFi',
+  select_chain: 'Seleccionar Cadena',
   onboarding_step_2:
     'Están <g>divididos en partes</g> para aumentar la seguridad y, <g>eliminar un único punto de fallo</g>',
   onboarding_step_3:
@@ -12,7 +14,10 @@ export const es = {
   vault_info: 'Información de la bóveda',
   keys: 'Claves',
   vault_share_banner:
-    'Este código QR le permite compartir una versión de vista de su bóveda',
+    'Este código QR te permite compartir una versión de solo lectura de tu Bóveda',
+  actions: 'Acciones',
+  copy_address: 'Copy Address',
+  price: 'Price',
   onboarding_step_5:
     '<g>Siempre haga una copia de seguridad de cada parte del depósito</g> separadamente en una <g>ubicación diferente</g>',
   onboarding_step_6:
@@ -176,6 +181,15 @@ export const es = {
   price_impact_average: 'Promedio',
   price_impact_high: 'Alto Impacto',
   search_field_placeholder: 'Buscar',
+  edit_vaults: 'Editar bóvedas',
+  vault_count_one: '{{count}} bóveda',
+  vault_count_other: '{{count}} bóvedas',
+  no_results: 'No se encontraron resultados',
+  adjust_search_query: 'Intenta ajustar tu búsqueda',
+  save: 'Guardar',
+  nothing_to_add: 'Nada que añadir',
+  nothing_to_add_hint:
+    'Todas tus bóvedas ya están organizadas. Crea una nueva bóveda para agregarla aquí.',
   max_total_fees: 'Tarifa Total Máx.',
   coin_not_found_in_current_vault: 'Moneda no encontrada en la bóveda actual',
   waiting_for_devices_to_join: 'Esperando a que otros dispositivos se unan',
@@ -404,7 +418,6 @@ export const es = {
   vault_delete_page_term_2: 'Soy consciente de que puedo perder fondos',
   vault_delete_page_term_3: 'He hecho una copia de seguridad de la bóveda',
   share_vault_qr: 'Compartir QR de la bóveda',
-  save: 'Guardar',
   settings_vault_page_footer: 'APLICACIÓN VULTISIG V',
   clear: 'Limpiar',
   faq_setup_crypto_vault_title:
@@ -717,6 +730,7 @@ export const es = {
     updateButton: 'Actualizar',
   },
   create_folder: 'Crear carpeta',
+  add_folder: 'Añadir carpeta',
   folder_name: 'Nombre de la carpeta',
   enter_folder_name: 'Introduzca el nombre de la carpeta',
   folder_name_required: 'El nombre de la carpeta es obligatorio',
@@ -725,6 +739,9 @@ export const es = {
   folders: 'Carpetas',
   check_for_update: 'Buscar actualizaciones',
   delete_folder: 'Eliminar carpeta',
+  follow_banner_subtitle: 'Vultisig está construyendo contigo.',
+  follow_banner_title: 'Síguenos en X',
+  follow_banner_button: 'Seguir @Vultisig',
   deposit: 'Depositar',
   add_vaults_to_folder: 'Seleccione Bóvedas para agregarlas a la carpeta.',
   chain_message_deposit: 'Depósito de mensajes de {{chain}}',
@@ -1216,4 +1233,9 @@ export const es = {
   not_enough_asset_to_cover_gas_fees:
     'No hay suficientes {{asset}} para cubrir las tarifas del gas',
   import_key: 'Importar clave',
+  back_up_now: 'Retroceda ahora',
+  fast_vault_backup_title:
+    'Realice una copia de seguridad de su recurso compartido en línea utilizando la misma contraseña que creó anteriormente.',
+  fast_vault_backup_description:
+    'Se recomienda y es seguro el almacenamiento en línea; las acciones de bóveda están diseñadas para ello.',
 }

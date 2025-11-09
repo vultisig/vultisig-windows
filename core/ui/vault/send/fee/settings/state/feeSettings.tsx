@@ -1,4 +1,4 @@
-import type { FeeSettings } from '@core/chain/feeQuote/settings/core'
+import type { FeeSettings } from '@core/mpc/keysign/chainSpecific/FeeSettings'
 import { ChildrenProp } from '@lib/ui/props'
 import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
 import { omit } from '@lib/utils/record/omit'

@@ -2,6 +2,8 @@ export const de = {
   onboarding_greeting: 'Auf Wiedersehen zu <g>Seed-Wörter</g>',
   onboarding_step_1:
     'Sag hallo zu <g>Tresoranteile,</g> deine neue <g>Wiederherstellungsmethode</g>',
+  defi: 'DeFi',
+  select_chain: 'Kette auswählen',
   onboarding_step_2:
     'Sie sind <g>in Teile aufgeteilt</g> um die Sicherheit zu erhöhen und, <g>den Single Point of Failure zu entfernen</g>',
   onboarding_step_3:
@@ -12,6 +14,9 @@ export const de = {
     '<g>Sichern Sie jede Tresorfreigabe immer</g> separat in einer <g>anderen Location</g>',
   vault_share_banner:
     'Dieser QR Code ermöglicht Ihnen, eine Ansichtsversion Ihres Tresors zu teilen',
+  actions: 'Aktionen',
+  copy_address: 'Copy Address',
+  price: 'Price',
   vault_info: 'Tresorinformationen',
   circle_title: 'Circle-Konten',
   circle_description: 'Zahle $USDC in einen Circle-Vertrag ein',
@@ -85,6 +90,15 @@ export const de = {
   vault_selected: 'Vault ausgewählt',
   passcodes_do_not_match: 'Passcodes stimmen nicht überein',
   search_field_placeholder: 'Suchen',
+  edit_vaults: 'Tresore bearbeiten',
+  vault_count_one: '{{count}} Tresor',
+  vault_count_other: '{{count}} Tresore',
+  no_results: 'Keine Ergebnisse gefunden',
+  adjust_search_query: 'Versuche, deine Suche anzupassen',
+  save: 'Speichern',
+  nothing_to_add: 'Nichts hinzuzufügen',
+  nothing_to_add_hint:
+    'Alle deine Tresore sind bereits sortiert. Erstelle einen neuen Tresor, um ihn hier hinzuzufügen.',
   referral_reg_fee: 'Registrierungsgebühr',
   enter_percentage: 'Prozentangabe eingeben',
   select: 'Auswählen',
@@ -397,7 +411,6 @@ export const de = {
     'Ich bin mir bewusst, dass ich Gelder verlieren kann',
   vault_delete_page_term_3: 'Ich habe ein Tresor-Backup erstellt',
   share_vault_qr: 'Tresor-QR teilen',
-  save: 'Speichern',
   settings_vault_page_footer: 'VULTISIG APP V',
   clear: 'Löschen',
   faq_setup_crypto_vault_title:
@@ -711,6 +724,7 @@ export const de = {
     updateButton: 'Aktualisieren',
   },
   create_folder: 'Ordner erstellen',
+  add_folder: 'Ordner hinzufügen',
   folder_name: 'Ordnername',
   enter_folder_name: 'Geben Sie den Ordnernamen ein',
   folder_name_required: 'Ordnername ist erforderlich',
@@ -719,6 +733,9 @@ export const de = {
   folders: 'Ordner',
   check_for_update: 'Nach Updates suchen',
   delete_folder: 'Ordner löschen',
+  follow_banner_subtitle: 'Vultisig baut mit Ihnen.',
+  follow_banner_title: 'Folgen Sie uns auf X',
+  follow_banner_button: 'Folgen Sie @Vultisig',
   deposit: 'Einzahlung',
   add_vaults_to_folder:
     'Wählen Sie Tresore aus, die dem Ordner hinzugefügt werden sollen.',
@@ -1217,4 +1234,9 @@ export const de = {
   not_enough_asset_to_cover_gas_fees:
     'Nicht genug {{asset}}, um die Gasgebühren zu decken',
   import_key: 'Schlüsselimport',
+  back_up_now: 'Jetzt sichern',
+  fast_vault_backup_title:
+    'Sichern Sie Ihre Tresorfreigabe online mit demselben Tresorpasswort, das Sie zuvor erstellt haben.',
+  fast_vault_backup_description:
+    'Online-Speicher ist empfehlenswert und sicher – Vault-Speicher sind genau dafür konzipiert.',
 }

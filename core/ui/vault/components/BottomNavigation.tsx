@@ -97,10 +97,11 @@ export const BottomNavigation = () => {
         <Container onClick={() => navigate({ id: 'uploadQr', state: {} })}>
           <Camera2Icon />
         </Container>
+
         <SecondaryItemWrapper disabled={t('coming_soon')}>
           <CoinsAddIcon />
           <Text as="span" size={10}>
-            {t('earn')}
+            {t('defi')}
           </Text>
         </SecondaryItemWrapper>
       </InnerContainer>

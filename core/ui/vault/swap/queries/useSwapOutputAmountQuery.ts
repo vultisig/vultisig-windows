@@ -12,7 +12,6 @@ import { useSwapQuoteQuery } from './useSwapQuoteQuery'
 
 export const useSwapOutputAmountQuery = () => {
   const [toCoinKey] = useSwapToCoin()
-
   const toCoin = useCurrentVaultCoin(toCoinKey)
 
   return useTransformQueryData(

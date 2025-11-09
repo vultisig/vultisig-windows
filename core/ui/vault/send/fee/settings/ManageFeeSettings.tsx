@@ -1,5 +1,5 @@
 import { toChainKindRecordUnion } from '@core/chain/ChainKind'
-import { feeSettingsChains } from '@core/chain/feeQuote/settings/core'
+import { feeSettingsChains } from '@core/mpc/keysign/chainSpecific/FeeSettings'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { Opener } from '@lib/ui/base/Opener'
 import { IconButton } from '@lib/ui/buttons/IconButton'

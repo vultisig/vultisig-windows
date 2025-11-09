@@ -27,10 +27,10 @@ import { StartKeysignPrompt } from '../../../../../mpc/keysign/prompt/StartKeysi
 import { KeysignFeeAmount } from '../../../../../mpc/keysign/tx/FeeAmount'
 import { useCurrentVaultCoin } from '../../../../state/currentVaultCoins'
 import { useReferralSender } from '../../hooks/useReferralSender'
+import { useReferralKeysignPayloadQuery } from '../../keysignPayload/query'
 import { useEditReferralFormData } from '../../providers/EditReferralFormProvider'
 import { useReferralPayoutAsset } from '../../providers/ReferralPayoutAssetProvider'
 import { useActivePoolsQuery } from '../../queries/useActivePoolsQuery'
-import { useReferralKeysignPayloadQuery } from '../../queries/useReferralKeysignPayloadQuery'
 import { useUserValidThorchainNameQuery } from '../../queries/useUserValidThorchainNameQuery'
 import {
   buildRenewalMemo,

@@ -6,7 +6,6 @@ import {
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 import { useAssertCurrentVaultId } from '../../../storage/currentVaultId'
 import { useFriendReferralQuery } from '../../../storage/referrals'
@@ -66,9 +65,4 @@ export const useSwapQuoteQuery = () => {
       }
     }
   )
-}
-
-export const useSwapQuote = () => {
-  const { data } = useSwapQuoteQuery()
-  return shouldBePresent(data, 'swap quote query data')
 }

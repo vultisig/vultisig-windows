@@ -11,8 +11,13 @@ export const en = {
     'This QR Code lets you share a view-only version of your Vault',
   description: 'Description',
   onboarding_greeting: 'Say goodbye to <g>seed phrases</g>',
+  actions: 'Actions',
+  copy_address: 'Copy Address',
+  price: 'Price',
   onboarding_step_1:
     'Say hello to <g>vault shares,</g> your new <g>recovery method</g>',
+  defi: 'DeFi',
+  select_chain: 'Select Chain',
   onboarding_step_2:
     "They're <g>split into parts</g> to increase security, <g>removing the single point-of-failure</g>",
   onboarding_step_3:
@@ -173,6 +178,15 @@ export const en = {
   onboarding_description_4:
     'Vultisig is a wallet without seed phrases. It uses easy-to-manage vault shares instead. Every device has its unique vault share that needs a separate backup.',
   search_field_placeholder: 'Search',
+  edit_vaults: 'Edit Vaults',
+  vault_count_one: '{{count}} Vault',
+  vault_count_other: '{{count}} Vaults',
+  no_results: 'No results found',
+  adjust_search_query: 'Try adjusting your search criteria',
+  save: 'Save',
+  nothing_to_add: 'Nothing to add',
+  nothing_to_add_hint:
+    'All your vaults are already sorted. Create a new vault to add it here.',
   create_new_vault: 'Create a New Vault',
   start_transaction: 'Start transaction',
   unexpected_error: 'Unexpected Error',
@@ -403,7 +417,6 @@ export const en = {
   vault_delete_page_term_2: 'I am aware that I can lose funds',
   vault_delete_page_term_3: 'I have made a vault backup',
   share_vault_qr: 'Share Vault QR',
-  save: 'Save',
   settings_vault_page_footer: 'VULTISIG APP V',
   clear: 'Clear',
   faq_setup_crypto_vault_title: 'What is Vultisig?',
@@ -875,6 +888,7 @@ export const en = {
     updateButton: 'Update',
   },
   create_folder: 'Create Folder',
+  add_folder: 'Add Folder',
   folder_name: 'Folder name',
   enter_folder_name: 'Enter folder name',
   folder_name_required: 'Folder name is required',
@@ -883,6 +897,9 @@ export const en = {
   delete_folder: 'Delete Folder',
   folders: 'Folders',
   add_vaults_to_folder: 'Select Vaults to add to the folder.',
+  follow_banner_subtitle: 'Vultisig is building with you.',
+  follow_banner_title: 'Follow us on X',
+  follow_banner_button: 'Follow @Vultisig',
   deposit: 'Function',
   chain_message_deposit: '{{chain}} message deposit',
   thorchain_message_deposit: 'THORChain message deposit',
@@ -1167,4 +1184,9 @@ export const en = {
   unlock_discount_tier_description:
     'By holding {{minBalance}}, you’ll unlock the {{tier}} Tier and receive a <b>{{bps}} bps trading fee discount</b> on all swaps.',
   import_key: 'Import Key',
+  back_up_now: 'Back Up Now',
+  fast_vault_backup_title:
+    'Back up your vault share online  using the same vault password you created earlier.',
+  fast_vault_backup_description:
+    'Online storage is recommended and safe - vault shares are designed for this.',
 }
