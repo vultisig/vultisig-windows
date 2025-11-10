@@ -77,15 +77,15 @@ const ChainItemsWrapper = styled.div`
   box-shadow: 0 30px 60px rgba(1, 5, 15, 0.6);
 `
 
-const ChainListItem = styled.button<{ $isEven: boolean }>`
+const ChainListItem = styled.button<{ isEven: boolean }>`
   display: flex;
   align-items: center;
   gap: 12px;
   width: 100%;
   padding: 12px 20px;
   border: none;
-  background: ${({ $isEven }) =>
-    $isEven
+  background: ${({ isEven }) =>
+    isEven
       ? 'var(--Backgrounds-surface-2, #11284A)'
       : 'var(--Backgrounds-surface-1, #061B3A)'};
   border-bottom: 1px solid var(--Borders-Light, #11284a);
@@ -105,8 +105,8 @@ const ChainListItem = styled.button<{ $isEven: boolean }>`
   }
 
   &:hover {
-    background: ${({ $isEven }) =>
-      $isEven ? 'rgba(17, 40, 74, 0.85)' : 'rgba(6, 27, 58, 0.9)'};
+    background: ${({ isEven }) =>
+      isEven ? 'rgba(17, 40, 74, 0.85)' : 'rgba(6, 27, 58, 0.9)'};
   }
 
   &:focus-visible {
@@ -179,7 +179,7 @@ export const ReceiveModal = ({ onClose }: OnCloseProp) => {
                 key={chain}
                 type="button"
                 onClick={() => setSelectedChain(chain)}
-                $isEven={index % 2 === 1}
+                isEven={index % 2 === 1}
               >
                 <ChainEntityIcon
                   value={getChainLogoSrc(chain)}
