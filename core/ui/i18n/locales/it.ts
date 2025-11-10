@@ -2,6 +2,8 @@ export const it = {
   onboarding_greeting: 'Addio a <g>frasi semina</g>',
   onboarding_step_1:
     'Dì ciao a <g>azioni della cassaforte,</g> il tuo nuovo <g>metodo di recupero</g>',
+  defi: 'DeFi',
+  select_chain: 'Seleziona Catena',
   onboarding_step_2:
     'Sono <g>divisi in parti</g> per aumentare la sicurezza e, <g>eliminare il singolo punto di guasto</g>',
   onboarding_step_3:
@@ -738,10 +740,13 @@ export const it = {
   folder_name_already_exists: 'Il nome della cartella deve essere univoco',
   create: 'Creare',
   folders: 'Cartelle',
-  check_for_update: 'Controlla gli aggiornamenti',
+  check_for_update: 'Verifica aggiornamenti',
   delete_folder: 'Elimina cartella',
+  follow_banner_subtitle: 'Vultisig sta costruendo con te.',
+  follow_banner_title: 'Seguici su X',
+  follow_banner_button: 'Segui @Vultisig',
   deposit: 'Deposito',
-  add_vaults_to_folder: 'Selezionare Vault da aggiungere alla cartella.',
+  add_vaults_to_folder: 'Seleziona i Vault da aggiungere alla cartella.',
   chain_message_deposit: 'Deposito messaggio {{chain}}',
   thorchain_message_deposit: 'Deposito messaggio THORChain',
   bond_with_lp: 'Legame',
