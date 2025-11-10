@@ -1,7 +1,11 @@
-import { UtxoChain } from '@core/chain/Chain'
+import { Chain, UtxoChain } from '@core/chain/Chain'
 import { minUtxo } from '@core/chain/chains/utxo/minUtxo'
 import { utxoChainScriptType } from '@core/chain/chains/utxo/tx/UtxoScriptType'
 import { getCoinType } from '@core/chain/coin/coinType'
+import {
+  fromBech32mAddress,
+  isBech32mAddress,
+} from '@core/chain/utils/bech32mAddress'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
@@ -60,7 +64,7 @@ export const getUtxoSigningInputs: SigningInputsResolver<'utxo'> = ({
     ? getRecordUnionValue(swapPayload).fromAmount
     : keysignPayload.toAmount
 
-  const destinationAddress = swapPayload
+  const rawDestinationAddress = swapPayload
     ? matchRecordUnion<KeysignSwapPayload, string>(swapPayload, {
         native: swapPayload => swapPayload.vaultAddress,
         general: () => {
@@ -68,6 +72,11 @@ export const getUtxoSigningInputs: SigningInputsResolver<'utxo'> = ({
         },
       })
     : keysignPayload.toAddress
+
+  const destinationAddress =
+    chain === Chain.Zcash && isBech32mAddress(rawDestinationAddress)
+      ? fromBech32mAddress(rawDestinationAddress)
+      : rawDestinationAddress
 
   let signingV2 = undefined
   if (psbt) {

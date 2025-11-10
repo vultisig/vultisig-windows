@@ -2,7 +2,8 @@ import { Chain } from '@core/chain/Chain'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { attempt } from '@lib/utils/attempt'
 import { WalletCore } from '@trustwallet/wallet-core'
-import { bech32m } from 'bech32'
+
+import { fromBech32mAddress, isBech32mAddress } from './bech32mAddress'
 
 type Input = {
   chain: Chain
@@ -20,8 +21,8 @@ export const isValidAddress = ({ chain, address, walletCore }: Input) => {
     return walletCore.AnyAddress.isValidBech32(address, coinType, 'maya')
   }
 
-  if (chain === Chain.Zcash && address.toLowerCase().startsWith('tex1')) {
-    const { data } = attempt(() => bech32m.decode(address))
+  if (chain === Chain.Zcash && isBech32mAddress(address)) {
+    const { data } = attempt(() => fromBech32mAddress(address))
     return !!data
   }
 
