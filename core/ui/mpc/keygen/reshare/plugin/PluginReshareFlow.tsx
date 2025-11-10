@@ -12,7 +12,6 @@ import { Button } from '@lib/ui/buttons/Button'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
-import { PageHeader } from '@lib/ui/page/PageHeader'
 import { GradientText, Text } from '@lib/ui/text'
 import { NameProp } from '@lib/utils/entities/props'
 import { useTranslation } from 'react-i18next'
@@ -51,7 +50,6 @@ export const PluginReshareFlow = ({ name }: NameProp) => {
       )}
       keygen={() => (
         <>
-          <PageHeader title={t('installing_plugin')} hasBorder />
           <ValueTransfer<string[]>
             from={({ onFinish }) => (
               <WaitForPluginAndVerifier onFinish={onFinish} />
