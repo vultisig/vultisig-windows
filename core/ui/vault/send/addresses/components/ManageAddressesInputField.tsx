@@ -40,16 +40,18 @@ export const ManageReceiverAddressInputField = () => {
   const { name } = useCurrentVault()
   const [value, setValue] = useSendReceiver()
   const [viewState, setViewState] = useState<MangeReceiverViewState>('default')
+  const [touched, setTouched] = useState(false)
   const walletCore = useAssertWalletCore()
 
   const { data } = useSendValidationQuery()
 
   const [, setFocusedSendField] = useSendFormFieldState()
 
-  const error = value ? data?.receiverAddress : undefined
+  const error = touched ? data?.receiverAddress : undefined
 
   const handleUpdateReceiverAddress = useCallback(
     (value: string) => {
+      setTouched(true)
       setValue(value)
       const receiverError = validateSendReceiver({
         receiverAddress: value,
@@ -119,6 +121,7 @@ export const ManageReceiverAddressInputField = () => {
                   placeholder={t('enter_address')}
                   value={value}
                   onValueChange={value => handleUpdateReceiverAddress(value)}
+                  onBlur={() => setTouched(true)}
                 />
                 {error && <AnimatedSendFormInputError error={error} />}
               </VStack>
