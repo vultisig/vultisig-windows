@@ -13,11 +13,11 @@ export const CarouselTrack = styled.div`
 `
 
 export const NavigationButton = styled(UnstyledButton)<{
-  $position: 'left' | 'right'
+  position: 'left' | 'right'
 }>`
   position: absolute;
   top: 50%;
-  ${({ $position }) => ($position === 'left' ? 'left: 8px;' : 'right: 8px;')}
+  ${({ position }) => (position === 'left' ? 'left: 8px;' : 'right: 8px;')}
   transform: translateY(-50%);
   width: 28px;
   height: 28px;
@@ -53,13 +53,13 @@ export const PaginationContainer = styled.div`
   z-index: 10;
 `
 
-export const PaginationDot = styled.button<{ $isActive: boolean }>`
+export const PaginationDot = styled.button<{ isActive: boolean }>`
   width: 6px;
   height: 6px;
   border-radius: 50%;
   border: none;
-  background: ${({ $isActive }) =>
-    $isActive ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.3)'};
+  background: ${({ isActive }) =>
+    isActive ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.3)'};
   cursor: pointer;
   padding: 0;
   transition:
@@ -67,8 +67,8 @@ export const PaginationDot = styled.button<{ $isActive: boolean }>`
     transform 0.2s;
 
   &:hover {
-    background: ${({ $isActive }) =>
-      $isActive ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.5)'};
+    background: ${({ isActive }) =>
+      isActive ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.5)'};
     transform: scale(1.2);
   }
 `
