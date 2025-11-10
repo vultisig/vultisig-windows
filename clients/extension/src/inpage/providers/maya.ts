@@ -1,5 +1,10 @@
 import { CosmosChain } from '@core/chain/Chain'
-import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
+import { callPopup } from '@core/inpage-provider/popup'
+import {
+  DepositTransactionDetails,
+  RequestInput,
+  TransactionDetails,
+} from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 
 import { Callback } from '../constants'
@@ -21,7 +26,49 @@ export class MAYAChain extends BaseCosmosChain {
 
   async request(data: RequestInput, callback?: Callback): Promise<unknown> {
     const processRequest = async () => {
-      const handlers = getSharedHandlers(CosmosChain.MayaChain)
+      const handlers = {
+        ...getSharedHandlers(CosmosChain.MayaChain),
+        deposit_transaction: async ([tx]: [TransactionDetails]) => {
+          const { hash } = await callPopup(
+            {
+              sendTx: {
+                keysign: {
+                  transactionDetails: tx,
+                  chain: CosmosChain.MayaChain,
+                  isDeposit: true,
+                },
+              },
+            },
+            {
+              account: tx.from,
+            }
+          )
+
+          return hash
+        },
+        deposit: async ([tx]: [DepositTransactionDetails]) => {
+          const { hash } = await callPopup(
+            {
+              sendTx: {
+                keysign: {
+                  transactionDetails: {
+                    ...tx,
+                    to: tx.recipient,
+                    data: tx.memo,
+                  },
+                  chain: CosmosChain.MayaChain,
+                  isDeposit: true,
+                },
+              },
+            },
+            {
+              account: tx.from,
+            }
+          )
+
+          return hash
+        },
+      }
 
       if (data.method in handlers) {
         return handlers[data.method as keyof typeof handlers](
