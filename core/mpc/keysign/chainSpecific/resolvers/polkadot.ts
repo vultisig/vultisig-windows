@@ -2,7 +2,9 @@ import { create } from '@bufbuild/protobuf'
 import { getPolkadotClient } from '@core/chain/chains/polkadot/client'
 import { polkadotConfig } from '@core/chain/chains/polkadot/config'
 import { PolkadotSpecificSchema } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+import { attempt, withFallback } from '@lib/utils/attempt'
 
+import { getKeysignAmount } from '../../utils/getKeysignAmount'
 import { getKeysignCoin } from '../../utils/getKeysignCoin'
 import { GetChainSpecificResolver } from '../resolver'
 
@@ -21,6 +23,20 @@ export const getPolkadotChainSpecific: GetChainSpecificResolver<
   const { specVersion, transactionVersion } =
     await client.rpc.state.getRuntimeVersion()
 
+  const transfer = client.tx.balances.transferKeepAlive(
+    keysignPayload.toAddress,
+    getKeysignAmount(keysignPayload)
+  )
+
+  const gas = await withFallback(
+    attempt(async () =>
+      (
+        await transfer.paymentInfo(coin.address, { nonce })
+      ).partialFee.toBigInt()
+    ),
+    polkadotConfig.fee
+  )
+
   return create(PolkadotSpecificSchema, {
     recentBlockHash,
     nonce,
@@ -28,6 +44,6 @@ export const getPolkadotChainSpecific: GetChainSpecificResolver<
     specVersion: specVersion.toNumber(),
     transactionVersion: transactionVersion.toNumber(),
     genesisHash,
-    gas: polkadotConfig.fee,
+    gas,
   })
 }
