@@ -64,7 +64,7 @@ export const getUtxoSigningInputs: SigningInputsResolver<'utxo'> = ({
     ? getRecordUnionValue(swapPayload).fromAmount
     : keysignPayload.toAmount
 
-  const rawDestinationAddress = swapPayload
+  let destinationAddress = swapPayload
     ? matchRecordUnion<KeysignSwapPayload, string>(swapPayload, {
         native: swapPayload => swapPayload.vaultAddress,
         general: () => {
@@ -73,10 +73,9 @@ export const getUtxoSigningInputs: SigningInputsResolver<'utxo'> = ({
       })
     : keysignPayload.toAddress
 
-  const destinationAddress =
-    chain === Chain.Zcash && isBech32mAddress(rawDestinationAddress)
-      ? fromBech32mAddress(rawDestinationAddress)
-      : rawDestinationAddress
+  if (chain === Chain.Zcash && isBech32mAddress(destinationAddress)) {
+    destinationAddress = fromBech32mAddress(destinationAddress)
+  }
 
   let signingV2 = undefined
   if (psbt) {
