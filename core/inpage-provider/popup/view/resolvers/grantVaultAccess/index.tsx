@@ -29,7 +29,7 @@ import { useTranslation } from 'react-i18next'
 
 export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
   onFinish,
-  context: { requestOrigin },
+  context: { requestOrigin, requestFavicon },
 }) => {
   const { t } = useTranslation()
   const [vaultId, setVaultId] = useState<string | undefined>(undefined)
@@ -45,6 +45,7 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
           vaultId,
           host: getUrlBaseDomain(requestOrigin),
           url: getUrlHost(requestOrigin),
+          icon: requestFavicon,
         }),
         setCurrentVaultId(vaultId),
       ])
