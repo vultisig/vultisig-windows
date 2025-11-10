@@ -1,16 +1,13 @@
 import { Chain } from '@core/chain/Chain'
 import { getCoinType } from '@core/chain/coin/coinType'
+import { attempt } from '@lib/utils/attempt'
 import { WalletCore } from '@trustwallet/wallet-core'
+import { bech32m } from 'bech32'
 
 type Input = {
   chain: Chain
   address: string
   walletCore: WalletCore
-}
-
-const customPrefixes: Partial<Record<Chain, string>> = {
-  [Chain.MayaChain]: 'maya',
-  [Chain.Zcash]: 'tex',
 }
 
 export const isValidAddress = ({ chain, address, walletCore }: Input) => {
@@ -19,9 +16,13 @@ export const isValidAddress = ({ chain, address, walletCore }: Input) => {
     chain,
   })
 
-  const customPrefix = customPrefixes[chain]
-  if (customPrefix && address.toLowerCase().startsWith(customPrefix)) {
-    return walletCore.AnyAddress.isValidBech32(address, coinType, customPrefix)
+  if (chain === Chain.MayaChain) {
+    return walletCore.AnyAddress.isValidBech32(address, coinType, 'maya')
+  }
+
+  if (chain === Chain.Zcash && address.toLowerCase().startsWith('tex1')) {
+    const { data } = attempt(() => bech32m.decode(address))
+    return !!data
   }
 
   return walletCore.AnyAddress.isValid(address, coinType)
