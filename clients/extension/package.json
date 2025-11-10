@@ -48,7 +48,7 @@
     "@keplr-wallet/types": "^0.12.270",
     "@lib/ui": "workspace:^",
     "@solana/web3.js": "^1.98.4",
-    "@trustwallet/wallet-core": "^4.3.6",
+    "@trustwallet/wallet-core": "^4.3.22",
     "@types/chrome": "^0.1.9",
     "@types/node": "^24.3.1",
     "@types/react": "^19.1.12",
