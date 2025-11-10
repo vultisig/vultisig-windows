@@ -66,15 +66,8 @@ const ReceiveSearchField = styled(SearchField)`
 
   input {
     color: ${getColor('textShy')};
-    font-size: 16px;
+    font-size: 13px;
   }
-
-  border-radius: 99px;
-  border: 1px solid var(--Borders-Normal, #1b3f73);
-  background: #061b3a;
-  box-shadow:
-    0 0 4px 0 rgba(240, 244, 252, 0.04) inset,
-    0 0 8px 0 rgba(240, 244, 252, 0.03) inset;
 `
 
 const ChainItemsWrapper = styled.div`
@@ -87,10 +80,9 @@ const ChainItemsWrapper = styled.div`
 const ChainListItem = styled.button<{ $isEven: boolean }>`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  gap: 12px;
   width: 100%;
-  padding: 20px 24px;
+  padding: 12px 20px;
   border: none;
   background: ${({ $isEven }) =>
     $isEven
@@ -123,22 +115,14 @@ const ChainListItem = styled.button<{ $isEven: boolean }>`
   }
 `
 
-const ChainInfo = styled(HStack)`
-  align-items: center;
-  gap: 16px;
-`
-
-const ChainTicker = styled(Text)`
-  letter-spacing: 0.4px;
-`
-
 const ChainBadge = styled(Text)`
   display: inline-flex;
   align-items: center;
-  padding: 6px 16px;
+  padding: 8px 12px;
   border-radius: 999px;
-  border: 1px solid var(--Borders-Light, #11284a);
-  background: rgba(4, 14, 30, 0.5);
+  border-radius: 99px;
+  border: 1.5px solid ${getColor('foregroundExtra')};
+  background: ${getColor('foreground')};
 `
 
 const EmptyStateMessage = styled(Text)`
@@ -197,22 +181,14 @@ export const ReceiveModal = ({ onClose }: OnCloseProp) => {
                 onClick={() => setSelectedChain(chain)}
                 $isEven={index % 2 === 1}
               >
-                <ChainInfo>
-                  <ChainEntityIcon
-                    value={getChainLogoSrc(chain)}
-                    style={{ fontSize: 36 }}
-                  />
-                  <ChainTicker
-                    as="span"
-                    size={18}
-                    weight="600"
-                    color="contrast"
-                    cropped
-                  >
-                    {ticker}
-                  </ChainTicker>
-                </ChainInfo>
-                <ChainBadge as="span" size={14} color="shyExtra" weight="500">
+                <ChainEntityIcon
+                  value={getChainLogoSrc(chain)}
+                  style={{ fontSize: 22 }}
+                />
+                <Text as="span" size={14} cropped>
+                  {ticker}
+                </Text>
+                <ChainBadge as="span" size={10} color="shyExtra" weight="500">
                   {chain}
                 </ChainBadge>
               </ChainListItem>
