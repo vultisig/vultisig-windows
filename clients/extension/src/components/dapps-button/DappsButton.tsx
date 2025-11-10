@@ -1,3 +1,4 @@
+import { useCurrentVaultAppSessionsQuery } from '@core/extension/storage/hooks/appSessions'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
@@ -63,13 +64,10 @@ const useCurrentTabInfo = () => {
   return tabInfo
 }
 
-type DappsButtonProps = {
-  sessions: Record<string, unknown>
-}
-
-export const DappsButton = ({ sessions }: DappsButtonProps) => {
+export const DappsButton = () => {
   const navigate = useNavigate()
   const tabInfo = useCurrentTabInfo()
+  const { data: sessions = {} } = useCurrentVaultAppSessionsQuery()
 
   const isConnected = tabInfo?.url
     ? sessions[getUrlBaseDomain(tabInfo.url)] !== undefined
