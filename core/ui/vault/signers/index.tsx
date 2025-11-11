@@ -1,16 +1,11 @@
 import { hasServer, isServer } from '@core/mpc/devices/localPartyId'
 import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
 import { Vault } from '@core/mpc/vault/Vault'
-import { ShieldIcon } from '@lib/ui/icons/ShieldIcon'
 import { ZapIcon } from '@lib/ui/icons/ZapIcon'
 import { getColor } from '@lib/ui/theme/getters'
 import { FC, HTMLAttributes } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-const StyledSuccessIcon = styled(ShieldIcon)`
-  color: ${getColor('success')};
-`
 
 const StyledWarningIcon = styled(ZapIcon)`
   color: ${getColor('idle')};
@@ -54,8 +49,7 @@ export const VaultSigners: FC<VaultSignersProps> = ({ vault, ...rest }) => {
         </>
       ) : (
         <>
-          <StyledSuccessIcon fontSize={16} />
-          <StyledText>{`${least}-${t('of')}-${total}`}</StyledText>
+          <StyledText>{`part ${least}-${t('of')}-${total}`}</StyledText>
         </>
       )}
     </StyledVaultSigners>
