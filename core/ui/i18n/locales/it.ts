@@ -905,6 +905,8 @@ export const it = {
   connect: 'Collegare',
   link_copied: 'Link copiato negli appunti',
   failed_to_copy_link: 'Impossibile copiare il collegamento',
+  failed_to_copy_address: "Impossibile copiare l'indirizzo",
+  failed_to_delete_folder: 'Impossibile eliminare la cartella',
   timeout_error: 'Errore di timeout',
   signing_timeout_description:
     'Il processo di firma ha superato il limite di tempo. Riprova!',

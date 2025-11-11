@@ -893,6 +893,8 @@ export const pt = {
   connect: 'Conectar',
   link_copied: 'Link copiado para a área de transferência',
   failed_to_copy_link: 'Falha ao copiar o link',
+  failed_to_copy_address: 'Falha ao copiar o endereço',
+  failed_to_delete_folder: 'Falha ao excluir a pasta',
   timeout_error: 'Erro de tempo limite',
   signing_timeout_description:
     'O processo de assinatura excedeu o limite de tempo. Tente novamente!',

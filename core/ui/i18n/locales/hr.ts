@@ -882,6 +882,8 @@ export const hr = {
   connect: 'Poveži se',
   link_copied: 'Veza je kopirana u međuspremnik',
   failed_to_copy_link: 'Kopiranje veze nije uspjelo',
+  failed_to_copy_address: 'Kopiranje adrese nije uspjelo',
+  failed_to_delete_folder: 'Brisanje mape nije uspjelo',
   timeout_error: 'Pogreška isteka vremena',
   signing_timeout_description:
     'Proces potpisivanja je premašio vremensko ograničenje. Molimo pokušajte ponovo!',
