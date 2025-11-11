@@ -10,6 +10,7 @@ import { KeysignPayload } from '../../types/vultisig/keysign/v1/keysign_message_
 import { UtxoInfoSchema } from '../../types/vultisig/keysign/v1/utxo_info_pb'
 import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
 import { getUtxoSigningInputs } from '../signingInputs/resolvers/utxo'
+import { getKeysignAmount } from '../utils/getKeysignAmount'
 
 type RefineKeysignUtxoInput = {
   keysignPayload: KeysignPayload
@@ -39,7 +40,9 @@ const convertPlanUtxosToUtxoInfo = ({
     })
   })
 
-export const refineKeysignUtxo = (input: RefineKeysignUtxoInput) => {
+export const refineKeysignUtxo = (
+  input: RefineKeysignUtxoInput
+): KeysignPayload => {
   const [signingInput] = getUtxoSigningInputs(input)
 
   const utxoSpecific = getBlockchainSpecificValue(
@@ -48,64 +51,67 @@ export const refineKeysignUtxo = (input: RefineKeysignUtxoInput) => {
   )
 
   const plan = shouldBePresent(signingInput.plan, 'UTXO signing input plan')
+  const planUtxos = plan.utxos
+
+  const amount = getKeysignAmount(input.keysignPayload)
+
+  if (!planUtxos || planUtxos.length === 0) {
+    if (utxoSpecific.sendMaxAmount) {
+      throw new Error(
+        'Failed to build transaction: insufficient balance or invalid UTXO selection'
+      )
+    }
+
+    if (amount) {
+      return refineKeysignUtxo({
+        ...input,
+        keysignPayload: {
+          ...input.keysignPayload,
+          blockchainSpecific: {
+            case: 'utxoSpecific',
+            value: create(UTXOSpecificSchema, {
+              ...utxoSpecific,
+              sendMaxAmount: true,
+            }),
+          },
+        },
+      })
+    }
+
+    return input.keysignPayload
+  }
+
   const actualFee = BigInt(
     shouldBePresent(plan.fee, 'UTXO signing input plan fee').toString()
   )
-  const utxos = shouldBePresent(plan.utxos, 'UTXO signing input plan utxos')
 
-  let updatedKeysignPayload = input.keysignPayload
-  let updatedBlockchainSpecific = input.keysignPayload.blockchainSpecific
-
-  if (input.keysignPayload.toAmount && !utxoSpecific.sendMaxAmount) {
-    const amount = BigInt(input.keysignPayload.toAmount)
+  if (amount && !utxoSpecific.sendMaxAmount) {
     const balance = bigIntSum(
       input.keysignPayload.utxoInfo.map(({ amount }) => amount)
     )
     const remainingBalance = balance - amount
 
     if (remainingBalance <= actualFee + dustStats) {
-      updatedBlockchainSpecific = {
-        case: 'utxoSpecific',
-        value: create(UTXOSpecificSchema, {
-          ...utxoSpecific,
-          sendMaxAmount: true,
-        }),
-      }
-
-      updatedKeysignPayload = {
-        ...input.keysignPayload,
-        blockchainSpecific: updatedBlockchainSpecific,
-      }
-
-      const [updatedSigningInput] = getUtxoSigningInputs({
+      return refineKeysignUtxo({
         ...input,
-        keysignPayload: updatedKeysignPayload,
+        keysignPayload: {
+          ...input.keysignPayload,
+          blockchainSpecific: {
+            case: 'utxoSpecific',
+            value: create(UTXOSpecificSchema, {
+              ...utxoSpecific,
+              sendMaxAmount: true,
+            }),
+          },
+        },
       })
-
-      const updatedPlan = shouldBePresent(
-        updatedSigningInput.plan,
-        'UTXO updated signing input plan'
-      )
-      const updatedUtxos = shouldBePresent(
-        updatedPlan.utxos,
-        'UTXO updated signing input plan utxos'
-      )
-
-      return {
-        ...updatedKeysignPayload,
-        utxoInfo: convertPlanUtxosToUtxoInfo({
-          utxos: updatedUtxos,
-          walletCore: input.walletCore,
-        }),
-      }
     }
   }
 
   return {
-    ...updatedKeysignPayload,
-    blockchainSpecific: updatedBlockchainSpecific,
+    ...input.keysignPayload,
     utxoInfo: convertPlanUtxosToUtxoInfo({
-      utxos,
+      utxos: planUtxos,
       walletCore: input.walletCore,
     }),
   }
