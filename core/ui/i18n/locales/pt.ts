@@ -265,6 +265,7 @@ export const pt = {
   pair_device_disclaimers_second: ' dispositivos presentes.',
   backup_disclaimer:
     'Você deve fazer backup de todos os fragmentos do cofre em locais separados.',
+  part: 'parte',
   of: 'de',
   vault: 'Cofre',
   vaults: 'Cofres',

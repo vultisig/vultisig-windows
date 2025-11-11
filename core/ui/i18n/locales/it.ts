@@ -277,6 +277,7 @@ export const it = {
   pair_device_disclaimers_second: ' dispositivi presenti.',
   backup_disclaimer:
     'Dovresti eseguire il backup di tutti i frammenti della cassaforte in posizioni separate.',
+  part: 'parte',
   of: 'di',
   vault: 'Cassaforte',
   vaults: 'Cassaforti',

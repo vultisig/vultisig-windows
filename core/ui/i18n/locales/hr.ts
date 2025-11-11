@@ -261,6 +261,7 @@ export const hr = {
   pair_device_disclaimers_second: ' prisutnih uređaja.',
   backup_disclaimer:
     'Trebali biste sigurnosno kopirati sve dijelove trezora na odvojene lokacije.',
+  part: 'dio',
   of: 'od',
   secureVault: 'Sigurni trezor',
   missing_public_key_ecdsa: 'Nedostaje javni ključ ECDSA',
