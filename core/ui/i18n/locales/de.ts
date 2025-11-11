@@ -270,6 +270,7 @@ export const de = {
   pair_device_disclaimers_second: ' anwesenden Geräten senden.',
   backup_disclaimer:
     'Sie sollten alle Tresorfragmente an separaten Orten sichern.',
+  part: 'Teil',
   of: 'von',
   vault: 'Tresor',
   vaults: 'Tresore',

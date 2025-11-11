@@ -257,6 +257,7 @@ export const en = {
   pair_device_disclaimers_second: 'devices present.',
   backup_disclaimer:
     'You should backup all vault shares in separate locations.',
+  part: 'part',
   of: 'of',
   vault: 'Vault',
   vaults: 'Vaults',
