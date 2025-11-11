@@ -3,6 +3,8 @@ export const pt = {
   keys: 'Chaves',
   onboarding_step_1:
     'Diga olá para <g>ações do cofre,</g> seu novo <g>método de recuperação</g>',
+  defi: 'DeFi',
+  select_chain: 'Selecionar Cadeia',
   onboarding_step_2:
     'Eles estão <g>divididos em partes</g> para aumentar a segurança e, <g>remover um único ponto de falha</g>',
   onboarding_step_3:
@@ -13,12 +15,15 @@ export const pt = {
     '<g>Sempre faça backup de cada parte do cofre</g> separadamente em um <g>local diferente</g>',
   onboarding_step_6: 'Essas partes colaboram para <g>desbloquear seu cofre</g>',
   vault_share_banner:
-    'Este QR Code permite compartilhar uma versão de visualização do seu cofre',
+    'Este código QR permite que você compartilhe uma versão somente de visualização do seu Cofre',
+  actions: 'Ações',
+  copy_address: 'Copy Address',
+  price: 'Price',
+  vault_info: 'Informações do Cofre',
   secure_crypto_vault: 'Cofre seguro de cripto',
   vultisig: 'Vultisig',
   by_vultisig: 'por Vultisig',
   failed_to_read_qr_code: 'Impossível ler o código QR',
-  vault_info: 'Informações do cofre',
   vault_details_description: 'Visualizar o nome, a parte e o tipo do cofre',
   circle: {
     introduction:
@@ -260,6 +265,7 @@ export const pt = {
   pair_device_disclaimers_second: ' dispositivos presentes.',
   backup_disclaimer:
     'Você deve fazer backup de todos os fragmentos do cofre em locais separados.',
+  part: 'parte',
   of: 'de',
   vault: 'Cofre',
   vaults: 'Cofres',
@@ -724,6 +730,9 @@ export const pt = {
   folders: 'Pastas',
   check_for_update: 'Verificar atualizações',
   delete_folder: 'Excluir pasta',
+  follow_banner_subtitle: 'Vultisig está construindo com você.',
+  follow_banner_title: 'Siga-nos no X',
+  follow_banner_button: 'Seguir @Vultisig',
   deposit: 'Depositar',
   add_vaults_to_folder: 'Selecione Cofres para adicionar à pasta.',
   chain_message_deposit: 'Depósito de mensagem {{chain}}',
@@ -885,6 +894,8 @@ export const pt = {
   connect: 'Conectar',
   link_copied: 'Link copiado para a área de transferência',
   failed_to_copy_link: 'Falha ao copiar o link',
+  failed_to_copy_address: 'Falha ao copiar o endereço',
+  failed_to_delete_folder: 'Falha ao excluir a pasta',
   timeout_error: 'Erro de tempo limite',
   signing_timeout_description:
     'O processo de assinatura excedeu o limite de tempo. Tente novamente!',

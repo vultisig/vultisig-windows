@@ -157,7 +157,6 @@ const AddVaultsToFolder = ({ totals, isTotalsPending }: AddVaultsProps) => {
                   <Switch checked={false} onChange={handleToggle} />
                 </SwitchWrapper>
               }
-              dimmed
               onClick={handleToggle}
             />
           )
@@ -254,6 +253,7 @@ const ManageFolderVaults = ({
                   <Switch checked onChange={handleRemove} />
                 </SwitchWrapper>
               }
+              disabled
             />
             {status === 'overlay' && <DnDItemHighlight />}
           </DnDItemContainer>

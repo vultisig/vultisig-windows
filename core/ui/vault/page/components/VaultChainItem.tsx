@@ -12,13 +12,18 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { useToast } from '@lib/ui/toast/ToastProvider'
 import { sum } from '@lib/utils/array/sum'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { attempt } from '@lib/utils/attempt'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useHandleVaultChainItemPress } from './useHandleVaultChainItemPress'
 import { VaultAddressCopyButton } from './VaultAddressCopyButton'
+import { VaultAddressCopyToast } from './VaultAddressCopyToast'
 
 type VaultChainItemProps = {
   balance: VaultChainBalance
@@ -28,11 +33,35 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
   const { chain, coins } = balance
 
   const addresses = useCurrentVaultAddresses()
-  const address = addresses[chain]
+  const address = shouldBePresent(
+    addresses[chain],
+    `Vault address missing for chain ${chain}`
+  )
 
   const pressHandlers = useHandleVaultChainItemPress({
     chain,
   })
+
+  const { t } = useTranslation()
+  const { addToast } = useToast()
+
+  const handleCopyAddress = (e: React.MouseEvent | React.KeyboardEvent) => {
+    e.stopPropagation()
+    e.preventDefault()
+
+    const result = attempt(() => navigator.clipboard.writeText(address))
+
+    if ('data' in result) {
+      addToast({
+        message: '',
+        renderContent: () => <VaultAddressCopyToast value={chain} />,
+      })
+    } else {
+      addToast({
+        message: t('failed_to_copy_address'),
+      })
+    }
+  }
 
   const formatFiatAmount = useFormatFiatAmount()
 
@@ -67,7 +96,20 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
               <Text color="contrast" size={14}>
                 {chain}
               </Text>
-              <HStack alignItems="center" gap={4}>
+              <AddressRow
+                alignItems="center"
+                gap={4}
+                onClick={handleCopyAddress}
+                onKeyDown={(e: React.KeyboardEvent) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    handleCopyAddress(e)
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+                aria-label={`Copy ${chain} address`}
+              >
                 <Text weight={500} color="shy" size={12}>
                   {formatWalletAddress(address)}
                 </Text>
@@ -77,7 +119,7 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
                     chain,
                   }}
                 />
-              </HStack>
+              </AddressRow>
             </VStack>
             <HStack gap={8} alignItems="center">
               <VStack
@@ -90,22 +132,22 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
                     {formatFiatAmount(totalAmount)}
                   </BalanceVisibilityAware>
                 </Text>
-                {singleCoin ? (
-                  <Text color="shy" weight="500" size={12} centerVertically>
+                <Text color="shy" weight="500" size={12} centerVertically>
+                  {singleCoin ? (
                     <BalanceVisibilityAware>
                       {formatAmount(
                         fromChainAmount(singleCoin.amount, singleCoin.decimals),
                         { precision: 'high', ticker: singleCoin.ticker }
                       )}
                     </BalanceVisibilityAware>
-                  </Text>
-                ) : coins.length > 1 ? (
-                  <BalanceVisibilityAware>
-                    <Text color="shy" weight="500" size={12} centerVertically>
-                      {coins.length} assets
-                    </Text>
-                  </BalanceVisibilityAware>
-                ) : null}
+                  ) : coins.length > 1 ? (
+                    <BalanceVisibilityAware>
+                      <>
+                        {coins.length} {t('assets')}
+                      </>
+                    </BalanceVisibilityAware>
+                  ) : null}
+                </Text>
               </VStack>
               <IconWrapper>
                 <ChevronRightIcon />
@@ -125,5 +167,18 @@ const StyledPanel = styled(Panel)`
 
   &:hover {
     background-color: ${getColor('foregroundExtra')};
+  }
+`
+
+const AddressRow = styled(HStack)`
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  &:active {
+    opacity: 0.6;
   }
 `

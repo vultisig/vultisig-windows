@@ -7,9 +7,13 @@ import { useCore } from '@core/ui/state/core'
 import { useAssertCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
+import { round } from '@lib/ui/css/round'
+import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { DAppsIcon } from '@lib/ui/icons/DAppsIcon'
 import { LinkTwoOffIcon } from '@lib/ui/icons/LinkTwoOffIcon'
+import { ContainImage } from '@lib/ui/images/ContainImage'
+import { SafeImage } from '@lib/ui/images/SafeImage'
 import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
@@ -19,7 +23,13 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
+const Icon = styled(ContainImage)`
+  ${sameDimensions('2.7em')};
+  ${round};
+  border: 1px solid rgba(255, 255, 255, 0.1);
+`
 export const ConnectedDappsPage = () => {
   const { t } = useTranslation()
   const { data: sessions = {} } = useCurrentVaultAppSessionsQuery()
@@ -66,6 +76,12 @@ export const ConnectedDappsPage = () => {
                     >
                       <LinkTwoOffIcon />
                     </IconButton>
+                  }
+                  icon={
+                    <SafeImage
+                      src={session.icon}
+                      render={props => <Icon {...props} />}
+                    />
                   }
                   title={
                     <Text color="contrast" size={14} weight={500}>

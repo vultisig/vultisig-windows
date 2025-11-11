@@ -59,7 +59,7 @@ export const ManageFromAmount = () => {
           onChange={e => handleInputValueChange(e.target.value)}
         />
         {value !== null && (
-          <SwapFiatAmount value={{ amount: value, ...fromCoinKey }} />
+          <SwapFiatAmount value={{ ...fromCoinKey, amount: value }} />
         )}
       </AmountContainer>
       <SwapCoinBalanceDependant

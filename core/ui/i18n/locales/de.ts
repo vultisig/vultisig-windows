@@ -2,6 +2,8 @@ export const de = {
   onboarding_greeting: 'Auf Wiedersehen zu <g>Seed-Wörter</g>',
   onboarding_step_1:
     'Sag hallo zu <g>Tresoranteile,</g> deine neue <g>Wiederherstellungsmethode</g>',
+  defi: 'DeFi',
+  select_chain: 'Kette auswählen',
   onboarding_step_2:
     'Sie sind <g>in Teile aufgeteilt</g> um die Sicherheit zu erhöhen und, <g>den Single Point of Failure zu entfernen</g>',
   onboarding_step_3:
@@ -12,6 +14,9 @@ export const de = {
     '<g>Sichern Sie jede Tresorfreigabe immer</g> separat in einer <g>anderen Location</g>',
   vault_share_banner:
     'Dieser QR Code ermöglicht Ihnen, eine Ansichtsversion Ihres Tresors zu teilen',
+  actions: 'Aktionen',
+  copy_address: 'Copy Address',
+  price: 'Price',
   vault_info: 'Tresorinformationen',
   circle_title: 'Circle-Konten',
   circle_description: 'Zahle $USDC in einen Circle-Vertrag ein',
@@ -265,6 +270,7 @@ export const de = {
   pair_device_disclaimers_second: ' anwesenden Geräten senden.',
   backup_disclaimer:
     'Sie sollten alle Tresorfragmente an separaten Orten sichern.',
+  part: 'Teil',
   of: 'von',
   vault: 'Tresor',
   vaults: 'Tresore',
@@ -728,6 +734,9 @@ export const de = {
   folders: 'Ordner',
   check_for_update: 'Nach Updates suchen',
   delete_folder: 'Ordner löschen',
+  follow_banner_subtitle: 'Vultisig baut mit Ihnen.',
+  follow_banner_title: 'Folgen Sie uns auf X',
+  follow_banner_button: 'Folgen Sie @Vultisig',
   deposit: 'Einzahlung',
   add_vaults_to_folder:
     'Wählen Sie Tresore aus, die dem Ordner hinzugefügt werden sollen.',
@@ -898,6 +907,8 @@ export const de = {
   connect: 'Verbinden',
   link_copied: 'Link in die Zwischenablage kopiert',
   failed_to_copy_link: 'Link konnte nicht kopiert werden',
+  failed_to_copy_address: 'Adresse konnte nicht kopiert werden',
+  failed_to_delete_folder: 'Ordner konnte nicht gelöscht werden',
   timeout_error: 'Timeout-Fehler',
   signing_timeout_description:
     'Der Signiervorgang hat das Zeitlimit überschritten. Bitte versuchen Sie es erneut!',

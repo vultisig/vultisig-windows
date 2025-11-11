@@ -26,11 +26,13 @@ export const VaultSelector = ({ value }: ValueProp<Vault>) => {
       role="button"
       tabIndex={0}
     >
-      <HStack gap={4} alignItems="center">
+      <HStack gap={4} alignItems="center" style={{ minWidth: 0, flex: 1 }}>
         <IconWrapper color={isFastVault ? 'idle' : 'primary'} size={16}>
           {isFastVault ? <LightningIcon /> : <ShieldIcon />}
         </IconWrapper>
-        <Text size={14}>{value.name}</Text>
+        <Text size={14} cropped>
+          {value.name}
+        </Text>
       </HStack>
       <Indicator />
     </Wrapper>
@@ -44,4 +46,6 @@ const Wrapper = styled.div`
   })};
 
   cursor: pointer;
+  max-width: 60%;
+  min-width: 0;
 `

@@ -2,12 +2,17 @@ export const it = {
   onboarding_greeting: 'Addio a <g>frasi semina</g>',
   onboarding_step_1:
     'Dì ciao a <g>azioni della cassaforte,</g> il tuo nuovo <g>metodo di recupero</g>',
+  defi: 'DeFi',
+  select_chain: 'Seleziona Catena',
   onboarding_step_2:
     'Sono <g>divisi in parti</g> per aumentare la sicurezza e, <g>eliminare il singolo punto di guasto</g>',
   onboarding_step_3:
     '<g>Ogni dispositivo</g> nel tuo caveau contiene <g>una quota del caveau</g>',
   positions: 'Posizioni',
   keys: 'Chiavi',
+  actions: 'Azioni',
+  copy_address: 'Copy Address',
+  price: 'Price',
   onboarding_step_4:
     'Recupera la tua cassaforte anche <g>se un dispositivo è perso o danneggiato</g>',
   vault_share_banner:
@@ -272,6 +277,7 @@ export const it = {
   pair_device_disclaimers_second: ' dispositivi presenti.',
   backup_disclaimer:
     'Dovresti eseguire il backup di tutti i frammenti della cassaforte in posizioni separate.',
+  part: 'parte',
   of: 'di',
   vault: 'Cassaforte',
   vaults: 'Cassaforti',
@@ -735,10 +741,13 @@ export const it = {
   folder_name_already_exists: 'Il nome della cartella deve essere univoco',
   create: 'Creare',
   folders: 'Cartelle',
-  check_for_update: 'Controlla gli aggiornamenti',
+  check_for_update: 'Verifica aggiornamenti',
   delete_folder: 'Elimina cartella',
+  follow_banner_subtitle: 'Vultisig sta costruendo con te.',
+  follow_banner_title: 'Seguici su X',
+  follow_banner_button: 'Segui @Vultisig',
   deposit: 'Deposito',
-  add_vaults_to_folder: 'Selezionare Vault da aggiungere alla cartella.',
+  add_vaults_to_folder: 'Seleziona i Vault da aggiungere alla cartella.',
   chain_message_deposit: 'Deposito messaggio {{chain}}',
   thorchain_message_deposit: 'Deposito messaggio THORChain',
   bond_with_lp: 'Legame',
@@ -897,6 +906,8 @@ export const it = {
   connect: 'Collegare',
   link_copied: 'Link copiato negli appunti',
   failed_to_copy_link: 'Impossibile copiare il collegamento',
+  failed_to_copy_address: "Impossibile copiare l'indirizzo",
+  failed_to_delete_folder: 'Impossibile eliminare la cartella',
   timeout_error: 'Errore di timeout',
   signing_timeout_description:
     'Il processo di firma ha superato il limite di tempo. Riprova!',

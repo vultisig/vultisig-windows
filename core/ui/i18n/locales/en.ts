@@ -4,15 +4,20 @@ export const en = {
   app_store: 'App Store',
   developer_options: 'Developer Options',
   incorrect_url: 'Incorrect URL',
-  install_app: 'Install app',
+  install_app: 'Install ‘{{name}}’ App',
   app_permissions: 'App Permissions',
   dapp_name: 'dApp Name',
   vault_share_banner:
     'This QR Code lets you share a view-only version of your Vault',
   description: 'Description',
   onboarding_greeting: 'Say goodbye to <g>seed phrases</g>',
+  actions: 'Actions',
+  copy_address: 'Copy Address',
+  price: 'Price',
   onboarding_step_1:
     'Say hello to <g>vault shares,</g> your new <g>recovery method</g>',
+  defi: 'DeFi',
+  select_chain: 'Select Chain',
   onboarding_step_2:
     "They're <g>split into parts</g> to increase security, <g>removing the single point-of-failure</g>",
   onboarding_step_3:
@@ -252,6 +257,7 @@ export const en = {
   pair_device_disclaimers_second: 'devices present.',
   backup_disclaimer:
     'You should backup all vault shares in separate locations.',
+  part: 'part',
   of: 'of',
   vault: 'Vault',
   vaults: 'Vaults',
@@ -892,6 +898,9 @@ export const en = {
   delete_folder: 'Delete Folder',
   folders: 'Folders',
   add_vaults_to_folder: 'Select Vaults to add to the folder.',
+  follow_banner_subtitle: 'Vultisig is building with you.',
+  follow_banner_title: 'Follow us on X',
+  follow_banner_button: 'Follow @Vultisig',
   deposit: 'Function',
   chain_message_deposit: '{{chain}} message deposit',
   thorchain_message_deposit: 'THORChain message deposit',
@@ -1000,6 +1009,8 @@ export const en = {
   connect: 'Connect',
   link_copied: 'Link copied to clipboard',
   failed_to_copy_link: 'Failed to copy link',
+  failed_to_copy_address: 'Failed to copy address',
+  failed_to_delete_folder: 'Failed to delete folder',
   failed_to_retrieve_addresses: 'Failed to retrieve addresses',
   timeout_error: 'Timeout Error',
   signing_timeout_description:
@@ -1181,4 +1192,7 @@ export const en = {
     'Back up your vault share online  using the same vault password you created earlier.',
   fast_vault_backup_description:
     'Online storage is recommended and safe - vault shares are designed for this.',
+  connected_with_server: 'Connected with server',
+  server_connection_estimation:
+    'This usually doesn’t take longer than 30 seconds',
 }

@@ -25,7 +25,7 @@ import styled from 'styled-components'
 
 import { useAssertWalletCore } from '../../../../chain/providers/WalletCoreProvider'
 import { AnimatedSendFormInputError } from '../../components/AnimatedSendFormInputError'
-import { validateSendForm } from '../../form/validateSendForm'
+import { validateSendReceiver } from '../../form/validateSendForm'
 import { useSendValidationQuery } from '../../queries/useSendValidationQuery'
 import { useCurrentSendCoin } from '../../state/sendCoin'
 import { AddressBookModal } from './AddressBookModal'
@@ -40,35 +40,32 @@ export const ManageReceiverAddressInputField = () => {
   const { name } = useCurrentVault()
   const [value, setValue] = useSendReceiver()
   const [viewState, setViewState] = useState<MangeReceiverViewState>('default')
+  const [touched, setTouched] = useState(false)
   const walletCore = useAssertWalletCore()
 
   const { data } = useSendValidationQuery()
 
   const [, setFocusedSendField] = useSendFormFieldState()
 
-  const error = data?.receiverAddress
+  const error = touched ? data?.receiverAddress : undefined
 
   const handleUpdateReceiverAddress = useCallback(
     (value: string) => {
+      setTouched(true)
       setValue(value)
-      const validation = validateSendForm(
-        {
-          coin,
-          amount: 0n,
-          senderAddress: coin.address,
-          receiverAddress: value,
-        },
-        {
-          balance: undefined,
-          walletCore,
-          t,
-        }
-      )
-      setFocusedSendField(state => ({
-        ...state,
-        errors: validation,
-        field: validation.receiverAddress ? state.field : 'amount',
-      }))
+      const receiverError = validateSendReceiver({
+        receiverAddress: value,
+        chain: coin.chain,
+        senderAddress: coin.address,
+        walletCore,
+        t,
+      })
+      if (!receiverError) {
+        setFocusedSendField(state => ({
+          ...state,
+          field: 'amount',
+        }))
+      }
     },
     [coin, setValue, setFocusedSendField, walletCore, t]
   )
@@ -124,6 +121,7 @@ export const ManageReceiverAddressInputField = () => {
                   placeholder={t('enter_address')}
                   value={value}
                   onValueChange={value => handleUpdateReceiverAddress(value)}
+                  onBlur={() => setTouched(true)}
                 />
                 {error && <AnimatedSendFormInputError error={error} />}
               </VStack>

@@ -8,10 +8,41 @@ import { TFunction } from 'i18next'
 
 import { SendFormShape, ValidationResult } from './formShape'
 
+type ValidateSendReceiverInput = {
+  receiverAddress: string
+  chain: Chain
+  senderAddress: string
+  walletCore: WalletCore
+  t: TFunction
+}
+
+export const validateSendReceiver = ({
+  receiverAddress,
+  chain,
+  senderAddress,
+  walletCore,
+  t,
+}: ValidateSendReceiverInput): string | undefined => {
+  if (!receiverAddress) {
+    return t('enter_address')
+  }
+
+  if (
+    chain === Chain.Tron &&
+    areLowerCaseEqual(senderAddress, receiverAddress)
+  ) {
+    return t('send_receiver_address_same_as_sender')
+  }
+
+  if (!isValidAddress({ address: receiverAddress, chain, walletCore })) {
+    return t('send_invalid_receiver_address')
+  }
+}
+
 export const validateSendForm = (
   values: SendFormShape,
   helpers: {
-    balance: bigint | undefined
+    balance: bigint
     walletCore: WalletCore
     t: TFunction
   }
@@ -25,16 +56,12 @@ export const validateSendForm = (
 
   if (!amount) {
     errors.amount = t('amount_required')
-  } else if (balance !== undefined) {
+  } else {
     if (amount > balance) {
       errors.amount = t('insufficient_balance')
     }
 
-    if (
-      isOneOf(chain, Object.values(UtxoBasedChain)) &&
-      amount &&
-      balance !== undefined
-    ) {
+    if (isOneOf(chain, Object.values(UtxoBasedChain)) && amount) {
       const errorMsg = validateUtxoRequirements({
         amount,
         balance,
@@ -47,15 +74,16 @@ export const validateSendForm = (
     }
   }
 
-  if (!receiverAddress) {
-    errors.receiverAddress = t('send_invalid_receiver_address')
-  } else if (
-    chain === Chain.Tron &&
-    areLowerCaseEqual(senderAddress, receiverAddress)
-  ) {
-    errors.receiverAddress = t('send_receiver_address_same_as_sender')
-  } else if (!isValidAddress({ address: receiverAddress, chain, walletCore })) {
-    errors.receiverAddress = t('send_invalid_receiver_address')
+  const receiverError = validateSendReceiver({
+    receiverAddress,
+    chain,
+    senderAddress,
+    walletCore,
+    t,
+  })
+
+  if (receiverError) {
+    errors.receiverAddress = receiverError
   }
 
   return errors
