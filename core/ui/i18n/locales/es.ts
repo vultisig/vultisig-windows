@@ -276,6 +276,7 @@ export const es = {
   pair_device_disclaimers_second: ' dispositivos presentes.',
   backup_disclaimer:
     'Debe hacer una copia de seguridad de todos los fragmentos de la bóveda en ubicaciones separadas.',
+  part: 'parte',
   of: 'de',
   save_changes: 'Guardar cambios',
   vault: 'Bóveda',
@@ -906,6 +907,8 @@ export const es = {
   connect: 'Conectar',
   link_copied: 'Enlace copiado al portapapeles',
   failed_to_copy_link: 'No se pudo copiar el enlace',
+  failed_to_copy_address: 'No se pudo copiar la dirección',
+  failed_to_delete_folder: 'No se pudo eliminar la carpeta',
   timeout_error: 'Error de tiempo de espera',
   signing_timeout_description:
     'El proceso de firma ha excedido el tiempo límite. ¡Inténtalo de nuevo!',

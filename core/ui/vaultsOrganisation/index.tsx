@@ -23,7 +23,7 @@ import { FolderIcon } from '@lib/ui/icons/FolderIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { PlusIcon } from '@lib/ui/icons/PlusIcon'
 import { SquarePenIcon } from '@lib/ui/icons/SquarePenIcon'
-import { VStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -39,6 +39,7 @@ type FolderEntry = {
   id: string
   name: string
   vaultCount: number
+  activeVaultName?: string
 }
 
 export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
@@ -54,17 +55,20 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
 
   const folderEntries = useMemo<FolderEntry[]>(() => {
     return folders.map(folder => {
-      const vaultCount = vaults.filter(
-        vault => vault.folderId === folder.id
-      ).length
+      const folderVaults = vaults.filter(vault => vault.folderId === folder.id)
+      const vaultCount = folderVaults.length
+      const activeVault = folderVaults.find(
+        vault => getVaultId(vault) === currentVaultId
+      )
 
       return {
         id: folder.id,
         name: folder.name,
         vaultCount,
+        activeVaultName: activeVault?.name,
       }
     })
-  }, [folders, vaults])
+  }, [folders, vaults, currentVaultId])
 
   const folderlessVaults = useMemo(
     () => vaults.filter(vault => !vault.folderId),
@@ -152,26 +156,42 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
 
         {folderEntries.length > 0 && (
           <VStack gap={12}>
-            {folderEntries.map(folder => (
-              <VaultListRow
-                key={folder.id}
-                leading={
-                  <LeadingIconBadge tone="info">
-                    <FolderIcon />
-                  </LeadingIconBadge>
-                }
-                title={folder.name}
-                subtitle={t('vault_count', { count: folder.vaultCount })}
-                trailing={
-                  <IconWrapper size={18} color="textShy">
-                    <ChevronRightIcon />
-                  </IconWrapper>
-                }
-                onClick={() =>
-                  navigate({ id: 'vaultFolder', state: { id: folder.id } })
-                }
-              />
-            ))}
+            {folderEntries.map(folder => {
+              const subtitle = folder.activeVaultName
+                ? `✓ '${folder.activeVaultName}' ${t('active')}`
+                : t('vault_count', { count: folder.vaultCount })
+
+              return (
+                <VaultListRow
+                  selected={!!folder.activeVaultName}
+                  key={folder.id}
+                  leading={
+                    <LeadingIconBadge tone="info">
+                      <FolderIcon />
+                    </LeadingIconBadge>
+                  }
+                  title={folder.name}
+                  subtitle={
+                    <Text
+                      size={13}
+                      weight={500}
+                      color={folder.activeVaultName ? 'info' : 'shy'}
+                      cropped
+                    >
+                      {subtitle}
+                    </Text>
+                  }
+                  trailing={
+                    <IconWrapper size={18} color="textShy">
+                      <ChevronRightIcon />
+                    </IconWrapper>
+                  }
+                  onClick={() =>
+                    navigate({ id: 'vaultFolder', state: { id: folder.id } })
+                  }
+                />
+              )
+            })}
           </VStack>
         )}
 
@@ -204,12 +224,21 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
                         : undefined
                     }
                     meta={
-                      <IconWrapper size={20} color="primary">
-                        <CheckIcon />
-                      </IconWrapper>
+                      <HStack gap={8} alignItems="center">
+                        <IconWrapper size={16} color="success">
+                          <CheckIcon />
+                        </IconWrapper>
+                        <VaultSignersPill vault={vault} />
+                      </HStack>
                     }
                     selected={vaultId === currentVaultId}
-                    trailing={<VaultSignersPill vault={vault} />}
+                    trailing={
+                      vaultId === currentVaultId ? (
+                        <IconWrapper size={20} color="success">
+                          <CheckIcon />
+                        </IconWrapper>
+                      ) : null
+                    }
                     onClick={() => handleSelectVault(vaultId)}
                   />
                 )

@@ -34,20 +34,27 @@ const Container = styled(VStack)`
 const QRContainer = styled.div`
   position: relative;
   width: 100%;
-  max-width: 360px;
-  padding: 20px 20px 64px;
+  max-width: 232px;
+  aspect-ratio: 232 / 272;
   border-radius: 24px;
-  border: 4px solid ${({ theme }) => theme.colors.buttonPrimary.toCssValue()};
   background: ${getColor('foreground')};
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  border-radius: 32px 32px 24px 24px;
+  background: linear-gradient(180deg, #4879fd 0%, #0d39b1 100%);
+  box-shadow:
+    0 -3px 1px 0 rgba(0, 0, 0, 0.25) inset,
+    0 1px 1px 0 rgba(255, 255, 255, 0.35) inset;
+  padding: 8px 8px 16px 8px;
 `
 
 const QRWrapper = styled.div`
   width: 100%;
   aspect-ratio: 1;
-  border-radius: 16px;
+  border-radius: 32px 32px 24px 24px;
+
   overflow: hidden;
   background: white;
   padding: 16px;
@@ -73,7 +80,6 @@ const ReceiveLabel = styled.div`
   bottom: 0;
   left: 0;
   right: 0;
-  background: ${({ theme }) => theme.colors.buttonPrimary.toCssValue()};
   padding: 12px;
   border-radius: 0 0 20px 20px;
   text-align: center;
