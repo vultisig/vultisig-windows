@@ -863,6 +863,7 @@ export const it = {
     output: "Accetto l'importo minimo che riceverò",
   },
   add_address: 'Aggiungi indirizzo',
+  add_to_address_book: 'Aggiungi alla rubrica',
   settings: 'Impostazioni',
   language: 'Lingua',
   currency: 'Valuta',
