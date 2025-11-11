@@ -97,14 +97,14 @@ export const BannerCarousel = ({ banners }: BannerCarouselProps) => {
         <>
           <NavigationButton
             onClick={goToPrevious}
-            $position="left"
+            position="left"
             aria-label="Previous banner"
           >
             ‹
           </NavigationButton>
           <NavigationButton
             onClick={goToNext}
-            $position="right"
+            position="right"
             aria-label="Next banner"
           >
             ›
@@ -114,7 +114,7 @@ export const BannerCarousel = ({ banners }: BannerCarouselProps) => {
             {activeBanners.map((banner, index) => (
               <PaginationDot
                 key={banner.id}
-                $isActive={index === currentIndex}
+                isActive={index === currentIndex}
                 onClick={() => setCurrentIndex(index)}
                 aria-label={`Go to banner ${index + 1}`}
               />
