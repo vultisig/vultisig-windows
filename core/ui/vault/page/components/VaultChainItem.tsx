@@ -14,6 +14,8 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useToast } from '@lib/ui/toast/ToastProvider'
 import { sum } from '@lib/utils/array/sum'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { attempt } from '@lib/utils/attempt'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
 import { useTranslation } from 'react-i18next'
@@ -31,7 +33,10 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
   const { chain, coins } = balance
 
   const addresses = useCurrentVaultAddresses()
-  const address = addresses[chain]
+  const address = shouldBePresent(
+    addresses[chain],
+    `Vault address missing for chain ${chain}`
+  )
 
   const pressHandlers = useHandleVaultChainItemPress({
     chain,
@@ -40,15 +45,22 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
   const { t } = useTranslation()
   const { addToast } = useToast()
 
-  const handleCopyAddress = (e: React.MouseEvent) => {
+  const handleCopyAddress = (e: React.MouseEvent | React.KeyboardEvent) => {
     e.stopPropagation()
     e.preventDefault()
-    navigator.clipboard.writeText(address)
 
-    addToast({
-      message: '',
-      renderContent: () => <VaultAddressCopyToast value={chain} />,
-    })
+    const result = attempt(() => navigator.clipboard.writeText(address))
+
+    if ('data' in result) {
+      addToast({
+        message: '',
+        renderContent: () => <VaultAddressCopyToast value={chain} />,
+      })
+    } else {
+      addToast({
+        message: t('failed_to_copy_address'),
+      })
+    }
   }
 
   const formatFiatAmount = useFormatFiatAmount()
@@ -88,6 +100,15 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
                 alignItems="center"
                 gap={4}
                 onClick={handleCopyAddress}
+                onKeyDown={(e: React.KeyboardEvent) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    handleCopyAddress(e)
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+                aria-label={`Copy ${chain} address`}
               >
                 <Text weight={500} color="shy" size={12}>
                   {formatWalletAddress(address)}
