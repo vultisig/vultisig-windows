@@ -9,6 +9,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Modal } from '@lib/ui/modal'
 import { getColor } from '@lib/ui/theme/getters'
+import { useToast } from '@lib/ui/toast/ToastProvider'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -21,6 +22,7 @@ export const DeleteVaultFolder = () => {
   const { id } = useCurrentVaultFolder()
   const { mutate, isPending } = useDeleteVaultFolderMutation()
   const navigate = useCoreNavigate()
+  const { addToast } = useToast()
 
   return (
     <Opener
@@ -40,7 +42,12 @@ export const DeleteVaultFolder = () => {
                     onClose()
                     navigate({ id: 'vaults' })
                   },
-                  onError: error => console.error(error),
+                  onError: error => {
+                    console.error(error)
+                    addToast({
+                      message: t('failed_to_delete_folder'),
+                    })
+                  },
                 })
               }
             >
