@@ -1,7 +1,7 @@
 import {
   buildReferralKeysignPayload,
   BuildReferralKeysignPayloadInput,
-} from '@core/mpc/keysign/send/build'
+} from '@core/mpc/keysign/referral/build'
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
