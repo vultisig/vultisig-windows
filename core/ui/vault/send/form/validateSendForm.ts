@@ -24,7 +24,7 @@ export const validateSendReceiver = ({
   t,
 }: ValidateSendReceiverInput): string | undefined => {
   if (!receiverAddress) {
-    return t('send_invalid_receiver_address')
+    return t('enter_address')
   }
 
   if (
