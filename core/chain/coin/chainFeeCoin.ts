@@ -185,7 +185,7 @@ const leanChainFeeCoin: Record<Chain, KnownCoinMetadata> = {
   [Chain.Sei]: {
     ticker: 'SEI',
     logo: 'sei',
-    decimals: 18,
+    decimals: 6,
     priceProviderId: 'sei-network',
   },
 }
