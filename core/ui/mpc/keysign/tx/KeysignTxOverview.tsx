@@ -12,7 +12,7 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIcon'
 import { SeparatedByLine } from '@lib/ui/layout/SeparatedByLine'
-import { HStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
@@ -22,6 +22,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { AddToAddressBookButton } from './components/AddToAddressBookButton'
 import { TxFeeRow } from './components/TxFeeRow'
 import { KeysignFeeAmount } from './FeeAmount'
 
@@ -84,17 +85,22 @@ export const KeysignTxOverview = () => {
             </HStack>
           </HStack>
           {toAddress && (
-            <HStack
-              alignItems="center"
-              gap={4}
-              justifyContent="space-between"
-              wrap="nowrap"
-            >
-              <Text color="shy" weight="500">
-                {t('to')}
-              </Text>
-              <AddressWrapper>{toAddress}</AddressWrapper>
-            </HStack>
+            <VStack gap={8}>
+              <HStack
+                alignItems="center"
+                gap={4}
+                justifyContent="space-between"
+                wrap="nowrap"
+              >
+                <Text color="shy" weight="500">
+                  {t('to')}
+                </Text>
+                <AddressWrapper>{toAddress}</AddressWrapper>
+              </HStack>
+              <HStack justifyContent="center">
+                <AddToAddressBookButton address={toAddress} chain={chain} />
+              </HStack>
+            </VStack>
           )}
           {memo && <TxOverviewMemo value={memo} chain={chain} />}
           <HStack alignItems="center" gap={4} justifyContent="space-between">
