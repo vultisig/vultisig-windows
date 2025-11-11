@@ -2,6 +2,8 @@ export const de = {
   onboarding_greeting: 'Auf Wiedersehen zu <g>Seed-Wörter</g>',
   onboarding_step_1:
     'Sag hallo zu <g>Tresoranteile,</g> deine neue <g>Wiederherstellungsmethode</g>',
+  defi: 'DeFi',
+  select_chain: 'Kette auswählen',
   onboarding_step_2:
     'Sie sind <g>in Teile aufgeteilt</g> um die Sicherheit zu erhöhen und, <g>den Single Point of Failure zu entfernen</g>',
   onboarding_step_3:
@@ -731,6 +733,9 @@ export const de = {
   folders: 'Ordner',
   check_for_update: 'Nach Updates suchen',
   delete_folder: 'Ordner löschen',
+  follow_banner_subtitle: 'Vultisig baut mit Ihnen.',
+  follow_banner_title: 'Folgen Sie uns auf X',
+  follow_banner_button: 'Folgen Sie @Vultisig',
   deposit: 'Einzahlung',
   add_vaults_to_folder:
     'Wählen Sie Tresore aus, die dem Ordner hinzugefügt werden sollen.',

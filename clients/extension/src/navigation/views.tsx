@@ -1,3 +1,4 @@
+import { DappsButton } from '@clients/extension/src/components/dapps-button/DappsButton'
 import { ExtensionDeveloperOptions } from '@clients/extension/src/components/developer-options'
 import { ExpandView } from '@clients/extension/src/components/expand-view'
 import { ExpandViewGuard } from '@clients/extension/src/components/expand-view-guard'
@@ -18,7 +19,12 @@ import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardi
 import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProvider'
 import { SettingsPage } from '@core/ui/settings'
 import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPage'
+import { VaultPage } from '@core/ui/vault/page/components/VaultPage'
 import { Views } from '@lib/ui/navigation/Views'
+
+const ExtensionVaultPage = () => {
+  return <VaultPage primaryControls={<DappsButton />} />
+}
 
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   connectedDapps: ConnectedDappsPage,
@@ -59,4 +65,5 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
 export const views: Views<AppViewId> = {
   ...sharedViews,
   ...appCustomViews,
+  vault: ExtensionVaultPage, // Override the shared vault view
 }

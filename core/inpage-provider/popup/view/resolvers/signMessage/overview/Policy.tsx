@@ -28,10 +28,13 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
   const { requestFavicon, requestOrigin } = usePopupContext<'signMessage'>()
   const isFinished = useMemo(() => !!signature, [signature])
 
-  const camelCaseToTitle = (input: string) => {
+  const snakeCaseToTitle = (input: string) => {
+    if (!input) return input
+
     return input
-      .replace(/([a-z])([A-Z])/g, '$1 $2')
-      .replace(/\b\w/g, char => char.toUpperCase())
+      .split('_')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ')
   }
 
   const policy = useMemo(() => {
@@ -172,7 +175,7 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
                                       weight={500}
                                       nowrap
                                     >
-                                      {camelCaseToTitle(parameterName)}
+                                      {snakeCaseToTitle(parameterName)}
                                     </Text>
                                     <Text
                                       as="span"
@@ -181,7 +184,7 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
                                       weight={500}
                                       nowrap
                                     >
-                                      {`(${camelCaseToTitle(constraint.value.case)})`}
+                                      {`(${snakeCaseToTitle(constraint.value.case)})`}
                                     </Text>
                                   </HStack>
                                 ) : (
@@ -193,7 +196,7 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
                                     cropped
                                     nowrap
                                   >
-                                    {camelCaseToTitle(parameterName)}
+                                    {snakeCaseToTitle(parameterName)}
                                   </Text>
                                 )}
                                 {isHexString(value) ? (
@@ -247,7 +250,7 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
                                   weight={500}
                                   nowrap
                                 >
-                                  {`(${camelCaseToTitle(target.target.case)})`}
+                                  {`(${snakeCaseToTitle(target.target.case)})`}
                                 </Text>
                               </HStack>
                             ) : (

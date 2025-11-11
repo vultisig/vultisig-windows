@@ -9,8 +9,9 @@ import { areEmptyChildren } from '@lib/ui/utils/areEmptyChildren'
 import { RefObject } from 'react'
 import styled from 'styled-components'
 
-import VaultBackupBanner from '../backup/vaultBackupBanner/VaultBackupBanner/VaultBackupBanner'
 import { VaultTotalBalance } from '../balance/VaultTotalBalance'
+import { BannerCarousel } from '../banners/BannerCarousel/BannerCarousel'
+import { FollowOnXBanner } from '../banners/FollowOnXBanner/FollowOnXBanner'
 import { MigrateVaultPrompt } from '../keygen/migrate/MigrateVaultPrompt'
 import { VaultOverviewPrimaryActions } from './VaultOverviewPrimaryActions'
 import { VaultTabs } from './VaultTabs/VaultTabs'
@@ -32,17 +33,37 @@ type VaultOverviewProps = {
 }
 
 export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
-  const { isBackedUp, libType } = useCurrentVault()
+  const { libType } = useCurrentVault()
+
+  const banners = [
+    ...(libType !== 'DKLS'
+      ? [
+          {
+            id: 'migrate' as const,
+            component: (props: { onDismiss: () => void }) => (
+              <MigrateVaultPrompt onDismiss={props.onDismiss} />
+            ),
+          },
+        ]
+      : []),
+    {
+      id: 'followOnX' as const,
+      component: (props: { onDismiss: () => void }) => (
+        <FollowOnXBanner onDismiss={props.onDismiss} />
+      ),
+    },
+  ]
 
   return (
     <VStack fullHeight>
-      <Wrap wrap={PromptsWrapper}>{!isBackedUp && <VaultBackupBanner />}</Wrap>
       <StyledPageContent ref={scrollContainerRef} scrollable gap={32} flexGrow>
         <VStack alignItems="center" gap={24}>
           <VaultTotalBalance />
           <VaultOverviewPrimaryActions />
-          {libType !== 'DKLS' && <MigrateVaultPrompt />}
         </VStack>
+        <Wrap wrap={PromptsWrapper}>
+          <BannerCarousel banners={banners} />
+        </Wrap>
         <Divider />
         <VaultTabs />
       </StyledPageContent>
@@ -52,6 +73,7 @@ export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
 
 const StyledPageContent = styled(PageContent)`
   ${hideScrollbars};
+  padding-bottom: 80px;
 `
 
 const Divider = styled.div`
