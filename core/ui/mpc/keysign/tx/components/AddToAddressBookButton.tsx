@@ -6,17 +6,17 @@ import {
   useCreateAddressBookItemMutation,
 } from '@core/ui/storage/addressBook'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Opener } from '@lib/ui/base/Opener'
 import { Button } from '@lib/ui/buttons/Button'
 import { PlusIcon } from '@lib/ui/icons/PlusIcon'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
-import { Opener } from '@lib/ui/modal/Opener'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
-import { FC, useState } from 'react'
+import { FC } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -25,26 +25,27 @@ import { z } from 'zod'
 
 const StyledButton = styled.button`
   align-items: center;
-  background: ${getColor('primary')};
-  border: none;
-  border-radius: 20px;
-  color: ${getColor('background')};
+  color: ${getColor('success')};
   cursor: pointer;
   display: flex;
   font-size: 12px;
   font-weight: 600;
   gap: 4px;
   height: 28px;
-  padding: 0 12px;
+  padding: 6px 12px;
   transition: all 0.2s;
   white-space: nowrap;
+
+  border-radius: 20px;
+  border: 0.5px solid ${getColor('success')};
+  background: #042436;
 
   &:hover {
     opacity: 0.9;
   }
 
   svg {
-    font-size: 14px;
+    font-size: 16px;
   }
 `
 
@@ -63,7 +64,6 @@ export const AddToAddressBookButton: FC<AddToAddressBookButtonProps> = ({
   const addressBookItems = useAddressBookItems()
   const addressBookItemOrders = useAddressBookItemOrders()
   const { mutate, error, isPending } = useCreateAddressBookItemMutation()
-  const [isOpen, setIsOpen] = useState(false)
 
   // Check if address already exists in address book
   const addressExists = addressBookItems.some(
@@ -88,7 +88,7 @@ export const AddToAddressBookButton: FC<AddToAddressBookButtonProps> = ({
     defaultValues: { title: '' },
   })
 
-  const handleAddAddress = (values: FormValues) => {
+  const handleAddAddress = (onClose: () => void) => (values: FormValues) => {
     const { title } = values
 
     mutate(
@@ -101,7 +101,7 @@ export const AddToAddressBookButton: FC<AddToAddressBookButtonProps> = ({
       },
       {
         onSuccess: () => {
-          setIsOpen(false)
+          onClose()
           reset()
         },
       }
@@ -115,21 +115,26 @@ export const AddToAddressBookButton: FC<AddToAddressBookButtonProps> = ({
 
   return (
     <Opener
-      isOpen={isOpen}
-      onOpen={() => setIsOpen(true)}
-      onClose={() => {
-        setIsOpen(false)
-        reset()
-      }}
-      renderOpener={({ onOpen }) => (
+      renderOpener={({ onOpen }: { onOpen: () => void }) => (
         <StyledButton onClick={onOpen}>
           <PlusIcon />
           {t('add_to_address_book')}
         </StyledButton>
       )}
-      renderContent={({ onClose }) => (
-        <Modal isOpen={true} onClose={onClose} title={t('add_to_address_book')}>
-          <VStack as="form" onSubmit={handleSubmit(handleAddAddress)} gap={16}>
+      renderContent={({ onClose }: { onClose: () => void }) => (
+        <Modal
+          isOpen={true}
+          onClose={() => {
+            onClose()
+            reset()
+          }}
+          title={t('add_to_address_book')}
+        >
+          <VStack
+            as="form"
+            onSubmit={handleSubmit(handleAddAddress(onClose))}
+            gap={16}
+          >
             <VStack gap={8}>
               <Text color="shy" size={14} weight="500">
                 {t('chain')}
