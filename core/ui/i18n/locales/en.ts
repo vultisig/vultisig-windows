@@ -257,6 +257,7 @@ export const en = {
   pair_device_disclaimers_second: 'devices present.',
   backup_disclaimer:
     'You should backup all vault shares in separate locations.',
+  part: 'part',
   of: 'of',
   vault: 'Vault',
   vaults: 'Vaults',
@@ -1008,6 +1009,8 @@ export const en = {
   connect: 'Connect',
   link_copied: 'Link copied to clipboard',
   failed_to_copy_link: 'Failed to copy link',
+  failed_to_copy_address: 'Failed to copy address',
+  failed_to_delete_folder: 'Failed to delete folder',
   failed_to_retrieve_addresses: 'Failed to retrieve addresses',
   timeout_error: 'Timeout Error',
   signing_timeout_description:

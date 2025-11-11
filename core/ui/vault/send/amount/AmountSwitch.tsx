@@ -29,7 +29,7 @@ export const CurrencySwitch = ({ onClick, value }: Props) => {
             const isActive = value === mode
             return (
               <AnimatedIconButton
-                $isActive={isActive}
+                isActive={isActive}
                 key={mode}
                 kind={isActive ? 'primary' : 'link'}
                 onClick={() => onClick(mode)}
@@ -44,10 +44,10 @@ export const CurrencySwitch = ({ onClick, value }: Props) => {
   )
 }
 
-const AnimatedIconButton = motion(styled(IconButton)<{ $isActive: boolean }>`
+const AnimatedIconButton = motion(styled(IconButton)<{ isActive: boolean }>`
   border-radius: 50%;
-  scale: ${({ $isActive }) => ($isActive ? 1.1 : 1)};
-  opacity: ${({ $isActive }) => ($isActive ? 1 : 0.6)};
+  scale: ${({ isActive }) => (isActive ? 1.1 : 1)};
+  opacity: ${({ isActive }) => (isActive ? 1 : 0.6)};
   transition:
     scale 0.2s ease,
     opacity 0.2s ease;

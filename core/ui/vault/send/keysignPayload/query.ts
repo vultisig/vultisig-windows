@@ -1,3 +1,7 @@
+import {
+  buildSendKeysignPayload,
+  BuildSendKeysignPayloadInput,
+} from '@core/mpc/keysign/send/build'
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
@@ -15,7 +19,6 @@ import { useSendAmount } from '../state/amount'
 import { useSendMemo } from '../state/memo'
 import { useSendReceiver } from '../state/receiver'
 import { useCurrentSendCoin } from '../state/sendCoin'
-import { buildSendKeysignPayload, BuildSendKeysignPayloadInput } from './build'
 
 export const useSendKeysignPayloadQuery = () => {
   const coin = useCurrentSendCoin()
