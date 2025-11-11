@@ -906,6 +906,8 @@ export const de = {
   connect: 'Verbinden',
   link_copied: 'Link in die Zwischenablage kopiert',
   failed_to_copy_link: 'Link konnte nicht kopiert werden',
+  failed_to_copy_address: 'Adresse konnte nicht kopiert werden',
+  failed_to_delete_folder: 'Ordner konnte nicht gelöscht werden',
   timeout_error: 'Timeout-Fehler',
   signing_timeout_description:
     'Der Signiervorgang hat das Zeitlimit überschritten. Bitte versuchen Sie es erneut!',
