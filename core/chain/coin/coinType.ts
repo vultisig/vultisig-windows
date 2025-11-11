@@ -47,5 +47,5 @@ export const getCoinType = ({
     [Chain.Zcash]: () => CoinType.zcash,
     [Chain.Cardano]: () => CoinType.cardano,
     [Chain.Mantle]: () => CoinType.mantle,
-    [Chain.Sei]: () => CoinType.sei,
+    [Chain.Sei]: () => CoinType.ethereum,
   })
