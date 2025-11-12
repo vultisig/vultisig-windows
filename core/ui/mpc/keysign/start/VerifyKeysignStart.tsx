@@ -1,4 +1,5 @@
 import { getBlockaidTxValidationInput } from '@core/chain/security/blockaid/tx/validation/input'
+import { BuildKeysignPayloadError } from '@core/mpc/keysign/error'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { getBlockaidTxValidationQuery } from '@core/ui/chain/security/blockaid/tx/queries/blockaidTxValidation'
 import { StartKeysignPrompt } from '@core/ui/mpc/keysign/prompt/StartKeysignPrompt'
@@ -14,6 +15,8 @@ import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData
 import { Query } from '@lib/ui/query/Query'
 import { Text } from '@lib/ui/text'
 import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { match } from '@lib/utils/match'
 import { ReactNode, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -91,6 +94,19 @@ export const VerifyKeysignStart = ({
       }
     }
 
+    if (keysignPayloadQuery.error) {
+      if (keysignPayloadQuery.error instanceof BuildKeysignPayloadError) {
+        return {
+          disabledMessage: match(keysignPayloadQuery.error.type, {
+            'not-enough-funds': () => t('not_enough_funds'),
+          }),
+        }
+      }
+      return {
+        disabledMessage: extractErrorMsg(keysignPayloadQuery.error),
+      }
+    }
+
     const keysign = keysignPayloadQuery.data
 
     if (!keysign) {
@@ -107,6 +123,7 @@ export const VerifyKeysignStart = ({
     }
   }, [
     keysignPayloadQuery.data,
+    keysignPayloadQuery.error,
     keysignPayloadQuery.isPending,
     t,
     termsAccepted,

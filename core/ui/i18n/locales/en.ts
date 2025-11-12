@@ -1195,4 +1195,5 @@ export const en = {
   connected_with_server: 'Connected with server',
   server_connection_estimation:
     'This usually doesn’t take longer than 30 seconds',
+  not_enough_funds: 'Not enough funds',
 }

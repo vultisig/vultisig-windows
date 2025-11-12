@@ -1,3 +1,4 @@
+import { BuildKeysignPayloadError } from '@core/mpc/keysign/error'
 import {
   buildSendKeysignPayload,
   BuildSendKeysignPayloadInput,
@@ -52,5 +53,12 @@ export const useSendKeysignPayloadQuery = () => {
     queryKey: ['sendTxKeysignPayload', omit(input, 'walletCore', 'publicKey')],
     queryFn: () => buildSendKeysignPayload(input),
     ...noRefetchQueryOptions,
+    retry: (failureCount, error) => {
+      if (error instanceof BuildKeysignPayloadError) {
+        return false
+      }
+
+      return failureCount < 3
+    },
   })
 }
