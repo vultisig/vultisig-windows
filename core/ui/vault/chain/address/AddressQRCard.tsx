@@ -174,6 +174,7 @@ export const AddressQRCard = ({ chain, coin, onShare }: AddressQRCardProps) => {
             }}
             fgColor="#000000"
             bgColor="#FFFFFF"
+            level="H"
           />
           <ChainIconOverlay>
             {coin?.logo ? (
