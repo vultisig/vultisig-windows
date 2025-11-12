@@ -270,6 +270,7 @@ export const de = {
   pair_device_disclaimers_second: ' anwesenden Geräten senden.',
   backup_disclaimer:
     'Sie sollten alle Tresorfragmente an separaten Orten sichern.',
+  part: 'Teil',
   of: 'von',
   vault: 'Tresor',
   vaults: 'Tresore',
@@ -906,6 +907,8 @@ export const de = {
   connect: 'Verbinden',
   link_copied: 'Link in die Zwischenablage kopiert',
   failed_to_copy_link: 'Link konnte nicht kopiert werden',
+  failed_to_copy_address: 'Adresse konnte nicht kopiert werden',
+  failed_to_delete_folder: 'Ordner konnte nicht gelöscht werden',
   timeout_error: 'Timeout-Fehler',
   signing_timeout_description:
     'Der Signiervorgang hat das Zeitlimit überschritten. Bitte versuchen Sie es erneut!',
@@ -1239,4 +1242,5 @@ export const de = {
     'Sichern Sie Ihre Tresorfreigabe online mit demselben Tresorpasswort, das Sie zuvor erstellt haben.',
   fast_vault_backup_description:
     'Online-Speicher ist empfehlenswert und sicher – Vault-Speicher sind genau dafür konzipiert.',
+  not_enough_funds: 'Nicht genügend Mittel',
 }

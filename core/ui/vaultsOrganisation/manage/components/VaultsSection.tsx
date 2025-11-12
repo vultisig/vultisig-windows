@@ -5,13 +5,12 @@ import { useFolderlessVaults } from '@core/ui/storage/vaults'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import {
   LeadingIconBadge,
+  SelectionIndicator,
   VaultListRow,
 } from '@core/ui/vaultsOrganisation/components'
 import { useVaultsTotalBalances } from '@core/ui/vaultsOrganisation/hooks/useVaultsTotalBalances'
 import { getVaultSecurityTone } from '@core/ui/vaultsOrganisation/utils/getVaultSecurityTone'
 import { DnDList } from '@lib/ui/dnd/DnDList'
-import { CheckIcon } from '@lib/ui/icons/CheckIcon'
-import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { MenuIcon } from '@lib/ui/icons/MenuIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import {
@@ -93,12 +92,8 @@ export const VaultsSection = () => {
                   ? formatFiatAmount(value)
                   : undefined
               }
-              meta={
-                vaultId === currentVaultId ? (
-                  <IconWrapper size={20} color="primary">
-                    <CheckIcon />
-                  </IconWrapper>
-                ) : undefined
+              trailing={
+                vaultId === currentVaultId ? <SelectionIndicator /> : null
               }
             />
             {status === 'overlay' && <DnDItemHighlight />}

@@ -265,6 +265,7 @@ export const pt = {
   pair_device_disclaimers_second: ' dispositivos presentes.',
   backup_disclaimer:
     'Você deve fazer backup de todos os fragmentos do cofre em locais separados.',
+  part: 'parte',
   of: 'de',
   vault: 'Cofre',
   vaults: 'Cofres',
@@ -893,6 +894,8 @@ export const pt = {
   connect: 'Conectar',
   link_copied: 'Link copiado para a área de transferência',
   failed_to_copy_link: 'Falha ao copiar o link',
+  failed_to_copy_address: 'Falha ao copiar o endereço',
+  failed_to_delete_folder: 'Falha ao excluir a pasta',
   timeout_error: 'Erro de tempo limite',
   signing_timeout_description:
     'O processo de assinatura excedeu o limite de tempo. Tente novamente!',
@@ -1226,4 +1229,5 @@ export const pt = {
     'Faça backup do seu compartilhamento do cofre online usando a mesma senha que você criou anteriormente.',
   fast_vault_backup_description:
     'O armazenamento online é recomendado e seguro - os cofres compartilhados são projetados para isso.',
+  not_enough_funds: 'Fundos insuficientes',
 }
