@@ -864,6 +864,7 @@ export const de = {
     output: 'Ich bin mit dem Mindestbetrag einverstanden, den ich erhalte',
   },
   add_address: 'Adresse hinzufügen',
+  add_to_address_book: 'Zum Adressbuch hinzufügen',
   settings: 'Einstellungen',
   language: 'Sprache',
   currency: 'Währung',

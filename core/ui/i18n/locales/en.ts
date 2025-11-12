@@ -161,6 +161,7 @@ export const en = {
   staked_amount: 'Staked Amount',
   send_overview: 'Send Overview',
   add_address: 'Add Address',
+  add_to_address_book: 'Add to Address Book',
   no_referral_yet: 'No referral yet.',
   turn_your_vault_into_rewards_machine:
     'Turn your vault into a rewards machine. Create your referral now and start earning.',
