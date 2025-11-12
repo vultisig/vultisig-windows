@@ -62,6 +62,13 @@ export default async () => {
         viteStaticCopy({
           targets: [
             {
+              src: path.resolve(
+                __dirname,
+                '../../node_modules/@trustwallet/wallet-core/dist/lib/wallet-core.wasm'
+              ),
+              dest: '',
+            },
+            {
               src: `${publicFolderPath}/**/*`,
               dest: 'core',
               rename: (_fileName, _fileExtension, fullPath) => {
