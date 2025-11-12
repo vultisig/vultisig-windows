@@ -4,8 +4,13 @@ import { isOneOf } from '@lib/utils/array/isOneOf'
 
 import { getCoinLogoSrc } from '../coin/icon/utils/getCoinLogoSrc'
 
+const chainsWithChainLogo = [
+  ...Object.values(EthereumL2Chain),
+  Chain.MayaChain,
+] as const
+
 export const getChainLogoSrc = (chain: Chain) => {
-  if (isOneOf(chain, Object.values(EthereumL2Chain))) {
+  if (isOneOf(chain, chainsWithChainLogo)) {
     return `/core/chains/${chain.toLowerCase()}.svg`
   }
 
