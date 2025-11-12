@@ -1,4 +1,4 @@
-import { EthereumL2Chain } from '@core/chain/Chain'
+import { Chain, EthereumL2Chain } from '@core/chain/Chain'
 import { coins } from '@core/chain/coin/coins'
 import { thorchainNativeTokensMetadata } from '@core/chain/coin/knownTokens/thorchain'
 import { getLastItem } from '@lib/utils/array/getLastItem'
@@ -109,7 +109,7 @@ const main = async () => {
       .map(getCoinLogoSrc)
       .map(logo => getLastItem(logo.split('/')))
 
-    const expectedChains = Object.values(EthereumL2Chain)
+    const expectedChains = [...Object.values(EthereumL2Chain), Chain.MayaChain]
       .map(getChainLogoSrc)
       .map(logo => getLastItem(logo.split('/')))
 
