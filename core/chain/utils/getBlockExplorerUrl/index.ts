@@ -31,7 +31,7 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.Blast]: 'https://blastscan.io',
   [Chain.CronosChain]: 'https://cronoscan.com',
   [Chain.Sui]: 'https://suiscan.xyz/mainnet',
-  [Chain.Polkadot]: 'https://polkadot.subscan.io',
+  [Chain.Polkadot]: 'https://assethub-polkadot.api.subscan.io',
   [Chain.Zksync]: 'https://explorer.zksync.io',
   [Chain.Ton]: 'https://tonviewer.com',
   [Chain.Osmosis]: `${cosmosBlockExplorer}/osmosis`,
