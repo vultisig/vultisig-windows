@@ -75,7 +75,7 @@ export const SearchChainToken = ({
               alignItems="center"
               style={{ minWidth: 'max-content' }}
             >
-              <SearchFieldWrapper $fullWidth={isFullWidth}>
+              <SearchFieldWrapper fullWidth={isFullWidth}>
                 <SearchField
                   value={inputValue}
                   onSearch={nextValue => setInputValue(nextValue)}
@@ -95,7 +95,7 @@ export const SearchChainToken = ({
           exit={{ opacity: 0, scale: 0.8 }}
           transition={{ duration: 0.2, ease: 'easeInOut' }}
         >
-          <IconButton onClick={handleOpen} size="lg">
+          <IconButton kind="secondary" onClick={handleOpen} size="lg">
             <SearchIcon />
           </IconButton>
         </motion.div>
@@ -104,12 +104,12 @@ export const SearchChainToken = ({
   )
 }
 
-const SearchFieldWrapper = styled.div<{ $fullWidth: boolean }>`
+const SearchFieldWrapper = styled.div<{ fullWidth: boolean }>`
   display: flex;
   flex-direction: column;
   max-height: 42px;
   flex: 1;
-  width: ${({ $fullWidth }) => ($fullWidth ? '100%' : 'auto')};
+  width: ${({ fullWidth }) => (fullWidth ? '100%' : 'auto')};
 
   & input {
     font-size: 12px;

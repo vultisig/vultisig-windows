@@ -9,7 +9,7 @@ import { pageConfig } from '@lib/ui/page/config'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { RefObject } from 'react'
+import { ReactNode, RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -49,6 +49,7 @@ const NormalContent = styled.div<{ isVisible: boolean }>`
 type VaultPageHeaderProps = {
   vault: Vault
   scrollContainerRef: RefObject<HTMLElement>
+  primaryControls?: ReactNode
 }
 
 const collapseThreshold = 1
@@ -56,6 +57,7 @@ const collapseThreshold = 1
 export const VaultPageHeader = ({
   vault,
   scrollContainerRef,
+  primaryControls,
 }: VaultPageHeaderProps) => {
   const scroll = useScroll(scrollContainerRef)
   const isCollapsed = scroll.y > collapseThreshold
@@ -69,7 +71,7 @@ export const VaultPageHeader = ({
     <HeaderContainer>
       <CollapsedContent isVisible={isCollapsed}>
         <VaultSelector value={vault} />
-        <VStack alignItems="flex-end" gap={2}>
+        <VStack alignItems="flex-end" gap={2} style={{ flexShrink: 0 }}>
           <Text size={12} color="shy">
             {t('portfolio_balance')}
           </Text>
@@ -80,6 +82,7 @@ export const VaultPageHeader = ({
       <NormalContent isVisible={!isCollapsed}>
         <PageHeader
           hasBorder
+          primaryControls={primaryControls}
           secondaryControls={<VaultPageHeaderControls />}
           title={<VaultSelector value={vault} />}
         />

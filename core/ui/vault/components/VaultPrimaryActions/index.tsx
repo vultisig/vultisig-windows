@@ -1,6 +1,6 @@
 import { banxaSupportedChains } from '@core/chain/banxa'
 import { Chain } from '@core/chain/Chain'
-import { CoinKey } from '@core/chain/coin/Coin'
+import { CoinKey, extractCoinKey } from '@core/chain/coin/Coin'
 import { swapEnabledChains } from '@core/chain/swap/swapEnabledChains'
 import { SendPrompt } from '@core/ui/vault/send/SendPrompt'
 import { isOneOf } from '@lib/utils/array/isOneOf'
@@ -17,11 +17,13 @@ import { SwapPrompt } from '../SwapPrompt'
 type VaultPrimaryActionsProps = {
   coin?: CoinKey
   onReceive?: () => void
+  showDepositAction?: boolean
 }
 
 export const VaultPrimaryActions = ({
   coin: potentialCoin,
   onReceive,
+  showDepositAction = true,
 }: VaultPrimaryActionsProps) => {
   const coins = useCurrentVaultCoins()
 
@@ -31,10 +33,15 @@ export const VaultPrimaryActions = ({
   )
 
   const getCoin = useCallback(
-    (supportedChains: readonly Chain[]) =>
-      (potentialCoin ? [potentialCoin] : coins).find(coin =>
+    (supportedChains: readonly Chain[]) => {
+      const coin = (potentialCoin ? [potentialCoin] : coins).find(coin =>
         isOneOf(coin.chain, supportedChains)
-      ),
+      )
+
+      if (coin) {
+        return extractCoinKey(coin)
+      }
+    },
     [coins, potentialCoin]
   )
 
@@ -45,10 +52,10 @@ export const VaultPrimaryActions = ({
   return (
     <ActionsWrapper justifyContent="center" gap={20}>
       {swapCoin && <SwapPrompt fromCoin={swapCoin} />}
-      {buyCoin && <BuyPrompt coin={buyCoin} />}
       <SendPrompt coin={sendCoin} />
+      {buyCoin && <BuyPrompt coin={buyCoin} />}
       {onReceive && <ReceivePrompt onClick={onReceive} />}
-      {depositCoin && <DepositPrompt coin={depositCoin} />}
+      {showDepositAction && depositCoin && <DepositPrompt coin={depositCoin} />}
     </ActionsWrapper>
   )
 }

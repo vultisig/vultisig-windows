@@ -3,7 +3,7 @@ import { getVaultId } from '@core/mpc/vault/Vault'
 import { FastVaultPasswordVerification } from '@core/ui/mpc/fast/FastVaultPasswordVerification'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { VStack } from '@lib/ui/layout/Stack'
-import { useRef } from 'react'
+import { ReactNode, useRef } from 'react'
 import styled from 'styled-components'
 
 import {
@@ -13,7 +13,11 @@ import {
 import { VaultOverview } from './VaultOverview'
 import { VaultPageHeader } from './VaultPageHeader'
 
-export const VaultPage = () => {
+type VaultPageProps = {
+  primaryControls?: ReactNode
+}
+
+export const VaultPage = ({ primaryControls }: VaultPageProps = {}) => {
   const vault = useCurrentVault()
   const { signers } = vault
   const isFastVault = hasServer(signers)
@@ -26,6 +30,7 @@ export const VaultPage = () => {
         <VaultPageHeader
           vault={vault}
           scrollContainerRef={scrollContainerRef}
+          primaryControls={primaryControls}
         />
         <VaultOverview scrollContainerRef={scrollContainerRef} />
         {isFastVault && <FastVaultPasswordVerification key={vaultId} />}
