@@ -1242,4 +1242,5 @@ export const de = {
     'Sichern Sie Ihre Tresorfreigabe online mit demselben Tresorpasswort, das Sie zuvor erstellt haben.',
   fast_vault_backup_description:
     'Online-Speicher ist empfehlenswert und sicher – Vault-Speicher sind genau dafür konzipiert.',
+  not_enough_funds: 'Nicht genügend Mittel',
 }

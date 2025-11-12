@@ -1229,4 +1229,5 @@ export const pt = {
     'Faça backup do seu compartilhamento do cofre online usando a mesma senha que você criou anteriormente.',
   fast_vault_backup_description:
     'O armazenamento online é recomendado e seguro - os cofres compartilhados são projetados para isso.',
+  not_enough_funds: 'Fundos insuficientes',
 }
