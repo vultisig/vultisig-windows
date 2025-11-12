@@ -1210,4 +1210,5 @@ export const hr = {
     'Napravite sigurnosnu kopiju svog trezora na mreži koristeći istu lozinku za trezor koju ste ranije kreirali.',
   fast_vault_backup_description:
     'Preporučuje se i sigurna je online pohrana - dijeljeni trezori su namijenjeni za to.',
+  not_enough_funds: 'Nema dovoljno sredstava',
 }

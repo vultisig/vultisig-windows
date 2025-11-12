@@ -21,10 +21,13 @@ import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { useSendAmount } from '../state/amount'
 
 const sendTerms = ['send_terms_1', 'send_terms_0'] as const
 
@@ -37,6 +40,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const sender = useSender()
   const keysignPayloadQuery = useSendKeysignPayloadQuery()
   const translatedTerms = sendTerms.map(term => t(term))
+  const [amount] = useSendAmount()
 
   return (
     <>
@@ -57,25 +61,28 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
                 </Text>
                 <HStack alignItems="center" gap={8}>
                   <CoinIcon coin={coin} style={{ fontSize: 24 }} />
-                  <MatchQuery
-                    value={keysignPayloadQuery}
-                    error={() => (
-                      <Text color="danger">{t('failed_to_load')}</Text>
-                    )}
-                    pending={() => <Spinner />}
-                    success={({ toAmount }) => (
-                      <HStack alignItems="center" gap={4}>
-                        <Text as="span" size={17}>
-                          {formatAmount(
-                            fromChainAmount(toAmount, coin.decimals)
-                          )}
-                        </Text>
-                        <Text as="span" color="shy" size={17}>
-                          {coin.ticker}
-                        </Text>
-                      </HStack>
-                    )}
-                  />
+                  <HStack alignItems="center" gap={4}>
+                    <Text as="span" size={17}>
+                      <MatchQuery
+                        value={keysignPayloadQuery}
+                        error={() =>
+                          formatAmount(
+                            fromChainAmount(
+                              shouldBePresent(amount),
+                              coin.decimals
+                            )
+                          )
+                        }
+                        pending={() => <Spinner />}
+                        success={({ toAmount }) =>
+                          formatAmount(fromChainAmount(toAmount, coin.decimals))
+                        }
+                      />
+                    </Text>
+                    <Text as="span" color="shy" size={17}>
+                      {coin.ticker}
+                    </Text>
+                  </HStack>
                 </HStack>
               </VStack>
             }

@@ -15,6 +15,7 @@ import {
   mantle,
   optimism,
   polygon,
+  sei,
   zksync,
 } from 'viem/chains'
 
@@ -30,6 +31,7 @@ const evmChainRpcUrls: Record<EvmChain, string> = {
   [EvmChain.Zksync]: `${rootApiUrl}/zksync/`,
   [EvmChain.Avalanche]: `${rootApiUrl}/avax/`,
   [EvmChain.Mantle]: `${rootApiUrl}/mantle/`,
+  [EvmChain.Sei]: `https://evm-rpc.sei-apis.com`,
 }
 
 const evmDefaultChainInfo: Record<EvmChain, ViemChain> = {
@@ -44,6 +46,7 @@ const evmDefaultChainInfo: Record<EvmChain, ViemChain> = {
   [EvmChain.Zksync]: zksync,
   [EvmChain.Avalanche]: avalanche,
   [EvmChain.Mantle]: mantle,
+  [EvmChain.Sei]: sei,
 }
 
 const evmChainId: Record<EvmChain, string> = recordMap(
