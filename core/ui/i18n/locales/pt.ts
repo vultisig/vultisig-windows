@@ -851,6 +851,7 @@ export const pt = {
     output: 'Concordo com o valor mínimo que receberei',
   },
   add_address: 'Adicionar endereço',
+  add_to_address_book: 'Adicionar ao catálogo de endereços',
   settings: 'Configurações',
   language: 'Linguagem',
   currency: 'Moeda',
