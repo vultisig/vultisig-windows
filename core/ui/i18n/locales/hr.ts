@@ -2,6 +2,8 @@ export const hr = {
   onboarding_greeting: 'Búcsúzz el a <g>seed kívána</g>',
   onboarding_step_1:
     'Mondd, hogy helló <g>széf részvények,</g> az új <g>helyreállítási módszered</g>',
+  defi: 'DeFi',
+  select_chain: 'Odaberi Lanac',
   onboarding_step_2:
     'Ezek <g>részekre vannak osztva</g> a biztonság növelése érdekében és, <g>az egyetlen meghibásodási pont eltávolítása érdekében</g>',
   keys: 'Kulcsák',
@@ -259,6 +261,7 @@ export const hr = {
   pair_device_disclaimers_second: ' prisutnih uređaja.',
   backup_disclaimer:
     'Trebali biste sigurnosno kopirati sve dijelove trezora na odvojene lokacije.',
+  part: 'dio',
   of: 'od',
   secureVault: 'Sigurni trezor',
   missing_public_key_ecdsa: 'Nedostaje javni ključ ECDSA',
@@ -707,9 +710,12 @@ export const hr = {
   folder_name_required: 'Potreban je naziv mape',
   folder_name_already_exists: 'Naziv mape mora biti jedinstven',
   create: 'Stvoriti',
-  folders: 'mape',
-  check_for_update: 'Provjerite ažuriranje',
+  folders: 'Mape',
+  check_for_update: 'Provjeri ažuriranja',
   delete_folder: 'Izbriši mapu',
+  follow_banner_subtitle: 'Vultisig gradi s vama.',
+  follow_banner_title: 'Pratite nas na X',
+  follow_banner_button: 'Pratite @Vultisig',
   deposit: 'Depozit',
   add_vaults_to_folder: 'Odaberite trezore za dodavanje u mapu.',
   chain_message_deposit: '{{chain}} polog poruke',
@@ -877,6 +883,8 @@ export const hr = {
   connect: 'Poveži se',
   link_copied: 'Veza je kopirana u međuspremnik',
   failed_to_copy_link: 'Kopiranje veze nije uspjelo',
+  failed_to_copy_address: 'Kopiranje adrese nije uspjelo',
+  failed_to_delete_folder: 'Brisanje mape nije uspjelo',
   timeout_error: 'Pogreška isteka vremena',
   signing_timeout_description:
     'Proces potpisivanja je premašio vremensko ograničenje. Molimo pokušajte ponovo!',

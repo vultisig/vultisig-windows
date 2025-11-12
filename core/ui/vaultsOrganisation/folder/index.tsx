@@ -18,9 +18,11 @@ import {
 import { useCurrentVaultFolder } from '@core/ui/vaultsOrganisation/folder/state/currentVaultFolder'
 import { useVaultsTotalBalances } from '@core/ui/vaultsOrganisation/hooks/useVaultsTotalBalances'
 import { IconButton } from '@lib/ui/buttons/IconButton'
+import { CheckIcon } from '@lib/ui/icons/CheckIcon'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { PlusIcon } from '@lib/ui/icons/PlusIcon'
 import { SquarePenIcon } from '@lib/ui/icons/SquarePenIcon'
-import { VStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -129,7 +131,14 @@ export const VaultFolderPage = () => {
                       ? formatFiatAmount(value)
                       : undefined
                   }
-                  meta={<VaultSigners vault={vault} />}
+                  meta={
+                    <HStack gap={8} alignItems="center">
+                      <IconWrapper size={16} color="success">
+                        <CheckIcon />
+                      </IconWrapper>
+                      <VaultSigners vault={vault} />
+                    </HStack>
+                  }
                   trailing={
                     vaultId === currentVaultId ? <SelectionIndicator /> : null
                   }

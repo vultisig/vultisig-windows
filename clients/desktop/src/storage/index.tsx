@@ -7,6 +7,7 @@ import { coinFinderIgnoreStorage } from './coinFinderIgnore'
 import { coinsStorage } from './coins'
 import { currentVaultIdStorage } from './currentVaultId'
 import { defaultChainsStorage } from './defaultChains'
+import { dismissedBannersStorage } from './dismissedBanners'
 import { fiatCurrencyStorage } from './fiatCurrency'
 import { languageStorage } from './language'
 import { onboardingStorage } from './onboarding'
@@ -32,4 +33,5 @@ export const storage: CoreStorage = {
   ...passcodeEncryptionStorage,
   ...passcodeAutoLockStorage,
   ...referralsStorage,
+  ...dismissedBannersStorage,
 }

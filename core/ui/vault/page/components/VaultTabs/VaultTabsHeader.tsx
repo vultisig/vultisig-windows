@@ -57,9 +57,10 @@ export const VaultTabsHeader = ({ children }: ChildrenProp) => {
               transition={{ duration: 0.2, ease: 'easeInOut' }}
             >
               <IconButton
+                kind="secondary"
                 onClick={() => navigate({ id: 'manageVaultChains' })}
                 style={{
-                  color: colors.buttonPrimary.toCssValue(),
+                  color: colors.info.toCssValue(),
                 }}
                 size="lg"
               >
