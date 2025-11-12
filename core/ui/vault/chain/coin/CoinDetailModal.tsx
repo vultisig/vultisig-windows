@@ -80,6 +80,7 @@ const InfoSection = styled(VStack)`
   width: 100%;
   max-width: 400px;
   margin-top: 8px;
+  padding-inline: 16px;
 `
 
 const InfoRow = styled(HStack)`
