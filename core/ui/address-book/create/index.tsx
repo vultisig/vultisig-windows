@@ -2,7 +2,6 @@ import {
   AddressBookForm,
   AddressBookFormValues,
 } from '@core/ui/address-book/form'
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import {
   useAddressBookItemOrders,
@@ -19,10 +18,9 @@ export const CreateAddressBookItemPage = () => {
   const state =
     currentView?.id === 'createAddressBookItem' ? currentView.state : undefined
   const { t } = useTranslation()
-  const navigate = useCoreNavigate()
   const { mutate, error, isPending } = useCreateAddressBookItemMutation()
   const addressBookItemOrders = useAddressBookItemOrders()
-  const { goBack } = useCore()
+  const { goBack, goHome } = useCore()
 
   // Check if we came from a keysign flow (has pre-filled address/chain)
   const cameFromKeysign = !!(state?.address && state?.chain)
@@ -40,9 +38,8 @@ export const CreateAddressBookItemPage = () => {
       },
       {
         onSuccess: () => {
-          // If we came from keysign, navigate to address book instead of going back
           if (cameFromKeysign) {
-            navigate({ id: 'addressBook' })
+            goHome()
           } else {
             goBack()
           }
@@ -58,6 +55,7 @@ export const CreateAddressBookItemPage = () => {
         chain: state?.chain,
         title: '',
       }}
+      onBack={cameFromKeysign ? goHome : undefined}
       error={error}
       isPending={isPending}
       onSubmit={handleCreateAddress}
