@@ -38,7 +38,7 @@ export const DepositPrompt = (state: CoreViewState<'deposit'>) => {
         <ShapesPlusXSquareCircleIcon />
       </SecondaryActionWrapper>
       <Text color="shyExtra" size={12}>
-        {t('actions')}
+        {t('deposit')}
       </Text>
     </VStack>
   )
