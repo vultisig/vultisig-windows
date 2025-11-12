@@ -109,10 +109,7 @@ const main = async () => {
       .map(getCoinLogoSrc)
       .map(logo => getLastItem(logo.split('/')))
 
-    const expectedChains = [
-      ...Object.values(EthereumL2Chain),
-      Chain.MayaChain,
-    ]
+    const expectedChains = [...Object.values(EthereumL2Chain), Chain.MayaChain]
       .map(getChainLogoSrc)
       .map(logo => getLastItem(logo.split('/')))
 
