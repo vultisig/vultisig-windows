@@ -24,7 +24,7 @@ const hyperliquidRpcUrl = 'https://rpc.hyperliquid.xyz/evm'
 export const hyperliquidBlockExplorerUrl = 'https://liquidscan.io'
 const hyperliquidNativeCoin = chainFeeCoin[EvmChain.Hyperliquid]
 
-const hyperliquid = defineChain({
+export const hyperliquid = defineChain({
   id: 999,
   name: 'Hyperliquid',
   network: 'hyperliquid',
