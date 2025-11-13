@@ -6,12 +6,17 @@ import { attempt, withFallback } from '@lib/utils/attempt'
 
 import { getKeysignAmount } from '../../utils/getKeysignAmount'
 import { getKeysignCoin } from '../../utils/getKeysignCoin'
+import { resolvePolkadotToAddress } from '../../utils/resolvePolkadotToAddress'
 import { GetChainSpecificResolver } from '../resolver'
 
 export const getPolkadotChainSpecific: GetChainSpecificResolver<
   'polkadotSpecific'
-> = async ({ keysignPayload }) => {
+> = async ({ keysignPayload, walletCore }) => {
   const coin = getKeysignCoin(keysignPayload)
+  const toAddress = resolvePolkadotToAddress({
+    keysignPayload,
+    walletCore,
+  })
   const client = await getPolkadotClient()
   const recentBlockHash = (await client.rpc.chain.getBlockHash()).toHex()
   const nonce = (
@@ -23,8 +28,8 @@ export const getPolkadotChainSpecific: GetChainSpecificResolver<
   const { specVersion, transactionVersion } =
     await client.rpc.state.getRuntimeVersion()
 
-  const transfer = client.tx.balances.transferKeepAlive(
-    keysignPayload.toAddress,
+  const transfer = client.tx.balances.transfer(
+    toAddress,
     getKeysignAmount(keysignPayload)
   )
 
