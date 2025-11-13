@@ -109,7 +109,6 @@ export const VaultFolderPage = () => {
             size={13}
             weight={600}
             color="shy"
-            style={{ textTransform: 'uppercase' }}
           >
             {t('vaults')}
           </Text>
