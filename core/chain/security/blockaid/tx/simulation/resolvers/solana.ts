@@ -1,3 +1,5 @@
+import { Chain } from '@core/chain/Chain'
+
 import { queryBlockaid } from '../../../core/query'
 import { BlockaidSolanaSimulation } from '../api/core'
 import { BlockaidTxSimulationResolver } from '../resolver'
@@ -8,12 +10,14 @@ type SolanaBlockaidScanResponse = {
   }
 }
 
-export const getSolanaTxBlockaidSimulation: BlockaidTxSimulationResolver =
-  async ({ data }) => {
-    const { result } = await queryBlockaid<SolanaBlockaidScanResponse>(
-      '/solana/message/scan',
-      data
-    )
+export const getSolanaTxBlockaidSimulation: BlockaidTxSimulationResolver<
+  typeof Chain.Solana,
+  'solana'
+> = async ({ data }) => {
+  const { result } = await queryBlockaid<SolanaBlockaidScanResponse>(
+    '/solana/message/scan',
+    data
+  )
 
-    return result.simulation
-  }
+  return result.simulation
+}

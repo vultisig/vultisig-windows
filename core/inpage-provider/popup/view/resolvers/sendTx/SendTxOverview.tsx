@@ -1,15 +1,12 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { Chain } from '@core/chain/Chain'
+import { Chain, EvmChain } from '@core/chain/Chain'
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { BlockaidSimulationSupportedChain } from '@core/chain/security/blockaid/simulationChains'
-import {
-  BlockaidEVMSimulation,
-  parseBlockaidEvmSimulation,
-} from '@core/chain/security/blockaid/tx/simulation/api/core'
+import { parseBlockaidEvmSimulation } from '@core/chain/security/blockaid/tx/simulation/api/core'
 import { BlockaidEvmSimulationInfo } from '@core/chain/security/blockaid/tx/simulation/core'
 import { getBlockaidTxSimulationInput } from '@core/chain/security/blockaid/tx/simulation/input'
+import { BlockaidTxSimulationInput } from '@core/chain/security/blockaid/tx/simulation/resolver'
 import {
   EvmFeeSettings,
   FeeSettings,
@@ -242,18 +239,28 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
           'blockaidTxSimulationInput'
         )
 
+        if (!isChainOfKind(blockaidTxSimulationInput.chain, 'evm')) {
+          return
+        }
+
+        const evmBlockaidTxSimulationInput: BlockaidTxSimulationInput<EvmChain> =
+          {
+            chain: blockaidTxSimulationInput.chain,
+            data: blockaidTxSimulationInput.data,
+          }
+
         const blockaidTxSimulationQuery = getBlockaidTxSimulationQuery(
-          blockaidTxSimulationInput
+          evmBlockaidTxSimulationInput
         )
         const sim = await blockaidTxSimulationQuery.queryFn()
 
         if (
-          'assets_diffs' in (sim as BlockaidEVMSimulation).account_summary &&
-          (sim as BlockaidEVMSimulation).account_summary.assets_diffs.length > 1
+          'assets_diffs' in sim.account_summary &&
+          sim.account_summary.assets_diffs.length > 1
         ) {
           const swapSimulationInfo = await parseBlockaidEvmSimulation(
-            sim as BlockaidEVMSimulation,
-            chain as BlockaidSimulationSupportedChain
+            sim,
+            chain
           )
           setBlockaidEvmSimulationInfo(swapSimulationInfo)
         } else {

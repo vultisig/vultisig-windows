@@ -1,6 +1,9 @@
 import { Resolver } from '@lib/utils/types/Resolver'
 
-import { BlockaidSimulationSupportedChain } from '../../simulationChains'
+import {
+  BlockaidSimulationSupportedChain,
+  BlockaidSimulationSupportedChainKind,
+} from '../../simulationChains'
 import { BlockaidEVMSimulation, BlockaidSolanaSimulation } from './api/core'
 
 export type BlockaidTxSimulationInput<
@@ -10,9 +13,20 @@ export type BlockaidTxSimulationInput<
   data: Record<string, unknown>
 }
 
+type BlockaidSimulationByKind = {
+  evm: BlockaidEVMSimulation
+  solana: BlockaidSolanaSimulation
+}
+
+export type BlockaidSimulationForChainKind<
+  K extends BlockaidSimulationSupportedChainKind,
+> = BlockaidSimulationByKind[K]
+
 export type BlockaidTxSimulationResolver<
   T extends BlockaidSimulationSupportedChain = BlockaidSimulationSupportedChain,
+  K extends
+    BlockaidSimulationSupportedChainKind = BlockaidSimulationSupportedChainKind,
 > = Resolver<
   BlockaidTxSimulationInput<T>,
-  Promise<BlockaidEVMSimulation | BlockaidSolanaSimulation>
+  Promise<BlockaidSimulationForChainKind<K>>
 >
