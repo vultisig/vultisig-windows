@@ -840,6 +840,7 @@ export const hr = {
     output: 'Slažem se s min. iznos koji ću dobiti',
   },
   add_address: 'Dodaj adresu',
+  add_to_address_book: 'Dodaj u adresar',
   settings: 'postavke',
   language: 'Jezik',
   currency: 'Valuta',
@@ -1210,4 +1211,5 @@ export const hr = {
     'Napravite sigurnosnu kopiju svog trezora na mreži koristeći istu lozinku za trezor koju ste ranije kreirali.',
   fast_vault_backup_description:
     'Preporučuje se i sigurna je online pohrana - dijeljeni trezori su namijenjeni za to.',
+  not_enough_funds: 'Nema dovoljno sredstava',
 }

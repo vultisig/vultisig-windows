@@ -863,6 +863,7 @@ export const it = {
     output: "Accetto l'importo minimo che riceverò",
   },
   add_address: 'Aggiungi indirizzo',
+  add_to_address_book: 'Aggiungi alla rubrica',
   settings: 'Impostazioni',
   language: 'Lingua',
   currency: 'Valuta',
@@ -1240,4 +1241,5 @@ export const it = {
     'Esegui il backup della condivisione del vault online utilizzando la stessa password del vault creata in precedenza.',
   fast_vault_backup_description:
     "L'archiviazione online è consigliata e sicura: le condivisioni Vault sono progettate per questo scopo.",
+  not_enough_funds: 'Fondi insufficienti',
 }

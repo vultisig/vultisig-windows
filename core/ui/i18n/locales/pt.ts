@@ -851,6 +851,7 @@ export const pt = {
     output: 'Concordo com o valor mínimo que receberei',
   },
   add_address: 'Adicionar endereço',
+  add_to_address_book: 'Adicionar ao catálogo de endereços',
   settings: 'Configurações',
   language: 'Linguagem',
   currency: 'Moeda',
@@ -1229,4 +1230,5 @@ export const pt = {
     'Faça backup do seu compartilhamento do cofre online usando a mesma senha que você criou anteriormente.',
   fast_vault_backup_description:
     'O armazenamento online é recomendado e seguro - os cofres compartilhados são projetados para isso.',
+  not_enough_funds: 'Fundos insuficientes',
 }
