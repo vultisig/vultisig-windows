@@ -13,22 +13,16 @@ export const resolvePolkadotToAddress = ({
   keysignPayload,
   walletCore,
 }: ResolvePolkadotToAddressInput): string => {
-  const coin = getKeysignCoin(keysignPayload)
-  const candidate = keysignPayload.toAddress
+  const { toAddress } = keysignPayload
+  const { chain, address } = getKeysignCoin(keysignPayload)
 
-  if (candidate.length === 0) {
-    return coin.address
-  }
+  const shouldUseOriginalAddress =
+    toAddress &&
+    isValidAddress({
+      chain,
+      address: toAddress,
+      walletCore,
+    })
 
-  const isValidDestination = isValidAddress({
-    chain: coin.chain,
-    address: candidate,
-    walletCore,
-  })
-
-  if (!isValidDestination) {
-    return coin.address
-  }
-
-  return candidate
+  return shouldUseOriginalAddress ? toAddress : address
 }
