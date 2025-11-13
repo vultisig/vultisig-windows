@@ -28,7 +28,7 @@ export const getPolkadotChainSpecific: GetChainSpecificResolver<
   const { specVersion, transactionVersion } =
     await client.rpc.state.getRuntimeVersion()
 
-  const transfer = client.tx.balances.transfer(
+  const transfer = client.tx.balances.transferKeepAlive(
     toAddress,
     getKeysignAmount(keysignPayload)
   )
