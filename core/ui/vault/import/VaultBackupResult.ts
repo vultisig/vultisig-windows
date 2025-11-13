@@ -14,7 +14,9 @@ export type VaultBackupResult =
 
 export type VaultBackupOverride = Pick<Vault, 'libType'>
 
-export type FileBasedVaultBackupResult = {
+export type FileBasedVaultBackupResultItem = {
   result: VaultBackupResult
   override?: VaultBackupOverride
 }
+
+export type FileBasedVaultBackupResult = FileBasedVaultBackupResultItem[]
