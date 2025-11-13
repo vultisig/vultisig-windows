@@ -1,4 +1,3 @@
-import { toTronData } from '@core/chain/chains/tron/tx/toTronData'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { bigIntToHex } from '@lib/utils/bigint/bigIntToHex'
 import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
@@ -106,41 +105,94 @@ export const getTronSigningInputs: SigningInputsResolver<'tron'> = ({
 
   if (swapPayload) {
     return matchRecordUnion(swapPayload, {
-      native: ({ fromCoin, fromAmount, vaultAddress }) => {
-        const memo = shouldBePresent(keysignPayload.memo)
+      native: ({ fromCoin, vaultAddress }) => {
         const { isNativeToken } = shouldBePresent(fromCoin)
 
-        if (!isNativeToken) {
-          throw new Error('TRC20 native swap on TRON not implemented yet')
+        if (isNativeToken) {
+          const contract = TW.Tron.Proto.TransferContract.create({
+            ownerAddress: shouldBePresent(keysignPayload?.coin?.address),
+            toAddress: shouldBePresent(vaultAddress),
+            amount: Long.fromString(shouldBePresent(keysignPayload?.toAmount)),
+          })
+
+          const input = TW.Tron.Proto.SigningInput.create({
+            transaction: TW.Tron.Proto.Transaction.create({
+              transfer: contract,
+              timestamp: Long.fromString(tronSpecific.timestamp.toString()),
+              blockHeader: TW.Tron.Proto.BlockHeader.create({
+                timestamp: Long.fromString(
+                  tronSpecific.blockHeaderTimestamp.toString()
+                ),
+                number: Long.fromString(
+                  tronSpecific.blockHeaderNumber.toString()
+                ),
+                version: Number(tronSpecific.blockHeaderVersion.toString()),
+                txTrieRoot: Buffer.from(
+                  tronSpecific.blockHeaderTxTrieRoot,
+                  'hex'
+                ),
+                parentHash: Buffer.from(
+                  tronSpecific.blockHeaderParentHash,
+                  'hex'
+                ),
+                witnessAddress: Buffer.from(
+                  tronSpecific.blockHeaderWitnessAddress,
+                  'hex'
+                ),
+              }),
+              expiration: Long.fromString(tronSpecific.expiration.toString()),
+              memo: keysignPayload.memo,
+            }),
+          })
+
+          return [input]
         }
 
-        const trigger = TW.Tron.Proto.TriggerSmartContract.create({
+        const amountHex = Buffer.from(
+          stripHexPrefix(bigIntToHex(BigInt(keysignPayload.toAmount))),
+          'hex'
+        )
+
+        const contract = TW.Tron.Proto.TransferTRC20Contract.create({
           ownerAddress: shouldBePresent(keysignPayload?.coin?.address),
-          contractAddress: shouldBePresent(vaultAddress),
-          data: toTronData(memo),
-          callValue: Long.fromString(shouldBePresent(fromAmount)),
+          toAddress: shouldBePresent(vaultAddress),
+          contractAddress: shouldBePresent(
+            keysignPayload?.coin?.contractAddress
+          ),
+          amount: amountHex,
         })
 
-        const tx = TW.Tron.Proto.Transaction.create({
-          triggerSmartContract: trigger,
-          timestamp: Long.fromString(tronSpecific.timestamp.toString()),
-          blockHeader: TW.Tron.Proto.BlockHeader.create({
-            timestamp: Long.fromString(
-              tronSpecific.blockHeaderTimestamp.toString()
-            ),
-            number: Long.fromString(tronSpecific.blockHeaderNumber.toString()),
-            version: Number(tronSpecific.blockHeaderVersion.toString()),
-            txTrieRoot: Buffer.from(tronSpecific.blockHeaderTxTrieRoot, 'hex'),
-            parentHash: Buffer.from(tronSpecific.blockHeaderParentHash, 'hex'),
-            witnessAddress: Buffer.from(
-              tronSpecific.blockHeaderWitnessAddress,
-              'hex'
-            ),
+        const input = TW.Tron.Proto.SigningInput.create({
+          transaction: TW.Tron.Proto.Transaction.create({
+            feeLimit: Long.fromString(tronSpecific.gasEstimation.toString()),
+            transferTrc20Contract: contract,
+            timestamp: Long.fromString(tronSpecific.timestamp.toString()),
+            blockHeader: TW.Tron.Proto.BlockHeader.create({
+              timestamp: Long.fromString(
+                tronSpecific.blockHeaderTimestamp.toString()
+              ),
+              number: Long.fromString(
+                tronSpecific.blockHeaderNumber.toString()
+              ),
+              version: Number(tronSpecific.blockHeaderVersion.toString()),
+              txTrieRoot: Buffer.from(
+                tronSpecific.blockHeaderTxTrieRoot,
+                'hex'
+              ),
+              parentHash: Buffer.from(
+                tronSpecific.blockHeaderParentHash,
+                'hex'
+              ),
+              witnessAddress: Buffer.from(
+                tronSpecific.blockHeaderWitnessAddress,
+                'hex'
+              ),
+            }),
+            expiration: Long.fromString(tronSpecific.expiration.toString()),
+            memo: keysignPayload.memo,
           }),
-          expiration: Long.fromString(tronSpecific.expiration.toString()),
         })
 
-        const input = TW.Tron.Proto.SigningInput.create({ transaction: tx })
         return [input]
       },
 

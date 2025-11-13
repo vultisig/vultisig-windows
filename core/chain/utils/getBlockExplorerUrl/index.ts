@@ -31,7 +31,7 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.Blast]: 'https://blastscan.io',
   [Chain.CronosChain]: 'https://cronoscan.com',
   [Chain.Sui]: 'https://suiscan.xyz/mainnet',
-  [Chain.Polkadot]: 'https://polkadot.subscan.io',
+  [Chain.Polkadot]: 'https://assethub-polkadot.api.subscan.io',
   [Chain.Zksync]: 'https://explorer.zksync.io',
   [Chain.Ton]: 'https://tonviewer.com',
   [Chain.Osmosis]: `${cosmosBlockExplorer}/osmosis`,
@@ -46,6 +46,7 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.Zcash]: 'https://blockchair.com/zcash',
   [Chain.Cardano]: 'https://cardanoscan.io',
   [Chain.Mantle]: 'https://explorer.mantle.xyz',
+  [Chain.Sei]: 'https://seiscan.io',
 }
 
 export const getBlockExplorerUrl = ({
@@ -91,6 +92,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Zcash]: () => `${baseUrl}/address/${value}`,
         [Chain.Cardano]: () => `${baseUrl}/address/${value}`,
         [Chain.Mantle]: () => `${baseUrl}/address/${value}`,
+        [Chain.Sei]: () => `${baseUrl}/address/${value}`,
       }),
     tx: () =>
       match(chain, {
@@ -128,6 +130,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Zcash]: () => `${baseUrl}/transaction/${value}`,
         [Chain.Cardano]: () => `${baseUrl}/transaction/${value}`,
         [Chain.Mantle]: () => `${baseUrl}/tx/${value}`,
+        [Chain.Sei]: () => `${baseUrl}/tx/${value}`,
       }),
   })
 }

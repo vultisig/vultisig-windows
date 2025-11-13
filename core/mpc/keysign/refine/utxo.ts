@@ -1,11 +1,16 @@
 import { create } from '@bufbuild/protobuf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { bigIntSum } from '@lib/utils/bigint/bigIntSum'
 import { WalletCore } from '@trustwallet/wallet-core'
+import { TW } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 
+import { UTXOSpecificSchema } from '../../types/vultisig/keysign/v1/blockchain_specific_pb'
 import { KeysignPayload } from '../../types/vultisig/keysign/v1/keysign_message_pb'
 import { UtxoInfoSchema } from '../../types/vultisig/keysign/v1/utxo_info_pb'
+import { getBlockchainSpecificValue } from '../chainSpecific/KeysignChainSpecific'
 import { getUtxoSigningInputs } from '../signingInputs/resolvers/utxo'
+import { getKeysignAmount } from '../utils/getKeysignAmount'
 
 type RefineKeysignUtxoInput = {
   keysignPayload: KeysignPayload
@@ -13,26 +18,101 @@ type RefineKeysignUtxoInput = {
   publicKey: PublicKey
 }
 
-export const refineKeysignUtxo = (input: RefineKeysignUtxoInput) => {
+const dustStats = 600n
+
+type ConvertPlanUtxosToUtxoInfoInput = {
+  utxos: Array<TW.Bitcoin.Proto.IUnspentTransaction>
+  walletCore: WalletCore
+}
+
+const convertPlanUtxosToUtxoInfo = ({
+  utxos,
+  walletCore,
+}: ConvertPlanUtxosToUtxoInfoInput) =>
+  utxos.map(({ outPoint, amount }) => {
+    const hash = shouldBePresent(outPoint?.hash, 'UTXO outPoint hash')
+    const index = shouldBePresent(outPoint?.index, 'UTXO outPoint index')
+
+    return create(UtxoInfoSchema, {
+      hash: walletCore.HexCoding.encode(Uint8Array.from(hash).reverse()),
+      amount: BigInt(shouldBePresent(amount, 'UTXO amount').toString()),
+      index,
+    })
+  })
+
+export const refineKeysignUtxo = (
+  input: RefineKeysignUtxoInput
+): KeysignPayload => {
   const [signingInput] = getUtxoSigningInputs(input)
 
-  if (signingInput.plan?.utxos) {
-    return {
-      ...input.keysignPayload,
-      utxoInfo: signingInput.plan.utxos.map(({ outPoint, amount }) => {
-        const hash = shouldBePresent(outPoint?.hash, 'UTXO outPoint hash')
-        const index = shouldBePresent(outPoint?.index, 'UTXO outPoint index')
+  const utxoSpecific = getBlockchainSpecificValue(
+    input.keysignPayload.blockchainSpecific,
+    'utxoSpecific'
+  )
 
-        return create(UtxoInfoSchema, {
-          hash: input.walletCore.HexCoding.encode(
-            Uint8Array.from(hash).reverse()
-          ),
-          amount: BigInt(shouldBePresent(amount, 'UTXO amount').toString()),
-          index,
-        })
-      }),
+  const plan = shouldBePresent(signingInput.plan, 'UTXO signing input plan')
+  const planUtxos = plan.utxos
+
+  const amount = getKeysignAmount(input.keysignPayload)
+
+  if (!planUtxos || planUtxos.length === 0) {
+    if (utxoSpecific.sendMaxAmount) {
+      throw new Error(
+        'Failed to build transaction: insufficient balance or invalid UTXO selection'
+      )
+    }
+
+    if (amount) {
+      return refineKeysignUtxo({
+        ...input,
+        keysignPayload: {
+          ...input.keysignPayload,
+          blockchainSpecific: {
+            case: 'utxoSpecific',
+            value: create(UTXOSpecificSchema, {
+              ...utxoSpecific,
+              sendMaxAmount: true,
+            }),
+          },
+        },
+      })
+    }
+
+    return input.keysignPayload
+  }
+
+  const actualFee = BigInt(
+    shouldBePresent(plan.fee, 'UTXO signing input plan fee').toString()
+  )
+
+  if (amount && !utxoSpecific.sendMaxAmount) {
+    const balance = bigIntSum(
+      input.keysignPayload.utxoInfo.map(({ amount }) => amount)
+    )
+    const remainingBalance = balance - amount
+
+    if (remainingBalance <= actualFee + dustStats) {
+      return refineKeysignUtxo({
+        ...input,
+        keysignPayload: {
+          ...input.keysignPayload,
+          blockchainSpecific: {
+            case: 'utxoSpecific',
+            value: create(UTXOSpecificSchema, {
+              ...utxoSpecific,
+              sendMaxAmount: true,
+            }),
+          },
+        },
+      })
     }
   }
 
-  return input.keysignPayload
+  return {
+    ...input.keysignPayload,
+    utxoInfo: convertPlanUtxosToUtxoInfo({
+      utxos: planUtxos,
+      walletCore: input.walletCore,
+    }),
+  }
 }

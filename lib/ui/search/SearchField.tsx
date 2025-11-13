@@ -1,4 +1,5 @@
 import { SearchIcon } from '@lib/ui/icons/SearchIcon'
+import { UiProps } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -6,7 +7,7 @@ import styled from 'styled-components'
 
 import { HStack } from '../layout/Stack'
 
-type SearchFieldProps = {
+type SearchFieldProps = UiProps & {
   placeholderKey?: string
   value?: string
   onSearch?: (query: string) => void
@@ -15,6 +16,8 @@ type SearchFieldProps = {
 export const SearchField: React.FC<SearchFieldProps> = ({
   onSearch,
   value,
+  className,
+  style,
 }) => {
   const [uncontrolledValue, setUncontrolledValue] = useState('')
   const [isFocused, setIsFocused] = useState(false)
@@ -31,7 +34,13 @@ export const SearchField: React.FC<SearchFieldProps> = ({
   const query = value ?? uncontrolledValue
 
   return (
-    <Wrapper justifyContent="center" alignItems="center" gap={8}>
+    <Wrapper
+      className={className}
+      style={style}
+      justifyContent="center"
+      alignItems="center"
+      gap={8}
+    >
       {!isFocused && (
         <SearchIconWrapper>
           <SearchIcon />

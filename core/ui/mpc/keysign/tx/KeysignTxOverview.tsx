@@ -22,6 +22,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { AddToAddressBookButton } from './components/AddToAddressBookButton'
 import { TxFeeRow } from './components/TxFeeRow'
 import { KeysignFeeAmount } from './FeeAmount'
 
@@ -86,14 +87,17 @@ export const KeysignTxOverview = () => {
           {toAddress && (
             <HStack
               alignItems="center"
-              gap={4}
+              gap={8}
               justifyContent="space-between"
               wrap="nowrap"
             >
               <Text color="shy" weight="500">
                 {t('to')}
               </Text>
-              <AddressWrapper>{toAddress}</AddressWrapper>
+              <HStack alignItems="center" gap={8} style={{ minWidth: 0 }}>
+                <AddressWrapper>{toAddress}</AddressWrapper>
+                <AddToAddressBookButton address={toAddress} chain={chain} />
+              </HStack>
             </HStack>
           )}
           {memo && <TxOverviewMemo value={memo} chain={chain} />}
@@ -121,4 +125,7 @@ export const KeysignTxOverview = () => {
 const AddressWrapper = styled(Text)`
   overflow: hidden;
   text-align: right;
+  width: 125px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `

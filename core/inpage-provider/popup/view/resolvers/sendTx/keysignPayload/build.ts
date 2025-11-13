@@ -145,10 +145,12 @@ export const buildSendTxKeysignPayload = async ({
       regular: ({ transactionDetails, isEvmContractCall }) => {
         const { data } = transactionDetails
 
+        if (!data || data === '0x') {
+          return undefined
+        }
+
         if (
-          data &&
           getChainKind(chain) === 'evm' &&
-          data !== '0x' &&
           (!data.startsWith('0x') || !isEvmContractCall)
         ) {
           const result = attempt(() => toUtf8String(data))

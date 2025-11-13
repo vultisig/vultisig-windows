@@ -276,6 +276,7 @@ export const es = {
   pair_device_disclaimers_second: ' dispositivos presentes.',
   backup_disclaimer:
     'Debe hacer una copia de seguridad de todos los fragmentos de la bóveda en ubicaciones separadas.',
+  part: 'parte',
   of: 'de',
   save_changes: 'Guardar cambios',
   vault: 'Bóveda',
@@ -863,6 +864,7 @@ export const es = {
     output: 'Estoy de acuerdo con el monto mínimo que recibiré',
   },
   add_address: 'Agregar dirección',
+  add_to_address_book: 'Agregar a la libreta de direcciones',
   settings: 'Ajustes',
   language: 'Idioma',
   currency: 'Divisa',
@@ -906,6 +908,8 @@ export const es = {
   connect: 'Conectar',
   link_copied: 'Enlace copiado al portapapeles',
   failed_to_copy_link: 'No se pudo copiar el enlace',
+  failed_to_copy_address: 'No se pudo copiar la dirección',
+  failed_to_delete_folder: 'No se pudo eliminar la carpeta',
   timeout_error: 'Error de tiempo de espera',
   signing_timeout_description:
     'El proceso de firma ha excedido el tiempo límite. ¡Inténtalo de nuevo!',
@@ -1238,4 +1242,5 @@ export const es = {
     'Realice una copia de seguridad de su recurso compartido en línea utilizando la misma contraseña que creó anteriormente.',
   fast_vault_backup_description:
     'Se recomienda y es seguro el almacenamiento en línea; las acciones de bóveda están diseñadas para ello.',
+  not_enough_funds: 'No hay fondos suficientes',
 }

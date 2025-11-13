@@ -161,6 +161,7 @@ export const en = {
   staked_amount: 'Staked Amount',
   send_overview: 'Send Overview',
   add_address: 'Add Address',
+  add_to_address_book: 'Add to Address Book',
   no_referral_yet: 'No referral yet.',
   turn_your_vault_into_rewards_machine:
     'Turn your vault into a rewards machine. Create your referral now and start earning.',
@@ -257,6 +258,7 @@ export const en = {
   pair_device_disclaimers_second: 'devices present.',
   backup_disclaimer:
     'You should backup all vault shares in separate locations.',
+  part: 'part',
   of: 'of',
   vault: 'Vault',
   vaults: 'Vaults',
@@ -1011,6 +1013,8 @@ export const en = {
   connect: 'Connect',
   link_copied: 'Link copied to clipboard',
   failed_to_copy_link: 'Failed to copy link',
+  failed_to_copy_address: 'Failed to copy address',
+  failed_to_delete_folder: 'Failed to delete folder',
   failed_to_retrieve_addresses: 'Failed to retrieve addresses',
   timeout_error: 'Timeout Error',
   signing_timeout_description:
@@ -1195,4 +1199,5 @@ export const en = {
   connected_with_server: 'Connected with server',
   server_connection_estimation:
     'This usually doesn’t take longer than 30 seconds',
+  not_enough_funds: 'Not enough funds',
 }

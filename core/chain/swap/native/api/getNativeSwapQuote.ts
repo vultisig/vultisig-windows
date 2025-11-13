@@ -7,10 +7,8 @@ import { queryUrl } from '@lib/utils/query/queryUrl'
 import { TransferDirection } from '@lib/utils/TransferDirection'
 import { t } from 'i18next'
 
-import { Chain } from '../../../Chain'
 import { chainFeeCoin } from '../../../coin/chainFeeCoin'
 import { toNativeSwapAsset } from '../asset/toNativeSwapAsset'
-import { nativeSwapAffiliateConfig } from '../nativeSwapAffiliateConfig'
 import {
   nativeSwapApiBaseUrl,
   NativeSwapChain,
@@ -18,6 +16,7 @@ import {
 } from '../NativeSwapChain'
 import { NativeSwapQuote } from '../NativeSwapQuote'
 import { getNativeSwapDecimals } from '../utils/getNativeSwapDecimals'
+import { buildAffiliateParams } from './affiliate'
 
 type GetNativeSwapQuoteInput = Record<TransferDirection, AccountCoin> & {
   swapChain: NativeSwapChain
@@ -49,27 +48,21 @@ export const getNativeSwapQuote = async ({
   const chainAmount = toChainAmount(amount, fromDecimals)
 
   const swapBaseUrl = `${nativeSwapApiBaseUrl[swapChain]}/quote/swap`
+
   const params = new URLSearchParams({
     from_asset: fromAsset,
     to_asset: toAsset,
     amount: chainAmount.toString(),
     destination,
     streaming_interval: String(nativeSwapStreamingInterval[swapChain]),
+    ...(affiliateBps !== undefined
+      ? buildAffiliateParams({
+          swapChain,
+          referral,
+          affiliateBps,
+        })
+      : {}),
   })
-
-  if (affiliateBps) {
-    params.append('affiliate', nativeSwapAffiliateConfig.affiliateFeeAddress)
-    params.append('affiliate_bps', affiliateBps.toString())
-  }
-
-  // THORChain supports nested affiliates; Maya supports single affiliate only
-  if (referral && !(swapChain === Chain.MayaChain && affiliateBps)) {
-    params.append('affiliate', referral)
-    params.append(
-      'affiliate_bps',
-      nativeSwapAffiliateConfig.referralDiscountAffiliateFeeRateBps.toString()
-    )
-  }
 
   const url = `${swapBaseUrl}?${params.toString()}`
 

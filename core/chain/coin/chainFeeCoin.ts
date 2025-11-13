@@ -182,6 +182,12 @@ const leanChainFeeCoin: Record<Chain, KnownCoinMetadata> = {
     decimals: 18,
     priceProviderId: 'mantle',
   },
+  [Chain.Sei]: {
+    ticker: 'SEI',
+    logo: 'sei',
+    decimals: 18,
+    priceProviderId: 'sei-network',
+  },
 }
 
 export const chainFeeCoin: Record<Chain, KnownCoin> = recordMap(

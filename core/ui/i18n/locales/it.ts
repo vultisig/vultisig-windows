@@ -277,6 +277,7 @@ export const it = {
   pair_device_disclaimers_second: ' dispositivi presenti.',
   backup_disclaimer:
     'Dovresti eseguire il backup di tutti i frammenti della cassaforte in posizioni separate.',
+  part: 'parte',
   of: 'di',
   vault: 'Cassaforte',
   vaults: 'Cassaforti',
@@ -862,6 +863,7 @@ export const it = {
     output: "Accetto l'importo minimo che riceverò",
   },
   add_address: 'Aggiungi indirizzo',
+  add_to_address_book: 'Aggiungi alla rubrica',
   settings: 'Impostazioni',
   language: 'Lingua',
   currency: 'Valuta',
@@ -905,6 +907,8 @@ export const it = {
   connect: 'Collegare',
   link_copied: 'Link copiato negli appunti',
   failed_to_copy_link: 'Impossibile copiare il collegamento',
+  failed_to_copy_address: "Impossibile copiare l'indirizzo",
+  failed_to_delete_folder: 'Impossibile eliminare la cartella',
   timeout_error: 'Errore di timeout',
   signing_timeout_description:
     'Il processo di firma ha superato il limite di tempo. Riprova!',
@@ -1237,4 +1241,5 @@ export const it = {
     'Esegui il backup della condivisione del vault online utilizzando la stessa password del vault creata in precedenza.',
   fast_vault_backup_description:
     "L'archiviazione online è consigliata e sicura: le condivisioni Vault sono progettate per questo scopo.",
+  not_enough_funds: 'Fondi insufficienti',
 }
