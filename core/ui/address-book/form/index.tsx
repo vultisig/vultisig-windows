@@ -52,6 +52,7 @@ type AddressBookFormProps = {
   isPending: UseMutationResult['isPending']
   onSubmit: (values: AddressBookFormValues) => void
   title: string
+  onBack?: () => void
 }
 
 export const AddressBookForm: FC<AddressBookFormProps> = ({
@@ -60,6 +61,7 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
   isPending,
   onSubmit,
   title,
+  onBack,
 }) => {
   const { t } = useTranslation()
   const addressBookItems = useAddressBookItems()
@@ -130,7 +132,7 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
       <PageHeader
         primaryControls={
           <PageHeaderBackButton
-            onClick={qrView ? () => setQrView(null) : undefined}
+            onClick={qrView ? () => setQrView(null) : onBack}
           />
         }
         title={title}
