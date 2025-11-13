@@ -1,8 +1,8 @@
 import { create } from '@bufbuild/protobuf'
 import { Chain } from '@core/chain/Chain'
+import { polkadotRpcUrl } from '@core/chain/chains/polkadot/client'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { decodeSigningOutput } from '@core/chain/tw/signingOutput'
-import { rootApiUrl } from '@core/config'
 import { getPreSigningOutput } from '@core/mpc/keysign/preSigningOutput'
 import { getEncodedSigningInputs } from '@core/mpc/keysign/signingInputs'
 import { PolkadotSpecific } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
@@ -82,7 +82,7 @@ export const refinePolkadotChainSpecific = async ({
 
   const { result } = await queryUrl<{
     result: { partialFee: string }
-  }>(`${rootApiUrl}/dot/`, {
+  }>(polkadotRpcUrl, {
     body: {
       jsonrpc: '2.0',
       method: 'payment_queryInfo',
