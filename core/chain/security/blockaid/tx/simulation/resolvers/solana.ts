@@ -1,10 +1,10 @@
 import { queryBlockaid } from '../../../core/query'
-import { BlockaidSimulation } from '../api/core'
+import { BlockaidSolanaSimulation } from '../api/core'
 import { BlockaidTxSimulationResolver } from '../resolver'
 
 type SolanaBlockaidScanResponse = {
   result: {
-    simulation: BlockaidSimulation
+    simulation: BlockaidSolanaSimulation
   }
 }
 

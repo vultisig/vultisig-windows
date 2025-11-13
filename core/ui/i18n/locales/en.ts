@@ -519,7 +519,10 @@ export const en = {
   advanced: 'Advanced',
   low: 'Low',
   gas_limit_tooltip_content:
-    'The maximum amount of gas you’ll pay for. Can be increased if gas limit is not sufficient to send transactions',
+    "The maximum amount of gas you'll pay for. Can be increased if gas limit is not sufficient to send transactions",
+  insufficient_gas_limit: 'Insufficient Gas Limit',
+  insufficient_gas_limit_description:
+    'Estimated gas: {{estimated}}. Gas limit: {{limit}}. The transaction may fail due to insufficient gas.',
   normal: 'Normal',
   fast: 'Fast',
   priority: 'Priority',

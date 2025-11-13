@@ -1,8 +1,12 @@
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
-import { BlockaidSolanaSwapSimulationInfo } from '../core'
+import { BlockaidSimulationSupportedChain } from '../../../simulationChains'
+import {
+  BlockaidEvmSimulationInfo,
+  BlockaidSolanaSwapSimulationInfo,
+} from '../core'
 
-export type BlockaidSimulation = {
+export type BlockaidSolanaSimulation = {
   account_summary: {
     account_assets_diff: Array<{
       asset: {
@@ -30,8 +34,50 @@ export type BlockaidSimulation = {
   }
 }
 
-export const parseBlockaidSimulation = async (
-  simulation: BlockaidSimulation
+export type BlockaidEVMSimulation = {
+  account_summary: {
+    assets_diffs: Array<{
+      asset_type: 'NATIVE' | 'ERC20'
+      asset: {
+        type: 'NATIVE' | 'ERC20'
+        chain_name: string
+        decimals: number
+        chain_id: number
+        address?: string
+        logo_url: string
+        name: string
+        symbol: string
+      }
+      in: Array<{
+        usd_price: number
+        summary: string
+        value: number
+        raw_value: number
+      }>
+      out: Array<{
+        usd_price: number
+        summary: string
+        value: number
+        raw_value: number
+      }>
+      balance_changes: {
+        before: {
+          usd_price: number
+          value: number
+          raw_value: number
+        }
+        after: {
+          usd_price: number
+          value: number
+          raw_value: number
+        }
+      }
+    }>
+  }
+}
+
+export const parseBlockaidSolanaSwapSimulation = async (
+  simulation: BlockaidSolanaSimulation
 ): Promise<BlockaidSolanaSwapSimulationInfo> => {
   const assetDiffs = simulation.account_summary.account_assets_diff
   if (assetDiffs.length > 1) {
@@ -71,4 +117,71 @@ export const parseBlockaidSimulation = async (
     }
   }
   throw new Error('Invalid simulation data')
+}
+
+export const parseBlockaidEvmSimulation = async (
+  simulation: BlockaidEVMSimulation,
+  chain: BlockaidSimulationSupportedChain
+): Promise<BlockaidEvmSimulationInfo> => {
+  const assetDiffs = simulation.account_summary.assets_diffs
+
+  if (assetDiffs.length === 1) {
+    const [potentialOutAsset] = assetDiffs
+
+    return {
+      transfer: {
+        fromCoin: {
+          decimals: potentialOutAsset.asset.decimals,
+          logo: potentialOutAsset.asset.logo_url,
+          ticker: potentialOutAsset.asset.symbol,
+          id: potentialOutAsset.asset.address,
+          chain: chain,
+        },
+        fromAmount: shouldBePresent(BigInt(potentialOutAsset.out[0].raw_value)),
+      },
+    }
+  } else if (assetDiffs.length > 1) {
+    const [potentialOutAsset, potentialInAsset] = assetDiffs
+    const { inAsset, inValue } = potentialInAsset.in
+      ? {
+          inAsset: potentialInAsset.asset,
+          inValue: potentialInAsset.in,
+        }
+      : {
+          inAsset: potentialOutAsset.asset,
+          inValue: potentialOutAsset.in,
+        }
+
+    const { outAsset, outValue } = potentialOutAsset.out
+      ? {
+          outAsset: potentialOutAsset.asset,
+          outValue: potentialOutAsset.out,
+        }
+      : {
+          outAsset: potentialInAsset.asset,
+          outValue: potentialInAsset.out,
+        }
+
+    return {
+      swap: {
+        fromCoin: {
+          decimals: outAsset.decimals,
+          logo: outAsset.logo_url,
+          ticker: outAsset.symbol,
+          id: outAsset.address,
+          chain: chain,
+        },
+        toCoin: {
+          chain: chain,
+          decimals: inAsset.decimals,
+          logo: inAsset.logo_url,
+          ticker: inAsset.symbol,
+          id: inAsset.address,
+        },
+        fromAmount: shouldBePresent(BigInt(outValue[0].raw_value)),
+        toAmount: shouldBePresent(BigInt(inValue[0].raw_value)),
+      },
+    }
+  }
+  return null
 }
