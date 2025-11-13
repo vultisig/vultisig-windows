@@ -36,6 +36,15 @@ func (a *App) ReadTextFile(filename string) (string, error) {
 	return string(data), nil
 }
 
+func (a *App) ReadFileBase64(filename string) (string, error) {
+	data, err := os.ReadFile(filename)
+	if err != nil {
+		return "", err
+	}
+
+	return base64.StdEncoding.EncodeToString(data), nil
+}
+
 func (a *App) SaveFile(suggestedFilename string, base64Data string) (string, error) {
 	filename, err := runtime.SaveFileDialog(a.ctx, runtime.SaveDialogOptions{
 		Title:           "Save File",
