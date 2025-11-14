@@ -136,6 +136,7 @@ const AnimationArea = styled(VStack)`
   justify-content: center;
   width: 100%;
   align-self: stretch;
+  overflow: hidden;
 `
 
 const AnimationWrapper = styled.div`
@@ -147,6 +148,7 @@ const AnimationWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 0;
 
   canvas,
   img,
@@ -170,4 +172,5 @@ const StyledLayout = styled(PageContent)`
   min-height: 0;
   align-items: stretch;
   gap: 24px;
+  overflow: hidden;
 `
