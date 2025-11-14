@@ -100,6 +100,8 @@ const stack = ({
   css`
     overflow: auto;
     flex-basis: 0;
+    min-height: 0;
+
     > * {
       flex-shrink: 0;
     }
