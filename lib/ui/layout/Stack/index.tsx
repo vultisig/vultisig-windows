@@ -1,4 +1,3 @@
-import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import React from 'react'
 import styled, { css } from 'styled-components'
@@ -102,7 +101,6 @@ const stack = ({
     overflow: auto;
     flex-basis: 0;
     min-height: 0;
-    ${hideScrollbars}
 
     > * {
       flex-shrink: 0;
