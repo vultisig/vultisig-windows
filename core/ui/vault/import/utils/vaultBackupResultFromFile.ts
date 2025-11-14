@@ -1,4 +1,6 @@
 import { getSevenZip } from '@core/mpc/compression/getSevenZip'
+import { isLikelyToBeDklsVaultBackup } from '@core/ui/vault/import/utils/isLikelyToBeDklsVaultBackup'
+import { vaultBackupResultFromFileContent } from '@core/ui/vault/import/utils/vaultBackupResultFromString'
 import {
   getFileExtension,
   getVaultBackupExtension,
@@ -10,8 +12,6 @@ import {
   FileBasedVaultBackupResult,
   FileBasedVaultBackupResultItem,
 } from '@core/ui/vault/import/VaultBackupResult'
-import { isLikelyToBeDklsVaultBackup } from '@core/ui/vault/import/utils/isLikelyToBeDklsVaultBackup'
-import { vaultBackupResultFromFileContent } from '@core/ui/vault/import/utils/vaultBackupResultFromString'
 import { attempt } from '@lib/utils/attempt'
 import { readFileAsArrayBuffer } from '@lib/utils/file/readFileAsArrayBuffer'
 
