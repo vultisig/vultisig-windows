@@ -7,8 +7,7 @@ export const vaultBackupArchiveExtensions = ['zip'] as const
 
 export type VaultBackupExtension = (typeof vaultBackupExtensions)[number]
 
-export type VaultBackupArchiveExtension =
-  (typeof vaultBackupArchiveExtensions)[number]
+type VaultBackupArchiveExtension = (typeof vaultBackupArchiveExtensions)[number]
 
 export const getFileExtension = (fileName: string) =>
   (getLastItem(fileName.split('.')) || '').toLowerCase()
