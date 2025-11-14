@@ -23,6 +23,8 @@ const Layout = styled(VStack)`
   min-height: 0;
   padding: ${pageConfig.verticalPadding}px ${pageConfig.horizontalPadding}px;
   gap: 24px;
+  overflow: hidden;
+  align-items: stretch;
 `
 
 const clampedWidth = 'min(520px, 100%)'
