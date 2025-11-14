@@ -1,4 +1,5 @@
 import { centeredContentColumn } from '@lib/ui/css/centeredContentColumn'
+import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { verticalPadding } from '@lib/ui/css/verticalPadding'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -24,4 +25,6 @@ export const FitPageContent = styled.div<FitPageContentProps>`
   ${verticalPadding(pageConfig.verticalPadding)};
   flex-grow: 1;
   overflow: auto;
+  min-height: 0;
+  ${hideScrollbars};
 `
