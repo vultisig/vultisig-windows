@@ -3,6 +3,7 @@ import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin } from '@core/chain/coin/Coin'
 import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
+import { SingingMode } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
@@ -56,6 +57,18 @@ export const useParsedTxQuery = (): Query<ParsedTx> => {
     [transactionPayload]
   )
 
+  const signingMode = useMemo(
+    () =>
+      matchRecordUnion<ITransactionPayload, SingingMode | undefined>(
+        transactionPayload,
+        {
+          keysign: ({ transactionDetails }) => transactionDetails.signingMode,
+          serialized: () => undefined,
+        }
+      ),
+    [transactionPayload]
+  )
+
   return useTransformQueriesData(
     {
       customTxData: customTxDataQuery,
@@ -92,6 +105,7 @@ export const useParsedTxQuery = (): Query<ParsedTx> => {
             getThirdPartyGasLimitEstimation(transactionPayload),
           customTxData,
           skipBroadcast,
+          signingMode,
           coin: {
             ...coin,
             address,
@@ -104,6 +118,7 @@ export const useParsedTxQuery = (): Query<ParsedTx> => {
         walletCore,
         skipBroadcast,
         transactionPayload,
+        signingMode,
       ]
     )
   )

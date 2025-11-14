@@ -75,8 +75,13 @@ export const buildSendTxKeysignPayload = async ({
   walletCore,
   localPartyId,
 }: BuildSendTxKeysignPayloadInput) => {
-  const { coin, customTxData, skipBroadcast, thirdPartyGasLimitEstimation } =
-    parsedTx
+  const {
+    coin,
+    customTxData,
+    skipBroadcast,
+    thirdPartyGasLimitEstimation,
+    signingMode,
+  } = parsedTx
   const { chain } = coin
 
   const getTransactionType = () => {
@@ -312,6 +317,7 @@ export const buildSendTxKeysignPayload = async ({
     memo,
     contractPayload,
     swapPayload,
+    signingMode,
   })
 
   keysignPayload.blockchainSpecific = await getChainSpecific({

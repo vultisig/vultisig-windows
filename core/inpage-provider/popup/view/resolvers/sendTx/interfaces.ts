@@ -1,4 +1,5 @@
 import { Chain } from '@core/chain/Chain'
+import { SingingMode } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 
 export enum CosmosMsgType {
   MSG_SEND = 'cosmos-sdk/MsgSend',
@@ -170,6 +171,7 @@ export type TransactionDetails = {
   }
   msgPayload?: MsgPayload
   skipBroadcast?: boolean
+  signingMode?: SingingMode
 }
 
 export type DepositTransactionDetails = {
