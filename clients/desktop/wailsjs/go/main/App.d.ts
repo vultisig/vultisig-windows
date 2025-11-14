@@ -3,6 +3,8 @@
 
 export function GetOSArgs():Promise<Array<string>>;
 
+export function ReadFileBase64(arg1:string):Promise<string>;
+
 export function ReadTextFile(arg1:string):Promise<string>;
 
 export function SaveFile(arg1:string,arg2:string):Promise<string>;

@@ -1,14 +1,14 @@
 import { useAppViewState } from '@clients/desktop/src/navigation/hooks/useAppViewState'
-import { ReadTextFile } from '@clients/desktop/wailsjs/go/main/App'
-import { vaultContainerFromString } from '@core/mpc/vault/utils/vaultContainerFromString'
+import { ReadFileBase64 } from '@clients/desktop/wailsjs/go/main/App'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
-import { isLikelyToBeDklsVaultBackup } from '@core/ui/vault/import/utils/isLikelyToBeDklsVaultBackup'
+import { vaultBackupResultFromFileBytes } from '@core/ui/vault/import/utils/vaultBackupResultFromFile'
 import { FileBasedVaultBackupResult } from '@core/ui/vault/import/VaultBackupResult'
 import { FlowPendingPageContent } from '@lib/ui/flow/FlowPendingPageContent'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMutation } from '@tanstack/react-query'
+import { Buffer } from 'buffer'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -20,25 +20,19 @@ export const ReadBackupFileStep = ({
 
   const { mutate, ...mutationState } = useMutation({
     mutationFn: async () => {
-      const fileContent = await ReadTextFile(filePath)
       const fileName = filePath.split('/').pop() || filePath
+      const base64Content = await ReadFileBase64(filePath)
+      const fileBuffer = Buffer.from(base64Content, 'base64')
+      const arrayBuffer = fileBuffer.buffer.slice(
+        fileBuffer.byteOffset,
+        fileBuffer.byteOffset + fileBuffer.byteLength
+      )
 
-      const vaultContainer = vaultContainerFromString(fileContent)
-
-      const result: FileBasedVaultBackupResult = {
-        result: { vaultContainer },
-      }
-
-      if (
-        isLikelyToBeDklsVaultBackup({
-          size: fileContent.length,
-          fileName,
-        })
-      ) {
-        result.override = { libType: 'DKLS' }
-      }
-
-      return result
+      return vaultBackupResultFromFileBytes({
+        name: fileName,
+        size: fileBuffer.byteLength,
+        buffer: arrayBuffer,
+      })
     },
     onSuccess: onFinish,
   })

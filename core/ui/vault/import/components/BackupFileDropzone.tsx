@@ -1,4 +1,8 @@
-import { vaultBackupExtensions } from '@core/ui/vault/import/VaultBackupExtension'
+import {
+  importableVaultBackupExtensions,
+  vaultBackupArchiveExtensions,
+  vaultBackupExtensions,
+} from '@core/ui/vault/import/VaultBackupExtension'
 import { CloudUploadIcon } from '@lib/ui/icons/CloudUploadIcon'
 import { InteractiveDropZoneContainer } from '@lib/ui/inputs/upload/DropZoneContainer'
 import { DropZoneContent } from '@lib/ui/inputs/upload/DropZoneContent'
@@ -19,6 +23,12 @@ export const BackupFileDropzone = ({
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       'application/octet-stream': vaultBackupExtensions.map(
+        extension => `.${extension}`
+      ),
+      'application/zip': vaultBackupArchiveExtensions.map(
+        extension => `.${extension}`
+      ),
+      'application/x-zip-compressed': vaultBackupArchiveExtensions.map(
         extension => `.${extension}`
       ),
     },
@@ -46,7 +56,12 @@ export const BackupFileDropzone = ({
         </DropZoneContent>
         <input {...getInputProps()} />
       </InteractiveDropZoneContainer>
-      <Text color="shy">Supported file types: .bak & .vult</Text>
+      <Text color="shy">
+        Supported file types:
+        {importableVaultBackupExtensions
+          .map(extension => `.${extension}`)
+          .join(', ')}
+      </Text>
     </>
   )
 }
