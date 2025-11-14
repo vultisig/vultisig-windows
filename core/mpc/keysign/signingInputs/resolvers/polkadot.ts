@@ -6,6 +6,7 @@ import Long from 'long'
 
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
 import { getKeysignChain } from '../../utils/getKeysignChain'
+import { resolvePolkadotToAddress } from '../../utils/resolvePolkadotToAddress'
 import { SigningInputsResolver } from '../resolver'
 
 export const getPolkadotSigningInputs: SigningInputsResolver<'polkadot'> = ({
@@ -13,6 +14,10 @@ export const getPolkadotSigningInputs: SigningInputsResolver<'polkadot'> = ({
   walletCore,
 }) => {
   const chain = getKeysignChain(keysignPayload)
+  const toAddress = resolvePolkadotToAddress({
+    keysignPayload,
+    walletCore,
+  })
 
   const {
     recentBlockHash,
@@ -32,14 +37,23 @@ export const getPolkadotSigningInputs: SigningInputsResolver<'polkadot'> = ({
     'hex'
   )
 
-  const t = TW.Polkadot.Proto.Balance.Transfer.create({
-    toAddress: keysignPayload.toAddress,
+  const callIndices = TW.Polkadot.Proto.CallIndices.create({
+    custom: TW.Polkadot.Proto.CustomCallIndices.create({
+      moduleIndex: 10,
+      methodIndex: 0,
+    }),
+  })
+
+  const assetTransfer = TW.Polkadot.Proto.Balance.AssetTransfer.create({
+    callIndices,
+    toAddress,
     value: new Uint8Array(amountHex),
-    memo: keysignPayload.memo || '',
+    assetId: 0,
+    feeAssetId: 0,
   })
 
   const balance = TW.Polkadot.Proto.Balance.create({
-    transfer: t,
+    assetTransfer,
   })
 
   const nonceLong =
