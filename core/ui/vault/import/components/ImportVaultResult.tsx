@@ -23,7 +23,9 @@ export const ImportVaultResult = ({
         vaultContainer: vaultContainer => (
           <ProcessVaultContainer value={vaultContainer} onFinish={onFinish} />
         ),
-        vault: vault => <SaveImportedVaultStep value={vault} onFinish={onFinish} />,
+        vault: vault => (
+          <SaveImportedVaultStep value={vault} onFinish={onFinish} />
+        ),
         encryptedVault: encryptedVault => (
           <ValueTransfer<Vault>
             from={({ onFinish: resolve }) => (
