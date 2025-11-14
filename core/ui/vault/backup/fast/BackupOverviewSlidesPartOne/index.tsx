@@ -1,7 +1,6 @@
 import { useBackupOverviewStepsAnimations } from '@core/ui/vault/backup/fast/BackupOverviewSlidesPartOne/hooks/useBackupOverviewStepsAnimations'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { applyResponsiveLayoutWidth } from '@lib/ui/css/getResponsiveLayoutWidth'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
@@ -31,7 +30,7 @@ export const BackupOverviewSlidesPartOne: FC<OnFinishProp> = ({ onFinish }) => {
   return (
     <StyledLayout fullSize>
       <StyledHeader gap={16}>
-        <HStack justifyContent="space-between">
+        <HStack justifyContent="space-between" fullWidth>
           <StyledButton
             icon={
               currentAnimation > 1 ? (
@@ -52,10 +51,12 @@ export const BackupOverviewSlidesPartOne: FC<OnFinishProp> = ({ onFinish }) => {
           variant="bars"
         />
       </StyledHeader>
-      <StyledContent alignItems="center">
-        <AnimationComponent />
-      </StyledContent>
-      <StyledFooter alignItems="center" gap={32}>
+      <AnimationArea>
+        <AnimationWrapper>
+          <AnimationComponent />
+        </AnimationWrapper>
+      </AnimationArea>
+      <StyledFooter>
         <AnimatedVisibility>
           {match(currentAnimation, {
             1: () => (
@@ -106,30 +107,67 @@ const StyledButton = styled(Button)`
   width: auto;
 `
 
-const StyledContent = styled(VStack)`
-  padding: 0;
-  height: 100%;
-  flex: 1;
-
-  @media ${mediaQuery.mobileDeviceAndDown} {
-    height: 400px;
-  }
-`
-
 const StyledFooter = styled(VStack)`
+  width: min(640px, 100%);
+  gap: 32px;
+  align-self: center;
+  align-items: center;
+  flex-shrink: 0;
+
   @media ${mediaQuery.mobileDeviceAndDown} {
     padding: 0 24px 20px;
   }
 `
 
 const StyledHeader = styled(VStack)`
+  width: min(640px, 100%);
+  align-self: center;
+  align-items: center;
+
   @media ${mediaQuery.mobileDeviceAndDown} {
     padding: 20px 24px 0;
+  }
+`
+
+const AnimationArea = styled(VStack)`
+  flex: 1;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  align-self: stretch;
+`
+
+const AnimationWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  max-width: 820px;
+  margin: 0 auto;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  canvas,
+  img,
+  video {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+  }
+
+  @media ${mediaQuery.mobileDeviceAndDown} {
+    max-width: 100%;
+    height: 320px;
   }
 `
 
 const StyledLayout = styled(PageContent)`
   margin: 0 auto;
   position: relative;
-  ${applyResponsiveLayoutWidth};
+  width: min(1100px, 100%);
+  height: 100%;
+  min-height: 0;
+  align-items: stretch;
+  gap: 24px;
 `
