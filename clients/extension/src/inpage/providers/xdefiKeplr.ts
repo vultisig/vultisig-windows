@@ -540,6 +540,106 @@ export class XDEFIKeplrProvider extends Keplr {
   }
   async sendMessage() {}
 
+  private decodeProtobufToAminoMsg(msg: {
+    typeUrl: string
+    value: Uint8Array
+  }): AminoMsg {
+    const protobufTypeUrls = [
+      CosmosMsgType.MSG_SEND_URL,
+      CosmosMsgType.MSG_EXECUTE_CONTRACT_URL,
+      CosmosMsgType.MSG_TRANSFER_URL,
+      CosmosMsgType.THORCHAIN_MSG_DEPOSIT_URL,
+    ]
+
+    if (!protobufTypeUrls.includes(msg.typeUrl as CosmosMsgType)) {
+      return {
+        type: msg.typeUrl,
+        value: JSON.parse(Buffer.from(msg.value).toString()),
+      } as AminoMsg
+    }
+
+    const result = match(msg.typeUrl, {
+      [CosmosMsgType.MSG_SEND_URL]: (): AminoMsg => {
+        const decodedMessage = MsgSend.decode(msg.value)
+        return {
+          type: CosmosMsgType.MSG_SEND,
+          value: {
+            from_address: decodedMessage.fromAddress,
+            to_address: decodedMessage.toAddress,
+            amount: decodedMessage.amount.map(coin => ({
+              denom: coin.denom,
+              amount: coin.amount,
+            })),
+          },
+        } as AminoMsg
+      },
+      [CosmosMsgType.MSG_EXECUTE_CONTRACT_URL]: (): AminoMsg => {
+        const decodedMessage = MsgExecuteContract.decode(msg.value)
+        const msgString = new TextDecoder().decode(
+          Buffer.from(decodedMessage.msg)
+        )
+        return {
+          type: CosmosMsgType.MSG_EXECUTE_CONTRACT,
+          value: {
+            sender: decodedMessage.sender,
+            contract: decodedMessage.contract,
+            funds: decodedMessage.funds.map(coin => ({
+              denom: coin.denom,
+              amount: coin.amount,
+            })),
+            msg: JSON.parse(msgString),
+          },
+        } as AminoMsg
+      },
+      [CosmosMsgType.MSG_TRANSFER_URL]: (): AminoMsg => {
+        const decodedMessage = MsgTransfer.decode(msg.value)
+        return {
+          type: CosmosMsgType.MSG_TRANSFER_URL,
+          value: {
+            source_port: decodedMessage.sourcePort,
+            source_channel: decodedMessage.sourceChannel,
+            token: {
+              denom: decodedMessage.token.denom,
+              amount: decodedMessage.token.amount,
+            },
+            sender: decodedMessage.sender,
+            receiver: decodedMessage.receiver,
+            timeout_height: {
+              revision_number:
+                decodedMessage.timeoutHeight.revisionNumber.toString(),
+              revision_height:
+                decodedMessage.timeoutHeight.revisionHeight.toString(),
+            },
+            timeout_timestamp: decodedMessage.timeoutTimestamp.toString(),
+            memo: decodedMessage.memo,
+          },
+        } as AminoMsg
+      },
+      [CosmosMsgType.THORCHAIN_MSG_DEPOSIT_URL]: (): AminoMsg => {
+        const decodedMessage = TW.Cosmos.Proto.Message.THORChainDeposit.decode(
+          msg.value
+        )
+        const thorAddress = bech32.encode(
+          'thor',
+          bech32.toWords(decodedMessage.signer)
+        )
+        return {
+          type: CosmosMsgType.THORCHAIN_MSG_DEPOSIT,
+          value: {
+            coins: decodedMessage.coins.map(coin => ({
+              amount: coin.amount,
+              asset: coin.asset?.ticker ?? '',
+            })),
+            memo: decodedMessage.memo,
+            signer: thorAddress,
+          },
+        } as AminoMsg
+      },
+    })
+
+    return result
+  }
+
   async signAmino(
     chainId: string,
     signer: string,
@@ -554,7 +654,13 @@ export class XDEFIKeplrProvider extends Keplr {
 
       const chain = shouldBePresent(getCosmosChainByChainId(chainId))
 
-      const transactionDetails = keplrHandler(signDoc, chain)
+      const transactionDetails = keplrHandler(
+        {
+          ...signDoc,
+          skipBroadcast: true,
+        },
+        chain
+      )
 
       const { data } = await callPopup(
         {
@@ -576,13 +682,13 @@ export class XDEFIKeplrProvider extends Keplr {
       const authInfo = AuthInfo.decode(txRaw.authInfoBytes)
       const msgs: AminoMsg[] = txBody.messages.map((msg): AminoMsg => {
         try {
-          return {
-            type: msg.typeUrl,
-            value: JSON.parse(Buffer.from(msg.value).toString()),
-          }
+          return this.decodeProtobufToAminoMsg({
+            typeUrl: msg.typeUrl,
+            value: msg.value,
+          })
         } catch (error) {
           throw new Error(
-            `Failed to parse message value for ${msg.typeUrl}: ${error}`
+            `Failed to decode message for ${msg.typeUrl}: ${error}`
           )
         }
       })
