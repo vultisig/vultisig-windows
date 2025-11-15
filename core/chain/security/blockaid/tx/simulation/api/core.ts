@@ -1,6 +1,7 @@
+import { EvmChain } from '@core/chain/Chain'
+import { isChainOfKind } from '@core/chain/ChainKind'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
-import { BlockaidSimulationSupportedChain } from '../../../simulationChains'
 import {
   BlockaidEvmSimulationInfo,
   BlockaidSolanaSwapSimulationInfo,
@@ -121,12 +122,22 @@ export const parseBlockaidSolanaSwapSimulation = async (
 
 export const parseBlockaidEvmSimulation = async (
   simulation: BlockaidEVMSimulation,
-  chain: BlockaidSimulationSupportedChain
+  chain: EvmChain
 ): Promise<BlockaidEvmSimulationInfo> => {
+  if (!isChainOfKind(chain, 'evm')) {
+    throw new Error(
+      `parseBlockaidEvmSimulation only supports EVM chains, got: ${chain}`
+    )
+  }
+
   const assetDiffs = simulation.account_summary.assets_diffs
 
   if (assetDiffs.length === 1) {
     const [potentialOutAsset] = assetDiffs
+
+    if (potentialOutAsset.out.length === 0) {
+      return null
+    }
 
     return {
       transfer: {
@@ -142,25 +153,31 @@ export const parseBlockaidEvmSimulation = async (
     }
   } else if (assetDiffs.length > 1) {
     const [potentialOutAsset, potentialInAsset] = assetDiffs
-    const { inAsset, inValue } = potentialInAsset.in
-      ? {
-          inAsset: potentialInAsset.asset,
-          inValue: potentialInAsset.in,
-        }
-      : {
-          inAsset: potentialOutAsset.asset,
-          inValue: potentialOutAsset.in,
-        }
+    const { inAsset, inValue } =
+      potentialInAsset.in.length > 0
+        ? {
+            inAsset: potentialInAsset.asset,
+            inValue: potentialInAsset.in,
+          }
+        : {
+            inAsset: potentialOutAsset.asset,
+            inValue: potentialOutAsset.in,
+          }
 
-    const { outAsset, outValue } = potentialOutAsset.out
-      ? {
-          outAsset: potentialOutAsset.asset,
-          outValue: potentialOutAsset.out,
-        }
-      : {
-          outAsset: potentialInAsset.asset,
-          outValue: potentialInAsset.out,
-        }
+    const { outAsset, outValue } =
+      potentialOutAsset.out.length > 0
+        ? {
+            outAsset: potentialOutAsset.asset,
+            outValue: potentialOutAsset.out,
+          }
+        : {
+            outAsset: potentialInAsset.asset,
+            outValue: potentialInAsset.out,
+          }
+
+    if (outValue.length === 0 || inValue.length === 0) {
+      return null
+    }
 
     return {
       swap: {
