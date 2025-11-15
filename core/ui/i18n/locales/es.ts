@@ -864,6 +864,7 @@ export const es = {
     output: 'Estoy de acuerdo con el monto mínimo que recibiré',
   },
   add_address: 'Agregar dirección',
+  add_to_address_book: 'Agregar a la libreta de direcciones',
   settings: 'Ajustes',
   language: 'Idioma',
   currency: 'Divisa',
@@ -1241,4 +1242,5 @@ export const es = {
     'Realice una copia de seguridad de su recurso compartido en línea utilizando la misma contraseña que creó anteriormente.',
   fast_vault_backup_description:
     'Se recomienda y es seguro el almacenamiento en línea; las acciones de bóveda están diseñadas para ello.',
+  not_enough_funds: 'No hay fondos suficientes',
 }

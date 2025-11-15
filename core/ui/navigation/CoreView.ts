@@ -14,7 +14,10 @@ export type CoreView =
   | { id: 'addressBook' }
   | { id: 'faq' }
   | { id: 'airdropRegister' }
-  | { id: 'createAddressBookItem' }
+  | {
+      id: 'createAddressBookItem'
+      state?: { address?: string; chain?: Chain }
+    }
   | { id: 'createVaultFolder' }
   | { id: 'currencySettings' }
   | { id: 'deeplink'; state: { url: string } }

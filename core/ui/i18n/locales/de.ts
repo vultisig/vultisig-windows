@@ -864,6 +864,7 @@ export const de = {
     output: 'Ich bin mit dem Mindestbetrag einverstanden, den ich erhalte',
   },
   add_address: 'Adresse hinzufügen',
+  add_to_address_book: 'Zum Adressbuch hinzufügen',
   settings: 'Einstellungen',
   language: 'Sprache',
   currency: 'Währung',
@@ -1242,4 +1243,5 @@ export const de = {
     'Sichern Sie Ihre Tresorfreigabe online mit demselben Tresorpasswort, das Sie zuvor erstellt haben.',
   fast_vault_backup_description:
     'Online-Speicher ist empfehlenswert und sicher – Vault-Speicher sind genau dafür konzipiert.',
+  not_enough_funds: 'Nicht genügend Mittel',
 }
