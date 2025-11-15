@@ -1,24 +1,47 @@
+import { Chain, EvmChain } from '@core/chain/Chain'
 import { DeriveChainKind, getChainKind } from '@core/chain/ChainKind'
 
 import { BlockaidSimulationSupportedChain } from '../../simulationChains'
-import { BlockaidSimulation } from './api/core'
 import {
+  BlockaidSimulationForChainKind,
   BlockaidTxSimulationInput,
   BlockaidTxSimulationResolver,
 } from './resolver'
+import { getEvmTxBlockaidSimulation } from './resolvers/evm'
 import { getSolanaTxBlockaidSimulation } from './resolvers/solana'
 
-const resolvers: Record<
-  DeriveChainKind<BlockaidSimulationSupportedChain>,
-  BlockaidTxSimulationResolver<any>
-> = {
-  solana: getSolanaTxBlockaidSimulation,
+type ResolverMap = {
+  evm: BlockaidTxSimulationResolver<any, 'evm'>
+  solana: BlockaidTxSimulationResolver<any, 'solana'>
 }
 
-export const getTxBlockaidSimulation = async (
-  input: BlockaidTxSimulationInput
-): Promise<BlockaidSimulation> => {
+const resolvers: ResolverMap = {
+  solana: getSolanaTxBlockaidSimulation,
+  evm: getEvmTxBlockaidSimulation,
+}
+
+export function getTxBlockaidSimulation(
+  input: BlockaidTxSimulationInput<EvmChain>
+): Promise<BlockaidSimulationForChainKind<'evm'>>
+
+export function getTxBlockaidSimulation(
+  input: BlockaidTxSimulationInput<typeof Chain.Solana>
+): Promise<BlockaidSimulationForChainKind<'solana'>>
+
+export async function getTxBlockaidSimulation<
+  T extends BlockaidSimulationSupportedChain,
+>(
+  input: BlockaidTxSimulationInput<T>
+): Promise<BlockaidSimulationForChainKind<DeriveChainKind<T>>> {
   const chainKind = getChainKind(input.chain)
 
-  return resolvers[chainKind](input)
+  if (chainKind === 'solana') {
+    return resolvers.solana(input) as Promise<
+      BlockaidSimulationForChainKind<DeriveChainKind<T>>
+    >
+  }
+
+  return resolvers.evm(input) as Promise<
+    BlockaidSimulationForChainKind<DeriveChainKind<T>>
+  >
 }

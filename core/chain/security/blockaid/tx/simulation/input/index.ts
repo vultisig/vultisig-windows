@@ -11,6 +11,7 @@ import {
   BlockaidTxSimulationInputResolver,
   BlockaidTxSimulationInputResolverInput,
 } from './resolver'
+import { getEvmBlockaidTxSimulationInput } from './resolvers/evm'
 import { getSolanaBlockaidTxSimulationInput } from './resolvers/solana'
 
 const resolvers: Record<
@@ -18,6 +19,7 @@ const resolvers: Record<
   BlockaidTxSimulationInputResolver<any>
 > = {
   solana: getSolanaBlockaidTxSimulationInput,
+  evm: getEvmBlockaidTxSimulationInput,
 }
 
 export const getBlockaidTxSimulationInput = (
