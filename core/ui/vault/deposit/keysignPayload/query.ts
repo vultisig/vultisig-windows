@@ -74,7 +74,7 @@ export const useDepositKeysignPayloadQuery = () => {
   )
 
   return useQuery({
-    queryKey: ['depositKeysignPayload', omit(input, 'publicKey')],
+    queryKey: ['depositKeysignPayload', omit(input, 'publicKey', 'walletCore')],
     queryFn: () => buildDepositKeysignPayload(input),
     ...noRefetchQueryOptions,
   })

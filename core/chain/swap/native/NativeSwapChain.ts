@@ -70,7 +70,7 @@ export const nativeSwapChainIds: Record<NativeSwapEnabledChain, string> = {
   [Chain.Zcash]: 'ZEC',
   [Chain.Ripple]: 'XRP',
   [Chain.Base]: 'BASE',
-  [Chain.Tron]: 'TRX',
+  [Chain.Tron]: 'TRON',
   [Chain.Noble]: 'NOBLE',
 }
 

@@ -15,7 +15,7 @@ type PolkadotAccountBalance = {
 
 export const getPolkadotCoinBalance: CoinBalanceResolver = async input => {
   const { data } = await queryUrl<PolkadotAccountBalance>(
-    'https://polkadot.api.subscan.io/api/v2/scan/search',
+    'https://assethub-polkadot.api.subscan.io/api/v2/scan/search',
     {
       body: { key: input.address },
     }

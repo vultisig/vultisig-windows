@@ -864,6 +864,7 @@ export const es = {
     output: 'Estoy de acuerdo con el monto mínimo que recibiré',
   },
   add_address: 'Agregar dirección',
+  add_to_address_book: 'Agregar a la libreta de direcciones',
   settings: 'Ajustes',
   language: 'Idioma',
   currency: 'Divisa',

@@ -840,6 +840,7 @@ export const hr = {
     output: 'Slažem se s min. iznos koji ću dobiti',
   },
   add_address: 'Dodaj adresu',
+  add_to_address_book: 'Dodaj u adresar',
   settings: 'postavke',
   language: 'Jezik',
   currency: 'Valuta',
