@@ -3,20 +3,17 @@ import { OtherChain } from '@core/chain/Chain'
 import { getSolanaClient } from '@core/chain/chains/solana/client'
 import { solanaConfig } from '@core/chain/chains/solana/solanaConfig'
 import { getSplAssociatedAccount } from '@core/chain/chains/solana/spl/getSplAssociatedAccount'
+import { SolanaSpecificSchema } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { attempt } from '@lib/utils/attempt'
-import { address } from '@solana/web3.js'
+import { attempt, withFallback } from '@lib/utils/attempt'
 
-import {
-  SolanaSpecific,
-  SolanaSpecificSchema,
-} from '../../../types/vultisig/keysign/v1/blockchain_specific_pb'
-import { getKeysignCoin } from '../../utils/getKeysignCoin'
-import { GetChainSpecificResolver } from '../resolver'
+import { getKeysignCoin } from '../../../utils/getKeysignCoin'
+import { GetChainSpecificResolver } from '../../resolver'
+import { refineSolanaChainSpecific } from './refine'
 
 export const getSolanaChainSpecific: GetChainSpecificResolver<
   'solanaSpecific'
-> = async ({ keysignPayload }) => {
+> = async ({ keysignPayload, walletCore }) => {
   const coin = getKeysignCoin<OtherChain.Solana>(keysignPayload)
   const receiver = shouldBePresent(keysignPayload.toAddress)
   const client = getSolanaClient()
@@ -25,19 +22,10 @@ export const getSolanaChainSpecific: GetChainSpecificResolver<
     await client.getLatestBlockhash().send()
   ).value.blockhash.toString()
 
-  const prioritizationFees = await client
-    .getRecentPrioritizationFees([address(coin.address)])
-    .send()
-
-  const highPriorityFee =
-    Math.max(
-      ...prioritizationFees.map(fee => Number(fee.prioritizationFee.valueOf())),
-      solanaConfig.priorityFeeLimit
-    ) + solanaConfig.baseFee
-
-  const result: SolanaSpecific = create(SolanaSpecificSchema, {
+  const chainSpecific = create(SolanaSpecificSchema, {
     recentBlockHash,
-    priorityFee: highPriorityFee.toString(),
+    priorityFee: solanaConfig.priorityFeePrice.toString(),
+    computeLimit: solanaConfig.priorityFeeLimit.toString(),
   })
 
   if (coin.id) {
@@ -45,7 +33,7 @@ export const getSolanaChainSpecific: GetChainSpecificResolver<
       account: coin.address,
       token: coin.id,
     })
-    result.fromTokenAssociatedAddress = fromAccount.address
+    chainSpecific.fromTokenAssociatedAddress = fromAccount.address
     const { data } = await attempt(
       getSplAssociatedAccount({
         account: receiver,
@@ -53,10 +41,19 @@ export const getSolanaChainSpecific: GetChainSpecificResolver<
       })
     )
     if (data) {
-      result.toTokenAssociatedAddress = data.address
-      result.programId = data.isToken2022
+      chainSpecific.toTokenAssociatedAddress = data.address
+      chainSpecific.programId = data.isToken2022
     }
   }
 
-  return result
+  return withFallback(
+    attempt(
+      refineSolanaChainSpecific({
+        keysignPayload,
+        chainSpecific,
+        walletCore,
+      })
+    ),
+    chainSpecific
+  )
 }

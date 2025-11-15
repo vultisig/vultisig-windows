@@ -20,7 +20,6 @@
     "@lib/dkls": "workspace:^",
     "@lib/schnorr": "workspace:^",
     "@lib/utils": "workspace:^",
-    "@solana/web3.js": "^2.0.0",
     "bitcoinjs-lib": "^6.1.7"
   }
 }
