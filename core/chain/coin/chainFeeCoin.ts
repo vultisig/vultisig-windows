@@ -182,6 +182,12 @@ const leanChainFeeCoin: Record<Chain, KnownCoinMetadata> = {
     decimals: 18,
     priceProviderId: 'mantle',
   },
+  [Chain.Hyperliquid]: {
+    ticker: 'HYPE',
+    logo: 'hyperliquid',
+    decimals: 18,
+    priceProviderId: 'hyperliquid',
+  },
   [Chain.Sei]: {
     ticker: 'SEI',
     logo: 'sei',

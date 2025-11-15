@@ -25,6 +25,7 @@ const coinGeckoNetwork: Record<EvmChain, string> = {
   [EvmChain.Zksync]: 'zksync',
   [EvmChain.CronosChain]: 'cronos',
   [EvmChain.Mantle]: 'mantle',
+  [EvmChain.Hyperliquid]: 'hyperliquid',
   [EvmChain.Sei]: 'sei-network',
 }
 

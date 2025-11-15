@@ -21,6 +21,7 @@ export const chainSpecificRecord = {
   [Chain.Polygon]: 'ethereumSpecific',
   [Chain.Zksync]: 'ethereumSpecific',
   [Chain.Mantle]: 'ethereumSpecific',
+  [Chain.Hyperliquid]: 'ethereumSpecific',
   [Chain.Sei]: 'ethereumSpecific',
 
   [Chain.Bitcoin]: 'utxoSpecific',

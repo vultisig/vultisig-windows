@@ -18,6 +18,7 @@ export const EvmChain = {
   BSC: 'BSC',
   Ethereum: 'Ethereum',
   Polygon: 'Polygon',
+  Hyperliquid: 'Hyperliquid',
   Sei: 'Sei',
 } as const
 
