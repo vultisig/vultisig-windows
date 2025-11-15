@@ -3,8 +3,10 @@ import styled from 'styled-components'
 export const Wrapper = styled.div`
   position: relative;
   box-sizing: border-box;
-  width: min(100%, calc(90vmin - 80px));
+  width: auto;
+  aspect-ratio: 1 / 1;
   padding: 4vmin;
+  flex: 1;
 `
 
 export const RiveWrapper = styled.div`
