@@ -6,6 +6,7 @@ import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 
 import { KeysignPayload } from '../../types/vultisig/keysign/v1/keysign_message_pb'
+import { BuildKeysignPayloadError } from '../error'
 import { getFeeAmount } from '../fee'
 import { getKeysignCoin } from '../utils/getKeysignCoin'
 
@@ -38,7 +39,7 @@ export const refineKeysignAmount = (input: RefineKeysignAmountInput) => {
   )
 
   if (refinedAmount <= 0n) {
-    throw new Error('Insufficient balance')
+    throw new BuildKeysignPayloadError('not-enough-funds')
   }
 
   return {
