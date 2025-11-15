@@ -10,7 +10,6 @@ import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 
 export type CoreView =
   | { id: 'addCustomToken'; state: { chain: ChainWithTokenMetadataDiscovery } }
-  | { id: 'address'; state: { address: string } }
   | { id: 'addressBook' }
   | { id: 'faq' }
   | { id: 'airdropRegister' }
