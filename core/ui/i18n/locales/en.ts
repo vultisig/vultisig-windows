@@ -525,6 +525,9 @@ export const en = {
   insufficient_gas_limit: 'Insufficient Gas Limit',
   insufficient_gas_limit_description:
     'Estimated gas: {{estimated}}. Gas limit: {{limit}}. The transaction may fail due to insufficient gas.',
+  blockaid_simulation_failed: 'Transaction Simulation Failed',
+  blockaid_simulation_failed_description:
+    'Unable to simulate this transaction. You can still proceed, but we recommend reviewing the transaction details carefully.',
   normal: 'Normal',
   fast: 'Fast',
   priority: 'Priority',
