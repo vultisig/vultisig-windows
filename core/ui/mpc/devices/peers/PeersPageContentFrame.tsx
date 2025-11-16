@@ -8,5 +8,4 @@ export const PeersPageContentFrame = styled.div`
     alignItems: 'center',
     justifyContent: 'center',
   })}
-  flex: 1;
 `

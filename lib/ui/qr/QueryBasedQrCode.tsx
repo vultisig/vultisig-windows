@@ -1,7 +1,7 @@
 import { centerContent } from '@lib/ui/css/centerContent'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { Spinner } from '@lib/ui/loaders/Spinner'
-import { UiProps, ValueProp } from '@lib/ui/props'
+import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Query } from '@lib/ui/query/Query'
 import { StrictText } from '@lib/ui/text'
@@ -16,16 +16,13 @@ const Status = styled.div`
   ${centerContent};
 `
 
-export const QueryBasedQrCode = ({
-  value,
-  ...rest
-}: ValueProp<Query<string>> & UiProps) => {
+export const QueryBasedQrCode = ({ value }: ValueProp<Query<string>>) => {
   const { t } = useTranslation()
 
   return (
     <MatchQuery
       value={value}
-      success={value => <FramedQrCode value={value} {...rest} />}
+      success={value => <FramedQrCode value={value} />}
       pending={() => (
         <Status>
           <Spinner />

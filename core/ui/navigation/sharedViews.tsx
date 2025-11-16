@@ -2,6 +2,7 @@ import { AddressBookPage } from '@core/ui/address-book'
 import { CreateAddressBookItemPage } from '@core/ui/address-book/create'
 import { UpdateAddressBookItemPage } from '@core/ui/address-book/update'
 import { AddCustomTokenPage } from '@core/ui/chain/coin/addCustomToken/AddCustomTokenPage'
+import { AddressPage } from '@core/ui/chain/coin/address'
 import { DeeplinkPage } from '@core/ui/deeplink/components/DeeplinkPage'
 import { ReshareVaultPage } from '@core/ui/mpc/keygen/reshare/ReshareVaultPage'
 import { CoreViewId } from '@core/ui/navigation/CoreView'
@@ -49,6 +50,7 @@ export type SharedViewId = Extract<
   CoreViewId,
   | 'circle'
   | 'addCustomToken'
+  | 'address'
   | 'addressBook'
   | 'airdropRegister'
   | 'createAddressBookItem'
@@ -97,6 +99,7 @@ export const sharedViews: Views<SharedViewId> = {
   ),
   circle: CirclePage,
   addCustomToken: AddCustomTokenPage,
+  address: AddressPage,
   addressBook: AddressBookPage,
   airdropRegister: AirdropRegisterPage,
   createAddressBookItem: CreateAddressBookItemPage,

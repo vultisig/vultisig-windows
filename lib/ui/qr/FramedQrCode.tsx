@@ -7,8 +7,8 @@ import { QRCodeWrapper, RiveWrapper, Wrapper } from './FramedQrCode.styled'
 
 type FramedQrCode = ValueProp<string> & ComponentProps<typeof Wrapper>
 
-export const FramedQrCode = ({ value, ...rest }: FramedQrCode) => (
-  <Wrapper {...rest}>
+export const FramedQrCode = ({ value }: FramedQrCode) => (
+  <Wrapper>
     <RiveWrapper>
       <Animation src="/core/animations/qr-scanned.riv" />
     </RiveWrapper>
