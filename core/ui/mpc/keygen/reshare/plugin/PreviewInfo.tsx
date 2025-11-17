@@ -17,10 +17,9 @@ import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-export const PreviewInfo: FC<OnFinishProp & ValueProp<string>> = ({
-  value: name,
-  onFinish,
-}) => {
+export const PreviewInfo: FC<
+  OnFinishProp & ValueProp<{ name: string; description: string }>
+> = ({ value: { name, description }, onFinish }) => {
   const { t } = useTranslation()
   const [step, setStep] = useState(1)
 
@@ -97,16 +96,17 @@ export const PreviewInfo: FC<OnFinishProp & ValueProp<string>> = ({
             <Text as="span" size={22} weight={500} centerHorizontally>
               {t('install_app', { name })}
             </Text>
-            <Text
-              as="span"
-              size={12}
-              color="shy"
-              weight={500}
-              centerHorizontally
-            >
-              Automate your salaries. Set and forget payroll for your team. It
-              was never this easy.
-            </Text>
+            {!!description && (
+              <Text
+                as="span"
+                size={12}
+                color="shy"
+                weight={500}
+                centerHorizontally
+              >
+                {description}
+              </Text>
+            )}
           </VStack>
         </VStack>
       </StyledPageContent>
