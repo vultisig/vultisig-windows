@@ -1124,6 +1124,8 @@ export const it = {
     'I tuoi vault appariranno qui. Inizia creandone uno o importandone uno esistente.',
   risky_transaction_detected: 'Rilevata transazione a rischio {{riskLevel}}',
   powered_by: 'Fornito da <provider></provider>',
+  risky_tx_warning:
+    'Questa transazione coinvolge un indirizzo malevolo. Interagire con esso può compromettere i tuoi beni. Procedi solo se ne sei certo.',
   ibc_transaction_not_supporting_memo_title:
     'Promemoria transazione IBC non supportato',
   ibc_transaction_not_supporting_memo_desc:

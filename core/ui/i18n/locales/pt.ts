@@ -1110,6 +1110,8 @@ export const pt = {
     'Seus cofres aparecerão aqui. Comece criando um ou importando um existente.',
   risky_transaction_detected: 'Transação de risco {{riskLevel}} detectada',
   powered_by: 'Desenvolvido por <provider></provider>',
+  risky_tx_warning:
+    'Esta transação envolve um endereço malicioso. Interagir com ele pode comprometer seus ativos. Prossiga apenas se tiver certeza.',
   ibc_transaction_not_supporting_memo_title:
     'Memorando de transação IBC não suportado',
   ibc_transaction_not_supporting_memo_desc:

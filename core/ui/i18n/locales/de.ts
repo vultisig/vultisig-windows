@@ -1126,6 +1126,8 @@ export const de = {
     'Ihre Tresore werden hier angezeigt. Erstellen Sie zunächst einen Tresor oder importieren Sie einen vorhandenen',
   risky_transaction_detected: '{{riskLevel}} Risikotransaktion erkannt',
   powered_by: 'Unterstützt von <provider></provider>',
+  risky_tx_warning:
+    'Diese Transaktion beinhaltet eine bösartige Adresse. Eine Interaktion damit kann Ihre Vermögenswerte gefährden. Fahren Sie nur fort, wenn Sie sich sicher sind.',
   ibc_transaction_not_supporting_memo_title:
     'IBC-Transaktionsmemo wird nicht unterstützt',
   ibc_transaction_not_supporting_memo_desc:
