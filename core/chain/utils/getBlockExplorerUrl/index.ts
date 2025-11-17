@@ -40,7 +40,7 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.Noble]: `${cosmosBlockExplorer}/noble`,
   [Chain.Ripple]: 'https://xrpscan.com',
   [Chain.THORChain]: 'https://thorchain.net',
-  [Chain.MayaChain]: 'https://explorer.mayachain.info',
+  [Chain.MayaChain]: 'https://www.explorer.mayachain.info',
   [Chain.Akash]: `${cosmosBlockExplorer}/akash`,
   [Chain.Tron]: 'https://tronscan.org/#',
   [Chain.Zcash]: 'https://blockexplorer.one/zcash/mainnet',
