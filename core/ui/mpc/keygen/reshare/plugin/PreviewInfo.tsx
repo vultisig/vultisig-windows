@@ -69,8 +69,8 @@ export const PreviewInfo: FC<
               weight={500}
               centerHorizontally
             >
-              Permissions are needed to let the app function properly, they
-              still use Vultisig’s golden multi-sig-only standard.
+              Vultisig Plugins can never sign transactions you do not first
+              approve.
             </Text>
           </VStack>
         </VStack>
