@@ -84,7 +84,8 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
 
   const gasEstimationQuery = usePotentialQuery(
     gasEstimationInput.data || undefined,
-    getGasEstimationQuery
+    getGasEstimationQuery,
+    null
   )
 
   const gasEstimationDataQuery = useTransformQueriesData(

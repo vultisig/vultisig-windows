@@ -1,13 +1,13 @@
 import { create } from '@bufbuild/protobuf'
 import { EvmChain } from '@core/chain/Chain'
 import { getEvmClient } from '@core/chain/chains/evm/client'
+import { deriveEvmGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
 import { getEvmFeeQuote } from '@core/mpc/keysign/fee/resolvers/evm/getEvmFeeQuote'
 import { EthereumSpecificSchema } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+import { formatDataToHex } from '@lib/utils/formatDataToHex'
 
 import { getKeysignCoin } from '../../utils/getKeysignCoin'
 import { GetChainSpecificResolver } from '../resolver'
-import { deriveEvmGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
-import { formatDataToHex } from '@lib/utils/formatDataToHex'
 
 export const getEvmChainSpecific: GetChainSpecificResolver<
   'ethereumSpecific'

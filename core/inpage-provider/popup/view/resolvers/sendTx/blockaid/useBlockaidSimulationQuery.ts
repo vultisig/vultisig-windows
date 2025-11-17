@@ -1,6 +1,10 @@
 import { EvmChain } from '@core/chain/Chain'
 import { isChainOfKind } from '@core/chain/ChainKind'
-import { parseBlockaidEvmSimulation } from '@core/chain/security/blockaid/tx/simulation/api/core'
+import { BlockaidSimulationSupportedChain } from '@core/chain/security/blockaid/simulationChains'
+import {
+  BlockaidEVMSimulation,
+  parseBlockaidEvmSimulation,
+} from '@core/chain/security/blockaid/tx/simulation/api/core'
 import { BlockaidEvmSimulationInfo } from '@core/chain/security/blockaid/tx/simulation/core'
 import { getBlockaidTxSimulationInput } from '@core/chain/security/blockaid/tx/simulation/input'
 import { BlockaidTxSimulationInput } from '@core/chain/security/blockaid/tx/simulation/resolver'
@@ -20,10 +24,9 @@ type UseBlockaidSimulationQueryInput = {
 }
 
 const getBlockaidSimulationQueryWithParsing = (
-  input: BlockaidTxSimulationInput<EvmChain>
+  input: BlockaidTxSimulationInput<BlockaidSimulationSupportedChain>
 ): UseQueryOptions<BlockaidEvmSimulationInfo | null> => {
   const baseQuery = getBlockaidTxSimulationQuery(input)
-  const evmChain = input.chain
 
   return {
     ...baseQuery,
@@ -31,12 +34,15 @@ const getBlockaidSimulationQueryWithParsing = (
       const sim = await baseQuery.queryFn()
 
       if (
+        isChainOfKind(input.chain, 'evm') &&
         'assets_diffs' in sim.account_summary &&
         sim.account_summary.assets_diffs.length > 0
       ) {
-        return parseBlockaidEvmSimulation(sim, evmChain)
+        return parseBlockaidEvmSimulation(
+          sim as BlockaidEVMSimulation,
+          input.chain
+        )
       }
-
       return null
     },
   }
@@ -60,11 +66,11 @@ export const useBlockaidSimulationQuery = ({
           walletCore,
         })
 
-        if (!input || !isChainOfKind(input.chain, 'evm')) {
-          return null
+        if (input) {
+          return input
         }
 
-        return input as BlockaidTxSimulationInput<EvmChain>
+        return null
       },
       [walletCore]
     )

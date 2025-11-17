@@ -12,9 +12,9 @@ import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_mess
 import { without } from '@lib/utils/array/without'
 import { attempt, withFallback } from '@lib/utils/attempt'
 import { bigIntMax } from '@lib/utils/bigint/bigIntMax'
+import { formatDataToHex } from '@lib/utils/formatDataToHex'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { encodeFunctionData, erc20Abi } from 'viem'
-import { formatDataToHex } from '@lib/utils/formatDataToHex'
 import { publicActionsL2 } from 'viem/zksync'
 
 const baseFeeMultiplier = (value: bigint) => (value * 15n) / 10n
