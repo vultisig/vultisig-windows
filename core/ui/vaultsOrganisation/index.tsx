@@ -218,14 +218,7 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
                         ? formatFiatAmount(value)
                         : undefined
                     }
-                    meta={
-                      <HStack gap={8} alignItems="center">
-                        <IconWrapper size={16} color="success">
-                          <CheckIcon />
-                        </IconWrapper>
-                        <VaultSignersPill vault={vault} />
-                      </HStack>
-                    }
+                    meta={<VaultSignersPill vault={vault} />}
                     selected={vaultId === currentVaultId}
                     trailing={
                       vaultId === currentVaultId ? (
