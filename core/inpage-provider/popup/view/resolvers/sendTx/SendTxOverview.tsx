@@ -19,12 +19,13 @@ import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { Panel } from '@lib/ui/panel/Panel'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
+import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
+import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { Text } from '@lib/ui/text'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatUnits } from 'ethers'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { usePopupInput } from '../../state/input'
@@ -67,24 +68,23 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
     walletCore,
   })
 
-  const gasEstimationQuery = useStateDependentQuery(
-    {
-      keysignPayload: keysignPayloadQuery.data,
-    },
-    ({
-      keysignPayload,
-    }: {
-      keysignPayload: typeof keysignPayloadQuery.data
-    }) => {
-      if (!isChainOfKind(chain, 'evm') || !keysignPayload) {
-        return {
-          queryKey: ['gasEstimation', 'skip'],
-          queryFn: async () => null,
+  const gasEstimationInput = useTransformQueryData(
+    keysignPayloadQuery,
+    useCallback(
+      payload => {
+        if (!isChainOfKind(chain, 'evm')) {
+          return null
         }
-      }
 
-      return getGasEstimationQuery({ keysignPayload })
-    }
+        return { keysignPayload: payload }
+      },
+      [chain]
+    )
+  )
+
+  const gasEstimationQuery = usePotentialQuery(
+    gasEstimationInput.data || undefined,
+    getGasEstimationQuery
   )
 
   const gasEstimationDataQuery = useTransformQueriesData(
@@ -109,7 +109,7 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
             title={t('failed_to_process_transaction')}
           />
         )}
-        success={({ keysignPayload, gasEstimation }) => {
+        success={({ keysignPayload, gasEstimation: estimatedGas }) => {
           const hasSwapPayload =
             keysignPayload.swapPayload && keysignPayload.swapPayload.value
 
@@ -123,8 +123,6 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
           const actualGasLimit = evmSpecific
             ? BigInt(evmSpecific.gasLimit)
             : null
-
-          const estimatedGas = gasEstimation
 
           const isInsufficientGas =
             estimatedGas !== null &&
