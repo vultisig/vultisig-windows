@@ -1,5 +1,4 @@
 import { isOneOf } from '@lib/utils/array/isOneOf'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 import { RiskLevel } from '../../../core/riskLevel'
 import { BlockaidValidationResult } from '../core'
@@ -36,27 +35,6 @@ const getRiskLevelFromBlockaidValidation = ({
   return blockaidRiskLevelToTxRiskLevel[result_type]
 }
 
-const getDescriptionFromBlockaidValidation = ({
-  description,
-  reason,
-  extended_features,
-  features,
-}: BlockaidValidation): string => {
-  if (description) {
-    return description
-  }
-
-  if (extended_features && extended_features.length > 0) {
-    return extended_features.map(f => f.description).join('\n')
-  }
-
-  if (features && features.length > 0) {
-    return features.map(f => f.description).join('\n')
-  }
-
-  return shouldBePresent(reason)
-}
-
 export const parseBlockaidValidation = (
   validation: BlockaidValidation
 ): BlockaidValidationResult => {
@@ -67,6 +45,5 @@ export const parseBlockaidValidation = (
 
   return {
     level,
-    description: getDescriptionFromBlockaidValidation(validation),
   }
 }
