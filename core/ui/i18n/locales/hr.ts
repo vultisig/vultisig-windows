@@ -1095,6 +1095,8 @@ export const hr = {
     'Vaši će se trezori pojaviti ovdje. Započnite stvaranjem jednog ili uvozom postojećeg trezora.',
   risky_transaction_detected: 'Otkrivena je rizična transakcija {{riskLevel}}',
   powered_by: 'Pokreće <provider></provider>',
+  risky_tx_warning:
+    'Ova transakcija uključuje zlonamjernu adresu. Interakcija s njom može ugroziti vašu imovinu. Nastavite samo ako ste sigurni.',
   ibc_transaction_not_supporting_memo_title:
     'IBC transakcijski memorandum nije podržan',
   ibc_transaction_not_supporting_memo_desc:

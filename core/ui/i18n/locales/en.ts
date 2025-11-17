@@ -521,7 +521,13 @@ export const en = {
   advanced: 'Advanced',
   low: 'Low',
   gas_limit_tooltip_content:
-    'The maximum amount of gas you’ll pay for. Can be increased if gas limit is not sufficient to send transactions',
+    "The maximum amount of gas you'll pay for. Can be increased if gas limit is not sufficient to send transactions",
+  insufficient_gas_limit: 'Insufficient Gas Limit',
+  insufficient_gas_limit_description:
+    'Estimated gas: {{estimated}}. Gas limit: {{limit}}. The transaction may fail due to insufficient gas.',
+  blockaid_simulation_failed: 'Transaction Simulation Failed',
+  blockaid_simulation_failed_description:
+    'Unable to simulate this transaction. You can still proceed, but we recommend reviewing the transaction details carefully.',
   normal: 'Normal',
   fast: 'Fast',
   priority: 'Priority',
@@ -1141,6 +1147,8 @@ export const en = {
     '{{riskLevel}} risk transaction detected by <provider></provider>',
   site_has_risk: 'Malicious site detected by <provider></provider>',
   risky_site_detected: 'Malicious site detected',
+  risky_tx_warning:
+    'This transaction involves a malicious address. Interacting with it may compromise your assets. Proceed only if you are certain.',
   ibc_transaction_not_supporting_memo_title:
     'IBC Transaction Memo Not Supported',
   ibc_transaction_not_supporting_memo_desc:
