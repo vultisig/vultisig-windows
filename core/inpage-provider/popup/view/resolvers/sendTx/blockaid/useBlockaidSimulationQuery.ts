@@ -1,4 +1,3 @@
-import { EvmChain } from '@core/chain/Chain'
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { BlockaidSimulationSupportedChain } from '@core/chain/security/blockaid/simulationChains'
 import {
