@@ -84,10 +84,15 @@ const createBackupResultItem = ({
 
 const toArrayBuffer = (value: Uint8Array) => value.slice().buffer
 
-const collectFilesRecursively = (
-  fs: Awaited<ReturnType<typeof getSevenZip>>['FS'],
+type CollectFilesRecursivelyInput = {
+  fs: Awaited<ReturnType<typeof getSevenZip>>['FS']
   directory: string
-): string[] => {
+}
+
+const collectFilesRecursively = ({
+  fs,
+  directory,
+}: CollectFilesRecursivelyInput): string[] => {
   const entries = fs.readdir(directory)
 
   return entries.flatMap(entry => {
@@ -99,17 +104,22 @@ const collectFilesRecursively = (
     const stats = fs.stat(path)
 
     if (fs.isDir(stats.mode)) {
-      return collectFilesRecursively(fs, path)
+      return collectFilesRecursively({ fs, directory: path })
     }
 
     return [path]
   })
 }
 
-const removeDirectoryRecursively = (
-  fs: Awaited<ReturnType<typeof getSevenZip>>['FS'],
+type RemoveDirectoryRecursivelyInput = {
+  fs: Awaited<ReturnType<typeof getSevenZip>>['FS']
   directory: string
-) => {
+}
+
+const removeDirectoryRecursively = ({
+  fs,
+  directory,
+}: RemoveDirectoryRecursivelyInput) => {
   const entries = fs.readdir(directory)
 
   entries.forEach(entry => {
@@ -121,7 +131,7 @@ const removeDirectoryRecursively = (
     const stats = fs.stat(path)
 
     if (fs.isDir(stats.mode)) {
-      removeDirectoryRecursively(fs, path)
+      removeDirectoryRecursively({ fs, directory: path })
       fs.rmdir(path)
     } else {
       fs.unlink(path)
@@ -149,14 +159,19 @@ const extractVaultBackupsFromArchive = async ({
   sevenZip.FS.mkdir(outputDir)
 
   const cleanup = () => {
-    attempt(() => removeDirectoryRecursively(sevenZip.FS, outputDir))
+    attempt(() =>
+      removeDirectoryRecursively({ fs: sevenZip.FS, directory: outputDir })
+    )
     attempt(() => sevenZip.FS.unlink(archiveFsName))
   }
 
   try {
     sevenZip.callMain(['x', archiveFsName, '-y', `-o${outputDir}`])
 
-    const filePaths = collectFilesRecursively(sevenZip.FS, outputDir)
+    const filePaths = collectFilesRecursively({
+      fs: sevenZip.FS,
+      directory: outputDir,
+    })
 
     const items: FileBasedVaultBackupResult = []
 
