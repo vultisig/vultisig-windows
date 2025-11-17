@@ -1124,6 +1124,8 @@ export const es = {
     'Tus bóvedas aparecerán aquí. Empieza creando una o importando una existente.',
   risky_transaction_detected: '{{riskLevel}} transacción de riesgo detectada',
   powered_by: 'Desarrollado por <provider></provider>',
+  risky_tx_warning:
+    'Esta transacción implica una dirección maliciosa. Interactuar con ella puede comprometer tus activos. Continúa solo si estás seguro.',
   ibc_transaction_not_supporting_memo_title:
     'Memo de transacción de IBC no compatible',
   ibc_transaction_not_supporting_memo_desc:

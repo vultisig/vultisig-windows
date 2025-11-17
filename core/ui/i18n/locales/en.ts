@@ -1141,6 +1141,8 @@ export const en = {
     '{{riskLevel}} risk transaction detected by <provider></provider>',
   site_has_risk: 'Malicious site detected by <provider></provider>',
   risky_site_detected: 'Malicious site detected',
+  risky_tx_warning:
+    'This transaction involves a malicious address. Interacting with it may compromise your assets. Proceed only if you are certain.',
   ibc_transaction_not_supporting_memo_title:
     'IBC Transaction Memo Not Supported',
   ibc_transaction_not_supporting_memo_desc:
