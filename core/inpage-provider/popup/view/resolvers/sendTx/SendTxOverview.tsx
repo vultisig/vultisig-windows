@@ -63,8 +63,7 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
   })
 
   const blockaidSimulationQuery = useBlockaidSimulationQuery({
-    chain,
-    keysignPayload: keysignPayloadQuery.data,
+    keysignPayloadQuery,
     walletCore,
   })
 
