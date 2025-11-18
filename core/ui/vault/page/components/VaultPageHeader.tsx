@@ -1,5 +1,6 @@
 import { Vault } from '@core/mpc/vault/Vault'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
+import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { useVaultTotalBalanceQuery } from '@core/ui/vault/queries/useVaultTotalBalanceQuery'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { verticalPadding } from '@lib/ui/css/verticalPadding'
@@ -75,7 +76,11 @@ export const VaultPageHeader = ({
           <Text size={12} color="shy">
             {t('portfolio_balance')}
           </Text>
-          <Text size={14}>{formattedBalance}</Text>
+          <Text size={14}>
+            <BalanceVisibilityAware size="m">
+              {formattedBalance}
+            </BalanceVisibilityAware>
+          </Text>
         </VStack>
       </CollapsedContent>
 
