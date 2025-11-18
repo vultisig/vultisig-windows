@@ -12,7 +12,6 @@ import { useTranslation } from 'react-i18next'
 export const ConnectOverview: FC<SignMessageOverview> = ({
   address,
   message,
-  method,
   signature,
 }) => {
   const { t } = useTranslation()
@@ -37,7 +36,7 @@ export const ConnectOverview: FC<SignMessageOverview> = ({
     <>
       {isFinished && <Animation />}
       <Sender favicon={requestFavicon} origin={requestOrigin} isValidated />
-      <Request address={address} message={displayMessage} method={method} />
+      <Request address={address} message={displayMessage} />
       {isFinished ? (
         <Collapse title={t('signed_signature')}>
           <Text as="span" color="info" size={14} weight={500}>
@@ -45,7 +44,7 @@ export const ConnectOverview: FC<SignMessageOverview> = ({
           </Text>
         </Collapse>
       ) : (
-        <Collapse title={t(`message`)}>
+        <Collapse title={t('message')}>
           <Text color="info" family="mono" size={14} weight={500}>
             <pre style={{ width: '100%' }}>
               <code
