@@ -45,6 +45,6 @@ export class Plugin extends EventEmitter {
       return handlers[method as keyof typeof handlers](params as any)
     }
 
-    throw new NotImplementedError(`Plugin method ${method}`)
+    throw new NotImplementedError(`App method ${method}`)
   }
 }
