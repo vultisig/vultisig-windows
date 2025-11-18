@@ -6,6 +6,10 @@ export function GetOSArgs() {
   return window['go']['main']['App']['GetOSArgs']();
 }
 
+export function ReadFileBase64(arg1) {
+  return window['go']['main']['App']['ReadFileBase64'](arg1);
+}
+
 export function ReadTextFile(arg1) {
   return window['go']['main']['App']['ReadTextFile'](arg1);
 }
