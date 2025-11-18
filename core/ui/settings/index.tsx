@@ -95,7 +95,7 @@ export const SettingsPage: FC<Props> = props => {
           hasBorder
         />
         <PageContent gap={14} flexGrow scrollable>
-          <SettingsSection title={t('vault')}>
+          <SettingsSection title={t('vault_management')}>
             {client === 'extension' && props.prioritize}
             <ListItem
               icon={
