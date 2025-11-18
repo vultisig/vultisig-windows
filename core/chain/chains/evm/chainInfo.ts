@@ -20,7 +20,7 @@ import {
   zksync,
 } from 'viem/chains'
 
-const hyperliquidRpcUrl = 'https://rpc.hyperliquid.xyz/evm'
+const hyperliquidRpcUrl = `${rootApiUrl}/hyperevm/`
 export const hyperliquidBlockExplorerUrl = 'https://liquidscan.io'
 const hyperliquidNativeCoin = chainFeeCoin[EvmChain.Hyperliquid]
 
