@@ -1,12 +1,7 @@
-import { Vault } from '@core/mpc/vault/Vault'
 import { FileBasedVaultBackupResult } from '@core/ui/vault/import/VaultBackupResult'
-import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 
-import { VaultBackupOverrideProvider } from '../state/vaultBackupOverride'
-import { DecryptVaultStep } from './DecryptVaultStep'
-import { ProcessVaultContainer } from './ProcessVaultContainer'
-import { SaveImportedVaultStep } from './SaveImportedVaultStep'
+import { ImportVaultSequence } from './ImportVaultSequence'
 
 type ImportVaultFlowProps = {
   renderBackupAcquisitionStep: ({
@@ -22,30 +17,7 @@ export const ImportVaultFlow = ({
   return (
     <ValueTransfer<FileBasedVaultBackupResult>
       from={renderBackupAcquisitionStep}
-      to={({ value }) => (
-        <VaultBackupOverrideProvider value={value.override ?? null}>
-          <MatchRecordUnion
-            value={value.result}
-            handlers={{
-              vaultContainer: vaultContainer => (
-                <ProcessVaultContainer value={vaultContainer} />
-              ),
-              vault: vault => <SaveImportedVaultStep value={vault} />,
-              encryptedVault: encryptedVault => (
-                <ValueTransfer<Vault>
-                  from={({ onFinish }) => (
-                    <DecryptVaultStep
-                      value={encryptedVault}
-                      onFinish={onFinish}
-                    />
-                  )}
-                  to={({ value }) => <SaveImportedVaultStep value={value} />}
-                />
-              ),
-            }}
-          />
-        </VaultBackupOverrideProvider>
-      )}
+      to={({ value }) => <ImportVaultSequence items={value} />}
     />
   )
 }
