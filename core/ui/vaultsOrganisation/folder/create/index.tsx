@@ -122,12 +122,7 @@ export const CreateVaultFolderPage = () => {
         </VStack>
 
         <VStack gap={16}>
-          <Text
-            size={13}
-            weight={600}
-            color="shy"
-            style={{ textTransform: 'uppercase' }}
-          >
+          <Text size={13} weight={600} color="shy">
             {t('add_vaults_to_folder')}
           </Text>
           {vaults.length ? (

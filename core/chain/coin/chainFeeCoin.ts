@@ -135,7 +135,7 @@ const leanChainFeeCoin: Record<Chain, KnownCoinMetadata> = {
   },
   [Chain.Noble]: {
     ticker: 'USDC',
-    logo: 'usdc',
+    logo: 'noble',
     decimals: 6,
     priceProviderId: 'usd-coin',
   },

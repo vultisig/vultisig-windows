@@ -11,18 +11,23 @@ import { pipe } from '@lib/utils/pipe'
 
 import { SaveImportedVaultStep } from './SaveImportedVaultStep'
 
-export const ProcessVaultContainer = ({ value }: ValueProp<VaultContainer>) => {
+export const ProcessVaultContainer = ({
+  value,
+  onFinish,
+}: ValueProp<VaultContainer> & { onFinish?: () => void }) => {
   const { vault: vaultAsBase64String, isEncrypted } = value
   if (isEncrypted) {
     return (
       <ValueTransfer<Vault>
-        from={({ onFinish }) => (
+        from={({ onFinish: resolve }) => (
           <DecryptVaultContainerStep
             value={vaultAsBase64String}
-            onFinish={onFinish}
+            onFinish={resolve}
           />
         )}
-        to={({ value }) => <SaveImportedVaultStep value={value} />}
+        to={({ value }) => (
+          <SaveImportedVaultStep value={value} onFinish={onFinish} />
+        )}
       />
     )
   }
@@ -36,5 +41,5 @@ export const ProcessVaultContainer = ({ value }: ValueProp<VaultContainer>) => {
     vault => ({ ...vault, isBackedUp: true })
   )
 
-  return <SaveImportedVaultStep value={vault} />
+  return <SaveImportedVaultStep value={vault} onFinish={onFinish} />
 }

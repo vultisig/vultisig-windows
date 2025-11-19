@@ -3,7 +3,7 @@ import { Chain } from '@core/chain/Chain'
 import { solanaRpcUrl } from '@core/chain/chains/solana/client'
 import { Coin, CoinKey } from '@core/chain/coin/Coin'
 import { getTxBlockaidSimulation } from '@core/chain/security/blockaid/tx/simulation'
-import { parseBlockaidSimulation } from '@core/chain/security/blockaid/tx/simulation/api/core'
+import { parseBlockaidSolanaSwapSimulation } from '@core/chain/security/blockaid/tx/simulation/api/core'
 import { getBlockaidTxSimulationInput } from '@core/chain/security/blockaid/tx/simulation/input'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import {
@@ -110,7 +110,7 @@ export const parseSolanaTx = async ({
     })
 
     const { fromMint, toMint, fromAmount, toAmount } =
-      await parseBlockaidSimulation(sim)
+      await parseBlockaidSolanaSwapSimulation(sim)
 
     const [inputCoin, outputCoin] = await Promise.all(
       [fromMint, toMint].map(mint => {

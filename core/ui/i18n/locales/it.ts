@@ -280,6 +280,7 @@ export const it = {
   part: 'parte',
   of: 'di',
   vault: 'Cassaforte',
+  vault_management: 'Gestione delle Cassaforti',
   vaults: 'Cassaforti',
   setup: 'Configura',
   import: 'Importa',
@@ -364,8 +365,8 @@ export const it = {
   vault_details_page_vault_type: 'Tipo di caveau',
   vault_backup_banner_title:
     'Esegui subito il backup della condivisione vault di questo dispositivo!',
-  vault_details_page_vault_ECDSA: 'ECDSA',
-  vault_details_page_vault_EDDSA: 'EdDSA',
+  vault_details_page_vault_ECDSA: 'Chiave ECDSA',
+  vault_details_page_vault_EDDSA: 'Chiave EdDSA',
   vault_details_page_signer_word: 'Firmatario',
   vault_edit_page_title: 'Modifica cassaforte',
   address_book: 'Rubrica indirizzi',
@@ -747,7 +748,7 @@ export const it = {
   follow_banner_title: 'Seguici su X',
   follow_banner_button: 'Segui @Vultisig',
   deposit: 'Deposito',
-  add_vaults_to_folder: 'Seleziona i Vault da aggiungere alla cartella.',
+  add_vaults_to_folder: 'Seleziona i Vault',
   chain_message_deposit: 'Deposito messaggio {{chain}}',
   thorchain_message_deposit: 'Deposito messaggio THORChain',
   bond_with_lp: 'Legame',
@@ -1124,6 +1125,8 @@ export const it = {
     'I tuoi vault appariranno qui. Inizia creandone uno o importandone uno esistente.',
   risky_transaction_detected: 'Rilevata transazione a rischio {{riskLevel}}',
   powered_by: 'Fornito da <provider></provider>',
+  risky_tx_warning:
+    'Questa transazione coinvolge un indirizzo malevolo. Interagire con esso può compromettere i tuoi beni. Procedi solo se ne sei certo.',
   ibc_transaction_not_supporting_memo_title:
     'Promemoria transazione IBC non supportato',
   ibc_transaction_not_supporting_memo_desc:

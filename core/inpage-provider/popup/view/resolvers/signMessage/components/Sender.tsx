@@ -23,7 +23,7 @@ export const Sender: FC<SenderProps> = ({ favicon, isValidated, origin }) => {
   return (
     <Section gap={24} padding={24}>
       <Text as="span" color="shy" size={14} weight={500} nowrap>
-        {t(`request_from`)}
+        {t('request_from')}
       </Text>
       <HStack
         gap={12}

@@ -19,7 +19,6 @@ import {
   SummaryListItem,
   Wrapper,
 } from './ReferralSummary.styled'
-import { Overlay } from './ReferralSummary.styled'
 
 const StyledIconWrapper = styled(IconWrapper)`
   color: ${getColor('primaryAlt')};
@@ -109,7 +108,6 @@ export const ReferralsSummary = ({ onFinish }: OnFinishProp) => {
           </Wrapper>
         </AnimatedVisibility>
       </VStack>
-      <Overlay />
     </>
   )
 }

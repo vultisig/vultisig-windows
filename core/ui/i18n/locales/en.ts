@@ -188,7 +188,7 @@ export const en = {
   nothing_to_add: 'Nothing to add',
   nothing_to_add_hint:
     'All your vaults are already sorted. Create a new vault to add it here.',
-  create_new_vault: 'Create a New Vault',
+  create_new_vault: 'Create New Vault',
   start_transaction: 'Start transaction',
   unexpected_error: 'Unexpected Error',
   youre_swapping: "You're swapping",
@@ -261,6 +261,7 @@ export const en = {
   part: 'part',
   of: 'of',
   vault: 'Vault',
+  vault_management: 'Vault Management',
   vaults: 'Vaults',
   setup: 'Setup',
   import: 'Import',
@@ -365,8 +366,8 @@ export const en = {
   wrong_vault_try_again: 'Wrong Vault or Pair Device.',
   vault_backup_banner_title: 'Backup your vault share of this device now!',
   vault_details_page_vault_type: 'Vault Type',
-  vault_details_page_vault_ECDSA: 'ECDSA',
-  vault_details_page_vault_EDDSA: 'EdDSA',
+  vault_details_page_vault_ECDSA: 'ECDSA key',
+  vault_details_page_vault_EDDSA: 'EdDSA key',
   vault_details_page_signer_word: 'Signer',
   this_device: 'This device',
   vault_edit_page_title: 'Edit Vault',
@@ -521,7 +522,13 @@ export const en = {
   advanced: 'Advanced',
   low: 'Low',
   gas_limit_tooltip_content:
-    'The maximum amount of gas you’ll pay for. Can be increased if gas limit is not sufficient to send transactions',
+    "The maximum amount of gas you'll pay for. Can be increased if gas limit is not sufficient to send transactions",
+  insufficient_gas_limit: 'Insufficient Gas Limit',
+  insufficient_gas_limit_description:
+    'Estimated gas: {{estimated}}. Gas limit: {{limit}}. The transaction may fail due to insufficient gas.',
+  blockaid_simulation_failed: 'Transaction Simulation Failed',
+  blockaid_simulation_failed_description:
+    'Unable to simulate this transaction. You can still proceed, but we recommend reviewing the transaction details carefully.',
   normal: 'Normal',
   fast: 'Fast',
   priority: 'Priority',
@@ -558,8 +565,8 @@ export const en = {
   asset: 'Asset',
   balance: 'Balance',
   portfolio_balance: 'Portfolio Balance',
-  hide_balance: 'Hide Balance',
-  show_balance: 'Show Balance',
+  hide_balance: 'Hide balance',
+  show_balance: 'Show balance',
   fill_the_form: 'Fill the form',
   sent: 'Sent',
   staked: 'Staked',
@@ -898,7 +905,7 @@ export const en = {
   create: 'Create',
   delete_folder: 'Delete Folder',
   folders: 'Folders',
-  add_vaults_to_folder: 'Select Vaults to add to the folder.',
+  add_vaults_to_folder: 'Select Vaults',
   follow_banner_subtitle: 'Vultisig is building with you.',
   follow_banner_title: 'Follow us on X',
   follow_banner_button: 'Follow @Vultisig',
@@ -1141,6 +1148,8 @@ export const en = {
     '{{riskLevel}} risk transaction detected by <provider></provider>',
   site_has_risk: 'Malicious site detected by <provider></provider>',
   risky_site_detected: 'Malicious site detected',
+  risky_tx_warning:
+    'This transaction involves a malicious address. Interacting with it may compromise your assets. Proceed only if you are certain.',
   ibc_transaction_not_supporting_memo_title:
     'IBC Transaction Memo Not Supported',
   ibc_transaction_not_supporting_memo_desc:
