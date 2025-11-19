@@ -58,6 +58,7 @@ export const DeleteVaultPage = () => {
         hasBorder
       />
       <PageContent gap={24} flexGrow scrollable>
+        <GradientBackground />
         <VStack alignItems="center" gap={14}>
           <IconWrapper size={24} color="danger">
             <TriangleAlertIcon />
@@ -74,7 +75,7 @@ export const DeleteVaultPage = () => {
         <VStack gap={12}>
           <Item>
             <Text size={13} weight={500}>
-              {t('vault_name')}
+              {t('vault_name')}:
             </Text>
             <Text size={14} weight={500}>
               {vault.name}
@@ -82,7 +83,7 @@ export const DeleteVaultPage = () => {
           </Item>
           <Item>
             <Text size={13} weight={500}>
-              {t('vault_value')}
+              {t('vault_value')}:
             </Text>
             <Text size={14} weight={500}>
               {`${vaultBalance} ${fiatCurrencySymbolRecord[currency]}`}
@@ -92,7 +93,7 @@ export const DeleteVaultPage = () => {
           <HStack gap={12} alignItems="center">
             <VItem>
               <Text size={13} weight={500}>
-                {t('vault_part')}
+                {t('vault_part')}:
               </Text>
               <Text size={14} weight={500}>
                 {`${t('share')} ${vault.signers.indexOf(vault.localPartyId) + 1} ${t('of')} ${vault.signers.length}`}
@@ -100,7 +101,7 @@ export const DeleteVaultPage = () => {
             </VItem>
             <VItem>
               <Text size={13} weight={500}>
-                {t('vault_delete_page_device_id')}
+                {t('vault_delete_page_device_id')}:
               </Text>
               <Text cropped size={14} weight={500} color="shy">
                 {vault.localPartyId}
@@ -110,7 +111,7 @@ export const DeleteVaultPage = () => {
           <HStack gap={12} alignItems="center">
             <VItem>
               <Text size={13} weight={500}>
-                {t('vault_details_page_vault_ECDSA')} Key
+                {t('vault_details_page_vault_ECDSA')} Key:
               </Text>
               <Text cropped size={14} weight={500} color="shy">
                 {vault.publicKeys.ecdsa}
@@ -118,7 +119,7 @@ export const DeleteVaultPage = () => {
             </VItem>
             <VItem>
               <Text size={13} weight={500}>
-                {t('vault_details_page_vault_EDDSA')} Key
+                {t('vault_details_page_vault_EDDSA')} Key:
               </Text>
               <Text cropped size={14} weight={500} color="shy">
                 {vault.publicKeys.eddsa}
@@ -174,4 +175,22 @@ const Item = styled.div`
 const VItem = styled(Item)`
   display: block;
   flex: 1;
+`
+
+const GradientBackground = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 300px;
+  border-radius: 512px;
+  background: linear-gradient(
+    82deg,
+    rgba(211, 40, 41, 0.1) 8.02%,
+    rgba(255, 92, 92, 0.1) 133.75%
+  );
+  filter: blur(126.94499969482422px);
+  pointer-events: none;
+  z-index: 0;
 `
