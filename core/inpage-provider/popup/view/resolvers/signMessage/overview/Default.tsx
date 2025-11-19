@@ -24,6 +24,15 @@ export const DefaultOverview: FC<SignMessageOverview> = ({
   const { requestFavicon, requestOrigin } = usePopupContext<'signMessage'>()
   const isFinished = useMemo(() => !!signature, [signature])
 
+  const formattedMessage = useMemo(() => {
+    try {
+      const parsed = JSON.parse(message)
+      return JSON.stringify(parsed, null, 2)
+    } catch {
+      return null
+    }
+  }, [message])
+
   return (
     <>
       {isFinished && <Animation />}
@@ -37,9 +46,25 @@ export const DefaultOverview: FC<SignMessageOverview> = ({
         </Collapse>
       ) : (
         <Collapse title={t(`message`)}>
-          <Text as="span" color="info" size={14} weight={500}>
-            {message}
-          </Text>
+          {formattedMessage ? (
+            <Text color="info" family="mono" size={14} weight={500}>
+              <pre style={{ width: '100%' }}>
+                <code
+                  style={{
+                    display: 'block',
+                    overflowX: 'auto',
+                    width: '100%',
+                  }}
+                >
+                  {formattedMessage}
+                </code>
+              </pre>
+            </Text>
+          ) : (
+            <Text as="span" color="info" size={14} weight={500}>
+              {message}
+            </Text>
+          )}
         </Collapse>
       )}
     </>

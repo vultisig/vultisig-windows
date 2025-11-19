@@ -1,3 +1,4 @@
+import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { areEqualCoins, extractCoinKey } from '@core/chain/coin/Coin'
 import { knownTokens } from '@core/chain/coin/knownTokens'
 import { sortCoinsAlphabetically } from '@core/chain/coin/utils/sortCoinsAlphabetically'
@@ -74,7 +75,7 @@ export const ManageVaultChainCoinsPage = () => {
     const currentCoin = currentCoins.find(c => areEqualCoins(c, coin))
     if (currentCoin) {
       addToCoinFinderIgnore.mutate(extractCoinKey(currentCoin), {
-        onSuccess: () => deleteCoin.mutate(currentCoin),
+        onSuccess: () => deleteCoin.mutate(extractAccountCoinKey(currentCoin)),
       })
     } else {
       removeFromCoinFinderIgnore.mutate(extractCoinKey(coin), {

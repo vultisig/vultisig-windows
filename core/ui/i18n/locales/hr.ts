@@ -267,6 +267,7 @@ export const hr = {
   missing_public_key_ecdsa: 'Nedostaje javni ključ ECDSA',
   missing_verification_code: 'Nedostaje kontrolni kod',
   vault: 'Trezor',
+  vault_management: 'Upravljanje trezorima',
   vaults: 'Trezori',
   setup: 'Postavljanje',
   import: 'Uvezi',
@@ -348,8 +349,8 @@ export const hr = {
   vault_backup_banner_title:
     'Sada napravite sigurnosnu kopiju svog udjela trezora na ovom uređaju!',
   vault_details_page_vault_type: 'Tip trezora',
-  vault_details_page_vault_ECDSA: 'ECDSA',
-  vault_details_page_vault_EDDSA: 'EdDSA',
+  vault_details_page_vault_ECDSA: 'ECDSA ključ',
+  vault_details_page_vault_EDDSA: 'EdDSA ključ',
   vault_details_page_signer_word: 'Potpisnik',
   vault_edit_page_title: 'Uredi trezor',
   address_book: 'Adresar',
@@ -717,7 +718,7 @@ export const hr = {
   follow_banner_title: 'Pratite nas na X',
   follow_banner_button: 'Pratite @Vultisig',
   deposit: 'Depozit',
-  add_vaults_to_folder: 'Odaberite trezore za dodavanje u mapu.',
+  add_vaults_to_folder: 'Odaberite trezore',
   chain_message_deposit: '{{chain}} polog poruke',
   thorchain_message_deposit: 'THORChain polog poruke',
   bond_with_lp: 'Veza',
@@ -1095,6 +1096,8 @@ export const hr = {
     'Vaši će se trezori pojaviti ovdje. Započnite stvaranjem jednog ili uvozom postojećeg trezora.',
   risky_transaction_detected: 'Otkrivena je rizična transakcija {{riskLevel}}',
   powered_by: 'Pokreće <provider></provider>',
+  risky_tx_warning:
+    'Ova transakcija uključuje zlonamjernu adresu. Interakcija s njom može ugroziti vašu imovinu. Nastavite samo ako ste sigurni.',
   ibc_transaction_not_supporting_memo_title:
     'IBC transakcijski memorandum nije podržan',
   ibc_transaction_not_supporting_memo_desc:

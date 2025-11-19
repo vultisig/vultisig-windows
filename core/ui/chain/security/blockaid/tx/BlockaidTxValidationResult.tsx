@@ -29,13 +29,13 @@ export const BlockaidTxValidationResult = ({
       <>
         <BlockaidOverlay
           riskLevel={value.level}
-          description={value.description}
+          description={t('risky_tx_warning')}
           title={t('risky_transaction_detected', {
             riskLevel: capitalizeFirstLetter(value.level),
           })}
         />
         <Tooltip
-          content={value.description}
+          content={t('risky_tx_warning')}
           renderOpener={props => (
             <BlockaidScanStatusContainer
               {...props}

@@ -273,6 +273,7 @@ export const de = {
   part: 'Teil',
   of: 'von',
   vault: 'Tresor',
+  vault_management: 'Tresorverwaltung',
   vaults: 'Tresore',
   setup: 'Einrichten',
   import: 'Importieren',
@@ -357,8 +358,8 @@ export const de = {
   vault_details_page_vault_type: 'Tresortyp',
   vault_backup_banner_title:
     'Sichern Sie jetzt Ihre Tresorfreigabe dieses Geräts!',
-  vault_details_page_vault_ECDSA: 'ECDSA',
-  vault_details_page_vault_EDDSA: 'EdDSA',
+  vault_details_page_vault_ECDSA: 'ECDSA-Schlüssel',
+  vault_details_page_vault_EDDSA: 'EdDSA-Schlüssel',
   vault_details_page_signer_word: 'Unterzeichner',
   vault_edit_page_title: 'Tresor bearbeiten',
   address_book: 'Adressbuch',
@@ -738,8 +739,7 @@ export const de = {
   follow_banner_title: 'Folgen Sie uns auf X',
   follow_banner_button: 'Folgen Sie @Vultisig',
   deposit: 'Einzahlung',
-  add_vaults_to_folder:
-    'Wählen Sie Tresore aus, die dem Ordner hinzugefügt werden sollen.',
+  add_vaults_to_folder: 'Tresore auswählen',
   chain_message_deposit: '{{chain}}-Nachrichteneinzahlung',
   thorchain_message_deposit: 'THORChain-Nachrichteneinzahlung',
   bond_with_lp: 'Bindung',
@@ -1126,6 +1126,8 @@ export const de = {
     'Ihre Tresore werden hier angezeigt. Erstellen Sie zunächst einen Tresor oder importieren Sie einen vorhandenen',
   risky_transaction_detected: '{{riskLevel}} Risikotransaktion erkannt',
   powered_by: 'Unterstützt von <provider></provider>',
+  risky_tx_warning:
+    'Diese Transaktion beinhaltet eine bösartige Adresse. Eine Interaktion damit kann Ihre Vermögenswerte gefährden. Fahren Sie nur fort, wenn Sie sich sicher sind.',
   ibc_transaction_not_supporting_memo_title:
     'IBC-Transaktionsmemo wird nicht unterstützt',
   ibc_transaction_not_supporting_memo_desc:
