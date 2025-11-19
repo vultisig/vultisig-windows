@@ -1,4 +1,5 @@
 import { Chain } from '@core/chain/Chain'
+import { hyperliquidBlockExplorerUrl } from '@core/chain/chains/evm/chainInfo'
 import { match } from '@lib/utils/match'
 
 type ChainEntity = 'address' | 'tx'
@@ -46,6 +47,7 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.Zcash]: 'https://blockexplorer.one/zcash/mainnet',
   [Chain.Cardano]: 'https://cardanoscan.io',
   [Chain.Mantle]: 'https://explorer.mantle.xyz',
+  [Chain.Hyperliquid]: hyperliquidBlockExplorerUrl,
   [Chain.Sei]: 'https://seiscan.io',
 }
 
@@ -92,6 +94,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Zcash]: () => `${baseUrl}/address/${value}`,
         [Chain.Cardano]: () => `${baseUrl}/address/${value}`,
         [Chain.Mantle]: () => `${baseUrl}/address/${value}`,
+        [Chain.Hyperliquid]: () => `${baseUrl}/address/${value}`,
         [Chain.Sei]: () => `${baseUrl}/address/${value}`,
       }),
     tx: () =>
@@ -130,6 +133,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Zcash]: () => `${baseUrl}/transaction/${value}`,
         [Chain.Cardano]: () => `${baseUrl}/transaction/${value}`,
         [Chain.Mantle]: () => `${baseUrl}/tx/${value}`,
+        [Chain.Hyperliquid]: () => `${baseUrl}/tx/${value}`,
         [Chain.Sei]: () => `${baseUrl}/tx/${value}`,
       }),
   })
