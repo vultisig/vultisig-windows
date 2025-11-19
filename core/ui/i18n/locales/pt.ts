@@ -653,6 +653,7 @@ export const pt = {
   password_required: 'Senha é necessária',
   passwords_dont_match: 'As senhas não correspondem',
   verify_password: 'Verificar senha',
+  reenter_password: 'Digite a senha novamente',
   email_confirmation_code_label:
     'Digite o código recebido com seu backup por e-mail',
   email_confirmation_code_error: 'Código inválido',

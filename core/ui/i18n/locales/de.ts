@@ -659,6 +659,7 @@ export const de = {
   password_required: 'Passwort erforderlich ist',
   passwords_dont_match: 'Passwörter stimmen nicht überein',
   verify_password: 'Kennwort bestätigen',
+  reenter_password: 'Passwort erneut eingeben',
   password: 'Passwort',
   password_backup: 'Schützen Sie Ihren Tresor und Ihr schnelles Zeichen.',
   looking_for_server: 'Suche nach FastVaultServer ...',

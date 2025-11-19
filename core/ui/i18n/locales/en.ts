@@ -819,6 +819,7 @@ export const en = {
   email_disclaimer: 'This email is only used to send the backup',
   passwords_dont_match: "Passwords don't match",
   verify_password: 'Verify Password',
+  reenter_password: 'Re-enter Password',
   server_password_reason:
     'This password encrypts your Vault Share received via email',
   password: 'Password',

@@ -669,6 +669,7 @@ export const it = {
   password_required: 'La password è obbligatoria',
   passwords_dont_match: 'Le password non corrispondono',
   verify_password: 'Verifica password',
+  reenter_password: 'Reinserisci password',
   password: 'Password',
   password_backup: 'Proteggi il tuo caveau e firma subito.',
   looking_for_server: 'Cerco FastVaultServer...',

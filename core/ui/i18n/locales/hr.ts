@@ -640,6 +640,7 @@ export const hr = {
   password_required: 'Lozinka je obavezna',
   passwords_dont_match: 'Lozinke se ne podudaraju',
   verify_password: 'Potvrdi lozinku',
+  reenter_password: 'Ponovno unesite lozinku',
   password: 'Lozinka',
   password_backup: 'Zaštitite svoj trezor i brzo potpišite.',
   looking_for_server: 'Tražite FastVaultServer...',

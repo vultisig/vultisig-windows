@@ -665,6 +665,7 @@ export const es = {
   password_required: 'Se requiere contraseña',
   passwords_dont_match: 'Las contraseñas no coinciden',
   verify_password: 'Verificar contraseña',
+  reenter_password: 'Volver a ingresar contraseña',
   password: 'Contraseña',
   password_backup: 'Protege tu bóveda y firma rápidamente.',
   looking_for_server: 'Buscando FastVaultServer...',
