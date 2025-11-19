@@ -243,7 +243,7 @@ export const pt = {
   devices_on_same_internet:
     'Conecte todos os dispositivos à Internet com o Vultisig aberto',
   select_the_pairing_devices: 'Selecione os dispositivos de pareamento',
-  m_of_n_vault: 'Cofre M de N',
+  m_of_n_vault: 'Cofre {{m}}-de-{{n}}',
   secureVault: 'Secure Vault',
   vault_type_1_description: 'Você precisa de mais 1 dispositivo para parear',
   vault_type_2_description: 'Você precisa de mais 2 dispositivos para parear',
@@ -864,7 +864,7 @@ export const pt = {
   vault_part: 'Parte do cofre',
   share: 'Compartilhar',
   backup_now: 'Faça backup agora',
-  share_n_of_m: 'Compartilhar {{n}} de {{m}}',
+  share_n_of_m: 'Compartilhar {{n}}-de-{{m}}',
   this_vault_share: 'este cofre compartilha',
   node_address: 'Endereço do nó',
   lp_units_must_be_positive: 'As unidades LP devem ser positivas',

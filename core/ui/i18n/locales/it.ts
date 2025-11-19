@@ -254,7 +254,7 @@ export const it = {
   devices_on_same_internet:
     'Collega tutti i dispositivi a Internet con Vultisig aperto',
   select_the_pairing_devices: 'Seleziona i dispositivi di accoppiamento',
-  m_of_n_vault: 'Cassaforte M di N',
+  m_of_n_vault: 'Cassaforte {{m}}-di-{{n}}',
   vault_type_1_description: 'Hai bisogno di 1 altro dispositivo per accoppiare',
   vault_type_2_description: 'Hai bisogno di 2 altri dispositivi per accoppiare',
   vault_type_3_description: 'Puoi accoppiare quanti dispositivi desideri',
@@ -876,7 +876,7 @@ export const it = {
   vault_part: 'Parte del caveau',
   share: 'Condividere',
   backup_now: 'Esegui il backup ora',
-  share_n_of_m: 'Condividi {{n}} di {{m}}',
+  share_n_of_m: 'Condividi {{n}}-di-{{m}}',
   this_vault_share: 'questa condivisione del caveau',
   node_address: 'Indirizzo del nodo',
   lp_units_must_be_positive: 'Le unità LP devono essere positive',
