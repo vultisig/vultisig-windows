@@ -251,7 +251,7 @@ export const es = {
   devices_on_same_internet:
     'Conecte todos los dispositivos a Internet con Vultisig abierto',
   select_the_pairing_devices: 'Seleccione los dispositivos de emparejamiento',
-  m_of_n_vault: 'Bóveda M de N',
+  m_of_n_vault: 'Bóveda {{m}}-de-{{n}}',
   vault_type_1_description: 'Necesita 1 dispositivo más para emparejar',
   vault_type_2_description: 'Necesita 2 dispositivos más para emparejar',
   vault_type_3_description: 'Puede emparejar tantos dispositivos como desee',
@@ -877,7 +877,7 @@ export const es = {
   vault_part: 'Parte de la bóveda',
   share: 'Compartir',
   backup_now: 'Haz una copia de seguridad ahora',
-  share_n_of_m: 'Compartir {{n}} de {{m}}',
+  share_n_of_m: 'Compartir {{n}}-de-{{m}}',
   this_vault_share: 'Esta bóveda comparte',
   node_address: 'Dirección de nodo',
   lp_units_must_be_positive: 'Las unidades LP deben ser positivas',

@@ -241,7 +241,7 @@ export const hr = {
   devices_on_same_internet:
     'Povežite sve uređaje na Internet s otvorenim Vultisigom',
   select_the_pairing_devices: 'Odaberite uređaje za uparivanje',
-  m_of_n_vault: 'M od N trezor',
+  m_of_n_vault: '{{m}}-od-{{n}} trezor',
   vault_type_1_description: 'Potrebno vam je još 1 uređaj za uparivanje',
   vault_type_2_description: 'Potrebna su vam još 2 uređaja za uparivanje',
   vault_type_3_description: 'Možete upariti koliko god uređaja želite',
@@ -853,7 +853,7 @@ export const hr = {
   vault_part: 'Trezorski dio',
   share: 'Udio',
   backup_now: 'Sigurnosno kopirajte sada',
-  share_n_of_m: 'Dijeli {{n}} od {{m}}',
+  share_n_of_m: 'Dijeli {{n}}-od-{{m}}',
   this_vault_share: 'ovaj dio trezora',
   node_address: 'Adresa čvora',
   lp_units_must_be_positive: 'LP jedinice moraju biti pozitivne',
