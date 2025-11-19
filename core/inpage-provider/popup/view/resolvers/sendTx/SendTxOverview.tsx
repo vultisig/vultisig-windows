@@ -34,6 +34,7 @@ import { BlockaidSimulationError } from './blockaid/BlockaidSimulationError'
 import { useBlockaidSimulationQuery } from './blockaid/useBlockaidSimulationQuery'
 import { MemoSection } from './components/MemoSection'
 import { NetworkFeeSection } from './components/NetworkFeeSection'
+import { SignAminoDisplay } from './components/SignAminoDisplay'
 import { SwapAmountDisplay } from './components/SwapAmountDisplay'
 import { ParsedTx } from './core/parsedTx'
 import { getGasEstimationQuery } from './gasEstimation/getGasEstimationQuery'
@@ -275,6 +276,9 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                     publicKey={publicKey}
                   />
                 </>
+              )}
+              {keysignPayload.signAmino !== undefined && (
+                <SignAminoDisplay signAmino={keysignPayload.signAmino} />
               )}
             </List>
           )

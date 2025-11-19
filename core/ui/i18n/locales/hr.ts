@@ -1125,6 +1125,7 @@ export const hr = {
   sign_request: 'Zahtjev za potpis',
   signed_signature: 'Potpis',
   signing_address: 'Adresa za potpisivanje',
+  signAmino: 'Amino potpis',
   verify_identity_sign: 'Prijavite se kako biste potvrdili svoj identitet',
   incorrect_url: 'Netočan URL',
   developer_options: 'Opcije za razvojne programere',

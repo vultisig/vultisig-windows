@@ -1141,6 +1141,7 @@ export const pt = {
   sign_request: 'Solicitação de assinatura',
   signed_signature: 'Assinatura assinada',
   signing_address: 'Endereço de Assinatura',
+  signAmino: 'Assinatura Amino',
   verify_identity_sign: 'Entre para verificar sua identidade',
   incorrect_url: 'URL incorreta',
   developer_options: 'Opções do desenvolvedor',

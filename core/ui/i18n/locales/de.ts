@@ -1157,6 +1157,7 @@ export const de = {
   sign_request: 'Anfrage unterzeichnen',
   signed_signature: 'Unterschrift',
   signing_address: 'Unterschriftsadresse',
+  signAmino: 'Amino-Unterschrift',
   verify_identity_sign: 'Melden Sie sich an, um Ihre Identität zu bestätigen',
   incorrect_url: 'Falsche URL',
   developer_options: 'Entwickleroptionen',

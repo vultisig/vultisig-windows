@@ -51,6 +51,7 @@ export const en = {
   sign_request: 'Sign Request',
   signed_signature: 'Signed Signature',
   signing_address: 'Signing Address',
+  signAmino: 'Amino Sign',
   verify_identity_sign: 'Sign in to verify your identity',
   plugin_server_url: 'Plugin Server URL',
   connecting_to_verifier: 'Connecting to Verifier',
