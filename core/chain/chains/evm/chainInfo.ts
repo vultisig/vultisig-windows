@@ -1,9 +1,10 @@
 import { EvmChain } from '@core/chain/Chain'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { rootApiUrl } from '@core/config'
 import { numberToHex } from '@lib/utils/hex/numberToHex'
 import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
 import { recordMap } from '@lib/utils/record/recordMap'
-import { Chain as ViemChain } from 'viem'
+import { Chain as ViemChain, defineChain } from 'viem'
 import {
   arbitrum,
   avalanche,
@@ -19,6 +20,28 @@ import {
   zksync,
 } from 'viem/chains'
 
+const hyperliquidRpcUrl = `${rootApiUrl}/hyperevm/`
+export const hyperliquidBlockExplorerUrl = 'https://liquidscan.io'
+const hyperliquidNativeCoin = chainFeeCoin[EvmChain.Hyperliquid]
+
+export const hyperliquid = defineChain({
+  id: 999,
+  name: 'Hyperliquid',
+  network: 'hyperliquid',
+  nativeCurrency: {
+    name: 'Hyperliquid',
+    symbol: hyperliquidNativeCoin.ticker,
+    decimals: hyperliquidNativeCoin.decimals,
+  },
+  rpcUrls: {
+    default: { http: [hyperliquidRpcUrl] },
+    public: { http: [hyperliquidRpcUrl] },
+  },
+  blockExplorers: {
+    default: { name: 'LiquidScan', url: hyperliquidBlockExplorerUrl },
+  },
+})
+
 const evmChainRpcUrls: Record<EvmChain, string> = {
   [EvmChain.Ethereum]: `${rootApiUrl}/eth/`,
   [EvmChain.Base]: `${rootApiUrl}/base/`,
@@ -31,6 +54,7 @@ const evmChainRpcUrls: Record<EvmChain, string> = {
   [EvmChain.Zksync]: `${rootApiUrl}/zksync/`,
   [EvmChain.Avalanche]: `${rootApiUrl}/avax/`,
   [EvmChain.Mantle]: `${rootApiUrl}/mantle/`,
+  [EvmChain.Hyperliquid]: hyperliquidRpcUrl,
   [EvmChain.Sei]: `https://evm-rpc.sei-apis.com`,
 }
 
@@ -46,6 +70,7 @@ const evmDefaultChainInfo: Record<EvmChain, ViemChain> = {
   [EvmChain.Zksync]: zksync,
   [EvmChain.Avalanche]: avalanche,
   [EvmChain.Mantle]: mantle,
+  [EvmChain.Hyperliquid]: hyperliquid,
   [EvmChain.Sei]: sei,
 }
 
