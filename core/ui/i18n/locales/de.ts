@@ -248,7 +248,7 @@ export const de = {
   devices_on_same_internet:
     'Verbinden Sie alle Geräte mit dem Internet und öffnen Sie Vultisig',
   select_the_pairing_devices: 'Wählen Sie die Paarungsgeräte aus',
-  m_of_n_vault: 'M-von-N-Tresor',
+  m_of_n_vault: '{{m}}-von-{{n}}-Tresor',
   vault_type_1_description: 'Sie benötigen 1 weiteres Gerät zum Paaren',
   vault_type_2_description: 'Sie benötigen 2 weitere Geräte zum Paaren',
   vault_type_3_description:
@@ -876,7 +876,7 @@ export const de = {
   vault_part: 'Tresorteil',
   share: 'Aktie',
   backup_now: 'Jetzt sichern',
-  share_n_of_m: 'Teilen Sie {{n}} von {{m}}',
+  share_n_of_m: 'Teilen Sie {{n}}-von-{{m}}',
   this_vault_share: 'diese Tresorfreigabe',
   node_address: 'Knotenadresse',
   lp_units_must_be_positive: 'LP-Einheiten müssen positiv sein',
