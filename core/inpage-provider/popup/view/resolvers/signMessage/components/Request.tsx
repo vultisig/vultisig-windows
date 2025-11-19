@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next'
 type RequestProps = {
   address: string
   message?: string
-  method: string
+  method?: string
 }
 
 export const Request: FC<RequestProps> = ({ address, message, method }) => {
@@ -19,20 +19,24 @@ export const Request: FC<RequestProps> = ({ address, message, method }) => {
 
   return (
     <Section gap={12} padding={24}>
-      <HStack
-        alignItems="center"
-        gap={8}
-        justifyContent="space-between"
-        wrap="nowrap"
-      >
-        <Text as="span" color="shy" size={14} weight={500} nowrap>
-          {t('method')}
-        </Text>
-        <Text as="span" size={14} weight={500} nowrap>
-          {method}
-        </Text>
-      </HStack>
-      <Divider />
+      {!!method && (
+        <>
+          <HStack
+            alignItems="center"
+            gap={8}
+            justifyContent="space-between"
+            wrap="nowrap"
+          >
+            <Text as="span" color="shy" size={14} weight={500} nowrap>
+              {t('method')}
+            </Text>
+            <Text as="span" size={14} weight={500} nowrap>
+              {method}
+            </Text>
+          </HStack>
+          <Divider />
+        </>
+      )}
       {!!message && (
         <>
           <HStack
