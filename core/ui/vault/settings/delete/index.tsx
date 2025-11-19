@@ -96,7 +96,7 @@ export const DeleteVaultPage = () => {
                 {t('vault_part')}:
               </Text>
               <Text size={14} weight={500}>
-                {`${t('share')} ${vault.signers.indexOf(vault.localPartyId) + 1} ${t('of')} ${vault.signers.length}`}
+                {`${t('share')} ${vault.signers.indexOf(vault.localPartyId) + 1}-${t('of')}-${vault.signers.length}`}
               </Text>
             </VItem>
             <VItem>
