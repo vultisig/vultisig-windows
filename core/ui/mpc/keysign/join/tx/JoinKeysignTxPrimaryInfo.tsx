@@ -20,6 +20,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useFormatFiatAmount } from '../../../../chain/hooks/useFormatFiatAmount'
 import { useKeysignFee } from '../../fee/useKeysignFee'
+import { SignAminoDisplay } from '../../tx/components/SignAminoDisplay'
 
 export const JoinKeysignTxPrimaryInfo = ({
   value,
@@ -84,6 +85,9 @@ export const JoinKeysignTxPrimaryInfo = ({
           <span>{t('network_fee')}</span>
           <span>{networkFeesFormatted}</span>
         </TxOverviewRow>
+      )}
+      {value.signAmino !== undefined && (
+        <SignAminoDisplay signAmino={value.signAmino} />
       )}
     </>
   )

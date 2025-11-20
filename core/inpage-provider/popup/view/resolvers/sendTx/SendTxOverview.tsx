@@ -6,6 +6,7 @@ import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
+import { SignAminoDisplay } from '@core/ui/mpc/keysign/tx/components/SignAminoDisplay'
 import { useCurrentVaultPublicKey } from '@core/ui/vault/state/currentVault'
 import {
   ContentWrapper,
@@ -275,6 +276,9 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                     publicKey={publicKey}
                   />
                 </>
+              )}
+              {keysignPayload.signAmino !== undefined && (
+                <SignAminoDisplay signAmino={keysignPayload.signAmino} />
               )}
             </List>
           )

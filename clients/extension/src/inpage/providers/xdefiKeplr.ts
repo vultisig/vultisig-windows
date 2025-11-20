@@ -10,6 +10,10 @@ import {
   MsgPayload,
   TransactionDetails,
 } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
+import {
+  CosmosFee,
+  CosmosMsg,
+} from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { AminoMsg, StdFee } from '@cosmjs/amino'
 import {
   CosmJSOfflineSigner,
@@ -37,7 +41,7 @@ import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
 import { TW } from '@trustwallet/wallet-core'
 import { bech32 } from 'bech32'
 import { MsgSend } from 'cosmjs-types/cosmos/bank/v1beta1/tx'
-import { AuthInfo, TxBody, TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
+import { TxBody, TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx'
 import { MsgTransfer } from 'cosmjs-types/ibc/applications/transfer/v1/tx'
 import Long from 'long'
@@ -381,6 +385,33 @@ const keplrHandler = (
   })
 }
 
+const aminoHandler = (
+  signDoc: StdSignDoc,
+  chain: Chain
+): TransactionDetails => {
+  const { msgs, fee, memo } = signDoc
+  const [message] = msgs
+
+  return {
+    asset: {
+      chain: chain,
+      ticker: message.value.funds?.[0]?.denom ?? chainFeeCoin[chain].ticker,
+    },
+    amount: {
+      amount: message.value.funds?.[0]?.amount ?? 0,
+      decimals: chainFeeCoin[chain].decimals,
+    },
+    from: message.value.sender ?? message.value.from_address ?? undefined,
+    to: message.value.contract ?? message.value.to_address ?? undefined,
+    data: memo,
+    aminoPayload: {
+      msgs: signDoc.msgs as CosmosMsg[],
+      fee: fee as CosmosFee,
+    },
+    skipBroadcast: true,
+  } as TransactionDetails
+}
+
 const getAccounts = async (chainId: string): Promise<AccountData[]> => {
   const { publicKey, address } = await requestAccount(
     shouldBePresent(getCosmosChainByChainId(chainId))
@@ -554,7 +585,7 @@ export class XDEFIKeplrProvider extends Keplr {
 
       const chain = shouldBePresent(getCosmosChainByChainId(chainId))
 
-      const transactionDetails = keplrHandler(signDoc, chain)
+      const transactionDetails = aminoHandler(signDoc, chain)
 
       const { data } = await callPopup(
         {
@@ -568,61 +599,46 @@ export class XDEFIKeplrProvider extends Keplr {
         { account: transactionDetails.from }
       )
 
-      const { serialized } = deserializeSigningOutput(chain, data)
+      const output = deserializeSigningOutput(chain, data)
 
-      const parsed = JSON.parse(serialized)
-      const txRaw = TxRaw.decode(Buffer.from(parsed.tx_bytes, 'base64'))
-      const txBody = TxBody.decode(txRaw.bodyBytes)
-      const authInfo = AuthInfo.decode(txRaw.authInfoBytes)
-      const msgs: AminoMsg[] = txBody.messages.map((msg): AminoMsg => {
-        try {
-          return {
-            type: msg.typeUrl,
-            value: JSON.parse(Buffer.from(msg.value).toString()),
-          }
-        } catch (error) {
-          throw new Error(
-            `Failed to parse message value for ${msg.typeUrl}: ${error}`
-          )
-        }
-      })
-      const gasLimit = authInfo.fee?.gasLimit.toString() || '0'
-      const feeAmount =
-        authInfo.fee?.amount.map(coin => ({
-          denom: coin.denom,
-          amount: coin.amount,
-        })) ?? []
-
-      const fee: StdFee = {
-        gas: gasLimit,
-        amount: feeAmount,
+      const aminoJson = JSON.parse(output.json)
+      const stdTx = aminoJson.tx as {
+        msg: AminoMsg[]
+        fee: StdFee
+        memo: string
+        signatures: Array<{
+          pub_key: { type: string; value: string }
+          signature: string
+        }>
       }
 
-      const memo = txBody.memo ?? ''
-
-      const sequence = authInfo.signerInfos[0]?.sequence.toString() ?? '0'
-
-      const stdSignDoc: StdSignDoc = {
-        chain_id: chainId,
-        account_number: signDoc.account_number.toString(),
-        sequence: sequence,
-        fee,
-        msgs,
-        memo,
+      if (!stdTx.signatures || stdTx.signatures.length === 0) {
+        throw new Error('Amino JSON transaction missing signatures')
       }
-      const publicKey = Buffer.from(new Uint8Array(account.pubkey)).toString(
-        'base64'
-      )
+
+      const [signature] = stdTx.signatures
+
+      if (!signature.pub_key) {
+        throw new Error('Amino JSON signature missing pub_key')
+      }
+
+      const signed: StdSignDoc = {
+        chain_id: signDoc.chain_id,
+        account_number: signDoc.account_number,
+        sequence: signDoc.sequence,
+        msgs: stdTx.msg,
+        fee: stdTx.fee,
+        memo: stdTx.memo,
+      }
+
       return {
-        signed: stdSignDoc,
+        signed,
         signature: {
           pub_key: {
-            type: 'tendermint/PubKeySecp256k1',
-            value: publicKey,
+            type: signature.pub_key.type,
+            value: signature.pub_key.value,
           },
-          signature: shouldBePresent(
-            Buffer.from(txRaw.signatures[0]).toString('base64')
-          ),
+          signature: signature.signature,
         },
       }
     })

@@ -1157,6 +1157,7 @@ export const es = {
   sign_request: 'Solicitud de firma',
   signed_signature: 'Firma firmada',
   signing_address: 'Dirección de firma',
+  signAmino: 'Firma Amino',
   verify_identity_sign: 'Inicie sesión para verificar su identidad',
   incorrect_url: 'URL incorrecta',
   developer_options: 'Opciones de desarrollador',
