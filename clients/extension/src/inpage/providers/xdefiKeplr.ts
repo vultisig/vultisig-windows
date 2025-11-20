@@ -629,6 +629,7 @@ export class XDEFIKeplrProvider extends Keplr {
         msgs: stdTx.msg,
         fee: stdTx.fee,
         memo: stdTx.memo,
+        timeout_height: signDoc.timeout_height,
       }
 
       return {
