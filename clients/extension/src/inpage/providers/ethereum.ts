@@ -166,10 +166,13 @@ export class Ethereum extends EventEmitter {
           }),
           []
         ),
-      eth_requestAccounts: async () => {
+      eth_requestAccounts: async (
+        params?: [{ preselectFastVault?: boolean }]
+      ) => {
         const chain = await getChain()
+        const preselectFastVault = params?.[0]?.preselectFastVault
 
-        const { address } = await requestAccount(chain)
+        const { address } = await requestAccount(chain, { preselectFastVault })
 
         return [address]
       },
