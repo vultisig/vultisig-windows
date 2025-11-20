@@ -127,7 +127,6 @@ export const getCustomTxData = ({
             const currentWalletEntries = params.filter(e =>
               areLowerCaseEqual(e.address, address)
             )
-
             if (currentWalletEntries.length === 0) {
               throw new Error('No entries for wallet address')
             }
