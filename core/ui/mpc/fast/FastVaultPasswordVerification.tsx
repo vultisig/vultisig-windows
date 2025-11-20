@@ -11,6 +11,7 @@ import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Backdrop } from '@lib/ui/modal/Backdrop'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { convertDuration } from '@lib/utils/time/convertDuration'
 import { useMutation } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
@@ -62,7 +63,7 @@ export const FastVaultPasswordVerification = () => {
   return (
     <Backdrop onClose={() => mutate(undefined)}>
       <ModalWrapper>
-        <CloseButton kind="action" onClick={() => mutate(undefined)}>
+        <CloseButton onClick={() => mutate(undefined)}>
           <CrossIcon />
         </CloseButton>
 
@@ -70,11 +71,11 @@ export const FastVaultPasswordVerification = () => {
           <FocusLockIcon />
         </IconWrapper>
 
-        <VStack gap={4} alignItems="center">
-          <Text size={16} weight={500} centerHorizontally>
+        <VStack gap={8} alignItems="center">
+          <Text size={17} weight={500} centerHorizontally>
             {t('enter_your_password')}
           </Text>
-          <Text size={12} weight={400} color="shy" centerHorizontally>
+          <Text size={12} color="shy" centerHorizontally>
             {t('verify_password_periodic_message_description')}
           </Text>
         </VStack>
@@ -107,19 +108,15 @@ export const FastVaultPasswordVerification = () => {
 
 const CloseButton = styled(IconButton)`
   display: flex;
-  width: 40px;
-  height: 40px;
-  padding: 12px;
-  justify-content: center;
+  padding: 8px;
   align-items: center;
-  border-radius: 77px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(8px);
+  gap: 10px;
 
   position: absolute;
-  right: 6px;
-  top: 6px;
+  right: 12px;
+  top: 12px;
+  border-radius: 99px;
+  background: ${getColor('foregroundExtra')};
 `
 
 const ModalWrapper = styled(VStack)`
