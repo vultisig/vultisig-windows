@@ -76,6 +76,7 @@ export class UTXO extends EventEmitter {
         },
       },
     })
+
     const rebuiltPsbt = rebuildPsbtWithPartialSigsFromWC(data, psbt)
     return rebuiltPsbt
   }
