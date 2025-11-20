@@ -50,9 +50,7 @@
       "resources": [
         "wallet-core.wasm",
         "popup.html",
-        "core/wasm/zxing_reader.wasm",
-        "inpage.js", 
-        "inpage.js.map"
+        "core/wasm/zxing_reader.wasm"
       ],
       "use_dynamic_url": false
     },
