@@ -28,7 +28,7 @@ export const ShareAppPrompt = () => {
 
   return (
     <Wrapper>
-      <Text size={16} color="shy">
+      <Text cropped size={16} color="shy">
         {shareURL}
       </Text>
       <UnstyledButton onClick={handleCopy}>

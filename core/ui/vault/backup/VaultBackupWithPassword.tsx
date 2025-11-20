@@ -81,7 +81,7 @@ export const VaultBackupWithPassword = ({
           <PasswordInput
             {...register('confirmPassword')}
             error={errors.confirmPassword?.message}
-            placeholder={t('verify_password')}
+            placeholder={t('reenter_password')}
             validation={
               isValid ? 'valid' : errors.confirmPassword ? 'invalid' : undefined
             }
