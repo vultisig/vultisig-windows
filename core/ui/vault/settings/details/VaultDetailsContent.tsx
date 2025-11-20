@@ -52,7 +52,7 @@ export const VaultDetailsContent = () => {
           <Text size={14}>{t('vault_part')}</Text>
           <Text
             size={14}
-          >{`${t('share')} ${localPartyIndex} ${t('of')} ${totalSigners}`}</Text>
+          >{`${t('share')} ${localPartyIndex}-${t('of')}-${totalSigners}`}</Text>
         </Item>
         <Item>
           <Text size={14}>{t('vault_details_page_vault_type')}</Text>

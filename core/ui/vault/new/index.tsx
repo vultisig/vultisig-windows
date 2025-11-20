@@ -35,7 +35,7 @@ export const NewVaultPage = () => {
           <Divider text={t('or').toUpperCase()} />
           <VStack gap={12}>
             <Button
-              kind="secondary"
+              kind="outlined"
               onClick={() =>
                 navigate({ id: 'uploadQr', state: { title: t('scan_qr') } })
               }
@@ -43,7 +43,7 @@ export const NewVaultPage = () => {
               {t('scan_qr')}
             </Button>
             <Button
-              kind="secondary"
+              kind="outlined"
               onClick={() => navigate({ id: 'importVault' })}
             >
               {t('import_vault')}

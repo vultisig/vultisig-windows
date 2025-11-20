@@ -66,6 +66,10 @@ const StyledIconButton = styled(UnstyledButton)<{
             action: () => css`
               background-color: ${getColor('buttonBackgroundDisabled')};
             `,
+            outlined: () => css`
+              background-color: ${getColor('buttonBackgroundDisabled')};
+              border: 1px solid ${getColor('buttonBackgroundDisabled')};
+            `,
           })}
         `
       : match(kind, {
@@ -266,6 +270,35 @@ const StyledIconButton = styled(UnstyledButton)<{
                     360deg
                 );
               }
+            }
+          `,
+          outlined: () => css`
+            background-color: transparent;
+            border: 1px solid ${getColor('buttonPrimary')};
+            color: ${getColor('buttonPrimary')};
+
+            &:hover {
+              ${match(status, {
+                default: () => css`
+                  background-color: ${getColor('buttonPrimary')};
+                  color: ${getColor('text')};
+                `,
+                danger: () => css`
+                  background-color: ${getColor('danger')};
+                  border-color: ${getColor('danger')};
+                  color: ${getColor('text')};
+                `,
+                success: () => css`
+                  background-color: ${getColor('primary')};
+                  border-color: ${getColor('primary')};
+                  color: ${getColor('text')};
+                `,
+                warning: () => css`
+                  background-color: ${getColor('idle')};
+                  border-color: ${getColor('idle')};
+                  color: ${getColor('text')};
+                `,
+              })}
             }
           `,
         })}
