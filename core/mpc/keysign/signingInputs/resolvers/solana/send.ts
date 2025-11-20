@@ -22,6 +22,7 @@ export const getSolanaSendSigningInput = ({
     fromTokenAssociatedAddress,
     toTokenAssociatedAddress,
     programId,
+    computeLimit,
   } = getBlockchainSpecificValue(
     keysignPayload.blockchainSpecific,
     'solanaSpecific'
@@ -91,7 +92,9 @@ export const getSolanaSendSigningInput = ({
       price: Long.fromString(solanaConfig.priorityFeePrice.toString()),
     }),
     priorityFeeLimit: TW.Solana.Proto.PriorityFeeLimit.create({
-      limit: solanaConfig.priorityFeeLimit,
+      limit: computeLimit
+        ? Number(computeLimit)
+        : solanaConfig.priorityFeeLimit,
     }),
     ...getSigningInputCoinSpecificFields(),
   })
