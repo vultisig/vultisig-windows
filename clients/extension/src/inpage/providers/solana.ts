@@ -490,7 +490,7 @@ export class Solana implements Wallet {
     const result = await this.signTransaction(transaction, false)
     if (!result) throw new Error('failed to signAndSendTransaction')
     return {
-      signature: result.signatures[0].toString(),
+      signature: bs58.encode(result.signatures[0]),
     }
   }
 
