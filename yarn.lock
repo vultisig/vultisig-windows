@@ -611,6 +611,8 @@ __metadata:
     "@bufbuild/protobuf": "npm:^2.7.0"
     "@core/config": "workspace:^"
     "@core/mpc": "workspace:^"
+    "@cosmjs/amino": "npm:^0.36.0"
+    "@cosmjs/encoding": "npm:^0.36.0"
     "@cosmjs/stargate": "npm:^0.36.0"
     "@lib/utils": "workspace:^"
     "@mysten/sui": "npm:^1.37.6"
