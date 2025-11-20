@@ -48,7 +48,28 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
     }
   >(chainSpecific, {
     ibcEnabled: ({ transactionType, ibcDenomTraces }) => {
+      if (signAmino) {
+        const msgs = signAmino.msgs
+
+        const messages = msgs.map(msg => {
+          const message = TW.Cosmos.Proto.Message.create({
+            rawJsonMessage: {
+              type: msg.type,
+              value: msg.value,
+            },
+          })
+
+          return message
+        })
+
+        return {
+          messages,
+          txMemo: memo,
+        }
+      }
       if (transactionType === TransactionType.IBC_TRANSFER) {
+        console.log('ibcEnabled', transactionType)
+
         const memo = shouldBePresent(keysignPayload.memo)
         const [, channel] = memo.split(':')
 
