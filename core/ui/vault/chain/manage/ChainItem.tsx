@@ -1,3 +1,4 @@
+import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { areEqualCoins, Coin } from '@core/chain/coin/Coin'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
@@ -32,7 +33,7 @@ export const ChainItem = ({ value: coin }: ValueProp<Coin>) => {
   const handleClick = () => {
     if (isLoading) return
     if (currentCoin) {
-      deleteCoin.mutate(currentCoin)
+      deleteCoin.mutate(extractAccountCoinKey(currentCoin))
     } else {
       createCoin.mutate(coin)
     }
