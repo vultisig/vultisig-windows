@@ -68,8 +68,6 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
         }
       }
       if (transactionType === TransactionType.IBC_TRANSFER) {
-        console.log('ibcEnabled', transactionType)
-
         const memo = shouldBePresent(keysignPayload.memo)
         const [, channel] = memo.split(':')
 
