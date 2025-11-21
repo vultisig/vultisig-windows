@@ -10,11 +10,12 @@ import { IconButton } from '@lib/ui/buttons/IconButton'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { ArCubeIcon } from '@lib/ui/icons/ArCubeIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
-import { VStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import styled from 'styled-components'
 
 import { useCurrentVaultAddress } from '../state/currentVaultCoins'
+import { RefreshVaultChainBalance } from './RefreshVaultChainBalance'
 import { VaultChainTabs } from './tabs/VaultChainTabs'
 import { useCurrentVaultChain } from './useCurrentVaultChain'
 import { VaultChainOverview } from './VaultChainOverview'
@@ -40,11 +41,14 @@ export const VaultChainPage = () => {
         <VaultHeader
           primaryControls={<PageHeaderBackButton />}
           secondaryControls={
-            <IconButton onClick={() => openUrl(blockExplorerUrl)}>
-              <IconWrapper size={24}>
-                <ArCubeIcon />
-              </IconWrapper>
-            </IconButton>
+            <HStack gap={4} alignItems="center">
+              <RefreshVaultChainBalance />
+              <IconButton onClick={() => openUrl(blockExplorerUrl)}>
+                <IconWrapper size={24}>
+                  <ArCubeIcon />
+                </IconWrapper>
+              </IconButton>
+            </HStack>
           }
         />
         <StyledPageContent scrollable gap={32} flexGrow>
