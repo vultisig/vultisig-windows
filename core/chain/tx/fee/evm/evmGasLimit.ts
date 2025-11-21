@@ -44,7 +44,6 @@ type DeriveEvmGasLimitInput = {
   data?: string
 }
 
-// If data is a hex string, we treat it as a contract call; otherwise, it's considered a simple memo
 export const deriveEvmGasLimit = ({ coin, data }: DeriveEvmGasLimitInput) => {
   const { id, chain } = coin
   if (data) {
