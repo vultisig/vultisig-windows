@@ -248,7 +248,7 @@ export const de = {
   devices_on_same_internet:
     'Verbinden Sie alle Geräte mit dem Internet und öffnen Sie Vultisig',
   select_the_pairing_devices: 'Wählen Sie die Paarungsgeräte aus',
-  m_of_n_vault: 'M-von-N-Tresor',
+  m_of_n_vault: '{{m}}-von-{{n}}-Tresor',
   vault_type_1_description: 'Sie benötigen 1 weiteres Gerät zum Paaren',
   vault_type_2_description: 'Sie benötigen 2 weitere Geräte zum Paaren',
   vault_type_3_description:
@@ -273,6 +273,7 @@ export const de = {
   part: 'Teil',
   of: 'von',
   vault: 'Tresor',
+  vault_management: 'Tresorverwaltung',
   vaults: 'Tresore',
   setup: 'Einrichten',
   import: 'Importieren',
@@ -357,8 +358,8 @@ export const de = {
   vault_details_page_vault_type: 'Tresortyp',
   vault_backup_banner_title:
     'Sichern Sie jetzt Ihre Tresorfreigabe dieses Geräts!',
-  vault_details_page_vault_ECDSA: 'ECDSA',
-  vault_details_page_vault_EDDSA: 'EdDSA',
+  vault_details_page_vault_ECDSA: 'ECDSA-Schlüssel',
+  vault_details_page_vault_EDDSA: 'EdDSA-Schlüssel',
   vault_details_page_signer_word: 'Unterzeichner',
   vault_edit_page_title: 'Tresor bearbeiten',
   address_book: 'Adressbuch',
@@ -658,6 +659,7 @@ export const de = {
   password_required: 'Passwort erforderlich ist',
   passwords_dont_match: 'Passwörter stimmen nicht überein',
   verify_password: 'Kennwort bestätigen',
+  reenter_password: 'Passwort erneut eingeben',
   password: 'Passwort',
   password_backup: 'Schützen Sie Ihren Tresor und Ihr schnelles Zeichen.',
   looking_for_server: 'Suche nach FastVaultServer ...',
@@ -738,8 +740,7 @@ export const de = {
   follow_banner_title: 'Folgen Sie uns auf X',
   follow_banner_button: 'Folgen Sie @Vultisig',
   deposit: 'Einzahlung',
-  add_vaults_to_folder:
-    'Wählen Sie Tresore aus, die dem Ordner hinzugefügt werden sollen.',
+  add_vaults_to_folder: 'Tresore auswählen',
   chain_message_deposit: '{{chain}}-Nachrichteneinzahlung',
   thorchain_message_deposit: 'THORChain-Nachrichteneinzahlung',
   bond_with_lp: 'Bindung',
@@ -876,7 +877,7 @@ export const de = {
   vault_part: 'Tresorteil',
   share: 'Aktie',
   backup_now: 'Jetzt sichern',
-  share_n_of_m: 'Teilen Sie {{n}} von {{m}}',
+  share_n_of_m: 'Teilen Sie {{n}}-von-{{m}}',
   this_vault_share: 'diese Tresorfreigabe',
   node_address: 'Knotenadresse',
   lp_units_must_be_positive: 'LP-Einheiten müssen positiv sein',
@@ -1126,6 +1127,8 @@ export const de = {
     'Ihre Tresore werden hier angezeigt. Erstellen Sie zunächst einen Tresor oder importieren Sie einen vorhandenen',
   risky_transaction_detected: '{{riskLevel}} Risikotransaktion erkannt',
   powered_by: 'Unterstützt von <provider></provider>',
+  risky_tx_warning:
+    'Diese Transaktion beinhaltet eine bösartige Adresse. Eine Interaktion damit kann Ihre Vermögenswerte gefährden. Fahren Sie nur fort, wenn Sie sich sicher sind.',
   ibc_transaction_not_supporting_memo_title:
     'IBC-Transaktionsmemo wird nicht unterstützt',
   ibc_transaction_not_supporting_memo_desc:
@@ -1155,6 +1158,7 @@ export const de = {
   sign_request: 'Anfrage unterzeichnen',
   signed_signature: 'Unterschrift',
   signing_address: 'Unterschriftsadresse',
+  signAmino: 'Amino-Unterschrift',
   verify_identity_sign: 'Melden Sie sich an, um Ihre Identität zu bestätigen',
   incorrect_url: 'Falsche URL',
   developer_options: 'Entwickleroptionen',

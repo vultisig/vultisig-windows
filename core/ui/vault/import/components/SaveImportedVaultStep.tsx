@@ -11,7 +11,10 @@ import { useTranslation } from 'react-i18next'
 
 import { FlowErrorPageContent } from '../../../flow/FlowErrorPageContent'
 
-export const SaveImportedVaultStep = ({ value }: ValueProp<Vault>) => {
+export const SaveImportedVaultStep = ({
+  value,
+  onFinish,
+}: ValueProp<Vault> & { onFinish?: () => void }) => {
   const { t } = useTranslation()
   const { client } = useCore()
   const navigate = useCoreNavigate()
@@ -44,10 +47,18 @@ export const SaveImportedVaultStep = ({ value }: ValueProp<Vault>) => {
     )
   }
 
+  const handleFinish = () => {
+    if (onFinish) {
+      onFinish()
+      return
+    }
+    navigate({ id: 'vault' })
+  }
+
   return (
     <SaveVaultStep
       onBack={() => navigate({ id: 'vault' })}
-      onFinish={() => navigate({ id: 'vault' })}
+      onFinish={handleFinish}
       value={finalValue}
       title={t('import_vault')}
     />

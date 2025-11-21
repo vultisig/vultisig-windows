@@ -16,7 +16,14 @@ type UploadQrViewProps = TitleProp & OnFinishProp<string>
 export const UploadQrView = ({ title, onFinish }: UploadQrViewProps) => {
   const { t } = useTranslation()
   const [file, setFile] = useState<File | null>(null)
-  const { error, isPending, mutate } = useProcessQrMutation()
+  const { error, isPending, mutate, reset } = useProcessQrMutation()
+
+  const handleFileChange = (newFile: File | null) => {
+    setFile(newFile)
+    if (newFile) {
+      reset()
+    }
+  }
 
   return (
     <>
@@ -25,9 +32,15 @@ export const UploadQrView = ({ title, onFinish }: UploadQrViewProps) => {
           {title}
         </Text>
         {file ? (
-          <UploadedQr value={file} onRemove={() => setFile(null)} />
+          <UploadedQr
+            value={file}
+            onRemove={() => {
+              setFile(null)
+              reset()
+            }}
+          />
         ) : (
-          <QrImageDropZone onFinish={setFile} />
+          <QrImageDropZone onFinish={handleFileChange} />
         )}
         {error && <Text color="danger">{extractErrorMsg(error)}</Text>}
       </PageContent>

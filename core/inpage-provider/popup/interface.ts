@@ -34,7 +34,10 @@ export type SignMessageInput =
     }
 
 export type PopupInterface = {
-  grantVaultAccess: Method<{}, { appSession: VaultAppSession }>
+  grantVaultAccess: Method<
+    { preselectFastVault?: boolean },
+    { appSession: VaultAppSession }
+  >
   exportVaults: Method<{}, VaultExport[]>
   pluginReshare: Method<{ pluginId: string }, { joinUrl: string }>
   signMessage: Method<SignMessageInput, string>

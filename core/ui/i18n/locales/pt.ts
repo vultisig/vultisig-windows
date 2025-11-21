@@ -243,7 +243,7 @@ export const pt = {
   devices_on_same_internet:
     'Conecte todos os dispositivos à Internet com o Vultisig aberto',
   select_the_pairing_devices: 'Selecione os dispositivos de pareamento',
-  m_of_n_vault: 'Cofre M de N',
+  m_of_n_vault: 'Cofre {{m}}-de-{{n}}',
   secureVault: 'Secure Vault',
   vault_type_1_description: 'Você precisa de mais 1 dispositivo para parear',
   vault_type_2_description: 'Você precisa de mais 2 dispositivos para parear',
@@ -268,6 +268,7 @@ export const pt = {
   part: 'parte',
   of: 'de',
   vault: 'Cofre',
+  vault_management: 'Gerenciamento do Cofre',
   vaults: 'Cofres',
   setup: 'Configurar',
   import: 'Importar',
@@ -350,8 +351,8 @@ export const pt = {
   vault_details_page_vault_type: 'Tipo de Cofre',
   vault_backup_banner_title:
     'Faça já o backup da partilha do cofre deste dispositivo!',
-  vault_details_page_vault_ECDSA: 'ECDSA',
-  vault_details_page_vault_EDDSA: 'EdDSA',
+  vault_details_page_vault_ECDSA: 'Chave ECDSA',
+  vault_details_page_vault_EDDSA: 'Chave EdDSA',
   vault_details_page_signer_word: 'Signatário',
   vault_edit_page_title: 'Editar cofre',
   address_book: 'Agenda de endereços',
@@ -652,6 +653,7 @@ export const pt = {
   password_required: 'Senha é necessária',
   passwords_dont_match: 'As senhas não correspondem',
   verify_password: 'Verificar senha',
+  reenter_password: 'Digite a senha novamente',
   email_confirmation_code_label:
     'Digite o código recebido com seu backup por e-mail',
   email_confirmation_code_error: 'Código inválido',
@@ -734,7 +736,7 @@ export const pt = {
   follow_banner_title: 'Siga-nos no X',
   follow_banner_button: 'Seguir @Vultisig',
   deposit: 'Depositar',
-  add_vaults_to_folder: 'Selecione Cofres para adicionar à pasta.',
+  add_vaults_to_folder: 'Selecione Cofres',
   chain_message_deposit: 'Depósito de mensagem {{chain}}',
   thorchain_message_deposit: 'Depósito de mensagem THORChain',
   bond_with_lp: 'Vínculo',
@@ -863,7 +865,7 @@ export const pt = {
   vault_part: 'Parte do cofre',
   share: 'Compartilhar',
   backup_now: 'Faça backup agora',
-  share_n_of_m: 'Compartilhar {{n}} de {{m}}',
+  share_n_of_m: 'Compartilhar {{n}}-de-{{m}}',
   this_vault_share: 'este cofre compartilha',
   node_address: 'Endereço do nó',
   lp_units_must_be_positive: 'As unidades LP devem ser positivas',
@@ -1110,6 +1112,8 @@ export const pt = {
     'Seus cofres aparecerão aqui. Comece criando um ou importando um existente.',
   risky_transaction_detected: 'Transação de risco {{riskLevel}} detectada',
   powered_by: 'Desenvolvido por <provider></provider>',
+  risky_tx_warning:
+    'Esta transação envolve um endereço malicioso. Interagir com ele pode comprometer seus ativos. Prossiga apenas se tiver certeza.',
   ibc_transaction_not_supporting_memo_title:
     'Memorando de transação IBC não suportado',
   ibc_transaction_not_supporting_memo_desc:
@@ -1139,6 +1143,7 @@ export const pt = {
   sign_request: 'Solicitação de assinatura',
   signed_signature: 'Assinatura assinada',
   signing_address: 'Endereço de Assinatura',
+  signAmino: 'Assinatura Amino',
   verify_identity_sign: 'Entre para verificar sua identidade',
   incorrect_url: 'URL incorreta',
   developer_options: 'Opções do desenvolvedor',

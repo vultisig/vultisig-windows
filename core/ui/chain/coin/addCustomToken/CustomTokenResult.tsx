@@ -1,3 +1,4 @@
+import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { coinKeyToString } from '@core/chain/coin/Coin'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
@@ -75,7 +76,7 @@ export const CustomTokenResult = ({ id }: { id: string }) => {
             c => coinKeyToString(c) === coinKeyToString(coin)
           )
           if (currentCoin) {
-            deleteCoin.mutate(currentCoin)
+            deleteCoin.mutate(extractAccountCoinKey(currentCoin))
           } else {
             createCoin.mutate(coin)
           }

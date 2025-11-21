@@ -3,16 +3,55 @@ import { FC } from 'react'
 
 export const MegaphoneIcon: FC<SvgProps> = props => (
   <svg
-    fill="none"
-    height="1em"
-    stroke="currentColor"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    strokeWidth="1.5"
-    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
     width="1em"
+    height="1em"
+    fill="none"
     {...props}
   >
-    <path d="M11.6 16.8C11.4949 17.1808 11.3159 17.5372 11.0731 17.8488C10.8303 18.1605 10.5285 18.4212 10.1849 18.6162C9.84132 18.8112 9.4627 18.9367 9.07065 18.9853C8.6786 19.034 8.28081 19.005 7.89997 18.9C7.51914 18.7949 7.16273 18.6159 6.85109 18.3731C6.53945 18.1303 6.27868 17.8285 6.08368 17.4849C5.88867 17.1413 5.76325 16.7627 5.71457 16.3706C5.6659 15.9786 5.69492 15.5808 5.79997 15.2M3 11L21 6V18L3 14V11Z" />
+    <g clipPath="url(#a)" filter="url(#b)">
+      <path
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+        d="M15.205 11.667a2.5 2.5 0 0 0 0-5m-4.726 8.541a2.501 2.501 0 0 1-4.857-.833v-1.25m.002-7.917v7.917m9.581-8.574v9.232a1.667 1.667 0 0 1-2.158 1.592l-9.584-2.959a1.667 1.667 0 0 1-1.175-1.592V7.51c0-.732.477-1.377 1.175-1.593l9.584-2.959a1.667 1.667 0 0 1 2.158 1.593Z"
+        shapeRendering="crispEdges"
+      />
+    </g>
+    <defs>
+      <clipPath id="a">
+        <path fill="#fff" d="M0 0h20v20H0z" />
+      </clipPath>
+      <filter
+        id="b"
+        width={24.917}
+        height={23.492}
+        x={-2.462}
+        y={2.133}
+        colorInterpolationFilters="sRGB"
+        filterUnits="userSpaceOnUse"
+      >
+        <feFlood floodOpacity={0} result="BackgroundImageFix" />
+        <feColorMatrix
+          in="SourceAlpha"
+          result="hardAlpha"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+        />
+        <feOffset dy={4} />
+        <feGaussianBlur stdDeviation={2} />
+        <feComposite in2="hardAlpha" operator="out" />
+        <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
+        <feBlend
+          in2="BackgroundImageFix"
+          result="effect1_dropShadow_57060_74525"
+        />
+        <feBlend
+          in="SourceGraphic"
+          in2="effect1_dropShadow_57060_74525"
+          result="shape"
+        />
+      </filter>
+    </defs>
   </svg>
 )

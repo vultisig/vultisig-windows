@@ -13,7 +13,6 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { GradientText, Text } from '@lib/ui/text'
-import { NameProp } from '@lib/utils/entities/props'
 import { useTranslation } from 'react-i18next'
 
 import { KeygenFlow } from '../../flow/KeygenFlow'
@@ -21,14 +20,22 @@ import { WaitForPluginAndVerifier } from './WaitForPluginAndVerifier'
 
 const steps = ['info', 'password', 'keygen'] as const
 
-export const PluginReshareFlow = ({ name }: NameProp) => {
+export const PluginReshareFlow = ({
+  description,
+  name,
+}: {
+  description: string
+  name: string
+}) => {
   const { t } = useTranslation()
   const { step, toPreviousStep, toNextStep } = useStepNavigation({ steps })
 
   return (
     <Match
       value={step}
-      info={() => <PreviewInfo value={name} onFinish={toNextStep} />}
+      info={() => (
+        <PreviewInfo value={{ description, name }} onFinish={toNextStep} />
+      )}
       password={() => (
         <ValueTransfer<{ password: string }>
           key="password"

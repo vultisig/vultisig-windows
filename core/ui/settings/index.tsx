@@ -13,7 +13,8 @@ import { useHasPasscodeEncryption } from '@core/ui/storage/passcodeEncryption'
 import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
 import { Opener } from '@lib/ui/base/Opener'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { BookMarkedIcon } from '@lib/ui/icons/BookMarkedIcon'
+import { BookIcon } from '@lib/ui/icons/BookIcon'
+import { BubbleQuestionIcon } from '@lib/ui/icons/BubbleQuestionIcon'
 import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
 import { CoinsIcon } from '@lib/ui/icons/CoinsIcon'
 import { DiscordIcon } from '@lib/ui/icons/DiscordIcon'
@@ -24,7 +25,6 @@ import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { LanguagesIcon } from '@lib/ui/icons/LanguagesIcon'
 import { LockKeyholeIcon } from '@lib/ui/icons/LockKeyholeIcon'
 import { MegaphoneIcon } from '@lib/ui/icons/MegaphoneIcon'
-import { MessageCircleQuestionIcon } from '@lib/ui/icons/MessageCircleQuestionIcon'
 import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { ShareTwoIcon } from '@lib/ui/icons/ShareTwoIcon'
@@ -95,7 +95,7 @@ export const SettingsPage: FC<Props> = props => {
           hasBorder
         />
         <PageContent gap={14} flexGrow scrollable>
-          <SettingsSection title={t('vault')}>
+          <SettingsSection title={t('vault_management')}>
             {client === 'extension' && props.prioritize}
             <ListItem
               icon={
@@ -156,7 +156,7 @@ export const SettingsPage: FC<Props> = props => {
             <ListItem
               icon={
                 <ListItemIconWrapper>
-                  <BookMarkedIcon />
+                  <BookIcon />
                 </ListItemIconWrapper>
               }
               onClick={() => navigate({ id: 'addressBook' })}
@@ -206,7 +206,7 @@ export const SettingsPage: FC<Props> = props => {
             <ListItem
               icon={
                 <ListItemIconWrapper>
-                  <MessageCircleQuestionIcon />
+                  <BubbleQuestionIcon />
                 </ListItemIconWrapper>
               }
               onClick={() => navigate({ id: 'faq' })}
