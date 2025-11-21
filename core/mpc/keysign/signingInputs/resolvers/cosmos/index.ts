@@ -38,7 +38,7 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
     keysignPayload.blockchainSpecific
   )
 
-  const { memo, toAddress } = keysignPayload
+  const { memo, toAddress, signAmino } = keysignPayload
 
   const { messages, txMemo } = matchRecordUnion<
     CosmosChainSpecific,
@@ -95,6 +95,25 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
       }
     },
     vaultBased: ({ isDeposit, ...rest }) => {
+      if (signAmino) {
+        const msgs = signAmino.msgs
+
+        const messages = msgs.map(msg => {
+          const message = TW.Cosmos.Proto.Message.create({
+            rawJsonMessage: {
+              type: msg.type,
+              value: msg.value,
+            },
+          })
+
+          return message
+        })
+
+        return {
+          messages,
+          txMemo: memo,
+        }
+      }
       const txType =
         (rest as Partial<THORChainSpecific>).transactionType ??
         TransactionType.UNSPECIFIED
@@ -251,6 +270,18 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
   })
 
   const getFee = () => {
+    if (signAmino) {
+      const fee = TW.Cosmos.Proto.Fee.create({
+        gas: Long.fromString(signAmino.fee?.gas ?? '0'),
+        amounts:
+          signAmino.fee?.amount?.map(coin =>
+            TW.Cosmos.Proto.Amount.create(coin)
+          ) ?? [],
+      })
+
+      return fee
+    }
+
     const getFeeAmounts = () => {
       if (chainKind !== 'ibcEnabled') return
 
@@ -283,16 +314,25 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
 
   const { accountNumber, sequence } = getRecordUnionValue(chainSpecific)
 
+  const fee = getFee()
+
+  const publicKey = getKeysignTwPublicKey(keysignPayload)
+  const chainId = getTwChainId({ walletCore, chain })
+
+  const signingMode = signAmino
+    ? TW.Cosmos.Proto.SigningMode.JSON
+    : TW.Cosmos.Proto.SigningMode.Protobuf
+
   const input = TW.Cosmos.Proto.SigningInput.create({
-    publicKey: getKeysignTwPublicKey(keysignPayload),
-    signingMode: TW.Cosmos.Proto.SigningMode.Protobuf,
-    chainId: getTwChainId({ walletCore, chain }),
+    publicKey,
+    signingMode,
+    chainId,
     accountNumber: new Long(Number(accountNumber)),
     sequence: new Long(Number(sequence)),
     mode: TW.Cosmos.Proto.BroadcastMode.SYNC,
     memo: txMemo,
     messages,
-    fee: getFee(),
+    fee,
   })
 
   return [input]

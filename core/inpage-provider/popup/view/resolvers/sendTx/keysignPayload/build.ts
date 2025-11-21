@@ -23,6 +23,7 @@ import {
 } from '@core/mpc/types/vultisig/keysign/v1/tron_contract_payload_pb'
 import {
   CosmosCoinSchema,
+  SignAminoSchema,
   WasmExecuteContractPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { attempt } from '@lib/utils/attempt'
@@ -144,11 +145,11 @@ export const buildSendTxKeysignPayload = async ({
     {
       regular: ({ transactionDetails, isEvmContractCall }) => {
         const { data } = transactionDetails
-
+        console.log('data:', data)
         if (!data || data === '0x') {
           return undefined
         }
-
+        console.log('data:', data)
         if (
           getChainKind(chain) === 'evm' &&
           (!data.startsWith('0x') || !isEvmContractCall)
@@ -301,6 +302,33 @@ export const buildSendTxKeysignPayload = async ({
     psbt: () => ({ case: undefined }),
   })
 
+  const aminoPayload = matchRecordUnion<
+    CustomTxData,
+    KeysignPayload['signAmino']
+  >(customTxData, {
+    regular: () => {
+      if ('regular' in customTxData) {
+        const { regular } = customTxData
+        const { transactionDetails } = regular
+        const { aminoPayload } = transactionDetails
+        if (aminoPayload) {
+          return create(SignAminoSchema, {
+            fee: aminoPayload.fee,
+            msgs: aminoPayload.msgs.map(msg => {
+              return {
+                type: msg.type,
+                value: JSON.stringify(msg.value),
+              }
+            }),
+          })
+        }
+      }
+      return undefined
+    },
+    solana: () => undefined,
+    psbt: () => undefined,
+  })
+
   let keysignPayload = create(KeysignPayloadSchema, {
     toAddress: toAddress ?? '',
     toAmount: getTxAmount(parsedTx).toString(),
@@ -312,6 +340,7 @@ export const buildSendTxKeysignPayload = async ({
     memo,
     contractPayload,
     swapPayload,
+    signAmino: aminoPayload,
   })
 
   keysignPayload.blockchainSpecific = await getChainSpecific({
