@@ -1089,20 +1089,15 @@ export const de = {
   install_plugin: 'Plugin installieren',
   installing_plugin: 'Plugin installieren',
   plugin_info: 'Plugin Informationen',
-  plugin_info_desc: 'Sie installieren das {{name}}-Plugin',
-  plugin_success_desc: 'Die Installation von {{name}} ist abgeschlossen',
   plugin_password_desc:
     'Geben Sie Ihr Passwort ein, um Ihre Serverfreigabe zu entsperren und die Plugin-Installation zu starten',
-  plugin_policy: 'Richtlinienüberprüfung',
-  plugin_policy_desc:
-    'Der Prüfer prüft stets, ob nur diese Richtlinien ausgeführt werden. So haben Sie die Sicherheit, dass nur autorisierte Personen unterzeichnen.',
-  plugin_policy_heading: 'Dieses Plugin greift automatisch zu',
+  plugin_rules: 'Plugin-Regeln',
+  plugin_server_url: 'Plugin-Server-URL',
+  plugin_success_desc: 'Die Installation von {{name}} ist abgeschlossen',
   password_do_not_match: 'Passwörter stimmen nicht überein',
   password_pattern_error:
     'Das Passwort muss zwischen {{min}} und {{max}} Zeichen lang sein',
   success: 'Erfolg',
-  failed_to_process_plugin_install:
-    'Die Installation des Plugins konnte nicht durchgeführt werden.',
   hold_for_paired_sign: 'Halten für gepaartes Zeichen',
   verify_password_periodic_message_description:
     'Wir werden Sie regelmäßig bitten, Ihr Fast Sign-Passwort zu bestätigen, damit Sie es immer im Gedächtnis behalten.',
@@ -1130,7 +1125,7 @@ export const de = {
   risky_tx_warning:
     'Diese Transaktion beinhaltet eine bösartige Adresse. Eine Interaktion damit kann Ihre Vermögenswerte gefährden. Fahren Sie nur fort, wenn Sie sich sicher sind.',
   ibc_transaction_not_supporting_memo_title:
-    'IBC-Transaktionsmemo wird nicht unterstützt',
+  'IBC-Transaktionsmemo wird nicht unterstützt',
   ibc_transaction_not_supporting_memo_desc:
     'Diese IBC-Transaktion enthält ein Memo, aber Vultisig unterstützt derzeit nicht das Einbetten von Memos in IBC-Übertragungsnachrichten.<br> Das Fortsetzen dieser Transaktion kann zu einem <b>irreversiblen Verlust von Geldern</b> führen.',
   go_back: 'Geh zurück',
@@ -1162,7 +1157,6 @@ export const de = {
   verify_identity_sign: 'Melden Sie sich an, um Ihre Identität zu bestätigen',
   incorrect_url: 'Falsche URL',
   developer_options: 'Entwickleroptionen',
-  plugin_server_url: 'Plugin-Server-URL',
   base_fee: 'Grundgebühr',
   backupShare2: 'Sicherungsfreigabe 2',
   processing_transaction: 'Transaktion wird verarbeitet...',
@@ -1221,7 +1215,6 @@ export const de = {
   this_vault_only: 'Nur dieser Tresor',
   all_vaults: 'Alle Tresore',
   more: 'mehr',
-  plugin_rules: 'Plugin-Regeln',
   resource: 'Ressource',
   target: 'Ziel',
   discount_tiers: 'Rabattstufen',

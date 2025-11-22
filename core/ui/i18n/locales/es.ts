@@ -1088,20 +1088,15 @@ export const es = {
   install_plugin: 'Instalar complemento',
   installing_plugin: 'Instalación del complemento',
   plugin_info: 'Información del complemento',
-  plugin_info_desc: 'Estás instalando el complemento {{name}}',
-  plugin_success_desc: 'La instalación de {{name}} se ha completado',
   plugin_password_desc:
     'Ingrese su contraseña para desbloquear su servidor compartido e iniciar la instalación del complemento',
-  plugin_policy: 'Revisión de políticas',
-  plugin_policy_desc:
-    'El verificador siempre comprobará que solo se ejecuten estas políticas, lo que le garantiza que solo las personas autorizadas serán firmadas.',
-  plugin_policy_heading: 'Este complemento accederá automáticamente',
+  plugin_rules: 'Reglas del complemento',
+  plugin_server_url: 'URL del servidor de complementos',
+  plugin_success_desc: 'La instalación de {{name}} se ha completado',
   password_do_not_match: 'Las contraseñas no coinciden',
   password_pattern_error:
     'La contraseña debe tener entre {{min}} y {{max}} caracteres',
   success: 'Éxito',
-  failed_to_process_plugin_install:
-    'No se pudo procesar la instalación del complemento',
   hold_for_paired_sign: 'Mantener pulsado para señal emparejada',
   verify_password_periodic_message_description:
     'Periódicamente le pediremos que verifique su contraseña de inicio de sesión rápido para que siempre la recuerde.',
@@ -1161,7 +1156,6 @@ export const es = {
   verify_identity_sign: 'Inicie sesión para verificar su identidad',
   incorrect_url: 'URL incorrecta',
   developer_options: 'Opciones de desarrollador',
-  plugin_server_url: 'URL del servidor de complementos',
   base_fee: 'Tarifa base',
   backupShare2: 'Copia de seguridad compartida 2',
   processing_transaction: 'Procesando transacción...',
@@ -1222,7 +1216,6 @@ export const es = {
   this_vault_only: 'Sólo esta bóveda',
   all_vaults: 'Todas las bóvedas',
   more: 'más',
-  plugin_rules: 'Reglas del complemento',
   resource: 'Recurso',
   target: 'Objetivo',
   discount_tiers: 'Niveles de descuento',
