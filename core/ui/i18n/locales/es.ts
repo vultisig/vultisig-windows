@@ -1090,8 +1090,8 @@ export const es = {
   plugin_info: 'Información del complemento',
   plugin_password_desc:
     'Ingrese su contraseña para desbloquear su servidor compartido e iniciar la instalación del complemento',
-  plugin_rules: 'Reglas del complemento',
-  plugin_server_url: 'URL del servidor de complementos',
+  plugin_rules: 'Reglas de la aplicación',
+  plugin_server_url: 'URL del servidor de aplicaciones',
   plugin_success_desc: 'La instalación de {{name}} se ha completado',
   password_do_not_match: 'Las contraseñas no coinciden',
   password_pattern_error:
