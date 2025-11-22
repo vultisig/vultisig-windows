@@ -307,8 +307,9 @@ const keplrHandler = (
       ) {
         throw new Error(' coins array is required and cannot be empty')
       }
-      const thorAddress = bech32.encode(
-        'thor',
+      const prefix = chain === Chain.MayaChain ? 'maya' : 'thor'
+      const signerAddress = bech32.encode(
+        prefix,
         bech32.toWords(decodedMessage.signer)
       )
 
@@ -321,7 +322,7 @@ const keplrHandler = (
           amount: decodedMessage.coins[0].amount,
           decimals: chainFeeCoin[chain].decimals,
         },
-        from: thorAddress,
+        from: signerAddress,
         data: memo,
         msgPayload: {
           case: CosmosMsgType.THORCHAIN_MSG_DEPOSIT,
@@ -331,7 +332,7 @@ const keplrHandler = (
               asset: coin.asset?.ticker,
             })),
             memo: decodedMessage.memo,
-            signer: thorAddress,
+            signer: signerAddress,
           },
         } as MsgPayload,
         skipBroadcast,
@@ -349,13 +350,15 @@ const keplrHandler = (
         throw new Error(' amounts array is required and cannot be empty')
       }
 
+      const prefix = chain === Chain.MayaChain ? 'maya' : 'thor'
+
       const fromAddress = bech32.encode(
-        'thor',
+        prefix,
         bech32.toWords(decodedMessage.fromAddress)
       )
 
       const toAddress = bech32.encode(
-        'thor',
+        prefix,
         bech32.toWords(decodedMessage.toAddress)
       )
 
