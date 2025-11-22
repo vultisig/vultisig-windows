@@ -2,6 +2,7 @@ import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import styled from 'styled-components'
 
 export const CarouselContainer = styled.div`
+  isolation: isolate;
   position: relative;
   width: 100%;
   max-width: 450px;
