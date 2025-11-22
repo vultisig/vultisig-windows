@@ -1,5 +1,6 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useCore } from '@core/ui/state/core'
 import { useSetupVaultPageAnimation } from '@core/ui/vault/create/setup-vault/hooks/useSetupVaultPageAnimation'
 import { useVaultSecurityType } from '@core/ui/vault/state/vaultSecurityType'
 import { getVaultSecurityProperties } from '@core/ui/vault/VaultSecurityType'
@@ -10,6 +11,7 @@ import { ShieldIcon } from '@lib/ui/icons/ShieldIcon'
 import { ZapIcon } from '@lib/ui/icons/ZapIcon'
 import { ToggleSwitch } from '@lib/ui/inputs/toggle-switch/ToggleSwitch'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { useNavigation } from '@lib/ui/navigation/state'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -38,6 +40,8 @@ export const SetupVaultPage = () => {
   const { t } = useTranslation()
   const [value, setValue] = useVaultSecurityType()
   const navigate = useCoreNavigate()
+  const { goBack } = useCore()
+  const [{ history }] = useNavigation()
 
   const handleStart = () => {
     match(value, {
@@ -46,10 +50,19 @@ export const SetupVaultPage = () => {
     })
   }
 
+  const handleBack = () => {
+    if (history.length > 1) {
+      goBack()
+      return
+    }
+
+    navigate({ id: 'newVault' })
+  }
+
   return (
     <>
       <PageHeader
-        primaryControls={<PageHeaderBackButton />}
+        primaryControls={<PageHeaderBackButton onClick={handleBack} />}
         title={t('chooseSetup')}
         hasBorder
       />

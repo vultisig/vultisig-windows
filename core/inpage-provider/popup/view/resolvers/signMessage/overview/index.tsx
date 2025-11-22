@@ -80,7 +80,11 @@ export const Overview = () => {
   })
 
   const displayMessage = matchRecordUnion<SignMessageInput, string>(input, {
-    eth_signTypedData_v4: () => message,
+    eth_signTypedData_v4: ({ message }) => {
+      return typeof message === 'string'
+        ? message
+        : JSON.stringify(message, null, 2)
+    },
     sign_message: () => message,
     personal_sign: ({ message }) => {
       const bytes =

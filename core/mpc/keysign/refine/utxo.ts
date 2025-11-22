@@ -43,12 +43,18 @@ const convertPlanUtxosToUtxoInfo = ({
 export const refineKeysignUtxo = (
   input: RefineKeysignUtxoInput
 ): KeysignPayload => {
-  const [signingInput] = getUtxoSigningInputs(input)
-
   const utxoSpecific = getBlockchainSpecificValue(
     input.keysignPayload.blockchainSpecific,
     'utxoSpecific'
   )
+
+  // PSBTs already have UTXOs defined - skip refinement logic
+  // The PSBT contains all necessary UTXO selection and transaction structure
+  if (utxoSpecific.psbt) {
+    return input.keysignPayload
+  }
+
+  const [signingInput] = getUtxoSigningInputs(input)
 
   const plan = shouldBePresent(signingInput.plan, 'UTXO signing input plan')
   const planUtxos = plan.utxos
