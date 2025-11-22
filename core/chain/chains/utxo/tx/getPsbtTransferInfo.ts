@@ -62,10 +62,16 @@ export const getPsbtTransferInfo = (psbt: Psbt, senderAddress: string) => {
     }
   })
 
-  // Filter out OP_RETURN and null addresses, and sender's change address
-  const recipients = allOutputs.filter(
-    o => !o.isOpReturn && o.addr !== null && o.addr !== senderAddress
-  )
+  // Filter out OP_RETURN outputs and null addresses (failed parsing)
+  const validOutputs = allOutputs.filter(o => !o.isOpReturn && o.addr !== null)
+
+  // Filter out sender's change address to isolate payment recipients.
+  // See https://github.com/vultisig/vultisig-windows/pull/2533 for context: that PR prevents change outputs from being treated as recipients.
+  // However, for self-sends (all outputs to sender address), we need to include
+  // them as recipients since there are no "external" recipients in that case.
+  const nonSenderOutputs = validOutputs.filter(o => o.addr !== senderAddress)
+  const recipients =
+    nonSenderOutputs.length > 0 ? nonSenderOutputs : validOutputs
 
   const outputsTotal = recipients.reduce((s, o) => s + o.value, 0n)
 
