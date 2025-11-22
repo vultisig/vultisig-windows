@@ -1078,9 +1078,9 @@ export const pt = {
   plugin_info: 'Informações do plugin',
   plugin_password_desc:
     'Digite sua senha para desbloquear seu Compartilhamento de Servidor e iniciar a instalação do plugin',
-  plugin_rules: 'Regras do plugin',
+  plugin_rules: 'Regras do app',
   plugin_success_desc: 'A instalação do {{name}} foi concluída',
-  plugin_server_url: 'URL do servidor de plugin',
+  plugin_server_url: 'URL do servidor de app',
   password_do_not_match: 'As senhas não correspondem',
   password_pattern_error: 'A senha deve ter entre {{min}} e {{max}} caracteres',
   success: 'Sucesso',
