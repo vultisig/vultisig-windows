@@ -1088,20 +1088,15 @@ export const it = {
   install_plugin: 'Installa il plugin',
   installing_plugin: 'Installazione del plugin',
   plugin_info: 'Informazioni sul plugin',
-  plugin_info_desc: 'Stai installando il plugin {{name}}',
-  plugin_success_desc: "L'installazione di {{name}} è completata",
   plugin_password_desc:
     "Inserisci la tua password per sbloccare la tua condivisione server e avviare l'installazione del plugin",
-  plugin_policy: 'Revisione delle politiche',
-  plugin_policy_desc:
-    'Il verificatore controllerà sempre che solo queste policy vengano eseguite, garantendoti la sicurezza che solo i dati autorizzati verranno firmati.',
-  plugin_policy_heading: 'Questo plugin accederà automaticamente',
+  plugin_rules: "Regole dell'app",
+  plugin_server_url: "URL del server dell'app",
+  plugin_success_desc: "L'installazione di {{name}} è completata",
   password_do_not_match: 'Le password non corrispondono',
   password_pattern_error:
     'La password deve essere compresa tra {{min}} e {{max}} caratteri',
   success: 'Successo',
-  failed_to_process_plugin_install:
-    "Impossibile elaborare l'installazione del plugin",
   hold_for_paired_sign: 'Tieni premuto per il segno di coppia',
   verify_password_periodic_message_description:
     'Ti chiederemo periodicamente di verificare la tua password di accesso rapido in modo che tu possa sempre ricordarla',
@@ -1162,7 +1157,6 @@ export const it = {
   verify_identity_sign: 'Accedi per verificare la tua identità',
   incorrect_url: 'URL errato',
   developer_options: 'Opzioni sviluppatore',
-  plugin_server_url: 'URL del server del plugin',
   base_fee: 'Tariffa base',
   backupShare2: 'Condivisione di backup 2',
   processing_transaction: 'Elaborazione della transazione in corso...',
@@ -1221,7 +1215,6 @@ export const it = {
   this_vault_only: 'Solo questo caveau',
   all_vaults: 'Tutti i caveau',
   more: 'Di più',
-  plugin_rules: 'Regole del plugin',
   resource: 'Risorsa',
   target: 'Bersaglio',
   discount_tiers: 'Livelli di sconto',

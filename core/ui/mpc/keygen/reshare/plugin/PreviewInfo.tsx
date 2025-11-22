@@ -69,7 +69,7 @@ export const PreviewInfo: FC<
               weight={500}
               centerHorizontally
             >
-              Vultisig Plugins can never sign transactions you do not first
+              Vultisig Apps can never sign transactions you do not first
               approve.
             </Text>
           </VStack>

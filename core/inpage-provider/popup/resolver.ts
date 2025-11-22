@@ -46,6 +46,7 @@ export type PopupMessage<M extends PopupMethod = PopupMethod> = {
 
 export type PopupOptions = {
   account?: string
+  shouldClosePopup?: boolean
 }
 
 export type PopupCallResolver<M extends PopupMethod = PopupMethod> = Resolver<

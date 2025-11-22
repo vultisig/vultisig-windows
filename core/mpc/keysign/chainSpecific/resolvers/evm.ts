@@ -4,8 +4,8 @@ import { getEvmClient } from '@core/chain/chains/evm/client'
 import { deriveEvmGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
 import { getEvmFeeQuote } from '@core/mpc/keysign/fee/resolvers/evm/getEvmFeeQuote'
 import { EthereumSpecificSchema } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
-import { formatDataToHex } from '@lib/utils/formatDataToHex'
 
+import { getKeysignSwapPayload } from '../../swap/getKeysignSwapPayload'
 import { getKeysignCoin } from '../../utils/getKeysignCoin'
 import { GetChainSpecificResolver } from '../resolver'
 
@@ -22,6 +22,18 @@ export const getEvmChainSpecific: GetChainSpecificResolver<
     })
   )
 
+  const getData = () => {
+    const swapPayload = getKeysignSwapPayload(keysignPayload)
+    if (swapPayload && 'general' in swapPayload) {
+      const value = swapPayload.general.quote?.tx?.data
+      if (value) {
+        return value
+      }
+    }
+
+    return keysignPayload.memo
+  }
+
   const { gasLimit, baseFeePerGas, maxPriorityFeePerGas } =
     await getEvmFeeQuote({
       keysignPayload,
@@ -29,9 +41,7 @@ export const getEvmChainSpecific: GetChainSpecificResolver<
       thirdPartyGasLimitEstimation,
       minimumGasLimit: deriveEvmGasLimit({
         coin,
-        data: keysignPayload.memo
-          ? formatDataToHex(keysignPayload.memo)
-          : undefined,
+        data: getData(),
       }),
     })
 
