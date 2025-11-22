@@ -1,5 +1,4 @@
 import { useOnboardingStepsAnimations } from '@core/ui/onboarding/hooks/useOnboardingStepsAnimations'
-import { useCore } from '@core/ui/state/core'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
@@ -8,14 +7,17 @@ import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { pageConfig } from '@lib/ui/page/config'
-import { OnFinishProp } from '@lib/ui/props'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { GradientText, Text } from '@lib/ui/text'
 import { FC } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
+export const OnboardingSteps: FC<OnFinishProp & OnBackProp> = ({
+  onFinish,
+  onBack,
+}) => {
   const { t } = useTranslation()
   const {
     animations,
@@ -25,7 +27,6 @@ export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
     animationComponent: AnimationComponent,
     isLoading,
   } = useOnboardingStepsAnimations()
-  const { goBack } = useCore()
 
   return (
     <Layout>
@@ -34,7 +35,7 @@ export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
           <StyledButton
             icon={<ChevronLeftIcon fontSize={18} />}
             kind="link"
-            onClick={!currentAnimation ? goBack : handlePrevAnimation}
+            onClick={!currentAnimation ? onBack : handlePrevAnimation}
             size="sm"
           >
             {t('back')}
