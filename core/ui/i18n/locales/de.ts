@@ -1091,8 +1091,8 @@ export const de = {
   plugin_info: 'Plugin Informationen',
   plugin_password_desc:
     'Geben Sie Ihr Passwort ein, um Ihre Serverfreigabe zu entsperren und die Plugin-Installation zu starten',
-  plugin_rules: 'Plugin-Regeln',
-  plugin_server_url: 'Plugin-Server-URL',
+  plugin_rules: 'App-Regeln',
+  plugin_server_url: 'App-Server-URL',
   plugin_success_desc: 'Die Installation von {{name}} ist abgeschlossen',
   password_do_not_match: 'Passwörter stimmen nicht überein',
   password_pattern_error:
