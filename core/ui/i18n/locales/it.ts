@@ -1090,8 +1090,8 @@ export const it = {
   plugin_info: 'Informazioni sul plugin',
   plugin_password_desc:
     "Inserisci la tua password per sbloccare la tua condivisione server e avviare l'installazione del plugin",
-  plugin_rules: 'Regole del plugin',
-  plugin_server_url: 'URL del server del plugin',
+  plugin_rules: "Regole dell'app",
+  plugin_server_url: "URL del server dell'app",
   plugin_success_desc: "L'installazione di {{name}} è completata",
   password_do_not_match: 'Le password non corrispondono',
   password_pattern_error:
