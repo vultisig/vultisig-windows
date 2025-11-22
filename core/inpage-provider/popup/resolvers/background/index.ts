@@ -39,7 +39,7 @@ export const callPopupFromBackground: PopupCallResolver = withInFlightCoalescer(
               resolve(data)
             }
 
-            if (response.shouldClosePopup) {
+            if (response.shouldClosePopup || options.shouldClosePopup) {
               close()
             }
           }

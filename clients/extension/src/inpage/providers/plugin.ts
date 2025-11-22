@@ -29,13 +29,16 @@ export class Plugin extends EventEmitter {
               },
             },
           },
-          { account }
+          { account, shouldClosePopup: true }
         )
 
         return processSignature(signature)
       },
       reshare_sign: async ([{ id }]: [{ id: string }]) => {
-        const { joinUrl } = await callPopup({ pluginReshare: { pluginId: id } })
+        const { joinUrl } = await callPopup(
+          { pluginReshare: { pluginId: id } },
+          { shouldClosePopup: true }
+        )
 
         return joinUrl
       },
