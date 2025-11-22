@@ -477,7 +477,7 @@ export const en = {
     'Keep devices on the same WiFi Network, correct vault and pair devices.',
   information_note2: 'Make sure no other devices are running Vultisig.',
   initiating_device: 'Initiating device',
-  install_app: 'Install ‘{{name}}’ App',
+  install_app: 'Install ‘{{title}}’ App',
   install_plugin: 'Install App',
   installing_plugin: 'Installing App',
   insufficient_balance: 'Insufficient balance',

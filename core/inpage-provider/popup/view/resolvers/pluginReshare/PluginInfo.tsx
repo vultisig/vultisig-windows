@@ -30,7 +30,7 @@ export const PluginInfo = ({
   return (
     <MatchQuery
       value={query}
-      success={({ description, title }) => (
+      success={plugin => (
         <ReshareVaultFlowProviders>
           <KeygenOperationProvider value={{ reshare: 'plugin' }}>
             <ReshareVaultKeygenActionProvider>
@@ -46,9 +46,7 @@ export const PluginInfo = ({
                     }}
                   />
                 )}
-                to={() => (
-                  <PluginReshareFlow description={description} name={title} />
-                )}
+                to={() => <PluginReshareFlow plugin={plugin} />}
               />
             </ReshareVaultKeygenActionProvider>
           </KeygenOperationProvider>
