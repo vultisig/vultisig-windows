@@ -87,20 +87,18 @@ export const ManageFee = ({
               )
               const payloadByteFee = BigInt(utxoSpecific.byteFee)
 
-              let baseFee = payloadByteFee
-              let initialValue: UtxoFeeSettings = { priority: 'normal' }
-
-              if (feeSettings) {
-                if ('priority' in feeSettings) {
-                  const multiplier = byteFeeMultiplier[feeSettings.priority]
-                  baseFee = BigInt(
-                    Math.round(Number(payloadByteFee) / multiplier)
-                  )
-                  initialValue = feeSettings
-                } else {
-                  baseFee = payloadByteFee
-                  initialValue = feeSettings as UtxoFeeSettings
+              const initialValue: UtxoFeeSettings =
+                (feeSettings as UtxoFeeSettings) ?? {
+                  priority: 'normal',
                 }
+
+              const getByteFee = () => {
+                if (feeSettings && 'priority' in feeSettings) {
+                  const multiplier = byteFeeMultiplier[feeSettings.priority]
+                  return BigInt(Math.round(Number(payloadByteFee) / multiplier))
+                }
+
+                return payloadByteFee
               }
 
               return (
@@ -115,7 +113,7 @@ export const ManageFee = ({
                         onClose()
                       }}
                       onClose={onClose}
-                      byteFee={baseFee}
+                      byteFee={getByteFee()}
                     />
                   )}
                 />
