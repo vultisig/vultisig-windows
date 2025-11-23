@@ -10,12 +10,14 @@ import { useState } from 'react'
 
 type ManageEvmFeeProps = InputProps<EvmFeeSettings> & {
   chain: EvmChain
+  baseFee: bigint
 }
 
 export const ManageEvmFee = ({
   onChange,
   value: initialValue,
   chain,
+  baseFee,
 }: ManageEvmFeeProps) => {
   const [value, setValue] = useState<EvmFeeSettings>(initialValue)
 
@@ -38,6 +40,7 @@ export const ManageEvmFee = ({
           }}
           onClose={onClose}
           chain={chain}
+          baseFee={baseFee}
         />
       )}
     />
