@@ -1,5 +1,8 @@
 import { toChainKindRecordUnion } from '@core/chain/ChainKind'
-import { UtxoFeeSettings } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
+import {
+  byteFeeMultiplier,
+  UtxoFeeSettings,
+} from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
 import {
   EvmFeeSettings,
   FeeSettings,
@@ -84,12 +87,23 @@ export const ManageFee = ({
                 keysignPayload.blockchainSpecific,
                 'utxoSpecific'
               )
-              const byteFee = BigInt(utxoSpecific.byteFee)
+              const payloadByteFee = BigInt(utxoSpecific.byteFee)
 
-              const initialValue: UtxoFeeSettings =
-                (feeSettings as UtxoFeeSettings) || {
-                  byteFee,
+              let baseFee = payloadByteFee
+              let initialValue: UtxoFeeSettings = { priority: 'normal' }
+
+              if (feeSettings) {
+                if ('priority' in feeSettings) {
+                  const multiplier = byteFeeMultiplier[feeSettings.priority]
+                  baseFee = BigInt(
+                    Math.round(Number(payloadByteFee) / multiplier)
+                  )
+                  initialValue = feeSettings
+                } else {
+                  baseFee = payloadByteFee
+                  initialValue = feeSettings as UtxoFeeSettings
                 }
+              }
 
               return (
                 <ControlledValue
@@ -103,7 +117,7 @@ export const ManageFee = ({
                         onClose()
                       }}
                       onClose={onClose}
-                      byteFee={byteFee}
+                      byteFee={baseFee}
                     />
                   )}
                 />
