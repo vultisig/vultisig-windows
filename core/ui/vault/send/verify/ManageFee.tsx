@@ -6,7 +6,7 @@ import {
 import {
   EvmFeeSettings,
   FeeSettings,
-  feeSettingsChains,
+  FeeSettingsChain,
 } from '@core/mpc/keysign/chainSpecific/FeeSettings'
 import { getBlockchainSpecificValue } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
@@ -18,8 +18,6 @@ import { Opener } from '@lib/ui/base/Opener'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { FuelIcon } from '@lib/ui/icons/FuelIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
-
-type FeeSettingsChain = (typeof feeSettingsChains)[number]
 
 type ManageFeeProps = {
   keysignPayload: KeysignPayload
