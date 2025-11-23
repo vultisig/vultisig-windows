@@ -23,8 +23,8 @@ type FeeSettingsChain = (typeof feeSettingsChains)[number]
 
 type ManageFeeProps = {
   keysignPayload: KeysignPayload
-  feeSettings: FeeSettings | undefined
-  onChange: (value: FeeSettings | undefined) => void
+  feeSettings?: FeeSettings
+  onChange: (value: FeeSettings) => void
   chain: FeeSettingsChain
 }
 
