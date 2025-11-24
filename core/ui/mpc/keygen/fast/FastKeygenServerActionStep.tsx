@@ -6,6 +6,7 @@ import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { FC, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+
 import { useKeygenOperation } from '../state/currentKeygenOperationType'
 
 export const FastKeygenServerActionStep: FC<OnFinishProp> = ({ onFinish }) => {

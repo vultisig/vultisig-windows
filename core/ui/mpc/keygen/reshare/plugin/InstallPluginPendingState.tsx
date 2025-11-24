@@ -1,6 +1,5 @@
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
-import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { FC } from 'react'
 import styled from 'styled-components'
 

@@ -1,7 +1,7 @@
 import { hasServer } from '@core/mpc/devices/localPartyId'
+import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { useMpcPeerOptionsQuery } from '@core/ui/mpc/devices/queries/useMpcPeerOptionsQuery'
 import { pluginPeersConfig } from '@core/ui/mpc/fast/config'
-import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { FC, useEffect, useMemo } from 'react'
