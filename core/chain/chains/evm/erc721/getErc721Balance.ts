@@ -2,7 +2,7 @@ import { EvmChain } from '@core/chain/Chain'
 import { getEvmClient } from '@core/chain/chains/evm/client'
 import { Address, erc721Abi } from 'viem'
 
-type Input = {
+export type GetErc721BalanceInput = {
   chain: EvmChain
   address: Address
   accountAddress: Address
@@ -12,7 +12,7 @@ export const getErc721Balance = async ({
   chain,
   address,
   accountAddress,
-}: Input) => {
+}: GetErc721BalanceInput) => {
   const publicClient = getEvmClient(chain)
 
   return publicClient.readContract({
