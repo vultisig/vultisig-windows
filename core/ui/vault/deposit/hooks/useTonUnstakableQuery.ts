@@ -17,9 +17,10 @@ export const useTonUnstakableQuery = ({
       if (!address) return 0n
 
       const data = await getTonBalance(address)
+      const pools = data.pools ?? []
 
       // Calculate total unstakeable amount from pools
-      const totalPoolAmount = data.pools.reduce((sum, pool) => {
+      const totalPoolAmount = pools.reduce((sum, pool) => {
         return sum + BigInt(pool.amount || '0')
       }, 0n)
 
