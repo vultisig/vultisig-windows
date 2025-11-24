@@ -13,7 +13,7 @@ import { DiscountTierMinBalance } from './minBalance'
 import { UnlockDiscountTier } from './unlock'
 
 type VultDiscountTierProps = ValueProp<VultDiscountTierType> & {
-  activeDiscountTier: VultDiscountTierType | undefined
+  activeDiscountTier: VultDiscountTierType | null
 }
 
 export const VultDiscountTier = ({

@@ -50,7 +50,7 @@ export const VultDiscountPage = () => {
                     <VultDiscountTier
                       key={tier}
                       value={tier}
-                      activeDiscountTier={activeDiscountTier ?? undefined}
+                      activeDiscountTier={activeDiscountTier}
                     />
                   ))}
                 </>
