@@ -95,23 +95,13 @@ export const UnlockDiscountTier = ({ value }: ValueProp<VultDiscountTier>) => {
               </Title>
             </VStack>
             <Description>
-              {value === 'ultimate' ? (
+              {
                 <Trans
-                  i18nKey="unlock_discount_tier_description_ultimate"
-                  values={{
-                    tier: t(value),
-                    minBalance: formatAmount(
-                      vultDiscountTierMinBalances[value],
-                      {
-                        ticker: `$${vult.ticker}`,
-                      }
-                    ),
-                  }}
-                  components={{ b: <b /> }}
-                />
-              ) : (
-                <Trans
-                  i18nKey="unlock_discount_tier_description"
+                  i18nKey={
+                    value === 'ultimate'
+                      ? 'unlock_discount_tier_description_ultimate'
+                      : 'unlock_discount_tier_description'
+                  }
                   values={{
                     tier: t(value),
                     minBalance: formatAmount(
@@ -124,7 +114,7 @@ export const UnlockDiscountTier = ({ value }: ValueProp<VultDiscountTier>) => {
                   }}
                   components={{ b: <b /> }}
                 />
-              )}
+              }
             </Description>
           </VStack>
         </Modal>
