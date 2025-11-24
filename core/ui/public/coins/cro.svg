@@ -1,25 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 26.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 120.1 138.8" style="enable-background:new 0 0 120.1 138.8;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:#002D74;}
-	.st1{fill:url(#SVGID_1_);}
-	.st2{fill:url(#SVGID_00000061444671184501762360000006264132297249298069_);}
-</style>
-<path class="st0" d="M60.1,0L0,34.7v69.4l60.1,34.7l60-34.7V34.7L60.1,0z M102.3,93.8l-42.3,24.4L17.8,93.8V45l42.3-24.4L102.3,45
-	V93.8z"/>
-<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="90.1166" y1="1.0868" x2="90.1166" y2="70.4884" gradientTransform="matrix(1 0 0 -1 0 139.8898)">
-	<stop  offset="0" style="stop-color:#002D74"/>
-	<stop  offset="1" style="stop-color:#002D74;stop-opacity:0"/>
-</linearGradient>
-<path class="st1" d="M60.1,138.8l60-34.7V34.7L60.1,0v20.6L102.3,45v48.9l-42.3,24.4V138.8z"/>
-<linearGradient id="SVGID_00000034064843000503835000000005854543727190432132_" gradientUnits="userSpaceOnUse" x1="30.0233" y1="139.8898" x2="30.0233" y2="70.4884" gradientTransform="matrix(1 0 0 -1 0 139.8898)">
-	<stop  offset="0" style="stop-color:#002D74"/>
-	<stop  offset="1" style="stop-color:#002D74;stop-opacity:0"/>
-</linearGradient>
-<path style="fill:url(#SVGID_00000034064843000503835000000005854543727190432132_);" d="M60,0L0,34.7v69.4l60,34.7v-20.6L17.8,93.8
-	V44.9L60,20.6V0z"/>
-<path class="st0" d="M88.1,85.6l-28,16.2L32,85.6V53.2L60.1,37l28,16.2L76.4,60l-16.4-9.5L43.7,60v18.9l16.4,9.5l16.4-9.5L88.1,85.6
-	z"/>
+<svg width="21" height="24" viewBox="0 0 21 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_48948_109734)">
+<path d="M6.2816 5.51562H13.884L14.8002 9.39092H5.40137L6.2816 5.51562ZM11.7536 12.1396L12.5647 9.9768H7.64466L8.47266 12.1396L8.21925 14.5679H10.0969L11.9887 14.5573L11.7536 12.1396Z" fill="white"/>
+<path d="M14.8161 10.7109L12.5911 12.1601V14.7338L10.8892 16.3665V17.1345L12.529 18.6443H13.8998L17.3558 12.6232L14.8161 10.7109ZM7.63442 12.1601L5.38124 10.7286L2.83301 12.6232L6.30666 18.6613H7.69513L9.33489 17.1345V16.3665L7.63371 14.7338L7.63442 12.1601Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0.0261176 6.16097L10.0871 0.351562L20.1741 6.17509V17.8207L10.0892 23.6457L10.0631 23.6316L0 17.8222V6.17509L0.0261176 6.16097ZM10.0871 1.54027L1.03059 6.77086V17.2292L10.0871 22.4584L19.1449 17.2292V6.77156L10.0871 1.54027Z" fill="white"/>
+</g>
+<defs>
+<clipPath id="clip0_48948_109734">
+<rect width="20.4706" height="24" fill="white"/>
+</clipPath>
+</defs>
 </svg>
