@@ -59,7 +59,9 @@ export const UnlockDiscountTier = ({ value }: ValueProp<VultDiscountTier>) => {
   return (
     <Opener
       renderOpener={({ onOpen }) => (
-        <Button onClick={onOpen}>{t('unlock_tier')}</Button>
+        <Button kind="outlined" onClick={onOpen}>
+          {t('unlock_tier')}
+        </Button>
       )}
       renderContent={({ onClose }) => (
         <Modal
