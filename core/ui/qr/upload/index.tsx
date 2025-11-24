@@ -1,3 +1,4 @@
+import { getVaultId } from '@core/mpc/vault/Vault'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
@@ -6,23 +7,12 @@ import { UploadQrView } from '@core/ui/qr/components/UploadQrView'
 import { useDeriveChainFromWalletAddress } from '@core/ui/qr/hooks/useDeriveChainFromWalletAddress'
 import { useCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { useVaults } from '@core/ui/storage/vaults'
-import { getVaultId } from '@core/ui/vault/Vault'
 import { Match } from '@lib/ui/base/Match'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { useToast } from '@lib/ui/toast/ToastProvider'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { createGlobalStyle } from 'styled-components'
-
-const GlobalStyle = createGlobalStyle`
-  body {
-    background-image: url('/core/images/scanQRCodeBackground.png');
-    background-position: 0% 40%;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-`
 
 export const UploadQrPage = () => {
   const { t } = useTranslation()
@@ -51,7 +41,7 @@ export const UploadQrPage = () => {
         if (coin) {
           navigate({ id: 'send', state: { coin, address: value } })
         } else {
-          addToast({ message: t('coin_not_found_in_current_vault') })
+          addToast({ message: t('failed_to_read_qr_code') })
         }
       } else {
         navigate({ id: 'deeplink', state: { url: value } })
@@ -80,10 +70,14 @@ export const UploadQrPage = () => {
               onFinish={onScanSuccess}
             />
           )}
-          upload={() => <UploadQrView />}
+          upload={() => (
+            <UploadQrView
+              title={t('upload_qr_code_to_join_keysign')}
+              onFinish={onScanSuccess}
+            />
+          )}
         />
       </VStack>
-      <GlobalStyle />
     </>
   )
 }

@@ -1,8 +1,8 @@
 import { fromBinary } from '@bufbuild/protobuf'
 import { fromCommVault } from '@core/mpc/types/utils/commVault'
 import { VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
+import { Vault } from '@core/mpc/vault/Vault'
 import { DecryptVaultView } from '@core/ui/vault/import/components/DecryptVaultView'
-import { Vault } from '@core/ui/vault/Vault'
 import { OnFinishProp, ValueProp } from '@lib/ui/props'
 import { decryptWithAesGcm } from '@lib/utils/encryption/aesGcm/decryptWithAesGcm'
 import { fromBase64 } from '@lib/utils/fromBase64'
@@ -13,7 +13,7 @@ export const DecryptVaultContainerStep = ({
   value,
   onFinish,
 }: ValueProp<string> & OnFinishProp<Vault>) => {
-  const { mutate, error, isPending } = useMutation({
+  const mutation = useMutation({
     mutationFn: async (password: string) =>
       pipe(
         value,
@@ -31,7 +31,5 @@ export const DecryptVaultContainerStep = ({
     onSuccess: onFinish,
   })
 
-  return (
-    <DecryptVaultView isPending={isPending} error={error} onSubmit={mutate} />
-  )
+  return <DecryptVaultView mutation={mutation} />
 }

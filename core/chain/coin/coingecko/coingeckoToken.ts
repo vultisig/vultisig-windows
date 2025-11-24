@@ -7,3 +7,11 @@ export type SolanaCoingeckoTokenResponse = {
     }
   }
 }
+
+export type SolanaFmTokenResponse = {
+  tokenList?: {
+    extensions?: {
+      coingeckoId?: string
+    } | null
+  } | null
+}

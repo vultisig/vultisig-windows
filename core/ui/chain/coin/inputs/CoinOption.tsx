@@ -16,7 +16,7 @@ import { IsActiveProp, OnClickProp, ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { formatAmount } from '@lib/utils/formatAmount'
 import styled from 'styled-components'
 
 export const CoinOption = ({
@@ -91,8 +91,7 @@ export const CoinOption = ({
                   color="contrast"
                   weight={500}
                 >
-                  {formatTokenAmount(fromChainAmount(balance, decimals))}
-                  {` ${ticker}`}
+                  {formatAmount(fromChainAmount(balance, decimals), { ticker })}
                 </Text>
               </VStack>
               <VStack flexGrow alignItems="flex-end">

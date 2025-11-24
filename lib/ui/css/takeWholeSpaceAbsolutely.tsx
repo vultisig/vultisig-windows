@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components'
 
 import { takeWholeSpace } from './takeWholeSpace'
 
-const takeWholeSpaceAbsolutely = css`
+export const takeWholeSpaceAbsolutely = css`
   position: absolute;
   left: 0;
   top: 0;

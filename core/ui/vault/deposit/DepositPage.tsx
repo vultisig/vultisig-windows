@@ -1,15 +1,19 @@
-import { useCoreViewState } from '../../navigation/hooks/useCoreViewState'
-import { useCurrentVaultCoin } from '../state/currentVaultCoins'
-import { DepositFlowController } from './DepositFlowController'
-import { DepositCoinProvider } from './providers/DepositCoinProvider'
+import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
+import { FieldValues } from 'react-hook-form'
+
+import { DepositForm } from './DepositForm'
+import { DepositVerify } from './DepositVerify'
+import { DepositDataProvider } from './state/data'
 
 export const DepositPage = () => {
-  const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
-  const coin = useCurrentVaultCoin(coinKey)
-
   return (
-    <DepositCoinProvider initialValue={coin}>
-      <DepositFlowController />
-    </DepositCoinProvider>
+    <ValueTransfer<FieldValues>
+      from={({ onFinish }) => <DepositForm onSubmit={onFinish} />}
+      to={({ value, onBack }) => (
+        <DepositDataProvider value={value}>
+          <DepositVerify onBack={onBack} />
+        </DepositDataProvider>
+      )}
+    />
   )
 }

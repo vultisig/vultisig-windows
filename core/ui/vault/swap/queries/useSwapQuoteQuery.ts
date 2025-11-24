@@ -1,100 +1,68 @@
-import { CoinKey } from '@core/chain/coin/Coin'
 import { swapConfig } from '@core/chain/swap/config'
-import { nativeSwapAffiliateConfig } from '@core/chain/swap/native/nativeSwapAffiliateConfig'
-import { AffiliateParam } from '@core/chain/swap/native/NativeSwapQuote'
-import { findSwapQuote } from '@core/chain/swap/quote/findSwapQuote'
+import {
+  findSwapQuote,
+  FindSwapQuoteInput,
+} from '@core/chain/swap/quote/findSwapQuote'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
-import { without } from '@lib/utils/array/without'
 
-import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
-import { useActiveReferralQuery } from '../../settings/referral/hooks/useActiveReferralQuery'
+import { useAssertCurrentVaultId } from '../../../storage/currentVaultId'
+import { useFriendReferralQuery } from '../../../storage/referrals'
 import { useFromAmount } from '../state/fromAmount'
-import { useToCoin } from '../state/toCoin'
+import { useSwapFromCoin } from '../state/fromCoin'
+import { useSwapToCoin } from '../state/toCoin'
+import { useSwapAffiliateBpsQuery } from './useSwapAffiliateBpsQuery'
 
-type GetSwapQuoteQueryKey = {
-  fromCoinKey: CoinKey
-  toCoinKey: CoinKey
-  fromAmount: number
-  referralKey?: string
-}
-
-export const getSwapQuoteQueryKey = ({
-  fromCoinKey,
-  toCoinKey,
-  fromAmount,
-  referralKey,
-}: GetSwapQuoteQueryKey) =>
-  without(
-    ['swapQuote', fromCoinKey, toCoinKey, fromAmount, referralKey],
-    null,
-    undefined
-  )
+export const swapQuoteQueryKeyPrefix = 'swapQuote'
 
 export const useSwapQuoteQuery = () => {
-  const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
-  const [toCoinKey] = useToCoin()
+  const [fromCoinKey] = useSwapFromCoin()
+  const [toCoinKey] = useSwapToCoin()
   const [fromAmount] = useFromAmount()
-  const activeReferralQuery = useActiveReferralQuery()
-  const activeReferral = activeReferralQuery.data
+  const vaultId = useAssertCurrentVaultId()
+  const referralQuery = useFriendReferralQuery(vaultId)
 
   const fromCoin = useCurrentVaultCoin(fromCoinKey)
   const toCoin = useCurrentVaultCoin(toCoinKey)
 
-  const fromCoinUsdPrice = useCoinPriceQuery({
-    coin: fromCoin,
+  const fromCoinUsdPriceQuery = useCoinPriceQuery({
+    coin: fromCoinKey,
     fiatCurrency: 'usd',
   })
+
+  const appAffiliateBpsQuery = useSwapAffiliateBpsQuery()
+
+  // If the price fails to load, proceed without the affiliate.
+  const fromCoinUsdPrice = fromCoinUsdPriceQuery.error
+    ? null
+    : fromCoinUsdPriceQuery.data
 
   return useStateDependentQuery(
     {
       fromAmount: fromAmount || undefined,
-      fromCoinUsdPrice: fromCoinUsdPrice.data,
-      activeReferral,
+      fromCoinUsdPrice,
+      referral: referralQuery.data,
+      affiliateBps: appAffiliateBpsQuery.data,
     },
-    ({ fromAmount, fromCoinUsdPrice, activeReferral }) => ({
-      queryKey: getSwapQuoteQueryKey({
-        fromCoinKey,
-        toCoinKey,
-        fromAmount,
-        referralKey: activeReferral.hasReferral
-          ? `${activeReferral.savedReferralName}:${activeReferral.appAffiliateBps}:${activeReferral.referrerBps}`
-          : `none:${activeReferral.appAffiliateBps}`,
-      }),
-      queryFn: async () => {
-        const { hasReferral, savedReferralName, appAffiliateBps, referrerBps } =
-          activeReferral
+    ({ fromAmount, fromCoinUsdPrice, referral, affiliateBps }) => {
+      const isAffiliate =
+        fromCoinUsdPrice &&
+        fromAmount * fromCoinUsdPrice >= swapConfig.minUsdAffiliateAmount
 
-        const usdAmount = fromAmount * fromCoinUsdPrice
-        const isAffiliate = usdAmount >= swapConfig.minUsdAffiliateAmount
+      const input: FindSwapQuoteInput = {
+        from: fromCoin,
+        to: toCoin,
+        amount: fromAmount,
+        referral: referral ?? undefined,
+        affiliateBps: isAffiliate ? affiliateBps : undefined,
+      }
 
-        const affiliates: AffiliateParam[] = hasReferral
-          ? [
-              {
-                name: nativeSwapAffiliateConfig.affiliateFeeAddress,
-                bps: isAffiliate ? appAffiliateBps : 0,
-              },
-              {
-                name: savedReferralName,
-                bps: isAffiliate ? referrerBps : 0,
-              },
-            ]
-          : [
-              {
-                name: nativeSwapAffiliateConfig.affiliateFeeAddress,
-                bps: isAffiliate ? appAffiliateBps : 0,
-              },
-            ]
-
-        return findSwapQuote({
-          from: fromCoin,
-          to: toCoin,
-          amount: fromAmount,
-          affiliates,
-        })
-      },
-      retry: false,
-    })
+      return {
+        queryKey: [swapQuoteQueryKeyPrefix, input],
+        queryFn: async () => findSwapQuote(input),
+        retry: false,
+      }
+    }
   )
 }

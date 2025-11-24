@@ -1,6 +1,11 @@
 import { EvmChain } from '@core/chain/Chain'
 
-export const evmNativeTokenGasLimit: Record<EvmChain, bigint> = {
+import { CoinKey } from '../../../coin/Coin'
+
+const zkSyncTransferGasLimit = 200000n
+const mantleTransferGasLimit = 90_000_000n
+
+const feeCoinTransferGasLimit: Record<EvmChain, bigint> = {
   [EvmChain.Ethereum]: 23000n,
   [EvmChain.Base]: 40000n,
   [EvmChain.Arbitrum]: 120000n,
@@ -10,23 +15,40 @@ export const evmNativeTokenGasLimit: Record<EvmChain, bigint> = {
   [EvmChain.Blast]: 40000n,
   [EvmChain.BSC]: 40000n,
   [EvmChain.Avalanche]: 23000n,
-  [EvmChain.Zksync]: 200000n,
-  [EvmChain.Mantle]: 90_000_000n,
+  [EvmChain.Zksync]: zkSyncTransferGasLimit,
+  [EvmChain.Mantle]: mantleTransferGasLimit,
+  [EvmChain.Hyperliquid]: 23000n,
+  [EvmChain.Sei]: 30_000n,
 }
 
-export const evmTokenGasLimit: Record<EvmChain, bigint> = {
-  [EvmChain.Ethereum]: 120000n,
-  [EvmChain.Base]: 120000n,
-  [EvmChain.Arbitrum]: 120000n,
-  [EvmChain.Polygon]: 120000n,
-  [EvmChain.Optimism]: 120000n,
-  [EvmChain.CronosChain]: 120000n,
-  [EvmChain.Blast]: 120000n,
-  [EvmChain.BSC]: 120000n,
-  [EvmChain.Avalanche]: 120000n,
-  [EvmChain.Zksync]: 200000n,
-  [EvmChain.Mantle]: 90_000_000n,
+const defaultErc20TransferGasLimit = 120_000n
+
+const erc20TransferGasLimit: Record<EvmChain, bigint> = {
+  [EvmChain.Ethereum]: defaultErc20TransferGasLimit,
+  [EvmChain.Base]: defaultErc20TransferGasLimit,
+  [EvmChain.Arbitrum]: defaultErc20TransferGasLimit,
+  [EvmChain.Polygon]: defaultErc20TransferGasLimit,
+  [EvmChain.Optimism]: defaultErc20TransferGasLimit,
+  [EvmChain.CronosChain]: defaultErc20TransferGasLimit,
+  [EvmChain.Blast]: defaultErc20TransferGasLimit,
+  [EvmChain.BSC]: defaultErc20TransferGasLimit,
+  [EvmChain.Avalanche]: defaultErc20TransferGasLimit,
+  [EvmChain.Zksync]: zkSyncTransferGasLimit,
+  [EvmChain.Mantle]: mantleTransferGasLimit,
+  [EvmChain.Hyperliquid]: defaultErc20TransferGasLimit,
+  [EvmChain.Sei]: defaultErc20TransferGasLimit,
 }
 
-export const getEvmSwapGasLimit = (chain: EvmChain): number =>
-  chain === EvmChain.Mantle ? 1_500_000_000 : 600_000
+type DeriveEvmGasLimitInput = {
+  coin: CoinKey<EvmChain>
+  data?: string
+}
+
+export const deriveEvmGasLimit = ({ coin, data }: DeriveEvmGasLimitInput) => {
+  const { id, chain } = coin
+  if (data) {
+    return chain === EvmChain.Mantle ? 3_00_000_0000n : 600_000n
+  }
+
+  return (id ? erc20TransferGasLimit : feeCoinTransferGasLimit)[chain]
+}

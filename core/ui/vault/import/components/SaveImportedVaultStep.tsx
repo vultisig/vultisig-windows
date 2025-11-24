@@ -1,23 +1,26 @@
+import { getVaultId, Vault } from '@core/mpc/vault/Vault'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { useVaultOrders, useVaults } from '@core/ui/storage/vaults'
 import { useVaultBackupOverride } from '@core/ui/vault/import/state/vaultBackupOverride'
 import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
-import { getVaultId, Vault } from '@core/ui/vault/Vault'
 import { ValueProp } from '@lib/ui/props'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FlowErrorPageContent } from '../../../flow/FlowErrorPageContent'
 
-export const SaveImportedVaultStep = ({ value }: ValueProp<Vault>) => {
+export const SaveImportedVaultStep = ({
+  value,
+  onFinish,
+}: ValueProp<Vault> & { onFinish?: () => void }) => {
   const { t } = useTranslation()
   const { client } = useCore()
   const navigate = useCoreNavigate()
   const override = useVaultBackupOverride()
 
-  const vaults = useVaults()
+  const initialVaults = useRef(useVaults()).current
 
   const vaultOrders = useVaultOrders()
 
@@ -30,13 +33,13 @@ export const SaveImportedVaultStep = ({ value }: ValueProp<Vault>) => {
   )
 
   const error = useMemo(() => {
-    if (vaults.find(v => getVaultId(v) === getVaultId(finalValue))) {
+    if (initialVaults.find(v => getVaultId(v) === getVaultId(finalValue))) {
       return t('vault_already_exists')
     }
     if (client === 'extension' && value.libType === 'GG20') {
       return t('extension_vault_import_restriction')
     }
-  }, [client, finalValue, t, value.libType, vaults])
+  }, [client, finalValue, t, value.libType, initialVaults])
 
   if (error) {
     return (
@@ -44,10 +47,18 @@ export const SaveImportedVaultStep = ({ value }: ValueProp<Vault>) => {
     )
   }
 
+  const handleFinish = () => {
+    if (onFinish) {
+      onFinish()
+      return
+    }
+    navigate({ id: 'vault' })
+  }
+
   return (
     <SaveVaultStep
       onBack={() => navigate({ id: 'vault' })}
-      onFinish={() => navigate({ id: 'vault' })}
+      onFinish={handleFinish}
       value={finalValue}
       title={t('import_vault')}
     />

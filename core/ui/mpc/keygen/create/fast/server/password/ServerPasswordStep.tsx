@@ -1,8 +1,8 @@
+import { passwordLengthConfig } from '@core/config/password'
 import { getVaultFromServer } from '@core/mpc/fast/api/getVaultFromServer'
+import { getVaultId } from '@core/mpc/vault/Vault'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { passwordLenghtConfig } from '@core/ui/security/password/config'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { getVaultId } from '@core/ui/vault/Vault'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
@@ -20,13 +20,13 @@ import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 
 const createSchema = (t: TFunction) => {
-  const message = t('password_pattern_error', passwordLenghtConfig)
+  const message = t('password_pattern_error', passwordLengthConfig)
 
   return z.object({
     password: z
       .string()
-      .min(passwordLenghtConfig.min, message)
-      .max(passwordLenghtConfig.max, message),
+      .min(passwordLengthConfig.min, message)
+      .max(passwordLengthConfig.max, message),
   })
 }
 

@@ -1,0 +1,12 @@
+---
+alwaysApply: false
+---
+
+Run yarn check until clean.
+
+- When this rule is present, always run the command below. No heuristics or skipping.
+- If it fails, fix issues and rerun. Repeat until it exits with no errors.
+
+```bash
+yarn check
+```

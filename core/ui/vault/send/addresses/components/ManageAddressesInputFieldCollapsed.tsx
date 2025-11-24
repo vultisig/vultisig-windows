@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { SendInputContainer } from '../../components/SendInputContainer'
+import { useSendValidationQuery } from '../../queries/useSendValidationQuery'
 import { useSendFormFieldState } from '../../state/formFields'
 import { useSendReceiver } from '../../state/receiver'
 import { SendFormIconsWrapper } from './SendFormIconsWrapper'
@@ -16,13 +17,10 @@ export const ManageAddressesInputFieldCollapsed = () => {
   const { t } = useTranslation()
   const [address] = useSendReceiver()
 
-  const [
-    {
-      field,
-      errors: { receiverAddress: addressError },
-    },
-    setFocusedSendField,
-  ] = useSendFormFieldState()
+  const [{ field }, setFocusedSendField] = useSendFormFieldState()
+
+  const { data } = useSendValidationQuery()
+  const addressError = data?.receiverAddress
 
   const isOpen = field === 'address'
   const isChecked = address && !isOpen && !addressError

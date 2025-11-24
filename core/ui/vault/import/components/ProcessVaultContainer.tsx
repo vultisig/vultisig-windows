@@ -2,8 +2,8 @@ import { fromBinary } from '@bufbuild/protobuf'
 import { fromCommVault } from '@core/mpc/types/utils/commVault'
 import { VaultContainer } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
 import { VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
+import { Vault } from '@core/mpc/vault/Vault'
 import { DecryptVaultContainerStep } from '@core/ui/vault/import/components/DecryptVaultContainerStep'
-import { Vault } from '@core/ui/vault/Vault'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { ValueProp } from '@lib/ui/props'
 import { fromBase64 } from '@lib/utils/fromBase64'
@@ -11,18 +11,23 @@ import { pipe } from '@lib/utils/pipe'
 
 import { SaveImportedVaultStep } from './SaveImportedVaultStep'
 
-export const ProcessVaultContainer = ({ value }: ValueProp<VaultContainer>) => {
+export const ProcessVaultContainer = ({
+  value,
+  onFinish,
+}: ValueProp<VaultContainer> & { onFinish?: () => void }) => {
   const { vault: vaultAsBase64String, isEncrypted } = value
   if (isEncrypted) {
     return (
       <ValueTransfer<Vault>
-        from={({ onFinish }) => (
+        from={({ onFinish: resolve }) => (
           <DecryptVaultContainerStep
             value={vaultAsBase64String}
-            onFinish={onFinish}
+            onFinish={resolve}
           />
         )}
-        to={({ value }) => <SaveImportedVaultStep value={value} />}
+        to={({ value }) => (
+          <SaveImportedVaultStep value={value} onFinish={onFinish} />
+        )}
       />
     )
   }
@@ -36,5 +41,5 @@ export const ProcessVaultContainer = ({ value }: ValueProp<VaultContainer>) => {
     vault => ({ ...vault, isBackedUp: true })
   )
 
-  return <SaveImportedVaultStep value={vault} />
+  return <SaveImportedVaultStep value={vault} onFinish={onFinish} />
 }

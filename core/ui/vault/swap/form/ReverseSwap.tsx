@@ -1,5 +1,4 @@
-import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
-import { useToCoin } from '@core/ui/vault/swap/state/toCoin'
+import { useSwapToCoin } from '@core/ui/vault/swap/state/toCoin'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
@@ -11,26 +10,24 @@ import { getColor } from '@lib/ui/theme/getters'
 import { motion, useReducedMotion } from 'framer-motion'
 import styled from 'styled-components'
 
-import { useSwapFormStates } from './hooks/useSwapFormStates'
+import { useSwapQuoteQuery } from '../queries/useSwapQuoteQuery'
+import { useSwapFromCoin } from '../state/fromCoin'
 
 export const ReverseSwap = () => {
-  const [{ coin: fromCoin }, setViewState] = useCoreViewState<'swap'>()
-  const [toCoin, setToCoin] = useToCoin()
-  const { isLoading } = useSwapFormStates()
+  const [fromCoinKey, setFromCoinKey] = useSwapFromCoin()
+  const [toCoin, setToCoin] = useSwapToCoin()
+  const { isPending } = useSwapQuoteQuery()
   const prefersReducedMotion = useReducedMotion()
 
   return (
     <Wrapper justifyContent="center" alignItems="center">
       <Button
         onClick={() => {
-          setViewState(prev => ({
-            ...prev,
-            coin: toCoin,
-          }))
-          setToCoin(fromCoin)
+          setFromCoinKey(toCoin)
+          setToCoin(fromCoinKey)
         }}
       >
-        {isLoading ? (
+        {isPending ? (
           <motion.span
             key="spinner"
             role="img"

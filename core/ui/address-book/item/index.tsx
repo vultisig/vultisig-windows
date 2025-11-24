@@ -5,15 +5,15 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useDeleteAddressBookItemMutation } from '@core/ui/storage/addressBook'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
-import { MenuIcon } from '@lib/ui/icons/MenuIcon'
-import { TrashIcon } from '@lib/ui/icons/TrashIcon'
+import { GripVerticalIcon } from '@lib/ui/icons/GripVerticalIcon'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { TrashIcon2 } from '@lib/ui/icons/TrashIcon2'
+import { HStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
-import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { FC } from 'react'
-import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
 
 type AddressBookListItemProps = {
   isEditMode?: boolean
@@ -25,39 +25,48 @@ export const AddressBookListItem: FC<AddressBookListItemProps> = ({
   onSelect,
   ...values
 }) => {
-  const { t } = useTranslation()
   const { address, chain, id, title } = values
   const { mutate } = useDeleteAddressBookItemMutation()
   const navigate = useCoreNavigate()
+  const { colors } = useTheme()
 
   return isEditMode ? (
-    <StyledListItem
-      description={<MiddleTruncate text={address} width={80} />}
-      extra={
-        <>
-          <Text color="shy">{`${chain} ${t('network')}`}</Text>
-          <IconButton onClick={() => mutate(id)} status="danger">
-            <TrashIcon />
-          </IconButton>
-        </>
-      }
-      icon={
-        <>
-          <MenuIcon fontSize={20} />
+    <HStack alignItems="center" gap={5}>
+      <IconWrapper size={23} color="textShy">
+        <GripVerticalIcon />
+      </IconWrapper>
+      <StyledListItem
+        style={{
+          flex: 1,
+          background: colors.foreground.toCssValue(),
+        }}
+        description={<MiddleTruncate text={address} width={200} />}
+        extra={
+          <>
+            <IconButton
+              style={{
+                color: colors.textShy.toCssValue(),
+              }}
+              onClick={() => mutate(id)}
+            >
+              <TrashIcon2 />
+            </IconButton>
+          </>
+        }
+        icon={
           <ChainEntityIcon
             value={getChainLogoSrc(chain)}
             style={{ fontSize: 32 }}
           />
-        </>
-      }
-      key={id}
-      title={title}
-      hoverable
-    />
+        }
+        key={id}
+        title={title}
+        hoverable
+      />
+    </HStack>
   ) : (
     <StyledListItem
-      description={<MiddleTruncate text={address} width={80} />}
-      extra={<Text color="shy">{`${chain} ${t('network')}`}</Text>}
+      description={<MiddleTruncate text={address} width={200} />}
       icon={
         <ChainEntityIcon
           value={getChainLogoSrc(chain)}

@@ -1,50 +1,40 @@
 import { create } from '@bufbuild/protobuf'
-import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { UtxoChain } from '@core/chain/Chain'
-import { getUtxoStats } from '@core/chain/chains/utxo/client/getUtxoStats'
-import { getCoinBalance } from '@core/chain/coin/balance'
-import { adjustByteFee } from '@core/chain/tx/fee/utxo/adjustByteFee'
-import { UtxoFeeSettings } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
+import { getUtxoByteFee } from '@core/chain/chains/utxo/fee/byteFee'
 import {
-  UTXOSpecific,
-  UTXOSpecificSchema,
-} from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+  byteFeeMultiplier,
+  UtxoFeeSettings,
+} from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
+import { UTXOSpecificSchema } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+import { multiplyBigInt } from '@lib/utils/bigint/bigIntMultiplyByNumber'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
-import { ChainSpecificResolver } from '../resolver'
+import { getKeysignCoin } from '../../utils/getKeysignCoin'
+import { GetChainSpecificResolver } from '../resolver'
 
-const dustStats = 600n
+export const getUtxoChainSpecific: GetChainSpecificResolver<
+  'utxoSpecific'
+> = async ({ keysignPayload, feeSettings, psbt }) => {
+  const coin = getKeysignCoin<UtxoChain>(keysignPayload)
 
-const getByteFee = async (chain: UtxoChain) => {
-  if (chain === UtxoChain.Zcash) {
-    return 1000
+  const getByteFee = () => {
+    if (feeSettings) {
+      return matchRecordUnion<UtxoFeeSettings, Promise<bigint>>(feeSettings, {
+        byteFee: async value => value,
+        priority: async priority =>
+          multiplyBigInt(
+            await getUtxoByteFee(coin.chain),
+            byteFeeMultiplier[priority]
+          ),
+      })
+    }
+
+    return getUtxoByteFee(coin.chain)
   }
 
-  const { data } = await getUtxoStats(chain)
-  return data.suggested_transaction_fee_per_byte_sat
-}
-
-export const getUtxoSpecific: ChainSpecificResolver<
-  UTXOSpecific,
-  UtxoFeeSettings
-> = async ({ coin, feeSettings, amount, psbt }) => {
-  const chain = coin.chain as UtxoChain
-
-  let byteFee = await getByteFee(chain)
-  if (feeSettings) {
-    byteFee = adjustByteFee(byteFee, feeSettings)
-  }
-
-  const result = create(UTXOSpecificSchema, {
-    byteFee: byteFee.toString(),
-
+  return create(UTXOSpecificSchema, {
     psbt: psbt?.toBase64(),
+    sendMaxAmount: false,
+    byteFee: (await getByteFee()).toString(),
   })
-
-  if (amount) {
-    const balance = await getCoinBalance(coin)
-    const requested = toChainAmount(amount, coin.decimals)
-    result.sendMaxAmount = balance - requested <= dustStats
-  }
-
-  return result
 }

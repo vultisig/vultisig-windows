@@ -16,7 +16,7 @@ export const ReferralLanding = ({ onFinish }: OnFinishProp) => {
       <Overlay />
       <Wrapper gap={24} flexGrow justifyContent="flex-end">
         <ImageWrapper justifyContent="flex-end">
-          <PositionedImage src="/core/images/referrals_landing.svg" alt="" />
+          <PositionedImage src="/core/images/referrals-landing.png" alt="" />
         </ImageWrapper>
         <ContentWrapper gap={24}>
           <VStack gap={12}>
@@ -29,7 +29,9 @@ export const ReferralLanding = ({ onFinish }: OnFinishProp) => {
                 }}
               />
             </Text>
-            <Text centerHorizontally>{t('share_description')}</Text>
+            <Text size={14} centerHorizontally color="shyExtra">
+              {t('share_description')}
+            </Text>
           </VStack>
           <ButtonWrapper>
             <Button onClick={onFinish}>{t('next')}</Button>
@@ -41,21 +43,23 @@ export const ReferralLanding = ({ onFinish }: OnFinishProp) => {
 }
 
 const Wrapper = styled(VStack)`
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: calc(100vw - 32px);
+  position: fixed;
+  bottom: 0;
+  left: 0;
   padding: 0 36px 36px 36px;
-  min-height: 460px;
+  height: 500px;
   background-color: ${getColor('foregroundExtra')};
   ${borderRadius.m}
   overflow: hidden;
 
   @media (${mediaQuery.tabletDeviceAndUp}) {
+    width: calc(100vw - 32px);
     max-width: 580px;
-    height: 500px;
+    height: 380px;
+    transform: translateY(-50%);
     margin-inline: auto;
     left: 50%;
+    top: 50%;
     transform: translate(-50%, -50%);
     flex-grow: 0;
   }
@@ -77,7 +81,7 @@ const PositionedImage = styled.img`
 
 const ImageWrapper = styled(VStack)`
   position: absolute;
-  top: -52.9%;
+  top: -35%;
   left: 50%;
   transform: translateX(-50%);
   width: 213px;
@@ -87,6 +91,7 @@ const ImageWrapper = styled(VStack)`
     0px -1.071px 4.283px 0px rgba(255, 255, 255, 0.2) inset,
     -2.142px 0px 5.14px -3.212px rgba(255, 255, 255, 0.4) inset;
   border-radius: 36.834px;
+  opacity: 0.75;
 
   &::before {
     border-radius: 36.834px;
@@ -101,7 +106,7 @@ const ImageWrapper = styled(VStack)`
   }
 
   @media (${mediaQuery.tabletDeviceAndUp}) {
-    top: -45%;
+    top: -60%;
   }
 `
 

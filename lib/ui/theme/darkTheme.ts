@@ -10,6 +10,7 @@ export const darkTheme: DefaultTheme = {
 
     text: new HSLA(220, 67, 96),
     textSupporting: new HSLA(211, 10, 43),
+    // Text/Tertiary
     textShy: new HSLA(214, 21, 60),
     textShyExtra: new HSLA(214, 40, 85, 1),
 
@@ -17,14 +18,18 @@ export const darkTheme: DefaultTheme = {
     primaryAlt: new HSLA(224, 98, 64),
     success: new HSLA(166, 83, 43),
     danger: new HSLA(0, 100, 68),
+    dangerBackground: new HSLA(0, 43, 12),
     idle: new HSLA(38, 100, 68),
     idleDark: new HSLA(39, 40, 15),
     info: new HSLA(212, 100, 68),
 
     background: new HSLA(217, 91, 9),
+    // Backgrounds/surface-1
     foreground: new HSLA(216, 81, 13),
     foregroundDark: new HSLA(213, 80, 14),
+    // Backgrounds/surface-2
     foregroundExtra: new HSLA(216, 63, 18),
+    // Borders/Normal
     foregroundSuper: new HSLA(215, 62, 28),
     foregroundSuperContrast: new HSLA(207, 42, 40),
 
@@ -39,6 +44,7 @@ export const darkTheme: DefaultTheme = {
     buttonHover: new HSLA(215, 75, 47),
     buttonTextDisabled: new HSLA(216, 15, 52),
     primaryAccentTwo: new HSLA(224, 96, 40),
+    primaryAccentFour: new HSLA(224, 96, 64),
 
     transparent: new HSLA(0, 0, 0, 0),
     white: new HSLA(0, 0, 100),

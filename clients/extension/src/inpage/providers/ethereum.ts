@@ -8,6 +8,7 @@ import {
 } from '@core/chain/chains/evm/chainInfo'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { callBackground } from '@core/inpage-provider/background'
+import { BackgroundError } from '@core/inpage-provider/background/error'
 import { addBackgroundEventListener } from '@core/inpage-provider/background/events/inpage'
 import { callPopup } from '@core/inpage-provider/popup'
 import { Eip712V4Payload } from '@core/inpage-provider/popup/interface'
@@ -114,6 +115,9 @@ export class Ethereum extends EventEmitter {
     }
     return this
   }
+  enable = () => {
+    return this.request({ method: 'eth_requestAccounts', params: [] })
+  }
 
   async request(data: RequestInput) {
     const getChain = async () => {
@@ -129,9 +133,16 @@ export class Ethereum extends EventEmitter {
         throw new EIP1193Error('UnrecognizedChain')
       }
 
-      await callBackground({
-        setAppChain: { evm: chain },
-      })
+      const { error } = await attempt(async () =>
+        callBackground({ setAppChain: { evm: chain } })
+      )
+      if (error) {
+        if (error === BackgroundError.Unauthorized) {
+          await callBackground({ setVaultChain: { evm: chain } })
+        } else {
+          throw error
+        }
+      }
 
       this.emitUpdateNetwork({ chainId })
 
@@ -155,10 +166,13 @@ export class Ethereum extends EventEmitter {
           }),
           []
         ),
-      eth_requestAccounts: async () => {
+      eth_requestAccounts: async (
+        params?: [{ preselectFastVault?: boolean }]
+      ) => {
         const chain = await getChain()
+        const preselectFastVault = params?.[0]?.preselectFastVault
 
-        const { address } = await requestAccount(chain)
+        const { address } = await requestAccount(chain, { preselectFastVault })
 
         return [address]
       },
@@ -284,26 +298,25 @@ export class Ethereum extends EventEmitter {
       personal_sign: async ([rawMessage, account]: [string, string]) => {
         const chain = await getChain()
 
-        const message = isHexString(rawMessage)
+        const messageBytes = isHexString(rawMessage)
           ? getBytes(rawMessage)
           : new TextEncoder().encode(rawMessage)
 
-        const result = await callPopup(
+        const signature = await callPopup(
           {
             signMessage: {
               personal_sign: {
+                bytesCount: messageBytes.length,
                 chain,
-                message: new TextDecoder().decode(message),
-                bytesCount: message.length,
+                message: rawMessage,
+                type: 'default',
               },
             },
           },
-          {
-            account,
-          }
+          { account }
         )
 
-        return processSignature(result)
+        return processSignature(signature)
       },
       eth_sendTransaction: async ([tx]: [RpcTransactionRequest]) => {
         const chain = await getChain()

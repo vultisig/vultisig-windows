@@ -7,12 +7,11 @@ import {
   useCurrentVaultAddresses,
   useCurrentVaultChainCoins,
 } from '../../state/currentVaultCoins'
-import { useDepositCoin } from '../providers/DepositCoinProvider'
 
 export const useMintOptions = () => {
   const coins = useCurrentVaultChainCoins(Chain.THORChain)
-  const [selectedCoin] = useDepositCoin()
-  const address = useCurrentVaultAddresses()[selectedCoin.chain]
+  const address = useCurrentVaultAddresses()[Chain.THORChain]
+
   const isTCYCoinInVault = coins.find(coin => coin.id === 'tcy')
   const factoredTCYCoin = useMemo(
     () => makeAccountCoin({ chain: Chain.THORChain, id: 'tcy' }, address),

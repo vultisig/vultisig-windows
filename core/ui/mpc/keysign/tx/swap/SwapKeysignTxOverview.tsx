@@ -7,7 +7,6 @@ import { KeysignSwapPayload } from '@core/mpc/keysign/swap/KeysignSwapPayload'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { SwapCoinItem } from '@core/ui/mpc/keysign/tx/swap/SwapCoinItem'
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
@@ -24,11 +23,13 @@ import { getLastItem } from '@lib/utils/array/getLastItem'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
+import { truncateId } from '@lib/utils/string/truncate'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { KeysignTxFee } from '../components/KeysignTxFee'
+import { TxFeeRow } from '../components/TxFeeRow'
+import { KeysignFeeAmount } from '../FeeAmount'
 import { TransactionSuccessAnimation } from '../TransactionSuccessAnimation'
 import { TrackTxPrompt } from './TrackTxPrompt'
 
@@ -39,8 +40,7 @@ export const SwapKeysignTxOverview = ({
   txHashes: string[]
 }) => {
   const { t } = useTranslation()
-  const { openUrl } = useCore()
-  const navigate = useCoreNavigate()
+  const { openUrl, goHome } = useCore()
   const vault = useCurrentVault()
   const { coin: potentialFromCoin } = value
   const swapPayload = shouldBePresent(getKeysignSwapPayload(value))
@@ -126,18 +126,10 @@ export const SwapKeysignTxOverview = ({
               {t('from')}
             </Text>
 
-            <Text
-              style={{
-                width: 170,
-              }}
-              weight={500}
-              size={14}
-              color="contrast"
-              cropped
-            >
+            <Text weight={500} size={14} color="contrast">
               {vault.name}{' '}
               <Text cropped as="span" color="shy">
-                ({fromCoin.address})
+                ({truncateId(fromCoin.address)})
               </Text>
             </Text>
           </HStack>
@@ -146,23 +138,19 @@ export const SwapKeysignTxOverview = ({
               fullWidth
               justifyContent="space-between"
               alignItems="center"
+              wrap="nowrap"
             >
               <Text weight="500" size={14} color="shy">
                 {t('to')}
               </Text>
-
-              <TrimmedText
-                cropped
-                width={170}
-                weight={500}
-                size={14}
-                color="contrast"
-              >
-                {toCoin.address}
-              </TrimmedText>
+              <AddressWrapper color="contrast" size={14} weight={500}>
+                {truncateId(toCoin.address)}
+              </AddressWrapper>
             </HStack>
           )}
-          <KeysignTxFee />
+          <TxFeeRow label={t('network_fee')}>
+            <KeysignFeeAmount keysignPayload={value} />
+          </TxFeeRow>
         </SwapInfoWrapper>
         <HStack gap={8} fullWidth>
           <Button
@@ -171,23 +159,16 @@ export const SwapKeysignTxOverview = ({
           >
             {t('track')}
           </Button>
-          <Button onClick={() => navigate({ id: 'vault' }, { replace: true })}>
-            {t('done')}
-          </Button>
+          <Button onClick={goHome}>{t('done')}</Button>
         </HStack>
       </VStack>
     </>
   )
 }
 
-const TrimmedText = styled(Text)<{
-  width?: number
-}>`
-  display: inline-block;
-  max-width: ${({ width }) => (width ? `${width}px` : null)};
+const AddressWrapper = styled(Text)`
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  text-align: right;
 `
 
 const SwapInfoWrapper = styled(SeparatedByLine)`

@@ -1,4 +1,5 @@
 import { Chain } from '@core/chain/Chain'
+import { hyperliquidBlockExplorerUrl } from '@core/chain/chains/evm/chainInfo'
 import { match } from '@lib/utils/match'
 
 type ChainEntity = 'address' | 'tx'
@@ -31,7 +32,7 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.Blast]: 'https://blastscan.io',
   [Chain.CronosChain]: 'https://cronoscan.com',
   [Chain.Sui]: 'https://suiscan.xyz/mainnet',
-  [Chain.Polkadot]: 'https://polkadot.subscan.io',
+  [Chain.Polkadot]: 'https://assethub-polkadot.subscan.io',
   [Chain.Zksync]: 'https://explorer.zksync.io',
   [Chain.Ton]: 'https://tonviewer.com',
   [Chain.Osmosis]: `${cosmosBlockExplorer}/osmosis`,
@@ -40,12 +41,14 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.Noble]: `${cosmosBlockExplorer}/noble`,
   [Chain.Ripple]: 'https://xrpscan.com',
   [Chain.THORChain]: 'https://thorchain.net',
-  [Chain.MayaChain]: 'https://mayascan.org',
+  [Chain.MayaChain]: 'https://www.explorer.mayachain.info',
   [Chain.Akash]: `${cosmosBlockExplorer}/akash`,
   [Chain.Tron]: 'https://tronscan.org/#',
-  [Chain.Zcash]: 'https://blockchair.com/zcash',
+  [Chain.Zcash]: 'https://blockexplorer.one/zcash/mainnet',
   [Chain.Cardano]: 'https://cardanoscan.io',
   [Chain.Mantle]: 'https://explorer.mantle.xyz',
+  [Chain.Hyperliquid]: hyperliquidBlockExplorerUrl,
+  [Chain.Sei]: 'https://seiscan.io',
 }
 
 export const getBlockExplorerUrl = ({
@@ -91,6 +94,8 @@ export const getBlockExplorerUrl = ({
         [Chain.Zcash]: () => `${baseUrl}/address/${value}`,
         [Chain.Cardano]: () => `${baseUrl}/address/${value}`,
         [Chain.Mantle]: () => `${baseUrl}/address/${value}`,
+        [Chain.Hyperliquid]: () => `${baseUrl}/address/${value}`,
+        [Chain.Sei]: () => `${baseUrl}/address/${value}`,
       }),
     tx: () =>
       match(chain, {
@@ -128,6 +133,8 @@ export const getBlockExplorerUrl = ({
         [Chain.Zcash]: () => `${baseUrl}/transaction/${value}`,
         [Chain.Cardano]: () => `${baseUrl}/transaction/${value}`,
         [Chain.Mantle]: () => `${baseUrl}/tx/${value}`,
+        [Chain.Hyperliquid]: () => `${baseUrl}/tx/${value}`,
+        [Chain.Sei]: () => `${baseUrl}/tx/${value}`,
       }),
   })
 }

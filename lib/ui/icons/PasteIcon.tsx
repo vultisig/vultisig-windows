@@ -7,7 +7,7 @@ export const PasteIcon = () => (
     fill="none"
   >
     <path
-      stroke="#F0F4FC"
+      stroke="currentColor"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={1.5}

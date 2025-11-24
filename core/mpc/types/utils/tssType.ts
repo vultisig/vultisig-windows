@@ -1,4 +1,3 @@
-import { GenMessage } from '@bufbuild/protobuf/codegenv1'
 import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
@@ -6,7 +5,7 @@ import { KeygenOperation } from '../../keygen/KeygenOperation'
 import { KeygenMessageSchema } from '../vultisig/keygen/v1/keygen_message_pb'
 import { ReshareMessageSchema } from '../vultisig/keygen/v1/reshare_message_pb'
 
-export type TssType = 'Keygen' | 'Reshare' | 'Migrate'
+export type TssType = 'Keygen' | 'Reshare' | 'Migrate' | 'KeyImport'
 
 export const toTssType = (operation: KeygenOperation): TssType => {
   return matchRecordUnion<KeygenOperation, TssType>(operation, {
@@ -18,6 +17,7 @@ export const toTssType = (operation: KeygenOperation): TssType => {
         plugin: () => 'Reshare',
       })
     },
+    keyimport: () => 'KeyImport',
   })
 }
 
@@ -26,11 +26,13 @@ export const fromTssType = (tssType: TssType): KeygenOperation => {
     Keygen: () => ({ create: true }),
     Migrate: () => ({ reshare: 'migrate' }),
     Reshare: () => ({ reshare: 'regular' }),
+    KeyImport: () => ({ keyimport: true }),
   })
 }
 
-export const tssMessageSchema: Record<TssType, GenMessage<any>> = {
+export const tssMessageSchema = {
   Keygen: KeygenMessageSchema,
   Reshare: ReshareMessageSchema,
   Migrate: ReshareMessageSchema,
-}
+  KeyImport: KeygenMessageSchema,
+} as const

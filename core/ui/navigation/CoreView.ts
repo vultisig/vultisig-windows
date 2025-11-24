@@ -12,8 +12,12 @@ export type CoreView =
   | { id: 'addCustomToken'; state: { chain: ChainWithTokenMetadataDiscovery } }
   | { id: 'address'; state: { address: string } }
   | { id: 'addressBook' }
+  | { id: 'faq' }
   | { id: 'airdropRegister' }
-  | { id: 'createAddressBookItem' }
+  | {
+      id: 'createAddressBookItem'
+      state?: { address?: string; chain?: Chain }
+    }
   | { id: 'createVaultFolder' }
   | { id: 'currencySettings' }
   | { id: 'deeplink'; state: { url: string } }
@@ -21,6 +25,7 @@ export type CoreView =
   | { id: 'deposit'; state: { coin: CoinKey } }
   | { id: 'referral' }
   | { id: 'importVault' }
+  | { id: 'shareVault' }
   | {
       id: 'joinKeygen'
       state: {
@@ -47,6 +52,7 @@ export type CoreView =
   | { id: 'reshareVault' }
   | { id: 'reshareVaultFast' }
   | { id: 'reshareVaultSecure' }
+  | { id: 'migrateVault' }
   | {
       id: 'send'
       state: ({ fromChain: Chain } | { coin: CoinKey }) & {
@@ -58,21 +64,25 @@ export type CoreView =
   | { id: 'setupSecureVault' }
   | { id: 'setupVault'; state: { type?: VaultSecurityType } }
   | { id: 'signCustomMessage' }
-  | { id: 'swap'; state: { coin: CoinKey } }
+  | { id: 'circle' }
+  | { id: 'swap'; state: { fromCoin?: CoinKey; toCoin?: CoinKey } }
   | { id: 'updateAddressBookItem'; state: { id: string } }
   | { id: 'updateVaultFolder'; state: { id: string } }
   | { id: 'uploadQr'; state: { title?: string } }
   | { id: 'vault' }
   | { id: 'vaultBackup' }
+  | { id: 'vaultsBackup' }
+  | { id: 'selectVaultsBackup' }
   | { id: 'vaultDetails' }
   | { id: 'vaultChainDetail'; state: { chain: Chain } }
-  | { id: 'vaultChainCoinDetail'; state: { coin: CoinKey } }
   | { id: 'vaultFolder'; state: { id: string } }
   | { id: 'vaults' }
   | { id: 'vaultSettings' }
   | { id: 'manageVaults' }
   | { id: 'managePasscodeEncryption' }
   | { id: 'passcodeAutoLock' }
+  | { id: 'requestFastVaultBackup' }
+  | { id: 'vultDiscount' }
 
 export type CoreViewId = CoreView['id']
 

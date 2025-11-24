@@ -3,7 +3,6 @@ import { KeygenOperation } from '@core/mpc/keygen/KeygenOperation'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { CreateVaultSuccessScreen } from '@core/ui/mpc/keygen/create/CreateVaultSuccessScreen'
-import { KeygenFlowEnding } from '@core/ui/mpc/keygen/flow/VaultKeygenEnding'
 import { useKeygenMutation } from '@core/ui/mpc/keygen/mutations/useKeygenMutation'
 import { KeygenPendingState } from '@core/ui/mpc/keygen/progress/KeygenPendingState'
 import { useKeygenOperation } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
@@ -21,6 +20,7 @@ import { useTranslation } from 'react-i18next'
 
 import { InstallPluginPendingState } from '../reshare/plugin/InstallPluginPendingState'
 import { mapKeygenStepToInstallStep } from '../reshare/plugin/InstallPluginStep'
+import { KeygenFlowEnding } from './KeygenFlowEnding'
 
 export const KeygenFlow = ({
   onBack,
@@ -44,6 +44,7 @@ export const KeygenFlow = ({
         plugin: () => t('install_plugin'),
         regular: () => t('reshare'),
       }),
+    keyimport: () => t('import_key'),
   })
 
   const isPluginReshare = useMemo(() => {
@@ -91,6 +92,7 @@ export const KeygenFlow = ({
                   />
                 ),
                 reshare: renderEnding,
+                keyimport: renderEnding, // TODO: Handle key import specific ending if needed
               }}
             />
           </CurrentVaultProvider>

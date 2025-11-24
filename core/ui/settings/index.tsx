@@ -1,84 +1,70 @@
 import { Chain } from '@core/chain/Chain'
-import { desktopDownloadUrl } from '@core/config'
+import { vult } from '@core/chain/coin/knownTokens'
+import { productWebsiteUrl } from '@core/config'
 import { ManageBlockaid } from '@core/ui/chain/security/blockaid/ManageBlockaid'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { languageName } from '@core/ui/i18n/Language'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { SettingsSection } from '@core/ui/settings/SettingsSection'
-import { Client, useCore } from '@core/ui/state/core'
+import { useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useLanguage } from '@core/ui/storage/language'
 import { useHasPasscodeEncryption } from '@core/ui/storage/passcodeEncryption'
 import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
+import { Opener } from '@lib/ui/base/Opener'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { BookMarkedIcon } from '@lib/ui/icons/BookMarkedIcon'
+import { BookIcon } from '@lib/ui/icons/BookIcon'
+import { BubbleQuestionIcon } from '@lib/ui/icons/BubbleQuestionIcon'
 import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
-import { CopyIcon } from '@lib/ui/icons/CopyIcon'
+import { CoinsIcon } from '@lib/ui/icons/CoinsIcon'
 import { DiscordIcon } from '@lib/ui/icons/DiscordIcon'
-import { FacebookIcon } from '@lib/ui/icons/FacebookIcon'
 import { FileTextIcon } from '@lib/ui/icons/FileTextIcon'
 import { GithubIcon } from '@lib/ui/icons/GithubIcon'
+import { GlobusIcon } from '@lib/ui/icons/GlobusIcon'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { LanguagesIcon } from '@lib/ui/icons/LanguagesIcon'
-import { LinkedinIcon } from '@lib/ui/icons/LinkedinIcon'
 import { LockKeyholeIcon } from '@lib/ui/icons/LockKeyholeIcon'
 import { MegaphoneIcon } from '@lib/ui/icons/MegaphoneIcon'
-import { MessageCircleQuestionIcon } from '@lib/ui/icons/MessageCircleQuestionIcon'
-import { RedditIcon } from '@lib/ui/icons/RedditIcon'
+import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { ShareTwoIcon } from '@lib/ui/icons/ShareTwoIcon'
 import { ShieldCheckIcon } from '@lib/ui/icons/ShieldCheckIcon'
 import { TwitterIcon } from '@lib/ui/icons/TwitterIcon'
-import { VultisigLogoIcon } from '@lib/ui/icons/VultisigLogoIcon'
-import { WhatsAppIcon } from '@lib/ui/icons/WhatsAppIcon'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { VultisigLeanLogoIcon } from '@lib/ui/icons/VultisigLeanLogoIcon'
+import { VStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
-import { Modal } from '@lib/ui/modal'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { Text } from '@lib/ui/text'
-import { useToast } from '@lib/ui/toast/ToastProvider'
-import { FC, ReactNode, useState } from 'react'
+import { getColor } from '@lib/ui/theme/getters'
+import { FC, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
-type ExtensionSettings = {
-  client: Extract<Client, 'extension'>
-  expandView: ReactNode
-  insiderOptions: ReactNode
-  prioritize: ReactNode
-}
+import {
+  discordReferralUrl,
+  vultisigPrivacyPolicyUrl,
+  vultisigTermsOfServiceUrl,
+  vultisigTwitterUrl,
+  vultisigWindowsGithubUrl,
+} from './constants'
+import { ShareAppModal } from './share-app/ShareAppModal'
 
-type DesktopSettings = {
-  client: Extract<Client, 'desktop'>
-  checkUpdate: ReactNode
-  insiderOptions: ReactNode
+type Props = {
+  expandView?: ReactNode
+  insiderOptions?: ReactNode
+  prioritize?: ReactNode
+  checkUpdate?: ReactNode
 }
 
 const iconSize = 20
 
-export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
+export const SettingsPage: FC<Props> = props => {
   const { t } = useTranslation()
-  const [visible, setVisible] = useState(false)
-  const { addToast } = useToast()
-  const { openUrl } = useCore()
+  const { openUrl, client } = useCore()
   const navigate = useCoreNavigate()
   const currency = useFiatCurrency()
   const language = useLanguage()
-  const shareURL =
-    props.client === 'desktop'
-      ? desktopDownloadUrl
-      : 'https://chromewebstore.google.com/detail/ggafhcdaplkhmmnlbfjpnnkepdfjaelb'
-
-  const handleCopy = () => {
-    navigator.clipboard
-      .writeText(shareURL)
-      .then(() => {
-        addToast({ message: t('link_copied') })
-      })
-      .catch(() => {
-        addToast({ message: t('failed_to_copy_link') })
-      })
-  }
 
   const hasPasscodeEncryption = useHasPasscodeEncryption()
   const addresses = useCurrentVaultAddresses()
@@ -97,25 +83,49 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
               }
             />
           }
+          secondaryControls={
+            <IconButton
+              kind="action"
+              onClick={() => navigate({ id: 'shareVault' })}
+            >
+              <QrCodeIcon />
+            </IconButton>
+          }
           title={t('settings')}
           hasBorder
         />
-        <PageContent gap={24} flexGrow scrollable>
-          <SettingsSection title={t('vault')}>
-            {props.client === 'extension' && props.prioritize}
+        <PageContent gap={14} flexGrow scrollable>
+          <SettingsSection title={t('vault_management')}>
+            {client === 'extension' && props.prioritize}
             <ListItem
-              icon={<SettingsIcon fontSize={iconSize} />}
+              icon={
+                <ListItemIconWrapper>
+                  <SettingsIcon />
+                </ListItemIconWrapper>
+              }
               onClick={() => navigate({ id: 'vaultSettings' })}
               title={t('vault_settings')}
-              hoverable
               showArrow
             />
             <ListItem
-              icon={<VultisigLogoIcon fontSize={iconSize} />}
+              icon={
+                <ListItemIconWrapper>
+                  <CoinsIcon />
+                </ListItemIconWrapper>
+              }
+              onClick={() => navigate({ id: 'vultDiscount' })}
+              title={`$${vult.ticker} ${t('discount_tiers')}`}
+              showArrow
+            />
+            <PrimaryListItem
+              icon={
+                <IconWrapper size={iconSize}>
+                  <VultisigLeanLogoIcon />
+                </IconWrapper>
+              }
               onClick={() => navigate({ id: 'airdropRegister' })}
-              status="success"
               title={t('register_your_vaults')}
-              hoverable
+              status="success"
               showArrow
             />
           </SettingsSection>
@@ -123,52 +133,70 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
           <SettingsSection title={t('general')}>
             <ListItem
               extra={languageName[language]}
-              icon={<LanguagesIcon fontSize={iconSize} />}
+              icon={
+                <ListItemIconWrapper>
+                  <LanguagesIcon />
+                </ListItemIconWrapper>
+              }
               onClick={() => navigate({ id: 'languageSettings' })}
               title={t('language')}
-              hoverable
               showArrow
             />
             <ListItem
               extra={currency.toUpperCase()}
-              icon={<CircleDollarSignIcon fontSize={iconSize} />}
+              icon={
+                <ListItemIconWrapper>
+                  <CircleDollarSignIcon />
+                </ListItemIconWrapper>
+              }
               onClick={() => navigate({ id: 'currencySettings' })}
               title={t('currency')}
-              hoverable
               showArrow
             />
             <ListItem
-              icon={<BookMarkedIcon fontSize={iconSize} />}
+              icon={
+                <ListItemIconWrapper>
+                  <BookIcon />
+                </ListItemIconWrapper>
+              }
               onClick={() => navigate({ id: 'addressBook' })}
               title={t('address_book')}
-              hoverable
               showArrow
             />
             {areReferralEnabled && (
               <ListItem
-                icon={<MegaphoneIcon fontSize={iconSize} />}
+                icon={
+                  <ListItemIconWrapper>
+                    <MegaphoneIcon />
+                  </ListItemIconWrapper>
+                }
                 onClick={() => navigate({ id: 'referral' })}
                 title={t('referral_code')}
-                hoverable
                 showArrow
               />
             )}
-            {props.client === 'extension' && props.expandView}
+            {client === 'extension' && props.expandView}
           </SettingsSection>
           <SettingsSection title={t('security')}>
             <ListItem
-              icon={<ShieldCheckIcon fontSize={iconSize} />}
+              icon={
+                <ListItemIconWrapper>
+                  <ShieldCheckIcon />
+                </ListItemIconWrapper>
+              }
               onClick={() => navigate({ id: 'managePasscodeEncryption' })}
               title={t('security')}
-              hoverable
               showArrow
             />
             {hasPasscodeEncryption && (
               <ListItem
-                icon={<LockKeyholeIcon fontSize={iconSize} />}
+                icon={
+                  <ListItemIconWrapper>
+                    <LockKeyholeIcon />
+                  </ListItemIconWrapper>
+                }
                 onClick={() => navigate({ id: 'passcodeAutoLock' })}
                 title={t('lock_time')}
-                hoverable
                 showArrow
               />
             )}
@@ -176,59 +204,95 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
           </SettingsSection>
           <SettingsSection title={t('support')}>
             <ListItem
-              icon={<MessageCircleQuestionIcon fontSize={iconSize} />}
-              onClick={() => openUrl('https://vultisig.com/support#faq')}
+              icon={
+                <ListItemIconWrapper>
+                  <BubbleQuestionIcon />
+                </ListItemIconWrapper>
+              }
+              onClick={() => navigate({ id: 'faq' })}
               title={t('faq')}
-              hoverable
               showArrow
             />
-            {props.client === 'desktop' && props.checkUpdate}
-            <ListItem
-              icon={<ShareTwoIcon fontSize={iconSize} />}
-              onClick={() => setVisible(true)}
-              title={t('share_app')}
-              hoverable
-              showArrow
+            {client === 'desktop' && props.checkUpdate}
+            <Opener
+              renderOpener={({ onOpen }) => (
+                <ListItem
+                  icon={
+                    <ListItemIconWrapper>
+                      <ShareTwoIcon />
+                    </ListItemIconWrapper>
+                  }
+                  onClick={onOpen}
+                  title={t('share_app')}
+                  showArrow
+                />
+              )}
+              renderContent={({ onClose }) => (
+                <ShareAppModal onClose={onClose} />
+              )}
             />
           </SettingsSection>
           <SettingsSection title={t('vultisig_community')}>
             <ListItem
-              icon={<TwitterIcon fontSize={iconSize} />}
-              onClick={() => openUrl('https://x.com/vultisig')}
-              title={t('twitter')}
-              hoverable
-              showArrow
-            />
-            <ListItem
-              icon={<DiscordIcon fontSize={iconSize} />}
-              onClick={() => openUrl('https://discord.gg/ngvW8tRRfB')}
-              title={t('discord')}
-              hoverable
-              showArrow
-            />
-            <ListItem
-              icon={<GithubIcon fontSize={iconSize} />}
-              onClick={() =>
-                openUrl('https://github.com/vultisig/vultisig-windows')
+              icon={
+                <ListItemIconWrapper>
+                  <TwitterIcon />
+                </ListItemIconWrapper>
               }
+              onClick={() => openUrl(vultisigTwitterUrl)}
+              title={t('twitter')}
+              showArrow
+            />
+            <ListItem
+              icon={
+                <ListItemIconWrapper>
+                  <DiscordIcon />
+                </ListItemIconWrapper>
+              }
+              onClick={() => openUrl(discordReferralUrl)}
+              title={t('discord')}
+              showArrow
+            />
+            <ListItem
+              icon={
+                <ListItemIconWrapper>
+                  <GithubIcon />
+                </ListItemIconWrapper>
+              }
+              onClick={() => openUrl(vultisigWindowsGithubUrl)}
               title={t('github')}
-              hoverable
+              showArrow
+            />
+            <ListItem
+              icon={
+                <ListItemIconWrapper>
+                  <GlobusIcon />
+                </ListItemIconWrapper>
+              }
+              onClick={() => openUrl(productWebsiteUrl)}
+              title={t('vultisig_website')}
               showArrow
             />
           </SettingsSection>
           <SettingsSection title={t('legal')}>
             <ListItem
-              icon={<ShieldCheckIcon fontSize={iconSize} />}
-              onClick={() => openUrl('https://vultisig.com/privacy')}
+              icon={
+                <ListItemIconWrapper>
+                  <ShieldCheckIcon />
+                </ListItemIconWrapper>
+              }
+              onClick={() => openUrl(vultisigPrivacyPolicyUrl)}
               title={t('privacy_policy')}
-              hoverable
               showArrow
             />
             <ListItem
-              icon={<FileTextIcon fontSize={iconSize} />}
-              onClick={() => openUrl('https://vultisig.com/termofservice')}
+              icon={
+                <ListItemIconWrapper>
+                  <FileTextIcon />
+                </ListItemIconWrapper>
+              }
+              onClick={() => openUrl(vultisigTermsOfServiceUrl)}
               title={t('terms_of_service')}
-              hoverable
               showArrow
             />
           </SettingsSection>
@@ -237,77 +301,15 @@ export const SettingsPage: FC<DesktopSettings | ExtensionSettings> = props => {
           {props.insiderOptions}
         </PageFooter>
       </VStack>
-      {visible && (
-        <Modal onClose={() => setVisible(false)} title="Vultisig">
-          <VStack gap={24}>
-            <VStack gap={14}>
-              <Text color="light" size={13} weight={500}>
-                {t('share_app')}
-              </Text>
-              <HStack gap={8} alignItems="center">
-                <IconButton
-                  onClick={() =>
-                    openUrl(
-                      `https://linkedin.com/sharing/share-offsite/?url=${shareURL}?utm_source=item-share-linkedin`
-                    )
-                  }
-                  size="lg"
-                >
-                  <LinkedinIcon fontSize={24} />
-                </IconButton>
-                <IconButton
-                  onClick={() =>
-                    openUrl(
-                      `https://facebook.com/sharer/sharer.php?u=${shareURL}?utm_source=item-share-facebook`
-                    )
-                  }
-                  size="lg"
-                >
-                  <FacebookIcon fontSize={24} />
-                </IconButton>
-                <IconButton
-                  onClick={() =>
-                    openUrl(
-                      `https://reddit.com/submit?url=${shareURL}?utm_source=item-share-reddit`
-                    )
-                  }
-                  size="lg"
-                >
-                  <RedditIcon fontSize={24} />
-                </IconButton>
-                <IconButton
-                  onClick={() =>
-                    openUrl(
-                      `https://wa.me/?text=${shareURL}?utm_source=item-share-whatsapp`
-                    )
-                  }
-                  size="lg"
-                >
-                  <WhatsAppIcon fontSize={24} />
-                </IconButton>
-                <IconButton
-                  onClick={() =>
-                    openUrl(
-                      `https://twitter.com/intent/tweet?url=${shareURL}?utm_source=item-share-x`
-                    )
-                  }
-                  size="lg"
-                >
-                  <TwitterIcon fontSize={24} />
-                </IconButton>
-              </HStack>
-            </VStack>
-            <HStack gap={8} alignItems="center">
-              <Text color="contrast" size={13} weight={500} cropped>
-                {shareURL}
-              </Text>
-              <IconButton onClick={handleCopy}>
-                <CopyIcon />
-              </IconButton>
-            </HStack>
-          </VStack>
-        </Modal>
-      )}
     </>
   )
 }
+
+const PrimaryListItem = styled(ListItem)`
+  background-color: ${getColor('buttonPrimary')};
+`
+
+const ListItemIconWrapper = styled(IconWrapper)`
+  font-size: 20px;
+  color: ${getColor('primaryAlt')};
+`

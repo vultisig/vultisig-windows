@@ -1,6 +1,6 @@
+import { passwordLengthConfig } from '@core/config/password'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { KeygenEducationPrompt } from '@core/ui/mpc/keygen/education/KeygenEducationPrompt'
-import { passwordLenghtConfig } from '@core/ui/security/password/config'
 import { usePassword } from '@core/ui/state/password'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
@@ -27,14 +27,14 @@ const StyledTooltip = styled.div`
 `
 
 const createSchema = (t: TFunction) => {
-  const message = t('password_pattern_error', passwordLenghtConfig)
+  const message = t('password_pattern_error', passwordLengthConfig)
 
   return z
     .object({
       password: z
         .string()
-        .min(passwordLenghtConfig.min, message)
-        .max(passwordLenghtConfig.max, message),
+        .min(passwordLengthConfig.min, message)
+        .max(passwordLengthConfig.max, message),
       confirmPassword: z.string(),
     })
     .refine(data => data.password === data.confirmPassword, {

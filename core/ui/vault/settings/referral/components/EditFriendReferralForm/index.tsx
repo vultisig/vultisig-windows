@@ -51,7 +51,7 @@ export const EditFriendReferralForm = ({ onFinish }: OnFinishProp) => {
             primaryControls={
               <PageHeaderBackButton onClick={() => onFinish()} />
             }
-            title={t('title_1')}
+            title={t('referrals_default_title')}
           />
           <ReferralPageWrapper flexGrow justifyContent="space-between">
             <VStack flexGrow justifyContent="space-between">

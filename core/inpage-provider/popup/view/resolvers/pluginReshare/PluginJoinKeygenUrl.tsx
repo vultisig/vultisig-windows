@@ -8,14 +8,12 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const PluginJoinKeygenUrl = ({ onFinish }: OnFinishProp<string>) => {
-  const query = useJoinKeygenUrlQuery()
   const { t } = useTranslation()
-
+  const query = useJoinKeygenUrlQuery()
   const { data } = query
+
   useEffect(() => {
-    if (data) {
-      onFinish(data)
-    }
+    if (data) onFinish(data)
   }, [data, onFinish])
 
   return (

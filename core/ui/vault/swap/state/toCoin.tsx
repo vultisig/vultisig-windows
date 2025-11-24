@@ -1,30 +1,30 @@
-import { areEqualCoins, CoinKey } from '@core/chain/coin/Coin'
-import { useCurrentVaultNativeCoins } from '@core/ui/vault/state/currentVaultCoins'
-import { ChildrenProp } from '@lib/ui/props'
-import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
-import { useMemo } from 'react'
+import { CoinKey } from '@core/chain/coin/Coin'
+import { without } from '@lib/utils/array/without'
+import { useCallback, useMemo } from 'react'
 
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
+import { useCurrentVaultChains } from '../../state/currentVaultCoins'
+import { useSwapFromCoin } from './fromCoin'
 
-const { useState: useToCoin, provider: ToCoinInternalProvider } =
-  getStateProviderSetup<CoinKey>('ToCoin')
+export const useSwapToCoin = () => {
+  const [{ toCoin }, setViewState] = useCoreViewState<'swap'>()
+  const chains = useCurrentVaultChains()
+  const [fromCoinKey] = useSwapFromCoin()
 
-export { useToCoin }
+  const value: CoinKey = useMemo(() => {
+    if (toCoin) return toCoin
 
-export const ToCoinProvider: React.FC<ChildrenProp> = ({ children }) => {
-  const [{ coin: fromCoin }] = useCoreViewState<'swap'>()
+    const [chain = fromCoinKey.chain] = without(chains, fromCoinKey.chain)
 
-  const nativeCoins = useCurrentVaultNativeCoins()
+    return { chain }
+  }, [chains, fromCoinKey.chain, toCoin])
 
-  const initialValue = useMemo(() => {
-    return (
-      nativeCoins.find(coin => !areEqualCoins(coin, fromCoin)) ?? nativeCoins[0]
-    )
-  }, [fromCoin, nativeCoins])
-
-  return (
-    <ToCoinInternalProvider initialValue={initialValue}>
-      {children}
-    </ToCoinInternalProvider>
+  const setValue = useCallback(
+    (value: CoinKey) => {
+      setViewState(prev => ({ ...prev, toCoin: value }))
+    },
+    [setViewState]
   )
+
+  return [value, setValue] as const
 }

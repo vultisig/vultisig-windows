@@ -26,9 +26,7 @@ export const useDepositCoinBalance = ({ action, chain }: Params) => {
     id: selectedCoin.id,
   })
 
-  const { data: { balances = [] } = {} } = useMergeableTokenBalancesQuery(
-    thorAddr ?? ''
-  )
+  const { data: { balances = [] } = {} } = useMergeableTokenBalancesQuery()
 
   return useMemo(() => {
     if (!selectedCoin) return 0

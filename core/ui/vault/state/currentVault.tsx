@@ -1,11 +1,14 @@
+import { Chain } from '@core/chain/Chain'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { hasServer, isServer } from '@core/mpc/devices/localPartyId'
-import { getVaultId, Vault } from '@core/ui/vault/Vault'
+import { getVaultId, Vault } from '@core/mpc/vault/Vault'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 import { ChildrenProp } from '@lib/ui/props'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { useMemo } from 'react'
 
+import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
 import { decryptVaultKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
 import { usePasscode } from '../../passcodeEncryption/state/passcode'
 import { useCurrentVaultId } from '../../storage/currentVaultId'
@@ -21,7 +24,19 @@ export const { useValue: useCurrentVault, provider: CurrentVaultProvider } =
 export const useCurrentVaultSecurityType = (): VaultSecurityType => {
   const { signers, localPartyId } = useCurrentVault()
 
-  return hasServer(signers) && !isServer(localPartyId) ? 'fast' : 'secure'
+  if (hasServer(signers)) {
+    if (isServer(localPartyId)) {
+      return 'secure'
+    }
+
+    const nonServerSignerCount = signers.filter(
+      signer => !isServer(signer)
+    ).length
+
+    return nonServerSignerCount < 2 ? 'fast' : 'secure'
+  }
+
+  return 'secure'
 }
 
 export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
@@ -50,4 +65,20 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   }, [vaults, id, passcode])
 
   return <CurrentVaultProvider value={value}>{children}</CurrentVaultProvider>
+}
+
+export const useCurrentVaultPublicKey = (chain: Chain) => {
+  const walletCore = useAssertWalletCore()
+  const { hexChainCode, publicKeys } = useCurrentVault()
+
+  return useMemo(
+    () =>
+      getPublicKey({
+        chain,
+        walletCore,
+        hexChainCode,
+        publicKeys,
+      }),
+    [chain, hexChainCode, publicKeys, walletCore]
+  )
 }

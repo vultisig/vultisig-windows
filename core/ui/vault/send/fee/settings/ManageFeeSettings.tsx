@@ -1,32 +1,42 @@
-import { getChainKind } from '@core/chain/ChainKind'
-import { PartialMatch } from '@lib/ui/base/PartialMatch'
+import { toChainKindRecordUnion } from '@core/chain/ChainKind'
+import { feeSettingsChains } from '@core/mpc/keysign/chainSpecific/FeeSettings'
+import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
+import { Opener } from '@lib/ui/base/Opener'
+import { IconButton } from '@lib/ui/buttons/IconButton'
+import { FuelIcon } from '@lib/ui/icons/FuelIcon'
+import { isOneOf } from '@lib/utils/array/isOneOf'
 
 import { useCurrentSendCoin } from '../../state/sendCoin'
 import { ManageEvmFeeSettings } from './evm/ManageEvmFeeSettings'
-import { ManageFeeSettingsFrame } from './ManageFeeSettingsFrame'
 import { ManageUtxoFeeSettings } from './utxo/ManageUtxoFeeSettings'
 
 export const ManageFeeSettings = () => {
-  const coin = useCurrentSendCoin()
-  const chainKind = getChainKind(coin.chain)
+  const { chain } = useCurrentSendCoin()
+
+  if (!isOneOf(chain, feeSettingsChains)) {
+    return null
+  }
 
   return (
-    <PartialMatch
-      value={chainKind}
-      if={{
-        evm: () => (
-          <ManageFeeSettingsFrame
-            render={({ onClose }) => <ManageEvmFeeSettings onClose={onClose} />}
-          />
-        ),
-        utxo: () => (
-          <ManageFeeSettingsFrame
-            render={({ onClose }) => (
-              <ManageUtxoFeeSettings onClose={onClose} />
-            )}
-          />
-        ),
-      }}
+    <Opener
+      renderOpener={({ onOpen }) => (
+        <IconButton onClick={() => onOpen()}>
+          <FuelIcon />
+        </IconButton>
+      )}
+      renderContent={({ onClose }) => (
+        <MatchRecordUnion
+          value={toChainKindRecordUnion(chain)}
+          handlers={{
+            evm: chain => (
+              <ManageEvmFeeSettings chain={chain} onClose={onClose} />
+            ),
+            utxo: chain => (
+              <ManageUtxoFeeSettings chain={chain} onClose={onClose} />
+            ),
+          }}
+        />
+      )}
     />
   )
 }

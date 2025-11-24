@@ -20,6 +20,7 @@ export type BackgroundInterface = {
   getAppChainId: Method<{ chainKind: ActiveChainKind }, string>
   setAppChain: Method<SetAppChainInput>
   getAppChain: GetAppChainMethod
+  setVaultChain: Method<SetAppChainInput>
   getAccount: Method<{ chain: Chain }, { address: string; publicKey: string }>
   signOut: Method<{}>
   evmClientRequest: Method<{ method: string; params?: unknown[] }, unknown>

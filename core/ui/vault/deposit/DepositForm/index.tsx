@@ -1,6 +1,4 @@
-import { Chain } from '@core/chain/Chain'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { DepositActionSpecific } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/DepositActionSpecific'
 import { DepositActionItemExplorer } from '@core/ui/vault/deposit/DepositForm/DepositActionItemExplorer'
 import {
@@ -24,28 +22,32 @@ import { FC } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { TextInputWithPasteAction } from '../../../components/TextInputWithPasteAction'
+import { useAvailableChainActions } from '../hooks/useAvailableChainActions'
 import { useDepositBalance } from '../hooks/useDepositBalance'
 import { useDepositFormConfig } from '../hooks/useDepositFormConfig'
 import { useDepositAction } from '../providers/DepositActionProvider'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
+import {
+  getBalanceDisplayConfig,
+  shouldShowBalance,
+  shouldShowTicker,
+} from '../utils/chainActionConfig'
+import { stepFromDecimals } from '../utils/stepFromDecimals'
 
 export type FormData = Record<string, any>
 type DepositFormProps = {
-  onSubmit: (data: FieldValues, selectedChainAction: ChainAction) => void
-  chainActionOptions: ChainAction[]
-  chain: Chain
+  onSubmit: (data: FieldValues) => void
 }
 
-export const DepositForm: FC<DepositFormProps> = ({
-  onSubmit,
-  chainActionOptions,
-  chain,
-}) => {
+export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
   const [selectedChainAction, setSelectedChainAction] = useDepositAction()
+
   const { t } = useTranslation()
   const [coin] = useDepositCoin()
+  const availableActions = useAvailableChainActions(coin.chain)
 
-  const { balanceFormatted } = useDepositBalance({
+  const { balance } = useDepositBalance({
     selectedChainAction,
   })
 
@@ -66,12 +68,19 @@ export const DepositForm: FC<DepositFormProps> = ({
   })
 
   const handleFormSubmit = (data: FieldValues) => {
-    onSubmit(data, selectedChainAction as ChainAction)
+    onSubmit(data)
   }
 
   return (
     <DepositFormHandlersProvider
-      initialValue={{ setValue, getValues, watch, chain, register, control }}
+      initialValue={{
+        setValue,
+        getValues,
+        watch,
+        chain: coin.chain,
+        register,
+        control,
+      }}
     >
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
@@ -83,7 +92,7 @@ export const DepositForm: FC<DepositFormProps> = ({
           <InputContainer>
             <InputFieldWrapper>
               {t('chain_message_deposit', {
-                chain,
+                chain: coin.chain,
               })}
             </InputFieldWrapper>
           </InputContainer>
@@ -104,7 +113,7 @@ export const DepositForm: FC<DepositFormProps> = ({
               <DepositActionItemExplorer
                 onClose={onClose}
                 activeOption={selectedChainAction}
-                options={chainActionOptions}
+                options={availableActions}
                 onOptionClick={option => {
                   onClose()
                   setSelectedChainAction(option)
@@ -117,79 +126,81 @@ export const DepositForm: FC<DepositFormProps> = ({
 
           {selectedChainAction && fields.length > 0 && (
             <VStack gap={12}>
-              {fields.map(field => {
-                const showBalance =
-                  field.name === 'amount' &&
-                  [
-                    'bond',
-                    'ibc_transfer',
-                    'switch',
-                    'merge',
-                    'stake',
-                    'unmerge',
-                    'unstake',
-                    'mint',
-                    'redeem',
-                    'withdraw_ruji_rewards',
-                  ].includes(selectedChainAction)
+              {fields
+                .filter(field => !field.hidden)
+                .map(field => {
+                  const config = getBalanceDisplayConfig({
+                    chainAction: selectedChainAction,
+                    chain: coin.chain,
+                  })
+                  const showBalance = shouldShowBalance({
+                    fieldName: field.name,
+                    chainAction: selectedChainAction,
+                  })
+                  const showTickerWithBalance = shouldShowTicker({
+                    fieldName: field.name,
+                    chainAction: selectedChainAction,
+                    chain: coin.chain,
+                  })
 
-                const ticker =
-                  selectedChainAction !== 'ibc_transfer' &&
-                  selectedChainAction !== 'merge' &&
-                  !(selectedChainAction === 'stake') &&
-                  coin.ticker
+                  return (
+                    <InputContainer key={field.name}>
+                      <Text size={15} weight="400">
+                        {field.label}{' '}
+                        {showBalance && (
+                          <>
+                            (
+                            {config.balanceLabel === 'shares' ? (
+                              <>
+                                {t('shares')}: {balance}
+                              </>
+                            ) : (
+                              <>
+                                {t('balance')}: {balance}
+                                {showTickerWithBalance &&
+                                  coin.ticker &&
+                                  ` ${coin.ticker}`}
+                              </>
+                            )}
+                            )
+                          </>
+                        )}
+                        {field.required ? (
+                          <Text as="span" color="danger" size={14}>
+                            *
+                          </Text>
+                        ) : (
+                          <Text as="span" size={14}>
+                            ({t('chainFunctions.optional_validation')})
+                          </Text>
+                        )}
+                      </Text>
 
-                return (
-                  <InputContainer key={field.name}>
-                    <Text size={15} weight="400">
-                      {field.label}{' '}
-                      {showBalance && (
-                        <>
-                          (
-                          {selectedChainAction === 'unmerge' ? (
-                            <>
-                              {t('shares')}: {balanceFormatted}
-                            </>
-                          ) : (
-                            <>
-                              {t('balance')}: {balanceFormatted}{' '}
-                              {ticker && ` ${ticker}`}
-                            </>
-                          )}
-                          )
-                        </>
+                      <TextInputWithPasteAction
+                        onWheel={e => e.currentTarget.blur()}
+                        type={field.type}
+                        step={
+                          field.name === 'amount'
+                            ? stepFromDecimals(coin.decimals)
+                            : undefined
+                        }
+                        min={0}
+                        {...register(field.name)}
+                        required={field.required}
+                      />
+
+                      {errors[field.name] && (
+                        <ErrorText color="danger" size={13} className="error">
+                          {t(errors[field.name]?.message as string, {
+                            defaultValue: t(
+                              'chainFunctions.default_validation'
+                            ),
+                          })}
+                        </ErrorText>
                       )}
-                      {field.required ? (
-                        <Text as="span" color="danger" size={14}>
-                          *
-                        </Text>
-                      ) : (
-                        <Text as="span" size={14}>
-                          ({t('chainFunctions.optional_validation')})
-                        </Text>
-                      )}
-                    </Text>
-
-                    <InputFieldWrapper
-                      as="input"
-                      onWheel={e => e.currentTarget.blur()}
-                      type={field.type}
-                      step="0.0001"
-                      min={0}
-                      {...register(field.name)}
-                      required={field.required}
-                    />
-
-                    {errors[field.name] && (
-                      <ErrorText color="danger" size={13} className="error">
-                        {t(errors[field.name]?.message as string, {
-                          defaultValue: t('chainFunctions.default_validation'),
-                        })}
-                      </ErrorText>
-                    )}
-                  </InputContainer>
-                )
-              })}
+                    </InputContainer>
+                  )
+                })}
             </VStack>
           )}
         </WithProgressIndicator>

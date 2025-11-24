@@ -1,4 +1,8 @@
 import { Chain } from '@core/chain/Chain'
+import {
+  CosmosFee,
+  CosmosMsg,
+} from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 
 export enum CosmosMsgType {
   MSG_SEND = 'cosmos-sdk/MsgSend',
@@ -9,6 +13,34 @@ export enum CosmosMsgType {
   MSG_SEND_URL = '/cosmos.bank.v1beta1.MsgSend',
   THORCHAIN_MSG_DEPOSIT = 'thorchain/MsgDeposit',
   THORCHAIN_MSG_DEPOSIT_URL = '/types.MsgDeposit',
+  THORCHAIN_MSG_SEND_URL = '/types.MsgSend',
+}
+export enum TronMsgType {
+  TRON_TRANSFER_CONTRACT = 'TransferContract',
+  TRON_TRIGGER_SMART_CONTRACT = 'TriggerSmartContract',
+  TRON_TRANSFER_ASSET_CONTRACT = 'TransferAssetContract',
+}
+
+type TronTransferContract = {
+  to_address: string
+  owner_address: string
+  amount: number
+}
+
+type TronTriggerSmartContract = {
+  owner_address: string
+  contract_address: string
+  call_value?: number
+  call_token_value?: number
+  token_id?: number
+  data?: string
+}
+
+type TronTransferAssetContract = {
+  to_address: string
+  owner_address: string
+  amount: number
+  asset_name: string
 }
 
 export type RequestInput = {
@@ -21,6 +53,10 @@ export type ProviderId =
   | 'phantom-override'
   | 'keplr-override'
   | 'ctrl-override'
+
+export enum XDEFIBitcoinPayloadMethods {
+  SignPsbt = 'sign_psbt',
+}
 
 type BitcoinAccountPurpose = 'payment' | 'ordinals'
 
@@ -57,7 +93,14 @@ type IMsgDeposit = {
   memo: string
 }
 
-export type CosmosMsgPayload =
+type TronTxMeta = {
+  timestamp: number
+  expiration: number
+  refBlockBytesHex: string
+  refBlockHashHex: string
+}
+
+export type MsgPayload =
   | {
       case:
         | CosmosMsgType.MSG_SEND
@@ -88,6 +131,29 @@ export type CosmosMsgPayload =
       case: CosmosMsgType.THORCHAIN_MSG_DEPOSIT
       value: IMsgDeposit
     }
+  | {
+      case: CosmosMsgType.THORCHAIN_MSG_SEND_URL
+      value: {
+        amount: { denom: string; amount: string }[]
+        fromAddress: string
+        toAddress: string
+      }
+    }
+  | {
+      case: TronMsgType.TRON_TRANSFER_CONTRACT
+      value: TronTransferContract
+      meta?: TronTxMeta
+    }
+  | {
+      case: TronMsgType.TRON_TRIGGER_SMART_CONTRACT
+      value: TronTriggerSmartContract
+      meta?: TronTxMeta
+    }
+  | {
+      case: TronMsgType.TRON_TRANSFER_ASSET_CONTRACT
+      value: TronTransferAssetContract
+      meta?: TronTxMeta
+    }
 
 type TransactionDetailsAsset = {
   ticker: string
@@ -106,8 +172,20 @@ export type TransactionDetails = {
     maxFeePerGas?: string
     maxPriorityFeePerGas?: string
   }
-  cosmosMsgPayload?: CosmosMsgPayload
+  msgPayload?: MsgPayload
+  aminoPayload?: {
+    msgs: CosmosMsg[]
+    fee: CosmosFee
+  }
   skipBroadcast?: boolean
+}
+
+export type DepositTransactionDetails = {
+  asset: { chain: string; ticker: string; symbol: string }
+  from: string
+  recipient?: string
+  amount?: { amount: string; decimals: number }
+  memo?: string
 }
 
 export type IKeysignTransactionPayload = {

@@ -9,8 +9,6 @@ export type KeysignChainSpecific = Exclude<
 
 export type KeysignChainSpecificKey = KeysignChainSpecific['case']
 
-export type KeysignChainSpecificValue = KeysignChainSpecific['value']
-
 export const chainSpecificRecord = {
   [Chain.Arbitrum]: 'ethereumSpecific',
   [Chain.Avalanche]: 'ethereumSpecific',
@@ -23,6 +21,8 @@ export const chainSpecificRecord = {
   [Chain.Polygon]: 'ethereumSpecific',
   [Chain.Zksync]: 'ethereumSpecific',
   [Chain.Mantle]: 'ethereumSpecific',
+  [Chain.Hyperliquid]: 'ethereumSpecific',
+  [Chain.Sei]: 'ethereumSpecific',
 
   [Chain.Bitcoin]: 'utxoSpecific',
   [Chain.BitcoinCash]: 'utxoSpecific',
@@ -58,12 +58,6 @@ export const chainSpecificRecord = {
 
   [Chain.Cardano]: 'cardano',
 } as const satisfies Record<Chain, KeysignChainSpecificKey>
-
-export type ChainsBySpecific<T extends KeysignChainSpecificKey> = {
-  [K in keyof typeof chainSpecificRecord]: (typeof chainSpecificRecord)[K] extends T
-    ? K
-    : never
-}[keyof typeof chainSpecificRecord]
 
 export const getBlockchainSpecificValue = <T extends KeysignChainSpecificKey>(
   blockchainSpecific: KeysignPayload['blockchainSpecific'],

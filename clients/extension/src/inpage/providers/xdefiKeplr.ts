@@ -6,10 +6,14 @@ import { deserializeSigningOutput } from '@core/chain/tw/signingOutput'
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
 import {
-  CosmosMsgPayload,
   CosmosMsgType,
+  MsgPayload,
   TransactionDetails,
 } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
+import {
+  CosmosFee,
+  CosmosMsg,
+} from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { AminoMsg, StdFee } from '@cosmjs/amino'
 import {
   CosmJSOfflineSigner,
@@ -37,7 +41,7 @@ import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
 import { TW } from '@trustwallet/wallet-core'
 import { bech32 } from 'bech32'
 import { MsgSend } from 'cosmjs-types/cosmos/bank/v1beta1/tx'
-import { AuthInfo, TxBody, TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
+import { TxBody, TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx'
 import { MsgTransfer } from 'cosmjs-types/ibc/applications/transfer/v1/tx'
 import Long from 'long'
@@ -116,14 +120,14 @@ const keplrHandler = (
       from: message.value.from_address,
       to: message.value.to_address,
       data: memo,
-      cosmosMsgPayload: {
+      msgPayload: {
         case: message.type,
         value: {
           amount: message.value.amount,
           from_address: message.value.from_address,
           to_address: message.value.to_address,
         },
-      } as CosmosMsgPayload,
+      } as MsgPayload,
       skipBroadcast,
     }
   }
@@ -142,14 +146,14 @@ const keplrHandler = (
       from: decodedMessage.fromAddress,
       to: decodedMessage.toAddress,
       data: memo,
-      cosmosMsgPayload: {
+      msgPayload: {
         case: message.typeUrl,
         value: {
           amount: decodedMessage.amount,
           from_address: decodedMessage.fromAddress,
           to_address: decodedMessage.toAddress,
         },
-      } as CosmosMsgPayload,
+      } as MsgPayload,
       skipBroadcast,
     }
   }
@@ -178,7 +182,7 @@ const keplrHandler = (
         from: message.value.sender,
         to: message.value.contract,
         data: memo,
-        cosmosMsgPayload: {
+        msgPayload: {
           case: CosmosMsgType.MSG_EXECUTE_CONTRACT,
           value: {
             sender: message.value.sender,
@@ -186,7 +190,7 @@ const keplrHandler = (
             funds: message.value.funds,
             msg: formattedMessage,
           },
-        } as CosmosMsgPayload,
+        } as MsgPayload,
         skipBroadcast,
       }
     },
@@ -212,7 +216,7 @@ const keplrHandler = (
         from: decodedMessage.sender,
         to: decodedMessage.contract,
         data: memo,
-        cosmosMsgPayload: {
+        msgPayload: {
           case: CosmosMsgType.MSG_EXECUTE_CONTRACT,
           value: {
             sender: decodedMessage.sender,
@@ -220,7 +224,7 @@ const keplrHandler = (
             funds: decodedMessage.funds,
             msg: formattedMessage,
           },
-        } as CosmosMsgPayload,
+        } as MsgPayload,
         skipBroadcast,
       }
     },
@@ -247,7 +251,7 @@ const keplrHandler = (
         from: msg.sender,
         to: msg.receiver,
         data: `${receiverChain}:${msg.sourceChannel}:${msg.receiver}:${msg.memo}`,
-        cosmosMsgPayload: {
+        msgPayload: {
           case: CosmosMsgType.MSG_TRANSFER_URL,
           value: {
             ...msg,
@@ -257,7 +261,7 @@ const keplrHandler = (
             },
             timeoutTimestamp: msg.timeoutTimestamp.toString(),
           },
-        } as CosmosMsgPayload,
+        } as MsgPayload,
         skipBroadcast,
       }
     },
@@ -281,14 +285,14 @@ const keplrHandler = (
         },
         from: message.value.signer,
         data: memo,
-        cosmosMsgPayload: {
+        msgPayload: {
           case: CosmosMsgType.THORCHAIN_MSG_DEPOSIT,
           value: {
             coins: message.value.coins,
             memo: message.value.memo,
             signer: message.value.signer,
           },
-        } as CosmosMsgPayload,
+        } as MsgPayload,
         skipBroadcast,
       }
     },
@@ -303,8 +307,9 @@ const keplrHandler = (
       ) {
         throw new Error(' coins array is required and cannot be empty')
       }
-      const thorAddress = bech32.encode(
-        'thor',
+      const prefix = chain === Chain.MayaChain ? 'maya' : 'thor'
+      const signerAddress = bech32.encode(
+        prefix,
         bech32.toWords(decodedMessage.signer)
       )
 
@@ -317,9 +322,9 @@ const keplrHandler = (
           amount: decodedMessage.coins[0].amount,
           decimals: chainFeeCoin[chain].decimals,
         },
-        from: thorAddress,
+        from: signerAddress,
         data: memo,
-        cosmosMsgPayload: {
+        msgPayload: {
           case: CosmosMsgType.THORCHAIN_MSG_DEPOSIT,
           value: {
             coins: decodedMessage.coins.map(coin => ({
@@ -327,13 +332,87 @@ const keplrHandler = (
               asset: coin.asset?.ticker,
             })),
             memo: decodedMessage.memo,
-            signer: thorAddress,
+            signer: signerAddress,
           },
-        } as CosmosMsgPayload,
+        } as MsgPayload,
+        skipBroadcast,
+      }
+    },
+    [CosmosMsgType.THORCHAIN_MSG_SEND_URL]: () => {
+      const decodedMessage = TW.Cosmos.Proto.Message.THORChainSend.decode(
+        message.value
+      )
+      if (
+        !decodedMessage.amounts ||
+        decodedMessage.amounts.length === 0 ||
+        !decodedMessage.amounts[0].denom
+      ) {
+        throw new Error(' amounts array is required and cannot be empty')
+      }
+
+      const prefix = chain === Chain.MayaChain ? 'maya' : 'thor'
+
+      const fromAddress = bech32.encode(
+        prefix,
+        bech32.toWords(decodedMessage.fromAddress)
+      )
+
+      const toAddress = bech32.encode(
+        prefix,
+        bech32.toWords(decodedMessage.toAddress)
+      )
+
+      return {
+        asset: {
+          chain: chain,
+          ticker: decodedMessage.amounts[0].denom,
+        },
+        amount: {
+          amount: decodedMessage.amounts[0].amount,
+          decimals: chainFeeCoin[chain].decimals,
+        },
+        from: fromAddress,
+        to: toAddress,
+        data: memo,
+        msgPayload: {
+          case: message.typeUrl,
+          value: {
+            amount: decodedMessage.amounts,
+            fromAddress: fromAddress,
+            toAddress: toAddress,
+          },
+        } as MsgPayload,
         skipBroadcast,
       }
     },
   })
+}
+
+const aminoHandler = (
+  signDoc: StdSignDoc,
+  chain: Chain
+): TransactionDetails => {
+  const { msgs, fee, memo } = signDoc
+  const [message] = msgs
+
+  return {
+    asset: {
+      chain: chain,
+      ticker: message.value.funds?.[0]?.denom ?? chainFeeCoin[chain].ticker,
+    },
+    amount: {
+      amount: message.value.funds?.[0]?.amount ?? 0,
+      decimals: chainFeeCoin[chain].decimals,
+    },
+    from: message.value.sender ?? message.value.from_address ?? undefined,
+    to: message.value.contract ?? message.value.to_address ?? undefined,
+    data: memo,
+    aminoPayload: {
+      msgs: signDoc.msgs as CosmosMsg[],
+      fee: fee as CosmosFee,
+    },
+    skipBroadcast: true,
+  } as TransactionDetails
 }
 
 const getAccounts = async (chainId: string): Promise<AccountData[]> => {
@@ -444,15 +523,7 @@ export class XDEFIKeplrProvider extends Keplr {
       undefined
     )
 
-    await Promise.all(
-      chains.map(chain =>
-        callBackground({
-          getAccount: {
-            chain,
-          },
-        })
-      )
-    )
+    await Promise.all(chains.map(chain => requestAccount(chain)))
   }
 
   getOfflineSigner(
@@ -517,7 +588,7 @@ export class XDEFIKeplrProvider extends Keplr {
 
       const chain = shouldBePresent(getCosmosChainByChainId(chainId))
 
-      const transactionDetails = keplrHandler(signDoc, chain)
+      const transactionDetails = aminoHandler(signDoc, chain)
 
       const { data } = await callPopup(
         {
@@ -531,61 +602,46 @@ export class XDEFIKeplrProvider extends Keplr {
         { account: transactionDetails.from }
       )
 
-      const { serialized } = deserializeSigningOutput(chain, data)
+      const output = deserializeSigningOutput(chain, data)
 
-      const parsed = JSON.parse(serialized)
-      const txRaw = TxRaw.decode(Buffer.from(parsed.tx_bytes, 'base64'))
-      const txBody = TxBody.decode(txRaw.bodyBytes)
-      const authInfo = AuthInfo.decode(txRaw.authInfoBytes)
-      const msgs: AminoMsg[] = txBody.messages.map((msg): AminoMsg => {
-        try {
-          return {
-            type: msg.typeUrl,
-            value: JSON.parse(Buffer.from(msg.value).toString()),
-          }
-        } catch (error) {
-          throw new Error(
-            `Failed to parse message value for ${msg.typeUrl}: ${error}`
-          )
-        }
-      })
-      const gasLimit = authInfo.fee?.gasLimit.toString() || '0'
-      const feeAmount =
-        authInfo.fee?.amount.map(coin => ({
-          denom: coin.denom,
-          amount: coin.amount,
-        })) ?? []
-
-      const fee: StdFee = {
-        gas: gasLimit,
-        amount: feeAmount,
+      const aminoJson = JSON.parse(output.json)
+      const stdTx = aminoJson.tx as {
+        msg: AminoMsg[]
+        fee: StdFee
+        memo: string
+        signatures: Array<{
+          pub_key: { type: string; value: string }
+          signature: string
+        }>
       }
 
-      const memo = txBody.memo ?? ''
-
-      const sequence = authInfo.signerInfos[0]?.sequence.toString() ?? '0'
-
-      const stdSignDoc: StdSignDoc = {
-        chain_id: chainId,
-        account_number: signDoc.account_number.toString(),
-        sequence: sequence,
-        fee,
-        msgs,
-        memo,
+      if (!stdTx.signatures || stdTx.signatures.length === 0) {
+        throw new Error('Amino JSON transaction missing signatures')
       }
-      const publicKey = Buffer.from(new Uint8Array(account.pubkey)).toString(
-        'base64'
-      )
+
+      const [signature] = stdTx.signatures
+
+      if (!signature.pub_key) {
+        throw new Error('Amino JSON signature missing pub_key')
+      }
+
+      const signed: StdSignDoc = {
+        chain_id: signDoc.chain_id,
+        account_number: signDoc.account_number,
+        sequence: signDoc.sequence,
+        msgs: stdTx.msg,
+        fee: stdTx.fee,
+        memo: stdTx.memo,
+      }
+
       return {
-        signed: stdSignDoc,
+        signed,
         signature: {
           pub_key: {
-            type: 'tendermint/PubKeySecp256k1',
-            value: publicKey,
+            type: signature.pub_key.type,
+            value: signature.pub_key.value,
           },
-          signature: shouldBePresent(
-            Buffer.from(txRaw.signatures[0]).toString('base64')
-          ),
+          signature: signature.signature,
         },
       }
     })
@@ -675,6 +731,10 @@ export class XDEFIKeplrProvider extends Keplr {
   async getKey(chainId: string): Promise<Key> {
     const [{ pubkey, address, algo }] = await getAccounts(chainId)
 
+    const vault = await callBackground({
+      exportVault: {},
+    })
+
     const addressBytes = new Uint8Array(
       bech32.fromWords(bech32.decode(address).words)
     )
@@ -686,7 +746,7 @@ export class XDEFIKeplrProvider extends Keplr {
       address: addressBytes,
       isNanoLedger: false,
       isKeystone: false,
-      name: '',
+      name: vault.name,
       algo,
     }
   }

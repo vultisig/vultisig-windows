@@ -139,6 +139,63 @@ const StyledButton = styled(UnstyledButton)<{
               }
             `}
       `,
+      action: () => css``,
+      outlined: () => css`
+        ${match(size, {
+          sm: () => css`
+            border-radius: 46px;
+            font-size: 14px;
+            font-weight: 600;
+            height: 46px;
+            min-width: 46px;
+            ${horizontalPadding(24)}
+          `,
+          md: () => css`
+            border-radius: 48px;
+            font-size: 16px;
+            font-weight: 500;
+            height: 48px;
+            min-width: 48px;
+            ${horizontalPadding(32)}
+          `,
+        })}
+
+        ${disabled || loading
+          ? css`
+              background-color: ${getColor('buttonBackgroundDisabled')};
+              border: 1px solid ${getColor('buttonBackgroundDisabled')};
+              color: ${getColor('buttonTextDisabled')};
+              cursor: default;
+            `
+          : css`
+              background-color: transparent;
+              border: 1px solid ${getColor('buttonPrimary')};
+
+              &:hover {
+                ${match(status, {
+                  default: () => css`
+                    background-color: ${getColor('buttonPrimary')};
+                    color: ${getColor('text')};
+                  `,
+                  danger: () => css`
+                    background-color: ${getColor('danger')};
+                    border-color: ${getColor('danger')};
+                    color: ${getColor('text')};
+                  `,
+                  success: () => css`
+                    background-color: ${getColor('primary')};
+                    border-color: ${getColor('primary')};
+                    color: ${getColor('text')};
+                  `,
+                  warning: () => css`
+                    background-color: ${getColor('idle')};
+                    border-color: ${getColor('idle')};
+                    color: ${getColor('text')};
+                  `,
+                })}
+              }
+            `}
+      `,
       secondary: () => css`
         ${match(size, {
           sm: () => css`

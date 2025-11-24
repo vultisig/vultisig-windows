@@ -30,7 +30,7 @@ const Box = styled.div<{ isChecked: boolean }>`
   ${({ isChecked }) =>
     isChecked
       ? css`
-          border: 1px solid ${getColor('foregroundExtra')};
+          border: 1px solid ${getColor('primary')};
         `
       : css`
           &:hover {

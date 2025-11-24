@@ -3,7 +3,7 @@ import { LocalStorage } from '../lib/ui/state/LocalStorage'
 import { TemporaryStorage } from '../lib/ui/state/TemporaryStorage'
 
 export enum PersistentStateKey {
-  VaultCreationMpcLib = 'vaultCreationMpcLib',
+  VaultCreationMpcLib = 'vaultCreationMpcLib-v2',
 }
 
 const Storage = typeof window !== 'undefined' ? LocalStorage : TemporaryStorage

@@ -1,3 +1,4 @@
+import { passwordLengthConfig } from '@core/config/password'
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultMutation'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -15,17 +16,15 @@ import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 
-import { passwordLenghtConfig } from '../../security/password/config'
-
 const createSchema = (t: TFunction) => {
-  const message = t('password_pattern_error', passwordLenghtConfig)
+  const message = t('password_pattern_error', passwordLengthConfig)
 
   return z
     .object({
       password: z
         .string()
-        .min(passwordLenghtConfig.min, message)
-        .max(passwordLenghtConfig.max, message),
+        .min(passwordLengthConfig.min, message)
+        .max(passwordLengthConfig.max, message),
       confirmPassword: z.string(),
     })
     .refine(data => data.password === data.confirmPassword, {
@@ -39,13 +38,15 @@ type Schema = z.infer<ReturnType<typeof createSchema>>
 export const VaultBackupWithPassword = ({
   onFinish,
   onBack,
-}: OnFinishProp & OnBackProp) => {
+  vaultIds,
+}: OnFinishProp & OnBackProp & { vaultIds: string[] }) => {
   const { t } = useTranslation()
 
   const schema = useMemo(() => createSchema(t), [t])
 
   const { error, isPending, mutate } = useBackupVaultMutation({
     onSuccess: onFinish,
+    vaultIds,
   })
 
   const {
@@ -80,7 +81,7 @@ export const VaultBackupWithPassword = ({
           <PasswordInput
             {...register('confirmPassword')}
             error={errors.confirmPassword?.message}
-            placeholder={t('verify_password')}
+            placeholder={t('reenter_password')}
             validation={
               isValid ? 'valid' : errors.confirmPassword ? 'invalid' : undefined
             }

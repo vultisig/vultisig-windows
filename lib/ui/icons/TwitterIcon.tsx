@@ -1,14 +1,14 @@
-import { SvgProps } from '@lib/ui/props'
-import { FC } from 'react'
-
-export const TwitterIcon: FC<SvgProps> = props => (
+export const TwitterIcon = () => (
   <svg
-    fill="currentColor"
-    height="1em"
-    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
     width="1em"
-    {...props}
+    height="1em"
+    viewBox="0 0 20 20"
+    fill="none"
   >
-    <path d="M13.6,10.7l6.1-7.1h-1.4l-5.3,6.1-4.2-6.1H3.8l6.4,9.3-6.4,7.4h1.4l5.6-6.5,4.5,6.5h4.9l-6.6-9.6ZM11.6,13h0s-.6-.9-.6-.9l-5.1-7.4h2.2l4.2,5.9.6.9,5.4,7.7h-2.2l-4.4-6.3Z" />
+    <path
+      d="M11.427 8.85148L17.0111 2.5H15.6879L10.8392 8.0149L6.9666 2.5H2.5L8.35615 10.8395L2.5 17.5H3.82333L8.94364 11.6761L13.0334 17.5H17.5L11.4267 8.85148H11.427ZM9.61456 10.913L9.02121 10.0825L4.30014 3.47475H6.33269L10.1427 8.80746L10.736 9.63788L15.6885 16.5696H13.656L9.61456 10.9133V10.913Z"
+      fill="currentColor"
+    />
   </svg>
 )

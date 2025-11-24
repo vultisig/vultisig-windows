@@ -9,10 +9,10 @@ import { Query } from '../Query'
 export const usePotentialQuery = <
   T,
   TQueryFnData,
-  TFallbackData extends null | undefined,
   TError,
   TData = TQueryFnData,
   TQueryKey extends readonly unknown[] = readonly unknown[],
+  TFallbackData extends null | undefined = undefined,
 >(
   input: T | undefined,
   getQuery: (

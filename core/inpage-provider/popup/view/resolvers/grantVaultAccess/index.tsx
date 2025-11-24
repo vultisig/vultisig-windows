@@ -1,5 +1,7 @@
 import { useAddVaultAppSessionMutation } from '@core/extension/storage/hooks/appSessions'
 import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
+import { hasServer } from '@core/mpc/devices/localPartyId'
+import { getVaultId } from '@core/mpc/vault/Vault'
 import { BlockaidNoScanStatus } from '@core/ui/chain/security/blockaid/scan/BlockaidNoScanStatus'
 import { BlockaidScanning } from '@core/ui/chain/security/blockaid/scan/BlockaidScanning'
 import { BlockaidScanStatusContainer } from '@core/ui/chain/security/blockaid/scan/BlockaidScanStatusContainer'
@@ -8,8 +10,8 @@ import { getBlockaidSiteScanQuery } from '@core/ui/chain/security/blockaid/site/
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useIsBlockaidEnabled } from '@core/ui/storage/blockaid'
 import { useSetCurrentVaultIdMutation } from '@core/ui/storage/currentVaultId'
+import { useCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { useVaults } from '@core/ui/storage/vaults'
-import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
 import { Switch } from '@lib/ui/inputs/switch'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -24,17 +26,42 @@ import { Text } from '@lib/ui/text'
 import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 import { getUrlHost } from '@lib/utils/url/host'
 import { useMutation } from '@tanstack/react-query'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
+  input,
   onFinish,
-  context: { requestOrigin },
+  context: { requestOrigin, requestFavicon },
 }) => {
   const { t } = useTranslation()
   const [vaultId, setVaultId] = useState<string | undefined>(undefined)
   const vaults = useVaults()
+  const currentVaultId = useCurrentVaultId()
   const isBlockaidEnabled = useIsBlockaidEnabled()
+
+  const initialVaultId = useMemo(() => {
+    if (!input.preselectFastVault) {
+      return undefined
+    }
+
+    const currentVault = currentVaultId
+      ? vaults.find(vault => getVaultId(vault) === currentVaultId)
+      : undefined
+
+    if (currentVault && hasServer(currentVault.signers)) {
+      return currentVaultId
+    }
+
+    const firstFastVault = vaults.find(vault => hasServer(vault.signers))
+    return firstFastVault ? getVaultId(firstFastVault) : undefined
+  }, [input.preselectFastVault, currentVaultId, vaults])
+
+  useEffect(() => {
+    if (initialVaultId !== undefined) {
+      setVaultId(initialVaultId ?? undefined)
+    }
+  }, [initialVaultId])
 
   const { mutateAsync: addAppSession } = useAddVaultAppSessionMutation()
   const { mutateAsync: setCurrentVaultId } = useSetCurrentVaultIdMutation()
@@ -45,6 +72,7 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
           vaultId,
           host: getUrlBaseDomain(requestOrigin),
           url: getUrlHost(requestOrigin),
+          icon: requestFavicon,
         }),
         setCurrentVaultId(vaultId),
       ])

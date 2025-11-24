@@ -1,7 +1,7 @@
 import { getCoinBalance } from '@core/chain/coin/balance'
 import { CoinBalanceResolverInput } from '@core/chain/coin/balance/resolver'
 import { coinKeyToString } from '@core/chain/coin/Coin'
-import { useQueriesToEagerQuery } from '@lib/ui/query/hooks/useQueriesToEagerQuery'
+import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
 import { persistQueryOptions } from '@lib/ui/query/utils/options'
 import { mergeRecords } from '@lib/utils/record/mergeRecords'
 import { Exact } from '@lib/utils/types/Exact'
@@ -32,7 +32,7 @@ export const useBalancesQuery = <T extends CoinBalanceResolverInput>(
     }),
   })
 
-  return useQueriesToEagerQuery({
+  return useCombineQueries({
     queries,
     joinData: data => mergeRecords(...data),
   })

@@ -70,9 +70,13 @@ export const useCreateCoinMutation = () => {
       walletCore,
     })
 
-    await createCoin({ vaultId, coin: { ...coin, address } })
+    const accountCoin = { ...coin, address }
+
+    await createCoin({ vaultId, coin: accountCoin })
 
     await invalidate([StorageKey.vaultsCoins])
+
+    return accountCoin
   }
 
   return useMutation({

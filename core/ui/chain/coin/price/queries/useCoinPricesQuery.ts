@@ -6,12 +6,14 @@ import { CoinKey, coinKeyToString, Token } from '@core/chain/coin/Coin'
 import { getErc20Prices } from '@core/chain/coin/price/evm/getErc20Prices'
 import { getCoinPrices } from '@core/chain/coin/price/getCoinPrices'
 import { FiatCurrency } from '@core/config/FiatCurrency'
-import { useQueriesToEagerQuery } from '@lib/ui/query/hooks/useQueriesToEagerQuery'
+import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
+import { EagerQuery, Query } from '@lib/ui/query/Query'
 import { persistQueryOptions } from '@lib/ui/query/utils/options'
 import { groupItems } from '@lib/utils/array/groupItems'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { without } from '@lib/utils/array/without'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 import { mergeRecords } from '@lib/utils/record/mergeRecords'
 import { toEntries } from '@lib/utils/record/toEntries'
 import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
@@ -32,20 +34,34 @@ export const getCoinPricesQueryKeys = (input: GetCoinPricesQueryKeysInput) => [
 type UseCoinPricesQueryInput = {
   coins: (CoinKey & { priceProviderId?: string })[]
   fiatCurrency?: FiatCurrency
+  eager?: boolean
 }
 
-export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
+export function useCoinPricesQuery(
+  input: Omit<UseCoinPricesQueryInput, 'eager'> & { eager?: true }
+): EagerQuery<Record<string, number>>
+export function useCoinPricesQuery(
+  input: Omit<UseCoinPricesQueryInput, 'eager'> & { eager: false }
+): Query<Record<string, number>>
+export function useCoinPricesQuery(
+  input: UseCoinPricesQueryInput
+): EagerQuery<Record<string, number>> | Query<Record<string, number>> {
   const defaultFiatCurrency = useFiatCurrency()
 
-  const fiatCurrency = input.fiatCurrency ?? defaultFiatCurrency
+  const { eager = true, fiatCurrency = defaultFiatCurrency, coins } = input
 
   const queries = []
+  const staticUnsupportedResults: {
+    data: Record<string, number> | undefined
+    isPending: boolean
+    error: unknown | null
+  }[] = []
 
   const coinsWithPriceProviderId: (CoinKey & { priceProviderId: string })[] = []
   const erc20sWithoutPriceProviderId: Token<CoinKey<EvmChain>>[] = []
   const yieldBearingTokens: Token<CoinKey<CosmosChain>>[] = []
 
-  input.coins.forEach(({ id, priceProviderId, chain }) => {
+  coins.forEach(({ id, priceProviderId, chain }) => {
     if (priceProviderId) {
       coinsWithPriceProviderId.push({ id, priceProviderId, chain })
     } else if (
@@ -56,6 +72,14 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
       yieldBearingTokens.push({ id, chain })
     } else if (isChainOfKind(chain, 'evm') && id) {
       erc20sWithoutPriceProviderId.push({ id, chain })
+    } else if (!eager) {
+      staticUnsupportedResults.push({
+        data: undefined,
+        isPending: false,
+        error: new NotImplementedError(
+          `price resolution for ${coinKeyToString({ id, chain })}`
+        ),
+      })
     }
   })
 
@@ -168,8 +192,9 @@ export const useCoinPricesQuery = (input: UseCoinPricesQueryInput) => {
     queries,
   })
 
-  return useQueriesToEagerQuery({
-    queries: queryResults,
+  return useCombineQueries({
+    queries: [...queryResults, ...staticUnsupportedResults],
     joinData: data => mergeRecords(...data),
+    eager,
   })
 }

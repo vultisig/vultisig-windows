@@ -1,6 +1,6 @@
 import { UtxoBasedChain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { formatAmount } from '@lib/utils/formatAmount'
 
 import { fromChainAmount } from '../../../amount/fromChainAmount'
 import { minUtxo } from '../minUtxo'
@@ -19,9 +19,9 @@ export const validateUtxoRequirements = ({
   const { decimals, ticker } = chainFeeCoin[chain]
 
   if (amount < minUtxo[chain]) {
-    const formattedAmount = formatTokenAmount(
+    const formattedAmount = formatAmount(
       fromChainAmount(minUtxo[chain], decimals),
-      ticker
+      { ticker }
     )
     return `Minimum send amount is ${formattedAmount}. ${chain} requires this to prevent spam.`
   }

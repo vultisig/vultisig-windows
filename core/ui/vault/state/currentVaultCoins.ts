@@ -1,6 +1,9 @@
 import { Chain } from '@core/chain/Chain'
 import { areEqualCoins, CoinKey } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
+import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
+import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { groupItems } from '@lib/utils/array/groupItems'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMemo } from 'react'
@@ -43,10 +46,24 @@ export const useCurrentVaultAddresses = () => {
   }, [coins])
 }
 
-export const useCurrentVaultAddress = (chain: string) => {
+export const useCurrentVaultAddress = (chain: Chain) => {
   const addresses = useCurrentVaultAddresses()
+  const walletCore = useAssertWalletCore()
+  const vault = useCurrentVault()
 
-  return shouldBePresent(addresses[chain as Chain])
+  return useMemo(() => {
+    const existing = addresses[chain]
+    if (existing) return existing
+
+    const publicKey = getPublicKey({
+      chain,
+      walletCore,
+      hexChainCode: vault.hexChainCode,
+      publicKeys: vault.publicKeys,
+    })
+
+    return deriveAddress({ chain, publicKey, walletCore })
+  }, [addresses, chain, walletCore, vault])
 }
 
 export const useCurrentVaultChainCoins = (chain: string) => {

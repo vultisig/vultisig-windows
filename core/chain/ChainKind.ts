@@ -12,6 +12,8 @@ const chainKindRecord = {
   [EvmChain.Polygon]: 'evm',
   [EvmChain.Zksync]: 'evm',
   [EvmChain.Mantle]: 'evm',
+  [EvmChain.Hyperliquid]: 'evm',
+  [EvmChain.Sei]: 'evm',
 
   [UtxoChain.Bitcoin]: 'utxo',
   [UtxoChain.BitcoinCash]: 'utxo',

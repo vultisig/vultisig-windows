@@ -1,12 +1,11 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
-import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
+import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { VStack } from '@lib/ui/layout/Stack'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { formatAmount } from '@lib/utils/formatAmount'
 import styled from 'styled-components'
 
 export const SwapCoinItem = ({
@@ -16,7 +15,7 @@ export const SwapCoinItem = ({
   coin: AccountCoin
   tokenAmount: number | null
 }) => {
-  const fiatCurrency = useFiatCurrency()
+  const formatFiatAmount = useFormatFiatAmount()
   const coinPriceQuery = useCoinPriceQuery({
     coin,
   })
@@ -35,7 +34,7 @@ export const SwapCoinItem = ({
             value={coinPriceQuery}
             success={price => (
               <Text centerHorizontally color="supporting" size={12}>
-                {formatAmount(tokenAmount * price, fiatCurrency)}
+                {formatFiatAmount(tokenAmount * price)}
               </Text>
             )}
             error={() => null}

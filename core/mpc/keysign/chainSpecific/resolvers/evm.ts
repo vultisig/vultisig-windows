@@ -1,74 +1,56 @@
 import { create } from '@bufbuild/protobuf'
-import { toChainAmount } from '@core/chain/amount/toChainAmount'
-import { Chain, EvmChain } from '@core/chain/Chain'
-import { evmChainInfo } from '@core/chain/chains/evm/chainInfo'
+import { EvmChain } from '@core/chain/Chain'
 import { getEvmClient } from '@core/chain/chains/evm/client'
-import { getEvmBaseFee } from '@core/chain/tx/fee/evm/baseFee'
-import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
-import { getEvmGasLimit } from '@core/chain/tx/fee/evm/getEvmGasLimit'
-import { getEvmMaxPriorityFeePerGas } from '@core/chain/tx/fee/evm/maxPriorityFeePerGas'
-import {
-  EthereumSpecific,
-  EthereumSpecificSchema,
-} from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { publicActionsL2 } from 'viem/zksync'
+import { deriveEvmGasLimit } from '@core/chain/tx/fee/evm/evmGasLimit'
+import { getEvmFeeQuote } from '@core/mpc/keysign/fee/resolvers/evm/getEvmFeeQuote'
+import { EthereumSpecificSchema } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 
-import { ChainSpecificResolver } from '../resolver'
+import { getKeysignSwapPayload } from '../../swap/getKeysignSwapPayload'
+import { getKeysignCoin } from '../../utils/getKeysignCoin'
+import { GetChainSpecificResolver } from '../resolver'
 
-const baseFeeMultiplier = 1.5
-
-export const getEthereumSpecific: ChainSpecificResolver<
-  EthereumSpecific,
-  EvmFeeSettings
-> = async ({ coin, feeSettings, amount, receiver, data }) => {
-  const chain = coin.chain as EvmChain
+export const getEvmChainSpecific: GetChainSpecificResolver<
+  'ethereumSpecific'
+> = async ({ keysignPayload, feeSettings, thirdPartyGasLimitEstimation }) => {
+  const coin = getKeysignCoin<EvmChain>(keysignPayload)
+  const { chain, address } = coin
+  const client = getEvmClient(chain)
 
   const nonce = BigInt(
-    await getEvmClient(chain).getTransactionCount({
-      address: coin.address as `0x${string}`,
+    await client.getTransactionCount({
+      address: address as `0x${string}`,
     })
   )
 
-  if (chain === Chain.Zksync) {
-    const client = getEvmClient(chain).extend(publicActionsL2())
-    const value = toChainAmount(shouldBePresent(amount), coin.decimals)
+  const getData = () => {
+    const swapPayload = getKeysignSwapPayload(keysignPayload)
+    if (swapPayload && 'general' in swapPayload) {
+      const value = swapPayload.general.quote?.tx?.data
+      if (value) {
+        return value
+      }
+    }
 
-    const { maxFeePerGas, maxPriorityFeePerGas, gasLimit } =
-      await client.estimateFee({
-        chain: evmChainInfo[chain],
-        account: coin.address as `0x${string}`,
-        to: shouldBePresent(receiver) as `0x${string}`,
-        value,
-        data: data as `0x${string}` | undefined,
-      })
-
-    return create(EthereumSpecificSchema, {
-      maxFeePerGasWei: maxFeePerGas.toString(),
-      priorityFee: maxPriorityFeePerGas.toString(),
-      gasLimit: gasLimit.toString(),
-      nonce,
-    })
+    return keysignPayload.memo
   }
 
-  const gasLimit = feeSettings?.gasLimit ?? getEvmGasLimit(coin)
+  const { gasLimit, baseFeePerGas, maxPriorityFeePerGas } =
+    await getEvmFeeQuote({
+      keysignPayload,
+      feeSettings,
+      thirdPartyGasLimitEstimation,
+      minimumGasLimit: deriveEvmGasLimit({
+        coin,
+        data: getData(),
+      }),
+    })
 
-  const baseFee = await getEvmBaseFee(chain)
-  const defaultPriorityFee = await getEvmMaxPriorityFeePerGas(chain)
-  const priorityFee = feeSettings?.priorityFee ?? defaultPriorityFee
-
-  let maxFeePerGasWei = Number(
-    BigInt(
-      Math.round(Number(baseFee) * baseFeeMultiplier + Number(priorityFee))
-    )
-  )
-
-  if (maxFeePerGasWei < 1) maxFeePerGasWei = 1
+  const maxFeePerGas = baseFeePerGas + maxPriorityFeePerGas
 
   return create(EthereumSpecificSchema, {
-    maxFeePerGasWei: maxFeePerGasWei.toString(),
-    priorityFee: priorityFee.toString(),
     nonce,
+    maxFeePerGasWei: maxFeePerGas.toString(),
+    priorityFee: maxPriorityFeePerGas.toString(),
     gasLimit: gasLimit.toString(),
   })
 }

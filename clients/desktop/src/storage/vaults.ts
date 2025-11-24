@@ -1,5 +1,5 @@
+import { getVaultId } from '@core/mpc/vault/Vault'
 import { vaultsInitialValue, VaultsStorage } from '@core/ui/storage/vaults'
-import { getVaultId } from '@core/ui/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { recordMap } from '@lib/utils/record/recordMap'
 import { toEntries } from '@lib/utils/record/toEntries'

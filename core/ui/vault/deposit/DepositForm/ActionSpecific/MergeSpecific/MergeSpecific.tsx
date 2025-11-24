@@ -35,7 +35,9 @@ export const MergeSpecific = () => {
       renderContent={({ onClose }) => (
         <MergeTokenExplorer
           activeOption={depositCoin}
-          onOptionClick={token => setDepositCoin(token)}
+          onOptionClick={token => {
+            setDepositCoin(token)
+          }}
           onClose={onClose}
         />
       )}

@@ -61,6 +61,8 @@ async function setupContentScriptMessenger(
   })
 
   if (vultisigDefaultProvider) {
+    providers.tron.init()
+
     const providerCopy = Object.create(
       Object.getPrototypeOf(ethereumProvider),
       Object.getOwnPropertyDescriptors(ethereumProvider)
@@ -77,6 +79,11 @@ async function setupContentScriptMessenger(
       provider: ethereumProvider as unknown as EIP1193Provider,
     })
     Object.defineProperties(window, {
+      tronLink: {
+        value: providers.tron,
+        configurable: false,
+        writable: false,
+      },
       ethereum: {
         get: () => window.vultiConnectRouter.currentProvider,
         set: newProvider => window.vultiConnectRouter.addProvider(newProvider),

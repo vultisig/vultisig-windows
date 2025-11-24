@@ -10,13 +10,15 @@ import { CurrencyPage } from '@core/ui/preferences/currency'
 import { LanguagePage } from '@core/ui/preferences/language'
 import { UploadQrPage } from '@core/ui/qr/upload'
 import { VaultBackupPage } from '@core/ui/vault/backup'
-import { VaultChainCoinPage } from '@core/ui/vault/chain/coin/VaultChainCoinPage'
+import { SelectVaultsBackupPage } from '@core/ui/vault/backup/select/SelectVaultsBackupPage'
+import { VaultsBackupPage } from '@core/ui/vault/backup/VaultsBackupPage'
 import { ManageVaultChainsPage } from '@core/ui/vault/chain/manage'
 import { ManageVaultChainCoinsPage } from '@core/ui/vault/chain/manage/coin'
 import { VaultChainPage } from '@core/ui/vault/chain/VaultChainPage'
 import { DepositPage } from '@core/ui/vault/deposit/DepositPage'
 import { SignCustomMessagePage } from '@core/ui/vault/keysign/custom-message'
 import { NewVaultPage } from '@core/ui/vault/new'
+import { VaultPage } from '@core/ui/vault/page'
 import { SendPage } from '@core/ui/vault/send/SendPage'
 import { VaultSettingsPage } from '@core/ui/vault/settings'
 import { AirdropRegisterPage } from '@core/ui/vault/settings/airdrop-register'
@@ -34,10 +36,19 @@ import { Views } from '@lib/ui/navigation/Views'
 
 import { PasscodeAutoLockPage } from '../passcodeEncryption/autoLock/PasscodeAutoLockPage'
 import { ManagePasscodeEncryptionPage } from '../passcodeEncryption/manage/ManagePasscodeEncryptionPage'
+import { RequestFastVaultBackup } from '../vault/backup/fast/request'
+import { DepositActionProvider } from '../vault/deposit/providers/DepositActionProvider'
+import { DepositCoinProvider } from '../vault/deposit/providers/DepositCoinProvider'
+import { CirclePage } from '../vault/settings/CirclePage/CirclePage'
+import { ReferralsGuard } from '../vault/settings/referral/providers/ReferralsGuard'
 import { ReferralPage } from '../vault/settings/referral/ReferralsPage'
+import { FaqVaultPage } from '../vault/settings/vaultFaq/FaqVaultPage'
+import { ShareVaultPage } from '../vault/share/ShareVaultPage'
+import { VultDiscountPage } from '../vult/discount/page'
 
 export type SharedViewId = Extract<
   CoreViewId,
+  | 'circle'
   | 'addCustomToken'
   | 'address'
   | 'addressBook'
@@ -62,9 +73,11 @@ export type SharedViewId = Extract<
   | 'updateAddressBookItem'
   | 'updateVaultFolder'
   | 'uploadQr'
+  | 'vault'
   | 'vaultBackup'
+  | 'vaultsBackup'
+  | 'selectVaultsBackup'
   | 'vaultChainDetail'
-  | 'vaultChainCoinDetail'
   | 'vaultDetails'
   | 'vaultFolder'
   | 'vaultSettings'
@@ -72,10 +85,19 @@ export type SharedViewId = Extract<
   | 'managePasscodeEncryption'
   | 'passcodeAutoLock'
   | 'referral'
+  | 'requestFastVaultBackup'
+  | 'faq'
+  | 'shareVault'
+  | 'vultDiscount'
 >
 
 export const sharedViews: Views<SharedViewId> = {
-  referral: ReferralPage,
+  referral: () => (
+    <ReferralsGuard>
+      <ReferralPage />
+    </ReferralsGuard>
+  ),
+  circle: CirclePage,
   addCustomToken: AddCustomTokenPage,
   address: AddressPage,
   addressBook: AddressBookPage,
@@ -85,7 +107,13 @@ export const sharedViews: Views<SharedViewId> = {
   currencySettings: CurrencyPage,
   deeplink: DeeplinkPage,
   deleteVault: DeleteVaultPage,
-  deposit: DepositPage,
+  deposit: () => (
+    <DepositActionProvider>
+      <DepositCoinProvider>
+        <DepositPage />
+      </DepositCoinProvider>
+    </DepositActionProvider>
+  ),
   languageSettings: LanguagePage,
   manageVaultChains: ManageVaultChainsPage,
   manageVaultChainCoins: ManageVaultChainCoinsPage,
@@ -103,8 +131,10 @@ export const sharedViews: Views<SharedViewId> = {
     </CurrentVaultFolderPageProvider>
   ),
   uploadQr: UploadQrPage,
+  vault: VaultPage,
   vaultBackup: VaultBackupPage,
-  vaultChainCoinDetail: VaultChainCoinPage,
+  vaultsBackup: VaultsBackupPage,
+  selectVaultsBackup: SelectVaultsBackupPage,
   vaultChainDetail: VaultChainPage,
   vaultDetails: VaultDetailsPage,
   vaultFolder: () => (
@@ -116,4 +146,8 @@ export const sharedViews: Views<SharedViewId> = {
   vaults: VaultsPage,
   managePasscodeEncryption: ManagePasscodeEncryptionPage,
   passcodeAutoLock: PasscodeAutoLockPage,
+  requestFastVaultBackup: RequestFastVaultBackup,
+  faq: FaqVaultPage,
+  shareVault: ShareVaultPage,
+  vultDiscount: VultDiscountPage,
 }

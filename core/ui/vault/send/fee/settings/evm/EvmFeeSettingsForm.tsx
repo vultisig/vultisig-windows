@@ -2,8 +2,9 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { EvmChain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
 import { gwei } from '@core/chain/tx/fee/evm/gwei'
+import { EvmFeeSettings } from '@core/mpc/keysign/chainSpecific/FeeSettings'
+import { useEvmBaseFeeQuery } from '@core/ui/chain/evm/queries/baseFee'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
@@ -16,12 +17,11 @@ import { InputProps, OnCloseProp, OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
-import { formatTokenAmount } from '@lib/utils/formatTokenAmount'
+import { formatAmount } from '@lib/utils/formatAmount'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useEvmBaseFeeQuery } from '../../../../../chain/evm/queries/baseFee'
 import { FeeContainer } from '../FeeContainer'
 
 type EvmFeeSettingsFormProps = InputProps<EvmFeeSettings> &
@@ -40,7 +40,7 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
   const { t } = useTranslation()
   const { ticker, decimals } = chainFeeCoin[chain]
   const priorityFeeInGwei = fromChainAmount(
-    BigInt(value.priorityFee),
+    BigInt(value.maxPriorityFeePerGas),
     gwei.decimals
   )
 
@@ -69,7 +69,9 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
             <MatchQuery
               value={baseFeeQuery}
               success={baseFee =>
-                formatTokenAmount(fromChainAmount(baseFee, decimals))
+                formatAmount(fromChainAmount(baseFee, decimals), {
+                  precision: 'high',
+                })
               }
               pending={() => <Spinner />}
               error={() => t('failed_to_load')}
@@ -85,7 +87,7 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
             onValueChange={priorityFee =>
               onChange({
                 ...value,
-                priorityFee: priorityFee
+                maxPriorityFeePerGas: priorityFee
                   ? toChainAmount(priorityFee, gwei.decimals)
                   : 0n,
               })

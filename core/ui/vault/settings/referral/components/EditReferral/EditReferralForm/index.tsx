@@ -45,6 +45,8 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
     [nameDetails.remainingYears]
   )
 
+  const maxExtension = initialExpiration + 1
+
   const feeAmount = watch('referralFeeAmount')
 
   const canAfford = useCanAffordReferral(feeAmount)
@@ -71,9 +73,12 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
   }, [coins, nameDetails?.preferred_asset])
 
   const currentExpiration = watch('expiration')
+  const isExactlyOneYearExtension = currentExpiration === maxExtension
+
   const expirationChanged =
     currentExpiration !== initialExpiration &&
     currentExpiration > initialExpiration
+
   const assetChanged = prefCoin
     ? referralPayoutAsset !== prefCoin
     : referralPayoutAsset !== initialReferralPayoutAsset.current
@@ -87,6 +92,8 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
   const isDisabled = useMemo(() => {
     if (currentExpiration <= initialExpiration) {
       return `Expiration must be greater than ${initialExpiration}`
+    } else if (!isExactlyOneYearExtension) {
+      return t('expiration_must_extend_by_exactly_one_year')
     } else if (!isValid || isSubmitting || !hasChanges || error) {
       return true
     }
@@ -95,15 +102,17 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
     error,
     hasChanges,
     initialExpiration,
+    isExactlyOneYearExtension,
     isSubmitting,
     isValid,
+    t,
   ])
 
   return (
     <VStack flexGrow gap={40}>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={t('title_1')}
+        title={t('referrals_default_title')}
       />
       <ReferralPageWrapper
         onSubmit={onFinish}

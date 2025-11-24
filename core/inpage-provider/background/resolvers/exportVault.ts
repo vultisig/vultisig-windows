@@ -1,7 +1,7 @@
 import { storage } from '@core/extension/storage'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
+import { getVaultId } from '@core/mpc/vault/Vault'
 import { toVaultExport } from '@core/ui/vault/export/core/toVaultExport'
-import { getVaultId } from '@core/ui/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 export const exportVault: BackgroundResolver<'exportVault'> = async ({

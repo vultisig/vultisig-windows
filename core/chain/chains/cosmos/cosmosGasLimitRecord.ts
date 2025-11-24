@@ -2,7 +2,7 @@ import { Chain, CosmosChain } from '@core/chain/Chain'
 
 import { areEqualCoins, CoinKey } from '../../coin/Coin'
 
-export const cosmosGasLimitRecord: Record<CosmosChain, bigint> = {
+const cosmosGasLimitRecord: Record<CosmosChain, bigint> = {
   [Chain.Cosmos]: 200000n,
   [Chain.Osmosis]: 300000n,
   [Chain.Kujira]: 200000n,

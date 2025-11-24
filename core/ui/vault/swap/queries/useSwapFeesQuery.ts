@@ -1,32 +1,42 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getNativeSwapDecimals } from '@core/chain/swap/native/utils/getNativeSwapDecimals'
+import { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
 import { SwapFees } from '@core/chain/swap/SwapFee'
-import { getFeeAmount } from '@core/chain/tx/fee/getFeeAmount'
-import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
+import { getFeeAmount } from '@core/mpc/keysign/fee'
+import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
-import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
-import { useToCoin } from '../state/toCoin'
-import { useSwapChainSpecificQuery } from './useSwapChainSpecificQuery'
-import { useSwapQuoteQuery } from './useSwapQuoteQuery'
+import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
+import { useCurrentVaultPublicKey } from '../../state/currentVault'
+import { useSwapKeysignPayloadQuery } from '../keysignPayload/query'
+import { useSwapFromCoin } from '../state/fromCoin'
+import { useSwapToCoin } from '../state/toCoin'
 
-export const useSwapFeesQuery = () => {
-  const swapQuoteQuery = useSwapQuoteQuery()
-  const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
-  const [toCoinKey] = useToCoin()
-  const chainSpecificQuery = useSwapChainSpecificQuery()
+export const useSwapFeesQuery = (swapQuote: SwapQuote) => {
+  const [fromCoinKey] = useSwapFromCoin()
+  const [toCoinKey] = useSwapToCoin()
+  const keysignPayloadQuery = useSwapKeysignPayloadQuery(swapQuote)
+  const publicKey = useCurrentVaultPublicKey(fromCoinKey.chain)
+  const walletCore = useAssertWalletCore()
 
-  return useTransformQueriesData(
-    {
-      swapQuote: swapQuoteQuery,
-      chainSpecific: chainSpecificQuery,
-    },
-    ({ swapQuote, chainSpecific }): SwapFees => {
-      const fromFeeCoin = chainFeeCoin[fromCoinKey.chain]
+  return useTransformQueryData(
+    keysignPayloadQuery,
+    (keysignPayload): SwapFees => {
+      const { chain } = fromCoinKey
+      const fromFeeCoin = chainFeeCoin[chain]
+
+      const network = {
+        ...fromFeeCoin,
+        amount: getFeeAmount({
+          keysignPayload,
+          walletCore,
+          publicKey,
+        }),
+        decimals: fromFeeCoin.decimals,
+      }
 
       return matchRecordUnion(swapQuote, {
         native: ({ fees }) => {
-          const networkFeeAmount = getFeeAmount(chainSpecific)
           const swapAmount = BigInt(fees.total)
 
           return {
@@ -35,27 +45,17 @@ export const useSwapFeesQuery = () => {
               amount: swapAmount,
               decimals: getNativeSwapDecimals(toCoinKey),
             },
-            network: {
-              ...fromFeeCoin,
-              amount: networkFeeAmount,
-              decimals: fromFeeCoin.decimals,
-            },
+            network,
           }
         },
         general: ({ tx }) => {
           return matchRecordUnion(tx, {
-            evm: ({ gasPrice, gas }) => ({
-              swap: {
-                chain: fromCoinKey.chain,
-                id: fromCoinKey.id,
-                amount: BigInt(gasPrice) * BigInt(gas),
-                decimals: fromFeeCoin.decimals,
-              },
+            evm: () => ({
+              network,
             }),
             solana: ({ networkFee, swapFee }) => ({
               network: {
-                chain: fromCoinKey.chain,
-                id: fromCoinKey.id,
+                chain: chain,
                 amount: BigInt(networkFee),
                 decimals: fromFeeCoin.decimals,
               },

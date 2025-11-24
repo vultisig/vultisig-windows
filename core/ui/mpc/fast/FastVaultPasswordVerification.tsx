@@ -1,11 +1,15 @@
 import { getVaultFromServer } from '@core/mpc/fast/api/getVaultFromServer'
+import { getVaultId } from '@core/mpc/vault/Vault'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
+import { IconButton } from '@lib/ui/buttons/IconButton'
+import { CrossIcon } from '@lib/ui/icons/CrossIcon'
+import { FocusLockIcon } from '@lib/ui/icons/FocusLockIcon'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
 import { VStack } from '@lib/ui/layout/Stack'
-import { Modal } from '@lib/ui/modal'
+import { Backdrop } from '@lib/ui/modal/Backdrop'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { convertDuration } from '@lib/utils/time/convertDuration'
@@ -57,42 +61,82 @@ export const FastVaultPasswordVerification = () => {
   if (!shouldShowModal) return null
 
   return (
-    <StyledModal
-      title={t('verify_password_periodic_message')}
-      onClose={() => mutate(undefined)}
-    >
-      <VStack gap={16}>
-        <Text centerHorizontally size={12} color="supporting">
-          {t('verify_password_periodic_message_description')}
-        </Text>
-        <PasswordInput
-          placeholder={t('enter_password')}
-          value={password}
-          onValueChange={value => {
-            if (isPending) return
-            setPassword(value)
-          }}
-        />
-        <VStack gap={6}>
-          <Button
+    <Backdrop onClose={() => mutate(undefined)}>
+      <ModalWrapper>
+        <CloseButton onClick={() => mutate(undefined)}>
+          <CrossIcon />
+        </CloseButton>
+
+        <IconWrapper size={32} color="buttonPrimary">
+          <FocusLockIcon />
+        </IconWrapper>
+
+        <VStack gap={8} alignItems="center">
+          <Text size={17} weight={500} centerHorizontally>
+            {t('enter_your_password')}
+          </Text>
+          <Text size={12} color="shy" centerHorizontally>
+            {t('verify_password_periodic_message_description')}
+          </Text>
+        </VStack>
+
+        <VStack gap={16} fullWidth>
+          <PasswordInput
+            placeholder={t('enter_password')}
+            value={password}
+            onValueChange={value => {
+              if (isPending) return
+              setPassword(value)
+            }}
+            validation={error ? 'invalid' : undefined}
+            error={error ? t('incorrect_password') : undefined}
+          />
+
+          <ConfirmButton
             disabled={isDisabled || isPending}
             loading={isPending}
             onClick={() => mutate(password)}
+            kind="primary"
           >
-            {t('verify')}
-          </Button>
-          {error && (
-            <Text size={12} color="danger">
-              {t('incorrect_password')}
-            </Text>
-          )}
+            {t('confirm')}
+          </ConfirmButton>
         </VStack>
-      </VStack>
-    </StyledModal>
+      </ModalWrapper>
+    </Backdrop>
   )
 }
 
-const StyledModal = styled(Modal)`
-  background-color: ${getColor('background')};
-  border: none;
+const CloseButton = styled(IconButton)`
+  display: flex;
+  padding: 8px;
+  align-items: center;
+  gap: 10px;
+
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  border-radius: 99px;
+  background: ${getColor('foregroundExtra')};
+`
+
+const ModalWrapper = styled(VStack)`
+  position: relative;
+  display: flex;
+  width: 311px;
+  padding: 32px 24px 24px 24px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  border-radius: 24px;
+  border: 1px solid #11284a;
+  background: #02122b;
+`
+
+const ConfirmButton = styled(Button)`
+  width: 100%;
+  height: 48px;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 600;
 `

@@ -1,6 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { Chain } from '@core/chain/Chain'
-import { formatFee } from '@core/chain/tx/fee/format/formatFee'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
@@ -19,12 +18,14 @@ import { assertField } from '@lib/utils/record/assertField'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useFiatCurrency } from '../../../../storage/fiatCurrency'
+import { useFormatFiatAmount } from '../../../../chain/hooks/useFormatFiatAmount'
+import { useKeysignFee } from '../../fee/useKeysignFee'
+import { SignAminoDisplay } from '../../tx/components/SignAminoDisplay'
 
 export const JoinKeysignTxPrimaryInfo = ({
   value,
 }: ValueProp<KeysignPayload>) => {
-  const { toAddress, memo, toAmount, blockchainSpecific } = value
+  const { toAddress, memo, toAmount } = value
 
   const coin = fromCommCoin(assertField(value, 'coin'))
 
@@ -36,15 +37,15 @@ export const JoinKeysignTxPrimaryInfo = ({
     coin,
   })
 
-  const fiatCurrency = useFiatCurrency()
+  const formatFiatAmount = useFormatFiatAmount()
+
+  const fee = useKeysignFee(value)
 
   const networkFeesFormatted = useMemo(() => {
-    if (!blockchainSpecific.value) return null
-    formatFee({
-      chain: coin.chain as Chain,
-      chainSpecific: blockchainSpecific,
-    })
-  }, [blockchainSpecific, coin.chain])
+    const { decimals, ticker } = chainFeeCoin[coin.chain]
+
+    return formatAmount(fromChainAmount(fee, decimals), { ticker })
+  }, [coin.chain, fee])
 
   return (
     <>
@@ -69,9 +70,8 @@ export const JoinKeysignTxPrimaryInfo = ({
             <TxOverviewRow>
               <span>{t('value')}</span>
               <span>
-                {formatAmount(
-                  fromChainAmount(BigInt(toAmount), decimals) * price,
-                  fiatCurrency
+                {formatFiatAmount(
+                  fromChainAmount(BigInt(toAmount), decimals) * price
                 )}
               </span>
             </TxOverviewRow>
@@ -85,6 +85,9 @@ export const JoinKeysignTxPrimaryInfo = ({
           <span>{t('network_fee')}</span>
           <span>{networkFeesFormatted}</span>
         </TxOverviewRow>
+      )}
+      {value.signAmino !== undefined && (
+        <SignAminoDisplay signAmino={value.signAmino} />
       )}
     </>
   )

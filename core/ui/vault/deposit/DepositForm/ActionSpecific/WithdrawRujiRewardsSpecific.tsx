@@ -5,7 +5,7 @@ import { useDepositBalance } from '../../hooks/useDepositBalance'
 import { InputFieldWrapper } from '../DepositForm.styled'
 
 export const WithdrawRujiRewardsSpecific = () => {
-  const { balanceFormatted } = useDepositBalance({
+  const { balance } = useDepositBalance({
     selectedChainAction: 'withdraw_ruji_rewards',
   })
   return (
@@ -15,7 +15,7 @@ export const WithdrawRujiRewardsSpecific = () => {
       </Text>
       <InputFieldWrapper>
         <Text size={15} weight="400">
-          {balanceFormatted}
+          {balance}
         </Text>
       </InputFieldWrapper>
     </InputContainer>

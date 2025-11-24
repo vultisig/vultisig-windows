@@ -27,17 +27,23 @@ const StyledCheckbox = styled(Checkbox)`
   pointer-events: none;
 `
 
-const Wrapper = styled(PageContent)`
+const SummaryContainer = styled(PageContent)`
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding-block: 40px;
+`
+
+const Wrapper = styled(VStack)`
   max-width: 550px;
-  margin-inline: auto;
-  padding-top: 100px;
-  justify-content: space-between;
-  overflow-y: hidden;
+  width: 100%;
   gap: 64px;
 `
 
 const LightningIconWrapper = styled.div`
   font-size: 20px;
+  color: ${getColor('idle')};
 `
 
 const ContentWrapper = styled(VStack)`
@@ -132,69 +138,71 @@ export const VaultBackupSummaryStep: FC<SetupVaultSummaryStepProps> = ({
   ]
 
   return (
-    <AnimatedVisibility
-      config={{
-        duration: 1000,
-      }}
-      animationConfig="bottomToTop"
-      delay={300}
-    >
-      <Wrapper data-testid="OnboardingSummary-Wrapper">
-        {isFastVault && (
-          <PillWrapper
-            data-testid="OnboardingSummary-PillWrapper"
-            alignItems="center"
-            gap={8}
-          >
-            <LightningIconWrapper>
-              <LightningIcon color="#FFC25C" />
-            </LightningIconWrapper>
-            <Text size={12} color="shy">
-              {t('fastVault')}
-            </Text>
-          </PillWrapper>
-        )}
-        <ContentWrapper>
-          <Text variant="h1Regular">{t('backupGuide')}</Text>
-          <VStack gap={24}>
-            {summaryItems.map(({ title, icon }) => (
-              <SummaryListItem alignItems="center" key={title}>
-                <IconWrapper>{icon}</IconWrapper>
-                <Text color="contrast" weight={500} size={13}>
-                  {title}
-                </Text>
-              </SummaryListItem>
-            ))}
+    <SummaryContainer>
+      <AnimatedVisibility
+        config={{
+          duration: 1000,
+        }}
+        animationConfig="bottomToTop"
+        delay={300}
+      >
+        <Wrapper data-testid="OnboardingSummary-Wrapper">
+          {isFastVault && (
+            <PillWrapper
+              data-testid="OnboardingSummary-PillWrapper"
+              alignItems="center"
+              gap={8}
+            >
+              <LightningIconWrapper>
+                <LightningIcon />
+              </LightningIconWrapper>
+              <Text size={12} color="shy">
+                {t('fastVault')}
+              </Text>
+            </PillWrapper>
+          )}
+          <ContentWrapper>
+            <Text variant="h1Regular">{t('backupGuide')}</Text>
+            <VStack gap={24}>
+              {summaryItems.map(({ title, icon }) => (
+                <SummaryListItem alignItems="center" key={title}>
+                  <IconWrapper>{icon}</IconWrapper>
+                  <Text color="contrast" weight={500} size={13}>
+                    {title}
+                  </Text>
+                </SummaryListItem>
+              ))}
+            </VStack>
+          </ContentWrapper>
+          <VStack gap={16}>
+            <HStack
+              role="button"
+              onClick={toggle}
+              tabIndex={0}
+              alignItems="center"
+              gap={8}
+            >
+              <StyledCheckbox onChange={() => {}} value={isAgreed} />
+              <Text color="contrast" weight={500} size={14}>
+                {t('fastVaultSetup.summary.agreementText')}
+              </Text>
+            </HStack>
+            <Button disabled={!isAgreed} onClick={onFinish}>
+              {t('fastVaultSetup.summary.start_using_vault')}
+            </Button>
+            <Divider text={t('or').toUpperCase()} />
+            <Button
+              disabled={!isAgreed}
+              kind="secondary"
+              onClick={() => {
+                navigate({ id: 'manageVaultChains' })
+              }}
+            >
+              {t('fastVaultSetup.summary.select_preferred_chains')}
+            </Button>
           </VStack>
-        </ContentWrapper>
-        <VStack gap={16}>
-          <HStack
-            role="button"
-            onClick={toggle}
-            tabIndex={0}
-            alignItems="center"
-            gap={8}
-          >
-            <StyledCheckbox onChange={() => {}} value={isAgreed} />
-            <Text color="contrast" weight={500} size={14}>
-              {t('fastVaultSetup.summary.agreementText')}
-            </Text>
-          </HStack>
-          <Button disabled={!isAgreed} onClick={onFinish}>
-            {t('fastVaultSetup.summary.start_using_vault')}
-          </Button>
-          <Divider text={t('or').toUpperCase()} />
-          <Button
-            disabled={!isAgreed}
-            kind="secondary"
-            onClick={() => {
-              navigate({ id: 'manageVaultChains' })
-            }}
-          >
-            {t('fastVaultSetup.summary.select_preferred_chains')}
-          </Button>
-        </VStack>
-      </Wrapper>
-    </AnimatedVisibility>
+        </Wrapper>
+      </AnimatedVisibility>
+    </SummaryContainer>
   )
 }

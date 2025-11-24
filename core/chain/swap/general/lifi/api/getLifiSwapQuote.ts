@@ -17,6 +17,7 @@ import { GeneralSwapQuote } from '../../GeneralSwapQuote'
 
 type Input = Record<TransferDirection, AccountCoinKey<LifiSwapEnabledChain>> & {
   amount: bigint
+  affiliateBps?: number
 }
 
 const setupLifi = memoize(() => {
@@ -27,6 +28,7 @@ const setupLifi = memoize(() => {
 
 export const getLifiSwapQuote = async ({
   amount,
+  affiliateBps,
   ...transfer
 }: Input): Promise<GeneralSwapQuote> => {
   setupLifi()
@@ -50,14 +52,14 @@ export const getLifiSwapQuote = async ({
     fromAmount: amount.toString(),
     fromAddress,
     toAddress,
-    fee: lifiConfig.afffiliateFee,
+    fee: affiliateBps ? affiliateBps / 10000 : undefined,
   })
 
   const { transactionRequest, estimate } = quote
 
   const chainKind = getChainKind(transfer.from.chain)
 
-  const { value, gasPrice, gasLimit, data, from, to } =
+  const { value, gasLimit, data, from, to } =
     shouldBePresent(transactionRequest)
 
   return {
@@ -94,16 +96,17 @@ export const getLifiSwapQuote = async ({
             },
           }
         },
-        evm: () => ({
-          evm: {
-            from: shouldBePresent(from),
-            to: shouldBePresent(to),
-            data: shouldBePresent(data),
-            value: BigInt(shouldBePresent(value)).toString(),
-            gasPrice: BigInt(shouldBePresent(gasPrice)).toString(),
-            gas: Number(shouldBePresent(gasLimit)),
-          },
-        }),
+        evm: () => {
+          return {
+            evm: {
+              from: shouldBePresent(from),
+              to: shouldBePresent(to),
+              data: shouldBePresent(data),
+              value: BigInt(shouldBePresent(value)).toString(),
+              gasLimit: gasLimit ? BigInt(gasLimit) : undefined,
+            },
+          }
+        },
       }
     ),
   }

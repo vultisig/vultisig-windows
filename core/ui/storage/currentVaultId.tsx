@@ -1,3 +1,4 @@
+import { getVaultId } from '@core/mpc/vault/Vault'
 import { useCore } from '@core/ui/state/core'
 import { ChildrenProp, ValueProp } from '@lib/ui/props'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
@@ -11,7 +12,6 @@ import {
 } from '@tanstack/react-query'
 import { useEffect, useMemo } from 'react'
 
-import { getVaultId } from '../vault/Vault'
 import { StorageKey } from './StorageKey'
 import { useVaults } from './vaults'
 

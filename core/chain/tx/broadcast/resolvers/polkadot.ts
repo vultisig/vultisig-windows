@@ -1,18 +1,21 @@
 import { OtherChain } from '@core/chain/Chain'
-import { getPolkadotClient } from '@core/chain/chains/polkadot/client'
-import { attempt } from '@lib/utils/attempt'
-import { isInError } from '@lib/utils/error/isInError'
+import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
+import { queryUrl } from '@lib/utils/query/queryUrl'
 
+import { polkadotRpcUrl } from '../../../chains/polkadot/client'
 import { BroadcastTxResolver } from '../resolver'
 
 export const broadcastPolkadotTx: BroadcastTxResolver<
   OtherChain.Polkadot
 > = async ({ tx: { encoded } }) => {
-  const client = await getPolkadotClient()
+  const hexWithPrefix = ensureHexPrefix(Buffer.from(encoded).toString('hex'))
 
-  const { error } = await attempt(client.rpc.author.submitExtrinsic(encoded))
-
-  if (error && !isInError(error, 'Transaction is temporarily banned')) {
-    throw error
-  }
+  await queryUrl(polkadotRpcUrl, {
+    body: {
+      jsonrpc: '2.0',
+      method: 'author_submitExtrinsic',
+      params: [hexWithPrefix],
+      id: 1,
+    },
+  })
 }

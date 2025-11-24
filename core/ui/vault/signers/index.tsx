@@ -1,16 +1,11 @@
 import { hasServer, isServer } from '@core/mpc/devices/localPartyId'
 import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
-import { Vault } from '@core/ui/vault/Vault'
-import { ShieldIcon } from '@lib/ui/icons/ShieldIcon'
+import { Vault } from '@core/mpc/vault/Vault'
 import { ZapIcon } from '@lib/ui/icons/ZapIcon'
 import { getColor } from '@lib/ui/theme/getters'
 import { FC, HTMLAttributes } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-const StyledSuccessIcon = styled(ShieldIcon)`
-  color: ${getColor('idle')};
-`
 
 const StyledWarningIcon = styled(ZapIcon)`
   color: ${getColor('idle')};
@@ -25,13 +20,14 @@ const StyledText = styled.span`
 
 const StyledVaultSigners = styled.div`
   align-items: center;
-  background-color: ${getColor('foreground')};
-  border: solid 1px ${getColor('foregroundExtra')};
-  border-radius: 16px;
+  border-radius: 20px;
+  background: ${({ theme }) =>
+    theme.colors.foreground.withAlpha(0.35).toCssValue()};
+  border: 1px solid ${getColor('foregroundExtra')};
   display: flex;
-  gap: 8px;
-  height: 32px;
-  padding: 12px 16px;
+  gap: 6px;
+  min-height: 30px;
+  padding: 6px 12px;
 `
 
 type VaultSignersProps = {
@@ -52,10 +48,7 @@ export const VaultSigners: FC<VaultSignersProps> = ({ vault, ...rest }) => {
           <StyledText>{t('fast')}</StyledText>
         </>
       ) : (
-        <>
-          <StyledSuccessIcon fontSize={16} />
-          <StyledText>{`${least}-${t('of')}-${total}`}</StyledText>
-        </>
+        <StyledText>{`${t('part')} ${least}-${t('of')}-${total}`}</StyledText>
       )}
     </StyledVaultSigners>
   )

@@ -10,6 +10,7 @@ export type ThemeColors = {
   primaryAlt: HSLA
   success: HSLA
   danger: HSLA
+  dangerBackground: HSLA
   idle: HSLA
   idleDark: HSLA
   info: HSLA
@@ -32,7 +33,10 @@ export type ThemeColors = {
   buttonHover: HSLA
   buttonTextDisabled: HSLA
   primaryAccentTwo: HSLA
+  primaryAccentFour: HSLA
 
   transparent: HSLA
   white: HSLA
 }
+
+export type ThemeColor = keyof ThemeColors

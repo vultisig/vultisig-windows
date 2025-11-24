@@ -5,6 +5,8 @@ import { ChildrenProp } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import styled, { keyframes } from 'styled-components'
 
+import { hStack } from '../layout/Stack'
+
 const appearFromBottom = keyframes`
   from {
     transform: translateX(-50%) translateY(100%);
@@ -17,21 +19,26 @@ const appearFromBottom = keyframes`
 const Position = styled.div`
   position: fixed;
   bottom: 60px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: auto;
-  z-index: 1;
+  padding-inline: 20px;
+  right: 0;
+  left: 0;
   animation: ${appearFromBottom} 0.5s ease-out;
+
+  ${hStack({
+    justifyContent: 'center',
+  })};
 `
 
 const Container = styled.div`
   ${round};
-  height: 48px;
+  padding: 8px 12px;
   ${horizontalPadding(20)};
   background: ${getColor('foregroundExtra')};
   ${centerContent};
   font-weight: 600;
   color: ${getColor('contrast')};
+
+  overflow-x: auto;
 `
 
 export const ToastItem = ({ children }: ChildrenProp) => {

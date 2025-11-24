@@ -1,31 +1,61 @@
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { banxaSupportedChains } from '@core/chain/banxa'
+import { Chain } from '@core/chain/Chain'
+import { CoinKey, extractCoinKey } from '@core/chain/coin/Coin'
 import { swapEnabledChains } from '@core/chain/swap/swapEnabledChains'
-import { DepositPrompt } from '@core/ui/vault/components/DepositPrompts'
 import { SendPrompt } from '@core/ui/vault/send/SendPrompt'
-import { SwapPrompt } from '@core/ui/vault/swap/components/SwapPrompt'
-import { UniformColumnGrid } from '@lib/ui/css/uniformColumnGrid'
 import { isOneOf } from '@lib/utils/array/isOneOf'
+import { useCallback, useMemo } from 'react'
 
-import { CoreViewState } from '../../../navigation/CoreView'
 import { depositEnabledChains } from '../../deposit/DepositEnabledChain'
-import { DepositCoinProvider } from '../../deposit/providers/DepositCoinProvider'
-import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
+import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
+import { BuyPrompt } from '../BuyPrompt'
+import { DepositPrompt } from '../DepositPrompt'
+import { ActionsWrapper } from '../PrimaryActions.styled'
+import { ReceivePrompt } from '../ReceivePrompt'
+import { SwapPrompt } from '../SwapPrompt'
 
-export const VaultPrimaryActions = (state: CoreViewState<'send'>) => {
-  const chain = 'fromChain' in state ? state.fromChain : state.coin.chain
-  const feeCoin = useCurrentVaultCoin({ chain, id: chainFeeCoin[chain].id })
-  const coin = 'coin' in state ? state.coin : feeCoin
-  const accountCoin = useCurrentVaultCoin(coin)
+type VaultPrimaryActionsProps = {
+  coin?: CoinKey
+  onReceive?: () => void
+  showDepositAction?: boolean
+}
+
+export const VaultPrimaryActions = ({
+  coin: potentialCoin,
+  onReceive,
+  showDepositAction = true,
+}: VaultPrimaryActionsProps) => {
+  const coins = useCurrentVaultCoins()
+
+  const sendCoin = useMemo(
+    () => potentialCoin || coins[0],
+    [coins, potentialCoin]
+  )
+
+  const getCoin = useCallback(
+    (supportedChains: readonly Chain[]) => {
+      const coin = (potentialCoin ? [potentialCoin] : coins).find(coin =>
+        isOneOf(coin.chain, supportedChains)
+      )
+
+      if (coin) {
+        return extractCoinKey(coin)
+      }
+    },
+    [coins, potentialCoin]
+  )
+
+  const swapCoin = useMemo(() => getCoin(swapEnabledChains), [getCoin])
+  const buyCoin = useMemo(() => getCoin(banxaSupportedChains), [getCoin])
+  const depositCoin = useMemo(() => getCoin(depositEnabledChains), [getCoin])
 
   return (
-    <UniformColumnGrid fullWidth gap={12}>
-      <SendPrompt {...state} />
-      {isOneOf(chain, swapEnabledChains) && <SwapPrompt coin={coin} />}
-      {isOneOf(chain, depositEnabledChains) && (
-        <DepositCoinProvider initialValue={accountCoin}>
-          <DepositPrompt coin={coin} />
-        </DepositCoinProvider>
-      )}
-    </UniformColumnGrid>
+    <ActionsWrapper justifyContent="center" gap={20}>
+      {swapCoin && <SwapPrompt fromCoin={swapCoin} />}
+      <SendPrompt coin={sendCoin} />
+      {buyCoin && <BuyPrompt coin={buyCoin} />}
+      {onReceive && <ReceivePrompt onClick={onReceive} />}
+      {showDepositAction && depositCoin && <DepositPrompt coin={depositCoin} />}
+    </ActionsWrapper>
   )
 }

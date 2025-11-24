@@ -1,15 +1,21 @@
 import { create, toBinary } from '@bufbuild/protobuf'
+import { productName } from '@core/config'
+import { getSevenZip } from '@core/mpc/compression/getSevenZip'
 import { toCommVault } from '@core/mpc/types/utils/commVault'
 import { VaultContainerSchema } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
 import { VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
+import { getVaultId, Vault } from '@core/mpc/vault/Vault'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
-import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { getVaultId, Vault } from '@core/ui/vault/Vault'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { attempt } from '@lib/utils/attempt'
 import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGcm'
 import { match } from '@lib/utils/match'
 import { useMutation } from '@tanstack/react-query'
 
+import { decryptVaultKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
+import { usePasscode } from '../../passcodeEncryption/state/passcode'
 import { useCore } from '../../state/core'
+import { useVaults } from '../../storage/vaults'
 
 const getExportName = (vault: Vault) => {
   const totalSigners = vault.signers.length
@@ -24,7 +30,7 @@ const getExportName = (vault: Vault) => {
   })
 }
 
-const createBackup = async (vault: Vault, password?: string) => {
+const createBackup = (vault: Vault, password?: string) => {
   const commVault = toCommVault(vault)
   const vaultData = toBinary(VaultSchema, commVault)
 
@@ -51,30 +57,100 @@ const createBackup = async (vault: Vault, password?: string) => {
 
 export const useBackupVaultMutation = ({
   onSuccess,
+  vaultIds,
 }: {
   onSuccess?: () => void
-} = {}) => {
-  const vault = useCurrentVault()
-
+  vaultIds: string[]
+}) => {
   const { mutateAsync: updateVault } = useUpdateVaultMutation()
 
   const { saveFile } = useCore()
 
+  const vaults = useVaults()
+
+  const [passcode] = usePasscode()
+
   return useMutation({
     mutationFn: async ({ password }: { password?: string }) => {
-      const base64Data = await createBackup(vault, password)
+      const getVault = (id: string) => {
+        const vault = shouldBePresent(
+          vaults.find(vault => getVaultId(vault) === id),
+          `Vault with id ${id}`
+        )
 
-      const blob = new Blob([base64Data], { type: 'application/octet-stream' })
+        if (!passcode) {
+          return vault
+        }
 
-      await saveFile({
-        name: getExportName(vault),
-        blob,
-      })
+        return {
+          ...vault,
+          keyShares: decryptVaultKeyShares({
+            keyShares: vault.keyShares,
+            key: passcode,
+          }),
+        }
+      }
 
-      await updateVault({
-        vaultId: getVaultId(vault),
-        fields: { isBackedUp: true },
-      })
+      const getFile = async () => {
+        if (vaultIds.length === 1) {
+          const [vaultId] = vaultIds
+          const vault = getVault(vaultId)
+          const base64Data = createBackup(vault, password)
+
+          const blob = new Blob([base64Data], {
+            type: 'application/octet-stream',
+          })
+
+          return {
+            name: getExportName(vault),
+            blob,
+          }
+        }
+
+        const sevenZip = await getSevenZip()
+        const fileNames: string[] = []
+        const archiveName = `${[
+          productName.toLowerCase(),
+          'backups',
+          Math.floor(Date.now() / 1000),
+        ].join('_')}.zip`
+
+        try {
+          vaultIds.forEach(vaultId => {
+            const vault = getVault(vaultId)
+            const base64 = createBackup(vault, password)
+            const name = getExportName(vault)
+            sevenZip.FS.writeFile(name, base64)
+            fileNames.push(name)
+          })
+
+          sevenZip.callMain(['a', archiveName, ...fileNames])
+          const archiveBytes = sevenZip.FS.readFile(archiveName)
+          const { buffer } = new Uint8Array(archiveBytes)
+          const blob = new Blob([buffer], { type: 'application/zip' })
+
+          return { name: archiveName, blob }
+        } finally {
+          attempt(() => {
+            fileNames.forEach(fileName => {
+              sevenZip.FS.unlink(fileName)
+            })
+            sevenZip.FS.unlink(archiveName)
+          })
+        }
+      }
+
+      const file = await getFile()
+      await saveFile(file)
+
+      await Promise.all(
+        vaults.map(vault =>
+          updateVault({
+            vaultId: getVaultId(vault),
+            fields: { isBackedUp: true },
+          })
+        )
+      )
     },
     onSuccess,
   })

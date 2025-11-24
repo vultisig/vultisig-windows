@@ -1,8 +1,6 @@
 import { CheckUpdate } from '@clients/desktop/src/components/check-update'
 import { ManageMpcLib } from '@clients/desktop/src/components/manage-mpc-lib'
 import { AppViewId } from '@clients/desktop/src/navigation/AppView'
-import { FaqVaultPage } from '@clients/desktop/src/pages/vaultSettings/vaultFaq/FaqVaultPage'
-import { VaultPage } from '@clients/desktop/src/vault/components/VaultPage'
 import { ImportVaultFromFilePage } from '@clients/desktop/src/vault/import/components/ImportVaultFromFilePage'
 import { JoinKeygenPage } from '@clients/desktop/src/vault/keygen/join/JoinKeygenPage'
 import { JoinKeysignPage } from '@clients/desktop/src/vault/keysign/join/JoinKeysignPage'
@@ -20,12 +18,10 @@ import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardi
 import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProvider'
 import { SettingsPage } from '@core/ui/settings'
 import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPage'
-import { ShareVaultPage } from '@core/ui/vault/share/ShareVaultPage'
 import { Views } from '@lib/ui/navigation/Views'
 
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   checkUpdate: CheckUpdatePage,
-  faq: FaqVaultPage,
   importVault: ImportVaultPage,
   importVaultFromFile: ImportVaultFromFilePage,
   joinKeygen: JoinKeygenPage,
@@ -41,7 +37,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   reshareVaultSecure: SecureReshareVaultPage,
   settings: () => (
     <SettingsPage
-      client="desktop"
       checkUpdate={<CheckUpdate />}
       insiderOptions={<ManageMpcLib />}
     />
@@ -53,9 +48,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
       <SetupVaultPageController />
     </ResponsivenessProvider>
   ),
-  shareVault: ShareVaultPage,
-  vault: VaultPage,
-  vaultFAQ: FaqVaultPage,
 }
 
 export const views: Views<AppViewId> = {

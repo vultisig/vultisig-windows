@@ -9,6 +9,7 @@ import styled from 'styled-components'
 import { CoinIcon } from '../../../../../chain/coin/icon/CoinIcon'
 import { SendFormIconsWrapper } from '../../../addresses/components/SendFormIconsWrapper'
 import { SendInputContainer } from '../../../components/SendInputContainer'
+import { useSendValidationQuery } from '../../../queries/useSendValidationQuery'
 import { useSendFormFieldState } from '../../../state/formFields'
 import { useCurrentSendCoin } from '../../../state/sendCoin'
 
@@ -16,13 +17,10 @@ export const ManageSendCoinCollapsedInputField = () => {
   const coin = useCurrentSendCoin()
   const { ticker } = coin
   const { t } = useTranslation()
-  const [
-    {
-      field,
-      errors: { coin: coinError },
-    },
-    setFocusedSendField,
-  ] = useSendFormFieldState()
+  const [{ field }, setFocusedSendField] = useSendFormFieldState()
+
+  const { data } = useSendValidationQuery()
+  const coinError = data?.coin
 
   const isOpen = field === 'coin'
   const isChecked = coin && !isOpen && !coinError

@@ -7,7 +7,7 @@ type Props = {
 
 const strokeAdditionalSpace = 12
 const minStrokeWidth = 44
-const idleTimeAfterScrollStop = 240
+const idleTimeAfterScrollStop = 500
 const behavior: ScrollBehavior = 'smooth'
 
 export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
@@ -24,8 +24,8 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
       const delta =
         eRect.left - cRect.left - (container.clientWidth - eRect.width) / 2
       const maxLeft = container.scrollWidth - container.clientWidth
-      const left = Math.min(Math.max(0, container.scrollLeft + delta), maxLeft)
-      return left
+
+      return Math.min(Math.max(0, container.scrollLeft + delta), maxLeft)
     },
     []
   )
@@ -52,12 +52,15 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
         : chain
           ? itemRefs.current[chain]
           : null
+
       if (!container || !stroke || !el) return
+
       const r = el.getBoundingClientRect()
       const width = Math.max(
         minStrokeWidth,
         Math.ceil(r.width + strokeAdditionalSpace)
       )
+
       stroke.style.width = `${width}px`
     },
     [chain]

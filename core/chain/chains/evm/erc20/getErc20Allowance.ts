@@ -5,7 +5,7 @@ import { erc20Abi } from 'viem'
 import { AccountCoinKey } from '../../../coin/AccountCoin'
 import { Token } from '../../../coin/Coin'
 
-export type GetErc20AllowanceInput = Token<AccountCoinKey<EvmChain>> & {
+type GetErc20AllowanceInput = Token<AccountCoinKey<EvmChain>> & {
   spender: string
 }
 

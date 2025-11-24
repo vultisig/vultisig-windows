@@ -135,7 +135,7 @@ const leanChainFeeCoin: Record<Chain, KnownCoinMetadata> = {
   },
   [Chain.Noble]: {
     ticker: 'USDC',
-    logo: 'usdc',
+    logo: 'noble',
     decimals: 6,
     priceProviderId: 'usd-coin',
   },
@@ -181,6 +181,18 @@ const leanChainFeeCoin: Record<Chain, KnownCoinMetadata> = {
     logo: 'mantle',
     decimals: 18,
     priceProviderId: 'mantle',
+  },
+  [Chain.Hyperliquid]: {
+    ticker: 'HYPE',
+    logo: 'hyperliquid',
+    decimals: 18,
+    priceProviderId: 'hyperliquid',
+  },
+  [Chain.Sei]: {
+    ticker: 'SEI',
+    logo: 'sei',
+    decimals: 18,
+    priceProviderId: 'sei-network',
   },
 }
 

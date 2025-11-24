@@ -4,7 +4,7 @@ import { findCoins } from '@core/chain/coin/find'
 import { coinFinderChainKinds } from '@core/chain/coin/find/CoinFinderChainKind'
 import { FindCoinsResolverInput } from '@core/chain/coin/find/resolver'
 import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
-import { useQueriesToEagerQuery } from '@lib/ui/query/hooks/useQueriesToEagerQuery'
+import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
 import {
   noRefetchQueryOptions,
   persistQueryOptions,
@@ -15,7 +15,7 @@ import { convertDuration } from '@lib/utils/time/convertDuration'
 import { useQueries } from '@tanstack/react-query'
 import { useCallback, useMemo } from 'react'
 
-export const getCoinFinderQueryKey = (input: FindCoinsResolverInput) => [
+const getCoinFinderQueryKey = (input: FindCoinsResolverInput) => [
   'coinFinder',
   input,
 ]
@@ -46,7 +46,7 @@ export const useCoinFinderQuery = () => {
     })),
   })
 
-  return useQueriesToEagerQuery({
+  return useCombineQueries({
     queries,
     joinData: useCallback((data: AccountCoin[][]) => data.flat(), []),
   })

@@ -6,11 +6,11 @@ import {
 import { readQrCode } from '@core/ui/qr/utils/readQrCode'
 import { Button } from '@lib/ui/buttons/Button'
 import { Image } from '@lib/ui/image/Image'
-import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
+import { Center } from '@lib/ui/layout/Center'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { attempt, withFallback } from '@lib/utils/attempt'
+import { attempt } from '@lib/utils/attempt'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -25,18 +25,19 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
     mutationFn: () =>
       navigator.mediaDevices.getUserMedia({
         video: {
+          facingMode: { ideal: 'environment' },
           width: {
             min: 640,
-            ideal: 1920,
-            max: 3840,
+            ideal: 3840,
+            max: 4096,
           },
           height: {
             min: 480,
-            ideal: 1080,
-            max: 2160,
+            ideal: 2160,
+            max: 4096,
           },
           frameRate: {
-            ideal: 30,
+            ideal: 60,
             max: 60,
           },
         },
@@ -44,6 +45,33 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
   })
 
   const { data: stream, reset: resetStreamState } = streamMutationState
+
+  useEffect(() => {
+    if (!stream) return
+
+    const [track] = stream.getVideoTracks()
+    if (!track) return
+
+    const capabilities = track.getCapabilities()
+    const constraints: MediaTrackConstraints = {}
+
+    if (capabilities.width && typeof capabilities.width.max === 'number') {
+      constraints.width = { ideal: capabilities.width.max }
+    }
+    if (capabilities.height && typeof capabilities.height.max === 'number') {
+      constraints.height = { ideal: capabilities.height.max }
+    }
+    if (
+      Array.isArray(capabilities.facingMode) &&
+      capabilities.facingMode.includes('environment')
+    ) {
+      constraints.facingMode = 'environment'
+    }
+
+    if (Object.keys(constraints).length > 0) {
+      attempt(() => track.applyConstraints(constraints))
+    }
+  }, [stream])
 
   useEffect(() => {
     if (!stream || !video) return
@@ -67,36 +95,39 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
 
     const canvas = document.createElement('canvas')
     const context = canvas.getContext('2d')
-
     if (!context) return
 
     let animationFrameId: number
+    let stopped = false
 
-    const scan = () => {
+    const scan = async () => {
+      if (stopped) return
       canvas.width = video.videoWidth
       canvas.height = video.videoHeight
 
-      const scanData = withFallback(
-        attempt(() =>
-          readQrCode({
-            canvasContext: context,
-            image: video,
-          })
-        ),
-        undefined
+      const { data } = await attempt(
+        readQrCode({
+          canvasContext: context,
+          image: video,
+        })
       )
 
-      if (scanData) {
-        onFinish(scanData)
-      } else {
-        animationFrameId = requestAnimationFrame(scan)
+      if (data) {
+        onFinish(data)
+      } else if (!stopped) {
+        animationFrameId = requestAnimationFrame(() => {
+          scan()
+        })
       }
     }
 
     animationFrameId = requestAnimationFrame(scan)
 
-    return () => cancelAnimationFrame(animationFrameId)
-  }, [onFinish, video])
+    return () => {
+      stopped = true
+      cancelAnimationFrame(animationFrameId)
+    }
+  }, [onFinish, stream, video])
 
   return (
     <MatchQuery
@@ -110,9 +141,9 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
         </VideoWrapper>
       )}
       pending={() => (
-        <CenterAbsolutely>
+        <Center>
           <Spinner size="3em" />
-        </CenterAbsolutely>
+        </Center>
       )}
       error={error => (
         <FlowErrorPageContent

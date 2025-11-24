@@ -16,11 +16,11 @@ import { FC, useMemo } from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useTransferDirection } from '../../../state/transferDirection'
 import { ChainOption } from '../components/ChainOption'
 import { SwapCoinInputField } from '../components/SwapCoinInputField'
-import { useToCoin } from '../state/toCoin'
+import { useSwapFromCoin } from '../state/fromCoin'
+import { useSwapToCoin } from '../state/toCoin'
 import { useChainSummaries } from './hooks/useChainSummaries'
 import { SwapCoinsExplorer } from './SwapCoinsExplorer'
 
@@ -30,8 +30,8 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
   const { t } = useTranslation()
   const coins = useCurrentVaultCoins()
   const coin = shouldBePresent(useCurrentVaultCoin(value))
-  const [{ coin: fromCoinKey }] = useCoreViewState<'swap'>()
-  const [currentToCoin] = useToCoin()
+  const [fromCoinKey] = useSwapFromCoin()
+  const [currentToCoin] = useSwapToCoin()
   const side = useTransferDirection()
   const chainSummaries = useChainSummaries()
 

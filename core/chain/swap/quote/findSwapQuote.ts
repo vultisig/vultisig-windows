@@ -11,6 +11,7 @@ import { asyncFallbackChain } from '@lib/utils/promise/asyncFallbackChain'
 import { pick } from '@lib/utils/record/pick'
 import { TransferDirection } from '@lib/utils/TransferDirection'
 
+import { isChainOfKind } from '../../ChainKind'
 import { getKyberSwapQuote } from '../general/kyber/api/quote'
 import { kyberSwapEnabledChains } from '../general/kyber/chains'
 import { getNativeSwapQuote } from '../native/api/getNativeSwapQuote'
@@ -18,22 +19,24 @@ import {
   nativeSwapChains,
   nativeSwapEnabledChainsRecord,
 } from '../native/NativeSwapChain'
-import { AffiliateParam } from '../native/NativeSwapQuote'
 import { SwapQuote } from './SwapQuote'
 
-type FindSwapQuoteInput = Record<TransferDirection, AccountCoin> & {
+export type FindSwapQuoteInput = Record<TransferDirection, AccountCoin> & {
   amount: number
-  affiliates: AffiliateParam[]
+  referral?: string
+  affiliateBps?: number
 }
+
+type SwapQuoteFetcher = () => Promise<SwapQuote>
 
 export const findSwapQuote = ({
   from,
   to,
   amount,
-  affiliates,
+  referral,
+  affiliateBps,
 }: FindSwapQuoteInput): Promise<SwapQuote> => {
   const involvedChains = [from.chain, to.chain]
-  const isAffiliate = affiliates.some(a => a.bps > 0)
 
   const matchingSwapChains = nativeSwapChains.filter(swapChain =>
     involvedChains.every(chain =>
@@ -41,85 +44,100 @@ export const findSwapQuote = ({
     )
   )
 
-  const fetchers = matchingSwapChains.map(
-    swapChain => async (): Promise<SwapQuote> => {
+  const getNativeFetchers = (): SwapQuoteFetcher[] =>
+    matchingSwapChains.map(swapChain => async (): Promise<SwapQuote> => {
       const native = await getNativeSwapQuote({
         swapChain,
         destination: to.address,
         from,
         to,
         amount,
-        affiliates,
+        referral,
+        affiliateBps,
       })
 
       return { native }
+    })
+
+  const getGeneralFetchers = (): SwapQuoteFetcher[] => {
+    const result: SwapQuoteFetcher[] = []
+
+    const fromChain = from.chain
+    const toChain = to.chain
+    const chainAmount = toChainAmount(amount, from.decimals)
+
+    if (
+      isOneOf(fromChain, kyberSwapEnabledChains) &&
+      isOneOf(toChain, kyberSwapEnabledChains) &&
+      fromChain === toChain
+    ) {
+      result.push(async (): Promise<SwapQuote> => {
+        const general = await getKyberSwapQuote({
+          from: {
+            ...from,
+            chain: fromChain,
+          },
+          to: {
+            ...to,
+            chain: toChain,
+          },
+          amount: chainAmount,
+          isAffiliate: !!affiliateBps,
+        })
+
+        return { general }
+      })
     }
-  )
 
-  const fromChain = from.chain
-  const toChain = to.chain
-  const chainAmount = toChainAmount(amount, from.decimals)
+    if (
+      isOneOf(from.chain, oneInchSwapEnabledChains) &&
+      from.chain === to.chain
+    ) {
+      result.push(async (): Promise<SwapQuote> => {
+        const general = await getOneInchSwapQuote({
+          account: pick(from, ['address', 'chain']),
+          fromCoinId: from.id ?? from.ticker,
+          toCoinId: to.id ?? to.ticker,
+          amount: chainAmount,
+          affiliateBps,
+        })
 
-  if (
-    isOneOf(fromChain, kyberSwapEnabledChains) &&
-    isOneOf(toChain, kyberSwapEnabledChains) &&
-    fromChain === toChain
-  ) {
-    fetchers.push(async (): Promise<SwapQuote> => {
-      const general = await getKyberSwapQuote({
-        from: {
-          ...from,
-          chain: fromChain,
-        },
-        to: {
-          ...to,
-          chain: toChain,
-        },
-        amount: chainAmount,
-        isAffiliate,
+        return { general }
       })
+    }
 
-      return { general }
-    })
+    if (
+      isOneOf(fromChain, lifiSwapEnabledChains) &&
+      isOneOf(toChain, lifiSwapEnabledChains)
+    ) {
+      result.push(async (): Promise<SwapQuote> => {
+        const general = await getLifiSwapQuote({
+          from: {
+            ...from,
+            chain: fromChain,
+          },
+          to: {
+            ...to,
+            chain: toChain,
+          },
+          amount: chainAmount,
+          affiliateBps,
+        })
+
+        return { general }
+      })
+    }
+
+    return result
   }
 
-  if (
-    isOneOf(from.chain, oneInchSwapEnabledChains) &&
-    from.chain === to.chain
-  ) {
-    fetchers.push(async (): Promise<SwapQuote> => {
-      const general = await getOneInchSwapQuote({
-        account: pick(from, ['address', 'chain']),
-        fromCoinId: from.id ?? from.ticker,
-        toCoinId: to.id ?? to.ticker,
-        amount: chainAmount,
-        isAffiliate,
-      })
+  const shouldPreferGeneralSwap =
+    [from.chain, to.chain].every(chain => isChainOfKind(chain, 'evm')) &&
+    [from.id, to.id].some(v => v)
 
-      return { general }
-    })
-  }
-
-  if (
-    isOneOf(fromChain, lifiSwapEnabledChains) &&
-    isOneOf(toChain, lifiSwapEnabledChains)
-  ) {
-    fetchers.push(async (): Promise<SwapQuote> => {
-      const general = await getLifiSwapQuote({
-        from: {
-          ...from,
-          chain: fromChain,
-        },
-        to: {
-          ...to,
-          chain: toChain,
-        },
-        amount: chainAmount,
-      })
-
-      return { general }
-    })
-  }
+  const fetchers = shouldPreferGeneralSwap
+    ? [...getGeneralFetchers(), ...getNativeFetchers()]
+    : [...getNativeFetchers(), ...getGeneralFetchers()]
 
   if (isEmpty(fetchers)) {
     throw new NoSwapRoutesError()

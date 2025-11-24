@@ -18,6 +18,8 @@ export const EvmChain = {
   BSC: 'BSC',
   Ethereum: 'Ethereum',
   Polygon: 'Polygon',
+  Hyperliquid: 'Hyperliquid',
+  Sei: 'Sei',
 } as const
 
 export type EvmChain = (typeof EvmChain)[keyof typeof EvmChain]

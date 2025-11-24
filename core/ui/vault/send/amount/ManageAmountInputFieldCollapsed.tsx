@@ -9,6 +9,7 @@ import styled from 'styled-components'
 
 import { SendFormIconsWrapper } from '../addresses/components/SendFormIconsWrapper'
 import { SendInputContainer } from '../components/SendInputContainer'
+import { useSendValidationQuery } from '../queries/useSendValidationQuery'
 import { useSendAmount } from '../state/amount'
 import { useSendFormFieldState } from '../state/formFields'
 import { useCurrentSendCoin } from '../state/sendCoin'
@@ -16,13 +17,10 @@ import { useCurrentSendCoin } from '../state/sendCoin'
 export const ManageAmountInputFieldCollapsed = () => {
   const { t } = useTranslation()
   const [amount] = useSendAmount()
-  const [
-    {
-      field,
-      errors: { amount: amountError },
-    },
-    setFocusedSendField,
-  ] = useSendFormFieldState()
+  const [{ field }, setFocusedSendField] = useSendFormFieldState()
+
+  const { data } = useSendValidationQuery()
+  const amountError = data?.amount
 
   const coin = useCurrentSendCoin()
 

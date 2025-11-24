@@ -1,24 +1,22 @@
 import { useVaults } from '@core/ui/storage/vaults'
-import { BackupConfirmation } from '@core/ui/vault/backup/confirmation'
 import { EmailConfirmation } from '@core/ui/vault/backup/fast'
 import { BackupOverviewSlidesPartOne } from '@core/ui/vault/backup/fast/BackupOverviewSlidesPartOne'
 import { BackupOverviewSlidesPartTwo } from '@core/ui/vault/backup/fast/BackupOverviewSlidesPartTwo'
-import { VaultBackupFlow } from '@core/ui/vault/backup/VaultBackupFlow'
 import { VaultBackupSummaryStep } from '@core/ui/vault/backup/VaultBackupSummaryStep'
 import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
-import { useRive } from '@rive-app/react-canvas'
 import { useTranslation } from 'react-i18next'
+
+import { InitiateFastVaultBackup } from './InitiateFastVaultBackup'
 
 const steps = [
   'backupSlideshowPartOne',
   'emailVerification',
   'saveVault',
   'backupSlideshowPartTwo',
-  'backupConfirmation',
   'backupPage',
   'backupSuccessfulSlideshow',
 ] as const
@@ -28,10 +26,7 @@ export const BackupFastVault = ({
   onBack,
 }: OnFinishProp & OnBackProp) => {
   const { t } = useTranslation()
-  const { RiveComponent } = useRive({
-    src: '/core/animations/fast-vault-backup-splash.riv',
-    autoplay: true,
-  })
+
   const { step, toNextStep } = useStepNavigation({
     steps,
   })
@@ -58,14 +53,8 @@ export const BackupFastVault = ({
       backupSlideshowPartTwo={() => (
         <BackupOverviewSlidesPartTwo onFinish={toNextStep} />
       )}
-      backupConfirmation={() => (
-        <BackupConfirmation
-          onCompleted={toNextStep}
-          riveComponent={<RiveComponent />}
-        />
-      )}
       backupPage={() => (
-        <VaultBackupFlow
+        <InitiateFastVaultBackup
           onFinish={() => {
             if (shouldShowBackupSummary) {
               toNextStep()

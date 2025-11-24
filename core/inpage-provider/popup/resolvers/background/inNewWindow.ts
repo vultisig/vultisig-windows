@@ -1,5 +1,3 @@
-import { pick } from '@lib/utils/record/pick'
-
 import { PopupOptions } from '../../resolver'
 
 type ExecuteInput = {
@@ -12,18 +10,52 @@ type Input<T> = PopupOptions & {
   execute: (input: ExecuteInput) => Promise<T>
 }
 
+const windowWidth = 480
+const windowHeight = 600
+const windowOffset = 20
+
+const calculateTopRightPosition = (
+  currentWindow: chrome.windows.Window
+): { left?: number; top: number } => {
+  const currentLeft = currentWindow.left
+  const currentTop = currentWindow.top
+  const currentWidth = currentWindow.width
+
+  if (
+    currentLeft !== undefined &&
+    currentTop !== undefined &&
+    currentWidth !== undefined &&
+    currentWidth >= windowWidth
+  ) {
+    const left = currentLeft + currentWidth - windowWidth
+
+    return {
+      left: Math.max(currentLeft, left),
+      top: Math.max(0, currentTop + windowOffset),
+    }
+  }
+
+  return {
+    top: windowOffset,
+  }
+}
+
 export const inNewWindow = async <T>({
   url,
   execute,
 }: Input<T>): Promise<T> => {
   const currentWindow = await chrome.windows.getCurrent()
+  const position = calculateTopRightPosition(currentWindow)
+
   const newWindow = await new Promise<chrome.windows.Window | undefined>(
     resolve =>
       chrome.windows.create(
         {
           url,
-          type: 'panel',
-          ...pick(currentWindow, ['height', 'left', 'top', 'width']),
+          type: 'popup',
+          height: windowHeight,
+          width: windowWidth,
+          ...position,
         },
         resolve
       )

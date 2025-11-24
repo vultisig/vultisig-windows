@@ -1,42 +1,32 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { DepositConfirmButton } from '@core/ui/vault/deposit/DepositConfirmButton'
 import { getFormattedFormData } from '@core/ui/vault/deposit/DepositVerify/utils'
-import { DepositFeeValue } from '@core/ui/vault/deposit/fee/DepositFeeValue'
-import { DepositFiatFeeValue } from '@core/ui/vault/deposit/fee/DepositFiatFeeValue'
+import { DepositFee } from '@core/ui/vault/deposit/fee/DepositFee'
 import { useMemoGenerator } from '@core/ui/vault/deposit/hooks/useMemoGenerator'
 import { useSender } from '@core/ui/vault/deposit/hooks/useSender'
 import { ProgressLine } from '@lib/ui/flow/ProgressLine'
-import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { Text } from '@lib/ui/text'
-import { FC } from 'react'
-import { FieldValues } from 'react-hook-form'
+import { OnBackProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
 import { useDepositFormConfig } from '../hooks/useDepositFormConfig'
 import { useDepositAction } from '../providers/DepositActionProvider'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
+import { useDepositData } from '../state/data'
 
-type DepositVerifyProps = {
-  depositFormData: FieldValues
-  onBack: () => void
-}
-
-export const DepositVerify: FC<DepositVerifyProps> = ({
-  onBack,
-  depositFormData,
-}) => {
+export const DepositVerify = ({ onBack }: OnBackProp) => {
   const [selectedChainAction] = useDepositAction()
   const [coin] = useDepositCoin()
+  const depositData = useDepositData()
 
   const depositFormDataWithMemo = useMemoGenerator({
-    depositFormData: depositFormData,
+    depositFormData: depositData,
     selectedChainAction: selectedChainAction,
-    bondableAsset: depositFormData?.bondableAsset,
+    bondableAsset: depositData?.bondableAsset,
     chain: coin?.chain,
   })
 
@@ -93,31 +83,17 @@ export const DepositVerify: FC<DepositVerifyProps> = ({
           {selectedChainAction === 'leave' && (
             <ListItem description={`0 ${coin.ticker}`} title={t('amount')} />
           )}
-          <ListItem
-            description={
-              <VStack as="pre" scrollable>
-                <Text as="code" family="mono">
-                  {String(formattedDepositFormData['memo'])}
-                </Text>
-              </VStack>
-            }
-            title={t('memo')}
-          />
-          <ListItem
-            description={<DepositFeeValue />}
-            title={`${t('gas')} (${t('auto')})`}
-          />
-          <ListItem
-            description={<DepositFiatFeeValue />}
-            title={t('network_fee')}
-          />
+          {Boolean(formattedDepositFormData['memo']) && (
+            <ListItem
+              description={String(formattedDepositFormData['memo'])}
+              title={t('memo')}
+            />
+          )}
+          <ListItem description={<DepositFee />} title={t('est_network_fee')} />
         </List>
       </PageContent>
       <PageFooter>
-        <DepositConfirmButton
-          action={selectedChainAction}
-          depositFormData={formattedDepositFormData}
-        />
+        <DepositConfirmButton />
       </PageFooter>
     </>
   )

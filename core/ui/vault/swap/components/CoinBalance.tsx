@@ -41,10 +41,7 @@ export const CoinBalance = ({ value }: ValueProp<CoinKey>) => {
             onClick={() => setFromValue(fromChainAmount(amount, coin.decimals))}
           >
             <Text as="span" size={12} color="shy" weight={500}>
-              {formatAmount(
-                fromChainAmount(amount, coin.decimals),
-                coin.ticker
-              )}
+              {formatAmount(fromChainAmount(amount, coin.decimals), coin)}
             </Text>
           </UnstyledButton>
         )}

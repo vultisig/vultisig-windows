@@ -63,5 +63,20 @@ export const JoinKeygenActionProvider = ({ children }: ChildrenProp) => {
         )}
       />
     ),
+    keyimport: () => (
+      <Match
+        value={mpcLib}
+        DKLS={() => (
+          <DKLSCreateKeygenActionProvider>
+            {children}
+          </DKLSCreateKeygenActionProvider>
+        )}
+        GG20={() => (
+          <GG20CreateKeygenActionProvider>
+            {children}
+          </GG20CreateKeygenActionProvider>
+        )}
+      />
+    ),
   })
 }

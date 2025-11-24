@@ -15,22 +15,30 @@ import { useMutation } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
+
 export const UploadBackupFileStep = ({
   onFinish,
 }: OnFinishProp<FileBasedVaultBackupResult>) => {
   const { t } = useTranslation()
   const [file, setFile] = useState<File | null>(null)
+  const [error, setError] = useState<Error | null>(null)
+  const navigate = useCoreNavigate()
 
-  const { mutate, isPending, error } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: vaultBackupResultFromFile,
     onSuccess: onFinish,
+    onError: setError,
   })
 
   const isDisabled = !file
 
   return (
     <>
-      <FlowPageHeader title={t('import_vault')} />
+      <FlowPageHeader
+        title={t('import_vault')}
+        onBack={() => navigate({ id: 'newVault' })}
+      />
       <PageContent
         as="form"
         {...getFormProps({
@@ -44,7 +52,13 @@ export const UploadBackupFileStep = ({
           {file ? (
             <UploadedBackupFile value={file} />
           ) : (
-            <BackupFileDropzone onFinish={setFile} />
+            <BackupFileDropzone
+              onFinish={file => {
+                setFile(file)
+                setError(null)
+              }}
+              onError={setError}
+            />
           )}
           {error && (
             <Text centerHorizontally color="danger">

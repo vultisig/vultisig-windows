@@ -1,38 +1,57 @@
-import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import {
-  CosmosSpecific,
-  EthereumSpecific,
-} from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
-import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
-import type { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import type { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { Resolver } from '@lib/utils/types/Resolver'
+import { WalletCore } from '@trustwallet/wallet-core'
 import { Psbt } from 'bitcoinjs-lib'
 
+import { KeysignPayload } from '../../types/vultisig/keysign/v1/keysign_message_pb'
+import { FeeSettings } from './FeeSettings'
 import {
-  ChainsBySpecific,
-  KeysignChainSpecificValue,
+  KeysignChainSpecific,
+  KeysignChainSpecificKey,
 } from './KeysignChainSpecific'
 
-type SpecificKeyByValue<R> = Extract<
-  Exclude<KeysignPayload['blockchainSpecific'], { case: undefined }>,
-  { value: R }
->['case']
+type ValueForCase<C extends KeysignChainSpecificKey> = Extract<
+  KeysignChainSpecific,
+  { case: C }
+>['value']
 
-export type ChainSpecificResolverInput<
-  T = any,
-  R = KeysignChainSpecificValue,
+export type GetChainSpecificInput<
+  C extends KeysignChainSpecificKey = KeysignChainSpecificKey,
 > = {
-  coin: AccountCoin<ChainsBySpecific<SpecificKeyByValue<R>>>
-  receiver?: string
-  feeSettings?: T
-  isDeposit?: boolean
-  amount?: number
-  transactionType?: TransactionType
-  psbt?: Psbt
-} & (R extends EthereumSpecific ? { data?: string } : {}) &
-  (R extends CosmosSpecific ? { timeoutTimestamp?: string } : {})
+  keysignPayload: KeysignPayload
+  walletCore: WalletCore
+} & (C extends 'ethereumSpecific'
+  ? {
+      feeSettings?: FeeSettings<'evm'>
+      thirdPartyGasLimitEstimation?: bigint
+    }
+  : C extends 'utxoSpecific'
+    ? { feeSettings?: FeeSettings<'utxo'>; psbt?: Psbt }
+    : C extends 'cosmosSpecific'
+      ? {
+          timeoutTimestamp?: string
+          transactionType?: TransactionType
+          isDeposit?: boolean
+        }
+      : C extends 'thorchainSpecific'
+        ? {
+            isDeposit?: boolean
+            transactionType?: TransactionType
+          }
+        : C extends 'mayaSpecific'
+          ? {
+              isDeposit?: boolean
+            }
+          : C extends 'tronSpecific'
+            ? {
+                expiration?: number
+                timestamp?: number
+                refBlockBytesHex?: string
+                refBlockHashHex?: string
+                thirdPartyGasLimitEstimation?: bigint
+              }
+            : {})
 
-export type ChainSpecificResolver<
-  R = KeysignChainSpecificValue,
-  T = any,
-> = Resolver<ChainSpecificResolverInput<T, R>, Promise<R>>
+export type GetChainSpecificResolver<
+  C extends KeysignChainSpecificKey = KeysignChainSpecificKey,
+> = Resolver<GetChainSpecificInput<C>, Promise<ValueForCase<C>>>

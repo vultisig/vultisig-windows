@@ -1,5 +1,5 @@
 import { VaultContainer } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
-import { Vault } from '@core/ui/vault/Vault'
+import { Vault } from '@core/mpc/vault/Vault'
 
 export type VaultBackupResult =
   | {
@@ -14,7 +14,9 @@ export type VaultBackupResult =
 
 export type VaultBackupOverride = Pick<Vault, 'libType'>
 
-export type FileBasedVaultBackupResult = {
+export type FileBasedVaultBackupResultItem = {
   result: VaultBackupResult
   override?: VaultBackupOverride
 }
+
+export type FileBasedVaultBackupResult = FileBasedVaultBackupResultItem[]

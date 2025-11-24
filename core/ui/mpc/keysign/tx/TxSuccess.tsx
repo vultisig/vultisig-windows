@@ -70,7 +70,9 @@ export const TxSuccess = ({
                     <MiddleTruncate width={85} text={txHash} />
                   </Text>
                 </TruncatedTextWrapper>
-                <TxRowIconButton onClick={() => copyToClipboard(txHash)}>
+                <TxRowIconButton
+                  onClick={() => copyToClipboard(blockExplorerUrl)}
+                >
                   <ClipboardCopyIcon />
                 </TxRowIconButton>
                 <TxRowIconButton onClick={() => openUrl(blockExplorerUrl)}>

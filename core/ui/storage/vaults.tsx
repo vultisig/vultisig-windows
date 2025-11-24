@@ -1,5 +1,6 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+import { getVaultId, Vault, VaultKeyShares } from '@core/mpc/vault/Vault'
 import { useCore } from '@core/ui/state/core'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
@@ -10,7 +11,6 @@ import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
-import { getVaultId, Vault, VaultKeyShares } from '../vault/Vault'
 import { StorageKey } from './StorageKey'
 
 export type UpdateVaultInput = {

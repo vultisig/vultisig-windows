@@ -1,6 +1,6 @@
 import { hasServer } from '@core/mpc/devices/localPartyId'
+import { Vault } from '@core/mpc/vault/Vault'
 
-import { Vault } from '../../Vault'
 import { VaultExport } from '.'
 import { getVaultExportUid } from './uid'
 

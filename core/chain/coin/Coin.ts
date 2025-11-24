@@ -19,7 +19,7 @@ export type CoinMetadata = {
   logo?: string
 }
 
-export type Coin = CoinKey & CoinMetadata
+export type Coin<T extends Chain = Chain> = CoinKey<T> & CoinMetadata
 
 // Coin metadata coming from autodiscovery might miss logo field,
 // but all coins defined in the codebase should have logo field.

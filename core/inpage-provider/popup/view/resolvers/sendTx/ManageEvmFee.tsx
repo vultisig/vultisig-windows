@@ -1,5 +1,5 @@
 import { EvmChain } from '@core/chain/Chain'
-import { EvmFeeSettings } from '@core/chain/tx/fee/evm/EvmFeeSettings'
+import { EvmFeeSettings } from '@core/mpc/keysign/chainSpecific/FeeSettings'
 import { EvmFeeSettingsForm } from '@core/ui/vault/send/fee/settings/evm/EvmFeeSettingsForm'
 import { Opener } from '@lib/ui/base/Opener'
 import { IconButton } from '@lib/ui/buttons/IconButton'

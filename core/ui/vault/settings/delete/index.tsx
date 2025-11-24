@@ -1,19 +1,16 @@
 import { fiatCurrencySymbolRecord } from '@core/config/FiatCurrency'
+import { getVaultId } from '@core/mpc/vault/Vault'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { useDeleteVaultMutation } from '@core/ui/storage/vaults'
 import { useVaultTotalBalanceQuery } from '@core/ui/vault/queries/useVaultTotalBalanceQuery'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { getVaultId } from '@core/ui/vault/Vault'
 import { Button } from '@lib/ui/buttons/Button'
-import { sameDimensions } from '@lib/ui/css/sameDimensions'
-import { Divider } from '@lib/ui/divider'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
-import { CheckStatus } from '@lib/ui/inputs/checkbox/CheckStatus'
-import { VStack } from '@lib/ui/layout/Stack'
-import { List } from '@lib/ui/list'
-import { ListItem } from '@lib/ui/list/item'
+import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
+import { HStack, hStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -22,14 +19,6 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-const StyledCheck = styled(CheckStatus)`
-  ${sameDimensions(14)};
-`
-
-const StyledIcon = styled(TriangleAlertIcon)`
-  color: ${getColor('danger')};
-`
 
 const terms = [
   'vault_delete_page_term_1',
@@ -69,47 +58,85 @@ export const DeleteVaultPage = () => {
         hasBorder
       />
       <PageContent gap={24} flexGrow scrollable>
-        <VStack alignItems="center" gap={24}>
-          <StyledIcon fontSize={66} />
-          <Text color="contrast" size={16} weight={700} centerHorizontally>
-            {t('vault_delete_page_header_subtitle')}
-          </Text>
+        <GradientBackground />
+        <VStack alignItems="center" gap={14}>
+          <IconWrapper size={24} color="danger">
+            <TriangleAlertIcon />
+          </IconWrapper>
+          <VStack gap={8}>
+            <Text color="danger" size={22} weight={500} centerHorizontally>
+              {t('vault_delete_page_header_title')}
+            </Text>
+            <Text color="shy" size={13} weight={500} centerHorizontally>
+              {t('vault_delete_page_header_subtitle')}
+            </Text>
+          </VStack>
         </VStack>
-        <List>
-          <ListItem title={t('vault_name')} description={vault.name} />
-          <ListItem
-            title={t('vault_value')}
-            description={`${vaultBalance} ${fiatCurrencySymbolRecord[currency]}`}
-          />
-          <ListItem
-            title={t('vault_part')}
-            description={`${t('share')} ${vault.signers.indexOf(vault.localPartyId) + 1} ${t('of')} ${vault.signers.length}`}
-          />
-          <ListItem
-            title={t('vault_details_page_vault_type')}
-            description={vault.libType}
-          />
-          <ListItem
-            title={t('vault_details_page_vault_ECDSA')}
-            description={vault.publicKeys.ecdsa}
-          />
-          <ListItem
-            title={t('vault_details_page_vault_EDDSA')}
-            description={vault.publicKeys.eddsa}
-          />
-        </List>
-        <Divider text={t('terms')} />
-        <List>
+        <VStack gap={12}>
+          <Item>
+            <Text size={13} weight={500}>
+              {t('vault_name')}:
+            </Text>
+            <Text size={14} weight={500}>
+              {vault.name}
+            </Text>
+          </Item>
+          <Item>
+            <Text size={13} weight={500}>
+              {t('vault_value')}:
+            </Text>
+            <Text size={14} weight={500}>
+              {`${vaultBalance} ${fiatCurrencySymbolRecord[currency]}`}
+            </Text>
+          </Item>
+
+          <HStack gap={12} alignItems="center">
+            <VItem>
+              <Text size={13} weight={500}>
+                {t('vault_part')}:
+              </Text>
+              <Text size={14} weight={500}>
+                {`${t('share')} ${vault.signers.indexOf(vault.localPartyId) + 1}-${t('of')}-${vault.signers.length}`}
+              </Text>
+            </VItem>
+            <VItem>
+              <Text size={13} weight={500}>
+                {t('vault_delete_page_device_id')}:
+              </Text>
+              <Text cropped size={14} weight={500} color="shy">
+                {vault.localPartyId}
+              </Text>
+            </VItem>
+          </HStack>
+          <HStack gap={12} alignItems="center">
+            <VItem>
+              <Text size={13} weight={500}>
+                {t('vault_details_page_vault_ECDSA')}:
+              </Text>
+              <Text cropped size={14} weight={500} color="shy">
+                {vault.publicKeys.ecdsa}
+              </Text>
+            </VItem>
+            <VItem>
+              <Text size={13} weight={500}>
+                {t('vault_details_page_vault_EDDSA')}:
+              </Text>
+              <Text cropped size={14} weight={500} color="shy">
+                {vault.publicKeys.eddsa}
+              </Text>
+            </VItem>
+          </HStack>
+        </VStack>
+        <VStack gap={8}>
           {terms.map((term, index) => (
-            <ListItem
-              extra={<StyledCheck value={termsAccepted[index]} />}
+            <Checkbox
               key={index}
-              onClick={() => toggleCheckbox(index)}
-              title={t(term)}
-              hoverable
+              onChange={() => toggleCheckbox(index)}
+              label={t(term)}
+              value={termsAccepted[index]}
             />
           ))}
-        </List>
+        </VStack>
         {error?.message && (
           <Text color="danger" size={12}>
             {error.message}
@@ -129,3 +156,41 @@ export const DeleteVaultPage = () => {
     </VStack>
   )
 }
+
+const Item = styled.div`
+  padding: 20px;
+
+  ${hStack({
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 12,
+  })};
+
+  border-radius: 12px;
+  border: 1px solid ${getColor('foregroundExtra')};
+  background: rgba(11, 26, 58, 0.5);
+  min-width: 0;
+`
+
+const VItem = styled(Item)`
+  display: block;
+  flex: 1;
+`
+
+const GradientBackground = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 300px;
+  border-radius: 512px;
+  background: linear-gradient(
+    82deg,
+    rgba(211, 40, 41, 0.1) 8.02%,
+    rgba(255, 92, 92, 0.1) 133.75%
+  );
+  filter: blur(126.94499969482422px);
+  pointer-events: none;
+  z-index: 0;
+`

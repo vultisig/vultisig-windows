@@ -7,12 +7,10 @@ import {
   useCurrentVaultAddresses,
   useCurrentVaultCoins,
 } from '../../state/currentVaultCoins'
-import { useDepositCoin } from '../providers/DepositCoinProvider'
 
 export const useRedeemOptions = () => {
-  const [selectedCoin] = useDepositCoin()
   const coins = useCurrentVaultCoins()
-  const address = useCurrentVaultAddresses()[selectedCoin.chain]
+  const address = useCurrentVaultAddresses()[Chain.THORChain]
 
   return useMemo(() => {
     return Object.keys(yieldBearingTokensIdToContractMap).map(

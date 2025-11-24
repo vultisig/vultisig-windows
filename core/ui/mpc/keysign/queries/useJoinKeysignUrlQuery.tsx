@@ -3,12 +3,12 @@ import {
   GetJoinKeysignUrlInput,
 } from '@core/chain/utils/getJoinKeysignUrl'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
+import { getVaultId } from '@core/mpc/vault/Vault'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
 import { useMpcServiceName } from '@core/ui/mpc/state/mpcServiceName'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { getVaultId } from '@core/ui/vault/Vault'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'

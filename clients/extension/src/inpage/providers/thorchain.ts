@@ -1,6 +1,7 @@
 import { CosmosChain } from '@core/chain/Chain'
 import { callPopup } from '@core/inpage-provider/popup'
 import {
+  DepositTransactionDetails,
   RequestInput,
   TransactionDetails,
 } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
@@ -35,6 +36,29 @@ export class THORChain extends BaseCosmosChain {
                 keysign: {
                   transactionDetails: tx,
                   chain: CosmosChain.THORChain,
+                  isDeposit: true,
+                },
+              },
+            },
+            {
+              account: tx.from,
+            }
+          )
+
+          return hash
+        },
+        deposit: async ([tx]: [DepositTransactionDetails]) => {
+          const { hash } = await callPopup(
+            {
+              sendTx: {
+                keysign: {
+                  transactionDetails: {
+                    ...tx,
+                    to: tx.recipient,
+                    data: tx.memo,
+                  },
+                  chain: CosmosChain.THORChain,
+                  isDeposit: true,
                 },
               },
             },

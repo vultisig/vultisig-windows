@@ -1,24 +1,20 @@
 import { create } from '@bufbuild/protobuf'
 import { CosmosChain } from '@core/chain/Chain'
 import { getCosmosAccountInfo } from '@core/chain/chains/cosmos/account/getCosmosAccountInfo'
-import {
-  MAYAChainSpecific,
-  MAYAChainSpecificSchema,
-} from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+import { MAYAChainSpecificSchema } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 
-import { ChainSpecificResolver } from '../resolver'
+import { getKeysignCoin } from '../../utils/getKeysignCoin'
+import { GetChainSpecificResolver } from '../resolver'
 
-export const getMayaSpecific: ChainSpecificResolver<
-  MAYAChainSpecific
-> = async ({ coin, isDeposit = false }) => {
-  const { accountNumber, sequence } = await getCosmosAccountInfo({
-    address: coin.address,
-    chain: coin.chain as CosmosChain,
-  })
+export const getMayaChainSpecific: GetChainSpecificResolver<
+  'mayaSpecific'
+> = async ({ keysignPayload, isDeposit }) => {
+  const coin = getKeysignCoin<CosmosChain>(keysignPayload)
+  const { accountNumber, sequence } = await getCosmosAccountInfo(coin)
 
   return create(MAYAChainSpecificSchema, {
     accountNumber: BigInt(accountNumber),
-    sequence: BigInt(sequence ?? 0),
+    sequence: BigInt(sequence),
     isDeposit,
   })
 }

@@ -4,7 +4,7 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { panel } from '@lib/ui/panel/Panel'
 import { InputProps } from '@lib/ui/props'
 import { OptionsProp } from '@lib/ui/props'
-import { Text } from '@lib/ui/text'
+import { Text, TextColor } from '@lib/ui/text'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -24,11 +24,16 @@ const ChainSelector = styled(HStack)`
   justify-content: space-between;
 `
 
+type Props = {
+  titleColor?: TextColor
+}
+
 export const ChainInput = <T extends Chain>({
   value,
   onChange,
   options,
-}: InputProps<T> & OptionsProp<T>) => {
+  titleColor = 'light',
+}: Props & InputProps<T> & OptionsProp<T>) => {
   const { t } = useTranslation()
   const [showChainSelection, setShowChainSelection] = useState(false)
 
@@ -39,7 +44,7 @@ export const ChainInput = <T extends Chain>({
 
   return (
     <VStack gap={8}>
-      <Text color="light" size={12} weight="500">
+      <Text color={titleColor} size={12} weight="500">
         {t('chain')}
       </Text>
       <ChainSelector onClick={() => setShowChainSelection(true)}>

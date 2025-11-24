@@ -1,31 +1,21 @@
-import { useCore } from '@core/ui/state/core'
 import { useSendMemo } from '@core/ui/vault/send/state/memo'
-import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
-import { IconButton } from '@lib/ui/buttons/IconButton'
-import { iconButtonSize } from '@lib/ui/buttons/IconButton'
 import { interactive } from '@lib/ui/css/interactive'
-import {
-  textInputHeight,
-  textInputHorizontalPadding,
-} from '@lib/ui/css/textInput'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
-import { PasteIcon } from '@lib/ui/icons/PasteIcon'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
-import { TextInput } from '@lib/ui/inputs/TextInput'
 import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndicator'
 import { Text, text } from '@lib/ui/text'
-import { attempt } from '@lib/utils/attempt'
 import { motion } from 'framer-motion'
 import { AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { TextInputWithPasteAction } from '../../../components/TextInputWithPasteAction'
+
 export const ManageMemo = () => {
   const [value, setValue] = useSendMemo()
   const { t } = useTranslation()
   const [isOpen, { toggle }] = useBoolean(!!value)
-  const { getClipboardText } = useCore()
 
   return (
     <InputContainer>
@@ -45,31 +35,10 @@ export const ManageMemo = () => {
             transition={{ duration: 0.2, ease: 'easeInOut' }}
             style={{ overflow: 'hidden' }}
           >
-            <ActionInsideInteractiveElement
-              render={() => (
-                <TextInput
-                  placeholder={t('enter_memo')}
-                  value={value}
-                  onValueChange={setValue}
-                />
-              )}
-              action={
-                <IconButton
-                  onClick={async () => {
-                    const { data } = await attempt(getClipboardText)
-
-                    if (data) {
-                      setValue(data)
-                    }
-                  }}
-                >
-                  <PasteIcon />
-                </IconButton>
-              }
-              actionPlacerStyles={{
-                bottom: (textInputHeight - iconButtonSize.md) / 2,
-                right: textInputHorizontalPadding,
-              }}
+            <TextInputWithPasteAction
+              placeholder={t('enter_memo')}
+              value={value}
+              onValueChange={setValue}
             />
           </motion.div>
         )}

@@ -1,3 +1,4 @@
+import { getVaultId } from '@core/mpc/vault/Vault'
 import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
 import { useVaults } from '@core/ui/storage/vaults'
 import { BackupConfirmation } from '@core/ui/vault/backup/confirmation'
@@ -9,6 +10,8 @@ import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { OnFinishProp } from '@lib/ui/props'
 import { useRive } from '@rive-app/react-canvas'
+
+import { useCurrentVault } from '../../state/currentVault'
 
 const steps = [
   'backupSlideshowPartOne',
@@ -26,6 +29,8 @@ export const BackupSecureVault = ({ onFinish }: OnFinishProp) => {
   const vaults = useVaults()
   const shouldShowBackupSummary = vaults.length > 1
   const isInitiatingDevice = useIsInitiatingDevice()
+
+  const vault = useCurrentVault()
 
   return (
     <Match
@@ -45,6 +50,7 @@ export const BackupSecureVault = ({ onFinish }: OnFinishProp) => {
       )}
       backupPage={() => (
         <VaultBackupFlow
+          vaultIds={[getVaultId(vault)]}
           onFinish={() => {
             if (shouldShowBackupSummary) {
               toNextStep()

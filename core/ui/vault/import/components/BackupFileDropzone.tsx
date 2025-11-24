@@ -1,4 +1,8 @@
-import { vaultBackupExtensions } from '@core/ui/vault/import/VaultBackupExtension'
+import {
+  importableVaultBackupExtensions,
+  vaultBackupArchiveExtensions,
+  vaultBackupExtensions,
+} from '@core/ui/vault/import/VaultBackupExtension'
 import { CloudUploadIcon } from '@lib/ui/icons/CloudUploadIcon'
 import { InteractiveDropZoneContainer } from '@lib/ui/inputs/upload/DropZoneContainer'
 import { DropZoneContent } from '@lib/ui/inputs/upload/DropZoneContent'
@@ -8,13 +12,23 @@ import { useTranslation } from 'react-i18next'
 
 type BackupFileDropzoneProps = {
   onFinish: (data: File) => void
+  onError: (error: Error) => void
 }
 
-export const BackupFileDropzone = ({ onFinish }: BackupFileDropzoneProps) => {
+export const BackupFileDropzone = ({
+  onFinish,
+  onError,
+}: BackupFileDropzoneProps) => {
   const { t } = useTranslation()
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       'application/octet-stream': vaultBackupExtensions.map(
+        extension => `.${extension}`
+      ),
+      'application/zip': vaultBackupArchiveExtensions.map(
+        extension => `.${extension}`
+      ),
+      'application/x-zip-compressed': vaultBackupArchiveExtensions.map(
         extension => `.${extension}`
       ),
     },
@@ -22,6 +36,8 @@ export const BackupFileDropzone = ({ onFinish }: BackupFileDropzoneProps) => {
       const [file] = acceptedFiles
       if (file) {
         onFinish(file)
+      } else {
+        onError(new Error(t('invalid_file_format')))
       }
     },
   })
@@ -40,7 +56,12 @@ export const BackupFileDropzone = ({ onFinish }: BackupFileDropzoneProps) => {
         </DropZoneContent>
         <input {...getInputProps()} />
       </InteractiveDropZoneContainer>
-      <Text color="shy">Supported file types: .bak & .vult</Text>
+      <Text color="shy">
+        Supported file types:
+        {importableVaultBackupExtensions
+          .map(extension => `.${extension}`)
+          .join(', ')}
+      </Text>
     </>
   )
 }

@@ -20,7 +20,7 @@ import { useUnmergeOptions } from '../../deposit/DepositForm/ActionSpecific/Unme
 import { useMergeableTokenBalancesQuery } from '../../deposit/hooks/useMergeableTokenBalancesQuery'
 
 export const WithdrawablePositions = ({ value }: ValueProp<AccountCoin>) => {
-  const mergeableBalancesData = useMergeableTokenBalancesQuery(value.address)
+  const mergeableBalancesData = useMergeableTokenBalancesQuery()
   const coins = useUnmergeOptions()
   const formatFiatAmount = useFormatFiatAmount()
   const { t } = useTranslation()

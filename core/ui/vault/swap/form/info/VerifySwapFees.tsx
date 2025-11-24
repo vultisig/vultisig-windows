@@ -1,61 +1,73 @@
-import { formatFee } from '@core/chain/tx/fee/format/formatFee'
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
+import { formatAmount } from '@lib/utils/formatAmount'
 import { ComponentType, FC, PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useSwapChainSpecificQuery } from '../../queries/useSwapChainSpecificQuery'
 import { useSwapFeesQuery } from '../../queries/useSwapFeesQuery'
+import { useSwapFromCoin } from '../../state/fromCoin'
 import { SwapFeeFiatValue } from './SwapTotalFeeFiatValue'
 
 type VerifySwapFeesProps = {
   RowComponent: ComponentType<PropsWithChildren>
+  swapQuote: SwapQuote
 }
 
-export const VerifySwapFees: FC<VerifySwapFeesProps> = ({ RowComponent }) => {
+export const VerifySwapFees: FC<VerifySwapFeesProps> = ({
+  RowComponent,
+  swapQuote,
+}) => {
   const { t } = useTranslation()
-  const query = useSwapFeesQuery()
-  const chainSpecificQuery = useSwapChainSpecificQuery()
+  const query = useSwapFeesQuery(swapQuote)
+
+  const [fromCoinKey] = useSwapFromCoin()
 
   return (
     <>
       <MatchQuery
         value={query}
-        success={({ network }) => {
-          if (!network) return null
-
+        pending={() => (
+          <RowComponent>
+            <Text>{t('swap_fee')}</Text>
+            <Skeleton width="48px" height="12px" />
+          </RowComponent>
+        )}
+        error={() => (
+          <RowComponent>
+            <Text>{t('swap_fee')}</Text>
+            <Text color="danger">{t('failed_to_load')}</Text>
+          </RowComponent>
+        )}
+        success={({ network, swap }) => {
+          const { ticker, decimals } = chainFeeCoin[fromCoinKey.chain]
           return (
-            <MatchQuery
-              value={chainSpecificQuery}
-              success={chainSpecific => {
-                return (
-                  <RowComponent>
-                    <span>{t('network_fee')}</span>
-                    <Text color="supporting">
-                      {formatFee({ ...network, chainSpecific })} (~
-                      <SwapFeeFiatValue value={[network]} />)
-                    </Text>
-                  </RowComponent>
-                )
-              }}
-            />
+            <>
+              {swap && (
+                <RowComponent>
+                  <Text>{t('swap_fee')}</Text>
+                  <Text color="shy">
+                    <SwapFeeFiatValue value={[swap]} />
+                  </Text>
+                </RowComponent>
+              )}
+              <RowComponent>
+                <span>{t('network_fee')}</span>
+                <Text color="shy">
+                  {formatAmount(fromChainAmount(network.amount, decimals), {
+                    ticker,
+                  })}{' '}
+                  (~
+                  <SwapFeeFiatValue value={[network]} />)
+                </Text>
+              </RowComponent>
+            </>
           )
         }}
       />
-      <RowComponent>
-        <Text>{t('swap_fee')}</Text>
-        <MatchQuery
-          value={query}
-          pending={() => <Skeleton width="48px" height="12px" />}
-          error={() => <Text color="danger">{t('failed_to_load')}</Text>}
-          success={({ swap }) => (
-            <Text color="supporting">
-              <SwapFeeFiatValue value={[swap]} />
-            </Text>
-          )}
-        />
-      </RowComponent>
       <RowComponent>
         <span>{t('max_total_fees')}</span>
         <MatchQuery

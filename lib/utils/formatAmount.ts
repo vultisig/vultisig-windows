@@ -1,45 +1,62 @@
 const million = 1000000
 const billion = 1000000000
 
-const fiatMaxDecimalPlaces = 3
-const tokenMaxDecimalPlaces = 8
+type Precision = 'medium' | 'high'
 
-// formatAmount is used to format a Fiat amount or a Token amount
+const maximumFractionDigitsRecord: Record<Precision, number> = {
+  medium: 3,
+  high: 8,
+}
+
+const locale = 'en-US'
+
+type FormatAmountOptions =
+  | {
+      currency: string
+    }
+  | {
+      ticker: string
+    }
+  | {
+      precision: Precision
+    }
+
 export const formatAmount = (
   amount: number,
-  currency: string,
-  locale = 'en-us'
+  options: FormatAmountOptions = { precision: 'medium' }
 ): string => {
   if (amount > billion) {
-    return `${formatAmount(amount / billion, currency, locale)}B`
+    return `${formatAmount(amount / billion, options)}B`
   }
   if (amount > million) {
-    return `${formatAmount(amount / million, currency, locale)}M`
+    return `${formatAmount(amount / million, options)}M`
   }
 
-  // Validate and set locale safely
-  let validLocale = 'en-US'
-  try {
-    validLocale = new Intl.NumberFormat(locale).resolvedOptions().locale
-  } catch (error: unknown) {
-    console.warn(
-      `Invalid locale provided: ${locale}. Falling back to 'en-US'. ${error}`
-    )
+  const isCurrency = options && 'currency' in options
+
+  const getPrecision = (): Precision => {
+    if ('precision' in options) {
+      return options.precision
+    }
+    return isCurrency ? 'medium' : 'high'
   }
 
-  try {
-    const formatter = new Intl.NumberFormat(validLocale, {
-      style: 'currency',
-      currency: currency,
-      maximumFractionDigits: fiatMaxDecimalPlaces,
-    })
-
-    return formatter.format(amount)
-  } catch {
-    const formatter = new Intl.NumberFormat(validLocale, {
-      maximumFractionDigits: tokenMaxDecimalPlaces,
-    })
-
-    return `${formatter.format(amount)} ${currency}`
+  const formatOptions: Intl.NumberFormatOptions = {
+    maximumFractionDigits: maximumFractionDigitsRecord[getPrecision()],
   }
+
+  if (isCurrency) {
+    formatOptions.currency = options.currency.toUpperCase()
+    formatOptions.style = 'currency'
+  }
+
+  const formatter = new Intl.NumberFormat(locale, formatOptions)
+
+  const formattedAmount = formatter.format(amount)
+
+  if (options && 'ticker' in options) {
+    return `${formattedAmount} ${options.ticker}`
+  }
+
+  return formattedAmount
 }

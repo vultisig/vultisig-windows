@@ -1,22 +1,23 @@
 import { useOnboardingStepsAnimations } from '@core/ui/onboarding/hooks/useOnboardingStepsAnimations'
-import { useCore } from '@core/ui/state/core'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { applyResponsiveLayoutWidth } from '@lib/ui/css/getResponsiveLayoutWidth'
 import { MultistepProgressIndicator } from '@lib/ui/flow/MultistepProgressIndicator'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { pageConfig } from '@lib/ui/page/config'
-import { OnFinishProp } from '@lib/ui/props'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { GradientText, Text } from '@lib/ui/text'
 import { FC } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
+export const OnboardingSteps: FC<OnFinishProp & OnBackProp> = ({
+  onFinish,
+  onBack,
+}) => {
   const { t } = useTranslation()
   const {
     animations,
@@ -26,39 +27,36 @@ export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
     animationComponent: AnimationComponent,
     isLoading,
   } = useOnboardingStepsAnimations()
-  const { goBack } = useCore()
 
   return (
-    <StyledLayout fullSize justifyContent="space-between">
-      <VStack flexGrow>
-        <Header gap={16}>
-          <HStack justifyContent="space-between">
-            <StyledButton
-              icon={<ChevronLeftIcon fontSize={18} />}
-              kind="link"
-              onClick={!currentAnimation ? goBack : handlePrevAnimation}
-              size="sm"
-            >
-              {t('back')}
-            </StyledButton>
-            <StyledButton kind="link" onClick={onFinish} size="sm">
-              {t('skip')}
-            </StyledButton>
-          </HStack>
-          <MultistepProgressIndicator
-            markPreviousStepsAsCompleted
-            steps={animations.length}
-            value={animations.indexOf(currentAnimation) + 1}
-            variant="bars"
-          />
-        </Header>
-        <VStack justifyContent="center" flexGrow alignItems="center">
-          <AnimationWrapper>
-            <AnimationComponent />
-          </AnimationWrapper>
-        </VStack>
-      </VStack>
-      <Footer alignItems="center" gap={32}>
+    <Layout>
+      <HeaderSection gap={16}>
+        <HStack justifyContent="space-between" fullWidth>
+          <StyledButton
+            icon={<ChevronLeftIcon fontSize={18} />}
+            kind="link"
+            onClick={!currentAnimation ? onBack : handlePrevAnimation}
+            size="sm"
+          >
+            {t('back')}
+          </StyledButton>
+          <StyledButton kind="link" onClick={onFinish} size="sm">
+            {t('skip')}
+          </StyledButton>
+        </HStack>
+        <MultistepProgressIndicator
+          markPreviousStepsAsCompleted
+          steps={animations.length}
+          value={animations.indexOf(currentAnimation) + 1}
+          variant="bars"
+        />
+      </HeaderSection>
+      <AnimationArea>
+        <AnimationWrapper>
+          <AnimationComponent />
+        </AnimationWrapper>
+      </AnimationArea>
+      <FooterSection>
         <AnimatedVisibility>
           <Text as="div" size={28} centerHorizontally>
             <Trans
@@ -79,8 +77,8 @@ export const OnboardingSteps: FC<OnFinishProp> = ({ onFinish }) => {
         >
           <ChevronRightIcon />
         </IconButton>
-      </Footer>
-    </StyledLayout>
+      </FooterSection>
+    </Layout>
   )
 }
 
@@ -89,39 +87,66 @@ const StyledButton = styled(Button)`
   width: auto;
 `
 
-const AnimationWrapper = styled.div`
-  position: relative;
-  width: 100%;
-  flex: 1;
-
-  @media ${mediaQuery.mobileDeviceAndDown} {
-    max-height: 380px;
-  }
-
-  @media ${mediaQuery.tabletDeviceAndUp} {
-    max-height: 650px;
-  }
-
-  @media ${mediaQuery.desktopDeviceAndUp} {
-    max-height: 750px;
-  }
+const Layout = styled(VStack)`
+  height: 100%;
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  padding: ${pageConfig.verticalPadding}px ${pageConfig.horizontalPadding}px;
+  gap: 32px;
+  overflow: hidden;
+  align-items: stretch;
 `
 
-const Header = styled(VStack)`
+const HeaderSection = styled(VStack)`
+  width: min(640px, 100%);
+  align-self: center;
+  align-items: center;
+
   @media ${mediaQuery.mobileDeviceAndDown} {
     padding: 36px 24px 0;
   }
 `
 
-const Footer = styled(VStack)`
+const AnimationArea = styled(VStack)`
+  flex: 1;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+`
+
+const AnimationWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  max-width: 880px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  min-height: 0;
+
+  canvas,
+  img,
+  video {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+  }
+
   @media ${mediaQuery.mobileDeviceAndDown} {
-    padding: 0 24px 36px;
+    max-width: 100%;
+    height: 320px;
   }
 `
 
-const StyledLayout = styled(VStack)`
-  margin: 0 auto;
-  position: relative;
-  padding-block: ${pageConfig.verticalPadding}px;
-  ${applyResponsiveLayoutWidth};
+const FooterSection = styled(VStack)`
+  width: min(640px, 100%);
+  align-self: center;
+  align-items: center;
+  gap: 32px;
+  flex-shrink: 0;
+
+  @media ${mediaQuery.mobileDeviceAndDown} {
+    padding: 0 24px 36px;
+  }
 `
