@@ -1,49 +1,63 @@
 import { hasServer } from '@core/mpc/devices/localPartyId'
 import { useMpcPeerOptionsQuery } from '@core/ui/mpc/devices/queries/useMpcPeerOptionsQuery'
 import { pluginPeersConfig } from '@core/ui/mpc/fast/config'
-import { FlowPendingPageContent } from '@lib/ui/flow/FlowPendingPageContent'
+import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { FlowErrorPageContent } from '../../../../flow/FlowErrorPageContent'
-import { InstallPluginPendingState } from './InstallPluginPendingState'
 import { InstallPluginStep } from './InstallPluginStep'
+import { usePluginInstallAnimation } from './PluginInstallAnimationProvider'
+
+const pluginIdPattern = /^[^-]+-[^-]+-[0-9a-f]{4}-[0-9]+$/
+
+const getNextStep = (
+  hasServer: boolean,
+  hasVerifier: boolean,
+  hasPlugin: boolean
+): InstallPluginStep | null => {
+  if (!hasServer) return 'fastServer'
+
+  const state = `${hasVerifier}-${hasPlugin}` as const
+  const stepMap: Record<string, InstallPluginStep | null> = {
+    'false-false': 'verifierServer',
+    'true-false': 'pluginServer',
+    'true-true': 'install',
+  }
+  return stepMap[state] ?? null
+}
 
 export const WaitForPluginAndVerifier: FC<OnFinishProp<string[]>> = ({
   onFinish,
 }) => {
   const { t } = useTranslation()
   const peersQuery = useMpcPeerOptionsQuery()
-  const [step, setStep] = useState<InstallPluginStep | null>(null)
+  const animationContext = usePluginInstallAnimation()
 
   const peers = useMemo(() => peersQuery.data ?? [], [peersQuery.data])
 
   const hasVerifier = peers.some(p => p.startsWith('verifier'))
-  // Detect if there is at least one plugin in the peers list
-  // Plugin local party format is expected to be: {developer}-{plugin}-{collision prevention random hex}-{random number}
-  // Example: vultisig-payroll-0000-1234 or raghav-personal-4567-13332
-  const pluginIdPattern = /^[^-]+-[^-]+-[0-9a-f]{4}-[0-9]+$/ // {dev}-{plugin}-{4hex}-{n}
   const hasPlugin = peers.some(p => pluginIdPattern.test(p))
   const enoughPeers = peers.length >= pluginPeersConfig.minimumJoinedParties
+  const serverPresent = hasServer(peers)
 
-  // Determine current step based on joined peers
-  const nextStep: InstallPluginStep | null = useMemo(() => {
-    if (hasPlugin && hasVerifier) return 'install'
-    if (hasVerifier) return 'pluginServer'
-    return null
-  }, [hasVerifier, hasPlugin])
-
-  useEffect(() => {
-    setStep(nextStep)
-  }, [nextStep])
+  const nextStep: InstallPluginStep | null = useMemo(
+    () => getNextStep(serverPresent, hasVerifier, hasPlugin),
+    [serverPresent, hasVerifier, hasPlugin]
+  )
 
   useEffect(() => {
-    if (hasPlugin && hasVerifier && enoughPeers && hasServer(peers)) {
+    if (animationContext) {
+      animationContext.setCurrentStep(nextStep)
+    }
+  }, [nextStep, animationContext])
+
+  useEffect(() => {
+    if (hasPlugin && hasVerifier && enoughPeers && serverPresent) {
       onFinish(peers)
     }
-  }, [enoughPeers, hasPlugin, hasVerifier, peers, onFinish])
+  }, [enoughPeers, hasPlugin, hasVerifier, peers, onFinish, serverPresent])
 
   return (
     <MatchQuery
@@ -54,13 +68,6 @@ export const WaitForPluginAndVerifier: FC<OnFinishProp<string[]>> = ({
           error={error}
         />
       )}
-      pending={() => (
-        <FlowPendingPageContent
-          title={`${t('connecting_to_server')}...`}
-          message={t('fastVaultSetup.takeMinute')}
-        />
-      )}
-      success={() => <InstallPluginPendingState value={step} />}
     />
   )
 }

@@ -6,21 +6,24 @@ import { StartMpcSessionFlow } from '@core/ui/mpc/session/StartMpcSessionFlow'
 import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
 import { PasswordProvider } from '@core/ui/state/password'
 import { Match } from '@lib/ui/base/Match'
-import { StepTransition } from '@lib/ui/base/StepTransition'
+
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
-import { Button } from '@lib/ui/buttons/Button'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
-import { PageContent } from '@lib/ui/page/PageContent'
-import { PageFooter } from '@lib/ui/page/PageFooter'
-import { GradientText, Text } from '@lib/ui/text'
+
 import { useTranslation } from 'react-i18next'
 
 import { KeygenFlow } from '../../flow/KeygenFlow'
+import { InstallPluginPendingState } from './InstallPluginPendingState'
+import {
+  PluginInstallAnimationProvider,
+  usePluginInstallAnimation,
+} from './PluginInstallAnimationProvider'
 import { WaitForPluginAndVerifier } from './WaitForPluginAndVerifier'
+import { useCallback } from 'react'
 
 const steps = ['info', 'password', 'keygen'] as const
-
-export const PluginReshareFlow = ({
+const closePopupDelay = 1200
+const PluginReshareFlowContent = ({
   description,
   name,
 }: {
@@ -29,78 +32,76 @@ export const PluginReshareFlow = ({
 }) => {
   const { t } = useTranslation()
   const { step, toPreviousStep, toNextStep } = useStepNavigation({ steps })
+  const animationContext = usePluginInstallAnimation()
+
+  const onFinish = useCallback(async () => {
+    if (animationContext) {
+      animationContext.setCurrentStep('finishInstallation')
+      await new Promise(resolve => setTimeout(resolve, closePopupDelay))
+      window.close()
+    }
+  }, [animationContext])
 
   return (
-    <Match
-      value={step}
-      info={() => (
-        <PreviewInfo value={{ description, name }} onFinish={toNextStep} />
-      )}
-      password={() => (
-        <ValueTransfer<{ password: string }>
-          key="password"
-          from={({ onFinish }) => (
-            <ServerPasswordStep
-              description={t('plugin_password_desc')}
-              onBack={toPreviousStep}
-              onFinish={onFinish}
-            />
-          )}
-          to={({ value: { password } }) => (
-            <PasswordProvider initialValue={password}>
-              <PluginReshareFastKeygenServerActionProvider>
-                <FastKeygenServerActionStep onFinish={toNextStep} />
-              </PluginReshareFastKeygenServerActionProvider>
-            </PasswordProvider>
-          )}
-        />
-      )}
-      keygen={() => (
-        <>
+    <>
+      <InstallPluginPendingState />
+      <Match
+        value={step}
+        info={() => (
+          <PreviewInfo value={{ description, name }} onFinish={toNextStep} />
+        )}
+        password={() => (
+          <ValueTransfer<{ password: string }>
+            key="password"
+            from={({ onFinish }) => (
+              <ServerPasswordStep
+                description={t('plugin_password_desc')}
+                onBack={toPreviousStep}
+                onFinish={onFinish}
+              />
+            )}
+            to={({ value: { password } }) => (
+              <PasswordProvider initialValue={password}>
+                <PluginReshareFastKeygenServerActionProvider>
+                  <FastKeygenServerActionStep onFinish={toNextStep} />
+                </PluginReshareFastKeygenServerActionProvider>
+              </PasswordProvider>
+            )}
+          />
+        )}
+        keygen={() => (
           <ValueTransfer<string[]>
             from={({ onFinish }) => (
               <WaitForPluginAndVerifier onFinish={onFinish} />
             )}
             to={({ value }) => (
-              <StepTransition
-                from={({ onFinish }) => (
-                  <MpcPeersProvider value={value}>
-                    <StartMpcSessionFlow
-                      render={() => (
-                        <KeygenFlow
-                          onBack={toPreviousStep}
-                          onFinish={onFinish}
-                        />
-                      )}
-                      value="keygen"
-                    />
-                  </MpcPeersProvider>
-                )}
-                to={() => (
-                  <>
-                    <PageContent justifyContent="end">
-                      <GradientText
-                        as="span"
-                        size={28}
-                        weight={500}
-                        centerHorizontally
-                      >{`${t('success')}.`}</GradientText>
-                      <Text as="span" size={28} weight={500} centerHorizontally>
-                        {t('plugin_success_desc', { name })}
-                      </Text>
-                    </PageContent>
-                    <PageFooter>
-                      <Button onClick={() => window.close()}>
-                        {t('go_to_wallet')}
-                      </Button>
-                    </PageFooter>
-                  </>
-                )}
-              />
+              <MpcPeersProvider value={value}>
+                <StartMpcSessionFlow
+                  hidden={true}
+                  render={() => (
+                    <KeygenFlow onBack={toPreviousStep} onFinish={onFinish} />
+                  )}
+                  value="keygen"
+                />
+              </MpcPeersProvider>
             )}
           />
-        </>
-      )}
-    />
+        )}
+      />
+    </>
+  )
+}
+
+export const PluginReshareFlow = ({
+  description,
+  name,
+}: {
+  description: string
+  name: string
+}) => {
+  return (
+    <PluginInstallAnimationProvider>
+      <PluginReshareFlowContent description={description} name={name} />
+    </PluginInstallAnimationProvider>
   )
 }

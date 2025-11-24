@@ -15,9 +15,10 @@ import { useTranslation } from 'react-i18next'
 import { FlowErrorPageContent } from '../../flow/FlowErrorPageContent'
 
 export const StartMpcSessionStep = ({
+  hidden,
   onFinish,
   value,
-}: OnFinishProp<string[]> & ValueProp<MpcSession>) => {
+}: OnFinishProp<string[]> & ValueProp<MpcSession> & { hidden?: boolean }) => {
   const { t } = useTranslation()
   const sessionId = useMpcSessionId()
   const serverUrl = useMpcServerUrl()
@@ -36,7 +37,7 @@ export const StartMpcSessionStep = ({
 
   useEffect(() => start(), [start])
 
-  return (
+  return hidden ? null : (
     <>
       <PageHeader title={t(value)} hasBorder />
       <PageContent justifyContent="center" alignItems="center">
