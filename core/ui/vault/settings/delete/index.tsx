@@ -111,7 +111,7 @@ export const DeleteVaultPage = () => {
           <HStack gap={12} alignItems="center">
             <VItem>
               <Text size={13} weight={500}>
-                {t('vault_details_page_vault_ECDSA')} Key:
+                {t('vault_details_page_vault_ECDSA')}:
               </Text>
               <Text cropped size={14} weight={500} color="shy">
                 {vault.publicKeys.ecdsa}
@@ -119,7 +119,7 @@ export const DeleteVaultPage = () => {
             </VItem>
             <VItem>
               <Text size={13} weight={500}>
-                {t('vault_details_page_vault_EDDSA')} Key:
+                {t('vault_details_page_vault_EDDSA')}:
               </Text>
               <Text cropped size={14} weight={500} color="shy">
                 {vault.publicKeys.eddsa}
