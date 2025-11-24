@@ -7,7 +7,10 @@ import { attempt } from '@lib/utils/attempt'
 
 import { EIP1193Error } from '../../../background/handlers/errorHandler'
 
-export const requestAccount = async (chain: Chain) => {
+export const requestAccount = async (
+  chain: Chain,
+  options?: { preselectFastVault?: boolean }
+) => {
   const { error, data } = await attempt(
     callBackground({
       getAccount: { chain },
@@ -21,7 +24,9 @@ export const requestAccount = async (chain: Chain) => {
   if (error === BackgroundError.Unauthorized) {
     const { data, error } = await attempt(
       callPopup({
-        grantVaultAccess: {},
+        grantVaultAccess: {
+          preselectFastVault: options?.preselectFastVault,
+        },
       })
     )
 

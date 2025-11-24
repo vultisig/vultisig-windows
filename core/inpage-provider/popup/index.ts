@@ -10,7 +10,7 @@ import { callInpageProviderBridgeBackgroundAgent } from '../bridge'
 // For background context, use `callPopupFromBackground` and provide the appropriate `context`.
 export const callPopup = async <M extends PopupMethod>(
   call: PopupCall<M>,
-  options: { account?: string } = {}
+  options: { account?: string; shouldClosePopup?: boolean } = {}
 ): Promise<PopupInterface[M]['output']> =>
   callInpageProviderBridgeBackgroundAgent({
     popup: { call, options },

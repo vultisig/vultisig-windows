@@ -17,6 +17,7 @@ const feeCoinTransferGasLimit: Record<EvmChain, bigint> = {
   [EvmChain.Avalanche]: 23000n,
   [EvmChain.Zksync]: zkSyncTransferGasLimit,
   [EvmChain.Mantle]: mantleTransferGasLimit,
+  [EvmChain.Hyperliquid]: 23000n,
   [EvmChain.Sei]: 30_000n,
 }
 
@@ -34,6 +35,7 @@ const erc20TransferGasLimit: Record<EvmChain, bigint> = {
   [EvmChain.Avalanche]: defaultErc20TransferGasLimit,
   [EvmChain.Zksync]: zkSyncTransferGasLimit,
   [EvmChain.Mantle]: mantleTransferGasLimit,
+  [EvmChain.Hyperliquid]: defaultErc20TransferGasLimit,
   [EvmChain.Sei]: defaultErc20TransferGasLimit,
 }
 
@@ -42,7 +44,6 @@ type DeriveEvmGasLimitInput = {
   data?: string
 }
 
-// If data is a hex string, we treat it as a contract call; otherwise, it's considered a simple memo
 export const deriveEvmGasLimit = ({ coin, data }: DeriveEvmGasLimitInput) => {
   const { id, chain } = coin
   if (data) {

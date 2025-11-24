@@ -12,7 +12,6 @@ import { VaultSigners } from '@core/ui/vault/signers'
 import {
   LeadingIconBadge,
   SectionHeader,
-  SelectionIndicator,
   VaultListRow,
 } from '@core/ui/vaultsOrganisation/components'
 import { useCurrentVaultFolder } from '@core/ui/vaultsOrganisation/folder/state/currentVaultFolder'
@@ -22,7 +21,7 @@ import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { PlusIcon } from '@lib/ui/icons/PlusIcon'
 import { SquarePenIcon } from '@lib/ui/icons/SquarePenIcon'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { VStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -105,12 +104,7 @@ export const VaultFolderPage = () => {
           }
         />
         <VStack gap={16}>
-          <Text
-            size={13}
-            weight={600}
-            color="shy"
-            style={{ textTransform: 'uppercase' }}
-          >
+          <Text size={13} weight={600} color="shy">
             {t('vaults')}
           </Text>
           <VStack gap={12}>
@@ -131,16 +125,13 @@ export const VaultFolderPage = () => {
                       ? formatFiatAmount(value)
                       : undefined
                   }
-                  meta={
-                    <HStack gap={8} alignItems="center">
-                      <IconWrapper size={16} color="success">
+                  meta={<VaultSigners vault={vault} />}
+                  trailing={
+                    vaultId === currentVaultId ? (
+                      <IconWrapper size={20} color="success">
                         <CheckIcon />
                       </IconWrapper>
-                      <VaultSigners vault={vault} />
-                    </HStack>
-                  }
-                  trailing={
-                    vaultId === currentVaultId ? <SelectionIndicator /> : null
+                    ) : null
                   }
                   onClick={() => handleSelectVault(vaultId)}
                 />

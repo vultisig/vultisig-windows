@@ -1,4 +1,8 @@
 import { Chain } from '@core/chain/Chain'
+import {
+  CosmosFee,
+  CosmosMsg,
+} from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 
 export enum CosmosMsgType {
   MSG_SEND = 'cosmos-sdk/MsgSend',
@@ -169,6 +173,10 @@ export type TransactionDetails = {
     maxPriorityFeePerGas?: string
   }
   msgPayload?: MsgPayload
+  aminoPayload?: {
+    msgs: CosmosMsg[]
+    fee: CosmosFee
+  }
   skipBroadcast?: boolean
 }
 

@@ -23,7 +23,7 @@ import { FolderIcon } from '@lib/ui/icons/FolderIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { PlusIcon } from '@lib/ui/icons/PlusIcon'
 import { SquarePenIcon } from '@lib/ui/icons/SquarePenIcon'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { VStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -197,12 +197,7 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
 
         {folderlessVaults.length > 0 && (
           <VStack gap={16}>
-            <Text
-              size={13}
-              weight={600}
-              color="shy"
-              style={{ textTransform: 'uppercase' }}
-            >
+            <Text size={13} weight={600} color="shy">
               {t('vaults')}
             </Text>
             <VStack gap={12}>
@@ -223,14 +218,7 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
                         ? formatFiatAmount(value)
                         : undefined
                     }
-                    meta={
-                      <HStack gap={8} alignItems="center">
-                        <IconWrapper size={16} color="success">
-                          <CheckIcon />
-                        </IconWrapper>
-                        <VaultSignersPill vault={vault} />
-                      </HStack>
-                    }
+                    meta={<VaultSignersPill vault={vault} />}
                     selected={vaultId === currentVaultId}
                     trailing={
                       vaultId === currentVaultId ? (

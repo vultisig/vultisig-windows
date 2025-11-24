@@ -29,13 +29,16 @@ export class Plugin extends EventEmitter {
               },
             },
           },
-          { account }
+          { account, shouldClosePopup: true }
         )
 
         return processSignature(signature)
       },
       reshare_sign: async ([{ id }]: [{ id: string }]) => {
-        const { joinUrl } = await callPopup({ pluginReshare: { pluginId: id } })
+        const { joinUrl } = await callPopup(
+          { pluginReshare: { pluginId: id } },
+          { shouldClosePopup: true }
+        )
 
         return joinUrl
       },
@@ -45,6 +48,6 @@ export class Plugin extends EventEmitter {
       return handlers[method as keyof typeof handlers](params as any)
     }
 
-    throw new NotImplementedError(`Plugin method ${method}`)
+    throw new NotImplementedError(`App method ${method}`)
   }
 }
