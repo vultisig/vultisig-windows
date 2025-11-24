@@ -13,12 +13,12 @@ import {
 
 type GetVultDiscountTierInput = {
   vultBalance: bigint
-  hasThorguardNft: boolean
+  thorguardNftBalance: bigint
 }
 
 export const getVultDiscountTier = ({
   vultBalance,
-  hasThorguardNft,
+  thorguardNftBalance,
 }: GetVultDiscountTierInput): VultDiscountTier | null => {
   const balance = fromChainAmount(vultBalance, vult.decimals)
 
@@ -28,7 +28,7 @@ export const getVultDiscountTier = ({
     'desc'
   ).find(({ value }) => balance >= value)?.key
 
-  if (!hasThorguardNft || !baseTier) {
+  if (thorguardNftBalance === 0n || !baseTier) {
     return null
   }
 
