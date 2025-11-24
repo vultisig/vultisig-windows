@@ -1,4 +1,5 @@
 import { vult } from '@core/chain/coin/knownTokens'
+import { getLastItem } from '@lib/utils/array/getLastItem'
 import { order } from '@lib/utils/array/order'
 import { toEntries } from '@lib/utils/record/toEntries'
 
@@ -8,7 +9,6 @@ import {
   VultDiscountTier,
   vultDiscountTierBps,
   vultDiscountTierMinBalances,
-  vultDiscountTiers,
 } from './config'
 
 type GetVultDiscountTierInput = {
@@ -22,25 +22,34 @@ export const getVultDiscountTier = ({
 }: GetVultDiscountTierInput): VultDiscountTier | null => {
   const balance = fromChainAmount(vultBalance, vult.decimals)
 
-  const baseTier = order(
+  const descendingTiers = order(
     toEntries(vultDiscountTierMinBalances),
     ({ value }) => value,
     'desc'
-  ).find(({ value }) => balance >= value)?.key
+  )
 
-  if (thorguardNftBalance === 0n || !baseTier) {
-    return null
+  const baseTier = descendingTiers.find(({ value }) => balance >= value)?.key
+
+  if (thorguardNftBalance === 0n) {
+    return baseTier ?? null
   }
 
-  const currentTierIndex = vultDiscountTiers.indexOf(baseTier)
-  const platinumIndex = vultDiscountTiers.indexOf('platinum')
+  if (!baseTier) {
+    return getLastItem(descendingTiers).key
+  }
 
-  if (currentTierIndex >= platinumIndex) {
+  const currentTierIndex = descendingTiers.findIndex(
+    ({ key }) => key === baseTier
+  )
+  const platinumIndex = descendingTiers.findIndex(
+    ({ key }) => key === 'platinum'
+  )
+
+  if (currentTierIndex > platinumIndex) {
     return baseTier
   }
 
-  const nextTierIndex = currentTierIndex + 1
-  return vultDiscountTiers[nextTierIndex]
+  return descendingTiers[currentTierIndex - 1].key
 }
 
 export const getSwapAffiliateBps = (
