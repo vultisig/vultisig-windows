@@ -39,6 +39,7 @@ const deviceOrder: DeviceKey[] = [
 
 export const usePluginReshareStepsAnimations = () => {
   const mountedRef = useRef(true)
+  const opIdRef = useRef(0)
 
   useEffect(() => {
     return () => {
@@ -141,6 +142,9 @@ export const usePluginReshareStepsAnimations = () => {
       step: Exclude<InstallPluginStep, 'fastServer'>,
       connected: boolean
     ) => {
+      opIdRef.current += 1
+      const currentOpId = opIdRef.current
+
       const targetDevice = mapInstallPluginStepToDeviceKey[step]
 
       const targetIndex = deviceOrder.indexOf(targetDevice)
@@ -156,13 +160,20 @@ export const usePluginReshareStepsAnimations = () => {
       }
 
       for (let i = 0; i < targetIndex; i++) {
+        if (currentOpId !== opIdRef.current) return
+        if (!mountedRef.current) return
+
         const previousDevice = deviceOrder[i]
         if (!statusRef.current[previousDevice]) {
+          if (currentOpId !== opIdRef.current) return
           connectDevice(previousDevice)
           await delay(1000)
+          if (currentOpId !== opIdRef.current) return
           if (!mountedRef.current) return
         }
       }
+      if (currentOpId !== opIdRef.current) return
+      if (!mountedRef.current) return
       connectDevice(targetDevice)
     },
     [connectDevice, setMap]
