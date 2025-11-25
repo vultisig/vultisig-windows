@@ -3,7 +3,7 @@ import { getStorageValue } from '@lib/extension/storage/get'
 import { setStorageValue } from '@lib/extension/storage/set'
 
 const initialValues: DeveloperOptions = {
-  pluginMarketplaceBaseUrl: 'https://store.vultisigplugin.app/api',
+  pluginMarketplaceBaseUrl: 'https://verifier.vultisig.com',
 }
 
 export const getDeveloperOptions = () =>

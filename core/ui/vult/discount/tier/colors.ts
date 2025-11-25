@@ -6,4 +6,6 @@ export const discountTierColors: Record<VultDiscountTier, HSLA> = {
   silver: new HSLA(215, 40, 85, 1),
   gold: new HSLA(38, 100, 68, 1),
   platinum: new HSLA(180, 60, 51, 1),
+  diamond: new HSLA(260, 100, 65, 1),
+  ultimate: new HSLA(45, 100, 50, 1),
 }
