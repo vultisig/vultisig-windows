@@ -34,6 +34,7 @@ import { UpdateVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/update
 import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage'
 import { Views } from '@lib/ui/navigation/Views'
 
+import { DefiPage } from '../defi/page/DefiPage'
 import { PasscodeAutoLockPage } from '../passcodeEncryption/autoLock/PasscodeAutoLockPage'
 import { ManagePasscodeEncryptionPage } from '../passcodeEncryption/manage/ManagePasscodeEncryptionPage'
 import { RequestFastVaultBackup } from '../vault/backup/fast/request'
@@ -45,7 +46,6 @@ import { ReferralPage } from '../vault/settings/referral/ReferralsPage'
 import { FaqVaultPage } from '../vault/settings/vaultFaq/FaqVaultPage'
 import { ShareVaultPage } from '../vault/share/ShareVaultPage'
 import { VultDiscountPage } from '../vult/discount/page'
-import { DefiPage } from '../defi/page'
 
 export type SharedViewId = Extract<
   CoreViewId,
