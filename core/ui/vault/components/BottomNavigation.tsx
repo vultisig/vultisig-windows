@@ -19,6 +19,60 @@ import styled, { css } from 'styled-components'
 export const bottomNavigationHeight = 75
 export const mobileBottomNavigationHeight = 120
 
+export const BottomNavigation = () => {
+  const navigate = useCoreNavigate()
+  const { t } = useTranslation()
+  const [activeTab, setActiveTab] = useState<'wallet' | 'defi'>('wallet')
+
+  return (
+    <Position>
+      <InnerContainer>
+        {/* Mobile Layout */}
+        <MobileRow>
+          <SwitchContainer>
+            <SwitchButton
+              isActive={activeTab === 'wallet'}
+              onClick={() => setActiveTab('wallet')}
+            >
+              <WalletIcon />
+              {t('wallet')}
+            </SwitchButton>
+            <SwitchButton
+              isActive={activeTab === 'defi'}
+              onClick={() => setActiveTab('defi')}
+            >
+              <CoinsAddIcon />
+              {t('defi')}
+            </SwitchButton>
+          </SwitchContainer>
+          <CameraButton onClick={() => navigate({ id: 'uploadQr', state: {} })}>
+            <Camera2Icon />
+          </CameraButton>
+        </MobileRow>
+
+        {/* Desktop Layout */}
+        <SecondaryItemWrapper>
+          <WalletIcon />
+          <Text as="span" size={10}>
+            {t('wallet')}
+          </Text>
+        </SecondaryItemWrapper>
+        <DesktopCameraButton
+          onClick={() => navigate({ id: 'uploadQr', state: {} })}
+        >
+          <Camera2Icon />
+        </DesktopCameraButton>
+        <SecondaryItemWrapper>
+          <CoinsAddIcon />
+          <Text as="span" size={10}>
+            {t('defi')}
+          </Text>
+        </SecondaryItemWrapper>
+      </InnerContainer>
+    </Position>
+  )
+}
+
 const CameraButton = styled(UnstyledButton)`
   ${round};
   background: ${getColor('buttonPrimary')};
@@ -66,14 +120,12 @@ const Position = styled.div`
 const InnerContainer = styled.div`
   width: 100%;
   border-top: 1px solid ${getColor('foregroundSuper')};
-  background: rgba(19, 46, 86, 0.6);
-  backdrop-filter: blur(32px);
+  background: ${getColor('background')};
   pointer-events: auto;
-
+  padding-inline: 16px;
   display: flex;
   flex-direction: column;
   height: 120px;
-  padding: 36px 24px 44px 24px;
   justify-content: center;
   align-items: center;
   gap: 16px;
@@ -84,6 +136,9 @@ const InnerContainer = styled.div`
       justifyContent: 'center',
       alignItems: 'center',
     })};
+    background: rgba(19, 46, 86, 0.1);
+    backdrop-filter: blur(32px);
+
     height: auto;
     padding: 8px 12px 10px 12px;
   }
@@ -133,7 +188,6 @@ const MobileRow = styled.div`
 const SwitchContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 0;
   background:
     linear-gradient(
       90deg,
@@ -213,57 +267,3 @@ const SwitchButton = styled(UnstyledButton)<{ isActive: boolean }>`
     font-size: 20px;
   }
 `
-
-export const BottomNavigation = () => {
-  const navigate = useCoreNavigate()
-  const { t } = useTranslation()
-  const [activeTab, setActiveTab] = useState<'wallet' | 'defi'>('wallet')
-
-  return (
-    <Position>
-      <InnerContainer>
-        {/* Mobile Layout */}
-        <MobileRow>
-          <SwitchContainer>
-            <SwitchButton
-              isActive={activeTab === 'wallet'}
-              onClick={() => setActiveTab('wallet')}
-            >
-              <WalletIcon />
-              {t('wallet')}
-            </SwitchButton>
-            <SwitchButton
-              isActive={activeTab === 'defi'}
-              onClick={() => setActiveTab('defi')}
-            >
-              <CoinsAddIcon />
-              {t('defi')}
-            </SwitchButton>
-          </SwitchContainer>
-          <CameraButton onClick={() => navigate({ id: 'uploadQr', state: {} })}>
-            <Camera2Icon />
-          </CameraButton>
-        </MobileRow>
-
-        {/* Desktop Layout */}
-        <SecondaryItemWrapper>
-          <WalletIcon />
-          <Text as="span" size={10}>
-            {t('wallet')}
-          </Text>
-        </SecondaryItemWrapper>
-        <DesktopCameraButton
-          onClick={() => navigate({ id: 'uploadQr', state: {} })}
-        >
-          <Camera2Icon />
-        </DesktopCameraButton>
-        <SecondaryItemWrapper>
-          <CoinsAddIcon />
-          <Text as="span" size={10}>
-            {t('defi')}
-          </Text>
-        </SecondaryItemWrapper>
-      </InnerContainer>
-    </Position>
-  )
-}
