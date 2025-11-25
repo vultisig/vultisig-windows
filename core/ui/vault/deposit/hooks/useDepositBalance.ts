@@ -9,6 +9,7 @@ import { useDepositAction } from '../providers/DepositActionProvider'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
 import { useDepositCoinBalance } from './useDepositCoinBalance'
 import { useRujiraStakeQuery } from './useRujiraStakeQuery'
+import { useTonUnstakableQuery } from './useTonUnstakableQuery'
 
 type Params = {
   selectedChainAction: ChainAction
@@ -34,6 +35,18 @@ export const useDepositBalance = ({ selectedChainAction }: Params) => {
 
   const { data: stakeAndRewards } = useRujiraStakeQuery()
 
+  const { data: { humanReadableBalance: tonUnstakableBalance = 0 } = {} } =
+    useTonUnstakableQuery({
+      address: selectedCoin.address,
+      options: {
+        enabled: Boolean(
+          selectedCoin.address &&
+            action === 'unstake' &&
+            selectedCoin.chain === Chain.Ton
+        ),
+      },
+    })
+
   const selectedCoinBalance = useDepositCoinBalance({
     action: selectedChainAction,
     chain,
@@ -41,6 +54,10 @@ export const useDepositBalance = ({ selectedChainAction }: Params) => {
 
   const totalTokenAmount = useMemo(() => {
     if (selectedChainAction === 'unstake') {
+      if (selectedCoin.chain === Chain.Ton) {
+        return tonUnstakableBalance
+      }
+
       if (
         selectedCoin.ticker ===
         knownCosmosTokens[Chain.THORChain]['x/ruji'].ticker
@@ -68,6 +85,7 @@ export const useDepositBalance = ({ selectedChainAction }: Params) => {
     stakeAndRewards?.bonded,
     stakeAndRewards?.rewardsUSDC,
     humanReadableBalance,
+    tonUnstakableBalance,
     totalAmountAvailableForChainData?.totalTokenAmount,
   ])
 
