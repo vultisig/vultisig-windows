@@ -45,6 +45,7 @@ import { ReferralPage } from '../vault/settings/referral/ReferralsPage'
 import { FaqVaultPage } from '../vault/settings/vaultFaq/FaqVaultPage'
 import { ShareVaultPage } from '../vault/share/ShareVaultPage'
 import { VultDiscountPage } from '../vult/discount/page'
+import { DefiPage } from '../defi/page'
 
 export type SharedViewId = Extract<
   CoreViewId,
@@ -57,9 +58,11 @@ export type SharedViewId = Extract<
   | 'createVaultFolder'
   | 'currencySettings'
   | 'deeplink'
+  | 'defi'
   | 'deleteVault'
   | 'deposit'
   | 'languageSettings'
+  | 'manageDefiChains'
   | 'manageVaultChainCoins'
   | 'manageVaultChains'
   | 'manageVaultFolder'
@@ -106,6 +109,7 @@ export const sharedViews: Views<SharedViewId> = {
   createVaultFolder: CreateVaultFolderPage,
   currencySettings: CurrencyPage,
   deeplink: DeeplinkPage,
+  defi: DefiPage,
   deleteVault: DeleteVaultPage,
   deposit: () => (
     <DepositActionProvider>
@@ -115,6 +119,7 @@ export const sharedViews: Views<SharedViewId> = {
     </DepositActionProvider>
   ),
   languageSettings: LanguagePage,
+  manageDefiChains: ManageVaultChainsPage,
   manageVaultChains: ManageVaultChainsPage,
   manageVaultChainCoins: ManageVaultChainCoinsPage,
   manageVaults: ManageVaultsPage,
