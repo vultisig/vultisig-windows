@@ -4,6 +4,7 @@ import { PreviewInfo } from '@core/ui/mpc/keygen/reshare/plugin/PreviewInfo'
 import { PluginReshareFastKeygenServerActionProvider } from '@core/ui/mpc/keygen/reshare/PluginReshareFastKeygenServerActionProvider'
 import { SilentStartMpcSessionFlow } from '@core/ui/mpc/session/SilentStartMpcSessionFlow'
 import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
+import { Plugin } from '@core/ui/plugins/core/get'
 import { PasswordProvider } from '@core/ui/state/password'
 import { Match } from '@lib/ui/base/Match'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
@@ -19,13 +20,7 @@ import { WaitForPluginAndVerifier } from './WaitForPluginAndVerifier'
 const steps = ['info', 'password', 'keygen'] as const
 const closePopupDelay = 1200
 
-export const PluginReshareFlowContent = ({
-  description,
-  name,
-}: {
-  description: string
-  name: string
-}) => {
+export const PluginReshareFlowContent = ({ plugin }: { plugin: Plugin }) => {
   const { t } = useTranslation()
   const { step, toPreviousStep, toNextStep } = useStepNavigation({ steps })
   const animationContext = usePluginInstallAnimation()
@@ -43,9 +38,7 @@ export const PluginReshareFlowContent = ({
       <InstallPluginPendingState />
       <Match
         value={step}
-        info={() => (
-          <PreviewInfo value={{ description, name }} onFinish={toNextStep} />
-        )}
+        info={() => <PreviewInfo value={plugin} onFinish={toNextStep} />}
         password={() => (
           <ValueTransfer<{ password: string }>
             key="password"

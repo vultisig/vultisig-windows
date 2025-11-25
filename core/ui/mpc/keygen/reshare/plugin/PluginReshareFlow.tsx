@@ -1,16 +1,12 @@
+import { Plugin } from '@core/ui/plugins/core/get'
+
 import { PluginInstallAnimationProvider } from './PluginInstallAnimationProvider'
 import { PluginReshareFlowContent } from './PluginReshareFlowContent'
 
-export const PluginReshareFlow = ({
-  description,
-  name,
-}: {
-  description: string
-  name: string
-}) => {
+export const PluginReshareFlow = ({ plugin }: { plugin: Plugin }) => {
   return (
     <PluginInstallAnimationProvider>
-      <PluginReshareFlowContent description={description} name={name} />
+      <PluginReshareFlowContent plugin={plugin} />
     </PluginInstallAnimationProvider>
   )
 }

@@ -38,6 +38,14 @@ const deviceOrder: DeviceKey[] = [
 ]
 
 export const usePluginReshareStepsAnimations = () => {
+  const mountedRef = useRef(true)
+
+  useEffect(() => {
+    return () => {
+      mountedRef.current = false
+    }
+  }, [])
+
   const [status, setStatus] = useState<Record<DeviceKey, boolean>>({
     device1Connected: false,
     device2Connected: false,
@@ -152,6 +160,7 @@ export const usePluginReshareStepsAnimations = () => {
         if (!statusRef.current[previousDevice]) {
           connectDevice(previousDevice)
           await delay(1000)
+          if (!mountedRef.current) return
         }
       }
       connectDevice(targetDevice)
