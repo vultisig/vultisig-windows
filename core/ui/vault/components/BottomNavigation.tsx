@@ -81,6 +81,9 @@ const CameraButton = styled(UnstyledButton)`
   font-size: 24px;
   color: ${getColor('text')};
   transition: all 0.2s;
+  box-shadow:
+    inset 1px 1px 2px rgba(255, 255, 255, 0.2),
+    inset 0 2px 2px rgba(0, 0, 0, 0.2);
 
   &:hover {
     background: ${getColor('buttonHover')};
@@ -187,7 +190,8 @@ const MobileRow = styled.div`
 
 const SwitchContainer = styled.div`
   display: flex;
-  align-items: center;
+  min-height: 54px;
+  width: 202px;
   background:
     linear-gradient(
       90deg,
@@ -243,7 +247,7 @@ const SwitchButton = styled(UnstyledButton)<{ isActive: boolean }>`
   border-radius: 1000px;
   font-size: 14px;
   font-weight: 500;
-  color: ${getColor('contrast')};
+  color: ${({ isActive }) => getColor(isActive ? 'contrast' : 'textShy')};
   background: ${({ isActive }) =>
     isActive ? 'rgba(255, 255, 255, 0.12)' : 'transparent'};
   transition: all 0.2s;
