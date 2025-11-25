@@ -13,14 +13,14 @@ import { useTranslation } from 'react-i18next'
 
 import { PageHeaderBackButton } from '../../flow/PageHeaderBackButton'
 import { useCore } from '../../state/core'
-import { useVultBalanceQuery } from '../queries/balance'
+import { useVultDiscountTierQuery } from './queries/tier'
 import { VultDiscountTier } from './tier'
 
 export const VultDiscountPage = () => {
   const { t } = useTranslation()
   const { openUrl } = useCore()
 
-  const vultBalanceQuery = useVultBalanceQuery()
+  const tierQuery = useVultDiscountTierQuery()
 
   return (
     <VStack fullHeight gap={10}>
@@ -41,16 +41,16 @@ export const VultDiscountPage = () => {
               {t('discount_tiers_description')}
             </Text>
             <MatchQuery
-              value={vultBalanceQuery}
+              value={tierQuery}
               pending={() => <Spinner />}
               error={() => t('failed_to_load')}
-              success={vultBalance => (
+              success={activeDiscountTier => (
                 <>
                   {vultDiscountTiers.map(tier => (
                     <VultDiscountTier
                       key={tier}
                       value={tier}
-                      vultBalance={vultBalance}
+                      activeDiscountTier={activeDiscountTier}
                     />
                   ))}
                 </>

@@ -375,6 +375,7 @@ export const de = {
   disconnect_all: 'Alle Verbindungen trennen',
   discord: 'Zwietracht',
   discount: 'Rabatt',
+  complete_fee_waive: 'Vollständige Gebührenbefreiung',
   discount_tiers: 'Rabattstufen',
   discount_tiers_description:
     'Halten Sie $VULT, um von niedrigeren Handelsgebühren zu profitieren.',
@@ -1257,4 +1258,8 @@ export const de = {
   your_referral_code: 'Ihr Empfehlungscode',
   your_referrals: 'Ihre Empfehlungen',
   youre_swapping: 'Du tauschst',
+  diamond: 'Diamant',
+  unlock_discount_tier_description_ultimate:
+    'Mit einem Guthaben von {{minBalance}} schalten Sie die Stufe {{tier}} frei und erhalten einen <b>vollständigen Vultisig-Gebührenverzicht</b> für alle Tauschgeschäfte.',
+  ultimate: 'Ultimativ',
 }

@@ -23,7 +23,13 @@ export const DiscountTierBps = ({ value }: ValueProp<VultDiscountTier>) => {
 
   return (
     <Container>
-      {t('discount')}: {vultDiscountTierBps[value]}bps
+      {value === 'ultimate' ? (
+        t('complete_fee_waive')
+      ) : (
+        <>
+          {t('discount')}: {vultDiscountTierBps[value]}bps
+        </>
+      )}
     </Container>
   )
 }

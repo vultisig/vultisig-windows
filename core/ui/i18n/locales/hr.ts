@@ -369,6 +369,7 @@ export const hr = {
   disconnect_all: 'Isključi sve',
   discord: 'Nesklad',
   discount: 'Popust',
+  complete_fee_waive: 'Potpuno oslobađanje od naknada',
   discount_tiers: 'Razine popusta',
   discount_tiers_description:
     'Držite $VULT kako biste otključali niže naknade za trgovanje.',
@@ -1231,4 +1232,8 @@ export const hr = {
   your_referral_code: 'Vaš referalni kod',
   your_referrals: 'Vaše preporuke',
   youre_swapping: 'Mijenjaš se',
+  diamond: 'Dijamant',
+  unlock_discount_tier_description_ultimate:
+    'Držanjem {{minBalance}} otključat ćete {{tier}} razinu i dobiti <b>potpuno oslobađanje od Vultisig naknade</b> za sve swapove.',
+  ultimate: 'Krajnji',
 }

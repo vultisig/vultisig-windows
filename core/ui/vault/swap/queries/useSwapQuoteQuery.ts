@@ -5,6 +5,7 @@ import {
 } from '@core/chain/swap/quote/findSwapQuote'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
+import { useSwapAffiliateBpsQuery } from '@core/ui/vult/discount/queries/swapAffiliateBps'
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
 
 import { useAssertCurrentVaultId } from '../../../storage/currentVaultId'
@@ -12,7 +13,6 @@ import { useFriendReferralQuery } from '../../../storage/referrals'
 import { useFromAmount } from '../state/fromAmount'
 import { useSwapFromCoin } from '../state/fromCoin'
 import { useSwapToCoin } from '../state/toCoin'
-import { useSwapAffiliateBpsQuery } from './useSwapAffiliateBpsQuery'
 
 export const swapQuoteQueryKeyPrefix = 'swapQuote'
 

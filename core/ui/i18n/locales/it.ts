@@ -380,6 +380,7 @@ export const it = {
   disconnect_all: 'Disconnetti tutto',
   discord: 'Discordia',
   discount: 'Sconto',
+  complete_fee_waive: 'Esenzione completa dalle commissioni',
   discount_tiers: 'Livelli di sconto',
   discount_tiers_description:
     'Mantieni $VULT per sbloccare commissioni di trading più basse.',
@@ -1253,4 +1254,8 @@ export const it = {
   your_referral_code: 'Il tuo codice di riferimento',
   your_referrals: 'I tuoi referral',
   youre_swapping: 'Stai scambiando',
+  diamond: 'Diamante',
+  unlock_discount_tier_description_ultimate:
+    "Mantenendo {{minBalance}}, sbloccherai il livello {{tier}} e riceverai un'<b>esenzione completa dalle commissioni Vultisig</b> su tutti gli swap.",
+  ultimate: 'Definitivo',
 }
