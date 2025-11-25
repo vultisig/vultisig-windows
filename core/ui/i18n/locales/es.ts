@@ -377,6 +377,7 @@ export const es = {
   disconnect_all: 'Desconectar todo',
   discord: 'Discordia',
   discount: 'Descuento',
+  complete_fee_waive: 'Exención completa de tarifas',
   discount_tiers: 'Niveles de descuento',
   discount_tiers_description:
     'Mantenga $VULT para desbloquear tarifas comerciales más bajas.',
@@ -1257,4 +1258,8 @@ export const es = {
   your_referral_code: 'Su código de referencia',
   your_referrals: 'Tus referencias',
   youre_swapping: 'Estás intercambiando',
+  diamond: 'Diamante',
+  unlock_discount_tier_description_ultimate:
+    'Al mantener {{minBalance}}, desbloquearás el nivel {{tier}} y recibirás una <b>exención completa de la tarifa de Vultisig</b> en todos los intercambios.',
+  ultimate: 'Último',
 }
