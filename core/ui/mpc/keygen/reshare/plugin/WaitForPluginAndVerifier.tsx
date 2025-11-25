@@ -22,6 +22,7 @@ const getNextStep = (
   const state = `${hasVerifier}-${hasPlugin}` as const
   const stepMap: Record<string, InstallPluginStep | null> = {
     'false-false': 'verifierServer',
+    'false-true': 'verifierServer',
     'true-false': 'pluginServer',
     'true-true': 'install',
   }

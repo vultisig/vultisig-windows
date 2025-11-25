@@ -56,11 +56,6 @@ export const usePluginReshareStepsAnimations = () => {
       fit: Fit.Contain,
       alignment: Alignment.Center,
     }),
-    onLoad: () => {
-      if (rive) {
-        rive.resizeDrawingSurfaceToCanvas()
-      }
-    },
   })
 
   const viewModel = useViewModel(rive, { useDefault: true })
@@ -101,7 +96,7 @@ export const usePluginReshareStepsAnimations = () => {
 
   useEffect(() => {
     if (!rive) return
-
+    rive.resizeDrawingSurfaceToCanvas()
     const onResize = () => {
       rive.resizeDrawingSurfaceToCanvas()
     }
