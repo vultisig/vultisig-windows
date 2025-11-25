@@ -12,17 +12,29 @@ import { IsActiveProp } from '@lib/ui/props'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 export const bottomNavigationHeight = 75
 export const mobileBottomNavigationHeight = 120
 
-export const BottomNavigation = () => {
+type BottomNavigationProps = {
+  activeTab?: 'wallet' | 'defi'
+}
+
+export const BottomNavigation = ({
+  activeTab = 'wallet',
+}: BottomNavigationProps) => {
   const navigate = useCoreNavigate()
   const { t } = useTranslation()
-  const [activeTab, setActiveTab] = useState<'wallet' | 'defi'>('wallet')
+
+  const handleTabChange = (tab: 'wallet' | 'defi') => {
+    if (tab === 'wallet') {
+      navigate({ id: 'vault' })
+    } else {
+      navigate({ id: 'defi' })
+    }
+  }
 
   return (
     <Position>
@@ -32,14 +44,14 @@ export const BottomNavigation = () => {
           <SwitchContainer>
             <SwitchButton
               isActive={activeTab === 'wallet'}
-              onClick={() => setActiveTab('wallet')}
+              onClick={() => handleTabChange('wallet')}
             >
               <WalletIcon />
               {t('wallet')}
             </SwitchButton>
             <SwitchButton
               isActive={activeTab === 'defi'}
-              onClick={() => setActiveTab('defi')}
+              onClick={() => handleTabChange('defi')}
             >
               <CoinsAddIcon />
               {t('defi')}
@@ -51,7 +63,7 @@ export const BottomNavigation = () => {
         </MobileRow>
 
         {/* Desktop Layout */}
-        <SecondaryItemWrapper>
+        <SecondaryItemWrapper onClick={() => handleTabChange('wallet')}>
           <WalletIcon />
           <Text as="span" size={10}>
             {t('wallet')}
@@ -62,7 +74,7 @@ export const BottomNavigation = () => {
         >
           <Camera2Icon />
         </DesktopCameraButton>
-        <SecondaryItemWrapper>
+        <SecondaryItemWrapper onClick={() => handleTabChange('defi')}>
           <CoinsAddIcon />
           <Text as="span" size={10}>
             {t('defi')}
