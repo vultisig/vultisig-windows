@@ -5,7 +5,7 @@ import { IconButton } from '@lib/ui/buttons/IconButton'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { verticalPadding } from '@lib/ui/css/verticalPadding'
 import { useScroll } from '@lib/ui/hooks/useScroll'
-import { CalendarCheckIcon } from '@lib/ui/icons/CalendarCheckIcon'
+import { CalendarIcon } from '@lib/ui/icons/CalendarIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -67,7 +67,7 @@ export const DefiPageHeader = ({
     <HStack gap={4} alignItems="center">
       <IconButton onClick={() => {}}>
         <IconWrapper size={24}>
-          <CalendarCheckIcon />
+          <CalendarIcon />
         </IconWrapper>
       </IconButton>
       <IconButton onClick={() => navigate({ id: 'settings' })}>
