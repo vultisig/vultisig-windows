@@ -28,7 +28,7 @@ export const DefiPortfolioBalance = () => {
       </ImageWrapper>
       <Content alignItems="center" gap={12}>
         <Text size={18} color="contrast" weight="500">
-          DeFi Portfolio
+          {t('defi_portfolio')}
         </Text>
         <MatchQuery
           value={query}
