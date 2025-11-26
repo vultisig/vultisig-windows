@@ -6,6 +6,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled, { useTheme } from 'styled-components'
 
 import { SearchChain } from './SearchChain'
@@ -14,6 +15,7 @@ export const DefiPortfolioHeader = () => {
   const { colors } = useTheme()
   const navigate = useCoreNavigate()
   const [isSearchExpanded, setIsSearchExpanded] = useState(false)
+  const { t } = useTranslation()
 
   return (
     <Wrapper>
@@ -27,7 +29,7 @@ export const DefiPortfolioHeader = () => {
             transition={{ duration: 0.2, ease: 'easeInOut' }}
           >
             <TabText size={16} weight="500">
-              Portfolio
+              {t('portfolio')}
             </TabText>
             <ActiveIndicator />
           </TabsHeaderMotion>
