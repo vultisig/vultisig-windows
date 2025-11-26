@@ -1,3 +1,4 @@
+import { featureFlags } from '@core/ui/featureFlags'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Button } from '@lib/ui/buttons/Button'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
@@ -41,45 +42,57 @@ export const BottomNavigation = ({
       <InnerContainer>
         {/* Mobile Layout */}
         <MobileRow>
-          <SwitchContainer>
-            <SwitchButton
-              isActive={activeTab === 'wallet'}
-              onClick={() => handleTabChange('wallet')}
-            >
-              <WalletIcon />
-              {t('wallet')}
-            </SwitchButton>
-            <SwitchButton
-              isActive={activeTab === 'defi'}
-              onClick={() => handleTabChange('defi')}
-            >
-              <CoinsAddIcon />
-              {t('defi')}
-            </SwitchButton>
-          </SwitchContainer>
+          {featureFlags.defi ? (
+            <SwitchContainer>
+              <SwitchButton
+                isActive={activeTab === 'wallet'}
+                onClick={() => handleTabChange('wallet')}
+              >
+                <WalletIcon />
+                {t('wallet')}
+              </SwitchButton>
+              <SwitchButton
+                isActive={activeTab === 'defi'}
+                onClick={() => handleTabChange('defi')}
+              >
+                <CoinsAddIcon />
+                {t('defi')}
+              </SwitchButton>
+            </SwitchContainer>
+          ) : null}
           <CameraButton onClick={() => navigate({ id: 'uploadQr', state: {} })}>
             <Camera2Icon />
           </CameraButton>
         </MobileRow>
 
         {/* Desktop Layout */}
-        <SecondaryItemWrapper onClick={() => handleTabChange('wallet')}>
-          <WalletIcon />
-          <Text as="span" size={10}>
-            {t('wallet')}
-          </Text>
-        </SecondaryItemWrapper>
+        {featureFlags.defi && (
+          <SecondaryItemWrapper
+            isActive={activeTab === 'wallet'}
+            onClick={() => handleTabChange('wallet')}
+          >
+            <WalletIcon />
+            <Text as="span" size={10}>
+              {t('wallet')}
+            </Text>
+          </SecondaryItemWrapper>
+        )}
         <DesktopCameraButton
           onClick={() => navigate({ id: 'uploadQr', state: {} })}
         >
           <Camera2Icon />
         </DesktopCameraButton>
-        <SecondaryItemWrapper onClick={() => handleTabChange('defi')}>
-          <CoinsAddIcon />
-          <Text as="span" size={10}>
-            {t('defi')}
-          </Text>
-        </SecondaryItemWrapper>
+        {featureFlags.defi && (
+          <SecondaryItemWrapper
+            isActive={activeTab === 'defi'}
+            onClick={() => handleTabChange('defi')}
+          >
+            <CoinsAddIcon />
+            <Text as="span" size={10}>
+              {t('defi')}
+            </Text>
+          </SecondaryItemWrapper>
+        )}
       </InnerContainer>
     </Position>
   )
@@ -140,7 +153,7 @@ const InnerContainer = styled.div`
   padding-inline: 16px;
   display: flex;
   flex-direction: column;
-  height: 120px;
+  height: ${mobileBottomNavigationHeight}px;
   justify-content: center;
   align-items: center;
   gap: 16px;
