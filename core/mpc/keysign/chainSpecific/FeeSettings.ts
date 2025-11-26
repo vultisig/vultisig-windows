@@ -7,7 +7,7 @@ export const feeSettingsChains = [
   ...Object.values(UtxoChain),
 ] as const satisfies Chain[]
 
-type FeeSettingsChain = (typeof feeSettingsChains)[number]
+export type FeeSettingsChain = (typeof feeSettingsChains)[number]
 
 export type FeeSettingsChainKind = DeriveChainKind<FeeSettingsChain>
 

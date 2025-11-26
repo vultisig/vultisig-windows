@@ -1,13 +1,9 @@
-import {
-  defaultFeePriority,
-  feePriorities,
-} from '@core/chain/tx/fee/FeePriority'
+import { feePriorities } from '@core/chain/tx/fee/FeePriority'
 import {
   byteFeeMultiplier,
   UtxoFeeSettings,
 } from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
-import { useFeeSettings } from '@core/ui/vault/send/fee/settings/state/feeSettings'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
@@ -15,29 +11,27 @@ import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { RadioInput } from '@lib/ui/inputs/RadioInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
-import { OnCloseProp } from '@lib/ui/props'
+import { InputProps, OnCloseProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-type UtxoFeeSettingsFormProps = OnCloseProp & {
-  byteFee: bigint
-}
+type UtxoFeeSettingsFormProps = InputProps<UtxoFeeSettings> &
+  OnCloseProp &
+  OnFinishProp & {
+    byteFee: bigint
+  }
 
 export const UtxoFeeSettingsForm: React.FC<UtxoFeeSettingsFormProps> = ({
+  value,
+  onChange,
+  onFinish,
   onClose,
   byteFee,
 }) => {
   const { t } = useTranslation()
-
-  const [persistentValue, setPersistentValue] =
-    useFeeSettings<UtxoFeeSettings>()
-
-  const [value, setValue] = useState<UtxoFeeSettings>(
-    () => persistentValue ?? { priority: defaultFeePriority }
-  )
 
   const isDisabled = useMemo(() => {
     if (!value) {
@@ -49,10 +43,7 @@ export const UtxoFeeSettingsForm: React.FC<UtxoFeeSettingsFormProps> = ({
     <Modal
       as="form"
       {...getFormProps({
-        onSubmit: () => {
-          setPersistentValue(value)
-          onClose()
-        },
+        onSubmit: onFinish,
         onClose,
         isDisabled,
       })}
@@ -75,7 +66,7 @@ export const UtxoFeeSettingsForm: React.FC<UtxoFeeSettingsFormProps> = ({
           <RadioInput
             options={feePriorities}
             value={value && 'priority' in value ? value.priority : null}
-            onChange={priority => setValue({ priority })}
+            onChange={priority => onChange({ priority })}
             renderOption={t}
           />
         </InputContainer>
@@ -91,7 +82,7 @@ export const UtxoFeeSettingsForm: React.FC<UtxoFeeSettingsFormProps> = ({
             priority: priority =>
               Math.round(byteFeeMultiplier[priority] * Number(byteFee)),
           })}
-          onValueChange={n => setValue({ byteFee: BigInt(n || 0) })}
+          onValueChange={n => onChange({ byteFee: BigInt(n || 0) })}
           shouldBeInteger
           shouldBePositive
         />

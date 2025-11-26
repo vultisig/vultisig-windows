@@ -1,4 +1,8 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import {
+  FeeSettings,
+  feeSettingsChains,
+} from '@core/mpc/keysign/chainSpecific/FeeSettings'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
@@ -21,13 +25,15 @@ import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
+import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useSendAmount } from '../state/amount'
+import { ManageFee } from './ManageFee'
 
 const sendTerms = ['send_terms_1', 'send_terms_0'] as const
 
@@ -38,7 +44,12 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const [memo] = useSendMemo()
   const coin = useCurrentSendCoin()
   const sender = useSender()
-  const keysignPayloadQuery = useSendKeysignPayloadQuery()
+  const [feeSettings, setFeeSettings] = useState<FeeSettings | undefined>(
+    undefined
+  )
+  const keysignPayloadQuery = useSendKeysignPayloadQuery({
+    feeSettings,
+  })
   const translatedTerms = sendTerms.map(term => t(term))
   const [amount] = useSendAmount()
 
@@ -134,7 +145,17 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
                 value={keysignPayloadQuery}
                 pending={() => <Spinner />}
                 success={keysignPayload => (
-                  <KeysignFeeAmount keysignPayload={keysignPayload} />
+                  <HStack alignItems="center" gap={8}>
+                    <KeysignFeeAmount keysignPayload={keysignPayload} />
+                    {isOneOf(coin.chain, feeSettingsChains) && (
+                      <ManageFee
+                        keysignPayload={keysignPayload}
+                        feeSettings={feeSettings}
+                        onChange={setFeeSettings}
+                        chain={coin.chain}
+                      />
+                    )}
+                  </HStack>
                 )}
               />
             }
