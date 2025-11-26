@@ -34,6 +34,7 @@ import { UpdateVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/update
 import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage'
 import { Views } from '@lib/ui/navigation/Views'
 
+import { ManageDefiChainsPage } from '../defi/manage/ManageDefiChainsPage'
 import { DefiPage } from '../defi/page/DefiPage'
 import { PasscodeAutoLockPage } from '../passcodeEncryption/autoLock/PasscodeAutoLockPage'
 import { ManagePasscodeEncryptionPage } from '../passcodeEncryption/manage/ManagePasscodeEncryptionPage'
@@ -119,7 +120,7 @@ export const sharedViews: Views<SharedViewId> = {
     </DepositActionProvider>
   ),
   languageSettings: LanguagePage,
-  manageDefiChains: ManageVaultChainsPage,
+  manageDefiChains: ManageDefiChainsPage,
   manageVaultChains: ManageVaultChainsPage,
   manageVaultChainCoins: ManageVaultChainCoinsPage,
   manageVaults: ManageVaultsPage,
