@@ -1,4 +1,3 @@
-import { getVultDiscountTier } from '@core/chain/swap/affiliate'
 import {
   VultDiscountTier as VultDiscountTierType,
   vultDiscountTiers,
@@ -14,14 +13,13 @@ import { DiscountTierMinBalance } from './minBalance'
 import { UnlockDiscountTier } from './unlock'
 
 type VultDiscountTierProps = ValueProp<VultDiscountTierType> & {
-  vultBalance: bigint
+  activeDiscountTier: VultDiscountTierType | null
 }
 
 export const VultDiscountTier = ({
   value,
-  vultBalance,
+  activeDiscountTier,
 }: VultDiscountTierProps) => {
-  const activeDiscountTier = getVultDiscountTier(vultBalance)
   const isActive = activeDiscountTier === value
 
   const isExpandable = useMemo(() => {

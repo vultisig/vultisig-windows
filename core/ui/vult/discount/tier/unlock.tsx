@@ -20,6 +20,7 @@ import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { useCreateCoinMutation } from '../../../storage/coins'
 import { discountTierColors } from './colors'
 import { discountTierIcons } from './icons'
+import { UltimateGradientText } from './UltimateGradientText'
 
 const Title = styled.p<ValueProp<VultDiscountTier>>`
   ${text({
@@ -58,7 +59,9 @@ export const UnlockDiscountTier = ({ value }: ValueProp<VultDiscountTier>) => {
   return (
     <Opener
       renderOpener={({ onOpen }) => (
-        <Button onClick={onOpen}>{t('unlock_tier')}</Button>
+        <Button kind="outlined" onClick={onOpen}>
+          {t('unlock_tier')}
+        </Button>
       )}
       renderContent={({ onClose }) => (
         <Modal
@@ -87,22 +90,33 @@ export const UnlockDiscountTier = ({ value }: ValueProp<VultDiscountTier>) => {
                 <Trans
                   i18nKey="unlock_discount_tier"
                   values={{ tier: t(value) }}
-                  components={{ b: <b /> }}
+                  components={{
+                    b: value === 'ultimate' ? <UltimateGradientText /> : <b />,
+                  }}
                 />
               </Title>
             </VStack>
             <Description>
-              <Trans
-                i18nKey="unlock_discount_tier_description"
-                values={{
-                  tier: t(value),
-                  minBalance: formatAmount(vultDiscountTierMinBalances[value], {
-                    ticker: `$${vult.ticker}`,
-                  }),
-                  bps: vultDiscountTierBps[value],
-                }}
-                components={{ b: <b /> }}
-              />
+              {
+                <Trans
+                  i18nKey={
+                    value === 'ultimate'
+                      ? 'unlock_discount_tier_description_ultimate'
+                      : 'unlock_discount_tier_description'
+                  }
+                  values={{
+                    tier: t(value),
+                    minBalance: formatAmount(
+                      vultDiscountTierMinBalances[value],
+                      {
+                        ticker: `$${vult.ticker}`,
+                      }
+                    ),
+                    bps: vultDiscountTierBps[value],
+                  }}
+                  components={{ b: <b /> }}
+                />
+              }
             </Description>
           </VStack>
         </Modal>

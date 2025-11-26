@@ -13,6 +13,11 @@ const gradientColors: Record<VultDiscountTier, [string, string]> = {
   silver: [discountTierColors.silver.toCssValue(), 'hsla(215, 69%, 53%, 0.22)'],
   gold: [discountTierColors.gold.toCssValue(), 'hsla(215, 69%, 53%, 0.2)'],
   platinum: ['hsla(167, 78%, 55%, 1)', 'hsla(224, 98%, 64%, 1)'],
+  diamond: [
+    discountTierColors.diamond.toCssValue(),
+    'hsla(260, 100%, 75%, 0.3)',
+  ],
+  ultimate: ['hsla(45, 100%, 50%, 1)', 'hsla(260, 100%, 65%, 1)'],
 }
 
 export const DiscountTierContainer = styled.div<ValueProp<VultDiscountTier>>`

@@ -1,4 +1,5 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { Plugin } from '@core/ui/plugins/core/get'
 import { Button } from '@lib/ui/buttons/Button'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { LogoBoxIcon } from '@lib/ui/icons/LogoBoxIcon'
@@ -17,9 +18,10 @@ import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-export const PreviewInfo: FC<
-  OnFinishProp & ValueProp<{ name: string; description: string }>
-> = ({ value: { name, description }, onFinish }) => {
+export const PreviewInfo: FC<OnFinishProp & ValueProp<Plugin>> = ({
+  value: { description, logo_url, title },
+  onFinish,
+}) => {
   const { t } = useTranslation()
   const [step, setStep] = useState(1)
 
@@ -37,7 +39,7 @@ export const PreviewInfo: FC<
         <SafeImage
           src="/assets/app-permissions.png"
           render={props => (
-            <VStack as="img" alt={name} height={126} width={126} {...props} />
+            <VStack as="img" alt={title} height={126} width={126} {...props} />
           )}
         />
         <VStack gap={24} maxWidth={576} fullWidth>
@@ -89,12 +91,27 @@ export const PreviewInfo: FC<
       <StyledPageContent alignItems="center" justifyContent="center" scrollable>
         <VStack alignItems="center" gap={48} maxWidth={576} fullWidth>
           <VStack position="relative">
-            <Text as={LogoBoxIcon} color="contrast" size={100} />
+            {logo_url ? (
+              <SafeImage
+                src={logo_url}
+                render={props => (
+                  <VStack
+                    as="img"
+                    alt={title}
+                    height={100}
+                    width={100}
+                    {...props}
+                  />
+                )}
+              />
+            ) : (
+              <Text as={LogoBoxIcon} color="contrast" size={100} />
+            )}
             <Plus />
           </VStack>
           <VStack gap={16} fullWidth>
             <Text as="span" size={22} weight={500} centerHorizontally>
-              {t('install_app', { name })}
+              {t('install_app', { title })}
             </Text>
             {!!description && (
               <Text

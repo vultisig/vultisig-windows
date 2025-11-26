@@ -94,6 +94,7 @@ export const en = {
   bond: 'Bond',
   bond_with_lp: 'Bond Maya',
   bronze: 'Bronze',
+  diamond: 'Diamond',
   buy: 'Buy',
   by_vultisig: 'by Vultisig',
   camera_access_blocked:
@@ -226,6 +227,7 @@ export const en = {
   disconnect_all: 'Disconnect All',
   discord: 'Discord',
   discount: 'Discount',
+  complete_fee_waive: 'Complete fee waive',
   discount_tiers: 'Discount Tiers',
   discount_tiers_description: 'Hold $VULT to unlock lower trading fees.',
   discovering_mediator: 'Discovering mediator service, please wait...',
@@ -477,7 +479,7 @@ export const en = {
     'Keep devices on the same WiFi Network, correct vault and pair devices.',
   information_note2: 'Make sure no other devices are running Vultisig.',
   initiating_device: 'Initiating device',
-  install_app: 'Install ‘{{name}}’ App',
+  install_app: 'Install ‘{{title}}’ App',
   install_plugin: 'Install App',
   installing_plugin: 'Installing App',
   insufficient_balance: 'Insufficient balance',
@@ -983,8 +985,11 @@ export const en = {
   unlock: 'Unlock',
   unlock_discount_tier: 'Unlock <b>{{tier}}</b> Tier',
   unlock_discount_tier_description:
-    'By holding {{minBalance}}, you’ll unlock the {{tier}} Tier and receive a <b>{{bps}} bps trading fee discount</b> on all swaps.',
+    "By holding {{minBalance}}, you'll unlock the {{tier}} Tier and receive a <b>{{bps}} bps trading fee discount</b> on all swaps.",
+  unlock_discount_tier_description_ultimate:
+    "By holding {{minBalance}}, you'll unlock the {{tier}} Tier and receive a <b>complete Vultisig fee waiver</b> on all swaps.",
   unlock_tier: 'Unlock Tier',
+  ultimate: 'Ultimate',
   unmerge: 'Unmerge',
   unmerge_ruji: 'Unmerge',
   unstake: 'Unstake',
