@@ -204,6 +204,7 @@ export const en = {
   deeplink: 'Deeplink',
   default_chains: 'Default Chains',
   defi: 'DeFi',
+  defi_portfolio: 'DeFi Portfolio',
   delete: 'Delete',
   delete_folder: 'Delete Folder',
   delete_folder_confirmation:
@@ -613,6 +614,9 @@ export const en = {
   new_vault_setup: 'New Vault Setup',
   new_vault_setup_disclaimer: 'Your configuration changed, make a new backup.',
   next: 'Next',
+  no_chains_enabled: 'No chains enabled',
+  no_chains_enabled_description:
+    "You've disabled all chains. Make sure that at least one chain is enabled.",
   no_chains_found: 'No chains found',
   no_connected_app: 'No Connected Apps Found',
   no_connected_dapps: 'No connected dApps',
@@ -699,6 +703,7 @@ export const en = {
   plugin_rules: 'App Rules',
   plugin_server_url: 'App Server URL',
   plugin_success_desc: 'Installation of {{name}} is completed',
+  portfolio: 'Portfolio',
   portfolio_balance: 'Portfolio Balance',
   portfolio_overview: 'Portfolio Overview',
   positions: 'Positions',
