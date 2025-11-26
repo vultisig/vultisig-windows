@@ -12,19 +12,18 @@ const toCamel = (value: string): string => {
   )
 }
 
-export const toCamelCase = (obj: any): any => {
+export const toCamelCase = <T>(obj: T): T => {
   if (isObject(obj)) {
-    const n: Record<string, any> = {}
+    const result: Record<string, unknown> = {}
 
-    Object.keys(obj).forEach(k => {
-      n[toCamel(k)] = toCamelCase(obj[k])
+    Object.keys(obj).forEach(key => {
+      const camelKey = toCamel(key)
+      result[camelKey] = toCamelCase((obj as Record<string, unknown>)[key])
     })
 
-    return n
+    return result as T
   } else if (isArray(obj)) {
-    return obj.map(i => {
-      return toCamelCase(i)
-    })
+    return obj.map(item => toCamelCase(item)) as T
   }
 
   return obj
