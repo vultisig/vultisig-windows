@@ -1,14 +1,10 @@
-import { startMpcSession } from '@core/mpc/session/startMpcSession'
 import { MpcSession } from '@core/ui/mpc/session/MpcSession'
-import { useMpcDevices } from '@core/ui/mpc/state/mpcDevices'
-import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
-import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
+import { useStartMpcSession } from '@core/ui/mpc/session/useStartMpcSession'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp, ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -19,20 +15,7 @@ export const StartMpcSessionStep = ({
   value,
 }: OnFinishProp<string[]> & ValueProp<MpcSession>) => {
   const { t } = useTranslation()
-  const sessionId = useMpcSessionId()
-  const serverUrl = useMpcServerUrl()
-  const devices = useMpcDevices()
-  const { mutate: start, ...status } = useMutation({
-    mutationFn: async () => {
-      await startMpcSession({
-        serverUrl,
-        sessionId,
-        devices,
-      })
-      return devices
-    },
-    onSuccess: onFinish,
-  })
+  const { mutate: start, ...status } = useStartMpcSession(onFinish)
 
   useEffect(() => start(), [start])
 

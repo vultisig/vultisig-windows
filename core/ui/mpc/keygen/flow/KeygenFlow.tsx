@@ -18,8 +18,6 @@ import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { InstallPluginPendingState } from '../reshare/plugin/InstallPluginPendingState'
-import { mapKeygenStepToInstallStep } from '../reshare/plugin/InstallPluginStep'
 import { KeygenFlowEnding } from './KeygenFlowEnding'
 
 export const KeygenFlow = ({
@@ -58,6 +56,7 @@ export const KeygenFlow = ({
         const renderEnding = () => {
           if (isPluginReshare && onFinish) {
             onFinish()
+            return null
           }
           if (hasServer(vault.signers)) {
             return <KeygenFlowEnding onBack={onBack} />
@@ -110,11 +109,7 @@ export const KeygenFlow = ({
       )}
       pending={() => (
         <>
-          {isPluginReshare ? (
-            <InstallPluginPendingState
-              value={mapKeygenStepToInstallStep(step)}
-            />
-          ) : (
+          {!isPluginReshare ? (
             <>
               <PageHeader
                 title={title}
@@ -123,7 +118,7 @@ export const KeygenFlow = ({
               />
               <KeygenPendingState value={step} />
             </>
-          )}
+          ) : null}
         </>
       )}
     />
