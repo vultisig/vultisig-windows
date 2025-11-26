@@ -42,7 +42,6 @@ export const DefiChainsList = () => {
     })
   }, [normalizedQuery, vaultChainBalances])
 
-  // Empty state when no chains are enabled
   if (vaultChainBalances.length === 0) {
     return (
       <EmptyWrapper>
@@ -52,11 +51,10 @@ export const DefiChainsList = () => {
           </IconWrapper>
           <VStack gap={8}>
             <Text centerHorizontally size={17} weight="600">
-              No chains enabled
+              {t('no_chains_enabled')}
             </Text>
             <Text size={13} color="shy" centerHorizontally>
-              You&apos;ve disabled all chains. Make sure that at least one chain
-              is enabled.
+              {t('no_chains_enabled_description')}
             </Text>
           </VStack>
         </VStack>
@@ -72,13 +70,12 @@ export const DefiChainsList = () => {
             </IconWrapper>
           }
         >
-          <Text size={12}>Customize chains</Text>
+          <Text size={12}>{t('customize_chains')}</Text>
         </Button>
       </EmptyWrapper>
     )
   }
 
-  // Empty state when search returns no results
   if (filteredBalances.length === 0 && normalizedQuery) {
     return (
       <EmptyWrapper>
