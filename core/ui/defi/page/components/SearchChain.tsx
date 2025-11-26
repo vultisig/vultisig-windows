@@ -9,6 +9,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useDeferredValue, useEffect, useState, useTransition } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useSearchChain } from './state/searchChainProvider'
@@ -24,6 +25,7 @@ export const SearchChain = ({
   onOpenChange,
   isFullWidth = false,
 }: SearchChainProps) => {
+  const { t } = useTranslation()
   const [isOpen, { set, unset }] = useBoolean(false)
   const [searchQuery, setSearchQuery] = useSearchChain()
   const [inputValue, setInputValue] = useState(searchQuery)
@@ -80,7 +82,7 @@ export const SearchChain = ({
                 />
               </SearchFieldWrapper>
               <CloseButton onClick={handleClose}>
-                <Text size={14}>Cancel</Text>
+                <Text size={14}>{t('cancel')}</Text>
               </CloseButton>
             </HStack>
           </motion.div>
