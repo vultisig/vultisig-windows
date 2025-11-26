@@ -1,3 +1,4 @@
+import { FeeSettings } from '@core/mpc/keysign/chainSpecific/FeeSettings'
 import { BuildKeysignPayloadError } from '@core/mpc/keysign/error'
 import {
   buildSendKeysignPayload,
@@ -15,18 +16,22 @@ import { omit } from '@lib/utils/record/omit'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
-import { useFeeSettings } from '../fee/settings/state/feeSettings'
 import { useSendAmount } from '../state/amount'
 import { useSendMemo } from '../state/memo'
 import { useSendReceiver } from '../state/receiver'
 import { useCurrentSendCoin } from '../state/sendCoin'
 
-export const useSendKeysignPayloadQuery = () => {
+type UseSendKeysignPayloadQueryProps = {
+  feeSettings?: FeeSettings
+}
+
+export const useSendKeysignPayloadQuery = ({
+  feeSettings,
+}: UseSendKeysignPayloadQueryProps = {}) => {
   const coin = useCurrentSendCoin()
   const [receiver] = useSendReceiver()
   const [memo] = useSendMemo()
   const [amount] = useSendAmount()
-  const [feeSettings] = useFeeSettings()
 
   const vault = useCurrentVault()
 
@@ -44,7 +49,7 @@ export const useSendKeysignPayloadQuery = () => {
       publicKey,
       libType: vault.libType,
       walletCore,
-      feeSettings: feeSettings ?? undefined,
+      feeSettings,
     }),
     [amount, coin, feeSettings, memo, publicKey, receiver, vault, walletCore]
   )

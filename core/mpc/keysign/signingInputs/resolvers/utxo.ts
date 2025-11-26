@@ -140,7 +140,7 @@ export const getUtxoSigningInputs: SigningInputsResolver<'utxo'> = ({
   input.plan = TW.Bitcoin.Proto.TransactionPlan.decode(plan)
 
   if (chain === UtxoChain.Zcash) {
-    input.plan.branchId = Buffer.from('5510e7c8', 'hex')
+    input.plan.branchId = Buffer.from('f04dec4d', 'hex')
   }
 
   return [input]

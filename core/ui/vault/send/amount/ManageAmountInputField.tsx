@@ -8,7 +8,6 @@ import { CurrencySwitch } from '@core/ui/vault/send/amount/AmountSwitch'
 import { AnimatedSendFormInputError } from '@core/ui/vault/send/components/AnimatedSendFormInputError'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { SendInputContainer } from '@core/ui/vault/send/components/SendInputContainer'
-import { ManageFeeSettings } from '@core/ui/vault/send/fee/settings/ManageFeeSettings'
 import { ManageMemo } from '@core/ui/vault/send/memo/ManageMemo'
 import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
@@ -85,7 +84,6 @@ export const ManageAmountInputField = () => {
     <SendInputContainer flexGrow>
       <HStack justifyContent="space-between" alignItems="center">
         <InputLabel>{t('amount')}</InputLabel>
-        <ManageFeeSettings />
       </HStack>
       <HorizontalLine />
       <VStack gap={8}>

@@ -2,10 +2,7 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import {
-  EvmFeeSettings,
-  FeeSettings,
-} from '@core/mpc/keysign/chainSpecific/FeeSettings'
+import { FeeSettings } from '@core/mpc/keysign/chainSpecific/FeeSettings'
 import { getBlockchainSpecificValue } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { getFeeAmount } from '@core/mpc/keysign/fee'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
@@ -52,13 +49,9 @@ export const NetworkFeeSection = ({
             publicKey,
           })
 
-          const getEvmFeeSettings = (): EvmFeeSettings | null => {
+          const getEvmValues = () => {
             if (!isChainOfKind(chain, 'evm')) {
               return null
-            }
-
-            if (feeSettings) {
-              return feeSettings
             }
 
             const evmSpecific = getBlockchainSpecificValue(
@@ -66,13 +59,20 @@ export const NetworkFeeSection = ({
               'ethereumSpecific'
             )
 
+            const baseFee =
+              BigInt(evmSpecific.maxFeePerGasWei) -
+              BigInt(evmSpecific.priorityFee)
+
             return {
-              maxPriorityFeePerGas: BigInt(evmSpecific.priorityFee),
-              gasLimit: BigInt(evmSpecific.gasLimit),
+              settings: feeSettings || {
+                maxPriorityFeePerGas: BigInt(evmSpecific.priorityFee),
+                gasLimit: BigInt(evmSpecific.gasLimit),
+              },
+              baseFee,
             }
           }
 
-          const evmFeeSettings = getEvmFeeSettings()
+          const evmValues = getEvmValues()
 
           return (
             <>
@@ -82,11 +82,12 @@ export const NetworkFeeSection = ({
                   chainFeeCoin[chain]
                 )}
                 extra={
-                  isChainOfKind(chain, 'evm') && evmFeeSettings ? (
+                  isChainOfKind(chain, 'evm') && evmValues ? (
                     <ManageEvmFee
-                      value={evmFeeSettings}
+                      value={evmValues.settings}
                       chain={chain}
                       onChange={setFeeSettings}
+                      baseFee={evmValues.baseFee}
                     />
                   ) : null
                 }

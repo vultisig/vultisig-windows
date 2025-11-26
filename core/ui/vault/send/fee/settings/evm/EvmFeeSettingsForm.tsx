@@ -4,17 +4,14 @@ import { EvmChain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { gwei } from '@core/chain/tx/fee/evm/gwei'
 import { EvmFeeSettings } from '@core/mpc/keysign/chainSpecific/FeeSettings'
-import { useEvmBaseFeeQuery } from '@core/ui/chain/evm/queries/baseFee'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { VStack } from '@lib/ui/layout/Stack'
-import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Modal } from '@lib/ui/modal'
 import { InputProps, OnCloseProp, OnFinishProp } from '@lib/ui/props'
-import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { formatAmount } from '@lib/utils/formatAmount'
@@ -28,6 +25,7 @@ type EvmFeeSettingsFormProps = InputProps<EvmFeeSettings> &
   OnCloseProp &
   OnFinishProp & {
     chain: EvmChain
+    baseFee: bigint
   }
 
 export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
@@ -36,6 +34,7 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
   onFinish,
   onClose,
   chain,
+  baseFee,
 }) => {
   const { t } = useTranslation()
   const { ticker, decimals } = chainFeeCoin[chain]
@@ -43,8 +42,6 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
     BigInt(value.maxPriorityFeePerGas),
     gwei.decimals
   )
-
-  const baseFeeQuery = useEvmBaseFeeQuery(chain)
 
   return (
     <Modal
@@ -66,16 +63,9 @@ export const EvmFeeSettingsForm: FC<EvmFeeSettingsFormProps> = ({
             {t('base_fee')} ({ticker})
           </Text>
           <FeeContainer>
-            <MatchQuery
-              value={baseFeeQuery}
-              success={baseFee =>
-                formatAmount(fromChainAmount(baseFee, decimals), {
-                  precision: 'high',
-                })
-              }
-              pending={() => <Spinner />}
-              error={() => t('failed_to_load')}
-            />
+            {formatAmount(fromChainAmount(baseFee, decimals), {
+              precision: 'high',
+            })}
           </FeeContainer>
         </InputContainer>
         <InputContainer>
