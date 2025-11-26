@@ -18,9 +18,7 @@ export const getSolanaChainSpecific: GetChainSpecificResolver<
   const receiver = shouldBePresent(keysignPayload.toAddress)
   const client = getSolanaClient()
 
-  const recentBlockHash = (
-    await client.getLatestBlockhash().send()
-  ).value.blockhash.toString()
+  const recentBlockHash = (await client.getLatestBlockhash()).blockhash
 
   const chainSpecific = create(SolanaSpecificSchema, {
     recentBlockHash,

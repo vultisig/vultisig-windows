@@ -1,8 +1,7 @@
-import { Address } from '@solana/web3.js'
+import { PublicKey } from '@solana/web3.js'
 
 import { getSolanaClient } from '../client'
-import { token2022ProgramId } from '../config'
-import { splTokenProgramId } from '../config'
+import { splTokenProgramId, token2022ProgramId } from '../config'
 
 export const getSplAccounts = async (address: string) => {
   const client = getSolanaClient()
@@ -10,17 +9,9 @@ export const getSplAccounts = async (address: string) => {
 
   const responses = await Promise.all(
     programs.map(programId =>
-      client
-        .getTokenAccountsByOwner(
-          address as Address,
-          {
-            programId: programId as Address,
-          },
-          {
-            encoding: 'jsonParsed',
-          }
-        )
-        .send()
+      client.getParsedTokenAccountsByOwner(new PublicKey(address), {
+        programId: new PublicKey(programId),
+      })
     )
   )
 
