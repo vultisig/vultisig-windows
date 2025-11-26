@@ -346,6 +346,7 @@ export const hr = {
   deeplink: 'Duboka veza',
   default_chains: 'Zadani lanci',
   defi: 'DeFi',
+  defi_portfolio: 'DeFi portfelj',
   delete: 'Izbrisati',
   delete_folder: 'Izbriši mapu',
   delete_folder_confirmation:
@@ -690,6 +691,9 @@ export const hr = {
   new_vault_setup_disclaimer:
     'Vaša konfiguracija se promijenila, napravite novu sigurnosnu kopiju.',
   next: 'Sljedeći',
+  no_chains_enabled: 'Nema omogućenih lanaca',
+  no_chains_enabled_description:
+    'Onemogućili ste sve lance. Provjerite je li barem jedan lanac omogućen.',
   no_chains_found: 'Nisu pronađeni lanci',
   no_connected_app: 'Nisu pronađene povezane aplikacije',
   no_connected_dapps: 'Nema povezanih dApp-ova',
@@ -777,6 +781,7 @@ export const hr = {
   plugin_rules: 'Pravila aplikacije',
   plugin_server_url: 'URL poslužitelja aplikacije',
   plugin_success_desc: 'Instalacija {{name}} je završena',
+  portfolio: 'Portfelj',
   portfolio_balance: 'Stanje portfelja',
   portfolio_overview: 'Pregled portfelja',
   positions: 'Pozicije',

@@ -351,6 +351,7 @@ export const es = {
   deeplink: 'Enlace profundo',
   default_chains: 'Cadenas predeterminadas',
   defi: 'DeFi',
+  defi_portfolio: 'Portafolio DeFi',
   delete: 'Borrar',
   delete_folder: 'Eliminar carpeta',
   delete_folder_confirmation:
@@ -702,6 +703,9 @@ export const es = {
   new_vault_setup_disclaimer:
     'Su configuración cambió, haga una nueva copia de seguridad.',
   next: 'Próximo',
+  no_chains_enabled: 'No hay cadenas habilitadas',
+  no_chains_enabled_description:
+    'Has deshabilitado todas las cadenas. Asegúrate de que al menos una cadena esté habilitada.',
   no_chains_found: 'No se encontraron cadenas',
   no_connected_app: 'No se encontraron aplicaciones conectadas',
   no_connected_dapps: 'No hay dApps conectadas',
@@ -791,6 +795,7 @@ export const es = {
   plugin_rules: 'Reglas de la aplicación',
   plugin_server_url: 'URL del servidor de aplicaciones',
   plugin_success_desc: 'La instalación de {{name}} se ha completado',
+  portfolio: 'Portafolio',
   portfolio_balance: 'Saldo de la cartera',
   portfolio_overview: 'Resumen del portafolio',
   positions: 'Posiciones',
