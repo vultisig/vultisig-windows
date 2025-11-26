@@ -354,6 +354,7 @@ export const it = {
   deeplink: 'Collegamento profondo',
   default_chains: 'Catene predefinite',
   defi: 'DeFi',
+  defi_portfolio: 'Portafoglio DeFi',
   delete: 'Eliminare',
   delete_folder: 'Elimina cartella',
   delete_folder_confirmation:
@@ -701,6 +702,9 @@ export const it = {
   new_vault_setup_disclaimer:
     'La configurazione è cambiata, esegui un nuovo backup.',
   next: 'Prossimo',
+  no_chains_enabled: 'Nessuna catena abilitata',
+  no_chains_enabled_description:
+    'Hai disabilitato tutte le catene. Assicurati che almeno una catena sia abilitata.',
   no_chains_found: 'Nessuna catena trovata',
   no_connected_app: 'Nessuna app connessa trovata',
   no_connected_dapps: 'Nessuna dApp connessa',
@@ -789,6 +793,7 @@ export const it = {
   plugin_rules: "Regole dell'app",
   plugin_server_url: 'URL del server delle applicazioni',
   plugin_success_desc: "L'installazione di {{name}} è completata",
+  portfolio: 'Portafoglio',
   portfolio_balance: 'Saldo del portafoglio',
   portfolio_overview: 'Panoramica del portafoglio',
   positions: 'Posizioni',
