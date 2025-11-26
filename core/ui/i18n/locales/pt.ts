@@ -347,6 +347,7 @@ export const pt = {
   deeplink: 'Link direto',
   default_chains: 'Cadeias padrão',
   defi: 'DeFi',
+  defi_portfolio: 'Portfólio DeFi',
   delete: 'Excluir',
   delete_folder: 'Excluir pasta',
   delete_folder_confirmation:
@@ -698,6 +699,9 @@ export const pt = {
   new_vault_setup_disclaimer:
     'Sua configuração foi alterada. Faça um novo backup.',
   next: 'Próximo',
+  no_chains_enabled: 'Nenhuma cadeia habilitada',
+  no_chains_enabled_description:
+    'Você desabilitou todas as cadeias. Certifique-se de que pelo menos uma cadeia esteja habilitada.',
   no_chains_found: 'Nenhuma corrente encontrada',
   no_connected_app: 'Nenhum aplicativo conectado encontrado',
   no_connected_dapps: 'Nenhum dApp conectado',
@@ -786,6 +790,7 @@ export const pt = {
   plugin_rules: 'Regras do aplicativo',
   plugin_server_url: 'URL do servidor de aplicativos',
   plugin_success_desc: 'A instalação de {{name}} foi concluída.',
+  portfolio: 'Portfólio',
   portfolio_balance: 'Equilíbrio da carteira',
   portfolio_overview: 'Visão geral do portfólio',
   positions: 'Cargos',

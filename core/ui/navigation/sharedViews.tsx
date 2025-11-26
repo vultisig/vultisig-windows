@@ -34,6 +34,8 @@ import { UpdateVaultFolderPage } from '@core/ui/vaultsOrganisation/folder/update
 import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage'
 import { Views } from '@lib/ui/navigation/Views'
 
+import { ManageDefiChainsPage } from '../defi/manage/ManageDefiChainsPage'
+import { DefiPage } from '../defi/page/DefiPage'
 import { PasscodeAutoLockPage } from '../passcodeEncryption/autoLock/PasscodeAutoLockPage'
 import { ManagePasscodeEncryptionPage } from '../passcodeEncryption/manage/ManagePasscodeEncryptionPage'
 import { RequestFastVaultBackup } from '../vault/backup/fast/request'
@@ -57,9 +59,11 @@ export type SharedViewId = Extract<
   | 'createVaultFolder'
   | 'currencySettings'
   | 'deeplink'
+  | 'defi'
   | 'deleteVault'
   | 'deposit'
   | 'languageSettings'
+  | 'manageDefiChains'
   | 'manageVaultChainCoins'
   | 'manageVaultChains'
   | 'manageVaultFolder'
@@ -106,6 +110,7 @@ export const sharedViews: Views<SharedViewId> = {
   createVaultFolder: CreateVaultFolderPage,
   currencySettings: CurrencyPage,
   deeplink: DeeplinkPage,
+  defi: DefiPage,
   deleteVault: DeleteVaultPage,
   deposit: () => (
     <DepositActionProvider>
@@ -115,6 +120,7 @@ export const sharedViews: Views<SharedViewId> = {
     </DepositActionProvider>
   ),
   languageSettings: LanguagePage,
+  manageDefiChains: ManageDefiChainsPage,
   manageVaultChains: ManageVaultChainsPage,
   manageVaultChainCoins: ManageVaultChainCoinsPage,
   manageVaults: ManageVaultsPage,

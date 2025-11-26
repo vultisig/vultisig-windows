@@ -351,6 +351,7 @@ export const de = {
   deeplink: 'Deeplink',
   default_chains: 'Standardketten',
   defi: 'DeFi',
+  defi_portfolio: 'DeFi-Portfolio',
   delete: 'Löschen',
   delete_folder: 'Ordner löschen',
   delete_folder_confirmation:
@@ -705,6 +706,9 @@ export const de = {
   new_vault_setup_disclaimer:
     'Ihre Konfiguration hat sich geändert, erstellen Sie ein neues Backup.',
   next: 'Nächste',
+  no_chains_enabled: 'Keine Ketten aktiviert',
+  no_chains_enabled_description:
+    'Sie haben alle Ketten deaktiviert. Stellen Sie sicher, dass mindestens eine Kette aktiviert ist.',
   no_chains_found: 'Keine Ketten gefunden',
   no_connected_app: 'Keine verbundenen Apps gefunden',
   no_connected_dapps: 'Keine verbundenen dApps',
@@ -795,6 +799,7 @@ export const de = {
   plugin_rules: 'App-Regeln',
   plugin_server_url: 'App-Server-URL',
   plugin_success_desc: 'Die Installation von {{name}} ist abgeschlossen',
+  portfolio: 'Portfolio',
   portfolio_balance: 'Portfoliobilanz',
   portfolio_overview: 'Portfolioübersicht',
   positions: 'Positionen',

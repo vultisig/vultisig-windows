@@ -70,6 +70,8 @@ export type CoreView =
   | { id: 'updateVaultFolder'; state: { id: string } }
   | { id: 'uploadQr'; state: { title?: string } }
   | { id: 'vault' }
+  | { id: 'defi' }
+  | { id: 'manageDefiChains' }
   | { id: 'vaultBackup' }
   | { id: 'vaultsBackup' }
   | { id: 'selectVaultsBackup' }
