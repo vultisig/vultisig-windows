@@ -42,14 +42,14 @@ export const DefiChainItem = ({ value: chain }: ValueProp<Chain>) => {
   )
 }
 
-const ChainCard = styled(UnstyledButton)<{
-  isLoading: boolean
-}>`
+const ChainCard = styled(UnstyledButton)<{ isLoading: boolean }>`
   ${vStack({
     gap: 11,
   })};
 
   width: 74px;
+  cursor: ${({ isLoading }) => (isLoading ? 'wait' : 'pointer')};
+  opacity: ${({ isLoading }) => (isLoading ? 0.6 : 1)};
 `
 
 const ChainIconWrapper = styled.div<IsActiveProp>`
