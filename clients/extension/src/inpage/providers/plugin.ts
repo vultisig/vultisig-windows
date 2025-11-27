@@ -37,7 +37,7 @@ export class Plugin extends EventEmitter {
       reshare_sign: async ([{ id }]: [{ id: string }]) => {
         const { joinUrl } = await callPopup(
           { pluginReshare: { pluginId: id } },
-          { shouldClosePopup: true }
+          { shouldClosePopup: false }
         )
 
         return joinUrl

@@ -4,18 +4,25 @@ import { FlowPendingPageContent } from '@lib/ui/flow/FlowPendingPageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { useKeygenOperation } from '../state/currentKeygenOperationType'
 
 export const FastKeygenServerActionStep: FC<OnFinishProp> = ({ onFinish }) => {
   const { t } = useTranslation()
   const { mutate, ...mutationState } = useFastKeygenServerActionMutation({
     onSuccess: onFinish,
   })
+  const keygenOperation = useKeygenOperation()
+
+  const isPluginReshare = useMemo(() => {
+    return 'reshare' in keygenOperation && keygenOperation.reshare === 'plugin'
+  }, [keygenOperation])
 
   useEffect(() => mutate(), [mutate])
 
-  return (
+  return isPluginReshare ? null : (
     <>
       <PageHeader title={t('fastVaultSetup.connectingWithServer')} hasBorder />
       <MatchQuery
