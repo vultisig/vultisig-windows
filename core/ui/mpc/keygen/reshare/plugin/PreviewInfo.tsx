@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 export const PreviewInfo: FC<OnFinishProp & ValueProp<Plugin>> = ({
-  value: { description, logo_url, title },
+  value: { description, logo_url, permissions, title },
   onFinish,
 }) => {
   const { t } = useTranslation()
@@ -30,12 +30,7 @@ export const PreviewInfo: FC<OnFinishProp & ValueProp<Plugin>> = ({
       <PageHeader
         primaryControls={<PageHeaderBackButton onClick={() => setStep(1)} />}
       />
-      <StyledPageContent
-        alignItems="center"
-        gap={24}
-        justifyContent="center"
-        scrollable
-      >
+      <StyledPageContent alignItems="center" gap={24} scrollable>
         <SafeImage
           src="/assets/app-permissions.png"
           render={props => (
@@ -49,11 +44,7 @@ export const PreviewInfo: FC<OnFinishProp & ValueProp<Plugin>> = ({
           <VStack gap={12}>
             <Panel>
               <VStack gap={16}>
-                {[
-                  'Access to transaction signing',
-                  'Fee deduction authorization',
-                  'Vault balance visibility',
-                ].map((item, index) => (
+                {permissions.map((item, index) => (
                   <HStack alignItems="center" gap={4} key={index}>
                     <Text as={ShieldCheckIcon} color="primaryAlt" size={16} />
                     <Text as="span" size={14}>
@@ -101,6 +92,7 @@ export const PreviewInfo: FC<OnFinishProp & ValueProp<Plugin>> = ({
                     height={100}
                     width={100}
                     {...props}
+                    style={{ borderRadius: 24 }}
                   />
                 )}
               />
@@ -129,7 +121,10 @@ export const PreviewInfo: FC<OnFinishProp & ValueProp<Plugin>> = ({
       </StyledPageContent>
       <PageFooter alignItems="center">
         <VStack maxWidth={576} fullWidth>
-          <Button kind="primary" onClick={() => setStep(2)}>
+          <Button
+            kind="primary"
+            onClick={() => (permissions.length > 0 ? setStep(2) : onFinish())}
+          >
             {t('continue')}
           </Button>
         </VStack>
