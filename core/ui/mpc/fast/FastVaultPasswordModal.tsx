@@ -36,11 +36,7 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
   const [password, setPassword] = useState('')
   const { t } = useTranslation()
 
-  const isDisabled = useMemo(() => {
-    if (!password) {
-      return t('password_required')
-    }
-  }, [password, t])
+  const isDisabled = useMemo(() => !password, [password])
 
   return showModal ? (
     <Backdrop onClose={onBack}>
