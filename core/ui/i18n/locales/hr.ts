@@ -341,6 +341,7 @@ export const hr = {
   custom: 'Prilagođena radnja',
   custom_token: 'Prilagođeni token',
   customize_chains: 'Prilagodi lance',
+  customize_positions: 'Prilagodi pozicije',
   dapp_name: 'Naziv dApp-a',
   decrypting_vault_keyshares: 'Dešifriranje dijeljenja ključeva trezora...',
   deeplink: 'Duboka veza',
@@ -707,6 +708,10 @@ export const hr = {
   no_tokens_selected: 'Nije odabran nijedan token',
   no_tokens_selected_description:
     'Onemogućili ste sve tokene. Provjerite je li token koji tražite omogućen.',
+  no_positions_found: 'Nisu pronađene pozicije',
+  no_positions_selected: 'Nije odabrana nijedna pozicija',
+  no_positions_selected_description:
+    'Onemogućili ste sve pozicije za ovaj lanac. Omogućite barem jednu poziciju za prikaz stanja i upravljanje radnjama.',
   no_vaults: 'Još nema trezora',
   no_vaults_desc:
     'Vaši će se trezori pojaviti ovdje. Započnite stvaranjem jednog ili uvozom postojećeg trezora.',
@@ -893,6 +898,9 @@ export const hr = {
   select_backup_file: 'Uvezite svoj trezorski udio',
   select_chain: 'Odaberite lanac',
   select_chains: 'Odaberite',
+  select_positions: 'Odaberite pozicije',
+  select_positions_description:
+    'Omogućite pozicije za prikaz stanja i upravljanje imovinom.',
   select_destination_chain: 'Odaberite lanac odredišta',
   select_n_devices_one: 'Odaberite {{count}} uređaj',
   select_n_devices_other: 'Odaberite {{count}} uređaja',
