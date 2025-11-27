@@ -781,6 +781,7 @@ export const hr = {
   plugin_rules: 'Pravila aplikacije',
   plugin_server_url: 'URL poslužitelja aplikacije',
   plugin_success_desc: 'Instalacija {{name}} je završena',
+  to_start_plugin_installation: 'Za početak instalacije aplikacije',
   portfolio: 'Portfelj',
   portfolio_balance: 'Stanje portfelja',
   portfolio_overview: 'Pregled portfelja',

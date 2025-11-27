@@ -1,4 +1,3 @@
-import { ServerPasswordStep } from '@core/ui/mpc/keygen/create/fast/server/password/ServerPasswordStep'
 import { FastKeygenServerActionStep } from '@core/ui/mpc/keygen/fast/FastKeygenServerActionStep'
 import { PreviewInfo } from '@core/ui/mpc/keygen/reshare/plugin/PreviewInfo'
 import { PluginReshareFastKeygenServerActionProvider } from '@core/ui/mpc/keygen/reshare/PluginReshareFastKeygenServerActionProvider'
@@ -10,18 +9,16 @@ import { Match } from '@lib/ui/base/Match'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useCallback } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { KeygenFlow } from '../../flow/KeygenFlow'
 import { InstallPluginPendingState } from './InstallPluginPendingState'
 import { usePluginInstallAnimation } from './PluginInstallAnimationProvider'
 import { WaitForPluginAndVerifier } from './WaitForPluginAndVerifier'
 
-const steps = ['info', 'password', 'keygen'] as const
+const steps = ['confirmation', 'keygen'] as const
 const closePopupDelay = 1200
 
 export const PluginReshareFlowContent = ({ plugin }: { plugin: Plugin }) => {
-  const { t } = useTranslation()
   const { step, toPreviousStep, toNextStep } = useStepNavigation({ steps })
   const animationContext = usePluginInstallAnimation()
 
@@ -38,16 +35,11 @@ export const PluginReshareFlowContent = ({ plugin }: { plugin: Plugin }) => {
       <InstallPluginPendingState />
       <Match
         value={step}
-        info={() => <PreviewInfo value={plugin} onFinish={toNextStep} />}
-        password={() => (
+        confirmation={() => (
           <ValueTransfer<{ password: string }>
             key="password"
             from={({ onFinish }) => (
-              <ServerPasswordStep
-                description={t('plugin_password_desc')}
-                onBack={toPreviousStep}
-                onFinish={onFinish}
-              />
+              <PreviewInfo value={plugin} onFinish={onFinish} />
             )}
             to={({ value: { password } }) => (
               <PasswordProvider initialValue={password}>

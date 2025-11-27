@@ -795,6 +795,7 @@ export const es = {
   plugin_rules: 'Reglas de la aplicación',
   plugin_server_url: 'URL del servidor de aplicaciones',
   plugin_success_desc: 'La instalación de {{name}} se ha completado',
+  to_start_plugin_installation: 'Para iniciar la instalación de la aplicación',
   portfolio: 'Portafolio',
   portfolio_balance: 'Saldo de la cartera',
   portfolio_overview: 'Resumen del portafolio',
