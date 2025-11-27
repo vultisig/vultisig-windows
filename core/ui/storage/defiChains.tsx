@@ -5,10 +5,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'
 
-// Supported DeFi chains - only THORChain and MayaChain
 export const supportedDefiChains: Chain[] = [Chain.THORChain, Chain.MayaChain]
 
-// Initial default DeFi chains (both enabled by default)
 export const initialDefiChains: Chain[] = [Chain.THORChain, Chain.MayaChain]
 
 type GetDefiChainsFunction = () => Promise<Chain[]>
