@@ -4,6 +4,7 @@ export enum StorageKey {
   currentVaultId = 'currentVaultId',
   vaultsCoins = 'vaultsCoins',
   defaultChains = 'defaultChains',
+  defiChains = 'defiChains',
   vaultFolders = 'vaultFolders',
   addressBookItems = 'addressBookItems',
   language = 'language',
