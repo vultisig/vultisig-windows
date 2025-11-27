@@ -1,5 +1,5 @@
 export const featureFlags = {
   circle: false,
-  defi: false,
+  defi: true,
   nftTab: false,
 }
