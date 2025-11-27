@@ -22,7 +22,7 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { isHexString } from 'ethers'
-import { FC, useCallback, useMemo } from 'react'
+import { FC, Fragment, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const PolicyOverview: FC<SignMessageOverview> = ({
@@ -173,13 +173,12 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
                             const value = String(constraint?.value.value || '')
 
                             return (
-                              <>
+                              <Fragment key={parameterName}>
                                 <Divider />
                                 <HStack
                                   alignItems="center"
                                   gap={8}
                                   justifyContent="space-between"
-                                  key={parameterName}
                                   wrap="nowrap"
                                 >
                                   {constraint?.value.case ? (
@@ -239,7 +238,7 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
                                     </Text>
                                   )}
                                 </HStack>
-                              </>
+                              </Fragment>
                             )
                           }
                         )}

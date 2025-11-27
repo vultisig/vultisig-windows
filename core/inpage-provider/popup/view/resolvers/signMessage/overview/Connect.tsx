@@ -93,7 +93,7 @@ export const ConnectOverview: FC<SignMessageOverview> = ({
 }
 
 const StyledPageContent = styled(PageContent)`
-  background-image: url('assets/install-app-bg.png');
+  background-image: url('/assets/install-app-bg.png');
   background-position: center top;
   background-repeat: no-repeat;
   background-size: contain;
