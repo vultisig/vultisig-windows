@@ -703,6 +703,7 @@ export const en = {
   plugin_rules: 'App Rules',
   plugin_server_url: 'App Server URL',
   plugin_success_desc: 'Installation of {{name}} is completed',
+  to_start_plugin_installation: 'To start the plugin installation',
   portfolio: 'Portfolio',
   portfolio_balance: 'Portfolio Balance',
   portfolio_overview: 'Portfolio Overview',
