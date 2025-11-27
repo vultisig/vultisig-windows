@@ -48,8 +48,8 @@ export const ManageDefiChainsPage = () => {
         <SearchInput value={search} onChange={setSearch} />
         {filteredChains.length > 0 ? (
           <ItemGrid>
-            {filteredChains.map((chain, index) => (
-              <DefiChainItem key={index} value={chain} />
+            {filteredChains.map(chain => (
+              <DefiChainItem key={chain} value={chain} />
             ))}
           </ItemGrid>
         ) : (
