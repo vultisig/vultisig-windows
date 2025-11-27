@@ -790,6 +790,7 @@ export const pt = {
   plugin_rules: 'Regras do aplicativo',
   plugin_server_url: 'URL do servidor de aplicativos',
   plugin_success_desc: 'A instalação de {{name}} foi concluída.',
+  to_start_plugin_installation: 'Para iniciar a instalação do aplicativo',
   portfolio: 'Portfólio',
   portfolio_balance: 'Equilíbrio da carteira',
   portfolio_overview: 'Visão geral do portfólio',

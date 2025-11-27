@@ -799,6 +799,7 @@ export const de = {
   plugin_rules: 'App-Regeln',
   plugin_server_url: 'App-Server-URL',
   plugin_success_desc: 'Die Installation von {{name}} ist abgeschlossen',
+  to_start_plugin_installation: 'Um die App-Installation zu starten',
   portfolio: 'Portfolio',
   portfolio_balance: 'Portfoliobilanz',
   portfolio_overview: 'Portfolioübersicht',

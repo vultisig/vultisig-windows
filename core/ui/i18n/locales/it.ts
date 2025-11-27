@@ -793,6 +793,7 @@ export const it = {
   plugin_rules: "Regole dell'app",
   plugin_server_url: 'URL del server delle applicazioni',
   plugin_success_desc: "L'installazione di {{name}} è completata",
+  to_start_plugin_installation: "Per avviare l'installazione dell'app",
   portfolio: 'Portafoglio',
   portfolio_balance: 'Saldo del portafoglio',
   portfolio_overview: 'Panoramica del portafoglio',
