@@ -17,7 +17,7 @@ export type DefiChainsStorage = {
   setDefiChains: SetDefiChainsFunction
 }
 
-export const useDefiChainsQuery = () => {
+const useDefiChainsQuery = () => {
   const { getDefiChains } = useCore()
 
   return useQuery({
@@ -33,7 +33,7 @@ export const useDefiChains = () => {
   return data ?? initialDefiChains
 }
 
-export const useSetDefiChainsMutation = () => {
+const useSetDefiChainsMutation = () => {
   const { setDefiChains } = useCore()
   const queryClient = useQueryClient()
 
