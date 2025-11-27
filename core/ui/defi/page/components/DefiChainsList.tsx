@@ -1,4 +1,6 @@
+import { Chain } from '@core/chain/Chain'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useDefiChains } from '@core/ui/storage/defiChains'
 import { VaultChainItem } from '@core/ui/vault/page/components/VaultChainItem'
 import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { Button } from '@lib/ui/buttons/Button'
@@ -17,6 +19,7 @@ import { useSearchChain } from './state/searchChainProvider'
 
 export const DefiChainsList = () => {
   const { data: vaultChainBalances = [] } = useVaultChainsBalancesQuery()
+  const defiChains = useDefiChains()
   const [searchQuery] = useSearchChain()
   const deferredQuery = useDeferredValue(searchQuery)
   const { t } = useTranslation()
@@ -24,12 +27,19 @@ export const DefiChainsList = () => {
 
   const normalizedQuery = deferredQuery.trim().toLowerCase()
 
+  // Filter to only show chains that are enabled in DeFi settings
+  const defiChainBalances = useMemo(() => {
+    return vaultChainBalances.filter(({ chain }) =>
+      defiChains.includes(chain as Chain)
+    )
+  }, [vaultChainBalances, defiChains])
+
   const filteredBalances = useMemo(() => {
     if (!normalizedQuery) {
-      return vaultChainBalances
+      return defiChainBalances
     }
 
-    return vaultChainBalances.filter(({ chain, coins }) => {
+    return defiChainBalances.filter(({ chain, coins }) => {
       const normalizedChain = String(chain).toLowerCase()
 
       if (normalizedChain.includes(normalizedQuery)) {
@@ -40,9 +50,9 @@ export const DefiChainsList = () => {
         coin.ticker?.toLowerCase().includes(normalizedQuery)
       )
     })
-  }, [normalizedQuery, vaultChainBalances])
+  }, [normalizedQuery, defiChainBalances])
 
-  if (vaultChainBalances.length === 0) {
+  if (defiChainBalances.length === 0) {
     return (
       <EmptyWrapper>
         <VStack gap={12} alignItems="center">
