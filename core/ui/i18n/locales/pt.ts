@@ -341,6 +341,7 @@ export const pt = {
   custom: 'Ação personalizada',
   custom_token: 'Token personalizado',
   customize_chains: 'Personalize correntes',
+  customize_positions: 'Personalizar posições',
   dapp_name: 'Nome do dApp',
   decrypting_vault_keyshares:
     'Descriptografando compartilhamentos de chaves do cofre...',
@@ -715,6 +716,10 @@ export const pt = {
   no_tokens_selected: 'Nenhum token selecionado',
   no_tokens_selected_description:
     'Você desativou todos os tokens. Certifique-se de que o token que você está procurando esteja ativado.',
+  no_positions_found: 'Nenhuma posição encontrada',
+  no_positions_selected: 'Nenhuma posição selecionada',
+  no_positions_selected_description:
+    'Você desativou todas as posições para esta cadeia. Ative pelo menos uma posição para visualizar saldos e gerenciar ações.',
   no_vaults: 'Ainda não há cofres.',
   no_vaults_desc:
     'Seus cofres aparecerão aqui. Comece criando um ou importando um cofre existente.',
@@ -901,6 +906,9 @@ export const pt = {
   select_backup_file: 'Importe sua partilha do cofre',
   select_chain: 'Selecione a corrente',
   select_chains: 'Selecione',
+  select_positions: 'Selecionar posições',
+  select_positions_description:
+    'Ative posições para visualizar saldos e gerenciar ativos.',
   select_destination_chain: 'Selecione a cadeia de destinos',
   select_n_devices_one: 'Selecione {{count}} dispositivo',
   select_n_devices_other: 'Selecione {{count}} dispositivos',

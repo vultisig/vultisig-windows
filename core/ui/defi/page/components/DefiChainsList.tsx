@@ -1,7 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useDefiChains } from '@core/ui/storage/defiChains'
-import { VaultChainItem } from '@core/ui/vault/page/components/VaultChainItem'
 import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { Button } from '@lib/ui/buttons/Button'
 import { CryptoIcon } from '@lib/ui/icons/CryptoIcon'
@@ -15,6 +14,7 @@ import { useDeferredValue, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { DefiChainItem } from './DefiChainItem'
 import { useSearchChain } from './state/searchChainProvider'
 
 export const DefiChainsList = () => {
@@ -123,7 +123,7 @@ export const DefiChainsList = () => {
   return (
     <List>
       {filteredBalances.map(balance => (
-        <VaultChainItem key={balance.chain} balance={balance} />
+        <DefiChainItem key={balance.chain} balance={balance} />
       ))}
     </List>
   )

@@ -348,6 +348,7 @@ export const it = {
   custom: 'Azione personalizzata',
   custom_token: 'Token personalizzato',
   customize_chains: 'Personalizza le catene',
+  customize_positions: 'Personalizza posizioni',
   dapp_name: 'Nome dApp',
   decrypting_vault_keyshares:
     'Decifratura delle condivisioni delle chiavi del vault...',
@@ -718,6 +719,10 @@ export const it = {
   no_tokens_selected: 'Nessun token selezionato',
   no_tokens_selected_description:
     'Hai disabilitato tutti i token. Assicurati che il token che stai cercando sia abilitato.',
+  no_positions_found: 'Nessuna posizione trovata',
+  no_positions_selected: 'Nessuna posizione selezionata',
+  no_positions_selected_description:
+    'Hai disabilitato tutte le posizioni per questa catena. Abilita almeno una posizione per visualizzare i saldi e gestire le azioni.',
   no_vaults: 'Ancora nessun caveau',
   no_vaults_desc:
     'I tuoi vault appariranno qui. Inizia creandone uno o importandone uno esistente.',
@@ -904,6 +909,9 @@ export const it = {
   select_backup_file: 'Importa la tua condivisione vault',
   select_chain: 'Seleziona catena',
   select_chains: 'Selezionare',
+  select_positions: 'Seleziona posizioni',
+  select_positions_description:
+    'Abilita le posizioni per visualizzare i saldi e gestire gli asset.',
   select_destination_chain: 'Seleziona la catena di destinazione',
   select_n_devices_one: 'Seleziona {{count}} dispositivo',
   select_n_devices_other: 'Seleziona {{count}} dispositivi',

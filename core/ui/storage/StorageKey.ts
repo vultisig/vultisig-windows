@@ -5,6 +5,7 @@ export enum StorageKey {
   vaultsCoins = 'vaultsCoins',
   defaultChains = 'defaultChains',
   defiChains = 'defiChains',
+  defiPositions = 'defiPositions',
   vaultFolders = 'vaultFolders',
   addressBookItems = 'addressBookItems',
   language = 'language',
