@@ -52,7 +52,7 @@ export const BottomNavigation = ({
                 <IconWrapper size={24}>
                   <WalletIcon />
                 </IconWrapper>
-                <Text size={10}> {t('wallet')}</Text>
+                <Text size={10}>{t('wallet')}</Text>
               </SwitchButton>
               <Tooltip
                 content={t('coming_soon')}
