@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 import {
   BottomNavigation,
-  mobileBottomNavigationHeight,
+  bottomNavigationHeight,
 } from '../../vault/components/BottomNavigation'
 import { DefiOverview } from './components/DefiOverview'
 import { DefiPageHeader } from './components/DefiPageHeader'
@@ -27,7 +27,7 @@ export const DefiPage = () => {
 
 const Wrapper = styled(VStack)`
   position: relative;
-  margin-bottom: ${mobileBottomNavigationHeight}px;
+  margin-bottom: ${bottomNavigationHeight}px;
 
   @media (min-width: 768px) {
     margin-bottom: 75px;
