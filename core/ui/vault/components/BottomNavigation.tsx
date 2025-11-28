@@ -7,17 +7,18 @@ import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { Camera2Icon } from '@lib/ui/icons/Camera2Icon'
 import { CoinsAddIcon } from '@lib/ui/icons/CoinsAddIcon'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { hStack, vStack } from '@lib/ui/layout/Stack'
-import { IsActiveProp } from '@lib/ui/props'
+import { IsActiveProp, IsDisabledProp } from '@lib/ui/props'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
-export const bottomNavigationHeight = 75
-export const mobileBottomNavigationHeight = 120
+export const bottomNavigationHeight = 62
 
 type BottomNavigationProps = {
   activeTab?: 'wallet' | 'defi'
@@ -48,16 +49,27 @@ export const BottomNavigation = ({
                 isActive={activeTab === 'wallet'}
                 onClick={() => handleTabChange('wallet')}
               >
-                <WalletIcon />
-                {t('wallet')}
+                <IconWrapper size={24}>
+                  <WalletIcon />
+                </IconWrapper>
+                <Text size={10}>{t('wallet')}</Text>
               </SwitchButton>
-              <SwitchButton
-                isActive={activeTab === 'defi'}
-                onClick={() => handleTabChange('defi')}
-              >
-                <CoinsAddIcon />
-                {t('defi')}
-              </SwitchButton>
+              <Tooltip
+                content={t('coming_soon')}
+                placement="top"
+                renderOpener={props => (
+                  <SwitchButton
+                    {...props}
+                    isActive={activeTab === 'defi'}
+                    isDisabled
+                  >
+                    <IconWrapper size={24}>
+                      <CoinsAddIcon />
+                    </IconWrapper>
+                    <Text size={10}>{t('defi')}</Text>
+                  </SwitchButton>
+                )}
+              />
             </SwitchContainer>
           ) : null}
           <CameraButton onClick={() => navigate({ id: 'uploadQr', state: {} })}>
@@ -83,15 +95,22 @@ export const BottomNavigation = ({
           <Camera2Icon />
         </DesktopCameraButton>
         {featureFlags.defi && (
-          <SecondaryItemWrapper
-            isActive={activeTab === 'defi'}
-            onClick={() => handleTabChange('defi')}
-          >
-            <CoinsAddIcon />
-            <Text as="span" size={10}>
-              {t('defi')}
-            </Text>
-          </SecondaryItemWrapper>
+          <Tooltip
+            content={t('coming_soon')}
+            placement="top"
+            renderOpener={props => (
+              <SecondaryItemWrapper
+                {...props}
+                isActive={activeTab === 'defi'}
+                isDisabled
+              >
+                <CoinsAddIcon />
+                <Text as="span" size={10}>
+                  {t('defi')}
+                </Text>
+              </SecondaryItemWrapper>
+            )}
+          />
         )}
       </InnerContainer>
     </Position>
@@ -138,22 +157,17 @@ const Position = styled.div`
   justify-content: center;
   box-shadow: 0px -60px 80px 10px rgba(2, 18, 43, 0.95);
 
-  height: ${mobileBottomNavigationHeight}px;
-
-  @media ${mediaQuery.tabletDeviceAndUp} {
-    height: ${bottomNavigationHeight}px;
-  }
+  height: ${bottomNavigationHeight}px;
 `
 
 const InnerContainer = styled.div`
   width: 100%;
-  border-top: 1px solid ${getColor('foregroundSuper')};
   background: ${getColor('background')};
   pointer-events: auto;
   padding-inline: 16px;
   display: flex;
   flex-direction: column;
-  height: ${mobileBottomNavigationHeight}px;
+  height: ${bottomNavigationHeight}px;
   justify-content: center;
   align-items: center;
   gap: 16px;
@@ -172,7 +186,7 @@ const InnerContainer = styled.div`
   }
 `
 
-const SecondaryItemWrapper = styled(Button)<IsActiveProp>`
+const SecondaryItemWrapper = styled(Button)<IsActiveProp & IsDisabledProp>`
   display: none;
 
   @media ${mediaQuery.tabletDeviceAndUp} {
@@ -197,6 +211,13 @@ const SecondaryItemWrapper = styled(Button)<IsActiveProp>`
         &:hover {
           background: ${getColor('primaryAccentFour')};
         }
+      `}
+
+    ${({ isDisabled }) =>
+      isDisabled &&
+      css`
+        cursor: not-allowed;
+        opacity: 0.6;
       `}
   }
 `
@@ -263,10 +284,11 @@ const SwitchContainer = styled.div`
   }
 `
 
-const SwitchButton = styled(UnstyledButton)<{ isActive: boolean }>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
+const SwitchButton = styled(UnstyledButton)<{
+  isActive: boolean
+  isDisabled?: boolean
+}>`
+  flex: 1;
   gap: 8px;
   padding: 8px 20px;
   border-radius: 1000px;
@@ -295,4 +317,11 @@ const SwitchButton = styled(UnstyledButton)<{ isActive: boolean }>`
   svg {
     font-size: 20px;
   }
+
+  ${({ isDisabled }) =>
+    isDisabled &&
+    css`
+      cursor: not-allowed;
+      opacity: 0.6;
+    `}
 `
