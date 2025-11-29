@@ -40,6 +40,27 @@ const calculateTopRightPosition = (
   }
 }
 
+const findExistingPopupWindow = async (): Promise<number | null> => {
+  const allWindows = await chrome.windows.getAll({ windowTypes: ['popup'] })
+  const runtimeUrl = chrome.runtime.getURL('popup.html')
+
+  for (const window of allWindows) {
+    if (!window.id) continue
+
+    const tabs = await chrome.tabs.query({ windowId: window.id })
+    const matchingTab = tabs.find(tab => {
+      const tabUrl = tab.url
+      return tabUrl?.startsWith(runtimeUrl.split('?')[0])
+    })
+
+    if (matchingTab) {
+      return window.id
+    }
+  }
+
+  return null
+}
+
 export const inNewWindow = async <T>({
   url,
   execute,
@@ -47,22 +68,38 @@ export const inNewWindow = async <T>({
   const currentWindow = await chrome.windows.getCurrent()
   const position = calculateTopRightPosition(currentWindow)
 
-  const newWindow = await new Promise<chrome.windows.Window | undefined>(
-    resolve =>
-      chrome.windows.create(
-        {
-          url,
-          type: 'popup',
-          height: windowHeight,
-          width: windowWidth,
-          ...position,
-        },
-        resolve
-      )
-  )
-  const windowId = newWindow?.id
-  if (!windowId) {
-    throw new Error('Failed to create new window')
+  // Check if there's an existing popup window we can reuse
+  const existingWindowId = await findExistingPopupWindow()
+
+  let windowId: number
+  if (existingWindowId !== null) {
+    // Reuse existing window by updating its tab URL and focusing it
+    windowId = existingWindowId
+    const tabs = await chrome.tabs.query({ windowId })
+    const tabId = tabs[0]?.id
+    if (tabId) {
+      await chrome.tabs.update(tabId, { url })
+    }
+    await chrome.windows.update(windowId, { focused: true })
+  } else {
+    const newWindow = await new Promise<chrome.windows.Window | undefined>(
+      resolve =>
+        chrome.windows.create(
+          {
+            url,
+            type: 'popup',
+            height: windowHeight,
+            width: windowWidth,
+            ...position,
+          },
+          resolve
+        )
+    )
+    const id = newWindow?.id
+    if (!id) {
+      throw new Error('Failed to create new window')
+    }
+    windowId = id
   }
 
   const controller = new AbortController()
