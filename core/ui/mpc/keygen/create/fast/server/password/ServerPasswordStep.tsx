@@ -96,6 +96,7 @@ export const ServerPasswordStep: React.FC<ServerPasswordStepProps> = ({
           error={passwordErrorMessage}
           placeholder={t('enter_password')}
           validation={passwordErrorMessage ? 'invalid' : undefined}
+          autoFocus
         />
       </PageContent>
       <PageFooter>
