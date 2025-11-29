@@ -55,7 +55,7 @@ export const BlockaidSwapDisplay = ({
       <Text color="supporting" size={15}>
         {t('youre_swapping')}
       </Text>
-      <VStack gap={16}>
+      <VStack gap={18}>
         <SwapAmountDisplay
           coin={fromCoin}
           amount={fromAmountDecimal}
