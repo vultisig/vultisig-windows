@@ -71,7 +71,7 @@ const hasSigningResultV2 = (
   'signingResultV2' in tx &&
   !!(tx as any).signingResultV2
 
-const selectEncodedBytes = (
+export const selectEncodedBytes = (
   chain: UtxoBasedChain,
   tx: UtxoBasedDecodedTx
 ): Uint8Array => {
