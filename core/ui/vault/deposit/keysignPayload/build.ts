@@ -282,6 +282,8 @@ export const buildDepositKeysignPayload = async ({
       'ibc_transfer',
       'switch',
       'merge',
+      'add_cacao_pool',
+      'remove_cacao_pool',
     ])
   ) {
     keysignPayload = create(KeysignPayloadSchema, {

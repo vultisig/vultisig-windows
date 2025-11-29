@@ -56,6 +56,8 @@ export const useAvailableChainActions = (chain: Chain) => {
           redeem: () => redeemOptions.length > 0,
           withdraw_ruji_rewards: () =>
             !!findByTicker({ coins, ticker: 'RUJI' }),
+          add_cacao_pool: () => !!findByTicker({ coins, ticker: 'CACAO' }),
+          remove_cacao_pool: () => !!findByTicker({ coins, ticker: 'CACAO' }),
         })
       ),
 

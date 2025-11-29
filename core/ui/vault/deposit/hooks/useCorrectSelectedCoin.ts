@@ -103,6 +103,8 @@ export const useCorrectSelectedCoin = () => {
         leave: () =>
           findByTicker({ coins, ticker: 'RUNE' }) ||
           findByTicker({ coins, ticker: 'CACAO' }),
+        add_cacao_pool: () => shouldBePresent(potentialCACAOCoin),
+        remove_cacao_pool: () => shouldBePresent(potentialCACAOCoin),
       })
     },
     [action, coins, mergeOptions, mintOptions, redeemOptions, unmergeOptions]

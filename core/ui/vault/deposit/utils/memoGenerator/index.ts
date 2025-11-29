@@ -1,5 +1,6 @@
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { Chain, CosmosChain } from '@core/chain/Chain'
+import { cacaoPoolAffiliateConfig } from '@core/chain/chains/cosmos/maya/cacaoPoolAffiliateConfig'
 import { rujiraStakingConfig } from '@core/chain/chains/cosmos/thor/rujira/config'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
@@ -189,6 +190,13 @@ export const generateMemo = ({
       const memo = `unmerge:${denom.toLowerCase()}:${sharesRaw}`
 
       return memo
+    },
+    add_cacao_pool: () => 'POOL+',
+    remove_cacao_pool: () => {
+      const { percentage } = extractFormValues(depositFormData)
+      const pct = shouldBePresent(percentage, 'Percentage')
+      const basisPoints = Math.floor(pct * 100)
+      return `POOL-:${basisPoints}:${cacaoPoolAffiliateConfig.affiliateFeeAddress}:${cacaoPoolAffiliateConfig.affiliateFeeRateBps}`
     },
   })
 }
