@@ -1,6 +1,5 @@
 import { fromBinary } from '@bufbuild/protobuf'
 import { Chain } from '@core/chain/Chain'
-import { assertChainField } from '@core/chain/utils/assertChainField'
 import { tssMessageSchema, TssType } from '@core/mpc/types/utils/tssType'
 import { KeygenMessage } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
 import { ReshareMessage } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
@@ -9,7 +8,9 @@ import {
   KeysignMessageSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { decompressQrPayload } from '@core/ui/qr/utils/decompressQrPayload'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { getRawQueryParams } from '@lib/utils/query/getRawQueryParams'
+import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
 
 type DeeplinkType = 'NewVault' | 'SignTransaction' | 'send'
 
@@ -27,7 +28,6 @@ type DeeplinkParams = DeeplinkSharedData & {
 }
 
 type SendDeeplinkParams = {
-  type: 'send'
   assetChain: string
   assetTicker: string
   toAddress: string
@@ -59,45 +59,34 @@ export type ParsedDeeplink =
   | { send: SendDeeplinkData }
 
 export const parseDeeplink = async (url: string): Promise<ParsedDeeplink> => {
-  const queryParams = getRawQueryParams<DeeplinkParams | SendDeeplinkParams>(
-    url
-  )
+  if (/:\/\/send\?/.test(url)) {
+    const queryParams = getRawQueryParams<SendDeeplinkParams>(url)
+
+    const chain = shouldBePresent(
+      Object.values(Chain).find(
+        chain => areLowerCaseEqual(chain, queryParams.assetChain),
+        'chain'
+      )
+    )
+
+    return {
+      send: {
+        chain,
+        ticker: shouldBePresent(queryParams.assetTicker, 'ticker'),
+        toAddress: shouldBePresent(queryParams.toAddress, 'toAddress'),
+        amount: queryParams.amount,
+        memo: queryParams.memo,
+      },
+    }
+  }
+
+  const queryParams = getRawQueryParams<DeeplinkParams>(url)
 
   if (!('type' in queryParams)) {
     throw new Error(`Unknown deeplink: ${url}`)
   }
 
-  const { type } = queryParams
-
-  if (type === 'send') {
-    const sendParams = queryParams as SendDeeplinkParams
-
-    if (
-      !sendParams.assetChain ||
-      !sendParams.assetTicker ||
-      !sendParams.toAddress
-    ) {
-      throw new Error(
-        `Missing required parameters for send deeplink: assetChain, assetTicker, and toAddress are required`
-      )
-    }
-
-    const chain = assertChainField<Chain, { chain: string }>({
-      chain: sendParams.assetChain,
-    }).chain
-
-    return {
-      send: {
-        chain,
-        ticker: sendParams.assetTicker,
-        toAddress: sendParams.toAddress,
-        amount: sendParams.amount,
-        memo: sendParams.memo,
-      },
-    }
-  }
-
-  const { jsonData } = queryParams as DeeplinkParams
+  const { type, jsonData } = queryParams
   const payload = await decompressQrPayload(jsonData)
 
   if (type === 'NewVault') {
