@@ -4,6 +4,7 @@ import { es } from './locales/es'
 import { hr } from './locales/hr'
 import { it } from './locales/it'
 import { pt } from './locales/pt'
+import { zh } from './locales/zh'
 
 export const translations = {
   de,
@@ -12,4 +13,5 @@ export const translations = {
   hr,
   it,
   pt,
+  zh,
 } as const

@@ -1141,12 +1141,14 @@ export const en = {
   vault_settings_language_settings_subtitle_hr: 'Croatian',
   vault_settings_language_settings_subtitle_it: 'Italian',
   vault_settings_language_settings_subtitle_pt: 'Portugal',
+  vault_settings_language_settings_subtitle_zh: 'Chinese',
   vault_settings_language_settings_title_de: 'Deutch',
   vault_settings_language_settings_title_en: 'English',
   vault_settings_language_settings_title_es: 'Espanol',
   vault_settings_language_settings_title_hr: 'Hrvatski',
   vault_settings_language_settings_title_it: 'Italiano',
   vault_settings_language_settings_title_pt: 'Portuguese',
+  vault_settings_language_settings_title_zh: '中文',
   vault_setup_prop: {
     fast: {
       prop_0: 'Only 1 device needed',

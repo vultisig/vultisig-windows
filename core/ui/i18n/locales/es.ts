@@ -1268,4 +1268,6 @@ export const es = {
   unlock_discount_tier_description_ultimate:
     'Al mantener {{minBalance}}, desbloquearás el nivel {{tier}} y recibirás una <b>exención completa de la tarifa de Vultisig</b> en todos los intercambios.',
   ultimate: 'Último',
+  vault_settings_language_settings_subtitle_zh: 'Chino',
+  vault_settings_language_settings_title_zh: '中文',
 }
