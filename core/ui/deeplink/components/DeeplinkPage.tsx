@@ -4,6 +4,7 @@ import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { ParsedDeeplink } from '../core'
 import { ParseDeeplinkStep } from './ParseDeeplinkStep'
 import { ProcessNewVault } from './ProcessNewVault'
+import { ProcessSend } from './ProcessSend'
 import { ProcessSignTransaction } from './ProcessSignTransaction'
 
 export const DeeplinkPage = () => {
@@ -16,6 +17,7 @@ export const DeeplinkPage = () => {
           handlers={{
             newVault: data => <ProcessNewVault value={data} />,
             signTransaction: data => <ProcessSignTransaction value={data} />,
+            send: data => <ProcessSend value={data} />,
           }}
         />
       )}
