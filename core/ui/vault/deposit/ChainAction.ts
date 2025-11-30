@@ -1,6 +1,9 @@
 import { Chain } from '@core/chain/Chain'
 import { DepositEnabledChain } from '@core/ui/vault/deposit/DepositEnabledChain'
 
+export const cacaoPoolActions = ['add_cacao_pool', 'remove_cacao_pool'] as const
+type CacaoPoolAction = (typeof cacaoPoolActions)[number]
+
 export type ChainAction =
   | 'bond'
   | 'unbond'
@@ -18,8 +21,7 @@ export type ChainAction =
   | 'mint'
   | 'redeem'
   | 'withdraw_ruji_rewards'
-  | 'add_cacao_pool'
-  | 'remove_cacao_pool'
+  | CacaoPoolAction
 
 export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
   [Chain.THORChain]: [
@@ -40,8 +42,7 @@ export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
     'unbond_with_lp',
     'leave',
     'custom',
-    'add_cacao_pool',
-    'remove_cacao_pool',
+    ...cacaoPoolActions,
   ],
   [Chain.Dydx]: ['vote'],
   [Chain.Ton]: ['stake', 'unstake'],
