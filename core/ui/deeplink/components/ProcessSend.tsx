@@ -1,6 +1,5 @@
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
-import { CoinKey } from '@core/chain/coin/Coin'
-import { findByTicker } from '@core/chain/coin/utils/findByTicker'
+import { extractCoinKey } from '@core/chain/coin/Coin'
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
@@ -14,6 +13,7 @@ import { VaultListItem } from '@core/ui/vaultsOrganisation/components/VaultListI
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { ValueProp } from '@lib/ui/props'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -27,61 +27,12 @@ export const ProcessSend = ({ value }: ValueProp<SendDeeplinkData>) => {
   const { mutate: setCurrentVaultId } = useSetCurrentVaultIdMutation()
 
   const vaultsWithCoin = useMemo(() => {
-    return vaults
-      .map(vault => {
-        const coin = findByTicker({
-          coins: vault.coins,
-          ticker: value.ticker,
-        })
-
-        if (!coin || coin.chain !== value.chain) {
-          return null
-        }
-
-        return { vault, coin }
-      })
-      .filter(
-        (
-          item
-        ): item is {
-          vault: (typeof vaults)[0]
-          coin: (typeof vaults)[0]['coins'][0]
-        } => item !== null
+    return vaults.filter(({ coins }) =>
+      coins.some(
+        coin => coin.chain === value.chain && coin.ticker === value.ticker
       )
-  }, [vaults, value.chain, value.ticker])
-
-  const handleSelectVault = (vaultId: string) => {
-    const vaultWithCoin = vaultsWithCoin.find(
-      item => getVaultId(item.vault) === vaultId
     )
-
-    if (!vaultWithCoin) {
-      return
-    }
-
-    const coinKey: CoinKey = {
-      chain: vaultWithCoin.coin.chain,
-      id: vaultWithCoin.coin.id,
-    }
-
-    const amount = value.amount
-      ? toChainAmount(parseFloat(value.amount), vaultWithCoin.coin.decimals)
-      : undefined
-
-    setCurrentVaultId(vaultId, {
-      onSuccess: () => {
-        navigate({
-          id: 'send',
-          state: {
-            coin: coinKey,
-            address: value.toAddress,
-            amount,
-            memo: value.memo,
-          },
-        })
-      },
-    })
-  }
+  }, [vaults, value.chain, value.ticker])
 
   if (vaults.length === 0) {
     return (
@@ -112,14 +63,37 @@ export const ProcessSend = ({ value }: ValueProp<SendDeeplinkData>) => {
       <FlowPageHeader title={t('select_vault')} />
       <PageContent gap={16} scrollable>
         <VStack gap={12}>
-          {vaultsWithCoin.map(({ vault }) => {
+          {vaultsWithCoin.map(vault => {
             const vaultId = getVaultId(vault)
 
             return (
               <VaultListItem
                 key={vaultId}
                 vault={vault}
-                onSelect={() => handleSelectVault(vaultId)}
+                onSelect={() => {
+                  const coin = shouldBePresent(
+                    vault.coins.find(
+                      coin =>
+                        coin.chain === value.chain &&
+                        coin.ticker === value.ticker
+                    )
+                  )
+                  setCurrentVaultId(vaultId, {
+                    onSuccess: () => {
+                      navigate({
+                        id: 'send',
+                        state: {
+                          coin: extractCoinKey(coin),
+                          address: value.toAddress,
+                          amount: value.amount
+                            ? toChainAmount(Number(value.amount), coin.decimals)
+                            : undefined,
+                          memo: value.memo,
+                        },
+                      })
+                    },
+                  })
+                }}
                 selected={vaultId === currentVaultId}
               />
             )
