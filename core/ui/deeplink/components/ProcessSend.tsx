@@ -10,7 +10,6 @@ import {
 } from '@core/ui/storage/currentVaultId'
 import { useVaults } from '@core/ui/storage/vaults'
 import { VaultListItem } from '@core/ui/vaultsOrganisation/components/VaultListItem'
-import { useVaultsTotalBalances } from '@core/ui/vaultsOrganisation/hooks/useVaultsTotalBalances'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { ValueProp } from '@lib/ui/props'
@@ -25,8 +24,6 @@ export const ProcessSend = ({ value }: ValueProp<SendDeeplinkData>) => {
   const vaults = useVaults()
   const currentVaultId = useCurrentVaultId()
   const { mutate: setCurrentVaultId } = useSetCurrentVaultIdMutation()
-  const { totals: vaultTotals, isPending: isTotalsPending } =
-    useVaultsTotalBalances()
 
   const vaultsWithCoin = useMemo(() => {
     return vaults
@@ -112,10 +109,6 @@ export const ProcessSend = ({ value }: ValueProp<SendDeeplinkData>) => {
         <VStack gap={12}>
           {vaultsWithCoin.map(({ vault }) => {
             const vaultId = getVaultId(vault)
-            const balance =
-              !isTotalsPending && vaultTotals?.[vaultId] !== undefined
-                ? vaultTotals[vaultId]
-                : undefined
 
             return (
               <VaultListItem
@@ -123,7 +116,6 @@ export const ProcessSend = ({ value }: ValueProp<SendDeeplinkData>) => {
                 vault={vault}
                 onSelect={() => handleSelectVault(vaultId)}
                 selected={vaultId === currentVaultId}
-                balance={balance}
               />
             )
           })}
