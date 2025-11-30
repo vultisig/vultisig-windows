@@ -1,3 +1,4 @@
+import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { CoinKey } from '@core/chain/coin/Coin'
 import { findByTicker } from '@core/chain/coin/utils/findByTicker'
 import { getVaultId } from '@core/mpc/vault/Vault'
@@ -63,6 +64,10 @@ export const ProcessSend = ({ value }: ValueProp<SendDeeplinkData>) => {
       id: vaultWithCoin.coin.id,
     }
 
+    const amount = value.amount
+      ? toChainAmount(parseFloat(value.amount), vaultWithCoin.coin.decimals)
+      : undefined
+
     setCurrentVaultId(vaultId, {
       onSuccess: () => {
         navigate({
@@ -70,7 +75,7 @@ export const ProcessSend = ({ value }: ValueProp<SendDeeplinkData>) => {
           state: {
             coin: coinKey,
             address: value.toAddress,
-            amount: value.amount,
+            amount,
             memo: value.memo,
           },
         })
