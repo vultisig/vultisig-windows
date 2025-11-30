@@ -82,10 +82,6 @@ export const parseDeeplink = async (url: string): Promise<ParsedDeeplink> => {
 
   const queryParams = getRawQueryParams<DeeplinkParams>(url)
 
-  if (!('type' in queryParams)) {
-    throw new Error(`Unknown deeplink: ${url}`)
-  }
-
   const { type, jsonData } = queryParams
   const payload = await decompressQrPayload(jsonData)
 
