@@ -4,9 +4,7 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useCoreViewState } from '../../navigation/hooks/useCoreViewState'
 import { useCore } from '../../state/core'
 import { SendForm } from './form/SendForm'
-import { SendAmountProvider } from './state/amount'
 import { SendFormFieldsStateProvider } from './state/formFields'
-import { SendMemoProvider } from './state/memo'
 import { SendReceiverProvider } from './state/receiver'
 import { SendVerify } from './verify/SendVerify'
 
@@ -22,17 +20,13 @@ export const SendPage = () => {
 
   return (
     <SendFormFieldsStateProvider>
-      <SendAmountProvider initialValue={null}>
-        <SendReceiverProvider initialValue={address ?? ''}>
-          <SendMemoProvider initialValue="">
-            <Match
-              value={step}
-              form={() => <SendForm onFinish={toNextStep} />}
-              verify={() => <SendVerify onBack={toPreviousStep} />}
-            />
-          </SendMemoProvider>
-        </SendReceiverProvider>
-      </SendAmountProvider>
+      <SendReceiverProvider initialValue={address ?? ''}>
+        <Match
+          value={step}
+          form={() => <SendForm onFinish={toNextStep} />}
+          verify={() => <SendVerify onBack={toPreviousStep} />}
+        />
+      </SendReceiverProvider>
     </SendFormFieldsStateProvider>
   )
 }
