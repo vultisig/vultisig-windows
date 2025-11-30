@@ -75,7 +75,9 @@ export const parseDeeplink = async (url: string): Promise<ParsedDeeplink> => {
         ticker: shouldBePresent(queryParams.assetTicker, 'ticker'),
         toAddress: shouldBePresent(queryParams.toAddress, 'toAddress'),
         amount: queryParams.amount,
-        memo: queryParams.memo,
+        memo: queryParams.memo
+          ? decodeURIComponent(queryParams.memo)
+          : undefined,
       },
     }
   }

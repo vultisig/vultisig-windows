@@ -10,7 +10,7 @@ import { VaultSignersPill } from './VaultSignersPill'
 type VaultListItemProps = {
   vault: Vault
   onSelect: () => void
-  selected: boolean
+  selected?: boolean
   balance?: number
 }
 

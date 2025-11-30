@@ -4,10 +4,7 @@ import { getVaultId } from '@core/mpc/vault/Vault'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import {
-  useCurrentVaultId,
-  useSetCurrentVaultIdMutation,
-} from '@core/ui/storage/currentVaultId'
+import { useSetCurrentVaultIdMutation } from '@core/ui/storage/currentVaultId'
 import { useVaults } from '@core/ui/storage/vaults'
 import { VaultListItem } from '@core/ui/vaultsOrganisation/components/VaultListItem'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -23,7 +20,6 @@ export const ProcessSend = ({ value }: ValueProp<SendDeeplinkData>) => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
   const vaults = useVaults()
-  const currentVaultId = useCurrentVaultId()
   const { mutate: setCurrentVaultId } = useSetCurrentVaultIdMutation()
 
   const vaultsWithCoin = useMemo(() => {
@@ -94,7 +90,6 @@ export const ProcessSend = ({ value }: ValueProp<SendDeeplinkData>) => {
                     },
                   })
                 }}
-                selected={vaultId === currentVaultId}
               />
             )
           })}
