@@ -24,7 +24,6 @@ export const ProcessSignTransaction = ({
       <FlowPageHeader title={t('joining_keysign')} />
       <MatchQuery
         value={mutationState}
-        success={() => null}
         pending={() => (
           <FlowPendingPageContent title={t('processing_transaction')} />
         )}

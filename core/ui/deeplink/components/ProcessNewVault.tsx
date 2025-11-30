@@ -22,7 +22,6 @@ export const ProcessNewVault = ({ value }: ValueProp<NewVaultData>) => {
       <FlowPageHeader title={t('joining_keygen')} />
       <MatchQuery
         value={mutationState}
-        success={() => null}
         pending={() => <FlowPendingPageContent title={t('processing_url')} />}
         error={error => (
           <FlowErrorPageContent
