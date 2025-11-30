@@ -11,6 +11,7 @@ import { useMemo } from 'react'
 
 import { useDepositReceiver } from '../hooks/useDepositReceiver'
 import { useDepositTxType } from '../hooks/useDepositTxType'
+import { useDepositMemo } from '../hooks/useDepositMemo'
 import { useDepositAction } from '../providers/DepositActionProvider'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
 import { useDepositData } from '../state/data'
@@ -30,10 +31,11 @@ export const useDepositKeysignPayloadQuery = () => {
   const receiver = useDepositReceiver()
   const transactionType = useDepositTxType()
 
+  const memo = useDepositMemo()
+
   const hasAmount = 'amount' in depositData
   const amount = hasAmount ? Number(depositData['amount']) : undefined
   const slippage = Number(depositData['slippage'] ?? 0)
-  const memo = (depositData['memo'] as string) ?? ''
   const validatorAddress = depositData['validatorAddress'] as string | undefined
   const autocompound = Boolean(depositData['autoCompound'])
 

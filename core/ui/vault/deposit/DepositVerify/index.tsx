@@ -2,7 +2,7 @@ import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { DepositConfirmButton } from '@core/ui/vault/deposit/DepositConfirmButton'
 import { getFormattedFormData } from '@core/ui/vault/deposit/DepositVerify/utils'
 import { DepositFee } from '@core/ui/vault/deposit/fee/DepositFee'
-import { useMemoGenerator } from '@core/ui/vault/deposit/hooks/useMemoGenerator'
+import { useDepositMemo } from '@core/ui/vault/deposit/hooks/useDepositMemo'
 import { useSender } from '@core/ui/vault/deposit/hooks/useSender'
 import { ProgressLine } from '@lib/ui/flow/ProgressLine'
 import { List } from '@lib/ui/list'
@@ -23,15 +23,10 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
   const [coin] = useDepositCoin()
   const depositData = useDepositData()
 
-  const depositFormDataWithMemo = useMemoGenerator({
-    depositFormData: depositData,
-    selectedChainAction: selectedChainAction,
-    bondableAsset: depositData?.bondableAsset,
-    chain: coin?.chain,
-  })
+  const memo = useDepositMemo()
 
   const formattedDepositFormData = getFormattedFormData(
-    depositFormDataWithMemo,
+    { ...depositData, memo },
     selectedChainAction,
     coin
   )
