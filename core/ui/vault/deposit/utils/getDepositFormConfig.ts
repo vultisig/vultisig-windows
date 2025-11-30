@@ -695,5 +695,47 @@ export const getDepositFormConfig = ({
               }) as any,
           }),
     }),
+    add_cacao_pool: () => ({
+      fields: [
+        {
+          name: 'amount',
+          type: 'number',
+          label: t('amount'),
+          required: true,
+        },
+      ],
+      schema: z.object({
+        amount: z
+          .string()
+          .transform(Number)
+          .pipe(
+            z
+              .number()
+              .positive(t('amount_must_be_positive'))
+              .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
+          ),
+      }),
+    }),
+    remove_cacao_pool: () => ({
+      fields: [
+        {
+          name: 'percentage',
+          type: 'number',
+          label: t('percentage'),
+          required: true,
+        },
+      ],
+      schema: z.object({
+        percentage: z
+          .string()
+          .transform(Number)
+          .pipe(
+            z
+              .number()
+              .positive(t('amount_must_be_positive'))
+              .max(100, t('percentage_limit'))
+          ),
+      }),
+    }),
   })
 }

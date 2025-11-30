@@ -1249,6 +1249,8 @@ export const pt = {
   while_you_wait_vultisig_is: 'Enquanto você espera, Vultisig está...',
   with_these_devices: 'Com esses dispositivos',
   withdraw_ruji_rewards: 'Retirar recompensas RUJI',
+  add_cacao_pool: 'Adicionar ao pool CACAO',
+  remove_cacao_pool: 'Remover do pool CACAO',
   wrong_address_for_chain: 'Endereço incorreto para a cadeia selecionada',
   wrong_vault_try_again: 'Cofre ou dispositivo de emparelhamento incorretos.',
   you_are_sending: 'Você está enviando',

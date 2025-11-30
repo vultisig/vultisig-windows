@@ -190,6 +190,13 @@ export const generateMemo = ({
 
       return memo
     },
+    add_cacao_pool: () => 'pool+',
+    remove_cacao_pool: () => {
+      const { percentage } = extractFormValues(depositFormData)
+      const pct = shouldBePresent(percentage, 'Percentage')
+      const basisPoints = Math.floor(pct * 100)
+      return `POOL-:${basisPoints}`
+    },
   })
 }
 

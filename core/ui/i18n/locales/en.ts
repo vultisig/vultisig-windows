@@ -1205,6 +1205,8 @@ export const en = {
   while_you_wait_vultisig_is: 'While you wait, Vultisig is...',
   with_these_devices: 'With these devices',
   withdraw_ruji_rewards: 'Withdraw RUJI Rewards',
+  add_cacao_pool: 'Add to CACAO Pool',
+  remove_cacao_pool: 'Remove from CACAO Pool',
   wrong_address_for_chain: 'Wrong address for selected Chain',
   wrong_vault_try_again: 'Wrong Vault or Pair Device.',
   you_are_sending: "You're sending",

@@ -1230,6 +1230,8 @@ export const hr = {
   while_you_wait_vultisig_is: 'Dok čekate, Vultisig je...',
   with_these_devices: 'S ovim uređajima',
   withdraw_ruji_rewards: 'Isplata RUJI nagrada',
+  add_cacao_pool: 'Dodaj u CACAO pool',
+  remove_cacao_pool: 'Ukloni iz CACAO poola',
   wrong_address_for_chain: 'Pogrešna adresa za odabrani lanac',
   wrong_vault_try_again: 'Pogrešan trezor ili upareni uređaj.',
   you_are_sending: 'Šaljete',

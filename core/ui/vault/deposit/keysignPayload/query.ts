@@ -9,6 +9,7 @@ import { omit } from '@lib/utils/record/omit'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
+import { useDepositMemo } from '../hooks/useDepositMemo'
 import { useDepositReceiver } from '../hooks/useDepositReceiver'
 import { useDepositTxType } from '../hooks/useDepositTxType'
 import { useDepositAction } from '../providers/DepositActionProvider'
@@ -30,10 +31,11 @@ export const useDepositKeysignPayloadQuery = () => {
   const receiver = useDepositReceiver()
   const transactionType = useDepositTxType()
 
+  const memo = useDepositMemo()
+
   const hasAmount = 'amount' in depositData
   const amount = hasAmount ? Number(depositData['amount']) : undefined
   const slippage = Number(depositData['slippage'] ?? 0)
-  const memo = (depositData['memo'] as string) ?? ''
   const validatorAddress = depositData['validatorAddress'] as string | undefined
   const autocompound = Boolean(depositData['autoCompound'])
 
