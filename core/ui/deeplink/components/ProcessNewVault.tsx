@@ -6,8 +6,8 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { NewVaultData } from '../core'
 import { useProcessNewVaultMutation } from '../mutations/useProcessNewVaultMutation'
-import { NewVaultData } from '../queries/useParseDeeplinkQuery'
 
 export const ProcessNewVault = ({ value }: ValueProp<NewVaultData>) => {
   const { t } = useTranslation()

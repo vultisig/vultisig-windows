@@ -1,7 +1,7 @@
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 
-import { ParsedDeeplink } from '../queries/useParseDeeplinkQuery'
+import { ParsedDeeplink } from '../core'
 import { ParseDeeplinkStep } from './ParseDeeplinkStep'
 import { ProcessNewVault } from './ProcessNewVault'
 import { ProcessSignTransaction } from './ProcessSignTransaction'

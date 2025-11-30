@@ -4,7 +4,7 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { useMutation } from '@tanstack/react-query'
 
-import { NewVaultData } from '../queries/useParseDeeplinkQuery'
+import { NewVaultData } from '../core'
 
 export const useProcessNewVaultMutation = () => {
   const navigate = useCoreNavigate()

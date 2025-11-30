@@ -7,7 +7,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { ParsedDeeplink } from '../queries/useParseDeeplinkQuery'
+import { ParsedDeeplink } from '../core'
 import { useParseDeeplinkQuery } from '../queries/useParseDeeplinkQuery'
 
 export const ParseDeeplinkStep = ({

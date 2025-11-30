@@ -6,8 +6,8 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { SignTransactionData } from '../core'
 import { useProcessSignTransactionMutation } from '../mutations/useProcessSignTransactionMutation'
-import { SignTransactionData } from '../queries/useParseDeeplinkQuery'
 
 export const ProcessSignTransaction = ({
   value,

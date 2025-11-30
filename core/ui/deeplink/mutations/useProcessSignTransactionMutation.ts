@@ -6,7 +6,7 @@ import { decompressQrPayload } from '@core/ui/qr/utils/decompressQrPayload'
 import { useCore } from '@core/ui/state/core'
 import { useMutation } from '@tanstack/react-query'
 
-import { SignTransactionData } from '../queries/useParseDeeplinkQuery'
+import { SignTransactionData } from '../core'
 
 export const useProcessSignTransactionMutation = () => {
   const navigate = useCoreNavigate()
