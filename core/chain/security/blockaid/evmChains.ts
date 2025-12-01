@@ -1,6 +1,6 @@
 import { EvmChain } from '../../Chain'
 
-const blockaidEvmChain = {
+export const blockaidEvmChain = {
   [EvmChain.Arbitrum]: 'arbitrum',
   [EvmChain.Avalanche]: 'avalanche',
   [EvmChain.Base]: 'base',
@@ -20,7 +20,3 @@ export type BlockaidSupportedEvmChain = keyof typeof blockaidEvmChain
 export const blockaidSupportedEvmChains = Object.keys(
   blockaidEvmChain
 ) as BlockaidSupportedEvmChain[]
-
-export const getBlockaidEvmChainName = (
-  chain: BlockaidSupportedEvmChain
-): string => blockaidEvmChain[chain]
