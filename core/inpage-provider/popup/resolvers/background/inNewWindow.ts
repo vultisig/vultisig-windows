@@ -1,3 +1,5 @@
+import { attempt } from '@lib/utils/attempt'
+
 import { PopupOptions } from '../../resolver'
 
 type ExecuteInput = {
@@ -80,25 +82,25 @@ export const inNewWindow = async <T>({
     if (tabs.length === 0) {
       windowId = undefined // Fall back to creating new window
     } else {
-      const tabId = tabs[0]?.id
+      const tabId = tabs[0].id
       if (!tabId) {
         windowId = undefined // Fall back to creating new window
       } else {
-        try {
-          await chrome.tabs.update(tabId, { url })
-        } catch {
+        const tabUpdateResult = await attempt(
+          chrome.tabs.update(tabId, { url })
+        )
+        if ('error' in tabUpdateResult) {
           windowId = undefined // Fall back to creating new window
         }
 
         if (windowId !== undefined) {
-          try {
-            await chrome.windows.update(windowId, { focused: true })
-          } catch {
+          const focusResult = await attempt(
+            chrome.windows.update(windowId, { focused: true })
+          )
+          if ('error' in focusResult) {
             // Best-effort fallback: try to create a new focused window
-            try {
-              const fallbackWindow = await new Promise<
-                chrome.windows.Window | undefined
-              >(resolve =>
+            const fallbackResult = await attempt(
+              new Promise<chrome.windows.Window | undefined>(resolve =>
                 chrome.windows.create(
                   {
                     url,
@@ -111,14 +113,13 @@ export const inNewWindow = async <T>({
                   resolve
                 )
               )
-              const fallbackId = fallbackWindow?.id
-              if (fallbackId) {
-                windowId = fallbackId
-              } else {
-                throw new Error('Failed to create fallback window')
-              }
-            } catch {
-              throw new Error('Failed to reuse or create popup window')
+            )
+            if ('data' in fallbackResult && fallbackResult.data?.id) {
+              windowId = fallbackResult.data.id
+            } else {
+              throw new Error(
+                `Failed to reuse or create popup window: ${focusResult.error instanceof Error ? focusResult.error.message : String(focusResult.error)}`
+              )
             }
           }
         }
