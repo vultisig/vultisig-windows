@@ -99,10 +99,15 @@ export const getAvailablePositionsForChain = (chain: Chain): DefiPosition[] => {
 }
 
 // Get positions by type for a specific chain
-export const getPositionsByType = (
-  chain: Chain,
+type GetPositionsByTypeInput = {
+  chain: Chain
   type: DefiPositionType
-): DefiPosition[] => {
+}
+
+export const getPositionsByType = ({
+  chain,
+  type,
+}: GetPositionsByTypeInput): DefiPosition[] => {
   const positions = availableDefiPositions[chain] || []
   return positions.filter(p => p.type === type)
 }
