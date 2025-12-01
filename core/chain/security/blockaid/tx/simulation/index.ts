@@ -1,6 +1,7 @@
-import { Chain, EvmChain } from '@core/chain/Chain'
+import { Chain } from '@core/chain/Chain'
 import { DeriveChainKind, getChainKind } from '@core/chain/ChainKind'
 
+import { BlockaidSupportedEvmChain } from '../../evmChains'
 import { BlockaidSimulationSupportedChain } from '../../simulationChains'
 import {
   BlockaidSimulationForChainKind,
@@ -21,7 +22,7 @@ const resolvers: ResolverMap = {
 }
 
 export function getTxBlockaidSimulation(
-  input: BlockaidTxSimulationInput<EvmChain>
+  input: BlockaidTxSimulationInput<BlockaidSupportedEvmChain>
 ): Promise<BlockaidSimulationForChainKind<'evm'>>
 
 export function getTxBlockaidSimulation(
