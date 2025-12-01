@@ -206,6 +206,11 @@ export const en = {
   default_chains: 'Default Chains',
   defi: 'DeFi',
   defi_portfolio: 'DeFi Portfolio',
+  defiChainTabs: {
+    bonded: 'Bonded',
+    staked: 'Staked',
+    lps: 'LPs',
+  },
   delete: 'Delete',
   delete_folder: 'Delete Folder',
   delete_folder_confirmation:
@@ -843,7 +848,7 @@ export const en = {
   select_chains: 'Select',
   select_positions: 'Select positions',
   select_positions_description:
-    'Enable at positions to view balances and manage assets.',
+    'Enable positions to view balances and manage assets.',
   select_destination_chain: 'Select Destination Chain',
   select_n_devices_one: 'Select {{count}} device',
   select_n_devices_other: 'Select {{count}} devices',

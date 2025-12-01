@@ -353,6 +353,11 @@ export const de = {
   default_chains: 'Standardketten',
   defi: 'DeFi',
   defi_portfolio: 'DeFi-Portfolio',
+  defiChainTabs: {
+    bonded: 'Bonded',
+    staked: 'Staked',
+    lps: 'LPs',
+  },
   delete: 'Löschen',
   delete_folder: 'Ordner löschen',
   delete_folder_confirmation:
