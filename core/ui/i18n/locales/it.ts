@@ -356,6 +356,11 @@ export const it = {
   default_chains: 'Catene predefinite',
   defi: 'DeFi',
   defi_portfolio: 'Portafoglio DeFi',
+  defiChainTabs: {
+    bonded: 'Bonded',
+    staked: 'Staked',
+    lps: 'LPs',
+  },
   delete: 'Eliminare',
   delete_folder: 'Elimina cartella',
   delete_folder_confirmation:

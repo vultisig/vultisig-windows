@@ -349,6 +349,11 @@ export const pt = {
   default_chains: 'Cadeias padrão',
   defi: 'DeFi',
   defi_portfolio: 'Portfólio DeFi',
+  defiChainTabs: {
+    bonded: 'Bonded',
+    staked: 'Staked',
+    lps: 'LPs',
+  },
   delete: 'Excluir',
   delete_folder: 'Excluir pasta',
   delete_folder_confirmation:
