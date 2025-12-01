@@ -28,11 +28,11 @@ export const ManageDefiPositionsPage = () => {
   const { togglePosition, isPending } = useToggleDefiPosition(chain)
 
   const bondPositions = useMemo(
-    () => getPositionsByType(chain, 'bond'),
+    () => getPositionsByType({ chain, type: 'bond' }),
     [chain]
   )
   const stakePositions = useMemo(
-    () => getPositionsByType(chain, 'stake'),
+    () => getPositionsByType({ chain, type: 'stake' }),
     [chain]
   )
 
