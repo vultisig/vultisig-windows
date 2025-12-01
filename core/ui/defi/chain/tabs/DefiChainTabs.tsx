@@ -5,21 +5,24 @@ import { CryptoWalletPenIcon } from '@lib/ui/icons/CryptoWalletPenIcon'
 import { HStack, hStack } from '@lib/ui/layout/Stack'
 import { IsActiveProp, IsDisabledProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled, { css, useTheme } from 'styled-components'
 
 import { useCurrentDefiChain } from '../useCurrentDefiChain'
-import { DefiChainPageTab, defiChainTabs } from './config'
+import { DefiChainPageTab, getDefiChainTabs } from './config'
 
 export const DefiChainTabs = () => {
+  const { t } = useTranslation()
   const [activeTab, setActiveTab] = useState<DefiChainPageTab>('bonded')
   const { colors } = useTheme()
   const navigate = useCoreNavigate()
   const chain = useCurrentDefiChain()
+  const tabs = useMemo(() => getDefiChainTabs(t), [t])
 
   return (
     <Tabs
-      tabs={defiChainTabs}
+      tabs={tabs}
       value={activeTab}
       onValueChange={setActiveTab}
       triggerSlot={({ tab: { label, disabled }, isActive }) => (
