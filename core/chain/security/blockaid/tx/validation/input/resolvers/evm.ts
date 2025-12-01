@@ -10,7 +10,7 @@ import { EvmChain } from '../../../../../../Chain'
 import { BlockaidTxValidationInput } from '../../resolver'
 import { BlockaidTxValidationInputResolver } from '../resolver'
 
-const blockaidEvnChain: Record<EvmChain, string> = {
+const blockaidEvmChain: Record<EvmChain, string> = {
   [EvmChain.Arbitrum]: 'arbitrum',
   [EvmChain.Avalanche]: 'avalanche',
   [EvmChain.Base]: 'base',
@@ -44,7 +44,7 @@ export const getEvmBlockaidTxValidationInput: BlockaidTxValidationInputResolver<
       method: 'eth_sendTransaction',
       params: [{ from: coin.address, to, value, data }],
     },
-    chain: blockaidEvnChain[chain],
+    chain: blockaidEvmChain[chain],
     metadata: {
       domain: productRootDomain,
     },
