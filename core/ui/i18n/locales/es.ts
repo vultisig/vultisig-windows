@@ -353,6 +353,11 @@ export const es = {
   default_chains: 'Cadenas predeterminadas',
   defi: 'DeFi',
   defi_portfolio: 'Portafolio DeFi',
+  defiChainTabs: {
+    bonded: 'Bonded',
+    staked: 'Staked',
+    lps: 'LPs',
+  },
   delete: 'Borrar',
   delete_folder: 'Eliminar carpeta',
   delete_folder_confirmation:

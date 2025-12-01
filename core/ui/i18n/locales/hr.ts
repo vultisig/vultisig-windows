@@ -348,6 +348,11 @@ export const hr = {
   default_chains: 'Zadani lanci',
   defi: 'DeFi',
   defi_portfolio: 'DeFi portfelj',
+  defiChainTabs: {
+    bonded: 'Bonded',
+    staked: 'Staked',
+    lps: 'LPs',
+  },
   delete: 'Izbrisati',
   delete_folder: 'Izbriši mapu',
   delete_folder_confirmation:
