@@ -304,6 +304,7 @@ export const pt = {
   clear: 'Claro',
   close: 'Fechar',
   coin_not_found_in_current_vault: 'Moeda não encontrada no cofre atual',
+  coin_not_found_in_any_vault: '{{ticker}} em {{chain}} não encontrado em nenhum cofre',
   collected_rewards: 'Recompensas acumuladas',
   coming_soon: 'Em breve',
   complete: 'Completo',

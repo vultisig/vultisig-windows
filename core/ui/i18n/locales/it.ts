@@ -311,6 +311,7 @@ export const it = {
   clear: 'Chiaro',
   close: 'Vicino',
   coin_not_found_in_current_vault: 'Moneta non trovata nel caveau attuale',
+  coin_not_found_in_any_vault: '{{ticker}} su {{chain}} non trovato in nessun caveau',
   collected_rewards: 'Ricompense raccolte',
   coming_soon: 'Prossimamente',
   complete: 'Completare',

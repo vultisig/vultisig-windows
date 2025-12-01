@@ -63,10 +63,10 @@ export const parseDeeplink = async (url: string): Promise<ParsedDeeplink> => {
     const queryParams = getRawQueryParams<SendDeeplinkParams>(url)
 
     const chain = shouldBePresent(
-      Object.values(Chain).find(
-        chain => areLowerCaseEqual(chain, queryParams.assetChain),
-        'chain'
-      )
+      Object.values(Chain).find(chain =>
+        areLowerCaseEqual(chain, queryParams.assetChain)
+      ),
+      'chain'
     )
 
     return {

@@ -309,6 +309,7 @@ export const es = {
   clear: 'Claro',
   close: 'Cerca',
   coin_not_found_in_current_vault: 'Moneda no encontrada en la bóveda actual',
+  coin_not_found_in_any_vault: '{{ticker}} en {{chain}} no encontrado en ninguna bóveda',
   collected_rewards: 'Recompensas acumuladas',
   coming_soon: 'Muy pronto',
   complete: 'Completo',

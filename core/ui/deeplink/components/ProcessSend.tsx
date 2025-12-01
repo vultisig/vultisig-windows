@@ -48,7 +48,10 @@ export const ProcessSend = ({ value }: ValueProp<SendDeeplinkData>) => {
         <FlowPageHeader title={t('send')} />
         <FlowErrorPageContent
           title={t('coin_not_found_in_current_vault')}
-          error={`${value.ticker} on ${value.chain} not found in any vault`}
+          error={t('coin_not_found_in_any_vault', {
+            ticker: value.ticker,
+            chain: value.chain,
+          })}
         />
       </>
     )
