@@ -71,17 +71,65 @@ export const inNewWindow = async <T>({
   // Check if there's an existing popup window we can reuse
   const existingWindowId = await findExistingPopupWindow()
 
-  let windowId: number
+  let windowId: number | undefined
   if (existingWindowId !== null) {
     // Reuse existing window by updating its tab URL and focusing it
     windowId = existingWindowId
     const tabs = await chrome.tabs.query({ windowId })
-    const tabId = tabs[0]?.id
-    if (tabId) {
-      await chrome.tabs.update(tabId, { url })
+
+    if (tabs.length === 0) {
+      windowId = undefined // Fall back to creating new window
+    } else {
+      const tabId = tabs[0]?.id
+      if (!tabId) {
+        windowId = undefined // Fall back to creating new window
+      } else {
+        try {
+          await chrome.tabs.update(tabId, { url })
+        } catch (error) {
+          windowId = undefined // Fall back to creating new window
+        }
+
+        if (windowId !== undefined) {
+          try {
+            await chrome.windows.update(windowId, { focused: true })
+          } catch (error) {
+            // Best-effort fallback: try to create a new focused window
+            try {
+              const fallbackWindow = await new Promise<
+                chrome.windows.Window | undefined
+              >(resolve =>
+                chrome.windows.create(
+                  {
+                    url,
+                    type: 'popup',
+                    height: windowHeight,
+                    width: windowWidth,
+                    focused: true,
+                    ...position,
+                  },
+                  resolve
+                )
+              )
+              const fallbackId = fallbackWindow?.id
+              if (fallbackId) {
+                windowId = fallbackId
+              } else {
+                throw new Error('Failed to create fallback window')
+              }
+            } catch (fallbackError) {
+              throw new Error(
+                `Failed to reuse or create popup window: ${error instanceof Error ? error.message : String(error)}`
+              )
+            }
+          }
+        }
+      }
     }
-    await chrome.windows.update(windowId, { focused: true })
-  } else {
+  }
+
+  // Create a new window if we couldn't reuse an existing one
+  if (existingWindowId === null || windowId === undefined) {
     const newWindow = await new Promise<chrome.windows.Window | undefined>(
       resolve =>
         chrome.windows.create(
