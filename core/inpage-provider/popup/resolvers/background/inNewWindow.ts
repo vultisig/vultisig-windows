@@ -86,14 +86,14 @@ export const inNewWindow = async <T>({
       } else {
         try {
           await chrome.tabs.update(tabId, { url })
-        } catch (error) {
+        } catch {
           windowId = undefined // Fall back to creating new window
         }
 
         if (windowId !== undefined) {
           try {
             await chrome.windows.update(windowId, { focused: true })
-          } catch (error) {
+          } catch {
             // Best-effort fallback: try to create a new focused window
             try {
               const fallbackWindow = await new Promise<
@@ -117,10 +117,8 @@ export const inNewWindow = async <T>({
               } else {
                 throw new Error('Failed to create fallback window')
               }
-            } catch (fallbackError) {
-              throw new Error(
-                `Failed to reuse or create popup window: ${error instanceof Error ? error.message : String(error)}`
-              )
+            } catch {
+              throw new Error('Failed to reuse or create popup window')
             }
           }
         }
