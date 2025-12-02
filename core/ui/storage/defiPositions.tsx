@@ -5,7 +5,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'
 
-export type DefiPositionType = 'bond' | 'stake' | 'lp'
+type DefiPositionType = 'bond' | 'stake' | 'lp'
 
 export type DefiPosition = {
   id: string
@@ -16,7 +16,7 @@ export type DefiPosition = {
 }
 
 // Define available positions for each chain
-export const availableDefiPositions: Record<Chain, DefiPosition[]> = {
+const availableDefiPositions: Record<Chain, DefiPosition[]> = {
   [Chain.THORChain]: [
     {
       id: 'thor-bond-rune',
@@ -140,7 +140,7 @@ export const useDefiPositions = (chain: Chain): string[] => {
   return data?.[chain] ?? []
 }
 
-export const useAllDefiPositions = (): DefiPositionsRecord => {
+const useAllDefiPositions = (): DefiPositionsRecord => {
   const { data } = useDefiPositionsQuery()
 
   return data ?? {}
@@ -177,18 +177,4 @@ export const useToggleDefiPosition = (chain: Chain) => {
   }
 
   return { togglePosition, isPending }
-}
-
-export const useSetDefiPositionsForChain = (chain: Chain) => {
-  const allPositions = useAllDefiPositions()
-  const { mutate: setDefiPositions, isPending } = useSetDefiPositionsMutation()
-
-  const setPositions = (positionIds: string[]) => {
-    setDefiPositions({
-      ...allPositions,
-      [chain]: positionIds,
-    })
-  }
-
-  return { setPositions, isPending }
 }
