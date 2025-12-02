@@ -106,7 +106,7 @@ export const DefiChainItem = ({ balance }: DefiChainItemProps) => {
 
 const StyledPanel = styled(Panel)`
   cursor: pointer;
-
+  max-height: 64px;
   transition: background-color 0.3s ease;
 
   &:hover {
