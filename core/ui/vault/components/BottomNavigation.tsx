@@ -34,7 +34,7 @@ export const BottomNavigation = ({
     if (tab === 'wallet') {
       navigate({ id: 'vault' })
     } else {
-      navigate({ id: 'defi' })
+      navigate({ id: 'defi', state: {} })
     }
   }
 
@@ -54,22 +54,34 @@ export const BottomNavigation = ({
                 </IconWrapper>
                 <Text size={10}>{t('wallet')}</Text>
               </SwitchButton>
-              <Tooltip
-                content={t('coming_soon')}
-                placement="top"
-                renderOpener={props => (
-                  <SwitchButton
-                    {...props}
-                    isActive={activeTab === 'defi'}
-                    isDisabled
-                  >
-                    <IconWrapper size={24}>
-                      <CoinsAddIcon />
-                    </IconWrapper>
-                    <Text size={10}>{t('defi')}</Text>
-                  </SwitchButton>
-                )}
-              />
+              {featureFlags.defiEnabled ? (
+                <SwitchButton
+                  isActive={activeTab === 'defi'}
+                  onClick={() => handleTabChange('defi')}
+                >
+                  <IconWrapper size={24}>
+                    <CoinsAddIcon />
+                  </IconWrapper>
+                  <Text size={10}>{t('defi')}</Text>
+                </SwitchButton>
+              ) : (
+                <Tooltip
+                  content={t('coming_soon')}
+                  placement="top"
+                  renderOpener={props => (
+                    <SwitchButton
+                      {...props}
+                      isActive={activeTab === 'defi'}
+                      isDisabled
+                    >
+                      <IconWrapper size={24}>
+                        <CoinsAddIcon />
+                      </IconWrapper>
+                      <Text size={10}>{t('defi')}</Text>
+                    </SwitchButton>
+                  )}
+                />
+              )}
             </SwitchContainer>
           ) : null}
           <CameraButton onClick={() => navigate({ id: 'uploadQr', state: {} })}>
@@ -94,24 +106,35 @@ export const BottomNavigation = ({
         >
           <Camera2Icon />
         </DesktopCameraButton>
-        {featureFlags.defi && (
-          <Tooltip
-            content={t('coming_soon')}
-            placement="top"
-            renderOpener={props => (
-              <SecondaryItemWrapper
-                {...props}
-                isActive={activeTab === 'defi'}
-                isDisabled
-              >
-                <CoinsAddIcon />
-                <Text as="span" size={10}>
-                  {t('defi')}
-                </Text>
-              </SecondaryItemWrapper>
-            )}
-          />
-        )}
+        {featureFlags.defi &&
+          (featureFlags.defiEnabled ? (
+            <SecondaryItemWrapper
+              isActive={activeTab === 'defi'}
+              onClick={() => handleTabChange('defi')}
+            >
+              <CoinsAddIcon />
+              <Text as="span" size={10}>
+                {t('defi')}
+              </Text>
+            </SecondaryItemWrapper>
+          ) : (
+            <Tooltip
+              content={t('coming_soon')}
+              placement="top"
+              renderOpener={props => (
+                <SecondaryItemWrapper
+                  {...props}
+                  isActive={activeTab === 'defi'}
+                  isDisabled
+                >
+                  <CoinsAddIcon />
+                  <Text as="span" size={10}>
+                    {t('defi')}
+                  </Text>
+                </SecondaryItemWrapper>
+              )}
+            />
+          ))}
       </InnerContainer>
     </Position>
   )

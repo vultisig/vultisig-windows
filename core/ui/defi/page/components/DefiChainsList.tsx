@@ -15,6 +15,9 @@ import { useDeferredValue, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { featureFlags } from '../../../featureFlags'
+import { defiProtocols } from '../../protocols/core'
+import { DefiProtocolItem } from './DefiProtocolItem'
 import { useSearchChain } from './state/searchChainProvider'
 
 export const DefiChainsList = () => {
@@ -122,6 +125,12 @@ export const DefiChainsList = () => {
 
   return (
     <List>
+      {defiProtocols.map(protocol => {
+        if (protocol === 'circle' && !featureFlags.circle) {
+          return null
+        }
+        return <DefiProtocolItem key={protocol} protocol={protocol} />
+      })}
       {filteredBalances.map(balance => (
         <VaultChainItem key={balance.chain} balance={balance} />
       ))}
