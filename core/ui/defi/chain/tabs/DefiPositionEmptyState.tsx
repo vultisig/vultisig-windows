@@ -1,8 +1,8 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Button } from '@lib/ui/buttons/Button'
+import { CryptoIcon } from '@lib/ui/icons/CryptoIcon'
 import { CryptoWalletPenIcon } from '@lib/ui/icons/CryptoWalletPenIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
-import { TargetIcon } from '@lib/ui/icons/TargetIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -19,9 +19,9 @@ export const DefiPositionEmptyState = () => {
   return (
     <EmptyWrapper>
       <VStack gap={12} alignItems="center">
-        <IconWrapper size={48} color="buttonHover">
-          <TargetIcon />
-        </IconWrapper>
+        <IconCircle>
+          <CryptoIcon />
+        </IconCircle>
         <VStack gap={8}>
           <Text centerHorizontally size={17} weight="600">
             {t('no_positions_selected')}
@@ -59,4 +59,16 @@ const EmptyWrapper = styled.div`
   padding: 40px 20px;
   background-color: ${getColor('foreground')};
   border-radius: 12px;
+`
+
+const IconCircle = styled.div`
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: ${getColor('primaryAccent')};
+  border: 1.5px solid ${getColor('primaryAccent')};
 `
