@@ -43,98 +43,93 @@ export const BottomNavigation = ({
       <InnerContainer>
         {/* Mobile Layout */}
         <MobileRow>
-          {featureFlags.defi ? (
-            <SwitchContainer>
+          <SwitchContainer>
+            <SwitchButton
+              isActive={activeTab === 'wallet'}
+              onClick={() => handleTabChange('wallet')}
+            >
+              <IconWrapper size={24}>
+                <WalletIcon />
+              </IconWrapper>
+              <Text size={10}>{t('wallet')}</Text>
+            </SwitchButton>
+            {featureFlags.defiEnabled ? (
               <SwitchButton
-                isActive={activeTab === 'wallet'}
-                onClick={() => handleTabChange('wallet')}
+                isActive={activeTab === 'defi'}
+                onClick={() => handleTabChange('defi')}
               >
                 <IconWrapper size={24}>
-                  <WalletIcon />
+                  <CoinsAddIcon />
                 </IconWrapper>
-                <Text size={10}>{t('wallet')}</Text>
+                <Text size={10}>{t('defi')}</Text>
               </SwitchButton>
-              {featureFlags.defiEnabled ? (
-                <SwitchButton
-                  isActive={activeTab === 'defi'}
-                  onClick={() => handleTabChange('defi')}
-                >
-                  <IconWrapper size={24}>
-                    <CoinsAddIcon />
-                  </IconWrapper>
-                  <Text size={10}>{t('defi')}</Text>
-                </SwitchButton>
-              ) : (
-                <Tooltip
-                  content={t('coming_soon')}
-                  placement="top"
-                  renderOpener={props => (
-                    <SwitchButton
-                      {...props}
-                      isActive={activeTab === 'defi'}
-                      isDisabled
-                    >
-                      <IconWrapper size={24}>
-                        <CoinsAddIcon />
-                      </IconWrapper>
-                      <Text size={10}>{t('defi')}</Text>
-                    </SwitchButton>
-                  )}
-                />
-              )}
-            </SwitchContainer>
-          ) : null}
+            ) : (
+              <Tooltip
+                content={t('coming_soon')}
+                placement="top"
+                renderOpener={props => (
+                  <SwitchButton
+                    {...props}
+                    isActive={activeTab === 'defi'}
+                    isDisabled
+                  >
+                    <IconWrapper size={24}>
+                      <CoinsAddIcon />
+                    </IconWrapper>
+                    <Text size={10}>{t('defi')}</Text>
+                  </SwitchButton>
+                )}
+              />
+            )}
+          </SwitchContainer>
           <CameraButton onClick={() => navigate({ id: 'uploadQr', state: {} })}>
             <Camera2Icon />
           </CameraButton>
         </MobileRow>
 
         {/* Desktop Layout */}
-        {featureFlags.defi && (
-          <SecondaryItemWrapper
-            isActive={activeTab === 'wallet'}
-            onClick={() => handleTabChange('wallet')}
-          >
-            <WalletIcon />
-            <Text as="span" size={10}>
-              {t('wallet')}
-            </Text>
-          </SecondaryItemWrapper>
-        )}
+        <SecondaryItemWrapper
+          isActive={activeTab === 'wallet'}
+          onClick={() => handleTabChange('wallet')}
+        >
+          <WalletIcon />
+          <Text as="span" size={10}>
+            {t('wallet')}
+          </Text>
+        </SecondaryItemWrapper>
         <DesktopCameraButton
           onClick={() => navigate({ id: 'uploadQr', state: {} })}
         >
           <Camera2Icon />
         </DesktopCameraButton>
-        {featureFlags.defi &&
-          (featureFlags.defiEnabled ? (
-            <SecondaryItemWrapper
-              isActive={activeTab === 'defi'}
-              onClick={() => handleTabChange('defi')}
-            >
-              <CoinsAddIcon />
-              <Text as="span" size={10}>
-                {t('defi')}
-              </Text>
-            </SecondaryItemWrapper>
-          ) : (
-            <Tooltip
-              content={t('coming_soon')}
-              placement="top"
-              renderOpener={props => (
-                <SecondaryItemWrapper
-                  {...props}
-                  isActive={activeTab === 'defi'}
-                  isDisabled
-                >
-                  <CoinsAddIcon />
-                  <Text as="span" size={10}>
-                    {t('defi')}
-                  </Text>
-                </SecondaryItemWrapper>
-              )}
-            />
-          ))}
+        {featureFlags.defiEnabled ? (
+          <SecondaryItemWrapper
+            isActive={activeTab === 'defi'}
+            onClick={() => handleTabChange('defi')}
+          >
+            <CoinsAddIcon />
+            <Text as="span" size={10}>
+              {t('defi')}
+            </Text>
+          </SecondaryItemWrapper>
+        ) : (
+          <Tooltip
+            content={t('coming_soon')}
+            placement="top"
+            renderOpener={props => (
+              <SecondaryItemWrapper
+                {...props}
+                isActive={activeTab === 'defi'}
+                isDisabled
+              >
+                <CoinsAddIcon />
+                <Text as="span" size={10}>
+                  {t('defi')}
+                </Text>
+              </SecondaryItemWrapper>
+            )}
+          />
+        )}
       </InnerContainer>
     </Position>
   )
