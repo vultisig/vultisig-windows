@@ -1256,6 +1256,8 @@ export const de = {
   while_you_wait_vultisig_is: 'Während Sie warten, ist Vultisig...',
   with_these_devices: 'Mit diesen Geräten',
   withdraw_ruji_rewards: 'RUJI-Prämien auszahlen',
+  add_cacao_pool: 'Zum CACAO-Pool hinzufügen',
+  remove_cacao_pool: 'Aus dem CACAO-Pool entfernen',
   wrong_address_for_chain: 'Falsche Adresse für die ausgewählte Kette',
   wrong_vault_try_again: 'Falscher Tresor oder falsches Gerät gekoppelt.',
   you_are_sending: 'Du sendest',
