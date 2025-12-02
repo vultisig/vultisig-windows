@@ -1,7 +1,6 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Tabs } from '@lib/ui/base/Tabs'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { CryptoWalletPenIcon } from '@lib/ui/icons/CryptoWalletPenIcon'
 import { HStack, hStack } from '@lib/ui/layout/Stack'
 import { IsActiveProp, IsDisabledProp } from '@lib/ui/props'
@@ -70,7 +69,7 @@ const TabsHeader = styled.div`
   margin-bottom: 16px;
 `
 
-const TriggerItem = styled(UnstyledButton)<IsActiveProp & IsDisabledProp>`
+const TriggerItem = styled.div<IsActiveProp & IsDisabledProp>`
   width: fit-content;
   padding-bottom: 6px;
   cursor: pointer;
