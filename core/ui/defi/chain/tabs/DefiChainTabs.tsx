@@ -69,7 +69,7 @@ const TabsHeader = styled.div`
   margin-bottom: 16px;
 `
 
-const TriggerItem = styled.div<IsActiveProp & IsDisabledProp>`
+const TriggerItem = styled.button<IsActiveProp & IsDisabledProp>`
   width: fit-content;
   padding-bottom: 6px;
   cursor: pointer;
