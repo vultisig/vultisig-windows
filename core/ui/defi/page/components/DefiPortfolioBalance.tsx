@@ -24,6 +24,9 @@ export const DefiPortfolioBalance = () => {
           src="/core/images/defi/homepage-banner.svg"
           width="100%"
           height="100%"
+          style={{
+            objectFit: 'cover',
+          }}
         />
       </ImageWrapper>
       <Content alignItems="center" gap={12}>
