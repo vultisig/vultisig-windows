@@ -1,3 +1,4 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
 import {
   buildSwapKeysignPayload,
@@ -35,7 +36,10 @@ export const useSwapKeysignPayloadQuery = (swapQuote: SwapQuote) => {
     () => ({
       fromCoin,
       toCoin,
-      amount: shouldBePresent(fromAmount),
+      amount: fromChainAmount(
+        shouldBePresent(fromAmount, 'fromAmount'),
+        fromCoin.decimals
+      ),
       swapQuote,
       vaultId: getVaultId(vault),
       localPartyId: vault.localPartyId,

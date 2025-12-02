@@ -2,9 +2,12 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
-import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
+import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { useCallback, useState } from 'react'
+import { multiplyBigInt } from '@lib/utils/bigint/bigIntMultiplyByNumber'
+import { bigIntToDecimalString } from '@lib/utils/bigint/bigIntToDecimalString'
+import { decimalStringToBigInt } from '@lib/utils/bigint/decimalStringToBigInt'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { useFromAmount } from '../../state/fromAmount'
@@ -16,34 +19,48 @@ import { SwapFiatAmount } from './SwapFiatAmount'
 export const ManageFromAmount = () => {
   const [value, setValue] = useFromAmount()
   const [fromCoinKey] = useSwapFromCoin()
-  const valueAsString = value?.toString() ?? ''
-  const [inputValue, setInputValue] = useState<string>(valueAsString)
-  const isFeeCoinSelected = isFeeCoin(fromCoinKey)
-
   const swapCoin = useCurrentVaultCoin(fromCoinKey)
   const { decimals } = swapCoin
+  const previousValueRef = useRef<bigint | null>(null)
+
+  const fullDecimalString =
+    value !== null ? bigIntToDecimalString(value, decimals) : ''
+  const trimmedDecimalString = fullDecimalString.replace(/\.?0+$/, '')
+  const [inputValue, setInputValue] = useState<string>(trimmedDecimalString)
+  const isFeeCoinSelected = isFeeCoin(fromCoinKey)
+
+  useEffect(() => {
+    // Only update input if the value changed externally (not from user typing)
+    // We detect this by checking if the value changed but the input doesn't match
+    if (value !== previousValueRef.current) {
+      const currentInputAsBigInt =
+        inputValue === '' ? null : decimalStringToBigInt(inputValue, decimals)
+      if (currentInputAsBigInt !== value) {
+        // Remove trailing zeros from the decimal string for display
+        setInputValue(trimmedDecimalString)
+      }
+      previousValueRef.current = value
+    }
+  }, [value, trimmedDecimalString, inputValue, decimals])
 
   const handleInputValueChange = useCallback(
     (value: string) => {
       value = value.replace(/-/g, '')
-
       if (value === '') {
         setInputValue('')
-        if (value !== inputValue) setValue?.(null)
+        setValue?.(null)
         return
       }
 
-      const valueAsNumber = parseFloat(value)
-      if (isNaN(valueAsNumber)) {
+      try {
+        const chainAmount = decimalStringToBigInt(value, decimals)
+        setInputValue(value)
+        setValue?.(chainAmount)
+      } catch {
         return
       }
-
-      setInputValue(
-        valueAsNumber.toString() !== value ? value : valueAsNumber.toString()
-      )
-      setValue?.(valueAsNumber)
     },
-    [inputValue, setValue]
+    [decimals, setValue]
   )
 
   const suggestions = [0.25, 0.5, isFeeCoinSelected ? 0.75 : 1]
@@ -52,14 +69,20 @@ export const ManageFromAmount = () => {
     <VStack gap={4} alignItems="flex-end">
       <AmountContainer gap={6} alignItems="flex-end">
         <PositionedAmountInput
-          type="number"
+          type="text"
+          inputMode="decimal"
           placeholder={'0'}
           onWheel={event => event.currentTarget.blur()}
-          value={value}
-          onChange={e => handleInputValueChange(e.target.value)}
+          value={inputValue}
+          onValueChange={handleInputValueChange}
         />
         {value !== null && (
-          <SwapFiatAmount value={{ ...fromCoinKey, amount: value }} />
+          <SwapFiatAmount
+            value={{
+              ...fromCoinKey,
+              amount: fromChainAmount(value, decimals),
+            }}
+          />
         )}
       </AmountContainer>
       <SwapCoinBalanceDependant
@@ -70,11 +93,15 @@ export const ManageFromAmount = () => {
           <HStack alignItems="center" gap={4}>
             {suggestions.map(suggestion => (
               <AmountSuggestion
-                onClick={() =>
-                  handleInputValueChange(
-                    String(fromChainAmount(amount, decimals) * suggestion)
+                onClick={() => {
+                  const suggestionAmount = multiplyBigInt(amount, suggestion)
+                  const decimalString = bigIntToDecimalString(
+                    suggestionAmount,
+                    decimals
                   )
-                }
+                  const trimmed = decimalString.replace(/\.?0+$/, '')
+                  handleInputValueChange(trimmed)
+                }}
                 key={suggestion}
                 value={suggestion}
               />
@@ -86,7 +113,7 @@ export const ManageFromAmount = () => {
   )
 }
 
-const PositionedAmountInput = styled(AmountTextInput)`
+const PositionedAmountInput = styled(TextInput)`
   text-align: right;
   border: none;
   font-family: inherit;
