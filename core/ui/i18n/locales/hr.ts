@@ -1244,4 +1244,6 @@ export const hr = {
   unlock_discount_tier_description_ultimate:
     'Držanjem {{minBalance}} otključat ćete {{tier}} razinu i dobiti <b>potpuno oslobađanje od Vultisig naknade</b> za sve swapove.',
   ultimate: 'Krajnji',
+  vault_settings_language_settings_subtitle_zh: 'kineski',
+  vault_settings_language_settings_title_zh: '中文',
 }

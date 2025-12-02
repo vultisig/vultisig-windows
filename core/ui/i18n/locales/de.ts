@@ -1270,4 +1270,6 @@ export const de = {
   unlock_discount_tier_description_ultimate:
     'Mit einem Guthaben von {{minBalance}} schalten Sie die Stufe {{tier}} frei und erhalten einen <b>vollständigen Vultisig-Gebührenverzicht</b> für alle Tauschgeschäfte.',
   ultimate: 'Ultimativ',
+  vault_settings_language_settings_subtitle_zh: 'chinesisch',
+  vault_settings_language_settings_title_zh: '中文',
 }
