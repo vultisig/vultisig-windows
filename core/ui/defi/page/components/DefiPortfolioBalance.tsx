@@ -82,8 +82,9 @@ const ImageWrapper = styled.div`
   width: 100%;
   position: absolute;
   inset: 0;
+  border-radius: 16px;
 
   & > img {
-    object-fit: cover;
+    border-radius: 16px;
   }
 `
