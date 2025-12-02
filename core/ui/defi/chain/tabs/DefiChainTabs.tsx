@@ -25,8 +25,8 @@ export const DefiChainTabs = () => {
       tabs={tabs}
       value={activeTab}
       onValueChange={setActiveTab}
-      triggerSlot={({ tab: { label, disabled }, isActive }) => (
-        <TriggerItem isActive={isActive} isDisabled={disabled}>
+      triggerSlot={({ tab: { label, disabled }, isActive, ...props }) => (
+        <TriggerItem {...props} isActive={isActive} isDisabled={disabled}>
           <Text
             size={14}
             as="span"
