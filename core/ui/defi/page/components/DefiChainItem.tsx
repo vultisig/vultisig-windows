@@ -1,5 +1,4 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { Chain } from '@core/chain/Chain'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
@@ -42,7 +41,7 @@ export const DefiChainItem = ({ balance }: DefiChainItemProps) => {
   )
 
   const handleClick = () => {
-    navigate({ id: 'defiChainDetail', state: { chain: chain as Chain } })
+    navigate({ id: 'defiChainDetail', state: { chain } })
   }
 
   return (
