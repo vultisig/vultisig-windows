@@ -199,12 +199,18 @@ export const en = {
   custom: 'Custom Action',
   custom_token: 'Custom Token',
   customize_chains: 'Customize chains',
+  customize_positions: 'Customize positions',
   dapp_name: 'dApp Name',
   decrypting_vault_keyshares: 'Decrypting vault keyshares...',
   deeplink: 'Deeplink',
   default_chains: 'Default Chains',
   defi: 'DeFi',
   defi_portfolio: 'DeFi Portfolio',
+  defiChainTabs: {
+    bonded: 'Bonded',
+    staked: 'Staked',
+    lps: 'LPs',
+  },
   delete: 'Delete',
   delete_folder: 'Delete Folder',
   delete_folder_confirmation:
@@ -630,6 +636,10 @@ export const en = {
   no_tokens_selected: 'No tokens selected',
   no_tokens_selected_description:
     "You've disabled all tokens. Make sure that the token you're looking for is enabled.",
+  no_positions_found: 'No positions found',
+  no_positions_selected: 'No positions selected',
+  no_positions_selected_description:
+    "You've disabled all positions for this chain. Enable at least one position to view balances and manage actions.",
   no_vaults: 'No vaults yet',
   no_vaults_desc:
     'Your vaults will appear here. Start by creating one or importing an existing vault',
@@ -836,6 +846,9 @@ export const en = {
   select_backup_file: 'Import your vault share',
   select_chain: 'Select Chain',
   select_chains: 'Select',
+  select_positions: 'Select positions',
+  select_positions_description:
+    'Enable positions to view balances and manage assets.',
   select_destination_chain: 'Select Destination Chain',
   select_n_devices_one: 'Select {{count}} device',
   select_n_devices_other: 'Select {{count}} devices',

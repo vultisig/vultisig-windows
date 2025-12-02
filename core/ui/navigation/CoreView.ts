@@ -71,7 +71,9 @@ export type CoreView =
   | { id: 'uploadQr'; state: { title?: string } }
   | { id: 'vault' }
   | { id: 'defi'; state: { protocol?: DefiProtocol } }
+  | { id: 'defiChainDetail'; state: { chain: Chain } }
   | { id: 'manageDefiChains' }
+  | { id: 'manageDefiPositions'; state: { chain: Chain } }
   | { id: 'vaultBackup' }
   | { id: 'vaultsBackup' }
   | { id: 'selectVaultsBackup' }

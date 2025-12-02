@@ -34,7 +34,7 @@ export const DefiProtocolItem = ({ protocol }: DefiProtocolItemProps) => {
   return (
     <StyledPanel onClick={handleClick}>
       <HStack fullWidth alignItems="center" gap={12}>
-        <IconWrapper style={{ fontSize: 32 }}>
+        <IconWrapper size={32}>
           <Icon />
         </IconWrapper>
 
@@ -54,6 +54,7 @@ export const DefiProtocolItem = ({ protocol }: DefiProtocolItemProps) => {
 
 const StyledPanel = styled(Panel)`
   cursor: pointer;
+  max-height: 64px;
 
   transition: background-color 0.3s ease;
 

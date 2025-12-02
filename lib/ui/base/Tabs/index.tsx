@@ -49,7 +49,12 @@ export function Tabs<T extends readonly Tab<string>[]>({
   const triggerContent = useMemo(
     () =>
       tabs.map(tab => (
-        <RadixTabs.Trigger key={tab.value} value={tab.value} asChild>
+        <RadixTabs.Trigger
+          key={tab.value}
+          value={tab.value}
+          disabled={tab.disabled}
+          asChild
+        >
           <TriggerComponent tab={tab} isActive={tab.value === value} />
         </RadixTabs.Trigger>
       )),

@@ -6,6 +6,7 @@ import { CoinsStorage } from './coins'
 import { CurrentVaultIdStorage } from './currentVaultId'
 import { DefaultChainsStorage } from './defaultChains'
 import { DefiChainsStorage } from './defiChains'
+import { DefiPositionsStorage } from './defiPositions'
 import { DismissedBannersStorage } from './dismissedBanners'
 import { FiatCurrencyStorage } from './fiatCurrency'
 import { LanguageStorage } from './language'
@@ -18,6 +19,7 @@ import { VaultsStorage } from './vaults'
 
 export type CoreStorage = CoinFinderIgnoreStorage &
   DefiChainsStorage &
+  DefiPositionsStorage &
   FiatCurrencyStorage &
   CurrentVaultIdStorage &
   VaultsStorage &
