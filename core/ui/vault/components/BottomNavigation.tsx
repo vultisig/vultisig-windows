@@ -34,7 +34,7 @@ export const BottomNavigation = ({
     if (tab === 'wallet') {
       navigate({ id: 'vault' })
     } else {
-      navigate({ id: 'defi' })
+      navigate({ id: 'defi', state: {} })
     }
   }
 

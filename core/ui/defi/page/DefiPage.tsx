@@ -1,3 +1,5 @@
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
+import { CirclePage } from '@core/ui/vault/settings/CirclePage/CirclePage'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useRef } from 'react'
@@ -13,12 +15,22 @@ import { DefiPageHeader } from './components/DefiPageHeader'
 export const DefiPage = () => {
   const vault = useCurrentVault()
   const scrollContainerRef = useRef<HTMLDivElement>(null!)
+  const [{ protocol }] = useCoreViewState<'defi'>()
 
   return (
     <Wrapper justifyContent="space-between" flexGrow>
       <VStack flexGrow>
-        <DefiPageHeader vault={vault} scrollContainerRef={scrollContainerRef} />
-        <DefiOverview scrollContainerRef={scrollContainerRef} />
+        {protocol === 'circle' ? (
+          <CirclePage />
+        ) : (
+          <>
+            <DefiPageHeader
+              vault={vault}
+              scrollContainerRef={scrollContainerRef}
+            />
+            <DefiOverview scrollContainerRef={scrollContainerRef} />
+          </>
+        )}
       </VStack>
       <BottomNavigation activeTab="defi" />
     </Wrapper>
