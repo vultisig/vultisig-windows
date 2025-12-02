@@ -69,6 +69,6 @@ const IconCircle = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 24px;
-  color: ${getColor('primaryAccent')};
-  border: 1.5px solid ${getColor('primaryAccent')};
+  color: ${getColor('primary')};
+  border: 1.5px solid ${getColor('primary')};
 `
