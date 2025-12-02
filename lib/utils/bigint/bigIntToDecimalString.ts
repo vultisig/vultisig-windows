@@ -3,6 +3,9 @@ export const bigIntToDecimalString = (
   decimals: number
 ): string => {
   const amountString = amount.toString()
+  if (decimals === 0) {
+    return amountString
+  }
   const isNegative = amount < 0n
   const absoluteAmount = isNegative ? amountString.slice(1) : amountString
 

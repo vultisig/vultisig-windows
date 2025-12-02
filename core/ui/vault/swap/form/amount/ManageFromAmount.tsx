@@ -25,7 +25,9 @@ export const ManageFromAmount = () => {
 
   const fullDecimalString =
     value !== null ? bigIntToDecimalString(value, decimals) : ''
-  const trimmedDecimalString = fullDecimalString.replace(/\.?0+$/, '')
+  const trimmedDecimalString = fullDecimalString.includes('.')
+    ? fullDecimalString.replace(/\.?0+$/, '')
+    : fullDecimalString
   const [inputValue, setInputValue] = useState<string>(trimmedDecimalString)
   const isFeeCoinSelected = isFeeCoin(fromCoinKey)
 
@@ -99,7 +101,9 @@ export const ManageFromAmount = () => {
                     suggestionAmount,
                     decimals
                   )
-                  const trimmed = decimalString.replace(/\.?0+$/, '')
+                  const trimmed = decimalString.includes('.')
+                    ? decimalString.replace(/\.?0+$/, '')
+                    : decimalString
                   handleInputValueChange(trimmed)
                 }}
                 key={suggestion}
