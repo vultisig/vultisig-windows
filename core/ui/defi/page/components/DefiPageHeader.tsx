@@ -65,12 +65,16 @@ export const DefiPageHeader = ({
 
   const headerControls = (
     <HStack gap={4} alignItems="center">
-      <IconButton onClick={() => {}}>
+      <IconButton size="lg" kind="action" onClick={() => {}}>
         <IconWrapper size={24}>
           <CalendarIcon />
         </IconWrapper>
       </IconButton>
-      <IconButton onClick={() => navigate({ id: 'settings' })}>
+      <IconButton
+        size="lg"
+        kind="action"
+        onClick={() => navigate({ id: 'settings' })}
+      >
         <IconWrapper size={24}>
           <SettingsIcon />
         </IconWrapper>
