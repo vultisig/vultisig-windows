@@ -16,7 +16,7 @@ export type DefiPosition = {
 }
 
 // Define available positions for each chain
-const availableDefiPositions: Record<Chain, DefiPosition[]> = {
+const availableDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
   [Chain.THORChain]: [
     {
       id: 'thor-bond-rune',
@@ -91,7 +91,7 @@ const availableDefiPositions: Record<Chain, DefiPosition[]> = {
       chain: Chain.MayaChain,
     },
   ],
-} as Record<Chain, DefiPosition[]>
+}
 
 // Get positions for a specific chain
 export const getAvailablePositionsForChain = (chain: Chain): DefiPosition[] => {
