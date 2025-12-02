@@ -41,7 +41,6 @@ import { ManagePasscodeEncryptionPage } from '../passcodeEncryption/manage/Manag
 import { RequestFastVaultBackup } from '../vault/backup/fast/request'
 import { DepositActionProvider } from '../vault/deposit/providers/DepositActionProvider'
 import { DepositCoinProvider } from '../vault/deposit/providers/DepositCoinProvider'
-import { CirclePage } from '../vault/settings/CirclePage/CirclePage'
 import { ReferralsGuard } from '../vault/settings/referral/providers/ReferralsGuard'
 import { ReferralPage } from '../vault/settings/referral/ReferralsPage'
 import { FaqVaultPage } from '../vault/settings/vaultFaq/FaqVaultPage'
@@ -50,7 +49,6 @@ import { VultDiscountPage } from '../vult/discount/page'
 
 export type SharedViewId = Extract<
   CoreViewId,
-  | 'circle'
   | 'addCustomToken'
   | 'address'
   | 'addressBook'
@@ -101,7 +99,6 @@ export const sharedViews: Views<SharedViewId> = {
       <ReferralPage />
     </ReferralsGuard>
   ),
-  circle: CirclePage,
   addCustomToken: AddCustomTokenPage,
   address: AddressPage,
   addressBook: AddressBookPage,

@@ -1,5 +1,4 @@
 import { Chain } from '@core/chain/Chain'
-import { featureFlags } from '@core/ui/featureFlags'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useDefiChains } from '@core/ui/storage/defiChains'
 import { VaultChainItem } from '@core/ui/vault/page/components/VaultChainItem'
@@ -16,6 +15,8 @@ import { useDeferredValue, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { featureFlags } from '../../../featureFlags'
+import { defiProtocols } from '../../protocols/core'
 import { DefiProtocolItem } from './DefiProtocolItem'
 import { useSearchChain } from './state/searchChainProvider'
 
@@ -124,7 +125,12 @@ export const DefiChainsList = () => {
 
   return (
     <List>
-      {featureFlags.circle && <DefiProtocolItem protocol="circle" />}
+      {defiProtocols.map(protocol => {
+        if (protocol === 'circle' && !featureFlags.circle) {
+          return null
+        }
+        return <DefiProtocolItem key={protocol} protocol={protocol} />
+      })}
       {filteredBalances.map(balance => (
         <VaultChainItem key={balance.chain} balance={balance} />
       ))}

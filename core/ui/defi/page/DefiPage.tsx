@@ -1,5 +1,5 @@
+import { CircleView } from '@core/ui/defi/protocols/circle/CircleView'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
-import { CirclePage } from '@core/ui/vault/settings/CirclePage/CirclePage'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useRef } from 'react'
@@ -21,7 +21,7 @@ export const DefiPage = () => {
     <Wrapper justifyContent="space-between" flexGrow>
       <VStack flexGrow>
         {protocol === 'circle' ? (
-          <CirclePage />
+          <CircleView />
         ) : (
           <>
             <DefiPageHeader
