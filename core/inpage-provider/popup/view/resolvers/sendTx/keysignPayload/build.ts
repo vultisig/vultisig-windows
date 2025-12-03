@@ -29,6 +29,7 @@ import {
 import { attempt } from '@lib/utils/attempt'
 import { matchDiscriminatedUnion } from '@lib/utils/matchDiscriminatedUnion'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
+import { normalizeNonEmptyString } from '@lib/utils/string/normalizeNonEmptyString'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { toUtf8String } from 'ethers'
@@ -144,22 +145,40 @@ export const buildSendTxKeysignPayload = async ({
     customTxData,
     {
       regular: ({ transactionDetails, isEvmContractCall }) => {
-        const { data } = transactionDetails
-        console.log('data:', data)
-        if (!data || data === '0x') {
-          return undefined
-        }
-        console.log('data:', data)
-        if (
-          getChainKind(chain) === 'evm' &&
-          (!data.startsWith('0x') || !isEvmContractCall)
-        ) {
-          const result = attempt(() => toUtf8String(data))
-          if ('data' in result) {
-            return result.data
+        const { data, memo: txMemo, msgPayload } = transactionDetails
+
+        const memoFromData = (() => {
+          if (!data || data === '0x') {
+            return undefined
           }
+
+          if (
+            getChainKind(chain) === 'evm' &&
+            (!data.startsWith('0x') || !isEvmContractCall)
+          ) {
+            const result = attempt(() => toUtf8String(data))
+            if ('data' in result) {
+              return result.data
+            }
+          }
+
+          return data
+        })()
+
+        if (memoFromData) {
+          return memoFromData
         }
-        return data
+
+        const memoFromTx = normalizeNonEmptyString(txMemo)
+        if (memoFromTx) {
+          return memoFromTx
+        }
+
+        if (msgPayload?.case === CosmosMsgType.THORCHAIN_MSG_DEPOSIT) {
+          return normalizeNonEmptyString(msgPayload.value.memo)
+        }
+
+        return undefined
       },
       solana: () => undefined,
       psbt: psbt => {
