@@ -8,6 +8,7 @@ import { parseOneInchSwapInstruction } from './instructionParser/parse1inchSwapI
 import { parseSystemInstruction } from './instructionParser/parseSystemInstruction'
 import { parseTokenInstruction } from './instructionParser/parseTokenInstruction'
 import { oneInchSwapProgram } from './swapPrograms'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 
 type Input = {
   tx: TW.Solana.Proto.RawMessage.IMessageLegacy
@@ -26,7 +27,7 @@ export const parseProgramCall = async ({
 }: Input) => {
   if (!tx.instructions || tx.instructions.length === 0)
     throw new Error('Instructions not found')
-
+  console.log('tx.instructions', tx.instructions)
   for (const instruction of tx.instructions) {
     const program = keys[shouldBePresent(instruction.programId)]
     // parse 1inch swap instruction
@@ -44,5 +45,16 @@ export const parseProgramCall = async ({
       return await parseSystemInstruction({ instruction, keys })
     }
   }
-  throw new Error('Invalid Solana transaction: no supported instruction found')
+  console.error('could not parse transaction, returning fallback swap')
+  return {
+    swap: {
+      authority: keys[0].toBase58(),
+      inAmount: '0',
+      inputCoin: chainFeeCoin.Solana,
+      outAmount: '0',
+      outputCoin: chainFeeCoin.Solana,
+      data,
+      swapProvider,
+    },
+  }
 }
