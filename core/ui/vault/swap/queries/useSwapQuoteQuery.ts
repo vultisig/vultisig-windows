@@ -7,6 +7,8 @@ import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPric
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useSwapAffiliateBpsQuery } from '@core/ui/vult/discount/queries/swapAffiliateBps'
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { bigIntToNumber } from '@lib/utils/bigint/bigIntToNumber'
 
 import { useAssertCurrentVaultId } from '../../../storage/currentVaultId'
 import { useFriendReferralQuery } from '../../../storage/referrals'
@@ -46,14 +48,20 @@ export const useSwapQuoteQuery = () => {
       affiliateBps: appAffiliateBpsQuery.data,
     },
     ({ fromAmount, fromCoinUsdPrice, referral, affiliateBps }) => {
+      const fromAmountNumber =
+        fromAmount !== undefined
+          ? bigIntToNumber(fromAmount, fromCoin.decimals)
+          : undefined
+
       const isAffiliate =
         fromCoinUsdPrice &&
-        fromAmount * fromCoinUsdPrice >= swapConfig.minUsdAffiliateAmount
+        fromAmountNumber !== undefined &&
+        fromAmountNumber * fromCoinUsdPrice >= swapConfig.minUsdAffiliateAmount
 
       const input: FindSwapQuoteInput = {
         from: fromCoin,
         to: toCoin,
-        amount: fromAmount,
+        amount: shouldBePresent(fromAmount, 'fromAmount'),
         referral: referral ?? undefined,
         affiliateBps: isAffiliate ? affiliateBps : undefined,
       }

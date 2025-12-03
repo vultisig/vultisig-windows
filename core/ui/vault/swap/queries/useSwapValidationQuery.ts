@@ -1,4 +1,3 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { t } from 'i18next'
@@ -29,19 +28,17 @@ export const useSwapValidationQuery = () => {
           return t('amount_required')
         }
 
-        if (amount <= 0) {
+        if (amount <= 0n) {
           return t('amount_required')
         }
 
-        const maxAmount = fromChainAmount(balance, coin.decimals)
-
-        if (amount > maxAmount) {
+        if (amount > balance) {
           return t('insufficient_balance')
         }
 
         return null
       },
-      [amount, coin.decimals]
+      [amount]
     )
   )
 }
