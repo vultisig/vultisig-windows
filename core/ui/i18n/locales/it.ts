@@ -442,6 +442,8 @@ export const it = {
   expires_on: 'Scade il',
   extension_vault_import_restriction:
     "Solo i vault DKLS possono essere importati nell'estensione",
+  fallback_swap_warning:
+    'Non siamo riusciti a simulare questa transazione. Procedere con cautela.',
   failed_to_confirm_email_code:
     "Impossibile confermare il codice di verifica dell'e-mail",
   failed_to_connect_with_server: 'Impossibile connettersi al server',

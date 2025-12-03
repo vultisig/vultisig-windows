@@ -433,6 +433,8 @@ export const pt = {
   expires_on: 'Expira em',
   extension_vault_import_restriction:
     'Somente cofres DKLS podem ser importados na extensão.',
+  fallback_swap_warning:
+    'Não conseguimos simular esta transação. Prossiga com cautela.',
   failed_to_confirm_email_code:
     'Falha ao confirmar o código de verificação do e-mail',
   failed_to_connect_with_server: 'Falha ao conectar-se ao servidor',

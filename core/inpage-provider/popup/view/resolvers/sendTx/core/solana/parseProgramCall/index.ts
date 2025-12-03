@@ -1,3 +1,4 @@
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin, CoinKey } from '@core/chain/coin/Coin'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
@@ -8,7 +9,6 @@ import { parseOneInchSwapInstruction } from './instructionParser/parse1inchSwapI
 import { parseSystemInstruction } from './instructionParser/parseSystemInstruction'
 import { parseTokenInstruction } from './instructionParser/parseTokenInstruction'
 import { oneInchSwapProgram } from './swapPrograms'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 
 type Input = {
   tx: TW.Solana.Proto.RawMessage.IMessageLegacy
@@ -54,7 +54,7 @@ export const parseProgramCall = async ({
       outAmount: '0',
       outputCoin: chainFeeCoin.Solana,
       data,
-      swapProvider,
+      swapProvider: 'fallback',
     },
   }
 }
