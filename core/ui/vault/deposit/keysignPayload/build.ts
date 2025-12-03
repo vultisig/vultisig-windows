@@ -277,21 +277,28 @@ export const buildDepositKeysignPayload = async ({
   if (
     isOneOf(action, [
       'leave',
-      'unbound',
+      'unbond',
       'bond',
       'ibc_transfer',
       'switch',
       'merge',
     ])
   ) {
+    // THORChain UNBOND requires zero coin amount - the unbond amount is only in the memo
+    const toAmountForAction =
+      action === 'unbond'
+        ? '0'
+        : hasAmount && amountUnits
+          ? amountUnits
+          : keysignPayload.toAmount
+
     keysignPayload = create(KeysignPayloadSchema, {
       ...keysignPayload,
       contractPayload: { case: undefined },
       toAddress: isTonFunction
         ? shouldBePresent(validatorAddress)
         : (receiver ?? keysignPayload.toAddress),
-      toAmount:
-        hasAmount && amountUnits ? amountUnits : keysignPayload.toAmount,
+      toAmount: toAmountForAction,
     })
   } else if (isUnmerge) {
     let contractAddress: string
@@ -321,6 +328,16 @@ export const buildDepositKeysignPayload = async ({
         toAmount: amountUnits,
       })
     }
+  }
+
+  if (
+    coin.chain === Chain.THORChain &&
+    (keysignPayload.memo?.toUpperCase().startsWith('UNBOND') ?? false)
+  ) {
+    keysignPayload = create(KeysignPayloadSchema, {
+      ...keysignPayload,
+      toAmount: '0',
+    })
   }
 
   return keysignPayload
