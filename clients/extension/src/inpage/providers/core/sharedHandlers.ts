@@ -11,7 +11,8 @@ type SendTxInput = {
   from: string
   to: string
   value: string
-  data: string
+  data?: string
+  memo?: string
 }
 
 type TxInput = TransactionDetails | SendTxInput
@@ -42,7 +43,14 @@ export const getSharedHandlers = (chain: Chain) => {
     send_transaction: async ([tx]: [TxInput]) => {
       const getTransactionDetails = () => {
         if ('asset' in tx) {
-          return tx
+          const memo = tx.memo
+          const data = tx.data ?? memo
+
+          return {
+            ...tx,
+            data,
+            memo,
+          }
         }
 
         return {
@@ -55,7 +63,8 @@ export const getSharedHandlers = (chain: Chain) => {
             amount: tx.value,
             decimals: chainFeeCoin[chain].decimals,
           },
-          data: tx.data,
+          data: tx.data ?? tx.memo,
+          memo: tx.memo,
         }
       }
 
