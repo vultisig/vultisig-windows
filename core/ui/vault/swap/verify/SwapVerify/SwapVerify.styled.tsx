@@ -43,8 +43,8 @@ export const IconWrapper = styled.div`
     content: '';
     width: 1px;
     background-color: ${getColor('foregroundExtra')};
-    height: 12px;
-    top: -14px;
+    height: 14px;
+    top: -16px;
     left: 12px;
   }
 
@@ -53,7 +53,7 @@ export const IconWrapper = styled.div`
     content: '';
     width: 1px;
     background-color: ${getColor('foregroundExtra')};
-    height: 13px;
+    height: 14px;
     bottom: -16px;
     left: 12px;
   }

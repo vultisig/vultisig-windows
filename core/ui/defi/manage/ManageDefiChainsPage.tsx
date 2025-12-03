@@ -36,10 +36,12 @@ export const ManageDefiChainsPage = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={
-          <PageHeaderBackButton onClick={() => navigate({ id: 'defi' })} />
+          <PageHeaderBackButton
+            onClick={() => navigate({ id: 'defi', state: {} })}
+          />
         }
         secondaryControls={
-          <DoneButton onClick={() => navigate({ id: 'defi' })} />
+          <DoneButton onClick={() => navigate({ id: 'defi', state: {} })} />
         }
         title={t('select_chains')}
         hasBorder
