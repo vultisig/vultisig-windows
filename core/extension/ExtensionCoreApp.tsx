@@ -35,6 +35,7 @@ type ExtensionCoreAppProps = ChildrenProp & {
   goBack: () => void
   goHome: () => void
   targetVaultId?: string
+  isLimited?: boolean
 }
 
 export const ExtensionCoreApp = ({
@@ -43,6 +44,7 @@ export const ExtensionCoreApp = ({
   goBack,
   targetVaultId,
   goHome,
+  isLimited,
 }: ExtensionCoreAppProps) => {
   const coreState = useMemo(
     () => ({
@@ -56,7 +58,11 @@ export const ExtensionCoreApp = ({
   )
 
   return (
-    <CoreApp migrationsManager={StorageMigrationsManager} coreState={coreState}>
+    <CoreApp
+      migrationsManager={StorageMigrationsManager}
+      coreState={coreState}
+      isLimited={isLimited}
+    >
       {children}
     </CoreApp>
   )
