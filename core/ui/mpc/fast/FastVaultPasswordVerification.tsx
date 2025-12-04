@@ -15,7 +15,7 @@ export const FastVaultPasswordVerification = () => {
     !lastPasswordVerificationTime ||
     now - lastPasswordVerificationTime > verificationTimeoutMs
 
-  const { verifyPassword, error, isPending } = usePasswordVerification()
+  const { verifyPassword } = usePasswordVerification()
 
   const handleBack = () => {
     verifyPassword(undefined)
@@ -32,8 +32,6 @@ export const FastVaultPasswordVerification = () => {
       showModal={shouldShowModal}
       onBack={handleBack}
       onFinish={handleFinish}
-      error={error}
-      isPending={isPending}
     />
   )
 }
