@@ -7,6 +7,7 @@ import { KeygenMessage } from '@core/mpc/types/vultisig/keygen/v1/keygen_message
 import { ReshareMessage } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
 import { KeysignMessage } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { DefiProtocol } from '@core/ui/defi/protocols/core'
+import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 
 export type CoreView =
@@ -23,7 +24,7 @@ export type CoreView =
   | { id: 'currencySettings' }
   | { id: 'deeplink'; state: { url: string } }
   | { id: 'deleteVault' }
-  | { id: 'deposit'; state: { coin: CoinKey } }
+  | { id: 'deposit'; state: { coin: CoinKey; action?: ChainAction } }
   | { id: 'referral' }
   | { id: 'importVault' }
   | { id: 'shareVault' }
