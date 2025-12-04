@@ -1,4 +1,4 @@
-import { deepLinkBaseUrl } from '@core/config'
+import { deepLinkBaseUrl, deepLinkBaseUrlAt } from '@core/config'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 
@@ -12,7 +12,9 @@ export const LauncherObserver = () => {
     mutationFn: async () => {
       const args = await GetOSArgs()
 
-      const url = args.find(arg => arg.startsWith(deepLinkBaseUrl))
+      const url = args.find(arg =>
+        [deepLinkBaseUrl, deepLinkBaseUrlAt].some(base => arg.startsWith(base))
+      )
       const filePath = args.find(arg => arg.endsWith('.vult'))
 
       if (url) {
