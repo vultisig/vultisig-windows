@@ -11,11 +11,13 @@ export const {
 } = getStateProviderSetup<ChainAction>('DepositAction')
 
 export const DepositActionProvider = ({ children }: ChildrenProp) => {
-  const [{ coin: coinKey }] = useCoreViewState<'deposit'>()
+  const [{ coin: coinKey, action }] = useCoreViewState<'deposit'>()
   const actions = useAvailableChainActions(coinKey.chain)
+  const initial =
+    (action && actions.includes(action) && action) || actions[0] || undefined
 
   return (
-    <InternalDepositActionProvider initialValue={actions[0]}>
+    <InternalDepositActionProvider initialValue={initial}>
       {children}
     </InternalDepositActionProvider>
   )
