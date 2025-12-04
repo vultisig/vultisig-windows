@@ -53,6 +53,7 @@ export const PopupApp = () => {
             goBack={() => window.close()}
             goHome={() => window.close()}
             targetVaultId={context?.appSession?.vaultId}
+            isLimited={true}
           >
             <VaultsOnly>
               <PopupContextProvider value={context}>

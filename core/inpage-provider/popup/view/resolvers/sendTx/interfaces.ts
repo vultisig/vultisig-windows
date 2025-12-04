@@ -166,6 +166,7 @@ export type TransactionDetails = {
   to?: string
   amount?: { amount: string; decimals: number }
   data?: string
+  memo?: string
   gasSettings?: {
     gasLimit?: string
     gasPrice?: string

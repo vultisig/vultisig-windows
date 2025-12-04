@@ -34,7 +34,7 @@ export const BottomNavigation = ({
     if (tab === 'wallet') {
       navigate({ id: 'vault' })
     } else {
-      navigate({ id: 'defi' })
+      navigate({ id: 'defi', state: {} })
     }
   }
 
@@ -43,17 +43,27 @@ export const BottomNavigation = ({
       <InnerContainer>
         {/* Mobile Layout */}
         <MobileRow>
-          {featureFlags.defi ? (
-            <SwitchContainer>
+          <SwitchContainer>
+            <SwitchButton
+              isActive={activeTab === 'wallet'}
+              onClick={() => handleTabChange('wallet')}
+            >
+              <IconWrapper size={24}>
+                <WalletIcon />
+              </IconWrapper>
+              <Text size={10}>{t('wallet')}</Text>
+            </SwitchButton>
+            {featureFlags.defiEnabled ? (
               <SwitchButton
-                isActive={activeTab === 'wallet'}
-                onClick={() => handleTabChange('wallet')}
+                isActive={activeTab === 'defi'}
+                onClick={() => handleTabChange('defi')}
               >
                 <IconWrapper size={24}>
-                  <WalletIcon />
+                  <CoinsAddIcon />
                 </IconWrapper>
-                <Text size={10}>{t('wallet')}</Text>
+                <Text size={10}>{t('defi')}</Text>
               </SwitchButton>
+            ) : (
               <Tooltip
                 content={t('coming_soon')}
                 placement="top"
@@ -70,31 +80,39 @@ export const BottomNavigation = ({
                   </SwitchButton>
                 )}
               />
-            </SwitchContainer>
-          ) : null}
+            )}
+          </SwitchContainer>
           <CameraButton onClick={() => navigate({ id: 'uploadQr', state: {} })}>
             <Camera2Icon />
           </CameraButton>
         </MobileRow>
 
         {/* Desktop Layout */}
-        {featureFlags.defi && (
-          <SecondaryItemWrapper
-            isActive={activeTab === 'wallet'}
-            onClick={() => handleTabChange('wallet')}
-          >
-            <WalletIcon />
-            <Text as="span" size={10}>
-              {t('wallet')}
-            </Text>
-          </SecondaryItemWrapper>
-        )}
+        <SecondaryItemWrapper
+          isActive={activeTab === 'wallet'}
+          onClick={() => handleTabChange('wallet')}
+        >
+          <WalletIcon />
+          <Text as="span" size={10}>
+            {t('wallet')}
+          </Text>
+        </SecondaryItemWrapper>
         <DesktopCameraButton
           onClick={() => navigate({ id: 'uploadQr', state: {} })}
         >
           <Camera2Icon />
         </DesktopCameraButton>
-        {featureFlags.defi && (
+        {featureFlags.defiEnabled ? (
+          <SecondaryItemWrapper
+            isActive={activeTab === 'defi'}
+            onClick={() => handleTabChange('defi')}
+          >
+            <CoinsAddIcon />
+            <Text as="span" size={10}>
+              {t('defi')}
+            </Text>
+          </SecondaryItemWrapper>
+        ) : (
           <Tooltip
             content={t('coming_soon')}
             placement="top"

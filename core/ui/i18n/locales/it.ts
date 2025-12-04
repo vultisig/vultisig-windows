@@ -350,6 +350,7 @@ export const it = {
   custom: 'Azione personalizzata',
   custom_token: 'Token personalizzato',
   customize_chains: 'Personalizza le catene',
+  customize_positions: 'Personalizza posizioni',
   dapp_name: 'Nome dApp',
   decrypting_vault_keyshares:
     'Decifratura delle condivisioni delle chiavi del vault...',
@@ -357,6 +358,11 @@ export const it = {
   default_chains: 'Catene predefinite',
   defi: 'DeFi',
   defi_portfolio: 'Portafoglio DeFi',
+  defiChainTabs: {
+    bonded: 'Bonded',
+    staked: 'Staked',
+    lps: 'LPs',
+  },
   delete: 'Eliminare',
   delete_folder: 'Elimina cartella',
   delete_folder_confirmation:
@@ -720,6 +726,10 @@ export const it = {
   no_tokens_selected: 'Nessun token selezionato',
   no_tokens_selected_description:
     'Hai disabilitato tutti i token. Assicurati che il token che stai cercando sia abilitato.',
+  no_positions_found: 'Nessuna posizione trovata',
+  no_positions_selected: 'Nessuna posizione selezionata',
+  no_positions_selected_description:
+    'Hai disabilitato tutte le posizioni per questa catena. Abilita almeno una posizione per visualizzare i saldi e gestire le azioni.',
   no_vaults: 'Ancora nessun caveau',
   no_vaults_desc:
     'I tuoi vault appariranno qui. Inizia creandone uno o importandone uno esistente.',
@@ -906,6 +916,9 @@ export const it = {
   select_backup_file: 'Importa la tua condivisione vault',
   select_chain: 'Seleziona catena',
   select_chains: 'Selezionare',
+  select_positions: 'Seleziona posizioni',
+  select_positions_description:
+    'Abilita le posizioni per visualizzare i saldi e gestire gli asset.',
   select_destination_chain: 'Seleziona la catena di destinazione',
   select_n_devices_one: 'Seleziona {{count}} dispositivo',
   select_n_devices_other: 'Seleziona {{count}} dispositivi',
@@ -1254,6 +1267,8 @@ export const it = {
   while_you_wait_vultisig_is: 'Mentre aspetti, Vultisig è...',
   with_these_devices: 'Con questi dispositivi',
   withdraw_ruji_rewards: 'Ritira i premi RUJI',
+  add_cacao_pool: 'Aggiungi al pool CACAO',
+  remove_cacao_pool: 'Rimuovi dal pool CACAO',
   wrong_address_for_chain: 'Indirizzo errato per la catena selezionata',
   wrong_vault_try_again: 'Vault o dispositivo di associazione errati.',
   you_are_sending: 'Stai inviando',
@@ -1266,4 +1281,6 @@ export const it = {
   unlock_discount_tier_description_ultimate:
     "Mantenendo {{minBalance}}, sbloccherai il livello {{tier}} e riceverai un'<b>esenzione completa dalle commissioni Vultisig</b> su tutti gli swap.",
   ultimate: 'Definitivo',
+  vault_settings_language_settings_subtitle_zh: 'cinese',
+  vault_settings_language_settings_title_zh: '中文',
 }

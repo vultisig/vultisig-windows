@@ -1,3 +1,4 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
 import { getKeysignSwapPayload } from '@core/mpc/keysign/swap/getKeysignSwapPayload'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
@@ -63,10 +64,13 @@ export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
             <HStack gap={8}>
               <CoinIcon coin={fromCoin} style={{ fontSize: 24 }} />
               <Text weight="500" size={17} color="contrast">
-                {fromAmount}{' '}
-                <Text as="span" color="shy" size={17}>
-                  {fromCoin.ticker.toUpperCase()}
-                </Text>
+                {formatAmount(
+                  fromChainAmount(
+                    shouldBePresent(fromAmount, 'fromAmount'),
+                    fromCoin.decimals
+                  ),
+                  fromCoin
+                )}{' '}
               </Text>
             </HStack>
             <HStack alignItems="center" gap={21}>

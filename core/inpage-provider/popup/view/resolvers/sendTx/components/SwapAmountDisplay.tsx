@@ -7,7 +7,6 @@ import styled from 'styled-components'
 
 const RoundedCoinIconWrapper = styled.div`
   ${round};
-  overflow: hidden;
   display: inline-flex;
 `
 

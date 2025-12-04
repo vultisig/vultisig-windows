@@ -33,6 +33,12 @@ const chainActionConfig: Record<ChainAction, BalanceDisplayConfig> = {
   bond_with_lp: { showBalance: false, showTicker: false },
   unbond_with_lp: { showBalance: false, showTicker: false },
   vote: { showBalance: false, showTicker: false },
+  add_cacao_pool: {
+    showBalance: true,
+    balanceLabel: 'balance',
+    showTicker: true,
+  },
+  remove_cacao_pool: { showBalance: false, showTicker: false },
 }
 
 type GetBalanceDisplayConfigInput = {

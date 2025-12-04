@@ -348,12 +348,18 @@ export const de = {
   custom: 'Benutzerdefinierte Aktion',
   custom_token: 'Benutzerdefiniertes Token',
   customize_chains: 'Ketten individuell gestalten',
+  customize_positions: 'Positionen anpassen',
   dapp_name: 'dApp-Name',
   decrypting_vault_keyshares: 'Entschlüsselung der Tresor-Schlüsselanteile...',
   deeplink: 'Deeplink',
   default_chains: 'Standardketten',
   defi: 'DeFi',
   defi_portfolio: 'DeFi-Portfolio',
+  defiChainTabs: {
+    bonded: 'Bonded',
+    staked: 'Staked',
+    lps: 'LPs',
+  },
   delete: 'Löschen',
   delete_folder: 'Ordner löschen',
   delete_folder_confirmation:
@@ -725,6 +731,10 @@ export const de = {
   no_tokens_selected: 'Keine Token ausgewählt',
   no_tokens_selected_description:
     'Sie haben alle Token deaktiviert. Stellen Sie sicher, dass das gesuchte Token aktiviert ist.',
+  no_positions_found: 'Keine Positionen gefunden',
+  no_positions_selected: 'Keine Positionen ausgewählt',
+  no_positions_selected_description:
+    'Sie haben alle Positionen für diese Chain deaktiviert. Aktivieren Sie mindestens eine Position, um Salden anzuzeigen und Aktionen zu verwalten.',
   no_vaults: 'Noch keine Tresore',
   no_vaults_desc:
     'Ihre Tresore werden hier angezeigt. Erstellen Sie zunächst einen neuen Tresor oder importieren Sie einen vorhandenen.',
@@ -912,6 +922,9 @@ export const de = {
   select_backup_file: 'Importieren Sie Ihre Tresorfreigabe',
   select_chain: 'Select Chain',
   select_chains: 'Wählen',
+  select_positions: 'Positionen auswählen',
+  select_positions_description:
+    'Aktivieren Sie Positionen, um Salden anzuzeigen und Vermögenswerte zu verwalten.',
   select_destination_chain: 'Zielkette auswählen',
   select_n_devices_one: 'Wählen Sie {{count}} Geräte aus',
   select_n_devices_other: 'Wählen Sie {{count}} Geräte aus',
@@ -1258,6 +1271,8 @@ export const de = {
   while_you_wait_vultisig_is: 'Während Sie warten, ist Vultisig...',
   with_these_devices: 'Mit diesen Geräten',
   withdraw_ruji_rewards: 'RUJI-Prämien auszahlen',
+  add_cacao_pool: 'Zum CACAO-Pool hinzufügen',
+  remove_cacao_pool: 'Aus dem CACAO-Pool entfernen',
   wrong_address_for_chain: 'Falsche Adresse für die ausgewählte Kette',
   wrong_vault_try_again: 'Falscher Tresor oder falsches Gerät gekoppelt.',
   you_are_sending: 'Du sendest',
@@ -1270,4 +1285,6 @@ export const de = {
   unlock_discount_tier_description_ultimate:
     'Mit einem Guthaben von {{minBalance}} schalten Sie die Stufe {{tier}} frei und erhalten einen <b>vollständigen Vultisig-Gebührenverzicht</b> für alle Tauschgeschäfte.',
   ultimate: 'Ultimativ',
+  vault_settings_language_settings_subtitle_zh: 'chinesisch',
+  vault_settings_language_settings_title_zh: '中文',
 }

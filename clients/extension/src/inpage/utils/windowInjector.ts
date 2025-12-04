@@ -4,6 +4,7 @@ import { createProviders } from '@clients/extension/src/inpage/providers/provide
 import { UtxoChain } from '@core/chain/Chain'
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
+import { attempt } from '@lib/utils/attempt'
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -26,11 +27,13 @@ export const injectToWindow = () => {
   })
 
   if (!window.ethereum) {
-    Object.defineProperty(window, 'ethereum', {
-      value: ethereumProvider,
-      configurable: true,
-      writable: true,
-    })
+    attempt(() =>
+      Object.defineProperty(window, 'ethereum', {
+        value: ethereumProvider,
+        configurable: true,
+        writable: true,
+      })
+    )
   }
 
   announceProvider({
@@ -78,53 +81,56 @@ async function setupContentScriptMessenger(
       },
       provider: ethereumProvider as unknown as EIP1193Provider,
     })
-    Object.defineProperties(window, {
-      tronLink: {
-        value: providers.tron,
-        configurable: false,
-        writable: false,
-      },
-      ethereum: {
-        get: () => window.vultiConnectRouter.currentProvider,
-        set: newProvider => window.vultiConnectRouter.addProvider(newProvider),
-        configurable: false,
-      },
-      xfi: { value: providers, configurable: false, writable: false },
-      isCtrl: { value: true, configurable: false, writable: false },
-      vultiConnectRouter: {
-        value: {
-          ethereumProvider,
-          lastInjectedProvider: window.ethereum,
-          currentProvider: ethereumProvider,
-          providers: [
-            ethereumProvider,
-            ...(window.ethereum ? [window.ethereum] : []),
-          ],
-          setDefaultProvider(vultiAsDefault: boolean) {
-            this.currentProvider = vultiAsDefault
-              ? window.vultisig.ethereum
-              : this.lastInjectedProvider
-          },
-          addProvider(provider: Ethereum) {
-            if (!this.providers.includes(provider))
-              this.providers.push(provider)
-            if (ethereumProvider !== provider)
-              this.lastInjectedProvider = provider
-          },
+    attempt(() =>
+      Object.defineProperties(window, {
+        tronLink: {
+          value: providers.tron,
+          configurable: false,
+          writable: false,
         },
-        configurable: false,
-        writable: false,
-      },
-      phantom: {
-        value: phantomProvider,
-        configurable: false,
-        writable: false,
-      },
-      keplr: {
-        value: providers.keplr,
-        configurable: false,
-        writable: false,
-      },
-    })
+        ethereum: {
+          get: () => window.vultiConnectRouter.currentProvider,
+          set: newProvider =>
+            window.vultiConnectRouter.addProvider(newProvider),
+          configurable: false,
+        },
+        xfi: { value: providers, configurable: false, writable: false },
+        isCtrl: { value: true, configurable: false, writable: false },
+        vultiConnectRouter: {
+          value: {
+            ethereumProvider,
+            lastInjectedProvider: window.ethereum,
+            currentProvider: ethereumProvider,
+            providers: [
+              ethereumProvider,
+              ...(window.ethereum ? [window.ethereum] : []),
+            ],
+            setDefaultProvider(vultiAsDefault: boolean) {
+              this.currentProvider = vultiAsDefault
+                ? window.vultisig.ethereum
+                : this.lastInjectedProvider
+            },
+            addProvider(provider: Ethereum) {
+              if (!this.providers.includes(provider))
+                this.providers.push(provider)
+              if (ethereumProvider !== provider)
+                this.lastInjectedProvider = provider
+            },
+          },
+          configurable: false,
+          writable: false,
+        },
+        phantom: {
+          value: phantomProvider,
+          configurable: false,
+          writable: false,
+        },
+        keplr: {
+          value: providers.keplr,
+          configurable: false,
+          writable: false,
+        },
+      })
+    )
   }
 }
