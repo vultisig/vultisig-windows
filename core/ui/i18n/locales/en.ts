@@ -162,6 +162,7 @@ export const en = {
   clear: 'Clear',
   close: 'Close',
   coin_not_found_in_current_vault: 'Coin not found in current vault',
+  coin_not_found_in_any_vault: '{{ticker}} on {{chain}} not found in any vault',
   collected_rewards: 'Collected rewards',
   coming_soon: 'Coming Soon',
   complete: 'Complete',

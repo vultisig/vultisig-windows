@@ -58,6 +58,8 @@ export type CoreView =
       id: 'send'
       state: ({ fromChain: Chain } | { coin: CoinKey }) & {
         address?: string
+        amount?: bigint
+        memo?: string
       }
     }
   | { id: 'settings' }
