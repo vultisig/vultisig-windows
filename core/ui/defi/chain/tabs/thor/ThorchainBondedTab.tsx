@@ -3,10 +3,10 @@ import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
+import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { useThorBondedNodesQuery } from '@core/ui/defi/chain/thor/hooks'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
-import { ArrowUpRightIcon } from '@lib/ui/icons/ArrowUpRightIcon'
 import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
 import { SafeImage } from '@lib/ui/images/SafeImage'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -16,15 +16,10 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 const runeDecimals = 8
-
-const formatRune = (amount: bigint) =>
-  formatAmount(fromChainAmount(amount, runeDecimals), { precision: 'high' })
-
-const formatUsd = (value: number) =>
-  `$${formatAmount(value, { precision: 'high' })}`
 
 const truncateAddress = (address: string) => {
   if (address.length <= 16) return address
@@ -36,6 +31,8 @@ export const ThorchainBondedTab = () => {
   const navigate = useCoreNavigate()
   const [activeNodesExpanded, setActiveNodesExpanded] = useState(true)
   const [availableNodesExpanded, setAvailableNodesExpanded] = useState(true)
+  const formatFiatAmount = useFormatFiatAmount()
+  const { t } = useTranslation()
 
   const runeCoin = chainFeeCoin.THORChain
   const pricesQuery = useCoinPricesQuery({
@@ -66,7 +63,7 @@ export const ThorchainBondedTab = () => {
   if (isError) {
     return (
       <Text color="danger" size={14}>
-        Failed to load bonded nodes.
+        {t('failed_to_load_bonded_nodes')}
       </Text>
     )
   }
@@ -85,13 +82,16 @@ export const ThorchainBondedTab = () => {
           />
           <VStack gap={4}>
             <Text size={12} color="shy">
-              Total Bonded RUNE
+              {t('total_bonded_rune')}
             </Text>
             <Text size={22} weight="700" color="contrast">
-              {formatRune(totalBond)} RUNE
+              {formatAmount(fromChainAmount(totalBond, runeDecimals), {
+                precision: 'high',
+              })}{' '}
+              RUNE
             </Text>
             <Text size={12} color="shy">
-              {formatUsd(totalBondUsd)}
+              {formatFiatAmount(totalBondUsd)}
             </Text>
           </VStack>
         </HStack>
@@ -106,7 +106,7 @@ export const ThorchainBondedTab = () => {
           })
         }
       >
-        Bond to Node
+        {t('bond_to_node')}
       </BondToNodeButton>
 
       {/* Active Nodes Section */}
@@ -116,7 +116,7 @@ export const ThorchainBondedTab = () => {
             onClick={() => setActiveNodesExpanded(!activeNodesExpanded)}
           >
             <Text size={14} weight="600" color="contrast">
-              Active Nodes
+              {t('active_nodes')}
             </Text>
             <ChevronIcon>
               <ChevronDownIcon
@@ -139,20 +139,25 @@ export const ThorchainBondedTab = () => {
                     {/* Node Address Row */}
                     <HStack justifyContent="space-between" alignItems="center">
                       <Text size={12} color="shy">
-                        Node Address: {truncateAddress(node.address)}
+                        {t('node_address')}: {truncateAddress(node.address)}
                       </Text>
                       <StatusBadge isActive={!isChurnedOut}>
-                        {isChurnedOut ? 'Churned Out' : 'Active'}
+                        {isChurnedOut ? t('churned_out') : t('active')}
                       </StatusBadge>
                     </HStack>
 
                     {/* Bonded Amount Row */}
                     <HStack justifyContent="space-between" alignItems="center">
                       <Text size={14} weight="600" color="primary">
-                        Bonded: {formatRune(bondAmount)} RUNE
+                        {t('bonded')}:{' '}
+                        {formatAmount(
+                          fromChainAmount(bondAmount, runeDecimals),
+                          { precision: 'high' }
+                        )}{' '}
+                        RUNE
                       </Text>
                       <Text size={14} color="contrast">
-                        {formatUsd(bondUsd)}
+                        {formatFiatAmount(bondUsd)}
                       </Text>
                     </HStack>
 
@@ -161,11 +166,11 @@ export const ThorchainBondedTab = () => {
                       <HStack gap={6} alignItems="center">
                         <InfoIcon>@</InfoIcon>
                         <Text size={12} color="shy">
-                          APY
+                          {t('apy')}
                         </Text>
                       </HStack>
                       <Text size={12} weight="600" color="primary">
-                        0 %
+                        --
                       </Text>
                     </HStack>
 
@@ -174,7 +179,7 @@ export const ThorchainBondedTab = () => {
                       <HStack gap={6} alignItems="center">
                         <InfoIcon>📅</InfoIcon>
                         <Text size={12} color="shy">
-                          Next Churn
+                          {t('next_churn')}
                         </Text>
                       </HStack>
                       <Text size={12} color="contrast">
@@ -187,7 +192,7 @@ export const ThorchainBondedTab = () => {
                       <HStack gap={6} alignItems="center">
                         <InfoIcon>📅</InfoIcon>
                         <Text size={12} color="shy">
-                          Next award
+                          {t('next_award')}
                         </Text>
                       </HStack>
                       <Text size={12} color="contrast">
@@ -209,7 +214,7 @@ export const ThorchainBondedTab = () => {
                         }
                       >
                         <ButtonIcon>↩</ButtonIcon>
-                        Unbond
+                        {t('unbond')}
                       </ActionButton>
                       <PrimaryActionButton
                         onClick={() =>
@@ -223,13 +228,13 @@ export const ThorchainBondedTab = () => {
                         }
                       >
                         <ButtonIcon>🔗</ButtonIcon>
-                        Bond
+                        {t('bond')}
                       </PrimaryActionButton>
                     </HStack>
 
                     {isChurnedOut && (
                       <Text size={11} color="shy">
-                        Wait until Node is churned out
+                        {t('wait_until_node_churned_out')}
                       </Text>
                     )}
                   </NodeCard>
@@ -246,7 +251,7 @@ export const ThorchainBondedTab = () => {
           onClick={() => setAvailableNodesExpanded(!availableNodesExpanded)}
         >
           <Text size={14} weight="600" color="contrast">
-            Available Nodes
+            {t('available_nodes')}
           </Text>
           <ChevronIcon>
             <ChevronDownIcon
@@ -258,21 +263,9 @@ export const ThorchainBondedTab = () => {
         </SectionHeader>
         {availableNodesExpanded && (
           <VStack gap={12} style={{ padding: 16 }}>
-            {/* Example available node - in real app this would come from API */}
-            <VStack gap={12}>
-              <HStack justifyContent="space-between" alignItems="center">
-                <Text size={14} color="contrast">
-                  VultiNode: thor1caywxyz
-                </Text>
-                <Text size={12} weight="600" color="primary">
-                  Active
-                </Text>
-              </HStack>
-              <RequestToBondButton>
-                <ArrowUpRightIcon />
-                Request to Bond
-              </RequestToBondButton>
-            </VStack>
+            <Text size={14} color="shy">
+              {t('available_nodes_coming_soon')}
+            </Text>
           </VStack>
         )}
       </SectionPanel>
@@ -382,25 +375,4 @@ const PrimaryActionButton = styled(ActionButton)`
 
 const ButtonIcon = styled.span`
   font-size: 14px;
-`
-
-const RequestToBondButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  padding: 12px;
-  border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 20px;
-  background: transparent;
-  color: ${getColor('contrast')};
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-
-  svg {
-    width: 16px;
-    height: 16px;
-  }
 `
