@@ -571,6 +571,7 @@ export const en = {
   leave: 'Leave',
   legal: 'Legal',
   link_copied: 'Link copied to clipboard',
+  liquidity_pools: 'Liquidity Pools',
   loading: 'Loading...',
   local: 'Local',
   localMode: "You're in local mode",

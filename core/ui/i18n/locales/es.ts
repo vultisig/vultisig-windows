@@ -658,6 +658,7 @@ export const es = {
   leave: 'Dejar',
   legal: 'Legal',
   link_copied: 'Enlace copiado al portapapeles',
+  liquidity_pools: 'Pools de liquidez',
   loading: 'Cargando...',
   local: 'Local',
   localMode: 'Estás en modo local',

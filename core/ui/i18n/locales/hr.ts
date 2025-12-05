@@ -648,6 +648,7 @@ export const hr = {
   leave: 'Ostavite',
   legal: 'Pravno',
   link_copied: 'Veza kopirana u međuspremnik',
+  liquidity_pools: 'Bazeni likvidnosti',
   loading: 'Učitavanje...',
   local: 'Lokalno',
   localMode: 'U lokalnom ste načinu rada',
