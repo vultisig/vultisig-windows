@@ -1,5 +1,7 @@
+import { Chain } from '@core/chain/Chain'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
-import { areEqualCoins, extractCoinKey } from '@core/chain/coin/Coin'
+import { areEqualCoins, Coin, extractCoinKey } from '@core/chain/coin/Coin'
+import { getSolanaCoingeckoId } from '@core/chain/coin/coingecko/getCoingeckoId'
 import { knownTokens } from '@core/chain/coin/knownTokens'
 import { sortCoinsAlphabetically } from '@core/chain/coin/utils/sortCoinsAlphabetically'
 import { useWhitelistedCoinsQuery } from '@core/ui/chain/coin/queries/useWhitelistedCoinsQuery'
@@ -70,7 +72,7 @@ export const ManageVaultChainCoinsPage = () => {
     )
   }, [coins, search])
 
-  const handleToggle = (coin: any) => {
+  const handleToggle = async (coin: Coin) => {
     if (isLoading) return
     const currentCoin = currentCoins.find(c => areEqualCoins(c, coin))
     if (currentCoin) {
@@ -79,7 +81,17 @@ export const ManageVaultChainCoinsPage = () => {
       })
     } else {
       removeFromCoinFinderIgnore.mutate(extractCoinKey(coin), {
-        onSuccess: () => createCoin.mutate(coin),
+        onSuccess: async () => {
+          const newCoin = { ...coin }
+
+          if (coin.chain === Chain.Solana && coin.id && !coin.priceProviderId) {
+            newCoin.priceProviderId = await getSolanaCoingeckoId({
+              id: coin.id,
+            })
+          }
+
+          createCoin.mutate(newCoin)
+        },
       })
     }
   }
