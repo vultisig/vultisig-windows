@@ -25,13 +25,26 @@ type ThorchainDefiBalance = {
 const runeDecimals = 8
 
 export const useThorchainDefiBalance = (): ThorchainDefiBalance => {
-  const { data: bondedNodes, isPending: isBondsPending } =
-    useThorBondedNodesQuery()
-  const { data: tcyStake, isPending: isTcyPending } = useThorTcyStakeQuery()
-  const { data: lpPositions, isPending: isLpPending } =
-    useThorLpPositionsQuery()
-  const { data: mergedAssets, isPending: isMergedPending } =
-    useThorMergedAssetsQuery()
+  const {
+    data: bondedNodes,
+    isPending: isBondsPending,
+    isError: isBondsError,
+  } = useThorBondedNodesQuery()
+  const {
+    data: tcyStake,
+    isPending: isTcyPending,
+    isError: isTcyError,
+  } = useThorTcyStakeQuery()
+  const {
+    data: lpPositions,
+    isPending: isLpPending,
+    isError: isLpError,
+  } = useThorLpPositionsQuery()
+  const {
+    data: mergedAssets,
+    isPending: isMergedPending,
+    isError: isMergedError,
+  } = useThorMergedAssetsQuery()
 
   const runeCoin = chainFeeCoin.THORChain
 
@@ -59,6 +72,8 @@ export const useThorchainDefiBalance = (): ThorchainDefiBalance => {
       isLpPending ||
       isMergedPending ||
       pricesQuery.isPending
+
+    const isError = isBondsError || isTcyError || isLpError || isMergedError
 
     // Calculate total bonded RUNE
     const bondedRune = (bondedNodes ?? []).reduce(
@@ -99,7 +114,7 @@ export const useThorchainDefiBalance = (): ThorchainDefiBalance => {
       stakedTcyUsd,
       lpValueUsd,
       isPending,
-      isError: false,
+      isError,
     }
   }, [
     bondedNodes,
@@ -112,5 +127,9 @@ export const useThorchainDefiBalance = (): ThorchainDefiBalance => {
     isLpPending,
     isMergedPending,
     pricesQuery.isPending,
+    isBondsError,
+    isTcyError,
+    isLpError,
+    isMergedError,
   ])
 }

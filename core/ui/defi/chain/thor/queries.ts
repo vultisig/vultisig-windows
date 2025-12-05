@@ -3,10 +3,10 @@ import { fetchRujiraStakeView } from '@core/chain/chains/thorchain/ruji/services
 import { UseQueryOptions } from '@tanstack/react-query'
 
 import {
-  fetchThorBondNodes,
+  fetchThorBondMetrics,
   fetchThorLpPositions,
   fetchThorTcyStakedAmount,
-  ThorBondNode,
+  ThorBondNodeMetrics,
   ThorchainLpPosition,
 } from './api'
 import { thorDefiStaleTimeMs } from './constants'
@@ -16,13 +16,13 @@ type Address = string | undefined
 export const thorBondedNodesQuery = (
   address: Address
 ): UseQueryOptions<
-  ThorBondNode[],
+  ThorBondNodeMetrics[],
   Error,
-  ThorBondNode[],
+  ThorBondNodeMetrics[],
   readonly [string, Address | null]
 > => ({
   queryKey: ['thor-bonds', address ?? null] as const,
-  queryFn: () => fetchThorBondNodes(address ?? ''),
+  queryFn: () => fetchThorBondMetrics(address ?? ''),
   enabled: !!address,
   staleTime: thorDefiStaleTimeMs,
 })
