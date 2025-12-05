@@ -654,6 +654,7 @@ export const pt = {
   leave: 'Deixar',
   legal: 'Jurídico',
   link_copied: 'Link copiado para a área de transferência',
+  liquidity_pools: 'Pools de Liquidez',
   loading: 'Carregando...',
   local: 'Local',
   localMode: 'Você está no modo local.',

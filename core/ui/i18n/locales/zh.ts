@@ -596,6 +596,7 @@ export const zh = {
   leave: '离开',
   legal: '合法的',
   link_copied: '链接已复制到剪贴板',
+  liquidity_pools: '流动性池',
   loading: '加载中...',
   local: '当地的',
   localMode: '您处于本地模式',
