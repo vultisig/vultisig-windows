@@ -1282,6 +1282,9 @@ export const it = {
   unlock_discount_tier_description_ultimate:
     "Mantenendo {{minBalance}}, sbloccherai il livello {{tier}} e riceverai un'<b>esenzione completa dalle commissioni Vultisig</b> su tutti gli swap.",
   ultimate: 'Definitivo',
+  active_nodes: 'Nodi attivi',
+  available_nodes: 'Nodi disponibili',
+  available_nodes_coming_soon: 'Nodi disponibili a breve',
   vault_settings_language_settings_subtitle_zh: 'cinese',
   vault_settings_language_settings_title_zh: '中文',
 }

@@ -1156,4 +1156,7 @@ export const zh = {
   your_referral_code: '您的推荐码',
   your_referrals: '您的推荐',
   youre_swapping: '你在交换',
+  active_nodes: '活跃节点',
+  available_nodes: '可用节点',
+  available_nodes_coming_soon: '可用节点即将推出',
 }

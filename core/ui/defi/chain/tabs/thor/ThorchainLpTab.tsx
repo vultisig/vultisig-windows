@@ -153,7 +153,7 @@ export const ThorchainLpTab = () => {
                 onClick={() =>
                   navigate({
                     id: 'deposit',
-                    state: { coin: chainFeeCoin.THORChain },
+                    state: { coin: chainFeeCoin.THORChain, action: 'custom' },
                   })
                 }
               >
@@ -164,7 +164,7 @@ export const ThorchainLpTab = () => {
                 onClick={() =>
                   navigate({
                     id: 'deposit',
-                    state: { coin: chainFeeCoin.THORChain },
+                    state: { coin: chainFeeCoin.THORChain, action: 'custom' },
                   })
                 }
               >

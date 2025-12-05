@@ -23,6 +23,9 @@ type ThorchainDefiBalance = {
 }
 
 const runeDecimals = 8
+const tcyDecimals = 8
+
+const tcyToken = { id: 'tcy', priceProviderId: 'tcy' }
 
 export const useThorchainDefiBalance = (): ThorchainDefiBalance => {
   const {
@@ -55,6 +58,11 @@ export const useThorchainDefiBalance = (): ThorchainDefiBalance => {
         id: runeCoin.id,
         priceProviderId: runeCoin.priceProviderId,
       },
+      {
+        chain: Chain.THORChain,
+        id: tcyToken.id,
+        priceProviderId: tcyToken.priceProviderId,
+      },
     ],
   })
 
@@ -64,6 +72,12 @@ export const useThorchainDefiBalance = (): ThorchainDefiBalance => {
     const key = `${Chain.THORChain}:`
     return pricesQuery.data[key] ?? 0
   }, [pricesQuery.data])
+
+  const tcyPrice = useMemo(() => {
+    if (!pricesQuery.data) return runePrice
+    const key = `${Chain.THORChain}:${tcyToken.id}`
+    return pricesQuery.data[key] ?? runePrice
+  }, [pricesQuery.data, runePrice])
 
   return useMemo(() => {
     const isPending =
@@ -82,10 +96,9 @@ export const useThorchainDefiBalance = (): ThorchainDefiBalance => {
     )
     const bondedRuneUsd = fromChainAmount(bondedRune, runeDecimals) * runePrice
 
-    // Calculate staked TCY (assuming TCY has the same price as RUNE for simplicity)
-    // In reality, TCY might have its own price
+    // Calculate staked TCY using its own price
     const stakedTcy = tcyStake ?? 0n
-    const stakedTcyUsd = fromChainAmount(stakedTcy, runeDecimals) * runePrice
+    const stakedTcyUsd = fromChainAmount(stakedTcy, tcyDecimals) * tcyPrice
 
     // Calculate LP positions value (rune value * 2 since it's symmetric)
     // The rune_deposit_value represents the RUNE value in the LP
@@ -122,6 +135,7 @@ export const useThorchainDefiBalance = (): ThorchainDefiBalance => {
     lpPositions,
     mergedAssets,
     runePrice,
+    tcyPrice,
     isBondsPending,
     isTcyPending,
     isLpPending,

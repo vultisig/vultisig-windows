@@ -22,6 +22,14 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 const runeDecimals = 8
+const tcyToken = {
+  id: 'tcy',
+  priceProviderId: 'tcy',
+}
+const rujiToken = {
+  id: 'rujira',
+  priceProviderId: 'rujira',
+}
 
 type StakeCardData = {
   label: string
@@ -60,9 +68,23 @@ export const ThorchainStakedTab = () => {
         id: runeCoin.id,
         priceProviderId: runeCoin.priceProviderId,
       },
+      {
+        chain: Chain.THORChain,
+        id: tcyToken.id,
+        priceProviderId: tcyToken.priceProviderId,
+      },
+      {
+        chain: Chain.THORChain,
+        id: rujiToken.id,
+        priceProviderId: rujiToken.priceProviderId,
+      },
     ],
   })
   const runePrice = pricesQuery.data?.[`${Chain.THORChain}:`] ?? 0
+  const tcyPrice =
+    pricesQuery.data?.[`${Chain.THORChain}:${tcyToken.id}`] ?? runePrice
+  const rujiPrice =
+    pricesQuery.data?.[`${Chain.THORChain}:${rujiToken.id}`] ?? runePrice
 
   if (isTcyPending || isMergedPending) {
     return (
@@ -90,7 +112,7 @@ export const ThorchainStakedTab = () => {
       label: 'Staked TCY',
       ticker: 'TCY',
       amount: tcyAmount,
-      usdValue: fromChainAmount(tcyAmount, runeDecimals) * runePrice,
+      usdValue: fromChainAmount(tcyAmount, runeDecimals) * tcyPrice,
       logo: 'tcy',
       apr: '--',
       nextPayout: '--',
@@ -108,7 +130,7 @@ export const ThorchainStakedTab = () => {
       label: 'Compounded TCY',
       ticker: 'sTCY',
       amount,
-      usdValue: fromChainAmount(amount, runeDecimals) * runePrice,
+      usdValue: fromChainAmount(amount, runeDecimals) * tcyPrice,
       logo: 'tcy',
       apr: '--',
       nextPayout: '--',
@@ -132,7 +154,7 @@ export const ThorchainStakedTab = () => {
       label: `Staked ${position.symbol.toUpperCase()}`,
       ticker: position.symbol.toUpperCase(),
       amount,
-      usdValue: fromChainAmount(amount, runeDecimals) * runePrice,
+      usdValue: fromChainAmount(amount, runeDecimals) * rujiPrice,
       logo: 'ruji',
       apr: '--',
       nextPayout: '--',

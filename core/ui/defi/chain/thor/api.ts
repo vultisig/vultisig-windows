@@ -29,6 +29,7 @@ export type ThorchainLpPosition = {
   units: string
   rune_deposit_value: string
   asset_deposit_value: string
+  apr?: number
 }
 
 type ThorchainPoolLpResponse = ThorchainLpPosition
