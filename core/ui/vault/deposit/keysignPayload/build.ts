@@ -99,7 +99,7 @@ export const buildDepositKeysignPayload = async ({
     libType,
     utxoInfo: await getKeysignUtxoInfo(coin),
     toAddress: receiver,
-    toAmount: hasAmount && amountUnits ? amountUnits : undefined,
+    toAmount: hasAmount && amountUnits ? amountUnits : '0',
   })
 
   keysignPayload.blockchainSpecific = await getChainSpecific({
@@ -267,7 +267,6 @@ export const buildDepositKeysignPayload = async ({
             coins: funds.map(fund => create(CosmosCoinSchema, fund)),
           }),
         },
-        toAmount: amountUnits,
       })
 
       return keysignPayload
