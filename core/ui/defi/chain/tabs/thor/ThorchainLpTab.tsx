@@ -1,7 +1,12 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
+import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { useThorLpPositionsQuery } from '@core/ui/defi/chain/thor/hooks'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { sameDimensions } from '@lib/ui/css/sameDimensions'
+import { SafeImage } from '@lib/ui/images/SafeImage'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Panel } from '@lib/ui/panel/Panel'
@@ -10,12 +15,47 @@ import { getColor } from '@lib/ui/theme/getters'
 import { formatAmount } from '@lib/utils/formatAmount'
 import styled from 'styled-components'
 
-const format8 = (value: bigint) =>
-  formatAmount(fromChainAmount(value, 8), { precision: 'high' })
+const decimals = 8
+
+const formatTokenAmount = (value: bigint) =>
+  formatAmount(fromChainAmount(value, decimals), { precision: 'high' })
+
+const formatUsd = (value: number) =>
+  `$${formatAmount(value, { precision: 'high' })}`
+
+// Map asset names to their logos
+const getAssetLogo = (asset: string): string => {
+  const assetLower = asset.toLowerCase()
+  if (assetLower.includes('eth')) return 'eth'
+  if (assetLower.includes('btc')) return 'btc'
+  if (assetLower.includes('usdc')) return 'usdc'
+  if (assetLower.includes('usdt')) return 'usdt'
+  if (assetLower.includes('bnb') || assetLower.includes('bsc')) return 'bsc'
+  if (assetLower.includes('avax')) return 'avax'
+  return 'eth' // default
+}
+
+// Extract pool name from asset string (e.g., "ETH.ETH" -> "ETH")
+const getPoolName = (asset: string): string => {
+  const parts = asset.split('.')
+  return parts.length > 1 ? parts[1] : parts[0]
+}
 
 export const ThorchainLpTab = () => {
   const { data, isPending, isError } = useThorLpPositionsQuery()
   const navigate = useCoreNavigate()
+
+  const runeCoin = chainFeeCoin.THORChain
+  const pricesQuery = useCoinPricesQuery({
+    coins: [
+      {
+        chain: Chain.THORChain,
+        id: runeCoin.id,
+        priceProviderId: runeCoin.priceProviderId,
+      },
+    ],
+  })
+  const runePrice = pricesQuery.data?.[`${Chain.THORChain}:`] ?? 0
 
   if (isPending) {
     return (
@@ -46,74 +86,151 @@ export const ThorchainLpTab = () => {
   }
 
   return (
-    <VStack gap={12}>
-      {positions.map(position => (
-        <LpCard key={`${position.asset}-${position.asset_address ?? ''}`}>
-          <VStack gap={4}>
-            <Text size={14} weight="600">
-              {position.asset}
-            </Text>
-            <Text size={12} color="shy">
-              Rune deposit:{' '}
-              {format8(BigInt(position.rune_deposit_value ?? '0'))}
-            </Text>
-            <Text size={12} color="shy">
-              Asset deposit:{' '}
-              {format8(BigInt(position.asset_deposit_value ?? '0'))}
-            </Text>
-          </VStack>
-          <Actions>
-            <ActionButton
-              onClick={() =>
-                navigate({
-                  id: 'deposit',
-                  state: { coin: chainFeeCoin.THORChain, action: 'custom' },
-                })
-              }
-            >
-              Remove
-            </ActionButton>
-            <PrimaryAction
-              onClick={() =>
-                navigate({
-                  id: 'deposit',
-                  state: { coin: chainFeeCoin.THORChain, action: 'custom' },
-                })
-              }
-            >
-              Add
-            </PrimaryAction>
-          </Actions>
-        </LpCard>
-      ))}
+    <VStack gap={16}>
+      {positions.map(position => {
+        const runeValue = BigInt(position.rune_deposit_value ?? '0')
+        const assetValue = BigInt(position.asset_deposit_value ?? '0')
+        // Total value is approximately 2x RUNE value (symmetric pool)
+        const totalUsdValue =
+          fromChainAmount(runeValue, decimals) * runePrice * 2
+        const poolName = getPoolName(position.asset)
+        const assetLogo = getAssetLogo(position.asset)
+
+        return (
+          <LpCardPanel
+            key={`${position.asset}-${position.asset_address ?? ''}`}
+          >
+            {/* Header with pool icon and APR */}
+            <HStack justifyContent="space-between" alignItems="flex-start">
+              <HStack gap={12} alignItems="center">
+                <PoolIconContainer>
+                  <SafeImage
+                    src={getCoinLogoSrc(assetLogo)}
+                    render={props => <PoolIcon {...props} />}
+                    fallback={
+                      <PoolIconFallback>{poolName[0]}</PoolIconFallback>
+                    }
+                  />
+                </PoolIconContainer>
+                <VStack gap={4}>
+                  <Text size={12} color="shy">
+                    RUNE/{poolName} Pool
+                  </Text>
+                  <Text size={20} weight="700" color="contrast">
+                    {formatUsd(totalUsdValue)}
+                  </Text>
+                </VStack>
+              </HStack>
+              <VStack alignItems="flex-end" gap={4}>
+                <HStack gap={4} alignItems="center">
+                  <AprIcon>@</AprIcon>
+                  <Text size={12} color="shy">
+                    APR
+                  </Text>
+                </HStack>
+                <Text size={14} weight="600" color="primary">
+                  5.17%
+                </Text>
+              </VStack>
+            </HStack>
+
+            {/* Position details */}
+            <VStack gap={4}>
+              <Text size={12} color="shy">
+                Position
+              </Text>
+              <Text size={14} color="contrast">
+                {formatTokenAmount(runeValue)} RUNE +{' '}
+                {formatTokenAmount(assetValue)} {poolName}
+              </Text>
+            </VStack>
+
+            {/* Action buttons */}
+            <HStack gap={10}>
+              <ActionButton
+                onClick={() =>
+                  navigate({
+                    id: 'deposit',
+                    state: { coin: chainFeeCoin.THORChain },
+                  })
+                }
+              >
+                <ButtonIcon>⊖</ButtonIcon>
+                Remove
+              </ActionButton>
+              <PrimaryActionButton
+                onClick={() =>
+                  navigate({
+                    id: 'deposit',
+                    state: { coin: chainFeeCoin.THORChain },
+                  })
+                }
+              >
+                <ButtonIcon>⊕</ButtonIcon>
+                Add
+              </PrimaryActionButton>
+            </HStack>
+          </LpCardPanel>
+        )
+      })}
     </VStack>
   )
 }
 
-const LpCard = styled(Panel)`
+const LpCardPanel = styled(Panel)`
   padding: 16px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
+  gap: 16px;
 `
 
-const Actions = styled(HStack)`
-  gap: 10px;
+const PoolIconContainer = styled.div`
+  ${sameDimensions(40)};
+  position: relative;
+`
+
+const PoolIcon = styled.img`
+  ${sameDimensions(40)};
+  border-radius: 50%;
+`
+
+const PoolIconFallback = styled.div`
+  ${sameDimensions(40)};
+  border-radius: 50%;
+  background: ${getColor('foregroundExtra')};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${getColor('primary')};
+  font-weight: 700;
+`
+
+const AprIcon = styled.span`
+  font-size: 10px;
+  color: ${getColor('textShy')};
 `
 
 const ActionButton = styled.button`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
   border: 1px solid ${getColor('foregroundExtra')};
+  border-radius: 20px;
   background: transparent;
   color: ${getColor('contrast')};
-  padding: 10px 14px;
-  border-radius: 12px;
-  cursor: pointer;
+  font-size: 13px;
   font-weight: 600;
+  cursor: pointer;
 `
 
-const PrimaryAction = styled(ActionButton)`
+const PrimaryActionButton = styled(ActionButton)`
   background: ${getColor('buttonPrimary')};
-  border: none;
-  color: ${getColor('contrast')};
+  border-color: ${getColor('buttonPrimary')};
+`
+
+const ButtonIcon = styled.span`
+  font-size: 14px;
 `
