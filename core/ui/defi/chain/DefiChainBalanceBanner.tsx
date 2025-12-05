@@ -1,4 +1,5 @@
 import { Chain } from '@core/chain/Chain'
+import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { SafeImage } from '@lib/ui/images/SafeImage'
@@ -6,25 +7,23 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { formatAmount } from '@lib/utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useThorchainDefiBalance } from './thor/useThorchainDefiBalance'
 import { useCurrentDefiChain } from './useCurrentDefiChain'
 
-const formatUsd = (value: number) => {
-  return `$${formatAmount(value, { precision: 'high' })}`
-}
-
 export const DefiChainBalanceBanner = () => {
   const { t } = useTranslation()
   const chain = useCurrentDefiChain()
   const thorBalance = useThorchainDefiBalance()
+  const formatFiatAmount = useFormatFiatAmount()
 
   // Use real balance for THORChain, fallback to $0 for other chains
   const totalBalance =
-    chain === Chain.THORChain ? formatUsd(thorBalance.totalUsd) : '$0.00'
+    chain === Chain.THORChain
+      ? formatFiatAmount(thorBalance.totalUsd)
+      : formatFiatAmount(0)
   const isLoading = chain === Chain.THORChain && thorBalance.isPending
 
   return (
