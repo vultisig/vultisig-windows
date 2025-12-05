@@ -3,6 +3,7 @@ import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
+import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import {
   useRujiStakeViewQuery,
   useThorMergedAssetsQuery,
@@ -17,15 +18,10 @@ import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { formatAmount } from '@lib/utils/formatAmount'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-const decimals = 8
-
-const formatTokenAmount = (value: bigint) =>
-  formatAmount(fromChainAmount(value, decimals), { precision: 'high' })
-
-const formatUsd = (value: number) =>
-  `$${formatAmount(value, { precision: 'high' })}`
+const runeDecimals = 8
 
 type StakeCardData = {
   label: string
@@ -53,6 +49,8 @@ export const ThorchainStakedTab = () => {
   } = useThorMergedAssetsQuery()
   const { data: rujiStake } = useRujiStakeViewQuery()
   const navigate = useCoreNavigate()
+  const formatFiatAmount = useFormatFiatAmount()
+  const { t } = useTranslation()
 
   const runeCoin = chainFeeCoin.THORChain
   const pricesQuery = useCoinPricesQuery({
@@ -77,7 +75,7 @@ export const ThorchainStakedTab = () => {
   if (isTcyError || isMergedError) {
     return (
       <Text color="danger" size={14}>
-        Failed to load stake data.
+        {t('failed_to_load_stake_data')}
       </Text>
     )
   }
@@ -92,11 +90,11 @@ export const ThorchainStakedTab = () => {
       label: 'Staked TCY',
       ticker: 'TCY',
       amount: tcyAmount,
-      usdValue: fromChainAmount(tcyAmount, decimals) * runePrice,
+      usdValue: fromChainAmount(tcyAmount, runeDecimals) * runePrice,
       logo: 'tcy',
-      apr: '5.17%',
-      nextPayout: 'Oct 15, 25',
-      estimatedReward: '20 RUNE',
+      apr: '--',
+      nextPayout: '--',
+      estimatedReward: '--',
     })
   }
 
@@ -110,11 +108,11 @@ export const ThorchainStakedTab = () => {
       label: 'Compounded TCY',
       ticker: 'sTCY',
       amount,
-      usdValue: fromChainAmount(amount, decimals) * runePrice,
+      usdValue: fromChainAmount(amount, runeDecimals) * runePrice,
       logo: 'tcy',
-      apr: '5.17%',
-      nextPayout: 'Oct 15, 25',
-      estimatedReward: '20 RUNE',
+      apr: '--',
+      nextPayout: '--',
+      estimatedReward: '--',
     })
   }
 
@@ -134,14 +132,14 @@ export const ThorchainStakedTab = () => {
       label: `Staked ${position.symbol.toUpperCase()}`,
       ticker: position.symbol.toUpperCase(),
       amount,
-      usdValue: fromChainAmount(amount, decimals) * runePrice,
+      usdValue: fromChainAmount(amount, runeDecimals) * runePrice,
       logo: 'ruji',
-      apr: '5.17%',
-      nextPayout: 'Oct 15, 25',
-      estimatedReward: '20 RUNE',
+      apr: '--',
+      nextPayout: '--',
+      estimatedReward: '--',
       showWithdrawButton: hasRewards ?? false,
       withdrawAmount: hasRewards
-        ? `${formatTokenAmount(BigInt(rujiStake?.rewardsAmount ?? '0'))} ${rujiStake?.rewardsTicker ?? 'USDC'}`
+        ? `${formatAmount(fromChainAmount(BigInt(rujiStake?.rewardsAmount ?? '0'), runeDecimals), { precision: 'high' })} ${rujiStake?.rewardsTicker ?? 'USDC'}`
         : undefined,
     })
   })
@@ -154,9 +152,9 @@ export const ThorchainStakedTab = () => {
       amount: 0n,
       usdValue: 0,
       logo: 'tcy',
-      apr: '5.17%',
+      apr: '--',
       nextPayout: '--',
-      estimatedReward: '-- RUNE',
+      estimatedReward: '--',
     })
   }
 
@@ -179,10 +177,13 @@ export const ThorchainStakedTab = () => {
                   {card.label}
                 </Text>
                 <Text size={20} weight="700" color="contrast">
-                  {formatTokenAmount(card.amount)} {card.ticker}
+                  {formatAmount(fromChainAmount(card.amount, runeDecimals), {
+                    precision: 'high',
+                  })}{' '}
+                  {card.ticker}
                 </Text>
                 <Text size={12} color="shy">
-                  {formatUsd(card.usdValue)}
+                  {formatFiatAmount(card.usdValue)}
                 </Text>
               </VStack>
             </HStack>

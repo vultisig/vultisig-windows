@@ -3,6 +3,7 @@ import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
+import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { useThorLpPositionsQuery } from '@core/ui/defi/chain/thor/hooks'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
@@ -13,15 +14,10 @@ import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { formatAmount } from '@lib/utils/formatAmount'
+import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-const decimals = 8
-
-const formatTokenAmount = (value: bigint) =>
-  formatAmount(fromChainAmount(value, decimals), { precision: 'high' })
-
-const formatUsd = (value: number) =>
-  `$${formatAmount(value, { precision: 'high' })}`
+const runeDecimals = 8
 
 // Map asset names to their logos
 const getAssetLogo = (asset: string): string => {
@@ -44,6 +40,8 @@ const getPoolName = (asset: string): string => {
 export const ThorchainLpTab = () => {
   const { data, isPending, isError } = useThorLpPositionsQuery()
   const navigate = useCoreNavigate()
+  const formatFiatAmount = useFormatFiatAmount()
+  const { t } = useTranslation()
 
   const runeCoin = chainFeeCoin.THORChain
   const pricesQuery = useCoinPricesQuery({
@@ -68,7 +66,7 @@ export const ThorchainLpTab = () => {
   if (isError) {
     return (
       <Text color="danger" size={14}>
-        Failed to load LP positions.
+        {t('failed_to_load_lp_positions')}
       </Text>
     )
   }
@@ -79,7 +77,7 @@ export const ThorchainLpTab = () => {
     return (
       <Panel>
         <Text size={14} color="shy">
-          No LP positions found for this address.
+          {t('no_lp_positions_found')}
         </Text>
       </Panel>
     )
@@ -92,14 +90,12 @@ export const ThorchainLpTab = () => {
         const assetValue = BigInt(position.asset_deposit_value ?? '0')
         // Total value is approximately 2x RUNE value (symmetric pool)
         const totalUsdValue =
-          fromChainAmount(runeValue, decimals) * runePrice * 2
+          fromChainAmount(runeValue, runeDecimals) * runePrice * 2
         const poolName = getPoolName(position.asset)
         const assetLogo = getAssetLogo(position.asset)
 
         return (
-          <LpCardPanel
-            key={`${position.asset}-${position.asset_address ?? ''}`}
-          >
+          <LpCardPanel key={position.asset}>
             {/* Header with pool icon and APR */}
             <HStack justifyContent="space-between" alignItems="flex-start">
               <HStack gap={12} alignItems="center">
@@ -117,7 +113,7 @@ export const ThorchainLpTab = () => {
                     RUNE/{poolName} Pool
                   </Text>
                   <Text size={20} weight="700" color="contrast">
-                    {formatUsd(totalUsdValue)}
+                    {formatFiatAmount(totalUsdValue)}
                   </Text>
                 </VStack>
               </HStack>
@@ -129,7 +125,7 @@ export const ThorchainLpTab = () => {
                   </Text>
                 </HStack>
                 <Text size={14} weight="600" color="primary">
-                  5.17%
+                  {position.apr ? `${position.apr.toFixed(2)}%` : '--'}
                 </Text>
               </VStack>
             </HStack>
@@ -140,8 +136,14 @@ export const ThorchainLpTab = () => {
                 Position
               </Text>
               <Text size={14} color="contrast">
-                {formatTokenAmount(runeValue)} RUNE +{' '}
-                {formatTokenAmount(assetValue)} {poolName}
+                {formatAmount(fromChainAmount(runeValue, runeDecimals), {
+                  precision: 'high',
+                })}{' '}
+                RUNE +{' '}
+                {formatAmount(fromChainAmount(assetValue, runeDecimals), {
+                  precision: 'high',
+                })}{' '}
+                {poolName}
               </Text>
             </VStack>
 
