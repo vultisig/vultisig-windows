@@ -24,7 +24,10 @@ export type CoreView =
   | { id: 'currencySettings' }
   | { id: 'deeplink'; state: { url: string } }
   | { id: 'deleteVault' }
-  | { id: 'deposit'; state: { coin: CoinKey; action?: ChainAction } }
+  | {
+      id: 'deposit'
+      state: { coin: CoinKey; action?: ChainAction; nodeAddress?: string }
+    }
   | { id: 'referral' }
   | { id: 'importVault' }
   | { id: 'shareVault' }

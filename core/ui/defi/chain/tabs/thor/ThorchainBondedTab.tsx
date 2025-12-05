@@ -209,6 +209,7 @@ export const ThorchainBondedTab = () => {
                             state: {
                               coin: chainFeeCoin.THORChain,
                               action: 'unbond',
+                              nodeAddress: node.address,
                             },
                           })
                         }
@@ -223,6 +224,7 @@ export const ThorchainBondedTab = () => {
                             state: {
                               coin: chainFeeCoin.THORChain,
                               action: 'bond',
+                              nodeAddress: node.address,
                             },
                           })
                         }
