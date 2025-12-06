@@ -28,11 +28,14 @@ export const zh = {
     optional_validation: '选修的',
   },
   circle: {
+    account_created: 'Circle 账户创建成功',
+    account_creation_failed: 'Circle 账户创建失败',
     apy: 'APY',
     balance_title: '资产概览',
     banner_text:
       '资金始终完全由您的金库控制。Circle收益通过安全的链下金库产生。结算后即可随时提现。',
     claim: '领取奖励',
+    creating_account: '正在创建账户...',
     deposit: '订金',
     introduction:
       '将您的 USDC 存入 Circle 账户即可赚取收益。安全存放于您的 Vultisig 金库中。',

@@ -28,11 +28,14 @@ export const de = {
     optional_validation: 'Optional',
   },
   circle: {
+    account_created: 'Circle-Konto erfolgreich erstellt',
+    account_creation_failed: 'Circle-Konto konnte nicht erstellt werden',
     apy: 'APY',
     balance_title: 'Bilanzübersicht',
     banner_text:
       'Ihre Gelder bleiben vollständig unter Ihrer Kontrolle. Die Circle-Rendite wird über sichere Off-Chain-Treasuries generiert. Sie können Ihr Geld jederzeit nach der Abrechnung abheben.',
     claim: 'Prämien einfordern',
+    creating_account: 'Konto wird erstellt...',
     deposit: 'Kaution',
     introduction:
       'Zahlen Sie Ihre USDC auf ein Circle-Konto ein und erhalten Sie Zinsen. Sicher in Ihrem Vultisig-Tresor.',

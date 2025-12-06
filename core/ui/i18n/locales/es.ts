@@ -28,11 +28,14 @@ export const es = {
     optional_validation: 'Opcional',
   },
   circle: {
+    account_created: 'Cuenta Circle creada con éxito',
+    account_creation_failed: 'Error al crear la cuenta Circle',
     apy: 'Tasa de rendimiento anual (APY)',
     balance_title: 'Resumen de equilibrio',
     banner_text:
       'Los fondos permanecen bajo el control total de su bóveda. El rendimiento de Circle se genera mediante tesorerías seguras fuera de la cadena. Puede retirar sus fondos en cualquier momento después de la liquidación.',
     claim: 'Reclama recompensas',
+    creating_account: 'Creando cuenta...',
     deposit: 'Depósito',
     introduction:
       'Deposita tus $USDC en una cuenta Circle y obtén ganancias. De forma segura en tu bóveda de Vultisig.',

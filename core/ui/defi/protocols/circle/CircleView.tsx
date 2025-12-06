@@ -9,6 +9,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { CreateCircleAccount } from './account/CreateCircleAccount'
 import { APYOverview } from './components/APYOverview'
 import { BalanceOverviewTable } from './components/BalanceOverviewTable'
 import { InfoBanner } from './components/InfoBanner'
@@ -24,6 +25,7 @@ export const CircleView = () => {
         title={t('circle_title')}
       />
       <StyledPageContent>
+        <CreateCircleAccount />
         <Image
           src="/core/images/circle-screen-bg.png"
           alt="register vault"

@@ -28,11 +28,14 @@ export const hr = {
     optional_validation: 'Izborno',
   },
   circle: {
+    account_created: 'Circle račun uspješno kreiran',
+    account_creation_failed: 'Kreiranje Circle računa nije uspjelo',
     apy: 'APY',
     balance_title: 'Pregled stanja',
     banner_text:
       'Sredstva ostaju u potpunosti pod kontrolom vašeg trezora. Prinos Circlea generira se putem sigurnih izvanmrežnih blagajni. Povucite novac bilo kada nakon namire.',
     claim: 'Iskoristite nagrade',
+    creating_account: 'Kreiranje računa...',
     deposit: 'Polog',
     introduction:
       'Uplatite svoj $USDC na Circle račun i ostvarite prinos. Sigurno unutar vašeg Vultisig trezora.',
