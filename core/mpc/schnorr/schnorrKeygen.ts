@@ -338,7 +338,8 @@ export class Schnorr {
   private async startKeyImport(
     hexPrivateKey: string,
     hexChainCode: string,
-    attempt: number
+    attempt: number,
+    additionalHeader?: string
   ) {
     console.log('startKeyImport schnorr, attempt:', attempt)
     this.isKeygenComplete = false
@@ -364,14 +365,14 @@ export class Schnorr {
           serverUrl: this.serverURL,
           message: encryptedSetupMsg,
           sessionId: this.sessionId,
-          messageId: 'eddsa_key_import',
+          messageId: additionalHeader,
         })
         console.log('uploaded setup message successfully')
       } else {
         const encodedEncryptedSetupMsg = await waitForSetupMessage({
           serverUrl: this.serverURL,
           sessionId: this.sessionId,
-          messageId: 'eddsa_key_import',
+          messageId: additionalHeader,
         })
         this.setupMessage = fromMpcServerMessage(
           encodedEncryptedSetupMsg,
@@ -411,12 +412,18 @@ export class Schnorr {
   }
   public async startKeyImportWithRetry(
     hexPrivateKey: string,
-    hexChainCode: string
+    hexChainCode: string,
+    additionalHeader?: string
   ) {
     await initializeMpcLib('eddsa')
     for (let i = 0; i < 3; i++) {
       try {
-        const result = await this.startKeyImport(hexPrivateKey, hexChainCode, i)
+        const result = await this.startKeyImport(
+          hexPrivateKey,
+          hexChainCode,
+          i,
+          additionalHeader
+        )
         if (result !== undefined) {
           return result
         }

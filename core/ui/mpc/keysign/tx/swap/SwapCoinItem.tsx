@@ -27,7 +27,7 @@ export const SwapCoinItem = ({
       <CoinIcon coin={coin} style={{ fontSize: 36 }} />
       <div>
         <Text centerHorizontally color="contrast" size={14}>
-          {tokenAmount} {ticker.toUpperCase()}
+          {tokenAmount} {ticker}
         </Text>
         {tokenAmount && (
           <MatchQuery
