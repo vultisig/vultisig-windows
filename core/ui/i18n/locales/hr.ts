@@ -304,6 +304,8 @@ export const hr = {
   clear: 'Jasan',
   close: 'Zatvoriti',
   coin_not_found_in_current_vault: 'Novčić nije pronađen u trenutnom trezoru',
+  coin_not_found_in_any_vault:
+    '{{ticker}} na {{chain}} nije pronađen u nijednom trezoru',
   collected_rewards: 'Sakupljene nagrade',
   coming_soon: 'Uskoro',
   complete: 'Završeno',

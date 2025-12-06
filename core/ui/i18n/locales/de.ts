@@ -309,6 +309,8 @@ export const de = {
   clear: 'Klar',
   close: 'Schließen',
   coin_not_found_in_current_vault: 'Münze im aktuellen Tresor nicht gefunden.',
+  coin_not_found_in_any_vault:
+    '{{ticker}} auf {{chain}} wurde in keinem Tresor gefunden',
   collected_rewards: 'Gesammelte Prämien',
   coming_soon: 'Demnächst verfügbar',
   complete: 'Vollständig',

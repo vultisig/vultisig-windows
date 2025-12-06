@@ -12,12 +12,11 @@ import { DoneButton } from '@core/ui/vault/chain/manage/shared/DoneButton'
 import {
   LeadingIconBadge,
   SectionHeader,
+  VaultListItem,
   VaultListRow,
-  VaultSignersPill,
 } from '@core/ui/vaultsOrganisation/components'
 import { useVaultsTotalBalances } from '@core/ui/vaultsOrganisation/hooks/useVaultsTotalBalances'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { FolderIcon } from '@lib/ui/icons/FolderIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -33,7 +32,6 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useCore } from '../state/core'
-import { getVaultSecurityTone } from './utils/getVaultSecurityTone'
 
 type FolderEntry = {
   id: string
@@ -203,31 +201,18 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
             <VStack gap={12}>
               {folderlessVaults.map(vault => {
                 const vaultId = getVaultId(vault)
-                const { tone, icon } = getVaultSecurityTone(vault)
-                const value = vaultTotals?.[vaultId]
+                const value =
+                  !isTotalsPending && vaultTotals?.[vaultId] !== undefined
+                    ? vaultTotals[vaultId]
+                    : undefined
 
                 return (
-                  <VaultListRow
+                  <VaultListItem
                     key={vaultId}
-                    leading={
-                      <LeadingIconBadge tone={tone}>{icon}</LeadingIconBadge>
-                    }
-                    title={vault.name}
-                    subtitle={
-                      !isTotalsPending && value !== undefined
-                        ? formatFiatAmount(value)
-                        : undefined
-                    }
-                    meta={<VaultSignersPill vault={vault} />}
+                    vault={vault}
+                    onSelect={() => handleSelectVault(vaultId)}
                     selected={vaultId === currentVaultId}
-                    trailing={
-                      vaultId === currentVaultId ? (
-                        <IconWrapper size={20} color="success">
-                          <CheckIcon />
-                        </IconWrapper>
-                      ) : null
-                    }
-                    onClick={() => handleSelectVault(vaultId)}
+                    balance={value}
                   />
                 )
               })}
