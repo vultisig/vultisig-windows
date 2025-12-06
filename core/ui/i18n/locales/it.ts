@@ -28,11 +28,14 @@ export const it = {
     optional_validation: 'Opzionale',
   },
   circle: {
+    account_created: 'Account Circle creato con successo',
+    account_creation_failed: "Impossibile creare l'account Circle",
     apy: 'APY',
     balance_title: 'Panoramica del saldo',
     banner_text:
       'I fondi rimangono completamente sotto il controllo del tuo caveau. Il rendimento di Circle è generato tramite tesorerie off-chain sicure. Puoi prelevare in qualsiasi momento dopo il regolamento.',
     claim: 'Richiedi premi',
+    creating_account: "Creazione dell'account in corso...",
     deposit: 'Depositare',
     introduction:
       'Deposita i tuoi $USDC su un conto Circle e guadagna. In tutta sicurezza, nel tuo caveau Vultisig.',

@@ -145,11 +145,14 @@ export const en = {
   choose_tokens: 'Choose Tokens',
   choose_vault: 'Choose Vault',
   circle: {
+    account_created: 'Circle account created successfully',
+    account_creation_failed: 'Failed to create Circle account',
     apy: 'APY',
     balance_title: 'Balance Overview',
     banner_text:
-      'Funds remain fully under your vault’s control. Circle yield is generated through secure off-chain treasuries. Withdraw anytime after settlement.',
+      "Funds remain fully under your vault's control. Circle yield is generated through secure off-chain treasuries. Withdraw anytime after settlement.",
     claim: 'Claim Rewards',
+    creating_account: 'Creating account...',
     deposit: 'Deposit',
     introduction:
       'Deposit your $USDC into a Circle account and earn yield. Securely within your Vultisig vault.',
@@ -1231,4 +1234,5 @@ export const en = {
   your_referral_code: 'Your Referral Code',
   your_referrals: 'Your Referrals',
   youre_swapping: "You're swapping",
+  open_account: 'Open Account',
 }

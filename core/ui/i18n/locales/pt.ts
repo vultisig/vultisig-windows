@@ -28,11 +28,14 @@ export const pt = {
     optional_validation: 'Opcional',
   },
   circle: {
+    account_created: 'Conta Circle criada com sucesso',
+    account_creation_failed: 'Falha ao criar conta Circle',
     apy: 'APY',
     balance_title: 'Visão geral do equilíbrio',
     banner_text:
       'Os fundos permanecem totalmente sob o controle do seu cofre. O rendimento do Circle é gerado por meio de tesourarias seguras fora da blockchain. Saque a qualquer momento após a liquidação.',
     claim: 'Resgate suas recompensas',
+    creating_account: 'Criando conta...',
     deposit: 'Depósito',
     introduction:
       'Deposite seus USDC em uma conta Circle e ganhe rendimentos. Tudo em segurança dentro do seu cofre Vultisig.',
