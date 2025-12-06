@@ -2,7 +2,6 @@ import { hasServer } from '@core/mpc/devices/localPartyId'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { CircleIcon } from '@lib/ui/icons/CircleIcon'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { IconFileEdit } from '@lib/ui/icons/IconFileEdit'
 import { IconShareAndroid } from '@lib/ui/icons/IconShareAndroid'
@@ -18,7 +17,6 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { featureFlags } from '../../featureFlags'
 import { SettingsSection } from '../../settings/SettingsSection'
 import { VaultSettingsBackup } from './backup'
 
@@ -109,22 +107,6 @@ export const VaultSettingsPage = () => {
             hoverable
             showArrow
           />
-          {featureFlags.circle && (
-            <ListItem
-              icon={
-                <ListItemIconWrapper>
-                  <CircleIcon />
-                </ListItemIconWrapper>
-              }
-              description={
-                <DescriptionText>{t('circle_description')}</DescriptionText>
-              }
-              onClick={() => navigate({ id: 'circle' })}
-              title={t('circle_title')}
-              hoverable
-              showArrow
-            />
-          )}
         </SettingsSection>
         <DeleteItem
           icon={

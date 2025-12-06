@@ -1,4 +1,3 @@
-import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { getLifiSwapQuote } from '@core/chain/swap/general/lifi/api/getLifiSwapQuote'
 import { lifiSwapEnabledChains } from '@core/chain/swap/general/lifi/LifiSwapEnabledChains'
@@ -7,6 +6,7 @@ import { oneInchSwapEnabledChains } from '@core/chain/swap/general/oneInch/OneIn
 import { NoSwapRoutesError } from '@core/chain/swap/NoSwapRoutesError'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { isOneOf } from '@lib/utils/array/isOneOf'
+import { bigIntToNumber } from '@lib/utils/bigint/bigIntToNumber'
 import { asyncFallbackChain } from '@lib/utils/promise/asyncFallbackChain'
 import { pick } from '@lib/utils/record/pick'
 import { TransferDirection } from '@lib/utils/TransferDirection'
@@ -22,7 +22,7 @@ import {
 import { SwapQuote } from './SwapQuote'
 
 export type FindSwapQuoteInput = Record<TransferDirection, AccountCoin> & {
-  amount: number
+  amount: bigint
   referral?: string
   affiliateBps?: number
 }
@@ -46,12 +46,14 @@ export const findSwapQuote = ({
 
   const getNativeFetchers = (): SwapQuoteFetcher[] =>
     matchingSwapChains.map(swapChain => async (): Promise<SwapQuote> => {
+      const fromDecimals = from.decimals
+      const amountNumber = bigIntToNumber(amount, fromDecimals)
       const native = await getNativeSwapQuote({
         swapChain,
         destination: to.address,
         from,
         to,
-        amount,
+        amount: amountNumber,
         referral,
         affiliateBps,
       })
@@ -64,7 +66,7 @@ export const findSwapQuote = ({
 
     const fromChain = from.chain
     const toChain = to.chain
-    const chainAmount = toChainAmount(amount, from.decimals)
+    const chainAmount = amount
 
     if (
       isOneOf(fromChain, kyberSwapEnabledChains) &&

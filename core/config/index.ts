@@ -1,7 +1,9 @@
-export const productRootDomain = 'vultisig.com'
+export const productName = 'Vultisig'
+const productId = productName.toLowerCase()
+export const productRootDomain = `${productId}.com`
 export const rootApiUrl = `https://api.${productRootDomain}`
 export const deepLinkBaseUrl = `https://${productRootDomain}`
-export const productName = 'Vultisig'
+export const deepLinkBaseUrlAt = `${productId}://`
 export const productWebsiteUrl = `https://${productRootDomain}`
 export const desktopDownloadUrl = `${productWebsiteUrl}/downloads`
 export const extensionDownloadUrl =

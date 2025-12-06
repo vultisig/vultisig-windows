@@ -304,6 +304,8 @@ export const hr = {
   clear: 'Jasan',
   close: 'Zatvoriti',
   coin_not_found_in_current_vault: 'Novčić nije pronađen u trenutnom trezoru',
+  coin_not_found_in_any_vault:
+    '{{ticker}} na {{chain}} nije pronađen u nijednom trezoru',
   collected_rewards: 'Sakupljene nagrade',
   coming_soon: 'Uskoro',
   complete: 'Završeno',
@@ -341,12 +343,18 @@ export const hr = {
   custom: 'Prilagođena radnja',
   custom_token: 'Prilagođeni token',
   customize_chains: 'Prilagodi lance',
+  customize_positions: 'Prilagodi pozicije',
   dapp_name: 'Naziv dApp-a',
   decrypting_vault_keyshares: 'Dešifriranje dijeljenja ključeva trezora...',
   deeplink: 'Duboka veza',
   default_chains: 'Zadani lanci',
   defi: 'DeFi',
   defi_portfolio: 'DeFi portfelj',
+  defiChainTabs: {
+    bonded: 'Bonded',
+    staked: 'Staked',
+    lps: 'LPs',
+  },
   delete: 'Izbrisati',
   delete_folder: 'Izbriši mapu',
   delete_folder_confirmation:
@@ -425,6 +433,8 @@ export const hr = {
   expires_on: 'Istječe',
   extension_vault_import_restriction:
     'U ekstenziju se mogu uvesti samo DKLS trezori',
+  fallback_swap_warning:
+    'Nismo mogli simulirati ovu transakciju. Nastavite s oprezom.',
   failed_to_confirm_email_code: 'Nije uspjelo potvrditi kod za potvrdu e-pošte',
   failed_to_connect_with_server: 'Povezivanje sa serverom nije uspjelo',
   failed_to_copy_address: 'Kopiranje adrese nije uspjelo',
@@ -707,6 +717,10 @@ export const hr = {
   no_tokens_selected: 'Nije odabran nijedan token',
   no_tokens_selected_description:
     'Onemogućili ste sve tokene. Provjerite je li token koji tražite omogućen.',
+  no_positions_found: 'Nisu pronađene pozicije',
+  no_positions_selected: 'Nije odabrana nijedna pozicija',
+  no_positions_selected_description:
+    'Onemogućili ste sve pozicije za ovaj lanac. Omogućite barem jednu poziciju za prikaz stanja i upravljanje radnjama.',
   no_vaults: 'Još nema trezora',
   no_vaults_desc:
     'Vaši će se trezori pojaviti ovdje. Započnite stvaranjem jednog ili uvozom postojećeg trezora.',
@@ -893,6 +907,9 @@ export const hr = {
   select_backup_file: 'Uvezite svoj trezorski udio',
   select_chain: 'Odaberite lanac',
   select_chains: 'Odaberite',
+  select_positions: 'Odaberite pozicije',
+  select_positions_description:
+    'Omogućite pozicije za prikaz stanja i upravljanje imovinom.',
   select_destination_chain: 'Odaberite lanac odredišta',
   select_n_devices_one: 'Odaberite {{count}} uređaj',
   select_n_devices_other: 'Odaberite {{count}} uređaja',
@@ -1230,6 +1247,8 @@ export const hr = {
   while_you_wait_vultisig_is: 'Dok čekate, Vultisig je...',
   with_these_devices: 'S ovim uređajima',
   withdraw_ruji_rewards: 'Isplata RUJI nagrada',
+  add_cacao_pool: 'Dodaj u CACAO pool',
+  remove_cacao_pool: 'Ukloni iz CACAO poola',
   wrong_address_for_chain: 'Pogrešna adresa za odabrani lanac',
   wrong_vault_try_again: 'Pogrešan trezor ili upareni uređaj.',
   you_are_sending: 'Šaljete',
@@ -1242,4 +1261,6 @@ export const hr = {
   unlock_discount_tier_description_ultimate:
     'Držanjem {{minBalance}} otključat ćete {{tier}} razinu i dobiti <b>potpuno oslobađanje od Vultisig naknade</b> za sve swapove.',
   ultimate: 'Krajnji',
+  vault_settings_language_settings_subtitle_zh: 'kineski',
+  vault_settings_language_settings_title_zh: '中文',
 }

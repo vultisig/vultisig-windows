@@ -81,8 +81,21 @@ export const parseBlockaidSolanaSwapSimulation = async (
   simulation: BlockaidSolanaSimulation
 ): Promise<BlockaidSolanaSwapSimulationInfo> => {
   const assetDiffs = simulation.account_summary.account_assets_diff
-  if (assetDiffs.length > 1) {
-    const [potentialOutAsset, potentialInAsset] = assetDiffs
+
+  // When we have 3 items and one is native SOL, filter it out and use the other two tokens.
+  // The native SOL is likely the transaction fee, not part of the swap itself.
+  let relevantDiffs = assetDiffs
+  if (assetDiffs.length === 3) {
+    const nativeSolIndex = assetDiffs.findIndex(
+      diff => diff.asset.type === 'SOL' || diff.asset_type === 'SOL'
+    )
+    if (nativeSolIndex !== -1) {
+      relevantDiffs = assetDiffs.filter((_, index) => index !== nativeSolIndex)
+    }
+  }
+
+  if (relevantDiffs.length > 1) {
+    const [potentialOutAsset, potentialInAsset] = relevantDiffs
     const { inAsset, inValue } = potentialInAsset.in
       ? {
           inAsset: potentialInAsset.asset,

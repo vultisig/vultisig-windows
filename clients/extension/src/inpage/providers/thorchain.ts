@@ -30,11 +30,17 @@ export class THORChain extends BaseCosmosChain {
       const handlers = {
         ...getSharedHandlers(CosmosChain.THORChain),
         deposit_transaction: async ([tx]: [TransactionDetails]) => {
+          const transactionDetails = {
+            ...tx,
+            memo: tx.memo,
+            data: tx.data ?? tx.memo,
+          }
+
           const { hash } = await callPopup(
             {
               sendTx: {
                 keysign: {
-                  transactionDetails: tx,
+                  transactionDetails,
                   chain: CosmosChain.THORChain,
                   isDeposit: true,
                 },

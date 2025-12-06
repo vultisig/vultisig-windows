@@ -1,3 +1,7 @@
+import { passwordLengthConfig } from '@core/config/password'
+import { getVaultFromServer } from '@core/mpc/fast/api/getVaultFromServer'
+import { getVaultId } from '@core/mpc/vault/Vault'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
@@ -9,16 +13,33 @@ import { Backdrop } from '@lib/ui/modal/Backdrop'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { useMemo, useState } from 'react'
+import { useMutation } from '@tanstack/react-query'
+import { TFunction } from 'i18next'
+import { useMemo } from 'react'
+import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+import { z } from 'zod'
+
+import { useCurrentVault } from '../../vault/state/currentVault'
+
+const createSchema = (t: TFunction) => {
+  const message = t('password_pattern_error', passwordLengthConfig)
+
+  return z.object({
+    password: z
+      .string()
+      .min(passwordLengthConfig.min, message)
+      .max(passwordLengthConfig.max, message),
+  })
+}
+
+type Schema = z.infer<ReturnType<typeof createSchema>>
 
 type FastVaultPasswordModalProps = OnBackProp &
   OnFinishProp<{
     password: string
   }> & {
-    error?: Error | null
-    isPending?: boolean
     title?: string
     description?: string
     showModal?: boolean
@@ -28,15 +49,41 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
   showModal,
   onFinish,
   onBack,
-  error,
-  isPending = false,
   title,
   description,
 }) => {
-  const [password, setPassword] = useState('')
   const { t } = useTranslation()
+  const vault = useCurrentVault()
+  const schema = useMemo(() => createSchema(t), [t])
+  const {
+    error: mutationError,
+    isPending: mutationIsPending,
+    mutate,
+  } = useMutation({
+    mutationFn: getVaultFromServer,
+    onSuccess: onFinish,
+  })
 
-  const isDisabled = useMemo(() => !password, [password])
+  const {
+    formState: { errors, isValid },
+    handleSubmit,
+    register,
+  } = useForm<Schema>({
+    mode: 'onChange',
+    resolver: zodResolver(schema),
+  })
+
+  const onSubmit = ({ password }: Schema) => {
+    mutate({ vaultId: getVaultId(vault), password })
+  }
+
+  const passwordErrorMessage = useMemo(() => {
+    if (mutationError) {
+      return t('incorrect_password')
+    }
+
+    return errors.password?.message
+  }, [mutationError, errors.password, t])
 
   return showModal ? (
     <Backdrop onClose={onBack}>
@@ -58,22 +105,18 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
           </Text>
         </VStack>
 
-        <VStack gap={16} fullWidth>
+        <VStack as="form" onSubmit={handleSubmit(onSubmit)} gap={16} fullWidth>
           <PasswordInput
+            {...register('password')}
             placeholder={t('enter_password')}
-            value={password}
-            onValueChange={value => {
-              if (isPending) return
-              setPassword(value)
-            }}
-            validation={error ? 'invalid' : undefined}
-            error={error ? t('incorrect_password') : undefined}
+            validation={passwordErrorMessage ? 'invalid' : undefined}
+            error={passwordErrorMessage}
           />
 
           <ConfirmButton
-            disabled={isDisabled || isPending}
-            loading={isPending}
-            onClick={() => onFinish({ password })}
+            disabled={mutationIsPending || !isValid}
+            loading={mutationIsPending}
+            type="submit"
             kind="primary"
           >
             {t('confirm')}

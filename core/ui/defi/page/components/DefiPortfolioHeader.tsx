@@ -66,7 +66,7 @@ export const DefiPortfolioHeader = () => {
                 kind="secondary"
                 onClick={() => navigate({ id: 'manageDefiChains' })}
                 style={{
-                  color: colors.info.toCssValue(),
+                  color: colors.primaryAccentFour.toCssValue(),
                 }}
                 size="lg"
               >
