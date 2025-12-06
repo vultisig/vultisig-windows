@@ -6,7 +6,9 @@ import { oneInchSwapEnabledChains } from '@core/chain/swap/general/oneInch/OneIn
 import { NoSwapRoutesError } from '@core/chain/swap/NoSwapRoutesError'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { isOneOf } from '@lib/utils/array/isOneOf'
+import { attempt } from '@lib/utils/attempt'
 import { bigIntToNumber } from '@lib/utils/bigint/bigIntToNumber'
+import { isInError } from '@lib/utils/error/isInError'
 import { asyncFallbackChain } from '@lib/utils/promise/asyncFallbackChain'
 import { pick } from '@lib/utils/record/pick'
 import { TransferDirection } from '@lib/utils/TransferDirection'
@@ -29,7 +31,7 @@ export type FindSwapQuoteInput = Record<TransferDirection, AccountCoin> & {
 
 type SwapQuoteFetcher = () => Promise<SwapQuote>
 
-export const findSwapQuote = ({
+export const findSwapQuote = async ({
   from,
   to,
   amount,
@@ -145,5 +147,17 @@ export const findSwapQuote = ({
     throw new NoSwapRoutesError()
   }
 
-  return asyncFallbackChain(...fetchers)
+  const { data, error } = await attempt(asyncFallbackChain(...fetchers))
+
+  if (data) {
+    return data
+  }
+
+  if (isInError(error, 'dust threshold')) {
+    throw new Error(
+      'Swap amount too small. Please increase the amount to proceed.'
+    )
+  }
+
+  throw error
 }
