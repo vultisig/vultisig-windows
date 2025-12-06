@@ -1,4 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { Chain } from '@core/chain/Chain'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
@@ -101,9 +102,16 @@ export const ManageFromAmount = () => {
                     suggestionAmount,
                     decimals
                   )
-                  const trimmed = decimalString.includes('.')
-                    ? decimalString.replace(/\.?0+$/, '')
-                    : decimalString
+                  const maxDisplayDecimals =
+                    fromCoinKey.chain === Chain.Bitcoin ? 8 : 4
+                  const [integerPart, decimalPart] = decimalString.split('.')
+                  const croppedDecimal = decimalPart
+                    ? `.${decimalPart.slice(0, maxDisplayDecimals)}`
+                    : ''
+                  const cropped = `${integerPart}${croppedDecimal}`
+                  const trimmed = cropped.includes('.')
+                    ? cropped.replace(/\.?0+$/, '')
+                    : cropped
                   handleInputValueChange(trimmed)
                 }}
                 key={suggestion}
