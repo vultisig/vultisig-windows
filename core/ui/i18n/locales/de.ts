@@ -663,6 +663,7 @@ export const de = {
   leave: 'Verlassen',
   legal: 'Recht',
   link_copied: 'Link in die Zwischenablage kopiert',
+  liquidity_pools: 'Liquiditätspools',
   loading: 'Laden...',
   local: 'Lokal',
   localMode: 'Sie befinden sich im lokalen Modus',
@@ -1287,6 +1288,9 @@ export const de = {
   unlock_discount_tier_description_ultimate:
     'Mit einem Guthaben von {{minBalance}} schalten Sie die Stufe {{tier}} frei und erhalten einen <b>vollständigen Vultisig-Gebührenverzicht</b> für alle Tauschgeschäfte.',
   ultimate: 'Ultimativ',
+  active_nodes: 'Aktive Nodes',
+  available_nodes: 'Verfügbare Nodes',
+  available_nodes_coming_soon: 'Verfügbare Nodes bald',
   vault_settings_language_settings_subtitle_zh: 'chinesisch',
   vault_settings_language_settings_title_zh: '中文',
 }

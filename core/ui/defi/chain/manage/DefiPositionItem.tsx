@@ -1,8 +1,10 @@
+import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { DefiPosition } from '@core/ui/storage/defiPositions'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { SafeImage } from '@lib/ui/images/SafeImage'
+import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import styled, { css } from 'styled-components'
@@ -22,23 +24,33 @@ export const DefiPositionItem = ({
 }: DefiPositionItemProps) => {
   return (
     <Container onClick={onToggle} disabled={isLoading}>
-      <HStack gap={12} alignItems="center">
+      <VStack gap={8} alignItems="center">
         <IconWrapper isSelected={isSelected}>
-          <Text size={16} weight="600" color="contrast">
-            {position.ticker.charAt(0)}
-          </Text>
+          {position.logo ? (
+            <SafeImage
+              src={getCoinLogoSrc(position.logo)}
+              render={props => <CoinLogo {...props} />}
+              fallback={
+                <Text size={16} weight="600" color="contrast">
+                  {position.ticker.charAt(0)}
+                </Text>
+              }
+            />
+          ) : (
+            <Text size={16} weight="600" color="contrast">
+              {position.ticker.charAt(0)}
+            </Text>
+          )}
           {isSelected && (
             <CheckBadge>
               <CheckIcon />
             </CheckBadge>
           )}
         </IconWrapper>
-        <VStack gap={2}>
-          <Text size={14} weight="500">
-            {position.name}
-          </Text>
-        </VStack>
-      </HStack>
+        <Text size={12} weight="500" color="contrast">
+          {position.ticker}
+        </Text>
+      </VStack>
     </Container>
   )
 }
@@ -91,4 +103,9 @@ const CheckBadge = styled.div`
     height: 10px;
     color: ${getColor('background')};
   }
+`
+
+const CoinLogo = styled.img`
+  ${sameDimensions(32)};
+  border-radius: 50%;
 `

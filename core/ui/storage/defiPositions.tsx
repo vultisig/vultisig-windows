@@ -13,6 +13,7 @@ export type DefiPosition = {
   ticker: string
   type: DefiPositionType
   chain: Chain
+  logo?: string // Logo identifier for coin icon
 }
 
 // Define available positions for each chain
@@ -24,6 +25,7 @@ const availableDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
       ticker: 'RUNE',
       type: 'bond',
       chain: Chain.THORChain,
+      logo: 'rune',
     },
     {
       id: 'thor-stake-tcy',
@@ -31,6 +33,7 @@ const availableDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
       ticker: 'TCY',
       type: 'stake',
       chain: Chain.THORChain,
+      logo: 'tcy',
     },
     {
       id: 'thor-stake-ruji',
@@ -38,6 +41,7 @@ const availableDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
       ticker: 'RUJI',
       type: 'stake',
       chain: Chain.THORChain,
+      logo: 'ruji',
     },
     {
       id: 'thor-stake-sruji',
@@ -45,6 +49,7 @@ const availableDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
       ticker: 'sRUJI',
       type: 'stake',
       chain: Chain.THORChain,
+      logo: 'ruji',
     },
     {
       id: 'thor-lp-rune-eth',
@@ -52,6 +57,7 @@ const availableDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
       ticker: 'RUNE/ETH',
       type: 'lp',
       chain: Chain.THORChain,
+      logo: 'eth',
     },
     {
       id: 'thor-lp-rune-usdc',
@@ -59,6 +65,7 @@ const availableDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
       ticker: 'RUNE/USDC',
       type: 'lp',
       chain: Chain.THORChain,
+      logo: 'usdc',
     },
     {
       id: 'thor-lp-rune-btc',
@@ -66,6 +73,7 @@ const availableDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
       ticker: 'RUNE/BTC',
       type: 'lp',
       chain: Chain.THORChain,
+      logo: 'btc',
     },
     {
       id: 'thor-lp-rune-bnb',
@@ -73,6 +81,7 @@ const availableDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
       ticker: 'RUNE/BNB',
       type: 'lp',
       chain: Chain.THORChain,
+      logo: 'bsc',
     },
   ],
   [Chain.MayaChain]: [
@@ -82,6 +91,7 @@ const availableDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
       ticker: 'CACAO',
       type: 'bond',
       chain: Chain.MayaChain,
+      logo: 'cacao',
     },
     {
       id: 'maya-stake-maya',
@@ -89,6 +99,7 @@ const availableDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
       ticker: 'MAYA',
       type: 'stake',
       chain: Chain.MayaChain,
+      logo: 'maya',
     },
   ],
 }

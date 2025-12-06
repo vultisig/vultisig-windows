@@ -596,6 +596,7 @@ export const zh = {
   leave: '离开',
   legal: '合法的',
   link_copied: '链接已复制到剪贴板',
+  liquidity_pools: '流动性池',
   loading: '加载中...',
   local: '当地的',
   localMode: '您处于本地模式',
@@ -1155,4 +1156,7 @@ export const zh = {
   your_referral_code: '您的推荐码',
   your_referrals: '您的推荐',
   youre_swapping: '你在交换',
+  active_nodes: '活跃节点',
+  available_nodes: '可用节点',
+  available_nodes_coming_soon: '可用节点即将推出',
 }

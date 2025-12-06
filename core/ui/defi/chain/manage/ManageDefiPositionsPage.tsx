@@ -35,6 +35,10 @@ export const ManageDefiPositionsPage = () => {
     () => getPositionsByType({ chain, type: 'stake' }),
     [chain]
   )
+  const lpPositions = useMemo(
+    () => getPositionsByType({ chain, type: 'lp' }),
+    [chain]
+  )
 
   const filterPositions = (positions: DefiPosition[]) => {
     if (!search) return positions
@@ -48,9 +52,12 @@ export const ManageDefiPositionsPage = () => {
 
   const filteredBondPositions = filterPositions(bondPositions)
   const filteredStakePositions = filterPositions(stakePositions)
+  const filteredLpPositions = filterPositions(lpPositions)
 
   const hasResults =
-    filteredBondPositions.length > 0 || filteredStakePositions.length > 0
+    filteredBondPositions.length > 0 ||
+    filteredStakePositions.length > 0 ||
+    filteredLpPositions.length > 0
 
   return (
     <VStack fullHeight>
@@ -94,6 +101,19 @@ export const ManageDefiPositionsPage = () => {
             {filteredStakePositions.length > 0 && (
               <PositionSection title={t('stake')}>
                 {filteredStakePositions.map(position => (
+                  <DefiPositionItem
+                    key={position.id}
+                    position={position}
+                    isSelected={selectedPositionIds.includes(position.id)}
+                    onToggle={() => togglePosition(position.id)}
+                    isLoading={isPending}
+                  />
+                ))}
+              </PositionSection>
+            )}
+            {filteredLpPositions.length > 0 && (
+              <PositionSection title={t('liquidity_pools')}>
+                {filteredLpPositions.map(position => (
                   <DefiPositionItem
                     key={position.id}
                     position={position}
