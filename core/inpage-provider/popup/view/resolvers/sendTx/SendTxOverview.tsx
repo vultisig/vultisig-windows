@@ -3,6 +3,7 @@ import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { FeeSettings } from '@core/mpc/keysign/chainSpecific/FeeSettings'
 import { getBlockchainSpecificValue } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
+import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
@@ -74,7 +75,7 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
   const gasEstimationInput = useTransformQueryData(
     keysignPayloadQuery,
     useCallback(
-      payload => {
+      (payload: KeysignPayload) => {
         if (!isChainOfKind(chain, 'evm')) {
           return null
         }

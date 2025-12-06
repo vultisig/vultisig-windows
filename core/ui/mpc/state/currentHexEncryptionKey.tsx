@@ -8,6 +8,11 @@ export const {
   provider: CurrentHexEncryptionKeyProvider,
 } = getValueProviderSetup<string>('CurrentHexEncryptionKey')
 
+export const {
+  useValue: useDAppEncryptionKey,
+  provider: DAppEncryptionKeyProvider,
+} = getValueProviderSetup<string | undefined>('DAppEncryptionKey')
+
 export const GeneratedHexEncryptionKeyProvider = ({
   children,
 }: ChildrenProp) => {
@@ -15,6 +20,25 @@ export const GeneratedHexEncryptionKeyProvider = ({
 
   return (
     <CurrentHexEncryptionKeyProvider value={HexEncryptionKey}>
+      {children}
+    </CurrentHexEncryptionKeyProvider>
+  )
+}
+
+export const ConditionalHexEncryptionKeyProvider = ({
+  children,
+}: ChildrenProp) => {
+  const dAppEncryptionKey = useDAppEncryptionKey()
+
+  const encryptionKey = useMemo(() => {
+    if (dAppEncryptionKey) {
+      return dAppEncryptionKey
+    }
+    return generateHexEncryptionKey()
+  }, [dAppEncryptionKey])
+
+  return (
+    <CurrentHexEncryptionKeyProvider value={encryptionKey}>
       {children}
     </CurrentHexEncryptionKeyProvider>
   )
