@@ -1,11 +1,7 @@
 import { Chain } from '@core/chain/Chain'
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useDefiChains } from '@core/ui/storage/defiChains'
-import { VaultChainItem } from '@core/ui/vault/page/components/VaultChainItem'
 import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
-import { Button } from '@lib/ui/buttons/Button'
 import { CryptoIcon } from '@lib/ui/icons/CryptoIcon'
-import { CryptoWalletPenIcon } from '@lib/ui/icons/CryptoWalletPenIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
@@ -15,6 +11,10 @@ import { useDeferredValue, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { featureFlags } from '../../../featureFlags'
+import { defiProtocols } from '../../protocols/core'
+import { DefiChainItem } from './DefiChainItem'
+import { DefiProtocolItem } from './DefiProtocolItem'
 import { useSearchChain } from './state/searchChainProvider'
 
 export const DefiChainsList = () => {
@@ -23,7 +23,6 @@ export const DefiChainsList = () => {
   const [searchQuery] = useSearchChain()
   const deferredQuery = useDeferredValue(searchQuery)
   const { t } = useTranslation()
-  const navigate = useCoreNavigate()
 
   const normalizedQuery = deferredQuery.trim().toLowerCase()
 
@@ -68,20 +67,6 @@ export const DefiChainsList = () => {
             </Text>
           </VStack>
         </VStack>
-        <Button
-          onClick={() => navigate({ id: 'manageDefiChains' })}
-          style={{
-            maxWidth: 'fit-content',
-            maxHeight: 32,
-          }}
-          icon={
-            <IconWrapper size={16}>
-              <CryptoWalletPenIcon />
-            </IconWrapper>
-          }
-        >
-          <Text size={12}>{t('customize_chains')}</Text>
-        </Button>
       </EmptyWrapper>
     )
   }
@@ -90,11 +75,11 @@ export const DefiChainsList = () => {
     return (
       <EmptyWrapper>
         <VStack gap={12} alignItems="center">
-          <IconWrapper size={48} color="buttonHover">
+          <IconWrapper size={18.5} color="buttonHover">
             <CryptoIcon />
           </IconWrapper>
           <VStack gap={8}>
-            <Text centerHorizontally size={17} weight="600">
+            <Text centerHorizontally size={17}>
               {t('no_chains_found')}
             </Text>
             <Text size={13} color="shy" centerHorizontally>
@@ -102,28 +87,20 @@ export const DefiChainsList = () => {
             </Text>
           </VStack>
         </VStack>
-        <Button
-          onClick={() => navigate({ id: 'manageDefiChains' })}
-          style={{
-            maxWidth: 'fit-content',
-            maxHeight: 32,
-          }}
-          icon={
-            <IconWrapper size={16}>
-              <CryptoWalletPenIcon />
-            </IconWrapper>
-          }
-        >
-          <Text size={12}>{t('customize_chains')}</Text>
-        </Button>
       </EmptyWrapper>
     )
   }
 
   return (
     <List>
+      {defiProtocols.map(protocol => {
+        if (protocol === 'circle' && !featureFlags.circle) {
+          return null
+        }
+        return <DefiProtocolItem key={protocol} protocol={protocol} />
+      })}
       {filteredBalances.map(balance => (
-        <VaultChainItem key={balance.chain} balance={balance} />
+        <DefiChainItem key={balance.chain} balance={balance} />
       ))}
     </List>
   )

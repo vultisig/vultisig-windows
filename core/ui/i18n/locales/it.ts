@@ -311,6 +311,8 @@ export const it = {
   clear: 'Chiaro',
   close: 'Vicino',
   coin_not_found_in_current_vault: 'Moneta non trovata nel caveau attuale',
+  coin_not_found_in_any_vault:
+    '{{ticker}} su {{chain}} non trovato in nessun caveau',
   collected_rewards: 'Ricompense raccolte',
   coming_soon: 'Prossimamente',
   complete: 'Completare',
@@ -348,6 +350,7 @@ export const it = {
   custom: 'Azione personalizzata',
   custom_token: 'Token personalizzato',
   customize_chains: 'Personalizza le catene',
+  customize_positions: 'Personalizza posizioni',
   dapp_name: 'Nome dApp',
   decrypting_vault_keyshares:
     'Decifratura delle condivisioni delle chiavi del vault...',
@@ -355,6 +358,11 @@ export const it = {
   default_chains: 'Catene predefinite',
   defi: 'DeFi',
   defi_portfolio: 'Portafoglio DeFi',
+  defiChainTabs: {
+    bonded: 'Bonded',
+    staked: 'Staked',
+    lps: 'LPs',
+  },
   delete: 'Eliminare',
   delete_folder: 'Elimina cartella',
   delete_folder_confirmation:
@@ -436,6 +444,8 @@ export const it = {
   expires_on: 'Scade il',
   extension_vault_import_restriction:
     "Solo i vault DKLS possono essere importati nell'estensione",
+  fallback_swap_warning:
+    'Non siamo riusciti a simulare questa transazione. Procedere con cautela.',
   failed_to_confirm_email_code:
     "Impossibile confermare il codice di verifica dell'e-mail",
   failed_to_connect_with_server: 'Impossibile connettersi al server',
@@ -718,6 +728,10 @@ export const it = {
   no_tokens_selected: 'Nessun token selezionato',
   no_tokens_selected_description:
     'Hai disabilitato tutti i token. Assicurati che il token che stai cercando sia abilitato.',
+  no_positions_found: 'Nessuna posizione trovata',
+  no_positions_selected: 'Nessuna posizione selezionata',
+  no_positions_selected_description:
+    'Hai disabilitato tutte le posizioni per questa catena. Abilita almeno una posizione per visualizzare i saldi e gestire le azioni.',
   no_vaults: 'Ancora nessun caveau',
   no_vaults_desc:
     'I tuoi vault appariranno qui. Inizia creandone uno o importandone uno esistente.',
@@ -904,6 +918,9 @@ export const it = {
   select_backup_file: 'Importa la tua condivisione vault',
   select_chain: 'Seleziona catena',
   select_chains: 'Selezionare',
+  select_positions: 'Seleziona posizioni',
+  select_positions_description:
+    'Abilita le posizioni per visualizzare i saldi e gestire gli asset.',
   select_destination_chain: 'Seleziona la catena di destinazione',
   select_n_devices_one: 'Seleziona {{count}} dispositivo',
   select_n_devices_other: 'Seleziona {{count}} dispositivi',
@@ -1266,4 +1283,6 @@ export const it = {
   unlock_discount_tier_description_ultimate:
     "Mantenendo {{minBalance}}, sbloccherai il livello {{tier}} e riceverai un'<b>esenzione completa dalle commissioni Vultisig</b> su tutti gli swap.",
   ultimate: 'Definitivo',
+  vault_settings_language_settings_subtitle_zh: 'cinese',
+  vault_settings_language_settings_title_zh: '中文',
 }

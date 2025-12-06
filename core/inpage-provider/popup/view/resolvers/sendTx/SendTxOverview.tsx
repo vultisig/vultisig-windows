@@ -14,6 +14,7 @@ import {
   IconWrapper,
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
+import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
@@ -23,6 +24,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
+import { WarningBlock } from '@lib/ui/status/WarningBlock'
 import { Text } from '@lib/ui/text'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatUnits } from 'ethers'
@@ -46,7 +48,7 @@ type SendTxOverviewProps = {
 }
 
 export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
-  const { coin } = parsedTx
+  const { coin, customTxData } = parsedTx
   const walletCore = useAssertWalletCore()
   const publicKey = useCurrentVaultPublicKey(coin.chain)
   const { t } = useTranslation()
@@ -168,16 +170,28 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
               {hasSwapPayload ? (
                 <>
                   <ContentWrapper gap={24}>
-                    <Text color="supporting" size={15}>
-                      {t('youre_swapping')}
-                    </Text>
-
                     <VStack gap={16}>
                       {(() => {
                         const swapPayloadValue = shouldBePresent(
                           keysignPayload.swapPayload?.value,
                           'swapPayload.value'
                         )
+
+                        if (
+                          isChainOfKind(chain, 'solana') &&
+                          'solana' in customTxData &&
+                          'swap' in customTxData.solana
+                        ) {
+                          const provider = customTxData.solana.swap.swapProvider
+                          if (provider === 'fallback') {
+                            return (
+                              <WarningBlock icon={CircleInfoIcon}>
+                                {t('fallback_swap_warning')}
+                              </WarningBlock>
+                            )
+                          }
+                        }
+
                         const fromCoin = shouldBePresent(
                           swapPayloadValue.fromCoin,
                           'fromCoin'
@@ -197,6 +211,9 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
 
                         return (
                           <>
+                            <Text color="supporting" size={15}>
+                              {t('youre_swapping')}
+                            </Text>
                             <SwapAmountDisplay
                               coin={fromCoin}
                               amount={fromAmount}

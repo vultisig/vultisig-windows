@@ -309,6 +309,8 @@ export const de = {
   clear: 'Klar',
   close: 'Schließen',
   coin_not_found_in_current_vault: 'Münze im aktuellen Tresor nicht gefunden.',
+  coin_not_found_in_any_vault:
+    '{{ticker}} auf {{chain}} wurde in keinem Tresor gefunden',
   collected_rewards: 'Gesammelte Prämien',
   coming_soon: 'Demnächst verfügbar',
   complete: 'Vollständig',
@@ -346,12 +348,18 @@ export const de = {
   custom: 'Benutzerdefinierte Aktion',
   custom_token: 'Benutzerdefiniertes Token',
   customize_chains: 'Ketten individuell gestalten',
+  customize_positions: 'Positionen anpassen',
   dapp_name: 'dApp-Name',
   decrypting_vault_keyshares: 'Entschlüsselung der Tresor-Schlüsselanteile...',
   deeplink: 'Deeplink',
   default_chains: 'Standardketten',
   defi: 'DeFi',
   defi_portfolio: 'DeFi-Portfolio',
+  defiChainTabs: {
+    bonded: 'Bonded',
+    staked: 'Staked',
+    lps: 'LPs',
+  },
   delete: 'Löschen',
   delete_folder: 'Ordner löschen',
   delete_folder_confirmation:
@@ -433,6 +441,8 @@ export const de = {
   expires_on: 'Läuft ab am',
   extension_vault_import_restriction:
     'Nur DKLS-Tresore können in die Erweiterung importiert werden.',
+  fallback_swap_warning:
+    'Wir konnten diese Transaktion nicht simulieren. Bitte mit Vorsicht fortfahren.',
   failed_to_confirm_email_code:
     'E-Mail-Bestätigungscode konnte nicht bestätigt werden',
   failed_to_connect_with_server: 'Verbindung zum Server fehlgeschlagen',
@@ -723,6 +733,10 @@ export const de = {
   no_tokens_selected: 'Keine Token ausgewählt',
   no_tokens_selected_description:
     'Sie haben alle Token deaktiviert. Stellen Sie sicher, dass das gesuchte Token aktiviert ist.',
+  no_positions_found: 'Keine Positionen gefunden',
+  no_positions_selected: 'Keine Positionen ausgewählt',
+  no_positions_selected_description:
+    'Sie haben alle Positionen für diese Chain deaktiviert. Aktivieren Sie mindestens eine Position, um Salden anzuzeigen und Aktionen zu verwalten.',
   no_vaults: 'Noch keine Tresore',
   no_vaults_desc:
     'Ihre Tresore werden hier angezeigt. Erstellen Sie zunächst einen neuen Tresor oder importieren Sie einen vorhandenen.',
@@ -910,6 +924,9 @@ export const de = {
   select_backup_file: 'Importieren Sie Ihre Tresorfreigabe',
   select_chain: 'Select Chain',
   select_chains: 'Wählen',
+  select_positions: 'Positionen auswählen',
+  select_positions_description:
+    'Aktivieren Sie Positionen, um Salden anzuzeigen und Vermögenswerte zu verwalten.',
   select_destination_chain: 'Zielkette auswählen',
   select_n_devices_one: 'Wählen Sie {{count}} Geräte aus',
   select_n_devices_other: 'Wählen Sie {{count}} Geräte aus',
@@ -1270,4 +1287,6 @@ export const de = {
   unlock_discount_tier_description_ultimate:
     'Mit einem Guthaben von {{minBalance}} schalten Sie die Stufe {{tier}} frei und erhalten einen <b>vollständigen Vultisig-Gebührenverzicht</b> für alle Tauschgeschäfte.',
   ultimate: 'Ultimativ',
+  vault_settings_language_settings_subtitle_zh: 'chinesisch',
+  vault_settings_language_settings_title_zh: '中文',
 }

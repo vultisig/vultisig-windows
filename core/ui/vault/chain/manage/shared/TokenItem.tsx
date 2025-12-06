@@ -13,7 +13,7 @@ import styled, { css } from 'styled-components'
 
 type TokenItemProps = ValueProp<Coin> & {
   currentCoins: Coin[]
-  onToggle: (coin: Coin) => void
+  onToggle: (coin: Coin) => void | Promise<void>
   isLoading?: boolean
 }
 

@@ -309,6 +309,8 @@ export const es = {
   clear: 'Claro',
   close: 'Cerca',
   coin_not_found_in_current_vault: 'Moneda no encontrada en la bóveda actual',
+  coin_not_found_in_any_vault:
+    '{{ticker}} en {{chain}} no encontrado en ninguna bóveda',
   collected_rewards: 'Recompensas acumuladas',
   coming_soon: 'Muy pronto',
   complete: 'Completo',
@@ -346,12 +348,18 @@ export const es = {
   custom: 'Acción personalizada',
   custom_token: 'Token personalizado',
   customize_chains: 'Personalizar cadenas',
+  customize_positions: 'Personalizar posiciones',
   dapp_name: 'Nombre de la dApp',
   decrypting_vault_keyshares: 'Descifrando claves compartidas de bóveda...',
   deeplink: 'Enlace profundo',
   default_chains: 'Cadenas predeterminadas',
   defi: 'DeFi',
   defi_portfolio: 'Portafolio DeFi',
+  defiChainTabs: {
+    bonded: 'Bonded',
+    staked: 'Staked',
+    lps: 'LPs',
+  },
   delete: 'Borrar',
   delete_folder: 'Eliminar carpeta',
   delete_folder_confirmation:
@@ -434,6 +442,8 @@ export const es = {
   expires_on: 'Caduca el',
   extension_vault_import_restriction:
     'Solo se pueden importar bóvedas DKLS en la extensión',
+  fallback_swap_warning:
+    'No pudimos simular esta transacción. Proceda con precaución.',
   failed_to_confirm_email_code:
     'No se pudo confirmar el código de verificación del correo electrónico',
   failed_to_connect_with_server: 'No se pudo conectar con el servidor',
@@ -719,6 +729,10 @@ export const es = {
   no_tokens_selected: 'No hay tokens seleccionados',
   no_tokens_selected_description:
     'Has desactivado todos los tokens. Asegúrate de que el token que buscas esté activado.',
+  no_positions_found: 'No se encontraron posiciones',
+  no_positions_selected: 'No hay posiciones seleccionadas',
+  no_positions_selected_description:
+    'Has desactivado todas las posiciones para esta cadena. Activa al menos una posición para ver saldos y gestionar acciones.',
   no_vaults: 'Aún no hay bóvedas',
   no_vaults_desc:
     'Tus bóvedas aparecerán aquí. Empieza creando una o importando una existente.',
@@ -906,6 +920,9 @@ export const es = {
   select_backup_file: 'Importar su recurso compartido de bóveda',
   select_chain: 'Seleccionar cadena',
   select_chains: 'Seleccionar',
+  select_positions: 'Seleccionar posiciones',
+  select_positions_description:
+    'Activa posiciones para ver saldos y gestionar activos.',
   select_destination_chain: 'Seleccionar cadena de destino',
   select_n_devices_one: 'Seleccione {{count}} dispositivo',
   select_n_devices_other: 'Seleccione {{count}} dispositivos',
@@ -1270,4 +1287,6 @@ export const es = {
   unlock_discount_tier_description_ultimate:
     'Al mantener {{minBalance}}, desbloquearás el nivel {{tier}} y recibirás una <b>exención completa de la tarifa de Vultisig</b> en todos los intercambios.',
   ultimate: 'Último',
+  vault_settings_language_settings_subtitle_zh: 'Chino',
+  vault_settings_language_settings_title_zh: '中文',
 }

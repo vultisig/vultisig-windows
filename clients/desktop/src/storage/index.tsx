@@ -8,6 +8,7 @@ import { coinsStorage } from './coins'
 import { currentVaultIdStorage } from './currentVaultId'
 import { defaultChainsStorage } from './defaultChains'
 import { defiChainsStorage } from './defiChains'
+import { defiPositionsStorage } from './defiPositions'
 import { dismissedBannersStorage } from './dismissedBanners'
 import { fiatCurrencyStorage } from './fiatCurrency'
 import { languageStorage } from './language'
@@ -26,6 +27,7 @@ export const storage: CoreStorage = {
   ...coinsStorage,
   ...defaultChainsStorage,
   ...defiChainsStorage,
+  ...defiPositionsStorage,
   ...addressBookStorage,
   ...languageStorage,
   ...balanceVisibilityStorage,

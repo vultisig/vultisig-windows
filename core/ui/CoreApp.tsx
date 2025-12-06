@@ -19,6 +19,7 @@ import styled from 'styled-components'
 type CoreAppProps = Partial<ChildrenProp> & {
   coreState: CoreState
   migrationsManager?: React.ComponentType<ChildrenProp>
+  isLimited?: boolean
 }
 
 const Container = styled.div`
@@ -30,6 +31,7 @@ export const CoreApp = ({
   children,
   coreState,
   migrationsManager: MigrationsManager,
+  isLimited = false,
 }: CoreAppProps) => {
   return (
     <ThemeProvider theme={darkTheme}>
@@ -42,10 +44,12 @@ export const CoreApp = ({
                 <ResponsivenessProvider>
                   <Container>
                     {children}
-                    <ActiveVaultOnly>
-                      <CoinFinder />
-                      <CoinsMetadataManager />
-                    </ActiveVaultOnly>
+                    {!isLimited && (
+                      <ActiveVaultOnly>
+                        <CoinFinder />
+                        <CoinsMetadataManager />
+                      </ActiveVaultOnly>
+                    )}
                   </Container>
                   <PasscodeGuard />
                 </ResponsivenessProvider>

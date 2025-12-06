@@ -37,9 +37,7 @@ export const CoinBalance = ({ value }: ValueProp<CoinKey>) => {
         pending={() => <Spinner />}
         error={() => t('failed_to_load')}
         success={amount => (
-          <UnstyledButton
-            onClick={() => setFromValue(fromChainAmount(amount, coin.decimals))}
-          >
+          <UnstyledButton onClick={() => setFromValue(amount)}>
             <Text as="span" size={12} color="shy" weight={500}>
               {formatAmount(fromChainAmount(amount, coin.decimals), coin)}
             </Text>

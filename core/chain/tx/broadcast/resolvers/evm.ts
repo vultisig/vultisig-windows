@@ -29,7 +29,8 @@ export const broadcastEvmTx: BroadcastTxResolver<EvmChain> = async ({
       'nonce too low',
       'transaction already exists',
       'future transaction tries to replace pending',
-      'could not replace existing tx'
+      'could not replace existing tx',
+      'tx already in mempool'
     )
   ) {
     throw error

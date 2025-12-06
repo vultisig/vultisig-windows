@@ -1,3 +1,4 @@
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin, CoinKey } from '@core/chain/coin/Coin'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
@@ -26,7 +27,7 @@ export const parseProgramCall = async ({
 }: Input) => {
   if (!tx.instructions || tx.instructions.length === 0)
     throw new Error('Instructions not found')
-
+  console.log('tx.instructions', tx.instructions)
   for (const instruction of tx.instructions) {
     const program = keys[shouldBePresent(instruction.programId)]
     // parse 1inch swap instruction
@@ -44,5 +45,16 @@ export const parseProgramCall = async ({
       return await parseSystemInstruction({ instruction, keys })
     }
   }
-  throw new Error('Invalid Solana transaction: no supported instruction found')
+  console.error('could not parse transaction, returning fallback swap')
+  return {
+    swap: {
+      authority: keys[0].toBase58(),
+      inAmount: '0',
+      inputCoin: chainFeeCoin.Solana,
+      outAmount: '0',
+      outputCoin: chainFeeCoin.Solana,
+      data,
+      swapProvider: 'fallback',
+    },
+  }
 }

@@ -14,7 +14,7 @@ import { BalanceOverviewTable } from './components/BalanceOverviewTable'
 import { InfoBanner } from './components/InfoBanner'
 import { TransactionActions } from './components/TransactionActions'
 
-export const CirclePage = () => {
+export const CircleView = () => {
   const { t } = useTranslation()
 
   return (

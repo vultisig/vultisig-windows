@@ -6,6 +6,7 @@ import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignM
 import { KeygenMessage } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
 import { ReshareMessage } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
 import { KeysignMessage } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { DefiProtocol } from '@core/ui/defi/protocols/core'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 
 export type CoreView =
@@ -57,6 +58,8 @@ export type CoreView =
       id: 'send'
       state: ({ fromChain: Chain } | { coin: CoinKey }) & {
         address?: string
+        amount?: bigint
+        memo?: string
       }
     }
   | { id: 'settings' }
@@ -64,14 +67,15 @@ export type CoreView =
   | { id: 'setupSecureVault' }
   | { id: 'setupVault'; state: { type?: VaultSecurityType } }
   | { id: 'signCustomMessage' }
-  | { id: 'circle' }
   | { id: 'swap'; state: { fromCoin?: CoinKey; toCoin?: CoinKey } }
   | { id: 'updateAddressBookItem'; state: { id: string } }
   | { id: 'updateVaultFolder'; state: { id: string } }
   | { id: 'uploadQr'; state: { title?: string } }
   | { id: 'vault' }
-  | { id: 'defi' }
+  | { id: 'defi'; state: { protocol?: DefiProtocol } }
+  | { id: 'defiChainDetail'; state: { chain: Chain } }
   | { id: 'manageDefiChains' }
+  | { id: 'manageDefiPositions'; state: { chain: Chain } }
   | { id: 'vaultBackup' }
   | { id: 'vaultsBackup' }
   | { id: 'selectVaultsBackup' }
