@@ -1,6 +1,5 @@
-import { EvmChain } from '@core/chain/Chain'
-
 import { queryBlockaid } from '../../../core/query'
+import { BlockaidSupportedEvmChain } from '../../../evmChains'
 import { BlockaidEVMSimulation } from '../api/core'
 import { BlockaidTxSimulationResolver } from '../resolver'
 
@@ -9,7 +8,7 @@ type EvmBlockaidScanResponse = {
 }
 
 export const getEvmTxBlockaidSimulation: BlockaidTxSimulationResolver<
-  EvmChain,
+  BlockaidSupportedEvmChain,
   'evm'
 > = async ({ data }) => {
   const { simulation } = await queryBlockaid<EvmBlockaidScanResponse>(

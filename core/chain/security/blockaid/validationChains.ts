@@ -1,8 +1,9 @@
-import { EvmChain, OtherChain, UtxoChain } from '../../Chain'
+import { OtherChain, UtxoChain } from '../../Chain'
 import { DeriveChainKind } from '../../ChainKind'
+import { blockaidSupportedEvmChains } from './evmChains'
 
 export const blockaidValidationSupportedChains = [
-  ...Object.values(EvmChain),
+  ...blockaidSupportedEvmChains,
   OtherChain.Solana,
   OtherChain.Sui,
   UtxoChain.Bitcoin,

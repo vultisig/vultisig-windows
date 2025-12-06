@@ -6,28 +6,15 @@ import { bigIntToHex } from '@lib/utils/bigint/bigIntToHex'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { encodeFunctionData, erc20Abi } from 'viem'
 
-import { EvmChain } from '../../../../../../Chain'
+import {
+  blockaidEvmChain,
+  BlockaidSupportedEvmChain,
+} from '../../../../evmChains'
 import { BlockaidTxValidationInput } from '../../resolver'
 import { BlockaidTxValidationInputResolver } from '../resolver'
 
-const blockaidEvnChain: Record<EvmChain, string> = {
-  [EvmChain.Arbitrum]: 'arbitrum',
-  [EvmChain.Avalanche]: 'avalanche',
-  [EvmChain.Base]: 'base',
-  [EvmChain.Blast]: 'blast',
-  [EvmChain.BSC]: 'bsc',
-  [EvmChain.CronosChain]: 'cronoschain',
-  [EvmChain.Ethereum]: 'ethereum',
-  [EvmChain.Hyperliquid]: 'hyperevm',
-  [EvmChain.Mantle]: 'mantle',
-  [EvmChain.Optimism]: 'optimism',
-  [EvmChain.Polygon]: 'polygon',
-  [EvmChain.Sei]: 'sei',
-  [EvmChain.Zksync]: 'zksync',
-}
-
 export const getEvmBlockaidTxValidationInput: BlockaidTxValidationInputResolver<
-  EvmChain
+  BlockaidSupportedEvmChain
 > = ({ payload, chain }) => {
   const coin = getKeysignCoin(payload)
 
@@ -44,7 +31,7 @@ export const getEvmBlockaidTxValidationInput: BlockaidTxValidationInputResolver<
       method: 'eth_sendTransaction',
       params: [{ from: coin.address, to, value, data }],
     },
-    chain: blockaidEvnChain[chain],
+    chain: blockaidEvmChain[chain],
     metadata: {
       domain: productRootDomain,
     },

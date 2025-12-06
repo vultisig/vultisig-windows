@@ -7,12 +7,15 @@ import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { encodeFunctionData } from 'viem'
 import { erc20Abi } from 'viem'
 
-import { EvmChain } from '../../../../../../Chain'
+import {
+  blockaidEvmChain,
+  BlockaidSupportedEvmChain,
+} from '../../../../evmChains'
 import { BlockaidTxSimulationInput } from '../../resolver'
 import { BlockaidTxSimulationInputResolver } from '../resolver'
 
 export const getEvmBlockaidTxSimulationInput: BlockaidTxSimulationInputResolver<
-  EvmChain
+  BlockaidSupportedEvmChain
 > = ({ payload, chain }) => {
   const coin = getKeysignCoin(payload)
 
@@ -36,7 +39,7 @@ export const getEvmBlockaidTxSimulationInput: BlockaidTxSimulationInputResolver<
         method: 'eth_sendTransaction',
         params: [params],
       },
-      chain: chain.toLowerCase(),
+      chain: blockaidEvmChain[chain],
       metadata: {
         domain: productRootDomain,
       },
