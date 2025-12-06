@@ -8,6 +8,7 @@ import { PasswordProvider } from '@core/ui/state/password'
 import { Match } from '@lib/ui/base/Match'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
+import { OnFinishProp } from '@lib/ui/props'
 import { useCallback } from 'react'
 
 import { KeygenFlow } from '../../flow/KeygenFlow'
@@ -18,7 +19,10 @@ import { WaitForPluginAndVerifier } from './WaitForPluginAndVerifier'
 const steps = ['confirmation', 'keygen'] as const
 const closePopupDelay = 1200
 
-export const PluginReshareFlowContent = ({ plugin }: { plugin: Plugin }) => {
+export const PluginReshareFlowContent = ({
+  plugin,
+  onFinish: onFinishProp,
+}: { plugin: Plugin } & OnFinishProp<boolean>) => {
   const { step, toPreviousStep, toNextStep } = useStepNavigation({ steps })
   const animationContext = usePluginInstallAnimation()
 
@@ -26,9 +30,9 @@ export const PluginReshareFlowContent = ({ plugin }: { plugin: Plugin }) => {
     if (animationContext) {
       animationContext.setCurrentStep('finishInstallation')
       await new Promise(resolve => setTimeout(resolve, closePopupDelay))
-      window.close()
+      onFinishProp(true)
     }
-  }, [animationContext])
+  }, [animationContext, onFinishProp])
 
   return (
     <>
