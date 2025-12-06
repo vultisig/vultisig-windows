@@ -288,6 +288,8 @@ export const en = {
   expires_on: 'Expires on',
   extension_vault_import_restriction:
     'Only DKLS vaults can be imported in extension',
+  fallback_swap_warning:
+    'We could not simulate this transaction. Proceed with caution.',
   failed_to_confirm_email_code: 'Failed to confirm email verification code',
   failed_to_connect_with_server: 'Failed to connect with server',
   failed_to_copy_address: 'Failed to copy address',

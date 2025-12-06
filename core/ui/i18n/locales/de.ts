@@ -441,6 +441,8 @@ export const de = {
   expires_on: 'Läuft ab am',
   extension_vault_import_restriction:
     'Nur DKLS-Tresore können in die Erweiterung importiert werden.',
+  fallback_swap_warning:
+    'Wir konnten diese Transaktion nicht simulieren. Bitte mit Vorsicht fortfahren.',
   failed_to_confirm_email_code:
     'E-Mail-Bestätigungscode konnte nicht bestätigt werden',
   failed_to_connect_with_server: 'Verbindung zum Server fehlgeschlagen',

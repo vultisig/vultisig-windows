@@ -433,6 +433,8 @@ export const hr = {
   expires_on: 'Istječe',
   extension_vault_import_restriction:
     'U ekstenziju se mogu uvesti samo DKLS trezori',
+  fallback_swap_warning:
+    'Nismo mogli simulirati ovu transakciju. Nastavite s oprezom.',
   failed_to_confirm_email_code: 'Nije uspjelo potvrditi kod za potvrdu e-pošte',
   failed_to_connect_with_server: 'Povezivanje sa serverom nije uspjelo',
   failed_to_copy_address: 'Kopiranje adrese nije uspjelo',
