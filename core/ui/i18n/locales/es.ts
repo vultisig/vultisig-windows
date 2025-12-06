@@ -442,6 +442,8 @@ export const es = {
   expires_on: 'Caduca el',
   extension_vault_import_restriction:
     'Solo se pueden importar bóvedas DKLS en la extensión',
+  fallback_swap_warning:
+    'No pudimos simular esta transacción. Proceda con precaución.',
   failed_to_confirm_email_code:
     'No se pudo confirmar el código de verificación del correo electrónico',
   failed_to_connect_with_server: 'No se pudo conectar con el servidor',

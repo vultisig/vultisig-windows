@@ -363,7 +363,8 @@ export class DKLS {
   private async startKeyImport(
     hexPrivateKey: string,
     hexChainCode: string,
-    attempt: number
+    attempt: number,
+    additionalHeader?: string
   ) {
     console.log('startKeyImport attempt:', attempt)
     this.isKeygenComplete = false
@@ -395,12 +396,14 @@ export class DKLS {
           serverUrl: this.serverURL,
           message: encryptedSetupMsg,
           sessionId: this.sessionId,
+          messageId: additionalHeader,
         })
         console.log('uploaded setup message successfully')
       } else {
         const encodedEncryptedSetupMsg = await waitForSetupMessage({
           serverUrl: this.serverURL,
           sessionId: this.sessionId,
+          messageId: additionalHeader,
         })
         this.setupMessage = fromMpcServerMessage(
           encodedEncryptedSetupMsg,
@@ -439,11 +442,20 @@ export class DKLS {
     }
   }
 
-  public async startKeyImportWithRetry(privateKey: string, chainCode: string) {
+  public async startKeyImportWithRetry(
+    privateKey: string,
+    chainCode: string,
+    additionalHeader?: string
+  ) {
     await initializeMpcLib('ecdsa')
     for (let i = 0; i < 3; i++) {
       try {
-        const result = await this.startKeyImport(privateKey, chainCode, i)
+        const result = await this.startKeyImport(
+          privateKey,
+          chainCode,
+          i,
+          additionalHeader
+        )
         return result
       } catch (error) {
         console.error('DKLS key import error:', error)
