@@ -9,13 +9,13 @@ import { Match } from '@lib/ui/base/Match'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { OnFinishProp } from '@lib/ui/props'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useCallback } from 'react'
 
 import { KeygenFlow } from '../../flow/KeygenFlow'
 import { InstallPluginPendingState } from './InstallPluginPendingState'
 import { usePluginInstallAnimation } from './PluginInstallAnimationProvider'
 import { WaitForPluginAndVerifier } from './WaitForPluginAndVerifier'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 const steps = ['confirmation', 'keygen'] as const
 const closePopupDelay = 1200
