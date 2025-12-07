@@ -15,6 +15,7 @@ import { KeygenFlow } from '../../flow/KeygenFlow'
 import { InstallPluginPendingState } from './InstallPluginPendingState'
 import { usePluginInstallAnimation } from './PluginInstallAnimationProvider'
 import { WaitForPluginAndVerifier } from './WaitForPluginAndVerifier'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 const steps = ['confirmation', 'keygen'] as const
 const closePopupDelay = 1200
@@ -27,11 +28,10 @@ export const PluginReshareFlowContent = ({
   const animationContext = usePluginInstallAnimation()
 
   const onFinish = useCallback(async () => {
-    if (animationContext) {
-      animationContext.setCurrentStep('finishInstallation')
-      await new Promise(resolve => setTimeout(resolve, closePopupDelay))
-      onFinishProp(true)
-    }
+    const context = shouldBePresent(animationContext)
+    context.setCurrentStep('finishInstallation')
+    await new Promise(resolve => setTimeout(resolve, closePopupDelay))
+    onFinishProp(true)
   }, [animationContext, onFinishProp])
 
   return (
