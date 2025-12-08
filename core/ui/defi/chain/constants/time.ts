@@ -1,0 +1,10 @@
+export const nanosecondsInSecond = 1_000_000_000
+export const secondsInMinute = 60
+export const minutesInHour = 60
+export const hoursInDay = 24
+export const secondsInHour = secondsInMinute * minutesInHour
+export const secondsInDay = secondsInHour * hoursInDay
+export const daysInYear = 365.25
+export const secondsInYear = secondsInDay * daysInYear
+export const thorchainBlockTimeSeconds = 6
+export const blocksPerDay = secondsInDay / thorchainBlockTimeSeconds
