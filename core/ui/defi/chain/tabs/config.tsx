@@ -14,11 +14,15 @@ export const getDefiChainTabs = (t: TFunction): Tab<DefiChainPageTab>[] => [
     label: t('defiChainTabs.bonded'),
     renderContent: BondedPositions,
   },
-  {
-    value: 'staked',
-    label: t('defiChainTabs.staked'),
-    renderContent: StakedPositions,
-  },
+  ...(featureFlags.defiStakedTab
+    ? [
+        {
+          value: 'staked' as const,
+          label: t('defiChainTabs.staked'),
+          renderContent: StakedPositions,
+        },
+      ]
+    : []),
   ...(featureFlags.defiLpTab
     ? [
         {
