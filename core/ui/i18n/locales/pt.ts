@@ -351,6 +351,7 @@ export const pt = {
   default_chains: 'Cadeias padrão',
   defi: 'DeFi',
   defi_portfolio: 'Portfólio DeFi',
+  total_balance: 'Saldo Total',
   defiChainTabs: {
     bonded: 'Bonded',
     staked: 'Staked',
@@ -549,6 +550,7 @@ export const pt = {
     'O programa de indicação é aplicado em swaps THORChain e funciona com base no princípio do melhor esforço. Você precisa registrar um THORName para usar o programa de indicação Vultisig. A taxa de registro é de 10 RUNE e 1 RUNE por ano, paga à rede THORChain.',
   header_tooltip_title: 'Programa de Encaminhamento',
   hide_balance: 'Ocultar saldo',
+  hide_defi_balance: 'Ocultar saldo DeFi',
   hold_for_paired_sign: 'Aguarde o sinal emparelhado',
   how_it_works: 'Como funciona',
   ibc_transaction_not_supporting_memo_desc:
@@ -918,6 +920,10 @@ export const pt = {
   select_positions: 'Selecionar posições',
   select_positions_description:
     'Ative posições para visualizar saldos e gerenciar ativos.',
+  liquidity_pools: 'Pools de liquidez',
+  no_active_nodes: 'Nenhum nó ativo',
+  no_available_nodes: 'Nenhum nó disponível',
+  compounded_token: '{{ticker}} capitalizado',
   select_destination_chain: 'Selecione a cadeia de destinos',
   select_n_devices_one: 'Selecione {{count}} dispositivo',
   select_n_devices_other: 'Selecione {{count}} dispositivos',
@@ -971,6 +977,7 @@ export const pt = {
   share_vault_qr: 'QR Code do Share Vault',
   shares: 'Ações',
   show_balance: 'Mostrar saldo',
+  show_defi_balance: 'Mostrar saldo DeFi',
   sign: 'Sinal',
   signAmino: 'Sinal Amino',
   signPrivately: 'Deseja assinar em particular?',
