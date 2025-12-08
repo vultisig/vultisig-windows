@@ -355,6 +355,7 @@ export const es = {
   default_chains: 'Cadenas predeterminadas',
   defi: 'DeFi',
   defi_portfolio: 'Portafolio DeFi',
+  total_balance: 'Saldo Total',
   defiChainTabs: {
     bonded: 'Bonded',
     staked: 'Staked',
@@ -553,6 +554,7 @@ export const es = {
     'El programa de referidos se aplica a los swaps de THORChain y se basa en el mejor esfuerzo. Necesita registrar un THORName para usar el programa de referidos de Vultisig. La cuota de registro es de 10 RUNE y 1 RUNE por año, que se paga a la red THORChain.',
   header_tooltip_title: 'Programa de referencias',
   hide_balance: 'Ocultar saldo',
+  hide_defi_balance: 'Ocultar saldo DeFi',
   hold_for_paired_sign: 'Mantener pulsado para señal emparejada',
   how_it_works: 'Cómo funciona',
   ibc_transaction_not_supporting_memo_desc:
@@ -923,6 +925,10 @@ export const es = {
   select_positions: 'Seleccionar posiciones',
   select_positions_description:
     'Activa posiciones para ver saldos y gestionar activos.',
+  liquidity_pools: 'Pools de liquidez',
+  no_active_nodes: 'No hay nodos activos',
+  no_available_nodes: 'No hay nodos disponibles',
+  compounded_token: '{{ticker}} compuesto',
   select_destination_chain: 'Seleccionar cadena de destino',
   select_n_devices_one: 'Seleccione {{count}} dispositivo',
   select_n_devices_other: 'Seleccione {{count}} dispositivos',
@@ -979,6 +985,7 @@ export const es = {
   share_vault_qr: 'Compartir código QR de Vault',
   shares: 'Acciones',
   show_balance: 'Mostrar saldo',
+  show_defi_balance: 'Mostrar saldo DeFi',
   sign: 'Firmar',
   signAmino: 'Signo de amino',
   signPrivately: '¿Quieres firmar en privado?',

@@ -207,6 +207,7 @@ export const en = {
   default_chains: 'Default Chains',
   defi: 'DeFi',
   defi_portfolio: 'DeFi Portfolio',
+  total_balance: 'Total Balance',
   defiChainTabs: {
     bonded: 'Bonded',
     staked: 'Staked',
@@ -468,6 +469,7 @@ export const en = {
     'The referral program is applied on THORChain swaps and is on a best effort basis. You need to register a THORName to use the Vultisig referral. The registration fee is 10 RUNE and 1 RUNE for each year, which is paid to the THORChain network.',
   header_tooltip_title: 'Referral Program',
   hide_balance: 'Hide balance',
+  hide_defi_balance: 'Hide DeFi balance',
   hold_for_paired_sign: 'Hold for paired sign',
   how_it_works: 'How it works',
   ibc_transaction_not_supporting_memo_desc:
@@ -643,6 +645,23 @@ export const en = {
   no_positions_selected: 'No positions selected',
   no_positions_selected_description:
     "You've disabled all positions for this chain. Enable at least one position to view balances and manage actions.",
+  locked_in_defi: 'Locked in DeFi',
+  total_bonded: 'Total Bonded {{ticker}}',
+  active_nodes: 'Active nodes',
+  available_nodes: 'Available nodes',
+  request_to_bond: 'Request to bond',
+  wait_until_node_churned: 'Wait until node is churned out',
+  bond_to_node: 'Bond to Node',
+  no_active_nodes: 'No active nodes yet',
+  no_available_nodes: 'No available nodes right now',
+  liquidity_pools: 'Liquidity Pools',
+  apr: 'APR',
+  next_payout: 'Next payout',
+  estimated_reward: 'Estimated reward',
+  next_churn: 'Next churn',
+  next_award: 'Next award',
+  enable_positions_hint:
+    'Enable positions to view balances and manage actions.',
   no_vaults: 'No vaults yet',
   no_vaults_desc:
     'Your vaults will appear here. Start by creating one or importing an existing vault',
@@ -852,6 +871,7 @@ export const en = {
   select_positions: 'Select positions',
   select_positions_description:
     'Enable positions to view balances and manage assets.',
+  compounded_token: 'Compounded {{ticker}}',
   select_destination_chain: 'Select Destination Chain',
   select_n_devices_one: 'Select {{count}} device',
   select_n_devices_other: 'Select {{count}} devices',
@@ -904,6 +924,7 @@ export const en = {
   share_vault_qr: 'Share Vault QR',
   shares: 'Shares',
   show_balance: 'Show balance',
+  show_defi_balance: 'Show DeFi balance',
   sign: 'Sign',
   signAmino: 'Amino Sign',
   signPrivately: 'Want to sign privately?',
