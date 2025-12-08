@@ -350,6 +350,7 @@ export const hr = {
   default_chains: 'Zadani lanci',
   defi: 'DeFi',
   defi_portfolio: 'DeFi portfelj',
+  total_balance: 'Ukupni saldo',
   defiChainTabs: {
     bonded: 'Bonded',
     staked: 'Staked',
@@ -544,6 +545,7 @@ export const hr = {
     'Program preporuka primjenjuje se na THORChain swapove i temelji se na najboljem naporu. Morate registrirati THORNAme da biste koristili Vultisig preporuku. Naknada za registraciju iznosi 10 RUNE i 1 RUNE za svaku godinu, koja se plaća THORChain mreži.',
   header_tooltip_title: 'Program preporuka',
   hide_balance: 'Sakrij stanje',
+  hide_defi_balance: 'Sakrij DeFi stanje',
   hold_for_paired_sign: 'Držite za upareni znak',
   how_it_works: 'Kako funkcionira',
   ibc_transaction_not_supporting_memo_desc:
@@ -910,6 +912,10 @@ export const hr = {
   select_positions: 'Odaberite pozicije',
   select_positions_description:
     'Omogućite pozicije za prikaz stanja i upravljanje imovinom.',
+  liquidity_pools: 'Likvidnosni bazeni',
+  no_active_nodes: 'Nema aktivnih čvorova',
+  no_available_nodes: 'Nema dostupnih čvorova',
+  compounded_token: 'Reinvestirani {{ticker}}',
   select_destination_chain: 'Odaberite lanac odredišta',
   select_n_devices_one: 'Odaberite {{count}} uređaj',
   select_n_devices_other: 'Odaberite {{count}} uređaja',
@@ -963,6 +969,7 @@ export const hr = {
   share_vault_qr: 'Podijeli QR kod trezora',
   shares: 'Dionice',
   show_balance: 'Prikaži stanje',
+  show_defi_balance: 'Prikaži DeFi stanje',
   sign: 'Znak',
   signAmino: 'Amino znak',
   signPrivately: 'Želite li potpisati privatno?',
