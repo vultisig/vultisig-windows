@@ -355,6 +355,7 @@ export const de = {
   default_chains: 'Standardketten',
   defi: 'DeFi',
   defi_portfolio: 'DeFi-Portfolio',
+  total_balance: 'Gesamtguthaben',
   defiChainTabs: {
     bonded: 'Bonded',
     staked: 'Staked',
@@ -555,6 +556,7 @@ export const de = {
     'Das Empfehlungsprogramm gilt für THORChain-Swaps und wird nach bestem Bemühen umgesetzt. Um das Vultisig-Empfehlungsprogramm nutzen zu können, müssen Sie einen THORNamen registrieren. Die Registrierungsgebühr beträgt 10 RUNE und 1 RUNE pro Jahr, die an das THORChain-Netzwerk gezahlt wird.',
   header_tooltip_title: 'Empfehlungsprogramm',
   hide_balance: 'Gleichgewicht ausblenden',
+  hide_defi_balance: 'DeFi-Guthaben ausblenden',
   hold_for_paired_sign: 'Halten Sie für das gepaarte Zeichen',
   how_it_works: 'So funktioniert es',
   ibc_transaction_not_supporting_memo_desc:
@@ -927,6 +929,10 @@ export const de = {
   select_positions: 'Positionen auswählen',
   select_positions_description:
     'Aktivieren Sie Positionen, um Salden anzuzeigen und Vermögenswerte zu verwalten.',
+  liquidity_pools: 'Liquiditätspools',
+  no_active_nodes: 'Keine aktiven Nodes',
+  no_available_nodes: 'Keine verfügbaren Nodes',
+  compounded_token: 'Aufgezinstes {{ticker}}',
   select_destination_chain: 'Zielkette auswählen',
   select_n_devices_one: 'Wählen Sie {{count}} Geräte aus',
   select_n_devices_other: 'Wählen Sie {{count}} Geräte aus',
@@ -980,6 +986,7 @@ export const de = {
   share_vault_qr: 'Share Vault QR',
   shares: 'Aktien',
   show_balance: 'Gleichgewicht anzeigen',
+  show_defi_balance: 'DeFi-Guthaben anzeigen',
   sign: 'Zeichen',
   signAmino: 'Amino-Zeichen',
   signPrivately: 'Möchten Sie vertraulich unterschreiben?',
