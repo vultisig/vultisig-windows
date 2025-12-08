@@ -1,6 +1,5 @@
 import { PopupDeadEnd } from '@core/inpage-provider/popup/view/flow/PopupDeadEnd'
 import { PluginReshareFlow } from '@core/ui/mpc/keygen/reshare/plugin/PluginReshareFlow'
-import { ReshareVaultFlowProviders } from '@core/ui/mpc/keygen/reshare/ReshareVaultFlowProviders'
 import { ReshareVaultKeygenActionProvider } from '@core/ui/mpc/keygen/reshare/ReshareVaultKeygenActionProvider'
 import { KeygenOperationProvider } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { getPlugin } from '@core/ui/plugins/core/get'
@@ -11,6 +10,8 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { StrictText } from '@lib/ui/text'
 import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
+
+import { PluginReshareVaultFlowProviders } from './PluginReshareVaultFlowProviders'
 
 export const PluginInfo = ({
   input: {
@@ -24,8 +25,8 @@ export const PluginInfo = ({
   input: {
     pluginId: string
     pluginMarketplaceBaseUrl: string
-    dAppSessionId?: string
-    encryptionKeyHex?: string
+    dAppSessionId: string
+    encryptionKeyHex: string
   }
 }) => {
   const { t } = useTranslation()
@@ -38,7 +39,7 @@ export const PluginInfo = ({
     <MatchQuery
       value={query}
       success={plugin => (
-        <ReshareVaultFlowProviders
+        <PluginReshareVaultFlowProviders
           dAppSessionId={dAppSessionId}
           encryptionKeyHex={encryptionKeyHex}
         >
@@ -47,7 +48,7 @@ export const PluginInfo = ({
               <PluginReshareFlow plugin={plugin} onFinish={onFinish} />
             </ReshareVaultKeygenActionProvider>
           </KeygenOperationProvider>
-        </ReshareVaultFlowProviders>
+        </PluginReshareVaultFlowProviders>
       )}
       pending={() => (
         <PopupDeadEnd>

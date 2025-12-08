@@ -42,8 +42,8 @@ export type PopupInterface = {
   pluginReshare: Method<
     {
       pluginId: string
-      dAppSessionId?: string
-      encryptionKeyHex?: string
+      dAppSessionId: string
+      encryptionKeyHex: string
     },
     { success: boolean }
   >

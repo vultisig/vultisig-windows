@@ -6,8 +6,10 @@ import { v4 as uuidv4 } from 'uuid'
 export const { useValue: useMpcSessionId, provider: MpcSessionIdProvider } =
   getValueProviderSetup<string>('MpcSessionId')
 
-export const { useValue: useDAppSessionId, provider: DAppSessionIdProvider } =
-  getValueProviderSetup<string | undefined>('DAppSessionId')
+export const {
+  useValue: useExternalSessionId,
+  provider: ExternalSessionIdProvider,
+} = getValueProviderSetup<string | null>('ExternalSessionId')
 
 export const GeneratedMpcSessionIdProvider = ({ children }: ChildrenProp) => {
   const MpcSessionId = useMemo(() => uuidv4(), [])
@@ -18,14 +20,14 @@ export const GeneratedMpcSessionIdProvider = ({ children }: ChildrenProp) => {
 }
 
 export const ConditionalMpcSessionIdProvider = ({ children }: ChildrenProp) => {
-  const dAppSessionId = useDAppSessionId()
+  const externalSessionId = useExternalSessionId()
 
   const sessionId = useMemo(() => {
-    if (dAppSessionId) {
-      return dAppSessionId
+    if (externalSessionId !== null) {
+      return externalSessionId
     }
     return uuidv4()
-  }, [dAppSessionId])
+  }, [externalSessionId])
 
   return (
     <MpcSessionIdProvider value={sessionId}>{children}</MpcSessionIdProvider>
