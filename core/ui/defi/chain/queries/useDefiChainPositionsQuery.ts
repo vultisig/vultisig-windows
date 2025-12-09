@@ -3,7 +3,7 @@ import { Chain } from '@core/chain/Chain'
 import { ThorchainDefiPositions } from './types'
 import { useThorchainDefiPositionsQuery } from './useThorchainDefiPositionsQuery'
 
-export type DefiPositionsQueryResult = {
+type DefiPositionsQueryResult = {
   data?: ThorchainDefiPositions
   isPending: boolean
   error: unknown
