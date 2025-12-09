@@ -9,6 +9,7 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { truncateId } from '@lib/utils/string/truncate'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -50,6 +51,7 @@ export const CircleView = () => {
           success={circleAccountAddress =>
             circleAccountAddress ? (
               <MainWrapper>
+                <p>Circle account: {truncateId(circleAccountAddress)}</p>
                 <Text weight={600}>{t('circle.balance_title')}</Text>
                 <BalanceOverviewTable />
                 <APYOverview />
