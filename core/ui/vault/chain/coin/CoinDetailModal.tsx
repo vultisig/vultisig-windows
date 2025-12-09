@@ -10,6 +10,7 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ModalCloseButton } from '@lib/ui/modal/ModalCloseButton'
 import { ResponsiveModal } from '@lib/ui/modal/ResponsiveModal'
 import { OnCloseProp } from '@lib/ui/props'
+import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { formatAmount } from '@lib/utils/formatAmount'
@@ -20,17 +21,39 @@ type CoinDetailModalProps = OnCloseProp & {
   coin: VaultChainCoin
 }
 
+const Header = styled(HStack)`
+  align-self: stretch;
+  display: none;
+
+  @media ${mediaQuery.tabletDeviceAndUp} {
+    display: flex;
+  }
+`
+
 const ContentContainer = styled(VStack)`
+  margin-inline: -20px;
   position: relative;
   gap: 32px;
-  align-items: center;
-  padding: 24px;
+  padding: 20px 0px;
   background: linear-gradient(
     0deg,
-    #061b3a 50%,
-    rgba(6, 27, 58, 0.5) 95%,
+    ${getColor('foreground')} 50%,
+    rgba(6, 27, 58, 0.5) 85%,
     rgba(6, 27, 58, 0) 100%
   );
+  align-items: center;
+
+  @media ${mediaQuery.tabletDeviceAndUp} {
+    margin-inline: revert;
+    padding: 24px;
+    background: linear-gradient(
+      0deg,
+      ${getColor('foreground')} 50%,
+      rgba(6, 27, 58, 0.5) 97%,
+      rgba(6, 27, 58, 0) 100%
+    );
+    border-radius: 12px;
+  }
 
   > * {
     position: relative;
@@ -111,16 +134,9 @@ export const CoinDetailModal = ({ coin, onClose }: CoinDetailModalProps) => {
       }}
     >
       <ContentContainer>
-        <HStack
-          style={{
-            alignSelf: 'stretch',
-          }}
-          alignItems="start"
-          justifyContent="flex-end"
-          gap={16}
-        >
+        <Header alignItems="start" justifyContent="flex-end" gap={16}>
           {onClose && <ModalCloseButton onClick={onClose} />}
-        </HStack>
+        </Header>
         <HStack alignItems="center" gap={8}>
           <CoinIcon coin={coin} style={{ fontSize: 24 }} />
           <Text size={20} weight={600} color="contrast">
