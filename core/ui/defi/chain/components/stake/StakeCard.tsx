@@ -64,15 +64,15 @@ type Props = {
   rewards?: number
   rewardTicker?: string
   nextPayout?: Date
-  onStake: () => void
-  onUnstake: () => void
+  onStake?: () => void
+  onUnstake?: () => void
   onWithdrawRewards?: () => void
   isSkeleton?: boolean
   actionsDisabled?: boolean
 }
 
 export const StakeCard = ({
-  id,
+  id: _id,
   coin,
   title,
   amount,
@@ -109,12 +109,9 @@ export const StakeCard = ({
               ) : (
                 <>
                   <Text size={24} weight="700" color="contrast">
-                    {formatAmount(
-                      fromChainAmount(amount, coin.decimals),
-                      {
-                        ticker: coin.ticker,
-                      }
-                    )}
+                    {formatAmount(fromChainAmount(amount, coin.decimals), {
+                      ticker: coin.ticker,
+                    })}
                   </Text>
                   <Text size={13} color="shy">
                     {formatFiatAmount(fiat)}
