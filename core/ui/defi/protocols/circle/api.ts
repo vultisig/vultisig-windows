@@ -42,7 +42,13 @@ type CircleWallet = {
 const isCircleAccount = (wallet: CircleWallet) =>
   wallet.accountType === 'SCA' && wallet.state === 'LIVE'
 
-export const getCircleAccount = async (ownerAddress: string) => {
+export type GetCircleAccountInput = {
+  ownerAddress: string
+}
+
+export const getCircleAccount = async ({
+  ownerAddress,
+}: GetCircleAccountInput) => {
   const wallets = await queryUrl<CircleWallet[]>(
     getCircleWalletsUrl(ownerAddress)
   )
