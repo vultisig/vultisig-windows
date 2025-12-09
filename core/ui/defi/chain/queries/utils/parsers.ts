@@ -82,7 +82,9 @@ export const estimateNextChurn = ({
       }
     }
 
-    return totalBlocks > 0 ? totalSeconds / totalBlocks : thorchainBlockTimeSeconds
+    return totalBlocks > 0
+      ? totalSeconds / totalBlocks
+      : thorchainBlockTimeSeconds
   }
 
   const avgBlockTime = deriveAverageBlockTime(churns)
