@@ -1,5 +1,6 @@
 import { productName, rootApiUrl } from '@core/config'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
 const circleApiUrl = `${rootApiUrl}/circle`
@@ -9,13 +10,6 @@ type CreateCircleWalletBody = {
   account_type: 'SCA'
   owner: string
   name: string
-}
-
-export const getCircleWalletsUrl = (ownerAddress: string) => {
-  const url = new URL(`${circleApiUrl}/wallet`)
-  url.searchParams.set('refId', ownerAddress)
-
-  return url.toString()
 }
 
 const defaultVaultName = `${productName} Vault`
@@ -50,7 +44,7 @@ export const getCircleAccount = async ({
   ownerAddress,
 }: GetCircleAccountInput) => {
   const wallets = await queryUrl<CircleWallet[]>(
-    getCircleWalletsUrl(ownerAddress)
+    addQueryParams(`${circleApiUrl}/wallet`, { refId: ownerAddress })
   )
 
   const [wallet] = wallets.filter(isCircleAccount)
