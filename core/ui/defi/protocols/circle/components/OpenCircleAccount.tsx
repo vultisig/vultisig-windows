@@ -3,21 +3,12 @@ import { useTranslation } from 'react-i18next'
 
 import { useOpenCircleAccountMutation } from '../mutations/useOpenCircleAccountMutation'
 
-type OpenCircleAccountProps = {
-  isPending?: boolean
-}
-
-export const OpenCircleAccount = ({
-  isPending = false,
-}: OpenCircleAccountProps) => {
+export const OpenCircleAccount = () => {
   const { t } = useTranslation()
-  const { mutate, isPending: isMutationPending } =
-    useOpenCircleAccountMutation()
-
-  const isLoading = isPending || isMutationPending
+  const { mutate, isPending } = useOpenCircleAccountMutation()
 
   return (
-    <Button disabled={isLoading} loading={isLoading} onClick={() => mutate()}>
+    <Button loading={isPending} onClick={() => mutate()}>
       {t('circle.open_account')}
     </Button>
   )

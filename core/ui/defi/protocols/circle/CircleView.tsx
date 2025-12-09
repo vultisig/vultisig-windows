@@ -1,7 +1,9 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { Button } from '@lib/ui/buttons/Button'
 import { Image } from '@lib/ui/image/Image'
+import { Center } from '@lib/ui/layout/Center'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -39,7 +41,11 @@ export const CircleView = () => {
         </Text>
         <MatchQuery
           value={circleAccountQuery}
-          pending={() => <OpenCircleAccount isPending />}
+          pending={() => (
+            <Center>
+              <Spinner />
+            </Center>
+          )}
           inactive={() => <OpenCircleAccount />}
           success={circleAccountAddress =>
             circleAccountAddress ? (
