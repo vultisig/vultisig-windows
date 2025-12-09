@@ -8,10 +8,15 @@ import { thorchainTokens } from '../../tokens'
 import { ThorchainStakePosition } from '../../types'
 import { parseBigint } from '../../utils/parsers'
 
-export const fetchStcyStakePosition = async (
-  address: string,
+type FetchStcyStakePositionInput = {
+  address: string
   prices: Record<string, number>
-): Promise<ThorchainStakePosition | null> => {
+}
+
+export const fetchStcyStakePosition = async ({
+  address,
+  prices,
+}: FetchStcyStakePositionInput): Promise<ThorchainStakePosition | null> => {
   try {
     const denom = encodeURIComponent(tcyAutoCompounderConfig.shareDenom)
     const balance = await queryUrl<{ balance?: { amount?: string } }>(

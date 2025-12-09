@@ -40,15 +40,28 @@ const aggregateThorchain = ({
   return { totalFiat, bondFiat, stakeFiat }
 }
 
+const defaultAggregates: ChainAggregates = {
+  totalFiat: 0,
+  bondFiat: 0,
+  stakeFiat: 0,
+}
+
+type ChainAggregator = (input: {
+  selectedPositionIds: string[]
+  thorchain?: ThorchainDefiPositions
+}) => ChainAggregates
+
+const chainAggregators: Partial<Record<Chain, ChainAggregator>> = {
+  [Chain.THORChain]: aggregateThorchain,
+}
+
 export const aggregateDefiPositions = ({
   chain,
   selectedPositionIds,
   thorchain,
 }: DefiAggregatesInput): ChainAggregates => {
-  switch (chain) {
-    case Chain.THORChain:
-      return aggregateThorchain({ selectedPositionIds, thorchain })
-    default:
-      return { totalFiat: 0, bondFiat: 0, stakeFiat: 0 }
-  }
+  const aggregator = chainAggregators[chain]
+  return aggregator
+    ? aggregator({ selectedPositionIds, thorchain })
+    : defaultAggregates
 }

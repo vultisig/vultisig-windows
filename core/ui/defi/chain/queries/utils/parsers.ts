@@ -30,15 +30,18 @@ export const encodeBase64 = (value: string) => {
   return value
 }
 
+const bondStatusMap: Record<string, string> = {
+  active: 'active',
+  ready: 'ready',
+  standby: 'standby',
+  disabled: 'disabled',
+  whitelisted: 'whitelisted',
+}
+
 export const toBondStatusLabel = (status?: string) => {
   if (!status) return 'unknown'
   const normalized = status.toLowerCase()
-  if (normalized === 'active') return 'active'
-  if (normalized === 'ready') return 'ready'
-  if (normalized === 'standby') return 'standby'
-  if (normalized === 'disabled') return 'disabled'
-  if (normalized === 'whitelisted') return 'whitelisted'
-  return 'unknown'
+  return bondStatusMap[normalized] ?? 'unknown'
 }
 
 export const estimateNextChurn = ({

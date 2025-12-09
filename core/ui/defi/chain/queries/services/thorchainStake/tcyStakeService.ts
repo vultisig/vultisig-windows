@@ -37,10 +37,15 @@ const getTcyStakers = () =>
     `${thornodeBaseUrl}/tcy_stakers`
   )
 
-export const fetchTcyStakePosition = async (
-  address: string,
+type FetchTcyStakePositionInput = {
+  address: string
   prices: Record<string, number>
-): Promise<ThorchainStakePosition | null> => {
+}
+
+export const fetchTcyStakePosition = async ({
+  address,
+  prices,
+}: FetchTcyStakePositionInput): Promise<ThorchainStakePosition | null> => {
   const staker = await getTcyStaker(address).catch(() => undefined)
   const amount = parseBigint(staker?.amount)
 
@@ -116,8 +121,7 @@ export const fetchTcyStakePosition = async (
         : 0
     estimatedReward = actualDistributionAmount * userShare
 
-    const currentBlock = await getLastBlock()
-    const blocksRemainingForNext = blocksPerDay - (currentBlock % blocksPerDay)
+    const blocksRemainingForNext = blocksPerDay - (lastBlock % blocksPerDay)
     const secondsRemaining = blocksRemainingForNext * thorchainBlockTimeSeconds
     nextPayout = new Date(Date.now() + secondsRemaining * 1000)
   } catch {
