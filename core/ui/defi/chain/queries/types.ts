@@ -1,5 +1,3 @@
-import { Coin } from '@core/chain/coin/Coin'
-
 export type ThorchainBondPosition = {
   id: string
   nodeAddress: string
@@ -35,5 +33,3 @@ export type ThorchainDefiPositions = {
   }
   prices: Record<string, number>
 }
-
-export type ThorchainTokenMap = Record<string, Coin>
