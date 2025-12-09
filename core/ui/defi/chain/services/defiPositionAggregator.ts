@@ -3,13 +3,13 @@ import { sum } from '@lib/utils/array/sum'
 
 import { ThorchainDefiPositions } from '../queries/types'
 
-export type ChainAggregates = {
+type ChainAggregates = {
   totalFiat: number
   bondFiat: number
   stakeFiat: number
 }
 
-export type DefiAggregatesInput = {
+type DefiAggregatesInput = {
   chain: Chain
   selectedPositionIds: string[]
   thorchain?: ThorchainDefiPositions | undefined
