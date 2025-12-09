@@ -1,8 +1,10 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Coin } from '@core/chain/coin/Coin'
+import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { Button } from '@lib/ui/buttons/Button'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
+import { formatAmount } from '@lib/utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -12,8 +14,6 @@ import {
   BondStatusPill,
   BondValueRow,
 } from './CardPrimitives'
-import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
-import { formatAmount } from '@lib/utils/formatAmount'
 
 const formatStatus = (status?: string) => {
   if (!status) return 'unknown'
@@ -78,7 +78,9 @@ export const BondNodeCard = ({
               {nodeAddress}
             </Text>
           </VStack>
-          <BondStatusPill tone={statusTone}>{formatStatus(status)}</BondStatusPill>
+          <BondStatusPill tone={statusTone}>
+            {formatStatus(status)}
+          </BondStatusPill>
         </BondSectionHeader>
 
         <BondValueRow>
