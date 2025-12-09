@@ -1,6 +1,14 @@
-import { GeneratedHexEncryptionKeyProvider } from '@core/ui/mpc/state/currentHexEncryptionKey'
+import {
+  CurrentHexEncryptionKeyProvider,
+  ExternalEncryptionKeyProvider,
+  GeneratedHexEncryptionKeyProvider,
+} from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
-import { GeneratedMpcSessionIdProvider } from '@core/ui/mpc/state/mpcSession'
+import {
+  ExternalSessionIdProvider,
+  GeneratedMpcSessionIdProvider,
+  MpcSessionIdProvider,
+} from '@core/ui/mpc/state/mpcSession'
 import { ChildrenProp } from '@lib/ui/props'
 
 import { CurrentVaultHexChainCodeProvider } from '../../state/currentHexChainCode'
@@ -11,10 +19,59 @@ import { GeneratedMpcServiceNameProvider } from '../../state/mpcServiceName'
 import { ServerUrlDerivedFromServerTypeProvider } from '../../state/serverUrlDerivedFromServerType'
 import { CurrentKeygenVaultProvider } from '../state/keygenVault'
 
-export const ReshareVaultFlowProviders = ({ children }: ChildrenProp) => {
+type ReshareVaultFlowProvidersProps = ChildrenProp & {
+  externalEncryptionKey?: string | null
+  externalSessionId?: string | null
+}
+
+const EncryptionKeyProviderWrapper = ({
+  children,
+  externalEncryptionKey,
+}: ChildrenProp & { externalEncryptionKey?: string | null }) => {
+  if (externalEncryptionKey !== undefined && externalEncryptionKey !== null) {
+    return (
+      <ExternalEncryptionKeyProvider value={externalEncryptionKey}>
+        <CurrentHexEncryptionKeyProvider value={externalEncryptionKey}>
+          {children}
+        </CurrentHexEncryptionKeyProvider>
+      </ExternalEncryptionKeyProvider>
+    )
+  }
   return (
     <GeneratedHexEncryptionKeyProvider>
-      <GeneratedMpcSessionIdProvider>
+      {children}
+    </GeneratedHexEncryptionKeyProvider>
+  )
+}
+
+const SessionIdProviderWrapper = ({
+  children,
+  externalSessionId,
+}: ChildrenProp & { externalSessionId?: string | null }) => {
+  if (externalSessionId !== undefined && externalSessionId !== null) {
+    return (
+      <ExternalSessionIdProvider value={externalSessionId}>
+        <MpcSessionIdProvider value={externalSessionId}>
+          {children}
+        </MpcSessionIdProvider>
+      </ExternalSessionIdProvider>
+    )
+  }
+  return (
+    <GeneratedMpcSessionIdProvider>{children}</GeneratedMpcSessionIdProvider>
+  )
+}
+
+export const ReshareVaultFlowProviders = ({
+  children,
+  externalEncryptionKey,
+  externalSessionId,
+}: ReshareVaultFlowProvidersProps) => {
+  return (
+    <SessionIdProviderWrapper externalSessionId={externalSessionId}>
+      <EncryptionKeyProviderWrapper
+        externalEncryptionKey={externalEncryptionKey}
+      >
         <CurrentKeygenVaultProvider>
           <CurrentVaultLocalPartyIdProvider>
             <MpcServerTypeProvider initialValue="relay">
@@ -32,7 +89,7 @@ export const ReshareVaultFlowProviders = ({ children }: ChildrenProp) => {
             </MpcServerTypeProvider>
           </CurrentVaultLocalPartyIdProvider>
         </CurrentKeygenVaultProvider>
-      </GeneratedMpcSessionIdProvider>
-    </GeneratedHexEncryptionKeyProvider>
+      </EncryptionKeyProviderWrapper>
+    </SessionIdProviderWrapper>
   )
 }
