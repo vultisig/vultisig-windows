@@ -10,7 +10,7 @@ import {
   fetchNetwork,
   fetchNetworkInfo,
 } from './services/thorchainBondService'
-import { fetchStakePositions } from './services/thorchainStakeService'
+import { fetchStakePositions } from './services/thorchainStake'
 import { thorchainDefiCoins } from './tokens'
 import { ThorchainDefiPositions } from './types'
 
@@ -59,5 +59,3 @@ export const useThorchainDefiPositionsQuery = (
     },
   })
 }
-
-export type { ThorchainDefiPositions } from './types'
