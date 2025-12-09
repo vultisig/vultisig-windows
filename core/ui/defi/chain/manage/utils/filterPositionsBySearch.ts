@@ -1,4 +1,4 @@
-import { DefiPosition } from '../../storage/defiPositions'
+import { DefiPosition } from '../../../../storage/defiPositions'
 
 export const filterPositionsBySearch = (
   positions: DefiPosition[],
