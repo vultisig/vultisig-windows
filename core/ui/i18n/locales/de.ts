@@ -36,6 +36,7 @@ export const de = {
     deposit: 'Kaution',
     introduction:
       'Zahlen Sie Ihre USDC auf ein Circle-Konto ein und erhalten Sie Zinsen. Sicher in Ihrem Vultisig-Tresor.',
+    open_account: 'Konto eröffnen',
     rewards: 'Prämien',
     total_deposit: 'Gesamteinzahlung',
     withdraw: 'Zurückziehen',

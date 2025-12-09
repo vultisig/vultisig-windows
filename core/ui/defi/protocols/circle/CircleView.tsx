@@ -4,6 +4,7 @@ import { Image } from '@lib/ui/image/Image'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
@@ -12,10 +13,13 @@ import styled from 'styled-components'
 import { APYOverview } from './components/APYOverview'
 import { BalanceOverviewTable } from './components/BalanceOverviewTable'
 import { InfoBanner } from './components/InfoBanner'
+import { OpenCircleAccount } from './components/OpenCircleAccount'
 import { TransactionActions } from './components/TransactionActions'
+import { useCircleAccountQuery } from './queries/useCircleAccountQuery'
 
 export const CircleView = () => {
   const { t } = useTranslation()
+  const circleAccountQuery = useCircleAccountQuery()
 
   return (
     <VStack fullHeight>
@@ -33,15 +37,26 @@ export const CircleView = () => {
         <Text size={14} color="shyExtra">
           {t('circle.introduction')}
         </Text>
-        <MainWrapper>
-          <Text weight={600}>{t('circle.balance_title')}</Text>
-          <BalanceOverviewTable />
-          <APYOverview />
-          <div />
-          <Button>{t('circle.claim')}</Button>
-          <TransactionActions />
-          <InfoBanner />
-        </MainWrapper>
+        <MatchQuery
+          value={circleAccountQuery}
+          pending={() => <OpenCircleAccount isPending />}
+          inactive={() => <OpenCircleAccount />}
+          success={circleAccountAddress =>
+            circleAccountAddress ? (
+              <MainWrapper>
+                <Text weight={600}>{t('circle.balance_title')}</Text>
+                <BalanceOverviewTable />
+                <APYOverview />
+                <div />
+                <Button>{t('circle.claim')}</Button>
+                <TransactionActions />
+                <InfoBanner />
+              </MainWrapper>
+            ) : (
+              <OpenCircleAccount />
+            )
+          }
+        />
       </StyledPageContent>
     </VStack>
   )

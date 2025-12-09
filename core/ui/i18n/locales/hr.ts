@@ -36,6 +36,7 @@ export const hr = {
     deposit: 'Polog',
     introduction:
       'Uplatite svoj $USDC na Circle račun i ostvarite prinos. Sigurno unutar vašeg Vultisig trezora.',
+    open_account: 'Otvori račun',
     rewards: 'Nagrade',
     total_deposit: 'Ukupni depozit',
     withdraw: 'Povući',
