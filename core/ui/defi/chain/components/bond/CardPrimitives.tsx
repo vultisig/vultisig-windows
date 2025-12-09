@@ -34,7 +34,9 @@ export const BondButtonRow = styled(HStack)`
   flex-wrap: wrap;
 `
 
-export const BondStatusPill = styled.div<{ tone?: 'success' | 'warning' | 'neutral' }>`
+export const BondStatusPill = styled.div<{
+  tone?: 'success' | 'warning' | 'neutral'
+}>`
   padding: 6px 12px;
   border-radius: 999px;
   font-size: 12px;
