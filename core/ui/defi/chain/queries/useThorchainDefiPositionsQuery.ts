@@ -49,7 +49,7 @@ export const useThorchainDefiPositionsQuery = (
         !network?.vaults_migrating
       )
 
-      const stake = await fetchStakePositions(address, prices)
+      const stake = await fetchStakePositions({ address, prices })
 
       return {
         bond,

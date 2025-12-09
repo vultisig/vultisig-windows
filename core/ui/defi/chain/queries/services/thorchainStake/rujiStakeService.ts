@@ -48,10 +48,15 @@ const getRujiStake = (address: string) => {
   })
 }
 
-export const fetchRujiStakePosition = async (
-  address: string,
+type FetchRujiStakePositionInput = {
+  address: string
   prices: Record<string, number>
-): Promise<ThorchainStakePosition | null> => {
+}
+
+export const fetchRujiStakePosition = async ({
+  address,
+  prices,
+}: FetchRujiStakePositionInput): Promise<ThorchainStakePosition | null> => {
   try {
     const response = await getRujiStake(address)
     const stake = response?.data?.node?.stakingV2?.[0]

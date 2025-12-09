@@ -134,7 +134,7 @@ export const fetchBondPositions = async (
 ) => {
   const bondedNodes = await getBondedNodes(address)
   const nodes = bondedNodes?.nodes ?? []
-  const thorchainNodes = (await getNodes().catch(() => [])) ?? []
+  const thorchainNodes = await getNodes().catch(() => [])
 
   const nextChurn = estimateNextChurn({
     nextChurnHeight: networkInfo?.nextChurnHeight,
@@ -176,19 +176,22 @@ export const fetchBondPositions = async (
 
   const bondedAddresses = new Set(nodes.map(node => node.address.toLowerCase()))
   const availableNodes = thorchainNodes
-    .filter(node => {
+    .map(node => {
+      if (!node.node_address) return null
+      const addr = node.node_address.toLowerCase()
       const status = toBondStatusLabel(node.status)
-      const addr = node.node_address?.toLowerCase() ?? ''
-      if (!addr) return false
-      if (bondedAddresses.has(addr)) return false
-      return (
+      if (bondedAddresses.has(addr)) return null
+      if (
         status === 'active' ||
         status === 'ready' ||
         status === 'standby' ||
         status === 'whitelisted'
-      )
+      ) {
+        return node.node_address
+      }
+      return null
     })
-    .map(node => node.node_address as string)
+    .filter((addr): addr is string => addr !== null)
 
   return {
     positions,

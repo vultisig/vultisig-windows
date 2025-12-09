@@ -44,9 +44,9 @@ const StatValue = styled(Text)`
   font-weight: 600;
 `
 
-const formatDateShort = (date?: Date) => {
-  if (!date) return 'Pending'
-  return date.toLocaleDateString(undefined, {
+const formatDateShort = (date?: Date, locale?: string) => {
+  if (!date) return null
+  return date.toLocaleDateString(locale, {
     month: 'short',
     day: 'numeric',
     year: '2-digit',
@@ -88,7 +88,7 @@ export const StakeCard = ({
   isSkeleton,
   actionsDisabled,
 }: Props) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const formatFiatAmount = useFormatFiatAmount()
 
   return (
@@ -135,7 +135,7 @@ export const StakeCard = ({
             {isSkeleton ? (
               <Skeleton width="80px" height="14px" />
             ) : (
-              formatDateShort(nextPayout)
+              (formatDateShort(nextPayout, i18n.language) ?? t('pending'))
             )}
           </StatValue>
         </StatRow>
@@ -154,7 +154,7 @@ export const StakeCard = ({
           </StatValue>
         </StatRow>
 
-        {rewards && rewards > 0 ? (
+        {rewards !== undefined && rewards > 0 ? (
           <Button
             kind="primary"
             onClick={onWithdrawRewards}
