@@ -29,12 +29,7 @@ export const openCircleAccount = (ownerAddress: string) => {
 
 type CircleWallet = {
   address: string
-  accountType: string
-  state: string
 }
-
-const isCircleAccount = (wallet: CircleWallet) =>
-  wallet.accountType === 'SCA' && wallet.state === 'LIVE'
 
 export type GetCircleAccountInput = {
   ownerAddress: string
@@ -43,11 +38,9 @@ export type GetCircleAccountInput = {
 export const getCircleAccount = async ({
   ownerAddress,
 }: GetCircleAccountInput) => {
-  const wallets = await queryUrl<CircleWallet[]>(
+  const [wallet] = await queryUrl<CircleWallet[]>(
     addQueryParams(`${circleApiUrl}/wallet`, { refId: ownerAddress })
   )
-
-  const [wallet] = wallets.filter(isCircleAccount)
 
   if (!wallet) return null
 
