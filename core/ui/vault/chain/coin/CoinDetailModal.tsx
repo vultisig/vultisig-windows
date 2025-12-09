@@ -7,6 +7,7 @@ import { VaultPrimaryActions } from '@core/ui/vault/components/VaultPrimaryActio
 import { VaultChainCoin } from '@core/ui/vault/queries/useVaultChainCoinsQuery'
 import { Opener } from '@lib/ui/base/Opener'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { ModalCloseButton } from '@lib/ui/modal/ModalCloseButton'
 import { ResponsiveModal } from '@lib/ui/modal/ResponsiveModal'
 import { OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
@@ -23,14 +24,11 @@ const ContentContainer = styled(VStack)`
   position: relative;
   gap: 32px;
   align-items: center;
-  padding: 20px 0px;
-  margin-inline: -20px;
-  margin-bottom: -32px;
-  overflow-x: hidden;
+  padding: 24px;
   background: linear-gradient(
     0deg,
     #061b3a 50%,
-    rgba(6, 27, 58, 0.5) 85%,
+    rgba(6, 27, 58, 0.5) 95%,
     rgba(6, 27, 58, 0) 100%
   );
 
@@ -105,8 +103,24 @@ export const CoinDetailModal = ({ coin, onClose }: CoinDetailModalProps) => {
   const fiatValue = (coin.price || 0) * balance
 
   return (
-    <ResponsiveModal isOpen onClose={onClose}>
+    <ResponsiveModal
+      isOpen
+      onClose={onClose}
+      modalProps={{
+        withDefaultStructure: false,
+      }}
+    >
       <ContentContainer>
+        <HStack
+          style={{
+            alignSelf: 'stretch',
+          }}
+          alignItems="start"
+          justifyContent="flex-end"
+          gap={16}
+        >
+          {onClose && <ModalCloseButton onClick={onClose} />}
+        </HStack>
         <HStack alignItems="center" gap={8}>
           <CoinIcon coin={coin} style={{ fontSize: 24 }} />
           <Text size={20} weight={600} color="contrast">
