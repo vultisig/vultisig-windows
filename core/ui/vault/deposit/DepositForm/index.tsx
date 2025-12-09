@@ -1,4 +1,5 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { DepositActionSpecific } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/DepositActionSpecific'
 import { DepositActionItemExplorer } from '@core/ui/vault/deposit/DepositForm/DepositActionItemExplorer'
 import {
@@ -42,6 +43,7 @@ type DepositFormProps = {
 
 export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
   const [selectedChainAction, setSelectedChainAction] = useDepositAction()
+  const [{ form: formDefaults }] = useCoreViewState<'deposit'>()
 
   const { t } = useTranslation()
   const [coin] = useDepositCoin()
@@ -64,7 +66,7 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
   } = useForm<FormData>({
     resolver: zodResolver(schema as any),
     mode: 'onSubmit',
-    defaultValues: { autoCompound: false },
+    defaultValues: { autoCompound: false, ...(formDefaults ?? {}) },
   })
 
   const handleFormSubmit = (data: FieldValues) => {

@@ -1,44 +1,32 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useDefiPositions } from '@core/ui/storage/defiPositions'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
-import { VaultChainBalance } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { sum } from '@lib/utils/array/sum'
-import { formatAmount } from '@lib/utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { DefiChainPortfolio } from '../hooks/useDefiPortfolios'
+
 type DefiChainItemProps = {
-  balance: VaultChainBalance
+  balance: DefiChainPortfolio
 }
 
 export const DefiChainItem = ({ balance }: DefiChainItemProps) => {
-  const { chain, coins } = balance
+  const { chain, totalFiat } = balance
   const navigate = useCoreNavigate()
 
   const { t } = useTranslation()
   const formatFiatAmount = useFormatFiatAmount()
 
-  const singleCoin = coins.length === 1 ? coins[0] : null
-
-  const totalAmount = sum(
-    coins.map(coin =>
-      getCoinValue({
-        price: coin.price ?? 0,
-        amount: coin.amount,
-        decimals: coin.decimals,
-      })
-    )
-  )
+  const selectedPositions = useDefiPositions(chain)
 
   const handleClick = () => {
     navigate({ id: 'defiChainDetail', state: { chain } })
@@ -72,24 +60,17 @@ export const DefiChainItem = ({ balance }: DefiChainItemProps) => {
               >
                 <Text centerVertically color="contrast" weight="550" size={14}>
                   <BalanceVisibilityAware>
-                    {formatFiatAmount(totalAmount)}
+                    {formatFiatAmount(totalFiat)}
                   </BalanceVisibilityAware>
                 </Text>
                 <Text color="shy" weight="500" size={12} centerVertically>
-                  {singleCoin ? (
+                  {selectedPositions.length > 0 ? (
                     <BalanceVisibilityAware>
-                      {formatAmount(
-                        fromChainAmount(singleCoin.amount, singleCoin.decimals),
-                        { precision: 'high', ticker: singleCoin.ticker }
-                      )}
+                      {selectedPositions.length} {t('positions')}
                     </BalanceVisibilityAware>
-                  ) : coins.length > 1 ? (
-                    <BalanceVisibilityAware>
-                      <>
-                        {coins.length} {t('assets')}
-                      </>
-                    </BalanceVisibilityAware>
-                  ) : null}
+                  ) : (
+                    t('no_positions_selected')
+                  )}
                 </Text>
               </VStack>
               <IconWrapper>

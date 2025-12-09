@@ -40,9 +40,9 @@ const availableDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
       chain: Chain.THORChain,
     },
     {
-      id: 'thor-stake-sruji',
-      name: 'sRUJI',
-      ticker: 'sRUJI',
+      id: 'thor-stake-stcy',
+      name: 'sTCY',
+      ticker: 'sTCY',
       type: 'stake',
       chain: Chain.THORChain,
     },
@@ -137,7 +137,7 @@ const useDefiPositionsQuery = () => {
 export const useDefiPositions = (chain: Chain): string[] => {
   const { data } = useDefiPositionsQuery()
 
-  return data?.[chain] ?? []
+  return data?.[chain] ?? getAvailablePositionsForChain(chain).map(p => p.id)
 }
 
 const useAllDefiPositions = (): DefiPositionsRecord => {
@@ -160,7 +160,10 @@ const useSetDefiPositionsMutation = () => {
 
 export const useToggleDefiPosition = (chain: Chain) => {
   const allPositions = useAllDefiPositions()
-  const chainPositions = allPositions[chain] ?? []
+  const defaultChainPositions = getAvailablePositionsForChain(chain).map(
+    p => p.id
+  )
+  const chainPositions = allPositions[chain] ?? defaultChainPositions
   const { mutate: setDefiPositions, isPending } = useSetDefiPositionsMutation()
 
   const togglePosition = (positionId: string) => {
