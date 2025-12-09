@@ -8,9 +8,9 @@ import {
 } from '@core/ui/defi/chain/constants/time'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
-import { ThorchainBondPosition } from '../types'
 import { midgardBaseUrl, thornodeBaseUrl } from '../constants'
 import { runeCoin } from '../tokens'
+import { ThorchainBondPosition } from '../types'
 import { toDecimalFactor } from '../utils/decimals'
 import {
   estimateNextChurn,
@@ -71,9 +71,12 @@ const getNodeDetails = (address: string) =>
 
 const getNodes = () => queryUrl<ThorchainNode[]>(`${thornodeBaseUrl}/nodes`)
 
-export const fetchChurns = () => queryUrl<ChurnEntry[]>(`${midgardBaseUrl}/churns`)
-export const fetchNetworkInfo = () => queryUrl<NetworkInfo>(`${midgardBaseUrl}/network`)
-export const fetchHealth = () => queryUrl<HealthInfo>(`${midgardBaseUrl}/health`)
+export const fetchChurns = () =>
+  queryUrl<ChurnEntry[]>(`${midgardBaseUrl}/churns`)
+export const fetchNetworkInfo = () =>
+  queryUrl<NetworkInfo>(`${midgardBaseUrl}/network`)
+export const fetchHealth = () =>
+  queryUrl<HealthInfo>(`${midgardBaseUrl}/health`)
 export const fetchNetwork = () =>
   queryUrl<{ vaults_migrating?: boolean }>(`${thornodeBaseUrl}/network`)
 
@@ -96,8 +99,7 @@ const calculateBondMetrics = async (
   const ownership = totalBond > 0n ? Number(myBond) / Number(totalBond) : 0
   const nodeOperatorFee =
     (parseNumber(details?.bond_providers?.node_operator_fee) ?? 0) / 10_000
-  const currentAward =
-    parseNumber(details?.current_award) / runeDecimalFactor
+  const currentAward = parseNumber(details?.current_award) / runeDecimalFactor
   const myAward = currentAward * (1 - nodeOperatorFee) * ownership
 
   const mostRecentChurn = churns?.[0]
