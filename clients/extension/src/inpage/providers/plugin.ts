@@ -34,14 +34,23 @@ export class Plugin extends EventEmitter {
 
         return processSignature(signature)
       },
-      reshare_sign: async ([{ id }]: [{ id: string }]) => {
-        const { joinUrl } = await callPopup(
-          { pluginReshare: { pluginId: id } },
-          { shouldClosePopup: false }
-        )
-
-        return joinUrl
-      },
+      reshare_sign: async ([{ id, dAppSessionId, encryptionKeyHex }]: [
+        {
+          id: string
+          dAppSessionId: string
+          encryptionKeyHex: string
+        },
+      ]) =>
+        callPopup(
+          {
+            pluginReshare: {
+              pluginId: id,
+              dAppSessionId: dAppSessionId,
+              encryptionKeyHex: encryptionKeyHex,
+            },
+          },
+          { shouldClosePopup: true }
+        ),
     } as const
 
     if (method in handlers) {
