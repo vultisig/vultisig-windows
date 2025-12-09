@@ -17,7 +17,7 @@ import { BalanceOverviewTable } from './components/BalanceOverviewTable'
 import { InfoBanner } from './components/InfoBanner'
 import { OpenCircleAccount } from './components/OpenCircleAccount'
 import { TransactionActions } from './components/TransactionActions'
-import { useCircleAccountQuery } from './queries/useCircleAccountQuery'
+import { useCircleAccountQuery } from './queries/circleAccount'
 
 export const CircleView = () => {
   const { t } = useTranslation()
