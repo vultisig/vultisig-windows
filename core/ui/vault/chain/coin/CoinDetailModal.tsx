@@ -21,6 +21,85 @@ type CoinDetailModalProps = OnCloseProp & {
   coin: VaultChainCoin
 }
 
+export const CoinDetailModal = ({ coin, onClose }: CoinDetailModalProps) => {
+  const { t } = useTranslation()
+  const formatFiatAmount = useFormatFiatAmount()
+  const balance = fromChainAmount(coin.amount, coin.decimals)
+  const fiatValue = (coin.price || 0) * balance
+
+  return (
+    <ResponsiveModal
+      isOpen
+      onClose={onClose}
+      modalProps={{
+        withDefaultStructure: false,
+      }}
+    >
+      <ContentContainer>
+        <Header alignItems="start" justifyContent="flex-end" gap={16}>
+          {onClose && <ModalCloseButton onClick={onClose} />}
+        </Header>
+        <HStack alignItems="center" gap={8}>
+          <CoinIcon coin={coin} style={{ fontSize: 24 }} />
+          <Text size={20} weight={600} color="contrast">
+            {coin.ticker}
+          </Text>
+        </HStack>
+
+        <BalanceCard>
+          <Text size={28} weight={500} color="contrast">
+            <BalanceVisibilityAware>
+              {formatFiatAmount(fiatValue)}
+            </BalanceVisibilityAware>
+          </Text>
+          <Text size={15} weight={500} color="shy">
+            <BalanceVisibilityAware>
+              {formatAmount(balance, { precision: 'high' })} {coin.ticker}
+            </BalanceVisibilityAware>
+          </Text>
+        </BalanceCard>
+
+        <Opener
+          renderOpener={({ onOpen }) => (
+            <VaultPrimaryActions coin={coin} onReceive={onOpen} />
+          )}
+          renderContent={({ onClose: onCloseQR }) => (
+            <AddressQRModal
+              chain={coin.chain}
+              coin={coin}
+              onClose={onCloseQR}
+            />
+          )}
+        />
+
+        <InfoSection>
+          <InfoRow>
+            <Text size={14} weight={500}>
+              {t('price')}
+            </Text>
+            <NetworkBadge>
+              <Text size={13} color="shyExtra">
+                {formatFiatAmount(coin.price || 0)}
+              </Text>
+            </NetworkBadge>
+          </InfoRow>
+
+          <InfoRow>
+            <Text size={14} weight={500}>
+              {t('network')}
+            </Text>
+            <NetworkBadge>
+              <Text size={13} color="shyExtra">
+                {coin.chain}
+              </Text>
+            </NetworkBadge>
+          </InfoRow>
+        </InfoSection>
+      </ContentContainer>
+    </ResponsiveModal>
+  )
+}
+
 const Header = styled(HStack)`
   align-self: stretch;
   display: none;
@@ -118,82 +197,3 @@ const NetworkBadge = styled.div`
   border-radius: 8px;
   background: ${getColor('foreground')};
 `
-
-export const CoinDetailModal = ({ coin, onClose }: CoinDetailModalProps) => {
-  const { t } = useTranslation()
-  const formatFiatAmount = useFormatFiatAmount()
-  const balance = fromChainAmount(coin.amount, coin.decimals)
-  const fiatValue = (coin.price || 0) * balance
-
-  return (
-    <ResponsiveModal
-      isOpen
-      onClose={onClose}
-      modalProps={{
-        withDefaultStructure: false,
-      }}
-    >
-      <ContentContainer>
-        <Header alignItems="start" justifyContent="flex-end" gap={16}>
-          {onClose && <ModalCloseButton onClick={onClose} />}
-        </Header>
-        <HStack alignItems="center" gap={8}>
-          <CoinIcon coin={coin} style={{ fontSize: 24 }} />
-          <Text size={20} weight={600} color="contrast">
-            {coin.ticker}
-          </Text>
-        </HStack>
-
-        <BalanceCard>
-          <Text size={28} weight={500} color="contrast">
-            <BalanceVisibilityAware>
-              {formatFiatAmount(fiatValue)}
-            </BalanceVisibilityAware>
-          </Text>
-          <Text size={15} weight={500} color="shy">
-            <BalanceVisibilityAware>
-              {formatAmount(balance, { precision: 'high' })} {coin.ticker}
-            </BalanceVisibilityAware>
-          </Text>
-        </BalanceCard>
-
-        <Opener
-          renderOpener={({ onOpen }) => (
-            <VaultPrimaryActions coin={coin} onReceive={onOpen} />
-          )}
-          renderContent={({ onClose: onCloseQR }) => (
-            <AddressQRModal
-              chain={coin.chain}
-              coin={coin}
-              onClose={onCloseQR}
-            />
-          )}
-        />
-
-        <InfoSection>
-          <InfoRow>
-            <Text size={14} weight={500}>
-              {t('price')}
-            </Text>
-            <NetworkBadge>
-              <Text size={13} color="shyExtra">
-                {formatFiatAmount(coin.price || 0)}
-              </Text>
-            </NetworkBadge>
-          </InfoRow>
-
-          <InfoRow>
-            <Text size={14} weight={500}>
-              {t('network')}
-            </Text>
-            <NetworkBadge>
-              <Text size={13} color="shyExtra">
-                {coin.chain}
-              </Text>
-            </NetworkBadge>
-          </InfoRow>
-        </InfoSection>
-      </ContentContainer>
-    </ResponsiveModal>
-  )
-}
