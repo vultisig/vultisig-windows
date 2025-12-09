@@ -1,7 +1,7 @@
 import { generateHexEncryptionKey } from '@core/mpc/utils/generateHexEncryptionKey'
 import { ChildrenProp } from '@lib/ui/props'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
-import { createContext, useContext, useMemo } from 'react'
+import { createContext, useMemo } from 'react'
 
 export const {
   useValue: useCurrentHexEncryptionKey,
@@ -23,11 +23,6 @@ export const ExternalEncryptionKeyProvider = ({
   )
 }
 
-const useOptionalExternalEncryptionKey = (): string | null => {
-  const context = useContext(ExternalEncryptionKeyContext)
-  return context === undefined ? null : (context ?? null)
-}
-
 export const GeneratedHexEncryptionKeyProvider = ({
   children,
 }: ChildrenProp) => {
@@ -35,25 +30,6 @@ export const GeneratedHexEncryptionKeyProvider = ({
 
   return (
     <CurrentHexEncryptionKeyProvider value={HexEncryptionKey}>
-      {children}
-    </CurrentHexEncryptionKeyProvider>
-  )
-}
-
-export const ConditionalHexEncryptionKeyProvider = ({
-  children,
-}: ChildrenProp) => {
-  const externalEncryptionKey = useOptionalExternalEncryptionKey()
-
-  const encryptionKey = useMemo(() => {
-    if (externalEncryptionKey !== null) {
-      return externalEncryptionKey
-    }
-    return generateHexEncryptionKey()
-  }, [externalEncryptionKey])
-
-  return (
-    <CurrentHexEncryptionKeyProvider value={encryptionKey}>
       {children}
     </CurrentHexEncryptionKeyProvider>
   )
