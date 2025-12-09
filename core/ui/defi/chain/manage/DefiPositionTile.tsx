@@ -11,7 +11,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import styled, { css } from 'styled-components'
 
-import { DefiPosition } from '../../storage/defiPositions'
+import { DefiPosition } from '../../../storage/defiPositions'
 
 type Props = {
   position: DefiPosition
