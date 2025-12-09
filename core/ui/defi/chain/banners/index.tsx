@@ -4,7 +4,9 @@ import { ComponentType } from 'react'
 import { DefiChainBalanceBannerFallback } from './DefiChainBalanceBannerFallback'
 import { DefiThorchainBalanceBanner } from './DefiThorchainBalanceBanner'
 
-const chainBannerRegistry: Partial<Record<Chain, ComponentType>> = {
+const chainBannerRegistry: Partial<
+  Record<Chain, ComponentType<Record<string, never>>>
+> = {
   [Chain.THORChain]: DefiThorchainBalanceBanner,
 }
 

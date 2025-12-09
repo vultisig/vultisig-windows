@@ -16,16 +16,16 @@ import {
 } from './CardPrimitives'
 
 const formatStatus = (status?: string) => {
-  if (!status) return 'unknown'
+  if (!status) return null
   return status
     .split('_')
     .map(part => part.charAt(0).toUpperCase() + part.slice(1))
     .join(' ')
 }
 
-const formatDateShort = (date?: Date) => {
-  if (!date) return 'Pending'
-  return date.toLocaleDateString(undefined, {
+const formatDateShort = (date?: Date, locale?: string) => {
+  if (!date) return null
+  return date.toLocaleDateString(locale, {
     month: 'short',
     day: 'numeric',
     year: '2-digit',
@@ -61,10 +61,15 @@ export const BondNodeCard = ({
   fiatValue,
   isBondingDisabled,
 }: Props) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const formatFiatAmount = useFormatFiatAmount()
+  const normalizedStatus = status.toLowerCase()
   const statusTone: 'success' | 'warning' | 'neutral' =
-    status === 'active' ? 'success' : status === 'ready' ? 'warning' : 'neutral'
+    normalizedStatus === 'active'
+      ? 'success'
+      : normalizedStatus === 'ready'
+        ? 'warning'
+        : 'neutral'
 
   return (
     <BondCard>
@@ -79,13 +84,13 @@ export const BondNodeCard = ({
             </Text>
           </VStack>
           <BondStatusPill tone={statusTone}>
-            {formatStatus(status)}
+            {formatStatus(status) ?? t('unknown')}
           </BondStatusPill>
         </BondSectionHeader>
 
         <BondValueRow>
           <Text size={12} color="shy">
-            {t('bonded' as any)}
+            {t('bonded')}
           </Text>
           <Text size={22} weight="700" color="contrast">
             {formatAmount(fromChainAmount(amount, coin.decimals), {
@@ -101,7 +106,7 @@ export const BondNodeCard = ({
         <HStack gap={16} style={{ flexWrap: 'wrap' }}>
           <BondValueRow>
             <Text size={12} color="shy">
-              {t('apy' as any)}
+              {t('apy')}
             </Text>
             <Text size={14} weight="600" color="success">
               {(apy * 100).toFixed(2)}%
@@ -109,15 +114,15 @@ export const BondNodeCard = ({
           </BondValueRow>
           <BondValueRow>
             <Text size={12} color="shy">
-              {t('next_churn') ?? 'Next churn'}
+              {t('next_churn')}
             </Text>
             <Text size={14} weight="600" color="contrast">
-              {formatDateShort(nextChurn)}
+              {formatDateShort(nextChurn, i18n.language) ?? t('pending')}
             </Text>
           </BondValueRow>
           <BondValueRow>
             <Text size={12} color="shy">
-              {t('next_award') ?? 'Next award'}
+              {t('next_award')}
             </Text>
             <Text size={14} weight="600" color="contrast">
               {formatAmount(nextReward, { ticker: coin.ticker })}

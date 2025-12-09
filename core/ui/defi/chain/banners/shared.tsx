@@ -77,19 +77,6 @@ export const ThorchainLogoWrapper = styled.div`
   height: 145px;
   top: 20%;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 200%;
-    height: 200%;
-    border-radius: 50%;
-
-    pointer-events: none;
-  }
-
   @media ${mediaQuery.tabletDeviceAndUp} {
     width: 300px;
     height: 300px;

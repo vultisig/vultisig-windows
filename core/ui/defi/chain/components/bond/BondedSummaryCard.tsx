@@ -6,6 +6,7 @@ import { Button } from '@lib/ui/buttons/Button'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -80,5 +81,5 @@ export const BondedSummaryCard = ({
 const Divider = styled.div`
   width: 100%;
   height: 1px;
-  background: var(--Borders-Light, #11284a);
+  background: ${getColor('foregroundExtra')};
 `
