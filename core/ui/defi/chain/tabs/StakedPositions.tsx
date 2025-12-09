@@ -10,8 +10,8 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useTranslation } from 'react-i18next'
 
 import { StakeCard } from '../components/stake/StakeCard'
-import { useDefiChainPositionsQuery } from '../queries/useDefiChainPositionsQuery'
 import { thorchainTokens } from '../queries/tokens'
+import { useDefiChainPositionsQuery } from '../queries/useDefiChainPositionsQuery'
 import { useCurrentDefiChain } from '../useCurrentDefiChain'
 import { DefiPositionEmptyState } from './DefiPositionEmptyState'
 
