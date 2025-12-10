@@ -13,6 +13,20 @@ export const findEvmCoins: FindCoinsResolver<EvmChain> = async ({
   address,
   chain,
 }) => {
+  const oneInchSupportedChains: EvmChain[] = [
+    EvmChain.Ethereum,
+    EvmChain.Base,
+    EvmChain.Arbitrum,
+    EvmChain.Polygon,
+    EvmChain.Optimism,
+    EvmChain.BSC,
+    EvmChain.Avalanche,
+  ]
+
+  if (!oneInchSupportedChains.includes(chain)) {
+    return []
+  }
+
   const oneInchChainId = hexToNumber(getEvmChainId(chain))
 
   const balanceResult = await attempt(
