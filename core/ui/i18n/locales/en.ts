@@ -653,6 +653,7 @@ export const en = {
   available_nodes: 'Available nodes',
   request_to_bond: 'Request to bond',
   wait_until_node_churned: 'Wait until node is churned out',
+  unstake_available_on: 'Unstake available on {{date}}',
   bond_to_node: 'Bond to Node',
   no_active_nodes: 'No active nodes yet',
   no_available_nodes: 'No available nodes right now',
