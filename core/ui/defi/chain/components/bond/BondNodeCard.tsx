@@ -92,8 +92,13 @@ export const BondNodeCard = ({
     normalizedStatus === 'active'
       ? 'success'
       : normalizedStatus === 'ready'
-        ? 'warning'
-        : 'neutral'
+      ? 'warning'
+      : 'neutral'
+  const nodeAllowsUnbond =
+    normalizedStatus === 'standby' ||
+    normalizedStatus === 'disabled' ||
+    normalizedStatus === 'whitelisted'
+  const unbondDisabled = !canUnbond || !nodeAllowsUnbond
 
   const truncatedAddress = `${nodeAddress.slice(0, 7)}....${nodeAddress.slice(-5)}`
 
@@ -181,7 +186,7 @@ export const BondNodeCard = ({
           <Button
             kind="secondary"
             onClick={onUnbond}
-            disabled={!canUnbond}
+            disabled={unbondDisabled}
             icon={<RefreshCwIcon />}
             style={{ flex: 1 }}
           >
@@ -197,7 +202,7 @@ export const BondNodeCard = ({
             {t('bond')}
           </Button>
         </BondButtonRow>
-        {!canUnbond && (
+        {unbondDisabled && (
           <Text size={12} color="shy">
             {t('wait_until_node_churned')}
           </Text>
