@@ -1260,4 +1260,5 @@ export const en = {
   your_referral_code: 'Your Referral Code',
   your_referrals: 'Your Referrals',
   youre_swapping: "You're swapping",
+  account: 'Account',
 }
