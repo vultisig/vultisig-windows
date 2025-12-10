@@ -29,6 +29,7 @@ export const CircleDepositedPanel = () => {
           <Text size={14} color="shy">
             {usdc.ticker} {t('deposited').toLowerCase()}
           </Text>
+          <Text size={28}>0 {usdc.ticker}</Text>
         </VStack>
       </HStack>
       <Separator />
