@@ -2,17 +2,22 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Coin } from '@core/chain/coin/Coin'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { Button } from '@lib/ui/buttons/Button'
+import { CalendarIcon } from '@lib/ui/icons/CalendarIcon'
+import { LinkIcon } from '@lib/ui/icons/LinkIcon'
+import { PercentIcon } from '@lib/ui/icons/PercentIcon'
+import { RefreshCwIcon } from '@lib/ui/icons/RefreshCwIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import {
   BondButtonRow,
   BondCard,
   BondSectionHeader,
   BondStatusPill,
-  BondValueRow,
 } from './CardPrimitives'
 
 const formatStatus = (status?: string) => {
@@ -47,6 +52,25 @@ type Props = {
   isBondingDisabled?: boolean
 }
 
+const Divider = styled.div`
+  width: 100%;
+  height: 1px;
+  background: ${getColor('foregroundExtra')};
+`
+
+const InfoRow = styled(HStack)`
+  align-items: center;
+  gap: 8px;
+`
+
+const InfoIcon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${getColor('textShy')};
+  font-size: 16px;
+`
+
 export const BondNodeCard = ({
   coin,
   nodeAddress,
@@ -71,70 +95,94 @@ export const BondNodeCard = ({
         ? 'warning'
         : 'neutral'
 
+  const truncatedAddress = `${nodeAddress.slice(0, 7)}....${nodeAddress.slice(-5)}`
+
   return (
     <BondCard>
       <VStack gap={12}>
+        {/* Node Address Header */}
         <BondSectionHeader>
-          <VStack gap={2}>
+          <HStack gap={4} alignItems="center">
             <Text size={13} color="shy">
-              {t('node_address')}
+              {t('node_address')}:
             </Text>
-            <Text size={15} weight="600" color="contrast">
-              {nodeAddress}
+            <Text size={13} weight="500" color="contrast">
+              {truncatedAddress}
             </Text>
-          </VStack>
+          </HStack>
           <BondStatusPill tone={statusTone}>
             {formatStatus(status) ?? t('unknown')}
           </BondStatusPill>
         </BondSectionHeader>
 
-        <BondValueRow>
-          <Text size={12} color="shy">
-            {t('bonded')}
-          </Text>
-          <Text size={22} weight="700" color="contrast">
+        {/* Bonded Amount Row */}
+        <HStack justifyContent="space-between" alignItems="center">
+          <Text size={18} weight="700" color="contrast">
+            {t('bonded')}:{' '}
             {formatAmount(fromChainAmount(amount, coin.decimals), {
               precision: 'high',
               ticker: coin.ticker,
             })}
           </Text>
-          <Text size={13} color="shy">
+          <Text size={14} color="shy">
             {formatFiatAmount(fiatValue)}
           </Text>
-        </BondValueRow>
+        </HStack>
 
-        <HStack gap={16} style={{ flexWrap: 'wrap' }}>
-          <BondValueRow>
-            <Text size={12} color="shy">
+        {/* APY Row */}
+        <HStack justifyContent="space-between" alignItems="center">
+          <InfoRow>
+            <InfoIcon>
+              <PercentIcon />
+            </InfoIcon>
+            <Text size={13} color="shy">
               {t('apy')}
             </Text>
-            <Text size={14} weight="600" color="success">
-              {(apy * 100).toFixed(2)}%
-            </Text>
-          </BondValueRow>
-          <BondValueRow>
-            <Text size={12} color="shy">
-              {t('next_churn')}
-            </Text>
+          </InfoRow>
+          <Text size={14} weight="600" color={apy > 0 ? 'success' : 'shy'}>
+            {(apy * 100).toFixed(2)}%
+          </Text>
+        </HStack>
+
+        <Divider />
+
+        {/* Next Churn and Next Award Row */}
+        <HStack gap={32}>
+          <VStack gap={4}>
+            <InfoRow>
+              <InfoIcon>
+                <CalendarIcon />
+              </InfoIcon>
+              <Text size={13} color="shy">
+                {t('next_churn')}
+              </Text>
+            </InfoRow>
             <Text size={14} weight="600" color="contrast">
               {formatDateShort(nextChurn, i18n.language) ?? t('pending')}
             </Text>
-          </BondValueRow>
-          <BondValueRow>
-            <Text size={12} color="shy">
-              {t('next_award')}
-            </Text>
+          </VStack>
+          <VStack gap={4}>
+            <InfoRow>
+              <InfoIcon>
+                <CalendarIcon />
+              </InfoIcon>
+              <Text size={13} color="shy">
+                {t('next_award')}
+              </Text>
+            </InfoRow>
             <Text size={14} weight="600" color="contrast">
               {formatAmount(nextReward, { ticker: coin.ticker })}
             </Text>
-          </BondValueRow>
+          </VStack>
         </HStack>
 
+        {/* Action Buttons */}
         <BondButtonRow>
           <Button
             kind="secondary"
             onClick={onUnbond}
             disabled={!canUnbond}
+            icon={<RefreshCwIcon />}
             style={{ flex: 1 }}
           >
             {t('unbond')}
@@ -142,6 +190,7 @@ export const BondNodeCard = ({
           <Button
             kind="primary"
             onClick={onBond}
+            icon={<LinkIcon />}
             style={{ flex: 1 }}
             disabled={isBondingDisabled}
           >
