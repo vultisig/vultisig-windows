@@ -1,0 +1,68 @@
+import { usdc } from '@core/chain/coin/knownTokens'
+import { Button } from '@lib/ui/buttons/Button'
+import { Center } from '@lib/ui/layout/Center'
+import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
+import { Spinner } from '@lib/ui/loaders/Spinner'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
+import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
+
+import { ChainEntityIcon } from '../../../../chain/coin/icon/ChainEntityIcon'
+import { getCoinLogoSrc } from '../../../../chain/coin/icon/utils/getCoinLogoSrc'
+import { OpenCircleAccount } from '../components/OpenCircleAccount'
+import { useCircleAccountQuery } from '../queries/circleAccount'
+
+export const CircleDepositedPanel = () => {
+  const circleAccountQuery = useCircleAccountQuery()
+  const { t } = useTranslation()
+
+  return (
+    <Container>
+      <HStack alignItems="center" gap={12}>
+        <ChainEntityIcon
+          style={{ fontSize: 48 }}
+          value={getCoinLogoSrc(usdc.logo)}
+        />
+        <VStack gap={2}>
+          <Text size={14} color="shy">
+            {usdc.ticker} {t('deposited').toLowerCase()}
+          </Text>
+        </VStack>
+      </HStack>
+      <Separator />
+      <MatchQuery
+        value={circleAccountQuery}
+        pending={() => (
+          <Center>
+            <Spinner />
+          </Center>
+        )}
+        success={circleAccountAddress =>
+          circleAccountAddress ? (
+            <Button>
+              {t('circle.deposit')} {usdc.ticker}
+            </Button>
+          ) : (
+            <OpenCircleAccount />
+          )
+        }
+      />
+    </Container>
+  )
+}
+
+const Container = styled.div`
+  padding: 16px;
+  border: 1px solid ${getColor('foregroundExtra')};
+  border-radius: 16px;
+  ${vStack({
+    gap: 16,
+  })}
+`
+
+const Separator = styled.div`
+  height: 1px;
+  background: ${getColor('foregroundExtra')};
+`

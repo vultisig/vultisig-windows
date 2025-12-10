@@ -144,10 +144,10 @@ export const en = {
   choose_payout_asset: 'Choose payout asset',
   choose_tokens: 'Choose Tokens',
   choose_vault: 'Choose Vault',
+  deposited: 'Deposited',
   circle: {
     apy: 'APY',
     balance_title: 'Balance Overview',
-    deposited_tab: 'Deposited',
     banner_text:
       'Funds remain fully under your vault’s control. Circle accounts are self-custodial and yield is generated through secure off-chain treasuries.',
     claim: 'Claim Rewards',

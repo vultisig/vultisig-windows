@@ -19,7 +19,7 @@ export const CircleView = () => {
   const tabs: Tab<CircleTab>[] = [
     {
       value: 'deposited',
-      label: t('circle.deposited_tab'),
+      label: t('deposited'),
       renderContent: () => <CircleContent />,
     },
   ]

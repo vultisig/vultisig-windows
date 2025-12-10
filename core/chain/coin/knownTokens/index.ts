@@ -13,6 +13,16 @@ export const vult: Token<CoinKey> & KnownCoinMetadata = {
   ticker: 'VULT',
   logo: 'vult',
   decimals: 18,
+  priceProviderId: 'vultisig',
+}
+
+export const usdc: Token<CoinKey> & KnownCoinMetadata = {
+  id: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
+  chain: Chain.Ethereum,
+  ticker: 'USDC',
+  logo: 'usdc',
+  decimals: 6,
+  priceProviderId: 'usd-coin',
 }
 
 const leanTokens: Partial<LeanChainTokensRecord> = {
@@ -34,12 +44,7 @@ const leanTokens: Partial<LeanChainTokensRecord> = {
   },
   [Chain.Ethereum]: {
     [vult.id]: omit(vult, 'id', 'chain'),
-    '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48': {
-      ticker: 'USDC',
-      logo: 'usdc',
-      decimals: 6,
-      priceProviderId: 'usd-coin',
-    },
+    [usdc.id]: omit(usdc, 'id', 'chain'),
     '0xdac17f958d2ee523a2206206994597c13d831ec7': {
       ticker: 'USDT',
       logo: 'usdt',
