@@ -14,16 +14,33 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { sum } from '@lib/utils/array/sum'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
-import { useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 import { BondedSummaryCard } from '../components/bond/BondedSummaryCard'
-import { BondNodeCard } from '../components/bond/BondNodeCard'
-import { BondCard, BondStatusPill } from '../components/bond/CardPrimitives'
+import { BondNodeItem } from '../components/bond/BondNodeItem'
 import { useDefiChainPositionsQuery } from '../queries/useDefiChainPositionsQuery'
 import { useCurrentDefiChain } from '../useCurrentDefiChain'
 import { DefiPositionEmptyState } from './DefiPositionEmptyState'
+
+const collapsibleTransition = {
+  duration: 0.35,
+  ease: [0.4, 0, 0.2, 1] as const,
+}
+
+const collapsibleVariants = {
+  collapsed: { height: 0, opacity: 0 },
+  open: { height: 'auto', opacity: 1 },
+} as const
+
+const SectionContainer = styled.div`
+  border-radius: 16px;
+  background: ${getColor('foreground')};
+  border: 1px solid ${getColor('foregroundSuper')};
+  overflow: hidden;
+`
 
 const SectionHeader = styled(UnstyledButton)`
   display: flex;
@@ -31,35 +48,49 @@ const SectionHeader = styled(UnstyledButton)`
   justify-content: space-between;
   width: 100%;
   padding: 16px;
-  border-radius: 16px;
-  background: ${getColor('foreground')};
-  border: 1px solid ${getColor('foregroundSuper')};
 `
 
-const ChevronWrapper = styled.div<{ $isOpen: boolean }>`
+const ChevronWrapper = styled(motion.div)`
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 20px;
   color: ${getColor('text')};
-  transition: transform 0.2s ease;
-  ${({ $isOpen }) =>
-    !$isOpen &&
-    css`
-      transform: rotate(180deg);
-    `}
 `
 
-const CollapsibleContent = styled.div<{ $isOpen: boolean }>`
-  display: ${({ $isOpen }) => ($isOpen ? 'block' : 'none')};
-`
-
-const AvailableNodeCard = styled.div`
+const SectionItem = styled.div`
   padding: 16px;
-  border-radius: 16px;
-  background: ${getColor('foreground')};
-  border: 1px solid ${getColor('foregroundSuper')};
+  border-top: 1px solid ${getColor('foregroundExtra')};
 `
+
+const SkeletonItem = styled(SectionItem)`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`
+
+type CollapsibleProps = {
+  isOpen: boolean
+  children: ReactNode
+}
+
+const Collapsible = ({ isOpen, children }: CollapsibleProps) => (
+  <AnimatePresence initial={false}>
+    {isOpen && (
+      <motion.div
+        key="collapsible-content"
+        variants={collapsibleVariants}
+        initial="collapsed"
+        animate="open"
+        exit="collapsed"
+        transition={collapsibleTransition}
+        style={{ overflow: 'hidden' }}
+      >
+        {children}
+      </motion.div>
+    )}
+  </AnimatePresence>
+)
 
 export const BondedPositions = () => {
   const chain = useCurrentDefiChain()
@@ -151,31 +182,33 @@ export const BondedPositions = () => {
       />
 
       {/* Active Nodes Section */}
-      <VStack gap={12}>
+      <SectionContainer>
         <SectionHeader onClick={() => setActiveNodesOpen(!activeNodesOpen)}>
           <Text size={14} weight="600" color="contrast">
             {t('active_nodes')}
           </Text>
-          <ChevronWrapper $isOpen={activeNodesOpen}>
+          <ChevronWrapper
+            animate={{ rotate: activeNodesOpen ? 180 : 0 }}
+            transition={{ duration: 0.2 }}
+          >
             <ChevronDownIcon />
           </ChevronWrapper>
         </SectionHeader>
-        <CollapsibleContent $isOpen={activeNodesOpen}>
-          <VStack gap={12}>
-            {isPending && positions.length === 0 ? (
-              <>
-                {[1, 2].map(key => (
-                  <BondCard key={key}>
-                    <Skeleton width="60%" height="16px" />
-                    <Skeleton width="40%" height="24px" />
-                    <Skeleton width="100%" height="20px" />
-                  </BondCard>
-                ))}
-              </>
-            ) : positions.length > 0 ? (
-              positions.map(position => (
-                <BondNodeCard
-                  key={position.nodeAddress}
+        <Collapsible isOpen={activeNodesOpen}>
+          {isPending && positions.length === 0 ? (
+            <>
+              {[1, 2].map(key => (
+                <SkeletonItem key={key}>
+                  <Skeleton width="60%" height="16px" />
+                  <Skeleton width="40%" height="24px" />
+                  <Skeleton width="100%" height="20px" />
+                </SkeletonItem>
+              ))}
+            </>
+          ) : positions.length > 0 ? (
+            positions.map(position => (
+              <SectionItem key={position.nodeAddress}>
+                <BondNodeItem
                   coin={bondCoin}
                   nodeAddress={position.nodeAddress}
                   amount={position.amount}
@@ -191,55 +224,62 @@ export const BondedPositions = () => {
                   fiatValue={position.fiatValue}
                   isBondingDisabled={isBondingDisabled}
                 />
-              ))
-            ) : (
+              </SectionItem>
+            ))
+          ) : (
+            <SectionItem>
               <EmptyState title={t('no_active_nodes')} />
-            )}
-          </VStack>
-        </CollapsibleContent>
-      </VStack>
+            </SectionItem>
+          )}
+        </Collapsible>
+      </SectionContainer>
 
       {/* Available Nodes Section */}
-      <VStack gap={12}>
+      <SectionContainer>
         <SectionHeader
           onClick={() => setAvailableNodesOpen(!availableNodesOpen)}
         >
           <Text size={14} weight="600" color="contrast">
             {t('available_nodes')}
           </Text>
-          <ChevronWrapper $isOpen={availableNodesOpen}>
+          <ChevronWrapper
+            animate={{ rotate: availableNodesOpen ? 180 : 0 }}
+            transition={{ duration: 0.2 }}
+          >
             <ChevronDownIcon />
           </ChevronWrapper>
         </SectionHeader>
-        <CollapsibleContent $isOpen={availableNodesOpen}>
-          <VStack gap={12}>
-            {availableNodes.length ? (
-              availableNodes.map(node => (
-                <AvailableNodeCard key={node}>
-                  <VStack gap={12}>
-                    <HStack justifyContent="space-between" alignItems="center">
-                      <Text size={14} color="contrast">
-                        VultiNode: {node.slice(0, 13)}
-                      </Text>
-                      <BondStatusPill tone="success">Active</BondStatusPill>
-                    </HStack>
-                    <Button
-                      kind="secondary"
-                      onClick={() => navigateToBond({ nodeAddress: node })}
-                      disabled={isBondingDisabled}
-                      icon={<ArrowUpRightIcon />}
-                    >
-                      {t('request_to_bond')}
-                    </Button>
-                  </VStack>
-                </AvailableNodeCard>
-              ))
-            ) : !isPending ? (
+        <Collapsible isOpen={availableNodesOpen}>
+          {availableNodes.length ? (
+            availableNodes.map(node => (
+              <SectionItem key={node}>
+                <VStack gap={12}>
+                  <HStack justifyContent="space-between" alignItems="center">
+                    <Text size={14} color="contrast">
+                      VultiNode: {node.slice(0, 13)}
+                    </Text>
+                    <Text size={13} weight="500" color="success">
+                      Active
+                    </Text>
+                  </HStack>
+                  <Button
+                    kind="outlined"
+                    onClick={() => navigateToBond({ nodeAddress: node })}
+                    disabled={isBondingDisabled}
+                    icon={<ArrowUpRightIcon />}
+                  >
+                    {t('request_to_bond')}
+                  </Button>
+                </VStack>
+              </SectionItem>
+            ))
+          ) : !isPending ? (
+            <SectionItem>
               <EmptyState title={t('no_available_nodes')} />
-            ) : null}
-          </VStack>
-        </CollapsibleContent>
-      </VStack>
+            </SectionItem>
+          ) : null}
+        </Collapsible>
+      </SectionContainer>
     </VStack>
   )
 }
