@@ -1,5 +1,6 @@
 import { CosmosChain } from '@core/chain/Chain'
 import { cosmosRpcUrl } from '@core/chain/chains/cosmos/cosmosRpcUrl'
+import { knownCosmosTokens } from '@core/chain/coin/knownTokens/cosmos'
 import { TokenMetadataResolver } from '@core/chain/coin/token/metadata/resolver'
 import { getLastItem } from '@lib/utils/array/getLastItem'
 import { attempt } from '@lib/utils/attempt'
@@ -66,6 +67,14 @@ const getDenomMetaFromLCD = async (
 export const getCosmosTokenMetadata: TokenMetadataResolver<
   CosmosChain
 > = async ({ chain, id }) => {
+  const knownMeta = knownCosmosTokens[chain]?.[id]
+  if (knownMeta) {
+    return {
+      ticker: knownMeta.ticker,
+      decimals: knownMeta.decimals,
+    }
+  }
+
   const lcd = cosmosRpcUrl[chain as CosmosChain]
   const meta = await getDenomMetaFromLCD(lcd, id)
   if (!meta) throw new Error(`No denom meta information available for ${id}`)

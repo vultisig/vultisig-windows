@@ -52,9 +52,7 @@ export const TxSuccess = ({
     <>
       <TransactionSuccessAnimation />
       <VStack gap={8}>
-        {formattedToAmount > 0 && (
-          <TxOverviewAmount amount={formattedToAmount} value={coin} />
-        )}
+        <TxOverviewAmount amount={formattedToAmount} value={coin} />
         <List>
           <ListItem
             hoverable
