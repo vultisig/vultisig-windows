@@ -36,6 +36,7 @@ export const es = {
     deposit: 'Depósito',
     introduction:
       'Deposita tus $USDC en una cuenta Circle y obtén ganancias. De forma segura en tu bóveda de Vultisig.',
+    open_account: 'Abrir cuenta',
     rewards: 'Recompensas',
     total_deposit: 'Depósito total',
     withdraw: 'Retirar',

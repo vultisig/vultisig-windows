@@ -1,0 +1,32 @@
+**---
+description: USE queryFn input as queryKey WHEN query just calls another function
+globs: 
+alwaysApply: false
+---
+
+# Query Key From Input Pattern
+
+When a query's `queryFn` simply calls another function with an input, use the function name and input as the query key. This ensures the query automatically invalidates when the input changes.
+
+## Pattern
+
+```ts
+// If queryFn calls: doSomething(input)
+// Then queryKey is: ['doSomething', input]
+
+export const useSomeQuery = () => {
+  const input = { id, network }
+
+  return useQuery({
+    queryKey: ['getSomething', input],
+    queryFn: async () => getSomething(input),
+  })
+}
+```
+
+## Benefits
+
+- Query key automatically reflects function dependencies
+- No manual key updates when input shape changes
+- Clear mapping between cache key and data source
+**
