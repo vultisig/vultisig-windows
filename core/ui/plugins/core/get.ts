@@ -2,6 +2,16 @@ import { RecipeSchema } from '@core/mpc/types/plugin/recipe_specification_pb'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { toCamelCase } from '@lib/utils/toCamelCase'
 
+type AppPricing = {
+  amount: number
+  createdAt: string
+  frequency: string
+  id: string
+  metric: string
+  type: string
+  updatedAt: string
+}
+
 export type Plugin = {
   category_id: string
   created_at: string
@@ -9,7 +19,7 @@ export type Plugin = {
   id: string
   logo_url: string
   permissions: string[]
-  pricing_id: string
+  pricing: AppPricing[]
   server_endpoint: string
   title: string
   updated_at: string
@@ -26,17 +36,24 @@ export const getPlugin = async (baseUrl: string, id: string) =>
 
           return {
             ...plugin,
-            permissions: supportedResources.reduce<string[]>(
-              (acc, { resourcePath }) => {
-                if (!resourcePath || !resourcePath.functionId) return acc
+            permissions: [
+              ...supportedResources.reduce<string[]>(
+                (acc, { resourcePath }) => {
+                  if (!resourcePath || !resourcePath.functionId) return acc
 
-                if (!acc.includes(resourcePath.functionId))
-                  acc.push(resourcePath.functionId)
+                  const id = resourcePath.functionId
 
-                return acc
-              },
-              []
-            ),
+                  if (!acc.includes(id)) acc.push(id)
+
+                  return acc
+                },
+                []
+              ),
+              ...(plugin.pricing.length > 0
+                ? ['Fee deduction authorization']
+                : []),
+              'Vault balance visibility',
+            ],
           }
         })
         .catch(() => ({ ...plugin, permissions: [] }) as Plugin)
