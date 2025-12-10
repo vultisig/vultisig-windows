@@ -1308,4 +1308,7 @@ export const pt = {
   ultimate: 'Final',
   vault_settings_language_settings_subtitle_zh: 'chinês',
   vault_settings_language_settings_title_zh: '中文',
+  deposited: 'Depositado',
+  withdraw: 'Retirar',
+  account: 'Conta',
 }

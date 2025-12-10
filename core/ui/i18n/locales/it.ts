@@ -1311,4 +1311,7 @@ export const it = {
   ultimate: 'Definitivo',
   vault_settings_language_settings_subtitle_zh: 'cinese',
   vault_settings_language_settings_title_zh: '中文',
+  deposited: 'Depositato',
+  withdraw: 'Ritirare',
+  account: 'Account',
 }

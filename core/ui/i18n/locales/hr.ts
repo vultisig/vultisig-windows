@@ -1289,4 +1289,7 @@ export const hr = {
   ultimate: 'Krajnji',
   vault_settings_language_settings_subtitle_zh: 'kineski',
   vault_settings_language_settings_title_zh: '中文',
+  deposited: 'Položeno',
+  withdraw: 'Povući',
+  account: 'Račun',
 }
