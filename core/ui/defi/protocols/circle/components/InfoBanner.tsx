@@ -16,10 +16,10 @@ export const InfoBanner = () => {
 
   return (
     <BannerWrapper>
-      <Text size={12} color="shyExtra">
+      <Text size={12} color="shyExtra" height="large">
         {t('circle.banner_text')}
       </Text>
-      <IconButton onClick={toggle}>
+      <IconButton size="xs" onClick={toggle}>
         <IconWrapper size={8}>
           <NavigationXIcon />
         </IconWrapper>
@@ -31,9 +31,12 @@ export const InfoBanner = () => {
 const BannerWrapper = styled.div`
   ${hStack({
     justifyContent: 'space-between',
+    gap: 12,
+    alignItems: 'start',
   })};
 
-  padding: 13px;
+  padding: 16px;
   border: 1px solid ${getColor('foregroundExtra')};
   background: ${getColor('foreground')};
+  border-radius: 12px;
 `
