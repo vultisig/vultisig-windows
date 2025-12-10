@@ -147,6 +147,7 @@ export const en = {
   circle: {
     apy: 'APY',
     balance_title: 'Balance Overview',
+    deposited_tab: 'Deposited',
     banner_text:
       'Funds remain fully under your vault’s control. Circle yield is generated through secure off-chain treasuries. Withdraw anytime after settlement.',
     claim: 'Claim Rewards',

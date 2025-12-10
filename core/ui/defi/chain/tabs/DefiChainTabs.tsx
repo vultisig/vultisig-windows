@@ -60,7 +60,7 @@ export const DefiChainTabs = () => {
   )
 }
 
-const TabsHeader = styled.div`
+export const TabsHeader = styled.div`
   ${hStack({
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -70,7 +70,9 @@ const TabsHeader = styled.div`
   margin-bottom: 16px;
 `
 
-const TriggerItem = styled(UnstyledButton)<IsActiveProp & IsDisabledProp>`
+export const TriggerItem = styled(UnstyledButton)<
+  IsActiveProp & IsDisabledProp
+>`
   width: fit-content;
   padding-bottom: 6px;
   cursor: pointer;
