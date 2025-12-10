@@ -6,13 +6,9 @@ import styled, { css } from 'styled-components'
 
 export const BondCard = styled(Panel)`
   padding: 16px;
-  border-radius: 18px;
-  background: linear-gradient(
-    145deg,
-    rgba(13, 26, 53, 0.8),
-    rgba(10, 18, 38, 0.9)
-  );
-  border: 1px solid ${getColor('foregroundExtra')};
+  border-radius: 16px;
+  background: ${getColor('foreground')};
+  border: 1px solid ${getColor('foregroundSuper')};
 `
 
 export const BondSectionHeader = styled(HStack)`

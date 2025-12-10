@@ -26,8 +26,11 @@ import { useDefiChainPositionsQuery } from '../queries/useDefiChainPositionsQuer
 import { useCurrentDefiChain } from '../useCurrentDefiChain'
 import { DefiPositionEmptyState } from './DefiPositionEmptyState'
 
-const AvailableNodeCard = styled(BondCard)`
+const AvailableNodeCard = styled.div`
+  padding: 16px;
+  border-radius: 16px;
   background: ${getColor('foreground')};
+  border: 1px solid ${getColor('foregroundSuper')};
 `
 
 export const BondedPositions = () => {
