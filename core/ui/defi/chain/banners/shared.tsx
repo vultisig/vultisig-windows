@@ -17,6 +17,7 @@ export const BannerContainer = styled.div`
     linear-gradient(140deg, rgba(8, 18, 43, 0.95) 0%, rgba(9, 28, 64, 0.9) 100%);
   position: relative;
   overflow: hidden;
+  min-height: 122px;
 `
 
 export const BannerContent = styled(VStack)`

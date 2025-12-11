@@ -39,6 +39,7 @@ export const zh = {
     rewards: '奖励',
     total_deposit: '总存款',
     withdraw: '提取',
+    open_account: '开户',
   },
   fastVaultSetup: {
     backup: {
@@ -1191,4 +1192,11 @@ export const zh = {
   your_referral_code: '您的推荐码',
   your_referrals: '您的推荐',
   youre_swapping: '你在交换',
+  deposited: '已存',
+  coin_not_found_in_any_vault: '{{ticker}} on {{chain}} 未在任何金库中找到',
+  fallback_swap_warning: '我们无法模拟此交易。请谨慎操作。',
+  withdraw: '提取',
+  add_cacao_pool: '添加到可可池',
+  remove_cacao_pool: '从可可池中移除',
+  account: '帐户',
 }
