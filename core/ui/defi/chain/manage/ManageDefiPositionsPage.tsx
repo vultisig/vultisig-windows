@@ -1,6 +1,6 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
+import { useCore } from '@core/ui/state/core'
 import {
   getPositionsByType,
   useDefiPositions,
@@ -23,8 +23,8 @@ import { filterPositionsBySearch } from './utils/filterPositionsBySearch'
 export const ManageDefiPositionsPage = () => {
   const { t } = useTranslation()
   const [search, setSearch] = useState('')
-  const navigate = useCoreNavigate()
   const [{ chain }] = useCoreViewState<'manageDefiPositions'>()
+  const { goBack } = useCore()
   const selectedPositionIds = useDefiPositions(chain)
   const { togglePosition, isPending } = useToggleDefiPosition(chain)
 
@@ -63,20 +63,8 @@ export const ManageDefiPositionsPage = () => {
   return (
     <VStack fullHeight>
       <PageHeader
-        primaryControls={
-          <PageHeaderBackButton
-            onClick={() =>
-              navigate({ id: 'defiChainDetail', state: { chain } })
-            }
-          />
-        }
-        secondaryControls={
-          <DoneButton
-            onClick={() =>
-              navigate({ id: 'defiChainDetail', state: { chain } })
-            }
-          />
-        }
+        primaryControls={<PageHeaderBackButton onClick={() => goBack()} />}
+        secondaryControls={<DoneButton onClick={() => goBack()} />}
         title={t('select_positions')}
         hasBorder
       />

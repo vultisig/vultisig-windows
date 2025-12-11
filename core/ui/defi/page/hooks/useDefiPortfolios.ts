@@ -4,18 +4,23 @@ import { useMemo } from 'react'
 
 import { useDefiChains } from '../../../storage/defiChains'
 import { useDefiPositions } from '../../../storage/defiPositions'
+import { useMayaDefiPositionsQuery } from '../../chain/queries/useMayaDefiPositionsQuery'
 import { useThorchainDefiPositionsQuery } from '../../chain/queries/useThorchainDefiPositionsQuery'
 import { aggregateDefiPositions } from '../../chain/services/defiPositionAggregator'
 
 export type DefiChainPortfolio = {
   chain: Chain
   totalFiat: number
+  positionsWithBalanceCount: number
+  isLoading: boolean
 }
 
 export const useDefiChainPortfolios = () => {
   const enabledChains = useDefiChains()
   const thorchainSelectedPositions = useDefiPositions(Chain.THORChain)
+  const mayaSelectedPositions = useDefiPositions(Chain.MayaChain)
   const thorchainQuery = useThorchainDefiPositionsQuery()
+  const mayaQuery = useMayaDefiPositionsQuery()
 
   const data = useMemo<DefiChainPortfolio[]>(() => {
     const portfolios: DefiChainPortfolio[] = []
@@ -31,17 +36,43 @@ export const useDefiChainPortfolios = () => {
       portfolios.push({
         chain: Chain.THORChain,
         totalFiat: aggregates.totalFiat,
+        positionsWithBalanceCount: aggregates.positionsWithBalanceCount,
+        isLoading: thorchainQuery.isPending,
       })
     }
 
-    // Maya and LPs can be added here once available
+    if (enabledChains.includes(Chain.MayaChain)) {
+      const selected = new Set(mayaSelectedPositions)
+      const aggregates = aggregateDefiPositions({
+        chain: Chain.MayaChain,
+        selectedPositionIds: Array.from(selected),
+        maya: mayaQuery.data,
+      })
+
+      portfolios.push({
+        chain: Chain.MayaChain,
+        totalFiat: aggregates.totalFiat,
+        positionsWithBalanceCount: aggregates.positionsWithBalanceCount,
+        isLoading: mayaQuery.isPending,
+      })
+    }
 
     return portfolios
-  }, [enabledChains, thorchainQuery.data, thorchainSelectedPositions])
+  }, [
+    enabledChains,
+    thorchainQuery.data,
+    mayaQuery.data,
+    thorchainSelectedPositions,
+    mayaSelectedPositions,
+    thorchainQuery.isPending,
+    mayaQuery.isPending,
+  ])
 
-  const isPending = thorchainQuery.isPending
+  const isPending =
+    (enabledChains.includes(Chain.THORChain) && thorchainQuery.isPending) ||
+    (enabledChains.includes(Chain.MayaChain) && mayaQuery.isPending)
 
-  const error = thorchainQuery.error ?? null
+  const error = thorchainQuery.error ?? mayaQuery.error ?? null
 
   return {
     isPending,

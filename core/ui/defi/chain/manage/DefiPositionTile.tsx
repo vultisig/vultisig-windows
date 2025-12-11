@@ -1,7 +1,4 @@
-import { Chain } from '@core/chain/Chain'
-import { knownCosmosTokens } from '@core/chain/coin/knownTokens/cosmos'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
-import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -12,6 +9,10 @@ import { getColor } from '@lib/ui/theme/getters'
 import styled, { css } from 'styled-components'
 
 import { DefiPosition } from '../../../storage/defiPositions'
+import {
+  resolveDefiPositionCoin,
+  resolveDefiPositionIcon,
+} from '../config/defiPositionResolver'
 
 type Props = {
   position: DefiPosition
@@ -62,28 +63,14 @@ const CheckBadge = styled(IconWrapper)`
   font-weight: 600;
 `
 
-const getPositionIcon = (position: DefiPosition) => {
-  switch (position.ticker.toUpperCase()) {
-    case 'RUNE':
-      return getChainLogoSrc(Chain.THORChain)
-    case 'TCY':
-      return `/core/images/token-icons/${knownCosmosTokens[Chain.THORChain]['tcy'].logo}`
-    case 'STCY':
-      return `/core/images/token-icons/${knownCosmosTokens[Chain.THORChain]['x/staking-tcy'].logo}`
-    case 'RUJI':
-      return `/core/images/token-icons/${knownCosmosTokens[Chain.THORChain]['x/ruji'].logo}`
-    default:
-      return getChainLogoSrc(position.chain)
-  }
-}
-
 export const DefiPositionTile = ({
   position,
   isSelected,
   onToggle,
   isLoading,
 }: Props) => {
-  const icon = getPositionIcon(position)
+  const icon = resolveDefiPositionIcon(position)
+  const coin = resolveDefiPositionCoin(position)
 
   const handleClick = () => {
     if (isLoading) return
@@ -107,7 +94,7 @@ export const DefiPositionTile = ({
         )}
       </PositionIconWrapper>
       <Text cropped color="contrast" size={12} weight={500}>
-        {position.name}
+        {coin.ticker ?? position.name}
       </Text>
     </PositionCard>
   )

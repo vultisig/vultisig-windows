@@ -931,6 +931,7 @@ export const pt = {
   no_available_nodes: 'Nenhum nó disponível',
   request_to_bond: 'Solicitar vínculo',
   wait_until_node_churned: 'Aguarde até o nó ser rotacionado',
+  unstake_available_on: 'Desbloqueio disponível em {{date}}',
   bond_to_node: 'Vincular ao nó',
   next_churn: 'Próxima rotação',
   next_award: 'Próxima recompensa',

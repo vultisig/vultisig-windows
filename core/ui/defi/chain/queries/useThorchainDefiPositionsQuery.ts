@@ -12,7 +12,7 @@ import {
 } from './services/thorchainBondService'
 import { fetchStakePositions } from './services/thorchainStake'
 import { thorchainDefiCoins } from './tokens'
-import { ThorchainDefiPositions } from './types'
+import { DefiChainPositions } from './types'
 
 type UseThorchainDefiPositionsQueryOptions = {
   enabled?: boolean
@@ -27,7 +27,7 @@ export const useThorchainDefiPositionsQuery = (
 
   const isEnabled = enabled && Boolean(address) && Boolean(priceQuery.data)
 
-  return useQuery<ThorchainDefiPositions>({
+  return useQuery<DefiChainPositions>({
     queryKey: ['defi', 'thorchain', 'positions', address],
     enabled: isEnabled,
     queryFn: async () => {

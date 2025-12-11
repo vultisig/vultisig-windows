@@ -21,6 +21,11 @@ import {
 
 const runeDecimalFactor = toDecimalFactor(runeCoin.decimals)
 
+type BondProvider = {
+  bond_address?: string
+  bond?: string
+}
+
 type BondedNodesResponse = {
   nodes?: Array<{
     status?: string
@@ -32,10 +37,7 @@ type BondedNodesResponse = {
 type NodeDetailsResponse = {
   bond_providers?: {
     node_operator_fee?: string
-    providers?: Array<{
-      bond_address?: string
-      bond?: string
-    }>
+    providers?: BondProvider[]
   }
   current_award?: string
   status?: string
@@ -61,6 +63,10 @@ type HealthInfo = {
 type ThorchainNode = {
   node_address?: string
   status?: string
+  bond_address?: string
+  bond_providers?: {
+    providers?: BondProvider[]
+  }
 }
 
 const getBondedNodes = (address: string) =>
@@ -175,18 +181,26 @@ export const fetchBondPositions = async (
   const totalBonded = positions.reduce((acc, p) => acc + p.amount, 0n)
 
   const bondedAddresses = new Set(nodes.map(node => node.address.toLowerCase()))
+  const normalizedAddress = address.toLowerCase()
   const availableNodes = thorchainNodes
     .map(node => {
       if (!node.node_address) return null
       const addr = node.node_address.toLowerCase()
-      const status = toBondStatusLabel(node.status)
       if (bondedAddresses.has(addr)) return null
+      const status = toBondStatusLabel(node.status)
       if (
         status === 'active' ||
         status === 'ready' ||
         status === 'standby' ||
         status === 'whitelisted'
       ) {
+        const providers = node.bond_providers?.providers ?? []
+        const isProvider = providers.some(
+          provider => provider.bond_address?.toLowerCase() === normalizedAddress
+        )
+        const isNodeOperator =
+          node.bond_address?.toLowerCase() === normalizedAddress
+        if (!isProvider && !isNodeOperator) return null
         return node.node_address
       }
       return null

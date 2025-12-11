@@ -74,9 +74,9 @@ export const Ring = styled.div`
 export const ThorchainLogoWrapper = styled.div`
   position: absolute;
   right: -50px;
-  width: 145px;
-  height: 145px;
-  top: 20%;
+  width: 200px;
+  height: 200px;
+  top: 10%;
 
   @media ${mediaQuery.tabletDeviceAndUp} {
     width: 300px;

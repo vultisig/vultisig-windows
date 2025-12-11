@@ -2,56 +2,126 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Coin } from '@core/chain/coin/Coin'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
-import { Button } from '@lib/ui/buttons/Button'
-import { ArrowUpRightIcon } from '@lib/ui/icons/ArrowUpRightIcon'
+import { formatDateShort } from '@core/ui/defi/shared/formatters'
+import { CalendarIcon } from '@lib/ui/icons/CalendarIcon'
+import { CircleMinusIcon } from '@lib/ui/icons/CircleMinusIcon'
+import { CirclePlusIcon } from '@lib/ui/icons/CirclePlusIcon'
+import { PercentIcon } from '@lib/ui/icons/PercentIcon'
+import { TrophyIcon } from '@lib/ui/icons/TrophyIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { formatAmount } from '@lib/utils/formatAmount'
+import { ButtonHTMLAttributes } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 const Card = styled(Panel)`
-  padding: 16px;
-  border-radius: 18px;
-  background: linear-gradient(
-    145deg,
-    rgba(13, 26, 53, 0.85),
-    rgba(8, 14, 32, 0.95)
-  );
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  padding: 20px;
+  border-radius: 24px;
+  background: ${getColor('foreground')};
+  border: 1px solid ${getColor('foregroundSuper')};
 `
 
 const SectionRow = styled(HStack)`
-  justify-content: space-between;
+  width: 100%;
   align-items: center;
   gap: 12px;
 `
 
-const StatRow = styled(SectionRow)`
-  padding: 4px 0;
+const StatRow = styled(HStack)`
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 `
 
-const StatLabel = styled(Text)`
-  font-size: 12px;
+const StatLabel = styled(HStack)`
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
   color: ${getColor('textShy')};
 `
 
 const StatValue = styled(Text)`
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
 `
 
-const formatDateShort = (date?: Date, locale?: string) => {
-  if (!date) return null
-  return date.toLocaleDateString(locale, {
-    month: 'short',
-    day: 'numeric',
-    year: '2-digit',
-  })
-}
+const Divider = styled.div`
+  width: 100%;
+  height: 1px;
+  background: ${getColor('foregroundSuper')};
+`
+
+const ActionsRow = styled(HStack)`
+  width: 100%;
+  gap: 12px;
+  flex-wrap: wrap;
+`
+
+const ActionButton = styled.button.attrs({ type: 'button' })<
+  ButtonHTMLAttributes<HTMLButtonElement> & {
+    variant: 'primary' | 'secondary'
+  }
+>`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 999px;
+  height: 48px;
+  padding: 0 26px;
+  font-size: 16px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  color: ${getColor('contrast')};
+
+  ${({ variant }) =>
+    variant === 'primary'
+      ? css`
+          background: ${getColor('buttonPrimary')};
+          box-shadow: 0px 8px 24px rgba(31, 39, 61, 0.35);
+        `
+      : css`
+          background: rgba(11, 19, 38, 0.95);
+          border-color: ${getColor('buttonPrimary')};
+        `}
+
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      opacity: 0.4;
+      cursor: default;
+    `}
+`
+
+const ActionIcon = styled.span<{ variant: 'primary' | 'secondary' }>`
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  margin-left: -12px;
+  color: ${getColor('contrast')};
+  ${({ variant }) =>
+    variant === 'primary'
+      ? css`
+          background: rgba(255, 255, 255, 0.2);
+        `
+      : css`
+          background: rgba(255, 255, 255, 0.12);
+        `}
+`
 
 type Props = {
   id: string
@@ -64,9 +134,13 @@ type Props = {
   rewards?: number
   rewardTicker?: string
   nextPayout?: Date
+  canUnstake?: boolean
+  unstakeAvailableDate?: Date
   onStake?: () => void
   onUnstake?: () => void
   onWithdrawRewards?: () => void
+  stakeLabel?: string
+  unstakeLabel?: string
   isSkeleton?: boolean
   actionsDisabled?: boolean
 }
@@ -82,90 +156,132 @@ export const StakeCard = ({
   rewards,
   rewardTicker,
   nextPayout,
+  canUnstake,
+  unstakeAvailableDate,
   onStake,
   onUnstake,
   onWithdrawRewards,
+  stakeLabel: _stakeLabel,
+  unstakeLabel: _unstakeLabel,
   isSkeleton,
   actionsDisabled,
 }: Props) => {
   const { t, i18n } = useTranslation()
   const formatFiatAmount = useFormatFiatAmount()
+  const unstakeAllowed = canUnstake ?? true
+  const unstakeDisabled = actionsDisabled || !unstakeAllowed
+  const unstakeMessage =
+    !unstakeAllowed && unstakeAvailableDate
+      ? t('unstake_available_on', {
+          date: formatDateShort(unstakeAvailableDate, i18n.language),
+        })
+      : undefined
 
   return (
     <Card>
-      <VStack gap={12}>
-        <SectionRow alignItems="center">
-          <HStack gap={12} alignItems="center">
-            <CoinIcon coin={coin} style={{ fontSize: 40 }} />
+      <VStack gap={16}>
+        <SectionRow>
+          <HStack gap={12} alignItems="center" fullWidth>
+            <CoinIcon coin={coin} style={{ fontSize: 44 }} />
             <VStack gap={4}>
               <Text size={14} color="shy">
                 {title}
               </Text>
               {isSkeleton ? (
                 <>
-                  <Skeleton width="140px" height="26px" />
-                  <Skeleton width="100px" height="14px" />
+                  <Skeleton width="140px" height="28px" />
+                  <Skeleton width="100px" height="12px" />
                 </>
               ) : (
                 <>
-                  <Text size={24} weight="700" color="contrast">
+                  <Text size={28} weight="700" color="contrast">
                     {formatAmount(fromChainAmount(amount, coin.decimals), {
                       ticker: coin.ticker,
                     })}
                   </Text>
-                  <Text size={13} color="shy">
+                  <Text size={12} color="shy">
                     {formatFiatAmount(fiat)}
                   </Text>
                 </>
               )}
             </VStack>
           </HStack>
-          <ArrowUpRightIcon />
         </SectionRow>
+        <Divider />
+        <VStack gap={16}>
+          <StatRow>
+            <StatLabel>
+              <PercentIcon />
+              <Text size={13} color="shy">
+                {t('apr')}
+              </Text>
+            </StatLabel>
+            <StatValue color="success">
+              {apr !== undefined ? `${apr.toFixed(2)}%` : '—'}
+            </StatValue>
+          </StatRow>
+          <HStack gap={16} alignItems="center">
+            <VStack flexGrow gap={8}>
+              <StatLabel>
+                <CalendarIcon />
+                <Text size={13} color="shy">
+                  {t('next_payout')}
+                </Text>
+              </StatLabel>
+              <StatValue color="shyExtra">
+                {isSkeleton ? (
+                  <Skeleton width="80px" height="14px" />
+                ) : (
+                  (formatDateShort(nextPayout, i18n.language) ?? t('pending'))
+                )}
+              </StatValue>
+            </VStack>
+            <VStack flexGrow gap={8}>
+              <StatLabel>
+                <TrophyIcon />
+                <Text size={14} color="shy">
+                  {t('estimated_reward')}
+                </Text>
+              </StatLabel>
+              <StatValue color="shyExtra">
+                {isSkeleton ? (
+                  <Skeleton width="90px" height="16px" />
+                ) : estimatedReward !== undefined ? (
+                  formatAmount(estimatedReward, {
+                    ticker: rewardTicker ?? coin.ticker,
+                  })
+                ) : (
+                  '—'
+                )}
+              </StatValue>
+            </VStack>
+          </HStack>
+        </VStack>
+
+        <Divider />
 
         <StatRow>
-          <StatLabel>{t('apr')}</StatLabel>
-          <StatValue color="success">
-            {apr !== undefined ? `${apr.toFixed(2)}%` : '—'}
-          </StatValue>
-        </StatRow>
-        <StatRow>
-          <StatLabel>{t('next_payout')}</StatLabel>
-          <StatValue color="contrast">
-            {isSkeleton ? (
-              <Skeleton width="80px" height="14px" />
-            ) : (
-              (formatDateShort(nextPayout, i18n.language) ?? t('pending'))
-            )}
-          </StatValue>
-        </StatRow>
-        <StatRow>
-          <StatLabel>{t('estimated_reward')}</StatLabel>
-          <StatValue color="contrast">
-            {isSkeleton ? (
-              <Skeleton width="90px" height="14px" />
-            ) : estimatedReward !== undefined ? (
-              formatAmount(estimatedReward, {
-                ticker: rewardTicker ?? coin.ticker,
-              })
-            ) : (
-              '—'
-            )}
-          </StatValue>
+          {rewards !== undefined && rewards > 0 ? (
+            <ActionButton
+              variant="primary"
+              onClick={onWithdrawRewards}
+              disabled={actionsDisabled}
+              style={{ width: '100%' }}
+            >
+              <ActionIcon variant="primary">
+                <CircleMinusIcon />
+              </ActionIcon>
+              <Text as="span" size={14} weight="600" color="contrast">
+                {t('withdraw')}{' '}
+                {formatAmount(rewards, {
+                  ticker: rewardTicker ?? coin.ticker,
+                })}
+              </Text>
+            </ActionButton>
+          ) : null}
         </StatRow>
 
-        {rewards !== undefined && rewards > 0 ? (
-          <Button
-            kind="primary"
-            onClick={onWithdrawRewards}
-            disabled={actionsDisabled}
-          >
-            {t('withdraw')}{' '}
-            {formatAmount(rewards, { ticker: rewardTicker ?? coin.ticker })}
-          </Button>
-        ) : null}
-
-        <SectionRow>
+        <ActionsRow>
           {isSkeleton ? (
             <>
               <Skeleton width="48%" height="42px" borderRadius="10px" />
@@ -173,25 +289,36 @@ export const StakeCard = ({
             </>
           ) : (
             <>
-              <Button
-                kind="secondary"
+              <ActionButton
+                variant="secondary"
                 onClick={onUnstake}
                 style={{ flex: 1 }}
-                disabled={actionsDisabled}
+                disabled={unstakeDisabled}
               >
-                {t('unstake')}
-              </Button>
-              <Button
-                kind="primary"
+                <ActionIcon variant="secondary">
+                  <CircleMinusIcon />
+                </ActionIcon>
+                {_unstakeLabel ?? t('unstake')}
+              </ActionButton>
+              <ActionButton
+                variant="primary"
                 onClick={onStake}
                 style={{ flex: 1 }}
                 disabled={actionsDisabled}
               >
-                {t('stake')}
-              </Button>
+                <ActionIcon variant="primary">
+                  <CirclePlusIcon />
+                </ActionIcon>
+                {_stakeLabel ?? t('stake')}
+              </ActionButton>
             </>
           )}
-        </SectionRow>
+        </ActionsRow>
+        {unstakeMessage ? (
+          <Text size={12} color="shy">
+            {unstakeMessage}
+          </Text>
+        ) : null}
       </VStack>
     </Card>
   )

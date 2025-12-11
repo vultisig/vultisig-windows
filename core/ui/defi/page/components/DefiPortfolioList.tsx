@@ -1,3 +1,4 @@
+import { vStack } from '@lib/ui/layout/Stack'
 import styled from 'styled-components'
 
 import { DefiChainsList } from './DefiChainsList'
@@ -16,8 +17,8 @@ export const DefiPortfolioList = () => {
 }
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  ${vStack({
+    gap: 16,
+  })};
   padding: 0 20px;
 `

@@ -51,3 +51,10 @@ export const thorchainDefiCoins: Coin[] = [
   thorchainTokens.yRune,
   thorchainTokens.yTcy,
 ]
+
+export const mayaCoin: Coin = {
+  ...chainFeeCoin[Chain.MayaChain],
+  chain: Chain.MayaChain,
+}
+
+export const mayaDefiCoins: Coin[] = [mayaCoin]
