@@ -13,6 +13,9 @@ export type ThorchainStakePosition = {
   id: string
   ticker: string
   amount: bigint
+  type?: 'stake' | 'compound' | 'index'
+  canUnstake?: boolean
+  unstakeAvailableDate?: Date
   apr?: number
   estimatedReward?: number
   nextPayout?: Date
@@ -21,14 +24,14 @@ export type ThorchainStakePosition = {
   fiatValue: number
 }
 
-export type ThorchainDefiPositions = {
-  bond: {
+export type DefiChainPositions = {
+  bond?: {
     totalBonded: bigint
     positions: ThorchainBondPosition[]
     availableNodes: string[]
     canUnbond: boolean
   }
-  stake: {
+  stake?: {
     positions: ThorchainStakePosition[]
   }
   prices: Record<string, number>
