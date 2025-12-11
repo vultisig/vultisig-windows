@@ -40,6 +40,20 @@ const availableDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
       chain: Chain.THORChain,
     },
     {
+      id: 'thor-stake-yrune',
+      name: 'yRUNE',
+      ticker: 'yRUNE',
+      type: 'stake',
+      chain: Chain.THORChain,
+    },
+    {
+      id: 'thor-stake-ytcy',
+      name: 'yTCY',
+      ticker: 'yTCY',
+      type: 'stake',
+      chain: Chain.THORChain,
+    },
+    {
       id: 'thor-stake-stcy',
       name: 'sTCY',
       ticker: 'sTCY',
@@ -84,9 +98,9 @@ const availableDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
       chain: Chain.MayaChain,
     },
     {
-      id: 'maya-stake-maya',
-      name: 'MAYA',
-      ticker: 'MAYA',
+      id: 'maya-stake-cacao',
+      name: 'CACAO',
+      ticker: 'CACAO',
       type: 'stake',
       chain: Chain.MayaChain,
     },
