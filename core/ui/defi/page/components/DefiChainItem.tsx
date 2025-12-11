@@ -2,11 +2,11 @@ import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { useDefiPositions } from '@core/ui/storage/defiPositions'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -20,13 +20,11 @@ type DefiChainItemProps = {
 }
 
 export const DefiChainItem = ({ balance }: DefiChainItemProps) => {
-  const { chain, totalFiat } = balance
+  const { chain, totalFiat, positionsWithBalanceCount, isLoading } = balance
   const navigate = useCoreNavigate()
 
   const { t } = useTranslation()
   const formatFiatAmount = useFormatFiatAmount()
-
-  const selectedPositions = useDefiPositions(chain)
 
   const handleClick = () => {
     navigate({ id: 'defiChainDetail', state: { chain } })
@@ -59,17 +57,23 @@ export const DefiChainItem = ({ balance }: DefiChainItemProps) => {
                 alignItems="flex-end"
               >
                 <Text centerVertically color="contrast" weight="550" size={14}>
-                  <BalanceVisibilityAware>
-                    {formatFiatAmount(totalFiat)}
-                  </BalanceVisibilityAware>
+                  {isLoading ? (
+                    <Spinner size={16} />
+                  ) : (
+                    <BalanceVisibilityAware>
+                      {formatFiatAmount(totalFiat)}
+                    </BalanceVisibilityAware>
+                  )}
                 </Text>
                 <Text color="shy" weight="500" size={12} centerVertically>
-                  {selectedPositions.length > 0 ? (
+                  {isLoading ? (
+                    <Spinner size={12} />
+                  ) : positionsWithBalanceCount > 0 ? (
                     <BalanceVisibilityAware>
-                      {selectedPositions.length} {t('positions')}
+                      {positionsWithBalanceCount} {t('positions')}
                     </BalanceVisibilityAware>
                   ) : (
-                    t('no_positions_selected')
+                    t('no_positions_found')
                   )}
                 </Text>
               </VStack>
