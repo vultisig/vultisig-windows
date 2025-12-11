@@ -211,7 +211,10 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
 
       const swapPayload = getSwapPayload()
 
-      if (isDeposit || (swapPayload && coin.chain === chain)) {
+      if (
+        isDeposit ||
+        (swapPayload && coin.chain === chain && swapPayload.chain === chain)
+      ) {
         const amountStr = isDeposit
           ? (keysignPayload.toAmount ?? '0')
           : swapPayload!.fromAmount
