@@ -666,6 +666,8 @@ export const en = {
   estimated_reward: 'Estimated reward',
   next_churn: 'Next churn',
   next_award: 'Next award',
+  percentage_zero: '0%',
+  percentage_value: '{{value}}%',
   enable_positions_hint:
     'Enable positions to view balances and manage actions.',
   no_vaults: 'No vaults yet',

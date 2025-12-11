@@ -946,6 +946,8 @@ export const es = {
   bonded: 'Vinculado',
   next_payout: 'Próximo pago',
   estimated_reward: 'Recompensa estimada',
+  percentage_zero: '0%',
+  percentage_value: '{{value}}%',
   enable_positions_hint:
     'Activa posiciones para ver saldos y gestionar acciones.',
   compounded_token: '{{ticker}} compuesto',

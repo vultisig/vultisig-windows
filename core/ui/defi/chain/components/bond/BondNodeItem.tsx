@@ -121,7 +121,9 @@ export const BondNodeItem = ({
           </Text>
         </InfoRow>
         <Text size={14} weight="600" color={apy > 0 ? 'success' : 'shy'}>
-          {apy === 0 ? '0 %' : `${(apy * 100).toFixed(2)}%`}
+          {apy === 0
+            ? t('percentage_zero')
+            : t('percentage_value', { value: (apy * 100).toFixed(2) })}
         </Text>
       </HStack>
 
