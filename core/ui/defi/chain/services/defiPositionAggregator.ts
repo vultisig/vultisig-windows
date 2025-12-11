@@ -7,6 +7,7 @@ type ChainAggregates = {
   totalFiat: number
   bondFiat: number
   stakeFiat: number
+  positionsWithBalanceCount: number
 }
 
 type DefiAggregatesInput = {
@@ -20,28 +21,38 @@ const aggregatePositions = (
   data?: DefiChainPositions,
   selectedPositionIds: string[] = []
 ): ChainAggregates => {
-  if (!data) return { totalFiat: 0, bondFiat: 0, stakeFiat: 0 }
+  if (!data)
+    return {
+      totalFiat: 0,
+      bondFiat: 0,
+      stakeFiat: 0,
+      positionsWithBalanceCount: 0,
+    }
 
   const selected = new Set(selectedPositionIds)
-  const bondFiat = sum(
-    data.bond?.positions
-      .filter(position => selected.has(position.id))
-      .map(position => position.fiatValue) ?? []
-  )
-  const stakeFiat = sum(
-    data.stake?.positions
-      .filter(position => selected.has(position.id))
-      .map(position => position.fiatValue) ?? []
-  )
+  const bondPositions =
+    data.bond?.positions.filter(
+      position => selected.has(position.id) && position.amount > 0n
+    ) ?? []
+  const stakePositions =
+    data.stake?.positions.filter(
+      position => selected.has(position.id) && position.amount > 0n
+    ) ?? []
+
+  const bondFiat = sum(bondPositions.map(position => position.fiatValue))
+  const stakeFiat = sum(stakePositions.map(position => position.fiatValue))
 
   const totalFiat = bondFiat + stakeFiat
-  return { totalFiat, bondFiat, stakeFiat }
+  const positionsWithBalanceCount = bondPositions.length + stakePositions.length
+
+  return { totalFiat, bondFiat, stakeFiat, positionsWithBalanceCount }
 }
 
 const defaultAggregates: ChainAggregates = {
   totalFiat: 0,
   bondFiat: 0,
   stakeFiat: 0,
+  positionsWithBalanceCount: 0,
 }
 
 type ChainAggregator = (input: {
