@@ -650,6 +650,7 @@ export const en = {
   locked_in_defi: 'Locked in DeFi',
   total_bonded: 'Total Bonded {{ticker}}',
   active_nodes: 'Active nodes',
+  vulti_node: 'VultiNode',
   available_nodes: 'Available nodes',
   request_to_bond: 'Request to bond',
   wait_until_node_churned: 'Wait until node is churned out',

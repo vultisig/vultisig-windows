@@ -256,10 +256,10 @@ export const BondedPositions = () => {
                 <VStack gap={12}>
                   <HStack justifyContent="space-between" alignItems="center">
                     <Text size={14} color="contrast">
-                      VultiNode: {node.slice(0, 13)}
+                      {t('vulti_node')}: {node.slice(0, 13)}
                     </Text>
                     <Text size={13} weight="500" color="success">
-                      Active
+                      {t('active')}
                     </Text>
                   </HStack>
                   <Button

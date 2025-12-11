@@ -2,6 +2,7 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Coin } from '@core/chain/coin/Coin'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
+import { formatDateShort } from '@core/ui/defi/shared/formatters'
 import { CalendarIcon } from '@lib/ui/icons/CalendarIcon'
 import { CircleMinusIcon } from '@lib/ui/icons/CircleMinusIcon'
 import { CirclePlusIcon } from '@lib/ui/icons/CirclePlusIcon'
@@ -121,15 +122,6 @@ const ActionIcon = styled.span<{ variant: 'primary' | 'secondary' }>`
           background: rgba(255, 255, 255, 0.12);
         `}
 `
-
-const formatDateShort = (date?: Date, locale?: string) => {
-  if (!date) return null
-  return date.toLocaleDateString(locale, {
-    month: 'short',
-    day: 'numeric',
-    year: '2-digit',
-  })
-}
 
 type Props = {
   id: string
@@ -306,7 +298,7 @@ export const StakeCard = ({
                 <ActionIcon variant="secondary">
                   <CircleMinusIcon />
                 </ActionIcon>
-                {t('unstake')}
+                {_unstakeLabel ?? t('unstake')}
               </ActionButton>
               <ActionButton
                 variant="primary"
@@ -317,7 +309,7 @@ export const StakeCard = ({
                 <ActionIcon variant="primary">
                   <CirclePlusIcon />
                 </ActionIcon>
-                {t('stake')}
+                {_stakeLabel ?? t('stake')}
               </ActionButton>
             </>
           )}

@@ -1,6 +1,10 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Coin } from '@core/chain/coin/Coin'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
+import {
+  formatDateShort,
+  formatStatusLabel,
+} from '@core/ui/defi/shared/formatters'
 import { Button } from '@lib/ui/buttons/Button'
 import { CalendarIcon } from '@lib/ui/icons/CalendarIcon'
 import { LinkIcon } from '@lib/ui/icons/LinkIcon'
@@ -10,25 +14,9 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { formatAmount } from '@lib/utils/formatAmount'
+import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-const formatStatus = (status?: string) => {
-  if (!status) return null
-  return status
-    .split('_')
-    .map(part => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(' ')
-}
-
-const formatDateShort = (date?: Date, locale?: string) => {
-  if (!date) return null
-  return date.toLocaleDateString(locale, {
-    month: 'short',
-    day: 'numeric',
-    year: '2-digit',
-  })
-}
 
 type Props = {
   coin: Coin
@@ -89,7 +77,7 @@ export const BondNodeItem = ({
   const isActive = normalizedStatus === 'active'
   const statusColor = isActive ? 'success' : 'idle'
 
-  const truncatedAddress = `${nodeAddress.slice(0, 7)}....${nodeAddress.slice(-5)}`
+  const truncatedAddress = formatWalletAddress(nodeAddress)
 
   return (
     <VStack gap={12}>
@@ -104,7 +92,7 @@ export const BondNodeItem = ({
           </Text>
         </HStack>
         <Text size={13} weight="600" color={statusColor}>
-          {formatStatus(status) ?? t('unknown')}
+          {formatStatusLabel(status) ?? t('unknown')}
         </Text>
       </HStack>
 

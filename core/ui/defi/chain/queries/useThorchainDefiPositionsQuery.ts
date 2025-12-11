@@ -46,7 +46,7 @@ export const useThorchainDefiPositionsQuery = (
         churns ?? [],
         networkInfo ?? {},
         health ?? {},
-        Boolean(network?.vaults_migrating)
+        !network?.vaults_migrating
       )
 
       const stake = await fetchStakePositions({ address, prices })
