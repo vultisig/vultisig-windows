@@ -64,14 +64,15 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
         title={t(isFinished ? 'overview' : 'sign_message')}
         hasBorder
       />
-      {isFinished && <Animation />}
-      <Sender favicon={requestFavicon} origin={requestOrigin} isValidated />
-      <Request
-        address={address}
-        message={t('verify_identity_sign')}
-        method={method}
-      />
       <PageContent gap={16} scrollable>
+        {isFinished && <Animation />}
+        <Sender favicon={requestFavicon} origin={requestOrigin} isValidated />
+        <Request
+          address={address}
+          message={t('verify_identity_sign')}
+          method={method}
+        />
+
         <Collapse title={t('plugin_info')} collapsed>
           <HStack
             alignItems="center"
