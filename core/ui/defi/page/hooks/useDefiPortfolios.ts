@@ -11,6 +11,8 @@ import { aggregateDefiPositions } from '../../chain/services/defiPositionAggrega
 export type DefiChainPortfolio = {
   chain: Chain
   totalFiat: number
+  positionsWithBalanceCount: number
+  isLoading: boolean
 }
 
 export const useDefiChainPortfolios = () => {
@@ -34,6 +36,8 @@ export const useDefiChainPortfolios = () => {
       portfolios.push({
         chain: Chain.THORChain,
         totalFiat: aggregates.totalFiat,
+        positionsWithBalanceCount: aggregates.positionsWithBalanceCount,
+        isLoading: thorchainQuery.isPending,
       })
     }
 
@@ -48,6 +52,8 @@ export const useDefiChainPortfolios = () => {
       portfolios.push({
         chain: Chain.MayaChain,
         totalFiat: aggregates.totalFiat,
+        positionsWithBalanceCount: aggregates.positionsWithBalanceCount,
+        isLoading: mayaQuery.isPending,
       })
     }
 
@@ -58,9 +64,13 @@ export const useDefiChainPortfolios = () => {
     mayaQuery.data,
     thorchainSelectedPositions,
     mayaSelectedPositions,
+    thorchainQuery.isPending,
+    mayaQuery.isPending,
   ])
 
-  const isPending = thorchainQuery.isPending || mayaQuery.isPending
+  const isPending =
+    (enabledChains.includes(Chain.THORChain) && thorchainQuery.isPending) ||
+    (enabledChains.includes(Chain.MayaChain) && mayaQuery.isPending)
 
   const error = thorchainQuery.error ?? mayaQuery.error ?? null
 
