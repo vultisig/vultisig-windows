@@ -144,11 +144,12 @@ export const en = {
   choose_payout_asset: 'Choose payout asset',
   choose_tokens: 'Choose Tokens',
   choose_vault: 'Choose Vault',
+  deposited: 'Deposited',
   circle: {
     apy: 'APY',
     balance_title: 'Balance Overview',
     banner_text:
-      'Funds remain fully under your vault’s control. Circle yield is generated through secure off-chain treasuries. Withdraw anytime after settlement.',
+      'Funds remain fully under your vault’s control. Circle accounts are self-custodial and yield is generated through secure off-chain treasuries.',
     claim: 'Claim Rewards',
     deposit: 'Deposit',
     introduction:
@@ -1260,4 +1261,5 @@ export const en = {
   your_referral_code: 'Your Referral Code',
   your_referrals: 'Your Referrals',
   youre_swapping: "You're swapping",
+  account: 'Account',
 }

@@ -5,7 +5,6 @@ import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { CryptoWalletPenIcon } from '@lib/ui/icons/CryptoWalletPenIcon'
 import { HStack, hStack } from '@lib/ui/layout/Stack'
 import { IsActiveProp, IsDisabledProp } from '@lib/ui/props'
-import { Text } from '@lib/ui/text'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css, useTheme } from 'styled-components'
@@ -28,13 +27,7 @@ export const DefiChainTabs = () => {
       onValueChange={setActiveTab}
       triggerSlot={({ tab: { label, disabled }, isActive, ...props }) => (
         <TriggerItem {...props} isActive={isActive} isDisabled={disabled}>
-          <Text
-            size={14}
-            as="span"
-            color={isActive ? 'contrast' : 'supporting'}
-          >
-            {label}
-          </Text>
+          {label}
         </TriggerItem>
       )}
       triggersContainer={({ children }) => (
@@ -60,7 +53,7 @@ export const DefiChainTabs = () => {
   )
 }
 
-const TabsHeader = styled.div`
+export const TabsHeader = styled.div`
   ${hStack({
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -70,10 +63,13 @@ const TabsHeader = styled.div`
   margin-bottom: 16px;
 `
 
-const TriggerItem = styled(UnstyledButton)<IsActiveProp & IsDisabledProp>`
+export const TriggerItem = styled(UnstyledButton)<
+  IsActiveProp & IsDisabledProp
+>`
   width: fit-content;
   padding-bottom: 6px;
   cursor: pointer;
+  font-size: 14px;
 
   ${hStack({
     alignItems: 'center',
@@ -84,6 +80,7 @@ const TriggerItem = styled(UnstyledButton)<IsActiveProp & IsDisabledProp>`
     isActive &&
     css`
       border-bottom: 1.5px solid ${theme.colors.buttonPrimary.toCssValue()};
+      color: ${theme.colors.contrast.toCssValue()};
     `};
 
   ${({ isDisabled }) =>

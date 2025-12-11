@@ -1315,4 +1315,7 @@ export const de = {
   ultimate: 'Ultimativ',
   vault_settings_language_settings_subtitle_zh: 'chinesisch',
   vault_settings_language_settings_title_zh: '中文',
+  deposited: 'Eingezahlt',
+  withdraw: 'Zurückziehen',
+  account: 'Konto',
 }
