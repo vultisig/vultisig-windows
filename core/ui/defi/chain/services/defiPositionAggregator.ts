@@ -1,7 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { sum } from '@lib/utils/array/sum'
 
-import { ThorchainDefiPositions } from '../queries/types'
+import { DefiChainPositions } from '../queries/types'
 
 type ChainAggregates = {
   totalFiat: number
@@ -12,28 +12,26 @@ type ChainAggregates = {
 type DefiAggregatesInput = {
   chain: Chain
   selectedPositionIds: string[]
-  thorchain?: ThorchainDefiPositions | undefined
+  thorchain?: DefiChainPositions | undefined
+  maya?: DefiChainPositions | undefined
 }
 
-const aggregateThorchain = ({
-  selectedPositionIds,
-  thorchain,
-}: {
-  selectedPositionIds: string[]
-  thorchain?: ThorchainDefiPositions
-}): ChainAggregates => {
-  if (!thorchain) return { totalFiat: 0, bondFiat: 0, stakeFiat: 0 }
+const aggregatePositions = (
+  data?: DefiChainPositions,
+  selectedPositionIds: string[] = []
+): ChainAggregates => {
+  if (!data) return { totalFiat: 0, bondFiat: 0, stakeFiat: 0 }
 
   const selected = new Set(selectedPositionIds)
   const bondFiat = sum(
-    thorchain.bond.positions
+    data.bond?.positions
       .filter(position => selected.has(position.id))
-      .map(position => position.fiatValue)
+      .map(position => position.fiatValue) ?? []
   )
   const stakeFiat = sum(
-    thorchain.stake.positions
+    data.stake?.positions
       .filter(position => selected.has(position.id))
-      .map(position => position.fiatValue)
+      .map(position => position.fiatValue) ?? []
   )
 
   const totalFiat = bondFiat + stakeFiat
@@ -48,20 +46,25 @@ const defaultAggregates: ChainAggregates = {
 
 type ChainAggregator = (input: {
   selectedPositionIds: string[]
-  thorchain?: ThorchainDefiPositions
+  thorchain?: DefiChainPositions
+  maya?: DefiChainPositions
 }) => ChainAggregates
 
 const chainAggregators: Partial<Record<Chain, ChainAggregator>> = {
-  [Chain.THORChain]: aggregateThorchain,
+  [Chain.THORChain]: ({ selectedPositionIds, thorchain }) =>
+    aggregatePositions(thorchain, selectedPositionIds),
+  [Chain.MayaChain]: ({ selectedPositionIds, maya }) =>
+    aggregatePositions(maya, selectedPositionIds),
 }
 
 export const aggregateDefiPositions = ({
   chain,
   selectedPositionIds,
   thorchain,
+  maya,
 }: DefiAggregatesInput): ChainAggregates => {
   const aggregator = chainAggregators[chain]
   return aggregator
-    ? aggregator({ selectedPositionIds, thorchain })
+    ? aggregator({ selectedPositionIds, thorchain, maya })
     : defaultAggregates
 }
