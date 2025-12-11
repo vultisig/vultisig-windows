@@ -34,6 +34,8 @@ export const fetchStcyStakePosition = async ({
       id: 'thor-stake-stcy',
       ticker: thorchainTokens.stcy.ticker,
       amount,
+      type: 'stake',
+      canUnstake: amount > 0n,
       fiatValue,
       estimatedReward: 0,
     }

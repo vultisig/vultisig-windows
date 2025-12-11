@@ -76,6 +76,8 @@ export const fetchRujiStakePosition = async ({
       id: 'thor-stake-ruji',
       ticker: thorchainTokens.ruji.ticker,
       amount: bondedAmount,
+      type: 'stake',
+      canUnstake: bondedAmount > 0n,
       fiatValue,
       apr: aprValue * 100,
       rewards: rewardsAmount,

@@ -132,6 +132,8 @@ export const fetchTcyStakePosition = async ({
     id: 'thor-stake-tcy',
     ticker: thorchainTokens.tcy.ticker,
     amount,
+    type: 'stake',
+    canUnstake: amount > 0n,
     fiatValue,
     estimatedReward,
     apr: convertAPYtoAPR(apyPercent),
