@@ -65,7 +65,7 @@ export class DKLS {
     this.publicKey = options?.publicKey
     this.chainCode = options?.chainCode
     this.localUI = options?.localUI?.padEnd(64, '0')
-    this.timeoutMs = options?.timeoutMs ?? 120000
+    this.timeoutMs = options?.timeoutMs ?? 60000
   }
 
   private async processOutbound(
