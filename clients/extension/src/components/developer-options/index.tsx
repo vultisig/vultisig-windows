@@ -22,6 +22,10 @@ import { z } from 'zod'
 const getSchema = (t: TFunction) =>
   z.object({
     pluginMarketplaceBaseUrl: z.string().url({ message: t('incorrect_url') }),
+    appInstallTimeout: z.preprocess(
+      val => (typeof val === 'string' ? Number(val) : val),
+      z.number().min(0)
+    ),
   })
 
 export const ExtensionDeveloperOptions = () => {
@@ -39,7 +43,7 @@ export const ExtensionDeveloperOptions = () => {
   } = useForm<DeveloperOptions>({
     defaultValues: async () => await getDeveloperOptions(),
     mode: 'all',
-    resolver: zodResolver(getSchema(t)),
+    resolver: zodResolver(getSchema(t)) as any,
   })
 
   const onSubmit = async (data: DeveloperOptions) => {
@@ -94,6 +98,26 @@ export const ExtensionDeveloperOptions = () => {
                     {errors.pluginMarketplaceBaseUrl.message}
                   </Text>
                 )}
+              <TextInput
+                {...register('appInstallTimeout')}
+                label={t('app_install_timeout')}
+                onValueChange={value =>
+                  setValue('appInstallTimeout', Number(value))
+                }
+                validation={
+                  isValid
+                    ? 'valid'
+                    : errors.appInstallTimeout
+                      ? 'invalid'
+                      : undefined
+                }
+                type="number"
+              />
+              {errors.appInstallTimeout && errors.appInstallTimeout.message && (
+                <Text color="danger" size={12}>
+                  {errors.appInstallTimeout.message}
+                </Text>
+              )}
             </VStack>
             <Button
               disabled={errors.pluginMarketplaceBaseUrl?.message}

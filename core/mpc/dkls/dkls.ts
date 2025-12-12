@@ -30,6 +30,7 @@ export class DKLS {
   private readonly keygenCommittee: string[]
   private readonly oldKeygenCommittee: string[]
   private readonly hexEncryptionKey: string
+  private readonly timeoutMs: number
   private isKeygenComplete: boolean = false
   private sequenceNo: number = 0
   private cache: Record<string, string> = {}
@@ -48,7 +49,8 @@ export class DKLS {
     hexEncryptionKey: string,
     localUI?: string,
     publicKey?: string,
-    chainCode?: string
+    chainCode?: string,
+    timeoutMs?: number
   ) {
     this.keygenOperation = keygenOperation
     this.isInitiateDevice = isInitiateDevice
@@ -61,6 +63,7 @@ export class DKLS {
     this.publicKey = publicKey
     this.chainCode = chainCode
     this.localUI = localUI?.padEnd(64, '0')
+    this.timeoutMs = timeoutMs ?? 120000
   }
 
   private async processOutbound(
@@ -149,8 +152,7 @@ export class DKLS {
         })
       }
       const end = Date.now()
-      // timeout after 1 minute
-      if (end - start > 1000 * 60 * 2) {
+      if (end - start > this.timeoutMs * 2) {
         console.log('timeout')
         this.isKeygenComplete = true
         return false

@@ -798,6 +798,7 @@ export const hr = {
     'Unesite lozinku za otključavanje dijeljenog poslužitelja i pokretanje instalacije aplikacije',
   plugin_rules: 'Pravila aplikacije',
   plugin_server_url: 'URL poslužitelja aplikacije',
+  app_install_timeout: 'Vremensko ograničenje instalacije aplikacije (ms)',
   plugin_success_desc: 'Instalacija {{name}} je završena',
   to_start_plugin_installation: 'Za početak instalacije aplikacije',
   portfolio: 'Portfelj',

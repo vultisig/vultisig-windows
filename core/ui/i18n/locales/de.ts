@@ -816,6 +816,7 @@ export const de = {
     'Geben Sie Ihr Passwort ein, um Ihre Serverfreigabe zu entsperren und die App-Installation zu starten.',
   plugin_rules: 'App-Regeln',
   plugin_server_url: 'App-Server-URL',
+  app_install_timeout: 'App-Installations-Timeout (ms)',
   plugin_success_desc: 'Die Installation von {{name}} ist abgeschlossen',
   to_start_plugin_installation: 'Um die App-Installation zu starten',
   portfolio: 'Portfolio',

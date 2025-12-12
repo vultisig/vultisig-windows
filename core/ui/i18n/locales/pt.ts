@@ -807,6 +807,7 @@ export const pt = {
     'Digite sua senha para desbloquear o compartilhamento do servidor e iniciar a instalação do aplicativo.',
   plugin_rules: 'Regras do aplicativo',
   plugin_server_url: 'URL do servidor de aplicativos',
+  app_install_timeout: 'Tempo limite de instalação do aplicativo (ms)',
   plugin_success_desc: 'A instalação de {{name}} foi concluída.',
   to_start_plugin_installation: 'Para iniciar a instalação do aplicativo',
   portfolio: 'Portfólio',

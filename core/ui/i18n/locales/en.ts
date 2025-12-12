@@ -743,6 +743,7 @@ export const en = {
     'Enter your password to unlock your Server Share and start the app installation',
   plugin_rules: 'App Rules',
   plugin_server_url: 'App Server URL',
+  app_install_timeout: 'App Install Timeout (ms)',
   plugin_success_desc: 'Installation of {{name}} is completed',
   to_start_plugin_installation: 'To start the plugin installation',
   portfolio: 'Portfolio',
