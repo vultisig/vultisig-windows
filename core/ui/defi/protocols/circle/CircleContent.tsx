@@ -22,7 +22,6 @@ export const CircleContent = () => {
         {t('circle.introduction')}
       </Text>
       <InfoBanner />
-      <CircleDepositedPanel />
       {data && (
         <MainWrapper>
           <Text weight={600}>{t('circle.balance_title')}</Text>
@@ -31,9 +30,9 @@ export const CircleContent = () => {
           <div />
           <Button>{t('circle.claim')}</Button>
           <TransactionActions />
-          <InfoBanner />
         </MainWrapper>
       )}
+      <CircleDepositedPanel />
     </VStack>
   )
 }

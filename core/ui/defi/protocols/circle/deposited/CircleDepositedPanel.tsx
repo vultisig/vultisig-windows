@@ -13,6 +13,7 @@ import { ChainEntityIcon } from '../../../../chain/coin/icon/ChainEntityIcon'
 import { getCoinLogoSrc } from '../../../../chain/coin/icon/utils/getCoinLogoSrc'
 import { OpenCircleAccount } from '../components/OpenCircleAccount'
 import { useCircleAccountQuery } from '../queries/circleAccount'
+import { CircleAccountBalance } from './CircleAccountBalance'
 
 export const CircleDepositedPanel = () => {
   const circleAccountQuery = useCircleAccountQuery()
@@ -29,7 +30,19 @@ export const CircleDepositedPanel = () => {
           <Text size={14} color="shy">
             {usdc.ticker} {t('deposited').toLowerCase()}
           </Text>
-          <Text size={28}>0 {usdc.ticker}</Text>
+          <Text size={28}>
+            <MatchQuery
+              value={circleAccountQuery}
+              pending={() => (
+                <Center>
+                  <Spinner />
+                </Center>
+              )}
+              success={circleAccount =>
+                circleAccount ? <CircleAccountBalance /> : <>0 {usdc.ticker}</>
+              }
+            />
+          </Text>
         </VStack>
       </HStack>
       <Separator />
@@ -40,8 +53,8 @@ export const CircleDepositedPanel = () => {
             <Spinner />
           </Center>
         )}
-        success={circleAccountAddress =>
-          circleAccountAddress ? (
+        success={circleAccount =>
+          circleAccount ? (
             <Button>
               {t('circle.deposit')} {usdc.ticker}
             </Button>
