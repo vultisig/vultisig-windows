@@ -18,7 +18,6 @@ export const CircleAccountBalance = () => {
           <Spinner />
         </Center>
       )}
-      error={() => <>0 {usdc.ticker}</>}
       success={balance =>
         formatAmount(fromChainAmount(balance, usdc.decimals), {
           ticker: usdc.ticker,
