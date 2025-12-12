@@ -1,8 +1,9 @@
-import { EvmChain, OtherChain } from '../../Chain'
+import { OtherChain } from '../../Chain'
 import { DeriveChainKind } from '../../ChainKind'
+import { blockaidSupportedEvmChains } from './evmChains'
 
 export const blockaidSimulationSupportedChains = [
-  ...Object.values(EvmChain),
+  ...blockaidSupportedEvmChains,
   OtherChain.Solana,
 ] as const
 
