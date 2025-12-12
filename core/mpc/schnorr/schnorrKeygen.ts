@@ -47,10 +47,12 @@ export class Schnorr {
     oldKeygenCommittee: string[],
     hexEncryptionKey: string,
     setupMessage: Uint8Array, // DKLS/Schnorr keygen only need to setup message once, thus for EdDSA , we could reuse the setup message from DKLS
-    localUI?: string,
-    publicKey?: string,
-    chainCode?: string,
-    timeoutMs?: number
+    options?: {
+      localUI?: string
+      publicKey?: string
+      chainCode?: string
+      timeoutMs?: number
+    }
   ) {
     this.keygenOperation = keygenOperation
     this.isInitiateDevice = isInitiateDevice
@@ -61,10 +63,10 @@ export class Schnorr {
     this.oldKeygenCommittee = oldKeygenCommittee
     this.hexEncryptionKey = hexEncryptionKey
     this.setupMessage = setupMessage
-    this.localUI = localUI?.padEnd(64, '0')
-    this.publicKey = publicKey
-    this.chainCode = chainCode
-    this.timeoutMs = timeoutMs ?? 60000 // Default to 1 minute (60000ms)
+    this.localUI = options?.localUI?.padEnd(64, '0')
+    this.publicKey = options?.publicKey
+    this.chainCode = options?.chainCode
+    this.timeoutMs = options?.timeoutMs ?? 60000 // Default to 1 minute (60000ms)
   }
 
   private async processOutbound(

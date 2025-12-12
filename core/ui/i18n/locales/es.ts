@@ -812,7 +812,6 @@ export const es = {
     'Ingrese su contraseña para desbloquear su servidor compartido e iniciar la instalación de la aplicación',
   plugin_rules: 'Reglas de la aplicación',
   plugin_server_url: 'URL del servidor de aplicaciones',
-  app_install_timeout: 'Tiempo de espera de instalación de aplicación (ms)',
   plugin_success_desc: 'La instalación de {{name}} se ha completado',
   to_start_plugin_installation: 'Para iniciar la instalación de la aplicación',
   portfolio: 'Portafolio',

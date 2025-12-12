@@ -47,10 +47,12 @@ export class DKLS {
     keygenCommittee: string[],
     oldKeygenCommittee: string[],
     hexEncryptionKey: string,
-    localUI?: string,
-    publicKey?: string,
-    chainCode?: string,
-    timeoutMs?: number
+    options?: {
+      localUI?: string
+      publicKey?: string
+      chainCode?: string
+      timeoutMs?: number
+    }
   ) {
     this.keygenOperation = keygenOperation
     this.isInitiateDevice = isInitiateDevice
@@ -60,10 +62,10 @@ export class DKLS {
     this.keygenCommittee = keygenCommittee
     this.oldKeygenCommittee = oldKeygenCommittee
     this.hexEncryptionKey = hexEncryptionKey
-    this.publicKey = publicKey
-    this.chainCode = chainCode
-    this.localUI = localUI?.padEnd(64, '0')
-    this.timeoutMs = timeoutMs ?? 120000
+    this.publicKey = options?.publicKey
+    this.chainCode = options?.chainCode
+    this.localUI = options?.localUI?.padEnd(64, '0')
+    this.timeoutMs = options?.timeoutMs ?? 120000
   }
 
   private async processOutbound(

@@ -22,7 +22,10 @@ import { z } from 'zod'
 const getSchema = (t: TFunction) =>
   z.object({
     pluginMarketplaceBaseUrl: z.string().url({ message: t('incorrect_url') }),
-    appInstallTimeout: z.number().min(0),
+    appInstallTimeout: z
+      .number({ message: t('app_install_timeout_invalid') })
+      .finite({ message: t('app_install_timeout_invalid') })
+      .min(0, { message: t('app_install_timeout_min') }),
   })
 
 export const ExtensionDeveloperOptions = () => {
@@ -98,9 +101,6 @@ export const ExtensionDeveloperOptions = () => {
               <TextInput
                 {...register('appInstallTimeout', { valueAsNumber: true })}
                 label={t('app_install_timeout')}
-                onValueChange={value =>
-                  setValue('appInstallTimeout', Number(value))
-                }
                 validation={
                   isValid
                     ? 'valid'
@@ -116,10 +116,7 @@ export const ExtensionDeveloperOptions = () => {
                 </Text>
               )}
             </VStack>
-            <Button
-              disabled={errors.pluginMarketplaceBaseUrl?.message}
-              type="submit"
-            >
+            <Button disabled={!isValid} type="submit">
               {t('save')}
             </Button>
           </VStack>

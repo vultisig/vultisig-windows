@@ -734,7 +734,6 @@ export const zh = {
   plugin_password_desc: '输入密码以解锁服务器共享并开始应用程序安装',
   plugin_rules: '应用程序规则',
   plugin_server_url: '应用服务器 URL',
-  app_install_timeout: '应用安装超时 (ms)',
   plugin_success_desc: '{{name}} 的安装已完成',
   to_start_plugin_installation: '开始安装插件',
   portfolio: '文件夹',

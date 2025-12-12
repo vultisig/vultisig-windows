@@ -44,7 +44,8 @@ export const ReshareVaultKeygenActionProvider = ({
     async ({ onStepChange, signers }) => {
       let timeoutMs = 60000
       if (getDeveloperOptions) {
-        timeoutMs = (await getDeveloperOptions()).appInstallTimeout
+        const { appInstallTimeout } = await getDeveloperOptions()
+        timeoutMs = appInstallTimeout
       }
       onStepChange('ecdsa')
       const sharedFinalVaultFields = {
@@ -64,10 +65,7 @@ export const ReshareVaultKeygenActionProvider = ({
         signers,
         oldCommittee,
         encryptionKeyHex,
-        undefined,
-        undefined,
-        undefined,
-        timeoutMs
+        { timeoutMs }
       )
       const oldEcdsaKeyshare =
         'existingVault' in keygenVault
@@ -88,10 +86,7 @@ export const ReshareVaultKeygenActionProvider = ({
         oldCommittee,
         encryptionKeyHex,
         new Uint8Array(0),
-        undefined,
-        undefined,
-        undefined,
-        timeoutMs
+        { timeoutMs }
       )
       const oldEddsaKeyshare =
         'existingVault' in keygenVault

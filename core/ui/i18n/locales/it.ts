@@ -810,7 +810,6 @@ export const it = {
     "Inserisci la tua password per sbloccare la tua condivisione server e avviare l'installazione dell'app",
   plugin_rules: "Regole dell'app",
   plugin_server_url: 'URL del server delle applicazioni',
-  app_install_timeout: 'Timeout installazione applicazione (ms)',
   plugin_success_desc: "L'installazione di {{name}} è completata",
   to_start_plugin_installation: "Per avviare l'installazione dell'app",
   portfolio: 'Portafoglio',

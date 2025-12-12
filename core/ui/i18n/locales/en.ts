@@ -744,6 +744,8 @@ export const en = {
   plugin_rules: 'App Rules',
   plugin_server_url: 'App Server URL',
   app_install_timeout: 'App Install Timeout (ms)',
+  app_install_timeout_invalid: 'Please enter a valid number.',
+  app_install_timeout_min: 'Must be 0 or greater.',
   plugin_success_desc: 'Installation of {{name}} is completed',
   to_start_plugin_installation: 'To start the plugin installation',
   portfolio: 'Portfolio',
