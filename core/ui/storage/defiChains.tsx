@@ -2,12 +2,16 @@ import { Chain } from '@core/chain/Chain'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
+import { featureFlags } from '../featureFlags'
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'
 
-export const supportedDefiChains: Chain[] = [Chain.THORChain, Chain.MayaChain]
+export const supportedDefiChains: Chain[] = [
+  Chain.THORChain,
+  ...(featureFlags.mayaChainDefi ? [Chain.MayaChain] : []),
+]
 
-export const initialDefiChains: Chain[] = [Chain.THORChain, Chain.MayaChain]
+export const initialDefiChains: Chain[] = supportedDefiChains
 
 type GetDefiChainsFunction = () => Promise<Chain[]>
 type SetDefiChainsFunction = (chains: Chain[]) => Promise<void>
@@ -30,7 +34,8 @@ const useDefiChainsQuery = () => {
 export const useDefiChains = () => {
   const { data } = useDefiChainsQuery()
 
-  return data ?? initialDefiChains
+  const resolved = data ?? initialDefiChains
+  return resolved.filter(chain => supportedDefiChains.includes(chain))
 }
 
 const useSetDefiChainsMutation = () => {
