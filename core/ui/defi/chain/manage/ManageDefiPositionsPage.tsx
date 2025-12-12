@@ -1,4 +1,7 @@
+import { Chain } from '@core/chain/Chain'
+import { featureFlags } from '@core/ui/featureFlags'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCore } from '@core/ui/state/core'
 import {
@@ -13,7 +16,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { DefiPositionTile } from './DefiPositionTile'
@@ -25,6 +28,17 @@ export const ManageDefiPositionsPage = () => {
   const [search, setSearch] = useState('')
   const [{ chain }] = useCoreViewState<'manageDefiPositions'>()
   const { goBack } = useCore()
+  const navigate = useCoreNavigate()
+
+  const isMayaDisabled =
+    chain === Chain.MayaChain && !featureFlags.mayaChainDefi
+
+  useEffect(() => {
+    if (isMayaDisabled) {
+      navigate({ id: 'defi', state: {} })
+    }
+  }, [isMayaDisabled, navigate])
+
   const selectedPositionIds = useDefiPositions(chain)
   const { togglePosition, isPending } = useToggleDefiPosition(chain)
 
@@ -59,6 +73,10 @@ export const ManageDefiPositionsPage = () => {
       ].filter(section => section.positions.length > 0),
     [filteredBondPositions, filteredStakePositions, filteredLpPositions, t]
   )
+
+  if (isMayaDisabled) {
+    return null
+  }
 
   return (
     <VStack fullHeight>
