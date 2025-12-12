@@ -11,4 +11,6 @@ export const toVaultExport = (vault: Vault): VaultExport => ({
   publicKeyEddsa: vault.publicKeys.eddsa,
   hexChainCode: vault.hexChainCode,
   isFastVault: hasServer(vault.signers),
+  localPartyId: vault.localPartyId,
+  parties: vault.signers,
 })

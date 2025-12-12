@@ -1,6 +1,7 @@
 export const featureFlags = {
-  circle: true,
+  circle: false,
   defiEnabled: true,
   defiLpTab: false,
+  defiStakedTab: true,
   nftTab: false,
 }

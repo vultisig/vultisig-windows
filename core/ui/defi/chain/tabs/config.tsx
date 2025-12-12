@@ -8,17 +8,32 @@ import { StakedPositions } from './StakedPositions'
 
 export type DefiChainPageTab = 'bonded' | 'staked' | 'lps'
 
-export const getDefiChainTabs = (t: TFunction): Tab<DefiChainPageTab>[] => [
-  {
-    value: 'bonded',
-    label: t('defiChainTabs.bonded'),
-    renderContent: BondedPositions,
-  },
-  {
-    value: 'staked',
-    label: t('defiChainTabs.staked'),
-    renderContent: StakedPositions,
-  },
+type DefiChainTabsOptions = {
+  includeBonded?: boolean
+}
+
+export const getDefiChainTabs = (
+  t: TFunction,
+  { includeBonded = true }: DefiChainTabsOptions = {}
+): Tab<DefiChainPageTab>[] => [
+  ...(includeBonded
+    ? [
+        {
+          value: 'bonded' as const,
+          label: t('defiChainTabs.bonded'),
+          renderContent: BondedPositions,
+        },
+      ]
+    : []),
+  ...(featureFlags.defiStakedTab
+    ? [
+        {
+          value: 'staked' as const,
+          label: t('defiChainTabs.staked'),
+          renderContent: StakedPositions,
+        },
+      ]
+    : []),
   ...(featureFlags.defiLpTab
     ? [
         {
