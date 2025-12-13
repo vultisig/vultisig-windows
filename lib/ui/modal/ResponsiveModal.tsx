@@ -25,8 +25,6 @@ const MobileDrawer = styled(VStack)`
   left: 16px;
   right: 16px;
   background: ${getColor('background')};
-  border-radius: 24px 24px 0 0;
-  padding: 32px 20px;
   max-height: 90vh;
   overflow-y: auto;
   z-index: 1000;
