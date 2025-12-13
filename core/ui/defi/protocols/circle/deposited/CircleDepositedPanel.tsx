@@ -1,6 +1,7 @@
 import { usdc } from '@core/chain/coin/knownTokens'
 import { Button } from '@lib/ui/buttons/Button'
 import { Center } from '@lib/ui/layout/Center'
+import { LineSeparator } from '@lib/ui/layout/LineSeparator'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -45,7 +46,7 @@ export const CircleDepositedPanel = () => {
           </Text>
         </VStack>
       </HStack>
-      <Separator />
+      <LineSeparator kind="regular" />
       <MatchQuery
         value={circleAccountQuery}
         pending={() => (
@@ -74,9 +75,4 @@ const Container = styled.div`
   ${vStack({
     gap: 16,
   })}
-`
-
-const Separator = styled.div`
-  height: 1px;
-  background: ${getColor('foregroundExtra')};
 `
