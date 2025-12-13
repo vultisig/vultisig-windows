@@ -1,9 +1,7 @@
 import { usdc } from '@core/chain/coin/knownTokens'
+import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { Button } from '@lib/ui/buttons/Button'
-import { Center } from '@lib/ui/layout/Center'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
-import { Spinner } from '@lib/ui/loaders/Spinner'
-import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
@@ -11,13 +9,15 @@ import styled from 'styled-components'
 
 import { ChainEntityIcon } from '../../../../chain/coin/icon/ChainEntityIcon'
 import { getCoinLogoSrc } from '../../../../chain/coin/icon/utils/getCoinLogoSrc'
+import { CircleAccountFiatBalance } from '../banner/CircleAccountFiatBalance'
 import { OpenCircleAccount } from '../components/OpenCircleAccount'
 import { useCircleAccountQuery } from '../queries/circleAccount'
 import { CircleAccountBalance } from './CircleAccountBalance'
 
 export const CircleDepositedPanel = () => {
-  const circleAccountQuery = useCircleAccountQuery()
+  const { data: circleAccount } = useCircleAccountQuery()
   const { t } = useTranslation()
+  const formatFiatAmount = useFormatFiatAmount()
 
   return (
     <Container>
@@ -30,39 +30,22 @@ export const CircleDepositedPanel = () => {
           <Text size={14} color="shy">
             {usdc.ticker} {t('deposited').toLowerCase()}
           </Text>
-          <Text size={28}>
-            <MatchQuery
-              value={circleAccountQuery}
-              pending={() => (
-                <Center>
-                  <Spinner />
-                </Center>
-              )}
-              success={circleAccount =>
-                circleAccount ? <CircleAccountBalance /> : <>0 {usdc.ticker}</>
-              }
-            />
+          <Text weight={500} size={28}>
+            {circleAccount ? <CircleAccountBalance /> : <>0 {usdc.ticker}</>}
+          </Text>
+          <Text size={12} color="shy">
+            {circleAccount ? <CircleAccountFiatBalance /> : formatFiatAmount(0)}
           </Text>
         </VStack>
       </HStack>
       <Separator />
-      <MatchQuery
-        value={circleAccountQuery}
-        pending={() => (
-          <Center>
-            <Spinner />
-          </Center>
-        )}
-        success={circleAccount =>
-          circleAccount ? (
-            <Button>
-              {t('circle.deposit')} {usdc.ticker}
-            </Button>
-          ) : (
-            <OpenCircleAccount />
-          )
-        }
-      />
+      {circleAccount ? (
+        <Button>
+          {t('circle.deposit')} {usdc.ticker}
+        </Button>
+      ) : (
+        <OpenCircleAccount />
+      )}
     </Container>
   )
 }
