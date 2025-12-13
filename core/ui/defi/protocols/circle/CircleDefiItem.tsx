@@ -14,6 +14,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { formatAmount } from '@lib/utils/formatAmount'
 import styled from 'styled-components'
 
+import { circleName } from './core/config'
 import { useCircleAccountUsdcBalanceQuery } from './queries/circleAccountUsdcBalance'
 import { useCircleAccountUsdcFiatBalanceQuery } from './queries/useCircleAccountUsdcFiatBalanceQuery'
 
@@ -43,7 +44,7 @@ export const CircleDefiItem = () => {
           >
             <VStack>
               <Text color="contrast" size={14}>
-                Circle
+                {circleName}
               </Text>
             </VStack>
             <HStack gap={8} alignItems="center">
