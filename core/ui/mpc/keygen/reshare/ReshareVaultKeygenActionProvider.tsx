@@ -10,6 +10,7 @@ import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
+import { useCore } from '@core/ui/state/core'
 import { useVaultOrders } from '@core/ui/storage/vaults'
 import { ChildrenProp } from '@lib/ui/props'
 import { without } from '@lib/utils/array/without'
@@ -35,11 +36,17 @@ export const ReshareVaultKeygenActionProvider = ({
   const isInitiatingDevice = useIsInitiatingDevice()
   const keygenVault = useKeygenVault()
   const operation = useKeygenOperation()
+  const { getDeveloperOptions } = useCore()
 
   const vaultOrders = useVaultOrders()
 
   const keygenAction: KeygenAction = useCallback(
     async ({ onStepChange, signers }) => {
+      let timeoutMs = 60000
+      if (getDeveloperOptions) {
+        const { appInstallTimeout } = await getDeveloperOptions()
+        timeoutMs = appInstallTimeout
+      }
       onStepChange('ecdsa')
       const sharedFinalVaultFields = {
         signers,
@@ -57,7 +64,8 @@ export const ReshareVaultKeygenActionProvider = ({
         localPartyId,
         signers,
         oldCommittee,
-        encryptionKeyHex
+        encryptionKeyHex,
+        { timeoutMs }
       )
       const oldEcdsaKeyshare =
         'existingVault' in keygenVault
@@ -77,7 +85,8 @@ export const ReshareVaultKeygenActionProvider = ({
         signers,
         oldCommittee,
         encryptionKeyHex,
-        new Uint8Array(0)
+        new Uint8Array(0),
+        { timeoutMs }
       )
       const oldEddsaKeyshare =
         'existingVault' in keygenVault
@@ -133,6 +142,7 @@ export const ReshareVaultKeygenActionProvider = ({
     [
       encryptionKeyHex,
       isInitiatingDevice,
+      getDeveloperOptions,
       keygenVault,
       localPartyId,
       serverUrl,
