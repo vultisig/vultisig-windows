@@ -8,7 +8,7 @@ type CircleWallet = {
   address: string
 }
 
-export type CircleAccount = {
+type CircleAccount = {
   id: string
   address: string
 }

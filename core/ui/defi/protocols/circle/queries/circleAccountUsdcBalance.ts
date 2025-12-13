@@ -1,16 +1,20 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQueryDependentQuery } from '@lib/ui/query/hooks/useQueryDependentQuery'
+import { Query } from '@lib/ui/query/Query'
 
 import { getCircleAccountUsdcBalance } from '../core/getCircleAccountUsdcBalance'
-import { useCircleAccount } from './circleAccount'
+import { useCircleAccountQuery } from './circleAccount'
 
 const getCircleAccountUsdcBalanceQueryKey = (walletId: string) =>
   ['circle-account-usdc-balance', walletId] as const
 
-export const useCircleAccountUsdcBalanceQuery = () => {
-  const { id } = useCircleAccount()
+export const useCircleAccountUsdcBalanceQuery = (): Query<bigint> => {
+  const accountQuery = useCircleAccountQuery()
 
-  return useQuery({
-    queryKey: getCircleAccountUsdcBalanceQueryKey(id),
-    queryFn: () => getCircleAccountUsdcBalance(id),
-  })
+  return useQueryDependentQuery(
+    { ...accountQuery, data: accountQuery.data?.id },
+    walletId => ({
+      queryKey: getCircleAccountUsdcBalanceQueryKey(walletId),
+      queryFn: () => getCircleAccountUsdcBalance(walletId),
+    })
+  )
 }

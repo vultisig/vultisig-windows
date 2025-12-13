@@ -1,0 +1,27 @@
+---
+description: Browser testing workflow for verifying UI changes
+globs:
+alwaysApply: false
+---
+
+# Browser Testing
+
+After implementing UI changes, verify them in the browser:
+
+1. **Use existing browser session** if one is already open in Cursor
+2. Navigate to `http://localhost:8081`
+3. Take a snapshot to verify the changes
+
+## If the app is not running or broken
+
+If no app is running at `http://localhost:8081`, or hot reload stopped working:
+
+```bash
+# Kill any existing process on port 8081
+lsof -ti:8081 | xargs kill -9 2>/dev/null || true
+
+# Start the app
+cd /Users/rodion/vultisig/windows && wails dev
+```
+
+Run the app in background and wait for it to be ready before testing.
