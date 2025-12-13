@@ -107,8 +107,8 @@ const ActiveIndicator = styled.div`
   bottom: -8px;
   left: 0;
   right: 0;
-  height: 2px;
-  background: ${getColor('primary')};
+  height: 1.5px;
+  background: ${getColor('primaryAccentFour')};
   border-radius: 1px;
 `
 

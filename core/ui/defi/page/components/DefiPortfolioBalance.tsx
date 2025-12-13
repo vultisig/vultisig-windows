@@ -6,7 +6,6 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -68,7 +67,6 @@ const Container = styled.div`
   gap: 16px;
   padding: 24px 20px;
   border-radius: 16px;
-  background: ${getColor('foreground')};
   margin: 0 20px;
   height: 136px;
 
@@ -85,8 +83,9 @@ const BlurEffect = styled.div`
   position: absolute;
   border-radius: 16px;
   border-radius: 350px;
-  height: 130px;
-  width: 350px;
+  top: -30px;
+  height: 200px;
+  width: 450px;
   opacity: 0.7;
   background: radial-gradient(
     50% 50% at 50% 50%,
