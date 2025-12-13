@@ -28,6 +28,7 @@ const StyledButton = styled(UnstyledButton)<{
     justify-content: center;
     transition: all 0.2s;
     width: 100%;
+    position: relative;
 
     ${match(kind, {
       link: () => css`
@@ -290,4 +291,9 @@ export const Button: FC<
 export const buttonSize: Record<ButtonSize, number> = {
   sm: 26,
   md: 28,
+}
+
+export const buttonHeight: Record<ButtonSize, number> = {
+  sm: 46,
+  md: 48,
 }
