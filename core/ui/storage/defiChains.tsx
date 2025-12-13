@@ -11,7 +11,7 @@ export const supportedDefiChains: Chain[] = [
   ...(featureFlags.mayaChainDefi ? [Chain.MayaChain] : []),
 ]
 
-export const initialDefiChains: Chain[] = supportedDefiChains
+export const initialDefiChains: Chain[] = []
 
 type GetDefiChainsFunction = () => Promise<Chain[]>
 type SetDefiChainsFunction = (chains: Chain[]) => Promise<void>
