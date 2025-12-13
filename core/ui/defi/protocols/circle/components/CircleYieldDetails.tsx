@@ -3,24 +3,28 @@ import { CalendarIcon } from '@lib/ui/icons/CalendarIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { PercentIcon } from '@lib/ui/icons/PercentIcon'
 import { TrophyIcon } from '@lib/ui/icons/TrophyIcon'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { LineSeparator } from '@lib/ui/layout/LineSeparator'
+import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+
+import { CircleRewardStat } from './CircleRewardStat'
+
+const mockTotalRewards = 1293230000n
+const mockCurrentRewards = 428250000n
 
 export const CircleYieldDetails = () => {
   const { t } = useTranslation()
 
   return (
     <Container>
-      <Header>
-        <Text size={14} weight={500} color="shyExtra">
-          {t('circle.yield_details')}
-        </Text>
-      </Header>
+      <Text size={14} weight={500} color="shyExtra">
+        {t('circle.yield_details')}
+      </Text>
       <VStack gap={14}>
-        <StatRow>
+        <HStack alignItems="center" justifyContent="space-between">
           <HStack gap={4} alignItems="center">
             <IconWrapper size={16} color="textSupporting">
               <PercentIcon />
@@ -32,38 +36,22 @@ export const CircleYieldDetails = () => {
           <Text size={16} weight={500} color="success">
             5.17%
           </Text>
-        </StatRow>
+        </HStack>
 
-        <Divider />
+        <LineSeparator kind="regular" />
 
         <HStack gap={16} fullWidth>
-          <VStack gap={6} flexGrow>
-            <HStack gap={4} alignItems="center">
-              <IconWrapper size={16} color="textSupporting">
-                <CalendarIcon />
-              </IconWrapper>
-              <Text size={14} weight={500} color="supporting">
-                {t('circle.total_rewards')}
-              </Text>
-            </HStack>
-            <Text size={16} weight={500} color="shyExtra">
-              1,293.23 USDC
-            </Text>
-          </VStack>
-
-          <VStack gap={6} flexGrow>
-            <HStack gap={4} alignItems="center">
-              <IconWrapper size={16} color="textSupporting">
-                <TrophyIcon />
-              </IconWrapper>
-              <Text size={14} weight={500} color="supporting">
-                {t('circle.current_rewards')}
-              </Text>
-            </HStack>
-            <Text size={16} weight={500} color="success">
-              +428.25 USDC
-            </Text>
-          </VStack>
+          <CircleRewardStat
+            icon={<CalendarIcon />}
+            title={t('circle.total_rewards')}
+            value={mockTotalRewards}
+          />
+          <CircleRewardStat
+            icon={<TrophyIcon />}
+            title={t('circle.current_rewards')}
+            value={mockCurrentRewards}
+            kind="primary"
+          />
         </HStack>
 
         <WithdrawButton>
@@ -84,28 +72,9 @@ const Container = styled.div`
   border-radius: 16px;
   border: 1px solid ${getColor('foregroundSuper')};
   background: ${getColor('foreground')};
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-`
-
-const Header = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`
-
-const StatRow = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 6px;
-`
-
-const Divider = styled.div`
-  width: 100%;
-  height: 1px;
-  background: ${getColor('foregroundSuper')};
+  ${vStack({
+    gap: 16,
+  })};
 `
 
 const WithdrawButton = styled.button`
