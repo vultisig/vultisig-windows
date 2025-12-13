@@ -10,9 +10,7 @@ export const CircleBanner = () => {
 
   return (
     <BannerContainer>
-      <PositionLogo>
-        <CircleBannerLogo fontSize={166} />
-      </PositionLogo>
+      <Logo fontSize={166} />
       <BannerContent gap={8}>
         <Text size={18} color="contrast">
           Circle USDC {t('account')}
@@ -22,8 +20,9 @@ export const CircleBanner = () => {
   )
 }
 
-const PositionLogo = styled.div`
+const Logo = styled(CircleBannerLogo)`
   position: absolute;
   right: 0;
   bottom: 0;
+  font-size: 166px;
 `
