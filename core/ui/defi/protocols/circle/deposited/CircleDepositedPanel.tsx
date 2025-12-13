@@ -1,5 +1,4 @@
 import { usdc } from '@core/chain/coin/knownTokens'
-import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { Button } from '@lib/ui/buttons/Button'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -17,7 +16,6 @@ import { CircleAccountBalance } from './CircleAccountBalance'
 export const CircleDepositedPanel = () => {
   const { data: circleAccount } = useCircleAccountQuery()
   const { t } = useTranslation()
-  const formatFiatAmount = useFormatFiatAmount()
 
   return (
     <Container>
@@ -31,10 +29,10 @@ export const CircleDepositedPanel = () => {
             {usdc.ticker} {t('deposited').toLowerCase()}
           </Text>
           <Text weight={500} size={28}>
-            {circleAccount ? <CircleAccountBalance /> : <>0 {usdc.ticker}</>}
+            <CircleAccountBalance />
           </Text>
           <Text size={12} color="shy">
-            {circleAccount ? <CircleAccountFiatBalance /> : formatFiatAmount(0)}
+            {circleAccount && <CircleAccountFiatBalance />}
           </Text>
         </VStack>
       </HStack>
