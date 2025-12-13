@@ -1,9 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { usdc } from '@core/chain/coin/knownTokens'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
-import { useCircleAccountUsdcBalanceQuery } from '@core/ui/defi/protocols/circle/queries/circleAccountUsdcBalance'
-import { useCircleAccountUsdcFiatBalanceQuery } from '@core/ui/defi/protocols/circle/queries/useCircleAccountUsdcFiatBalanceQuery'
-import { DefiProtocol } from '@core/ui/defi/protocols/core'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
@@ -11,41 +8,30 @@ import { CircleIcon } from '@lib/ui/icons/CircleIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { formatAmount } from '@lib/utils/formatAmount'
 import styled from 'styled-components'
 
-type DefiProtocolItemProps = {
-  protocol: DefiProtocol
-}
+import { useCircleAccountUsdcBalanceQuery } from './queries/circleAccountUsdcBalance'
+import { useCircleAccountUsdcFiatBalanceQuery } from './queries/useCircleAccountUsdcFiatBalanceQuery'
 
-const protocolIcons: Record<DefiProtocol, React.ComponentType> = {
-  circle: CircleIcon,
-}
-
-const protocolLabels: Record<DefiProtocol, string> = {
-  circle: 'Circle',
-}
-
-export const DefiProtocolItem = ({ protocol }: DefiProtocolItemProps) => {
+export const CircleDefiItem = () => {
   const navigate = useCoreNavigate()
   const formatFiatAmount = useFormatFiatAmount()
   const balanceQuery = useCircleAccountUsdcBalanceQuery()
   const fiatBalanceQuery = useCircleAccountUsdcFiatBalanceQuery()
 
-  const Icon = protocolIcons[protocol]
-  const label = protocolLabels[protocol]
-
   const handleClick = () => {
-    navigate({ id: 'defi', state: { protocol } })
+    navigate({ id: 'defi', state: { protocol: 'circle' } })
   }
 
   return (
     <StyledPanel onClick={handleClick}>
       <HStack fullWidth alignItems="center" gap={12}>
         <IconWrapper size={32}>
-          <Icon />
+          <CircleIcon />
         </IconWrapper>
 
         <VStack fullWidth alignItems="start" gap={12}>
@@ -57,37 +43,38 @@ export const DefiProtocolItem = ({ protocol }: DefiProtocolItemProps) => {
           >
             <VStack>
               <Text color="contrast" size={14}>
-                {label}
+                Circle
               </Text>
             </VStack>
             <HStack gap={8} alignItems="center">
-              {fiatBalanceQuery.data !== undefined &&
-                balanceQuery.data !== undefined && (
-                  <VStack
-                    gap={8}
-                    justifyContent="space-between"
-                    alignItems="flex-end"
-                  >
-                    <Text
-                      centerVertically
-                      color="contrast"
-                      weight="550"
-                      size={14}
-                    >
-                      <BalanceVisibilityAware>
-                        {formatFiatAmount(fiatBalanceQuery.data)}
-                      </BalanceVisibilityAware>
-                    </Text>
-                    <Text color="shy" weight="500" size={12} centerVertically>
-                      <BalanceVisibilityAware>
-                        {formatAmount(
-                          fromChainAmount(balanceQuery.data, usdc.decimals),
-                          { ticker: usdc.ticker }
-                        )}
-                      </BalanceVisibilityAware>
-                    </Text>
-                  </VStack>
-                )}
+              <VStack
+                gap={8}
+                justifyContent="space-between"
+                alignItems="flex-end"
+              >
+                <Text centerVertically color="contrast" weight="550" size={14}>
+                  <BalanceVisibilityAware>
+                    <MatchQuery
+                      value={fiatBalanceQuery}
+                      success={formatFiatAmount}
+                      inactive={() => formatFiatAmount(0)}
+                    />
+                  </BalanceVisibilityAware>
+                </Text>
+                <Text color="shy" weight="500" size={12} centerVertically>
+                  <BalanceVisibilityAware>
+                    <MatchQuery
+                      value={balanceQuery}
+                      success={balance =>
+                        formatAmount(fromChainAmount(balance, usdc.decimals), {
+                          ticker: usdc.ticker,
+                        })
+                      }
+                      inactive={() => formatAmount(0, { ticker: usdc.ticker })}
+                    />
+                  </BalanceVisibilityAware>
+                </Text>
+              </VStack>
               <IconWrapper>
                 <ChevronRightIcon />
               </IconWrapper>
