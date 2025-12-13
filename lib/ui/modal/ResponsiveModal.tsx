@@ -77,6 +77,7 @@ export const ResponsiveModal = ({
           onClose={onClose}
           placement="center"
           targetWidth={480}
+          style={containerStyles}
           {...modalProps}
         >
           {children}
