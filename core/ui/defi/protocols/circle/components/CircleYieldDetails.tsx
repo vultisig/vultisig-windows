@@ -1,4 +1,3 @@
-import { ArrowWallDownIcon } from '@lib/ui/icons/ArrowWallDownIcon'
 import { CalendarIcon } from '@lib/ui/icons/CalendarIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { PercentIcon } from '@lib/ui/icons/PercentIcon'
@@ -11,6 +10,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { CircleRewardStat } from './CircleRewardStat'
+import { CircleWithdrawButton } from './CircleWithdrawButton'
 
 const mockTotalRewards = 1293230000n
 const mockCurrentRewards = 428250000n
@@ -54,14 +54,7 @@ export const CircleYieldDetails = () => {
           />
         </HStack>
 
-        <WithdrawButton>
-          <ButtonIconWrapper>
-            <ArrowWallDownIcon />
-          </ButtonIconWrapper>
-          <Text size={14} weight={600} color="contrast">
-            {t('circle.withdraw')}
-          </Text>
-        </WithdrawButton>
+        <CircleWithdrawButton />
       </VStack>
     </Container>
   )
@@ -75,33 +68,4 @@ const Container = styled.div`
   ${vStack({
     gap: 16,
   })};
-`
-
-const WithdrawButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 5px;
-  padding: 4px 40px 4px 4px;
-  height: 42px;
-  border-radius: 30px;
-  border: 1px solid ${getColor('buttonPrimary')};
-  background: transparent;
-  cursor: pointer;
-  width: 100%;
-
-  &:hover {
-    opacity: 0.9;
-  }
-`
-
-const ButtonIconWrapper = styled(IconWrapper)`
-  width: 34px;
-  height: 34px;
-  border-radius: 40px;
-  background: rgba(255, 255, 255, 0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
 `
