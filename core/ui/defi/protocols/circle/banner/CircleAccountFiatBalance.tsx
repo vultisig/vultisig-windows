@@ -7,5 +7,11 @@ export const CircleAccountFiatBalance = () => {
   const query = useCircleAccountUsdcFiatBalanceQuery()
   const formatFiatAmount = useFormatFiatAmount()
 
-  return <MatchQuery value={query} success={formatFiatAmount} />
+  return (
+    <MatchQuery
+      value={query}
+      success={formatFiatAmount}
+      inactive={() => formatFiatAmount(0)}
+    />
+  )
 }

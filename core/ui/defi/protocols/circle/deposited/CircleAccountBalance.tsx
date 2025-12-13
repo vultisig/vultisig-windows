@@ -16,6 +16,7 @@ export const CircleAccountBalance = () => {
           ticker: usdc.ticker,
         })
       }
+      inactive={() => formatAmount(0, { ticker: usdc.ticker })}
     />
   )
 }
