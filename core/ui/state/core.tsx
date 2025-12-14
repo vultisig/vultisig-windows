@@ -20,6 +20,11 @@ export type GetMpcServerUrlInput = {
   serviceName: string
 }
 
+type DeveloperOptions = {
+  pluginMarketplaceBaseUrl: string
+  appInstallTimeout: number
+}
+
 export type CoreState = CoreStorage & {
   client: Client
   openUrl: (url: string) => void
@@ -30,6 +35,7 @@ export type CoreState = CoreStorage & {
   version: string
   isLocalModeAvailable: boolean
   getMpcServerUrl: (input: GetMpcServerUrlInput) => Promise<string>
+  getDeveloperOptions?: () => Promise<DeveloperOptions>
   processError?: ErrorBoundaryProcessError
   targetVaultId?: string
   goBack: () => void

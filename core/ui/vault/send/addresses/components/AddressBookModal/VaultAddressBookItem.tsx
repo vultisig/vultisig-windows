@@ -25,7 +25,17 @@ export const VaultAddressBookItem = ({
       icon={<AddressBookItemAvatar name={name} address={address} />}
       key={address}
       onClick={() => onSelect(address)}
-      title={<Text size={14}>{name}</Text>}
+      title={
+        <Text
+          style={{
+            maxWidth: 140,
+          }}
+          cropped
+          size={14}
+        >
+          {name}
+        </Text>
+      }
       hoverable
     />
   )

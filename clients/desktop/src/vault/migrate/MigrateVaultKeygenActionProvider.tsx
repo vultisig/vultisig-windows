@@ -62,9 +62,11 @@ export const MigrateVaultKeygenActionProvider = ({
         signers,
         existingVault.signers,
         encryptionKeyHex,
-        localUIEcdsa,
-        existingVault.publicKeys.ecdsa,
-        hexChainCode
+        {
+          localUI: localUIEcdsa,
+          publicKey: existingVault.publicKeys.ecdsa,
+          chainCode: hexChainCode,
+        }
       )
       const dklsResult = await dklsKeygen.startKeygenWithRetry()
 
@@ -79,9 +81,11 @@ export const MigrateVaultKeygenActionProvider = ({
         existingVault.signers,
         encryptionKeyHex,
         dklsKeygen.getSetupMessage(),
-        localUIEddsa,
-        existingVault.publicKeys.eddsa,
-        hexChainCode
+        {
+          localUI: localUIEddsa,
+          publicKey: existingVault.publicKeys.eddsa,
+          chainCode: hexChainCode,
+        }
       )
       const schnorrResult = await schnorrKeygen.startKeygenWithRetry()
 

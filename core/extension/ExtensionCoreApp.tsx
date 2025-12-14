@@ -7,6 +7,7 @@ import { initiateFileDownload } from '@lib/utils/file/initiateFileDownload'
 import { useMemo } from 'react'
 
 import { storage } from './storage'
+import { getDeveloperOptions } from './storage/developerOptions'
 import { StorageMigrationsManager } from './storage/migrations/StorageMigrationManager'
 
 const baseCoreState: Omit<CoreState, 'goBack' | 'goHome'> = {
@@ -27,6 +28,7 @@ const baseCoreState: Omit<CoreState, 'goBack' | 'goHome'> = {
 
     throw new Error('Local mode is not available in extension')
   },
+  getDeveloperOptions,
   vaultCreationMpcLib: 'DKLS',
 }
 

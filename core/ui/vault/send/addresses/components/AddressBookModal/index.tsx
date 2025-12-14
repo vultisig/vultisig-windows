@@ -9,9 +9,10 @@ import {
 } from '@lib/ui/inputs/toggle-switch/ToggleSwitch'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
-import { Modal } from '@lib/ui/modal'
 import { ModalCloseButton } from '@lib/ui/modal/ModalCloseButton'
+import { ResponsiveModal } from '@lib/ui/modal/ResponsiveModal'
 import { OnCloseProp } from '@lib/ui/props'
+import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useMemo, useState } from 'react'
@@ -71,7 +72,13 @@ export const AddressBookModal = ({ onSelect, onClose }: Props) => {
   }, [coin.chain, vaults, walletCore])
 
   return (
-    <Modal withDefaultStructure={false} onClose={onClose}>
+    <ResponsiveModal
+      isOpen
+      modalProps={{
+        withDefaultStructure: false,
+      }}
+      onClose={onClose}
+    >
       <ModalWrapper gap={16}>
         <HStack justifyContent="space-between" alignItems="center">
           <Title size={15}>{t('address_book')}</Title>
@@ -130,7 +137,7 @@ export const AddressBookModal = ({ onSelect, onClose }: Props) => {
           </StyledList>
         </VStack>
       </ModalWrapper>
-    </Modal>
+    </ResponsiveModal>
   )
 }
 
@@ -146,11 +153,14 @@ const Divider = styled.div`
 
 const ModalWrapper = styled(VStack)`
   height: 500px;
-  width: min(368px, 100% - 32px);
-  background: ${getColor('background')};
-  border: 1px solid ${getColor('mistExtra')};
+  width: 100%;
+  background: ${getColor('foreground')};
   ${borderRadius.m};
   padding: 24px 20px;
+
+  @media ${mediaQuery.tabletDeviceAndUp} {
+    width: min(368px, 100% - 32px);
+  }
 `
 
 const OptionsContainer = styled(HStack)`
@@ -159,9 +169,9 @@ const OptionsContainer = styled(HStack)`
 `
 
 const StyledList = styled(List)`
-  background-color: transparent;
   gap: 16px;
   flex: 1;
+  background-image: none;
   flex-basis: 0;
   overflow: auto;
 `
