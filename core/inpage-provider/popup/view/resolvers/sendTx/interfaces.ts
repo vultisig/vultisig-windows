@@ -178,6 +178,12 @@ export type TransactionDetails = {
     msgs: CosmosMsg[]
     fee: CosmosFee
   }
+  directPayload?: {
+    bodyBytes: string // base64 encoded
+    authInfoBytes: string // base64 encoded
+    chainId: string
+    accountNumber: string
+  }
   skipBroadcast?: boolean
 }
 

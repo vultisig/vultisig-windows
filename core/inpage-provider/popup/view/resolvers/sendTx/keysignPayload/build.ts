@@ -24,6 +24,7 @@ import {
 import {
   CosmosCoinSchema,
   SignAminoSchema,
+  SignDirectSchema,
   WasmExecuteContractPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { attempt } from '@lib/utils/attempt'
@@ -348,6 +349,30 @@ export const buildSendTxKeysignPayload = async ({
     psbt: () => undefined,
   })
 
+  const directPayload = matchRecordUnion<
+    CustomTxData,
+    KeysignPayload['signDirect']
+  >(customTxData, {
+    regular: () => {
+      if ('regular' in customTxData) {
+        const { regular } = customTxData
+        const { transactionDetails } = regular
+        const { directPayload } = transactionDetails
+        if (directPayload) {
+          return create(SignDirectSchema, {
+            bodyBytes: directPayload.bodyBytes,
+            authInfoBytes: directPayload.authInfoBytes,
+            chainId: directPayload.chainId,
+            accountNumber: directPayload.accountNumber,
+          })
+        }
+      }
+      return undefined
+    },
+    solana: () => undefined,
+    psbt: () => undefined,
+  })
+
   let keysignPayload = create(KeysignPayloadSchema, {
     toAddress: toAddress ?? '',
     toAmount: getTxAmount(parsedTx).toString(),
@@ -360,6 +385,7 @@ export const buildSendTxKeysignPayload = async ({
     contractPayload,
     swapPayload,
     signAmino: aminoPayload,
+    signDirect: directPayload,
   })
 
   keysignPayload.blockchainSpecific = await getChainSpecific({

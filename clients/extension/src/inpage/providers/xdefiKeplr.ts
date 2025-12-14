@@ -93,6 +93,7 @@ const extractKeplrMessages = (
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const keplrHandler = (
   tx: KeplrTransaction,
   chain: Chain
@@ -415,6 +416,302 @@ const aminoHandler = (
   } as TransactionDetails
 }
 
+const directHandler = (
+  signDoc: {
+    bodyBytes: string // base64 encoded
+    authInfoBytes: string // base64 encoded
+    chainId: string
+    accountNumber: string
+  },
+  chain: Chain
+): TransactionDetails => {
+  const txBody = TxBody.decode(base64.decode(signDoc.bodyBytes))
+  const [message] = txBody.messages
+  const memo = txBody.memo
+
+  const handleMsgSendUrl = () => {
+    const decodedMessage = MsgSend.decode(message.value)
+    return {
+      asset: {
+        chain: chain,
+        ticker: decodedMessage.amount[0]?.denom ?? chainFeeCoin[chain].ticker,
+      },
+      amount: {
+        amount: decodedMessage.amount[0]?.amount ?? '0',
+        decimals: chainFeeCoin[chain].decimals,
+      },
+      from: decodedMessage.fromAddress,
+      to: decodedMessage.toAddress,
+      data: memo,
+    }
+  }
+
+  const handleMsgExecuteContractUrl = () => {
+    const decodedMessage = MsgExecuteContract.decode(message.value)
+    return {
+      asset: {
+        chain: chain,
+        ticker:
+          decodedMessage.funds.length > 0
+            ? decodedMessage.funds[0].denom
+            : chainFeeCoin[chain].ticker,
+      },
+      amount: {
+        amount:
+          decodedMessage.funds.length > 0
+            ? decodedMessage.funds[0].amount
+            : '0',
+        decimals: chainFeeCoin[chain].decimals,
+      },
+      from: decodedMessage.sender,
+      to: decodedMessage.contract,
+      data: memo,
+    }
+  }
+
+  const handleMsgTransferUrl = () => {
+    const txChain = getCosmosChainByChainId(signDoc.chainId)
+
+    if (!txChain) {
+      throw new Error(`Chain not supported: ${signDoc.chainId}`)
+    }
+
+    const msg = MsgTransfer.decode(message.value)
+    const receiverChain = getCosmosChainFromAddress(msg.receiver)
+
+    return {
+      asset: {
+        chain: txChain,
+        ticker: msg.token.denom,
+      },
+      amount: {
+        amount: msg.token.amount,
+        decimals: chainFeeCoin[txChain].decimals,
+      },
+      from: msg.sender,
+      to: msg.receiver,
+      data: `${receiverChain}:${msg.sourceChannel}:${msg.receiver}:${msg.memo}`,
+    }
+  }
+
+  const handleThorchainDepositUrl = () => {
+    const decodedMessage = TW.Cosmos.Proto.Message.THORChainDeposit.decode(
+      message.value
+    )
+    if (
+      !decodedMessage.coins ||
+      decodedMessage.coins.length === 0 ||
+      !decodedMessage.coins[0].asset
+    ) {
+      throw new Error(' coins array is required and cannot be empty')
+    }
+    const prefix = chain === Chain.MayaChain ? 'maya' : 'thor'
+    const signerAddress = bech32.encode(
+      prefix,
+      bech32.toWords(decodedMessage.signer)
+    )
+
+    return {
+      asset: {
+        chain: chain,
+        ticker: decodedMessage.coins[0].asset
+          ? decodedMessage.coins[0].asset.chain +
+            (decodedMessage.coins[0].asset.secured ? '-' : '.') +
+            decodedMessage.coins[0].asset.symbol
+          : '',
+      },
+      amount: {
+        amount: decodedMessage.coins[0].amount,
+        decimals: chainFeeCoin[chain].decimals,
+      },
+      from: signerAddress,
+      data: memo,
+    }
+  }
+
+  const handleThorchainSendUrl = () => {
+    const decodedMessage = TW.Cosmos.Proto.Message.THORChainSend.decode(
+      message.value
+    )
+    if (
+      !decodedMessage.amounts ||
+      decodedMessage.amounts.length === 0 ||
+      !decodedMessage.amounts[0].denom
+    ) {
+      throw new Error(' amounts array is required and cannot be empty')
+    }
+
+    const prefix = chain === Chain.MayaChain ? 'maya' : 'thor'
+
+    const fromAddress = bech32.encode(
+      prefix,
+      bech32.toWords(decodedMessage.fromAddress)
+    )
+
+    const toAddress = bech32.encode(
+      prefix,
+      bech32.toWords(decodedMessage.toAddress)
+    )
+
+    return {
+      asset: {
+        chain: chain,
+        ticker: decodedMessage.amounts[0].denom,
+      },
+      amount: {
+        amount: decodedMessage.amounts[0].amount,
+        decimals: chainFeeCoin[chain].decimals,
+      },
+      from: fromAddress,
+      to: toAddress,
+      data: memo,
+    }
+  }
+
+  // Para mensajes Amino JSON (sin URL), intentar decodificar como JSON
+  const handleThorchainDeposit = () => {
+    try {
+      // En signDirect, los mensajes Amino pueden venir como JSON en el value
+      const decodedValue = JSON.parse(
+        new TextDecoder().decode(message.value)
+      ) as {
+        coins?: Array<{ asset: string; amount: string }>
+        memo?: string
+        signer?: string
+      }
+
+      if (!decodedValue.coins || decodedValue.coins.length === 0) {
+        throw new Error(' coins array is required and cannot be empty')
+      }
+
+      const assetParts = decodedValue.coins[0].asset.split('.')
+      if (assetParts.length < 2) {
+        throw new Error(`invalid asset format: ${decodedValue.coins[0].asset}`)
+      }
+
+      return {
+        asset: {
+          chain: chain,
+          ticker: assetParts[1],
+        },
+        amount: {
+          amount: decodedValue.coins[0].amount,
+          decimals: chainFeeCoin[chain].decimals,
+        },
+        from: decodedValue.signer,
+        data: decodedValue.memo ?? memo,
+      }
+    } catch {
+      // Si falla, intentar como protobuf
+      return handleThorchainDepositUrl()
+    }
+  }
+
+  const handleMsgSend = () => {
+    try {
+      // Intentar decodificar como JSON Amino primero
+      const decodedValue = JSON.parse(
+        new TextDecoder().decode(message.value)
+      ) as {
+        amount?: Array<{ denom: string; amount: string }>
+        from_address?: string
+        to_address?: string
+      }
+
+      if (!decodedValue.amount || decodedValue.amount.length === 0) {
+        throw new Error('Invalid message structure: missing or empty amount')
+      }
+
+      return {
+        asset: {
+          chain: chain,
+          ticker: decodedValue.amount[0].denom,
+        },
+        amount: {
+          amount: decodedValue.amount[0].amount,
+          decimals: chainFeeCoin[chain].decimals,
+        },
+        from: decodedValue.from_address,
+        to: decodedValue.to_address,
+        data: memo,
+      }
+    } catch {
+      // Si falla, intentar como protobuf
+      return handleMsgSendUrl()
+    }
+  }
+
+  const handleMsgExecuteContract = () => {
+    try {
+      // Intentar decodificar como JSON Amino primero
+      const decodedValue = JSON.parse(
+        new TextDecoder().decode(message.value)
+      ) as {
+        funds?: Array<{ denom: string; amount: string }>
+        sender?: string
+        contract?: string
+        msg?: any
+      }
+
+      return {
+        asset: {
+          chain: chain,
+          ticker:
+            decodedValue.funds && decodedValue.funds.length > 0
+              ? decodedValue.funds[0].denom
+              : chainFeeCoin[chain].ticker,
+        },
+        amount: {
+          amount:
+            decodedValue.funds && decodedValue.funds.length > 0
+              ? decodedValue.funds[0].amount
+              : '0',
+          decimals: chainFeeCoin[chain].decimals,
+        },
+        from: decodedValue.sender,
+        to: decodedValue.contract,
+        data: memo,
+      }
+    } catch {
+      // Si falla, intentar como protobuf
+      return handleMsgExecuteContractUrl()
+    }
+  }
+
+  let transactionInfo: any
+
+  try {
+    transactionInfo = match(message.typeUrl, {
+      [CosmosMsgType.MSG_SEND]: handleMsgSend,
+      [CosmosMsgType.THORCHAIN_MSG_SEND]: handleMsgSend,
+      [CosmosMsgType.MSG_SEND_URL]: handleMsgSendUrl,
+      [CosmosMsgType.MSG_EXECUTE_CONTRACT]: handleMsgExecuteContract,
+      [CosmosMsgType.MSG_EXECUTE_CONTRACT_URL]: handleMsgExecuteContractUrl,
+      [CosmosMsgType.MSG_TRANSFER_URL]: handleMsgTransferUrl,
+      [CosmosMsgType.THORCHAIN_MSG_DEPOSIT]: handleThorchainDeposit,
+      [CosmosMsgType.THORCHAIN_MSG_DEPOSIT_URL]: handleThorchainDepositUrl,
+      [CosmosMsgType.THORCHAIN_MSG_SEND_URL]: handleThorchainSendUrl,
+    })
+  } catch {
+    transactionInfo = {
+      asset: { chain, ticker: chainFeeCoin[chain].ticker },
+      amount: { amount: '0', decimals: chainFeeCoin[chain].decimals },
+      data: memo,
+    }
+  }
+
+  return {
+    ...transactionInfo,
+    directPayload: {
+      bodyBytes: signDoc.bodyBytes,
+      authInfoBytes: signDoc.authInfoBytes,
+      chainId: signDoc.chainId,
+      accountNumber: signDoc.accountNumber,
+    },
+    skipBroadcast: true,
+  } as TransactionDetails
+}
+
 const getAccounts = async (chainId: string): Promise<AccountData[]> => {
   const { publicKey, address } = await requestAccount(
     shouldBePresent(getCosmosChainByChainId(chainId))
@@ -665,13 +962,12 @@ export class XDEFIKeplrProvider extends Keplr {
 
       const chain = shouldBePresent(getCosmosChainByChainId(chainId))
 
-      const transactionDetails = keplrHandler(
+      const transactionDetails: TransactionDetails = directHandler(
         {
           bodyBytes: Buffer.from(signDoc.bodyBytes).toString('base64'),
           authInfoBytes: Buffer.from(signDoc.authInfoBytes).toString('base64'),
           chainId: signDoc.chainId,
           accountNumber: signDoc.accountNumber.toString(),
-          skipBroadcast: true,
         },
         chain
       )
