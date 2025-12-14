@@ -100,7 +100,7 @@ type TronTxMeta = {
   refBlockHashHex: string
 }
 
-export type MsgPayload =
+type MsgPayload =
   | {
       case:
         | CosmosMsgType.MSG_SEND
