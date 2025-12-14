@@ -83,15 +83,9 @@ export class Ethereum extends EventEmitter<EthereumProviderEvents> {
   }
 
   emitAccountsChanged(addresses: string[]) {
-    if (addresses.length) {
-      const [address] = addresses
-
-      this.selectedAddress = address ?? ''
-      this.emit('accountsChanged', address ? [address] : [])
-    } else {
-      this.selectedAddress = ''
-      this.emit('accountsChanged', [])
-    }
+    const [address] = addresses
+    this.emit('accountsChanged', address ? [address] : [])
+    this.selectedAddress = address ?? ''
   }
 
   emitUpdateNetwork({ chainId }: { chainId: string }) {
