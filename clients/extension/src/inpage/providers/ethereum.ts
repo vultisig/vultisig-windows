@@ -113,23 +113,6 @@ export class Ethereum extends EventEmitter<EthereumProviderEvents> {
     return this.connected
   }
 
-  override on<K extends keyof EthereumProviderEvents>(
-    event: K,
-    listener: (...args: EthereumProviderEvents[K]) => void
-  ): this {
-    if (event === EventMethod.CONNECT && this.isConnected()) {
-      callBackground({ getAppChainId: { chainKind: 'evm' } }).then(chainId => {
-        ;(
-          listener as (
-            ...args: EthereumProviderEvents[typeof EventMethod.CONNECT]
-          ) => void
-        )({ chainId })
-      })
-    } else {
-      super.on(event, listener as never)
-    }
-    return this
-  }
   enable = () => {
     return this.request({ method: 'eth_requestAccounts', params: [] })
   }
