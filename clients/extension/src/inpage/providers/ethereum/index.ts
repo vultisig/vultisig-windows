@@ -1,9 +1,6 @@
 import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
 import { requestAccount } from '@clients/extension/src/inpage/providers/core/requestAccount'
-import {
-  EthereumProviderEvents,
-  EventMethod,
-} from '@clients/extension/src/inpage/providers/ethereum/events'
+import { EthereumProviderEvents } from '@clients/extension/src/inpage/providers/ethereum/events'
 import { EvmChain } from '@core/chain/Chain'
 import {
   getEvmChainByChainId,
@@ -67,8 +64,8 @@ export class Ethereum extends EventEmitter<EthereumProviderEvents> {
     if (!validateUrl(window.location.href)) {
       addBackgroundEventListener('disconnect', () => {
         this.connected = false
-        this.emit(EventMethod.ACCOUNTS_CHANGED, [])
-        this.emit(EventMethod.DISCONNECT, [])
+        this.emit('accountsChanged', [])
+        this.emit('diconnect', [])
       })
     }
   }
@@ -90,18 +87,18 @@ export class Ethereum extends EventEmitter<EthereumProviderEvents> {
       const [address] = addresses
 
       this.selectedAddress = address ?? ''
-      this.emit(EventMethod.ACCOUNTS_CHANGED, address ? [address] : [])
+      this.emit('accountsChanged', address ? [address] : [])
     } else {
       this.selectedAddress = ''
-      this.emit(EventMethod.ACCOUNTS_CHANGED, [])
+      this.emit('accountsChanged', [])
     }
   }
 
   emitUpdateNetwork({ chainId }: { chainId: string }) {
     if (Number(chainId) && this.chainId !== chainId) this.chainId = chainId
 
-    this.emit(EventMethod.NETWORK_CHANGED, Number(this.chainId))
-    this.emit(EventMethod.CHAIN_CHANGED, this.chainId)
+    this.emit('networkChanged', Number(this.chainId))
+    this.emit('chainChanged', this.chainId)
   }
 
   isConnected() {
