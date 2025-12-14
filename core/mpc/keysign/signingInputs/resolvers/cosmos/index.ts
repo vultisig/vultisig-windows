@@ -30,8 +30,6 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
   keysignPayload,
   walletCore,
 }) => {
-  debugger
-
   const chain = getKeysignChain<'cosmos'>(keysignPayload)
   const coin = getKeysignCoin<CosmosChain>(keysignPayload)
 
@@ -52,7 +50,6 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
     }
   >(chainSpecific, {
     ibcEnabled: ({ transactionType, ibcDenomTraces }) => {
-      debugger
       if (transactionType === TransactionType.IBC_TRANSFER) {
         const memo = shouldBePresent(keysignPayload.memo)
         const [, channel] = memo.split(':')
@@ -134,7 +131,6 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
       }
     },
     vaultBased: ({ isDeposit, ...rest }) => {
-      debugger
       if (signDirect) {
         const bodyBytes = fromBase64(signDirect.bodyBytes)
         const txBody = TxBody.decode(bodyBytes)
