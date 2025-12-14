@@ -70,7 +70,7 @@ export class Ethereum extends EventEmitter<EthereumProviderEvents> {
     }
   }
 
-  static getInstance(_chain: string): Ethereum {
+  static getInstance(): Ethereum {
     if (!Ethereum.instance) {
       Ethereum.instance = new Ethereum()
     }
