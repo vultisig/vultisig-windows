@@ -67,6 +67,12 @@ export class Ethereum extends EventEmitter<EthereumProviderEvents> {
         this.emit('accountsChanged', [])
         this.emit('diconnect', [])
       })
+
+      addBackgroundEventListener('evmChainChanged', chainId => {
+        this.chainId = chainId
+        this.emit('networkChanged', Number(this.chainId))
+        this.emit('chainChanged', this.chainId)
+      })
     }
   }
 
@@ -80,19 +86,6 @@ export class Ethereum extends EventEmitter<EthereumProviderEvents> {
     window.ctrlEthProviders['Ctrl Wallet'] = Ethereum.instance
     window.isCtrl = true
     return Ethereum.instance
-  }
-
-  emitAccountsChanged(addresses: string[]) {
-    const [address] = addresses
-    this.emit('accountsChanged', address ? [address] : [])
-    this.selectedAddress = address ?? ''
-  }
-
-  emitUpdateNetwork({ chainId }: { chainId: string }) {
-    if (Number(chainId) && this.chainId !== chainId) this.chainId = chainId
-
-    this.emit('networkChanged', Number(this.chainId))
-    this.emit('chainChanged', this.chainId)
   }
 
   isConnected() {
@@ -127,8 +120,6 @@ export class Ethereum extends EventEmitter<EthereumProviderEvents> {
           throw error
         }
       }
-
-      this.emitUpdateNetwork({ chainId })
 
       return null
     }
