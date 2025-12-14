@@ -65,7 +65,7 @@ export class Ethereum extends EventEmitter<EthereumProviderEvents> {
       addBackgroundEventListener('disconnect', () => {
         this.connected = false
         this.emit('accountsChanged', [])
-        this.emit('diconnect', [])
+        this.emit('disconnect', [])
       })
 
       addBackgroundEventListener('evmChainChanged', chainId => {

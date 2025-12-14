@@ -1,5 +1,5 @@
 import { storage } from '@core/extension/storage'
-import { AppSession } from '@core/extension/storage/appSessions'
+import { VaultsAppSessions } from '@core/extension/storage/appSessions'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { without } from '@lib/utils/array/without'
 
@@ -11,17 +11,18 @@ export const runBackgroundEventsAgent = () => {
 
     if (!(StorageKey.appSessions in changes)) return
 
-    const { newValue, oldValue } = changes[StorageKey.appSessions]
+    const { newValue, oldValue } = changes[StorageKey.appSessions] as {
+      newValue?: VaultsAppSessions
+      oldValue: VaultsAppSessions
+    }
 
     if (!oldValue) return
 
     const currentVaultId = await storage.getCurrentVaultId()
     if (!currentVaultId) return
 
-    const prevSessions: Record<string, AppSession> =
-      oldValue[currentVaultId] ?? {}
-    const nextSessions: Record<string, AppSession> =
-      newValue?.[currentVaultId] ?? {}
+    const prevSessions = oldValue[currentVaultId] ?? {}
+    const nextSessions = newValue?.[currentVaultId] ?? {}
 
     const prevApps = Object.keys(prevSessions)
     const nextApps = Object.keys(nextSessions)

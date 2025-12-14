@@ -2,6 +2,6 @@ export type EthereumProviderEvents = {
   accountsChanged: [accounts: string[]]
   chainChanged: [chainId: string]
   connect: [connectInfo: { chainId: string }]
-  diconnect: [error: unknown[]]
+  disconnect: [error: unknown[]]
   networkChanged: [networkId: number]
 }
