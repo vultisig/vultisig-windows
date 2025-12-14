@@ -8,6 +8,7 @@ import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
 import { SignAminoDisplay } from '@core/ui/mpc/keysign/tx/components/SignAminoDisplay'
+import { SignDirectDisplay } from '@core/ui/mpc/keysign/tx/components/SignDirectDisplay'
 import { useCurrentVaultPublicKey } from '@core/ui/vault/state/currentVault'
 import {
   ContentWrapper,
@@ -297,6 +298,9 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
               )}
               {keysignPayload.signAmino !== undefined && (
                 <SignAminoDisplay signAmino={keysignPayload.signAmino} />
+              )}
+              {keysignPayload.signDirect !== undefined && (
+                <SignDirectDisplay signDirect={keysignPayload.signDirect} />
               )}
             </List>
           )

@@ -1002,6 +1002,7 @@ export const it = {
   show_defi_balance: 'Mostra saldo DeFi',
   sign: 'Cartello',
   signAmino: 'Segno amminico',
+  signDirect: 'Segno diretto',
   signPrivately: 'Vuoi firmare privatamente?',
   sign_custom_message: 'Firma un messaggio personalizzato',
   sign_custom_message_description: 'Firma un messaggio personalizzato',

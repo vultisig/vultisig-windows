@@ -936,6 +936,7 @@ export const en = {
   show_defi_balance: 'Show DeFi balance',
   sign: 'Sign',
   signAmino: 'Amino Sign',
+  signDirect: 'Direct Sign',
   signPrivately: 'Want to sign privately?',
   sign_custom_message: 'Sign custom message',
   sign_custom_message_description: 'Sign custom message',

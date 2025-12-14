@@ -1010,6 +1010,7 @@ export const es = {
   show_defi_balance: 'Mostrar saldo DeFi',
   sign: 'Firmar',
   signAmino: 'Signo de amino',
+  signDirect: 'Firma directa',
   signPrivately: '¿Quieres firmar en privado?',
   sign_custom_message: 'Firmar mensaje personalizado',
   sign_custom_message_description: 'Firmar mensaje personalizado',
