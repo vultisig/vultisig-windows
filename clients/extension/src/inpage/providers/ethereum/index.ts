@@ -1,6 +1,9 @@
 import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
 import { requestAccount } from '@clients/extension/src/inpage/providers/core/requestAccount'
-import { EventMethod } from '@clients/extension/src/utils/constants'
+import {
+  EthereumProviderEvents,
+  EventMethod,
+} from '@clients/extension/src/inpage/providers/ethereum/events'
 import { EvmChain } from '@core/chain/Chain'
 import {
   getEvmChainByChainId,
@@ -21,14 +24,6 @@ import { validateUrl } from '@lib/utils/validation/url'
 import { ethers, getBytes, isHexString, Signature } from 'ethers'
 import EventEmitter from 'events'
 import { BlockTag, type RpcTransactionRequest } from 'viem'
-
-type EthereumProviderEvents = {
-  [EventMethod.ACCOUNTS_CHANGED]: [accounts: string[]]
-  [EventMethod.CHAIN_CHANGED]: [chainId: string]
-  [EventMethod.CONNECT]: [connectInfo: { chainId: string }]
-  [EventMethod.DISCONNECT]: [error: unknown[]]
-  [EventMethod.NETWORK_CHANGED]: [networkId: number]
-}
 
 export const processSignature = (signature: string) => {
   let result = Signature.from(ensureHexPrefix(signature))
