@@ -83,7 +83,6 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
         const bodyBytes = fromBase64(signDirect.bodyBytes)
         const txBody = TxBody.decode(bodyBytes)
 
-        // Para signDirect, creamos un solo mensaje con los bytes completos
         const messages = [
           TW.Cosmos.Proto.Message.create({
             signDirectMessage: TW.Cosmos.Proto.Message.SignDirect.create({
@@ -135,7 +134,6 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
         const bodyBytes = fromBase64(signDirect.bodyBytes)
         const txBody = TxBody.decode(bodyBytes)
 
-        // Para signDirect, creamos un solo mensaje con los bytes completos
         const messages = [
           TW.Cosmos.Proto.Message.create({
             signDirectMessage: TW.Cosmos.Proto.Message.SignDirect.create({
