@@ -22,6 +22,14 @@ import { ethers, getBytes, isHexString, Signature } from 'ethers'
 import EventEmitter from 'events'
 import { BlockTag, type RpcTransactionRequest } from 'viem'
 
+type EthereumProviderEvents = {
+  [EventMethod.ACCOUNTS_CHANGED]: [accounts: string[]]
+  [EventMethod.CHAIN_CHANGED]: [chainId: string]
+  [EventMethod.CONNECT]: [connectInfo: { chainId: string }]
+  [EventMethod.DISCONNECT]: [error: unknown[]]
+  [EventMethod.NETWORK_CHANGED]: [networkId: number]
+}
+
 export const processSignature = (signature: string) => {
   let result = Signature.from(ensureHexPrefix(signature))
 
@@ -36,7 +44,7 @@ export const processSignature = (signature: string) => {
   return ensureHexPrefix(result.serialized)
 }
 
-export class Ethereum extends EventEmitter {
+export class Ethereum extends EventEmitter<EthereumProviderEvents> {
   public chainId: string
   public connected: boolean
   public isCtrl: boolean
@@ -105,13 +113,20 @@ export class Ethereum extends EventEmitter {
     return this.connected
   }
 
-  on = (event: string, callback: (data: any) => void): this => {
+  override on<K extends keyof EthereumProviderEvents>(
+    event: K,
+    listener: (...args: EthereumProviderEvents[K]) => void
+  ): this {
     if (event === EventMethod.CONNECT && this.isConnected()) {
       callBackground({ getAppChainId: { chainKind: 'evm' } }).then(chainId => {
-        callback({ chainId })
+        ;(
+          listener as (
+            ...args: EthereumProviderEvents[typeof EventMethod.CONNECT]
+          ) => void
+        )({ chainId })
       })
     } else {
-      super.on(event, callback)
+      super.on(event, listener as never)
     }
     return this
   }
