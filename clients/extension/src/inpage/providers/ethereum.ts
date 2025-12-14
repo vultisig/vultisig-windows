@@ -184,7 +184,6 @@ export class Ethereum extends EventEmitter {
         await callBackground({
           signOut: {},
         })
-        this.emit(EventMethod.DISCONNECT)
       },
       net_version: async () => {
         const chain = await getChain()
@@ -372,16 +371,5 @@ export class Ethereum extends EventEmitter {
     }
 
     throw new NotImplementedError(`Ethereum method ${data.method}`)
-  }
-
-  _connect = (): void => {
-    this.emit(EventMethod.CONNECT, '')
-  }
-
-  _disconnect = (error?: { code: number; message: string }): void => {
-    this.emit(
-      EventMethod.DISCONNECT,
-      error || { code: 4900, message: 'Provider disconnected' }
-    )
   }
 }
