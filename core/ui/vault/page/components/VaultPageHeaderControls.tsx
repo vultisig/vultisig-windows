@@ -12,7 +12,7 @@ export const VaultPageHeaderControls = () => {
   return (
     <HStack gap={4} alignItems="center">
       <RefreshVaultBalance />
-      <IconButton kind="action" onClick={() => navigate({ id: 'settings' })}>
+      <IconButton onClick={() => navigate({ id: 'settings' })}>
         <IconWrapper size={24}>
           <SettingsIcon />
         </IconWrapper>
