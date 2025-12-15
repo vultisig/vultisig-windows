@@ -13,10 +13,11 @@ export class Plugin extends EventEmitter {
 
   async request({ method, params }: RequestInput) {
     const handlers = {
-      personal_sign: async ([rawMessage, account, type = 'default']: [
+      personal_sign: async ([rawMessage, account, type = 'default', pluginId]: [
         string,
         string,
         SignMessageType,
+        string | undefined,
       ]) => {
         const signature = await callPopup(
           {
@@ -26,6 +27,7 @@ export class Plugin extends EventEmitter {
                 chain: Chain.Ethereum,
                 message: rawMessage,
                 type,
+                pluginId,
               },
             },
           },

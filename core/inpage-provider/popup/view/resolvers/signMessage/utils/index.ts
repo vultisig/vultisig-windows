@@ -3,7 +3,7 @@ import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 
-export type ParsedConfigurationRow = {
+type ParsedConfigurationRow = {
   key: string
   value: string
 }
@@ -83,7 +83,9 @@ const fillEmptyTokenWithNativeTicker = ({
 export const parseConfiguration = (
   configuration: JsonObject
 ): ParsedConfigurationRow[] => {
-  const rows = flattenJson({ value: configuration }).filter(row => row.key !== '')
+  const rows = flattenJson({ value: configuration }).filter(
+    row => row.key !== ''
+  )
 
   return fillEmptyTokenWithNativeTicker({
     rows: fillEmptyTokenWithNativeTicker({

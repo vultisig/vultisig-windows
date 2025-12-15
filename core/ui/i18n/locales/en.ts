@@ -169,6 +169,7 @@ export const en = {
   coming_soon: 'Coming Soon',
   complete: 'Complete',
   confirm: 'Confirm',
+  confirm_automation_creation: 'Confirm automation creation',
   confirm_new_passcode: 'Confirm New Passcode',
   confirm_passcode: 'Confirm Passcode',
   connect: 'Connect',
@@ -479,6 +480,7 @@ export const en = {
   ibc_transaction_not_supporting_memo_title:
     'IBC Transaction Memo Not Supported',
   ibc_transfer: 'IBC Transfer',
+  id: 'ID',
   import: 'Import',
   import_existing_vault: 'Import an Existing Vault',
   import_failed: 'QR code invalid, please retry',
@@ -741,7 +743,7 @@ export const en = {
   plugin_info: 'App Info',
   plugin_password_desc:
     'Enter your password to unlock your Server Share and start the app installation',
-  plugin_rules: 'App Rules',
+  automation_info: 'Automation Info',
   plugin_server_url: 'App Server URL',
   app_install_timeout: 'App Install Timeout (ms)',
   app_install_timeout_invalid: 'Please enter a valid number.',
@@ -1225,7 +1227,7 @@ export const en = {
   vaults: 'Vaults',
   verify: 'Verify',
   verify_email: 'Verify Email',
-  verify_identity_sign: 'Sign in to verify your identity',
+
   verify_password: 'Verify Password',
   verify_password_periodic_message: 'Verify your Server Share Password',
   verify_password_periodic_message_description:
