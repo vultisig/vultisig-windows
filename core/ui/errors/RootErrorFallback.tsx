@@ -63,6 +63,7 @@ export const RootErrorFallback = ({
             {t('report_error')}
           </Button>
           <Button
+            kind="action"
             onClick={() => {
               goBack()
               clearError()
