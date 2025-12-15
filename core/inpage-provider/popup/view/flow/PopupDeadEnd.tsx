@@ -16,7 +16,7 @@ export const PopupDeadEnd = ({ children }: ChildrenProp) => {
         {children}
       </PageContent>
       <PageFooter>
-        <Button kind="secondary" onClick={goBack}>
+        <Button kind="action" onClick={goBack}>
           {t('close')}
         </Button>
       </PageFooter>

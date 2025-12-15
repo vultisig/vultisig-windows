@@ -54,7 +54,9 @@ export const BlockaidOverlay = ({
     <Modal
       footer={
         <VStack gap={20}>
-          <Button onClick={goBack}>{t('go_back')}</Button>
+          <Button kind="action" onClick={goBack}>
+            {t('go_back')}
+          </Button>
           <DismissButton onClick={dismiss}>
             {t('continue_anyway')}
           </DismissButton>
