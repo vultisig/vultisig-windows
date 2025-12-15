@@ -8,6 +8,7 @@ import { useDefiPositions } from '../../../storage/defiPositions'
 import { useMayaDefiPositionsQuery } from '../../chain/queries/useMayaDefiPositionsQuery'
 import { useThorchainDefiPositionsQuery } from '../../chain/queries/useThorchainDefiPositionsQuery'
 import { aggregateDefiPositions } from '../../chain/services/defiPositionAggregator'
+import { useCircleAccountUsdcFiatBalanceQuery } from '../../protocols/circle/queries/useCircleAccountUsdcFiatBalanceQuery'
 
 export type DefiChainPortfolio = {
   chain: Chain
@@ -87,14 +88,24 @@ export const useDefiChainPortfolios = () => {
 
 export const useDefiPortfolioBalance = () => {
   const portfolios = useDefiChainPortfolios()
+  const circleFiatBalanceQuery = useCircleAccountUsdcFiatBalanceQuery()
 
-  const total = useMemo(
-    () =>
-      portfolios.isPending
-        ? undefined
-        : sum(portfolios.data.map(portfolio => portfolio.totalFiat)),
-    [portfolios.data, portfolios.isPending]
-  )
+  const total = useMemo(() => {
+    if (portfolios.isPending || circleFiatBalanceQuery.isPending) {
+      return undefined
+    }
+
+    const chainTotal = sum(
+      portfolios.data.map(portfolio => portfolio.totalFiat)
+    )
+
+    return chainTotal + (circleFiatBalanceQuery.data ?? 0)
+  }, [
+    portfolios.data,
+    portfolios.isPending,
+    circleFiatBalanceQuery.data,
+    circleFiatBalanceQuery.isPending,
+  ])
 
   return {
     ...portfolios,
