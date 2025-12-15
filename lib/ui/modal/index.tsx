@@ -24,6 +24,7 @@ export type ModalProps = AsProp &
     titleAlign?: 'left' | 'center' | 'right'
     withDefaultStructure?: boolean
     closeButtonStyle?: CSSProperties
+    style?: CSSProperties
   }
 
 const contentVerticalPadding = 8

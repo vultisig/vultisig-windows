@@ -9,7 +9,15 @@ import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-export const ManageVaultBalanceVisibility = () => {
+type ManageVaultBalanceVisibilityProps = {
+  hideText?: string
+  showText?: string
+}
+
+export const ManageVaultBalanceVisibility = ({
+  hideText,
+  showText,
+}: ManageVaultBalanceVisibilityProps = {}) => {
   const { t } = useTranslation()
   const value = useIsBalanceVisible()
   const { mutateAsync: setIsBalanceVisible } = useSetIsBalanceVisibleMutation()
@@ -24,7 +32,9 @@ export const ManageVaultBalanceVisibility = () => {
         {value ? <EyeClosedIcon /> : <EyeIcon />}
       </IconWrapper>
       <Text size={12} color="primaryAlt">
-        {value ? t('hide_balance') : t('show_balance')}
+        {value
+          ? (hideText ?? t('hide_balance'))
+          : (showText ?? t('show_balance'))}
       </Text>
     </Wrapper>
   )

@@ -1,74 +1,50 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { Button } from '@lib/ui/buttons/Button'
-import { Image } from '@lib/ui/image/Image'
-import { VStack, vStack } from '@lib/ui/layout/Stack'
-import { PageContent } from '@lib/ui/page/PageContent'
-import { PageHeader } from '@lib/ui/page/PageHeader'
-import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
+import { VaultHeader } from '@core/ui/vault/components/VaultHeader'
+import { Tab, Tabs } from '@lib/ui/base/Tabs'
+import { VStack } from '@lib/ui/layout/Stack'
+import { FitPageContent } from '@lib/ui/page/PageContent'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
-import { APYOverview } from './components/APYOverview'
-import { BalanceOverviewTable } from './components/BalanceOverviewTable'
-import { InfoBanner } from './components/InfoBanner'
-import { TransactionActions } from './components/TransactionActions'
+import { TabsHeader, TriggerItem } from '../../chain/tabs/DefiChainTabs'
+import { CircleBanner } from './banner/CircleBanner'
+import { CircleContent } from './CircleContent'
+
+type CircleTab = 'deposited'
 
 export const CircleView = () => {
   const { t } = useTranslation()
+  const [activeTab, setActiveTab] = useState<CircleTab>('deposited')
+
+  const tabs: Tab<CircleTab>[] = [
+    {
+      value: 'deposited',
+      label: t('deposited'),
+      renderContent: () => <CircleContent />,
+    },
+  ]
 
   return (
-    <VStack fullHeight>
-      <StyledHeader
-        primaryControls={<PageHeaderBackButton />}
-        title={t('circle_title')}
-      />
-      <StyledPageContent>
-        <Image
-          src="/core/images/circle-screen-bg.png"
-          alt="register vault"
-          width={353}
-          height={143}
-        />
-        <Text size={14} color="shyExtra">
-          {t('circle.introduction')}
-        </Text>
-        <MainWrapper>
-          <Text weight={600}>{t('circle.balance_title')}</Text>
-          <BalanceOverviewTable />
-          <APYOverview />
-          <div />
-          <Button>{t('circle.claim')}</Button>
-          <TransactionActions />
-          <InfoBanner />
-        </MainWrapper>
-      </StyledPageContent>
+    <VStack flexGrow>
+      <VaultHeader primaryControls={<PageHeaderBackButton />} />
+      <FitPageContent contentMaxWidth={400}>
+        <VStack gap={12} flexGrow>
+          <CircleBanner />
+          <Tabs
+            tabs={tabs}
+            value={activeTab}
+            onValueChange={setActiveTab}
+            triggerSlot={({ tab: { label, disabled }, isActive, ...props }) => (
+              <TriggerItem {...props} isActive={isActive} isDisabled={disabled}>
+                {label}
+              </TriggerItem>
+            )}
+            triggersContainer={({ children }) => (
+              <TabsHeader>{children}</TabsHeader>
+            )}
+          />
+        </VStack>
+      </FitPageContent>
     </VStack>
   )
 }
-
-const StyledHeader = styled(PageHeader)`
-  position: relative;
-  z-index: 1;
-`
-
-const StyledPageContent = styled(PageContent)`
-  max-width: 353px;
-  margin-inline: auto;
-
-  ${vStack({
-    gap: 12,
-    flexGrow: true,
-  })};
-`
-
-const MainWrapper = styled.div`
-  padding: 16px;
-  border-radius: 16px;
-  border: 1px solid ${getColor('foregroundSuper')};
-  background: ${getColor('foreground')};
-
-  ${vStack({
-    gap: 15,
-  })};
-`

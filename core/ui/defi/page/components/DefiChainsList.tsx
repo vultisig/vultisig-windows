@@ -1,10 +1,10 @@
-import { Chain } from '@core/chain/Chain'
 import { useDefiChains } from '@core/ui/storage/defiChains'
-import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { CryptoIcon } from '@lib/ui/icons/CryptoIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { Center } from '@lib/ui/layout/Center'
 import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useDeferredValue, useMemo } from 'react'
@@ -12,13 +12,13 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { featureFlags } from '../../../featureFlags'
-import { defiProtocols } from '../../protocols/core'
+import { CircleDefiItem } from '../../protocols/circle/CircleDefiItem'
+import { useDefiChainPortfolios } from '../hooks/useDefiPortfolios'
 import { DefiChainItem } from './DefiChainItem'
-import { DefiProtocolItem } from './DefiProtocolItem'
 import { useSearchChain } from './state/searchChainProvider'
 
 export const DefiChainsList = () => {
-  const { data: vaultChainBalances = [] } = useVaultChainsBalancesQuery()
+  const { data: chainPortfolios = [], isPending } = useDefiChainPortfolios()
   const defiChains = useDefiChains()
   const [searchQuery] = useSearchChain()
   const deferredQuery = useDeferredValue(searchQuery)
@@ -28,30 +28,32 @@ export const DefiChainsList = () => {
 
   // Filter to only show chains that are enabled in DeFi settings
   const defiChainBalances = useMemo(() => {
-    return vaultChainBalances.filter(({ chain }) =>
-      defiChains.includes(chain as Chain)
-    )
-  }, [vaultChainBalances, defiChains])
+    return chainPortfolios.filter(({ chain }) => defiChains.includes(chain))
+  }, [chainPortfolios, defiChains])
 
   const filteredBalances = useMemo(() => {
     if (!normalizedQuery) {
       return defiChainBalances
     }
 
-    return defiChainBalances.filter(({ chain, coins }) => {
+    return defiChainBalances.filter(({ chain }) => {
       const normalizedChain = String(chain).toLowerCase()
-
       if (normalizedChain.includes(normalizedQuery)) {
         return true
       }
-
-      return coins.some(coin =>
-        coin.ticker?.toLowerCase().includes(normalizedQuery)
-      )
+      return false
     })
   }, [normalizedQuery, defiChainBalances])
 
   if (defiChainBalances.length === 0) {
+    if (isPending) {
+      return (
+        <Center>
+          <Spinner />
+        </Center>
+      )
+    }
+
     return (
       <EmptyWrapper>
         <VStack gap={12} alignItems="center">
@@ -93,12 +95,7 @@ export const DefiChainsList = () => {
 
   return (
     <List>
-      {defiProtocols.map(protocol => {
-        if (protocol === 'circle' && !featureFlags.circle) {
-          return null
-        }
-        return <DefiProtocolItem key={protocol} protocol={protocol} />
-      })}
+      {featureFlags.circle && <CircleDefiItem />}
       {filteredBalances.map(balance => (
         <DefiChainItem key={balance.chain} balance={balance} />
       ))}

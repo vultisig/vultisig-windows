@@ -1,0 +1,45 @@
+---
+description: USE resolved query data hook pattern WHEN child components need access to query data
+globs: 
+alwaysApply: false
+---
+
+# Resolved Query Data Hook Pattern
+
+When a parent component renders children only after a query resolves (for example via `MatchQuery.success`), child components can access the data directly via a companion hook instead of prop drilling or context providers.
+
+## Pattern
+
+```ts
+// query.ts
+export const useSomeQuery = () => {
+  return useQuery({ ... })
+}
+
+export const useSomeData = () => {
+  const { data } = useSomeQuery()
+  return ensurePresent(data, 'some query data')
+}
+```
+
+## Usage
+
+```tsx
+// Parent - renders children only when query succeeds
+<MatchQuery
+  value={query}
+  success={(data) => <ChildComponent />}
+/>
+
+// Child - uses the resolved data hook directly
+const ChildComponent = () => {
+  const data = useSomeData()
+  return <div>{data.name}</div>
+}
+```
+
+## When to Use
+
+- Query is resolved in parent before children render
+- Multiple nested children need the same data
+- Avoids prop drilling and context boilerplate

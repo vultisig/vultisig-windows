@@ -1,8 +1,6 @@
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { ManageVaultBalanceVisibility } from '@core/ui/vault/page/balance/visibility/ManageVaultBalanceVisibility'
-import { useVaultTotalBalanceQuery } from '@core/ui/vault/queries/useVaultTotalBalanceQuery'
-import { Image } from '@lib/ui/image/Image'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -12,44 +10,51 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useDefiPortfolioBalance } from '../hooks/useDefiPortfolios'
+
 export const DefiPortfolioBalance = () => {
-  const query = useVaultTotalBalanceQuery()
+  const query = useDefiPortfolioBalance()
   const formatFiatAmount = useFormatFiatAmount()
   const { t } = useTranslation()
 
   return (
     <Container>
-      <ImageWrapper>
-        <Image
-          src="/core/images/defi/homepage-banner.svg"
-          width="100%"
-          height="100%"
-          style={{
-            objectFit: 'cover',
-          }}
+      <BlurEffect />
+      <Content justifyContent="center" flexGrow alignItems="center" gap={12}>
+        <VStack alignItems="center" gap={8}>
+          <MatchQuery
+            value={query}
+            error={() => t('failed_to_load')}
+            pending={() => (
+              <HStack gap={6} alignItems="center">
+                <Spinner size="1.5em" />
+              </HStack>
+            )}
+            success={value => (
+              <Text size={34}>
+                <BalanceVisibilityAware size="l">
+                  {formatFiatAmount(value)}
+                </BalanceVisibilityAware>
+              </Text>
+            )}
+          />
+          <MatchQuery
+            value={query}
+            error={() => null}
+            pending={() => null}
+            success={value => (
+              <Text size={13} color="shy">
+                <BalanceVisibilityAware>
+                  {t('total_balance')} {formatFiatAmount(value)}
+                </BalanceVisibilityAware>
+              </Text>
+            )}
+          />
+        </VStack>
+        <ManageVaultBalanceVisibility
+          hideText={t('hide_defi_balance')}
+          showText={t('show_defi_balance')}
         />
-      </ImageWrapper>
-      <Content alignItems="center" gap={12}>
-        <Text size={18} color="contrast" weight="500">
-          {t('defi_portfolio')}
-        </Text>
-        <MatchQuery
-          value={query}
-          error={() => t('failed_to_load')}
-          pending={() => (
-            <HStack gap={6} alignItems="center">
-              <Spinner size="1.5em" />
-            </HStack>
-          )}
-          success={value => (
-            <Text color="contrast" size={28} centerVertically weight="600">
-              <BalanceVisibilityAware size="l">
-                {formatFiatAmount(value)}
-              </BalanceVisibilityAware>
-            </Text>
-          )}
-        />
-        <ManageVaultBalanceVisibility />
       </Content>
     </Container>
   )
@@ -74,17 +79,25 @@ const Container = styled.div`
 
 const Content = styled(VStack)`
   position: relative;
-  flex: 1;
-  justify-content: center;
 `
 
-const ImageWrapper = styled.div`
-  width: 100%;
+const BlurEffect = styled.div`
   position: absolute;
-  inset: 0;
   border-radius: 16px;
+  border-radius: 350px;
+  height: 130px;
+  width: 350px;
+  opacity: 0.7;
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    rgba(4, 57, 199, 0.5) 0%,
+    rgba(2, 18, 43, 0) 100%
+  );
+  filter: blur(36px);
 
-  & > img {
-    border-radius: 16px;
+  @media ${mediaQuery.tabletDeviceAndUp} {
+    height: 450px;
+    width: 600px;
+    top: -50px;
   }
 `

@@ -1,3 +1,5 @@
+import { Chain } from '@core/chain/Chain'
+import { featureFlags } from '@core/ui/featureFlags'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Tabs } from '@lib/ui/base/Tabs'
 import { IconButton } from '@lib/ui/buttons/IconButton'
@@ -5,8 +7,7 @@ import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { CryptoWalletPenIcon } from '@lib/ui/icons/CryptoWalletPenIcon'
 import { HStack, hStack } from '@lib/ui/layout/Stack'
 import { IsActiveProp, IsDisabledProp } from '@lib/ui/props'
-import { Text } from '@lib/ui/text'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css, useTheme } from 'styled-components'
 
@@ -15,11 +16,34 @@ import { DefiChainPageTab, getDefiChainTabs } from './config'
 
 export const DefiChainTabs = () => {
   const { t } = useTranslation()
-  const [activeTab, setActiveTab] = useState<DefiChainPageTab>('bonded')
+  const chain = useCurrentDefiChain()
+  const includeBonding = chain === Chain.THORChain || chain === Chain.MayaChain
+
+  const defaultTab: DefiChainPageTab = includeBonding
+    ? 'bonded'
+    : featureFlags.defiStakedTab
+      ? 'staked'
+      : 'lps'
+  const [activeTab, setActiveTab] = useState<DefiChainPageTab>(defaultTab)
   const { colors } = useTheme()
   const navigate = useCoreNavigate()
-  const chain = useCurrentDefiChain()
-  const tabs = useMemo(() => getDefiChainTabs(t), [t])
+  const tabs = useMemo(
+    () => getDefiChainTabs(t, { includeBonded: includeBonding }),
+    [t, includeBonding]
+  )
+
+  useEffect(() => {
+    if (!tabs.length) return
+
+    const isActiveTabAvailable = tabs.some(tab => tab.value === activeTab)
+    if (!isActiveTabAvailable) {
+      setActiveTab(tabs[0].value)
+    }
+  }, [tabs, activeTab])
+
+  if (!tabs.length) {
+    return null
+  }
 
   return (
     <Tabs
@@ -28,13 +52,7 @@ export const DefiChainTabs = () => {
       onValueChange={setActiveTab}
       triggerSlot={({ tab: { label, disabled }, isActive, ...props }) => (
         <TriggerItem {...props} isActive={isActive} isDisabled={disabled}>
-          <Text
-            size={14}
-            as="span"
-            color={isActive ? 'contrast' : 'supporting'}
-          >
-            {label}
-          </Text>
+          {label}
         </TriggerItem>
       )}
       triggersContainer={({ children }) => (
@@ -60,7 +78,7 @@ export const DefiChainTabs = () => {
   )
 }
 
-const TabsHeader = styled.div`
+export const TabsHeader = styled.div`
   ${hStack({
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -70,10 +88,13 @@ const TabsHeader = styled.div`
   margin-bottom: 16px;
 `
 
-const TriggerItem = styled(UnstyledButton)<IsActiveProp & IsDisabledProp>`
+export const TriggerItem = styled(UnstyledButton)<
+  IsActiveProp & IsDisabledProp
+>`
   width: fit-content;
   padding-bottom: 6px;
   cursor: pointer;
+  font-size: 14px;
 
   ${hStack({
     alignItems: 'center',
@@ -84,6 +105,7 @@ const TriggerItem = styled(UnstyledButton)<IsActiveProp & IsDisabledProp>`
     isActive &&
     css`
       border-bottom: 1.5px solid ${theme.colors.buttonPrimary.toCssValue()};
+      color: ${theme.colors.contrast.toCssValue()};
     `};
 
   ${({ isDisabled }) =>
