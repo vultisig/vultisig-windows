@@ -21,7 +21,7 @@ If no app is running at `http://localhost:8081`, or hot reload stopped working:
 lsof -ti:8081 | xargs kill -9 2>/dev/null || true
 
 # Start the app
-cd /Users/rodion/vultisig/windows && wails dev
+wails dev
 ```
 
 Run the app in background and wait for it to be ready before testing.
