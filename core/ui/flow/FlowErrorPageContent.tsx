@@ -26,13 +26,7 @@ export const FlowErrorPageContent = ({
         <ErrorFallbackContent {...props} />
       </PageContent>
       <PageFooter>
-        {action ? (
-          action
-        ) : (
-          <Button kind="action" onClick={goBack}>
-            {t('back')}
-          </Button>
-        )}
+        {action ? action : <Button onClick={goBack}>{t('back')}</Button>}
       </PageFooter>
     </>
   )
