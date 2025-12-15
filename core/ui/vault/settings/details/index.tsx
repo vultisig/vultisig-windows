@@ -31,7 +31,7 @@ export const VaultDetailsPage = () => {
           <SaveAsImage
             fileName={`${name}-vault-details`}
             renderTrigger={({ onClick }) => (
-              <IconButton kind="action" onClick={onClick}>
+              <IconButton onClick={onClick}>
                 <ShareIcon />
               </IconButton>
             )}

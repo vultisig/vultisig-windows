@@ -139,7 +139,6 @@ const StyledButton = styled(UnstyledButton)<{
               }
             `}
       `,
-      action: () => css``,
       outlined: () => css`
         ${match(size, {
           sm: () => css`
