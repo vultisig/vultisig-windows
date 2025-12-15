@@ -1,4 +1,4 @@
-import { fromBinary } from '@bufbuild/protobuf'
+import { fromBinary, JsonObject } from '@bufbuild/protobuf'
 import { base64Decode } from '@bufbuild/protobuf/wire'
 import { Animation } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Animation'
 import { Collapse } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Collapse'
@@ -24,6 +24,7 @@ import { MiddleTruncate } from '@lib/ui/truncate'
 import { isHexString } from 'ethers'
 import { FC, Fragment, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { parseConfiguration } from '../utils'
 
 export const PolicyOverview: FC<SignMessageOverview> = ({
   address,
@@ -49,8 +50,15 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
 
   const policy = useMemo(() => {
     const [recipe] = message.split('*#*')
+    const decoded = fromBinary(PolicySchema, base64Decode(recipe))
+    const parsedConfiguration = parseConfiguration(
+      decoded.configuration as JsonObject
+    )
 
-    return fromBinary(PolicySchema, base64Decode(recipe))
+    return {
+      ...decoded,
+      configuration: parsedConfiguration,
+    }
   }, [message])
 
   const executeNavigation = useCallback(() => {
@@ -144,107 +152,33 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
           <>
             {policy.rules?.length > 0 && (
               <Collapse title={t('plugin_rules')}>
-                {policy.rules.map(
-                  ({ parameterConstraints, resource, target }, index) => {
-                    const number = `${index < 9 ? '0' : ''}${index + 1}`
+                {policy.rules.map(({ resource, target }, index) => {
+                  const number = `${index < 9 ? '0' : ''}${index + 1}`
 
-                    return (
-                      <Description key={number}>
-                        <HStack
-                          alignItems="center"
-                          gap={8}
-                          justifyContent="space-between"
-                          wrap="nowrap"
+                  return (
+                    <Description key={number}>
+                      <HStack
+                        alignItems="center"
+                        gap={8}
+                        justifyContent="space-between"
+                        wrap="nowrap"
+                      >
+                        <Text
+                          as="span"
+                          color="shy"
+                          size={12}
+                          weight={500}
+                          nowrap
                         >
-                          <Text
-                            as="span"
-                            color="shy"
-                            size={12}
-                            weight={500}
-                            nowrap
-                          >
-                            {t('resource')}
-                          </Text>
-                          <Text as="span" size={12} weight={500}>
-                            {resource}
-                          </Text>
-                        </HStack>
-                        {parameterConstraints.map(
-                          ({ constraint, parameterName }) => {
-                            const value = String(constraint?.value.value || '')
-
-                            return (
-                              <Fragment key={parameterName}>
-                                <Divider />
-                                <HStack
-                                  alignItems="center"
-                                  gap={8}
-                                  justifyContent="space-between"
-                                  wrap="nowrap"
-                                >
-                                  {constraint?.value.case ? (
-                                    <HStack
-                                      alignItems="center"
-                                      gap={4}
-                                      wrap="nowrap"
-                                    >
-                                      <Text
-                                        as="span"
-                                        color="shy"
-                                        size={12}
-                                        weight={500}
-                                        nowrap
-                                      >
-                                        {snakeCaseToTitle(parameterName)}
-                                      </Text>
-                                      <Text
-                                        as="span"
-                                        color="shy"
-                                        size={10}
-                                        weight={500}
-                                        nowrap
-                                      >
-                                        {`(${snakeCaseToTitle(constraint.value.case)})`}
-                                      </Text>
-                                    </HStack>
-                                  ) : (
-                                    <Text
-                                      as="span"
-                                      color="shy"
-                                      size={12}
-                                      weight={500}
-                                      cropped
-                                      nowrap
-                                    >
-                                      {snakeCaseToTitle(parameterName)}
-                                    </Text>
-                                  )}
-                                  {isHexString(value) ? (
-                                    <MiddleTruncate
-                                      justifyContent="end"
-                                      size={12}
-                                      text={value}
-                                      weight={500}
-                                      flexGrow
-                                    />
-                                  ) : (
-                                    <Text
-                                      as="span"
-                                      size={12}
-                                      weight={500}
-                                      cropped
-                                      nowrap
-                                    >
-                                      {value}
-                                    </Text>
-                                  )}
-                                </HStack>
-                              </Fragment>
-                            )
-                          }
-                        )}
-                        {target ? (
-                          <>
+                          {t('resource')}
+                        </Text>
+                        <Text as="span" size={12} weight={500}>
+                          {resource}
+                        </Text>
+                      </HStack>
+                      {policy.configuration.map(({ key, value }) => {
+                        return (
+                          <Fragment key={key}>
                             <Divider />
                             <HStack
                               alignItems="center"
@@ -252,32 +186,7 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
                               justifyContent="space-between"
                               wrap="nowrap"
                             >
-                              {target.target.case ? (
-                                <HStack
-                                  alignItems="center"
-                                  gap={4}
-                                  wrap="nowrap"
-                                >
-                                  <Text
-                                    as="span"
-                                    color="shy"
-                                    size={12}
-                                    weight={500}
-                                    nowrap
-                                  >
-                                    {t('target')}
-                                  </Text>
-                                  <Text
-                                    as="span"
-                                    color="shy"
-                                    size={10}
-                                    weight={500}
-                                    nowrap
-                                  >
-                                    {`(${snakeCaseToTitle(target.target.case)})`}
-                                  </Text>
-                                </HStack>
-                              ) : (
+                              <HStack alignItems="center" gap={4} wrap="nowrap">
                                 <Text
                                   as="span"
                                   color="shy"
@@ -285,14 +194,14 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
                                   weight={500}
                                   nowrap
                                 >
-                                  {t('target')}
+                                  {snakeCaseToTitle(key)}
                                 </Text>
-                              )}
-                              {isHexString(target.target.value) ? (
+                              </HStack>
+                              {isHexString(value) ? (
                                 <MiddleTruncate
                                   justifyContent="end"
                                   size={12}
-                                  text={target.target.value}
+                                  text={value}
                                   weight={500}
                                   flexGrow
                                 />
@@ -304,18 +213,81 @@ export const PolicyOverview: FC<SignMessageOverview> = ({
                                   cropped
                                   nowrap
                                 >
-                                  {target.target.value || '-'}
+                                  {value}
                                 </Text>
                               )}
                             </HStack>
-                          </>
-                        ) : (
-                          <></>
-                        )}
-                      </Description>
-                    )
-                  }
-                )}
+                          </Fragment>
+                        )
+                      })}
+                      {target ? (
+                        <>
+                          <Divider />
+                          <HStack
+                            alignItems="center"
+                            gap={8}
+                            justifyContent="space-between"
+                            wrap="nowrap"
+                          >
+                            {target.target.case ? (
+                              <HStack alignItems="center" gap={4} wrap="nowrap">
+                                <Text
+                                  as="span"
+                                  color="shy"
+                                  size={12}
+                                  weight={500}
+                                  nowrap
+                                >
+                                  {t('target')}
+                                </Text>
+                                <Text
+                                  as="span"
+                                  color="shy"
+                                  size={10}
+                                  weight={500}
+                                  nowrap
+                                >
+                                  {`(${snakeCaseToTitle(target.target.case)})`}
+                                </Text>
+                              </HStack>
+                            ) : (
+                              <Text
+                                as="span"
+                                color="shy"
+                                size={12}
+                                weight={500}
+                                nowrap
+                              >
+                                {t('target')}
+                              </Text>
+                            )}
+                            {isHexString(target.target.value) ? (
+                              <MiddleTruncate
+                                justifyContent="end"
+                                size={12}
+                                text={target.target.value}
+                                weight={500}
+                                flexGrow
+                              />
+                            ) : (
+                              <Text
+                                as="span"
+                                size={12}
+                                weight={500}
+                                cropped
+                                nowrap
+                              >
+                                {target.target.value || '-'}
+                              </Text>
+                            )}
+                          </HStack>
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                    </Description>
+                  )
+                })}
               </Collapse>
             )}
             <Collapse title={t(`message`)}>
