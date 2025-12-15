@@ -43,7 +43,10 @@ export const VaultChainPage = () => {
           secondaryControls={
             <HStack gap={4} alignItems="center">
               <RefreshVaultChainBalance />
-              <IconButton onClick={() => openUrl(blockExplorerUrl)}>
+              <IconButton
+                kind="action"
+                onClick={() => openUrl(blockExplorerUrl)}
+              >
                 <IconWrapper size={24}>
                   <ArCubeIcon />
                 </IconWrapper>

@@ -32,7 +32,7 @@ export const RefreshVaultChainBalance = () => {
   })
 
   return (
-    <IconButton loading={isPending} onClick={() => refresh()}>
+    <IconButton kind="action" loading={isPending} onClick={() => refresh()}>
       <IconWrapper size={24}>
         <RefreshCwIcon />
       </IconWrapper>
