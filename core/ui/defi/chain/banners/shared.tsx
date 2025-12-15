@@ -6,18 +6,16 @@ import styled from 'styled-components'
 
 export const BannerContainer = styled.div`
   padding: 24px;
-  border-radius: 20px;
-  border: 1px solid ${getColor('foregroundExtra')};
-  background:
-    radial-gradient(
-      circle at 30% 20%,
-      rgba(50, 120, 255, 0.2),
-      transparent 50%
-    ),
-    linear-gradient(140deg, rgba(8, 18, 43, 0.95) 0%, rgba(9, 28, 64, 0.9) 100%);
   position: relative;
   overflow: hidden;
   min-height: 122px;
+  border-radius: 16px;
+  border: 1px solid rgba(52, 230, 191, 0.17);
+  background: linear-gradient(
+    180deg,
+    rgba(52, 230, 191, 0.09) 0%,
+    rgba(29, 128, 106, 0) 100%
+  );
 `
 
 export const BannerContent = styled(VStack)`
