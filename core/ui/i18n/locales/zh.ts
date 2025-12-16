@@ -839,7 +839,7 @@ export const zh = {
   select_chain: '选择链',
   select_chains: '选择',
   select_positions: '选择仓位',
-  select_positions_description: '启用仓位以查看余额并管理资产。',
+  select_positions_description: '启用至少一个仓位以查看余额并管理仓位。',
   no_positions_found: '未找到头寸',
   no_positions_selected: '未选择仓位',
   no_positions_selected_description:

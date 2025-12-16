@@ -76,9 +76,7 @@ export const VaultPageHeader = ({
             {t('portfolio_balance')}
           </Text>
           <Text size={14}>
-            <BalanceVisibilityAware size="m">
-              {formattedBalance}
-            </BalanceVisibilityAware>
+            <BalanceVisibilityAware>{formattedBalance}</BalanceVisibilityAware>
           </Text>
         </VStack>
       </CollapsedContent>

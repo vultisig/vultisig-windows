@@ -81,8 +81,8 @@ export const ManageDefiPositionsPage = () => {
   return (
     <VStack fullHeight>
       <PageHeader
-        primaryControls={<PageHeaderBackButton onClick={() => goBack()} />}
-        secondaryControls={<DoneButton onClick={() => goBack()} />}
+        primaryControls={<PageHeaderBackButton onClick={goBack} />}
+        secondaryControls={<DoneButton onClick={goBack} />}
         title={t('select_positions')}
         hasBorder
       />
@@ -101,8 +101,8 @@ export const ManageDefiPositionsPage = () => {
         {hasResults ? (
           <VStack gap={24}>
             {sections.map(section => (
-              <VStack key={section.title} gap={12}>
-                <Text size={14} weight="600" color="shy">
+              <VStack key={section.title} gap={8}>
+                <Text size={13} color="shy">
                   {section.title}
                 </Text>
                 <ItemGrid>

@@ -3,13 +3,12 @@ import {
   useRemoveAllVaultAppSessionsMutation,
   useRemoveVaultAppSessionMutation,
 } from '@core/extension/storage/hooks/appSessions'
-import { useCore } from '@core/ui/state/core'
+import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useAssertCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
-import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { DAppsIcon } from '@lib/ui/icons/DAppsIcon'
 import { LinkTwoOffIcon } from '@lib/ui/icons/LinkTwoOffIcon'
 import { ContainImage } from '@lib/ui/images/ContainImage'
@@ -37,16 +36,11 @@ export const ConnectedDappsPage = () => {
   const { mutate: removeAllSessions } = useRemoveAllVaultAppSessionsMutation()
   const sessionsArray = Object.entries(sessions)
   const vaultId = useAssertCurrentVaultId()
-  const { goBack } = useCore()
 
   return (
     <VStack fullHeight>
       <PageHeader
-        primaryControls={
-          <IconButton onClick={goBack}>
-            <ChevronLeftIcon />
-          </IconButton>
-        }
+        primaryControls={<PageHeaderBackButton />}
         title={
           <Text color="contrast" size={18} weight={500}>
             {t('connected_dapps')}

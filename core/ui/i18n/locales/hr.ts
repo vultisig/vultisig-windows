@@ -913,7 +913,7 @@ export const hr = {
   select_chains: 'Odaberite',
   select_positions: 'Odaberite pozicije',
   select_positions_description:
-    'Omogućite pozicije za prikaz stanja i upravljanje imovinom.',
+    'Omogućite barem jednu poziciju za prikaz stanja i upravljanje pozicijama.',
   liquidity_pools: 'Likvidnosni bazeni',
   locked_in_defi: 'Zaključano u DeFi',
   total_bonded: 'Ukupno vezano {{ticker}}',
