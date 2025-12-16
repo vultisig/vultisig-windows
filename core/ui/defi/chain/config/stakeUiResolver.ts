@@ -45,8 +45,8 @@ const stakeActionByChain: Partial<
   [Chain.MayaChain]: ({ translate }) => ({
     stakeAction: 'add_cacao_pool',
     unstakeAction: 'remove_cacao_pool',
-    stakeLabel: translate('add_cacao_pool'),
-    unstakeLabel: translate('remove_cacao_pool'),
+    stakeLabel: translate('defi_add'),
+    unstakeLabel: translate('defi_remove'),
   }),
 }
 
@@ -71,6 +71,17 @@ export const resolveStakeActions = ({
   const base = resolver
     ? resolver({ chain, position, translate })
     : defaultActions
+
+  if (
+    chain === Chain.THORChain &&
+    (position.id === 'thor-stake-yrune' || position.id === 'thor-stake-ytcy')
+  ) {
+    return {
+      ...base,
+      stakeLabel: translate('mint'),
+      unstakeLabel: translate('redeem'),
+    }
+  }
 
   // Index tokens should not allow stake/unstake from UI
   if (position.type === 'index') {
