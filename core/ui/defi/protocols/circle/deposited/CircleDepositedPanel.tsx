@@ -1,5 +1,6 @@
 import { usdc } from '@core/chain/coin/knownTokens'
 import { Button } from '@lib/ui/buttons/Button'
+import { LineSeparator } from '@lib/ui/layout/LineSeparator'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -36,7 +37,7 @@ export const CircleDepositedPanel = () => {
           </Text>
         </VStack>
       </HStack>
-      <Separator />
+      <LineSeparator kind="regular" />
       {circleAccount ? (
         <Button>
           {t('circle.deposit')} {usdc.ticker}
@@ -55,9 +56,4 @@ const Container = styled.div`
   ${vStack({
     gap: 16,
   })}
-`
-
-const Separator = styled.div`
-  height: 1px;
-  background: ${getColor('foregroundExtra')};
 `
