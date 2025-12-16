@@ -168,6 +168,13 @@ export const en = {
   close: 'Close',
   coin_not_found_in_current_vault: 'Coin not found in current vault',
   coin_not_found_in_any_vault: '{{ticker}} on {{chain}} not found in any vault',
+  defi_token_required: '{{ticker}} is not in this vault',
+  defi_token_required_description:
+    'Add {{ticker}} to this vault from Manage Tokens to stake, unstake, or bond.',
+  defi_add_chain_to_vault_title: 'Add the chain to your vault first',
+  defi_add_chain_to_vault_description:
+    'Enable a chain in your vault to manage its DeFi positions here.',
+  manage_tokens: 'Manage tokens',
   collected_rewards: 'Collected rewards',
   coming_soon: 'Coming Soon',
   complete: 'Complete',

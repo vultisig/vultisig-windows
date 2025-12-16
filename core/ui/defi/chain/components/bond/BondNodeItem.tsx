@@ -13,8 +13,10 @@ import { RefreshCwIcon } from '@lib/ui/icons/RefreshCwIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
+import { CSSProperties, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -31,6 +33,7 @@ type Props = {
   canUnbond: boolean
   fiatValue: number
   isBondingDisabled?: boolean
+  actionsDisabledReason?: string
 }
 
 const Divider = styled.div`
@@ -70,6 +73,7 @@ export const BondNodeItem = ({
   canUnbond,
   fiatValue,
   isBondingDisabled,
+  actionsDisabledReason,
 }: Props) => {
   const { t, i18n } = useTranslation()
   const formatFiatAmount = useFormatFiatAmount()
@@ -78,6 +82,32 @@ export const BondNodeItem = ({
   const statusColor = isActive ? 'success' : 'idle'
 
   const truncatedAddress = formatWalletAddress(nodeAddress)
+  const unbondDisabled = !canUnbond || Boolean(isBondingDisabled)
+  const bondDisabled = Boolean(isBondingDisabled)
+
+  const renderAction = (
+    action: ReactNode,
+    wrapperStyle?: CSSProperties
+  ): ReactNode =>
+    actionsDisabledReason ? (
+      <Tooltip
+        content={actionsDisabledReason}
+        renderOpener={({ ref, ...props }) => (
+          <div
+            ref={ref as any}
+            {...props}
+            style={{
+              display: 'flex',
+              ...(wrapperStyle ?? {}),
+            }}
+          >
+            {action}
+          </div>
+        )}
+      />
+    ) : (
+      action
+    )
 
   return (
     <VStack gap={12}>
@@ -161,25 +191,37 @@ export const BondNodeItem = ({
 
       {/* Action Buttons */}
       <ButtonRow>
-        <Button
-          kind="secondary"
-          onClick={onUnbond}
-          disabled={!canUnbond}
-          icon={<RefreshCwIcon />}
-          style={{ flex: 1 }}
-        >
-          {t('unbond')}
-        </Button>
-        <Button
-          kind="primary"
-          onClick={onBond}
-          icon={<LinkIcon />}
-          style={{ flex: 1 }}
-          disabled={isBondingDisabled}
-        >
-          {t('bond')}
-        </Button>
+        {renderAction(
+          <Button
+            kind="secondary"
+            onClick={onUnbond}
+            disabled={unbondDisabled}
+            icon={<RefreshCwIcon />}
+            style={{ flex: 1 }}
+          >
+            {t('unbond')}
+          </Button>,
+          { flex: 1 }
+        )}
+        {renderAction(
+          <Button
+            kind="primary"
+            onClick={onBond}
+            icon={<LinkIcon />}
+            style={{ flex: 1 }}
+            disabled={bondDisabled}
+          >
+            {t('bond')}
+          </Button>,
+          { flex: 1 }
+        )}
       </ButtonRow>
+
+      {actionsDisabledReason ? (
+        <Text size={12} color="warning">
+          {actionsDisabledReason}
+        </Text>
+      ) : null}
 
       {/* Wait message for active nodes */}
       {!canUnbond && (

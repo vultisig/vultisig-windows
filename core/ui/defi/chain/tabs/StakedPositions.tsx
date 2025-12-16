@@ -1,6 +1,8 @@
 import { Chain } from '@core/chain/Chain'
+import { areEqualCoins } from '@core/chain/coin/Coin'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useDefiPositions } from '@core/ui/storage/defiPositions'
+import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -23,6 +25,7 @@ export const StakedPositions = () => {
   const selectedPositions = useDefiPositions(chain)
   const { data, isPending, error } = useDefiChainPositionsQuery(chain)
   const navigate = useCoreNavigate()
+  const vaultCoins = useCurrentVaultCoins()
   const { t } = useTranslation()
   const translate = (key: string, params?: Record<string, unknown>) =>
     t(key as any, params as any) as string
@@ -64,9 +67,10 @@ export const StakedPositions = () => {
       | 'unstake'
       | 'withdraw_ruji_rewards'
       | 'add_cacao_pool'
-      | 'remove_cacao_pool'
+      | 'remove_cacao_pool',
+    isDisabled: boolean
   ) => {
-    if (actionsDisabled) return
+    if (actionsDisabled || isDisabled) return
 
     const token = resolveStakeToken(chain, id)
 
@@ -116,6 +120,12 @@ export const StakedPositions = () => {
       {isPending && positions.length > 0 && <Spinner />}
       {positions.map(position => {
         const token = resolveStakeToken(chain, position.id)
+        const hasRequiredCoin = vaultCoins.some(current =>
+          areEqualCoins(current, token)
+        )
+        const actionsDisabledReason = hasRequiredCoin
+          ? undefined
+          : t('defi_token_required', { ticker: token.ticker })
         const {
           stakeAction,
           unstakeAction,
@@ -127,7 +137,18 @@ export const StakedPositions = () => {
           position,
           translate: key => t(key as any),
         })
-        const cardActionsDisabled = actionsDisabled || resolverDisabled
+        const cardActionsDisabled =
+          actionsDisabled || resolverDisabled || !hasRequiredCoin
+
+        const handleNavigate = (
+          action:
+            | 'stake'
+            | 'unstake'
+            | 'withdraw_ruji_rewards'
+            | 'add_cacao_pool'
+            | 'remove_cacao_pool'
+        ) => navigateTo(position.id, action, cardActionsDisabled)
+
         return (
           <StakeCard
             key={position.id}
@@ -146,15 +167,16 @@ export const StakedPositions = () => {
             rewardTicker={position.rewardTicker}
             nextPayout={position.nextPayout}
             actionsDisabled={cardActionsDisabled}
+            actionsDisabledReason={actionsDisabledReason}
             canUnstake={position.canUnstake}
             unstakeAvailableDate={position.unstakeAvailableDate}
             stakeLabel={stakeLabel}
             unstakeLabel={unstakeLabel}
-            onStake={() => navigateTo(position.id, stakeAction)}
-            onUnstake={() => navigateTo(position.id, unstakeAction)}
+            onStake={() => handleNavigate(stakeAction)}
+            onUnstake={() => handleNavigate(unstakeAction)}
             onWithdrawRewards={
               position.rewards && position.rewards > 0
-                ? () => navigateTo(position.id, 'withdraw_ruji_rewards')
+                ? () => handleNavigate('withdraw_ruji_rewards')
                 : undefined
             }
           />
