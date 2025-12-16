@@ -12,7 +12,7 @@ export const CircleBanner = () => {
   const { t } = useTranslation()
 
   return (
-    <BannerContainer>
+    <Container>
       <Logo fontSize={166} />
       <BannerContent gap={8}>
         <Text size={18} color="contrast">
@@ -22,9 +22,18 @@ export const CircleBanner = () => {
           <CircleAccountFiatBalance />
         </Text>
       </BannerContent>
-    </BannerContainer>
+    </Container>
   )
 }
+
+const Container = styled(BannerContainer)`
+  border: 1px solid rgba(176, 144, 245, 0.17);
+  background: linear-gradient(
+    180deg,
+    rgba(95, 191, 255, 0.09) 0%,
+    rgba(95, 191, 255, 0) 100%
+  );
+`
 
 const Logo = styled(CircleBannerLogo)`
   position: absolute;
