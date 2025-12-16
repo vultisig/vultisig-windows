@@ -926,7 +926,7 @@ export const es = {
   select_chains: 'Seleccionar',
   select_positions: 'Seleccionar posiciones',
   select_positions_description:
-    'Activa posiciones para ver saldos y gestionar activos.',
+    'Activa al menos una posición para ver saldos y gestionar posiciones.',
   liquidity_pools: 'Pools de liquidez',
   locked_in_defi: 'Bloqueado en DeFi',
   total_bonded: 'Total vinculado {{ticker}}',

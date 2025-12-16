@@ -882,7 +882,7 @@ export const en = {
   select_chains: 'Select',
   select_positions: 'Select positions',
   select_positions_description:
-    'Enable positions to view balances and manage assets.',
+    'Enable at least one position to view balances and manage positions.',
   compounded_token: 'Compounded {{ticker}}',
   select_destination_chain: 'Select Destination Chain',
   select_n_devices_one: 'Select {{count}} device',
