@@ -1,3 +1,4 @@
+import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
 import { processSignature } from '@clients/extension/src/inpage/providers/ethereum'
 import { Chain } from '@core/chain/Chain'
 import { callPopup } from '@core/inpage-provider/popup'
@@ -19,6 +20,13 @@ export class Plugin extends EventEmitter {
         SignMessageType,
         string | undefined,
       ]) => {
+        if (type === 'policy' && (!pluginId || pluginId.trim() === '')) {
+          const error = new EIP1193Error('InvalidParams')
+          error.message =
+            'Invalid params: pluginId is required when type === "policy"'
+          throw error
+        }
+
         const signature = await callPopup(
           {
             signMessage: {

@@ -1,4 +1,4 @@
-import { fromBinary, JsonObject } from '@bufbuild/protobuf'
+import { fromBinary } from '@bufbuild/protobuf'
 import { base64Decode } from '@bufbuild/protobuf/wire'
 import { Animation } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Animation'
 import { Collapse } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Collapse'
@@ -31,7 +31,14 @@ import { FC, Fragment, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { PopupDeadEnd } from '../../../flow/PopupDeadEnd'
-import { parseConfiguration } from '../utils'
+import { parseConfiguration, ParsedConfigurationRow } from '../utils'
+
+type ParsedPolicy = Omit<
+  ReturnType<typeof fromBinary<typeof PolicySchema>>,
+  'configuration'
+> & {
+  configuration: ParsedConfigurationRow[]
+}
 
 export const PolicyOverview: FC<
   SignMessageOverview & { pluginId: string; pluginMarketplaceBaseUrl: string }
@@ -68,14 +75,12 @@ export const PolicyOverview: FC<
     const [recipe] = message.split('*#*')
     const decoded = fromBinary(PolicySchema, base64Decode(recipe))
 
-    const parsedConfiguration = parseConfiguration(
-      decoded.configuration as JsonObject
-    )
+    const parsedConfiguration = parseConfiguration(decoded.configuration ?? {})
 
     return {
       ...decoded,
       configuration: parsedConfiguration,
-    }
+    } satisfies ParsedPolicy
   }, [message])
 
   const executeNavigation = useCallback(() => {

@@ -3,7 +3,7 @@ import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 
-type ParsedConfigurationRow = {
+export type ParsedConfigurationRow = {
   key: string
   value: string
 }
