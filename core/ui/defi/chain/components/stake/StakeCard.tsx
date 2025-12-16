@@ -13,8 +13,9 @@ import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { formatAmount } from '@lib/utils/formatAmount'
-import { ButtonHTMLAttributes } from 'react'
+import { ButtonHTMLAttributes, CSSProperties, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
@@ -143,6 +144,7 @@ type Props = {
   unstakeLabel?: string
   isSkeleton?: boolean
   actionsDisabled?: boolean
+  actionsDisabledReason?: string
 }
 
 export const StakeCard = ({
@@ -165,6 +167,7 @@ export const StakeCard = ({
   unstakeLabel: _unstakeLabel,
   isSkeleton,
   actionsDisabled,
+  actionsDisabledReason,
 }: Props) => {
   const { t, i18n } = useTranslation()
   const formatFiatAmount = useFormatFiatAmount()
@@ -176,6 +179,30 @@ export const StakeCard = ({
           date: formatDateShort(unstakeAvailableDate, i18n.language),
         })
       : undefined
+
+  const renderAction = (
+    action: ReactNode,
+    wrapperStyle?: CSSProperties
+  ): ReactNode =>
+    actionsDisabledReason ? (
+      <Tooltip
+        content={actionsDisabledReason}
+        renderOpener={({ ref, ...props }) => (
+          <div
+            ref={ref as any}
+            {...props}
+            style={{
+              display: 'flex',
+              ...(wrapperStyle ?? {}),
+            }}
+          >
+            {action}
+          </div>
+        )}
+      />
+    ) : (
+      action
+    )
 
   return (
     <Card>
@@ -261,24 +288,27 @@ export const StakeCard = ({
         <Divider />
 
         <StatRow>
-          {rewards !== undefined && rewards > 0 ? (
-            <ActionButton
-              variant="primary"
-              onClick={onWithdrawRewards}
-              disabled={actionsDisabled}
-              style={{ width: '100%' }}
-            >
-              <ActionIcon variant="primary">
-                <CircleMinusIcon />
-              </ActionIcon>
-              <Text as="span" size={14} weight="600" color="contrast">
-                {t('withdraw')}{' '}
-                {formatAmount(rewards, {
-                  ticker: rewardTicker ?? coin.ticker,
-                })}
-              </Text>
-            </ActionButton>
-          ) : null}
+          {rewards !== undefined && rewards > 0
+            ? renderAction(
+                <ActionButton
+                  variant="primary"
+                  onClick={onWithdrawRewards}
+                  disabled={actionsDisabled}
+                  style={{ width: '100%' }}
+                >
+                  <ActionIcon variant="primary">
+                    <CircleMinusIcon />
+                  </ActionIcon>
+                  <Text as="span" size={14} weight="600" color="contrast">
+                    {t('withdraw')}{' '}
+                    {formatAmount(rewards, {
+                      ticker: rewardTicker ?? coin.ticker,
+                    })}
+                  </Text>
+                </ActionButton>,
+                { width: '100%' }
+              )
+            : null}
         </StatRow>
 
         <ActionsRow>
@@ -289,31 +319,42 @@ export const StakeCard = ({
             </>
           ) : (
             <>
-              <ActionButton
-                variant="secondary"
-                onClick={onUnstake}
-                style={{ flex: 1 }}
-                disabled={unstakeDisabled}
-              >
-                <ActionIcon variant="secondary">
-                  <CircleMinusIcon />
-                </ActionIcon>
-                {_unstakeLabel ?? t('unstake')}
-              </ActionButton>
-              <ActionButton
-                variant="primary"
-                onClick={onStake}
-                style={{ flex: 1 }}
-                disabled={actionsDisabled}
-              >
-                <ActionIcon variant="primary">
-                  <CirclePlusIcon />
-                </ActionIcon>
-                {_stakeLabel ?? t('stake')}
-              </ActionButton>
+              {renderAction(
+                <ActionButton
+                  variant="secondary"
+                  onClick={onUnstake}
+                  style={{ flex: 1 }}
+                  disabled={unstakeDisabled}
+                >
+                  <ActionIcon variant="secondary">
+                    <CircleMinusIcon />
+                  </ActionIcon>
+                  {_unstakeLabel ?? t('unstake')}
+                </ActionButton>,
+                { flex: 1 }
+              )}
+              {renderAction(
+                <ActionButton
+                  variant="primary"
+                  onClick={onStake}
+                  style={{ flex: 1 }}
+                  disabled={actionsDisabled}
+                >
+                  <ActionIcon variant="primary">
+                    <CirclePlusIcon />
+                  </ActionIcon>
+                  {_stakeLabel ?? t('stake')}
+                </ActionButton>,
+                { flex: 1 }
+              )}
             </>
           )}
         </ActionsRow>
+        {actionsDisabledReason ? (
+          <Text size={12} color="warning">
+            {actionsDisabledReason}
+          </Text>
+        ) : null}
         {unstakeMessage ? (
           <Text size={12} color="shy">
             {unstakeMessage}
