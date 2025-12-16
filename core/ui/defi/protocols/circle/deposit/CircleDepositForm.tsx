@@ -11,33 +11,37 @@ import { HStack, vStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { formatAmount } from '@lib/utils/formatAmount'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { CircleDepositAmountInput } from './CircleDepositAmountInput'
 import { CircleDepositPercentageSelector } from './CircleDepositPercentageSelector'
 
-type CircleDepositFormProps = {
-  amount: bigint | null
-  onAmountChange: (amount: bigint | null) => void
-  onSubmit: () => void
-}
-
-export const CircleDepositForm = ({
-  amount,
-  onAmountChange,
-  onSubmit,
-}: CircleDepositFormProps) => {
+export const CircleDepositForm = () => {
   const { t } = useTranslation()
+  const [amount, setAmount] = useState<bigint | null>(null)
   const address = useCurrentVaultAddress(Chain.Ethereum)
   const balanceQuery = useBalanceQuery(
     extractAccountCoinKey({ ...usdc, address })
   )
 
-  const isDisabled = amount === null || amount === 0n
+  const balance = balanceQuery.data
+  const isAmountExceedsBalance =
+    amount !== null && balance !== undefined && amount > balance
+
+  const isDisabled = (() => {
+    if (amount === null || amount === 0n) return true
+    if (isAmountExceedsBalance) return t('send_amount_exceeds_balance')
+    return false
+  })()
+
+  const handleSubmit = () => {
+    console.log('Deposit amount:', amount)
+  }
 
   return (
-    <Form {...getFormProps({ onSubmit, isDisabled })}>
+    <Form {...getFormProps({ onSubmit: handleSubmit, isDisabled })}>
       <AmountContainer>
         <HStack justifyContent="space-between" alignItems="center">
           <Text size={14} weight="500">
@@ -46,7 +50,7 @@ export const CircleDepositForm = ({
         </HStack>
         <LineSeparator kind="regular" />
         <AmountInputWrapper>
-          <CircleDepositAmountInput value={amount} onChange={onAmountChange} />
+          <CircleDepositAmountInput value={amount} onChange={setAmount} />
           <PercentageText size={15} color="shy" $visible={amount !== null}>
             {amount !== null && balanceQuery.data
               ? `${Math.round((Number(amount) / Number(balanceQuery.data)) * 100)}%`
@@ -56,7 +60,7 @@ export const CircleDepositForm = ({
         <CircleDepositPercentageSelector
           balance={balanceQuery.data ?? null}
           currentAmount={amount}
-          onSelect={onAmountChange}
+          onSelect={setAmount}
         />
         <HStack justifyContent="space-between" alignItems="center">
           <Text size={14} weight="500">

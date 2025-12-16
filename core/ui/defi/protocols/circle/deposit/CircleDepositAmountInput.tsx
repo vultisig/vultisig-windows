@@ -1,5 +1,6 @@
 import { usdc } from '@core/chain/coin/knownTokens'
 import { HStack } from '@lib/ui/layout/Stack'
+import { InputProps } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { bigIntToDecimalString } from '@lib/utils/bigint/bigIntToDecimalString'
 import { decimalStringToBigInt } from '@lib/utils/bigint/decimalStringToBigInt'
@@ -13,10 +14,7 @@ import {
 } from 'react'
 import styled from 'styled-components'
 
-type CircleDepositAmountInputProps = {
-  value: bigint | null
-  onChange: (value: bigint | null) => void
-}
+type CircleDepositAmountInputProps = InputProps<bigint | null>
 
 const placeholder = formatAmount(0)
 

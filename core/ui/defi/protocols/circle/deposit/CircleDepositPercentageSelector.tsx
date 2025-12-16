@@ -38,10 +38,10 @@ export const CircleDepositPercentageSelector = ({
       {percentages.map(percentage => (
         <PercentageButton
           key={percentage}
-          isActive={isActive(percentage)}
+          $isActive={isActive(percentage)}
           onClick={() => onSelect(multiplyBigInt(balance, percentage))}
         >
-          <Text size={12} weight="500" color="shy">
+          <Text size={12} weight="500" color="shyExtra">
             {percentage === 1 ? t('max') : `${Math.round(percentage * 100)}%`}
           </Text>
         </PercentageButton>
@@ -50,12 +50,14 @@ export const CircleDepositPercentageSelector = ({
   )
 }
 
-const PercentageButton = styled(UnstyledButton)<{ isActive: boolean }>`
+const PercentageButton = styled(UnstyledButton)<{ $isActive: boolean }>`
   flex: 1;
   padding: 4px 16px;
   border-radius: 99px;
   border: 1px solid ${getColor('foregroundExtra')};
-  background-color: ${({ isActive }) =>
-    isActive ? getColor('buttonPrimary') : getColor('background')};
+  background-color: ${({ $isActive, theme }) =>
+    $isActive
+      ? theme.colors.buttonPrimary.toCssValue()
+      : theme.colors.background.toCssValue()};
   ${centerContent}
 `

@@ -14,20 +14,14 @@ import { CircleWithdrawButton } from '../components/CircleWithdrawButton'
 import { OpenCircleAccount } from '../components/OpenCircleAccount'
 import { useCircleAccountQuery } from '../queries/circleAccount'
 import { useCircleAccountUsdcBalanceQuery } from '../queries/circleAccountUsdcBalance'
+import { useCircleViewState } from '../state/circleViewState'
 import { CircleAccountBalance } from './CircleAccountBalance'
 
-type CircleDepositedPanelProps = {
-  onDeposit: () => void
-  onWithdraw: () => void
-}
-
-export const CircleDepositedPanel = ({
-  onDeposit,
-  onWithdraw,
-}: CircleDepositedPanelProps) => {
+export const CircleDepositedPanel = () => {
   const { data: circleAccount } = useCircleAccountQuery()
   const { data: circleBalance } = useCircleAccountUsdcBalanceQuery()
   const { t } = useTranslation()
+  const [, setViewState] = useCircleViewState()
 
   const hasBalance = circleBalance !== undefined && circleBalance > 0n
 
@@ -53,10 +47,10 @@ export const CircleDepositedPanel = ({
       <LineSeparator kind="regular" />
       {circleAccount ? (
         <VStack gap={8}>
-          <Button onClick={onDeposit}>
+          <Button onClick={() => setViewState('deposit')}>
             {t('circle.deposit')} {usdc.ticker}
           </Button>
-          {hasBalance && <CircleWithdrawButton onClick={onWithdraw} />}
+          {hasBalance && <CircleWithdrawButton />}
         </VStack>
       ) : (
         <OpenCircleAccount />

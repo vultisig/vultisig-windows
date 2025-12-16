@@ -4,7 +4,6 @@ import { PercentIcon } from '@lib/ui/icons/PercentIcon'
 import { TrophyIcon } from '@lib/ui/icons/TrophyIcon'
 import { LineSeparator } from '@lib/ui/layout/LineSeparator'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
-import { OnClickProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
@@ -16,11 +15,7 @@ import { CircleWithdrawButton } from './CircleWithdrawButton'
 const mockTotalRewards = 1293230000n
 const mockCurrentRewards = 428250000n
 
-type CircleYieldDetailsProps = {
-  onWithdraw: OnClickProp['onClick']
-}
-
-export const CircleYieldDetails = ({ onWithdraw }: CircleYieldDetailsProps) => {
+export const CircleYieldDetails = () => {
   const { t } = useTranslation()
 
   return (
@@ -59,7 +54,7 @@ export const CircleYieldDetails = ({ onWithdraw }: CircleYieldDetailsProps) => {
           />
         </HStack>
 
-        <CircleWithdrawButton onClick={onWithdraw} />
+        <CircleWithdrawButton />
       </VStack>
     </Container>
   )

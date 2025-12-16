@@ -7,15 +7,7 @@ import { InfoBanner } from './components/InfoBanner'
 import { CircleDepositedPanel } from './deposited/CircleDepositedPanel'
 import { useCircleAccountQuery } from './queries/circleAccount'
 
-type CircleContentProps = {
-  onDeposit: () => void
-  onWithdraw: () => void
-}
-
-export const CircleContent = ({
-  onDeposit,
-  onWithdraw,
-}: CircleContentProps) => {
+export const CircleContent = () => {
   const { t } = useTranslation()
   const accountQuery = useCircleAccountQuery()
 
@@ -25,8 +17,8 @@ export const CircleContent = ({
         {t('circle.introduction')}
       </Text>
       <InfoBanner />
-      <CircleDepositedPanel onDeposit={onDeposit} onWithdraw={onWithdraw} />
-      {accountQuery.data && <CircleYieldDetails onWithdraw={onWithdraw} />}
+      <CircleDepositedPanel />
+      {accountQuery.data && <CircleYieldDetails />}
     </VStack>
   )
 }
