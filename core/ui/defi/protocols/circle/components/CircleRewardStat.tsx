@@ -1,4 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { usdc } from '@core/chain/coin/knownTokens'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { IconProp, TitleProp, ValueProp } from '@lib/ui/props'
@@ -13,16 +14,14 @@ type CircleRewardStatProps = IconProp &
     kind?: CircleRewardStatKind
   }
 
-const usdcDecimals = 6
-
 export const CircleRewardStat = ({
   icon,
   title,
   value,
   kind = 'regular',
 }: CircleRewardStatProps) => {
-  const formattedValue = formatAmount(fromChainAmount(value, usdcDecimals), {
-    ticker: 'USDC',
+  const formattedValue = formatAmount(fromChainAmount(value, usdc.decimals), {
+    ticker: usdc.ticker,
   })
 
   return (
