@@ -29,7 +29,9 @@ export const SearchInput = ({ onChange, value }: InputProps<string>) => {
                   <IconWrapper size={16}>
                     <MagnifyingGlassIcon />
                   </IconWrapper>
-                  <Text color="shy">{t('search_field_placeholder')}</Text>
+                  <Text size={13} color="shy">
+                    {t('search_field_placeholder')}
+                  </Text>
                 </InputOverlayWr>
               )
             }
@@ -67,6 +69,9 @@ export const SearchInput = ({ onChange, value }: InputProps<string>) => {
 
 const InputWrapper = styled.div<{ hasBorder?: boolean }>`
   border-radius: 99px;
+  background: ${getColor('foreground')};
+  background-clip: padding-box;
+  overflow: hidden;
   border: ${({ hasBorder, theme }) =>
     hasBorder ? `1.5px solid ${getColor('primary')({ theme })}` : 'none'};
 `

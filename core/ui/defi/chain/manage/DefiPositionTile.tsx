@@ -1,4 +1,8 @@
+import { Chain } from '@core/chain/Chain'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { usdc } from '@core/chain/coin/knownTokens'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -63,6 +67,40 @@ const CheckBadge = styled(IconWrapper)`
   font-weight: 600;
 `
 
+const DualIconWrapper = styled.div`
+  position: relative;
+`
+
+const SecondaryIconWrapper = styled.div`
+  position: absolute;
+  top: -0.25em;
+  right: -0.25em;
+  font-size: 0.56em;
+  border-radius: 999px;
+  background: ${getColor('foreground')};
+  border: 1px solid ${getColor('foreground')};
+`
+
+const lpSecondaryCoinByTicker: Record<string, { logo: string } | undefined> = {
+  ETH: chainFeeCoin[Chain.Ethereum],
+  BTC: chainFeeCoin[Chain.Bitcoin],
+  BNB: chainFeeCoin[Chain.BSC],
+  USDC: usdc,
+}
+
+const getLpSecondaryIconSrc = (position: DefiPosition): string | undefined => {
+  const pair = (position.ticker || position.name).split('/')
+  if (pair.length < 2) return undefined
+
+  const secondaryTicker = pair[1]?.trim().toUpperCase()
+  if (!secondaryTicker) return undefined
+
+  const coin = lpSecondaryCoinByTicker[secondaryTicker]
+  if (!coin?.logo) return undefined
+
+  return getCoinLogoSrc(coin.logo)
+}
+
 export const DefiPositionTile = ({
   position,
   isSelected,
@@ -71,6 +109,14 @@ export const DefiPositionTile = ({
 }: Props) => {
   const icon = resolveDefiPositionIcon(position)
   const coin = resolveDefiPositionCoin(position)
+
+  const lpSecondaryIconSrc =
+    position.type === 'lp' ? getLpSecondaryIconSrc(position) : undefined
+
+  const label =
+    position.type === 'lp'
+      ? position.name || position.ticker
+      : (coin.ticker ?? position.name)
 
   const handleClick = () => {
     if (isLoading) return
@@ -86,7 +132,16 @@ export const DefiPositionTile = ({
       isSelected={isSelected}
     >
       <PositionIconWrapper isActive={isSelected}>
-        <ChainEntityIcon value={icon} style={{ fontSize: 27.5 }} />
+        {position.type === 'lp' && lpSecondaryIconSrc ? (
+          <DualIconWrapper>
+            <ChainEntityIcon value={icon} style={{ fontSize: 27.5 }} />
+            <SecondaryIconWrapper>
+              <ChainEntityIcon value={lpSecondaryIconSrc} />
+            </SecondaryIconWrapper>
+          </DualIconWrapper>
+        ) : (
+          <ChainEntityIcon value={icon} style={{ fontSize: 27.5 }} />
+        )}
         {isSelected && (
           <CheckBadge color="primary" size={12}>
             <CheckmarkIcon />
@@ -94,7 +149,7 @@ export const DefiPositionTile = ({
         )}
       </PositionIconWrapper>
       <Text cropped color="contrast" size={12} weight={500}>
-        {coin.ticker ?? position.name}
+        {label}
       </Text>
     </PositionCard>
   )

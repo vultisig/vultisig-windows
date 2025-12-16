@@ -52,7 +52,6 @@ export const MigrateVaultPrompt = ({
             onDismiss()
           }
         }}
-        kind="action"
       >
         <CrossIcon />
       </CloseButton>

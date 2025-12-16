@@ -930,7 +930,7 @@ export const de = {
   select_chains: 'Wählen',
   select_positions: 'Positionen auswählen',
   select_positions_description:
-    'Aktivieren Sie Positionen, um Salden anzuzeigen und Vermögenswerte zu verwalten.',
+    'Aktivieren Sie mindestens eine Position, um Salden anzuzeigen und Positionen zu verwalten.',
   liquidity_pools: 'Liquiditätspools',
   locked_in_defi: 'In DeFi gesperrt',
   total_bonded: 'Gesamt gebunden {{ticker}}',

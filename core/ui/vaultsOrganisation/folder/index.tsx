@@ -83,7 +83,6 @@ export const VaultFolderPage = () => {
           actions={
             <>
               <IconButton
-                kind="action"
                 size="md"
                 onClick={() =>
                   navigate({ id: 'updateVaultFolder', state: { id } })
@@ -93,7 +92,6 @@ export const VaultFolderPage = () => {
                 <SquarePenIcon />
               </IconButton>
               <IconButton
-                kind="action"
                 size="md"
                 onClick={() => navigate({ id: 'newVault' })}
                 aria-label={t('add_new_vault')}
