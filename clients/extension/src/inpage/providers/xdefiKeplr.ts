@@ -229,10 +229,8 @@ const directHandler = (
     }
   }
 
-  // Para mensajes Amino JSON (sin URL), intentar decodificar como JSON
   const handleThorchainDeposit = () => {
     try {
-      // En signDirect, los mensajes Amino pueden venir como JSON en el value
       const decodedValue = JSON.parse(
         new TextDecoder().decode(message.value)
       ) as {
@@ -263,14 +261,12 @@ const directHandler = (
         data: decodedValue.memo ?? memo,
       }
     } catch {
-      // Si falla, intentar como protobuf
       return handleThorchainDepositUrl()
     }
   }
 
   const handleMsgSend = () => {
     try {
-      // Intentar decodificar como JSON Amino primero
       const decodedValue = JSON.parse(
         new TextDecoder().decode(message.value)
       ) as {
@@ -297,14 +293,12 @@ const directHandler = (
         data: memo,
       }
     } catch {
-      // Si falla, intentar como protobuf
       return handleMsgSendUrl()
     }
   }
 
   const handleMsgExecuteContract = () => {
     try {
-      // Intentar decodificar como JSON Amino primero
       const decodedValue = JSON.parse(
         new TextDecoder().decode(message.value)
       ) as {
@@ -334,7 +328,6 @@ const directHandler = (
         data: memo,
       }
     } catch {
-      // Si falla, intentar como protobuf
       return handleMsgExecuteContractUrl()
     }
   }

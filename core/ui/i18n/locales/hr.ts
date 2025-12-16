@@ -998,7 +998,7 @@ export const hr = {
   show_defi_balance: 'Prikaži DeFi stanje',
   sign: 'Znak',
   signAmino: 'Amino znak',
-  signDirect: 'Izravni znak',
+  signDirect: 'Direct znak',
   signPrivately: 'Želite li potpisati privatno?',
   sign_custom_message: 'Potpiši prilagođenu poruku',
   sign_custom_message_description: 'Potpiši prilagođenu poruku',

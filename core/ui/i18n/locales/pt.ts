@@ -1006,7 +1006,7 @@ export const pt = {
   show_defi_balance: 'Mostrar saldo DeFi',
   sign: 'Sinal',
   signAmino: 'Sinal Amino',
-  signDirect: 'Assinatura Direta',
+  signDirect: 'Sinal Direct',
   signPrivately: 'Deseja assinar em particular?',
   sign_custom_message: 'Assinar mensagem personalizada',
   sign_custom_message_description: 'Assinar mensagem personalizada',
