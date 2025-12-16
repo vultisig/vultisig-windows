@@ -10,13 +10,26 @@ import styled from 'styled-components'
 import { ChainEntityIcon } from '../../../../chain/coin/icon/ChainEntityIcon'
 import { getCoinLogoSrc } from '../../../../chain/coin/icon/utils/getCoinLogoSrc'
 import { CircleAccountFiatBalance } from '../banner/CircleAccountFiatBalance'
+import { CircleWithdrawButton } from '../components/CircleWithdrawButton'
 import { OpenCircleAccount } from '../components/OpenCircleAccount'
 import { useCircleAccountQuery } from '../queries/circleAccount'
+import { useCircleAccountUsdcBalanceQuery } from '../queries/circleAccountUsdcBalance'
 import { CircleAccountBalance } from './CircleAccountBalance'
 
-export const CircleDepositedPanel = () => {
+type CircleDepositedPanelProps = {
+  onDeposit: () => void
+  onWithdraw: () => void
+}
+
+export const CircleDepositedPanel = ({
+  onDeposit,
+  onWithdraw,
+}: CircleDepositedPanelProps) => {
   const { data: circleAccount } = useCircleAccountQuery()
+  const { data: circleBalance } = useCircleAccountUsdcBalanceQuery()
   const { t } = useTranslation()
+
+  const hasBalance = circleBalance !== undefined && circleBalance > 0n
 
   return (
     <Container>
@@ -39,9 +52,12 @@ export const CircleDepositedPanel = () => {
       </HStack>
       <LineSeparator kind="regular" />
       {circleAccount ? (
-        <Button>
-          {t('circle.deposit')} {usdc.ticker}
-        </Button>
+        <VStack gap={8}>
+          <Button onClick={onDeposit}>
+            {t('circle.deposit')} {usdc.ticker}
+          </Button>
+          {hasBalance && <CircleWithdrawButton onClick={onWithdraw} />}
+        </VStack>
       ) : (
         <OpenCircleAccount />
       )}

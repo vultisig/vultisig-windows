@@ -4,6 +4,7 @@ import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { ArrowWallDownIcon } from '@lib/ui/icons/ArrowWallDownIcon'
+import { OnClickProp } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -12,11 +13,11 @@ const size = 'sm'
 const iconPadding = 4
 const iconSize = buttonHeight[size] - iconPadding * 2
 
-export const CircleWithdrawButton = () => {
+export const CircleWithdrawButton = ({ onClick }: OnClickProp) => {
   const { t } = useTranslation()
 
   return (
-    <Button kind="outlined" size={size}>
+    <Button kind="outlined" size={size} onClick={onClick}>
       <IconWrapper>
         <ArrowWallDownIcon />
       </IconWrapper>
