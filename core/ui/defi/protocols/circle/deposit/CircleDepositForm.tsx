@@ -47,11 +47,11 @@ export const CircleDepositForm = ({
         <LineSeparator kind="regular" />
         <AmountInputWrapper>
           <CircleDepositAmountInput value={amount} onChange={onAmountChange} />
-          {amount !== null && balanceQuery.data && (
-            <Text size={15} color="shy">
-              {Math.round((Number(amount) / Number(balanceQuery.data)) * 100)}%
-            </Text>
-          )}
+          <PercentageText size={15} color="shy" $visible={amount !== null}>
+            {amount !== null && balanceQuery.data
+              ? `${Math.round((Number(amount) / Number(balanceQuery.data)) * 100)}%`
+              : '0%'}
+          </PercentageText>
         </AmountInputWrapper>
         <CircleDepositPercentageSelector
           balance={balanceQuery.data ?? null}
@@ -105,4 +105,8 @@ const AmountInputWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+`
+
+const PercentageText = styled(Text)<{ $visible: boolean }>`
+  visibility: ${({ $visible }) => ($visible ? 'visible' : 'hidden')};
 `

@@ -117,9 +117,7 @@ export const CircleDepositAmountInput = ({
           }
         />
       </InputWrapper>
-      <Text size={18} weight="500" color="shy">
-        {usdc.ticker}
-      </Text>
+      <Ticker color="shy">{usdc.ticker}</Ticker>
     </Container>
   )
 }
@@ -128,7 +126,6 @@ const Container = styled(HStack)`
   align-items: baseline;
   justify-content: center;
   gap: 4px;
-  font-size: 34px;
 `
 
 const InputWrapper = styled.div`
@@ -150,7 +147,7 @@ const MeasureSpan = styled.span`
 const StyledInput = styled.input`
   border: none;
   background: transparent;
-  text-align: center;
+  text-align: left;
   font-size: 34px;
   font-weight: 500;
   line-height: 37px;
@@ -165,4 +162,11 @@ const StyledInput = styled.input`
   &:focus {
     outline: none;
   }
+`
+
+const Ticker = styled(Text)`
+  font-size: 34px;
+  font-weight: 500;
+  line-height: 37px;
+  letter-spacing: -1px;
 `
