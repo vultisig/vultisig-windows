@@ -16,6 +16,7 @@ import { ManageVaultChainsPage } from '@core/ui/vault/chain/manage'
 import { ManageVaultChainCoinsPage } from '@core/ui/vault/chain/manage/coin'
 import { VaultChainPage } from '@core/ui/vault/chain/VaultChainPage'
 import { DepositPage } from '@core/ui/vault/deposit/DepositPage'
+import { DepositAccessGuard } from '@core/ui/vault/deposit/providers/DepositAccessGuard'
 import { SignCustomMessagePage } from '@core/ui/vault/keysign/custom-message'
 import { NewVaultPage } from '@core/ui/vault/new'
 import { VaultPage } from '@core/ui/vault/page'
@@ -115,11 +116,13 @@ export const sharedViews: Views<SharedViewId> = {
   defiChainDetail: DefiChainPage,
   deleteVault: DeleteVaultPage,
   deposit: () => (
-    <DepositActionProvider>
-      <DepositCoinProvider>
-        <DepositPage />
-      </DepositCoinProvider>
-    </DepositActionProvider>
+    <DepositAccessGuard>
+      <DepositActionProvider>
+        <DepositCoinProvider>
+          <DepositPage />
+        </DepositCoinProvider>
+      </DepositActionProvider>
+    </DepositAccessGuard>
   ),
   languageSettings: LanguagePage,
   manageDefiChains: ManageDefiChainsPage,
