@@ -32,6 +32,7 @@ export const CircleDepositForm = () => {
 
   const isDisabled = (() => {
     if (amount === null || amount === 0n) return true
+    if (balance === undefined) return true
     if (isAmountExceedsBalance) return t('send_amount_exceeds_balance')
     return false
   })()
