@@ -1,0 +1,34 @@
+---
+alwaysApply: false
+---
+
+# Browser Testing
+
+After implementing UI changes, verify them in the browser.
+
+## Prerequisites
+
+Before browser testing, ensure `yarn check` passes with no errors. Code errors can cause the app to fail or not work properly.
+
+## Testing Steps
+
+1. **Use existing browser session** if one is already open in Cursor
+2. Navigate to `http://localhost:8081`
+3. Take a snapshot to verify the changes
+
+## If the app is not responding
+
+Try these steps in order:
+
+1. **Reload the browser page** - hot reload may have stalled
+2. **If reload doesn't work**, restart the dev server as a last resort:
+
+```bash
+# Kill any existing process on port 8081
+lsof -ti:8081 | xargs kill -9 2>/dev/null || true
+
+# Start the app
+yarn dev
+```
+
+Run the app in background and wait for it to be ready before testing.

@@ -23,6 +23,7 @@ export type SignMessageInput =
         chain: EvmChain
         message: string
         type: SignMessageType
+        pluginId?: string
       }
     }
   | {

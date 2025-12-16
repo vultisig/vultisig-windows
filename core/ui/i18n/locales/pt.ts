@@ -307,6 +307,13 @@ export const pt = {
   coin_not_found_in_current_vault: 'Moeda não encontrada no cofre atual',
   coin_not_found_in_any_vault:
     '{{ticker}} em {{chain}} não encontrado em nenhum cofre',
+  defi_token_required: '{{ticker}} não está neste cofre',
+  defi_token_required_description:
+    'Adicione {{ticker}} em Gerenciar tokens para fazer stake, unstake ou bond.',
+  defi_add_chain_to_vault_title: 'Adicione a cadeia ao cofre primeiro',
+  defi_add_chain_to_vault_description:
+    'Ative uma cadeia no seu cofre para gerenciar aqui suas posições DeFi.',
+  manage_tokens: 'Gerenciar tokens',
   collected_rewards: 'Recompensas acumuladas',
   coming_soon: 'Em breve',
   complete: 'Completo',
@@ -921,7 +928,7 @@ export const pt = {
   select_chains: 'Selecione',
   select_positions: 'Selecionar posições',
   select_positions_description:
-    'Ative posições para visualizar saldos e gerenciar ativos.',
+    'Ative pelo menos uma posição para ver saldos e gerenciar posições.',
   liquidity_pools: 'Pools de liquidez',
   locked_in_defi: 'Bloqueado em DeFi',
   total_bonded: 'Total vinculado {{ticker}}',

@@ -312,6 +312,13 @@ export const es = {
   coin_not_found_in_current_vault: 'Moneda no encontrada en la bóveda actual',
   coin_not_found_in_any_vault:
     '{{ticker}} en {{chain}} no encontrado en ninguna bóveda',
+  defi_token_required: '{{ticker}} no está en esta bóveda',
+  defi_token_required_description:
+    'Añade {{ticker}} desde Administrar tokens para hacer stake, unstake o bond.',
+  defi_add_chain_to_vault_title: 'Primero añade la cadena a tu bóveda',
+  defi_add_chain_to_vault_description:
+    'Activa una cadena en tu bóveda para gestionar aquí sus posiciones DeFi.',
+  manage_tokens: 'Administrar tokens',
   collected_rewards: 'Recompensas acumuladas',
   coming_soon: 'Muy pronto',
   complete: 'Completo',
@@ -926,7 +933,7 @@ export const es = {
   select_chains: 'Seleccionar',
   select_positions: 'Seleccionar posiciones',
   select_positions_description:
-    'Activa posiciones para ver saldos y gestionar activos.',
+    'Activa al menos una posición para ver saldos y gestionar posiciones.',
   liquidity_pools: 'Pools de liquidez',
   locked_in_defi: 'Bloqueado en DeFi',
   total_bonded: 'Total vinculado {{ticker}}',

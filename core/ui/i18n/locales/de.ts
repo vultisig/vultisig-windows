@@ -312,6 +312,13 @@ export const de = {
   coin_not_found_in_current_vault: 'Münze im aktuellen Tresor nicht gefunden.',
   coin_not_found_in_any_vault:
     '{{ticker}} auf {{chain}} wurde in keinem Tresor gefunden',
+  defi_token_required: '{{ticker}} ist nicht in diesem Tresor',
+  defi_token_required_description:
+    'Füge {{ticker}} unter „Tokens verwalten“ hinzu, um zu staken, zu unstaken oder zu bonden.',
+  defi_add_chain_to_vault_title: 'Füge die Chain zuerst deinem Tresor hinzu',
+  defi_add_chain_to_vault_description:
+    'Aktiviere eine Chain in deinem Tresor, um hier ihre DeFi-Positionen zu verwalten.',
+  manage_tokens: 'Tokens verwalten',
   collected_rewards: 'Gesammelte Prämien',
   coming_soon: 'Demnächst verfügbar',
   complete: 'Vollständig',
@@ -930,7 +937,7 @@ export const de = {
   select_chains: 'Wählen',
   select_positions: 'Positionen auswählen',
   select_positions_description:
-    'Aktivieren Sie Positionen, um Salden anzuzeigen und Vermögenswerte zu verwalten.',
+    'Aktivieren Sie mindestens eine Position, um Salden anzuzeigen und Positionen zu verwalten.',
   liquidity_pools: 'Liquiditätspools',
   locked_in_defi: 'In DeFi gesperrt',
   total_bonded: 'Gesamt gebunden {{ticker}}',
