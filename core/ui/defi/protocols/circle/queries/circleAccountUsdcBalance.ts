@@ -1,20 +1,20 @@
+import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
+import { usdc } from '@core/chain/coin/knownTokens'
+import { getBalanceQueryOptions } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import { useQueryDependentQuery } from '@lib/ui/query/hooks/useQueryDependentQuery'
+import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { Query } from '@lib/ui/query/Query'
 
-import { getCircleAccountUsdcBalance } from '../core/getCircleAccountUsdcBalance'
 import { useCircleAccountQuery } from './circleAccount'
-
-const getCircleAccountUsdcBalanceQueryKey = (mscaAddress: string) =>
-  ['circle-account-usdc-balance', mscaAddress] as const
 
 export const useCircleAccountUsdcBalanceQuery = (): Query<bigint> => {
   const accountQuery = useCircleAccountQuery()
 
-  return useQueryDependentQuery(
+  const balanceQuery = useQueryDependentQuery(
     { ...accountQuery, data: accountQuery.data?.address },
-    mscaAddress => ({
-      queryKey: getCircleAccountUsdcBalanceQueryKey(mscaAddress),
-      queryFn: () => getCircleAccountUsdcBalance(mscaAddress),
-    })
+    address =>
+      getBalanceQueryOptions(extractAccountCoinKey({ ...usdc, address }))
   )
+
+  return useTransformQueryData(balanceQuery, data => Object.values(data)[0])
 }
