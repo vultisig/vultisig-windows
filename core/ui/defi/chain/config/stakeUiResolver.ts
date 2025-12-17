@@ -2,12 +2,14 @@ import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin } from '@core/chain/coin/Coin'
 
-import { mayaCoin, thorchainTokens } from '../queries/tokens'
+import { mayaCoin, runeCoin, thorchainTokens } from '../queries/tokens'
 import { ThorchainStakePosition } from '../queries/types'
 
 type StakeAction =
   | 'stake'
   | 'unstake'
+  | 'mint'
+  | 'redeem'
   | 'withdraw_ruji_rewards'
   | 'add_cacao_pool'
   | 'remove_cacao_pool'
@@ -28,6 +30,7 @@ type ResolverInput = {
 
 const tokenById: Partial<Record<Chain, Record<string, Coin>>> = {
   [Chain.THORChain]: {
+    'thor-stake-rune': runeCoin,
     'thor-stake-tcy': thorchainTokens.tcy,
     'thor-stake-stcy': thorchainTokens.stcy,
     'thor-stake-ruji': thorchainTokens.ruji,
@@ -78,8 +81,10 @@ export const resolveStakeActions = ({
   ) {
     return {
       ...base,
+      stakeAction: 'mint',
+      unstakeAction: 'redeem',
       stakeLabel: translate('mint'),
-      unstakeLabel: translate('redeem'),
+      unstakeLabel: 'Unmint',
     }
   }
 
