@@ -24,5 +24,4 @@ export const DefiOverview = ({ scrollContainerRef }: DefiOverviewProps) => {
 
 const StyledPageContent = styled(PageContent)`
   ${hideScrollbars};
-  padding-bottom: 80px;
 `
