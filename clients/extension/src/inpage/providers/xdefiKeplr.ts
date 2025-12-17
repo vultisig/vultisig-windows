@@ -63,7 +63,7 @@ const aminoHandler = (
       ticker: message.value.funds?.[0]?.denom ?? chainFeeCoin[chain].ticker,
     },
     amount: {
-      amount: message.value.funds?.[0]?.amount ?? 0,
+      amount: message.value.funds?.[0]?.amount ?? '0',
       decimals: chainFeeCoin[chain].decimals,
     },
     from: message.value.sender ?? message.value.from_address ?? undefined,
@@ -229,120 +229,17 @@ const directHandler = (
     }
   }
 
-  const handleThorchainDeposit = () => {
-    try {
-      const decodedValue = JSON.parse(
-        new TextDecoder().decode(message.value)
-      ) as {
-        coins?: Array<{ asset: string; amount: string }>
-        memo?: string
-        signer?: string
-      }
-
-      if (!decodedValue.coins || decodedValue.coins.length === 0) {
-        throw new Error(' coins array is required and cannot be empty')
-      }
-
-      const assetParts = decodedValue.coins[0].asset.split('.')
-      if (assetParts.length < 2) {
-        throw new Error(`invalid asset format: ${decodedValue.coins[0].asset}`)
-      }
-
-      return {
-        asset: {
-          chain: chain,
-          ticker: assetParts[1],
-        },
-        amount: {
-          amount: decodedValue.coins[0].amount,
-          decimals: chainFeeCoin[chain].decimals,
-        },
-        from: decodedValue.signer,
-        data: decodedValue.memo ?? memo,
-      }
-    } catch {
-      return handleThorchainDepositUrl()
-    }
-  }
-
-  const handleMsgSend = () => {
-    try {
-      const decodedValue = JSON.parse(
-        new TextDecoder().decode(message.value)
-      ) as {
-        amount?: Array<{ denom: string; amount: string }>
-        from_address?: string
-        to_address?: string
-      }
-
-      if (!decodedValue.amount || decodedValue.amount.length === 0) {
-        throw new Error('Invalid message structure: missing or empty amount')
-      }
-
-      return {
-        asset: {
-          chain: chain,
-          ticker: decodedValue.amount[0].denom,
-        },
-        amount: {
-          amount: decodedValue.amount[0].amount,
-          decimals: chainFeeCoin[chain].decimals,
-        },
-        from: decodedValue.from_address,
-        to: decodedValue.to_address,
-        data: memo,
-      }
-    } catch {
-      return handleMsgSendUrl()
-    }
-  }
-
-  const handleMsgExecuteContract = () => {
-    try {
-      const decodedValue = JSON.parse(
-        new TextDecoder().decode(message.value)
-      ) as {
-        funds?: Array<{ denom: string; amount: string }>
-        sender?: string
-        contract?: string
-        msg?: any
-      }
-
-      return {
-        asset: {
-          chain: chain,
-          ticker:
-            decodedValue.funds && decodedValue.funds.length > 0
-              ? decodedValue.funds[0].denom
-              : chainFeeCoin[chain].ticker,
-        },
-        amount: {
-          amount:
-            decodedValue.funds && decodedValue.funds.length > 0
-              ? decodedValue.funds[0].amount
-              : '0',
-          decimals: chainFeeCoin[chain].decimals,
-        },
-        from: decodedValue.sender,
-        to: decodedValue.contract,
-        data: memo,
-      }
-    } catch {
-      return handleMsgExecuteContractUrl()
-    }
-  }
-
   let transactionInfo: any
 
   try {
     transactionInfo = match(message.typeUrl, {
-      [CosmosMsgType.MSG_SEND]: handleMsgSend,
-      [CosmosMsgType.THORCHAIN_MSG_SEND]: handleMsgSend,
+      [CosmosMsgType.MSG_SEND]: handleMsgSendUrl,
+      [CosmosMsgType.THORCHAIN_MSG_SEND]: handleMsgSendUrl,
       [CosmosMsgType.MSG_SEND_URL]: handleMsgSendUrl,
-      [CosmosMsgType.MSG_EXECUTE_CONTRACT]: handleMsgExecuteContract,
+      [CosmosMsgType.MSG_EXECUTE_CONTRACT]: handleMsgExecuteContractUrl,
       [CosmosMsgType.MSG_EXECUTE_CONTRACT_URL]: handleMsgExecuteContractUrl,
       [CosmosMsgType.MSG_TRANSFER_URL]: handleMsgTransferUrl,
-      [CosmosMsgType.THORCHAIN_MSG_DEPOSIT]: handleThorchainDeposit,
+      [CosmosMsgType.THORCHAIN_MSG_DEPOSIT]: handleThorchainDepositUrl,
       [CosmosMsgType.THORCHAIN_MSG_DEPOSIT_URL]: handleThorchainDepositUrl,
       [CosmosMsgType.THORCHAIN_MSG_SEND_URL]: handleThorchainSendUrl,
     })
