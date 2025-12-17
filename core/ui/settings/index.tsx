@@ -84,10 +84,7 @@ export const SettingsPage: FC<Props> = props => {
             />
           }
           secondaryControls={
-            <IconButton
-              kind="action"
-              onClick={() => navigate({ id: 'shareVault' })}
-            >
+            <IconButton onClick={() => navigate({ id: 'shareVault' })}>
               <QrCodeIcon />
             </IconButton>
           }

@@ -1,5 +1,6 @@
 import { create } from '@bufbuild/protobuf'
 import { Chain } from '@core/chain/Chain'
+import { getDeveloperOptions } from '@core/extension/storage/developerOptions'
 import {
   SignMessageInput,
   SignMessageType,
@@ -12,19 +13,30 @@ import { hexStr2byteArray } from '@core/inpage-provider/popup/view/utils/hexStr2
 import { toDisplayMessageString } from '@core/inpage-provider/popup/view/utils/toDisplayMessage'
 import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { getVaultId } from '@core/mpc/vault/Vault'
+import { StorageKey } from '@core/ui/storage/StorageKey'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { Match } from '@lib/ui/base/Match'
+import { Center } from '@lib/ui/layout/Center'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { useViewState } from '@lib/ui/navigation/hooks/useViewState'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { StrictText } from '@lib/ui/text'
+import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { omit } from '@lib/utils/record/omit'
 import { getRecordUnionKey } from '@lib/utils/record/union/getRecordUnionKey'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
+import { useQuery } from '@tanstack/react-query'
 import { getBytes, hexlify, toUtf8Bytes, TypedDataEncoder } from 'ethers'
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
+
+import { PopupDeadEnd } from '../../../flow/PopupDeadEnd'
 
 export const Overview = () => {
+  const { t } = useTranslation()
   const input = usePopupInput<'signMessage'>()
   const method = getRecordUnionKey(input)
   const { chain } = getRecordUnionValue(input)
@@ -90,6 +102,20 @@ export const Overview = () => {
     personal_sign: ({ type }) => type,
   })
 
+  const pluginId = matchRecordUnion<SignMessageInput, string | undefined>(
+    input,
+    {
+      eth_signTypedData_v4: () => undefined,
+      sign_message: () => undefined,
+      personal_sign: ({ pluginId }) => pluginId,
+    }
+  )
+
+  const developerOptionsQuery = useQuery({
+    queryKey: [StorageKey.developerOptions],
+    queryFn: getDeveloperOptions,
+  })
+
   const keysignMessagePayload = useMemo(
     () => ({
       custom: create(CustomMessagePayloadSchema, {
@@ -124,12 +150,29 @@ export const Overview = () => {
         />
       )}
       policy={() => (
-        <PolicyOverview
-          address={address}
-          keysignPayload={keysignMessagePayload}
-          message={displayMessage}
-          method={method}
-          signature={signature}
+        <MatchQuery
+          value={developerOptionsQuery}
+          success={({ pluginMarketplaceBaseUrl }) => (
+            <PolicyOverview
+              address={address}
+              keysignPayload={keysignMessagePayload}
+              message={displayMessage}
+              method={method}
+              signature={signature}
+              pluginId={shouldBeDefined(pluginId)}
+              pluginMarketplaceBaseUrl={pluginMarketplaceBaseUrl}
+            />
+          )}
+          pending={() => (
+            <PopupDeadEnd>
+              <Spinner />
+            </PopupDeadEnd>
+          )}
+          error={() => (
+            <Center>
+              <StrictText>{t('failed_to_load')}</StrictText>
+            </Center>
+          )}
         />
       )}
     />

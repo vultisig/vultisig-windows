@@ -149,15 +149,18 @@ export const en = {
     apy: 'APY',
     balance_title: 'Balance Overview',
     banner_text:
-      'Funds remain fully under your vault’s control. Circle accounts are self-custodial and yield is generated through secure off-chain treasuries.',
+      "Funds remain fully under your vault's control. Circle accounts are self-custodial and yield is generated through secure off-chain treasuries.",
     claim: 'Claim Rewards',
+    current_rewards: 'Current Rewards',
     deposit: 'Deposit',
     introduction:
       'Deposit your $USDC into a Circle account and earn yield. Securely within your Vultisig vault.',
     open_account: 'Open Account',
     rewards: 'Rewards',
     total_deposit: 'Total Deposit',
+    total_rewards: 'Total Rewards',
     withdraw: 'Withdraw',
+    yield_details: 'Circle Yield Details',
   },
   circle_description: 'Deposit $USDC into A Circle Contract',
   circle_title: 'Circle Accounts',
@@ -165,10 +168,18 @@ export const en = {
   close: 'Close',
   coin_not_found_in_current_vault: 'Coin not found in current vault',
   coin_not_found_in_any_vault: '{{ticker}} on {{chain}} not found in any vault',
+  defi_token_required: '{{ticker}} is not in this vault',
+  defi_token_required_description:
+    'Add {{ticker}} to this vault from Manage Tokens to stake, unstake, or bond.',
+  defi_add_chain_to_vault_title: 'Add the chain to your vault first',
+  defi_add_chain_to_vault_description:
+    'Enable a chain in your vault to manage its DeFi positions here.',
+  manage_tokens: 'Manage tokens',
   collected_rewards: 'Collected rewards',
   coming_soon: 'Coming Soon',
   complete: 'Complete',
   confirm: 'Confirm',
+  confirm_automation_creation: 'Confirm automation creation',
   confirm_new_passcode: 'Confirm New Passcode',
   confirm_passcode: 'Confirm Passcode',
   connect: 'Connect',
@@ -479,6 +490,7 @@ export const en = {
   ibc_transaction_not_supporting_memo_title:
     'IBC Transaction Memo Not Supported',
   ibc_transfer: 'IBC Transfer',
+  id: 'ID',
   import: 'Import',
   import_existing_vault: 'Import an Existing Vault',
   import_failed: 'QR code invalid, please retry',
@@ -741,7 +753,7 @@ export const en = {
   plugin_info: 'App Info',
   plugin_password_desc:
     'Enter your password to unlock your Server Share and start the app installation',
-  plugin_rules: 'App Rules',
+  automation_info: 'Automation Info',
   plugin_server_url: 'App Server URL',
   app_install_timeout: 'App Install Timeout (ms)',
   app_install_timeout_invalid: 'Please enter a valid number.',
@@ -882,7 +894,7 @@ export const en = {
   select_chains: 'Select',
   select_positions: 'Select positions',
   select_positions_description:
-    'Enable positions to view balances and manage assets.',
+    'Enable at least one position to view balances and manage positions.',
   compounded_token: 'Compounded {{ticker}}',
   select_destination_chain: 'Select Destination Chain',
   select_n_devices_one: 'Select {{count}} device',
@@ -1226,7 +1238,7 @@ export const en = {
   vaults: 'Vaults',
   verify: 'Verify',
   verify_email: 'Verify Email',
-  verify_identity_sign: 'Sign in to verify your identity',
+
   verify_password: 'Verify Password',
   verify_password_periodic_message: 'Verify your Server Share Password',
   verify_password_periodic_message_description:
