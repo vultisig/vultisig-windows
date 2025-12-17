@@ -9,16 +9,14 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
-import { useCurrentVaultSecurityType } from '../../../vault/state/currentVault'
 
 const animationDuration = 6000
 
 export const KeygenFlowSuccess = () => {
   const { t } = useTranslation()
-  const securityType = useCurrentVaultSecurityType()
 
   const { RiveComponent } = useRive({
-    src: `/core/animations/${securityType}-vault-keygen-success.riv`,
+    src: '/core/animations/keygen_animationdata_binding.riv',
     stateMachines: 'State Machine 1',
     autoplay: true,
   })
