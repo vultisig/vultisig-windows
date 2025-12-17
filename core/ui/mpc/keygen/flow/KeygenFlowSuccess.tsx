@@ -3,7 +3,7 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { GradientText, Text } from '@lib/ui/text'
-import { useRive } from '@rive-app/react-canvas'
+import { Alignment, Fit, Layout, useRive } from '@rive-app/react-canvas'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -15,10 +15,14 @@ const animationDuration = 6000
 export const KeygenFlowSuccess = () => {
   const { t } = useTranslation()
 
-  const { RiveComponent } = useRive({
+  const { RiveComponent, rive } = useRive({
     src: '/core/animations/keygen_animationdata_binding.riv',
     stateMachines: 'State Machine 1',
     autoplay: true,
+    layout: new Layout({
+      fit: Fit.Contain,
+      alignment: Alignment.Center,
+    }),
   })
 
   const navigate = useCoreNavigate()
@@ -30,6 +34,19 @@ export const KeygenFlowSuccess = () => {
 
     return () => clearTimeout(timeoutId)
   }, [navigate])
+
+  useEffect(() => {
+    if (!rive) return
+
+    rive.resizeDrawingSurfaceToCanvas()
+
+    const onResize = () => {
+      rive.resizeDrawingSurfaceToCanvas()
+    }
+
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [rive])
 
   return (
     <Wrapper>
