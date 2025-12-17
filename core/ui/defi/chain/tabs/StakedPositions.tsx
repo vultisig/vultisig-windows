@@ -1,5 +1,5 @@
 import { Chain } from '@core/chain/Chain'
-import { areEqualCoins } from '@core/chain/coin/Coin'
+import { areEqualCoins, extractCoinKey } from '@core/chain/coin/Coin'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useDefiPositions } from '@core/ui/storage/defiPositions'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
@@ -65,6 +65,8 @@ export const StakedPositions = () => {
     action:
       | 'stake'
       | 'unstake'
+      | 'mint'
+      | 'redeem'
       | 'withdraw_ruji_rewards'
       | 'add_cacao_pool'
       | 'remove_cacao_pool',
@@ -74,10 +76,17 @@ export const StakedPositions = () => {
 
     const token = resolveStakeToken(chain, id)
 
+    const coinForAction =
+      chain === Chain.THORChain && action === 'mint'
+        ? id === 'thor-stake-ytcy'
+          ? resolveStakeToken(chain, 'thor-stake-tcy')
+          : resolveStakeToken(chain, 'thor-stake-rune')
+        : token
+
     navigate({
       id: 'deposit',
       state: {
-        coin: token,
+        coin: extractCoinKey(coinForAction),
         action,
       },
     })
@@ -144,6 +153,8 @@ export const StakedPositions = () => {
           action:
             | 'stake'
             | 'unstake'
+            | 'mint'
+            | 'redeem'
             | 'withdraw_ruji_rewards'
             | 'add_cacao_pool'
             | 'remove_cacao_pool'
