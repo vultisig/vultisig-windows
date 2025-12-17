@@ -8,15 +8,22 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useCircleViewState } from '../state/circleViewState'
+
 const size = 'sm'
 const iconPadding = 4
 const iconSize = buttonHeight[size] - iconPadding * 2
 
 export const CircleWithdrawButton = () => {
   const { t } = useTranslation()
+  const [, setViewState] = useCircleViewState()
 
   return (
-    <Button kind="outlined" size={size}>
+    <Button
+      kind="outlined"
+      size={size}
+      onClick={() => setViewState('withdraw')}
+    >
       <IconWrapper>
         <ArrowWallDownIcon />
       </IconWrapper>

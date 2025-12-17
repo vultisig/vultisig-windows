@@ -45,7 +45,9 @@ export const DefiChainsList = () => {
     })
   }, [normalizedQuery, defiChainBalances])
 
-  if (defiChainBalances.length === 0) {
+  const hasCircle = featureFlags.circle
+
+  if (defiChainBalances.length === 0 && !hasCircle) {
     if (isPending) {
       return (
         <Center>
@@ -73,7 +75,7 @@ export const DefiChainsList = () => {
     )
   }
 
-  if (filteredBalances.length === 0 && normalizedQuery) {
+  if (filteredBalances.length === 0 && normalizedQuery && !hasCircle) {
     return (
       <EmptyWrapper>
         <VStack gap={12} alignItems="center">
@@ -95,7 +97,7 @@ export const DefiChainsList = () => {
 
   return (
     <List>
-      {featureFlags.circle && <CircleDefiItem />}
+      {hasCircle && <CircleDefiItem />}
       {filteredBalances.map(balance => (
         <DefiChainItem key={balance.chain} balance={balance} />
       ))}
