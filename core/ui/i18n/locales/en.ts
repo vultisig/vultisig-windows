@@ -153,6 +153,7 @@ export const en = {
     claim: 'Claim Rewards',
     current_rewards: 'Current Rewards',
     deposit: 'Deposit',
+    deposit_header: 'Deposit to Circle Account',
     introduction:
       'Deposit your $USDC into a Circle account and earn yield. Securely within your Vultisig vault.',
     open_account: 'Open Account',
@@ -160,6 +161,7 @@ export const en = {
     total_deposit: 'Total Deposit',
     total_rewards: 'Total Rewards',
     withdraw: 'Withdraw',
+    withdraw_header: 'Withdraw from Circle',
     yield_details: 'Circle Yield Details',
   },
   circle_description: 'Deposit $USDC into A Circle Contract',
@@ -1150,7 +1152,8 @@ export const en = {
     'Vault file is corrupted or missing a public key. Please try again or select a different vault.',
   vault_name: 'Vault Name',
   vault_name_already_exists: 'Vault name must be unique',
-  vault_name_description: 'You can always rename your vault later in settings',
+  vault_name_description:
+    'You can always rename your vault later in the settings',
   vault_name_max_length_error: 'Vault name must be less than 50 characters',
   vault_name_required: 'Vault name is required',
   vault_overview: 'Vault Overview',

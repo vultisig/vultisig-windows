@@ -1,0 +1,24 @@
+---
+description: USE shared prop types WHEN defining component props TO avoid duplication
+globs: *.tsx
+alwaysApply: false
+---
+
+# Reuse Shared Props
+
+USE shared prop types from `@/shared/types/Props` WHEN defining component props with common fields like `label`, `value`, `children`, `title`, `icon`, `onClick`, etc.
+
+## Example
+
+```tsx
+// ✅ Good: Reuse shared props
+import { LabelProp, ValueProp } from '@/shared/types/Props'
+
+type MyComponentProps = LabelProp & ValueProp<number>
+
+// ❌ Bad: Duplicate prop definitions
+type MyComponentProps = {
+  label: ReactNode
+  value: number
+}
+```
