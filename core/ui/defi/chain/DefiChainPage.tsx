@@ -2,10 +2,7 @@ import { Chain } from '@core/chain/Chain'
 import { featureFlags } from '@core/ui/featureFlags'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import {
-  BottomNavigation,
-  bottomNavigationHeight,
-} from '@core/ui/vault/components/BottomNavigation'
+import { BottomNavigation } from '@core/ui/vault/components/BottomNavigation'
 import { VaultHeader } from '@core/ui/vault/components/VaultHeader'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -51,7 +48,6 @@ export const DefiChainPage = () => {
 
 const Wrapper = styled(VStack)`
   position: relative;
-  margin-bottom: ${bottomNavigationHeight}px;
 `
 
 const StyledPageContent = styled(PageContent)`
