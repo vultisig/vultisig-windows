@@ -307,6 +307,13 @@ export const hr = {
   coin_not_found_in_current_vault: 'Novčić nije pronađen u trenutnom trezoru',
   coin_not_found_in_any_vault:
     '{{ticker}} na {{chain}} nije pronađen u nijednom trezoru',
+  defi_token_required: '{{ticker}} nije u ovom trezoru',
+  defi_token_required_description:
+    'Dodajte {{ticker}} kroz Upravljanje tokenima kako biste mogli stakeati, unstakeati ili bondati.',
+  defi_add_chain_to_vault_title: 'Prvo dodajte chain u trezor',
+  defi_add_chain_to_vault_description:
+    'Aktivirajte chain u trezoru kako biste ovdje upravljali DeFi pozicijama.',
+  manage_tokens: 'Upravljaj tokenima',
   collected_rewards: 'Sakupljene nagrade',
   coming_soon: 'Uskoro',
   complete: 'Završeno',
