@@ -1,10 +1,7 @@
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCore } from '@core/ui/state/core'
-import {
-  BottomNavigation,
-  bottomNavigationHeight,
-} from '@core/ui/vault/components/BottomNavigation'
+import { BottomNavigation } from '@core/ui/vault/components/BottomNavigation'
 import { VaultHeader } from '@core/ui/vault/components/VaultHeader'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
@@ -63,7 +60,6 @@ export const VaultChainPage = () => {
 
 const Wrapper = styled(VStack)`
   position: relative;
-  margin-bottom: ${bottomNavigationHeight}px;
 `
 
 const StyledPageContent = styled(PageContent)`
