@@ -154,6 +154,7 @@ export const en = {
     current_rewards: 'Current Rewards',
     deposit: 'Deposit',
     deposit_header: 'Deposit to Circle Account',
+    verify_deposit: 'Verify Deposit',
     introduction:
       'Deposit your $USDC into a Circle account and earn yield. Securely within your Vultisig vault.',
     open_account: 'Open Account',
