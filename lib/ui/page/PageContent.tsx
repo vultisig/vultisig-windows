@@ -5,9 +5,19 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { pageConfig } from '@lib/ui/page/config'
 import styled, { css } from 'styled-components'
 
+export const pageBottomInsetVar = '--page-bottom-inset'
+const pageBottomInset = `var(${pageBottomInsetVar}, 0px)`
+
 export const PageContent = styled(VStack)`
   ${horizontalPadding(pageConfig.horizontalPadding)};
   ${verticalPadding(pageConfig.verticalPadding)};
+  padding-bottom: calc(${pageConfig.verticalPadding}px + ${pageBottomInset});
+  @supports (padding-bottom: calc(0px + env(safe-area-inset-bottom))) {
+    padding-bottom: calc(
+      ${pageConfig.verticalPadding}px + ${pageBottomInset} +
+        env(safe-area-inset-bottom)
+    );
+  }
   flex-grow: 1;
 `
 
@@ -23,6 +33,13 @@ export const fitPageContent = ({
     horizontalMinPadding: pageConfig.horizontalPadding,
   })}
   ${verticalPadding(pageConfig.verticalPadding)};
+  padding-bottom: calc(${pageConfig.verticalPadding}px + ${pageBottomInset});
+  @supports (padding-bottom: calc(0px + env(safe-area-inset-bottom))) {
+    padding-bottom: calc(
+      ${pageConfig.verticalPadding}px + ${pageBottomInset} +
+        env(safe-area-inset-bottom)
+    );
+  }
   flex-grow: 1;
   overflow: auto;
   min-height: 0;
