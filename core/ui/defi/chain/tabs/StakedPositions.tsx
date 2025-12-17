@@ -20,6 +20,15 @@ import { useDefiChainPositionsQuery } from '../queries/useDefiChainPositionsQuer
 import { useCurrentDefiChain } from '../useCurrentDefiChain'
 import { DefiPositionEmptyState } from './DefiPositionEmptyState'
 
+type StakeActionType =
+  | 'stake'
+  | 'unstake'
+  | 'mint'
+  | 'redeem'
+  | 'withdraw_ruji_rewards'
+  | 'add_cacao_pool'
+  | 'remove_cacao_pool'
+
 export const StakedPositions = () => {
   const chain = useCurrentDefiChain()
   const selectedPositions = useDefiPositions(chain)
@@ -62,14 +71,7 @@ export const StakedPositions = () => {
 
   const navigateTo = (
     id: string,
-    action:
-      | 'stake'
-      | 'unstake'
-      | 'mint'
-      | 'redeem'
-      | 'withdraw_ruji_rewards'
-      | 'add_cacao_pool'
-      | 'remove_cacao_pool',
+    action: StakeActionType,
     isDisabled: boolean
   ) => {
     if (actionsDisabled || isDisabled) return
@@ -149,16 +151,8 @@ export const StakedPositions = () => {
         const cardActionsDisabled =
           actionsDisabled || resolverDisabled || !hasRequiredCoin
 
-        const handleNavigate = (
-          action:
-            | 'stake'
-            | 'unstake'
-            | 'mint'
-            | 'redeem'
-            | 'withdraw_ruji_rewards'
-            | 'add_cacao_pool'
-            | 'remove_cacao_pool'
-        ) => navigateTo(position.id, action, cardActionsDisabled)
+        const handleNavigate = (action: StakeActionType) =>
+          navigateTo(position.id, action, cardActionsDisabled)
 
         return (
           <StakeCard
