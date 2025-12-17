@@ -3,7 +3,13 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { GradientText, Text } from '@lib/ui/text'
-import { Alignment, Fit, Layout, useRive } from '@rive-app/react-canvas'
+import {
+  Alignment,
+  Fit,
+  Layout,
+  StateMachineInputType,
+  useRive,
+} from '@rive-app/react-canvas'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -37,6 +43,46 @@ export const KeygenFlowSuccess = () => {
 
   useEffect(() => {
     if (!rive) return
+
+    const trySetSuccessState = (stateMachineName: string) => {
+      let inputs: ReturnType<typeof rive.stateMachineInputs>
+      try {
+        inputs = rive.stateMachineInputs(stateMachineName)
+      } catch {
+        return
+      }
+
+      for (const input of inputs) {
+        const normalizedName = input.name.toLowerCase()
+
+        if (input.type === StateMachineInputType.Boolean) {
+          if (normalizedName === 'connected') {
+            input.value = true
+          }
+
+          if (normalizedName === 'connecting') {
+            input.value = false
+          }
+        }
+
+        if (input.type === StateMachineInputType.Trigger) {
+          if (
+            normalizedName.includes('success') ||
+            normalizedName.includes('connected')
+          ) {
+            input.fire()
+          }
+        }
+      }
+    }
+
+    trySetSuccessState('State Machine 1')
+    trySetSuccessState('State Machine 2')
+  }, [rive])
+
+  useEffect(() => {
+    if (!rive) return
+    if (typeof window === 'undefined') return
 
     rive.resizeDrawingSurfaceToCanvas()
 
