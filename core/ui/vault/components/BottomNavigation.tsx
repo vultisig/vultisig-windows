@@ -16,12 +16,8 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
-export const bottomNavigationHeight = 66
+const bottomNavigationHeight = 66
 const cameraIconSize = 56
-
-export const bottomNavigationInset = css`
-  ${pageBottomInsetVar}: ${bottomNavigationHeight}px;
-`
 
 type BottomNavigationProps = {
   activeTab?: 'wallet' | 'defi'
