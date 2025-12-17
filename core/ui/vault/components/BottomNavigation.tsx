@@ -8,14 +8,20 @@ import { Camera2Icon } from '@lib/ui/icons/Camera2Icon'
 import { CoinsAddIcon } from '@lib/ui/icons/CoinsAddIcon'
 import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { hStack, vStack } from '@lib/ui/layout/Stack'
+import { pageBottomInsetVar } from '@lib/ui/page/PageContent'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 export const bottomNavigationHeight = 66
 const cameraIconSize = 56
+
+export const bottomNavigationInset = css`
+  ${pageBottomInsetVar}: ${bottomNavigationHeight}px;
+`
 
 type BottomNavigationProps = {
   activeTab?: 'wallet' | 'defi'
@@ -26,6 +32,23 @@ export const BottomNavigation = ({
 }: BottomNavigationProps) => {
   const navigate = useCoreNavigate()
   const { t } = useTranslation()
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return
+
+    const root = document.documentElement
+    const previousValue = root.style.getPropertyValue(pageBottomInsetVar)
+
+    root.style.setProperty(pageBottomInsetVar, `${bottomNavigationHeight}px`)
+
+    return () => {
+      if (previousValue) {
+        root.style.setProperty(pageBottomInsetVar, previousValue)
+      } else {
+        root.style.removeProperty(pageBottomInsetVar)
+      }
+    }
+  }, [])
 
   const handleTabChange = (tab: 'wallet' | 'defi') => {
     if (tab === 'wallet') {
