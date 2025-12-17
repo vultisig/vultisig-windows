@@ -1,0 +1,61 @@
+---
+globs: *.tsx
+alwaysApply: false
+---
+
+# Component Autonomy - Use Hooks Directly
+
+## Core Rule
+
+- **Domain-specific components should access state directly** using hooks
+- **NEVER pass props that components can obtain themselves** via hooks
+- Only pass props to truly reusable/generic components that need to work in multiple contexts
+
+## When to Use Hooks Directly
+
+<example>
+// ✅ Domain-specific component uses hooks directly
+export const PerpHeader = () => {
+  const [perpId, setPerpId] = usePerpId()
+  
+  return <PerpSelector currentPerpId={perpId} onSelectPerp={setPerpId} />
+}
+
+// Parent just renders it
+export const PerpPage = () => {
+return <PerpHeader />
+}
+</example>
+
+<example type="invalid">
+// ❌ Unnecessarily passing props the component can get itself
+export const PerpHeader = ({ perpId, onPerpIdChange }) => {
+  return <PerpSelector currentPerpId={perpId} onSelectPerp={onPerpIdChange} />
+}
+
+export const PerpPage = () => {
+const [perpId, setPerpId] = usePerpId()
+return <PerpHeader perpId={perpId} onPerpIdChange={setPerpId} />
+}
+</example>
+
+## When to Pass Props
+
+Pass props only for:
+
+- **Reusable components** used in multiple different contexts
+- **Generic UI components** that shouldn't know about domain logic
+- **Configuration** that varies between instances of the same component
+
+<example>
+// ✅ Generic reusable component receives props
+export const Selector = ({ value, onChange, options }) => {
+  return <Select value={value} onChange={onChange} options={options} />
+}
+</example>
+
+## Guidelines
+
+- If a component is only used in one domain context, let it use hooks
+- Don't make components "stateless" just for the sake of it
+- Props are for reusability, not for drilling available state

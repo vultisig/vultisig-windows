@@ -153,6 +153,7 @@ export const en = {
     claim: 'Claim Rewards',
     current_rewards: 'Current Rewards',
     deposit: 'Deposit',
+    deposit_header: 'Deposit to Circle Account',
     introduction:
       'Deposit your $USDC into a Circle account and earn yield. Securely within your Vultisig vault.',
     open_account: 'Open Account',
@@ -160,6 +161,7 @@ export const en = {
     total_deposit: 'Total Deposit',
     total_rewards: 'Total Rewards',
     withdraw: 'Withdraw',
+    withdraw_header: 'Withdraw from Circle',
     yield_details: 'Circle Yield Details',
   },
   circle_description: 'Deposit $USDC into A Circle Contract',
