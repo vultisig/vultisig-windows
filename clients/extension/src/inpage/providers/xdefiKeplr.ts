@@ -164,7 +164,7 @@ const directHandler = (
       decodedMessage.coins.length === 0 ||
       !decodedMessage.coins[0].asset
     ) {
-      throw new Error(' coins array is required and cannot be empty')
+      throw new Error('coins array is required and cannot be empty')
     }
     const prefix = chain === Chain.MayaChain ? 'maya' : 'thor'
     const signerAddress = bech32.encode(
@@ -199,7 +199,7 @@ const directHandler = (
       decodedMessage.amounts.length === 0 ||
       !decodedMessage.amounts[0].denom
     ) {
-      throw new Error(' amounts array is required and cannot be empty')
+      throw new Error('amounts array is required and cannot be empty')
     }
 
     const prefix = chain === Chain.MayaChain ? 'maya' : 'thor'
