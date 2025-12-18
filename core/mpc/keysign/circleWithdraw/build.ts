@@ -84,7 +84,7 @@ export const buildCircleWithdrawKeysignPayload = async ({
     walletCore,
   })
 
-  let keysignPayload = create(KeysignPayloadSchema, {
+  const keysignPayload = create(KeysignPayloadSchema, {
     coin: toCommCoin({
       ...nativeCoin,
       hexPublicKey: Buffer.from(publicKey.data()).toString('hex'),
@@ -104,4 +104,3 @@ export const buildCircleWithdrawKeysignPayload = async ({
 
   return keysignPayload
 }
-
