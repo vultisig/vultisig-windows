@@ -14,7 +14,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file vultisig/vault/v1/vault.proto.
  */
 export const file_vultisig_vault_v1_vault: GenFile = /*@__PURE__*/
-  fileDesc("Ch12dWx0aXNpZy92YXVsdC92MS92YXVsdC5wcm90bxIRdnVsdGlzaWcudmF1bHQudjEi6gIKBVZhdWx0EgwKBG5hbWUYASABKAkSGAoQcHVibGljX2tleV9lY2RzYRgCIAEoCRIYChBwdWJsaWNfa2V5X2VkZHNhGAMgASgJEg8KB3NpZ25lcnMYBCADKAkSLgoKY3JlYXRlZF9hdBgFIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASFgoOaGV4X2NoYWluX2NvZGUYBiABKAkSNQoKa2V5X3NoYXJlcxgHIAMoCzIhLnZ1bHRpc2lnLnZhdWx0LnYxLlZhdWx0LktleVNoYXJlEhYKDmxvY2FsX3BhcnR5X2lkGAggASgJEhYKDnJlc2hhcmVfcHJlZml4GAkgASgJEi0KCGxpYl90eXBlGAogASgOMhsudnVsdGlzaWcua2V5Z2VuLnYxLkxpYlR5cGUaMAoIS2V5U2hhcmUSEgoKcHVibGljX2tleRgBIAEoCRIQCghrZXlzaGFyZRgCIAEoCUJQChF2dWx0aXNpZy52YXVsdC52MVo2Z2l0aHViLmNvbS92dWx0aXNpZy9jb21tb25kYXRhL2dvL3Z1bHRpc2lnL3ZhdWx0L3YxO3YxugICVlNiBnByb3RvMw", [file_google_protobuf_timestamp, file_vultisig_keygen_v1_lib_type_message]);
+  fileDesc("Ch12dWx0aXNpZy92YXVsdC92MS92YXVsdC5wcm90bxIRdnVsdGlzaWcudmF1bHQudjEi9QMKBVZhdWx0EgwKBG5hbWUYASABKAkSGAoQcHVibGljX2tleV9lY2RzYRgCIAEoCRIYChBwdWJsaWNfa2V5X2VkZHNhGAMgASgJEg8KB3NpZ25lcnMYBCADKAkSLgoKY3JlYXRlZF9hdBgFIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASFgoOaGV4X2NoYWluX2NvZGUYBiABKAkSNQoKa2V5X3NoYXJlcxgHIAMoCzIhLnZ1bHRpc2lnLnZhdWx0LnYxLlZhdWx0LktleVNoYXJlEhYKDmxvY2FsX3BhcnR5X2lkGAggASgJEhYKDnJlc2hhcmVfcHJlZml4GAkgASgJEi0KCGxpYl90eXBlGAogASgOMhsudnVsdGlzaWcua2V5Z2VuLnYxLkxpYlR5cGUSQgoRY2hhaW5fcHVibGljX2tleXMYCyADKAsyJy52dWx0aXNpZy52YXVsdC52MS5WYXVsdC5DaGFpblB1YmxpY0tleRowCghLZXlTaGFyZRISCgpwdWJsaWNfa2V5GAEgASgJEhAKCGtleXNoYXJlGAIgASgJGkUKDkNoYWluUHVibGljS2V5EhIKCnB1YmxpY19rZXkYASABKAkSDQoFY2hhaW4YAiABKAkSEAoIaXNfZWRkc2EYAyABKAhCUAoRdnVsdGlzaWcudmF1bHQudjFaNmdpdGh1Yi5jb20vdnVsdGlzaWcvY29tbW9uZGF0YS9nby92dWx0aXNpZy92YXVsdC92MTt2MboCAlZTYgZwcm90bzM", [file_google_protobuf_timestamp, file_vultisig_keygen_v1_lib_type_message]);
 
 /**
  * @generated from message vultisig.vault.v1.Vault
@@ -69,6 +69,11 @@ export type Vault = Message<"vultisig.vault.v1.Vault"> & {
    * @generated from field: vultisig.keygen.v1.LibType lib_type = 10;
    */
   libType: LibType;
+
+  /**
+   * @generated from field: repeated vultisig.vault.v1.Vault.ChainPublicKey chain_public_keys = 11;
+   */
+  chainPublicKeys: Vault_ChainPublicKey[];
 };
 
 /**
@@ -99,4 +104,31 @@ export type Vault_KeyShare = Message<"vultisig.vault.v1.Vault.KeyShare"> & {
  */
 export const Vault_KeyShareSchema: GenMessage<Vault_KeyShare> = /*@__PURE__*/
   messageDesc(file_vultisig_vault_v1_vault, 0, 0);
+
+/**
+ * @generated from message vultisig.vault.v1.Vault.ChainPublicKey
+ */
+export type Vault_ChainPublicKey = Message<"vultisig.vault.v1.Vault.ChainPublicKey"> & {
+  /**
+   * @generated from field: string public_key = 1;
+   */
+  publicKey: string;
+
+  /**
+   * @generated from field: string chain = 2;
+   */
+  chain: string;
+
+  /**
+   * @generated from field: bool is_eddsa = 3;
+   */
+  isEddsa: boolean;
+};
+
+/**
+ * Describes the message vultisig.vault.v1.Vault.ChainPublicKey.
+ * Use `create(Vault_ChainPublicKeySchema)` to create a new message.
+ */
+export const Vault_ChainPublicKeySchema: GenMessage<Vault_ChainPublicKey> = /*@__PURE__*/
+  messageDesc(file_vultisig_vault_v1_vault, 0, 1);
 
