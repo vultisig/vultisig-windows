@@ -7,7 +7,7 @@ import { multiplyBigInt } from '@lib/utils/bigint/bigIntMultiplyByNumber'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-type CircleDepositPercentageSelectorProps = {
+type CirclePercentageSelectorProps = {
   balance: bigint | null
   currentAmount: bigint | null
   onSelect: (amount: bigint | null) => void
@@ -15,11 +15,11 @@ type CircleDepositPercentageSelectorProps = {
 
 const percentages = [0.25, 0.5, 0.75, 1] as const
 
-export const CircleDepositPercentageSelector = ({
+export const CirclePercentageSelector = ({
   balance,
   currentAmount,
   onSelect,
-}: CircleDepositPercentageSelectorProps) => {
+}: CirclePercentageSelectorProps) => {
   const { t } = useTranslation()
 
   if (!balance) return null

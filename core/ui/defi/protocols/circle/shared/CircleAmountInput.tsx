@@ -14,14 +14,14 @@ import {
 } from 'react'
 import styled from 'styled-components'
 
-type CircleDepositAmountInputProps = InputProps<bigint | null>
+type CircleAmountInputProps = InputProps<bigint | null>
 
 const placeholder = formatAmount(0)
 
-export const CircleDepositAmountInput = ({
+export const CircleAmountInput = ({
   value,
   onChange,
-}: CircleDepositAmountInputProps) => {
+}: CircleAmountInputProps) => {
   const measureRef = useRef<HTMLSpanElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const [inputWidth, setInputWidth] = useState<number | undefined>(undefined)
