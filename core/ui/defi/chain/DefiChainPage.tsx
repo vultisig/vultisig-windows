@@ -41,7 +41,7 @@ export const DefiChainPage = () => {
           <DefiChainTabs />
         </StyledPageContent>
       </VStack>
-      <BottomNavigation activeTab="defi" />
+      <BottomNavigation activeTab="defi" isActiveTabRoot={false} />
     </Wrapper>
   )
 }
