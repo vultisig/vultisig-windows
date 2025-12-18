@@ -13,19 +13,19 @@ import {
 } from 'react'
 import styled from 'styled-components'
 
-type BigAmountInputProps = InputProps<bigint | null> & {
+type HeroAmountInputProps = InputProps<bigint | null> & {
   ticker: string
   decimals: number
 }
 
 const placeholder = formatAmount(0)
 
-export const BigAmountInput = ({
+export const HeroAmountInput = ({
   value,
   onChange,
   ticker,
   decimals,
-}: BigAmountInputProps) => {
+}: HeroAmountInputProps) => {
   const measureRef = useRef<HTMLSpanElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const [inputWidth, setInputWidth] = useState<number | undefined>(undefined)
@@ -170,3 +170,4 @@ const Ticker = styled(Text)`
   line-height: 37px;
   letter-spacing: -1px;
 `
+

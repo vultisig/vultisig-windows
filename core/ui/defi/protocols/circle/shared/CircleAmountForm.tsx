@@ -2,7 +2,7 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { usdc } from '@core/chain/coin/knownTokens'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
-import { BigAmountInput } from '@lib/ui/inputs/BigAmountInput'
+import { HeroAmountInput } from '@lib/ui/inputs/HeroAmountInput'
 import { PercentageSelector } from '@lib/ui/inputs/PercentageSelector'
 import { LineSeparator } from '@lib/ui/layout/LineSeparator'
 import { HStack, vStack } from '@lib/ui/layout/Stack'
@@ -52,7 +52,7 @@ export const CircleAmountForm = ({
         </HStack>
         <LineSeparator kind="regular" />
         <AmountInputWrapper>
-          <BigAmountInput
+          <HeroAmountInput
             value={amount}
             onChange={setAmount}
             ticker={usdc.ticker}
