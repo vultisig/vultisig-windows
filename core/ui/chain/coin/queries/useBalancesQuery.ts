@@ -13,23 +13,24 @@ export function getBalanceQueryKey<T extends CoinBalanceResolverInput>(
   return ['coinBalance', input]
 }
 
+export const getBalanceQueryOptions = <T extends CoinBalanceResolverInput>(
+  input: Exact<CoinBalanceResolverInput, T>
+) => ({
+  queryKey: getBalanceQueryKey(input),
+  queryFn: async () => {
+    const amount = await getCoinBalance(input)
+    return {
+      [coinKeyToString(input)]: amount,
+    }
+  },
+  ...persistQueryOptions,
+})
+
 export const useBalancesQuery = <T extends CoinBalanceResolverInput>(
   inputs: Exact<CoinBalanceResolverInput, T>[]
 ) => {
   const queries = useQueries({
-    queries: inputs.map(input => {
-      return {
-        queryKey: getBalanceQueryKey(input),
-        queryFn: async () => {
-          const amount = await getCoinBalance(input)
-
-          return {
-            [coinKeyToString(input)]: amount,
-          }
-        },
-        ...persistQueryOptions,
-      }
-    }),
+    queries: inputs.map(input => getBalanceQueryOptions(input)),
   })
 
   return useCombineQueries({
