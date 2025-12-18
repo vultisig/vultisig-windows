@@ -958,7 +958,6 @@ export const it = {
   select_destination_chain: 'Seleziona la catena di destinazione',
   select_n_devices_one: 'Seleziona {{count}} dispositivo',
   select_n_devices_other: 'Seleziona {{count}} dispositivi',
-  select_network: 'Seleziona Catena',
   select_the_pairing_devices: 'Seleziona i dispositivi di associazione',
   select_token: 'Seleziona token',
   select_vault: 'Seleziona un Vault',
