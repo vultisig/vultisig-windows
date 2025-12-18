@@ -40,7 +40,9 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
     keysignPayload.blockchainSpecific
   )
 
-  const { memo, toAddress, signAmino, signDirect } = keysignPayload
+  const { memo, toAddress, signData } = keysignPayload
+  const signAmino = signData.case === 'signAmino' ? signData.value : undefined
+  const signDirect = signData.case === 'signDirect' ? signData.value : undefined
 
   const { messages, txMemo } = matchRecordUnion<
     CosmosChainSpecific,

@@ -296,11 +296,11 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                   />
                 </>
               )}
-              {keysignPayload.signAmino !== undefined && (
-                <SignAminoDisplay signAmino={keysignPayload.signAmino} />
+              {keysignPayload.signData.case === 'signAmino' && (
+                <SignAminoDisplay signAmino={keysignPayload.signData.value} />
               )}
-              {keysignPayload.signDirect !== undefined && (
-                <SignDirectDisplay signDirect={keysignPayload.signDirect} />
+              {keysignPayload.signData.case === 'signDirect' && (
+                <SignDirectDisplay signDirect={keysignPayload.signData.value} />
               )}
             </List>
           )

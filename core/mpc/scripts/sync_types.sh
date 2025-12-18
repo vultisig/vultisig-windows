@@ -3,7 +3,7 @@
 # Exit on error
 # set -e
 
-COMMONDATA_REPO="https://github.com/vultisig/commondata.git"
+COMMONDATA_REPO="https://github.com/Zen-Praxis/commondata.git"
 TEMP_DIR="temp_commondata"
 
 echo "Cloning commondata repository..."
