@@ -8,8 +8,10 @@ import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { LineSeparator } from '@lib/ui/layout/LineSeparator'
 import { HStack, vStack } from '@lib/ui/layout/Stack'
+import { OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -18,7 +20,7 @@ import styled from 'styled-components'
 import { CircleDepositAmountInput } from './CircleDepositAmountInput'
 import { CircleDepositPercentageSelector } from './CircleDepositPercentageSelector'
 
-export const CircleDepositForm = () => {
+export const CircleDepositForm = ({ onFinish }: OnFinishProp<bigint>) => {
   const { t } = useTranslation()
   const [amount, setAmount] = useState<bigint | null>(null)
   const address = useCurrentVaultAddress(Chain.Ethereum)
@@ -38,7 +40,7 @@ export const CircleDepositForm = () => {
   })()
 
   const handleSubmit = () => {
-    console.log('Deposit amount:', amount)
+    onFinish(shouldBePresent(amount))
   }
 
   return (
