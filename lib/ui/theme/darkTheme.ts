@@ -12,6 +12,7 @@ export const darkTheme: DefaultTheme = {
     textSupporting: new HSLA(211, 10, 43),
     // Text/Tertiary
     textShy: new HSLA(214, 21, 60),
+    // Text/Secondary
     textShyExtra: new HSLA(214, 40, 85, 1),
 
     primary: new HSLA(167, 78, 55),
@@ -40,6 +41,7 @@ export const darkTheme: DefaultTheme = {
 
     buttonBackgroundDisabled: new HSLA(217, 57, 14),
     buttonLinkHover: new HSLA(0, 0, 100, 0.04),
+    // Primary/Accent 3
     buttonPrimary: new HSLA(224, 75, 50),
     buttonHover: new HSLA(215, 75, 47),
     buttonTextDisabled: new HSLA(216, 15, 52),

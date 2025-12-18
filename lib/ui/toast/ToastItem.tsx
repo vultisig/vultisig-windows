@@ -1,6 +1,7 @@
 import { centerContent } from '@lib/ui/css/centerContent'
 import { horizontalPadding } from '@lib/ui/css/horizontalPadding'
 import { round } from '@lib/ui/css/round'
+import { BodyPortal } from '@lib/ui/dom/BodyPortal'
 import { ChildrenProp } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import styled, { keyframes } from 'styled-components'
@@ -9,10 +10,10 @@ import { hStack } from '../layout/Stack'
 
 const appearFromBottom = keyframes`
   from {
-    transform: translateX(-50%) translateY(100%);
+    transform: translateY(100%);
   }
   to {
-    transform: translateX(-50%) translateY(0);
+    transform: translateY(0);
   }
 `
 
@@ -22,6 +23,7 @@ const Position = styled.div`
   padding-inline: 20px;
   right: 0;
   left: 0;
+  z-index: 1100;
   animation: ${appearFromBottom} 0.5s ease-out;
 
   ${hStack({
@@ -43,8 +45,10 @@ const Container = styled.div`
 
 export const ToastItem = ({ children }: ChildrenProp) => {
   return (
-    <Position>
-      <Container>{children}</Container>
-    </Position>
+    <BodyPortal>
+      <Position>
+        <Container>{children}</Container>
+      </Position>
+    </BodyPortal>
   )
 }
