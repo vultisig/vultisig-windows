@@ -151,7 +151,7 @@ const useDefiPositionsQuery = () => {
 export const useDefiPositions = (chain: Chain): string[] => {
   const { data } = useDefiPositionsQuery()
 
-  return data?.[chain] ?? getAvailablePositionsForChain(chain).map(p => p.id)
+  return data?.[chain] ?? []
 }
 
 const useAllDefiPositions = (): DefiPositionsRecord => {
@@ -174,10 +174,7 @@ const useSetDefiPositionsMutation = () => {
 
 export const useToggleDefiPosition = (chain: Chain) => {
   const allPositions = useAllDefiPositions()
-  const defaultChainPositions = getAvailablePositionsForChain(chain).map(
-    p => p.id
-  )
-  const chainPositions = allPositions[chain] ?? defaultChainPositions
+  const chainPositions = allPositions[chain] ?? []
   const { mutate: setDefiPositions, isPending } = useSetDefiPositionsMutation()
 
   const togglePosition = (positionId: string) => {

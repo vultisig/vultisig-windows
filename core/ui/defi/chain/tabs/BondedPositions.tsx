@@ -223,7 +223,7 @@ export const BondedPositions = () => {
       {/* Active Nodes Section */}
       <SectionContainer>
         <SectionHeader onClick={() => setActiveNodesOpen(!activeNodesOpen)}>
-          <Text size={14} weight="600" color="contrast">
+          <Text size={14} weight="500" color="shy">
             {t('active_nodes')}
           </Text>
           <ChevronWrapper
@@ -279,7 +279,7 @@ export const BondedPositions = () => {
         <SectionHeader
           onClick={() => setAvailableNodesOpen(!availableNodesOpen)}
         >
-          <Text size={14} weight="600" color="contrast">
+          <Text size={14} weight="500" color="shy">
             {t('available_nodes')}
           </Text>
           <ChevronWrapper
@@ -315,11 +315,21 @@ export const BondedPositions = () => {
                 </VStack>
               </SectionItem>
             ))
-          ) : !isPending ? (
+          ) : isPending ? (
+            <>
+              {[1, 2].map(key => (
+                <SkeletonItem key={key}>
+                  <Skeleton width="60%" height="16px" />
+                  <Skeleton width="40%" height="20px" />
+                  <Skeleton width="100%" height="20px" />
+                </SkeletonItem>
+              ))}
+            </>
+          ) : (
             <SectionItem>
               <EmptyState title={t('no_available_nodes')} />
             </SectionItem>
-          ) : null}
+          )}
         </Collapsible>
       </SectionContainer>
     </VStack>
