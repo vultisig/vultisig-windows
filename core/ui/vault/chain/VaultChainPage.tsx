@@ -53,7 +53,7 @@ export const VaultChainPage = () => {
           <VaultChainTabs />
         </StyledPageContent>
       </VStack>
-      <BottomNavigation />
+      <BottomNavigation isActiveTabRoot={false} />
     </Wrapper>
   )
 }
