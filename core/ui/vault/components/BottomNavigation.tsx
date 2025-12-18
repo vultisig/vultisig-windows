@@ -21,10 +21,12 @@ const cameraIconSize = 56
 
 type BottomNavigationProps = {
   activeTab?: 'wallet' | 'defi'
+  isActiveTabRoot?: boolean
 }
 
 export const BottomNavigation = ({
   activeTab = 'wallet',
+  isActiveTabRoot = true,
 }: BottomNavigationProps) => {
   const navigate = useCoreNavigate()
   const { t } = useTranslation()
@@ -47,10 +49,12 @@ export const BottomNavigation = ({
   }, [])
 
   const handleTabChange = (tab: 'wallet' | 'defi') => {
+    if (tab === activeTab && isActiveTabRoot) return
+
     if (tab === 'wallet') {
-      navigate({ id: 'vault' })
+      navigate({ id: 'vault' }, { replace: true })
     } else {
-      navigate({ id: 'defi', state: {} })
+      navigate({ id: 'defi', state: {} }, { replace: true })
     }
   }
 
@@ -110,6 +114,11 @@ const Container = styled.div`
   backdrop-filter: blur(32px);
   padding: 8px 12px 10px 12px;
   border-top: 1px solid #1b3f73;
+
+  @supports (padding-bottom: calc(0px + env(safe-area-inset-bottom))) {
+    height: calc(${bottomNavigationHeight}px + env(safe-area-inset-bottom));
+    padding-bottom: calc(10px + env(safe-area-inset-bottom));
+  }
 `
 
 const CameraButton = styled(UnstyledButton)`
