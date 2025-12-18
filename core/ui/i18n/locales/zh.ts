@@ -288,6 +288,13 @@ export const zh = {
   clear: '清除',
   close: '关闭',
   coin_not_found_in_current_vault: '当前金库中未找到该硬币。',
+  defi_token_required: '{{ticker}} 不在此金库中',
+  defi_token_required_description:
+    '请在“管理代币”中添加 {{ticker}}，以便进行质押、解押或绑定。',
+  defi_add_chain_to_vault_title: '请先将链添加到金库',
+  defi_add_chain_to_vault_description:
+    '先在金库中启用链，才能在此管理它的 DeFi 头寸。',
+  manage_tokens: '管理代币',
   collected_rewards: '已获得的奖励',
   coming_soon: '即将推出',
   complete: '完全的',
@@ -839,7 +846,7 @@ export const zh = {
   select_chain: '选择链',
   select_chains: '选择',
   select_positions: '选择仓位',
-  select_positions_description: '启用仓位以查看余额并管理资产。',
+  select_positions_description: '启用至少一个仓位以查看余额并管理仓位。',
   no_positions_found: '未找到头寸',
   no_positions_selected: '未选择仓位',
   no_positions_selected_description:

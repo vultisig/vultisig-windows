@@ -1,13 +1,19 @@
 import { Chain } from '@core/chain/Chain'
+import { useCurrentVaultChains } from '@core/ui/vault/state/currentVaultCoins'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMemo } from 'react'
 
+import { featureFlags } from '../featureFlags'
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'
 
-export const supportedDefiChains: Chain[] = [Chain.THORChain, Chain.MayaChain]
+const supportedDefiChains: Chain[] = [
+  Chain.THORChain,
+  ...(featureFlags.mayaChainDefi ? [Chain.MayaChain] : []),
+]
 
-export const initialDefiChains: Chain[] = [Chain.THORChain, Chain.MayaChain]
+export const initialDefiChains: Chain[] = []
 
 type GetDefiChainsFunction = () => Promise<Chain[]>
 type SetDefiChainsFunction = (chains: Chain[]) => Promise<void>
@@ -28,9 +34,11 @@ const useDefiChainsQuery = () => {
 }
 
 export const useDefiChains = () => {
+  const allowedDefiChains = useSupportedDefiChainsForVault()
   const { data } = useDefiChainsQuery()
 
-  return data ?? initialDefiChains
+  const resolved = data ?? initialDefiChains
+  return resolved.filter(chain => allowedDefiChains.includes(chain))
 }
 
 const useSetDefiChainsMutation = () => {
@@ -47,10 +55,15 @@ const useSetDefiChainsMutation = () => {
 
 export const useToggleDefiChain = () => {
   const defiChains = useDefiChains()
+  const allowedDefiChains = useSupportedDefiChainsForVault()
   const { mutate: setDefiChains, isPending } = useSetDefiChainsMutation()
 
   const toggleChain = (chain: Chain) => {
     const isSelected = defiChains.includes(chain)
+
+    if (!isSelected && !allowedDefiChains.includes(chain)) {
+      return
+    }
 
     if (isSelected) {
       // Remove chain
@@ -62,4 +75,13 @@ export const useToggleDefiChain = () => {
   }
 
   return { toggleChain, isPending }
+}
+
+export const useSupportedDefiChainsForVault = () => {
+  const vaultChains = useCurrentVaultChains()
+
+  return useMemo(
+    () => supportedDefiChains.filter(chain => vaultChains.includes(chain)),
+    [vaultChains]
+  )
 }
