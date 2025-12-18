@@ -170,4 +170,3 @@ const Ticker = styled(Text)`
   line-height: 37px;
   letter-spacing: -1px;
 `
-
