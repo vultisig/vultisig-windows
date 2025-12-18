@@ -1,31 +1,26 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { HStack } from '@lib/ui/layout/Stack'
+import { InputProps } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { multiplyBigInt } from '@lib/utils/bigint/bigIntMultiplyByNumber'
-import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-type CirclePercentageSelectorProps = {
-  balance: bigint | null
-  currentAmount: bigint | null
-  onSelect: (amount: bigint | null) => void
+type PercentageSelectorProps = InputProps<bigint | null> & {
+  max: bigint
+  maxLabel?: string
 }
 
 const percentages = [0.25, 0.5, 0.75, 1] as const
 
-export const CirclePercentageSelector = ({
-  balance,
-  currentAmount,
-  onSelect,
-}: CirclePercentageSelectorProps) => {
-  const { t } = useTranslation()
-
-  if (!balance) return null
-
-  const currentPercentage =
-    currentAmount !== null ? Number(currentAmount) / Number(balance) : null
+export const PercentageSelector = ({
+  max,
+  value,
+  onChange,
+  maxLabel = 'Max',
+}: PercentageSelectorProps) => {
+  const currentPercentage = value !== null ? Number(value) / Number(max) : null
 
   const isActive = (percentage: number) => {
     if (currentPercentage === null) return false
@@ -39,10 +34,10 @@ export const CirclePercentageSelector = ({
         <PercentageButton
           key={percentage}
           $isActive={isActive(percentage)}
-          onClick={() => onSelect(multiplyBigInt(balance, percentage))}
+          onClick={() => onChange(multiplyBigInt(max, percentage))}
         >
           <Text size={12} weight="500" color="shyExtra">
-            {percentage === 1 ? t('max') : `${Math.round(percentage * 100)}%`}
+            {percentage === 1 ? maxLabel : `${Math.round(percentage * 100)}%`}
           </Text>
         </PercentageButton>
       ))}

@@ -2,6 +2,8 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { usdc } from '@core/chain/coin/knownTokens'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
+import { BigAmountInput } from '@lib/ui/inputs/BigAmountInput'
+import { PercentageSelector } from '@lib/ui/inputs/PercentageSelector'
 import { LineSeparator } from '@lib/ui/layout/LineSeparator'
 import { HStack, vStack } from '@lib/ui/layout/Stack'
 import { OnFinishProp } from '@lib/ui/props'
@@ -13,9 +15,6 @@ import { formatAmount } from '@lib/utils/formatAmount'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { CircleAmountInput } from './CircleAmountInput'
-import { CirclePercentageSelector } from './CirclePercentageSelector'
 
 type CircleAmountFormProps = OnFinishProp<bigint> & {
   balanceQuery: Query<bigint>
@@ -53,18 +52,26 @@ export const CircleAmountForm = ({
         </HStack>
         <LineSeparator kind="regular" />
         <AmountInputWrapper>
-          <CircleAmountInput value={amount} onChange={setAmount} />
+          <BigAmountInput
+            value={amount}
+            onChange={setAmount}
+            ticker={usdc.ticker}
+            decimals={usdc.decimals}
+          />
           <PercentageText size={15} color="shy" $visible={amount !== null}>
             {amount !== null && balanceQuery.data
               ? `${Math.round((Number(amount) / Number(balanceQuery.data)) * 100)}%`
               : '0%'}
           </PercentageText>
         </AmountInputWrapper>
-        <CirclePercentageSelector
-          balance={balanceQuery.data ?? null}
-          currentAmount={amount}
-          onSelect={setAmount}
-        />
+        {balanceQuery.data && (
+          <PercentageSelector
+            max={balanceQuery.data}
+            value={amount}
+            onChange={setAmount}
+            maxLabel={t('max')}
+          />
+        )}
         <HStack justifyContent="space-between" alignItems="center">
           <Text size={14} weight="500">
             {t('balance_available')}:

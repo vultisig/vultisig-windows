@@ -1,4 +1,3 @@
-import { usdc } from '@core/chain/coin/knownTokens'
 import { HStack } from '@lib/ui/layout/Stack'
 import { InputProps } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
@@ -14,21 +13,26 @@ import {
 } from 'react'
 import styled from 'styled-components'
 
-type CircleAmountInputProps = InputProps<bigint | null>
+type BigAmountInputProps = InputProps<bigint | null> & {
+  ticker: string
+  decimals: number
+}
 
 const placeholder = formatAmount(0)
 
-export const CircleAmountInput = ({
+export const BigAmountInput = ({
   value,
   onChange,
-}: CircleAmountInputProps) => {
+  ticker,
+  decimals,
+}: BigAmountInputProps) => {
   const measureRef = useRef<HTMLSpanElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const [inputWidth, setInputWidth] = useState<number | undefined>(undefined)
   const [isReady, setIsReady] = useState(false)
 
   const displayValue =
-    value !== null ? bigIntToDecimalString(value, usdc.decimals) : ''
+    value !== null ? bigIntToDecimalString(value, decimals) : ''
   const trimmedDisplayValue = displayValue.includes('.')
     ? displayValue.replace(/\.?0+$/, '')
     : displayValue
@@ -39,15 +43,13 @@ export const CircleAmountInput = ({
   useEffect(() => {
     if (value !== previousValueRef.current) {
       const currentInputAsBigInt =
-        inputValue === ''
-          ? null
-          : decimalStringToBigInt(inputValue, usdc.decimals)
+        inputValue === '' ? null : decimalStringToBigInt(inputValue, decimals)
       if (currentInputAsBigInt !== value) {
         setInputValue(trimmedDisplayValue)
       }
       previousValueRef.current = value
     }
-  }, [value, trimmedDisplayValue, inputValue])
+  }, [value, trimmedDisplayValue, inputValue, decimals])
 
   const measureWidth = (text: string) => {
     if (!measureRef.current) return 0
@@ -87,14 +89,14 @@ export const CircleAmountInput = ({
       }
 
       try {
-        const chainAmount = decimalStringToBigInt(newValue, usdc.decimals)
+        const chainAmount = decimalStringToBigInt(newValue, decimals)
         setInputValue(newValue)
         onChange(chainAmount)
       } catch {
         return
       }
     },
-    [onChange]
+    [onChange, decimals]
   )
 
   return (
@@ -115,7 +117,7 @@ export const CircleAmountInput = ({
           }
         />
       </InputWrapper>
-      <Ticker color="shy">{usdc.ticker}</Ticker>
+      <Ticker color="shy">{ticker}</Ticker>
     </Container>
   )
 }
