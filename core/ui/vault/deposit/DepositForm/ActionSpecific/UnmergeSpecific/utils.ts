@@ -7,7 +7,7 @@ export const makeUnmergeSpecificPlaceholderCoin = (
   symbol: string,
   address: AccountCoin['address']
 ): AccountCoin => ({
-  id: `4.${symbol}`,
+  id: `thor.${symbol.toLowerCase()}`,
   chain: Chain.THORChain,
   ticker: symbol,
   decimals: chainFeeCoin[Chain.THORChain].decimals,
