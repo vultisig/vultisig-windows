@@ -111,7 +111,7 @@ export const SendCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
           )}
           {isChainModalOpen && (
             <SelectItemModal
-              title={t('select_network')}
+              title={t('select_chain')}
               optionComponent={props => {
                 const currentItemChain = props.value.chain
                 const summary = chainSummaries.data?.[currentItemChain]

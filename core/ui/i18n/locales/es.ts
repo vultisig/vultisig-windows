@@ -963,7 +963,6 @@ export const es = {
   select_destination_chain: 'Seleccionar cadena de destino',
   select_n_devices_one: 'Seleccione {{count}} dispositivo',
   select_n_devices_other: 'Seleccione {{count}} dispositivos',
-  select_network: 'Seleccionar cadena',
   select_the_pairing_devices: 'Seleccionar los dispositivos de emparejamiento',
   select_token: 'Seleccionar token',
   select_vault: 'Seleccione una bóveda',

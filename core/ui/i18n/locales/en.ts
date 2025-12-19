@@ -904,7 +904,6 @@ export const en = {
   select_destination_chain: 'Select Destination Chain',
   select_n_devices_one: 'Select {{count}} device',
   select_n_devices_other: 'Select {{count}} devices',
-  select_network: 'Select Chain',
   select_the_pairing_devices: 'Select the pairing devices',
   select_token: 'Select token',
   select_vault: 'Select a Vault',
