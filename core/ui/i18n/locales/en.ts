@@ -163,6 +163,7 @@ export const en = {
     total_rewards: 'Total Rewards',
     withdraw: 'Withdraw',
     withdraw_header: 'Withdraw from Circle',
+    verify_withdraw: 'Verify Withdraw',
     yield_details: 'Circle Yield Details',
   },
   circle_description: 'Deposit $USDC into A Circle Contract',
