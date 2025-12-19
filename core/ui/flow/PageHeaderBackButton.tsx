@@ -7,7 +7,7 @@ export const PageHeaderBackButton = ({ onClick }: Partial<OnClickProp>) => {
   const { goBack } = useCore()
 
   return (
-    <IconButton kind="action" onClick={onClick ?? goBack}>
+    <IconButton onClick={onClick ?? goBack}>
       <ChevronLeftIcon />
     </IconButton>
   )

@@ -1,5 +1,6 @@
 import { usdc } from '@core/chain/coin/knownTokens'
 import { Button } from '@lib/ui/buttons/Button'
+import { LineSeparator } from '@lib/ui/layout/LineSeparator'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -9,13 +10,20 @@ import styled from 'styled-components'
 import { ChainEntityIcon } from '../../../../chain/coin/icon/ChainEntityIcon'
 import { getCoinLogoSrc } from '../../../../chain/coin/icon/utils/getCoinLogoSrc'
 import { CircleAccountFiatBalance } from '../banner/CircleAccountFiatBalance'
+import { CircleWithdrawButton } from '../components/CircleWithdrawButton'
 import { OpenCircleAccount } from '../components/OpenCircleAccount'
 import { useCircleAccountQuery } from '../queries/circleAccount'
+import { useCircleAccountUsdcBalanceQuery } from '../queries/circleAccountUsdcBalance'
+import { useCircleViewState } from '../state/circleViewState'
 import { CircleAccountBalance } from './CircleAccountBalance'
 
 export const CircleDepositedPanel = () => {
   const { data: circleAccount } = useCircleAccountQuery()
+  const { data: circleBalance } = useCircleAccountUsdcBalanceQuery()
   const { t } = useTranslation()
+  const [, setViewState] = useCircleViewState()
+
+  const hasBalance = circleBalance !== undefined && circleBalance > 0n
 
   return (
     <Container>
@@ -36,11 +44,14 @@ export const CircleDepositedPanel = () => {
           </Text>
         </VStack>
       </HStack>
-      <Separator />
+      <LineSeparator kind="regular" />
       {circleAccount ? (
-        <Button>
-          {t('circle.deposit')} {usdc.ticker}
-        </Button>
+        <VStack gap={8}>
+          <Button onClick={() => setViewState('deposit')}>
+            {t('circle.deposit')} {usdc.ticker}
+          </Button>
+          {hasBalance && <CircleWithdrawButton />}
+        </VStack>
       ) : (
         <OpenCircleAccount />
       )}
@@ -55,9 +66,4 @@ const Container = styled.div`
   ${vStack({
     gap: 16,
   })}
-`
-
-const Separator = styled.div`
-  height: 1px;
-  background: ${getColor('foregroundExtra')};
 `

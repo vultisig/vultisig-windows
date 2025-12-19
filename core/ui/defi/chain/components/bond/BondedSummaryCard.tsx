@@ -7,6 +7,7 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -21,6 +22,7 @@ type Props = {
   isPending: boolean
   isSkeleton?: boolean
   isBondingDisabled?: boolean
+  actionsDisabledReason?: string
 }
 
 export const BondedSummaryCard = ({
@@ -31,9 +33,30 @@ export const BondedSummaryCard = ({
   isPending,
   isSkeleton,
   isBondingDisabled,
+  actionsDisabledReason,
 }: Props) => {
   const { t } = useTranslation()
   const formatFiatAmount = useFormatFiatAmount()
+
+  const actionButton = (
+    <Button kind="primary" onClick={onBond} disabled={isBondingDisabled}>
+      {t('bond_to_node')}
+    </Button>
+  )
+
+  const action =
+    actionsDisabledReason && !isPending && !isSkeleton ? (
+      <Tooltip
+        content={actionsDisabledReason}
+        renderOpener={({ ref, ...props }) => (
+          <div ref={ref as any} {...props} style={{ width: '100%' }}>
+            {actionButton}
+          </div>
+        )}
+      />
+    ) : (
+      actionButton
+    )
 
   return (
     <BondCard>
@@ -69,10 +92,13 @@ export const BondedSummaryCard = ({
         {isPending || isSkeleton ? (
           <Skeleton width="100%" height="44px" borderRadius="10px" />
         ) : (
-          <Button kind="primary" onClick={onBond} disabled={isBondingDisabled}>
-            {t('bond_to_node')}
-          </Button>
+          action
         )}
+        {actionsDisabledReason ? (
+          <Text size={12} color="warning">
+            {actionsDisabledReason}
+          </Text>
+        ) : null}
       </VStack>
     </BondCard>
   )

@@ -36,7 +36,7 @@ export const FollowOnXBanner = ({ onDismiss }: FollowOnXBannerProps) => {
         />
       </BackgroundPattern>
 
-      <CloseButton onClick={onDismiss} kind="action">
+      <CloseButton onClick={onDismiss}>
         <CrossIcon />
       </CloseButton>
 

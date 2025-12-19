@@ -314,6 +314,15 @@ export const it = {
   coin_not_found_in_current_vault: 'Moneta non trovata nel caveau attuale',
   coin_not_found_in_any_vault:
     '{{ticker}} su {{chain}} non trovato in nessun caveau',
+  defi_token_required: '{{ticker}} non è in questo caveau',
+  defi_token_required_description:
+    'Aggiungi {{ticker}} da Gestisci token per eseguire staking, unstaking o bonding.',
+  defi_add_chain_to_vault_title: 'Aggiungi prima la chain al caveau',
+  defi_add_chain_to_vault_description:
+    'Attiva una chain nel tuo caveau per gestirne qui le posizioni DeFi.',
+  defi_add: 'Add',
+  defi_remove: 'Remove',
+  manage_tokens: 'Gestisci token',
   collected_rewards: 'Ricompense raccolte',
   coming_soon: 'Prossimamente',
   complete: 'Completare',
@@ -924,13 +933,13 @@ export const it = {
   select_chains: 'Selezionare',
   select_positions: 'Seleziona posizioni',
   select_positions_description:
-    'Abilita le posizioni per visualizzare i saldi e gestire gli asset.',
+    'Abilita almeno una posizione per visualizzare i saldi e gestire le posizioni.',
   liquidity_pools: 'Pool di liquidità',
   locked_in_defi: 'Bloccato in DeFi',
   total_bonded: 'Totale in bond {{ticker}}',
-  active_nodes: 'Nodi attivi',
+  active_nodes: 'ActiveNodes',
   no_active_nodes: 'Nessun nodo attivo',
-  available_nodes: 'Nodi disponibili',
+  available_nodes: 'Available Nodes',
   no_available_nodes: 'Nessun nodo disponibile',
   request_to_bond: 'Richiedi bond',
   wait_until_node_churned: 'Attendi che il nodo venga churnato',
