@@ -13,7 +13,7 @@ import { useMemo } from 'react'
 type Props = { chain: Chain }
 
 export const useAutoDiscoverTokens = ({ chain }: Props) => {
-  const { data: whitelisted, isPending } = useWhitelistedCoinsQuery(chain)
+  const { data: whitelisted } = useWhitelistedCoinsQuery(chain)
 
   const vaultCoins = useCurrentVaultCoins()
 
@@ -44,5 +44,5 @@ export const useAutoDiscoverTokens = ({ chain }: Props) => {
     return out
   }, [whitelisted, vaultSet, metaByKey])
 
-  return { isPending, discoveredCoins }
+  return discoveredCoins
 }

@@ -51,7 +51,7 @@ export const SwapCoinsExplorer = ({
   const currentChain = side === 'from' ? fromCoinKey.chain : currentToCoin.chain
 
   const sortedSwapCoins = useSortedByBalanceCoins(value)
-  const { discoveredCoins } = useAutoDiscoverTokens({
+  const discoveredCoins = useAutoDiscoverTokens({
     chain: currentChain,
   })
   const mergedOptions = useMemo(
