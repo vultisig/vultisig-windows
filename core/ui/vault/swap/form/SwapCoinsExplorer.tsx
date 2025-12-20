@@ -82,20 +82,12 @@ export const SwapCoinsExplorer = ({
       optionComponent={CoinOption}
       onFinish={async newValue => {
         if (newValue) {
-          const isAlreadySaved = coins.some(c => areEqualCoins(c, newValue))
-          if (isAlreadySaved) {
+          if (coins.some(c => areEqualCoins(c, newValue))) {
             onChange(newValue)
           } else {
-            const coinToSave = discoveredCoins.find(c =>
-              areEqualCoins(c, newValue)
-            )
-            if (coinToSave) {
-              createCoin(coinToSave, {
-                onSuccess: () => onChange(newValue),
-              })
-            } else {
-              onChange(newValue)
-            }
+            createCoin(newValue, {
+              onSuccess: () => onChange(newValue),
+            })
           }
         }
         onClose()
