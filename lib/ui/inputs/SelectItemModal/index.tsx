@@ -34,8 +34,10 @@ const Content = styled(VStack)`
 `
 
 const ListWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
   flex: 1;
-  min-height: 0;
+  min-height: 320px;
   overflow-y: auto;
 `
 
