@@ -876,7 +876,6 @@ export const zh = {
   select_destination_chain: '选择目的地链',
   select_n_devices_one: '选择 {{count}} 台设备',
   select_n_devices_other: '选择 {{count}} 台设备',
-  select_network: '选择链',
   select_the_pairing_devices: '选择配对设备',
   select_token: '选择令牌',
   select_vault: '选择保险库',

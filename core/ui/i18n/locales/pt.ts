@@ -955,7 +955,6 @@ export const pt = {
   select_destination_chain: 'Selecione a cadeia de destinos',
   select_n_devices_one: 'Selecione {{count}} dispositivo',
   select_n_devices_other: 'Selecione {{count}} dispositivos',
-  select_network: 'Selecione a corrente',
   select_the_pairing_devices: 'Selecione os dispositivos de emparelhamento',
   select_token: 'Selecione o token',
   select_vault: 'Selecione um cofre',

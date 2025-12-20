@@ -97,14 +97,14 @@ export const SwapCoinsExplorer = ({
           <SwapHorizontalDivider />
           <VStack gap={7}>
             <FooterText height="large" centerHorizontally color="shy" size={12}>
-              {t('select_network')}
+              {t('select_chain')}
             </FooterText>
 
             <CarouselViewport>
               <CarouselWrapper
                 ref={footerRef}
                 role="tablist"
-                aria-label={t('select_network')}
+                aria-label={t('select_chain')}
                 onKeyDown={onKeyDown}
                 tabIndex={0}
               >

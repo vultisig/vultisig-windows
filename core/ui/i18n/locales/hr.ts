@@ -947,7 +947,6 @@ export const hr = {
   select_destination_chain: 'Odaberite lanac odredišta',
   select_n_devices_one: 'Odaberite {{count}} uređaj',
   select_n_devices_other: 'Odaberite {{count}} uređaja',
-  select_network: 'Odaberite lanac',
   select_the_pairing_devices: 'Odaberite uređaje za uparivanje',
   select_token: 'Odaberite token',
   select_vault: 'Odaberite trezor',

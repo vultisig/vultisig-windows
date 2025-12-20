@@ -20,7 +20,7 @@ export const KeygenPeerDiscoveryEducationOverlay: FC<OnFinishProp> = ({
         <OverlayContentWrapper justifyContent="center" gap={36}>
           <PhoneImageWrapper>
             <PhoneImageOverlay />
-            <img src="/assets/images/vultisig-peak.png" alt="" />
+            <img src="/core/images/vultisig-peak.png" alt="" />
             <RiveWrapper>
               <Animation src="/core/animations/pulse.riv" />
             </RiveWrapper>

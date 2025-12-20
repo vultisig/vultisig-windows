@@ -75,7 +75,6 @@ export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
 
 const StyledPageContent = styled(PageContent)`
   ${hideScrollbars};
-  padding-bottom: 80px;
   position: relative;
 `
 

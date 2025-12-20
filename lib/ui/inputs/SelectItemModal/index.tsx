@@ -28,6 +28,17 @@ const offset = 100
 const defaultIncreaseViewportForVirtualizedList =
   modalOptionsListHeight + offset
 
+const Content = styled(VStack)`
+  flex: 1;
+  min-height: 0;
+`
+
+const ListWrapper = styled.div`
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+`
+
 export const SelectItemModal = <T extends { id?: string; chain?: string }>(
   props: SelectItemModalProps<T>
 ) => {
@@ -55,14 +66,14 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>(
 
   return (
     <Modal onClose={() => onFinish()} title={title}>
-      <VStack gap={8}>
+      <Content gap={8}>
         {options.length > 1 && <SearchField onSearch={setSearchQuery} />}
         {renderListHeader?.() || <div />}
 
         <ListWrapper>
           {useVirtual ? (
             <Virtuoso
-              style={{ height: modalOptionsListHeight }}
+              style={{ height: '100%' }}
               totalCount={filtered.length}
               data={filtered}
               increaseViewportBy={
@@ -89,15 +100,10 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>(
         </ListWrapper>
 
         {renderFooter?.()}
-      </VStack>
+      </Content>
     </Modal>
   )
 }
-
-const ListWrapper = styled.div`
-  max-height: ${modalOptionsListHeight}px;
-  overflow-y: auto;
-`
 
 const NonVirtualList = styled.div`
   display: flex;

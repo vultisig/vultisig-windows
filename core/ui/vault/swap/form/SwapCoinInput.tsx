@@ -68,7 +68,7 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
               </Text>
             </HStack>
           )}
-          title={t('select_network')}
+          title={t('select_chain')}
           optionComponent={props => {
             const currentItemChain = props.value.chain
             const isSelected =

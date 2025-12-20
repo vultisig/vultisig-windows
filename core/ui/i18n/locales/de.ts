@@ -964,7 +964,6 @@ export const de = {
   select_destination_chain: 'Zielkette auswählen',
   select_n_devices_one: 'Wählen Sie {{count}} Geräte aus',
   select_n_devices_other: 'Wählen Sie {{count}} Geräte aus',
-  select_network: 'Select Chain',
   select_the_pairing_devices: 'Wählen Sie die zu koppelnden Geräte aus.',
   select_token: 'Token auswählen',
   select_vault: 'Wählen Sie einen Tresor aus.',
