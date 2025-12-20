@@ -4,6 +4,7 @@ import {
   CoinKey,
   coinKeyToString,
 } from '@core/chain/coin/Coin'
+import { knownTokens } from '@core/chain/coin/knownTokens'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { swapEnabledChains } from '@core/chain/swap/swapEnabledChains'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
@@ -19,7 +20,7 @@ import styled from 'styled-components'
 
 import { CoinIcon } from '../../../chain/coin/icon/CoinIcon'
 import { CoinOption } from '../../../chain/coin/inputs/CoinOption'
-import { useAutoDiscoverTokens } from '../../../chain/hooks/useAutoDiscoverTokens'
+import { useWhitelistedCoinsQuery } from '../../../chain/coin/queries/useWhitelistedCoinsQuery'
 import { useTransferDirection } from '../../../state/transferDirection'
 import { useCreateCoinMutation } from '../../../storage/coins'
 import { useSortedByBalanceCoins } from '../../chain/coin/hooks/useSortedByBalanceCoins'
@@ -39,6 +40,30 @@ export const SwapCoinsExplorer = ({
   const side = useTransferDirection()
   const coins = useCurrentVaultCoins()
   const { mutate: createCoin } = useCreateCoinMutation()
+  const currentChain = side === 'from' ? fromCoinKey.chain : currentToCoin.chain
+
+  const { data: whitelisted } = useWhitelistedCoinsQuery(currentChain)
+
+  const sortedSwapCoins = useSortedByBalanceCoins(value)
+  const options = useMemo(() => {
+    const result: Coin[] = [...sortedSwapCoins]
+    const keys = new Set(sortedSwapCoins.map(coinKeyToString))
+
+    const extraCoins = [
+      ...(knownTokens[currentChain] ?? []),
+      ...(whitelisted ?? []),
+    ]
+
+    extraCoins.forEach(coin => {
+      const key = coinKeyToString(coin)
+      if (keys.has(key)) return
+
+      keys.add(key)
+      result.push(coin)
+    })
+
+    return result
+  }, [currentChain, sortedSwapCoins, whitelisted])
 
   const { t } = useTranslation()
 
@@ -46,17 +71,6 @@ export const SwapCoinsExplorer = ({
     () =>
       coins.filter(c => isOneOf(c.chain, swapEnabledChains) && isFeeCoin(c)),
     [coins]
-  )
-
-  const currentChain = side === 'from' ? fromCoinKey.chain : currentToCoin.chain
-
-  const sortedSwapCoins = useSortedByBalanceCoins(value)
-  const discoveredCoins = useAutoDiscoverTokens({
-    chain: currentChain,
-  })
-  const mergedOptions = useMemo(
-    () => [...sortedSwapCoins, ...discoveredCoins],
-    [discoveredCoins, sortedSwapCoins]
   )
 
   const { footerRef, itemRefs, scrollToKey, strokeRef, onKeyDown } =
@@ -93,7 +107,7 @@ export const SwapCoinsExplorer = ({
         onClose()
       }}
       getKey={v => coinKeyToString(v)}
-      options={mergedOptions}
+      options={options}
       renderFooter={() => (
         <VStack gap={11}>
           <SwapHorizontalDivider />
