@@ -21,6 +21,7 @@ import { useTranslation } from 'react-i18next'
 import { useFormatFiatAmount } from '../../../../chain/hooks/useFormatFiatAmount'
 import { useKeysignFee } from '../../fee/useKeysignFee'
 import { SignAminoDisplay } from '../../tx/components/SignAminoDisplay'
+import { SignDirectDisplay } from '../../tx/components/SignDirectDisplay'
 
 export const JoinKeysignTxPrimaryInfo = ({
   value,
@@ -86,8 +87,11 @@ export const JoinKeysignTxPrimaryInfo = ({
           <span>{networkFeesFormatted}</span>
         </TxOverviewRow>
       )}
-      {value.signAmino !== undefined && (
-        <SignAminoDisplay signAmino={value.signAmino} />
+      {value.signData.case === 'signAmino' && (
+        <SignAminoDisplay signAmino={value.signData.value} />
+      )}
+      {value.signData.case === 'signDirect' && (
+        <SignDirectDisplay signDirect={value.signData.value} />
       )}
     </>
   )

@@ -18,11 +18,10 @@ import { SigningInputsResolver } from '../resolver'
 export const getUtxoSigningInputs: SigningInputsResolver<'utxo'> = ({
   keysignPayload,
   walletCore,
-  publicKey,
 }) => {
   const chain = getKeysignChain<'utxo'>(keysignPayload)
 
-  const { byteFee, sendMaxAmount, psbt } = getBlockchainSpecificValue(
+  const { byteFee, sendMaxAmount } = getBlockchainSpecificValue(
     keysignPayload.blockchainSpecific,
     'utxoSpecific'
   )
@@ -69,39 +68,6 @@ export const getUtxoSigningInputs: SigningInputsResolver<'utxo'> = ({
       })
     : keysignPayload.toAddress
 
-  let signingV2 = undefined
-  if (psbt) {
-    if (!publicKey) {
-      throw new Error('Public key is required')
-    }
-    const pub33 = publicKey.data()
-    if (pub33.length !== 33) {
-      throw new Error(
-        `Expected compressed secp256k1 pubkey (33 bytes), got ${pub33.length}`
-      )
-    }
-    const hrpEnum = walletCore.CoinTypeExt.hrp(coinType)
-    const hrpMap: Record<number, string> = {
-      [walletCore.HRP.bitcoin.value]: 'bc',
-      [walletCore.HRP.litecoin.value]: 'ltc',
-    }
-
-    const chainInfo = TW.BitcoinV2.Proto.ChainInfo.create({
-      p2pkhPrefix: walletCore.CoinTypeExt.p2pkhPrefix(coinType),
-      p2shPrefix: walletCore.CoinTypeExt.p2shPrefix(coinType),
-      hrp: hrpMap[hrpEnum.value], // ok if undefined for other coins
-    })
-    const psbtBytes = Uint8Array.from(Buffer.from(psbt, 'base64'))
-
-    signingV2 = {
-      psbt: TW.BitcoinV2.Proto.Psbt.create({
-        psbt: psbtBytes,
-      }),
-      publicKeys: [publicKey.data()],
-      chainInfo,
-    }
-  }
-
   const input = TW.Bitcoin.Proto.SigningInput.create({
     hashType: walletCore.BitcoinScript.hashTypeForCoin(coinType),
     amount: Long.fromString(amount),
@@ -114,7 +80,6 @@ export const getUtxoSigningInputs: SigningInputsResolver<'utxo'> = ({
     scripts: {
       [scriptKey]: script,
     },
-    signingV2: signingV2,
     utxo: keysignPayload.utxoInfo.map(({ hash, amount, index }) =>
       TW.Bitcoin.Proto.UnspentTransaction.create({
         amount: Long.fromString(amount.toString()),

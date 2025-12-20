@@ -7,7 +7,6 @@ import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
 import {
   CosmosMsgType,
-  MsgPayload,
   TransactionDetails,
 } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import {
@@ -51,343 +50,6 @@ import { getCosmosChainFromAddress } from '../../utils/cosmos/getCosmosChainFrom
 import { requestAccount } from './core/requestAccount'
 import { Cosmos } from './cosmos'
 
-const formatContractMessage = (msgString: string): string =>
-  msgString.replace(/^({)/, '$1 ').replace(/(})$/, ' $1').replace(/:/g, ': ')
-
-type KeplrTransaction = (
-  | StdSignDoc
-  | {
-      bodyBytes: string // base64 encoded
-      authInfoBytes: string // base64 encoded
-      chainId: string
-      accountNumber: string // stringified Long
-    }
-) & {
-  skipBroadcast?: boolean
-}
-
-const extractKeplrMessages = (
-  tx: KeplrTransaction
-): {
-  messages: any[]
-  memo: string
-  chainId: string
-  skipBroadcast?: boolean
-} => {
-  if ('msgs' in tx) {
-    return {
-      chainId: tx.chain_id,
-      messages: [...tx.msgs],
-      memo: tx.memo,
-      skipBroadcast: tx.skipBroadcast,
-    }
-  } else {
-    const txBody = TxBody.decode(base64.decode(tx.bodyBytes))
-
-    return {
-      chainId: tx.chainId,
-      messages: txBody.messages,
-      memo: txBody.memo,
-      skipBroadcast: tx.skipBroadcast,
-    }
-  }
-}
-
-const keplrHandler = (
-  tx: KeplrTransaction,
-  chain: Chain
-): TransactionDetails => {
-  const { messages, memo, chainId, skipBroadcast } = extractKeplrMessages(tx)
-  const [message] = messages
-
-  const handleMsgSend = () => {
-    if (
-      !message.value ||
-      !message.value.amount ||
-      message.value.amount.length === 0
-    ) {
-      throw new Error('Invalid message structure: missing or empty amount')
-    }
-    return {
-      asset: {
-        chain: chain,
-        ticker: message.value.amount[0].denom,
-      },
-      amount: {
-        amount: message.value.amount[0].amount,
-        decimals: chainFeeCoin[chain].decimals,
-      },
-      from: message.value.from_address,
-      to: message.value.to_address,
-      data: memo,
-      msgPayload: {
-        case: message.type,
-        value: {
-          amount: message.value.amount,
-          from_address: message.value.from_address,
-          to_address: message.value.to_address,
-        },
-      } as MsgPayload,
-      skipBroadcast,
-    }
-  }
-
-  const handleMsgSendUrl = () => {
-    const decodedMessage = MsgSend.decode(message.value)
-    return {
-      asset: {
-        chain: chain,
-        ticker: decodedMessage.amount[0].denom,
-      },
-      amount: {
-        amount: decodedMessage.amount[0].amount,
-        decimals: chainFeeCoin[chain].decimals,
-      },
-      from: decodedMessage.fromAddress,
-      to: decodedMessage.toAddress,
-      data: memo,
-      msgPayload: {
-        case: message.typeUrl,
-        value: {
-          amount: decodedMessage.amount,
-          from_address: decodedMessage.fromAddress,
-          to_address: decodedMessage.toAddress,
-        },
-      } as MsgPayload,
-      skipBroadcast,
-    }
-  }
-  return match(message.type ?? message.typeUrl, {
-    [CosmosMsgType.MSG_SEND]: handleMsgSend,
-    [CosmosMsgType.THORCHAIN_MSG_SEND]: handleMsgSend,
-    [CosmosMsgType.MSG_SEND_URL]: handleMsgSendUrl,
-    [CosmosMsgType.MSG_EXECUTE_CONTRACT]: () => {
-      const formattedMessage = formatContractMessage(
-        JSON.stringify(message.value.msg)
-      )
-
-      return {
-        asset: {
-          chain: chain,
-          ticker: message.value.funds.length
-            ? message.value!.funds[0].denom
-            : chainFeeCoin[chain].ticker,
-        },
-        amount: {
-          amount: message.value.funds.length
-            ? message.value.funds[0].amount
-            : 0,
-          decimals: chainFeeCoin[chain].decimals,
-        },
-        from: message.value.sender,
-        to: message.value.contract,
-        data: memo,
-        msgPayload: {
-          case: CosmosMsgType.MSG_EXECUTE_CONTRACT,
-          value: {
-            sender: message.value.sender,
-            contract: message.value.contract,
-            funds: message.value.funds,
-            msg: formattedMessage,
-          },
-        } as MsgPayload,
-        skipBroadcast,
-      }
-    },
-    [CosmosMsgType.MSG_EXECUTE_CONTRACT_URL]: () => {
-      const decodedMessage = MsgExecuteContract.decode(message.value)
-      const msgString = new TextDecoder().decode(
-        Buffer.from(decodedMessage.msg)
-      )
-      const formattedMessage = formatContractMessage(msgString)
-      return {
-        asset: {
-          chain: chain,
-          ticker: decodedMessage.funds.length
-            ? decodedMessage.funds[0].denom
-            : chainFeeCoin[chain].ticker,
-        },
-        amount: {
-          amount: decodedMessage.funds.length
-            ? decodedMessage.funds[0].amount
-            : 0,
-          decimals: chainFeeCoin[chain].decimals,
-        },
-        from: decodedMessage.sender,
-        to: decodedMessage.contract,
-        data: memo,
-        msgPayload: {
-          case: CosmosMsgType.MSG_EXECUTE_CONTRACT,
-          value: {
-            sender: decodedMessage.sender,
-            contract: decodedMessage.contract,
-            funds: decodedMessage.funds,
-            msg: formattedMessage,
-          },
-        } as MsgPayload,
-        skipBroadcast,
-      }
-    },
-    [CosmosMsgType.MSG_TRANSFER_URL]: () => {
-      const txChain = getCosmosChainByChainId(chainId)
-
-      if (!txChain) {
-        throw new Error(`Chain not supported: ${chainId}`)
-      }
-
-      const msg = MsgTransfer.decode(message.value)
-
-      const receiverChain = getCosmosChainFromAddress(msg.receiver)
-
-      return {
-        asset: {
-          chain: txChain,
-          ticker: msg.token.denom,
-        },
-        amount: {
-          amount: msg.token.amount,
-          decimals: chainFeeCoin[txChain].decimals,
-        },
-        from: msg.sender,
-        to: msg.receiver,
-        data: `${receiverChain}:${msg.sourceChannel}:${msg.receiver}:${msg.memo}`,
-        msgPayload: {
-          case: CosmosMsgType.MSG_TRANSFER_URL,
-          value: {
-            ...msg,
-            timeoutHeight: {
-              revisionHeight: msg.timeoutHeight.revisionHeight.toString(),
-              revisionNumber: msg.timeoutHeight.revisionNumber.toString(),
-            },
-            timeoutTimestamp: msg.timeoutTimestamp.toString(),
-          },
-        } as MsgPayload,
-        skipBroadcast,
-      }
-    },
-    [CosmosMsgType.THORCHAIN_MSG_DEPOSIT]: () => {
-      if (!message.value.coins || message.value.coins.length === 0) {
-        throw new Error(' coins array is required and cannot be empty')
-      }
-
-      const assetParts = message.value.coins[0].asset.split('.')
-      if (assetParts.length < 2) {
-        throw new Error(`invalid asset format: ${message.value.coins[0].asset}`)
-      }
-      return {
-        asset: {
-          chain: chain,
-          ticker: assetParts[1],
-        },
-        amount: {
-          amount: message.value.coins[0].amount,
-          decimals: chainFeeCoin[chain].decimals,
-        },
-        from: message.value.signer,
-        data: memo,
-        msgPayload: {
-          case: CosmosMsgType.THORCHAIN_MSG_DEPOSIT,
-          value: {
-            coins: message.value.coins,
-            memo: message.value.memo,
-            signer: message.value.signer,
-          },
-        } as MsgPayload,
-        skipBroadcast,
-      }
-    },
-    [CosmosMsgType.THORCHAIN_MSG_DEPOSIT_URL]: () => {
-      const decodedMessage = TW.Cosmos.Proto.Message.THORChainDeposit.decode(
-        message.value
-      )
-      if (
-        !decodedMessage.coins ||
-        decodedMessage.coins.length === 0 ||
-        !decodedMessage.coins[0].asset
-      ) {
-        throw new Error(' coins array is required and cannot be empty')
-      }
-      const prefix = chain === Chain.MayaChain ? 'maya' : 'thor'
-      const signerAddress = bech32.encode(
-        prefix,
-        bech32.toWords(decodedMessage.signer)
-      )
-
-      return {
-        asset: {
-          chain: chain,
-          ticker: decodedMessage.coins[0].asset.ticker,
-        },
-        amount: {
-          amount: decodedMessage.coins[0].amount,
-          decimals: chainFeeCoin[chain].decimals,
-        },
-        from: signerAddress,
-        data: memo,
-        msgPayload: {
-          case: CosmosMsgType.THORCHAIN_MSG_DEPOSIT,
-          value: {
-            coins: decodedMessage.coins.map(coin => ({
-              amount: coin.amount,
-              asset: coin.asset?.ticker,
-            })),
-            memo: decodedMessage.memo,
-            signer: signerAddress,
-          },
-        } as MsgPayload,
-        skipBroadcast,
-      }
-    },
-    [CosmosMsgType.THORCHAIN_MSG_SEND_URL]: () => {
-      const decodedMessage = TW.Cosmos.Proto.Message.THORChainSend.decode(
-        message.value
-      )
-      if (
-        !decodedMessage.amounts ||
-        decodedMessage.amounts.length === 0 ||
-        !decodedMessage.amounts[0].denom
-      ) {
-        throw new Error(' amounts array is required and cannot be empty')
-      }
-
-      const prefix = chain === Chain.MayaChain ? 'maya' : 'thor'
-
-      const fromAddress = bech32.encode(
-        prefix,
-        bech32.toWords(decodedMessage.fromAddress)
-      )
-
-      const toAddress = bech32.encode(
-        prefix,
-        bech32.toWords(decodedMessage.toAddress)
-      )
-
-      return {
-        asset: {
-          chain: chain,
-          ticker: decodedMessage.amounts[0].denom,
-        },
-        amount: {
-          amount: decodedMessage.amounts[0].amount,
-          decimals: chainFeeCoin[chain].decimals,
-        },
-        from: fromAddress,
-        to: toAddress,
-        data: memo,
-        msgPayload: {
-          case: message.typeUrl,
-          value: {
-            amount: decodedMessage.amounts,
-            fromAddress: fromAddress,
-            toAddress: toAddress,
-          },
-        } as MsgPayload,
-        skipBroadcast,
-      }
-    },
-  })
-}
-
 const aminoHandler = (
   signDoc: StdSignDoc,
   chain: Chain
@@ -401,7 +63,7 @@ const aminoHandler = (
       ticker: message.value.funds?.[0]?.denom ?? chainFeeCoin[chain].ticker,
     },
     amount: {
-      amount: message.value.funds?.[0]?.amount ?? 0,
+      amount: message.value.funds?.[0]?.amount ?? '0',
       decimals: chainFeeCoin[chain].decimals,
     },
     from: message.value.sender ?? message.value.from_address ?? undefined,
@@ -410,6 +72,192 @@ const aminoHandler = (
     aminoPayload: {
       msgs: signDoc.msgs as CosmosMsg[],
       fee: fee as CosmosFee,
+    },
+    skipBroadcast: true,
+  } as TransactionDetails
+}
+
+const directHandler = (
+  signDoc: {
+    bodyBytes: string // base64 encoded
+    authInfoBytes: string // base64 encoded
+    chainId: string
+    accountNumber: string
+  },
+  chain: Chain
+): TransactionDetails => {
+  const txBody = TxBody.decode(base64.decode(signDoc.bodyBytes))
+  const [message] = txBody.messages
+  const memo = txBody.memo
+
+  const handleMsgSendUrl = () => {
+    const decodedMessage = MsgSend.decode(message.value)
+    return {
+      asset: {
+        chain: chain,
+        ticker: decodedMessage.amount[0]?.denom ?? chainFeeCoin[chain].ticker,
+      },
+      amount: {
+        amount: decodedMessage.amount[0]?.amount ?? '0',
+        decimals: chainFeeCoin[chain].decimals,
+      },
+      from: decodedMessage.fromAddress,
+      to: decodedMessage.toAddress,
+      data: memo,
+    }
+  }
+
+  const handleMsgExecuteContractUrl = () => {
+    const decodedMessage = MsgExecuteContract.decode(message.value)
+    return {
+      asset: {
+        chain: chain,
+        ticker:
+          decodedMessage.funds.length > 0
+            ? decodedMessage.funds[0].denom
+            : chainFeeCoin[chain].ticker,
+      },
+      amount: {
+        amount:
+          decodedMessage.funds.length > 0
+            ? decodedMessage.funds[0].amount
+            : '0',
+        decimals: chainFeeCoin[chain].decimals,
+      },
+      from: decodedMessage.sender,
+      to: decodedMessage.contract,
+      data: memo,
+    }
+  }
+
+  const handleMsgTransferUrl = () => {
+    const txChain = getCosmosChainByChainId(signDoc.chainId)
+
+    if (!txChain) {
+      throw new Error(`Chain not supported: ${signDoc.chainId}`)
+    }
+
+    const msg = MsgTransfer.decode(message.value)
+    const receiverChain = getCosmosChainFromAddress(msg.receiver)
+
+    return {
+      asset: {
+        chain: txChain,
+        ticker: msg.token.denom,
+      },
+      amount: {
+        amount: msg.token.amount,
+        decimals: chainFeeCoin[txChain].decimals,
+      },
+      from: msg.sender,
+      to: msg.receiver,
+      data: `${receiverChain}:${msg.sourceChannel}:${msg.receiver}:${msg.memo}`,
+    }
+  }
+
+  const handleThorchainDepositUrl = () => {
+    const decodedMessage = TW.Cosmos.Proto.Message.THORChainDeposit.decode(
+      message.value
+    )
+    if (
+      !decodedMessage.coins ||
+      decodedMessage.coins.length === 0 ||
+      !decodedMessage.coins[0].asset
+    ) {
+      throw new Error('coins array is required and cannot be empty')
+    }
+    const prefix = chain === Chain.MayaChain ? 'maya' : 'thor'
+    const signerAddress = bech32.encode(
+      prefix,
+      bech32.toWords(decodedMessage.signer)
+    )
+
+    return {
+      asset: {
+        chain: chain,
+        ticker: decodedMessage.coins[0].asset
+          ? decodedMessage.coins[0].asset.chain +
+            (decodedMessage.coins[0].asset.secured ? '-' : '.') +
+            decodedMessage.coins[0].asset.symbol
+          : '',
+      },
+      amount: {
+        amount: decodedMessage.coins[0].amount,
+        decimals: chainFeeCoin[chain].decimals,
+      },
+      from: signerAddress,
+      data: memo,
+    }
+  }
+
+  const handleThorchainSendUrl = () => {
+    const decodedMessage = TW.Cosmos.Proto.Message.THORChainSend.decode(
+      message.value
+    )
+    if (
+      !decodedMessage.amounts ||
+      decodedMessage.amounts.length === 0 ||
+      !decodedMessage.amounts[0].denom
+    ) {
+      throw new Error('amounts array is required and cannot be empty')
+    }
+
+    const prefix = chain === Chain.MayaChain ? 'maya' : 'thor'
+
+    const fromAddress = bech32.encode(
+      prefix,
+      bech32.toWords(decodedMessage.fromAddress)
+    )
+
+    const toAddress = bech32.encode(
+      prefix,
+      bech32.toWords(decodedMessage.toAddress)
+    )
+
+    return {
+      asset: {
+        chain: chain,
+        ticker: decodedMessage.amounts[0].denom,
+      },
+      amount: {
+        amount: decodedMessage.amounts[0].amount,
+        decimals: chainFeeCoin[chain].decimals,
+      },
+      from: fromAddress,
+      to: toAddress,
+      data: memo,
+    }
+  }
+
+  let transactionInfo: any
+
+  try {
+    transactionInfo = match(message.typeUrl, {
+      [CosmosMsgType.MSG_SEND]: handleMsgSendUrl,
+      [CosmosMsgType.THORCHAIN_MSG_SEND]: handleMsgSendUrl,
+      [CosmosMsgType.MSG_SEND_URL]: handleMsgSendUrl,
+      [CosmosMsgType.MSG_EXECUTE_CONTRACT]: handleMsgExecuteContractUrl,
+      [CosmosMsgType.MSG_EXECUTE_CONTRACT_URL]: handleMsgExecuteContractUrl,
+      [CosmosMsgType.MSG_TRANSFER_URL]: handleMsgTransferUrl,
+      [CosmosMsgType.THORCHAIN_MSG_DEPOSIT]: handleThorchainDepositUrl,
+      [CosmosMsgType.THORCHAIN_MSG_DEPOSIT_URL]: handleThorchainDepositUrl,
+      [CosmosMsgType.THORCHAIN_MSG_SEND_URL]: handleThorchainSendUrl,
+    })
+  } catch {
+    transactionInfo = {
+      asset: { chain, ticker: chainFeeCoin[chain].ticker },
+      amount: { amount: '0', decimals: chainFeeCoin[chain].decimals },
+      data: memo,
+    }
+  }
+
+  return {
+    ...transactionInfo,
+    directPayload: {
+      bodyBytes: signDoc.bodyBytes,
+      authInfoBytes: signDoc.authInfoBytes,
+      chainId: signDoc.chainId,
+      accountNumber: signDoc.accountNumber,
     },
     skipBroadcast: true,
   } as TransactionDetails
@@ -665,13 +513,12 @@ export class XDEFIKeplrProvider extends Keplr {
 
       const chain = shouldBePresent(getCosmosChainByChainId(chainId))
 
-      const transactionDetails = keplrHandler(
+      const transactionDetails: TransactionDetails = directHandler(
         {
           bodyBytes: Buffer.from(signDoc.bodyBytes).toString('base64'),
           authInfoBytes: Buffer.from(signDoc.authInfoBytes).toString('base64'),
           chainId: signDoc.chainId,
           accountNumber: signDoc.accountNumber.toString(),
-          skipBroadcast: true,
         },
         chain
       )

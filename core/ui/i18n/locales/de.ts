@@ -1016,6 +1016,7 @@ export const de = {
   show_defi_balance: 'DeFi-Guthaben anzeigen',
   sign: 'Zeichen',
   signAmino: 'Amino-Zeichen',
+  signDirect: 'Direktes Zeichen',
   signPrivately: 'Möchten Sie vertraulich unterschreiben?',
   sign_custom_message: 'Benutzerdefinierte Nachricht unterschreiben',
   sign_custom_message_description:
