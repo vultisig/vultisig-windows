@@ -322,6 +322,12 @@ export const it = {
     'Attiva una chain nel tuo caveau per gestirne qui le posizioni DeFi.',
   defi_add: 'Add',
   defi_remove: 'Remove',
+  defi_lp_pool_title: 'Pool {{pool}}',
+  position_label: 'Posizione',
+  defi_lp_position_form_title:
+    '{{action, select, add {Aggiungi liquidità} remove {Rimuovi liquidità} other {Gestisci liquidità}}}',
+  defi_lp_position_form_description:
+    'La gestione della liquidità per {{position}} sarà disponibile a breve.',
   manage_tokens: 'Gestisci token',
   collected_rewards: 'Ricompense raccolte',
   coming_soon: 'Prossimamente',
