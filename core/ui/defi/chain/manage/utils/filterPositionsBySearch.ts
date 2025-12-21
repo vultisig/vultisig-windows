@@ -10,6 +10,7 @@ export const filterPositionsBySearch = (
   return positions.filter(
     position =>
       position.name.toLowerCase().includes(normalizedSearch) ||
-      position.ticker.toLowerCase().includes(normalizedSearch)
+      position.ticker.toLowerCase().includes(normalizedSearch) ||
+      position.poolAsset?.toLowerCase().includes(normalizedSearch)
   )
 }
