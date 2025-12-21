@@ -145,6 +145,8 @@ type Props = {
   isSkeleton?: boolean
   actionsDisabled?: boolean
   actionsDisabledReason?: string
+  hideStats?: boolean
+  isPendingAction?: boolean
 }
 
 export const StakeCard = ({
@@ -168,11 +170,14 @@ export const StakeCard = ({
   isSkeleton,
   actionsDisabled,
   actionsDisabledReason,
+  hideStats,
+  isPendingAction = false,
 }: Props) => {
   const { t, i18n } = useTranslation()
   const formatFiatAmount = useFormatFiatAmount()
   const unstakeAllowed = canUnstake ?? true
-  const unstakeDisabled = actionsDisabled || !unstakeAllowed
+  const unstakeDisabled = actionsDisabled || !unstakeAllowed || isPendingAction
+  const stakeDisabled = actionsDisabled || isPendingAction
   const unstakeMessage =
     !unstakeAllowed && unstakeAvailableDate
       ? t('unstake_available_on', {
@@ -234,56 +239,61 @@ export const StakeCard = ({
             </VStack>
           </HStack>
         </SectionRow>
-        <Divider />
-        <VStack gap={16}>
-          <StatRow>
-            <StatLabel>
-              <PercentIcon />
-              <Text size={13} color="shy">
-                {t('apr')}
-              </Text>
-            </StatLabel>
-            <StatValue color="success">
-              {apr !== undefined ? `${apr.toFixed(2)}%` : '—'}
-            </StatValue>
-          </StatRow>
-          <HStack gap={16} alignItems="center">
-            <VStack flexGrow gap={8}>
-              <StatLabel>
-                <CalendarIcon />
-                <Text size={13} color="shy">
-                  {t('next_payout')}
-                </Text>
-              </StatLabel>
-              <StatValue color="shyExtra">
-                {isSkeleton ? (
-                  <Skeleton width="80px" height="14px" />
-                ) : (
-                  (formatDateShort(nextPayout, i18n.language) ?? t('pending'))
-                )}
-              </StatValue>
+        {!hideStats ? (
+          <>
+            <Divider />
+            <VStack gap={16}>
+              <StatRow>
+                <StatLabel>
+                  <PercentIcon />
+                  <Text size={13} color="shy">
+                    {t('apr')}
+                  </Text>
+                </StatLabel>
+                <StatValue color="success">
+                  {apr !== undefined ? `${apr.toFixed(2)}%` : '—'}
+                </StatValue>
+              </StatRow>
+              <HStack gap={16} alignItems="center">
+                <VStack flexGrow gap={8}>
+                  <StatLabel>
+                    <CalendarIcon />
+                    <Text size={13} color="shy">
+                      {t('next_payout')}
+                    </Text>
+                  </StatLabel>
+                  <StatValue color="shyExtra">
+                    {isSkeleton ? (
+                      <Skeleton width="80px" height="14px" />
+                    ) : (
+                      (formatDateShort(nextPayout, i18n.language) ??
+                      t('pending'))
+                    )}
+                  </StatValue>
+                </VStack>
+                <VStack flexGrow gap={8}>
+                  <StatLabel>
+                    <TrophyIcon />
+                    <Text size={14} color="shy">
+                      {t('estimated_reward')}
+                    </Text>
+                  </StatLabel>
+                  <StatValue color="shyExtra">
+                    {isSkeleton ? (
+                      <Skeleton width="90px" height="16px" />
+                    ) : estimatedReward !== undefined ? (
+                      formatAmount(estimatedReward, {
+                        ticker: rewardTicker ?? coin.ticker,
+                      })
+                    ) : (
+                      '—'
+                    )}
+                  </StatValue>
+                </VStack>
+              </HStack>
             </VStack>
-            <VStack flexGrow gap={8}>
-              <StatLabel>
-                <TrophyIcon />
-                <Text size={14} color="shy">
-                  {t('estimated_reward')}
-                </Text>
-              </StatLabel>
-              <StatValue color="shyExtra">
-                {isSkeleton ? (
-                  <Skeleton width="90px" height="16px" />
-                ) : estimatedReward !== undefined ? (
-                  formatAmount(estimatedReward, {
-                    ticker: rewardTicker ?? coin.ticker,
-                  })
-                ) : (
-                  '—'
-                )}
-              </StatValue>
-            </VStack>
-          </HStack>
-        </VStack>
+          </>
+        ) : null}
 
         <Divider />
 
@@ -338,7 +348,7 @@ export const StakeCard = ({
                   variant="primary"
                   onClick={onStake}
                   style={{ flex: 1 }}
-                  disabled={actionsDisabled}
+                  disabled={stakeDisabled}
                 >
                   <ActionIcon variant="primary">
                     <CirclePlusIcon />
