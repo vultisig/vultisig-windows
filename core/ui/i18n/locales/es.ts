@@ -320,6 +320,12 @@ export const es = {
     'Activa una cadena en tu bóveda para gestionar aquí sus posiciones DeFi.',
   defi_add: 'Add',
   defi_remove: 'Remove',
+  defi_lp_pool_title: 'Pool {{pool}}',
+  position_label: 'Posición',
+  defi_lp_position_form_title:
+    '{{action, select, add {Agregar liquidez} remove {Retirar liquidez} other {Administrar liquidez}}}',
+  defi_lp_position_form_description:
+    'La gestión de liquidez para {{position}} estará disponible pronto.',
   manage_tokens: 'Administrar tokens',
   collected_rewards: 'Recompensas acumuladas',
   coming_soon: 'Muy pronto',
