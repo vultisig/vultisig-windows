@@ -4,6 +4,7 @@ import {
   daysInYear,
   thorchainBlockTimeSeconds,
 } from '@core/ui/defi/chain/constants/time'
+import { mayaMidgardBaseUrl } from '@core/ui/defi/chain/queries/constants'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
 import { mayaMidgardBaseUrl } from '../constants'
