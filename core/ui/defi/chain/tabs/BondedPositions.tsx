@@ -10,7 +10,6 @@ import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
-import { EmptyState } from '@lib/ui/status/EmptyState'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
@@ -221,117 +220,113 @@ export const BondedPositions = () => {
       ) : null}
 
       {/* Active Nodes Section */}
-      <SectionContainer>
-        <SectionHeader onClick={() => setActiveNodesOpen(!activeNodesOpen)}>
-          <Text size={14} weight="500" color="shy">
-            {t('active_nodes')}
-          </Text>
-          <ChevronWrapper
-            animate={{ rotate: activeNodesOpen ? 180 : 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            <ChevronDownIcon />
-          </ChevronWrapper>
-        </SectionHeader>
-        <Collapsible isOpen={activeNodesOpen}>
-          {isPending && positions.length === 0 ? (
-            <>
-              {[1, 2].map(key => (
-                <SkeletonItem key={key}>
-                  <Skeleton width="60%" height="16px" />
-                  <Skeleton width="40%" height="24px" />
-                  <Skeleton width="100%" height="20px" />
-                </SkeletonItem>
-              ))}
-            </>
-          ) : positions.length > 0 ? (
-            positions.map(position => (
-              <SectionItem key={position.nodeAddress}>
-                <BondNodeItem
-                  coin={bondCoin}
-                  nodeAddress={position.nodeAddress}
-                  amount={position.amount}
-                  apy={position.apy}
-                  nextReward={position.nextReward}
-                  nextChurn={position.nextChurn}
-                  status={position.status}
-                  onBond={() =>
-                    navigateToBond({ nodeAddress: position.nodeAddress })
-                  }
-                  onUnbond={() => navigateToUnbond(position.nodeAddress)}
-                  canUnbond={canUnbond}
-                  fiatValue={position.fiatValue}
-                  isBondingDisabled={isBondingDisabled}
-                  actionsDisabledReason={bondingDisabledReason}
-                />
-              </SectionItem>
-            ))
-          ) : (
-            <SectionItem>
-              <EmptyState title={t('no_active_nodes')} />
-            </SectionItem>
-          )}
-        </Collapsible>
-      </SectionContainer>
+      {(isPending || positions.length > 0) && (
+        <SectionContainer>
+          <SectionHeader onClick={() => setActiveNodesOpen(!activeNodesOpen)}>
+            <Text size={14} weight="500" color="shy">
+              {t('active_nodes')}
+            </Text>
+            <ChevronWrapper
+              animate={{ rotate: activeNodesOpen ? 180 : 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <ChevronDownIcon />
+            </ChevronWrapper>
+          </SectionHeader>
+          <Collapsible isOpen={activeNodesOpen}>
+            {isPending && positions.length === 0 ? (
+              <>
+                {[1, 2].map(key => (
+                  <SkeletonItem key={key}>
+                    <Skeleton width="60%" height="16px" />
+                    <Skeleton width="40%" height="24px" />
+                    <Skeleton width="100%" height="20px" />
+                  </SkeletonItem>
+                ))}
+              </>
+            ) : (
+              positions.map(position => (
+                <SectionItem key={position.nodeAddress}>
+                  <BondNodeItem
+                    coin={bondCoin}
+                    nodeAddress={position.nodeAddress}
+                    amount={position.amount}
+                    apy={position.apy}
+                    nextReward={position.nextReward}
+                    nextChurn={position.nextChurn}
+                    status={position.status}
+                    onBond={() =>
+                      navigateToBond({ nodeAddress: position.nodeAddress })
+                    }
+                    onUnbond={() => navigateToUnbond(position.nodeAddress)}
+                    canUnbond={canUnbond}
+                    fiatValue={position.fiatValue}
+                    isBondingDisabled={isBondingDisabled}
+                    actionsDisabledReason={bondingDisabledReason}
+                  />
+                </SectionItem>
+              ))
+            )}
+          </Collapsible>
+        </SectionContainer>
+      )}
 
       {/* Available Nodes Section */}
-      <SectionContainer>
-        <SectionHeader
-          onClick={() => setAvailableNodesOpen(!availableNodesOpen)}
-        >
-          <Text size={14} weight="500" color="shy">
-            {t('available_nodes')}
-          </Text>
-          <ChevronWrapper
-            animate={{ rotate: availableNodesOpen ? 180 : 0 }}
-            transition={{ duration: 0.2 }}
+      {(isPending || availableNodes.length > 0) && (
+        <SectionContainer>
+          <SectionHeader
+            onClick={() => setAvailableNodesOpen(!availableNodesOpen)}
           >
-            <ChevronDownIcon />
-          </ChevronWrapper>
-        </SectionHeader>
-        <Collapsible isOpen={availableNodesOpen}>
-          {availableNodes.length ? (
-            availableNodes.map(node => (
-              <SectionItem key={node}>
-                <VStack gap={12}>
-                  <HStack justifyContent="space-between" alignItems="center">
-                    <Text size={14} color="contrast">
-                      {t('vulti_node')}: {node.slice(0, 13)}
-                    </Text>
-                    <Text size={13} weight="500" color="success">
-                      {t('active')}
-                    </Text>
-                  </HStack>
-                  {renderDisabledAction(
-                    <Button
-                      kind="outlined"
-                      onClick={() => navigateToBond({ nodeAddress: node })}
-                      disabled={isBondingDisabled}
-                      icon={<ArrowUpRightIcon />}
-                    >
-                      {t('request_to_bond')}
-                    </Button>
-                  )}
-                </VStack>
-              </SectionItem>
-            ))
-          ) : isPending ? (
-            <>
-              {[1, 2].map(key => (
-                <SkeletonItem key={key}>
-                  <Skeleton width="60%" height="16px" />
-                  <Skeleton width="40%" height="20px" />
-                  <Skeleton width="100%" height="20px" />
-                </SkeletonItem>
-              ))}
-            </>
-          ) : (
-            <SectionItem>
-              <EmptyState title={t('no_available_nodes')} />
-            </SectionItem>
-          )}
-        </Collapsible>
-      </SectionContainer>
+            <Text size={14} weight="500" color="shy">
+              {t('available_nodes')}
+            </Text>
+            <ChevronWrapper
+              animate={{ rotate: availableNodesOpen ? 180 : 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <ChevronDownIcon />
+            </ChevronWrapper>
+          </SectionHeader>
+          <Collapsible isOpen={availableNodesOpen}>
+            {availableNodes.length ? (
+              availableNodes.map(node => (
+                <SectionItem key={node}>
+                  <VStack gap={12}>
+                    <HStack justifyContent="space-between" alignItems="center">
+                      <Text size={14} color="contrast">
+                        {t('vulti_node')}: {node.slice(0, 13)}
+                      </Text>
+                      <Text size={13} weight="500" color="success">
+                        {t('active')}
+                      </Text>
+                    </HStack>
+                    {renderDisabledAction(
+                      <Button
+                        kind="outlined"
+                        onClick={() => navigateToBond({ nodeAddress: node })}
+                        disabled={isBondingDisabled}
+                        icon={<ArrowUpRightIcon />}
+                      >
+                        {t('request_to_bond')}
+                      </Button>
+                    )}
+                  </VStack>
+                </SectionItem>
+              ))
+            ) : (
+              <>
+                {[1, 2].map(key => (
+                  <SkeletonItem key={key}>
+                    <Skeleton width="60%" height="16px" />
+                    <Skeleton width="40%" height="20px" />
+                    <Skeleton width="100%" height="20px" />
+                  </SkeletonItem>
+                ))}
+              </>
+            )}
+          </Collapsible>
+        </SectionContainer>
+      )}
     </VStack>
   )
 }
