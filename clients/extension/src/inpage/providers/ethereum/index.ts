@@ -1,6 +1,6 @@
 import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
 import { requestAccount } from '@clients/extension/src/inpage/providers/core/requestAccount'
-import { EventMethod } from '@clients/extension/src/utils/constants'
+import { EthereumProviderEvents } from '@clients/extension/src/inpage/providers/ethereum/events'
 import { EvmChain } from '@core/chain/Chain'
 import {
   getEvmChainByChainId,
@@ -36,7 +36,7 @@ export const processSignature = (signature: string) => {
   return ensureHexPrefix(result.serialized)
 }
 
-export class Ethereum extends EventEmitter {
+export class Ethereum extends EventEmitter<EthereumProviderEvents> {
   public chainId: string
   public connected: boolean
   public isCtrl: boolean
@@ -64,13 +64,19 @@ export class Ethereum extends EventEmitter {
     if (!validateUrl(window.location.href)) {
       addBackgroundEventListener('disconnect', () => {
         this.connected = false
-        this.emit(EventMethod.ACCOUNTS_CHANGED, [])
-        this.emit(EventMethod.DISCONNECT, [])
+        this.emit('accountsChanged', [])
+        this.emit('disconnect', [])
+      })
+
+      addBackgroundEventListener('evmChainChanged', chainId => {
+        this.chainId = chainId
+        this.emit('networkChanged', Number(this.chainId))
+        this.emit('chainChanged', this.chainId)
       })
     }
   }
 
-  static getInstance(_chain: string): Ethereum {
+  static getInstance(): Ethereum {
     if (!Ethereum.instance) {
       Ethereum.instance = new Ethereum()
     }
@@ -82,39 +88,10 @@ export class Ethereum extends EventEmitter {
     return Ethereum.instance
   }
 
-  emitAccountsChanged(addresses: string[]) {
-    if (addresses.length) {
-      const [address] = addresses
-
-      this.selectedAddress = address ?? ''
-      this.emit(EventMethod.ACCOUNTS_CHANGED, address ? [address] : [])
-    } else {
-      this.selectedAddress = ''
-      this.emit(EventMethod.ACCOUNTS_CHANGED, [])
-    }
-  }
-
-  emitUpdateNetwork({ chainId }: { chainId: string }) {
-    if (Number(chainId) && this.chainId !== chainId) this.chainId = chainId
-
-    this.emit(EventMethod.NETWORK_CHANGED, Number(this.chainId))
-    this.emit(EventMethod.CHAIN_CHANGED, this.chainId)
-  }
-
   isConnected() {
     return this.connected
   }
 
-  on = (event: string, callback: (data: any) => void): this => {
-    if (event === EventMethod.CONNECT && this.isConnected()) {
-      callBackground({ getAppChainId: { chainKind: 'evm' } }).then(chainId => {
-        callback({ chainId })
-      })
-    } else {
-      super.on(event, callback)
-    }
-    return this
-  }
   enable = () => {
     return this.request({ method: 'eth_requestAccounts', params: [] })
   }
@@ -143,8 +120,6 @@ export class Ethereum extends EventEmitter {
           throw error
         }
       }
-
-      this.emitUpdateNetwork({ chainId })
 
       return null
     }
@@ -184,7 +159,6 @@ export class Ethereum extends EventEmitter {
         await callBackground({
           signOut: {},
         })
-        this.emit(EventMethod.DISCONNECT)
       },
       net_version: async () => {
         const chain = await getChain()
@@ -372,16 +346,5 @@ export class Ethereum extends EventEmitter {
     }
 
     throw new NotImplementedError(`Ethereum method ${data.method}`)
-  }
-
-  _connect = (): void => {
-    this.emit(EventMethod.CONNECT, '')
-  }
-
-  _disconnect = (error?: { code: number; message: string }): void => {
-    this.emit(
-      EventMethod.DISCONNECT,
-      error || { code: 4900, message: 'Provider disconnected' }
-    )
   }
 }
