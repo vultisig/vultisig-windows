@@ -157,7 +157,12 @@ export const ReceiveModal = ({ onClose }: OnCloseProp) => {
   const modalContent = (
     <ModalBody>
       <Header>
-        <IconButton kind="action" size="xl" onClick={onClose}>
+        <IconButton
+          style={{
+            fontSize: 16,
+          }}
+          onClick={onClose}
+        >
           <ChevronLeftIcon />
         </IconButton>
         <Text size={20} weight="600" color="contrast">

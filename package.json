@@ -15,7 +15,7 @@
     "dev:extension": "yarn workspace @clients/extension dev",
     "build": "yarn workspace @clients/desktop build",
     "typecheck": "tsc --noEmit",
-    "test": "vitest",
+    "test": "vitest run",
     "knip": "knip",
     "check:all": "yarn lint && yarn typecheck && yarn test && yarn knip",
     "knip:fix": "knip --fix --allow-remove-files",

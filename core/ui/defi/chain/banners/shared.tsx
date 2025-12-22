@@ -1,23 +1,22 @@
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { VStack } from '@lib/ui/layout/Stack'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
+import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
 export const BannerContainer = styled.div`
   padding: 24px;
-  border-radius: 20px;
-  border: 1px solid ${getColor('foregroundExtra')};
-  background:
-    radial-gradient(
-      circle at 30% 20%,
-      rgba(50, 120, 255, 0.2),
-      transparent 50%
-    ),
-    linear-gradient(140deg, rgba(8, 18, 43, 0.95) 0%, rgba(9, 28, 64, 0.9) 100%);
   position: relative;
   overflow: hidden;
   min-height: 122px;
+  border-radius: 16px;
+  border: 1px solid rgba(52, 230, 191, 0.17);
+  background: linear-gradient(
+    180deg,
+    rgba(52, 230, 191, 0.09) 0%,
+    rgba(29, 128, 106, 0) 100%
+  );
 `
 
 export const BannerContent = styled(VStack)`
@@ -76,12 +75,30 @@ export const ThorchainLogoWrapper = styled.div`
   right: -50px;
   width: 200px;
   height: 200px;
-  top: 10%;
+  top: 0%;
 
   @media ${mediaQuery.tabletDeviceAndUp} {
     width: 300px;
     height: 300px;
-    top: -30%;
+    top: -40%;
     right: -7%;
   }
+`
+
+export const ChainTitle = styled(Text)`
+  font-family: Brockmann, sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 28px;
+  letter-spacing: -0.09px;
+  text-align: center;
+`
+
+export const BalanceValue = styled(Text)`
+  font-family: Satoshi, sans-serif;
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 34px;
+  letter-spacing: -0.56px;
+  text-align: center;
 `

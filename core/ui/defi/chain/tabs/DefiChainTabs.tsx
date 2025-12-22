@@ -104,7 +104,7 @@ export const TriggerItem = styled(UnstyledButton)<
   ${({ isActive, theme }) =>
     isActive &&
     css`
-      border-bottom: 1.5px solid ${theme.colors.buttonPrimary.toCssValue()};
+      border-bottom: 1.5px solid ${theme.colors.primaryAccentFour.toCssValue()};
       color: ${theme.colors.contrast.toCssValue()};
     `};
 

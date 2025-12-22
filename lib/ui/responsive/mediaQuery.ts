@@ -25,9 +25,7 @@ export const mediaQuery: Record<SupportedMedias, string> = {
   }px)`,
 
   desktopDeviceAndUp: `(min-width: ${mediaBreakPoints.desktopDevice}px)`,
-  desktopDeviceOnly: `(min-width: ${mediaBreakPoints.desktopDevice}px) and (max-width: ${
-    mediaBreakPoints.desktopDevice - 1
-  }px)`,
+  desktopDeviceOnly: `(min-width: ${mediaBreakPoints.desktopDevice}px)`,
 
   tabletDeviceAndUp: `(min-width: ${mediaBreakPoints.tabletDevice}px)`,
   tabletDeviceOnly: `(min-width: ${mediaBreakPoints.tabletDevice}px) and (max-width: ${
@@ -37,10 +35,14 @@ export const mediaQuery: Record<SupportedMedias, string> = {
 
 export const useIsTabletDeviceAndUp = () => {
   const [isTabletOrLarger, setIsTabletOrLarger] = useState(
-    window.innerWidth >= mediaBreakPoints.tabletDevice - 1
+    typeof window === 'undefined'
+      ? false
+      : window.innerWidth >= mediaBreakPoints.tabletDevice
   )
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
+
     const targetMediaQuery = window.matchMedia(mediaQuery.tabletDeviceAndUp)
 
     const handleChange = (event: MediaQueryListEvent) => {

@@ -65,7 +65,7 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
     formState: { errors, isValid },
   } = useForm<FormData>({
     resolver: zodResolver(schema as any),
-    mode: 'onSubmit',
+    mode: 'onChange',
     defaultValues: { autoCompound: false, ...(formDefaults ?? {}) },
   })
 

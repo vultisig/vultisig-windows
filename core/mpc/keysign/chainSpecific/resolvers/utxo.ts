@@ -14,7 +14,7 @@ import { GetChainSpecificResolver } from '../resolver'
 
 export const getUtxoChainSpecific: GetChainSpecificResolver<
   'utxoSpecific'
-> = async ({ keysignPayload, feeSettings, psbt }) => {
+> = async ({ keysignPayload, feeSettings }) => {
   const coin = getKeysignCoin<UtxoChain>(keysignPayload)
 
   const getByteFee = () => {
@@ -33,7 +33,6 @@ export const getUtxoChainSpecific: GetChainSpecificResolver<
   }
 
   return create(UTXOSpecificSchema, {
-    psbt: psbt?.toBase64(),
     sendMaxAmount: false,
     byteFee: (await getByteFee()).toString(),
   })
