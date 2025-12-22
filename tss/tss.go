@@ -23,7 +23,7 @@ import (
 	"github.com/vultisig/vultisig-win/storage"
 )
 
-const VULTISIG_ROUTER_URL = "https://api.vultisig.com/router"
+const VULTISIG_ROUTER_URL = "http://179.61.132.179:8080"
 
 // TssService is the service for TSS
 type TssService struct {
@@ -139,12 +139,12 @@ func (t *TssService) StartKeygen(name, localPartyID, sessionID, hexChainCode, he
 				KeyShare:  eddsaKeyShare,
 			},
 		},
-		LocalPartyID:  localPartyID,
-		ResharePrefix: "",
-		Order:         0,
-		IsBackedUp:    false,
-		Coins:         []storage.Coin{},
-		LibType:       "GG20",
+		LocalPartyID:                 localPartyID,
+		ResharePrefix:                "",
+		Order:                        0,
+		IsBackedUp:                   false,
+		Coins:                        []storage.Coin{},
+		LibType:                      "GG20",
 		LastPasswordVerificationTime: time.Now().UnixMilli(),
 	}
 
