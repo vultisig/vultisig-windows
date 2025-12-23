@@ -50,9 +50,9 @@ export const StakedPositions = () => {
   const actionsDisabled = chain !== Chain.THORChain && chain !== Chain.MayaChain
 
   const shouldAutoEnableCoin = useMemo(
-    () => (coinId: string) => {
-      // Auto-enable for TCY family
-      return coinId === 'thor-stake-tcy' || coinId === 'thor-stake-ytcy'
+    () => (_coinId: string) => {
+      // Auto-enable coin when user clicks stake/unstake
+      return true
     },
     []
   )
@@ -136,7 +136,6 @@ export const StakedPositions = () => {
             return (
               <StakeCard
                 key={key}
-                id="thor-stake-tcy"
                 coin={token}
                 title={resolveStakeTitle({
                   position: {
@@ -196,7 +195,6 @@ export const StakedPositions = () => {
         return (
           <StakeCard
             key={position.id}
-            id={position.id}
             coin={token}
             title={resolveStakeTitle({
               position,

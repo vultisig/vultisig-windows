@@ -38,51 +38,43 @@ export const DefiChainItem = ({ balance }: DefiChainItemProps) => {
           style={{ fontSize: 32 }}
         />
 
-        <VStack fullWidth alignItems="start" gap={12}>
-          <HStack
-            fullWidth
-            alignItems="center"
-            justifyContent="space-between"
-            gap={20}
-          >
-            <VStack>
-              <Text color="contrast" size={14}>
-                {chain}
+        <HStack
+          fullWidth
+          alignItems="center"
+          justifyContent="space-between"
+          gap={20}
+        >
+          <Text color="contrast" size={14}>
+            {chain}
+          </Text>
+          <HStack gap={8} alignItems="center">
+            <VStack gap={4} alignItems="flex-end">
+              <Text centerVertically color="contrast" weight="550" size={14}>
+                {isLoading ? (
+                  <Spinner size={16} />
+                ) : (
+                  <BalanceVisibilityAware>
+                    {formatFiatAmount(totalFiat)}
+                  </BalanceVisibilityAware>
+                )}
+              </Text>
+              <Text color="shy" weight="500" size={12} centerVertically>
+                {isLoading ? (
+                  <Spinner size={12} />
+                ) : positionsWithBalanceCount > 0 ? (
+                  <BalanceVisibilityAware>
+                    {positionsWithBalanceCount} {t('positions')}
+                  </BalanceVisibilityAware>
+                ) : (
+                  t('no_positions_found')
+                )}
               </Text>
             </VStack>
-            <HStack gap={8} alignItems="center">
-              <VStack
-                gap={8}
-                justifyContent="space-between"
-                alignItems="flex-end"
-              >
-                <Text centerVertically color="contrast" weight="550" size={14}>
-                  {isLoading ? (
-                    <Spinner size={16} />
-                  ) : (
-                    <BalanceVisibilityAware>
-                      {formatFiatAmount(totalFiat)}
-                    </BalanceVisibilityAware>
-                  )}
-                </Text>
-                <Text color="shy" weight="500" size={12} centerVertically>
-                  {isLoading ? (
-                    <Spinner size={12} />
-                  ) : positionsWithBalanceCount > 0 ? (
-                    <BalanceVisibilityAware>
-                      {positionsWithBalanceCount} {t('positions')}
-                    </BalanceVisibilityAware>
-                  ) : (
-                    t('no_positions_found')
-                  )}
-                </Text>
-              </VStack>
-              <IconWrapper>
-                <ChevronRightIcon />
-              </IconWrapper>
-            </HStack>
+            <IconWrapper>
+              <ChevronRightIcon />
+            </IconWrapper>
           </HStack>
-        </VStack>
+        </HStack>
       </HStack>
     </StyledPanel>
   )
