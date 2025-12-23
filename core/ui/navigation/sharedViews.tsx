@@ -36,6 +36,7 @@ import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage'
 import { Views } from '@lib/ui/navigation/Views'
 
 import { DefiChainPage } from '../defi/chain/DefiChainPage'
+import { LpPositionFormPage } from '../defi/chain/LpPositionFormPage'
 import { ManageDefiPositionsPage } from '../defi/chain/manage/ManageDefiPositionsPage'
 import { ManageDefiChainsPage } from '../defi/manage/ManageDefiChainsPage'
 import { DefiPage } from '../defi/page/DefiPage'
@@ -67,6 +68,7 @@ export type SharedViewId = Extract<
   | 'languageSettings'
   | 'manageDefiChains'
   | 'manageDefiPositions'
+  | 'lpPositionForm'
   | 'manageVaultChainCoins'
   | 'manageVaultChains'
   | 'manageVaultFolder'
@@ -127,6 +129,7 @@ export const sharedViews: Views<SharedViewId> = {
   languageSettings: LanguagePage,
   manageDefiChains: ManageDefiChainsPage,
   manageDefiPositions: ManageDefiPositionsPage,
+  lpPositionForm: LpPositionFormPage,
   manageVaultChains: ManageVaultChainsPage,
   manageVaultChainCoins: ManageVaultChainCoinsPage,
   manageVaults: ManageVaultsPage,
