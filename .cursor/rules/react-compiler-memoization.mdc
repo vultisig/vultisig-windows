@@ -1,0 +1,87 @@
+---
+description: Rely on React Compiler for automatic memoization - avoid useMemo/useCallback unless absolutely necessary
+globs: *.ts,*.tsx
+alwaysApply: true
+---
+
+# React Compiler Memoization
+
+## Context
+
+- This project uses React Compiler which automatically memoizes components, values, and callbacks
+- React Compiler handles memoization at compile time, eliminating most manual memoization needs
+- Apply when writing React components and hooks in TypeScript/TSX files
+
+## Core Rule
+
+- **NEVER use `useMemo` or `useCallback`** unless absolutely necessary for precise control
+- **Rely on React Compiler** to automatically memoize values and functions
+- Write code naturally - let the compiler optimize it
+
+## When useMemo/useCallback Are Necessary
+
+Only use `useMemo` or `useCallback` when you need:
+
+1. **Stable reference for dependency arrays**: When a value must have a stable reference for other hooks' dependency arrays (e.g., `useEffect`, `useMemo` in other components)
+2. **Expensive computations**: When a computation is genuinely expensive and you want to prevent recalculation even if dependencies haven't changed semantically
+3. **Preventing infinite loops**: When a function/value is used in a dependency array and would cause infinite re-renders without memoization
+
+## When NOT to Use useMemo/useCallback
+
+Do NOT use them for:
+
+- Simple value derivations
+- Regular function definitions in components
+- Callbacks passed to child components (compiler handles this)
+- Array/object creations (compiler optimizes these)
+- Preventing re-renders (compiler handles this automatically)
+
+## Examples
+
+<example>
+// ✅ Good: Let compiler handle memoization
+const MyComponent = ({ items }: { items: string[] }) => {
+  const filtered = items.filter(item => item.startsWith('a'))
+  const handleClick = () => {
+    console.log('clicked')
+  }
+  return <button onClick={handleClick}>{filtered.length}</button>
+}
+</example>
+
+<example type="invalid">
+// ❌ Bad: Unnecessary memoization
+const MyComponent = ({ items }: { items: string[] }) => {
+  const filtered = useMemo(() => items.filter(item => item.startsWith('a')), [items])
+  const handleClick = useCallback(() => {
+    console.log('clicked')
+  }, [])
+  return <button onClick={handleClick}>{filtered.length}</button>
+}
+</example>
+
+<example>
+// ✅ Good: Necessary useMemo for stable reference in dependency array
+const useExpensiveQuery = (config: QueryConfig) => {
+  const stableConfig = useMemo(() => config, [config.id, config.enabled])
+  return useQuery(stableConfig) // Needs stable reference
+}
+</example>
+
+<example>
+// ✅ Good: Necessary useCallback to prevent infinite loop
+const useCustomHook = (callback: () => void) => {
+  const stableCallback = useCallback(callback, [])
+  useEffect(() => {
+    // Would cause infinite loop without stable reference
+    stableCallback()
+  }, [stableCallback])
+}
+</example>
+
+## Guidelines
+
+- Write code naturally without memoization hooks
+- Trust React Compiler to optimize automatically
+- Only add `useMemo`/`useCallback` when you encounter specific issues that require precise control
+- When in doubt, don't use them - the compiler will handle it

@@ -21,7 +21,11 @@ export default defineConfig(async () => {
       __APP_BUILD__: JSON.stringify(buildInfo.build),
     },
     plugins: [
-      react(),
+      react({
+        babel: {
+          plugins: [['babel-plugin-react-compiler', {}]],
+        },
+      }),
       nodePolyfills({ exclude: ['fs'] }),
       wasm(),
       topLevelAwait(),

@@ -76,6 +76,7 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
   useEffect(() => {
     if (!stream || !video) return
 
+    // eslint-disable-next-line react-compiler/react-compiler
     video.srcObject = stream
     video.play()
 

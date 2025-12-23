@@ -55,7 +55,11 @@ export default async () => {
 
     return defineConfig({
       plugins: [
-        react(),
+        react({
+          babel: {
+            plugins: [['babel-plugin-react-compiler', {}]],
+          },
+        }),
         nodePolyfills({ exclude: ['fs'] }),
         wasm(),
         topLevelAwait(),

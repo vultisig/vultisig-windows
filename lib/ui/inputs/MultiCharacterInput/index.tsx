@@ -67,6 +67,7 @@ export const MultiCharacterInput = ({
             onKeyDown={e => handleKeyDown(e, idx)}
             onPaste={handlePaste}
             ref={el => {
+              // eslint-disable-next-line react-compiler/react-compiler
               inputRefs.current[idx] = el
             }}
             {...rest}

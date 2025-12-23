@@ -11,7 +11,7 @@ export const {
 } = getValueProviderSetup<string>('CurrentHexChainCode')
 
 export const GeneratedHexChainCodeProvider = ({ children }: ChildrenProp) => {
-  const HexChainCode = useMemo(generateHexChainCode, [])
+  const HexChainCode = useMemo(() => generateHexChainCode(), [])
 
   return (
     <CurrentHexChainCodeProvider value={HexChainCode}>

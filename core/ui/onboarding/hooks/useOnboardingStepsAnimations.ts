@@ -44,6 +44,7 @@ export const useOnboardingStepsAnimations = () => {
       typeof stateMachineInput?.value === 'number' &&
       stateMachineInput.value > 0
     ) {
+      // eslint-disable-next-line react-compiler/react-compiler
       stateMachineInput.value -= 1
       toPreviousAnimation()
     }
