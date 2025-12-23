@@ -313,6 +313,7 @@ export const es = {
   coin_not_found_in_any_vault:
     '{{ticker}} en {{chain}} no encontrado en ninguna bóveda',
   defi_token_required: '{{ticker}} no está en esta bóveda',
+  adding_coin_to_vault: 'Añadiendo moneda a la bóveda...',
   defi_token_required_description:
     'Añade {{ticker}} desde Administrar tokens para hacer stake, unstake o bond.',
   defi_add_chain_to_vault_title: 'Primero añade la cadena a tu bóveda',
