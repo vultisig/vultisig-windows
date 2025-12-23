@@ -1,8 +1,6 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { isInError } from '@lib/utils/error/isInError'
-import { formatAmount } from '@lib/utils/formatAmount'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { TransferDirection } from '@lib/utils/TransferDirection'
 import { t } from 'i18next'
@@ -78,19 +76,6 @@ export const getNativeSwapQuote = async ({
       )
     }
     throw new Error(result.error)
-  }
-
-  if (BigInt(result.recommended_min_amount_in) > chainAmount) {
-    const minAmount = fromChainAmount(
-      result.recommended_min_amount_in,
-      fromDecimals
-    )
-
-    const formattedMinAmount = formatAmount(minAmount, from)
-
-    const msg = `Swap amount too small. Recommended amount ${formattedMinAmount}`
-
-    throw new Error(msg)
   }
 
   return {

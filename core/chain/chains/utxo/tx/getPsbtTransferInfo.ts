@@ -32,8 +32,8 @@ export const getPsbtTransferInfo = (psbt: Psbt, senderAddress: string) => {
     const value = BigInt(o.value)
 
     // Handle OP_RETURN outputs (they don't have addresses)
-    if (isOpReturn(o.script)) {
-      const opReturnData = getOpReturnData(o.script)
+    if (isOpReturn(Buffer.from(o.script))) {
+      const opReturnData = getOpReturnData(Buffer.from(o.script))
       return {
         value,
         addr: null,

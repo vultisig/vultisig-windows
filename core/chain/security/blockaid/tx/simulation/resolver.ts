@@ -24,8 +24,8 @@ export type BlockaidSimulationForChainKind<
 
 export type BlockaidTxSimulationResolver<
   T extends BlockaidSimulationSupportedChain = BlockaidSimulationSupportedChain,
-  K extends
-    BlockaidSimulationSupportedChainKind = BlockaidSimulationSupportedChainKind,
+  K extends BlockaidSimulationSupportedChainKind =
+    BlockaidSimulationSupportedChainKind,
 > = Resolver<
   BlockaidTxSimulationInput<T>,
   Promise<BlockaidSimulationForChainKind<K>>
