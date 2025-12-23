@@ -1,8 +1,8 @@
 import { OnValueChangeListener, PersistentStorage } from './PersistentStorage'
 
-export class TemporaryStorage<
-  T extends string = string,
-> implements PersistentStorage<T> {
+export class TemporaryStorage<T extends string = string>
+  implements PersistentStorage<T>
+{
   storage: Record<string, unknown> = {}
   listeners: Record<string, OnValueChangeListener<any>[]> = {}
 
