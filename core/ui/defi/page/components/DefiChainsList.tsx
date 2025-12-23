@@ -59,7 +59,7 @@ export const DefiChainsList = () => {
     return (
       <EmptyWrapper>
         <VStack gap={12} alignItems="center">
-          <IconWrapper size={48} color="buttonHover">
+          <IconWrapper size={24} color="primaryAccentFour">
             <CryptoIcon />
           </IconWrapper>
           <VStack gap={8}>
