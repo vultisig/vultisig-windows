@@ -3,5 +3,8 @@ import styled from 'styled-components'
 
 export const ModalContent = styled.div`
   ${takeWholeSpace};
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
 `

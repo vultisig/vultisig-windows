@@ -923,6 +923,7 @@ export const zh = {
   show_defi_balance: '显示DeFi余额',
   sign: '符号',
   signAmino: 'Amino Sign',
+  signDirect: 'Direct sign',
   signPrivately: '想私下签署吗？?',
   sign_custom_message: '签名自定义消息',
   sign_custom_message_description: '签名自定义消息',
