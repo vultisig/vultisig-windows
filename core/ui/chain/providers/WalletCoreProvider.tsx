@@ -1,42 +1,28 @@
-import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { ChildrenProp } from '@lib/ui/props'
-import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { useQuery } from '@tanstack/react-query'
 import { initWasm, WalletCore } from '@trustwallet/wallet-core'
-import { createContext, useContext } from 'react'
-
-import { ProductLogoBlock } from '../../product/ProductLogoBlock'
+import { createContext, useContext, useEffect, useState } from 'react'
 
 const WalletCoreContext = createContext<WalletCore | null>(null)
 
 export const WalletCoreProvider = ({ children }: ChildrenProp) => {
-  const query = useQuery({
-    queryKey: ['walletCore'],
-    ...noRefetchQueryOptions,
-    queryFn: async () => {
+  const [wasm, setWasm] = useState<WalletCore | null>(null)
+  useEffect(() => {
+    const fetchWasm = async () => {
       const wasm = await initWasm()
-      return wasm
-    },
-  })
+      setWasm(wasm)
+    }
+    fetchWasm()
+  }, [])
+
+  if (!wasm) {
+    return <p>loading: {JSON.stringify(wasm, null, 2)}</p>
+  }
 
   return (
-    <MatchQuery
-      value={query}
-      success={value => (
-        <WalletCoreContext.Provider value={value}>
-          {children}
-        </WalletCoreContext.Provider>
-      )}
-      pending={() => <ProductLogoBlock />}
-      error={error => (
-        <FlowErrorPageContent
-          title="Failed to load wallet core"
-          error={error}
-        />
-      )}
-    />
+    <WalletCoreContext.Provider value={wasm}>
+      {children}
+    </WalletCoreContext.Provider>
   )
 }
 
