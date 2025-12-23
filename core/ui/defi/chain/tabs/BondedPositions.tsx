@@ -1,6 +1,9 @@
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { extractCoinKey } from '@core/chain/coin/Coin'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useRemoveFromCoinFinderIgnoreMutation } from '@core/ui/storage/coinFinderIgnore'
+import { useCreateCoinMutation } from '@core/ui/storage/coins'
 import { useDefiPositions } from '@core/ui/storage/defiPositions'
 import { useHasVaultCoin } from '@core/ui/vault/state/useHasVaultCoin'
 import { Button } from '@lib/ui/buttons/Button'
@@ -12,11 +15,10 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { sum } from '@lib/utils/array/sum'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ReactNode, useCallback, useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -101,6 +103,8 @@ export const BondedPositions = () => {
   const { t } = useTranslation()
   const [activeNodesOpen, setActiveNodesOpen] = useState(true)
   const [availableNodesOpen, setAvailableNodesOpen] = useState(true)
+  const createCoin = useCreateCoinMutation()
+  const removeFromIgnored = useRemoveFromCoinFinderIgnoreMutation()
 
   const isBondingDisabledByChain = chain !== Chain.THORChain
   const bondCoin = {
@@ -108,32 +112,14 @@ export const BondedPositions = () => {
     chain,
   }
   const hasBondCoin = useHasVaultCoin(bondCoin)
-  const isBondingDisabled = isBondingDisabledByChain || !hasBondCoin
-  const bondingDisabledReason =
-    !hasBondCoin && !isBondingDisabledByChain
-      ? t('defi_token_required', { ticker: bondCoin.ticker })
-      : undefined
+  const isBondingDisabled = isBondingDisabledByChain
 
-  const renderDisabledAction = useCallback(
-    (action: ReactNode) =>
-      bondingDisabledReason ? (
-        <Tooltip
-          content={bondingDisabledReason}
-          renderOpener={({ ref, ...props }) => (
-            <div
-              ref={ref as any}
-              {...props}
-              style={{ width: '100%', display: 'flex' }}
-            >
-              {action}
-            </div>
-          )}
-        />
-      ) : (
-        action
-      ),
-    [bondingDisabledReason]
-  )
+  const autoEnableCoinIfNeeded = async () => {
+    if (hasBondCoin) return
+
+    await removeFromIgnored.mutateAsync(extractCoinKey(bondCoin))
+    await createCoin.mutateAsync(bondCoin)
+  }
 
   if (error) {
     return (
@@ -172,8 +158,12 @@ export const BondedPositions = () => {
   const canUnbond = Boolean(data?.bond?.canUnbond)
   const availableNodes = data?.bond?.availableNodes ?? []
 
-  const navigateToBond = (overrides?: { nodeAddress?: string }) => {
+  const navigateToBond = async (overrides?: { nodeAddress?: string }) => {
     if (isBondingDisabled) return
+
+    if (!hasBondCoin) {
+      await autoEnableCoinIfNeeded()
+    }
 
     navigate({
       id: 'deposit',
@@ -187,8 +177,12 @@ export const BondedPositions = () => {
     })
   }
 
-  const navigateToUnbond = (nodeAddress: string) => {
+  const navigateToUnbond = async (nodeAddress: string) => {
     if (isBondingDisabled) return
+
+    if (!hasBondCoin) {
+      await autoEnableCoinIfNeeded()
+    }
 
     navigate({
       id: 'deposit',
@@ -210,14 +204,7 @@ export const BondedPositions = () => {
         isPending={isPending}
         isSkeleton={isPending && positions.length === 0}
         isBondingDisabled={isBondingDisabled}
-        actionsDisabledReason={bondingDisabledReason}
       />
-
-      {bondingDisabledReason ? (
-        <Text size={12} color="warning">
-          {bondingDisabledReason}
-        </Text>
-      ) : null}
 
       {/* Active Nodes Section */}
       {(isPending || positions.length > 0) && (
@@ -262,7 +249,6 @@ export const BondedPositions = () => {
                     canUnbond={canUnbond}
                     fiatValue={position.fiatValue}
                     isBondingDisabled={isBondingDisabled}
-                    actionsDisabledReason={bondingDisabledReason}
                   />
                 </SectionItem>
               ))
@@ -300,16 +286,14 @@ export const BondedPositions = () => {
                         {t('active')}
                       </Text>
                     </HStack>
-                    {renderDisabledAction(
-                      <Button
-                        kind="outlined"
-                        onClick={() => navigateToBond({ nodeAddress: node })}
-                        disabled={isBondingDisabled}
-                        icon={<ArrowUpRightIcon />}
-                      >
-                        {t('request_to_bond')}
-                      </Button>
-                    )}
+                    <Button
+                      kind="outlined"
+                      onClick={() => navigateToBond({ nodeAddress: node })}
+                      disabled={isBondingDisabled}
+                      icon={<ArrowUpRightIcon />}
+                    >
+                      {t('request_to_bond')}
+                    </Button>
                   </VStack>
                 </SectionItem>
               ))
