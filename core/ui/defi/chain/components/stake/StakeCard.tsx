@@ -125,7 +125,6 @@ const ActionIcon = styled.span<{ variant: 'primary' | 'secondary' }>`
 `
 
 type Props = {
-  id: string
   coin: Coin
   title: string
   amount: bigint
@@ -150,7 +149,6 @@ type Props = {
 }
 
 export const StakeCard = ({
-  id: _id,
   coin,
   title,
   amount,
@@ -360,7 +358,11 @@ export const StakeCard = ({
             </>
           )}
         </ActionsRow>
-        {actionsDisabledReason ? (
+        {isPendingAction ? (
+          <Text size={12} color="primary">
+            {t('adding_coin_to_vault')}
+          </Text>
+        ) : actionsDisabledReason ? (
           <Text size={12} color="warning">
             {actionsDisabledReason}
           </Text>
