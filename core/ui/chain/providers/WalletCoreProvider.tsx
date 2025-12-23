@@ -3,6 +3,8 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { initWasm, WalletCore } from '@trustwallet/wallet-core'
 import { createContext, useContext, useEffect, useState } from 'react'
 
+import { ProductLogoBlock } from '../../product/ProductLogoBlock'
+
 const WalletCoreContext = createContext<WalletCore | null>(null)
 
 export const WalletCoreProvider = ({ children }: ChildrenProp) => {
@@ -16,7 +18,7 @@ export const WalletCoreProvider = ({ children }: ChildrenProp) => {
   }, [])
 
   if (!wasm) {
-    return <p>loading: {JSON.stringify(wasm, null, 2)}</p>
+    return <ProductLogoBlock />
   }
 
   return (
