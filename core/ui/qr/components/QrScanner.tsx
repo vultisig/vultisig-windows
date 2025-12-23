@@ -12,14 +12,14 @@ import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { attempt } from '@lib/utils/attempt'
 import { useMutation } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FlowErrorPageContent } from '../../flow/FlowErrorPageContent'
 
 export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
   const { t } = useTranslation()
-  const [video, setVideo] = useState<HTMLVideoElement | null>(null)
+  const videoRef = useRef<HTMLVideoElement | null>(null)
 
   const { mutate: getStream, ...streamMutationState } = useMutation({
     mutationFn: () =>
@@ -74,9 +74,9 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
   }, [stream])
 
   useEffect(() => {
+    const video = videoRef.current
     if (!stream || !video) return
 
-    // eslint-disable-next-line react-compiler/react-compiler
     video.srcObject = stream
     video.play()
 
@@ -87,11 +87,12 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
         video.srcObject = null
       }
     }
-  }, [video, stream])
+  }, [stream])
 
   useEffect(getStream, [getStream])
 
   useEffect(() => {
+    const video = videoRef.current
     if (!video) return
 
     const canvas = document.createElement('canvas')
@@ -128,14 +129,14 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
       stopped = true
       cancelAnimationFrame(animationFrameId)
     }
-  }, [onFinish, stream, video])
+  }, [onFinish, stream])
 
   return (
     <MatchQuery
       value={streamMutationState}
       success={() => (
         <VideoWrapper>
-          <Video ref={setVideo} muted />
+          <Video ref={videoRef} muted />
           <BorderImageWrapper>
             <Image src="/core/images/borderedWrapper.svg" alt="" />
           </BorderImageWrapper>
