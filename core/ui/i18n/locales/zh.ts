@@ -296,6 +296,11 @@ export const zh = {
     '先在金库中启用链，才能在此管理它的 DeFi 头寸。',
   defi_add: 'Add',
   defi_remove: 'Remove',
+  defi_lp_pool_title: '{{pool}} 池',
+  position_label: '仓位',
+  defi_lp_position_form_title:
+    '{{action, select, add {添加流动性} remove {移除流动性} other {管理流动性}}}',
+  defi_lp_position_form_description: '针对 {{position}} 的流动性管理即将推出。',
   manage_tokens: '管理代币',
   collected_rewards: '已获得的奖励',
   coming_soon: '即将推出',

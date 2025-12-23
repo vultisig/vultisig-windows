@@ -77,9 +77,13 @@ export type CoreView =
   | { id: 'uploadQr'; state: { title?: string } }
   | { id: 'vault' }
   | { id: 'defi'; state: { protocol?: DefiProtocol } }
-  | { id: 'defiChainDetail'; state: { chain: Chain } }
+  | { id: 'defiChainDetail'; state: { chain: Chain; tab?: string } }
   | { id: 'manageDefiChains' }
-  | { id: 'manageDefiPositions'; state: { chain: Chain } }
+  | { id: 'manageDefiPositions'; state: { chain: Chain; returnTab?: string } }
+  | {
+      id: 'lpPositionForm'
+      state: { chain: Chain; positionId: string; action: 'add' | 'remove' }
+    }
   | { id: 'vaultBackup' }
   | { id: 'vaultsBackup' }
   | { id: 'selectVaultsBackup' }
