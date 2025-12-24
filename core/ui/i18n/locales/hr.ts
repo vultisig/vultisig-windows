@@ -315,6 +315,12 @@ export const hr = {
     'Aktivirajte chain u trezoru kako biste ovdje upravljali DeFi pozicijama.',
   defi_add: 'Add',
   defi_remove: 'Remove',
+  defi_lp_pool_title: 'Pool {{pool}}',
+  position_label: 'Pozicija',
+  defi_lp_position_form_title:
+    '{{action, select, add {Dodaj likvidnost} remove {Ukloni likvidnost} other {Upravljaj likvidnošću}}}',
+  defi_lp_position_form_description:
+    'Upravljanje likvidnošću za {{position}} stiže uskoro.',
   manage_tokens: 'Upravljaj tokenima',
   collected_rewards: 'Sakupljene nagrade',
   coming_soon: 'Uskoro',
@@ -999,6 +1005,7 @@ export const hr = {
   show_defi_balance: 'Prikaži DeFi stanje',
   sign: 'Znak',
   signAmino: 'Amino znak',
+  signDirect: 'Direct znak',
   signPrivately: 'Želite li potpisati privatno?',
   sign_custom_message: 'Potpiši prilagođenu poruku',
   sign_custom_message_description: 'Potpiši prilagođenu poruku',

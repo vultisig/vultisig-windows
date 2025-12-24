@@ -315,6 +315,12 @@ export const pt = {
     'Ative uma cadeia no seu cofre para gerenciar aqui suas posições DeFi.',
   defi_add: 'Add',
   defi_remove: 'Remove',
+  defi_lp_pool_title: 'Pool {{pool}}',
+  position_label: 'Posição',
+  defi_lp_position_form_title:
+    '{{action, select, add {Adicionar liquidez} remove {Remover liquidez} other {Gerenciar liquidez}}}',
+  defi_lp_position_form_description:
+    'Gerenciar liquidez para {{position}} estará disponível em breve.',
   manage_tokens: 'Gerenciar tokens',
   collected_rewards: 'Recompensas acumuladas',
   coming_soon: 'Em breve',
@@ -1007,6 +1013,7 @@ export const pt = {
   show_defi_balance: 'Mostrar saldo DeFi',
   sign: 'Sinal',
   signAmino: 'Sinal Amino',
+  signDirect: 'Sinal Direct',
   signPrivately: 'Deseja assinar em particular?',
   sign_custom_message: 'Assinar mensagem personalizada',
   sign_custom_message_description: 'Assinar mensagem personalizada',

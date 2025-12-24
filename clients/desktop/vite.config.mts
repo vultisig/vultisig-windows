@@ -3,7 +3,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import { defineConfig, normalizePath } from 'vite'
 import circleDependency from 'vite-plugin-circular-dependency'
-import stdLibBrowser from 'vite-plugin-node-stdlib-browser'
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import topLevelAwait from 'vite-plugin-top-level-await'
 import wasm from 'vite-plugin-wasm'
 
@@ -22,7 +22,7 @@ export default defineConfig(async () => {
     },
     plugins: [
       react(),
-      stdLibBrowser(),
+      nodePolyfills({ exclude: ['fs'] }),
       wasm(),
       topLevelAwait(),
       viteStaticCopy({
@@ -76,15 +76,7 @@ export default defineConfig(async () => {
     },
     publicDir: 'public',
     resolve: {
-      alias: {
-        crypto: 'crypto-browserify',
-        stream: 'stream-browserify',
-        buffer: 'buffer',
-        'fs/promises': 'node-stdlib-browser/mock/empty',
-      },
-    },
-    optimizeDeps: {
-      include: ['crypto-browserify', 'stream-browserify', 'buffer'],
+      alias: {},
     },
   }
 })

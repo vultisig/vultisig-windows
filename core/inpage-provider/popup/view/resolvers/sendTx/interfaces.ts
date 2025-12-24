@@ -100,7 +100,7 @@ type TronTxMeta = {
   refBlockHashHex: string
 }
 
-export type MsgPayload =
+type MsgPayload =
   | {
       case:
         | CosmosMsgType.MSG_SEND
@@ -177,6 +177,12 @@ export type TransactionDetails = {
   aminoPayload?: {
     msgs: CosmosMsg[]
     fee: CosmosFee
+  }
+  directPayload?: {
+    bodyBytes: string // base64 encoded
+    authInfoBytes: string // base64 encoded
+    chainId: string
+    accountNumber: string
   }
   skipBroadcast?: boolean
 }
