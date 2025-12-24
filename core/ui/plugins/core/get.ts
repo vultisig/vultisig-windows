@@ -18,7 +18,7 @@ export type Plugin = {
   description: string
   id: string
   logo_url: string
-  permissions: string[]
+  permissions: RecipeSchema['permissions']
   pricing: AppPricing[]
   server_endpoint: string
   title: string
@@ -33,28 +33,9 @@ export const getPlugin = async (baseUrl: string, id: string) =>
       `${baseUrl}/plugins/${id}/recipe-specification`
     )
       .then(({ data }) => {
-        const { supportedResources, pluginVersion } =
-          toCamelCase<RecipeSchema>(data)
+        const { permissions, pluginVersion } = toCamelCase<RecipeSchema>(data)
 
-        return {
-          ...plugin,
-          permissions: [
-            ...supportedResources.reduce<string[]>((acc, { resourcePath }) => {
-              if (!resourcePath || !resourcePath.functionId) return acc
-
-              const id = resourcePath.functionId
-
-              if (!acc.includes(id)) acc.push(id)
-
-              return acc
-            }, []),
-            ...(plugin.pricing.length > 0
-              ? ['Fee deduction authorization']
-              : []),
-            'Vault balance visibility',
-          ],
-          pluginVersion,
-        }
+        return { ...plugin, permissions, pluginVersion }
       })
       .catch(
         () =>
