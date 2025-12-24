@@ -315,6 +315,7 @@ export const it = {
   coin_not_found_in_any_vault:
     '{{ticker}} su {{chain}} non trovato in nessun caveau',
   defi_token_required: '{{ticker}} non è in questo caveau',
+  adding_coin_to_vault: 'Aggiunta della moneta al caveau...',
   defi_token_required_description:
     'Aggiungi {{ticker}} da Gestisci token per eseguire staking, unstaking o bonding.',
   defi_add_chain_to_vault_title: 'Aggiungi prima la chain al caveau',

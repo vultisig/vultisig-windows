@@ -1,3 +1,4 @@
+import { useIsCircleVisible } from '@core/ui/storage/circleVisibility'
 import { useDefiChains } from '@core/ui/storage/defiChains'
 import { CryptoIcon } from '@lib/ui/icons/CryptoIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -11,7 +12,6 @@ import { useDeferredValue, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { featureFlags } from '../../../featureFlags'
 import { CircleDefiItem } from '../../protocols/circle/CircleDefiItem'
 import { useDefiChainPortfolios } from '../hooks/useDefiPortfolios'
 import { DefiChainItem } from './DefiChainItem'
@@ -20,13 +20,13 @@ import { useSearchChain } from './state/searchChainProvider'
 export const DefiChainsList = () => {
   const { data: chainPortfolios = [], isPending } = useDefiChainPortfolios()
   const defiChains = useDefiChains()
+  const isCircleVisible = useIsCircleVisible()
   const [searchQuery] = useSearchChain()
   const deferredQuery = useDeferredValue(searchQuery)
   const { t } = useTranslation()
 
   const normalizedQuery = deferredQuery.trim().toLowerCase()
 
-  // Filter to only show chains that are enabled in DeFi settings
   const defiChainBalances = useMemo(() => {
     return chainPortfolios.filter(({ chain }) => defiChains.includes(chain))
   }, [chainPortfolios, defiChains])
@@ -45,9 +45,7 @@ export const DefiChainsList = () => {
     })
   }, [normalizedQuery, defiChainBalances])
 
-  const hasCircle = featureFlags.circle
-
-  if (defiChainBalances.length === 0 && !hasCircle) {
+  if (defiChainBalances.length === 0 && !isCircleVisible) {
     if (isPending) {
       return (
         <Center>
@@ -59,7 +57,7 @@ export const DefiChainsList = () => {
     return (
       <EmptyWrapper>
         <VStack gap={12} alignItems="center">
-          <IconWrapper size={48} color="buttonHover">
+          <IconWrapper size={24} color="primaryAccentFour">
             <CryptoIcon />
           </IconWrapper>
           <VStack gap={8}>
@@ -75,7 +73,7 @@ export const DefiChainsList = () => {
     )
   }
 
-  if (filteredBalances.length === 0 && normalizedQuery && !hasCircle) {
+  if (filteredBalances.length === 0 && normalizedQuery && !isCircleVisible) {
     return (
       <EmptyWrapper>
         <VStack gap={12} alignItems="center">
@@ -97,7 +95,7 @@ export const DefiChainsList = () => {
 
   return (
     <List>
-      {hasCircle && <CircleDefiItem />}
+      {isCircleVisible && <CircleDefiItem />}
       {filteredBalances.map(balance => (
         <DefiChainItem key={balance.chain} balance={balance} />
       ))}
