@@ -3,6 +3,7 @@ import { CoreStorage } from '@core/ui/storage/CoreStorage'
 import { addressBookStorage } from './addressBook'
 import { balanceVisibilityStorage } from './balanceVisibility'
 import { blockaidStorage } from './blockaid'
+import { circleVisibilityStorage } from './circleVisibility'
 import { coinFinderIgnoreStorage } from './coinFinderIgnore'
 import { coinsStorage } from './coins'
 import { currentVaultIdStorage } from './currentVaultId'
@@ -38,4 +39,5 @@ export const storage: CoreStorage = {
   ...passcodeAutoLockStorage,
   ...referralsStorage,
   ...dismissedBannersStorage,
+  ...circleVisibilityStorage,
 }
