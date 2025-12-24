@@ -4,13 +4,13 @@ import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { SafeImage } from '@lib/ui/images/SafeImage'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { Text } from '@lib/ui/text'
-import styled from 'styled-components'
 
 import {
+  BalanceValue,
   BannerContainer,
   BannerContent,
   ChainLogo,
+  ChainTitle,
   FallbackLogo,
   GradientBackground,
   Ring,
@@ -21,24 +21,6 @@ type DefiChainBalanceBannerFallbackProps = {
 }
 
 const totalFiat = 0
-
-const ChainTitle = styled(Text)`
-  color: #f0f4fc;
-  font-family: Brockmann, sans-serif;
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 28px;
-  letter-spacing: -0.09px;
-`
-
-const BalanceValue = styled(Text)`
-  color: #f0f4fc;
-  font-family: Satoshi, sans-serif;
-  font-size: 28px;
-  font-weight: 500;
-  line-height: 34px;
-  letter-spacing: -0.56px;
-`
 
 export const DefiChainBalanceBannerFallback = ({
   chain,

@@ -313,6 +313,7 @@ export const de = {
   coin_not_found_in_any_vault:
     '{{ticker}} auf {{chain}} wurde in keinem Tresor gefunden',
   defi_token_required: '{{ticker}} ist nicht in diesem Tresor',
+  adding_coin_to_vault: 'Münze wird zum Tresor hinzugefügt...',
   defi_token_required_description:
     'Füge {{ticker}} unter „Tokens verwalten“ hinzu, um zu staken, zu unstaken oder zu bonden.',
   defi_add_chain_to_vault_title: 'Füge die Chain zuerst deinem Tresor hinzu',

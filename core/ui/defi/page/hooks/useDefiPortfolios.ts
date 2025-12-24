@@ -31,10 +31,9 @@ export const useDefiChainPortfolios = () => {
     const portfolios: DefiChainPortfolio[] = []
 
     if (enabledChains.includes(Chain.THORChain)) {
-      const selected = new Set(thorchainSelectedPositions)
       const aggregates = aggregateDefiPositions({
         chain: Chain.THORChain,
-        selectedPositionIds: Array.from(selected),
+        selectedPositionIds: thorchainSelectedPositions,
         thorchain: thorchainQuery.data,
       })
 
@@ -47,10 +46,9 @@ export const useDefiChainPortfolios = () => {
     }
 
     if (enabledChains.includes(Chain.MayaChain)) {
-      const selected = new Set(mayaSelectedPositions)
       const aggregates = aggregateDefiPositions({
         chain: Chain.MayaChain,
-        selectedPositionIds: Array.from(selected),
+        selectedPositionIds: mayaSelectedPositions,
         maya: mayaQuery.data,
       })
 
