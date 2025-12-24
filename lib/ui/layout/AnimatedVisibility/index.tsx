@@ -58,8 +58,6 @@ export const AnimatedVisibility: FC<AnimatedVisibilityProps> = ({
     from: animationConfigDerived.from,
     leave: animationConfigDerived.leave,
     onRest: (animationResult: AnimationResult) => {
-      const result = animationResult.value as { opacity: number }
-      if (result.opacity !== 0) return
       if (animationResult.finished) onAnimationComplete?.()
     },
   })
