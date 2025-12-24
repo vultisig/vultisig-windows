@@ -1,8 +1,6 @@
 import { callBackground } from '@core/inpage-provider/background'
 
-import { EthereumResolver } from '../resolver'
-
-export const getEthChainId: EthereumResolver<void, string> = async () =>
+export const getEthChainId = async (): Promise<string> =>
   callBackground({
     getAppChainId: { chainKind: 'evm' },
   })

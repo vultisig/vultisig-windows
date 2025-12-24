@@ -49,4 +49,3 @@ export const switchChainHandler = async ([{ chainId }]: [
 
   return null
 }
-

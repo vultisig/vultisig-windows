@@ -1,13 +1,12 @@
 import { callPopup } from '@core/inpage-provider/popup'
 import { Eip712V4Payload } from '@core/inpage-provider/popup/interface'
 
-import { EthereumResolver } from '../resolver'
 import { getChain, processSignature } from '../utils'
 
-export const signEthTypedDataV4: EthereumResolver<
-  [string, string | Eip712V4Payload],
-  string
-> = async ([account, input]) => {
+export const signEthTypedDataV4 = async ([account, input]: [
+  string,
+  string | Eip712V4Payload,
+]): Promise<string> => {
   const chain = await getChain()
 
   const result = await callPopup(

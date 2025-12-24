@@ -1,13 +1,12 @@
 import { callPopup } from '@core/inpage-provider/popup'
 import { getBytes, isHexString } from 'ethers'
 
-import { EthereumResolver } from '../resolver'
 import { getChain, processSignature } from '../utils'
 
-export const personalSign: EthereumResolver<[string, string], string> = async ([
-  rawMessage,
-  account,
-]) => {
+export const personalSign = async ([rawMessage, account]: [
+  string,
+  string,
+]): Promise<string> => {
   const chain = await getChain()
 
   const messageBytes = isHexString(rawMessage)

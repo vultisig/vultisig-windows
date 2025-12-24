@@ -1,10 +1,9 @@
 import { callBackground } from '@core/inpage-provider/background'
 import { attempt, withFallback } from '@lib/utils/attempt'
 
-import { EthereumResolver } from '../resolver'
 import { getChain } from '../utils'
 
-export const getEthAccounts: EthereumResolver<void, string[]> = async () =>
+export const getEthAccounts = async (): Promise<string[]> =>
   withFallback(
     attempt(async () => {
       const chain = await getChain()

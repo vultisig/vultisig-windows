@@ -1,12 +1,10 @@
 import { requestAccount } from '@clients/extension/src/inpage/providers/core/requestAccount'
 
-import { EthereumResolver } from '../resolver'
 import { getChain } from '../utils'
 
-export const requestEthAccounts: EthereumResolver<
-  [{ preselectFastVault?: boolean }] | undefined,
-  string[]
-> = async params => {
+export const requestEthAccounts = async (
+  params: [{ preselectFastVault?: boolean }] | undefined
+): Promise<string[]> => {
   const chain = await getChain()
   const preselectFastVault = params?.[0]?.preselectFastVault
 

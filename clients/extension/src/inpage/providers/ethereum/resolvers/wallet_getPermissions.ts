@@ -1,6 +1,1 @@
-import { EthereumResolver } from '../resolver'
-
-export const getWalletPermissions: EthereumResolver<
-  void,
-  any[]
-> = async () => []
+export const getWalletPermissions = async (): Promise<any[]> => []

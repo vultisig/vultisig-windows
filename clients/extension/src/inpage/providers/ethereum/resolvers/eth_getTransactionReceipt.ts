@@ -1,11 +1,8 @@
 import { callBackground } from '@core/inpage-provider/background'
 
-import { EthereumResolver } from '../resolver'
-
-export const getEthTransactionReceipt: EthereumResolver<
-  [`0x${string}`] | [`0x${string}`, ...unknown[]],
-  any
-> = async params =>
+export const getEthTransactionReceipt = async (
+  params: [`0x${string}`] | [`0x${string}`, ...unknown[]]
+): Promise<any> =>
   callBackground({
     evmClientRequest: {
       method: 'eth_getTransactionReceipt',

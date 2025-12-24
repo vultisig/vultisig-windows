@@ -4,13 +4,11 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { ethers } from 'ethers'
 import { type RpcTransactionRequest } from 'viem'
 
-import { EthereumResolver } from '../resolver'
 import { getChain } from '../utils'
 
-export const sendEthTransaction: EthereumResolver<
-  [RpcTransactionRequest],
-  string
-> = async ([tx]) => {
+export const sendEthTransaction = async ([tx]: [
+  RpcTransactionRequest,
+]): Promise<string> => {
   const chain = await getChain()
 
   const from = shouldBePresent(tx.from, 'tx.from')

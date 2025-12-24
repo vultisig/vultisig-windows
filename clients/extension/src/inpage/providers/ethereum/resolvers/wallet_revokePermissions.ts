@@ -1,11 +1,6 @@
 import { callBackground } from '@core/inpage-provider/background'
 
-import { EthereumResolver } from '../resolver'
-
-export const revokeWalletPermissions: EthereumResolver<
-  void,
-  void
-> = async () => {
+export const revokeWalletPermissions = async (): Promise<void> => {
   await callBackground({
     signOut: {},
   })
