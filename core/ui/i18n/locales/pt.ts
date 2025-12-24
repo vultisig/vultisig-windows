@@ -308,6 +308,7 @@ export const pt = {
   coin_not_found_in_any_vault:
     '{{ticker}} em {{chain}} não encontrado em nenhum cofre',
   defi_token_required: '{{ticker}} não está neste cofre',
+  adding_coin_to_vault: 'Adicionando moeda ao cofre...',
   defi_token_required_description:
     'Adicione {{ticker}} em Gerenciar tokens para fazer stake, unstake ou bond.',
   defi_add_chain_to_vault_title: 'Adicione a cadeia ao cofre primeiro',
