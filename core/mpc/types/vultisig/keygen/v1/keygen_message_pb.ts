@@ -12,7 +12,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file vultisig/keygen/v1/keygen_message.proto.
  */
 export const file_vultisig_keygen_v1_keygen_message: GenFile = /*@__PURE__*/
-  fileDesc("Cid2dWx0aXNpZy9rZXlnZW4vdjEva2V5Z2VuX21lc3NhZ2UucHJvdG8SEnZ1bHRpc2lnLmtleWdlbi52MSLMAQoNS2V5Z2VuTWVzc2FnZRISCgpzZXNzaW9uX2lkGAEgASgJEhYKDmhleF9jaGFpbl9jb2RlGAIgASgJEhQKDHNlcnZpY2VfbmFtZRgDIAEoCRIaChJlbmNyeXB0aW9uX2tleV9oZXgYBCABKAkSGgoSdXNlX3Z1bHRpc2lnX3JlbGF5GAUgASgIEhIKCnZhdWx0X25hbWUYBiABKAkSLQoIbGliX3R5cGUYByABKA4yGy52dWx0aXNpZy5rZXlnZW4udjEuTGliVHlwZUJSChJ2dWx0aXNpZy5rZXlnZW4udjFaN2dpdGh1Yi5jb20vdnVsdGlzaWcvY29tbW9uZGF0YS9nby92dWx0aXNpZy9rZXlnZW4vdjE7djG6AgJWU2IGcHJvdG8z", [file_vultisig_keygen_v1_lib_type_message]);
+  fileDesc("Cid2dWx0aXNpZy9rZXlnZW4vdjEva2V5Z2VuX21lc3NhZ2UucHJvdG8SEnZ1bHRpc2lnLmtleWdlbi52MSLcAQoNS2V5Z2VuTWVzc2FnZRISCgpzZXNzaW9uX2lkGAEgASgJEhYKDmhleF9jaGFpbl9jb2RlGAIgASgJEhQKDHNlcnZpY2VfbmFtZRgDIAEoCRIaChJlbmNyeXB0aW9uX2tleV9oZXgYBCABKAkSGgoSdXNlX3Z1bHRpc2lnX3JlbGF5GAUgASgIEhIKCnZhdWx0X25hbWUYBiABKAkSLQoIbGliX3R5cGUYByABKA4yGy52dWx0aXNpZy5rZXlnZW4udjEuTGliVHlwZRIOCgZjaGFpbnMYCCADKAlCUgoSdnVsdGlzaWcua2V5Z2VuLnYxWjdnaXRodWIuY29tL3Z1bHRpc2lnL2NvbW1vbmRhdGEvZ28vdnVsdGlzaWcva2V5Z2VuL3YxO3YxugICVlNiBnByb3RvMw", [file_vultisig_keygen_v1_lib_type_message]);
 
 /**
  * @generated from message vultisig.keygen.v1.KeygenMessage
@@ -54,6 +54,13 @@ export type KeygenMessage = Message<"vultisig.keygen.v1.KeygenMessage"> & {
    * @generated from field: vultisig.keygen.v1.LibType lib_type = 7;
    */
   libType: LibType;
+
+  /**
+   * This field only used by KeyImport
+   *
+   * @generated from field: repeated string chains = 8;
+   */
+  chains: string[];
 };
 
 /**

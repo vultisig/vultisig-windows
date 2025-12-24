@@ -180,6 +180,12 @@ export const en = {
     'Enable a chain in your vault to manage its DeFi positions here.',
   defi_add: 'Add',
   defi_remove: 'Remove',
+  defi_lp_pool_title: '{{pool}} Pool',
+  position_label: 'Position',
+  defi_lp_position_form_title:
+    '{{action, select, add {Add liquidity} remove {Remove liquidity} other {Manage liquidity}}}',
+  defi_lp_position_form_description:
+    'Managing liquidity for {{position}} is coming soon.',
   manage_tokens: 'Manage tokens',
   collected_rewards: 'Collected rewards',
   coming_soon: 'Coming Soon',
@@ -956,6 +962,7 @@ export const en = {
   show_defi_balance: 'Show DeFi balance',
   sign: 'Sign',
   signAmino: 'Amino Sign',
+  signDirect: 'Direct Sign',
   signPrivately: 'Want to sign privately?',
   sign_custom_message: 'Sign custom message',
   sign_custom_message_description: 'Sign custom message',

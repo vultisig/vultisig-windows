@@ -1,9 +1,9 @@
 import { storage } from '@core/extension/storage'
+import { VaultsAppSessions } from '@core/extension/storage/appSessions'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { without } from '@lib/utils/array/without'
-import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
 
-import { BackgroundEventMessage, backgroundEventMsgType } from './core'
+import { sendEventToApp } from './sendEventToApp'
 
 export const runBackgroundEventsAgent = () => {
   chrome.storage.onChanged.addListener(async (changes, areaName) => {
@@ -11,7 +11,10 @@ export const runBackgroundEventsAgent = () => {
 
     if (!(StorageKey.appSessions in changes)) return
 
-    const { newValue, oldValue } = changes[StorageKey.appSessions]
+    const { newValue, oldValue } = changes[StorageKey.appSessions] as {
+      newValue?: VaultsAppSessions
+      oldValue: VaultsAppSessions
+    }
 
     if (!oldValue) return
 
@@ -27,24 +30,25 @@ export const runBackgroundEventsAgent = () => {
     const removedApps = without(prevApps, ...nextApps)
 
     for (const appId of removedApps) {
-      chrome.tabs?.query({ url: '*://*/*' }, tabs => {
-        const targetTabs = without(
-          tabs.map(({ url, id }) => {
-            if (!url || getUrlBaseDomain(url) !== appId) return
+      sendEventToApp({ appId, event: 'disconnect', value: undefined })
+    }
 
-            return id
-          }),
-          undefined
-        )
+    for (const appId of nextApps) {
+      const prevSession = prevSessions[appId]
+      const nextSession = nextSessions[appId]
 
-        targetTabs.forEach(tabId => {
-          const message: BackgroundEventMessage = {
-            type: backgroundEventMsgType,
-            event: 'disconnect',
-          }
-          chrome.tabs.sendMessage(tabId, message)
+      if (!prevSession || !nextSession) continue
+
+      const prevChainId = prevSession.selectedEVMChainId
+      const nextChainId = nextSession.selectedEVMChainId
+
+      if (prevChainId && nextChainId && prevChainId !== nextChainId) {
+        sendEventToApp({
+          appId,
+          event: 'evmChainChanged',
+          value: nextChainId,
         })
-      })
+      }
     }
   })
 }

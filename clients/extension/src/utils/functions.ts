@@ -40,7 +40,7 @@ const unfinalizeInput = (psbt: Psbt, i: number) => {
 export const rebuildPsbtWithPartialSigsFromWC = (
   wcData: any,
   originalPsbtBytes: Buffer
-): Buffer => {
+): Uint8Array => {
   const sr = wcData?.signingResultV2
   if (!sr) throw new Error('Missing signingResultV2')
 

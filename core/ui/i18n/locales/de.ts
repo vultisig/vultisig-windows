@@ -320,6 +320,12 @@ export const de = {
     'Aktiviere eine Chain in deinem Tresor, um hier ihre DeFi-Positionen zu verwalten.',
   defi_add: 'Add',
   defi_remove: 'Remove',
+  defi_lp_pool_title: '{{pool}} Pool',
+  position_label: 'Position',
+  defi_lp_position_form_title:
+    '{{action, select, add {Liquidität hinzufügen} remove {Liquidität entfernen} other {Liquidität verwalten}}}',
+  defi_lp_position_form_description:
+    'Die Verwaltung von Liquidität für {{position}} ist bald verfügbar.',
   manage_tokens: 'Tokens verwalten',
   collected_rewards: 'Gesammelte Prämien',
   coming_soon: 'Demnächst verfügbar',
@@ -1016,6 +1022,7 @@ export const de = {
   show_defi_balance: 'DeFi-Guthaben anzeigen',
   sign: 'Zeichen',
   signAmino: 'Amino-Zeichen',
+  signDirect: 'Direktes Zeichen',
   signPrivately: 'Möchten Sie vertraulich unterschreiben?',
   sign_custom_message: 'Benutzerdefinierte Nachricht unterschreiben',
   sign_custom_message_description:

@@ -25,13 +25,15 @@ export const restrictPsbtToInputs = (
       // Strip our keypaths so WalletCore skips
       if (input.bip32Derivation) {
         input.bip32Derivation = input.bip32Derivation.filter(
-          d => !d.pubkey.equals(ourPubkey)
+          d => !Buffer.from(d.pubkey).equals(ourPubkey)
         )
       }
       if ((input as any).tapBip32Derivation) {
         ;(input as any).tapBip32Derivation = (
           input as any
-        ).tapBip32Derivation.filter((d: any) => !d.pubkey.equals(ourPubkey))
+        ).tapBip32Derivation.filter(
+          (d: any) => !Buffer.from(d.pubkey).equals(ourPubkey)
+        )
       }
       return
     }
