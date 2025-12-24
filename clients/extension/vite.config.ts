@@ -73,6 +73,13 @@ export default async () => {
               dest: '',
             },
             {
+              src: path.resolve(
+                __dirname,
+                '../../node_modules/zxing-wasm/dist/reader/zxing_reader.wasm'
+              ),
+              dest: 'wasm',
+            },
+            {
               src: `${publicFolderPath}/**/*`,
               dest: 'core',
               rename: (_fileName, _fileExtension, fullPath) => {

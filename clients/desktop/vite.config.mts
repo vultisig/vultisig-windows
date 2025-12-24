@@ -48,6 +48,15 @@ export default defineConfig(async () => {
           },
           {
             src: normalizePath(
+              path.resolve(
+                __dirname,
+                '../../node_modules/zxing-wasm/dist/reader/zxing_reader.wasm'
+              )
+            ),
+            dest: 'wasm',
+          },
+          {
+            src: normalizePath(
               path.resolve(__dirname, '../../core/ui/public/**/*')
             ),
             dest: 'core',

@@ -3,7 +3,7 @@ import {
   Video,
   VideoWrapper,
 } from '@core/ui/qr/components/styles'
-import { readQrCode } from '@core/ui/qr/utils/readQrCode'
+import { initZxing, readQrCode } from '@core/ui/qr/utils/readQrCode'
 import { Button } from '@lib/ui/buttons/Button'
 import { Image } from '@lib/ui/image/Image'
 import { Center } from '@lib/ui/layout/Center'
@@ -90,6 +90,10 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
   }, [stream])
 
   useEffect(getStream, [getStream])
+
+  useEffect(() => {
+    initZxing()
+  }, [])
 
   useEffect(() => {
     const video = videoRef.current
