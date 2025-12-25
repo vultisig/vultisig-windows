@@ -289,6 +289,7 @@ export const zh = {
   close: '关闭',
   coin_not_found_in_current_vault: '当前金库中未找到该硬币。',
   defi_token_required: '{{ticker}} 不在此金库中',
+  adding_coin_to_vault: '正在将代币添加到金库...',
   defi_token_required_description:
     '请在“管理代币”中添加 {{ticker}}，以便进行质押、解押或绑定。',
   defi_add_chain_to_vault_title: '请先将链添加到金库',

@@ -84,7 +84,7 @@ export const resolveStakeActions = ({
       stakeAction: 'mint',
       unstakeAction: 'redeem',
       stakeLabel: translate('mint'),
-      unstakeLabel: 'Unmint',
+      unstakeLabel: translate('redeem'),
     }
   }
 

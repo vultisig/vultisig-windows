@@ -1,4 +1,5 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { FastVaultPasswordModal } from '@core/ui/mpc/fast/FastVaultPasswordModal'
 import { Plugin } from '@core/ui/plugins/core/get'
 import { Button } from '@lib/ui/buttons/Button'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
@@ -14,11 +15,10 @@ import { Panel } from '@lib/ui/panel/Panel'
 import { OnFinishProp, ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { FastVaultPasswordModal } from '../../../fast/FastVaultPasswordModal'
 
 export const PreviewInfo: FC<
   OnFinishProp<{ password: string }> & ValueProp<Plugin>
@@ -26,6 +26,7 @@ export const PreviewInfo: FC<
   const { t } = useTranslation()
   const [step, setStep] = useState(1)
   const [showModal, setShowModal] = useState(false)
+
   return (
     <>
       {step > 1 ? (
@@ -55,17 +56,29 @@ export const PreviewInfo: FC<
               <VStack gap={12}>
                 <Panel>
                   <VStack gap={16}>
-                    {permissions.map((item, index) => (
-                      <HStack alignItems="center" gap={4} key={index}>
+                    {permissions.map(({ description, id, label }) => (
+                      <HStack alignItems="center" gap={4} key={id}>
                         <Text
                           as={ShieldCheckIcon}
                           color="primaryAlt"
                           size={16}
                         />
                         <Text as="span" size={14}>
-                          {item}
+                          {label}
                         </Text>
-                        <Text as={CircleInfoIcon} color="shy" size={16} />
+                        <Tooltip
+                          content={description}
+                          placement="top"
+                          renderOpener={props => (
+                            <Text
+                              as={CircleInfoIcon}
+                              color="shy"
+                              cursor="pointer"
+                              size={16}
+                              {...props}
+                            />
+                          )}
+                        />
                       </HStack>
                     ))}
                   </VStack>

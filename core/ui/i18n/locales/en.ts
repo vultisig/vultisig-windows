@@ -173,6 +173,7 @@ export const en = {
   coin_not_found_in_current_vault: 'Coin not found in current vault',
   coin_not_found_in_any_vault: '{{ticker}} on {{chain}} not found in any vault',
   defi_token_required: '{{ticker}} is not in this vault',
+  adding_coin_to_vault: 'Adding coin to vault...',
   defi_token_required_description:
     'Add {{ticker}} to this vault from Manage Tokens to stake, unstake, or bond.',
   defi_add_chain_to_vault_title: 'Add the chain to your vault first',
