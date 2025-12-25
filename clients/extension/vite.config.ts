@@ -55,7 +55,11 @@ export default async () => {
 
     return defineConfig({
       plugins: [
-        react(),
+        react({
+          babel: {
+            plugins: [['babel-plugin-react-compiler', {}]],
+          },
+        }),
         nodePolyfills({ exclude: ['fs'] }),
         wasm(),
         topLevelAwait(),
@@ -67,6 +71,13 @@ export default async () => {
                 '../../node_modules/@trustwallet/wallet-core/dist/lib/wallet-core.wasm'
               ),
               dest: '',
+            },
+            {
+              src: path.resolve(
+                __dirname,
+                '../../node_modules/zxing-wasm/dist/reader/zxing_reader.wasm'
+              ),
+              dest: 'wasm',
             },
             {
               src: `${publicFolderPath}/**/*`,

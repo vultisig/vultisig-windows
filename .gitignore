@@ -47,14 +47,19 @@ Thumbs.db
 *.cover.out
 
 # Wails specific files
-frontend/dist/
-frontend/node_modules/
-frontend/yarn.lock
-frontend/package.json.md5
+clients/desktop/dist/
+clients/desktop/node_modules/
+clients/desktop/package.json.md5
+clients/extension/dist/
+clients/extension/node_modules/
+clients/extension/package.json.md5
+*.package.json.md5
 
 # Ignore build files created by Wails
-frontend/build/
-frontend/.parcel-cache/
+clients/desktop/build/
+clients/desktop/.parcel-cache/
+clients/extension/build/
+clients/extension/.parcel-cache/
 
 # Local environment configuration
 .env
@@ -77,7 +82,8 @@ frontend/.parcel-cache/
 vultisig.db
 vultisig-win
 
-frontend/vite.config.ts.timestamp-*
+clients/desktop/vite.config.ts.timestamp-*
+clients/desktop/vite.config.mts.timestamp-*
 
 .envrc
 credentials.json
