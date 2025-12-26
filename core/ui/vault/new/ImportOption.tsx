@@ -1,6 +1,5 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { borderRadius } from '@lib/ui/css/borderRadius'
-import { hStack, VStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import {
   DescriptionProp,
   IconProp,
@@ -13,30 +12,22 @@ import { ReactNode } from 'react'
 import styled from 'styled-components'
 
 const Container = styled(UnstyledButton)`
-  ${hStack({
-    gap: 24,
-    alignItems: 'center',
+  ${vStack({
+    gap: 12,
   })}
-  ${borderRadius.l};
+  border-radius: 24px;
   background: ${getColor('foreground')};
   padding: 24px;
   width: 100%;
 
   &:hover {
-    background: ${getColor('mist')};
+    background: ${getColor('foregroundExtra')};
   }
 `
 
 const IconContainer = styled.div`
-  ${hStack({
-    alignItems: 'center',
-    gap: 8,
-  })}
-  color: ${getColor('contrast')};
-
-  svg {
-    font-size: 20px;
-  }
+  color: ${getColor('info')};
+  font-size: 20px;
 `
 
 type ImportOptionProps = IconProp &
@@ -57,24 +48,22 @@ export const ImportOption = ({
 }: ImportOptionProps) => {
   return (
     <Container onClick={onClick}>
-      <VStack flexGrow alignItems="start" gap={12}>
-        {badge}
-        <IconContainer>
-          {icon}
-          <Text size={15} weight="500" color="contrast">
-            {title}
+      {badge}
+      <HStack gap={8} alignItems="center">
+        <IconContainer>{icon}</IconContainer>
+        <Text size={15} weight="500">
+          {title}
+        </Text>
+      </HStack>
+      <VStack alignItems="start" gap={8}>
+        <Text size={13} weight="500" color="shyExtra">
+          {description}
+        </Text>
+        {footnote && (
+          <Text size={10} weight="500" color="shy">
+            {footnote}
           </Text>
-        </IconContainer>
-        <VStack alignItems="start" gap={8}>
-          <Text size={13} weight="500" color="supporting">
-            {description}
-          </Text>
-          {footnote && (
-            <Text size={10} weight="500" color="shy">
-              {footnote}
-            </Text>
-          )}
-        </VStack>
+        )}
       </VStack>
     </Container>
   )
