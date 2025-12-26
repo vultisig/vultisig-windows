@@ -1,11 +1,19 @@
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { useRive, useStateMachineInput } from '@rive-app/react-canvas'
-import { useCallback } from 'react'
 
 const stateMachineName = 'State Machine 1'
 const inputName = 'Index'
 
 const animations = [1, 2, 3, 4, 5, 6] as const
+
+const updateRiveInputValue = (
+  input: ReturnType<typeof useStateMachineInput>,
+  delta: number
+) => {
+  if (input && typeof input.value === 'number') {
+    input.value += delta
+  }
+}
 
 export const useOnboardingStepsAnimations = () => {
   const {
@@ -28,26 +36,26 @@ export const useOnboardingStepsAnimations = () => {
     inputName
   )
 
-  const handleNextAnimation = useCallback(() => {
+  const handleNextAnimation = () => {
     if (
       typeof stateMachineInput?.value === 'number' &&
       stateMachineInput.value < animations.length
     ) {
-      stateMachineInput.value += 1
+      updateRiveInputValue(stateMachineInput, 1)
       toNextAnimation()
     }
-  }, [stateMachineInput, toNextAnimation])
+  }
 
   // TODO: tony to refactor when the designer gives us the animations that work backwards
-  const handlePrevAnimation = useCallback(() => {
+  const handlePrevAnimation = () => {
     if (
       typeof stateMachineInput?.value === 'number' &&
       stateMachineInput.value > 0
     ) {
-      stateMachineInput.value -= 1
+      updateRiveInputValue(stateMachineInput, -1)
       toPreviousAnimation()
     }
-  }, [stateMachineInput, toPreviousAnimation])
+  }
 
   return {
     animations,

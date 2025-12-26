@@ -10,6 +10,7 @@ import tsParser from '@typescript-eslint/parser'
 import jsxA11Y from 'eslint-plugin-jsx-a11y'
 import react from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
+import reactCompiler from 'eslint-plugin-react-compiler'
 import simpleImportSort from 'eslint-plugin-simple-import-sort'
 import storybook from 'eslint-plugin-storybook'
 import unusedImportsPlugin from 'eslint-plugin-unused-imports'
@@ -52,6 +53,7 @@ export default [
       'simple-import-sort': simpleImportSort,
       'unused-imports': fixupPluginRules(unusedImportsPlugin),
       storybook,
+      'react-compiler': reactCompiler,
     },
 
     languageOptions: {
@@ -98,6 +100,7 @@ export default [
       'react/prop-types': 'off',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'error',
+      'react-compiler/react-compiler': 'error',
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
       '@typescript-eslint/ban-ts-comment': 'off',

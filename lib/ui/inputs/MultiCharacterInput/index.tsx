@@ -38,7 +38,7 @@ export const MultiCharacterInput = ({
   ...rest
 }: MultiCharacterInputProps) => {
   const { t } = useTranslation()
-  const { digits, handleChange, handleKeyDown, handlePaste, inputRefs } =
+  const { digits, handleChange, handleKeyDown, handlePaste, getRefCallback } =
     useMultiCharacterInput({ length, value, onChange })
 
   const isDisabled = validation === 'loading'
@@ -66,9 +66,7 @@ export const MultiCharacterInput = ({
             disabled={isDisabled}
             onKeyDown={e => handleKeyDown(e, idx)}
             onPaste={handlePaste}
-            ref={el => {
-              inputRefs.current[idx] = el
-            }}
+            ref={getRefCallback(idx)}
             {...rest}
           />
         ))}

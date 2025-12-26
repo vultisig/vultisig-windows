@@ -6,9 +6,9 @@ type Input = {
   image: CanvasImageSource
 }
 
-const wasmUrl = '/core/wasm/zxing_reader.wasm'
+const wasmUrl = '/wasm/zxing_reader.wasm'
 
-const initZxing = memoizeAsync(() => {
+export const initZxing = memoizeAsync(() => {
   return prepareZXingModule({
     overrides: {
       locateFile: (path, prefix) =>

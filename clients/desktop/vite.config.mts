@@ -21,7 +21,11 @@ export default defineConfig(async () => {
       __APP_BUILD__: JSON.stringify(buildInfo.build),
     },
     plugins: [
-      react(),
+      react({
+        babel: {
+          plugins: [['babel-plugin-react-compiler', {}]],
+        },
+      }),
       nodePolyfills({ exclude: ['fs'] }),
       wasm(),
       topLevelAwait(),
@@ -41,6 +45,15 @@ export default defineConfig(async () => {
               path.resolve(__dirname, '../../node_modules/7z-wasm/7zz.wasm')
             ),
             dest: '7z-wasm',
+          },
+          {
+            src: normalizePath(
+              path.resolve(
+                __dirname,
+                '../../node_modules/zxing-wasm/dist/reader/zxing_reader.wasm'
+              )
+            ),
+            dest: 'wasm',
           },
           {
             src: normalizePath(
