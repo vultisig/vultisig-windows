@@ -5,6 +5,7 @@ import { GrantVaultAccess } from '@core/inpage-provider/popup/view/resolvers/gra
 import { PluginReshare } from '@core/inpage-provider/popup/view/resolvers/pluginReshare'
 import { SendTx } from '@core/inpage-provider/popup/view/resolvers/sendTx'
 import { SignMessage } from '@core/inpage-provider/popup/view/resolvers/signMessage'
+import { WatchAsset } from '@core/inpage-provider/popup/view/resolvers/watchAsset'
 
 type PopupApiImplementation = {
   [K in PopupMethod]: PopupResolver<K>
@@ -16,4 +17,5 @@ export const PopupResolvers: PopupApiImplementation = {
   pluginReshare: PluginReshare,
   signMessage: SignMessage,
   sendTx: SendTx,
+  watchAsset: WatchAsset,
 }
