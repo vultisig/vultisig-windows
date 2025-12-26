@@ -654,7 +654,6 @@ __metadata:
     "@eslint/js": "npm:^9.39.2"
     "@lib/ui": "workspace:^"
     "@lib/utils": "workspace:^"
-    "@vitejs/plugin-react": "npm:^5.1.2"
     "@wailsapp/runtime": "workspace:^"
     eslint: "npm:^9.39.2"
     eslint-plugin-jsx-a11y: "npm:^6.10.2"
@@ -666,10 +665,7 @@ __metadata:
     styled-components: "npm:^6.1.19"
     typescript: "npm:^5.9.3"
     vite: "npm:^7.3.0"
-    vite-plugin-node-polyfills: "npm:^0.24.0"
     vite-plugin-static-copy: "npm:^3.1.4"
-    vite-plugin-top-level-await: "npm:^1.6.0"
-    vite-plugin-wasm: "npm:^3.5.0"
     vitest: "npm:^4.0.16"
   languageName: unknown
   linkType: soft
@@ -701,7 +697,6 @@ __metadata:
     "@types/react": "npm:^19.2.7"
     "@types/react-dom": "npm:^19.2.3"
     "@types/uuid": "npm:^11.0.0"
-    "@vitejs/plugin-react": "npm:^5.1.2"
     "@wallet-standard/base": "npm:^1.1.0"
     "@wallet-standard/features": "npm:^1.1.0"
     bech32: "npm:^2.0.0"
@@ -862,9 +857,16 @@ __metadata:
     "@lib/utils": "workspace:^"
     "@rive-app/react-canvas": "npm:^4.25.1"
     "@trustwallet/wallet-core": "npm:^4.4.5"
+    "@types/node": "npm:^25.0.3"
+    "@vitejs/plugin-react": "npm:^5.1.2"
     react: "npm:^19.2.3"
     react-circular-progressbar: "npm:^2.2.0"
     styled-components: "npm:^6.1.19"
+    vite: "npm:^7.3.0"
+    vite-plugin-node-polyfills: "npm:^0.24.0"
+    vite-plugin-static-copy: "npm:^3.1.4"
+    vite-plugin-top-level-await: "npm:^1.6.0"
+    vite-plugin-wasm: "npm:^3.5.0"
     zxing-wasm: "npm:2.2.4"
   languageName: unknown
   linkType: soft

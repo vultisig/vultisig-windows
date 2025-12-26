@@ -1,10 +1,12 @@
-import react from '@vitejs/plugin-react'
 import path from 'path'
 import { defineConfig, PluginOption } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 import topLevelAwait from 'vite-plugin-top-level-await'
 import wasm from 'vite-plugin-wasm'
+
+import { getCommonPlugins } from '../../core/ui/vite/plugins'
+import { getStaticCopyTargets } from '../../core/ui/vite/staticCopy'
 
 export default async () => {
   const chunk = process.env.CHUNK
@@ -51,46 +53,11 @@ export default async () => {
       },
     })
   } else {
-    const publicFolderPath = '../../core/ui/public'
-
     return defineConfig({
       plugins: [
-        react({
-          babel: {
-            plugins: [['babel-plugin-react-compiler', {}]],
-          },
-        }),
-        nodePolyfills({ exclude: ['fs'] }),
-        wasm(),
-        topLevelAwait(),
+        ...getCommonPlugins(),
         viteStaticCopy({
-          targets: [
-            {
-              src: path.resolve(
-                __dirname,
-                '../../node_modules/@trustwallet/wallet-core/dist/lib/wallet-core.wasm'
-              ),
-              dest: '',
-            },
-            {
-              src: path.resolve(
-                __dirname,
-                '../../node_modules/zxing-wasm/dist/reader/zxing_reader.wasm'
-              ),
-              dest: 'wasm',
-            },
-            {
-              src: `${publicFolderPath}/**/*`,
-              dest: 'core',
-              rename: (_fileName, _fileExtension, fullPath) => {
-                const relativePath = path.relative(
-                  path.resolve(__dirname, publicFolderPath),
-                  fullPath
-                )
-                return relativePath
-              },
-            },
-          ],
+          targets: getStaticCopyTargets(),
         }),
       ],
       build: {

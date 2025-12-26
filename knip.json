@@ -52,8 +52,15 @@
       ]
     },
     "core/ui": {
+      "entry": [
+        "vite/plugins.ts",
+        "vite/staticCopy.ts"
+      ],
       "project": [
         "**/*.{ts,tsx}"
+      ],
+      "ignoreDependencies": [
+        "vite-plugin-static-copy"
       ]
     },
     "lib/utils": {

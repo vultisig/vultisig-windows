@@ -50,7 +50,7 @@
       "resources": [
         "wallet-core.wasm",
         "popup.html",
-        "wasm/zxing_reader.wasm"
+        "zxing_reader.wasm"
       ],
       "use_dynamic_url": false
     },
