@@ -10,10 +10,10 @@ const Container = styled.div`
     alignItems: 'center',
     gap: 4,
   })}
+  color: ${getColor('idle')};
 `
 
 const BadgeText = styled(Text)`
-  color: ${getColor('idle')};
   font-size: 10px;
   font-weight: 500;
   letter-spacing: 0.12px;
@@ -22,7 +22,6 @@ const BadgeText = styled(Text)`
 
 const BadgeIcon = styled(WandSparklesIcon)`
   font-size: 12px;
-  color: ${getColor('idle')};
 `
 
 export const NewBadge = () => {
