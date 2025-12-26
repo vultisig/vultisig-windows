@@ -3,15 +3,20 @@ import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { panel } from '@lib/ui/panel/Panel'
 import { InputProps } from '@lib/ui/props'
-import { OptionsProp } from '@lib/ui/props'
 import { Text, TextColor } from '@lib/ui/text'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { ChainSelectionScreen } from '../chainSelection/ChainSelectionScreen'
-import { ChainEntityIcon } from '../coin/icon/ChainEntityIcon'
-import { getChainLogoSrc } from '../metadata/getChainLogoSrc'
+import { ChainEntityIcon } from '../chain/coin/icon/ChainEntityIcon'
+import { getChainLogoSrc } from '../chain/metadata/getChainLogoSrc'
+import { AddressBookChainSelectionScreen } from './AddressBookChainSelectionScreen'
+import {
+  AddressBookChainType,
+  fromAddressBookChainType,
+  getAddressBookChainOptions,
+  toAddressBookChainType,
+} from './AddressBookChainType'
 
 const ChainSelector = styled(HStack)`
   ${panel()};
@@ -26,21 +31,38 @@ const ChainSelector = styled(HStack)`
 
 type Props = {
   titleColor?: TextColor
-}
+} & InputProps<Chain | undefined>
 
-export const ChainInput = <T extends Chain>({
+export const AddressBookChainInput = ({
   value,
   onChange,
-  options,
   titleColor = 'light',
-}: Props & InputProps<T> & OptionsProp<T>) => {
+}: Props) => {
   const { t } = useTranslation()
   const [showChainSelection, setShowChainSelection] = useState(false)
 
-  const handleChainSelect = (chain: T) => {
-    onChange?.(chain)
+  const selectedChainType = value ? toAddressBookChainType(value) : undefined
+
+  const handleChainTypeSelect = (
+    chainType: AddressBookChainType | undefined
+  ) => {
+    if (chainType) {
+      onChange?.(fromAddressBookChainType(chainType))
+    }
     setShowChainSelection(false)
   }
+
+  const displayName = selectedChainType
+    ? selectedChainType.kind === 'evm'
+      ? t('evm_chains')
+      : selectedChainType.chain
+    : undefined
+
+  const logoSrc = selectedChainType
+    ? selectedChainType.kind === 'evm'
+      ? getChainLogoSrc(Chain.Ethereum)
+      : getChainLogoSrc(selectedChainType.chain)
+    : undefined
 
   return (
     <VStack gap={8}>
@@ -48,14 +70,11 @@ export const ChainInput = <T extends Chain>({
         {t('chain')}
       </Text>
       <ChainSelector onClick={() => setShowChainSelection(true)}>
-        {value ? (
+        {selectedChainType && logoSrc ? (
           <>
-            <ChainEntityIcon
-              value={getChainLogoSrc(value)}
-              style={{ fontSize: 24 }}
-            />
+            <ChainEntityIcon value={logoSrc} style={{ fontSize: 24 }} />
             <Text color="contrast" size={14} weight="500">
-              {value}
+              {displayName}
             </Text>
           </>
         ) : (
@@ -66,10 +85,10 @@ export const ChainInput = <T extends Chain>({
         <ChevronRightIcon style={{ marginLeft: 'auto', marginRight: 0 }} />
       </ChainSelector>
       {showChainSelection && (
-        <ChainSelectionScreen
-          value={value}
-          onChange={handleChainSelect}
-          options={options}
+        <AddressBookChainSelectionScreen
+          value={selectedChainType}
+          onChange={handleChainTypeSelect}
+          options={getAddressBookChainOptions()}
         />
       )}
     </VStack>

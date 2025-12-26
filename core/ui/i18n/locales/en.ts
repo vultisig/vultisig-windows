@@ -290,6 +290,7 @@ export const en = {
   email_disclaimer: 'This email is only used to send the backup',
   email_required: 'Email is required',
   emails_dont_match: "Emails don't match",
+  evm_chains: 'EVM Chains',
   enable_dkls: 'Enable DKLS',
   enable_token_instruction:
     'Enable at least one token to view balances and manage positions.',

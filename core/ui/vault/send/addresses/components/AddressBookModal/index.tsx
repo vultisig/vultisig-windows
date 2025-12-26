@@ -1,5 +1,6 @@
 import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
+import { isEvmChain } from '@core/ui/address-book/AddressBookChainType'
 import { Match } from '@lib/ui/base/Match'
 import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
@@ -115,7 +116,12 @@ export const AddressBookModal = ({ onSelect, onClose }: Props) => {
               value={addressBookSelectedOption}
               saved={() =>
                 addressBookItems
-                  .filter(item => item.chain === coin.chain)
+                  .filter(item => {
+                    if (isEvmChain(coin.chain)) {
+                      return isEvmChain(item.chain)
+                    }
+                    return item.chain === coin.chain
+                  })
                   .map(item => (
                     <AddressBookListItem
                       key={item.id}
