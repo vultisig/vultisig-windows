@@ -21,6 +21,7 @@ import { getWalletPermissions } from './resolvers/wallet_getPermissions'
 import { requestWalletPermissions } from './resolvers/wallet_requestPermissions'
 import { revokeWalletPermissions } from './resolvers/wallet_revokePermissions'
 import { switchEthereumChain } from './resolvers/wallet_switchEthereumChain'
+import { watchAsset } from './resolvers/wallet_watchAsset'
 
 export { processSignature } from './utils'
 
@@ -30,6 +31,7 @@ export const ethereumHandlers = {
   eth_requestAccounts: requestEthAccounts,
   wallet_switchEthereumChain: switchEthereumChain,
   wallet_addEthereumChain: addEthereumChain,
+  wallet_watchAsset: watchAsset,
   wallet_getPermissions: getWalletPermissions,
   wallet_requestPermissions: requestWalletPermissions,
   wallet_revokePermissions: revokeWalletPermissions,
