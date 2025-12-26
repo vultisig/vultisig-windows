@@ -9,7 +9,7 @@ import { enumDesc, fileDesc } from "@bufbuild/protobuf/codegenv2";
  * Describes the file vultisig/keygen/v1/lib_type_message.proto.
  */
 export const file_vultisig_keygen_v1_lib_type_message: GenFile = /*@__PURE__*/
-  fileDesc("Cil2dWx0aXNpZy9rZXlnZW4vdjEvbGliX3R5cGVfbWVzc2FnZS5wcm90bxISdnVsdGlzaWcua2V5Z2VuLnYxKi8KB0xpYlR5cGUSEQoNTElCX1RZUEVfR0cyMBAAEhEKDUxJQl9UWVBFX0RLTFMQAUJSChJ2dWx0aXNpZy5rZXlnZW4udjFaN2dpdGh1Yi5jb20vdnVsdGlzaWcvY29tbW9uZGF0YS9nby92dWx0aXNpZy9rZXlnZW4vdjE7djG6AgJWU2IGcHJvdG8z");
+  fileDesc("Cil2dWx0aXNpZy9rZXlnZW4vdjEvbGliX3R5cGVfbWVzc2FnZS5wcm90bxISdnVsdGlzaWcua2V5Z2VuLnYxKkcKB0xpYlR5cGUSEQoNTElCX1RZUEVfR0cyMBAAEhEKDUxJQl9UWVBFX0RLTFMQARIWChJMSUJfVFlQRV9LRVlJTVBPUlQQAkJSChJ2dWx0aXNpZy5rZXlnZW4udjFaN2dpdGh1Yi5jb20vdnVsdGlzaWcvY29tbW9uZGF0YS9nby92dWx0aXNpZy9rZXlnZW4vdjE7djG6AgJWU2IGcHJvdG8z");
 
 /**
  * buf:lint:ignore ENUM_ZERO_VALUE_SUFFIX
@@ -28,6 +28,11 @@ export enum LibType {
    * @generated from enum value: LIB_TYPE_DKLS = 1;
    */
   DKLS = 1,
+
+  /**
+   * @generated from enum value: LIB_TYPE_KEYIMPORT = 2;
+   */
+  KEYIMPORT = 2,
 }
 
 /**

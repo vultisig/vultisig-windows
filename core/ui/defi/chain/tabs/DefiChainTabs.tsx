@@ -13,6 +13,7 @@ import styled, { css, useTheme } from 'styled-components'
 
 import { useCurrentDefiChain } from '../useCurrentDefiChain'
 import { DefiChainPageTab, getDefiChainTabs } from './config'
+import { getLastDefiChainTab, setLastDefiChainTab } from './lastTab'
 
 export const DefiChainTabs = () => {
   const { t } = useTranslation()
@@ -24,7 +25,9 @@ export const DefiChainTabs = () => {
     : featureFlags.defiStakedTab
       ? 'staked'
       : 'lps'
-  const [activeTab, setActiveTab] = useState<DefiChainPageTab>(defaultTab)
+  const [activeTab, setActiveTab] = useState<DefiChainPageTab>(
+    getLastDefiChainTab(chain) ?? defaultTab
+  )
   const { colors } = useTheme()
   const navigate = useCoreNavigate()
   const tabs = useMemo(
@@ -40,6 +43,10 @@ export const DefiChainTabs = () => {
       setActiveTab(tabs[0].value)
     }
   }, [tabs, activeTab])
+
+  useEffect(() => {
+    setLastDefiChainTab(chain, activeTab)
+  }, [chain, activeTab])
 
   if (!tabs.length) {
     return null
@@ -63,7 +70,10 @@ export const DefiChainTabs = () => {
           <IconButton
             kind="secondary"
             onClick={() =>
-              navigate({ id: 'manageDefiPositions', state: { chain } })
+              navigate({
+                id: 'manageDefiPositions',
+                state: { chain, returnTab: activeTab },
+              })
             }
             style={{
               color: colors.info.toCssValue(),
@@ -104,7 +114,7 @@ export const TriggerItem = styled(UnstyledButton)<
   ${({ isActive, theme }) =>
     isActive &&
     css`
-      border-bottom: 1.5px solid ${theme.colors.buttonPrimary.toCssValue()};
+      border-bottom: 1.5px solid ${theme.colors.primaryAccentFour.toCssValue()};
       color: ${theme.colors.contrast.toCssValue()};
     `};
 

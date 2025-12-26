@@ -16,6 +16,7 @@ import { ManageVaultChainsPage } from '@core/ui/vault/chain/manage'
 import { ManageVaultChainCoinsPage } from '@core/ui/vault/chain/manage/coin'
 import { VaultChainPage } from '@core/ui/vault/chain/VaultChainPage'
 import { DepositPage } from '@core/ui/vault/deposit/DepositPage'
+import { DepositAccessGuard } from '@core/ui/vault/deposit/providers/DepositAccessGuard'
 import { SignCustomMessagePage } from '@core/ui/vault/keysign/custom-message'
 import { NewVaultPage } from '@core/ui/vault/new'
 import { VaultPage } from '@core/ui/vault/page'
@@ -35,6 +36,7 @@ import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage'
 import { Views } from '@lib/ui/navigation/Views'
 
 import { DefiChainPage } from '../defi/chain/DefiChainPage'
+import { LpPositionFormPage } from '../defi/chain/LpPositionFormPage'
 import { ManageDefiPositionsPage } from '../defi/chain/manage/ManageDefiPositionsPage'
 import { ManageDefiChainsPage } from '../defi/manage/ManageDefiChainsPage'
 import { DefiPage } from '../defi/page/DefiPage'
@@ -66,6 +68,7 @@ export type SharedViewId = Extract<
   | 'languageSettings'
   | 'manageDefiChains'
   | 'manageDefiPositions'
+  | 'lpPositionForm'
   | 'manageVaultChainCoins'
   | 'manageVaultChains'
   | 'manageVaultFolder'
@@ -115,15 +118,18 @@ export const sharedViews: Views<SharedViewId> = {
   defiChainDetail: DefiChainPage,
   deleteVault: DeleteVaultPage,
   deposit: () => (
-    <DepositActionProvider>
-      <DepositCoinProvider>
-        <DepositPage />
-      </DepositCoinProvider>
-    </DepositActionProvider>
+    <DepositAccessGuard>
+      <DepositActionProvider>
+        <DepositCoinProvider>
+          <DepositPage />
+        </DepositCoinProvider>
+      </DepositActionProvider>
+    </DepositAccessGuard>
   ),
   languageSettings: LanguagePage,
   manageDefiChains: ManageDefiChainsPage,
   manageDefiPositions: ManageDefiPositionsPage,
+  lpPositionForm: LpPositionFormPage,
   manageVaultChains: ManageVaultChainsPage,
   manageVaultChainCoins: ManageVaultChainCoinsPage,
   manageVaults: ManageVaultsPage,

@@ -4,13 +4,13 @@ import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { SafeImage } from '@lib/ui/images/SafeImage'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { Text } from '@lib/ui/text'
-import { useTranslation } from 'react-i18next'
 
 import {
+  BalanceValue,
   BannerContainer,
   BannerContent,
   ChainLogo,
+  ChainTitle,
   FallbackLogo,
   GradientBackground,
   Ring,
@@ -25,7 +25,6 @@ const totalFiat = 0
 export const DefiChainBalanceBannerFallback = ({
   chain,
 }: DefiChainBalanceBannerFallbackProps) => {
-  const { t } = useTranslation()
   const formatFiatAmount = useFormatFiatAmount()
 
   return (
@@ -38,23 +37,14 @@ export const DefiChainBalanceBannerFallback = ({
             fallback={<FallbackLogo>{chain.charAt(0)}</FallbackLogo>}
           />
           <VStack gap={2}>
-            <Text size={18} weight="600" color="contrast">
-              {chain}
-            </Text>
+            <ChainTitle>{chain}</ChainTitle>
           </VStack>
         </HStack>
-        <VStack gap={6}>
-          <Text size={12} color="shy">
-            {t('locked_in_defi')}
-          </Text>
-          <VStack gap={4}>
-            <Text size={30} weight="700" color="contrast">
-              <BalanceVisibilityAware>
-                {formatFiatAmount(totalFiat)}
-              </BalanceVisibilityAware>
-            </Text>
-          </VStack>
-        </VStack>
+        <BalanceValue>
+          <BalanceVisibilityAware>
+            {formatFiatAmount(totalFiat)}
+          </BalanceVisibilityAware>
+        </BalanceValue>
       </BannerContent>
       <Ring />
       <GradientBackground />

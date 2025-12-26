@@ -6,10 +6,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { ReactNode, useRef } from 'react'
 import styled from 'styled-components'
 
-import {
-  BottomNavigation,
-  bottomNavigationHeight,
-} from '../../components/BottomNavigation'
+import { BottomNavigation } from '../../components/BottomNavigation'
 import { VaultOverview } from './VaultOverview'
 import { VaultPageHeader } from './VaultPageHeader'
 
@@ -42,5 +39,4 @@ export const VaultPage = ({ primaryControls }: VaultPageProps = {}) => {
 
 const Wrapper = styled(VStack)`
   position: relative;
-  margin-bottom: ${bottomNavigationHeight}px;
 `

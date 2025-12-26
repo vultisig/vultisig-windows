@@ -27,8 +27,8 @@ export const useDepositBalance = ({ selectedChainAction }: Params) => {
     options: {
       enabled: Boolean(
         selectedCoin.address &&
-          action === 'unstake' &&
-          selectedCoin.ticker === knownCosmosTokens.THORChain.tcy.ticker
+        action === 'unstake' &&
+        selectedCoin.ticker === knownCosmosTokens.THORChain.tcy.ticker
       ),
     },
   })
@@ -41,8 +41,8 @@ export const useDepositBalance = ({ selectedChainAction }: Params) => {
       options: {
         enabled: Boolean(
           selectedCoin.address &&
-            action === 'unstake' &&
-            selectedCoin.chain === Chain.Ton
+          action === 'unstake' &&
+          selectedCoin.chain === Chain.Ton
         ),
       },
     })

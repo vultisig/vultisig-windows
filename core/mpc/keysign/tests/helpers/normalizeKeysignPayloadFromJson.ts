@@ -4,6 +4,14 @@ import {
   KeysignPayload,
   KeysignPayloadSchema,
 } from '../../../types/vultisig/keysign/v1/keysign_message_pb'
+import {
+  CosmosCoinSchema,
+  CosmosFee,
+  CosmosFeeSchema,
+  CosmosMsgSchema,
+  SignAminoSchema,
+  SignDirectSchema,
+} from '../../../types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { mapBlockchainSpecific } from '../mappers/mapBlockchainSpecific'
 import { mapSwapPayload } from '../mappers/mapSwapPayload'
 import {
@@ -29,6 +37,7 @@ import { toBlockchainSpecificOneof } from './toBlockchainSpecificOneof'
  *   - MayachainSwapPayload
  *   (and keeps unknowns as-is if they appear)
  * - optional approve/erc20 approve payload passthrough if provided by fixtures
+ * - sign_data with sign_amino or sign_direct for CosmosSDK message signing
  */
 export const normalizeKeysignPayloadFromJson = (input: any) => {
   const src = structuredClone(input)
@@ -104,6 +113,62 @@ export const normalizeKeysignPayloadFromJson = (input: any) => {
         }
       : undefined
 
+  const signDataSrc = src.sign_data
+  let signData: KeysignPayload['signData'] = {
+    case: undefined,
+    value: undefined,
+  }
+
+  if (signDataSrc) {
+    if (signDataSrc.sign_amino) {
+      const aminoSrc = signDataSrc.sign_amino
+      const feeSrc = aminoSrc.fee
+
+      const fee: CosmosFee | undefined = feeSrc
+        ? create(CosmosFeeSchema, {
+            amount: (feeSrc.amount ?? []).map((coin: any) =>
+              create(CosmosCoinSchema, {
+                denom: coin.denom,
+                amount: coin.amount,
+              })
+            ),
+            gas: feeSrc.gas ?? '0',
+            payer: feeSrc.payer,
+            granter: feeSrc.granter,
+            feePayer: feeSrc.fee_payer,
+          })
+        : undefined
+
+      signData = {
+        case: 'signAmino',
+        value: create(SignAminoSchema, {
+          fee,
+          msgs: (aminoSrc.msgs ?? []).map((msg: any) =>
+            create(CosmosMsgSchema, {
+              type: msg.type,
+              value:
+                typeof msg.value === 'string'
+                  ? msg.value
+                  : JSON.stringify(msg.value),
+            })
+          ),
+        }),
+      }
+    } else if (signDataSrc.sign_direct) {
+      const directSrc = signDataSrc.sign_direct
+
+      signData = {
+        case: 'signDirect',
+        value: create(SignDirectSchema, {
+          bodyBytes: directSrc.body_bytes,
+          authInfoBytes: directSrc.auth_info_bytes,
+          chainId: directSrc.chain_id,
+          accountNumber: directSrc.account_number,
+        }),
+      }
+    }
+  }
+
   const out = {
     coin,
     toAddress: emptyToUndefined(src.to_address ?? src.toAddress),
@@ -120,6 +185,7 @@ export const normalizeKeysignPayloadFromJson = (input: any) => {
     erc20ApprovePayload: approveMapped,
     approvePayload: approveMapped,
     contractPayload,
+    signData,
   }
 
   return create(KeysignPayloadSchema, out)

@@ -1,8 +1,7 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Button } from '@lib/ui/buttons/Button'
-import { CryptoIcon } from '@lib/ui/icons/CryptoIcon'
+import { CircleIcon } from '@lib/ui/icons/CircleIcon'
 import { CryptoWalletPenIcon } from '@lib/ui/icons/CryptoWalletPenIcon'
-import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -20,7 +19,7 @@ export const DefiPositionEmptyState = () => {
     <EmptyWrapper>
       <VStack gap={12} alignItems="center">
         <IconCircle>
-          <CryptoIcon />
+          <CircleIcon />
         </IconCircle>
         <VStack gap={8}>
           <Text centerHorizontally size={17} weight="600">
@@ -39,11 +38,7 @@ export const DefiPositionEmptyState = () => {
           maxWidth: 'fit-content',
           maxHeight: 32,
         }}
-        icon={
-          <IconWrapper size={16}>
-            <CryptoWalletPenIcon />
-          </IconWrapper>
-        }
+        icon={<CryptoWalletPenIcon />}
       >
         <Text size={12}>{t('customize_positions')}</Text>
       </Button>
@@ -62,13 +57,14 @@ const EmptyWrapper = styled.div`
 `
 
 const IconCircle = styled.div`
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 24px;
-  color: ${getColor('primary')};
-  border: 1.5px solid ${getColor('primary')};
+  color: ${getColor('info')};
+  border: 1.5px solid ${getColor('info')};
+  background: ${getColor('foregroundExtra')};
 `

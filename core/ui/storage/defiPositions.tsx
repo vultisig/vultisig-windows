@@ -1,6 +1,17 @@
 import { Chain } from '@core/chain/Chain'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { Coin } from '@core/chain/coin/Coin'
+import { knownTokens, knownTokensIndex } from '@core/chain/coin/knownTokens'
+import { findByTicker } from '@core/chain/coin/utils/findByTicker'
+import {
+  mayaMidgardBaseUrl,
+  midgardBaseUrl,
+} from '@core/ui/defi/chain/queries/constants'
+import { mayaCoin, runeCoin } from '@core/ui/defi/chain/queries/tokens'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
+import { queryUrl } from '@lib/utils/query/queryUrl'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMemo } from 'react'
 
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'
@@ -13,10 +24,15 @@ export type DefiPosition = {
   ticker: string
   type: DefiPositionType
   chain: Chain
+  coin?: Coin
+  poolAsset?: string
+  legacyIds?: string[]
+  apr?: number
 }
 
-// Define available positions for each chain
-const availableDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
+type LpSupportedChain = typeof Chain.THORChain | typeof Chain.MayaChain
+
+const staticDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
   [Chain.THORChain]: [
     {
       id: 'thor-bond-rune',
@@ -60,34 +76,6 @@ const availableDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
       type: 'stake',
       chain: Chain.THORChain,
     },
-    {
-      id: 'thor-lp-rune-eth',
-      name: 'RUNE/ETH',
-      ticker: 'RUNE/ETH',
-      type: 'lp',
-      chain: Chain.THORChain,
-    },
-    {
-      id: 'thor-lp-rune-usdc',
-      name: 'RUNE/USDC',
-      ticker: 'RUNE/USDC',
-      type: 'lp',
-      chain: Chain.THORChain,
-    },
-    {
-      id: 'thor-lp-rune-btc',
-      name: 'RUNE/BTC',
-      ticker: 'RUNE/BTC',
-      type: 'lp',
-      chain: Chain.THORChain,
-    },
-    {
-      id: 'thor-lp-rune-bnb',
-      name: 'RUNE/BNB',
-      ticker: 'RUNE/BNB',
-      type: 'lp',
-      chain: Chain.THORChain,
-    },
   ],
   [Chain.MayaChain]: [
     {
@@ -107,24 +95,240 @@ const availableDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
   ],
 }
 
-// Get positions for a specific chain
-export const getAvailablePositionsForChain = (chain: Chain): DefiPosition[] => {
-  return availableDefiPositions[chain] || []
+const getAvailablePositionsForChain = (chain: Chain): DefiPosition[] => {
+  return staticDefiPositions[chain] || []
 }
 
-// Get positions by type for a specific chain
-type GetPositionsByTypeInput = {
+const lpBaseTicker: Record<LpSupportedChain, string> = {
+  [Chain.THORChain]: runeCoin.ticker,
+  [Chain.MayaChain]: mayaCoin.ticker,
+}
+
+const lpChainMap: Partial<Record<string, Chain>> = {
+  AVAX: Chain.Avalanche,
+  BASE: Chain.Base,
+  BCH: Chain.BitcoinCash,
+  BSC: Chain.BSC,
+  BTC: Chain.Bitcoin,
+  DASH: Chain.Dash,
+  DOGE: Chain.Dogecoin,
+  ETH: Chain.Ethereum,
+  GAIA: Chain.Cosmos,
+  KUJI: Chain.Kujira,
+  LTC: Chain.Litecoin,
+  THOR: Chain.THORChain,
+  TRON: Chain.Tron,
+  XRP: Chain.Ripple,
+  ARB: Chain.Arbitrum,
+  ZEC: Chain.Zcash,
+}
+
+const legacyThorLpIdsByAsset: Record<string, string> = {
+  'ETH.ETH': 'thor-lp-rune-eth',
+  'BTC.BTC': 'thor-lp-rune-btc',
+  'BSC.BNB': 'thor-lp-rune-bnb',
+  'ETH.USDC-0XA0B86991C6218B36C1D19D4A2E9EB0CE3606EB48': 'thor-lp-rune-usdc',
+}
+
+type BuildLpPositionIdInput = {
   chain: Chain
-  type: DefiPositionType
+  poolAsset: string
 }
 
-export const getPositionsByType = ({
-  chain,
-  type,
-}: GetPositionsByTypeInput): DefiPosition[] => {
-  const positions = availableDefiPositions[chain] || []
-  return positions.filter(p => p.type === type)
+const buildLpPositionId = ({ chain, poolAsset }: BuildLpPositionIdInput) => {
+  const normalizedAsset = poolAsset.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()
+  return `${chain.toLowerCase()}-lp-${normalizedAsset}`
 }
+
+type ParsedPoolAsset = {
+  chain: Chain
+  ticker: string
+  tokenId?: string
+  poolAsset: string
+}
+
+const parsePoolAsset = (poolAsset: string): ParsedPoolAsset | undefined => {
+  const [chainCode, assetPart] = poolAsset.split('.')
+  if (!chainCode || !assetPart) return undefined
+
+  const chain = lpChainMap[chainCode.toUpperCase()]
+  if (!chain) return undefined
+
+  const [rawTicker, tokenId] = assetPart.split('-')
+  if (!rawTicker) return undefined
+
+  return {
+    chain,
+    ticker: rawTicker.toUpperCase(),
+    tokenId: tokenId?.toLowerCase(),
+    poolAsset,
+  }
+}
+
+const buildCoinFromPoolAsset = ({
+  chain,
+  ticker,
+  tokenId,
+}: ParsedPoolAsset): Coin => {
+  const knownTokenById =
+    tokenId !== undefined ? knownTokensIndex[chain]?.[tokenId] : undefined
+  const knownTokenByTicker = findByTicker({
+    coins: knownTokens[chain] ?? [],
+    ticker,
+  })
+
+  const fallbackCoin = chainFeeCoin[chain]
+  const source = knownTokenById ?? knownTokenByTicker
+  const logo = source?.logo ?? fallbackCoin?.logo ?? ticker.toLowerCase()
+
+  return {
+    chain,
+    id: source?.id ?? tokenId,
+    ticker,
+    logo,
+    decimals: source?.decimals ?? fallbackCoin?.decimals ?? 8,
+    priceProviderId: source?.priceProviderId ?? fallbackCoin?.priceProviderId,
+  }
+}
+
+type GetLegacyIdsForPoolInput = {
+  chain: Chain
+  poolAsset: string
+}
+
+const getLegacyIdsForPool = ({
+  chain,
+  poolAsset,
+}: GetLegacyIdsForPoolInput): string[] => {
+  if (chain !== Chain.THORChain) return []
+
+  const legacyId = legacyThorLpIdsByAsset[poolAsset.toUpperCase()]
+  return legacyId ? [legacyId] : []
+}
+
+type MidgardPool = {
+  asset: string
+  poolAPY?: string
+  annualPercentageRate?: string
+}
+
+const fetchThorchainPools = () =>
+  queryUrl<MidgardPool[]>(`${midgardBaseUrl}/pools?status=available`, {
+    headers: { 'X-Client-ID': 'vultisig' },
+  })
+
+const fetchMayachainPools = () =>
+  queryUrl<MidgardPool[]>(`${mayaMidgardBaseUrl}/pools?status=available`, {
+    headers: { 'X-Client-ID': 'vultisig' },
+  })
+
+const lpPoolResolvers: Record<LpSupportedChain, () => Promise<MidgardPool[]>> =
+  {
+    [Chain.THORChain]: fetchThorchainPools,
+    [Chain.MayaChain]: fetchMayachainPools,
+  }
+
+const fetchLpPools = (chain: LpSupportedChain) => lpPoolResolvers[chain]()
+
+type MapLpPoolsToPositionsInput = {
+  chain: LpSupportedChain
+  pools: MidgardPool[]
+}
+
+const mapLpPoolsToPositions = ({
+  chain,
+  pools,
+}: MapLpPoolsToPositionsInput): DefiPosition[] => {
+  const baseTicker = lpBaseTicker[chain]
+
+  return pools
+    .map(pool => parsePoolAsset(pool.asset))
+    .filter((parsed): parsed is ParsedPoolAsset => Boolean(parsed))
+    .map(parsed => {
+      const coin = buildCoinFromPoolAsset(parsed)
+      const legacyIds = getLegacyIdsForPool({
+        chain,
+        poolAsset: parsed.poolAsset,
+      })
+      const pool = pools.find(({ asset }) => asset === parsed.poolAsset)
+      const aprValue = pool?.poolAPY ?? pool?.annualPercentageRate
+      const aprNumber =
+        aprValue !== undefined ? Number.parseFloat(aprValue) * 100 : undefined
+      const apr = Number.isFinite(aprNumber) ? aprNumber : undefined
+
+      return {
+        id: buildLpPositionId({ chain, poolAsset: parsed.poolAsset }),
+        name: `${baseTicker}/${parsed.ticker}`,
+        ticker: parsed.ticker,
+        type: 'lp' as const,
+        chain,
+        coin,
+        poolAsset: parsed.poolAsset,
+        legacyIds,
+        apr,
+      }
+    })
+    .sort((left, right) => {
+      const nameCompare = left.name.localeCompare(right.name)
+      if (nameCompare !== 0) return nameCompare
+
+      return (left.poolAsset ?? '').localeCompare(right.poolAsset ?? '')
+    })
+}
+
+const useDefiLpPoolsQuery = (chain: Chain) => {
+  const isSupported = chain === Chain.THORChain || chain === Chain.MayaChain
+
+  return useQuery({
+    queryKey: ['defi', chain, 'lp', 'pools'],
+    enabled: isSupported,
+    queryFn: () => fetchLpPools(chain as LpSupportedChain),
+  })
+}
+
+export const useAvailableDefiPositions = (chain: Chain) => {
+  const staticPositions = useMemo(
+    () => getAvailablePositionsForChain(chain),
+    [chain]
+  )
+
+  const lpPoolsQuery = useDefiLpPoolsQuery(chain)
+  const isLpChain = chain === Chain.THORChain || chain === Chain.MayaChain
+
+  const lpPositions = useMemo(
+    () =>
+      isLpChain
+        ? mapLpPoolsToPositions({
+            chain: chain as LpSupportedChain,
+            pools: lpPoolsQuery.data ?? [],
+          })
+        : [],
+    [chain, isLpChain, lpPoolsQuery.data]
+  )
+
+  const positions = useMemo(
+    () => [...staticPositions, ...lpPositions],
+    [lpPositions, staticPositions]
+  )
+
+  return {
+    positions,
+    isLoading: isLpChain ? lpPoolsQuery.isPending : false,
+    error: isLpChain ? (lpPoolsQuery.error ?? null) : null,
+  }
+}
+
+type IsDefiPositionSelectedInput = {
+  position: DefiPosition
+  selectedPositionIds: string[]
+}
+
+export const isDefiPositionSelected = ({
+  position,
+  selectedPositionIds,
+}: IsDefiPositionSelectedInput) =>
+  selectedPositionIds.includes(position.id) ||
+  position.legacyIds?.some(id => selectedPositionIds.includes(id)) === true
 
 type DefiPositionsRecord = Record<string, string[]> // chain -> position ids
 
@@ -151,7 +355,7 @@ const useDefiPositionsQuery = () => {
 export const useDefiPositions = (chain: Chain): string[] => {
   const { data } = useDefiPositionsQuery()
 
-  return data?.[chain] ?? getAvailablePositionsForChain(chain).map(p => p.id)
+  return data?.[chain] ?? []
 }
 
 const useAllDefiPositions = (): DefiPositionsRecord => {
@@ -174,18 +378,23 @@ const useSetDefiPositionsMutation = () => {
 
 export const useToggleDefiPosition = (chain: Chain) => {
   const allPositions = useAllDefiPositions()
-  const defaultChainPositions = getAvailablePositionsForChain(chain).map(
-    p => p.id
-  )
-  const chainPositions = allPositions[chain] ?? defaultChainPositions
+  const chainPositions = allPositions[chain] ?? []
   const { mutate: setDefiPositions, isPending } = useSetDefiPositionsMutation()
 
-  const togglePosition = (positionId: string) => {
-    const isSelected = chainPositions.includes(positionId)
+  const togglePosition = (position: DefiPosition) => {
+    const isSelected = isDefiPositionSelected({
+      position,
+      selectedPositionIds: chainPositions,
+    })
+
+    const legacyIds = position.legacyIds ?? []
+    const filteredPositions = chainPositions.filter(
+      id => id !== position.id && !legacyIds.includes(id)
+    )
 
     const newChainPositions = isSelected
-      ? chainPositions.filter(id => id !== positionId)
-      : [...chainPositions, positionId]
+      ? filteredPositions
+      : [...filteredPositions, position.id]
 
     setDefiPositions({
       ...allPositions,

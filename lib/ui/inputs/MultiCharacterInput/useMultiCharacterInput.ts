@@ -20,6 +20,21 @@ export const useMultiCharacterInput = ({
 }: UseMultiCharacterInputArgs) => {
   const inputRefs = useRef<Array<HTMLInputElement | null>>([])
 
+  const refCallbacksRef = useRef<
+    Map<number, (el: HTMLInputElement | null) => void>
+  >(new Map())
+
+  const getRefCallback = (idx: number) => {
+    let callback = refCallbacksRef.current.get(idx)
+    if (!callback) {
+      callback = (el: HTMLInputElement | null) => {
+        inputRefs.current[idx] = el
+      }
+      refCallbacksRef.current.set(idx, callback)
+    }
+    return callback
+  }
+
   const [digits, setDigits] = useState<string[]>(() => {
     const arr = (value ?? '').split('')
     while (arr.length < length) arr.push('')
@@ -91,6 +106,6 @@ export const useMultiCharacterInput = ({
     handleChange,
     handleKeyDown,
     handlePaste,
-    inputRefs,
+    getRefCallback,
   }
 }

@@ -13,8 +13,9 @@ import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { formatAmount } from '@lib/utils/formatAmount'
-import { ButtonHTMLAttributes } from 'react'
+import { ButtonHTMLAttributes, CSSProperties, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
@@ -124,7 +125,6 @@ const ActionIcon = styled.span<{ variant: 'primary' | 'secondary' }>`
 `
 
 type Props = {
-  id: string
   coin: Coin
   title: string
   amount: bigint
@@ -143,10 +143,12 @@ type Props = {
   unstakeLabel?: string
   isSkeleton?: boolean
   actionsDisabled?: boolean
+  actionsDisabledReason?: string
+  hideStats?: boolean
+  isPendingAction?: boolean
 }
 
 export const StakeCard = ({
-  id: _id,
   coin,
   title,
   amount,
@@ -165,17 +167,45 @@ export const StakeCard = ({
   unstakeLabel: _unstakeLabel,
   isSkeleton,
   actionsDisabled,
+  actionsDisabledReason,
+  hideStats,
+  isPendingAction = false,
 }: Props) => {
   const { t, i18n } = useTranslation()
   const formatFiatAmount = useFormatFiatAmount()
   const unstakeAllowed = canUnstake ?? true
-  const unstakeDisabled = actionsDisabled || !unstakeAllowed
+  const unstakeDisabled = actionsDisabled || !unstakeAllowed || isPendingAction
+  const stakeDisabled = actionsDisabled || isPendingAction
   const unstakeMessage =
     !unstakeAllowed && unstakeAvailableDate
       ? t('unstake_available_on', {
           date: formatDateShort(unstakeAvailableDate, i18n.language),
         })
       : undefined
+
+  const renderAction = (
+    action: ReactNode,
+    wrapperStyle?: CSSProperties
+  ): ReactNode =>
+    actionsDisabledReason ? (
+      <Tooltip
+        content={actionsDisabledReason}
+        renderOpener={({ ref, ...props }) => (
+          <div
+            ref={ref as any}
+            {...props}
+            style={{
+              display: 'flex',
+              ...(wrapperStyle ?? {}),
+            }}
+          >
+            {action}
+          </div>
+        )}
+      />
+    ) : (
+      action
+    )
 
   return (
     <Card>
@@ -207,78 +237,86 @@ export const StakeCard = ({
             </VStack>
           </HStack>
         </SectionRow>
-        <Divider />
-        <VStack gap={16}>
-          <StatRow>
-            <StatLabel>
-              <PercentIcon />
-              <Text size={13} color="shy">
-                {t('apr')}
-              </Text>
-            </StatLabel>
-            <StatValue color="success">
-              {apr !== undefined ? `${apr.toFixed(2)}%` : '—'}
-            </StatValue>
-          </StatRow>
-          <HStack gap={16} alignItems="center">
-            <VStack flexGrow gap={8}>
-              <StatLabel>
-                <CalendarIcon />
-                <Text size={13} color="shy">
-                  {t('next_payout')}
-                </Text>
-              </StatLabel>
-              <StatValue color="shyExtra">
-                {isSkeleton ? (
-                  <Skeleton width="80px" height="14px" />
-                ) : (
-                  (formatDateShort(nextPayout, i18n.language) ?? t('pending'))
-                )}
-              </StatValue>
+        {!hideStats ? (
+          <>
+            <Divider />
+            <VStack gap={16}>
+              <StatRow>
+                <StatLabel>
+                  <PercentIcon />
+                  <Text size={13} color="shy">
+                    {t('apr')}
+                  </Text>
+                </StatLabel>
+                <StatValue color="success">
+                  {apr !== undefined ? `${apr.toFixed(2)}%` : '—'}
+                </StatValue>
+              </StatRow>
+              <HStack gap={16} alignItems="center">
+                <VStack flexGrow gap={8}>
+                  <StatLabel>
+                    <CalendarIcon />
+                    <Text size={13} color="shy">
+                      {t('next_payout')}
+                    </Text>
+                  </StatLabel>
+                  <StatValue color="shyExtra">
+                    {isSkeleton ? (
+                      <Skeleton width="80px" height="14px" />
+                    ) : (
+                      (formatDateShort(nextPayout, i18n.language) ??
+                      t('pending'))
+                    )}
+                  </StatValue>
+                </VStack>
+                <VStack flexGrow gap={8}>
+                  <StatLabel>
+                    <TrophyIcon />
+                    <Text size={14} color="shy">
+                      {t('estimated_reward')}
+                    </Text>
+                  </StatLabel>
+                  <StatValue color="shyExtra">
+                    {isSkeleton ? (
+                      <Skeleton width="90px" height="16px" />
+                    ) : estimatedReward !== undefined ? (
+                      formatAmount(estimatedReward, {
+                        ticker: rewardTicker ?? coin.ticker,
+                      })
+                    ) : (
+                      '—'
+                    )}
+                  </StatValue>
+                </VStack>
+              </HStack>
             </VStack>
-            <VStack flexGrow gap={8}>
-              <StatLabel>
-                <TrophyIcon />
-                <Text size={14} color="shy">
-                  {t('estimated_reward')}
-                </Text>
-              </StatLabel>
-              <StatValue color="shyExtra">
-                {isSkeleton ? (
-                  <Skeleton width="90px" height="16px" />
-                ) : estimatedReward !== undefined ? (
-                  formatAmount(estimatedReward, {
-                    ticker: rewardTicker ?? coin.ticker,
-                  })
-                ) : (
-                  '—'
-                )}
-              </StatValue>
-            </VStack>
-          </HStack>
-        </VStack>
+          </>
+        ) : null}
 
         <Divider />
 
         <StatRow>
-          {rewards !== undefined && rewards > 0 ? (
-            <ActionButton
-              variant="primary"
-              onClick={onWithdrawRewards}
-              disabled={actionsDisabled}
-              style={{ width: '100%' }}
-            >
-              <ActionIcon variant="primary">
-                <CircleMinusIcon />
-              </ActionIcon>
-              <Text as="span" size={14} weight="600" color="contrast">
-                {t('withdraw')}{' '}
-                {formatAmount(rewards, {
-                  ticker: rewardTicker ?? coin.ticker,
-                })}
-              </Text>
-            </ActionButton>
-          ) : null}
+          {rewards !== undefined && rewards > 0
+            ? renderAction(
+                <ActionButton
+                  variant="primary"
+                  onClick={onWithdrawRewards}
+                  disabled={actionsDisabled}
+                  style={{ width: '100%' }}
+                >
+                  <ActionIcon variant="primary">
+                    <CircleMinusIcon />
+                  </ActionIcon>
+                  <Text as="span" size={14} weight="600" color="contrast">
+                    {t('withdraw')}{' '}
+                    {formatAmount(rewards, {
+                      ticker: rewardTicker ?? coin.ticker,
+                    })}
+                  </Text>
+                </ActionButton>,
+                { width: '100%' }
+              )
+            : null}
         </StatRow>
 
         <ActionsRow>
@@ -289,31 +327,46 @@ export const StakeCard = ({
             </>
           ) : (
             <>
-              <ActionButton
-                variant="secondary"
-                onClick={onUnstake}
-                style={{ flex: 1 }}
-                disabled={unstakeDisabled}
-              >
-                <ActionIcon variant="secondary">
-                  <CircleMinusIcon />
-                </ActionIcon>
-                {_unstakeLabel ?? t('unstake')}
-              </ActionButton>
-              <ActionButton
-                variant="primary"
-                onClick={onStake}
-                style={{ flex: 1 }}
-                disabled={actionsDisabled}
-              >
-                <ActionIcon variant="primary">
-                  <CirclePlusIcon />
-                </ActionIcon>
-                {_stakeLabel ?? t('stake')}
-              </ActionButton>
+              {renderAction(
+                <ActionButton
+                  variant="secondary"
+                  onClick={onUnstake}
+                  style={{ flex: 1 }}
+                  disabled={unstakeDisabled}
+                >
+                  <ActionIcon variant="secondary">
+                    <CircleMinusIcon />
+                  </ActionIcon>
+                  {_unstakeLabel ?? t('unstake')}
+                </ActionButton>,
+                { flex: 1 }
+              )}
+              {renderAction(
+                <ActionButton
+                  variant="primary"
+                  onClick={onStake}
+                  style={{ flex: 1 }}
+                  disabled={stakeDisabled}
+                >
+                  <ActionIcon variant="primary">
+                    <CirclePlusIcon />
+                  </ActionIcon>
+                  {_stakeLabel ?? t('stake')}
+                </ActionButton>,
+                { flex: 1 }
+              )}
             </>
           )}
         </ActionsRow>
+        {isPendingAction ? (
+          <Text size={12} color="primary">
+            {t('adding_coin_to_vault')}
+          </Text>
+        ) : actionsDisabledReason ? (
+          <Text size={12} color="warning">
+            {actionsDisabledReason}
+          </Text>
+        ) : null}
         {unstakeMessage ? (
           <Text size={12} color="shy">
             {unstakeMessage}

@@ -21,4 +21,5 @@ export enum StorageKey {
   friendReferral = 'friendReferral',
   developerOptions = 'developerOptions',
   dismissedBanners = 'dismissedBanners',
+  isCircleVisible = 'isCircleVisible',
 }

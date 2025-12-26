@@ -312,6 +312,22 @@ export const de = {
   coin_not_found_in_current_vault: 'Münze im aktuellen Tresor nicht gefunden.',
   coin_not_found_in_any_vault:
     '{{ticker}} auf {{chain}} wurde in keinem Tresor gefunden',
+  defi_token_required: '{{ticker}} ist nicht in diesem Tresor',
+  adding_coin_to_vault: 'Münze wird zum Tresor hinzugefügt...',
+  defi_token_required_description:
+    'Füge {{ticker}} unter „Tokens verwalten“ hinzu, um zu staken, zu unstaken oder zu bonden.',
+  defi_add_chain_to_vault_title: 'Füge die Chain zuerst deinem Tresor hinzu',
+  defi_add_chain_to_vault_description:
+    'Aktiviere eine Chain in deinem Tresor, um hier ihre DeFi-Positionen zu verwalten.',
+  defi_add: 'Add',
+  defi_remove: 'Remove',
+  defi_lp_pool_title: '{{pool}} Pool',
+  position_label: 'Position',
+  defi_lp_position_form_title:
+    '{{action, select, add {Liquidität hinzufügen} remove {Liquidität entfernen} other {Liquidität verwalten}}}',
+  defi_lp_position_form_description:
+    'Die Verwaltung von Liquidität für {{position}} ist bald verfügbar.',
+  manage_tokens: 'Tokens verwalten',
   collected_rewards: 'Gesammelte Prämien',
   coming_soon: 'Demnächst verfügbar',
   complete: 'Vollständig',
@@ -930,13 +946,13 @@ export const de = {
   select_chains: 'Wählen',
   select_positions: 'Positionen auswählen',
   select_positions_description:
-    'Aktivieren Sie Positionen, um Salden anzuzeigen und Vermögenswerte zu verwalten.',
+    'Aktivieren Sie mindestens eine Position, um Salden anzuzeigen und Positionen zu verwalten.',
   liquidity_pools: 'Liquiditätspools',
   locked_in_defi: 'In DeFi gesperrt',
   total_bonded: 'Gesamt gebunden {{ticker}}',
-  active_nodes: 'Aktive Nodes',
+  active_nodes: 'ActiveNodes',
   no_active_nodes: 'Keine aktiven Nodes',
-  available_nodes: 'Verfügbare Nodes',
+  available_nodes: 'Available Nodes',
   no_available_nodes: 'Keine verfügbaren Nodes',
   request_to_bond: 'Bond anfordern',
   wait_until_node_churned: 'Warten Sie, bis der Node rotiert wird',
@@ -955,7 +971,6 @@ export const de = {
   select_destination_chain: 'Zielkette auswählen',
   select_n_devices_one: 'Wählen Sie {{count}} Geräte aus',
   select_n_devices_other: 'Wählen Sie {{count}} Geräte aus',
-  select_network: 'Select Chain',
   select_the_pairing_devices: 'Wählen Sie die zu koppelnden Geräte aus.',
   select_token: 'Token auswählen',
   select_vault: 'Wählen Sie einen Tresor aus.',
@@ -1008,6 +1023,7 @@ export const de = {
   show_defi_balance: 'DeFi-Guthaben anzeigen',
   sign: 'Zeichen',
   signAmino: 'Amino-Zeichen',
+  signDirect: 'Direktes Zeichen',
   signPrivately: 'Möchten Sie vertraulich unterschreiben?',
   sign_custom_message: 'Benutzerdefinierte Nachricht unterschreiben',
   sign_custom_message_description:

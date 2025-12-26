@@ -26,7 +26,7 @@ export const ExternalEncryptionKeyProvider = ({
 export const GeneratedHexEncryptionKeyProvider = ({
   children,
 }: ChildrenProp) => {
-  const HexEncryptionKey = useMemo(generateHexEncryptionKey, [])
+  const HexEncryptionKey = useMemo(() => generateHexEncryptionKey(), [])
 
   return (
     <CurrentHexEncryptionKeyProvider value={HexEncryptionKey}>

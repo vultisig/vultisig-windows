@@ -3,7 +3,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import { defineConfig, normalizePath } from 'vite'
 import circleDependency from 'vite-plugin-circular-dependency'
-import stdLibBrowser from 'vite-plugin-node-stdlib-browser'
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import topLevelAwait from 'vite-plugin-top-level-await'
 import wasm from 'vite-plugin-wasm'
 
@@ -21,8 +21,12 @@ export default defineConfig(async () => {
       __APP_BUILD__: JSON.stringify(buildInfo.build),
     },
     plugins: [
-      react(),
-      stdLibBrowser(),
+      react({
+        babel: {
+          plugins: [['babel-plugin-react-compiler', {}]],
+        },
+      }),
+      nodePolyfills({ exclude: ['fs'] }),
       wasm(),
       topLevelAwait(),
       viteStaticCopy({
@@ -41,6 +45,15 @@ export default defineConfig(async () => {
               path.resolve(__dirname, '../../node_modules/7z-wasm/7zz.wasm')
             ),
             dest: '7z-wasm',
+          },
+          {
+            src: normalizePath(
+              path.resolve(
+                __dirname,
+                '../../node_modules/zxing-wasm/dist/reader/zxing_reader.wasm'
+              )
+            ),
+            dest: 'wasm',
           },
           {
             src: normalizePath(
@@ -76,15 +89,7 @@ export default defineConfig(async () => {
     },
     publicDir: 'public',
     resolve: {
-      alias: {
-        crypto: 'crypto-browserify',
-        stream: 'stream-browserify',
-        buffer: 'buffer',
-        'fs/promises': 'node-stdlib-browser/mock/empty',
-      },
-    },
-    optimizeDeps: {
-      include: ['crypto-browserify', 'stream-browserify', 'buffer'],
+      alias: {},
     },
   }
 })

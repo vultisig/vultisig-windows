@@ -1,8 +1,12 @@
+import { Chain } from '@core/chain/Chain'
+import { featureFlags } from '@core/ui/featureFlags'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCore } from '@core/ui/state/core'
 import {
-  getPositionsByType,
+  isDefiPositionSelected,
+  useAvailableDefiPositions,
   useDefiPositions,
   useToggleDefiPosition,
 } from '@core/ui/storage/defiPositions'
@@ -10,12 +14,15 @@ import { DoneButton } from '@core/ui/vault/chain/manage/shared/DoneButton'
 import { ItemGrid } from '@core/ui/vault/chain/manage/shared/ItemGrid'
 import { SearchInput } from '@core/ui/vault/chain/manage/shared/SearchInput'
 import { VStack } from '@lib/ui/layout/Stack'
+import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { DefiChainPageTab } from '../tabs/config'
+import { setLastDefiChainTab } from '../tabs/lastTab'
 import { DefiPositionTile } from './DefiPositionTile'
 import { PositionsEmptyState } from './PositionsEmptyState'
 import { filterPositionsBySearch } from './utils/filterPositionsBySearch'
@@ -23,22 +30,41 @@ import { filterPositionsBySearch } from './utils/filterPositionsBySearch'
 export const ManageDefiPositionsPage = () => {
   const { t } = useTranslation()
   const [search, setSearch] = useState('')
-  const [{ chain }] = useCoreViewState<'manageDefiPositions'>()
+  const [{ chain, returnTab }] = useCoreViewState<'manageDefiPositions'>()
   const { goBack } = useCore()
+  const navigate = useCoreNavigate()
+
+  const isMayaDisabled =
+    chain === Chain.MayaChain && !featureFlags.mayaChainDefi
+
+  useEffect(() => {
+    if (isMayaDisabled) {
+      navigate({ id: 'defi', state: {} })
+    }
+  }, [isMayaDisabled, navigate])
+
+  useEffect(() => {
+    if (returnTab && ['bonded', 'staked', 'lps'].includes(returnTab)) {
+      setLastDefiChainTab(chain, returnTab as DefiChainPageTab)
+    }
+  }, [chain, returnTab])
+
   const selectedPositionIds = useDefiPositions(chain)
   const { togglePosition, isPending } = useToggleDefiPosition(chain)
+  const { positions: availablePositions, isLoading: isPositionsLoading } =
+    useAvailableDefiPositions(chain)
 
   const bondPositions = useMemo(
-    () => getPositionsByType({ chain, type: 'bond' }),
-    [chain]
+    () => availablePositions.filter(position => position.type === 'bond'),
+    [availablePositions]
   )
   const stakePositions = useMemo(
-    () => getPositionsByType({ chain, type: 'stake' }),
-    [chain]
+    () => availablePositions.filter(position => position.type === 'stake'),
+    [availablePositions]
   )
   const lpPositions = useMemo(
-    () => getPositionsByType({ chain, type: 'lp' }),
-    [chain]
+    () => availablePositions.filter(position => position.type === 'lp'),
+    [availablePositions]
   )
 
   const filteredBondPositions = filterPositionsBySearch(bondPositions, search)
@@ -50,6 +76,12 @@ export const ManageDefiPositionsPage = () => {
     filteredStakePositions.length > 0 ||
     filteredLpPositions.length > 0
 
+  const isLoadingWithoutResults =
+    isPositionsLoading &&
+    !filteredBondPositions.length &&
+    !filteredStakePositions.length &&
+    !filteredLpPositions.length
+
   const sections = useMemo(
     () =>
       [
@@ -60,11 +92,15 @@ export const ManageDefiPositionsPage = () => {
     [filteredBondPositions, filteredStakePositions, filteredLpPositions, t]
   )
 
+  if (isMayaDisabled) {
+    return null
+  }
+
   return (
     <VStack fullHeight>
       <PageHeader
-        primaryControls={<PageHeaderBackButton onClick={() => goBack()} />}
-        secondaryControls={<DoneButton onClick={() => goBack()} />}
+        primaryControls={<PageHeaderBackButton onClick={goBack} />}
+        secondaryControls={<DoneButton onClick={goBack} />}
         title={t('select_positions')}
         hasBorder
       />
@@ -83,8 +119,8 @@ export const ManageDefiPositionsPage = () => {
         {hasResults ? (
           <VStack gap={24}>
             {sections.map(section => (
-              <VStack key={section.title} gap={12}>
-                <Text size={14} weight="600" color="shy">
+              <VStack key={section.title} gap={8}>
+                <Text size={13} color="shy">
                   {section.title}
                 </Text>
                 <ItemGrid>
@@ -92,14 +128,21 @@ export const ManageDefiPositionsPage = () => {
                     <DefiPositionTile
                       key={position.id}
                       position={position}
-                      isSelected={selectedPositionIds.includes(position.id)}
-                      onToggle={() => togglePosition(position.id)}
+                      isSelected={isDefiPositionSelected({
+                        position,
+                        selectedPositionIds,
+                      })}
+                      onToggle={() => togglePosition(position)}
                       isLoading={isPending}
                     />
                   ))}
                 </ItemGrid>
               </VStack>
             ))}
+          </VStack>
+        ) : isLoadingWithoutResults ? (
+          <VStack alignItems="center" gap={12}>
+            <Spinner size={20} />
           </VStack>
         ) : (
           <PositionsEmptyState />

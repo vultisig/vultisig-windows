@@ -63,6 +63,10 @@ const CheckBadge = styled(IconWrapper)`
   font-weight: 600;
 `
 
+const DualIconWrapper = styled.div`
+  position: relative;
+`
+
 export const DefiPositionTile = ({
   position,
   isSelected,
@@ -71,6 +75,11 @@ export const DefiPositionTile = ({
 }: Props) => {
   const icon = resolveDefiPositionIcon(position)
   const coin = resolveDefiPositionCoin(position)
+
+  const label =
+    position.type === 'lp'
+      ? position.name || position.ticker
+      : (coin.ticker ?? position.name)
 
   const handleClick = () => {
     if (isLoading) return
@@ -86,7 +95,9 @@ export const DefiPositionTile = ({
       isSelected={isSelected}
     >
       <PositionIconWrapper isActive={isSelected}>
-        <ChainEntityIcon value={icon} style={{ fontSize: 27.5 }} />
+        <DualIconWrapper>
+          <ChainEntityIcon value={icon} style={{ fontSize: 27.5 }} />
+        </DualIconWrapper>
         {isSelected && (
           <CheckBadge color="primary" size={12}>
             <CheckmarkIcon />
@@ -94,7 +105,7 @@ export const DefiPositionTile = ({
         )}
       </PositionIconWrapper>
       <Text cropped color="contrast" size={12} weight={500}>
-        {coin.ticker ?? position.name}
+        {label}
       </Text>
     </PositionCard>
   )

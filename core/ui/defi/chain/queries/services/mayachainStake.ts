@@ -6,11 +6,11 @@ import {
 } from '@core/ui/defi/chain/constants/time'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
+import { mayaMidgardBaseUrl } from '../constants'
 import { mayaCoin } from '../tokens'
 import { ThorchainStakePosition } from '../types'
 import { parseBigint, parseNumber } from '../utils/parsers'
 
-const mayaMidgardBaseUrl = 'https://midgard.mayachain.info/v2'
 const mayanodeBaseUrl = 'https://mayanode.mayachain.info/mayachain'
 
 type CacaoPoolMember = {

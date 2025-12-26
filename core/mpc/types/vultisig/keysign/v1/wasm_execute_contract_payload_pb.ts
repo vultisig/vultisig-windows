@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file vultisig/keysign/v1/wasm_execute_contract_payload.proto.
  */
 export const file_vultisig_keysign_v1_wasm_execute_contract_payload: GenFile = /*@__PURE__*/
-  fileDesc("Cjd2dWx0aXNpZy9rZXlzaWduL3YxL3dhc21fZXhlY3V0ZV9jb250cmFjdF9wYXlsb2FkLnByb3RvEhN2dWx0aXNpZy5rZXlzaWduLnYxIisKCkNvc21vc0NvaW4SDQoFZGVub20YASABKAkSDgoGYW1vdW50GAIgASgJIq0BCglDb3Ntb3NGZWUSLwoGYW1vdW50GAEgAygLMh8udnVsdGlzaWcua2V5c2lnbi52MS5Db3Ntb3NDb2luEgsKA2dhcxgCIAEoCRISCgVwYXllchgDIAEoCUgAiAEBEhQKB2dyYW50ZXIYBCABKAlIAYgBARIVCghmZWVQYXllchgFIAEoCUgCiAEBQggKBl9wYXllckIKCghfZ3JhbnRlckILCglfZmVlUGF5ZXIiKAoJQ29zbW9zTXNnEgwKBHR5cGUYASABKAkSDQoFdmFsdWUYAiABKAkiZgoJU2lnbkFtaW5vEisKA2ZlZRgoIAEoCzIeLnZ1bHRpc2lnLmtleXNpZ24udjEuQ29zbW9zRmVlEiwKBG1zZ3MYKSADKAsyHi52dWx0aXNpZy5rZXlzaWduLnYxLkNvc21vc01zZyKTAQoaV2FzbUV4ZWN1dGVDb250cmFjdFBheWxvYWQSFgoOc2VuZGVyX2FkZHJlc3MYASABKAkSGAoQY29udHJhY3RfYWRkcmVzcxgCIAEoCRITCgtleGVjdXRlX21zZxgDIAEoCRIuCgVjb2lucxgEIAMoCzIfLnZ1bHRpc2lnLmtleXNpZ24udjEuQ29zbW9zQ29pbkJUChN2dWx0aXNpZy5rZXlzaWduLnYxWjhnaXRodWIuY29tL3Z1bHRpc2lnL2NvbW1vbmRhdGEvZ28vdnVsdGlzaWcva2V5c2lnbi92MTt2MboCAlZTYgZwcm90bzM");
+  fileDesc("Cjd2dWx0aXNpZy9rZXlzaWduL3YxL3dhc21fZXhlY3V0ZV9jb250cmFjdF9wYXlsb2FkLnByb3RvEhN2dWx0aXNpZy5rZXlzaWduLnYxIisKCkNvc21vc0NvaW4SDQoFZGVub20YASABKAkSDgoGYW1vdW50GAIgASgJIq8BCglDb3Ntb3NGZWUSLwoGYW1vdW50GAEgAygLMh8udnVsdGlzaWcua2V5c2lnbi52MS5Db3Ntb3NDb2luEgsKA2dhcxgCIAEoCRISCgVwYXllchgDIAEoCUgAiAEBEhQKB2dyYW50ZXIYBCABKAlIAYgBARIWCglmZWVfcGF5ZXIYBSABKAlIAogBAUIICgZfcGF5ZXJCCgoIX2dyYW50ZXJCDAoKX2ZlZV9wYXllciIoCglDb3Ntb3NNc2cSDAoEdHlwZRgBIAEoCRINCgV2YWx1ZRgCIAEoCSJmCglTaWduQW1pbm8SKwoDZmVlGAEgASgLMh4udnVsdGlzaWcua2V5c2lnbi52MS5Db3Ntb3NGZWUSLAoEbXNncxgCIAMoCzIeLnZ1bHRpc2lnLmtleXNpZ24udjEuQ29zbW9zTXNnImMKClNpZ25EaXJlY3QSEgoKYm9keV9ieXRlcxgBIAEoCRIXCg9hdXRoX2luZm9fYnl0ZXMYAiABKAkSEAoIY2hhaW5faWQYAyABKAkSFgoOYWNjb3VudF9udW1iZXIYBCABKAkikwEKGldhc21FeGVjdXRlQ29udHJhY3RQYXlsb2FkEhYKDnNlbmRlcl9hZGRyZXNzGAEgASgJEhgKEGNvbnRyYWN0X2FkZHJlc3MYAiABKAkSEwoLZXhlY3V0ZV9tc2cYAyABKAkSLgoFY29pbnMYBCADKAsyHy52dWx0aXNpZy5rZXlzaWduLnYxLkNvc21vc0NvaW5CVAoTdnVsdGlzaWcua2V5c2lnbi52MVo4Z2l0aHViLmNvbS92dWx0aXNpZy9jb21tb25kYXRhL2dvL3Z1bHRpc2lnL2tleXNpZ24vdjE7djG6AgJWU2IGcHJvdG8z");
 
 /**
  * @generated from message vultisig.keysign.v1.CosmosCoin
@@ -59,7 +59,7 @@ export type CosmosFee = Message<"vultisig.keysign.v1.CosmosFee"> & {
   granter?: string;
 
   /**
-   * @generated from field: optional string feePayer = 5;
+   * @generated from field: optional string fee_payer = 5;
    */
   feePayer?: string;
 };
@@ -98,12 +98,12 @@ export const CosmosMsgSchema: GenMessage<CosmosMsg> = /*@__PURE__*/
  */
 export type SignAmino = Message<"vultisig.keysign.v1.SignAmino"> & {
   /**
-   * @generated from field: vultisig.keysign.v1.CosmosFee fee = 40;
+   * @generated from field: vultisig.keysign.v1.CosmosFee fee = 1;
    */
   fee?: CosmosFee;
 
   /**
-   * @generated from field: repeated vultisig.keysign.v1.CosmosMsg msgs = 41;
+   * @generated from field: repeated vultisig.keysign.v1.CosmosMsg msgs = 2;
    */
   msgs: CosmosMsg[];
 };
@@ -114,6 +114,38 @@ export type SignAmino = Message<"vultisig.keysign.v1.SignAmino"> & {
  */
 export const SignAminoSchema: GenMessage<SignAmino> = /*@__PURE__*/
   messageDesc(file_vultisig_keysign_v1_wasm_execute_contract_payload, 3);
+
+/**
+ * @generated from message vultisig.keysign.v1.SignDirect
+ */
+export type SignDirect = Message<"vultisig.keysign.v1.SignDirect"> & {
+  /**
+   * @generated from field: string body_bytes = 1;
+   */
+  bodyBytes: string;
+
+  /**
+   * @generated from field: string auth_info_bytes = 2;
+   */
+  authInfoBytes: string;
+
+  /**
+   * @generated from field: string chain_id = 3;
+   */
+  chainId: string;
+
+  /**
+   * @generated from field: string account_number = 4;
+   */
+  accountNumber: string;
+};
+
+/**
+ * Describes the message vultisig.keysign.v1.SignDirect.
+ * Use `create(SignDirectSchema)` to create a new message.
+ */
+export const SignDirectSchema: GenMessage<SignDirect> = /*@__PURE__*/
+  messageDesc(file_vultisig_keysign_v1_wasm_execute_contract_payload, 4);
 
 /**
  * @generated from message vultisig.keysign.v1.WasmExecuteContractPayload
@@ -145,5 +177,5 @@ export type WasmExecuteContractPayload = Message<"vultisig.keysign.v1.WasmExecut
  * Use `create(WasmExecuteContractPayloadSchema)` to create a new message.
  */
 export const WasmExecuteContractPayloadSchema: GenMessage<WasmExecuteContractPayload> = /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_wasm_execute_contract_payload, 4);
+  messageDesc(file_vultisig_keysign_v1_wasm_execute_contract_payload, 5);
 

@@ -1,7 +1,8 @@
 import { Chain } from '@core/chain/Chain'
+import { featureFlags } from '@core/ui/featureFlags'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { supportedDefiChains } from '@core/ui/storage/defiChains'
+import { useSupportedDefiChainsForVault } from '@core/ui/storage/defiChains'
 import { DoneButton } from '@core/ui/vault/chain/manage/shared/DoneButton'
 import { ItemGrid } from '@core/ui/vault/chain/manage/shared/ItemGrid'
 import { SearchInput } from '@core/ui/vault/chain/manage/shared/SearchInput'
@@ -12,25 +13,40 @@ import { EmptyState } from '@lib/ui/status/EmptyState'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { circleName } from '../protocols/circle/core/config'
+import { CircleItem } from './CircleItem'
 import { DefiChainItem } from './DefiChainItem'
 
 export const ManageDefiChainsPage = () => {
   const { t } = useTranslation()
   const [search, setSearch] = useState('')
   const navigate = useCoreNavigate()
+  const eligibleChains = useSupportedDefiChainsForVault()
+
+  const hasCircle = featureFlags.circle
+
+  const showCircle = useMemo(() => {
+    if (!hasCircle) return false
+    if (!search) return true
+
+    const normalizedSearch = search.toLowerCase()
+    return circleName.toLowerCase().includes(normalizedSearch)
+  }, [hasCircle, search])
 
   const filteredChains = useMemo(() => {
-    let chains = supportedDefiChains
+    let chains = eligibleChains
 
     if (search) {
       const normalizedSearch = search.toLowerCase()
-      chains = supportedDefiChains.filter((chain: Chain) =>
+      chains = eligibleChains.filter((chain: Chain) =>
         chain.toLowerCase().includes(normalizedSearch)
       )
     }
 
     return chains.sort((a, b) => a.localeCompare(b))
-  }, [search])
+  }, [eligibleChains, search])
+
+  const hasNoEligibleItems = eligibleChains.length === 0 && !hasCircle
 
   return (
     <VStack fullHeight>
@@ -47,9 +63,17 @@ export const ManageDefiChainsPage = () => {
         hasBorder
       />
       <PageContent gap={24} flexGrow scrollable>
-        <SearchInput value={search} onChange={setSearch} />
-        {filteredChains.length > 0 ? (
+        {!hasNoEligibleItems && (
+          <SearchInput value={search} onChange={setSearch} />
+        )}
+        {hasNoEligibleItems ? (
+          <EmptyState
+            title={t('defi_add_chain_to_vault_title')}
+            description={t('defi_add_chain_to_vault_description')}
+          />
+        ) : filteredChains.length > 0 || showCircle ? (
           <ItemGrid>
+            {showCircle && <CircleItem />}
             {filteredChains.map(chain => (
               <DefiChainItem key={chain} value={chain} />
             ))}

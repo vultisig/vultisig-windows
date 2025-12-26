@@ -2,12 +2,14 @@ import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin } from '@core/chain/coin/Coin'
 
-import { mayaCoin, thorchainTokens } from '../queries/tokens'
+import { mayaCoin, runeCoin, thorchainTokens } from '../queries/tokens'
 import { ThorchainStakePosition } from '../queries/types'
 
 type StakeAction =
   | 'stake'
   | 'unstake'
+  | 'mint'
+  | 'redeem'
   | 'withdraw_ruji_rewards'
   | 'add_cacao_pool'
   | 'remove_cacao_pool'
@@ -28,6 +30,7 @@ type ResolverInput = {
 
 const tokenById: Partial<Record<Chain, Record<string, Coin>>> = {
   [Chain.THORChain]: {
+    'thor-stake-rune': runeCoin,
     'thor-stake-tcy': thorchainTokens.tcy,
     'thor-stake-stcy': thorchainTokens.stcy,
     'thor-stake-ruji': thorchainTokens.ruji,
@@ -45,8 +48,8 @@ const stakeActionByChain: Partial<
   [Chain.MayaChain]: ({ translate }) => ({
     stakeAction: 'add_cacao_pool',
     unstakeAction: 'remove_cacao_pool',
-    stakeLabel: translate('add_cacao_pool'),
-    unstakeLabel: translate('remove_cacao_pool'),
+    stakeLabel: translate('defi_add'),
+    unstakeLabel: translate('defi_remove'),
   }),
 }
 
@@ -71,6 +74,19 @@ export const resolveStakeActions = ({
   const base = resolver
     ? resolver({ chain, position, translate })
     : defaultActions
+
+  if (
+    chain === Chain.THORChain &&
+    (position.id === 'thor-stake-yrune' || position.id === 'thor-stake-ytcy')
+  ) {
+    return {
+      ...base,
+      stakeAction: 'mint',
+      unstakeAction: 'redeem',
+      stakeLabel: translate('mint'),
+      unstakeLabel: translate('redeem'),
+    }
+  }
 
   // Index tokens should not allow stake/unstake from UI
   if (position.type === 'index') {

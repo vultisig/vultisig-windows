@@ -21,6 +21,8 @@ const mayaPositionCoinByTicker: Record<string, Coin> = {
 }
 
 export const resolveDefiPositionCoin = (position: DefiPosition): Coin => {
+  if (position.coin) return position.coin
+
   const ticker = position.ticker.toUpperCase()
 
   if (position.chain === Chain.THORChain && thorPositionCoinByTicker[ticker]) {
@@ -31,7 +33,21 @@ export const resolveDefiPositionCoin = (position: DefiPosition): Coin => {
     return mayaPositionCoinByTicker[ticker]
   }
 
-  return { ...chainFeeCoin[position.chain], chain: position.chain }
+  const fallbackCoin = chainFeeCoin[position.chain]
+
+  if (fallbackCoin) {
+    return {
+      ...fallbackCoin,
+      ticker: position.ticker,
+      chain: position.chain,
+    }
+  }
+
+  return {
+    chain: position.chain,
+    ticker: position.ticker,
+    decimals: 8,
+  }
 }
 
 export const resolveDefiPositionIcon = (position: DefiPosition) => {
