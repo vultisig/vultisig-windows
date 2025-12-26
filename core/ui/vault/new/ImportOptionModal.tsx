@@ -5,41 +5,10 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
+import { NewBadge } from '../../components/NewBadge'
 import { ImportOption } from './ImportOption'
-
-const NewBadge = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-`
-
-const NewText = styled(Text)`
-  color: ${getColor('idle')};
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.12px;
-  text-transform: uppercase;
-`
-
-const IconContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: ${getColor('contrast')};
-
-  svg {
-    font-size: 20px;
-  }
-`
-
-const BadgeIcon = styled(WandSparklesIcon)`
-  font-size: 12px;
-  color: ${getColor('idle')};
-`
 
 export const ImportOptionModal = ({ onClose }: OnCloseProp) => {
   const { t } = useTranslation()
@@ -50,21 +19,9 @@ export const ImportOptionModal = ({ onClose }: OnCloseProp) => {
       <VStack gap={20}>
         <VStack gap={14}>
           <ImportOption
-            icon={
-              <VStack alignItems="start" gap={12}>
-                <NewBadge>
-                  <BadgeIcon />
-                  <NewText>NEW</NewText>
-                </NewBadge>
-                <IconContainer>
-                  <WandSparklesIcon />
-                  <Text size={15} weight="500">
-                    {t('import_seedphrase')}
-                  </Text>
-                </IconContainer>
-              </VStack>
-            }
-            title=""
+            badge={<NewBadge />}
+            icon={<WandSparklesIcon />}
+            title={t('import_seedphrase')}
             onClick={() => {
               navigate({ id: 'importSeedphrase' })
               onClose()
@@ -76,28 +33,21 @@ export const ImportOptionModal = ({ onClose }: OnCloseProp) => {
           </ImportOption>
 
           <ImportOption
-            icon={
-              <IconContainer>
-                <FileTextIcon />
-                <Text size={15} weight="500">
-                  {t('import_vault_share')}
-                </Text>
-              </IconContainer>
-            }
-            title=""
+            icon={<FileTextIcon />}
+            title={t('import_vault_share')}
             onClick={() => {
               navigate({ id: 'importVault' })
               onClose()
             }}
-          >
-            <VStack alignItems="start" gap={8}>
-              <Text size={13} weight="500" color="supporting">
-                {t('import_vault_share_description')}
-              </Text>
+            footnote={
               <Text size={10} weight="500" color="shy">
                 {t('import_vault_share_supported_files')}
               </Text>
-            </VStack>
+            }
+          >
+            <Text size={13} weight="500" color="supporting">
+              {t('import_vault_share_description')}
+            </Text>
           </ImportOption>
         </VStack>
       </VStack>

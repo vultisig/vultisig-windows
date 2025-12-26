@@ -653,6 +653,7 @@ export const en = {
   network_rate: 'Network rate',
   network_rate_required: 'Network rate is required',
   never: 'Never',
+  new: 'New',
   new_passcode: 'New Passcode',
   new_vault_setup: 'New Vault Setup',
   new_vault_setup_disclaimer: 'Your configuration changed, make a new backup.',
