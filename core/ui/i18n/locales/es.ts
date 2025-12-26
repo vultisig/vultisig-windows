@@ -40,6 +40,13 @@ export const es = {
     rewards: 'Recompensas',
     total_deposit: 'Depósito total',
     withdraw: 'Retirar',
+    current_rewards: 'Recompensas actuales',
+    deposit_header: 'Depósito a la cuenta Circle',
+    verify_deposit: 'Verificar depósito',
+    total_rewards: 'Recompensas totales',
+    withdraw_header: 'Retirarse del Círculo',
+    verify_withdraw: 'Verificar Retirar',
+    yield_details: 'Detalles del rendimiento del círculo',
   },
   fastVaultSetup: {
     backup: {
@@ -826,7 +833,6 @@ export const es = {
   plugin_info: 'Información de la aplicación',
   plugin_password_desc:
     'Ingrese su contraseña para desbloquear su servidor compartido e iniciar la instalación de la aplicación',
-  plugin_rules: 'Reglas de la aplicación',
   plugin_server_url: 'URL del servidor de aplicaciones',
   plugin_success_desc: 'La instalación de {{name}} se ha completado',
   to_start_plugin_installation: 'Para iniciar la instalación de la aplicación',
@@ -1285,7 +1291,6 @@ export const es = {
   vaults: 'bóvedas',
   verify: 'Verificar',
   verify_email: 'Verificar correo electrónico',
-  verify_identity_sign: 'Inicie sesión para verificar su identidad',
   verify_password: 'Verificar contraseña',
   verify_password_periodic_message:
     'Verifique su contraseña compartida del servidor',
@@ -1338,4 +1343,20 @@ export const es = {
   deposited: 'Depositado',
   withdraw: 'Retirar',
   account: 'Cuenta',
+  confirm_automation_creation: 'Confirmar la creación de la automatización',
+  id: 'IDENTIFICACIÓN',
+  import_seedphrase: 'Importar frase semilla',
+  import_seedphrase_description: 'Entra, crea una bóveda y nunca mires atrás.',
+  import_vault_share: 'Importar recurso compartido de bóveda',
+  import_vault_share_description:
+    'Utilice un recurso compartido de bóveda para recuperar su bóveda.',
+  import_vault_share_supported_files:
+    'Tipos de archivos admitidos: .bak y .vult',
+  new: 'Nuevo',
+  automation_info: 'Información de automatización',
+  app_install_timeout: 'Tiempo de espera de instalación de la aplicación (ms)',
+  app_install_timeout_invalid: 'Por favor, introduzca un número válido.',
+  app_install_timeout_min: 'Debe ser 0 o mayor.',
+  recover_vault_or_convert_seedphrase:
+    'Recupera tu bóveda o convierte tu frase semilla en una bóveda',
 }
