@@ -7,31 +7,19 @@ const dirname = path.dirname(filename)
 
 const publicFolderPath = path.resolve(dirname, '../public')
 
+const wasmPaths = [
+  '@trustwallet/wallet-core/dist/lib/wallet-core.wasm',
+  '7z-wasm/7zz.wasm',
+  'zxing-wasm/dist/reader/zxing_reader.wasm',
+]
+
 export const getStaticCopyTargets = () => [
-  {
+  ...wasmPaths.map(wasmPath => ({
     src: normalizePath(
-      path.resolve(
-        dirname,
-        '../../../node_modules/@trustwallet/wallet-core/dist/lib/wallet-core.wasm'
-      )
+      path.resolve(dirname, '../../../node_modules', wasmPath)
     ),
     dest: '',
-  },
-  {
-    src: normalizePath(
-      path.resolve(dirname, '../../../node_modules/7z-wasm/7zz.wasm')
-    ),
-    dest: '',
-  },
-  {
-    src: normalizePath(
-      path.resolve(
-        dirname,
-        '../../../node_modules/zxing-wasm/dist/reader/zxing_reader.wasm'
-      )
-    ),
-    dest: '',
-  },
+  })),
   {
     src: normalizePath(`${publicFolderPath}/**/*`),
     dest: 'core',
