@@ -1,7 +1,7 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { FileTextIcon } from '@lib/ui/icons/FileTextIcon'
 import { WandSparklesIcon } from '@lib/ui/icons/WandSparklesIcon'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { VStack } from '@lib/ui/layout/Stack'
 import { ResponsiveModal } from '@lib/ui/modal/ResponsiveModal'
 import { OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
@@ -119,4 +119,3 @@ export const ImportOptionModal = ({ onClose }: OnCloseProp) => {
     </ResponsiveModal>
   )
 }
-

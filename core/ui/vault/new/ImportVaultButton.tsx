@@ -17,7 +17,9 @@ export const ImportVaultButton = () => {
         <Button kind="outlined" onClick={() => setIsModalOpen(true)}>
           {t('import_vault')}
         </Button>
-        {isModalOpen && <ImportOptionModal onClose={() => setIsModalOpen(false)} />}
+        {isModalOpen && (
+          <ImportOptionModal onClose={() => setIsModalOpen(false)} />
+        )}
       </>
     )
   }
@@ -28,4 +30,3 @@ export const ImportVaultButton = () => {
     </Button>
   )
 }
-

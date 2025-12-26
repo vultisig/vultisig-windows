@@ -20,4 +20,3 @@ export const WandSparklesIcon: FC<SvgProps> = props => (
     />
   </svg>
 )
-

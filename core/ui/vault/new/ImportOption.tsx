@@ -1,17 +1,11 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
-import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { hStack, VStack } from '@lib/ui/layout/Stack'
 import { ChildrenProp, OnClickProp, TitleProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode } from 'react'
 import styled from 'styled-components'
-
-const IconContainer = styled(IconWrapper)`
-  color: ${getColor('textSupporting')};
-  font-size: 20px;
-`
 
 const Container = styled(UnstyledButton)`
   ${hStack({
@@ -56,4 +50,3 @@ export const ImportOption = ({
     </Container>
   )
 }
-

@@ -5,4 +5,3 @@ export const ImportSeedphrasePage = () => {
 
   return <div>{t('import_seedphrase')}</div>
 }
-

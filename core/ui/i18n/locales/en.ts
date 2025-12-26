@@ -809,7 +809,8 @@ export const en = {
   receivedShare1Email: 'Vault Share 1 received via mail',
   redeem: 'Redeem',
   reenter_password: 'Re-enter Password',
-  recover_vault_or_convert_seedphrase: 'Recover your vault or convert your seedphrase to a vault',
+  recover_vault_or_convert_seedphrase:
+    'Recover your vault or convert your seedphrase to a vault',
   referral_annual_fee: 'Referral annual fee',
   referral_code: 'Referral Code',
   referral_costs: 'Costs',
