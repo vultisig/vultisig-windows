@@ -2,7 +2,7 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { FileTextIcon } from '@lib/ui/icons/FileTextIcon'
 import { WandSparklesIcon } from '@lib/ui/icons/WandSparklesIcon'
 import { VStack } from '@lib/ui/layout/Stack'
-import { ResponsiveModal } from '@lib/ui/modal/ResponsiveModal'
+import { Modal } from '@lib/ui/modal'
 import { OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -46,23 +46,8 @@ export const ImportOptionModal = ({ onClose }: OnCloseProp) => {
   const navigate = useCoreNavigate()
 
   return (
-    <ResponsiveModal
-      isOpen
-      onClose={onClose}
-      containerStyles={{
-        padding: '32px 24px 40px',
-      }}
-    >
+    <Modal onClose={onClose} title={t('recover_vault_or_convert_seedphrase')}>
       <VStack gap={20}>
-        <Text
-          size={17}
-          weight="500"
-          color="contrast"
-          centerHorizontally
-          style={{ lineHeight: '20px', letterSpacing: '-0.3px' }}
-        >
-          {t('recover_vault_or_convert_seedphrase')}
-        </Text>
         <VStack gap={14}>
           <ImportOption
             icon={
@@ -116,6 +101,6 @@ export const ImportOptionModal = ({ onClose }: OnCloseProp) => {
           </ImportOption>
         </VStack>
       </VStack>
-    </ResponsiveModal>
+    </Modal>
   )
 }
