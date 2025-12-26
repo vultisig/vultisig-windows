@@ -40,6 +40,13 @@ export const hr = {
     rewards: 'Nagrade',
     total_deposit: 'Ukupni depozit',
     withdraw: 'Povući',
+    current_rewards: 'Trenutne nagrade',
+    deposit_header: 'Uplata na Circle račun',
+    verify_deposit: 'Potvrdi uplatu',
+    total_rewards: 'Ukupne nagrade',
+    withdraw_header: 'Povuci se iz kruga',
+    verify_withdraw: 'Potvrdi isplatu',
+    yield_details: 'Detalji prinosa kruga',
   },
   fastVaultSetup: {
     backup: {
@@ -812,7 +819,6 @@ export const hr = {
   plugin_info: 'Informacije o aplikaciji',
   plugin_password_desc:
     'Unesite lozinku za otključavanje dijeljenog poslužitelja i pokretanje instalacije aplikacije',
-  plugin_rules: 'Pravila aplikacije',
   plugin_server_url: 'URL poslužitelja aplikacije',
   plugin_success_desc: 'Instalacija {{name}} je završena',
   to_start_plugin_installation: 'Za početak instalacije aplikacije',
@@ -1257,7 +1263,6 @@ export const hr = {
   vaults: 'Trezori',
   verify: 'Potvrdi',
   verify_email: 'Potvrdi e-poštu',
-  verify_identity_sign: 'Prijavite se kako biste potvrdili svoj identitet',
   verify_password: 'Potvrdite lozinku',
   verify_password_periodic_message:
     'Potvrdite lozinku za dijeljenje poslužitelja',
@@ -1309,4 +1314,23 @@ export const hr = {
   deposited: 'Položeno',
   withdraw: 'Povući',
   account: 'Račun',
+  confirm_automation_creation: 'Potvrdite stvaranje automatizacije',
+  id: 'ID',
+  import_seedphrase: 'Uvoz početne fraze',
+  import_seedphrase_description:
+    'Uđi u njega, stvori trezor, nikad se ne osvrni.',
+  import_vault_share: 'Uvoz dijeljenja trezora',
+  import_vault_share_description:
+    'Upotrijebite dijeljenje trezora za oporavak trezora.',
+  import_vault_share_supported_files: 'Podržane vrste datoteka: .bak i .vult',
+  new: 'Novi',
+  vulti_node: 'VultiNode',
+  percentage_zero: '0%',
+  percentage_value: '{{vrijednost}}%',
+  automation_info: 'Informacije o automatizaciji',
+  app_install_timeout: 'Vrijeme čekanja za instalaciju aplikacije (ms)',
+  app_install_timeout_invalid: 'Molimo unesite važeći broj.',
+  app_install_timeout_min: 'Mora biti 0 ili veće.',
+  recover_vault_or_convert_seedphrase:
+    'Oporavite svoj trezor ili pretvorite svoju seedphrase u trezor',
 }

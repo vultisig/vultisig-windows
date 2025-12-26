@@ -40,6 +40,13 @@ export const it = {
     rewards: 'Ricompense',
     total_deposit: 'Deposito totale',
     withdraw: 'Ritirare',
+    current_rewards: 'Ricompense attuali',
+    deposit_header: 'Deposito sul conto Circle',
+    verify_deposit: 'Verifica deposito',
+    total_rewards: 'Ricompense totali',
+    withdraw_header: 'Ritirarsi dal Cerchio',
+    verify_withdraw: 'Verifica Prelievo',
+    yield_details: 'Dettagli sulla resa del cerchio',
   },
   fastVaultSetup: {
     backup: {
@@ -824,7 +831,6 @@ export const it = {
   plugin_info: "Informazioni sull'app",
   plugin_password_desc:
     "Inserisci la tua password per sbloccare la tua condivisione server e avviare l'installazione dell'app",
-  plugin_rules: "Regole dell'app",
   plugin_server_url: 'URL del server delle applicazioni',
   plugin_success_desc: "L'installazione di {{name}} è completata",
   to_start_plugin_installation: "Per avviare l'installazione dell'app",
@@ -1278,7 +1284,6 @@ export const it = {
   vaults: 'Caveau',
   verify: 'Verificare',
   verify_email: 'Verifica email',
-  verify_identity_sign: 'Accedi per verificare la tua identità',
   verify_password: 'Verifica password',
   verify_password_periodic_message:
     'Verifica la password di condivisione del server',
@@ -1331,4 +1336,23 @@ export const it = {
   deposited: 'Depositato',
   withdraw: 'Ritirare',
   account: 'Account',
+  confirm_automation_creation: "Conferma la creazione dell'automazione",
+  id: 'ID',
+  import_seedphrase: 'Importa seedphrase',
+  import_seedphrase_description:
+    'Entra, crea un caveau e non voltarti mai indietro.',
+  import_vault_share: 'Importa condivisione vault',
+  import_vault_share_description:
+    'Utilizza una condivisione vault per recuperare il tuo vault.',
+  import_vault_share_supported_files: 'Tipi di file supportati: .bak e .vult',
+  new: 'Nuovo',
+  vulti_node: 'VultiNode',
+  percentage_zero: '0%',
+  percentage_value: '{{valore}}%',
+  automation_info: "Informazioni sull'automazione",
+  app_install_timeout: "Timeout di installazione dell'app (ms)",
+  app_install_timeout_invalid: 'Inserisci un numero valido.',
+  app_install_timeout_min: 'Deve essere 0 o maggiore.',
+  recover_vault_or_convert_seedphrase:
+    'Recupera il tuo vault o converti la tua seedphrase in un vault',
 }

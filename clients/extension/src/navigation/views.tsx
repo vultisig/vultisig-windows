@@ -18,6 +18,7 @@ import { OnboardingPage } from '@core/ui/onboarding/components/OnboardingPage'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProvider'
 import { SettingsPage } from '@core/ui/settings'
+import { ImportSeedphrasePage } from '@core/ui/vault/import/components/ImportSeedphrasePage'
 import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPage'
 import { VaultPage } from '@core/ui/vault/page/components/VaultPage'
 import { Views } from '@lib/ui/navigation/Views'
@@ -28,6 +29,7 @@ const ExtensionVaultPage = () => {
 
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   connectedDapps: ConnectedDappsPage,
+  importSeedphrase: ImportSeedphrasePage,
   importVault: () => (
     <ExpandViewGuard>
       <ImportVaultPage />

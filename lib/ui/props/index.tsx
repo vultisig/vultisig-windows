@@ -47,6 +47,10 @@ export type TitleProp = {
   title: ReactNode
 }
 
+export type DescriptionProp = {
+  description: ReactNode
+}
+
 export type UiProps = {
   style?: React.CSSProperties
   className?: string

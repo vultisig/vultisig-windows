@@ -40,6 +40,13 @@ export const pt = {
     rewards: 'Recompensas',
     total_deposit: 'Depósito total',
     withdraw: 'Retirar',
+    current_rewards: 'Recompensas atuais',
+    deposit_header: 'Depósito na conta Circle',
+    verify_deposit: 'Verificar depósito',
+    total_rewards: 'Recompensas Totais',
+    withdraw_header: 'Retirar-se do Círculo',
+    verify_withdraw: 'Verificar Saque',
+    yield_details: 'Detalhes do rendimento circular',
   },
   fastVaultSetup: {
     backup: {
@@ -821,7 +828,6 @@ export const pt = {
   plugin_info: 'Informações do aplicativo',
   plugin_password_desc:
     'Digite sua senha para desbloquear o compartilhamento do servidor e iniciar a instalação do aplicativo.',
-  plugin_rules: 'Regras do aplicativo',
   plugin_server_url: 'URL do servidor de aplicativos',
   plugin_success_desc: 'A instalação de {{name}} foi concluída.',
   to_start_plugin_installation: 'Para iniciar a instalação do aplicativo',
@@ -1276,7 +1282,6 @@ export const pt = {
   vaults: 'Cofres',
   verify: 'Verificar',
   verify_email: 'Verificar e-mail',
-  verify_identity_sign: 'Faça login para verificar sua identidade.',
   verify_password: 'Verificar senha',
   verify_password_periodic_message:
     'Verifique a senha de compartilhamento do seu servidor.',
@@ -1328,4 +1333,24 @@ export const pt = {
   deposited: 'Depositado',
   withdraw: 'Retirar',
   account: 'Conta',
+  confirm_automation_creation: 'Confirme a criação da automação.',
+  id: 'EU IA',
+  import_seedphrase: 'Importar frase-semente',
+  import_seedphrase_description:
+    'Entre, crie um cofre e nunca mais olhe para trás.',
+  import_vault_share: 'Compartilhamento do cofre de importação',
+  import_vault_share_description:
+    'Utilize uma pasta compartilhada do cofre para recuperar seu cofre.',
+  import_vault_share_supported_files:
+    'Tipos de arquivo suportados: .bak e .vult',
+  new: 'Novo',
+  vulti_node: 'VultiNode',
+  percentage_zero: '0%',
+  percentage_value: '{{valor}}%',
+  automation_info: 'Informações sobre automação',
+  app_install_timeout: 'Tempo limite de instalação do aplicativo (ms)',
+  app_install_timeout_invalid: 'Por favor, insira um número válido.',
+  app_install_timeout_min: 'Deve ser igual ou superior a 0.',
+  recover_vault_or_convert_seedphrase:
+    'Recupere seu cofre ou converta sua frase mnemônica em um cofre.',
 }
