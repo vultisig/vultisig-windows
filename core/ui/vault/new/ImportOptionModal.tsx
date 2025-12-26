@@ -4,7 +4,6 @@ import { WandSparklesIcon } from '@lib/ui/icons/WandSparklesIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { OnCloseProp } from '@lib/ui/props'
-import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
 import { NewBadge } from '../../components/NewBadge'
@@ -16,40 +15,28 @@ export const ImportOptionModal = ({ onClose }: OnCloseProp) => {
 
   return (
     <Modal onClose={onClose} title={t('recover_vault_or_convert_seedphrase')}>
-      <VStack gap={20}>
-        <VStack gap={14}>
-          <ImportOption
-            badge={<NewBadge />}
-            icon={<WandSparklesIcon />}
-            title={t('import_seedphrase')}
-            onClick={() => {
-              navigate({ id: 'importSeedphrase' })
-              onClose()
-            }}
-          >
-            <Text size={13} weight="500" color="supporting">
-              {t('import_seedphrase_description')}
-            </Text>
-          </ImportOption>
+      <VStack gap={14}>
+        <ImportOption
+          badge={<NewBadge />}
+          icon={<WandSparklesIcon />}
+          title={t('import_seedphrase')}
+          onClick={() => {
+            navigate({ id: 'importSeedphrase' })
+            onClose()
+          }}
+          description={t('import_seedphrase_description')}
+        />
 
-          <ImportOption
-            icon={<FileTextIcon />}
-            title={t('import_vault_share')}
-            onClick={() => {
-              navigate({ id: 'importVault' })
-              onClose()
-            }}
-            footnote={
-              <Text size={10} weight="500" color="shy">
-                {t('import_vault_share_supported_files')}
-              </Text>
-            }
-          >
-            <Text size={13} weight="500" color="supporting">
-              {t('import_vault_share_description')}
-            </Text>
-          </ImportOption>
-        </VStack>
+        <ImportOption
+          icon={<FileTextIcon />}
+          title={t('import_vault_share')}
+          onClick={() => {
+            navigate({ id: 'importVault' })
+            onClose()
+          }}
+          footnote={t('import_vault_share_supported_files')}
+          description={t('import_vault_share_description')}
+        />
       </VStack>
     </Modal>
   )

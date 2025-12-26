@@ -1,7 +1,12 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { hStack, VStack } from '@lib/ui/layout/Stack'
-import { ChildrenProp, IconProp, OnClickProp, TitleProp } from '@lib/ui/props'
+import {
+  DescriptionProp,
+  IconProp,
+  OnClickProp,
+  TitleProp,
+} from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode } from 'react'
@@ -35,7 +40,7 @@ const IconContainer = styled.div`
 `
 
 type ImportOptionProps = IconProp &
-  ChildrenProp &
+  DescriptionProp &
   TitleProp &
   OnClickProp & {
     badge?: ReactNode
@@ -44,7 +49,7 @@ type ImportOptionProps = IconProp &
 
 export const ImportOption = ({
   icon,
-  children,
+  description,
   onClick,
   title,
   badge,
@@ -61,9 +66,15 @@ export const ImportOption = ({
           </Text>
         </IconContainer>
         <VStack alignItems="start" gap={8}>
-          {children}
+          <Text size={13} weight="500" color="supporting">
+            {description}
+          </Text>
+          {footnote && (
+            <Text size={10} weight="500" color="shy">
+              {footnote}
+            </Text>
+          )}
         </VStack>
-        {footnote}
       </VStack>
     </Container>
   )
