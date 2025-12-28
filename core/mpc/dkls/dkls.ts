@@ -153,7 +153,6 @@ export class DKLS {
         }
         this.cache[cacheKey] = ''
         this.inboundSequenceNo++
-        console.log('this.inboundSequenceNo:', this.inboundSequenceNo)
         this.onInboundSequenceNoChange?.(this.inboundSequenceNo)
         await deleteMpcRelayMessage({
           serverUrl: this.serverURL,
