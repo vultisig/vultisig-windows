@@ -3,13 +3,7 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { GradientText, Text } from '@lib/ui/text'
-import {
-  Alignment,
-  Fit,
-  Layout,
-  StateMachineInputType,
-  useRive,
-} from '@rive-app/react-canvas'
+import { useRive, useStateMachineInput } from '@rive-app/react-canvas'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -17,19 +11,33 @@ import styled from 'styled-components'
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 
 const animationDuration = 6000
+const stateMachineName = 'State Machine 1'
+
+const setRiveInput = (
+  input: ReturnType<typeof useStateMachineInput>,
+  value: boolean | number
+) => {
+  if (input && typeof input.value === typeof value) {
+    input.value = value
+  }
+}
 
 export const KeygenFlowSuccess = () => {
   const { t } = useTranslation()
 
   const { RiveComponent, rive } = useRive({
     src: '/core/animations/keygen_animationdata_binding.riv',
-    stateMachines: 'State Machine 1',
+    stateMachines: stateMachineName,
     autoplay: true,
-    layout: new Layout({
-      fit: Fit.Contain,
-      alignment: Alignment.Center,
-    }),
   })
+
+  const testInput = useStateMachineInput(rive, stateMachineName, 'Test')
+  const numberInput = useStateMachineInput(rive, stateMachineName, 'Number 1')
+
+  useEffect(() => {
+    setRiveInput(testInput, true)
+    setRiveInput(numberInput, 1)
+  }, [testInput, numberInput])
 
   const navigate = useCoreNavigate()
 
@@ -41,62 +49,9 @@ export const KeygenFlowSuccess = () => {
     return () => clearTimeout(timeoutId)
   }, [navigate])
 
-  useEffect(() => {
-    if (!rive) return
-
-    const trySetSuccessState = (stateMachineName: string) => {
-      let inputs: ReturnType<typeof rive.stateMachineInputs>
-      try {
-        inputs = rive.stateMachineInputs(stateMachineName)
-      } catch {
-        return
-      }
-
-      for (const input of inputs) {
-        const normalizedName = input.name.toLowerCase()
-
-        if (input.type === StateMachineInputType.Boolean) {
-          if (normalizedName === 'connected') {
-            input.value = true
-          }
-
-          if (normalizedName === 'connecting') {
-            input.value = false
-          }
-        }
-
-        if (input.type === StateMachineInputType.Trigger) {
-          if (
-            normalizedName.includes('success') ||
-            normalizedName.includes('connected')
-          ) {
-            input.fire()
-          }
-        }
-      }
-    }
-
-    trySetSuccessState('State Machine 1')
-    trySetSuccessState('State Machine 2')
-  }, [rive])
-
-  useEffect(() => {
-    if (!rive) return
-    if (typeof window === 'undefined') return
-
-    rive.resizeDrawingSurfaceToCanvas()
-
-    const onResize = () => {
-      rive.resizeDrawingSurfaceToCanvas()
-    }
-
-    window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
-  }, [rive])
-
   return (
     <Wrapper>
-      <VStack justifyContent="space-between" flexGrow>
+      <VStack justifyContent="space-between" flexGrow gap={24}>
         <RiveWrapper justifyContent="center">
           <RiveComponent
             style={{
