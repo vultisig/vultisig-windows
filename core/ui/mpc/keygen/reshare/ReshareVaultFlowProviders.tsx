@@ -18,6 +18,7 @@ import { MpcServerTypeProvider } from '../../state/mpcServerType'
 import { GeneratedMpcServiceNameProvider } from '../../state/mpcServiceName'
 import { ServerUrlDerivedFromServerTypeProvider } from '../../state/serverUrlDerivedFromServerType'
 import { CurrentKeygenVaultProvider } from '../state/keygenVault'
+import { DklsInboundSequenceNoProvider } from './state/dklsInboundSequenceNo'
 
 type ReshareVaultFlowProvidersProps = ChildrenProp & {
   externalEncryptionKey?: string | null
@@ -72,23 +73,25 @@ export const ReshareVaultFlowProviders = ({
       <EncryptionKeyProviderWrapper
         externalEncryptionKey={externalEncryptionKey}
       >
-        <CurrentKeygenVaultProvider>
-          <CurrentVaultLocalPartyIdProvider>
-            <MpcServerTypeProvider initialValue="relay">
-              <ServerUrlDerivedFromServerTypeProvider>
-                <CurrentVaultHexChainCodeProvider>
-                  <IsInitiatingDeviceProvider value={true}>
-                    <GeneratedMpcServiceNameProvider>
-                      <MpcPeersSelectionProvider>
-                        {children}
-                      </MpcPeersSelectionProvider>
-                    </GeneratedMpcServiceNameProvider>
-                  </IsInitiatingDeviceProvider>
-                </CurrentVaultHexChainCodeProvider>
-              </ServerUrlDerivedFromServerTypeProvider>
-            </MpcServerTypeProvider>
-          </CurrentVaultLocalPartyIdProvider>
-        </CurrentKeygenVaultProvider>
+        <DklsInboundSequenceNoProvider initialValue={0}>
+          <CurrentKeygenVaultProvider>
+            <CurrentVaultLocalPartyIdProvider>
+              <MpcServerTypeProvider initialValue="relay">
+                <ServerUrlDerivedFromServerTypeProvider>
+                  <CurrentVaultHexChainCodeProvider>
+                    <IsInitiatingDeviceProvider value={true}>
+                      <GeneratedMpcServiceNameProvider>
+                        <MpcPeersSelectionProvider>
+                          {children}
+                        </MpcPeersSelectionProvider>
+                      </GeneratedMpcServiceNameProvider>
+                    </IsInitiatingDeviceProvider>
+                  </CurrentVaultHexChainCodeProvider>
+                </ServerUrlDerivedFromServerTypeProvider>
+              </MpcServerTypeProvider>
+            </CurrentVaultLocalPartyIdProvider>
+          </CurrentKeygenVaultProvider>
+        </DklsInboundSequenceNoProvider>
       </EncryptionKeyProviderWrapper>
     </SessionIdProviderWrapper>
   )

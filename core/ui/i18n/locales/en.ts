@@ -522,6 +522,7 @@ export const en = {
   install_app: 'Install ‘{{title}}’ App',
   install_plugin: 'Install App',
   installing_plugin: 'Installing App',
+  installation_progress: 'Installation progress: {{progress}}%',
   insufficient_balance: 'Insufficient balance',
   insufficient_funds_to_pay_fee:
     'Insufficient balance to cover transaction fee.',
