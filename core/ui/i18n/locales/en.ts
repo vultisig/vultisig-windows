@@ -522,8 +522,7 @@ export const en = {
   install_app: 'Install ‘{{title}}’ App',
   install_plugin: 'Install App',
   installing_plugin: 'Installing App',
-  dkls_inbound_messages_one: 'Inbound message: {{count}}',
-  dkls_inbound_messages_other: 'Inbound messages: {{count}}',
+  installation_progress: 'Installation progress: {{progress}}%',
   insufficient_balance: 'Insufficient balance',
   insufficient_funds_to_pay_fee:
     'Insufficient balance to cover transaction fee.',

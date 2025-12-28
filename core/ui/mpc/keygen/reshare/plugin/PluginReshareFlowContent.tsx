@@ -23,6 +23,7 @@ import { WaitForPluginAndVerifier } from './WaitForPluginAndVerifier'
 
 const steps = ['confirmation', 'keygen'] as const
 const closePopupDelay = 1200
+const appInstallTotalSequenceNo = 12
 
 export const PluginReshareFlowContent = ({
   plugin,
@@ -69,10 +70,18 @@ export const PluginReshareFlowContent = ({
               <MpcPeersProvider value={value}>
                 <SilentStartMpcSessionFlow
                   render={() => (
-                    <VStack gap={8}>
-                      <Text color="shy" size={12} centerHorizontally>
-                        {t('dkls_inbound_messages', {
-                          count: dklsInboundSequenceNo,
+                    <VStack gap={8} padding={16}>
+                      <Text color="shy" size={14} centerHorizontally>
+                        {t('installation_progress', {
+                          progress:
+                            dklsInboundSequenceNo != 0
+                              ? Number(
+                                  (
+                                    dklsInboundSequenceNo /
+                                    appInstallTotalSequenceNo
+                                  ).toFixed(2)
+                                ) * 100
+                              : 0,
                         })}
                       </Text>
                       <KeygenFlow onBack={toPreviousStep} onFinish={onFinish} />
