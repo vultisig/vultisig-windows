@@ -367,7 +367,7 @@ export const getDepositFormConfig = ({
             {
               message: t('invalid_node_address'),
             }
-        ),
+          ),
         // TODO: need to find out how to find the max amount of LP tokens
         lpUnits: z.preprocess(
           toRequiredNumber,
