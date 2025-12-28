@@ -9,36 +9,12 @@ import { z } from 'zod'
 
 import { ChainAction } from '../ChainAction'
 import { isStakeableChain, StakeableChain } from '../config'
-
-const toOptionalNumber = (value: unknown) => {
-  if (value === '' || value === undefined || value === null) return undefined
-  const parsed = typeof value === 'number' ? value : Number(value)
-  return Number.isFinite(parsed) ? parsed : undefined
-}
-
-const toRequiredNumber = (value: unknown) => {
-  const parsed = typeof value === 'number' ? value : Number(value)
-  return Number.isFinite(parsed) ? parsed : NaN
-}
-
-const maxOrInfinity = (value: number) =>
-  value > 0 ? value : Number.POSITIVE_INFINITY
-
-const positiveAmountSchema = (
-  maxValue: number,
-  t: TFunction,
-  maxMessage?: string
-) =>
-  z.preprocess(
-    toRequiredNumber,
-    z
-      .number()
-      .gt(0, t('amount_must_be_positive'))
-      .max(
-        maxOrInfinity(maxValue),
-        maxMessage ?? t('chainFunctions.amountExceeded')
-      )
-  )
+import {
+  maxOrInfinity,
+  positiveAmountSchema,
+  toOptionalNumber,
+  toRequiredNumber,
+} from './validationHelpers'
 
 export const sourceChannelByChain: Partial<
   Record<Chain, Partial<Record<Chain | string, string>>>
