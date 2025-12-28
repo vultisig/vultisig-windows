@@ -10,6 +10,36 @@ import { z } from 'zod'
 import { ChainAction } from '../ChainAction'
 import { isStakeableChain, StakeableChain } from '../config'
 
+const toOptionalNumber = (value: unknown) => {
+  if (value === '' || value === undefined || value === null) return undefined
+  const parsed = typeof value === 'number' ? value : Number(value)
+  return Number.isFinite(parsed) ? parsed : undefined
+}
+
+const toRequiredNumber = (value: unknown) => {
+  const parsed = typeof value === 'number' ? value : Number(value)
+  return Number.isFinite(parsed) ? parsed : NaN
+}
+
+const maxOrInfinity = (value: number) =>
+  value > 0 ? value : Number.POSITIVE_INFINITY
+
+const positiveAmountSchema = (
+  maxValue: number,
+  t: TFunction,
+  maxMessage?: string
+) =>
+  z.preprocess(
+    toRequiredNumber,
+    z
+      .number()
+      .gt(0, t('amount_must_be_positive'))
+      .max(
+        maxOrInfinity(maxValue),
+        maxMessage ?? t('chainFunctions.amountExceeded')
+      )
+  )
+
 export const sourceChannelByChain: Partial<
   Record<Chain, Partial<Record<Chain | string, string>>>
 > = {
@@ -91,10 +121,7 @@ export const getDepositFormConfig = ({
         { name: 'amount', type: 'number', label: t('amount'), required: true },
       ],
       schema: z.object({
-        amount: z
-          .string()
-          .transform(Number)
-          .pipe(z.number().positive().max(totalAmountAvailable)),
+        amount: positiveAmountSchema(totalAmountAvailable, t),
       }),
     }),
     redeem: () => ({
@@ -109,14 +136,8 @@ export const getDepositFormConfig = ({
         },
       ],
       schema: z.object({
-        amount: z
-          .string()
-          .transform(Number)
-          .pipe(z.number().positive().max(totalAmountAvailable)),
-        slippage: z
-          .string()
-          .transform(Number)
-          .pipe(z.number().min(0.1).max(7.5)),
+        amount: positiveAmountSchema(totalAmountAvailable, t),
+        slippage: z.preprocess(toRequiredNumber, z.number().min(0.1).max(7.5)),
       }),
     }),
     unmerge: () => ({
@@ -129,10 +150,7 @@ export const getDepositFormConfig = ({
         },
       ],
       schema: z.object({
-        amount: z
-          .string()
-          .transform(val => Number(val))
-          .pipe(z.number().positive().max(totalAmountAvailable)),
+        amount: positiveAmountSchema(totalAmountAvailable, t),
       }),
     }),
     merge: () => ({
@@ -146,10 +164,7 @@ export const getDepositFormConfig = ({
       ],
       schema: z.object({
         nodeAddress: z.string().min(1, 'Required'),
-        amount: z
-          .string()
-          .transform(val => Number(val))
-          .pipe(z.number().positive().max(totalAmountAvailable)),
+        amount: positiveAmountSchema(totalAmountAvailable, t),
       }),
     }),
     switch: () => ({
@@ -162,10 +177,7 @@ export const getDepositFormConfig = ({
         },
       ],
       schema: z.object({
-        amount: z
-          .string()
-          .transform(val => Number(val))
-          .pipe(z.number().positive().max(totalAmountAvailable)),
+        amount: positiveAmountSchema(totalAmountAvailable, t),
         nodeAddress: z.string().min(1, 'Required'),
         thorchainAddress: z.string().min(1, 'Required'),
       }),
@@ -182,15 +194,11 @@ export const getDepositFormConfig = ({
       schema: z.object({
         destinationChain: z.string().min(1, 'Destination Chain is required'),
         nodeAddress: z.string().min(1, 'Destination Address is required'),
-        amount: z
-          .string()
-          .transform(val => Number(val))
-          .pipe(
-            z
-              .number()
-              .positive()
-              .max(totalAmountAvailable, 'Amount exceeds balance')
-          ),
+        amount: positiveAmountSchema(
+          totalAmountAvailable,
+          t,
+          t('chainFunctions.amountExceeded')
+        ),
       }),
     }),
     bond: () => ({
@@ -239,22 +247,8 @@ export const getDepositFormConfig = ({
             }
           ),
         provider: z.string().optional(),
-        operatorFee: z
-          .string()
-          .transform(val => (val ? Number(val) : undefined))
-          .pipe(z.number().optional()),
-        amount: z
-          .string()
-          .transform(val => Number(val))
-          .pipe(
-            z
-              .number()
-              .positive()
-              .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
-              .refine(val => val > 0, {
-                message: t('amount'),
-              })
-          ),
+        operatorFee: z.preprocess(toOptionalNumber, z.number().optional()),
+        amount: positiveAmountSchema(totalAmountAvailable, t),
       }),
     }),
     bond_with_lp: () => ({
@@ -297,34 +291,23 @@ export const getDepositFormConfig = ({
             }
           ),
         bondableAsset: z.string().min(1, t('asset')),
-        lpUnits: z
-          .string()
-          .optional()
-          .transform(val => Number(val))
-          .pipe(
-            z
-              .number()
-              .positive()
-              // TODO: need to find out how to find the max amount of LP tokens
-              // .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
-              .refine(val => val > 0, {
-                message: t('lp_units'),
-              })
-          ),
-        amount: z
-          .string()
-          .optional()
-          .transform(val => {
-            if (val === undefined || val === '') return undefined
-            return Number(val)
-          })
-          .pipe(
-            z
-              .number()
-              .positive()
-              .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
-              .optional()
-          ),
+        // TODO: need to find out how to find the max amount of LP tokens
+        lpUnits: z.preprocess(
+          toRequiredNumber,
+          z.number().gt(0, t('lp_units'))
+          // .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
+        ),
+        amount: z.preprocess(
+          toOptionalNumber,
+          z
+            .number()
+            .gt(0, t('amount_must_be_positive'))
+            .max(
+              maxOrInfinity(totalAmountAvailable),
+              t('chainFunctions.amountExceeded')
+            )
+            .optional()
+        ),
       }),
     }),
     unbond: () => ({
@@ -366,7 +349,7 @@ export const getDepositFormConfig = ({
               message: t('invalid_node_address'),
             }
           ),
-        amount: z.string().transform(val => Number(val)),
+        amount: positiveAmountSchema(totalAmountAvailable, t),
         provider: z.string().optional(),
       }),
     }),
@@ -408,36 +391,25 @@ export const getDepositFormConfig = ({
             {
               message: t('invalid_node_address'),
             }
-          ),
-        lpUnits: z
-          .string()
-          .optional()
-          .transform(val => Number(val))
-          .pipe(
-            z
-              .number()
-              .positive()
-              // TODO: need to find out how to find the max amount of LP tokens
-              // .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
-              .refine(val => val > 0, {
-                message: t('lp_units'),
-              })
-          ),
+        ),
+        // TODO: need to find out how to find the max amount of LP tokens
+        lpUnits: z.preprocess(
+          toRequiredNumber,
+          z.number().gt(0, t('lp_units'))
+          // .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
+        ),
         bondableAsset: z.string().min(1, t('asset')),
-        amount: z
-          .string()
-          .optional()
-          .transform(val => {
-            if (val === undefined || val === '') return undefined
-            return Number(val)
-          })
-          .pipe(
-            z
-              .number()
-              .positive()
-              .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
-              .optional()
-          ),
+        amount: z.preprocess(
+          toOptionalNumber,
+          z
+            .number()
+            .gt(0, t('amount_must_be_positive'))
+            .max(
+              maxOrInfinity(totalAmountAvailable),
+              t('chainFunctions.amountExceeded')
+            )
+            .optional()
+        ),
       }),
     }),
     leave: () => ({
@@ -485,21 +457,19 @@ export const getDepositFormConfig = ({
         },
       ],
       schema: z.object({
-        amount: z
-          .string()
-          .optional()
-          .transform(val =>
-            val === '' || val === undefined ? undefined : Number(val)
-          )
-          .pipe(
-            z
-              .number()
-              .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
-              .refine(val => val >= 0, {
-                message: t('amount'),
-              })
-              .optional()
-          ),
+        amount: z.preprocess(
+          toOptionalNumber,
+          z
+            .number()
+            .max(
+              maxOrInfinity(totalAmountAvailable),
+              t('chainFunctions.amountExceeded')
+            )
+            .refine(val => val >= 0, {
+              message: t('amount'),
+            })
+            .optional()
+        ),
         customMemo: z
           .string()
           .min(1, t('chainFunctions.custom.validations.customMemo')),
@@ -560,42 +530,20 @@ export const getDepositFormConfig = ({
             THORChain: () =>
               coin.ticker === 'RUJI'
                 ? z.object({
-                    amount: z
-                      .string()
-                      .transform(Number)
-                      .pipe(
-                        z
-                          .number()
-                          .positive()
-                          .max(
-                            totalAmountAvailable,
-                            t('chainFunctions.amountExceeded')
-                          )
-                      ),
+                    amount: positiveAmountSchema(totalAmountAvailable, t),
                   })
                 : coin.ticker === 'TCY'
                   ? z.object({
-                      amount: z
-                        .string()
-                        .transform(Number)
-                        .pipe(
-                          z
-                            .number()
-                            .positive()
-                            .max(
-                              totalAmountAvailable,
-                              t('chainFunctions.amountExceeded')
-                            )
-                        ),
+                      amount: positiveAmountSchema(totalAmountAvailable, t),
                       autoCompound: z.boolean().optional(),
                     })
                   : z.never(),
             Ton: () =>
               z.object({
-                amount: z
-                  .string()
-                  .transform(val => Number(val))
-                  .pipe(z.number().positive()),
+                amount: z.preprocess(
+                  toRequiredNumber,
+                  z.number().gt(0, t('amount_must_be_positive'))
+                ),
                 validatorAddress: z.string().min(1, t('validator_address')),
               }) as any,
           }),
@@ -646,52 +594,41 @@ export const getDepositFormConfig = ({
             THORChain: () =>
               coin.ticker === 'RUJI'
                 ? z.object({
-                    amount: z
-                      .string()
-                      .transform(Number)
-                      .pipe(z.number().positive().max(totalAmountAvailable)),
+                    amount: positiveAmountSchema(totalAmountAvailable, t),
                   })
                 : coin.ticker === 'TCY'
                   ? z.discriminatedUnion('autoCompound', [
                       z.object({
                         autoCompound: z.literal(true),
-                        amount: z
-                          .number()
-                          .transform(Number)
-                          .pipe(
-                            z.number().positive().max(totalAmountAvailable)
-                          ),
-                        percentage: z
-                          .number()
-                          .optional()
-                          .pipe(
-                            z
-                              .number()
-                              .positive()
-                              .max(100, 'Percentage must be 0-100')
-                          ),
+                        amount: positiveAmountSchema(totalAmountAvailable, t),
+                        percentage: z.preprocess(
+                          toOptionalNumber,
+                          z
+                            .number()
+                            .gt(0, 'Percentage must be 0-100')
+                            .max(100, 'Percentage must be 0-100')
+                            .optional()
+                        ),
                       }),
                       z.object({
                         autoCompound: z.literal(false),
-                        percentage: z
-                          .string()
-                          .transform(Number)
-                          .pipe(
-                            z
-                              .number()
-                              .positive()
-                              .max(100, 'Percentage must be 0-100')
-                          ),
+                        percentage: z.preprocess(
+                          toRequiredNumber,
+                          z
+                            .number()
+                            .gt(0, 'Percentage must be 0-100')
+                            .max(100, 'Percentage must be 0-100')
+                        ),
                       }),
                     ])
                   : z.never(),
             Ton: () =>
               z.object({
                 validatorAddress: z.string().min(1, t('validator_address')),
-                amount: z
-                  .string()
-                  .transform(Number)
-                  .pipe(z.number().positive()),
+                amount: z.preprocess(
+                  toRequiredNumber,
+                  z.number().gt(0, t('amount_must_be_positive'))
+                ),
               }) as any,
           }),
     }),
@@ -705,15 +642,7 @@ export const getDepositFormConfig = ({
         },
       ],
       schema: z.object({
-        amount: z
-          .string()
-          .transform(Number)
-          .pipe(
-            z
-              .number()
-              .positive(t('amount_must_be_positive'))
-              .max(totalAmountAvailable, t('chainFunctions.amountExceeded'))
-          ),
+        amount: positiveAmountSchema(totalAmountAvailable, t),
       }),
     }),
     remove_cacao_pool: () => ({
@@ -726,15 +655,13 @@ export const getDepositFormConfig = ({
         },
       ],
       schema: z.object({
-        percentage: z
-          .string()
-          .transform(Number)
-          .pipe(
-            z
-              .number()
-              .positive(t('amount_must_be_positive'))
-              .max(100, t('percentage_limit'))
-          ),
+        percentage: z.preprocess(
+          toRequiredNumber,
+          z
+            .number()
+            .gt(0, t('amount_must_be_positive'))
+            .max(100, t('percentage_limit'))
+        ),
       }),
     }),
   })
