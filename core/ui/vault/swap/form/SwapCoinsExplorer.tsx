@@ -73,7 +73,7 @@ export const SwapCoinsExplorer = ({
     [coins]
   )
 
-  const { footerRef, itemRefs, scrollToKey, strokeRef, onKeyDown } =
+  const { footerRef, scrollToKey, strokeRef, onKeyDown, setItemRef } =
     useCenteredSnapCarousel({
       chain: currentChain,
       onSelect: chain => {
@@ -133,9 +133,7 @@ export const SwapCoinsExplorer = ({
 
                   return (
                     <FooterItem
-                      ref={el => {
-                        itemRefs.current[chain] = el
-                      }}
+                      ref={el => setItemRef(chain, el)}
                       tabIndex={0}
                       role="tab"
                       aria-selected={isActive}
