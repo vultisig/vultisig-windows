@@ -140,7 +140,7 @@ export const FastVaultStartKeysignPrompt = (props: StartKeysignPromptProps) => {
         showModal={showModal}
         onBack={() => setShowModal(false)}
         onFinish={onGetPassword}
-        description={t('to_start_plugin_installation')}
+        description={t('fast_vault_password_start_keysign_description')}
       />
     </VStack>
   )
