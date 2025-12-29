@@ -442,7 +442,7 @@ export const getDepositFormConfig = ({
               t('chainFunctions.amountExceeded')
             )
             .refine(val => val >= 0, {
-              message: t('amount'),
+              message: t('amount_must_be_non_negative'),
             })
             .optional()
         ),
@@ -581,8 +581,8 @@ export const getDepositFormConfig = ({
                           toOptionalNumber,
                           z
                             .number()
-                            .gt(0, 'Percentage must be 0-100')
-                            .max(100, 'Percentage must be 0-100')
+                            .gt(0, t('percentage_limit'))
+                            .max(100, t('percentage_limit'))
                             .optional()
                         ),
                       }),
@@ -592,8 +592,8 @@ export const getDepositFormConfig = ({
                           toRequiredNumber,
                           z
                             .number()
-                            .gt(0, 'Percentage must be 0-100')
-                            .max(100, 'Percentage must be 0-100')
+                            .gt(0, t('percentage_limit'))
+                            .max(100, t('percentage_limit'))
                         ),
                       }),
                     ])
