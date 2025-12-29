@@ -2,7 +2,7 @@ import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 
-import { ImportSeedphraseIntro } from './ImportSeedphraseIntro'
+import { ImportSeedphraseIntro } from './intro/ImportSeedphraseIntro'
 
 export const ImportSeedphrasePage = () => {
   const handleFinish = () => {
