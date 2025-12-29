@@ -21,7 +21,7 @@ export const ImportRequirementRow: FC<ImportRequirementRowProps> = ({
   <HStack gap={16} alignItems="start">
     <IconWrapper>{icon}</IconWrapper>
     <VStack gap={8}>
-      <Text color="contrast" size={15} weight={500}>
+      <Text size={15} weight={500}>
         {title}
       </Text>
       <Text color="shy" size={13} weight={500}>
