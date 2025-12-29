@@ -31,8 +31,12 @@ export class DKLS {
   private readonly oldKeygenCommittee: string[]
   private readonly hexEncryptionKey: string
   private readonly timeoutMs: number
+  private readonly onInboundSequenceNoChange?: (
+    inboundSequenceNo: number
+  ) => void
   private isKeygenComplete: boolean = false
   private sequenceNo: number = 0
+  private inboundSequenceNo: number = 0
   private cache: Record<string, string> = {}
   private setupMessage: Uint8Array = new Uint8Array()
   private readonly localUI?: string
@@ -52,6 +56,7 @@ export class DKLS {
       publicKey?: string
       chainCode?: string
       timeoutMs?: number
+      onInboundSequenceNoChange?: (inboundSequenceNo: number) => void
     }
   ) {
     this.keygenOperation = keygenOperation
@@ -66,6 +71,7 @@ export class DKLS {
     this.chainCode = options?.chainCode
     this.localUI = options?.localUI?.padEnd(64, '0')
     this.timeoutMs = options?.timeoutMs ?? 60000
+    this.onInboundSequenceNoChange = options?.onInboundSequenceNoChange
   }
 
   private async processOutbound(
@@ -146,6 +152,8 @@ export class DKLS {
           return true
         }
         this.cache[cacheKey] = ''
+        this.inboundSequenceNo++
+        this.onInboundSequenceNoChange?.(this.inboundSequenceNo)
         await deleteMpcRelayMessage({
           serverUrl: this.serverURL,
           localPartyId: this.localPartyId,
@@ -172,6 +180,8 @@ export class DKLS {
     console.log('startKeygen attempt:', attempt)
     console.log('session id:', this.sessionId)
     this.isKeygenComplete = false
+    this.inboundSequenceNo = 0
+    this.onInboundSequenceNoChange?.(this.inboundSequenceNo)
     try {
       if (this.isInitiateDevice && attempt === 0) {
         const threshold = getKeygenThreshold(this.keygenCommittee.length)
@@ -264,6 +274,8 @@ export class DKLS {
   ) {
     console.log('startReshare dkls, attempt:', attempt)
     this.isKeygenComplete = false
+    this.inboundSequenceNo = 0
+    this.onInboundSequenceNoChange?.(this.inboundSequenceNo)
     let localKeyshare: Keyshare | null = null
     if (dklsKeyshare !== undefined && dklsKeyshare.length > 0) {
       localKeyshare = Keyshare.fromBytes(Buffer.from(dklsKeyshare, 'base64'))

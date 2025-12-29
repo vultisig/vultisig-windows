@@ -24,6 +24,7 @@ import {
   useKeygenVault,
   useKeygenVaultName,
 } from '../state/keygenVault'
+import { useDklsInboundSequenceNoState } from './state/dklsInboundSequenceNo'
 
 export const ReshareVaultKeygenActionProvider = ({
   children,
@@ -37,6 +38,7 @@ export const ReshareVaultKeygenActionProvider = ({
   const keygenVault = useKeygenVault()
   const operation = useKeygenOperation()
   const { getDeveloperOptions } = useCore()
+  const [, setDklsInboundSequenceNo] = useDklsInboundSequenceNoState()
 
   const vaultOrders = useVaultOrders()
 
@@ -48,6 +50,7 @@ export const ReshareVaultKeygenActionProvider = ({
         timeoutMs = appInstallTimeout
       }
       onStepChange('ecdsa')
+      setDklsInboundSequenceNo(0)
       const sharedFinalVaultFields = {
         signers,
         localPartyId,
@@ -65,7 +68,7 @@ export const ReshareVaultKeygenActionProvider = ({
         signers,
         oldCommittee,
         encryptionKeyHex,
-        { timeoutMs }
+        { timeoutMs, onInboundSequenceNoChange: setDklsInboundSequenceNo }
       )
       const oldEcdsaKeyshare =
         'existingVault' in keygenVault
@@ -145,6 +148,7 @@ export const ReshareVaultKeygenActionProvider = ({
       getDeveloperOptions,
       keygenVault,
       localPartyId,
+      setDklsInboundSequenceNo,
       serverUrl,
       sessionId,
       vaultName,
