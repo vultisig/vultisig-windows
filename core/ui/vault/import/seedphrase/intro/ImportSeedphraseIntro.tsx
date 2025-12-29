@@ -113,13 +113,11 @@ export const ImportSeedphraseIntro = ({ onFinish }: OnFinishProp) => {
         </VStack>
       </FitPageContent>
 
-      <PageFooter alignItems="center">
-        <AnimatedVisibility isOpen={showContent}>
-          <VStack maxWidth={576} fullWidth>
-            <Button onClick={onFinish}>{t('next')}</Button>
-          </VStack>
-        </AnimatedVisibility>
-      </PageFooter>
+      <AnimatedVisibility isOpen={showContent}>
+        <PageFooter alignItems="center">
+          <Button onClick={onFinish}>{t('next')}</Button>
+        </PageFooter>
+      </AnimatedVisibility>
     </>
   )
 }
