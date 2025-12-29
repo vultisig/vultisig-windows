@@ -219,6 +219,7 @@ export const hr = {
   allowance_amount: 'Iznos naknade',
   allowance_spender: 'Potrošač džeparca',
   amount: 'Iznositi',
+  amount_must_be_non_negative: 'Iznos ne smije biti negativan',
   amount_must_be_positive: 'Iznos mora biti pozitivan',
   amount_required: 'Potreban je iznos',
   amount_to_unstake: 'Iznos za poništavanje uloga',
