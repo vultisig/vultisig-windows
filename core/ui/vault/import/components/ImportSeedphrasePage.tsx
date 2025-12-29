@@ -7,7 +7,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { GradientText, Text } from '@lib/ui/text'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 import { ImportRequirementRow } from './ImportRequirementRow'
@@ -75,11 +75,10 @@ export const ImportSeedphrasePage = () => {
                   {t('before_you_start')}
                 </Text>
                 <Text size={22} weight={500} height="large">
-                  {t('you_are_entering_new_era')}
-                  <GradientText>
-                    {t('leaving_old_seedphrases_behind')}
-                  </GradientText>
-                  {t('youll_need')}
+                  <Trans
+                    i18nKey="import_seedphrase_onboarding_title"
+                    components={{ g: <GradientText /> }}
+                  />
                 </Text>
               </VStack>
 
