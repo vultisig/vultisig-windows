@@ -13,6 +13,11 @@ import styled, { css } from 'styled-components'
 
 import { ImportRequirementRow } from './ImportRequirementRow'
 
+const animationTop = 32
+const animationHeight = 186
+const animationWidth = 263
+const animationGap = 32
+
 const AnimationContainer = styled.div<{ showContent: boolean }>`
   position: absolute;
   left: 0;
@@ -27,7 +32,7 @@ const AnimationContainer = styled.div<{ showContent: boolean }>`
   ${({ showContent }) =>
     showContent
       ? css`
-          top: 32px;
+          top: ${animationTop}px;
         `
       : css`
           top: 50%;
@@ -35,14 +40,14 @@ const AnimationContainer = styled.div<{ showContent: boolean }>`
         `}
 
   & > * {
-    width: 263px !important;
-    height: 186px !important;
+    width: ${animationWidth}px !important;
+    height: ${animationHeight}px !important;
   }
 `
 
 const ContentArea = styled(VStack)`
   flex-grow: 1;
-  padding-top: 250px; // top 32 + height 186 + gap 32
+  padding-top: ${animationTop + animationHeight + animationGap}px;
   width: 100%;
   max-width: 576px;
   align-self: center;
