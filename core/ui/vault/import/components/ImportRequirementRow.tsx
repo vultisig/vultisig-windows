@@ -8,7 +8,7 @@ import styled from 'styled-components'
 type ImportRequirementRowProps = IconProp & TitleProp & DescriptionProp
 
 const IconWrapper = styled(VStack)`
-  color: ${getColor('primaryAlt')};
+  color: ${getColor('info')};
   font-size: 20px;
   flex-shrink: 0;
 `
