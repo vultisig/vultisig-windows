@@ -1,7 +1,7 @@
 import { useImportSeedphraseAnimation } from '@core/ui/vault/import/hooks/useImportSeedphraseAnimation'
 import { Button } from '@lib/ui/buttons/Button'
+import { SeedphraseIcon } from '@lib/ui/icons/SeedphraseIcon'
 import { TabletSmartphoneIcon } from '@lib/ui/icons/TabletSmartphoneIcon'
-import { WandSparklesIcon } from '@lib/ui/icons/WandSparklesIcon'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -84,7 +84,7 @@ export const ImportSeedphrasePage = () => {
 
               <VStack gap={24}>
                 <ImportRequirementRow
-                  icon={<WandSparklesIcon />}
+                  icon={<SeedphraseIcon />}
                   title={t('your_seedphrase')}
                   description={t('your_seedphrase_subtitle')}
                 />
