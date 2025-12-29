@@ -1,4 +1,3 @@
-import { useImportSeedphraseAnimation } from '@core/ui/vault/import/hooks/useImportSeedphraseAnimation'
 import { Button } from '@lib/ui/buttons/Button'
 import { SeedphraseIcon } from '@lib/ui/icons/SeedphraseIcon'
 import { TabletSmartphoneIcon } from '@lib/ui/icons/TabletSmartphoneIcon'
@@ -8,6 +7,8 @@ import { FitPageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { OnFinishProp } from '@lib/ui/props'
 import { GradientText, Text } from '@lib/ui/text'
+import { useRive } from '@rive-app/react-canvas'
+import { useEffect, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
@@ -55,7 +56,21 @@ const ContentArea = styled(VStack)`
 
 export const ImportSeedphraseIntro = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
-  const { RiveComponent, showContent } = useImportSeedphraseAnimation()
+
+  const [showContent, setShowContent] = useState(false)
+
+  const { RiveComponent } = useRive({
+    src: '/core/animations/import-seedphrase.riv',
+    autoplay: true,
+  })
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setShowContent(true)
+    }, 3000)
+
+    return () => clearTimeout(timeoutId)
+  }, [])
 
   return (
     <>
