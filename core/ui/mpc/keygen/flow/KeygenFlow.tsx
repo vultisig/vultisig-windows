@@ -1,10 +1,11 @@
 import { hasServer } from '@core/mpc/devices/localPartyId'
 import { KeygenOperation } from '@core/mpc/keygen/KeygenOperation'
+import { KeygenStep } from '@core/mpc/keygen/KeygenStep'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { CreateVaultSuccessScreen } from '@core/ui/mpc/keygen/create/CreateVaultSuccessScreen'
 import { useKeygenMutation } from '@core/ui/mpc/keygen/mutations/useKeygenMutation'
-import { KeygenPendingState } from '@core/ui/mpc/keygen/progress/KeygenPendingState'
+import { KeygenRiveAnimation } from '@core/ui/mpc/keygen/progress/KeygenRiveAnimation'
 import { useKeygenOperation } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
@@ -29,6 +30,15 @@ export const KeygenFlow = ({
     mutate: startKeygen,
     ...keygenMutationState
   } = useKeygenMutation()
+
+  const progressPercentage = useMemo(() => {
+    const stepToProgress: Record<KeygenStep, number> = {
+      prepareVault: 10,
+      ecdsa: 50,
+      eddsa: 90,
+    }
+    return step ? stepToProgress[step] : 0
+  }, [step])
   useEffect(startKeygen, [startKeygen])
   const { t } = useTranslation()
 
@@ -107,20 +117,11 @@ export const KeygenFlow = ({
           <FlowErrorPageContent title={t('keygen_failed')} error={error} />
         </>
       )}
-      pending={() => (
-        <>
-          {!isPluginReshare ? (
-            <>
-              <PageHeader
-                title={title}
-                hasBorder
-                primaryControls={<PageHeaderBackButton />}
-              />
-              <KeygenPendingState value={step} />
-            </>
-          ) : null}
-        </>
-      )}
+      pending={() =>
+        !isPluginReshare ? (
+          <KeygenRiveAnimation progressPercentage={progressPercentage} />
+        ) : null
+      }
     />
   )
 }
