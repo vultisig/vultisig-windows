@@ -1,7 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { isValidAddress } from '@core/chain/utils/isValidAddress'
+import { AddressBookChainInput } from '@core/ui/address-book/AddressBookChainInput'
 import { AddressBookItem } from '@core/ui/address-book/model'
-import { ChainInput } from '@core/ui/chain/inputs/ChainInput'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { ScanQrView } from '@core/ui/qr/components/ScanQrView'
@@ -139,11 +139,14 @@ export const AddressBookForm: FC<AddressBookFormProps> = ({
       />
       <VStack fullHeight style={{ position: 'relative' }}>
         <PageContent gap={16} flexGrow scrollable>
-          <ChainInput
+          <AddressBookChainInput
             titleColor="contrast"
             value={watch('chain')}
-            onChange={newChain => setValue('chain', newChain)}
-            options={Object.values(Chain)}
+            onChange={newChain => {
+              if (newChain) {
+                setValue('chain', newChain)
+              }
+            }}
           />
           <VStack gap={8}>
             <TextInput

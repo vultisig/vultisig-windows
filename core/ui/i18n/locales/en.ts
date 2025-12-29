@@ -287,6 +287,7 @@ export const en = {
   email_disclaimer: 'This email is only used to send the backup',
   email_required: 'Email is required',
   emails_dont_match: "Emails don't match",
+  evm_chains: 'EVM Chains',
   enable_dkls: 'Enable DKLS',
   enable_token_instruction:
     'Enable at least one token to view balances and manage positions.',
@@ -526,6 +527,7 @@ export const en = {
   install_app: 'Install ‘{{title}}’ App',
   install_plugin: 'Install App',
   installing_plugin: 'Installing App',
+  installation_progress: 'Installation progress: {{progress}}%',
   insufficient_balance: 'Insufficient balance',
   insufficient_funds_to_pay_fee:
     'Insufficient balance to cover transaction fee.',
