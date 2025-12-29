@@ -40,6 +40,13 @@ export const de = {
     rewards: 'Prämien',
     total_deposit: 'Gesamteinzahlung',
     withdraw: 'Zurückziehen',
+    current_rewards: 'Aktuelle Prämien',
+    deposit_header: 'Einzahlung auf das Circle-Konto',
+    verify_deposit: 'Einzahlung prüfen',
+    total_rewards: 'Gesamtprämien',
+    withdraw_header: 'Aus dem Kreis austreten',
+    verify_withdraw: 'Auszahlung bestätigen',
+    yield_details: 'Kreisausbeute-Details',
   },
   fastVaultSetup: {
     backup: {
@@ -830,7 +837,6 @@ export const de = {
   plugin_info: 'App-Informationen',
   plugin_password_desc:
     'Geben Sie Ihr Passwort ein, um Ihre Serverfreigabe zu entsperren und die App-Installation zu starten.',
-  plugin_rules: 'App-Regeln',
   plugin_server_url: 'App-Server-URL',
   plugin_success_desc: 'Die Installation von {{name}} ist abgeschlossen',
   to_start_plugin_installation: 'Um die App-Installation zu starten',
@@ -1282,7 +1288,6 @@ export const de = {
   vaults: 'Gewölbe',
   verify: 'Verifizieren',
   verify_email: 'E-Mail-Adresse bestätigen',
-  verify_identity_sign: 'Melden Sie sich an, um Ihre Identität zu bestätigen.',
   verify_password: 'Passwort bestätigen',
   verify_password_periodic_message:
     'Überprüfen Sie Ihr Serverfreigabepasswort.',
@@ -1335,4 +1340,23 @@ export const de = {
   deposited: 'Eingezahlt',
   withdraw: 'Zurückziehen',
   account: 'Konto',
+  confirm_automation_creation: 'Automatisierungserstellung bestätigen',
+  id: 'AUSWEIS',
+  import_seedphrase: 'Seedphrase importieren',
+  import_seedphrase_description:
+    'Betritt es, erschaffe einen Tresor, schau nie zurück.',
+  import_vault_share: 'Vault-Freigabe importieren',
+  import_vault_share_description:
+    'Verwenden Sie eine Tresorfreigabe, um Ihren Tresor wiederherzustellen.',
+  import_vault_share_supported_files: 'Unterstützte Dateitypen: .bak & .vult',
+  new: 'Neu',
+  vulti_node: 'VultiNode',
+  percentage_zero: '0 %',
+  percentage_value: '{{Wert}}%',
+  automation_info: 'Automatisierungsinformationen',
+  app_install_timeout: 'Zeitüberschreitung bei der App-Installation (ms)',
+  app_install_timeout_invalid: 'Bitte geben Sie eine gültige Nummer ein.',
+  app_install_timeout_min: 'Muss 0 oder größer sein.',
+  recover_vault_or_convert_seedphrase:
+    'Stellen Sie Ihren Tresor wieder her oder wandeln Sie Ihre Seedphrase in einen Tresor um.',
 }
