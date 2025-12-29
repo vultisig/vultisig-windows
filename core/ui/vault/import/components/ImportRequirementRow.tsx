@@ -1,17 +1,14 @@
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { DescriptionProp, IconProp, TitleProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { FC, ReactNode } from 'react'
+import { FC } from 'react'
 
-type ImportRequirementRowProps = {
-  icon: ReactNode
-  title: string
-  subtitle: string
-}
+type ImportRequirementRowProps = IconProp & TitleProp & DescriptionProp
 
 export const ImportRequirementRow: FC<ImportRequirementRowProps> = ({
   icon,
   title,
-  subtitle,
+  description,
 }) => (
   <HStack gap={16} alignItems="start">
     <VStack style={{ fontSize: 20 }}>{icon}</VStack>
@@ -20,7 +17,7 @@ export const ImportRequirementRow: FC<ImportRequirementRowProps> = ({
         {title}
       </Text>
       <Text color="shy" size={13} weight={500}>
-        {subtitle}
+        {description}
       </Text>
     </VStack>
   </HStack>

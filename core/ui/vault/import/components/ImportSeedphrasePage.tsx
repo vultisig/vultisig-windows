@@ -86,12 +86,12 @@ export const ImportSeedphrasePage = () => {
                 <ImportRequirementRow
                   icon={<WandSparklesIcon />}
                   title={t('your_seedphrase')}
-                  subtitle={t('your_seedphrase_subtitle')}
+                  description={t('your_seedphrase_subtitle')}
                 />
                 <ImportRequirementRow
                   icon={<TabletSmartphoneIcon />}
                   title={t('at_least_one_device')}
-                  subtitle={t('at_least_one_device_subtitle')}
+                  description={t('at_least_one_device_subtitle')}
                 />
               </VStack>
             </VStack>
