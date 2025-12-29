@@ -10,6 +10,8 @@ import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { useTranslation } from 'react-i18next'
 
+import { ImportVaultButton } from './ImportVaultButton'
+
 export const NewVaultPage = () => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
@@ -42,12 +44,7 @@ export const NewVaultPage = () => {
             >
               {t('scan_qr')}
             </Button>
-            <Button
-              kind="outlined"
-              onClick={() => navigate({ id: 'importVault' })}
-            >
-              {t('import_vault')}
-            </Button>
+            <ImportVaultButton />
           </VStack>
         </VStack>
       </PageFooter>

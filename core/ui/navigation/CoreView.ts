@@ -53,6 +53,7 @@ export type CoreView =
   | { id: 'manageVaultChains' }
   | { id: 'manageVaultChainCoins'; state: { chain: Chain } }
   | { id: 'newVault' }
+  | { id: 'importSeedphrase' }
   | { id: 'renameVault' }
   | { id: 'reshareVault' }
   | { id: 'reshareVaultFast' }
