@@ -1,5 +1,7 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
+import { ActionForm } from '@core/ui/vault/components/action-form/ActionForm'
+import { BondForm } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/BondSpecific/BondForm'
 import { DepositActionSpecific } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/DepositActionSpecific'
 import { DepositActionItemExplorer } from '@core/ui/vault/deposit/DepositForm/DepositActionItemExplorer'
 import {
@@ -35,8 +37,8 @@ import {
   shouldShowTicker,
 } from '../utils/chainActionConfig'
 import { stepFromDecimals } from '../utils/stepFromDecimals'
+import { FormData } from './types'
 
-export type FormData = Record<string, any>
 type DepositFormProps = {
   onSubmit: (data: FieldValues) => void
 }
@@ -73,6 +75,14 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
     onSubmit(data)
   }
 
+  const isBondAction = selectedChainAction === 'bond'
+  const pageTitle = isBondAction
+    ? `${t('bond')} ${coin.ticker ?? ''}`.trim()
+    : t('deposit')
+  const FormComponent = (
+    isBondAction ? ActionForm : PageContent
+  ) as typeof PageContent
+
   return (
     <DepositFormHandlersProvider
       initialValue={{
@@ -86,10 +96,14 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
     >
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={t('deposit')}
+        title={pageTitle}
         hasBorder
       />
-      <PageContent as="form" gap={40} onSubmit={handleSubmit(handleFormSubmit)}>
+      <FormComponent
+        as="form"
+        gap={40}
+        onSubmit={handleSubmit(handleFormSubmit)}
+      >
         <WithProgressIndicator value={0.2}>
           <InputContainer>
             <InputFieldWrapper>
@@ -124,92 +138,102 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
             )}
           />
 
-          <DepositActionSpecific value={selectedChainAction} />
+          {isBondAction ? (
+            <BondForm balance={balance} errors={errors} isValid={isValid} />
+          ) : (
+            <>
+              <DepositActionSpecific value={selectedChainAction} />
 
-          {selectedChainAction && fields.length > 0 && (
-            <VStack gap={12}>
-              {fields
-                .filter(field => !field.hidden)
-                .map(field => {
-                  const config = getBalanceDisplayConfig({
-                    chainAction: selectedChainAction,
-                    chain: coin.chain,
-                  })
-                  const showBalance = shouldShowBalance({
-                    fieldName: field.name,
-                    chainAction: selectedChainAction,
-                  })
-                  const showTickerWithBalance = shouldShowTicker({
-                    fieldName: field.name,
-                    chainAction: selectedChainAction,
-                    chain: coin.chain,
-                  })
+              {selectedChainAction && fields.length > 0 && (
+                <VStack gap={12}>
+                  {fields
+                    .filter(field => !field.hidden)
+                    .map(field => {
+                      const config = getBalanceDisplayConfig({
+                        chainAction: selectedChainAction,
+                        chain: coin.chain,
+                      })
+                      const showBalance = shouldShowBalance({
+                        fieldName: field.name,
+                        chainAction: selectedChainAction,
+                      })
+                      const showTickerWithBalance = shouldShowTicker({
+                        fieldName: field.name,
+                        chainAction: selectedChainAction,
+                        chain: coin.chain,
+                      })
 
-                  return (
-                    <InputContainer key={field.name}>
-                      <Text size={15} weight="400">
-                        {field.label}{' '}
-                        {showBalance && (
-                          <>
-                            (
-                            {config.balanceLabel === 'shares' ? (
+                      return (
+                        <InputContainer key={field.name}>
+                          <Text size={15} weight="400">
+                            {field.label}{' '}
+                            {showBalance && (
                               <>
-                                {t('shares')}: {balance}
-                              </>
-                            ) : (
-                              <>
-                                {t('balance')}: {balance}
-                                {showTickerWithBalance &&
-                                  coin.ticker &&
-                                  ` ${coin.ticker}`}
+                                (
+                                {config.balanceLabel === 'shares' ? (
+                                  <>
+                                    {t('shares')}: {balance}
+                                  </>
+                                ) : (
+                                  <>
+                                    {t('balance')}: {balance}
+                                    {showTickerWithBalance &&
+                                      coin.ticker &&
+                                      ` ${coin.ticker}`}
+                                  </>
+                                )}
+                                )
                               </>
                             )}
-                            )
-                          </>
-                        )}
-                        {field.required ? (
-                          <Text as="span" color="danger" size={14}>
-                            *
+                            {field.required ? (
+                              <Text as="span" color="danger" size={14}>
+                                *
+                              </Text>
+                            ) : (
+                              <Text as="span" size={14}>
+                                ({t('chainFunctions.optional_validation')})
+                              </Text>
+                            )}
                           </Text>
-                        ) : (
-                          <Text as="span" size={14}>
-                            ({t('chainFunctions.optional_validation')})
-                          </Text>
-                        )}
-                      </Text>
 
-                      <TextInputWithPasteAction
-                        onWheel={e => e.currentTarget.blur()}
-                        type={field.type}
-                        step={
-                          field.name === 'amount'
-                            ? stepFromDecimals(coin.decimals)
-                            : undefined
-                        }
-                        min={0}
-                        {...register(field.name)}
-                        required={field.required}
-                      />
+                          <TextInputWithPasteAction
+                            onWheel={e => e.currentTarget.blur()}
+                            type={field.type}
+                            step={
+                              field.name === 'amount'
+                                ? stepFromDecimals(coin.decimals)
+                                : undefined
+                            }
+                            min={0}
+                            {...register(field.name)}
+                            required={field.required}
+                          />
 
-                      {errors[field.name] && (
-                        <ErrorText color="danger" size={13} className="error">
-                          {t(errors[field.name]?.message as string, {
-                            defaultValue: t(
-                              'chainFunctions.default_validation'
-                            ),
-                          })}
-                        </ErrorText>
-                      )}
-                    </InputContainer>
-                  )
-                })}
-            </VStack>
+                          {errors[field.name] && (
+                            <ErrorText
+                              color="danger"
+                              size={13}
+                              className="error"
+                            >
+                              {t(errors[field.name]?.message as string, {
+                                defaultValue: t(
+                                  'chainFunctions.default_validation'
+                                ),
+                              })}
+                            </ErrorText>
+                          )}
+                        </InputContainer>
+                      )
+                    })}
+                </VStack>
+              )}
+            </>
           )}
         </WithProgressIndicator>
         <Button disabled={!isValid} type="submit">
           {t('continue')}
         </Button>
-      </PageContent>
+      </FormComponent>
     </DepositFormHandlersProvider>
   )
 }
