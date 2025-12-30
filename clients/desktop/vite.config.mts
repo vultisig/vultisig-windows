@@ -1,74 +1,21 @@
-import react from '@vitejs/plugin-react'
-import path from 'path'
-import { fileURLToPath } from 'url'
-import { defineConfig, normalizePath } from 'vite'
+import { defineConfig } from 'vite'
 import circleDependency from 'vite-plugin-circular-dependency'
-import { nodePolyfills } from 'vite-plugin-node-polyfills'
-import topLevelAwait from 'vite-plugin-top-level-await'
-import wasm from 'vite-plugin-wasm'
+import { viteStaticCopy } from 'vite-plugin-static-copy'
 
+import { getCommonPlugins } from '../../core/ui/vite/plugins'
+import { getStaticCopyTargets } from '../../core/ui/vite/staticCopy'
 import * as buildInfo from './build.json'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-
 export default defineConfig(async () => {
-  const { viteStaticCopy } = await import('vite-plugin-static-copy')
-
   return {
     define: {
       __APP_VERSION__: JSON.stringify(buildInfo.version),
       __APP_BUILD__: JSON.stringify(buildInfo.build),
     },
     plugins: [
-      react({
-        babel: {
-          plugins: [['babel-plugin-react-compiler', {}]],
-        },
-      }),
-      nodePolyfills({ exclude: ['fs'] }),
-      wasm(),
-      topLevelAwait(),
+      ...getCommonPlugins(),
       viteStaticCopy({
-        targets: [
-          {
-            src: normalizePath(
-              path.resolve(
-                __dirname,
-                '../../node_modules/@trustwallet/wallet-core/dist/lib/wallet-core.wasm'
-              )
-            ),
-            dest: '',
-          },
-          {
-            src: normalizePath(
-              path.resolve(__dirname, '../../node_modules/7z-wasm/7zz.wasm')
-            ),
-            dest: '7z-wasm',
-          },
-          {
-            src: normalizePath(
-              path.resolve(
-                __dirname,
-                '../../node_modules/zxing-wasm/dist/reader/zxing_reader.wasm'
-              )
-            ),
-            dest: 'wasm',
-          },
-          {
-            src: normalizePath(
-              path.resolve(__dirname, '../../core/ui/public/**/*')
-            ),
-            dest: 'core',
-            rename: (fileName, fileExtension, fullPath) => {
-              const relativePath = path.relative(
-                path.resolve(__dirname, '../../core/ui/public'),
-                fullPath
-              )
-              return relativePath
-            },
-          },
-        ],
+        targets: getStaticCopyTargets(),
       }),
       circleDependency({
         exclude: /node_modules/,

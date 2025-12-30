@@ -10,6 +10,7 @@ import styled from 'styled-components'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { VaultSecurityType } from '../../../vault/VaultSecurityType'
+import { FastVaultPasswordModal } from '../../fast/FastVaultPasswordModal'
 import { StartKeysignPromptProps } from './StartKeysignPromptProps'
 
 const clickDurationThreshold: Milliseconds = 300
@@ -45,6 +46,7 @@ const Fill = styled.div`
 export const FastVaultStartKeysignPrompt = (props: StartKeysignPromptProps) => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
+  const [showModal, setShowModal] = useState(false)
   const [startPressingAt, setStartPressingAt] = useState<null | number>(null)
 
   const keysignPayload =
@@ -52,18 +54,37 @@ export const FastVaultStartKeysignPrompt = (props: StartKeysignPromptProps) => {
 
   const executeNavigation = useCallback(
     (securityType: VaultSecurityType) => {
+      if (securityType === 'fast') {
+        setShowModal(true)
+        return
+      } else {
+        navigate({
+          id: 'keysign',
+          state: {
+            ...props,
+            keysignPayload: shouldBePresent(keysignPayload),
+            securityType,
+          },
+        })
+      }
+    },
+    [props, keysignPayload, navigate]
+  )
+
+  const onGetPassword = useCallback(
+    ({ password }: { password: string }) => {
       navigate({
         id: 'keysign',
         state: {
           ...props,
           keysignPayload: shouldBePresent(keysignPayload),
-          securityType,
+          securityType: 'fast',
+          password,
         },
       })
     },
     [props, keysignPayload, navigate]
   )
-
   useEffect(() => {
     if (!startPressingAt) return
 
@@ -115,6 +136,12 @@ export const FastVaultStartKeysignPrompt = (props: StartKeysignPromptProps) => {
         {t('fast_sign')}
         {startPressingAt && <Fill />}
       </Container>
+      <FastVaultPasswordModal
+        showModal={showModal}
+        onBack={() => setShowModal(false)}
+        onFinish={onGetPassword}
+        description={t('fast_vault_password_start_keysign_description')}
+      />
     </VStack>
   )
 }
