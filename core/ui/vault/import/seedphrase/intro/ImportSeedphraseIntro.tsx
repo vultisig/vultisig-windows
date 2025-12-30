@@ -1,18 +1,14 @@
 import { Button } from '@lib/ui/buttons/Button'
-import { SeedphraseIcon } from '@lib/ui/icons/SeedphraseIcon'
-import { TabletSmartphoneIcon } from '@lib/ui/icons/TabletSmartphoneIcon'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { VStack } from '@lib/ui/layout/Stack'
-import { FitPageContent } from '@lib/ui/page/PageContent'
-import { PageFooter } from '@lib/ui/page/PageFooter'
+import { fitPageContent } from '@lib/ui/page/PageContent'
 import { OnFinishProp } from '@lib/ui/props'
-import { GradientText, Text } from '@lib/ui/text'
 import { useRive } from '@rive-app/react-canvas'
 import { useEffect, useState } from 'react'
-import { Trans, useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
-import { ImportRequirementRow } from './ImportRequirementRow'
+import { ImportSeedphraseIntroRequirements } from './ImportSeedphraseIntroRequirements'
 
 const animationTop = 32
 const animationHeight = 186
@@ -74,50 +70,36 @@ export const ImportSeedphraseIntro = ({ onFinish }: OnFinishProp) => {
 
   return (
     <>
-      <FitPageContent>
+      <Container>
         <VStack style={{ position: 'relative' }} flexGrow>
           <AnimationContainer showContent={showContent}>
             <RiveComponent />
           </AnimationContainer>
 
           <ContentArea>
-            <AnimatedVisibility isOpen={showContent}>
-              <VStack gap={32}>
-                <VStack gap={12}>
-                  <Text color="shy" size={12} weight={500}>
-                    {t('before_you_start')}
-                  </Text>
-                  <Text size={22} weight={500} height="large">
-                    <Trans
-                      i18nKey="import_seedphrase_onboarding_title"
-                      components={{ g: <GradientText /> }}
-                    />
-                  </Text>
-                </VStack>
+            <AnimatedVisibility
+              isOpen={showContent}
+              overlayStyles={{
+                flexGrow: 1,
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <VStack flexGrow justifyContent="space-between" gap={40}>
+                <ImportSeedphraseIntroRequirements />
 
-                <VStack gap={24}>
-                  <ImportRequirementRow
-                    icon={<SeedphraseIcon />}
-                    title={t('your_seedphrase')}
-                    description={t('your_seedphrase_subtitle')}
-                  />
-                  <ImportRequirementRow
-                    icon={<TabletSmartphoneIcon />}
-                    title={t('at_least_one_device')}
-                    description={t('at_least_one_device_subtitle')}
-                  />
-                </VStack>
+                <Button onClick={onFinish}>{t('next')}</Button>
               </VStack>
             </AnimatedVisibility>
           </ContentArea>
         </VStack>
-      </FitPageContent>
-
-      <AnimatedVisibility isOpen={showContent}>
-        <PageFooter alignItems="center">
-          <Button onClick={onFinish}>{t('next')}</Button>
-        </PageFooter>
-      </AnimatedVisibility>
+      </Container>
     </>
   )
 }
+
+const Container = styled.div`
+  ${fitPageContent({
+    contentMaxWidth: 360,
+  })}
+`
