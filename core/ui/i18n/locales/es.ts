@@ -223,6 +223,7 @@ export const es = {
   allowance_amount: 'Monto de la asignación',
   allowance_spender: 'Gastador de asignaciones',
   amount: 'Cantidad',
+  amount_must_be_non_negative: 'La cantidad no puede ser negativa.',
   amount_must_be_positive: 'La cantidad debe ser positiva.',
   amount_required: 'Se requiere cantidad',
   amount_to_unstake: 'Cantidad a deshacer',

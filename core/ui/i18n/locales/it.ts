@@ -226,6 +226,7 @@ export const it = {
   allowance_amount: "Importo dell'indennità",
   allowance_spender: 'Spendere indennità',
   amount: 'Quantità',
+  amount_must_be_non_negative: "L'importo non può essere negativo",
   amount_must_be_positive: "L'importo deve essere positivo",
   amount_required: "L'importo è richiesto",
   amount_to_unstake: 'Importo da annullare',
