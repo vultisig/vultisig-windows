@@ -30,6 +30,7 @@ export const en = {
   allowance_amount: 'Allowance amount',
   allowance_spender: 'Allowance spender',
   amount: 'Amount',
+  amount_must_be_non_negative: 'Amount must be non-negative',
   amount_must_be_positive: 'Amount must be positive',
   amount_required: 'Amount is required',
   amount_to_unstake: 'Amount to unstake',
@@ -377,6 +378,8 @@ export const en = {
   faq_vultisig_make_money_title: 'How is Vultisig used?',
   fast: 'Fast',
   fastVault: 'Fast Vault',
+  fast_vault_password_start_keysign_description:
+    'Confirm the transaction by entering the password of your server share.',
   fastVaultSetup: {
     addOptionalHint: 'Add an optional hint',
     backup: {
