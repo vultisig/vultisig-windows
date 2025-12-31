@@ -34,6 +34,7 @@ export const EnterSeedphraseStep = ({ onFinish }: OnFinishProp) => {
 
       <VStack gap={8}>
         <TextArea
+          autoFocus
           value={mnemonic}
           onValueChange={setMnemonic}
           onBlur={() => setIsTouched(true)}
