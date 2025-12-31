@@ -6,5 +6,5 @@ export const featureFlags = {
   defiStakedTab: true,
   nftTab: false,
   defiLpAddEnabled: false,
-  importSeedphrase: true,
+  importSeedphrase: false,
 }
