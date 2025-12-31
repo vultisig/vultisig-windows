@@ -1,5 +1,6 @@
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { Button } from '@lib/ui/buttons/Button'
+import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { TextArea } from '@lib/ui/inputs/TextArea'
 import { VStack } from '@lib/ui/layout/Stack'
 import { OnFinishProp } from '@lib/ui/props'
@@ -29,7 +30,12 @@ export const EnterSeedphraseStep = ({ onFinish }: OnFinishProp) => {
   const accessory = `${wordsCount}/${maxWords}`
 
   return (
-    <VStack gap={32} flexGrow>
+    <VStack
+      as="form"
+      gap={32}
+      flexGrow
+      {...getFormProps({ onSubmit: onFinish, isDisabled: !isValid })}
+    >
       <EnterSeedphraseHeader />
 
       <VStack gap={8}>
@@ -53,7 +59,7 @@ export const EnterSeedphraseStep = ({ onFinish }: OnFinishProp) => {
       </VStack>
 
       <VStack flexGrow justifyContent="flex-end" fullWidth>
-        <Button type="submit" onClick={onFinish} disabled={error || undefined}>
+        <Button type="submit" disabled={error || undefined}>
           {t('import')}
         </Button>
       </VStack>
