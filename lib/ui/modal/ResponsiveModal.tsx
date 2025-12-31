@@ -27,7 +27,7 @@ const MobileDrawer = styled(VStack)`
   right: 16px;
   background: ${getColor('background')};
   max-height: 90vh;
-  overflow-y: auto;
+  overflow: hidden;
   border-radius: 24px 24px 0 0;
   overscroll-behavior: contain;
   z-index: 1000;
@@ -38,8 +38,6 @@ const MobileDrawer = styled(VStack)`
 `
 
 const MobileDrawerHeader = styled.div`
-  position: sticky;
-  top: 0;
   display: flex;
   justify-content: center;
   padding: 12px 0;
@@ -54,6 +52,12 @@ const MobileDrawerGrabber = styled.div`
   height: 4px;
   border-radius: 999px;
   background: ${getColor('foregroundSuper')};
+`
+
+const MobileDrawerContent = styled(VStack)`
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 `
 
 const MobileBackdrop = styled.div`
@@ -89,6 +93,7 @@ export const ResponsiveModal = ({
 }: ResponsiveModalProps) => {
   const isTabletAndUp = useIsTabletDeviceAndUp()
   const drawerRef = useRef<HTMLDivElement | null>(null)
+  const drawerContentRef = useRef<HTMLDivElement | null>(null)
   const dragStartYRef = useRef<number | null>(null)
   const [translateY, setTranslateY] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
@@ -113,11 +118,11 @@ export const ResponsiveModal = ({
   }
 
   const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
-    const drawer = shouldBePresent(
-      drawerRef.current,
-      'ResponsiveModal MobileDrawer'
+    const drawerContent = shouldBePresent(
+      drawerContentRef.current,
+      'ResponsiveModal MobileDrawerContent'
     )
-    if (drawer.scrollTop !== 0) return
+    if (drawerContent.scrollTop !== 0) return
 
     dragStartYRef.current = event.clientY
     setIsDragging(true)
@@ -163,13 +168,12 @@ export const ResponsiveModal = ({
         <MobileDrawer
           ref={drawerRef}
           style={{
-            ...containerStyles,
             transform: `translate3d(0, ${translateY}px, 0)`,
             transition: isDragging ? 'none' : 'transform 180ms ease',
             willChange: 'transform',
           }}
           onClick={e => e.stopPropagation()}
-          gap={24}
+          gap={0}
         >
           <MobileDrawerHeader
             onPointerDown={handlePointerDown}
@@ -179,7 +183,13 @@ export const ResponsiveModal = ({
           >
             <MobileDrawerGrabber />
           </MobileDrawerHeader>
-          {children}
+          <MobileDrawerContent
+            ref={drawerContentRef}
+            style={containerStyles}
+            gap={24}
+          >
+            {children}
+          </MobileDrawerContent>
         </MobileDrawer>
       </MobileBackdrop>
     </BodyPortal>
