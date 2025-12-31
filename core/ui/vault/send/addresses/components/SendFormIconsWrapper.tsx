@@ -1,4 +1,3 @@
-import { borderRadius } from '@lib/ui/css/borderRadius'
 import { HStack } from '@lib/ui/layout/Stack'
 import styled from 'styled-components'
 
@@ -9,7 +8,6 @@ export const SendFormIconsWrapper = styled(HStack)`
 export const SendFormCheckBadge = styled.div`
   width: 16px;
   height: 16px;
-  ${borderRadius.l};
   border-radius: 50%;
   border: 0.6667px solid #13c89d;
   background: #042436;
