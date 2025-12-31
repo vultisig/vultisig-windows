@@ -53,7 +53,7 @@ export const EnterSeedphraseStep = ({ onFinish }: OnFinishProp) => {
       </VStack>
 
       <VStack flexGrow justifyContent="flex-end" fullWidth>
-        <Button onClick={onFinish} disabled={!isValid}>
+        <Button type="submit" onClick={onFinish} disabled={error || undefined}>
           {t('import')}
         </Button>
       </VStack>
