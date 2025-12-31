@@ -113,7 +113,10 @@ export const ResponsiveModal = ({
   }
 
   const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
-    const drawer = shouldBePresent(drawerRef.current, 'ResponsiveModal MobileDrawer')
+    const drawer = shouldBePresent(
+      drawerRef.current,
+      'ResponsiveModal MobileDrawer'
+    )
     if (drawer.scrollTop !== 0) return
 
     dragStartYRef.current = event.clientY
@@ -136,7 +139,10 @@ export const ResponsiveModal = ({
   const handlePointerEnd = () => {
     if (!isDragging) return
 
-    const drawer = shouldBePresent(drawerRef.current, 'ResponsiveModal MobileDrawer')
+    const drawer = shouldBePresent(
+      drawerRef.current,
+      'ResponsiveModal MobileDrawer'
+    )
     const drawerHeight = drawer.getBoundingClientRect().height
     const closeThreshold = Math.max(120, drawerHeight * 0.25)
 
