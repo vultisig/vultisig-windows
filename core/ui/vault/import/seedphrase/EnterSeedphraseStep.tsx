@@ -82,20 +82,27 @@ export const EnterSeedphraseStep = ({ onFinish }: OnFinishProp) => {
         </VStack>
       </VStack>
 
-      <SeedphraseTextArea
-        value={mnemonic}
-        onChange={setMnemonic}
-        placeholder={t('mnemonic_placeholder')}
-        validation={
-          validMnemonic === true
-            ? 'valid'
-            : validMnemonic === false && errorMessage
-              ? 'invalid'
-              : 'idle'
-        }
-        wordCount={wordCountAccessory}
-        error={errorMessage}
-      />
+      {validMnemonic === true ? (
+        <SeedphraseTextArea
+          value={mnemonic}
+          onChange={setMnemonic}
+          wordCount={wordCountAccessory}
+          isValid
+        />
+      ) : validMnemonic === false && errorMessage ? (
+        <SeedphraseTextArea
+          value={mnemonic}
+          onChange={setMnemonic}
+          wordCount={wordCountAccessory}
+          error={errorMessage}
+        />
+      ) : (
+        <SeedphraseTextArea
+          value={mnemonic}
+          onChange={setMnemonic}
+          wordCount={wordCountAccessory}
+        />
+      )}
 
       <VStack flexGrow justifyContent="flex-end" fullWidth>
         <Button onClick={onFinish} disabled={!validMnemonic}>

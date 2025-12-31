@@ -1,18 +1,20 @@
 import { textInput } from '@lib/ui/css/textInput'
 import { VStack } from '@lib/ui/layout/Stack'
+import { InputProps } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { ChangeEvent, forwardRef } from 'react'
+import { match } from '@lib/utils/match'
+import { Ref } from 'react'
 import styled, { css } from 'styled-components'
 
-type SeedphraseTextAreaProps = {
-  value: string
-  onChange: (value: string) => void
-  validation?: 'valid' | 'invalid' | 'idle'
-  placeholder?: string
+type SeedphraseTextAreaProps = InputProps<string> & {
   wordCount?: string
-  error?: string
-}
+  ref?: Ref<HTMLTextAreaElement>
+} & (
+    | { error: string; isValid?: never }
+    | { isValid: true; error?: never }
+    | { isValid?: never; error?: never }
+  )
 
 const Container = styled(VStack)`
   position: relative;
@@ -30,26 +32,26 @@ const TextArea = styled.textarea<{
   line-height: 1.5;
   text-transform: lowercase;
 
-  ${({ validation }) =>
-    validation === 'valid'
-      ? css`
+  ${({ validation = 'idle' }) =>
+    match(validation, {
+      valid: () => css`
+        border-color: ${getColor('primary')};
+        &:focus,
+        &:hover {
           border-color: ${getColor('primary')};
-          &:focus,
-          &:hover {
-            border-color: ${getColor('primary')};
-          }
-        `
-      : validation === 'invalid'
-        ? css`
-            border-color: ${getColor('danger')};
-            &:focus,
-            &:hover {
-              border-color: ${getColor('danger')};
-            }
-          `
-        : css`
-            border-color: transparent;
-          `}
+        }
+      `,
+      invalid: () => css`
+        border-color: ${getColor('danger')};
+        &:focus,
+        &:hover {
+          border-color: ${getColor('danger')};
+        }
+      `,
+      idle: () => css`
+        border-color: transparent;
+      `,
+    })}
 `
 
 const WordCount = styled(Text)`
@@ -59,13 +61,15 @@ const WordCount = styled(Text)`
   pointer-events: none;
 `
 
-export const SeedphraseTextArea = forwardRef<
-  HTMLTextAreaElement,
-  SeedphraseTextAreaProps
->(({ value, onChange, validation, placeholder, wordCount, error }, ref) => {
-  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    onChange(event.target.value)
-  }
+export const SeedphraseTextArea = ({
+  value,
+  onChange,
+  wordCount,
+  error,
+  isValid,
+  ref,
+}: SeedphraseTextAreaProps) => {
+  const validation = isValid ? 'valid' : error ? 'invalid' : 'idle'
 
   return (
     <VStack gap={8}>
@@ -73,9 +77,8 @@ export const SeedphraseTextArea = forwardRef<
         <TextArea
           ref={ref}
           value={value}
-          onChange={handleChange}
+          onChange={event => onChange(event.target.value)}
           validation={validation}
-          placeholder={placeholder}
           autoComplete="off"
           autoCorrect="off"
           autoCapitalize="none"
@@ -94,6 +97,4 @@ export const SeedphraseTextArea = forwardRef<
       )}
     </VStack>
   )
-})
-
-SeedphraseTextArea.displayName = 'SeedphraseTextArea'
+}
