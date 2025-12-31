@@ -11,7 +11,10 @@ import { SendInputContainer } from '../../components/SendInputContainer'
 import { useSendValidationQuery } from '../../queries/useSendValidationQuery'
 import { useSendFormFieldState } from '../../state/formFields'
 import { useSendReceiver } from '../../state/receiver'
-import { SendFormIconsWrapper } from './SendFormIconsWrapper'
+import {
+  SendFormCheckBadge,
+  SendFormIconsWrapper,
+} from './SendFormIconsWrapper'
 
 export const ManageAddressesInputFieldCollapsed = () => {
   const { t } = useTranslation()
@@ -43,7 +46,11 @@ export const ManageAddressesInputFieldCollapsed = () => {
         </Text>
       </HStack>
       <SendFormIconsWrapper gap={12}>
-        {isChecked && <CheckmarkIcon />}
+        {isChecked && (
+          <SendFormCheckBadge>
+            <CheckmarkIcon />
+          </SendFormCheckBadge>
+        )}
         {!isOpen && (
           <PencilIconWrapper>
             <PencilIcon />
