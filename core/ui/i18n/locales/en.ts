@@ -516,6 +516,14 @@ export const en = {
   import_failed: 'QR code invalid, please retry',
   import_key: 'Import Key',
   import_seedphrase: 'Import seedphrase',
+  enter_your_seedphrase: 'Enter your seed phrase',
+  enter_seedphrase_subtitle:
+    'Leave a space between each word. Seed phrases of <h>12 or 24 words</h> are supported.',
+  mnemonic_placeholder: 'Enter the 12 or 24 words of your seedphrase',
+  seedphrase_word_count_error:
+    'You entered {{count}} words. Seed phrase must be 12 or 24',
+  seedphrase_invalid_error:
+    'Seed phrase is not correct, please verify all words.',
   import_seedphrase_description: 'Enter it, create a vault, never look back.',
   import_seedphrase_onboarding_title:
     'You are entering a new era, <g>leaving old seed phrases behind.</g> You’ll need:',
