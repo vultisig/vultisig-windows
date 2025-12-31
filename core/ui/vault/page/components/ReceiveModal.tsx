@@ -212,7 +212,7 @@ export const ReceiveModal = ({ onClose }: OnCloseProp) => {
     <ResponsiveModal
       isOpen
       onClose={onClose}
-      containerStyles={{ padding: '32px 24px 40px' }}
+      containerStyles={{ padding: '10px 24px 40px' }}
       modalProps={{ withDefaultStructure: false }}
     >
       {isTabletAndUp ? (

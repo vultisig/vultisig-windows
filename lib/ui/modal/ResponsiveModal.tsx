@@ -155,6 +155,7 @@ export const ResponsiveModal = ({
     setIsDragging(false)
 
     if (translateY > closeThreshold) {
+      setTranslateY(0)
       onClose()
       return
     }

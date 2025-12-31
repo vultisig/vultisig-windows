@@ -23,6 +23,7 @@ const Container = styled(FocusLock)<ContainerProps>`
   ${vStack()};
 
   max-height: 100%;
+  min-height: 0;
   background: ${getColor('background')};
   border: 1px solid ${getColor('mistExtra')};
 
@@ -40,7 +41,8 @@ const Container = styled(FocusLock)<ContainerProps>`
         `
       : takeWholeSpace};
 
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 `
 
 type ModalContainerProps = {
