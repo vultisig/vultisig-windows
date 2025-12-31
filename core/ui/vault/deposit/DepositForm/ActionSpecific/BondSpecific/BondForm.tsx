@@ -208,7 +208,7 @@ export const BondForm = ({
                 </Text>
               </HStack>
               <SendFormIconsWrapper gap={12}>
-                {isAddressComplete && !isAddressOpen && <CheckmarkIcon />}
+                {isAddressComplete && !isAddressOpen && <GreenCheckIcon />}
                 {!isAddressOpen && (
                   <PencilIconWrapper>
                     <PencilIcon />
@@ -393,7 +393,7 @@ export const BondForm = ({
                 </Text>
               </HStack>
               <SendFormIconsWrapper gap={12}>
-                {isAmountComplete && !isAmountOpen && <CheckmarkIcon />}
+                {isAmountComplete && !isAmountOpen && <GreenCheckIcon />}
                 {!isAmountOpen && (
                   <PencilIconWrapper>
                     <PencilIcon />
@@ -528,6 +528,10 @@ const ExpandableHeader = styled(HStack)`
 const GasAmountText = styled(Text)`
   ${brockmannMedium};
   color: ${getColor('text')};
+`
+
+const GreenCheckIcon = styled(CheckmarkIcon)`
+  color: ${getColor('success')};
 `
 
 type BondSection = 'address' | 'amount'
