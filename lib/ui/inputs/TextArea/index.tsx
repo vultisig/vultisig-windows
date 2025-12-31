@@ -1,15 +1,14 @@
 import { textInput } from '@lib/ui/css/textInput'
 import { VStack } from '@lib/ui/layout/Stack'
-import { InputProps } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { ReactNode } from 'react'
+import { ComponentProps, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
-type TextAreaProps = InputProps<string> & {
+type TextAreaProps = ComponentProps<'textarea'> & {
+  onValueChange?: (value: string) => void
   validation?: 'valid' | 'invalid'
   accessory?: ReactNode
-  placeholder?: string
 }
 
 const Container = styled(VStack)`
@@ -56,10 +55,9 @@ const AccessoryWr = styled(Text)`
 
 export const TextArea = ({
   value,
-  onChange,
+  onValueChange,
   validation,
   accessory,
-  placeholder,
   ...props
 }: TextAreaProps) => {
   return (
@@ -67,9 +65,11 @@ export const TextArea = ({
       <TextAreaInput
         {...props}
         value={value}
-        onChange={event => onChange(event.target.value)}
+        onChange={event => {
+          props.onChange?.(event)
+          onValueChange?.(event.target.value)
+        }}
         validation={validation}
-        placeholder={placeholder}
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="none"

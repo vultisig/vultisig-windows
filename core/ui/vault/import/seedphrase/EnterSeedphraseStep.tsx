@@ -6,61 +6,28 @@ import { TextArea } from '@lib/ui/inputs/TextArea'
 import { VStack } from '@lib/ui/layout/Stack'
 import { OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { isOneOf } from '@lib/utils/array/isOneOf'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
 import { seedphraseWordCounts } from './config'
 import { useMnemonic } from './state/mnemonic'
-
-const cleanMnemonic = (text: string) =>
-  text.split(/\s+/).filter(Boolean).join(' ')
+import { cleanMnemonic, validateMnemonic } from './validateMnemonic'
 
 export const EnterSeedphraseStep = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
   const [mnemonic, setMnemonic] = useMnemonic()
   const walletCore = useAssertWalletCore()
 
-  const [validMnemonic, setValidMnemonic] = useState<boolean | null>(null)
-  const [errorMessage, setErrorMessage] = useState<string | undefined>()
+  const [isTouched, setIsTouched] = useState(false)
+
+  const error = validateMnemonic({ mnemonic, walletCore, t })
+  const isValid = mnemonic.trim() !== '' && !error
 
   const words = cleanMnemonic(mnemonic).split(' ')
   const wordsCount = mnemonic.trim() === '' ? 0 : words.length
   const [minWordCount, maxWordCount] = seedphraseWordCounts
   const maxWords = wordsCount > minWordCount ? maxWordCount : minWordCount
   const accessory = `${wordsCount}/${maxWords}`
-
-  useEffect(() => {
-    const cleaned = cleanMnemonic(mnemonic)
-
-    if (cleaned === '') {
-      setValidMnemonic(null)
-      setErrorMessage(undefined)
-      return
-    }
-
-    const words = cleaned.split(' ')
-    const count = words.length
-
-    setValidMnemonic(false)
-    setErrorMessage(undefined)
-
-    const timeoutId = setTimeout(() => {
-      if (!isOneOf(count, seedphraseWordCounts)) {
-        setErrorMessage(t('seedphrase_word_count_error', { count }))
-        return
-      }
-
-      if (!walletCore.Mnemonic.isValid(cleaned)) {
-        setErrorMessage(t('seedphrase_invalid_error'))
-        return
-      }
-
-      setValidMnemonic(true)
-    }, 500)
-
-    return () => clearTimeout(timeoutId)
-  }, [mnemonic, t, walletCore])
 
   return (
     <VStack gap={32} alignItems="center" flexGrow>
@@ -88,27 +55,24 @@ export const EnterSeedphraseStep = ({ onFinish }: OnFinishProp) => {
       <VStack gap={8}>
         <TextArea
           value={mnemonic}
-          onChange={setMnemonic}
+          onValueChange={setMnemonic}
+          onBlur={() => setIsTouched(true)}
           accessory={accessory}
           validation={
-            validMnemonic === true
-              ? 'valid'
-              : errorMessage
-                ? 'invalid'
-                : undefined
+            isValid ? 'valid' : isTouched && error ? 'invalid' : undefined
           }
           placeholder={t('mnemonic_placeholder')}
         />
 
-        {errorMessage && (
+        {isTouched && error && (
           <Text size={13} color="danger">
-            {errorMessage}
+            {error}
           </Text>
         )}
       </VStack>
 
       <VStack flexGrow justifyContent="flex-end" fullWidth>
-        <Button onClick={onFinish} disabled={!validMnemonic}>
+        <Button onClick={onFinish} disabled={!isValid}>
           {t('import')}
         </Button>
       </VStack>
