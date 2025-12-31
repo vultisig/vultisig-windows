@@ -25,7 +25,6 @@ const TextAreaInput = styled.textarea<{
   resize: none;
   padding: 16px;
   line-height: 1.5;
-  text-transform: lowercase;
 
   ${({ validation }) =>
     validation === 'valid'

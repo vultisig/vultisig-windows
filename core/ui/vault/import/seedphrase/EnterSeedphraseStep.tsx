@@ -29,7 +29,7 @@ export const EnterSeedphraseStep = ({ onFinish }: OnFinishProp) => {
   const accessory = `${wordsCount}/${maxWords}`
 
   return (
-    <VStack gap={32} alignItems="center" flexGrow>
+    <VStack gap={32} flexGrow>
       <EnterSeedphraseHeader />
 
       <VStack gap={8}>
