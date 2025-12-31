@@ -1,4 +1,3 @@
-import { isValidMnemonic } from '@core/chain/utils/isValidMnemonic'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { Button } from '@lib/ui/buttons/Button'
 import { GlowIcon } from '@lib/ui/icons/GlowIcon'
@@ -49,7 +48,7 @@ export const EnterSeedphraseStep = ({ onFinish }: OnFinishProp) => {
         return
       }
 
-      if (!isValidMnemonic({ mnemonic: cleaned, walletCore })) {
+      if (!walletCore.Mnemonic.isValid(cleaned)) {
         setErrorMessage(t('seedphrase_invalid_error'))
         return
       }
