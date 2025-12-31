@@ -18,7 +18,7 @@ export const AddressQRModal = ({
   onClose,
 }: AddressQRModalProps) => {
   return (
-    <ResponsiveModal isOpen onClose={onClose}>
+    <ResponsiveModal grabbable isOpen onClose={onClose}>
       <MobilePaddedContent>
         <AddressQRCard chain={chain} coin={coin} />
       </MobilePaddedContent>

@@ -210,6 +210,7 @@ export const ReceiveModal = ({ onClose }: OnCloseProp) => {
 
   return (
     <ResponsiveModal
+      grabbable
       isOpen
       onClose={onClose}
       containerStyles={{ padding: '10px 24px 40px' }}

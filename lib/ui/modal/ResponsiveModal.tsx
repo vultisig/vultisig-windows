@@ -18,6 +18,7 @@ type ResponsiveModalProps = {
   title?: ReactNode
   modalProps?: Partial<ModalProps>
   containerStyles?: React.CSSProperties
+  grabbable?: boolean
 }
 
 const MobileDrawer = styled(VStack)`
@@ -57,6 +58,7 @@ const MobileDrawerGrabber = styled.div`
 const MobileDrawerContent = styled(VStack)`
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   overscroll-behavior: contain;
 `
 
@@ -90,6 +92,7 @@ export const ResponsiveModal = ({
   title,
   modalProps,
   containerStyles,
+  grabbable = false,
 }: ResponsiveModalProps) => {
   const isTabletAndUp = useIsTabletDeviceAndUp()
   const drawerRef = useRef<HTMLDivElement | null>(null)
@@ -176,14 +179,16 @@ export const ResponsiveModal = ({
           onClick={e => e.stopPropagation()}
           gap={0}
         >
-          <MobileDrawerHeader
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerEnd}
-            onPointerCancel={handlePointerEnd}
-          >
-            <MobileDrawerGrabber />
-          </MobileDrawerHeader>
+          {grabbable && (
+            <MobileDrawerHeader
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerEnd}
+              onPointerCancel={handlePointerEnd}
+            >
+              <MobileDrawerGrabber />
+            </MobileDrawerHeader>
+          )}
           <MobileDrawerContent
             ref={drawerContentRef}
             style={containerStyles}

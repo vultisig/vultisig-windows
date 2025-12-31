@@ -29,6 +29,7 @@ export const CoinDetailModal = ({ coin, onClose }: CoinDetailModalProps) => {
 
   return (
     <ResponsiveModal
+      grabbable
       isOpen
       onClose={onClose}
       modalProps={{
