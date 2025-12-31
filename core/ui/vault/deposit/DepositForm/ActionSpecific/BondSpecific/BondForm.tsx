@@ -208,7 +208,11 @@ export const BondForm = ({
                 </Text>
               </HStack>
               <SendFormIconsWrapper gap={12}>
-                {isAddressComplete && !isAddressOpen && <GreenCheckIcon />}
+                {isAddressComplete && !isAddressOpen && (
+                  <CheckBadge>
+                    <CheckmarkIcon />
+                  </CheckBadge>
+                )}
                 {!isAddressOpen && (
                   <PencilIconWrapper>
                     <PencilIcon />
@@ -393,7 +397,11 @@ export const BondForm = ({
                 </Text>
               </HStack>
               <SendFormIconsWrapper gap={12}>
-                {isAmountComplete && !isAmountOpen && <GreenCheckIcon />}
+                {isAmountComplete && !isAmountOpen && (
+                  <CheckBadge>
+                    <CheckmarkIcon />
+                  </CheckBadge>
+                )}
                 {!isAmountOpen && (
                   <PencilIconWrapper>
                     <PencilIcon />
@@ -530,8 +538,18 @@ const GasAmountText = styled(Text)`
   color: ${getColor('text')};
 `
 
-const GreenCheckIcon = styled(CheckmarkIcon)`
-  color: ${getColor('success')};
+const CheckBadge = styled.div`
+  width: 16px;
+  height: 16px;
+  ${borderRadius.l};
+  border-radius: 50%;
+  border: 0.6667px solid #13c89d;
+  background: #042436;
+  color: #13c89d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
 `
 
 type BondSection = 'address' | 'amount'
