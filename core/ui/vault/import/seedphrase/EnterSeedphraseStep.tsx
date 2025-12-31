@@ -6,9 +6,11 @@ import { TextArea } from '@lib/ui/inputs/TextArea'
 import { VStack } from '@lib/ui/layout/Stack'
 import { OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
+import { isOneOf } from '@lib/utils/array/isOneOf'
 import { useEffect, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
+import { seedphraseWordCounts } from './config'
 import { useMnemonic } from './state/mnemonic'
 
 const cleanMnemonic = (text: string) =>
@@ -24,7 +26,8 @@ export const EnterSeedphraseStep = ({ onFinish }: OnFinishProp) => {
 
   const words = cleanMnemonic(mnemonic).split(' ')
   const wordsCount = mnemonic.trim() === '' ? 0 : words.length
-  const maxWords = wordsCount > 12 ? 24 : 12
+  const [minWordCount, maxWordCount] = seedphraseWordCounts
+  const maxWords = wordsCount > minWordCount ? maxWordCount : minWordCount
   const accessory = `${wordsCount}/${maxWords}`
 
   useEffect(() => {
@@ -43,7 +46,7 @@ export const EnterSeedphraseStep = ({ onFinish }: OnFinishProp) => {
     setErrorMessage(undefined)
 
     const timeoutId = setTimeout(() => {
-      if (![12, 24].includes(count)) {
+      if (!isOneOf(count, seedphraseWordCounts)) {
         setErrorMessage(t('seedphrase_word_count_error', { count }))
         return
       }
