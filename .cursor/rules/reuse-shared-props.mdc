@@ -6,13 +6,13 @@ alwaysApply: false
 
 # Reuse Shared Props
 
-USE shared prop types from `@/shared/types/Props` WHEN defining component props with common fields like `label`, `value`, `children`, `title`, `icon`, `onClick`, etc.
+USE shared prop types from `@lib/ui/props` WHEN defining component props with common fields like `label`, `value`, `children`, `title`, `icon`, `onClick`, etc.
 
 ## Example
 
 ```tsx
 // ✅ Good: Reuse shared props
-import { LabelProp, ValueProp } from '@/shared/types/Props'
+import { LabelProp, ValueProp } from '@lib/ui/props'
 
 type MyComponentProps = LabelProp & ValueProp<number>
 
