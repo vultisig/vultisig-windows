@@ -1,5 +1,4 @@
 import { WaitForServerStep } from '@core/ui/mpc/fast/WaitForServerStep'
-import { ServerPasswordStep } from '@core/ui/mpc/keygen/create/fast/server/password/ServerPasswordStep'
 import { FastKeysignServerStep } from '@core/ui/mpc/keysign/fast/FastKeysignServerStep'
 import { KeysignSigningStep } from '@core/ui/mpc/keysign/KeysignSigningStep'
 import { KeysignActionProviderProp } from '@core/ui/mpc/keysign/start/KeysignActionProviderProp'
@@ -10,6 +9,7 @@ import { useCore } from '@core/ui/state/core'
 import { Match } from '@lib/ui/base/Match'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 import { KeysignMessagePayloadProvider } from '../state/keysignMessagePayload'
 
@@ -19,7 +19,7 @@ export const StartFastKeysignFlow = ({
   keysignActionProvider: KeysignActionProvider,
 }: KeysignActionProviderProp) => {
   const { goBack } = useCore()
-  const [{ keysignPayload }] = useCoreViewState<'keysign'>()
+  const [{ keysignPayload, password }] = useCoreViewState<'keysign'>()
   const { step, toNextStep } = useStepNavigation({
     steps: keysignSteps,
     onExit: goBack,
@@ -29,12 +29,9 @@ export const StartFastKeysignFlow = ({
     <Match
       value={step}
       server={() => (
-        <ValueTransfer<{ password: string }>
-          from={({ onFinish }) => <ServerPasswordStep onFinish={onFinish} />}
-          key="password"
-          to={({ value: { password } }) => (
-            <FastKeysignServerStep onFinish={toNextStep} password={password} />
-          )}
+        <FastKeysignServerStep
+          onFinish={toNextStep}
+          password={shouldBePresent(password)}
         />
       )}
       keysign={() => (

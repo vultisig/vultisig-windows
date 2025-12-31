@@ -21,5 +21,14 @@
     "react-circular-progressbar": "^2.2.0",
     "styled-components": "^6.1.19",
     "zxing-wasm": "2.2.4"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "@vitejs/plugin-react": "^5.1.2",
+    "vite": "^7.3.0",
+    "vite-plugin-node-polyfills": "^0.24.0",
+    "vite-plugin-static-copy": "^3.1.4",
+    "vite-plugin-top-level-await": "^1.6.0",
+    "vite-plugin-wasm": "^3.5.0"
   }
 }

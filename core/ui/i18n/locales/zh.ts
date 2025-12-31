@@ -208,6 +208,7 @@ export const zh = {
   allowance_amount: '津贴金额',
   allowance_spender: '零用钱支出者',
   amount: '数量',
+  amount_must_be_non_negative: '金额不能为负数。',
   amount_must_be_positive: '金额必须为正数。',
   amount_required: '所需金额',
   amount_to_unstake: '解除质押金额',
