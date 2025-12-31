@@ -1,9 +1,8 @@
 import { Chain } from '@core/chain/Chain'
 import { CoinKey } from '@core/chain/coin/Coin'
-import { ResponsiveModal } from '@lib/ui/modal/ResponsiveModal'
+import { AddressQRCard } from '@core/ui/vault/chain/address/AddressQRCard'
+import { Modal } from '@lib/ui/modal'
 import { OnCloseProp } from '@lib/ui/props'
-
-import { AddressQRCard } from './AddressQRCard'
 
 type AddressQRModalProps = {
   chain: Chain
@@ -16,8 +15,8 @@ export const AddressQRModal = ({
   onClose,
 }: AddressQRModalProps) => {
   return (
-    <ResponsiveModal isOpen onClose={onClose}>
+    <Modal onClose={onClose} isOpen>
       <AddressQRCard chain={chain} coin={coin} />
-    </ResponsiveModal>
+    </Modal>
   )
 }
