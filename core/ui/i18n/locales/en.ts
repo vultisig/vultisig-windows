@@ -32,6 +32,7 @@ export const en = {
   allowance_amount: 'Allowance amount',
   allowance_spender: 'Allowance spender',
   amount: 'Amount',
+  amount_must_be_non_negative: 'Amount must be non-negative',
   amount_must_be_positive: 'Amount must be positive',
   amount_required: 'Amount is required',
   amount_to_unstake: 'Amount to unstake',
@@ -49,11 +50,14 @@ export const en = {
   asset: 'Asset',
   asset_selection: 'Asset selection',
   assets: 'assets',
+  at_least_one_device: 'At least one device',
+  at_least_one_device_subtitle: 'Any device that can run Vultisig will work.',
   auto: 'auto',
   auto_compound_into_label: 'Auto-compound into {{ticker}}',
   available: 'Available',
   back: 'Back',
   back_up_now: 'Back Up Now',
+  before_you_start: 'Before you start...',
   backup: 'Backup',
   backupGuide: 'Backup guide',
   backupShare: 'Backup Vault Share',
@@ -377,6 +381,8 @@ export const en = {
   faq_vultisig_make_money_title: 'How is Vultisig used?',
   fast: 'Fast',
   fastVault: 'Fast Vault',
+  fast_vault_password_start_keysign_description:
+    'Confirm the transaction by entering the password of your server share.',
   fastVaultSetup: {
     addOptionalHint: 'Add an optional hint',
     backup: {
@@ -514,6 +520,8 @@ export const en = {
   import_key: 'Import Key',
   import_seedphrase: 'Import seedphrase',
   import_seedphrase_description: 'Enter it, create a vault, never look back.',
+  import_seedphrase_onboarding_title:
+    'You are entering a new era, <g>leaving old seed phrases behind.</g> You’ll need:',
   import_successed: 'Imported successfully',
   import_vault: 'Import Vault',
   import_vault_share: 'Import vault share',
@@ -1306,6 +1314,8 @@ export const en = {
   your_friends_referral_code: 'Your friends referral code',
   your_referral_code: 'Your Referral Code',
   your_referrals: 'Your Referrals',
+  your_seedphrase: 'Your seedphrase',
+  your_seedphrase_subtitle: 'Enter it, create a vault, never look back',
   youre_swapping: "You're swapping",
   account: 'Account',
 }

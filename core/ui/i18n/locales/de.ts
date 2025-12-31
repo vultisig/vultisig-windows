@@ -223,6 +223,7 @@ export const de = {
   allowance_amount: 'Zulagebetrag',
   allowance_spender: 'Taschengeldausgeber',
   amount: 'Menge',
+  amount_must_be_non_negative: 'Der Betrag darf nicht negativ sein.',
   amount_must_be_positive: 'Der Betrag muss positiv sein.',
   amount_required: 'Es wird ein bestimmter Betrag benötigt.',
   amount_to_unstake: 'Abzulösender Betrag',

@@ -219,6 +219,7 @@ export const pt = {
   allowance_amount: 'Valor do subsídio',
   allowance_spender: 'gastador de mesada',
   amount: 'Quantia',
+  amount_must_be_non_negative: 'O valor não pode ser negativo.',
   amount_must_be_positive: 'O valor deve ser positivo.',
   amount_required: 'É necessário informar o valor.',
   amount_to_unstake: 'Valor a retirar da aposta',
