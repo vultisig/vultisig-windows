@@ -62,6 +62,10 @@ export const TextArea = ({
   return (
     <Container>
       <TextAreaInput
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="none"
+        spellCheck={false}
         {...props}
         value={value}
         onChange={event => {
@@ -69,10 +73,6 @@ export const TextArea = ({
           onValueChange?.(event.target.value)
         }}
         validation={validation}
-        autoComplete="off"
-        autoCorrect="off"
-        autoCapitalize="none"
-        spellCheck={false}
       />
       {accessory && (
         <AccessoryWr size={12} color="shy">
