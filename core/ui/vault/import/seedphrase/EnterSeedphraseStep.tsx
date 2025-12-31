@@ -2,13 +2,13 @@ import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider
 import { Button } from '@lib/ui/buttons/Button'
 import { GlowIcon } from '@lib/ui/icons/GlowIcon'
 import { SeedphraseIcon } from '@lib/ui/icons/SeedphraseIcon'
+import { TextArea } from '@lib/ui/inputs/TextArea'
 import { VStack } from '@lib/ui/layout/Stack'
 import { OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { useEffect, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
-import { SeedphraseTextArea } from './components/SeedphraseTextArea'
 import { useMnemonic } from './state/mnemonic'
 
 const cleanMnemonic = (text: string) =>
@@ -25,7 +25,7 @@ export const EnterSeedphraseStep = ({ onFinish }: OnFinishProp) => {
   const words = cleanMnemonic(mnemonic).split(' ')
   const wordsCount = mnemonic.trim() === '' ? 0 : words.length
   const maxWords = wordsCount > 12 ? 24 : 12
-  const wordCountAccessory = `${wordsCount}/${maxWords}`
+  const accessory = `${wordsCount}/${maxWords}`
 
   useEffect(() => {
     const cleaned = cleanMnemonic(mnemonic)
@@ -82,27 +82,27 @@ export const EnterSeedphraseStep = ({ onFinish }: OnFinishProp) => {
         </VStack>
       </VStack>
 
-      {validMnemonic === true ? (
-        <SeedphraseTextArea
+      <VStack gap={8}>
+        <TextArea
           value={mnemonic}
           onChange={setMnemonic}
-          wordCount={wordCountAccessory}
-          isValid
+          accessory={accessory}
+          validation={
+            validMnemonic === true
+              ? 'valid'
+              : errorMessage
+                ? 'invalid'
+                : undefined
+          }
+          placeholder={t('mnemonic_placeholder')}
         />
-      ) : validMnemonic === false && errorMessage ? (
-        <SeedphraseTextArea
-          value={mnemonic}
-          onChange={setMnemonic}
-          wordCount={wordCountAccessory}
-          error={errorMessage}
-        />
-      ) : (
-        <SeedphraseTextArea
-          value={mnemonic}
-          onChange={setMnemonic}
-          wordCount={wordCountAccessory}
-        />
-      )}
+
+        {errorMessage && (
+          <Text size={13} color="danger">
+            {errorMessage}
+          </Text>
+        )}
+      </VStack>
 
       <VStack flexGrow justifyContent="flex-end" fullWidth>
         <Button onClick={onFinish} disabled={!validMnemonic}>
