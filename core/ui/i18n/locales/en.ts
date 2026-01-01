@@ -19,6 +19,9 @@ export const en = {
   address_book_empty: 'Your Address Book is empty',
   address_book_empty_instruction:
     'Click "Add Address" to add your favorite addresses',
+  address_book_no_eligible_addresses_title: 'No saved addresses for {{chain}}',
+  address_book_no_eligible_addresses_description:
+    'Saved addresses must match the chain you are sending on.',
   address_book_saved: 'Saved Addresses',
   address_book_vault: 'My Vaults',
   adjust_search_query: 'Try adjusting your search criteria',
