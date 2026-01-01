@@ -28,6 +28,14 @@ export const OnboardingSteps: FC<OnFinishProp & OnBackProp> = ({
     isLoading,
   } = useOnboardingStepsAnimations()
 
+  const handleBack = () => {
+    if (!currentAnimation || currentAnimation === 1) {
+      onBack()
+    } else {
+      handlePrevAnimation()
+    }
+  }
+
   return (
     <Layout>
       <HeaderSection gap={16}>
@@ -35,7 +43,7 @@ export const OnboardingSteps: FC<OnFinishProp & OnBackProp> = ({
           <StyledButton
             icon={<ChevronLeftIcon fontSize={18} />}
             kind="link"
-            onClick={!currentAnimation ? onBack : handlePrevAnimation}
+            onClick={handleBack}
             size="sm"
           >
             {t('back')}

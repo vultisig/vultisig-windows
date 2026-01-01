@@ -9,7 +9,7 @@ import {
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { OnFinishProp } from '@lib/ui/props'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { useIsTabletDeviceAndUp } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
 import { useMutation } from '@tanstack/react-query'
@@ -19,7 +19,10 @@ import { useTranslation } from 'react-i18next'
 const onCompleteDelay = 1000
 const emailConfirmationCodeLength = 4
 
-export const EmailConfirmation = ({ onFinish }: OnFinishProp) => {
+export const EmailConfirmation = ({
+  onFinish,
+  onBack,
+}: OnFinishProp & OnBackProp) => {
   const [input, setInput] = useState<string | null>('')
 
   const { t } = useTranslation()
@@ -62,7 +65,7 @@ export const EmailConfirmation = ({ onFinish }: OnFinishProp) => {
   return (
     <VStack fullHeight>
       <PageHeader
-        primaryControls={<PageHeaderBackButton />}
+        primaryControls={<PageHeaderBackButton onClick={onBack} />}
         title={t('email')}
         hasBorder
       />
