@@ -47,6 +47,7 @@ export type CoreView =
       state: {
         securityType: VaultSecurityType
         keysignPayload: KeysignMessagePayload
+        password?: string
       }
     }
   | { id: 'languageSettings' }

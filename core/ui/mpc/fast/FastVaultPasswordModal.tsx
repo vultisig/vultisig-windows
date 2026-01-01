@@ -108,6 +108,7 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
         <VStack as="form" onSubmit={handleSubmit(onSubmit)} gap={16} fullWidth>
           <PasswordInput
             {...register('password')}
+            autoFocus
             placeholder={t('enter_password')}
             validation={passwordErrorMessage ? 'invalid' : undefined}
             error={passwordErrorMessage}
