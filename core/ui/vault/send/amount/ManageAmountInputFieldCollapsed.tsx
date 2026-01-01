@@ -7,7 +7,10 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { SendFormIconsWrapper } from '../addresses/components/SendFormIconsWrapper'
+import {
+  SendFormCheckBadge,
+  SendFormIconsWrapper,
+} from '../addresses/components/SendFormIconsWrapper'
 import { SendInputContainer } from '../components/SendInputContainer'
 import { useSendValidationQuery } from '../queries/useSendValidationQuery'
 import { useSendAmount } from '../state/amount'
@@ -42,7 +45,11 @@ export const ManageAmountInputFieldCollapsed = () => {
         </Text>
       </HStack>
       <SendFormIconsWrapper gap={12}>
-        {isChecked && <CheckmarkIcon />}
+        {isChecked && (
+          <SendFormCheckBadge>
+            <CheckmarkIcon />
+          </SendFormCheckBadge>
+        )}
         {!isOpen && (
           <PencilIconWrapper>
             <PencilIcon />

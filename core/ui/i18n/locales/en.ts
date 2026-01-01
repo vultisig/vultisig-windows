@@ -748,6 +748,7 @@ export const en = {
   open_desktop: 'Open Desktop',
   open_desktop_app: 'Open Desktop App',
   operator_fee: "Operator's Fee",
+  basis_points: 'Basis Points',
   optional: 'optional',
   optionalDevice: 'Optional Device',
   or: 'or',

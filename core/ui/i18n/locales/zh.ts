@@ -723,6 +723,7 @@ export const zh = {
   open_desktop: '打开桌面',
   open_desktop_app: '打开桌面应用程序',
   operator_fee: '运营商费用',
+  basis_points: '基点',
   optional: '选修的',
   optionalDevice: '可选设备',
   or: '或者',
