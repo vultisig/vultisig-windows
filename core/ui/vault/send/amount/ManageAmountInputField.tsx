@@ -18,7 +18,7 @@ import {
   AmountTextInputProps,
 } from '@lib/ui/inputs/AmountTextInput'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
-import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
 import { Text } from '@lib/ui/text'
@@ -31,6 +31,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'
+import { ActionAmountInputSurface } from '../../components/action-form/ActionAmountInputSurface'
 import { useSendValidationQuery } from '../queries/useSendValidationQuery'
 import { useSendAmount } from '../state/amount'
 import { FiatSendAmountInput } from './FiatSendAmountInput'
@@ -91,7 +92,7 @@ export const ManageAmountInputField = () => {
           <VStack flexGrow gap={8}>
             <ActionInsideInteractiveElement
               render={() => (
-                <InputWrapper>
+                <ActionAmountInputSurface>
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={currencyInputMode}
@@ -132,7 +133,7 @@ export const ManageAmountInputField = () => {
                     </motion.div>
                   </AnimatePresence>
                   <AmountInReverseCurrencyDisplay value={currencyInputMode} />
-                </InputWrapper>
+                </ActionAmountInputSurface>
               )}
               action={
                 <MatchQuery
@@ -202,29 +203,6 @@ export const ManageAmountInputField = () => {
     </SendInputContainer>
   )
 }
-
-const InputWrapper = styled.div`
-  height: 170px;
-  ${vStack({
-    justifyContent: 'center',
-    alignItems: 'center',
-  })}
-  * > input {
-    text-align: center;
-    font-size: 32px;
-    background-color: transparent;
-    border: none;
-
-    &:focus,
-    &:hover {
-      outline: none;
-    }
-
-    &::placeholder {
-      font-size: 24px;
-    }
-  }
-`
 
 const TotalBalanceWrapper = styled(HStack)`
   background-color: ${getColor('foreground')};

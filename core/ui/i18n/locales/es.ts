@@ -799,6 +799,7 @@ export const es = {
   open_desktop: 'Abrir escritorio',
   open_desktop_app: 'Abrir la aplicación de escritorio',
   operator_fee: 'Tarifa del operador',
+  basis_points: 'Puntos básicos',
   optional: 'opcional',
   optionalDevice: 'Dispositivo opcional',
   or: 'o',

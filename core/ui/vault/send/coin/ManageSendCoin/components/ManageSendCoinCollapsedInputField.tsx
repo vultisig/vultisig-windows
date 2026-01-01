@@ -7,7 +7,10 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { CoinIcon } from '../../../../../chain/coin/icon/CoinIcon'
-import { SendFormIconsWrapper } from '../../../addresses/components/SendFormIconsWrapper'
+import {
+  SendFormCheckBadge,
+  SendFormIconsWrapper,
+} from '../../../addresses/components/SendFormIconsWrapper'
 import { SendInputContainer } from '../../../components/SendInputContainer'
 import { useSendValidationQuery } from '../../../queries/useSendValidationQuery'
 import { useSendFormFieldState } from '../../../state/formFields'
@@ -44,7 +47,11 @@ export const ManageSendCoinCollapsedInputField = () => {
         </HStack>
       </HStack>
       <SendFormIconsWrapper gap={12}>
-        {isChecked && <CheckmarkIcon />}
+        {isChecked && (
+          <SendFormCheckBadge>
+            <CheckmarkIcon />
+          </SendFormCheckBadge>
+        )}
         {!isOpen && (
           <PencilIconWrapper>
             <PencilIcon />
