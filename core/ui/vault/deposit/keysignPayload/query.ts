@@ -1,3 +1,4 @@
+import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
@@ -6,7 +7,7 @@ import {
 } from '@core/ui/vault/state/currentVault'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { omit } from '@lib/utils/record/omit'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
 import { useDepositMemo } from '../hooks/useDepositMemo'
@@ -20,7 +21,9 @@ import {
   BuildDepositKeysignPayloadInput,
 } from './build'
 
-export const useDepositKeysignPayloadQuery = () => {
+export const useDepositKeysignPayloadQuery = (
+  options?: Pick<UseQueryOptions<KeysignPayload>, 'enabled'>
+) => {
   const [action] = useDepositAction()
   const depositData = useDepositData()
   const [coin] = useDepositCoin()
@@ -75,9 +78,10 @@ export const useDepositKeysignPayloadQuery = () => {
     ]
   )
 
-  return useQuery({
+  return useQuery<KeysignPayload>({
     queryKey: ['depositKeysignPayload', omit(input, 'publicKey', 'walletCore')],
     queryFn: () => buildDepositKeysignPayload(input),
     ...noRefetchQueryOptions,
+    ...options,
   })
 }

@@ -1,5 +1,6 @@
 import { ScanQrView } from '@core/ui/qr/components/ScanQrView'
 import { useCore } from '@core/ui/state/core'
+import { ActionIconButton } from '@core/ui/vault/components/action-form/ActionIconButton'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { SendInputContainer } from '@core/ui/vault/send/components/SendInputContainer'
 import { useSender } from '@core/ui/vault/send/sender/hooks/useSender'
@@ -7,7 +8,6 @@ import { useSendFormFieldState } from '@core/ui/vault/send/state/formFields'
 import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Match } from '@lib/ui/base/Match'
-import { IconButton } from '@lib/ui/buttons/IconButton'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import BookAIcon from '@lib/ui/icons/BookAIcon'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
@@ -127,7 +127,7 @@ export const ManageReceiverAddressInputField = () => {
               </VStack>
 
               <HStack justifyContent="space-between" gap={8}>
-                <StyledIconButton
+                <ActionIconButton
                   onClick={async () => {
                     const { data } = await attempt(getClipboardText)
 
@@ -137,13 +137,13 @@ export const ManageReceiverAddressInputField = () => {
                   }}
                 >
                   <PasteIcon />
-                </StyledIconButton>
-                <StyledIconButton onClick={() => setViewState('scanner')}>
+                </ActionIconButton>
+                <ActionIconButton onClick={() => setViewState('scanner')}>
                   <CameraIcon />
-                </StyledIconButton>
-                <StyledIconButton onClick={() => setViewState('addressBook')}>
+                </ActionIconButton>
+                <ActionIconButton onClick={() => setViewState('addressBook')}>
                   <BookAIcon />
-                </StyledIconButton>
+                </ActionIconButton>
               </HStack>
             </VStack>
           )}
@@ -175,17 +175,4 @@ const Input = styled(TextInput)<{
 const FixedScanQRView = styled(ScanQrView)`
   position: fixed;
   inset: 0;
-`
-
-const StyledIconButton = styled(IconButton)`
-  padding: 12px 16px;
-  width: 103px;
-  height: 46px;
-  background-color: ${getColor('foreground')};
-  border: 1px solid ${getColor('foregroundExtra')};
-  ${borderRadius.s}
-
-  &:hover {
-    background-color: ${getColor('foregroundExtra')};
-  }
 `
