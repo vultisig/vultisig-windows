@@ -2,6 +2,8 @@ import { Chain } from '@core/chain/Chain'
 import { CoinKey } from '@core/chain/coin/Coin'
 import { ResponsiveModal } from '@lib/ui/modal/ResponsiveModal'
 import { OnCloseProp } from '@lib/ui/props'
+import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
+import styled from 'styled-components'
 
 import { AddressQRCard } from './AddressQRCard'
 
@@ -16,8 +18,18 @@ export const AddressQRModal = ({
   onClose,
 }: AddressQRModalProps) => {
   return (
-    <ResponsiveModal isOpen onClose={onClose}>
-      <AddressQRCard chain={chain} coin={coin} />
+    <ResponsiveModal grabbable isOpen onClose={onClose}>
+      <MobilePaddedContent>
+        <AddressQRCard chain={chain} coin={coin} />
+      </MobilePaddedContent>
     </ResponsiveModal>
   )
 }
+
+const MobilePaddedContent = styled.div`
+  padding: 24px 24px 32px;
+
+  @media ${mediaQuery.tabletDeviceAndUp} {
+    padding: 0;
+  }
+`

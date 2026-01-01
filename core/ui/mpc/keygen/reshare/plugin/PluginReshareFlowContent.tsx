@@ -77,10 +77,11 @@ export const PluginReshareFlowContent = ({
                             dklsInboundSequenceNo != 0
                               ? Number(
                                   (
-                                    dklsInboundSequenceNo /
-                                    appInstallTotalSequenceNo
-                                  ).toFixed(2)
-                                ) * 100
+                                    (dklsInboundSequenceNo /
+                                      appInstallTotalSequenceNo) *
+                                    100
+                                  ).toFixed(0)
+                                )
                               : 0,
                         })}
                       </Text>

@@ -1,4 +1,5 @@
 import { EvmChain, OtherChain } from '@core/chain/Chain'
+import { Coin } from '@core/chain/coin/Coin'
 import { SerializedSigningOutput } from '@core/chain/tw/signingOutput'
 import { Tx } from '@core/chain/tx'
 import { VaultAppSession } from '@core/extension/storage/appSessions'
@@ -53,6 +54,7 @@ export type PopupInterface = {
     ITransactionPayload,
     Omit<Tx, 'data'> & { data: SerializedSigningOutput }
   >
+  watchAsset: Method<Coin<EvmChain>, boolean>
 }
 
 export type PopupMethod = keyof PopupInterface
@@ -63,6 +65,7 @@ export const authorizedPopupMethods = [
   'signMessage',
   'sendTx',
   'pluginReshare',
+  'watchAsset',
 ] as const satisfies readonly PopupMethod[]
 
 export type AuthorizedPopupMethod = (typeof authorizedPopupMethods)[number]

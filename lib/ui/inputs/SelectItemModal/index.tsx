@@ -73,7 +73,7 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>(
         <ListWrapper>
           {useVirtual ? (
             <Virtuoso
-              style={{ height: '100%' }}
+              style={{ height: modalOptionsListHeight - 60 }}
               totalCount={filtered.length}
               data={filtered}
               increaseViewportBy={

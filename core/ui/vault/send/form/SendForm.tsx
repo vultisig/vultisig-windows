@@ -1,20 +1,18 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { ActionForm } from '@core/ui/vault/components/action-form/ActionForm'
 import { ManageAddresses } from '@core/ui/vault/send/addresses/ManageAddresses'
 import { ManageAmount } from '@core/ui/vault/send/amount/ManageAmount'
 import { ManageSendCoin } from '@core/ui/vault/send/coin/ManageSendCoin'
 import { RefreshSend } from '@core/ui/vault/send/RefreshSend'
 import { Button } from '@lib/ui/buttons/Button'
-import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { VStack } from '@lib/ui/layout/Stack'
-import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { isRecordEmpty } from '@lib/utils/record/isRecordEmpty'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
 import { useSendValidationQuery } from '../queries/useSendValidationQuery'
 
@@ -42,7 +40,7 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
         title={t('send')}
         hasBorder
       />
-      <FormWrapper
+      <ActionForm
         as="form"
         justifyContent="space-between"
         scrollable
@@ -60,14 +58,7 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
         <Button disabled={isDisabled} loading={isPending} type="submit">
           {t('continue')}
         </Button>
-      </FormWrapper>
+      </ActionForm>
     </>
   )
 }
-
-const FormWrapper = styled(PageContent)`
-  width: min(468px, 100%);
-  margin-inline: auto;
-  overflow: auto;
-  ${hideScrollbars}
-`
