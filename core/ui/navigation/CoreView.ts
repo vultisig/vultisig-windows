@@ -26,7 +26,12 @@ export type CoreView =
   | { id: 'deleteVault' }
   | {
       id: 'deposit'
-      state: { coin: CoinKey; action?: ChainAction; form?: Record<string, any> }
+      state: {
+        coin: CoinKey
+        action?: ChainAction
+        form?: Record<string, any>
+        entryPoint?: 'defi' | 'vault'
+      }
     }
   | { id: 'referral' }
   | { id: 'importVault' }
