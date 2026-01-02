@@ -1,9 +1,11 @@
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { DepositActionOption } from '@core/ui/vault/deposit/DepositForm/DepositActionOption'
+import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 type DepositActionItemExplorerProps = {
   options: ChainAction[]
@@ -22,7 +24,7 @@ export const DepositActionItemExplorer: FC<DepositActionItemExplorerProps> = ({
 
   return (
     <Modal onClose={onClose} title="">
-      <VStack gap={20}>
+      <ScrollableContent gap={20}>
         {options.map((option, index) => {
           return (
             <DepositActionOption
@@ -33,7 +35,14 @@ export const DepositActionItemExplorer: FC<DepositActionItemExplorerProps> = ({
             />
           )
         })}
-      </VStack>
+      </ScrollableContent>
     </Modal>
   )
 }
+
+const ScrollableContent = styled(VStack)`
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  ${hideScrollbars};
+`

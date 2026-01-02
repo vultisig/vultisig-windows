@@ -787,6 +787,7 @@ export const hr = {
   open_desktop: 'Otvori radnu površinu',
   open_desktop_app: 'Otvori aplikaciju za stolna računala',
   operator_fee: 'Naknada operatera',
+  basis_points: 'Bazni bodovi',
   optional: 'opcionalno',
   optionalDevice: 'Dodatni uređaj',
   or: 'ili',

@@ -794,6 +794,7 @@ export const pt = {
   open_desktop: 'Área de trabalho aberta',
   open_desktop_app: 'Abrir aplicativo para desktop',
   operator_fee: 'Taxa de Operador',
+  basis_points: 'Pontos base',
   optional: 'opcional',
   optionalDevice: 'Dispositivo opcional',
   or: 'ou',

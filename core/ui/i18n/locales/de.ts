@@ -803,6 +803,7 @@ export const de = {
   open_desktop: 'Desktop öffnen',
   open_desktop_app: 'Desktop-App öffnen',
   operator_fee: 'Betreibergebühr',
+  basis_points: 'Basispunkte',
   optional: 'optional',
   optionalDevice: 'Optionales Gerät',
   or: 'oder',

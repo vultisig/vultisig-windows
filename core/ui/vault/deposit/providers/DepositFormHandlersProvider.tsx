@@ -8,7 +8,7 @@ import {
   UseFormWatch,
 } from 'react-hook-form'
 
-import { FormData } from '../DepositForm'
+import { FormData } from '../DepositForm/types'
 
 type DepositFormHandlers = {
   setValue: UseFormSetValue<FormData>

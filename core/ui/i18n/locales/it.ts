@@ -798,6 +798,7 @@ export const it = {
   open_desktop: 'Apri Desktop',
   open_desktop_app: "Apri l'app desktop",
   operator_fee: "Tariffa dell'operatore",
+  basis_points: 'Punti base',
   optional: 'opzionale',
   optionalDevice: 'Dispositivo opzionale',
   or: 'O',
