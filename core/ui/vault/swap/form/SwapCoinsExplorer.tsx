@@ -1,4 +1,10 @@
-import { Coin, CoinKey, coinKeyToString } from '@core/chain/coin/Coin'
+import {
+  areEqualCoins,
+  Coin,
+  CoinKey,
+  coinKeyToString,
+} from '@core/chain/coin/Coin'
+import { knownTokens } from '@core/chain/coin/knownTokens'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { swapEnabledChains } from '@core/chain/swap/swapEnabledChains'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
@@ -8,16 +14,15 @@ import { InputProps, IsActiveProp, OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { isOneOf } from '@lib/utils/array/isOneOf'
-import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { CoinIcon } from '../../../chain/coin/icon/CoinIcon'
 import { CoinOption } from '../../../chain/coin/inputs/CoinOption'
-import { useAutoDiscoverTokens } from '../../../chain/hooks/useAutoDiscoverTokens'
+import { useWhitelistedCoinsQuery } from '../../../chain/coin/queries/useWhitelistedCoinsQuery'
 import { useTransferDirection } from '../../../state/transferDirection'
-import { StorageKey } from '../../../storage/StorageKey'
+import { useCreateCoinMutation } from '../../../storage/coins'
 import { useSortedByBalanceCoins } from '../../chain/coin/hooks/useSortedByBalanceCoins'
 import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 import { SwapHorizontalDivider } from '../components/SwapHorizontalDivider'
@@ -34,7 +39,31 @@ export const SwapCoinsExplorer = ({
   const [currentToCoin] = useSwapToCoin()
   const side = useTransferDirection()
   const coins = useCurrentVaultCoins()
-  const queryClient = useQueryClient()
+  const { mutate: createCoin } = useCreateCoinMutation()
+  const currentChain = side === 'from' ? fromCoinKey.chain : currentToCoin.chain
+
+  const { data: whitelisted } = useWhitelistedCoinsQuery(currentChain)
+
+  const sortedSwapCoins = useSortedByBalanceCoins(value)
+  const options = useMemo(() => {
+    const result: Coin[] = [...sortedSwapCoins]
+    const keys = new Set(sortedSwapCoins.map(coinKeyToString))
+
+    const extraCoins = [
+      ...(knownTokens[currentChain] ?? []),
+      ...(whitelisted ?? []),
+    ]
+
+    extraCoins.forEach(coin => {
+      const key = coinKeyToString(coin)
+      if (keys.has(key)) return
+
+      keys.add(key)
+      result.push(coin)
+    })
+
+    return result
+  }, [currentChain, sortedSwapCoins, whitelisted])
 
   const { t } = useTranslation()
 
@@ -44,18 +73,7 @@ export const SwapCoinsExplorer = ({
     [coins]
   )
 
-  const currentChain = side === 'from' ? fromCoinKey.chain : currentToCoin.chain
-
-  const sortedSwapCoins = useSortedByBalanceCoins(value)
-  const { discoveredCoins, ensureSaved } = useAutoDiscoverTokens({
-    chain: currentChain,
-  })
-  const mergedOptions = useMemo(
-    () => [...sortedSwapCoins, ...discoveredCoins],
-    [discoveredCoins, sortedSwapCoins]
-  )
-
-  const { footerRef, itemRefs, scrollToKey, strokeRef, onKeyDown } =
+  const { footerRef, scrollToKey, strokeRef, onKeyDown, setItemRef } =
     useCenteredSnapCarousel({
       chain: currentChain,
       onSelect: chain => {
@@ -76,22 +94,20 @@ export const SwapCoinsExplorer = ({
       filterFunction={filterByTicker}
       title={t('select_asset')}
       optionComponent={CoinOption}
-      onFinish={async (newValue: CoinKey | undefined) => {
-        try {
-          if (newValue) {
-            await ensureSaved(newValue)
-            await queryClient.refetchQueries({
-              queryKey: [StorageKey.vaultsCoins],
-              type: 'active',
-            })
+      onFinish={async newValue => {
+        if (newValue) {
+          if (coins.some(c => areEqualCoins(c, newValue))) {
             onChange(newValue)
+          } else {
+            createCoin(newValue, {
+              onSuccess: () => onChange(newValue),
+            })
           }
-        } finally {
-          onClose()
         }
+        onClose()
       }}
       getKey={v => coinKeyToString(v)}
-      options={mergedOptions}
+      options={options}
       renderFooter={() => (
         <VStack gap={11}>
           <SwapHorizontalDivider />
@@ -117,9 +133,7 @@ export const SwapCoinsExplorer = ({
 
                   return (
                     <FooterItem
-                      ref={el => {
-                        itemRefs.current[chain] = el
-                      }}
+                      ref={el => setItemRef(chain, el)}
                       tabIndex={0}
                       role="tab"
                       aria-selected={isActive}
