@@ -283,6 +283,7 @@ export const hr = {
   blockaid_simulation_failed: 'Simulacija transakcije nije uspjela',
   blockaid_simulation_failed_description:
     'Nije moguće simulirati ovu transakciju. I dalje možete nastaviti, ali preporučujemo da pažljivo pregledate detalje transakcije.',
+  transaction_scanned_by: 'Transakciju je skenirao {{provider}}',
   bond: 'Veza',
   bond_with_lp: 'Bond Maya',
   bronze: 'Bronza',
@@ -1301,6 +1302,7 @@ export const hr = {
   remove_cacao_pool: 'Ukloni iz CACAO poola',
   wrong_address_for_chain: 'Pogrešna adresa za odabrani lanac',
   wrong_vault_try_again: 'Pogrešan trezor ili upareni uređaj.',
+  you_are_bonding: 'Bondate',
   you_are_sending: 'Šaljete',
   yourVaultShares: 'Vaš trezor ima {{shares}} dijeljenih trezora',
   your_friends_referral_code: 'Referral kod tvog prijatelja',
