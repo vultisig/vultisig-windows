@@ -522,7 +522,7 @@ export const en = {
   import_existing_vault: 'Import an Existing Vault',
   import_failed: 'QR code invalid, please retry',
   import_key: 'Import Key',
-  import_seedphrase: 'Import seedphrase',
+  import_seedphrase: 'Import Seedphrase',
   enter_your_seedphrase: 'Enter your seed phrase',
   enter_seedphrase_subtitle:
     'Leave a space between each word. Seed phrases of <h>12 or 24 words</h> are supported.',
@@ -918,6 +918,10 @@ export const en = {
   scan_with_devices_to_sign:
     'Scan with devices to participate in signing the transaction',
   scanning: 'scanning...',
+  scanning_for_chains: 'Scanning for chains...',
+  scanning_for_chains_highlight: 'This process can take up to 2 minutes.',
+  scanning_for_chains_subtitle:
+    "We're checking which blockchains have active addresses for your seed phrase.",
   search: 'Search',
   search_field_placeholder: 'Search',
   secure: 'Secure',
@@ -938,7 +942,8 @@ export const en = {
   select_at_least_one_device: 'Select at least one device',
   select_backup_file: 'Import your vault share',
   select_chain: 'Select Chain',
-  select_chains: 'Select',
+  select_chains: 'Select chains',
+  select_chains_manually: 'Select chains manually',
   select_positions: 'Select positions',
   select_positions_description:
     'Enable at least one position to view balances and manage positions.',
