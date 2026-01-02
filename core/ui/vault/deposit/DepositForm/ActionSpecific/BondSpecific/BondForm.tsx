@@ -11,6 +11,7 @@ import { useDepositCoin } from '@core/ui/vault/deposit/providers/DepositCoinProv
 import { useDepositFormHandlers } from '@core/ui/vault/deposit/providers/DepositFormHandlersProvider'
 import { stepFromDecimals } from '@core/ui/vault/deposit/utils/stepFromDecimals'
 import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
+import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
@@ -18,7 +19,6 @@ import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
 import { ClipboardCopyIcon } from '@lib/ui/icons/ClipboardCopyIcon'
 import { PasteIcon } from '@lib/ui/icons/PasteIcon'
 import { PencilIcon } from '@lib/ui/icons/PenciIcon'
-import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack, hStack, VStack } from '@lib/ui/layout/Stack'
@@ -30,8 +30,8 @@ import { getColor } from '@lib/ui/theme/getters'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { attempt } from '@lib/utils/attempt'
 import { formatAmount } from '@lib/utils/formatAmount'
-import { useEffect, useRef, useState } from 'react'
-import { Controller, FieldErrors } from 'react-hook-form'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { Controller, ControllerRenderProps, FieldErrors } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
@@ -48,6 +48,29 @@ type BondFormProps = {
 }
 
 const amountSuggestions = [0.25, 0.5, 0.75, 1]
+
+const amountFont = "500 34px 'Brockmann', sans-serif"
+const amountLetterSpacing = -1
+let measureContext: CanvasRenderingContext2D | null = null
+
+const measureAmountTextWidth = (text: string) => {
+  if (!measureContext) {
+    const canvas = document.createElement('canvas')
+    measureContext = canvas.getContext('2d')
+  }
+
+  const ctx = measureContext
+  if (!ctx) return 0
+
+  ctx.font = amountFont
+  const baseWidth = ctx.measureText(text).width
+  const spacingAdjustment =
+    (text?.length ?? 0) > 0
+      ? amountLetterSpacing * Math.max(text.length - 1, 0)
+      : 0
+
+  return baseWidth + spacingAdjustment
+}
 
 export const BondForm = ({
   balance,
@@ -236,37 +259,13 @@ export const BondForm = ({
                   <Controller
                     control={control}
                     name="amount"
-                    render={({ field }) => {
-                      const showTicker =
-                        Boolean(coin.ticker) &&
-                        field.value !== '' &&
-                        field.value !== null &&
-                        field.value !== undefined
-
-                      return (
-                        <AmountValueRow>
-                          <LargeAmountInput
-                            {...field}
-                            value={
-                              typeof field.value === 'number'
-                                ? field.value
-                                : field.value === '' || field.value == null
-                                  ? null
-                                  : Number(field.value)
-                            }
-                            onValueChange={value => {
-                              field.onChange(value ?? '')
-                            }}
-                            placeholder={t('enter_amount')}
-                            shouldBePositive
-                            step={stepFromDecimals(coin.decimals)}
-                          />
-                          {showTicker && (
-                            <AmountTicker>{coin.ticker}</AmountTicker>
-                          )}
-                        </AmountValueRow>
-                      )
-                    }}
+                    render={({ field }) => (
+                      <BondAmountInput
+                        field={field}
+                        ticker={coin.ticker}
+                        decimals={coin.decimals}
+                      />
+                    )}
                   />
                 </ActionAmountInputSurface>
                 {errors.amount && (
@@ -314,6 +313,8 @@ export const BondForm = ({
                     onWheel={event => event.currentTarget.blur()}
                     validation={errors.operatorFee ? 'warning' : undefined}
                     type="number"
+                    step="any"
+                    inputMode="decimal"
                     placeholder={t('operator_fee')}
                     {...register('operatorFee', { valueAsNumber: true })}
                   />
@@ -449,22 +450,42 @@ const PencilIconWrapper = styled.div`
   color: ${getColor('contrast')};
 `
 
-const AmountValueRow = styled(HStack)`
-  width: 100%;
+const AmountValueRowWrapper = styled.div`
+  display: flex;
   justify-content: center;
-  align-items: baseline;
-  gap: 8px;
+  width: 100%;
+  position: relative;
 `
 
-const LargeAmountInput = styled(AmountTextInput)`
-  width: auto;
-  min-width: 140px;
-  height: auto;
-  padding: 0;
-  text-align: center;
+const AmountValueRow = styled.div`
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+`
+
+const LargeAmountInput = styled.input<{ $width: number }>`
   background: transparent;
   border: none;
   box-shadow: none;
+  width: ${({ $width }) => `${$width}px`};
+  min-width: 120px;
+  padding: 0;
+  margin: 0;
+  font-family: 'Brockmann', sans-serif;
+  font-size: 34px;
+  font-weight: 500;
+  letter-spacing: -1px;
+  line-height: 37px;
+  color: ${getColor('text')};
+  text-align: center;
+
+  &:focus,
+  &:hover,
+  &:focus-visible {
+    outline: none !important;
+    border: none !important;
+  }
 
   &:hover,
   &:focus,
@@ -474,22 +495,27 @@ const LargeAmountInput = styled(AmountTextInput)`
   }
 
   &::placeholder {
-    font-size: 28px;
+    color: ${getColor('textShy')};
   }
 `
 
 const AmountTicker = styled(Text)`
-  font-size: 32px;
-  font-weight: 600;
-  line-height: 1.1;
+  font-family: 'Brockmann', sans-serif;
+  font-size: 34px;
+  font-weight: 500;
+  letter-spacing: -1px;
+  line-height: 37px;
 `
 
 const FilledTextInput = styled(TextInput)`
-  height: 64px;
-  padding: 18px 16px;
-  ${borderRadius.l};
-  background: ${getColor('foreground')};
-  border: 1px solid ${getColor('foregroundSuper')};
+  display: flex;
+  padding: 16px;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  border-radius: 12px;
+  border: 1px solid #11284a;
+  background: #061b3a;
   font-size: 16px;
 
   &::placeholder {
@@ -553,3 +579,85 @@ const CheckBadge = styled.div`
 `
 
 type BondSection = 'address' | 'amount'
+
+type BondAmountInputProps = {
+  field: ControllerRenderProps<FormData, 'amount'>
+  ticker?: string
+  decimals: number
+  placeholder?: string
+}
+
+const BondAmountInput = ({
+  field,
+  ticker,
+  decimals,
+  placeholder = '',
+}: BondAmountInputProps) => {
+  const maxAmount = 10_000_000
+  const displayValue =
+    typeof field.value === 'number'
+      ? String(field.value)
+      : field.value == null
+        ? ''
+        : String(field.value)
+
+  const measuredWidth = useMemo(() => {
+    const textToMeasure =
+      displayValue === '' ? placeholder || '0' : displayValue
+    const rawWidth = Math.ceil(measureAmountTextWidth(textToMeasure))
+    const inputWidth = Math.max(140, rawWidth + 16)
+    return { textWidth: rawWidth, inputWidth }
+  }, [displayValue, placeholder])
+
+  const centeredTickerLeft =
+    (measuredWidth.inputWidth + measuredWidth.textWidth) / 2 + 8
+
+  return (
+    <AmountValueRowWrapper>
+      <ActionInsideInteractiveElement
+        action={
+          ticker ? <AmountTicker as="span">{ticker}</AmountTicker> : undefined
+        }
+        actionPlacerStyles={{
+          top: '50%',
+          transform: 'translateY(-50%)',
+          left: centeredTickerLeft,
+        }}
+        render={({ actionSize }) => {
+          const totalWidth =
+            measuredWidth.inputWidth +
+            (actionSize?.width ?? 0) +
+            (ticker ? 8 : 0)
+          return (
+            <AmountValueRow style={{ width: totalWidth }}>
+              <LargeAmountInput
+                $width={measuredWidth.inputWidth}
+                value={displayValue}
+                onChange={event => {
+                  const raw = event.currentTarget.value
+                  const normalized = raw.replace(/,/g, '.')
+                  if (normalized === '') {
+                    field.onChange('')
+                    return
+                  }
+                  if (!/^(\d+\.?\d*|\.\d*)$/.test(normalized)) {
+                    return
+                  }
+                  const numericValue = Number(normalized)
+                  if (!Number.isNaN(numericValue) && numericValue > maxAmount) {
+                    return
+                  }
+                  field.onChange(normalized)
+                }}
+                placeholder={placeholder}
+                inputMode="decimal"
+                type="text"
+                step={stepFromDecimals(decimals)}
+              />
+            </AmountValueRow>
+          )
+        }}
+      />
+    </AmountValueRowWrapper>
+  )
+}
