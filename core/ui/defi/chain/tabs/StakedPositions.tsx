@@ -118,6 +118,7 @@ export const StakedPositions = () => {
       state: {
         coin: extractCoinKey(coinForAction),
         action,
+        entryPoint: 'defi',
       },
     })
   }
