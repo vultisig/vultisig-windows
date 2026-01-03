@@ -267,6 +267,7 @@ export const zh = {
   blockaid_simulation_failed: '交易模拟失败',
   blockaid_simulation_failed_description:
     '无法模拟此交易。您仍可继续操作，但我们建议您仔细核对交易详情。',
+  transaction_scanned_by: '交易已由 {{provider}} 扫描',
   bond: '纽带',
   bond_with_lp: '邦德·玛雅',
   bronze: '青铜',
@@ -1209,6 +1210,7 @@ export const zh = {
   withdraw_ruji_rewards: '提取 RUJI 奖励',
   wrong_address_for_chain: '所选链的地址错误',
   wrong_vault_try_again: '错误的保险库或配对设备。',
+  you_are_bonding: '您正在质押',
   you_are_sending: '您正在发送',
   yourVaultShares: '您的金库拥有 {{shares}} 个金库份额',
   your_friends_referral_code: '你朋友的推荐码',

@@ -288,6 +288,7 @@ export const de = {
   blockaid_simulation_failed: 'Transaktionssimulation fehlgeschlagen',
   blockaid_simulation_failed_description:
     'Diese Transaktion konnte nicht simuliert werden. Sie können trotzdem fortfahren, wir empfehlen Ihnen jedoch, die Transaktionsdetails sorgfältig zu prüfen.',
+  transaction_scanned_by: 'Transaktion von {{provider}} geprüft',
   bond: 'Bindung',
   bond_with_lp: 'Bond Maya',
   bronze: 'Bronze',
@@ -1327,6 +1328,7 @@ export const de = {
   remove_cacao_pool: 'Aus dem CACAO-Pool entfernen',
   wrong_address_for_chain: 'Falsche Adresse für die ausgewählte Kette',
   wrong_vault_try_again: 'Falscher Tresor oder falsches Gerät gekoppelt.',
+  you_are_bonding: 'Du bondest',
   you_are_sending: 'Du sendest',
   yourVaultShares: 'Ihr Tresor enthält {{shares}} Tresoranteile',
   your_friends_referral_code: 'Der Empfehlungscode deines Freundes',
