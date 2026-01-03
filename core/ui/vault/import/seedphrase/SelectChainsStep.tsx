@@ -3,7 +3,7 @@ import { SelectableChainItem } from '@core/ui/chain/selection/SelectableChainIte
 import { ItemGrid } from '@core/ui/vault/chain/manage/shared/ItemGrid'
 import { SearchInput } from '@core/ui/vault/chain/manage/shared/SearchInput'
 import { Button } from '@lib/ui/buttons/Button'
-import { VStack } from '@lib/ui/layout/Stack'
+import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { toggleInclusion } from '@lib/utils/array/toggleInclusion'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -15,6 +15,15 @@ const ScrollableContent = styled.div`
   flex: 1;
   overflow-y: auto;
   min-height: 0;
+  ${hideScrollbars}
+`
+
+const Wrapper = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow: hidden;
 `
 
 export const SelectChainsStep = () => {
@@ -41,7 +50,7 @@ export const SelectChainsStep = () => {
   }
 
   return (
-    <VStack gap={14} flexGrow>
+    <Wrapper>
       <SearchInput value={search} onChange={setSearch} />
       <ScrollableContent>
         <ItemGrid>
@@ -58,6 +67,6 @@ export const SelectChainsStep = () => {
       <Button disabled={selectedChains.length === 0} onClick={handleFinish}>
         {t('next')}
       </Button>
-    </VStack>
+    </Wrapper>
   )
 }
