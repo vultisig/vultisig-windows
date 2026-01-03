@@ -3,6 +3,10 @@ export const en = {
   action: 'Action',
   actions: 'Actions',
   active: 'Active',
+  active_chains_found_one: 'We found {{count}} active chain',
+  active_chains_found_other: 'We found {{count}} active chains',
+  active_chains_warning:
+    'Each extra chain increases the time to generate your vault and possibility of an timeout.',
   add_address: 'Add Address',
   add_folder: 'Add Folder',
   add_friends_referral: 'Add a Friends Referral',
@@ -683,6 +687,9 @@ export const en = {
   new_vault_setup: 'New Vault Setup',
   new_vault_setup_disclaimer: 'Your configuration changed, make a new backup.',
   next: 'Next',
+  no_active_chains_found: 'No active chains found',
+  no_active_chains_found_description:
+    "We didn't detect any assets on this seed phrase.",
   no_chains_enabled: 'No chains enabled',
   no_chains_enabled_description:
     "You've disabled all chains. Make sure that at least one chain is enabled.",

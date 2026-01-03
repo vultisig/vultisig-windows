@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import { EnterSeedphraseStep } from './EnterSeedphraseStep'
 import { ImportSeedphraseIntroStep } from './intro/ImportSeedphraseIntro'
 import { ScanningChainsStep } from './ScanningChainsStep'
+import { ScanResultStep } from './scanResult'
 import { SelectChainsStep } from './SelectChainsStep'
 import { ImportSeedphraseStep, useImportSeedphraseStep } from './state/step'
 
@@ -28,6 +29,7 @@ const stepComponents: Record<ImportSeedphraseStep, ComponentType> = {
   intro: ImportSeedphraseIntroStep,
   input: EnterSeedphraseStep,
   scan: ScanningChainsStep,
+  scanResult: ScanResultStep,
   chains: SelectChainsStep,
 }
 
@@ -35,7 +37,8 @@ const backSteps: Record<ImportSeedphraseStep, ImportSeedphraseStep | null> = {
   intro: null,
   input: 'intro',
   scan: 'input',
-  chains: 'input',
+  scanResult: 'scan',
+  chains: 'scanResult',
 }
 
 export const ImportSeedphraseActiveStep = () => {

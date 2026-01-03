@@ -34,7 +34,7 @@ export const ScanningChainsStep = () => {
   useEffect(() => {
     if (isSuccess && chainsWithBalance) {
       setSelectedChains(chainsWithBalance)
-      setStep('chains')
+      setStep('scanResult')
     }
   }, [isSuccess, chainsWithBalance, setSelectedChains, setStep])
 
