@@ -926,9 +926,8 @@ export const en = {
     'Scan with devices to participate in signing the transaction',
   scanning: 'scanning...',
   scanning_for_chains: 'Scanning for chains...',
-  scanning_for_chains_highlight: 'This process can take up to 2 minutes.',
   scanning_for_chains_subtitle:
-    "We're checking which blockchains have active addresses for your seed phrase.",
+    "We're checking which blockchains have active addresses for your seed phrase. <highlight>This process can take up to 2 minutes.</highlight>",
   search: 'Search',
   search_field_placeholder: 'Search',
   secure: 'Secure',

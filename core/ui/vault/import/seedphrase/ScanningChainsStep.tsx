@@ -3,18 +3,12 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import { Trans, useTranslation } from 'react-i18next'
 
 import { useScanChainsWithBalanceMutation } from './mutations/useScanChainsWithBalanceMutation'
 import { useSelectedChains } from './state/selectedChains'
 import { useImportSeedphraseStep } from './state/step'
-
-const HighlightedText = styled.span`
-  color: ${getColor('contrast')};
-`
 
 export const ScanningChainsStep = () => {
   const { t } = useTranslation()
@@ -51,14 +45,16 @@ export const ScanningChainsStep = () => {
           {t('scanning_for_chains')}
         </Text>
         <Text centerHorizontally color="supporting" size={14}>
-          {t('scanning_for_chains_subtitle')}{' '}
-          <HighlightedText>
-            {t('scanning_for_chains_highlight')}
-          </HighlightedText>
+          <Trans
+            i18nKey="scanning_for_chains_subtitle"
+            components={{
+              highlight: <Text as="span" color="regular" />,
+            }}
+          />
         </Text>
       </VStack>
       <VStack style={{ marginTop: 'auto' }} fullWidth>
-        <Button kind="secondary" onClick={handleSelectManually}>
+        <Button kind="outlined" onClick={handleSelectManually}>
           {t('select_chains_manually')}
         </Button>
       </VStack>
