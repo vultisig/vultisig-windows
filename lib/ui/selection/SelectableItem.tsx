@@ -1,56 +1,51 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { CheckIcon } from '@lib/ui/icons/CheckIcon'
-import { InputProps } from '@lib/ui/props'
+import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
+import { IconWrapper as BaseIconWrapper } from '@lib/ui/icons/IconWrapper'
+import { vStack } from '@lib/ui/layout/Stack'
+import { InputProps, IsActiveProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
-const iconSize = 48
-
-const IconWrapper = styled.div<{ isSelected: boolean }>`
+const IconWrapper = styled.div<IsActiveProp>`
+  ${vStack({
+    alignItems: 'center',
+    justifyContent: 'center',
+  })};
   position: relative;
-  width: ${iconSize}px;
-  height: ${iconSize}px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  border-radius: 24px;
+  background: rgba(11, 26, 58, 0.5);
+  height: 74px;
+  padding: 17px;
+  opacity: ${({ isActive }) => (isActive ? 1 : 0.5)};
+  font-size: 27.5px;
 
-  ${({ isSelected }) =>
-    isSelected &&
+  ${({ isActive }) =>
+    isActive &&
     css`
-      outline: 2px solid ${getColor('primary')};
-      outline-offset: 2px;
+      border: 1.5px solid ${getColor('foregroundSuper')};
+      background: ${getColor('foreground')};
     `}
 `
 
-const CheckBadge = styled.div`
+const CheckBadge = styled(BaseIconWrapper)`
   position: absolute;
-  bottom: -2px;
-  right: -2px;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: ${getColor('primary')};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: ${getColor('background')};
+  bottom: 0;
+  right: 0;
+  height: 24px;
+  padding: 8px;
+  border-radius: 40px 0 25px 0;
+  background: ${getColor('foregroundSuper')};
+  font-weight: 600;
 `
 
 const Container = styled(UnstyledButton)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 8px;
-  border-radius: 12px;
+  ${vStack({
+    gap: 11,
+  })};
 
-  &:hover {
-    background: ${getColor('mist')};
-  }
+  width: 74px;
 `
 
 type SelectableItemProps = InputProps<boolean> & {
@@ -66,11 +61,11 @@ export const SelectableItem = ({
 }: SelectableItemProps) => {
   return (
     <Container onClick={() => onChange(!isSelected)}>
-      <IconWrapper isSelected={isSelected}>
+      <IconWrapper isActive={isSelected}>
         {icon}
         {isSelected && (
-          <CheckBadge>
-            <CheckIcon />
+          <CheckBadge color="primary" size={12}>
+            <CheckmarkIcon />
           </CheckBadge>
         )}
       </IconWrapper>

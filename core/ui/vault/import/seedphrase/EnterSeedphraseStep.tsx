@@ -11,7 +11,7 @@ import { seedphraseWordCounts } from './config'
 import { EnterSeedphraseHeader } from './EnterSeedphraseHeader'
 import { useMnemonic } from './state/mnemonic'
 import { useImportSeedphraseStep } from './state/step'
-import { cleanMnemonic, validateMnemonic } from './validateMnemonic'
+import { cleanMnemonic, validateMnemonic } from './utils/validateMnemonic'
 
 export const EnterSeedphraseStep = () => {
   const { t } = useTranslation()

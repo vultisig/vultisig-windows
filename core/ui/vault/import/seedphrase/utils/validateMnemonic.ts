@@ -2,7 +2,7 @@ import { isOneOf } from '@lib/utils/array/isOneOf'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { TFunction } from 'i18next'
 
-import { seedphraseWordCounts } from './config'
+import { seedphraseWordCounts } from '../config'
 
 type ValidateMnemonicInput = {
   mnemonic: string

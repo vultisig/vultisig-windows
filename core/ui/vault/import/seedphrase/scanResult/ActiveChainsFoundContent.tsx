@@ -4,12 +4,14 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { useTranslation } from 'react-i18next'
 
 import { useSelectedChains } from '../state/selectedChains'
+import { useImportSeedphraseStep } from '../state/step'
 import { ScanResultChainItem } from './ScanResultChainItem'
 import { ScanResultHeader } from './ScanResultHeader'
 
 export const ActiveChainsFoundContent = () => {
   const { t } = useTranslation()
   const [selectedChains] = useSelectedChains()
+  const [, setStep] = useImportSeedphraseStep()
 
   const handleNext = () => {
     console.log('todo')
@@ -34,7 +36,7 @@ export const ActiveChainsFoundContent = () => {
         <Button
           kind="link"
           status="success"
-          onClick={handleNext}
+          onClick={() => setStep('chains')}
           icon={<SparkledPenIcon />}
         >
           {t('customize_chains')}
