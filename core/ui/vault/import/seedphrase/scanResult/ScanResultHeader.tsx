@@ -1,5 +1,7 @@
+import { centerContent } from '@lib/ui/css/centerContent'
+import { round } from '@lib/ui/css/round'
+import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { CubeWithCornersIcon } from '@lib/ui/icons/CubeWithCornersIcon'
-import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { VStack } from '@lib/ui/layout/Stack'
 import { DescriptionProp, KindProp, TitleProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
@@ -12,11 +14,27 @@ type ScanResultHeaderProps = TitleProp &
   DescriptionProp &
   KindProp<ScanResultHeaderKind>
 
-const StyledIconWrapper = styled(IconWrapper)<KindProp<ScanResultHeaderKind>>`
+const StyledIconWrapper = styled.div<KindProp<ScanResultHeaderKind>>`
+  ${round};
   color: ${matchColor('kind', {
     positive: 'primary',
     negative: 'danger',
   })};
+
+  background: ${({ kind, theme: { colors } }) =>
+    kind === 'positive'
+      ? colors.primary.getVariant({ a: () => 0.12 }).toCssValue()
+      : colors.dangerBackground.toCssValue()};
+
+  border: 2px solid
+    ${({ kind, theme: { colors } }) =>
+      kind === 'positive'
+        ? colors.primary.getVariant({ a: () => 0.25 }).toCssValue()
+        : colors.danger.getVariant({ a: () => 0.25 }).toCssValue()};
+
+  font-size: 26px;
+  ${sameDimensions(48)};
+  ${centerContent};
 `
 
 export const ScanResultHeader = ({
@@ -25,7 +43,7 @@ export const ScanResultHeader = ({
   description,
 }: ScanResultHeaderProps) => (
   <VStack alignItems="center" gap={24}>
-    <StyledIconWrapper size={48} kind={kind}>
+    <StyledIconWrapper kind={kind}>
       <CubeWithCornersIcon />
     </StyledIconWrapper>
     <VStack alignItems="center" gap={8}>

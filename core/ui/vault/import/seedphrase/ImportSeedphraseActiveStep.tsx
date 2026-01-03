@@ -37,8 +37,8 @@ const backSteps: Record<ImportSeedphraseStep, ImportSeedphraseStep | null> = {
   intro: null,
   input: 'intro',
   scan: 'input',
-  scanResult: 'scan',
-  chains: 'scanResult',
+  scanResult: 'input',
+  chains: 'input',
 }
 
 export const ImportSeedphraseActiveStep = () => {

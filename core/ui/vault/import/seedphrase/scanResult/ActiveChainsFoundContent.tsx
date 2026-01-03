@@ -1,4 +1,5 @@
 import { Button } from '@lib/ui/buttons/Button'
+import { SparkledPenIcon } from '@lib/ui/icons/SparkledPenIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useTranslation } from 'react-i18next'
 
@@ -30,7 +31,12 @@ export const ActiveChainsFoundContent = () => {
 
       <VStack fullWidth gap={20} style={{ marginTop: 'auto' }}>
         <Button onClick={handleNext}>{t('next')}</Button>
-        <Button kind="link" status="success" onClick={handleNext}>
+        <Button
+          kind="link"
+          status="success"
+          onClick={handleNext}
+          icon={<SparkledPenIcon />}
+        >
           {t('customize_chains')}
         </Button>
       </VStack>
