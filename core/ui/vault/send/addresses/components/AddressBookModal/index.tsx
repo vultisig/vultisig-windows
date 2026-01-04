@@ -16,7 +16,7 @@ import { OnCloseProp } from '@lib/ui/props'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -47,8 +47,8 @@ export const AddressBookModal = ({ onSelect, onClose }: Props) => {
   const [addressBookSelectedOption, setAddressBookSelectedOption] =
     useState<AddressBookOption>('saved')
 
-  const vaultsAndAddressForSelectedCoin = useMemo(() => {
-    return vaults.reduce<VaultAddressBookItem[]>((acc, vault) => {
+  const vaultsAndAddressForSelectedCoin = vaults.reduce<VaultAddressBookItem[]>(
+    (acc, vault) => {
       const match = vault.coins.find(c => c.chain === coin.chain)
 
       if (match?.address) {
@@ -69,8 +69,33 @@ export const AddressBookModal = ({ onSelect, onClose }: Props) => {
         acc.push({ name: vault.name, address })
       }
       return acc
-    }, [])
-  }, [coin.chain, vaults, walletCore])
+    },
+    []
+  )
+
+  const eligibleSavedItems = addressBookItems.filter(item => {
+    if (isEvmChain(coin.chain)) {
+      return isEvmChain(item.chain)
+    }
+    return item.chain === coin.chain
+  })
+
+  const savedEmptyState = (() => {
+    if (addressBookItems.length === 0) {
+      return {
+        title: t('vault_settings_address_book_no_addresses_title'),
+        description: t('vault_settings_address_book_no_addresses_description'),
+      }
+    }
+
+    const chainLabel = isEvmChain(coin.chain) ? t('evm_chains') : coin.chain
+    return {
+      title: t('address_book_no_eligible_addresses_title', {
+        chain: chainLabel,
+      }),
+      description: t('address_book_no_eligible_addresses_description'),
+    }
+  })()
 
   return (
     <ResponsiveModal
@@ -115,20 +140,29 @@ export const AddressBookModal = ({ onSelect, onClose }: Props) => {
             <Match
               value={addressBookSelectedOption}
               saved={() =>
-                addressBookItems
-                  .filter(item => {
-                    if (isEvmChain(coin.chain)) {
-                      return isEvmChain(item.chain)
-                    }
-                    return item.chain === coin.chain
-                  })
-                  .map(item => (
+                eligibleSavedItems.length > 0 ? (
+                  eligibleSavedItems.map(item => (
                     <AddressBookListItem
                       key={item.id}
                       onSelect={onSelect}
                       {...item}
                     />
                   ))
+                ) : (
+                  <SavedEmptyState gap={12} alignItems="center">
+                    <Text
+                      centerHorizontally
+                      color="contrast"
+                      size={16}
+                      weight={500}
+                    >
+                      {savedEmptyState.title}
+                    </Text>
+                    <Text centerHorizontally color="shy" size={14} weight={500}>
+                      {savedEmptyState.description}
+                    </Text>
+                  </SavedEmptyState>
+                )
               }
               all={() =>
                 vaultsAndAddressForSelectedCoin.map((value, idx) => (
@@ -180,6 +214,13 @@ const StyledList = styled(List)`
   background-image: none;
   flex-basis: 0;
   overflow: auto;
+`
+
+const SavedEmptyState = styled(VStack)`
+  flex: 1;
+  justify-content: center;
+  max-width: 265px;
+  margin: auto;
 `
 
 const OptionButton = styled(Button)`

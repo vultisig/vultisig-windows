@@ -121,7 +121,9 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={<PageHeaderBackButton onClick={handleBack} />}
-        secondaryControls={<DoneButton onClick={handleDone} />}
+        secondaryControls={
+          onFinish ? <DoneButton onClick={handleDone} /> : undefined
+        }
         title={t('vaults')}
       />
       <PageContent gap={28} flexGrow scrollable>
