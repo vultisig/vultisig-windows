@@ -170,6 +170,7 @@ export const BondedPositions = () => {
       state: {
         coin: bondCoin,
         action: 'bond',
+        entryPoint: 'defi',
         form: overrides?.nodeAddress
           ? { nodeAddress: overrides.nodeAddress }
           : undefined,
@@ -189,6 +190,7 @@ export const BondedPositions = () => {
       state: {
         coin: bondCoin,
         action: 'unbond',
+        entryPoint: 'defi',
         form: { nodeAddress },
       },
     })

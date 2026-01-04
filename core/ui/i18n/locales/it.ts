@@ -290,6 +290,7 @@ export const it = {
   blockaid_simulation_failed: 'Simulazione della transazione non riuscita',
   blockaid_simulation_failed_description:
     'Impossibile simulare questa transazione. Puoi comunque procedere, ma ti consigliamo di controllare attentamente i dettagli della transazione.',
+  transaction_scanned_by: 'Transazione scansionata da {{provider}}',
   bond: 'Legame',
   bond_with_lp: 'Bond Maya',
   bronze: 'Bronzo',
@@ -1323,6 +1324,7 @@ export const it = {
   remove_cacao_pool: 'Rimuovi dal pool CACAO',
   wrong_address_for_chain: 'Indirizzo errato per la catena selezionata',
   wrong_vault_try_again: 'Vault o dispositivo di associazione errati.',
+  you_are_bonding: 'Stai facendo bond',
   you_are_sending: 'Stai inviando',
   yourVaultShares: 'Il tuo vault ha {{shares}} condivisioni Vault',
   your_friends_referral_code: 'Codice di riferimento dei tuoi amici',

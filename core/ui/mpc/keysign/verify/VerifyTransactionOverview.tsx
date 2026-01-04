@@ -3,18 +3,19 @@ import { Chain } from '@core/chain/Chain'
 import { CoinKey, CoinMetadata } from '@core/chain/coin/Coin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
-import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { KeysignFeeAmount } from '@core/ui/mpc/keysign/tx/FeeAmount'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { List } from '@lib/ui/list'
-import { ListItem } from '@lib/ui/list/item'
+import {
+  TransactionOverviewAmount,
+  TransactionOverviewCard,
+  TransactionOverviewItem,
+} from '@core/ui/mpc/keysign/verify/components'
+import { HStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Query } from '@lib/ui/query/Query'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
-import { formatAmount } from '@lib/utils/formatAmount'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -48,36 +49,16 @@ export const VerifyTransactionOverview = ({
   const formattedAmount = fromChainAmount(amount, coin.decimals)
 
   return (
-    <List border="gradient">
-      <ListItem
-        title={
-          <VStack gap={24}>
-            <Text as="span" color="shyExtra" size={15} weight={500}>
-              {t('you_are_sending')}
-            </Text>
-            <HStack alignItems="center" gap={8}>
-              <CoinIcon coin={coin} style={{ fontSize: 24 }} />
-              <HStack alignItems="center" gap={4}>
-                <Text as="span" size={17}>
-                  <MatchQuery
-                    value={keysignPayloadQuery}
-                    error={() => formatAmount(formattedAmount)}
-                    pending={() => <Spinner />}
-                    success={({ toAmount }) =>
-                      formatAmount(fromChainAmount(toAmount, coin.decimals))
-                    }
-                  />
-                </Text>
-                <Text as="span" color="shy" size={17}>
-                  {coin.ticker}
-                </Text>
-              </HStack>
-            </HStack>
-          </VStack>
-        }
+    <TransactionOverviewCard>
+      <TransactionOverviewAmount
+        label={t('you_are_sending')}
+        coin={coin}
+        fallbackAmount={formattedAmount}
+        keysignPayloadQuery={keysignPayloadQuery}
       />
-      <ListItem
-        extra={
+      <TransactionOverviewItem
+        label={t('from')}
+        value={
           <HStack alignItems="center" gap={8}>
             <Text as="span" size={14} weight={500}>
               {senderName}
@@ -87,11 +68,10 @@ export const VerifyTransactionOverview = ({
             </Text>
           </HStack>
         }
-        title={t('from')}
-        styles={{ title: { color: 'textShy' } }}
       />
-      <ListItem
-        extra={
+      <TransactionOverviewItem
+        label={t('to')}
+        value={
           typeof receiver === 'string' ? (
             <MiddleTruncate
               size={14}
@@ -103,11 +83,10 @@ export const VerifyTransactionOverview = ({
             receiver
           )
         }
-        title={t('to')}
-        styles={{ title: { color: 'textShy' } }}
       />
-      <ListItem
-        extra={
+      <TransactionOverviewItem
+        label={t('network')}
+        value={
           <HStack alignItems="center" gap={4}>
             <ChainEntityIcon
               value={getChainLogoSrc(chain)}
@@ -118,11 +97,10 @@ export const VerifyTransactionOverview = ({
             </Text>
           </HStack>
         }
-        title={t('network')}
-        styles={{ title: { color: 'textShy' } }}
       />
-      <ListItem
-        extra={
+      <TransactionOverviewItem
+        label={t('est_network_fee')}
+        value={
           <MatchQuery
             value={keysignPayloadQuery}
             pending={() => <Spinner />}
@@ -134,10 +112,8 @@ export const VerifyTransactionOverview = ({
             )}
           />
         }
-        title={t('est_network_fee')}
-        styles={{ title: { color: 'textShy' } }}
       />
       {children}
-    </List>
+    </TransactionOverviewCard>
   )
 }

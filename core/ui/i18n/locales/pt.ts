@@ -283,6 +283,7 @@ export const pt = {
   blockaid_simulation_failed: 'A simulação da transação falhou.',
   blockaid_simulation_failed_description:
     'Não foi possível simular esta transação. Você ainda pode prosseguir, mas recomendamos que revise os detalhes da transação cuidadosamente.',
+  transaction_scanned_by: 'Transação verificada por {{provider}}',
   bond: 'Ligação',
   bond_with_lp: 'Bond Maya',
   bronze: 'Bronze',
@@ -1320,6 +1321,7 @@ export const pt = {
   remove_cacao_pool: 'Remover do pool CACAO',
   wrong_address_for_chain: 'Endereço incorreto para a cadeia selecionada',
   wrong_vault_try_again: 'Cofre ou dispositivo de emparelhamento incorretos.',
+  you_are_bonding: 'Você está bondando',
   you_are_sending: 'Você está enviando',
   yourVaultShares: 'Seu cofre possui {{shares}} ações do cofre.',
   your_friends_referral_code: 'Código de indicação do seu amigo',
