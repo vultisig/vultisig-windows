@@ -288,6 +288,7 @@ export const es = {
   blockaid_simulation_failed: 'Simulación de transacción fallida',
   blockaid_simulation_failed_description:
     'No se puede simular esta transacción. Puede continuar, pero le recomendamos revisar los detalles de la transacción con atención.',
+  transaction_scanned_by: 'Transacción analizada por {{provider}}',
   bond: 'Vínculo',
   bond_with_lp: 'Vínculo Maya',
   bronze: 'Bronce',
@@ -1330,6 +1331,7 @@ export const es = {
   remove_cacao_pool: 'Retirar del pool de CACAO',
   wrong_address_for_chain: 'Dirección incorrecta para la cadena seleccionada',
   wrong_vault_try_again: 'Dispositivo de emparejamiento o bóveda incorrecto.',
+  you_are_bonding: 'Estás haciendo bond',
   you_are_sending: 'Estás enviando',
   yourVaultShares: 'Su bóveda tiene {{shares}} acciones de bóveda',
   your_friends_referral_code: 'Código de referencia de tus amigos',

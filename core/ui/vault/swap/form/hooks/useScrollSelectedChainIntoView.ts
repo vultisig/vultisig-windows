@@ -171,5 +171,16 @@ export const useCenteredSnapCarousel = ({ chain, onSelect }: Props) => {
     [chain, onSelect, scrollToKey, setStrokeToKey]
   )
 
-  return { footerRef, itemRefs, scrollToKey, strokeRef, onKeyDown }
+  const setItemRef = useCallback((key: string, el: HTMLDivElement | null) => {
+    itemRefs.current[key] = el
+  }, [])
+
+  return {
+    footerRef,
+    itemRefs,
+    scrollToKey,
+    strokeRef,
+    onKeyDown,
+    setItemRef,
+  }
 }
