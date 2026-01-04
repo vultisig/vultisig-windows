@@ -23,7 +23,7 @@ export const OnboardingController = () => {
     navigate({ id: 'newVault' })
   }
 
-  const { step, toNextStep, toPreviousStep } = useStepNavigation({
+  const { step, toNextStep } = useStepNavigation({
     steps,
     onExit: handleExit,
   })
@@ -33,7 +33,7 @@ export const OnboardingController = () => {
       value={step}
       greeting={() => <OnboardingGreeting onFinish={toNextStep} />}
       steps={() => (
-        <OnboardingSteps onFinish={toNextStep} onBack={toPreviousStep} />
+        <OnboardingSteps onFinish={toNextStep} onBack={handleExit} />
       )}
       summary={() => <OnboardingSummary />}
     />

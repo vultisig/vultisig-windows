@@ -1,5 +1,5 @@
 import { StepTransition } from '@lib/ui/base/StepTransition'
-import { OnFinishProp } from '@lib/ui/props'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 
 import { VaultBackupWithoutPassword } from './VaultBackupWithoutPassword'
 import { VaultBackupWithPassword } from './VaultBackupWithPassword'
@@ -9,7 +9,8 @@ type VaultBackupFlowProps = OnFinishProp & { vaultIds: string[] }
 export const VaultBackupFlow = ({
   onFinish,
   vaultIds,
-}: VaultBackupFlowProps) => {
+  onBack: onPreviousStep,
+}: VaultBackupFlowProps & Partial<OnBackProp>) => {
   return (
     <StepTransition
       from={({ onFinish: onPasswordRequest }) => (
@@ -17,6 +18,7 @@ export const VaultBackupFlow = ({
           vaultIds={vaultIds}
           onFinish={onFinish}
           onPasswordRequest={onPasswordRequest}
+          onBack={onPreviousStep}
         />
       )}
       to={({ onBack }) => (

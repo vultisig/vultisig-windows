@@ -37,7 +37,11 @@ export const SelectVaultsBackupPage = () => {
     <VStack fullHeight gap={40}>
       <PageHeader
         title={t('backup')}
-        primaryControls={<PageHeaderBackButton />}
+        primaryControls={
+          <PageHeaderBackButton
+            onClick={() => navigate({ id: 'vaultSettings' })}
+          />
+        }
       />
       <FitPageContent contentMaxWidth={520}>
         <VStack gap={36}>
