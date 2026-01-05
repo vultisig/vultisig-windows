@@ -27,7 +27,7 @@ export const BackupFastVault = ({
 }: OnFinishProp & OnBackProp) => {
   const { t } = useTranslation()
 
-  const { step, toNextStep } = useStepNavigation({
+  const { step, toNextStep, toPreviousStep } = useStepNavigation({
     steps,
   })
   const vaults = useVaults()
@@ -49,7 +49,9 @@ export const BackupFastVault = ({
           onBack={onBack}
         />
       )}
-      emailVerification={() => <EmailConfirmation onFinish={toNextStep} />}
+      emailVerification={() => (
+        <EmailConfirmation onFinish={toNextStep} onBack={toPreviousStep} />
+      )}
       backupSlideshowPartTwo={() => (
         <BackupOverviewSlidesPartTwo onFinish={toNextStep} />
       )}
@@ -62,6 +64,7 @@ export const BackupFastVault = ({
               onFinish()
             }
           }}
+          onBack={toPreviousStep}
         />
       )}
       backupSuccessfulSlideshow={() => (

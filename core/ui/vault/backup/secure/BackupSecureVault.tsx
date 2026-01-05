@@ -25,7 +25,7 @@ export const BackupSecureVault = ({ onFinish }: OnFinishProp) => {
     src: '/core/animations/backup-vault-splash.riv',
     autoplay: true,
   })
-  const { step, toNextStep } = useStepNavigation({ steps })
+  const { step, toNextStep, toPreviousStep } = useStepNavigation({ steps })
   const vaults = useVaults()
   const shouldShowBackupSummary = vaults.length > 1
   const isInitiatingDevice = useIsInitiatingDevice()
@@ -58,6 +58,7 @@ export const BackupSecureVault = ({ onFinish }: OnFinishProp) => {
               onFinish()
             }
           }}
+          onBack={toPreviousStep}
         />
       )}
       backupSuccessfulSlideshow={() => (

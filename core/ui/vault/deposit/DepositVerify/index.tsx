@@ -13,15 +13,18 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnBackProp } from '@lib/ui/props'
 import { useTranslation } from 'react-i18next'
 
+import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useDepositFormConfig } from '../hooks/useDepositFormConfig'
 import { useDepositAction } from '../providers/DepositActionProvider'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
 import { useDepositData } from '../state/data'
+import { BondOverview } from './BondOverview'
 
 export const DepositVerify = ({ onBack }: OnBackProp) => {
   const [selectedChainAction] = useDepositAction()
   const [coin] = useDepositCoin()
   const depositData = useDepositData()
+  const [{ entryPoint }] = useCoreViewState<'deposit'>()
 
   const memo = useDepositMemo()
 
@@ -34,6 +37,13 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
   const sender = useSender()
   const { t } = useTranslation()
   const { fields: actionFields } = useDepositFormConfig()
+
+  const shouldUseBondOverview =
+    entryPoint === 'defi' && selectedChainAction === 'bond'
+
+  if (shouldUseBondOverview) {
+    return <BondOverview onBack={onBack} />
+  }
 
   return (
     <>

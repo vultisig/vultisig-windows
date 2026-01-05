@@ -21,6 +21,9 @@ export const en = {
   address_book_empty: 'Your Address Book is empty',
   address_book_empty_instruction:
     'Click "Add Address" to add your favorite addresses',
+  address_book_no_eligible_addresses_title: 'No saved addresses for {{chain}}',
+  address_book_no_eligible_addresses_description:
+    'Saved addresses must match the chain you are sending on.',
   address_book_saved: 'Saved Addresses',
   address_book_vault: 'My Vaults',
   adjust_search_query: 'Try adjusting your search criteria',
@@ -98,6 +101,7 @@ export const en = {
   blockaid_simulation_failed: 'Transaction Simulation Failed',
   blockaid_simulation_failed_description:
     'Unable to simulate this transaction. You can still proceed, but we recommend reviewing the transaction details carefully.',
+  transaction_scanned_by: 'Transaction scanned by {{provider}}',
   bond: 'Bond',
   bond_with_lp: 'Bond Maya',
   bronze: 'Bronze',
@@ -1318,6 +1322,7 @@ export const en = {
   remove_cacao_pool: 'Remove from CACAO Pool',
   wrong_address_for_chain: 'Wrong address for selected Chain',
   wrong_vault_try_again: 'Wrong Vault or Pair Device.',
+  you_are_bonding: "You're bonding",
   you_are_sending: "You're sending",
   yourVaultShares: 'Your vault has {{shares}} Vault Shares',
   your_friends_referral_code: 'Your friends referral code',
