@@ -1,21 +1,21 @@
 import { Chain } from '@core/chain/Chain'
 import { BlockaidEvmSimulationInfo } from '@core/chain/security/blockaid/tx/simulation/core'
+import { BlockaidSwapDisplay } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidSwapDisplay'
+import { BlockaidTransferDisplay } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidTransferDisplay'
+import { MemoSection } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/MemoSection'
+import {
+  NetworkFeeSection,
+  NetworkFeeSectionProps,
+} from '@core/inpage-provider/popup/view/resolvers/sendTx/components/NetworkFeeSection'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Query } from '@lib/ui/query/Query'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { formatUnits } from 'ethers'
 import { useTranslation } from 'react-i18next'
-
-import { MemoSection } from '../components/MemoSection'
-import {
-  NetworkFeeSection,
-  NetworkFeeSectionProps,
-} from '../components/NetworkFeeSection'
-import { BlockaidSwapDisplay } from './BlockaidSwapDisplay'
-import { BlockaidTransferDisplay } from './BlockaidTransferDisplay'
 
 type BlockaidSimulationContentProps = {
   blockaidSimulationQuery: Query<BlockaidEvmSimulationInfo, unknown>
@@ -41,26 +41,28 @@ export const BlockaidSimulationContent = ({
         if (!blockaidEvmSimulationInfo) {
           return (
             <>
-              <ListItem description={address} title={t('from')} />
-              {keysignPayload.toAddress && (
+              <List>
+                <ListItem description={address} title={t('from')} />
+                {keysignPayload.toAddress && (
+                  <ListItem
+                    description={keysignPayload.toAddress}
+                    title={t('to')}
+                  />
+                )}
+                {keysignPayload.toAmount && (
+                  <ListItem
+                    description={`${formatUnits(
+                      keysignPayload.toAmount,
+                      keysignPayload.coin?.decimals
+                    )} ${keysignPayload.coin?.ticker}`}
+                    title={t('amount')}
+                  />
+                )}
                 <ListItem
-                  description={keysignPayload.toAddress}
-                  title={t('to')}
+                  description={getKeysignChain(keysignPayload)}
+                  title={t('network')}
                 />
-              )}
-              {keysignPayload.toAmount && (
-                <ListItem
-                  description={`${formatUnits(
-                    keysignPayload.toAmount,
-                    keysignPayload.coin?.decimals
-                  )} ${keysignPayload.coin?.ticker}`}
-                  title={t('amount')}
-                />
-              )}
-              <ListItem
-                description={getKeysignChain(keysignPayload)}
-                title={t('network')}
-              />
+              </List>
               <MemoSection memo={keysignPayload.memo} chain={chain} />
               <NetworkFeeSection {...networkFeeProps} />
             </>

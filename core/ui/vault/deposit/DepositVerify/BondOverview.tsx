@@ -4,7 +4,6 @@ import { BlockaidLogo } from '@core/ui/chain/security/blockaid/BlockaidLogo'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { KeysignFeeAmount } from '@core/ui/mpc/keysign/tx/FeeAmount'
 import { TransactionOverviewAmount } from '@core/ui/mpc/keysign/verify/components/TransactionOverviewAmount'
-import { TransactionOverviewCard } from '@core/ui/mpc/keysign/verify/components/TransactionOverviewCard'
 import { TransactionOverviewItem } from '@core/ui/mpc/keysign/verify/components/TransactionOverviewItem'
 import { useIsBlockaidEnabledQuery } from '@core/ui/storage/blockaid'
 import { DepositConfirmButton } from '@core/ui/vault/deposit/DepositConfirmButton'
@@ -16,6 +15,7 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { HStack } from '@lib/ui/layout/Stack'
+import { List } from '@lib/ui/list'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
@@ -68,7 +68,7 @@ export const BondOverview = ({ onBack }: OnBackProp) => {
           </BlockaidStatus>
         )}
 
-        <TransactionOverviewCard>
+        <List border="gradient" radius={16}>
           <TransactionOverviewAmount
             label={t('you_are_bonding')}
             coin={coin}
@@ -153,7 +153,7 @@ export const BondOverview = ({ onBack }: OnBackProp) => {
               />
             }
           />
-        </TransactionOverviewCard>
+        </List>
       </PageContent>
       <PageFooter>
         <DepositConfirmButton />
