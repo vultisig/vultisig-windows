@@ -1,11 +1,10 @@
 import { SearchIcon } from '@lib/ui/icons/SearchIcon'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { UiProps } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { HStack, VStack } from '@lib/ui/layout/Stack'
 
 type SearchFieldProps = UiProps & {
   placeholderKey?: string
