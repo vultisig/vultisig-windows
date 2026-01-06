@@ -3,6 +3,10 @@ export const en = {
   action: 'Action',
   actions: 'Actions',
   active: 'Active',
+  active_chains_found_one: 'We found {{count}} active chain',
+  active_chains_found_other: 'We found {{count}} active chains',
+  active_chains_warning:
+    'Each extra chain increases the time to generate your vault and possibility of an timeout.',
   add_address: 'Add Address',
   add_folder: 'Add Folder',
   add_friends_referral: 'Add a Friends Referral',
@@ -522,7 +526,7 @@ export const en = {
   import_existing_vault: 'Import an Existing Vault',
   import_failed: 'QR code invalid, please retry',
   import_key: 'Import Key',
-  import_seedphrase: 'Import seedphrase',
+  import_seedphrase: 'Import Seedphrase',
   enter_your_seedphrase: 'Enter your seed phrase',
   enter_seedphrase_subtitle:
     'Leave a space between each word. Seed phrases of <h>12 or 24 words</h> are supported.',
@@ -683,6 +687,9 @@ export const en = {
   new_vault_setup: 'New Vault Setup',
   new_vault_setup_disclaimer: 'Your configuration changed, make a new backup.',
   next: 'Next',
+  no_active_chains_found: 'No active chains found',
+  no_active_chains_found_description:
+    "We didn't detect any assets on this seed phrase.",
   no_chains_enabled: 'No chains enabled',
   no_chains_enabled_description:
     "You've disabled all chains. Make sure that at least one chain is enabled.",
@@ -918,6 +925,9 @@ export const en = {
   scan_with_devices_to_sign:
     'Scan with devices to participate in signing the transaction',
   scanning: 'scanning...',
+  scanning_for_chains: 'Scanning for chains...',
+  scanning_for_chains_subtitle:
+    "We're checking which blockchains have active addresses for your seed phrase. <highlight>This process can take up to 2 minutes.</highlight>",
   search: 'Search',
   search_field_placeholder: 'Search',
   secure: 'Secure',
@@ -938,7 +948,8 @@ export const en = {
   select_at_least_one_device: 'Select at least one device',
   select_backup_file: 'Import your vault share',
   select_chain: 'Select Chain',
-  select_chains: 'Select',
+  select_chains: 'Select chains',
+  select_chains_manually: 'Select chains manually',
   select_positions: 'Select positions',
   select_positions_description:
     'Enable at least one position to view balances and manage positions.',
