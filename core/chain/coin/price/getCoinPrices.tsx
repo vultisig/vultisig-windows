@@ -15,8 +15,12 @@ export const getCoinPrices = async ({
   ids,
   fiatCurrency = defaultFiatCurrency,
 }: GetCoinPricesInput) => {
+  const normalizedIds = Array.from(
+    new Set(ids.map(id => id.toLowerCase()).filter(Boolean))
+  )
+
   const url = addQueryParams(baseUrl, {
-    ids: ids.join(','),
+    ids: normalizedIds.join(','),
     vs_currencies: fiatCurrency,
   })
 
