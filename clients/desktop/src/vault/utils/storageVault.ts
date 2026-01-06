@@ -1,7 +1,9 @@
 import { Chain } from '@core/chain/Chain'
-import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
+import { signingAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { MpcLib } from '@core/mpc/mpcLib'
-import { Vault, VaultKeyShares } from '@core/mpc/vault/Vault'
+import { Vault } from '@core/mpc/vault/Vault'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { recordFromKeys } from '@lib/utils/record/recordFromKeys'
 import { toEntries } from '@lib/utils/record/toEntries'
 
 import { storage } from '../../../wailsjs/go/models'
@@ -56,12 +58,15 @@ export const fromStorageVault = (
     eddsa: vault.public_key_eddsa,
   }
 
-  const keyShares: VaultKeyShares = {} as any
-  vault.keyshares.forEach(keyShare => {
-    if (keyShare.public_key === 'ecdsa' || keyShare.public_key === 'eddsa') {
-      keyShares[keyShare.public_key as SignatureAlgorithm] = keyShare.keyshare
-    }
-  })
+  const keyShares = recordFromKeys(
+    signingAlgorithms,
+    algorithm =>
+      shouldBePresent(
+        vault.keyshares.find(
+          keyShare => keyShare.public_key === publicKeys[algorithm]
+        )
+      ).keyshare
+  )
 
   const chainPublicKeys = vault.chain_public_keys
     ? (JSON.parse(vault.chain_public_keys) as Partial<Record<Chain, string>>)
