@@ -1,6 +1,5 @@
 import { Chain } from '@core/chain/Chain'
 import { SelectableChainItem } from '@core/ui/chain/selection/SelectableChainItem'
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { ItemGrid } from '@core/ui/vault/chain/manage/shared/ItemGrid'
 import { SearchInput } from '@core/ui/vault/chain/manage/shared/SearchInput'
 import { Button } from '@lib/ui/buttons/Button'
@@ -10,8 +9,8 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useMnemonic } from './state/mnemonic'
 import { useSelectedChains } from './state/selectedChains'
+import { useFinishSeedphraseImport } from './utils/useFinishSeedphraseImport'
 
 const ScrollableContent = styled.div`
   flex: 1;
@@ -32,8 +31,7 @@ export const SelectChainsStep = () => {
   const { t } = useTranslation()
   const [search, setSearch] = useState('')
   const [selectedChains, setSelectedChains] = useSelectedChains()
-  const [mnemonic] = useMnemonic()
-  const navigate = useCoreNavigate()
+  const handleFinish = useFinishSeedphraseImport()
 
   const allChains = Object.values(Chain)
 
@@ -47,18 +45,6 @@ export const SelectChainsStep = () => {
 
   const toggleChain = (chain: Chain) => {
     setSelectedChains(prev => toggleInclusion(prev, chain))
-  }
-
-  const handleFinish = () => {
-    navigate({
-      id: 'setupVault',
-      state: {
-        keyImportInput: {
-          mnemonic,
-          chains: selectedChains,
-        },
-      },
-    })
   }
 
   return (
