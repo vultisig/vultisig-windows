@@ -15,9 +15,9 @@ import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Match } from '@lib/ui/base/Match'
 import { borderRadius } from '@lib/ui/css/borderRadius'
-import BookAIcon from '@lib/ui/icons/BookAIcon'
+import { BookIcon } from '@lib/ui/icons/BookIcon'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
-import { PasteIcon } from '@lib/ui/icons/PasteIcon'
+import { SquareBehindSquare4Icon } from '@lib/ui/icons/SquareBehindSquare4Icon'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -135,13 +135,13 @@ export const ManageReceiverAddressInputField = () => {
                     }
                   }}
                 >
-                  <PasteIcon />
+                  <SquareBehindSquare4Icon />
                 </ActionIconButton>
                 <ActionIconButton onClick={() => setViewState('scanner')}>
                   <CameraIcon />
                 </ActionIconButton>
                 <ActionIconButton onClick={() => setViewState('addressBook')}>
-                  <BookAIcon />
+                  <BookIcon />
                 </ActionIconButton>
               </HStack>
             </VStack>
