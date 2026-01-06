@@ -1,6 +1,7 @@
 import { Chain } from '@core/chain/Chain'
+import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { MpcLib } from '@core/mpc/mpcLib'
-import { Vault } from '@core/mpc/vault/Vault'
+import { Vault, VaultKeyShares } from '@core/mpc/vault/Vault'
 import { toEntries } from '@lib/utils/record/toEntries'
 
 import { storage } from '../../../wailsjs/go/models'
@@ -20,6 +21,7 @@ export const toStorageVault = ({
   isBackedUp,
   lastPasswordVerificationTime,
   chainPublicKeys,
+  chainKeyShares,
 }: Vault): storage.Vault => ({
   last_password_verification_time: lastPasswordVerificationTime ?? Date.now(),
   name: name,
@@ -42,6 +44,7 @@ export const toStorageVault = ({
   chain_public_keys: chainPublicKeys
     ? JSON.stringify(chainPublicKeys)
     : undefined,
+  chain_key_shares: chainKeyShares ? JSON.stringify(chainKeyShares) : undefined,
   convertValues: () => {},
 })
 
@@ -53,13 +56,19 @@ export const fromStorageVault = (
     eddsa: vault.public_key_eddsa,
   }
 
-  const keyShares: Record<string, string> = {}
+  const keyShares: VaultKeyShares = {} as any
   vault.keyshares.forEach(keyShare => {
-    keyShares[keyShare.public_key] = keyShare.keyshare
+    if (keyShare.public_key === 'ecdsa' || keyShare.public_key === 'eddsa') {
+      keyShares[keyShare.public_key as SignatureAlgorithm] = keyShare.keyshare
+    }
   })
 
   const chainPublicKeys = vault.chain_public_keys
     ? (JSON.parse(vault.chain_public_keys) as Partial<Record<Chain, string>>)
+    : undefined
+
+  const chainKeyShares = vault.chain_key_shares
+    ? (JSON.parse(vault.chain_key_shares) as Partial<Record<Chain, string>>)
     : undefined
 
   return {
@@ -77,5 +86,6 @@ export const fromStorageVault = (
     folderId: vault.folder_id,
     isBackedUp: vault.is_backed_up,
     chainPublicKeys,
+    chainKeyShares,
   }
 }

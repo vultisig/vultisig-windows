@@ -1,3 +1,4 @@
+import { Chain } from '@core/chain/Chain'
 import { VaultKeyShares } from '@core/mpc/vault/Vault'
 import { decryptWithAesGcm } from '@lib/utils/encryption/aesGcm/decryptWithAesGcm'
 import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGcm'
@@ -9,6 +10,11 @@ import { recordMap } from '@lib/utils/record/recordMap'
 
 type Input = {
   keyShares: VaultKeyShares
+  key: string
+}
+
+type ChainKeySharesInput = {
+  keyShares: Partial<Record<Chain, string>>
   key: string
 }
 
@@ -27,3 +33,25 @@ export const decryptVaultKeyShares = ({ keyShares, key }: Input) =>
       value: Buffer.from(value, encryptedEncoding),
     }).toString(plainTextEncoding)
   )
+
+export const encryptChainKeyShares = ({
+  keyShares,
+  key,
+}: ChainKeySharesInput) =>
+  recordMap(keyShares as Record<Chain, string>, value =>
+    encryptWithAesGcm({
+      key,
+      value: Buffer.from(value),
+    }).toString(encryptedEncoding)
+  ) as Partial<Record<Chain, string>>
+
+export const decryptChainKeyShares = ({
+  keyShares,
+  key,
+}: ChainKeySharesInput) =>
+  recordMap(keyShares as Record<Chain, string>, value =>
+    decryptWithAesGcm({
+      key,
+      value: Buffer.from(value, encryptedEncoding),
+    }).toString(plainTextEncoding)
+  ) as Partial<Record<Chain, string>>

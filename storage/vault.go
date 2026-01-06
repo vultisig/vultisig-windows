@@ -27,4 +27,5 @@ type Vault struct {
 	LibType			 string   `json:"lib_type"`
 	LastPasswordVerificationTime int64 `json:"last_password_verification_time"`
 	ChainPublicKeys map[string]string `json:"chain_public_keys,omitempty"`
+	ChainKeyShares  map[string]string `json:"chain_key_shares,omitempty"`
 }

@@ -11,7 +11,7 @@ import {
 import { MpcLib } from '@core/mpc/mpcLib'
 import { Schnorr } from '@core/mpc/schnorr/schnorrKeygen'
 import { clampThenUniformScalar } from '@core/mpc/utils/ed25519ScalarClamp'
-import { Vault } from '@core/mpc/vault/Vault'
+import { Vault, VaultKeyShares } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
@@ -118,9 +118,10 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
       )
 
       const chainPublicKeys: Partial<Record<Chain, string>> = {}
-      const keyShares: Record<string, string> = {
-        [rootEcdsaResult.publicKey]: rootEcdsaResult.keyshare,
-        [rootEddsaResult.publicKey]: rootEddsaResult.keyshare,
+      const chainKeyShares: Partial<Record<Chain, string>> = {}
+      const keyShares: VaultKeyShares = {
+        ecdsa: rootEcdsaResult.keyshare,
+        eddsa: rootEddsaResult.keyshare,
       }
 
       for (const chain of chains) {
@@ -178,7 +179,7 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
         }
 
         chainPublicKeys[chain] = chainResult.publicKey
-        keyShares[chainResult.publicKey] = chainResult.keyshare
+        chainKeyShares[chain] = chainResult.keyshare
       }
 
       if (hdWallet) {
@@ -203,6 +204,7 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
           ? Date.now()
           : undefined,
         chainPublicKeys,
+        chainKeyShares,
       }
 
       await setKeygenComplete({

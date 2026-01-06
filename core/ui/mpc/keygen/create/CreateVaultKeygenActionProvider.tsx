@@ -74,8 +74,8 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
       }
 
       const keyShares = {
-        [dklsResult.publicKey]: dklsResult.keyshare,
-        [schnorrResult.publicKey]: schnorrResult.keyshare,
+        ecdsa: dklsResult.keyshare,
+        eddsa: schnorrResult.keyshare,
       }
 
       const vault = {

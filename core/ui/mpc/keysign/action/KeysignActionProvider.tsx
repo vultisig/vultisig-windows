@@ -1,4 +1,3 @@
-import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { keysign } from '@core/mpc/keysign'
 import { isKeyImportVault } from '@core/mpc/vault/Vault'
 import { ChildrenProp } from '@lib/ui/props'
@@ -32,18 +31,11 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
 
   const keysignAction: KeysignAction = useCallback(
     async ({ msgs, signatureAlgorithm, coinType, chain }) => {
-      const publicKey = getPublicKey({
-        chain,
-        walletCore,
-        hexChainCode: vault.hexChainCode,
-        publicKeys: vault.publicKeys,
-        chainPublicKeys: vault.chainPublicKeys,
-      })
-
-      const publicKeyHex = Buffer.from(publicKey.data()).toString('hex')
       const keyShare = shouldBePresent(
-        vault.keyShares[publicKeyHex],
-        'Keyshare for public key'
+        isKeyImportVault(vault)
+          ? vault.chainKeyShares?.[chain]
+          : vault.keyShares[signatureAlgorithm],
+        'Keyshare'
       )
 
       return chainPromises(

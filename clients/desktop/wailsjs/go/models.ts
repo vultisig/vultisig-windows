@@ -80,7 +80,8 @@ export namespace storage {
 	    lib_type: string;
 	    last_password_verification_time: number;
 	    chain_public_keys?: string;
-	
+	    chain_key_shares?: string;
+
 	    static createFrom(source: any = {}) {
 	        return new Vault(source);
 	    }
@@ -103,6 +104,7 @@ export namespace storage {
 	        this.lib_type = source["lib_type"];
 	        this.last_password_verification_time = source["last_password_verification_time"];
 	        this.chain_public_keys = source["chain_public_keys"];
+	        this.chain_key_shares = source["chain_key_shares"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
