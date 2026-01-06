@@ -9,10 +9,7 @@ import { pipe } from '@lib/utils/pipe'
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
 
 import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
-import {
-  encryptChainKeyShares,
-  encryptVaultKeyShares,
-} from '../../passcodeEncryption/core/vaultKeyShares'
+import { encryptVaultKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
 import { usePasscode } from '../../passcodeEncryption/state/passcode'
 import { useCreateCoinsMutation } from '../../storage/coins'
 import { useSetCurrentVaultIdMutation } from '../../storage/currentVaultId'
@@ -36,7 +33,7 @@ export const useCreateVaultMutation = (
   return useMutation({
     mutationFn: async (input: Vault) => {
       const vault = await createVault(
-        pipe(input, ({ keyShares, chainKeyShares }) => {
+        pipe(input, ({ keyShares }) => {
           if (hasPasscodeEncryption) {
             const key = shouldBePresent(passcode)
             return {
@@ -45,12 +42,7 @@ export const useCreateVaultMutation = (
                 keyShares,
                 key,
               }),
-              chainKeyShares: chainKeyShares
-                ? encryptChainKeyShares({
-                    keyShares: chainKeyShares,
-                    key,
-                  })
-                : undefined,
+              chainKeyShares: input.chainKeyShares,
             } as Vault
           }
 

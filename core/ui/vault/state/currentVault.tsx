@@ -9,10 +9,7 @@ import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { useMemo } from 'react'
 
 import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
-import {
-  decryptChainKeyShares,
-  decryptVaultKeyShares,
-} from '../../passcodeEncryption/core/vaultKeyShares'
+import { decryptVaultKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
 import { usePasscode } from '../../passcodeEncryption/state/passcode'
 import { useCurrentVaultId } from '../../storage/currentVaultId'
 import { useVaults } from '../../storage/vaults'
@@ -58,12 +55,7 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
             keyShares: vault.keyShares,
             key: passcode,
           }),
-          chainKeyShares: vault.chainKeyShares
-            ? decryptChainKeyShares({
-                keyShares: vault.chainKeyShares,
-                key: passcode,
-              })
-            : undefined,
+          chainKeyShares: vault.chainKeyShares,
         } as Vault
       } catch {
         return vault
