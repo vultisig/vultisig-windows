@@ -948,7 +948,7 @@ export const en = {
   select_asset: 'Select asset',
   select_at_least_one_device: 'Select at least one device',
   select_backup_file: 'Import your vault share',
-  select_chain: 'Select Chain',
+  select_chain: 'Select chain',
   select_chains: 'Select chains',
   select_chains_manually: 'Select chains manually',
   select_positions: 'Select positions',
@@ -969,7 +969,7 @@ export const en = {
   selected_chain_missing_in_your_vault: 'Selected chain missing in your vault',
   send: 'Send',
   send_amount_exceeds_balance: 'Amount exceeds balance',
-  send_invalid_receiver_address: 'Wrong address for selected Chain',
+  send_invalid_receiver_address: 'Wrong address for selected chain',
   send_overview: 'Send Overview',
   send_pending_validation: 'Validating your transaction...',
   send_receiver_address_same_as_sender:
