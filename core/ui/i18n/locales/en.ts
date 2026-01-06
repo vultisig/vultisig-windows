@@ -968,7 +968,7 @@ export const en = {
   selected_chain_missing_in_your_vault: 'Selected chain missing in your vault',
   send: 'Send',
   send_amount_exceeds_balance: 'Amount exceeds balance',
-  send_invalid_receiver_address: 'Enter a valid receiver address',
+  send_invalid_receiver_address: 'Wrong address for selected Chain',
   send_overview: 'Send Overview',
   send_pending_validation: 'Validating your transaction...',
   send_receiver_address_same_as_sender:

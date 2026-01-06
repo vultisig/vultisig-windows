@@ -1,3 +1,12 @@
+import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import {
+  SendFormCheckBadge,
+  SendFormIconsWrapper,
+} from '@core/ui/vault/send/addresses/components/SendFormIconsWrapper'
+import { SendInputContainer } from '@core/ui/vault/send/components/SendInputContainer'
+import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValidationQuery'
+import { useSendFormFieldState } from '@core/ui/vault/send/state/formFields'
+import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { HStack, hStack } from '@lib/ui/layout/Stack'
@@ -5,16 +14,6 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { CoinIcon } from '../../../../../chain/coin/icon/CoinIcon'
-import {
-  SendFormCheckBadge,
-  SendFormIconsWrapper,
-} from '../../../addresses/components/SendFormIconsWrapper'
-import { SendInputContainer } from '../../../components/SendInputContainer'
-import { useSendValidationQuery } from '../../../queries/useSendValidationQuery'
-import { useSendFormFieldState } from '../../../state/formFields'
-import { useCurrentSendCoin } from '../../../state/sendCoin'
 
 export const ManageSendCoinCollapsedInputField = () => {
   const coin = useCurrentSendCoin()
