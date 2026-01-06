@@ -42,8 +42,7 @@ export const useCreateVaultMutation = (
                 keyShares,
                 key,
               }),
-              chainKeyShares: input.chainKeyShares,
-            } as Vault
+            }
           }
 
           return input
