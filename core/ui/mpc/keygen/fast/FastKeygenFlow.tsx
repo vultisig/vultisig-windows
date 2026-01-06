@@ -16,9 +16,10 @@ import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { ComponentType } from 'react'
 
+import { KeyImportFastKeygenServerActionProvider } from '../keyimport/fast/KeyImportFastKeygenServerActionProvider'
+
 export const FastKeygenFlow = ({ onBack }: OnBackProp) => {
   const keygenOperation = useKeygenOperation()
-  const EmptyComponent: ComponentType<any> = () => null
   const ServerActionProvider = matchRecordUnion<
     KeygenOperation,
     ComponentType<any>
@@ -31,7 +32,7 @@ export const FastKeygenFlow = ({ onBack }: OnBackProp) => {
         plugin: () => PluginReshareFastKeygenServerActionProvider,
       })
     },
-    keyimport: () => EmptyComponent,
+    keyimport: () => KeyImportFastKeygenServerActionProvider,
   })
 
   return (
