@@ -55,8 +55,7 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
             keyShares: vault.keyShares,
             key: passcode,
           }),
-          chainKeyShares: vault.chainKeyShares,
-        } as Vault
+        }
       } catch {
         return vault
       }
