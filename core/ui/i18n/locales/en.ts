@@ -308,6 +308,7 @@ export const en = {
     'Enable at least one token to view balances and manage positions.',
   encrypting_vault_keyshares: 'Encrypting vault keyshares...',
   enter_address: 'Enter Address',
+  enter_address_here: 'Enter address here',
   enter_amount: 'Enter Amount',
   enter_contract_address: 'Enter Contract Address',
   enter_folder_name: 'Enter folder name',
