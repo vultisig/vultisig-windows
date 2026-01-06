@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { HStack } from '../layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 
 type SearchFieldProps = UiProps & {
   placeholderKey?: string
@@ -43,7 +43,7 @@ export const SearchField: React.FC<SearchFieldProps> = ({
     >
       {!isFocused && (
         <SearchIconWrapper>
-          <SearchIcon />
+          <SearchIcon strokeWidth={2.5} />
         </SearchIconWrapper>
       )}
       <StyledInput
@@ -66,12 +66,13 @@ const Wrapper = styled(HStack)`
   height: 48px;
 `
 
-const SearchIconWrapper = styled.div`
-  position: absolute;
+const SearchIconWrapper = styled(VStack)`
+  color: ${getColor('textShy')};
+  font-size: 16px;
   left: 8px;
+  position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  color: ${getColor('textShy')};
 `
 
 const StyledInput = styled.input.attrs({ autoComplete: 'off' })`
