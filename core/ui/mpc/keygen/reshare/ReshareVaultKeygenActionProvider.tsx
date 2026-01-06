@@ -72,7 +72,9 @@ export const ReshareVaultKeygenActionProvider = ({
       )
       const oldEcdsaKeyshare =
         'existingVault' in keygenVault
-          ? keygenVault.existingVault.keyShares.ecdsa
+          ? keygenVault.existingVault.keyShares[
+              keygenVault.existingVault.publicKeys.ecdsa
+            ]
           : undefined
       const dklsResult =
         await dklsKeygen.startReshareWithRetry(oldEcdsaKeyshare)
@@ -93,7 +95,9 @@ export const ReshareVaultKeygenActionProvider = ({
       )
       const oldEddsaKeyshare =
         'existingVault' in keygenVault
-          ? keygenVault.existingVault.keyShares.eddsa
+          ? keygenVault.existingVault.keyShares[
+              keygenVault.existingVault.publicKeys.eddsa
+            ]
           : undefined
 
       const schnorrResult =
@@ -105,8 +109,8 @@ export const ReshareVaultKeygenActionProvider = ({
       }
 
       const keyShares = {
-        ecdsa: dklsResult.keyshare,
-        eddsa: schnorrResult.keyshare,
+        [dklsResult.publicKey]: dklsResult.keyshare,
+        [schnorrResult.publicKey]: schnorrResult.keyshare,
       }
 
       const newVaultFields = {

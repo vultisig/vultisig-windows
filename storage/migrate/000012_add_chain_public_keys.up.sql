@@ -1,0 +1,1 @@
+ALTER TABLE vaults ADD COLUMN chain_public_keys TEXT DEFAULT NULL;

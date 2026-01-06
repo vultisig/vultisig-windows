@@ -32,6 +32,7 @@
     "@emotion/is-prop-valid": "^1.4.0",
     "@hookform/resolvers": "^5.2.2",
     "@lifi/sdk": "^3.14.1",
+    "@noble/hashes": "^2.0.1",
     "@react-spring/web": "^10.0.3",
     "@rive-app/react-canvas": "^4.25.1",
     "@tanstack/react-query": "^5.90.12",

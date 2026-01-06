@@ -69,7 +69,7 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
 
 export const useCurrentVaultPublicKey = (chain: Chain) => {
   const walletCore = useAssertWalletCore()
-  const { hexChainCode, publicKeys } = useCurrentVault()
+  const { hexChainCode, publicKeys, chainPublicKeys } = useCurrentVault()
 
   return useMemo(
     () =>
@@ -78,7 +78,8 @@ export const useCurrentVaultPublicKey = (chain: Chain) => {
         walletCore,
         hexChainCode,
         publicKeys,
+        chainPublicKeys,
       }),
-    [chain, hexChainCode, publicKeys, walletCore]
+    [chain, hexChainCode, publicKeys, walletCore, chainPublicKeys]
   )
 }

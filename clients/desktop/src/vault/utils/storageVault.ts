@@ -1,8 +1,6 @@
-import { signingAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
+import { Chain } from '@core/chain/Chain'
 import { MpcLib } from '@core/mpc/mpcLib'
 import { Vault } from '@core/mpc/vault/Vault'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { recordFromKeys } from '@lib/utils/record/recordFromKeys'
 import { toEntries } from '@lib/utils/record/toEntries'
 
 import { storage } from '../../../wailsjs/go/models'
@@ -21,6 +19,7 @@ export const toStorageVault = ({
   folderId,
   isBackedUp,
   lastPasswordVerificationTime,
+  chainPublicKeys,
 }: Vault): storage.Vault => ({
   last_password_verification_time: lastPasswordVerificationTime ?? Date.now(),
   name: name,
@@ -30,7 +29,7 @@ export const toStorageVault = ({
   created_at: (createdAt ? new Date(createdAt) : new Date()).toISOString(),
   hex_chain_code: hexChainCode,
   keyshares: toEntries(keyShares).map(({ key, value }) => ({
-    public_key: publicKeys[key],
+    public_key: key,
     keyshare: value,
   })),
   local_party_id: localPartyId,
@@ -40,6 +39,9 @@ export const toStorageVault = ({
   coins: [],
   lib_type: libType,
   folder_id: folderId,
+  chain_public_keys: chainPublicKeys
+    ? JSON.stringify(chainPublicKeys)
+    : undefined,
   convertValues: () => {},
 })
 
@@ -51,15 +53,15 @@ export const fromStorageVault = (
     eddsa: vault.public_key_eddsa,
   }
 
-  const keyShares = recordFromKeys(
-    signingAlgorithms,
-    algorithm =>
-      shouldBePresent(
-        vault.keyshares.find(
-          keyShare => keyShare.public_key === publicKeys[algorithm]
-        )
-      ).keyshare
-  )
+  const keyShares: Record<string, string> = {}
+  vault.keyshares.forEach(keyShare => {
+    keyShares[keyShare.public_key] = keyShare.keyshare
+  })
+
+  const chainPublicKeys = vault.chain_public_keys
+    ? (JSON.parse(vault.chain_public_keys) as Partial<Record<Chain, string>>)
+    : undefined
+
   return {
     lastPasswordVerificationTime: vault.last_password_verification_time,
     name: vault.name,
@@ -74,5 +76,6 @@ export const fromStorageVault = (
     order: vault.order,
     folderId: vault.folder_id,
     isBackedUp: vault.is_backed_up,
+    chainPublicKeys,
   }
 }

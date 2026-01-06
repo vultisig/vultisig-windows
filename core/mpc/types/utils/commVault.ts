@@ -1,10 +1,7 @@
 import { create } from '@bufbuild/protobuf'
 import { Timestamp, TimestampSchema } from '@bufbuild/protobuf/wkt'
-import { signingAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { Vault } from '@core/mpc/vault/Vault'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { pick } from '@lib/utils/record/pick'
-import { recordFromKeys } from '@lib/utils/record/recordFromKeys'
 import { toEntries } from '@lib/utils/record/toEntries'
 import { convertDuration } from '@lib/utils/time/convertDuration'
 
@@ -40,13 +37,18 @@ export const toCommVault = (vault: Vault): CommVault =>
       : undefined,
     keyShares: toEntries(vault.keyShares).map(({ key, value }) =>
       create(Vault_KeyShareSchema, {
-        publicKey: vault.publicKeys[key],
+        publicKey: key,
         keyshare: value,
       })
     ),
     publicKeyEcdsa: vault.publicKeys.ecdsa,
     publicKeyEddsa: vault.publicKeys.eddsa,
-    libType: toLibType(vault.libType),
+    libType: toLibType({
+      libType: vault.libType,
+      isKeyImport:
+        vault.chainPublicKeys !== undefined &&
+        Object.keys(vault.chainPublicKeys).length > 0,
+    }),
   })
 
 export const fromCommVault = (vault: CommVault): Vault => {
@@ -55,15 +57,10 @@ export const fromCommVault = (vault: CommVault): Vault => {
     eddsa: vault.publicKeyEddsa,
   }
 
-  const keyShares = recordFromKeys(
-    signingAlgorithms,
-    algorithm =>
-      shouldBePresent(
-        vault.keyShares.find(
-          keyShare => keyShare.publicKey === publicKeys[algorithm]
-        )
-      ).keyshare
-  )
+  const keyShares: Record<string, string> = {}
+  vault.keyShares.forEach(keyShare => {
+    keyShares[keyShare.publicKey] = keyShare.keyshare
+  })
 
   return {
     ...pick(vault, [

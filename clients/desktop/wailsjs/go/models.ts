@@ -79,6 +79,7 @@ export namespace storage {
 	    folder_id?: string;
 	    lib_type: string;
 	    last_password_verification_time: number;
+	    chain_public_keys?: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new Vault(source);
@@ -101,6 +102,7 @@ export namespace storage {
 	        this.folder_id = source["folder_id"];
 	        this.lib_type = source["lib_type"];
 	        this.last_password_verification_time = source["last_password_verification_time"];
+	        this.chain_public_keys = source["chain_public_keys"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

@@ -6,6 +6,7 @@ import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { assertChainField } from '@core/chain/utils/assertChainField'
 import { signWithServer } from '@core/mpc/fast/api/signWithServer'
 import { getEncodedSigningInputs } from '@core/mpc/keysign/signingInputs'
+import { isKeyImportVault } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
@@ -40,7 +41,8 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
 }) => {
   const { t } = useTranslation()
 
-  const { publicKeys, hexChainCode } = useCurrentVault()
+  const vault = useCurrentVault()
+  const { publicKeys, hexChainCode } = vault
 
   const sessionId = useMpcSessionId()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
@@ -59,6 +61,7 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
             walletCore,
             hexChainCode,
             publicKeys,
+            chainPublicKeys: vault.chainPublicKeys,
           })
           const inputs = getEncodedSigningInputs({
             keysignPayload,
@@ -74,14 +77,20 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
             }).map(value => Buffer.from(value).toString('hex'))
           )
 
+          const isImport = isKeyImportVault(vault)
+
           return signWithServer({
-            public_key: publicKeys.ecdsa,
+            public_key: isImport
+              ? Buffer.from(publicKey.data()).toString('hex')
+              : publicKeys.ecdsa,
             messages,
             session: sessionId,
             hex_encryption_key: hexEncryptionKey,
-            derive_path: walletCore.CoinTypeExt.derivationPath(
-              getCoinType({ walletCore, chain })
-            ),
+            derive_path: isImport
+              ? ''
+              : walletCore.CoinTypeExt.derivationPath(
+                  getCoinType({ walletCore, chain })
+                ),
             is_ecdsa: signatureAlgorithms[getChainKind(chain)] === 'ecdsa',
             vault_password: password,
           })
@@ -93,17 +102,33 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
 
           const hexMessage = getCustomMessageHex({ chain, message })
 
+          const isImport = isKeyImportVault(vault)
+
+          const derivePath = isImport
+            ? ''
+            : walletCore.CoinTypeExt.derivationPath(
+                getCoinType({
+                  walletCore,
+                  chain,
+                })
+              )
+
+          const publicKey = getPublicKey({
+            chain,
+            walletCore,
+            hexChainCode,
+            publicKeys,
+            chainPublicKeys: vault.chainPublicKeys,
+          })
+
           return signWithServer({
-            public_key: publicKeys.ecdsa,
+            public_key: isImport
+              ? Buffer.from(publicKey.data()).toString('hex')
+              : publicKeys.ecdsa,
             messages: [hexMessage],
             session: sessionId,
             hex_encryption_key: hexEncryptionKey,
-            derive_path: walletCore.CoinTypeExt.derivationPath(
-              getCoinType({
-                walletCore,
-                chain,
-              })
-            ),
+            derive_path: derivePath,
             is_ecdsa: signatureAlgorithms[getChainKind(chain)] === 'ecdsa',
             vault_password: password,
           })

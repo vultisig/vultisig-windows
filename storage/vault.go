@@ -26,4 +26,5 @@ type Vault struct {
 	FolderID			 *string `json:"folder_id,omitempty"`
 	LibType			 string   `json:"lib_type"`
 	LastPasswordVerificationTime int64 `json:"last_password_verification_time"`
+	ChainPublicKeys map[string]string `json:"chain_public_keys,omitempty"`
 }

@@ -1,3 +1,4 @@
+import { Chain } from '@core/chain/Chain'
 import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
@@ -7,6 +8,7 @@ type KeysignActionInput = {
   msgs: string[]
   signatureAlgorithm: SignatureAlgorithm
   coinType: CoinType
+  chain: Chain
 }
 
 export type KeysignAction = (

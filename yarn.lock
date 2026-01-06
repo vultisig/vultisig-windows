@@ -12878,6 +12878,7 @@ __metadata:
     "@google-cloud/translate": "npm:^9.3.0"
     "@hookform/resolvers": "npm:^5.2.2"
     "@lifi/sdk": "npm:^3.14.1"
+    "@noble/hashes": "npm:^2.0.1"
     "@react-spring/web": "npm:^10.0.3"
     "@rive-app/react-canvas": "npm:^4.25.1"
     "@tanstack/react-query": "npm:^5.90.12"

@@ -49,6 +49,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
               walletCore,
               hexChainCode: vault.hexChainCode,
               publicKeys: vault.publicKeys,
+              chainPublicKeys: vault.chainPublicKeys,
             })
 
             const chainKind = getChainKind(chain)
@@ -75,6 +76,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
               msgs,
               signatureAlgorithm,
               coinType,
+              chain,
             })
             const signaturesRecord = recordFromItems(signatures, ({ msg }) =>
               Buffer.from(msg, 'base64').toString('hex')
@@ -127,6 +129,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
               msgs: [hexMessage],
               signatureAlgorithm: signatureAlgorithms[chainKind],
               coinType: getCoinType({ walletCore, chain }),
+              chain,
             })
 
             const result = generateSignature({
