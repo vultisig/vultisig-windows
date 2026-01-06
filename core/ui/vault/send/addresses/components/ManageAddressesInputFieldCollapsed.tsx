@@ -47,14 +47,16 @@ export const ManageAddressesInputFieldCollapsed = () => {
       </HStack>
       <SendFormIconsWrapper gap={12}>
         {isChecked && (
-          <SendFormCheckBadge>
-            <CheckmarkIcon />
-          </SendFormCheckBadge>
-        )}
-        {!isOpen && (
-          <PencilIconWrapper>
-            <PencilIcon />
-          </PencilIconWrapper>
+          <>
+            <SendFormCheckBadge>
+              <CheckmarkIcon />
+            </SendFormCheckBadge>
+            {!isOpen && (
+              <PencilIconWrapper>
+                <PencilIcon />
+              </PencilIconWrapper>
+            )}
+          </>
         )}
       </SendFormIconsWrapper>
     </CollapsedCoinInputContainer>
