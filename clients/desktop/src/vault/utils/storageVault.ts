@@ -43,10 +43,8 @@ export const toStorageVault = ({
   coins: [],
   lib_type: libType,
   folder_id: folderId,
-  chain_public_keys: chainPublicKeys
-    ? JSON.stringify(chainPublicKeys)
-    : undefined,
-  chain_key_shares: chainKeyShares ? JSON.stringify(chainKeyShares) : undefined,
+  chain_public_keys: chainPublicKeys,
+  chain_key_shares: chainKeyShares,
   convertValues: () => {},
 })
 
@@ -68,13 +66,13 @@ export const fromStorageVault = (
       ).keyshare
   )
 
-  const chainPublicKeys = vault.chain_public_keys
-    ? (JSON.parse(vault.chain_public_keys) as Partial<Record<Chain, string>>)
-    : undefined
+  const chainPublicKeys = vault.chain_public_keys as
+    | Partial<Record<Chain, string>>
+    | undefined
 
-  const chainKeyShares = vault.chain_key_shares
-    ? (JSON.parse(vault.chain_key_shares) as Partial<Record<Chain, string>>)
-    : undefined
+  const chainKeyShares = vault.chain_key_shares as
+    | Partial<Record<Chain, string>>
+    | undefined
 
   return {
     lastPasswordVerificationTime: vault.last_password_verification_time,
