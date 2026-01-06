@@ -47,10 +47,12 @@ export const vaultsStorage: VaultsStorage = {
     const storageVaultsKeyShares = recordMap(
       vaultsKeyShares,
       (keyShares, vaultId) => {
-        shouldBePresent(vaults.find(v => getVaultId(v) === vaultId))
+        const { publicKeys } = shouldBePresent(
+          vaults.find(v => getVaultId(v) === vaultId)
+        )
 
         return toEntries(keyShares).map(({ key, value }) => ({
-          public_key: key,
+          public_key: publicKeys[key],
           keyshare: value,
         }))
       }
