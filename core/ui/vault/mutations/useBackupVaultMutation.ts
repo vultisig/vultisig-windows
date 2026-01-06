@@ -88,8 +88,7 @@ export const useBackupVaultMutation = ({
             keyShares: vault.keyShares,
             key: passcode,
           }),
-          chainKeyShares: vault.chainKeyShares,
-        } as Vault
+        }
       }
 
       const getFile = async () => {
