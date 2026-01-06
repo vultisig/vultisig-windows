@@ -41,7 +41,7 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
   const { t } = useTranslation()
 
   const vault = useCurrentVault()
-  const { publicKeys, hexChainCode } = vault
+  const { publicKeys, hexChainCode, chainPublicKeys } = vault
 
   const sessionId = useMpcSessionId()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
@@ -60,7 +60,7 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
             walletCore,
             hexChainCode,
             publicKeys,
-            chainPublicKeys: vault.chainPublicKeys,
+            chainPublicKeys,
           })
           const inputs = getEncodedSigningInputs({
             keysignPayload,
