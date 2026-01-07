@@ -350,7 +350,7 @@ export class Schnorr {
     this.isKeygenComplete = false
     try {
       let session: KeyImportSession | KeyImportInitiator | null = null
-      if (this.isInitiateDevice && attempt === 0) {
+      if (this.isInitiateDevice) {
         const privateKey = Buffer.from(hexPrivateKey, 'hex')
         const chainCode = Buffer.from(hexChainCode, 'hex')
         const initiatorSession = new KeyImportInitiator(
@@ -370,14 +370,14 @@ export class Schnorr {
           serverUrl: this.serverURL,
           message: encryptedSetupMsg,
           sessionId: this.sessionId,
-          messageId: additionalHeader,
+          messageId: additionalHeader ?? 'eddsa_key_import',
         })
         console.log('uploaded setup message successfully')
       } else {
         const encodedEncryptedSetupMsg = await waitForSetupMessage({
           serverUrl: this.serverURL,
           sessionId: this.sessionId,
-          messageId: additionalHeader,
+          messageId: additionalHeader ?? 'eddsa_key_import',
         })
         this.setupMessage = fromMpcServerMessage(
           encodedEncryptedSetupMsg,
