@@ -1,5 +1,6 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCore } from '@core/ui/state/core'
 import { useSetupVaultPageAnimation } from '@core/ui/vault/create/setup-vault/hooks/useSetupVaultPageAnimation'
 import { useVaultSecurityType } from '@core/ui/vault/state/vaultSecurityType'
@@ -42,11 +43,21 @@ export const SetupVaultPage = () => {
   const navigate = useCoreNavigate()
   const { goBack } = useCore()
   const [{ history }] = useNavigation()
+  const [state] = useCoreViewState<'setupVault'>()
+  const keyImportInput = state?.keyImportInput
 
   const handleStart = () => {
     match(value, {
-      fast: () => navigate({ id: 'setupFastVault' }),
-      secure: () => navigate({ id: 'setupSecureVault' }),
+      fast: () =>
+        navigate({
+          id: 'setupFastVault',
+          state: { keyImportInput },
+        }),
+      secure: () =>
+        navigate({
+          id: 'setupSecureVault',
+          state: { keyImportInput },
+        }),
     })
   }
 

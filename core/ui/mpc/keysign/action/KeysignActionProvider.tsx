@@ -1,5 +1,7 @@
 import { keysign } from '@core/mpc/keysign'
+import { isKeyImportVault } from '@core/mpc/vault/Vault'
 import { ChildrenProp } from '@lib/ui/props'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
 import { chainPromises } from '@lib/utils/promise/chainPromises'
 import { useCallback } from 'react'
@@ -28,8 +30,13 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
   const peers = useMpcPeers()
 
   const keysignAction: KeysignAction = useCallback(
-    async ({ msgs, signatureAlgorithm, coinType }) => {
-      const keyShare = vault.keyShares[signatureAlgorithm]
+    async ({ msgs, signatureAlgorithm, coinType, chain }) => {
+      const keyShare = shouldBePresent(
+        isKeyImportVault(vault)
+          ? vault.chainKeyShares?.[chain]
+          : vault.keyShares[signatureAlgorithm],
+        'Keyshare'
+      )
 
       return chainPromises(
         msgs.map(
@@ -38,14 +45,15 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
               keyShare,
               signatureAlgorithm,
               message,
-              chainPath: match(signatureAlgorithm, {
-                ecdsa: () =>
-                  walletCore.CoinTypeExt.derivationPath(coinType).replaceAll(
-                    "'",
-                    ''
-                  ),
-                eddsa: () => eddsaPlaceholderChainPath,
-              }),
+              chainPath: isKeyImportVault(vault)
+                ? ''
+                : match(signatureAlgorithm, {
+                    ecdsa: () =>
+                      walletCore.CoinTypeExt.derivationPath(
+                        coinType
+                      ).replaceAll("'", ''),
+                    eddsa: () => eddsaPlaceholderChainPath,
+                  }),
               localPartyId: vault.localPartyId,
               peers,
               serverUrl,
@@ -62,9 +70,8 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
       peers,
       serverUrl,
       sessionId,
-      vault.keyShares,
-      vault.localPartyId,
-      walletCore.CoinTypeExt,
+      vault,
+      walletCore,
     ]
   )
 

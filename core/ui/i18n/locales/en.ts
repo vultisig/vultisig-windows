@@ -3,6 +3,10 @@ export const en = {
   action: 'Action',
   actions: 'Actions',
   active: 'Active',
+  active_chains_found_one: 'We found {{count}} active chain',
+  active_chains_found_other: 'We found {{count}} active chains',
+  active_chains_warning:
+    'Each extra chain increases the time to generate your vault and possibility of an timeout.',
   add_address: 'Add Address',
   add_folder: 'Add Folder',
   add_friends_referral: 'Add a Friends Referral',
@@ -304,6 +308,7 @@ export const en = {
     'Enable at least one token to view balances and manage positions.',
   encrypting_vault_keyshares: 'Encrypting vault keyshares...',
   enter_address: 'Enter Address',
+  enter_address_here: 'Enter address here',
   enter_amount: 'Enter Amount',
   enter_contract_address: 'Enter Contract Address',
   enter_folder_name: 'Enter folder name',
@@ -522,7 +527,7 @@ export const en = {
   import_existing_vault: 'Import an Existing Vault',
   import_failed: 'QR code invalid, please retry',
   import_key: 'Import Key',
-  import_seedphrase: 'Import seedphrase',
+  import_seedphrase: 'Import Seedphrase',
   enter_your_seedphrase: 'Enter your seed phrase',
   enter_seedphrase_subtitle:
     'Leave a space between each word. Seed phrases of <h>12 or 24 words</h> are supported.',
@@ -683,6 +688,9 @@ export const en = {
   new_vault_setup: 'New Vault Setup',
   new_vault_setup_disclaimer: 'Your configuration changed, make a new backup.',
   next: 'Next',
+  no_active_chains_found: 'No active chains found',
+  no_active_chains_found_description:
+    "We didn't detect any assets on this seed phrase.",
   no_chains_enabled: 'No chains enabled',
   no_chains_enabled_description:
     "You've disabled all chains. Make sure that at least one chain is enabled.",
@@ -918,6 +926,9 @@ export const en = {
   scan_with_devices_to_sign:
     'Scan with devices to participate in signing the transaction',
   scanning: 'scanning...',
+  scanning_for_chains: 'Scanning for chains...',
+  scanning_for_chains_subtitle:
+    "We're checking which blockchains have active addresses for your seed phrase. <highlight>This process can take up to 2 minutes.</highlight>",
   search: 'Search',
   search_field_placeholder: 'Search',
   secure: 'Secure',
@@ -937,8 +948,9 @@ export const en = {
   select_asset: 'Select asset',
   select_at_least_one_device: 'Select at least one device',
   select_backup_file: 'Import your vault share',
-  select_chain: 'Select Chain',
-  select_chains: 'Select',
+  select_chain: 'Select chain',
+  select_chains: 'Select chains',
+  select_chains_manually: 'Select chains manually',
   select_positions: 'Select positions',
   select_positions_description:
     'Enable at least one position to view balances and manage positions.',
@@ -957,7 +969,7 @@ export const en = {
   selected_chain_missing_in_your_vault: 'Selected chain missing in your vault',
   send: 'Send',
   send_amount_exceeds_balance: 'Amount exceeds balance',
-  send_invalid_receiver_address: 'Enter a valid receiver address',
+  send_invalid_receiver_address: 'Wrong address for selected chain',
   send_overview: 'Send Overview',
   send_pending_validation: 'Validating your transaction...',
   send_receiver_address_same_as_sender:

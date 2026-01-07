@@ -1,12 +1,12 @@
 import { Button } from '@lib/ui/buttons/Button'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { VStack } from '@lib/ui/layout/Stack'
-import { OnFinishProp } from '@lib/ui/props'
 import { useRive } from '@rive-app/react-canvas'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
+import { useImportSeedphraseStep } from '../state/step'
 import { ImportSeedphraseIntroRequirements } from './ImportSeedphraseIntroRequirements'
 
 const animationTop = 32
@@ -49,8 +49,9 @@ const ContentArea = styled(VStack)`
   align-self: center;
 `
 
-export const ImportSeedphraseIntroStep = ({ onFinish }: OnFinishProp) => {
+export const ImportSeedphraseIntroStep = () => {
   const { t } = useTranslation()
+  const [, setStep] = useImportSeedphraseStep()
 
   const [showContent, setShowContent] = useState(false)
 
@@ -85,7 +86,7 @@ export const ImportSeedphraseIntroStep = ({ onFinish }: OnFinishProp) => {
           <VStack flexGrow justifyContent="space-between" gap={40}>
             <ImportSeedphraseIntroRequirements />
 
-            <Button onClick={onFinish}>{t('next')}</Button>
+            <Button onClick={() => setStep('input')}>{t('next')}</Button>
           </VStack>
         </AnimatedVisibility>
       </ContentArea>

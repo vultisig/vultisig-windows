@@ -3,7 +3,6 @@ import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { TextArea } from '@lib/ui/inputs/TextArea'
 import { VStack } from '@lib/ui/layout/Stack'
-import { OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -11,11 +10,13 @@ import { useTranslation } from 'react-i18next'
 import { seedphraseWordCounts } from './config'
 import { EnterSeedphraseHeader } from './EnterSeedphraseHeader'
 import { useMnemonic } from './state/mnemonic'
-import { cleanMnemonic, validateMnemonic } from './validateMnemonic'
+import { useImportSeedphraseStep } from './state/step'
+import { cleanMnemonic, validateMnemonic } from './utils/validateMnemonic'
 
-export const EnterSeedphraseStep = ({ onFinish }: OnFinishProp) => {
+export const EnterSeedphraseStep = () => {
   const { t } = useTranslation()
   const [mnemonic, setMnemonic] = useMnemonic()
+  const [, setStep] = useImportSeedphraseStep()
   const walletCore = useAssertWalletCore()
 
   const [isTouched, setIsTouched] = useState(false)
@@ -34,7 +35,10 @@ export const EnterSeedphraseStep = ({ onFinish }: OnFinishProp) => {
       as="form"
       gap={32}
       flexGrow
-      {...getFormProps({ onSubmit: onFinish, isDisabled: !isValid })}
+      {...getFormProps({
+        onSubmit: () => setStep('scan'),
+        isDisabled: !isValid,
+      })}
     >
       <EnterSeedphraseHeader />
 

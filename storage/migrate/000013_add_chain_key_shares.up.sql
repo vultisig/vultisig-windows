@@ -1,0 +1,1 @@
+ALTER TABLE vaults ADD COLUMN chain_key_shares TEXT DEFAULT NULL;

@@ -1,7 +1,13 @@
 import { create } from '@bufbuild/protobuf'
 import { Timestamp, TimestampSchema } from '@bufbuild/protobuf/wkt'
-import { signingAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
-import { Vault } from '@core/mpc/vault/Vault'
+import { Chain } from '@core/chain/Chain'
+import { getChainKind } from '@core/chain/ChainKind'
+import {
+  SignatureAlgorithm,
+  signatureAlgorithms,
+  signingAlgorithms,
+} from '@core/chain/signing/SignatureAlgorithm'
+import { isKeyImportVault, Vault } from '@core/mpc/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { pick } from '@lib/utils/record/pick'
 import { recordFromKeys } from '@lib/utils/record/recordFromKeys'
@@ -11,6 +17,7 @@ import { convertDuration } from '@lib/utils/time/convertDuration'
 import { hasServer } from '../../devices/localPartyId'
 import {
   Vault as CommVault,
+  Vault_ChainPublicKeySchema,
   Vault_KeyShareSchema,
   VaultSchema,
 } from '../vultisig/vault/v1/vault_pb'
@@ -38,15 +45,34 @@ export const toCommVault = (vault: Vault): CommVault =>
     createdAt: vault.createdAt
       ? isoStringToProtoTimestamp(vault.createdAt)
       : undefined,
-    keyShares: toEntries(vault.keyShares).map(({ key, value }) =>
-      create(Vault_KeyShareSchema, {
-        publicKey: vault.publicKeys[key],
-        keyshare: value,
-      })
-    ),
+    keyShares: [
+      ...toEntries(vault.keyShares).map(({ key, value }) =>
+        create(Vault_KeyShareSchema, {
+          publicKey: vault.publicKeys[key as SignatureAlgorithm],
+          keyshare: value,
+        })
+      ),
+      ...toEntries(vault.chainKeyShares ?? {}).map(({ key, value }) =>
+        create(Vault_KeyShareSchema, {
+          publicKey: shouldBePresent(vault.chainPublicKeys?.[key as Chain]),
+          keyshare: value,
+        })
+      ),
+    ],
     publicKeyEcdsa: vault.publicKeys.ecdsa,
     publicKeyEddsa: vault.publicKeys.eddsa,
-    libType: toLibType(vault.libType),
+    libType: toLibType({
+      libType: vault.libType,
+      isKeyImport: isKeyImportVault(vault),
+    }),
+    chainPublicKeys: toEntries(vault.chainPublicKeys ?? {}).map(
+      ({ key, value }) =>
+        create(Vault_ChainPublicKeySchema, {
+          publicKey: value,
+          chain: key,
+          isEddsa: signatureAlgorithms[getChainKind(key as Chain)] === 'eddsa',
+        })
+    ),
   })
 
 export const fromCommVault = (vault: CommVault): Vault => {
@@ -54,6 +80,15 @@ export const fromCommVault = (vault: CommVault): Vault => {
     ecdsa: vault.publicKeyEcdsa,
     eddsa: vault.publicKeyEddsa,
   }
+
+  const chainPublicKeys: Partial<Record<Chain, string>> = {}
+  const chainByPublicKey = new Map<string, Chain>()
+
+  vault.chainPublicKeys.forEach(cp => {
+    const chain = cp.chain as Chain
+    chainPublicKeys[chain] = cp.publicKey
+    chainByPublicKey.set(cp.publicKey, chain)
+  })
 
   const keyShares = recordFromKeys(
     signingAlgorithms,
@@ -64,6 +99,14 @@ export const fromCommVault = (vault: CommVault): Vault => {
         )
       ).keyshare
   )
+
+  const chainKeyShares: Partial<Record<Chain, string>> = {}
+  vault.keyShares.forEach(keyShare => {
+    const chain = chainByPublicKey.get(keyShare.publicKey)
+    if (chain) {
+      chainKeyShares[chain] = keyShare.keyshare
+    }
+  })
 
   return {
     ...pick(vault, [
@@ -79,6 +122,8 @@ export const fromCommVault = (vault: CommVault): Vault => {
       : undefined,
     publicKeys,
     keyShares,
+    chainKeyShares,
+    chainPublicKeys,
     libType: fromLibType(vault.libType),
     isBackedUp: false,
     order: 0,

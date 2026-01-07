@@ -1,19 +1,17 @@
 import { Chain } from '@core/chain/Chain'
 import { Coin } from '@core/chain/coin/Coin'
+import { MemoSection } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/MemoSection'
+import {
+  NetworkFeeSection,
+  NetworkFeeSectionProps,
+} from '@core/inpage-provider/popup/view/resolvers/sendTx/components/NetworkFeeSection'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
-import { ContentWrapper } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
 import { Text } from '@lib/ui/text'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { formatUnits } from 'ethers'
 import { useTranslation } from 'react-i18next'
-
-import { MemoSection } from '../components/MemoSection'
-import {
-  NetworkFeeSection,
-  NetworkFeeSectionProps,
-} from '../components/NetworkFeeSection'
 
 type BlockaidTransferDisplayProps = {
   transfer: {
@@ -45,7 +43,7 @@ export const BlockaidTransferDisplay = ({
 
   return (
     <>
-      <ContentWrapper gap={24}>
+      <VStack bgColor="foreground" gap={24} padding={24} radius={16}>
         <Text color="supporting" size={15}>
           {t('you_are_sending')}
         </Text>
@@ -59,7 +57,7 @@ export const BlockaidTransferDisplay = ({
             </VStack>
           </HStack>
         </VStack>
-      </ContentWrapper>
+      </VStack>
       <ListItem description={fromAddress} title={t('from')} />
       {toAddress && <ListItem description={toAddress} title={t('to')} />}
       <MemoSection memo={memo} chain={chain} />

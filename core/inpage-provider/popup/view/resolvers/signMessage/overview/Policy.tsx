@@ -12,6 +12,7 @@ import {
 import { usePopupContext } from '@core/inpage-provider/popup/view/state/context'
 import { PolicySchema } from '@core/mpc/types/plugin/policy_pb'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { FastVaultPasswordModal } from '@core/ui/mpc/fast/FastVaultPasswordModal'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { getPlugin } from '@core/ui/plugins/core/get'
 import { useCore } from '@core/ui/state/core'
@@ -27,7 +28,7 @@ import { StrictText, Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { useQuery } from '@tanstack/react-query'
 import { isHexString } from 'ethers'
-import { FC, Fragment, useCallback, useMemo } from 'react'
+import { FC, Fragment, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { PopupDeadEnd } from '../../../flow/PopupDeadEnd'
@@ -56,6 +57,7 @@ export const PolicyOverview: FC<
   const { requestFavicon, requestOrigin } = usePopupContext<'signMessage'>()
   const navigate = useCoreNavigate()
   const isFinished = Boolean(signature)
+  const [showPasswordModal, setShowPasswordModal] = useState(false)
 
   const pluginInfoQuery = useQuery({
     queryKey: [pluginId, pluginMarketplaceBaseUrl],
@@ -83,9 +85,12 @@ export const PolicyOverview: FC<
     } satisfies ParsedPolicy
   }, [message])
 
-  const executeNavigation = useCallback(() => {
-    navigate({ id: 'keysign', state: { keysignPayload, securityType: 'fast' } })
-  }, [keysignPayload, navigate])
+  const onGetPassword = ({ password }: { password: string }) => {
+    navigate({
+      id: 'keysign',
+      state: { keysignPayload, securityType: 'fast', password },
+    })
+  }
 
   return (
     <MatchQuery
@@ -339,9 +344,17 @@ export const PolicyOverview: FC<
             {isFinished ? (
               <Button onClick={goHome}>{t('complete')}</Button>
             ) : (
-              <Button onClick={executeNavigation}>{t('continue')}</Button>
+              <Button onClick={() => setShowPasswordModal(true)}>
+                {t('continue')}
+              </Button>
             )}
           </PageFooter>
+          <FastVaultPasswordModal
+            showModal={showPasswordModal}
+            onBack={() => setShowPasswordModal(false)}
+            onFinish={onGetPassword}
+            description={t('fast_vault_password_start_keysign_description')}
+          />
         </>
       )}
       pending={() => (

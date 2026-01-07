@@ -1,7 +1,13 @@
 import { Chain } from '@core/chain/Chain'
 import { Coin } from '@core/chain/coin/Coin'
+import { MemoSection } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/MemoSection'
 import {
-  ContentWrapper,
+  NetworkFeeSection,
+  NetworkFeeSectionProps,
+} from '@core/inpage-provider/popup/view/resolvers/sendTx/components/NetworkFeeSection'
+import { SwapAmountDisplay } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/SwapAmountDisplay'
+import {
+  ContainerWrapper,
   HorizontalLine,
   IconWrapper,
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
@@ -11,13 +17,6 @@ import { Text } from '@lib/ui/text'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { formatUnits } from 'ethers'
 import { useTranslation } from 'react-i18next'
-
-import { MemoSection } from '../components/MemoSection'
-import {
-  NetworkFeeSection,
-  NetworkFeeSectionProps,
-} from '../components/NetworkFeeSection'
-import { SwapAmountDisplay } from '../components/SwapAmountDisplay'
 
 type BlockaidSwapDisplayProps = {
   swap: {
@@ -51,30 +50,35 @@ export const BlockaidSwapDisplay = ({
   )
 
   return (
-    <ContentWrapper gap={24}>
-      <Text color="supporting" size={15}>
-        {t('youre_swapping')}
-      </Text>
-      <VStack gap={18}>
-        <SwapAmountDisplay
-          coin={fromCoin}
-          amount={fromAmountDecimal}
-          useRoundedIcon
-        />
-        <HStack alignItems="center" gap={21}>
-          <IconWrapper>
-            <ArrowDownIcon />
-          </IconWrapper>
-          <HorizontalLine />
-        </HStack>
-        <SwapAmountDisplay
-          coin={toCoin}
-          amount={toAmountDecimal}
-          useRoundedIcon
-        />
-      </VStack>
+    <>
+      <ContainerWrapper radius={16}>
+        <VStack bgColor="foreground" gap={24} padding={24} radius={16}>
+          <Text color="supporting" size={15}>
+            {t('youre_swapping')}
+          </Text>
+          <VStack gap={18}>
+            <SwapAmountDisplay
+              coin={fromCoin}
+              amount={fromAmountDecimal}
+              useRoundedIcon
+            />
+            <HStack alignItems="center" gap={10}>
+              <IconWrapper>
+                <ArrowDownIcon />
+              </IconWrapper>
+              {t('to')}
+              <HorizontalLine />
+            </HStack>
+            <SwapAmountDisplay
+              coin={toCoin}
+              amount={toAmountDecimal}
+              useRoundedIcon
+            />
+          </VStack>
+        </VStack>
+      </ContainerWrapper>
       <MemoSection memo={memo} chain={chain} />
       <NetworkFeeSection {...networkFeeProps} />
-    </ContentWrapper>
+    </>
   )
 }
