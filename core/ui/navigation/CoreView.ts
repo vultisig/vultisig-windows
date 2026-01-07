@@ -7,6 +7,7 @@ import { KeygenMessage } from '@core/mpc/types/vultisig/keygen/v1/keygen_message
 import { ReshareMessage } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
 import { KeysignMessage } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { DefiProtocol } from '@core/ui/defi/protocols/core'
+import { KeyImportInput } from '@core/ui/mpc/keygen/keyimport/state/keyImportInput'
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 
@@ -26,7 +27,12 @@ export type CoreView =
   | { id: 'deleteVault' }
   | {
       id: 'deposit'
-      state: { coin: CoinKey; action?: ChainAction; form?: Record<string, any> }
+      state: {
+        coin: CoinKey
+        action?: ChainAction
+        form?: Record<string, any>
+        entryPoint?: 'defi' | 'vault'
+      }
     }
   | { id: 'referral' }
   | { id: 'importVault' }
@@ -69,9 +75,12 @@ export type CoreView =
       }
     }
   | { id: 'settings' }
-  | { id: 'setupFastVault' }
-  | { id: 'setupSecureVault' }
-  | { id: 'setupVault'; state: { type?: VaultSecurityType } }
+  | { id: 'setupFastVault'; state: { keyImportInput?: KeyImportInput } }
+  | { id: 'setupSecureVault'; state: { keyImportInput?: KeyImportInput } }
+  | {
+      id: 'setupVault'
+      state: { type?: VaultSecurityType; keyImportInput?: KeyImportInput }
+    }
   | { id: 'signCustomMessage' }
   | { id: 'swap'; state: { fromCoin?: CoinKey; toCoin?: CoinKey } }
   | { id: 'updateAddressBookItem'; state: { id: string } }

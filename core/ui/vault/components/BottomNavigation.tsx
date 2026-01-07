@@ -4,7 +4,7 @@ import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
-import { Camera2Icon } from '@lib/ui/icons/Camera2Icon'
+import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 import { CoinsAddIcon } from '@lib/ui/icons/CoinsAddIcon'
 import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { hStack, vStack } from '@lib/ui/layout/Stack'
@@ -70,7 +70,7 @@ export const BottomNavigation = ({
         </Text>
       </TabButton>
       <CameraButton onClick={() => navigate({ id: 'uploadQr', state: {} })}>
-        <Camera2Icon />
+        <CameraIcon />
       </CameraButton>
       {featureFlags.defiEnabled ? (
         <TabButton

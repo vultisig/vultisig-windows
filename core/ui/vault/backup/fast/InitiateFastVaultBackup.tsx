@@ -4,7 +4,7 @@ import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultM
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
-import { OnFinishProp } from '@lib/ui/props'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -12,7 +12,10 @@ import styled from 'styled-components'
 import { usePassword } from '../../../state/password'
 import { useCurrentVault } from '../../state/currentVault'
 
-export const InitiateFastVaultBackup = ({ onFinish }: OnFinishProp) => {
+export const InitiateFastVaultBackup = ({
+  onFinish,
+  onBack,
+}: OnFinishProp & OnBackProp) => {
   const { t } = useTranslation()
   const [password] = usePassword()
   const vault = useCurrentVault()
@@ -24,7 +27,7 @@ export const InitiateFastVaultBackup = ({ onFinish }: OnFinishProp) => {
 
   return (
     <VStack fullHeight>
-      <FlowPageHeader title={t('backup')} />
+      <FlowPageHeader title={t('backup')} onBack={onBack} />
       <Content>
         <Hero>
           <HeroImage src="/core/images/backup-clouds.png" alt="Backup Clouds" />

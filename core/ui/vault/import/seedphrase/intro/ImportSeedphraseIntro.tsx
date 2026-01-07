@@ -1,13 +1,12 @@
 import { Button } from '@lib/ui/buttons/Button'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { VStack } from '@lib/ui/layout/Stack'
-import { fitPageContent } from '@lib/ui/page/PageContent'
-import { OnFinishProp } from '@lib/ui/props'
 import { useRive } from '@rive-app/react-canvas'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
+import { useImportSeedphraseStep } from '../state/step'
 import { ImportSeedphraseIntroRequirements } from './ImportSeedphraseIntroRequirements'
 
 const animationTop = 32
@@ -50,8 +49,9 @@ const ContentArea = styled(VStack)`
   align-self: center;
 `
 
-export const ImportSeedphraseIntro = ({ onFinish }: OnFinishProp) => {
+export const ImportSeedphraseIntroStep = () => {
   const { t } = useTranslation()
+  const [, setStep] = useImportSeedphraseStep()
 
   const [showContent, setShowContent] = useState(false)
 
@@ -69,37 +69,27 @@ export const ImportSeedphraseIntro = ({ onFinish }: OnFinishProp) => {
   }, [])
 
   return (
-    <>
-      <Container>
-        <VStack style={{ position: 'relative' }} flexGrow>
-          <AnimationContainer showContent={showContent}>
-            <RiveComponent />
-          </AnimationContainer>
+    <VStack style={{ position: 'relative' }} flexGrow>
+      <AnimationContainer showContent={showContent}>
+        <RiveComponent />
+      </AnimationContainer>
 
-          <ContentArea>
-            <AnimatedVisibility
-              isOpen={showContent}
-              overlayStyles={{
-                flexGrow: 1,
-                display: 'flex',
-                flexDirection: 'column',
-              }}
-            >
-              <VStack flexGrow justifyContent="space-between" gap={40}>
-                <ImportSeedphraseIntroRequirements />
+      <ContentArea>
+        <AnimatedVisibility
+          isOpen={showContent}
+          overlayStyles={{
+            flexGrow: 1,
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <VStack flexGrow justifyContent="space-between" gap={40}>
+            <ImportSeedphraseIntroRequirements />
 
-                <Button onClick={onFinish}>{t('next')}</Button>
-              </VStack>
-            </AnimatedVisibility>
-          </ContentArea>
-        </VStack>
-      </Container>
-    </>
+            <Button onClick={() => setStep('input')}>{t('next')}</Button>
+          </VStack>
+        </AnimatedVisibility>
+      </ContentArea>
+    </VStack>
   )
 }
-
-const Container = styled.div`
-  ${fitPageContent({
-    contentMaxWidth: 360,
-  })}
-`

@@ -46,7 +46,7 @@ type DepositFormProps = {
 
 export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
   const [selectedChainAction, setSelectedChainAction] = useDepositAction()
-  const [{ form: formDefaults }] = useCoreViewState<'deposit'>()
+  const [{ form: formDefaults, entryPoint }] = useCoreViewState<'deposit'>()
 
   const { t } = useTranslation()
   const [coin] = useDepositCoin()
@@ -78,11 +78,12 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
 
   const isBondAction = selectedChainAction === 'bond'
   const formValues = watch()
-  const pageTitle = isBondAction
+  const shouldUseBondRedesign = isBondAction && entryPoint === 'defi'
+  const pageTitle = shouldUseBondRedesign
     ? `${t('bond')} ${coin.ticker ?? ''}`.trim()
     : t('deposit')
   const FormComponent = (
-    isBondAction ? ActionForm : PageContent
+    shouldUseBondRedesign ? ActionForm : PageContent
   ) as typeof PageContent
 
   return (
@@ -106,7 +107,7 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
         gap={40}
         onSubmit={handleSubmit(handleFormSubmit)}
       >
-        {isBondAction ? (
+        {shouldUseBondRedesign ? (
           <DepositDataProvider value={formValues}>
             <BondForm
               balance={balance}

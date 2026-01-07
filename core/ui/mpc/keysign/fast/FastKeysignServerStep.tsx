@@ -40,7 +40,8 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
 }) => {
   const { t } = useTranslation()
 
-  const { publicKeys, hexChainCode } = useCurrentVault()
+  const vault = useCurrentVault()
+  const { publicKeys, hexChainCode, chainPublicKeys } = vault
 
   const sessionId = useMpcSessionId()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
@@ -59,6 +60,7 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
             walletCore,
             hexChainCode,
             publicKeys,
+            chainPublicKeys,
           })
           const inputs = getEncodedSigningInputs({
             keysignPayload,
@@ -84,6 +86,7 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
             ),
             is_ecdsa: signatureAlgorithms[getChainKind(chain)] === 'ecdsa',
             vault_password: password,
+            chain,
           })
         },
         custom: async ({ message, chain = customMessageDefaultChain }) => {
@@ -106,6 +109,7 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
             ),
             is_ecdsa: signatureAlgorithms[getChainKind(chain)] === 'ecdsa',
             vault_password: password,
+            chain,
           })
         },
       })

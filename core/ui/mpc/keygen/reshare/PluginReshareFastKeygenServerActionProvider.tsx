@@ -18,8 +18,15 @@ export const PluginReshareFastKeygenServerActionProvider = ({
 
   const [password] = usePassword()
 
-  const { name, hexChainCode, publicKeys, resharePrefix, signers, libType } =
-    useCurrentVault()
+  const {
+    name,
+    hexChainCode,
+    publicKeys,
+    resharePrefix,
+    signers,
+    libType,
+    chainPublicKeys,
+  } = useCurrentVault()
 
   const action = useCallback(async () => {
     await reshareWithServer({
@@ -32,7 +39,10 @@ export const PluginReshareFastKeygenServerActionProvider = ({
       hex_chain_code: hexChainCode,
       local_party_id: generateLocalPartyId('server'),
       old_reshare_prefix: resharePrefix ?? '',
-      lib_type: toLibType(libType),
+      lib_type: toLibType({
+        libType,
+        chainPublicKeys,
+      }),
       reshare_type: 1,
     })
   }, [
@@ -45,6 +55,7 @@ export const PluginReshareFastKeygenServerActionProvider = ({
     sessionId,
     signers,
     libType,
+    chainPublicKeys,
   ])
 
   return (

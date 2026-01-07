@@ -43,11 +43,13 @@ export const useJoinKeygenUrlQuery = () => {
     useSevenZipQuery(),
     useCallback(
       sevenZip => {
-        const libType = toLibType(
-          'existingVault' in keygenVault
-            ? keygenVault.existingVault.libType
-            : vaultCreationMpcLib
-        )
+        const libType = toLibType({
+          libType:
+            'existingVault' in keygenVault
+              ? keygenVault.existingVault.libType
+              : vaultCreationMpcLib,
+          isKeyImport: 'keyimport' in keygenOperation,
+        })
 
         const useVultisigRelay = serverType === 'relay'
 

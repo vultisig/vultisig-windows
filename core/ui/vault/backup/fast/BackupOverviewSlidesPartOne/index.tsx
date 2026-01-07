@@ -30,20 +30,18 @@ export const BackupOverviewSlidesPartOne: FC<OnFinishProp> = ({ onFinish }) => {
   return (
     <StyledLayout fullSize>
       <StyledHeader gap={16}>
-        <HStack justifyContent="space-between" fullWidth>
-          <StyledButton
-            icon={
-              currentAnimation > 1 ? (
-                <ChevronLeftIcon fontSize={18} />
-              ) : undefined
-            }
-            kind="link"
-            onClick={currentAnimation > 1 ? handlePrevAnimation : undefined}
-            size="sm"
-          >
-            {t('back')}
-          </StyledButton>
-        </HStack>
+        {currentAnimation > 1 && (
+          <HStack justifyContent="space-between" fullWidth>
+            <StyledButton
+              icon={<ChevronLeftIcon fontSize={18} />}
+              kind="link"
+              onClick={handlePrevAnimation}
+              size="sm"
+            >
+              {t('back')}
+            </StyledButton>
+          </HStack>
+        )}
         <MultistepProgressIndicator
           markPreviousStepsAsCompleted
           steps={animations.length}

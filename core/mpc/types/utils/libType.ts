@@ -1,3 +1,4 @@
+import { Chain } from '@core/chain/Chain'
 import { MpcLib } from '@core/mpc/mpcLib'
 import { LibType } from '@core/mpc/types/vultisig/keygen/v1/lib_type_message_pb'
 import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
@@ -8,9 +9,28 @@ const mpcLibToLibType: Record<MpcLib, LibType> = {
 }
 
 export const fromLibType = (libType: LibType): MpcLib => {
+  if (libType === LibType.KEYIMPORT) {
+    return 'DKLS'
+  }
   return mirrorRecord(mpcLibToLibType)[libType]
 }
 
-export const toLibType = (mpcLib: MpcLib): LibType => {
-  return mpcLibToLibType[mpcLib]
+type ToLibTypeInput = {
+  libType: MpcLib
+  chainPublicKeys?: Partial<Record<Chain, string>>
+  isKeyImport?: boolean
+}
+
+export const toLibType = ({
+  libType,
+  chainPublicKeys,
+  isKeyImport,
+}: ToLibTypeInput): LibType => {
+  if (
+    isKeyImport ||
+    (chainPublicKeys && Object.keys(chainPublicKeys).length > 0)
+  ) {
+    return LibType.KEYIMPORT
+  }
+  return mpcLibToLibType[libType]
 }
