@@ -1,20 +1,16 @@
 import { Chain } from '@core/chain/Chain'
+import { VaultAddressCopyToast } from '@core/ui/vault/page/components/VaultAddressCopyToast'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { CopyIcon } from '@lib/ui/icons/CopyIcon'
+import { SquareBehindSquare6Icon } from '@lib/ui/icons/SquareBehindSquare6Icon'
 import { hStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import { useToast } from '@lib/ui/toast/ToastProvider'
 import styled from 'styled-components'
 
-import { VaultAddressCopyToast } from './VaultAddressCopyToast'
-
 export const VaultAddressCopyButton = ({
   value: { address, chain },
-}: ValueProp<{
-  address: string
-  chain: Chain
-}>) => {
+}: ValueProp<{ address: string; chain: Chain }>) => {
   const { addToast } = useToast()
 
   const handleCopyAddress = (e: React.MouseEvent) => {
@@ -34,7 +30,7 @@ export const VaultAddressCopyButton = ({
       onPointerDown={handleCopyAddress}
       onPointerUp={handleCopyAddress}
     >
-      <CopyIcon />
+      <SquareBehindSquare6Icon />
     </CopyButton>
   )
 }

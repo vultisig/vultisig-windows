@@ -1,5 +1,16 @@
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { BlockaidSimulationContent } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidSimulationContent'
+import { BlockaidSimulationError } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidSimulationError'
+import { useBlockaidSimulationQuery } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/useBlockaidSimulationQuery'
+import { MemoSection } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/MemoSection'
+import { NetworkFeeSection } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/NetworkFeeSection'
+import { SwapAmountDisplay } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/SwapAmountDisplay'
+import { ParsedTx } from '@core/inpage-provider/popup/view/resolvers/sendTx/core/parsedTx'
+import { getGasEstimationQuery } from '@core/inpage-provider/popup/view/resolvers/sendTx/gasEstimation/getGasEstimationQuery'
+import { useSendTxKeysignPayloadQuery } from '@core/inpage-provider/popup/view/resolvers/sendTx/keysignPayload/query'
+import { PendingState } from '@core/inpage-provider/popup/view/resolvers/sendTx/PendingState'
+import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
 import { FeeSettings } from '@core/mpc/keysign/chainSpecific/FeeSettings'
 import { getBlockchainSpecificValue } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
@@ -11,7 +22,6 @@ import { SignAminoDisplay } from '@core/ui/mpc/keysign/tx/components/SignAminoDi
 import { SignDirectDisplay } from '@core/ui/mpc/keysign/tx/components/SignDirectDisplay'
 import { useCurrentVaultPublicKey } from '@core/ui/vault/state/currentVault'
 import {
-  ContentWrapper,
   HorizontalLine,
   IconWrapper,
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
@@ -32,18 +42,6 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatUnits } from 'ethers'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { usePopupInput } from '../../state/input'
-import { BlockaidSimulationContent } from './blockaid/BlockaidSimulationContent'
-import { BlockaidSimulationError } from './blockaid/BlockaidSimulationError'
-import { useBlockaidSimulationQuery } from './blockaid/useBlockaidSimulationQuery'
-import { MemoSection } from './components/MemoSection'
-import { NetworkFeeSection } from './components/NetworkFeeSection'
-import { SwapAmountDisplay } from './components/SwapAmountDisplay'
-import { ParsedTx } from './core/parsedTx'
-import { getGasEstimationQuery } from './gasEstimation/getGasEstimationQuery'
-import { useSendTxKeysignPayloadQuery } from './keysignPayload/query'
-import { PendingState } from './PendingState'
 
 type SendTxOverviewProps = {
   parsedTx: ParsedTx
@@ -136,7 +134,7 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
             estimatedGas > actualGasLimit
 
           return (
-            <List>
+            <>
               {isInsufficientGas && (
                 <Panel>
                   <VStack gap={12} alignItems="center">
@@ -171,70 +169,73 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
               )}
               {hasSwapPayload ? (
                 <>
-                  <ContentWrapper gap={24}>
-                    <VStack gap={16}>
-                      {(() => {
-                        const swapPayloadValue = shouldBePresent(
-                          keysignPayload.swapPayload?.value,
-                          'swapPayload.value'
-                        )
+                  <VStack
+                    bgColor="foreground"
+                    gap={16}
+                    padding={24}
+                    radius={16}
+                  >
+                    {(() => {
+                      const swapPayloadValue = shouldBePresent(
+                        keysignPayload.swapPayload?.value,
+                        'swapPayload.value'
+                      )
 
-                        if (
-                          isChainOfKind(chain, 'solana') &&
-                          'solana' in customTxData &&
-                          'swap' in customTxData.solana
-                        ) {
-                          const provider = customTxData.solana.swap.swapProvider
-                          if (provider === 'fallback') {
-                            return (
-                              <WarningBlock icon={CircleInfoIcon}>
-                                {t('fallback_swap_warning')}
-                              </WarningBlock>
-                            )
-                          }
-                        }
-
-                        const fromCoin = shouldBePresent(
-                          swapPayloadValue.fromCoin,
-                          'fromCoin'
-                        ) as AccountCoin
-
-                        const toCoin = shouldBePresent(
-                          swapPayloadValue.toCoin,
-                          'toCoin'
-                        ) as AccountCoin
-
-                        const fromAmount = Number(
-                          formatUnits(
-                            swapPayloadValue.fromAmount,
-                            fromCoin.decimals
+                      if (
+                        isChainOfKind(chain, 'solana') &&
+                        'solana' in customTxData &&
+                        'swap' in customTxData.solana
+                      ) {
+                        const provider = customTxData.solana.swap.swapProvider
+                        if (provider === 'fallback') {
+                          return (
+                            <WarningBlock icon={CircleInfoIcon}>
+                              {t('fallback_swap_warning')}
+                            </WarningBlock>
                           )
-                        ).toString()
+                        }
+                      }
 
-                        return (
-                          <>
-                            <Text color="supporting" size={15}>
-                              {t('youre_swapping')}
-                            </Text>
-                            <SwapAmountDisplay
-                              coin={fromCoin}
-                              amount={fromAmount}
-                            />
-                            <HStack alignItems="center" gap={21}>
-                              <IconWrapper>
-                                <ArrowDownIcon />
-                              </IconWrapper>
-                              <HorizontalLine />
-                            </HStack>
-                            <SwapAmountDisplay
-                              coin={toCoin}
-                              amount={swapPayloadValue.toAmountDecimal}
-                            />
-                          </>
+                      const fromCoin = shouldBePresent(
+                        swapPayloadValue.fromCoin,
+                        'fromCoin'
+                      ) as AccountCoin
+
+                      const toCoin = shouldBePresent(
+                        swapPayloadValue.toCoin,
+                        'toCoin'
+                      ) as AccountCoin
+
+                      const fromAmount = Number(
+                        formatUnits(
+                          swapPayloadValue.fromAmount,
+                          fromCoin.decimals
                         )
-                      })()}
-                    </VStack>
-                  </ContentWrapper>
+                      ).toString()
+
+                      return (
+                        <>
+                          <Text color="supporting" size={15}>
+                            {t('youre_swapping')}
+                          </Text>
+                          <SwapAmountDisplay
+                            coin={fromCoin}
+                            amount={fromAmount}
+                          />
+                          <HStack alignItems="center" gap={21}>
+                            <IconWrapper>
+                              <ArrowDownIcon />
+                            </IconWrapper>
+                            <HorizontalLine />
+                          </HStack>
+                          <SwapAmountDisplay
+                            coin={toCoin}
+                            amount={swapPayloadValue.toAmountDecimal}
+                          />
+                        </>
+                      )
+                    })()}
+                  </VStack>
                   <MemoSection memo={keysignPayload.memo} chain={chain} />
                   <NetworkFeeSection
                     keysignPayload={keysignPayload}
@@ -264,36 +265,40 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                 />
               ) : (
                 <>
-                  <ListItem description={address} title={t('from')} />
-                  {keysignPayload.toAddress && (
+                  <List>
+                    <ListItem description={address} title={t('from')} />
+                    {keysignPayload.toAddress && (
+                      <ListItem
+                        description={keysignPayload.toAddress}
+                        title={t('to')}
+                      />
+                    )}
+                    {keysignPayload.toAmount && (
+                      <ListItem
+                        description={`${formatUnits(
+                          keysignPayload.toAmount,
+                          keysignPayload.coin?.decimals
+                        )} ${keysignPayload.coin?.ticker}`}
+                        title={t('amount')}
+                      />
+                    )}
                     <ListItem
-                      description={keysignPayload.toAddress}
-                      title={t('to')}
+                      description={getKeysignChain(keysignPayload)}
+                      title={t('network')}
                     />
-                  )}
-                  {keysignPayload.toAmount && (
-                    <ListItem
-                      description={`${formatUnits(
-                        keysignPayload.toAmount,
-                        keysignPayload.coin?.decimals
-                      )} ${keysignPayload.coin?.ticker}`}
-                      title={t('amount')}
-                    />
-                  )}
-                  <ListItem
-                    description={getKeysignChain(keysignPayload)}
-                    title={t('network')}
-                  />
+                  </List>
                   <MemoSection memo={keysignPayload.memo} chain={chain} />
-                  <NetworkFeeSection
-                    keysignPayload={keysignPayload}
-                    transactionPayload={transactionPayload}
-                    chain={chain}
-                    feeSettings={feeSettings}
-                    setFeeSettings={setFeeSettings}
-                    walletCore={walletCore}
-                    publicKey={publicKey}
-                  />
+                  <VStack bgColor="foreground" radius={16}>
+                    <NetworkFeeSection
+                      keysignPayload={keysignPayload}
+                      transactionPayload={transactionPayload}
+                      chain={chain}
+                      feeSettings={feeSettings}
+                      setFeeSettings={setFeeSettings}
+                      walletCore={walletCore}
+                      publicKey={publicKey}
+                    />
+                  </VStack>
                 </>
               )}
               {keysignPayload.signData.case === 'signAmino' && (
@@ -302,7 +307,7 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
               {keysignPayload.signData.case === 'signDirect' && (
                 <SignDirectDisplay signDirect={keysignPayload.signData.value} />
               )}
-            </List>
+            </>
           )
         }}
       />
