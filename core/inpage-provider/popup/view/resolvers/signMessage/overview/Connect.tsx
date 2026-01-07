@@ -5,6 +5,7 @@ import { Sender } from '@core/inpage-provider/popup/view/resolvers/signMessage/c
 import { SignMessageOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Default'
 import { usePopupContext } from '@core/inpage-provider/popup/view/state/context'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { FastVaultPasswordModal } from '@core/ui/mpc/fast/FastVaultPasswordModal'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { Button } from '@lib/ui/buttons/Button'
@@ -15,7 +16,7 @@ import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { attempt } from '@lib/utils/attempt'
-import { FC, useCallback, useMemo } from 'react'
+import { FC, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -29,6 +30,7 @@ export const ConnectOverview: FC<SignMessageOverview> = ({
   const { goHome } = useCore()
   const { requestFavicon, requestOrigin } = usePopupContext<'signMessage'>()
   const navigate = useCoreNavigate()
+  const [showPasswordModal, setShowPasswordModal] = useState(false)
 
   const displayMessage = useMemo(() => {
     const { data, error } = attempt(() => JSON.parse(message))
@@ -38,9 +40,12 @@ export const ConnectOverview: FC<SignMessageOverview> = ({
     return data.message as string
   }, [message])
 
-  const executeNavigation = useCallback(() => {
-    navigate({ id: 'keysign', state: { keysignPayload, securityType: 'fast' } })
-  }, [keysignPayload, navigate])
+  const onGetPassword = ({ password }: { password: string }) => {
+    navigate({
+      id: 'keysign',
+      state: { keysignPayload, securityType: 'fast', password },
+    })
+  }
 
   return signature ? (
     <>
@@ -86,8 +91,16 @@ export const ConnectOverview: FC<SignMessageOverview> = ({
         </Text>
       </StyledPageContent>
       <PageFooter>
-        <Button onClick={executeNavigation}>{t('continue')}</Button>
+        <Button onClick={() => setShowPasswordModal(true)}>
+          {t('continue')}
+        </Button>
       </PageFooter>
+      <FastVaultPasswordModal
+        showModal={showPasswordModal}
+        onBack={() => setShowPasswordModal(false)}
+        onFinish={onGetPassword}
+        description={t('fast_vault_password_start_keysign_description')}
+      />
     </>
   )
 }
