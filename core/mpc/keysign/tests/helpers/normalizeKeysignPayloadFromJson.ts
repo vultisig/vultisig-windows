@@ -5,6 +5,10 @@ import {
   KeysignPayloadSchema,
 } from '../../../types/vultisig/keysign/v1/keysign_message_pb'
 import {
+  TronTransferContractPayloadSchema,
+  TronTriggerSmartContractPayloadSchema,
+} from '../../../types/vultisig/keysign/v1/tron_contract_payload_pb'
+import {
   CosmosCoinSchema,
   CosmosFee,
   CosmosFeeSchema,
@@ -95,23 +99,58 @@ export const normalizeKeysignPayloadFromJson = (input: any) => {
       }
     : undefined
 
-  const wasmContractPayload = src.wasm_execute_contract_payload
-  const contractPayload: KeysignPayload['contractPayload'] | undefined =
-    wasmContractPayload
-      ? {
-          case: 'wasmExecuteContractPayload',
-          value: {
-            $typeName: 'vultisig.keysign.v1.WasmExecuteContractPayload',
-            senderAddress: wasmContractPayload.sender_address,
-            contractAddress: wasmContractPayload.contract_address,
-            executeMsg: wasmContractPayload.execute_msg,
-            coins: wasmContractPayload.coins.map((coin: any) => ({
-              denom: coin.denom,
-              amount: coin.amount,
-            })) as any,
-          },
-        }
-      : undefined
+  // Handle contract payloads (WASM or TRON)
+  // Mobile format: payloads at root level (wasm_execute_contract_payload, tron_transfer_contract_payload, etc.)
+  let contractPayload: KeysignPayload['contractPayload'] | undefined = undefined
+
+  const wasmPayload = src.wasm_execute_contract_payload
+  const tronTransferPayload = src.tron_transfer_contract_payload
+  const tronTriggerPayload = src.tron_trigger_smart_contract_payload
+
+  if (wasmPayload) {
+    contractPayload = {
+      case: 'wasmExecuteContractPayload',
+      value: {
+        $typeName: 'vultisig.keysign.v1.WasmExecuteContractPayload',
+        senderAddress: wasmPayload.sender_address,
+        contractAddress: wasmPayload.contract_address,
+        executeMsg: wasmPayload.execute_msg,
+        coins: (wasmPayload.coins ?? []).map((coin: any) => ({
+          denom: coin.denom,
+          amount: coin.amount,
+        })) as any,
+      },
+    }
+  } else if (tronTransferPayload) {
+    contractPayload = {
+      case: 'tronTransferContractPayload',
+      value: create(TronTransferContractPayloadSchema, {
+        toAddress: tronTransferPayload.to_address,
+        ownerAddress: tronTransferPayload.owner_address,
+        amount: String(tronTransferPayload.amount),
+      }),
+    }
+  } else if (tronTriggerPayload) {
+    contractPayload = {
+      case: 'tronTriggerSmartContractPayload',
+      value: create(TronTriggerSmartContractPayloadSchema, {
+        ownerAddress: tronTriggerPayload.owner_address,
+        contractAddress: tronTriggerPayload.contract_address,
+        callValue:
+          tronTriggerPayload.call_value !== null &&
+          tronTriggerPayload.call_value !== undefined
+            ? String(tronTriggerPayload.call_value)
+            : undefined,
+        callTokenValue:
+          tronTriggerPayload.call_token_value !== null &&
+          tronTriggerPayload.call_token_value !== undefined
+            ? String(tronTriggerPayload.call_token_value)
+            : undefined,
+        tokenId: tronTriggerPayload.token_id,
+        data: tronTriggerPayload.data,
+      }),
+    }
+  }
 
   const signDataSrc = src.sign_data
   let signData: KeysignPayload['signData'] = {

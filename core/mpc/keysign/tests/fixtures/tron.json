@@ -112,5 +112,92 @@
     "expected_image_hash": [
       "26e3a2a424d552a1f7fb6b9767d55fcbcb24fa670b2ed03451bec8000dcf40ae"
     ]
+  },
+  {
+    "name": "Send TRON TRX (contract)",
+    "keysign_payload": {
+      "coin": {
+        "chain": "Tron",
+        "ticker": "TRX",
+        "address": "TP7uKZGD63fjZPWNEsT3cRftgqJPiiUgji",
+        "decimals": 6,
+        "price_provider_id": "tron",
+        "is_native_token": true,
+        "hex_public_key": "0407dd70f3824b8670ff1ced263f78977f2fddb34a69049adc94b1ef7cd114a96faf3cabb58b79a465ecf1e4e202da131c8e293a2e89cba45d99cc2119760f581a",
+        "contract_address": "",
+        "logo": "tron"
+      },
+      "to_address": "TB3fnJmKZ98MrXrvJthv1B4SYy2Jfm6Qtf",
+      "to_amount": "50000",
+      "BlockchainSpecific": {
+        "case": "tronSpecific",
+        "value": {
+          "timestamp": "1767721305000",
+          "expiration": "1767721365000",
+          "blockHeaderTimestamp": "1767721305000",
+          "blockHeaderNumber": "79019420",
+          "blockHeaderVersion": "32",
+          "blockHeaderTxTrieRoot": "cc7f448e7af26ba657a5ec48dcb08e8c3ca85de54b81408e2e2042eda66c98c7",
+          "blockHeaderParentHash": "0000000004b5bd9b6e5882f9bf6c778f79386ac85d75c08e045e5ed1b9ef2c6d",
+          "blockHeaderWitnessAddress": "41a1a508ce5762ffd3f16bd6af93808d26d57f01eb",
+          "gasEstimation": "800000"
+        }
+      },
+      "tron_transfer_contract_payload": {
+        "to_address": "TB3fnJmKZ98MrXrvJthv1B4SYy2Jfm6Qtf",
+        "owner_address": "TP7uKZGD63fjZPWNEsT3cRftgqJPiiUgji",
+        "amount": "50000"
+      },
+      "utxo_info": [],
+      "SwapPayload": null,
+      "vault_public_key_ecdsa": "03a4d9b5d643f9a08846295e3010b26fe37c12611020853d526b96cdd0e09d12af",
+      "lib_type": "DKLS"
+    },
+    "expected_image_hash": [
+      "9933d1a473394c50b644ea8365d680a3f424f426b474c9e1a668c715e045139b"
+    ]
+  },
+  {
+    "name": "Send TRON USDT",
+    "keysign_payload": {
+      "coin": {
+        "chain": "Tron",
+        "ticker": "USDT",
+        "address": "TP7uKZGD63fjZPWNEsT3cRftgqJPiiUgji",
+        "decimals": 6,
+        "price_provider_id": "tether",
+        "is_native_token": false,
+        "hex_public_key": "0407dd70f3824b8670ff1ced263f78977f2fddb34a69049adc94b1ef7cd114a96faf3cabb58b79a465ecf1e4e202da131c8e293a2e89cba45d99cc2119760f581a",
+        "contract_address": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "logo": "usdt"
+      },
+      "to_address": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+      "to_amount": "0",
+      "BlockchainSpecific": {
+        "TronSpecific": {
+          "timestamp": 1767774490902,
+          "expiration": 1767774549000,
+          "block_header_timestamp": 1767774435000,
+          "block_header_number": 79037124,
+          "block_header_version": 32,
+          "block_header_tx_trie_root": "96c7d50d7f0bf747c7a13ec2da88cf22383de530ece38bcb8975a5111567dfbe",
+          "block_header_parent_hash": "0000000004b602c3eb49dbe327e78d872ee0afcec62f91329ebdb74ac9bd3a18",
+          "block_header_witness_address": "414e4e68d51df137837ffda057af5efc587e01aac0",
+          "gas_estimation": 15000000
+        }
+      },
+      "tron_trigger_smart_contract_payload": {
+        "owner_address": "TP7uKZGD63fjZPWNEsT3cRftgqJPiiUgji",
+        "contract_address": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+        "data": "a9059cbb0000000000000000000000000bd02502416c13800964338c4f2320925ec51347000000000000000000000000000000000000000000000000000000000000c350"
+      },
+      "utxo_info": [],
+      "SwapPayload": null,
+      "vault_public_key_ecdsa": "03a4d9b5d643f9a08846295e3010b26fe37c12611020853d526b96cdd0e09d12af",
+      "lib_type": "DKLS"
+    },
+    "expected_image_hash": [
+      "9bae76f52ae063c8e862d4d4bef3095af186efd08b02786c007799b025b0fc0c"
+    ]
   }
 ]
