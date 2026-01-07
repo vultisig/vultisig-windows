@@ -13,6 +13,7 @@ import { Schnorr } from '@core/mpc/schnorr/schnorrKeygen'
 import { clampThenUniformScalar } from '@core/mpc/utils/ed25519ScalarClamp'
 import { Vault, VaultKeyShares } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
@@ -37,6 +38,7 @@ type KeyShareResult = {
 export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
   const serverUrl = useMpcServerUrl()
   const encryptionKeyHex = useCurrentHexEncryptionKey()
+  const hexChainCode = useCurrentHexChainCode()
   const sessionId = useMpcSessionId()
   const vaultName = useKeygenVaultName()
   const localPartyId = useMpcLocalPartyId()
@@ -87,7 +89,7 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
 
       const rootEcdsaResult = await dklsKeygen.startKeyImportWithRetry(
         rootEcdsaPrivateKeyHex ?? '',
-        ''
+        hexChainCode
       )
 
       onStepChange('eddsa')
@@ -114,7 +116,7 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
 
       const rootEddsaResult = await schnorrKeygen.startKeyImportWithRetry(
         rootEddsaPrivateKeyHex ?? '',
-        ''
+        hexChainCode
       )
 
       const chainPublicKeys: Partial<Record<Chain, string>> = {}
@@ -223,6 +225,7 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
     },
     [
       encryptionKeyHex,
+      hexChainCode,
       isInitiatingDevice,
       keyImportInput,
       localPartyId,
