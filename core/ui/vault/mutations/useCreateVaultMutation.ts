@@ -35,11 +35,12 @@ export const useCreateVaultMutation = (
       const vault = await createVault(
         pipe(input, ({ keyShares }) => {
           if (hasPasscodeEncryption) {
+            const key = shouldBePresent(passcode)
             return {
               ...input,
               keyShares: encryptVaultKeyShares({
                 keyShares,
-                key: shouldBePresent(passcode),
+                key,
               }),
             }
           }

@@ -21,6 +21,7 @@
     "@lib/dkls": "workspace:^",
     "@lib/schnorr": "workspace:^",
     "@lib/utils": "workspace:^",
+    "@noble/hashes": "^2.0.1",
     "@solana/web3.js": "^1.98.4",
     "bitcoinjs-lib": "^7.0.0"
   }
