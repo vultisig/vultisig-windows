@@ -1,31 +1,33 @@
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
-import React from 'react'
+import { getColor } from '@lib/ui/theme/getters'
+import { ThemeColors } from '@lib/ui/theme/ThemeColors'
+import { CSSProperties, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
 type FixedDirectionStackProps = {
-  gap?: React.CSSProperties['gap']
-  alignItems?: React.CSSProperties['alignItems']
-  justifyContent?: React.CSSProperties['justifyContent']
-  wrap?: React.CSSProperties['flexWrap']
-  fullWidth?: boolean
+  alignItems?: CSSProperties['alignItems']
+  bgColor?: keyof Omit<ThemeColors, 'getLabelColor'>
+  children?: ReactNode
+  flexGrow?: boolean
   fullHeight?: boolean
   fullSize?: boolean
-  flexGrow?: boolean
-  children?: React.ReactNode
-  maxWidth?: React.CSSProperties['maxWidth']
-  padding?: React.CSSProperties['padding']
-  position?: React.CSSProperties['position']
+  fullWidth?: boolean
+  gap?: CSSProperties['gap']
+  justifyContent?: CSSProperties['justifyContent']
+  maxWidth?: CSSProperties['maxWidth']
+  padding?: CSSProperties['padding']
+  position?: CSSProperties['position']
+  radius?: CSSProperties['borderRadius']
   scrollable?: boolean
+  wrap?: CSSProperties['flexWrap']
 }
 
 export type StackProps = FixedDirectionStackProps & {
-  direction: React.CSSProperties['flexDirection']
+  direction: CSSProperties['flexDirection']
 }
 
 const formatFlexAlignment = (
-  value:
-    | React.CSSProperties['alignItems']
-    | React.CSSProperties['justifyContent']
+  value: CSSProperties['alignItems'] | CSSProperties['justifyContent']
 ) => {
   if (value === 'end' || value === 'start') {
     return `flex-${value}`
@@ -35,30 +37,37 @@ const formatFlexAlignment = (
 }
 
 const stack = ({
-  gap,
   alignItems,
-  justifyContent,
-  wrap,
-  fullWidth,
-  fullHeight,
-  fullSize,
+  bgColor,
   direction,
   flexGrow,
+  fullHeight,
+  fullSize,
+  fullWidth,
+  gap,
+  justifyContent,
   maxWidth,
   padding,
   position,
+  radius,
   scrollable,
+  wrap,
 }: StackProps) => css`
   display: flex;
   flex-direction: ${direction};
-  ${gap &&
-  css`
-    gap: ${toSizeUnit(gap)};
-  `}
   ${alignItems &&
   css`
     align-items: ${formatFlexAlignment(alignItems)};
   `}
+  ${bgColor &&
+  css`
+    background-color: ${getColor(bgColor)};
+  `}
+  ${gap &&
+  css`
+    gap: ${toSizeUnit(gap)};
+  `}
+  
   ${justifyContent &&
   css`
     justify-content: ${formatFlexAlignment(justifyContent)};
@@ -95,6 +104,10 @@ const stack = ({
   ${position &&
   css`
     position: ${position};
+  `}
+  ${radius &&
+  css`
+    border-radius: ${toSizeUnit(radius)};
   `}
   ${scrollable &&
   css`

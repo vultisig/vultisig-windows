@@ -2,6 +2,7 @@ import { generateLocalPartyId } from '@core/mpc/devices/localPartyId'
 import { setupVaultWithServer } from '@core/mpc/fast/api/setupVaultWithServer'
 import { toLibType } from '@core/mpc/types/utils/libType'
 import { useVaultName } from '@core/ui/mpc/keygen/create/state/vaultName'
+import { useKeygenOperation } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
@@ -23,6 +24,7 @@ export const CreateFastKeygenServerActionProvider = ({
   const hexChainCode = useCurrentHexChainCode()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
   const { vaultCreationMpcLib } = useCore()
+  const keygenOperation = useKeygenOperation()
 
   const action = useCallback(async () => {
     await setupVaultWithServer({
@@ -33,13 +35,17 @@ export const CreateFastKeygenServerActionProvider = ({
       local_party_id: generateLocalPartyId('server'),
       email,
       hex_encryption_key: hexEncryptionKey,
-      lib_type: toLibType(vaultCreationMpcLib),
+      lib_type: toLibType({
+        libType: vaultCreationMpcLib,
+        isKeyImport: 'keyimport' in keygenOperation,
+      }),
     })
   }, [
     email,
     hexChainCode,
     hexEncryptionKey,
     vaultCreationMpcLib,
+    keygenOperation,
     name,
     password,
     sessionId,

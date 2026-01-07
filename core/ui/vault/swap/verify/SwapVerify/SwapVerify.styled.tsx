@@ -1,31 +1,15 @@
-import { TxOverviewRow } from '@core/ui/chain/tx/TxOverviewRow'
-import { hStack, VStack } from '@lib/ui/layout/Stack'
-import { text } from '@lib/ui/text'
+import { VStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
-export const SwapTxFeesOverviewRow = styled(TxOverviewRow)`
-  ${hStack({
-    fullWidth: true,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    wrap: 'wrap',
-    gap: 20,
-  })}
-
-  ${text({
-    weight: 500,
-    size: 13,
-    color: 'supporting',
-  })}
-
-  border-bottom: 1px solid ${getColor('foregroundExtra')};
-  padding-bottom: 12px;
-`
-export const ContentWrapper = styled(VStack)`
-  padding: 24px;
-  background: ${getColor('foreground')};
-  border-radius: 16px;
+export const ContainerWrapper = styled(VStack)`
+  background-image: linear-gradient(
+    180deg,
+    ${({ theme }) => theme.colors.success.toRgba(0.5)} 0%,
+    ${({ theme }) => theme.colors.success.getVariant({ l: () => 19 }).toRgba(0)}
+      100%
+  );
+  padding: 1px;
 `
 
 export const IconWrapper = styled.div`

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useSelectedChains } from '../state/selectedChains'
 import { useImportSeedphraseStep } from '../state/step'
+import { useFinishSeedphraseImport } from '../utils/useFinishSeedphraseImport'
 import { ScanResultChainItem } from './ScanResultChainItem'
 import { ScanResultHeader } from './ScanResultHeader'
 
@@ -12,10 +13,7 @@ export const ActiveChainsFoundContent = () => {
   const { t } = useTranslation()
   const [selectedChains] = useSelectedChains()
   const [, setStep] = useImportSeedphraseStep()
-
-  const handleNext = () => {
-    console.log('todo')
-  }
+  const handleFinish = useFinishSeedphraseImport()
 
   return (
     <VStack alignItems="center" gap={32} flexGrow>
@@ -32,7 +30,7 @@ export const ActiveChainsFoundContent = () => {
       </VStack>
 
       <VStack fullWidth gap={20} style={{ marginTop: 'auto' }}>
-        <Button onClick={handleNext}>{t('next')}</Button>
+        <Button onClick={handleFinish}>{t('next')}</Button>
         <Button
           kind="link"
           status="success"

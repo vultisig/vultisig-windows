@@ -2,6 +2,9 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { CosmosMsgType } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
+import { ManageEvmFee } from '@core/inpage-provider/popup/view/resolvers/sendTx/ManageEvmFee'
+import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
 import { FeeSettings } from '@core/mpc/keysign/chainSpecific/FeeSettings'
 import { getBlockchainSpecificValue } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { getFeeAmount } from '@core/mpc/keysign/fee'
@@ -9,13 +12,10 @@ import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_mess
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useCurrentVaultPublicKey } from '@core/ui/vault/state/currentVault'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
+import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { useTranslation } from 'react-i18next'
-
-import { usePopupInput } from '../../../state/input'
-import { CosmosMsgType } from '../interfaces'
-import { ManageEvmFee } from '../ManageEvmFee'
 
 export type NetworkFeeSectionProps = {
   keysignPayload: KeysignPayload
@@ -75,7 +75,7 @@ export const NetworkFeeSection = ({
           const evmValues = getEvmValues()
 
           return (
-            <>
+            <List>
               <ListItem
                 description={formatAmount(
                   fromChainAmount(feeAmount, chainFeeCoin[chain].decimals),
@@ -92,6 +92,7 @@ export const NetworkFeeSection = ({
                   ) : null
                 }
                 title={t('est_network_fee')}
+                hoverable={false}
               />
               {transactionPayload.transactionDetails.msgPayload?.case ===
                 CosmosMsgType.MSG_EXECUTE_CONTRACT && (
@@ -100,9 +101,10 @@ export const NetworkFeeSection = ({
                     transactionPayload.transactionDetails.msgPayload.value.msg
                   }
                   title={t('message')}
+                  hoverable={false}
                 />
               )}
-            </>
+            </List>
           )
         },
         serialized: () => null,

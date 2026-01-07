@@ -7,10 +7,10 @@ import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { KeysignFeeAmount } from '@core/ui/mpc/keysign/tx/FeeAmount'
 import {
   TransactionOverviewAmount,
-  TransactionOverviewCard,
   TransactionOverviewItem,
 } from '@core/ui/mpc/keysign/verify/components'
 import { HStack } from '@lib/ui/layout/Stack'
+import { List } from '@lib/ui/list'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Query } from '@lib/ui/query/Query'
@@ -49,7 +49,7 @@ export const VerifyTransactionOverview = ({
   const formattedAmount = fromChainAmount(amount, coin.decimals)
 
   return (
-    <TransactionOverviewCard>
+    <List border="gradient" radius={16}>
       <TransactionOverviewAmount
         label={t('you_are_sending')}
         coin={coin}
@@ -114,6 +114,6 @@ export const VerifyTransactionOverview = ({
         }
       />
       {children}
-    </TransactionOverviewCard>
+    </List>
   )
 }
