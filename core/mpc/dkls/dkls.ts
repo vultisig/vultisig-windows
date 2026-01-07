@@ -384,9 +384,6 @@ export class DKLS {
   ) {
     console.log('startKeyImport attempt:', attempt)
     this.isKeygenComplete = false
-    if (this.keygenCommittee.length != 3) {
-      throw new Error('DKLS key import requires exactly 3 committee members')
-    }
     try {
       let session: KeyImportInitiator | KeyImportSession | null = null
       if (this.isInitiateDevice) {

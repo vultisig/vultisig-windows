@@ -1,3 +1,11 @@
+import {
+  SendFormCheckBadge,
+  SendFormIconsWrapper,
+} from '@core/ui/vault/send/addresses/components/SendFormIconsWrapper'
+import { SendInputContainer } from '@core/ui/vault/send/components/SendInputContainer'
+import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValidationQuery'
+import { useSendFormFieldState } from '@core/ui/vault/send/state/formFields'
+import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { HStack, hStack } from '@lib/ui/layout/Stack'
@@ -6,15 +14,6 @@ import { getColor } from '@lib/ui/theme/getters'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { SendInputContainer } from '../../components/SendInputContainer'
-import { useSendValidationQuery } from '../../queries/useSendValidationQuery'
-import { useSendFormFieldState } from '../../state/formFields'
-import { useSendReceiver } from '../../state/receiver'
-import {
-  SendFormCheckBadge,
-  SendFormIconsWrapper,
-} from './SendFormIconsWrapper'
 
 export const ManageAddressesInputFieldCollapsed = () => {
   const { t } = useTranslation()
@@ -47,14 +46,16 @@ export const ManageAddressesInputFieldCollapsed = () => {
       </HStack>
       <SendFormIconsWrapper gap={12}>
         {isChecked && (
-          <SendFormCheckBadge>
-            <CheckmarkIcon />
-          </SendFormCheckBadge>
-        )}
-        {!isOpen && (
-          <PencilIconWrapper>
-            <PencilIcon />
-          </PencilIconWrapper>
+          <>
+            <SendFormCheckBadge>
+              <CheckmarkIcon />
+            </SendFormCheckBadge>
+            {!isOpen && (
+              <PencilIconWrapper>
+                <PencilIcon />
+              </PencilIconWrapper>
+            )}
+          </>
         )}
       </SendFormIconsWrapper>
     </CollapsedCoinInputContainer>

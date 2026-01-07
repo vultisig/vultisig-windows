@@ -10,7 +10,7 @@ import { UserLockIcon } from '@lib/ui/icons/UserLockIcon'
 import { InfoItem } from '@lib/ui/info/InfoItem'
 import { VStack } from '@lib/ui/layout/Stack'
 import { FitPageContent } from '@lib/ui/page/PageContent'
-import { OnFinishProp } from '@lib/ui/props'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
@@ -49,7 +49,9 @@ export const VaultBackupWithoutPassword = ({
   onFinish,
   onPasswordRequest,
   vaultIds,
-}: VaultBackupWithoutPasswordProps & { vaultIds: string[] }) => {
+  onBack,
+}: VaultBackupWithoutPasswordProps &
+  Partial<OnBackProp> & { vaultIds: string[] }) => {
   const { t } = useTranslation()
   const { mutate: backupVault, isPending } = useBackupVaultMutation({
     onSuccess: onFinish,
@@ -58,7 +60,7 @@ export const VaultBackupWithoutPassword = ({
 
   return (
     <VStack fullHeight>
-      <FlowPageHeader title={t('backup')} />
+      <FlowPageHeader title={t('backup')} onBack={onBack} />
       <FitPageContent contentMaxWidth={360}>
         <VStack gap={68} justifyContent="center">
           <VStack gap={36}>

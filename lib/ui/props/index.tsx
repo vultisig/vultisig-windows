@@ -92,6 +92,10 @@ export type StatusProp<T> = {
   status: T
 }
 
+export type KindProp<T> = {
+  kind: T
+}
+
 export type SvgProps = SVGProps<SVGSVGElement>
 
 export type MessageProp = {

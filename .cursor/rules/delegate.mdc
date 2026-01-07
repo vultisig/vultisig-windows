@@ -1,0 +1,90 @@
+---
+alwaysApply: false
+---
+
+# Delegation-Ready Plan Format
+
+Write a plan that can be executed by a less capable AI model.
+
+## Requirements
+
+1. **Numbered steps** - Each step = one atomic action
+2. **Exact file paths** - Use workspace-relative paths (e.g., `clients/desktop/src/components/MyComponent.tsx`)
+3. **Code snippets** - Provide actual code, not descriptions. Follow existing codebase rules (e.g., `type` over `interface`, `assertField`, `useTranslation`)
+4. **Before/After** - Show the exact lines to find and what to replace them with
+5. **No ambiguity** - Pick one approach explicitly and provide full implementation details
+
+## Format
+
+````
+## Step 1: Create the new component
+
+Create `clients/desktop/src/components/feature/MyComponent.tsx`:
+
+```tsx
+import { useTranslation } from 'react-i18next'
+import { Text } from '@lib/ui/text'
+
+export type MyComponentProps = {
+  title: string
+}
+
+export const MyComponent = ({ title }: MyComponentProps) => {
+  const { t } = useTranslation()
+
+  return (
+    <div>
+      <Text>{t(title)}</Text>
+    </div>
+  )
+}
+```
+
+## Step 2: Update the parent view
+
+In `clients/desktop/src/navigation/views.tsx`, find:
+
+```tsx
+const views = {
+  // ...
+  settings: () => <SettingsPage />,
+}
+```
+
+Replace with:
+
+```tsx
+const views = {
+  // ...
+  settings: () => <SettingsPage />,
+  my_feature: () => <MyComponent title="my_feature_title" />,
+}
+```
+
+## Step 3: Add translations
+
+In `core/ui/i18n/locales/en.ts`, add the new key:
+
+```ts
+export const en = {
+  // ...
+  my_feature_title: 'My New Feature',
+}
+```
+````
+
+## Codebase Rules to Follow in Plans
+
+- **Internationalization**: Use `useTranslation` and update `core/ui/i18n/locales/en.ts` for all user-facing text.
+- **Type Definitions**: Use `type` for object/union definitions; `interface` only for class contracts.
+- **Assertions**: Use `shouldBePresent()` or `assertField()` when values must exist.
+- **Pattern Matching**: Prefer `match` or Record lookups over `switch/case`.
+- **Functions**: Use object parameters for functions with more than one argument.
+- **Imports**: Use relative paths within a package, but use package names (e.g., `@lib/ui/...`) for cross-package imports.
+
+## Anti-patterns
+
+- ❌ "Add appropriate styling" → Show the actual styles or component props
+- ❌ "Handle the edge cases" → Provide the exact logic for each case
+- ❌ "Similar to X component" → Provide the full, adapted implementation
+- ❌ "Update imports as needed" → Show the exact import statements required

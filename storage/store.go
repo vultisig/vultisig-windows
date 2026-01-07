@@ -122,10 +122,30 @@ func (s *Store) SaveVault(vault *Vault) error {
 		"folder_id",
 		"lib_type",
 		"last_password_verification_time",
+		"chain_public_keys",
+		"chain_key_shares",
 	}
 	query := fmt.Sprintf(`INSERT OR REPLACE INTO vaults (%s) VALUES (%s)`,
 		strings.Join(columns, ", "),
 		generatePlaceholders(len(columns)))
+
+	var chainPublicKeys interface{}
+	if vault.ChainPublicKeys != nil {
+		buf, err := json.Marshal(vault.ChainPublicKeys)
+		if err != nil {
+			return fmt.Errorf("could not marshal chain public keys, err: %w", err)
+		}
+		chainPublicKeys = string(buf)
+	}
+
+	var chainKeyShares interface{}
+	if vault.ChainKeyShares != nil {
+		buf, err := json.Marshal(vault.ChainKeyShares)
+		if err != nil {
+			return fmt.Errorf("could not marshal chain key shares, err: %w", err)
+		}
+		chainKeyShares = string(buf)
+	}
 
 	_, err = s.db.Exec(query,
 		vault.Name,
@@ -141,6 +161,8 @@ func (s *Store) SaveVault(vault *Vault) error {
 		vault.FolderID,
 		vault.LibType,
 		vault.LastPasswordVerificationTime,
+		chainPublicKeys,
+		chainKeyShares,
 	)
 	if err != nil {
 		return fmt.Errorf("could not upsert vault, err: %w", err)
@@ -161,10 +183,12 @@ func (s *Store) SaveVault(vault *Vault) error {
 
 func (s *Store) GetVault(publicKeyEcdsa string) (*Vault, error) {
 	query := `SELECT name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code,
-		local_party_id, signers, reshare_prefix, "order", is_backedup, folder_id, lib_type, last_password_verification_time
+		local_party_id, signers, reshare_prefix, "order", is_backedup, folder_id, lib_type, last_password_verification_time, chain_public_keys, chain_key_shares
 		FROM vaults WHERE public_key_ecdsa = ?`
 	row := s.db.QueryRow(query, publicKeyEcdsa)
 	var signers string
+	var chainPublicKeys sql.NullString
+	var chainKeyShares sql.NullString
 	var vault Vault
 	var folderID sql.NullString
 	err := row.Scan(&vault.Name,
@@ -180,6 +204,8 @@ func (s *Store) GetVault(publicKeyEcdsa string) (*Vault, error) {
 		&folderID,
 		&vault.LibType,
 		&vault.LastPasswordVerificationTime,
+		&chainPublicKeys,
+		&chainKeyShares,
 	)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -194,6 +220,16 @@ func (s *Store) GetVault(publicKeyEcdsa string) (*Vault, error) {
 	}
 	if err := json.Unmarshal([]byte(signers), &vault.Signers); err != nil {
 		return nil, fmt.Errorf("could not unmarshal signers, err: %w", err)
+	}
+	if chainPublicKeys.Valid {
+		if err := json.Unmarshal([]byte(chainPublicKeys.String), &vault.ChainPublicKeys); err != nil {
+			return nil, fmt.Errorf("could not unmarshal chain public keys, err: %w", err)
+		}
+	}
+	if chainKeyShares.Valid {
+		if err := json.Unmarshal([]byte(chainKeyShares.String), &vault.ChainKeyShares); err != nil {
+			return nil, fmt.Errorf("could not unmarshal chain key shares, err: %w", err)
+		}
 	}
 	keyShares, err := s.getKeyShares(publicKeyEcdsa)
 	if err != nil {
@@ -253,7 +289,7 @@ func (s *Store) getKeyShares(vaultPublicKeyECDSA string) ([]KeyShare, error) {
 
 func (s *Store) GetVaults() ([]*Vault, error) {
 	query := `SELECT name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code,
-	local_party_id, signers, reshare_prefix, "order", is_backedup, folder_id, lib_type, last_password_verification_time FROM vaults`
+	local_party_id, signers, reshare_prefix, "order", is_backedup, folder_id, lib_type, last_password_verification_time, chain_public_keys, chain_key_shares FROM vaults`
 
 	rows, err := s.db.Query(query)
 	if err != nil {
@@ -265,6 +301,8 @@ func (s *Store) GetVaults() ([]*Vault, error) {
 	for rows.Next() {
 		var vault Vault
 		var signers string
+		var chainPublicKeys sql.NullString
+		var chainKeyShares sql.NullString
 		var folderID sql.NullString
 		err := rows.Scan(&vault.Name,
 			&vault.PublicKeyECDSA,
@@ -279,6 +317,8 @@ func (s *Store) GetVaults() ([]*Vault, error) {
 			&folderID,
 			&vault.LibType,
 			&vault.LastPasswordVerificationTime,
+			&chainPublicKeys,
+			&chainKeyShares,
 		)
 		if err != nil {
 			return nil, fmt.Errorf("could not scan vault, err: %w", err)
@@ -290,6 +330,16 @@ func (s *Store) GetVaults() ([]*Vault, error) {
 		}
 		if err := json.Unmarshal([]byte(signers), &vault.Signers); err != nil {
 			return nil, fmt.Errorf("could not unmarshal signers, err: %w", err)
+		}
+		if chainPublicKeys.Valid {
+			if err := json.Unmarshal([]byte(chainPublicKeys.String), &vault.ChainPublicKeys); err != nil {
+				return nil, fmt.Errorf("could not unmarshal chain public keys, err: %w", err)
+			}
+		}
+		if chainKeyShares.Valid {
+			if err := json.Unmarshal([]byte(chainKeyShares.String), &vault.ChainKeyShares); err != nil {
+				return nil, fmt.Errorf("could not unmarshal chain key shares, err: %w", err)
+			}
 		}
 		keyShares, err := s.getKeyShares(vault.PublicKeyECDSA)
 		if err != nil {

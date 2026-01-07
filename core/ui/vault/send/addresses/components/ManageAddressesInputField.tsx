@@ -1,17 +1,23 @@
+import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { ScanQrView } from '@core/ui/qr/components/ScanQrView'
 import { useCore } from '@core/ui/state/core'
 import { ActionIconButton } from '@core/ui/vault/components/action-form/ActionIconButton'
+import { AddressBookModal } from '@core/ui/vault/send/addresses/components/AddressBookModal'
+import { AnimatedSendFormInputError } from '@core/ui/vault/send/components/AnimatedSendFormInputError'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { SendInputContainer } from '@core/ui/vault/send/components/SendInputContainer'
+import { validateSendReceiver } from '@core/ui/vault/send/form/validateSendForm'
+import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValidationQuery'
 import { useSender } from '@core/ui/vault/send/sender/hooks/useSender'
 import { useSendFormFieldState } from '@core/ui/vault/send/state/formFields'
 import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
+import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Match } from '@lib/ui/base/Match'
 import { borderRadius } from '@lib/ui/css/borderRadius'
-import BookAIcon from '@lib/ui/icons/BookAIcon'
+import { BookIcon } from '@lib/ui/icons/BookIcon'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
-import { PasteIcon } from '@lib/ui/icons/PasteIcon'
+import { SquareBehindSquare4Icon } from '@lib/ui/icons/SquareBehindSquare4Icon'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -22,13 +28,6 @@ import { attempt } from '@lib/utils/attempt'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { useAssertWalletCore } from '../../../../chain/providers/WalletCoreProvider'
-import { AnimatedSendFormInputError } from '../../components/AnimatedSendFormInputError'
-import { validateSendReceiver } from '../../form/validateSendForm'
-import { useSendValidationQuery } from '../../queries/useSendValidationQuery'
-import { useCurrentSendCoin } from '../../state/sendCoin'
-import { AddressBookModal } from './AddressBookModal'
 
 type MangeReceiverViewState = 'default' | 'addressBook' | 'scanner'
 
@@ -136,13 +135,13 @@ export const ManageReceiverAddressInputField = () => {
                     }
                   }}
                 >
-                  <PasteIcon />
+                  <SquareBehindSquare4Icon />
                 </ActionIconButton>
                 <ActionIconButton onClick={() => setViewState('scanner')}>
                   <CameraIcon />
                 </ActionIconButton>
                 <ActionIconButton onClick={() => setViewState('addressBook')}>
-                  <BookAIcon />
+                  <BookIcon />
                 </ActionIconButton>
               </HStack>
             </VStack>

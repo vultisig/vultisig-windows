@@ -15,6 +15,7 @@ type Input = {
   walletCore: WalletCore
   hexChainCode: string
   publicKeys: PublicKeys
+  chainPublicKeys?: Partial<Record<Chain, string>>
 }
 
 export const getPublicKey = ({
@@ -22,25 +23,30 @@ export const getPublicKey = ({
   walletCore,
   hexChainCode,
   publicKeys,
+  chainPublicKeys,
 }: Input) => {
   const coinType = getCoinType({
     walletCore,
     chain,
   })
 
+  const chainPublicKey = chainPublicKeys?.[chain]
+
   const keysignType = signatureAlgorithms[getChainKind(chain)]
 
   const publicKeyType = getTwPublicKeyType({ walletCore, chain })
 
-  const derivedPublicKey = match(keysignType, {
-    ecdsa: () =>
-      derivePublicKey({
-        hexRootPubKey: publicKeys.ecdsa,
-        hexChainCode: hexChainCode,
-        path: walletCore.CoinTypeExt.derivationPath(coinType),
-      }),
-    eddsa: () => publicKeys.eddsa,
-  })
+  const derivedPublicKey =
+    chainPublicKey ??
+    match(keysignType, {
+      ecdsa: () =>
+        derivePublicKey({
+          hexRootPubKey: publicKeys.ecdsa,
+          hexChainCode: hexChainCode,
+          path: walletCore.CoinTypeExt.derivationPath(coinType),
+        }),
+      eddsa: () => publicKeys.eddsa,
+    })
 
   const publicKeyData =
     chain === Chain.Cardano

@@ -1,11 +1,18 @@
-export const BookIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em">
-    <path
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={1.5}
-      d="M16.042 10v2.291c0 .92-.747 1.667-1.667 1.667H5.833a1.875 1.875 0 0 0 0 3.75h2.5M7.292 5.833h5.416M7.292 9.166h2.916M5.625 2.291h8.75c.92 0 1.667.746 1.667 1.667V16.04c0 .92-.747 1.667-1.667 1.667h-8.75c-.92 0-1.667-.746-1.667-1.667V3.958c0-.92.747-1.667 1.667-1.667Z"
-    />
+import { SvgProps } from '@lib/ui/props'
+import { FC } from 'react'
+
+export const BookIcon: FC<SvgProps> = props => (
+  <svg
+    fill="none"
+    height="1em"
+    stroke="currentColor"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    strokeWidth="1.5"
+    viewBox="0 0 24 24"
+    width="1em"
+    {...props}
+  >
+    <path d="M19.25 12V14.75C19.25 15.8546 18.3546 16.75 17.25 16.75H7C5.75736 16.75 4.75 17.7574 4.75 19C4.75 20.2426 5.75736 21.25 7 21.25H10M8.75 7H15.25M8.75 11H12.25M6.75 2.75H17.25C18.3546 2.75 19.25 3.64543 19.25 4.75V19.25C19.25 20.3546 18.3546 21.25 17.25 21.25H6.75C5.64543 21.25 4.75 20.3546 4.75 19.25V4.75C4.75 3.64543 5.64543 2.75 6.75 2.75Z" />
   </svg>
 )

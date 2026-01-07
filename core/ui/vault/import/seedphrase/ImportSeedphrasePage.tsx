@@ -1,18 +1,16 @@
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { VStack } from '@lib/ui/layout/Stack'
-import { PageHeader } from '@lib/ui/page/PageHeader'
-
-import { ImportSeedphraseIntro } from './intro/ImportSeedphraseIntro'
+import { ImportSeedphraseActiveStep } from './ImportSeedphraseActiveStep'
+import { MnemonicProvider } from './state/mnemonic'
+import { SelectedChainsProvider } from './state/selectedChains'
+import { ImportSeedphraseStepProvider } from './state/step'
 
 export const ImportSeedphrasePage = () => {
-  const handleFinish = () => {
-    console.log('finish')
-  }
-
   return (
-    <VStack fullHeight>
-      <PageHeader primaryControls={<PageHeaderBackButton />} />
-      <ImportSeedphraseIntro onFinish={handleFinish} />
-    </VStack>
+    <MnemonicProvider initialValue="">
+      <SelectedChainsProvider initialValue={[]}>
+        <ImportSeedphraseStepProvider initialValue="intro">
+          <ImportSeedphraseActiveStep />
+        </ImportSeedphraseStepProvider>
+      </SelectedChainsProvider>
+    </MnemonicProvider>
   )
 }

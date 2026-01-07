@@ -142,10 +142,8 @@ export function useCoinPricesQuery(
           // multiple coins can have the same price provider
           // so we need to find all coins with the same price provider
           // for example: ETH.ETH, ARBITRUM.ETH, OPTIMISM.ETH there are all ETH , so they have the same price provider
-          const matchedCoins = shouldBePresent(
-            coinsWithPriceProviderId.filter(
-              coin => coin.priceProviderId == priceProviderId
-            )
+          const matchedCoins = coinsWithPriceProviderId.filter(coin =>
+            areLowerCaseEqual(coin.priceProviderId, priceProviderId)
           )
           matchedCoins.forEach(coin => {
             result[coinKeyToString(coin)] = price
