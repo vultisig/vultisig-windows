@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useSelectedChains } from './state/selectedChains'
+import { useFinishSeedphraseImport } from './utils/useFinishSeedphraseImport'
 
 const ScrollableContent = styled.div`
   flex: 1;
@@ -30,6 +31,7 @@ export const SelectChainsStep = () => {
   const { t } = useTranslation()
   const [search, setSearch] = useState('')
   const [selectedChains, setSelectedChains] = useSelectedChains()
+  const handleFinish = useFinishSeedphraseImport()
 
   const allChains = Object.values(Chain)
 
@@ -43,10 +45,6 @@ export const SelectChainsStep = () => {
 
   const toggleChain = (chain: Chain) => {
     setSelectedChains(prev => toggleInclusion(prev, chain))
-  }
-
-  const handleFinish = () => {
-    console.log('Import complete')
   }
 
   return (

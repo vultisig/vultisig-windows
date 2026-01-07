@@ -1,3 +1,4 @@
+import { Chain } from '@core/chain/Chain'
 import { signingAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { MpcLib } from '@core/mpc/mpcLib'
 import { Vault } from '@core/mpc/vault/Vault'
@@ -21,6 +22,8 @@ export const toStorageVault = ({
   folderId,
   isBackedUp,
   lastPasswordVerificationTime,
+  chainPublicKeys,
+  chainKeyShares,
 }: Vault): storage.Vault => ({
   last_password_verification_time: lastPasswordVerificationTime ?? Date.now(),
   name: name,
@@ -30,7 +33,7 @@ export const toStorageVault = ({
   created_at: (createdAt ? new Date(createdAt) : new Date()).toISOString(),
   hex_chain_code: hexChainCode,
   keyshares: toEntries(keyShares).map(({ key, value }) => ({
-    public_key: publicKeys[key],
+    public_key: key,
     keyshare: value,
   })),
   local_party_id: localPartyId,
@@ -40,6 +43,8 @@ export const toStorageVault = ({
   coins: [],
   lib_type: libType,
   folder_id: folderId,
+  chain_public_keys: chainPublicKeys,
+  chain_key_shares: chainKeyShares,
   convertValues: () => {},
 })
 
@@ -60,6 +65,15 @@ export const fromStorageVault = (
         )
       ).keyshare
   )
+
+  const chainPublicKeys = vault.chain_public_keys as
+    | Partial<Record<Chain, string>>
+    | undefined
+
+  const chainKeyShares = vault.chain_key_shares as
+    | Partial<Record<Chain, string>>
+    | undefined
+
   return {
     lastPasswordVerificationTime: vault.last_password_verification_time,
     name: vault.name,
@@ -74,5 +88,7 @@ export const fromStorageVault = (
     order: vault.order,
     folderId: vault.folder_id,
     isBackedUp: vault.is_backed_up,
+    chainPublicKeys,
+    chainKeyShares,
   }
 }

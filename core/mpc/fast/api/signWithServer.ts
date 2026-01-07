@@ -10,6 +10,7 @@ type Input = {
   derive_path: string
   is_ecdsa: boolean
   vault_password: string
+  chain: string
 }
 
 export const signWithServer = async (input: Input) =>
