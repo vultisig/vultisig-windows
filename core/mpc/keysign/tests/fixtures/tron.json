@@ -114,7 +114,7 @@
     ]
   },
   {
-    "name": "Send TRON TRX",
+    "name": "Send TRON TRX (contract)",
     "keysign_payload": {
       "coin": {
         "chain": "Tron",
