@@ -16,7 +16,7 @@ import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { attempt } from '@lib/utils/attempt'
-import { FC, useCallback, useMemo, useState } from 'react'
+import { FC, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -40,15 +40,12 @@ export const ConnectOverview: FC<SignMessageOverview> = ({
     return data.message as string
   }, [message])
 
-  const onGetPassword = useCallback(
-    ({ password }: { password: string }) => {
-      navigate({
-        id: 'keysign',
-        state: { keysignPayload, securityType: 'fast', password },
-      })
-    },
-    [keysignPayload, navigate]
-  )
+  const onGetPassword = ({ password }: { password: string }) => {
+    navigate({
+      id: 'keysign',
+      state: { keysignPayload, securityType: 'fast', password },
+    })
+  }
 
   return signature ? (
     <>

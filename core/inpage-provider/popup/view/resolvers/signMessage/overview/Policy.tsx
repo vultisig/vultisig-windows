@@ -28,7 +28,7 @@ import { StrictText, Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { useQuery } from '@tanstack/react-query'
 import { isHexString } from 'ethers'
-import { FC, Fragment, useCallback, useMemo, useState } from 'react'
+import { FC, Fragment, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { PopupDeadEnd } from '../../../flow/PopupDeadEnd'
@@ -85,15 +85,12 @@ export const PolicyOverview: FC<
     } satisfies ParsedPolicy
   }, [message])
 
-  const onGetPassword = useCallback(
-    ({ password }: { password: string }) => {
-      navigate({
-        id: 'keysign',
-        state: { keysignPayload, securityType: 'fast', password },
-      })
-    },
-    [keysignPayload, navigate]
-  )
+  const onGetPassword = ({ password }: { password: string }) => {
+    navigate({
+      id: 'keysign',
+      state: { keysignPayload, securityType: 'fast', password },
+    })
+  }
 
   return (
     <MatchQuery
