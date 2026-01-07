@@ -3,6 +3,7 @@ import { ActionForm } from '@core/ui/vault/components/action-form/ActionForm'
 import { ManageAddresses } from '@core/ui/vault/send/addresses/ManageAddresses'
 import { ManageAmount } from '@core/ui/vault/send/amount/ManageAmount'
 import { ManageSendCoin } from '@core/ui/vault/send/coin/ManageSendCoin'
+import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValidationQuery'
 import { RefreshSend } from '@core/ui/vault/send/RefreshSend'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
@@ -13,8 +14,6 @@ import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { isRecordEmpty } from '@lib/utils/record/isRecordEmpty'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { useSendValidationQuery } from '../queries/useSendValidationQuery'
 
 export const SendForm = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
