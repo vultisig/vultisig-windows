@@ -33,7 +33,7 @@ export const toStorageVault = ({
   created_at: (createdAt ? new Date(createdAt) : new Date()).toISOString(),
   hex_chain_code: hexChainCode,
   keyshares: toEntries(keyShares).map(({ key, value }) => ({
-    public_key: key,
+    public_key: publicKeys[key],
     keyshare: value,
   })),
   local_party_id: localPartyId,

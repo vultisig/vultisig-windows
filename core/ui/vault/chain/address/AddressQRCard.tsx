@@ -11,6 +11,7 @@ import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useToast } from '@lib/ui/toast/ToastProvider'
@@ -23,7 +24,7 @@ type AddressQRCardProps = {
   chain: Chain
   coin?: CoinKey & Partial<Pick<CoinMetadata, 'logo' | 'ticker'>>
   onShare?: () => void
-}
+} & Partial<OnCloseProp>
 
 const Container = styled(VStack)`
   gap: 24px;
@@ -125,7 +126,12 @@ const CopyButton = styled(Button)`
   }
 `
 
-export const AddressQRCard = ({ chain, coin, onShare }: AddressQRCardProps) => {
+export const AddressQRCard = ({
+  chain,
+  coin,
+  onShare,
+  onClose,
+}: AddressQRCardProps) => {
   const { t } = useTranslation()
   const address = useCurrentVaultAddress(chain)
   const { addToast } = useToast()
@@ -139,8 +145,9 @@ export const AddressQRCard = ({ chain, coin, onShare }: AddressQRCardProps) => {
         message: '',
         renderContent: () => <VaultAddressCopyToast value={chain} />,
       })
+      onClose?.()
     }
-  }, [address, addToast, chain])
+  }, [address, addToast, chain, onClose])
 
   const handleShare = useCallback(() => {
     if (onShare) {
