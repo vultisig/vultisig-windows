@@ -20,7 +20,7 @@ export const AddressQRModal = ({
   return (
     <ResponsiveModal grabbable isOpen onClose={onClose}>
       <MobilePaddedContent>
-        <AddressQRCard chain={chain} coin={coin} />
+        <AddressQRCard chain={chain} coin={coin} onClose={onClose} />
       </MobilePaddedContent>
     </ResponsiveModal>
   )
