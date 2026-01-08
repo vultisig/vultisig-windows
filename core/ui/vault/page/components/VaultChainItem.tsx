@@ -18,9 +18,9 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useToast } from '@lib/ui/toast/ToastProvider'
 import { sum } from '@lib/utils/array/sum'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { attempt } from '@lib/utils/attempt'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
-import { KeyboardEvent, MouseEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -44,23 +44,24 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
   const { t } = useTranslation()
   const { addToast } = useToast()
 
-  const handleCopyAddress = (e: KeyboardEvent | MouseEvent) => {
+  const handleCopyAddress = async (
+    e: React.MouseEvent | React.KeyboardEvent
+  ) => {
     e.stopPropagation()
     e.preventDefault()
 
-    navigator.clipboard
-      .writeText(address)
-      .then(() => {
-        addToast({
-          message: '',
-          renderContent: () => <VaultAddressCopyToast value={chain} />,
-        })
+    try {
+      await attempt(() => navigator.clipboard.writeText(address))
+
+      addToast({
+        message: '',
+        renderContent: () => <VaultAddressCopyToast value={chain} />,
       })
-      .catch(() => {
-        addToast({
-          message: t('failed_to_copy_address'),
-        })
+    } catch {
+      addToast({
+        message: t('failed_to_copy_address'),
       })
+    }
   }
 
   const formatFiatAmount = useFormatFiatAmount()
@@ -100,7 +101,7 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
                 alignItems="center"
                 gap={4}
                 onClick={handleCopyAddress}
-                onKeyDown={(e: KeyboardEvent) => {
+                onKeyDown={(e: React.KeyboardEvent) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault()
                     handleCopyAddress(e)
