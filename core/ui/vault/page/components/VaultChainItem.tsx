@@ -47,12 +47,20 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
   const handleCopyAddress = (e: KeyboardEvent | MouseEvent) => {
     e.stopPropagation()
     e.preventDefault()
-    navigator.clipboard.writeText(address)
 
-    addToast({
-      message: '',
-      renderContent: () => <VaultAddressCopyToast value={chain} />,
-    })
+    navigator.clipboard
+      .writeText(address)
+      .then(() => {
+        addToast({
+          message: '',
+          renderContent: () => <VaultAddressCopyToast value={chain} />,
+        })
+      })
+      .catch(() => {
+        addToast({
+          message: t('failed_to_copy_address'),
+        })
+      })
   }
 
   const formatFiatAmount = useFormatFiatAmount()
