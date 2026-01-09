@@ -113,6 +113,7 @@ export const getCustomTxData = ({
           walletCore,
           hexChainCode: vault.hexChainCode,
           publicKeys: vault.publicKeys,
+          chainPublicKeys: vault.chainPublicKeys,
         })
         const address = deriveAddress({
           chain,

@@ -59,6 +59,7 @@ export const AddressBookModal = ({ onSelect, onClose }: Props) => {
           walletCore,
           hexChainCode: vault.hexChainCode,
           publicKeys: vault.publicKeys,
+          chainPublicKeys: vault.chainPublicKeys,
         })
 
         const address = deriveAddress({

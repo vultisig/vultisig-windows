@@ -19,6 +19,7 @@ export const getAccount: BackgroundResolver<'getAccount'> = async ({
     walletCore,
     hexChainCode: vault.hexChainCode,
     publicKeys: vault.publicKeys,
+    chainPublicKeys: vault.chainPublicKeys,
   })
 
   const address = deriveAddress({
