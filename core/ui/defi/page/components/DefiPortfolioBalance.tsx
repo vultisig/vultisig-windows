@@ -1,4 +1,5 @@
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
+import { useDefiPortfolioBalance } from '@core/ui/defi/page/hooks/useDefiPortfolios'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { ManageVaultBalanceVisibility } from '@core/ui/vault/page/balance/visibility/ManageVaultBalanceVisibility'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -9,8 +10,6 @@ import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useDefiPortfolioBalance } from '../hooks/useDefiPortfolios'
-
 export const DefiPortfolioBalance = () => {
   const query = useDefiPortfolioBalance()
   const formatFiatAmount = useFormatFiatAmount()
@@ -19,42 +18,34 @@ export const DefiPortfolioBalance = () => {
   return (
     <Container>
       <BlurEffect />
-      <Content justifyContent="center" flexGrow alignItems="center" gap={12}>
-        <VStack alignItems="center" gap={8}>
-          <MatchQuery
-            value={query}
-            error={() => t('failed_to_load')}
-            pending={() => (
-              <HStack gap={6} alignItems="center">
-                <Spinner size="1.5em" />
-              </HStack>
-            )}
-            success={value => (
-              <Text size={34}>
-                <BalanceVisibilityAware size="l">
-                  {formatFiatAmount(value)}
-                </BalanceVisibilityAware>
-              </Text>
-            )}
-          />
-          <MatchQuery
-            value={query}
-            error={() => null}
-            pending={() => null}
-            success={value => (
-              <Text size={13} color="shy">
-                <BalanceVisibilityAware>
-                  {t('total_balance')} {formatFiatAmount(value)}
-                </BalanceVisibilityAware>
-              </Text>
-            )}
-          />
-        </VStack>
+      <VStack
+        alignItems="center"
+        gap={12}
+        justifyContent="center"
+        position="relative"
+        flexGrow
+      >
+        <MatchQuery
+          value={query}
+          error={() => t('failed_to_load')}
+          pending={() => (
+            <HStack gap={6} alignItems="center">
+              <Spinner size="1.5em" />
+            </HStack>
+          )}
+          success={value => (
+            <Text size={34}>
+              <BalanceVisibilityAware size="l">
+                {formatFiatAmount(value)}
+              </BalanceVisibilityAware>
+            </Text>
+          )}
+        />
         <ManageVaultBalanceVisibility
           hideText={t('hide_defi_balance')}
           showText={t('show_defi_balance')}
         />
-      </Content>
+      </VStack>
     </Container>
   )
 }
@@ -73,10 +64,6 @@ const Container = styled.div`
   @media ${mediaQuery.tabletDeviceAndUp} {
     height: 360px;
   }
-`
-
-const Content = styled(VStack)`
-  position: relative;
 `
 
 const BlurEffect = styled.div`

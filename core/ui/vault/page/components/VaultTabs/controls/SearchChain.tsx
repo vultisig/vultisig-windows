@@ -1,18 +1,15 @@
+import { useSearchChain } from '@core/ui/vault/page/state/searchChainProvider'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { useDebounce } from '@lib/ui/hooks/useDebounce'
+import { CircleICloseIcon } from '@lib/ui/icons/CircleICloseIcon'
 import { SearchIcon } from '@lib/ui/icons/SearchIcon'
-import { HStack } from '@lib/ui/layout/Stack'
 import { SearchField } from '@lib/ui/search/SearchField'
-import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useDeferredValue, useEffect, useState, useTransition } from 'react'
-import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { useSearchChain } from '../../../state/searchChainProvider'
 
 const debounceDelayMs = 250
 
@@ -31,7 +28,6 @@ export const SearchChain = ({
   const debouncedValue = useDebounce(inputValue, debounceDelayMs)
   const deferredValue = useDeferredValue(debouncedValue)
   const [, startTransition] = useTransition()
-  const { t } = useTranslation()
 
   useEffect(() => {
     setInputValue(searchQuery)
@@ -70,21 +66,15 @@ export const SearchChain = ({
             exit={{ opacity: 0 }}
             transition={{ duration: 0.1 }}
           >
-            <HStack
-              gap={8}
-              alignItems="center"
-              style={{ minWidth: 'max-content' }}
-            >
-              <SearchFieldWrapper fullWidth={isFullWidth}>
-                <SearchField
-                  value={inputValue}
-                  onSearch={nextValue => setInputValue(nextValue)}
-                />
-              </SearchFieldWrapper>
+            <SearchFieldWrapper fullWidth={isFullWidth}>
+              <SearchField
+                value={inputValue}
+                onSearch={nextValue => setInputValue(nextValue)}
+              />
               <CloseButton onClick={handleClose}>
-                <Text size={14}>{t('vault_search_close')}</Text>
+                <CircleICloseIcon />
               </CloseButton>
-            </HStack>
+            </SearchFieldWrapper>
           </motion.div>
         </motion.div>
       ) : (
@@ -107,8 +97,9 @@ export const SearchChain = ({
 const SearchFieldWrapper = styled.div<{ fullWidth: boolean }>`
   display: flex;
   flex-direction: column;
-  max-height: 42px;
   flex: 1;
+  max-height: 42px;
+  position: relative;
   width: ${({ fullWidth }) => (fullWidth ? '100%' : 'auto')};
 
   & input {
@@ -118,10 +109,20 @@ const SearchFieldWrapper = styled.div<{ fullWidth: boolean }>`
 `
 
 const CloseButton = styled(UnstyledButton)`
-  display: flex;
   align-items: center;
+  display: flex;
   flex-shrink: 0;
-  white-space: nowrap;
+  font-size: 20px;
   min-width: fit-content;
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
   width: fit-content;
+
+  svg {
+    color: ${getColor('foreground')};
+    fill: ${getColor('textShy')};
+  }
 `

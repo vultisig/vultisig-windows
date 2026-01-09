@@ -5,6 +5,7 @@ import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
+import { SwapFiatAmount } from '@core/ui/vault/swap/form/amount/SwapFiatAmount'
 import { VerifySwapFees } from '@core/ui/vault/swap/form/info/VerifySwapFees'
 import { useSwapKeysignPayloadQuery } from '@core/ui/vault/swap/keysignPayload/query'
 import { useFromAmount } from '@core/ui/vault/swap/state/fromAmount'
@@ -62,15 +63,26 @@ export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
             <VStack gap={16}>
               <HStack gap={8}>
                 <CoinIcon coin={fromCoin} style={{ fontSize: 24 }} />
-                <Text weight="500" size={17} color="contrast">
-                  {formatAmount(
-                    fromChainAmount(
-                      shouldBePresent(fromAmount, 'fromAmount'),
-                      fromCoin.decimals
-                    ),
-                    fromCoin
-                  )}
-                </Text>
+                <VStack>
+                  <Text weight="500" size={17} color="contrast">
+                    {formatAmount(
+                      fromChainAmount(
+                        shouldBePresent(fromAmount, 'fromAmount'),
+                        fromCoin.decimals
+                      ),
+                      fromCoin
+                    )}
+                  </Text>
+                  <SwapFiatAmount
+                    value={{
+                      ...fromCoinKey,
+                      amount: fromChainAmount(
+                        shouldBePresent(fromAmount, 'fromAmount'),
+                        fromCoin.decimals
+                      ),
+                    }}
+                  />
+                </VStack>
               </HStack>
               <HStack alignItems="center" gap={10}>
                 <IconWrapper>
@@ -91,10 +103,19 @@ export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
                       'swap payload'
                     )
                     const { toAmountDecimal } = getRecordUnionValue(swapPayload)
+
                     return (
-                      <Text weight="500" size={17} color="contrast">
-                        {formatAmount(parseFloat(toAmountDecimal), toCoin)}
-                      </Text>
+                      <VStack>
+                        <Text weight="500" size={17} color="contrast">
+                          {formatAmount(parseFloat(toAmountDecimal), toCoin)}
+                        </Text>
+                        <SwapFiatAmount
+                          value={{
+                            ...toCoin,
+                            amount: parseFloat(toAmountDecimal),
+                          }}
+                        />
+                      </VStack>
                     )
                   }}
                 />
