@@ -1,5 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { useCurrentVaultChains } from '@core/ui/vault/state/currentVaultCoins'
+import { useAvailableChains } from '@core/ui/vault/state/useAvailableChains'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
@@ -79,9 +80,13 @@ export const useToggleDefiChain = () => {
 
 export const useSupportedDefiChainsForVault = () => {
   const vaultChains = useCurrentVaultChains()
+  const availableChains = useAvailableChains()
 
   return useMemo(
-    () => supportedDefiChains.filter(chain => vaultChains.includes(chain)),
-    [vaultChains]
+    () =>
+      supportedDefiChains.filter(
+        chain => vaultChains.includes(chain) && availableChains.includes(chain)
+      ),
+    [vaultChains, availableChains]
   )
 }
