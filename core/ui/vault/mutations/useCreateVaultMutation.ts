@@ -1,4 +1,3 @@
-import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
@@ -7,6 +6,7 @@ import { useCore } from '@core/ui/state/core'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { pipe } from '@lib/utils/pipe'
+import { getRecordKeys } from '@lib/utils/record/getRecordKeys'
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
 
 import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
@@ -55,7 +55,7 @@ export const useCreateVaultMutation = (
       await setCurrentVaultId(getVaultId(vault))
 
       const chainsToCreate = vault.chainPublicKeys
-        ? (Object.keys(vault.chainPublicKeys) as Chain[])
+        ? getRecordKeys(vault.chainPublicKeys)
         : await getDefaultChains()
 
       const coins = await Promise.all(
