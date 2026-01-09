@@ -62,6 +62,7 @@ export const useCreateCoinMutation = () => {
       walletCore,
       hexChainCode: vault.hexChainCode,
       publicKeys: vault.publicKeys,
+      chainPublicKeys: vault.chainPublicKeys,
     })
 
     const address = deriveAddress({

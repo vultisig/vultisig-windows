@@ -1,3 +1,4 @@
+import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
@@ -53,14 +54,18 @@ export const useCreateVaultMutation = (
 
       await setCurrentVaultId(getVaultId(vault))
 
-      const defaultChains = await getDefaultChains()
+      const chainsToCreate = vault.chainPublicKeys
+        ? (Object.keys(vault.chainPublicKeys) as Chain[])
+        : await getDefaultChains()
+
       const coins = await Promise.all(
-        defaultChains.map(async chain => {
+        chainsToCreate.map(async chain => {
           const publicKey = getPublicKey({
             chain,
             walletCore,
             hexChainCode: vault.hexChainCode,
             publicKeys: vault.publicKeys,
+            chainPublicKeys: vault.chainPublicKeys,
           })
 
           const address = deriveAddress({
