@@ -1,4 +1,5 @@
 import { hasServer } from '@core/mpc/devices/localPartyId'
+import { isKeyImportVault } from '@core/mpc/vault/Vault'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
@@ -110,9 +111,11 @@ export const VaultBackupSummaryStep: FC<SetupVaultSummaryStepProps> = ({
 }) => {
   const { t } = useTranslation()
   const [isAgreed, { toggle }] = useBoolean(false)
-  const { signers } = useCurrentVault()
+  const vault = useCurrentVault()
+  const { signers } = vault
   const navigate = useCoreNavigate()
   const isFastVault = hasServer(signers)
+  const isKeyImport = isKeyImportVault(vault)
 
   const summaryItems = [
     {
@@ -190,16 +193,20 @@ export const VaultBackupSummaryStep: FC<SetupVaultSummaryStepProps> = ({
             <Button disabled={!isAgreed} onClick={onFinish}>
               {t('fastVaultSetup.summary.start_using_vault')}
             </Button>
-            <Divider text={t('or').toUpperCase()} />
-            <Button
-              disabled={!isAgreed}
-              kind="secondary"
-              onClick={() => {
-                navigate({ id: 'manageVaultChains' })
-              }}
-            >
-              {t('fastVaultSetup.summary.select_preferred_chains')}
-            </Button>
+            {!isKeyImport && (
+              <>
+                <Divider text={t('or').toUpperCase()} />
+                <Button
+                  disabled={!isAgreed}
+                  kind="secondary"
+                  onClick={() => {
+                    navigate({ id: 'manageVaultChains' })
+                  }}
+                >
+                  {t('fastVaultSetup.summary.select_preferred_chains')}
+                </Button>
+              </>
+            )}
           </VStack>
         </Wrapper>
       </AnimatedVisibility>
