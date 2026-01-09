@@ -6,6 +6,7 @@ import { useSupportedDefiChainsForVault } from '@core/ui/storage/defiChains'
 import { DoneButton } from '@core/ui/vault/chain/manage/shared/DoneButton'
 import { ItemGrid } from '@core/ui/vault/chain/manage/shared/ItemGrid'
 import { SearchInput } from '@core/ui/vault/chain/manage/shared/SearchInput'
+import { useAvailableChains } from '@core/ui/vault/state/useAvailableChains'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -13,7 +14,7 @@ import { EmptyState } from '@lib/ui/status/EmptyState'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { circleName } from '../protocols/circle/core/config'
+import { circleChain, circleName } from '../protocols/circle/core/config'
 import { CircleItem } from './CircleItem'
 import { DefiChainItem } from './DefiChainItem'
 
@@ -22,8 +23,9 @@ export const ManageDefiChainsPage = () => {
   const [search, setSearch] = useState('')
   const navigate = useCoreNavigate()
   const eligibleChains = useSupportedDefiChainsForVault()
+  const availableChains = useAvailableChains()
 
-  const hasCircle = featureFlags.circle
+  const hasCircle = featureFlags.circle && availableChains.includes(circleChain)
 
   const showCircle = useMemo(() => {
     if (!hasCircle) return false
