@@ -5,6 +5,11 @@ import { MpcLib } from '@core/mpc/mpcLib'
 
 export type VaultKeyShares = Record<SignatureAlgorithm, string>
 
+export type VaultAllKeyShares = {
+  keyShares: VaultKeyShares
+  chainKeyShares?: Partial<Record<Chain, string>>
+}
+
 export type Vault = {
   name: string
   publicKeys: PublicKeys

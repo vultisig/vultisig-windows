@@ -12,7 +12,7 @@ import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGc
 import { match } from '@lib/utils/match'
 import { useMutation } from '@tanstack/react-query'
 
-import { decryptVaultKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
+import { decryptVaultAllKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
 import { usePasscode } from '../../passcodeEncryption/state/passcode'
 import { useCore } from '../../state/core'
 import { useVaults } from '../../storage/vaults'
@@ -82,12 +82,15 @@ export const useBackupVaultMutation = ({
           return vault
         }
 
+        const decrypted = decryptVaultAllKeyShares({
+          keyShares: vault.keyShares,
+          chainKeyShares: vault.chainKeyShares,
+          key: passcode,
+        })
+
         return {
           ...vault,
-          keyShares: decryptVaultKeyShares({
-            keyShares: vault.keyShares,
-            key: passcode,
-          }),
+          ...decrypted,
         }
       }
 

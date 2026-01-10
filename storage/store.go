@@ -653,7 +653,8 @@ func (s *Store) GetVaultFolder(id string) (*VaultFolder, error) {
 }
 
 // SaveVaultsKeyShares atomically updates keyshares for multiple vaults in a single transaction
-func (s *Store) SaveVaultsKeyShares(vaultKeyShares map[string][]KeyShare) error {
+// ChainKeyShares is optional - only imported vaults will have this field populated
+func (s *Store) SaveVaultsKeyShares(vaultKeyShares map[string]VaultAllKeyShares) error {
 	if len(vaultKeyShares) == 0 {
 		return nil // Nothing to update
 	}
@@ -675,17 +676,17 @@ func (s *Store) SaveVaultsKeyShares(vaultKeyShares map[string][]KeyShare) error 
 	for vaultID := range vaultKeyShares {
 		vaultIDs = append(vaultIDs, vaultID)
 	}
-	
+
 	// Create placeholders for the IN clause
 	placeholders := generatePlaceholders(len(vaultIDs))
 	deleteQuery := fmt.Sprintf("DELETE FROM keyshares WHERE public_key_ecdsa IN (%s)", placeholders)
-	
+
 	// Convert vaultIDs to []interface{} for Exec
 	args := make([]interface{}, len(vaultIDs))
 	for i, id := range vaultIDs {
 		args[i] = id
 	}
-	
+
 	_, err = tx.Exec(deleteQuery, args...)
 	if err != nil {
 		return fmt.Errorf("could not delete existing keyshares: %w", err)
@@ -708,11 +709,29 @@ func (s *Store) SaveVaultsKeyShares(vaultKeyShares map[string][]KeyShare) error 
 	defer stmt.Close()
 
 	// Insert keyshares for all vaults
-	for vaultPublicKeyECDSA, keyShares := range vaultKeyShares {
-		for _, keyShare := range keyShares {
+	for vaultPublicKeyECDSA, allKeyShares := range vaultKeyShares {
+		// Insert standard keyshares (always present)
+		for _, keyShare := range allKeyShares.KeyShares {
 			_, err = stmt.Exec(vaultPublicKeyECDSA, keyShare.PublicKey, keyShare.KeyShare)
 			if err != nil {
 				return fmt.Errorf("could not insert keyshare %s for vault %s: %w", keyShare.PublicKey, vaultPublicKeyECDSA, err)
+			}
+		}
+
+		// Update chain_key_shares in vaults table ONLY if provided (imported vaults only)
+		// Regular vaults will have nil/empty ChainKeyShares - we skip the update for them
+		if len(allKeyShares.ChainKeyShares) > 0 {
+			chainKeySharesJSON, err := json.Marshal(allKeyShares.ChainKeyShares)
+			if err != nil {
+				return fmt.Errorf("could not marshal chain key shares: %w", err)
+			}
+			_, err = tx.Exec(
+				"UPDATE vaults SET chain_key_shares = ? WHERE public_key_ecdsa = ?",
+				string(chainKeySharesJSON),
+				vaultPublicKeyECDSA,
+			)
+			if err != nil {
+				return fmt.Errorf("could not update chain key shares: %w", err)
 			}
 		}
 	}

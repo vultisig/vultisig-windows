@@ -38,6 +38,6 @@ export function SaveVault(arg1:storage.Vault):Promise<void>;
 
 export function SaveVaultFolder(arg1:storage.VaultFolder):Promise<string>;
 
-export function SaveVaultsKeyShares(arg1:Record<string, Array<storage.KeyShare>>):Promise<void>;
+export function SaveVaultsKeyShares(arg1:Record<string, storage.VaultAllKeyShares>):Promise<void>;
 
 export function UpdateAddressBookItem(arg1:storage.AddressBookItem):Promise<void>;

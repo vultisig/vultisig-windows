@@ -9,6 +9,12 @@ type KeyShare struct {
 	KeyShare  string `json:"keyshare"`
 }
 
+// VaultAllKeyShares contains both standard keyshares and optional chain-specific keyshares
+type VaultAllKeyShares struct {
+	KeyShares      []KeyShare        `json:"keyShares"`
+	ChainKeyShares map[string]string `json:"chainKeyShares,omitempty"` // Optional: only for imported vaults
+}
+
 // Vault represent the vault
 type Vault struct {
 	Name           string     `json:"name"`

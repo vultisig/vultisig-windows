@@ -52,10 +52,16 @@ export const vaultsStorage: VaultsStorage = {
   updateVaultsKeyShares: async vaultsKeyShares => {
     const vaults = await getVaults()
 
-    const newVaults = vaults.map(vault => ({
-      ...vault,
-      keyShares: vaultsKeyShares[getVaultId(vault)],
-    }))
+    const newVaults = vaults.map(vault => {
+      const allKeyShares = vaultsKeyShares[getVaultId(vault)]
+      if (!allKeyShares) return vault
+
+      return {
+        ...vault,
+        keyShares: allKeyShares.keyShares,
+        chainKeyShares: allKeyShares.chainKeyShares,
+      }
+    })
 
     await updateVaults(newVaults)
   },
