@@ -7,17 +7,18 @@ import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 import { SearchChainProvider } from '../../state/searchChainProvider'
-import { VaultPageTab, vaultTabs } from './config'
+import { getVaultTabs, VaultPageTab } from './config'
 import { VaultTabsHeader } from './VaultTabsHeader'
 
 export const VaultTabs = () => {
   const [activeTab, setActiveTab] = useState<VaultPageTab>('portfolio')
   const { t } = useTranslation()
+  const tabs = getVaultTabs(t)
 
   return (
     <SearchChainProvider initialValue="">
       <Tabs
-        tabs={vaultTabs}
+        tabs={tabs}
         value={activeTab}
         onValueChange={setActiveTab}
         triggerSlot={({ tab: { label, disabled }, isActive }) => (

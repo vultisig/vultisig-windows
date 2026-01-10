@@ -35,7 +35,7 @@ export const ExpirationField = ({ initialExpiration }: Props) => {
 
   const error =
     initialExpiration >= expiration
-      ? `Expiration must be greater than ${initialExpiration}`
+      ? t('expiration_must_be_greater', { value: initialExpiration })
       : errors.expiration?.message || undefined
 
   return (
@@ -55,7 +55,7 @@ export const ExpirationField = ({ initialExpiration }: Props) => {
               max={10}
               value={value}
               onChange={onChange}
-              placeholder="Enter a number"
+              placeholder={t('enter_number_placeholder')}
             />
           )}
         />
