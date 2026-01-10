@@ -57,6 +57,7 @@ export const ImportSeedphraseIntroStep = () => {
 
   const { RiveComponent } = useRive({
     src: '/core/animations/import-seedphrase.riv',
+    stateMachines: ['State Machine 1'],
     autoplay: true,
   })
 
