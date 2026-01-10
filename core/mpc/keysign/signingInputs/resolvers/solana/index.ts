@@ -20,47 +20,108 @@ export const getSolanaSigningInputs: SigningInputsResolver<'solana'> = ({
     'solanaSpecific'
   )
 
+  if (keysignPayload.signData.case === 'signSolana') {
+    const rawMessageData = keysignPayload.signData.value.rawMessage
+    const coinType = getCoinType({ walletCore, chain })
+    const decodedData = walletCore.TransactionDecoder.decode(
+      coinType,
+      Buffer.from(rawMessageData, 'base64')
+    )
+    const decodedTransaction =
+      TW.Solana.Proto.DecodingTransactionOutput.decode(decodedData)
+    if (!decodedTransaction.transaction) {
+      throw new Error("Can't decode transaction")
+    }
+    const rawMessage = decodedTransaction.transaction
+
+    return [
+      TW.Solana.Proto.SigningInput.create({
+        rawMessage,
+      }),
+    ]
+  }
+
   const swapPayload = getKeysignSwapPayload(keysignPayload)
+  const coinType = getCoinType({
+    walletCore,
+    chain,
+  })
+
+  let transactionData: Uint8Array
 
   if (swapPayload) {
-    return matchRecordUnion(swapPayload, {
+    const swapTx = matchRecordUnion(swapPayload, {
       native: () => {
         throw new Error('Native swap not supported')
       },
       general: swapPayload => {
         const tx = shouldBePresent(swapPayload.quote?.tx)
-        const { data } = tx
-
-        const decodedData = walletCore.TransactionDecoder.decode(
-          getCoinType({
-            walletCore,
-            chain,
-          }),
-          Buffer.from(data, 'base64')
-        )
-        const { transaction } =
-          TW.Solana.Proto.DecodingTransactionOutput.decode(decodedData)
-
-        if (!transaction) {
-          throw new Error("Can't decode swap transaction")
-        }
-
-        if (transaction.legacy) {
-          transaction.legacy.recentBlockhash = recentBlockHash
-        } else if (transaction.v0) {
-          transaction.v0.recentBlockhash = recentBlockHash
-        }
-
-        const signingInput = TW.Solana.Proto.SigningInput.create({
-          v0Msg: true,
-          recentBlockhash: recentBlockHash,
-          rawMessage: transaction,
-        })
-
-        return [signingInput]
+        return Buffer.from(tx.data, 'base64')
       },
+    }) as Uint8Array
+
+    transactionData = swapTx
+  } else {
+    const sendSigningInput = getSolanaSendSigningInput({
+      keysignPayload,
+      walletCore,
     })
+
+    const inputData =
+      TW.Solana.Proto.SigningInput.encode(sendSigningInput).finish()
+
+    const encodedTransaction = walletCore.AnySigner.sign(inputData, coinType)
+
+    const signingOutput =
+      TW.Solana.Proto.SigningOutput.decode(encodedTransaction)
+
+    if (!signingOutput.encoded) {
+      throw new Error("Can't encode send transaction")
+    }
+
+    transactionData = Buffer.from(signingOutput.encoded, 'base64')
   }
 
-  return [getSolanaSendSigningInput({ keysignPayload, walletCore })]
+  const decodedData = walletCore.TransactionDecoder.decode(
+    coinType,
+    transactionData
+  )
+
+  const decodedTransaction =
+    TW.Solana.Proto.DecodingTransactionOutput.decode(decodedData)
+
+  if (!decodedTransaction.transaction) {
+    throw new Error("Can't decode transaction")
+  }
+
+  const transaction = decodedTransaction.transaction
+
+  let rawMessage: TW.Solana.Proto.RawMessage
+  let isV0 = false
+
+  if (transaction.legacy) {
+    transaction.legacy.recentBlockhash = recentBlockHash
+    rawMessage = TW.Solana.Proto.RawMessage.create({
+      legacy: transaction.legacy,
+      signatures: transaction.signatures,
+    })
+    isV0 = false
+  } else if (transaction.v0) {
+    transaction.v0.recentBlockhash = recentBlockHash
+    rawMessage = TW.Solana.Proto.RawMessage.create({
+      v0: transaction.v0,
+      signatures: transaction.signatures,
+    })
+    isV0 = true
+  } else {
+    throw new Error('Invalid transaction format')
+  }
+
+  const signingInput = TW.Solana.Proto.SigningInput.create({
+    v0Msg: isV0,
+    recentBlockhash: recentBlockHash,
+    rawMessage,
+  })
+
+  return [signingInput]
 }
