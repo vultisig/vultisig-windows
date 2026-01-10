@@ -2,7 +2,7 @@ import { Tabs } from '@lib/ui/base/Tabs'
 import { hStack } from '@lib/ui/layout/Stack'
 import { IsActiveProp, IsDisabledProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
@@ -13,7 +13,7 @@ import { VaultChainTabsHeader } from './VaultChainTabsHeader'
 export const VaultChainTabs = () => {
   const [activeTab, setActiveTab] = useState<VaultChainPageTab>('tokens')
   const { t } = useTranslation()
-  const tabs = useMemo(() => getVaultChainTabs(t), [t])
+  const tabs = getVaultChainTabs(t)
 
   return (
     <SearchChainTokenProvider initialValue="">
