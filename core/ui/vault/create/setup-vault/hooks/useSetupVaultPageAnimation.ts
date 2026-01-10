@@ -1,4 +1,4 @@
-import { useRive, useStateMachineInput } from '@rive-app/react-canvas'
+import { useRive, useStateMachineInput } from '@rive-app/react-webgl2'
 import { useCallback, useEffect, useState } from 'react'
 
 const stateMachineName = 'State Machine 1'

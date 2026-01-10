@@ -2,7 +2,7 @@ import { peerOption } from '@core/ui/mpc/devices/peers/option/PeerOptionContaine
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { ChildrenProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { useRive } from '@rive-app/react-canvas'
+import { useRive } from '@rive-app/react-webgl2'
 import styled from 'styled-components'
 
 const Container = styled.div`

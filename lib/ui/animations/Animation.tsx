@@ -1,4 +1,4 @@
-import { useRive } from '@rive-app/react-canvas'
+import { useRive } from '@rive-app/react-webgl2'
 
 type AnimationProps = {
   stateMachines?: string

@@ -12,19 +12,19 @@
     "@lib/utils": "workspace:^",
     "@radix-ui/react-roving-focus": "^1.1.11",
     "@radix-ui/react-tabs": "^1.1.13",
-    "@tanstack/query-core": "^5.90.12",
-    "styled-components": "^6.1.19"
+    "@tanstack/query-core": "^5.90.16",
+    "styled-components": "^6.2.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^4.1.3",
-    "@storybook/addon-a11y": "^10.1.10",
-    "@storybook/addon-docs": "^10.1.10",
-    "@storybook/addon-vitest": "^10.1.10",
+    "@storybook/addon-a11y": "^10.1.11",
+    "@storybook/addon-docs": "^10.1.11",
+    "@storybook/addon-vitest": "^10.1.11",
     "@storybook/jest": "^0.2.3",
-    "@storybook/react-vite": "^10.1.10",
+    "@storybook/react-vite": "^10.1.11",
     "@storybook/testing-library": "^0.2.2",
     "@vitest/browser": "^4.0.16",
-    "storybook": "^10.1.10",
+    "storybook": "^10.1.11",
     "vitest": "^4.0.16"
   }
 }

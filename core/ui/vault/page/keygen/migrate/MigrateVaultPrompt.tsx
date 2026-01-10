@@ -7,7 +7,7 @@ import { hStack, VStack } from '@lib/ui/layout/Stack'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { useRive } from '@rive-app/react-canvas'
+import { useRive } from '@rive-app/react-webgl2'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 

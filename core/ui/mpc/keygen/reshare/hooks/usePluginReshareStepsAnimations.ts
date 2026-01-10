@@ -6,7 +6,7 @@ import {
   useViewModel,
   useViewModelInstance,
   useViewModelInstanceBoolean,
-} from '@rive-app/react-canvas'
+} from '@rive-app/react-webgl2'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { InstallPluginStep } from '../plugin/InstallPluginStep'

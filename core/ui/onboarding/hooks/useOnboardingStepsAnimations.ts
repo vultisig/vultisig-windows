@@ -1,5 +1,5 @@
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
-import { useRive, useStateMachineInput } from '@rive-app/react-canvas'
+import { useRive, useStateMachineInput } from '@rive-app/react-webgl2'
 
 const stateMachineName = 'State Machine 1'
 const inputName = 'Index'

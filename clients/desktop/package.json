@@ -14,7 +14,7 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@eslint/compat": "^2.0.0",
+    "@eslint/compat": "^2.0.1",
     "@eslint/eslintrc": "^3.3.3",
     "@eslint/js": "^9.39.2",
     "eslint": "^9.39.2",
@@ -22,10 +22,10 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
-    "globals": "^16.5.0",
+    "globals": "^17.0.0",
     "prettier": "^3.7.4",
     "typescript": "^5.9.3",
-    "vite": "^7.3.0",
+    "vite": "^7.3.1",
     "vite-plugin-static-copy": "^3.1.4",
     "vitest": "^4.0.16"
   },
@@ -37,6 +37,6 @@
     "@lib/ui": "workspace:^",
     "@lib/utils": "workspace:^",
     "@wailsapp/runtime": "workspace:^",
-    "styled-components": "^6.1.19"
+    "styled-components": "^6.2.0"
   }
 }
