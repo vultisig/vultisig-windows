@@ -1344,4 +1344,16 @@ export const en = {
   your_seedphrase_subtitle: 'Enter it, create a vault, never look back',
   youre_swapping: "You're swapping",
   account: 'Account',
+
+  // Tab labels
+  portfolio_tab: 'Portfolio',
+  nft_tab: 'NFT',
+  tokens_tab: 'Tokens',
+
+  // Error messages
+  storage_load_error: 'Failed to load essential data from the storage',
+
+  // Referral form
+  enter_number_placeholder: 'Enter a number',
+  expiration_must_be_greater: 'Expiration must be greater than {{value}}',
 }

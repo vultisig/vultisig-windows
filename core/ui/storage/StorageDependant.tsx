@@ -3,6 +3,7 @@ import { ErrorBoundary } from '@lib/ui/errors/ErrorBoundary'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
+import i18n from 'i18next'
 
 import { RootErrorFallback } from '../errors/RootErrorFallback'
 import { FlowErrorPageContent } from '../flow/FlowErrorPageContent'
@@ -83,7 +84,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
       )}
       error={error => (
         <FlowErrorPageContent
-          title="Failed to load essential data from the storage"
+          title={i18n.t('storage_load_error')}
           error={error}
         />
       )}

@@ -1241,4 +1241,16 @@ export const zh = {
   app_install_timeout_min: '必须大于等于0。',
   recover_vault_or_convert_seedphrase:
     '恢复您的保险库或将您的助记词转换为保险库',
+
+  // Tab labels
+  portfolio_tab: '投资组合',
+  nft_tab: 'NFT',
+  tokens_tab: '代币',
+
+  // Error messages
+  storage_load_error: '无法从存储中加载重要数据',
+
+  // Referral form
+  enter_number_placeholder: '请输入数字',
+  expiration_must_be_greater: '到期时间必须大于 {{value}}',
 }

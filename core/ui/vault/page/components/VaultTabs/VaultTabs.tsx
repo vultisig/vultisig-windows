@@ -2,22 +2,23 @@ import { Tabs } from '@lib/ui/base/Tabs'
 import { hStack } from '@lib/ui/layout/Stack'
 import { IsActiveProp, IsDisabledProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 import { SearchChainProvider } from '../../state/searchChainProvider'
-import { VaultPageTab, vaultTabs } from './config'
+import { getVaultTabs, VaultPageTab } from './config'
 import { VaultTabsHeader } from './VaultTabsHeader'
 
 export const VaultTabs = () => {
   const [activeTab, setActiveTab] = useState<VaultPageTab>('portfolio')
   const { t } = useTranslation()
+  const tabs = useMemo(() => getVaultTabs(t), [t])
 
   return (
     <SearchChainProvider initialValue="">
       <Tabs
-        tabs={vaultTabs}
+        tabs={tabs}
         value={activeTab}
         onValueChange={setActiveTab}
         triggerSlot={({ tab: { label, disabled }, isActive }) => (

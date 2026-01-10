@@ -1363,4 +1363,16 @@ export const de = {
   app_install_timeout_min: 'Muss 0 oder größer sein.',
   recover_vault_or_convert_seedphrase:
     'Stellen Sie Ihren Tresor wieder her oder wandeln Sie Ihre Seedphrase in einen Tresor um.',
+
+  // Tab labels
+  portfolio_tab: 'Portfolio',
+  nft_tab: 'NFT',
+  tokens_tab: 'Token',
+
+  // Error messages
+  storage_load_error: 'Fehler beim Laden wichtiger Daten aus dem Speicher',
+
+  // Referral form
+  enter_number_placeholder: 'Geben Sie eine Zahl ein',
+  expiration_must_be_greater: 'Ablauf muss größer als {{value}} sein',
 }

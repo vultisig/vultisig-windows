@@ -1363,4 +1363,16 @@ export const es = {
   app_install_timeout_min: 'Debe ser 0 o mayor.',
   recover_vault_or_convert_seedphrase:
     'Recupera tu bóveda o convierte tu frase semilla en una bóveda',
+
+  // Tab labels
+  portfolio_tab: 'Portafolio',
+  nft_tab: 'NFT',
+  tokens_tab: 'Tokens',
+
+  // Error messages
+  storage_load_error: 'Error al cargar datos esenciales del almacenamiento',
+
+  // Referral form
+  enter_number_placeholder: 'Ingrese un número',
+  expiration_must_be_greater: 'La expiración debe ser mayor que {{value}}',
 }

@@ -1337,4 +1337,16 @@ export const hr = {
   app_install_timeout_min: 'Mora biti 0 ili veće.',
   recover_vault_or_convert_seedphrase:
     'Oporavite svoj trezor ili pretvorite svoju seedphrase u trezor',
+
+  // Tab labels
+  portfolio_tab: 'Portfelj',
+  nft_tab: 'NFT',
+  tokens_tab: 'Tokeni',
+
+  // Error messages
+  storage_load_error: 'Nije uspjelo učitavanje bitnih podataka iz pohrane',
+
+  // Referral form
+  enter_number_placeholder: 'Unesite broj',
+  expiration_must_be_greater: 'Istek mora biti veći od {{value}}',
 }

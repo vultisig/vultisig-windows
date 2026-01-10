@@ -1359,4 +1359,16 @@ export const it = {
   app_install_timeout_min: 'Deve essere 0 o maggiore.',
   recover_vault_or_convert_seedphrase:
     'Recupera il tuo vault o converti la tua seedphrase in un vault',
+
+  // Tab labels
+  portfolio_tab: 'Portafoglio',
+  nft_tab: 'NFT',
+  tokens_tab: 'Token',
+
+  // Error messages
+  storage_load_error: 'Impossibile caricare i dati essenziali dalla memoria',
+
+  // Referral form
+  enter_number_placeholder: 'Inserisci un numero',
+  expiration_must_be_greater: 'La scadenza deve essere maggiore di {{value}}',
 }

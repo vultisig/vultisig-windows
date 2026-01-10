@@ -1,13 +1,14 @@
 import { Tab } from '@lib/ui/base/Tabs'
+import { TFunction } from 'i18next'
 
 import { Tokens } from './Tokens'
 
 export type VaultChainPageTab = 'tokens'
 
-export const vaultChainTabs: Tab<VaultChainPageTab>[] = [
+export const getVaultChainTabs = (t: TFunction): Tab<VaultChainPageTab>[] => [
   {
     value: 'tokens',
-    label: 'Tokens',
+    label: t('tokens_tab'),
     renderContent: Tokens,
   },
 ]

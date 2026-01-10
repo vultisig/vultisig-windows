@@ -1357,4 +1357,16 @@ export const pt = {
   app_install_timeout_min: 'Deve ser igual ou superior a 0.',
   recover_vault_or_convert_seedphrase:
     'Recupere seu cofre ou converta sua frase mnemônica em um cofre.',
+
+  // Tab labels
+  portfolio_tab: 'Portfólio',
+  nft_tab: 'NFT',
+  tokens_tab: 'Tokens',
+
+  // Error messages
+  storage_load_error: 'Falha ao carregar dados essenciais do armazenamento',
+
+  // Referral form
+  enter_number_placeholder: 'Digite um número',
+  expiration_must_be_greater: 'A expiração deve ser maior que {{value}}',
 }
