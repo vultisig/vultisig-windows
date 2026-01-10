@@ -51,16 +51,20 @@ export namespace storage {
 	export class KeyShare {
 	    public_key: string;
 	    keyshare: string;
-	
+
 	    static createFrom(source: any = {}) {
 	        return new KeyShare(source);
 	    }
-	
+
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.public_key = source["public_key"];
 	        this.keyshare = source["keyshare"];
 	    }
+	}
+	export type VaultAllKeyShares = {
+	    keyShares: KeyShare[];
+	    chainKeyShares?: Record<string, string>;
 	}
 	export class Vault {
 	    name: string;

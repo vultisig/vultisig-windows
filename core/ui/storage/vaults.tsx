@@ -1,3 +1,4 @@
+import { Chain } from '@core/chain/Chain'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { getVaultId, Vault, VaultKeyShares } from '@core/mpc/vault/Vault'
@@ -28,8 +29,13 @@ type GetVaultsFunction = () => Promise<Vault[]>
 
 type DeleteVaultFunction = (vaultId: string) => Promise<void>
 
+export type VaultAllKeyShares = {
+  keyShares: VaultKeyShares
+  chainKeyShares?: Partial<Record<Chain, string>>
+}
+
 type UpdateVaultsKeyShares = (
-  value: Record<string, VaultKeyShares>
+  value: Record<string, VaultAllKeyShares>
 ) => Promise<void>
 
 export type VaultsStorage = {
