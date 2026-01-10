@@ -128,6 +128,7 @@ export const parseSolanaTx = async ({
         outputCoin,
         data,
         swapProvider,
+        rawMessageData: data,
       },
     }
   })
@@ -146,6 +147,15 @@ export const parseSolanaTx = async ({
   )
 
   if (!error && parsedTx) {
+    // Add rawMessageData to the parsed transaction
+    if ('transfer' in parsedTx) {
+      return {
+        transfer: {
+          ...parsedTx.transfer,
+          rawMessageData: data,
+        },
+      }
+    }
     return parsedTx
   }
   throw new Error('failed to parse transaction')

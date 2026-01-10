@@ -326,24 +326,15 @@ export class Solana implements Wallet {
         }
       )
 
-      const { signatures, encoded } = deserializeSigningOutput(
-        Chain.Solana,
-        data
-      )
-      const { message: signedMessage } = VersionedTransaction.deserialize(
-        bs58.decode(encoded)
-      )
-      for (const sig of signatures) {
-        const { pubkey, signature } = sig
-        if (pubkey && signature)
-          transaction.addSignature(
-            new PublicKey(pubkey),
-            bs58.decode(signature)
-          )
+      const { encoded } = deserializeSigningOutput(Chain.Solana, data)
+      if (!encoded) {
+        throw new Error('No encoded transaction returned from signing')
       }
-      transaction.message.recentBlockhash = signedMessage.recentBlockhash
 
-      return transaction
+      const rawData = bs58.decode(encoded)
+      const signedTransaction = VersionedTransaction.deserialize(rawData)
+
+      return signedTransaction
     } else {
       const connection = new Connection(`${rootApiUrl}/solana/`)
       for (const instruction of transaction.instructions) {
