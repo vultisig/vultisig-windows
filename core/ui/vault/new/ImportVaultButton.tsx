@@ -31,7 +31,7 @@ export const ImportVaultButton = () => {
           }}
         >
           {t('import')}
-          <Badge />
+          {featureFlags.importSeedphrase && <Badge />}
         </Button>
       )}
       renderContent={({ onClose }) => <ImportOptionModal onClose={onClose} />}
