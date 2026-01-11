@@ -4,7 +4,7 @@ import { ProductLogo } from '@core/ui/product/ProductLogo'
 import { useVaults } from '@core/ui/storage/vaults'
 import { Button } from '@lib/ui/buttons/Button'
 import { UniformColumnGrid } from '@lib/ui/css/uniformColumnGrid'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -49,12 +49,6 @@ const LogoContainer = styled.div`
 
 const Logo = styled(ProductLogo)`
   font-size: 34px;
-`
-
-const ButtonRow = styled(HStack)`
-  > *:first-child {
-    flex: 1;
-  }
 `
 
 export const NewVaultPage = () => {
