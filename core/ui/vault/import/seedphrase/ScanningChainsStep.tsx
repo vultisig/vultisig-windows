@@ -6,7 +6,7 @@ import { Text } from '@lib/ui/text'
 import { useEffect } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
-import { useScanChainsWithBalanceMutation } from './mutations/useScanChainsWithBalanceMutation'
+import { useScanChainsWithBalanceQuery } from './queries/useScanChainsWithBalanceQuery'
 import { useSelectedChains } from './state/selectedChains'
 import { useImportSeedphraseStep } from './state/step'
 
@@ -15,22 +15,14 @@ export const ScanningChainsStep = () => {
   const [, setSelectedChains] = useSelectedChains()
   const [, setStep] = useImportSeedphraseStep()
 
-  const {
-    mutate: startScanning,
-    data: chainsWithBalance,
-    isSuccess,
-  } = useScanChainsWithBalanceMutation()
+  const { data: chainsWithBalance } = useScanChainsWithBalanceQuery()
 
   useEffect(() => {
-    startScanning()
-  }, [startScanning])
-
-  useEffect(() => {
-    if (isSuccess && chainsWithBalance) {
+    if (chainsWithBalance) {
       setSelectedChains(chainsWithBalance)
       setStep('scanResult')
     }
-  }, [isSuccess, chainsWithBalance, setSelectedChains, setStep])
+  }, [chainsWithBalance, setSelectedChains, setStep])
 
   const handleSelectManually = () => {
     setSelectedChains([])
