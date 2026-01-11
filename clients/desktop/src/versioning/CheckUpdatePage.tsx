@@ -1,6 +1,6 @@
 import { desktopDownloadUrl } from '@core/config'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { ProductLogo } from '@core/ui/product/ProductLogo'
+import { DeprecatedProductLogo } from '@core/ui/product/DeprecatedProductLogo'
 import { useCore } from '@core/ui/state/core'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -29,7 +29,7 @@ export const CheckUpdatePage = () => {
         title={t('vaultCheckUpdatePage.title')}
       />
       <FixedWrapper>
-        <ProductLogo fontSize={72} />
+        <DeprecatedProductLogo style={{ fontSize: 72 }} />
         <Content>
           <MatchQuery
             value={latestVersionQuery}
