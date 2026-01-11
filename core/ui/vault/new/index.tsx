@@ -3,8 +3,9 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { ProductLogo } from '@core/ui/product/ProductLogo'
 import { useVaults } from '@core/ui/storage/vaults'
 import { Button } from '@lib/ui/buttons/Button'
+import { UniformColumnGrid } from '@lib/ui/css/uniformColumnGrid'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { FitPageContent } from '@lib/ui/page/PageContent'
+import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
@@ -71,7 +72,7 @@ export const NewVaultPage = () => {
           }
         />
       )}
-      <FitPageContent>
+      <PageContent>
         <VStack
           flexGrow
           alignItems="center"
@@ -86,10 +87,10 @@ export const NewVaultPage = () => {
             {t('vultisig')}
           </Text>
         </VStack>
-      </FitPageContent>
+      </PageContent>
       <PageFooter>
         <VStack gap={16} fullWidth>
-          <ButtonRow gap={8}>
+          <UniformColumnGrid gap={8}>
             <Button
               kind="secondary"
               onClick={() =>
@@ -99,7 +100,7 @@ export const NewVaultPage = () => {
               {t('scan_qr')}
             </Button>
             <ImportVaultButton />
-          </ButtonRow>
+          </UniformColumnGrid>
           <Button onClick={() => navigate({ id: 'setupVault', state: {} })}>
             {t('next')}
           </Button>

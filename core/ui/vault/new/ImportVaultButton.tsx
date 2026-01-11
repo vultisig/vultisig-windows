@@ -8,16 +8,9 @@ import styled from 'styled-components'
 
 import { ImportOptionModal } from './ImportOptionModal'
 
-const ButtonWrapper = styled.div`
-  position: relative;
-  flex: 1;
-`
-
-const BadgePosition = styled.div`
+const Badge = styled(NewBadge)`
   position: absolute;
   right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
 `
 
 export const ImportVaultButton = () => {
@@ -27,23 +20,19 @@ export const ImportVaultButton = () => {
   return (
     <Opener
       renderOpener={({ onOpen }) => (
-        <ButtonWrapper>
-          <Button
-            kind="secondary"
-            onClick={() => {
-              if (featureFlags.importSeedphrase) {
-                onOpen()
-              } else {
-                navigate({ id: 'importVault' })
-              }
-            }}
-          >
-            {t('import')}
-          </Button>
-          <BadgePosition>
-            <NewBadge />
-          </BadgePosition>
-        </ButtonWrapper>
+        <Button
+          kind="secondary"
+          onClick={() => {
+            if (featureFlags.importSeedphrase) {
+              onOpen()
+            } else {
+              navigate({ id: 'importVault' })
+            }
+          }}
+        >
+          {t('import')}
+          <Badge />
+        </Button>
       )}
       renderContent={({ onClose }) => <ImportOptionModal onClose={onClose} />}
     />
