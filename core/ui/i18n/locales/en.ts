@@ -568,8 +568,10 @@ export const en = {
   network_rate_required: 'Network rate is required',
   never: 'Never',
   new: 'New',
-  new_passcode: 'New Passcode',
   next: 'Next',
+  new_passcode: 'New Passcode',
+  new_vault_setup: 'New Vault Setup',
+  new_vault_setup_disclaimer: 'Your configuration changed, make a new backup.',
   no_active_chains_found: 'No active chains found',
   no_active_chains_found_description:
     "We didn't detect any assets on this seed phrase.",
