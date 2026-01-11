@@ -1,6 +1,5 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { ProductLogo } from '@core/ui/product/ProductLogo'
 import { useVaults } from '@core/ui/storage/vaults'
 import { Button } from '@lib/ui/buttons/Button'
 import { UniformColumnGrid } from '@lib/ui/css/uniformColumnGrid'
@@ -12,6 +11,7 @@ import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { ProductLogo } from '../../product/ProductLogo'
 import { ImportVaultButton } from './ImportVaultButton'
 
 const PageWrapper = styled(VStack)`
@@ -45,9 +45,6 @@ const LogoContainer = styled.div`
   background: linear-gradient(180deg, #4879fd 0%, #0d39b1 100%);
   box-shadow: inset 0px 1.2px 1.2px 0px rgba(255, 255, 255, 0.35);
   color: white;
-`
-
-const Logo = styled(ProductLogo)`
   font-size: 34px;
 `
 
@@ -75,7 +72,7 @@ export const NewVaultPage = () => {
           fullHeight
         >
           <LogoContainer>
-            <Logo />
+            <ProductLogo />
           </LogoContainer>
           <Text color="contrast" weight={500} size={28}>
             {t('vultisig')}
