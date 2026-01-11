@@ -12,17 +12,18 @@ const Container = styled.div`
     gap: 4,
   })}
   color: ${getColor('idle')};
+  font-size: 10px;
 `
 
 const BadgeText = styled(Text)`
-  font-size: 8px;
+  font-size: 1em;
   font-weight: 500;
   letter-spacing: 0.12px;
   text-transform: uppercase;
 `
 
 const BadgeIcon = styled(WandSparklesIcon)`
-  font-size: 10px;
+  font-size: 1.2em;
 `
 
 export const NewBadge = (props: ComponentProps<'div'>) => {
