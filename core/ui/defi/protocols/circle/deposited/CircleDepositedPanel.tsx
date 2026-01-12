@@ -1,4 +1,5 @@
 import { usdc } from '@core/chain/coin/knownTokens'
+import { featureFlags } from '@core/ui/featureFlags'
 import { Button } from '@lib/ui/buttons/Button'
 import { LineSeparator } from '@lib/ui/layout/LineSeparator'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
@@ -50,7 +51,9 @@ export const CircleDepositedPanel = () => {
           <Button onClick={() => setViewState('deposit')}>
             {t('circle.deposit')} {usdc.ticker}
           </Button>
-          {hasBalance && <CircleWithdrawButton />}
+          {!featureFlags.circleYieldDetails && hasBalance && (
+            <CircleWithdrawButton />
+          )}
         </VStack>
       ) : (
         <OpenCircleAccount />
