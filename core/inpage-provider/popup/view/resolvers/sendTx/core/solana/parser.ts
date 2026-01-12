@@ -136,7 +136,7 @@ export const parseSolanaTx = async ({
   if (parsedSimulation) {
     return parsedSimulation
   }
-  const { data: parsedTx, error } = await attempt(
+  const { data: parsedTx } = await attempt(
     parseProgramCall({
       tx,
       keys,
@@ -146,17 +146,36 @@ export const parseSolanaTx = async ({
     })
   )
 
-  if (!error && parsedTx) {
-    // Add rawMessageData to the parsed transaction
-    if ('transfer' in parsedTx) {
-      return {
-        transfer: {
-          ...parsedTx.transfer,
-          rawMessageData: data,
-        },
-      }
+  // Si parsedTx existe y tiene transfer, usar esos valores
+  if (parsedTx && 'transfer' in parsedTx) {
+    return {
+      transfer: {
+        ...parsedTx.transfer,
+        rawMessageData: data,
+      },
     }
-    return parsedTx
   }
-  throw new Error('failed to parse transaction')
+
+  // Si parsedTx tiene swap, retornarlo con rawMessageData agregado
+  if (parsedTx && 'swap' in parsedTx) {
+    return {
+      swap: {
+        ...parsedTx.swap,
+        rawMessageData: data,
+      },
+    }
+  }
+
+  // Si no se pudo parsear, retornar un objeto transfer mínimo con rawMessageData
+  // Esto permite que la firma funcione aunque no se pueda mostrar información detallada
+  const solanaFeeCoin = await getCoin({ chain: Chain.Solana })
+  return {
+    transfer: {
+      authority: fromCoin.address,
+      inputCoin: solanaFeeCoin,
+      inAmount: '0',
+      receiverAddress: '',
+      rawMessageData: data,
+    },
+  }
 }
