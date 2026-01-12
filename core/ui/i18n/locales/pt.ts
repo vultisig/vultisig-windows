@@ -1323,6 +1323,8 @@ export const pt = {
   wrong_vault_try_again: 'Cofre ou dispositivo de emparelhamento incorretos.',
   you_are_bonding: 'Você está bondando',
   you_are_sending: 'Você está enviando',
+  you_are_staking: 'Você está stakando',
+  you_are_unstaking: 'Você está desfazendo stake',
   yourVaultShares: 'Seu cofre possui {{shares}} ações do cofre.',
   your_friends_referral_code: 'Código de indicação do seu amigo',
   your_referral_code: 'Seu código de indicação',
