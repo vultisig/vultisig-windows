@@ -9,7 +9,7 @@ import { VaultBackupSummaryStep } from '@core/ui/vault/backup/VaultBackupSummary
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { OnFinishProp } from '@lib/ui/props'
-import { useRive } from '@rive-app/react-canvas'
+import { useRive } from '@rive-app/react-webgl2'
 
 import { useCurrentVault } from '../../state/currentVault'
 
