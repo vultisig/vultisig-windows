@@ -98,10 +98,15 @@ func (s *Client) WaitForSessionStart(ctx context.Context, sessionID string) ([]s
 			s.Logger.WithFields(logrus.Fields{
 				"session": sessionID,
 			}).Info("Waiting for session start")
-			resp, err := s.client.Get(sessionURL)
+			req, err := http.NewRequestWithContext(ctx, http.MethodGet, sessionURL, nil)
+			if err != nil {
+				return nil, fmt.Errorf("fail to create request: %w", err)
+			}
+			resp, err := s.client.Do(req)
 			if err != nil {
 				return nil, fmt.Errorf("fail to get session: %w", err)
 			}
+			defer s.closer(resp.Body)
 			if resp.StatusCode != http.StatusOK {
 				return nil, fmt.Errorf("fail to get session: %s", resp.Status)
 			}
@@ -110,13 +115,9 @@ func (s *Client) WaitForSessionStart(ctx context.Context, sessionID string) ([]s
 			if err != nil {
 				return nil, fmt.Errorf("fail to read session body: %w", err)
 			}
-			if err := resp.Body.Close(); err != nil {
-				s.Logger.Errorf("fail to close response body, %w", err)
-			}
 			if err := json.Unmarshal(buff, &parties); err != nil {
 				return nil, fmt.Errorf("fail to unmarshal session body: %w", err)
 			}
-			//remove duplicates from parties
 			distinctParties := make(map[string]struct{})
 			for _, party := range parties {
 				distinctParties[party] = struct{}{}
@@ -125,7 +126,6 @@ func (s *Client) WaitForSessionStart(ctx context.Context, sessionID string) ([]s
 			for party := range distinctParties {
 				parties = append(parties, party)
 			}
-			// We need to hold expected parties to start session
 			if len(parties) > 1 {
 				s.Logger.WithFields(logrus.Fields{
 					"session": sessionID,
@@ -138,8 +138,11 @@ func (s *Client) WaitForSessionStart(ctx context.Context, sessionID string) ([]s
 				"session": sessionID,
 			}).Info("Waiting for someone to start session")
 
-			// backoff
-			time.Sleep(1 * time.Second)
+			select {
+			case <-ctx.Done():
+				return nil, ctx.Err()
+			case <-time.After(1 * time.Second):
+			}
 		}
 	}
 }
