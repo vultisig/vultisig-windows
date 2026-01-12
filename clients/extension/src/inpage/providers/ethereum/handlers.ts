@@ -17,6 +17,7 @@ import { signEthTypedDataV4 } from './resolvers/eth_signTypedData_v4'
 import { getNetVersion } from './resolvers/net_version'
 import { personalSign } from './resolvers/personal_sign'
 import { addEthereumChain } from './resolvers/wallet_addEthereumChain'
+import { getWalletCapabilities } from './resolvers/wallet_getCapabilities'
 import { getWalletPermissions } from './resolvers/wallet_getPermissions'
 import { requestWalletPermissions } from './resolvers/wallet_requestPermissions'
 import { revokeWalletPermissions } from './resolvers/wallet_revokePermissions'
@@ -30,6 +31,7 @@ export const ethereumHandlers = {
   eth_accounts: getEthAccounts,
   eth_requestAccounts: requestEthAccounts,
   wallet_switchEthereumChain: switchEthereumChain,
+  wallet_getCapabilities: getWalletCapabilities,
   wallet_addEthereumChain: addEthereumChain,
   wallet_watchAsset: watchAsset,
   wallet_getPermissions: getWalletPermissions,
