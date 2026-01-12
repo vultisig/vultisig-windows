@@ -89,12 +89,16 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
             chain,
           })
         },
-        custom: async ({ message, chain = customMessageDefaultChain }) => {
+        custom: async ({
+          method,
+          message,
+          chain = customMessageDefaultChain,
+        }) => {
           if (!isOneOf(chain, customMessageSupportedChains)) {
             throw new Error(`Unsupported chain ${chain}`)
           }
 
-          const hexMessage = getCustomMessageHex({ chain, message })
+          const hexMessage = getCustomMessageHex({ chain, message, method })
 
           return signWithServer({
             public_key: publicKeys.ecdsa,
