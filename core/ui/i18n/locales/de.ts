@@ -1330,6 +1330,8 @@ export const de = {
   wrong_vault_try_again: 'Falscher Tresor oder falsches Gerät gekoppelt.',
   you_are_bonding: 'Du bondest',
   you_are_sending: 'Du sendest',
+  you_are_staking: 'Du stakest',
+  you_are_unstaking: 'Du entstakest',
   yourVaultShares: 'Ihr Tresor enthält {{shares}} Tresoranteile',
   your_friends_referral_code: 'Der Empfehlungscode deines Freundes',
   your_referral_code: 'Ihr Empfehlungscode',

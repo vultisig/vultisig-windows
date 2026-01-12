@@ -1336,6 +1336,8 @@ export const en = {
   wrong_vault_try_again: 'Wrong Vault or Pair Device.',
   you_are_bonding: "You're bonding",
   you_are_sending: "You're sending",
+  you_are_staking: "You're staking",
+  you_are_unstaking: "You're unstaking",
   yourVaultShares: 'Your vault has {{shares}} Vault Shares',
   your_friends_referral_code: 'Your friends referral code',
   your_referral_code: 'Your Referral Code',
