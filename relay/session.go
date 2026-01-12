@@ -106,12 +106,13 @@ func (s *Client) WaitForSessionStart(ctx context.Context, sessionID string) ([]s
 			if err != nil {
 				return nil, fmt.Errorf("fail to get session: %w", err)
 			}
-			defer s.closer(resp.Body)
 			if resp.StatusCode != http.StatusOK {
+				s.closer(resp.Body)
 				return nil, fmt.Errorf("fail to get session: %s", resp.Status)
 			}
 			var parties []string
 			buff, err := io.ReadAll(resp.Body)
+			s.closer(resp.Body)
 			if err != nil {
 				return nil, fmt.Errorf("fail to read session body: %w", err)
 			}
