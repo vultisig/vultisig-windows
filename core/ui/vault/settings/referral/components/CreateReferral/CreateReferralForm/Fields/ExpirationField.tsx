@@ -46,7 +46,7 @@ export const ExpirationField = () => {
               max={10}
               value={value}
               onChange={onChange}
-              placeholder="Enter a number"
+              placeholder={t('enter_number_placeholder')}
             />
           )}
         />

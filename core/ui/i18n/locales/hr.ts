@@ -382,6 +382,13 @@ export const hr = {
     staked: 'Staked',
     lps: 'LPs',
   },
+  vaultTabs: {
+    portfolio: 'Portfelj',
+    nft: 'NFT',
+  },
+  vaultChainTabs: {
+    tokens: 'Tokeni',
+  },
   delete: 'Izbrisati',
   delete_folder: 'Izbriši mapu',
   delete_folder_confirmation:
@@ -443,6 +450,7 @@ export const hr = {
   enter_new_passcode: 'Unesite novu lozinku',
   enter_passcode: 'Unesite lozinku',
   enter_password: 'Unesite lozinku',
+  enter_number_placeholder: 'Unesite broj',
   enter_percentage: 'Unesite postotak',
   enter_referral_code_placeholder: 'Unesite referalni kod',
   enter_up_to_4_characters_placeholder: 'Unesite do 4 znaka',
@@ -457,6 +465,7 @@ export const hr = {
   expiration_date: 'Datum isteka',
   expiration_must_extend_by_exactly_one_year:
     'Rok valjanosti može se produžiti samo za točno 1 godinu',
+  expiration_must_be_greater: 'Istek mora biti veći od {{value}}',
   expires_on: 'Istječe',
   extension_vault_import_restriction:
     'U ekstenziju se mogu uvesti samo DKLS trezori',
@@ -480,6 +489,7 @@ export const hr = {
   failed_to_join_session: 'Pridruživanje sesiji nije uspjelo',
   failed_to_load: 'Učitavanje nije uspjelo',
   failed_to_migrate_storage: 'Migracija pohrane nije uspjela',
+  storage_load_error: 'Učitavanje bitnih podataka iz pohrane nije uspjelo',
   failed_to_process_transaction: 'Obrada transakcije nije uspjela',
   failed_to_process_url: 'Obrada URL-a nije uspjela',
   failed_to_read_qr_code: 'Nije uspjelo čitanje QR koda',
@@ -1304,6 +1314,8 @@ export const hr = {
   wrong_vault_try_again: 'Pogrešan trezor ili upareni uređaj.',
   you_are_bonding: 'Bondate',
   you_are_sending: 'Šaljete',
+  you_are_staking: 'Stakate',
+  you_are_unstaking: 'Povlačite stake',
   yourVaultShares: 'Vaš trezor ima {{shares}} dijeljenih trezora',
   your_friends_referral_code: 'Referral kod tvog prijatelja',
   your_referral_code: 'Vaš referalni kod',
