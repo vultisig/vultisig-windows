@@ -3197,24 +3197,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rive-app/canvas@npm:2.34.0":
-  version: 2.34.0
-  resolution: "@rive-app/canvas@npm:2.34.0"
-  checksum: 10c0/e506ca1fa06923baab61a599bb8d22723e0ede2b5ce5a9d9ad1188534451f173e72087d984cf66e12531241d385a05cffceef61da2bc1cb6206fce3a1bec6fc7
-  languageName: node
-  linkType: hard
-
-"@rive-app/react-canvas@npm:^4.25.1":
-  version: 4.26.0
-  resolution: "@rive-app/react-canvas@npm:4.26.0"
-  dependencies:
-    "@rive-app/canvas": "npm:2.34.0"
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0
-  checksum: 10c0/d87f9f3c481dd09a8246a4d6baefd46b19cd0ace91c5ba22442205d9e7dcea7d500bfc66f06b662026ac4ddcdb7c1b2fcf12315cc9712417933bdbb9fe9bd507
-  languageName: node
-  linkType: hard
-
 "@rive-app/react-webgl2@npm:^4.25.3":
   version: 4.25.3
   resolution: "@rive-app/react-webgl2@npm:4.25.3"
@@ -4175,7 +4157,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-query-persist-client@npm:^5.90.14":
+"@tanstack/react-query-persist-client@npm:^5.90.18":
   version: 5.90.18
   resolution: "@tanstack/react-query-persist-client@npm:5.90.18"
   dependencies:
@@ -4187,7 +4169,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^5.90.12":
+"@tanstack/react-query@npm:^5.90.16":
   version: 5.90.16
   resolution: "@tanstack/react-query@npm:5.90.16"
   dependencies:
@@ -4244,7 +4226,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@trustwallet/wallet-core@npm:^4.4.5, @trustwallet/wallet-core@npm:^4.5.0":
+"@trustwallet/wallet-core@npm:^4.5.0":
   version: 4.5.0
   resolution: "@trustwallet/wallet-core@npm:4.5.0"
   dependencies:
@@ -12961,13 +12943,12 @@ __metadata:
     "@hookform/resolvers": "npm:^5.2.2"
     "@lifi/sdk": "npm:^3.15.0"
     "@react-spring/web": "npm:^10.0.3"
-    "@rive-app/react-canvas": "npm:^4.25.1"
     "@rive-app/react-webgl2": "npm:^4.25.3"
     "@solana/spl-token": "npm:^0.4.14"
     "@solana/web3.js": "npm:^1.98.4"
-    "@tanstack/react-query": "npm:^5.90.12"
-    "@tanstack/react-query-persist-client": "npm:^5.90.14"
-    "@trustwallet/wallet-core": "npm:^4.4.5"
+    "@tanstack/react-query": "npm:^5.90.16"
+    "@tanstack/react-query-persist-client": "npm:^5.90.18"
+    "@trustwallet/wallet-core": "npm:^4.5.0"
     "@types/node": "npm:^25.0.5"
     "@types/react": "npm:^19.2.7"
     "@types/react-dom": "npm:^19.2.3"
