@@ -7,6 +7,7 @@ import { useStakeBalance } from '@core/ui/vault/deposit/staking/useStakeBalance'
 import { stepFromDecimals } from '@core/ui/vault/deposit/utils/stepFromDecimals'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
+import { Slider } from '@lib/ui/inputs/Slider'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -130,39 +131,14 @@ export const StakeForm = ({
             </ErrorText>
           )}
 
-          <SliderContainer>
-            <SliderLabels>
-              <Text size={13} color="shy">
-                0%
-              </Text>
-              <Text size={13} color="shy">
-                100%
-              </Text>
-            </SliderLabels>
-            <SliderTrack>
-              <SliderInput
-                type="range"
-                min={0}
-                max={100}
-                value={currentPercentage}
-                onChange={e => handleSliderChange(Number(e.target.value))}
-                style={
-                  {
-                    '--value': `${currentPercentage}%`,
-                  } as React.CSSProperties
-                }
-              />
-              <SliderDots>
-                {[25, 50, 75].map(dot => (
-                  <SliderDot
-                    key={dot}
-                    $active={currentPercentage >= dot}
-                    style={{ left: `${dot}%` }}
-                  />
-                ))}
-              </SliderDots>
-            </SliderTrack>
-          </SliderContainer>
+          <Slider
+            value={currentPercentage}
+            onChange={handleSliderChange}
+            min={0}
+            max={100}
+            showLabels
+            showDots
+          />
 
           <HStack justifyContent="space-between" alignItems="center">
             <PrimaryLabel>{t('balance_available')}:</PrimaryLabel>
@@ -194,80 +170,6 @@ const SecondaryValue = styled(Text).attrs({ size: 14 })`
 
 const ErrorText = styled(Text)`
   text-align: center;
-`
-
-const SliderContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 0 4px;
-`
-
-const SliderLabels = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`
-
-const SliderTrack = styled.div`
-  position: relative;
-  width: 100%;
-  height: 24px;
-`
-
-const SliderDots = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  transform: translateY(-50%);
-  pointer-events: none;
-`
-
-const SliderDot = styled.div<{ $active: boolean }>`
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: ${({ $active }) =>
-    $active ? getColor('primary') : getColor('foregroundExtra')};
-  transform: translateX(-50%);
-`
-
-const SliderInput = styled.input`
-  width: 100%;
-  height: 4px;
-  appearance: none;
-  background: linear-gradient(
-    to right,
-    ${getColor('primary')} 0%,
-    ${getColor('primary')} var(--value, 0%),
-    ${getColor('foregroundExtra')} var(--value, 0%),
-    ${getColor('foregroundExtra')} 100%
-  );
-  border-radius: 2px;
-  outline: none;
-  cursor: pointer;
-
-  &::-webkit-slider-thumb {
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: ${getColor('contrast')};
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
-
-  &::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: ${getColor('contrast')};
-    cursor: pointer;
-    border: none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
 `
 
 const AmountValueRowWrapper = styled.div`
