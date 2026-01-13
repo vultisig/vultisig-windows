@@ -1099,6 +1099,12 @@ export const en = {
   transaction_could_not_be_parsed:
     'This transaction could not be parsed. Raw transaction data is shown below.',
   raw_transaction_data: 'Raw Transaction Data',
+  transaction_instructions_summary: 'Transaction Instructions Summary',
+  instruction: 'Instruction',
+  program_id: 'Program ID',
+  accounts: 'Accounts',
+  data_length: 'Data Length',
+  bytes: 'bytes',
   try_again: 'Try Again',
   try_in_expanded_mode: 'Try in expanded mode',
   turn_your_vault_into_rewards_machine:

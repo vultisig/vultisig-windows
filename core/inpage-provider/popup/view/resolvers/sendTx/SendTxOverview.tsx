@@ -266,67 +266,76 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                 />
               ) : (
                 <>
-                  {(() => {
-                    const isSolanaUnparsed =
-                      isChainOfKind(chain, 'solana') &&
-                      'solana' in customTxData &&
-                      'transfer' in customTxData.solana &&
-                      customTxData.solana.transfer.isUnparsed
+                  {keysignPayload.signData.case === 'signSolana' ? (
+                    <SignSolanaDisplay
+                      signSolana={keysignPayload.signData.value}
+                    />
+                  ) : (
+                    <>
+                      {(() => {
+                        const isSolanaUnparsed =
+                          isChainOfKind(chain, 'solana') &&
+                          'solana' in customTxData &&
+                          'transfer' in customTxData.solana &&
+                          customTxData.solana.transfer.isUnparsed
 
-                    if (isSolanaUnparsed) {
-                      return (
-                        <VStack gap={16}>
-                          <WarningBlock icon={CircleInfoIcon}>
-                            {t('transaction_could_not_be_parsed')}
-                          </WarningBlock>
-                          {keysignPayload.signData.case === 'signSolana' && (
-                            <SignSolanaDisplay
-                              signSolana={keysignPayload.signData.value}
-                            />
-                          )}
-                        </VStack>
-                      )
-                    }
+                        if (isSolanaUnparsed) {
+                          return (
+                            <VStack gap={16}>
+                              <WarningBlock icon={CircleInfoIcon}>
+                                {t('transaction_could_not_be_parsed')}
+                              </WarningBlock>
+                            </VStack>
+                          )
+                        }
 
-                    return (
-                      <>
-                        <List>
-                          <ListItem description={address} title={t('from')} />
-                          {keysignPayload.toAddress && (
-                            <ListItem
-                              description={keysignPayload.toAddress}
-                              title={t('to')}
+                        return (
+                          <>
+                            <List>
+                              <ListItem
+                                description={address}
+                                title={t('from')}
+                              />
+                              {keysignPayload.toAddress && (
+                                <ListItem
+                                  description={keysignPayload.toAddress}
+                                  title={t('to')}
+                                />
+                              )}
+                              {keysignPayload.toAmount && (
+                                <ListItem
+                                  description={`${formatUnits(
+                                    keysignPayload.toAmount,
+                                    keysignPayload.coin?.decimals
+                                  )} ${keysignPayload.coin?.ticker}`}
+                                  title={t('amount')}
+                                />
+                              )}
+                              <ListItem
+                                description={getKeysignChain(keysignPayload)}
+                                title={t('network')}
+                              />
+                            </List>
+                            <MemoSection
+                              memo={keysignPayload.memo}
+                              chain={chain}
                             />
-                          )}
-                          {keysignPayload.toAmount && (
-                            <ListItem
-                              description={`${formatUnits(
-                                keysignPayload.toAmount,
-                                keysignPayload.coin?.decimals
-                              )} ${keysignPayload.coin?.ticker}`}
-                              title={t('amount')}
-                            />
-                          )}
-                          <ListItem
-                            description={getKeysignChain(keysignPayload)}
-                            title={t('network')}
-                          />
-                        </List>
-                        <MemoSection memo={keysignPayload.memo} chain={chain} />
-                        <VStack bgColor="foreground" radius={16}>
-                          <NetworkFeeSection
-                            keysignPayload={keysignPayload}
-                            transactionPayload={transactionPayload}
-                            chain={chain}
-                            feeSettings={feeSettings}
-                            setFeeSettings={setFeeSettings}
-                            walletCore={walletCore}
-                            publicKey={publicKey}
-                          />
-                        </VStack>
-                      </>
-                    )
-                  })()}
+                            <VStack bgColor="foreground" radius={16}>
+                              <NetworkFeeSection
+                                keysignPayload={keysignPayload}
+                                transactionPayload={transactionPayload}
+                                chain={chain}
+                                feeSettings={feeSettings}
+                                setFeeSettings={setFeeSettings}
+                                walletCore={walletCore}
+                                publicKey={publicKey}
+                              />
+                            </VStack>
+                          </>
+                        )
+                      })()}
+                    </>
+                  )}
                 </>
               )}
               {keysignPayload.signData.case === 'signAmino' && (
@@ -335,17 +344,6 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
               {keysignPayload.signData.case === 'signDirect' && (
                 <SignDirectDisplay signDirect={keysignPayload.signData.value} />
               )}
-              {keysignPayload.signData.case === 'signSolana' &&
-                !(
-                  isChainOfKind(chain, 'solana') &&
-                  'solana' in customTxData &&
-                  'transfer' in customTxData.solana &&
-                  customTxData.solana.transfer.isUnparsed
-                ) && (
-                  <SignSolanaDisplay
-                    signSolana={keysignPayload.signData.value}
-                  />
-                )}
             </>
           )
         }}

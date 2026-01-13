@@ -21,7 +21,7 @@ export const getSolanaSigningInputs: SigningInputsResolver<'solana'> = ({
   )
 
   if (keysignPayload.signData.case === 'signSolana') {
-    const rawMessageData = keysignPayload.signData.value.rawMessage
+    const rawMessageData = keysignPayload.signData.value.rawTransactions[0] // TODO: Support multiple transactions
     const coinType = getCoinType({ walletCore, chain })
     const decodedData = walletCore.TransactionDecoder.decode(
       coinType,
