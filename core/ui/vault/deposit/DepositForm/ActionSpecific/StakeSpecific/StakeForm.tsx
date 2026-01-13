@@ -22,7 +22,6 @@ import { FormData } from '../../types'
 type StakeFormProps = {
   balance: number
   errors: FieldErrors<FormData>
-  isValid: boolean
   formValues: FormData
   isUnstake?: boolean
 }
