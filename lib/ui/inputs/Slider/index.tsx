@@ -32,7 +32,7 @@ export const Slider = ({
 }: SliderProps) => {
   const trackRef = useRef<HTMLDivElement>(null)
 
-  const percentage = ((value - min) / (max - min)) * 100
+  const percentage = max === min ? 0 : ((value - min) / (max - min)) * 100
 
   const handleTrackClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!trackRef.current) return
