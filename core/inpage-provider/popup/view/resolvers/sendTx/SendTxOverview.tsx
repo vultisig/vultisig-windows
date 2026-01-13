@@ -273,22 +273,6 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                   ) : (
                     <>
                       {(() => {
-                        const isSolanaUnparsed =
-                          isChainOfKind(chain, 'solana') &&
-                          'solana' in customTxData &&
-                          'transfer' in customTxData.solana &&
-                          customTxData.solana.transfer.isUnparsed
-
-                        if (isSolanaUnparsed) {
-                          return (
-                            <VStack gap={16}>
-                              <WarningBlock icon={CircleInfoIcon}>
-                                {t('transaction_could_not_be_parsed')}
-                              </WarningBlock>
-                            </VStack>
-                          )
-                        }
-
                         return (
                           <>
                             <List>

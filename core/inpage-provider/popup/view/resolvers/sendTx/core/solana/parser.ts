@@ -171,7 +171,6 @@ export const parseSolanaTx = async ({
       inAmount: '0',
       receiverAddress: '',
       rawMessageData: data,
-      isUnparsed: true,
     },
   }
 }
