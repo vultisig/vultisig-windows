@@ -137,7 +137,6 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
             <StakeForm
               balance={balance}
               errors={errors}
-              isValid={isValid}
               formValues={formValues}
               isUnstake={isUnstakeAction}
             />
