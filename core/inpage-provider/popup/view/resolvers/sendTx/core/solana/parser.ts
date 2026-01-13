@@ -48,7 +48,6 @@ export const parseSolanaTx = async ({
   )
   if (!encodedTx) throw new Error('Could not encode transaction')
   const decodedTx = TW.Solana.Proto.DecodingTransactionOutput.decode(encodedTx)
-  debugger
   if (!decodedTx.transaction)
     throw new Error('Invalid Solana transaction: missing v0 transaction data')
 
