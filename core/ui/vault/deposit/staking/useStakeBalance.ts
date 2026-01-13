@@ -67,7 +67,7 @@ export const useStakeBalance = (): StakeBalanceResult => {
   })
 
   return useMemo((): StakeBalanceResult => {
-    if (!isUnstake || !stakeId) {
+    if (!isUnstake) {
       return { balance: 0, isLoading: false, stakeId }
     }
 
@@ -77,6 +77,10 @@ export const useStakeBalance = (): StakeBalanceResult => {
         isLoading: isLoadingTon,
         stakeId: null,
       }
+    }
+
+    if (!stakeId) {
+      return { balance: 0, isLoading: false, stakeId }
     }
 
     return match(stakeId, {
