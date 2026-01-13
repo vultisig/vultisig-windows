@@ -7,7 +7,7 @@ import { Text } from '../../text'
 
 const thumbWidth = 38
 
-export type SliderProps = InputProps<number> & {
+type SliderProps = InputProps<number> & {
   min?: number
   max?: number
   step?: number
