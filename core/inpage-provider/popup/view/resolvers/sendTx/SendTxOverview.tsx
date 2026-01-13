@@ -20,6 +20,7 @@ import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
 import { SignAminoDisplay } from '@core/ui/mpc/keysign/tx/components/SignAminoDisplay'
 import { SignDirectDisplay } from '@core/ui/mpc/keysign/tx/components/SignDirectDisplay'
+import { SignSolanaDisplay } from '@core/ui/mpc/keysign/tx/components/SignSolanaDisplay'
 import { useCurrentVaultPublicKey } from '@core/ui/vault/state/currentVault'
 import {
   HorizontalLine,
@@ -265,40 +266,67 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                 />
               ) : (
                 <>
-                  <List>
-                    <ListItem description={address} title={t('from')} />
-                    {keysignPayload.toAddress && (
-                      <ListItem
-                        description={keysignPayload.toAddress}
-                        title={t('to')}
-                      />
-                    )}
-                    {keysignPayload.toAmount && (
-                      <ListItem
-                        description={`${formatUnits(
-                          keysignPayload.toAmount,
-                          keysignPayload.coin?.decimals
-                        )} ${keysignPayload.coin?.ticker}`}
-                        title={t('amount')}
-                      />
-                    )}
-                    <ListItem
-                      description={getKeysignChain(keysignPayload)}
-                      title={t('network')}
-                    />
-                  </List>
-                  <MemoSection memo={keysignPayload.memo} chain={chain} />
-                  <VStack bgColor="foreground" radius={16}>
-                    <NetworkFeeSection
-                      keysignPayload={keysignPayload}
-                      transactionPayload={transactionPayload}
-                      chain={chain}
-                      feeSettings={feeSettings}
-                      setFeeSettings={setFeeSettings}
-                      walletCore={walletCore}
-                      publicKey={publicKey}
-                    />
-                  </VStack>
+                  {(() => {
+                    const isSolanaUnparsed =
+                      isChainOfKind(chain, 'solana') &&
+                      'solana' in customTxData &&
+                      'transfer' in customTxData.solana &&
+                      customTxData.solana.transfer.isUnparsed
+
+                    if (isSolanaUnparsed) {
+                      return (
+                        <VStack gap={16}>
+                          <WarningBlock icon={CircleInfoIcon}>
+                            {t('transaction_could_not_be_parsed')}
+                          </WarningBlock>
+                          {keysignPayload.signData.case === 'signSolana' && (
+                            <SignSolanaDisplay
+                              signSolana={keysignPayload.signData.value}
+                            />
+                          )}
+                        </VStack>
+                      )
+                    }
+
+                    return (
+                      <>
+                        <List>
+                          <ListItem description={address} title={t('from')} />
+                          {keysignPayload.toAddress && (
+                            <ListItem
+                              description={keysignPayload.toAddress}
+                              title={t('to')}
+                            />
+                          )}
+                          {keysignPayload.toAmount && (
+                            <ListItem
+                              description={`${formatUnits(
+                                keysignPayload.toAmount,
+                                keysignPayload.coin?.decimals
+                              )} ${keysignPayload.coin?.ticker}`}
+                              title={t('amount')}
+                            />
+                          )}
+                          <ListItem
+                            description={getKeysignChain(keysignPayload)}
+                            title={t('network')}
+                          />
+                        </List>
+                        <MemoSection memo={keysignPayload.memo} chain={chain} />
+                        <VStack bgColor="foreground" radius={16}>
+                          <NetworkFeeSection
+                            keysignPayload={keysignPayload}
+                            transactionPayload={transactionPayload}
+                            chain={chain}
+                            feeSettings={feeSettings}
+                            setFeeSettings={setFeeSettings}
+                            walletCore={walletCore}
+                            publicKey={publicKey}
+                          />
+                        </VStack>
+                      </>
+                    )
+                  })()}
                 </>
               )}
               {keysignPayload.signData.case === 'signAmino' && (
@@ -307,6 +335,17 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
               {keysignPayload.signData.case === 'signDirect' && (
                 <SignDirectDisplay signDirect={keysignPayload.signData.value} />
               )}
+              {keysignPayload.signData.case === 'signSolana' &&
+                !(
+                  isChainOfKind(chain, 'solana') &&
+                  'solana' in customTxData &&
+                  'transfer' in customTxData.solana &&
+                  customTxData.solana.transfer.isUnparsed
+                ) && (
+                  <SignSolanaDisplay
+                    signSolana={keysignPayload.signData.value}
+                  />
+                )}
             </>
           )
         }}

@@ -1096,6 +1096,9 @@ export const en = {
     '{{riskLevel}} risk transaction detected by <provider></provider>',
   transaction_hash_copied: 'Transaction hash copied',
   transaction_successful: 'Transaction Successful',
+  transaction_could_not_be_parsed:
+    'This transaction could not be parsed. Raw transaction data is shown below.',
+  raw_transaction_data: 'Raw Transaction Data',
   try_again: 'Try Again',
   try_in_expanded_mode: 'Try in expanded mode',
   turn_your_vault_into_rewards_machine:
