@@ -157,7 +157,7 @@ const BlockaidStatus = styled(HStack)`
   padding: 0 4px;
   background: transparent;
   border: none;
-  color: #c9d6e8;
+  color: ${getColor('textShy')};
   font-family: 'Brockmann', sans-serif;
   font-size: 13px;
   font-weight: 500;
@@ -178,7 +178,7 @@ const SuccessIconWrapper = styled.div`
 `
 
 const BlockaidLabel = styled(Text)`
-  color: #c9d6e8;
+  color: ${getColor('textShy')};
   font-family: 'Brockmann', sans-serif;
   font-size: 13px;
   font-weight: 500;
