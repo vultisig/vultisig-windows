@@ -32,9 +32,8 @@ import { useCenteredSnapCarousel } from './hooks/useScrollSelectedChainIntoView'
 
 export const SwapCoinsExplorer = ({
   onChange,
-  value,
   onClose,
-}: OnCloseProp & InputProps<CoinKey>) => {
+}: OnCloseProp & Pick<InputProps<CoinKey>, 'onChange'>) => {
   const [fromCoinKey] = useSwapFromCoin()
   const [currentToCoin] = useSwapToCoin()
   const side = useTransferDirection()
@@ -44,7 +43,7 @@ export const SwapCoinsExplorer = ({
 
   const { data: whitelisted } = useWhitelistedCoinsQuery(currentChain)
 
-  const sortedSwapCoins = useSortedByBalanceCoins(value)
+  const sortedSwapCoins = useSortedByBalanceCoins(currentChain)
   const options = useMemo(() => {
     const result: Coin[] = [...sortedSwapCoins]
 
