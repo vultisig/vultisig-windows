@@ -79,6 +79,7 @@ export const useParsedTxQuery = (): Query<ParsedTx> => {
           walletCore,
           hexChainCode: vault.hexChainCode,
           publicKeys: vault.publicKeys,
+          chainPublicKeys: vault.chainPublicKeys,
         })
 
         const address = deriveAddress({
@@ -101,6 +102,7 @@ export const useParsedTxQuery = (): Query<ParsedTx> => {
       [
         vault.hexChainCode,
         vault.publicKeys,
+        vault.chainPublicKeys,
         walletCore,
         skipBroadcast,
         transactionPayload,
