@@ -47,7 +47,6 @@ export const SwapCoinsExplorer = ({
   const sortedSwapCoins = useSortedByBalanceCoins(value)
   const options = useMemo(() => {
     const result: Coin[] = [...sortedSwapCoins]
-    const keys = new Set(sortedSwapCoins.map(coinKeyToString))
 
     const extraCoins = [
       ...(knownTokens[currentChain] ?? []),
@@ -55,10 +54,7 @@ export const SwapCoinsExplorer = ({
     ]
 
     extraCoins.forEach(coin => {
-      const key = coinKeyToString(coin)
-      if (keys.has(key)) return
-
-      keys.add(key)
+      if (result.some(existing => areEqualCoins(existing, coin))) return
       result.push(coin)
     })
 
