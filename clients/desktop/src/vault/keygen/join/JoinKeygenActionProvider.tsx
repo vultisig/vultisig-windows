@@ -1,6 +1,7 @@
 import { KeygenOperation } from '@core/mpc/keygen/KeygenOperation'
 import { fromLibType } from '@core/mpc/types/utils/libType'
 import { CreateVaultKeygenActionProvider as DKLSCreateKeygenActionProvider } from '@core/ui/mpc/keygen/create/CreateVaultKeygenActionProvider'
+import { JoinKeyImportKeygenActionProvider } from '@core/ui/mpc/keygen/keyimport/JoinKeyImportKeygenActionProvider'
 import { ReshareVaultKeygenActionProvider as DKLSReshareKeygenActionProvider } from '@core/ui/mpc/keygen/reshare/ReshareVaultKeygenActionProvider'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { Match } from '@lib/ui/base/Match'
@@ -64,19 +65,9 @@ export const JoinKeygenActionProvider = ({ children }: ChildrenProp) => {
       />
     ),
     keyimport: () => (
-      <Match
-        value={mpcLib}
-        DKLS={() => (
-          <DKLSCreateKeygenActionProvider>
-            {children}
-          </DKLSCreateKeygenActionProvider>
-        )}
-        GG20={() => (
-          <GG20CreateKeygenActionProvider>
-            {children}
-          </GG20CreateKeygenActionProvider>
-        )}
-      />
+      <JoinKeyImportKeygenActionProvider>
+        {children}
+      </JoinKeyImportKeygenActionProvider>
     ),
   })
 }
