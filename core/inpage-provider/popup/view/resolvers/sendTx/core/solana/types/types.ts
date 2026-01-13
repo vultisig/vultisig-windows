@@ -20,7 +20,7 @@ export type SolanaTxData =
         inAmount: string
         receiverAddress: string
         rawMessageData?: string // base64 encoded serialized transaction
-        isUnparsed?: boolean // true cuando no se pudo parsear la transacción
+        isUnparsed?: boolean
       }
     }
 

@@ -145,7 +145,6 @@ export const parseSolanaTx = async ({
     })
   )
 
-  // Si parsedTx existe y tiene transfer, usar esos valores
   if (parsedTx && 'transfer' in parsedTx) {
     return {
       transfer: {
@@ -155,7 +154,6 @@ export const parseSolanaTx = async ({
     }
   }
 
-  // Si parsedTx tiene swap, retornarlo con rawMessageData agregado
   if (parsedTx && 'swap' in parsedTx) {
     return {
       swap: {
@@ -165,8 +163,6 @@ export const parseSolanaTx = async ({
     }
   }
 
-  // Si no se pudo parsear, retornar un objeto transfer mínimo con rawMessageData
-  // Esto permite que la firma funcione aunque no se pueda mostrar información detallada
   const solanaFeeCoin = await getCoin({ chain: Chain.Solana })
   return {
     transfer: {
@@ -175,7 +171,7 @@ export const parseSolanaTx = async ({
       inAmount: '0',
       receiverAddress: '',
       rawMessageData: data,
-      isUnparsed: true, // Marcar que no se pudo parsear para mostrar raw message en UI
+      isUnparsed: true,
     },
   }
 }
