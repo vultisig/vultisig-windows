@@ -387,6 +387,13 @@ export const es = {
     staked: 'Staked',
     lps: 'LPs',
   },
+  vaultTabs: {
+    portfolio: 'Portafolio',
+    nft: 'NFT',
+  },
+  vaultChainTabs: {
+    tokens: 'Tokens',
+  },
   delete: 'Borrar',
   delete_folder: 'Eliminar carpeta',
   delete_folder_confirmation:
@@ -453,6 +460,7 @@ export const es = {
   enter_new_passcode: 'Introduce la nueva contraseña',
   enter_passcode: 'Introducir código de acceso',
   enter_password: 'Introduce la contraseña',
+  enter_number_placeholder: 'Introduzca un número',
   enter_percentage: 'Introduzca el porcentaje',
   enter_referral_code_placeholder: 'Introduzca el código de referencia',
   enter_up_to_4_characters_placeholder: 'Introduzca hasta 4 caracteres',
@@ -466,6 +474,7 @@ export const es = {
   expiration_date: 'Fecha de expiración',
   expiration_must_extend_by_exactly_one_year:
     'La expiración solo se puede extender por exactamente 1 año',
+  expiration_must_be_greater: 'La expiración debe ser mayor que {{value}}',
   expires_on: 'Caduca el',
   extension_vault_import_restriction:
     'Solo se pueden importar bóvedas DKLS en la extensión',
@@ -488,6 +497,7 @@ export const es = {
   failed_to_join_session: 'No se pudo unir a la sesión',
   failed_to_load: 'Error al cargar',
   failed_to_migrate_storage: 'No se pudo migrar el almacenamiento',
+  storage_load_error: 'Error al cargar datos esenciales del almacenamiento',
   failed_to_process_transaction: 'No se pudo procesar la transacción',
   failed_to_process_url: 'No se pudo procesar la URL',
   failed_to_read_qr_code: 'No se pudo leer el código QR',
@@ -1333,6 +1343,8 @@ export const es = {
   wrong_vault_try_again: 'Dispositivo de emparejamiento o bóveda incorrecto.',
   you_are_bonding: 'Estás haciendo bond',
   you_are_sending: 'Estás enviando',
+  you_are_staking: 'Estás haciendo stake',
+  you_are_unstaking: 'Estás haciendo unstake',
   yourVaultShares: 'Su bóveda tiene {{shares}} acciones de bóveda',
   your_friends_referral_code: 'Código de referencia de tus amigos',
   your_referral_code: 'Su código de referencia',

@@ -60,6 +60,7 @@ export const useCurrentVaultAddress = (chain: Chain) => {
       walletCore,
       hexChainCode: vault.hexChainCode,
       publicKeys: vault.publicKeys,
+      chainPublicKeys: vault.chainPublicKeys,
     })
 
     return deriveAddress({ chain, publicKey, walletCore })

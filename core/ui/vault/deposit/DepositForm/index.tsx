@@ -3,6 +3,7 @@ import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ActionForm } from '@core/ui/vault/components/action-form/ActionForm'
 import { BondForm } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/BondSpecific/BondForm'
 import { DepositActionSpecific } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/DepositActionSpecific'
+import { StakeForm } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/StakeSpecific/StakeForm'
 import { DepositActionItemExplorer } from '@core/ui/vault/deposit/DepositForm/DepositActionItemExplorer'
 import {
   Container,
@@ -77,13 +78,28 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
   }
 
   const isBondAction = selectedChainAction === 'bond'
+  const isStakeAction = selectedChainAction === 'stake'
+  const isUnstakeAction = selectedChainAction === 'unstake'
   const formValues = watch()
   const shouldUseBondRedesign = isBondAction && entryPoint === 'defi'
-  const pageTitle = shouldUseBondRedesign
-    ? `${t('bond')} ${coin.ticker ?? ''}`.trim()
-    : t('deposit')
+  const shouldUseStakeRedesign =
+    (isStakeAction || isUnstakeAction) && entryPoint === 'defi'
+  const shouldUseActionForm = shouldUseBondRedesign || shouldUseStakeRedesign
+
+  const getPageTitle = () => {
+    if (shouldUseBondRedesign) {
+      return `${t('bond')} ${coin.ticker ?? ''}`.trim()
+    }
+    if (shouldUseStakeRedesign) {
+      const actionLabel = isUnstakeAction ? t('unstake') : t('stake')
+      return `${actionLabel} ${coin.ticker ?? ''}`.trim()
+    }
+    return t('deposit')
+  }
+
+  const pageTitle = getPageTitle()
   const FormComponent = (
-    shouldUseBondRedesign ? ActionForm : PageContent
+    shouldUseActionForm ? ActionForm : PageContent
   ) as typeof PageContent
 
   return (
@@ -114,6 +130,15 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
               errors={errors}
               isValid={isValid}
               formValues={formValues}
+            />
+          </DepositDataProvider>
+        ) : shouldUseStakeRedesign ? (
+          <DepositDataProvider value={formValues}>
+            <StakeForm
+              balance={balance}
+              errors={errors}
+              formValues={formValues}
+              isUnstake={isUnstakeAction}
             />
           </DepositDataProvider>
         ) : (
