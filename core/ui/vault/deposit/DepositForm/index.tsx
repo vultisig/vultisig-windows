@@ -4,6 +4,7 @@ import { ActionForm } from '@core/ui/vault/components/action-form/ActionForm'
 import { BondForm } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/BondSpecific/BondForm'
 import { DepositActionSpecific } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/DepositActionSpecific'
 import { StakeForm } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/StakeSpecific/StakeForm'
+import { UnbondForm } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/UnbondSpecific/UnbondForm'
 import { DepositActionItemExplorer } from '@core/ui/vault/deposit/DepositForm/DepositActionItemExplorer'
 import {
   Container,
@@ -78,17 +79,23 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
   }
 
   const isBondAction = selectedChainAction === 'bond'
+  const isUnbondAction = selectedChainAction === 'unbond'
   const isStakeAction = selectedChainAction === 'stake'
   const isUnstakeAction = selectedChainAction === 'unstake'
   const formValues = watch()
   const shouldUseBondRedesign = isBondAction && entryPoint === 'defi'
+  const shouldUseUnbondRedesign = isUnbondAction && entryPoint === 'defi'
   const shouldUseStakeRedesign =
     (isStakeAction || isUnstakeAction) && entryPoint === 'defi'
-  const shouldUseActionForm = shouldUseBondRedesign || shouldUseStakeRedesign
+  const shouldUseActionForm =
+    shouldUseBondRedesign || shouldUseUnbondRedesign || shouldUseStakeRedesign
 
   const getPageTitle = () => {
     if (shouldUseBondRedesign) {
       return `${t('bond')} ${coin.ticker ?? ''}`.trim()
+    }
+    if (shouldUseUnbondRedesign) {
+      return `${t('unbond')} ${coin.ticker ?? ''}`.trim()
     }
     if (shouldUseStakeRedesign) {
       const actionLabel = isUnstakeAction ? t('unstake') : t('stake')
@@ -127,6 +134,15 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
         {shouldUseBondRedesign ? (
           <DepositDataProvider value={formValues}>
             <BondForm
+              balance={balance}
+              errors={errors}
+              isValid={isValid}
+              formValues={formValues}
+            />
+          </DepositDataProvider>
+        ) : shouldUseUnbondRedesign ? (
+          <DepositDataProvider value={formValues}>
+            <UnbondForm
               balance={balance}
               errors={errors}
               isValid={isValid}
