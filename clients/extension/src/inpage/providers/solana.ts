@@ -311,7 +311,7 @@ export class Solana implements Wallet {
       'base64'
     )
 
-    const { data } = await callPopup(
+    const result = await callPopup(
       {
         sendTx: {
           serialized: {
@@ -326,7 +326,9 @@ export class Solana implements Wallet {
       }
     )
 
-    const { encoded } = deserializeSigningOutput(Chain.Solana, data)
+    // Normalize to array and take first element (single transaction)
+    const txResult = Array.isArray(result) ? result[0] : result
+    const { encoded } = deserializeSigningOutput(Chain.Solana, txResult.data)
     if (!encoded) {
       throw new Error('No encoded transaction returned from signing')
     }
@@ -350,16 +352,72 @@ export class Solana implements Wallet {
       })
     }
 
-    const results: (Transaction | VersionedTransaction)[] = []
+    // Serialize all transactions
+    const serializedTransactions: string[] = []
+    let authority: string | undefined
 
     for (const transaction of transactions) {
-      const result = await this.signTransaction(transaction)
-      if (result) {
-        results.push(result)
+      let serializedTransaction: Uint8Array
+
+      if (isVersionedTransaction(transaction)) {
+        serializedTransaction = transaction.serialize()
+        if (!authority) {
+          authority = getTransactionAuthority(serializedTransaction)
+        }
       } else {
+        serializedTransaction = transaction.serialize({
+          requireAllSignatures: false,
+          verifySignatures: false,
+        })
+        if (!authority) {
+          authority = transaction.feePayer?.toString()
+        }
+      }
+
+      const serializedBase64 = Buffer.from(serializedTransaction).toString(
+        'base64'
+      )
+      serializedTransactions.push(serializedBase64)
+    }
+
+    // Process all transactions together in a single keysignPayload
+    const result = await callPopup(
+      {
+        sendTx: {
+          serialized: {
+            data: serializedTransactions,
+            skipBroadcast: true,
+            chain: Chain.Solana,
+          },
+        },
+      },
+      {
+        account: authority,
+      }
+    )
+
+    // Handle response - it can be an array of transactions or a single transaction
+    const responseData = Array.isArray(result) ? result : [result]
+    const results: (Transaction | VersionedTransaction)[] = []
+
+    for (let i = 0; i < responseData.length; i++) {
+      const { encoded } = deserializeSigningOutput(
+        Chain.Solana,
+        responseData[i].data
+      )
+      if (!encoded) {
         throw new Error(
-          'Failed to sign transaction: No matching instructions found'
+          `No encoded transaction returned from signing for transaction ${i + 1}`
         )
+      }
+
+      const rawData = bs58.decode(encoded)
+      const originalTx = transactions[i]
+
+      if (isVersionedTransaction(originalTx)) {
+        results.push(VersionedTransaction.deserialize(rawData))
+      } else {
+        results.push(Transaction.from(Buffer.from(rawData)))
       }
     }
 

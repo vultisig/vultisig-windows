@@ -207,7 +207,7 @@ export type IKeysignTransactionPayload = {
 }
 
 type ISerializedTransactionPayload = {
-  data: string
+  data: string | string[] // Single transaction or array of transactions
   skipBroadcast?: boolean
   chain: Chain
   params?: Record<string, any>[]

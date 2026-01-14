@@ -438,7 +438,7 @@ export class XDEFIKeplrProvider extends Keplr {
 
       const transactionDetails = aminoHandler(signDoc, chain)
 
-      const { data } = await callPopup(
+      const [{ data }] = await callPopup(
         {
           sendTx: {
             keysign: {
@@ -523,7 +523,7 @@ export class XDEFIKeplrProvider extends Keplr {
         chain
       )
 
-      const { data } = await callPopup(
+      const [{ data }] = await callPopup(
         {
           sendTx: {
             keysign: {

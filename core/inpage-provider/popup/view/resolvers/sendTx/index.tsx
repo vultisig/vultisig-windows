@@ -28,13 +28,15 @@ export const SendTx: PopupResolver<'sendTx'> = ({ onFinish }) => {
   const keysignMutationListener: KeysignMutationListener = useMemo(
     () => ({
       onSuccess: result => {
-        const [{ hash, data }] = getRecordUnionValue(result, 'txs')
+        const txs = getRecordUnionValue(result, 'txs')
+        // Return all transactions as an array (one or more)
+        const transactionsData = txs.map(({ hash, data }) => ({
+          hash,
+          data: data.toJSON(),
+        }))
         onFinish({
           result: {
-            data: {
-              hash,
-              data: data.toJSON(),
-            },
+            data: transactionsData,
           },
           shouldClosePopup: false,
         })

@@ -25,7 +25,7 @@ import { mergedKeys, resolveAddressTableKeys } from './utils'
 type ParseSolanaTxInput = {
   fromCoin: CommCoin
   walletCore: WalletCore
-  data: string
+  data: string | string[]
   getCoin: (coinKey: CoinKey) => Promise<Coin>
   swapProvider: string
 }
@@ -38,7 +38,9 @@ export const parseSolanaTx = async ({
   swapProvider,
 }: ParseSolanaTxInput): Promise<SolanaTxData> => {
   const connection = new Connection(solanaRpcUrl)
-  const inputTx = Uint8Array.from(Buffer.from(data, 'base64'))
+  const inputTx = Uint8Array.from(
+    Buffer.from(Array.isArray(data) ? data[0] : data, 'base64')
+  )
   const txInputDataArray = Object.values(inputTx)
   const txInputDataBuffer = new Uint8Array(txInputDataArray as any)
   const buffer = Buffer.from(txInputDataBuffer)
@@ -125,9 +127,9 @@ export const parseSolanaTx = async ({
         inputCoin,
         outAmount: toAmount.toString(),
         outputCoin,
-        data,
+        data: Array.isArray(data) ? data[0] : data,
         swapProvider,
-        rawMessageData: data,
+        rawTransactions: Array.isArray(data) ? data : [data],
       },
     }
   })
@@ -141,7 +143,7 @@ export const parseSolanaTx = async ({
       keys,
       getCoin,
       swapProvider,
-      data,
+      data: Array.isArray(data) ? data[0] : data,
     })
   )
 
@@ -149,7 +151,7 @@ export const parseSolanaTx = async ({
     return {
       transfer: {
         ...parsedTx.transfer,
-        rawMessageData: data,
+        rawTransactions: Array.isArray(data) ? data : [data],
       },
     }
   }
@@ -158,7 +160,7 @@ export const parseSolanaTx = async ({
     return {
       swap: {
         ...parsedTx.swap,
-        rawMessageData: data,
+        rawTransactions: Array.isArray(data) ? data : [data],
       },
     }
   }
@@ -170,7 +172,7 @@ export const parseSolanaTx = async ({
       inputCoin: solanaFeeCoin,
       inAmount: '0',
       receiverAddress: '',
-      rawMessageData: data,
+      rawTransactions: Array.isArray(data) ? data : [data],
     },
   }
 }

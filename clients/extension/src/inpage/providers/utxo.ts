@@ -66,7 +66,7 @@ export class UTXO extends EventEmitter {
     },
     broadcast: boolean = false
   ) {
-    const { data } = await callPopup({
+    const [{ data }] = await callPopup({
       sendTx: {
         serialized: {
           data: Buffer.from(psbt).toString('base64'),

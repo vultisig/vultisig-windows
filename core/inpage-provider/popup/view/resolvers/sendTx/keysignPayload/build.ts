@@ -382,12 +382,13 @@ export const buildSendTxKeysignPayload = async ({
     {
       regular: () => undefined,
       solana: tx => {
-        const rawMessageData =
-          ('swap' in tx && tx.swap.rawMessageData) ||
-          ('transfer' in tx && tx.transfer.rawMessageData)
-        if (rawMessageData) {
+        const rawTransactions =
+          ('swap' in tx && tx.swap.rawTransactions) ||
+          ('transfer' in tx && tx.transfer.rawTransactions)
+
+        if (rawTransactions && rawTransactions.length > 0) {
           return create(SignSolanaSchema, {
-            rawTransactions: [rawMessageData],
+            rawTransactions,
           })
         }
         return undefined
