@@ -1,6 +1,10 @@
 import { changeFeeCoinKey } from './entries/changeFeeCoinKey'
+import { removeDuplicateCoins } from './entries/removeDuplicateCoins'
 
-export const storageMigrationKeys = ['changeFeeCoinKey'] as const
+export const storageMigrationKeys = [
+  'changeFeeCoinKey',
+  'removeDuplicateCoins',
+] as const
 
 export type StorageMigrationKey = (typeof storageMigrationKeys)[number]
 
@@ -9,4 +13,5 @@ export const storageMigrations: Record<
   () => Promise<void>
 > = {
   changeFeeCoinKey,
+  removeDuplicateCoins,
 }

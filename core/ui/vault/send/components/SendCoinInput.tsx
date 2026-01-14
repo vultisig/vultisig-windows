@@ -34,7 +34,7 @@ export const SendCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
   const { t } = useTranslation()
   const coins = useCurrentVaultCoins()
   const coin = useCurrentVaultCoin(value)
-  const sortedSwapCoinsForChain = useSortedByBalanceCoins(value)
+  const sortedSwapCoinsForChain = useSortedByBalanceCoins(coin.chain)
   const chainSummaries = useChainSummaries()
 
   const handleAutoAdvance = () => {

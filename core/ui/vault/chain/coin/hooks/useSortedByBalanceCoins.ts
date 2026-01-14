@@ -1,23 +1,15 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { Chain } from '@core/chain/Chain'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
-import { CoinKey, coinKeyToString } from '@core/chain/coin/Coin'
+import { coinKeyToString } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { useMemo } from 'react'
 
 import { useBalancesQuery } from '../../../../chain/coin/queries/useBalancesQuery'
-import {
-  useCurrentVaultCoin,
-  useCurrentVaultCoins,
-} from '../../../state/currentVaultCoins'
+import { useCurrentVaultChainCoins } from '../../../state/currentVaultCoins'
 
-export const useSortedByBalanceCoins = (value: CoinKey) => {
-  const coins = useCurrentVaultCoins()
-  const coin = useCurrentVaultCoin(value)
-
-  const coinsInSelectedChain = useMemo(
-    () => coins.filter(c => c.chain === coin.chain),
-    [coin.chain, coins]
-  )
+export const useSortedByBalanceCoins = (chain: Chain) => {
+  const coinsInSelectedChain = useCurrentVaultChainCoins(chain)
 
   const { data: balances } = useBalancesQuery(
     coinsInSelectedChain.map(extractAccountCoinKey)

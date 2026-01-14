@@ -4,9 +4,7 @@ import { useCreateCoinsMutation } from '@core/ui/storage/coins'
 import { useCoinFinderQuery } from '@core/ui/vault/chain/coin/finder/queries/useCoinFinderQuery'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { isEmpty } from '@lib/utils/array/isEmpty'
-import { areEqualRecords } from '@lib/utils/record/areEqualRecords'
 import { pick } from '@lib/utils/record/pick'
-import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
 import { useEffect } from 'react'
 
 import { useCoinFinderIgnore } from '../../../../storage/coinFinderIgnore'
@@ -40,15 +38,7 @@ export const CoinFinder = () => {
           ...pick(existingCoinInfo, coinMetadataFields),
         }
       })
-      .filter(
-        coin =>
-          !vaultCoins.some(c =>
-            areEqualRecords(
-              withoutUndefinedFields(c),
-              withoutUndefinedFields(coin)
-            )
-          )
-      )
+      .filter(coin => !vaultCoins.some(c => areEqualCoins(c, coin)))
 
     if (!isEmpty(newCoins) && !isPending && !error) {
       console.log('CoinFinder: saving new coins', newCoins)

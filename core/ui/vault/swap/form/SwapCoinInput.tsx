@@ -51,7 +51,6 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
       {opened === 'coin' && (
         <SwapCoinsExplorer
           onClose={() => setOpened(null)}
-          value={value}
           onChange={onChange}
         />
       )}
