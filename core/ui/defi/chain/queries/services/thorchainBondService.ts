@@ -1,4 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { coinKeyToString } from '@core/chain/coin/Coin'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import {
@@ -18,6 +19,9 @@ import {
   parseNumber,
   toBondStatusLabel,
 } from '../utils/parsers'
+
+// Set to true to use mock bonded positions for testing
+const useMockBondPositions = true
 
 const runeDecimalFactor = toDecimalFactor(runeCoin.decimals)
 
@@ -138,6 +142,51 @@ export const fetchBondPositions = async (
   health: HealthInfo,
   canUnbond: boolean
 ) => {
+  // Return mock data for testing when no real bonded positions exist
+  if (useMockBondPositions) {
+    const mockAmount1 = toChainAmount(800, runeCoin.decimals)
+    const mockAmount2 = toChainAmount(700, runeCoin.decimals)
+    const runePrice = prices[coinKeyToString(runeCoin)] ?? 1
+
+    const mockPositions: ThorchainBondPosition[] = [
+      {
+        id: 'thor-bond-rune',
+        nodeAddress: 'thor1ca7qwlmue4t2y8lck5xnpzfkhpt0ycwyw8xyzf',
+        amount: mockAmount1,
+        apy: 0.05,
+        nextReward: 20,
+        nextChurn: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        status: 'churned out',
+        fiatValue: getCoinValue({
+          amount: mockAmount1,
+          decimals: runeCoin.decimals,
+          price: runePrice,
+        }),
+      },
+      {
+        id: 'thor-bond-rune',
+        nodeAddress: 'thor1qpgxwq6gaw9wfkkahtp6yk9q7uqhrhkhq3ywxyz',
+        amount: mockAmount2,
+        apy: 0.0517,
+        nextReward: 15,
+        nextChurn: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        status: 'active',
+        fiatValue: getCoinValue({
+          amount: mockAmount2,
+          decimals: runeCoin.decimals,
+          price: runePrice,
+        }),
+      },
+    ]
+
+    return {
+      positions: mockPositions,
+      totalBonded: mockAmount1 + mockAmount2,
+      availableNodes: [],
+      canUnbond: true,
+    }
+  }
+
   const bondedNodes = await getBondedNodes(address)
   const nodes = bondedNodes?.nodes ?? []
   const thorchainNodes = await getNodes().catch(() => [])
