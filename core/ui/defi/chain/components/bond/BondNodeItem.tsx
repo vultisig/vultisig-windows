@@ -5,10 +5,10 @@ import {
   formatDateShort,
   formatStatusLabel,
 } from '@core/ui/defi/shared/formatters'
+import { BrokenChainLink3Icon } from '@lib/ui/icons/BrokenChainLink3Icon'
 import { CalendarIcon } from '@lib/ui/icons/CalendarIcon'
-import { LinkIcon } from '@lib/ui/icons/LinkIcon'
+import { ChainLinkIcon3 } from '@lib/ui/icons/ChainLinkIcon3'
 import { PercentIcon } from '@lib/ui/icons/PercentIcon'
-import { RefreshCwIcon } from '@lib/ui/icons/RefreshCwIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -66,13 +66,13 @@ const ActionButton = styled.button.attrs({ type: 'button' })<
 >`
   position: relative;
   display: flex;
+  font-size: 14px;
   align-items: center;
   justify-content: center;
   gap: 10px;
   border-radius: 999px;
   height: 48px;
   padding: 0 26px;
-  font-size: 16px;
   font-weight: 600;
   border: 1px solid transparent;
   cursor: pointer;
@@ -231,7 +231,7 @@ export const BondNodeItem = ({
               {t('next_churn')}
             </Text>
           </InfoRow>
-          <Text size={14} weight="600" color="contrast">
+          <Text size={14} weight="600" color="shyExtra">
             {formatDateShort(nextChurn, i18n.language) ?? t('pending')}
           </Text>
         </VStack>
@@ -244,7 +244,7 @@ export const BondNodeItem = ({
               {t('next_award')}
             </Text>
           </InfoRow>
-          <Text size={14} weight="600" color="contrast">
+          <Text size={14} weight="600" color="shyExtra">
             {formatAmount(nextReward, { ticker: coin.ticker })}
           </Text>
         </VStack>
@@ -260,7 +260,7 @@ export const BondNodeItem = ({
             style={{ flex: 1 }}
           >
             <ActionIcon variant="secondary">
-              <RefreshCwIcon />
+              <BrokenChainLink3Icon />
             </ActionIcon>
             {t('unbond')}
           </ActionButton>,
@@ -274,7 +274,7 @@ export const BondNodeItem = ({
             style={{ flex: 1 }}
           >
             <ActionIcon variant="primary">
-              <LinkIcon />
+              <ChainLinkIcon3 />
             </ActionIcon>
             {t('bond')}
           </ActionButton>,
