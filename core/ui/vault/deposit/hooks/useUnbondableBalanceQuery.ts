@@ -11,7 +11,7 @@ const thornodeBaseUrl = 'https://thornode.ninerealms.com/thorchain'
 const midgardBaseUrl = 'https://midgard.ninerealms.com/v2'
 
 // Set to true to use mock data for testing when you don't have bonded RUNE
-const useMockData = true
+const useMockData = false
 const mockUnbondableBalance = 500
 
 type BondProvider = {
