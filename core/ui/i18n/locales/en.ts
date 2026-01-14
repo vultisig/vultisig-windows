@@ -723,7 +723,7 @@ export const en = {
     "You've disabled all positions for this chain. Enable at least one position to view balances and manage actions.",
   locked_in_defi: 'Locked in DeFi',
   total_bonded: 'Total Bonded {{ticker}}',
-  active_nodes: 'ActiveNodes',
+  active_nodes: 'Active Nodes',
   vulti_node: 'VultiNode',
   available_nodes: 'Available Nodes',
   request_to_bond: 'Request to bond',

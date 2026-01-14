@@ -965,7 +965,7 @@ export const es = {
   liquidity_pools: 'Pools de liquidez',
   locked_in_defi: 'Bloqueado en DeFi',
   total_bonded: 'Total vinculado {{ticker}}',
-  active_nodes: 'ActiveNodes',
+  active_nodes: 'Nodos Activos',
   no_active_nodes: 'No hay nodos activos',
   vulti_node: 'Nodo VultiNode',
   available_nodes: 'Available Nodes',
