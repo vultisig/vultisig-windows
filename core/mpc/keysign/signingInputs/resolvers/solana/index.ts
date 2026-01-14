@@ -20,6 +20,30 @@ export const getSolanaSigningInputs: SigningInputsResolver<'solana'> = ({
     'solanaSpecific'
   )
 
+  if (keysignPayload.signData.case === 'signSolana') {
+    const coinType = getCoinType({ walletCore, chain })
+    const inputs = keysignPayload.signData.value.rawTransactions.map(
+      rawMessageData => {
+        const decodedData = walletCore.TransactionDecoder.decode(
+          coinType,
+          Buffer.from(rawMessageData, 'base64')
+        )
+        const decodedTransaction =
+          TW.Solana.Proto.DecodingTransactionOutput.decode(decodedData)
+        if (!decodedTransaction.transaction) {
+          throw new Error("Can't decode transaction")
+        }
+        const rawMessage = decodedTransaction.transaction
+
+        return TW.Solana.Proto.SigningInput.create({
+          rawMessage,
+        })
+      }
+    )
+    debugger
+    return inputs
+  }
+
   const swapPayload = getKeysignSwapPayload(keysignPayload)
 
   if (swapPayload) {

@@ -27,6 +27,8 @@ import {
   SignAminoSchema,
   SignDirect,
   SignDirectSchema,
+  SignSolana,
+  SignSolanaSchema,
   WasmExecuteContractPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { attempt } from '@lib/utils/attempt'
@@ -375,12 +377,34 @@ export const buildSendTxKeysignPayload = async ({
     }
   )
 
+  const solanaPayload = matchRecordUnion<CustomTxData, SignSolana | undefined>(
+    customTxData,
+    {
+      regular: () => undefined,
+      solana: tx => {
+        const rawTransactions =
+          ('swap' in tx && tx.swap.rawTransactions) ||
+          ('transfer' in tx && tx.transfer.rawTransactions)
+
+        if (rawTransactions && rawTransactions.length > 0) {
+          return create(SignSolanaSchema, {
+            rawTransactions,
+          })
+        }
+        return undefined
+      },
+      psbt: () => undefined,
+    }
+  )
+
   const signData: KeysignPayload['signData'] =
     aminoPayload !== undefined
       ? { case: 'signAmino', value: aminoPayload }
       : directPayload !== undefined
         ? { case: 'signDirect', value: directPayload }
-        : { case: undefined, value: undefined }
+        : solanaPayload !== undefined
+          ? { case: 'signSolana', value: solanaPayload }
+          : { case: undefined, value: undefined }
 
   let keysignPayload = create(KeysignPayloadSchema, {
     toAddress: toAddress ?? '',

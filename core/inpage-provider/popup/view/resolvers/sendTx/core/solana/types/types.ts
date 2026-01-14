@@ -10,6 +10,7 @@ export type SolanaTxData =
         outAmount: string
         data: string
         swapProvider: string
+        rawTransactions?: string[] // base64 encoded serialized transactions (one or more)
       }
     }
   | {
@@ -18,6 +19,8 @@ export type SolanaTxData =
         inputCoin: Coin
         inAmount: string
         receiverAddress: string
+        rawTransactions?: string[] // base64 encoded serialized transactions (one or more)
+        isUnparsed?: boolean
       }
     }
 

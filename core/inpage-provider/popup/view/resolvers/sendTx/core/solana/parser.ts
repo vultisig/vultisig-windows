@@ -25,7 +25,7 @@ import { mergedKeys, resolveAddressTableKeys } from './utils'
 type ParseSolanaTxInput = {
   fromCoin: CommCoin
   walletCore: WalletCore
-  data: string
+  data: string | string[]
   getCoin: (coinKey: CoinKey) => Promise<Coin>
   swapProvider: string
 }
@@ -38,7 +38,9 @@ export const parseSolanaTx = async ({
   swapProvider,
 }: ParseSolanaTxInput): Promise<SolanaTxData> => {
   const connection = new Connection(solanaRpcUrl)
-  const inputTx = Uint8Array.from(Buffer.from(data, 'base64'))
+  const inputTx = Uint8Array.from(
+    Buffer.from(Array.isArray(data) ? data[0] : data, 'base64')
+  )
   const txInputDataArray = Object.values(inputTx)
   const txInputDataBuffer = new Uint8Array(txInputDataArray as any)
   const buffer = Buffer.from(txInputDataBuffer)
@@ -48,7 +50,6 @@ export const parseSolanaTx = async ({
   )
   if (!encodedTx) throw new Error('Could not encode transaction')
   const decodedTx = TW.Solana.Proto.DecodingTransactionOutput.decode(encodedTx)
-
   if (!decodedTx.transaction)
     throw new Error('Invalid Solana transaction: missing v0 transaction data')
 
@@ -126,8 +127,9 @@ export const parseSolanaTx = async ({
         inputCoin,
         outAmount: toAmount.toString(),
         outputCoin,
-        data,
+        data: Array.isArray(data) ? data[0] : data,
         swapProvider,
+        rawTransactions: Array.isArray(data) ? data : [data],
       },
     }
   })
@@ -135,18 +137,42 @@ export const parseSolanaTx = async ({
   if (parsedSimulation) {
     return parsedSimulation
   }
-  const { data: parsedTx, error } = await attempt(
+  const { data: parsedTx } = await attempt(
     parseProgramCall({
       tx,
       keys,
       getCoin,
       swapProvider,
-      data,
+      data: Array.isArray(data) ? data[0] : data,
     })
   )
 
-  if (!error && parsedTx) {
-    return parsedTx
+  if (parsedTx && 'transfer' in parsedTx) {
+    return {
+      transfer: {
+        ...parsedTx.transfer,
+        rawTransactions: Array.isArray(data) ? data : [data],
+      },
+    }
   }
-  throw new Error('failed to parse transaction')
+
+  if (parsedTx && 'swap' in parsedTx) {
+    return {
+      swap: {
+        ...parsedTx.swap,
+        rawTransactions: Array.isArray(data) ? data : [data],
+      },
+    }
+  }
+
+  const solanaFeeCoin = await getCoin({ chain: Chain.Solana })
+  return {
+    transfer: {
+      authority: fromCoin.address,
+      inputCoin: solanaFeeCoin,
+      inAmount: '0',
+      receiverAddress: '',
+      rawTransactions: Array.isArray(data) ? data : [data],
+    },
+  }
 }
