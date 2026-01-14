@@ -178,7 +178,10 @@ export const BondedPositions = () => {
     })
   }
 
-  const navigateToUnbond = async (nodeAddress: string) => {
+  const navigateToUnbond = async (
+    nodeAddress: string,
+    bondedAmount: bigint
+  ) => {
     if (isBondingDisabled) return
 
     if (!hasBondCoin) {
@@ -191,7 +194,7 @@ export const BondedPositions = () => {
         coin: bondCoin,
         action: 'unbond',
         entryPoint: 'defi',
-        form: { nodeAddress },
+        form: { nodeAddress, bondedAmount: bondedAmount.toString() },
       },
     })
   }
