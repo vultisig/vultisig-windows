@@ -167,8 +167,11 @@ export const UnbondForm = ({
 
       <StackedField
         isOpen={activeSection === 'amount'}
+        style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
         renderOpen={() => (
-          <ActionInputContainer>
+          <ActionInputContainer
+            style={{ flex: 1, display: 'flex', flexDirection: 'column' }}
+          >
             <InputLabel weight="600" size={16}>
               {t('amount')}
             </InputLabel>
