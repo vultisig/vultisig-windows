@@ -1343,6 +1343,8 @@ export const es = {
   wrong_vault_try_again: 'Dispositivo de emparejamiento o bóveda incorrecto.',
   you_are_bonding: 'Estás haciendo bond',
   you_are_sending: 'Estás enviando',
+  you_are_staking: 'Estás haciendo stake',
+  you_are_unstaking: 'Estás haciendo unstake',
   yourVaultShares: 'Su bóveda tiene {{shares}} acciones de bóveda',
   your_friends_referral_code: 'Código de referencia de tus amigos',
   your_referral_code: 'Su código de referencia',
