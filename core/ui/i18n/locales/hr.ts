@@ -952,7 +952,7 @@ export const hr = {
   liquidity_pools: 'Likvidnosni bazeni',
   locked_in_defi: 'Zaključano u DeFi',
   total_bonded: 'Ukupno vezano {{ticker}}',
-  active_nodes: 'ActiveNodes',
+  active_nodes: 'Aktivni Čvorovi',
   no_active_nodes: 'Nema aktivnih čvorova',
   available_nodes: 'Available Nodes',
   no_available_nodes: 'Nema dostupnih čvorova',

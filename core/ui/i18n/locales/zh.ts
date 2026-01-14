@@ -881,7 +881,7 @@ export const zh = {
   liquidity_pools: '流动性池',
   locked_in_defi: '锁定在DeFi中',
   total_bonded: '总绑定 {{ticker}}',
-  active_nodes: 'ActiveNodes',
+  active_nodes: '活跃节点',
   no_active_nodes: '暂无活跃节点',
   available_nodes: 'Available Nodes',
   no_available_nodes: '暂无可用节点',
