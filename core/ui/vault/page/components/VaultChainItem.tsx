@@ -4,10 +4,13 @@ import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
+import { useHandleVaultChainItemPress } from '@core/ui/vault/page/components/useHandleVaultChainItemPress'
+import { VaultAddressCopyToast } from '@core/ui/vault/page/components/VaultAddressCopyToast'
 import { VaultChainBalance } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
 import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { SquareBehindSquare6Icon } from '@lib/ui/icons/SquareBehindSquare6Icon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
@@ -20,10 +23,6 @@ import { formatAmount } from '@lib/utils/formatAmount'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { useHandleVaultChainItemPress } from './useHandleVaultChainItemPress'
-import { VaultAddressCopyButton } from './VaultAddressCopyButton'
-import { VaultAddressCopyToast } from './VaultAddressCopyToast'
 
 type VaultChainItemProps = {
   balance: VaultChainBalance
@@ -45,18 +44,20 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
   const { t } = useTranslation()
   const { addToast } = useToast()
 
-  const handleCopyAddress = (e: React.MouseEvent | React.KeyboardEvent) => {
+  const handleCopyAddress = async (
+    e: React.MouseEvent | React.KeyboardEvent
+  ) => {
     e.stopPropagation()
     e.preventDefault()
 
-    const result = attempt(() => navigator.clipboard.writeText(address))
+    try {
+      await attempt(() => navigator.clipboard.writeText(address))
 
-    if ('data' in result) {
       addToast({
         message: '',
         renderContent: () => <VaultAddressCopyToast value={chain} />,
       })
-    } else {
+    } catch {
       addToast({
         message: t('failed_to_copy_address'),
       })
@@ -113,12 +114,7 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
                 <Text weight={500} color="shy" size={12}>
                   {formatWalletAddress(address)}
                 </Text>
-                <VaultAddressCopyButton
-                  value={{
-                    address,
-                    chain,
-                  }}
-                />
+                <SquareBehindSquare6Icon />
               </AddressRow>
             </VStack>
             <HStack gap={8} alignItems="center">
