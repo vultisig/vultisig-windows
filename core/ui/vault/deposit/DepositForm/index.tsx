@@ -120,6 +120,7 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
       />
       <FormComponent
         as="form"
+        flexGrow
         gap={40}
         onSubmit={handleSubmit(handleFormSubmit)}
       >
