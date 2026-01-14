@@ -21,7 +21,7 @@ import {
 } from '../utils/parsers'
 
 // Set to true to use mock bonded positions for testing
-const useMockBondPositions = true
+const useMockBondPositions = false
 
 const runeDecimalFactor = toDecimalFactor(runeCoin.decimals)
 
