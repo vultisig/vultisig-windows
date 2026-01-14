@@ -250,7 +250,9 @@ export const BondedPositions = () => {
                     onBond={() =>
                       navigateToBond({ nodeAddress: position.nodeAddress })
                     }
-                    onUnbond={() => navigateToUnbond(position.nodeAddress)}
+                    onUnbond={() =>
+                      navigateToUnbond(position.nodeAddress, position.amount)
+                    }
                     canUnbond={canUnbond}
                     fiatValue={position.fiatValue}
                     isBondingDisabled={isBondingDisabled}
