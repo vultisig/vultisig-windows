@@ -5,7 +5,6 @@ import {
   formatDateShort,
   formatStatusLabel,
 } from '@core/ui/defi/shared/formatters'
-import { Button } from '@lib/ui/buttons/Button'
 import { CalendarIcon } from '@lib/ui/icons/CalendarIcon'
 import { LinkIcon } from '@lib/ui/icons/LinkIcon'
 import { PercentIcon } from '@lib/ui/icons/PercentIcon'
@@ -16,9 +15,9 @@ import { getColor } from '@lib/ui/theme/getters'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { formatAmount } from '@lib/utils/formatAmount'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
-import { CSSProperties, ReactNode } from 'react'
+import { ButtonHTMLAttributes, CSSProperties, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 type Props = {
   coin: Coin
@@ -58,6 +57,68 @@ const InfoIcon = styled.div`
 const ButtonRow = styled(HStack)`
   gap: 12px;
   flex-wrap: wrap;
+`
+
+const ActionButton = styled.button.attrs({ type: 'button' })<
+  ButtonHTMLAttributes<HTMLButtonElement> & {
+    variant: 'primary' | 'secondary'
+  }
+>`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 999px;
+  height: 48px;
+  padding: 0 26px;
+  font-size: 16px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  color: ${getColor('contrast')};
+
+  ${({ variant }) =>
+    variant === 'primary'
+      ? css`
+          background: ${getColor('buttonPrimary')};
+          box-shadow: 0px 8px 24px rgba(31, 39, 61, 0.35);
+        `
+      : css`
+          background: rgba(11, 19, 38, 0.95);
+          border-color: ${getColor('buttonPrimary')};
+        `}
+
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      opacity: 0.4;
+      cursor: default;
+    `}
+`
+
+const ActionIcon = styled.span<{ variant: 'primary' | 'secondary' }>`
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  margin-left: -12px;
+  color: ${getColor('contrast')};
+  ${({ variant }) =>
+    variant === 'primary'
+      ? css`
+          background: rgba(255, 255, 255, 0.2);
+        `
+      : css`
+          background: rgba(255, 255, 255, 0.12);
+        `}
 `
 
 export const BondNodeItem = ({
@@ -110,7 +171,7 @@ export const BondNodeItem = ({
     )
 
   return (
-    <VStack gap={12}>
+    <VStack gap={14}>
       {/* Node Address Header */}
       <HStack justifyContent="space-between" alignItems="center">
         <HStack gap={4} alignItems="center">
@@ -192,27 +253,31 @@ export const BondNodeItem = ({
       {/* Action Buttons */}
       <ButtonRow>
         {renderAction(
-          <Button
-            kind="secondary"
+          <ActionButton
+            variant="secondary"
             onClick={onUnbond}
             disabled={unbondDisabled}
-            icon={<RefreshCwIcon />}
             style={{ flex: 1 }}
           >
+            <ActionIcon variant="secondary">
+              <RefreshCwIcon />
+            </ActionIcon>
             {t('unbond')}
-          </Button>,
+          </ActionButton>,
           { flex: 1 }
         )}
         {renderAction(
-          <Button
-            kind="primary"
+          <ActionButton
+            variant="primary"
             onClick={onBond}
-            icon={<LinkIcon />}
-            style={{ flex: 1 }}
             disabled={bondDisabled}
+            style={{ flex: 1 }}
           >
+            <ActionIcon variant="primary">
+              <LinkIcon />
+            </ActionIcon>
             {t('bond')}
-          </Button>,
+          </ActionButton>,
           { flex: 1 }
         )}
       </ButtonRow>
