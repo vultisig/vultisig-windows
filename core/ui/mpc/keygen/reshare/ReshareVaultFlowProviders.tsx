@@ -17,6 +17,7 @@ import { MpcPeersSelectionProvider } from '../../state/mpcSelectedPeers'
 import { MpcServerTypeProvider } from '../../state/mpcServerType'
 import { GeneratedMpcServiceNameProvider } from '../../state/mpcServiceName'
 import { ServerUrlDerivedFromServerTypeProvider } from '../../state/serverUrlDerivedFromServerType'
+import { KeyImportChainsProvider } from '../keyimport/state/keyImportChains'
 import { CurrentKeygenVaultProvider } from '../state/keygenVault'
 import { DklsInboundSequenceNoProvider } from './state/dklsInboundSequenceNo'
 
@@ -81,9 +82,11 @@ export const ReshareVaultFlowProviders = ({
                   <CurrentVaultHexChainCodeProvider>
                     <IsInitiatingDeviceProvider value={true}>
                       <GeneratedMpcServiceNameProvider>
-                        <MpcPeersSelectionProvider>
-                          {children}
-                        </MpcPeersSelectionProvider>
+                        <KeyImportChainsProvider value={[]}>
+                          <MpcPeersSelectionProvider>
+                            {children}
+                          </MpcPeersSelectionProvider>
+                        </KeyImportChainsProvider>
                       </GeneratedMpcServiceNameProvider>
                     </IsInitiatingDeviceProvider>
                   </CurrentVaultHexChainCodeProvider>

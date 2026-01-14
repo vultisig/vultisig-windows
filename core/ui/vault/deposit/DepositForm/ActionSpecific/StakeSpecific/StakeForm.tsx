@@ -102,13 +102,13 @@ export const StakeForm = ({
       : undefined
 
   return (
-    <VStack gap={16}>
+    <VStack flexGrow gap={16}>
       <ActionInputContainer>
         <InputLabel weight="600" size={16}>
           {t('amount')}
         </InputLabel>
         <ActionFieldDivider />
-        <VStack gap={12}>
+        <VStack gap={12} flexGrow>
           <ActionAmountInputSurface>
             <Controller
               control={control}

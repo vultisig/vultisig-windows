@@ -2,10 +2,11 @@ import { vStack } from '@lib/ui/layout/Stack'
 import styled from 'styled-components'
 
 export const ActionAmountInputSurface = styled.div`
-  height: 170px;
+  min-height: 100px;
   ${vStack({
     justifyContent: 'center',
     alignItems: 'center',
+    flexGrow: true,
   })}
 
   * > input {

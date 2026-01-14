@@ -969,7 +969,7 @@ export const de = {
   liquidity_pools: 'Liquiditätspools',
   locked_in_defi: 'In DeFi gesperrt',
   total_bonded: 'Gesamt gebunden {{ticker}}',
-  active_nodes: 'ActiveNodes',
+  active_nodes: 'Aktive Nodes',
   no_active_nodes: 'Keine aktiven Nodes',
   available_nodes: 'Available Nodes',
   no_available_nodes: 'Keine verfügbaren Nodes',
