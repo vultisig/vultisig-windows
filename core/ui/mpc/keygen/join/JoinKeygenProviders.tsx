@@ -7,6 +7,7 @@ import { MpcSessionIdProvider } from '@core/ui/mpc/state/mpcSession'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ChildrenProp } from '@lib/ui/props'
 
+import { KeyImportChainsProvider } from '../keyimport/state/keyImportChains'
 import { JoinKeygenVaultProvider } from './state/keygenVault'
 
 export const JoinKeygenProviders = ({ children }: ChildrenProp) => {
@@ -17,6 +18,8 @@ export const JoinKeygenProviders = ({ children }: ChildrenProp) => {
 
   const serverType = useVultisigRelay ? 'relay' : 'local'
 
+  const keyImportChains = 'chains' in keygenMsg ? keygenMsg.chains : []
+
   return (
     <IsInitiatingDeviceProvider value={false}>
       <MpcServiceNameProvider value={serviceName}>
@@ -24,7 +27,9 @@ export const JoinKeygenProviders = ({ children }: ChildrenProp) => {
           <MpcSessionIdProvider value={sessionId}>
             <KeygenOperationProvider value={keygenOperation}>
               <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
-                <JoinKeygenVaultProvider>{children}</JoinKeygenVaultProvider>
+                <KeyImportChainsProvider value={keyImportChains}>
+                  <JoinKeygenVaultProvider>{children}</JoinKeygenVaultProvider>
+                </KeyImportChainsProvider>
               </CurrentHexEncryptionKeyProvider>
             </KeygenOperationProvider>
           </MpcSessionIdProvider>

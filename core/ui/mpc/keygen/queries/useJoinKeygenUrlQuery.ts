@@ -24,8 +24,10 @@ import { addQueryParams } from '@lib/utils/query/addQueryParams'
 import { useCallback } from 'react'
 
 import { useCore } from '../../../state/core'
+import { useKeyImportChains } from '../keyimport/state/keyImportChains'
 
 export const useJoinKeygenUrlQuery = () => {
+  const keyImportChains = useKeyImportChains()
   const sessionId = useMpcSessionId()
   const [serverType] = useMpcServerType()
   const serviceName = useMpcServiceName()
@@ -89,6 +91,7 @@ export const useJoinKeygenUrlQuery = () => {
                 useVultisigRelay,
                 vaultName,
                 libType,
+                chains: keyImportChains,
               })
               return toBinary(KeygenMessageSchema, message)
             },
@@ -110,6 +113,7 @@ export const useJoinKeygenUrlQuery = () => {
         hexEncryptionKey,
         keygenOperation,
         keygenVault,
+        keyImportChains,
         serverType,
         serviceName,
         sessionId,
