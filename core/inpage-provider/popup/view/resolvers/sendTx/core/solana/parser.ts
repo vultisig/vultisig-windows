@@ -48,7 +48,6 @@ export const parseSolanaTx = async ({
   )
   if (!encodedTx) throw new Error('Could not encode transaction')
   const decodedTx = TW.Solana.Proto.DecodingTransactionOutput.decode(encodedTx)
-
   if (!decodedTx.transaction)
     throw new Error('Invalid Solana transaction: missing v0 transaction data')
 
@@ -128,6 +127,7 @@ export const parseSolanaTx = async ({
         outputCoin,
         data,
         swapProvider,
+        rawMessageData: data,
       },
     }
   })
@@ -135,7 +135,7 @@ export const parseSolanaTx = async ({
   if (parsedSimulation) {
     return parsedSimulation
   }
-  const { data: parsedTx, error } = await attempt(
+  const { data: parsedTx } = await attempt(
     parseProgramCall({
       tx,
       keys,
@@ -145,8 +145,32 @@ export const parseSolanaTx = async ({
     })
   )
 
-  if (!error && parsedTx) {
-    return parsedTx
+  if (parsedTx && 'transfer' in parsedTx) {
+    return {
+      transfer: {
+        ...parsedTx.transfer,
+        rawMessageData: data,
+      },
+    }
   }
-  throw new Error('failed to parse transaction')
+
+  if (parsedTx && 'swap' in parsedTx) {
+    return {
+      swap: {
+        ...parsedTx.swap,
+        rawMessageData: data,
+      },
+    }
+  }
+
+  const solanaFeeCoin = await getCoin({ chain: Chain.Solana })
+  return {
+    transfer: {
+      authority: fromCoin.address,
+      inputCoin: solanaFeeCoin,
+      inAmount: '0',
+      receiverAddress: '',
+      rawMessageData: data,
+    },
+  }
 }
