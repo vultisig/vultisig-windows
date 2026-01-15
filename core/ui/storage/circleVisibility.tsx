@@ -2,8 +2,10 @@ import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
+import { circleChain } from '../defi/protocols/circle/core/config'
 import { featureFlags } from '../featureFlags'
 import { useCore } from '../state/core'
+import { useAvailableChains } from '../vault/state/useAvailableChains'
 import { StorageKey } from './StorageKey'
 
 export const isCircleInitiallyVisible = true
@@ -34,6 +36,12 @@ export const useIsCircleVisible = () => {
   }
 
   return data ?? isCircleInitiallyVisible
+}
+
+export const useIsCircleIncluded = () => {
+  const isCircleVisible = useIsCircleVisible()
+  const availableChains = useAvailableChains()
+  return isCircleVisible && availableChains.includes(circleChain)
 }
 
 export const useToggleCircleVisibility = () => {

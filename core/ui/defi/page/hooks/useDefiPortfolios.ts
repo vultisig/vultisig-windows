@@ -1,5 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { featureFlags } from '@core/ui/featureFlags'
+import { useIsCircleIncluded } from '@core/ui/storage/circleVisibility'
 import { sum } from '@lib/utils/array/sum'
 import { useMemo } from 'react'
 
@@ -86,6 +87,7 @@ export const useDefiChainPortfolios = () => {
 
 export const useDefiPortfolioBalance = () => {
   const portfolios = useDefiChainPortfolios()
+  const isCircleIncluded = useIsCircleIncluded()
   const circleFiatBalanceQuery = useCircleAccountUsdcFiatBalanceQuery()
 
   const total = useMemo(() => {
@@ -97,12 +99,17 @@ export const useDefiPortfolioBalance = () => {
       portfolios.data.map(portfolio => portfolio.totalFiat)
     )
 
-    return chainTotal + (circleFiatBalanceQuery.data ?? 0)
+    const circleTotal = isCircleIncluded
+      ? (circleFiatBalanceQuery.data ?? 0)
+      : 0
+
+    return chainTotal + circleTotal
   }, [
     portfolios.data,
     portfolios.isPending,
     circleFiatBalanceQuery.data,
     circleFiatBalanceQuery.isPending,
+    isCircleIncluded,
   ])
 
   return {
