@@ -70,6 +70,7 @@ export class VultisigTronWebTrx extends Trx {
                   ? transaction.raw_data.fee_limit.toString()
                   : undefined,
               },
+              skipBroadcast: true,
             } as TransactionDetails
           },
           TriggerSmartContract: async () => {
@@ -119,6 +120,7 @@ export class VultisigTronWebTrx extends Trx {
                   ? transaction.raw_data.fee_limit.toString()
                   : undefined,
               },
+              skipBroadcast: true,
             } as TransactionDetails
           },
           TransferAssetContract: async () => {
@@ -173,6 +175,7 @@ export class VultisigTronWebTrx extends Trx {
                   ? transaction.raw_data.fee_limit.toString()
                   : undefined,
               },
+              skipBroadcast: true,
             } as TransactionDetails
           },
         })
