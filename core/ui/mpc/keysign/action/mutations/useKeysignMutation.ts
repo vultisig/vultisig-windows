@@ -116,14 +116,18 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
 
             return { txs }
           },
-          custom: async ({ message, chain = customMessageDefaultChain }) => {
+          custom: async ({
+            method,
+            message,
+            chain = customMessageDefaultChain,
+          }) => {
             if (!isOneOf(chain, customMessageSupportedChains)) {
               throw new Error(`Unsupported chain ${chain}`)
             }
 
             const chainKind = getChainKind(chain)
 
-            const hexMessage = getCustomMessageHex({ chain, message })
+            const hexMessage = getCustomMessageHex({ chain, message, method })
 
             const [signature] = await keysignAction({
               msgs: [hexMessage],
