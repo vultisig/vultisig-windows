@@ -387,6 +387,13 @@ export const de = {
     staked: 'Staked',
     lps: 'LPs',
   },
+  vaultTabs: {
+    portfolio: 'Portfolio',
+    nft: 'NFT',
+  },
+  vaultChainTabs: {
+    tokens: 'Token',
+  },
   delete: 'Löschen',
   delete_folder: 'Ordner löschen',
   delete_folder_confirmation:
@@ -451,6 +458,7 @@ export const de = {
   enter_new_passcode: 'Geben Sie einen neuen Passcode ein.',
   enter_passcode: 'Passcode eingeben',
   enter_password: 'Passwort eingeben',
+  enter_number_placeholder: 'Zahl eingeben',
   enter_percentage: 'Prozentsatz eingeben',
   enter_referral_code_placeholder: 'Empfehlungscode eingeben',
   enter_up_to_4_characters_placeholder: 'Geben Sie bis zu 4 Zeichen ein',
@@ -465,6 +473,7 @@ export const de = {
   expiration_date: 'Verfallsdatum',
   expiration_must_extend_by_exactly_one_year:
     'Die Gültigkeit kann nur um genau 1 Jahr verlängert werden.',
+  expiration_must_be_greater: 'Ablauf muss größer als {{value}} sein',
   expires_on: 'Läuft ab am',
   extension_vault_import_restriction:
     'Nur DKLS-Tresore können in die Erweiterung importiert werden.',
@@ -490,6 +499,7 @@ export const de = {
   failed_to_join_session: 'Beitritt zur Sitzung fehlgeschlagen.',
   failed_to_load: 'Fehler beim Laden',
   failed_to_migrate_storage: 'Speichermigration fehlgeschlagen',
+  storage_load_error: 'Fehler beim Laden wichtiger Daten aus dem Speicher',
   failed_to_process_transaction: 'Transaktion konnte nicht verarbeitet werden',
   failed_to_process_url: 'URL konnte nicht verarbeitet werden',
   failed_to_read_qr_code: 'QR-Code konnte nicht gelesen werden',
@@ -959,7 +969,7 @@ export const de = {
   liquidity_pools: 'Liquiditätspools',
   locked_in_defi: 'In DeFi gesperrt',
   total_bonded: 'Gesamt gebunden {{ticker}}',
-  active_nodes: 'ActiveNodes',
+  active_nodes: 'Aktive Nodes',
   no_active_nodes: 'Keine aktiven Nodes',
   available_nodes: 'Available Nodes',
   no_available_nodes: 'Keine verfügbaren Nodes',
@@ -1330,6 +1340,8 @@ export const de = {
   wrong_vault_try_again: 'Falscher Tresor oder falsches Gerät gekoppelt.',
   you_are_bonding: 'Du bondest',
   you_are_sending: 'Du sendest',
+  you_are_staking: 'Du stakest',
+  you_are_unstaking: 'Du entstakest',
   yourVaultShares: 'Ihr Tresor enthält {{shares}} Tresoranteile',
   your_friends_referral_code: 'Der Empfehlungscode deines Freundes',
   your_referral_code: 'Ihr Empfehlungscode',

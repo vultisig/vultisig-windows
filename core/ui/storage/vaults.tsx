@@ -1,6 +1,6 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
-import { getVaultId, Vault, VaultKeyShares } from '@core/mpc/vault/Vault'
+import { getVaultId, Vault, VaultAllKeyShares } from '@core/mpc/vault/Vault'
 import { useCore } from '@core/ui/state/core'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
@@ -29,7 +29,7 @@ type GetVaultsFunction = () => Promise<Vault[]>
 type DeleteVaultFunction = (vaultId: string) => Promise<void>
 
 type UpdateVaultsKeyShares = (
-  value: Record<string, VaultKeyShares>
+  value: Record<string, VaultAllKeyShares>
 ) => Promise<void>
 
 export type VaultsStorage = {

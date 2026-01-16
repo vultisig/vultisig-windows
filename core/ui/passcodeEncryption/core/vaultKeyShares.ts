@@ -1,4 +1,4 @@
-import { VaultKeyShares } from '@core/mpc/vault/Vault'
+import { VaultAllKeyShares, VaultKeyShares } from '@core/mpc/vault/Vault'
 import { decryptWithAesGcm } from '@lib/utils/encryption/aesGcm/decryptWithAesGcm'
 import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGcm'
 import {
@@ -12,7 +12,7 @@ type Input = {
   key: string
 }
 
-export const encryptVaultKeyShares = ({ keyShares, key }: Input) =>
+const encryptVaultKeyShares = ({ keyShares, key }: Input) =>
   recordMap(keyShares, value =>
     encryptWithAesGcm({
       key,
@@ -20,10 +20,44 @@ export const encryptVaultKeyShares = ({ keyShares, key }: Input) =>
     }).toString(encryptedEncoding)
   )
 
-export const decryptVaultKeyShares = ({ keyShares, key }: Input) =>
+const decryptVaultKeyShares = ({ keyShares, key }: Input) =>
   recordMap(keyShares, value =>
     decryptWithAesGcm({
       key,
       value: Buffer.from(value, encryptedEncoding),
     }).toString(plainTextEncoding)
   )
+
+type EncryptInput = VaultAllKeyShares & { key: string }
+
+export const encryptVaultAllKeyShares = ({
+  keyShares,
+  chainKeyShares,
+  key,
+}: EncryptInput): VaultAllKeyShares => ({
+  keyShares: encryptVaultKeyShares({ keyShares, key }),
+  chainKeyShares: chainKeyShares
+    ? recordMap(chainKeyShares, value =>
+        encryptWithAesGcm({
+          key,
+          value: Buffer.from(value, plainTextEncoding),
+        }).toString(encryptedEncoding)
+      )
+    : undefined,
+})
+
+export const decryptVaultAllKeyShares = ({
+  keyShares,
+  chainKeyShares,
+  key,
+}: EncryptInput): VaultAllKeyShares => ({
+  keyShares: decryptVaultKeyShares({ keyShares, key }),
+  chainKeyShares: chainKeyShares
+    ? recordMap(chainKeyShares, value =>
+        decryptWithAesGcm({
+          key,
+          value: Buffer.from(value, encryptedEncoding),
+        }).toString(plainTextEncoding)
+      )
+    : undefined,
+})

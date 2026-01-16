@@ -1,8 +1,8 @@
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { encryptSample } from '@core/ui/passcodeEncryption/core/sample'
 import {
-  decryptVaultKeyShares,
-  encryptVaultKeyShares,
+  decryptVaultAllKeyShares,
+  encryptVaultAllKeyShares,
 } from '@core/ui/passcodeEncryption/core/vaultKeyShares'
 import { usePasscode } from '@core/ui/passcodeEncryption/state/passcode'
 import { useCore } from '@core/ui/state/core'
@@ -33,14 +33,15 @@ export const useChangePasscodeMutation = () => {
 
       const vaultsKeyShares = recordMap(
         recordFromItems(vaults, getVaultId),
-        ({ keyShares }) => {
-          const decryptedKeyShares = decryptVaultKeyShares({
+        ({ keyShares, chainKeyShares }) => {
+          const decrypted = decryptVaultAllKeyShares({
             key,
             keyShares,
+            chainKeyShares,
           })
-          return encryptVaultKeyShares({
+          return encryptVaultAllKeyShares({
+            ...decrypted,
             key: newPasscode,
-            keyShares: decryptedKeyShares,
           })
         }
       )

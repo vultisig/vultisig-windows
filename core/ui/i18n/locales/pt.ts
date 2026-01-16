@@ -383,6 +383,13 @@ export const pt = {
     staked: 'Staked',
     lps: 'LPs',
   },
+  vaultTabs: {
+    portfolio: 'Portfólio',
+    nft: 'NFT',
+  },
+  vaultChainTabs: {
+    tokens: 'Tokens',
+  },
   delete: 'Excluir',
   delete_folder: 'Excluir pasta',
   delete_folder_confirmation:
@@ -446,6 +453,7 @@ export const pt = {
   enter_new_passcode: 'Digite o novo código de acesso',
   enter_passcode: 'Digite a senha',
   enter_password: 'Digite a senha',
+  enter_number_placeholder: 'Digite um número',
   enter_percentage: 'Insira a porcentagem',
   enter_referral_code_placeholder: 'Insira o código de indicação',
   enter_up_to_4_characters_placeholder: 'Digite até 4 caracteres',
@@ -459,6 +467,7 @@ export const pt = {
   expiration_date: 'Data de validade',
   expiration_must_extend_by_exactly_one_year:
     'A validade só pode ser prorrogada por exatamente 1 ano.',
+  expiration_must_be_greater: 'A expiração deve ser maior que {{value}}',
   expires_on: 'Expira em',
   extension_vault_import_restriction:
     'Somente cofres DKLS podem ser importados na extensão.',
@@ -484,6 +493,7 @@ export const pt = {
   failed_to_join_session: 'Não foi possível entrar na sessão.',
   failed_to_load: 'Falha ao carregar',
   failed_to_migrate_storage: 'Falha ao migrar o armazenamento',
+  storage_load_error: 'Falha ao carregar dados essenciais do armazenamento',
   failed_to_process_transaction: 'Falha ao processar a transação',
   failed_to_process_url: 'Falha ao processar o URL',
   failed_to_read_qr_code: 'Falha ao ler o código QR',
@@ -950,7 +960,7 @@ export const pt = {
   liquidity_pools: 'Pools de liquidez',
   locked_in_defi: 'Bloqueado em DeFi',
   total_bonded: 'Total vinculado {{ticker}}',
-  active_nodes: 'ActiveNodes',
+  active_nodes: 'Nós Ativos',
   no_active_nodes: 'Nenhum nó ativo',
   available_nodes: 'Available Nodes',
   no_available_nodes: 'Nenhum nó disponível',
@@ -1323,6 +1333,8 @@ export const pt = {
   wrong_vault_try_again: 'Cofre ou dispositivo de emparelhamento incorretos.',
   you_are_bonding: 'Você está bondando',
   you_are_sending: 'Você está enviando',
+  you_are_staking: 'Você está stakando',
+  you_are_unstaking: 'Você está desfazendo stake',
   yourVaultShares: 'Seu cofre possui {{shares}} ações do cofre.',
   your_friends_referral_code: 'Código de indicação do seu amigo',
   your_referral_code: 'Seu código de indicação',

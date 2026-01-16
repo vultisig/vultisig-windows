@@ -1,12 +1,12 @@
 import { vStack } from '@lib/ui/layout/Stack'
-import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
 export const ActionAmountInputSurface = styled.div`
-  height: 170px;
+  min-height: 100px;
   ${vStack({
     justifyContent: 'center',
     alignItems: 'center',
+    flexGrow: true,
   })}
 
   * > input {
@@ -15,14 +15,9 @@ export const ActionAmountInputSurface = styled.div`
     background-color: transparent;
     border: none;
 
-    &:focus-visible {
-      outline: 2px solid ${getColor('primary')};
-      outline-offset: 6px;
-    }
-
+    &:focus,
     &:hover {
-      outline: 2px solid ${getColor('mist')};
-      outline-offset: 6px;
+      outline: none;
     }
 
     &::placeholder {

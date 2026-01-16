@@ -1,6 +1,7 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useAvailableChains } from '@core/ui/vault/state/useAvailableChains'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -16,7 +17,14 @@ import { SearchInput } from './shared/SearchInput'
 export const ManageVaultChainsPage = () => {
   const { t } = useTranslation()
   const [search, setSearch] = useState('')
-  const nativeCoins = Object.values(chainFeeCoin)
+  const availableChains = useAvailableChains()
+  const nativeCoins = useMemo(
+    () =>
+      Object.values(chainFeeCoin).filter(coin =>
+        availableChains.includes(coin.chain)
+      ),
+    [availableChains]
+  )
   const navigate = useCoreNavigate()
 
   const sortedNativeCoins = useMemo(() => {

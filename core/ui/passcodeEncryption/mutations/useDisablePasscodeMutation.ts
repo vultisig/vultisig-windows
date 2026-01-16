@@ -1,5 +1,5 @@
 import { getVaultId } from '@core/mpc/vault/Vault'
-import { decryptVaultKeyShares } from '@core/ui/passcodeEncryption/core/vaultKeyShares'
+import { decryptVaultAllKeyShares } from '@core/ui/passcodeEncryption/core/vaultKeyShares'
 import { usePasscode } from '@core/ui/passcodeEncryption/state/passcode'
 import { useCore } from '@core/ui/state/core'
 import { StorageKey } from '@core/ui/storage/StorageKey'
@@ -22,7 +22,8 @@ export const useDisablePasscodeMutation = () => {
 
       const vaultsKeyShares = recordMap(
         recordFromItems(vaults, getVaultId),
-        ({ keyShares }) => decryptVaultKeyShares({ key, keyShares })
+        ({ keyShares, chainKeyShares }) =>
+          decryptVaultAllKeyShares({ key, keyShares, chainKeyShares })
       )
 
       await updateVaultsKeyShares(vaultsKeyShares)

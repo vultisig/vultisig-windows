@@ -390,6 +390,13 @@ export const it = {
     staked: 'Staked',
     lps: 'LPs',
   },
+  vaultTabs: {
+    portfolio: 'Portafoglio',
+    nft: 'NFT',
+  },
+  vaultChainTabs: {
+    tokens: 'Token',
+  },
   delete: 'Eliminare',
   delete_folder: 'Elimina cartella',
   delete_folder_confirmation:
@@ -455,6 +462,7 @@ export const it = {
   enter_new_passcode: 'Inserisci il nuovo codice di accesso',
   enter_passcode: 'Inserisci il codice di accesso',
   enter_password: 'Inserisci la password',
+  enter_number_placeholder: 'Inserisci un numero',
   enter_percentage: 'Inserisci la percentuale',
   enter_referral_code_placeholder: 'Inserisci il codice di riferimento',
   enter_up_to_4_characters_placeholder: 'Inserisci fino a 4 caratteri',
@@ -468,6 +476,7 @@ export const it = {
   expiration_date: 'Data di scadenza',
   expiration_must_extend_by_exactly_one_year:
     'La scadenza può essere estesa solo di 1 anno esatto',
+  expiration_must_be_greater: 'La scadenza deve essere maggiore di {{value}}',
   expires_on: 'Scade il',
   extension_vault_import_restriction:
     "Solo i vault DKLS possono essere importati nell'estensione",
@@ -491,6 +500,7 @@ export const it = {
   failed_to_join_session: 'Impossibile partecipare alla sessione',
   failed_to_load: 'Caricamento non riuscito',
   failed_to_migrate_storage: "Impossibile migrare l'archiviazione",
+  storage_load_error: 'Impossibile caricare i dati essenziali dallo storage',
   failed_to_process_transaction: 'Impossibile elaborare la transazione',
   failed_to_process_url: "Impossibile elaborare l'URL",
   failed_to_read_qr_code: 'Impossibile leggere il codice QR',
@@ -953,7 +963,7 @@ export const it = {
   liquidity_pools: 'Pool di liquidità',
   locked_in_defi: 'Bloccato in DeFi',
   total_bonded: 'Totale in bond {{ticker}}',
-  active_nodes: 'ActiveNodes',
+  active_nodes: 'Nodi Attivi',
   no_active_nodes: 'Nessun nodo attivo',
   available_nodes: 'Available Nodes',
   no_available_nodes: 'Nessun nodo disponibile',
@@ -1326,6 +1336,8 @@ export const it = {
   wrong_vault_try_again: 'Vault o dispositivo di associazione errati.',
   you_are_bonding: 'Stai facendo bond',
   you_are_sending: 'Stai inviando',
+  you_are_staking: 'Stai facendo stake',
+  you_are_unstaking: 'Stai facendo unstake',
   yourVaultShares: 'Il tuo vault ha {{shares}} condivisioni Vault',
   your_friends_referral_code: 'Codice di riferimento dei tuoi amici',
   your_referral_code: 'Il tuo codice di riferimento',
