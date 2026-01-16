@@ -1,3 +1,4 @@
+import { featureFlags } from '@core/ui/featureFlags'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
@@ -18,7 +19,9 @@ export const CircleContent = () => {
       </Text>
       <InfoBanner />
       <CircleDepositedPanel />
-      {accountQuery.data && <CircleYieldDetails />}
+      {featureFlags.circleYieldDetails && accountQuery.data && (
+        <CircleYieldDetails />
+      )}
     </VStack>
   )
 }

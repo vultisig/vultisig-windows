@@ -1,5 +1,6 @@
 export const featureFlags = {
   circle: false,
+  circleYieldDetails: false,
   defiEnabled: true,
   mayaChainDefi: false,
   defiLpTab: true,

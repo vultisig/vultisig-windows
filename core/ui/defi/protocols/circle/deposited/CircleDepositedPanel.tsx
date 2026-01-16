@@ -1,5 +1,7 @@
 import { usdc } from '@core/chain/coin/knownTokens'
+import { featureFlags } from '@core/ui/featureFlags'
 import { Button } from '@lib/ui/buttons/Button'
+import { UniformColumnGrid } from '@lib/ui/css/uniformColumnGrid'
 import { LineSeparator } from '@lib/ui/layout/LineSeparator'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -46,12 +48,14 @@ export const CircleDepositedPanel = () => {
       </HStack>
       <LineSeparator kind="regular" />
       {circleAccount ? (
-        <VStack gap={8}>
+        <UniformColumnGrid gap={8}>
+          {!featureFlags.circleYieldDetails && hasBalance && (
+            <CircleWithdrawButton />
+          )}
           <Button onClick={() => setViewState('deposit')}>
             {t('circle.deposit')} {usdc.ticker}
           </Button>
-          {hasBalance && <CircleWithdrawButton />}
-        </VStack>
+        </UniformColumnGrid>
       ) : (
         <OpenCircleAccount />
       )}
