@@ -1,8 +1,6 @@
 import { fromBinary } from '@bufbuild/protobuf'
-import {
-  CustomMessagePayloadSchema,
-  KeysignPayloadSchema,
-} from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
+import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { getPayloadFromServer } from '@core/ui/mpc/keygen/create/fast/server/utils/getPayloadFromServer'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { decompressQrPayload } from '@core/ui/qr/utils/decompressQrPayload'
