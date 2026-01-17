@@ -5,8 +5,8 @@ import { getSevenZip } from '@core/mpc/compression/getSevenZip'
 import { uploadPayloadToServer } from '@core/mpc/keygen/server/uploadPayloadToServer'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { MpcServerType, mpcServerUrl } from '@core/mpc/MpcServerType'
+import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import {
-  CustomMessagePayloadSchema,
   KeysignMessageSchema,
   KeysignPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
