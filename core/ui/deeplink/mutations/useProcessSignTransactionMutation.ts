@@ -1,5 +1,8 @@
 import { fromBinary } from '@bufbuild/protobuf'
-import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import {
+  CustomMessagePayloadSchema,
+  KeysignPayloadSchema,
+} from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { getPayloadFromServer } from '@core/ui/mpc/keygen/create/fast/server/utils/getPayloadFromServer'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { decompressQrPayload } from '@core/ui/qr/utils/decompressQrPayload'
@@ -31,6 +34,26 @@ export const useProcessSignTransactionMutation = () => {
 
         keysignMsg.payloadId = ''
         keysignMsg.keysignPayload = fromBinary(KeysignPayloadSchema, payload)
+      }
+
+      if (keysignMsg.customPayloadId) {
+        const serverType = keysignMsg.useVultisigRelay ? 'relay' : 'local'
+        const serverUrl = await getMpcServerUrl({
+          serverType,
+          serviceName: keysignMsg.serviceName,
+        })
+
+        const rawPayload = await getPayloadFromServer({
+          hash: keysignMsg.customPayloadId,
+          serverUrl,
+        })
+        const payload = await decompressQrPayload(rawPayload)
+
+        keysignMsg.customPayloadId = ''
+        keysignMsg.customMessagePayload = fromBinary(
+          CustomMessagePayloadSchema,
+          payload
+        )
       }
 
       navigate(
