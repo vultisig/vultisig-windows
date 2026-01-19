@@ -4,14 +4,10 @@ import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
-import { featureFlags } from '../featureFlags'
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'
 
-const supportedDefiChains: Chain[] = [
-  Chain.THORChain,
-  ...(featureFlags.mayaChainDefi ? [Chain.MayaChain] : []),
-]
+const supportedDefiChains: Chain[] = [Chain.THORChain, Chain.MayaChain]
 
 export const initialDefiChains: Chain[] = []
 
