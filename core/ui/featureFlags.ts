@@ -3,4 +3,5 @@ export const featureFlags = {
   circleYieldDetails: false,
   nftTab: false,
   importSeedphrase: false,
+  mayaChain: false,
 }

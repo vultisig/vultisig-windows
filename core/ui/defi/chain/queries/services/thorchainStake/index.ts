@@ -8,7 +8,6 @@ import { thorchainTokens } from '../../tokens'
 import { ThorchainStakePosition } from '../../types'
 import { parseBigint } from '../../utils/parsers'
 import { fetchRujiStakePosition } from './rujiStakeService'
-import { fetchStcyStakePosition } from './stcyStakeService'
 import { fetchTcyStakePosition } from './tcyStakeService'
 
 const getBalanceByDenom = (address: string, denom: string) =>
@@ -62,9 +61,10 @@ export const fetchStakePositions = async ({
   address,
   prices,
 }: FetchStakePositionsInput) => {
-  const [tcy, stcy, ruji, yRune, yTcy] = await Promise.all([
+  // Note: sTCY is no longer fetched as it's hidden from DeFi UI
+  // Users can still unstake via deposit functions if needed
+  const [tcy, ruji, yRune, yTcy] = await Promise.all([
     fetchTcyStakePosition({ address, prices }),
-    fetchStcyStakePosition({ address, prices }),
     fetchRujiStakePosition({ address, prices }),
     fetchYieldStakePosition({
       address,
@@ -80,7 +80,7 @@ export const fetchStakePositions = async ({
     }),
   ])
 
-  const positions = [tcy, stcy, ruji, yRune, yTcy].filter(
+  const positions = [tcy, ruji, yRune, yTcy].filter(
     (p): p is ThorchainStakePosition => p !== null
   )
   return { positions }
