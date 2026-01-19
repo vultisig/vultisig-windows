@@ -1335,6 +1335,7 @@ export const it = {
   wrong_address_for_chain: 'Indirizzo errato per la catena selezionata',
   wrong_vault_try_again: 'Vault o dispositivo di associazione errati.',
   you_are_bonding: 'Stai facendo bond',
+  you_are_unbonding: 'Stai facendo unbond',
   you_are_sending: 'Stai inviando',
   you_are_staking: 'Stai facendo stake',
   you_are_unstaking: 'Stai facendo unstake',

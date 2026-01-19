@@ -1221,6 +1221,7 @@ export const zh = {
   wrong_address_for_chain: '所选链的地址错误',
   wrong_vault_try_again: '错误的保险库或配对设备。',
   you_are_bonding: '您正在质押',
+  you_are_unbonding: '您正在解除质押',
   you_are_sending: '您正在发送',
   you_are_staking: '您正在质押',
   you_are_unstaking: '您正在取消质押',

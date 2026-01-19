@@ -15,7 +15,7 @@ import { useDepositFormHandlers } from '../../../../../providers/DepositFormHand
 import { useUnstakableStcyQuery } from '../hooks/useUnstakableSTcyQuery'
 
 export const UnstakeSTCY = () => {
-  const [{ setValue, getValues }] = useDepositFormHandlers()
+  const [{ setValue, watch }] = useDepositFormHandlers()
   const { t } = useTranslation()
   const address = useCurrentVaultAddress(Chain.THORChain)
 
@@ -24,8 +24,21 @@ export const UnstakeSTCY = () => {
     options: { enabled: !!address },
   })
 
-  const error =
-    getValues('amount') > humanReadableBalance ? 'Invalid amount' : null
+  // Use watch for reactive updates
+  const percentageValue = watch('percentage')
+  const amountValue = watch('amount')
+
+  const numericPercentage =
+    typeof percentageValue === 'number'
+      ? percentageValue
+      : typeof percentageValue === 'string' && percentageValue !== ''
+        ? Number(percentageValue)
+        : null
+
+  const numericAmount =
+    typeof amountValue === 'number' ? amountValue : Number(amountValue ?? 0)
+
+  const error = numericAmount > humanReadableBalance ? 'Invalid amount' : null
 
   return (
     <InputContainer>
@@ -64,7 +77,7 @@ export const UnstakeSTCY = () => {
             type="number"
             placeholder={t('enter_percentage')}
             shouldBePositive
-            value={getValues('percentage')}
+            value={numericPercentage}
             onValueChange={value => {
               const percentage = value ?? 0
               setValue('percentage', percentage, { shouldValidate: true })

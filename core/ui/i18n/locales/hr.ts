@@ -1313,6 +1313,7 @@ export const hr = {
   wrong_address_for_chain: 'Pogrešna adresa za odabrani lanac',
   wrong_vault_try_again: 'Pogrešan trezor ili upareni uređaj.',
   you_are_bonding: 'Bondate',
+  you_are_unbonding: 'Povlačite bond',
   you_are_sending: 'Šaljete',
   you_are_staking: 'Stakate',
   you_are_unstaking: 'Povlačite stake',

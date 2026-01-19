@@ -17,7 +17,7 @@ import { useDepositFormHandlers } from '../../../../../providers/DepositFormHand
 import { useUnstakableTcyQuery } from '../hooks/useUnstakableTcyQuery'
 
 export const UnstakeTCYNative = () => {
-  const [{ setValue, getValues }] = useDepositFormHandlers()
+  const [{ setValue, watch }] = useDepositFormHandlers()
   const { t } = useTranslation()
   const address = useCurrentVaultAddress(Chain.THORChain)
   const { data: tcyBalance = 0n } = useUnstakableTcyQuery({
@@ -31,6 +31,15 @@ export const UnstakeTCYNative = () => {
   })
   const maxDisplay = fromChainAmount(tcyBalance, decimals)
 
+  // Use watch for reactive updates
+  const percentageValue = watch('percentage')
+  const numericValue =
+    typeof percentageValue === 'number'
+      ? percentageValue
+      : typeof percentageValue === 'string' && percentageValue !== ''
+        ? Number(percentageValue)
+        : null
+
   return (
     <InputContainer>
       <Text size={15}>
@@ -41,12 +50,13 @@ export const UnstakeTCYNative = () => {
         render={() => (
           <AmountTextInput
             placeholder={t('enter_percentage')}
-            value={getValues('percentage')}
-            onChange={e =>
-              setValue('percentage', e.target.value, {
+            value={numericValue}
+            onValueChange={value =>
+              setValue('percentage', value ?? undefined, {
                 shouldValidate: true,
               })
             }
+            shouldBePositive
             suggestion={
               <HStack gap={4}>
                 {[0.25, 0.5, 0.75].map(v => (
@@ -54,7 +64,7 @@ export const UnstakeTCYNative = () => {
                     key={v}
                     value={v}
                     onClick={() =>
-                      setValue('percentage', String(v * 100), {
+                      setValue('percentage', v * 100, {
                         shouldValidate: true,
                       })
                     }
