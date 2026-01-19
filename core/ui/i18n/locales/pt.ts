@@ -12,6 +12,10 @@ export const pt = {
       validations: {
         proposalId: 'É necessário o ID da proposta.',
       },
+      labels: {
+        proposalId: 'ID da proposta',
+        support: 'Apoiar',
+      },
     },
     amountExceeded: 'O valor excede o saldo disponível.',
     default_validation: 'Entrada inválida',
@@ -1037,4 +1041,62 @@ export const pt = {
   select_chains_manually: 'Selecione as correntes manualmente',
   your_seedphrase: 'Sua frase-semente',
   your_seedphrase_subtitle: 'Entre, crie um cofre e nunca mais olhe para trás.',
+  active_chains_found_one: 'Encontramos {{count}} cadeias ativas',
+  active_chains_found_other: 'Encontramos {{count}} cadeias ativas',
+  allowance: 'Mesada',
+  auto: 'auto',
+  backupShare: 'Compartilhamento do cofre de backup',
+  backup_password_info_cannot_be_reset:
+    'Lembre-se: se você esquecer a senha do seu cofre, ela <b>não poderá</b> ser redefinida ou recuperada.',
+  backup_password_info_encrypt_with_password:
+    'Se você optar por adicionar uma senha, ela será usada para criptografar o arquivo de backup.',
+  backup_password_info_secure_without_password:
+    'Por padrão, seu backup é <b>seguro sem</b> uma senha extra, já que você armazena os compartilhamentos do Vault em locais diferentes.',
+  create: 'Criar',
+  device_backup: 'Backup do dispositivo',
+  device_backup_description: 'Armazene a parte do cofre deste dispositivo.',
+  email_backup: 'Insira seu e-mail para receber seu backup.',
+  error: 'ERRO',
+  local: 'Local',
+  low: 'Baixo',
+  minute_one: '{{count}} minuto',
+  minute_other: '{{count}} minutos',
+  normal: 'Normal',
+  off: 'Desligado',
+  on: 'Sobre',
+  onboarding_step_1:
+    'Dê as boas-vindas aos <g>compartilhamentos de cofre</g>, seu novo <g>método de recuperação</g>',
+  onboarding_step_2:
+    'Eles são divididos em partes para aumentar a segurança, eliminando o ponto único de falha.',
+  onboarding_step_3:
+    '<g>Cada dispositivo</g> em seu cofre contém <g>uma participação no cofre</g>',
+  onboarding_step_4:
+    'Recupere seu cofre mesmo se um dispositivo for perdido ou danificado.',
+  onboarding_step_5:
+    '<g>Sempre faça backup de cada compartilhamento do cofre</g> separadamente em um <g>local diferente</g>',
+  onboarding_step_6: 'Essas ações colaboram para <g>desbloquear seu cofre</g>',
+  optional: 'opcional',
+  password_backup: 'Proteja seu cofre e assine rapidamente.',
+  permissions: 'Permissões',
+  prepareVault: 'Preparando o cofre...',
+  remove: 'Remover',
+  compounded_token: 'Composto {{ticker}}',
+  select_n_devices_one: 'Selecione {{count}} dispositivo',
+  select_n_devices_other: 'Selecione {{count}} dispositivos',
+  selected: 'selecionado',
+  server_backup_description:
+    'Solicite novamente o compartilhamento do cofre do servidor.',
+  staked: 'Estacado',
+  start: 'Começar',
+  success: 'Sucesso',
+  title: 'Título',
+  tokens: 'fichas',
+  unlock_discount_tier_description:
+    'Ao manter {{minBalance}}, você desbloqueará o nível {{tier}} e receberá um desconto de <b>{{bps}} bps na taxa de negociação</b> em todos os swaps.',
+  unlock_discount_tier_description_ultimate:
+    'Ao manter {{minBalance}}, você desbloqueará o nível {{tier}} e receberá uma isenção completa da taxa Vultisig em todas as trocas.',
+  vaultOverview: 'Visão geral do cofre',
+  vault_count_one: '{{count}} Cofre',
+  vault_count_other: '{{count}} Cofres',
+  vult: '$VULT',
 }

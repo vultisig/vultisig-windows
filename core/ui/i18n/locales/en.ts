@@ -2,6 +2,8 @@ export const en = {
   accept_continue: 'Accept & continue',
   action: 'Action',
   active: 'Active',
+  active_chains_found_one: 'We found {{count}} active chain',
+  active_chains_found_other: 'We found {{count}} active chains',
   active_chains_warning:
     'Each extra chain increases the time to generate your vault and possibility of an timeout.',
   add_address: 'Add Address',
@@ -27,6 +29,7 @@ export const en = {
   advanced: 'Advanced',
   advanced_gas_fee: 'Advanced gas fee',
   all_vaults: 'All Vaults',
+  allowance: 'Allowance',
   allowance_amount: 'Allowance amount',
   allowance_spender: 'Allowance spender',
   amount: 'Amount',
@@ -48,6 +51,7 @@ export const en = {
   assets: 'assets',
   at_least_one_device: 'At least one device',
   at_least_one_device_subtitle: 'Any device that can run Vultisig will work.',
+  auto: 'auto',
   auto_compound_into_label: 'Auto-compound into {{ticker}}',
   available: 'Available',
   back: 'Back',
@@ -55,12 +59,19 @@ export const en = {
   before_you_start: 'Before you start...',
   backup: 'Backup',
   backupGuide: 'Backup guide',
+  backupShare: 'Backup Vault Share',
   backupShare2: 'Backup Share 2',
   backup_description: 'Back up your Vault Share to a preferred location',
   backup_now: 'Backup now',
   backup_password: 'Backup Password',
   backup_password_confirmation_title:
     'Do you want to encrypt your backup with a password?',
+  backup_password_info_cannot_be_reset:
+    'Remember: if you forget your vault password, it <b>cannot</b> be reset or recovered.',
+  backup_password_info_encrypt_with_password:
+    'If you choose to add a password, this will be used to <b>encrypt</b> the backup file.',
+  backup_password_info_secure_without_password:
+    'By default, your backup is <b>secure without</b> an extra password, since you store Vault shares in different locations.',
   backup_share_sent: 'Backup share sent!',
   backup_share_sent_description:
     'We just sent your backup share to your email. If you don’t see it, check your spam folder.',
@@ -97,6 +108,10 @@ export const en = {
     default_validation: 'Invalid input',
     optional_validation: 'Optional',
     vote: {
+      labels: {
+        proposalId: 'Proposal ID',
+        support: 'Support',
+      },
       validations: {
         proposalId: 'Proposal ID is required',
       },
@@ -165,6 +180,7 @@ export const en = {
   continue_anyway: 'Continue Anyway',
   continue_in_new_window: 'Continue in the opened window',
   copy_address: 'Copy Address',
+  create: 'Create',
   create_folder: 'Create Folder',
   create_new_vault: 'Create New Vault',
   create_own_referral:
@@ -203,6 +219,8 @@ export const en = {
   destination_address: 'Destination Address',
   details: 'Details',
   developer_options: 'Developer Options',
+  device_backup: 'Device Backup',
+  device_backup_description: 'Store the vault share of this device.',
   devices: 'Devices',
   digit_input_error_validation: 'Error verifying code, please re-try',
   digit_input_loading_validation: 'Verifying code, please wait',
@@ -222,6 +240,7 @@ export const en = {
   edit_referral: 'Edit Referral',
   edit_vaults: 'Edit Vaults',
   email: 'Email',
+  email_backup: 'Enter your email to receive your backup',
   email_required: 'Email is required',
   evm_chains: 'EVM Chains',
   enable_dkls: 'Enable DKLS',
@@ -244,6 +263,7 @@ export const en = {
   enter_your_password: 'Enter your password',
   entity_not_scanned: '{{entity}} not scanned by <provider></provider>',
   entity_scanned: '{{entity}} scanned by <provider></provider>',
+  error: 'ERROR',
   est_network_fee: 'Est. Network Fee',
   expand_view: 'Expand View',
   expiration_date: 'Expiration Date',
@@ -510,10 +530,12 @@ export const en = {
   legal: 'Legal',
   link_copied: 'Link copied to clipboard',
   loading: 'Loading...',
+  local: 'Local',
   localMode: "You're in local mode",
   lock_time: 'Lock Time',
   lock_vultisig_automatically_after: 'Lock Vultisig automatically after...',
   looking_for_server: 'Looking for FastVaultServer...',
+  low: 'Low',
   lp_units: 'LP Units',
   m_of_n_vault: '{{m}}-of-{{n}} Vault',
   make_sure_chains: 'Make sure that the chain you’re looking for is enabled.',
@@ -530,6 +552,8 @@ export const en = {
   method: 'Method',
   method_required: 'Signing method is required',
   mint: 'Mint',
+  minute_one: '{{count}} minute',
+  minute_other: '{{count}} minutes',
   missing_destination_address: 'Missing Destination Address',
   missing_devices_for_migration:
     'Join with the following devices to migrate your vault',
@@ -586,12 +610,15 @@ export const en = {
   no_vaults_desc:
     'Your vaults will appear here. Start by creating one or importing an existing vault',
   node_address: 'Node Address',
+  normal: 'Normal',
   not_enough_asset_to_cover_gas_fees: 'Not enough {{asset}} to cover gas fees',
   not_enough_funds: 'Not enough funds',
   nothing_to_add: 'Nothing to add',
   nothing_to_add_hint:
     'All your vaults are already sorted. Create a new vault to add it here.',
   of: 'of',
+  off: 'Off',
+  on: 'On',
   onboarding_description_1:
     'Vultisig is a secure, multi-device crypto vault, compatible with all major blockchains and 10,000+ tokens. Vultisig is fully self-custodial.',
   onboarding_description_2:
@@ -601,8 +628,20 @@ export const en = {
   onboarding_description_4:
     'Vultisig is a wallet without seed phrases. It uses easy-to-manage vault shares instead. Every device has its unique vault share that needs a separate backup.',
   onboarding_greeting: 'Say goodbye to <g>seed phrases</g>',
+  onboarding_step_1:
+    'Say hello to <g>vault shares,</g> your new <g>recovery method</g>',
+  onboarding_step_2:
+    "They're <g>split into parts</g> to increase security, <g>removing the single point-of-failure</g>",
+  onboarding_step_3:
+    '<g>Each device</g> in your vault holds <g>one vault share</g>',
+  onboarding_step_4:
+    'Recover your vault even <g>if a device is lost or damaged</g>',
+  onboarding_step_5:
+    '<g>Always backup each vault share</g> separately in a <g>different location</g>',
+  onboarding_step_6: 'These shares collaborate to <g>unlock your vault</g>',
   operator_fee: "Operator's Fee",
   basis_points: 'Basis Points',
+  optional: 'optional',
   optionalDevice: 'Optional Device',
   or: 'or',
   other: 'Other',
@@ -610,6 +649,7 @@ export const en = {
   part: 'part',
   passcodes_do_not_match: 'Passcodes do not match',
   password: 'Password',
+  password_backup: 'Protect your vault and fast sign.',
   password_do_not_match: 'Passwords do not match',
   password_pattern_error:
     'Password must be between {{min}} and {{max}} characters',
@@ -619,6 +659,7 @@ export const en = {
   percentage: 'Percentage',
   percentage_limit: 'Percentage must be 0-100',
   percentage_to_unstake: 'Percentage to Unstake',
+  permissions: 'Permissions',
   pick_referral_code: 'Pick Referral Code',
   platinum: 'Platinum',
   plugin_info: 'App Info',
@@ -632,6 +673,7 @@ export const en = {
   portfolio_balance: 'Portfolio Balance',
   positions: 'Positions',
   powered_by: 'Powered by <provider></provider>',
+  prepareVault: 'Preparing vault...',
   price: 'Price',
   price_impact_average: 'Average',
   price_impact_good: 'Good',
@@ -683,6 +725,7 @@ export const en = {
   },
   register_guide: 'Register Guide',
   register_your_vaults: 'Register your Vaults!',
+  remove: 'Remove',
   remove_token: 'Remove Token',
   rename: 'Rename',
   rename_vault: 'Rename Vault',
@@ -743,12 +786,16 @@ export const en = {
   select_positions: 'Select positions',
   select_positions_description:
     'Enable at least one position to view balances and manage positions.',
+  compounded_token: 'Compounded {{ticker}}',
   select_destination_chain: 'Select Destination Chain',
+  select_n_devices_one: 'Select {{count}} device',
+  select_n_devices_other: 'Select {{count}} devices',
   select_token: 'Select token',
   select_vault: 'Select a Vault',
   select_vaults_to_backup: 'Select Vaults to Back Up',
   select_vaults_to_backup_description:
     'Choose whether to back up just this vault or all vaults in your app.',
+  selected: 'selected',
   send: 'Send',
   send_amount_exceeds_balance: 'Amount exceeds balance',
   send_invalid_receiver_address: 'Wrong address for selected chain',
@@ -760,6 +807,7 @@ export const en = {
   send_to: 'Send to',
   sent: 'Sent',
   server_backup: 'Server Backup',
+  server_backup_description: 'Request Server Vault Share again.',
   session_init_failed: 'Failed to initialize session',
   set_expiration: 'Set Expiration (in years)',
   set_passcode: 'Set Passcode',
@@ -796,8 +844,11 @@ export const en = {
   something_went_wrong: 'Something went wrong',
   soon: 'Soon',
   stake: 'Stake',
+  staked: 'Staked',
   staked_amount: 'Staked Amount',
+  start: 'Start',
   start_reshare: 'Start Reshare',
+  success: 'Success',
   successfully: 'Successfully',
   support: 'Support',
   swap: 'Swap',
@@ -819,6 +870,7 @@ export const en = {
   thorchain_address: 'THORChain Address',
   thorchain_address_required_for_referrals:
     'You need to have a THORChain address to use the referral program',
+  title: 'Title',
   tns_alnum_only: 'Referral code must contain only alphanumeric characters',
   tns_max_4_chars: 'Referral code must be no more than 4 characters',
   tns_missing_thor_alias: 'Referral code must have a THOR‐chain alias',
@@ -827,6 +879,7 @@ export const en = {
   to_asset: 'To Asset',
   token_not_found_description:
     'Possible reasons: wrong contract, unsupported chain, or token removed from registries.',
+  tokens: 'tokens',
   total_fee: 'Total Fees',
   track: 'Track',
   transaction: 'Transaction',
@@ -843,6 +896,10 @@ export const en = {
   unbond: 'Unbond',
   unbond_with_lp: 'Unbond Maya',
   unlock_discount_tier: 'Unlock <b>{{tier}}</b> Tier',
+  unlock_discount_tier_description:
+    "By holding {{minBalance}}, you'll unlock the {{tier}} Tier and receive a <b>{{bps}} bps trading fee discount</b> on all swaps.",
+  unlock_discount_tier_description_ultimate:
+    "By holding {{minBalance}}, you'll unlock the {{tier}} Tier and receive a <b>complete Vultisig fee waiver</b> on all swaps.",
   unlock_tier: 'Unlock Tier',
   ultimate: 'Ultimate',
   unmerge: 'Unmerge',
@@ -880,12 +937,15 @@ export const en = {
     version: 'Version {{latestVersion}}',
   },
   vaultCreated: 'Vault created',
+  vaultOverview: 'Vault Overview',
   vault_already_exists: 'Vault already exists',
   vault_backup_page_password_info:
     'Never store Vault Shares from different devices in the same location',
   vault_backup_page_password_protection:
     'Optional password protection of your Vault',
   vault_backup_page_submit_loading_button_text: 'Saving...',
+  vault_count_one: '{{count}} Vault',
+  vault_count_other: '{{count}} Vaults',
   vault_delete_page_device_id: 'Device ID',
   vault_delete_page_header_subtitle: 'You are permanently deleting your vault',
   vault_delete_page_header_title: 'Delete vault',
@@ -969,6 +1029,7 @@ export const en = {
     'We will periodically ask you to verify your fast sign password so you will always remember it',
   version: 'Version',
   vote: 'Vote',
+  vult: '$VULT',
   vultisig: 'Vultisig',
   vultisig_community: 'Vultisig Community',
   vultisig_website: 'Vultisig Website',

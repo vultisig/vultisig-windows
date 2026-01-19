@@ -12,6 +12,10 @@ export const hr = {
       validations: {
         proposalId: 'ID prijedloga je obavezan',
       },
+      labels: {
+        proposalId: 'ID prijedloga',
+        support: 'Podrška',
+      },
     },
     amountExceeded: 'Iznos premašuje raspoloživi saldo',
     default_validation: 'Nevažeći unos',
@@ -1018,4 +1022,63 @@ export const hr = {
   select_chains_manually: 'Ručni odabir lanaca',
   your_seedphrase: 'Vaša početna fraza',
   your_seedphrase_subtitle: 'Uđi, stvori trezor, nikad se ne osvrni',
+  active_chains_found_one: 'Pronašli smo {{count}} aktivnog lanca',
+  active_chains_found_other: 'Pronašli smo {{count}} aktivnih lanaca',
+  allowance: 'Dodatak',
+  auto: 'auto',
+  backupShare: 'Dijeljenje sigurnosne kopije trezora',
+  backup_password_info_cannot_be_reset:
+    'Zapamtite: ako zaboravite lozinku za trezor, ona se *ne može* resetirati ili oporaviti.',
+  backup_password_info_encrypt_with_password:
+    'Ako odaberete dodati lozinku, ona će se koristiti za <b>šifriranje</b> sigurnosne kopije datoteke.',
+  backup_password_info_secure_without_password:
+    'Prema zadanim postavkama, vaša sigurnosna kopija je <b>sigurna bez</b> dodatne lozinke jer dijeljene datoteke Vaulta pohranjujete na različitim lokacijama.',
+  create: 'Stvoriti',
+  device_backup: 'Sigurnosna kopija uređaja',
+  device_backup_description: 'Pohrani dijeljeni trezor ovog uređaja.',
+  email_backup: 'Unesite svoju e-poštu kako biste primili sigurnosnu kopiju',
+  error: 'POGREŠKA',
+  local: 'Lokalno',
+  low: 'Nisko',
+  minute_one: '{{count}} minuta',
+  minute_other: '{{broj}} minuta',
+  normal: 'Normalan',
+  off: 'Isključeno',
+  on: 'Na',
+  onboarding_step_1:
+    'Pozdravite <g>dijeljene trezore</g>, vašu novu <g>metodu oporavka</g>',
+  onboarding_step_2:
+    'Podijeljeni su na dijelove kako bi se povećala sigurnost, <g>uklanjajući jedinstvenu točku kvara</g>',
+  onboarding_step_3:
+    '<g>Svaki uređaj</g> u vašem trezoru sadrži <g>jedan udio trezora</g>',
+  onboarding_step_4:
+    'Oporavite svoj trezor čak i <g>ako je uređaj izgubljen ili oštećen</g>',
+  onboarding_step_5:
+    '<g>Uvijek napravite sigurnosnu kopiju svakog dijeljenog trezora</g> zasebno na <g>drugoj lokaciji</g>',
+  onboarding_step_6:
+    'Ovi dijeljeni resursi surađuju kako bi <g>otključali vaš trezor</g>',
+  optional: 'opcionalno',
+  password_backup: 'Zaštitite svoj trezor i brzo se prijavite.',
+  permissions: 'Dozvole',
+  prepareVault: 'Priprema trezora...',
+  remove: 'Ukloniti',
+  compounded_token: 'Složeni {{ticker}}',
+  select_n_devices_one: 'Odaberite {{count}} uređaj',
+  select_n_devices_other: 'Odaberite {{count}} uređaja',
+  selected: 'odabrano',
+  server_backup_description:
+    'Ponovno zatražite dijeljenje trezora poslužitelja.',
+  staked: 'Uloženo',
+  start: 'Start',
+  success: 'Uspjeh',
+  title: 'Titula',
+  tokens: 'žetoni',
+  unlock_discount_tier_description:
+    'Držanjem {{minBalance}} otključat ćete {{tier}} razinu i ostvariti popust od <b>{{bps}} bps naknade za trgovanje</b> na sve swapove.',
+  unlock_discount_tier_description_ultimate:
+    'Držanjem {{minBalance}} otključat ćete {{tier}} razinu i dobiti <b>potpuno oslobađanje od Vultisig naknade</b> za sve swapove.',
+  vaultOverview: 'Pregled trezora',
+  vault_count_one: '{{count}} Trezor',
+  vault_count_other: '{{count}} Trezora',
+  vult: '$VULT',
 }

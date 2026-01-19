@@ -12,6 +12,10 @@ export const de = {
       validations: {
         proposalId: 'Eine Angebots-ID ist erforderlich.',
       },
+      labels: {
+        proposalId: 'Vorschlags-ID',
+        support: 'Unterstützung',
+      },
     },
     amountExceeded: 'Der Betrag übersteigt das verfügbare Guthaben',
     default_validation: 'Ungültige Eingabe',
@@ -1042,4 +1046,64 @@ export const de = {
   your_seedphrase: 'Ihre Seedphrase',
   your_seedphrase_subtitle:
     'Betritt es, erschaffe einen Tresor, schau nie zurück',
+  active_chains_found_one: 'Wir haben {{count}} aktive Ketten gefunden',
+  active_chains_found_other: 'Wir haben {{count}} aktive Ketten gefunden',
+  allowance: 'Zuschuss',
+  auto: 'Auto',
+  backupShare: 'Backup-Tresor-Freigabe',
+  backup_password_info_cannot_be_reset:
+    'Wichtig: Wenn Sie Ihr Tresorpasswort vergessen, kann es <b>nicht</b> zurückgesetzt oder wiederhergestellt werden.',
+  backup_password_info_encrypt_with_password:
+    'Wenn Sie ein Passwort hinzufügen, wird dieses verwendet, um die Sicherungsdatei zu verschlüsseln.',
+  backup_password_info_secure_without_password:
+    'Standardmäßig ist Ihre Datensicherung <b>ohne</b> zusätzliches Passwort sicher, da Sie Vault-Freigaben an verschiedenen Orten speichern.',
+  create: 'Erstellen',
+  device_backup: 'Gerätesicherung',
+  device_backup_description: 'Speichern Sie die Tresorfreigabe dieses Geräts.',
+  email_backup:
+    'Geben Sie Ihre E-Mail-Adresse ein, um Ihre Sicherungskopie zu erhalten.',
+  error: 'FEHLER',
+  local: 'Lokal',
+  low: 'Niedrig',
+  minute_one: '{{count}} Minute',
+  minute_other: '{{count}} Minuten',
+  normal: 'Normal',
+  off: 'Aus',
+  on: 'An',
+  onboarding_step_1:
+    'Lernen Sie <g>Vault-Freigaben</g> kennen, Ihre neue <g>Wiederherstellungsmethode</g>',
+  onboarding_step_2:
+    'Sie sind <g>in Teile aufgeteilt</g>, um die Sicherheit zu erhöhen und den zentralen Fehlerpunkt zu beseitigen</g>',
+  onboarding_step_3:
+    '<g>Jedes Gerät</g> in Ihrem Tresor enthält <g>eine Tresorfreigabe</g>',
+  onboarding_step_4:
+    'Stellen Sie Ihren Tresor auch dann wieder her, wenn ein Gerät verloren geht oder beschädigt wird.',
+  onboarding_step_5:
+    '<g>Sichern Sie jede Tresorfreigabe immer separat</g> an einem <g>anderen Ort</g>',
+  onboarding_step_6:
+    'Diese Aktien arbeiten zusammen, um <g>Ihren Tresor zu öffnen</g>',
+  optional: 'optional',
+  password_backup:
+    'Schützen Sie Ihren Tresor und sichern Sie sich eine schnelle Signatur.',
+  permissions: 'Berechtigungen',
+  prepareVault: 'Vorbereitung des Tresors...',
+  remove: 'Entfernen',
+  compounded_token: 'Zusammengesetztes {{ticker}}',
+  select_n_devices_one: 'Wählen Sie {{count}} Geräte aus',
+  select_n_devices_other: 'Wählen Sie {{count}} Geräte aus',
+  selected: 'ausgewählt',
+  server_backup_description: 'Server-Tresorfreigabe erneut anfordern.',
+  staked: 'Einsatz',
+  start: 'Start',
+  success: 'Erfolg',
+  title: 'Titel',
+  tokens: 'Token',
+  unlock_discount_tier_description:
+    'Mit {{minBalance}} schalten Sie die {{tier}} Stufe frei und erhalten einen <b>{{bps}} bps Handelsgebührenrabatt</b> auf alle Tauschgeschäfte.',
+  unlock_discount_tier_description_ultimate:
+    'Mit einem Guthaben von {{minBalance}} schalten Sie die Stufe {{tier}} frei und erhalten einen <b>vollständigen Vultisig-Gebührenverzicht</b> für alle Tauschgeschäfte.',
+  vaultOverview: 'Tresorübersicht',
+  vault_count_one: '{{count}} Tresor',
+  vault_count_other: '{{count}} Tresore',
+  vult: '$VULT',
 }

@@ -12,6 +12,10 @@ export const es = {
       validations: {
         proposalId: 'Se requiere identificación de propuesta',
       },
+      labels: {
+        proposalId: 'Identificación de la propuesta',
+        support: 'Apoyo',
+      },
     },
     amountExceeded: 'El importe excede el saldo disponible',
     default_validation: 'Entrada no válida',
@@ -1037,4 +1041,64 @@ export const es = {
   select_chains_manually: 'Seleccionar cadenas manualmente',
   your_seedphrase: 'Tu frase semilla',
   your_seedphrase_subtitle: 'Entra, crea una bóveda y nunca mires atrás.',
+  active_chains_found_one: 'Encontramos {{count}} cadena activa',
+  active_chains_found_other: 'Encontramos {{count}} cadenas activas',
+  allowance: 'Prestación',
+  auto: 'auto',
+  backupShare: 'Compartir bóveda de respaldo',
+  backup_password_info_cannot_be_reset:
+    'Recuerde: si olvida la contraseña de su bóveda, no podrá restablecerla ni recuperarla.',
+  backup_password_info_encrypt_with_password:
+    'Si decide agregar una contraseña, esta se utilizará para <b>encriptar</b> el archivo de respaldo.',
+  backup_password_info_secure_without_password:
+    'De forma predeterminada, su copia de seguridad es <b>segura</b> sin una contraseña adicional, ya que almacena los recursos compartidos de Vault en diferentes ubicaciones.',
+  create: 'Crear',
+  device_backup: 'Copia de seguridad del dispositivo',
+  device_backup_description:
+    'Almacenar el recurso compartido de bóveda de este dispositivo.',
+  email_backup: 'Ingresa tu email para recibir tu backup',
+  error: 'ERROR',
+  local: 'Local',
+  low: 'Bajo',
+  minute_one: '{{count}} minuto',
+  minute_other: '{{count}} minutos',
+  normal: 'Normal',
+  off: 'Apagado',
+  on: 'En',
+  onboarding_step_1:
+    'Saluda a los recursos compartidos de bóveda, tu nuevo método de recuperación.',
+  onboarding_step_2:
+    'Están <g>divididos en partes</g> para aumentar la seguridad, <g>eliminando el único punto de fallo</g>',
+  onboarding_step_3:
+    '<g>Cada dispositivo</g> en su bóveda contiene <g>una parte de la bóveda</g>',
+  onboarding_step_4:
+    'Recupere su bóveda incluso si un dispositivo se pierde o se daña',
+  onboarding_step_5:
+    '<g>Siempre haga una copia de seguridad de cada recurso compartido de bóveda</g> por separado en una <g>ubicación diferente</g>',
+  onboarding_step_6:
+    'Estas acciones colaboran para <g>desbloquear tu bóveda</g>',
+  optional: 'opcional',
+  password_backup: 'Protege tu bóveda y firma rápidamente.',
+  permissions: 'Permisos',
+  prepareVault: 'Preparando la bóveda...',
+  remove: 'Eliminar',
+  compounded_token: 'Compuesto {{ticker}}',
+  select_n_devices_one: 'Seleccione {{count}} dispositivo',
+  select_n_devices_other: 'Seleccione {{count}} dispositivos',
+  selected: 'seleccionado',
+  server_backup_description:
+    'Solicitar nuevamente el uso compartido de Server Vault.',
+  staked: 'Estacado',
+  start: 'Comenzar',
+  success: 'Éxito',
+  title: 'Título',
+  tokens: 'fichas',
+  unlock_discount_tier_description:
+    'Al mantener {{minBalance}}, desbloqueará el nivel {{tier}} y recibirá un <b>{{bps}} bps de descuento en la tarifa comercial</b> en todos los swaps.',
+  unlock_discount_tier_description_ultimate:
+    'Al mantener {{minBalance}}, desbloquearás el nivel {{tier}} y recibirás una <b>exención completa de la tarifa de Vultisig</b> en todos los intercambios.',
+  vaultOverview: 'Descripción general de la bóveda',
+  vault_count_one: 'Bóveda de {{count}}',
+  vault_count_other: '{{count}} Bóvedas',
+  vult: '$VULT',
 }

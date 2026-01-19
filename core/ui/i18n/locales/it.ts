@@ -12,6 +12,10 @@ export const it = {
       validations: {
         proposalId: "L'ID della proposta è obbligatorio",
       },
+      labels: {
+        proposalId: 'ID proposta',
+        support: 'Supporto',
+      },
     },
     amountExceeded: "L'importo supera il saldo disponibile",
     default_validation: 'Input non valido',
@@ -1036,4 +1040,64 @@ export const it = {
   select_chains_manually: 'Seleziona manualmente le catene',
   your_seedphrase: 'La tua frase seme',
   your_seedphrase_subtitle: 'Entra, crea un caveau, non voltarti mai indietro',
+  active_chains_found_one: 'Abbiamo trovato {{count}} catena attiva',
+  active_chains_found_other: 'Abbiamo trovato {{count}} catene attive',
+  allowance: 'Indennità',
+  auto: 'auto',
+  backupShare: 'Condivisione del Vault di backup',
+  backup_password_info_cannot_be_reset:
+    'Ricorda: se dimentichi la password del tuo vault, non potrai reimpostarla o recuperarla.',
+  backup_password_info_encrypt_with_password:
+    'Se si sceglie di aggiungere una password, questa verrà utilizzata per <b>crittografare</b> il file di backup.',
+  backup_password_info_secure_without_password:
+    'Per impostazione predefinita, il backup è <b>sicuro</b> senza una password aggiuntiva, poiché le condivisioni Vault vengono archiviate in posizioni diverse.',
+  create: 'Creare',
+  device_backup: 'Backup del dispositivo',
+  device_backup_description:
+    'Memorizza la condivisione vault di questo dispositivo.',
+  email_backup: 'Inserisci la tua email per ricevere il backup',
+  error: 'ERRORE',
+  local: 'Locale',
+  low: 'Basso',
+  minute_one: '{{count}} minuto',
+  minute_other: '{{count}} minuti',
+  normal: 'Normale',
+  off: 'Spento',
+  on: 'SU',
+  onboarding_step_1:
+    'Dai il benvenuto alle <g>condivisioni vault</g>, il tuo nuovo <g>metodo di recupero</g>',
+  onboarding_step_2:
+    'Sono <g>divisi in parti</g> per aumentare la sicurezza, <g>eliminando il singolo punto di errore</g>',
+  onboarding_step_3:
+    '<g>Ogni dispositivo</g> nel tuo vault contiene <g>una condivisione vault</g>',
+  onboarding_step_4:
+    'Recupera il tuo vault anche <g>se un dispositivo è perso o danneggiato</g>',
+  onboarding_step_5:
+    '<g>Eseguire sempre il backup di ogni condivisione del vault</g> separatamente in una <g>posizione diversa</g>',
+  onboarding_step_6:
+    'Queste condivisioni collaborano per <g>sbloccare il tuo caveau</g>',
+  optional: 'opzionale',
+  password_backup: 'Proteggi il tuo caveau e firma subito.',
+  permissions: 'Permessi',
+  prepareVault: 'Preparazione del caveau...',
+  remove: 'Rimuovere',
+  compounded_token: 'Composto {{ticker}}',
+  select_n_devices_one: 'Seleziona {{count}} dispositivo',
+  select_n_devices_other: 'Seleziona {{count}} dispositivi',
+  selected: 'selezionato',
+  server_backup_description:
+    'Richiedi nuovamente la condivisione del vault del server.',
+  staked: 'Picchettato',
+  start: 'Inizio',
+  success: 'Successo',
+  title: 'Titolo',
+  tokens: 'gettoni',
+  unlock_discount_tier_description:
+    'Mantenendo {{minBalance}}, sbloccherai il livello {{tier}} e riceverai uno sconto sulle commissioni di trading di <b>{{bps}} bps</b> su tutti gli swap.',
+  unlock_discount_tier_description_ultimate:
+    "Mantenendo {{minBalance}}, sbloccherai il livello {{tier}} e riceverai un'<b>esenzione completa dalle commissioni Vultisig</b> su tutti gli swap.",
+  vaultOverview: 'Panoramica del Vault',
+  vault_count_one: '{{count}} Caveau',
+  vault_count_other: '{{count}} Vault',
+  vult: '$VULT',
 }

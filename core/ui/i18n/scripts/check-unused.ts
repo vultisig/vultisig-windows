@@ -91,54 +91,17 @@ const isTFunctionCall = (node: ts.Node): node is ts.CallExpression => {
   return false
 }
 
-const getTransComponentI18nKey = (
-  node: ts.Node
-): ts.StringLiteral | ts.JsxExpression | null => {
-  if (!ts.isJsxSelfClosingElement(node) && !ts.isJsxOpeningElement(node)) {
-    return null
-  }
-
-  const tagName = node.tagName
-  if (!ts.isIdentifier(tagName) || tagName.text !== 'Trans') {
-    return null
-  }
-
-  for (const attr of node.attributes.properties) {
-    if (
-      ts.isJsxAttribute(attr) &&
-      ts.isIdentifier(attr.name) &&
-      attr.name.text === 'i18nKey'
-    ) {
-      const initializer = attr.initializer
-      if (initializer) {
-        if (ts.isStringLiteral(initializer)) {
-          return initializer
-        }
-        if (ts.isJsxExpression(initializer) && initializer.expression) {
-          if (ts.isStringLiteral(initializer.expression)) {
-            return initializer.expression
-          }
-        }
-      }
-    }
-  }
-
-  return null
-}
-
-const extractTemplatePrefix = (node: ts.TemplateExpression): string | null => {
-  const head = node.head.text
-  if (head.length > 0) {
-    return head
-  }
-  return null
-}
-
 const analyzeTranslationUsage = (
   sourceFiles: string[]
-): { usedKeys: Set<string>; usedPrefixes: Set<string>; warnings: string[] } => {
+): {
+  usedKeys: Set<string>
+  usedPrefixes: Set<string>
+  usedSuffixes: Set<string>
+  warnings: string[]
+} => {
   const usedKeys = new Set<string>()
   const usedPrefixes = new Set<string>()
+  const usedSuffixes = new Set<string>()
   const warnings: string[] = []
 
   const configPath = path.join(workspaceRoot, 'tsconfig.json')
@@ -157,20 +120,79 @@ const analyzeTranslationUsage = (
 
   const checker = program.getTypeChecker()
 
+  const addKeyWithPlurals = (key: string, hasCount: boolean) => {
+    usedKeys.add(key)
+    if (hasCount) {
+      usedKeys.add(`${key}_one`)
+      usedKeys.add(`${key}_other`)
+    }
+  }
+
+  const handleStringLiteral = (
+    node: ts.Node,
+    text: string,
+    hasCount: boolean
+  ) => {
+    addKeyWithPlurals(text, hasCount)
+  }
+
+  const handleTemplateExpression = (node: ts.TemplateExpression) => {
+    const prefix = node.head.text
+    if (prefix) {
+      usedPrefixes.add(prefix)
+    }
+    const lastSpan = node.templateSpans[node.templateSpans.length - 1]
+    if (lastSpan) {
+      const suffix = lastSpan.literal.text
+      if (suffix) {
+        usedSuffixes.add(suffix)
+      }
+    }
+  }
+
   const visitNode = (node: ts.Node, sourceFile: ts.SourceFile) => {
+    if (ts.isStringLiteral(node)) {
+      usedKeys.add(node.text)
+    } else if (ts.isNoSubstitutionTemplateLiteral(node)) {
+      usedKeys.add(node.text)
+    }
+
     if (isTFunctionCall(node)) {
       const args = node.arguments
       if (args.length > 0) {
         const firstArg = args[0]
+        const secondArg = args[1]
+        let hasCount = false
+
+        if (secondArg && ts.isObjectLiteralExpression(secondArg)) {
+          hasCount = secondArg.properties.some(
+            p =>
+              ts.isPropertyAssignment(p) &&
+              ts.isIdentifier(p.name) &&
+              p.name.text === 'count'
+          )
+        }
 
         if (ts.isStringLiteral(firstArg)) {
-          usedKeys.add(firstArg.text)
+          handleStringLiteral(firstArg, firstArg.text, hasCount)
         } else if (ts.isNoSubstitutionTemplateLiteral(firstArg)) {
-          usedKeys.add(firstArg.text)
+          handleStringLiteral(firstArg, firstArg.text, hasCount)
         } else if (ts.isTemplateExpression(firstArg)) {
-          const prefix = extractTemplatePrefix(firstArg)
-          if (prefix) {
-            usedPrefixes.add(prefix)
+          handleTemplateExpression(firstArg)
+        } else if (ts.isConditionalExpression(firstArg)) {
+          if (ts.isStringLiteral(firstArg.whenTrue)) {
+            handleStringLiteral(
+              firstArg.whenTrue,
+              firstArg.whenTrue.text,
+              false
+            )
+          }
+          if (ts.isStringLiteral(firstArg.whenFalse)) {
+            handleStringLiteral(
+              firstArg.whenFalse,
+              firstArg.whenFalse.text,
+              false
+            )
           }
         } else if (ts.isIdentifier(firstArg)) {
           const type = checker.getTypeAtLocation(firstArg)
@@ -179,7 +201,7 @@ const analyzeTranslationUsage = (
             let allLiterals = true
             for (const t of type.types) {
               if (t.isStringLiteral()) {
-                usedKeys.add(t.value)
+                addKeyWithPlurals(t.value, hasCount)
               } else {
                 allLiterals = false
               }
@@ -193,7 +215,7 @@ const analyzeTranslationUsage = (
               )
             }
           } else if (type.isStringLiteral()) {
-            usedKeys.add(type.value)
+            addKeyWithPlurals(type.value, hasCount)
           } else {
             const typeString = checker.typeToString(type)
             if (typeString !== 'string') {
@@ -209,11 +231,11 @@ const analyzeTranslationUsage = (
           const type = checker.getTypeAtLocation(firstArg)
 
           if (type.isStringLiteral()) {
-            usedKeys.add(type.value)
+            addKeyWithPlurals(type.value, hasCount)
           } else if (type.isUnion()) {
             for (const t of type.types) {
               if (t.isStringLiteral()) {
-                usedKeys.add(t.value)
+                addKeyWithPlurals(t.value, hasCount)
               }
             }
           }
@@ -221,11 +243,11 @@ const analyzeTranslationUsage = (
           const type = checker.getTypeAtLocation(firstArg)
 
           if (type.isStringLiteral()) {
-            usedKeys.add(type.value)
+            addKeyWithPlurals(type.value, hasCount)
           } else if (type.isUnion()) {
             for (const t of type.types) {
               if (t.isStringLiteral()) {
-                usedKeys.add(t.value)
+                addKeyWithPlurals(t.value, hasCount)
               }
             }
           }
@@ -233,9 +255,38 @@ const analyzeTranslationUsage = (
       }
     }
 
-    const transKey = getTransComponentI18nKey(node)
-    if (transKey && ts.isStringLiteral(transKey)) {
-      usedKeys.add(transKey.text)
+    if (ts.isJsxSelfClosingElement(node) || ts.isJsxOpeningElement(node)) {
+      const tagName = node.tagName
+      if (ts.isIdentifier(tagName) && tagName.text === 'Trans') {
+        for (const attr of node.attributes.properties) {
+          if (
+            ts.isJsxAttribute(attr) &&
+            ts.isIdentifier(attr.name) &&
+            attr.name.text === 'i18nKey'
+          ) {
+            const initializer = attr.initializer
+            if (initializer && ts.isJsxExpression(initializer)) {
+              const expr = initializer.expression
+              if (expr) {
+                if (ts.isStringLiteral(expr)) {
+                  usedKeys.add(expr.text)
+                } else if (ts.isTemplateExpression(expr)) {
+                  handleTemplateExpression(expr)
+                } else if (ts.isConditionalExpression(expr)) {
+                  if (ts.isStringLiteral(expr.whenTrue)) {
+                    usedKeys.add(expr.whenTrue.text)
+                  }
+                  if (ts.isStringLiteral(expr.whenFalse)) {
+                    usedKeys.add(expr.whenFalse.text)
+                  }
+                }
+              }
+            } else if (initializer && ts.isStringLiteral(initializer)) {
+              usedKeys.add(initializer.text)
+            }
+          }
+        }
+      }
     }
 
     ts.forEachChild(node, child => visitNode(child, sourceFile))
@@ -250,7 +301,7 @@ const analyzeTranslationUsage = (
     }
   }
 
-  return { usedKeys, usedPrefixes, warnings }
+  return { usedKeys, usedPrefixes, usedSuffixes, warnings }
 }
 
 const loadEnglishLocale = async (): Promise<Locale> => {
@@ -325,12 +376,15 @@ const main = async () => {
       !f.endsWith('.d.ts')
   )
 
-  const { usedKeys, usedPrefixes, warnings } =
+  const { usedKeys, usedPrefixes, usedSuffixes, warnings } =
     analyzeTranslationUsage(sourceFiles)
 
   console.log(`✓ Found ${usedKeys.size} literal key usages`)
   console.log(
-    `✓ Found ${usedPrefixes.size} template prefixes (auto-detected): ${[...usedPrefixes].join(', ') || 'none'}`
+    `✓ Found ${usedPrefixes.size} template prefixes: ${[...usedPrefixes].join(', ') || 'none'}`
+  )
+  console.log(
+    `✓ Found ${usedSuffixes.size} template suffixes: ${[...usedSuffixes].join(', ') || 'none'}`
   )
 
   if (warnings.length > 0) {
@@ -345,6 +399,9 @@ const main = async () => {
     if (usedKeys.has(key)) return false
     for (const prefix of usedPrefixes) {
       if (key.startsWith(prefix)) return false
+    }
+    for (const suffix of usedSuffixes) {
+      if (key.endsWith(suffix)) return false
     }
     return true
   })
