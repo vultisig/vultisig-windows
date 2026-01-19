@@ -33,6 +33,7 @@ export const UnstakeTCYNative = () => {
 
   // Use watch for reactive updates
   const percentageValue = watch('percentage')
+
   const numericValue =
     typeof percentageValue === 'number'
       ? percentageValue
@@ -51,11 +52,11 @@ export const UnstakeTCYNative = () => {
           <AmountTextInput
             placeholder={t('enter_percentage')}
             value={numericValue}
-            onValueChange={value =>
+            onValueChange={value => {
               setValue('percentage', value ?? undefined, {
                 shouldValidate: true,
               })
-            }
+            }}
             shouldBePositive
             suggestion={
               <HStack gap={4}>
