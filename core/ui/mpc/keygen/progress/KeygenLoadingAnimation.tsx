@@ -12,17 +12,23 @@ const AnimationContainer = styled.div`
 
 type KeygenLoadingAnimationProps = {
   isConnected: boolean
+  progress?: number
 }
 
 export const KeygenLoadingAnimation = ({
   isConnected,
+  progress = 0,
 }: KeygenLoadingAnimationProps) => {
-  const { RiveComponent, containerRef, setConnected } =
+  const { RiveComponent, containerRef, setConnected, setProgress } =
     useKeygenLoadingAnimation()
 
   useEffect(() => {
     setConnected(isConnected)
   }, [isConnected, setConnected])
+
+  useEffect(() => {
+    setProgress(progress)
+  }, [progress, setProgress])
 
   return (
     <AnimationContainer ref={containerRef}>
