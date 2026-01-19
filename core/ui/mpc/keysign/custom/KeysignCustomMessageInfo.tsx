@@ -4,12 +4,23 @@ import {
   TxOverviewRow,
 } from '@core/ui/chain/tx/TxOverviewRow'
 import { ValueProp } from '@lib/ui/props'
+import { attempt, withFallback } from '@lib/utils/attempt'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const KeysignCustomMessageInfo = ({
   value,
 }: ValueProp<CustomMessagePayload>) => {
   const { t } = useTranslation()
+
+  const formattedMessage = useMemo(
+    () =>
+      withFallback(
+        attempt(() => JSON.stringify(JSON.parse(value.message), null, 2)),
+        value.message
+      ),
+    [value.message]
+  )
 
   return (
     <>
@@ -19,7 +30,11 @@ export const KeysignCustomMessageInfo = ({
       </TxOverviewRow>
       <TxOverviewChainDataRow>
         <span>{t('message')}</span>
-        <span>{value.message}</span>
+        <pre
+          style={{ margin: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
+        >
+          {formattedMessage}
+        </pre>
       </TxOverviewChainDataRow>
     </>
   )
