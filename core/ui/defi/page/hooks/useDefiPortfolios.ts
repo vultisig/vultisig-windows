@@ -1,5 +1,4 @@
 import { Chain } from '@core/chain/Chain'
-import { featureFlags } from '@core/ui/featureFlags'
 import { sum } from '@lib/utils/array/sum'
 import { useMemo } from 'react'
 
@@ -23,8 +22,7 @@ export const useDefiChainPortfolios = () => {
   const mayaSelectedPositions = useDefiPositions(Chain.MayaChain)
   const thorchainQuery = useThorchainDefiPositionsQuery()
   const mayaQuery = useMayaDefiPositionsQuery({
-    enabled:
-      featureFlags.mayaChainDefi && enabledChains.includes(Chain.MayaChain),
+    enabled: enabledChains.includes(Chain.MayaChain),
   })
 
   const data = useMemo<DefiChainPortfolio[]>(() => {
