@@ -4,4 +4,6 @@ export const featureFlags = {
   nftTab: false,
   importSeedphrase: false,
   mayaChain: false,
+  defiLpsTab: false,
+  stcyStaking: false,
 }

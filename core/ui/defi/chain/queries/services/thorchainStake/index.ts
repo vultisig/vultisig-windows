@@ -2,12 +2,14 @@ import { cosmosRpcUrl } from '@core/chain/chains/cosmos/cosmosRpcUrl'
 import { Coin } from '@core/chain/coin/Coin'
 import { coinKeyToString } from '@core/chain/coin/Coin'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
+import { featureFlags } from '@core/ui/featureFlags'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
 import { thorchainTokens } from '../../tokens'
 import { ThorchainStakePosition } from '../../types'
 import { parseBigint } from '../../utils/parsers'
 import { fetchRujiStakePosition } from './rujiStakeService'
+import { fetchStcyStakePosition } from './stcyStakeService'
 import { fetchTcyStakePosition } from './tcyStakeService'
 
 const getBalanceByDenom = (address: string, denom: string) =>
@@ -61,10 +63,11 @@ export const fetchStakePositions = async ({
   address,
   prices,
 }: FetchStakePositionsInput) => {
-  // Note: sTCY is no longer fetched as it's hidden from DeFi UI
-  // Users can still unstake via deposit functions if needed
-  const [tcy, ruji, yRune, yTcy] = await Promise.all([
+  const [tcy, stcy, ruji, yRune, yTcy] = await Promise.all([
     fetchTcyStakePosition({ address, prices }),
+    featureFlags.stcyStaking
+      ? fetchStcyStakePosition({ address, prices })
+      : Promise.resolve(null),
     fetchRujiStakePosition({ address, prices }),
     fetchYieldStakePosition({
       address,
@@ -80,7 +83,7 @@ export const fetchStakePositions = async ({
     }),
   ])
 
-  const positions = [tcy, ruji, yRune, yTcy].filter(
+  const positions = [tcy, stcy, ruji, yRune, yTcy].filter(
     (p): p is ThorchainStakePosition => p !== null
   )
   return { positions }
