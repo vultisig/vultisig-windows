@@ -10,6 +10,7 @@ import { toEvmTwAmount } from '@core/chain/chains/evm/tx/tw/toEvmTwAmount'
 import { toEvmTxData } from '@core/chain/chains/evm/tx/tw/toEvmTxData'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
+import { maxBigInt } from '@lib/utils/math/maxBigInt'
 import { assertField } from '@lib/utils/record/assertField'
 import { TW } from '@trustwallet/wallet-core'
 
@@ -172,7 +173,7 @@ export const getEvmSigningInputs: SigningInputsResolver<'evm'> = ({
     }
     if (swapPayload && 'general' in swapPayload) {
       const { gasPrice, gas } = shouldBePresent(swapPayload.general.quote?.tx)
-      input.maxFeePerGasWei = BigInt(gasPrice)
+      input.maxFeePerGasWei = maxBigInt(BigInt(gasPrice), input.maxFeePerGasWei)
       if (BigInt(gas) > input.gasLimit) {
         input.gasLimit = BigInt(gas)
       }
