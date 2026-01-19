@@ -46,7 +46,7 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
               signatureAlgorithm,
               message,
               chainPath: isKeyImportVault(vault)
-                ? ''
+                ? eddsaPlaceholderChainPath
                 : match(signatureAlgorithm, {
                     ecdsa: () =>
                       walletCore.CoinTypeExt.derivationPath(
