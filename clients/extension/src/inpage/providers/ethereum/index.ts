@@ -1,3 +1,4 @@
+import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
 import { EthereumProviderEvents } from '@clients/extension/src/inpage/providers/ethereum/events'
 import {
   ethereumHandlers,
@@ -5,7 +6,6 @@ import {
 } from '@clients/extension/src/inpage/providers/ethereum/handlers'
 import { addBackgroundEventListener } from '@core/inpage-provider/background/events/inpage'
 import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
-import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 import { validateUrl } from '@lib/utils/validation/url'
 import EventEmitter from 'events'
 
@@ -78,6 +78,6 @@ export class Ethereum extends EventEmitter<EthereumProviderEvents> {
       )
     }
 
-    throw new NotImplementedError(`Ethereum method ${data.method}`)
+    throw new EIP1193Error('UnsupportedMethod')
   }
 }

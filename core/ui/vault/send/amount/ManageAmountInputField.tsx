@@ -3,7 +3,6 @@ import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
-import { ActionAmountInputSurface } from '@core/ui/vault/components/action-form/ActionAmountInputSurface'
 import { AmountInReverseCurrencyDisplay } from '@core/ui/vault/send/amount/AmountInReverseCurrencyDisplay'
 import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
 import { CurrencySwitch } from '@core/ui/vault/send/amount/AmountSwitch'
@@ -23,7 +22,7 @@ import {
   AmountTextInputProps,
 } from '@lib/ui/inputs/AmountTextInput'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
 import { Text } from '@lib/ui/text'
@@ -91,7 +90,7 @@ export const ManageAmountInputField = () => {
           <VStack flexGrow gap={8}>
             <ActionInsideInteractiveElement
               render={() => (
-                <ActionAmountInputSurface>
+                <InputWrapper>
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={currencyInputMode}
@@ -132,7 +131,7 @@ export const ManageAmountInputField = () => {
                     </motion.div>
                   </AnimatePresence>
                   <AmountInReverseCurrencyDisplay value={currencyInputMode} />
-                </ActionAmountInputSurface>
+                </InputWrapper>
               )}
               action={
                 <MatchQuery
@@ -202,6 +201,29 @@ export const ManageAmountInputField = () => {
     </SendInputContainer>
   )
 }
+
+const InputWrapper = styled.div`
+  height: 170px;
+  ${vStack({
+    justifyContent: 'center',
+    alignItems: 'center',
+  })}
+  * > input {
+    text-align: center;
+    font-size: 32px;
+    background-color: transparent;
+    border: none;
+
+    &:focus,
+    &:hover {
+      outline: none;
+    }
+
+    &::placeholder {
+      font-size: 24px;
+    }
+  }
+`
 
 const TotalBalanceWrapper = styled(HStack)`
   background-color: ${getColor('foreground')};

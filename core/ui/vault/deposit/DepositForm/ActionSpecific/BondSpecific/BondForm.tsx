@@ -253,7 +253,13 @@ export const BondForm = ({
               <InputLabel weight="600" size={16}>
                 {t('amount')}
               </InputLabel>
-              <ActionFieldDivider />
+              <VStack
+                style={{
+                  marginBlock: 12,
+                }}
+              >
+                <ActionFieldDivider />
+              </VStack>
               <VStack gap={12}>
                 <ActionAmountInputSurface>
                   <Controller

@@ -254,6 +254,13 @@ export const en = {
     staked: 'Staked',
     lps: 'LPs',
   },
+  vaultTabs: {
+    portfolio: 'Portfolio',
+    nft: 'NFT',
+  },
+  vaultChainTabs: {
+    tokens: 'Tokens',
+  },
   delete: 'Delete',
   delete_folder: 'Delete Folder',
   delete_folder_confirmation:
@@ -316,6 +323,7 @@ export const en = {
   enter_new_passcode: 'Enter new passcode',
   enter_passcode: 'Enter Passcode',
   enter_password: 'Enter Password',
+  enter_number_placeholder: 'Enter a number',
   enter_percentage: 'Enter percentage',
   enter_referral_code_placeholder: 'Enter Referral Code',
   enter_up_to_4_characters_placeholder: 'Enter up to 4 characters',
@@ -329,6 +337,7 @@ export const en = {
   expiration_date: 'Expiration Date',
   expiration_must_extend_by_exactly_one_year:
     'Expiration can only be extended by exactly 1 year',
+  expiration_must_be_greater: 'Expiration must be greater than {{value}}',
   expires_on: 'Expires on',
   extension_vault_import_restriction:
     'Only DKLS vaults can be imported in extension',
@@ -350,6 +359,7 @@ export const en = {
   failed_to_join_session: 'Failed to join session',
   failed_to_load: 'Failed to load',
   failed_to_migrate_storage: 'Failed to migrate storage',
+  storage_load_error: 'Failed to load essential data from the storage',
   failed_to_process_transaction: 'Failed to process transaction',
   failed_to_process_url: 'Failed to process URL',
   failed_to_read_qr_code: 'Failed to read QR code',
@@ -713,7 +723,7 @@ export const en = {
     "You've disabled all positions for this chain. Enable at least one position to view balances and manage actions.",
   locked_in_defi: 'Locked in DeFi',
   total_bonded: 'Total Bonded {{ticker}}',
-  active_nodes: 'ActiveNodes',
+  active_nodes: 'Active Nodes',
   vulti_node: 'VultiNode',
   available_nodes: 'Available Nodes',
   request_to_bond: 'Request to bond',
@@ -1336,6 +1346,8 @@ export const en = {
   wrong_vault_try_again: 'Wrong Vault or Pair Device.',
   you_are_bonding: "You're bonding",
   you_are_sending: "You're sending",
+  you_are_staking: "You're staking",
+  you_are_unstaking: "You're unstaking",
   yourVaultShares: 'Your vault has {{shares}} Vault Shares',
   your_friends_referral_code: 'Your friends referral code',
   your_referral_code: 'Your Referral Code',
