@@ -6,6 +6,7 @@ import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
+import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { AmountSuggestion } from '../../../../../../send/amount/AmountSuggestion'
@@ -14,10 +15,14 @@ import {
   useCurrentVaultCoin,
 } from '../../../../../../state/currentVaultCoins'
 import { useDepositFormHandlers } from '../../../../../providers/DepositFormHandlersProvider'
+import {
+  clampPercentage,
+  toNumericValue,
+} from '../../../../../utils/percentage'
 import { useUnstakableTcyQuery } from '../hooks/useUnstakableTcyQuery'
 
 export const UnstakeTCYNative = () => {
-  const [{ setValue, watch }] = useDepositFormHandlers()
+  const [{ control, setValue }] = useDepositFormHandlers()
   const { t } = useTranslation()
   const address = useCurrentVaultAddress(Chain.THORChain)
   const { data: tcyBalance = 0n } = useUnstakableTcyQuery({
@@ -31,16 +36,6 @@ export const UnstakeTCYNative = () => {
   })
   const maxDisplay = fromChainAmount(tcyBalance, decimals)
 
-  // Use watch for reactive updates
-  const percentageValue = watch('percentage')
-
-  const numericValue =
-    typeof percentageValue === 'number'
-      ? percentageValue
-      : typeof percentageValue === 'string' && percentageValue !== ''
-        ? Number(percentageValue)
-        : null
-
   return (
     <InputContainer>
       <Text size={15}>
@@ -49,36 +44,49 @@ export const UnstakeTCYNative = () => {
       </Text>
       <ActionInsideInteractiveElement
         render={() => (
-          <AmountTextInput
-            placeholder={t('enter_percentage')}
-            value={numericValue}
-            onValueChange={value => {
-              setValue('percentage', value ?? undefined, {
-                shouldValidate: true,
-              })
+          <Controller
+            control={control}
+            name="percentage"
+            render={({ field }) => {
+              const handlePercentageChange = (value: number | null) => {
+                if (value === null) {
+                  field.onChange('')
+                  return
+                }
+
+                const clamped = clampPercentage(value)
+                field.onChange(clamped)
+              }
+
+              return (
+                <AmountTextInput
+                  placeholder={t('enter_percentage')}
+                  value={toNumericValue(field.value)}
+                  onValueChange={handlePercentageChange}
+                  shouldBePositive
+                  suggestion={
+                    <HStack gap={4}>
+                      {[0.25, 0.5, 0.75].map(v => (
+                        <AmountSuggestion
+                          key={v}
+                          value={v}
+                          onClick={() => handlePercentageChange(v * 100)}
+                        />
+                      ))}
+                    </HStack>
+                  }
+                />
+              )
             }}
-            shouldBePositive
-            suggestion={
-              <HStack gap={4}>
-                {[0.25, 0.5, 0.75].map(v => (
-                  <AmountSuggestion
-                    key={v}
-                    value={v}
-                    onClick={() =>
-                      setValue('percentage', v * 100, {
-                        shouldValidate: true,
-                      })
-                    }
-                  />
-                ))}
-              </HStack>
-            }
           />
         )}
         action={
           <MaxButton
             onClick={() =>
-              setValue('percentage', 100, { shouldValidate: true })
+              setValue('percentage', 100, {
+                shouldDirty: true,
+                shouldValidate: true,
+              })
             }
           >
             {t('max')}
