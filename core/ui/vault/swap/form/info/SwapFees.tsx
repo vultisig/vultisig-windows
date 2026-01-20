@@ -19,6 +19,7 @@ import styled from 'styled-components'
 import { useSwapFeesQuery } from '../../queries/useSwapFeesQuery'
 import { useSwapQuoteQuery } from '../../queries/useSwapQuoteQuery'
 import { useSwapFromCoin } from '../../state/fromCoin'
+import { SwapDiscountInfo } from './SwapDiscountInfo'
 import { SwapFeeFiatValue } from './SwapTotalFeeFiatValue'
 
 type SwapFeesProps = {
@@ -107,6 +108,7 @@ export const SwapFees: FC<SwapFeesProps> = ({ RowComponent, swapQuote }) => {
                           <SwapFeeFiatValue value={[network]} />)
                         </Text>
                       </RowComponent>
+                      <SwapDiscountInfo />
                     </>
                   )
                 }}

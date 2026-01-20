@@ -194,6 +194,7 @@ export const zh = {
   app_permissions: '应用权限',
   approval_tx: '批准 Tx',
   approve: '批准',
+  applied_discounts: '已应用折扣：',
   asset: '资产',
   assets: '资产',
   auto_compound_into_label: '自动复利至 {{ticker}}',

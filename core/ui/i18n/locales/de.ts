@@ -207,6 +207,7 @@ export const de = {
   app_permissions: 'App-Berechtigungen',
   approval_tx: 'Genehmigung Tx',
   approve: 'Genehmigen',
+  applied_discounts: 'Angewandte Rabatte:',
   asset: 'Vermögenswert',
   assets: 'Vermögenswerte',
   auto_compound_into_label: 'Automatische Komposition in {{ticker}}',

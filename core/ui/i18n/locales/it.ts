@@ -210,6 +210,7 @@ export const it = {
   app_permissions: "Autorizzazioni dell'app",
   approval_tx: 'Approvazione Tx',
   approve: 'Approvare',
+  applied_discounts: 'Sconti applicati:',
   asset: 'Risorsa',
   assets: 'attività',
   auto_compound_into_label: 'Autocomposizione in {{ticker}}',
