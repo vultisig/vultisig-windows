@@ -7,27 +7,31 @@ import { mergeRecords } from '@lib/utils/record/mergeRecords'
 import { Exact } from '@lib/utils/types/Exact'
 import { useQueries } from '@tanstack/react-query'
 
-export function getBalanceQueryKey<T extends CoinBalanceResolverInput>(
-  input: Exact<CoinBalanceResolverInput, T>
-): [string, CoinBalanceResolverInput] {
+export type BalanceQueryInput = CoinBalanceResolverInput & {
+  key?: string
+}
+
+export function getBalanceQueryKey<T extends BalanceQueryInput>(
+  input: Exact<BalanceQueryInput, T>
+): [string, BalanceQueryInput] {
   return ['coinBalance', input]
 }
 
-export const getBalanceQueryOptions = <T extends CoinBalanceResolverInput>(
-  input: Exact<CoinBalanceResolverInput, T>
+export const getBalanceQueryOptions = <T extends BalanceQueryInput>(
+  input: Exact<BalanceQueryInput, T>
 ) => ({
   queryKey: getBalanceQueryKey(input),
   queryFn: async () => {
     const amount = await getCoinBalance(input)
     return {
-      [coinKeyToString(input)]: amount,
+      [input.key ?? coinKeyToString(input)]: amount,
     }
   },
   ...persistQueryOptions,
 })
 
-export const useBalancesQuery = <T extends CoinBalanceResolverInput>(
-  inputs: Exact<CoinBalanceResolverInput, T>[]
+export const useBalancesQuery = <T extends BalanceQueryInput>(
+  inputs: Exact<BalanceQueryInput, T>[]
 ) => {
   const queries = useQueries({
     queries: inputs.map(input => getBalanceQueryOptions(input)),
