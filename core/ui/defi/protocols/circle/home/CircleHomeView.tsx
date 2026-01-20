@@ -1,3 +1,4 @@
+import { RefreshDefiData } from '@core/ui/defi/RefreshDefiData'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { VaultHeader } from '@core/ui/vault/components/VaultHeader'
 import { Tab, Tabs } from '@lib/ui/base/Tabs'
@@ -26,7 +27,10 @@ export const CircleHomeView = () => {
 
   return (
     <>
-      <VaultHeader primaryControls={<PageHeaderBackButton />} />
+      <VaultHeader
+        primaryControls={<PageHeaderBackButton />}
+        secondaryControls={<RefreshDefiData />}
+      />
       <CirclePageContainer>
         <VStack gap={12} flexGrow>
           <CircleBanner />

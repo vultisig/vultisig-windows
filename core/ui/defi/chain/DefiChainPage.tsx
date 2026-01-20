@@ -1,3 +1,4 @@
+import { RefreshDefiData } from '@core/ui/defi/RefreshDefiData'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { BottomNavigation } from '@core/ui/vault/components/BottomNavigation'
 import { VaultHeader } from '@core/ui/vault/components/VaultHeader'
@@ -17,7 +18,10 @@ export const DefiChainPage = () => {
       flexGrow
     >
       <VStack flexGrow>
-        <VaultHeader primaryControls={<PageHeaderBackButton />} />
+        <VaultHeader
+          primaryControls={<PageHeaderBackButton />}
+          secondaryControls={<RefreshDefiData />}
+        />
         <StyledPageContent scrollable gap={24} flexGrow>
           <DefiChainBalanceBanner />
           <DefiChainTabs />

@@ -1,5 +1,8 @@
 import { useIsCircleVisible } from '@core/ui/storage/circleVisibility'
-import { useDefiChains } from '@core/ui/storage/defiChains'
+import {
+  isSupportedDefiChain,
+  useDefiChains,
+} from '@core/ui/storage/defiChains'
 import { useAvailableChains } from '@core/ui/vault/state/useAvailableChains'
 import { CryptoIcon } from '@lib/ui/icons/CryptoIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -32,7 +35,9 @@ export const DefiChainsList = () => {
   const normalizedQuery = deferredQuery.trim().toLowerCase()
 
   const defiChainBalances = useMemo(() => {
-    return chainPortfolios.filter(({ chain }) => defiChains.includes(chain))
+    return chainPortfolios.filter(
+      ({ chain }) => isSupportedDefiChain(chain) && defiChains.includes(chain)
+    )
   }, [chainPortfolios, defiChains])
 
   const filteredBalances = useMemo(() => {
