@@ -7,9 +7,15 @@ import { useMemo } from 'react'
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'
 
-const supportedDefiChains: Chain[] = [Chain.THORChain, Chain.MayaChain]
+export const supportedDefiChains = [Chain.THORChain, Chain.MayaChain] as const
+export type SupportedDefiChain = (typeof supportedDefiChains)[number]
 
 export const initialDefiChains: Chain[] = []
+
+export const isSupportedDefiChain = (
+  chain: Chain
+): chain is SupportedDefiChain =>
+  (supportedDefiChains as readonly Chain[]).includes(chain)
 
 type GetDefiChainsFunction = () => Promise<Chain[]>
 type SetDefiChainsFunction = (chains: Chain[]) => Promise<void>
@@ -33,7 +39,8 @@ export const useDefiChains = () => {
   const allowedDefiChains = useSupportedDefiChainsForVault()
   const { data } = useDefiChainsQuery()
 
-  const resolved = data ?? initialDefiChains
+  const resolved = (data ?? initialDefiChains).filter(isSupportedDefiChain)
+
   return resolved.filter(chain => allowedDefiChains.includes(chain))
 }
 
@@ -55,6 +62,10 @@ export const useToggleDefiChain = () => {
   const { mutate: setDefiChains, isPending } = useSetDefiChainsMutation()
 
   const toggleChain = (chain: Chain) => {
+    if (!isSupportedDefiChain(chain)) {
+      return
+    }
+
     const isSelected = defiChains.includes(chain)
 
     if (!isSelected && !allowedDefiChains.includes(chain)) {
@@ -75,9 +86,14 @@ export const useToggleDefiChain = () => {
 
 export const useSupportedDefiChainsForVault = () => {
   const vaultChains = useCurrentVaultChains()
+  const vaultChainsSet = useMemo(
+    () => new Set<Chain>(vaultChains),
+    [vaultChains]
+  )
 
   return useMemo(
-    () => supportedDefiChains.filter(chain => vaultChains.includes(chain)),
-    [vaultChains]
+    () =>
+      supportedDefiChains.filter(chain => vaultChainsSet.has(chain as Chain)),
+    [vaultChainsSet]
   )
 }
