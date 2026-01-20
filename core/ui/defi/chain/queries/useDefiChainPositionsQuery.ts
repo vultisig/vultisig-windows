@@ -1,5 +1,4 @@
 import { Chain } from '@core/chain/Chain'
-import { featureFlags } from '@core/ui/featureFlags'
 
 import { DefiChainPositions } from './types'
 import { useMayaDefiPositionsQuery } from './useMayaDefiPositionsQuery'
@@ -19,7 +18,7 @@ export const useDefiChainPositionsQuery = (
     enabled: chain === Chain.THORChain,
   })
   const mayaQuery = useMayaDefiPositionsQuery({
-    enabled: featureFlags.mayaChainDefi && chain === Chain.MayaChain,
+    enabled: chain === Chain.MayaChain,
   })
 
   if (chain === Chain.THORChain) {

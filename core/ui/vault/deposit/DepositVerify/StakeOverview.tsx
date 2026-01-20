@@ -1,3 +1,5 @@
+import { toChainAmount } from '@core/chain/amount/toChainAmount'
+import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { BlockaidLogo } from '@core/ui/chain/security/blockaid/BlockaidLogo'
@@ -27,6 +29,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
+import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -46,10 +49,28 @@ export const StakeOverview = ({ onBack }: OnBackProp) => {
     ? (t('you_are_unstaking') as string)
     : (t('you_are_staking') as string)
 
+  // Check if this is a native TCY unstake - the memo will be like 'tcy-:5000'
+  // In this case, the transaction amount is 0 and the percentage is in the memo
+  const isNativeTcyUnstake = isUnstake && memo?.startsWith('tcy-:')
+
   const rawAmount = depositData?.amount
   const amountValue =
     typeof rawAmount === 'number' ? rawAmount : Number(rawAmount ?? 0)
   const fallbackAmount = Number.isFinite(amountValue) ? amountValue : 0
+
+  // For native TCY unstaking, the payload.toAmount is '0' because the amount is
+  // encoded in the memo as a percentage. We need to use the form amount instead.
+  const getPayloadAmount = useCallback(
+    (payload: KeysignPayload) => {
+      const payloadAmount = payload.toAmount
+      // If payload amount is 0 or empty, use the form amount (converted to chain units)
+      if (!payloadAmount || payloadAmount === '0') {
+        return toChainAmount(fallbackAmount, coin.decimals).toString()
+      }
+      return payloadAmount
+    },
+    [fallbackAmount, coin.decimals]
+  )
 
   return (
     <>
@@ -74,12 +95,17 @@ export const StakeOverview = ({ onBack }: OnBackProp) => {
         )}
 
         <List border="gradient" radius={16}>
-          <TransactionOverviewAmount
-            label={actionLabel}
-            coin={coin}
-            fallbackAmount={fallbackAmount}
-            keysignPayloadQuery={keysignPayloadQuery}
-          />
+          {/* Hide amount row for native TCY unstake when fallback is 0, as the actual
+              amount is determined by THORChain based on the percentage in the memo */}
+          {!(isNativeTcyUnstake && fallbackAmount === 0) && (
+            <TransactionOverviewAmount
+              label={actionLabel}
+              coin={coin}
+              fallbackAmount={fallbackAmount}
+              keysignPayloadQuery={keysignPayloadQuery}
+              getPayloadAmount={getPayloadAmount}
+            />
+          )}
           <TransactionOverviewItem
             label={t('from')}
             value={
@@ -97,7 +123,7 @@ export const StakeOverview = ({ onBack }: OnBackProp) => {
             label={t('memo')}
             value={
               memo ? (
-                <MiddleTruncate
+                <StyledTruncate
                   size={14}
                   text={memo}
                   weight={500}
@@ -187,6 +213,10 @@ const BlockaidLabel = styled(Text)`
   margin-right: 6px;
   white-space: nowrap;
   text-align: center;
+`
+
+const StyledTruncate = styled(MiddleTruncate)`
+  justify-content: flex-end;
 `
 
 const BlockaidLogoWrapper = styled.div`

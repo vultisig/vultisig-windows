@@ -970,6 +970,7 @@ export const it = {
   remove_cacao_pool: 'Rimuovi dal pool CACAO',
   wrong_vault_try_again: 'Vault o dispositivo di associazione errati.',
   you_are_bonding: 'Stai facendo bond',
+  you_are_unbonding: 'Stai facendo unbond',
   you_are_sending: 'Stai inviando',
   you_are_staking: 'Stai facendo stake',
   you_are_unstaking: 'Stai facendo unstake',

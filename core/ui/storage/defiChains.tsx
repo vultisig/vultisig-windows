@@ -10,7 +10,7 @@ import { StorageKey } from './StorageKey'
 
 const supportedDefiChains: Chain[] = [
   Chain.THORChain,
-  ...(featureFlags.mayaChainDefi ? [Chain.MayaChain] : []),
+  ...(featureFlags.mayaChain ? [Chain.MayaChain] : []),
 ]
 
 export const initialDefiChains: Chain[] = []

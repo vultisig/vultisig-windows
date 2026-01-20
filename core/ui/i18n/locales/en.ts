@@ -1049,6 +1049,7 @@ export const en = {
   remove_cacao_pool: 'Remove from CACAO Pool',
   wrong_vault_try_again: 'Wrong Vault or Pair Device.',
   you_are_bonding: "You're bonding",
+  you_are_unbonding: "You're unbonding",
   you_are_sending: "You're sending",
   you_are_staking: "You're staking",
   you_are_unstaking: "You're unstaking",

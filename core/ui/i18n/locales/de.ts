@@ -975,6 +975,7 @@ export const de = {
   remove_cacao_pool: 'Aus dem CACAO-Pool entfernen',
   wrong_vault_try_again: 'Falscher Tresor oder falsches Gerät gekoppelt.',
   you_are_bonding: 'Du bondest',
+  you_are_unbonding: 'Du entbondest',
   you_are_sending: 'Du sendest',
   you_are_staking: 'Du stakest',
   you_are_unstaking: 'Du entstakest',

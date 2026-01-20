@@ -1,6 +1,5 @@
 import { Chain } from '@core/chain/Chain'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
-import { featureFlags } from '@core/ui/featureFlags'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import {
   DefiPosition,
@@ -16,7 +15,6 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
@@ -155,10 +153,8 @@ export const LpPositions = () => {
   const { positions: availablePositions, isLoading } =
     useAvailableDefiPositions(chain)
   const navigate = useCoreNavigate()
-  const addEnabled = featureFlags.defiLpAddEnabled
 
   const handleAction = (position: DefiPosition, action: 'add' | 'remove') => {
-    if (!addEnabled) return
     navigate({
       id: 'lpPositionForm',
       state: { chain, positionId: position.id, action },
@@ -234,57 +230,25 @@ export const LpPositions = () => {
               </VStack>
 
               <ActionsRow>
-                {addEnabled ? (
-                  <ActionButton
-                    variant="secondary"
-                    onClick={() => handleAction(position, 'remove')}
-                  >
-                    <ActionIcon variant="secondary">
-                      <CircleMinusIcon />
-                    </ActionIcon>
-                    {t('defi_remove')}
-                  </ActionButton>
-                ) : (
-                  <Tooltip
-                    content={t('coming_soon')}
-                    renderOpener={({ ref, ...props }) => (
-                      <span ref={ref as any} {...props} style={{ flex: 1 }}>
-                        <ActionButton variant="secondary" disabled>
-                          <ActionIcon variant="secondary">
-                            <CircleMinusIcon />
-                          </ActionIcon>
-                          {t('defi_remove')}
-                        </ActionButton>
-                      </span>
-                    )}
-                  />
-                )}
+                <ActionButton
+                  variant="secondary"
+                  onClick={() => handleAction(position, 'remove')}
+                >
+                  <ActionIcon variant="secondary">
+                    <CircleMinusIcon />
+                  </ActionIcon>
+                  {t('defi_remove')}
+                </ActionButton>
 
-                {addEnabled ? (
-                  <ActionButton
-                    variant="primary"
-                    onClick={() => handleAction(position, 'add')}
-                  >
-                    <ActionIcon variant="primary">
-                      <CirclePlusIcon />
-                    </ActionIcon>
-                    {t('defi_add')}
-                  </ActionButton>
-                ) : (
-                  <Tooltip
-                    content={t('coming_soon')}
-                    renderOpener={({ ref, ...props }) => (
-                      <span ref={ref as any} {...props} style={{ flex: 1 }}>
-                        <ActionButton variant="primary" disabled>
-                          <ActionIcon variant="primary">
-                            <CirclePlusIcon />
-                          </ActionIcon>
-                          {t('defi_add')}
-                        </ActionButton>
-                      </span>
-                    )}
-                  />
-                )}
+                <ActionButton
+                  variant="primary"
+                  onClick={() => handleAction(position, 'add')}
+                >
+                  <ActionIcon variant="primary">
+                    <CirclePlusIcon />
+                  </ActionIcon>
+                  {t('defi_add')}
+                </ActionButton>
               </ActionsRow>
             </VStack>
           </Card>

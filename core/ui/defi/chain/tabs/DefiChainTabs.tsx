@@ -1,5 +1,4 @@
 import { Chain } from '@core/chain/Chain'
-import { featureFlags } from '@core/ui/featureFlags'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Tabs } from '@lib/ui/base/Tabs'
 import { IconButton } from '@lib/ui/buttons/IconButton'
@@ -20,11 +19,7 @@ export const DefiChainTabs = () => {
   const chain = useCurrentDefiChain()
   const includeBonding = chain === Chain.THORChain || chain === Chain.MayaChain
 
-  const defaultTab: DefiChainPageTab = includeBonding
-    ? 'bonded'
-    : featureFlags.defiStakedTab
-      ? 'staked'
-      : 'lps'
+  const defaultTab: DefiChainPageTab = includeBonding ? 'bonded' : 'staked'
   const [activeTab, setActiveTab] = useState<DefiChainPageTab>(
     getLastDefiChainTab(chain) ?? defaultTab
   )
