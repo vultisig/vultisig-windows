@@ -92,7 +92,7 @@ export const ManageAmountInputField = () => {
               render={() => (
                 <InputWrapper>
                   <AnimatePresence mode="wait">
-                    <motion.div
+                    <StyledInputWrapper
                       key={currencyInputMode}
                       initial={{ y: 20, opacity: 0 }}
                       animate={{ y: 0, opacity: 1 }}
@@ -128,7 +128,7 @@ export const ManageAmountInputField = () => {
                           />
                         )}
                       />
-                    </motion.div>
+                    </StyledInputWrapper>
                   </AnimatePresence>
                   <AmountInReverseCurrencyDisplay value={currencyInputMode} />
                 </InputWrapper>
@@ -223,6 +223,10 @@ const InputWrapper = styled.div`
       font-size: 24px;
     }
   }
+`
+
+const StyledInputWrapper = styled(motion.div)`
+  padding-right: 40px;
 `
 
 const TotalBalanceWrapper = styled(HStack)`
