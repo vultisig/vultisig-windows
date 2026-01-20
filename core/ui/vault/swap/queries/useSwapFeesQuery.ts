@@ -1,6 +1,6 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getNativeSwapDecimals } from '@core/chain/swap/native/utils/getNativeSwapDecimals'
-import { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
+import { SwapQuote, SwapQuoteResult } from '@core/chain/swap/quote/SwapQuote'
 import { SwapFees } from '@core/chain/swap/SwapFee'
 import { getFeeAmount } from '@core/mpc/keysign/fee'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
@@ -35,35 +35,38 @@ export const useSwapFeesQuery = (swapQuote: SwapQuote) => {
         decimals: fromFeeCoin.decimals,
       }
 
-      return matchRecordUnion(swapQuote, {
-        native: ({ fees }) => {
-          const swapAmount = BigInt(fees.total)
+      return matchRecordUnion<SwapQuoteResult, SwapFees>(
+        swapQuote as SwapQuoteResult,
+        {
+          native: ({ fees }) => {
+            const swapAmount = BigInt(fees.total)
 
-          return {
-            swap: {
-              ...toCoinKey,
-              amount: swapAmount,
-              decimals: getNativeSwapDecimals(toCoinKey),
-            },
-            network,
-          }
-        },
-        general: ({ tx }) => {
-          return matchRecordUnion(tx, {
-            evm: () => ({
-              network,
-            }),
-            solana: ({ networkFee, swapFee }) => ({
-              network: {
-                chain: chain,
-                amount: BigInt(networkFee),
-                decimals: fromFeeCoin.decimals,
+            return {
+              swap: {
+                ...toCoinKey,
+                amount: swapAmount,
+                decimals: getNativeSwapDecimals(toCoinKey),
               },
-              swap: swapFee,
-            }),
-          })
-        },
-      })
+              network,
+            }
+          },
+          general: ({ tx }) => {
+            return matchRecordUnion(tx, {
+              evm: () => ({
+                network,
+              }),
+              solana: ({ networkFee, swapFee }) => ({
+                network: {
+                  chain: chain,
+                  amount: BigInt(networkFee),
+                  decimals: fromFeeCoin.decimals,
+                },
+                swap: swapFee,
+              }),
+            })
+          },
+        }
+      )
     }
   )
 }

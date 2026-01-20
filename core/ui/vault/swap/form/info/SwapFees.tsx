@@ -108,7 +108,7 @@ export const SwapFees: FC<SwapFeesProps> = ({ RowComponent, swapQuote }) => {
                           </Text>
                         </RowComponent>
                       )}
-                      <SwapDiscountInfo />
+                      <SwapDiscountInfo discounts={swapQuote.discounts} />
                     </>
                   )
                 }}
