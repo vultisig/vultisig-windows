@@ -35,38 +35,35 @@ export const useSwapFeesQuery = (swapQuote: SwapQuote) => {
         decimals: fromFeeCoin.decimals,
       }
 
-      return matchRecordUnion<SwapQuoteResult, SwapFees>(
-        swapQuote as SwapQuoteResult,
-        {
-          native: ({ fees }) => {
-            const swapAmount = BigInt(fees.total)
+      return matchRecordUnion<SwapQuoteResult, SwapFees>(swapQuote.quote, {
+        native: ({ fees }) => {
+          const swapAmount = BigInt(fees.total)
 
-            return {
-              swap: {
-                ...toCoinKey,
-                amount: swapAmount,
-                decimals: getNativeSwapDecimals(toCoinKey),
-              },
+          return {
+            swap: {
+              ...toCoinKey,
+              amount: swapAmount,
+              decimals: getNativeSwapDecimals(toCoinKey),
+            },
+            network,
+          }
+        },
+        general: ({ tx }) => {
+          return matchRecordUnion(tx, {
+            evm: () => ({
               network,
-            }
-          },
-          general: ({ tx }) => {
-            return matchRecordUnion(tx, {
-              evm: () => ({
-                network,
-              }),
-              solana: ({ networkFee, swapFee }) => ({
-                network: {
-                  chain: chain,
-                  amount: BigInt(networkFee),
-                  decimals: fromFeeCoin.decimals,
-                },
-                swap: swapFee,
-              }),
-            })
-          },
-        }
-      )
+            }),
+            solana: ({ networkFee, swapFee }) => ({
+              network: {
+                chain: chain,
+                amount: BigInt(networkFee),
+                decimals: fromFeeCoin.decimals,
+              },
+              swap: swapFee,
+            }),
+          })
+        },
+      })
     }
   )
 }

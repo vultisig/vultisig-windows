@@ -72,7 +72,7 @@ export const findSwapQuote = async ({
       })
 
       return {
-        native,
+        quote: { native },
         discounts:
           swapChain === Chain.THORChain
             ? [...vultDiscount, ...referralDiscount]
@@ -106,7 +106,7 @@ export const findSwapQuote = async ({
           isAffiliate: !!affiliateBps,
         })
 
-        return { general, discounts: [] }
+        return { quote: { general }, discounts: [] }
       })
     }
 
@@ -123,7 +123,7 @@ export const findSwapQuote = async ({
           affiliateBps,
         })
 
-        return { general, discounts: vultDiscount }
+        return { quote: { general }, discounts: vultDiscount }
       })
     }
 
@@ -145,7 +145,7 @@ export const findSwapQuote = async ({
           affiliateBps,
         })
 
-        return { general, discounts: vultDiscount }
+        return { quote: { general }, discounts: vultDiscount }
       })
     }
 

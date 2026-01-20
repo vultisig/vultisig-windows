@@ -16,7 +16,7 @@ export const getSwapDestinationAddress = ({
   quote,
   fromCoin,
 }: GetSwapDestinationAddressInput): string =>
-  matchRecordUnion<SwapQuoteResult, string>(quote as SwapQuoteResult, {
+  matchRecordUnion<SwapQuoteResult, string>(quote.quote, {
     general: quote =>
       matchRecordUnion<GeneralSwapTx, string>(quote.tx, {
         evm: ({ to }) => to,

@@ -123,7 +123,8 @@ export const SwapFees: FC<SwapFeesProps> = ({ RowComponent, swapQuote }) => {
         pending={() => <Skeleton width="48px" height="12px" />}
         error={() => <Text color="danger">{t('failed_to_load')}</Text>}
         success={data => {
-          const totalBps = 'native' in data ? data.native.fees.total_bps : 0
+          const totalBps =
+            'native' in data.quote ? data.quote.native.fees.total_bps : 0
           if (!totalBps) return null
 
           const toalBpsPercentage = totalBps / 100

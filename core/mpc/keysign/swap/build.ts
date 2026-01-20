@@ -65,7 +65,7 @@ export const buildSwapKeysignPayload = async ({
   const thirdPartyGasLimitEstimation = matchRecordUnion<
     SwapQuoteResult,
     bigint | undefined
-  >(swapQuote as SwapQuoteResult, {
+  >(swapQuote.quote, {
     native: () => undefined,
     general: ({ tx }) =>
       matchRecordUnion<GeneralSwapTx, bigint | undefined>(tx, {
@@ -86,7 +86,7 @@ export const buildSwapKeysignPayload = async ({
     toAddress: getSwapDestinationAddress({ quote: swapQuote, fromCoin }),
     utxoInfo: await getKeysignUtxoInfo(fromCoin),
     memo: matchRecordUnion<SwapQuoteResult, string | undefined>(
-      swapQuote as SwapQuoteResult,
+      swapQuote.quote,
       {
         native: ({ memo }) => memo,
         general: () => undefined,
@@ -97,7 +97,7 @@ export const buildSwapKeysignPayload = async ({
   keysignPayload.swapPayload = matchRecordUnion<
     SwapQuoteResult,
     KeysignPayload['swapPayload']
-  >(swapQuote as SwapQuoteResult, {
+  >(swapQuote.quote, {
     general: quote => {
       const txMsg = matchRecordUnion<
         GeneralSwapTx,
@@ -171,14 +171,11 @@ export const buildSwapKeysignPayload = async ({
     keysignPayload,
     walletCore,
     thirdPartyGasLimitEstimation,
-    isDeposit: matchRecordUnion<SwapQuoteResult, boolean>(
-      swapQuote as SwapQuoteResult,
-      {
-        native: ({ swapChain }) =>
-          areEqualCoins(fromCoin, chainFeeCoin[swapChain]),
-        general: () => false,
-      }
-    ),
+    isDeposit: matchRecordUnion<SwapQuoteResult, boolean>(swapQuote.quote, {
+      native: ({ swapChain }) =>
+        areEqualCoins(fromCoin, chainFeeCoin[swapChain]),
+      general: () => false,
+    }),
   })
 
   const { chain } = fromCoin

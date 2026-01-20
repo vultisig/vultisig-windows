@@ -13,8 +13,7 @@ export type SwapQuoteResult = {
   [T in SwapType]: { [K in T]: SwapQuoteMap[T] }
 }[SwapType]
 
-type SwapQuoteBase = {
+export type SwapQuote = {
+  quote: SwapQuoteResult
   discounts: SwapDiscount[]
 }
-
-export type SwapQuote = SwapQuoteResult & SwapQuoteBase
