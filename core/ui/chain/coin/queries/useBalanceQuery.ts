@@ -1,5 +1,5 @@
+import { accountCoinKeyToString } from '@core/chain/coin/AccountCoin'
 import { CoinBalanceResolverInput } from '@core/chain/coin/balance/resolver'
-import { coinKeyToString } from '@core/chain/coin/Coin'
 import { Exact } from '@lib/utils/types/Exact'
 import { useMemo } from 'react'
 
@@ -13,7 +13,7 @@ export const useBalanceQuery = <T extends CoinBalanceResolverInput>(
   return useMemo(() => {
     const error = query.errors[0] ?? null
 
-    const data = query.data?.[coinKeyToString(input)]
+    const data = query.data?.[accountCoinKeyToString(input)]
 
     return {
       data,
