@@ -8,6 +8,7 @@ import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
 import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { formatAmount } from '@lib/utils/formatAmount'
+import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -24,7 +25,7 @@ export const Fees = () => {
   const referralFeeAmount = watch('referralFeeAmount')
   const expiration = watch('expiration')
   const debouncedExpiration = useDebounce(expiration, debounceDelayMs)
-  const tnsFees = useTnsFeesQuery(debouncedExpiration)
+  const tnsFees = useTnsFeesQuery(1)
   const formatFiatAmount = useFormatFiatAmount()
   const [coin] = useReferralPayoutAsset()
   const coinPrice = useCoinPriceQuery({
@@ -35,6 +36,48 @@ export const Fees = () => {
     coinPrice,
     tnsFees,
   })
+
+  const normalizedYears = useMemo(
+    () => Math.max(1, debouncedExpiration ?? 1),
+    [debouncedExpiration]
+  )
+
+  const derivedFees = useMemo(() => {
+    if (!query.data) {
+      return null
+    }
+
+    const {
+      tnsFees: { registerFee, runeFee },
+      coinPrice,
+    } = query.data
+
+    const perYearFee = runeFee - registerFee
+    const totalYearCost = perYearFee * normalizedYears
+    const totalFee = registerFee + totalYearCost
+
+    return {
+      registerFee,
+      perYearFee,
+      totalYearCost,
+      totalFee,
+      coinPrice,
+    }
+  }, [normalizedYears, query.data])
+
+  useEffect(() => {
+    if (!derivedFees) {
+      return
+    }
+
+    const { totalFee } = derivedFees
+
+    if (referralFeeAmount !== totalFee) {
+      setValue('referralFeeAmount', totalFee, {
+        shouldValidate: true,
+      })
+    }
+  }, [derivedFees, referralFeeAmount, setValue])
 
   return (
     <VStack
@@ -54,18 +97,10 @@ export const Fees = () => {
           </CenterAbsolutely>
         )}
         success={({ coinPrice, tnsFees: { registerFee, runeFee } }) => {
-          if (referralFeeAmount !== runeFee) {
-            setValue('referralFeeAmount', runeFee, {
-              shouldValidate: true,
-            })
-          }
-
-          const yearlyFee = (runeFee - registerFee) / debouncedExpiration
+          const perYearFee = runeFee - registerFee
+          const totalYearCost = perYearFee * normalizedYears
           const registerFeeFiat = formatFiatAmount(registerFee * coinPrice)
-
-          const yearlyFeeFiat = formatFiatAmount(
-            yearlyFee * debouncedExpiration * coinPrice
-          )
+          const yearlyFeeFiat = formatFiatAmount(totalYearCost * coinPrice)
 
           return (
             <>
@@ -91,8 +126,8 @@ export const Fees = () => {
                 </Text>
                 <VStack alignItems="flex-end">
                   <Text size={14}>
-                    {debouncedExpiration} ×{' '}
-                    {formatAmount(yearlyFee, { ticker: 'RUNE' })}
+                    {normalizedYears} ×{' '}
+                    {formatAmount(perYearFee, { ticker: 'RUNE' })}
                   </Text>
                   <Text size={14} color="supporting">
                     {yearlyFeeFiat}
