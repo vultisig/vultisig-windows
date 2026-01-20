@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "translate": "npx tsx i18n/scripts/translate.ts",
-    "validate-public": "npx tsx scripts/validatePublic.ts"
+    "validate-public": "npx tsx scripts/validatePublic.ts",
+    "i18n:check": "npx tsx i18n/scripts/check-unused.ts",
+    "i18n:fix": "npx tsx i18n/scripts/check-unused.ts --fix"
   },
   "dependencies": {
     "@bufbuild/protobuf": "^2.10.2",
