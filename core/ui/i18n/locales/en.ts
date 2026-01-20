@@ -887,6 +887,15 @@ export const en = {
   transaction_has_risk:
     '{{riskLevel}} risk transaction detected by <provider></provider>',
   transaction_successful: 'Transaction Successful',
+  transaction_could_not_be_parsed:
+    'This transaction could not be parsed. Raw transaction data is shown below.',
+  raw_transaction_data: 'Raw Transaction Data',
+  transaction_instructions_summary: 'Transaction Instructions Summary',
+  instruction: 'Instruction',
+  program_id: 'Program ID',
+  accounts: 'Accounts',
+  data_length: 'Data Length',
+  bytes: 'bytes',
   try_again: 'Try Again',
   turn_your_vault_into_rewards_machine:
     'Turn your vault into a rewards machine. Create your referral now and start earning.',
