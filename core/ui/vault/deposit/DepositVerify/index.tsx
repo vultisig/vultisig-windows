@@ -40,7 +40,8 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
   const { fields: actionFields } = useDepositFormConfig()
 
   const shouldUseBondOverview =
-    entryPoint === 'defi' && selectedChainAction === 'bond'
+    entryPoint === 'defi' &&
+    (selectedChainAction === 'bond' || selectedChainAction === 'unbond')
   const shouldUseStakeOverview =
     entryPoint === 'defi' &&
     (selectedChainAction === 'stake' || selectedChainAction === 'unstake')

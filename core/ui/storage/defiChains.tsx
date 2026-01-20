@@ -4,18 +4,23 @@ import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
+import { featureFlags } from '../featureFlags'
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'
 
-export const supportedDefiChains = [Chain.THORChain, Chain.MayaChain] as const
-export type SupportedDefiChain = (typeof supportedDefiChains)[number]
+export const supportedDefiChains = [
+  Chain.THORChain,
+  ...(featureFlags.mayaChain ? [Chain.MayaChain] : []),
+] as const satisfies readonly Chain[]
 
-export const initialDefiChains: Chain[] = []
+export type SupportedDefiChain = (typeof supportedDefiChains)[number]
 
 export const isSupportedDefiChain = (
   chain: Chain
 ): chain is SupportedDefiChain =>
-  (supportedDefiChains as readonly Chain[]).includes(chain)
+  supportedDefiChains.includes(chain as SupportedDefiChain)
+
+export const initialDefiChains: Chain[] = []
 
 type GetDefiChainsFunction = () => Promise<Chain[]>
 type SetDefiChainsFunction = (chains: Chain[]) => Promise<void>
@@ -40,7 +45,6 @@ export const useDefiChains = () => {
   const { data } = useDefiChainsQuery()
 
   const resolved = (data ?? initialDefiChains).filter(isSupportedDefiChain)
-
   return resolved.filter(chain => allowedDefiChains.includes(chain))
 }
 
@@ -86,14 +90,9 @@ export const useToggleDefiChain = () => {
 
 export const useSupportedDefiChainsForVault = () => {
   const vaultChains = useCurrentVaultChains()
-  const vaultChainsSet = useMemo(
-    () => new Set<Chain>(vaultChains),
-    [vaultChains]
-  )
 
   return useMemo(
-    () =>
-      supportedDefiChains.filter(chain => vaultChainsSet.has(chain as Chain)),
-    [vaultChainsSet]
+    () => supportedDefiChains.filter(chain => vaultChains.includes(chain)),
+    [vaultChains]
   )
 }
