@@ -9,7 +9,6 @@ import { useMemo } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
 import { usePopupInput } from '../../state/input'
-import { CosmosMsgType } from './interfaces'
 
 export const TxGuard = ({ children }: ChildrenProp) => {
   const transactionPayload = usePopupInput<'sendTx'>()
@@ -18,22 +17,8 @@ export const TxGuard = ({ children }: ChildrenProp) => {
   const isUnsupportedIbcTx = useMemo(
     () =>
       matchRecordUnion(transactionPayload, {
-        keysign: ({ transactionDetails }) => {
-          if (!('msgPayload' in transactionDetails)) {
-            return false
-          }
-
-          const { msgPayload } = transactionDetails
-          if (!msgPayload) {
-            return false
-          }
-
-          const { case: msgCase } = msgPayload
-          if (msgCase !== CosmosMsgType.MSG_TRANSFER_URL) {
-            return false
-          }
-
-          return !!msgPayload.value.memo
+        keysign: () => {
+          return false
         },
         serialized: () => false,
       }),
