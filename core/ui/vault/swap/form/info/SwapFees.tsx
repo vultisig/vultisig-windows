@@ -89,14 +89,6 @@ export const SwapFees: FC<SwapFeesProps> = ({ RowComponent, swapQuote }) => {
                   const { ticker, decimals } = chainFeeCoin[fromCoinKey.chain]
                   return (
                     <>
-                      {swap && (
-                        <RowComponent>
-                          <Text>{t('swap_fee')}</Text>
-                          <Text color="shy">
-                            <SwapFeeFiatValue value={[swap]} />
-                          </Text>
-                        </RowComponent>
-                      )}
                       <RowComponent>
                         <span>{t('network_fee')}</span>
                         <Text color="shy">
@@ -108,6 +100,14 @@ export const SwapFees: FC<SwapFeesProps> = ({ RowComponent, swapQuote }) => {
                           <SwapFeeFiatValue value={[network]} />)
                         </Text>
                       </RowComponent>
+                      {swap && (
+                        <RowComponent>
+                          <Text>{t('swap_fee')}</Text>
+                          <Text color="shy">
+                            <SwapFeeFiatValue value={[swap]} />
+                          </Text>
+                        </RowComponent>
+                      )}
                       <SwapDiscountInfo />
                     </>
                   )
