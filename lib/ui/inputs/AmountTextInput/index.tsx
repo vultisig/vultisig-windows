@@ -3,7 +3,7 @@ import { centerContent } from '@lib/ui/css/centerContent'
 import { TextInput, TextInputProps } from '@lib/ui/inputs/TextInput'
 import { HStack } from '@lib/ui/layout/Stack'
 import { text } from '@lib/ui/text'
-import { ReactNode, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 export type AmountTextInputProps = Omit<
@@ -50,6 +50,11 @@ export const AmountTextInput = ({
   const valueAsString = value?.toString() ?? ''
   const [inputValue, setInputValue] = useState<string>(valueAsString)
 
+  // Sync internal state with prop value
+  useEffect(() => {
+    setInputValue(valueAsString)
+  }, [valueAsString])
+
   return (
     <Input
       {...props}
@@ -68,11 +73,7 @@ export const AmountTextInput = ({
         </HStack>
       }
       placeholder={placeholder ?? 'Enter amount'}
-      value={
-        Number(valueAsString) === Number(inputValue)
-          ? inputValue
-          : valueAsString
-      }
+      value={inputValue}
       inputOverlay={unit ? <UnitContainer>{unit}</UnitContainer> : undefined}
       onValueChange={(value: string) => {
         if (shouldBePositive) {

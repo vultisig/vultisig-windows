@@ -1,4 +1,3 @@
-import { featureFlags } from '@core/ui/featureFlags'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { centerContent } from '@lib/ui/css/centerContent'
@@ -11,7 +10,6 @@ import { hStack, vStack } from '@lib/ui/layout/Stack'
 import { pageBottomInsetVar } from '@lib/ui/page/PageContent'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
@@ -72,30 +70,15 @@ export const BottomNavigation = ({
       <CameraButton onClick={() => navigate({ id: 'uploadQr', state: {} })}>
         <CameraIcon />
       </CameraButton>
-      {featureFlags.defiEnabled ? (
-        <TabButton
-          isActive={activeTab === 'defi'}
-          onClick={() => handleTabChange('defi')}
-        >
-          <CoinsAddIcon />
-          <Text as="span" size={10}>
-            {t('defi')}
-          </Text>
-        </TabButton>
-      ) : (
-        <Tooltip
-          content={t('coming_soon')}
-          placement="top"
-          renderOpener={props => (
-            <TabButton {...props} isActive={activeTab === 'defi'} isDisabled>
-              <CoinsAddIcon />
-              <Text as="span" size={10}>
-                {t('defi')}
-              </Text>
-            </TabButton>
-          )}
-        />
-      )}
+      <TabButton
+        isActive={activeTab === 'defi'}
+        onClick={() => handleTabChange('defi')}
+      >
+        <CoinsAddIcon />
+        <Text as="span" size={10}>
+          {t('defi')}
+        </Text>
+      </TabButton>
     </Container>
   )
 }
