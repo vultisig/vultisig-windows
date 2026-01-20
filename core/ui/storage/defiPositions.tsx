@@ -69,13 +69,7 @@ const staticDefiPositions: Partial<Record<Chain, DefiPosition[]>> = {
       type: 'stake',
       chain: Chain.THORChain,
     },
-    {
-      id: 'thor-stake-stcy',
-      name: 'sTCY',
-      ticker: 'sTCY',
-      type: 'stake',
-      chain: Chain.THORChain,
-    },
+    // sTCY is hidden from DeFi UI - users can unstake via deposit functions
   ],
   [Chain.MayaChain]: [
     {
