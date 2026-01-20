@@ -19,6 +19,7 @@ import { useDepositAction } from '../providers/DepositActionProvider'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
 import { useDepositData } from '../state/data'
 import { BondOverview } from './BondOverview'
+import { StakeOverview } from './StakeOverview'
 
 export const DepositVerify = ({ onBack }: OnBackProp) => {
   const [selectedChainAction] = useDepositAction()
@@ -40,9 +41,16 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
 
   const shouldUseBondOverview =
     entryPoint === 'defi' && selectedChainAction === 'bond'
+  const shouldUseStakeOverview =
+    entryPoint === 'defi' &&
+    (selectedChainAction === 'stake' || selectedChainAction === 'unstake')
 
   if (shouldUseBondOverview) {
     return <BondOverview onBack={onBack} />
+  }
+
+  if (shouldUseStakeOverview) {
+    return <StakeOverview onBack={onBack} />
   }
 
   return (

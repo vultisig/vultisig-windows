@@ -1,15 +1,11 @@
-import { Chain } from '@core/chain/Chain'
-import { knownCosmosTokens } from '@core/chain/coin/knownTokens/cosmos'
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
-import { useGetTotalAmountAvailableForChain } from '@core/ui/vault/deposit/hooks/useGetAmountTotalBalance'
 import { useMemo } from 'react'
 
-import { useUnstakableStcyQuery } from '../DepositForm/ActionSpecific/StakeSpecific/UnstakeSpecific/hooks/useUnstakableSTcyQuery'
-import { useDepositAction } from '../providers/DepositActionProvider'
 import { useDepositCoin } from '../providers/DepositCoinProvider'
+import { useStakeBalance } from '../staking/useStakeBalance'
 import { useDepositCoinBalance } from './useDepositCoinBalance'
 import { useRujiraStakeQuery } from './useRujiraStakeQuery'
-import { useTonUnstakableQuery } from './useTonUnstakableQuery'
+import { useUnbondableBalanceQuery } from './useUnbondableBalanceQuery'
 
 type Params = {
   selectedChainAction: ChainAction
@@ -18,34 +14,12 @@ type Params = {
 export const useDepositBalance = ({ selectedChainAction }: Params) => {
   const [selectedCoin] = useDepositCoin()
   const chain = selectedCoin.chain
-  const { data: totalAmountAvailableForChainData } =
-    useGetTotalAmountAvailableForChain(chain)
-  const [action] = useDepositAction()
 
-  const { data: { humanReadableBalance = 0 } = {} } = useUnstakableStcyQuery({
-    address: selectedCoin.address,
-    options: {
-      enabled: Boolean(
-        selectedCoin.address &&
-        action === 'unstake' &&
-        selectedCoin.ticker === knownCosmosTokens.THORChain.tcy.ticker
-      ),
-    },
-  })
-
+  const { balance: stakeBalance } = useStakeBalance()
   const { data: stakeAndRewards } = useRujiraStakeQuery()
-
-  const { data: { humanReadableBalance: tonUnstakableBalance = 0 } = {} } =
-    useTonUnstakableQuery({
-      address: selectedCoin.address,
-      options: {
-        enabled: Boolean(
-          selectedCoin.address &&
-          action === 'unstake' &&
-          selectedCoin.chain === Chain.Ton
-        ),
-      },
-    })
+  const { data: unbondableBalance } = useUnbondableBalanceQuery({
+    enabled: selectedChainAction === 'unbond',
+  })
 
   const selectedCoinBalance = useDepositCoinBalance({
     action: selectedChainAction,
@@ -54,39 +28,24 @@ export const useDepositBalance = ({ selectedChainAction }: Params) => {
 
   const totalTokenAmount = useMemo(() => {
     if (selectedChainAction === 'unstake') {
-      if (selectedCoin.chain === Chain.Ton) {
-        return tonUnstakableBalance
-      }
+      return stakeBalance
+    }
 
-      if (
-        selectedCoin.ticker ===
-        knownCosmosTokens[Chain.THORChain]['x/ruji'].ticker
-      ) {
-        return stakeAndRewards?.bonded ?? 0
-      }
-
-      if (selectedCoin.ticker === knownCosmosTokens.THORChain.tcy.ticker) {
-        return humanReadableBalance
-      }
+    if (selectedChainAction === 'unbond') {
+      return unbondableBalance?.humanReadableBalance ?? 0
     }
 
     if (selectedChainAction === 'withdraw_ruji_rewards') {
       return stakeAndRewards?.rewardsUSDC ?? 0
     }
 
-    if (selectedCoin) return selectedCoinBalance
-    {
-      return totalAmountAvailableForChainData?.totalTokenAmount ?? 0
-    }
+    return selectedCoinBalance
   }, [
     selectedChainAction,
-    selectedCoin,
     selectedCoinBalance,
-    stakeAndRewards?.bonded,
+    stakeBalance,
+    unbondableBalance?.humanReadableBalance,
     stakeAndRewards?.rewardsUSDC,
-    humanReadableBalance,
-    tonUnstakableBalance,
-    totalAmountAvailableForChainData?.totalTokenAmount,
   ])
 
   return {

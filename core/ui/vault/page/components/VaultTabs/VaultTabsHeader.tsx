@@ -1,4 +1,6 @@
+import { isKeyImportVault } from '@core/mpc/vault/Vault'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CryptoWalletPenIcon } from '@lib/ui/icons/CryptoWalletPenIcon'
 import { hStack } from '@lib/ui/layout/Stack'
@@ -11,6 +13,7 @@ import { SearchChain } from './controls/SearchChain'
 
 export const VaultTabsHeader = ({ children }: ChildrenProp) => {
   const { colors } = useTheme()
+  const vault = useCurrentVault()
   const navigate = useCoreNavigate()
   const [isSearchExpanded, setIsSearchExpanded] = useState(false)
 
@@ -48,7 +51,7 @@ export const VaultTabsHeader = ({ children }: ChildrenProp) => {
           />
         </SearchArea>
         <AnimatePresence initial={false}>
-          {!isSearchExpanded && (
+          {!isSearchExpanded && !isKeyImportVault(vault) && (
             <ManageButtonMotion
               key="manage-vault-chains"
               initial={{ opacity: 0, scale: 0.95 }}

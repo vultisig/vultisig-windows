@@ -6,10 +6,11 @@ import { useCore } from '@core/ui/state/core'
 import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { pipe } from '@lib/utils/pipe'
+import { getRecordKeys } from '@lib/utils/record/getRecordKeys'
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
 
 import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
-import { encryptVaultKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
+import { encryptVaultAllKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
 import { usePasscode } from '../../passcodeEncryption/state/passcode'
 import { useCreateCoinsMutation } from '../../storage/coins'
 import { useSetCurrentVaultIdMutation } from '../../storage/currentVaultId'
@@ -33,19 +34,21 @@ export const useCreateVaultMutation = (
   return useMutation({
     mutationFn: async (input: Vault) => {
       const vault = await createVault(
-        pipe(input, ({ keyShares }) => {
+        pipe(input, vault => {
           if (hasPasscodeEncryption) {
             const key = shouldBePresent(passcode)
+            const encrypted = encryptVaultAllKeyShares({
+              keyShares: vault.keyShares,
+              chainKeyShares: vault.chainKeyShares,
+              key,
+            })
             return {
-              ...input,
-              keyShares: encryptVaultKeyShares({
-                keyShares,
-                key,
-              }),
+              ...vault,
+              ...encrypted,
             }
           }
 
-          return input
+          return vault
         })
       )
 
@@ -53,14 +56,18 @@ export const useCreateVaultMutation = (
 
       await setCurrentVaultId(getVaultId(vault))
 
-      const defaultChains = await getDefaultChains()
+      const chainsToCreate = vault.chainPublicKeys
+        ? getRecordKeys(vault.chainPublicKeys)
+        : await getDefaultChains()
+
       const coins = await Promise.all(
-        defaultChains.map(async chain => {
+        chainsToCreate.map(async chain => {
           const publicKey = getPublicKey({
             chain,
             walletCore,
             hexChainCode: vault.hexChainCode,
             publicKeys: vault.publicKeys,
+            chainPublicKeys: vault.chainPublicKeys,
           })
 
           const address = deriveAddress({

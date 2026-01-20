@@ -9,7 +9,7 @@ import { useCore } from '../../state/core'
 import { StorageKey } from '../../storage/StorageKey'
 import { useVaults } from '../../storage/vaults'
 import { encryptSample } from '../core/sample'
-import { encryptVaultKeyShares } from '../core/vaultKeyShares'
+import { encryptVaultAllKeyShares } from '../core/vaultKeyShares'
 import { usePasscode } from '../state/passcode'
 
 export const useSetPasscodeMutation = () => {
@@ -29,7 +29,8 @@ export const useSetPasscodeMutation = () => {
 
       const vaultsKeyShares = recordMap(
         recordFromItems(vaults, getVaultId),
-        ({ keyShares }) => encryptVaultKeyShares({ key: passcode, keyShares })
+        ({ keyShares, chainKeyShares }) =>
+          encryptVaultAllKeyShares({ keyShares, chainKeyShares, key: passcode })
       )
 
       await updateVaultsKeyShares(vaultsKeyShares)

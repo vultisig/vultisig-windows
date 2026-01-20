@@ -25,11 +25,10 @@ import { StrictText } from '@lib/ui/text'
 import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
-import { omit } from '@lib/utils/record/omit'
 import { getRecordUnionKey } from '@lib/utils/record/union/getRecordUnionKey'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useQuery } from '@tanstack/react-query'
-import { getBytes, hexlify, toUtf8Bytes, TypedDataEncoder } from 'ethers'
+import { getBytes, hexlify, toUtf8Bytes } from 'ethers'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -44,13 +43,7 @@ export const Overview = () => {
   const address = shouldBePresent(useCurrentVaultAddress(chain))
   const vault = useCurrentVault()
   const message = matchRecordUnion<SignMessageInput, string>(input, {
-    eth_signTypedData_v4: ({ message: { domain, types, message } }) =>
-      TypedDataEncoder.encode(
-        domain,
-        // Remove EIP712Domain if present — ethers handles it internally
-        omit(types, 'EIP712Domain'),
-        message
-      ),
+    eth_signTypedData_v4: ({ message }) => JSON.stringify(message),
     sign_message: ({ message, chain, useTronHeader }) => {
       const tronMessageHeader = '\x19TRON Signed Message:\n32'
       const ethMessageHeader = '\x19Ethereum Signed Message:\n32'
