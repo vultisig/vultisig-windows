@@ -670,8 +670,13 @@ export const pt = {
   reenter_password: 'Digite novamente a senha',
   referral_annual_fee: 'Taxa anual de indicação',
   referral_code: 'Código de indicação',
+  referral_code_no_whitespace: 'Espaços em branco não são permitidos',
+  referral_code_required: 'É necessário um código de indicação validado',
   referral_costs: 'Custos',
+  referral_expiration_maximum: 'Máximo de 1000 anos',
+  referral_expiration_minimum: 'Mínimo de 1 ano',
   referral_extension_fee: 'Taxa de extensão de encaminhamento',
+  referral_fee_amount_minimum: 'Mínimo de {{amount}} RUNE',
   referral_landing_title:
     '<0>Convide amigos</0>. <1>Ganhe recompensas</1>. Economize em taxas.',
   referral_program: 'Programa de Encaminhamento',
