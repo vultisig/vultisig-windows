@@ -1,14 +1,12 @@
 import { base64 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
 import { Chain } from '@core/chain/Chain'
 import { getCosmosChainByChainId } from '@core/chain/chains/cosmos/chainInfo'
+import { CosmosMsgType } from '@core/chain/chains/cosmos/cosmosMsgTypes'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { deserializeSigningOutput } from '@core/chain/tw/signingOutput'
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
-import {
-  CosmosMsgType,
-  TransactionDetails,
-} from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
+import { TransactionDetails } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import {
   CosmosFee,
   CosmosMsg,
