@@ -1,23 +1,13 @@
 import { bs58 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
 import { Chain } from '@core/chain/Chain'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { deserializeSigningOutput } from '@core/chain/tw/signingOutput'
-import { rootApiUrl } from '@core/config'
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
 import { getTransactionAuthority } from '@core/inpage-provider/popup/view/resolvers/sendTx/core/solana/utils'
-import {
-  RequestInput,
-  TransactionDetails,
-} from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
+import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { attempt } from '@lib/utils/attempt'
 import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
-import {
-  ASSOCIATED_TOKEN_PROGRAM_ID,
-  getAccount,
-  TOKEN_PROGRAM_ID,
-} from '@solana/spl-token'
 import {
   SolanaSignAndSendTransaction,
   type SolanaSignAndSendTransactionFeature,
@@ -38,11 +28,8 @@ import {
   type SolanaSignTransactionOutput,
 } from '@solana/wallet-standard-features'
 import {
-  Connection,
   PublicKey,
   SendOptions,
-  SystemInstruction,
-  SystemProgram,
   Transaction,
   TransactionSignature,
   VersionedTransaction,
@@ -306,154 +293,50 @@ export class Solana implements Wallet {
     transaction: Transaction | VersionedTransaction,
     skipBroadcast: boolean = true
   ) => {
+    let serializedTransaction: Uint8Array
+    let authority: string | undefined
+
     if (isVersionedTransaction(transaction)) {
-      const serializedTransaction = transaction.serialize()
-      const serializedBase64 = Buffer.from(serializedTransaction).toString(
-        'base64'
-      )
-      const { data } = await callPopup(
-        {
-          sendTx: {
-            serialized: {
-              data: serializedBase64,
-              skipBroadcast,
-              chain: Chain.Solana,
-            },
+      serializedTransaction = transaction.serialize()
+      authority = getTransactionAuthority(serializedTransaction)
+    } else {
+      serializedTransaction = transaction.serialize({
+        requireAllSignatures: false,
+        verifySignatures: false,
+      })
+      authority = transaction.feePayer?.toString()
+    }
+
+    const serializedBase64 = Buffer.from(serializedTransaction).toString(
+      'base64'
+    )
+
+    const { data } = await callPopup(
+      {
+        sendTx: {
+          serialized: {
+            data: serializedBase64,
+            skipBroadcast,
+            chain: Chain.Solana,
           },
         },
-        {
-          account: getTransactionAuthority(serializedTransaction),
-        }
-      )
-
-      const { signatures, encoded } = deserializeSigningOutput(
-        Chain.Solana,
-        data
-      )
-      const { message: signedMessage } = VersionedTransaction.deserialize(
-        bs58.decode(encoded)
-      )
-      for (const sig of signatures) {
-        const { pubkey, signature } = sig
-        if (pubkey && signature)
-          transaction.addSignature(
-            new PublicKey(pubkey),
-            bs58.decode(signature)
-          )
+      },
+      {
+        account: authority,
       }
-      transaction.message.recentBlockhash = signedMessage.recentBlockhash
+    )
 
-      return transaction
+    const { encoded } = deserializeSigningOutput(Chain.Solana, data)
+    if (!encoded) {
+      throw new Error('No encoded transaction returned from signing')
+    }
+
+    const rawData = bs58.decode(encoded)
+
+    if (isVersionedTransaction(transaction)) {
+      return VersionedTransaction.deserialize(rawData)
     } else {
-      const connection = new Connection(`${rootApiUrl}/solana/`)
-      for (const instruction of transaction.instructions) {
-        const getTransactionDetails = async (): Promise<
-          TransactionDetails | undefined
-        > => {
-          if (instruction.programId.equals(SystemProgram.programId)) {
-            // Handle Native SOL Transfers
-            const decodedTransfer =
-              SystemInstruction.decodeTransfer(instruction)
-
-            const amount = decodedTransfer.lamports.toString()
-            return {
-              asset: { ticker: 'SOL' },
-              amount: {
-                amount: amount,
-                decimals: chainFeeCoin[Chain.Solana].decimals,
-              },
-              from: decodedTransfer.fromPubkey.toString(),
-              to: decodedTransfer.toPubkey.toString(),
-              skipBroadcast,
-            }
-          }
-
-          if (instruction.programId.equals(TOKEN_PROGRAM_ID)) {
-            //  Handle SPL Token Transfers
-            const senderTokenAccountInfo = await getAccount(
-              connection,
-              new PublicKey(instruction.keys[0].pubkey)
-            )
-            let recipient: string
-            try {
-              // Try fetching receiver account
-              const receiverTokenAccountInfo = await getAccount(
-                connection,
-                new PublicKey(instruction.keys[2].pubkey)
-              )
-              recipient = receiverTokenAccountInfo.owner.toString()
-            } catch {
-              console.warn(
-                'Receiver token account not found. Checking for ATA...'
-              )
-              const ataInstruction = transaction.instructions.find(instr =>
-                instr.programId.equals(ASSOCIATED_TOKEN_PROGRAM_ID)
-              )
-              if (ataInstruction) {
-                // The recipient should be in the ATA instruction's keys[0] (payer) or keys[2] (owner)
-                recipient = ataInstruction.keys[2].pubkey.toString()
-              } else {
-                throw new Error(
-                  'Unable to determine recipient address. No direct token account or ATA instruction found.'
-                )
-              }
-            }
-
-            const amountBytes = instruction.data.slice(1, 9)
-            const amount = new DataView(
-              Uint8Array.from(amountBytes).buffer
-            ).getBigUint64(0, true)
-
-            const mint = senderTokenAccountInfo.mint.toString()
-
-            const metadata = await callBackground({
-              getTokenMetadata: {
-                chain: Chain.Solana,
-                id: mint,
-              },
-            })
-
-            return {
-              amount: {
-                amount: amount.toString(),
-                decimals: metadata.decimals,
-              },
-              asset: {
-                mint: mint,
-                ticker: metadata.ticker,
-              },
-              from: senderTokenAccountInfo.owner.toString(),
-              to: recipient,
-              skipBroadcast,
-            }
-          }
-        }
-
-        const transactionDetails = await getTransactionDetails()
-        if (!transactionDetails) {
-          continue
-        }
-        const { data } = await callPopup(
-          {
-            sendTx: {
-              keysign: {
-                transactionDetails,
-                chain: Chain.Solana,
-              },
-            },
-          },
-          {
-            account: transactionDetails.from,
-          }
-        )
-
-        const { encoded } = deserializeSigningOutput(Chain.Solana, data)
-
-        const rawData = bs58.decode(encoded)
-
-        return VersionedTransaction.deserialize(rawData)
-      }
-      throw new Error('Failed to get transaction details')
+      return Transaction.from(Buffer.from(rawData))
     }
   }
 
@@ -489,8 +372,14 @@ export class Solana implements Wallet {
   ): Promise<{ signature: TransactionSignature }> => {
     const result = await this.signTransaction(transaction, false)
     if (!result) throw new Error('failed to signAndSendTransaction')
+
+    const firstSignature = result.signatures[0]
+    if (!firstSignature) {
+      throw new Error('Transaction has no signatures')
+    }
+
     return {
-      signature: bs58.encode(result.signatures[0]),
+      signature: bs58.encode(firstSignature as any),
     }
   }
 

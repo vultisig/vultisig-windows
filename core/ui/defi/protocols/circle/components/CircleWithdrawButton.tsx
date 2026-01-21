@@ -19,7 +19,7 @@ export const CircleWithdrawButton = () => {
   const [, setViewState] = useCircleViewState()
 
   return (
-    <Button
+    <Container
       kind="outlined"
       size={size}
       onClick={() => setViewState('withdraw')}
@@ -28,9 +28,13 @@ export const CircleWithdrawButton = () => {
         <ArrowWallDownIcon />
       </IconWrapper>
       {t('circle.withdraw')}
-    </Button>
+    </Container>
   )
 }
+
+const Container = styled(Button)`
+  padding-left: 40px;
+`
 
 const IconWrapper = styled.div`
   position: absolute;

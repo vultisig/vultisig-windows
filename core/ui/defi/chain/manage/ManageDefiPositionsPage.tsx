@@ -1,7 +1,4 @@
-import { Chain } from '@core/chain/Chain'
-import { featureFlags } from '@core/ui/featureFlags'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCore } from '@core/ui/state/core'
 import {
@@ -32,16 +29,6 @@ export const ManageDefiPositionsPage = () => {
   const [search, setSearch] = useState('')
   const [{ chain, returnTab }] = useCoreViewState<'manageDefiPositions'>()
   const { goBack } = useCore()
-  const navigate = useCoreNavigate()
-
-  const isMayaDisabled =
-    chain === Chain.MayaChain && !featureFlags.mayaChainDefi
-
-  useEffect(() => {
-    if (isMayaDisabled) {
-      navigate({ id: 'defi', state: {} })
-    }
-  }, [isMayaDisabled, navigate])
 
   useEffect(() => {
     if (returnTab && ['bonded', 'staked', 'lps'].includes(returnTab)) {
@@ -91,10 +78,6 @@ export const ManageDefiPositionsPage = () => {
       ].filter(section => section.positions.length > 0),
     [filteredBondPositions, filteredStakePositions, filteredLpPositions, t]
   )
-
-  if (isMayaDisabled) {
-    return null
-  }
 
   return (
     <VStack fullHeight>
