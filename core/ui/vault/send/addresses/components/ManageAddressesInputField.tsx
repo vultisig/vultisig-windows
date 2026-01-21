@@ -117,7 +117,7 @@ export const ManageReceiverAddressInputField = () => {
               <VStack gap={4}>
                 <Input
                   validation={error ? 'warning' : undefined}
-                  placeholder={t('enter_address')}
+                  placeholder={t('enter_address_here')}
                   value={value}
                   onValueChange={value => handleUpdateReceiverAddress(value)}
                   onBlur={() => setTouched(true)}
