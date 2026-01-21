@@ -672,8 +672,13 @@ export const it = {
   reenter_password: 'Reinserisci la password',
   referral_annual_fee: 'Quota annuale di segnalazione',
   referral_code: 'Codice di riferimento',
+  referral_code_no_whitespace: 'Gli spazi non sono consentiti',
+  referral_code_required: 'È necessario un codice di riferimento convalidato',
   referral_costs: 'Costi',
+  referral_expiration_maximum: 'Massimo 1000 anni',
+  referral_expiration_minimum: 'Minimo 1 anno',
   referral_extension_fee: 'Commissione di estensione del referral',
+  referral_fee_amount_minimum: 'Minimo {{amount}} RUNE',
   referral_landing_title:
     '<0>Invita amici</0>. <1>Guadagna premi</1>. Risparmia sulle commissioni.',
   referral_program: 'Programma di segnalazione',

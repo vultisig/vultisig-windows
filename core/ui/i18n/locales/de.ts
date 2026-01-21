@@ -675,8 +675,13 @@ export const de = {
   reenter_password: 'Kennwort erneut eingeben',
   referral_annual_fee: 'jährliche Empfehlungsgebühr',
   referral_code: 'Empfehlungscode',
+  referral_code_no_whitespace: 'Leerzeichen sind nicht erlaubt',
+  referral_code_required: 'Ein bestätigter Empfehlungscode ist erforderlich',
   referral_costs: 'Kosten',
+  referral_expiration_maximum: 'Maximal 1000 Jahre',
+  referral_expiration_minimum: 'Mindestens 1 Jahr',
   referral_extension_fee: 'Vermittlungsgebühr',
+  referral_fee_amount_minimum: 'Mindestens {{amount}} RUNE',
   referral_landing_title:
     '<0>Freunde einladen</0>. <1>Prämien verdienen</1>. Gebühren sparen.',
   referral_program: 'Empfehlungsprogramm',
