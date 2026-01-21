@@ -822,6 +822,8 @@ __metadata:
     "@lib/ui": "workspace:^"
     "@lib/utils": "workspace:^"
     "@rive-app/react-webgl2": "npm:^4.26.1"
+    "@solana/spl-token": "npm:^0.4.14"
+    "@solana/web3.js": "npm:^1.98.4"
     "@tanstack/react-query": "npm:^5.90.19"
     "@tanstack/react-query-persist-client": "npm:^5.90.21"
     "@trustwallet/wallet-core": "npm:^4.5.0"
