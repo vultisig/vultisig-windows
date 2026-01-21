@@ -8,6 +8,8 @@ import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
 import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { formatAmount } from '@lib/utils/formatAmount'
+import { useEffect, useMemo } from 'react'
+import { useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -20,10 +22,11 @@ const debounceDelayMs = 300
 
 export const Fees = () => {
   const { t } = useTranslation()
-  const { watch, setValue } = useCreateReferralForm()
-  const referralFeeAmount = watch('referralFeeAmount')
-  const expiration = watch('expiration')
-  const debouncedExpiration = useDebounce(expiration, debounceDelayMs)
+  const { control, setValue } = useCreateReferralForm()
+  const referralFeeAmount = useWatch({ control, name: 'referralFeeAmount' })
+  const expiration = useWatch({ control, name: 'expiration' })
+  const safeExpiration = expiration ?? 1
+  const debouncedExpiration = useDebounce(safeExpiration, debounceDelayMs)
   const tnsFees = useTnsFeesQuery(debouncedExpiration)
   const formatFiatAmount = useFormatFiatAmount()
   const [coin] = useReferralPayoutAsset()
@@ -35,6 +38,26 @@ export const Fees = () => {
     coinPrice,
     tnsFees,
   })
+
+  useEffect(() => {
+    const totalFee = tnsFees.data?.runeFee
+    if (totalFee === undefined) return
+    if (referralFeeAmount === totalFee) return
+
+    setValue('referralFeeAmount', totalFee, {
+      shouldValidate: true,
+    })
+  }, [referralFeeAmount, setValue, tnsFees.data?.runeFee])
+
+  const costs = useMemo(() => {
+    const totalFee = tnsFees.data?.runeFee ?? 0
+    const registerFee = tnsFees.data?.registerFee ?? 0
+
+    return {
+      registerFee,
+      totalFee,
+    }
+  }, [tnsFees.data?.registerFee, tnsFees.data?.runeFee])
 
   return (
     <VStack
@@ -53,19 +76,12 @@ export const Fees = () => {
             <Spinner size="1.5em" />
           </CenterAbsolutely>
         )}
-        success={({ coinPrice, tnsFees: { registerFee, runeFee } }) => {
-          if (referralFeeAmount !== runeFee) {
-            setValue('referralFeeAmount', runeFee, {
-              shouldValidate: true,
-            })
-          }
-
-          const yearlyFee = (runeFee - registerFee) / debouncedExpiration
-          const registerFeeFiat = formatFiatAmount(registerFee * coinPrice)
-
-          const yearlyFeeFiat = formatFiatAmount(
-            yearlyFee * debouncedExpiration * coinPrice
+        success={({ coinPrice }) => {
+          const registerFeeFiat = formatFiatAmount(
+            costs.registerFee * coinPrice
           )
+
+          const totalFeeFiat = formatFiatAmount(costs.totalFee * coinPrice)
 
           return (
             <>
@@ -76,7 +92,7 @@ export const Fees = () => {
                 </Text>
                 <VStack alignItems="flex-end">
                   <Text size={14}>
-                    {formatAmount(registerFee, { ticker: 'RUNE' })}
+                    {formatAmount(costs.registerFee, { ticker: 'RUNE' })}
                   </Text>
                   <Text size={14} color="supporting">
                     {registerFeeFiat}
@@ -84,18 +100,17 @@ export const Fees = () => {
                 </VStack>
               </RowWrapper>
 
-              {/* Costs row – now shows years × 1 RUNE */}
+              {/* Costs row – total to send */}
               <RowWrapper>
                 <Text size={13} color="supporting">
                   {t('referral_costs')}
                 </Text>
                 <VStack alignItems="flex-end">
                   <Text size={14}>
-                    {debouncedExpiration} ×{' '}
-                    {formatAmount(yearlyFee, { ticker: 'RUNE' })}
+                    {formatAmount(costs.totalFee, { ticker: 'RUNE' })}
                   </Text>
                   <Text size={14} color="supporting">
-                    {yearlyFeeFiat}
+                    {totalFeeFiat}
                   </Text>
                 </VStack>
               </RowWrapper>
