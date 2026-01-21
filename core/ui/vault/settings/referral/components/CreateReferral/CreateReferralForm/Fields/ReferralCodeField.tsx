@@ -62,9 +62,11 @@ export const ReferralCodeField = () => {
           <Button
             onClick={() => {
               if (localInput) {
-                checkAvailability(name, {
+                const candidate = localInput.trim()
+                if (!candidate) return
+                checkAvailability(candidate, {
                   onSuccess: () => {
-                    setValue('referralName', localInput, {
+                    setValue('referralName', candidate, {
                       shouldValidate: true,
                     })
                     clearErrors('referralName')
