@@ -22,9 +22,7 @@ const createReferralSchema = (t: TFunction) =>
       .min(0.1, t('referral_fee_amount_minimum', { amount: 0.1 })),
   })
 
-export type CreateReferralFormData = z.infer<
-  ReturnType<typeof createReferralSchema>
->
+type CreateReferralFormData = z.infer<ReturnType<typeof createReferralSchema>>
 
 export const CreateReferralFormProvider = ({ children }: ChildrenProp) => {
   const { t } = useTranslation()
