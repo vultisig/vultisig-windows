@@ -672,8 +672,13 @@ export const es = {
   reenter_password: 'Escriba la contraseña otra vez',
   referral_annual_fee: 'Tarifa anual por referencia',
   referral_code: 'Código de referencia',
+  referral_code_no_whitespace: 'No se permiten espacios en blanco',
+  referral_code_required: 'Se requiere un código de referencia validado',
   referral_costs: 'Costos',
+  referral_expiration_maximum: 'Máximo 1000 años',
+  referral_expiration_minimum: 'Mínimo 1 año',
   referral_extension_fee: 'Tarifa de extensión de referencia',
+  referral_fee_amount_minimum: 'Mínimo {{amount}} RUNE',
   referral_landing_title:
     'Invita a tus amigos. Gana recompensas. Ahorra en comisiones.',
   referral_program: 'Programa de referencias',
