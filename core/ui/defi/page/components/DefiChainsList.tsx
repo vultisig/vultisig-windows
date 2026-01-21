@@ -1,9 +1,8 @@
-import { useIsCircleVisible } from '@core/ui/storage/circleVisibility'
+import { useIsCircleIncluded } from '@core/ui/storage/circleVisibility'
 import {
   isSupportedDefiChain,
   useDefiChains,
 } from '@core/ui/storage/defiChains'
-import { useAvailableChains } from '@core/ui/vault/state/useAvailableChains'
 import { CryptoIcon } from '@lib/ui/icons/CryptoIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { Center } from '@lib/ui/layout/Center'
@@ -17,7 +16,6 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { CircleDefiItem } from '../../protocols/circle/CircleDefiItem'
-import { circleChain } from '../../protocols/circle/core/config'
 import { useDefiChainPortfolios } from '../hooks/useDefiPortfolios'
 import { DefiChainItem } from './DefiChainItem'
 import { useSearchChain } from './state/searchChainProvider'
@@ -25,9 +23,7 @@ import { useSearchChain } from './state/searchChainProvider'
 export const DefiChainsList = () => {
   const { data: chainPortfolios = [], isPending } = useDefiChainPortfolios()
   const defiChains = useDefiChains()
-  const availableChains = useAvailableChains()
-  const isCircleVisible =
-    useIsCircleVisible() && availableChains.includes(circleChain)
+  const isCircleVisible = useIsCircleIncluded()
   const [searchQuery] = useSearchChain()
   const deferredQuery = useDeferredValue(searchQuery)
   const { t } = useTranslation()
