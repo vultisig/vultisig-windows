@@ -11,7 +11,7 @@ export const CreateReferralFormProvider = ({ children }: ChildrenProp) => {
   const methods = useForm<CreateReferralFormData>({
     resolver: zodResolver(referralSchema),
     defaultValues: { referralName: '', expiration: 1, referralFeeAmount: 0 },
-    mode: 'onBlur',
+    mode: 'onChange',
   })
 
   return <FormProvider {...methods}>{children}</FormProvider>
