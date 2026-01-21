@@ -52,7 +52,7 @@ export const ExpirationField = ({ initialExpiration }: Props) => {
               ref={ref}
               onBlur={onBlur}
               min={1}
-              max={10}
+              max={1000}
               value={value}
               onChange={onChange}
               placeholder={t('enter_number_placeholder')}
