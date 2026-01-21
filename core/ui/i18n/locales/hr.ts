@@ -662,8 +662,13 @@ export const hr = {
   reenter_password: 'Ponovno unesite lozinku',
   referral_annual_fee: 'Godišnja naknada za preporuku',
   referral_code: 'Referral kod',
+  referral_code_no_whitespace: 'Razmaci nisu dopušteni',
+  referral_code_required: 'Potvrđeni referral kod je obavezan',
   referral_costs: 'Troškovi',
+  referral_expiration_maximum: 'Maksimalno 1000 godina',
+  referral_expiration_minimum: 'Minimalno 1 godina',
   referral_extension_fee: 'Naknada za produljenje preporuke',
+  referral_fee_amount_minimum: 'Minimalno {{amount}} RUNE',
   referral_landing_title:
     '<0>Pozovite prijatelje</0>. <1>Osvojite nagrade</1>. Uštedite na naknadama.',
   referral_program: 'Program preporuka',

@@ -43,14 +43,10 @@ export const Fees = () => {
         error={err => (
           <CenterAbsolutely>{extractErrorMsg(err)}</CenterAbsolutely>
         )}
-        success={({
-          runePrice,
-          existing: valid,
-          tnsFees: { registerFee, runeFee },
-        }) => {
+        success={({ runePrice, existing: valid, tnsFees }) => {
           const remaining = valid?.remainingYears ?? 0
           const yearsToAdd = Math.max(0, Math.ceil(requestedYears - remaining))
-          const perYearFee = runeFee - registerFee
+          const perYearFee = tnsFees.perYearFee
           const extensionFee = perYearFee * yearsToAdd
 
           if (watch('referralFeeAmount') !== extensionFee) {
