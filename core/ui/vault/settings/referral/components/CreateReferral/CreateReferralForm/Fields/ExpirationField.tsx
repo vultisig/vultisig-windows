@@ -18,10 +18,11 @@ export const ExpirationField = () => {
     formState: { errors },
   } = useCreateReferralForm()
 
-  const expiration = useWatch({
-    control,
-    name: 'expiration',
-  }) ?? 1
+  const expiration =
+    useWatch({
+      control,
+      name: 'expiration',
+    }) ?? 1
 
   const formattedExpirationDate = new Date(
     new Date().setFullYear(new Date().getFullYear() + expiration)

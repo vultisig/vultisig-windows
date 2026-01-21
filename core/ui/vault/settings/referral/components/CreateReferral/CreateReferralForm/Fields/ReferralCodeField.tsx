@@ -27,9 +27,7 @@ export const ReferralCodeField = () => {
     formState: { errors },
     setValue,
     clearErrors,
-    getValues,
   } = useCreateReferralForm()
-  const name = getValues('referralName')
 
   const {
     mutate: checkAvailability,
