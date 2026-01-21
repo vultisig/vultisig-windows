@@ -696,8 +696,13 @@ export const en = {
     'Recover your vault or convert your seedphrase to a vault',
   referral_annual_fee: 'Referral annual fee',
   referral_code: 'Referral Code',
+  referral_code_no_whitespace: 'Whitespace not allowed',
+  referral_code_required: 'Validated referral code is required',
   referral_costs: 'Costs',
+  referral_expiration_maximum: 'Maximum 1000 years',
+  referral_expiration_minimum: 'Minimum 1 year',
   referral_extension_fee: 'Referral extension fee',
+  referral_fee_amount_minimum: 'Minimum {{amount}} RUNE',
   referral_landing_title:
     '<0>Invite friends</0>. <1>Earn rewards</1>. Save on fees.',
   referral_program: 'Referral Program',

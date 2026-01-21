@@ -45,8 +45,6 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
     [nameDetails.remainingYears]
   )
 
-  const maxExtension = initialExpiration + 1
-
   const feeAmount = watch('referralFeeAmount')
 
   const canAfford = useCanAffordReferral(feeAmount)
@@ -73,8 +71,6 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
   }, [coins, nameDetails?.preferred_asset])
 
   const currentExpiration = watch('expiration')
-  const isExactlyOneYearExtension = currentExpiration === maxExtension
-
   const expirationChanged =
     currentExpiration !== initialExpiration &&
     currentExpiration > initialExpiration
@@ -90,22 +86,15 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
   }, [initialExpiration, prefCoin, setValue, setReferralPayoutAsset])
 
   const isDisabled = useMemo(() => {
-    if (currentExpiration <= initialExpiration) {
-      return `Expiration must be greater than ${initialExpiration}`
-    } else if (!isExactlyOneYearExtension) {
-      return t('expiration_must_extend_by_exactly_one_year')
-    } else if (!isValid || isSubmitting || !hasChanges || error) {
-      return true
-    }
+    if (currentExpiration <= initialExpiration) return true
+    if (!isValid || isSubmitting || !hasChanges || error) return true
   }, [
     currentExpiration,
     error,
     hasChanges,
     initialExpiration,
-    isExactlyOneYearExtension,
     isSubmitting,
     isValid,
-    t,
   ])
 
   return (

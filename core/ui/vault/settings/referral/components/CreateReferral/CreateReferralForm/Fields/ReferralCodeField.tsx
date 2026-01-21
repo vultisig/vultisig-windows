@@ -8,17 +8,16 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useState } from 'react'
-import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useThorNameAvailabilityMutation } from '../../../../mutations/useThorNameAvailabilityMutation'
+import { useCreateReferralForm } from '../../../../providers/CreateReferralFormProvider'
 import {
   FormField,
   FormFieldErrorText,
   FormFieldLabel,
 } from '../../../Referrals.styled'
-import { CreateReferralFormData } from '../config'
 
 export const ReferralCodeField = () => {
   const [localInput, setLocalInput] = useState('')
@@ -28,9 +27,7 @@ export const ReferralCodeField = () => {
     formState: { errors },
     setValue,
     clearErrors,
-    getValues,
-  } = useFormContext<CreateReferralFormData>()
-  const name = getValues('referralName')
+  } = useCreateReferralForm()
 
   const {
     mutate: checkAvailability,
@@ -62,9 +59,11 @@ export const ReferralCodeField = () => {
           <Button
             onClick={() => {
               if (localInput) {
-                checkAvailability(name, {
+                const candidate = localInput.trim()
+                if (!candidate) return
+                checkAvailability(candidate, {
                   onSuccess: () => {
-                    setValue('referralName', localInput, {
+                    setValue('referralName', candidate, {
                       shouldValidate: true,
                     })
                     clearErrors('referralName')
