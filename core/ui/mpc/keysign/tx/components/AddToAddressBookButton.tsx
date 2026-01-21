@@ -1,5 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useCore } from '@core/ui/state/core'
 import { useAddressBookItems } from '@core/ui/storage/addressBook'
 import { PlusIcon } from '@lib/ui/icons/PlusIcon'
 import { getColor } from '@lib/ui/theme/getters'
@@ -43,6 +44,7 @@ export const AddToAddressBookButton: FC<AddToAddressBookButtonProps> = ({
   chain,
 }) => {
   const { t } = useTranslation()
+  const { isLimited } = useCore()
   const navigate = useCoreNavigate()
   const addressBookItems = useAddressBookItems()
 
@@ -50,7 +52,7 @@ export const AddToAddressBookButton: FC<AddToAddressBookButtonProps> = ({
     item => item.address === address && item.chain === chain
   )
 
-  if (addressExists) {
+  if (addressExists || isLimited) {
     return null
   }
 
