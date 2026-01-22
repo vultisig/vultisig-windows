@@ -63,6 +63,7 @@ const Wrapper = styled(HStack)`
   background-color: ${getColor('foreground')};
   border-radius: 10px;
   height: 48px;
+  flex: none;
 `
 
 const SearchIconWrapper = styled(VStack)`
