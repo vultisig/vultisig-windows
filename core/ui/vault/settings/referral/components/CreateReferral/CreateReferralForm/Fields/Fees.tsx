@@ -22,7 +22,7 @@ const debounceDelayMs = 300
 
 export const Fees = () => {
   const { t } = useTranslation()
-  const { control, setValue } = useCreateReferralForm()
+  const { control, setValue, trigger } = useCreateReferralForm()
   const referralFeeAmount = useWatch({ control, name: 'referralFeeAmount' })
   const expiration = useWatch({ control, name: 'expiration' })
   const safeExpiration = expiration ?? 1
@@ -44,10 +44,9 @@ export const Fees = () => {
     if (totalFee === undefined) return
     if (referralFeeAmount === totalFee) return
 
-    setValue('referralFeeAmount', totalFee, {
-      shouldValidate: true,
-    })
-  }, [referralFeeAmount, setValue, tnsFees.data?.runeFee])
+    setValue('referralFeeAmount', totalFee)
+    trigger()
+  }, [referralFeeAmount, setValue, trigger, tnsFees.data?.runeFee])
 
   const costs = useMemo(() => {
     const totalFee = tnsFees.data?.runeFee ?? 0
