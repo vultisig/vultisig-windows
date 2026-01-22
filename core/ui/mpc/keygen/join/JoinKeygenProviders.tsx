@@ -8,6 +8,7 @@ import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ChildrenProp } from '@lib/ui/props'
 
 import { KeyImportChainsProvider } from '../keyimport/state/keyImportChains'
+import { DklsInboundSequenceNoProvider } from '../reshare/state/dklsInboundSequenceNo'
 import { JoinKeygenVaultProvider } from './state/keygenVault'
 
 export const JoinKeygenProviders = ({ children }: ChildrenProp) => {
@@ -28,7 +29,11 @@ export const JoinKeygenProviders = ({ children }: ChildrenProp) => {
             <KeygenOperationProvider value={keygenOperation}>
               <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
                 <KeyImportChainsProvider value={keyImportChains}>
-                  <JoinKeygenVaultProvider>{children}</JoinKeygenVaultProvider>
+                  <DklsInboundSequenceNoProvider initialValue={0}>
+                    <JoinKeygenVaultProvider>
+                      {children}
+                    </JoinKeygenVaultProvider>
+                  </DklsInboundSequenceNoProvider>
                 </KeyImportChainsProvider>
               </CurrentHexEncryptionKeyProvider>
             </KeygenOperationProvider>
