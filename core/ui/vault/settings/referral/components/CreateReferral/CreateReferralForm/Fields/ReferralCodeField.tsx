@@ -27,6 +27,7 @@ export const ReferralCodeField = () => {
     formState: { errors },
     setValue,
     clearErrors,
+    trigger,
   } = useCreateReferralForm()
 
   const {
@@ -36,8 +37,14 @@ export const ReferralCodeField = () => {
     reset,
   } = useThorNameAvailabilityMutation()
 
-  const inputError =
-    localInput && localInput.length > 4 ? t('max_4_characters') : ''
+  const trimmedInput = localInput.trim()
+  const isInputTooLong = trimmedInput.length > 4
+  const isInputEmpty = trimmedInput.length === 0
+  const hasWhitespace = /\s/.test(trimmedInput)
+  const isSearchDisabled =
+    isInputEmpty || isInputTooLong || hasWhitespace || status === 'pending'
+
+  const inputError = isInputTooLong ? t('max_4_characters') : ''
 
   return (
     <VStack gap={14}>
@@ -57,22 +64,18 @@ export const ReferralCodeField = () => {
             }}
           />
           <Button
+            disabled={isSearchDisabled}
             onClick={() => {
-              if (localInput) {
-                const candidate = localInput.trim()
-                if (!candidate) return
-                checkAvailability(candidate, {
-                  onSuccess: () => {
-                    setValue('referralName', candidate, {
-                      shouldValidate: true,
-                    })
-                    clearErrors('referralName')
-                  },
-                  onError: () => {
-                    setValue('referralName', '')
-                  },
-                })
-              }
+              checkAvailability(trimmedInput, {
+                onSuccess: async () => {
+                  setValue('referralName', trimmedInput)
+                  clearErrors('referralName')
+                  await trigger()
+                },
+                onError: () => {
+                  setValue('referralName', '')
+                },
+              })
             }}
             style={{ maxWidth: 97, fontSize: 14 }}
           >
