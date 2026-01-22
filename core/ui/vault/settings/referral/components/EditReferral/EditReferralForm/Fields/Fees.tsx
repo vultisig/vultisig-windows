@@ -9,6 +9,8 @@ import { useMergeQueries } from '@lib/ui/query/hooks/useMergeQueries'
 import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { formatAmount } from '@lib/utils/formatAmount'
+import { useEffect, useMemo } from 'react'
+import { useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -19,17 +21,36 @@ import { useUserValidThorchainNameQuery } from '../../../../queries/useUserValid
 
 export const Fees = () => {
   const { t } = useTranslation()
-  const { watch, setValue } = useEditReferralFormData()
+  const { control, setValue, trigger } = useEditReferralFormData()
   const existing = useUserValidThorchainNameQuery()
   const runeCoin = chainFeeCoin.THORChain
   const runePrice = useCoinPriceQuery({ coin: runeCoin })
   const formatFiatAmount = useFormatFiatAmount()
 
-  const requestedYears = useDebounce(watch('expiration'), 300)
+  const expiration = useWatch({ control, name: 'expiration' })
+  const referralFeeAmount = useWatch({ control, name: 'referralFeeAmount' })
+  const requestedYears = useDebounce(expiration, 300)
 
   const tnsFees1y = useTnsFeesQuery(1)
 
   const query = useMergeQueries({ runePrice, existing, tnsFees: tnsFees1y })
+
+  const extensionFee = useMemo(() => {
+    const remaining = existing.data?.remainingYears ?? 0
+    const yearsToAdd = Math.max(0, Math.ceil(requestedYears - remaining))
+    const perYearFee = tnsFees1y.data?.perYearFee ?? 0
+    return perYearFee * yearsToAdd
+  }, [
+    existing.data?.remainingYears,
+    requestedYears,
+    tnsFees1y.data?.perYearFee,
+  ])
+
+  useEffect(() => {
+    if (referralFeeAmount === extensionFee) return
+    setValue('referralFeeAmount', extensionFee)
+    trigger()
+  }, [extensionFee, referralFeeAmount, setValue, trigger])
 
   return (
     <VStack style={{ position: 'relative' }} gap={14}>
@@ -47,13 +68,6 @@ export const Fees = () => {
           const remaining = valid?.remainingYears ?? 0
           const yearsToAdd = Math.max(0, Math.ceil(requestedYears - remaining))
           const perYearFee = tnsFees.perYearFee
-          const extensionFee = perYearFee * yearsToAdd
-
-          if (watch('referralFeeAmount') !== extensionFee) {
-            setValue('referralFeeAmount', extensionFee, {
-              shouldValidate: true,
-            })
-          }
 
           const perYearFiat = formatFiatAmount(perYearFee * runePrice)
           const totalFiat = formatFiatAmount(extensionFee * runePrice)
