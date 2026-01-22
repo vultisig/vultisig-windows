@@ -1,6 +1,7 @@
 import { create } from '@bufbuild/protobuf'
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { getChainKind, isChainOfKind } from '@core/chain/ChainKind'
+import { CosmosMsgType } from '@core/chain/chains/cosmos/cosmosMsgTypes'
 import { getPsbtTransferInfo } from '@core/chain/chains/utxo/tx/getPsbtTransferInfo'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import {
@@ -43,7 +44,7 @@ import { hexToString } from 'viem'
 import { getTxAmount } from '../core/amount'
 import { CustomTxData } from '../core/customTxData'
 import { ParsedTx } from '../core/parsedTx'
-import { CosmosMsgType, TronMsgType } from '../interfaces'
+import { TronMsgType } from '../interfaces'
 
 export type BuildSendTxKeysignPayloadInput = {
   parsedTx: ParsedTx
