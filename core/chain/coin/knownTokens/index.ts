@@ -3,6 +3,7 @@ import { makeRecord } from '@lib/utils/record/makeRecord'
 import { omit } from '@lib/utils/record/omit'
 
 import { CoinKey, KnownCoin, KnownCoinMetadata, Token } from '../Coin'
+import { knownCardanoTokens } from './cardano'
 import { knownCosmosTokens } from './cosmos'
 
 type LeanChainTokensRecord = Record<Chain, Record<string, KnownCoinMetadata>>
@@ -648,6 +649,7 @@ const leanTokens: Partial<LeanChainTokensRecord> = {
       priceProviderId: 'usd-coin',
     },
   },
+  [Chain.Cardano]: knownCardanoTokens,
   ...knownCosmosTokens,
 }
 

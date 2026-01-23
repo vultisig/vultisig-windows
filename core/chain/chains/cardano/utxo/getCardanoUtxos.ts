@@ -4,10 +4,17 @@ import { queryUrl } from '@lib/utils/query/queryUrl'
 
 import { cardanoApiUrl } from '../client/config'
 
+type CardanoAsset = {
+  policy_id: string
+  asset_name: string // hex
+  quantity: string
+}
+
 type CardanoUtxoResponse = Array<{
   tx_hash: string
   tx_index: number
   value: string
+  asset_list?: CardanoAsset[]
 }>
 
 export const getCardanoUtxos = async (address: string) => {

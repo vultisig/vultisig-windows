@@ -17,12 +17,28 @@ export const getCardanoSigningInputs: SigningInputsResolver<'cardano'> = ({
 
   const coin = shouldBePresent(keysignPayload.coin)
 
+  const tokenAmount = coin.id
+    ? TW.Cardano.Proto.TokenBundle.create({
+        token: [
+          TW.Cardano.Proto.TokenAmount.create({
+            policyId: coin.id.slice(0, 56),
+            assetName: '',
+            assetNameHex: coin.id.slice(56),
+            amount: walletCore.HexCoding.decode(
+              BigInt(keysignPayload.toAmount).toString(16).padStart(64, '0')
+            ),
+          }),
+        ],
+      })
+    : undefined
+
   const input = TW.Cardano.Proto.SigningInput.create({
     transferMessage: TW.Cardano.Proto.Transfer.create({
       toAddress: keysignPayload.toAddress,
       changeAddress: coin.address,
       amount: Long.fromString(keysignPayload.toAmount),
       useMaxAmount: sendMaxAmount,
+      tokenAmount,
     }),
     ttl: Long.fromString(ttl.toString()),
 
