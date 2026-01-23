@@ -46,6 +46,14 @@ export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
     return validationErrorMessage
   }, [validationErrorMessage, error, isPending, t])
 
+  // Display error for ReverseSwap button (excludes non-error states like loading/fill_the_form)
+  const displayErrorMessage = useMemo(() => {
+    if (isPending) return null
+    if (validationErrorMessage === undefined) return null
+    if (error) return extractErrorMsg(error)
+    return validationErrorMessage
+  }, [validationErrorMessage, error, isPending])
+
   const handleSubmit = () => {
     if (!errorMessage) {
       const swapQuote = shouldBePresent(swapQuoteQuery.data, 'swap quote')
@@ -75,7 +83,7 @@ export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
           <VStack gap={8}>
             <ManageFromCoin />
             <ReverseSwapWrapper>
-              <ReverseSwap />
+              <ReverseSwap errorMessage={displayErrorMessage} />
             </ReverseSwapWrapper>
             <ManageToCoin />
           </VStack>
@@ -83,8 +91,8 @@ export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
             <SwapInfo />
           </VStack>
         </VStack>
-        <Button disabled={errorMessage || undefined} type="submit">
-          {errorMessage || t('continue')}
+        <Button disabled={!!errorMessage} type="submit">
+          {t('continue')}
         </Button>
       </PageContent>
     </>

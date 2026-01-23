@@ -30,7 +30,7 @@ export const TxSuccess = ({
   onSeeTxDetails: () => void
 }) => {
   const { t } = useTranslation()
-  const { coin: potentialCoin, toAmount } = value
+  const { coin: potentialCoin, toAmount, skipBroadcast } = value
   const coin = fromCommCoin(shouldBePresent(potentialCoin))
   const txHash = useTxHash()
   const [, copyToClipboard] = useCopyToClipboard()
@@ -53,44 +53,46 @@ export const TxSuccess = ({
       <TransactionSuccessAnimation />
       <VStack gap={8}>
         <TxOverviewAmount amount={formattedToAmount} value={coin} />
-        <List>
-          <ListItem
-            hoverable
-            extra={
-              <HStack
-                flexGrow
-                alignItems="center"
-                gap={8}
-                justifyContent="flex-end"
-              >
-                <TruncatedTextWrapper>
-                  <Text size={14}>
-                    <MiddleTruncate width={85} text={txHash} />
-                  </Text>
-                </TruncatedTextWrapper>
-                <TxRowIconButton
-                  onClick={() => copyToClipboard(blockExplorerUrl)}
+        {!skipBroadcast && (
+          <List>
+            <ListItem
+              hoverable
+              extra={
+                <HStack
+                  flexGrow
+                  alignItems="center"
+                  gap={8}
+                  justifyContent="flex-end"
                 >
-                  <ClipboardCopyIcon />
-                </TxRowIconButton>
-                <TxRowIconButton onClick={() => openUrl(blockExplorerUrl)}>
-                  <SquareArrowTopRightIcon />
-                </TxRowIconButton>
-              </HStack>
-            }
-            title={
-              <Text size={14} color="shy">
-                {t('tx_hash')}
-              </Text>
-            }
-          />
-          <ListItem
-            onClick={onSeeTxDetails}
-            title={<Text size={14}>{t('transaction_details')}</Text>}
-            hoverable
-            showArrow
-          />
-        </List>
+                  <TruncatedTextWrapper>
+                    <Text size={14}>
+                      <MiddleTruncate width={85} text={txHash} />
+                    </Text>
+                  </TruncatedTextWrapper>
+                  <TxRowIconButton
+                    onClick={() => copyToClipboard(blockExplorerUrl)}
+                  >
+                    <ClipboardCopyIcon />
+                  </TxRowIconButton>
+                  <TxRowIconButton onClick={() => openUrl(blockExplorerUrl)}>
+                    <SquareArrowTopRightIcon />
+                  </TxRowIconButton>
+                </HStack>
+              }
+              title={
+                <Text size={14} color="shy">
+                  {t('tx_hash')}
+                </Text>
+              }
+            />
+            <ListItem
+              onClick={onSeeTxDetails}
+              title={<Text size={14}>{t('transaction_details')}</Text>}
+              hoverable
+              showArrow
+            />
+          </List>
+        )}
       </VStack>
     </>
   )

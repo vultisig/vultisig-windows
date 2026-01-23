@@ -63,11 +63,7 @@ const InputWr = styled.div`
   justify-content: space-between;
 `
 
-const TextInputContainer = styled.input<{
-  validation?: 'valid' | 'invalid' | 'warning'
-}>`
-  ${textInput};
-
+const validationStyles = css<{ validation?: 'valid' | 'invalid' | 'warning' }>`
   ${({ validation }) =>
     validation === 'valid'
       ? css`
@@ -98,10 +94,21 @@ const TextInputContainer = styled.input<{
           `}
 `
 
+const TextInputContainer = styled.input<{
+  validation?: 'valid' | 'invalid' | 'warning'
+}>`
+  ${textInput};
+  ${validationStyles}
+`
+
+const TextInputLoaderContainer = styled.div`
+  ${textInput};
+`
+
 const TextInputLoader = (props: UiProps) => (
-  <TextInputContainer as="div" {...props}>
+  <TextInputLoaderContainer {...props}>
     <VStack fullHeight justifyContent="center">
       <Spinner />
     </VStack>
-  </TextInputContainer>
+  </TextInputLoaderContainer>
 )

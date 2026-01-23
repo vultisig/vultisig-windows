@@ -1,7 +1,7 @@
-import { featureFlags } from '@core/ui/featureFlags'
 import { Tab } from '@lib/ui/base/Tabs'
 import { TFunction } from 'i18next'
 
+import { featureFlags } from '../../../featureFlags'
 import { BondedPositions } from './BondedPositions'
 import { LpPositions } from './LpPositions'
 import { StakedPositions } from './StakedPositions'
@@ -25,16 +25,12 @@ export const getDefiChainTabs = (
         },
       ]
     : []),
-  ...(featureFlags.defiStakedTab
-    ? [
-        {
-          value: 'staked' as const,
-          label: t('defiChainTabs.staked'),
-          renderContent: StakedPositions,
-        },
-      ]
-    : []),
-  ...(featureFlags.defiLpTab
+  {
+    value: 'staked' as const,
+    label: t('defiChainTabs.staked'),
+    renderContent: StakedPositions,
+  },
+  ...(featureFlags.defiLpsTab
     ? [
         {
           value: 'lps' as const,

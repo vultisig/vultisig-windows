@@ -7,6 +7,7 @@ export const CloudUploadIcon: FC<SvgProps> = props => (
     width="1em"
     height="1em"
     fill="none"
+    viewBox="0 0 20 20"
     {...props}
   >
     <path
