@@ -1,7 +1,6 @@
 ---
+name: derive-union-from-const
 description: USE const array with derived type WHEN defining unions that need runtime values TO avoid repetition
-globs:
-alwaysApply: false
 ---
 
 # Derive Union Types from Const Arrays
