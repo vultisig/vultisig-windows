@@ -1,3 +1,4 @@
+import { CosmosMsgType } from '@core/chain/chains/cosmos/cosmosMsgTypes'
 import { SignDirect } from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { fromBase64, toBase64 } from '@cosmjs/encoding'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
@@ -6,10 +7,42 @@ import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { ThemeColor } from '@lib/ui/theme/ThemeColors'
+import { TW } from '@trustwallet/wallet-core'
+import { MsgSend } from 'cosmjs-types/cosmos/bank/v1beta1/tx'
 import { AuthInfo, TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
+import { MsgExecuteContract } from 'cosmjs-types/cosmwasm/wasm/v1/tx'
+import { MsgTransfer } from 'cosmjs-types/ibc/applications/transfer/v1/tx'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { CSSProperties } from 'styled-components'
+
+type DecodedMessage = {
+  typeUrl: string
+  value: unknown
+}
+
+const decodeMessage = (msg: {
+  typeUrl: string
+  value: Uint8Array
+}): DecodedMessage => {
+  const parsers: Record<string, () => unknown> = {
+    [CosmosMsgType.MSG_SEND_URL]: () => MsgSend.decode(msg.value),
+    [CosmosMsgType.MSG_EXECUTE_CONTRACT_URL]: () =>
+      MsgExecuteContract.decode(msg.value),
+    [CosmosMsgType.MSG_TRANSFER_URL]: () => MsgTransfer.decode(msg.value),
+    [CosmosMsgType.THORCHAIN_MSG_DEPOSIT_URL]: () =>
+      TW.Cosmos.Proto.Message.THORChainDeposit.decode(msg.value),
+    [CosmosMsgType.THORCHAIN_MSG_SEND_URL]: () =>
+      TW.Cosmos.Proto.Message.THORChainSend.decode(msg.value),
+  }
+
+  const parser = parsers[msg.typeUrl]
+
+  return {
+    typeUrl: msg.typeUrl,
+    value: parser ? parser() : toBase64(msg.value),
+  }
+}
 
 type Styles = {
   color: ThemeColor
@@ -40,10 +73,7 @@ export const SignDirectDisplay = ({
       const txBody = TxBody.decode(bodyBytes)
       const authInfo = AuthInfo.decode(authInfoBytes)
 
-      const messages = txBody.messages.map(msg => ({
-        typeUrl: msg.typeUrl,
-        value: toBase64(msg.value),
-      }))
+      const messages = txBody.messages.map(decodeMessage)
 
       const fee = authInfo.fee
         ? {

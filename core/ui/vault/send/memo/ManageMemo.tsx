@@ -35,7 +35,7 @@ export const ManageMemo = () => {
             transition={{ duration: 0.2, ease: 'easeInOut' }}
             style={{ overflow: 'hidden' }}
           >
-            <TextInputWithPasteAction
+            <StyledTextInput
               placeholder={t('enter_memo')}
               value={value}
               onValueChange={setValue}
@@ -49,6 +49,8 @@ export const ManageMemo = () => {
 
 const Label = styled(InputLabel)`
   ${interactive};
+  justify-content: space-between;
+  align-items: center;
   ${text({
     centerVertically: true,
   })}
@@ -57,5 +59,15 @@ const Label = styled(InputLabel)`
 
   svg {
     font-size: 16px;
+  }
+`
+
+const StyledTextInput = styled(TextInputWithPasteAction)`
+  font-weight: 500;
+  font-size: 16px;
+
+  &::placeholder {
+    font-size: 16px;
+    font-weight: 500;
   }
 `

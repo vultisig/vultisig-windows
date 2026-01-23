@@ -8,6 +8,7 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
+import { useFormState, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -25,11 +26,9 @@ import { ReferralCodeField } from './Fields/ReferralCodeField'
 export const CreateReferralForm = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
 
-  const {
-    watch,
-    formState: { isValid, isSubmitting },
-  } = useCreateReferralForm()
-  const feeAmount = watch('referralFeeAmount')
+  const { control } = useCreateReferralForm()
+  const { isValid, isSubmitting } = useFormState({ control })
+  const feeAmount = useWatch({ control, name: 'referralFeeAmount' })
 
   const canAfford = useCanAffordReferral(feeAmount)
   const error = canAfford ? undefined : t('insufficient_balance')

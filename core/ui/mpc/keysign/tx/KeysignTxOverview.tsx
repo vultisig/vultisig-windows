@@ -59,17 +59,19 @@ export const KeysignTxOverview = () => {
       )}
       <Panel>
         <SeparatedByLine gap={16}>
-          <HStack alignItems="center" gap={4} justifyContent="space-between">
-            <Text color="shy" weight="500">
-              {t('tx_hash')}
-            </Text>
-            <HStack alignItems="center" gap={4}>
-              <MiddleTruncate text={txHash} width={140} />
-              <IconButton onClick={() => openUrl(blockExplorerUrl)}>
-                <SquareArrowOutUpRightIcon />
-              </IconButton>
+          {!keysignPayload.skipBroadcast && (
+            <HStack alignItems="center" gap={4} justifyContent="space-between">
+              <Text color="shy" weight="500">
+                {t('tx_hash')}
+              </Text>
+              <HStack alignItems="center" gap={4}>
+                <MiddleTruncate text={txHash} width={140} />
+                <IconButton onClick={() => openUrl(blockExplorerUrl)}>
+                  <SquareArrowOutUpRightIcon />
+                </IconButton>
+              </HStack>
             </HStack>
-          </HStack>
+          )}
           <HStack alignItems="center" gap={4} justifyContent="space-between">
             <Text color="shy" weight="500">
               {t('from')}

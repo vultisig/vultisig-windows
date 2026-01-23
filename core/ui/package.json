@@ -14,6 +14,7 @@
     "@core/config": "workspace:^",
     "@core/mpc": "workspace:^",
     "@cosmjs/encoding": "^0.38.1",
+    "@floating-ui/react": "^0.27.16",
     "@hookform/resolvers": "^5.2.2",
     "@lib/codegen": "workspace:^",
     "@lib/ui": "workspace:^",

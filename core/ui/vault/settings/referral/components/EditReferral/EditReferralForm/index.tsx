@@ -7,6 +7,7 @@ import { StackSeparatedBy } from '@lib/ui/layout/StackSeparatedBy'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
 import { useEffect, useMemo, useRef } from 'react'
+import { useFormState, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { useCurrentVaultCoins } from '../../../../../state/currentVaultCoins'
@@ -31,11 +32,8 @@ type Props = {
 export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
   const { t } = useTranslation()
 
-  const {
-    setValue,
-    watch,
-    formState: { isValid, isSubmitting },
-  } = useEditReferralFormData()
+  const { control, setValue } = useEditReferralFormData()
+  const { isValid, isSubmitting } = useFormState({ control })
 
   const [referralPayoutAsset, setReferralPayoutAsset] = useReferralPayoutAsset()
   const initialReferralPayoutAsset = useRef(referralPayoutAsset)
@@ -45,9 +43,8 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
     [nameDetails.remainingYears]
   )
 
-  const maxExtension = initialExpiration + 1
-
-  const feeAmount = watch('referralFeeAmount')
+  const feeAmount = useWatch({ control, name: 'referralFeeAmount' })
+  const currentExpiration = useWatch({ control, name: 'expiration' })
 
   const canAfford = useCanAffordReferral(feeAmount)
   const error = canAfford ? undefined : t('insufficient_balance')
@@ -72,9 +69,6 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
     )
   }, [coins, nameDetails?.preferred_asset])
 
-  const currentExpiration = watch('expiration')
-  const isExactlyOneYearExtension = currentExpiration === maxExtension
-
   const expirationChanged =
     currentExpiration !== initialExpiration &&
     currentExpiration > initialExpiration
@@ -90,22 +84,15 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
   }, [initialExpiration, prefCoin, setValue, setReferralPayoutAsset])
 
   const isDisabled = useMemo(() => {
-    if (currentExpiration <= initialExpiration) {
-      return `Expiration must be greater than ${initialExpiration}`
-    } else if (!isExactlyOneYearExtension) {
-      return t('expiration_must_extend_by_exactly_one_year')
-    } else if (!isValid || isSubmitting || !hasChanges || error) {
-      return true
-    }
+    if (currentExpiration <= initialExpiration) return true
+    if (!isValid || isSubmitting || !hasChanges || error) return true
   }, [
     currentExpiration,
     error,
     hasChanges,
     initialExpiration,
-    isExactlyOneYearExtension,
     isSubmitting,
     isValid,
-    t,
   ])
 
   return (

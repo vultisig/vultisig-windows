@@ -817,6 +817,7 @@ __metadata:
     "@core/config": "workspace:^"
     "@core/mpc": "workspace:^"
     "@cosmjs/encoding": "npm:^0.38.1"
+    "@floating-ui/react": "npm:^0.27.16"
     "@hookform/resolvers": "npm:^5.2.2"
     "@lib/codegen": "workspace:^"
     "@lib/ui": "workspace:^"
