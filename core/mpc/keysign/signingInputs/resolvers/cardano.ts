@@ -17,13 +17,17 @@ export const getCardanoSigningInputs: SigningInputsResolver<'cardano'> = ({
 
   const coin = shouldBePresent(keysignPayload.coin)
 
-  const tokenAmount = coin.id
+  // For Cardano tokens, contractAddress contains the token ID (policy_id + asset_name_hex)
+  const tokenId = coin.contractAddress || ''
+  const isToken = tokenId.length > 0
+
+  const tokenAmount = isToken
     ? TW.Cardano.Proto.TokenBundle.create({
         token: [
           TW.Cardano.Proto.TokenAmount.create({
-            policyId: coin.id.slice(0, 56),
+            policyId: tokenId.slice(0, 56),
             assetName: '',
-            assetNameHex: coin.id.slice(56),
+            assetNameHex: tokenId.slice(56),
             amount: walletCore.HexCoding.decode(
               BigInt(keysignPayload.toAmount).toString(16).padStart(64, '0')
             ),
