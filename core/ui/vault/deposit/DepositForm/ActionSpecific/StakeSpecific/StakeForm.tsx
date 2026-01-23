@@ -102,13 +102,13 @@ export const StakeForm = ({
       : undefined
 
   return (
-    <VStack gap={16}>
+    <VStack flexGrow gap={16}>
       <ActionInputContainer>
         <InputLabel weight="600" size={16}>
           {t('amount')}
         </InputLabel>
         <ActionFieldDivider />
-        <VStack gap={12}>
+        <VStack gap={12} flexGrow>
           <ActionAmountInputSurface>
             <Controller
               control={control}
@@ -120,6 +120,18 @@ export const StakeForm = ({
                   decimals={coin.decimals}
                   showPercentage
                   percentage={currentPercentage}
+                  onAmountChange={amount => {
+                    if (isUnstake && stakeId === 'native-tcy' && balance > 0) {
+                      const newPercentage =
+                        amount !== null
+                          ? Math.round((amount / balance) * 100)
+                          : 0
+                      setValue('percentage', newPercentage, {
+                        shouldValidate: true,
+                        shouldDirty: true,
+                      })
+                    }
+                  }}
                 />
               )}
             />
@@ -241,6 +253,7 @@ type StakeAmountInputProps = {
   placeholder?: string
   showPercentage?: boolean
   percentage?: number
+  onAmountChange?: (amount: number | null) => void
 }
 
 const StakeAmountInput = ({
@@ -250,6 +263,7 @@ const StakeAmountInput = ({
   placeholder = '',
   showPercentage = false,
   percentage = 0,
+  onAmountChange,
 }: StakeAmountInputProps) => {
   const maxAmount = 10_000_000
   const displayValue =
@@ -296,6 +310,7 @@ const StakeAmountInput = ({
                   const normalized = raw.replace(/,/g, '.')
                   if (normalized === '') {
                     field.onChange('')
+                    onAmountChange?.(null)
                     return
                   }
                   if (!/^(\d+\.?\d*|\.\d*)$/.test(normalized)) {
@@ -306,6 +321,7 @@ const StakeAmountInput = ({
                     return
                   }
                   field.onChange(normalized)
+                  onAmountChange?.(numericValue)
                 }}
                 placeholder={placeholder}
                 inputMode="decimal"

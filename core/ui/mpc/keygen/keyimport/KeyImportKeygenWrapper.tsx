@@ -2,6 +2,7 @@ import { KeygenOperationProvider } from '@core/ui/mpc/keygen/state/currentKeygen
 import { ChildrenProp } from '@lib/ui/props'
 
 import { KeyImportKeygenActionProvider } from './KeyImportKeygenActionProvider'
+import { KeyImportChainsProvider } from './state/keyImportChains'
 import { KeyImportInput, KeyImportInputProvider } from './state/keyImportInput'
 
 type Props = ChildrenProp & {
@@ -10,8 +11,12 @@ type Props = ChildrenProp & {
 
 export const KeyImportKeygenWrapper = ({ keyImportInput, children }: Props) => (
   <KeyImportInputProvider value={keyImportInput}>
-    <KeygenOperationProvider value={{ keyimport: true }}>
-      <KeyImportKeygenActionProvider>{children}</KeyImportKeygenActionProvider>
-    </KeygenOperationProvider>
+    <KeyImportChainsProvider value={keyImportInput.chains}>
+      <KeygenOperationProvider value={{ keyimport: true }}>
+        <KeyImportKeygenActionProvider>
+          {children}
+        </KeyImportKeygenActionProvider>
+      </KeygenOperationProvider>
+    </KeyImportChainsProvider>
   </KeyImportInputProvider>
 )

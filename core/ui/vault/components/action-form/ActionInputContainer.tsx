@@ -8,6 +8,7 @@ export const ActionInputContainer = styled(VStack)`
   ${interactive};
   gap: 16px;
   padding: 12px;
+  flex: 1;
   ${borderRadius.m};
   border: 1px solid ${getColor('foregroundSuper')};
 `

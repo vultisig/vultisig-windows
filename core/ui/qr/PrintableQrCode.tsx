@@ -1,4 +1,4 @@
-import { ProductLogo } from '@core/ui/product/ProductLogo'
+import { DeprecatedProductLogo } from '@core/ui/product/DeprecatedProductLogo'
 import { VStack } from '@lib/ui/layout/Stack'
 import { FramedQrCode } from '@lib/ui/qr/FramedQrCode'
 import { Text } from '@lib/ui/text'
@@ -20,7 +20,7 @@ const Footer = styled(VStack)`
   font-weight: 600;
 `
 
-const Logo = styled(ProductLogo)`
+const Logo = styled(DeprecatedProductLogo)`
   font-size: 80px;
 `
 

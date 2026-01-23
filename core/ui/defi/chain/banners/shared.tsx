@@ -85,6 +85,36 @@ export const ThorchainLogoWrapper = styled.div`
   }
 `
 
+export const MayachainBannerContainer = styled.div`
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  min-height: 122px;
+  border-radius: 16px;
+  border: 1px solid rgba(28, 157, 125, 0.17);
+  background: linear-gradient(
+    180deg,
+    rgba(28, 157, 125, 0.09) 0%,
+    rgba(17, 40, 74, 0) 100%
+  );
+`
+
+export const MayachainLogoWrapper = styled.div`
+  position: absolute;
+  right: 0;
+  width: 120px;
+  height: 120px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.8;
+
+  @media ${mediaQuery.tabletDeviceAndUp} {
+    width: 160px;
+    height: 160px;
+    right: 20px;
+  }
+`
+
 export const ChainTitle = styled(Text)`
   font-family: Brockmann, sans-serif;
   font-size: 18px;

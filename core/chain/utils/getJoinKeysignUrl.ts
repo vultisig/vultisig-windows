@@ -5,6 +5,7 @@ import { getSevenZip } from '@core/mpc/compression/getSevenZip'
 import { uploadPayloadToServer } from '@core/mpc/keygen/server/uploadPayloadToServer'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { MpcServerType, mpcServerUrl } from '@core/mpc/MpcServerType'
+import { CustomMessagePayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import {
   KeysignMessageSchema,
   KeysignPayloadSchema,
@@ -19,6 +20,7 @@ export type GetJoinKeysignUrlInput = {
   hexEncryptionKey: string
   payload?: KeysignMessagePayload
   payloadId?: string
+  customPayloadId?: string
   vaultId: string
 }
 
@@ -31,6 +33,7 @@ export const getJoinKeysignUrl = async ({
   hexEncryptionKey,
   payload,
   payloadId,
+  customPayloadId,
   vaultId,
 }: GetJoinKeysignUrlInput): Promise<string> => {
   const keysignMessage = create(KeysignMessageSchema, {
@@ -39,6 +42,7 @@ export const getJoinKeysignUrl = async ({
     encryptionKeyHex: hexEncryptionKey,
     useVultisigRelay: serverType === 'relay',
     payloadId,
+    customPayloadId,
   })
 
   if (payload) {
@@ -67,25 +71,48 @@ export const getJoinKeysignUrl = async ({
     jsonData,
   })
 
-  if (payload && 'keysign' in payload && urlWithPayload.length > urlMaxLength) {
-    const binary = toBinary(KeysignPayloadSchema, payload.keysign)
-    const compressedPayload = toCompressedString({
-      sevenZip,
-      binary,
-    })
-    const payloadId = await uploadPayloadToServer({
-      payload: compressedPayload,
-      serverUrl: mpcServerUrl[serverType],
-    })
+  if (payload && urlWithPayload.length > urlMaxLength) {
+    if ('keysign' in payload) {
+      const binary = toBinary(KeysignPayloadSchema, payload.keysign)
+      const compressedPayload = toCompressedString({
+        sevenZip,
+        binary,
+      })
+      const payloadId = await uploadPayloadToServer({
+        payload: compressedPayload,
+        serverUrl: mpcServerUrl[serverType],
+      })
 
-    return getJoinKeysignUrl({
-      serverType,
-      serviceName,
-      sessionId,
-      hexEncryptionKey,
-      payloadId,
-      vaultId,
-    })
+      return getJoinKeysignUrl({
+        serverType,
+        serviceName,
+        sessionId,
+        hexEncryptionKey,
+        payloadId,
+        vaultId,
+      })
+    }
+
+    if ('custom' in payload) {
+      const binary = toBinary(CustomMessagePayloadSchema, payload.custom)
+      const compressedPayload = toCompressedString({
+        sevenZip,
+        binary,
+      })
+      const customPayloadId = await uploadPayloadToServer({
+        payload: compressedPayload,
+        serverUrl: mpcServerUrl[serverType],
+      })
+
+      return getJoinKeysignUrl({
+        serverType,
+        serviceName,
+        sessionId,
+        hexEncryptionKey,
+        customPayloadId,
+        vaultId,
+      })
+    }
   }
 
   return urlWithPayload

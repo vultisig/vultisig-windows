@@ -5,6 +5,7 @@ import { useDepositCoin } from '../providers/DepositCoinProvider'
 import { useStakeBalance } from '../staking/useStakeBalance'
 import { useDepositCoinBalance } from './useDepositCoinBalance'
 import { useRujiraStakeQuery } from './useRujiraStakeQuery'
+import { useUnbondableBalanceQuery } from './useUnbondableBalanceQuery'
 
 type Params = {
   selectedChainAction: ChainAction
@@ -16,6 +17,9 @@ export const useDepositBalance = ({ selectedChainAction }: Params) => {
 
   const { balance: stakeBalance } = useStakeBalance()
   const { data: stakeAndRewards } = useRujiraStakeQuery()
+  const { data: unbondableBalance } = useUnbondableBalanceQuery({
+    enabled: selectedChainAction === 'unbond',
+  })
 
   const selectedCoinBalance = useDepositCoinBalance({
     action: selectedChainAction,
@@ -27,6 +31,10 @@ export const useDepositBalance = ({ selectedChainAction }: Params) => {
       return stakeBalance
     }
 
+    if (selectedChainAction === 'unbond') {
+      return unbondableBalance?.humanReadableBalance ?? 0
+    }
+
     if (selectedChainAction === 'withdraw_ruji_rewards') {
       return stakeAndRewards?.rewardsUSDC ?? 0
     }
@@ -36,6 +44,7 @@ export const useDepositBalance = ({ selectedChainAction }: Params) => {
     selectedChainAction,
     selectedCoinBalance,
     stakeBalance,
+    unbondableBalance?.humanReadableBalance,
     stakeAndRewards?.rewardsUSDC,
   ])
 
