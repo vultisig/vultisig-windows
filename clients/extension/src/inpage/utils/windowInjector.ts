@@ -8,6 +8,8 @@ import { attempt } from '@lib/utils/attempt'
 import { announceProvider, EIP1193Provider } from 'mipd'
 import { v4 as uuidv4 } from 'uuid'
 
+import { Solana } from '../providers/solana'
+import { registerWallet } from '../providers/solana/register'
 import { UTXO } from '../providers/utxo'
 
 export const injectToWindow = () => {
@@ -64,6 +66,9 @@ async function setupContentScriptMessenger(
   })
 
   if (vultisigDefaultProvider) {
+    const metaMaskSolanaProvider = new Solana('MetaMask')
+
+    registerWallet(metaMaskSolanaProvider)
     providers.tron.init()
 
     const providerCopy = Object.create(

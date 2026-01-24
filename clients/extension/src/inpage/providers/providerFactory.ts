@@ -16,9 +16,9 @@ import { TronLink } from './tronLink'
 
 export const createProviders = () => {
   const cosmosProvider = Cosmos.getInstance()
-  const solanaProvider = new Solana()
+  const vultisigSolanaProvider = new Solana('Vultisig')
 
-  registerWallet(solanaProvider)
+  registerWallet(vultisigSolanaProvider)
 
   return {
     bitcoin: new UTXO(UtxoChain.Bitcoin),
@@ -34,7 +34,7 @@ export const createProviders = () => {
     plugin: new Plugin(),
     polkadot: Polkadot.getInstance(),
     ripple: Ripple.getInstance(),
-    solana: solanaProvider,
+    solana: vultisigSolanaProvider,
     thorchain: THORChain.getInstance(),
     tron: new TronLink(),
   }
