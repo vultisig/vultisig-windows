@@ -12634,6 +12634,7 @@ __metadata:
     eslint-plugin-unused-imports: "npm:^4.3.0"
     globals: "npm:^17.0.0"
     knip: "npm:^5.82.1"
+    lottie-react: "npm:^2.4.1"
     prettier: "npm:^3.8.0"
     typescript: "npm:^5.9.3"
     vitest: "npm:^4.0.17"
