@@ -1,3 +1,4 @@
+import { Chain } from '@core/chain/Chain'
 import {
   areEqualCoins,
   Coin,
@@ -14,6 +15,8 @@ import { InputProps, IsActiveProp, OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { isOneOf } from '@lib/utils/array/isOneOf'
+import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
+import { NATIVE_MINT } from '@solana/spl-token'
 import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -45,20 +48,39 @@ export const SwapCoinsExplorer = ({
 
   const sortedSwapCoins = useSortedByBalanceCoins(currentChain)
   const options = useMemo(() => {
-    const result: Coin[] = [...sortedSwapCoins]
+    const vaultCoinsForChain = coins.filter(c => c.chain === currentChain)
 
-    const extraCoins = [
-      ...(knownTokens[currentChain] ?? []),
-      ...(whitelisted ?? []),
-    ]
+    const allOptions = withoutDuplicates(
+      [
+        ...sortedSwapCoins,
+        ...(knownTokens[currentChain] ?? []).filter(
+          coin => !vaultCoinsForChain.some(vc => areEqualCoins(vc, coin))
+        ),
+        ...(whitelisted ?? []).filter(
+          coin => !vaultCoinsForChain.some(vc => areEqualCoins(vc, coin))
+        ),
+      ],
+      areEqualCoins
+    )
 
-    extraCoins.forEach(coin => {
-      if (result.some(existing => areEqualCoins(existing, coin))) return
-      result.push(coin)
-    })
+    if (currentChain === Chain.Solana) {
+      const hasNativeSol = allOptions.some(
+        coin => coin.chain === Chain.Solana && !coin.id && isFeeCoin(coin)
+      )
 
-    return result
-  }, [currentChain, sortedSwapCoins, whitelisted])
+      if (hasNativeSol) {
+        return allOptions.filter(
+          coin =>
+            !(
+              coin.chain === Chain.Solana &&
+              coin.id?.toLowerCase() === NATIVE_MINT.toBase58().toLowerCase()
+            )
+        )
+      }
+    }
+
+    return allOptions
+  }, [currentChain, sortedSwapCoins, whitelisted, coins])
 
   const { t } = useTranslation()
 
