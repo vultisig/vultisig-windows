@@ -38,6 +38,7 @@ export type CoreState = CoreStorage & {
   getDeveloperOptions?: () => Promise<DeveloperOptions>
   processError?: ErrorBoundaryProcessError
   targetVaultId?: string
+  isLimited?: boolean
   goBack: () => void
   goHome: () => void
 }
