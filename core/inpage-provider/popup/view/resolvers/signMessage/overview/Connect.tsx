@@ -83,7 +83,7 @@ export const ConnectOverview: FC<SignMessageOverview> = ({
           )}
         />
         <Text size={22} weight={500} centerHorizontally>
-          Welcome to the Vultisig App Store
+          Welcome to the Vultisig Plugin Marketplace
         </Text>
         <Text color="shy" size={12} weight={500} centerHorizontally>
           Sign in with your Vultisig Vault to access Apps to automate your
