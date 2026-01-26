@@ -1,7 +1,9 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
-import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
-import { coinKeyToString } from '@core/chain/coin/Coin'
+import {
+  accountCoinKeyToString,
+  extractAccountCoinKey,
+} from '@core/chain/coin/AccountCoin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { useMemo } from 'react'
 
@@ -17,7 +19,7 @@ export const useSortedByBalanceCoins = (chain: Chain) => {
 
   return useMemo(() => {
     const getHumanBalance = (c: (typeof coinsInSelectedChain)[number]) => {
-      const key = coinKeyToString(extractAccountCoinKey(c))
+      const key = accountCoinKeyToString(extractAccountCoinKey(c))
       const chainBalance = balances?.[key] || 0
       return fromChainAmount(chainBalance, c.decimals)
     }
