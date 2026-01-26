@@ -1,3 +1,4 @@
+import { Chain } from '@core/chain/Chain'
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { BlockaidSimulationContent } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidSimulationContent'
@@ -248,7 +249,7 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                     publicKey={publicKey}
                   />
                 </>
-              ) : isChainOfKind(chain, 'evm') ? (
+              ) : isChainOfKind(chain, 'evm') || chain === Chain.Solana ? (
                 <BlockaidSimulationContent
                   blockaidSimulationQuery={blockaidSimulationQuery}
                   keysignPayload={keysignPayload}

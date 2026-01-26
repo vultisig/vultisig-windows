@@ -15,6 +15,7 @@ import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData
 import { Query } from '@lib/ui/query/Query'
 import { UseQueryOptions } from '@tanstack/react-query'
 import { WalletCore } from '@trustwallet/wallet-core'
+import base58 from 'bs58'
 import { useCallback } from 'react'
 
 type UseBlockaidSimulationQueryInput = {
@@ -56,6 +57,22 @@ export const useBlockaidSimulationQuery = ({
     useCallback(
       payload => {
         const chain = getKeysignChain(payload)
+        if (
+          payload.signData &&
+          payload.signData.case === 'signSolana' &&
+          payload.signData.value.rawTransactions
+        ) {
+          const rawTransactionsBase58 =
+            payload.signData.value.rawTransactions.map(base64Tx =>
+              base58.encode(Buffer.from(base64Tx, 'base64'))
+            )
+          return getBlockaidTxSimulationInput({
+            payload,
+            walletCore,
+            raw: rawTransactionsBase58,
+          })
+        }
+
         if (!isChainOfKind(chain, 'evm')) {
           return null
         }

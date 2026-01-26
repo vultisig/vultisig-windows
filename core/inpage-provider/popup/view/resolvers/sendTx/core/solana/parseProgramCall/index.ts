@@ -47,14 +47,10 @@ export const parseProgramCall = async ({
   }
   console.error('could not parse transaction, returning fallback swap')
   return {
-    swap: {
-      authority: keys[0].toBase58(),
+    raw: {
       inAmount: '0',
       inputCoin: chainFeeCoin.Solana,
-      outAmount: '0',
-      outputCoin: chainFeeCoin.Solana,
-      data,
-      swapProvider: 'fallback',
+      transactions: [data],
     },
   }
 }

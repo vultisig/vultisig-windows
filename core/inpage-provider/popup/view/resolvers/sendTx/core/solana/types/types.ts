@@ -22,6 +22,13 @@ export type SolanaTxData =
         rawMessageData?: string // base64 encoded serialized transaction
       }
     }
+  | {
+      raw: {
+        inputCoin: Coin
+        inAmount: string
+        transactions: string[]
+      }
+    }
 
 export type AddressTableLookup = {
   accountKey: string
