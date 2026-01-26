@@ -1,5 +1,6 @@
 import { PartialMatch } from '@lib/ui/base/PartialMatch'
 import { ValueProp } from '@lib/ui/props'
+import { useWatch } from 'react-hook-form'
 
 import { ChainAction } from '../../ChainAction'
 import { useGetMayaChainBondableAssetsQuery } from '../../hooks/useGetMayaChainBondableAssetsQuery'
@@ -17,8 +18,8 @@ import { WithdrawRujiRewardsSpecific } from './WithdrawRujiRewardsSpecific'
 
 export const DepositActionSpecific = ({ value }: ValueProp<ChainAction>) => {
   const { data: bondableAssets = [] } = useGetMayaChainBondableAssetsQuery()
-  const [{ getValues }] = useDepositFormHandlers()
-  const selectedBondableAsset = getValues('bondableAsset')
+  const [{ control }] = useDepositFormHandlers()
+  const selectedBondableAsset = useWatch({ control, name: 'bondableAsset' })
 
   return (
     <PartialMatch
