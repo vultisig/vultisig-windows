@@ -8,10 +8,17 @@ import { featureFlags } from '../featureFlags'
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'
 
-const supportedDefiChains: Chain[] = [
+export const supportedDefiChains = [
   Chain.THORChain,
-  ...(featureFlags.mayaChainDefi ? [Chain.MayaChain] : []),
-]
+  ...(featureFlags.mayaChain ? [Chain.MayaChain] : []),
+] as const satisfies readonly Chain[]
+
+export type SupportedDefiChain = (typeof supportedDefiChains)[number]
+
+export const isSupportedDefiChain = (
+  chain: Chain
+): chain is SupportedDefiChain =>
+  supportedDefiChains.includes(chain as SupportedDefiChain)
 
 export const initialDefiChains: Chain[] = []
 
@@ -37,7 +44,7 @@ export const useDefiChains = () => {
   const allowedDefiChains = useSupportedDefiChainsForVault()
   const { data } = useDefiChainsQuery()
 
-  const resolved = data ?? initialDefiChains
+  const resolved = (data ?? initialDefiChains).filter(isSupportedDefiChain)
   return resolved.filter(chain => allowedDefiChains.includes(chain))
 }
 
@@ -59,6 +66,10 @@ export const useToggleDefiChain = () => {
   const { mutate: setDefiChains, isPending } = useSetDefiChainsMutation()
 
   const toggleChain = (chain: Chain) => {
+    if (!isSupportedDefiChain(chain)) {
+      return
+    }
+
     const isSelected = defiChains.includes(chain)
 
     if (!isSelected && !allowedDefiChains.includes(chain)) {

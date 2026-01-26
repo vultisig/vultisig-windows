@@ -20,6 +20,7 @@ import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
 import { SignAminoDisplay } from '@core/ui/mpc/keysign/tx/components/SignAminoDisplay'
 import { SignDirectDisplay } from '@core/ui/mpc/keysign/tx/components/SignDirectDisplay'
+import { SignSolanaDisplay } from '@core/ui/mpc/keysign/tx/components/SignSolanaDisplay'
 import { useCurrentVaultPublicKey } from '@core/ui/vault/state/currentVault'
 import {
   HorizontalLine,
@@ -265,40 +266,60 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                 />
               ) : (
                 <>
-                  <List>
-                    <ListItem description={address} title={t('from')} />
-                    {keysignPayload.toAddress && (
-                      <ListItem
-                        description={keysignPayload.toAddress}
-                        title={t('to')}
-                      />
-                    )}
-                    {keysignPayload.toAmount && (
-                      <ListItem
-                        description={`${formatUnits(
-                          keysignPayload.toAmount,
-                          keysignPayload.coin?.decimals
-                        )} ${keysignPayload.coin?.ticker}`}
-                        title={t('amount')}
-                      />
-                    )}
-                    <ListItem
-                      description={getKeysignChain(keysignPayload)}
-                      title={t('network')}
+                  {keysignPayload.signData.case === 'signSolana' ? (
+                    <SignSolanaDisplay
+                      signSolana={keysignPayload.signData.value}
                     />
-                  </List>
-                  <MemoSection memo={keysignPayload.memo} chain={chain} />
-                  <VStack bgColor="foreground" radius={16}>
-                    <NetworkFeeSection
-                      keysignPayload={keysignPayload}
-                      transactionPayload={transactionPayload}
-                      chain={chain}
-                      feeSettings={feeSettings}
-                      setFeeSettings={setFeeSettings}
-                      walletCore={walletCore}
-                      publicKey={publicKey}
-                    />
-                  </VStack>
+                  ) : (
+                    <>
+                      {(() => {
+                        return (
+                          <>
+                            <List>
+                              <ListItem
+                                description={address}
+                                title={t('from')}
+                              />
+                              {keysignPayload.toAddress && (
+                                <ListItem
+                                  description={keysignPayload.toAddress}
+                                  title={t('to')}
+                                />
+                              )}
+                              {keysignPayload.toAmount && (
+                                <ListItem
+                                  description={`${formatUnits(
+                                    keysignPayload.toAmount,
+                                    keysignPayload.coin?.decimals
+                                  )} ${keysignPayload.coin?.ticker}`}
+                                  title={t('amount')}
+                                />
+                              )}
+                              <ListItem
+                                description={getKeysignChain(keysignPayload)}
+                                title={t('network')}
+                              />
+                            </List>
+                            <MemoSection
+                              memo={keysignPayload.memo}
+                              chain={chain}
+                            />
+                            <VStack bgColor="foreground" radius={16}>
+                              <NetworkFeeSection
+                                keysignPayload={keysignPayload}
+                                transactionPayload={transactionPayload}
+                                chain={chain}
+                                feeSettings={feeSettings}
+                                setFeeSettings={setFeeSettings}
+                                walletCore={walletCore}
+                                publicKey={publicKey}
+                              />
+                            </VStack>
+                          </>
+                        )
+                      })()}
+                    </>
+                  )}
                 </>
               )}
               {keysignPayload.signData.case === 'signAmino' && (

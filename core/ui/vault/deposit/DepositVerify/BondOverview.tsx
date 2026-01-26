@@ -9,6 +9,7 @@ import { useIsBlockaidEnabledQuery } from '@core/ui/storage/blockaid'
 import { DepositConfirmButton } from '@core/ui/vault/deposit/DepositConfirmButton'
 import { useDepositMemo } from '@core/ui/vault/deposit/hooks/useDepositMemo'
 import { useDepositKeysignPayloadQuery } from '@core/ui/vault/deposit/keysignPayload/query'
+import { useDepositAction } from '@core/ui/vault/deposit/providers/DepositActionProvider'
 import { useDepositCoin } from '@core/ui/vault/deposit/providers/DepositCoinProvider'
 import { useDepositData } from '@core/ui/vault/deposit/state/data'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -33,11 +34,17 @@ export const BondOverview = ({ onBack }: OnBackProp) => {
   const { t } = useTranslation()
   const depositData = useDepositData()
   const [coin] = useDepositCoin()
+  const [action] = useDepositAction()
   const memo = useDepositMemo()
   const { name: vaultName } = useCurrentVault()
   const vaultAddress = useCurrentVaultAddress(coin.chain)
   const keysignPayloadQuery = useDepositKeysignPayloadQuery()
   const { data: isBlockaidEnabled } = useIsBlockaidEnabledQuery()
+
+  const isUnbond = action === 'unbond'
+  const actionLabel = isUnbond
+    ? (t('you_are_unbonding') as string)
+    : (t('you_are_bonding') as string)
 
   const rawAmount = depositData?.amount
   const amountValue =
@@ -70,7 +77,7 @@ export const BondOverview = ({ onBack }: OnBackProp) => {
 
         <List border="gradient" radius={16}>
           <TransactionOverviewAmount
-            label={t('you_are_bonding')}
+            label={actionLabel}
             coin={coin}
             fallbackAmount={fallbackAmount}
             keysignPayloadQuery={keysignPayloadQuery}

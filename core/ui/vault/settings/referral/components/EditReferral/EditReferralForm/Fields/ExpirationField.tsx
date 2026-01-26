@@ -1,10 +1,10 @@
 import { Stepper } from '@lib/ui/inputs/Stepper'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
-import { Controller } from 'react-hook-form'
+import { Controller, useFormState, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { useCreateReferralForm } from '../../../../providers/CreateReferralFormProvider'
+import { useEditReferralFormData } from '../../../../providers/EditReferralFormProvider'
 import {
   FormField,
   FormFieldErrorText,
@@ -17,13 +17,9 @@ type Props = {
 
 export const ExpirationField = ({ initialExpiration }: Props) => {
   const { t } = useTranslation()
-  const {
-    control,
-    formState: { errors, isDirty },
-    watch,
-  } = useCreateReferralForm()
-
-  const expiration = watch('expiration')
+  const { control } = useEditReferralFormData()
+  const { errors, isDirty } = useFormState({ control })
+  const expiration = useWatch({ control, name: 'expiration' })
 
   const formattedExpirationDate = new Date(
     new Date().setFullYear(new Date().getFullYear() + expiration)
@@ -52,7 +48,7 @@ export const ExpirationField = ({ initialExpiration }: Props) => {
               ref={ref}
               onBlur={onBlur}
               min={1}
-              max={10}
+              max={1000}
               value={value}
               onChange={onChange}
               placeholder={t('enter_number_placeholder')}

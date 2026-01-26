@@ -1,4 +1,5 @@
 import { Vault } from '@core/mpc/vault/Vault'
+import { RefreshDefiData } from '@core/ui/defi/RefreshDefiData'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { VaultSelector } from '@core/ui/vault/page/components/VaultSelector'
 import { IconButton } from '@lib/ui/buttons/IconButton'
@@ -64,6 +65,7 @@ export const DefiPageHeader = ({
 
   const headerControls = (
     <HStack gap={4} alignItems="center">
+      <RefreshDefiData />
       <IconButton size="lg" onClick={() => navigate({ id: 'settings' })}>
         <IconWrapper size={24}>
           <SettingsIcon />
@@ -76,11 +78,14 @@ export const DefiPageHeader = ({
     <HeaderContainer>
       <CollapsedContent isVisible={isCollapsed}>
         <VaultSelector value={vault} />
-        <VStack alignItems="flex-end" gap={2} style={{ flexShrink: 0 }}>
-          <Text size={12} color="shy">
-            {t('defi')}
-          </Text>
-        </VStack>
+        <HStack alignItems="center" gap={12} style={{ flexShrink: 0 }}>
+          <VStack alignItems="flex-end" gap={2}>
+            <Text size={12} color="shy">
+              {t('defi')}
+            </Text>
+          </VStack>
+          {headerControls}
+        </HStack>
       </CollapsedContent>
 
       <NormalContent isVisible={!isCollapsed}>

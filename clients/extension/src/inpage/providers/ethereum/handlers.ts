@@ -3,10 +3,14 @@ import { getEthBlockNumber } from './resolvers/eth_blockNumber'
 import { callEth } from './resolvers/eth_call'
 import { getEthChainId } from './resolvers/eth_chainId'
 import { estimateEthGas } from './resolvers/eth_estimateGas'
+import { getEthFeeHistory } from './resolvers/eth_feeHistory'
 import { getEthGasPrice } from './resolvers/eth_gasPrice'
 import { getEthBalance } from './resolvers/eth_getBalance'
+import { getEthBlockByHash } from './resolvers/eth_getBlockByHash'
 import { getEthBlockByNumber } from './resolvers/eth_getBlockByNumber'
 import { getEthCode } from './resolvers/eth_getCode'
+import { getEthLogs } from './resolvers/eth_getLogs'
+import { getEthStorageAt } from './resolvers/eth_getStorageAt'
 import { getEthTransactionByHash } from './resolvers/eth_getTransactionByHash'
 import { getEthTransactionCount } from './resolvers/eth_getTransactionCount'
 import { getEthTransactionReceipt } from './resolvers/eth_getTransactionReceipt'
@@ -42,8 +46,12 @@ export const ethereumHandlers = {
   eth_getTransactionCount: getEthTransactionCount,
   eth_getBalance: getEthBalance,
   eth_blockNumber: getEthBlockNumber,
+  eth_getBlockByHash: getEthBlockByHash,
   eth_getBlockByNumber: getEthBlockByNumber,
+  eth_feeHistory: getEthFeeHistory,
   eth_gasPrice: getEthGasPrice,
+  eth_getLogs: getEthLogs,
+  eth_getStorageAt: getEthStorageAt,
   eth_maxPriorityFeePerGas: getEthMaxPriorityFeePerGas,
   eth_estimateGas: estimateEthGas,
   eth_call: callEth,

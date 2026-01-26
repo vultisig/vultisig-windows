@@ -1,6 +1,7 @@
 import { create } from '@bufbuild/protobuf'
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { getChainKind, isChainOfKind } from '@core/chain/ChainKind'
+import { CosmosMsgType } from '@core/chain/chains/cosmos/cosmosMsgTypes'
 import { getPsbtTransferInfo } from '@core/chain/chains/utxo/tx/getPsbtTransferInfo'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import {
@@ -27,6 +28,8 @@ import {
   SignAminoSchema,
   SignDirect,
   SignDirectSchema,
+  SignSolana,
+  SignSolanaSchema,
   WasmExecuteContractPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { attempt } from '@lib/utils/attempt'
@@ -41,7 +44,7 @@ import { hexToString } from 'viem'
 import { getTxAmount } from '../core/amount'
 import { CustomTxData } from '../core/customTxData'
 import { ParsedTx } from '../core/parsedTx'
-import { CosmosMsgType, TronMsgType } from '../interfaces'
+import { TronMsgType } from '../interfaces'
 
 export type BuildSendTxKeysignPayloadInput = {
   parsedTx: ParsedTx
@@ -375,12 +378,33 @@ export const buildSendTxKeysignPayload = async ({
     }
   )
 
+  const solanaPayload = matchRecordUnion<CustomTxData, SignSolana | undefined>(
+    customTxData,
+    {
+      regular: () => undefined,
+      solana: tx => {
+        const rawMessageData =
+          ('swap' in tx && tx.swap.rawMessageData) ||
+          ('transfer' in tx && tx.transfer.rawMessageData)
+        if (rawMessageData) {
+          return create(SignSolanaSchema, {
+            rawTransactions: [rawMessageData],
+          })
+        }
+        return undefined
+      },
+      psbt: () => undefined,
+    }
+  )
+
   const signData: KeysignPayload['signData'] =
     aminoPayload !== undefined
       ? { case: 'signAmino', value: aminoPayload }
       : directPayload !== undefined
         ? { case: 'signDirect', value: directPayload }
-        : { case: undefined, value: undefined }
+        : solanaPayload !== undefined
+          ? { case: 'signSolana', value: solanaPayload }
+          : { case: undefined, value: undefined }
 
   let keysignPayload = create(KeysignPayloadSchema, {
     toAddress: toAddress ?? '',
