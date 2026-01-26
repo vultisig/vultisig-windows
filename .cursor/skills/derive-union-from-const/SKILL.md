@@ -1,0 +1,22 @@
+---
+name: derive-union-from-const
+description: USE const array with derived type WHEN defining unions that need runtime values TO avoid repetition
+---
+
+# Derive Union Types from Const Arrays
+
+When you need both a union type AND runtime array values, define the array first and derive the type.
+
+```typescript
+// ✅ Good - single source of truth
+const sortableColumns = ['size', 'creationTime'] as const
+type SortableColumn = (typeof sortableColumns)[number]
+
+// Use the array directly
+sortable={{ items: sortableColumns }}
+
+// ❌ Bad - duplicated values
+type SortableColumn = 'size' | 'creationTime'
+
+sortable={{ items: ['size', 'creationTime'] }} // repeated!
+```

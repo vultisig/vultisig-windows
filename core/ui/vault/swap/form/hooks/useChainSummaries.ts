@@ -1,5 +1,8 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
+import {
+  accountCoinKeyToString,
+  extractAccountCoinKey,
+} from '@core/chain/coin/AccountCoin'
 import { Coin, coinKeyToString } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
@@ -34,10 +37,11 @@ export const useChainSummaries = (): Query<
         const result: Record<Coin['chain'], ChainSummary> = {} as any
 
         for (const coin of coins) {
-          const key = coinKeyToString(extractAccountCoinKey(coin))
-          const rawBal = balances[key] ?? 0
+          const balanceKey = accountCoinKeyToString(extractAccountCoinKey(coin))
+          const priceKey = coinKeyToString(coin)
+          const rawBal = balances[balanceKey] ?? 0
           const amount = fromChainAmount(rawBal, coin.decimals)
-          const price = prices[key] ?? 0
+          const price = prices[priceKey] ?? 0
           const usd = amount * price
 
           const chain = coin.chain
