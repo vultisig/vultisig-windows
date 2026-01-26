@@ -12,8 +12,7 @@ export const toRequiredNumber = (value: unknown) => {
   return Number.isFinite(parsed) ? parsed : NaN
 }
 
-export const maxOrInfinity = (value: number) =>
-  value > 0 ? value : Number.POSITIVE_INFINITY
+export const maxOrInfinity = (value: number) => (value > 0 ? value : 0)
 
 export const positiveAmountSchema = (
   maxValue: number,
