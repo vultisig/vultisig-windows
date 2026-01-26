@@ -67,7 +67,7 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
     setValue,
     getValues,
     control,
-    formState: { errors, isValid },
+    formState: { errors, isValid, touchedFields, dirtyFields },
   } = useForm<FormData>({
     resolver: zodResolver(schema as any),
     mode: 'onChange',
@@ -260,15 +260,21 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
                           required={field.required}
                         />
 
-                        {errors[field.name] && (
-                          <ErrorText color="danger" size={13} className="error">
-                            {t(errors[field.name]?.message as string, {
-                              defaultValue: t(
-                                'chainFunctions.default_validation'
-                              ),
-                            })}
-                          </ErrorText>
-                        )}
+                        {(touchedFields[field.name] ||
+                          dirtyFields[field.name]) &&
+                          errors[field.name] && (
+                            <ErrorText
+                              color="danger"
+                              size={13}
+                              className="error"
+                            >
+                              {t(errors[field.name]?.message as string, {
+                                defaultValue: t(
+                                  'chainFunctions.default_validation'
+                                ),
+                              })}
+                            </ErrorText>
+                          )}
                       </InputContainer>
                     )
                   })}
