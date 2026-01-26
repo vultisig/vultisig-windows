@@ -1,6 +1,6 @@
+import { accountCoinKeyToString } from '@core/chain/coin/AccountCoin'
 import { getCoinBalance } from '@core/chain/coin/balance'
 import { CoinBalanceResolverInput } from '@core/chain/coin/balance/resolver'
-import { coinKeyToString } from '@core/chain/coin/Coin'
 import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
 import { persistQueryOptions } from '@lib/ui/query/utils/options'
 import { mergeRecords } from '@lib/utils/record/mergeRecords'
@@ -20,7 +20,7 @@ export const getBalanceQueryOptions = <T extends CoinBalanceResolverInput>(
   queryFn: async () => {
     const amount = await getCoinBalance(input)
     return {
-      [coinKeyToString(input)]: amount,
+      [accountCoinKeyToString(input)]: amount,
     }
   },
   ...persistQueryOptions,

@@ -1,0 +1,49 @@
+---
+description: KEEP one React component per file TO maintain clear separation of concerns and improve code navigation
+globs: *.tsx
+alwaysApply: true
+---
+
+# One Component Per File
+
+Each `.tsx` file should export **only one React component**. This includes skeleton components, loading states, and error states.
+
+## Structure
+
+```
+my-component/
+├── my-component.tsx           # Main component
+├── my-component-skeleton.tsx  # Skeleton/loading state
+├── my-component-error.tsx     # Error state (if needed)
+├── styles.ts                  # Shared styled components
+└── index.ts                   # Re-exports (optional)
+```
+
+## Examples
+
+```tsx
+// ✅ Good: Separate files
+// my-component.tsx
+export const MyComponent = () => { ... }
+
+// my-component-skeleton.tsx
+export const MyComponentSkeleton = () => { ... }
+
+// ❌ Bad: Multiple components in one file
+export const MyComponent = () => { ... }
+const MyComponentSkeleton = () => { ... }  // Should be in separate file
+```
+
+## Exceptions
+
+- **Styled components** can remain in the same file if they're only used by that component
+- **Shared styled components** used by multiple files should go in `styles.ts`
+- **Small helper components** (< 10 lines) that are only used within the file can stay inline
+
+## Benefits
+
+- Clear file responsibility
+- Easier code navigation
+- Better tree-shaking
+- Simpler imports
+- Cleaner git diffs
