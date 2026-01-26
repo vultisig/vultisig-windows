@@ -1,7 +1,6 @@
 ---
+name: ensure-query-data
 description: USE resolved query data hook pattern WHEN child components need access to query data
-globs: 
-alwaysApply: false
 ---
 
 # Resolved Query Data Hook Pattern
