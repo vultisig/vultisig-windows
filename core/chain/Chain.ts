@@ -92,3 +92,11 @@ export const UtxoBasedChain = [
 ] as const
 
 export type UtxoBasedChain = (typeof UtxoBasedChain)[number]
+
+export const defaultChains = [
+  Chain.Bitcoin,
+  Chain.Ethereum,
+  Chain.THORChain,
+  Chain.Solana,
+  Chain.BSC,
+]
