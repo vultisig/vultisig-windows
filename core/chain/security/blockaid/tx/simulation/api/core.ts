@@ -126,8 +126,8 @@ export const parseBlockaidSolanaSimulation = async (
             inAsset.type === 'SOL'
               ? 'So11111111111111111111111111111111111111112'
               : shouldBePresent(inAsset.address),
-          fromAmount: shouldBePresent(outValue).raw_value,
-          toAmount: shouldBePresent(inValue).raw_value,
+          fromAmount: BigInt(shouldBePresent(outValue).raw_value),
+          toAmount: BigInt(shouldBePresent(inValue).raw_value),
           toAssetDecimal: inAsset.decimals,
         },
       }
@@ -138,7 +138,7 @@ export const parseBlockaidSolanaSimulation = async (
             outAsset.type === 'SOL'
               ? 'So11111111111111111111111111111111111111112'
               : shouldBePresent(outAsset.address),
-          fromAmount: shouldBePresent(outValue).raw_value,
+          fromAmount: BigInt(shouldBePresent(outValue).raw_value),
         },
       }
     }

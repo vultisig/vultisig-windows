@@ -1,5 +1,4 @@
-import { Chain } from '@core/chain/Chain'
-import { getChainKind } from '@core/chain/ChainKind'
+import { Chain, EvmChain } from '@core/chain/Chain'
 import { Coin, CoinKey } from '@core/chain/coin/Coin'
 import {
   BlockaidEvmSimulationInfo,
@@ -25,24 +24,30 @@ import { formatUnits } from 'ethers'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
-type BlockaidSimulationContentProps = {
-  blockaidSimulationQuery: Query<
-    BlockaidEvmSimulationInfo | BlockaidSolanaSimulationInfo,
-    unknown
-  >
-  keysignPayload: KeysignPayload
-  address: string
-  chain: Chain
-  networkFeeProps: NetworkFeeSectionProps
-  getCoin: (coinKey: CoinKey) => Promise<Coin>
-}
+type BlockaidSimulationContentProps =
+  | {
+      chain: EvmChain
+      blockaidSimulationQuery: Query<BlockaidEvmSimulationInfo, unknown>
+      keysignPayload: KeysignPayload
+      address: string
+      networkFeeProps: NetworkFeeSectionProps
+      getCoin: (coinKey: CoinKey) => Promise<Coin>
+    }
+  | {
+      chain: typeof Chain.Solana
+      blockaidSimulationQuery: Query<BlockaidSolanaSimulationInfo, unknown>
+      keysignPayload: KeysignPayload
+      address: string
+      networkFeeProps: NetworkFeeSectionProps
+      getCoin: (coinKey: CoinKey) => Promise<Coin>
+    }
 
 type EnrichedSolanaSimulationInfo =
   | {
       swap: {
-        fromAmount: number
+        fromAmount: bigint
         fromMint: string
-        toAmount: number
+        toAmount: bigint
         toAssetDecimal: number
         toMint: string
         fromCoin: Coin
@@ -51,16 +56,19 @@ type EnrichedSolanaSimulationInfo =
     }
   | {
       transfer: {
-        fromAmount: number
+        fromAmount: bigint
         fromMint: string
         fromCoin: Coin
       }
     }
 
-const enrichSolanaSimulationInfo = async (
-  simulationInfo: BlockaidSolanaSimulationInfo,
+const enrichSolanaSimulationInfo = async ({
+  simulationInfo,
+  getCoin,
+}: {
+  simulationInfo: BlockaidSolanaSimulationInfo
   getCoin: (coinKey: CoinKey) => Promise<Coin>
-): Promise<EnrichedSolanaSimulationInfo> => {
+}): Promise<EnrichedSolanaSimulationInfo> => {
   return matchRecordUnion(simulationInfo, {
     swap: async ({
       fromAmount,
@@ -103,145 +111,158 @@ const enrichSolanaSimulationInfo = async (
   })
 }
 
-export const BlockaidSimulationContent = ({
+export const BlockaidSimulationContent = (
+  props: BlockaidSimulationContentProps
+) => {
+  if (props.chain === Chain.Solana) {
+    return <BlockaidSolanaSimulationContent {...props} />
+  }
+  return <BlockaidEvmSimulationContent {...props} />
+}
+
+const BlockaidSolanaSimulationContent = ({
   blockaidSimulationQuery,
   keysignPayload,
   address,
   chain,
   networkFeeProps,
   getCoin,
-}: BlockaidSimulationContentProps) => {
-  const { t } = useTranslation()
-
+}: Extract<BlockaidSimulationContentProps, { chain: typeof Chain.Solana }>) => {
   const enrichedSolanaSimulationQuery = useQueryDependentQuery(
     blockaidSimulationQuery,
     useCallback(
-      simulationInfo => {
-        if (getChainKind(chain) !== 'solana') {
-          return {
-            queryKey: ['blockaid-solana-simulation-enriched', 'skip'],
-            queryFn: async () => null,
-          }
-        }
-
-        const solanaSimulationInfo =
-          simulationInfo as BlockaidSolanaSimulationInfo
-
+      (simulationInfo: BlockaidSolanaSimulationInfo) => {
         return {
-          queryKey: [
-            'blockaid-solana-simulation-enriched',
-            solanaSimulationInfo,
-          ],
+          queryKey: ['blockaid-solana-simulation-enriched', simulationInfo],
           queryFn: async () =>
-            enrichSolanaSimulationInfo(solanaSimulationInfo, getCoin),
+            enrichSolanaSimulationInfo({
+              simulationInfo,
+              getCoin,
+            }),
         }
       },
-      [chain, getCoin]
+      [getCoin]
     )
   )
 
   return (
     <MatchQuery
       value={blockaidSimulationQuery}
-      success={blockaidSimulationInfo => {
-        if (getChainKind(chain) === 'evm') {
-          const blockaidEvmSimulationInfo =
-            blockaidSimulationInfo as BlockaidEvmSimulationInfo
-          if (!blockaidEvmSimulationInfo) {
-            return (
-              <>
-                <List>
-                  <ListItem description={address} title={t('from')} />
-                  {keysignPayload.toAddress && (
-                    <ListItem
-                      description={keysignPayload.toAddress}
-                      title={t('to')}
-                    />
-                  )}
-                  {keysignPayload.toAmount && (
-                    <ListItem
-                      description={`${formatUnits(
-                        keysignPayload.toAmount,
-                        keysignPayload.coin?.decimals
-                      )} ${keysignPayload.coin?.ticker}`}
-                      title={t('amount')}
-                    />
-                  )}
-                  <ListItem
-                    description={getKeysignChain(keysignPayload)}
-                    title={t('network')}
+      success={(_blockaidSimulationInfo: BlockaidSolanaSimulationInfo) => {
+        return (
+          <MatchQuery
+            value={enrichedSolanaSimulationQuery}
+            success={enrichedInfo => {
+              if (!enrichedInfo) {
+                return null
+              }
+
+              return matchRecordUnion(enrichedInfo, {
+                swap: swap => (
+                  <BlockaidSwapDisplay
+                    swap={{
+                      fromAmount: swap.fromAmount,
+                      fromCoin: swap.fromCoin,
+                      toAmount: swap.toAmount,
+                      toCoin: swap.toCoin,
+                    }}
+                    memo={keysignPayload.memo}
+                    chain={chain}
+                    networkFeeProps={networkFeeProps}
                   />
-                </List>
-                <MemoSection memo={keysignPayload.memo} chain={chain} />
-                <NetworkFeeSection {...networkFeeProps} />
-              </>
-            )
-          }
+                ),
+                transfer: transfer => (
+                  <BlockaidTransferDisplay
+                    transfer={{
+                      fromAmount: transfer.fromAmount,
+                      fromCoin: transfer.fromCoin,
+                    }}
+                    fromAddress={address}
+                    toAddress={keysignPayload.toAddress}
+                    memo={keysignPayload.memo}
+                    chain={chain}
+                    networkFeeProps={networkFeeProps}
+                  />
+                ),
+              })
+            }}
+            pending={() => null}
+            error={() => null}
+            inactive={() => null}
+          />
+        )
+      }}
+      error={() => null}
+      pending={() => null}
+      inactive={() => null}
+    />
+  )
+}
 
-          return matchRecordUnion(blockaidEvmSimulationInfo, {
-            swap: swap => (
-              <BlockaidSwapDisplay
-                swap={swap}
-                memo={keysignPayload.memo}
-                chain={chain}
-                networkFeeProps={networkFeeProps}
-              />
-            ),
-            transfer: transfer => (
-              <BlockaidTransferDisplay
-                transfer={transfer}
-                fromAddress={address}
-                toAddress={keysignPayload.toAddress}
-                memo={keysignPayload.memo}
-                chain={chain}
-                networkFeeProps={networkFeeProps}
-              />
-            ),
-          })
-        } else {
+const BlockaidEvmSimulationContent = ({
+  blockaidSimulationQuery,
+  keysignPayload,
+  address,
+  chain,
+  networkFeeProps,
+}: Extract<BlockaidSimulationContentProps, { chain: EvmChain }>) => {
+  const { t } = useTranslation()
+
+  return (
+    <MatchQuery
+      value={blockaidSimulationQuery}
+      success={(blockaidSimulationInfo: BlockaidEvmSimulationInfo) => {
+        if (blockaidSimulationInfo === null) {
           return (
-            <MatchQuery
-              value={enrichedSolanaSimulationQuery}
-              success={enrichedInfo => {
-                if (!enrichedInfo) {
-                  return null
-                }
-
-                return matchRecordUnion(enrichedInfo, {
-                  swap: swap => (
-                    <BlockaidSwapDisplay
-                      swap={{
-                        fromAmount: BigInt(swap.fromAmount),
-                        fromCoin: swap.fromCoin,
-                        toAmount: BigInt(swap.toAmount),
-                        toCoin: swap.toCoin,
-                      }}
-                      memo={keysignPayload.memo}
-                      chain={chain}
-                      networkFeeProps={networkFeeProps}
-                    />
-                  ),
-                  transfer: transfer => (
-                    <BlockaidTransferDisplay
-                      transfer={{
-                        fromAmount: BigInt(transfer.fromAmount),
-                        fromCoin: transfer.fromCoin,
-                      }}
-                      fromAddress={address}
-                      toAddress={keysignPayload.toAddress}
-                      memo={keysignPayload.memo}
-                      chain={chain}
-                      networkFeeProps={networkFeeProps}
-                    />
-                  ),
-                })
-              }}
-              pending={() => null}
-              error={() => null}
-              inactive={() => null}
-            />
+            <>
+              <List>
+                <ListItem description={address} title={t('from')} />
+                {keysignPayload.toAddress && (
+                  <ListItem
+                    description={keysignPayload.toAddress}
+                    title={t('to')}
+                  />
+                )}
+                {keysignPayload.toAmount && (
+                  <ListItem
+                    description={`${formatUnits(
+                      keysignPayload.toAmount,
+                      keysignPayload.coin?.decimals
+                    )} ${keysignPayload.coin?.ticker}`}
+                    title={t('amount')}
+                  />
+                )}
+                <ListItem
+                  description={getKeysignChain(keysignPayload)}
+                  title={t('network')}
+                />
+              </List>
+              <MemoSection memo={keysignPayload.memo} chain={chain} />
+              <NetworkFeeSection {...networkFeeProps} />
+            </>
           )
         }
+
+        return matchRecordUnion(blockaidSimulationInfo, {
+          swap: swap => (
+            <BlockaidSwapDisplay
+              swap={swap}
+              memo={keysignPayload.memo}
+              chain={chain}
+              networkFeeProps={networkFeeProps}
+            />
+          ),
+          transfer: transfer => (
+            <BlockaidTransferDisplay
+              transfer={transfer}
+              fromAddress={address}
+              toAddress={keysignPayload.toAddress}
+              memo={keysignPayload.memo}
+              chain={chain}
+              networkFeeProps={networkFeeProps}
+            />
+          ),
+        })
       }}
       error={() => null}
       pending={() => null}

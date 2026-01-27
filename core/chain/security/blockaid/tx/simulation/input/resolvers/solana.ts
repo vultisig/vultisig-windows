@@ -9,7 +9,7 @@ export const getSolanaBlockaidTxSimulationInput: BlockaidTxSimulationInputResolv
   OtherChain.Solana
 > = ({ payload, walletCore, chain, raw }) => {
   const coin = assertField(payload, 'coin')
-  if (raw) {
+  if (raw && raw.length > 0) {
     return {
       chain: 'mainnet',
       options: ['simulation'],

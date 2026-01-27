@@ -1,4 +1,3 @@
-import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { SignSolana } from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -143,9 +142,12 @@ const parseSolanaTransactionInstructions = (
   }
 }
 
-export const SignSolanaDisplay = ({ payload }: { payload: KeysignPayload }) => {
+export const SignSolanaDisplay = ({
+  signSolana,
+}: {
+  signSolana: SignSolana
+}) => {
   const { t } = useTranslation()
-  const signSolana = payload.signData.value as SignSolana
   const instructionsSummary = useMemo(() => {
     const allInstructions: InstructionSummary[] = []
     signSolana.rawTransactions.forEach(tx => {

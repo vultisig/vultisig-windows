@@ -44,7 +44,7 @@ export const parseProgramCall = async ({
       return await parseSystemInstruction({ instruction, keys })
     }
   }
-  console.error('could not parse transaction, returning fallback swap')
+  console.error('could not parse transaction, returning raw fallback')
   return {
     raw: {
       inAmount: '0',

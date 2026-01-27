@@ -168,6 +168,12 @@ export const parseSolanaTx = async ({
     })
   )
 
+  if (parsedTx && 'raw' in parsedTx) {
+    return {
+      raw: parsedTx.raw,
+    }
+  }
+
   if (parsedTx && 'transfer' in parsedTx) {
     return {
       transfer: {

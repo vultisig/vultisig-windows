@@ -5,15 +5,15 @@ export type BlockaidSolanaSimulationInfo =
       swap: {
         fromMint: string
         toMint: string
-        fromAmount: number
-        toAmount: number
+        fromAmount: bigint
+        toAmount: bigint
         toAssetDecimal: number
       }
     }
   | {
       transfer: {
         fromMint: string
-        fromAmount: number
+        fromAmount: bigint
       }
     }
 

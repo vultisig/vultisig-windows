@@ -76,7 +76,8 @@ export const useBlockaidSimulationQuery = ({
         if (
           payload.signData &&
           payload.signData.case === 'signSolana' &&
-          payload.signData.value.rawTransactions
+          payload.signData.value.rawTransactions &&
+          payload.signData.value.rawTransactions.length > 0
         ) {
           const rawTransactionsBase58 =
             payload.signData.value.rawTransactions.map(base64Tx =>
