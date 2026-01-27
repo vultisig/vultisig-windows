@@ -1,56 +1,93 @@
 import { useSwapToCoin } from '@core/ui/vault/swap/state/toCoin'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { centerContent } from '@lib/ui/css/centerContent'
-import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { ArrowUpDownIcon } from '@lib/ui/icons/ArrowUpDownIcon'
 import { SwapLoadingIcon } from '@lib/ui/icons/SwapLoadingIcon'
+import { WarningIcon } from '@lib/ui/icons/WarningIcon'
 import { HStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import { motion, useReducedMotion } from 'framer-motion'
-import styled from 'styled-components'
+import { useEffect, useState } from 'react'
+import styled, { css } from 'styled-components'
 
 import { useSwapQuoteQuery } from '../queries/useSwapQuoteQuery'
 import { useSwapFromCoin } from '../state/fromCoin'
+import { SwapErrorTooltip } from './SwapErrorTooltip'
 
-export const ReverseSwap = () => {
+type ReverseSwapProps = {
+  errorMessage?: string | null
+}
+
+export const ReverseSwap = ({ errorMessage }: ReverseSwapProps) => {
   const [fromCoinKey, setFromCoinKey] = useSwapFromCoin()
   const [toCoin, setToCoin] = useSwapToCoin()
   const { isPending } = useSwapQuoteQuery()
   const prefersReducedMotion = useReducedMotion()
+  const [isTooltipDismissed, setIsTooltipDismissed] = useState(false)
+
+  const hasError = !!errorMessage
+
+  // Reset tooltip dismissed state when error message changes
+  useEffect(() => {
+    setIsTooltipDismissed(false)
+  }, [errorMessage])
+
+  const showTooltip = hasError && !isTooltipDismissed
+
+  const renderButton = (props: Record<string, unknown>) => (
+    <Button
+      {...props}
+      $hasError={hasError}
+      onClick={
+        hasError
+          ? undefined
+          : () => {
+              setFromCoinKey(toCoin)
+              setToCoin(fromCoinKey)
+            }
+      }
+    >
+      {isPending ? (
+        <motion.span
+          key="spinner"
+          role="img"
+          aria-label="loading"
+          style={{
+            display: 'inline-flex',
+            willChange: 'transform',
+            fontSize: 12,
+          }}
+          initial={{ rotate: 0 }}
+          animate={prefersReducedMotion ? { rotate: 0 } : { rotate: 360 }}
+          transition={
+            prefersReducedMotion
+              ? { duration: 0 }
+              : { repeat: Infinity, ease: 'linear', duration: 0.8 }
+          }
+        >
+          <SwapLoadingIcon />
+        </motion.span>
+      ) : hasError ? (
+        <WarningIcon />
+      ) : (
+        <ArrowUpDownIcon />
+      )}
+    </Button>
+  )
 
   return (
     <Wrapper justifyContent="center" alignItems="center">
-      <Button
-        onClick={() => {
-          setFromCoinKey(toCoin)
-          setToCoin(fromCoinKey)
-        }}
-      >
-        {isPending ? (
-          <motion.span
-            key="spinner"
-            role="img"
-            aria-label="loading"
-            style={{
-              display: 'inline-flex',
-              willChange: 'transform',
-              fontSize: 12,
-            }}
-            initial={{ rotate: 0 }}
-            animate={prefersReducedMotion ? { rotate: 0 } : { rotate: 360 }}
-            transition={
-              prefersReducedMotion
-                ? { duration: 0 }
-                : { repeat: Infinity, ease: 'linear', duration: 0.8 }
-            }
-          >
-            <SwapLoadingIcon />
-          </motion.span>
-        ) : (
-          <ArrowUpDownIcon />
+      <SwapErrorTooltip
+        content={showTooltip ? errorMessage : null}
+        placement="top"
+        onClose={() => setIsTooltipDismissed(true)}
+        renderOpener={({ ref, ...rest }) => (
+          <div ref={ref as React.Ref<HTMLDivElement>} {...rest}>
+            {renderButton({})}
+          </div>
         )}
-      </Button>
+      />
     </Wrapper>
   )
 }
@@ -91,12 +128,20 @@ const Wrapper = styled(HStack)`
   }
 `
 
-const Button = styled(UnstyledButton)`
-  ${round};
+const Button = styled(UnstyledButton)<{ $hasError: boolean }>`
   ${sameDimensions(40)};
-  background: ${getColor('buttonPrimary')};
+  background: ${({ $hasError }) =>
+    $hasError ? getColor('danger') : getColor('buttonPrimary')};
+  border-radius: ${({ $hasError }) => ($hasError ? '18px' : '1000px')};
   border: 2px solid ${getColor('background')};
   ${centerContent};
-  font-size: 16px;
+  font-size: ${({ $hasError }) => ($hasError ? '20px' : '16px')};
   color: ${getColor('contrast')};
+
+  ${({ $hasError }) =>
+    $hasError &&
+    css`
+      pointer-events: none;
+      cursor: default;
+    `}
 `

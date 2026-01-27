@@ -7,6 +7,7 @@
     "printKnownTokens": "npx tsx scripts/printKnownTokens.ts"
   },
   "dependencies": {
+    "7z-wasm": "^1.2.0",
     "@bufbuild/protobuf": "^2.10.2",
     "@core/config": "workspace:^",
     "@core/mpc": "workspace:^",
@@ -14,6 +15,7 @@
     "@cosmjs/encoding": "^0.38.1",
     "@cosmjs/stargate": "^0.38.1",
     "@lib/utils": "workspace:^",
+    "@lifi/sdk": "^3.15.4",
     "@mysten/sui": "^1.45.2",
     "@noble/hashes": "^2.0.1",
     "@polkadot/api": "^16.5.4",
@@ -21,9 +23,13 @@
     "@trustwallet/wallet-core": "^4.5.0",
     "bip32": "^5.0.0",
     "bitcoinjs-lib": "^7.0.1",
+    "bs58": "^6.0.0",
     "cbor-x": "^1.6.0",
+    "date-fns": "^4.1.0",
+    "ethers": "^6.16.0",
+    "i18next": "^25.8.0",
     "tiny-secp256k1": "^2.2.4",
-    "viem": "^2.44.1",
+    "viem": "^2.44.4",
     "xrpl": "^4.5.0"
   }
 }

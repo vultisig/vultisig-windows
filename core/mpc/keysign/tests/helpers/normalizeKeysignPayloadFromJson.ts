@@ -15,6 +15,7 @@ import {
   CosmosMsgSchema,
   SignAminoSchema,
   SignDirectSchema,
+  SignSolanaSchema,
 } from '../../../types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { mapBlockchainSpecific } from '../mappers/mapBlockchainSpecific'
 import { mapSwapPayload } from '../mappers/mapSwapPayload'
@@ -203,6 +204,15 @@ export const normalizeKeysignPayloadFromJson = (input: any) => {
           authInfoBytes: directSrc.auth_info_bytes,
           chainId: directSrc.chain_id,
           accountNumber: directSrc.account_number,
+        }),
+      }
+    } else if (signDataSrc.sign_solana) {
+      const solanaSrc = signDataSrc.sign_solana
+
+      signData = {
+        case: 'signSolana',
+        value: create(SignSolanaSchema, {
+          rawTransactions: solanaSrc.raw_transactions ?? [],
         }),
       }
     }

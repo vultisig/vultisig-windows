@@ -569,8 +569,10 @@ export const en = {
   network_rate_required: 'Network rate is required',
   never: 'Never',
   new: 'New',
-  new_passcode: 'New Passcode',
   next: 'Next',
+  new_passcode: 'New Passcode',
+  new_vault_setup: 'New Vault Setup',
+  new_vault_setup_disclaimer: 'Your configuration changed, make a new backup.',
   no_active_chains_found: 'No active chains found',
   no_active_chains_found_description:
     "We didn't detect any assets on this seed phrase.",
@@ -697,8 +699,13 @@ export const en = {
     'Recover your vault or convert your seedphrase to a vault',
   referral_annual_fee: 'Referral annual fee',
   referral_code: 'Referral Code',
+  referral_code_no_whitespace: 'Whitespace not allowed',
+  referral_code_required: 'Validated referral code is required',
   referral_costs: 'Costs',
+  referral_expiration_maximum: 'Maximum 1000 years',
+  referral_expiration_minimum: 'Minimum 1 year',
   referral_extension_fee: 'Referral extension fee',
+  referral_fee_amount_minimum: 'Minimum {{amount}} RUNE',
   referral_landing_title:
     '<0>Invite friends</0>. <1>Earn rewards</1>. Save on fees.',
   referral_program: 'Referral Program',
@@ -888,6 +895,15 @@ export const en = {
   transaction_has_risk:
     '{{riskLevel}} risk transaction detected by <provider></provider>',
   transaction_successful: 'Transaction Successful',
+  transaction_could_not_be_parsed:
+    'This transaction could not be parsed. Raw transaction data is shown below.',
+  raw_transaction_data: 'Raw Transaction Data',
+  transaction_instructions_summary: 'Transaction Instructions Summary',
+  instruction: 'Instruction',
+  program_id: 'Program ID',
+  accounts: 'Accounts',
+  data_length: 'Data Length',
+  bytes: 'bytes',
   try_again: 'Try Again',
   turn_your_vault_into_rewards_machine:
     'Turn your vault into a rewards machine. Create your referral now and start earning.',

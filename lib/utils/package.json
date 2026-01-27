@@ -6,7 +6,11 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest"
   },
+  "dependencies": {
+    "long": "^5.3.2",
+    "viem": "^2.44.4"
+  },
   "devDependencies": {
-    "vitest": "^4.0.16"
+    "vitest": "^4.0.17"
   }
 }

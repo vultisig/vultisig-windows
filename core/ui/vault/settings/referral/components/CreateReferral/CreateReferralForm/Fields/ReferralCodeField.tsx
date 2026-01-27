@@ -8,17 +8,16 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { useState } from 'react'
-import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useThorNameAvailabilityMutation } from '../../../../mutations/useThorNameAvailabilityMutation'
+import { useCreateReferralForm } from '../../../../providers/CreateReferralFormProvider'
 import {
   FormField,
   FormFieldErrorText,
   FormFieldLabel,
 } from '../../../Referrals.styled'
-import { CreateReferralFormData } from '../config'
 
 export const ReferralCodeField = () => {
   const [localInput, setLocalInput] = useState('')
@@ -28,9 +27,8 @@ export const ReferralCodeField = () => {
     formState: { errors },
     setValue,
     clearErrors,
-    getValues,
-  } = useFormContext<CreateReferralFormData>()
-  const name = getValues('referralName')
+    trigger,
+  } = useCreateReferralForm()
 
   const {
     mutate: checkAvailability,
@@ -39,8 +37,14 @@ export const ReferralCodeField = () => {
     reset,
   } = useThorNameAvailabilityMutation()
 
-  const inputError =
-    localInput && localInput.length > 4 ? t('max_4_characters') : ''
+  const trimmedInput = localInput.trim()
+  const isInputTooLong = trimmedInput.length > 4
+  const isInputEmpty = trimmedInput.length === 0
+  const hasWhitespace = /\s/.test(trimmedInput)
+  const isSearchDisabled =
+    isInputEmpty || isInputTooLong || hasWhitespace || status === 'pending'
+
+  const inputError = isInputTooLong ? t('max_4_characters') : ''
 
   return (
     <VStack gap={14}>
@@ -60,20 +64,18 @@ export const ReferralCodeField = () => {
             }}
           />
           <Button
+            disabled={isSearchDisabled}
             onClick={() => {
-              if (localInput) {
-                checkAvailability(name, {
-                  onSuccess: () => {
-                    setValue('referralName', localInput, {
-                      shouldValidate: true,
-                    })
-                    clearErrors('referralName')
-                  },
-                  onError: () => {
-                    setValue('referralName', '')
-                  },
-                })
-              }
+              checkAvailability(trimmedInput, {
+                onSuccess: async () => {
+                  setValue('referralName', trimmedInput)
+                  clearErrors('referralName')
+                  await trigger()
+                },
+                onError: () => {
+                  setValue('referralName', '')
+                },
+              })
             }}
             style={{ maxWidth: 97, fontSize: 14 }}
           >

@@ -55,8 +55,9 @@ export const ExtensionCoreApp = ({
       targetVaultId,
       goBack,
       goHome,
+      isLimited,
     }),
-    [processError, targetVaultId, goBack, goHome]
+    [processError, targetVaultId, goBack, goHome, isLimited]
   )
 
   return (

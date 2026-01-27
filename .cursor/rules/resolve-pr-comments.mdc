@@ -1,0 +1,67 @@
+---
+alwaysApply: false
+---
+
+# Resolve PR Review Comments
+
+Address all review comments on a pull request and resolve conversations to make it merge-ready.
+
+## Usage
+
+Provide the PR link or number. The agent will:
+1. Fetch all unresolved review comments
+2. Address each comment with code changes or explanations
+3. Push changes and resolve all conversations
+
+## Workflow
+
+### 1. Fetch Review Comments
+
+Use GitHub MCP to get all review threads:
+
+```
+pull_request_read with method: "get_review_comments"
+```
+
+Focus on threads where `IsResolved: false`.
+
+### 2. Address Each Comment
+
+For each unresolved comment:
+
+- **If actionable**: Implement the suggested fix
+- **If disagree**: Still resolve, but reply explaining why (e.g., "Skipping because X")
+- **If unclear**: Make best judgment call and note it in the reply
+
+Group related changes and make edits efficiently.
+
+### 3. Run Checks
+
+After all changes:
+
+```bash
+yarn check
+```
+
+Fix any errors before proceeding.
+
+### 4. Push Changes
+
+Commit and push all changes to the PR branch:
+
+```bash
+git add -A && git commit -m "address review comments" && git push
+```
+
+### 5. Resolve All Conversations
+
+For each comment thread, reply with a brief summary of what was done, then resolve the conversation.
+
+Use GitHub MCP to reply to each thread, acknowledging the feedback.
+
+## Goal
+
+After completion:
+- All review threads should be resolved
+- All checks should pass
+- PR should be ready to merge with no blocking conversations

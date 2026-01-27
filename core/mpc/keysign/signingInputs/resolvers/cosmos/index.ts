@@ -52,35 +52,6 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
     }
   >(chainSpecific, {
     ibcEnabled: ({ transactionType, ibcDenomTraces }) => {
-      if (transactionType === TransactionType.IBC_TRANSFER) {
-        const memo = shouldBePresent(keysignPayload.memo)
-        const [, channel] = memo.split(':')
-
-        const timeoutTimestamp = Long.fromString(
-          ibcDenomTraces?.latestBlock?.split('_')?.[1] || '0'
-        )
-
-        return {
-          messages: [
-            TW.Cosmos.Proto.Message.create({
-              transferTokensMessage: TW.Cosmos.Proto.Message.Transfer.create({
-                sourcePort: 'transfer',
-                sourceChannel: channel,
-                token: getCosmosCoinAmount(keysignPayload),
-                sender: coin.address,
-                receiver: toAddress,
-                timeoutHeight: {
-                  revisionNumber: Long.fromString('0'),
-                  revisionHeight: Long.fromString('0'),
-                },
-                timeoutTimestamp,
-              }),
-            }),
-          ],
-          txMemo: memo,
-        }
-      }
-
       if (signDirect) {
         const bodyBytes = fromBase64(signDirect.bodyBytes)
         const txBody = TxBody.decode(bodyBytes)
@@ -110,6 +81,34 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
               },
             })
           }),
+          txMemo: memo,
+        }
+      }
+      if (transactionType === TransactionType.IBC_TRANSFER) {
+        const memo = shouldBePresent(keysignPayload.memo)
+        const [, channel] = memo.split(':')
+
+        const timeoutTimestamp = Long.fromString(
+          ibcDenomTraces?.latestBlock?.split('_')?.[1] || '0'
+        )
+
+        return {
+          messages: [
+            TW.Cosmos.Proto.Message.create({
+              transferTokensMessage: TW.Cosmos.Proto.Message.Transfer.create({
+                sourcePort: 'transfer',
+                sourceChannel: channel,
+                token: getCosmosCoinAmount(keysignPayload),
+                sender: coin.address,
+                receiver: toAddress,
+                timeoutHeight: {
+                  revisionNumber: Long.fromString('0'),
+                  revisionHeight: Long.fromString('0'),
+                },
+                timeoutTimestamp,
+              }),
+            }),
+          ],
           txMemo: memo,
         }
       }
