@@ -9,6 +9,8 @@ import { PageFooter } from '@lib/ui/page/PageFooter'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+const contentMaxWidth = 345
+
 const PageWrapper = styled(VStack)`
   position: relative;
   overflow-x: hidden;
@@ -47,8 +49,8 @@ const AnimationContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  max-width: 345px;
-  aspect-ratio: 345 / 500;
+  max-width: ${contentMaxWidth}px;
+  aspect-ratio: ${contentMaxWidth} / 500;
 `
 
 export const SetupVaultPage = () => {
@@ -81,7 +83,7 @@ export const SetupVaultPage = () => {
           <DeviceSelectionTip />
           <Button
             onClick={handleContinue}
-            style={{ width: '100%', maxWidth: 345 }}
+            style={{ width: '100%', maxWidth: contentMaxWidth }}
           >
             {t('get_started')}
           </Button>
