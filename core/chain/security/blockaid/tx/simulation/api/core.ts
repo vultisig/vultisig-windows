@@ -94,6 +94,24 @@ export const parseBlockaidSolanaSimulation = async (
     }
   }
 
+  if (relevantDiffs.length === 1) {
+    const [potentialOutAsset] = relevantDiffs
+
+    if (!potentialOutAsset.out) {
+      throw new Error('Invalid simulation data: no out value for transfer')
+    }
+
+    return {
+      transfer: {
+        fromMint:
+          potentialOutAsset.asset.type === 'SOL'
+            ? 'So11111111111111111111111111111111111111112'
+            : shouldBePresent(potentialOutAsset.asset.address),
+        fromAmount: BigInt(shouldBePresent(potentialOutAsset.out).raw_value),
+      },
+    }
+  }
+
   if (relevantDiffs.length > 1) {
     const [potentialOutAsset, potentialInAsset] = relevantDiffs
     const { inAsset, inValue } = potentialInAsset.in
