@@ -47,6 +47,7 @@ export const en = {
   approval_tx: 'Approval Tx',
   approve: 'Approve',
   reject: 'Reject',
+  applied_discounts: 'Applied Discounts:',
   asset: 'Asset',
   assets: 'assets',
   at_least_one_device: 'At least one device',

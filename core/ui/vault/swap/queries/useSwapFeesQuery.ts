@@ -1,6 +1,6 @@
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getNativeSwapDecimals } from '@core/chain/swap/native/utils/getNativeSwapDecimals'
-import { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
+import { SwapQuote, SwapQuoteResult } from '@core/chain/swap/quote/SwapQuote'
 import { SwapFees } from '@core/chain/swap/SwapFee'
 import { getFeeAmount } from '@core/mpc/keysign/fee'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
@@ -35,7 +35,7 @@ export const useSwapFeesQuery = (swapQuote: SwapQuote) => {
         decimals: fromFeeCoin.decimals,
       }
 
-      return matchRecordUnion(swapQuote, {
+      return matchRecordUnion<SwapQuoteResult, SwapFees>(swapQuote.quote, {
         native: ({ fees }) => {
           const swapAmount = BigInt(fees.total)
 
