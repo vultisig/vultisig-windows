@@ -1,5 +1,7 @@
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { ScanQrView } from '@core/ui/qr/components/ScanQrView'
+import { UploadQrView } from '@core/ui/qr/components/UploadQrView'
 import { useCore } from '@core/ui/state/core'
 import { ActionIconButton } from '@core/ui/vault/components/action-form/ActionIconButton'
 import { AddressBookModal } from '@core/ui/vault/send/addresses/components/AddressBookModal'
@@ -22,6 +24,7 @@ import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
+import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { attempt } from '@lib/utils/attempt'
@@ -39,6 +42,7 @@ export const ManageReceiverAddressInputField = () => {
   const { name } = useCurrentVault()
   const [value, setValue] = useSendReceiver()
   const [viewState, setViewState] = useState<MangeReceiverViewState>('default')
+  const [qrView, setQrView] = useState<'scan' | 'upload'>('scan')
   const [touched, setTouched] = useState(false)
   const walletCore = useAssertWalletCore()
 
@@ -69,12 +73,17 @@ export const ManageReceiverAddressInputField = () => {
     [coin, setValue, setFocusedSendField, walletCore, t]
   )
 
+  const closeQrModal = useCallback(() => {
+    setQrView('scan')
+    setViewState('default')
+  }, [])
+
   const onScanSuccess = useCallback(
     (address: string) => {
       handleUpdateReceiverAddress(address)
-      setViewState('default')
+      closeQrModal()
     },
-    [handleUpdateReceiverAddress]
+    [closeQrModal, handleUpdateReceiverAddress]
   )
 
   return (
@@ -95,12 +104,43 @@ export const ManageReceiverAddressInputField = () => {
         <Match
           value={viewState}
           scanner={() => (
-            <Modal
-              title=""
-              onClose={() => setViewState('default')}
-              withDefaultStructure={false}
-            >
-              <FixedScanQRView onFinish={onScanSuccess} />
+            <Modal title="" onClose={closeQrModal} withDefaultStructure={false}>
+              <QrModalOverlay>
+                <PageHeader
+                  hasBorder
+                  title={
+                    qrView === 'upload'
+                      ? t('upload_qr_code_image')
+                      : t('scan_qr')
+                  }
+                  primaryControls={
+                    <PageHeaderBackButton
+                      onClick={
+                        qrView === 'upload'
+                          ? () => setQrView('scan')
+                          : closeQrModal
+                      }
+                    />
+                  }
+                />
+                <QrModalBody>
+                  <Match
+                    value={qrView}
+                    scan={() => (
+                      <ScanQrView
+                        onFinish={onScanSuccess}
+                        onUploadQrViewRequest={() => setQrView('upload')}
+                      />
+                    )}
+                    upload={() => (
+                      <UploadQrView
+                        title={t('upload_qr_code_with_address')}
+                        onFinish={onScanSuccess}
+                      />
+                    )}
+                  />
+                </QrModalBody>
+              </QrModalOverlay>
             </Modal>
           )}
           addressBook={() => (
@@ -137,7 +177,12 @@ export const ManageReceiverAddressInputField = () => {
                 >
                   <SquareBehindSquare4Icon />
                 </ActionIconButton>
-                <ActionIconButton onClick={() => setViewState('scanner')}>
+                <ActionIconButton
+                  onClick={() => {
+                    setQrView('scan')
+                    setViewState('scanner')
+                  }}
+                >
                   <CameraIcon />
                 </ActionIconButton>
                 <ActionIconButton onClick={() => setViewState('addressBook')}>
@@ -171,7 +216,17 @@ const Input = styled(TextInput)<{
         : getColor('foregroundExtra')};
 `
 
-const FixedScanQRView = styled(ScanQrView)`
+const QrModalOverlay = styled(VStack).attrs({
+  fullHeight: true,
+  fullWidth: true,
+})`
   position: fixed;
   inset: 0;
+  background: ${getColor('background')};
+  isolation: isolate;
+`
+
+const QrModalBody = styled(VStack)`
+  flex: 1;
+  min-height: 0;
 `
