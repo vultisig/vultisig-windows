@@ -4,7 +4,7 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 import {
   BlockaidEvmSimulationInfo,
-  BlockaidSolanaSwapSimulationInfo,
+  BlockaidSolanaSimulationInfo,
 } from '../core'
 
 export type BlockaidSolanaSimulation = {
@@ -77,9 +77,9 @@ export type BlockaidEVMSimulation = {
   }
 }
 
-export const parseBlockaidSolanaSwapSimulation = async (
+export const parseBlockaidSolanaSimulation = async (
   simulation: BlockaidSolanaSimulation
-): Promise<BlockaidSolanaSwapSimulationInfo> => {
+): Promise<BlockaidSolanaSimulationInfo> => {
   const assetDiffs = simulation.account_summary.account_assets_diff
 
   // When we have 3 items and one is native SOL, filter it out and use the other two tokens.
@@ -98,36 +98,49 @@ export const parseBlockaidSolanaSwapSimulation = async (
     const [potentialOutAsset, potentialInAsset] = relevantDiffs
     const { inAsset, inValue } = potentialInAsset.in
       ? {
-          inAsset: potentialInAsset.asset,
-          inValue: potentialInAsset.in,
-        }
+        inAsset: potentialInAsset.asset,
+        inValue: potentialInAsset.in,
+      }
       : {
-          inAsset: potentialOutAsset.asset,
-          inValue: potentialOutAsset.in,
-        }
+        inAsset: potentialOutAsset.asset,
+        inValue: potentialOutAsset.in,
+      }
 
     const { outAsset, outValue } = potentialOutAsset.out
       ? {
-          outAsset: potentialOutAsset.asset,
-          outValue: potentialOutAsset.out,
-        }
+        outAsset: potentialOutAsset.asset,
+        outValue: potentialOutAsset.out,
+      }
       : {
-          outAsset: potentialInAsset.asset,
-          outValue: potentialInAsset.out,
-        }
-
-    return {
-      fromMint:
-        outAsset.type === 'SOL'
-          ? 'So11111111111111111111111111111111111111112'
-          : shouldBePresent(outAsset.address),
-      toMint:
-        inAsset.type === 'SOL'
-          ? 'So11111111111111111111111111111111111111112'
-          : shouldBePresent(inAsset.address),
-      fromAmount: shouldBePresent(outValue).raw_value,
-      toAmount: shouldBePresent(inValue).raw_value,
-      toAssetDecimal: inAsset.decimals,
+        outAsset: potentialInAsset.asset,
+        outValue: potentialInAsset.out,
+      }
+    if (outAsset && inAsset && outValue && inValue) {
+      return {
+        swap: {
+          fromMint:
+            outAsset.type === 'SOL'
+              ? 'So11111111111111111111111111111111111111112'
+              : shouldBePresent(outAsset.address),
+          toMint:
+            inAsset.type === 'SOL'
+              ? 'So11111111111111111111111111111111111111112'
+              : shouldBePresent(inAsset.address),
+          fromAmount: shouldBePresent(outValue).raw_value,
+          toAmount: shouldBePresent(inValue).raw_value,
+          toAssetDecimal: inAsset.decimals,
+        },
+      }
+    } else if (outAsset && outValue) {
+      return {
+        transfer: {
+          fromMint:
+            outAsset.type === 'SOL'
+              ? 'So11111111111111111111111111111111111111112'
+              : shouldBePresent(outAsset.address),
+          fromAmount: shouldBePresent(outValue).raw_value,
+        },
+      }
     }
   }
   throw new Error('Invalid simulation data')
@@ -169,24 +182,24 @@ export const parseBlockaidEvmSimulation = async (
     const { inAsset, inValue } =
       potentialInAsset.in.length > 0
         ? {
-            inAsset: potentialInAsset.asset,
-            inValue: potentialInAsset.in,
-          }
+          inAsset: potentialInAsset.asset,
+          inValue: potentialInAsset.in,
+        }
         : {
-            inAsset: potentialOutAsset.asset,
-            inValue: potentialOutAsset.in,
-          }
+          inAsset: potentialOutAsset.asset,
+          inValue: potentialOutAsset.in,
+        }
 
     const { outAsset, outValue } =
       potentialOutAsset.out.length > 0
         ? {
-            outAsset: potentialOutAsset.asset,
-            outValue: potentialOutAsset.out,
-          }
+          outAsset: potentialOutAsset.asset,
+          outValue: potentialOutAsset.out,
+        }
         : {
-            outAsset: potentialInAsset.asset,
-            outValue: potentialInAsset.out,
-          }
+          outAsset: potentialInAsset.asset,
+          outValue: potentialInAsset.out,
+        }
 
     if (outValue.length === 0 || inValue.length === 0) {
       return null

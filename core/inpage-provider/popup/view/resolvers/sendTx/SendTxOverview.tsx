@@ -28,7 +28,6 @@ import {
   IconWrapper,
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
-import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
@@ -38,12 +37,15 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
-import { WarningBlock } from '@lib/ui/status/WarningBlock'
 import { Text } from '@lib/ui/text'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatUnits } from 'ethers'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { useGetCoin } from './core/coin'
+import { WarningBlock } from '@lib/ui/status/WarningBlock'
+import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 
 type SendTxOverviewProps = {
   parsedTx: ParsedTx
@@ -54,7 +56,7 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
   const walletCore = useAssertWalletCore()
   const publicKey = useCurrentVaultPublicKey(coin.chain)
   const { t } = useTranslation()
-
+  const getCoin = useGetCoin()
   const transactionPayload = usePopupInput<'sendTx'>()
 
   const { chain, address } = coin
@@ -121,9 +123,9 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
 
           const evmSpecific = isChainOfKind(chain, 'evm')
             ? getBlockchainSpecificValue(
-                keysignPayload.blockchainSpecific,
-                'ethereumSpecific'
-              )
+              keysignPayload.blockchainSpecific,
+              'ethereumSpecific'
+            )
             : null
 
           const actualGasLimit = evmSpecific
@@ -160,15 +162,16 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                   </VStack>
                 </Panel>
               )}
-              {isChainOfKind(chain, 'evm') && (
-                <MatchQuery
-                  value={blockaidSimulationQuery}
-                  error={() => <BlockaidSimulationError />}
-                  success={() => null}
-                  pending={() => null}
-                  inactive={() => null}
-                />
-              )}
+              {isChainOfKind(chain, 'evm') ||
+                (chain === Chain.Solana && (
+                  <MatchQuery
+                    value={blockaidSimulationQuery}
+                    error={() => <BlockaidSimulationError />}
+                    success={() => null}
+                    pending={() => null}
+                    inactive={() => null}
+                  />
+                ))}
               {hasSwapPayload ? (
                 <>
                   <VStack
@@ -249,7 +252,7 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                     publicKey={publicKey}
                   />
                 </>
-              ) : isChainOfKind(chain, 'evm') || chain === Chain.Solana ? (
+              ) : isChainOfKind(chain, 'evm') ? (
                 <BlockaidSimulationContent
                   blockaidSimulationQuery={blockaidSimulationQuery}
                   keysignPayload={keysignPayload}
@@ -264,13 +267,30 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                     walletCore,
                     publicKey,
                   }}
+                  getCoin={getCoin}
                 />
               ) : (
                 <>
                   {keysignPayload.signData.case === 'signSolana' ? (
-                    <SignSolanaDisplay
-                      signSolana={keysignPayload.signData.value}
-                    />
+                    <>
+                      <BlockaidSimulationContent
+                        blockaidSimulationQuery={blockaidSimulationQuery}
+                        keysignPayload={keysignPayload}
+                        address={address}
+                        chain={chain}
+                        networkFeeProps={{
+                          keysignPayload,
+                          transactionPayload,
+                          chain,
+                          feeSettings,
+                          setFeeSettings,
+                          walletCore,
+                          publicKey,
+                        }}
+                        getCoin={getCoin}
+                      />
+                      <SignSolanaDisplay payload={keysignPayload} />
+                    </>
                   ) : (
                     <>
                       {(() => {

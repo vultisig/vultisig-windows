@@ -3,7 +3,8 @@ import { Chain } from '@core/chain/Chain'
 import { solanaRpcUrl } from '@core/chain/chains/solana/client'
 import { Coin, CoinKey } from '@core/chain/coin/Coin'
 import { getTxBlockaidSimulation } from '@core/chain/security/blockaid/tx/simulation'
-import { parseBlockaidSolanaSwapSimulation } from '@core/chain/security/blockaid/tx/simulation/api/core'
+import { parseBlockaidSolanaSimulation } from '@core/chain/security/blockaid/tx/simulation/api/core'
+import { BlockaidSolanaSimulationInfo } from '@core/chain/security/blockaid/tx/simulation/core'
 import { getBlockaidTxSimulationInput } from '@core/chain/security/blockaid/tx/simulation/input'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import {
@@ -14,6 +15,7 @@ import {
 import { Coin as CommCoin } from '@core/mpc/types/vultisig/keysign/v1/coin_pb'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { attempt } from '@lib/utils/attempt'
+import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { NATIVE_MINT } from '@solana/spl-token'
 import { Connection, PublicKey } from '@solana/web3.js'
 import { TW, WalletCore } from '@trustwallet/wallet-core'
@@ -108,28 +110,49 @@ export const parseSolanaTx = async ({
       data: blockaidTxSimulationInput.data,
     })
 
-    const { fromMint, toMint, fromAmount, toAmount } =
-      await parseBlockaidSolanaSwapSimulation(sim)
-
-    const [inputCoin, outputCoin] = await Promise.all(
-      [fromMint, toMint].map(mint => {
-        const id = mint === NATIVE_MINT.toBase58() ? undefined : mint
-        return getCoin({ chain: Chain.Solana, id })
-      })
-    )
-
-    return {
-      swap: {
-        authority: fromCoin.address,
-        inAmount: fromAmount.toString(),
-        inputCoin,
-        outAmount: toAmount.toString(),
-        outputCoin,
-        data,
-        swapProvider,
-        rawMessageData: data,
+    const simulationResult = await parseBlockaidSolanaSimulation(sim)
+    return await matchRecordUnion<
+      BlockaidSolanaSimulationInfo,
+      Promise<SolanaTxData>
+    >(simulationResult, {
+      swap: async ({ fromMint, toMint, fromAmount, toAmount }) => {
+        const [inputCoin, outputCoin] = await Promise.all(
+          [fromMint, toMint].map(mint => {
+            const id = mint === NATIVE_MINT.toBase58() ? undefined : mint
+            return getCoin({ chain: Chain.Solana, id })
+          })
+        )
+        return {
+          swap: {
+            authority: fromCoin.address,
+            inAmount: fromAmount.toString(),
+            inputCoin,
+            outAmount: toAmount.toString(),
+            outputCoin,
+            data,
+            swapProvider,
+            rawMessageData: data,
+          },
+        } as SolanaTxData
       },
-    }
+      transfer: async ({ fromAmount, fromMint }) => {
+        const [inputCoin] = await Promise.all(
+          [fromMint].map(mint => {
+            const id = mint === NATIVE_MINT.toBase58() ? undefined : mint
+            return getCoin({ chain: Chain.Solana, id })
+          })
+        )
+        return {
+          transfer: {
+            authority: fromCoin.address,
+            inputCoin,
+            inAmount: fromAmount.toString(),
+            receiverAddress: '',
+            rawMessageData: data,
+          },
+        } as SolanaTxData
+      },
+    })
   })
 
   if (parsedSimulation) {

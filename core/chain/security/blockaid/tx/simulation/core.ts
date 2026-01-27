@@ -1,12 +1,21 @@
 import { Coin } from '../../../../coin/Coin'
 
-export type BlockaidSolanaSwapSimulationInfo = {
-  fromMint: string
-  toMint: string
-  fromAmount: number
-  toAmount: number
-  toAssetDecimal: number
-}
+export type BlockaidSolanaSimulationInfo =
+  | {
+      swap: {
+        fromMint: string
+        toMint: string
+        fromAmount: number
+        toAmount: number
+        toAssetDecimal: number
+      }
+    }
+  | {
+      transfer: {
+        fromMint: string
+        fromAmount: number
+      }
+    }
 
 export type BlockaidEvmSimulationInfo =
   | {

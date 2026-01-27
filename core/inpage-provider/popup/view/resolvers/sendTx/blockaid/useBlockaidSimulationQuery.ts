@@ -2,9 +2,14 @@ import { isChainOfKind } from '@core/chain/ChainKind'
 import { BlockaidSimulationSupportedChain } from '@core/chain/security/blockaid/simulationChains'
 import {
   BlockaidEVMSimulation,
+  BlockaidSolanaSimulation,
   parseBlockaidEvmSimulation,
+  parseBlockaidSolanaSimulation,
 } from '@core/chain/security/blockaid/tx/simulation/api/core'
-import { BlockaidEvmSimulationInfo } from '@core/chain/security/blockaid/tx/simulation/core'
+import {
+  BlockaidEvmSimulationInfo,
+  BlockaidSolanaSimulationInfo,
+} from '@core/chain/security/blockaid/tx/simulation/core'
 import { getBlockaidTxSimulationInput } from '@core/chain/security/blockaid/tx/simulation/input'
 import { BlockaidTxSimulationInput } from '@core/chain/security/blockaid/tx/simulation/resolver'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
@@ -25,7 +30,9 @@ type UseBlockaidSimulationQueryInput = {
 
 const getBlockaidSimulationQueryWithParsing = (
   input: BlockaidTxSimulationInput<BlockaidSimulationSupportedChain>
-): UseQueryOptions<BlockaidEvmSimulationInfo | null> => {
+): UseQueryOptions<
+  BlockaidEvmSimulationInfo | BlockaidSolanaSimulationInfo | null
+> => {
   const baseQuery = getBlockaidTxSimulationQuery(input)
 
   return {
@@ -33,16 +40,25 @@ const getBlockaidSimulationQueryWithParsing = (
     queryFn: async () => {
       const sim = await baseQuery.queryFn()
 
-      if (
-        isChainOfKind(input.chain, 'evm') &&
-        'assets_diffs' in sim.account_summary &&
-        sim.account_summary.assets_diffs.length > 0
-      ) {
-        return parseBlockaidEvmSimulation(
-          sim as BlockaidEVMSimulation,
-          input.chain
+      if (isChainOfKind(input.chain, 'evm')) {
+        if (
+          'assets_diffs' in sim.account_summary &&
+          sim.account_summary.assets_diffs.length > 0
+        ) {
+          return parseBlockaidEvmSimulation(
+            sim as BlockaidEVMSimulation,
+            input.chain
+          )
+        }
+        return null
+      }
+
+      if (isChainOfKind(input.chain, 'solana')) {
+        return await parseBlockaidSolanaSimulation(
+          sim as BlockaidSolanaSimulation
         )
       }
+
       return null
     },
   }
@@ -95,5 +111,8 @@ export const useBlockaidSimulationQuery = ({
   return usePotentialQuery(
     blockaidTxSimulationInput.data || undefined,
     getBlockaidSimulationQueryWithParsing
-  ) as Query<BlockaidEvmSimulationInfo | null, unknown>
+  ) as Query<
+    BlockaidEvmSimulationInfo | BlockaidSolanaSimulationInfo | null,
+    unknown
+  >
 }
