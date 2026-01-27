@@ -1,5 +1,8 @@
 import { Chain } from '@core/chain/Chain'
-import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
+import {
+  accountCoinKeyToString,
+  extractAccountCoinKey,
+} from '@core/chain/coin/AccountCoin'
 import { CoinAmount, CoinKey, coinKeyToString } from '@core/chain/coin/Coin'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { useBalancesQuery } from '@core/ui/chain/coin/queries/useBalancesQuery'
@@ -38,7 +41,8 @@ export const useVaultChainCoinsQuery = (chain: Chain) => {
 
       const data = without(
         coins.map(coin => {
-          const amount = balances[coinKeyToString(coin)] ?? BigInt(0)
+          const balanceKey = accountCoinKeyToString(extractAccountCoinKey(coin))
+          const amount = balances[balanceKey] ?? BigInt(0)
           const price = basePrices[coinKeyToString(coin)]
 
           return { ...coin, amount, price }

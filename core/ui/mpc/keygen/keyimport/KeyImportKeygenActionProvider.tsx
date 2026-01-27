@@ -1,6 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCoinType } from '@core/chain/coin/coinType'
+import { phantomSolanaPath } from '@core/chain/publicKey/address/deriveSolanaAddressFromMnemonic'
 import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { hasServer } from '@core/mpc/devices/localPartyId'
 import { DKLS } from '@core/mpc/dkls/dkls'
@@ -133,7 +134,11 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
 
         let chainPrivateKeyHex: string | undefined
         if (isInitiatingDevice && hdWallet) {
-          const chainKey = hdWallet.getKeyForCoin(coinType)
+          const chainKey =
+            chain === Chain.Solana && keyImportInput.usePhantomSolanaPath
+              ? hdWallet.getKey(coinType, phantomSolanaPath)
+              : hdWallet.getKeyForCoin(coinType)
+
           const chainKeyData = new Uint8Array(chainKey.data())
 
           if (algorithm === 'ecdsa') {

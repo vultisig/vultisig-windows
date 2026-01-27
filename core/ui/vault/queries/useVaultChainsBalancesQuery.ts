@@ -1,5 +1,8 @@
 import { Chain } from '@core/chain/Chain'
-import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
+import {
+  accountCoinKeyToString,
+  extractAccountCoinKey,
+} from '@core/chain/coin/AccountCoin'
 import { coinKeyToString } from '@core/chain/coin/Coin'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
@@ -41,7 +44,7 @@ export const useVaultChainsBalancesQuery = (): EagerQuery<
       return coins.map(coin => {
         const getAmount = () => {
           if (balancesQuery.data) {
-            const key = coinKeyToString(coin)
+            const key = accountCoinKeyToString(extractAccountCoinKey(coin))
             if (key in balancesQuery.data) {
               return balancesQuery.data[key]
             }

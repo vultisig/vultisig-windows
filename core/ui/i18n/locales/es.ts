@@ -208,6 +208,7 @@ export const es = {
   app_permissions: 'Permisos de la aplicación',
   approval_tx: 'Aprobación Tx',
   approve: 'Aprobar',
+  applied_discounts: 'Descuentos aplicados:',
   asset: 'Activo',
   assets: 'activos',
   auto_compound_into_label: 'Compuesto automático en {{ticker}}',

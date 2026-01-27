@@ -3,7 +3,7 @@ import {
   FindSwapQuoteInput,
 } from '@core/chain/swap/quote/findSwapQuote'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
-import { useSwapAffiliateBpsQuery } from '@core/ui/vult/discount/queries/swapAffiliateBps'
+import { useVultDiscountTierQuery } from '@core/ui/vult/discount/queries/tier'
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
@@ -25,21 +25,21 @@ export const useSwapQuoteQuery = () => {
   const fromCoin = useCurrentVaultCoin(fromCoinKey)
   const toCoin = useCurrentVaultCoin(toCoinKey)
 
-  const appAffiliateBpsQuery = useSwapAffiliateBpsQuery()
+  const vultDiscountTierQuery = useVultDiscountTierQuery()
 
   return useStateDependentQuery(
     {
       fromAmount: fromAmount || undefined,
       referral: referralQuery.data,
-      affiliateBps: appAffiliateBpsQuery.data,
+      vultDiscountTier: vultDiscountTierQuery.data,
     },
-    ({ fromAmount, referral, affiliateBps }) => {
+    ({ fromAmount, referral, vultDiscountTier }) => {
       const input: FindSwapQuoteInput = {
         from: fromCoin,
         to: toCoin,
         amount: shouldBePresent(fromAmount, 'fromAmount'),
         referral: referral ?? undefined,
-        affiliateBps,
+        vultDiscountTier,
       }
 
       return {
