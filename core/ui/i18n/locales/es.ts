@@ -998,6 +998,7 @@ export const es = {
   confirm_automation_creation: 'Confirmar la creación de la automatización',
   id: 'IDENTIFICACIÓN',
   import_seedphrase: 'Importar frase semilla',
+  seedPhraseImportTip: 'Consejo: Puedes usar un navegador como dispositivo',
   import_seedphrase_description: 'Entra, crea una bóveda y nunca mires atrás.',
   import_vault_share: 'Importar recurso compartido de bóveda',
   import_vault_share_description:

@@ -447,6 +447,7 @@ export const en = {
   import: 'Import',
   import_key: 'Import Key',
   import_seedphrase: 'Import Seedphrase',
+  seedPhraseImportTip: 'Tip: You can use a browser as a device',
   enter_your_seedphrase: 'Enter your seed phrase',
   enter_seedphrase_subtitle:
     'Leave a space between each word. Seed phrases of <h>12 or 24 words</h> are supported.',
