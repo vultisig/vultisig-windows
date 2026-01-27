@@ -1,7 +1,6 @@
-**---
+---
+name: query-key-from-input
 description: USE queryFn input as queryKey WHEN query just calls another function
-globs: 
-alwaysApply: false
 ---
 
 # Query Key From Input Pattern
@@ -29,4 +28,3 @@ export const useSomeQuery = () => {
 - Query key automatically reflects function dependencies
 - No manual key updates when input shape changes
 - Clear mapping between cache key and data source
-**

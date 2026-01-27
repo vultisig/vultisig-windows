@@ -9,20 +9,24 @@ import { Trans, useTranslation } from 'react-i18next'
 import { useScanChainsWithBalanceQuery } from './queries/useScanChainsWithBalanceQuery'
 import { useSelectedChains } from './state/selectedChains'
 import { useImportSeedphraseStep } from './state/step'
+import { useUsePhantomSolanaPath } from './state/usePhantomSolanaPath'
 
 export const ScanningChainsStep = () => {
   const { t } = useTranslation()
   const [, setSelectedChains] = useSelectedChains()
   const [, setStep] = useImportSeedphraseStep()
+  const [, setUsePhantomSolanaPath] = useUsePhantomSolanaPath()
 
-  const { data: chainsWithBalance } = useScanChainsWithBalanceQuery()
+  const { data } = useScanChainsWithBalanceQuery()
 
   useEffect(() => {
-    if (chainsWithBalance) {
-      setSelectedChains(chainsWithBalance)
+    if (data) {
+      const { chains, usePhantomSolanaPath } = data
+      setSelectedChains(chains)
+      setUsePhantomSolanaPath(usePhantomSolanaPath)
       setStep('scanResult')
     }
-  }, [chainsWithBalance, setSelectedChains, setStep])
+  }, [data, setSelectedChains, setStep, setUsePhantomSolanaPath])
 
   const handleSelectManually = () => {
     setSelectedChains([])

@@ -1,4 +1,7 @@
-import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
+import {
+  accountCoinKeyToString,
+  extractAccountCoinKey,
+} from '@core/chain/coin/AccountCoin'
 import { coinKeyToString } from '@core/chain/coin/Coin'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
@@ -27,9 +30,8 @@ export const useVaultTotalBalanceQuery = () => {
       const data = sum(
         coins.map(coin => {
           const price = shouldBePresent(pricesQuery.data)[coinKeyToString(coin)]
-          const amount = shouldBePresent(balancesQuery.data)[
-            coinKeyToString(coin)
-          ]
+          const balanceKey = accountCoinKeyToString(extractAccountCoinKey(coin))
+          const amount = shouldBePresent(balancesQuery.data)[balanceKey]
 
           if (price === undefined || amount === undefined) {
             return 0

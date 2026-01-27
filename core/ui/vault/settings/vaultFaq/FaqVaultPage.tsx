@@ -43,7 +43,7 @@ export const FaqVaultPage = () => {
 
   return (
     <VStack flexGrow>
-      <FlowPageHeader title={t('vault_rename_page_header_title')} />
+      <FlowPageHeader title={t('faq')} />
       <PageContent>
         <RowsWrapper>
           {faqData.map(({ id, title, content }, idx) => {

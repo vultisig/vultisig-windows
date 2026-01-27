@@ -1,6 +1,7 @@
 import { passwordLengthConfig } from '@core/config/password'
 import { getVaultFromServer } from '@core/mpc/fast/api/getVaultFromServer'
 import { getVaultId } from '@core/mpc/vault/Vault'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
@@ -21,8 +22,6 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { z } from 'zod'
 
-import { useCurrentVault } from '../../vault/state/currentVault'
-
 const createSchema = (t: TFunction) => {
   const message = t('password_pattern_error', passwordLengthConfig)
 
@@ -41,7 +40,7 @@ type FastVaultPasswordModalProps = OnBackProp &
     password: string
   }> & {
     title?: string
-    description?: string
+    description: string
     showModal?: boolean
   }
 
@@ -101,7 +100,7 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
             {title ?? t('enter_your_password')}
           </Text>
           <Text size={12} color="shy" centerHorizontally>
-            {description ?? t('verify_password_periodic_message_description')}
+            {description}
           </Text>
         </VStack>
 

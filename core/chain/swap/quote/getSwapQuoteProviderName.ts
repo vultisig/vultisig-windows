@@ -1,10 +1,10 @@
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
 import { generalSwapProviderName } from '../general/GeneralSwapProvider'
-import { SwapQuote } from './SwapQuote'
+import { SwapQuote, SwapQuoteResult } from './SwapQuote'
 
 export const getSwapQuoteProviderName = (quote: SwapQuote) => {
-  return matchRecordUnion<SwapQuote, string>(quote, {
+  return matchRecordUnion<SwapQuoteResult, string>(quote.quote, {
     native: ({ swapChain }) => swapChain,
     general: ({ provider }) => generalSwapProviderName[provider],
   })

@@ -1,0 +1,51 @@
+---
+description: Remove empty styled components - use regular elements or fragments instead
+globs: *.ts,*.tsx
+alwaysApply: false
+---
+
+# No Empty Styled Components
+
+## Core Rule
+
+- **NEVER create styled components with empty template literals** (`styled.div\`\``)
+- Empty styled components add unnecessary overhead and provide no value
+- Use regular HTML elements, React fragments, or remove the wrapper entirely
+
+## When to Remove
+
+<example type="invalid">
+// ❌ Bad: Empty styled component
+const Container = styled.div``
+
+// Usage
+<Container>
+<Content />
+</Container>
+</example>
+
+<example>
+// ✅ Good: Use regular element if wrapper is needed
+<div>
+  <Content />
+</div>
+</example>
+
+<example>
+// ✅ Good: Use fragment if no wrapper needed
+<>
+  <Content />
+</>
+</example>
+
+<example>
+// ✅ Good: Remove wrapper entirely if not needed
+<Content />
+</example>
+
+## Guidelines
+
+- If a styled component has no styles, remove it
+- Use regular HTML elements (`div`, `span`, etc.) if a wrapper is needed for structure
+- Use React fragments (`<>...</>`) if grouping is needed without a DOM element
+- Only create styled components when you actually need to apply styles

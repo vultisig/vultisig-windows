@@ -13,7 +13,10 @@ import { asyncFallbackChain } from '@lib/utils/promise/asyncFallbackChain'
 import { pick } from '@lib/utils/record/pick'
 import { TransferDirection } from '@lib/utils/TransferDirection'
 
+import { Chain } from '../../Chain'
 import { isChainOfKind } from '../../ChainKind'
+import { getSwapAffiliateBps, VultDiscountTier } from '../affiliate'
+import { SwapDiscount } from '../discount/SwapDiscount'
 import { getKyberSwapQuote } from '../general/kyber/api/quote'
 import { kyberSwapEnabledChains } from '../general/kyber/chains'
 import { getNativeSwapQuote } from '../native/api/getNativeSwapQuote'
@@ -26,7 +29,7 @@ import { SwapQuote } from './SwapQuote'
 export type FindSwapQuoteInput = Record<TransferDirection, AccountCoin> & {
   amount: bigint
   referral?: string
-  affiliateBps?: number
+  vultDiscountTier?: VultDiscountTier | null
 }
 
 type SwapQuoteFetcher = () => Promise<SwapQuote>
@@ -36,8 +39,16 @@ export const findSwapQuote = async ({
   to,
   amount,
   referral,
-  affiliateBps,
+  vultDiscountTier,
 }: FindSwapQuoteInput): Promise<SwapQuote> => {
+  const affiliateBps = getSwapAffiliateBps(vultDiscountTier ?? null)
+
+  const vultDiscount: SwapDiscount[] = vultDiscountTier
+    ? [{ vult: { tier: vultDiscountTier } }]
+    : []
+
+  const referralDiscount: SwapDiscount[] = referral ? [{ referral: {} }] : []
+
   const involvedChains = [from.chain, to.chain]
 
   const matchingSwapChains = nativeSwapChains.filter(swapChain =>
@@ -60,7 +71,13 @@ export const findSwapQuote = async ({
         affiliateBps,
       })
 
-      return { native }
+      return {
+        quote: { native },
+        discounts:
+          swapChain === Chain.THORChain
+            ? [...vultDiscount, ...referralDiscount]
+            : vultDiscount,
+      }
     })
 
   const getGeneralFetchers = (): SwapQuoteFetcher[] => {
@@ -89,7 +106,7 @@ export const findSwapQuote = async ({
           isAffiliate: !!affiliateBps,
         })
 
-        return { general }
+        return { quote: { general }, discounts: [] }
       })
     }
 
@@ -106,7 +123,7 @@ export const findSwapQuote = async ({
           affiliateBps,
         })
 
-        return { general }
+        return { quote: { general }, discounts: vultDiscount }
       })
     }
 
@@ -128,7 +145,7 @@ export const findSwapQuote = async ({
           affiliateBps,
         })
 
-        return { general }
+        return { quote: { general }, discounts: vultDiscount }
       })
     }
 
