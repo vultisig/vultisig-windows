@@ -54,9 +54,14 @@ const getBlockaidSimulationQueryWithParsing = (
       }
 
       if (isChainOfKind(input.chain, 'solana')) {
-        return await parseBlockaidSolanaSimulation(
-          sim as BlockaidSolanaSimulation
-        )
+        const solanaSim = sim as BlockaidSolanaSimulation
+        if (
+          'account_assets_diff' in solanaSim.account_summary &&
+          solanaSim.account_summary.account_assets_diff.length > 0
+        ) {
+          return await parseBlockaidSolanaSimulation(solanaSim)
+        }
+        return null
       }
 
       return null

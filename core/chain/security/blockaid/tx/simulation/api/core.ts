@@ -22,13 +22,13 @@ export type BlockaidSolanaSimulation = {
         usd_price: number
         summary: string
         value: number
-        raw_value: number
+        raw_value: string
       } | null
       out: {
         usd_price: number
         summary: string
         value: number
-        raw_value: number
+        raw_value: string
       } | null
       asset_type: 'TOKEN' | 'SOL'
     }>
@@ -53,24 +53,24 @@ export type BlockaidEVMSimulation = {
         usd_price: number
         summary: string
         value: number
-        raw_value: number
+        raw_value: string
       }>
       out: Array<{
         usd_price: number
         summary: string
         value: number
-        raw_value: number
+        raw_value: string
       }>
       balance_changes: {
         before: {
           usd_price: number
           value: number
-          raw_value: number
+          raw_value: string
         }
         after: {
           usd_price: number
           value: number
-          raw_value: number
+          raw_value: string
         }
       }
     }>
