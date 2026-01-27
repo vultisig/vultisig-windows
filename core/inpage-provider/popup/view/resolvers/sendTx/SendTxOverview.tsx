@@ -28,6 +28,7 @@ import {
   IconWrapper,
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
+import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
@@ -37,6 +38,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
+import { WarningBlock } from '@lib/ui/status/WarningBlock'
 import { Text } from '@lib/ui/text'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatUnits } from 'ethers'
@@ -44,8 +46,6 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useGetCoin } from './core/coin'
-import { WarningBlock } from '@lib/ui/status/WarningBlock'
-import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 
 type SendTxOverviewProps = {
   parsedTx: ParsedTx
@@ -123,9 +123,9 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
 
           const evmSpecific = isChainOfKind(chain, 'evm')
             ? getBlockchainSpecificValue(
-              keysignPayload.blockchainSpecific,
-              'ethereumSpecific'
-            )
+                keysignPayload.blockchainSpecific,
+                'ethereumSpecific'
+              )
             : null
 
           const actualGasLimit = evmSpecific

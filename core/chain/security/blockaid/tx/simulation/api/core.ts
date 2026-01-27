@@ -98,23 +98,23 @@ export const parseBlockaidSolanaSimulation = async (
     const [potentialOutAsset, potentialInAsset] = relevantDiffs
     const { inAsset, inValue } = potentialInAsset.in
       ? {
-        inAsset: potentialInAsset.asset,
-        inValue: potentialInAsset.in,
-      }
+          inAsset: potentialInAsset.asset,
+          inValue: potentialInAsset.in,
+        }
       : {
-        inAsset: potentialOutAsset.asset,
-        inValue: potentialOutAsset.in,
-      }
+          inAsset: potentialOutAsset.asset,
+          inValue: potentialOutAsset.in,
+        }
 
     const { outAsset, outValue } = potentialOutAsset.out
       ? {
-        outAsset: potentialOutAsset.asset,
-        outValue: potentialOutAsset.out,
-      }
+          outAsset: potentialOutAsset.asset,
+          outValue: potentialOutAsset.out,
+        }
       : {
-        outAsset: potentialInAsset.asset,
-        outValue: potentialInAsset.out,
-      }
+          outAsset: potentialInAsset.asset,
+          outValue: potentialInAsset.out,
+        }
     if (outAsset && inAsset && outValue && inValue) {
       return {
         swap: {
@@ -182,24 +182,24 @@ export const parseBlockaidEvmSimulation = async (
     const { inAsset, inValue } =
       potentialInAsset.in.length > 0
         ? {
-          inAsset: potentialInAsset.asset,
-          inValue: potentialInAsset.in,
-        }
+            inAsset: potentialInAsset.asset,
+            inValue: potentialInAsset.in,
+          }
         : {
-          inAsset: potentialOutAsset.asset,
-          inValue: potentialOutAsset.in,
-        }
+            inAsset: potentialOutAsset.asset,
+            inValue: potentialOutAsset.in,
+          }
 
     const { outAsset, outValue } =
       potentialOutAsset.out.length > 0
         ? {
-          outAsset: potentialOutAsset.asset,
-          outValue: potentialOutAsset.out,
-        }
+            outAsset: potentialOutAsset.asset,
+            outValue: potentialOutAsset.out,
+          }
         : {
-          outAsset: potentialInAsset.asset,
-          outValue: potentialInAsset.out,
-        }
+            outAsset: potentialInAsset.asset,
+            outValue: potentialInAsset.out,
+          }
 
     if (outValue.length === 0 || inValue.length === 0) {
       return null
