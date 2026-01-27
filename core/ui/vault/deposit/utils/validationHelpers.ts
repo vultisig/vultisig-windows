@@ -25,7 +25,15 @@ export const positiveAmountSchema = (
       .number()
       .gt(0, t('amount_must_be_positive'))
       .max(
-        maxOrInfinity(maxValue),
+        maxValue > 0 ? maxValue : Number.POSITIVE_INFINITY,
         maxMessage ?? t('chainFunctions.amountExceeded')
       )
+      .superRefine((_val, ctx) => {
+        if (maxValue <= 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: t('insufficient_balance'),
+          })
+        }
+      })
   )
