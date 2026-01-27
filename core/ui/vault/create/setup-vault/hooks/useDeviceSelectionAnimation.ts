@@ -1,22 +1,46 @@
-import { useRive, useStateMachineInput } from '@rive-app/react-webgl2'
-import { useEffect, useState } from 'react'
+import {
+  Fit,
+  Layout,
+  useRive,
+  useViewModel,
+  useViewModelInstance,
+  useViewModelInstanceNumber,
+} from '@rive-app/react-webgl2'
+import { useEffect } from 'react'
 
 export const useDeviceSelectionAnimation = () => {
-  const [selectedDeviceCount, setSelectedDeviceCount] = useState(0)
-
   const { RiveComponent, rive } = useRive({
     src: '/core/animations/devices-component.riv',
     autoplay: true,
     stateMachines: ['State Machine 1'],
+    layout: new Layout({
+      fit: Fit.Layout,
+    }),
   })
 
-  const indexInput = useStateMachineInput(rive, 'State Machine 1', 'Index')
+  const viewModel = useViewModel(rive, { useDefault: true })
+
+  const viewModelInstance = useViewModelInstance(viewModel, {
+    useDefault: true,
+    rive,
+  })
+
+  const indexProperty = useViewModelInstanceNumber('Index', viewModelInstance)
 
   useEffect(() => {
-    if (indexInput && typeof indexInput.value === 'number') {
-      setSelectedDeviceCount(indexInput.value)
-    }
-  }, [indexInput])
+    if (!rive) return
+    rive.resizeDrawingSurfaceToCanvas()
 
-  return { RiveComponent, selectedDeviceCount }
+    const onResize = () => {
+      rive.resizeDrawingSurfaceToCanvas()
+    }
+
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [rive])
+
+  return {
+    RiveComponent,
+    selectedDeviceCount: indexProperty?.value ?? 0,
+  }
 }
