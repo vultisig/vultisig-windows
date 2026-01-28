@@ -1,6 +1,5 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useVaultName } from '@core/ui/mpc/keygen/create/state/vaultName'
-import { KeygenEducationPrompt } from '@core/ui/mpc/keygen/education/KeygenEducationPrompt'
 import { useVaultNames } from '@core/ui/storage/vaults'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Button } from '@lib/ui/buttons/Button'
@@ -10,7 +9,7 @@ import {
   textInputHorizontalPadding,
 } from '@lib/ui/css/textInput'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
-import { CircleCrossIcon } from '@lib/ui/icons/CircleCrossIcon'
+import { CircleCrossFilledIcon } from '@lib/ui/icons/CircleCrossFilledIcon'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -53,7 +52,6 @@ export const CreateVaultNameStep = ({
     >
       <PageHeader
         primaryControls={<PageHeaderBackButton onClick={onBack} />}
-        secondaryControls={<KeygenEducationPrompt />}
         title={t('name_your_vault')}
         hasBorder
       />
@@ -72,7 +70,7 @@ export const CreateVaultNameStep = ({
           )}
           action={
             <IconButton onClick={() => setName('')}>
-              <CircleCrossIcon />
+              <CircleCrossFilledIcon />
             </IconButton>
           }
           actionPlacerStyles={{
