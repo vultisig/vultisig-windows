@@ -204,6 +204,7 @@ export const pt = {
   app_permissions: 'Permissões do aplicativo',
   approval_tx: 'Aprovação Tx',
   approve: 'Aprovar',
+  applied_discounts: 'Descontos aplicados:',
   asset: 'Ativo',
   assets: 'ativos',
   auto_compound_into_label: 'Composto automaticamente em {{ticker}}',

@@ -1,4 +1,14 @@
-export const languages = ['en', 'es', 'pt', 'it', 'de', 'hr', 'zh'] as const
+export const languages = [
+  'en',
+  'es',
+  'pt',
+  'it',
+  'de',
+  'hr',
+  'zh',
+  'nl',
+  'ru',
+] as const
 export type Language = (typeof languages)[number]
 
 export const primaryLanguage: Language = 'en'
@@ -11,6 +21,8 @@ export const languageName: Record<Language, string> = {
   hr: 'Hrvatski',
   pt: 'Português',
   zh: '中文',
+  nl: 'Nederlands',
+  ru: 'Русский',
 }
 
 export const languageRegion: Record<Language, string> = {
@@ -21,4 +33,6 @@ export const languageRegion: Record<Language, string> = {
   hr: 'Croatian',
   pt: 'Portuguese',
   zh: 'Chinese',
+  nl: 'Dutch',
+  ru: 'Russian',
 }
