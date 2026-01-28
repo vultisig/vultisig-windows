@@ -16,21 +16,13 @@ import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 
 import { NameFormSection } from '../components/NameFormSection'
-
-const maxVaultNameLength = 50
+import { getVaultNameSchema } from '../utils/getVaultNameSchema'
 
 type SecureVaultSetupFormProps = OnFinishProp & Partial<OnBackProp>
 
 const getSecureVaultSchema = (t: TFunction, existingVaultNames: string[]) =>
   z.object({
-    name: z
-      .string()
-      .min(1, t('vault_name_required'))
-      .max(maxVaultNameLength, t('vault_name_max_length_error'))
-      .refine(
-        name => !existingVaultNames.includes(name),
-        t('vault_name_already_exists')
-      ),
+    name: getVaultNameSchema(t, existingVaultNames),
   })
 
 type SecureVaultFormValues = z.infer<ReturnType<typeof getSecureVaultSchema>>

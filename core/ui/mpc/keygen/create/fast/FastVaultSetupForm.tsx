@@ -23,8 +23,7 @@ import { z } from 'zod'
 import { EmailFormSection } from '../components/EmailFormSection'
 import { NameFormSection } from '../components/NameFormSection'
 import { PasswordFormSection } from '../components/PasswordFormSection'
-
-const maxVaultNameLength = 50
+import { getVaultNameSchema } from '../utils/getVaultNameSchema'
 
 type FastVaultSetupFormProps = OnFinishProp & Partial<OnBackProp>
 
@@ -33,14 +32,7 @@ const getFastVaultSchema = (t: TFunction, existingVaultNames: string[]) => {
 
   return z
     .object({
-      name: z
-        .string()
-        .min(1, t('vault_name_required'))
-        .max(maxVaultNameLength, t('vault_name_max_length_error'))
-        .refine(
-          name => !existingVaultNames.includes(name),
-          t('vault_name_already_exists')
-        ),
+      name: getVaultNameSchema(t, existingVaultNames),
       email: z
         .string()
         .min(1, t('email_required'))
