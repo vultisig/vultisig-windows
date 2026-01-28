@@ -5,6 +5,7 @@ import { CosmosChain, EvmChain, OtherChain } from '../../../Chain'
 export const chainsWithTokenMetadataDiscovery = [
   ...Object.values(EvmChain),
   OtherChain.Solana,
+  OtherChain.Tron,
   ...Object.values(CosmosChain),
 ] as const
 
