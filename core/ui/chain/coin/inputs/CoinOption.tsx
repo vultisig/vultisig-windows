@@ -2,9 +2,7 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { Coin } from '@core/chain/coin/Coin'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
-import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
-import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import {
   useCurrentVaultAddress,
   useCurrentVaultCoins,
@@ -19,6 +17,9 @@ import { getColor } from '@lib/ui/theme/getters'
 import { formatAmount } from '@lib/utils/formatAmount'
 import styled from 'styled-components'
 
+import { CoinOptionFiatAmount } from './CoinOptionFiatAmount'
+import { CoinOptionFiatValue } from './CoinOptionFiatValue'
+
 export const CoinOption = ({
   value,
   onClick,
@@ -31,10 +32,6 @@ export const CoinOption = ({
     address,
   }
   const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
-  const priceQuery = useCoinPriceQuery({
-    coin,
-  })
-  const formatFiatAmount = useFormatFiatAmount()
 
   return (
     <Container
@@ -95,17 +92,14 @@ export const CoinOption = ({
                 </Text>
               </VStack>
               <VStack flexGrow alignItems="flex-end">
-                <MatchQuery
-                  value={priceQuery}
-                  pending={() => <Skeleton />}
-                  success={price => (
-                    <Text as="span" size={12} color="shy" weight={500}>
-                      {formatFiatAmount(
-                        fromChainAmount(balance, decimals) * price
-                      )}
-                    </Text>
-                  )}
-                />
+                {balance > 0 ? (
+                  <CoinOptionFiatAmount
+                    coin={coin}
+                    amount={fromChainAmount(balance, decimals)}
+                  />
+                ) : (
+                  <CoinOptionFiatValue value={0} />
+                )}
               </VStack>
             </VStack>
           )}
