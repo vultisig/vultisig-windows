@@ -132,6 +132,12 @@ export const getDepositFormConfig = ({
     merge: () => ({
       fields: [
         {
+          name: 'nodeAddress',
+          type: 'text',
+          label: t('node_address'),
+          required: true,
+        },
+        {
           name: 'amount',
           type: 'number',
           label: 'Amount',
@@ -139,7 +145,20 @@ export const getDepositFormConfig = ({
         },
       ],
       schema: z.object({
-        nodeAddress: z.string().min(1, 'Required'),
+        nodeAddress: z
+          .string()
+          .min(1, 'Required')
+          .refine(
+            address =>
+              isValidAddress({
+                chain: chain as Chain,
+                address,
+                walletCore,
+              }),
+            {
+              message: t('invalid_node_address'),
+            }
+          ),
         amount: positiveAmountSchema(totalAmountAvailable, t),
       }),
     }),
@@ -154,8 +173,34 @@ export const getDepositFormConfig = ({
       ],
       schema: z.object({
         amount: positiveAmountSchema(totalAmountAvailable, t),
-        nodeAddress: z.string().min(1, 'Required'),
-        thorchainAddress: z.string().min(1, 'Required'),
+        nodeAddress: z
+          .string()
+          .min(1, 'Required')
+          .refine(
+            address =>
+              isValidAddress({
+                chain: chain as Chain,
+                address,
+                walletCore,
+              }),
+            {
+              message: t('invalid_node_address'),
+            }
+          ),
+        thorchainAddress: z
+          .string()
+          .min(1, 'Required')
+          .refine(
+            address =>
+              isValidAddress({
+                chain: Chain.THORChain,
+                address,
+                walletCore,
+              }),
+            {
+              message: t('invalid_node_address'),
+            }
+          ),
       }),
     }),
     ibc_transfer: () => ({
@@ -167,15 +212,35 @@ export const getDepositFormConfig = ({
           required: true,
         },
       ],
-      schema: z.object({
-        destinationChain: z.string().min(1, 'Destination Chain is required'),
-        nodeAddress: z.string().min(1, 'Destination Address is required'),
-        amount: positiveAmountSchema(
-          totalAmountAvailable,
-          t,
-          t('chainFunctions.amountExceeded')
-        ),
-      }),
+      schema: z
+        .object({
+          destinationChain: z.custom<Chain>(
+            (val): val is Chain => Object.values(Chain).includes(val as Chain),
+            { message: 'Destination Chain is required' }
+          ),
+          nodeAddress: z.string().min(1, 'Destination Address is required'),
+          amount: positiveAmountSchema(
+            totalAmountAvailable,
+            t,
+            t('chainFunctions.amountExceeded')
+          ),
+        })
+        .superRefine((data, ctx) => {
+          const { destinationChain, nodeAddress } = data
+          if (
+            !isValidAddress({
+              chain: destinationChain as Chain,
+              address: nodeAddress,
+              walletCore,
+            })
+          ) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: t('send_invalid_receiver_address'),
+              path: ['nodeAddress'],
+            })
+          }
+        }),
     }),
     bond: () => ({
       fields: [
@@ -516,11 +581,22 @@ export const getDepositFormConfig = ({
                   : z.never(),
             Ton: () =>
               z.object({
-                amount: z.preprocess(
-                  toRequiredNumber,
-                  z.number().gt(0, t('amount_must_be_positive'))
-                ),
-                validatorAddress: z.string().min(1, t('validator_address')),
+                amount: positiveAmountSchema(totalAmountAvailable, t),
+                validatorAddress: z
+                  .string()
+                  .trim()
+                  .min(1, t('validator_address'))
+                  .refine(
+                    address =>
+                      isValidAddress({
+                        chain: chain as Chain,
+                        address,
+                        walletCore,
+                      }),
+                    {
+                      message: t('send_invalid_receiver_address'),
+                    }
+                  ),
               }) as any,
           }),
     }),
@@ -600,11 +676,22 @@ export const getDepositFormConfig = ({
                   : z.never(),
             Ton: () =>
               z.object({
-                validatorAddress: z.string().min(1, t('validator_address')),
-                amount: z.preprocess(
-                  toRequiredNumber,
-                  z.number().gt(0, t('amount_must_be_positive'))
-                ),
+                validatorAddress: z
+                  .string()
+                  .trim()
+                  .min(1, t('validator_address'))
+                  .refine(
+                    address =>
+                      isValidAddress({
+                        chain: chain as Chain,
+                        address,
+                        walletCore,
+                      }),
+                    {
+                      message: t('send_invalid_receiver_address'),
+                    }
+                  ),
+                amount: positiveAmountSchema(totalAmountAvailable, t),
               }) as any,
           }),
     }),
