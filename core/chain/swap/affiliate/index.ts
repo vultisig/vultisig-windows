@@ -11,6 +11,8 @@ import {
   vultDiscountTierMinBalances,
 } from './config'
 
+export type { VultDiscountTier }
+
 type GetVultDiscountTierInput = {
   vultBalance: bigint
   thorguardNftBalance: bigint

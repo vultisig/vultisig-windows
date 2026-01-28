@@ -203,6 +203,7 @@ export const hr = {
   app_permissions: 'Dozvole aplikacije',
   approval_tx: 'Odobrenje slanja',
   approve: 'Odobriti',
+  applied_discounts: 'Primijenjeni popusti:',
   asset: 'Imovina',
   assets: 'imovina',
   auto_compound_into_label: 'Automatsko spajanje u {{ticker}}',
