@@ -4,7 +4,7 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 import {
   BlockaidEvmSimulationInfo,
-  BlockaidSolanaSwapSimulationInfo,
+  BlockaidSolanaSimulationInfo,
 } from '../core'
 
 export type BlockaidSolanaSimulation = {
@@ -22,13 +22,13 @@ export type BlockaidSolanaSimulation = {
         usd_price: number
         summary: string
         value: number
-        raw_value: number
+        raw_value: string
       } | null
       out: {
         usd_price: number
         summary: string
         value: number
-        raw_value: number
+        raw_value: string
       } | null
       asset_type: 'TOKEN' | 'SOL'
     }>
@@ -53,33 +53,33 @@ export type BlockaidEVMSimulation = {
         usd_price: number
         summary: string
         value: number
-        raw_value: number
+        raw_value: string
       }>
       out: Array<{
         usd_price: number
         summary: string
         value: number
-        raw_value: number
+        raw_value: string
       }>
       balance_changes: {
         before: {
           usd_price: number
           value: number
-          raw_value: number
+          raw_value: string
         }
         after: {
           usd_price: number
           value: number
-          raw_value: number
+          raw_value: string
         }
       }
     }>
   }
 }
 
-export const parseBlockaidSolanaSwapSimulation = async (
+export const parseBlockaidSolanaSimulation = async (
   simulation: BlockaidSolanaSimulation
-): Promise<BlockaidSolanaSwapSimulationInfo> => {
+): Promise<BlockaidSolanaSimulationInfo> => {
   const assetDiffs = simulation.account_summary.account_assets_diff
 
   // When we have 3 items and one is native SOL, filter it out and use the other two tokens.
@@ -91,6 +91,24 @@ export const parseBlockaidSolanaSwapSimulation = async (
     )
     if (nativeSolIndex !== -1) {
       relevantDiffs = assetDiffs.filter((_, index) => index !== nativeSolIndex)
+    }
+  }
+
+  if (relevantDiffs.length === 1) {
+    const [potentialOutAsset] = relevantDiffs
+
+    if (!potentialOutAsset.out) {
+      throw new Error('Invalid simulation data: no out value for transfer')
+    }
+
+    return {
+      transfer: {
+        fromMint:
+          potentialOutAsset.asset.type === 'SOL'
+            ? 'So11111111111111111111111111111111111111112'
+            : shouldBePresent(potentialOutAsset.asset.address),
+        fromAmount: BigInt(shouldBePresent(potentialOutAsset.out).raw_value),
+      },
     }
   }
 
@@ -115,19 +133,32 @@ export const parseBlockaidSolanaSwapSimulation = async (
           outAsset: potentialInAsset.asset,
           outValue: potentialInAsset.out,
         }
-
-    return {
-      fromMint:
-        outAsset.type === 'SOL'
-          ? 'So11111111111111111111111111111111111111112'
-          : shouldBePresent(outAsset.address),
-      toMint:
-        inAsset.type === 'SOL'
-          ? 'So11111111111111111111111111111111111111112'
-          : shouldBePresent(inAsset.address),
-      fromAmount: shouldBePresent(outValue).raw_value,
-      toAmount: shouldBePresent(inValue).raw_value,
-      toAssetDecimal: inAsset.decimals,
+    if (outAsset && inAsset && outValue && inValue) {
+      return {
+        swap: {
+          fromMint:
+            outAsset.type === 'SOL'
+              ? 'So11111111111111111111111111111111111111112'
+              : shouldBePresent(outAsset.address),
+          toMint:
+            inAsset.type === 'SOL'
+              ? 'So11111111111111111111111111111111111111112'
+              : shouldBePresent(inAsset.address),
+          fromAmount: BigInt(shouldBePresent(outValue).raw_value),
+          toAmount: BigInt(shouldBePresent(inValue).raw_value),
+          toAssetDecimal: inAsset.decimals,
+        },
+      }
+    } else if (outAsset && outValue) {
+      return {
+        transfer: {
+          fromMint:
+            outAsset.type === 'SOL'
+              ? 'So11111111111111111111111111111111111111112'
+              : shouldBePresent(outAsset.address),
+          fromAmount: BigInt(shouldBePresent(outValue).raw_value),
+        },
+      }
     }
   }
   throw new Error('Invalid simulation data')

@@ -1,5 +1,10 @@
+import { Chain } from '@core/chain/Chain'
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import {
+  BlockaidEvmSimulationInfo,
+  BlockaidSolanaSimulationInfo,
+} from '@core/chain/security/blockaid/tx/simulation/core'
 import { BlockaidSimulationContent } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidSimulationContent'
 import { BlockaidSimulationError } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidSimulationError'
 import { useBlockaidSimulationQuery } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/useBlockaidSimulationQuery'
@@ -37,12 +42,15 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
 import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
+import { Query } from '@lib/ui/query/Query'
 import { WarningBlock } from '@lib/ui/status/WarningBlock'
 import { Text } from '@lib/ui/text'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { formatUnits } from 'ethers'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { useGetCoin } from './core/coin'
 
 type SendTxOverviewProps = {
   parsedTx: ParsedTx
@@ -53,7 +61,7 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
   const walletCore = useAssertWalletCore()
   const publicKey = useCurrentVaultPublicKey(coin.chain)
   const { t } = useTranslation()
-
+  const getCoin = useGetCoin()
   const transactionPayload = usePopupInput<'sendTx'>()
 
   const { chain, address } = coin
@@ -159,15 +167,16 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                   </VStack>
                 </Panel>
               )}
-              {isChainOfKind(chain, 'evm') && (
-                <MatchQuery
-                  value={blockaidSimulationQuery}
-                  error={() => <BlockaidSimulationError />}
-                  success={() => null}
-                  pending={() => null}
-                  inactive={() => null}
-                />
-              )}
+              {isChainOfKind(chain, 'evm') ||
+                (chain === Chain.Solana && (
+                  <MatchQuery
+                    value={blockaidSimulationQuery}
+                    error={() => <BlockaidSimulationError />}
+                    success={() => null}
+                    pending={() => null}
+                    inactive={() => null}
+                  />
+                ))}
               {hasSwapPayload ? (
                 <>
                   <VStack
@@ -250,10 +259,15 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                 </>
               ) : isChainOfKind(chain, 'evm') ? (
                 <BlockaidSimulationContent
-                  blockaidSimulationQuery={blockaidSimulationQuery}
+                  chain={chain}
+                  blockaidSimulationQuery={
+                    blockaidSimulationQuery as Query<
+                      BlockaidEvmSimulationInfo,
+                      unknown
+                    >
+                  }
                   keysignPayload={keysignPayload}
                   address={address}
-                  chain={chain}
                   networkFeeProps={{
                     keysignPayload,
                     transactionPayload,
@@ -263,13 +277,37 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                     walletCore,
                     publicKey,
                   }}
+                  getCoin={getCoin}
                 />
-              ) : (
+              ) : chain === Chain.Solana ? (
                 <>
                   {keysignPayload.signData.case === 'signSolana' ? (
-                    <SignSolanaDisplay
-                      signSolana={keysignPayload.signData.value}
-                    />
+                    <>
+                      <BlockaidSimulationContent
+                        chain={chain}
+                        blockaidSimulationQuery={
+                          blockaidSimulationQuery as Query<
+                            BlockaidSolanaSimulationInfo,
+                            unknown
+                          >
+                        }
+                        keysignPayload={keysignPayload}
+                        address={address}
+                        networkFeeProps={{
+                          keysignPayload,
+                          transactionPayload,
+                          chain,
+                          feeSettings,
+                          setFeeSettings,
+                          walletCore,
+                          publicKey,
+                        }}
+                        getCoin={getCoin}
+                      />
+                      <SignSolanaDisplay
+                        signSolana={keysignPayload.signData.value}
+                      />
+                    </>
                   ) : (
                     <>
                       {(() => {
@@ -321,7 +359,7 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                     </>
                   )}
                 </>
-              )}
+              ) : null}
               {keysignPayload.signData.case === 'signAmino' && (
                 <SignAminoDisplay signAmino={keysignPayload.signData.value} />
               )}
