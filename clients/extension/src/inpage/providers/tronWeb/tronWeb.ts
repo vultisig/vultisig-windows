@@ -1,4 +1,5 @@
 import { Chain } from '@core/chain/Chain'
+import { decodeTrc20TransferData } from '@core/chain/chains/tron/trc20/decodeTrc20TransferData'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { deserializeSigningOutput } from '@core/chain/tw/signingOutput'
 import { callPopup } from '@core/inpage-provider/popup'
@@ -76,8 +77,16 @@ export class VultisigTronWebTrx extends Trx {
           TriggerSmartContract: async () => {
             const triggerSmartContract = contract.parameter
               .value as Types.TriggerSmartContract
+            const contractAddress = fromHex(
+              triggerSmartContract.contract_address
+            )
 
-            let asset = { ticker: 'TRX' }
+            let asset: TransactionDetails['asset'] = { ticker: 'TRX' }
+            let amount = {
+              amount: triggerSmartContract.call_value?.toString() ?? '0',
+              decimals: chainFeeCoin.Tron.decimals,
+            }
+
             if (triggerSmartContract.token_id) {
               const tokenInfo = await this.getTokenByID(
                 triggerSmartContract.token_id
@@ -85,13 +94,25 @@ export class VultisigTronWebTrx extends Trx {
               asset = { ticker: tokenInfo.abbr }
             }
 
+            const trc20Transfer = decodeTrc20TransferData(
+              triggerSmartContract.data ?? ''
+            )
+
+            if (trc20Transfer) {
+              asset = {
+                ticker: 'TRC20',
+                contractAddress,
+              }
+              amount = {
+                amount: trc20Transfer.amount.toString(),
+                decimals: 6,
+              }
+            }
+
             return {
               asset,
-              amount: {
-                amount: triggerSmartContract.call_value?.toString() ?? '0',
-                decimals: chainFeeCoin.Tron.decimals,
-              },
-              to: fromHex(triggerSmartContract.contract_address),
+              amount,
+              to: trc20Transfer ? trc20Transfer.recipient : contractAddress,
               from: fromHex(triggerSmartContract.owner_address),
               data: transaction.raw_data.data
                 ? Buffer.from(
