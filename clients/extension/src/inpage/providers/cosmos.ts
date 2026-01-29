@@ -28,6 +28,10 @@ export class Cosmos extends BaseCosmosChain {
       if (!chain) {
         throw new EIP1193Error('UnrecognizedChain')
       }
+
+      await callBackground({ setAppChain: { cosmos: chain } })
+
+      return null
     }
     const processRequest = async () => {
       const chain = await callBackground({
