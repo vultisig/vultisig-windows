@@ -74,7 +74,7 @@ export const getCustomTxData = ({
         }
 
         const getCoinKey = (): CoinKey => {
-          const { ticker, mint } = tx.transactionDetails.asset
+          const { ticker, mint, contractAddress } = tx.transactionDetails.asset
           if (mint) {
             return { chain: Chain.Solana, id: mint }
           }
@@ -85,6 +85,10 @@ export const getCustomTxData = ({
 
           if (areLowerCaseEqual(ticker, feeCoin.ticker)) {
             return { chain }
+          }
+
+          if (contractAddress) {
+            return { chain, id: contractAddress }
           }
 
           if (

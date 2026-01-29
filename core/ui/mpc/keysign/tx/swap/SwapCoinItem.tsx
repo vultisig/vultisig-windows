@@ -29,18 +29,14 @@ export const SwapCoinItem = ({
         <Text centerHorizontally color="contrast" size={14}>
           {tokenAmount} {ticker}
         </Text>
-        {tokenAmount && (
-          <MatchQuery
-            value={coinPriceQuery}
-            success={price => (
-              <Text centerHorizontally color="supporting" size={12}>
-                {formatFiatAmount(tokenAmount * price)}
-              </Text>
-            )}
-            error={() => null}
-            pending={() => null}
-          />
-        )}
+        <MatchQuery
+          value={coinPriceQuery}
+          success={price => (
+            <Text centerHorizontally color="supporting" size={12}>
+              {formatFiatAmount((tokenAmount ?? 0) * price)}
+            </Text>
+          )}
+        />
       </div>
     </SwapVStackItem>
   )

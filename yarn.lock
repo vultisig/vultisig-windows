@@ -772,6 +772,7 @@ __metadata:
     "@tanstack/react-query": "npm:^5.90.19"
     "@trustwallet/wallet-core": "npm:^4.5.0"
     bitcoinjs-lib: "npm:^7.0.1"
+    bs58: "npm:^6.0.0"
     ethers: "npm:^6.16.0"
     framer-motion: "npm:^12.27.5"
     react: "npm:^19.2.3"

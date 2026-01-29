@@ -1,13 +1,18 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
+import { useCore } from '@core/ui/state/core'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { AddressQRModal } from '@core/ui/vault/chain/address/AddressQRModal'
 import { VaultPrimaryActions } from '@core/ui/vault/components/VaultPrimaryActions'
 import { VaultChainCoin } from '@core/ui/vault/queries/useVaultChainCoinsQuery'
+import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { Opener } from '@lib/ui/base/Opener'
+import { IconButton } from '@lib/ui/buttons/IconButton'
+import { ArCubeIcon } from '@lib/ui/icons/ArCubeIcon'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { ModalCloseButton } from '@lib/ui/modal/ModalCloseButton'
 import { ResponsiveModal } from '@lib/ui/modal/ResponsiveModal'
 import { OnCloseProp } from '@lib/ui/props'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
@@ -23,9 +28,16 @@ type CoinDetailModalProps = OnCloseProp & {
 
 export const CoinDetailModal = ({ coin, onClose }: CoinDetailModalProps) => {
   const { t } = useTranslation()
+  const { openUrl } = useCore()
   const formatFiatAmount = useFormatFiatAmount()
   const balance = fromChainAmount(coin.amount, coin.decimals)
   const fiatValue = (coin.price || 0) * balance
+  const address = useCurrentVaultAddress(coin.chain)
+  const blockExplorerUrl = getBlockExplorerUrl({
+    chain: coin.chain,
+    entity: 'address',
+    value: address,
+  })
 
   return (
     <ResponsiveModal
@@ -37,17 +49,22 @@ export const CoinDetailModal = ({ coin, onClose }: CoinDetailModalProps) => {
       }}
     >
       <ContentContainer>
-        <Header alignItems="start" justifyContent="flex-end" gap={16}>
-          {onClose && <ModalCloseButton onClick={onClose} />}
-        </Header>
-        <HStack alignItems="center" gap={8}>
-          <CoinIcon coin={coin} style={{ fontSize: 24 }} />
-          <Text size={20} weight={600} color="contrast">
-            {coin.ticker}
-          </Text>
-        </HStack>
-
-        <BalanceCard>
+        <VStack alignItems="center" fullWidth>
+          <HStack justifyContent="end" fullWidth>
+            <IconButton onClick={() => openUrl(blockExplorerUrl)}>
+              <IconWrapper size={20}>
+                <ArCubeIcon />
+              </IconWrapper>
+            </IconButton>
+          </HStack>
+          <HStack alignItems="center" gap={8}>
+            <CoinIcon coin={coin} style={{ fontSize: 24 }} />
+            <Text size={20} weight={600} color="contrast">
+              {coin.ticker}
+            </Text>
+          </HStack>
+        </VStack>
+        <VStack alignItems="center" gap={8}>
           <Text size={28} weight={500} color="contrast">
             <BalanceVisibilityAware>
               {formatFiatAmount(fiatValue)}
@@ -58,7 +75,7 @@ export const CoinDetailModal = ({ coin, onClose }: CoinDetailModalProps) => {
               {formatAmount(balance, { precision: 'high' })} {coin.ticker}
             </BalanceVisibilityAware>
           </Text>
-        </BalanceCard>
+        </VStack>
 
         <Opener
           renderOpener={({ onOpen }) => (
@@ -101,20 +118,10 @@ export const CoinDetailModal = ({ coin, onClose }: CoinDetailModalProps) => {
   )
 }
 
-const Header = styled(HStack)`
-  align-self: stretch;
-  display: none;
-
-  @media ${mediaQuery.tabletDeviceAndUp} {
-    display: flex;
-  }
-`
-
 const ContentContainer = styled(VStack)`
-  margin-inline: -20px;
   position: relative;
   gap: 32px;
-  padding: 20px 0px;
+  padding: 0 16px 20px 16px;
   background: linear-gradient(
     0deg,
     ${getColor('foreground')} 50%,
@@ -171,17 +178,11 @@ const ContentContainer = styled(VStack)`
   }
 `
 
-const BalanceCard = styled(VStack)`
-  gap: 8px;
-  align-items: center;
-`
-
 const InfoSection = styled(VStack)`
   gap: 16px;
   width: 100%;
   max-width: 400px;
   margin-top: 8px;
-  padding-inline: 16px;
 `
 
 const InfoRow = styled(HStack)`
