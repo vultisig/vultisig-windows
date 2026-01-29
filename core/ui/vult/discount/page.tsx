@@ -45,7 +45,7 @@ export const VultDiscountPage = () => {
               pending={() => <Spinner />}
               error={() => t('failed_to_load')}
               success={activeDiscountTier => (
-                <>
+                <VStack gap={12}>
                   {vultDiscountTiers.map(tier => (
                     <VultDiscountTier
                       key={tier}
@@ -53,7 +53,7 @@ export const VultDiscountPage = () => {
                       activeDiscountTier={activeDiscountTier}
                     />
                   ))}
-                </>
+                </VStack>
               )}
             />
           </VStack>
