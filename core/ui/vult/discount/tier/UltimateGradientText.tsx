@@ -2,16 +2,22 @@ import styled from 'styled-components'
 
 export const UltimateGradientText = styled.span`
   background: linear-gradient(
-    82deg,
-    #ffd700 0%,
-    #ffa500 20%,
-    #ff6b35 40%,
-    #ff1493 60%,
-    #8954ff 80%,
-    #4169e1 100%
+    51deg,
+    #041022 19.23%,
+    #114aa0 35.63%,
+    #ffc25c 50.13%,
+    #fff 54.86%,
+    #0f4594 67.16%,
+    #e8b762 75.04%,
+    #fffbf3 84.81%
   );
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-family: Brockmann;
+  font-size: 28px;
+  font-style: normal;
   font-weight: 500;
+  line-height: 34px;
+  letter-spacing: -0.64px;
 `
