@@ -51,16 +51,16 @@ const Wrapper = styled(VStack)`
   border-bottom: 2px dashed ${getColor('foregroundExtra')};
 `
 
-const BadgeIconWrapper = styled.div<{ $isSecure?: boolean }>`
+const BadgeIconWrapper = styled.div<{ isSecure?: boolean }>`
   font-size: 16px;
-  color: ${({ $isSecure }) =>
-    $isSecure ? getColor('success') : getColor('idle')};
+  color: ${({ isSecure }) =>
+    isSecure ? getColor('success') : getColor('idle')};
 `
 
-const ContentWrapper = styled(VStack)<{ $isSecure?: boolean }>`
+const ContentWrapper = styled(VStack)<{ isSecure?: boolean }>`
   padding: 24px;
-  background: ${({ $isSecure }) =>
-    $isSecure ? 'rgba(0, 128, 0, 0.03)' : 'rgba(92, 167, 255, 0.03)'};
+  background: ${({ isSecure }) =>
+    isSecure ? 'rgba(0, 128, 0, 0.03)' : 'rgba(92, 167, 255, 0.03)'};
 
   gap: 24px;
   font-size: 24px;
@@ -68,15 +68,15 @@ const ContentWrapper = styled(VStack)<{ $isSecure?: boolean }>`
 `
 
 const PillWrapper = styled(HStack)<{
-  $showLine?: boolean
-  $isSecure?: boolean
+  showLine?: boolean
+  isSecure?: boolean
 }>`
   position: relative;
   padding: 8px 12px;
   background-color: #07203e;
   border: 2px solid
-    ${({ $isSecure }) =>
-      $isSecure ? getColor('foreground') : getColor('foregroundExtra')};
+    ${({ isSecure }) =>
+      isSecure ? getColor('foreground') : getColor('foregroundExtra')};
   border-radius: 0px 9999px 9999px 0px;
   max-width: fit-content;
 
@@ -85,8 +85,8 @@ const PillWrapper = styled(HStack)<{
     alignItems: 'center',
   })};
 
-  ${({ $showLine }) =>
-    $showLine &&
+  ${({ showLine }) =>
+    showLine &&
     css`
       &:before {
         content: '';
@@ -100,7 +100,7 @@ const PillWrapper = styled(HStack)<{
     `}
 `
 
-const SummaryListItem = styled(HStack)<{ $showLine?: boolean }>`
+const SummaryListItem = styled(HStack)<{ showLine?: boolean }>`
   position: relative;
   gap: 12px;
   padding: 16px;
@@ -120,7 +120,7 @@ const SummaryListItem = styled(HStack)<{ $showLine?: boolean }>`
   }
 `
 
-const IconWrapper = styled(VStack)<{ $isSecure?: boolean }>`
+const IconWrapper = styled(VStack)<{ isSecure?: boolean }>`
   justify-content: center;
   width: 24px;
   height: 24px;
@@ -183,26 +183,26 @@ export const VaultBackupSummaryStep: FC<SetupVaultSummaryStepProps> = ({
               data-testid="OnboardingSummary-PillWrapper"
               alignItems="center"
               gap={8}
-              $showLine={true}
-              $isSecure={!isFastVault}
+              showLine={true}
+              isSecure={!isFastVault}
             >
-              <BadgeIconWrapper $isSecure={!isFastVault}>
+              <BadgeIconWrapper isSecure={!isFastVault}>
                 {isFastVault ? <LightningIcon /> : <ShieldIcon />}
               </BadgeIconWrapper>
               <Text size={12} color="shy">
                 {isFastVault ? t('fastVault') : t('secureVault')}
               </Text>
             </PillWrapper>
-            <ContentWrapper $isSecure={!isFastVault}>
+            <ContentWrapper isSecure={!isFastVault}>
               <Text variant="h1Regular">{t('backupGuide')}</Text>
               <VStack gap={24}>
                 {summaryItems.map(({ title, icon }) => (
                   <SummaryListItem
                     alignItems="center"
                     key={title}
-                    $showLine={isFastVault}
+                    showLine={isFastVault}
                   >
-                    <IconWrapper $isSecure={!isFastVault}>{icon}</IconWrapper>
+                    <IconWrapper isSecure={!isFastVault}>{icon}</IconWrapper>
                     <Text color="contrast" weight={500} size={13}>
                       {title}
                     </Text>
