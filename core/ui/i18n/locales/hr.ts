@@ -1,4 +1,5 @@
 export const hr = {
+  seedPhraseImportTip: 'Savjet: Možete koristiti preglednik kao uređaj',
   chainFunctions: {
     custom: {
       labels: {
