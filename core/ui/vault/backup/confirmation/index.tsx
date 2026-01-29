@@ -1,3 +1,4 @@
+import { BackupWarningMessage } from '@core/ui/vault/backup/BackupWarningMessage'
 import { backupEducationUrl } from '@core/ui/vault/backup/education'
 import { Button } from '@lib/ui/buttons/Button'
 import { HardDriveDownloadIcon } from '@lib/ui/icons/HardDriveDownloadIcon'
@@ -51,6 +52,7 @@ export const BackupConfirmation: FC<BackupConfirmationProps> = ({
               {t('learnMore')}
             </Text>
           </Text>
+          <BackupWarningMessage />
         </VStack>
         <Button
           icon={<HardDriveDownloadIcon />}

@@ -1,7 +1,6 @@
 import { useVaults } from '@core/ui/storage/vaults'
+import { BackupOverviewScreen } from '@core/ui/vault/backup/BackupOverviewScreen'
 import { EmailConfirmation } from '@core/ui/vault/backup/fast'
-import { BackupOverviewSlidesPartOne } from '@core/ui/vault/backup/fast/BackupOverviewSlidesPartOne'
-import { BackupOverviewSlidesPartTwo } from '@core/ui/vault/backup/fast/BackupOverviewSlidesPartTwo'
 import { VaultBackupSummaryStep } from '@core/ui/vault/backup/VaultBackupSummaryStep'
 import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -13,10 +12,9 @@ import { useTranslation } from 'react-i18next'
 import { InitiateFastVaultBackup } from './InitiateFastVaultBackup'
 
 const steps = [
-  'backupSlideshowPartOne',
+  'backupOverview',
   'emailVerification',
   'saveVault',
-  'backupSlideshowPartTwo',
   'backupPage',
   'backupSuccessfulSlideshow',
 ] as const
@@ -32,15 +30,12 @@ export const BackupFastVault = ({
   })
   const vaults = useVaults()
   const vault = useCurrentVault()
-  // @antonio: by design we only need to show the summary step if user has more than 2 vaults
   const shouldShowBackupSummary = vaults.length > 1
 
   return (
     <Match
       value={step}
-      backupSlideshowPartOne={() => (
-        <BackupOverviewSlidesPartOne onFinish={toNextStep} />
-      )}
+      backupOverview={() => <BackupOverviewScreen onFinish={toNextStep} />}
       saveVault={() => (
         <SaveVaultStep
           value={vault}
@@ -51,9 +46,6 @@ export const BackupFastVault = ({
       )}
       emailVerification={() => (
         <EmailConfirmation onFinish={toNextStep} onBack={toPreviousStep} />
-      )}
-      backupSlideshowPartTwo={() => (
-        <BackupOverviewSlidesPartTwo onFinish={toNextStep} />
       )}
       backupPage={() => (
         <InitiateFastVaultBackup

@@ -1,10 +1,14 @@
-export const ArrowSplitIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none">
-    <path
-      stroke="#4879FD"
-      strokeLinecap="square"
-      strokeWidth={1.5}
-      d="M3.75 9.75v-5.5h5.5m5.5 0h5.5v5.5M12 12.5v8.25m0-8.25L4.5 5m7.5 7.5L19.5 5"
-    />
+import { SvgProps } from '@lib/ui/props'
+
+export const ArrowSplitIcon = (props: SvgProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="1em"
+    height="1em"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    {...props}
+  >
+    <path d="M14 4l2.29 2.29-2.88 2.88 1.42 1.42 2.88-2.88L20 10V4h-6zm-4 0H4v6l2.29-2.29 4.71 4.7V20h2v-8.41l-5.29-5.3L10 4z" />
   </svg>
 )
