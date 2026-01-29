@@ -921,6 +921,7 @@ export const zh = {
   confirm_automation_creation: '确认自动化创建',
   id: 'ID',
   import_seedphrase: '导入种子短语',
+  seedPhraseImportTip: '提示：您可以使用浏览器作为设备',
   import_seedphrase_description: '进入其中，创建一个保险库，永不回头。',
   import_vault_share: '导入保险库共享',
   import_vault_share_description: '使用保险库共享来恢复您的保险库。',

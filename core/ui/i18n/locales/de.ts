@@ -998,6 +998,7 @@ export const de = {
   confirm_automation_creation: 'Automatisierungserstellung bestätigen',
   id: 'AUSWEIS',
   import_seedphrase: 'Seedphrase importieren',
+  seedPhraseImportTip: 'Tipp: Sie können einen Browser als Gerät verwenden',
   import_seedphrase_description:
     'Betritt es, erschaffe einen Tresor, schau nie zurück.',
   import_vault_share: 'Vault-Freigabe importieren',

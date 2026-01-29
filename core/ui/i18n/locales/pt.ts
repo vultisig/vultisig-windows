@@ -1,4 +1,5 @@
 export const pt = {
+  seedPhraseImportTip: 'Dica: Você pode usar um navegador como dispositivo',
   chainFunctions: {
     custom: {
       labels: {
