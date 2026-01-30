@@ -1,17 +1,10 @@
-import { ProductEnhancedLogo } from '@core/ui/product/logo/ProductEnhancedLogo'
 import { VStack } from '@lib/ui/layout/Stack'
-import { Text } from '@lib/ui/text'
-import { useTranslation } from 'react-i18next'
+import Lottie from 'lottie-react'
 
-export const ProductLogoBlock = () => {
-  const { t } = useTranslation()
+import splashScreen from './splash-screen.json'
 
-  return (
-    <VStack alignItems="center" justifyContent="center" flexGrow fullHeight>
-      <ProductEnhancedLogo style={{ fontSize: 250 }} />
-      <Text color="contrast" weight="500" size={34}>
-        {t('vultisig')}
-      </Text>
-    </VStack>
-  )
-}
+export const ProductLogoBlock = () => (
+  <VStack alignItems="center" justifyContent="center" fullSize>
+    <Lottie animationData={splashScreen} loop={false} />
+  </VStack>
+)

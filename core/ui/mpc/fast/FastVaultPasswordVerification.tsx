@@ -1,5 +1,6 @@
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { convertDuration } from '@lib/utils/time/convertDuration'
+import { useTranslation } from 'react-i18next'
 
 import { FastVaultPasswordModal } from './FastVaultPasswordModal'
 import { usePasswordVerification } from './hooks/usePasswordVerification'
@@ -7,8 +8,8 @@ import { usePasswordVerification } from './hooks/usePasswordVerification'
 const verificationTimeoutMs = convertDuration(15, 'd', 'ms')
 
 export const FastVaultPasswordVerification = () => {
-  const vault = useCurrentVault()
-  const { lastPasswordVerificationTime } = vault
+  const { t } = useTranslation()
+  const { lastPasswordVerificationTime } = useCurrentVault()
   const now = Date.now()
 
   const shouldShowModal =
@@ -29,9 +30,10 @@ export const FastVaultPasswordVerification = () => {
 
   return (
     <FastVaultPasswordModal
-      showModal={shouldShowModal}
+      description={t('verify_password_periodic_message_description')}
       onBack={handleBack}
       onFinish={handleFinish}
+      showModal={shouldShowModal}
     />
   )
 }

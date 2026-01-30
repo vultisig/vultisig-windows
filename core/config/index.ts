@@ -9,3 +9,6 @@ export const desktopDownloadUrl = `${productWebsiteUrl}/downloads`
 export const extensionDownloadUrl =
   'https://chromewebstore.google.com/detail/ggafhcdaplkhmmnlbfjpnnkepdfjaelb'
 export const vultWebsiteUrl = `${productWebsiteUrl}/vult`
+
+export * from './password'
+export * from './vault'

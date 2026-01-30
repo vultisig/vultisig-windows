@@ -1,4 +1,5 @@
 export const pt = {
+  seedPhraseImportTip: 'Dica: Você pode usar um navegador como dispositivo',
   chainFunctions: {
     custom: {
       labels: {
@@ -204,6 +205,7 @@ export const pt = {
   app_permissions: 'Permissões do aplicativo',
   approval_tx: 'Aprovação Tx',
   approve: 'Aprovar',
+  applied_discounts: 'Descontos aplicados:',
   asset: 'Ativo',
   assets: 'ativos',
   auto_compound_into_label: 'Composto automaticamente em {{ticker}}',
@@ -333,7 +335,7 @@ export const pt = {
   disconnect_all: 'Desconectar tudo',
   discord: 'Discórdia',
   discount: 'Desconto',
-  complete_fee_waive: 'Isenção completa de taxas',
+  complete_fee_waive: 'Sem Taxa',
   discount_tiers: 'Níveis de desconto',
   discount_tiers_description:
     'Mantenha $VULT para desbloquear taxas de negociação mais baixas.',
@@ -434,6 +436,7 @@ export const pt = {
   faq_vultisig_make_money_title: 'Como se utiliza o Vultisig?',
   fast: 'Rápido',
   fastVault: 'Cofre Rápido',
+  secureVault: 'Cofre Seguro',
   fast_sign: 'Assinatura rápida',
   fast_vault_backup_description:
     'O armazenamento online é recomendado e seguro - os cofres compartilhados são projetados para isso.',

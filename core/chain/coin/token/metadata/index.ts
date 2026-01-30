@@ -5,6 +5,7 @@ import { TokenMetadataResolver } from './resolver'
 import { getCosmosTokenMetadata } from './resolvers/cosmos'
 import { getEvmTokenMetadata } from './resolvers/evm'
 import { getSolanaTokenMetadata } from './resolvers/solana'
+import { getTronTokenMetadata } from './resolvers/tron'
 
 const resolvers: Record<
   ChainKindWithTokenMetadataDiscovery,
@@ -13,6 +14,7 @@ const resolvers: Record<
   evm: getEvmTokenMetadata,
   solana: getSolanaTokenMetadata,
   cosmos: getCosmosTokenMetadata,
+  tron: getTronTokenMetadata,
 }
 
 export const getTokenMetadata: TokenMetadataResolver = async input => {

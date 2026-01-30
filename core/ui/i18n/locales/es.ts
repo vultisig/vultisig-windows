@@ -208,6 +208,7 @@ export const es = {
   app_permissions: 'Permisos de la aplicación',
   approval_tx: 'Aprobación Tx',
   approve: 'Aprobar',
+  applied_discounts: 'Descuentos aplicados:',
   asset: 'Activo',
   assets: 'activos',
   auto_compound_into_label: 'Compuesto automático en {{ticker}}',
@@ -337,7 +338,7 @@ export const es = {
   disconnect_all: 'Desconectar todo',
   discord: 'Discordia',
   discount: 'Descuento',
-  complete_fee_waive: 'Exención completa de tarifas',
+  complete_fee_waive: 'Sin tarifa',
   discount_tiers: 'Niveles de descuento',
   discount_tiers_description:
     'Mantenga $VULT para desbloquear tarifas comerciales más bajas.',
@@ -435,6 +436,7 @@ export const es = {
   faq_vultisig_make_money_title: '¿Cómo se utiliza Vultisig?',
   fast: 'Rápido',
   fastVault: 'Bóveda rápida',
+  secureVault: 'Bóveda segura',
   fast_sign: 'Señal rápida',
   fast_vault_backup_description:
     'Se recomienda el almacenamiento en línea y es seguro: los recursos compartidos de bóveda están diseñados para esto.',
@@ -997,6 +999,7 @@ export const es = {
   confirm_automation_creation: 'Confirmar la creación de la automatización',
   id: 'IDENTIFICACIÓN',
   import_seedphrase: 'Importar frase semilla',
+  seedPhraseImportTip: 'Consejo: Puedes usar un navegador como dispositivo',
   import_seedphrase_description: 'Entra, crea una bóveda y nunca mires atrás.',
   import_vault_share: 'Importar recurso compartido de bóveda',
   import_vault_share_description:

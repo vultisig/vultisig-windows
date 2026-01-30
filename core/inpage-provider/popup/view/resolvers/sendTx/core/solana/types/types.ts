@@ -23,6 +23,13 @@ export type SolanaTxData =
         isUnparsed?: boolean
       }
     }
+  | {
+      raw: {
+        inputCoin: Coin
+        inAmount: string
+        transactions: string[]
+      }
+    }
 
 export type AddressTableLookup = {
   accountKey: string

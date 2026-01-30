@@ -48,5 +48,8 @@
     "prettier": "^3.8.0",
     "typescript": "^5.9.3",
     "vitest": "^4.0.17"
+  },
+  "dependencies": {
+    "lottie-react": "^2.4.1"
   }
 }

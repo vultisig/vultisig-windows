@@ -69,7 +69,6 @@ export const getSharedHandlers = (chain: Chain) => {
       }
 
       const transactionDetails = getTransactionDetails()
-      console.log('transactionDetails', transactionDetails)
 
       const [{ hash }] = await callPopup(
         {

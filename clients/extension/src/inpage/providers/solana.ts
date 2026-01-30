@@ -65,7 +65,7 @@ export class Solana implements Wallet {
     [E in StandardEventsNames]?: StandardEventsListeners[E][]
   } = {}
   readonly version = '1.0.0' as const
-  readonly name = 'Vultisig' as const
+  name: string
   readonly icon = icon as `data:image/png;base64,${string}`
   private account: VultisigSolanaWalletAccount | null = null
   public isPhantom: boolean
@@ -125,7 +125,8 @@ export class Solana implements Wallet {
     return this.account ? [this.account] : []
   }
 
-  constructor() {
+  constructor(name: string) {
+    this.name = name
     this.isPhantom = true
     this.isXDEFI = true
     this.#connected()

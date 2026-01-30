@@ -141,6 +141,7 @@ export const buildSendTxKeysignPayload = async ({
         matchRecordUnion(tx, {
           swap: () => undefined,
           transfer: ({ receiverAddress }) => receiverAddress,
+          raw: () => undefined,
         }),
       psbt: psbt =>
         getPsbtTransferInfo(psbt, coin.address).recipient ?? undefined,
@@ -323,6 +324,7 @@ export const buildSendTxKeysignPayload = async ({
           }),
         }),
         transfer: () => ({ case: undefined }),
+        raw: () => ({ case: undefined }),
       }),
     psbt: () => ({ case: undefined }),
   })
@@ -390,6 +392,11 @@ export const buildSendTxKeysignPayload = async ({
         if (rawTransactions && rawTransactions.length > 0) {
           return create(SignSolanaSchema, {
             rawTransactions,
+          })
+        }
+        if ('raw' in tx && tx.raw.transactions) {
+          return create(SignSolanaSchema, {
+            rawTransactions: tx.raw.transactions,
           })
         }
         return undefined

@@ -1,4 +1,5 @@
 export const hr = {
+  seedPhraseImportTip: 'Savjet: Možete koristiti preglednik kao uređaj',
   chainFunctions: {
     custom: {
       labels: {
@@ -203,6 +204,7 @@ export const hr = {
   app_permissions: 'Dozvole aplikacije',
   approval_tx: 'Odobrenje slanja',
   approve: 'Odobriti',
+  applied_discounts: 'Primijenjeni popusti:',
   asset: 'Imovina',
   assets: 'imovina',
   auto_compound_into_label: 'Automatsko spajanje u {{ticker}}',
@@ -331,7 +333,7 @@ export const hr = {
   disconnect_all: 'Isključi sve',
   discord: 'Nesklad',
   discount: 'Popust',
-  complete_fee_waive: 'Potpuno oslobađanje od naknada',
+  complete_fee_waive: 'Bez naknade',
   discount_tiers: 'Razine popusta',
   discount_tiers_description:
     'Držite $VULT kako biste otključali niže naknade za trgovanje.',
@@ -429,6 +431,7 @@ export const hr = {
   faq_vultisig_make_money_title: 'Kako se koristi Vultisig?',
   fast: 'Brzo',
   fastVault: 'Brzi trezor',
+  secureVault: 'Siguran trezor',
   fast_sign: 'Brzi znak',
   fast_vault_backup_description:
     'Preporučuje se i sigurna je online pohrana - dijeljeni trezori su namijenjeni za to.',

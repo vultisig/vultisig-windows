@@ -11,6 +11,7 @@ export type BlockaidTxSimulationInputResolverInput<
   payload: KeysignPayload
   walletCore: WalletCore
   chain: T
+  raw?: string[]
 }
 
 export type BlockaidTxSimulationInputResolver<
@@ -20,6 +21,7 @@ export type BlockaidTxSimulationInputResolver<
     payload: KeysignPayload
     walletCore: WalletCore
     chain: T
+    raw?: string[]
   },
   BlockaidTxSimulationInput['data'] | null
 >

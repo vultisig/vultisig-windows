@@ -148,6 +148,7 @@ type MsgPayload =
 type TransactionDetailsAsset = {
   ticker: string
   mint?: string
+  contractAddress?: string
 }
 
 export type TransactionDetails = {
