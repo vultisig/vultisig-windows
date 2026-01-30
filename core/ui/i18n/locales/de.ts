@@ -438,6 +438,7 @@ export const de = {
   faq_vultisig_make_money_title: 'Wie wird Vultisig verwendet?',
   fast: 'Schnell',
   fastVault: 'Schneller Tresor',
+  secureVault: 'Sicherer Tresor',
   fast_sign: 'Schnelles Zeichen',
   fast_vault_backup_description:
     'Online-Speicher ist empfehlenswert und sicher – Vault-Speicher sind genau dafür konzipiert.',

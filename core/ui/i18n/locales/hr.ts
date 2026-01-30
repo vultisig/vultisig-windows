@@ -431,6 +431,7 @@ export const hr = {
   faq_vultisig_make_money_title: 'Kako se koristi Vultisig?',
   fast: 'Brzo',
   fastVault: 'Brzi trezor',
+  secureVault: 'Siguran trezor',
   fast_sign: 'Brzi znak',
   fast_vault_backup_description:
     'Preporučuje se i sigurna je online pohrana - dijeljeni trezori su namijenjeni za to.',

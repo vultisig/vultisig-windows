@@ -333,6 +333,7 @@ export const nl = {
   faq_vultisig_make_money_title: 'Hoe wordt Vultisig gebruikt?',
   fast: 'Snel',
   fastVault: 'Fast Vault',
+  secureVault: 'Veilige Kluis',
   fast_vault_password_start_keysign_description:
     'Bevestig de transactie door het wachtwoord van je server-share in te voeren.',
   fastVaultSetup: {

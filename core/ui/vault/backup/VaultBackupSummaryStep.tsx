@@ -11,16 +11,18 @@ import { CloudCheckIcon } from '@lib/ui/icons/CloudCheckIcon'
 import { CloudStackIcon } from '@lib/ui/icons/CloudStackIcon'
 import { EmailIcon } from '@lib/ui/icons/EmailIcon'
 import { LightningIcon } from '@lib/ui/icons/LightningIcon'
+import { ShieldIcon } from '@lib/ui/icons/ShieldIcon'
 import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { HStack, hStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { OnFinishProp } from '@lib/ui/props'
+import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 import { useCoreNavigate } from '../../navigation/hooks/useCoreNavigate'
 
@@ -40,44 +42,65 @@ const Wrapper = styled(VStack)`
   max-width: 550px;
   width: 100%;
   gap: 64px;
-`
+  padding-block: 16px;
+  border: 1px dashed var(--Borders-Light, #11284a);
 
-const LightningIconWrapper = styled.div`
-  font-size: 20px;
-  color: ${getColor('idle')};
-`
-
-const ContentWrapper = styled(VStack)`
-  padding: 24px;
   background: rgba(92, 167, 255, 0.03);
-  border-top: 1px dashed ${getColor('foregroundExtra')};
-  border-bottom: 1px dashed ${getColor('foregroundExtra')};
+
+  border-top: 2px dashed ${getColor('foregroundExtra')};
+  border-bottom: 2px dashed ${getColor('foregroundExtra')};
+`
+
+const BadgeIconWrapper = styled.div<{ isSecure?: boolean }>`
+  font-size: 16px;
+  color: ${({ isSecure }) =>
+    isSecure ? getColor('success') : getColor('idle')};
+`
+
+const ContentWrapper = styled(VStack)<{ isSecure?: boolean }>`
+  padding: 24px;
+  background: ${({ isSecure }) =>
+    isSecure ? 'rgba(0, 128, 0, 0.03)' : 'rgba(92, 167, 255, 0.03)'};
+
   gap: 24px;
   font-size: 24px;
   ${borderRadius.s};
 `
 
-const PillWrapper = styled(HStack)`
+const PillWrapper = styled(HStack)<{
+  showLine?: boolean
+  isSecure?: boolean
+}>`
   position: relative;
   padding: 8px 12px;
-  background-color: ${getColor('foreground')};
-  border: 1px solid ${getColor('foregroundExtra')};
+  background-color: #07203e;
+  border: 2px solid
+    ${({ isSecure }) =>
+      isSecure ? getColor('foreground') : getColor('foregroundExtra')};
   border-radius: 0px 9999px 9999px 0px;
   max-width: fit-content;
-  border-left: 2px solid ${getColor('foregroundDark')};
 
-  &:before {
-    content: '';
-    position: absolute;
-    left: -2px;
-    bottom: -463px;
-    height: 463px;
-    width: 2px;
-    background-color: ${getColor('foreground')};
-  }
+  ${hStack({
+    justifyContent: 'center',
+    alignItems: 'center',
+  })};
+
+  ${({ showLine }) =>
+    showLine &&
+    css`
+      &:before {
+        content: '';
+        position: absolute;
+        left: -3px;
+        bottom: -463px;
+        height: 501px;
+        width: 2px;
+        background-color: ${getColor('foreground')};
+      }
+    `}
 `
 
-const SummaryListItem = styled(HStack)`
+const SummaryListItem = styled(HStack)<{ showLine?: boolean }>`
   position: relative;
   gap: 12px;
   padding: 16px;
@@ -97,7 +120,7 @@ const SummaryListItem = styled(HStack)`
   }
 `
 
-const IconWrapper = styled(VStack)`
+const IconWrapper = styled(VStack)<{ isSecure?: boolean }>`
   justify-content: center;
   width: 24px;
   height: 24px;
@@ -149,34 +172,47 @@ export const VaultBackupSummaryStep: FC<SetupVaultSummaryStepProps> = ({
         animationConfig="bottomToTop"
         delay={300}
       >
-        <Wrapper data-testid="OnboardingSummary-Wrapper">
-          {isFastVault && (
+        <VStack
+          style={{
+            position: 'relative',
+          }}
+          gap={32}
+        >
+          <Wrapper data-testid="OnboardingSummary-Wrapper">
             <PillWrapper
               data-testid="OnboardingSummary-PillWrapper"
               alignItems="center"
               gap={8}
+              showLine={true}
+              isSecure={!isFastVault}
             >
-              <LightningIconWrapper>
-                <LightningIcon />
-              </LightningIconWrapper>
+              <BadgeIconWrapper isSecure={!isFastVault}>
+                {isFastVault ? <LightningIcon /> : <ShieldIcon />}
+              </BadgeIconWrapper>
               <Text size={12} color="shy">
-                {t('fastVault')}
+                {isFastVault ? t('fastVault') : t('secureVault')}
               </Text>
             </PillWrapper>
-          )}
-          <ContentWrapper>
-            <Text variant="h1Regular">{t('backupGuide')}</Text>
-            <VStack gap={24}>
-              {summaryItems.map(({ title, icon }) => (
-                <SummaryListItem alignItems="center" key={title}>
-                  <IconWrapper>{icon}</IconWrapper>
-                  <Text color="contrast" weight={500} size={13}>
-                    {title}
-                  </Text>
-                </SummaryListItem>
-              ))}
-            </VStack>
-          </ContentWrapper>
+            <ContentWrapper isSecure={!isFastVault}>
+              <Text variant="h1Regular">{t('backupGuide')}</Text>
+              <VStack gap={24}>
+                {summaryItems.map(({ title, icon }) => (
+                  <SummaryListItem
+                    alignItems="center"
+                    key={title}
+                    showLine={isFastVault}
+                  >
+                    <IconWrapper isSecure={!isFastVault}>{icon}</IconWrapper>
+                    <Text color="contrast" weight={500} size={13}>
+                      {title}
+                    </Text>
+                  </SummaryListItem>
+                ))}
+              </VStack>
+            </ContentWrapper>
+          </Wrapper>
+          <BlurEffect />
+
           <VStack gap={16}>
             <HStack
               role="button"
@@ -208,8 +244,28 @@ export const VaultBackupSummaryStep: FC<SetupVaultSummaryStepProps> = ({
               </>
             )}
           </VStack>
-        </Wrapper>
+        </VStack>
       </AnimatedVisibility>
     </SummaryContainer>
   )
 }
+
+const BlurEffect = styled.div`
+  position: absolute;
+  border-radius: 16px;
+  border-radius: 350px;
+  height: 450px;
+  width: 500px;
+  top: 150px;
+  left: -50px;
+  opacity: 0.7;
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    rgba(50, 72, 132, 0.5) 0%,
+    rgba(2, 18, 43, 0) 100%
+  );
+  filter: blur(36px);
+
+  @media ${mediaQuery.tabletDeviceAndUp} {
+  }
+`

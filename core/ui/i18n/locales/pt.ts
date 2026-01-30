@@ -436,6 +436,7 @@ export const pt = {
   faq_vultisig_make_money_title: 'Como se utiliza o Vultisig?',
   fast: 'Rápido',
   fastVault: 'Cofre Rápido',
+  secureVault: 'Cofre Seguro',
   fast_sign: 'Assinatura rápida',
   fast_vault_backup_description:
     'O armazenamento online é recomendado e seguro - os cofres compartilhados são projetados para isso.',
