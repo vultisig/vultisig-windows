@@ -52,7 +52,7 @@ export const SearchField: React.FC<SearchFieldProps> = ({
         type="text"
         value={query}
         onChange={handleChange}
-        placeholder={!isFocused ? `  ${t('search_field_placeholder')}` : ''}
+        placeholder={!isFocused ? t('search_field_placeholder') : ''}
       />
     </Wrapper>
   )
@@ -68,7 +68,7 @@ const Wrapper = styled(HStack)`
 
 const SearchIconWrapper = styled(VStack)`
   color: ${getColor('textShy')};
-  font-size: 16px;
+  font-size: 20px;
   left: 8px;
   position: absolute;
   top: 50%;
@@ -77,7 +77,7 @@ const SearchIconWrapper = styled(VStack)`
 
 const StyledInput = styled.input.attrs({ autoComplete: 'off' })`
   width: 100%;
-  padding-left: 20px;
+  padding-left: 32px;
   line-height: 20px;
   font-size: 16px;
   border-radius: 4px;
@@ -85,6 +85,7 @@ const StyledInput = styled.input.attrs({ autoComplete: 'off' })`
   transition: border-color 0.2s;
   background-color: transparent;
   color: ${getColor('textShy')};
+  font-weight: 500;
 
   &::placeholder {
     color: ${getColor('textShy')};

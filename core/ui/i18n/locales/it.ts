@@ -440,6 +440,7 @@ export const it = {
   faq_vultisig_make_money_title: 'Come si usa Vultisig?',
   fast: 'Veloce',
   fastVault: 'Deposito veloce',
+  secureVault: 'Deposito sicuro',
   fast_sign: 'Segnale veloce',
   fast_vault_backup_description:
     "L'archiviazione online è consigliata e sicura: le condivisioni Vault sono progettate per questo scopo.",

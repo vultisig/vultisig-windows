@@ -330,6 +330,7 @@ export const ru = {
   faq_vultisig_make_money_title: 'Как используется Vultisig?',
   fast: 'Быстро',
   fastVault: 'Fast Vault',
+  secureVault: 'Надёжное Хранилище',
   fast_vault_password_start_keysign_description:
     'Подтвердите транзакцию, введя пароль вашей серверной доли.',
   fastVaultSetup: {
