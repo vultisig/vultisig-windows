@@ -408,6 +408,7 @@ export const en = {
   folder_name: 'Folder name',
   folder_name_already_exists: 'Folder name must be unique',
   folder_name_required: 'Folder name is required',
+  folder_at_least_one_vault_required: 'At least one vault is required',
   folders: 'Folders',
   follow_banner_button: 'Follow @Vultisig',
   follow_banner_subtitle: 'Vultisig is building with you.',

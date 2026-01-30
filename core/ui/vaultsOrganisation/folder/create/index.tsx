@@ -56,8 +56,10 @@ export const CreateVaultFolderPage = () => {
 
     if (names.includes(name)) return t('folder_name_already_exists')
 
+    if (vaultIds.length === 0) return t('folder_at_least_one_vault_required')
+
     return null
-  }, [name, t, names])
+  }, [name, t, names, vaultIds.length])
 
   const toggleVault = (vaultId: string) => {
     setVaultIds(prevVaultIds =>
