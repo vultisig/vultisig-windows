@@ -12,6 +12,7 @@ import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
 import { PageHeaderBackButton } from '../../flow/PageHeaderBackButton'
+import { useResponsiveness } from '../../providers/ResponsivenessProvider'
 import { useCore } from '../../state/core'
 import { useVultDiscountTierQuery } from './queries/tier'
 import { VultDiscountTier } from './tier'
@@ -21,6 +22,8 @@ export const VultDiscountPage = () => {
   const { openUrl } = useCore()
 
   const tierQuery = useVultDiscountTierQuery()
+
+  const { isTabletOrLarger } = useResponsiveness()
 
   return (
     <VStack fullHeight gap={10}>
@@ -33,7 +36,7 @@ export const VultDiscountPage = () => {
           </IconButton>
         }
       />
-      <FitPageContent contentMaxWidth={360}>
+      <FitPageContent contentMaxWidth={isTabletOrLarger ? 600 : 360}>
         <VStack gap={24}>
           <img src="/core/images/vult-banner.png" alt="Vult Banner" />
           <VStack gap={12}>
