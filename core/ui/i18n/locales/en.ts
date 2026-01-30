@@ -889,6 +889,7 @@ export const en = {
   to_asset: 'To Asset',
   token_not_found_description:
     'Possible reasons: wrong contract, unsupported chain, or token removed from registries.',
+  token_not_found_invalid: 'Invalid contract address',
   tokens: 'tokens',
   total_fee: 'Total Fees',
   track: 'Track',
