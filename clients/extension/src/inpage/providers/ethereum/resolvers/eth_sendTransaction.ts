@@ -15,7 +15,7 @@ export const sendEthTransaction = async ([tx]: [
 
   const { decimals, ticker } = chainFeeCoin[chain]
 
-  const { hash } = await callPopup(
+  const [{ hash }] = await callPopup(
     {
       sendTx: {
         keysign: {
