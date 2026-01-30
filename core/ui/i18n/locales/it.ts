@@ -450,6 +450,7 @@ export const it = {
   folder_name: 'Nome della cartella',
   folder_name_already_exists: 'Il nome della cartella deve essere univoco',
   folder_name_required: 'Il nome della cartella è obbligatorio',
+  folder_at_least_one_vault_required: 'È richiesto almeno un vault',
   folders: 'Cartelle',
   follow_banner_button: 'Segui @Vultisig',
   follow_banner_subtitle: 'Vultisig costruisce con te.',

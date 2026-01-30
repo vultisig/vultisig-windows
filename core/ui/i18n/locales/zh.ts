@@ -412,6 +412,7 @@ export const zh = {
   folder_name: '文件夹名称',
   folder_name_already_exists: '文件夹名称必须唯一',
   folder_name_required: '文件夹名称为必填项',
+  folder_at_least_one_vault_required: '至少需要一个保险库',
   folders: '文件夹',
   follow_banner_button: '关注 @Vultisig',
   follow_banner_subtitle: 'Vultisig 与您携手共建。',

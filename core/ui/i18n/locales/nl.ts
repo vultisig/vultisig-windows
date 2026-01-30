@@ -416,6 +416,7 @@ export const nl = {
   folder_name: 'Mapnaam',
   folder_name_already_exists: 'Mapnaam moet uniek zijn',
   folder_name_required: 'Mapnaam is verplicht',
+  folder_at_least_one_vault_required: 'Minimaal één kluis is vereist',
   folders: 'Mappen',
   follow_banner_button: 'Volg @Vultisig',
   follow_banner_subtitle: 'Vultisig bouwt samen met jou.',

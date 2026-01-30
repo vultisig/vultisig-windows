@@ -412,6 +412,7 @@ export const ru = {
   folder_name: 'Имя папки',
   folder_name_already_exists: 'Имя папки должно быть уникальным',
   folder_name_required: 'Имя папки обязательно',
+  folder_at_least_one_vault_required: 'Требуется как минимум одно хранилище',
   folders: 'Папки',
   follow_banner_button: 'Подписаться на @Vultisig',
   follow_banner_subtitle: 'Vultisig строит вместе с вами.',

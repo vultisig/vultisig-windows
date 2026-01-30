@@ -446,6 +446,7 @@ export const pt = {
   folder_name: 'Nome da pasta',
   folder_name_already_exists: 'O nome da pasta deve ser único.',
   folder_name_required: 'É necessário nomear a pasta.',
+  folder_at_least_one_vault_required: 'Pelo menos um cofre é necessário',
   folders: 'Pastas',
   follow_banner_button: 'Siga @Vultisig',
   follow_banner_subtitle: 'Vultisig está construindo com você.',
