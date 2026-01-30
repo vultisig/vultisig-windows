@@ -402,6 +402,7 @@ export const zh = {
   faq_vultisig_make_money_title: 'Vultisig 如何使用？?',
   fast: '快速地',
   fastVault: '快速金库',
+  secureVault: '安全金库',
   fast_sign: '快速签名',
   fast_vault_backup_description:
     '推荐使用在线存储，安全可靠——Vault 共享就是为此而设计的。',

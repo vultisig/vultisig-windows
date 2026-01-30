@@ -327,10 +327,11 @@ export const en = {
   faq_vultisig_make_money_title: 'How is Vultisig used?',
   fast: 'Fast',
   fastVault: 'Fast Vault',
+  secureVault: 'Secure Vault',
   fast_vault_password_start_keysign_description:
     'Confirm the transaction by entering the password of your server share.',
   fastVaultSetup: {
-    addOptionalHint: 'Add an optional hint',
+    addOptionalHint: 'Add Hint (Optional)',
     backup: {
       backThemUpNow: 'back them up now',
       backupConfirmationDescription: 'Backup your vault share online',

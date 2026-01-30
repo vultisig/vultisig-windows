@@ -436,6 +436,7 @@ export const es = {
   faq_vultisig_make_money_title: '¿Cómo se utiliza Vultisig?',
   fast: 'Rápido',
   fastVault: 'Bóveda rápida',
+  secureVault: 'Bóveda segura',
   fast_sign: 'Señal rápida',
   fast_vault_backup_description:
     'Se recomienda el almacenamiento en línea y es seguro: los recursos compartidos de bóveda están diseñados para esto.',
