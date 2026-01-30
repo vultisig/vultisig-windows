@@ -15,12 +15,14 @@ export const DiscountTierMinBalance = ({
   const { t } = useTranslation()
   return (
     <VStack gap={4}>
-      <Text color="shy" size={13} weight="500">
+      <Text size={13} color="shy">
         {t('stake')}
       </Text>
-      {formatAmount(vultDiscountTierMinBalances[value], {
-        ticker: `$${vult.ticker}`,
-      })}
+      <Text size={14} weight={550}>
+        {formatAmount(vultDiscountTierMinBalances[value], {
+          ticker: `$${vult.ticker}`,
+        })}
+      </Text>
     </VStack>
   )
 }
