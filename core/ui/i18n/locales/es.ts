@@ -338,7 +338,7 @@ export const es = {
   disconnect_all: 'Desconectar todo',
   discord: 'Discordia',
   discount: 'Descuento',
-  complete_fee_waive: 'Exención completa de tarifas',
+  complete_fee_waive: 'Sin tarifa',
   discount_tiers: 'Niveles de descuento',
   discount_tiers_description:
     'Mantenga $VULT para desbloquear tarifas comerciales más bajas.',

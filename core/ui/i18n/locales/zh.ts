@@ -317,7 +317,7 @@ export const zh = {
   disconnect_all: '断开所有连接',
   discord: 'Discord',
   discount: '折扣',
-  complete_fee_waive: '完全免除费用',
+  complete_fee_waive: '无费用',
   discount_tiers: '折扣等级',
   discount_tiers_description: '持有 $VULT 即可享受更低的交易手续费。',
   discovering_mediator: '正在查找调解服务，请稍候……',

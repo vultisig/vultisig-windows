@@ -333,7 +333,7 @@ export const hr = {
   disconnect_all: 'Isključi sve',
   discord: 'Nesklad',
   discount: 'Popust',
-  complete_fee_waive: 'Potpuno oslobađanje od naknada',
+  complete_fee_waive: 'Bez naknade',
   discount_tiers: 'Razine popusta',
   discount_tiers_description:
     'Držite $VULT kako biste otključali niže naknade za trgovanje.',

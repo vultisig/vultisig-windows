@@ -233,7 +233,7 @@ export const nl = {
   disconnect_all: 'Alles verbreken',
   discord: 'Discord',
   discount: 'Korting',
-  complete_fee_waive: 'Volledige fee-kwijtschelding',
+  complete_fee_waive: 'Geen kosten',
   discount_tiers: 'Kortingsniveaus',
   discount_tiers_description:
     'Houd $VULT aan om lagere trading fees te ontgrendelen.',

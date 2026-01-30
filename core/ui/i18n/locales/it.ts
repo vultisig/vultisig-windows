@@ -342,7 +342,7 @@ export const it = {
   disconnect_all: 'Disconnetti tutto',
   discord: 'Discordia',
   discount: 'Sconto',
-  complete_fee_waive: 'Esenzione completa dalle commissioni',
+  complete_fee_waive: 'Nessuna commissione',
   discount_tiers: 'Livelli di sconto',
   discount_tiers_description:
     'Mantieni $VULT per sbloccare commissioni di trading più basse.',
