@@ -425,7 +425,7 @@ export const en = {
   general: 'General',
   generating_ecdsa_key: 'Generating ECDSA Key',
   generating_eddsa_key: 'Generating EdDSA Key',
-  get_started: 'Get Started',
+  get_started: 'Get started',
   github: 'Github',
   go_back: 'Go Back',
   go_to_vault: 'Go to vault',
@@ -708,12 +708,11 @@ export const en = {
   referral_expiration_minimum: 'Minimum 1 year',
   referral_extension_fee: 'Referral extension fee',
   referral_fee_amount_minimum: 'Minimum {{amount}} RUNE',
-  referral_landing_title:
-    '<0>Invite friends</0>. <1>Earn rewards</1>. Save on fees.',
+  referral_landing_title: 'Invite friends. <g>Earn rewards.</g> Save on fees.',
   referral_program: 'Referral Program',
   referral_reg_fee: 'Registration Fee',
   referral_status: 'Status',
-  referrals_create_page_title: 'Vultisig - Referrals',
+  referrals_create_page_title: 'Vultisig Referrals',
   referrals_default_title: 'Referral',
   referrals_summary: {
     item_1: {
@@ -826,7 +825,7 @@ export const en = {
   share2StoredByYou: 'Vault Share 2 stored by you',
   share_app: 'Share the app',
   share_description:
-    'Share your unique referral code to invite friends. They get a discount and the more they trade, the more you earn — directly to your wallet.',
+    'Share your unique referral code to invite friends. They get a discount and the more they trade, the more you earn — directly delivered to your vault.',
   share_vault_qr: 'Share Vault QR',
   shares: 'Shares',
   show_balance: 'Show balance',

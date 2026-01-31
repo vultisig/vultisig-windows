@@ -1,19 +1,17 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import {
+  useHasFinishedReferralsOnboardingQuery,
+  useSetHasFinishedReferralsOnboardingMutation,
+} from '@core/ui/storage/referrals'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { CenterAbsolutely } from '@lib/ui/layout/CenterAbsolutely'
 import { Spinner } from '@lib/ui/loaders/Spinner'
-import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
-import {
-  useHasFinishedReferralsOnboardingQuery,
-  useSetHasFinishedReferralsOnboardingMutation,
-} from '../../../storage/referrals'
 import { ManageReferrals } from './components/ManageReferrals'
 import { ReferralLanding } from './components/ReferralLanding'
 import { ReferralsSummary } from './components/ReferralSummary'
@@ -40,9 +38,7 @@ export const ReferralPage = () => {
   const { refetch } = validThorchainNameQuery
 
   useEffect(() => {
-    if (isOnboarded) {
-      refetch()
-    }
+    if (isOnboarded) refetch()
   }, [isOnboarded, refetch])
 
   return (
@@ -61,20 +57,18 @@ export const ReferralPage = () => {
                 primaryControls={<PageHeaderBackButton />}
                 title={t('referrals_default_title')}
               />
-              <ContentWrapper>
-                <Match
-                  value={step}
-                  landing={() => <ReferralLanding onFinish={toNextStep} />}
-                  summary={() => (
-                    <ReferralsSummary
-                      onFinish={() => {
-                        setHasFinishedOnboarding(true)
-                        toNextStep()
-                      }}
-                    />
-                  )}
-                />
-              </ContentWrapper>
+              <Match
+                value={step}
+                landing={() => <ReferralLanding onFinish={toNextStep} />}
+                summary={() => (
+                  <ReferralsSummary
+                    onFinish={() => {
+                      setHasFinishedOnboarding(true)
+                      toNextStep()
+                    }}
+                  />
+                )}
+              />
             </>
           )
         }
@@ -95,7 +89,3 @@ export const ReferralPage = () => {
     />
   )
 }
-
-const ContentWrapper = styled(PageContent)`
-  overflow-y: hidden;
-`
