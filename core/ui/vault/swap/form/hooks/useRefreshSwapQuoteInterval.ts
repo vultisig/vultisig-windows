@@ -11,12 +11,12 @@ export const useRefreshSwapQuoteInterval = (countdownTime: Seconds) => {
     useSwapQuoteQuery()
   const { mutate: refreshQuote } = useRefreshSwapQuoteMutation()
 
-  // Reset timer when a new quote is received or when quote starts loading
+  // Reset timer when a new quote is received
   useEffect(() => {
-    if (swapQuoteData || isSwapQuotePending) {
+    if (swapQuoteData) {
       setTimeLeft(countdownTime)
     }
-  }, [countdownTime, isSwapQuotePending, swapQuoteData])
+  }, [countdownTime, swapQuoteData])
 
   useEffect(() => {
     if (timeLeft === 0) {
