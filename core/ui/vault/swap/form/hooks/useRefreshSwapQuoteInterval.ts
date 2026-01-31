@@ -7,8 +7,7 @@ import { useSwapQuoteQuery } from '../../queries/useSwapQuoteQuery'
 export const useRefreshSwapQuoteInterval = (countdownTime: Seconds) => {
   const [timeLeft, setTimeLeft] = useState(0)
 
-  const { data: swapQuoteData, isPending: isSwapQuotePending } =
-    useSwapQuoteQuery()
+  const { data: swapQuoteData } = useSwapQuoteQuery()
   const { mutate: refreshQuote } = useRefreshSwapQuoteMutation()
 
   // Reset timer when a new quote is received
