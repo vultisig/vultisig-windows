@@ -23,13 +23,14 @@ type FormatAmountOptions =
 
 export const formatAmount = (
   amount: number,
-  options: FormatAmountOptions = { precision: 'medium' }
+  options: FormatAmountOptions = { precision: 'medium' },
+  suffix?: string
 ): string => {
-  if (amount > billion) {
-    return `${formatAmount(amount / billion, options)}B`
+  if (amount >= billion) {
+    return formatAmount(amount / billion, options, 'B')
   }
-  if (amount > million) {
-    return `${formatAmount(amount / million, options)}M`
+  if (amount >= million) {
+    return formatAmount(amount / million, options, 'M')
   }
 
   const isCurrency = options && 'currency' in options
@@ -54,9 +55,15 @@ export const formatAmount = (
 
   const formattedAmount = formatter.format(amount)
 
-  if (options && 'ticker' in options) {
-    return `${formattedAmount} ${options.ticker}`
+  let result = formattedAmount
+
+  if (suffix) {
+    result = `${formattedAmount}${suffix}`
   }
 
-  return formattedAmount
+  if (options && 'ticker' in options) {
+    return `${result} ${options.ticker}`
+  }
+
+  return result
 }
