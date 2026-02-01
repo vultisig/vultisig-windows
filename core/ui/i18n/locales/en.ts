@@ -186,9 +186,14 @@ export const en = {
   create_new_vault: 'Create New Vault',
   create_own_referral:
     'Create your own code and earn <blue>20%</blue> on referred swaps',
-  create_referral: 'Create Referral',
   create_referral_form: 'Create referral',
   create_referral_title: 'Create Referral',
+  create_referral: 'Create Referral',
+  create_referral_desc:
+    'Create your own code and earn <c>20%</c> on referred swaps',
+  save_referral: 'Save Referral',
+  save_referral_desc:
+    'Save a friend’s referral code and save <c>10%</c> on swaps.',
   creating_vault: 'Creating Vault',
   currency: 'Currency',
   current_expiry: 'Current expiry',
@@ -712,7 +717,7 @@ export const en = {
   referral_program: 'Referral Program',
   referral_reg_fee: 'Registration Fee',
   referral_status: 'Status',
-  referrals_create_page_title: 'Vultisig Referrals',
+  manage_referral_title: 'Vultisig Referrals',
   referrals_default_title: 'Referral',
   referrals_summary: {
     item_1: {

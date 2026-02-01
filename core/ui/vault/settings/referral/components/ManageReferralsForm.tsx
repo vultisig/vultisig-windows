@@ -1,7 +1,10 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCore } from '@core/ui/state/core'
 import { useAssertCurrentVaultId } from '@core/ui/storage/currentVaultId'
-import { useFriendReferralQuery } from '@core/ui/storage/referrals'
+import {
+  useFriendReferralQuery,
+  useSetFriendReferralMutation,
+} from '@core/ui/storage/referrals'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { Button } from '@lib/ui/buttons/Button'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
@@ -9,14 +12,13 @@ import {
   textInputHeight,
   textInputHorizontalPadding,
 } from '@lib/ui/css/textInput'
-import { Divider } from '@lib/ui/divider'
 import { ClipboardCopyIcon } from '@lib/ui/icons/ClipboardCopyIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
-import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
+import { OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { attempt } from '@lib/utils/attempt'
@@ -27,25 +29,15 @@ import styled from 'styled-components'
 
 import { useFriendReferralValidation } from './EditFriendReferralForm/hooks/useFriendReferralValidation'
 import { FormFieldErrorText } from './Referrals.styled'
-import { SafeImage } from '@lib/ui/images/SafeImage'
 
-type Props = {
-  onSaveReferral: (friendReferral: string) => void
-  onCreateReferral: () => void
-  onEditFriendReferral: () => void
-}
-
-const copyButtonSize = 27
-
-export const ManageReferralsForm = ({
-  onSaveReferral,
-  onCreateReferral,
-  onEditFriendReferral,
-}: Props) => {
+export const ManageReferralsForm = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
   const [value, setValue] = useState('')
   const vaultId = useAssertCurrentVaultId()
-  const { data: friendReferral } = useFriendReferralQuery(vaultId)
+  const { data: friendReferral, isLoading: isFriendReferralLoading } =
+    useFriendReferralQuery(vaultId)
+  const { mutateAsync: setFriendReferral } =
+    useSetFriendReferralMutation(vaultId)
   const { getClipboardText } = useCore()
   const error = useFriendReferralValidation(value)
   const disabled = friendReferral
@@ -58,6 +50,21 @@ export const ManageReferralsForm = ({
     if (data) setValue(data)
   }
 
+  const handleSave = () => {
+    const newFriendReferral = value.trim()
+
+    if (isFriendReferralLoading) return
+
+    if (friendReferral) {
+      onFinish()
+      return
+    }
+
+    if (newFriendReferral) {
+      setFriendReferral(newFriendReferral)
+    }
+  }
+
   useEffect(() => {
     if (friendReferral) setValue(friendReferral)
   }, [friendReferral])
@@ -66,15 +73,9 @@ export const ManageReferralsForm = ({
     <>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
-        title={t('referrals_create_page_title')}
+        title={t('manage_referral_title')}
       />
-      <PageContent alignItems="center" scrollable>
-        <VStack flexGrow>
-          <SafeImage
-            src="/core/images/crypto-natives.png"
-            render={props => <VStack as="img" {...props} />}
-          />
-        </VStack>
+      <PageContent alignItems="center">
         <VStack gap={16} maxWidth={480} fullWidth>
           <VStack gap={8}>
             <Text centerHorizontally size={14}>
@@ -107,7 +108,7 @@ export const ManageReferralsForm = ({
                   </UnstyledButton>
                 }
                 actionPlacerStyles={{
-                  bottom: (textInputHeight - copyButtonSize) / 2,
+                  bottom: (textInputHeight - 28) / 2,
                   right: textInputHorizontalPadding,
                 }}
               />
@@ -118,9 +119,7 @@ export const ManageReferralsForm = ({
           </VStack>
           <SaveReferralButton
             disabled={disabled}
-            onClick={() =>
-              friendReferral ? onEditFriendReferral() : onSaveReferral(value)
-            }
+            onClick={() => (friendReferral ? onFinish() : handleSave())}
           >
             <Text as="span" color="contrast">
               {friendReferral
@@ -128,16 +127,6 @@ export const ManageReferralsForm = ({
                 : t('add_referral_code')}
             </Text>
           </SaveReferralButton>
-          <Divider text={t('or').toUpperCase()} />
-          <Text size={14} centerHorizontally>
-            <Trans
-              i18nKey="create_own_referral"
-              components={{
-                blue: <Text as="span" color="primaryAlt" size={14} />,
-              }}
-            />
-          </Text>
-          <Button onClick={onCreateReferral}>{t('create_referral')}</Button>
         </VStack>
       </PageContent>
     </>
