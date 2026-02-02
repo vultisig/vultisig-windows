@@ -3,6 +3,7 @@ import { KeygenOperation } from '@core/mpc/keygen/KeygenOperation'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { CreateVaultSuccessScreen } from '@core/ui/mpc/keygen/create/CreateVaultSuccessScreen'
+import { usePendingReferral } from '@core/ui/mpc/keygen/create/state/pendingReferral'
 import { useKeygenMutation } from '@core/ui/mpc/keygen/mutations/useKeygenMutation'
 import { KeygenPendingState } from '@core/ui/mpc/keygen/progress/KeygenPendingState'
 import { useKeygenOperation } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
@@ -33,6 +34,7 @@ export const KeygenFlow = ({
   const { t } = useTranslation()
 
   const keygenOperation = useKeygenOperation()
+  const [pendingReferral] = usePendingReferral()
 
   const title = matchRecordUnion<KeygenOperation, string>(keygenOperation, {
     create: () => t('creating_vault'),
@@ -70,6 +72,7 @@ export const KeygenFlow = ({
                   value={vault}
                   onFinish={onFinish}
                   onBack={onBack}
+                  pendingReferral={pendingReferral}
                 />
               )}
               to={() => <KeygenFlowEnding onBack={onBack} />}
