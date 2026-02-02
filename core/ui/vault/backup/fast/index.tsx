@@ -2,6 +2,7 @@ import { verifyVaultEmailCode } from '@core/mpc/fast/api/verifyVaultEmailCode'
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import {
   MultiCharacterInput,
   MultiCharacterInputProps,
@@ -19,10 +20,18 @@ import { useTranslation } from 'react-i18next'
 const onCompleteDelay = 1000
 const emailConfirmationCodeLength = 4
 
+type EmailConfirmationProps = OnFinishProp &
+  OnBackProp & {
+    email: string
+    onChangeEmailAndRestart?: () => void
+  }
+
 export const EmailConfirmation = ({
   onFinish,
   onBack,
-}: OnFinishProp & OnBackProp) => {
+  email,
+  onChangeEmailAndRestart,
+}: EmailConfirmationProps) => {
   const [input, setInput] = useState<string | null>('')
 
   const { t } = useTranslation()
@@ -91,6 +100,18 @@ export const EmailConfirmation = ({
             validation={inputState}
             length={emailConfirmationCodeLength}
           />
+        </VStack>
+        <VStack alignItems="center" gap={8}>
+          <Text size={13} color="shy">
+            {t('fastVaultSetup.backup.sentTo', { email })}
+          </Text>
+          {onChangeEmailAndRestart && (
+            <UnstyledButton onClick={onChangeEmailAndRestart}>
+              <Text size={13} color="primary">
+                {t('fastVaultSetup.backup.changeEmailAndRestartKeygen')}
+              </Text>
+            </UnstyledButton>
+          )}
         </VStack>
       </PageContent>
     </VStack>
