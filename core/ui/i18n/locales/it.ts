@@ -62,6 +62,8 @@ export const it = {
       shareSecurely: "per garantire l'accesso, preferibilmente",
       vaultShares: 'Il tuo caveau contiene 2 azioni,',
       wellDone: 'Ben fatto',
+      sentTo: 'Sent to {{email}}.',
+      changeEmailAndRestartKeygen: 'Change email and restart keygen',
     },
     createVault: {
       availablePlatforms: {
