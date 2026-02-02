@@ -449,6 +449,7 @@ export const de = {
   folder_name: 'Ordnername',
   folder_name_already_exists: 'Der Ordnername muss eindeutig sein.',
   folder_name_required: 'Ein Ordnername ist erforderlich.',
+  folder_at_least_one_vault_required: 'Mindestens ein Vault ist erforderlich',
   folders: 'Ordner',
   follow_banner_button: 'Folge @Vultisig',
   follow_banner_subtitle: 'Vultisig baut mit Ihnen zusammen.',

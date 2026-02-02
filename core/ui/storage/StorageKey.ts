@@ -3,7 +3,6 @@ export enum StorageKey {
   fiatCurrency = 'fiatCurrency',
   currentVaultId = 'currentVaultId',
   vaultsCoins = 'vaultsCoins',
-  defaultChains = 'defaultChains',
   defiChains = 'defiChains',
   defiPositions = 'defiPositions',
   vaultFolders = 'vaultFolders',
