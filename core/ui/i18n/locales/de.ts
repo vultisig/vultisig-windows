@@ -207,6 +207,7 @@ export const de = {
   app_permissions: 'App-Berechtigungen',
   approval_tx: 'Genehmigung Tx',
   approve: 'Genehmigen',
+  applied_discounts: 'Angewandte Rabatte:',
   asset: 'Vermögenswert',
   assets: 'Vermögenswerte',
   auto_compound_into_label: 'Automatische Komposition in {{ticker}}',
@@ -336,7 +337,7 @@ export const de = {
   disconnect_all: 'Alle Verbindungen trennen',
   discord: 'Zwietracht',
   discount: 'Rabatt',
-  complete_fee_waive: 'Vollständige Gebührenbefreiung',
+  complete_fee_waive: 'Keine Gebühr',
   discount_tiers: 'Rabattstufen',
   discount_tiers_description:
     'Halten Sie $VULT, um von niedrigeren Handelsgebühren zu profitieren.',
@@ -437,6 +438,7 @@ export const de = {
   faq_vultisig_make_money_title: 'Wie wird Vultisig verwendet?',
   fast: 'Schnell',
   fastVault: 'Schneller Tresor',
+  secureVault: 'Sicherer Tresor',
   fast_sign: 'Schnelles Zeichen',
   fast_vault_backup_description:
     'Online-Speicher ist empfehlenswert und sicher – Vault-Speicher sind genau dafür konzipiert.',
@@ -997,6 +999,7 @@ export const de = {
   confirm_automation_creation: 'Automatisierungserstellung bestätigen',
   id: 'AUSWEIS',
   import_seedphrase: 'Seedphrase importieren',
+  seedPhraseImportTip: 'Tipp: Sie können einen Browser als Gerät verwenden',
   import_seedphrase_description:
     'Betritt es, erschaffe einen Tresor, schau nie zurück.',
   import_vault_share: 'Vault-Freigabe importieren',

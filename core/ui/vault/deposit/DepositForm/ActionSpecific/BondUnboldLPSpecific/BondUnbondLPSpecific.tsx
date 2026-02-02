@@ -3,6 +3,7 @@ import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
+import { useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
 import { useDepositFormHandlers } from '../../../providers/DepositFormHandlersProvider'
@@ -20,7 +21,9 @@ export const BondUnbondLPSpecific = ({
   selectedAsset,
 }: BondUnbondLPSpecificProps) => {
   const { t } = useTranslation()
-  const [{ setValue, watch }] = useDepositFormHandlers()
+  const [{ setValue, control }] = useDepositFormHandlers()
+  const activeAsset =
+    useWatch({ control, name: 'bondableAsset' }) ?? selectedAsset
 
   return (
     assets.length > 0 && (
@@ -29,9 +32,9 @@ export const BondUnbondLPSpecific = ({
           <Container onClick={onOpen}>
             <HStack alignItems="center" gap={4}>
               <Text weight="400" family="mono" size={16}>
-                {selectedAsset || t('asset')}
+                {activeAsset || t('asset')}
               </Text>
-              {!selectedAsset && (
+              {!activeAsset && (
                 <AssetRequiredLabel as="span" color="danger" size={14}>
                   *
                 </AssetRequiredLabel>
@@ -45,9 +48,9 @@ export const BondUnbondLPSpecific = ({
         renderContent={({ onClose }) => (
           <MayaChainAssetExplorer
             onClose={onClose}
-            activeOption={watch('bondableAsset')}
-            onOptionClick={selectedAsset => {
-              setValue('bondableAsset', selectedAsset, {
+            activeOption={activeAsset}
+            onOptionClick={selectedOption => {
+              setValue('bondableAsset', selectedOption, {
                 shouldValidate: true,
               })
               onClose()

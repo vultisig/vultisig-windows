@@ -1,3 +1,4 @@
+import { SwapDiscount } from '../discount/SwapDiscount'
 import { GeneralSwapQuote } from '../general/GeneralSwapQuote'
 import { NativeSwapQuote } from '../native/NativeSwapQuote'
 
@@ -8,6 +9,11 @@ type SwapQuoteMap = {
   general: GeneralSwapQuote
 }
 
-export type SwapQuote = {
+export type SwapQuoteResult = {
   [T in SwapType]: { [K in T]: SwapQuoteMap[T] }
 }[SwapType]
+
+export type SwapQuote = {
+  quote: SwapQuoteResult
+  discounts: SwapDiscount[]
+}

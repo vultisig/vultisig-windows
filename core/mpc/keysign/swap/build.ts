@@ -9,7 +9,7 @@ import { areEqualCoins } from '@core/chain/coin/Coin'
 import { GeneralSwapTx } from '@core/chain/swap/general/GeneralSwapQuote'
 import { getSwapDestinationAddress } from '@core/chain/swap/keysign/getSwapDestinationAddress'
 import { nativeSwapQuoteToSwapPayload } from '@core/chain/swap/native/utils/nativeSwapQuoteToSwapPayload'
-import { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
+import { SwapQuote, SwapQuoteResult } from '@core/chain/swap/quote/SwapQuote'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import { getBlockchainSpecificValue } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { refineKeysignUtxo } from '@core/mpc/keysign/refine/utxo'
@@ -63,9 +63,9 @@ export const buildSwapKeysignPayload = async ({
   const toCoinHexPublicKey = Buffer.from(toPublicKey.data()).toString('hex')
 
   const thirdPartyGasLimitEstimation = matchRecordUnion<
-    SwapQuote,
+    SwapQuoteResult,
     bigint | undefined
-  >(swapQuote, {
+  >(swapQuote.quote, {
     native: () => undefined,
     general: ({ tx }) =>
       matchRecordUnion<GeneralSwapTx, bigint | undefined>(tx, {
@@ -85,16 +85,19 @@ export const buildSwapKeysignPayload = async ({
     libType,
     toAddress: getSwapDestinationAddress({ quote: swapQuote, fromCoin }),
     utxoInfo: await getKeysignUtxoInfo(fromCoin),
-    memo: matchRecordUnion<SwapQuote, string | undefined>(swapQuote, {
-      native: ({ memo }) => memo,
-      general: () => undefined,
-    }),
+    memo: matchRecordUnion<SwapQuoteResult, string | undefined>(
+      swapQuote.quote,
+      {
+        native: ({ memo }) => memo,
+        general: () => undefined,
+      }
+    ),
   })
 
   keysignPayload.swapPayload = matchRecordUnion<
-    SwapQuote,
+    SwapQuoteResult,
     KeysignPayload['swapPayload']
-  >(swapQuote, {
+  >(swapQuote.quote, {
     general: quote => {
       const txMsg = matchRecordUnion<
         GeneralSwapTx,
@@ -168,7 +171,7 @@ export const buildSwapKeysignPayload = async ({
     keysignPayload,
     walletCore,
     thirdPartyGasLimitEstimation,
-    isDeposit: matchRecordUnion<SwapQuote, boolean>(swapQuote, {
+    isDeposit: matchRecordUnion<SwapQuoteResult, boolean>(swapQuote.quote, {
       native: ({ swapChain }) =>
         areEqualCoins(fromCoin, chainFeeCoin[swapChain]),
       general: () => false,

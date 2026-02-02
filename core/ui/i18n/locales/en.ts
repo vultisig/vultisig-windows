@@ -47,6 +47,7 @@ export const en = {
   approval_tx: 'Approval Tx',
   approve: 'Approve',
   reject: 'Reject',
+  applied_discounts: 'Applied Discounts:',
   asset: 'Asset',
   assets: 'assets',
   at_least_one_device: 'At least one device',
@@ -228,7 +229,7 @@ export const en = {
   disconnect_all: 'Disconnect All',
   discord: 'Discord',
   discount: 'Discount',
-  complete_fee_waive: 'Complete fee waive',
+  complete_fee_waive: 'No Fee',
   discount_tiers: 'Discount Tiers',
   discount_tiers_description: 'Hold $VULT to unlock lower trading fees.',
   discovering_mediator: 'Discovering mediator service, please wait...',
@@ -326,10 +327,11 @@ export const en = {
   faq_vultisig_make_money_title: 'How is Vultisig used?',
   fast: 'Fast',
   fastVault: 'Fast Vault',
+  secureVault: 'Secure Vault',
   fast_vault_password_start_keysign_description:
     'Confirm the transaction by entering the password of your server share.',
   fastVaultSetup: {
-    addOptionalHint: 'Add an optional hint',
+    addOptionalHint: 'Add Hint (Optional)',
     backup: {
       backThemUpNow: 'back them up now',
       backupConfirmationDescription: 'Backup your vault share online',
@@ -446,6 +448,7 @@ export const en = {
   import: 'Import',
   import_key: 'Import Key',
   import_seedphrase: 'Import Seedphrase',
+  seedPhraseImportTip: 'Tip: You can use a browser as a device',
   enter_your_seedphrase: 'Enter your seed phrase',
   enter_seedphrase_subtitle:
     'Leave a space between each word. Seed phrases of <h>12 or 24 words</h> are supported.',
@@ -886,6 +889,7 @@ export const en = {
   to_asset: 'To Asset',
   token_not_found_description:
     'Possible reasons: wrong contract, unsupported chain, or token removed from registries.',
+  token_not_found_invalid: 'Invalid contract address',
   tokens: 'tokens',
   total_fee: 'Total Fees',
   track: 'Track',

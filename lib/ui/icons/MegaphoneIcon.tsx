@@ -6,52 +6,16 @@ export const MegaphoneIcon: FC<SvgProps> = props => (
     xmlns="http://www.w3.org/2000/svg"
     width="1em"
     height="1em"
+    viewBox="0 0 19 19"
     fill="none"
     {...props}
   >
-    <g clipPath="url(#a)" filter="url(#b)">
-      <path
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={1.5}
-        d="M15.205 11.667a2.5 2.5 0 0 0 0-5m-4.726 8.541a2.501 2.501 0 0 1-4.857-.833v-1.25m.002-7.917v7.917m9.581-8.574v9.232a1.667 1.667 0 0 1-2.158 1.592l-9.584-2.959a1.667 1.667 0 0 1-1.175-1.592V7.51c0-.732.477-1.377 1.175-1.593l9.584-2.959a1.667 1.667 0 0 1 2.158 1.593Z"
-        shapeRendering="crispEdges"
-      />
-    </g>
-    <defs>
-      <clipPath id="a">
-        <path fill="#fff" d="M0 0h20v20H0z" />
-      </clipPath>
-      <filter
-        id="b"
-        width={24.917}
-        height={23.492}
-        x={-2.462}
-        y={2.133}
-        colorInterpolationFilters="sRGB"
-        filterUnits="userSpaceOnUse"
-      >
-        <feFlood floodOpacity={0} result="BackgroundImageFix" />
-        <feColorMatrix
-          in="SourceAlpha"
-          result="hardAlpha"
-          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-        />
-        <feOffset dy={4} />
-        <feGaussianBlur stdDeviation={2} />
-        <feComposite in2="hardAlpha" operator="out" />
-        <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
-        <feBlend
-          in2="BackgroundImageFix"
-          result="effect1_dropShadow_57060_74525"
-        />
-        <feBlend
-          in="SourceGraphic"
-          in2="effect1_dropShadow_57060_74525"
-          result="shape"
-        />
-      </filter>
-    </defs>
+    <path
+      d="M14.4449 11.083C15.7565 11.083 16.8199 10.0197 16.8199 8.70798C16.8199 7.39632 15.7565 6.333 14.4449 6.333M9.95561 14.4476C9.6296 15.37 8.74982 16.0309 7.71574 16.0309C6.40407 16.0309 5.34074 14.9676 5.34074 13.6559V12.4684M5.34248 4.94759V12.4684M14.4449 4.3227V13.0933C14.4449 14.1592 13.413 14.9207 12.3945 14.6061L3.29031 11.7952C2.62669 11.5903 2.17407 10.9769 2.17407 10.2824V7.13366C2.17407 6.43914 2.62669 5.8257 3.29031 5.6208L12.3945 2.80983C13.413 2.49538 14.4449 3.25678 14.4449 4.3227Z"
+      stroke="currentColor"
+      strokeWidth={1.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 )

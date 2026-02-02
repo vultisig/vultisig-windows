@@ -1,7 +1,7 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { GeneralSwapTx } from '@core/chain/swap/general/GeneralSwapQuote'
-import { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
+import { SwapQuote, SwapQuoteResult } from '@core/chain/swap/quote/SwapQuote'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
@@ -16,7 +16,7 @@ export const getSwapDestinationAddress = ({
   quote,
   fromCoin,
 }: GetSwapDestinationAddressInput): string =>
-  matchRecordUnion<SwapQuote, string>(quote, {
+  matchRecordUnion<SwapQuoteResult, string>(quote.quote, {
     general: quote =>
       matchRecordUnion<GeneralSwapTx, string>(quote.tx, {
         evm: ({ to }) => to,

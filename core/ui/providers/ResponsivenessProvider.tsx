@@ -1,16 +1,16 @@
 import { ChildrenProp } from '@lib/ui/props'
 import { mediaBreakPoints } from '@lib/ui/responsive/mediaQuery'
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 
-type Size = 's' | 'm' | 'l'
+type Size = 'mobile' | 'tablet' | 'desktop'
 
 const getSize = (width: number): Size => {
-  if (width < mediaBreakPoints.mobileDevice) return 's'
-  if (width < mediaBreakPoints.desktopDevice) return 'm'
-  return 'l'
+  if (width < mediaBreakPoints.mobileDevice) return 'mobile'
+  if (width < mediaBreakPoints.tabletDevice) return 'tablet'
+  return 'desktop'
 }
 
-const ResponsivenessContext = createContext<Size>('m')
+const ResponsivenessContext = createContext<Size>('tablet')
 
 export const ResponsivenessProvider = ({ children }: ChildrenProp) => {
   const [size, setSize] = useState<Size>(() => getSize(window.innerWidth))
@@ -33,10 +33,28 @@ export const ResponsivenessProvider = ({ children }: ChildrenProp) => {
 
 export const useResponsiveness = () => {
   const size = useContext(ResponsivenessContext)
-  return {
-    current: size,
-    isSmall: size === 's',
-    isMedium: size === 'm',
-    isLarge: size === 'l',
-  }
+
+  return useMemo(() => {
+    const isMobile = size === 'mobile'
+    const isTablet = size === 'tablet'
+    const isDesktop = size === 'desktop'
+
+    return {
+      current: size,
+      // Exact matches
+      isMobile,
+      isTablet,
+      isDesktop,
+      // "And up" helpers
+      isTabletOrLarger: isTablet || isDesktop,
+      isDesktopOrLarger: isDesktop,
+      // "And down" helpers
+      isMobileOrSmaller: isMobile,
+      isTabletOrSmaller: isMobile || isTablet,
+      // Legacy aliases (deprecated - use new names)
+      isSmall: isMobile,
+      isMedium: isTablet,
+      isLarge: isDesktop,
+    }
+  }, [size])
 }

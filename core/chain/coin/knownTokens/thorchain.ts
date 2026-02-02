@@ -233,6 +233,18 @@ export const thorchainNativeTokensMetadata: Record<string, CoinMetadata> = {
     decimals: 8,
     priceProviderId: 'rujira',
   },
+  'thor.ruji': {
+    ticker: 'RUJI',
+    logo: 'ruji',
+    decimals: 8,
+    priceProviderId: 'rujira',
+  },
+  'thor.rune': {
+    ticker: 'RUNE',
+    logo: 'rune',
+    decimals: 8,
+    priceProviderId: 'thorchain',
+  },
   'x/staking-tcy': {
     ticker: 'sTCY',
     logo: 'tcy.png',

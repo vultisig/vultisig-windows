@@ -1,4 +1,5 @@
 export const it = {
+  seedPhraseImportTip: 'Suggerimento: Puoi usare un browser como dispositivo',
   chainFunctions: {
     custom: {
       labels: {
@@ -210,6 +211,7 @@ export const it = {
   app_permissions: "Autorizzazioni dell'app",
   approval_tx: 'Approvazione Tx',
   approve: 'Approvare',
+  applied_discounts: 'Sconti applicati:',
   asset: 'Risorsa',
   assets: 'attività',
   auto_compound_into_label: 'Autocomposizione in {{ticker}}',
@@ -340,7 +342,7 @@ export const it = {
   disconnect_all: 'Disconnetti tutto',
   discord: 'Discordia',
   discount: 'Sconto',
-  complete_fee_waive: 'Esenzione completa dalle commissioni',
+  complete_fee_waive: 'Nessuna commissione',
   discount_tiers: 'Livelli di sconto',
   discount_tiers_description:
     'Mantieni $VULT per sbloccare commissioni di trading più basse.',
@@ -438,6 +440,7 @@ export const it = {
   faq_vultisig_make_money_title: 'Come si usa Vultisig?',
   fast: 'Veloce',
   fastVault: 'Deposito veloce',
+  secureVault: 'Deposito sicuro',
   fast_sign: 'Segnale veloce',
   fast_vault_backup_description:
     "L'archiviazione online è consigliata e sicura: le condivisioni Vault sono progettate per questo scopo.",

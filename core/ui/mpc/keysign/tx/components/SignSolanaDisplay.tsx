@@ -148,7 +148,6 @@ export const SignSolanaDisplay = ({
   signSolana: SignSolana
 }) => {
   const { t } = useTranslation()
-
   const instructionsSummary = useMemo(() => {
     const allInstructions: InstructionSummary[] = []
     signSolana.rawTransactions.forEach(tx => {

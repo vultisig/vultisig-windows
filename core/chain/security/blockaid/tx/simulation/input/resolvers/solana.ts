@@ -7,9 +7,19 @@ import { BlockaidTxSimulationInputResolver } from '../resolver'
 
 export const getSolanaBlockaidTxSimulationInput: BlockaidTxSimulationInputResolver<
   OtherChain.Solana
-> = ({ payload, walletCore, chain }) => {
+> = ({ payload, walletCore, chain, raw }) => {
   const coin = assertField(payload, 'coin')
-
+  if (raw && raw.length > 0) {
+    return {
+      chain: 'mainnet',
+      options: ['simulation'],
+      account_address: coin.address,
+      encoding: 'base58',
+      transactions: raw,
+      method: 'signAndSendTransaction',
+      metadata: {},
+    }
+  }
   const transactions = getCompiledTxsForBlockaidInput({
     payload,
     walletCore,
