@@ -20,9 +20,14 @@ import { KeyImportFastKeygenServerActionProvider } from '../keyimport/fast/KeyIm
 
 type FastKeygenFlowProps = OnBackProp & {
   password?: string
+  onChangeEmailAndRestart?: () => void
 }
 
-export const FastKeygenFlow = ({ onBack, password }: FastKeygenFlowProps) => {
+export const FastKeygenFlow = ({
+  onBack,
+  password,
+  onChangeEmailAndRestart,
+}: FastKeygenFlowProps) => {
   const keygenOperation = useKeygenOperation()
   const ServerActionProvider = matchRecordUnion<
     KeygenOperation,
@@ -55,7 +60,11 @@ export const FastKeygenFlow = ({ onBack, password }: FastKeygenFlowProps) => {
             <MpcPeersProvider value={value}>
               <StartMpcSessionFlow
                 render={() => (
-                  <KeygenFlow onBack={onBack} password={password} />
+                  <KeygenFlow
+                    onBack={onBack}
+                    password={password}
+                    onChangeEmailAndRestart={onChangeEmailAndRestart}
+                  />
                 )}
                 value="keygen"
               />
