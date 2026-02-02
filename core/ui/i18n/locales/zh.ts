@@ -57,6 +57,8 @@ export const zh = {
       shareSecurely: '为确保能够访问，最好',
       vaultShares: '您的金库持有2股股票，',
       wellDone: '做得好',
+      sentTo: 'Sent to {{email}}.',
+      changeEmailAndRestartKeygen: 'Change email and restart keygen',
     },
     createVault: {
       availablePlatforms: {
