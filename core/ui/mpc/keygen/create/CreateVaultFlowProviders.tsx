@@ -1,4 +1,5 @@
 import { CreateFlowKeygenVaultProvider } from '@core/ui/mpc/keygen/create/state/keygenVault'
+import { PendingReferralProvider } from '@core/ui/mpc/keygen/create/state/pendingReferral'
 import { GeneratedVaultNameProvider } from '@core/ui/mpc/keygen/create/state/vaultName'
 import { KeyImportChainsProvider } from '@core/ui/mpc/keygen/keyimport/state/keyImportChains'
 import { KeygenOperationProvider } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
@@ -26,11 +27,13 @@ export const CreateVaultFlowProviders = ({ children }: ChildrenProp) => {
                     <KeygenOperationProvider value={{ create: true }}>
                       <KeyImportChainsProvider value={[]}>
                         <GeneratedVaultNameProvider>
-                          <CreateFlowKeygenVaultProvider>
-                            <MpcPeersSelectionProvider>
-                              {children}
-                            </MpcPeersSelectionProvider>
-                          </CreateFlowKeygenVaultProvider>
+                          <PendingReferralProvider initialValue="">
+                            <CreateFlowKeygenVaultProvider>
+                              <MpcPeersSelectionProvider>
+                                {children}
+                              </MpcPeersSelectionProvider>
+                            </CreateFlowKeygenVaultProvider>
+                          </PendingReferralProvider>
                         </GeneratedVaultNameProvider>
                       </KeyImportChainsProvider>
                     </KeygenOperationProvider>
