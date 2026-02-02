@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next'
 
 import { ClearableTextInput } from './ClearableTextInput'
 import { CollapsedFormField } from './CollapsedFormField'
+import { ReferralExpandableField } from './ReferralExpandableField'
 
 type NameFormSectionProps = {
   isExpanded: boolean
@@ -66,6 +67,7 @@ export const NameFormSection = ({
                 {error}
               </Text>
             )}
+            <ReferralExpandableField />
           </VStack>
         </ActionInputContainer>
       )}
