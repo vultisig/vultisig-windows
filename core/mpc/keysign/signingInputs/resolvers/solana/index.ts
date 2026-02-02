@@ -23,10 +23,10 @@ export const getSolanaSigningInputs: SigningInputsResolver<'solana'> = ({
   if (keysignPayload.signData.case === 'signSolana') {
     const coinType = getCoinType({ walletCore, chain })
     const inputs = keysignPayload.signData.value.rawTransactions.map(
-      rawMessageData => {
+      transaction => {
         const decodedData = walletCore.TransactionDecoder.decode(
           coinType,
-          Buffer.from(rawMessageData, 'base64')
+          Buffer.from(transaction, 'base64')
         )
         const decodedTransaction =
           TW.Solana.Proto.DecodingTransactionOutput.decode(decodedData)
