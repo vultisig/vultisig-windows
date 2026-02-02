@@ -122,8 +122,10 @@ export const fromCommVault = (vault: CommVault): Vault => {
       : undefined,
     publicKeys,
     keyShares,
-    chainKeyShares,
-    chainPublicKeys,
+    chainKeyShares:
+      Object.keys(chainKeyShares).length > 0 ? chainKeyShares : undefined,
+    chainPublicKeys:
+      Object.keys(chainPublicKeys).length > 0 ? chainPublicKeys : undefined,
     libType: fromLibType(vault.libType),
     isBackedUp: false,
     order: 0,
