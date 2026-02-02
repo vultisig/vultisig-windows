@@ -18,7 +18,6 @@ import {
   CurrentVaultIdProvider,
   useCurrentVaultIdQuery,
 } from './currentVaultId'
-import { useDefaultChainsQuery } from './defaultChains'
 import { useFiatCurrencyQuery } from './fiatCurrency'
 import { useLanguageQuery } from './language'
 import { useHasFinishedOnboardingQuery } from './onboarding'
@@ -30,7 +29,6 @@ import { useVaultsQuery, VaultsProvider } from './vaults'
 export const StorageDependant = ({ children }: ChildrenProp) => {
   const vaults = useVaultsQuery()
   const vaultFolders = useVaultFoldersQuery()
-  const defaultChains = useDefaultChainsQuery()
   const fiatCurrency = useFiatCurrencyQuery()
   const currentVaultId = useCurrentVaultIdQuery()
   const addressBookItems = useAddressBookItemsQuery()
@@ -47,7 +45,6 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   const query = useMergeQueries({
     vaults,
     vaultFolders,
-    defaultChains,
     fiatCurrency,
     currentVaultId,
     addressBookItems,

@@ -5,7 +5,6 @@ import { CircleVisibilityStorage } from './circleVisibility'
 import { CoinFinderIgnoreStorage } from './coinFinderIgnore'
 import { CoinsStorage } from './coins'
 import { CurrentVaultIdStorage } from './currentVaultId'
-import { DefaultChainsStorage } from './defaultChains'
 import { DefiChainsStorage } from './defiChains'
 import { DefiPositionsStorage } from './defiPositions'
 import { DismissedBannersStorage } from './dismissedBanners'
@@ -27,7 +26,6 @@ export type CoreStorage = CoinFinderIgnoreStorage &
   VaultsStorage &
   VaultFoldersStorage &
   CoinsStorage &
-  DefaultChainsStorage &
   AddressBookStorage &
   LanguageStorage &
   BalanceVisibilityStorage &
