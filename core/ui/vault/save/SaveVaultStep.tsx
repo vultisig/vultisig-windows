@@ -1,6 +1,5 @@
 import { Vault } from '@core/mpc/vault/Vault'
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
-import { usePendingReferral } from '@core/ui/mpc/keygen/create/state/pendingReferral'
 import { useCreateVaultWithReferralMutation } from '@core/ui/vault/mutations/useCreateVaultWithReferralMutation'
 import { Button } from '@lib/ui/buttons/Button'
 import { FlowPendingPageContent } from '@lib/ui/flow/FlowPendingPageContent'
@@ -11,12 +10,22 @@ import { useTranslation } from 'react-i18next'
 
 import { FlowErrorPageContent } from '../../flow/FlowErrorPageContent'
 
-export const SaveVaultStep: React.FC<
-  ValueProp<Vault> & OnFinishProp & TitleProp & OnBackProp
-> = ({ value, onFinish, title, onBack }) => {
+type SaveVaultStepProps = ValueProp<Vault> &
+  OnFinishProp &
+  TitleProp &
+  OnBackProp & {
+    pendingReferral?: string
+  }
+
+export const SaveVaultStep: React.FC<SaveVaultStepProps> = ({
+  value,
+  onFinish,
+  title,
+  onBack,
+  pendingReferral = '',
+}) => {
   const { t } = useTranslation()
 
-  const [pendingReferral] = usePendingReferral()
   const { mutate, ...mutationState } = useCreateVaultWithReferralMutation({
     onSuccess: onFinish,
   })
