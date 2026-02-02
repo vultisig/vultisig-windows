@@ -229,7 +229,7 @@ export const en = {
   disconnect_all: 'Disconnect All',
   discord: 'Discord',
   discount: 'Discount',
-  complete_fee_waive: 'Complete fee waive',
+  complete_fee_waive: 'No Fee',
   discount_tiers: 'Discount Tiers',
   discount_tiers_description: 'Hold $VULT to unlock lower trading fees.',
   discovering_mediator: 'Discovering mediator service, please wait...',

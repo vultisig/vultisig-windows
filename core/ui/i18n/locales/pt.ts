@@ -335,7 +335,7 @@ export const pt = {
   disconnect_all: 'Desconectar tudo',
   discord: 'Discórdia',
   discount: 'Desconto',
-  complete_fee_waive: 'Isenção completa de taxas',
+  complete_fee_waive: 'Sem Taxa',
   discount_tiers: 'Níveis de desconto',
   discount_tiers_description:
     'Mantenha $VULT para desbloquear taxas de negociação mais baixas.',

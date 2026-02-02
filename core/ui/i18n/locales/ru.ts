@@ -232,7 +232,7 @@ export const ru = {
   disconnect_all: 'Отключить всё',
   discord: 'Discord',
   discount: 'Скидка',
-  complete_fee_waive: 'Полная отмена комиссии',
+  complete_fee_waive: 'Без комиссии',
   discount_tiers: 'Уровни скидок',
   discount_tiers_description:
     'Держите $VULT, чтобы разблокировать меньшие торговые комиссии.',

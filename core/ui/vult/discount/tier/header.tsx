@@ -1,6 +1,6 @@
 import { VultDiscountTier } from '@core/chain/swap/affiliate/config'
 import { HStack, hStack } from '@lib/ui/layout/Stack'
-import { OnClickProp, ValueProp } from '@lib/ui/props'
+import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { t } from 'i18next'
 import styled from 'styled-components'
@@ -13,19 +13,16 @@ const Container = styled.div`
     alignItems: 'center',
     justifyContent: 'space-between',
   })}
+  width: 100%;
 `
 
 export const VultDiscountTierHeader = ({
   value,
-  onClick,
-}: ValueProp<VultDiscountTier> & Partial<OnClickProp>) => {
+}: ValueProp<VultDiscountTier>) => {
   const Icon = discountTierIcons[value]
 
   return (
-    <Container
-      onClick={onClick}
-      style={onClick ? { cursor: 'pointer' } : undefined}
-    >
+    <Container>
       <HStack alignItems="center" gap={12}>
         <Icon fontSize={36} />
         <Text size={22} weight="500">

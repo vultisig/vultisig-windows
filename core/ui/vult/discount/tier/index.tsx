@@ -2,9 +2,8 @@ import {
   VultDiscountTier as VultDiscountTierType,
   vultDiscountTiers,
 } from '@core/chain/swap/affiliate/config'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { HStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
-import React, { useMemo, useState } from 'react'
 
 import { ActiveDiscountTierIndicator } from './active-indicator'
 import { DiscountTierContainer } from './container'
@@ -22,42 +21,23 @@ export const VultDiscountTier = ({
 }: VultDiscountTierProps) => {
   const isActive = activeDiscountTier === value
 
-  const isExpandable = useMemo(() => {
+  const isUnlockable = (() => {
     if (!activeDiscountTier) {
       return true
     }
-
-    const activeDiscountTierIndex =
-      vultDiscountTiers.indexOf(activeDiscountTier)
-
-    return activeDiscountTierIndex < vultDiscountTiers.indexOf(value)
-  }, [activeDiscountTier, value])
-
-  const [isExpanded, setIsExpanded] = useState(isActive)
+    const activeIndex = vultDiscountTiers.indexOf(activeDiscountTier)
+    const currentIndex = vultDiscountTiers.indexOf(value)
+    return currentIndex > activeIndex
+  })()
 
   return (
-    <DiscountTierContainer value={value}>
-      <VultDiscountTierHeader
-        value={value}
-        onClick={isExpandable ? () => setIsExpanded(prev => !prev) : undefined}
-      />
-      {isExpanded && (
-        <VStack gap={14}>
-          {isActive ? (
-            <div style={{ height: 20 }} />
-          ) : (
-            <DiscountTierMinBalance value={value} />
-          )}
-          {isActive ? (
-            <HStack alignItems="center" justifyContent="space-between">
-              <DiscountTierMinBalance value={value} />
-              <ActiveDiscountTierIndicator />
-            </HStack>
-          ) : (
-            <UnlockDiscountTier value={value} />
-          )}
-        </VStack>
-      )}
+    <DiscountTierContainer value={value} $hasUnlockButton={isUnlockable}>
+      <VultDiscountTierHeader value={value} />
+      <HStack alignItems="center" justifyContent="space-between" fullWidth>
+        <DiscountTierMinBalance value={value} />
+        {isActive && <ActiveDiscountTierIndicator />}
+      </HStack>
+      {isUnlockable && <UnlockDiscountTier value={value} />}
     </DiscountTierContainer>
   )
 }

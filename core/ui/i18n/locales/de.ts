@@ -337,7 +337,7 @@ export const de = {
   disconnect_all: 'Alle Verbindungen trennen',
   discord: 'Zwietracht',
   discount: 'Rabatt',
-  complete_fee_waive: 'Vollständige Gebührenbefreiung',
+  complete_fee_waive: 'Keine Gebühr',
   discount_tiers: 'Rabattstufen',
   discount_tiers_description:
     'Halten Sie $VULT, um von niedrigeren Handelsgebühren zu profitieren.',
