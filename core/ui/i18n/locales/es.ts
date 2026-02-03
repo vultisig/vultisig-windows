@@ -447,6 +447,7 @@ export const es = {
   folder_name: 'Nombre de la carpeta',
   folder_name_already_exists: 'El nombre de la carpeta debe ser único',
   folder_name_required: 'El nombre de la carpeta es obligatorio',
+  folder_at_least_one_vault_required: 'Se requiere al menos una bóveda',
   folders: 'Carpetas',
   follow_banner_button: 'Sigue a @Vultisig',
   follow_banner_subtitle: 'Vultisig construye contigo.',
