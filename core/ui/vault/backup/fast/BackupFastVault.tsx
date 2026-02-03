@@ -24,7 +24,8 @@ const steps = [
 export const BackupFastVault = ({
   onFinish,
   onBack,
-}: OnFinishProp & OnBackProp) => {
+  password,
+}: OnFinishProp & OnBackProp & { password: string }) => {
   const { t } = useTranslation()
 
   const { step, toNextStep, toPreviousStep } = useStepNavigation({
@@ -57,6 +58,7 @@ export const BackupFastVault = ({
       )}
       backupPage={() => (
         <InitiateFastVaultBackup
+          password={password}
           onFinish={() => {
             if (shouldShowBackupSummary) {
               toNextStep()

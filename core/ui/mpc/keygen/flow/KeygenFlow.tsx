@@ -3,7 +3,6 @@ import { KeygenOperation } from '@core/mpc/keygen/KeygenOperation'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { CreateVaultSuccessScreen } from '@core/ui/mpc/keygen/create/CreateVaultSuccessScreen'
-import { usePendingReferral } from '@core/ui/mpc/keygen/create/state/pendingReferral'
 import { useKeygenMutation } from '@core/ui/mpc/keygen/mutations/useKeygenMutation'
 import { KeygenPendingState } from '@core/ui/mpc/keygen/progress/KeygenPendingState'
 import { useKeygenOperation } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
@@ -21,10 +20,12 @@ import { useTranslation } from 'react-i18next'
 
 import { KeygenFlowEnding } from './KeygenFlowEnding'
 
-export const KeygenFlow = ({
-  onBack,
-  onFinish,
-}: OnBackProp & Partial<OnFinishProp>) => {
+type KeygenFlowProps = OnBackProp &
+  Partial<OnFinishProp> & {
+    password?: string
+  }
+
+export const KeygenFlow = ({ onBack, onFinish, password }: KeygenFlowProps) => {
   const {
     step,
     mutate: startKeygen,
@@ -34,7 +35,6 @@ export const KeygenFlow = ({
   const { t } = useTranslation()
 
   const keygenOperation = useKeygenOperation()
-  const [pendingReferral] = usePendingReferral()
 
   const title = matchRecordUnion<KeygenOperation, string>(keygenOperation, {
     create: () => t('creating_vault'),
@@ -61,7 +61,7 @@ export const KeygenFlow = ({
             return null
           }
           if (hasServer(vault.signers)) {
-            return <KeygenFlowEnding onBack={onBack} />
+            return <KeygenFlowEnding onBack={onBack} password={password} />
           }
 
           return (
@@ -72,10 +72,11 @@ export const KeygenFlow = ({
                   value={vault}
                   onFinish={onFinish}
                   onBack={onBack}
-                  pendingReferral={pendingReferral}
                 />
               )}
-              to={() => <KeygenFlowEnding onBack={onBack} />}
+              to={() => (
+                <KeygenFlowEnding onBack={onBack} password={password} />
+              )}
             />
           )
         }

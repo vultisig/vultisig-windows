@@ -5,14 +5,26 @@ import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { BackupFastVault } from '../../../vault/backup/fast/BackupFastVault'
 import { BackupSecureVault } from '../../../vault/backup/secure/BackupSecureVault'
 
+type VaultKeygenBackupFlowProps = OnFinishProp &
+  OnBackProp & {
+    password?: string
+  }
+
 export const VaultKeygenBackupFlow = ({
   onFinish,
   onBack,
-}: OnFinishProp & OnBackProp) => {
+  password = '',
+}: VaultKeygenBackupFlowProps) => {
   const vault = useCurrentVault()
 
   if (hasServer(vault.signers)) {
-    return <BackupFastVault onFinish={onFinish} onBack={onBack} />
+    return (
+      <BackupFastVault
+        password={password}
+        onFinish={onFinish}
+        onBack={onBack}
+      />
+    )
   }
 
   return <BackupSecureVault onFinish={onFinish} />

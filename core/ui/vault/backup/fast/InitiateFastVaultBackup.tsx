@@ -9,15 +9,19 @@ import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { usePassword } from '../../../state/password'
 import { useCurrentVault } from '../../state/currentVault'
+
+type InitiateFastVaultBackupProps = OnFinishProp &
+  OnBackProp & {
+    password: string
+  }
 
 export const InitiateFastVaultBackup = ({
   onFinish,
   onBack,
-}: OnFinishProp & OnBackProp) => {
+  password,
+}: InitiateFastVaultBackupProps) => {
   const { t } = useTranslation()
-  const [password] = usePassword()
   const vault = useCurrentVault()
 
   const { mutate: backupVault, isPending } = useBackupVaultMutation({
