@@ -7,6 +7,7 @@ import { MpcSessionIdProvider } from '@core/ui/mpc/state/mpcSession'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ChildrenProp } from '@lib/ui/props'
 
+import { PendingReferralProvider } from '../create/state/pendingReferral'
 import { KeyImportChainsProvider } from '../keyimport/state/keyImportChains'
 import { DklsInboundSequenceNoProvider } from '../reshare/state/dklsInboundSequenceNo'
 import { JoinKeygenVaultProvider } from './state/keygenVault'
@@ -30,9 +31,11 @@ export const JoinKeygenProviders = ({ children }: ChildrenProp) => {
               <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
                 <KeyImportChainsProvider value={keyImportChains}>
                   <DklsInboundSequenceNoProvider initialValue={0}>
-                    <JoinKeygenVaultProvider>
-                      {children}
-                    </JoinKeygenVaultProvider>
+                    <PendingReferralProvider initialValue="">
+                      <JoinKeygenVaultProvider>
+                        {children}
+                      </JoinKeygenVaultProvider>
+                    </PendingReferralProvider>
                   </DklsInboundSequenceNoProvider>
                 </KeyImportChainsProvider>
               </CurrentHexEncryptionKeyProvider>
