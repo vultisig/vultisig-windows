@@ -1,19 +1,24 @@
-import { KeygenFlow } from '@core/ui/mpc/keygen/flow/KeygenFlow'
-import { KeygenPeerDiscoveryStep } from '@core/ui/mpc/keygen/peers/KeygenPeerDiscoveryStep'
 import { useCore } from '@core/ui/state/core'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
+import { ChildrenProp } from '@lib/ui/props'
+import { ComponentType } from 'react'
 
-import { StartMpcSessionFlow } from '../../../session/StartMpcSessionFlow'
+import { SecureVaultKeygenFlow } from './SecureVaultKeygenFlow'
 import { SecureVaultSetupForm } from './SecureVaultSetupForm'
 
-const steps = ['form', 'peers', 'keygen'] as const
+const steps = ['form', 'keygen'] as const
 
-const lastEditableStep = steps[0]
+type CreateSecureVaultFlowProps = Partial<ChildrenProp> & {
+  CreateActionProvider?: ComponentType<ChildrenProp>
+}
 
-export const CreateSecureVaultFlow = () => {
+export const CreateSecureVaultFlow = ({
+  children,
+  CreateActionProvider,
+}: CreateSecureVaultFlowProps) => {
   const { goBack } = useCore()
-  const { step, setStep, toNextStep } = useStepNavigation({
+  const { step, toPreviousStep, toNextStep } = useStepNavigation({
     steps,
     onExit: goBack,
   })
@@ -22,19 +27,15 @@ export const CreateSecureVaultFlow = () => {
     <Match
       value={step}
       form={() => (
-        <SecureVaultSetupForm onBack={goBack} onFinish={toNextStep} />
-      )}
-      peers={() => (
-        <KeygenPeerDiscoveryStep
-          onBack={() => setStep(steps[0])}
-          onFinish={toNextStep}
-        />
+        <SecureVaultSetupForm onBack={toPreviousStep} onFinish={toNextStep} />
       )}
       keygen={() => (
-        <StartMpcSessionFlow
-          value="keygen"
-          render={() => <KeygenFlow onBack={() => setStep(lastEditableStep)} />}
-        />
+        <SecureVaultKeygenFlow
+          onBack={toPreviousStep}
+          CreateActionProvider={CreateActionProvider}
+        >
+          {children}
+        </SecureVaultKeygenFlow>
       )}
     />
   )

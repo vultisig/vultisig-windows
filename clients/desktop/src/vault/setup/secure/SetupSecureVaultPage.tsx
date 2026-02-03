@@ -1,7 +1,7 @@
 import { CreateVaultFlowProviders } from '@core/ui/mpc/keygen/create/CreateVaultFlowProviders'
 import { CreateSecureVaultFlow } from '@core/ui/mpc/keygen/create/secure/CreateSecureVaultFlow'
 import { VaultSecurityTypeProvider } from '@core/ui/mpc/keygen/create/state/vaultSecurityType'
-import { KeyImportKeygenWrapper } from '@core/ui/mpc/keygen/keyimport/KeyImportKeygenWrapper'
+import { KeyImportConfigProviders } from '@core/ui/mpc/keygen/keyimport/KeyImportConfigProviders'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 
 import { MpcMediatorManager } from '../../../mpc/serverType/MpcMediatorManager'
@@ -12,23 +12,24 @@ export const SetupSecureVaultPage = () => {
   const keyImportInput = state?.keyImportInput
 
   const content = (
-    <>
+    <CreateSecureVaultFlow
+      CreateActionProvider={CreateVaultKeygenActionProvider}
+    >
       <MpcMediatorManager />
-      <CreateSecureVaultFlow />
-    </>
-  )
-
-  const wrappedContent = keyImportInput ? (
-    <KeyImportKeygenWrapper keyImportInput={keyImportInput}>
-      {content}
-    </KeyImportKeygenWrapper>
-  ) : (
-    <CreateVaultKeygenActionProvider>{content}</CreateVaultKeygenActionProvider>
+    </CreateSecureVaultFlow>
   )
 
   return (
     <VaultSecurityTypeProvider value="secure">
-      <CreateVaultFlowProviders>{wrappedContent}</CreateVaultFlowProviders>
+      <CreateVaultFlowProviders>
+        {keyImportInput ? (
+          <KeyImportConfigProviders keyImportInput={keyImportInput}>
+            {content}
+          </KeyImportConfigProviders>
+        ) : (
+          content
+        )}
+      </CreateVaultFlowProviders>
     </VaultSecurityTypeProvider>
   )
 }
