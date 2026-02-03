@@ -1,3 +1,4 @@
+import { PendingReferralProvider } from '@core/ui/mpc/keygen/create/state/pendingReferral'
 import { FileBasedVaultBackupResult } from '@core/ui/vault/import/VaultBackupResult'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 
@@ -15,9 +16,11 @@ export const ImportVaultFlow = ({
   renderBackupAcquisitionStep,
 }: ImportVaultFlowProps) => {
   return (
-    <ValueTransfer<FileBasedVaultBackupResult>
-      from={renderBackupAcquisitionStep}
-      to={({ value }) => <ImportVaultSequence items={value} />}
-    />
+    <PendingReferralProvider initialValue="">
+      <ValueTransfer<FileBasedVaultBackupResult>
+        from={renderBackupAcquisitionStep}
+        to={({ value }) => <ImportVaultSequence items={value} />}
+      />
+    </PendingReferralProvider>
   )
 }
