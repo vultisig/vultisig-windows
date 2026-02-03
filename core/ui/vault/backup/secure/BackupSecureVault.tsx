@@ -1,9 +1,8 @@
+import { isServer } from '@core/mpc/devices/localPartyId'
 import { getVaultId } from '@core/mpc/vault/Vault'
-import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
 import { useVaults } from '@core/ui/storage/vaults'
+import { BackupOverviewScreen } from '@core/ui/vault/backup/BackupOverviewScreen'
 import { BackupConfirmation } from '@core/ui/vault/backup/confirmation'
-import { BackupOverviewSlidesPartOne } from '@core/ui/vault/backup/secure/BackupOverviewSlidesPartOne'
-import { PairingDeviceBackupOverviewSlidesPartOne } from '@core/ui/vault/backup/secure/PairingDeviceBackupOverviewSlidesPartOne'
 import { VaultBackupFlow } from '@core/ui/vault/backup/VaultBackupFlow'
 import { VaultBackupSummaryStep } from '@core/ui/vault/backup/VaultBackupSummaryStep'
 import { Match } from '@lib/ui/base/Match'
@@ -14,7 +13,7 @@ import { useRive } from '@rive-app/react-webgl2'
 import { useCurrentVault } from '../../state/currentVault'
 
 const steps = [
-  'backupSlideshowPartOne',
+  'backupOverview',
   'backupConfirmation',
   'backupPage',
   'backupSuccessfulSlideshow',
@@ -28,20 +27,18 @@ export const BackupSecureVault = ({ onFinish }: OnFinishProp) => {
   const { step, toNextStep, toPreviousStep } = useStepNavigation({ steps })
   const vaults = useVaults()
   const shouldShowBackupSummary = vaults.length > 1
-  const isInitiatingDevice = useIsInitiatingDevice()
 
   const vault = useCurrentVault()
 
   return (
     <Match
       value={step}
-      backupSlideshowPartOne={() =>
-        isInitiatingDevice ? (
-          <BackupOverviewSlidesPartOne onFinish={toNextStep} />
-        ) : (
-          <PairingDeviceBackupOverviewSlidesPartOne onFinish={toNextStep} />
-        )
-      }
+      backupOverview={() => (
+        <BackupOverviewScreen
+          userDeviceCount={vault.signers.filter(s => !isServer(s)).length}
+          onFinish={toNextStep}
+        />
+      )}
       backupConfirmation={() => (
         <BackupConfirmation
           onCompleted={toNextStep}

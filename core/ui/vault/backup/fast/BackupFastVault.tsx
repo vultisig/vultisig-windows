@@ -1,8 +1,8 @@
+import { isServer } from '@core/mpc/devices/localPartyId'
 import { useVaultCreationInput } from '@core/ui/mpc/keygen/create/state/vaultCreationInput'
 import { useVaults } from '@core/ui/storage/vaults'
+import { BackupOverviewScreen } from '@core/ui/vault/backup/BackupOverviewScreen'
 import { EmailConfirmation } from '@core/ui/vault/backup/fast'
-import { BackupOverviewSlidesPartOne } from '@core/ui/vault/backup/fast/BackupOverviewSlidesPartOne'
-import { BackupOverviewSlidesPartTwo } from '@core/ui/vault/backup/fast/BackupOverviewSlidesPartTwo'
 import { VaultBackupSummaryStep } from '@core/ui/vault/backup/VaultBackupSummaryStep'
 import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -14,10 +14,9 @@ import { useTranslation } from 'react-i18next'
 import { InitiateFastVaultBackup } from './InitiateFastVaultBackup'
 
 const steps = [
-  'backupSlideshowPartOne',
+  'backupOverview',
   'emailVerification',
   'saveVault',
-  'backupSlideshowPartTwo',
   'backupPage',
   'backupSuccessfulSlideshow',
 ] as const
@@ -52,8 +51,11 @@ export const BackupFastVault = ({
   return (
     <Match
       value={step}
-      backupSlideshowPartOne={() => (
-        <BackupOverviewSlidesPartOne onFinish={toNextStep} />
+      backupOverview={() => (
+        <BackupOverviewScreen
+          userDeviceCount={vault.signers.filter(s => !isServer(s)).length}
+          onFinish={toNextStep}
+        />
       )}
       saveVault={() => (
         <SaveVaultStep
@@ -70,9 +72,6 @@ export const BackupFastVault = ({
           email={email}
           onChangeEmailAndRestart={onChangeEmailAndRestart}
         />
-      )}
-      backupSlideshowPartTwo={() => (
-        <BackupOverviewSlidesPartTwo onFinish={toNextStep} />
       )}
       backupPage={() => (
         <InitiateFastVaultBackup

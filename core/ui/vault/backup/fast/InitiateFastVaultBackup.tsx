@@ -1,5 +1,6 @@
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
+import { BackupWarningMessage } from '@core/ui/vault/backup/BackupWarningMessage'
 import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultMutation'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -44,6 +45,7 @@ export const InitiateFastVaultBackup = ({
             <Text size={16} weight={500} color="shy" centerHorizontally>
               {t('fast_vault_backup_description')}
             </Text>
+            <BackupWarningMessage />
           </VStack>
           <Button loading={isPending} onClick={() => backupVault({ password })}>
             {t('back_up_now')}
