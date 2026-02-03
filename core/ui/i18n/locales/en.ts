@@ -351,6 +351,8 @@ export const en = {
       shareSecurely: 'to ensure access, preferably',
       vaultShares: 'Your vault holds 2 shares,',
       wellDone: 'Well done',
+      sentTo: 'Sent to {{email}}.',
+      changeEmailAndRestartKeygen: 'Change email and restart keygen',
     },
     connectingWithServer: 'Connecting with server...',
     createVault: {

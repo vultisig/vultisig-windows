@@ -1,3 +1,4 @@
+import { useVaultCreationInput } from '@core/ui/mpc/keygen/create/state/vaultCreationInput'
 import { useVaults } from '@core/ui/storage/vaults'
 import { EmailConfirmation } from '@core/ui/vault/backup/fast'
 import { BackupOverviewSlidesPartOne } from '@core/ui/vault/backup/fast/BackupOverviewSlidesPartOne'
@@ -21,11 +22,18 @@ const steps = [
   'backupSuccessfulSlideshow',
 ] as const
 
+type BackupFastVaultProps = OnFinishProp &
+  OnBackProp & {
+    password: string
+    onChangeEmailAndRestart?: () => void
+  }
+
 export const BackupFastVault = ({
   onFinish,
   onBack,
   password,
-}: OnFinishProp & OnBackProp & { password: string }) => {
+  onChangeEmailAndRestart,
+}: BackupFastVaultProps) => {
   const { t } = useTranslation()
 
   const { step, toNextStep, toPreviousStep } = useStepNavigation({
@@ -33,6 +41,11 @@ export const BackupFastVault = ({
   })
   const vaults = useVaults()
   const vault = useCurrentVault()
+  const vaultCreationInput = useVaultCreationInput()
+  const email =
+    vaultCreationInput && 'fast' in vaultCreationInput
+      ? vaultCreationInput.fast.email
+      : ''
   // @antonio: by design we only need to show the summary step if user has more than 2 vaults
   const shouldShowBackupSummary = vaults.length > 1
 
@@ -51,7 +64,12 @@ export const BackupFastVault = ({
         />
       )}
       emailVerification={() => (
-        <EmailConfirmation onFinish={toNextStep} onBack={toPreviousStep} />
+        <EmailConfirmation
+          onFinish={toNextStep}
+          onBack={toPreviousStep}
+          email={email}
+          onChangeEmailAndRestart={onChangeEmailAndRestart}
+        />
       )}
       backupSlideshowPartTwo={() => (
         <BackupOverviewSlidesPartTwo onFinish={toNextStep} />
