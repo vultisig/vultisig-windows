@@ -90,7 +90,7 @@ export const EmailConfirmation = ({
             {t('fastVaultSetup.backup.codeInfo')}
           </Text>
         </VStack>
-        <VStack gap={4}>
+        <VStack gap={8}>
           <MultiCharacterInput
             value={input}
             onChange={value => {
@@ -100,18 +100,24 @@ export const EmailConfirmation = ({
             validation={inputState}
             length={emailConfirmationCodeLength}
           />
-        </VStack>
-        <VStack alignItems="center" gap={8}>
-          <Text size={13} color="shy">
-            {t('fastVaultSetup.backup.sentTo', { email })}
-          </Text>
-          {onChangeEmailAndRestart && (
-            <UnstyledButton onClick={onChangeEmailAndRestart}>
-              <Text size={13} color="primary">
-                {t('fastVaultSetup.backup.changeEmailAndRestartKeygen')}
-              </Text>
-            </UnstyledButton>
-          )}
+          <VStack gap={4}>
+            <Text size={12} color="shy">
+              {t('fastVaultSetup.backup.sentTo', { email })}
+            </Text>
+            {onChangeEmailAndRestart && (
+              <UnstyledButton onClick={onChangeEmailAndRestart}>
+                <Text
+                  style={{
+                    textAlign: 'left',
+                  }}
+                  size={13}
+                  color="shyExtra"
+                >
+                  {t('fastVaultSetup.backup.changeEmailAndRestartKeygen')}
+                </Text>
+              </UnstyledButton>
+            )}
+          </VStack>
         </VStack>
       </PageContent>
     </VStack>
