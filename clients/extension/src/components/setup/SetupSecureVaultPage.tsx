@@ -1,7 +1,7 @@
-import { CreateVaultFlowProviders } from '@core/ui/mpc/keygen/create/CreateVaultFlowProviders'
 import { CreateSecureVaultFlow } from '@core/ui/mpc/keygen/create/secure/CreateSecureVaultFlow'
 import { VaultSecurityTypeProvider } from '@core/ui/mpc/keygen/create/state/vaultSecurityType'
 import { KeyImportConfigProviders } from '@core/ui/mpc/keygen/keyimport/KeyImportConfigProviders'
+import { KeygenOperationProvider } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 
 export const SetupSecureVaultPage = () => {
@@ -12,7 +12,7 @@ export const SetupSecureVaultPage = () => {
 
   return (
     <VaultSecurityTypeProvider value="secure">
-      <CreateVaultFlowProviders>
+      <KeygenOperationProvider value={{ create: true }}>
         {keyImportInput ? (
           <KeyImportConfigProviders keyImportInput={keyImportInput}>
             {content}
@@ -20,7 +20,7 @@ export const SetupSecureVaultPage = () => {
         ) : (
           content
         )}
-      </CreateVaultFlowProviders>
+      </KeygenOperationProvider>
     </VaultSecurityTypeProvider>
   )
 }

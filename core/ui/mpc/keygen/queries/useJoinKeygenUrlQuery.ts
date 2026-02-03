@@ -45,6 +45,7 @@ export const useJoinKeygenUrlQuery = () => {
     useSevenZipQuery(),
     useCallback(
       sevenZip => {
+        const chains = keyImportChains ?? []
         const libType = toLibType({
           libType:
             'existingVault' in keygenVault
@@ -91,7 +92,7 @@ export const useJoinKeygenUrlQuery = () => {
                 useVultisigRelay,
                 vaultName,
                 libType,
-                chains: keyImportChains,
+                chains,
               })
               return toBinary(KeygenMessageSchema, message)
             },

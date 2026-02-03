@@ -18,6 +18,8 @@ type NameFormSectionProps = {
   error?: string
   value: string
   onValueChange: (value: string) => void
+  referralValue: string
+  onReferralValueChange: (value: string) => void
 }
 
 export const NameFormSection = ({
@@ -27,6 +29,8 @@ export const NameFormSection = ({
   error,
   value,
   onValueChange,
+  referralValue,
+  onReferralValueChange,
 }: NameFormSectionProps) => {
   const { t } = useTranslation()
 
@@ -67,7 +71,10 @@ export const NameFormSection = ({
                 {error}
               </Text>
             )}
-            <ReferralExpandableField />
+            <ReferralExpandableField
+              onValueChange={onReferralValueChange}
+              value={referralValue}
+            />
           </VStack>
         </ActionInputContainer>
       )}
