@@ -355,8 +355,8 @@ export const ru = {
       shareSecurely: 'чтобы обеспечить доступ, желательно',
       vaultShares: 'Ваше хранилище содержит 2 доли,',
       wellDone: 'Отлично',
-      sentTo: 'Sent to {{email}}.',
-      changeEmailAndRestartKeygen: 'Change email and restart keygen',
+      sentTo: 'Отправлено на {{email}}.',
+      changeEmailAndRestartKeygen: 'Изменить e-mail и перезапустить Keygen',
     },
     connectingWithServer: 'Подключение к серверу...',
     createVault: {

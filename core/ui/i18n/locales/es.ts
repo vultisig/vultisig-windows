@@ -61,8 +61,8 @@ export const es = {
       shareSecurely: 'para garantizar el acceso, preferiblemente',
       vaultShares: 'Su bóveda contiene 2 acciones,',
       wellDone: 'Bien hecho',
-      sentTo: 'Sent to {{email}}.',
-      changeEmailAndRestartKeygen: 'Change email and restart keygen',
+      sentTo: 'Enviado a {{email}}.',
+      changeEmailAndRestartKeygen: 'Cambiar correo y reiniciar keygen',
     },
     createVault: {
       availablePlatforms: {

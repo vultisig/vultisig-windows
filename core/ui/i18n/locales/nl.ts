@@ -359,8 +359,8 @@ export const nl = {
       shareSecurely: 'om toegang te garanderen, bij voorkeur',
       vaultShares: 'Je kluis heeft 2 shares,',
       wellDone: 'Goed gedaan',
-      sentTo: 'Sent to {{email}}.',
-      changeEmailAndRestartKeygen: 'Change email and restart keygen',
+      sentTo: 'Verzonden naar {{email}}.',
+      changeEmailAndRestartKeygen: 'E-mail wijzigen en keygen herstarten',
     },
     connectingWithServer: 'Verbinden met server...',
     createVault: {

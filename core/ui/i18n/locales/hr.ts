@@ -60,8 +60,8 @@ export const hr = {
       shareSecurely: 'kako bi se osigurao pristup, po mogućnosti',
       vaultShares: 'U vašem trezoru se nalaze 2 dionice,',
       wellDone: 'Bravo',
-      sentTo: 'Sent to {{email}}.',
-      changeEmailAndRestartKeygen: 'Change email and restart keygen',
+      sentTo: 'Poslano na {{email}}.',
+      changeEmailAndRestartKeygen: 'Promijeni e-mail i ponovno pokreni keygen',
     },
     createVault: {
       availablePlatforms: {

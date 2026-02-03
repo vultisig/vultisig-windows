@@ -60,8 +60,8 @@ export const pt = {
       shareSecurely: 'para garantir o acesso, de preferência',
       vaultShares: 'Seu cofre contém 2 ações.',
       wellDone: 'Bom trabalho',
-      sentTo: 'Sent to {{email}}.',
-      changeEmailAndRestartKeygen: 'Change email and restart keygen',
+      sentTo: 'Enviado para {{email}}.',
+      changeEmailAndRestartKeygen: 'Alterar e-mail e reiniciar keygen',
     },
     createVault: {
       availablePlatforms: {

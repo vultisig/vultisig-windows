@@ -12,20 +12,9 @@ import { useTranslation } from 'react-i18next'
 
 import { FlowErrorPageContent } from '../../flow/FlowErrorPageContent'
 
-type SaveVaultStepProps = ValueProp<Vault> &
-  OnFinishProp &
-  TitleProp &
-  OnBackProp & {
-    pendingReferral?: string
-  }
-
-export const SaveVaultStep: React.FC<SaveVaultStepProps> = ({
-  value,
-  onFinish,
-  title,
-  onBack,
-  pendingReferral = '',
-}) => {
+export const SaveVaultStep: React.FC<
+  ValueProp<Vault> & OnFinishProp & TitleProp & OnBackProp
+> = ({ value, onFinish, title, onBack }) => {
   const { t } = useTranslation()
 
   const input = useVaultCreationInput()
