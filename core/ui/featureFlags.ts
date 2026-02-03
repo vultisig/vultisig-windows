@@ -2,7 +2,7 @@ export const featureFlags = {
   circle: false,
   circleYieldDetails: false,
   nftTab: false,
-  importSeedphrase: true,
+  importSeedphrase: false,
   mayaChain: false,
   defiLpsTab: false,
   stcyStaking: false,
