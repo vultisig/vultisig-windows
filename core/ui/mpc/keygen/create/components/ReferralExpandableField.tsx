@@ -1,4 +1,3 @@
-import { usePendingReferral } from '@core/ui/mpc/keygen/create/state/pendingReferral'
 import { useFriendReferralValidation } from '@core/ui/vault/settings/referral/components/EditFriendReferralForm/hooks/useFriendReferralValidation'
 import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndicator'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -14,9 +13,16 @@ const ExpandableHeader = styled(HStack)`
   user-select: none;
 `
 
-export const ReferralExpandableField = () => {
+type ReferralExpandableFieldProps = {
+  value: string
+  onValueChange: (value: string) => void
+}
+
+export const ReferralExpandableField = ({
+  value,
+  onValueChange,
+}: ReferralExpandableFieldProps) => {
   const { t } = useTranslation()
-  const [value, onChange] = usePendingReferral()
   const [isExpanded, setIsExpanded] = useState(false)
   const error = useFriendReferralValidation(value)
 
@@ -37,8 +43,8 @@ export const ReferralExpandableField = () => {
           <ClearableTextInput
             placeholder={t('enter_up_to_4_characters_placeholder')}
             value={value}
-            onValueChange={onChange}
-            onClear={() => onChange('')}
+            onValueChange={onValueChange}
+            onClear={() => onValueChange('')}
             validation={error ? 'invalid' : undefined}
           />
           {error && (

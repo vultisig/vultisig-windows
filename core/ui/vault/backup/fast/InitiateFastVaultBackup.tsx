@@ -1,5 +1,6 @@
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
+import { BackupWarningMessage } from '@core/ui/vault/backup/BackupWarningMessage'
 import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultMutation'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -9,15 +10,19 @@ import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { usePassword } from '../../../state/password'
 import { useCurrentVault } from '../../state/currentVault'
+
+type InitiateFastVaultBackupProps = OnFinishProp &
+  OnBackProp & {
+    password: string
+  }
 
 export const InitiateFastVaultBackup = ({
   onFinish,
   onBack,
-}: OnFinishProp & OnBackProp) => {
+  password,
+}: InitiateFastVaultBackupProps) => {
   const { t } = useTranslation()
-  const [password] = usePassword()
   const vault = useCurrentVault()
 
   const { mutate: backupVault, isPending } = useBackupVaultMutation({
@@ -40,6 +45,7 @@ export const InitiateFastVaultBackup = ({
             <Text size={16} weight={500} color="shy" centerHorizontally>
               {t('fast_vault_backup_description')}
             </Text>
+            <BackupWarningMessage />
           </VStack>
           <Button loading={isPending} onClick={() => backupVault({ password })}>
             {t('back_up_now')}

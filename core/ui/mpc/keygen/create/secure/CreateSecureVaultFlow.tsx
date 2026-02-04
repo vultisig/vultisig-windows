@@ -1,13 +1,12 @@
 import { useCore } from '@core/ui/state/core'
-import { Match } from '@lib/ui/base/Match'
-import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
+import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { ChildrenProp } from '@lib/ui/props'
 import { ComponentType } from 'react'
 
+import { VaultCreationInputProvider } from '../state/vaultCreationInput'
+import { SecureVaultCreationInput } from '../VaultCreationInput'
+import { VaultSetupForm } from '../VaultSetupForm'
 import { SecureVaultKeygenFlow } from './SecureVaultKeygenFlow'
-import { SecureVaultSetupForm } from './SecureVaultSetupForm'
-
-const steps = ['form', 'keygen'] as const
 
 type CreateSecureVaultFlowProps = Partial<ChildrenProp> & {
   CreateActionProvider?: ComponentType<ChildrenProp>
@@ -18,24 +17,25 @@ export const CreateSecureVaultFlow = ({
   CreateActionProvider,
 }: CreateSecureVaultFlowProps) => {
   const { goBack } = useCore()
-  const { step, toPreviousStep, toNextStep } = useStepNavigation({
-    steps,
-    onExit: goBack,
-  })
 
   return (
-    <Match
-      value={step}
-      form={() => (
-        <SecureVaultSetupForm onBack={toPreviousStep} onFinish={toNextStep} />
+    <ValueTransfer<SecureVaultCreationInput>
+      from={({ onFinish }) => (
+        <VaultSetupForm
+          vaultSecurityType="secure"
+          onBack={goBack}
+          onSubmit={onFinish}
+        />
       )}
-      keygen={() => (
-        <SecureVaultKeygenFlow
-          onBack={toPreviousStep}
-          CreateActionProvider={CreateActionProvider}
-        >
-          {children}
-        </SecureVaultKeygenFlow>
+      to={({ value, onBack }) => (
+        <VaultCreationInputProvider value={{ secure: value }}>
+          <SecureVaultKeygenFlow
+            onBack={onBack}
+            CreateActionProvider={CreateActionProvider}
+          >
+            {children}
+          </SecureVaultKeygenFlow>
+        </VaultCreationInputProvider>
       )}
     />
   )

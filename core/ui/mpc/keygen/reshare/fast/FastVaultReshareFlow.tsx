@@ -26,7 +26,7 @@ export const FastVaultReshareFlow = () => {
           }
           to={({ value: { password }, onBack }) => (
             <PasswordProvider initialValue={password}>
-              <FastKeygenFlow onBack={onBack} />
+              <FastKeygenFlow onBack={onBack} password={password} />
             </PasswordProvider>
           )}
         />

@@ -1,11 +1,12 @@
 import { Vault } from '@core/mpc/vault/Vault'
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
-import { usePendingReferral } from '@core/ui/mpc/keygen/create/state/pendingReferral'
+import { useVaultCreationInput } from '@core/ui/mpc/keygen/create/state/vaultCreationInput'
 import { useCreateVaultWithReferralMutation } from '@core/ui/vault/mutations/useCreateVaultWithReferralMutation'
 import { Button } from '@lib/ui/buttons/Button'
 import { FlowPendingPageContent } from '@lib/ui/flow/FlowPendingPageContent'
 import { OnBackProp, OnFinishProp, TitleProp, ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -16,14 +17,16 @@ export const SaveVaultStep: React.FC<
 > = ({ value, onFinish, title, onBack }) => {
   const { t } = useTranslation()
 
-  const [pendingReferral] = usePendingReferral()
+  const input = useVaultCreationInput()
+  const referral = input ? getRecordUnionValue(input).referral : undefined
+
   const { mutate, ...mutationState } = useCreateVaultWithReferralMutation({
     onSuccess: onFinish,
   })
 
   useEffect(() => {
-    mutate({ vault: value, pendingReferral })
-  }, [mutate, value, pendingReferral])
+    mutate({ vault: value, pendingReferral: referral ?? '' })
+  }, [mutate, value, referral])
 
   return (
     <>

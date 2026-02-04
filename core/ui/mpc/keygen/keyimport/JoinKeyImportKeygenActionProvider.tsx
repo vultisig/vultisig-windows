@@ -19,6 +19,7 @@ import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useVaultOrders } from '@core/ui/storage/vaults'
 import { ChildrenProp } from '@lib/ui/props'
 import { without } from '@lib/utils/array/without'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { useCallback } from 'react'
 
@@ -50,7 +51,7 @@ export const JoinKeyImportKeygenActionProvider = ({
 
   const keygenAction: KeygenAction = useCallback(
     async ({ onStepChange, signers }) => {
-      const chains = parseKeyImportChains(keyImportChainsRaw)
+      const chains = parseKeyImportChains(shouldBePresent(keyImportChainsRaw))
 
       const sharedDklsParams = {
         isInitiateDevice: isInitiatingDevice,

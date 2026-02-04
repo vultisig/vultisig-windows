@@ -44,54 +44,58 @@ export const PluginReshareFlowContent = ({
   return (
     <>
       <InstallPluginPendingState />
-      <Match
-        value={step}
-        confirmation={() => (
-          <ValueTransfer<{ password: string }>
-            key="password"
-            from={({ onFinish }) => (
-              <PreviewInfo value={plugin} onFinish={onFinish} />
-            )}
-            to={({ value: { password } }) => (
-              <PasswordProvider initialValue={password}>
+      <ValueTransfer<{ password: string }>
+        key="password"
+        from={({ onFinish }) => (
+          <PreviewInfo value={plugin} onFinish={onFinish} />
+        )}
+        to={({ value: { password } }) => (
+          <PasswordProvider initialValue={password}>
+            <Match
+              value={step}
+              confirmation={() => (
                 <PluginReshareFastKeygenServerActionProvider>
                   <FastKeygenServerActionStep onFinish={toNextStep} />
                 </PluginReshareFastKeygenServerActionProvider>
-              </PasswordProvider>
-            )}
-          />
-        )}
-        keygen={() => (
-          <ValueTransfer<string[]>
-            from={({ onFinish }) => (
-              <WaitForPluginAndVerifier onFinish={onFinish} />
-            )}
-            to={({ value }) => (
-              <MpcPeersProvider value={value}>
-                <SilentStartMpcSessionFlow
-                  render={() => (
-                    <VStack gap={8} padding={16}>
-                      <Text color="shy" size={14} centerHorizontally>
-                        {t('installation_progress', {
-                          progress:
-                            dklsInboundSequenceNo != 0
-                              ? Number(
-                                  (
-                                    (dklsInboundSequenceNo /
-                                      appInstallTotalSequenceNo) *
-                                    100
-                                  ).toFixed(0)
-                                )
-                              : 0,
-                        })}
-                      </Text>
-                      <KeygenFlow onBack={toPreviousStep} onFinish={onFinish} />
-                    </VStack>
+              )}
+              keygen={() => (
+                <ValueTransfer<string[]>
+                  from={({ onFinish }) => (
+                    <WaitForPluginAndVerifier onFinish={onFinish} />
+                  )}
+                  to={({ value }) => (
+                    <MpcPeersProvider value={value}>
+                      <SilentStartMpcSessionFlow
+                        render={() => (
+                          <VStack gap={8} padding={16}>
+                            <Text color="shy" size={14} centerHorizontally>
+                              {t('installation_progress', {
+                                progress:
+                                  dklsInboundSequenceNo != 0
+                                    ? Number(
+                                        (
+                                          (dklsInboundSequenceNo /
+                                            appInstallTotalSequenceNo) *
+                                          100
+                                        ).toFixed(0)
+                                      )
+                                    : 0,
+                              })}
+                            </Text>
+                            <KeygenFlow
+                              onBack={toPreviousStep}
+                              onFinish={onFinish}
+                              password={password}
+                            />
+                          </VStack>
+                        )}
+                      />
+                    </MpcPeersProvider>
                   )}
                 />
-              </MpcPeersProvider>
-            )}
-          />
+              )}
+            />
+          </PasswordProvider>
         )}
       />
     </>
