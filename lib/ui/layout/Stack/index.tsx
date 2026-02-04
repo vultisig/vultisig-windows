@@ -6,6 +6,7 @@ import styled, { css } from 'styled-components'
 
 type FixedDirectionStackProps = {
   alignItems?: CSSProperties['alignItems']
+  alignSelf?: CSSProperties['alignSelf']
   bgColor?: keyof Omit<ThemeColors, 'getLabelColor'>
   children?: ReactNode
   flexGrow?: boolean
@@ -15,6 +16,7 @@ type FixedDirectionStackProps = {
   gap?: CSSProperties['gap']
   justifyContent?: CSSProperties['justifyContent']
   maxWidth?: CSSProperties['maxWidth']
+  overflow?: CSSProperties['overflow']
   padding?: CSSProperties['padding']
   position?: CSSProperties['position']
   radius?: CSSProperties['borderRadius']
@@ -36,8 +38,19 @@ const formatFlexAlignment = (
   return value
 }
 
+const formatSelfAlignment = (
+  value: CSSProperties['alignItems'] | CSSProperties['justifyContent']
+) => {
+  if (value === 'end' || value === 'start') {
+    return `flex-${value}`
+  }
+
+  return value
+}
+
 const stack = ({
   alignItems,
+  alignSelf,
   bgColor,
   direction,
   flexGrow,
@@ -47,6 +60,7 @@ const stack = ({
   gap,
   justifyContent,
   maxWidth,
+  overflow,
   padding,
   position,
   radius,
@@ -58,6 +72,10 @@ const stack = ({
   ${alignItems &&
   css`
     align-items: ${formatFlexAlignment(alignItems)};
+  `}
+  ${alignSelf &&
+  css`
+    align-self: ${formatSelfAlignment(alignSelf)};
   `}
   ${bgColor &&
   css`
@@ -96,6 +114,10 @@ const stack = ({
   ${!!maxWidth &&
   css`
     max-width: ${toSizeUnit(maxWidth)};
+  `}
+  ${overflow &&
+  css`
+    overflow: ${overflow};
   `}
   ${padding &&
   css`
