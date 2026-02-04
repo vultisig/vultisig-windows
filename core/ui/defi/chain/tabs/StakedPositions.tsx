@@ -10,7 +10,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { StakeCard } from '../components/stake/StakeCard'
@@ -49,14 +49,6 @@ export const StakedPositions = () => {
 
   const actionsDisabled = chain !== Chain.THORChain && chain !== Chain.MayaChain
 
-  const shouldAutoEnableCoin = useMemo(
-    () => (_coinId: string) => {
-      // Auto-enable coin when user clicks stake/unstake
-      return true
-    },
-    []
-  )
-
   if (error) {
     return (
       <CenterAbsolutely>
@@ -86,8 +78,6 @@ export const StakedPositions = () => {
   }
 
   const autoEnableCoinIfNeeded = async (coinId: string, token: any) => {
-    if (!shouldAutoEnableCoin(coinId)) return
-
     try {
       setPendingEnableById(prev => ({ ...prev, [coinId]: true }))
       await removeFromIgnored.mutateAsync(extractCoinKey(token))
@@ -162,11 +152,6 @@ export const StakedPositions = () => {
         const hasRequiredCoin = vaultCoins.some(current =>
           areEqualCoins(current, token)
         )
-        const supportsAutoEnable = shouldAutoEnableCoin(position.id)
-        const missingCoinAndBlocked = !hasRequiredCoin && !supportsAutoEnable
-        const actionsDisabledReason = missingCoinAndBlocked
-          ? t('defi_token_required', { ticker: token.ticker })
-          : undefined
         const {
           stakeAction,
           unstakeAction,
@@ -178,8 +163,7 @@ export const StakedPositions = () => {
           position,
           translate: key => t(key as any),
         })
-        const cardActionsDisabled =
-          actionsDisabled || resolverDisabled || missingCoinAndBlocked
+        const cardActionsDisabled = actionsDisabled || resolverDisabled
         const hideStats =
           position.id === 'thor-stake-stcy' ||
           position.id === 'thor-stake-yrune' ||
@@ -187,7 +171,7 @@ export const StakedPositions = () => {
 
         const handleNavigate = async (action: StakeActionType) => {
           if (cardActionsDisabled) return
-          if (!hasRequiredCoin && supportsAutoEnable) {
+          if (!hasRequiredCoin) {
             await autoEnableCoinIfNeeded(position.id, token)
           }
           navigateTo(position.id, action, false)
@@ -210,7 +194,6 @@ export const StakedPositions = () => {
             rewardTicker={position.rewardTicker}
             nextPayout={position.nextPayout}
             actionsDisabled={cardActionsDisabled}
-            actionsDisabledReason={actionsDisabledReason}
             canUnstake={position.canUnstake}
             unstakeAvailableDate={position.unstakeAvailableDate}
             stakeLabel={stakeLabel}
