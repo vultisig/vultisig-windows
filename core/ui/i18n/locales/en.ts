@@ -62,6 +62,17 @@ export const en = {
   backupGuide: 'Backup guide',
   backupShare: 'Backup Vault Share',
   backupShare2: 'Backup Share 2',
+  backupsTitle: '<highlight>Backups,</highlight> your new recovery method',
+  backupsDescription:
+    "Instead of a single seed phrase, your vault is secured by multiple devices. Each device has its own backup. A backup on its own can't move funds. Backups are only for recovery.",
+  backupEachDevice: 'Back up each device',
+  backupEachDeviceDescription:
+    'This is only 1 backup of your vault, repeat this process for the other devices.',
+  storeBackupsSeparately: 'Store backups separately',
+  storeBackupsSeparatelyDescription:
+    'Keep each backup in a different place. If one is compromised, your funds stay safe.',
+  backupShareWarning: 'This is only 1 share of your vault',
+  backupShareWarningRest: ', repeat this process for the other devices.',
   backup_description: 'Back up your Vault Share to a preferred location',
   backup_now: 'Backup now',
   backup_password: 'Backup Password',
@@ -332,6 +343,7 @@ export const en = {
     'Confirm the transaction by entering the password of your server share.',
   fastVaultSetup: {
     addOptionalHint: 'Add Hint (Optional)',
+    addAnOptionalHint: 'Add an optional hint',
     backup: {
       backThemUpNow: 'back them up now',
       backupConfirmationDescription: 'Backup your vault share online',
