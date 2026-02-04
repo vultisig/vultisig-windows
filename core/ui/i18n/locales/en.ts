@@ -343,6 +343,7 @@ export const en = {
     'Confirm the transaction by entering the password of your server share.',
   fastVaultSetup: {
     addOptionalHint: 'Add Hint (Optional)',
+    addAnOptionalHint: 'Add an optional hint',
     backup: {
       backThemUpNow: 'back them up now',
       backupConfirmationDescription: 'Backup your vault share online',
