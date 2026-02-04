@@ -1,5 +1,8 @@
 import { Chain } from '@core/chain/Chain'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { useCreateCoinMutation } from '@core/ui/storage/coins'
 import { useCurrentVaultChains } from '@core/ui/vault/state/currentVaultCoins'
+import { useAvailableChains } from '@core/ui/vault/state/useAvailableChains'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
@@ -60,39 +63,70 @@ const useSetDefiChainsMutation = () => {
   })
 }
 
-export const useToggleDefiChain = () => {
-  const defiChains = useDefiChains()
-  const allowedDefiChains = useSupportedDefiChainsForVault()
-  const { mutate: setDefiChains, isPending } = useSetDefiChainsMutation()
-
-  const toggleChain = (chain: Chain) => {
-    if (!isSupportedDefiChain(chain)) {
-      return
-    }
-
-    const isSelected = defiChains.includes(chain)
-
-    if (!isSelected && !allowedDefiChains.includes(chain)) {
-      return
-    }
-
-    if (isSelected) {
-      // Remove chain
-      setDefiChains(defiChains.filter(c => c !== chain))
-    } else {
-      // Add chain
-      setDefiChains([...defiChains, chain])
-    }
-  }
-
-  return { toggleChain, isPending }
-}
-
-export const useSupportedDefiChainsForVault = () => {
+const useSupportedDefiChainsForVault = () => {
   const vaultChains = useCurrentVaultChains()
 
   return useMemo(
     () => supportedDefiChains.filter(chain => vaultChains.includes(chain)),
     [vaultChains]
   )
+}
+
+type DefiChainAvailability = {
+  chain: SupportedDefiChain
+  isInVault: boolean
+  canEnable: boolean
+}
+
+export const useDefiChainAvailability = (): DefiChainAvailability[] => {
+  const vaultChains = useCurrentVaultChains()
+  const availableChains = useAvailableChains()
+
+  return useMemo(
+    () =>
+      supportedDefiChains.map(chain => ({
+        chain,
+        isInVault: vaultChains.includes(chain),
+        canEnable: availableChains.includes(chain),
+      })),
+    [vaultChains, availableChains]
+  )
+}
+
+export const useToggleDefiChainWithAutoEnable = () => {
+  const defiChains = useDefiChains()
+  const vaultChains = useCurrentVaultChains()
+  const availableChains = useAvailableChains()
+  const { mutate: setDefiChains, isPending: isSettingDefiChains } =
+    useSetDefiChainsMutation()
+  const createCoinMutation = useCreateCoinMutation()
+
+  const toggleChain = async (chain: Chain) => {
+    if (!isSupportedDefiChain(chain)) return
+
+    const isSelected = defiChains.includes(chain)
+
+    if (isSelected) {
+      // Deselecting - only remove from defiChains (requirement: don't remove from wallet)
+      setDefiChains(defiChains.filter(c => c !== chain))
+      return
+    }
+
+    // Selecting
+    const isInVault = vaultChains.includes(chain)
+    if (!isInVault) {
+      const canEnable = availableChains.includes(chain)
+      if (!canEnable) return // Key-import vault without this chain
+
+      // Auto-enable by creating fee coin
+      await createCoinMutation.mutateAsync(chainFeeCoin[chain])
+    }
+
+    setDefiChains([...defiChains, chain])
+  }
+
+  return {
+    toggleChain,
+    isPending: isSettingDefiChains || createCoinMutation.isPending,
+  }
 }
