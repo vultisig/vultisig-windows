@@ -28,7 +28,12 @@ export const DefiItem = ({
   onClick,
 }: DefiItemProps) => {
   return (
-    <Container onClick={onClick} isLoading={isPending} isDisabled={isDisabled}>
+    <Container
+      onClick={onClick}
+      isLoading={isPending}
+      isDisabled={isDisabled}
+      aria-disabled={isDisabled}
+    >
       <IconContainer isActive={isSelected} isDisabled={isDisabled}>
         <IconWrapper style={{ fontSize: iconSize }} size={iconSize}>
           {icon}
