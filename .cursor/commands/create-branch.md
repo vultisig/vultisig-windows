@@ -8,8 +8,8 @@ Create a new local git branch based on the conversation context.
 
 2. **If no GitHub issue in context**:
    - Create a descriptive branch name based on what we're working on
-   - Use format: `{type}/{short-description}` where type is `feature`, `fix`, `refactor`, etc.
-   - Example: Adding dark mode → `feature/add-dark-mode`
+   - Use format: `{type}-{short-description}` where type is `feature`, `fix`, `refactor`, etc.
+   - Example: Adding dark mode → `feature-add-dark-mode`
 
 ## Rules
 

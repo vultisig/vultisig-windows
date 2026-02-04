@@ -6,7 +6,9 @@
     "translate": "npx tsx i18n/scripts/translate.ts",
     "validate-public": "npx tsx scripts/validatePublic.ts",
     "i18n:check": "npx tsx i18n/scripts/check-unused.ts",
-    "i18n:fix": "npx tsx i18n/scripts/check-unused.ts --fix"
+    "i18n:fix": "npx tsx i18n/scripts/check-unused.ts --fix",
+    "storybook": "storybook dev -p 6007",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@bufbuild/protobuf": "^2.10.2",
@@ -46,10 +48,13 @@
     "zxing-wasm": "2.2.4"
   },
   "devDependencies": {
+    "@storybook/addon-docs": "^10.1.11",
+    "@storybook/react-vite": "^10.1.11",
     "@types/node": "^25.0.9",
     "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.2",
+    "storybook": "^10.1.11",
     "vite": "^7.3.1",
     "vite-plugin-node-polyfills": "^0.25.0",
     "vite-plugin-static-copy": "^3.1.5",
