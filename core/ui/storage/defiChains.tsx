@@ -100,6 +100,7 @@ export const useToggleDefiChainWithAutoEnable = () => {
   const { mutate: setDefiChains, isPending: isSettingDefiChains } =
     useSetDefiChainsMutation()
   const createCoinMutation = useCreateCoinMutation()
+  const queryClient = useQueryClient()
 
   const toggleChain = async (chain: Chain) => {
     if (!isSupportedDefiChain(chain)) return
@@ -107,7 +108,6 @@ export const useToggleDefiChainWithAutoEnable = () => {
     const isSelected = defiChains.includes(chain)
 
     if (isSelected) {
-      // Deselecting - only remove from defiChains (requirement: don't remove from wallet)
       setDefiChains(defiChains.filter(c => c !== chain))
       return
     }
@@ -116,13 +116,22 @@ export const useToggleDefiChainWithAutoEnable = () => {
     const isInVault = vaultChains.includes(chain)
     if (!isInVault) {
       const canEnable = availableChains.includes(chain)
-      if (!canEnable) return // Key-import vault without this chain
+      if (!canEnable) return
 
-      // Auto-enable by creating fee coin
-      await createCoinMutation.mutateAsync(chainFeeCoin[chain])
+      try {
+        await createCoinMutation.mutateAsync(chainFeeCoin[chain])
+      } catch {
+        return
+      }
     }
 
-    setDefiChains([...defiChains, chain])
+    // Read fresh defiChains from cache to avoid stale closure after await
+    const currentDefiChains =
+      queryClient.getQueryData<Chain[]>([StorageKey.defiChains]) ??
+      initialDefiChains
+    if (!currentDefiChains.includes(chain)) {
+      setDefiChains([...currentDefiChains, chain])
+    }
   }
 
   return {

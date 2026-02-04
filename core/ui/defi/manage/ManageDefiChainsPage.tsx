@@ -44,7 +44,7 @@ export const ManageDefiChainsPage = () => {
       )
     }
 
-    return chains.sort((a, b) => a.chain.localeCompare(b.chain))
+    return [...chains].sort((a, b) => a.chain.localeCompare(b.chain))
   }, [chainAvailability, search])
 
   const hasNoItems = filteredChains.length === 0 && !showCircle
