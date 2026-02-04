@@ -106,7 +106,8 @@ export const BondedPositions = () => {
   const createCoin = useCreateCoinMutation()
   const removeFromIgnored = useRemoveFromCoinFinderIgnoreMutation()
 
-  const isBondingDisabledByChain = chain !== Chain.THORChain
+  const isBondingDisabledByChain =
+    chain !== Chain.THORChain && chain !== Chain.MayaChain
   const bondCoin = {
     ...(chainFeeCoin[chain] ?? chainFeeCoin[Chain.THORChain]),
     chain,
@@ -117,8 +118,12 @@ export const BondedPositions = () => {
   const autoEnableCoinIfNeeded = async () => {
     if (hasBondCoin) return
 
-    await removeFromIgnored.mutateAsync(extractCoinKey(bondCoin))
-    await createCoin.mutateAsync(bondCoin)
+    try {
+      await removeFromIgnored.mutateAsync(extractCoinKey(bondCoin))
+      await createCoin.mutateAsync(bondCoin)
+    } catch {
+      return
+    }
   }
 
   if (error) {
