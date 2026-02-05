@@ -229,6 +229,7 @@ export const StakeCard = ({
                     href={infoUrl}
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label={`${title} info`}
                     style={{ display: 'flex', color: 'inherit' }}
                   >
                     <CircleInfoIcon style={{ fontSize: 16 }} />
