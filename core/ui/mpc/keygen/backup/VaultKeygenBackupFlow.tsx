@@ -8,12 +8,14 @@ import { BackupSecureVault } from '../../../vault/backup/secure/BackupSecureVaul
 type VaultKeygenBackupFlowProps = OnFinishProp &
   OnBackProp & {
     password?: string
+    onChangeEmailAndRestart?: () => void
   }
 
 export const VaultKeygenBackupFlow = ({
   onFinish,
   onBack,
   password = '',
+  onChangeEmailAndRestart,
 }: VaultKeygenBackupFlowProps) => {
   const vault = useCurrentVault()
 
@@ -23,6 +25,7 @@ export const VaultKeygenBackupFlow = ({
         password={password}
         onFinish={onFinish}
         onBack={onBack}
+        onChangeEmailAndRestart={onChangeEmailAndRestart}
       />
     )
   }

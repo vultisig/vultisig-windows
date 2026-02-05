@@ -5,6 +5,7 @@ import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
+import { TextArea } from '@lib/ui/inputs/TextArea'
 import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndicator'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { WarningBlock } from '@lib/ui/status/WarningBlock'
@@ -13,7 +14,6 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { UseFormRegisterReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
-import { ClearableTextInput } from './ClearableTextInput'
 import { CollapsedFormField } from './CollapsedFormField'
 
 type PasswordFormSectionProps = {
@@ -105,13 +105,20 @@ export const PasswordFormSection = ({
                     transition={{ duration: 0.2 }}
                     style={{ overflow: 'hidden' }}
                   >
-                    <VStack padding="8px 0 0 0">
-                      <ClearableTextInput
+                    <VStack gap={20} padding="8px 0 0 0">
+                      <VStack gap={12}>
+                        <Text as="span" size={28}>
+                          {t('fastVaultSetup.addAnOptionalHint')}
+                        </Text>
+                        <Text as="span" color="shy" size={14}>
+                          {t('fastVaultSetup.hintDescription')}
+                        </Text>
+                      </VStack>
+                      <TextArea
                         {...hintRegister}
-                        placeholder={t('fastVaultSetup.enterHint')}
                         value={hintValue}
                         onValueChange={onHintChange}
-                        onClear={() => onHintChange('')}
+                        placeholder={t('fastVaultSetup.enterHint')}
                       />
                     </VStack>
                   </motion.div>
