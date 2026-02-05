@@ -865,6 +865,7 @@ export const ru = {
   soon: 'Скоро',
   stake: 'Стейк',
   staked: 'Застейкано',
+  transfer: 'Перевод',
   staked_amount: 'Застейканная сумма',
   start: 'Начать',
   start_reshare: 'Начать Reshare',
