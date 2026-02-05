@@ -23,6 +23,9 @@ import { useDefiChainPositionsQuery } from '../queries/useDefiChainPositionsQuer
 import { useCurrentDefiChain } from '../useCurrentDefiChain'
 import { DefiPositionEmptyState } from './DefiPositionEmptyState'
 
+const stcyInfoUrl =
+  'https://docs.rujira.network/ecosystem-products/tcy-autocompounder'
+
 type StakeActionType =
   | 'stake'
   | 'unstake'
@@ -193,6 +196,16 @@ export const StakedPositions = () => {
           navigateTo(position.id, action, false)
         }
 
+        const handleTransfer = () => {
+          if (position.id === 'thor-stake-stcy') {
+            const stcyCoin = resolveStakeToken(chain, position.id)
+            navigate({
+              id: 'send',
+              state: { coin: extractCoinKey(stcyCoin) },
+            })
+          }
+        }
+
         return (
           <StakeCard
             key={position.id}
@@ -223,6 +236,12 @@ export const StakedPositions = () => {
               position.rewards && position.rewards > 0
                 ? () => handleNavigate('withdraw_ruji_rewards')
                 : undefined
+            }
+            infoUrl={
+              position.id === 'thor-stake-stcy' ? stcyInfoUrl : undefined
+            }
+            onTransfer={
+              position.id === 'thor-stake-stcy' ? handleTransfer : undefined
             }
           />
         )
