@@ -8,13 +8,27 @@ import { OnBackProp } from '@lib/ui/props'
 import { MigrateSuccess } from '../migrate/MigrateSuccess'
 import { KeygenFlowSuccess } from './KeygenFlowSuccess'
 
-export const KeygenFlowEnding = ({ onBack }: OnBackProp) => {
+type KeygenFlowEndingProps = OnBackProp & {
+  password?: string
+  onChangeEmailAndRestart?: () => void
+}
+
+export const KeygenFlowEnding = ({
+  onBack,
+  password,
+  onChangeEmailAndRestart,
+}: KeygenFlowEndingProps) => {
   const keygenOperation = useKeygenOperation()
 
   return (
     <StepTransition
       from={({ onFinish }) => (
-        <VaultKeygenBackupFlow onFinish={onFinish} onBack={onBack} />
+        <VaultKeygenBackupFlow
+          onFinish={onFinish}
+          onBack={onBack}
+          password={password}
+          onChangeEmailAndRestart={onChangeEmailAndRestart}
+        />
       )}
       to={() => (
         <MatchRecordUnion
