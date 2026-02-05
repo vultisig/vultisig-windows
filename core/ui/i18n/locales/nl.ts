@@ -874,6 +874,7 @@ export const nl = {
   soon: 'Binnenkort',
   stake: 'Staken',
   staked: 'Gestaked',
+  transfer: 'Overdragen',
   staked_amount: 'Gestaked bedrag',
   start: 'Start',
   start_reshare: 'Reshare starten',
