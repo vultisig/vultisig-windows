@@ -202,9 +202,12 @@ export const StakedPositions = () => {
           navigateTo(position.id, action, false)
         }
 
-        const handleTransfer = () => {
+        const handleTransfer = async () => {
           if (position.id === 'thor-stake-stcy') {
             const stcyCoin = resolveStakeToken(chain, position.id)
+            if (!hasRequiredCoin && supportsAutoEnable) {
+              await autoEnableCoinIfNeeded(position.id, stcyCoin)
+            }
             navigate({
               id: 'send',
               state: { coin: extractCoinKey(stcyCoin) },
