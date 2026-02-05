@@ -870,6 +870,7 @@ export const en = {
   soon: 'Soon',
   stake: 'Stake',
   staked: 'Staked',
+  transfer: 'Transfer',
   staked_amount: 'Staked Amount',
   start: 'Start',
   start_reshare: 'Start Reshare',
