@@ -43,6 +43,7 @@ const CheckBadge = styled(BaseIconWrapper)`
 const Container = styled(UnstyledButton)`
   ${vStack({
     gap: 11,
+    alignItems: 'center',
   })};
 
   width: 74px;
@@ -69,9 +70,17 @@ export const SelectableItem = ({
           </CheckBadge>
         )}
       </IconWrapper>
-      <Text cropped color="contrast" size={12} weight={500}>
-        {name}
-      </Text>
+      <TextWrapper>
+        <Text cropped color="contrast" size={12} weight={500}>
+          {name}
+        </Text>
+      </TextWrapper>
     </Container>
   )
 }
+
+const TextWrapper = styled.div`
+  min-width: 0;
+  width: 100%;
+  text-align: center;
+`
