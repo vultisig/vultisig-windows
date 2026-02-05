@@ -1,6 +1,7 @@
 import { CosmosChain } from '@core/chain/Chain'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
 import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
+import { tcyAutoCompounderConfig } from '@core/chain/chains/cosmos/thor/tcy-autocompound/config'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { FindCoinsResolver } from '@core/chain/coin/find/resolver'
 import { getCosmosTokenMetadata } from '@core/chain/coin/token/metadata/resolvers/cosmos'
@@ -20,7 +21,8 @@ export const findCosmosCoins: FindCoinsResolver<CosmosChain> = async ({
   const coins = await Promise.all(
     without(
       balances.map(({ denom }) => denom),
-      cosmosFeeCoinDenom[chain]
+      cosmosFeeCoinDenom[chain],
+      tcyAutoCompounderConfig.shareDenom
     ).map(denom =>
       getCosmosTokenMetadata({ chain, id: denom })
         .then(({ ticker }) => ({ denom, ticker }))
