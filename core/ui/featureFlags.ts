@@ -5,5 +5,5 @@ export const featureFlags = {
   importSeedphrase: false,
   mayaChain: false,
   defiLpsTab: false,
-  stcyStaking: false,
+  stcyStaking: true,
 }
