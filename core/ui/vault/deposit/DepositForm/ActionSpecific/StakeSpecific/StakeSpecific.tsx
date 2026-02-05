@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next'
 import { StakeableChain } from '../../../config'
 import { useDepositCoin } from '../../../providers/DepositCoinProvider'
 import { useDepositFormHandlers } from '../../../providers/DepositFormHandlersProvider'
-import { AssetRequiredLabel, Container } from '../../DepositForm.styled'
+import { Container } from '../../DepositForm.styled'
 import { StakeTokenExplorer } from './StakeTokenExplorer'
 
 export const StakeSpecific = () => {
@@ -28,11 +28,6 @@ export const StakeSpecific = () => {
                 <Text weight="400" family="mono" size={16}>
                   {selectedCoin.ticker || t('select_token')}
                 </Text>
-                {!selectedCoin && (
-                  <AssetRequiredLabel as="span" color="danger" size={14}>
-                    *
-                  </AssetRequiredLabel>
-                )}
               </HStack>
               <IconWrapper style={{ fontSize: 20 }}>
                 <ChevronRightIcon />
