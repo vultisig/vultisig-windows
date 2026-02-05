@@ -40,7 +40,6 @@ export const getSolanaSigningInputs: SigningInputsResolver<'solana'> = ({
         })
       }
     )
-    // debugger
     return inputs
   }
 

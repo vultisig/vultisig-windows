@@ -67,7 +67,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
               }).map(value => Buffer.from(value).toString('hex'))
             )
 
-            const msgs = groupedMsgs.flat().sort()
+            const msgs = groupedMsgs.flat()
 
             const signatureAlgorithm = signatureAlgorithms[chainKind]
 

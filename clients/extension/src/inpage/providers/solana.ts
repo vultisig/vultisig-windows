@@ -425,6 +425,15 @@ export class Solana implements Wallet {
     return results
   }
 
+  signAndSendAllTransactions = async <
+    T extends Transaction | VersionedTransaction,
+  >(
+    _transactions: T[],
+    _options?: SendOptions
+  ): Promise<{ signature: TransactionSignature }[]> => {
+    throw new NotImplementedError('signAndSendAllTransactions')
+  }
+
   signAndSendTransaction = async <T extends Transaction | VersionedTransaction>(
     transaction: T,
     _options?: SendOptions
