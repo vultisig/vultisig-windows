@@ -109,12 +109,17 @@ export const StakedPositions = () => {
 
     const token = resolveStakeToken(chain, id)
 
+    // For sTCY, we need to pass TCY coin with autoCompound: true
+    // Similar to how yTCY/yRUNE use TCY/RUNE coin for mint
+    const isStcyPosition = id === 'thor-stake-stcy'
     const coinForAction =
       chain === Chain.THORChain && action === 'mint'
         ? id === 'thor-stake-ytcy'
           ? resolveStakeToken(chain, 'thor-stake-tcy')
           : resolveStakeToken(chain, 'thor-stake-rune')
-        : token
+        : isStcyPosition
+          ? resolveStakeToken(chain, 'thor-stake-tcy')
+          : token
 
     navigate({
       id: 'deposit',
@@ -122,6 +127,7 @@ export const StakedPositions = () => {
         coin: extractCoinKey(coinForAction),
         action,
         entryPoint: 'defi',
+        form: isStcyPosition ? { autoCompound: true } : undefined,
       },
     })
   }
