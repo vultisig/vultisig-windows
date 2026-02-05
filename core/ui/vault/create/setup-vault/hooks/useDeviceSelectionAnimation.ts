@@ -6,7 +6,13 @@ import {
   useViewModelInstance,
   useViewModelInstanceNumber,
 } from '@rive-app/react-webgl2'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
+
+const triggerHapticFeedback = () => {
+  if ('vibrate' in navigator) {
+    navigator.vibrate(10)
+  }
+}
 
 export const useDeviceSelectionAnimation = () => {
   const { RiveComponent, rive } = useRive({
@@ -26,6 +32,21 @@ export const useDeviceSelectionAnimation = () => {
   })
 
   const indexProperty = useViewModelInstanceNumber('Index', viewModelInstance)
+
+  const previousIndexRef = useRef<number | null>(null)
+
+  useEffect(() => {
+    const currentIndex = indexProperty?.value ?? 0
+
+    if (
+      previousIndexRef.current !== null &&
+      previousIndexRef.current !== currentIndex
+    ) {
+      triggerHapticFeedback()
+    }
+
+    previousIndexRef.current = currentIndex
+  }, [indexProperty?.value])
 
   useEffect(() => {
     if (!rive) return

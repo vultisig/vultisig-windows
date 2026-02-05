@@ -56,12 +56,20 @@ export const ChainItem = ({ value: coin }: ValueProp<Coin>) => {
           </CheckBadge>
         )}
       </ChainIconWrapper>
-      <Text cropped color="contrast" size={12} weight={500}>
-        {coin.chain}
-      </Text>
+      <ChainNameWrapper>
+        <Text cropped color="contrast" size={12} weight={500}>
+          {coin.chain}
+        </Text>
+      </ChainNameWrapper>
     </ChainCard>
   )
 }
+
+const ChainNameWrapper = styled.div`
+  min-width: 0;
+  width: 100%;
+  text-align: center;
+`
 
 const ChainCard = styled(UnstyledButton)<{
   isSelected: boolean
@@ -69,6 +77,7 @@ const ChainCard = styled(UnstyledButton)<{
 }>`
   ${vStack({
     gap: 11,
+    alignItems: 'center',
   })};
 
   width: 74px;

@@ -24,17 +24,26 @@ export const AddCustomTokenPrompt = () => {
         <CustomIconWrapper>
           <PlusIcon />
         </CustomIconWrapper>
-        <Text cropped color="contrast" size={12} weight={500}>
-          {t('custom_token')}
-        </Text>
+        <TextWrapper>
+          <Text cropped color="contrast" size={12} weight={500}>
+            {t('custom_token')}
+          </Text>
+        </TextWrapper>
       </CustomTokenCard>
     )
   }
 }
 
+const TextWrapper = styled.div`
+  min-width: 0;
+  width: 100%;
+  text-align: center;
+`
+
 const CustomTokenCard = styled(UnstyledButton)`
   ${vStack({
     gap: 11,
+    alignItems: 'center',
   })};
 
   width: 74px;
