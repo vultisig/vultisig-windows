@@ -13,6 +13,7 @@ type DefiItemProps = {
   name: string
   isSelected: boolean
   isPending: boolean
+  isDisabled?: boolean
   onClick: () => void
 }
 
@@ -23,11 +24,12 @@ export const DefiItem = ({
   name,
   isSelected,
   isPending,
+  isDisabled = false,
   onClick,
 }: DefiItemProps) => {
   return (
-    <Container onClick={onClick} isLoading={isPending}>
-      <IconContainer isActive={isSelected}>
+    <Container onClick={onClick} isLoading={isPending} isDisabled={isDisabled}>
+      <IconContainer isActive={isSelected} isDisabled={isDisabled}>
         <IconWrapper style={{ fontSize: iconSize }} size={iconSize}>
           {icon}
         </IconWrapper>
@@ -37,24 +39,36 @@ export const DefiItem = ({
           </CheckBadge>
         )}
       </IconContainer>
-      <Text cropped color="contrast" size={12} weight={500}>
+      <Text
+        cropped
+        color={isDisabled ? 'supporting' : 'contrast'}
+        size={12}
+        weight={500}
+      >
         {name}
       </Text>
     </Container>
   )
 }
 
-const Container = styled(UnstyledButton)<{ isLoading: boolean }>`
+const Container = styled(UnstyledButton)<{
+  isLoading: boolean
+  isDisabled: boolean
+}>`
   ${vStack({
     gap: 11,
   })};
 
   width: 74px;
-  cursor: ${({ isLoading }) => (isLoading ? 'wait' : 'pointer')};
-  opacity: ${({ isLoading }) => (isLoading ? 0.6 : 1)};
+  cursor: ${({ isLoading, isDisabled }) =>
+    isDisabled ? 'not-allowed' : isLoading ? 'wait' : 'pointer'};
+  opacity: ${({ isLoading, isDisabled }) =>
+    isDisabled ? 0.4 : isLoading ? 0.6 : 1};
 `
 
-const IconContainer = styled.div<IsActiveProp>`
+type IconContainerProps = IsActiveProp & { isDisabled: boolean }
+
+const IconContainer = styled.div<IconContainerProps>`
   ${vStack({
     alignItems: 'center',
     justifyContent: 'center',
@@ -64,10 +78,12 @@ const IconContainer = styled.div<IsActiveProp>`
   background: rgba(11, 26, 58, 0.5);
   height: 74px;
   padding: 17px;
-  opacity: ${({ isActive }) => (isActive ? 1 : 0.5)};
+  opacity: ${({ isActive, isDisabled }) =>
+    isDisabled ? 0.5 : isActive ? 1 : 0.5};
 
-  ${({ isActive }) =>
+  ${({ isActive, isDisabled }) =>
     isActive &&
+    !isDisabled &&
     css`
       border: 1.5px solid ${getColor('foregroundSuper')};
       background: ${getColor('foreground')};
