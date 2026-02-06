@@ -1,14 +1,18 @@
 import { expect } from '@storybook/jest'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { userEvent, within } from '@storybook/testing-library'
-import { Fragment } from 'react'
 
 import { BoxIcon as SampleIcon } from '../../icons/BoxIcon'
-import { IconButton } from './index'
 import { PrimaryButtonStatus } from '../ButtonProps'
+import { IconButton } from './index'
 
 const KINDS = ['link', 'primary', 'secondary'] as const
-const PRIMARY_STATUSES: PrimaryButtonStatus[] = ['default', 'neutral', 'success', 'danger']
+const primaryStatuses: PrimaryButtonStatus[] = [
+  'default',
+  'neutral',
+  'success',
+  'danger',
+]
 const SIZES = ['xs', 'sm', 'md', 'lg', 'xl'] as const
 
 const meta: Meta<typeof IconButton> = {
@@ -18,7 +22,7 @@ const meta: Meta<typeof IconButton> = {
   parameters: { layout: 'centered' },
   argTypes: {
     kind: { control: 'radio', options: KINDS },
-    status: { control: 'radio', options: PRIMARY_STATUSES },
+    status: { control: 'radio', options: primaryStatuses },
     size: { control: 'radio', options: SIZES },
     loading: { control: 'boolean' },
     disabled: { control: 'text' },
@@ -40,7 +44,7 @@ export const Playground: Story = {
   args: {
     kind: 'primary',
     status: 'default',
-  }
+  },
 }
 
 export const VariantMatrix: Story = {
@@ -50,9 +54,14 @@ export const VariantMatrix: Story = {
       <section>
         <h3 style={{ color: '#f0f4fc', marginBottom: 16 }}>Primary</h3>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          {PRIMARY_STATUSES.map(status => (
-            <div key={status} style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-              <span style={{ color: '#718096', fontSize: 14, minWidth: 60 }}>{status}</span>
+          {primaryStatuses.map(status => (
+            <div
+              key={status}
+              style={{ display: 'flex', gap: 12, alignItems: 'center' }}
+            >
+              <span style={{ color: '#718096', fontSize: 14, minWidth: 60 }}>
+                {status}
+              </span>
               {SIZES.map(size => (
                 <IconButton
                   key={size}
@@ -119,7 +128,11 @@ export const Disabled: Story = {
 }
 
 export const TogglesLoading: Story = {
-  args: { kind: 'primary', children: <SampleIcon />, 'aria-label': 'toggle-loading' },
+  args: {
+    kind: 'primary',
+    children: <SampleIcon />,
+    'aria-label': 'toggle-loading',
+  },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement)
     const button = canvas.getByRole('button', { name: /toggle-loading/i })

@@ -11,4 +11,7 @@ type BaseButtonProps = Omit<
 export type PrimaryButtonStatus = 'default' | 'neutral' | 'success' | 'danger'
 
 export type ButtonProps = BaseButtonProps &
-  ({ kind?: 'primary'; status?: PrimaryButtonStatus } | { kind: 'secondary' | 'link' | 'outlined'; status?: never })
+  (
+    | { kind?: 'primary'; status?: PrimaryButtonStatus }
+    | { kind: 'secondary' | 'link' | 'outlined'; status?: never }
+  )

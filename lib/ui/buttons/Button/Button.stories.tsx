@@ -2,10 +2,10 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Fragment } from 'react'
 
 import { EyeIcon } from '../../icons/EyeIcon'
-import { Button } from '.'
 import { PrimaryButtonStatus } from '../ButtonProps'
+import { Button } from '.'
 
-const PRIMARY_STATUSES: PrimaryButtonStatus[] = [
+const primaryStatuses: PrimaryButtonStatus[] = [
   'default',
   'neutral',
   'success',
@@ -22,7 +22,7 @@ const meta: Meta<typeof Button> = {
   },
   argTypes: {
     kind: { control: 'radio', options: ['primary', 'secondary', 'link'] },
-    status: { control: 'radio', options: PRIMARY_STATUSES },
+    status: { control: 'radio', options: primaryStatuses },
     size: { control: 'radio', options: SIZES },
     loading: { control: 'boolean' },
     disabled: { control: 'text' },
@@ -65,7 +65,7 @@ export const Gallery: Story = {
             md
           </span>
 
-          {PRIMARY_STATUSES.map(status => (
+          {primaryStatuses.map(status => (
             <Fragment key={status}>
               <span style={{ color: '#718096', fontSize: 14, minWidth: 60 }}>
                 {status}

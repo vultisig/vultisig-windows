@@ -129,7 +129,11 @@ export const AddressBookModal = ({ onSelect, onClose }: Props) => {
                   : { kind: 'secondary' as const }
 
                 return (
-                  <OptionButton {...(rest as any)} {...buttonProps} disabled={false}>
+                  <OptionButton
+                    {...(rest as any)}
+                    {...buttonProps}
+                    disabled={false}
+                  >
                     {children}
                   </OptionButton>
                 )
