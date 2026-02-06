@@ -1,6 +1,7 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
 import { knownCosmosTokens } from '@core/chain/coin/knownTokens/cosmos'
+import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { attempt } from '@lib/utils/attempt'
 import { match } from '@lib/utils/match'
@@ -24,19 +25,20 @@ type StakeBalanceResult = {
 export const useStakeBalance = (): StakeBalanceResult => {
   const [selectedCoin] = useDepositCoin()
   const [action] = useDepositAction()
+  const [{ form }] = useCoreViewState<'deposit'>()
   const thorchainVaultAddress = useCurrentVaultAddress(Chain.THORChain)
   const tonVaultAddress = useCurrentVaultAddress(Chain.Ton)
 
   const isUnstake = action === 'unstake'
   const isTonChain = selectedCoin.chain === Chain.Ton
+  const autocompound = form?.autoCompound === true
 
   const stakeId = useMemo(() => {
     if (isTonChain) return null
     return (
-      attempt(() => selectStakeId(selectedCoin, { autocompound: false }))
-        .data ?? null
+      attempt(() => selectStakeId(selectedCoin, { autocompound })).data ?? null
     )
-  }, [selectedCoin, isTonChain])
+  }, [selectedCoin, isTonChain, autocompound])
 
   const { data: nativeTcyBalance = 0n, isLoading: isLoadingNativeTcy } =
     useUnstakableTcyQuery({

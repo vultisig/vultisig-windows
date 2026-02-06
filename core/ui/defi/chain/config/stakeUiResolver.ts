@@ -112,7 +112,7 @@ export const resolveStakeTitle = ({
 }: TitleResolverInput) => {
   if (position.type === 'index') return coin.ticker
   if (position.id === 'thor-stake-stcy') {
-    return translate('compounded_token', { ticker: coin.ticker })
+    return translate('compounded_token', { ticker: 'TCY' })
   }
   return `${translate('staked')} ${coin.ticker}`
 }
