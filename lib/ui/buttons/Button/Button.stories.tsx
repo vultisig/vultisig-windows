@@ -1,10 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import { Fragment } from 'react'
 
 import { EyeIcon } from '../../icons/EyeIcon'
+import { PrimaryButtonStatus } from '../ButtonProps'
 import { Button } from '.'
 
-const KINDS = ['primary', 'secondary', 'link'] as const
-const STATUSES = ['default', 'success', 'warning', 'danger'] as const
+const primaryStatuses: PrimaryButtonStatus[] = [
+  'default',
+  'neutral',
+  'success',
+  'danger',
+]
 const SIZES = ['sm', 'md'] as const
 
 const meta: Meta<typeof Button> = {
@@ -15,60 +21,145 @@ const meta: Meta<typeof Button> = {
     layout: 'centered',
   },
   argTypes: {
-    kind: { control: 'radio', options: KINDS },
-    status: { control: 'radio', options: STATUSES },
+    kind: { control: 'radio', options: ['primary', 'secondary', 'link'] },
+    status: { control: 'radio', options: primaryStatuses },
     size: { control: 'radio', options: SIZES },
     loading: { control: 'boolean' },
     disabled: { control: 'text' },
     icon: { table: { disable: true } },
   },
+}
+export default meta
+
+type Story = StoryObj<typeof Button>
+
+export const Playground: Story = {
   args: {
     kind: 'primary',
     status: 'default',
     size: 'md',
-    children: 'Button',
+    children: 'Get started',
   },
 }
-export default meta
-
-type Story = StoryObj<typeof meta>
-
-export const Playground: Story = {}
 
 export const Gallery: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {KINDS.map(kind => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 48 }}>
+      {/* Primary variants */}
+      <section>
+        <h3 style={{ color: '#f0f4fc', marginBottom: 16 }}>Primary</h3>
         <div
-          key={kind}
-          style={{ display: 'flex', flexDirection: 'column', gap: 8 }}
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'auto 1fr 1fr',
+            gap: '16px 24px',
+            alignItems: 'center',
+          }}
         >
-          <strong>{kind}</strong>
-          {STATUSES.map(status => (
-            <div key={status} style={{ display: 'flex', gap: 8 }}>
+          {/* Header row */}
+          <span />
+          <span style={{ color: '#718096', fontSize: 12, textAlign: 'center' }}>
+            sm
+          </span>
+          <span style={{ color: '#718096', fontSize: 12, textAlign: 'center' }}>
+            md
+          </span>
+
+          {primaryStatuses.map(status => (
+            <Fragment key={status}>
+              <span style={{ color: '#718096', fontSize: 14, minWidth: 60 }}>
+                {status}
+              </span>
               {SIZES.map(size => (
-                <Button key={size} kind={kind} status={status} size={size}>
-                  {status}
-                </Button>
+                <div key={size}>
+                  <Button kind="primary" status={status} size={size}>
+                    Get started
+                  </Button>
+                </div>
               ))}
-            </div>
+            </Fragment>
           ))}
         </div>
-      ))}
+      </section>
+
+      {/* Secondary */}
+      <section>
+        <h3 style={{ color: '#f0f4fc', marginBottom: 16 }}>Secondary</h3>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '16px 24px',
+            alignItems: 'center',
+            maxWidth: 400,
+          }}
+        >
+          <span style={{ color: '#718096', fontSize: 12, textAlign: 'center' }}>
+            sm
+          </span>
+          <span style={{ color: '#718096', fontSize: 12, textAlign: 'center' }}>
+            md
+          </span>
+          {SIZES.map(size => (
+            <Button key={size} kind="secondary" size={size}>
+              Get started
+            </Button>
+          ))}
+        </div>
+      </section>
+
+      {/* Link */}
+      <section>
+        <h3 style={{ color: '#f0f4fc', marginBottom: 16 }}>Link</h3>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gap: '16px 24px',
+            alignItems: 'center',
+            maxWidth: 400,
+          }}
+        >
+          <span style={{ color: '#718096', fontSize: 12, textAlign: 'center' }}>
+            sm
+          </span>
+          <span style={{ color: '#718096', fontSize: 12, textAlign: 'center' }}>
+            md
+          </span>
+          {SIZES.map(size => (
+            <Button key={size} kind="link" size={size}>
+              Get started
+            </Button>
+          ))}
+        </div>
+      </section>
     </div>
   ),
-  parameters: { controls: { hideNoControlsWarning: true } },
 }
 
 export const WithIcon: Story = {
   args: {
+    kind: 'primary',
+    status: 'default',
     icon: <EyeIcon />,
     children: 'Preview',
   },
 }
 
-export const Loading: Story = { args: { loading: true } }
+export const Loading: Story = {
+  args: {
+    kind: 'primary',
+    status: 'default',
+    loading: true,
+    children: 'Button',
+  },
+}
 
 export const Disabled: Story = {
-  args: { disabled: 'Form invalid', children: 'Submit' },
+  args: {
+    kind: 'primary',
+    status: 'default',
+    disabled: 'Form invalid',
+    children: 'Submit',
+  },
 }
