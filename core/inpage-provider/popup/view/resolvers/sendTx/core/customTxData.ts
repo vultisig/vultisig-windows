@@ -126,10 +126,7 @@ export const getCustomTxData = ({
         })
 
         if (chain === Chain.Bitcoin) {
-          const dataBuffer = Buffer.from(
-            Array.isArray(data) ? data[0] : data,
-            'base64'
-          )
+          const dataBuffer = Buffer.from(data[0], 'base64')
           let psbt = Psbt.fromBuffer(Buffer.from(dataBuffer))
           if (params && params.length > 0) {
             const currentWalletEntries = params.filter(e =>

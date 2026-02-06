@@ -1,6 +1,9 @@
 import { bs58 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
 import { Chain } from '@core/chain/Chain'
-import { deserializeSigningOutput } from '@core/chain/tw/signingOutput'
+import {
+  deserializeSigningOutput,
+  SerializedSigningOutput,
+} from '@core/chain/tw/signingOutput'
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
 import { getTransactionAuthority } from '@core/inpage-provider/popup/view/resolvers/sendTx/core/solana/utils'
@@ -290,33 +293,57 @@ export class Solana implements Wallet {
     }
   }
 
-  signTransaction = async (
-    transaction: Transaction | VersionedTransaction,
-    skipBroadcast: boolean = true
-  ) => {
-    let serializedTransaction: Uint8Array
-    let authority: string | undefined
-
+  private serializeTransaction(
+    transaction: Transaction | VersionedTransaction
+  ) {
     if (isVersionedTransaction(transaction)) {
-      serializedTransaction = transaction.serialize()
-      authority = getTransactionAuthority(serializedTransaction)
-    } else {
-      serializedTransaction = transaction.serialize({
-        requireAllSignatures: false,
-        verifySignatures: false,
-      })
-      authority = transaction.feePayer?.toString()
+      const bytes = transaction.serialize()
+      return {
+        base64: Buffer.from(bytes).toString('base64'),
+        authority: getTransactionAuthority(bytes),
+      }
     }
 
-    const serializedBase64 = Buffer.from(serializedTransaction).toString(
-      'base64'
-    )
+    const bytes = transaction.serialize({
+      requireAllSignatures: false,
+      verifySignatures: false,
+    })
+    return {
+      base64: Buffer.from(bytes).toString('base64'),
+      authority: transaction.feePayer?.toString(),
+    }
+  }
+
+  private deserializeSignedTransaction(
+    data: SerializedSigningOutput,
+    original: Transaction | VersionedTransaction
+  ) {
+    const { encoded } = deserializeSigningOutput(Chain.Solana, data)
+    if (!encoded) {
+      throw new Error('No encoded transaction returned from signing')
+    }
+
+    const rawData = bs58.decode(encoded)
+
+    if (isVersionedTransaction(original)) {
+      return VersionedTransaction.deserialize(rawData)
+    }
+
+    return Transaction.from(Buffer.from(rawData))
+  }
+
+  private async signTransactions<T extends Transaction | VersionedTransaction>(
+    transactions: T[],
+    skipBroadcast: boolean
+  ): Promise<T[]> {
+    const serialized = transactions.map(tx => this.serializeTransaction(tx))
+    const authority = serialized.find(s => s.authority)?.authority
 
     const result = await callPopup(
       {
         sendTx: {
           serialized: {
-            data: serializedBase64,
+            data: serialized.map(s => s.base64),
             skipBroadcast,
             chain: Chain.Solana,
           },
@@ -327,102 +354,31 @@ export class Solana implements Wallet {
       }
     )
 
-    // Normalize to array and take first element (single transaction)
-    const txResult = Array.isArray(result) ? result[0] : result
-    const { encoded } = deserializeSigningOutput(Chain.Solana, txResult.data)
-    if (!encoded) {
-      throw new Error('No encoded transaction returned from signing')
-    }
+    return result.map(
+      (txResult, i) =>
+        this.deserializeSignedTransaction(txResult.data, transactions[i]) as T
+    )
+  }
 
-    const rawData = bs58.decode(encoded)
-
-    if (isVersionedTransaction(transaction)) {
-      return VersionedTransaction.deserialize(rawData)
-    } else {
-      return Transaction.from(Buffer.from(rawData))
-    }
+  signTransaction = async (
+    transaction: Transaction | VersionedTransaction,
+    skipBroadcast: boolean = true
+  ) => {
+    const [signed] = await this.signTransactions([transaction], skipBroadcast)
+    return signed
   }
 
   signAllTransactions = async <T extends Transaction | VersionedTransaction>(
     transactions: T[]
   ) => {
-    if (!transactions || !transactions.length) {
+    if (!transactions.length) {
       return Promise.reject({
         code: -32000,
         message: 'Missing or invalid parameters.',
       })
     }
 
-    // Serialize all transactions
-    const serializedTransactions: string[] = []
-    let authority: string | undefined
-
-    for (const transaction of transactions) {
-      let serializedTransaction: Uint8Array
-
-      if (isVersionedTransaction(transaction)) {
-        serializedTransaction = transaction.serialize()
-        if (!authority) {
-          authority = getTransactionAuthority(serializedTransaction)
-        }
-      } else {
-        serializedTransaction = transaction.serialize({
-          requireAllSignatures: false,
-          verifySignatures: false,
-        })
-        if (!authority) {
-          authority = transaction.feePayer?.toString()
-        }
-      }
-
-      const serializedBase64 = Buffer.from(serializedTransaction).toString(
-        'base64'
-      )
-      serializedTransactions.push(serializedBase64)
-    }
-
-    // Process all transactions together in a single keysignPayload
-    const result = await callPopup(
-      {
-        sendTx: {
-          serialized: {
-            data: serializedTransactions,
-            skipBroadcast: true,
-            chain: Chain.Solana,
-          },
-        },
-      },
-      {
-        account: authority,
-      }
-    )
-
-    // Handle response - it can be an array of transactions or a single transaction
-    const responseData = Array.isArray(result) ? result : [result]
-    const results: (Transaction | VersionedTransaction)[] = []
-
-    for (let i = 0; i < responseData.length; i++) {
-      const { encoded } = deserializeSigningOutput(
-        Chain.Solana,
-        responseData[i].data
-      )
-      if (!encoded) {
-        throw new Error(
-          `No encoded transaction returned from signing for transaction ${i + 1}`
-        )
-      }
-
-      const rawData = bs58.decode(encoded)
-      const originalTx = transactions[i]
-
-      if (isVersionedTransaction(originalTx)) {
-        results.push(VersionedTransaction.deserialize(rawData))
-      } else {
-        results.push(Transaction.from(Buffer.from(rawData)))
-      }
-    }
-
-    return results
+    return this.signTransactions(transactions, true)
   }
 
   signAndSendAllTransactions = async <
