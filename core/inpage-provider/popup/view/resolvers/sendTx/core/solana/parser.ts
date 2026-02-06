@@ -27,7 +27,7 @@ import { mergedKeys, resolveAddressTableKeys } from './utils'
 type ParseSolanaTxInput = {
   fromCoin: CommCoin
   walletCore: WalletCore
-  data: string
+  data: string[]
   getCoin: (coinKey: CoinKey) => Promise<Coin>
   swapProvider: string
 }
@@ -40,7 +40,7 @@ export const parseSolanaTx = async ({
   swapProvider,
 }: ParseSolanaTxInput): Promise<SolanaTxData> => {
   const connection = new Connection(solanaRpcUrl)
-  const inputTx = Uint8Array.from(Buffer.from(data, 'base64'))
+  const inputTx = Uint8Array.from(Buffer.from(data[0], 'base64'))
   const txInputDataArray = Object.values(inputTx)
   const txInputDataBuffer = new Uint8Array(txInputDataArray as any)
   const buffer = Buffer.from(txInputDataBuffer)
@@ -129,9 +129,9 @@ export const parseSolanaTx = async ({
             inputCoin,
             outAmount: toAmount.toString(),
             outputCoin,
-            data,
+            data: data[0],
             swapProvider,
-            rawMessageData: data,
+            rawTransactions: data,
           },
         } as SolanaTxData
       },
@@ -148,7 +148,7 @@ export const parseSolanaTx = async ({
             inputCoin,
             inAmount: fromAmount.toString(),
             receiverAddress: '',
-            rawMessageData: data,
+            rawTransactions: data,
           },
         } as SolanaTxData
       },
@@ -164,7 +164,7 @@ export const parseSolanaTx = async ({
       keys,
       getCoin,
       swapProvider,
-      data,
+      data: data[0],
     })
   )
 
@@ -178,7 +178,7 @@ export const parseSolanaTx = async ({
     return {
       transfer: {
         ...parsedTx.transfer,
-        rawMessageData: data,
+        rawTransactions: data,
       },
     }
   }
@@ -187,7 +187,7 @@ export const parseSolanaTx = async ({
     return {
       swap: {
         ...parsedTx.swap,
-        rawMessageData: data,
+        rawTransactions: data,
       },
     }
   }
@@ -199,7 +199,7 @@ export const parseSolanaTx = async ({
       inputCoin: solanaFeeCoin,
       inAmount: '0',
       receiverAddress: '',
-      rawMessageData: data,
+      rawTransactions: data,
     },
   }
 }

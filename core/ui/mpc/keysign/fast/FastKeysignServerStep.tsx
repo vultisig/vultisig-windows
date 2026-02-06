@@ -68,13 +68,15 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
             publicKey,
           })
 
-          const messages = inputs.flatMap(txInputData =>
-            getPreSigningHashes({
-              txInputData,
-              walletCore,
-              chain,
-            }).map(value => Buffer.from(value).toString('hex'))
-          )
+          const messages = inputs
+            .flatMap(txInputData =>
+              getPreSigningHashes({
+                txInputData,
+                walletCore,
+                chain,
+              }).map(value => Buffer.from(value).toString('hex'))
+            )
+            .sort()
 
           return signWithServer({
             public_key: publicKeys.ecdsa,
