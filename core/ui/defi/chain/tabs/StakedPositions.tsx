@@ -23,6 +23,9 @@ import { useDefiChainPositionsQuery } from '../queries/useDefiChainPositionsQuer
 import { useCurrentDefiChain } from '../useCurrentDefiChain'
 import { DefiPositionEmptyState } from './DefiPositionEmptyState'
 
+const stcyInfoUrl =
+  'https://docs.rujira.network/ecosystem-products/tcy-autocompounder'
+
 type StakeActionType =
   | 'stake'
   | 'unstake'
@@ -106,12 +109,17 @@ export const StakedPositions = () => {
 
     const token = resolveStakeToken(chain, id)
 
+    // For sTCY, we need to pass TCY coin with autoCompound: true
+    // Similar to how yTCY/yRUNE use TCY/RUNE coin for mint
+    const isStcyPosition = id === 'thor-stake-stcy'
     const coinForAction =
       chain === Chain.THORChain && action === 'mint'
         ? id === 'thor-stake-ytcy'
           ? resolveStakeToken(chain, 'thor-stake-tcy')
           : resolveStakeToken(chain, 'thor-stake-rune')
-        : token
+        : isStcyPosition
+          ? resolveStakeToken(chain, 'thor-stake-tcy')
+          : token
 
     navigate({
       id: 'deposit',
@@ -119,6 +127,7 @@ export const StakedPositions = () => {
         coin: extractCoinKey(coinForAction),
         action,
         entryPoint: 'defi',
+        form: isStcyPosition ? { autoCompound: true } : undefined,
       },
     })
   }
@@ -193,6 +202,19 @@ export const StakedPositions = () => {
           navigateTo(position.id, action, false)
         }
 
+        const handleTransfer = async () => {
+          if (position.id === 'thor-stake-stcy') {
+            const stcyCoin = resolveStakeToken(chain, position.id)
+            if (!hasRequiredCoin && supportsAutoEnable) {
+              await autoEnableCoinIfNeeded(position.id, stcyCoin)
+            }
+            navigate({
+              id: 'send',
+              state: { coin: extractCoinKey(stcyCoin) },
+            })
+          }
+        }
+
         return (
           <StakeCard
             key={position.id}
@@ -223,6 +245,12 @@ export const StakedPositions = () => {
               position.rewards && position.rewards > 0
                 ? () => handleNavigate('withdraw_ruji_rewards')
                 : undefined
+            }
+            infoUrl={
+              position.id === 'thor-stake-stcy' ? stcyInfoUrl : undefined
+            }
+            onTransfer={
+              position.id === 'thor-stake-stcy' ? handleTransfer : undefined
             }
           />
         )
