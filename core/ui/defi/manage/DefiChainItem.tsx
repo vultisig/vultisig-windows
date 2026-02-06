@@ -4,21 +4,29 @@ import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import {
   isSupportedDefiChain,
   useDefiChains,
-  useToggleDefiChain,
+  useToggleDefiChainWithAutoEnable,
 } from '@core/ui/storage/defiChains'
 import { ValueProp } from '@lib/ui/props'
 
 import { DefiItem } from './DefiItem'
 
-export const DefiChainItem = ({ value: chain }: ValueProp<Chain>) => {
+type DefiChainItemProps = ValueProp<Chain> & {
+  canEnable: boolean
+}
+
+export const DefiChainItem = ({
+  value: chain,
+  canEnable,
+}: DefiChainItemProps) => {
   const defiChains = useDefiChains()
-  const { toggleChain, isPending } = useToggleDefiChain()
+  const { toggleChain, isPending } = useToggleDefiChainWithAutoEnable()
   const isSupported = isSupportedDefiChain(chain)
 
   const isSelected = isSupported && defiChains.includes(chain)
+  const isDisabled = !canEnable && !isSelected
 
   const handleClick = () => {
-    if (isPending || !isSupported) return
+    if (isPending || !isSupported || isDisabled) return
     toggleChain(chain)
   }
 
@@ -28,6 +36,7 @@ export const DefiChainItem = ({ value: chain }: ValueProp<Chain>) => {
       name={chain}
       isSelected={isSelected}
       isPending={isPending}
+      isDisabled={isDisabled}
       onClick={handleClick}
     />
   )
