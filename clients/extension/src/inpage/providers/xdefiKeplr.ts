@@ -1,4 +1,3 @@
-import { base64 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
 import { Chain } from '@core/chain/Chain'
 import { getCosmosChainByChainId } from '@core/chain/chains/cosmos/chainInfo'
 import { CosmosMsgType } from '@core/chain/chains/cosmos/cosmosMsgTypes'
@@ -84,7 +83,7 @@ const directHandler = (
   },
   chain: Chain
 ): TransactionDetails => {
-  const txBody = TxBody.decode(base64.decode(signDoc.bodyBytes))
+  const txBody = TxBody.decode(Buffer.from(signDoc.bodyBytes, 'base64'))
   const [message] = txBody.messages
   const memo = txBody.memo
 
