@@ -9,7 +9,7 @@ import { PageFooter } from '@lib/ui/page/PageFooter'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-const contentMaxWidth = 345
+const contentMaxWidth = 400
 
 const PageWrapper = styled(VStack)`
   position: relative;
@@ -50,7 +50,7 @@ const AnimationContainer = styled.div`
   align-items: center;
   width: 100%;
   max-width: ${contentMaxWidth}px;
-  aspect-ratio: ${contentMaxWidth} / 500;
+  aspect-ratio: ${contentMaxWidth} / 600;
 `
 
 export const SetupVaultPage = () => {

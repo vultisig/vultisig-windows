@@ -23,9 +23,15 @@ import { KeygenFlowEnding } from './KeygenFlowEnding'
 type KeygenFlowProps = OnBackProp &
   Partial<OnFinishProp> & {
     password?: string
+    onChangeEmailAndRestart?: () => void
   }
 
-export const KeygenFlow = ({ onBack, onFinish, password }: KeygenFlowProps) => {
+export const KeygenFlow = ({
+  onBack,
+  onFinish,
+  password,
+  onChangeEmailAndRestart,
+}: KeygenFlowProps) => {
   const {
     step,
     mutate: startKeygen,
@@ -61,7 +67,13 @@ export const KeygenFlow = ({ onBack, onFinish, password }: KeygenFlowProps) => {
             return null
           }
           if (hasServer(vault.signers)) {
-            return <KeygenFlowEnding onBack={onBack} password={password} />
+            return (
+              <KeygenFlowEnding
+                onBack={onBack}
+                password={password}
+                onChangeEmailAndRestart={onChangeEmailAndRestart}
+              />
+            )
           }
 
           return (
@@ -75,7 +87,11 @@ export const KeygenFlow = ({ onBack, onFinish, password }: KeygenFlowProps) => {
                 />
               )}
               to={() => (
-                <KeygenFlowEnding onBack={onBack} password={password} />
+                <KeygenFlowEnding
+                  onBack={onBack}
+                  password={password}
+                  onChangeEmailAndRestart={onChangeEmailAndRestart}
+                />
               )}
             />
           )

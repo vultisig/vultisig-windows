@@ -61,6 +61,8 @@ export const de = {
       shareSecurely: 'um den Zugang zu gewährleisten, vorzugsweise',
       vaultShares: 'Ihr Tresor enthält 2 Aktien.',
       wellDone: 'Gut gemacht',
+      sentTo: 'Gesendet an {{email}}.',
+      changeEmailAndRestartKeygen: 'E-Mail ändern und Keygen neu starten',
     },
     createVault: {
       availablePlatforms: {

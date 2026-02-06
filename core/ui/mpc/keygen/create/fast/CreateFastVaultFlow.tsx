@@ -34,7 +34,11 @@ export const CreateFastVaultFlow = ({
           <KeygenSessionProviders>
             {children}
             <KeygenActionWrapper CreateActionProvider={CreateActionProvider}>
-              <FastKeygenFlow onBack={onBack} password={value.password} />
+              <FastKeygenFlow
+                onBack={onBack}
+                password={value.password}
+                onChangeEmailAndRestart={onBack}
+              />
             </KeygenActionWrapper>
           </KeygenSessionProviders>
         </VaultCreationInputProvider>

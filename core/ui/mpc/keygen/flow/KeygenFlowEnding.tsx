@@ -10,11 +10,13 @@ import { KeygenFlowSuccess } from './KeygenFlowSuccess'
 
 type KeygenFlowEndingProps = OnBackProp & {
   password?: string
+  onChangeEmailAndRestart?: () => void
 }
 
 export const KeygenFlowEnding = ({
   onBack,
   password,
+  onChangeEmailAndRestart,
 }: KeygenFlowEndingProps) => {
   const keygenOperation = useKeygenOperation()
 
@@ -25,6 +27,7 @@ export const KeygenFlowEnding = ({
           onFinish={onFinish}
           onBack={onBack}
           password={password}
+          onChangeEmailAndRestart={onChangeEmailAndRestart}
         />
       )}
       to={() => (
