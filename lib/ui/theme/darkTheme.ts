@@ -42,8 +42,12 @@ export const darkTheme: DefaultTheme = {
     buttonBackgroundDisabled: new HSLA(217, 57, 14),
     buttonLinkHover: new HSLA(0, 0, 100, 0.04),
     // Primary/Accent 3
-    buttonPrimary: new HSLA(224, 75, 50),
+    buttonPrimary: new HSLA(224, 100, 52),
     buttonHover: new HSLA(215, 75, 47),
+    buttonSecondary: new HSLA(216, 63, 18),
+    buttonSecondaryHover: new HSLA(215, 53, 24),
+    buttonNeutral: new HSLA(224, 75, 50),
+    buttonNeutralHover: new HSLA(215, 75, 47),
     buttonTextDisabled: new HSLA(216, 15, 52),
     primaryAccentTwo: new HSLA(224, 96, 40),
     primaryAccentFour: new HSLA(224, 96, 64),
