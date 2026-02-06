@@ -481,6 +481,42 @@ func (s *Store) DeleteCoin(vaultPublicKeyECDSA, coinID string) error {
 	return err
 }
 
+func (s *Store) GetVaultCoins(vaultPublicKeyECDSA string) ([]Coin, error) {
+	query := `SELECT id, chain, address, ticker, contract_address, is_native_token, logo, price_provider_id, decimals
+		FROM coins WHERE public_key_ecdsa = ?`
+	rows, err := s.db.Query(query, vaultPublicKeyECDSA)
+	if err != nil {
+		return nil, fmt.Errorf("could not query coins: %w", err)
+	}
+	defer s.closeRows(rows)
+
+	var coins []Coin
+	for rows.Next() {
+		var coin Coin
+		err := rows.Scan(
+			&coin.ID,
+			&coin.Chain,
+			&coin.Address,
+			&coin.Ticker,
+			&coin.ContractAddress,
+			&coin.IsNativeToken,
+			&coin.Logo,
+			&coin.PriceProviderID,
+			&coin.Decimals,
+		)
+		if err != nil {
+			return nil, fmt.Errorf("could not scan coin: %w", err)
+		}
+		coins = append(coins, coin)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, fmt.Errorf("error occurred during iteration of rows: %w", err)
+	}
+
+	return coins, nil
+}
+
 // generatePlaceholders generates the correct number of SQL placeholders
 func generatePlaceholders(count int) string {
 	placeholders := make([]string, count)

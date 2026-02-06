@@ -38,6 +38,10 @@ export function GetVault(arg1) {
   return window['go']['storage']['Store']['GetVault'](arg1);
 }
 
+export function GetVaultCoins(arg1) {
+  return window['go']['storage']['Store']['GetVaultCoins'](arg1);
+}
+
 export function GetVaultFolder(arg1) {
   return window['go']['storage']['Store']['GetVaultFolder'](arg1);
 }

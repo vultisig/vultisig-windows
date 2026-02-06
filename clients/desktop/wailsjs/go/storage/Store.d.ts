@@ -20,6 +20,8 @@ export function GetCoins():Promise<Record<string, Array<storage.Coin>>>;
 
 export function GetVault(arg1:string):Promise<storage.Vault>;
 
+export function GetVaultCoins(arg1:string):Promise<Array<storage.Coin>>;
+
 export function GetVaultFolder(arg1:string):Promise<storage.VaultFolder>;
 
 export function GetVaultFolders():Promise<Array<storage.VaultFolder>>;

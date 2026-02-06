@@ -1,3 +1,112 @@
+export namespace agent {
+	
+	export class ToolCall {
+	    id: string;
+	    name: string;
+	    input: Record<string, any>;
+	    status: string;
+	    output?: any;
+	    error?: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new ToolCall(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
+	        this.name = source["name"];
+	        this.input = source["input"];
+	        this.status = source["status"];
+	        this.output = source["output"];
+	        this.error = source["error"];
+	    }
+	}
+	export class ChatMessage {
+	    id: string;
+	    role: string;
+	    content: string;
+	    toolCalls?: ToolCall[];
+	    timestamp: time.Time;
+	
+	    static createFrom(source: any = {}) {
+	        return new ChatMessage(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
+	        this.role = source["role"];
+	        this.content = source["content"];
+	        this.toolCalls = this.convertValues(source["toolCalls"], ToolCall);
+	        this.timestamp = this.convertValues(source["timestamp"], time.Time);
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+	export class Conversation {
+	    id: string;
+	    name: string;
+	    vaultPubKey: string;
+	    policyId?: string;
+	    status: string;
+	    messages: ChatMessage[];
+	    createdAt: time.Time;
+	    updatedAt: time.Time;
+	
+	    static createFrom(source: any = {}) {
+	        return new Conversation(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
+	        this.name = source["name"];
+	        this.vaultPubKey = source["vaultPubKey"];
+	        this.policyId = source["policyId"];
+	        this.status = source["status"];
+	        this.messages = this.convertValues(source["messages"], ChatMessage);
+	        this.createdAt = this.convertValues(source["createdAt"], time.Time);
+	        this.updatedAt = this.convertValues(source["updatedAt"], time.Time);
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+
+}
+
 export namespace storage {
 	
 	export class AddressBookItem {
@@ -67,8 +176,7 @@ export namespace storage {
 	    public_key_ecdsa: string;
 	    public_key_eddsa: string;
 	    signers: string[];
-	    // Go type: time
-	    created_at: any;
+	    created_at: time.Time;
 	    hex_chain_code: string;
 	    keyshares: KeyShare[];
 	    local_party_id: string;
@@ -92,7 +200,7 @@ export namespace storage {
 	        this.public_key_ecdsa = source["public_key_ecdsa"];
 	        this.public_key_eddsa = source["public_key_eddsa"];
 	        this.signers = source["signers"];
-	        this.created_at = this.convertValues(source["created_at"], null);
+	        this.created_at = this.convertValues(source["created_at"], time.Time);
 	        this.hex_chain_code = source["hex_chain_code"];
 	        this.keyshares = this.convertValues(source["keyshares"], KeyShare);
 	        this.local_party_id = source["local_party_id"];
@@ -139,6 +247,23 @@ export namespace storage {
 	        this.id = source["id"];
 	        this.name = source["name"];
 	        this.order = source["order"];
+	    }
+	}
+
+}
+
+export namespace time {
+	
+	export class Time {
+	
+	
+	    static createFrom(source: any = {}) {
+	        return new Time(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	
 	    }
 	}
 

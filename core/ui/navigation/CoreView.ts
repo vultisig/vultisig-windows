@@ -12,6 +12,11 @@ import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 
 export type CoreView =
+  | { id: 'agent' }
+  | {
+      id: 'agentChat'
+      state: { conversationId?: string; initialMessage?: string }
+    }
   | { id: 'addCustomToken'; state: { chain: ChainWithTokenMetadataDiscovery } }
   | { id: 'address'; state: { address: string } }
   | { id: 'addressBook' }
