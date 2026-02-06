@@ -31,6 +31,10 @@ export type ThemeColors = {
   buttonLinkHover: HSLA
   buttonPrimary: HSLA
   buttonHover: HSLA
+  buttonSecondary: HSLA
+  buttonSecondaryHover: HSLA
+  buttonNeutral: HSLA
+  buttonNeutralHover: HSLA
   buttonTextDisabled: HSLA
   primaryAccentTwo: HSLA
   primaryAccentFour: HSLA

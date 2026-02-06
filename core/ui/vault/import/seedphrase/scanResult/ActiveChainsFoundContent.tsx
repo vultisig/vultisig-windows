@@ -33,7 +33,6 @@ export const ActiveChainsFoundContent = () => {
         <Button onClick={handleFinish}>{t('next')}</Button>
         <Button
           kind="link"
-          status="success"
           onClick={() => setStep('chains')}
           icon={<SparkledPenIcon />}
         >

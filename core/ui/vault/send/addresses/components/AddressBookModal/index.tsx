@@ -123,15 +123,21 @@ export const AddressBookModal = ({ onSelect, onClose }: Props) => {
             style={{ backgroundColor: 'transparent' }}
             slots={{
               Container: OptionsContainer,
-              OptionButton: ({ children, active, ...rest }) => (
-                <OptionButton
-                  {...rest}
-                  disabled={false}
-                  kind={active ? 'primary' : 'secondary'}
-                >
-                  {children}
-                </OptionButton>
-              ),
+              OptionButton: ({ children, active, ...rest }) => {
+                const buttonProps = active
+                  ? { kind: 'primary' as const, status: 'default' as const }
+                  : { kind: 'secondary' as const }
+
+                return (
+                  <OptionButton
+                    {...(rest as any)}
+                    {...buttonProps}
+                    disabled={false}
+                  >
+                    {children}
+                  </OptionButton>
+                )
+              },
             }}
             value={addressBookSelectedOption}
             options={options}
