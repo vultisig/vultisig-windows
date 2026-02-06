@@ -3,7 +3,9 @@ import { Coin } from '@core/chain/coin/Coin'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { formatDateShort } from '@core/ui/defi/shared/formatters'
+import { ArrowUpRightIcon } from '@lib/ui/icons/ArrowUpRightIcon'
 import { CalendarIcon } from '@lib/ui/icons/CalendarIcon'
+import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { CircleMinusIcon } from '@lib/ui/icons/CircleMinusIcon'
 import { CirclePlusIcon } from '@lib/ui/icons/CirclePlusIcon'
 import { PercentIcon } from '@lib/ui/icons/PercentIcon'
@@ -146,6 +148,8 @@ type Props = {
   actionsDisabledReason?: string
   hideStats?: boolean
   isPendingAction?: boolean
+  infoUrl?: string
+  onTransfer?: () => void
 }
 
 export const StakeCard = ({
@@ -170,6 +174,8 @@ export const StakeCard = ({
   actionsDisabledReason,
   hideStats,
   isPendingAction = false,
+  infoUrl,
+  onTransfer,
 }: Props) => {
   const { t, i18n } = useTranslation()
   const formatFiatAmount = useFormatFiatAmount()
@@ -214,9 +220,22 @@ export const StakeCard = ({
           <HStack gap={12} alignItems="center" fullWidth>
             <CoinIcon coin={coin} style={{ fontSize: 44 }} />
             <VStack gap={4}>
-              <Text size={14} color="shy">
-                {title}
-              </Text>
+              <HStack gap={4} alignItems="center">
+                <Text size={14} color="shy">
+                  {title}
+                </Text>
+                {infoUrl && (
+                  <a
+                    href={infoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${title} info`}
+                    style={{ display: 'flex', color: 'inherit' }}
+                  >
+                    <CircleInfoIcon style={{ fontSize: 16 }} />
+                  </a>
+                )}
+              </HStack>
               {isSkeleton ? (
                 <>
                   <Skeleton width="140px" height="28px" />
@@ -318,6 +337,25 @@ export const StakeCard = ({
               )
             : null}
         </StatRow>
+
+        {onTransfer && (
+          <ActionsRow>
+            {renderAction(
+              <ActionButton
+                variant="primary"
+                onClick={onTransfer}
+                disabled={actionsDisabled || isPendingAction}
+                style={{ width: '100%' }}
+              >
+                <ActionIcon variant="primary">
+                  <ArrowUpRightIcon />
+                </ActionIcon>
+                {t('transfer')}
+              </ActionButton>,
+              { width: '100%' }
+            )}
+          </ActionsRow>
+        )}
 
         <ActionsRow>
           {isSkeleton ? (

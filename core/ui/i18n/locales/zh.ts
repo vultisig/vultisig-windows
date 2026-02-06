@@ -759,6 +759,7 @@ export const zh = {
   soon: '很快',
   stake: '赌注',
   staked_amount: '投注金额',
+  transfer: '转账',
   start_reshare: '开始转发',
   successfully: '成功地',
   support: '支持',

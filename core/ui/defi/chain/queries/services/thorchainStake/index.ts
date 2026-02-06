@@ -2,7 +2,6 @@ import { cosmosRpcUrl } from '@core/chain/chains/cosmos/cosmosRpcUrl'
 import { Coin } from '@core/chain/coin/Coin'
 import { coinKeyToString } from '@core/chain/coin/Coin'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
-import { featureFlags } from '@core/ui/featureFlags'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
 import { thorchainTokens } from '../../tokens'
@@ -65,9 +64,7 @@ export const fetchStakePositions = async ({
 }: FetchStakePositionsInput) => {
   const [tcy, stcy, ruji, yRune, yTcy] = await Promise.all([
     fetchTcyStakePosition({ address, prices }),
-    featureFlags.stcyStaking
-      ? fetchStcyStakePosition({ address, prices })
-      : Promise.resolve(null),
+    fetchStcyStakePosition({ address, prices }),
     fetchRujiStakePosition({ address, prices }),
     fetchYieldStakePosition({
       address,

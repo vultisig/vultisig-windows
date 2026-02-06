@@ -812,6 +812,7 @@ export const pt = {
   soon: 'Breve',
   stake: 'Estaca',
   staked_amount: 'Valor apostado',
+  transfer: 'Transferir',
   start_reshare: 'Começar a compartilhar',
   successfully: 'Com sucesso',
   support: 'Apoiar',

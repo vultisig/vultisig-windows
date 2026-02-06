@@ -814,6 +814,7 @@ export const it = {
   soon: 'Presto',
   stake: 'Palo',
   staked_amount: 'Importo puntato',
+  transfer: 'Trasferimento',
   start_reshare: 'Avvia la condivisione',
   successfully: 'Con successo',
   support: 'Supporto',
