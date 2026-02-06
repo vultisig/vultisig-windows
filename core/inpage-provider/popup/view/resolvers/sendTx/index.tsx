@@ -29,7 +29,6 @@ export const SendTx: PopupResolver<'sendTx'> = ({ onFinish }) => {
     () => ({
       onSuccess: result => {
         const txs = getRecordUnionValue(result, 'txs')
-        // Return all transactions as an array (one or more)
         const transactionsData = txs.map(({ hash, data }) => ({
           hash,
           data: data.toJSON(),

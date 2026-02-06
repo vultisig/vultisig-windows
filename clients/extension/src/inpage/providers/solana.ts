@@ -354,6 +354,12 @@ export class Solana implements Wallet {
       }
     )
 
+    if (result.length !== transactions.length) {
+      throw new Error(
+        `Expected ${transactions.length} signed transaction(s), got ${result.length}`
+      )
+    }
+
     return result.map(
       (txResult, i) =>
         this.deserializeSignedTransaction(txResult.data, transactions[i]) as T
