@@ -22,7 +22,6 @@ export const PersistNavigationState = ({ children }: ChildrenProp) => {
       return
     }
 
-
     if (shouldPersistView(currentView.id)) {
       setPersistedHistory(history as AppView[])
     } else {
