@@ -23,7 +23,6 @@ export const PersistNavigationState = ({ children }: ChildrenProp) => {
       return
     }
 
-    if (isPopupView()) return
 
     if (shouldPersistView(currentView.id)) {
       setPersistedHistory(history as AppView[])
