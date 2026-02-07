@@ -141,21 +141,18 @@ export const en = {
   choose_tokens: 'Choose Tokens',
   deposited: 'Deposited',
   circle: {
-    apy: 'APY',
     banner_text:
       "Funds remain fully under your vault's control. Circle accounts are self-custodial and yield is generated through secure off-chain treasuries.",
-    current_rewards: 'Current Rewards',
     deposit: 'Deposit',
     deposit_header: 'Deposit to Circle Account',
     verify_deposit: 'Verify Deposit',
     introduction:
       'Deposit your $USDC into a Circle account and earn yield. Securely within your Vultisig vault.',
     open_account: 'Open Account',
-    total_rewards: 'Total Rewards',
     withdraw: 'Withdraw',
     withdraw_header: 'Withdraw from Circle',
     verify_withdraw: 'Verify Withdraw',
-    yield_details: 'Circle Yield Details',
+    apy_approx: 'APY (approx.)',
   },
   clear: 'Clear',
   close: 'Close',
