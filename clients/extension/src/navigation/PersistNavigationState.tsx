@@ -1,4 +1,3 @@
-import { isPopupView } from '@clients/extension/src/utils/functions'
 import { useNavigation } from '@lib/ui/navigation/state'
 import { ChildrenProp } from '@lib/ui/props'
 import { getLastItem } from '@lib/utils/array/getLastItem'
