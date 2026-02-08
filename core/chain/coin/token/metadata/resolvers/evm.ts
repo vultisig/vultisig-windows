@@ -1,6 +1,7 @@
 import { EvmChain } from '@core/chain/Chain'
 import { getEvmChainId } from '@core/chain/chains/evm/chainInfo'
 import { getEvmClient } from '@core/chain/chains/evm/client'
+import { CoinMetadata } from '@core/chain/coin/Coin'
 import { queryOneInch } from '@core/chain/coin/find/resolvers/evm/queryOneInch'
 import { OneInchToken } from '@core/chain/coin/oneInch/token'
 import { TokenMetadataResolver } from '@core/chain/coin/token/metadata/resolver'
@@ -27,7 +28,7 @@ export const getEvmTokenMetadata: TokenMetadataResolver<EvmChain> = async ({
     }),
   ])
 
-  const result: ReturnType<TokenMetadataResolver<EvmChain>> = {
+  const result: CoinMetadata = {
     ticker,
     decimals,
   }
@@ -40,7 +41,7 @@ export const getEvmTokenMetadata: TokenMetadataResolver<EvmChain> = async ({
     )
   )
 
-  if ('data' in logoResult) {
+  if ('data' in logoResult && logoResult.data) {
     const tokenData = logoResult.data[id]
     if (tokenData?.logoURI) {
       result.logo = tokenData.logoURI
