@@ -2,6 +2,7 @@ import { base64 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
 import { Chain } from '@core/chain/Chain'
 import { getCosmosChainByChainId } from '@core/chain/chains/cosmos/chainInfo'
 import { CosmosMsgType } from '@core/chain/chains/cosmos/cosmosMsgTypes'
+import { normalizeCosmosAuthInfoFee } from '@core/chain/chains/cosmos/normalizeAuthInfoFee'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { deserializeSigningOutput } from '@core/chain/tw/signingOutput'
 import { callBackground } from '@core/inpage-provider/background'
@@ -511,10 +512,16 @@ export class XDEFIKeplrProvider extends Keplr {
 
       const chain = shouldBePresent(getCosmosChainByChainId(chainId))
 
+      const normalizedAuthInfoBytes = normalizeCosmosAuthInfoFee(
+        new Uint8Array(signDoc.authInfoBytes),
+        chain
+      )
       const transactionDetails: TransactionDetails = directHandler(
         {
           bodyBytes: Buffer.from(signDoc.bodyBytes).toString('base64'),
-          authInfoBytes: Buffer.from(signDoc.authInfoBytes).toString('base64'),
+          authInfoBytes: Buffer.from(normalizedAuthInfoBytes).toString(
+            'base64'
+          ),
           chainId: signDoc.chainId,
           accountNumber: signDoc.accountNumber.toString(),
         },
