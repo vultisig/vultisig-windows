@@ -1,5 +1,5 @@
 import { CoinKey } from '@core/chain/coin/Coin'
-import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -42,12 +42,12 @@ export const useCoinFinderIgnore = () => {
 export const useAddToCoinFinderIgnoreMutation = () => {
   const { addToCoinFinderIgnore } = useCore()
 
-  const invalidate = useInvalidateQueries()
+  const refetch = useRefetchQueries()
 
   const mutationFn: AddToCoinFinderIgnoreFunction = async coinKey => {
     await addToCoinFinderIgnore(coinKey)
 
-    await invalidate([StorageKey.coinFinderIgnore])
+    await refetch([StorageKey.coinFinderIgnore])
   }
 
   return useMutation({
@@ -58,12 +58,12 @@ export const useAddToCoinFinderIgnoreMutation = () => {
 export const useRemoveFromCoinFinderIgnoreMutation = () => {
   const { removeFromCoinFinderIgnore } = useCore()
 
-  const invalidate = useInvalidateQueries()
+  const refetch = useRefetchQueries()
 
   const mutationFn: RemoveFromCoinFinderIgnoreFunction = async coinKey => {
     await removeFromCoinFinderIgnore(coinKey)
 
-    await invalidate([StorageKey.coinFinderIgnore])
+    await refetch([StorageKey.coinFinderIgnore])
   }
 
   return useMutation({
