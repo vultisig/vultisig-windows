@@ -2,7 +2,6 @@ import { base64 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
 import { Chain } from '@core/chain/Chain'
 import { getCosmosChainByChainId } from '@core/chain/chains/cosmos/chainInfo'
 import { CosmosMsgType } from '@core/chain/chains/cosmos/cosmosMsgTypes'
-import { normalizeCosmosAuthInfoFee } from '@core/chain/chains/cosmos/normalizeAuthInfoFee'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { deserializeSigningOutput } from '@core/chain/tw/signingOutput'
 import { callBackground } from '@core/inpage-provider/background'
@@ -48,6 +47,7 @@ import { EIP1193Error } from '../../background/handlers/errorHandler'
 import { getCosmosChainFromAddress } from '../../utils/cosmos/getCosmosChainFromAddress'
 import { requestAccount } from './core/requestAccount'
 import { Cosmos } from './cosmos'
+import { normalizeCosmosAuthInfoFee } from './cosmos/normalizeAuthInfoFee'
 
 const aminoHandler = (
   signDoc: StdSignDoc,

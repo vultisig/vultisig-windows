@@ -1,7 +1,6 @@
 import { Chain, CosmosChain, VaultBasedCosmosChain } from '@core/chain/Chain'
 import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
 import { getCosmosGasLimit } from '@core/chain/chains/cosmos/cosmosGasLimitRecord'
-import { normalizeCosmosAuthInfoFee } from '@core/chain/chains/cosmos/normalizeAuthInfoFee'
 import { getCosmosChainKind } from '@core/chain/chains/cosmos/utils/getCosmosChainKind'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { areEqualCoins } from '@core/chain/coin/Coin'
@@ -61,10 +60,7 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
       if (signDirect) {
         const bodyBytes = fromBase64(signDirect.bodyBytes)
         const txBody = TxBody.decode(bodyBytes)
-        const authInfoBytes = normalizeCosmosAuthInfoFee(
-          fromBase64(signDirect.authInfoBytes),
-          chain
-        )
+        const authInfoBytes = fromBase64(signDirect.authInfoBytes)
 
         const messages = [
           TW.Cosmos.Proto.Message.create({
@@ -144,10 +140,7 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
       if (signDirect) {
         const bodyBytes = fromBase64(signDirect.bodyBytes)
         const txBody = TxBody.decode(bodyBytes)
-        const authInfoBytes = normalizeCosmosAuthInfoFee(
-          fromBase64(signDirect.authInfoBytes),
-          chain
-        )
+        const authInfoBytes = fromBase64(signDirect.authInfoBytes)
 
         const messages = [
           TW.Cosmos.Proto.Message.create({
@@ -343,10 +336,7 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
 
   const getFee = () => {
     if (signDirect) {
-      const authInfoBytes = normalizeCosmosAuthInfoFee(
-        fromBase64(signDirect.authInfoBytes),
-        chain
-      )
+      const authInfoBytes = fromBase64(signDirect.authInfoBytes)
       const authInfo = AuthInfo.decode(authInfoBytes)
 
       if (authInfo.fee) {

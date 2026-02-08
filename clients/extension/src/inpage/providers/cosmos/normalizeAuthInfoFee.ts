@@ -1,4 +1,4 @@
-import { CosmosChain } from '@core/chain/Chain'
+import type { CosmosChain } from '@core/chain/Chain'
 import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { BinaryWriter } from 'cosmjs-types/binary'
@@ -7,7 +7,7 @@ import { AuthInfo } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 /**
  * Normalizes the fee denom in AuthInfo bytes (e.g. ATOM → uatom for Cosmos Hub)
  * so the payload is valid and can be shown correctly in the UI.
- * Use when building transactionDetails for signDirect (e.g. in the extension).
+ * Call in the provider before building transactionDetails for signDirect.
  */
 export const normalizeCosmosAuthInfoFee = (
   authInfoBytes: Uint8Array,
