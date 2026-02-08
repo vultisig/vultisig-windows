@@ -7,7 +7,7 @@ import {
   useDeleteCoinMutation,
 } from '@core/ui/storage/coins'
 import { Button } from '@lib/ui/buttons/Button'
-import { CircleHelpIcon } from '@lib/ui/icons/CircleHelpIcon'
+import { CryptoIcon } from '@lib/ui/icons/CryptoIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -41,7 +41,7 @@ export const CustomTokenResult = ({ id }: { id: string }) => {
           <EmptyState
             icon={
               <IconWrapper size={48} color="primary">
-                <CircleHelpIcon />
+                <CryptoIcon />
               </IconWrapper>
             }
             title={t('no_token_found')}
