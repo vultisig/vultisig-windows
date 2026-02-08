@@ -6,6 +6,7 @@ import { LineSeparator } from '@lib/ui/layout/LineSeparator'
 import { HStack, VStack, vStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { toPercents } from '@lib/utils/toPercents'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -50,21 +51,29 @@ export const CircleDepositedPanel = () => {
       <LineSeparator kind="regular" />
       <VStack gap={16}>
         {circleAccount && (
-          <>
-            <HStack alignItems="center" justifyContent="space-between">
-              <HStack gap={4} alignItems="center">
-                <IconWrapper size={16} color="textShy">
-                  <PercentIcon />
-                </IconWrapper>
-                <Text size={14} weight={500} color="shy">
-                  {t('circle.apy_approx')}
+          <Tooltip
+            content={t('circle.apy_tooltip')}
+            placement="top"
+            renderOpener={props => (
+              <HStack
+                alignItems="center"
+                justifyContent="space-between"
+                {...props}
+              >
+                <HStack gap={4} alignItems="center">
+                  <IconWrapper size={16} color="textShy">
+                    <PercentIcon />
+                  </IconWrapper>
+                  <Text size={14} weight={500} color="shy">
+                    {t('circle.apy_approx')}
+                  </Text>
+                </HStack>
+                <Text size={16} weight={500} color="success">
+                  {toPercents(circleApy)}
                 </Text>
               </HStack>
-              <Text size={16} weight={500} color="success">
-                {toPercents(circleApy)}
-              </Text>
-            </HStack>
-          </>
+            )}
+          />
         )}
         {circleAccount ? (
           <UniformColumnGrid gap={16}>

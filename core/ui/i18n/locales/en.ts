@@ -153,6 +153,7 @@ export const en = {
     withdraw_header: 'Withdraw from Circle',
     verify_withdraw: 'Verify Withdraw',
     apy_approx: 'APY (approx.)',
+    apy_tooltip: 'Rewards are automatically credited to your balance.',
   },
   clear: 'Clear',
   close: 'Close',
