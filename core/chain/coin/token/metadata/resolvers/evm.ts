@@ -33,16 +33,16 @@ export const getEvmTokenMetadata: TokenMetadataResolver<EvmChain> = async ({
     decimals,
   }
 
-  // Try to fetch logo from 1inch API
   const oneInchChainId = hexToNumber(getEvmChainId(chain))
+  const normalizedId = id.toLowerCase()
   const logoResult = await attempt(() =>
     queryOneInch<Record<string, OneInchToken>>(
-      `/token/v1.2/${oneInchChainId}/custom?addresses=${id}`
+      `/token/v1.2/${oneInchChainId}/custom?addresses=${normalizedId}`
     )
   )
 
   if ('data' in logoResult && logoResult.data) {
-    const tokenData = logoResult.data[id]
+    const tokenData = logoResult.data[normalizedId]
     if (tokenData?.logoURI) {
       result.logo = tokenData.logoURI
     }
