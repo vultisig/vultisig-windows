@@ -198,7 +198,7 @@ export type IKeysignTransactionPayload = {
 }
 
 type ISerializedTransactionPayload = {
-  data: string
+  data: string[]
   skipBroadcast?: boolean
   chain: Chain
   params?: Record<string, any>[]

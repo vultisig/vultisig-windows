@@ -204,7 +204,7 @@ export class VultisigTronWebTrx extends Trx {
 
       const details = await getTransactionDetails()
 
-      const { data } = await callPopup(
+      const [{ data }] = await callPopup(
         {
           sendTx: {
             keysign: {

@@ -70,7 +70,7 @@ export const getSharedHandlers = (chain: Chain) => {
 
       const transactionDetails = getTransactionDetails()
 
-      const { hash } = await callPopup(
+      const [{ hash }] = await callPopup(
         {
           sendTx: {
             keysign: {
