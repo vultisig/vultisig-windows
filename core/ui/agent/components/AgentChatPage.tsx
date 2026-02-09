@@ -199,14 +199,19 @@ export const AgentChatPage: FC = () => {
         }
 
         const fromAmountStr = state.fromAmount as string | undefined
-        const fromAmount = fromAmountStr ? BigInt(fromAmountStr) : undefined
+        let fromAmount: bigint | undefined
+        if (fromAmountStr && /^\d+$/.test(fromAmountStr)) {
+          fromAmount = BigInt(fromAmountStr)
+        }
 
+        const hasAllSwapParams = fromCoin && toCoin && fromAmount
         navigate({
           id: 'swap',
           state: {
             fromCoin: fromCoin ? buildCoinKey(fromCoin) : undefined,
             toCoin: toCoin ? buildCoinKey(toCoin) : undefined,
             fromAmount,
+            autoSubmit: hasAllSwapParams ? true : undefined,
           },
         })
       } else if (data.id === 'send') {
@@ -220,7 +225,11 @@ export const AgentChatPage: FC = () => {
             coinKey.id = coin.id
           }
           const amountStr = state.amount as string | undefined
-          const amount = amountStr ? BigInt(amountStr) : undefined
+          let amount: bigint | undefined
+          if (amountStr && /^\d+$/.test(amountStr)) {
+            amount = BigInt(amountStr)
+          }
+          const hasAllSendParams = amount && state.address
           navigate({
             id: 'send',
             state: {
@@ -228,6 +237,7 @@ export const AgentChatPage: FC = () => {
               address: state.address as string | undefined,
               amount,
               memo: state.memo as string | undefined,
+              skipToVerify: hasAllSendParams ? true : undefined,
             },
           })
         }

@@ -77,6 +77,7 @@ export type CoreView =
         address?: string
         amount?: bigint
         memo?: string
+        skipToVerify?: boolean
       }
     }
   | { id: 'settings' }
@@ -87,7 +88,15 @@ export type CoreView =
       state: { type?: VaultSecurityType; keyImportInput?: KeyImportInput }
     }
   | { id: 'signCustomMessage' }
-  | { id: 'swap'; state: { fromCoin?: CoinKey; toCoin?: CoinKey } }
+  | {
+      id: 'swap'
+      state: {
+        fromCoin?: CoinKey
+        toCoin?: CoinKey
+        fromAmount?: bigint
+        autoSubmit?: boolean
+      }
+    }
   | { id: 'updateAddressBookItem'; state: { id: string } }
   | { id: 'updateVaultFolder'; state: { id: string } }
   | { id: 'uploadQr'; state: { title?: string } }
