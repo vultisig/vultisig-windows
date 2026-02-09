@@ -3,7 +3,6 @@ package tools
 import (
 	"encoding/json"
 	"fmt"
-	"math/big"
 	"strings"
 
 	"github.com/vultisig/vultisig-win/agent/shared"
@@ -114,7 +113,14 @@ func (t *PolicyGenerateTool) Execute(input map[string]any, ctx *ExecutionContext
 		},
 	}
 
-	addDisplayFields(result, config, input, pluginID)
+	enrichPolicyFields(result, config)
+
+	if amount, ok := input["amount"]; ok {
+		result["amount"] = fmt.Sprintf("%v", amount)
+	}
+	if frequency, ok := config["frequency"]; ok {
+		result["frequency"] = fmt.Sprintf("%v", frequency)
+	}
 
 	return result, nil
 }
@@ -179,7 +185,10 @@ func buildSwapConfig(input map[string]any, ctx *ExecutionContext) map[string]any
 	}
 
 	if toAssetRaw, ok := input["to_asset"]; ok {
-		toAssetStr, _ := toAssetRaw.(string)
+		toAssetStr, ok := toAssetRaw.(string)
+		if !ok {
+			toAssetStr = ""
+		}
 		toAsset := shared.ResolveAsset(toAssetStr)
 		if toAsset != nil {
 			toObj := map[string]any{
@@ -212,93 +221,13 @@ func buildSwapConfig(input map[string]any, ctx *ExecutionContext) map[string]any
 
 	if amount, ok := input["amount"]; ok {
 		amountStr := fmt.Sprintf("%v", amount)
-		var fromAssetLocal *shared.AssetInfo
-		if fromAssetRaw, ok := input["from_asset"]; ok {
-			if s, ok := fromAssetRaw.(string); ok {
-				fromAssetLocal = shared.ResolveAsset(s)
-			}
-		}
-		if fromAssetLocal != nil && fromAssetLocal.Decimals > 0 {
-			amountStr = convertToSmallestUnit(amountStr, fromAssetLocal.Decimals)
+		if fromAsset != nil && fromAsset.Decimals > 0 {
+			amountStr = convertToSmallestUnit(amountStr, fromAsset.Decimals)
 		}
 		config["fromAmount"] = amountStr
 	}
 
 	return config
-}
-
-func addDisplayFields(result, config map[string]any, input map[string]any, pluginID string) {
-	if pluginID == sendsPluginID {
-		if assetObj, ok := config["asset"].(map[string]any); ok {
-			chain := fmt.Sprintf("%v", assetObj["chain"])
-			token := ""
-			if t, ok := assetObj["token"]; ok && t != nil {
-				token = fmt.Sprintf("%v", t)
-			}
-			result["from_asset"] = shared.ResolveTickerByChainAndToken(chain, token)
-			result["from_chain"] = chain
-		}
-		if recipients, ok := config["recipients"].([]any); ok && len(recipients) > 0 {
-			if r, ok := recipients[0].(map[string]any); ok {
-				if addr, ok := r["toAddress"]; ok {
-					result["to_address"] = fmt.Sprintf("%v", addr)
-				}
-			}
-		}
-	} else {
-		if fromObj, ok := config["from"].(map[string]any); ok {
-			chain := fmt.Sprintf("%v", fromObj["chain"])
-			token := ""
-			if t, ok := fromObj["token"]; ok && t != nil {
-				token = fmt.Sprintf("%v", t)
-			}
-			result["from_asset"] = shared.ResolveTickerByChainAndToken(chain, token)
-			result["from_chain"] = chain
-		}
-		if toObj, ok := config["to"].(map[string]any); ok {
-			chain := fmt.Sprintf("%v", toObj["chain"])
-			token := ""
-			if t, ok := toObj["token"]; ok && t != nil {
-				token = fmt.Sprintf("%v", t)
-			}
-			result["to_asset"] = shared.ResolveTickerByChainAndToken(chain, token)
-			result["to_chain"] = chain
-		}
-	}
-
-	if amount, ok := input["amount"]; ok {
-		result["amount"] = fmt.Sprintf("%v", amount)
-	}
-	if frequency, ok := config["frequency"]; ok {
-		result["frequency"] = fmt.Sprintf("%v", frequency)
-	}
-}
-
-func convertToSmallestUnit(amount string, decimals int) string {
-	parts := strings.Split(amount, ".")
-	intPart := parts[0]
-	fracPart := ""
-	if len(parts) > 1 {
-		fracPart = parts[1]
-	}
-
-	if len(fracPart) < decimals {
-		fracPart = fracPart + strings.Repeat("0", decimals-len(fracPart))
-	} else if len(fracPart) > decimals {
-		fracPart = fracPart[:decimals]
-	}
-
-	combined := strings.TrimLeft(intPart+fracPart, "0")
-	if combined == "" {
-		return "0"
-	}
-
-	r := new(big.Int)
-	_, ok := r.SetString(combined, 10)
-	if !ok {
-		return amount
-	}
-	return r.String()
 }
 
 func findVaultAddress(vault *storage.Vault, chain string) string {

@@ -80,7 +80,7 @@ func (t *PolicyDeleteTool) Execute(input map[string]any, ctx *ExecutionContext) 
 		pluginVersion,
 	)
 
-	t.logger.WithField("message", messageToSign).Info("Signing delete message")
+	t.logger.WithField("message", messageToSign).Debug("Signing delete message")
 
 	messageHash := signing.EthereumSignHash(messageToSign)
 	cfg := KeysignConfig{
@@ -97,7 +97,7 @@ func (t *PolicyDeleteTool) Execute(input map[string]any, ctx *ExecutionContext) 
 		return nil, fmt.Errorf("failed to sign delete request: %w", err)
 	}
 
-	t.logger.WithField("signature", signature).Info("Delete signed successfully")
+	t.logger.Info("Delete signed successfully")
 
 	err = t.client.DeletePolicy(policyID, signature, ctx.AuthToken)
 	if err != nil {

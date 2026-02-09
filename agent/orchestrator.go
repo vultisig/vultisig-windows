@@ -176,7 +176,10 @@ func (o *Orchestrator) Run(ctx context.Context, conv *Conversation, vault *stora
 			assistantContent = append(assistantContent, anthropic.NewTextBlock(textContent))
 		}
 		for _, tc := range toolCalls {
-			inputJSON, _ := json.Marshal(tc.Input)
+			inputJSON, marshalErr := json.Marshal(tc.Input)
+			if marshalErr != nil {
+				return fmt.Errorf("failed to marshal tool input for %s: %w", tc.Name, marshalErr)
+			}
 			assistantContent = append(assistantContent, anthropic.ContentBlockParamUnion{
 				OfToolUse: &anthropic.ToolUseBlockParam{
 					ID:    tc.ID,
@@ -208,7 +211,10 @@ func (o *Orchestrator) Run(ctx context.Context, conv *Conversation, vault *stora
 			} else {
 				tc.Status = "complete"
 				tc.Output = result
-				resultJSON, _ := json.Marshal(result)
+				resultJSON, marshalErr := json.Marshal(result)
+				if marshalErr != nil {
+					return fmt.Errorf("failed to marshal tool result for %s: %w", tc.Name, marshalErr)
+				}
 				toolResults = append(toolResults, anthropic.NewToolResultBlock(
 					tc.ID,
 					string(resultJSON),
@@ -606,8 +612,15 @@ func (o *Orchestrator) convertMessages(messages []ChatMessage) []anthropic.Messa
 			if msg.Content != "" {
 				content = append(content, anthropic.NewTextBlock(msg.Content))
 			}
+			var toolResults []anthropic.ContentBlockParamUnion
 			for _, tc := range msg.ToolCalls {
-				inputJSON, _ := json.Marshal(tc.Input)
+				if tc.Status != "complete" && tc.Status != "error" {
+					continue
+				}
+				inputJSON, marshalErr := json.Marshal(tc.Input)
+				if marshalErr != nil {
+					inputJSON = []byte("{}")
+				}
 				content = append(content, anthropic.ContentBlockParamUnion{
 					OfToolUse: &anthropic.ToolUseBlockParam{
 						ID:    tc.ID,
@@ -615,6 +628,23 @@ func (o *Orchestrator) convertMessages(messages []ChatMessage) []anthropic.Messa
 						Input: json.RawMessage(inputJSON),
 					},
 				})
+				if tc.Error != "" {
+					toolResults = append(toolResults, anthropic.NewToolResultBlock(
+						tc.ID,
+						fmt.Sprintf("Error: %s", tc.Error),
+						true,
+					))
+				} else {
+					resultJSON, marshalErr := json.Marshal(tc.Output)
+					if marshalErr != nil {
+						resultJSON = []byte("{}")
+					}
+					toolResults = append(toolResults, anthropic.NewToolResultBlock(
+						tc.ID,
+						string(resultJSON),
+						false,
+					))
+				}
 			}
 			if len(content) > 0 {
 				result = append(result, anthropic.MessageParam{
@@ -622,33 +652,11 @@ func (o *Orchestrator) convertMessages(messages []ChatMessage) []anthropic.Messa
 					Content: content,
 				})
 			}
-
-			if len(msg.ToolCalls) > 0 {
-				var toolResults []anthropic.ContentBlockParamUnion
-				for _, tc := range msg.ToolCalls {
-					if tc.Status == "complete" || tc.Status == "error" {
-						if tc.Error != "" {
-							toolResults = append(toolResults, anthropic.NewToolResultBlock(
-								tc.ID,
-								fmt.Sprintf("Error: %s", tc.Error),
-								true,
-							))
-						} else {
-							resultJSON, _ := json.Marshal(tc.Output)
-							toolResults = append(toolResults, anthropic.NewToolResultBlock(
-								tc.ID,
-								string(resultJSON),
-								false,
-							))
-						}
-					}
-				}
-				if len(toolResults) > 0 {
-					result = append(result, anthropic.MessageParam{
-						Role:    anthropic.MessageParamRoleUser,
-						Content: toolResults,
-					})
-				}
+			if len(toolResults) > 0 {
+				result = append(result, anthropic.MessageParam{
+					Role:    anthropic.MessageParamRoleUser,
+					Content: toolResults,
+				})
 			}
 		}
 	}

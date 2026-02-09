@@ -496,16 +496,16 @@ func (a *AgentService) GetAuthToken(ctx context.Context, vault *storage.Vault, p
 		return "", err
 	}
 
+	if strings.TrimSpace(newToken.Token) == "" {
+		return "", fmt.Errorf("authentication returned empty token")
+	}
+
 	a.authTokensMu.Lock()
 	a.authTokens[vault.PublicKeyECDSA] = newToken
 	a.authTokensMu.Unlock()
 	saveErr := a.store.SaveAgentAuthToken(vault.PublicKeyECDSA, newToken.Token, newToken.ExpiresAt)
 	if saveErr != nil {
 		a.Logger.WithError(saveErr).Warn("Failed to persist auth token")
-	}
-
-	if strings.TrimSpace(newToken.Token) == "" {
-		return "", fmt.Errorf("authentication returned empty token")
 	}
 
 	return newToken.Token, nil
@@ -623,7 +623,7 @@ func (a *AgentService) authenticate(ctx context.Context, vault *storage.Vault, p
 		return nil, fmt.Errorf("failed to generate auth message: %w", err)
 	}
 
-	a.Logger.WithField("message", authMessage).Info("Signing auth message")
+	a.Logger.Debug("Signing auth message")
 
 	signature, err := a.signMessage(authCtx, vault, password, authMessage)
 	if err != nil {

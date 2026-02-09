@@ -42,7 +42,7 @@ func (t *GetPortfolioTool) Execute(input map[string]any, ctx *ExecutionContext) 
 		return nil, fmt.Errorf("failed to get portfolio data: %w", err)
 	}
 
-	var coinsOutput []map[string]any
+	coinsOutput := make([]map[string]any, 0, len(resp.Coins))
 	for _, coin := range resp.Coins {
 		entry := map[string]any{
 			"chain":     coin.Chain,
@@ -57,7 +57,7 @@ func (t *GetPortfolioTool) Execute(input map[string]any, ctx *ExecutionContext) 
 		coinsOutput = append(coinsOutput, entry)
 	}
 
-	var chainsOutput []map[string]any
+	chainsOutput := make([]map[string]any, 0, len(resp.Chains))
 	for _, chain := range resp.Chains {
 		chainsOutput = append(chainsOutput, map[string]any{
 			"chain":     chain.Chain,

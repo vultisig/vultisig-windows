@@ -106,7 +106,7 @@ func (t *PolicyAddTool) Execute(input map[string]any, ctx *ExecutionContext) (an
 	pluginVersion := resolveVersionFromPlugin(plugin)
 	messageToSign := fmt.Sprintf("%s*#*%s*#*%d*#*%s", recipeBase64, ctx.VaultPubKey, policyVersion, pluginVersion)
 
-	t.logger.WithField("message", messageToSign).Info("Signing policy message")
+	t.logger.WithField("message", messageToSign).Debug("Signing policy message")
 
 	messageHash := signing.EthereumSignHash(messageToSign)
 	cfg := KeysignConfig{
@@ -123,7 +123,7 @@ func (t *PolicyAddTool) Execute(input map[string]any, ctx *ExecutionContext) (an
 		return nil, fmt.Errorf("failed to sign policy: %w", err)
 	}
 
-	t.logger.WithField("signature", signature).Info("Policy signed successfully")
+	t.logger.Info("Policy signed successfully")
 
 	req := &verifier.PolicyAddRequest{
 		PluginID:      pluginID,
@@ -159,52 +159,7 @@ func (t *PolicyAddTool) Execute(input map[string]any, ctx *ExecutionContext) (an
 		},
 	}
 
-	var fromChain, fromToken string
-	if pluginID == sendsPluginID {
-		if assetObj, ok := config["asset"].(map[string]any); ok {
-			fromChain = fmt.Sprintf("%v", assetObj["chain"])
-			if t, ok := assetObj["token"]; ok && t != nil {
-				fromToken = fmt.Sprintf("%v", t)
-			}
-			result["from_asset"] = shared.ResolveTickerByChainAndToken(fromChain, fromToken)
-			result["from_chain"] = fromChain
-		}
-		if recipients, ok := config["recipients"].([]any); ok && len(recipients) > 0 {
-			if r, ok := recipients[0].(map[string]any); ok {
-				if addr, ok := r["toAddress"]; ok {
-					result["to_address"] = fmt.Sprintf("%v", addr)
-				}
-				if amt, ok := r["amount"]; ok {
-					result["amount"] = shared.FormatHumanAmount(fmt.Sprintf("%v", amt), fromChain, fromToken)
-				}
-			}
-		}
-	} else {
-		if fromObj, ok := config["from"].(map[string]any); ok {
-			fromChain = fmt.Sprintf("%v", fromObj["chain"])
-			if t, ok := fromObj["token"]; ok && t != nil {
-				fromToken = fmt.Sprintf("%v", t)
-			}
-			result["from_asset"] = shared.ResolveTickerByChainAndToken(fromChain, fromToken)
-			result["from_chain"] = fromChain
-		}
-		if toObj, ok := config["to"].(map[string]any); ok {
-			chain := fmt.Sprintf("%v", toObj["chain"])
-			token := ""
-			if t, ok := toObj["token"]; ok && t != nil {
-				token = fmt.Sprintf("%v", t)
-			}
-			result["to_asset"] = shared.ResolveTickerByChainAndToken(chain, token)
-			result["to_chain"] = chain
-		}
-		if amount, ok := config["fromAmount"]; ok {
-			result["amount"] = shared.FormatHumanAmount(fmt.Sprintf("%v", amount), fromChain, fromToken)
-		}
-	}
-
-	if freq, ok := config["frequency"]; ok {
-		result["frequency"] = fmt.Sprintf("%v", freq)
-	}
+	enrichPolicyFields(result, config)
 
 	return result, nil
 }

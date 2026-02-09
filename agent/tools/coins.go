@@ -219,6 +219,7 @@ func (t *AddCoinTool) Execute(input map[string]any, ctx *ExecutionContext) (any,
 			if saveErr != nil {
 				return nil, fmt.Errorf("failed to save native coin for chain %s: %w", chain, saveErr)
 			}
+			ctx.Vault.Coins = append(ctx.Vault.Coins, nativeCoin)
 		}
 	}
 
@@ -327,8 +328,14 @@ func (t *RemoveCoinTool) Execute(input map[string]any, ctx *ExecutionContext) (a
 			return nil, fmt.Errorf("either coin_id or both chain and ticker are required")
 		}
 
-		chain, _ := chainRaw.(string)
-		ticker, _ := tickerRaw.(string)
+		chain, ok := chainRaw.(string)
+		if !ok {
+			return nil, fmt.Errorf("chain must be a string")
+		}
+		ticker, ok := tickerRaw.(string)
+		if !ok {
+			return nil, fmt.Errorf("ticker must be a string")
+		}
 
 		for _, coin := range ctx.Vault.Coins {
 			if strings.EqualFold(coin.Chain, chain) && strings.EqualFold(coin.Ticker, ticker) {
