@@ -6,7 +6,7 @@ import {
 import { Coin, coinKeyToString } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
-import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
+import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
 import { Query } from '@lib/ui/query/Query'
 import { useMemo } from 'react'
 
@@ -57,11 +57,12 @@ export const useChainSummaries = (): Query<
     [coins]
   )
 
-  return useTransformQueriesData(
-    {
+  return useCombineQueries({
+    queries: {
       balances: { ...balancesQuery, error: balancesQuery.errors[0] },
       prices: { ...pricesQuery, error: pricesQuery.errors[0] },
     },
-    ({ balances, prices }) => transform({ balances, prices })
-  )
+    joinData: ({ balances, prices }) => transform({ balances, prices }),
+    eager: false,
+  })
 }

@@ -4,7 +4,7 @@ import { Button } from '@lib/ui/buttons/Button'
 import { Center } from '@lib/ui/layout/Center'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useNavigation } from '@lib/ui/navigation/state'
-import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { Text } from '@lib/ui/text'
 import { getLastItem } from '@lib/utils/array/getLastItem'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -59,7 +59,7 @@ const persistInitialView = async (view: unknown) => {
 export const CameraPermission = () => {
   const { t } = useTranslation()
   const { client, openUrl } = useCore()
-  const invalidateQueries = useInvalidateQueries()
+  const refetchQueries = useRefetchQueries()
   const [{ history }] = useNavigation()
 
   const currentView = useMemo(
@@ -80,7 +80,7 @@ export const CameraPermission = () => {
 
       await navigator.mediaDevices.getUserMedia({ video: true })
 
-      return invalidateQueries(cameraPermissionQueryKey)
+      return refetchQueries(cameraPermissionQueryKey)
     },
   })
 

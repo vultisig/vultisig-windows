@@ -39,8 +39,8 @@ import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { Panel } from '@lib/ui/panel/Panel'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
 import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
-import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { Query } from '@lib/ui/query/Query'
 import { WarningBlock } from '@lib/ui/status/WarningBlock'
@@ -100,16 +100,17 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
     null
   )
 
-  const gasEstimationDataQuery = useTransformQueriesData(
-    {
+  const gasEstimationDataQuery = useCombineQueries({
+    queries: {
       keysignPayload: keysignPayloadQuery,
       gasEstimation: gasEstimationQuery,
     },
-    ({ keysignPayload, gasEstimation }) => ({
+    joinData: ({ keysignPayload, gasEstimation }) => ({
       keysignPayload,
       gasEstimation: gasEstimation ?? null,
-    })
-  )
+    }),
+    eager: false,
+  })
 
   return (
     <VerifyKeysignStart keysignPayloadQuery={keysignPayloadQuery}>

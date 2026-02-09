@@ -47,6 +47,7 @@ import { EIP1193Error } from '../../background/handlers/errorHandler'
 import { getCosmosChainFromAddress } from '../../utils/cosmos/getCosmosChainFromAddress'
 import { requestAccount } from './core/requestAccount'
 import { Cosmos } from './cosmos'
+import { normalizeCosmosAuthInfoFee } from './cosmos/normalizeAuthInfoFee'
 
 const aminoHandler = (
   signDoc: StdSignDoc,
@@ -511,10 +512,16 @@ export class XDEFIKeplrProvider extends Keplr {
 
       const chain = shouldBePresent(getCosmosChainByChainId(chainId))
 
+      const normalizedAuthInfoBytes = normalizeCosmosAuthInfoFee(
+        new Uint8Array(signDoc.authInfoBytes),
+        chain
+      )
       const transactionDetails: TransactionDetails = directHandler(
         {
           bodyBytes: Buffer.from(signDoc.bodyBytes).toString('base64'),
-          authInfoBytes: Buffer.from(signDoc.authInfoBytes).toString('base64'),
+          authInfoBytes: Buffer.from(normalizedAuthInfoBytes).toString(
+            'base64'
+          ),
           chainId: signDoc.chainId,
           accountNumber: signDoc.accountNumber.toString(),
         },

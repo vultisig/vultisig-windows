@@ -1,4 +1,4 @@
-import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
@@ -46,13 +46,13 @@ export const useIsCircleIncluded = () => {
 
 export const useToggleCircleVisibility = () => {
   const { setIsCircleVisible } = useCore()
-  const invalidateQueries = useInvalidateQueries()
+  const refetchQueries = useRefetchQueries()
   const isVisible = useIsCircleVisible()
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (newValue: boolean) => {
       await setIsCircleVisible(newValue)
-      await invalidateQueries([StorageKey.isCircleVisible])
+      await refetchQueries([StorageKey.isCircleVisible])
     },
   })
 
