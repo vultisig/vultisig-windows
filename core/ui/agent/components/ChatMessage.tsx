@@ -2,7 +2,7 @@ import { SparklesIcon } from '@lib/ui/icons/SparklesIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { FC } from 'react'
+import { FC, memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -14,7 +14,7 @@ type Props = {
   message: ChatMessageType
 }
 
-export const ChatMessage: FC<Props> = ({ message }) => {
+const ChatMessageComponent: FC<Props> = ({ message }) => {
   const { t } = useTranslation()
   const isUser = message.role === 'user'
   const hasTextContent = message.content.trim().length > 0
@@ -57,6 +57,8 @@ export const ChatMessage: FC<Props> = ({ message }) => {
   )
 }
 
+export const ChatMessage = memo(ChatMessageComponent)
+
 const Container = styled.div<{ $isUser: boolean }>`
   padding: 8px 0;
   display: flex;
@@ -86,7 +88,9 @@ const BotAvatar = styled.div`
 const MessageBubble = styled.div<{ $isUser: boolean }>`
   padding: 12px 16px;
   border-radius: 12px;
-  background: ${({ $isUser }) =>
-    $isUser ? '#1a4a8a' : getColor('foreground')};
+  background: ${({ $isUser, theme }) =>
+    $isUser
+      ? theme.colors.primary.getVariant({ l: () => 27 }).toCssValue()
+      : getColor('foreground')};
   color: ${getColor('contrast')};
 `

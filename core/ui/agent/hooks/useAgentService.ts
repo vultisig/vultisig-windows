@@ -29,6 +29,22 @@ declare global {
           SignIn: (vaultPubKey: string, password: string) => Promise<void>
           GetConversationStarters: (vaultPubKey: string) => Promise<string[]>
           GenerateConversationStarters: (vaultPubKey: string) => Promise<void>
+          ProvideDKLSSignature: (
+            requestId: string,
+            r: string,
+            s: string,
+            recoveryId: string,
+            error: string
+          ) => Promise<void>
+          ProvideDKLSReshare: (
+            requestId: string,
+            ecdsaPubKey: string,
+            eddsaPubKey: string,
+            ecdsaKeyshare: string,
+            eddsaKeyshare: string,
+            chaincode: string,
+            error: string
+          ) => Promise<void>
         }
       }
     }

@@ -10,12 +10,12 @@ import {
   ChainAddressResult,
   ChainsListResult,
   CoinsListResult,
-  PolicyAddResult,
-  PolicyDetailsResult,
   PluginInstalledResult,
   PluginInstallResult,
   PluginListResult,
   PluginSpecResult,
+  PolicyAddResult,
+  PolicyDetailsResult,
   PolicyListResult,
   PolicyPreviewResult,
   PolicyStatusResult,
@@ -93,9 +93,7 @@ const renderToolOutput = (
       return <PluginInstalledResult data={output} />
 
     case 'plugin_uninstall':
-      return (
-        <SuccessResult data={output} action="delete" entityType="plugin" />
-      )
+      return <SuccessResult data={output} action="delete" entityType="plugin" />
 
     case 'asset_lookup':
       return <AssetLookupResult data={output} />

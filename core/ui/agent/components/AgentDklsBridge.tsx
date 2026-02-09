@@ -25,8 +25,8 @@ export const AgentDklsBridge = () => {
     if (!window.runtime) return
 
     const onDklsSignRequest = async (data: DklsSignRequestEvent) => {
-      const agentService = (window as any).go?.agent?.AgentService
-      if (!agentService?.ProvideDKLSSignature) {
+      const agentService = window.go?.agent?.AgentService
+      if (!agentService || !('ProvideDKLSSignature' in agentService)) {
         return
       }
 

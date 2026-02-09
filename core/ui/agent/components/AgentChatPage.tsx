@@ -7,6 +7,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { useViewState } from '@lib/ui/navigation/hooks/useViewState'
 
 type AgentChatViewState = { conversationId?: string; initialMessage?: string }
+import { ErrorBoundary } from '@lib/ui/errors/ErrorBoundary'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
@@ -76,13 +77,13 @@ export const AgentChatPage: FC = () => {
 
   useEffect(() => {
     if (initialConversationId) {
-      window.go.agent.AgentService.GetConversation(initialConversationId)
-        .then(conv => {
+      window.go?.agent?.AgentService?.GetConversation(initialConversationId)
+        ?.then(conv => {
           if (conv?.messages?.length) {
             setInitialMessages(conv.messages)
           }
         })
-        .catch(err => console.error('Failed to load conversation:', err))
+        ?.catch(() => {})
     }
   }, [initialConversationId, setInitialMessages])
 
@@ -276,42 +277,49 @@ export const AgentChatPage: FC = () => {
         hasBorder
       />
       <MessagesContainer>
-        {messages.length === 0 &&
-          !isThinking &&
-          streamingSegments.length === 0 && (
-            <WelcomeMessage>
-              <VStack gap={16} alignItems="center">
-                <Text size={24} weight={600}>
-                  {t('vultibot_welcome')}
-                </Text>
-                <Text
-                  size={14}
-                  color="supporting"
-                  style={{ textAlign: 'center' }}
-                >
-                  {t('vultibot_description')}
-                </Text>
-                <ConversationStarters
-                  starters={starters}
-                  isLoading={isLoadingStarters}
-                  fullWidth={false}
-                  onSelect={handleSend}
-                />
-              </VStack>
-            </WelcomeMessage>
+        <ErrorBoundary fallback={AgentErrorFallback}>
+          {messages.length === 0 &&
+            !isThinking &&
+            streamingSegments.length === 0 && (
+              <WelcomeMessage>
+                <VStack gap={16} alignItems="center">
+                  <Text size={24} weight={600}>
+                    {t('vultibot_welcome')}
+                  </Text>
+                  <Text
+                    size={14}
+                    color="supporting"
+                    style={{ textAlign: 'center' }}
+                  >
+                    {t('vultibot_description')}
+                  </Text>
+                  <ConversationStarters
+                    starters={starters}
+                    isLoading={isLoadingStarters}
+                    fullWidth={false}
+                    onSelect={handleSend}
+                  />
+                </VStack>
+              </WelcomeMessage>
+            )}
+          {messages.map(msg => (
+            <ChatMessage key={msg.id} message={msg} />
+          ))}
+          {isThinking && streamingSegments.length === 0 && (
+            <ThinkingIndicator />
           )}
-        {messages.map(msg => (
-          <ChatMessage key={msg.id} message={msg} />
-        ))}
-        {isThinking && streamingSegments.length === 0 && <ThinkingIndicator />}
-        <StreamingText segments={streamingSegments} toolResults={toolResults} />
-        {error && (
-          <ErrorMessage onClick={dismissError}>
-            <Text size={14} color="danger">
-              {error}
-            </Text>
-          </ErrorMessage>
-        )}
+          <StreamingText
+            segments={streamingSegments}
+            toolResults={toolResults}
+          />
+          {error && (
+            <ErrorMessage onClick={dismissError}>
+              <Text size={14} color="danger">
+                {error}
+              </Text>
+            </ErrorMessage>
+          )}
+        </ErrorBoundary>
         <div ref={messagesEndRef} />
       </MessagesContainer>
       <ChatInput
@@ -339,6 +347,22 @@ export const AgentChatPage: FC = () => {
     </VStack>
   )
 }
+
+const AgentErrorFallback: FC<{ clearError: () => void }> = ({ clearError }) => (
+  <VStack gap={12} alignItems="center" style={{ padding: 24 }}>
+    <Text size={14} color="danger">
+      Something went wrong rendering the chat.
+    </Text>
+    <Text
+      size={13}
+      color="primary"
+      style={{ cursor: 'pointer' }}
+      onClick={clearError}
+    >
+      Try again
+    </Text>
+  </VStack>
+)
 
 const MessagesContainer = styled(PageContent)`
   flex: 1;

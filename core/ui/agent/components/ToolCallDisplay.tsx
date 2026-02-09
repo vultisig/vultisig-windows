@@ -4,7 +4,7 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { FC, useMemo, useState } from 'react'
+import { FC, useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { ToolCall } from '../types'
@@ -80,11 +80,20 @@ const toolsWithCustomOutput = new Set([
   'transaction_history',
 ])
 
+const safeStringify = (value: unknown): string => {
+  try {
+    return JSON.stringify(value, null, 2)
+  } catch {
+    return String(value)
+  }
+}
+
 export const ToolCallDisplay: FC<Props> = ({
   toolCall,
   showOutput = false,
 }) => {
   const [expanded, setExpanded] = useState(false)
+  const toggleExpanded = useCallback(() => setExpanded(prev => !prev), [])
 
   const description =
     toolDescriptions[toolCall.name] ||
@@ -118,7 +127,7 @@ export const ToolCallDisplay: FC<Props> = ({
   }
 
   return (
-    <Container onClick={() => setExpanded(!expanded)}>
+    <Container onClick={toggleExpanded}>
       <HStack gap={8} alignItems="center">
         <StatusIcon>
           {isRunning ? (
@@ -157,7 +166,7 @@ export const ToolCallDisplay: FC<Props> = ({
               </Text>
               <CodeBlock>
                 <Text size={10} color="supporting">
-                  {JSON.stringify(toolCall.input, null, 2)}
+                  {safeStringify(toolCall.input)}
                 </Text>
               </CodeBlock>
             </div>
@@ -168,7 +177,7 @@ export const ToolCallDisplay: FC<Props> = ({
                 </Text>
                 <CodeBlock>
                   <Text size={10} color="supporting">
-                    {JSON.stringify(toolCall.output, null, 2)}
+                    {safeStringify(toolCall.output)}
                   </Text>
                 </CodeBlock>
               </div>

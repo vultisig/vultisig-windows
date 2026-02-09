@@ -79,7 +79,8 @@ export const PolicyListResult: FC<Props> = ({ data }) => {
     <ResultPanel title="Active Policies" count={data.policies.length}>
       {data.policies.map((policy, index) => {
         const pluginType = policy.pluginType || policy.plugin_id
-        const pluginName = policy.plugin_name || getPluginDisplayName(pluginType)
+        const pluginName =
+          policy.plugin_name || getPluginDisplayName(pluginType)
         const isActive = policy.isActive ?? policy.active ?? true
         const fromAsset = policy.fromAsset || policy.from_asset
         const toAsset = policy.toAsset || policy.to_asset

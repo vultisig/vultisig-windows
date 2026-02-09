@@ -85,8 +85,7 @@ export const PolicyPreviewResult: FC<Props> = ({ data }) => {
     data.fromChain ||
     data.from_chain ||
     (typeof configFrom?.chain === 'string' ? configFrom.chain : undefined)
-  const toAsset =
-    data.toAsset || data.to_asset || extractChainLabel(configTo)
+  const toAsset = data.toAsset || data.to_asset || extractChainLabel(configTo)
   const toChain =
     data.toChain ||
     data.to_chain ||

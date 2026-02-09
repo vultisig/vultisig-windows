@@ -30,8 +30,8 @@ export const AgentDklsReshareBridge = () => {
     if (!window.runtime) return
 
     const onDklsReshareRequest = async (data: DklsReshareRequestEvent) => {
-      const agentService = (window as any).go?.agent?.AgentService
-      if (!agentService?.ProvideDKLSReshare) {
+      const agentService = window.go?.agent?.AgentService
+      if (!agentService || !('ProvideDKLSReshare' in agentService)) {
         return
       }
 

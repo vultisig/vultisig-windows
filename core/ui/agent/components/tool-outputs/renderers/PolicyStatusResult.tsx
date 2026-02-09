@@ -166,6 +166,11 @@ export const PolicyStatusResult: FC<Props> = ({ data }) => {
   )
 }
 
+const statusColorMap: Record<string, string> = {
+  success: 'success',
+  failed: 'danger',
+}
+
 const StatusIcon = styled.span<{ $status: string }>`
   font-size: 14px;
   width: 24px;
@@ -174,28 +179,22 @@ const StatusIcon = styled.span<{ $status: string }>`
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: ${({ $status }) => {
-    switch ($status) {
-      case 'success':
-        return 'rgba(51, 230, 191, 0.15)'
-      case 'failed':
-        return 'rgba(255, 92, 92, 0.15)'
-      case 'pending':
-        return 'rgba(255, 193, 7, 0.15)'
-      default:
-        return getColor('mist')
+  background: ${({ $status, theme }) => {
+    const colorName = statusColorMap[$status]
+    if (colorName) {
+      return theme.colors[colorName as keyof typeof theme.colors]
+        .getVariant({ a: () => 0.15 })
+        .toCssValue()
     }
+    if ($status === 'pending') return 'rgba(255, 193, 7, 0.15)'
+    return getColor('mist')
   }};
-  color: ${({ $status }) => {
-    switch ($status) {
-      case 'success':
-        return '#33E6BF'
-      case 'failed':
-        return '#FF5C5C'
-      case 'pending':
-        return '#FFC107'
-      default:
-        return 'inherit'
+  color: ${({ $status, theme }) => {
+    const colorName = statusColorMap[$status]
+    if (colorName) {
+      return theme.colors[colorName as keyof typeof theme.colors].toCssValue()
     }
+    if ($status === 'pending') return '#FFC107'
+    return 'inherit'
   }};
 `
