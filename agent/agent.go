@@ -15,7 +15,9 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 
+	"github.com/vultisig/vultisig-win/agent/chainbridge"
 	"github.com/vultisig/vultisig-win/agent/dklsbridge"
+	"github.com/vultisig/vultisig-win/agent/portfoliobridge"
 	"github.com/vultisig/vultisig-win/agent/shared"
 	"github.com/vultisig/vultisig-win/agent/signing"
 	"github.com/vultisig/vultisig-win/agent/tools"
@@ -291,6 +293,19 @@ func (a *AgentService) ProvideDKLSReshare(requestID, ecdsaPubKey, eddsaPubKey, e
 		HexChainCode:  hexChainCode,
 		Error:         errMessage,
 	})
+}
+
+func (a *AgentService) ProvideChainAddress(requestID, chain, address, errMessage string) error {
+	return chainbridge.SubmitDeriveAddressResponse(chainbridge.DeriveAddressResponse{
+		RequestID: requestID,
+		Chain:     chain,
+		Address:   address,
+		Error:     errMessage,
+	})
+}
+
+func (a *AgentService) ProvidePortfolio(responseJSON string) error {
+	return portfoliobridge.SubmitPortfolioResponse(responseJSON)
 }
 
 func (a *AgentService) SetApiKey(key string) error {

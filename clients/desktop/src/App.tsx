@@ -1,5 +1,7 @@
 import buildInfo from '@clients/desktop/build.json'
 import { mpcServerUrl } from '@core/mpc/MpcServerType'
+import { AgentChainBridge } from '@core/ui/agent/components/AgentChainBridge'
+import { AgentPortfolioBridge } from '@core/ui/agent/components/AgentPortfolioBridge'
 import { AgentDklsBridge } from '@core/ui/agent/components/AgentDklsBridge'
 import { AgentDklsReshareBridge } from '@core/ui/agent/components/AgentDklsReshareBridge'
 import { CoreApp } from '@core/ui/CoreApp'
@@ -72,8 +74,10 @@ const AppContent = () => {
 
   return (
     <CoreApp coreState={coreState}>
+      <AgentChainBridge />
       <AgentDklsBridge />
       <AgentDklsReshareBridge />
+      <AgentPortfolioBridge />
       <LauncherObserver />
       <ActiveView views={views} />
       <OnboardingResetter />

@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/wailsapp/wails/v2/pkg/runtime"
+
+	"github.com/vultisig/vultisig-win/agent/chainbridge"
 	"github.com/vultisig/vultisig-win/storage"
 )
 
@@ -18,11 +21,16 @@ func (t *GetCoinsTool) Name() string {
 }
 
 func (t *GetCoinsTool) Description() string {
-	return "List all coins/tokens tracked in the current vault. Returns detailed information about each coin including chain, ticker, address, and whether it's a native token or ERC-20/SPL token."
+	return "List coins/tokens tracked in the current vault. Optionally filter by chain. Returns chain, ticker, address, and whether it's a native token or ERC-20/SPL token."
 }
 
 func (t *GetCoinsTool) InputSchema() map[string]any {
-	return map[string]any{}
+	return map[string]any{
+		"chain": map[string]any{
+			"type":        "string",
+			"description": "Optional chain to filter by (e.g., 'Ethereum', 'Bitcoin', 'Solana'). If omitted, returns coins from all chains.",
+		},
+	}
 }
 
 func (t *GetCoinsTool) RequiresPassword() bool {
@@ -38,8 +46,16 @@ func (t *GetCoinsTool) Execute(input map[string]any, ctx *ExecutionContext) (any
 		return nil, fmt.Errorf("vault not available in context")
 	}
 
+	filterChain := ""
+	if chainRaw, ok := input["chain"]; ok && chainRaw != nil {
+		filterChain = chainRaw.(string)
+	}
+
 	var coins []map[string]any
 	for _, coin := range ctx.Vault.Coins {
+		if filterChain != "" && !strings.EqualFold(coin.Chain, filterChain) {
+			continue
+		}
 		coinInfo := map[string]any{
 			"id":               coin.ID,
 			"chain":            coin.Chain,
@@ -104,7 +120,7 @@ func (t *AddCoinTool) RequiresPassword() bool {
 }
 
 func (t *AddCoinTool) RequiresConfirmation() bool {
-	return true
+	return false
 }
 
 func (t *AddCoinTool) Execute(input map[string]any, ctx *ExecutionContext) (any, error) {
@@ -160,7 +176,37 @@ func (t *AddCoinTool) Execute(input map[string]any, ctx *ExecutionContext) (any,
 	}
 
 	if existingAddress == "" {
-		return nil, fmt.Errorf("chain '%s' not found in vault - cannot determine address. Add the native token for this chain first through the app UI", chain)
+		resolvedChain, valid := resolveChainName(chain)
+		if !valid {
+			return nil, fmt.Errorf("chain '%s' is not a supported chain", chain)
+		}
+		chain = resolvedChain
+
+		resp, err := chainbridge.RequestDeriveAddress(ctx.AppCtx, ctx.Ctx, chainbridge.DeriveAddressRequest{
+			VaultPubKey: ctx.VaultPubKey,
+			Chain:       chain,
+		})
+		if err != nil {
+			return nil, fmt.Errorf("failed to derive address for new chain %s: %w", chain, err)
+		}
+		existingAddress = resp.Address
+
+		meta, hasMeta := chainMetadata[chain]
+		if hasMeta {
+			nativeCoin := storage.Coin{
+				Chain:           chain,
+				Ticker:          meta.Ticker,
+				Address:         existingAddress,
+				IsNativeToken:   true,
+				Decimals:        meta.Decimals,
+				Logo:            meta.Logo,
+				PriceProviderID: meta.PriceProviderID,
+			}
+			_, saveErr := t.store.SaveCoin(ctx.VaultPubKey, nativeCoin)
+			if saveErr != nil {
+				return nil, fmt.Errorf("failed to save native coin for chain %s: %w", chain, saveErr)
+			}
+		}
 	}
 
 	for _, coin := range ctx.Vault.Coins {
@@ -187,6 +233,8 @@ func (t *AddCoinTool) Execute(input map[string]any, ctx *ExecutionContext) (any,
 	if err != nil {
 		return nil, fmt.Errorf("failed to save coin: %w", err)
 	}
+
+	runtime.EventsEmit(ctx.AppCtx, "vault:coins-changed")
 
 	return map[string]any{
 		"success":          true,
@@ -237,7 +285,7 @@ func (t *RemoveCoinTool) RequiresPassword() bool {
 }
 
 func (t *RemoveCoinTool) RequiresConfirmation() bool {
-	return true
+	return false
 }
 
 func (t *RemoveCoinTool) Execute(input map[string]any, ctx *ExecutionContext) (any, error) {
@@ -287,6 +335,8 @@ func (t *RemoveCoinTool) Execute(input map[string]any, ctx *ExecutionContext) (a
 	if err != nil {
 		return nil, fmt.Errorf("failed to delete coin: %w", err)
 	}
+
+	runtime.EventsEmit(ctx.AppCtx, "vault:coins-changed")
 
 	return map[string]any{
 		"success": true,

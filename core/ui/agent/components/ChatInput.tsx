@@ -1,6 +1,5 @@
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { ArrowUpRightIcon } from '@lib/ui/icons/ArrowUpRightIcon'
-import { CircleCrossFilledIcon } from '@lib/ui/icons/CircleCrossFilledIcon'
 import { HStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
 import { FC, KeyboardEvent, useState } from 'react'
@@ -9,16 +8,12 @@ import styled from 'styled-components'
 
 type Props = {
   onSend: (message: string) => void
-  onStop?: () => void
-  isRunning?: boolean
   disabled?: boolean
   placeholder?: string
 }
 
 export const ChatInput: FC<Props> = ({
   onSend,
-  onStop,
-  isRunning = false,
   disabled = false,
   placeholder,
 }) => {
@@ -27,24 +22,16 @@ export const ChatInput: FC<Props> = ({
 
   const handleSend = () => {
     const trimmed = value.trim()
-    if (trimmed && !disabled && !isRunning) {
+    if (trimmed && !disabled) {
       onSend(trimmed)
       setValue('')
     }
   }
 
-  const handleAction = () => {
-    if (isRunning) {
-      onStop?.()
-      return
-    }
-    handleSend()
-  }
-
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
-      handleAction()
+      handleSend()
     }
   }
 
@@ -57,18 +44,17 @@ export const ChatInput: FC<Props> = ({
             onChange={e => setValue(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={placeholder || t('type_a_message')}
-            disabled={disabled || isRunning}
+            disabled={disabled}
             rows={1}
           />
         </InputWrapper>
         <SendButton
           kind="primary"
           size="lg"
-          onClick={handleAction}
-          disabled={isRunning ? false : disabled || !value.trim()}
-          status={isRunning ? 'danger' : 'default'}
+          onClick={handleSend}
+          disabled={disabled || !value.trim()}
         >
-          {isRunning ? <CircleCrossFilledIcon /> : <ArrowUpRightIcon />}
+          <ArrowUpRightIcon />
         </SendButton>
       </HStack>
     </Container>

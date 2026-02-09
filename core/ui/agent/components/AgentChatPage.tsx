@@ -2,9 +2,11 @@ import { Chain } from '@core/chain/Chain'
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { StorageKey } from '@core/ui/storage/StorageKey'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useViewState } from '@lib/ui/navigation/hooks/useViewState'
+import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 
 type AgentChatViewState = { conversationId?: string; initialMessage?: string }
 import { ErrorBoundary } from '@lib/ui/errors/ErrorBoundary'
@@ -12,7 +14,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { FC, useCallback, useEffect, useRef, useState } from 'react'
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -95,12 +97,17 @@ export const AgentChatPage: FC = () => {
   const { starters, isLoading: isLoadingStarters } =
     useConversationStarters(vaultId)
 
-  const handleSend = useCallback(
+  const queuedMessageRef = useRef<string | null>(null)
+
+  const isProcessing = useMemo(
+    () => Boolean(isThinking || isLoading || streamingSegments.length > 0),
+    [isThinking, isLoading, streamingSegments.length]
+  )
+
+  const doSend = useCallback(
     async (message: string) => {
       if (!vaultId) return
-
       addUserMessage(message)
-
       try {
         const id = await sendMessage(vaultId, message)
         setConversationId(id)
@@ -110,6 +117,29 @@ export const AgentChatPage: FC = () => {
     },
     [vaultId, addUserMessage, sendMessage]
   )
+
+  const handleSend = useCallback(
+    (message: string) => {
+      if (isProcessing) {
+        queuedMessageRef.current = message
+        addUserMessage(message)
+        return
+      }
+      doSend(message)
+    },
+    [isProcessing, addUserMessage, doSend]
+  )
+
+  useEffect(() => {
+    if (!isProcessing && queuedMessageRef.current) {
+      const queued = queuedMessageRef.current
+      queuedMessageRef.current = null
+      if (!vaultId) return
+      sendMessage(vaultId, queued)
+        .then(id => setConversationId(id))
+        .catch(err => console.error('Failed to send queued message:', err))
+    }
+  }, [isProcessing, vaultId, sendMessage])
 
   useEffect(() => {
     if (initialMessage && vaultId && !initialMessageSentRef.current) {
@@ -168,11 +198,15 @@ export const AgentChatPage: FC = () => {
           return result
         }
 
+        const fromAmountStr = state.fromAmount as string | undefined
+        const fromAmount = fromAmountStr ? BigInt(fromAmountStr) : undefined
+
         navigate({
           id: 'swap',
           state: {
             fromCoin: fromCoin ? buildCoinKey(fromCoin) : undefined,
             toCoin: toCoin ? buildCoinKey(toCoin) : undefined,
+            fromAmount,
           },
         })
       } else if (data.id === 'send') {
@@ -185,11 +219,14 @@ export const AgentChatPage: FC = () => {
           if (coin.id) {
             coinKey.id = coin.id
           }
+          const amountStr = state.amount as string | undefined
+          const amount = amountStr ? BigInt(amountStr) : undefined
           navigate({
             id: 'send',
             state: {
               coin: coinKey,
               address: state.address as string | undefined,
+              amount,
               memo: state.memo as string | undefined,
             },
           })
@@ -204,6 +241,18 @@ export const AgentChatPage: FC = () => {
 
     return cleanup
   }, [navigate])
+
+  const invalidateQueries = useInvalidateQueries()
+
+  useEffect(() => {
+    if (!window.runtime) return
+
+    const cleanup = window.runtime.EventsOn('vault:coins-changed', () => {
+      invalidateQueries([StorageKey.vaultsCoins])
+    })
+
+    return cleanup
+  }, [invalidateQueries])
 
   const handlePasswordSubmit = useCallback(
     async (password: string) => {
@@ -227,16 +276,6 @@ export const AgentChatPage: FC = () => {
     dismissConfirmation()
     provideConfirmation(false)
   }, [dismissConfirmation, provideConfirmation])
-
-  const handleStop = useCallback(() => {
-    cancelRequest().catch(err => {
-      console.error('Failed to cancel request:', err)
-    })
-  }, [cancelRequest])
-
-  const isProcessing = Boolean(
-    isThinking || isLoading || streamingSegments.length > 0
-  )
 
   if (hasApiKey === false) {
     return (
@@ -324,8 +363,6 @@ export const AgentChatPage: FC = () => {
       </MessagesContainer>
       <ChatInput
         onSend={handleSend}
-        onStop={handleStop}
-        isRunning={isProcessing}
         placeholder={t('ask_about_plugins_policies')}
       />
       {passwordRequired && (

@@ -19,6 +19,7 @@ import {
   PolicyListResult,
   PolicyPreviewResult,
   PolicyStatusResult,
+  PortfolioResult,
   SuccessResult,
   VaultInfoResult,
   VaultsListResult,
@@ -53,6 +54,9 @@ const renderToolOutput = (
     case 'get_coins':
     case 'get_balances':
       return <CoinsListResult data={output} />
+
+    case 'get_portfolio':
+      return <PortfolioResult data={output} />
 
     case 'vault_info':
       return <VaultInfoResult data={output} />

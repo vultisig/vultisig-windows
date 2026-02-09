@@ -45,6 +45,13 @@ declare global {
             chaincode: string,
             error: string
           ) => Promise<void>
+          ProvideChainAddress: (
+            requestId: string,
+            chain: string,
+            address: string,
+            error: string
+          ) => Promise<void>
+          ProvidePortfolio: (data: string) => Promise<void>
         }
       }
     }

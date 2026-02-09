@@ -8,7 +8,7 @@ import (
 const (
 	DefaultVerifierURL = "https://verifier.vultisig.com"
 	DefaultRelayURL    = "https://api.vultisig.com/router"
-	ClaudeModel        = "claude-sonnet-4-20250514"
+	ClaudeModel        = "claude-haiku-4-5-20251001"
 )
 
 type PluginInfo struct {
@@ -163,12 +163,14 @@ func ResolveTickerByChainAndToken(chain, tokenAddress string) string {
 func ResolveDecimalsByChainAndToken(chain, tokenAddress string) int {
 	if tokenAddress == "" {
 		switch strings.ToLower(chain) {
-		case "bitcoin":
+		case "bitcoin", "dogecoin", "litecoin", "bitcoin-cash", "dash", "thorchain":
 			return 8
-		case "solana":
+		case "solana", "sui", "ton":
 			return 9
-		case "tron":
+		case "tron", "cosmos", "ripple":
 			return 6
+		case "polkadot", "mayachain":
+			return 10
 		default:
 			return 18
 		}
