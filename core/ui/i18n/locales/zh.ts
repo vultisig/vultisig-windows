@@ -57,6 +57,8 @@ export const zh = {
       shareSecurely: '为确保能够访问，最好',
       vaultShares: '您的金库持有2股股票，',
       wellDone: '做得好',
+      sentTo: '已发送至 {{email}}。',
+      changeEmailAndRestartKeygen: '更改邮箱并重新开始密钥生成',
     },
     createVault: {
       availablePlatforms: {
@@ -413,6 +415,7 @@ export const zh = {
   folder_name: '文件夹名称',
   folder_name_already_exists: '文件夹名称必须唯一',
   folder_name_required: '文件夹名称为必填项',
+  folder_at_least_one_vault_required: '至少需要一个保险库',
   folders: '文件夹',
   follow_banner_button: '关注 @Vultisig',
   follow_banner_subtitle: 'Vultisig 与您携手共建。',
@@ -756,6 +759,7 @@ export const zh = {
   soon: '很快',
   stake: '赌注',
   staked_amount: '投注金额',
+  transfer: '转账',
   start_reshare: '开始转发',
   successfully: '成功地',
   support: '支持',

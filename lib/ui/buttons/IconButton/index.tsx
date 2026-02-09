@@ -8,30 +8,30 @@ import { FC } from 'react'
 import styled, { css } from 'styled-components'
 
 import { Size } from '../../core/Size'
-import { ButtonProps } from '../ButtonProps'
+import { ButtonProps, PrimaryButtonStatus } from '../ButtonProps'
 
 type ButtonSize = Extract<Size, 'xs' | 'sm' | 'md' | 'lg' | 'xl'>
 
 const StyledIconButton = styled(UnstyledButton)<{
-  disabled: boolean
-  kind: NonNullable<ButtonProps['kind']>
-  loading: boolean
-  size: ButtonSize
-  status: NonNullable<ButtonProps['status']>
+  $disabled: boolean
+  $kind: NonNullable<ButtonProps['kind']>
+  $loading: boolean
+  $size: ButtonSize
+  $status: PrimaryButtonStatus
 }>`
-  ${({ disabled, kind, loading, size, status }) => css`
+  ${({ $disabled, $kind, $loading, $size, $status }) => css`
     align-items: center;
     border: none;
-    border-radius: ${iconButtonSize[size]}px;
+    border-radius: ${iconButtonSize[$size]}px;
     cursor: pointer;
     display: flex;
-    height: ${iconButtonSize[size]}px;
+    height: ${iconButtonSize[$size]}px;
     justify-content: center;
-    min-width: ${iconButtonSize[size]}px;
+    min-width: ${iconButtonSize[$size]}px;
     transition: all 0.2s;
     width: auto;
 
-    ${match(size, {
+    ${match($size, {
       xs: () => css`
         font-size: 16px;
       `,
@@ -50,12 +50,12 @@ const StyledIconButton = styled(UnstyledButton)<{
       `,
     })}
 
-    ${disabled || loading
+    ${$disabled || $loading
       ? css`
           color: ${getColor('buttonTextDisabled')};
           cursor: default;
 
-          ${match(kind, {
+          ${match($kind, {
             link: () => css``,
             primary: () => css`
               background-color: ${getColor('buttonBackgroundDisabled')};
@@ -69,7 +69,7 @@ const StyledIconButton = styled(UnstyledButton)<{
             `,
           })}
         `
-      : match(kind, {
+      : match($kind, {
           link: () => css`
             background-color: transparent;
             color: ${getColor('text')};
@@ -77,28 +77,35 @@ const StyledIconButton = styled(UnstyledButton)<{
             &:hover {
               background-color: ${getColor('buttonLinkHover')};
 
-              ${match(status, {
-                default: () => css`
-                  color: ${getColor('text')};
-                `,
-                danger: () => css`
-                  color: ${getColor('danger')};
-                `,
-                success: () => css`
-                  color: ${getColor('primary')};
-                `,
-                warning: () => css`
-                  color: ${getColor('idle')};
-                `,
-              })}
+              ${$kind === 'primary'
+                ? match($status, {
+                    default: () => css`
+                      color: ${getColor('text')};
+                    `,
+                    neutral: () => css`
+                      color: ${getColor('text')};
+                    `,
+                    danger: () => css`
+                      color: ${getColor('danger')};
+                    `,
+                    success: () => css`
+                      color: ${getColor('primary')};
+                    `,
+                  })
+                : css`
+                    color: ${getColor('text')};
+                  `}
             }
           `,
           primary: () => css`
             color: ${getColor('text')};
 
-            ${match(status, {
+            ${match($status, {
               default: () => css`
                 background-color: ${getColor('buttonPrimary')};
+              `,
+              neutral: () => css`
+                background-color: ${getColor('buttonNeutral')};
               `,
               danger: () => css`
                 background-color: ${getColor('danger')};
@@ -106,15 +113,15 @@ const StyledIconButton = styled(UnstyledButton)<{
               success: () => css`
                 background-color: ${getColor('primary')};
               `,
-              warning: () => css`
-                background-color: ${getColor('idle')};
-              `,
             })}
 
             &:hover {
-              ${match(status, {
+              ${match($status, {
                 default: () => css`
                   background-color: ${getColor('buttonHover')};
+                `,
+                neutral: () => css`
+                  background-color: ${getColor('buttonNeutralHover')};
                 `,
                 danger: () => css`
                   background-color: ${getColor('danger')};
@@ -122,33 +129,16 @@ const StyledIconButton = styled(UnstyledButton)<{
                 success: () => css`
                   background-color: ${getColor('primary')};
                 `,
-                warning: () => css`
-                  background-color: ${getColor('idle')};
-                `,
               })}
             }
           `,
           secondary: () => css`
-            background-color: ${getColor('foreground')};
+            background-color: ${getColor('buttonSecondary')};
+            border: 1px solid rgba(255, 255, 255, 0.03);
             color: ${getColor('text')};
 
             &:hover {
-              background-color: ${getColor('buttonHover')};
-
-              ${match(status, {
-                default: () => css`
-                  color: ${getColor('text')};
-                `,
-                danger: () => css`
-                  color: ${getColor('danger')};
-                `,
-                success: () => css`
-                  color: ${getColor('primary')};
-                `,
-                warning: () => css`
-                  color: ${getColor('idle')};
-                `,
-              })}
+              background-color: ${getColor('buttonSecondaryHover')};
             }
           `,
           outlined: () => css`
@@ -157,27 +147,8 @@ const StyledIconButton = styled(UnstyledButton)<{
             color: ${getColor('buttonPrimary')};
 
             &:hover {
-              ${match(status, {
-                default: () => css`
-                  background-color: ${getColor('buttonPrimary')};
-                  color: ${getColor('text')};
-                `,
-                danger: () => css`
-                  background-color: ${getColor('danger')};
-                  border-color: ${getColor('danger')};
-                  color: ${getColor('text')};
-                `,
-                success: () => css`
-                  background-color: ${getColor('primary')};
-                  border-color: ${getColor('primary')};
-                  color: ${getColor('text')};
-                `,
-                warning: () => css`
-                  background-color: ${getColor('idle')};
-                  border-color: ${getColor('idle')};
-                  color: ${getColor('text')};
-                `,
-              })}
+              background-color: ${getColor('buttonPrimary')};
+              color: ${getColor('text')};
             }
           `,
         })}
@@ -195,12 +166,16 @@ export const IconButton: FC<
   status = 'default',
   ...rest
 }) => {
-  const props = {
+  const styledProps = {
+    $disabled: !!disabled,
+    $kind: kind,
+    $loading: loading,
+    $size: size,
+    $status: status as PrimaryButtonStatus,
+  }
+
+  const htmlProps = {
     disabled: !!disabled,
-    kind,
-    loading,
-    size,
-    status,
     ...rest,
   }
 
@@ -208,13 +183,13 @@ export const IconButton: FC<
     <Tooltip
       content={disabled}
       renderOpener={options => (
-        <StyledIconButton {...options} {...props}>
+        <StyledIconButton {...options} {...htmlProps} {...styledProps}>
           {loading ? <Spinner /> : children}
         </StyledIconButton>
       )}
     />
   ) : (
-    <StyledIconButton {...props}>
+    <StyledIconButton {...htmlProps} {...styledProps}>
       {loading ? <Spinner /> : children}
     </StyledIconButton>
   )

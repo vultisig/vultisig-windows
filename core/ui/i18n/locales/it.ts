@@ -62,6 +62,8 @@ export const it = {
       shareSecurely: "per garantire l'accesso, preferibilmente",
       vaultShares: 'Il tuo caveau contiene 2 azioni,',
       wellDone: 'Ben fatto',
+      sentTo: 'Inviato a {{email}}.',
+      changeEmailAndRestartKeygen: 'Cambia email e riavvia keygen',
     },
     createVault: {
       availablePlatforms: {
@@ -451,6 +453,7 @@ export const it = {
   folder_name: 'Nome della cartella',
   folder_name_already_exists: 'Il nome della cartella deve essere univoco',
   folder_name_required: 'Il nome della cartella è obbligatorio',
+  folder_at_least_one_vault_required: 'È richiesto almeno un vault',
   folders: 'Cartelle',
   follow_banner_button: 'Segui @Vultisig',
   follow_banner_subtitle: 'Vultisig costruisce con te.',
@@ -811,6 +814,7 @@ export const it = {
   soon: 'Presto',
   stake: 'Palo',
   staked_amount: 'Importo puntato',
+  transfer: 'Trasferimento',
   start_reshare: 'Avvia la condivisione',
   successfully: 'Con successo',
   support: 'Supporto',

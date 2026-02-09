@@ -62,6 +62,17 @@ export const en = {
   backupGuide: 'Backup guide',
   backupShare: 'Backup Vault Share',
   backupShare2: 'Backup Share 2',
+  backupsTitle: '<highlight>Backups,</highlight> your new recovery method',
+  backupsDescription:
+    "Instead of a single seed phrase, your vault is secured by multiple devices. Each device has its own backup. A backup on its own can't move funds. Backups are only for recovery.",
+  backupEachDevice: 'Back up each device',
+  backupEachDeviceDescription:
+    'This is only 1 backup of your vault, repeat this process for the other devices.',
+  storeBackupsSeparately: 'Store backups separately',
+  storeBackupsSeparatelyDescription:
+    'Keep each backup in a different place. If one is compromised, your funds stay safe.',
+  backupShareWarning: 'This is only 1 share of your vault',
+  backupShareWarningRest: ', repeat this process for the other devices.',
   backup_description: 'Back up your Vault Share to a preferred location',
   backup_now: 'Backup now',
   backup_password: 'Backup Password',
@@ -130,21 +141,19 @@ export const en = {
   choose_tokens: 'Choose Tokens',
   deposited: 'Deposited',
   circle: {
-    apy: 'APY',
     banner_text:
       "Funds remain fully under your vault's control. Circle accounts are self-custodial and yield is generated through secure off-chain treasuries.",
-    current_rewards: 'Current Rewards',
     deposit: 'Deposit',
     deposit_header: 'Deposit to Circle Account',
     verify_deposit: 'Verify Deposit',
     introduction:
       'Deposit your $USDC into a Circle account and earn yield. Securely within your Vultisig vault.',
     open_account: 'Open Account',
-    total_rewards: 'Total Rewards',
     withdraw: 'Withdraw',
     withdraw_header: 'Withdraw from Circle',
     verify_withdraw: 'Verify Withdraw',
-    yield_details: 'Circle Yield Details',
+    apy_approx: 'APY (approx.)',
+    apy_tooltip: 'Rewards are automatically credited to your balance.',
   },
   clear: 'Clear',
   close: 'Close',
@@ -337,6 +346,7 @@ export const en = {
     'Confirm the transaction by entering the password of your server share.',
   fastVaultSetup: {
     addOptionalHint: 'Add Hint (Optional)',
+    addAnOptionalHint: 'Add an optional hint',
     backup: {
       backThemUpNow: 'back them up now',
       backupConfirmationDescription: 'Backup your vault share online',
@@ -356,6 +366,8 @@ export const en = {
       shareSecurely: 'to ensure access, preferably',
       vaultShares: 'Your vault holds 2 shares,',
       wellDone: 'Well done',
+      sentTo: 'Sent to {{email}}.',
+      changeEmailAndRestartKeygen: 'Change email and restart keygen',
     },
     connectingWithServer: 'Connecting with server...',
     createVault: {
@@ -413,6 +425,7 @@ export const en = {
   folder_name: 'Folder name',
   folder_name_already_exists: 'Folder name must be unique',
   folder_name_required: 'Folder name is required',
+  folder_at_least_one_vault_required: 'At least one vault is required',
   folders: 'Folders',
   follow_banner_button: 'Follow @Vultisig',
   follow_banner_subtitle: 'Vultisig is building with you.',
@@ -859,6 +872,7 @@ export const en = {
   soon: 'Soon',
   stake: 'Stake',
   staked: 'Staked',
+  transfer: 'Transfer',
   staked_amount: 'Staked Amount',
   start: 'Start',
   start_reshare: 'Start Reshare',

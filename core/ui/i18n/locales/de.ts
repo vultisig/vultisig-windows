@@ -61,6 +61,8 @@ export const de = {
       shareSecurely: 'um den Zugang zu gewährleisten, vorzugsweise',
       vaultShares: 'Ihr Tresor enthält 2 Aktien.',
       wellDone: 'Gut gemacht',
+      sentTo: 'Gesendet an {{email}}.',
+      changeEmailAndRestartKeygen: 'E-Mail ändern und Keygen neu starten',
     },
     createVault: {
       availablePlatforms: {
@@ -449,6 +451,7 @@ export const de = {
   folder_name: 'Ordnername',
   folder_name_already_exists: 'Der Ordnername muss eindeutig sein.',
   folder_name_required: 'Ein Ordnername ist erforderlich.',
+  folder_at_least_one_vault_required: 'Mindestens ein Vault ist erforderlich',
   folders: 'Ordner',
   follow_banner_button: 'Folge @Vultisig',
   follow_banner_subtitle: 'Vultisig baut mit Ihnen zusammen.',
@@ -814,6 +817,7 @@ export const de = {
   soon: 'Bald',
   stake: 'Einsatz',
   staked_amount: 'Einsatzbetrag',
+  transfer: 'Übertragen',
   start_reshare: 'Teilen starten',
   successfully: 'Erfolgreich',
   support: 'Unterstützung',

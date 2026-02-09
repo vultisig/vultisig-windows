@@ -1,25 +1,24 @@
 import { generateLocalPartyId } from '@core/mpc/devices/localPartyId'
 import { setupVaultWithServer } from '@core/mpc/fast/api/setupVaultWithServer'
 import { toLibType } from '@core/mpc/types/utils/libType'
-import { useVaultName } from '@core/ui/mpc/keygen/create/state/vaultName'
 import { useKeygenOperation } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
-import { useEmail } from '@core/ui/state/email'
-import { usePassword } from '@core/ui/state/password'
 import { ChildrenProp } from '@lib/ui/props'
+import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useCallback } from 'react'
 
 import { useCore } from '../../../../state/core'
 import { FastKeygenServerActionProvider } from '../../fast/state/fastKeygenServerAction'
+import { useVaultCreationInput } from '../state/vaultCreationInput'
 
 export const CreateFastKeygenServerActionProvider = ({
   children,
 }: ChildrenProp) => {
-  const [name] = useVaultName()
-  const [password] = usePassword()
-  const [email] = useEmail()
+  const input = useVaultCreationInput()
+
+  const { name, email, password } = getRecordUnionValue(input, 'fast')
   const sessionId = useMpcSessionId()
   const hexChainCode = useCurrentHexChainCode()
   const hexEncryptionKey = useCurrentHexEncryptionKey()

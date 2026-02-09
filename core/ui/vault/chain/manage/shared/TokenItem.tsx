@@ -51,12 +51,20 @@ export const TokenItem = ({
           </CheckBadge>
         )}
       </TokenIconWrapper>
-      <Text cropped color="contrast" size={12} weight={500}>
-        {coin.ticker}
-      </Text>
+      <TokenNameWrapper>
+        <Text cropped color="contrast" size={12} weight={500}>
+          {coin.ticker}
+        </Text>
+      </TokenNameWrapper>
     </TokenCard>
   )
 }
+
+const TokenNameWrapper = styled.div`
+  min-width: 0;
+  width: 100%;
+  text-align: center;
+`
 
 const TokenCard = styled(UnstyledButton)<{
   isSelected: boolean
@@ -64,6 +72,7 @@ const TokenCard = styled(UnstyledButton)<{
 }>`
   ${vStack({
     gap: 11,
+    alignItems: 'center',
   })};
 
   width: 74px;

@@ -1,4 +1,4 @@
-import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { useMutation } from '@tanstack/react-query'
 
 import { useCore } from '../../../state/core'
@@ -7,12 +7,12 @@ import { StorageKey } from '../../../storage/StorageKey'
 
 export const useSetPasscodeAutoLockMutation = () => {
   const { setPasscodeAutoLock } = useCore()
-  const invalidateQueries = useInvalidateQueries()
+  const refetchQueries = useRefetchQueries()
 
   return useMutation({
     mutationFn: async (value: PasscodeAutoLockValue) => {
       await setPasscodeAutoLock(value)
-      await invalidateQueries([StorageKey.passcodeAutoLock])
+      await refetchQueries([StorageKey.passcodeAutoLock])
     },
   })
 }

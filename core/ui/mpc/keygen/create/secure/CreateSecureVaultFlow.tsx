@@ -1,40 +1,41 @@
-import { KeygenFlow } from '@core/ui/mpc/keygen/flow/KeygenFlow'
-import { KeygenPeerDiscoveryStep } from '@core/ui/mpc/keygen/peers/KeygenPeerDiscoveryStep'
 import { useCore } from '@core/ui/state/core'
-import { Match } from '@lib/ui/base/Match'
-import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
+import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
+import { ChildrenProp } from '@lib/ui/props'
+import { ComponentType } from 'react'
 
-import { StartMpcSessionFlow } from '../../../session/StartMpcSessionFlow'
-import { SecureVaultSetupForm } from './SecureVaultSetupForm'
+import { VaultCreationInputProvider } from '../state/vaultCreationInput'
+import { SecureVaultCreationInput } from '../VaultCreationInput'
+import { VaultSetupForm } from '../VaultSetupForm'
+import { SecureVaultKeygenFlow } from './SecureVaultKeygenFlow'
 
-const steps = ['form', 'peers', 'keygen'] as const
+type CreateSecureVaultFlowProps = Partial<ChildrenProp> & {
+  CreateActionProvider?: ComponentType<ChildrenProp>
+}
 
-const lastEditableStep = steps[0]
-
-export const CreateSecureVaultFlow = () => {
+export const CreateSecureVaultFlow = ({
+  children,
+  CreateActionProvider,
+}: CreateSecureVaultFlowProps) => {
   const { goBack } = useCore()
-  const { step, setStep, toNextStep } = useStepNavigation({
-    steps,
-    onExit: goBack,
-  })
 
   return (
-    <Match
-      value={step}
-      form={() => (
-        <SecureVaultSetupForm onBack={goBack} onFinish={toNextStep} />
-      )}
-      peers={() => (
-        <KeygenPeerDiscoveryStep
-          onBack={() => setStep(steps[0])}
-          onFinish={toNextStep}
+    <ValueTransfer<SecureVaultCreationInput>
+      from={({ onFinish }) => (
+        <VaultSetupForm
+          vaultSecurityType="secure"
+          onBack={goBack}
+          onSubmit={onFinish}
         />
       )}
-      keygen={() => (
-        <StartMpcSessionFlow
-          value="keygen"
-          render={() => <KeygenFlow onBack={() => setStep(lastEditableStep)} />}
-        />
+      to={({ value, onBack }) => (
+        <VaultCreationInputProvider value={{ secure: value }}>
+          <SecureVaultKeygenFlow
+            onBack={onBack}
+            CreateActionProvider={CreateActionProvider}
+          >
+            {children}
+          </SecureVaultKeygenFlow>
+        </VaultCreationInputProvider>
       )}
     />
   )

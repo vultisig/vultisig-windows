@@ -1,6 +1,6 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { Chain } from '@core/chain/Chain'
-import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
+import { getSwapTrackingUrl } from '@core/chain/swap/utils/getSwapTrackingUrl'
 import { getKeysignSwapPayload } from '@core/mpc/keysign/swap/getKeysignSwapPayload'
 import { getKeysignSwapProviderName } from '@core/mpc/keysign/swap/getKeysignSwapProviderName'
 import { KeysignSwapPayload } from '@core/mpc/keysign/swap/KeysignSwapPayload'
@@ -67,10 +67,10 @@ export const SwapKeysignTxOverview = ({
 
   const trackTransaction = (tx: string) =>
     openUrl(
-      getBlockExplorerUrl({
-        chain: blockExplorerChain,
-        entity: 'tx',
-        value: tx,
+      getSwapTrackingUrl({
+        swapPayload,
+        txHash: tx,
+        sourceChain,
       })
     )
 
@@ -104,6 +104,8 @@ export const SwapKeysignTxOverview = ({
             title={t('transaction')}
             value={getLastItem(txHashes)}
             chain={blockExplorerChain}
+            swapPayload={swapPayload}
+            sourceChain={sourceChain}
           />
           {'erc20Approve' in value && (
             <TrackTxPrompt

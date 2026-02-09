@@ -1,9 +1,10 @@
+import { defaultChains } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
-import { getVaultId, Vault } from '@core/mpc/vault/Vault'
+import { getVaultId, isKeyImportVault, Vault } from '@core/mpc/vault/Vault'
 import { useCore } from '@core/ui/state/core'
-import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { pipe } from '@lib/utils/pipe'
 import { getRecordKeys } from '@lib/utils/record/getRecordKeys'
@@ -20,11 +21,11 @@ import { StorageKey } from '../../storage/StorageKey'
 export const useCreateVaultMutation = (
   options?: UseMutationOptions<any, any, Vault, unknown>
 ) => {
-  const invalidateQueries = useInvalidateQueries()
+  const refetchQueries = useRefetchQueries()
   const hasPasscodeEncryption = useHasPasscodeEncryption()
   const [passcode] = usePasscode()
 
-  const { createVault, getDefaultChains } = useCore()
+  const { createVault } = useCore()
 
   const { mutateAsync: setCurrentVaultId } = useSetCurrentVaultIdMutation()
   const { mutateAsync: createCoins } = useCreateCoinsMutation()
@@ -52,13 +53,13 @@ export const useCreateVaultMutation = (
         })
       )
 
-      await invalidateQueries([StorageKey.vaults])
+      await refetchQueries([StorageKey.vaults])
 
       await setCurrentVaultId(getVaultId(vault))
 
-      const chainsToCreate = vault.chainPublicKeys
-        ? getRecordKeys(vault.chainPublicKeys)
-        : await getDefaultChains()
+      const chainsToCreate = isKeyImportVault(vault)
+        ? getRecordKeys(shouldBePresent(vault.chainPublicKeys))
+        : defaultChains
 
       const coins = await Promise.all(
         chainsToCreate.map(async chain => {

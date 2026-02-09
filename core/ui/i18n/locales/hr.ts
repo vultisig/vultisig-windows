@@ -60,6 +60,8 @@ export const hr = {
       shareSecurely: 'kako bi se osigurao pristup, po mogućnosti',
       vaultShares: 'U vašem trezoru se nalaze 2 dionice,',
       wellDone: 'Bravo',
+      sentTo: 'Poslano na {{email}}.',
+      changeEmailAndRestartKeygen: 'Promijeni e-mail i ponovno pokreni keygen',
     },
     createVault: {
       availablePlatforms: {
@@ -442,6 +444,7 @@ export const hr = {
   folder_name: 'Naziv mape',
   folder_name_already_exists: 'Naziv mape mora biti jedinstven',
   folder_name_required: 'Naziv mape je obavezan',
+  folder_at_least_one_vault_required: 'Potreban je barem jedan trezor',
   folders: 'Mape',
   follow_banner_button: 'Pratite @Vultisig',
   follow_banner_subtitle: 'Vultisig gradi s vama.',
@@ -801,6 +804,7 @@ export const hr = {
   soon: 'Uskoro',
   stake: 'Ulog',
   staked_amount: 'Uloženi iznos',
+  transfer: 'Prijenos',
   start_reshare: 'Započni ponovno dijeljenje',
   successfully: 'Uspješno',
   support: 'Podrška',
