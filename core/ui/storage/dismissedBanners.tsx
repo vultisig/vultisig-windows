@@ -1,4 +1,4 @@
-import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
@@ -37,11 +37,11 @@ export const useDismissedBanners = () => {
 
 const useSetDismissedBannersMutation = () => {
   const { setDismissedBanners } = useCore()
-  const invalidateQueries = useInvalidateQueries()
+  const refetchQueries = useRefetchQueries()
 
   const mutationFn: SetDismissedBannersFunction = async input => {
     await setDismissedBanners(input)
-    await invalidateQueries([StorageKey.dismissedBanners])
+    await refetchQueries([StorageKey.dismissedBanners])
   }
 
   return useMutation({

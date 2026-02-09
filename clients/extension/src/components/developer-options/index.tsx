@@ -11,7 +11,7 @@ import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { TextInput } from '@lib/ui/inputs/TextInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
-import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { Text } from '@lib/ui/text'
 import { TFunction } from 'i18next'
 import { useRef, useState } from 'react'
@@ -33,7 +33,7 @@ export const ExtensionDeveloperOptions = () => {
   const [visible, setVisible] = useState(false)
   const { version } = useCore()
   const clickCount = useRef(0)
-  const invalidateQueries = useInvalidateQueries()
+  const refetchQueries = useRefetchQueries()
 
   const {
     register,
@@ -48,7 +48,7 @@ export const ExtensionDeveloperOptions = () => {
 
   const onSubmit = async (data: DeveloperOptions) => {
     await setDeveloperOptions(data)
-    invalidateQueries([StorageKey.developerOptions])
+    refetchQueries([StorageKey.developerOptions])
     setVisible(false)
   }
 

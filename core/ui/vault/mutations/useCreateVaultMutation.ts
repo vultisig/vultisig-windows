@@ -4,7 +4,7 @@ import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { getVaultId, isKeyImportVault, Vault } from '@core/mpc/vault/Vault'
 import { useCore } from '@core/ui/state/core'
-import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { pipe } from '@lib/utils/pipe'
 import { getRecordKeys } from '@lib/utils/record/getRecordKeys'
@@ -21,7 +21,7 @@ import { StorageKey } from '../../storage/StorageKey'
 export const useCreateVaultMutation = (
   options?: UseMutationOptions<any, any, Vault, unknown>
 ) => {
-  const invalidateQueries = useInvalidateQueries()
+  const refetchQueries = useRefetchQueries()
   const hasPasscodeEncryption = useHasPasscodeEncryption()
   const [passcode] = usePasscode()
 
@@ -53,7 +53,7 @@ export const useCreateVaultMutation = (
         })
       )
 
-      await invalidateQueries([StorageKey.vaults])
+      await refetchQueries([StorageKey.vaults])
 
       await setCurrentVaultId(getVaultId(vault))
 

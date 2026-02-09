@@ -1,7 +1,7 @@
 import { Vault } from '@core/mpc/vault/Vault'
 import { useVaults } from '@core/ui/storage/vaults'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
-import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { useMutation } from '@tanstack/react-query'
@@ -13,7 +13,7 @@ type RemoveVaultFromFolderInput = {
 }
 
 export const useRemoveVaultFromFolderMutation = () => {
-  const invalidateQueries = useInvalidateQueries()
+  const refetchQueries = useRefetchQueries()
 
   const vaults = useVaults()
 
@@ -39,7 +39,7 @@ export const useRemoveVaultFromFolderMutation = () => {
         fields: updateParams,
       })
 
-      await invalidateQueries([StorageKey.vaults])
+      await refetchQueries([StorageKey.vaults])
     },
   })
 }
