@@ -1,7 +1,7 @@
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { useCore } from '@core/ui/state/core'
 import { ChildrenProp, ValueProp } from '@lib/ui/props'
-import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -83,14 +83,14 @@ export const CurrentVaultIdProvider = ({
 export const useSetCurrentVaultIdMutation = (
   options?: UseMutationOptions<any, any, CurrentVaultId, unknown>
 ) => {
-  const invalidateQueries = useInvalidateQueries()
+  const refetchQueries = useRefetchQueries()
 
   const { setCurrentVaultId } = useCore()
 
   const mutationFn = async (value: CurrentVaultId) => {
     await setCurrentVaultId(value)
 
-    await invalidateQueries([StorageKey.currentVaultId])
+    await refetchQueries([StorageKey.currentVaultId])
   }
 
   return useMutation({

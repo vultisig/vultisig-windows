@@ -1,7 +1,7 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { usdc } from '@core/chain/coin/knownTokens'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
-import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
+import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
 import { Query } from '@lib/ui/query/Query'
 import { useMemo } from 'react'
 
@@ -29,5 +29,9 @@ export const useCircleAccountUsdcFiatBalanceQuery = (): Query<number> => {
     [balanceQuery, priceQuery]
   )
 
-  return useTransformQueriesData(queriesRecord, transformToFiatValue)
+  return useCombineQueries({
+    queries: queriesRecord,
+    joinData: transformToFiatValue,
+    eager: false,
+  })
 }

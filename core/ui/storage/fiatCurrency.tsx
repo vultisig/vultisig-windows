@@ -1,5 +1,5 @@
 import { FiatCurrency } from '@core/config/FiatCurrency'
-import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -34,12 +34,12 @@ export const useFiatCurrency = () => {
 
 export const useSetFiatCurrencyMutation = () => {
   const { setFiatCurrency } = useCore()
-  const invalidateQueries = useInvalidateQueries()
+  const refetchQueries = useRefetchQueries()
 
   return useMutation({
     mutationFn: async (value: FiatCurrency) => {
       await setFiatCurrency(value)
-      await invalidateQueries([StorageKey.fiatCurrency])
+      await refetchQueries([StorageKey.fiatCurrency])
     },
   })
 }
