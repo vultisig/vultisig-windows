@@ -2,8 +2,8 @@ import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { getVaultId, Vault, VaultAllKeyShares } from '@core/mpc/vault/Vault'
 import { useCore } from '@core/ui/state/core'
-import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
-import { useTransformQueriesData } from '@lib/ui/query/hooks/useTransformQueriesData'
+import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
+import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
@@ -77,16 +77,17 @@ export const useVaultsQuery = () => {
     ...noRefetchQueryOptions,
   })
 
-  return useTransformQueriesData(
-    useMemo(
+  return useCombineQueries({
+    queries: useMemo(
       () => ({
         vaults,
         coins,
       }),
       [vaults, coins]
     ),
-    mergeVaultsWithCoins
-  )
+    joinData: mergeVaultsWithCoins,
+    eager: false,
+  })
 }
 
 export const useFolderlessVaults = () => {
@@ -118,11 +119,11 @@ export const useVaultOrders = () => {
 
 export const useDeleteVaultMutation = () => {
   const { deleteVault } = useCore()
-  const invalidateQueries = useInvalidateQueries()
+  const refetchQueries = useRefetchQueries()
 
   const mutationFn: DeleteVaultFunction = async input => {
     await deleteVault(input)
-    await invalidateQueries([StorageKey.vaults])
+    await refetchQueries([StorageKey.vaults])
   }
 
   return useMutation({
