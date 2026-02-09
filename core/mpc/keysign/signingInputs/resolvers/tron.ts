@@ -10,6 +10,23 @@ import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpec
 import { getKeysignSwapPayload } from '../../swap/getKeysignSwapPayload'
 import { SigningInputsResolver } from '../resolver'
 
+const createTronBlockHeader = (tronSpecific: {
+  blockHeaderTimestamp: bigint | number | string
+  blockHeaderNumber: bigint | number | string
+  blockHeaderVersion: bigint | number | string
+  blockHeaderTxTrieRoot: string
+  blockHeaderParentHash: string
+  blockHeaderWitnessAddress: string
+}) =>
+  TW.Tron.Proto.BlockHeader.create({
+    timestamp: Long.fromString(tronSpecific.blockHeaderTimestamp.toString()),
+    number: Long.fromString(tronSpecific.blockHeaderNumber.toString()),
+    version: Number(tronSpecific.blockHeaderVersion.toString()),
+    txTrieRoot: Buffer.from(tronSpecific.blockHeaderTxTrieRoot, 'hex'),
+    parentHash: Buffer.from(tronSpecific.blockHeaderParentHash, 'hex'),
+    witnessAddress: Buffer.from(tronSpecific.blockHeaderWitnessAddress, 'hex'),
+  })
+
 export const getTronSigningInputs: SigningInputsResolver<'tron'> = ({
   keysignPayload,
 }) => {
@@ -17,6 +34,70 @@ export const getTronSigningInputs: SigningInputsResolver<'tron'> = ({
     keysignPayload.blockchainSpecific,
     'tronSpecific'
   )
+
+  const memo = keysignPayload.memo ?? ''
+
+  // FreezeBalanceV2 (Stake 2.0) — dispatch based on memo prefix
+  if (memo.startsWith('FREEZE:')) {
+    const resource = memo.slice('FREEZE:'.length)
+    if (resource !== 'BANDWIDTH' && resource !== 'ENERGY') {
+      throw new Error(`Invalid TRON resource type: ${resource}`)
+    }
+
+    const frozenBalance = Long.fromString(
+      shouldBePresent(keysignPayload?.toAmount)
+    )
+    if (frozenBalance.lessThanOrEqual(Long.ZERO)) {
+      throw new Error('Frozen balance must be strictly positive')
+    }
+
+    const input = TW.Tron.Proto.SigningInput.create({
+      transaction: TW.Tron.Proto.Transaction.create({
+        freezeBalanceV2: TW.Tron.Proto.FreezeBalanceV2Contract.create({
+          ownerAddress: shouldBePresent(keysignPayload?.coin?.address),
+          frozenBalance,
+          resource,
+        }),
+        timestamp: Long.fromString(tronSpecific.timestamp.toString()),
+        expiration: Long.fromString(tronSpecific.expiration.toString()),
+        feeLimit: Long.fromString(tronSpecific.gasEstimation.toString()),
+        blockHeader: createTronBlockHeader(tronSpecific),
+      }),
+    })
+
+    return [input]
+  }
+
+  // UnfreezeBalanceV2 (Stake 2.0) — dispatch based on memo prefix
+  if (memo.startsWith('UNFREEZE:')) {
+    const resource = memo.slice('UNFREEZE:'.length)
+    if (resource !== 'BANDWIDTH' && resource !== 'ENERGY') {
+      throw new Error(`Invalid TRON resource type: ${resource}`)
+    }
+
+    const unfreezeBalance = Long.fromString(
+      shouldBePresent(keysignPayload?.toAmount)
+    )
+    if (unfreezeBalance.lessThanOrEqual(Long.ZERO)) {
+      throw new Error('Unfreeze balance must be strictly positive')
+    }
+
+    const input = TW.Tron.Proto.SigningInput.create({
+      transaction: TW.Tron.Proto.Transaction.create({
+        unfreezeBalanceV2: TW.Tron.Proto.UnfreezeBalanceV2Contract.create({
+          ownerAddress: shouldBePresent(keysignPayload?.coin?.address),
+          unfreezeBalance,
+          resource,
+        }),
+        timestamp: Long.fromString(tronSpecific.timestamp.toString()),
+        expiration: Long.fromString(tronSpecific.expiration.toString()),
+        feeLimit: Long.fromString(tronSpecific.gasEstimation.toString()),
+        blockHeader: createTronBlockHeader(tronSpecific),
+      }),
+    })
+
+    return [input]
+  }
 
   const isNative = keysignPayload?.coin?.isNativeToken
   const swapPayload = getKeysignSwapPayload(keysignPayload)
