@@ -73,7 +73,7 @@ func (t *GetChainAddressTool) Name() string {
 }
 
 func (t *GetChainAddressTool) Description() string {
-	return "Get the wallet address for a specific blockchain chain. Use this when the user asks 'what is my Ethereum address?' or similar questions."
+	return "Get the wallet address for a specific blockchain chain in the CURRENT active vault only. For other vaults, use list_vaults which returns chain_addresses for all vaults."
 }
 
 func (t *GetChainAddressTool) InputSchema() map[string]any {

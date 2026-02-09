@@ -46,11 +46,17 @@ func (t *InitiateSwapTool) Execute(input map[string]any, ctx *ExecutionContext) 
 	var fromCoin, toCoin map[string]any
 
 	if fromCoinRaw, ok := input["from_coin"]; ok && fromCoinRaw != nil {
-		fromCoin = parseCoinInput(fromCoinRaw.(string))
+		fromStr, ok := fromCoinRaw.(string)
+		if ok {
+			fromCoin = parseCoinInput(fromStr)
+		}
 	}
 
 	if toCoinRaw, ok := input["to_coin"]; ok && toCoinRaw != nil {
-		toCoin = parseCoinInput(toCoinRaw.(string))
+		toStr, ok := toCoinRaw.(string)
+		if ok {
+			toCoin = parseCoinInput(toStr)
+		}
 	}
 
 	navState := map[string]any{}

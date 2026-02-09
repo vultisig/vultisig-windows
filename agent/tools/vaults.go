@@ -20,7 +20,7 @@ func (t *ListVaultsTool) Name() string {
 }
 
 func (t *ListVaultsTool) Description() string {
-	return "List all vaults the user has. Returns vault names and identifies the currently active vault. Note: You can only operate on the current active vault."
+	return "List all vaults the user has. Returns vault names, chain addresses, and identifies the currently active vault. Use this to look up addresses for any vault (e.g., 'send to my Other vault')."
 }
 
 func (t *ListVaultsTool) InputSchema() map[string]any {
@@ -41,16 +41,30 @@ func (t *ListVaultsTool) Execute(input map[string]any, ctx *ExecutionContext) (a
 		return nil, fmt.Errorf("failed to get vaults: %w", err)
 	}
 
+	allCoins, err := t.store.GetCoins()
+	if err != nil {
+		return nil, fmt.Errorf("failed to get coins: %w", err)
+	}
+
 	var vaultList []map[string]any
 	for _, v := range vaults {
 		isActive := v.PublicKeyECDSA == ctx.VaultPubKey
+
+		chainAddresses := make(map[string]string)
+		for _, coin := range allCoins[v.PublicKeyECDSA] {
+			if _, exists := chainAddresses[coin.Chain]; !exists {
+				chainAddresses[coin.Chain] = coin.Address
+			}
+		}
+
 		vaultList = append(vaultList, map[string]any{
-			"name":       v.Name,
-			"is_active":  isActive,
-			"isActive":   isActive,
-			"signers":    len(v.Signers),
-			"created_at": v.CreatedAt.Format("2006-01-02"),
-			"createdAt":  v.CreatedAt.Format("2006-01-02"),
+			"name":            v.Name,
+			"is_active":       isActive,
+			"isActive":        isActive,
+			"signers":         len(v.Signers),
+			"created_at":      v.CreatedAt.Format("2006-01-02"),
+			"createdAt":       v.CreatedAt.Format("2006-01-02"),
+			"chain_addresses": chainAddresses,
 		})
 	}
 
@@ -105,7 +119,11 @@ func (t *RenameVaultTool) Execute(input map[string]any, ctx *ExecutionContext) (
 	if !ok {
 		return nil, fmt.Errorf("new_name is required")
 	}
-	newName := strings.TrimSpace(newNameRaw.(string))
+	newNameStr, ok := newNameRaw.(string)
+	if !ok {
+		return nil, fmt.Errorf("new_name must be a string")
+	}
+	newName := strings.TrimSpace(newNameStr)
 
 	if len(newName) < 2 || len(newName) > 50 {
 		return map[string]any{

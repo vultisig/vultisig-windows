@@ -19,12 +19,14 @@ var (
 )
 
 type ExecutionContext struct {
+	AppCtx      context.Context
 	Ctx         context.Context
 	Vault       *storage.Vault
 	VaultPubKey string
 	Password    string
 	Confirmed   bool
 	AuthToken   string
+	OnProgress  func(step string)
 }
 
 type Tool interface {
@@ -66,7 +68,7 @@ func (r *Registry) registerTools() {
 		NewPluginListTool(r.verifierClient),
 		NewPluginSpecTool(r.verifierClient),
 		NewPluginInstalledTool(r.verifierClient),
-		NewPluginInstallTool(r.verifierClient, r.tss, r.store),
+		NewPluginInstallTool(r.verifierClient, r.store),
 		NewAssetLookupTool(),
 		NewGetMarketPriceTool(),
 		NewVaultInfoTool(r.store),
@@ -75,6 +77,8 @@ func (r *Registry) registerTools() {
 		NewPolicyAddTool(r.verifierClient, r.tss),
 		NewPolicyDeleteTool(r.verifierClient, r.tss),
 		NewPolicyStatusTool(r.verifierClient),
+		NewTransactionHistoryTool(r.verifierClient),
+		NewPluginUninstallTool(r.verifierClient),
 
 		NewGetChainsTool(),
 		NewGetChainAddressTool(),

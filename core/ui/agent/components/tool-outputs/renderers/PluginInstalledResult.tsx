@@ -15,7 +15,7 @@ export const PluginInstalledResult: FC<Props> = ({ data }) => {
   if (!obj) return null
 
   const pluginName = readString(obj, 'plugin_name', 'pluginName', 'plugin_id')
-  const installed = readBoolean(obj, 'installed')
+  const installed = readBoolean(obj, 'installed', 'success')
   const message = readString(obj, 'message')
   const ui = toRecord(obj.ui)
   const actions = (ui?.actions as ToolAction[] | undefined) ?? []

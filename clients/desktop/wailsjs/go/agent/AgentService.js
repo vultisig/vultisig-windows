@@ -50,12 +50,24 @@ export function GetVerifierSignInStatus(arg1) {
   return window['go']['agent']['AgentService']['GetVerifierSignInStatus'](arg1);
 }
 
+export function InvalidateAuthToken(arg1) {
+  return window['go']['agent']['AgentService']['InvalidateAuthToken'](arg1);
+}
+
 export function NewConversation(arg1, arg2) {
   return window['go']['agent']['AgentService']['NewConversation'](arg1, arg2);
 }
 
 export function ProvideConfirmation(arg1) {
   return window['go']['agent']['AgentService']['ProvideConfirmation'](arg1);
+}
+
+export function ProvideDKLSReshare(arg1, arg2, arg3, arg4, arg5, arg6, arg7) {
+  return window['go']['agent']['AgentService']['ProvideDKLSReshare'](arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+}
+
+export function ProvideDKLSSignature(arg1, arg2, arg3, arg4, arg5) {
+  return window['go']['agent']['AgentService']['ProvideDKLSSignature'](arg1, arg2, arg3, arg4, arg5);
 }
 
 export function ProvidePassword(arg1) {

@@ -227,6 +227,12 @@ export const AgentChatPage: FC = () => {
     provideConfirmation(false)
   }, [dismissConfirmation, provideConfirmation])
 
+  const handleStop = useCallback(() => {
+    cancelRequest().catch(err => {
+      console.error('Failed to cancel request:', err)
+    })
+  }, [cancelRequest])
+
   const isProcessing = Boolean(
     isThinking || isLoading || streamingSegments.length > 0
   )
@@ -310,7 +316,8 @@ export const AgentChatPage: FC = () => {
       </MessagesContainer>
       <ChatInput
         onSend={handleSend}
-        disabled={isProcessing}
+        onStop={handleStop}
+        isRunning={isProcessing}
         placeholder={t('ask_about_plugins_policies')}
       />
       {passwordRequired && (

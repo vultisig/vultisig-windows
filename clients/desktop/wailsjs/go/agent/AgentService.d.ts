@@ -28,9 +28,15 @@ export function GetConversations(arg1:string):Promise<Array<agent.Conversation>>
 
 export function GetVerifierSignInStatus(arg1:string):Promise<boolean>;
 
+export function InvalidateAuthToken(arg1:string):Promise<void>;
+
 export function NewConversation(arg1:string,arg2:string):Promise<string>;
 
 export function ProvideConfirmation(arg1:boolean):Promise<void>;
+
+export function ProvideDKLSReshare(arg1:string,arg2:string,arg3:string,arg4:string,arg5:string,arg6:string,arg7:string):Promise<void>;
+
+export function ProvideDKLSSignature(arg1:string,arg2:string,arg3:string,arg4:string,arg5:string):Promise<void>;
 
 export function ProvidePassword(arg1:string):Promise<void>;
 

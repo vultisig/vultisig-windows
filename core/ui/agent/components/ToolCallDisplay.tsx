@@ -4,12 +4,22 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { FC, useState } from 'react'
+import { FC, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { ToolCall } from '../types'
 import { formatToolName } from '../utils/formatToolName'
 import { ToolOutputRenderer } from './tool-outputs'
+
+const progressPattern = /^(\d+)%\s+(.+)$/
+
+const parseProgress = (
+  progress: string
+): { percent: number; message: string } | null => {
+  const match = progress.match(progressPattern)
+  if (!match) return null
+  return { percent: parseInt(match[1], 10), message: match[2] }
+}
 
 type Props = {
   toolCall: ToolCall
@@ -39,6 +49,7 @@ const toolDescriptions: Record<string, string> = {
   policy_add: 'Submitting policy',
   policy_delete: 'Deleting policy',
   policy_status: 'Checking policy status',
+  transaction_history: 'Getting transaction history',
 }
 
 const toolsWithCustomOutput = new Set([
@@ -56,6 +67,7 @@ const toolsWithCustomOutput = new Set([
   'rename_vault',
   'plugin_list',
   'plugin_spec',
+  'plugin_install',
   'plugin_installed',
   'policy_list',
   'policy_add',
@@ -65,6 +77,7 @@ const toolsWithCustomOutput = new Set([
   'asset_lookup',
   'initiate_send',
   'initiate_swap',
+  'transaction_history',
 ])
 
 export const ToolCallDisplay: FC<Props> = ({
@@ -124,6 +137,9 @@ export const ToolCallDisplay: FC<Props> = ({
           <Text size={12} color="supporting">
             {description}
           </Text>
+          {isRunning && toolCall.progress && (
+            <ProgressDisplay progress={toolCall.progress} />
+          )}
           {isError && toolCall.error && (
             <Text size={11} color="danger">
               {toolCall.error}
@@ -163,6 +179,53 @@ export const ToolCallDisplay: FC<Props> = ({
     </Container>
   )
 }
+
+const ProgressDisplay: FC<{ progress: string }> = ({ progress }) => {
+  const parsed = useMemo(() => parseProgress(progress), [progress])
+
+  if (!parsed) {
+    return (
+      <Text size={11} color="shy">
+        {progress}
+      </Text>
+    )
+  }
+
+  return (
+    <VStack gap={4}>
+      <HStack gap={6} alignItems="center">
+        <ProgressBarTrack>
+          <ProgressBarFill style={{ width: `${parsed.percent}%` }} />
+        </ProgressBarTrack>
+        <Text
+          size={11}
+          color="shy"
+          style={{ minWidth: 32, textAlign: 'right' }}
+        >
+          {parsed.percent}%
+        </Text>
+      </HStack>
+      <Text size={11} color="shy">
+        {parsed.message}
+      </Text>
+    </VStack>
+  )
+}
+
+const ProgressBarTrack = styled.div`
+  flex: 1;
+  height: 4px;
+  background: ${getColor('mist')};
+  border-radius: 2px;
+  overflow: hidden;
+`
+
+const ProgressBarFill = styled.div`
+  height: 100%;
+  background: ${getColor('primary')};
+  border-radius: 2px;
+  transition: width 0.3s ease;
+`
 
 const Container = styled.div`
   padding: 8px 12px;

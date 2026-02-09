@@ -118,7 +118,7 @@ func TestClientWorkflowEndToEnd(t *testing.T) {
 		t.Fatalf("expected 1 plugin, got %d", plugins.TotalCount)
 	}
 
-	installed, err := client.CheckPluginInstalled("vultisig-dca-0000", "pub-key")
+	installed, err := client.CheckPluginInstalled("vultisig-dca-0000", "pub-key", "")
 	if err != nil {
 		t.Fatalf("check installed failed: %v", err)
 	}

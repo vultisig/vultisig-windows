@@ -9,6 +9,7 @@ import {
   TextDeltaEvent,
   ToolCall,
   ToolCallEvent,
+  ToolProgressEvent,
   ToolResultEvent,
 } from '../types'
 
@@ -44,6 +45,22 @@ type UseAgentEventsReturn = AgentEventsState & {
   dismissPasswordRequired: () => void
   dismissConfirmation: () => void
   dismissError: () => void
+}
+
+const agentStoppedMessage =
+  "Agent stopped. Send a new message when you're ready."
+
+const normalizeAgentErrorMessage = (error: string) => {
+  const normalized = error.toLowerCase()
+  if (
+    normalized.includes('context canceled') ||
+    normalized.includes('context cancelled') ||
+    normalized.includes('user cancelled') ||
+    normalized.includes('user canceled')
+  ) {
+    return 'agent stopped'
+  }
+  return error
 }
 
 export const useAgentEvents = (
@@ -106,8 +123,23 @@ export const useAgentEvents = (
     []
   )
 
+  const appendAssistantMessage = useCallback((content: string) => {
+    const now = Date.now()
+    const assistantMessage: ChatMessage = {
+      id: `msg-${now}`,
+      role: 'assistant',
+      content,
+      timestamp: new Date(now).toISOString(),
+    }
+
+    setState(prev => ({
+      ...prev,
+      messages: [...prev.messages, assistantMessage],
+    }))
+  }, [])
+
   useEffect(() => {
-    if (!conversationId || !window.runtime) return
+    if (!window.runtime) return
 
     const cleanups: (() => void)[] = []
 
@@ -121,7 +153,7 @@ export const useAgentEvents = (
     }
 
     const onTextDelta = (data: TextDeltaEvent) => {
-      if (data.conversationId !== conversationId) return
+      if (conversationId && data.conversationId !== conversationId) return
 
       const segments = streamingSegmentsRef.current
       const lastSegment = segments[segments.length - 1]
@@ -141,7 +173,7 @@ export const useAgentEvents = (
     }
 
     const onToolCall = (data: ToolCallEvent) => {
-      if (data.conversationId !== conversationId) return
+      if (conversationId && data.conversationId !== conversationId) return
 
       const tc: ToolCall = {
         id: data.id,
@@ -169,7 +201,7 @@ export const useAgentEvents = (
     }
 
     const onToolResult = (data: ToolResultEvent) => {
-      if (data.conversationId !== conversationId) return
+      if (conversationId && data.conversationId !== conversationId) return
 
       const tc = toolCallsMapRef.current.get(data.id)
       if (tc) {
@@ -203,8 +235,38 @@ export const useAgentEvents = (
       }
     }
 
+    const onToolProgress = (data: ToolProgressEvent) => {
+      if (conversationId && data.conversationId !== conversationId) return
+
+      const tc = toolCallsMapRef.current.get(data.toolCallId)
+      if (tc) {
+        tc.progress = data.step
+        toolCallsMapRef.current.set(data.toolCallId, tc)
+
+        const updatedSegments = streamingSegmentsRef.current.map(segment => {
+          if (segment.type === 'toolCalls') {
+            return {
+              ...segment,
+              calls: segment.calls.map(call =>
+                call.id === data.toolCallId
+                  ? { ...call, progress: data.step }
+                  : call
+              ),
+            }
+          }
+          return segment
+        })
+        streamingSegmentsRef.current = updatedSegments
+
+        setState(prev => ({
+          ...prev,
+          streamingSegments: [...streamingSegmentsRef.current],
+        }))
+      }
+    }
+
     const onPasswordRequired = (data: PasswordRequiredEvent) => {
-      if (data.conversationId !== conversationId) return
+      if (conversationId && data.conversationId !== conversationId) return
       setState(prev => ({
         ...prev,
         passwordRequired: data,
@@ -212,7 +274,7 @@ export const useAgentEvents = (
     }
 
     const onConfirmationRequired = (data: ConfirmationRequiredEvent) => {
-      if (data.conversationId !== conversationId) return
+      if (conversationId && data.conversationId !== conversationId) return
       setState(prev => ({
         ...prev,
         confirmationRequired: data,
@@ -220,7 +282,7 @@ export const useAgentEvents = (
     }
 
     const onComplete = (data: CompleteEvent) => {
-      if (data.conversationId !== conversationId) return
+      if (conversationId && data.conversationId !== conversationId) return
 
       appendAssistantMessagesFromSegments(streamingSegmentsRef.current)
 
@@ -238,11 +300,28 @@ export const useAgentEvents = (
     }
 
     const onError = (data: ErrorEvent) => {
-      if (data.conversationId !== conversationId) return
+      if (conversationId && data.conversationId !== conversationId) return
+
+      appendAssistantMessagesFromSegments(streamingSegmentsRef.current)
+      streamingSegmentsRef.current = []
+      toolResultsRef.current = []
+      toolCallsMapRef.current.clear()
+
+      const normalizedError = normalizeAgentErrorMessage(data.error)
+      const isStopped = normalizedError === 'agent stopped'
+
+      if (isStopped) {
+        appendAssistantMessage(agentStoppedMessage)
+      }
+
       setState(prev => ({
         ...prev,
-        error: data.error,
+        error: isStopped ? null : normalizedError,
         isThinking: false,
+        streamingSegments: [],
+        toolResults: [],
+        passwordRequired: null,
+        confirmationRequired: null,
       }))
     }
 
@@ -267,6 +346,12 @@ export const useAgentEvents = (
     )
     cleanups.push(
       window.runtime.EventsOn(
+        'agent:tool_progress',
+        onToolProgress as (data: unknown) => void
+      )
+    )
+    cleanups.push(
+      window.runtime.EventsOn(
         'agent:password_required',
         onPasswordRequired as (data: unknown) => void
       )
@@ -286,11 +371,14 @@ export const useAgentEvents = (
     cleanups.push(
       window.runtime.EventsOn('agent:error', onError as (data: unknown) => void)
     )
-
     return () => {
       cleanups.forEach(cleanup => cleanup())
     }
-  }, [conversationId, appendAssistantMessagesFromSegments])
+  }, [
+    conversationId,
+    appendAssistantMessagesFromSegments,
+    appendAssistantMessage,
+  ])
 
   const addUserMessage = useCallback((content: string) => {
     const message: ChatMessage = {

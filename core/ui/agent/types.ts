@@ -5,6 +5,7 @@ export type ToolCall = {
   status: 'running' | 'complete' | 'error'
   output?: unknown
   error?: string
+  progress?: string
 }
 
 export type ChatMessage = {
@@ -56,6 +57,12 @@ export type ConfirmationRequiredEvent = {
   action: string
   details: string
   toolCallId: string
+}
+
+export type ToolProgressEvent = {
+  conversationId: string
+  toolCallId: string
+  step: string
 }
 
 export type CompleteEvent = {

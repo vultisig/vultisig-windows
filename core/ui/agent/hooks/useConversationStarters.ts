@@ -37,8 +37,17 @@ export const useConversationStarters = (
       setIsLoading(false)
     }
 
-    // Refresh cache for next open without blocking UI rendering.
-    generateConversationStarters(vaultId).catch(() => {})
+    // Refresh cache for next open and update current UI if a new batch is ready.
+    generateConversationStarters(vaultId)
+      .then(async () => {
+        try {
+          const latest = await getConversationStarters(vaultId)
+          setStarters((latest || []).slice(0, 4))
+        } catch {
+          // keep current starters
+        }
+      })
+      .catch(() => {})
   }, [generateConversationStarters, getConversationStarters, vaultId])
 
   useEffect(() => {

@@ -41,6 +41,20 @@ const isPolicyPreviewData = (data: unknown): data is PolicyPreviewData => {
   return true
 }
 
+const extractChainLabel = (
+  obj: Record<string, unknown> | null
+): string | undefined => {
+  if (!obj) return undefined
+  const chain = typeof obj.chain === 'string' ? obj.chain : undefined
+  if (!chain) return undefined
+  const token = typeof obj.token === 'string' ? obj.token : ''
+  if (!token) return chain
+  if (token.length > 10) {
+    return `${token.slice(0, 6)}...${token.slice(-4)}`
+  }
+  return token
+}
+
 const getPluginDisplayName = (
   pluginType?: string,
   pluginName?: string
@@ -61,12 +75,23 @@ export const PolicyPreviewResult: FC<Props> = ({ data }) => {
 
   const pluginName = data.pluginName || data.plugin_name
   const pluginType = data.pluginType
-  const fromAsset = data.fromAsset || data.from_asset
-  const fromChain = data.fromChain || data.from_chain
-  const toAsset = data.toAsset || data.to_asset
-  const toChain = data.toChain || data.to_chain
-  const recipient = data.recipient || data.to_address
   const configuration = toRecord(data.configuration) || {}
+  const configFrom = toRecord(configuration.from)
+  const configTo = toRecord(configuration.to)
+
+  const fromAsset =
+    data.fromAsset || data.from_asset || extractChainLabel(configFrom)
+  const fromChain =
+    data.fromChain ||
+    data.from_chain ||
+    (typeof configFrom?.chain === 'string' ? configFrom.chain : undefined)
+  const toAsset =
+    data.toAsset || data.to_asset || extractChainLabel(configTo)
+  const toChain =
+    data.toChain ||
+    data.to_chain ||
+    (typeof configTo?.chain === 'string' ? configTo.chain : undefined)
+  const recipient = data.recipient || data.to_address
   const configJson =
     typeof data.config_json === 'string'
       ? data.config_json
@@ -128,24 +153,30 @@ export const PolicyPreviewResult: FC<Props> = ({ data }) => {
             </InfoRow>
           )}
 
-          {data.amount && (
+          {(data.amount ||
+            (typeof configuration.fromAmount === 'string' &&
+              configuration.fromAmount)) && (
             <InfoRow>
               <Text size={13} color="shy">
                 Amount
               </Text>
               <Text size={13} color="regular">
-                {data.amount}
+                {data.amount || (configuration.fromAmount as string)}
               </Text>
             </InfoRow>
           )}
 
-          {(data.schedule || data.frequency) && (
+          {(data.schedule ||
+            data.frequency ||
+            typeof configuration.frequency === 'string') && (
             <InfoRow>
               <Text size={13} color="shy">
                 Frequency
               </Text>
               <Text size={13} color="regular">
-                {data.schedule || data.frequency}
+                {data.schedule ||
+                  data.frequency ||
+                  (configuration.frequency as string)}
               </Text>
             </InfoRow>
           )}

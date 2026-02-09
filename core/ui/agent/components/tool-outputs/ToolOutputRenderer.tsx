@@ -10,7 +10,10 @@ import {
   ChainAddressResult,
   ChainsListResult,
   CoinsListResult,
+  PolicyAddResult,
+  PolicyDetailsResult,
   PluginInstalledResult,
+  PluginInstallResult,
   PluginListResult,
   PluginSpecResult,
   PolicyListResult,
@@ -83,8 +86,16 @@ const renderToolOutput = (
     case 'plugin_spec':
       return <PluginSpecResult data={output} />
 
+    case 'plugin_install':
+      return <PluginInstallResult data={output} />
+
     case 'plugin_installed':
       return <PluginInstalledResult data={output} />
+
+    case 'plugin_uninstall':
+      return (
+        <SuccessResult data={output} action="delete" entityType="plugin" />
+      )
 
     case 'asset_lookup':
       return <AssetLookupResult data={output} />
@@ -93,12 +104,15 @@ const renderToolOutput = (
       return <PolicyListResult data={output} />
 
     case 'policy_add':
-      return <SuccessResult data={output} action="create" entityType="policy" />
+      return <PolicyAddResult data={output} />
 
     case 'policy_delete':
       return <SuccessResult data={output} action="delete" entityType="policy" />
 
     case 'policy_status':
+      return <PolicyDetailsResult data={output} />
+
+    case 'transaction_history':
       return <PolicyStatusResult data={output} />
 
     case 'policy_generate':

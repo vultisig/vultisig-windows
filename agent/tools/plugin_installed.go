@@ -48,7 +48,7 @@ func (t *PluginInstalledTool) Execute(input map[string]any, ctx *ExecutionContex
 
 	pluginID := shared.ResolvePluginID(pluginIDRaw.(string))
 
-	installed, err := t.client.CheckPluginInstalled(pluginID, ctx.VaultPubKey)
+	installed, err := t.client.CheckPluginInstalled(pluginID, ctx.VaultPubKey, ctx.AuthToken)
 	if err != nil {
 		return nil, fmt.Errorf("failed to check plugin installation: %w", err)
 	}

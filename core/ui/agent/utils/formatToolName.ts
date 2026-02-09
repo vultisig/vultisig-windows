@@ -1,11 +1,13 @@
 const toolDisplayNames: Record<string, string> = {
   plugin_install: 'Install Plugin',
+  plugin_uninstall: 'Uninstall Plugin',
   plugin_list: 'List Plugins',
   plugin_installed: 'Check Plugin Status',
   policy_add: 'Add Policy',
   policy_delete: 'Delete Policy',
   policy_list: 'List Policies',
   policy_status: 'Policy Status',
+  transaction_history: 'Transaction History',
   policy_generate: 'Generate Policy',
   initiate_swap: 'Initiate Swap',
   initiate_send: 'Initiate Send',

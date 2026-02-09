@@ -55,6 +55,7 @@ type PasswordRequiredEvent struct {
 	ConversationID string `json:"conversationId"`
 	ToolName       string `json:"toolName"`
 	Operation      string `json:"operation"`
+	RequestID      string `json:"requestId"`
 }
 
 type CompleteEvent struct {
@@ -72,4 +73,11 @@ type ConfirmationRequiredEvent struct {
 	Action         string `json:"action"`
 	Details        string `json:"details"`
 	ToolCallID     string `json:"toolCallId"`
+	RequestID      string `json:"requestId"`
+}
+
+type ToolProgressEvent struct {
+	ConversationID string `json:"conversationId"`
+	ToolCallID     string `json:"toolCallId"`
+	Step           string `json:"step"`
 }

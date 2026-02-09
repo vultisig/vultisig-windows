@@ -3,13 +3,9 @@ package agent
 import (
 	"bytes"
 	"context"
-	"crypto/rand"
-	"encoding/base64"
-	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"net/http"
 	"strings"
 	"sync"
@@ -19,19 +15,18 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 
+	"github.com/vultisig/vultisig-win/agent/dklsbridge"
 	"github.com/vultisig/vultisig-win/agent/shared"
 	"github.com/vultisig/vultisig-win/agent/signing"
 	"github.com/vultisig/vultisig-win/agent/tools"
 	"github.com/vultisig/vultisig-win/agent/verifier"
-	"github.com/vultisig/vultisig-win/relay"
 	"github.com/vultisig/vultisig-win/storage"
 	"github.com/vultisig/vultisig-win/tss"
 )
 
 const (
-	fastVaultServerURL = "https://api.vultisig.com/vault"
-	authDerivePath     = "m/44'/60'/0'/0/0"
-	authSignTimeout    = 2 * time.Minute
+	authDerivePath  = "m/44'/60'/0'/0/0"
+	authSignTimeout = 2 * time.Minute
 )
 
 var (
@@ -54,8 +49,8 @@ type AgentService struct {
 	authTokensMu    sync.RWMutex
 	startersCache   map[string][]string
 	startersCacheMu sync.RWMutex
-	passwordChan    chan string
-	confirmChan     chan bool
+	passwordChan chan string
+	confirmChan  chan bool
 	cancelFunc      context.CancelFunc
 	busy            bool
 	busyMu          sync.Mutex
@@ -134,11 +129,22 @@ func (a *AgentService) SendMessage(vaultPubKey, message string) (string, error) 
 	conv.UpdatedAt = time.Now()
 
 	ctx, cancel := context.WithCancel(a.ctx)
+	a.busyMu.Lock()
 	a.cancelFunc = cancel
+	a.busyMu.Unlock()
 
 	go func() {
 		err := a.orchestrator.Run(ctx, conv, vault, apiKey)
 		if err != nil {
+			if errors.Is(err, context.Canceled) {
+				a.Logger.WithField("conversation_id", conv.ID).Info("agent stopped by user")
+				runtime.EventsEmit(a.ctx, "agent:error", ErrorEvent{
+					ConversationID: conv.ID,
+					Error:          "agent stopped",
+				})
+				return
+			}
+
 			a.Logger.WithError(err).Error("orchestrator error")
 			runtime.EventsEmit(a.ctx, "agent:error", ErrorEvent{
 				ConversationID: conv.ID,
@@ -237,9 +243,12 @@ func (a *AgentService) ClearHistory(vaultPubKey string) error {
 }
 
 func (a *AgentService) CancelRequest() error {
-	if a.cancelFunc != nil {
-		a.cancelFunc()
-		a.cancelFunc = nil
+	a.busyMu.Lock()
+	cancel := a.cancelFunc
+	a.cancelFunc = nil
+	a.busyMu.Unlock()
+	if cancel != nil {
+		cancel()
 	}
 	return nil
 }
@@ -260,6 +269,28 @@ func (a *AgentService) ProvideConfirmation(confirmed bool) error {
 	default:
 		return fmt.Errorf("no pending confirmation request")
 	}
+}
+
+func (a *AgentService) ProvideDKLSSignature(requestID, r, s, recoveryID, errMessage string) error {
+	return dklsbridge.SubmitSignResponse(dklsbridge.SignResponse{
+		RequestID:  requestID,
+		R:          r,
+		S:          s,
+		RecoveryID: recoveryID,
+		Error:      errMessage,
+	})
+}
+
+func (a *AgentService) ProvideDKLSReshare(requestID, ecdsaPubKey, eddsaPubKey, ecdsaKeyshare, eddsaKeyshare, hexChainCode, errMessage string) error {
+	return dklsbridge.SubmitReshareResponse(dklsbridge.ReshareResponse{
+		RequestID:     requestID,
+		EcdsaPubKey:   ecdsaPubKey,
+		EddsaPubKey:   eddsaPubKey,
+		EcdsaKeyshare: ecdsaKeyshare,
+		EddsaKeyshare: eddsaKeyshare,
+		HexChainCode:  hexChainCode,
+		Error:         errMessage,
+	})
 }
 
 func (a *AgentService) SetApiKey(key string) error {
@@ -330,10 +361,14 @@ func (a *AgentService) getOrCreateConversation(vaultPubKey string) *Conversation
 }
 
 func (a *AgentService) waitForPassword(ctx context.Context, convID, toolName, operation string) (string, error) {
+	drainChan(a.passwordChan)
+
+	requestID := uuid.New().String()
 	runtime.EventsEmit(a.ctx, "agent:password_required", PasswordRequiredEvent{
 		ConversationID: convID,
 		ToolName:       toolName,
 		Operation:      operation,
+		RequestID:      requestID,
 	})
 
 	select {
@@ -345,11 +380,15 @@ func (a *AgentService) waitForPassword(ctx context.Context, convID, toolName, op
 }
 
 func (a *AgentService) waitForConfirmation(ctx context.Context, convID, action, details, toolCallID string) (bool, error) {
+	drainChan(a.confirmChan)
+
+	requestID := uuid.New().String()
 	runtime.EventsEmit(a.ctx, "agent:confirmation_required", ConfirmationRequiredEvent{
 		ConversationID: convID,
 		Action:         action,
 		Details:        details,
 		ToolCallID:     toolCallID,
+		RequestID:      requestID,
 	})
 
 	select {
@@ -392,6 +431,14 @@ func (a *AgentService) emitComplete(convID, message string) {
 	})
 }
 
+func (a *AgentService) emitToolProgress(convID string, toolCallID string, step string) {
+	runtime.EventsEmit(a.ctx, "agent:tool_progress", ToolProgressEvent{
+		ConversationID: convID,
+		ToolCallID:     toolCallID,
+		Step:           step,
+	})
+}
+
 func (a *AgentService) emitThinking(convID string) {
 	runtime.EventsEmit(a.ctx, "agent:thinking", map[string]string{
 		"conversationId": convID,
@@ -428,6 +475,14 @@ func (a *AgentService) GetAuthToken(ctx context.Context, vault *storage.Vault, p
 	a.authTokensMu.Lock()
 	a.authTokens[vault.PublicKeyECDSA] = newToken
 	a.authTokensMu.Unlock()
+	saveErr := a.store.SaveAgentAuthToken(vault.PublicKeyECDSA, newToken.Token, newToken.ExpiresAt)
+	if saveErr != nil {
+		a.Logger.WithError(saveErr).Warn("Failed to persist auth token")
+	}
+
+	if strings.TrimSpace(newToken.Token) == "" {
+		return "", fmt.Errorf("authentication returned empty token")
+	}
 
 	return newToken.Token, nil
 }
@@ -436,26 +491,100 @@ func (a *AgentService) getCachedAuthToken(vaultPubKey string) (*verifier.AuthTok
 	a.authTokensMu.RLock()
 	token, ok := a.authTokens[vaultPubKey]
 	a.authTokensMu.RUnlock()
+
 	if !ok || token == nil {
+		persistedToken, loaded := a.loadPersistedAuthToken(vaultPubKey)
+		if !loaded {
+			return nil, false
+		}
+		token = persistedToken
+	}
+	if strings.TrimSpace(token.Token) == "" {
+		_ = a.store.DeleteAgentAuthToken(vaultPubKey)
 		return nil, false
 	}
 	if token.ExpiresAt.Before(time.Now().Add(time.Hour)) {
+		newToken, err := a.refreshAuthToken(vaultPubKey)
+		if err == nil {
+			return newToken, true
+		}
+		a.Logger.WithError(err).Debug("Token refresh failed, falling back to full re-auth")
+		_ = a.store.DeleteAgentAuthToken(vaultPubKey)
+		a.authTokensMu.Lock()
+		delete(a.authTokens, vaultPubKey)
+		a.authTokensMu.Unlock()
 		return nil, false
 	}
 	return token, true
 }
 
-func (a *AgentService) GetCachedAuthToken(vaultPubKey string) (string, time.Time, bool) {
+func (a *AgentService) refreshAuthToken(vaultPubKey string) (*verifier.AuthToken, error) {
 	a.authTokensMu.RLock()
 	token, ok := a.authTokens[vaultPubKey]
 	a.authTokensMu.RUnlock()
+
+	if !ok || token == nil || strings.TrimSpace(token.Token) == "" {
+		return nil, fmt.Errorf("no cached token to refresh")
+	}
+	if token.ExpiresAt.Before(time.Now()) {
+		return nil, fmt.Errorf("token already expired, cannot refresh")
+	}
+
+	newToken, err := a.verifierClient.RefreshToken(token.Token)
+	if err != nil {
+		return nil, fmt.Errorf("refresh request failed: %w", err)
+	}
+
+	a.authTokensMu.Lock()
+	a.authTokens[vaultPubKey] = newToken
+	a.authTokensMu.Unlock()
+
+	saveErr := a.store.SaveAgentAuthToken(vaultPubKey, newToken.Token, newToken.ExpiresAt)
+	if saveErr != nil {
+		a.Logger.WithError(saveErr).Warn("Failed to persist refreshed auth token")
+	}
+
+	a.Logger.Info("Auth token refreshed successfully")
+	return newToken, nil
+}
+
+func (a *AgentService) GetCachedAuthToken(vaultPubKey string) (string, time.Time, bool) {
+	token, ok := a.getCachedAuthToken(vaultPubKey)
 	if !ok || token == nil {
 		return "", time.Time{}, false
 	}
-	if token.ExpiresAt.Before(time.Now().Add(time.Hour)) {
-		return "", time.Time{}, false
-	}
 	return token.Token, token.ExpiresAt, true
+}
+
+func (a *AgentService) InvalidateAuthToken(vaultPubKey string) {
+	a.authTokensMu.Lock()
+	delete(a.authTokens, vaultPubKey)
+	a.authTokensMu.Unlock()
+	delErr := a.store.DeleteAgentAuthToken(vaultPubKey)
+	if delErr != nil {
+		a.Logger.WithError(delErr).Warn("Failed to delete persisted auth token")
+	}
+}
+
+func (a *AgentService) loadPersistedAuthToken(vaultPubKey string) (*verifier.AuthToken, bool) {
+	tokenValue, expiresAt, err := a.store.GetAgentAuthToken(vaultPubKey)
+	if err != nil {
+		return nil, false
+	}
+
+	token := &verifier.AuthToken{
+		Token:     strings.TrimSpace(tokenValue),
+		ExpiresAt: expiresAt,
+	}
+	if token.Token == "" {
+		_ = a.store.DeleteAgentAuthToken(vaultPubKey)
+		return nil, false
+	}
+
+	a.authTokensMu.Lock()
+	a.authTokens[vaultPubKey] = token
+	a.authTokensMu.Unlock()
+	return token, true
 }
 
 func (a *AgentService) authenticate(ctx context.Context, vault *storage.Vault, password string) (*verifier.AuthToken, error) {
@@ -465,7 +594,7 @@ func (a *AgentService) authenticate(ctx context.Context, vault *storage.Vault, p
 	authCtx, cancel := context.WithTimeout(ctx, authSignTimeout)
 	defer cancel()
 
-	authMessage, err := verifier.GenerateAuthMessage()
+	authMessage, err := verifier.GenerateAuthMessage(vault.PublicKeyECDSA)
 	if err != nil {
 		return nil, fmt.Errorf("failed to generate auth message: %w", err)
 	}
@@ -492,164 +621,24 @@ func (a *AgentService) authenticate(ctx context.Context, vault *storage.Vault, p
 func (a *AgentService) signMessage(ctx context.Context, vault *storage.Vault, password, message string) (string, error) {
 	messageHash := signing.EthereumSignHash(message)
 
-	const maxAttempts = 2
-	var lastErr error
-	for attempt := 1; attempt <= maxAttempts; attempt++ {
-		sessionID := uuid.New().String()
-		encryptionKey := make([]byte, 32)
-		_, err := rand.Read(encryptionKey)
-		if err != nil {
-			return "", fmt.Errorf("failed to generate encryption key: %w", err)
-		}
-		hexEncryptionKey := hex.EncodeToString(encryptionKey)
-
-		relayURL := shared.DefaultRelayURL
-		relayClient := relay.NewClient(relayURL)
-
-		a.Logger.WithFields(logrus.Fields{
-			"session_id": sessionID,
-			"relay_url":  relayURL,
-			"attempt":    attempt,
-		}).Info("Registering session on relay for auth")
-
-		err = relayClient.RegisterSession(sessionID, vault.LocalPartyID)
-		if err != nil {
-			return "", fmt.Errorf("failed to register session: %w", err)
-		}
-
-		err = a.callFastVaultSign(ctx, vault, password, sessionID, hexEncryptionKey, []string{messageHash})
-		if err != nil {
-			return "", fmt.Errorf("failed to call fast vault server: %w", err)
-		}
-
-		a.Logger.WithField("attempt", attempt).Info("Waiting for Fast Vault Server to join session...")
-		err = a.waitForSessionParties(ctx, relayClient, sessionID, 2)
-		if err != nil {
-			lastErr = fmt.Errorf("failed to wait for session start: %w", err)
-			if attempt < maxAttempts && isSessionJoinTimeout(err) {
-				a.Logger.WithError(err).Warn("Session start wait timed out; retrying auth keysign once")
-				continue
-			}
-			return "", lastErr
-		}
-
-		a.Logger.Info("Running TSS keysign protocol for auth")
-
-		results, err := a.tss.Keysign(
-			*vault,
-			[]string{messageHash},
-			vault.LocalPartyID,
-			authDerivePath,
-			sessionID,
-			hexEncryptionKey,
-			relayURL,
-			"ecdsa",
-		)
-		if err != nil {
-			return "", fmt.Errorf("keysign failed: %w", err)
-		}
-
-		if len(results) == 0 {
-			return "", fmt.Errorf("no signature returned from keysign")
-		}
-
-		sig := results[0]
-		rBytes, err := base64.StdEncoding.DecodeString(sig.R)
-		if err != nil {
-			return "", fmt.Errorf("failed to decode R: %w", err)
-		}
-		sBytes, err := base64.StdEncoding.DecodeString(sig.S)
-		if err != nil {
-			return "", fmt.Errorf("failed to decode S: %w", err)
-		}
-
-		recoveryID := sig.RecoveryID
-		if recoveryID == "" {
-			recoveryID = "1b"
-		}
-		signature := signing.FormatDerSignature(hex.EncodeToString(rBytes), hex.EncodeToString(sBytes), recoveryID)
-		return signature, nil
+	cfg := tools.KeysignConfig{
+		AppCtx:      a.ctx,
+		Ctx:         ctx,
+		Vault:       vault,
+		Password:    password,
+		DerivePath:  authDerivePath,
+		TSS:         a.tss,
+		Logger:      a.Logger,
+		MaxAttempts: 2,
 	}
-
-	return "", lastErr
+	return tools.FastVaultKeysign(cfg, messageHash)
 }
 
-func (a *AgentService) callFastVaultSign(ctx context.Context, vault *storage.Vault, password, sessionID, hexEncryptionKey string, messages []string) error {
-	reqBody := map[string]any{
-		"public_key":         vault.PublicKeyECDSA,
-		"messages":           messages,
-		"session":            sessionID,
-		"hex_encryption_key": hexEncryptionKey,
-		"derive_path":        authDerivePath,
-		"is_ecdsa":           true,
-		"vault_password":     password,
-		"chain":              "Ethereum",
+func drainChan[T any](ch chan T) {
+	select {
+	case <-ch:
+	default:
 	}
-
-	jsonBody, err := json.Marshal(reqBody)
-	if err != nil {
-		return fmt.Errorf("failed to marshal request: %w", err)
-	}
-
-	signURL := fastVaultServerURL + "/sign"
-	a.Logger.WithField("url", signURL).Info("Sending sign request to Fast Vault Server")
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, signURL, bytes.NewReader(jsonBody))
-	if err != nil {
-		return fmt.Errorf("failed to create request: %w", err)
-	}
-	req.Header.Set("Content-Type", "application/json")
-
-	client := &http.Client{Timeout: 30 * time.Second}
-	resp, err := client.Do(req)
-	if err != nil {
-		return fmt.Errorf("request failed: %w", err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated && resp.StatusCode != http.StatusAccepted {
-		body, _ := io.ReadAll(resp.Body)
-		msg := strings.TrimSpace(string(body))
-		if msg == "" {
-			return fmt.Errorf("fast vault server returned status %d", resp.StatusCode)
-		}
-		return fmt.Errorf("fast vault server returned status %d: %s", resp.StatusCode, msg)
-	}
-
-	return nil
-}
-
-func (a *AgentService) waitForSessionParties(ctx context.Context, relayClient *relay.Client, sessionID string, expectedParties int) error {
-	timeout := time.After(authSignTimeout)
-	ticker := time.NewTicker(500 * time.Millisecond)
-	defer ticker.Stop()
-
-	for {
-		select {
-		case <-ctx.Done():
-			return ctx.Err()
-		case <-timeout:
-			return fmt.Errorf("timeout waiting for %d parties to join session", expectedParties)
-		case <-ticker.C:
-			parties, err := relayClient.GetSession(sessionID)
-			if err != nil {
-				a.Logger.WithError(err).Warn("Failed to get session parties")
-				continue
-			}
-			a.Logger.WithField("parties", parties).Info("Session parties")
-			if len(parties) >= expectedParties {
-				return nil
-			}
-		}
-	}
-}
-
-func isSessionJoinTimeout(err error) bool {
-	if err == nil {
-		return false
-	}
-	errStr := err.Error()
-	return strings.Contains(errStr, "timeout waiting for") || strings.Contains(errStr, "deadline exceeded")
 }
 
 func (a *AgentService) GetConversationStarters(vaultPubKey string) []string {
@@ -824,8 +813,7 @@ func (a *AgentService) callClaudeForStarters(apiKey, prompt string, expectedCoun
 		return nil, fmt.Errorf("no content in response")
 	}
 
-	var starters []string
-	err = json.Unmarshal([]byte(result.Content[0].Text), &starters)
+	starters, err := parseStartersResponse(result.Content[0].Text)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse starters JSON: %w", err)
 	}
@@ -835,4 +823,66 @@ func (a *AgentService) callClaudeForStarters(apiKey, prompt string, expectedCoun
 	}
 
 	return starters[:expectedCount], nil
+}
+
+func parseStartersResponse(raw string) ([]string, error) {
+	raw = strings.TrimSpace(raw)
+	if raw == "" {
+		return nil, fmt.Errorf("empty response")
+	}
+
+	var starters []string
+	if err := json.Unmarshal([]byte(raw), &starters); err == nil && len(starters) > 0 {
+		return normalizeStarters(starters), nil
+	}
+
+	start := strings.Index(raw, "[")
+	end := strings.LastIndex(raw, "]")
+	if start >= 0 && end > start {
+		candidate := raw[start : end+1]
+		if err := json.Unmarshal([]byte(candidate), &starters); err == nil && len(starters) > 0 {
+			return normalizeStarters(starters), nil
+		}
+	}
+
+	lines := strings.Split(raw, "\n")
+	for _, line := range lines {
+		s := strings.TrimSpace(line)
+		s = strings.TrimPrefix(s, "-")
+		s = strings.TrimPrefix(s, "*")
+		s = strings.TrimSpace(s)
+		if s == "" {
+			continue
+		}
+		if dot := strings.Index(s, ". "); dot > 0 && dot < 3 {
+			s = strings.TrimSpace(s[dot+2:])
+		}
+		s = strings.Trim(s, "\"")
+		if s != "" {
+			starters = append(starters, s)
+		}
+	}
+	if len(starters) > 0 {
+		return normalizeStarters(starters), nil
+	}
+
+	return nil, fmt.Errorf("no starters found in response")
+}
+
+func normalizeStarters(input []string) []string {
+	out := make([]string, 0, len(input))
+	seen := make(map[string]bool)
+	for _, item := range input {
+		s := strings.TrimSpace(item)
+		if s == "" {
+			continue
+		}
+		key := strings.ToLower(s)
+		if seen[key] {
+			continue
+		}
+		seen[key] = true
+		out = append(out, s)
+	}
+	return out
 }

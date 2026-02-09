@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -34,13 +35,14 @@ type APIError struct {
 }
 
 type Plugin struct {
-	ID          string   `json:"id"`
-	Title       string   `json:"title"`
-	Description string   `json:"description"`
-	Logo        string   `json:"logo,omitempty"`
-	Categories  []string `json:"categories,omitempty"`
-	Version     string   `json:"version,omitempty"`
-	Author      string   `json:"author,omitempty"`
+	ID            string   `json:"id"`
+	Title         string   `json:"title"`
+	Description   string   `json:"description"`
+	Logo          string   `json:"logo,omitempty"`
+	Categories    []string `json:"categories,omitempty"`
+	Version       string   `json:"version,omitempty"`
+	PluginVersion string   `json:"plugin_version,omitempty"`
+	Author        string   `json:"author,omitempty"`
 }
 
 type PluginListResponse struct {
@@ -64,6 +66,7 @@ type Policy struct {
 	Name          string         `json:"name,omitempty"`
 	Active        bool           `json:"active"`
 	Configuration map[string]any `json:"configuration"`
+	Recipe        string         `json:"recipe,omitempty"`
 	CreatedAt     string         `json:"created_at"`
 	UpdatedAt     string         `json:"updated_at,omitempty"`
 }
@@ -167,10 +170,14 @@ func (c *Client) GetRecipeSpecification(pluginID string) (*RecipeSpecification, 
 	return &result, nil
 }
 
-func (c *Client) CheckPluginInstalled(pluginID, publicKey string) (bool, error) {
-	_, err := c.get("/vault/exist/" + pluginID + "/" + publicKey)
+func (c *Client) CheckPluginInstalled(pluginID, publicKey, authToken string) (bool, error) {
+	_, err := c.getWithAuth("/vault/exist/"+pluginID+"/"+publicKey, authToken)
 	if err != nil {
-		return false, nil
+		msg := strings.ToLower(err.Error())
+		if strings.Contains(msg, "status 404") || strings.Contains(msg, "not found") {
+			return false, nil
+		}
+		return false, err
 	}
 	return true, nil
 }
@@ -262,6 +269,26 @@ func (c *Client) GetPolicy(policyID, authToken string) (*PolicyDetails, error) {
 	return &result, nil
 }
 
+func (c *Client) UninstallPlugin(pluginID, authToken string) error {
+	_, err := c.delete("/plugin/"+pluginID, map[string]any{}, authToken)
+	return err
+}
+
+func (c *Client) GetPolicyFull(policyID, authToken string) (*Policy, error) {
+	resp, err := c.getWithAuth("/plugin/policy/"+policyID, authToken)
+	if err != nil {
+		return nil, err
+	}
+
+	var result Policy
+	err = json.Unmarshal(resp, &result)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal policy: %w", err)
+	}
+
+	return &result, nil
+}
+
 func (c *Client) GetTransactions(publicKey, authToken string) (*TransactionListResponse, error) {
 	resp, err := c.getWithAuth("/plugin/transactions?public_key="+publicKey, authToken)
 	if err != nil {
@@ -289,7 +316,7 @@ func (c *Client) getWithAuth(path, authToken string) (json.RawMessage, error) {
 
 	req.Header.Set("Content-Type", "application/json")
 	if authToken != "" {
-		req.Header.Set("Authorization", "Bearer "+authToken)
+		req.Header.Set("Authorization", bearerAuth(authToken))
 	}
 
 	resp, err := c.httpClient.Do(req)
@@ -337,7 +364,7 @@ func (c *Client) post(path string, body map[string]any, authToken string) (json.
 
 	req.Header.Set("Content-Type", "application/json")
 	if authToken != "" {
-		req.Header.Set("Authorization", "Bearer "+authToken)
+		req.Header.Set("Authorization", bearerAuth(authToken))
 	}
 
 	resp, err := c.httpClient.Do(req)
@@ -385,7 +412,7 @@ func (c *Client) delete(path string, body map[string]any, authToken string) (jso
 
 	req.Header.Set("Content-Type", "application/json")
 	if authToken != "" {
-		req.Header.Set("Authorization", "Bearer "+authToken)
+		req.Header.Set("Authorization", bearerAuth(authToken))
 	}
 
 	resp, err := c.httpClient.Do(req)
@@ -404,4 +431,15 @@ func (c *Client) delete(path string, body map[string]any, authToken string) (jso
 	}
 
 	return respBody, nil
+}
+
+func bearerAuth(token string) string {
+	t := strings.TrimSpace(token)
+	if t == "" {
+		return ""
+	}
+	if strings.HasPrefix(strings.ToLower(t), "bearer ") {
+		return "Bearer " + strings.TrimSpace(t[7:])
+	}
+	return "Bearer " + t
 }

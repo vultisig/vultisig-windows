@@ -2,39 +2,48 @@ package tools
 
 import (
 	"bytes"
+	"context"
 	"crypto/rand"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
+	"regexp"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 
+	"github.com/vultisig/vultisig-win/agent/dklsbridge"
 	"github.com/vultisig/vultisig-win/agent/shared"
 	"github.com/vultisig/vultisig-win/agent/verifier"
 	"github.com/vultisig/vultisig-win/relay"
 	"github.com/vultisig/vultisig-win/storage"
-	"github.com/vultisig/vultisig-win/tss"
 )
 
 const (
 	fastVaultServerURLInstall = "https://api.vultisig.com"
+	pluginInstallJoinTimeout = 5 * time.Minute
+
+	pluginPeersMinimumJoinedParties = 3
+	libTypeGG20                     = 0
+	libTypeDKLS                     = 1
+	libTypeKeyImport                = 2
 )
+
+var pluginPartyIDPattern = regexp.MustCompile(`^[^-]+-[^-]+-[0-9a-f]{4}-[0-9]+$`)
 
 type PluginInstallTool struct {
 	client *verifier.Client
-	tss    *tss.TssService
 	store  *storage.Store
 	logger *logrus.Logger
 }
 
-func NewPluginInstallTool(client *verifier.Client, tss *tss.TssService, store *storage.Store) *PluginInstallTool {
+func NewPluginInstallTool(client *verifier.Client, store *storage.Store) *PluginInstallTool {
 	return &PluginInstallTool{
 		client: client,
-		tss:    tss,
 		store:  store,
 		logger: logrus.WithField("module", "plugin_install").Logger,
 	}
@@ -71,6 +80,11 @@ func (t *PluginInstallTool) Execute(input map[string]any, ctx *ExecutionContext)
 		debugLog = append(debugLog, msg)
 		t.logger.Info(msg)
 	}
+	emitProgress := func(step string) {
+		if ctx.OnProgress != nil {
+			ctx.OnProgress(step)
+		}
+	}
 
 	pluginIDRaw, ok := input["plugin_id"]
 	if !ok {
@@ -82,7 +96,7 @@ func (t *PluginInstallTool) Execute(input map[string]any, ctx *ExecutionContext)
 	addLog(fmt.Sprintf("Resolved plugin: %s (%s)", pluginName, pluginID))
 
 	addLog("Checking if plugin is already installed...")
-	installed, err := t.client.CheckPluginInstalled(pluginID, ctx.VaultPubKey)
+	installed, err := t.client.CheckPluginInstalled(pluginID, ctx.VaultPubKey, ctx.AuthToken)
 	if err != nil {
 		addLog(fmt.Sprintf("Warning: Failed to check installation status: %v", err))
 	}
@@ -101,8 +115,9 @@ func (t *PluginInstallTool) Execute(input map[string]any, ctx *ExecutionContext)
 	addLog("Plugin not installed, starting installation...")
 	addLog(fmt.Sprintf("Auth token present: %v", ctx.AuthToken != ""))
 	addLog(fmt.Sprintf("Password present: %v", ctx.Password != ""))
+	emitProgress("5% Preparing plugin installation...")
 
-	newVault, installLog, err := t.reshareWithPlugin(ctx, pluginID)
+	installLog, err := t.reshareWithPlugin(ctx, pluginID, emitProgress)
 	debugLog = append(debugLog, installLog...)
 	if err != nil {
 		return map[string]any{
@@ -110,16 +125,6 @@ func (t *PluginInstallTool) Execute(input map[string]any, ctx *ExecutionContext)
 			"error":     err.Error(),
 			"debug_log": debugLog,
 		}, fmt.Errorf("failed to install plugin: %w", err)
-	}
-
-	addLog("Saving updated vault...")
-	err = t.store.SaveVault(newVault)
-	if err != nil {
-		return map[string]any{
-			"success":   false,
-			"error":     err.Error(),
-			"debug_log": debugLog,
-		}, fmt.Errorf("failed to save updated vault: %w", err)
 	}
 
 	addLog("Plugin installed successfully!")
@@ -132,7 +137,7 @@ func (t *PluginInstallTool) Execute(input map[string]any, ctx *ExecutionContext)
 	}, nil
 }
 
-func (t *PluginInstallTool) reshareWithPlugin(ctx *ExecutionContext, pluginID string) (*storage.Vault, []string, error) {
+func (t *PluginInstallTool) reshareWithPlugin(ctx *ExecutionContext, pluginID string, emitProgress func(string)) ([]string, error) {
 	debugLog := []string{}
 	addLog := func(msg string) {
 		debugLog = append(debugLog, msg)
@@ -140,22 +145,31 @@ func (t *PluginInstallTool) reshareWithPlugin(ctx *ExecutionContext, pluginID st
 	}
 
 	if ctx.Vault == nil {
-		return nil, debugLog, fmt.Errorf("vault is required")
+		return debugLog, fmt.Errorf("vault is required")
 	}
 	if ctx.Password == "" {
-		return nil, debugLog, fmt.Errorf("password is required")
+		return debugLog, fmt.Errorf("password is required")
 	}
 	if ctx.AuthToken == "" {
-		return nil, debugLog, fmt.Errorf("auth token is required for plugin installation")
+		return debugLog, fmt.Errorf("auth token is required for plugin installation")
 	}
 
 	vault := ctx.Vault
+	err := validateVaultForPluginInstall(vault)
+	if err != nil {
+		return debugLog, err
+	}
+	if !contains(vault.Signers, vault.LocalPartyID) {
+		return debugLog, fmt.Errorf("local party id %q is not in vault signers %v; cannot start plugin install reshare", vault.LocalPartyID, vault.Signers)
+	}
+	addLog(fmt.Sprintf("Vault local party: %s", vault.LocalPartyID))
+	addLog(fmt.Sprintf("Vault old signers (%d): %v", len(vault.Signers), vault.Signers))
 
 	sessionID := uuid.New().String()
 	encryptionKey := make([]byte, 32)
-	_, err := rand.Read(encryptionKey)
+	_, err = rand.Read(encryptionKey)
 	if err != nil {
-		return nil, debugLog, fmt.Errorf("failed to generate encryption key: %w", err)
+		return debugLog, fmt.Errorf("failed to generate encryption key: %w", err)
 	}
 	hexEncryptionKey := hex.EncodeToString(encryptionKey)
 
@@ -164,58 +178,284 @@ func (t *PluginInstallTool) reshareWithPlugin(ctx *ExecutionContext, pluginID st
 
 	addLog(fmt.Sprintf("Session ID: %s", sessionID))
 	addLog(fmt.Sprintf("Relay URL: %s", relayURL))
+	emitProgress("15% Registering session on relay...")
 	addLog("Registering session on relay...")
 
 	err = relayClient.RegisterSession(sessionID, vault.LocalPartyID)
 	if err != nil {
-		return nil, debugLog, fmt.Errorf("failed to register session: %w", err)
+		return debugLog, fmt.Errorf("failed to register session: %w", err)
 	}
 	addLog("Session registered successfully")
 
+	emitProgress("25% Waiting for Fast Vault Server to join...")
 	addLog("Requesting Fast Vault Server to join reshare...")
 	err = t.requestFastVaultReshare(ctx, sessionID, hexEncryptionKey)
 	if err != nil {
 		addLog(fmt.Sprintf("Warning: Fast Vault Server request failed: %v", err))
-	} else {
-		addLog("Fast Vault Server joined successfully")
 	}
+	addLog("Waiting for Fast Vault Server to join before requesting Verifier...")
+	if _, err := waitForSessionPartiesWithProgress(ctx.Ctx, relayClient, sessionID, 2, addLog, "fast-vault"); err != nil {
+		return debugLog, fmt.Errorf("fast vault did not join: %w", err)
+	}
+	addLog("Fast Vault Server joined successfully")
 
+	emitProgress("40% Waiting for Verifier to join...")
 	verifierURL := shared.GetVerifierURL()
 	addLog(fmt.Sprintf("Requesting Verifier to join reshare (plugin: %s)...", pluginID))
 	addLog(fmt.Sprintf("Verifier URL: %s", verifierURL))
+	addLog(fmt.Sprintf("Auth token has bearer prefix: %v", strings.HasPrefix(strings.ToLower(strings.TrimSpace(ctx.AuthToken)), "bearer ")))
 	err = t.requestVerifierReshare(ctx, sessionID, hexEncryptionKey, pluginID, verifierURL)
 	if err != nil {
-		return nil, debugLog, fmt.Errorf("failed to request verifier reshare: %w", err)
+		return debugLog, fmt.Errorf("failed to request verifier reshare: %w", err)
 	}
 	addLog("Verifier joined successfully")
 
-	addLog("Running TSS reshare protocol...")
-
-	type reshareResult struct {
-		vault *storage.Vault
-		err   error
-	}
-	resultCh := make(chan reshareResult, 1)
-
-	go func() {
-		newVault, err := t.tss.Reshare(*vault, sessionID, hexEncryptionKey, relayURL)
-		resultCh <- reshareResult{vault: newVault, err: err}
-	}()
-
-	select {
-	case result := <-resultCh:
-		if result.err != nil {
-			addLog(fmt.Sprintf("TSS reshare failed: %v", result.err))
-			return nil, debugLog, fmt.Errorf("reshare failed: %w", result.err)
+	emitProgress("55% Waiting for plugin server to join...")
+	expectedParties := len(vault.Signers) + 2
+	addLog(fmt.Sprintf("Waiting for plugin-install peers to be ready (expected>=%d)...", expectedParties))
+	parties, err := waitForPluginInstallPartiesWithProgress(ctx.Ctx, relayClient, sessionID, expectedParties, addLog)
+	if err != nil {
+		currentParties, getErr := relayClient.GetSession(sessionID)
+		if getErr != nil {
+			return debugLog, fmt.Errorf("failed waiting for parties: %w (also failed reading current session parties: %v)", err, getErr)
 		}
-		addLog("TSS reshare completed successfully")
-		return result.vault, debugLog, nil
-	case <-ctx.Ctx.Done():
-		addLog("TSS reshare timed out or cancelled")
-		return nil, debugLog, fmt.Errorf("reshare timed out or cancelled: %w", ctx.Ctx.Err())
-	case <-time.After(90 * time.Second):
-		addLog("TSS reshare timed out after 90 seconds")
-		return nil, debugLog, fmt.Errorf("reshare timed out after 90 seconds - ensure Fast Vault Server and Verifier are running")
+		return debugLog, fmt.Errorf("failed waiting for parties: %w (expected=%d, current=%d, parties=%v)", err, expectedParties, len(currentParties), currentParties)
+	}
+	addLog(fmt.Sprintf("Session parties: %v", parties))
+
+	emitProgress("70% All peers joined, starting MPC session...")
+	addLog("Starting relay session...")
+	err = relayClient.StartSession(sessionID, parties)
+	if err != nil {
+		return debugLog, fmt.Errorf("failed to start relay session: %w", err)
+	}
+	addLog("Relay session started")
+
+	emitProgress("80% Running key reshare protocol...")
+	addLog("Running DKLS reshare protocol...")
+
+	var ecdsaKeyshare, eddsaKeyshare string
+	for _, ks := range vault.KeyShares {
+		if ks.PublicKey == vault.PublicKeyECDSA {
+			ecdsaKeyshare = ks.KeyShare
+		}
+		if ks.PublicKey == vault.PublicKeyEdDSA {
+			eddsaKeyshare = ks.KeyShare
+		}
+	}
+
+	reshareReq := dklsbridge.ReshareRequest{
+		VaultPubKey:      vault.PublicKeyECDSA,
+		SessionID:        sessionID,
+		HexEncryptionKey: hexEncryptionKey,
+		RelayURL:         relayURL,
+		LocalPartyID:     vault.LocalPartyID,
+		Peers:            parties,
+		OldParties:       vault.Signers,
+		EcdsaKeyshare:    ecdsaKeyshare,
+		EddsaKeyshare:    eddsaKeyshare,
+	}
+
+	_, err = dklsbridge.RequestReshare(ctx.AppCtx, ctx.Ctx, reshareReq)
+	if err != nil {
+		addLog(fmt.Sprintf("DKLS reshare failed: %v", err))
+		return debugLog, fmt.Errorf("reshare failed: %w", err)
+	}
+
+	emitProgress("95% Verifying installation...")
+	addLog("TSS reshare completed successfully")
+
+	var confirmed bool
+	for i := 0; i < 5; i++ {
+		confirmed, err = t.client.CheckPluginInstalled(pluginID, vault.PublicKeyECDSA, ctx.AuthToken)
+		if err != nil {
+			addLog(fmt.Sprintf("Install verification attempt %d failed: %v", i+1, err))
+		}
+		if confirmed {
+			break
+		}
+		time.Sleep(2 * time.Second)
+	}
+	if err != nil {
+		return debugLog, fmt.Errorf("plugin install reshare completed but failed to confirm backend install state: %w", err)
+	}
+	if !confirmed {
+		return debugLog, fmt.Errorf("plugin install reshare completed but backend still reports plugin as not installed")
+	}
+	return debugLog, nil
+}
+
+func contains(items []string, value string) bool {
+	for _, item := range items {
+		if item == value {
+			return true
+		}
+	}
+	return false
+}
+
+func waitForSessionPartiesWithProgress(
+	ctx context.Context,
+	relayClient *relay.Client,
+	sessionID string,
+	expected int,
+	addLog func(string),
+	label string,
+) ([]string, error) {
+	timeout := time.After(pluginInstallJoinTimeout)
+	ticker := time.NewTicker(time.Second)
+	defer ticker.Stop()
+
+	lastCount := -1
+	lastLogAt := time.Now().Add(-30 * time.Second)
+	lastParties := []string{}
+
+	for {
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-timeout:
+			return nil, fmt.Errorf("timeout waiting for %d parties after %s (last=%d, parties=%v)", expected, pluginInstallJoinTimeout, len(lastParties), lastParties)
+		case <-ticker.C:
+			parties, err := relayClient.GetSession(sessionID)
+			if err != nil {
+				continue
+			}
+			lastParties = parties
+
+			now := time.Now()
+			if len(parties) != lastCount || now.Sub(lastLogAt) >= 15*time.Second {
+				addLog(fmt.Sprintf("[%s] session parties: %d/%d %v", label, len(parties), expected, parties))
+				lastCount = len(parties)
+				lastLogAt = now
+			}
+			if len(parties) >= expected {
+				return parties, nil
+			}
+		}
+	}
+}
+
+func waitForPluginInstallPartiesWithProgress(
+	ctx context.Context,
+	relayClient *relay.Client,
+	sessionID string,
+	expected int,
+	addLog func(string),
+) ([]string, error) {
+	timeout := time.After(pluginInstallJoinTimeout)
+	ticker := time.NewTicker(time.Second)
+	defer ticker.Stop()
+
+	requiredPeers := expected
+	if requiredPeers < pluginPeersMinimumJoinedParties {
+		requiredPeers = pluginPeersMinimumJoinedParties
+	}
+
+	lastCount := -1
+	lastLogAt := time.Now().Add(-30 * time.Second)
+	lastParties := []string{}
+
+	for {
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-timeout:
+			return nil, fmt.Errorf(
+				"timeout waiting for plugin-install peers after %s (required=%d, last=%d, parties=%v)",
+				pluginInstallJoinTimeout,
+				requiredPeers,
+				len(lastParties),
+				lastParties,
+			)
+		case <-ticker.C:
+			parties, err := relayClient.GetSession(sessionID)
+			if err != nil {
+				continue
+			}
+			lastParties = parties
+
+			hasServer, hasVerifier, hasPlugin := classifyPluginInstallParties(parties)
+			ready := hasServer && hasVerifier && hasPlugin && len(parties) >= requiredPeers
+
+			now := time.Now()
+			if len(parties) != lastCount || now.Sub(lastLogAt) >= 15*time.Second {
+				addLog(fmt.Sprintf(
+					"[plugin-peers] parties=%d/%d server=%t verifier=%t plugin=%t %v",
+					len(parties),
+					requiredPeers,
+					hasServer,
+					hasVerifier,
+					hasPlugin,
+					parties,
+				))
+				lastCount = len(parties)
+				lastLogAt = now
+			}
+
+			if ready {
+				return parties, nil
+			}
+		}
+	}
+}
+
+func classifyPluginInstallParties(parties []string) (hasServer, hasVerifier, hasPlugin bool) {
+	for _, party := range parties {
+		partyLower := strings.ToLower(strings.TrimSpace(party))
+		if strings.HasPrefix(partyLower, "server-") {
+			hasServer = true
+		}
+		if strings.HasPrefix(partyLower, "verifier") {
+			hasVerifier = true
+		}
+		if pluginPartyIDPattern.MatchString(party) {
+			hasPlugin = true
+		}
+	}
+	return
+}
+
+func validateVaultForPluginInstall(vault *storage.Vault) error {
+	if vault == nil {
+		return fmt.Errorf("vault is required")
+	}
+	if strings.TrimSpace(vault.PublicKeyECDSA) == "" {
+		return fmt.Errorf("vault ECDSA public key is required")
+	}
+	if strings.TrimSpace(vault.HexChainCode) == "" {
+		return fmt.Errorf("vault hex chain code is required")
+	}
+	if !hasServerParty(vault.Signers) {
+		return fmt.Errorf("plugin installation requires a fast vault signer committee with a server party")
+	}
+	if !IsDKLSLib(vault.LibType) {
+		return fmt.Errorf("plugin installation requires a DKLS vault; GG20 vaults are not supported")
+	}
+	return nil
+}
+
+func hasServerParty(parties []string) bool {
+	for _, party := range parties {
+		if strings.HasPrefix(strings.ToLower(strings.TrimSpace(party)), "server-") {
+			return true
+		}
+	}
+	return false
+}
+
+func toLibType(vault *storage.Vault) int {
+	if vault != nil && (len(vault.ChainPublicKeys) > 0 || len(vault.ChainKeyShares) > 0) {
+		return libTypeKeyImport
+	}
+	libType := strings.ToUpper(strings.TrimSpace(vault.LibType))
+	switch libType {
+	case "DKLS":
+		return libTypeDKLS
+	case "KEYIMPORT":
+		return libTypeKeyImport
+	default:
+		return libTypeGG20
 	}
 }
 
@@ -237,6 +477,7 @@ func generateServerPartyID(sessionID string) string {
 func (t *PluginInstallTool) requestFastVaultReshare(ctx *ExecutionContext, sessionID, hexEncryptionKey string) error {
 	vault := ctx.Vault
 	serverPartyID := generateServerPartyID(sessionID)
+	libType := toLibType(vault)
 
 	reqBody := map[string]any{
 		"name":                vault.Name,
@@ -250,7 +491,7 @@ func (t *PluginInstallTool) requestFastVaultReshare(ctx *ExecutionContext, sessi
 		"encryption_password": ctx.Password,
 		"email":               "",
 		"reshare_type":        1,
-		"lib_type":            1,
+		"lib_type":            libType,
 	}
 
 	jsonBody, err := json.Marshal(reqBody)
@@ -293,8 +534,13 @@ func (t *PluginInstallTool) requestVerifierReshare(ctx *ExecutionContext, sessio
 		"hex_chain_code":     vault.HexChainCode,
 		"local_party_id":     "verifier-" + sessionID[:8],
 		"old_parties":        vault.Signers,
+		"old_reshare_prefix": vault.ResharePrefix,
+		"lib_type":           toLibType(vault),
 		"email":              "",
 		"plugin_id":          pluginID,
+		"use_vultisig_relay": true,
+		"relay_url":          shared.DefaultRelayURL,
+		"relay_server":       shared.DefaultRelayURL,
 	}
 
 	jsonBody, err := json.Marshal(reqBody)
@@ -311,7 +557,7 @@ func (t *PluginInstallTool) requestVerifierReshare(ctx *ExecutionContext, sessio
 	}
 	req.Header.Set("Content-Type", "application/json")
 	if ctx.AuthToken != "" {
-		req.Header.Set("Authorization", "Bearer "+ctx.AuthToken)
+		req.Header.Set("Authorization", formatBearerAuth(ctx.AuthToken))
 	}
 
 	client := &http.Client{Timeout: 30 * time.Second}
@@ -327,4 +573,15 @@ func (t *PluginInstallTool) requestVerifierReshare(ctx *ExecutionContext, sessio
 	}
 
 	return nil
+}
+
+func formatBearerAuth(token string) string {
+	t := strings.TrimSpace(token)
+	if t == "" {
+		return ""
+	}
+	if strings.HasPrefix(strings.ToLower(t), "bearer ") {
+		return "Bearer " + strings.TrimSpace(t[7:])
+	}
+	return "Bearer " + t
 }

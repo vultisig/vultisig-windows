@@ -83,7 +83,8 @@ func (t *GetMarketPriceTool) Execute(input map[string]any, ctx *ExecutionContext
 	endpoint := marketPriceBaseURL + "?" + q.Encode()
 
 	var resp map[string]map[string]float64
-	if err := rpc.GetJSON(endpoint, &resp); err != nil {
+	err := rpc.GetJSON(endpoint, &resp)
+	if err != nil {
 		return nil, fmt.Errorf("failed to fetch market price: %w", err)
 	}
 

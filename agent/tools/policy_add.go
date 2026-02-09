@@ -1,16 +1,9 @@
 package tools
 
 import (
-	"bytes"
-	"crypto/rand"
 	"encoding/base64"
-	"encoding/hex"
-	"encoding/json"
 	"fmt"
-	"net/http"
-	"time"
 
-	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 	rtypes "github.com/vultisig/recipes/types"
 	"google.golang.org/protobuf/proto"
@@ -19,14 +12,10 @@ import (
 	"github.com/vultisig/vultisig-win/agent/shared"
 	"github.com/vultisig/vultisig-win/agent/signing"
 	"github.com/vultisig/vultisig-win/agent/verifier"
-	"github.com/vultisig/vultisig-win/relay"
 	"github.com/vultisig/vultisig-win/tss"
 )
 
-const (
-	fastVaultServerURL = "https://api.vultisig.com/vault"
-	policyDerivePath   = "m/44'/60'/0'/0/0"
-)
+const policyDerivePath = "m/44'/60'/0'/0/0"
 
 type PolicyAddTool struct {
 	client *verifier.Client
@@ -88,8 +77,7 @@ func (t *PolicyAddTool) Execute(input map[string]any, ctx *ExecutionContext) (an
 
 	suggest, err := t.client.SuggestPolicy(pluginID, config)
 	if err != nil {
-		t.logger.WithError(err).Warn("Failed to get policy suggestion, using empty rules")
-		suggest = &verifier.PolicySuggest{}
+		return nil, fmt.Errorf("failed to get policy rules from plugin: %w", err)
 	}
 
 	recipeBase64, err := t.buildProtobufRecipe(pluginID, config, suggest)
@@ -97,13 +85,23 @@ func (t *PolicyAddTool) Execute(input map[string]any, ctx *ExecutionContext) (an
 		return nil, fmt.Errorf("failed to build recipe: %w", err)
 	}
 
-	policyVersion := 1
-	pluginVersion := "1.0.0"
+	policyVersion := 0
+	pluginVersion := t.resolvePluginVersion(pluginID)
 	messageToSign := fmt.Sprintf("%s*#*%s*#*%d*#*%s", recipeBase64, ctx.VaultPubKey, policyVersion, pluginVersion)
 
 	t.logger.WithField("message", messageToSign).Info("Signing policy message")
 
-	signature, err := t.signWithFastVault(ctx, messageToSign)
+	messageHash := signing.EthereumSignHash(messageToSign)
+	cfg := KeysignConfig{
+		AppCtx:     ctx.AppCtx,
+		Ctx:        ctx.Ctx,
+		Vault:      ctx.Vault,
+		Password:   ctx.Password,
+		DerivePath: policyDerivePath,
+		TSS:        t.tss,
+		Logger:     t.logger,
+	}
+	signature, err := FastVaultKeysign(cfg, messageHash)
 	if err != nil {
 		return nil, fmt.Errorf("failed to sign policy: %w", err)
 	}
@@ -126,7 +124,7 @@ func (t *PolicyAddTool) Execute(input map[string]any, ctx *ExecutionContext) (an
 		return nil, fmt.Errorf("failed to add policy: %w", err)
 	}
 
-	return map[string]any{
+	result := map[string]any{
 		"success":     true,
 		"policy_id":   resp.ID,
 		"plugin_id":   pluginID,
@@ -142,7 +140,37 @@ func (t *PolicyAddTool) Execute(input map[string]any, ctx *ExecutionContext) (an
 				},
 			},
 		},
-	}, nil
+	}
+
+	var fromChain, fromToken string
+	if fromObj, ok := config["from"].(map[string]any); ok {
+		fromChain = fmt.Sprintf("%v", fromObj["chain"])
+		if t, ok := fromObj["token"]; ok && t != nil {
+			fromToken = fmt.Sprintf("%v", t)
+		}
+		result["from_asset"] = shared.ResolveTickerByChainAndToken(fromChain, fromToken)
+		result["from_chain"] = fromChain
+	}
+
+	if toObj, ok := config["to"].(map[string]any); ok {
+		chain := fmt.Sprintf("%v", toObj["chain"])
+		token := ""
+		if t, ok := toObj["token"]; ok && t != nil {
+			token = fmt.Sprintf("%v", t)
+		}
+		result["to_asset"] = shared.ResolveTickerByChainAndToken(chain, token)
+		result["to_chain"] = chain
+	}
+
+	if amount, ok := config["fromAmount"]; ok {
+		result["amount"] = shared.FormatHumanAmount(fmt.Sprintf("%v", amount), fromChain, fromToken)
+	}
+
+	if freq, ok := config["frequency"]; ok {
+		result["frequency"] = fmt.Sprintf("%v", freq)
+	}
+
+	return result, nil
 }
 
 func normalizeBilling(raw any) []any {
@@ -156,6 +184,22 @@ func normalizeBilling(raw any) []any {
 		return []any{item}
 	}
 	return nil
+}
+
+func (t *PolicyAddTool) resolvePluginVersion(pluginID string) string {
+	const fallbackVersion = "1.0.0"
+	plugin, err := t.client.GetPlugin(pluginID)
+	if err != nil {
+		t.logger.WithError(err).WithField("plugin_id", pluginID).Warn("Failed to fetch plugin version, using fallback")
+		return fallbackVersion
+	}
+	if plugin.Version != "" {
+		return plugin.Version
+	}
+	if plugin.PluginVersion != "" {
+		return plugin.PluginVersion
+	}
+	return fallbackVersion
 }
 
 func (t *PolicyAddTool) buildProtobufRecipe(pluginID string, config map[string]any, suggest *verifier.PolicySuggest) (string, error) {
@@ -200,123 +244,3 @@ func (t *PolicyAddTool) buildProtobufRecipe(pluginID string, config map[string]a
 	return base64.StdEncoding.EncodeToString(policyBytes), nil
 }
 
-func (t *PolicyAddTool) signWithFastVault(ctx *ExecutionContext, message string) (string, error) {
-	if ctx.Vault == nil {
-		return "", fmt.Errorf("vault is required for signing")
-	}
-	if ctx.Password == "" {
-		return "", fmt.Errorf("password is required for signing")
-	}
-
-	vault := ctx.Vault
-
-	messageHash := signing.EthereumSignHash(message)
-
-	sessionID := uuid.New().String()
-	encryptionKey := make([]byte, 32)
-	_, err := rand.Read(encryptionKey)
-	if err != nil {
-		return "", fmt.Errorf("failed to generate encryption key: %w", err)
-	}
-	hexEncryptionKey := hex.EncodeToString(encryptionKey)
-
-	relayURL := shared.DefaultRelayURL
-	relayClient := relay.NewClient(relayURL)
-
-	t.logger.WithFields(logrus.Fields{
-		"session_id": sessionID,
-		"relay_url":  relayURL,
-	}).Info("Registering session on relay")
-
-	err = relayClient.RegisterSession(sessionID, vault.LocalPartyID)
-	if err != nil {
-		return "", fmt.Errorf("failed to register session: %w", err)
-	}
-
-	t.logger.Info("Calling Fast Vault Server to start signing")
-
-	err = t.callFastVaultSign(ctx, sessionID, hexEncryptionKey, []string{messageHash})
-	if err != nil {
-		return "", fmt.Errorf("failed to call fast vault server: %w", err)
-	}
-
-	t.logger.Info("Running TSS keysign protocol")
-
-	results, err := t.tss.Keysign(
-		*vault,
-		[]string{messageHash},
-		vault.LocalPartyID,
-		policyDerivePath,
-		sessionID,
-		hexEncryptionKey,
-		relayURL,
-		"ecdsa",
-	)
-	if err != nil {
-		return "", fmt.Errorf("keysign failed: %w", err)
-	}
-
-	if len(results) == 0 {
-		return "", fmt.Errorf("no signature returned from keysign")
-	}
-
-	sig := results[0]
-	rBytes, err := base64.StdEncoding.DecodeString(sig.R)
-	if err != nil {
-		return "", fmt.Errorf("failed to decode R: %w", err)
-	}
-	sBytes, err := base64.StdEncoding.DecodeString(sig.S)
-	if err != nil {
-		return "", fmt.Errorf("failed to decode S: %w", err)
-	}
-
-	recoveryID := sig.RecoveryID
-	if recoveryID == "" {
-		recoveryID = "1b"
-	}
-	signature := signing.FormatSignature(hex.EncodeToString(rBytes), hex.EncodeToString(sBytes), recoveryID)
-
-	return signature, nil
-}
-
-func (t *PolicyAddTool) callFastVaultSign(ctx *ExecutionContext, sessionID, hexEncryptionKey string, messages []string) error {
-	vault := ctx.Vault
-
-	reqBody := map[string]any{
-		"public_key":         vault.PublicKeyECDSA,
-		"messages":           messages,
-		"session":            sessionID,
-		"hex_encryption_key": hexEncryptionKey,
-		"derive_path":        policyDerivePath,
-		"is_ecdsa":           true,
-		"vault_password":     ctx.Password,
-		"chain":              "Ethereum",
-	}
-
-	jsonBody, err := json.Marshal(reqBody)
-	if err != nil {
-		return fmt.Errorf("failed to marshal request: %w", err)
-	}
-
-	signURL := fastVaultServerURL + "/sign"
-	t.logger.WithField("url", signURL).Info("Sending sign request to Fast Vault Server")
-
-	req, err := http.NewRequestWithContext(ctx.Ctx, http.MethodPost, signURL, bytes.NewReader(jsonBody))
-	if err != nil {
-		return fmt.Errorf("failed to create request: %w", err)
-	}
-	req.Header.Set("Content-Type", "application/json")
-
-	client := &http.Client{Timeout: 30 * time.Second}
-	resp, err := client.Do(req)
-	if err != nil {
-		return fmt.Errorf("request failed: %w", err)
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated && resp.StatusCode != http.StatusAccepted {
-		return fmt.Errorf("fast vault server returned status %d", resp.StatusCode)
-	}
-
-	return nil
-}

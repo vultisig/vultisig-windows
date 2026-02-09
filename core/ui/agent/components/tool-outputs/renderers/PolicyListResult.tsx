@@ -13,13 +13,17 @@ type PolicyItem = {
   id: string
   pluginType?: string
   plugin_id?: string
+  plugin_name?: string
   description?: string
   isActive?: boolean
   active?: boolean
   schedule?: string
+  frequency?: string
   amount?: string
   fromAsset?: string
+  from_asset?: string
   toAsset?: string
+  to_asset?: string
   configuration?: Record<string, unknown>
 }
 
@@ -74,29 +78,13 @@ export const PolicyListResult: FC<Props> = ({ data }) => {
   return (
     <ResultPanel title="Active Policies" count={data.policies.length}>
       {data.policies.map((policy, index) => {
-        const configuration = toRecord(policy.configuration)
         const pluginType = policy.pluginType || policy.plugin_id
+        const pluginName = policy.plugin_name || getPluginDisplayName(pluginType)
         const isActive = policy.isActive ?? policy.active ?? true
-        const amount =
-          policy.amount ||
-          (typeof configuration?.amount === 'string'
-            ? configuration.amount
-            : undefined)
-        const schedule =
-          policy.schedule ||
-          (typeof configuration?.frequency === 'string'
-            ? configuration.frequency
-            : undefined)
-        const fromAsset =
-          policy.fromAsset ||
-          (typeof configuration?.from_asset === 'string'
-            ? configuration.from_asset
-            : undefined)
-        const toAsset =
-          policy.toAsset ||
-          (typeof configuration?.to_asset === 'string'
-            ? configuration.to_asset
-            : undefined)
+        const fromAsset = policy.fromAsset || policy.from_asset
+        const toAsset = policy.toAsset || policy.to_asset
+        const amount = policy.amount
+        const schedule = policy.schedule || policy.frequency
 
         return (
           <ResultRow
@@ -118,7 +106,7 @@ export const PolicyListResult: FC<Props> = ({ data }) => {
               <HStack gap={8} alignItems="center">
                 <Text size={14} weight={500} color="regular">
                   {policy.description ||
-                    `${getPluginDisplayName(pluginType)}${
+                    `${pluginName}${
                       fromAsset && toAsset ? ` ${fromAsset} → ${toAsset}` : ''
                     }`}
                 </Text>

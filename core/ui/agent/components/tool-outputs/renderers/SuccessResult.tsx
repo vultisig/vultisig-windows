@@ -53,7 +53,7 @@ type SuccessData = {
 type Props = {
   data: unknown
   action: 'add' | 'remove' | 'rename' | 'create' | 'delete'
-  entityType: 'coin' | 'address' | 'policy' | 'vault'
+  entityType: 'coin' | 'address' | 'policy' | 'vault' | 'plugin'
 }
 
 const isSuccessData = (data: unknown): data is SuccessData => {
@@ -89,6 +89,7 @@ const getTitle = (
     address: 'Address',
     policy: 'Policy',
     vault: 'Vault',
+    plugin: 'Plugin',
   }
   return `${entityLabels[entityType] || 'Item'} ${actionLabels[action] || action}`
 }

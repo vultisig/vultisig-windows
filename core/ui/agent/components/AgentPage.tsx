@@ -16,8 +16,8 @@ import { FC, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { useConversationStarters } from '../hooks/useConversationStarters'
 import { useAgentService } from '../hooks/useAgentService'
+import { useConversationStarters } from '../hooks/useConversationStarters'
 import { Conversation } from '../types'
 import { ChatInput } from './ChatInput'
 import { ConversationStarters } from './ConversationStarters'
@@ -56,7 +56,9 @@ export const AgentPage: FC = () => {
   }, [vaultId, getVerifierSignInStatus])
 
   useEffect(() => {
-    checkApiKey().then(setHasApiKey).catch(() => setHasApiKey(false))
+    checkApiKey()
+      .then(setHasApiKey)
+      .catch(() => setHasApiKey(false))
     checkSignInStatus()
     loadConversations()
   }, [checkApiKey, checkSignInStatus, loadConversations])

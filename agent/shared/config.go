@@ -125,6 +125,88 @@ func ResolveAsset(input string) *AssetInfo {
 	return nil
 }
 
+var nativeTickers = map[string]string{
+	"ethereum":  "ETH",
+	"bitcoin":   "BTC",
+	"solana":    "SOL",
+	"bsc":       "BNB",
+	"avalanche": "AVAX",
+	"polygon":   "MATIC",
+	"tron":      "TRX",
+	"arbitrum":  "ETH",
+	"base":      "ETH",
+	"optimism":  "ETH",
+}
+
+func ResolveTickerByChainAndToken(chain, tokenAddress string) string {
+	if tokenAddress == "" {
+		ticker, ok := nativeTickers[strings.ToLower(chain)]
+		if ok {
+			return ticker
+		}
+		return chain
+	}
+
+	lowerAddr := strings.ToLower(tokenAddress)
+	for _, asset := range AssetAliases {
+		if strings.EqualFold(asset.Chain, chain) && strings.ToLower(asset.TokenAddress) == lowerAddr {
+			return asset.Ticker
+		}
+	}
+
+	if len(tokenAddress) > 10 {
+		return tokenAddress[:6] + "..." + tokenAddress[len(tokenAddress)-4:]
+	}
+	return tokenAddress
+}
+
+func ResolveDecimalsByChainAndToken(chain, tokenAddress string) int {
+	if tokenAddress == "" {
+		switch strings.ToLower(chain) {
+		case "bitcoin":
+			return 8
+		case "solana":
+			return 9
+		case "tron":
+			return 6
+		default:
+			return 18
+		}
+	}
+
+	lowerAddr := strings.ToLower(tokenAddress)
+	for _, asset := range AssetAliases {
+		if strings.EqualFold(asset.Chain, chain) && strings.ToLower(asset.TokenAddress) == lowerAddr {
+			return asset.Decimals
+		}
+	}
+	return 18
+}
+
+func FormatHumanAmount(smallestUnit, chain, tokenAddress string) string {
+	decimals := ResolveDecimalsByChainAndToken(chain, tokenAddress)
+	if decimals == 0 {
+		return smallestUnit
+	}
+
+	s := strings.TrimLeft(smallestUnit, "0")
+	if s == "" {
+		return "0"
+	}
+
+	if len(s) <= decimals {
+		s = strings.Repeat("0", decimals-len(s)+1) + s
+	}
+
+	intPart := s[:len(s)-decimals]
+	fracPart := strings.TrimRight(s[len(s)-decimals:], "0")
+
+	if fracPart == "" {
+		return intPart
+	}
+	return intPart + "." + fracPart
+}
+
 func GetVerifierURL() string {
 	if url := os.Getenv("VULTISIG_VERIFIER_URL"); url != "" {
 		return url
