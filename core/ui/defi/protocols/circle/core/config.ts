@@ -6,3 +6,5 @@ export const circleApiUrl = `${rootApiUrl}/circle`
 export const circleName = 'Circle'
 
 export const circleChain = Chain.Ethereum
+
+export const circleApy = 0.01
