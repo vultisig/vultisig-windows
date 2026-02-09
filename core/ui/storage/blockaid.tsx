@@ -1,4 +1,4 @@
-import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -37,11 +37,11 @@ export const useIsBlockaidEnabled = () => {
 
 export const useSetIsBlockaidEnabledMutation = () => {
   const { setIsBlockaidEnabled } = useCore()
-  const invalidateQueries = useInvalidateQueries()
+  const refetchQueries = useRefetchQueries()
 
   const mutationFn: SetIsBlockaidEnabledFunction = async input => {
     await setIsBlockaidEnabled(input)
-    await invalidateQueries([StorageKey.isBlockaidEnabled])
+    await refetchQueries([StorageKey.isBlockaidEnabled])
   }
 
   return useMutation({

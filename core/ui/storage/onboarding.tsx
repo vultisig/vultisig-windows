@@ -1,4 +1,4 @@
-import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -37,11 +37,11 @@ export const useHasFinishedOnboarding = () => {
 
 export const useSetHasFinishedOnboardingMutation = () => {
   const { setHasFinishedOnboarding } = useCore()
-  const invalidateQueries = useInvalidateQueries()
+  const refetchQueries = useRefetchQueries()
 
   const mutationFn: SetHasFinishedOnboardingFunction = async input => {
     await setHasFinishedOnboarding(input)
-    await invalidateQueries([StorageKey.hasFinishedOnboarding])
+    await refetchQueries([StorageKey.hasFinishedOnboarding])
   }
 
   return useMutation({
