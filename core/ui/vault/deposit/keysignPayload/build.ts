@@ -273,6 +273,18 @@ export const buildDepositKeysignPayload = async ({
     }
   }
 
+  // TRON freeze/unfreeze: self-transaction with amount in SUN
+  if (isOneOf(action, ['freeze', 'unfreeze'])) {
+    keysignPayload = create(KeysignPayloadSchema, {
+      ...keysignPayload,
+      contractPayload: { case: undefined },
+      toAddress: coin.address,
+      toAmount: hasAmount && amountUnits ? amountUnits : '0',
+    })
+
+    return keysignPayload
+  }
+
   if (
     isOneOf(action, [
       'leave',
