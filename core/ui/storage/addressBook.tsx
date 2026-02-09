@@ -1,7 +1,7 @@
 import { AddressBookItem } from '@core/ui/address-book/model'
 import { useCore } from '@core/ui/state/core'
 import { StorageKey } from '@core/ui/storage/StorageKey'
-import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
@@ -65,11 +65,11 @@ export const useAddressBookItemOrders = () => {
 export const useCreateAddressBookItemMutation = () => {
   const { createAddressBookItem } = useCore()
 
-  const invalidateQueries = useInvalidateQueries()
+  const refetchQueries = useRefetchQueries()
 
   const mutationFn: CreateAddressBookItemFunction = async input => {
     await createAddressBookItem(input)
-    await invalidateQueries([StorageKey.addressBookItems])
+    await refetchQueries([StorageKey.addressBookItems])
   }
 
   return useMutation({
@@ -80,11 +80,11 @@ export const useCreateAddressBookItemMutation = () => {
 export const useDeleteAddressBookItemMutation = () => {
   const { deleteAddressBookItem } = useCore()
 
-  const invalidateQueries = useInvalidateQueries()
+  const refetchQueries = useRefetchQueries()
 
   const mutationFn: DeleteAddressBookItemFunction = async input => {
     await deleteAddressBookItem(input)
-    await invalidateQueries([StorageKey.addressBookItems])
+    await refetchQueries([StorageKey.addressBookItems])
   }
 
   return useMutation({
@@ -95,11 +95,11 @@ export const useDeleteAddressBookItemMutation = () => {
 export const useUpdateAddressBookItemMutation = () => {
   const { updateAddressBookItem } = useCore()
 
-  const invalidateQueries = useInvalidateQueries()
+  const refetchQueries = useRefetchQueries()
 
   const mutationFn: UpdateAddressBookItemFunction = async input => {
     await updateAddressBookItem(input)
-    await invalidateQueries([StorageKey.addressBookItems])
+    await refetchQueries([StorageKey.addressBookItems])
   }
 
   return useMutation({

@@ -4,7 +4,7 @@ import { usePasscode } from '@core/ui/passcodeEncryption/state/passcode'
 import { useCore } from '@core/ui/state/core'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { useVaults } from '@core/ui/storage/vaults'
-import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { recordFromItems } from '@lib/utils/record/recordFromItems'
 import { recordMap } from '@lib/utils/record/recordMap'
@@ -12,7 +12,7 @@ import { useMutation } from '@tanstack/react-query'
 
 export const useDisablePasscodeMutation = () => {
   const { setPasscodeEncryption, updateVaultsKeyShares } = useCore()
-  const invalidateQueries = useInvalidateQueries()
+  const refetchQueries = useRefetchQueries()
   const [passcode, setPasscode] = usePasscode()
   const vaults = useVaults()
 
@@ -27,10 +27,10 @@ export const useDisablePasscodeMutation = () => {
       )
 
       await updateVaultsKeyShares(vaultsKeyShares)
-      await invalidateQueries([StorageKey.vaults])
+      await refetchQueries([StorageKey.vaults])
       setPasscode(null)
       await setPasscodeEncryption(null)
-      await invalidateQueries([StorageKey.passcodeEncryption])
+      await refetchQueries([StorageKey.passcodeEncryption])
     },
   })
 }

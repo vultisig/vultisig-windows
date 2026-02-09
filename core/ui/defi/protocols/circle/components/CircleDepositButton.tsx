@@ -1,20 +1,20 @@
-import { CircleMinusIcon } from '@lib/ui/icons/CircleMinusIcon'
+import { CirclePlusIcon } from '@lib/ui/icons/CirclePlusIcon'
 import { useTranslation } from 'react-i18next'
 
 import { DeFiActionButton } from '../../../components/DeFiActionButton'
 import { useCircleViewState } from '../state/circleViewState'
 
-export const CircleWithdrawButton = () => {
+export const CircleDepositButton = () => {
   const { t } = useTranslation()
   const [, setViewState] = useCircleViewState()
 
   return (
     <DeFiActionButton
-      kind="secondary"
-      onClick={() => setViewState('withdraw')}
-      icon={<CircleMinusIcon />}
+      kind="primary"
+      onClick={() => setViewState('deposit')}
+      icon={<CirclePlusIcon />}
     >
-      {t('circle.withdraw')}
+      {t('circle.deposit')}
     </DeFiActionButton>
   )
 }

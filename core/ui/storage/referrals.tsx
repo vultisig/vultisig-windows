@@ -1,4 +1,4 @@
-import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
@@ -44,22 +44,22 @@ export const useHasFinishedReferralsOnboardingQuery = () => {
 
 export const useSetFriendReferralMutation = (vaultId: string) => {
   const { setFriendReferral } = useCore()
-  const invalidate = useInvalidateQueries()
+  const refetch = useRefetchQueries()
   return useMutation({
     mutationFn: async (input: string) => {
       await setFriendReferral(vaultId, input)
-      await invalidate([StorageKey.friendReferral, vaultId])
+      await refetch([StorageKey.friendReferral, vaultId])
     },
   })
 }
 
 export const useSetHasFinishedReferralsOnboardingMutation = () => {
   const { setHasFinishedReferralsOnboarding } = useCore()
-  const invalidateQueries = useInvalidateQueries()
+  const refetchQueries = useRefetchQueries()
 
   const mutationFn: SetHasFinishedReferralsOnboardingFunction = async input => {
     await setHasFinishedReferralsOnboarding(input)
-    await invalidateQueries([StorageKey.hasFinishedReferralsOnboarding])
+    await refetchQueries([StorageKey.hasFinishedReferralsOnboarding])
   }
 
   return useMutation({

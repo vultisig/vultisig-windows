@@ -5,7 +5,7 @@ import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { useMutation } from '@tanstack/react-query'
 
 import { useAssertCurrentVaultId } from './currentVaultId'
@@ -50,7 +50,7 @@ export const useCreateCoinMutation = () => {
 
   const walletCore = useAssertWalletCore()
 
-  const invalidate = useInvalidateQueries()
+  const refetch = useRefetchQueries()
 
   const { createCoin } = useCore()
 
@@ -75,7 +75,7 @@ export const useCreateCoinMutation = () => {
 
     await createCoin({ vaultId, coin: accountCoin })
 
-    await invalidate([StorageKey.vaultsCoins])
+    await refetch([StorageKey.vaultsCoins])
 
     return accountCoin
   }
@@ -86,13 +86,13 @@ export const useCreateCoinMutation = () => {
 }
 
 export const useCreateCoinsMutation = () => {
-  const invalidate = useInvalidateQueries()
+  const refetch = useRefetchQueries()
 
   const { createCoins } = useCore()
 
   const mutationFn: CreateCoinsFunction = async input => {
     await createCoins(input)
-    await invalidate([StorageKey.vaultsCoins])
+    await refetch([StorageKey.vaultsCoins])
   }
 
   return useMutation({
@@ -101,7 +101,7 @@ export const useCreateCoinsMutation = () => {
 }
 
 export const useDeleteCoinMutation = () => {
-  const invalidate = useInvalidateQueries()
+  const refetch = useRefetchQueries()
 
   const { deleteCoin } = useCore()
 
@@ -109,7 +109,7 @@ export const useDeleteCoinMutation = () => {
 
   const mutationFn = async (coinKey: AccountCoinKey) => {
     await deleteCoin({ vaultId, coinKey })
-    await invalidate([StorageKey.vaultsCoins])
+    await refetch([StorageKey.vaultsCoins])
   }
 
   return useMutation({
