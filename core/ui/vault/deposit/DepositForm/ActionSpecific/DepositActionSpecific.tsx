@@ -6,6 +6,8 @@ import { ChainAction } from '../../ChainAction'
 import { useGetMayaChainBondableAssetsQuery } from '../../hooks/useGetMayaChainBondableAssetsQuery'
 import { useDepositFormHandlers } from '../../providers/DepositFormHandlersProvider'
 import { BondUnbondLPSpecific } from './BondUnboldLPSpecific/BondUnbondLPSpecific'
+import { FreezeSpecific } from './FreezeSpecific/FreezeSpecific'
+import { TronUnfreezeSpecific } from './FreezeSpecific/TronUnfreezeSpecific'
 import { IBCTransferSpecific } from './IBCTransferSpecific/IBCTransferSpecific'
 import { MergeSpecific } from './MergeSpecific/MergeSpecific'
 import { MintSpecific } from './MintUnmintSpecific/MintSpecific/MintSpecific'
@@ -46,6 +48,8 @@ export const DepositActionSpecific = ({ value }: ValueProp<ChainAction>) => {
         mint: () => <MintSpecific />,
         redeem: () => <RedeemSpecific />,
         withdraw_ruji_rewards: () => <WithdrawRujiRewardsSpecific />,
+        freeze: () => <FreezeSpecific />,
+        unfreeze: () => <TronUnfreezeSpecific />,
       }}
       else={() => null}
     />
