@@ -6,13 +6,13 @@ import { useCurrentVaultChainCoins } from '@core/ui/vault/state/currentVaultCoin
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { RefreshCwIcon } from '@lib/ui/icons/RefreshCwIcon'
-import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { useMutation } from '@tanstack/react-query'
 
 import { useCurrentVaultChain } from './useCurrentVaultChain'
 
 export const RefreshVaultChainBalance = () => {
-  const invalidateQueries = useInvalidateQueries()
+  const refetchQueries = useRefetchQueries()
 
   const chain = useCurrentVaultChain()
   const coins = useCurrentVaultChainCoins(chain)
@@ -21,7 +21,7 @@ export const RefreshVaultChainBalance = () => {
 
   const { mutate: refresh, isPending } = useMutation({
     mutationFn: () => {
-      return invalidateQueries(
+      return refetchQueries(
         getCoinPricesQueryKeys({
           coins,
           fiatCurrency,

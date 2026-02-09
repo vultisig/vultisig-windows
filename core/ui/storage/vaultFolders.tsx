@@ -1,6 +1,6 @@
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { useCore } from '@core/ui/state/core'
-import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { isEmpty } from '@lib/utils/array/isEmpty'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -62,7 +62,7 @@ export const useVaultFolder = (id: string) => {
 }
 
 export const useDeleteVaultFolderMutation = () => {
-  const invalidateQueries = useInvalidateQueries()
+  const refetchQueries = useRefetchQueries()
 
   const vaults = useVaults()
 
@@ -100,7 +100,7 @@ export const useDeleteVaultFolderMutation = () => {
         )
       }
 
-      await invalidateQueries([StorageKey.vaultFolders], [StorageKey.vaults])
+      await refetchQueries([StorageKey.vaultFolders], [StorageKey.vaults])
     },
   })
 }
@@ -108,11 +108,11 @@ export const useDeleteVaultFolderMutation = () => {
 export const useUpdateVaultFolderMutation = () => {
   const { updateVaultFolder } = useCore()
 
-  const invalidateQueries = useInvalidateQueries()
+  const refetchQueries = useRefetchQueries()
 
   const mutationFn: UpdateVaultFolderFunction = async input => {
     await updateVaultFolder(input)
-    await invalidateQueries([StorageKey.vaultFolders])
+    await refetchQueries([StorageKey.vaultFolders])
   }
 
   return useMutation({
@@ -127,7 +127,7 @@ type CreateVaultFolderInput = {
 }
 
 export const useCreateVaultFolderMutation = () => {
-  const invalidateQueries = useInvalidateQueries()
+  const refetchQueries = useRefetchQueries()
 
   const { createVaultFolder, updateVault } = useCore()
 
@@ -151,7 +151,7 @@ export const useCreateVaultFolderMutation = () => {
         )
       )
 
-      await invalidateQueries([StorageKey.vaultFolders], [StorageKey.vaults])
+      await refetchQueries([StorageKey.vaultFolders], [StorageKey.vaults])
     },
   })
 }

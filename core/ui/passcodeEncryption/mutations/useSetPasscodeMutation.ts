@@ -1,5 +1,5 @@
 import { getVaultId } from '@core/mpc/vault/Vault'
-import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { recordFromItems } from '@lib/utils/record/recordFromItems'
 import { recordMap } from '@lib/utils/record/recordMap'
 import { useMutation } from '@tanstack/react-query'
@@ -14,7 +14,7 @@ import { usePasscode } from '../state/passcode'
 
 export const useSetPasscodeMutation = () => {
   const { setPasscodeEncryption, updateVaultsKeyShares } = useCore()
-  const invalidateQueries = useInvalidateQueries()
+  const refetchQueries = useRefetchQueries()
   const vaults = useVaults()
   const [, setPasscode] = usePasscode()
 
@@ -34,13 +34,13 @@ export const useSetPasscodeMutation = () => {
       )
 
       await updateVaultsKeyShares(vaultsKeyShares)
-      await invalidateQueries([StorageKey.vaults])
+      await refetchQueries([StorageKey.vaults])
 
       setPasscode(passcode)
       await setPasscodeEncryption({
         encryptedSample,
       })
-      await invalidateQueries([StorageKey.passcodeEncryption])
+      await refetchQueries([StorageKey.passcodeEncryption])
     },
   })
 }
