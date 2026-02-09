@@ -4,7 +4,7 @@ import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { SearchInput } from '@core/ui/vault/chain/manage/shared/SearchInput'
-import { CircleHelpIcon } from '@lib/ui/icons/CircleHelpIcon'
+import { CryptoIcon } from '@lib/ui/icons/CryptoIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -42,7 +42,7 @@ export const AddCustomTokenPage = () => {
             <EmptyState
               icon={
                 <IconWrapper size={48} color="primary">
-                  <CircleHelpIcon />
+                  <CryptoIcon />
                 </IconWrapper>
               }
               title={t('no_token_found')}
