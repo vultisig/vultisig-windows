@@ -97,24 +97,27 @@ func (a *AgentService) SendMessage(vaultPubKey, message string) (string, error) 
 	a.busy = true
 	a.busyMu.Unlock()
 
-	defer func() {
+	apiKey := a.getApiKey()
+	if apiKey == "" {
 		a.busyMu.Lock()
 		a.busy = false
 		a.busyMu.Unlock()
-	}()
-
-	apiKey := a.getApiKey()
-	if apiKey == "" {
 		return "", ErrNoAPIKey
 	}
 
 	vault, err := a.store.GetVault(vaultPubKey)
 	if err != nil {
+		a.busyMu.Lock()
+		a.busy = false
+		a.busyMu.Unlock()
 		return "", fmt.Errorf("failed to get vault: %w", err)
 	}
 
 	coins, err := a.store.GetVaultCoins(vaultPubKey)
 	if err != nil {
+		a.busyMu.Lock()
+		a.busy = false
+		a.busyMu.Unlock()
 		return "", fmt.Errorf("failed to get vault coins: %w", err)
 	}
 	vault.Coins = coins
@@ -136,6 +139,12 @@ func (a *AgentService) SendMessage(vaultPubKey, message string) (string, error) 
 	a.busyMu.Unlock()
 
 	go func() {
+		defer func() {
+			a.busyMu.Lock()
+			a.busy = false
+			a.busyMu.Unlock()
+		}()
+
 		err := a.orchestrator.Run(ctx, conv, vault, apiKey)
 		if err != nil {
 			if errors.Is(err, context.Canceled) {

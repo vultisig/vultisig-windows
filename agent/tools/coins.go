@@ -48,7 +48,9 @@ func (t *GetCoinsTool) Execute(input map[string]any, ctx *ExecutionContext) (any
 
 	filterChain := ""
 	if chainRaw, ok := input["chain"]; ok && chainRaw != nil {
-		filterChain = chainRaw.(string)
+		if s, ok := chainRaw.(string); ok {
+			filterChain = s
+		}
 	}
 
 	var coins []map[string]any
@@ -132,22 +134,33 @@ func (t *AddCoinTool) Execute(input map[string]any, ctx *ExecutionContext) (any,
 	if !ok {
 		return nil, fmt.Errorf("chain is required")
 	}
-	chain := chainRaw.(string)
+	chain, ok := chainRaw.(string)
+	if !ok {
+		return nil, fmt.Errorf("chain must be a string")
+	}
 
 	tickerRaw, ok := input["ticker"]
 	if !ok {
 		return nil, fmt.Errorf("ticker is required")
 	}
-	ticker := strings.ToUpper(tickerRaw.(string))
+	tickerStr, ok := tickerRaw.(string)
+	if !ok {
+		return nil, fmt.Errorf("ticker must be a string")
+	}
+	ticker := strings.ToUpper(tickerStr)
 
 	var contractAddress string
 	if contractRaw, ok := input["contract_address"]; ok {
-		contractAddress = contractRaw.(string)
+		if s, ok := contractRaw.(string); ok {
+			contractAddress = s
+		}
 	}
 
 	isNative := contractAddress == ""
 	if isNativeRaw, ok := input["is_native"]; ok {
-		isNative = isNativeRaw.(bool)
+		if b, ok := isNativeRaw.(bool); ok {
+			isNative = b
+		}
 	}
 
 	decimals := int32(18)
@@ -297,7 +310,9 @@ func (t *RemoveCoinTool) Execute(input map[string]any, ctx *ExecutionContext) (a
 	var coinToRemove *storage.Coin
 
 	if coinIDRaw, ok := input["coin_id"]; ok {
-		coinID = coinIDRaw.(string)
+		if s, ok := coinIDRaw.(string); ok {
+			coinID = s
+		}
 		for _, coin := range ctx.Vault.Coins {
 			if coin.ID == coinID {
 				coinToRemove = &coin
@@ -312,8 +327,8 @@ func (t *RemoveCoinTool) Execute(input map[string]any, ctx *ExecutionContext) (a
 			return nil, fmt.Errorf("either coin_id or both chain and ticker are required")
 		}
 
-		chain := chainRaw.(string)
-		ticker := tickerRaw.(string)
+		chain, _ := chainRaw.(string)
+		ticker, _ := tickerRaw.(string)
 
 		for _, coin := range ctx.Vault.Coins {
 			if strings.EqualFold(coin.Chain, chain) && strings.EqualFold(coin.Ticker, ticker) {

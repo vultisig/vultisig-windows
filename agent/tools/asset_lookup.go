@@ -44,7 +44,11 @@ func (t *AssetLookupTool) Execute(input map[string]any, ctx *ExecutionContext) (
 		return nil, fmt.Errorf("asset is required")
 	}
 
-	assetStr := strings.TrimSpace(assetRaw.(string))
+	assetStr, ok := assetRaw.(string)
+	if !ok {
+		return nil, fmt.Errorf("asset must be a string")
+	}
+	assetStr = strings.TrimSpace(assetStr)
 	asset := shared.ResolveAsset(assetStr)
 
 	if asset == nil {

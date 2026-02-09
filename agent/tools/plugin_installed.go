@@ -46,7 +46,11 @@ func (t *PluginInstalledTool) Execute(input map[string]any, ctx *ExecutionContex
 		return nil, fmt.Errorf("plugin_id is required")
 	}
 
-	pluginID := shared.ResolvePluginID(pluginIDRaw.(string))
+	pluginIDStr, ok := pluginIDRaw.(string)
+	if !ok {
+		return nil, fmt.Errorf("plugin_id must be a string")
+	}
+	pluginID := shared.ResolvePluginID(pluginIDStr)
 
 	installed, err := t.client.CheckPluginInstalled(pluginID, ctx.VaultPubKey, ctx.AuthToken)
 	if err != nil {
@@ -61,7 +65,7 @@ func (t *PluginInstalledTool) Execute(input map[string]any, ctx *ExecutionContex
 			if installed {
 				return fmt.Sprintf("Plugin %s is installed for this vault", shared.GetPluginName(pluginID))
 			}
-			return fmt.Sprintf("Plugin %s is NOT installed. Use plugin_install to install it.", shared.GetPluginName(pluginID))
+			return fmt.Sprintf("Plugin %s is not installed.", shared.GetPluginName(pluginID))
 		}(),
 		"ui": map[string]any{
 			"title": "Plugin Status",

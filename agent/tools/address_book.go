@@ -94,7 +94,7 @@ func (t *AddAddressBookEntryTool) RequiresPassword() bool {
 }
 
 func (t *AddAddressBookEntryTool) RequiresConfirmation() bool {
-	return true
+	return false
 }
 
 func (t *AddAddressBookEntryTool) Execute(input map[string]any, ctx *ExecutionContext) (any, error) {
@@ -102,19 +102,28 @@ func (t *AddAddressBookEntryTool) Execute(input map[string]any, ctx *ExecutionCo
 	if !ok {
 		return nil, fmt.Errorf("title is required")
 	}
-	title := titleRaw.(string)
+	title, ok := titleRaw.(string)
+	if !ok {
+		return nil, fmt.Errorf("title must be a string")
+	}
 
 	addressRaw, ok := input["address"]
 	if !ok {
 		return nil, fmt.Errorf("address is required")
 	}
-	address := addressRaw.(string)
+	address, ok := addressRaw.(string)
+	if !ok {
+		return nil, fmt.Errorf("address must be a string")
+	}
 
 	chainRaw, ok := input["chain"]
 	if !ok {
 		return nil, fmt.Errorf("chain is required")
 	}
-	chain := chainRaw.(string)
+	chain, ok := chainRaw.(string)
+	if !ok {
+		return nil, fmt.Errorf("chain must be a string")
+	}
 
 	item := storage.AddressBookItem{
 		Title:   title,
@@ -167,7 +176,7 @@ func (t *RemoveAddressBookEntryTool) RequiresPassword() bool {
 }
 
 func (t *RemoveAddressBookEntryTool) RequiresConfirmation() bool {
-	return true
+	return false
 }
 
 func (t *RemoveAddressBookEntryTool) Execute(input map[string]any, ctx *ExecutionContext) (any, error) {
@@ -175,7 +184,10 @@ func (t *RemoveAddressBookEntryTool) Execute(input map[string]any, ctx *Executio
 	if !ok {
 		return nil, fmt.Errorf("id is required")
 	}
-	id := idRaw.(string)
+	id, ok := idRaw.(string)
+	if !ok {
+		return nil, fmt.Errorf("id must be a string")
+	}
 
 	item, err := t.store.GetAddressBookItem(id)
 	if err != nil {

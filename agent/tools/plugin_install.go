@@ -91,7 +91,11 @@ func (t *PluginInstallTool) Execute(input map[string]any, ctx *ExecutionContext)
 		return nil, fmt.Errorf("plugin_id is required")
 	}
 
-	pluginID := shared.ResolvePluginID(pluginIDRaw.(string))
+	pluginIDStr, ok := pluginIDRaw.(string)
+	if !ok {
+		return nil, fmt.Errorf("plugin_id must be a string")
+	}
+	pluginID := shared.ResolvePluginID(pluginIDStr)
 	pluginName := shared.GetPluginName(pluginID)
 	addLog(fmt.Sprintf("Resolved plugin: %s (%s)", pluginName, pluginID))
 
@@ -445,7 +449,10 @@ func hasServerParty(parties []string) bool {
 }
 
 func toLibType(vault *storage.Vault) int {
-	if vault != nil && (len(vault.ChainPublicKeys) > 0 || len(vault.ChainKeyShares) > 0) {
+	if vault == nil {
+		return libTypeGG20
+	}
+	if len(vault.ChainPublicKeys) > 0 || len(vault.ChainKeyShares) > 0 {
 		return libTypeKeyImport
 	}
 	libType := strings.ToUpper(strings.TrimSpace(vault.LibType))

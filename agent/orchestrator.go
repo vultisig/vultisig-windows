@@ -3,6 +3,7 @@ package agent
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strings"
 	"time"
@@ -348,7 +349,7 @@ func (o *Orchestrator) executeToolWithRetry(ctx context.Context, conv *Conversat
 		}
 		lastErr = err
 
-		if err == tools.ErrPasswordRequired {
+		if errors.Is(err, tools.ErrPasswordRequired) {
 			operation := toolOperationNames[tc.Name]
 			if operation == "" {
 				operation = "TSS signing"
@@ -369,7 +370,7 @@ func (o *Orchestrator) executeToolWithRetry(ctx context.Context, conv *Conversat
 			continue
 		}
 
-		if err == tools.ErrConfirmationRequired {
+		if errors.Is(err, tools.ErrConfirmationRequired) {
 			details := o.buildConfirmationDetails(tc)
 			confirmed, confErr := o.agent.waitForConfirmation(ctx, conv.ID, tc.Name, details, tc.ID)
 			if confErr != nil {
@@ -522,18 +523,39 @@ func buildPolicyConfirmation(tc *ToolCall) string {
 		return sb.String()
 	}
 
-	fromStr, fromChain, fromToken := resolveAssetField(config, "from")
-	if fromStr != "" {
-		amountStr := ""
-		if amount, ok := config["fromAmount"]; ok {
-			amountStr = shared.FormatHumanAmount(fmt.Sprintf("%v", amount), fromChain, fromToken) + " "
+	if pluginID == "vultisig-recurring-sends-0000" {
+		fromStr, fromChain, fromToken := resolveAssetField(config, "asset")
+		if fromStr != "" {
+			fmt.Fprintf(&sb, "Asset: %s\n", fromStr)
 		}
-		fmt.Fprintf(&sb, "From: %s%s\n", amountStr, fromStr)
-	}
+		if recipients, ok := config["recipients"].([]any); ok && len(recipients) > 0 {
+			if r, ok := recipients[0].(map[string]any); ok {
+				if addr, ok := r["toAddress"]; ok {
+					fmt.Fprintf(&sb, "To: %v\n", addr)
+				}
+				if amt, ok := r["amount"]; ok {
+					amountStr := shared.FormatHumanAmount(fmt.Sprintf("%v", amt), fromChain, fromToken)
+					fmt.Fprintf(&sb, "Amount: %s\n", amountStr)
+				}
+			}
+			if len(recipients) > 1 {
+				fmt.Fprintf(&sb, "Recipients: %d\n", len(recipients))
+			}
+		}
+	} else {
+		fromStr, fromChain, fromToken := resolveAssetField(config, "from")
+		if fromStr != "" {
+			amountStr := ""
+			if amount, ok := config["fromAmount"]; ok {
+				amountStr = shared.FormatHumanAmount(fmt.Sprintf("%v", amount), fromChain, fromToken) + " "
+			}
+			fmt.Fprintf(&sb, "From: %s%s\n", amountStr, fromStr)
+		}
 
-	toStr, _, _ := resolveAssetField(config, "to")
-	if toStr != "" {
-		fmt.Fprintf(&sb, "To: %s\n", toStr)
+		toStr, _, _ := resolveAssetField(config, "to")
+		if toStr != "" {
+			fmt.Fprintf(&sb, "To: %s\n", toStr)
+		}
 	}
 
 	if freq, ok := config["frequency"]; ok {

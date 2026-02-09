@@ -4,14 +4,12 @@ import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { ErrorBoundary } from '@lib/ui/errors/ErrorBoundary'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useViewState } from '@lib/ui/navigation/hooks/useViewState'
-import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
-
-type AgentChatViewState = { conversationId?: string; initialMessage?: string }
-import { ErrorBoundary } from '@lib/ui/errors/ErrorBoundary'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
+import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -29,6 +27,8 @@ import { ConversationStarters } from './ConversationStarters'
 import { PasswordPrompt } from './PasswordPrompt'
 import { StreamingText } from './StreamingText'
 import { ThinkingIndicator } from './ThinkingIndicator'
+
+type AgentChatViewState = { conversationId?: string; initialMessage?: string }
 
 export const AgentChatPage: FC = () => {
   const { t } = useTranslation()

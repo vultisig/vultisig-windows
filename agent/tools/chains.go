@@ -102,7 +102,10 @@ func (t *GetChainAddressTool) Execute(input map[string]any, ctx *ExecutionContex
 	if !ok {
 		return nil, fmt.Errorf("chain is required")
 	}
-	chain := chainRaw.(string)
+	chain, ok := chainRaw.(string)
+	if !ok {
+		return nil, fmt.Errorf("chain must be a string")
+	}
 
 	chainLower := strings.ToLower(chain)
 	for _, coin := range ctx.Vault.Coins {

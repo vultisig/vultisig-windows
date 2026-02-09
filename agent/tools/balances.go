@@ -50,10 +50,14 @@ func (t *GetBalancesTool) Execute(input map[string]any, ctx *ExecutionContext) (
 
 	var chainFilter, tickerFilter string
 	if chainRaw, ok := input["chain"]; ok && chainRaw != nil {
-		chainFilter = strings.ToLower(chainRaw.(string))
+		if s, ok := chainRaw.(string); ok {
+			chainFilter = strings.ToLower(s)
+		}
 	}
 	if tickerRaw, ok := input["ticker"]; ok && tickerRaw != nil {
-		tickerFilter = strings.ToUpper(tickerRaw.(string))
+		if s, ok := tickerRaw.(string); ok {
+			tickerFilter = strings.ToUpper(s)
+		}
 	}
 
 	var coins []map[string]any

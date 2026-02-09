@@ -64,13 +64,17 @@ export const AgentDklsBridge = () => {
         )
       } catch (err) {
         const message = err instanceof Error ? err.message : String(err)
-        await agentService.ProvideDKLSSignature(
-          data.requestId,
-          '',
-          '',
-          '',
-          message
-        )
+        try {
+          await agentService.ProvideDKLSSignature(
+            data.requestId,
+            '',
+            '',
+            '',
+            message
+          )
+        } catch {
+          // best-effort error notification
+        }
       }
     }
 

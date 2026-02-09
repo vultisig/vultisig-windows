@@ -46,7 +46,11 @@ func (t *PluginSpecTool) Execute(input map[string]any, ctx *ExecutionContext) (a
 		return nil, fmt.Errorf("plugin_id is required")
 	}
 
-	pluginID := shared.ResolvePluginID(pluginIDRaw.(string))
+	pluginIDStr, ok := pluginIDRaw.(string)
+	if !ok {
+		return nil, fmt.Errorf("plugin_id must be a string")
+	}
+	pluginID := shared.ResolvePluginID(pluginIDStr)
 
 	spec, err := t.client.GetRecipeSpecification(pluginID)
 	if err != nil {
@@ -58,7 +62,7 @@ func (t *PluginSpecTool) Execute(input map[string]any, ctx *ExecutionContext) (a
 		return nil, fmt.Errorf("failed to get plugin info: %w", err)
 	}
 
-	return map[string]any{
+	result := map[string]any{
 		"plugin_id":             pluginID,
 		"plugin_name":           plugin.Title,
 		"description":           spec.Description,
@@ -78,5 +82,14 @@ func (t *PluginSpecTool) Execute(input map[string]any, ctx *ExecutionContext) (a
 				},
 			},
 		},
-	}, nil
+	}
+
+	pricingText := formatPluginPricing(plugin.Pricing)
+	if pricingText != "" {
+		result["pricing"] = pricingText
+	} else {
+		result["pricing"] = "Free"
+	}
+
+	return result, nil
 }

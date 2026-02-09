@@ -46,7 +46,11 @@ func (t *PluginUninstallTool) Execute(input map[string]any, ctx *ExecutionContex
 		return nil, fmt.Errorf("plugin_id is required")
 	}
 
-	pluginID := shared.ResolvePluginID(pluginIDRaw.(string))
+	pluginIDStr, ok := pluginIDRaw.(string)
+	if !ok {
+		return nil, fmt.Errorf("plugin_id must be a string")
+	}
+	pluginID := shared.ResolvePluginID(pluginIDStr)
 	pluginName := shared.GetPluginName(pluginID)
 
 	err := t.client.UninstallPlugin(pluginID, ctx.AuthToken)

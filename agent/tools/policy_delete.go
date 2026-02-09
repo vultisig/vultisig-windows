@@ -57,7 +57,10 @@ func (t *PolicyDeleteTool) Execute(input map[string]any, ctx *ExecutionContext) 
 		return nil, fmt.Errorf("policy_id is required")
 	}
 
-	policyID := policyIDRaw.(string)
+	policyID, ok := policyIDRaw.(string)
+	if !ok {
+		return nil, fmt.Errorf("policy_id must be a string")
+	}
 
 	policyDetails, err := t.client.GetPolicy(policyID, ctx.AuthToken)
 	if err != nil {

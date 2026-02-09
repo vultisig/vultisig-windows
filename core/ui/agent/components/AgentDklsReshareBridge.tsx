@@ -109,15 +109,19 @@ export const AgentDklsReshareBridge = () => {
         )
       } catch (err) {
         const message = err instanceof Error ? err.message : String(err)
-        await agentService.ProvideDKLSReshare(
-          data.requestId,
-          '',
-          '',
-          '',
-          '',
-          '',
-          message
-        )
+        try {
+          await agentService.ProvideDKLSReshare(
+            data.requestId,
+            '',
+            '',
+            '',
+            '',
+            '',
+            message
+          )
+        } catch {
+          // best-effort error notification
+        }
       }
     }
 

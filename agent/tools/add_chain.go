@@ -111,7 +111,10 @@ func (t *AddChainTool) Execute(input map[string]any, ctx *ExecutionContext) (any
 	if !ok {
 		return nil, fmt.Errorf("chain is required")
 	}
-	chainInput := chainRaw.(string)
+	chainInput, ok := chainRaw.(string)
+	if !ok {
+		return nil, fmt.Errorf("chain must be a string")
+	}
 
 	chain, valid := resolveChainName(chainInput)
 	if !valid {

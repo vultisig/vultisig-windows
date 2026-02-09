@@ -53,12 +53,18 @@ func (t *PolicyListTool) RequiresConfirmation() bool {
 func (t *PolicyListTool) Execute(input map[string]any, ctx *ExecutionContext) (any, error) {
 	active := true
 	if activeRaw, ok := input["active"]; ok {
-		active = activeRaw.(bool)
+		if b, ok := activeRaw.(bool); ok {
+			active = b
+		}
 	}
 
 	var pluginIDs []string
 	if pluginIDRaw, ok := input["plugin_id"]; ok {
-		pluginIDs = append(pluginIDs, shared.ResolvePluginID(pluginIDRaw.(string)))
+		pluginIDStr, ok := pluginIDRaw.(string)
+		if !ok {
+			return nil, fmt.Errorf("plugin_id must be a string")
+		}
+		pluginIDs = append(pluginIDs, shared.ResolvePluginID(pluginIDStr))
 	} else {
 		for _, p := range shared.KnownPlugins {
 			pluginIDs = append(pluginIDs, p.ID)

@@ -71,13 +71,30 @@ func (t *PolicyAddTool) Execute(input map[string]any, ctx *ExecutionContext) (an
 		return nil, fmt.Errorf("configuration is required")
 	}
 
-	pluginID := shared.ResolvePluginID(pluginIDRaw.(string))
-	config := configRaw.(map[string]any)
+	pluginIDStr, ok := pluginIDRaw.(string)
+	if !ok {
+		return nil, fmt.Errorf("plugin_id must be a string")
+	}
+	pluginID := shared.ResolvePluginID(pluginIDStr)
+	config, ok := configRaw.(map[string]any)
+	if !ok {
+		return nil, fmt.Errorf("configuration must be an object")
+	}
 	billing := normalizeBilling(input["billing"])
+
+	plugin, err := t.client.GetPlugin(pluginID)
+	if err != nil {
+		t.logger.WithError(err).Warn("Failed to fetch plugin info")
+	}
+
+	if len(billing) == 0 && plugin != nil && len(plugin.Pricing) > 0 {
+		billing = billingFromPricing(plugin.Pricing)
+	}
 
 	suggest, err := t.client.SuggestPolicy(pluginID, config)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get policy rules from plugin: %w", err)
+		t.logger.WithError(err).Warn("SuggestPolicy failed, using empty rules fallback")
+		suggest = &rtypes.PolicySuggest{}
 	}
 
 	recipeBase64, err := t.buildProtobufRecipe(pluginID, config, suggest)
@@ -86,7 +103,7 @@ func (t *PolicyAddTool) Execute(input map[string]any, ctx *ExecutionContext) (an
 	}
 
 	policyVersion := 0
-	pluginVersion := t.resolvePluginVersion(pluginID)
+	pluginVersion := resolveVersionFromPlugin(plugin)
 	messageToSign := fmt.Sprintf("%s*#*%s*#*%d*#*%s", recipeBase64, ctx.VaultPubKey, policyVersion, pluginVersion)
 
 	t.logger.WithField("message", messageToSign).Info("Signing policy message")
@@ -129,7 +146,7 @@ func (t *PolicyAddTool) Execute(input map[string]any, ctx *ExecutionContext) (an
 		"policy_id":   resp.ID,
 		"plugin_id":   pluginID,
 		"plugin_name": shared.GetPluginName(pluginID),
-		"message":     fmt.Sprintf("Policy created successfully! ID: %s. Use policy_status to check execution schedule.", resp.ID),
+		"message":     fmt.Sprintf("Policy created successfully (ID: %s).", resp.ID),
 		"ui": map[string]any{
 			"title": "Policy Created",
 			"actions": []map[string]any{
@@ -143,27 +160,46 @@ func (t *PolicyAddTool) Execute(input map[string]any, ctx *ExecutionContext) (an
 	}
 
 	var fromChain, fromToken string
-	if fromObj, ok := config["from"].(map[string]any); ok {
-		fromChain = fmt.Sprintf("%v", fromObj["chain"])
-		if t, ok := fromObj["token"]; ok && t != nil {
-			fromToken = fmt.Sprintf("%v", t)
+	if pluginID == sendsPluginID {
+		if assetObj, ok := config["asset"].(map[string]any); ok {
+			fromChain = fmt.Sprintf("%v", assetObj["chain"])
+			if t, ok := assetObj["token"]; ok && t != nil {
+				fromToken = fmt.Sprintf("%v", t)
+			}
+			result["from_asset"] = shared.ResolveTickerByChainAndToken(fromChain, fromToken)
+			result["from_chain"] = fromChain
 		}
-		result["from_asset"] = shared.ResolveTickerByChainAndToken(fromChain, fromToken)
-		result["from_chain"] = fromChain
-	}
-
-	if toObj, ok := config["to"].(map[string]any); ok {
-		chain := fmt.Sprintf("%v", toObj["chain"])
-		token := ""
-		if t, ok := toObj["token"]; ok && t != nil {
-			token = fmt.Sprintf("%v", t)
+		if recipients, ok := config["recipients"].([]any); ok && len(recipients) > 0 {
+			if r, ok := recipients[0].(map[string]any); ok {
+				if addr, ok := r["toAddress"]; ok {
+					result["to_address"] = fmt.Sprintf("%v", addr)
+				}
+				if amt, ok := r["amount"]; ok {
+					result["amount"] = shared.FormatHumanAmount(fmt.Sprintf("%v", amt), fromChain, fromToken)
+				}
+			}
 		}
-		result["to_asset"] = shared.ResolveTickerByChainAndToken(chain, token)
-		result["to_chain"] = chain
-	}
-
-	if amount, ok := config["fromAmount"]; ok {
-		result["amount"] = shared.FormatHumanAmount(fmt.Sprintf("%v", amount), fromChain, fromToken)
+	} else {
+		if fromObj, ok := config["from"].(map[string]any); ok {
+			fromChain = fmt.Sprintf("%v", fromObj["chain"])
+			if t, ok := fromObj["token"]; ok && t != nil {
+				fromToken = fmt.Sprintf("%v", t)
+			}
+			result["from_asset"] = shared.ResolveTickerByChainAndToken(fromChain, fromToken)
+			result["from_chain"] = fromChain
+		}
+		if toObj, ok := config["to"].(map[string]any); ok {
+			chain := fmt.Sprintf("%v", toObj["chain"])
+			token := ""
+			if t, ok := toObj["token"]; ok && t != nil {
+				token = fmt.Sprintf("%v", t)
+			}
+			result["to_asset"] = shared.ResolveTickerByChainAndToken(chain, token)
+			result["to_chain"] = chain
+		}
+		if amount, ok := config["fromAmount"]; ok {
+			result["amount"] = shared.FormatHumanAmount(fmt.Sprintf("%v", amount), fromChain, fromToken)
+		}
 	}
 
 	if freq, ok := config["frequency"]; ok {
@@ -186,11 +222,9 @@ func normalizeBilling(raw any) []any {
 	return nil
 }
 
-func (t *PolicyAddTool) resolvePluginVersion(pluginID string) string {
+func resolveVersionFromPlugin(plugin *verifier.Plugin) string {
 	const fallbackVersion = "1.0.0"
-	plugin, err := t.client.GetPlugin(pluginID)
-	if err != nil {
-		t.logger.WithError(err).WithField("plugin_id", pluginID).Warn("Failed to fetch plugin version, using fallback")
+	if plugin == nil {
 		return fallbackVersion
 	}
 	if plugin.Version != "" {
@@ -202,38 +236,39 @@ func (t *PolicyAddTool) resolvePluginVersion(pluginID string) string {
 	return fallbackVersion
 }
 
-func (t *PolicyAddTool) buildProtobufRecipe(pluginID string, config map[string]any, suggest *verifier.PolicySuggest) (string, error) {
+func billingFromPricing(pricing []verifier.AppPricing) []any {
+	var billing []any
+	for _, p := range pricing {
+		if p.Amount <= 0 {
+			continue
+		}
+		entry := map[string]any{
+			"amount": p.Amount,
+			"asset":  p.Asset,
+		}
+		if p.Type != "" {
+			entry["type"] = p.Type
+		}
+		if p.Frequency != "" {
+			entry["frequency"] = p.Frequency
+		}
+		billing = append(billing, entry)
+	}
+	return billing
+}
+
+func (t *PolicyAddTool) buildProtobufRecipe(pluginID string, config map[string]any, suggest *rtypes.PolicySuggest) (string, error) {
 	configuration, err := structpb.NewStruct(config)
 	if err != nil {
 		return "", fmt.Errorf("failed to create struct: %w", err)
 	}
 
-	var rules []*rtypes.Rule
-	for _, r := range suggest.Rules {
-		effect := rtypes.Effect_EFFECT_ALLOW
-		if r.Effect == "deny" {
-			effect = rtypes.Effect_EFFECT_DENY
-		}
-		rules = append(rules, &rtypes.Rule{
-			Resource:    r.Resource,
-			Effect:      effect,
-			Description: r.Description,
-		})
-	}
-
 	policy := &rtypes.Policy{
-		Id:            pluginID,
-		Configuration: configuration,
-		Rules:         rules,
-	}
-
-	if suggest.RateLimitWindow > 0 {
-		window := uint32(suggest.RateLimitWindow)
-		policy.RateLimitWindow = &window
-	}
-	if suggest.MaxTxsPerWindow > 0 {
-		maxTxs := uint32(suggest.MaxTxsPerWindow)
-		policy.MaxTxsPerWindow = &maxTxs
+		Id:              pluginID,
+		Configuration:   configuration,
+		Rules:           suggest.Rules,
+		RateLimitWindow: suggest.RateLimitWindow,
+		MaxTxsPerWindow: suggest.MaxTxsPerWindow,
 	}
 
 	policyBytes, err := proto.Marshal(policy)

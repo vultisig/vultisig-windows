@@ -50,6 +50,7 @@ export type PasswordRequiredEvent = {
   conversationId: string
   toolName: string
   operation: string
+  requestId: string
 }
 
 export type ConfirmationRequiredEvent = {
@@ -57,6 +58,7 @@ export type ConfirmationRequiredEvent = {
   action: string
   details: string
   toolCallId: string
+  requestId: string
 }
 
 export type ToolProgressEvent = {
