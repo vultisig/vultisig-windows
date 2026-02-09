@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/wailsapp/wails/v2/pkg/runtime"
+
 	"github.com/vultisig/vultisig-win/storage"
 )
 
@@ -107,7 +109,7 @@ func (t *RenameVaultTool) RequiresPassword() bool {
 }
 
 func (t *RenameVaultTool) RequiresConfirmation() bool {
-	return true
+	return false
 }
 
 func (t *RenameVaultTool) Execute(input map[string]any, ctx *ExecutionContext) (any, error) {
@@ -153,6 +155,8 @@ func (t *RenameVaultTool) Execute(input map[string]any, ctx *ExecutionContext) (
 	if err != nil {
 		return nil, fmt.Errorf("failed to save vault: %w", err)
 	}
+
+	runtime.EventsEmit(ctx.AppCtx, "vault:coins-changed")
 
 	return map[string]any{
 		"success":  true,
