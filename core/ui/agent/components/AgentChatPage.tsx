@@ -258,7 +258,7 @@ export const AgentChatPage: FC = () => {
     if (!window.runtime) return
 
     const cleanup = window.runtime.EventsOn('vault:coins-changed', () => {
-      invalidateQueries([StorageKey.vaultsCoins, StorageKey.vaults])
+      invalidateQueries([StorageKey.vaultsCoins], [StorageKey.vaults])
     })
 
     return cleanup
