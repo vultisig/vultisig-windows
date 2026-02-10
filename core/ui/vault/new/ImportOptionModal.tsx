@@ -1,6 +1,6 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { DownloadSeedphraseIcon } from '@lib/ui/icons/DownloadSeedphraseIcon'
 import { FileTextIcon } from '@lib/ui/icons/FileTextIcon'
-import { WandSparklesIcon } from '@lib/ui/icons/WandSparklesIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { OnCloseProp } from '@lib/ui/props'
@@ -18,7 +18,7 @@ export const ImportOptionModal = ({ onClose }: OnCloseProp) => {
       <VStack gap={14}>
         <ImportOption
           badge={<NewBadge />}
-          icon={<WandSparklesIcon />}
+          icon={<DownloadSeedphraseIcon />}
           title={t('import_seedphrase')}
           onClick={() => {
             navigate({ id: 'importSeedphrase' })
