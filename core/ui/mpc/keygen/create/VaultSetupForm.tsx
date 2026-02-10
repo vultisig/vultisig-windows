@@ -8,6 +8,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
+import { match } from '@lib/utils/match'
 import { validateEmail } from '@lib/utils/validation/validateEmail'
 import { TFunction } from 'i18next'
 import { useEffect, useMemo, useState } from 'react'
@@ -106,6 +107,7 @@ export const VaultSetupForm = (props: VaultSetupFormProps) => {
     watch,
     formState: { errors, isValid },
     trigger,
+    setFocus,
   } = useForm<FormValues>({
     defaultValues: {
       name: generatedName,
@@ -122,6 +124,18 @@ export const VaultSetupForm = (props: VaultSetupFormProps) => {
   })
 
   const values = watch()
+
+  useEffect(() => {
+    setFocus('name')
+  }, [setFocus])
+
+  const isNextDisabled = !isFast
+    ? !isValid
+    : match(expandedSection, {
+        name: () => !values.name || !!errors.name,
+        email: () => !values.email || !!errors.email,
+        password: () => !isValid,
+      })
 
   const handleFormSubmit = (data: FormValues) => {
     if (isFast) {
@@ -149,27 +163,17 @@ export const VaultSetupForm = (props: VaultSetupFormProps) => {
     if (expandedSection === 'name') {
       if (await trigger('name')) {
         setExpandedSection('email')
+        setFocus('email')
       }
     } else if (expandedSection === 'email') {
       if (await trigger('email')) {
         setExpandedSection('password')
+        setFocus('password')
       }
     } else {
       handleSubmit(handleFormSubmit)()
     }
   }
-
-  useEffect(() => {
-    if (!isFast) return
-
-    if (errors.name) {
-      setExpandedSection('name')
-    } else if (errors.email) {
-      setExpandedSection('email')
-    } else if (errors.password || errors.confirmPassword) {
-      setExpandedSection('password')
-    }
-  }, [errors, isFast])
 
   const getButtonText = () => {
     if (!isFast) return t('next')
@@ -234,7 +238,7 @@ export const VaultSetupForm = (props: VaultSetupFormProps) => {
         )}
       </PageContent>
       <PageFooter>
-        <Button disabled={!isValid} type="button" onClick={handleNext}>
+        <Button disabled={isNextDisabled} type="button" onClick={handleNext}>
           {getButtonText()}
         </Button>
       </PageFooter>

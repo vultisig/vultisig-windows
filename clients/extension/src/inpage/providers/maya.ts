@@ -35,7 +35,7 @@ export class MAYAChain extends BaseCosmosChain {
             data: tx.data ?? tx.memo,
           }
 
-          const { hash } = await callPopup(
+          const [{ hash }] = await callPopup(
             {
               sendTx: {
                 keysign: {
@@ -53,7 +53,7 @@ export class MAYAChain extends BaseCosmosChain {
           return hash
         },
         deposit: async ([tx]: [DepositTransactionDetails]) => {
-          const { hash } = await callPopup(
+          const [{ hash }] = await callPopup(
             {
               sendTx: {
                 keysign: {

@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@lib/utils": "workspace:^",
-    "prettier": "^3.8.0"
+    "prettier": "^3.8.1"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
