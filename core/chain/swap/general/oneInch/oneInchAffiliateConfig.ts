@@ -1,3 +1,3 @@
 export const oneInchAffiliateConfig = {
-  referrer: '0x8E247a480449c84a5fDD25974A8501f3EFa4ABb9',
+  referrer: '0xa4a4f610e89488eb4ecc6c63069f241a54485269',
 }
