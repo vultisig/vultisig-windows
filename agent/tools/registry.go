@@ -87,6 +87,7 @@ func (r *Registry) registerTools() {
 		NewGetCoinsTool(),
 		NewAddCoinTool(r.store),
 		NewAddChainTool(r.store),
+		NewRemoveChainTool(r.store),
 		NewRemoveCoinTool(r.store),
 		NewGetAddressBookTool(r.store),
 		NewAddAddressBookEntryTool(r.store),

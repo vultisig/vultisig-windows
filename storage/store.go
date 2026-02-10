@@ -481,6 +481,14 @@ func (s *Store) DeleteCoin(vaultPublicKeyECDSA, coinID string) error {
 	return err
 }
 
+func (s *Store) DeleteCoinsByChain(vaultPublicKeyECDSA, chain string) (int64, error) {
+	result, err := s.db.Exec("DELETE FROM coins WHERE public_key_ecdsa = ? AND chain = ?", vaultPublicKeyECDSA, chain)
+	if err != nil {
+		return 0, err
+	}
+	return result.RowsAffected()
+}
+
 func (s *Store) GetVaultCoins(vaultPublicKeyECDSA string) ([]Coin, error) {
 	query := `SELECT id, chain, address, ticker, contract_address, is_native_token, logo, price_provider_id, decimals
 		FROM coins WHERE public_key_ecdsa = ?`

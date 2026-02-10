@@ -69,6 +69,87 @@ func resolveChainName(input string) (string, bool) {
 	return "", false
 }
 
+type RemoveChainTool struct {
+	store *storage.Store
+}
+
+func NewRemoveChainTool(store *storage.Store) *RemoveChainTool {
+	return &RemoveChainTool{store: store}
+}
+
+func (t *RemoveChainTool) Name() string {
+	return "remove_chain"
+}
+
+func (t *RemoveChainTool) Description() string {
+	return "Remove a blockchain chain and all its coins/tokens from the current vault."
+}
+
+func (t *RemoveChainTool) InputSchema() map[string]any {
+	return map[string]any{
+		"chain": map[string]any{
+			"type":        "string",
+			"description": "The blockchain chain name to remove (e.g., 'Sui', 'Solana', 'Ethereum')",
+		},
+	}
+}
+
+func (t *RemoveChainTool) RequiresPassword() bool {
+	return false
+}
+
+func (t *RemoveChainTool) RequiresConfirmation() bool {
+	return false
+}
+
+func (t *RemoveChainTool) Execute(input map[string]any, ctx *ExecutionContext) (any, error) {
+	if ctx.Vault == nil {
+		return nil, fmt.Errorf("vault not available in context")
+	}
+
+	chainRaw, ok := input["chain"]
+	if !ok {
+		return nil, fmt.Errorf("chain is required")
+	}
+	chainInput, ok := chainRaw.(string)
+	if !ok {
+		return nil, fmt.Errorf("chain must be a string")
+	}
+
+	chain, valid := resolveChainName(chainInput)
+	if !valid {
+		return nil, fmt.Errorf("unsupported chain '%s'", chainInput)
+	}
+
+	found := false
+	for _, coin := range ctx.Vault.Coins {
+		if strings.EqualFold(coin.Chain, chain) {
+			found = true
+			break
+		}
+	}
+	if !found {
+		return map[string]any{
+			"success": false,
+			"message": fmt.Sprintf("Chain %s is not in the vault", chain),
+		}, nil
+	}
+
+	removed, err := t.store.DeleteCoinsByChain(ctx.VaultPubKey, chain)
+	if err != nil {
+		return nil, fmt.Errorf("failed to remove chain %s: %w", chain, err)
+	}
+
+	runtime.EventsEmit(ctx.AppCtx, "vault:coins-changed")
+
+	return map[string]any{
+		"success":       true,
+		"chain":         chain,
+		"coins_removed": removed,
+		"message":       fmt.Sprintf("Successfully removed %s chain and %d coin(s) from vault", chain, removed),
+	}, nil
+}
+
 type AddChainTool struct {
 	store *storage.Store
 }
