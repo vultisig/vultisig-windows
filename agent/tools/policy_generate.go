@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/vultisig/vultisig-win/agent/shared"
 	"github.com/vultisig/vultisig-win/storage"
@@ -125,8 +126,13 @@ func (t *PolicyGenerateTool) Execute(input map[string]any, ctx *ExecutionContext
 	return result, nil
 }
 
+func immediateStartDate() string {
+	return time.Now().UTC().Add(time.Minute).Truncate(time.Minute).Format(time.RFC3339)
+}
+
 func buildSendsConfig(input map[string]any, ctx *ExecutionContext) map[string]any {
 	config := make(map[string]any)
+	config["startDate"] = immediateStartDate()
 
 	var fromAsset *shared.AssetInfo
 	if fromAssetRaw, ok := input["from_asset"]; ok {
@@ -165,6 +171,7 @@ func buildSendsConfig(input map[string]any, ctx *ExecutionContext) map[string]an
 
 func buildSwapConfig(input map[string]any, ctx *ExecutionContext) map[string]any {
 	config := make(map[string]any)
+	config["startDate"] = immediateStartDate()
 
 	var fromAsset *shared.AssetInfo
 	if fromAssetRaw, ok := input["from_asset"]; ok {
