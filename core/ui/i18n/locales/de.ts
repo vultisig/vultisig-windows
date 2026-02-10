@@ -817,6 +817,7 @@ export const de = {
   soon: 'Bald',
   stake: 'Einsatz',
   staked_amount: 'Einsatzbetrag',
+  transfer: 'Übertragen',
   start_reshare: 'Teilen starten',
   successfully: 'Erfolgreich',
   support: 'Unterstützung',

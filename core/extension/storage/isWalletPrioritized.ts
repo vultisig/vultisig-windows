@@ -1,6 +1,6 @@
 import { getStorageValue } from '@lib/extension/storage/get'
 import { setStorageValue } from '@lib/extension/storage/set'
-import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import {
   useMutation,
   UseMutationOptions,
@@ -30,7 +30,7 @@ export const useIsWalletPrioritizedQuery = () => {
 export const useSetIsWalletPrioritizedMutation = (
   options?: UseMutationOptions<any, any, boolean, unknown>
 ) => {
-  const invalidate = useInvalidateQueries()
+  const refetch = useRefetchQueries()
 
   return useMutation({
     mutationFn: async isPrioritized => {
@@ -38,7 +38,7 @@ export const useSetIsWalletPrioritizedMutation = (
       return isPrioritized
     },
     onSuccess: async () => {
-      await invalidate(queryKey)
+      await refetch(queryKey)
     },
     ...options,
   })

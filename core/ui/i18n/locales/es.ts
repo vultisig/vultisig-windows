@@ -818,6 +818,7 @@ export const es = {
   soon: 'Pronto',
   stake: 'Apostar',
   staked_amount: 'Cantidad apostada',
+  transfer: 'Transferir',
   start_reshare: 'Empezar a compartir',
   successfully: 'Exitosamente',
   support: 'Apoyo',

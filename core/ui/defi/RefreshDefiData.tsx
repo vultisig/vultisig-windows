@@ -13,7 +13,7 @@ import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { RefreshCwIcon } from '@lib/ui/icons/RefreshCwIcon'
-import { useInvalidateQueries } from '@lib/ui/query/hooks/useInvalidateQueries'
+import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { QueryKey, useMutation } from '@tanstack/react-query'
 
 import { mayaDefiCoins, thorchainDefiCoins } from './chain/queries/tokens'
@@ -52,7 +52,7 @@ const defiRefreshConfig: Record<SupportedDefiChain, DefiRefreshConfig> = {
 }
 
 export const RefreshDefiData = () => {
-  const invalidateQueries = useInvalidateQueries()
+  const refetchQueries = useRefetchQueries()
   const fiatCurrency = useFiatCurrency()
   const thorchainAddress = useCurrentVaultAddress(Chain.THORChain)
   const mayachainAddress = useCurrentVaultAddress(Chain.MayaChain)
@@ -98,7 +98,7 @@ export const RefreshDefiData = () => {
         }
       }
 
-      await invalidateQueries(...queryKeys)
+      await refetchQueries(...queryKeys)
     },
   })
 

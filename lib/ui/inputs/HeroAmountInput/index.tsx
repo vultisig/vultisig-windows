@@ -88,6 +88,13 @@ export const HeroAmountInput = ({
         return
       }
 
+      // Allow "." as an intermediate state while typing a decimal like ".5"
+      if (newValue === '.') {
+        setInputValue('.')
+        onChange(null)
+        return
+      }
+
       try {
         const chainAmount = decimalStringToBigInt(newValue, decimals)
         setInputValue(newValue)

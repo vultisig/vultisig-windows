@@ -2,6 +2,7 @@ import { Chain, CosmosChain, VaultBasedCosmosChain } from '@core/chain/Chain'
 import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
 import { getCosmosGasLimit } from '@core/chain/chains/cosmos/cosmosGasLimitRecord'
 import { getCosmosChainKind } from '@core/chain/chains/cosmos/utils/getCosmosChainKind'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { areEqualCoins } from '@core/chain/coin/Coin'
 import { nativeSwapChainIds } from '@core/chain/swap/native/NativeSwapChain'
 import {
@@ -44,6 +45,10 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
   const signAmino = signData.case === 'signAmino' ? signData.value : undefined
   const signDirect = signData.case === 'signDirect' ? signData.value : undefined
 
+  const chainFeeDenom = cosmosFeeCoinDenom[chain]
+  const toChainFeeDenom = (denom: string): string =>
+    chainFeeCoin[chain]?.ticker === denom ? chainFeeDenom : denom
+
   const { messages, txMemo } = matchRecordUnion<
     CosmosChainSpecific,
     {
@@ -55,12 +60,13 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
       if (signDirect) {
         const bodyBytes = fromBase64(signDirect.bodyBytes)
         const txBody = TxBody.decode(bodyBytes)
+        const authInfoBytes = fromBase64(signDirect.authInfoBytes)
 
         const messages = [
           TW.Cosmos.Proto.Message.create({
             signDirectMessage: TW.Cosmos.Proto.Message.SignDirect.create({
               bodyBytes: bodyBytes,
-              authInfoBytes: fromBase64(signDirect.authInfoBytes),
+              authInfoBytes,
             }),
           }),
         ]
@@ -134,12 +140,13 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
       if (signDirect) {
         const bodyBytes = fromBase64(signDirect.bodyBytes)
         const txBody = TxBody.decode(bodyBytes)
+        const authInfoBytes = fromBase64(signDirect.authInfoBytes)
 
         const messages = [
           TW.Cosmos.Proto.Message.create({
             signDirectMessage: TW.Cosmos.Proto.Message.SignDirect.create({
               bodyBytes: bodyBytes,
-              authInfoBytes: fromBase64(signDirect.authInfoBytes),
+              authInfoBytes,
             }),
           }),
         ]
@@ -335,7 +342,7 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
       if (authInfo.fee) {
         const amounts = authInfo.fee.amount.map(coin =>
           TW.Cosmos.Proto.Amount.create({
-            denom: coin.denom,
+            denom: toChainFeeDenom(coin.denom),
             amount: coin.amount,
           })
         )
@@ -352,7 +359,10 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
         gas: Long.fromString(signAmino.fee?.gas ?? '0'),
         amounts:
           signAmino.fee?.amount?.map(coin =>
-            TW.Cosmos.Proto.Amount.create(coin)
+            TW.Cosmos.Proto.Amount.create({
+              ...coin,
+              denom: toChainFeeDenom(coin.denom),
+            })
           ) ?? [],
       })
 
@@ -367,7 +377,7 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
       const amounts: TW.Cosmos.Proto.Amount[] = [
         TW.Cosmos.Proto.Amount.create({
           amount: gas.toString(),
-          denom: cosmosFeeCoinDenom[chain],
+          denom: chainFeeDenom,
         }),
       ]
 

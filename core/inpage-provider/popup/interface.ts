@@ -52,7 +52,7 @@ export type PopupInterface = {
   signMessage: Method<SignMessageInput, string>
   sendTx: Method<
     ITransactionPayload,
-    Omit<Tx, 'data'> & { data: SerializedSigningOutput }
+    (Omit<Tx, 'data'> & { data: SerializedSigningOutput })[]
   >
   watchAsset: Method<Coin<EvmChain>, boolean>
 }

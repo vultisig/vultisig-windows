@@ -8,7 +8,7 @@ import { FC, ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
 import { Size } from '../../core/Size'
-import { ButtonProps } from '../ButtonProps'
+import { ButtonProps, PrimaryButtonStatus } from '../ButtonProps'
 
 type ButtonSize = Extract<Size, 'sm' | 'md'>
 
@@ -23,13 +23,13 @@ const ButtonShadow = styled.div`
 `
 
 const StyledButton = styled(UnstyledButton)<{
-  disabled: boolean
-  kind: NonNullable<ButtonProps['kind']>
-  loading: boolean
-  size: ButtonSize
-  status: any
+  $disabled: boolean
+  $kind: NonNullable<ButtonProps['kind']>
+  $loading: boolean
+  $size: ButtonSize
+  $status: PrimaryButtonStatus
 }>`
-  ${({ disabled, kind, loading, size, status }) => css`
+  ${({ $disabled, $kind, $loading, $size, $status }) => css`
     align-items: center;
     border: none;
     cursor: pointer;
@@ -40,9 +40,9 @@ const StyledButton = styled(UnstyledButton)<{
     width: 100%;
     position: relative;
 
-    ${match(kind, {
+    ${match($kind, {
       link: () => css`
-        ${match(size, {
+        ${match($size, {
           sm: () => css`
             border-radius: 26px;
             font-size: 12px;
@@ -61,7 +61,7 @@ const StyledButton = styled(UnstyledButton)<{
           `,
         })}
 
-        ${disabled || loading
+        ${$disabled || $loading
           ? css`
               color: ${getColor('buttonTextDisabled')};
               cursor: default;
@@ -76,7 +76,7 @@ const StyledButton = styled(UnstyledButton)<{
             `}
       `,
       primary: () => css`
-        ${match(size, {
+        ${match($size, {
           sm: () => css`
             border-radius: 36px;
             font-size: 12px;
@@ -95,14 +95,14 @@ const StyledButton = styled(UnstyledButton)<{
           `,
         })}
 
-        ${disabled || loading
+        ${$disabled || $loading
           ? css`
               background-color: ${getColor('buttonBackgroundDisabled')};
               color: ${getColor('buttonTextDisabled')};
               cursor: default;
             `
           : css`
-              ${match(status, {
+              ${match($status, {
                 default: () => css`
                   color: ${getColor('text')};
                   background-color: ${getColor('buttonPrimary')};
@@ -122,7 +122,7 @@ const StyledButton = styled(UnstyledButton)<{
               })}
 
               &:hover {
-                ${match(status, {
+                ${match($status, {
                   default: () => css`
                     background-color: ${getColor('buttonHover')};
                   `,
@@ -140,7 +140,7 @@ const StyledButton = styled(UnstyledButton)<{
             `}
       `,
       outlined: () => css`
-        ${match(size, {
+        ${match($size, {
           sm: () => css`
             border-radius: 36px;
             font-size: 12px;
@@ -159,7 +159,7 @@ const StyledButton = styled(UnstyledButton)<{
           `,
         })}
 
-        ${disabled || loading
+        ${$disabled || $loading
           ? css`
               background-color: ${getColor('buttonBackgroundDisabled')};
               border: 1px solid ${getColor('buttonBackgroundDisabled')};
@@ -177,7 +177,7 @@ const StyledButton = styled(UnstyledButton)<{
             `}
       `,
       secondary: () => css`
-        ${match(size, {
+        ${match($size, {
           sm: () => css`
             border-radius: 36px;
             font-size: 12px;
@@ -196,7 +196,7 @@ const StyledButton = styled(UnstyledButton)<{
           `,
         })}
 
-        ${disabled || loading
+        ${$disabled || $loading
           ? css`
               background-color: ${getColor('buttonBackgroundDisabled')};
               color: ${getColor('buttonTextDisabled')};
@@ -228,14 +228,18 @@ export const Button: FC<
   status = 'default',
   ...rest
 }) => {
-  const props = {
+  const styledProps = {
+    $disabled: !!disabled,
+    $kind: kind,
+    $loading: loading,
+    $size: size,
+    $status: status as PrimaryButtonStatus,
+  }
+
+  const htmlProps = {
     disabled: !!disabled,
-    kind,
-    loading,
-    size,
-    status,
     ...rest,
-  } as any
+  }
 
   const showShadow = kind === 'primary' && !disabled && !loading
 
@@ -243,7 +247,7 @@ export const Button: FC<
     <Tooltip
       content={disabled}
       renderOpener={options => (
-        <StyledButton {...options} {...props}>
+        <StyledButton {...options} {...htmlProps} {...styledProps}>
           {loading ? <Spinner /> : icon}
           {children}
           {showShadow && <ButtonShadow />}
@@ -251,7 +255,7 @@ export const Button: FC<
       )}
     />
   ) : (
-    <StyledButton {...props}>
+    <StyledButton {...htmlProps} {...styledProps}>
       {loading ? <Spinner /> : icon}
       {children}
       {showShadow && <ButtonShadow />}

@@ -804,6 +804,7 @@ export const hr = {
   soon: 'Uskoro',
   stake: 'Ulog',
   staked_amount: 'Uloženi iznos',
+  transfer: 'Prijenos',
   start_reshare: 'Započni ponovno dijeljenje',
   successfully: 'Uspješno',
   support: 'Podrška',
