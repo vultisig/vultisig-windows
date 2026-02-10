@@ -6,5 +6,5 @@ export const kyberSwapSlippageTolerance: number = 100
 
 export const kyberSwapAffiliateConfig = {
   source: 'vultisig-v0',
-  referral: '0xa4a4f610e89488eb4ecc6c63069f241a54485269',
+  referral: '0x8E247a480449c84a5fDD25974A8501f3EFa4ABb9',
 }
