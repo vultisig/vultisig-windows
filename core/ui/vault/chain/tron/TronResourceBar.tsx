@@ -18,7 +18,8 @@ const Fill = styled.div<TronResourceBarProps>`
   height: 100%;
   border-radius: 2px;
   background: ${({ $color }) => $color};
-  width: ${({ $percentage }) => toPercents(Math.min($percentage, 1))};
+  width: ${({ $percentage }) =>
+    toPercents(Math.max(Math.min($percentage, 1), 0))};
   transition: width 0.3s ease;
 `
 
