@@ -1085,9 +1085,6 @@ export const pt = {
     '<g>Cada dispositivo</g> em seu cofre contém <g>uma participação no cofre</g>',
   onboarding_step_4:
     'Recupere seu cofre mesmo se um dispositivo for perdido ou danificado.',
-  onboarding_step_5:
-    '<g>Sempre faça backup de cada compartilhamento do cofre</g> separadamente em um <g>local diferente</g>',
-  onboarding_step_6: 'Essas ações colaboram para <g>desbloquear seu cofre</g>',
   optional: 'opcional',
   password_backup: 'Proteja seu cofre e assine rapidamente.',
   permissions: 'Permissões',

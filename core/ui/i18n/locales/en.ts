@@ -651,17 +651,6 @@ export const en = {
   onboarding_description_4:
     'Vultisig is a wallet without seed phrases. It uses easy-to-manage vault shares instead. Every device has its unique vault share that needs a separate backup.',
   onboarding_greeting: 'Say goodbye to <g>seed phrases</g>',
-  onboarding_step_1:
-    'Say hello to <g>vault shares,</g> your new <g>recovery method</g>',
-  onboarding_step_2:
-    "They're <g>split into parts</g> to increase security, <g>removing the single point-of-failure</g>",
-  onboarding_step_3:
-    '<g>Each device</g> in your vault holds <g>one vault share</g>',
-  onboarding_step_4:
-    'Recover your vault even <g>if a device is lost or damaged</g>',
-  onboarding_step_5:
-    '<g>Always backup each vault share</g> separately in a <g>different location</g>',
-  onboarding_step_6: 'These shares collaborate to <g>unlock your vault</g>',
   operator_fee: "Operator's Fee",
   basis_points: 'Basis Points',
   optional: 'optional',

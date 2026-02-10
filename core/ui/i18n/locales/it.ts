@@ -1085,10 +1085,6 @@ export const it = {
     '<g>Ogni dispositivo</g> nel tuo vault contiene <g>una condivisione vault</g>',
   onboarding_step_4:
     'Recupera il tuo vault anche <g>se un dispositivo è perso o danneggiato</g>',
-  onboarding_step_5:
-    '<g>Eseguire sempre il backup di ogni condivisione del vault</g> separatamente in una <g>posizione diversa</g>',
-  onboarding_step_6:
-    'Queste condivisioni collaborano per <g>sbloccare il tuo caveau</g>',
   optional: 'opzionale',
   password_backup: 'Proteggi il tuo caveau e firma subito.',
   permissions: 'Permessi',

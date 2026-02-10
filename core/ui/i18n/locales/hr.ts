@@ -1066,10 +1066,6 @@ export const hr = {
     '<g>Svaki uređaj</g> u vašem trezoru sadrži <g>jedan udio trezora</g>',
   onboarding_step_4:
     'Oporavite svoj trezor čak i <g>ako je uređaj izgubljen ili oštećen</g>',
-  onboarding_step_5:
-    '<g>Uvijek napravite sigurnosnu kopiju svakog dijeljenog trezora</g> zasebno na <g>drugoj lokaciji</g>',
-  onboarding_step_6:
-    'Ovi dijeljeni resursi surađuju kako bi <g>otključali vaš trezor</g>',
   optional: 'opcionalno',
   password_backup: 'Zaštitite svoj trezor i brzo se prijavite.',
   permissions: 'Dozvole',
