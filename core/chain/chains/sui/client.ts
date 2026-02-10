@@ -1,6 +1,10 @@
 import { memoize } from '@lib/utils/memoize'
-import { SuiClient } from '@mysten/sui/client'
+import { SuiJsonRpcClient } from '@mysten/sui/jsonRpc'
 
 export const getSuiClient = memoize(
-  () => new SuiClient({ url: 'https://sui-rpc.publicnode.com' })
+  () =>
+    new SuiJsonRpcClient({
+      url: 'https://sui-rpc.publicnode.com',
+      network: 'mainnet',
+    })
 )
