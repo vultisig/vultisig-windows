@@ -458,6 +458,7 @@ export const de = {
   follow_banner_title: 'Folgen Sie uns auf X',
   from: 'Aus',
   from_asset: 'Aus dem Vermögenswert',
+  freeze: 'Freeze',
   function_arguments: 'Funktionsargumente',
   function_signature: 'Funktionssignatur',
   function_unavailble:
@@ -853,6 +854,14 @@ export const de = {
   transaction_has_risk:
     '{{riskLevel}} Risikotransaktion vom <provider></provider> erkannt',
   transaction_successful: 'Transaktion erfolgreich',
+  tron_bandwidth: 'Bandwidth',
+  tron_energy: 'Energy',
+  tron_freeze_button: 'Freeze',
+  tron_freeze_title: 'TRON Freeze',
+  tron_frozen_label: 'Frozen',
+  tron_pending_withdrawals: 'Pending Withdrawals',
+  tron_ready_to_claim: 'Ready to claim',
+  tron_unfreeze_button: 'Unfreeze',
   try_again: 'Versuchen Sie es erneut',
   turn_your_vault_into_rewards_machine:
     'Verwandle deinen Tresor in eine Prämienmaschine. Erstelle jetzt dein Empfehlungskonto und verdiene Geld.',
@@ -864,6 +873,7 @@ export const de = {
   unlock_discount_tier: 'Schalte die Stufe frei: <b>{{tier}}</b>',
   unlock_tier: 'Stufe freischalten',
   unmerge: 'Aufheben',
+  unfreeze: 'Unfreeze',
   unknown: 'Unbekannt',
   unstake: 'Entkoppeln',
   unstake_share_token_label: '{{ticker}}',
