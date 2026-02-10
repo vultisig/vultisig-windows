@@ -6,6 +6,7 @@ import {
   SuiSpecificSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { attempt, withFallback } from '@lib/utils/attempt'
+import { type CoinStruct } from '@mysten/sui/jsonRpc'
 
 import { getKeysignCoin } from '../../../utils/getKeysignCoin'
 import { GetChainSpecificResolver } from '../../resolver'
@@ -22,7 +23,7 @@ export const getSuiChainSpecific: GetChainSpecificResolver<
     owner: address,
   })
 
-  const coins = data.map(coin => create(SuiCoinSchema, coin))
+  const coins = data.map((coin: CoinStruct) => create(SuiCoinSchema, coin))
 
   const referenceGasPrice = await client.getReferenceGasPrice()
 
