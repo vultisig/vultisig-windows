@@ -1,40 +1,41 @@
-import { useSetHasFinishedOnboardingMutation } from '@core/ui/storage/onboarding'
 import { Button } from '@lib/ui/buttons/Button'
-import { useBoolean } from '@lib/ui/hooks/useBoolean'
-import { CloudDownloadIcon } from '@lib/ui/icons/CloudDownloadIcon'
-import { LayersIcon } from '@lib/ui/icons/LayersIcon'
-import { SplitIcon } from '@lib/ui/icons/SplitIcon'
-import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
-import { Checkbox as LibCheckBox } from '@lib/ui/inputs/checkbox/Checkbox'
+import { GroupOneIcon } from '@lib/ui/icons/GroupOneIcon'
+import { KeyboardUpIcon } from '@lib/ui/icons/KeyboardUpIcon'
+import { MegaphoneIcon } from '@lib/ui/icons/MegaphoneIcon'
+import { ShareAndroidIcon } from '@lib/ui/icons/ShareAndroidIcon'
+import { TrophyIcon } from '@lib/ui/icons/TrophyIcon'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-export const OnboardingSummary = () => {
+export const ReferralsSummary = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
-  const { mutateAsync: onFinish } = useSetHasFinishedOnboardingMutation()
-  const [isChecked, { toggle }] = useBoolean(false)
 
   const items = [
     {
-      icon: <InfoIcon as={CloudDownloadIcon} />,
-      title: t('fastVaultSetup.summary.summaryItemOneTitle'),
+      title: t('referrals_summary.item_1.title'),
+      description: t('referrals_summary.item_1.description'),
+      icon: KeyboardUpIcon,
     },
     {
-      icon: <InfoIcon as={SplitIcon} />,
-      title: t('fastVaultSetup.summary.summaryItemTwoTitle'),
+      title: t('referrals_summary.item_2.title'),
+      description: t('referrals_summary.item_2.description'),
+      icon: ShareAndroidIcon,
     },
     {
-      icon: <InfoIcon as={LayersIcon} />,
-      title: t('fastVaultSetup.summary.summaryItemThreeTitle'),
+      title: t('referrals_summary.item_3.title'),
+      description: t('referrals_summary.item_3.description'),
+      icon: TrophyIcon,
     },
     {
-      icon: <WarningIcon as={TriangleAlertIcon} />,
-      title: t('fastVaultSetup.summary.summaryItemFourTitle'),
+      title: t('referrals_summary.item_4.title'),
+      description: t('referrals_summary.item_4.description'),
+      icon: GroupOneIcon,
     },
   ]
 
@@ -50,48 +51,36 @@ export const OnboardingSummary = () => {
         fullWidth
       >
         <VStack gap={24} overflow="hidden">
-          <Label>{t('fastVaultSetup.summary.pillText')}</Label>
+          <Label>
+            <Text as={MegaphoneIcon} color="primaryAlt" size={16} />
+            {t('referral_program')}
+          </Label>
           <VStack gap={16} padding="0 0 0 24px">
             <Text as="span" size={34} weight={500}>
-              {t('fastVaultSetup.summary.title')}
+              {t('how_it_works')}
             </Text>
-            {items.map((item, index) => (
+            {items.map(({ title, icon, description }, index) => (
               <Item key={index}>
-                {item.icon}
-                <Text as="span" size={13} weight={500}>
-                  {item.title}
-                </Text>
+                <Icon as={icon} />
+                <VStack gap={4}>
+                  <Text color="contrast" weight={500} size={13}>
+                    {title}
+                  </Text>
+                  <Text color="shyExtra" weight={500} size={13}>
+                    {description}
+                  </Text>
+                </VStack>
               </Item>
             ))}
           </VStack>
         </VStack>
-        <VStack alignItems="start" gap={16}>
-          <HStack
-            alignItems="center"
-            gap={8}
-            onClick={toggle}
-            role="button"
-            tabIndex={0}
-          >
-            <CheckBox onChange={() => {}} value={isChecked} />
-            <Text as="span" size={14} weight={500}>
-              {t('fastVaultSetup.summary.agreementText')}
-            </Text>
-          </HStack>
-          <Button disabled={!isChecked} onClick={() => onFinish(true)}>
-            {t('fastVaultSetup.summary.ctaText')}
-          </Button>
-        </VStack>
+        <Button onClick={onFinish}>{t('get_started')}</Button>
       </VStack>
     </PageContent>
   )
 }
 
-const CheckBox = styled(LibCheckBox)`
-  pointer-events: none;
-`
-
-const InfoIcon = styled.div`
+const Icon = styled.div`
   color: ${getColor('primaryAlt')};
   flex: none;
   font-size: 24px;
@@ -142,10 +131,4 @@ const Label = styled(HStack)`
   margin-left: 2px;
   max-width: fit-content;
   padding: 8px 12px;
-`
-
-const WarningIcon = styled.div`
-  color: ${getColor('idle')};
-  flex: none;
-  font-size: 24px;
 `

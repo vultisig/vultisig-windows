@@ -195,9 +195,14 @@ export const en = {
   create_new_vault: 'Create New Vault',
   create_own_referral:
     'Create your own code and earn <blue>20%</blue> on referred swaps',
-  create_referral: 'Create Referral',
   create_referral_form: 'Create referral',
   create_referral_title: 'Create Referral',
+  create_referral: 'Create Referral',
+  create_referral_desc:
+    'Create your own code and earn <c>20%</c> on referred swaps',
+  save_referral: 'Save Referral',
+  save_referral_desc:
+    'Save a friend’s referral code and save <c>10%</c> on swaps.',
   creating_vault: 'Creating Vault',
   currency: 'Currency',
   current_expiry: 'Current expiry',
@@ -439,7 +444,7 @@ export const en = {
   general: 'General',
   generating_ecdsa_key: 'Generating ECDSA Key',
   generating_eddsa_key: 'Generating EdDSA Key',
-  get_started: 'Get Started',
+  get_started: 'Get started',
   github: 'Github',
   go_back: 'Go Back',
   go_to_vault: 'Go to vault',
@@ -722,12 +727,11 @@ export const en = {
   referral_expiration_minimum: 'Minimum 1 year',
   referral_extension_fee: 'Referral extension fee',
   referral_fee_amount_minimum: 'Minimum {{amount}} RUNE',
-  referral_landing_title:
-    '<0>Invite friends</0>. <1>Earn rewards</1>. Save on fees.',
+  referral_landing_title: 'Invite friends. <g>Earn rewards.</g> Save on fees.',
   referral_program: 'Referral Program',
   referral_reg_fee: 'Registration Fee',
   referral_status: 'Status',
-  referrals_create_page_title: 'Vultisig - Referrals',
+  manage_referral_title: 'Vultisig Referrals',
   referrals_default_title: 'Referral',
   referrals_summary: {
     item_1: {
@@ -840,7 +844,7 @@ export const en = {
   share2StoredByYou: 'Vault Share 2 stored by you',
   share_app: 'Share the app',
   share_description:
-    'Share your unique referral code to invite friends. They get a discount and the more they trade, the more you earn — directly to your wallet.',
+    'Share your unique referral code to invite friends. They get a discount and the more they trade, the more you earn — directly delivered to your vault.',
   share_vault_qr: 'Share Vault QR',
   shares: 'Shares',
   show_balance: 'Show balance',
