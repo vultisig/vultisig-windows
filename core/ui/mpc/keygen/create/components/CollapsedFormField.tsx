@@ -1,4 +1,6 @@
-import { ActionInputContainer } from '@core/ui/vault/components/action-form/ActionInputContainer'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { borderRadius } from '@lib/ui/css/borderRadius'
+import { interactive } from '@lib/ui/css/interactive'
 import { FormCheckBadge } from '@lib/ui/form/FormCheckBadge'
 import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { HStack, hStack } from '@lib/ui/layout/Stack'
@@ -12,6 +14,7 @@ type CollapsedFormFieldProps = {
   valuePreview?: ReactNode
   isValid: boolean
   onClick: () => void
+  onCollapsedFocus?: () => void
 }
 
 export const CollapsedFormField = ({
@@ -19,9 +22,14 @@ export const CollapsedFormField = ({
   valuePreview,
   isValid,
   onClick,
+  onCollapsedFocus,
 }: CollapsedFormFieldProps) => {
+  const handleFocus = () => {
+    onCollapsedFocus?.()
+  }
+
   return (
-    <Container onClick={onClick}>
+    <Container type="button" onClick={onClick} onFocus={handleFocus}>
       <HStack gap={12} alignItems="center">
         <Text size={14} color="contrast">
           {title}
@@ -46,7 +54,15 @@ export const CollapsedFormField = ({
   )
 }
 
-const Container = styled(ActionInputContainer)`
+const Container = styled(UnstyledButton)`
+  width: 100%;
+  text-align: left;
+  ${interactive};
+  gap: 16px;
+  padding: 12px;
+  flex: 1;
+  ${borderRadius.m};
+  border: 1px solid ${getColor('foregroundSuper')};
   ${hStack({
     justifyContent: 'space-between',
     alignItems: 'center',

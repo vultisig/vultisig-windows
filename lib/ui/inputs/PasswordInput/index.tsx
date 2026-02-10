@@ -35,7 +35,7 @@ export const PasswordInput: React.FC<
           />
         )}
         action={
-          <IconButton onClick={toggle}>
+          <IconButton tabIndex={-1} onClick={toggle}>
             {shouldHideValue ? <EyeOffIcon /> : <EyeIcon />}
           </IconButton>
         }
