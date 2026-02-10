@@ -279,7 +279,7 @@ export const buildDepositKeysignPayload = async ({
       ...keysignPayload,
       contractPayload: { case: undefined },
       toAddress: coin.address,
-      toAmount: hasAmount && amountUnits ? amountUnits : '0',
+      toAmount: shouldBePresent(amountUnits, 'Amount'),
     })
 
     return keysignPayload
