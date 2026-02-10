@@ -20,7 +20,7 @@ export const ClearableTextInput = ({
     <ActionInsideInteractiveElement
       render={() => <TextInput {...props} onValueChange={onValueChange} />}
       action={
-        <IconButton onClick={onClear}>
+        <IconButton tabIndex={-1} onClick={onClear}>
           <CircleCrossFilledIcon />
         </IconButton>
       }
