@@ -1,3 +1,7 @@
+import { parseUnits } from 'viem'
+
 export const toChainAmount = (amount: number, decimals: number) => {
-  return BigInt(Math.round(amount * 10 ** decimals))
+  const str = amount.toString()
+  const value = /[eE]/.test(str) ? amount.toFixed(decimals) : str
+  return parseUnits(value, decimals)
 }
