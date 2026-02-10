@@ -28,7 +28,7 @@ export const ActionsCard = ({ data }: ActionsCardProps) => {
   const balanceQuery = useBalanceQuery({
     chain: Chain.Tron,
     address,
-    id: '',
+    id: undefined,
   })
   const priceQuery = useCoinPriceQuery({
     coin: { chain: Chain.Tron, id: undefined },
