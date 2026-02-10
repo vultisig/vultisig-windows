@@ -14,65 +14,55 @@ export const ReferralLanding = ({ onFinish }: OnFinishProp) => {
   return (
     <>
       <Overlay />
-      <Wrapper gap={24} flexGrow justifyContent="flex-end">
+      <Wrapper gap={24} justifyContent="flex-end">
         <ImageWrapper justifyContent="flex-end">
           <PositionedImage src="/core/images/referrals-landing.png" alt="" />
         </ImageWrapper>
-        <ContentWrapper gap={24}>
-          <VStack gap={12}>
-            <Text centerHorizontally size={22}>
-              <Trans
-                i18nKey="referral_landing_title"
-                components={{
-                  0: <Text as="span" centerHorizontally size={22} />,
-                  1: <GradientText as="span" size={22} />,
-                }}
-              />
-            </Text>
-            <Text size={14} centerHorizontally color="shyExtra">
-              {t('share_description')}
-            </Text>
-          </VStack>
-          <ButtonWrapper>
-            <Button onClick={onFinish}>{t('next')}</Button>
-          </ButtonWrapper>
-        </ContentWrapper>
+        <Text size={22} centerHorizontally>
+          <Trans
+            i18nKey="referral_landing_title"
+            components={{ g: <GradientText as="span" size={22} /> }}
+          />
+        </Text>
+        <Text color="shyExtra" size={14} centerHorizontally>
+          {t('share_description')}
+        </Text>
+        <ButtonWrapper>
+          <Button onClick={onFinish}>{t('get_started')}</Button>
+        </ButtonWrapper>
       </Wrapper>
     </>
   )
 }
 
 const Wrapper = styled(VStack)`
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  padding: 0 36px 36px 36px;
-  height: 500px;
   background-color: ${getColor('foregroundExtra')};
   ${borderRadius.m}
+  bottom: 0;
+  height: 500px;
+  left: 0;
   overflow: hidden;
+  padding: 0 36px 36px 36px;
+  position: fixed;
 
   @media (${mediaQuery.tabletDeviceAndUp}) {
-    width: calc(100vw - 32px);
-    max-width: 580px;
     height: 380px;
-    transform: translateY(-50%);
-    margin-inline: auto;
     left: 50%;
+    max-width: 580px;
     top: 50%;
     transform: translate(-50%, -50%);
-    flex-grow: 0;
+    width: calc(100vw - 32px);
   }
 `
 
 const Overlay = styled.div`
-  position: fixed;
-  inset: 0;
-  background: rgba(2, 18, 43, 0.9);
-  z-index: 0;
+  background-color: rgba(2, 18, 43, 0.9);
   box-shadow:
-    0px -1.071px 4.283px 0px rgba(255, 255, 255, 0.2) inset,
-    -2.142px 0px 5.14px -3.212px rgba(255, 255, 255, 0.4) inset;
+    0px -1px 4px 0px rgba(255, 255, 255, 0.2) inset,
+    -2px 0px 5px -3px rgba(255, 255, 255, 0.4) inset;
+  inset: 0;
+  position: fixed;
+  z-index: 0;
 `
 
 const PositionedImage = styled.img`
@@ -80,38 +70,29 @@ const PositionedImage = styled.img`
 `
 
 const ImageWrapper = styled(VStack)`
-  position: absolute;
-  top: -35%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 213px;
-  height: 400px;
-  padding: 0px 12px 16px 12px;
+  border-radius: 34px;
   box-shadow:
-    0px -1.071px 4.283px 0px rgba(255, 255, 255, 0.2) inset,
-    -2.142px 0px 5.14px -3.212px rgba(255, 255, 255, 0.4) inset;
-  border-radius: 36.834px;
+    0px -1px 4px 0px rgba(255, 255, 255, 0.2) inset,
+    -2px 0px 5px -3px rgba(255, 255, 255, 0.4) inset;
+  height: 400px;
+  left: 50%;
   opacity: 0.75;
+  padding: 0px 12px 16px 12px;
+  position: relative;
+  transform: translateX(-50%);
+  width: 214px;
 
   &::before {
-    border-radius: 36.834px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 34px;
     content: '';
+    height: 100%;
+    left: 0;
+    pointer-events: none;
     position: absolute;
     top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.1);
-    pointer-events: none;
   }
-
-  @media (${mediaQuery.tabletDeviceAndUp}) {
-    top: -60%;
-  }
-`
-
-const ContentWrapper = styled(VStack)`
-  padding-inline: 16px;
 `
 
 const ButtonWrapper = styled(VStack)`

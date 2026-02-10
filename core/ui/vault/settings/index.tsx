@@ -4,9 +4,9 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { IconFileEdit } from '@lib/ui/icons/IconFileEdit'
-import { IconShareAndroid } from '@lib/ui/icons/IconShareAndroid'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { PencilIcon } from '@lib/ui/icons/PenciIcon'
+import { ShareAndroidIcon } from '@lib/ui/icons/ShareAndroidIcon'
 import { TrashCanIcon } from '@lib/ui/icons/TrashCanIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
@@ -79,7 +79,7 @@ export const VaultSettingsPage = () => {
             <ListItem
               icon={
                 <ListItemIconWrapper>
-                  <IconShareAndroid />
+                  <ShareAndroidIcon />
                 </ListItemIconWrapper>
               }
               description={
