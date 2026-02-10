@@ -1,3 +1,3 @@
 export const lifiConfig = {
-  integratorName: 'vultisig-ios',
+  integratorName: 'vultisig-0',
 }
