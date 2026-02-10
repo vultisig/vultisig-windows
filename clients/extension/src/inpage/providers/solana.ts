@@ -1,4 +1,3 @@
-import { bs58 } from '@coral-xyz/anchor/dist/cjs/utils/bytes'
 import { Chain } from '@core/chain/Chain'
 import {
   deserializeSigningOutput,
@@ -50,6 +49,7 @@ import {
   type StandardEventsNames,
   type StandardEventsOnMethod,
 } from '@wallet-standard/features'
+import bs58 from 'bs58'
 
 import { bytesEqual, isVersionedTransaction } from '../../utils/functions'
 import { Callback } from '../constants'

@@ -24,14 +24,14 @@
     "update": "yarn set version latest && yarn dlx npm-check-updates@latest -u --workspaces --root && yarn install"
   },
   "devDependencies": {
-    "@eslint/compat": "^2.0.1",
+    "@eslint/compat": "^2.0.2",
     "@eslint/eslintrc": "^3.3.3",
     "@eslint/js": "^9.39.2",
     "@google-cloud/translate": "^9.3.0",
-    "@types/node": "^25.0.9",
-    "@types/react": "^19.2.9",
-    "@typescript-eslint/eslint-plugin": "^8.53.1",
-    "@typescript-eslint/parser": "^8.53.1",
+    "@types/node": "^25.2.1",
+    "@types/react": "^19.2.13",
+    "@typescript-eslint/eslint-plugin": "^8.54.0",
+    "@typescript-eslint/parser": "^8.54.0",
     "babel-plugin-react-compiler": "^1.0.0",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
@@ -41,13 +41,13 @@
     "eslint-plugin-react-compiler": "^19.1.0-rc.2",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
-    "eslint-plugin-storybook": "^10.1.11",
+    "eslint-plugin-storybook": "^10.2.7",
     "eslint-plugin-unused-imports": "^4.3.0",
-    "globals": "^17.0.0",
-    "knip": "^5.82.1",
-    "prettier": "^3.8.0",
+    "globals": "^17.3.0",
+    "knip": "^5.83.0",
+    "prettier": "^3.8.1",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.17"
+    "vitest": "^4.0.18"
   },
   "dependencies": {
     "lottie-react": "^2.4.1"
