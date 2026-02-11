@@ -2,9 +2,9 @@ import {
   formatTronResourceValue,
   TronAccountResources,
 } from '@core/chain/chains/tron/resources'
-import { BatteryChargingIcon } from '@lib/ui/icons/BatteryChargingIcon'
 import { InfoCircleIcon } from '@lib/ui/icons/InfoCircleIcon'
-import { SatelliteDishIcon } from '@lib/ui/icons/SatelliteDishIcon'
+import { TronBandwidthIcon } from '@lib/ui/icons/TronBandwidthIcon'
+import { TronEnergyIcon } from '@lib/ui/icons/TronEnergyIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -21,7 +21,6 @@ type ResourcesCardProps = {
 
 const bandwidthAccent = '#13C89D'
 const energyAccent = '#FFC25C'
-const bandwidthBarColor = '#4879FD'
 
 const Card = styled(VStack)`
   flex: 1;
@@ -32,14 +31,23 @@ const Card = styled(VStack)`
   gap: 16px;
 `
 
-const IconBox = styled.div<{ $color: string }>`
-  width: 36px;
-  height: 36px;
-  border-radius: 6px;
+const BandwidthIconBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: ${({ $color }) => `${$color}1A`};
+  padding: 8px;
+  border-radius: 8px;
+  background: rgba(19, 200, 157, 0.1);
+  flex-shrink: 0;
+`
+
+const EnergyIconBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 8px;
+  background: #1b2430;
   flex-shrink: 0;
 `
 
@@ -58,7 +66,6 @@ const InfoButton = styled.button`
 type ResourceCardItemProps = {
   icon: ReactNode
   accentColor: string
-  barColor: string
   title: string
   value: string
   percentage: number
@@ -68,7 +75,6 @@ type ResourceCardItemProps = {
 const ResourceCardItem: FC<ResourceCardItemProps> = ({
   icon,
   accentColor,
-  barColor,
   title,
   value,
   percentage,
@@ -76,9 +82,9 @@ const ResourceCardItem: FC<ResourceCardItemProps> = ({
 }) => (
   <Card>
     <HStack gap={8} alignItems="center">
-      <IconBox $color={accentColor}>{icon}</IconBox>
+      {icon}
       <VStack gap={2} style={{ flex: 1 }}>
-        <Text color="contrast" size={14} weight="500">
+        <Text style={{ color: accentColor }} size={15} weight="500">
           {title}
         </Text>
         <Text color="shyExtra" size={12} weight="500">
@@ -87,7 +93,7 @@ const ResourceCardItem: FC<ResourceCardItemProps> = ({
       </VStack>
       {trailing}
     </HStack>
-    <TronResourceBar percentage={percentage} color={barColor} />
+    <TronResourceBar percentage={percentage} color={accentColor} />
   </Card>
 )
 
@@ -106,10 +112,13 @@ export const ResourcesCard = ({ data, onInfoPress }: ResourcesCardProps) => {
     <HStack fullWidth gap={12}>
       <ResourceCardItem
         icon={
-          <SatelliteDishIcon style={{ fontSize: 24, color: bandwidthAccent }} />
+          <BandwidthIconBox>
+            <TronBandwidthIcon
+              style={{ fontSize: 16, color: bandwidthAccent }}
+            />
+          </BandwidthIconBox>
         }
         accentColor={bandwidthAccent}
-        barColor={bandwidthBarColor}
         title={t('tron_bandwidth')}
         value={formatTronResourceValue({
           available: data.bandwidth.available,
@@ -120,10 +129,11 @@ export const ResourcesCard = ({ data, onInfoPress }: ResourcesCardProps) => {
       />
       <ResourceCardItem
         icon={
-          <BatteryChargingIcon style={{ fontSize: 24, color: energyAccent }} />
+          <EnergyIconBox>
+            <TronEnergyIcon style={{ fontSize: 16, color: energyAccent }} />
+          </EnergyIconBox>
         }
         accentColor={energyAccent}
-        barColor={energyAccent}
         title={t('tron_energy')}
         value={formatTronResourceValue({
           available: data.energy.available,
