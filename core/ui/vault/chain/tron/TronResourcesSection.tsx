@@ -1,11 +1,11 @@
 import { TronAccountResources } from '@core/chain/chains/tron/resources'
+import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Panel } from '@lib/ui/panel/Panel'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
-import { useState } from 'react'
 
 import { ResourcesCard } from './ResourcesCard'
 import { TronResourcesInfoModal } from './TronResourcesInfoModal'
@@ -13,7 +13,7 @@ import { useTronAccountResourcesQuery } from './useTronAccountResourcesQuery'
 
 export const TronResourcesSection = () => {
   const query = useTronAccountResourcesQuery()
-  const [isInfoOpen, setIsInfoOpen] = useState(false)
+  const [isInfoOpen, { set: openInfo, unset: closeInfo }] = useBoolean(false)
 
   return (
     <>
@@ -36,12 +36,10 @@ export const TronResourcesSection = () => {
           </Panel>
         )}
         success={(data: TronAccountResources) => (
-          <ResourcesCard data={data} onInfoPress={() => setIsInfoOpen(true)} />
+          <ResourcesCard data={data} onInfoPress={openInfo} />
         )}
       />
-      {isInfoOpen && (
-        <TronResourcesInfoModal onClose={() => setIsInfoOpen(false)} />
-      )}
+      <TronResourcesInfoModal isOpen={isInfoOpen} onClose={closeInfo} />
     </>
   )
 }

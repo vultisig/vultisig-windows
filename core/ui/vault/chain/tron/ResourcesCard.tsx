@@ -3,6 +3,7 @@ import {
   TronAccountResources,
 } from '@core/chain/chains/tron/resources'
 import { BatteryChargingIcon } from '@lib/ui/icons/BatteryChargingIcon'
+import { InfoCircleIcon } from '@lib/ui/icons/InfoCircleIcon'
 import { SatelliteDishIcon } from '@lib/ui/icons/SatelliteDishIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
@@ -29,7 +30,6 @@ const Card = styled(VStack)`
   border: 1px solid ${getColor('foregroundExtra')};
   background: ${getColor('background')};
   gap: 16px;
-  cursor: pointer;
 `
 
 const IconBox = styled.div<{ $color: string }>`
@@ -43,6 +43,18 @@ const IconBox = styled.div<{ $color: string }>`
   flex-shrink: 0;
 `
 
+const InfoButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #8295ae;
+  flex-shrink: 0;
+`
+
 type ResourceCardItemProps = {
   icon: ReactNode
   accentColor: string
@@ -50,7 +62,7 @@ type ResourceCardItemProps = {
   title: string
   value: string
   percentage: number
-  onClick: () => void
+  trailing?: ReactNode
 }
 
 const ResourceCardItem: FC<ResourceCardItemProps> = ({
@@ -60,12 +72,12 @@ const ResourceCardItem: FC<ResourceCardItemProps> = ({
   title,
   value,
   percentage,
-  onClick,
+  trailing,
 }) => (
-  <Card onClick={onClick}>
+  <Card>
     <HStack gap={8} alignItems="center">
       <IconBox $color={accentColor}>{icon}</IconBox>
-      <VStack gap={2}>
+      <VStack gap={2} style={{ flex: 1 }}>
         <Text color="contrast" size={14} weight="500">
           {title}
         </Text>
@@ -73,6 +85,7 @@ const ResourceCardItem: FC<ResourceCardItemProps> = ({
           {value}
         </Text>
       </VStack>
+      {trailing}
     </HStack>
     <TronResourceBar percentage={percentage} color={barColor} />
   </Card>
@@ -104,7 +117,6 @@ export const ResourcesCard = ({ data, onInfoPress }: ResourcesCardProps) => {
           unit: '',
         })}
         percentage={bandwidthPercentage}
-        onClick={onInfoPress}
       />
       <ResourceCardItem
         icon={
@@ -119,7 +131,11 @@ export const ResourcesCard = ({ data, onInfoPress }: ResourcesCardProps) => {
           unit: '',
         })}
         percentage={energyPercentage}
-        onClick={onInfoPress}
+        trailing={
+          <InfoButton onClick={onInfoPress}>
+            <InfoCircleIcon style={{ fontSize: 20 }} />
+          </InfoButton>
+        }
       />
     </HStack>
   )
