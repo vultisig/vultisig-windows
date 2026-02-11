@@ -472,6 +472,8 @@ export const en = {
     'You entered {{count}} words. Seed phrase must be 12 or 24',
   seedphrase_invalid_error:
     'Seed phrase is not correct, please verify all words.',
+  seedphrase_duplicate_vault_error:
+    'This seed phrase is already imported as vault "{{vaultName}}". Importing it again would replace the existing vault.',
   import_seedphrase_description: 'Enter it, create a vault, never look back.',
   import_seedphrase_onboarding_title:
     'You are entering a new era, <g>leaving old seed phrases behind.</g> You’ll need:',
