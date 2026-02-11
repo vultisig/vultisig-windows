@@ -935,8 +935,9 @@ export const en = {
   tron_ready_to_claim: 'Ready to claim',
   tron_unfreeze_button: 'Unfreeze',
   tron_your_holdings: 'Your holdings',
+  tron_bandwidth_and_energy: 'Bandwidth & Energy',
   tron_bandwidth_description:
-    'Discounts transfer costs. If insufficient, TRX covers the fee. The green meter shows daily free Bandwidth (600) + staked TRX Bandwidth. More staked TRX means more Bandwidth. Refills every 24h.',
+    'Bandwidth Points are required for every transaction on TRON, including both standard token sends and smart contract interactions. Every TRON user receives 600 free Bandwidth Points per day, which can cover approximately two basic sends. Additionally, you can earn extra Bandwidth Points by staking TRX, increasing your daily balance to support more transactions. If you have enough Bandwidth Points, you can send tokens, stake TRX, or interact with smart contracts without paying TRX in gas fees.',
   tron_energy_description:
     'Discounts smart contract costs. If insufficient, TRX covers the fee. The green meter shows daily Energy from staked TRX. More staked TRX means more Energy. Refills every 24h. Failed transactions burn more Energy and are not refunded.',
   tron_got_it: 'Got It',
