@@ -39,9 +39,7 @@ export const checkDuplicateMnemonicVault = ({
       const ecdsaPrivateKeyData = new Uint8Array(ecdsaMasterKey.data())
       ecdsaPrivateKey =
         walletCore.PrivateKey.createWithData(ecdsaPrivateKeyData)
-      const ecdsaPublicKey = ecdsaPrivateKey
-        .shouldBePresent('Failed to create ECDSA private key')
-        .getPublicKeySecp256k1(true)
+      const ecdsaPublicKey = ecdsaPrivateKey.getPublicKeySecp256k1(true)
       const ecdsaPublicKeyHex = Buffer.from(ecdsaPublicKey.data()).toString(
         'hex'
       )
@@ -51,10 +49,7 @@ export const checkDuplicateMnemonicVault = ({
       const eddsaPrivateKeyData = new Uint8Array(eddsaMasterKey.data())
       const clampedEddsaKey = clampThenUniformScalar(eddsaPrivateKeyData)
       eddsaPrivateKey = walletCore.PrivateKey.createWithData(clampedEddsaKey)
-      const eddsaPublicKeyData = eddsaPrivateKey
-        .shouldBePresent('Failed to create EdDSA private key')
-        .getPublicKeyEd25519()
-        .data()
+      const eddsaPublicKeyData = eddsaPrivateKey.getPublicKeyEd25519().data()
       const eddsaPublicKeyHex = Buffer.from(eddsaPublicKeyData).toString('hex')
 
       // Check for matching vault
