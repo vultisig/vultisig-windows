@@ -7,6 +7,7 @@ import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider
 import { EagerQuery } from '@lib/ui/query/Query'
 import { useMemo } from 'react'
 
+import { seedphraseImportSupportedChains } from '../config'
 import { useMnemonic } from '../state/mnemonic'
 
 type ScanChainsResult = {
@@ -20,7 +21,7 @@ export const useScanChainsWithBalanceQuery =
     const [mnemonic] = useMnemonic()
 
     const { trustWalletInputs, phantomSolanaInput } = useMemo(() => {
-      const trustWalletInputs = Object.values(Chain).map(chain => ({
+      const trustWalletInputs = seedphraseImportSupportedChains.map(chain => ({
         chain,
         address: deriveAddressFromMnemonic({ chain, mnemonic, walletCore }),
       }))
@@ -71,13 +72,15 @@ export const useScanChainsWithBalanceQuery =
       const phantomSolanaBalance = balances?.[phantomSolanaKey] ?? 0n
 
       // All queries settled - filter chains with positive balance
-      const chainsWithBalance = Object.values(Chain).filter(chain => {
-        const input = trustWalletInputs.find(i => i.chain === chain)
-        if (!input) return false
-        const key = accountCoinKeyToString(input)
-        const balance = balances?.[key]
-        return balance !== undefined && balance > 0n
-      })
+      const chainsWithBalance = seedphraseImportSupportedChains.filter(
+        chain => {
+          const input = trustWalletInputs.find(i => i.chain === chain)
+          if (!input) return false
+          const key = accountCoinKeyToString(input)
+          const balance = balances?.[key]
+          return balance !== undefined && balance > 0n
+        }
+      )
 
       const usePhantomSolanaPath =
         phantomSolanaBalance > 0n && trustSolanaBalance === 0n
