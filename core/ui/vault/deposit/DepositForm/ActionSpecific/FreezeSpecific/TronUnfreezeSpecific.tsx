@@ -14,21 +14,25 @@ const toTronResourceType = (value: unknown): TronResourceType =>
     : 'BANDWIDTH'
 
 export const TronUnfreezeSpecific = () => {
-  const [{ setValue, control }] = useDepositFormHandlers()
+  const [{ setValue, control, setTronResourceType }] = useDepositFormHandlers()
   const rawResourceType = useWatch({ control, name: 'resourceType' })
   const resourceType = toTronResourceType(rawResourceType)
 
   useEffect(() => {
     if (!rawResourceType) {
       setValue('resourceType', 'BANDWIDTH')
+      setTronResourceType?.('BANDWIDTH')
     }
-  }, [rawResourceType, setValue])
+  }, [rawResourceType, setValue, setTronResourceType])
 
   return (
     <VStack gap={12}>
       <TronResourceTypePicker
         value={resourceType}
-        onChange={value => setValue('resourceType', value)}
+        onChange={value => {
+          setValue('resourceType', value)
+          setTronResourceType?.(value)
+        }}
       />
     </VStack>
   )

@@ -1,3 +1,4 @@
+import { TronResourceType } from '@core/chain/chains/tron/resources'
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { useMemo } from 'react'
 
@@ -5,13 +6,18 @@ import { useDepositCoin } from '../providers/DepositCoinProvider'
 import { useStakeBalance } from '../staking/useStakeBalance'
 import { useDepositCoinBalance } from './useDepositCoinBalance'
 import { useRujiraStakeQuery } from './useRujiraStakeQuery'
+import { useTronFrozenBalance } from './useTronFrozenBalance'
 import { useUnbondableBalanceQuery } from './useUnbondableBalanceQuery'
 
 type Params = {
   selectedChainAction: ChainAction
+  tronResourceType?: TronResourceType
 }
 
-export const useDepositBalance = ({ selectedChainAction }: Params) => {
+export const useDepositBalance = ({
+  selectedChainAction,
+  tronResourceType,
+}: Params) => {
   const [selectedCoin] = useDepositCoin()
   const chain = selectedCoin.chain
 
@@ -24,6 +30,10 @@ export const useDepositBalance = ({ selectedChainAction }: Params) => {
   const selectedCoinBalance = useDepositCoinBalance({
     action: selectedChainAction,
     chain,
+  })
+
+  const tronFrozenBalance = useTronFrozenBalance({
+    resourceType: tronResourceType ?? 'BANDWIDTH',
   })
 
   const totalTokenAmount = useMemo(() => {
@@ -39,11 +49,16 @@ export const useDepositBalance = ({ selectedChainAction }: Params) => {
       return stakeAndRewards?.rewardsUSDC ?? 0
     }
 
+    if (selectedChainAction === 'unfreeze') {
+      return tronFrozenBalance
+    }
+
     return selectedCoinBalance
   }, [
     selectedChainAction,
     selectedCoinBalance,
     stakeBalance,
+    tronFrozenBalance,
     unbondableBalance?.humanReadableBalance,
     stakeAndRewards?.rewardsUSDC,
   ])
