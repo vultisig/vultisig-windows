@@ -1,14 +1,15 @@
 import { Chain } from '@core/chain/Chain'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCore } from '@core/ui/state/core'
-import { Button } from '@lib/ui/buttons/Button'
-import { BatteryChargingIcon } from '@lib/ui/icons/BatteryChargingIcon'
 import CaretDownIcon from '@lib/ui/icons/CaretDownIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
-import { SatelliteDishIcon } from '@lib/ui/icons/SatelliteDishIcon'
+import { TronBandwidthIcon } from '@lib/ui/icons/TronBandwidthIcon'
+import { TronEnergyIcon } from '@lib/ui/icons/TronEnergyIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { vStack } from '@lib/ui/layout/Stack'
 import { ResponsiveModal } from '@lib/ui/modal/ResponsiveModal'
+import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { motion, Transition } from 'framer-motion'
@@ -53,9 +54,17 @@ export const TronResourcesInfoModal = ({
       modalProps={{ withDefaultStructure: false }}
       containerStyles={{ padding: '24px' }}
     >
-      <VStack gap={24}>
-        <VStack alignItems="center" gap={8}>
-          <ChainEntityIcon value={Chain.Tron} style={{ fontSize: 48 }} />
+      <ContentContainer gap={24}>
+        <VStack alignItems="center" gap={24}>
+          <HStack alignItems="center" gap={8}>
+            <ChainEntityIcon
+              value={getChainLogoSrc(Chain.Tron)}
+              style={{ fontSize: 24 }}
+            />
+            <Text size={13} weight="500" color="contrast">
+              TRON
+            </Text>
+          </HStack>
           <Text size={18} weight="700" color="contrast">
             {t('tron_bandwidth_and_energy')}
           </Text>
@@ -69,11 +78,11 @@ export const TronResourcesInfoModal = ({
           >
             <HStack justifyContent="space-between" alignItems="center">
               <HStack gap={8} alignItems="center">
-                <IconCircle $color={bandwidthAccent}>
-                  <SatelliteDishIcon
-                    style={{ fontSize: 20, color: bandwidthAccent }}
+                <BandwidthIconCircle>
+                  <TronBandwidthIcon
+                    style={{ fontSize: 16, color: bandwidthAccent }}
                   />
-                </IconCircle>
+                </BandwidthIconCircle>
                 <Text size={14} color="contrast" weight="600">
                   {t('tron_bandwidth')}
                 </Text>
@@ -115,15 +124,16 @@ export const TronResourcesInfoModal = ({
           >
             <HStack justifyContent="space-between" alignItems="center">
               <HStack gap={8} alignItems="center">
-                <IconCircle $color={energyAccent}>
-                  <BatteryChargingIcon
-                    style={{ fontSize: 20, color: energyAccent }}
+                <EnergyIconCircle>
+                  <TronEnergyIcon
+                    style={{ fontSize: 16, color: energyAccent }}
                   />
-                </IconCircle>
+                </EnergyIconCircle>
                 <Text size={14} color="contrast" weight="600">
                   {t('tron_energy')}
                 </Text>
               </HStack>
+
               <motion.div
                 animate={{ rotate: expanded === 'energy' ? 180 : 0 }}
                 transition={contentTransition}
@@ -133,6 +143,7 @@ export const TronResourcesInfoModal = ({
                 </IconWrapper>
               </motion.div>
             </HStack>
+
             <motion.div
               initial="collapsed"
               animate={expanded === 'energy' ? 'expanded' : 'collapsed'}
@@ -153,20 +164,47 @@ export const TronResourcesInfoModal = ({
           </RowWrapper>
         </AccordionWrapper>
 
-        <Button onClick={() => openUrl(tronDocsUrl)}>{t('learnMore')}</Button>
-      </VStack>
+        <LearnMoreButton onClick={() => openUrl(tronDocsUrl)}>
+          <Text size={14} weight="600" color="contrast">
+            {t('learnMore')}
+          </Text>
+        </LearnMoreButton>
+      </ContentContainer>
     </ResponsiveModal>
   )
 }
 
-const IconCircle = styled.div<{ $color: string }>`
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+const ContentContainer = styled(VStack)`
+  padding: 0 16px 20px 16px;
+  overflow: hidden;
+
+  @media ${mediaQuery.tabletDeviceAndUp} {
+    padding: 24px;
+    background: ${getColor('background')};
+    border-radius: 12px;
+    border: 1px solid ${getColor('mistExtra')};
+    max-width: 480px;
+    width: 100%;
+  }
+`
+
+const BandwidthIconCircle = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: ${({ $color }) => `${$color}1A`};
+  padding: 8px;
+  border-radius: 8px;
+  background: rgba(19, 200, 157, 0.1);
+  flex-shrink: 0;
+`
+
+const EnergyIconCircle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 8px;
+  background: #1b2430;
   flex-shrink: 0;
 `
 
@@ -202,4 +240,23 @@ const Divider = styled.div`
   height: 1px;
   width: 100%;
   background: linear-gradient(90deg, #061b3a 0%, #284570 49.5%, #061b3a 100%);
+`
+
+const LearnMoreButton = styled.button`
+  display: flex;
+  width: 100%;
+  padding: 14px 32px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 99px;
+  border: 1px solid ${getColor('foregroundExtra')};
+  background: ${getColor('foreground')};
+  box-shadow: 0 1px 1px 0 rgba(255, 255, 255, 0.1) inset;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background: ${getColor('foregroundExtra')};
+  }
 `
