@@ -13,6 +13,7 @@ import { CollapsedFormField } from './CollapsedFormField'
 type EmailFormSectionProps = {
   isExpanded: boolean
   onToggle: () => void
+  onCollapsedFocus?: () => void
   register: UseFormRegisterReturn<'email'>
   error?: string
   value: string
@@ -22,6 +23,7 @@ type EmailFormSectionProps = {
 export const EmailFormSection = ({
   isExpanded,
   onToggle,
+  onCollapsedFocus,
   register,
   error,
   value,
@@ -38,6 +40,7 @@ export const EmailFormSection = ({
           valuePreview={value}
           isValid={!error && !!value}
           onClick={onToggle}
+          onCollapsedFocus={onCollapsedFocus}
         />
       )}
       renderOpen={() => (
