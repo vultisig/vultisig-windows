@@ -3,6 +3,7 @@ import { PasscodeGuard } from '@core/ui/passcodeEncryption/guard/PasscodeGuard'
 import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProvider'
 import { CoreProvider, CoreState } from '@core/ui/state/core'
 import { StorageDependant } from '@core/ui/storage/StorageDependant'
+import { useVaults } from '@core/ui/storage/vaults'
 import { ActiveVaultOnly } from '@core/ui/vault/ActiveVaultOnly'
 import { CoinFinder } from '@core/ui/vault/chain/coin/finder/CoinFinder'
 import { CoinsMetadataManager } from '@core/ui/vault/chain/coin/metadata/CoinsMetadataManager'
@@ -27,6 +28,22 @@ const Container = styled.div`
   isolation: isolate;
 `
 
+const VaultDependentContent = () => {
+  const vaults = useVaults()
+  const hasVaults = vaults.length > 0
+
+  if (!hasVaults) {
+    return null
+  }
+
+  return (
+    <ActiveVaultOnly>
+      <CoinFinder />
+      <CoinsMetadataManager />
+    </ActiveVaultOnly>
+  )
+}
+
 export const CoreApp = ({
   children,
   coreState,
@@ -44,12 +61,7 @@ export const CoreApp = ({
                 <ResponsivenessProvider>
                   <Container>
                     {children}
-                    {!isLimited && (
-                      <ActiveVaultOnly>
-                        <CoinFinder />
-                        <CoinsMetadataManager />
-                      </ActiveVaultOnly>
-                    )}
+                    {!isLimited && <VaultDependentContent />}
                   </Container>
                   <PasscodeGuard />
                 </ResponsivenessProvider>
