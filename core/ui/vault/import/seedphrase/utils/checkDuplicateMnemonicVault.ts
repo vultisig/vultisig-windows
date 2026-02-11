@@ -9,6 +9,8 @@ type CheckDuplicateInput = {
   walletCore: WalletCore
 }
 
+type PrivateKeyType = ReturnType<typeof WalletCore.PrivateKey.createWithData>
+
 /**
  * Checks if a mnemonic already exists in the system by comparing
  * the derived ECDSA and EdDSA public keys against existing vault public keys
@@ -24,16 +26,18 @@ export const checkDuplicateMnemonicVault = ({
 
   const result = attempt(() => {
     const hdWallet = walletCore.HDWallet.createWithMnemonic(mnemonic, '')
-    let ecdsaPrivateKey: ReturnType<typeof walletCore.PrivateKey.createWithData> | null = null
-    let eddsaPrivateKey: ReturnType<typeof walletCore.PrivateKey.createWithData> | null = null
+    let ecdsaPrivateKey: PrivateKeyType | null = null
+    let eddsaPrivateKey: PrivateKeyType | null = null
 
     try {
       // Derive ECDSA public key
       const ecdsaMasterKey = hdWallet.getMasterKey(walletCore.Curve.secp256k1)
       const ecdsaPrivateKeyData = new Uint8Array(ecdsaMasterKey.data())
       ecdsaPrivateKey = walletCore.PrivateKey.createWithData(ecdsaPrivateKeyData)
-      const ecdsaPublicKeyData = ecdsaPrivateKey.getPublicKeySecp256k1(true).data()
-      const ecdsaPublicKeyHex = Buffer.from(ecdsaPublicKeyData).toString('hex')
+      const ecdsaPublicKey = ecdsaPrivateKey.getPublicKeySecp256k1(true)
+      const ecdsaPublicKeyHex = Buffer.from(ecdsaPublicKey.data()).toString(
+        'hex'
+      )
 
       // Derive EdDSA public key
       const eddtsMasterKey = hdWallet.getMasterKey(walletCore.Curve.ed25519)
