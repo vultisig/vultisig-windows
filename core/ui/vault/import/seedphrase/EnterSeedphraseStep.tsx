@@ -24,26 +24,31 @@ export const EnterSeedphraseStep = () => {
 
   const [isTouched, setIsTouched] = useState(false)
 
-  const basicError = validateMnemonic({ mnemonic, walletCore, t })
+  const cleanedMnemonic = cleanMnemonic(mnemonic)
+  const basicError = validateMnemonic({
+    mnemonic: cleanedMnemonic,
+    walletCore,
+    t,
+  })
 
   const duplicateVault = useMemo(() => {
     if (basicError) return null
     return checkDuplicateMnemonicVault({
-      mnemonic: cleanMnemonic(mnemonic),
+      mnemonic: cleanedMnemonic,
       existingVaults: vaults,
       walletCore,
     })
-  }, [mnemonic, basicError, vaults, walletCore])
+  }, [cleanedMnemonic, basicError, vaults, walletCore])
 
   const duplicateError = duplicateVault
     ? t('seedphrase_duplicate_vault_error', { vaultName: duplicateVault.name })
     : null
 
   const error = basicError || duplicateError
-  const isValid = mnemonic.trim() !== '' && !error
+  const isValid = cleanedMnemonic !== '' && !error
 
-  const words = cleanMnemonic(mnemonic).split(' ')
-  const wordsCount = mnemonic.trim() === '' ? 0 : words.length
+  const words = cleanedMnemonic.split(' ')
+  const wordsCount = cleanedMnemonic === '' ? 0 : words.length
   const [minWordCount, maxWordCount] = seedphraseWordCounts
   const maxWords = wordsCount > minWordCount ? maxWordCount : minWordCount
   const accessory = `${wordsCount}/${maxWords}`
@@ -54,7 +59,10 @@ export const EnterSeedphraseStep = () => {
       gap={32}
       flexGrow
       {...getFormProps({
-        onSubmit: () => setStep('scan'),
+        onSubmit: () => {
+          setMnemonic(cleanedMnemonic)
+          setStep('scan')
+        },
         isDisabled: !isValid,
       })}
     >
