@@ -17,7 +17,7 @@ const Track = styled.div`
 const Fill = styled.div<TronResourceBarProps>`
   height: 100%;
   border-radius: 12px;
-  background: linear-gradient(90deg, ${({ $color }) => $color}, #11284a);
+  background: ${({ $color }) => $color};
   width: ${({ $percentage }) =>
     toPercents(Math.max(Math.min($percentage, 1), 0))};
   transition: width 0.3s ease;
