@@ -456,6 +456,7 @@ export const es = {
   follow_banner_title: 'Síguenos en X',
   from: 'De',
   from_asset: 'De Activo',
+  freeze: 'Freeze',
   function_arguments: 'Argumentos de función',
   function_signature: 'Firma de función',
   function_unavailble:
@@ -854,6 +855,14 @@ export const es = {
   transaction_has_risk:
     'Transacción de riesgo {{riskLevel}} detectada por <provider></provider>',
   transaction_successful: 'Transacción exitosa',
+  tron_bandwidth: 'Bandwidth',
+  tron_energy: 'Energy',
+  tron_freeze_button: 'Freeze',
+  tron_freeze_title: 'TRON Freeze',
+  tron_frozen_label: 'Frozen',
+  tron_pending_withdrawals: 'Pending Withdrawals',
+  tron_ready_to_claim: 'Ready to claim',
+  tron_unfreeze_button: 'Unfreeze',
   try_again: 'Intentar otra vez',
   turn_your_vault_into_rewards_machine:
     'Convierte tu bóveda en una máquina de recompensas. Crea tu referido ahora y empieza a ganar.',
@@ -865,6 +874,7 @@ export const es = {
   unlock_discount_tier: 'Desbloquear <b>{{tier}}</b> nivel',
   unlock_tier: 'Desbloquear nivel',
   unmerge: 'Separar',
+  unfreeze: 'Unfreeze',
   unknown: 'Desconocido',
   unstake: 'Desasegurar',
   unstake_share_token_label: 'Anular la apuesta {{ticker}}',

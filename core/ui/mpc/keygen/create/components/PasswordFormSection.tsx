@@ -19,6 +19,7 @@ import { CollapsedFormField } from './CollapsedFormField'
 type PasswordFormSectionProps = {
   isExpanded: boolean
   onToggle: () => void
+  onCollapsedFocus?: () => void
   passwordRegister: UseFormRegisterReturn<'password'>
   confirmPasswordRegister: UseFormRegisterReturn<'confirmPassword'>
   hintRegister: UseFormRegisterReturn<'hint'>
@@ -35,6 +36,7 @@ type PasswordFormSectionProps = {
 export const PasswordFormSection = ({
   isExpanded,
   onToggle,
+  onCollapsedFocus,
   passwordRegister,
   confirmPasswordRegister,
   hintRegister,
@@ -58,6 +60,7 @@ export const PasswordFormSection = ({
           valuePreview={passwordValue ? '********' : undefined}
           isValid={!passwordError && !confirmPasswordError && !!passwordValue}
           onClick={onToggle}
+          onCollapsedFocus={onCollapsedFocus}
         />
       )}
       renderOpen={() => (

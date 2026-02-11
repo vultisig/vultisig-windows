@@ -14,6 +14,7 @@ import { ReferralExpandableField } from './ReferralExpandableField'
 type NameFormSectionProps = {
   isExpanded: boolean
   onToggle: () => void
+  onCollapsedFocus?: () => void
   register: UseFormRegisterReturn<'name'>
   error?: string
   value: string
@@ -25,6 +26,7 @@ type NameFormSectionProps = {
 export const NameFormSection = ({
   isExpanded,
   onToggle,
+  onCollapsedFocus,
   register,
   error,
   value,
@@ -43,6 +45,7 @@ export const NameFormSection = ({
           valuePreview={value}
           isValid={!error && !!value}
           onClick={onToggle}
+          onCollapsedFocus={onCollapsedFocus}
         />
       )}
       renderOpen={() => (

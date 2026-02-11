@@ -451,6 +451,7 @@ export const hr = {
   follow_banner_title: 'Pratite nas na X-u',
   from: 'Iz',
   from_asset: 'Iz imovine',
+  freeze: 'Freeze',
   function_arguments: 'Argumenti funkcije',
   function_signature: 'Potpis funkcije',
   function_unavailble:
@@ -838,6 +839,14 @@ export const hr = {
   transaction_has_risk:
     '<provider></provider> je otkrio rizičnu transakciju {{riskLevel}}',
   transaction_successful: 'Transakcija uspješna',
+  tron_bandwidth: 'Bandwidth',
+  tron_energy: 'Energy',
+  tron_freeze_button: 'Freeze',
+  tron_freeze_title: 'TRON Freeze',
+  tron_frozen_label: 'Frozen',
+  tron_pending_withdrawals: 'Pending Withdrawals',
+  tron_ready_to_claim: 'Ready to claim',
+  tron_unfreeze_button: 'Unfreeze',
   try_again: 'Pokušaj ponovno',
   turn_your_vault_into_rewards_machine:
     'Pretvorite svoj trezor u stroj za nagrade. Izradite svoju preporuku odmah i počnite zarađivati.',
@@ -849,6 +858,7 @@ export const hr = {
   unlock_discount_tier: 'Otključaj <b>{{tier}}<b> razinu',
   unlock_tier: 'Otključaj razinu',
   unmerge: 'Razdvoji',
+  unfreeze: 'Unfreeze',
   unknown: 'Nepoznato',
   unstake: 'Ukloni klađenje',
   unstake_share_token_label: 'Ukloni {{ticker}}',

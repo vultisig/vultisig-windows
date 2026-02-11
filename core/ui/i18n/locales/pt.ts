@@ -456,6 +456,7 @@ export const pt = {
   follow_banner_title: 'Siga-nos no X',
   from: 'De',
   from_asset: 'Do ativo',
+  freeze: 'Freeze',
   function_arguments: 'Argumentos da função',
   function_signature: 'Assinatura da função',
   function_unavailble:
@@ -848,6 +849,14 @@ export const pt = {
   transaction_has_risk:
     'Transação de risco {{riskLevel}} detectada por <provider></provider>',
   transaction_successful: 'Transação concluída com sucesso',
+  tron_bandwidth: 'Bandwidth',
+  tron_energy: 'Energy',
+  tron_freeze_button: 'Freeze',
+  tron_freeze_title: 'TRON Freeze',
+  tron_frozen_label: 'Frozen',
+  tron_pending_withdrawals: 'Pending Withdrawals',
+  tron_ready_to_claim: 'Ready to claim',
+  tron_unfreeze_button: 'Unfreeze',
   try_again: 'Tente novamente',
   turn_your_vault_into_rewards_machine:
     'Transforme seu cofre em uma máquina de recompensas. Crie seu cadastro de indicação agora e comece a ganhar.',
@@ -859,6 +868,7 @@ export const pt = {
   unlock_discount_tier: 'Desbloquear <b>{{tier}calb> Nível',
   unlock_tier: 'Desbloquear nível',
   unmerge: 'Desfazer fusão',
+  unfreeze: 'Unfreeze',
   unknown: 'Desconhecido',
   unstake: 'Desvincule',
   unstake_share_token_label: 'Unstake {{ticker}}',

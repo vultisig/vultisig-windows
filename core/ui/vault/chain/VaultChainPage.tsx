@@ -1,3 +1,4 @@
+import { Chain } from '@core/chain/Chain'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCore } from '@core/ui/state/core'
@@ -14,6 +15,7 @@ import styled from 'styled-components'
 import { useCurrentVaultAddress } from '../state/currentVaultCoins'
 import { RefreshVaultChainBalance } from './RefreshVaultChainBalance'
 import { VaultChainTabs } from './tabs/VaultChainTabs'
+import { TronResourcesSection } from './tron/TronResourcesSection'
 import { useCurrentVaultChain } from './useCurrentVaultChain'
 import { VaultChainOverview } from './VaultChainOverview'
 
@@ -50,6 +52,7 @@ export const VaultChainPage = () => {
         />
         <StyledPageContent scrollable gap={32} flexGrow>
           <VaultChainOverview />
+          {chain === Chain.Tron && <TronResourcesSection />}
           <VaultChainTabs />
         </StyledPageContent>
       </VStack>
