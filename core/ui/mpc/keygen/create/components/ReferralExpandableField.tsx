@@ -1,4 +1,4 @@
-import { useFriendReferralValidation } from '@core/ui/vault/settings/referral/components/EditFriendReferralForm/hooks/useFriendReferralValidation'
+import { useReferralValidation } from '@core/ui/vault/settings/referral/hooks/useReferralValidation'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndicator'
 import { hStack, VStack } from '@lib/ui/layout/Stack'
@@ -31,7 +31,7 @@ export const ReferralExpandableField = ({
 }: ReferralExpandableFieldProps) => {
   const { t } = useTranslation()
   const [isExpanded, setIsExpanded] = useState(false)
-  const error = useFriendReferralValidation(value)
+  const error = useReferralValidation(value)
 
   return (
     <VStack gap={12}>
