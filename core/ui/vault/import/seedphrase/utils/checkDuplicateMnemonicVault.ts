@@ -1,5 +1,5 @@
-import { Vault } from '@core/mpc/vault/Vault'
 import { clampThenUniformScalar } from '@core/mpc/utils/ed25519ScalarClamp'
+import { Vault } from '@core/mpc/vault/Vault'
 import { attempt, withFallback } from '@lib/utils/attempt'
 import { WalletCore } from '@trustwallet/wallet-core'
 
@@ -33,7 +33,8 @@ export const checkDuplicateMnemonicVault = ({
       // Derive ECDSA public key
       const ecdsaMasterKey = hdWallet.getMasterKey(walletCore.Curve.secp256k1)
       const ecdsaPrivateKeyData = new Uint8Array(ecdsaMasterKey.data())
-      ecdsaPrivateKey = walletCore.PrivateKey.createWithData(ecdsaPrivateKeyData)
+      ecdsaPrivateKey =
+        walletCore.PrivateKey.createWithData(ecdsaPrivateKeyData)
       const ecdsaPublicKey = ecdsaPrivateKey.getPublicKeySecp256k1(true)
       const ecdsaPublicKeyHex = Buffer.from(ecdsaPublicKey.data()).toString(
         'hex'
