@@ -60,6 +60,10 @@ export const en = {
   before_you_start: 'Before you start...',
   backup: 'Backup',
   backupGuide: 'Backup guide',
+  backupVault: 'Backup Vault',
+  backupInCloudTitle: 'Backup in the cloud',
+  backupInCloudDescription:
+    'Back up your vault share securely online. Online storage is recommended and vault shares are designed for this.',
   backupShare: 'Backup Vault Share',
   backupShare2: 'Backup Share 2',
   backupsTitle: '<highlight>Backups,</highlight> your new recovery method',
@@ -74,7 +78,7 @@ export const en = {
   backupShareWarning: 'This is only 1 share of your vault',
   backupShareWarningRest: ', repeat this process for the other devices.',
   backup_description: 'Back up your Vault Share to a preferred location',
-  backup_now: 'Backup now',
+  backup_now: 'Get started',
   backup_password: 'Backup Password',
   backup_password_confirmation_title:
     'Do you want to encrypt your backup with a password?',
@@ -349,8 +353,6 @@ export const en = {
     addAnOptionalHint: 'Add an optional hint',
     backup: {
       backThemUpNow: 'back them up now',
-      backupConfirmationDescription: 'Backup your vault share online',
-      backupVault: 'Backup Vault',
       checkEmail: 'Check your e-mail to verify',
       codeInfo:
         "This code will confirm that you've received your vault share 1 via email",
@@ -358,8 +360,6 @@ export const en = {
       enterCode: 'Enter the 4 digit code we emailed you',
       heldByServer: 'held by the server',
       online: 'online',
-      onlineStorageDescription:
-        'Online storage is recommended and safe - vault shares are designed for this.',
       part1: 'Share 1 of the vault shares will be',
       securely: 'securely, preferably',
       setNewStandard: "You're ready to use a new wallet standard.",
@@ -416,10 +416,6 @@ export const en = {
     takeMinute: 'This should only take a second',
   },
   fast_sign: 'Fast Sign',
-  fast_vault_backup_description:
-    'Online storage is recommended and safe - vault shares are designed for this.',
-  fast_vault_backup_title:
-    'Back up your vault share online  using the same vault password you created earlier.',
   fill_the_form: 'Fill the form',
   find_custom_token: 'Find custom token',
   folder_name: 'Folder name',
