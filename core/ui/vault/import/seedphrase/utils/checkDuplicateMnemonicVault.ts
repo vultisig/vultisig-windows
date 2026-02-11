@@ -9,7 +9,11 @@ type CheckDuplicateInput = {
   walletCore: WalletCore
 }
 
-type PrivateKeyType = ReturnType<typeof WalletCore.PrivateKey.createWithData>
+type PrivateKeyLike = {
+  getPublicKeySecp256k1(compressed: boolean): { data(): Uint8Array }
+  getPublicKeyEd25519(): { data(): Uint8Array }
+  delete(): void
+}
 
 /**
  * Checks if a mnemonic already exists in the system by comparing
@@ -26,8 +30,8 @@ export const checkDuplicateMnemonicVault = ({
 
   const result = attempt(() => {
     const hdWallet = walletCore.HDWallet.createWithMnemonic(mnemonic, '')
-    let ecdsaPrivateKey: PrivateKeyType | null = null
-    let eddsaPrivateKey: PrivateKeyType | null = null
+    let ecdsaPrivateKey: PrivateKeyLike | null = null
+    let eddsaPrivateKey: PrivateKeyLike | null = null
 
     try {
       // Derive ECDSA public key
@@ -41,19 +45,20 @@ export const checkDuplicateMnemonicVault = ({
       )
 
       // Derive EdDSA public key
-      const eddtsMasterKey = hdWallet.getMasterKey(walletCore.Curve.ed25519)
-      const eddsaPrivateKeyData = new Uint8Array(eddtsMasterKey.data())
+      const eddsaMasterKey = hdWallet.getMasterKey(walletCore.Curve.ed25519)
+      const eddsaPrivateKeyData = new Uint8Array(eddsaMasterKey.data())
       const clampedEddsaKey = clampThenUniformScalar(eddsaPrivateKeyData)
       eddsaPrivateKey = walletCore.PrivateKey.createWithData(clampedEddsaKey)
       const eddsaPublicKeyData = eddsaPrivateKey.getPublicKeyEd25519().data()
       const eddsaPublicKeyHex = Buffer.from(eddsaPublicKeyData).toString('hex')
 
       // Check for matching vault
-      return existingVaults.find(
-        vault =>
-          vault.publicKeys.ecdsa === ecdsaPublicKeyHex ||
-          vault.publicKeys.eddsa === eddsaPublicKeyHex
+      const vault = existingVaults.find(
+        v =>
+          v.publicKeys.ecdsa === ecdsaPublicKeyHex ||
+          v.publicKeys.eddsa === eddsaPublicKeyHex
       )
+      return vault ?? null
     } finally {
       // Guarantee cleanup even if any step throws
       hdWallet.delete()
