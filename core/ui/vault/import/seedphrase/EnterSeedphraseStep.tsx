@@ -1,16 +1,18 @@
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { useVaults } from '@core/ui/storage/vaults'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { TextArea } from '@lib/ui/inputs/TextArea'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { seedphraseWordCounts } from './config'
 import { EnterSeedphraseHeader } from './EnterSeedphraseHeader'
 import { useMnemonic } from './state/mnemonic'
 import { useImportSeedphraseStep } from './state/step'
+import { checkDuplicateMnemonicVault } from './utils/checkDuplicateMnemonicVault'
 import { cleanMnemonic, validateMnemonic } from './utils/validateMnemonic'
 
 export const EnterSeedphraseStep = () => {
@@ -18,14 +20,35 @@ export const EnterSeedphraseStep = () => {
   const [mnemonic, setMnemonic] = useMnemonic()
   const [, setStep] = useImportSeedphraseStep()
   const walletCore = useAssertWalletCore()
+  const vaults = useVaults()
 
   const [isTouched, setIsTouched] = useState(false)
 
-  const error = validateMnemonic({ mnemonic, walletCore, t })
-  const isValid = mnemonic.trim() !== '' && !error
+  const cleanedMnemonic = cleanMnemonic(mnemonic)
+  const basicError = validateMnemonic({
+    mnemonic: cleanedMnemonic,
+    walletCore,
+    t,
+  })
 
-  const words = cleanMnemonic(mnemonic).split(' ')
-  const wordsCount = mnemonic.trim() === '' ? 0 : words.length
+  const duplicateVault = useMemo(() => {
+    if (basicError) return null
+    return checkDuplicateMnemonicVault({
+      mnemonic: cleanedMnemonic,
+      existingVaults: vaults,
+      walletCore,
+    })
+  }, [cleanedMnemonic, basicError, vaults, walletCore])
+
+  const duplicateError = duplicateVault
+    ? t('seedphrase_duplicate_vault_error', { vaultName: duplicateVault.name })
+    : null
+
+  const error = basicError || duplicateError
+  const isValid = cleanedMnemonic !== '' && !error
+
+  const words = cleanedMnemonic.split(' ')
+  const wordsCount = cleanedMnemonic === '' ? 0 : words.length
   const [minWordCount, maxWordCount] = seedphraseWordCounts
   const maxWords = wordsCount > minWordCount ? maxWordCount : minWordCount
   const accessory = `${wordsCount}/${maxWords}`
@@ -36,7 +59,10 @@ export const EnterSeedphraseStep = () => {
       gap={32}
       flexGrow
       {...getFormProps({
-        onSubmit: () => setStep('scan'),
+        onSubmit: () => {
+          setMnemonic(cleanedMnemonic)
+          setStep('scan')
+        },
         isDisabled: !isValid,
       })}
     >

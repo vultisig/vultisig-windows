@@ -15,7 +15,7 @@ Create a new local git branch based on conversation context.
 
 2. **No GitHub issue**:
    - Create a descriptive branch name based on what we're working on
-   - Format: `{short-description}`
+   - Format: `{short-description}` in kebab-case, no prefixes like `feat/`, `fix/`, etc.
    - Example: Adding dark mode -> `add-dark-mode`
 
 ## Rules
