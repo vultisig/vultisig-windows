@@ -1,7 +1,6 @@
 import { Chain } from '@core/chain/Chain'
-import { featureFlags } from '@core/ui/featureFlags'
 
-const allDepositEnabledChains = [
+export const depositEnabledChains = [
   Chain.THORChain,
   Chain.MayaChain,
   Chain.Dydx,
@@ -12,9 +11,4 @@ const allDepositEnabledChains = [
   Chain.Cosmos,
 ] as const satisfies readonly Chain[]
 
-export type DepositEnabledChain = (typeof allDepositEnabledChains)[number]
-
-export const depositEnabledChains: readonly Chain[] =
-  allDepositEnabledChains.filter(
-    chain => chain !== Chain.Tron || featureFlags.tronResources
-  )
+export type DepositEnabledChain = (typeof depositEnabledChains)[number]

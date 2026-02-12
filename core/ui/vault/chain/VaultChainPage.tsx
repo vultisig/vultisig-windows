@@ -1,6 +1,5 @@
 import { Chain } from '@core/chain/Chain'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
-import { featureFlags } from '@core/ui/featureFlags'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCore } from '@core/ui/state/core'
 import { BottomNavigation } from '@core/ui/vault/components/BottomNavigation'
@@ -53,9 +52,7 @@ export const VaultChainPage = () => {
         />
         <StyledPageContent scrollable gap={32} flexGrow>
           <VaultChainOverview />
-          {featureFlags.tronResources && chain === Chain.Tron && (
-            <TronResourcesSection />
-          )}
+          {chain === Chain.Tron && <TronResourcesSection />}
           <VaultChainTabs />
         </StyledPageContent>
       </VStack>
