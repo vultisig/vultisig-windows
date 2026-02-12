@@ -56,7 +56,7 @@ export const TransactionOverviewAmount = ({
                   error={() => formatAmount(fallbackAmount)}
                   success={payload =>
                     formatAmount(
-                      fromChainAmount(getPayloadAmount(payload), coin.decimals)
+                      fromChainAmount(getPayloadAmount(payload), coin.decimals), { precision: 'high' }
                     )
                   }
                 />
