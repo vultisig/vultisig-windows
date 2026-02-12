@@ -253,6 +253,28 @@ export class VultisigTronWebTrx extends Trx {
       multisig
     )) as SignedStringOrSignedTransaction<T>
   }
+
+  // @ts-expect-error - base class types signMessageV2 as sync, but wallet implementations are async (requires user confirmation popup)
+  signMessageV2 = async (
+    message: string | Uint8Array | Array<number>,
+    _privateKey?: string
+  ): Promise<string> => {
+    const messageStr =
+      typeof message === 'string'
+        ? message
+        : Buffer.from(message as Uint8Array).toString('utf8')
+    const signature = await callPopup({
+      signMessage: {
+        sign_message: {
+          chain: Chain.Tron,
+          message: messageStr,
+          signMessageV2: true,
+        },
+      },
+    })
+
+    return processSignature(signature)
+  }
 }
 
 export class VultisigTronWeb extends TronWeb {
@@ -263,5 +285,6 @@ export class VultisigTronWeb extends TronWeb {
     })
   }
 
+  // @ts-expect-error - VultisigTronWebTrx makes signMessageV2 async for wallet popup flow
   trx: VultisigTronWebTrx = new VultisigTronWebTrx(this)
 }
