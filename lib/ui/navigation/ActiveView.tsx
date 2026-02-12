@@ -1,4 +1,5 @@
 import { getLastItem } from '@lib/utils/array/getLastItem'
+import { useRef } from 'react'
 
 import { useNavigation } from './state'
 import { Views } from './Views'
@@ -9,14 +10,16 @@ type ActiveViewProps = {
 
 export const ActiveView = ({ views }: ActiveViewProps) => {
   const [{ history }] = useNavigation()
+  const viewKeyRef = useRef(0)
+  const prevHistoryRef = useRef(history)
 
-  const currentView = getLastItem(history)
-  const { id } = currentView
+  if (history !== prevHistoryRef.current) {
+    viewKeyRef.current++
+    prevHistoryRef.current = history
+  }
+
+  const { id } = getLastItem(history)
   const View = views[id]
 
-  // Create a stable key for each view instance to ensure proper remounting
-  // when navigating back to the same view ID with different state
-  const viewKey = JSON.stringify(currentView)
-
-  return <View key={viewKey} />
+  return <View key={viewKeyRef.current} />
 }
