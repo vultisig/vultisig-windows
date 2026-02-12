@@ -11,14 +11,20 @@ type ActiveViewProps = {
 export const ActiveView = ({ views }: ActiveViewProps) => {
   const [{ history }] = useNavigation()
   const viewKeyRef = useRef(0)
-  const prevHistoryRef = useRef(history)
+  const prevHistoryLengthRef = useRef(history.length)
+  const prevViewIdRef = useRef(getLastItem(history).id)
 
-  if (history !== prevHistoryRef.current) {
+  const currentView = getLastItem(history)
+  if (
+    prevHistoryLengthRef.current !== history.length ||
+    prevViewIdRef.current !== currentView.id
+  ) {
     viewKeyRef.current++
-    prevHistoryRef.current = history
+    prevHistoryLengthRef.current = history.length
+    prevViewIdRef.current = currentView.id
   }
 
-  const { id } = getLastItem(history)
+  const { id } = currentView
   const View = views[id]
 
   return <View key={viewKeyRef.current} />
