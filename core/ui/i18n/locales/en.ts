@@ -490,6 +490,8 @@ export const en = {
   install_plugin: 'Install App',
   installation_progress: 'Installation progress: {{progress}}%',
   insufficient_balance: 'Insufficient balance',
+  insufficient_native_balance_for_fee:
+    'Insufficient native token balance to pay for the transaction fee',
   insufficient_gas_limit: 'Insufficient Gas Limit',
   insufficient_gas_limit_description:
     'Estimated gas: {{estimated}}. Gas limit: {{limit}}. The transaction may fail due to insufficient gas.',
