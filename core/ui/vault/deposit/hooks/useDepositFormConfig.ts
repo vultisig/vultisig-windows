@@ -1,3 +1,4 @@
+import { TronResourceType } from '@core/chain/chains/tron/resources'
 import { useTranslation } from 'react-i18next'
 
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
@@ -6,7 +7,7 @@ import { useDepositCoin } from '../providers/DepositCoinProvider'
 import { getDepositFormConfig } from '../utils/getDepositFormConfig'
 import { useDepositBalance } from './useDepositBalance'
 
-export const useDepositFormConfig = () => {
+export const useDepositFormConfig = (tronResourceType?: TronResourceType) => {
   const [selectedChainAction] = useDepositAction()
   const walletCore = useAssertWalletCore()
   const [coin] = useDepositCoin()
@@ -14,6 +15,7 @@ export const useDepositFormConfig = () => {
 
   const { balance } = useDepositBalance({
     selectedChainAction,
+    tronResourceType,
   })
 
   return getDepositFormConfig({

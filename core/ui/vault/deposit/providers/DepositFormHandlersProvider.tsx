@@ -1,4 +1,5 @@
 import { Chain } from '@core/chain/Chain'
+import { TronResourceType } from '@core/chain/chains/tron/resources'
 import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
 import {
   Control,
@@ -17,6 +18,8 @@ type DepositFormHandlers = {
   chain: Chain
   register: UseFormRegister<FormData>
   control: Control<FormData, any>
+  tronResourceType?: TronResourceType
+  setTronResourceType?: (type: TronResourceType) => void
 }
 
 export const {
