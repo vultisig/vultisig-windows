@@ -695,6 +695,34 @@ export const getDepositFormConfig = ({
               }) as any,
           }),
     }),
+    freeze: () => ({
+      fields: [
+        {
+          name: 'amount',
+          type: 'number',
+          label: t('amount'),
+          required: true,
+        },
+      ],
+      schema: z.object({
+        resourceType: z.enum(['BANDWIDTH', 'ENERGY']),
+        amount: positiveAmountSchema(totalAmountAvailable, t),
+      }),
+    }),
+    unfreeze: () => ({
+      fields: [
+        {
+          name: 'amount',
+          type: 'number',
+          label: t('amount'),
+          required: true,
+        },
+      ],
+      schema: z.object({
+        resourceType: z.enum(['BANDWIDTH', 'ENERGY']),
+        amount: positiveAmountSchema(totalAmountAvailable, t),
+      }),
+    }),
     add_cacao_pool: () => ({
       fields: [
         {

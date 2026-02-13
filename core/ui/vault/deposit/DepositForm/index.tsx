@@ -1,3 +1,4 @@
+import { TronResourceType } from '@core/chain/chains/tron/resources'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ActionForm } from '@core/ui/vault/components/action-form/ActionForm'
@@ -23,7 +24,7 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import { FieldValues, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
@@ -54,11 +55,15 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
   const [coin] = useDepositCoin()
   const availableActions = useAvailableChainActions(coin.chain)
 
+  const [tronResourceType, setTronResourceType] =
+    useState<TronResourceType>('BANDWIDTH')
+
   const { balance } = useDepositBalance({
     selectedChainAction,
+    tronResourceType,
   })
 
-  const { fields, schema } = useDepositFormConfig()
+  const { fields, schema } = useDepositFormConfig(tronResourceType)
 
   const {
     register,
@@ -118,6 +123,8 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
         chain: coin.chain,
         register,
         control,
+        tronResourceType,
+        setTronResourceType,
       }}
     >
       <PageHeader

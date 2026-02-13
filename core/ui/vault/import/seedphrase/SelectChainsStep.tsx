@@ -9,6 +9,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { seedphraseImportSupportedChains } from './config'
 import { useSelectedChains } from './state/selectedChains'
 import { useFinishSeedphraseImport } from './utils/useFinishSeedphraseImport'
 
@@ -33,7 +34,7 @@ export const SelectChainsStep = () => {
   const [selectedChains, setSelectedChains] = useSelectedChains()
   const handleFinish = useFinishSeedphraseImport()
 
-  const allChains = Object.values(Chain)
+  const allChains = seedphraseImportSupportedChains
 
   const filteredChains = search
     ? allChains.filter(chain =>
