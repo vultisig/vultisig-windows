@@ -16,6 +16,7 @@ import { DownloadKeygenQrCode } from '@core/ui/mpc/keygen/qr/DownloadKeygenQrCod
 import { useJoinKeygenUrlQuery } from '@core/ui/mpc/keygen/queries/useJoinKeygenUrlQuery'
 import { useKeygenOperation } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { useKeygenVault } from '@core/ui/mpc/keygen/state/keygenVault'
+import { useTargetDeviceCount } from '@core/ui/mpc/keygen/state/targetDeviceCount'
 import { MpcLocalServerIndicator } from '@core/ui/mpc/server/MpcLocalServerIndicator'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcPeers } from '@core/ui/mpc/state/mpcPeers'
@@ -38,6 +39,7 @@ import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { AutoStartKeygen } from './AutoStartKeygen'
 import { minKeygenDevices } from './config'
 import { KeygenDevicesRequirementsInfo } from './KeygenDevicesRequirementsInfo'
 
@@ -63,10 +65,15 @@ export const KeygenPeerDiscoveryStep = ({
   const keygenVault = useKeygenVault()
   const localPartyId = useMpcLocalPartyId()
   const opertaionType = useKeygenOperation()
+  const targetDeviceCount = useTargetDeviceCount()
 
   const recommendedPeers = useMemo(() => {
+    if (targetDeviceCount !== undefined) {
+      return targetDeviceCount - 1
+    }
+
     return !selectedPeers.length ? 2 : selectedPeers.length + 1
-  }, [selectedPeers])
+  }, [selectedPeers, targetDeviceCount])
 
   const isMigrate = useMemo(() => {
     return 'reshare' in opertaionType && opertaionType.reshare === 'migrate'
@@ -84,6 +91,10 @@ export const KeygenPeerDiscoveryStep = ({
   }, [keygenVault, isMigrate, localPartyId, selectedPeers])
 
   const devicesTarget = useMemo(() => {
+    if (targetDeviceCount !== undefined) {
+      return targetDeviceCount
+    }
+
     if (isMigrate) {
       const { signers } = getRecordUnionValue(keygenVault, 'existingVault')
 
@@ -95,21 +106,53 @@ export const KeygenPeerDiscoveryStep = ({
     }
 
     return Math.max(peerOptionsQuery.data.length + 1, minKeygenDevices)
-  }, [isMigrate, keygenVault, peerOptionsQuery.data, selectedPeers.length])
+  }, [
+    targetDeviceCount,
+    isMigrate,
+    keygenVault,
+    peerOptionsQuery.data,
+    selectedPeers.length,
+  ])
 
   const isDisabled = useMemo(() => {
-    if (!selectedPeers.length) {
-      return t('select_n_devices', { count: 1 })
-    }
-
     if (isMigrate && missingPeers.length > 0) {
       return `${t('missing_devices_for_migration')}: ${missingPeers.join(', ')}`
     }
-  }, [isMigrate, missingPeers, selectedPeers.length, t])
+
+    if (targetDeviceCount !== undefined) {
+      const requiredPeers = targetDeviceCount - 1
+      if (targetDeviceCount <= 3) {
+        if (selectedPeers.length !== requiredPeers) {
+          return t('select_n_devices', {
+            count: requiredPeers - selectedPeers.length,
+          })
+        }
+      } else {
+        if (selectedPeers.length < requiredPeers) {
+          return t('select_n_devices', {
+            count: requiredPeers - selectedPeers.length,
+          })
+        }
+      }
+      return undefined
+    }
+
+    if (!selectedPeers.length) {
+      return t('select_n_devices', { count: 1 })
+    }
+  }, [isMigrate, missingPeers, selectedPeers.length, t, targetDeviceCount])
+
+  const showOptionalDevice = useMemo(() => {
+    if (isMigrate) return false
+    if (targetDeviceCount !== undefined && targetDeviceCount <= 3) return false
+
+    return true
+  }, [isMigrate, targetDeviceCount])
 
   return (
     <>
       <MpcPeersCorrector />
+      <AutoStartKeygen onFinish={onFinish} />
       <PageHeader
         primaryControls={<PageHeaderBackButton onClick={onBack} />}
         secondaryControls={
@@ -147,7 +190,9 @@ export const KeygenPeerDiscoveryStep = ({
                 value={serverType}
                 local={() => <MpcLocalServerIndicator />}
                 relay={() =>
-                  isMigrate ? null : <KeygenDevicesRequirementsInfo />
+                  isMigrate || targetDeviceCount !== undefined ? null : (
+                    <KeygenDevicesRequirementsInfo />
+                  )
                 }
               />
               <PeersManagerTitle target={devicesTarget} />
@@ -158,7 +203,7 @@ export const KeygenPeerDiscoveryStep = ({
                   success={peerOptions => {
                     const placeholderCount = isMigrate
                       ? missingPeers.length
-                      : recommendedPeers - peerOptions.length
+                      : Math.max(0, recommendedPeers - peerOptions.length)
 
                     return (
                       <>
@@ -179,7 +224,7 @@ export const KeygenPeerDiscoveryStep = ({
                             </PeerPlaceholder>
                           )
                         })}
-                        {!isMigrate && (
+                        {showOptionalDevice && (
                           <>
                             {peerOptions.length >= recommendedPeers && (
                               <PeerPlaceholder>
@@ -192,6 +237,15 @@ export const KeygenPeerDiscoveryStep = ({
                     )
                   }}
                 />
+                {targetDeviceCount !== undefined &&
+                  peerOptionsQuery.data === undefined &&
+                  range(recommendedPeers).map(index => (
+                    <PeerPlaceholder key={index}>
+                      {t('scan_with_device_index', {
+                        index: index + 1,
+                      })}
+                    </PeerPlaceholder>
+                  ))}
               </PeersContainer>
             </PeersManagerFrame>
           </PeersPageContentFrame>

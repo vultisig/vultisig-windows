@@ -14,6 +14,7 @@ export const SetupSecureVaultPage = () => {
   const content = (
     <CreateSecureVaultFlow
       CreateActionProvider={CreateVaultKeygenActionProvider}
+      deviceCount={state?.deviceCount}
     >
       <MpcMediatorManager />
     </CreateSecureVaultFlow>
