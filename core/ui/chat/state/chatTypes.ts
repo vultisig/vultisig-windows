@@ -71,12 +71,6 @@ export type PolicyReady = {
   policy_suggest: PolicySuggestData
 }
 
-export type AuthResponse = {
-  access_token: string
-  refresh_token: string
-  expires_in: number
-}
-
 export type SendMessageRequest = {
   public_key: string
   content: string

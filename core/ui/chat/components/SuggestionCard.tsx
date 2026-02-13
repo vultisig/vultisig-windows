@@ -12,7 +12,7 @@ type SuggestionCardProps = {
   disabled?: boolean
 }
 
-export const SuggestionCard = ({
+const SuggestionCard = ({
   suggestion,
   onSelect,
   disabled,
