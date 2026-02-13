@@ -5,7 +5,7 @@ type StatusResponse = { data?: { nav_per_share?: string } }
 export const fetchNavPerShare = async (
   contractId: string
 ): Promise<number | undefined> => {
-  const url = `https://thornode-mainnet-api.bryanlabs.net/cosmwasm/wasm/v1/contract/${contractId}/smart/eyJzdGF0dXMiOiB7fX0`
+  const url = `https://thorchain.ibs.team/api/cosmwasm/wasm/v1/contract/${contractId}/smart/eyJzdGF0dXMiOiB7fX0=`
 
   try {
     const json = await queryUrl<StatusResponse>(url)

@@ -44,15 +44,28 @@ export const Overview = () => {
   const vault = useCurrentVault()
   const message = matchRecordUnion<SignMessageInput, string>(input, {
     eth_signTypedData_v4: ({ message }) => JSON.stringify(message),
-    sign_message: ({ message, chain, useTronHeader }) => {
-      const tronMessageHeader = '\x19TRON Signed Message:\n32'
-      const ethMessageHeader = '\x19Ethereum Signed Message:\n32'
+    sign_message: ({ message, chain, useTronHeader, signMessageV2 }) => {
       if (chain === Chain.Tron) {
-        const messageBytes = [
-          ...toUtf8Bytes(useTronHeader ? tronMessageHeader : ethMessageHeader),
-          ...hexStr2byteArray(message),
-        ]
-        return hexlify(new Uint8Array(messageBytes))
+        // V2 (TIP-191): always dynamic header "\x19TRON Signed Message:\n" + message length in bytes.
+        if (signMessageV2) {
+          const messageBytes = toUtf8Bytes(message)
+          const tronMessageHeader = `\x19TRON Signed Message:\n${messageBytes.length}`
+          const fullBytes = [...toUtf8Bytes(tronMessageHeader), ...messageBytes]
+          return hexlify(new Uint8Array(fullBytes))
+        }
+        // Legacy: useTronHeader true → fixed "\x19TRON Signed Message:\n32" + hex message.
+        if (useTronHeader) {
+          const tronMessageHeader = '\x19TRON Signed Message:\n32'
+          const messageBytes = [
+            ...toUtf8Bytes(tronMessageHeader),
+            ...hexStr2byteArray(message),
+          ]
+          return hexlify(new Uint8Array(messageBytes))
+        }
+        // Legacy without header: deprecated and poorly aligned with our architecture. Not supported.
+        throw new Error(
+          'TRON legacy signMessage without header is not supported. Use tronWeb.trx.signMessageV2 instead.'
+        )
       }
       return message
     },

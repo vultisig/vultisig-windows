@@ -23,6 +23,7 @@ export const StackedField = ({
             position: isOpen ? 'relative' : 'absolute',
             width: '100%',
           }}
+          {...(!isOpen && { inert: true })}
         >
           {renderOpen()}
         </motion.div>
@@ -38,6 +39,7 @@ export const StackedField = ({
             position: isOpen ? 'absolute' : 'relative',
             width: '100%',
           }}
+          {...(isOpen && { inert: true })}
         >
           {renderClose()}
         </motion.div>

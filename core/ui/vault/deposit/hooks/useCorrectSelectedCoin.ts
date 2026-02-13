@@ -105,6 +105,8 @@ export const useCorrectSelectedCoin = () => {
           findByTicker({ coins, ticker: 'CACAO' }),
         add_cacao_pool: () => shouldBePresent(potentialCACAOCoin),
         remove_cacao_pool: () => shouldBePresent(potentialCACAOCoin),
+        freeze: () => currentDepositCoin,
+        unfreeze: () => currentDepositCoin,
       })
     },
     [action, coins, mergeOptions, mintOptions, redeemOptions, unmergeOptions]
