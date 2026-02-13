@@ -60,6 +60,10 @@ export const en = {
   before_you_start: 'Before you start...',
   backup: 'Backup',
   backupGuide: 'Backup guide',
+  backupVault: 'Backup Vault',
+  backupInCloudTitle: 'Backup in the cloud',
+  backupInCloudDescription:
+    'Back up your vault share securely online. Online storage is recommended and vault shares are designed for this.',
   backupShare: 'Backup Vault Share',
   backupShare2: 'Backup Share 2',
   backupsTitle: '<highlight>Backups,</highlight> your new recovery method',
@@ -74,7 +78,7 @@ export const en = {
   backupShareWarning: 'This is only 1 share of your vault',
   backupShareWarningRest: ', repeat this process for the other devices.',
   backup_description: 'Back up your Vault Share to a preferred location',
-  backup_now: 'Backup now',
+  backup_now: 'Get started',
   backup_password: 'Backup Password',
   backup_password_confirmation_title:
     'Do you want to encrypt your backup with a password?',
@@ -349,8 +353,6 @@ export const en = {
     addAnOptionalHint: 'Add an optional hint',
     backup: {
       backThemUpNow: 'back them up now',
-      backupConfirmationDescription: 'Backup your vault share online',
-      backupVault: 'Backup Vault',
       checkEmail: 'Check your e-mail to verify',
       codeInfo:
         "This code will confirm that you've received your vault share 1 via email",
@@ -358,8 +360,6 @@ export const en = {
       enterCode: 'Enter the 4 digit code we emailed you',
       heldByServer: 'held by the server',
       online: 'online',
-      onlineStorageDescription:
-        'Online storage is recommended and safe - vault shares are designed for this.',
       part1: 'Share 1 of the vault shares will be',
       securely: 'securely, preferably',
       setNewStandard: "You're ready to use a new wallet standard.",
@@ -416,10 +416,6 @@ export const en = {
     takeMinute: 'This should only take a second',
   },
   fast_sign: 'Fast Sign',
-  fast_vault_backup_description:
-    'Online storage is recommended and safe - vault shares are designed for this.',
-  fast_vault_backup_title:
-    'Back up your vault share online  using the same vault password you created earlier.',
   fill_the_form: 'Fill the form',
   find_custom_token: 'Find custom token',
   folder_name: 'Folder name',
@@ -432,6 +428,7 @@ export const en = {
   follow_banner_title: 'Follow us on X',
   from: 'From',
   from_asset: 'From Asset',
+  freeze: 'Freeze',
   function_arguments: 'Function Arguments',
   function_signature: 'Function Signature',
   function_unavailble:
@@ -475,6 +472,8 @@ export const en = {
     'You entered {{count}} words. Seed phrase must be 12 or 24',
   seedphrase_invalid_error:
     'Seed phrase is not correct, please verify all words.',
+  seedphrase_duplicate_vault_error:
+    'This seed phrase is already imported as vault "{{vaultName}}". Importing it again would replace the existing vault.',
   import_seedphrase_description: 'Enter it, create a vault, never look back.',
   import_seedphrase_onboarding_title:
     'You are entering a new era, <g>leaving old seed phrases behind.</g> You’ll need:',
@@ -925,6 +924,21 @@ export const en = {
   accounts: 'Accounts',
   data_length: 'Data Length',
   bytes: 'bytes',
+  tron_bandwidth: 'Bandwidth',
+  tron_energy: 'Energy',
+  tron_freeze_button: 'Freeze',
+  tron_freeze_title: 'TRON Freeze',
+  tron_frozen_label: 'Frozen',
+  tron_pending_withdrawals: 'Pending Withdrawals',
+  tron_ready_to_claim: 'Ready to claim',
+  tron_unfreeze_button: 'Unfreeze',
+  tron_your_holdings: 'Your holdings',
+  tron_bandwidth_and_energy: 'Bandwidth & Energy',
+  tron_bandwidth_description:
+    'Bandwidth Points are required for every transaction on TRON, including both standard token sends and smart contract interactions. Every TRON user receives 600 free Bandwidth Points per day, which can cover approximately two basic sends. Additionally, you can earn extra Bandwidth Points by staking TRX, increasing your daily balance to support more transactions. If you have enough Bandwidth Points, you can send tokens, stake TRX, or interact with smart contracts without paying TRX in gas fees.',
+  tron_energy_description:
+    'Discounts smart contract costs. If insufficient, TRX covers the fee. The green meter shows daily Energy from staked TRX. More staked TRX means more Energy. Refills every 24h. Failed transactions burn more Energy and are not refunded.',
+  tron_got_it: 'Got It',
   try_again: 'Try Again',
   turn_your_vault_into_rewards_machine:
     'Turn your vault into a rewards machine. Create your referral now and start earning.',
@@ -941,6 +955,7 @@ export const en = {
   unlock_tier: 'Unlock Tier',
   ultimate: 'Ultimate',
   unmerge: 'Unmerge',
+  unfreeze: 'Unfreeze',
   unknown: 'Unknown',
   unstake: 'Unstake',
   unstake_share_token_label: 'Unstake {{ticker}}',

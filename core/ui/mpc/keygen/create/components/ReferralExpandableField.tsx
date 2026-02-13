@@ -1,6 +1,7 @@
-import { useFriendReferralValidation } from '@core/ui/vault/settings/referral/components/EditFriendReferralForm/hooks/useFriendReferralValidation'
+import { useReferralValidation } from '@core/ui/vault/settings/referral/hooks/useReferralValidation'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndicator'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { hStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -8,7 +9,13 @@ import styled from 'styled-components'
 
 import { ClearableTextInput } from './ClearableTextInput'
 
-const ExpandableHeader = styled(HStack)`
+const ExpandableHeader = styled(UnstyledButton)`
+  width: 100%;
+  text-align: left;
+  ${hStack({
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  })}
   cursor: pointer;
   user-select: none;
 `
@@ -24,13 +31,12 @@ export const ReferralExpandableField = ({
 }: ReferralExpandableFieldProps) => {
   const { t } = useTranslation()
   const [isExpanded, setIsExpanded] = useState(false)
-  const error = useFriendReferralValidation(value)
+  const error = useReferralValidation(value)
 
   return (
     <VStack gap={12}>
       <ExpandableHeader
-        alignItems="center"
-        justifyContent="space-between"
+        type="button"
         onClick={() => setIsExpanded(prev => !prev)}
       >
         <Text color="shy" size={14}>

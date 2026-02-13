@@ -14,6 +14,8 @@ export type ChainAction =
   | 'vote'
   | 'stake'
   | 'unstake'
+  | 'freeze'
+  | 'unfreeze'
   | 'ibc_transfer'
   | 'merge'
   | 'switch'
@@ -49,4 +51,5 @@ export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
   [Chain.Kujira]: ['ibc_transfer'],
   [Chain.Osmosis]: ['ibc_transfer'],
   [Chain.Cosmos]: ['ibc_transfer', 'switch'],
+  [Chain.Tron]: ['freeze', 'unfreeze'],
 }

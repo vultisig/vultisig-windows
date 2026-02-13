@@ -39,6 +39,8 @@ const chainActionConfig: Record<ChainAction, BalanceDisplayConfig> = {
     showTicker: true,
   },
   remove_cacao_pool: { showBalance: false, showTicker: false },
+  freeze: { showBalance: true, balanceLabel: 'balance', showTicker: true },
+  unfreeze: { showBalance: true, balanceLabel: 'balance', showTicker: true },
 }
 
 type GetBalanceDisplayConfigInput = {
