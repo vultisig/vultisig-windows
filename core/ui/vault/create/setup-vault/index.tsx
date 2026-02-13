@@ -62,12 +62,20 @@ export const SetupVaultPage = () => {
   const [state] = useCoreViewState<'setupVault'>()
 
   const handleContinue = () => {
-    const destination =
-      selectedDeviceCount === 0 ? 'setupFastVault' : 'setupSecureVault'
-    navigate({
-      id: destination,
-      state: { keyImportInput: state?.keyImportInput },
-    })
+    if (selectedDeviceCount === 0) {
+      navigate({
+        id: 'setupFastVault',
+        state: { keyImportInput: state?.keyImportInput },
+      })
+    } else {
+      navigate({
+        id: 'setupSecureVault',
+        state: {
+          keyImportInput: state?.keyImportInput,
+          deviceCount: selectedDeviceCount + 1,
+        },
+      })
+    }
   }
 
   return (

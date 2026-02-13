@@ -8,15 +8,15 @@ type TronResourceBarProps = {
 
 const Track = styled.div`
   width: 100%;
-  height: 3px;
-  border-radius: 2px;
-  background: ${({ theme }) => theme.colors.foregroundSuper.toCssValue()};
+  height: 8px;
+  border-radius: 12px;
+  background: #11284a;
   overflow: hidden;
 `
 
 const Fill = styled.div<TronResourceBarProps>`
   height: 100%;
-  border-radius: 2px;
+  border-radius: 12px;
   background: ${({ $color }) => $color};
   width: ${({ $percentage }) =>
     toPercents(Math.max(Math.min($percentage, 1), 0))};
