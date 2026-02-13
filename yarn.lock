@@ -867,6 +867,7 @@ __metadata:
     "@lib/codegen": "workspace:^"
     "@lib/ui": "workspace:^"
     "@lib/utils": "workspace:^"
+    "@react-spring/web": "npm:^10.0.3"
     "@rive-app/react-webgl2": "npm:^4.26.2"
     "@solana/spl-token": "npm:^0.4.14"
     "@solana/web3.js": "npm:^1.98.4"
