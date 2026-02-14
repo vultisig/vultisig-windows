@@ -8,7 +8,7 @@ export const SetupSecureVaultPage = () => {
   const [state] = useCoreViewState<'setupSecureVault'>()
   const keyImportInput = state?.keyImportInput
 
-  const content = <CreateSecureVaultFlow />
+  const content = <CreateSecureVaultFlow deviceCount={state?.deviceCount} />
 
   return (
     <VaultSecurityTypeProvider value="secure">

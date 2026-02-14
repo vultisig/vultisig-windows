@@ -76,7 +76,10 @@ export type CoreView =
     }
   | { id: 'settings' }
   | { id: 'setupFastVault'; state: { keyImportInput?: KeyImportInput } }
-  | { id: 'setupSecureVault'; state: { keyImportInput?: KeyImportInput } }
+  | {
+      id: 'setupSecureVault'
+      state: { keyImportInput?: KeyImportInput; deviceCount?: number }
+    }
   | {
       id: 'setupVault'
       state: { type?: VaultSecurityType; keyImportInput?: KeyImportInput }
