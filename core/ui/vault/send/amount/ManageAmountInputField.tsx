@@ -1,6 +1,8 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { getMaxValue } from '@core/chain/amount/getMaxValue'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
 import { AmountInReverseCurrencyDisplay } from '@core/ui/vault/send/amount/AmountInReverseCurrencyDisplay'
@@ -11,6 +13,7 @@ import { AnimatedSendFormInputError } from '@core/ui/vault/send/components/Anima
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { SendInputContainer } from '@core/ui/vault/send/components/SendInputContainer'
 import { ManageMemo } from '@core/ui/vault/send/memo/ManageMemo'
+import { useSendFeeEstimateQuery } from '@core/ui/vault/send/queries/useSendFeeEstimateQuery'
 import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValidationQuery'
 import { useSendAmount } from '@core/ui/vault/send/state/amount'
 import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
@@ -29,8 +32,9 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { multiplyBigInt } from '@lib/utils/bigint/bigIntMultiplyByNumber'
+import { minBigInt } from '@lib/utils/math/minBigInt'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -42,9 +46,39 @@ export const ManageAmountInputField = () => {
   const { t } = useTranslation()
 
   const [value, setValue] = useSendAmount()
+  const [pendingSuggestion, setPendingSuggestion] = useState<number | null>(
+    null
+  )
 
   const coin = useCurrentSendCoin()
   const coinPriceQuery = useCoinPriceQuery({ coin })
+  const feeEstimateQuery = useSendFeeEstimateQuery()
+  const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
+  const balance = balanceQuery.data
+  const isNative = isFeeCoin(coin)
+
+  // When user clicked a suggestion and we were waiting for fee: apply amount once fee is available
+  useEffect(() => {
+    if (
+      pendingSuggestion == null ||
+      balance == null ||
+      (isNative && feeEstimateQuery.data == null)
+    ) {
+      return
+    }
+
+    const suggestionValue = multiplyBigInt(balance, pendingSuggestion)
+    const maxSendable =
+      isNative && feeEstimateQuery.data != null
+        ? getMaxValue(balance, feeEstimateQuery.data)
+        : balance
+    const effectiveAmount = isNative
+      ? minBigInt(suggestionValue, maxSendable)
+      : suggestionValue
+
+    setValue(effectiveAmount)
+    setPendingSuggestion(null)
+  }, [balance, feeEstimateQuery.data, isNative, pendingSuggestion, setValue])
 
   const [currencyInputMode, setCurrencyInputMode] = useStateCorrector(
     useState<CurrencyInputMode>('base'),
@@ -63,20 +97,21 @@ export const ManageAmountInputField = () => {
   const { data } = useSendValidationQuery()
   const amountError = data?.amount
 
-  const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
-
   const error = !!amountError && value ? amountError : undefined
+  const isWaitingForFee =
+    pendingSuggestion != null && isNative && feeEstimateQuery.isPending
 
   const sharedInputProps: Pick<
     AmountTextInputProps,
-    'validation' | 'placeholder' | 'shouldBePositive'
+    'validation' | 'placeholder' | 'shouldBePositive' | 'disabled'
   > = useMemo(
     () => ({
-      validation: error ? 'warning' : undefined,
-      placeholder: t('enter_amount'),
+      validation: error && !isWaitingForFee ? 'warning' : undefined,
+      placeholder: isWaitingForFee ? t('loading') : t('enter_amount'),
       shouldBePositive: true,
+      disabled: isWaitingForFee,
     }),
-    [error, t]
+    [error, isWaitingForFee, t]
   )
 
   return (
@@ -118,13 +153,13 @@ export const ManageAmountInputField = () => {
                                 ? value
                                 : fromChainAmount(value, coin.decimals)
                             }
-                            onValueChange={value => {
+                            onValueChange={newValue =>
                               setValue(
-                                value === null
-                                  ? value
-                                  : toChainAmount(value, coin.decimals)
+                                newValue === null
+                                  ? newValue
+                                  : toChainAmount(newValue, coin.decimals)
                               )
-                            }}
+                            }
                           />
                         )}
                       />
@@ -153,26 +188,42 @@ export const ManageAmountInputField = () => {
             />
             <HStack justifyContent="space-between" alignItems="center" gap={4}>
               {suggestions.map(suggestion => {
-                const getProps = () => {
-                  const { data } = balanceQuery
-                  if (!data) {
-                    return {}
-                  }
-                  const suggestionValue = multiplyBigInt(data, suggestion)
+                const suggestionValue =
+                  balance != null ? multiplyBigInt(balance, suggestion) : 0n
+                const maxSendable =
+                  balance != null && isNative && feeEstimateQuery.data != null
+                    ? getMaxValue(balance, feeEstimateQuery.data)
+                    : (balance ?? 0n)
+                const effectiveAmount =
+                  balance != null
+                    ? isNative
+                      ? minBigInt(suggestionValue, maxSendable)
+                      : suggestionValue
+                    : 0n
 
-                  return {
-                    onClick: () => {
-                      setValue(suggestionValue)
-                    },
-                    isActive: value === suggestionValue,
+                const handleSuggestionClick = () => {
+                  if (balance == null) return
+
+                  if (!isNative) {
+                    setValue(suggestionValue)
+                    setPendingSuggestion(null)
+                    return
+                  }
+
+                  if (feeEstimateQuery.data != null) {
+                    setValue(effectiveAmount)
+                    setPendingSuggestion(null)
+                  } else {
+                    setPendingSuggestion(suggestion)
                   }
                 }
 
                 return (
                   <SuggestionOption
-                    {...getProps()}
                     key={suggestion}
                     value={suggestion}
+                    onClick={handleSuggestionClick}
+                    isActive={value === effectiveAmount}
                   />
                 )
               })}
