@@ -1,5 +1,7 @@
 import { generateLocalPartyId, hasServer } from '@core/mpc/devices/localPartyId'
+import { createSession } from '@core/mpc/fast/api/createSession'
 import { reshareWithServer } from '@core/mpc/fast/api/reshareWithServer'
+import { reshareWithVerifier } from '@core/mpc/fast/api/reshareWithVerifier'
 import { toLibType } from '@core/mpc/types/utils/libType'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
@@ -12,12 +14,15 @@ import { FastKeygenServerActionProvider } from '../fast/state/fastKeygenServerAc
 
 export const PluginReshareFastKeygenServerActionProvider = ({
   children,
-}: ChildrenProp) => {
+  pluginId,
+}: ChildrenProp & { pluginId: string }) => {
   const sessionId = useMpcSessionId()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
+  console.log('hexEncryptionKey', hexEncryptionKey)
+  console.log('sessionId', sessionId)
 
   const [password] = usePassword()
-
+  console.log('password', password)
   const {
     name,
     hexChainCode,
@@ -26,9 +31,17 @@ export const PluginReshareFastKeygenServerActionProvider = ({
     signers,
     libType,
     chainPublicKeys,
+    localPartyId,
   } = useCurrentVault()
 
   const action = useCallback(async () => {
+    const extensionParty = signers.find(s => s.startsWith('extension'))
+    if (!extensionParty) {
+      throw new Error('Extension party not found')
+    }
+    console.log('creating session for', extensionParty)
+    await createSession({ sessionId, extensionParty })
+    console.log('extensionParty created', extensionParty)
     await reshareWithServer({
       public_key: hasServer(signers) ? publicKeys.ecdsa : undefined,
       session_id: sessionId,
@@ -45,11 +58,24 @@ export const PluginReshareFastKeygenServerActionProvider = ({
       }),
       reshare_type: 1,
     })
+    await reshareWithVerifier({
+      email: '',
+      hex_chain_code: hexChainCode,
+      hex_encryption_key: hexEncryptionKey,
+      local_party_id: localPartyId,
+      name,
+      old_parties: signers as string[],
+      plugin_id: pluginId,
+      public_key: publicKeys.ecdsa,
+      session_id: sessionId,
+    })
   }, [
     hexChainCode,
     hexEncryptionKey,
+    localPartyId,
     name,
     password,
+    pluginId,
     publicKeys.ecdsa,
     resharePrefix,
     sessionId,

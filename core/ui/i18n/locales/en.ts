@@ -770,6 +770,7 @@ export const en = {
   reshare_your_vault: 'Reshare your vault',
   resource: 'Resource',
   retry: 'Retry',
+  retry_plugin_installation: 'Installation timed out. Retrying now (attempt {{retryNumber}}).',
   risky_site_detected: 'Malicious site detected',
   risky_transaction_detected: '{{riskLevel}} risk transaction detected',
   risky_tx_warning:

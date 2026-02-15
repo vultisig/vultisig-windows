@@ -7,10 +7,20 @@ import { PluginReshareFlowContent } from './PluginReshareFlowContent'
 export const PluginReshareFlow = ({
   plugin,
   onFinish,
-}: { plugin: Plugin } & OnFinishProp<boolean>) => {
+  onTimeout,
+  retryKey,
+}: {
+  plugin: Plugin
+  retryKey: number
+} & OnFinishProp<boolean> & { onTimeout?: () => void }) => {
   return (
     <PluginInstallAnimationProvider>
-      <PluginReshareFlowContent plugin={plugin} onFinish={onFinish} />
+      <PluginReshareFlowContent
+        plugin={plugin}
+        onFinish={onFinish}
+        onTimeout={onTimeout}
+        retryKey={retryKey}
+      />
     </PluginInstallAnimationProvider>
   )
 }

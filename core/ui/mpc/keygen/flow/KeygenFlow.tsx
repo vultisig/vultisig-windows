@@ -20,10 +20,13 @@ import { useTranslation } from 'react-i18next'
 
 import { KeygenFlowEnding } from './KeygenFlowEnding'
 
+const keygenTimeoutMs = 1 * 60 * 1000 // 1 minute
+
 type KeygenFlowProps = OnBackProp &
   Partial<OnFinishProp> & {
     password?: string
     onChangeEmailAndRestart?: () => void
+    onTimeout?: () => void
   }
 
 export const KeygenFlow = ({
@@ -31,6 +34,7 @@ export const KeygenFlow = ({
   onFinish,
   password,
   onChangeEmailAndRestart,
+  onTimeout,
 }: KeygenFlowProps) => {
   const {
     step,
@@ -39,6 +43,15 @@ export const KeygenFlow = ({
   } = useKeygenMutation()
   useEffect(startKeygen, [startKeygen])
   const { t } = useTranslation()
+
+  useEffect(() => {
+    if (!keygenMutationState.isPending || !onTimeout) return
+    const id = setTimeout(() => {
+      console.log('keygen timeout')
+      onTimeout()
+    }, keygenTimeoutMs)
+    return () => clearTimeout(id)
+  }, [keygenMutationState.isPending, onTimeout])
 
   const keygenOperation = useKeygenOperation()
 

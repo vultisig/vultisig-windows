@@ -9,7 +9,9 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { StrictText } from '@lib/ui/text'
+import { getHexEncodedRandomBytes } from '@lib/utils/crypto/getHexEncodedRandomBytes'
 import { useQuery } from '@tanstack/react-query'
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const PluginInfo = ({
@@ -29,22 +31,39 @@ export const PluginInfo = ({
   }
 }) => {
   const { t } = useTranslation()
+  const [credentials, setCredentials] = useState(() => ({
+    dAppSessionId,
+    encryptionKeyHex,
+  }))
+  const [retryKey, setRetryKey] = useState(0)
   const query = useQuery({
     queryKey: [pluginId, pluginMarketplaceBaseUrl],
     queryFn: () => getPlugin(pluginMarketplaceBaseUrl, pluginId),
   })
+  const onTimeout = useCallback(() => {
+    setCredentials({
+      dAppSessionId: crypto.randomUUID(),
+      encryptionKeyHex: getHexEncodedRandomBytes(32),
+    })
+    setRetryKey(k => k + 1)
+  }, [])
 
   return (
     <MatchQuery
       value={query}
       success={plugin => (
         <ReshareVaultFlowProviders
-          externalEncryptionKey={encryptionKeyHex}
-          externalSessionId={dAppSessionId}
+          externalEncryptionKey={credentials.encryptionKeyHex}
+          externalSessionId={credentials.dAppSessionId}
         >
           <KeygenOperationProvider value={{ reshare: 'plugin' }}>
             <ReshareVaultKeygenActionProvider>
-              <PluginReshareFlow plugin={plugin} onFinish={onFinish} />
+              <PluginReshareFlow
+                plugin={plugin}
+                onFinish={onFinish}
+                onTimeout={onTimeout}
+                retryKey={retryKey}
+              />
             </ReshareVaultKeygenActionProvider>
           </KeygenOperationProvider>
         </ReshareVaultFlowProviders>
