@@ -61,9 +61,9 @@ export const en = {
   backup: 'Backup',
   backupGuide: 'Backup guide',
   backupVault: 'Backup Vault',
-  backupInCloudTitle: 'Backup in the cloud',
+  backupInCloudTitle: 'Encrypted with your Vault Password',
   backupInCloudDescription:
-    'Back up your vault share securely online. Online storage is recommended and vault shares are designed for this.',
+    'Back up your vault share online using the same vault password you created earlier. Online storage is recommended and safe vault shares are designed for this.',
   backupShare: 'Backup Vault Share',
   backupShare2: 'Backup Share 2',
   backupsTitle: '<highlight>Backups,</highlight> your new recovery method',
