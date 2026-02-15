@@ -70,6 +70,7 @@ export const BackupInCloudScreen = ({
             icon={<CloudDownloadIcon />}
             onClick={onContinue}
             loading={ctaLoading}
+            disabled={ctaLoading}
           >
             {t('backup_now')}
           </Button>
