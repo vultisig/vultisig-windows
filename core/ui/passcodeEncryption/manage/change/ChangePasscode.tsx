@@ -53,7 +53,7 @@ export const ChangePasscode = () => {
 
   const currentPasscodeFull =
     currentPasscode?.length === passcodeEncryptionConfig.passcodeLength
-    
+
   const currentPasscodeValidation =
     currentPasscodeFull && currentPasscode !== passcode
       ? 'invalid'
