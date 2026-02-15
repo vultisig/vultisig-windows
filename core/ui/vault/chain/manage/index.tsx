@@ -13,6 +13,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { EmptyState } from '@lib/ui/status/EmptyState'
+import { attempt } from '@lib/utils/attempt'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -77,7 +78,7 @@ export const ManageVaultChainsPage = () => {
   const handleDone = async () => {
     setSaveError(null)
     setIsSaving(true)
-    try {
+    const result = await attempt(async () => {
       const currentChains = new Set(currentCoins.map(c => c.chain))
       const toRemove = currentCoins.filter(
         c => !draftSelectedChains.has(c.chain)
@@ -95,10 +96,14 @@ export const ManageVaultChainsPage = () => {
       }
 
       navigate({ id: 'vault' })
-    } catch (err) {
-      setSaveError(err instanceof Error ? err.message : String(err))
-    } finally {
-      setIsSaving(false)
+    })
+    setIsSaving(false)
+    if ('error' in result) {
+      setSaveError(
+        result.error instanceof Error
+          ? result.error.message
+          : String(result.error)
+      )
     }
   }
 
@@ -124,9 +129,9 @@ export const ManageVaultChainsPage = () => {
         <SearchInput value={search} onChange={setSearch} />
         {sortedNativeCoins.length > 0 ? (
           <ItemGrid>
-            {sortedNativeCoins.map((coin, index) => (
+            {sortedNativeCoins.map(coin => (
               <ChainItem
-                key={index}
+                key={coin.chain}
                 value={coin}
                 isSelected={draftSelectedChains.has(coin.chain)}
                 onToggle={() => toggleDraft(coin.chain)}

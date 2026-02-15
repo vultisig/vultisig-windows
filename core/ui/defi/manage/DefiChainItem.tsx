@@ -26,8 +26,19 @@ export const DefiChainItem = ({
   const { toggleChain, isPending } = useToggleDefiChainWithAutoEnable()
   const isSupported = isSupportedDefiChain(chain)
 
-  const isControlled =
-    controlledIsSelected !== undefined && controlledOnToggle !== undefined
+  const hasControlledIsSelected = controlledIsSelected !== undefined
+  const hasControlledOnToggle = controlledOnToggle !== undefined
+  const isControlled = hasControlledIsSelected && hasControlledOnToggle
+
+  const hasPartialControlledProps =
+    hasControlledIsSelected !== hasControlledOnToggle
+  if (hasPartialControlledProps) {
+    console.error(
+      'DefiChainItem: controlled usage requires both controlledIsSelected and controlledOnToggle. ' +
+        'Provide both for controlled mode or omit both for uncontrolled mode.'
+    )
+    return null
+  }
 
   const isSelected = isControlled
     ? controlledIsSelected
