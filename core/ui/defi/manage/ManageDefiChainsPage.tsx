@@ -19,8 +19,9 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { EmptyState } from '@lib/ui/status/EmptyState'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { attempt } from '@lib/utils/attempt'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { circleChain, circleName } from '../protocols/circle/core/config'
@@ -38,15 +39,13 @@ export const ManageDefiChainsPage = () => {
   const defiChains = useDefiChains()
   const vaultChains = useCurrentVaultChains()
   const [draftSelectedChains, setDraftSelectedChains] = useState<Chain[]>([])
-  const draftInitialized = useRef(false)
+  const [hasUserEditedDraft, setHasUserEditedDraft] = useState(false)
   const setDefiChainsMutation = useSetDefiChainsMutation()
   const createCoinMutation = useCreateCoinMutation()
 
   useEffect(() => {
-    if (draftInitialized.current) return
-    draftInitialized.current = true
-    setDraftSelectedChains([...defiChains])
-  }, [defiChains])
+    if (!hasUserEditedDraft) setDraftSelectedChains([...defiChains])
+  }, [defiChains, hasUserEditedDraft])
 
   const hasCircle = featureFlags.circle && availableChains.includes(circleChain)
 
@@ -75,6 +74,7 @@ export const ManageDefiChainsPage = () => {
 
   const toggleDraft = (chain: Chain) => {
     if (!isSupportedDefiChain(chain)) return
+    setHasUserEditedDraft(true)
     setDraftSelectedChains(prev =>
       prev.includes(chain) ? prev.filter(c => c !== chain) : [...prev, chain]
     )
@@ -88,8 +88,11 @@ export const ManageDefiChainsPage = () => {
         chain => !vaultChains.includes(chain)
       )
       for (const chain of chainsToAddToVault) {
-        const coin = chainFeeCoin[chain]
-        if (coin) await createCoinMutation.mutateAsync(coin)
+        const coin = shouldBePresent(
+          chainFeeCoin[chain],
+          `missing fee coin for chain ${chain}`
+        )
+        await createCoinMutation.mutateAsync(coin)
       }
       await setDefiChainsMutation.mutateAsync(draftSelectedChains)
       navigate({ id: 'defi', state: {} })
