@@ -61,15 +61,20 @@ export const ChangePasscode = () => {
         ? 'valid'
         : undefined
 
-  const confirmPasscodeMismatch =
-    newPasscode != null &&
-    confirmNewPasscode != null &&
-    newPasscode !== confirmNewPasscode
+  const newPasscodeFull =
+    newPasscode?.length === passcodeEncryptionConfig.passcodeLength
+  const confirmNewPasscodeFull =
+    confirmNewPasscode?.length === passcodeEncryptionConfig.passcodeLength
 
   const confirmPasscodeMatch =
-    newPasscode != null &&
-    confirmNewPasscode != null &&
+    newPasscodeFull &&
+    confirmNewPasscodeFull &&
     newPasscode === confirmNewPasscode
+
+  const confirmPasscodeMismatch =
+    newPasscodeFull &&
+    confirmNewPasscodeFull &&
+    newPasscode !== confirmNewPasscode
 
   const confirmPasscodeValidation = confirmPasscodeMismatch
     ? 'invalid'
