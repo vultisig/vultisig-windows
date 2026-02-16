@@ -64,8 +64,11 @@ export const ru = {
   backupShare: 'Резервная доля хранилища',
   backupShare2: 'Резервная доля 2',
   backup_description: 'Сохраните долю хранилища в предпочтительное место',
+  backup_email_description: 'Enter the email to receive the vault share.',
   backup_now: 'Сделать резервную копию',
   backup_password: 'Пароль резервной копии',
+  backup_password_description:
+    'Enter the password you set when creating this Vault.',
   backup_password_confirmation_title:
     'Хотите зашифровать резервную копию паролем?',
   backup_password_info_cannot_be_reset:
@@ -252,6 +255,7 @@ export const ru = {
   enable_token_instruction:
     'Включите минимум один токен, чтобы видеть балансы и управлять позициями.',
   encrypting_vault_keyshares: 'Шифрование keyshares хранилища...',
+  enter: 'Enter',
   enter_address: 'Введите адрес',
   enter_address_here: 'Введите адрес здесь',
   enter_amount: 'Введите сумму',
@@ -475,6 +479,7 @@ export const ru = {
   import_vault_share_supported_files:
     'Поддерживаемые типы файлов: .bak и .vult',
   importing_vault: 'Импорт хранилища...',
+  incorrect_email: 'Incorrect e-mail, please check',
   incorrect_password: 'Неверный пароль',
   incorrect_url: 'Неверный URL',
   install_app: 'Установить приложение «{{title}}»',

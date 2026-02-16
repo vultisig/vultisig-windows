@@ -222,8 +222,11 @@ export const es = {
   backupShare2: 'Copia de seguridad compartida 2',
   backup_description:
     'Realice una copia de seguridad de su Vault Share en una ubicación preferida',
+  backup_email_description: 'Enter the email to receive the vault share.',
   backup_now: 'Copia de seguridad ahora',
   backup_password: 'Contraseña de respaldo',
+  backup_password_description:
+    'Enter the password you set when creating this Vault.',
   backup_password_confirmation_title:
     '¿Quieres cifrar tu copia de seguridad con una contraseña?',
   backup_share_sent: '¡Respaldo compartido enviado!',
@@ -359,6 +362,7 @@ export const es = {
   enable_token_instruction:
     'Habilite al menos un token para ver saldos y administrar posiciones.',
   encrypting_vault_keyshares: 'Cifrado de claves compartidas de bóveda...',
+  enter: 'Enter',
   enter_address: 'Introduzca la dirección',
   enter_amount: 'Introduzca el importe',
   enter_folder_name: 'Introduzca el nombre de la carpeta',
@@ -491,6 +495,7 @@ export const es = {
   import_key: 'Importar clave',
   import_vault: 'Importar bóveda',
   importing_vault: 'Importando Vault...',
+  incorrect_email: 'Incorrect e-mail, please check',
   incorrect_password: 'Contraseña incorrecta',
   incorrect_url: 'URL incorrecta',
   install_app: 'Instalar la aplicación ‘{{title}}’',

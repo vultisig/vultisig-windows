@@ -225,8 +225,11 @@ export const it = {
   backupShare2: 'Condivisione di backup 2',
   backup_description:
     'Esegui il backup di Vault Share in una posizione preferita',
+  backup_email_description: 'Enter the email to receive the vault share.',
   backup_now: 'Esegui il backup ora',
   backup_password: 'Password di backup',
+  backup_password_description:
+    'Enter the password you set when creating this Vault.',
   backup_password_confirmation_title:
     'Vuoi crittografare il tuo backup con una password?',
   backup_share_sent: 'Condivisione di backup inviata!',
@@ -363,6 +366,7 @@ export const it = {
     'Abilita almeno un token per visualizzare i saldi e gestire le posizioni.',
   encrypting_vault_keyshares:
     'Crittografia delle condivisioni delle chiavi del vault...',
+  enter: 'Enter',
   enter_address: "Inserisci l'indirizzo",
   enter_amount: "Inserisci l'importo",
   enter_folder_name: 'Inserisci il nome della cartella',
@@ -495,6 +499,7 @@ export const it = {
   import_key: 'Chiave di importazione',
   import_vault: 'Importa Vault',
   importing_vault: 'Importazione Vault...',
+  incorrect_email: 'Incorrect e-mail, please check',
   incorrect_password: 'Password errata',
   incorrect_url: 'URL errato',
   install_app: 'Installa l\'app "{{title}}"',

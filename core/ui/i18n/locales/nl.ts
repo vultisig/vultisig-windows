@@ -64,8 +64,11 @@ export const nl = {
   backupShare2: 'Back-up share 2',
   backup_description:
     'Maak een back-up van je kluis-share op een gewenste locatie',
+  backup_email_description: 'Enter the email to receive the vault share.',
   backup_now: 'Nu back-uppen',
   backup_password: 'Back-upwachtwoord',
+  backup_password_description:
+    'Enter the password you set when creating this Vault.',
   backup_password_confirmation_title:
     'Wil je je back-up versleutelen met een wachtwoord?',
   backup_password_info_cannot_be_reset:
@@ -253,6 +256,7 @@ export const nl = {
   enable_token_instruction:
     'Schakel minstens één token in om saldi te bekijken en posities te beheren.',
   encrypting_vault_keyshares: 'Kluis-keyshares versleutelen...',
+  enter: 'Enter',
   enter_address: 'Adres invoeren',
   enter_address_here: 'Voer hier een adres in',
   enter_amount: 'Bedrag invoeren',
@@ -480,6 +484,7 @@ export const nl = {
   import_vault_share_supported_files:
     'Ondersteunde bestandstypes: .bak & .vult',
   importing_vault: 'Kluis importeren...',
+  incorrect_email: 'Incorrect e-mail, please check',
   incorrect_password: 'Onjuist wachtwoord',
   incorrect_url: 'Onjuiste URL',
   install_app: 'Installeer de app ‘{{title}}’',
