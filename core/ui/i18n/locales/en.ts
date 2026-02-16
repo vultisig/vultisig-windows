@@ -1098,6 +1098,60 @@ export const en = {
   you_are_staking: "You're staking",
   you_are_unstaking: "You're unstaking",
   yourVaultShares: 'Your vault has {{shares}} Vault Shares',
+  vaultSetupOverview: {
+    title: 'Your vault setup',
+    fast: {
+      badgeTitle: 'Fast Vault',
+      badgeSubtitle: '2-device setup',
+      feature1Title: '1-Device Signing',
+      feature1Description:
+        'Convenient one-device signing on the go. Perfect for daily transactions or trading smaller amounts.',
+      feature2Title: 'Fast and Secure Setup',
+      feature2Description:
+        'No long setup. Just your email and password, plus two backups.',
+      feature3Title: 'You stay in control',
+      feature3Description:
+        'A co-signer can never initiate transactions; only assists with signing them.',
+    },
+    secure2: {
+      badgeTitle: 'Secure Vault',
+      badgeSubtitle: '2-device vault',
+      feature1Title: '2-Device Signing',
+      feature1Description:
+        'Every transaction needs approvals from both of your devices.',
+      feature2Title: 'No single point of failure',
+      feature2Description:
+        "One device alone can't move funds. If one device is lost or exposed, it can't approve on its own.",
+      feature3Title: 'Ideal for simple cold storage',
+      feature3Description: 'Perfect setup for users with only 2 devices.',
+    },
+    secure3: {
+      badgeTitle: 'Secure Vault',
+      badgeSubtitle: '3-device vault',
+      feature1Title: '2-Device Signing',
+      feature1Description:
+        'Every transaction needs approvals from 2 of your 3 devices.',
+      feature2Title: 'No single point of failure',
+      feature2Description:
+        "One device alone can't move funds. If one device is lost or exposed, it can't approve on its own.",
+      feature3Title: 'Ideal for cold storage',
+      feature3Description:
+        'Perfect balance for most users. 2 signers and 1 backup device. Store assets without stress.',
+    },
+    secure4: {
+      badgeTitle: 'Secure Vault',
+      badgeSubtitle: '4+-device vault',
+      feature1Title: '3-Device or more Signing',
+      feature1Description:
+        'Vaults need 67% of devices to sign a transaction. Have as many signers you want',
+      feature2Title: 'Dynamic device management',
+      feature2Description:
+        'Add as many devices you want and receive institutional grade security.',
+      feature3Title: 'Built for teams and treasuries',
+      feature3Description:
+        'Ideal for teams managing shared funds and higher-value vaults, which require more signers.',
+    },
+  },
   your_friends_referral_code: 'Your friends referral code',
   your_referral_code: 'Your Referral Code',
   your_referrals: 'Your Referrals',
