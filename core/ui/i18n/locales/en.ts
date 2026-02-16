@@ -243,7 +243,7 @@ export const en = {
   devices: 'Devices',
   digit_input_error_validation: 'Error verifying code, please re-try',
   digit_input_loading_validation: 'Verifying code, please wait',
-  digit_input_success_validation: 'Verification succesful',
+  digit_input_success_validation: 'Verification successful',
   disconnect_all: 'Disconnect All',
   discord: 'Discord',
   discount: 'Discount',
@@ -496,6 +496,7 @@ export const en = {
   invalid_email: 'Please enter a valid email address',
   invalid_file_format: 'Invalid File Format',
   invalid_node_address: 'Node Address is invalid',
+  incorrect_passcode: 'Incorrect passcode.',
   invalid_passcode: 'Invalid passcode',
   join_keygen: 'Join Keygen',
   join_keygen_slider1_note1: 'Vultisig is',
@@ -652,17 +653,6 @@ export const en = {
   onboarding_description_4:
     'Vultisig is a wallet without seed phrases. It uses easy-to-manage vault shares instead. Every device has its unique vault share that needs a separate backup.',
   onboarding_greeting: 'Say goodbye to <g>seed phrases</g>',
-  onboarding_step_1:
-    'Say hello to <g>vault shares,</g> your new <g>recovery method</g>',
-  onboarding_step_2:
-    "They're <g>split into parts</g> to increase security, <g>removing the single point-of-failure</g>",
-  onboarding_step_3:
-    '<g>Each device</g> in your vault holds <g>one vault share</g>',
-  onboarding_step_4:
-    'Recover your vault even <g>if a device is lost or damaged</g>',
-  onboarding_step_5:
-    '<g>Always backup each vault share</g> separately in a <g>different location</g>',
-  onboarding_step_6: 'These shares collaborate to <g>unlock your vault</g>',
   operator_fee: "Operator's Fee",
   basis_points: 'Basis Points',
   optional: 'optional',
@@ -671,7 +661,7 @@ export const en = {
   other: 'Other',
   overview: 'Overview',
   part: 'part',
-  passcodes_do_not_match: 'Passcodes do not match',
+  passcodes_do_not_match: 'Passcodes do not match.',
   password: 'Password',
   password_backup: 'Protect your vault and fast sign.',
   password_do_not_match: 'Passwords do not match',
@@ -1109,6 +1099,60 @@ export const en = {
   you_are_staking: "You're staking",
   you_are_unstaking: "You're unstaking",
   yourVaultShares: 'Your vault has {{shares}} Vault Shares',
+  vaultSetupOverview: {
+    title: 'Your vault setup',
+    fast: {
+      badgeTitle: 'Fast Vault',
+      badgeSubtitle: '2-device setup',
+      feature1Title: '1-Device Signing',
+      feature1Description:
+        'Convenient one-device signing on the go. Perfect for daily transactions or trading smaller amounts.',
+      feature2Title: 'Fast and Secure Setup',
+      feature2Description:
+        'No long setup. Just your email and password, plus two backups.',
+      feature3Title: 'You stay in control',
+      feature3Description:
+        'A co-signer can never initiate transactions; only assists with signing them.',
+    },
+    secure2: {
+      badgeTitle: 'Secure Vault',
+      badgeSubtitle: '2-device vault',
+      feature1Title: '2-Device Signing',
+      feature1Description:
+        'Every transaction needs approvals from both of your devices.',
+      feature2Title: 'No single point of failure',
+      feature2Description:
+        "One device alone can't move funds. If one device is lost or exposed, it can't approve on its own.",
+      feature3Title: 'Ideal for simple cold storage',
+      feature3Description: 'Perfect setup for users with only 2 devices.',
+    },
+    secure3: {
+      badgeTitle: 'Secure Vault',
+      badgeSubtitle: '3-device vault',
+      feature1Title: '2-Device Signing',
+      feature1Description:
+        'Every transaction needs approvals from 2 of your 3 devices.',
+      feature2Title: 'No single point of failure',
+      feature2Description:
+        "One device alone can't move funds. If one device is lost or exposed, it can't approve on its own.",
+      feature3Title: 'Ideal for cold storage',
+      feature3Description:
+        'Perfect balance for most users. 2 signers and 1 backup device. Store assets without stress.',
+    },
+    secure4: {
+      badgeTitle: 'Secure Vault',
+      badgeSubtitle: '4+-device vault',
+      feature1Title: '3-Device or more Signing',
+      feature1Description:
+        'Vaults need 67% of devices to sign a transaction. Have as many signers you want',
+      feature2Title: 'Dynamic device management',
+      feature2Description:
+        'Add as many devices you want and receive institutional grade security.',
+      feature3Title: 'Built for teams and treasuries',
+      feature3Description:
+        'Ideal for teams managing shared funds and higher-value vaults, which require more signers.',
+    },
+  },
   your_friends_referral_code: 'Your friends referral code',
   your_referral_code: 'Your Referral Code',
   your_referrals: 'Your Referrals',
