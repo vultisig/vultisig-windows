@@ -3,7 +3,9 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { DeviceSelectionTip } from '@core/ui/vault/create/setup-vault/DeviceSelectionTip'
 import { useDeviceSelectionAnimation } from '@core/ui/vault/create/setup-vault/hooks/useDeviceSelectionAnimation'
+import { VaultSetupOverviewContent } from '@core/ui/vault/create/setup-vault/vault-setup-overview/VaultSetupOverviewContent'
 import { Button } from '@lib/ui/buttons/Button'
+import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
@@ -55,11 +57,17 @@ const AnimationContainer = styled.div`
   aspect-ratio: ${contentMaxWidth} / 600;
 `
 
+const HiddenWhenInactive = styled.div<{ $active: boolean }>`
+  display: ${({ $active }) => ($active ? 'contents' : 'none')};
+`
+
 export const SetupVaultPage = () => {
   const { RiveComponent, selectedDeviceCount } = useDeviceSelectionAnimation()
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
   const [state] = useCoreViewState<'setupVault'>()
+  const [showOverview, { set: goToOverview, unset: goBackToSelection }] =
+    useBoolean(false)
 
   const handleContinue = () => {
     if (selectedDeviceCount === 0) {
@@ -79,31 +87,49 @@ export const SetupVaultPage = () => {
   }
 
   return (
-    <PageWrapper fullHeight>
-      <TopGradient />
-      <PageHeader
-        primaryControls={
-          <PageHeaderBackButton onClick={() => navigate({ id: 'newVault' })} />
-        }
-      />
-      <ContentWrapper>
-        <VStack flexGrow alignItems="center" justifyContent="center" fullWidth>
-          <AnimationContainer>
-            <RiveComponent style={{ width: '100%', height: '100%' }} />
-          </AnimationContainer>
-        </VStack>
-      </ContentWrapper>
-      <FooterWrapper>
-        <VStack gap={16} fullWidth alignItems="center">
-          <DeviceSelectionTip />
-          <Button
-            onClick={handleContinue}
-            style={{ width: '100%', maxWidth: contentMaxWidth }}
-          >
-            {t('get_started')}
-          </Button>
-        </VStack>
-      </FooterWrapper>
-    </PageWrapper>
+    <>
+      <HiddenWhenInactive $active={!showOverview}>
+        <PageWrapper fullHeight>
+          <TopGradient />
+          <PageHeader
+            primaryControls={
+              <PageHeaderBackButton
+                onClick={() => navigate({ id: 'newVault' })}
+              />
+            }
+          />
+          <ContentWrapper>
+            <VStack
+              flexGrow
+              alignItems="center"
+              justifyContent="center"
+              fullWidth
+            >
+              <AnimationContainer>
+                <RiveComponent style={{ width: '100%', height: '100%' }} />
+              </AnimationContainer>
+            </VStack>
+          </ContentWrapper>
+          <FooterWrapper>
+            <VStack gap={16} fullWidth alignItems="center">
+              <DeviceSelectionTip />
+              <Button
+                onClick={goToOverview}
+                style={{ width: '100%', maxWidth: contentMaxWidth }}
+              >
+                {t('get_started')}
+              </Button>
+            </VStack>
+          </FooterWrapper>
+        </PageWrapper>
+      </HiddenWhenInactive>
+      {showOverview && (
+        <VaultSetupOverviewContent
+          selectedDeviceCount={selectedDeviceCount}
+          onBack={goBackToSelection}
+          onGetStarted={handleContinue}
+        />
+      )}
+    </>
   )
 }
