@@ -57,20 +57,21 @@ export const getCustomTxData = ({
     {
       keysign: async tx => {
         const getIsEvmContractCall = async () => {
-          if (!isChainOfKind(tx.chain, 'evm')) {
-            return false
-          }
+          if (!isChainOfKind(tx.chain, 'evm')) return false
 
           const { data } = tx.transactionDetails
-          if (!data || data === '0x') {
+
+          if (!data || data === '0x') return false
+
+          try {
+            const { data: potentialData } = await attempt(
+              getEvmContractCallSignatures(getEvmContractCallHexSignature(data))
+            )
+
+            return potentialData && potentialData.count > 0
+          } catch {
             return false
           }
-
-          const { data: potentialData } = await attempt(
-            getEvmContractCallSignatures(getEvmContractCallHexSignature(data))
-          )
-
-          return potentialData && potentialData.count > 0
         }
 
         const getCoinKey = (): CoinKey => {
