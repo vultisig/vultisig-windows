@@ -218,11 +218,8 @@ export const hr = {
   backupShare2: 'Sigurnosna kopija dijeljenja 2',
   backup_description:
     'Napravite sigurnosnu kopiju Vault Share-a na željenu lokaciju',
-  backup_email_description: 'Enter the email to receive the vault share.',
   backup_now: 'Sigurnosno kopiraj sada',
   backup_password: 'Sigurnosna kopija lozinke',
-  backup_password_description:
-    'Enter the password you set when creating this Vault.',
   backup_password_confirmation_title:
     'Želite li šifrirati sigurnosnu kopiju lozinkom?',
   backup_share_sent: 'Dijeljenje sigurnosne kopije poslano!',
@@ -356,7 +353,6 @@ export const hr = {
   enable_token_instruction:
     'Omogućite barem jedan token za pregled stanja i upravljanje pozicijama.',
   encrypting_vault_keyshares: 'Šifriranje dijeljenja ključeva trezora...',
-  enter: 'Enter',
   enter_address: 'Unesite adresu',
   enter_amount: 'Unesite iznos',
   enter_folder_name: 'Unesite naziv mape',
@@ -490,7 +486,6 @@ export const hr = {
   import_key: 'Uvoz ključa',
   import_vault: 'Uvoz trezora',
   importing_vault: 'Uvoz Vaulta...',
-  incorrect_email: 'Incorrect e-mail, please check',
   incorrect_password: 'Netočna lozinka',
   incorrect_url: 'Netočan URL',
   install_app: 'Instalirajte aplikaciju ‘{{title}}’',

@@ -207,11 +207,8 @@ export const zh = {
   backupGuide: '备份指南',
   backupShare2: '备份共享 2',
   backup_description: '将您的 Vault Share 备份到首选位置',
-  backup_email_description: 'Enter the email to receive the vault share.',
   backup_now: '立即备份',
   backup_password: '备份密码',
-  backup_password_description:
-    'Enter the password you set when creating this Vault.',
   backup_password_confirmation_title: '您想用密码加密备份吗？?',
   backup_share_sent: '备份共享已发送！',
   backup_share_sent_description:
@@ -337,7 +334,6 @@ export const zh = {
   enable_dkls: '启用 DKLS',
   enable_token_instruction: '至少启用一个代币才能查看余额和管理持仓。',
   encrypting_vault_keyshares: '加密保险库密钥共享...',
-  enter: 'Enter',
   enter_address: '输入地址',
   enter_amount: '请输入金额',
   enter_folder_name: '输入文件夹名称',
@@ -460,7 +456,6 @@ export const zh = {
   import_key: '导入密钥',
   import_vault: '导入库',
   importing_vault: '正在导入 Vault...',
-  incorrect_email: 'Incorrect e-mail, please check',
   incorrect_password: '密码错误',
   incorrect_url: '错误的网址',
   install_app: '安装“{{title}}”应用',

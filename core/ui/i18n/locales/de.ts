@@ -221,11 +221,8 @@ export const de = {
   backupShare2: 'Backup Share 2',
   backup_description:
     'Sichern Sie Ihre Vault Share-Daten an einem bevorzugten Speicherort',
-  backup_email_description: 'Enter the email to receive the vault share.',
   backup_now: 'Jetzt sichern',
   backup_password: 'Backup-Passwort',
-  backup_password_description:
-    'Enter the password you set when creating this Vault.',
   backup_password_confirmation_title:
     'Möchten Sie Ihr Backup mit einem Passwort verschlüsseln?',
   backup_share_sent: 'Backup-Freigabe gesendet!',
@@ -360,7 +357,6 @@ export const de = {
   enable_token_instruction:
     'Aktivieren Sie mindestens ein Token, um Kontostände anzuzeigen und Positionen zu verwalten.',
   encrypting_vault_keyshares: 'Verschlüsselung der Tresor-Schlüsselanteile...',
-  enter: 'Enter',
   enter_address: 'Adresse eingeben',
   enter_amount: 'Betrag eingeben',
   enter_folder_name: 'Ordnernamen eingeben',
@@ -497,7 +493,6 @@ export const de = {
   import_key: 'Importschlüssel',
   import_vault: 'Import Vault',
   importing_vault: 'Vault wird importiert...',
-  incorrect_email: 'Incorrect e-mail, please check',
   incorrect_password: 'Falsches Passwort',
   incorrect_url: 'Falsche URL',
   install_app: 'Installieren Sie die App „{{title}}“.',

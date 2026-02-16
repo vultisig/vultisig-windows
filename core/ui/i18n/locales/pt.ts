@@ -219,11 +219,8 @@ export const pt = {
   backupShare2: 'Compartilhamento de backup 2',
   backup_description:
     'Faça backup do seu Vault Share em um local de sua preferência.',
-  backup_email_description: 'Enter the email to receive the vault share.',
   backup_now: 'Faça backup agora',
   backup_password: 'Senha de backup',
-  backup_password_description:
-    'Enter the password you set when creating this Vault.',
   backup_password_confirmation_title:
     'Deseja criptografar seu backup com uma senha?',
   backup_share_sent: 'Compartilhamento de backup enviado!',
@@ -359,7 +356,6 @@ export const pt = {
     'Habilite pelo menos um token para visualizar saldos e gerenciar posições.',
   encrypting_vault_keyshares:
     'Criptografando compartilhamentos de chaves do cofre...',
-  enter: 'Enter',
   enter_address: 'Insira o endereço',
   enter_amount: 'Insira o valor',
   enter_folder_name: 'Digite o nome da pasta',
@@ -495,7 +491,6 @@ export const pt = {
   import_key: 'Chave de importação',
   import_vault: 'Cofre de Importação',
   importing_vault: 'Importando o Vault...',
-  incorrect_email: 'Incorrect e-mail, please check',
   incorrect_password: 'Senha incorreta',
   incorrect_url: 'URL incorreta',
   install_app: 'Instale o aplicativo ‘{{title}}’',
