@@ -154,6 +154,11 @@ export const VaultSetupForm = (props: VaultSetupFormProps) => {
     }
   }
 
+  const expandAndFocus = (section: 'name' | 'email' | 'password') => {
+    setExpandedSection(section)
+    setTimeout(() => setFocus(section), 0)
+  }
+
   const handleNext = async () => {
     if (!isFast) {
       handleSubmit(handleFormSubmit)()
@@ -192,6 +197,7 @@ export const VaultSetupForm = (props: VaultSetupFormProps) => {
         <NameFormSection
           isExpanded={isFast ? expandedSection === 'name' : true}
           onToggle={() => setExpandedSection('name')}
+          onCollapsedFocus={isFast ? () => expandAndFocus('name') : undefined}
           register={register('name')}
           error={errors.name?.message}
           value={values.name}
@@ -207,6 +213,7 @@ export const VaultSetupForm = (props: VaultSetupFormProps) => {
             <EmailFormSection
               isExpanded={expandedSection === 'email'}
               onToggle={() => setExpandedSection('email')}
+              onCollapsedFocus={() => expandAndFocus('email')}
               register={register('email')}
               error={errors.email?.message}
               value={values.email || ''}
@@ -218,6 +225,7 @@ export const VaultSetupForm = (props: VaultSetupFormProps) => {
             <PasswordFormSection
               isExpanded={expandedSection === 'password'}
               onToggle={() => setExpandedSection('password')}
+              onCollapsedFocus={() => expandAndFocus('password')}
               passwordRegister={register('password')}
               confirmPasswordRegister={register('confirmPassword')}
               hintRegister={register('hint')}

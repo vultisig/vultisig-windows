@@ -48,6 +48,8 @@ export const useAvailableChainActions = (chain: Chain) => {
         vote: () => true,
         stake: () => areStakeActionsAvailable,
         unstake: () => areStakeActionsAvailable,
+        freeze: () => true,
+        unfreeze: () => true,
         ibc_transfer: () => true,
         merge: () => mergeOptions.length > 0,
         switch: () => true,

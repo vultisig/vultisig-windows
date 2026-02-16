@@ -190,6 +190,10 @@ export const generateMemo = ({
 
       return memo
     },
+    freeze: () =>
+      `FREEZE:${shouldBePresent(depositFormData.resourceType, 'Resource type')}`,
+    unfreeze: () =>
+      `UNFREEZE:${shouldBePresent(depositFormData.resourceType, 'Resource type')}`,
     add_cacao_pool: () => 'pool+',
     remove_cacao_pool: () => {
       const { percentage } = extractFormValues(depositFormData)

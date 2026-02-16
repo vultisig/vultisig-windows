@@ -422,6 +422,7 @@ export const zh = {
   follow_banner_title: '请在 X 上关注我们',
   from: '从',
   from_asset: '来自资产',
+  freeze: 'Freeze',
   function_arguments: '函数参数',
   function_signature: '函数签名',
   function_unavailble:
@@ -792,6 +793,21 @@ export const zh = {
   transaction_details: '交易详情',
   transaction_has_risk: '<provider></provider> 检测到 {{riskLevel}} 风险交易',
   transaction_successful: '交易成功',
+  tron_bandwidth: 'Bandwidth',
+  tron_energy: 'Energy',
+  tron_freeze_button: 'Freeze',
+  tron_freeze_title: 'TRON Freeze',
+  tron_frozen_label: 'Frozen',
+  tron_pending_withdrawals: 'Pending Withdrawals',
+  tron_ready_to_claim: 'Ready to claim',
+  tron_unfreeze_button: 'Unfreeze',
+  tron_your_holdings: 'Your holdings',
+  tron_bandwidth_and_energy: '带宽和能量',
+  tron_bandwidth_description:
+    'Bandwidth Points are required for every transaction on TRON, including both standard token sends and smart contract interactions. Every TRON user receives 600 free Bandwidth Points per day, which can cover approximately two basic sends. Additionally, you can earn extra Bandwidth Points by staking TRX, increasing your daily balance to support more transactions. If you have enough Bandwidth Points, you can send tokens, stake TRX, or interact with smart contracts without paying TRX in gas fees.',
+  tron_energy_description:
+    'Discounts smart contract costs. If insufficient, TRX covers the fee. The green meter shows daily Energy from staked TRX. More staked TRX means more Energy. Refills every 24h. Failed transactions burn more Energy and are not refunded.',
+  tron_got_it: 'Got It',
   try_again: '重试',
   turn_your_vault_into_rewards_machine:
     '将您的金库变成奖励机器。立即创建您的推荐账户，开始赚取奖励。',
@@ -804,6 +820,7 @@ export const zh = {
   unlock_tier: '解锁等级',
   ultimate: '最终的',
   unmerge: '取消合并',
+  unfreeze: 'Unfreeze',
   unknown: '未知',
   unstake: '取消抵押',
   unstake_share_token_label: '解除质押 {{ticker}}',

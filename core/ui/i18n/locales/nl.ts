@@ -426,6 +426,7 @@ export const nl = {
   follow_banner_title: 'Volg ons op X',
   from: 'Van',
   from_asset: 'Van-asset',
+  freeze: 'Freeze',
   function_arguments: 'Functie-argumenten',
   function_signature: 'Functie-signature',
   function_unavailble:
@@ -922,6 +923,21 @@ export const nl = {
   accounts: 'Accounts',
   data_length: 'Datalengte',
   bytes: 'bytes',
+  tron_bandwidth: 'Bandwidth',
+  tron_energy: 'Energy',
+  tron_freeze_button: 'Freeze',
+  tron_freeze_title: 'TRON Freeze',
+  tron_frozen_label: 'Frozen',
+  tron_pending_withdrawals: 'Pending Withdrawals',
+  tron_ready_to_claim: 'Ready to claim',
+  tron_unfreeze_button: 'Unfreeze',
+  tron_your_holdings: 'Your holdings',
+  tron_bandwidth_and_energy: 'Bandbreedte & Energie',
+  tron_bandwidth_description:
+    'Bandwidth Points are required for every transaction on TRON, including both standard token sends and smart contract interactions. Every TRON user receives 600 free Bandwidth Points per day, which can cover approximately two basic sends. Additionally, you can earn extra Bandwidth Points by staking TRX, increasing your daily balance to support more transactions. If you have enough Bandwidth Points, you can send tokens, stake TRX, or interact with smart contracts without paying TRX in gas fees.',
+  tron_energy_description:
+    'Discounts smart contract costs. If insufficient, TRX covers the fee. The green meter shows daily Energy from staked TRX. More staked TRX means more Energy. Refills every 24h. Failed transactions burn more Energy and are not refunded.',
+  tron_got_it: 'Got It',
   try_again: 'Opnieuw proberen',
   turn_your_vault_into_rewards_machine:
     'Maak van je kluis een rewards-machine. Maak nu je referral aan en begin te verdienen.',
@@ -938,6 +954,7 @@ export const nl = {
   unlock_tier: 'Niveau ontgrendelen',
   ultimate: 'Ultimate',
   unmerge: 'Ontsamenvoegen',
+  unfreeze: 'Unfreeze',
   unknown: 'Onbekend',
   unstake: 'Unstaken',
   unstake_share_token_label: '{{ticker}} unstaken',

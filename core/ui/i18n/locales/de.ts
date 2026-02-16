@@ -458,6 +458,7 @@ export const de = {
   follow_banner_title: 'Folgen Sie uns auf X',
   from: 'Aus',
   from_asset: 'Aus dem Vermögenswert',
+  freeze: 'Freeze',
   function_arguments: 'Funktionsargumente',
   function_signature: 'Funktionssignatur',
   function_unavailble:
@@ -853,6 +854,21 @@ export const de = {
   transaction_has_risk:
     '{{riskLevel}} Risikotransaktion vom <provider></provider> erkannt',
   transaction_successful: 'Transaktion erfolgreich',
+  tron_bandwidth: 'Bandwidth',
+  tron_energy: 'Energy',
+  tron_freeze_button: 'Freeze',
+  tron_freeze_title: 'TRON Freeze',
+  tron_frozen_label: 'Frozen',
+  tron_pending_withdrawals: 'Pending Withdrawals',
+  tron_ready_to_claim: 'Ready to claim',
+  tron_unfreeze_button: 'Unfreeze',
+  tron_your_holdings: 'Your holdings',
+  tron_bandwidth_and_energy: 'Bandbreite & Energie',
+  tron_bandwidth_description:
+    'Bandwidth Points are required for every transaction on TRON, including both standard token sends and smart contract interactions. Every TRON user receives 600 free Bandwidth Points per day, which can cover approximately two basic sends. Additionally, you can earn extra Bandwidth Points by staking TRX, increasing your daily balance to support more transactions. If you have enough Bandwidth Points, you can send tokens, stake TRX, or interact with smart contracts without paying TRX in gas fees.',
+  tron_energy_description:
+    'Discounts smart contract costs. If insufficient, TRX covers the fee. The green meter shows daily Energy from staked TRX. More staked TRX means more Energy. Refills every 24h. Failed transactions burn more Energy and are not refunded.',
+  tron_got_it: 'Got It',
   try_again: 'Versuchen Sie es erneut',
   turn_your_vault_into_rewards_machine:
     'Verwandle deinen Tresor in eine Prämienmaschine. Erstelle jetzt dein Empfehlungskonto und verdiene Geld.',
@@ -864,6 +880,7 @@ export const de = {
   unlock_discount_tier: 'Schalte die Stufe frei: <b>{{tier}}</b>',
   unlock_tier: 'Stufe freischalten',
   unmerge: 'Aufheben',
+  unfreeze: 'Unfreeze',
   unknown: 'Unbekannt',
   unstake: 'Entkoppeln',
   unstake_share_token_label: '{{ticker}}',
