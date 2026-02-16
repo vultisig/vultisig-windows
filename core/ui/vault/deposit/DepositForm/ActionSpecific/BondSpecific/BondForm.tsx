@@ -12,7 +12,6 @@ import { useDepositFormHandlers } from '@core/ui/vault/deposit/providers/Deposit
 import { stepFromDecimals } from '@core/ui/vault/deposit/utils/stepFromDecimals'
 import { AmountSuggestion } from '@core/ui/vault/send/amount/AmountSuggestion'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
-import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
@@ -36,7 +35,10 @@ import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 import { KeysignFeeAmount } from '../../../../../mpc/keysign/tx/FeeAmount'
-import { SendFormIconsWrapper } from '../../../../send/addresses/components/SendFormIconsWrapper'
+import {
+  ActionFormCheckBadge,
+  ActionFormIconsWrapper,
+} from '../../../../components/action-form/ActionFormIconsWrapper'
 import { ErrorText } from '../../DepositForm.styled'
 import { FormData } from '../../types'
 
@@ -230,18 +232,18 @@ export const BondForm = ({
                   )}
                 </Text>
               </HStack>
-              <SendFormIconsWrapper gap={12}>
+              <ActionFormIconsWrapper gap={12}>
                 {isAddressComplete && !isAddressOpen && (
-                  <CheckBadge>
+                  <ActionFormCheckBadge>
                     <CheckmarkIcon />
-                  </CheckBadge>
+                  </ActionFormCheckBadge>
                 )}
                 {!isAddressOpen && (
                   <PencilIconWrapper>
                     <PencilIcon />
                   </PencilIconWrapper>
                 )}
-              </SendFormIconsWrapper>
+              </ActionFormIconsWrapper>
             </CollapsedField>
           )}
         />
@@ -403,18 +405,18 @@ export const BondForm = ({
                     : t('enter_amount')}
                 </Text>
               </HStack>
-              <SendFormIconsWrapper gap={12}>
+              <ActionFormIconsWrapper gap={12}>
                 {isAmountComplete && !isAmountOpen && (
-                  <CheckBadge>
+                  <ActionFormCheckBadge>
                     <CheckmarkIcon />
-                  </CheckBadge>
+                  </ActionFormCheckBadge>
                 )}
                 {!isAmountOpen && (
                   <PencilIconWrapper>
                     <PencilIcon />
                   </PencilIconWrapper>
                 )}
-              </SendFormIconsWrapper>
+              </ActionFormIconsWrapper>
             </CollapsedField>
           )}
         />
@@ -568,20 +570,6 @@ const ExpandableHeader = styled(HStack)`
 const GasAmountText = styled(Text)`
   ${brockmannMedium};
   color: ${getColor('text')};
-`
-
-const CheckBadge = styled.div`
-  width: 16px;
-  height: 16px;
-  ${borderRadius.l};
-  border-radius: 50%;
-  border: 0.6667px solid #13c89d;
-  background: #042436;
-  color: #13c89d;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
 `
 
 type BondSection = 'address' | 'amount'
