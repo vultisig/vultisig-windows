@@ -23,6 +23,7 @@ const Container = styled.div`
   ${fitPageContent({
     contentMaxWidth: 360,
   })}
+  min-height:fit-content;
 `
 
 const stepComponents: Record<ImportSeedphraseStep, ComponentType> = {
