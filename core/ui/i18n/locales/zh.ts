@@ -1015,13 +1015,6 @@ export const zh = {
   normal: '普通的',
   off: '离开',
   on: '在',
-  onboarding_step_1: '隆重推出<g>Vault Shares</g>，您的全新<g>恢复方法</g>。',
-  onboarding_step_2:
-    '它们被<g>拆分成多个部分</g>以提高安全性，<g>消除单点故障</g>。',
-  onboarding_step_3: '您保险库中的每个设备都持有一个保险库份额。',
-  onboarding_step_4: '即使设备丢失或损坏，也能找回您的保险库。',
-  onboarding_step_5: '始终将每个存储库共享分别备份到不同的位置。',
-  onboarding_step_6: '这些股份共同作用，<g>解锁你的金库</g>',
   optional: '选修的',
   password_backup: '保护您的金库并快速签名。',
   permissions: '权限',

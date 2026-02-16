@@ -4,7 +4,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { match } from '@lib/utils/match'
 import styled, { css, DefaultTheme } from 'styled-components'
 
-type TextVariant = 'h1Hero' | 'h1Regular'
+type TextVariant = 'h1Hero' | 'h1Regular' | 'footnote'
 
 const textVariantsRecord: Record<
   TextVariant,
@@ -21,6 +21,12 @@ const textVariantsRecord: Record<
     height: 'large',
     weight: 500,
     cropped: false,
+  },
+  footnote: {
+    size: 13,
+    weight: 500,
+    height: 1.385,
+    letterSpacing: 0.06,
   },
 }
 
@@ -42,12 +48,16 @@ const getTextColorRecord = ({ colors }: DefaultTheme) =>
     shyExtra: colors.textShyExtra,
   }) as const
 
-type TextHeight = 'small' | 'regular' | 'large'
-const lineHeight: Record<TextHeight, number> = {
+type TextHeightPreset = 'small' | 'regular' | 'large'
+type TextHeight = TextHeightPreset | number
+const lineHeightPreset: Record<TextHeightPreset, number> = {
   small: 1,
   regular: 1.2,
   large: 1.5,
 }
+
+const resolveLineHeight = (value: TextHeight): number =>
+  typeof value === 'number' ? value : lineHeightPreset[value]
 
 type TextFontFamily = 'regular' | 'mono'
 
@@ -102,9 +112,9 @@ export const text = ({
       : ''}
     ${height || variantStyles.height
       ? css`
-          line-height: ${lineHeight[
-            height ?? (variantStyles.height as TextHeight)
-          ]};
+          line-height: ${resolveLineHeight(
+            (height ?? variantStyles.height) as TextHeight
+          )};
         `
       : ''}
     ${(size ?? variantStyles.size)
@@ -114,7 +124,9 @@ export const text = ({
       : ''}
     ${letterSpacing || variantStyles.letterSpacing
       ? css`
-          letter-spacing: ${toSizeUnit((size ?? variantStyles.size) as number)};
+          letter-spacing: ${toSizeUnit(
+            (letterSpacing ?? variantStyles.letterSpacing) as number
+          )};
         `
       : ''}
     ${centerHorizontally &&
