@@ -658,10 +658,6 @@ export const nl = {
     '<g>Elk apparaat</g> in je kluis houdt <g>één kluis-share</g>',
   onboarding_step_4:
     'Herstel je kluis zelfs <g>als een apparaat verloren gaat of beschadigd raakt</g>',
-  onboarding_step_5:
-    '<g>Back-up altijd elke kluis-share</g> afzonderlijk op een <g>andere locatie</g>',
-  onboarding_step_6:
-    'Deze shares werken samen om <g>je kluis te ontgrendelen</g>',
   operator_fee: 'Operatorfee',
   basis_points: 'Basispunten',
   optional: 'optioneel',
