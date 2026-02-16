@@ -63,15 +63,15 @@ export const getCustomTxData = ({
 
           if (!data || data === '0x') return false
 
-          try {
-            const { data: potentialData } = await attempt(
-              getEvmContractCallSignatures(getEvmContractCallHexSignature(data))
-            )
+          const result = await attempt(
+            getEvmContractCallSignatures(getEvmContractCallHexSignature(data))
+          )
 
-            return potentialData && potentialData.count > 0
-          } catch {
-            return false
-          }
+          if ('error' in result) return false
+
+          const { data: potentialData } = result
+
+          return potentialData && potentialData.count > 0
         }
 
         const getCoinKey = (): CoinKey => {
