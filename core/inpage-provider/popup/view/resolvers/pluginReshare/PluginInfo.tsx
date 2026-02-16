@@ -15,25 +15,18 @@ import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const PluginInfo = ({
-  input: {
-    pluginId,
-    pluginMarketplaceBaseUrl,
-    dAppSessionId,
-    encryptionKeyHex,
-  },
+  input: { pluginId, pluginMarketplaceBaseUrl },
   onFinish,
 }: OnFinishProp<boolean> & {
   input: {
     pluginId: string
     pluginMarketplaceBaseUrl: string
-    dAppSessionId: string
-    encryptionKeyHex: string
   }
 }) => {
   const { t } = useTranslation()
   const [credentials, setCredentials] = useState(() => ({
-    dAppSessionId,
-    encryptionKeyHex,
+    dAppSessionId: crypto.randomUUID(),
+    encryptionKeyHex: getHexEncodedRandomBytes(32),
   }))
   const [retryKey, setRetryKey] = useState(0)
   const query = useQuery({

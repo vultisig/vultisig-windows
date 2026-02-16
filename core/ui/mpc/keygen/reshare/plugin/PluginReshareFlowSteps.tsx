@@ -64,12 +64,12 @@ export const PluginReshareFlowSteps = ({
                         progress:
                           dklsInboundSequenceNo !== 0
                             ? Number(
-                              (
-                                (dklsInboundSequenceNo /
-                                  appInstallTotalSequenceNo) *
-                                100
-                              ).toFixed(0)
-                            )
+                                (
+                                  (dklsInboundSequenceNo /
+                                    appInstallTotalSequenceNo) *
+                                  100
+                                ).toFixed(0)
+                              )
                             : 0,
                       })}
                     </Text>

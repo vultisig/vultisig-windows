@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next'
 
 export const PluginReshare: PopupResolver<'pluginReshare'> = ({
   onFinish,
-  input: { pluginId, dAppSessionId, encryptionKeyHex },
+  input: { pluginId },
 }) => {
   const { t } = useTranslation()
   const developerOptionsQuery = useQuery({
@@ -31,8 +31,6 @@ export const PluginReshare: PopupResolver<'pluginReshare'> = ({
           input={{
             pluginId,
             pluginMarketplaceBaseUrl,
-            dAppSessionId,
-            encryptionKeyHex,
           }}
         />
       )}
