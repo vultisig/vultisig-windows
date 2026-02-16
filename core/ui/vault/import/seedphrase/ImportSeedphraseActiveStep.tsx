@@ -12,6 +12,7 @@ import { ImportSeedphraseIntroStep } from './intro/ImportSeedphraseIntro'
 import { ScanningChainsStep } from './ScanningChainsStep'
 import { ScanResultStep } from './scanResult'
 import { SelectChainsStep } from './SelectChainsStep'
+import { useMnemonic } from './state/mnemonic'
 import { ImportSeedphraseStep, useImportSeedphraseStep } from './state/step'
 
 const stepTitles: Partial<Record<ImportSeedphraseStep, string>> = {
@@ -46,11 +47,15 @@ export const ImportSeedphraseActiveStep = () => {
   const { t } = useTranslation()
   const { goBack } = useCore()
   const [step, setStep] = useImportSeedphraseStep()
+  const [, setMnemonic] = useMnemonic()
 
   const handleBack = () => {
     const nextStep = backSteps[step]
 
     if (nextStep) {
+      if (step === 'input') {
+        setMnemonic('')
+      }
       setStep(nextStep)
     } else {
       goBack()
