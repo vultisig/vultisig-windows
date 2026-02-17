@@ -1,7 +1,5 @@
-import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 import { TransferDirection } from '@lib/utils/TransferDirection'
 
-export const {
-  useValue: useTransferDirection,
-  provider: TransferDirectionProvider,
-} = getValueProviderSetup<TransferDirection>('TransferDirectionProvider')
+export const [TransferDirectionProvider, useTransferDirection] =
+  setupValueProvider<TransferDirection>('TransferDirectionProvider')

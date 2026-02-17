@@ -56,7 +56,7 @@ export const JoinKeysignVaultGuard = ({ children }: ChildrenProp) => {
   }
 
   return (
-    <CurrentVaultProvider value={vault}>
+    <CurrentVaultProvider value={shouldBePresent(vault)}>
       <MpcLocalPartyIdProvider value={shouldBePresent(vault).localPartyId}>
         {children}
       </MpcLocalPartyIdProvider>

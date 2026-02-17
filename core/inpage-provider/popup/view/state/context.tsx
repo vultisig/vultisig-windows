@@ -5,14 +5,14 @@ import {
   PopupMethod,
 } from '@core/inpage-provider/popup/interface'
 import { BridgeContext } from '@lib/extension/bridge/context'
-import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 
 type PopupViewContext =
   | (BridgeContext & { appSession?: VaultAppSession })
   | undefined
 
-const { provider: PopupContextProvider, useValue } =
-  getValueProviderSetup<PopupViewContext>('PopupContext')
+const [PopupContextProvider, useValue] =
+  setupValueProvider<PopupViewContext>('PopupContext')
 
 export { PopupContextProvider }
 
