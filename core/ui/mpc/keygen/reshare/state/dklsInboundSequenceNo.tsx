@@ -1,6 +1,4 @@
-import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
+import { setupStateProvider } from '@lib/ui/state/setupStateProvider'
 
-export const {
-  provider: DklsInboundSequenceNoProvider,
-  useState: useDklsInboundSequenceNoState,
-} = getStateProviderSetup<number>('DklsInboundSequenceNo')
+export const [DklsInboundSequenceNoProvider, useDklsInboundSequenceNoState] =
+  setupStateProvider<number>('DklsInboundSequenceNo')

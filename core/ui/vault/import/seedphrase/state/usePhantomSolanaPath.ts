@@ -1,6 +1,4 @@
-import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
+import { setupStateProvider } from '@lib/ui/state/setupStateProvider'
 
-export const {
-  useState: useUsePhantomSolanaPath,
-  provider: UsePhantomSolanaPathProvider,
-} = getStateProviderSetup<boolean>('UsePhantomSolanaPath')
+export const [UsePhantomSolanaPathProvider, useUsePhantomSolanaPath] =
+  setupStateProvider<boolean>('UsePhantomSolanaPath')

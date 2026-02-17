@@ -1,4 +1,3 @@
-import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 
-export const { useValue: useTxHash, provider: TxHashProvider } =
-  getValueProviderSetup<string>('TxHash')
+export const [TxHashProvider, useTxHash] = setupValueProvider<string>('TxHash')

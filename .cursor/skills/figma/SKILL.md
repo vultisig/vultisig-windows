@@ -111,10 +111,73 @@ Figma MCP does **not** reliably export SVG icon paths. When implementing a desig
 3. **Never approximate, invent, or use a "similar" icon.** The exact SVG from the design must be used.
 4. When creating a new icon from user-provided SVG, follow the `svg-icon-pattern` skill.
 
+## Screen Layout
+
+When implementing a full screen from a Figma design, **always use `ScreenLayout`** from `lib/ui/layout/ScreenLayout/ScreenLayout.tsx`. Do NOT manually compose `PageHeader` + `PageContent` + `PageFooter`.
+
+### API
+
+```tsx
+import { ScreenLayout } from '@lib/ui/layout/ScreenLayout/ScreenLayout'
+
+<ScreenLayout
+  title="Screen Title"        // optional — centered in header
+  onBack={() => goBack()}     // optional — shows back button (IconButton secondary lg)
+  footer={<Button>Action</Button>}  // optional — sticky footer
+>
+  {/* scrollable content */}
+</ScreenLayout>
+```
+
+### Props
+
+| Prop       | Type           | Description                                                                 |
+|------------|----------------|-----------------------------------------------------------------------------|
+| `children` | `ReactNode`    | Main content — placed in a centered column (max 500px, 24px side padding)   |
+| `title`    | `ReactNode`    | Optional header title, centered                                             |
+| `onBack`   | `() => void`   | If provided, renders a back button in the header                            |
+| `footer`   | `ReactNode`    | Optional sticky footer, same centered column width as content               |
+
+### Behavior
+
+- **Header** renders only when `title` or `onBack` is provided.
+- **Content** is scrollable; scrollbar appears on the right edge of the screen, not inside the centered column.
+- **Footer** stays fixed at the bottom, outside the scroll area.
+- **Responsive**: content is 345px on iPhone (393px screen), stretches on medium screens (extension popover), caps at 500px on wider screens.
+
+### Mapping Figma screens to ScreenLayout
+
+When you see a Figma screen with a back chevron button and/or a centered title at the top:
+- `onBack` → the back button callback (use `useNavigateBack()` or a custom callback)
+- `title` → the centered header text
+
+When you see a primary action button pinned at the bottom of the screen:
+- `footer` → wrap the button in the footer prop
+
+Everything between the header and footer is `children`.
+
+### Vertical centering
+
+If children need to fill the available vertical space (e.g., a centered animation), wrap them in a `VStack` with `flexGrow` and `justifyContent="center"`.
+
+### Background decorations
+
+If the screen has a background decoration (gradient, pattern), wrap `ScreenLayout` in a positioned container and place the decoration as a sibling:
+
+```tsx
+<Wrapper>        {/* position: relative; height: 100% */}
+  <Gradient />   {/* position: absolute; z-index: 0 */}
+  <ScreenLayout onBack={...} footer={...}>
+    {/* content */}
+  </ScreenLayout>
+</Wrapper>
+```
+
 ## Key Component References
 
 Consult these files for implementation details:
 
+- **Screen Layout**: `lib/ui/layout/ScreenLayout/ScreenLayout.tsx`
 - **Colors**: `lib/ui/theme/ThemeColors.ts`, `lib/ui/theme/darkTheme.ts`, `lib/ui/theme/getters.ts`
 - **Typography**: `lib/ui/text/index.tsx` (includes `TextVariant` and `textVariantsRecord`)
 - **Buttons**: `lib/ui/buttons/Button/index.tsx`, `lib/ui/buttons/IconButton/index.tsx`

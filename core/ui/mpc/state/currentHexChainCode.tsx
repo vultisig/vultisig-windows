@@ -1,14 +1,12 @@
 import { generateHexChainCode } from '@core/mpc/utils/generateHexChainCode'
 import { ChildrenProp } from '@lib/ui/props'
-import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 import { useMemo } from 'react'
 
 import { useCurrentVault } from '../../vault/state/currentVault'
 
-export const {
-  useValue: useCurrentHexChainCode,
-  provider: CurrentHexChainCodeProvider,
-} = getValueProviderSetup<string>('CurrentHexChainCode')
+export const [CurrentHexChainCodeProvider, useCurrentHexChainCode] =
+  setupValueProvider<string>('CurrentHexChainCode')
 
 export const GeneratedHexChainCodeProvider = ({ children }: ChildrenProp) => {
   const HexChainCode = useMemo(() => generateHexChainCode(), [])

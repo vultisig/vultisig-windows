@@ -1,4 +1,3 @@
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { DeviceSelectionTip } from '@core/ui/vault/create/setup-vault/DeviceSelectionTip'
@@ -6,24 +5,22 @@ import { useDeviceSelectionAnimation } from '@core/ui/vault/create/setup-vault/h
 import { VaultSetupOverviewContent } from '@core/ui/vault/create/setup-vault/vault-setup-overview/VaultSetupOverviewContent'
 import { Button } from '@lib/ui/buttons/Button'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
+import { ScreenLayout } from '@lib/ui/layout/ScreenLayout/ScreenLayout'
 import { VStack } from '@lib/ui/layout/Stack'
-import { PageContent } from '@lib/ui/page/PageContent'
-import { PageFooter } from '@lib/ui/page/PageFooter'
-import { PageHeader } from '@lib/ui/page/PageHeader'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-const contentMaxWidth = 400
+const animationMaxWidth = 400
 
-const PageWrapper = styled(VStack)`
+const GradientWrapper = styled.div`
   position: relative;
-  overflow-x: hidden;
-  overflow-y: auto;
+  height: 100%;
+  overflow: hidden;
 `
 
 const TopGradient = styled.div`
   position: absolute;
-  z-index: -1;
+  z-index: 0;
   top: -200px;
   left: 50%;
   transform: translateX(-50%);
@@ -38,23 +35,13 @@ const TopGradient = styled.div`
   pointer-events: none;
 `
 
-const ContentWrapper = styled(PageContent)`
-  position: relative;
-  z-index: 1;
-`
-
-const FooterWrapper = styled(PageFooter)`
-  position: relative;
-  z-index: 1;
-`
-
 const AnimationContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  max-width: ${contentMaxWidth}px;
-  aspect-ratio: ${contentMaxWidth} / 600;
+  max-width: ${animationMaxWidth}px;
+  aspect-ratio: ${animationMaxWidth} / 600;
 `
 
 const HiddenWhenInactive = styled.div<{ $active: boolean }>`
@@ -89,39 +76,26 @@ export const SetupVaultPage = () => {
   return (
     <>
       <HiddenWhenInactive $active={!showOverview}>
-        <PageWrapper fullHeight>
+        <GradientWrapper>
           <TopGradient />
-          <PageHeader
-            primaryControls={
-              <PageHeaderBackButton
-                onClick={() => navigate({ id: 'newVault' })}
-              />
+          <ScreenLayout
+            onBack={() => navigate({ id: 'newVault' })}
+            footer={
+              <VStack gap={16} fullWidth alignItems="center">
+                <DeviceSelectionTip />
+                <Button onClick={goToOverview} style={{ width: '100%' }}>
+                  {t('get_started')}
+                </Button>
+              </VStack>
             }
-          />
-          <ContentWrapper>
-            <VStack
-              flexGrow
-              alignItems="center"
-              justifyContent="center"
-              fullWidth
-            >
+          >
+            <VStack flexGrow alignItems="center" justifyContent="center">
               <AnimationContainer>
                 <RiveComponent style={{ width: '100%', height: '100%' }} />
               </AnimationContainer>
             </VStack>
-          </ContentWrapper>
-          <FooterWrapper>
-            <VStack gap={16} fullWidth alignItems="center">
-              <DeviceSelectionTip />
-              <Button
-                onClick={goToOverview}
-                style={{ width: '100%', maxWidth: contentMaxWidth }}
-              >
-                {t('get_started')}
-              </Button>
-            </VStack>
-          </FooterWrapper>
-        </PageWrapper>
+          </ScreenLayout>
+        </GradientWrapper>
       </HiddenWhenInactive>
       {showOverview && (
         <VaultSetupOverviewContent
