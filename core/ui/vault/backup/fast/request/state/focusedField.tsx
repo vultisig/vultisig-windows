@@ -1,4 +1,4 @@
-import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
+import { setupStateProvider } from '@lib/ui/state/setupStateProvider'
 
 type FocusedBackupField = 'email' | 'password' | null
 
@@ -6,9 +6,5 @@ type FocusedBackupFieldContext = {
   field: FocusedBackupField
 }
 
-export const {
-  useState: useBackupFormFieldState,
-  provider: BackupFormFieldsStateProvider,
-} = getStateProviderSetup<FocusedBackupFieldContext>(
-  'BackupFormFieldStateProvider'
-)
+export const [BackupFormFieldsStateProvider, useBackupFormFieldState] =
+  setupStateProvider<FocusedBackupFieldContext>('BackupFormFieldStateProvider')
