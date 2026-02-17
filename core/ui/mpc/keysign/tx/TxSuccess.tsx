@@ -21,7 +21,7 @@ import styled from 'styled-components'
 
 import { useTxHash } from '../../../chain/state/txHash'
 import { useCore } from '../../../state/core'
-import { TransactionSuccessAnimation } from './TransactionSuccessAnimation'
+import { TxStatusTracker } from './TxStatusTracker'
 
 export const TxSuccess = ({
   onSeeTxDetails,
@@ -49,8 +49,8 @@ export const TxSuccess = ({
   })
 
   return (
-    <>
-      <TransactionSuccessAnimation />
+    <VStack gap={36}>
+      <TxStatusTracker chain={coin.chain} hash={txHash} />
       <VStack gap={8}>
         <TxOverviewAmount amount={formattedToAmount} value={coin} />
         {!skipBroadcast && (
@@ -94,7 +94,7 @@ export const TxSuccess = ({
           </List>
         )}
       </VStack>
-    </>
+    </VStack>
   )
 }
 
