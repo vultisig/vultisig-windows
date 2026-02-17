@@ -67,7 +67,7 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   }, [vaults, id, passcode])
 
   if (!value) {
-    return null
+    return <>{children}</>
   }
 
   return <CurrentVaultProvider value={value}>{children}</CurrentVaultProvider>
