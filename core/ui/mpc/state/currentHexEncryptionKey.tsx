@@ -1,12 +1,10 @@
 import { generateHexEncryptionKey } from '@core/mpc/utils/generateHexEncryptionKey'
 import { ChildrenProp } from '@lib/ui/props'
-import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 import { createContext, useMemo } from 'react'
 
-export const {
-  useValue: useCurrentHexEncryptionKey,
-  provider: CurrentHexEncryptionKeyProvider,
-} = getValueProviderSetup<string>('CurrentHexEncryptionKey')
+export const [CurrentHexEncryptionKeyProvider, useCurrentHexEncryptionKey] =
+  setupValueProvider<string>('CurrentHexEncryptionKey')
 
 const ExternalEncryptionKeyContext = createContext<string | null | undefined>(
   undefined

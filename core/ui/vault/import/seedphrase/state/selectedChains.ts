@@ -1,5 +1,5 @@
 import { Chain } from '@core/chain/Chain'
-import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
+import { setupStateProvider } from '@lib/ui/state/setupStateProvider'
 
-export const { useState: useSelectedChains, provider: SelectedChainsProvider } =
-  getStateProviderSetup<Chain[]>('SelectedChains')
+export const [SelectedChainsProvider, useSelectedChains] =
+  setupStateProvider<Chain[]>('SelectedChains')
