@@ -1,6 +1,4 @@
-import { getOptionalValueProviderSetup } from '@lib/ui/state/getOptionalValueProviderSetup'
+import { setupOptionalValueProvider } from '@lib/ui/state/setupOptionalValueProvider'
 
-export const {
-  useValue: useTargetDeviceCount,
-  provider: TargetDeviceCountProvider,
-} = getOptionalValueProviderSetup<number>()
+export const [TargetDeviceCountProvider, useTargetDeviceCount] =
+  setupOptionalValueProvider<number>()

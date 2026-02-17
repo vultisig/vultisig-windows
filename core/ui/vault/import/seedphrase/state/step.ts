@@ -1,4 +1,4 @@
-import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
+import { setupStateProvider } from '@lib/ui/state/setupStateProvider'
 
 export type ImportSeedphraseStep =
   | 'intro'
@@ -7,7 +7,5 @@ export type ImportSeedphraseStep =
   | 'scanResult'
   | 'chains'
 
-export const {
-  useState: useImportSeedphraseStep,
-  provider: ImportSeedphraseStepProvider,
-} = getStateProviderSetup<ImportSeedphraseStep>('ImportSeedphraseStep')
+export const [ImportSeedphraseStepProvider, useImportSeedphraseStep] =
+  setupStateProvider<ImportSeedphraseStep>('ImportSeedphraseStep')
