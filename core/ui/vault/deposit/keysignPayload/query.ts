@@ -1,3 +1,4 @@
+import { toKeysignLibType } from '@core/mpc/types/utils/libType'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
@@ -58,7 +59,7 @@ export const useDepositKeysignPayloadQuery = (
       vaultId: getVaultId(vault),
       localPartyId: vault.localPartyId,
       publicKey,
-      libType: vault.libType,
+      libType: toKeysignLibType(vault),
       walletCore,
     }),
     [
