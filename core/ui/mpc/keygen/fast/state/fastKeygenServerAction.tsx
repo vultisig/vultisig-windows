@@ -1,6 +1,4 @@
-import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 
-export const {
-  useValue: useFastKeygenServerAction,
-  provider: FastKeygenServerActionProvider,
-} = getValueProviderSetup<() => Promise<void>>('FastKeygenServerAction')
+export const [FastKeygenServerActionProvider, useFastKeygenServerAction] =
+  setupValueProvider<() => Promise<void>>('FastKeygenServerAction')

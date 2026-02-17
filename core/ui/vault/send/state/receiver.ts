@@ -1,4 +1,4 @@
-import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
+import { setupStateProvider } from '@lib/ui/state/setupStateProvider'
 
-export const { useState: useSendReceiver, provider: SendReceiverProvider } =
-  getStateProviderSetup<string>('SendReceiver')
+export const [SendReceiverProvider, useSendReceiver] =
+  setupStateProvider<string>('SendReceiver')

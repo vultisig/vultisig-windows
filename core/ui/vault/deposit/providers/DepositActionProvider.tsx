@@ -1,14 +1,12 @@
 import { ChildrenProp } from '@lib/ui/props'
-import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
+import { setupStateProvider } from '@lib/ui/state/setupStateProvider'
 
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { ChainAction } from '../ChainAction'
 import { useAvailableChainActions } from '../hooks/useAvailableChainActions'
 
-export const {
-  useState: useDepositAction,
-  provider: InternalDepositActionProvider,
-} = getStateProviderSetup<ChainAction>('DepositAction')
+export const [InternalDepositActionProvider, useDepositAction] =
+  setupStateProvider<ChainAction>('DepositAction')
 
 export const DepositActionProvider = ({ children }: ChildrenProp) => {
   const [{ coin: coinKey, action: preferredAction }] =
