@@ -1,8 +1,9 @@
 import { ChildrenProp } from '@lib/ui/props'
-import { createContextHook } from '@lib/ui/state/createContextHook'
 import { createContext } from 'react'
 
-export function getValueProviderSetup<T>(contextId: string) {
+import { createContextHook } from './createContextHook'
+
+export function setupValueProvider<T>(contextId: string) {
   const ValueContext = createContext<T | undefined>(undefined)
 
   type Props = ChildrenProp & { value: T }
@@ -13,8 +14,5 @@ export function getValueProviderSetup<T>(contextId: string) {
     )
   }
 
-  return {
-    provider: ValueProvider,
-    useValue: createContextHook(ValueContext, contextId),
-  }
+  return [ValueProvider, createContextHook(ValueContext, contextId)] as const
 }

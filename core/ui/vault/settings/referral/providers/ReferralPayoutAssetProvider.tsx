@@ -1,15 +1,13 @@
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { ChildrenProp } from '@lib/ui/props'
-import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
+import { setupStateProvider } from '@lib/ui/state/setupStateProvider'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 import { useCurrentVaultCoin } from '../../../state/currentVaultCoins'
 
-const {
-  useState: useInternalReferralPayoutAsset,
-  provider: InternalReferralPayoutAssetProvider,
-} = getStateProviderSetup<AccountCoin>('ReferralPayoutAssetProvider')
+const [InternalReferralPayoutAssetProvider, useInternalReferralPayoutAsset] =
+  setupStateProvider<AccountCoin>('ReferralPayoutAssetProvider')
 
 export const useReferralPayoutAsset = () => useInternalReferralPayoutAsset()
 

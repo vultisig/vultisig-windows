@@ -1,5 +1,5 @@
 import { ChildrenProp } from '@lib/ui/props'
-import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
+import { setupStateProvider } from '@lib/ui/state/setupStateProvider'
 
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 
@@ -9,10 +9,8 @@ type FocusedSendFieldContext = {
   field: FocusedSendField
 }
 
-export const {
-  useState: useSendFormFieldState,
-  provider: InternalSendFormFieldsStateProvider,
-} = getStateProviderSetup<FocusedSendFieldContext>('SendFormFieldStateProvider')
+export const [InternalSendFormFieldsStateProvider, useSendFormFieldState] =
+  setupStateProvider<FocusedSendFieldContext>('SendFormFieldStateProvider')
 
 export const SendFormFieldsStateProvider = ({ children }: ChildrenProp) => {
   const [state] = useCoreViewState<'send'>()
