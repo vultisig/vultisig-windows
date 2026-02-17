@@ -2,17 +2,13 @@ import { getVaultSetupVariant } from '@core/ui/vault/create/setup-vault/vault-se
 import { useVaultSetupAnimation } from '@core/ui/vault/create/setup-vault/vault-setup-overview/useVaultSetupAnimation'
 import { VaultSetupBadge } from '@core/ui/vault/create/setup-vault/vault-setup-overview/VaultSetupBadge'
 import { Button } from '@lib/ui/buttons/Button'
-import { IconButton } from '@lib/ui/buttons/IconButton'
-import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
 import { CoSignIcon } from '@lib/ui/icons/CoSignIcon'
 import { PadlockIcon } from '@lib/ui/icons/PadlockIcon'
 import { ShieldIcon } from '@lib/ui/icons/ShieldIcon'
 import { ShieldVerifiedIcon } from '@lib/ui/icons/ShieldVerifiedIcon'
 import { ZapIcon } from '@lib/ui/icons/ZapIcon'
+import { ScreenLayout } from '@lib/ui/layout/ScreenLayout/ScreenLayout'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { PageContent } from '@lib/ui/page/PageContent'
-import { PageFooter } from '@lib/ui/page/PageFooter'
-import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
@@ -41,92 +37,75 @@ export const VaultSetupOverviewContent = ({
     useVaultSetupAnimation(selectedDeviceCount)
 
   return (
-    <VStack fullHeight>
-      <PageHeader
-        title={t('vaultSetupOverview.title')}
-        primaryControls={
-          <IconButton onClick={onBack}>
-            <ChevronLeftIcon />
-          </IconButton>
-        }
-      />
-      <ScrollableContent alignItems="center">
-        <ContentColumn>
-          <VaultSetupBadge
-            icon={badgeIconRecord[securityType]}
-            title={t(`vaultSetupOverview.${key}.badgeTitle`)}
-            subtitle={t(`vaultSetupOverview.${key}.badgeSubtitle`)}
-          />
-          <AnimationWrapper>
-            <AnimationContainer>
-              <RiveComponent />
-            </AnimationContainer>
-          </AnimationWrapper>
-          <VStack gap={16}>
-            <FeatureRow>
-              <FeatureIconContainer>
-                <CoSignIcon style={{ fontSize: 24 }} />
-              </FeatureIconContainer>
-              <VStack gap={8} style={{ paddingTop: 2, flex: 1 }}>
-                <Text size={15} weight={500} color="contrast">
-                  {t(`vaultSetupOverview.${key}.feature1Title`)}
-                </Text>
-                <Text variant="footnote" color="shy">
-                  {t(`vaultSetupOverview.${key}.feature1Description`)}
-                </Text>
-              </VStack>
-            </FeatureRow>
-            <FeatureRow>
-              <FeatureIconContainer>
-                <ShieldVerifiedIcon style={{ fontSize: 20 }} />
-              </FeatureIconContainer>
-              <VStack gap={8} style={{ paddingTop: 2, flex: 1 }}>
-                <Text size={15} weight={500} color="contrast">
-                  {t(`vaultSetupOverview.${key}.feature2Title`)}
-                </Text>
-                <Text variant="footnote" color="shy">
-                  {t(`vaultSetupOverview.${key}.feature2Description`)}
-                </Text>
-              </VStack>
-            </FeatureRow>
-            <FeatureRow>
-              <FeatureIconContainer>
-                <PadlockIcon style={{ fontSize: 20 }} />
-              </FeatureIconContainer>
-              <VStack gap={8} style={{ paddingTop: 2, flex: 1 }}>
-                <Text size={15} weight={500} color="contrast">
-                  {t(`vaultSetupOverview.${key}.feature3Title`)}
-                </Text>
-                <Text variant="footnote" color="shy">
-                  {t(`vaultSetupOverview.${key}.feature3Description`)}
-                </Text>
-              </VStack>
-            </FeatureRow>
-          </VStack>
-        </ContentColumn>
-      </ScrollableContent>
-      <PageFooter alignItems="center">
+    <ScreenLayout
+      title={t('vaultSetupOverview.title')}
+      onBack={onBack}
+      footer={
         <Button
-          style={{ width: '100%', maxWidth: 345 }}
+          style={{ width: '100%' }}
           onClick={onGetStarted}
           loading={isLoading}
         >
           {t('get_started')}
         </Button>
-      </PageFooter>
-    </VStack>
+      }
+    >
+      <VStack gap={24}>
+        <VaultSetupBadge
+          icon={badgeIconRecord[securityType]}
+          title={t(`vaultSetupOverview.${key}.badgeTitle`)}
+          subtitle={t(`vaultSetupOverview.${key}.badgeSubtitle`)}
+        />
+        <AnimationWrapper>
+          <AnimationContainer>
+            <RiveComponent />
+          </AnimationContainer>
+        </AnimationWrapper>
+        <VStack gap={16}>
+          <FeatureRow>
+            <FeatureIconContainer>
+              <CoSignIcon style={{ fontSize: 24 }} />
+            </FeatureIconContainer>
+            <VStack gap={8} style={{ paddingTop: 2, flex: 1 }}>
+              <Text size={15} weight={500} color="contrast">
+                {t(`vaultSetupOverview.${key}.feature1Title`)}
+              </Text>
+              <Text variant="footnote" color="shy">
+                {t(`vaultSetupOverview.${key}.feature1Description`)}
+              </Text>
+            </VStack>
+          </FeatureRow>
+          <FeatureRow>
+            <FeatureIconContainer>
+              <ShieldVerifiedIcon style={{ fontSize: 20 }} />
+            </FeatureIconContainer>
+            <VStack gap={8} style={{ paddingTop: 2, flex: 1 }}>
+              <Text size={15} weight={500} color="contrast">
+                {t(`vaultSetupOverview.${key}.feature2Title`)}
+              </Text>
+              <Text variant="footnote" color="shy">
+                {t(`vaultSetupOverview.${key}.feature2Description`)}
+              </Text>
+            </VStack>
+          </FeatureRow>
+          <FeatureRow>
+            <FeatureIconContainer>
+              <PadlockIcon style={{ fontSize: 20 }} />
+            </FeatureIconContainer>
+            <VStack gap={8} style={{ paddingTop: 2, flex: 1 }}>
+              <Text size={15} weight={500} color="contrast">
+                {t(`vaultSetupOverview.${key}.feature3Title`)}
+              </Text>
+              <Text variant="footnote" color="shy">
+                {t(`vaultSetupOverview.${key}.feature3Description`)}
+              </Text>
+            </VStack>
+          </FeatureRow>
+        </VStack>
+      </VStack>
+    </ScreenLayout>
   )
 }
-
-const ScrollableContent = styled(PageContent)`
-  overflow: auto;
-  min-height: 0;
-`
-
-const ContentColumn = styled(VStack)`
-  width: min(345px, 100%);
-  gap: 24px;
-`
 
 const AnimationWrapper = styled.div`
   display: flex;
