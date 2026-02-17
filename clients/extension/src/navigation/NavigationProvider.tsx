@@ -1,3 +1,4 @@
+import { vaultsStorage } from '@core/extension/storage/vaults'
 import { initialCoreView } from '@core/ui/navigation/CoreView'
 import { Center } from '@lib/ui/layout/Center'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -23,6 +24,11 @@ const resolveInitialHistory = async (): Promise<View[]> => {
   const persistedHistory = await getPersistedHistory()
   if (persistedHistory !== null && persistedHistory.length > 0) {
     return persistedHistory
+  }
+
+  const vaults = await vaultsStorage.getVaults()
+  if (vaults.length === 0) {
+    return [{ id: 'newVault' }]
   }
 
   return [initialCoreView]
