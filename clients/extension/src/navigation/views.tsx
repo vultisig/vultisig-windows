@@ -20,10 +20,24 @@ import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProvide
 import { SettingsPage } from '@core/ui/settings'
 import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPage'
 import { ImportSeedphrasePage } from '@core/ui/vault/import/seedphrase/ImportSeedphrasePage'
+import { useVaults } from '@core/ui/storage/vaults'
 import { VaultPage } from '@core/ui/vault/page/components/VaultPage'
+import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { Views } from '@lib/ui/navigation/Views'
+import { useEffect } from 'react'
 
 const ExtensionVaultPage = () => {
+  const vaults = useVaults()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (vaults.length === 0) {
+      navigate({ id: 'setupVault' }, { replace: true })
+    }
+  }, [vaults.length, navigate])
+
+  if (vaults.length === 0) return null
+
   return <VaultPage primaryControls={<DappsButton />} />
 }
 
