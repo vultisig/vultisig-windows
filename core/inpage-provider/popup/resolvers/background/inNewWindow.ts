@@ -18,16 +18,14 @@ const windowHeight = 600
 const getPopupPosition = async (): Promise<
   { left: number; top: number } | undefined
 > => {
-  try {
-    const lastFocused = await chrome.windows.getLastFocused()
-    const l = lastFocused.left ?? 0
-    const w = lastFocused.width ?? windowWidth
-    const top = lastFocused.top ?? 0
-    const left = Math.max(l + (w - windowWidth), 0)
-    return { left, top }
-  } catch {
-    return undefined
-  }
+  const result = await attempt(() => chrome.windows.getLastFocused())
+  if ('error' in result) return undefined
+  const lastFocused = result.data
+  const l = lastFocused.left ?? 0
+  const w = lastFocused.width ?? windowWidth
+  const top = lastFocused.top ?? 0
+  const left = Math.max(l + (w - windowWidth), 0)
+  return { left, top }
 }
 
 const findExistingPopupWindow = async (): Promise<number | null> => {
