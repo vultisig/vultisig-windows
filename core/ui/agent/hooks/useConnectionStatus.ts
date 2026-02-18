@@ -4,6 +4,7 @@ export type ConnectionState = 'disconnected' | 'connecting' | 'connected'
 
 type UseConnectionStatusReturn = {
   state: ConnectionState
+  checked: boolean
   error: string | null
   connect: (password: string) => Promise<void>
   disconnect: () => void
@@ -14,6 +15,7 @@ export const useConnectionStatus = (
   vaultId: string | null
 ): UseConnectionStatusReturn => {
   const [state, setState] = useState<ConnectionState>('disconnected')
+  const [checked, setChecked] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const refreshTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -77,6 +79,10 @@ export const useConnectionStatus = (
       } catch {
         if (!cancelled) {
           setState('disconnected')
+        }
+      } finally {
+        if (!cancelled) {
+          setChecked(true)
         }
       }
     }
@@ -158,5 +164,5 @@ export const useConnectionStatus = (
     setError(null)
   }, [])
 
-  return { state, error, connect, disconnect, clearError }
+  return { state, checked, error, connect, disconnect, clearError }
 }
