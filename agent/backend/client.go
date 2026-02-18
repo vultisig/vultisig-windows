@@ -101,7 +101,7 @@ func (c *Client) DeleteConversation(ctx context.Context, convID, publicKey, toke
 }
 
 func (c *Client) BuildTx(ctx context.Context, convID string, req *BuildTxRequest, token string) (*BuildTxResponse, error) {
-	path := fmt.Sprintf("/agent/conversations/%s/swap/build", convID)
+	path := fmt.Sprintf("/agent/conversations/%s/tx/build", convID)
 	var resp BuildTxResponse
 	err := c.doRequest(ctx, http.MethodPost, path, token, req, &resp)
 	if err != nil {
