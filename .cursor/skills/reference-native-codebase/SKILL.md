@@ -22,6 +22,7 @@ USE this skill WHEN the user says "port from iOS/Android", "this exists in nativ
 | `android` | Kotlin | `app/src/main/java/`, similar structure |
 | `commondata` | Protobuf | Shared message definitions |
 | `vultisig-sdk` | Multi | MPC SDK (reference for crypto logic) |
+| `community-tools` | TypeScript | `recovery-tools/`, `vultisig-playground/` |
 
 ## Swift/Kotlin to TypeScript
 
