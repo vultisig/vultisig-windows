@@ -1165,4 +1165,23 @@ export const en = {
   your_seedphrase_subtitle: 'Enter it, create a vault, never look back',
   youre_swapping: "You're swapping",
   account: 'Account',
+  vultibot: 'VultiBot',
+  vultibot_welcome: "Hi, I'm VultiBot",
+  start_new_chat: 'Start New Chat',
+  new_chat: 'New Chat',
+  messages: 'messages',
+  vultibot_description:
+    'Your AI-powered vault assistant. I can swap, send, automate policies, check balances, and manage your vault.',
+  api_key_required: 'API Key Required',
+  api_key_required_description:
+    'To use VultiBot, please set your Anthropic API key as an environment variable before starting the app.',
+  type_a_message: 'Type a message...',
+  thinking: 'Thinking',
+  try_saying: 'Try saying',
+  ask_about_plugins_policies: 'Ask about plugins and policies...',
+  signed_in: 'Signed in',
+  password_required_for_operation:
+    'Please enter your password for {{operation}}.',
+  confirm_action: 'Confirm Action',
+  confirm_action_description: 'Please confirm you want to {{action}}.',
 }

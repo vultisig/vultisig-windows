@@ -1,3 +1,187 @@
+export namespace agent {
+	
+	export class AuthTokenInfo {
+	    connected: boolean;
+	    expiresAt: time.Time;
+	
+	    static createFrom(source: any = {}) {
+	        return new AuthTokenInfo(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.connected = source["connected"];
+	        this.expiresAt = this.convertValues(source["expiresAt"], time.Time);
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+	export class ServiceStatus {
+	    fastVaultServer: boolean;
+	    verifier: boolean;
+	    agentBackend: boolean;
+	    authenticated: boolean;
+	
+	    static createFrom(source: any = {}) {
+	        return new ServiceStatus(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.fastVaultServer = source["fastVaultServer"];
+	        this.verifier = source["verifier"];
+	        this.agentBackend = source["agentBackend"];
+	        this.authenticated = source["authenticated"];
+	    }
+	}
+
+}
+
+export namespace backend {
+	
+	export class Conversation {
+	    id: string;
+	    public_key: string;
+	    title?: string;
+	    created_at: time.Time;
+	    updated_at: time.Time;
+	    archived_at?: time.Time;
+	
+	    static createFrom(source: any = {}) {
+	        return new Conversation(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
+	        this.public_key = source["public_key"];
+	        this.title = source["title"];
+	        this.created_at = this.convertValues(source["created_at"], time.Time);
+	        this.updated_at = this.convertValues(source["updated_at"], time.Time);
+	        this.archived_at = this.convertValues(source["archived_at"], time.Time);
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+	export class Message {
+	    id: string;
+	    conversation_id: string;
+	    role: string;
+	    content: string;
+	    content_type: string;
+	    metadata?: number[];
+	    created_at: time.Time;
+	
+	    static createFrom(source: any = {}) {
+	        return new Message(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
+	        this.conversation_id = source["conversation_id"];
+	        this.role = source["role"];
+	        this.content = source["content"];
+	        this.content_type = source["content_type"];
+	        this.metadata = source["metadata"];
+	        this.created_at = this.convertValues(source["created_at"], time.Time);
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+	export class ConversationWithMessages {
+	    id: string;
+	    public_key: string;
+	    title?: string;
+	    created_at: time.Time;
+	    updated_at: time.Time;
+	    archived_at?: time.Time;
+	    messages: Message[];
+	
+	    static createFrom(source: any = {}) {
+	        return new ConversationWithMessages(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
+	        this.public_key = source["public_key"];
+	        this.title = source["title"];
+	        this.created_at = this.convertValues(source["created_at"], time.Time);
+	        this.updated_at = this.convertValues(source["updated_at"], time.Time);
+	        this.archived_at = this.convertValues(source["archived_at"], time.Time);
+	        this.messages = this.convertValues(source["messages"], Message);
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+
+}
+
 export namespace storage {
 	
 	export class AddressBookItem {
@@ -67,8 +251,7 @@ export namespace storage {
 	    public_key_ecdsa: string;
 	    public_key_eddsa: string;
 	    signers: string[];
-	    // Go type: time
-	    created_at: any;
+	    created_at: time.Time;
 	    hex_chain_code: string;
 	    keyshares: KeyShare[];
 	    local_party_id: string;
@@ -92,7 +275,7 @@ export namespace storage {
 	        this.public_key_ecdsa = source["public_key_ecdsa"];
 	        this.public_key_eddsa = source["public_key_eddsa"];
 	        this.signers = source["signers"];
-	        this.created_at = this.convertValues(source["created_at"], null);
+	        this.created_at = this.convertValues(source["created_at"], time.Time);
 	        this.hex_chain_code = source["hex_chain_code"];
 	        this.keyshares = this.convertValues(source["keyshares"], KeyShare);
 	        this.local_party_id = source["local_party_id"];
@@ -139,6 +322,23 @@ export namespace storage {
 	        this.id = source["id"];
 	        this.name = source["name"];
 	        this.order = source["order"];
+	    }
+	}
+
+}
+
+export namespace time {
+	
+	export class Time {
+	
+	
+	    static createFrom(source: any = {}) {
+	        return new Time(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	
 	    }
 	}
 

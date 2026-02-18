@@ -5,6 +5,7 @@ import (
 	"embed"
 	"os"
 
+	"github.com/joho/godotenv"
 	"github.com/rs/zerolog/log"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/logger"
@@ -13,6 +14,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options/mac"
 	"github.com/wailsapp/wails/v2/pkg/options/windows"
 
+	"github.com/vultisig/vultisig-win/agent"
 	"github.com/vultisig/vultisig-win/mediator"
 	"github.com/vultisig/vultisig-win/storage"
 	"github.com/vultisig/vultisig-win/tss"
@@ -26,6 +28,8 @@ var assets embed.FS
 var icon []byte
 
 func main() {
+	_ = godotenv.Load()
+
 	argsWithoutProg := os.Args[1:]
 	// Create an instance of the app structure
 	app := NewApp(argsWithoutProg)
@@ -52,6 +56,9 @@ func main() {
 	// Create an instance of InstallMarkerService
 	installMarkerService := &InstallMarkerService{}
 
+	// Create agent service
+	agentSvc := agent.NewAgentService(store, tssIns)
+
 	// Optionally handle fresh install logic in Go on startup
 	if installMarkerService.IsFreshInstall() {
 		log.Info().Msg("Fresh install detected. Creating install marker.")
@@ -74,6 +81,7 @@ func main() {
 		OnStartup: func(ctx context.Context) {
 			app.startup(ctx)
 			tssIns.Startup(ctx)
+			agentSvc.Startup(ctx)
 		},
 		OnShutdown: func(ctx context.Context) {
 			if err := mediator.StopServer(); err != nil {
@@ -87,6 +95,7 @@ func main() {
 			mediator,
 			goHttp,
 			installMarkerService,
+			agentSvc,
 		},
 		EnumBind: []interface{}{},
 		LogLevel: logger.ERROR,

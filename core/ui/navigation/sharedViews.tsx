@@ -1,6 +1,8 @@
 import { AddressBookPage } from '@core/ui/address-book'
 import { CreateAddressBookItemPage } from '@core/ui/address-book/create'
 import { UpdateAddressBookItemPage } from '@core/ui/address-book/update'
+import { AgentChatPage } from '@core/ui/agent/components/AgentChatPage'
+import { AgentPage } from '@core/ui/agent/components/AgentPage'
 import { AddCustomTokenPage } from '@core/ui/chain/coin/addCustomToken/AddCustomTokenPage'
 import { AddressPage } from '@core/ui/chain/coin/address'
 import { DeeplinkPage } from '@core/ui/deeplink/components/DeeplinkPage'
@@ -53,6 +55,8 @@ import { VultDiscountPage } from '../vult/discount/page'
 
 export type SharedViewId = Extract<
   CoreViewId,
+  | 'agent'
+  | 'agentChat'
   | 'addCustomToken'
   | 'address'
   | 'addressBook'
@@ -101,6 +105,8 @@ export type SharedViewId = Extract<
 >
 
 export const sharedViews: Views<SharedViewId> = {
+  agent: AgentPage,
+  agentChat: AgentChatPage,
   referral: () => (
     <ReferralsGuard>
       <ReferralPage />
