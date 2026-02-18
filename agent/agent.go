@@ -251,19 +251,20 @@ func (a *AgentService) handleBackendResponse(ctx context.Context, convID, vaultP
 	})
 
 	if resp.TxReady != nil {
-		runtime.EventsEmit(a.ctx, "agent:tx_ready", TxReadyEvent{
+		runtime.EventsEmit(a.ctx, "agent:tx_bundle", TxBundleEvent{
 			ConversationID: convID,
-			TxReady:        resp.TxReady,
+			TxBundle:       resp.TxReady.ToTxBundle(),
 		})
 	}
 
-	autoActions, buildAction := filterSwapBuild(filterAutoActions(resp.Actions))
+	autoActions, buildAction := filterBuildTx(filterAutoActions(resp.Actions))
 
 	if buildAction != nil {
-		a.Logger.WithField("action", buildAction.Type).Info("building swap quote async")
-		go a.buildSwapQuoteAsync(ctx, convID, vaultPubKey, token, buildAction.Params, vault)
+		a.Logger.WithField("action", buildAction.Type).Info("building tx async")
+		go a.buildTxAsync(ctx, convID, vaultPubKey, token, buildAction.Params, vault)
 	}
 
+	var results []*backend.ActionResult
 	for _, action := range autoActions {
 		if ctx.Err() != nil {
 			return
@@ -300,20 +301,29 @@ func (a *AgentService) handleBackendResponse(ctx context.Context, convID, vaultP
 			Error:          result.Error,
 		})
 
-		a.reportActionResult(ctx, convID, vaultPubKey, vault, token, result)
+		results = append(results, result)
+	}
+
+	if len(results) > 0 {
+		a.reportBatchActionResults(ctx, convID, vaultPubKey, vault, token, results)
+		return
+	}
+
+	if buildAction != nil {
+		return
 	}
 
 	runtime.EventsEmit(a.ctx, "agent:complete", CompleteEvent{
 		ConversationID: convID,
-		Message: resp.Message.Content,
+		Message:        resp.Message.Content,
 	})
 }
 
-func filterSwapBuild(actions []backend.Action) ([]backend.Action, *backend.Action) {
+func filterBuildTx(actions []backend.Action) ([]backend.Action, *backend.Action) {
 	var remaining []backend.Action
 	var build *backend.Action
 	for i := range actions {
-		if actions[i].Type == "build_swap_tx" {
+		if actions[i].Type == "build_tx" {
 			build = &actions[i]
 		} else {
 			remaining = append(remaining, actions[i])
@@ -322,43 +332,50 @@ func filterSwapBuild(actions []backend.Action) ([]backend.Action, *backend.Actio
 	return remaining, build
 }
 
-func (a *AgentService) buildSwapQuoteAsync(ctx context.Context, convID, vaultPubKey, token string, params map[string]any, vault *storage.Vault) {
-	a.Logger.Info("starting async swap quote build")
+func (a *AgentService) buildTxAsync(ctx context.Context, convID, vaultPubKey, token string, params map[string]any, vault *storage.Vault) {
+	a.Logger.Info("starting async tx build")
 
 	msgCtx := buildQuickMessageContext(vault, a.store)
 
-	req := &backend.BuildSwapQuoteRequest{
+	req := &backend.BuildTxRequest{
 		PublicKey: vaultPubKey,
 		Params:    params,
 		Context:   msgCtx,
 	}
 
-	resp, err := a.backendClient.BuildSwapQuote(ctx, convID, req, token)
+	resp, err := a.backendClient.BuildTx(ctx, convID, req, token)
 	if err != nil {
-		a.Logger.WithError(err).Error("async swap quote build failed")
-		runtime.EventsEmit(a.ctx, "agent:error", ErrorEvent{
-			ConversationID: convID,
-			Error:          fmt.Sprintf("Failed to build swap: %v", err),
-		})
+		a.Logger.WithError(err).Error("async tx build failed")
+		result := &backend.ActionResult{
+			Action:  "build_tx",
+			Success: false,
+			Error:   err.Error(),
+		}
+		if isRetryableBuildError(err.Error()) {
+			result.Data = map[string]any{"retryable": true}
+		}
+		a.reportActionResult(ctx, convID, vaultPubKey, vault, token, result)
 		return
 	}
 
 	if resp.TxReady != nil {
-		a.Logger.Info("async swap quote build complete")
-		runtime.EventsEmit(a.ctx, "agent:tx_ready", TxReadyEvent{
+		a.Logger.Info("async tx build complete")
+		runtime.EventsEmit(a.ctx, "agent:tx_bundle", TxBundleEvent{
 			ConversationID: convID,
-			TxReady:        resp.TxReady,
+			TxBundle:       resp.TxReady.ToTxBundle(),
 		})
+		runtime.EventsEmit(a.ctx, "agent:complete", CompleteEvent{ConversationID: convID})
 		return
 	}
 
 	if len(resp.Actions) > 0 {
+		var recoveryResults []*backend.ActionResult
 		for _, action := range resp.Actions {
 			if ctx.Err() != nil {
 				return
 			}
 
-			a.Logger.WithField("action", action.Type).Info("executing recovery action from swap build")
+			a.Logger.WithField("action", action.Type).Info("executing recovery action from tx build")
 
 			runtime.EventsEmit(a.ctx, "agent:tool_call", ToolCallEvent{
 				ConversationID: convID,
@@ -388,7 +405,10 @@ func (a *AgentService) buildSwapQuoteAsync(ctx context.Context, convID, vaultPub
 				Error:          result.Error,
 			})
 
-			a.reportActionResult(ctx, convID, vaultPubKey, vault, token, result)
+			recoveryResults = append(recoveryResults, result)
+		}
+		if len(recoveryResults) > 0 {
+			a.reportBatchActionResults(ctx, convID, vaultPubKey, vault, token, recoveryResults)
 		}
 		return
 	}
@@ -398,11 +418,18 @@ func (a *AgentService) buildSwapQuoteAsync(ctx context.Context, convID, vaultPub
 		errMsg = resp.Error
 	}
 	if errMsg != "" {
-		runtime.EventsEmit(a.ctx, "agent:error", ErrorEvent{
-			ConversationID: convID,
-			Error:          errMsg,
-		})
+		result := &backend.ActionResult{
+			Action:  "build_tx",
+			Success: false,
+			Error:   errMsg,
+		}
+		if isRetryableBuildError(errMsg) {
+			result.Data = map[string]any{"retryable": true}
+		}
+		a.reportActionResult(ctx, convID, vaultPubKey, vault, token, result)
+		return
 	}
+	runtime.EventsEmit(a.ctx, "agent:complete", CompleteEvent{ConversationID: convID})
 }
 
 
@@ -422,6 +449,32 @@ func (a *AgentService) reportActionResult(ctx context.Context, convID, vaultPubK
 	}
 
 	a.handleBackendResponse(ctx, convID, vaultPubKey, vault, token, resp)
+}
+
+func (a *AgentService) reportBatchActionResults(ctx context.Context, convID, vaultPubKey string, vault *storage.Vault, token string, results []*backend.ActionResult) {
+	msgCtx := buildMessageContext(a.ctx, ctx, vault, nil)
+
+	for i, result := range results {
+		if ctx.Err() != nil {
+			return
+		}
+
+		req := &backend.SendMessageRequest{
+			PublicKey:    vaultPubKey,
+			ActionResult: result,
+			Context:      msgCtx,
+		}
+
+		resp, err := a.backendClient.SendMessage(ctx, convID, req, token)
+		if err != nil {
+			a.Logger.WithError(err).Error("failed to report action result to backend")
+			continue
+		}
+
+		if i == len(results)-1 {
+			a.handleBackendResponse(ctx, convID, vaultPubKey, vault, token, resp)
+		}
+	}
 }
 
 func (a *AgentService) ExecuteAction(convID, vaultPubKey, actionJSON string) error {
@@ -1127,7 +1180,26 @@ var alwaysAutoExecute = map[string]bool{
 	"get_balances":         true,
 	"get_portfolio":        true,
 	"search_token":         true,
-	"build_swap_tx":        true,
+	"list_vaults":          true,
+	"build_tx":             true,
+	"scan_tx":              true,
+}
+
+func isRetryableBuildError(errMsg string) bool {
+	lower := strings.ToLower(errMsg)
+	patterns := []string{
+		"status 429",
+		"status 502", "status 503", "status 504",
+		"timeout", "timed out",
+		"no response",
+		"connection refused", "connection reset",
+	}
+	for _, p := range patterns {
+		if strings.Contains(lower, p) {
+			return true
+		}
+	}
+	return false
 }
 
 func shouldAutoExecute(action backend.Action) bool {

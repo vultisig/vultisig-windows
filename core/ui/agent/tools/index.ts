@@ -22,6 +22,7 @@ import { handlePolicyList } from './handlers/policyList'
 import { handlePolicyStatus } from './handlers/policyStatus'
 import { handleRemoveChain } from './handlers/removeChain'
 import { handleRemoveCoin } from './handlers/removeCoin'
+import { handleScanTx } from './handlers/scanTx'
 import { handleSearchToken } from './handlers/searchToken'
 import { handleSignInStatus } from './handlers/signInStatus'
 import { handleTransactionHistory } from './handlers/transactionHistory'
@@ -54,5 +55,6 @@ export const toolHandlers: Record<string, ToolHandler> = {
   initiate_send: handleInitiateSend,
   policy_generate: handlePolicyGenerate,
   search_token: handleSearchToken,
+  scan_tx: handleScanTx,
   broadcast_tx: handleBroadcastTx,
 }

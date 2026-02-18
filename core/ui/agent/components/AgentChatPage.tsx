@@ -27,8 +27,8 @@ import { ConnectionButton } from './ConnectionButton'
 import { ConversationStarters } from './ConversationStarters'
 import { PasswordPrompt } from './PasswordPrompt'
 import { SuggestionCard } from './SuggestionCard'
-import { SwapReviewCard } from './swap-review'
 import { ThinkingIndicator } from './ThinkingIndicator'
+import { TxReviewCard } from './tx-review'
 import { TxStatusCard } from './TxStatusCard'
 
 type AgentChatViewState = { conversationId?: string; initialMessage?: string }
@@ -68,7 +68,7 @@ export const AgentChatPage: FC = () => {
     isLoading,
     actions,
     suggestions,
-    txReady,
+    txBundle,
     passwordRequired,
     confirmationRequired,
     authRequired,
@@ -79,7 +79,7 @@ export const AgentChatPage: FC = () => {
     dismissConfirmation,
     dismissAuthRequired,
     dismissError,
-    dismissTxReady,
+    dismissTxBundle,
     dismissTxStatus,
     requestAuth,
   } = useAgentEvents(conversationId)
@@ -343,10 +343,10 @@ export const AgentChatPage: FC = () => {
     [conversationId, vaultId, executeAction]
   )
 
-  const handleSwapCancel = useCallback(() => {
-    dismissTxReady()
-    doSend('I cancelled the swap transaction.')
-  }, [dismissTxReady, doSend])
+  const handleBundleCancel = useCallback(() => {
+    dismissTxBundle()
+    doSend('I cancelled the transaction.')
+  }, [dismissTxBundle, doSend])
 
   const handleSuggestionSelect = useCallback(
     (suggestion: Suggestion) => {
@@ -433,12 +433,12 @@ export const AgentChatPage: FC = () => {
               ))}
             </VStack>
           )}
-          {txReady && (
+          {txBundle && (
             <div style={{ padding: '8px 0' }}>
-              <SwapReviewCard
-                txReady={txReady}
+              <TxReviewCard
+                txBundle={txBundle}
                 onSign={handleActionExecute}
-                onCancel={handleSwapCancel}
+                onCancel={handleBundleCancel}
               />
             </div>
           )}

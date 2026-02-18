@@ -7,8 +7,8 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { ChatMessage as ChatMessageType } from '../types'
+import { InlineToolCallMessage } from './InlineToolCallMessage'
 import { MarkdownContent } from './MarkdownContent'
-import { ToolCallMessage } from './ToolCallMessage'
 
 type Props = {
   message: ChatMessageType
@@ -21,19 +21,9 @@ const ChatMessageComponent: FC<Props> = ({ message }) => {
 
   if (message.toolCall) {
     return (
-      <Container $isUser={false}>
-        <MessageWrapper $isUser={false}>
-          <BotAvatar>
-            <SparklesIcon />
-          </BotAvatar>
-          <VStack gap={8}>
-            <Text size={12} color="supporting" weight={600}>
-              {t('vultibot')}
-            </Text>
-            <ToolCallMessage toolCall={message.toolCall} />
-          </VStack>
-        </MessageWrapper>
-      </Container>
+      <InlineContainer>
+        <InlineToolCallMessage toolCall={message.toolCall} />
+      </InlineContainer>
     )
   }
 
@@ -94,6 +84,11 @@ const BotAvatar = styled.div`
   flex-shrink: 0;
   font-size: 16px;
   color: white;
+`
+
+const InlineContainer = styled.div`
+  padding: 2px 0;
+  margin-left: 44px;
 `
 
 const MessageBubble = styled.div<{ $isUser: boolean }>`

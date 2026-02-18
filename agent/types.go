@@ -33,9 +33,9 @@ type ResponseEvent struct {
 	InstallRequired *backend.InstallRequired `json:"installRequired,omitempty"`
 }
 
-type TxReadyEvent struct {
-	ConversationID string           `json:"conversationId"`
-	TxReady        *backend.TxReady `json:"txReady"`
+type TxBundleEvent struct {
+	ConversationID string            `json:"conversationId"`
+	TxBundle       *backend.TxBundle `json:"txBundle"`
 }
 
 type ActionResultEvent struct {

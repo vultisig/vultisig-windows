@@ -15,8 +15,8 @@ import {
   ResponseEvent,
   Suggestion,
   ToolCallEvent,
-  TxReady,
-  TxReadyEvent,
+  TxBundle,
+  TxBundleEvent,
   TxStatusEvent,
   TxStatusInfo,
 } from '../types'
@@ -39,7 +39,7 @@ type AgentEventsState = {
   suggestions: Suggestion[]
   policyReady: PolicyReady | null
   installRequired: InstallRequired | null
-  txReady: TxReady | null
+  txBundle: TxBundle | null
   passwordRequired: PasswordRequiredEvent | null
   confirmationRequired: ConfirmationRequiredEvent | null
   authRequired: AuthRequiredEvent | null
@@ -55,7 +55,7 @@ type UseAgentEventsReturn = AgentEventsState & {
   dismissConfirmation: () => void
   dismissAuthRequired: () => void
   dismissError: () => void
-  dismissTxReady: () => void
+  dismissTxBundle: () => void
   dismissTxStatus: (txHash: string) => void
   requestAuth: () => void
 }
@@ -86,7 +86,7 @@ export const useAgentEvents = (
     suggestions: [],
     policyReady: null,
     installRequired: null,
-    txReady: null,
+    txBundle: null,
     passwordRequired: null,
     confirmationRequired: null,
     authRequired: null,
@@ -153,12 +153,12 @@ export const useAgentEvents = (
       }))
     }
 
-    const onTxReady = (data: TxReadyEvent) => {
+    const onTxBundle = (data: TxBundleEvent) => {
       if (conversationId && data.conversationId !== conversationId) return
 
       setState(prev => ({
         ...prev,
-        txReady: data.txReady,
+        txBundle: data.txBundle,
       }))
     }
 
@@ -227,7 +227,7 @@ export const useAgentEvents = (
         return {
           ...prev,
           actions: prev.actions.filter(a => a.id !== data.actionId),
-          txReady: data.actionType === 'sign_swap_tx' ? null : prev.txReady,
+          txBundle: data.actionType === 'sign_tx' ? null : prev.txBundle,
           messages: updatedMessages,
         }
       })
@@ -364,8 +364,8 @@ export const useAgentEvents = (
     )
     cleanups.push(
       window.runtime.EventsOn(
-        'agent:tx_ready',
-        onTxReady as (data: unknown) => void
+        'agent:tx_bundle',
+        onTxBundle as (data: unknown) => void
       )
     )
     cleanups.push(
@@ -417,7 +417,7 @@ export const useAgentEvents = (
       suggestions: [],
       policyReady: null,
       installRequired: null,
-      txReady: null,
+      txBundle: null,
       passwordRequired: null,
       confirmationRequired: null,
       authRequired: null,
@@ -442,8 +442,8 @@ export const useAgentEvents = (
     setState(prev => ({ ...prev, error: null }))
   }, [])
 
-  const dismissTxReady = useCallback(() => {
-    setState(prev => ({ ...prev, txReady: null }))
+  const dismissTxBundle = useCallback(() => {
+    setState(prev => ({ ...prev, txBundle: null }))
   }, [])
 
   const dismissTxStatus = useCallback((txHash: string) => {
@@ -470,7 +470,7 @@ export const useAgentEvents = (
     dismissConfirmation,
     dismissAuthRequired,
     dismissError,
-    dismissTxReady,
+    dismissTxBundle,
     dismissTxStatus,
     requestAuth,
   }
