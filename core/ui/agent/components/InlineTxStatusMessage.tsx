@@ -10,9 +10,6 @@ type Props = {
   txStatus: TxStatusInfo
 }
 
-const truncateHash = (hash: string) =>
-  hash.length > 16 ? `${hash.slice(0, 8)}...${hash.slice(-6)}` : hash
-
 const statusIndicators: Record<string, string> = {
   pending: '\u{23F3}',
   confirmed: '\u{2713}',
@@ -41,7 +38,6 @@ const InlineTxStatusMessageComponent: FC<Props> = ({ txStatus }) => {
     <Line $status={status}>
       <Indicator>{indicator}</Indicator>
       <span>{displayLabel}</span>
-      <Hash>{truncateHash(txHash)}</Hash>
       {explorerUrl && (
         <ViewLink href={explorerUrl} target="_blank" rel="noopener noreferrer">
           View &#x2197;
@@ -81,10 +77,6 @@ const Line = styled.div<{ $status: string }>`
 
 const Indicator = styled.span`
   flex-shrink: 0;
-`
-
-const Hash = styled.span`
-  opacity: 0.6;
 `
 
 const ViewLink = styled.a`
