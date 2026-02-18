@@ -15,7 +15,7 @@ import { getBlockchainSpecificValue } from '@core/mpc/keysign/chainSpecific/Keys
 import { refineKeysignUtxo } from '@core/mpc/keysign/refine/utxo'
 import { CommKeysignSwapPayload } from '@core/mpc/keysign/swap/KeysignSwapPayload'
 import { getKeysignUtxoInfo } from '@core/mpc/keysign/utxo/getKeysignUtxoInfo'
-import { MpcLib } from '@core/mpc/mpcLib'
+import { KeysignLibType } from '@core/mpc/mpcLib'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import {
   OneInchQuoteSchema,
@@ -41,7 +41,7 @@ export type BuildSwapKeysignPayloadInput = {
   localPartyId: string
   fromPublicKey: PublicKey
   toPublicKey: PublicKey
-  libType: MpcLib
+  libType: KeysignLibType
   walletCore: WalletCore
 }
 
