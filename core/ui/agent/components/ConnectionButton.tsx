@@ -4,7 +4,7 @@ import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { FC, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { useConnectionStatus } from '../hooks/useConnectionStatus'
@@ -13,9 +13,17 @@ import { PasswordPrompt } from './PasswordPrompt'
 export const ConnectionButton: FC = () => {
   const vault = useCurrentVault()
   const vaultId = vault ? getVaultId(vault) : null
-  const { state, connect, disconnect, error, clearError } =
+  const { state, checked, connect, disconnect, error, clearError } =
     useConnectionStatus(vaultId)
   const [showPassword, setShowPassword] = useState(false)
+  const autoPromptedRef = useRef(false)
+
+  useEffect(() => {
+    if (checked && state === 'disconnected' && !autoPromptedRef.current) {
+      autoPromptedRef.current = true
+      setShowPassword(true)
+    }
+  }, [checked, state])
 
   const handleClick = () => {
     if (state === 'disconnected') {
