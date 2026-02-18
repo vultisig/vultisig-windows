@@ -1,3 +1,4 @@
+import { toKeysignLibType } from '@core/mpc/types/utils/libType'
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
@@ -39,7 +40,7 @@ export const JoinKeysignVaultGuard = ({ children }: ChildrenProp) => {
       return t('same_vault_share')
     }
 
-    if (libType && !areLowerCaseEqual(libType, vault.libType)) {
+    if (libType && !areLowerCaseEqual(libType, toKeysignLibType(vault))) {
       return t('vault_type_does_not_match')
     }
   }, [payload, t, vault])
