@@ -90,8 +90,10 @@ func (e *Executor) dispatch(action backend.Action, params *ExecuteParams) (map[s
 		return e.executeGoTool("policy_add", action.Params, params)
 	case "delete_policy":
 		return e.executeGoTool("policy_delete", action.Params, params)
-	case "sign_swap_tx":
-		return e.executeGoTool("sign_swap_tx", action.Params, params)
+	case "sign_tx":
+		return e.executeGoTool("sign_tx", action.Params, params)
+	case "scan_tx":
+		return e.executeBridged("scan_tx", action.Params, params)
 	default:
 		return nil, fmt.Errorf("unknown action type: %s", action.Type)
 	}
@@ -191,7 +193,7 @@ func (e *Executor) executeGetPortfolio(params *ExecuteParams) (map[string]any, e
 
 func (e *Executor) NeedsPassword(actionType string) bool {
 	switch actionType {
-	case "plugin_install", "create_policy", "delete_policy", "sign_swap_tx":
+	case "plugin_install", "create_policy", "delete_policy", "sign_tx":
 		return true
 	default:
 		return false

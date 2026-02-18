@@ -73,7 +73,7 @@ func (r *Registry) registerTools() {
 		NewPluginInstallTool(r.verifierClient, r.store),
 		NewPolicyAddTool(r.verifierClient, r.tss),
 		NewPolicyDeleteTool(r.verifierClient, r.tss),
-		NewSignSwapTxTool(r.tss),
+		NewSignTxTool(r.tss),
 
 		NewGetBalancesTool(),
 		NewGetPortfolioTool(),
@@ -216,6 +216,16 @@ func (r *Registry) registerTools() {
 			map[string]any{
 				"query": map[string]any{"type": "string", "description": "Token ticker or name to search for (e.g., 'PEPE', 'Uniswap', 'USDC')"},
 				"chain": map[string]any{"type": "string", "description": "Optional: restrict search to a specific chain (e.g., 'Ethereum', 'Solana'). If omitted, searches all chains."},
+			}, false, false),
+
+		NewBridgedTool("scan_tx",
+			"Scan a transaction for security risks using Blockaid. Returns risk level (Benign/Warning/Malicious) and description. Supports EVM chains only.",
+			map[string]any{
+				"chain": map[string]any{"type": "string", "description": "Chain name (e.g., 'Ethereum', 'Arbitrum', 'Base')"},
+				"from":  map[string]any{"type": "string", "description": "Sender address"},
+				"to":    map[string]any{"type": "string", "description": "Recipient/contract address"},
+				"value": map[string]any{"type": "string", "description": "Transaction value in hex (e.g., '0x0')"},
+				"data":  map[string]any{"type": "string", "description": "Transaction calldata hex"},
 			}, false, false),
 	}
 

@@ -80,22 +80,18 @@ export type TxData = {
   chain_id?: string
 }
 
-export type TxReady = {
-  provider: string
-  expected_output: string
-  minimum_output: string
-  needs_approval: boolean
-  approval_tx?: TxData
-  swap_tx: TxData
-  from_chain: string
-  from_symbol: string
-  from_decimals: number
-  to_chain: string
-  to_symbol: string
-  to_decimals: number
-  amount: string
+export type Transaction = {
+  type: string
+  label: string
+  tx_data: TxData
+  metadata?: Record<string, unknown>
+}
+
+export type TxBundle = {
+  transactions: Transaction[]
+  chain: string
   sender: string
-  destination: string
+  metadata?: Record<string, unknown>
 }
 
 export type ResponseEvent = {
@@ -107,9 +103,9 @@ export type ResponseEvent = {
   installRequired?: InstallRequired
 }
 
-export type TxReadyEvent = {
+export type TxBundleEvent = {
   conversationId: string
-  txReady: TxReady
+  txBundle: TxBundle
 }
 
 export type ActionResultEvent = {

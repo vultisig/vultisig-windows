@@ -7,10 +7,12 @@ import { formatAmount } from '@lib/utils/formatAmount'
 import { FC } from 'react'
 import styled from 'styled-components'
 
-import { truncateAddress } from '../../tools/shared/assetResolution'
-import { CopyableValue } from '../shared/CopyableValue'
-import { ExplorerLink } from '../shared/ExplorerLink'
-import { ResolvedTokenInfo } from './resolveSwapTokenInfo'
+import {
+  ResolvedTokenInfo,
+  truncateAddress,
+} from '../../../tools/shared/assetResolution'
+import { CopyableValue } from '../../shared/CopyableValue'
+import { ExplorerLink } from '../../shared/ExplorerLink'
 
 type Props = {
   info: ResolvedTokenInfo

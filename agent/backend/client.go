@@ -100,15 +100,15 @@ func (c *Client) DeleteConversation(ctx context.Context, convID, publicKey, toke
 	return nil
 }
 
-func (c *Client) BuildSwapQuote(ctx context.Context, convID string, req *BuildSwapQuoteRequest, token string) (*BuildSwapQuoteResponse, error) {
+func (c *Client) BuildTx(ctx context.Context, convID string, req *BuildTxRequest, token string) (*BuildTxResponse, error) {
 	path := fmt.Sprintf("/agent/conversations/%s/swap/build", convID)
-	var resp BuildSwapQuoteResponse
+	var resp BuildTxResponse
 	err := c.doRequest(ctx, http.MethodPost, path, token, req, &resp)
 	if err != nil {
-		return nil, fmt.Errorf("build swap quote: %w", err)
+		return nil, fmt.Errorf("build tx: %w", err)
 	}
 	if resp.Error != "" && len(resp.Actions) == 0 {
-		return nil, fmt.Errorf("build swap quote: %s", resp.Error)
+		return nil, fmt.Errorf("build tx: %s", resp.Error)
 	}
 	return &resp, nil
 }

@@ -14,6 +14,7 @@ const actionIcons: Record<string, string> = {
   delete_policy: '\u{1F5D1}\u{FE0F}',
   address_book_add: '\u{1F4D6}',
   address_book_remove: '\u{1F4D6}',
+  sign_tx: '\u{1F4E6}',
 }
 
 export const getActionIcon = (actionType: string): string =>

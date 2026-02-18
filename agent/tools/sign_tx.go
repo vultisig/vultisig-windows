@@ -14,108 +14,99 @@ import (
 	"github.com/vultisig/vultisig-win/tss"
 )
 
-const swapDerivePath = "m/44'/60'/0'/0/0"
+const txDerivePath = "m/44'/60'/0'/0/0"
 
-type SignSwapTxTool struct {
+type SignTxTool struct {
 	tss    *tss.TssService
 	logger *logrus.Logger
 }
 
-func NewSignSwapTxTool(tss *tss.TssService) *SignSwapTxTool {
-	return &SignSwapTxTool{
+func NewSignTxTool(tss *tss.TssService) *SignTxTool {
+	return &SignTxTool{
 		tss:    tss,
-		logger: logrus.WithField("module", "sign_swap_tx").Logger,
+		logger: logrus.WithField("module", "sign_tx").Logger,
 	}
 }
 
-func (t *SignSwapTxTool) Name() string { return "sign_swap_tx" }
+func (t *SignTxTool) Name() string { return "sign_tx" }
 
-func (t *SignSwapTxTool) Description() string {
-	return "Sign and broadcast a swap transaction built by the DCA plugin."
+func (t *SignTxTool) Description() string {
+	return "Sign and broadcast a bundle of transactions in order."
 }
 
-func (t *SignSwapTxTool) InputSchema() map[string]any {
+func (t *SignTxTool) InputSchema() map[string]any {
 	return map[string]any{
-		"from_chain":     map[string]any{"type": "string", "description": "Chain name"},
-		"swap_tx":        map[string]any{"type": "object", "description": "Swap transaction data"},
-		"approval_tx":    map[string]any{"type": "object", "description": "Optional approval transaction data"},
-		"needs_approval": map[string]any{"type": "boolean", "description": "Whether approval tx is needed first"},
+		"chain":        map[string]any{"type": "string", "description": "Chain name"},
+		"transactions": map[string]any{"type": "array", "description": "Ordered list of transactions to sign and broadcast"},
 	}
 }
 
-func (t *SignSwapTxTool) RequiresPassword() bool     { return true }
-func (t *SignSwapTxTool) RequiresConfirmation() bool { return false }
+func (t *SignTxTool) RequiresPassword() bool     { return true }
+func (t *SignTxTool) RequiresConfirmation() bool { return false }
 
-func (t *SignSwapTxTool) Execute(input map[string]any, execCtx *ExecutionContext) (any, error) {
-	fromChain, _ := input["from_chain"].(string)
-	needsApproval, _ := input["needs_approval"].(bool)
+func (t *SignTxTool) Execute(input map[string]any, execCtx *ExecutionContext) (any, error) {
+	chain, _ := input["chain"].(string)
 	conversationID, _ := input["conversation_id"].(string)
 
-	if fromChain == "" {
-		return nil, fmt.Errorf("from_chain is required")
+	if chain == "" {
+		return nil, fmt.Errorf("chain is required")
 	}
 
-	swapTxMap, ok := input["swap_tx"].(map[string]any)
-	if !ok {
-		return nil, fmt.Errorf("swap_tx is required")
+	txsRaw, ok := input["transactions"].([]any)
+	if !ok || len(txsRaw) == 0 {
+		return nil, fmt.Errorf("transactions array is required")
 	}
 
-	var approvalHash string
+	var txHashes []map[string]string
 
-	if needsApproval {
-		approvalTxMap, ok := input["approval_tx"].(map[string]any)
+	for i, txRaw := range txsRaw {
+		txMap, ok := txRaw.(map[string]any)
 		if !ok {
-			return nil, fmt.Errorf("approval_tx required when needs_approval is true")
+			return nil, fmt.Errorf("transaction %d: invalid format", i)
+		}
+
+		txDataMap, ok := txMap["tx_data"].(map[string]any)
+		if !ok {
+			return nil, fmt.Errorf("transaction %d: tx_data is required", i)
+		}
+
+		label, _ := txMap["label"].(string)
+		if label == "" {
+			label, _ = txMap["type"].(string)
 		}
 
 		if execCtx.OnProgress != nil {
-			execCtx.OnProgress("Signing approval transaction...")
+			execCtx.OnProgress(fmt.Sprintf("Signing %s transaction...", label))
 		}
 
-		signedApproval, err := t.signPrebuiltTx(execCtx, fromChain, approvalTxMap)
+		signedTx, err := t.signPrebuiltTx(execCtx, chain, txDataMap)
 		if err != nil {
-			return nil, fmt.Errorf("sign approval tx: %w", err)
+			return nil, fmt.Errorf("sign %s tx: %w", label, err)
 		}
 
-		hash, err := t.broadcastViaBridge(execCtx, fromChain, signedApproval, conversationID, "Approval")
+		hash, err := t.broadcastViaBridge(execCtx, chain, signedTx, conversationID, label)
 		if err != nil {
-			return nil, fmt.Errorf("broadcast approval tx: %w", err)
+			return nil, fmt.Errorf("broadcast %s tx: %w", label, err)
 		}
-		approvalHash = hash
-		t.logger.WithField("tx_hash", approvalHash).Info("Approval tx broadcast")
-	}
 
-	if execCtx.OnProgress != nil {
-		execCtx.OnProgress("Signing swap transaction...")
+		t.logger.WithField("tx_hash", hash).WithField("label", label).Info("tx broadcast")
+		txHashes = append(txHashes, map[string]string{
+			"label":   label,
+			"tx_hash": hash,
+		})
 	}
-
-	signedSwap, err := t.signPrebuiltTx(execCtx, fromChain, swapTxMap)
-	if err != nil {
-		return nil, fmt.Errorf("sign swap tx: %w", err)
-	}
-
-	if execCtx.OnProgress != nil {
-		execCtx.OnProgress("Broadcasting transactions...")
-	}
-
-	txHash, err := t.broadcastViaBridge(execCtx, fromChain, signedSwap, conversationID, "Swap")
-	if err != nil {
-		return nil, fmt.Errorf("broadcast swap tx: %w", err)
-	}
-
-	t.logger.WithField("tx_hash", txHash).Info("Swap tx broadcast")
 
 	result := map[string]any{
-		"tx_hash": txHash,
-		"chain":   fromChain,
+		"chain":        chain,
+		"transactions": txHashes,
 	}
-	if approvalHash != "" {
-		result["approval_tx_hash"] = approvalHash
+	if len(txHashes) > 0 {
+		result["tx_hash"] = txHashes[len(txHashes)-1]["tx_hash"]
 	}
 	return result, nil
 }
 
-func (t *SignSwapTxTool) broadcastViaBridge(execCtx *ExecutionContext, chain string, signedTx []byte, conversationID, label string) (string, error) {
+func (t *SignTxTool) broadcastViaBridge(execCtx *ExecutionContext, chain string, signedTx []byte, conversationID, label string) (string, error) {
 	coins := shared.MapCoinsToToolbridge(execCtx.Vault.Coins)
 
 	req := toolbridge.ToolRequest{
@@ -153,7 +144,7 @@ func (t *SignSwapTxTool) broadcastViaBridge(execCtx *ExecutionContext, chain str
 	return txHash, nil
 }
 
-func (t *SignSwapTxTool) signPrebuiltTx(execCtx *ExecutionContext, chain string, txMap map[string]any) ([]byte, error) {
+func (t *SignTxTool) signPrebuiltTx(execCtx *ExecutionContext, chain string, txMap map[string]any) ([]byte, error) {
 	unsignedTxHex, _ := txMap["unsigned_tx"].(string)
 	signingHashHex, _ := txMap["signing_hash"].(string)
 
@@ -173,7 +164,7 @@ func (t *SignSwapTxTool) signPrebuiltTx(execCtx *ExecutionContext, chain string,
 		Ctx:         execCtx.Ctx,
 		Vault:       execCtx.Vault,
 		Password:    execCtx.Password,
-		DerivePath:  swapDerivePath,
+		DerivePath:  txDerivePath,
 		TSS:         t.tss,
 		Logger:      t.logger,
 		MaxAttempts: 2,

@@ -87,6 +87,63 @@ type TxReady struct {
 	Destination    string  `json:"destination"`
 }
 
+func (t *TxReady) ToTxBundle() *TxBundle {
+	bundle := &TxBundle{
+		Chain:  t.FromChain,
+		Sender: t.Sender,
+		Metadata: map[string]any{
+			"provider": t.Provider,
+		},
+	}
+
+	swapMeta := map[string]any{
+		"from_chain":      t.FromChain,
+		"from_symbol":     t.FromSymbol,
+		"to_chain":        t.ToChain,
+		"to_symbol":       t.ToSymbol,
+		"amount":          t.Amount,
+		"expected_output": t.ExpectedOutput,
+		"minimum_output":  t.MinimumOutput,
+		"destination":     t.Destination,
+	}
+
+	if t.NeedsApproval && t.ApprovalTx != nil {
+		bundle.Transactions = append(bundle.Transactions, Transaction{
+			Type:   "approval",
+			Label:  "Approve " + t.FromSymbol,
+			TxData: *t.ApprovalTx,
+			Metadata: map[string]any{
+				"token_symbol": t.FromSymbol,
+			},
+		})
+	}
+
+	if t.SwapTx != nil {
+		bundle.Transactions = append(bundle.Transactions, Transaction{
+			Type:     "swap",
+			Label:    t.FromSymbol + " → " + t.ToSymbol,
+			TxData:   *t.SwapTx,
+			Metadata: swapMeta,
+		})
+	}
+
+	return bundle
+}
+
+type Transaction struct {
+	Type     string         `json:"type"`
+	Label    string         `json:"label"`
+	TxData   TxData         `json:"tx_data"`
+	Metadata map[string]any `json:"metadata,omitempty"`
+}
+
+type TxBundle struct {
+	Transactions []Transaction  `json:"transactions"`
+	Chain        string         `json:"chain"`
+	Sender       string         `json:"sender"`
+	Metadata     map[string]any `json:"metadata,omitempty"`
+}
+
 type TxData struct {
 	To          string `json:"to"`
 	Value       string `json:"value"`
@@ -100,13 +157,13 @@ type TxData struct {
 	MsgHash     string `json:"msg_hash,omitempty"`
 }
 
-type BuildSwapQuoteRequest struct {
+type BuildTxRequest struct {
 	PublicKey string          `json:"public_key"`
 	Params    map[string]any  `json:"params"`
 	Context   *MessageContext `json:"context,omitempty"`
 }
 
-type BuildSwapQuoteResponse struct {
+type BuildTxResponse struct {
 	TxReady *TxReady `json:"tx_ready,omitempty"`
 	Actions []Action `json:"actions,omitempty"`
 	Message string   `json:"message,omitempty"`
