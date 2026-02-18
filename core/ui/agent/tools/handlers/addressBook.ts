@@ -1,12 +1,14 @@
+import { Chain } from '@core/chain/Chain'
+
 import { getChainFromString } from '../../utils/getChainFromString'
+import { getStorageContext } from '../shared/storageContext'
 import type { ToolHandler } from '../types'
 
 export const handleGetAddressBook: ToolHandler = async () => {
-  const store = window.go?.storage?.Store
-  if (!store) throw new Error('storage not available')
+  const storage = getStorageContext()
 
-  const items = await store.GetAllAddressBookItems()
-  const entries = (items ?? []).map(item => ({
+  const items = await storage.getAddressBookItems()
+  const entries = items.map(item => ({
     id: item.id,
     title: item.title,
     address: item.address,
@@ -22,8 +24,7 @@ export const handleGetAddressBook: ToolHandler = async () => {
 }
 
 export const handleAddAddressBookEntry: ToolHandler = async input => {
-  const store = window.go?.storage?.Store
-  if (!store) throw new Error('storage not available')
+  const storage = getStorageContext()
 
   const title = String(input.title ?? input.name ?? '').trim()
   const address = String(input.address ?? '').trim()
@@ -35,20 +36,16 @@ export const handleAddAddressBookEntry: ToolHandler = async input => {
     )
   }
 
-  const chain = getChainFromString(chainRaw) ?? chainRaw
+  const chain = (getChainFromString(chainRaw) ?? chainRaw) as Chain
 
   const id = crypto.randomUUID()
-  await store.SaveAddressBookItem({
+  await storage.createAddressBookItem({
     id,
     title,
     address,
     chain,
     order: 0,
-  } as never)
-
-  if (window.runtime) {
-    window.runtime.EventsEmit('addressbook:changed')
-  }
+  })
 
   return {
     data: {
@@ -63,8 +60,7 @@ export const handleAddAddressBookEntry: ToolHandler = async input => {
 }
 
 export const handleRemoveAddressBookEntry: ToolHandler = async input => {
-  const store = window.go?.storage?.Store
-  if (!store) throw new Error('storage not available')
+  const storage = getStorageContext()
 
   let id = String(input.id ?? '').trim()
 
@@ -73,9 +69,9 @@ export const handleRemoveAddressBookEntry: ToolHandler = async input => {
     const chain = String(input.chain ?? '').trim()
     if (!name) throw new Error('name or id is required')
 
-    const items = await store.GetAllAddressBookItems()
+    const items = await storage.getAddressBookItems()
     const lowerName = name.toLowerCase()
-    const match = (items ?? []).find(item => {
+    const match = items.find(item => {
       if (item.title.toLowerCase() !== lowerName) return false
       if (chain && item.chain.toLowerCase() !== chain.toLowerCase())
         return false
@@ -85,11 +81,7 @@ export const handleRemoveAddressBookEntry: ToolHandler = async input => {
     id = match.id
   }
 
-  await store.DeleteAddressBookItem(id)
-
-  if (window.runtime) {
-    window.runtime.EventsEmit('addressbook:changed')
-  }
+  await storage.deleteAddressBookItem(id)
 
   return {
     data: {

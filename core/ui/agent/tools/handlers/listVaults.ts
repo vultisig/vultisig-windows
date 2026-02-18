@@ -1,14 +1,17 @@
+import { getVaultId } from '@core/mpc/vault/Vault'
+
+import { getStorageContext } from '../shared/storageContext'
 import type { ToolHandler } from '../types'
 
 export const handleListVaults: ToolHandler = async (_input, context) => {
-  const store = window.go?.storage?.Store
-  if (!store) throw new Error('storage not available')
+  const storage = getStorageContext()
 
-  const vaults = await store.GetVaults()
-  const allCoins = await store.GetCoins()
+  const vaults = await storage.getVaults()
+  const allCoins = await storage.getCoins()
 
   const vaultList = vaults.map(v => {
-    const coins = allCoins[v.publicKeyEcdsa] ?? []
+    const vaultId = getVaultId(v)
+    const coins = allCoins[vaultId] ?? []
     const chainAddresses: Record<string, string> = {}
     for (const coin of coins) {
       if (!chainAddresses[coin.chain]) {
@@ -18,8 +21,8 @@ export const handleListVaults: ToolHandler = async (_input, context) => {
 
     return {
       name: v.name,
-      public_key: v.publicKeyEcdsa,
-      is_active: v.publicKeyEcdsa === context.vaultPubKey,
+      public_key: vaultId,
+      is_active: vaultId === context.vaultPubKey,
       chain_addresses: chainAddresses,
       total_chains: Object.keys(chainAddresses).length,
     }

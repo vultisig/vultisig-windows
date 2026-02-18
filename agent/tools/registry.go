@@ -115,11 +115,6 @@ func (r *Registry) registerTools() {
 		NewBridgedTool("list_vaults",
 			"List all vaults the user has. Returns vault names, chain addresses, and identifies the currently active vault. Use this to look up addresses for any vault (e.g., 'send to my Other vault').",
 			map[string]any{}, false, false),
-		NewBridgedTool("rename_vault",
-			"Rename the current active vault. The new name must be 2-50 characters and unique among all vaults.",
-			map[string]any{
-				"new_name": map[string]any{"type": "string", "description": "The new name for the vault (2-50 characters)"},
-			}, false, false),
 		NewBridgedTool("get_address_book",
 			"Get all saved addresses from the address book. Returns a list of saved addresses with their titles, blockchain chains, and addresses.",
 			map[string]any{}, false, false),

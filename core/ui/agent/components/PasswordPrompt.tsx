@@ -42,10 +42,7 @@ export const PasswordPrompt: FC<Props> = ({
       onClose={onCancel}
       footer={
         <VStack gap={8} fullWidth>
-          <Button
-            onClick={handleSubmit}
-            disabled={!password || isLoading}
-          >
+          <Button onClick={handleSubmit} disabled={!password || isLoading}>
             {isLoading ? 'Signing in...' : t('continue')}
           </Button>
           <Button kind="outlined" onClick={onCancel} disabled={isLoading}>

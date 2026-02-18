@@ -2,11 +2,13 @@ import { Chain } from '@core/chain/Chain'
 import { CoinKey } from '@core/chain/coin/Coin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { CoreView } from '@core/ui/navigation/CoreView'
+import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { useCallback, useEffect, useRef } from 'react'
 
 import { toolHandlers } from '../tools'
+import { setStorageContext } from '../tools/shared/storageContext'
 import { setWalletContext } from '../tools/shared/walletContext'
 import type { CoinInfo, ToolContext, ToolHandlerResult } from '../tools/types'
 
@@ -79,6 +81,7 @@ function processNavigation(
 export const AgentToolBridge = () => {
   const vault = useCurrentVault()
   const walletCore = useAssertWalletCore()
+  const core = useCore()
   const navigate = useNavigate<CoreView>()
   const navigateRef = useRef(navigate)
   navigateRef.current = navigate
@@ -91,6 +94,11 @@ export const AgentToolBridge = () => {
     }
     return () => setWalletContext(null)
   }, [vault, walletCore])
+
+  useEffect(() => {
+    setStorageContext(core)
+    return () => setStorageContext(null)
+  }, [core])
 
   const handleResult = useCallback((result: ToolHandlerResult) => {
     const nav = result.data?.navigation as NavigationData | undefined
@@ -138,6 +146,9 @@ export const AgentToolBridge = () => {
       try {
         const result = await handler(data.input, context)
         handleResult(result)
+        if (result.vaultModified) {
+          window.runtime.EventsEmit('vault:coins-changed')
+        }
         await sendResponse({
           requestId: data.requestId,
           result: JSON.stringify(result.data),

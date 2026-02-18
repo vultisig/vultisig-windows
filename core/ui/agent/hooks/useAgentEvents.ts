@@ -40,7 +40,6 @@ type AgentEventsState = {
   policyReady: PolicyReady | null
   installRequired: InstallRequired | null
   txReady: TxReady | null
-  txStatuses: TxStatusInfo[]
   passwordRequired: PasswordRequiredEvent | null
   confirmationRequired: ConfirmationRequiredEvent | null
   authRequired: AuthRequiredEvent | null
@@ -88,7 +87,6 @@ export const useAgentEvents = (
     policyReady: null,
     installRequired: null,
     txReady: null,
-    txStatuses: [],
     passwordRequired: null,
     confirmationRequired: null,
     authRequired: null,
@@ -291,21 +289,34 @@ export const useAgentEvents = (
 
     const onTxStatus = (data: TxStatusEvent) => {
       if (conversationId && data.conversationId !== conversationId) return
+      const msgId = `tx-status-${data.txHash}`
       setState(prev => {
-        const existing = prev.txStatuses.findIndex(
-          t => t.txHash === data.txHash
-        )
+        const existingIdx = prev.messages.findIndex(m => m.id === msgId)
+        if (existingIdx >= 0) {
+          const updated = prev.messages.map((m, i) =>
+            i === existingIdx
+              ? {
+                  ...m,
+                  txStatus: { ...m.txStatus!, status: data.status },
+                }
+              : m
+          )
+          return { ...prev, messages: updated }
+        }
         const entry: TxStatusInfo = {
           txHash: data.txHash,
           chain: data.chain,
           status: data.status,
           label: data.label,
         }
-        const updated =
-          existing >= 0
-            ? prev.txStatuses.map((t, i) => (i === existing ? entry : t))
-            : [...prev.txStatuses, entry]
-        return { ...prev, txStatuses: updated }
+        const txMsg: ChatMessage = {
+          id: msgId,
+          role: 'assistant',
+          content: '',
+          timestamp: new Date().toISOString(),
+          txStatus: entry,
+        }
+        return { ...prev, messages: [...prev.messages, txMsg] }
       })
     }
 
@@ -407,7 +418,6 @@ export const useAgentEvents = (
       policyReady: null,
       installRequired: null,
       txReady: null,
-      txStatuses: [],
       passwordRequired: null,
       confirmationRequired: null,
       authRequired: null,
@@ -439,7 +449,7 @@ export const useAgentEvents = (
   const dismissTxStatus = useCallback((txHash: string) => {
     setState(prev => ({
       ...prev,
-      txStatuses: prev.txStatuses.filter(t => t.txHash !== txHash),
+      messages: prev.messages.filter(m => m.id !== `tx-status-${txHash}`),
     }))
   }, [])
 

@@ -3,6 +3,7 @@ package tools
 import (
 	"encoding/json"
 
+	"github.com/vultisig/vultisig-win/agent/shared"
 	"github.com/vultisig/vultisig-win/agent/toolbridge"
 )
 
@@ -31,19 +32,7 @@ func (t *BridgedTool) RequiresPassword() bool      { return t.requiresPassword }
 func (t *BridgedTool) RequiresConfirmation() bool   { return t.requiresConfirmation }
 
 func (t *BridgedTool) Execute(input map[string]any, ctx *ExecutionContext) (any, error) {
-	coins := make([]toolbridge.CoinInfo, 0, len(ctx.Vault.Coins))
-	for _, c := range ctx.Vault.Coins {
-		coins = append(coins, toolbridge.CoinInfo{
-			Chain:           c.Chain,
-			Ticker:          c.Ticker,
-			Address:         c.Address,
-			ContractAddress: c.ContractAddress,
-			Decimals:        int(c.Decimals),
-			Logo:            c.Logo,
-			PriceProviderID: c.PriceProviderID,
-			IsNativeToken:   c.IsNativeToken,
-		})
-	}
+	coins := shared.MapCoinsToToolbridge(ctx.Vault.Coins)
 
 	req := toolbridge.ToolRequest{
 		ToolName: t.name,

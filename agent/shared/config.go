@@ -1,13 +1,13 @@
 package shared
 
 import (
+	"math/big"
 	"os"
 	"strings"
 )
 
 const (
 	DefaultVerifierURL = "https://verifier.vultisig.com"
-	DefaultRelayURL    = "https://api.vultisig.com/router"
 	ClaudeModel        = "claude-haiku-4-5-20251001"
 )
 
@@ -198,22 +198,13 @@ func FormatHumanAmount(smallestUnit, chain, tokenAddress string) string {
 		return smallestUnit
 	}
 
-	s := strings.TrimLeft(smallestUnit, "0")
-	if s == "" {
-		return "0"
+	raw := new(big.Int)
+	_, ok := raw.SetString(strings.TrimSpace(smallestUnit), 10)
+	if !ok {
+		return smallestUnit
 	}
 
-	if len(s) <= decimals {
-		s = strings.Repeat("0", decimals-len(s)+1) + s
-	}
-
-	intPart := s[:len(s)-decimals]
-	fracPart := strings.TrimRight(s[len(s)-decimals:], "0")
-
-	if fracPart == "" {
-		return intPart
-	}
-	return intPart + "." + fracPart
+	return FormatBalance(raw, decimals, decimals)
 }
 
 func GetVerifierURL() string {

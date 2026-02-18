@@ -7,6 +7,7 @@ import (
 
 	"github.com/vultisig/vultisig-win/agent/backend"
 	"github.com/vultisig/vultisig-win/agent/portfoliobridge"
+	"github.com/vultisig/vultisig-win/agent/shared"
 	"github.com/vultisig/vultisig-win/agent/toolbridge"
 	"github.com/vultisig/vultisig-win/agent/tools"
 	"github.com/vultisig/vultisig-win/storage"
@@ -29,13 +30,14 @@ func NewExecutor(store *storage.Store, toolRegistry *tools.Registry) *Executor {
 }
 
 type ExecuteParams struct {
-	AppCtx     context.Context
-	Ctx        context.Context
-	Vault      *storage.Vault
-	AuthToken  string
-	Password   string
-	Confirmed  bool
-	OnProgress ProgressCallback
+	AppCtx         context.Context
+	Ctx            context.Context
+	Vault          *storage.Vault
+	AuthToken      string
+	Password       string
+	Confirmed      bool
+	ConversationID string
+	OnProgress     ProgressCallback
 }
 
 func (e *Executor) Execute(action backend.Action, params *ExecuteParams) (*backend.ActionResult, error) {
@@ -76,8 +78,6 @@ func (e *Executor) dispatch(action backend.Action, params *ExecuteParams) (map[s
 		return e.executeBridged("search_token", action.Params, params)
 	case "initiate_send":
 		return e.executeBridged("initiate_send", action.Params, params)
-	case "rename_vault":
-		return e.executeBridged("rename_vault", action.Params, params)
 	case "list_vaults":
 		return e.executeBridged("list_vaults", action.Params, params)
 	case "address_book_add":
@@ -103,19 +103,7 @@ func (e *Executor) executeBridged(toolName string, actionParams map[string]any, 
 		input[k] = v
 	}
 
-	coins := make([]toolbridge.CoinInfo, 0, len(params.Vault.Coins))
-	for _, c := range params.Vault.Coins {
-		coins = append(coins, toolbridge.CoinInfo{
-			Chain:           c.Chain,
-			Ticker:          c.Ticker,
-			Address:         c.Address,
-			ContractAddress: c.ContractAddress,
-			Decimals:        int(c.Decimals),
-			Logo:            c.Logo,
-			PriceProviderID: c.PriceProviderID,
-			IsNativeToken:   c.IsNativeToken,
-		})
-	}
+	coins := shared.MapCoinsToToolbridge(params.Vault.Coins)
 
 	req := toolbridge.ToolRequest{
 		ToolName: toolName,
@@ -144,6 +132,9 @@ func (e *Executor) executeGoTool(toolName string, actionParams map[string]any, p
 	input := make(map[string]any)
 	for k, v := range actionParams {
 		input[k] = v
+	}
+	if params.ConversationID != "" {
+		input["conversation_id"] = params.ConversationID
 	}
 
 	ctx := &tools.ExecutionContext{

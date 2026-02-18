@@ -88,13 +88,16 @@ type TxReady struct {
 }
 
 type TxData struct {
-	To       string `json:"to"`
-	Value    string `json:"value"`
-	Data     string `json:"data"`
-	Memo     string `json:"memo,omitempty"`
-	Nonce    uint64 `json:"nonce"`
-	GasLimit uint64 `json:"gas_limit"`
-	ChainID  string `json:"chain_id,omitempty"`
+	To          string `json:"to"`
+	Value       string `json:"value"`
+	Data        string `json:"data"`
+	Memo        string `json:"memo,omitempty"`
+	Nonce       uint64 `json:"nonce"`
+	GasLimit    uint64 `json:"gas_limit"`
+	ChainID     string `json:"chain_id,omitempty"`
+	UnsignedTx  string `json:"unsigned_tx,omitempty"`
+	SigningHash string `json:"signing_hash,omitempty"`
+	MsgHash     string `json:"msg_hash,omitempty"`
 }
 
 type BuildSwapQuoteRequest struct {

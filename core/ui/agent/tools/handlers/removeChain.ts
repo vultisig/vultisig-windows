@@ -1,11 +1,11 @@
 import { Chain } from '@core/chain/Chain'
 
 import { getChainFromString } from '../../utils/getChainFromString'
+import { getStorageContext } from '../shared/storageContext'
 import type { ToolHandler } from '../types'
 
 export const handleRemoveChain: ToolHandler = async (input, context) => {
-  const store = window.go?.storage?.Store
-  if (!store) throw new Error('storage not available')
+  const storage = getStorageContext()
 
   const chainInput = String(input.chain ?? '').trim()
   if (!chainInput) throw new Error('chain is required')
@@ -18,18 +18,29 @@ export const handleRemoveChain: ToolHandler = async (input, context) => {
     )
   }
 
-  const count = await store.DeleteCoinsByChain(context.vaultPubKey, chain)
+  const allCoins = await storage.getCoins()
+  const vaultCoins = allCoins[context.vaultPubKey] ?? []
+  const chainCoins = vaultCoins.filter(
+    c => c.chain.toLowerCase() === chain.toLowerCase()
+  )
 
-  if (window.runtime) {
-    window.runtime.EventsEmit('vault:coins-changed')
+  for (const coin of chainCoins) {
+    await storage.deleteCoin({
+      vaultId: context.vaultPubKey,
+      coinKey: {
+        chain: coin.chain,
+        id: coin.id,
+        address: coin.address,
+      },
+    })
   }
 
   return {
     data: {
       success: true,
       chain,
-      removed_count: count,
-      message: `Removed ${chain} and ${count} coin(s) from vault`,
+      removed_count: chainCoins.length,
+      message: `Removed ${chain} and ${chainCoins.length} coin(s) from vault`,
     },
     vaultModified: true,
   }

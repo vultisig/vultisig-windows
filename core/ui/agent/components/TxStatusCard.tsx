@@ -12,6 +12,9 @@ import styled from 'styled-components'
 
 import { TxStatusInfo } from '../types'
 import { getChainFromString } from '../utils/getChainFromString'
+import { agentCard } from './shared/agentCard'
+import { CopyButton } from './shared/CopyButton'
+import { ExplorerLink } from './shared/ExplorerLink'
 
 type TxStatusCardProps = {
   txStatus: TxStatusInfo
@@ -57,9 +60,9 @@ export const TxStatusCard: FC<TxStatusCardProps> = ({
             <Text size={12} color="supporting">
               {chain}
             </Text>
-            <MonoText size={12} color="supporting">
+            <Text family="mono" size={12} color="supporting">
               {truncateHash(txHash)}
-            </MonoText>
+            </Text>
             <CopyButton onClick={handleCopy}>
               <CopyIcon />
             </CopyButton>
@@ -87,21 +90,17 @@ export const TxStatusCard: FC<TxStatusCardProps> = ({
 }
 
 const Card = styled.div<{ $status: string }>`
-  padding: 12px 16px;
-  border-radius: 12px;
-  background: ${getColor('foreground')};
-  border: 1px solid
-    ${({ $status }) => {
-      switch ($status) {
-        case 'confirmed':
-          return getColor('primary')
-        case 'failed':
-          return getColor('danger')
-        default:
-          return getColor('mist')
-      }
-    }};
-  transition: border-color 0.15s ease;
+  ${agentCard}
+  border-color: ${({ $status }) => {
+    switch ($status) {
+      case 'confirmed':
+        return getColor('primary')
+      case 'failed':
+        return getColor('danger')
+      default:
+        return getColor('mist')
+    }
+  }};
 `
 
 const IconWrapper = styled.div<{ $status: string }>`
@@ -118,32 +117,6 @@ const IconWrapper = styled.div<{ $status: string }>`
         return getColor('textShy')
     }
   }};
-`
-
-const MonoText = styled(Text)`
-  font-family: monospace;
-`
-
-const CopyButton = styled(UnstyledButton)`
-  padding: 2px;
-  border-radius: 4px;
-  color: ${getColor('textShy')};
-  font-size: 12px;
-  cursor: pointer;
-  transition: color 0.15s ease;
-  &:hover {
-    color: ${getColor('text')};
-  }
-`
-
-const ExplorerLink = styled.a`
-  font-size: 11px;
-  color: ${getColor('primary')};
-  text-decoration: none;
-  cursor: pointer;
-  &:hover {
-    text-decoration: underline;
-  }
 `
 
 const DismissButton = styled(UnstyledButton)`

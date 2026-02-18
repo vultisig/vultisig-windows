@@ -30,9 +30,7 @@ declare global {
             suggestionID: string
           ) => Promise<void>
           CreateConversation: (vaultPubKey: string) => Promise<string>
-          GetConversations: (
-            vaultPubKey: string
-          ) => Promise<Conversation[]>
+          GetConversations: (vaultPubKey: string) => Promise<Conversation[]>
           GetConversation: (
             convID: string,
             vaultPubKey: string
@@ -46,9 +44,7 @@ declare global {
           ProvideConfirmation: (confirmed: boolean) => Promise<void>
           GetVerifierSignInStatus: (vaultPubKey: string) => Promise<boolean>
           CheckServices: (vaultPubKey: string) => Promise<ServiceStatus>
-          GetCachedAuthToken: (
-            vaultPubKey: string
-          ) => Promise<string>
+          GetCachedAuthToken: (vaultPubKey: string) => Promise<string>
           SignIn: (vaultPubKey: string, password: string) => Promise<void>
           GetAuthTokenInfo: (
             vaultPubKey: string

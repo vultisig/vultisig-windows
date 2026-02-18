@@ -8,27 +8,12 @@ import styled, { keyframes } from 'styled-components'
 
 import { ToolCallInfo } from '../types'
 import { formatToolName } from '../utils/formatToolName'
+import { getActionIcon } from './shared/actionIcons'
+import { agentCard } from './shared/agentCard'
+import { DetailRow } from './shared/DetailRow'
 
 type Props = {
   toolCall: ToolCallInfo
-}
-
-const actionIcons: Record<string, string> = {
-  get_market_price: '\u{1F4C8}',
-  get_balances: '\u{1F4B0}',
-  get_portfolio: '\u{1F4CA}',
-  add_chain: '\u{1F517}',
-  add_coin: '\u{1FA99}',
-  remove_coin: '\u{274C}',
-  remove_chain: '\u{274C}',
-  initiate_send: '\u{1F4E4}',
-  initiate_swap: '\u{1F504}',
-  rename_vault: '\u{270F}\u{FE0F}',
-  plugin_install: '\u{1F50C}',
-  create_policy: '\u{1F4DD}',
-  delete_policy: '\u{1F5D1}\u{FE0F}',
-  address_book_add: '\u{1F4D6}',
-  address_book_remove: '\u{1F4D6}',
 }
 
 const statusLabels: Record<string, string> = {
@@ -49,7 +34,7 @@ const formatParamKey = (key: string): string =>
 
 const ToolCallMessageComponent: FC<Props> = ({ toolCall }) => {
   const [expanded, setExpanded] = useState(false)
-  const icon = actionIcons[toolCall.actionType] || '\u{26A1}'
+  const icon = getActionIcon(toolCall.actionType)
   const displayName = formatToolName(toolCall.actionType)
   const hasResult =
     toolCall.resultData && Object.keys(toolCall.resultData).length > 0
@@ -119,18 +104,17 @@ const ToolCallMessageComponent: FC<Props> = ({ toolCall }) => {
 export const ToolCallMessage = memo(ToolCallMessageComponent)
 
 const Card = styled.div<{ $status: string }>`
+  ${agentCard}
   padding: 10px 14px;
   border-radius: 10px;
-  background: ${getColor('foreground')};
-  border: 1px solid
-    ${({ $status }) =>
-      $status === 'error'
-        ? 'rgba(255, 80, 80, 0.3)'
-        : $status === 'success'
-          ? 'rgba(51, 230, 191, 0.3)'
-          : `${getColor('mist')}`};
   min-width: 200px;
   max-width: 100%;
+  border-color: ${({ $status }) =>
+    $status === 'error'
+      ? 'rgba(255, 80, 80, 0.3)'
+      : $status === 'success'
+        ? 'rgba(51, 230, 191, 0.3)'
+        : getColor('mist')};
 `
 
 const IconBox = styled.div`
@@ -159,7 +143,7 @@ const StatusRow = styled.div<{ $status: string }>`
       ? '#ff5050'
       : $status === 'success'
         ? '#33e6bf'
-        : `${getColor('textSupporting')}`};
+        : getColor('textSupporting')};
 
   svg {
     width: 12px;
@@ -194,18 +178,6 @@ const DetailSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
-`
-
-const DetailRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-
-  & > :last-child {
-    word-break: break-all;
-    text-align: right;
-    min-width: 0;
-  }
 `
 
 const ErrorText = styled(Text)`

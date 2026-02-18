@@ -89,11 +89,3 @@ type ToolCallEvent struct {
 	Title          string         `json:"title"`
 	Params         map[string]any `json:"params,omitempty"`
 }
-
-type TxStatusEvent struct {
-	ConversationID string `json:"conversationId"`
-	TxHash         string `json:"txHash"`
-	Chain          string `json:"chain"`
-	Status         string `json:"status"`
-	Label          string `json:"label"`
-}
