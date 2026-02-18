@@ -1,4 +1,7 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
+import { WithChainIcon } from '@core/ui/chain/coin/icon/WithChainIcon'
+import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -96,7 +99,16 @@ export const DefiPositionTile = ({
     >
       <PositionIconWrapper isActive={isSelected}>
         <DualIconWrapper>
-          <ChainEntityIcon value={icon} style={{ fontSize: 27.5 }} />
+          {position.coin && shouldDisplayChainLogo(position.coin) ? (
+            <WithChainIcon
+              src={getChainLogoSrc(position.coin.chain)}
+              style={{ fontSize: 27.5 }}
+            >
+              <ChainEntityIcon value={icon} />
+            </WithChainIcon>
+          ) : (
+            <ChainEntityIcon value={icon} style={{ fontSize: 27.5 }} />
+          )}
         </DualIconWrapper>
         {isSelected && (
           <CheckBadge color="primary" size={12}>
