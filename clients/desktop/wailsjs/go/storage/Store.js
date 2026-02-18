@@ -10,8 +10,16 @@ export function DeleteAddressBookItem(arg1) {
   return window['go']['storage']['Store']['DeleteAddressBookItem'](arg1);
 }
 
+export function DeleteAgentAuthToken(arg1) {
+  return window['go']['storage']['Store']['DeleteAgentAuthToken'](arg1);
+}
+
 export function DeleteCoin(arg1, arg2) {
   return window['go']['storage']['Store']['DeleteCoin'](arg1, arg2);
+}
+
+export function DeleteCoinsByChain(arg1, arg2) {
+  return window['go']['storage']['Store']['DeleteCoinsByChain'](arg1, arg2);
 }
 
 export function DeleteVault(arg1) {
@@ -26,6 +34,10 @@ export function GetAddressBookItem(arg1) {
   return window['go']['storage']['Store']['GetAddressBookItem'](arg1);
 }
 
+export function GetAgentAuthToken(arg1) {
+  return window['go']['storage']['Store']['GetAgentAuthToken'](arg1);
+}
+
 export function GetAllAddressBookItems() {
   return window['go']['storage']['Store']['GetAllAddressBookItems']();
 }
@@ -36,6 +48,10 @@ export function GetCoins() {
 
 export function GetVault(arg1) {
   return window['go']['storage']['Store']['GetVault'](arg1);
+}
+
+export function GetVaultCoins(arg1) {
+  return window['go']['storage']['Store']['GetVaultCoins'](arg1);
 }
 
 export function GetVaultFolder(arg1) {
@@ -56,6 +72,10 @@ export function Migrate() {
 
 export function SaveAddressBookItem(arg1) {
   return window['go']['storage']['Store']['SaveAddressBookItem'](arg1);
+}
+
+export function SaveAgentAuthToken(arg1, arg2, arg3, arg4) {
+  return window['go']['storage']['Store']['SaveAgentAuthToken'](arg1, arg2, arg3, arg4);
 }
 
 export function SaveCoin(arg1, arg2) {

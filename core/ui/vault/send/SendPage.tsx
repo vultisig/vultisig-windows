@@ -12,11 +12,13 @@ const sendSteps = ['form', 'verify'] as const
 
 export const SendPage = () => {
   const { goBack } = useCore()
+  const [{ address, skipToVerify }] = useCoreViewState<'send'>()
+  const initialStep = skipToVerify ? ('verify' as const) : undefined
   const { step, toPreviousStep, toNextStep } = useStepNavigation({
     steps: sendSteps,
+    initialStep,
     onExit: goBack,
   })
-  const [{ address }] = useCoreViewState<'send'>()
 
   return (
     <SendFormFieldsStateProvider>
