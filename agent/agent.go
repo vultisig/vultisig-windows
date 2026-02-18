@@ -521,6 +521,14 @@ func (a *AgentService) ExecuteAction(convID, vaultPubKey, actionJSON string) err
 func (a *AgentService) executeAndReport(ctx context.Context, convID, vaultPubKey string, vault *storage.Vault, token string, action backend.Action) {
 	runtime.EventsEmit(a.ctx, "agent:loading", map[string]string{"conversationId": convID})
 
+	runtime.EventsEmit(a.ctx, "agent:tool_call", ToolCallEvent{
+		ConversationID: convID,
+		ActionID:       action.ID,
+		ActionType:     action.Type,
+		Title:          action.Title,
+		Params:         action.Params,
+	})
+
 	params := &actions.ExecuteParams{
 		AppCtx:         a.ctx,
 		Ctx:            ctx,
