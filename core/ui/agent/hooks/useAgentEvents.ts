@@ -56,7 +56,6 @@ type UseAgentEventsReturn = AgentEventsState & {
   dismissAuthRequired: () => void
   dismissError: () => void
   dismissTxBundle: () => void
-  dismissTxStatus: (txHash: string) => void
   requestAuth: () => void
 }
 
@@ -446,13 +445,6 @@ export const useAgentEvents = (
     setState(prev => ({ ...prev, txBundle: null }))
   }, [])
 
-  const dismissTxStatus = useCallback((txHash: string) => {
-    setState(prev => ({
-      ...prev,
-      messages: prev.messages.filter(m => m.id !== `tx-status-${txHash}`),
-    }))
-  }, [])
-
   const requestAuth = useCallback(() => {
     setState(prev => ({
       ...prev,
@@ -471,7 +463,6 @@ export const useAgentEvents = (
     dismissAuthRequired,
     dismissError,
     dismissTxBundle,
-    dismissTxStatus,
     requestAuth,
   }
 }
