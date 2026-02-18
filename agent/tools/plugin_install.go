@@ -10,6 +10,7 @@ import (
 	"io"
 	"net/http"
 	"regexp"
+	"slices"
 	"strings"
 	"time"
 
@@ -163,7 +164,7 @@ func (t *PluginInstallTool) reshareWithPlugin(ctx *ExecutionContext, pluginID st
 	if err != nil {
 		return debugLog, err
 	}
-	if !contains(vault.Signers, vault.LocalPartyID) {
+	if !slices.Contains(vault.Signers, vault.LocalPartyID) {
 		return debugLog, fmt.Errorf("local party id %q is not in vault signers %v; cannot start plugin install reshare", vault.LocalPartyID, vault.Signers)
 	}
 	addLog(fmt.Sprintf("Vault local party: %s", vault.LocalPartyID))
@@ -287,15 +288,6 @@ func (t *PluginInstallTool) reshareWithPlugin(ctx *ExecutionContext, pluginID st
 		return debugLog, fmt.Errorf("plugin install reshare completed but backend still reports plugin as not installed")
 	}
 	return debugLog, nil
-}
-
-func contains(items []string, value string) bool {
-	for _, item := range items {
-		if item == value {
-			return true
-		}
-	}
-	return false
 }
 
 func waitForSessionPartiesWithProgress(
@@ -564,7 +556,7 @@ func (t *PluginInstallTool) requestVerifierReshare(ctx *ExecutionContext, sessio
 	}
 	req.Header.Set("Content-Type", "application/json")
 	if ctx.AuthToken != "" {
-		req.Header.Set("Authorization", formatBearerAuth(ctx.AuthToken))
+		req.Header.Set("Authorization", shared.BearerAuth(ctx.AuthToken))
 	}
 
 	client := &http.Client{Timeout: 30 * time.Second}
@@ -582,13 +574,3 @@ func (t *PluginInstallTool) requestVerifierReshare(ctx *ExecutionContext, sessio
 	return nil
 }
 
-func formatBearerAuth(token string) string {
-	t := strings.TrimSpace(token)
-	if t == "" {
-		return ""
-	}
-	if strings.HasPrefix(strings.ToLower(t), "bearer ") {
-		return "Bearer " + strings.TrimSpace(t[7:])
-	}
-	return "Bearer " + t
-}

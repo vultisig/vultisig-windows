@@ -5,12 +5,12 @@ import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 
 import { getChainFromString } from '../../utils/getChainFromString'
+import { getStorageContext } from '../shared/storageContext'
 import { getWalletContext } from '../shared/walletContext'
 import type { ToolHandler } from '../types'
 
 export const handleAddCoin: ToolHandler = async (input, context) => {
-  const store = window.go?.storage?.Store
-  if (!store) throw new Error('storage not available')
+  const storage = getStorageContext()
 
   const chainInput = String(input.chain ?? '').trim()
   if (!chainInput) throw new Error('chain is required')
@@ -34,7 +34,10 @@ export const handleAddCoin: ToolHandler = async (input, context) => {
 
   const feeCoin = chainFeeCoin[chain]
 
-  if (!contractAddress && ticker.toUpperCase() !== feeCoin.ticker.toUpperCase()) {
+  if (
+    !contractAddress &&
+    ticker.toUpperCase() !== feeCoin.ticker.toUpperCase()
+  ) {
     const tokens = knownTokensIndex[chain]
     if (tokens) {
       const match = Object.entries(tokens).find(
@@ -52,13 +55,13 @@ export const handleAddCoin: ToolHandler = async (input, context) => {
   }
 
   let decimals = 18
-  let logo = ''
-  let priceProviderId = ''
+  let logo: string | undefined
+  let priceProviderId: string | undefined
 
   if (isNative) {
     decimals = feeCoin.decimals
     logo = feeCoin.logo
-    priceProviderId = feeCoin.priceProviderId ?? ''
+    priceProviderId = feeCoin.priceProviderId
   } else if (contractAddress) {
     const tokens = knownTokensIndex[chain]
     if (tokens) {
@@ -66,7 +69,7 @@ export const handleAddCoin: ToolHandler = async (input, context) => {
       if (known) {
         decimals = known.decimals
         logo = known.logo
-        priceProviderId = known.priceProviderId ?? ''
+        priceProviderId = known.priceProviderId
       }
     }
   }
@@ -102,17 +105,16 @@ export const handleAddCoin: ToolHandler = async (input, context) => {
 
     existingAddress = deriveAddress({ chain, publicKey, walletCore })
 
-    const feeCoin = chainFeeCoin[chain]
-    await store.SaveCoin(context.vaultPubKey, {
-      id: '',
-      chain,
-      address: existingAddress,
-      ticker: feeCoin.ticker,
-      contract_address: '',
-      is_native_token: true,
-      decimals: feeCoin.decimals,
-      logo: feeCoin.logo,
-      price_provider_id: feeCoin.priceProviderId ?? '',
+    await storage.createCoin({
+      vaultId: context.vaultPubKey,
+      coin: {
+        chain,
+        address: existingAddress,
+        ticker: feeCoin.ticker,
+        decimals: feeCoin.decimals,
+        logo: feeCoin.logo,
+        priceProviderId: feeCoin.priceProviderId,
+      },
     })
   }
 
@@ -131,26 +133,22 @@ export const handleAddCoin: ToolHandler = async (input, context) => {
     }
   }
 
-  const coinId = await store.SaveCoin(context.vaultPubKey, {
-    id: '',
-    chain,
-    address: existingAddress,
-    ticker,
-    contract_address: contractAddress,
-    is_native_token: isNative,
-    decimals,
-    logo,
-    price_provider_id: priceProviderId,
+  await storage.createCoin({
+    vaultId: context.vaultPubKey,
+    coin: {
+      chain,
+      address: existingAddress,
+      ticker,
+      id: contractAddress || undefined,
+      decimals,
+      logo,
+      priceProviderId,
+    },
   })
-
-  if (window.runtime) {
-    window.runtime.EventsEmit('vault:coins-changed')
-  }
 
   return {
     data: {
       success: true,
-      coin_id: coinId,
       chain,
       ticker,
       address: existingAddress,

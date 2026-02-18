@@ -6,6 +6,7 @@ import {
   handleRemoveAddressBookEntry,
 } from './handlers/addressBook'
 import { handleAssetLookup } from './handlers/assetLookup'
+import { handleBroadcastTx } from './handlers/broadcastTx'
 import { handleGetChainAddress } from './handlers/getChainAddress'
 import { handleGetChains } from './handlers/getChains'
 import { handleGetCoins } from './handlers/getCoins'
@@ -21,7 +22,6 @@ import { handlePolicyList } from './handlers/policyList'
 import { handlePolicyStatus } from './handlers/policyStatus'
 import { handleRemoveChain } from './handlers/removeChain'
 import { handleRemoveCoin } from './handlers/removeCoin'
-import { handleRenameVault } from './handlers/renameVault'
 import { handleSearchToken } from './handlers/searchToken'
 import { handleSignInStatus } from './handlers/signInStatus'
 import { handleTransactionHistory } from './handlers/transactionHistory'
@@ -38,7 +38,6 @@ export const toolHandlers: Record<string, ToolHandler> = {
   remove_coin: handleRemoveCoin,
   remove_chain: handleRemoveChain,
   list_vaults: handleListVaults,
-  rename_vault: handleRenameVault,
   get_address_book: handleGetAddressBook,
   add_address_book_entry: handleAddAddressBookEntry,
   remove_address_book_entry: handleRemoveAddressBookEntry,
@@ -55,4 +54,5 @@ export const toolHandlers: Record<string, ToolHandler> = {
   initiate_send: handleInitiateSend,
   policy_generate: handlePolicyGenerate,
   search_token: handleSearchToken,
+  broadcast_tx: handleBroadcastTx,
 }

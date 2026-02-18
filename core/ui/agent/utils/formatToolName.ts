@@ -21,7 +21,6 @@ const toolDisplayNames: Record<string, string> = {
   add_address_book_entry: 'Add Address Book Entry',
   remove_address_book_entry: 'Remove Address Book Entry',
   list_vaults: 'List Vaults',
-  rename_vault: 'Rename Vault',
   vault_info: 'Vault Info',
 }
 

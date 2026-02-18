@@ -1,10 +1,10 @@
-import { resolveDecimalsByChainAndToken } from '../shared/assetResolution'
 import {
   convertToSmallestUnit,
   looksLikeAddress,
   parseCoinInput,
+  resolveDecimalsByChainAndToken,
   truncateAddress,
-} from '../shared/coinHelpers'
+} from '../shared/assetResolution'
 import type { CoinInfo, ToolHandler } from '../types'
 
 function findCoinInVault(

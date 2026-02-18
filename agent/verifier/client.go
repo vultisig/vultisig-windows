@@ -11,6 +11,8 @@ import (
 
 	rtypes "github.com/vultisig/recipes/types"
 	"google.golang.org/protobuf/encoding/protojson"
+
+	"github.com/vultisig/vultisig-win/agent/shared"
 )
 
 type Client struct {
@@ -328,7 +330,7 @@ func (c *Client) getWithAuth(path, authToken string) (json.RawMessage, error) {
 
 	req.Header.Set("Content-Type", "application/json")
 	if authToken != "" {
-		req.Header.Set("Authorization", bearerAuth(authToken))
+		req.Header.Set("Authorization", shared.BearerAuth(authToken))
 	}
 
 	resp, err := c.httpClient.Do(req)
@@ -376,7 +378,7 @@ func (c *Client) post(path string, body map[string]any, authToken string) (json.
 
 	req.Header.Set("Content-Type", "application/json")
 	if authToken != "" {
-		req.Header.Set("Authorization", bearerAuth(authToken))
+		req.Header.Set("Authorization", shared.BearerAuth(authToken))
 	}
 
 	resp, err := c.httpClient.Do(req)
@@ -424,7 +426,7 @@ func (c *Client) delete(path string, body map[string]any, authToken string) (jso
 
 	req.Header.Set("Content-Type", "application/json")
 	if authToken != "" {
-		req.Header.Set("Authorization", bearerAuth(authToken))
+		req.Header.Set("Authorization", shared.BearerAuth(authToken))
 	}
 
 	resp, err := c.httpClient.Do(req)
@@ -445,13 +447,3 @@ func (c *Client) delete(path string, body map[string]any, authToken string) (jso
 	return respBody, nil
 }
 
-func bearerAuth(token string) string {
-	t := strings.TrimSpace(token)
-	if t == "" {
-		return ""
-	}
-	if strings.HasPrefix(strings.ToLower(t), "bearer ") {
-		return "Bearer " + strings.TrimSpace(t[7:])
-	}
-	return "Bearer " + t
-}

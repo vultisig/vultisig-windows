@@ -405,26 +405,6 @@ func (a *AgentService) buildSwapQuoteAsync(ctx context.Context, convID, vaultPub
 	}
 }
 
-func (a *AgentService) pollTxStatus(convID, chain, txHash, label string) {
-	rpcURL, err := signing.GetEVMRPCURL(chain)
-	if err != nil {
-		a.Logger.WithError(err).WithField("chain", chain).Warn("cannot poll tx status: unsupported chain")
-		return
-	}
-
-	pollCtx, pollCancel := context.WithTimeout(a.ctx, 3*time.Minute)
-	defer pollCancel()
-
-	signing.PollTxStatus(pollCtx, rpcURL, txHash, func(status signing.TxPollStatus) {
-		runtime.EventsEmit(a.ctx, "agent:tx_status", TxStatusEvent{
-			ConversationID: convID,
-			TxHash:         txHash,
-			Chain:          chain,
-			Status:         status.Status,
-			Label:          label,
-		})
-	})
-}
 
 func (a *AgentService) reportActionResult(ctx context.Context, convID, vaultPubKey string, vault *storage.Vault, token string, result *backend.ActionResult) {
 	msgCtx := buildMessageContext(a.ctx, ctx, vault, nil)
@@ -489,10 +469,11 @@ func (a *AgentService) executeAndReport(ctx context.Context, convID, vaultPubKey
 	runtime.EventsEmit(a.ctx, "agent:loading", map[string]string{"conversationId": convID})
 
 	params := &actions.ExecuteParams{
-		AppCtx:    a.ctx,
-		Ctx:       ctx,
-		Vault:     vault,
-		AuthToken: token,
+		AppCtx:         a.ctx,
+		Ctx:            ctx,
+		Vault:          vault,
+		AuthToken:      token,
+		ConversationID: convID,
 	}
 
 	if a.executor.NeedsPassword(action.Type) {
@@ -532,18 +513,6 @@ func (a *AgentService) executeAndReport(ctx context.Context, convID, vaultPubKey
 		Data:           result.Data,
 		Error:          result.Error,
 	})
-
-	if action.Type == "sign_swap_tx" && result.Success && result.Data != nil {
-		txHash, _ := result.Data["tx_hash"].(string)
-		chain, _ := result.Data["chain"].(string)
-		approvalHash, _ := result.Data["approval_tx_hash"].(string)
-		if approvalHash != "" {
-			go a.pollTxStatus(convID, chain, approvalHash, "Approval")
-		}
-		if txHash != "" && chain != "" {
-			go a.pollTxStatus(convID, chain, txHash, "Swap")
-		}
-	}
 
 	a.reportActionResult(ctx, convID, vaultPubKey, vault, token, result)
 }

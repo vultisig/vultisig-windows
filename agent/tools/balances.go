@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/vultisig/vultisig-win/agent/balancebridge"
+	"github.com/vultisig/vultisig-win/agent/shared"
 )
 
 type GetBalancesTool struct{}
@@ -131,35 +132,6 @@ func (t *GetBalancesTool) fetchBalance(appCtx, waitCtx context.Context, chain, a
 		return nil, "", fmt.Errorf("invalid balance: %s", resp.Balance)
 	}
 
-	return balance, formatBalance(balance, decimals), nil
+	return balance, shared.FormatBalance(balance, int(decimals), 6), nil
 }
 
-func formatBalance(balance *big.Int, decimals int32) string {
-	if balance == nil || balance.Sign() == 0 {
-		return "0"
-	}
-
-	divisor := new(big.Int).Exp(big.NewInt(10), big.NewInt(int64(decimals)), nil)
-	whole := new(big.Int).Div(balance, divisor)
-	remainder := new(big.Int).Mod(balance, divisor)
-
-	if remainder.Sign() == 0 {
-		return whole.String()
-	}
-
-	remainderStr := remainder.String()
-	for len(remainderStr) < int(decimals) {
-		remainderStr = "0" + remainderStr
-	}
-
-	remainderStr = strings.TrimRight(remainderStr, "0")
-	if remainderStr == "" {
-		return whole.String()
-	}
-
-	if len(remainderStr) > 6 {
-		remainderStr = remainderStr[:6]
-	}
-
-	return whole.String() + "." + remainderStr
-}

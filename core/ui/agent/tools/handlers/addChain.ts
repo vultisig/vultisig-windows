@@ -4,12 +4,12 @@ import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 
 import { getChainFromString } from '../../utils/getChainFromString'
+import { getStorageContext } from '../shared/storageContext'
 import { getWalletContext } from '../shared/walletContext'
 import type { ToolHandler } from '../types'
 
 export const handleAddChain: ToolHandler = async (input, context) => {
-  const store = window.go?.storage?.Store
-  if (!store) throw new Error('storage not available')
+  const storage = getStorageContext()
 
   const chainInput = String(input.chain ?? '').trim()
   if (!chainInput) throw new Error('chain is required')
@@ -47,21 +47,17 @@ export const handleAddChain: ToolHandler = async (input, context) => {
   const address = deriveAddress({ chain, publicKey, walletCore })
   const feeCoin = chainFeeCoin[chain]
 
-  await store.SaveCoin(context.vaultPubKey, {
-    id: '',
-    chain,
-    address,
-    ticker: feeCoin.ticker,
-    contract_address: '',
-    is_native_token: true,
-    decimals: feeCoin.decimals,
-    logo: feeCoin.logo,
-    price_provider_id: feeCoin.priceProviderId ?? '',
+  await storage.createCoin({
+    vaultId: context.vaultPubKey,
+    coin: {
+      chain,
+      address,
+      ticker: feeCoin.ticker,
+      decimals: feeCoin.decimals,
+      logo: feeCoin.logo,
+      priceProviderId: feeCoin.priceProviderId,
+    },
   })
-
-  if (window.runtime) {
-    window.runtime.EventsEmit('vault:coins-changed')
-  }
 
   return {
     data: {

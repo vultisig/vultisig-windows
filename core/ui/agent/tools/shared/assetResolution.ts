@@ -1,4 +1,5 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { knownTokensIndex } from '@core/chain/coin/knownTokens/index'
@@ -13,6 +14,16 @@ type AssetInfo = {
   decimals: number
   logo: string
   priceProviderId: string
+}
+
+export type ResolvedTokenInfo = {
+  chain: Chain | null
+  ticker: string
+  logo: string | undefined
+  decimals: number
+  priceProviderId: string | undefined
+  contractAddress: string | undefined
+  isLocallyVerified: boolean
 }
 
 const ambiguousDefaults: Record<string, { chain: Chain; tokenId: string }> = {
@@ -204,6 +215,156 @@ export function formatHumanAmount(
   const trimmed = fracPart.replace(/0+$/, '')
   if (!trimmed) return intPart
   return intPart + '.' + trimmed
+}
+
+export function isNativeCoin(ticker: string): boolean {
+  const upper = ticker.toUpperCase()
+  return Object.values(chainFeeCoin).some(fc => fc.ticker === upper)
+}
+
+export function inferChainFromTicker(ticker: string): string {
+  const upper = ticker.toUpperCase()
+
+  for (const [chain, fc] of Object.entries(chainFeeCoin)) {
+    if (fc.ticker === upper) return chain
+  }
+
+  const ethTokens = knownTokensIndex[Chain.Ethereum]
+  if (ethTokens) {
+    for (const token of Object.values(ethTokens)) {
+      if (token.ticker.toUpperCase() === upper) return Chain.Ethereum
+    }
+  }
+
+  for (const chain of Object.values(Chain)) {
+    if (chain === Chain.Ethereum) continue
+    const tokens = knownTokensIndex[chain]
+    if (!tokens) continue
+    for (const token of Object.values(tokens)) {
+      if (token.ticker.toUpperCase() === upper) return chain
+    }
+  }
+
+  return ''
+}
+
+export function getTokenContractAddress(ticker: string, chain: string): string {
+  const tokens = knownTokensIndex[chain as Chain]
+  if (!tokens) return ''
+  const upper = ticker.toUpperCase()
+  for (const [contractAddress, token] of Object.entries(tokens)) {
+    if (token.ticker.toUpperCase() === upper) return contractAddress
+  }
+  return ''
+}
+
+export function parseCoinInput(coinStr: string): Record<string, string> | null {
+  const trimmed = coinStr.trim()
+  if (!trimmed) return null
+
+  const parts = trimmed.split('-')
+  const ticker = parts[0].toUpperCase()
+
+  let chain = ''
+  if (parts.length > 1) {
+    chain = parts[1]
+  } else {
+    chain = inferChainFromTicker(ticker)
+  }
+
+  if (!chain) return null
+
+  const result: Record<string, string> = { chain }
+
+  if (!isNativeCoin(ticker)) {
+    const contractAddr = getTokenContractAddress(ticker, chain)
+    if (contractAddr) {
+      result.id = contractAddr
+    }
+  }
+
+  return result
+}
+
+export function convertToSmallestUnit(
+  amount: string,
+  decimals: number
+): string {
+  return toChainAmount(parseFloat(amount), decimals).toString()
+}
+
+export function looksLikeAddress(s: string): boolean {
+  if (s.length < 20) return false
+  if (s.startsWith('0x') || s.startsWith('0X')) return s.length >= 42
+  if (s.startsWith('bc1') || s.startsWith('tb1')) return true
+  if (s.startsWith('T') && s.length === 34) return true
+  if (s.includes(' ')) return false
+  return s.length >= 25
+}
+
+export function truncateAddress(address: string): string {
+  if (address.length <= 12) return address
+  return address.slice(0, 6) + '...' + address.slice(-4)
+}
+
+export const resolveSwapTokenInfo = (
+  chainStr: string,
+  symbol: string,
+  fallbackDecimals?: number
+): ResolvedTokenInfo => {
+  const chain = getChainFromString(chainStr)
+
+  if (!chain) {
+    return {
+      chain: null,
+      ticker: symbol,
+      logo: undefined,
+      decimals: fallbackDecimals ?? 18,
+      priceProviderId: undefined,
+      contractAddress: undefined,
+      isLocallyVerified: false,
+    }
+  }
+
+  const nativeCoin = chainFeeCoin[chain]
+  if (nativeCoin.ticker.toUpperCase() === symbol.toUpperCase()) {
+    return {
+      chain,
+      ticker: nativeCoin.ticker,
+      logo: nativeCoin.logo,
+      decimals: nativeCoin.decimals,
+      priceProviderId: nativeCoin.priceProviderId,
+      contractAddress: undefined,
+      isLocallyVerified: true,
+    }
+  }
+
+  const tokens = knownTokensIndex[chain]
+  if (tokens) {
+    for (const [addr, token] of Object.entries(tokens)) {
+      if (token.ticker.toUpperCase() === symbol.toUpperCase()) {
+        return {
+          chain,
+          ticker: token.ticker,
+          logo: token.logo,
+          decimals: token.decimals,
+          priceProviderId: token.priceProviderId,
+          contractAddress: addr,
+          isLocallyVerified: true,
+        }
+      }
+    }
+  }
+
+  return {
+    chain,
+    ticker: symbol,
+    logo: undefined,
+    decimals: fallbackDecimals ?? 18,
+    priceProviderId: undefined,
+    contractAddress: undefined,
+    isLocallyVerified: false,
+  }
 }
 
 const assetAliases: Record<string, AssetInfo> = (() => {

@@ -1,16 +1,16 @@
 package tools
 
 import (
-	"context"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
-	"math/big"
-	"strconv"
-	"time"
+	"strings"
 
 	"github.com/sirupsen/logrus"
 
+	"github.com/vultisig/vultisig-win/agent/shared"
 	"github.com/vultisig/vultisig-win/agent/signing"
+	"github.com/vultisig/vultisig-win/agent/toolbridge"
 	"github.com/vultisig/vultisig-win/tss"
 )
 
@@ -36,8 +36,7 @@ func (t *SignSwapTxTool) Description() string {
 
 func (t *SignSwapTxTool) InputSchema() map[string]any {
 	return map[string]any{
-		"from_chain":     map[string]any{"type": "string", "description": "Chain name for RPC URL lookup"},
-		"sender":         map[string]any{"type": "string", "description": "Sender address"},
+		"from_chain":     map[string]any{"type": "string", "description": "Chain name"},
 		"swap_tx":        map[string]any{"type": "object", "description": "Swap transaction data"},
 		"approval_tx":    map[string]any{"type": "object", "description": "Optional approval transaction data"},
 		"needs_approval": map[string]any{"type": "boolean", "description": "Whether approval tx is needed first"},
@@ -49,40 +48,19 @@ func (t *SignSwapTxTool) RequiresConfirmation() bool { return false }
 
 func (t *SignSwapTxTool) Execute(input map[string]any, execCtx *ExecutionContext) (any, error) {
 	fromChain, _ := input["from_chain"].(string)
-	sender, _ := input["sender"].(string)
 	needsApproval, _ := input["needs_approval"].(bool)
+	conversationID, _ := input["conversation_id"].(string)
 
-	if fromChain == "" || sender == "" {
-		return nil, fmt.Errorf("from_chain and sender are required")
+	if fromChain == "" {
+		return nil, fmt.Errorf("from_chain is required")
 	}
-
-	rpcURL, err := signing.GetEVMRPCURL(fromChain)
-	if err != nil {
-		return nil, err
-	}
-
-	rpcCtx, rpcCancel := context.WithTimeout(execCtx.Ctx, 30*time.Second)
-	defer rpcCancel()
-
-	nonce, err := signing.GetNonce(rpcCtx, rpcURL, sender)
-	if err != nil {
-		return nil, fmt.Errorf("get nonce: %w", err)
-	}
-
-	gasPrice, err := signing.GetGasPrice(rpcCtx, rpcURL)
-	if err != nil {
-		return nil, fmt.Errorf("get gas price: %w", err)
-	}
-
-	gasPriceBuffered := new(big.Int).Mul(gasPrice, big.NewInt(110))
-	gasPriceBuffered.Div(gasPriceBuffered, big.NewInt(100))
 
 	swapTxMap, ok := input["swap_tx"].(map[string]any)
 	if !ok {
 		return nil, fmt.Errorf("swap_tx is required")
 	}
 
-	var approvalSignedTx []byte
+	var approvalHash string
 
 	if needsApproval {
 		approvalTxMap, ok := input["approval_tx"].(map[string]any)
@@ -94,63 +72,33 @@ func (t *SignSwapTxTool) Execute(input map[string]any, execCtx *ExecutionContext
 			execCtx.OnProgress("Signing approval transaction...")
 		}
 
-		approvalParams, err := t.buildTxParams(approvalTxMap, nonce, gasPriceBuffered)
-		if err != nil {
-			return nil, fmt.Errorf("build approval tx: %w", err)
-		}
-
-		approvalSignedTx, err = t.signTx(execCtx, approvalParams)
+		signedApproval, err := t.signPrebuiltTx(execCtx, fromChain, approvalTxMap)
 		if err != nil {
 			return nil, fmt.Errorf("sign approval tx: %w", err)
 		}
 
-		t.logger.WithField("nonce", nonce).Info("Approval tx signed")
-		nonce++
+		hash, err := t.broadcastViaBridge(execCtx, fromChain, signedApproval, conversationID, "Approval")
+		if err != nil {
+			return nil, fmt.Errorf("broadcast approval tx: %w", err)
+		}
+		approvalHash = hash
+		t.logger.WithField("tx_hash", approvalHash).Info("Approval tx broadcast")
 	}
 
 	if execCtx.OnProgress != nil {
 		execCtx.OnProgress("Signing swap transaction...")
 	}
 
-	swapTxParams, err := t.buildTxParams(swapTxMap, nonce, gasPriceBuffered)
-	if err != nil {
-		return nil, fmt.Errorf("build swap tx: %w", err)
-	}
-
-	swapSignedTx, err := t.signTx(execCtx, swapTxParams)
+	signedSwap, err := t.signPrebuiltTx(execCtx, fromChain, swapTxMap)
 	if err != nil {
 		return nil, fmt.Errorf("sign swap tx: %w", err)
 	}
-
-	t.logger.WithField("nonce", nonce).Info("Swap tx signed")
 
 	if execCtx.OnProgress != nil {
 		execCtx.OnProgress("Broadcasting transactions...")
 	}
 
-	t.logger.WithFields(logrus.Fields{
-		"gas_price": gasPriceBuffered.String(),
-		"swap_gas_limit": swapTxParams.GasLimit,
-		"swap_chain_id":  swapTxParams.ChainID.String(),
-		"swap_to":        hex.EncodeToString(swapTxParams.To),
-		"swap_value":     swapTxParams.Value.String(),
-		"swap_data_len":  len(swapTxParams.Data),
-	}).Info("Transaction params")
-
-	var approvalHash string
-	if approvalSignedTx != nil {
-		broadcastCtx, broadcastCancel := context.WithTimeout(execCtx.Ctx, 30*time.Second)
-		approvalHash, err = signing.BroadcastTx(broadcastCtx, rpcURL, approvalSignedTx)
-		broadcastCancel()
-		if err != nil {
-			return nil, fmt.Errorf("broadcast approval tx: %w", err)
-		}
-		t.logger.WithField("tx_hash", approvalHash).Info("Approval tx broadcast")
-	}
-
-	broadcastCtx, broadcastCancel := context.WithTimeout(execCtx.Ctx, 30*time.Second)
-	txHash, err := signing.BroadcastTx(broadcastCtx, rpcURL, swapSignedTx)
-	broadcastCancel()
+	txHash, err := t.broadcastViaBridge(execCtx, fromChain, signedSwap, conversationID, "Swap")
 	if err != nil {
 		return nil, fmt.Errorf("broadcast swap tx: %w", err)
 	}
@@ -167,59 +115,58 @@ func (t *SignSwapTxTool) Execute(input map[string]any, execCtx *ExecutionContext
 	return result, nil
 }
 
-func (t *SignSwapTxTool) buildTxParams(txMap map[string]any, nonce uint64, gasPrice *big.Int) (*signing.EVMTxParams, error) {
-	toAddr, _ := txMap["to"].(string)
-	valueStr, _ := txMap["value"].(string)
-	dataStr, _ := txMap["data"].(string)
-	chainIDStr, _ := txMap["chain_id"].(string)
-	gasLimit := extractUint64(txMap, "gas_limit")
+func (t *SignSwapTxTool) broadcastViaBridge(execCtx *ExecutionContext, chain string, signedTx []byte, conversationID, label string) (string, error) {
+	coins := shared.MapCoinsToToolbridge(execCtx.Vault.Coins)
 
-	if toAddr == "" {
-		return nil, fmt.Errorf("tx 'to' address is required")
+	req := toolbridge.ToolRequest{
+		ToolName: "broadcast_tx",
+		Input: map[string]any{
+			"chain":           chain,
+			"signed_tx_hex":   hex.EncodeToString(signedTx),
+			"conversation_id": conversationID,
+			"label":           label,
+		},
+		Context: toolbridge.ToolContext{
+			VaultPubKey: execCtx.VaultPubKey,
+			VaultName:   execCtx.Vault.Name,
+			AuthToken:   execCtx.AuthToken,
+			Coins:       coins,
+		},
 	}
 
-	to, err := signing.ParseHexAddress(toAddr)
+	resp, err := toolbridge.RequestToolExecution(execCtx.AppCtx, execCtx.Ctx, req)
 	if err != nil {
-		return nil, fmt.Errorf("parse 'to' address: %w", err)
+		return "", err
 	}
 
-	value, err := signing.ParseValue(valueStr)
+	var result map[string]any
+	err = json.Unmarshal([]byte(resp.Result), &result)
 	if err != nil {
-		return nil, fmt.Errorf("parse value: %w", err)
+		return "", fmt.Errorf("unmarshal broadcast result: %w", err)
 	}
 
-	data, err := signing.ParseHexData(dataStr)
-	if err != nil {
-		return nil, fmt.Errorf("parse data: %w", err)
+	txHash, _ := result["tx_hash"].(string)
+	if txHash == "" {
+		return "", fmt.Errorf("no tx_hash in broadcast response")
 	}
 
-	chainID := big.NewInt(1)
-	if chainIDStr != "" {
-		parsed, parseErr := strconv.ParseInt(chainIDStr, 10, 64)
-		if parseErr != nil {
-			return nil, fmt.Errorf("parse chain_id: %w", parseErr)
-		}
-		chainID = big.NewInt(parsed)
-	}
-
-	if gasLimit == 0 {
-		gasLimit = 300000
-	}
-
-	return &signing.EVMTxParams{
-		Nonce:    nonce,
-		GasPrice: gasPrice,
-		GasLimit: gasLimit,
-		To:       to,
-		Value:    value,
-		Data:     data,
-		ChainID:  chainID,
-	}, nil
+	return txHash, nil
 }
 
-func (t *SignSwapTxTool) signTx(execCtx *ExecutionContext, txParams *signing.EVMTxParams) ([]byte, error) {
-	signingHash := signing.ComputeSigningHash(txParams)
-	signingHashHex := hex.EncodeToString(signingHash)
+func (t *SignSwapTxTool) signPrebuiltTx(execCtx *ExecutionContext, chain string, txMap map[string]any) ([]byte, error) {
+	unsignedTxHex, _ := txMap["unsigned_tx"].(string)
+	signingHashHex, _ := txMap["signing_hash"].(string)
+
+	if unsignedTxHex == "" || signingHashHex == "" {
+		return nil, fmt.Errorf("unsigned_tx and signing_hash are required")
+	}
+
+	err := signing.VerifyTx(chain, unsignedTxHex, signingHashHex)
+	if err != nil {
+		return nil, fmt.Errorf("verify signing hash: %w", err)
+	}
+
+	signingHashClean := strings.TrimPrefix(signingHashHex, "0x")
 
 	cfg := KeysignConfig{
 		AppCtx:      execCtx.AppCtx,
@@ -232,37 +179,42 @@ func (t *SignSwapTxTool) signTx(execCtx *ExecutionContext, txParams *signing.EVM
 		MaxAttempts: 2,
 	}
 
-	signature, err := FastVaultKeysign(cfg, signingHashHex)
+	signature, err := FastVaultKeysign(cfg, signingHashClean)
 	if err != nil {
 		return nil, fmt.Errorf("keysign: %w", err)
 	}
 
-	v, r, s, err := signing.ParseSignature(signature, txParams.ChainID)
+	rHex, sHex, vHex, err := splitSignature(signature)
 	if err != nil {
-		return nil, fmt.Errorf("parse signature: %w", err)
+		return nil, fmt.Errorf("split signature: %w", err)
 	}
 
-	return signing.EncodeSignedTx(txParams, v, r, s), nil
+	signedBytes, err := signing.EncodeSignedTx(chain, unsignedTxHex, rHex, sHex, vHex)
+	if err != nil {
+		return nil, fmt.Errorf("encode signed tx: %w", err)
+	}
+
+	return signedBytes, nil
 }
 
-func extractUint64(params map[string]any, key string) uint64 {
-	v, ok := params[key]
-	if !ok {
-		return 0
+func splitSignature(sigHex string) (rHex, sHex, vHex string, err error) {
+	sigHex = strings.TrimPrefix(sigHex, "0x")
+	if len(sigHex) != 130 {
+		return "", "", "", fmt.Errorf("invalid signature length: %d (expected 130 hex chars)", len(sigHex))
 	}
-	switch n := v.(type) {
-	case float64:
-		return uint64(n)
-	case int:
-		return uint64(n)
-	case uint64:
-		return n
-	case string:
-		parsed, err := strconv.ParseUint(n, 10, 64)
-		if err != nil {
-			return 0
-		}
-		return parsed
+
+	rHex = sigHex[:64]
+	sHex = sigHex[64:128]
+	vRaw := sigHex[128:130]
+
+	switch vRaw {
+	case "1b":
+		vHex = "00"
+	case "1c":
+		vHex = "01"
+	default:
+		vHex = vRaw
 	}
-	return 0
+
+	return rHex, sHex, vHex, nil
 }

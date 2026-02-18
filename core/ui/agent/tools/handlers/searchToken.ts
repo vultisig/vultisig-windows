@@ -1,13 +1,11 @@
 import { Chain, EvmChain } from '@core/chain/Chain'
-import { getEvmChainId } from '@core/chain/chains/evm/chainInfo'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { SolanaJupiterToken } from '@core/chain/coin/jupiter/token'
 import { knownTokensIndex } from '@core/chain/coin/knownTokens/index'
 import { OneInchTokensResponse } from '@core/chain/coin/oneInch/token'
 import { getCoinPrices } from '@core/chain/coin/price/getCoinPrices'
 import { baseJupiterTokensUrl } from '@core/chain/coin/token/metadata/resolvers/solana'
-import { rootApiUrl } from '@core/config'
-import { hexToNumber } from '@lib/utils/hex/hexToNumber'
+import { fetchOneInchTokensRaw } from '@core/ui/chain/coin/queries/fetchWhitelistedCoins'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
 import { getChainFromString } from '../../utils/getChainFromString'
@@ -29,7 +27,7 @@ type CacheEntry = {
   timestamp: number
 }
 
-const oneInchCache = new Map<number, CacheEntry>()
+const oneInchCache = new Map<string, CacheEntry>()
 const cacheTtlMs = 5 * 60 * 1000
 
 const matchType = (
@@ -118,17 +116,16 @@ const searchKnownTokens = (
   return results
 }
 
-const fetchOneInchTokens = async (
-  chainId: number
+const fetchOneInchTokensCached = async (
+  chain: EvmChain
 ): Promise<OneInchTokensResponse> => {
-  const cached = oneInchCache.get(chainId)
+  const cached = oneInchCache.get(chain)
   if (cached && Date.now() - cached.timestamp < cacheTtlMs) {
     return cached.data
   }
 
-  const url = `${rootApiUrl}/1inch/swap/v6.0/${chainId}/tokens`
-  const data = await queryUrl<OneInchTokensResponse>(url)
-  oneInchCache.set(chainId, { data, timestamp: Date.now() })
+  const data = await fetchOneInchTokensRaw(chain)
+  oneInchCache.set(chain, { data, timestamp: Date.now() })
   return data
 }
 
@@ -136,11 +133,7 @@ const searchOneInchChain = async (
   chain: EvmChain,
   query: string
 ): Promise<TokenResult[]> => {
-  const hexChainId = getEvmChainId(chain)
-  if (!hexChainId) return []
-
-  const chainId = hexToNumber(hexChainId)
-  const data = await fetchOneInchTokens(chainId)
+  const data = await fetchOneInchTokensCached(chain)
   const results: TokenResult[] = []
   const queryLower = query.toLowerCase()
   const isAddress = queryLower.startsWith('0x')
@@ -279,9 +272,7 @@ export const handleSearchToken: ToolHandler = async input => {
     }
   }
 
-  const priceIds = ranked
-    .map(r => r.price_provider_id)
-    .filter(Boolean)
+  const priceIds = ranked.map(r => r.price_provider_id).filter(Boolean)
   const uniquePriceIds = [...new Set(priceIds)]
 
   let priceMap: Record<string, number> = {}

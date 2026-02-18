@@ -44,6 +44,7 @@ export type ChatMessage = {
   actions?: Action[]
   timestamp: string
   toolCall?: ToolCallInfo
+  txStatus?: TxStatusInfo
 }
 
 export type Conversation = {

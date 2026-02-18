@@ -6,6 +6,7 @@ import { FC } from 'react'
 import styled from 'styled-components'
 
 import { Suggestion } from '../types'
+import { agentCard, agentCardInteractiveHover } from './shared/agentCard'
 
 type Props = {
   suggestion: Suggestion
@@ -28,15 +29,8 @@ export const SuggestionCard: FC<Props> = ({ suggestion, onSelect }) => {
 }
 
 const Card = styled(UnstyledButton)`
-  padding: 12px 16px;
-  border-radius: 12px;
-  background: ${getColor('foreground')};
-  border: 1px solid ${getColor('primary')}40;
+  ${agentCard}
+  ${agentCardInteractiveHover}
+  border-color: ${getColor('primary')}40;
   text-align: left;
-  transition: all 0.15s ease;
-
-  &:hover {
-    background: ${getColor('foregroundExtra')};
-    border-color: ${getColor('primary')};
-  }
 `
