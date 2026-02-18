@@ -8,6 +8,7 @@ import styled from 'styled-components'
 
 import { ChatMessage as ChatMessageType } from '../types'
 import { InlineToolCallMessage } from './InlineToolCallMessage'
+import { InlineTxStatusMessage } from './InlineTxStatusMessage'
 import { MarkdownContent } from './MarkdownContent'
 
 type Props = {
@@ -23,6 +24,14 @@ const ChatMessageComponent: FC<Props> = ({ message }) => {
     return (
       <InlineContainer>
         <InlineToolCallMessage toolCall={message.toolCall} />
+      </InlineContainer>
+    )
+  }
+
+  if (message.txStatus) {
+    return (
+      <InlineContainer>
+        <InlineTxStatusMessage txStatus={message.txStatus} />
       </InlineContainer>
     )
   }

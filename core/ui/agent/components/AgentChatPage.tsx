@@ -29,7 +29,6 @@ import { PasswordPrompt } from './PasswordPrompt'
 import { SuggestionCard } from './SuggestionCard'
 import { ThinkingIndicator } from './ThinkingIndicator'
 import { TxReviewCard } from './tx-review'
-import { TxStatusCard } from './TxStatusCard'
 
 type AgentChatViewState = { conversationId?: string; initialMessage?: string }
 
@@ -80,7 +79,6 @@ export const AgentChatPage: FC = () => {
     dismissAuthRequired,
     dismissError,
     dismissTxBundle,
-    dismissTxStatus,
     requestAuth,
   } = useAgentEvents(conversationId)
 
@@ -391,25 +389,9 @@ export const AgentChatPage: FC = () => {
               </VStack>
             </WelcomeMessage>
           )}
-          {messages.map(msg =>
-            msg.txStatus ? (
-              <div
-                key={msg.id}
-                style={{
-                  padding: '8px 0',
-                  maxWidth: '85%',
-                  marginLeft: 44,
-                }}
-              >
-                <TxStatusCard
-                  txStatus={msg.txStatus}
-                  onDismiss={() => dismissTxStatus(msg.txStatus!.txHash)}
-                />
-              </div>
-            ) : (
-              <ChatMessage key={msg.id} message={msg} />
-            )
-          )}
+          {messages.map(msg => (
+            <ChatMessage key={msg.id} message={msg} />
+          ))}
           {isLoading && <ThinkingIndicator />}
           {actions.length > 0 && (
             <VStack gap={8} style={{ padding: '8px 0' }}>
