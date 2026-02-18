@@ -29,6 +29,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { attempt } from '@lib/utils/attempt'
 import { formatAmount } from '@lib/utils/formatAmount'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Controller, ControllerRenderProps, FieldErrors } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -45,7 +46,6 @@ import { FormData } from '../../types'
 type BondFormProps = {
   balance: number
   errors: FieldErrors<FormData>
-  isValid: boolean
   formValues: FormData
 }
 
@@ -74,12 +74,7 @@ const measureAmountTextWidth = (text: string) => {
   return baseWidth + spacingAdjustment
 }
 
-export const BondForm = ({
-  balance,
-  errors,
-  isValid,
-  formValues,
-}: BondFormProps) => {
+export const BondForm = ({ balance, errors, formValues }: BondFormProps) => {
   const { t } = useTranslation()
   const [{ register, control, setValue }] = useDepositFormHandlers()
   const [coin] = useDepositCoin()
@@ -94,7 +89,10 @@ export const BondForm = ({
   const providerValue = formValues?.provider as string | undefined
 
   const shouldShowFeePreview =
-    isValid && Boolean(nodeAddress) && Boolean(amountValue)
+    !errors.nodeAddress &&
+    !errors.amount &&
+    Boolean(nodeAddress) &&
+    Boolean(amountValue)
 
   const gasFeeQuery = useDepositKeysignPayloadQuery({
     enabled: shouldShowFeePreview,
@@ -349,20 +347,31 @@ export const BondForm = ({
                       <ChevronDownIcon />
                     </ChevronIcon>
                   </ExpandableHeader>
-                  {isProviderOpen && (
-                    <VStack gap={8}>
-                      <FilledTextInput
-                        validation={errors.provider ? 'warning' : undefined}
-                        placeholder={t('provider')}
-                        {...register('provider')}
-                      />
-                      {errors.provider && (
-                        <ErrorText color="danger" size={13}>
-                          {formatError(errors.provider?.message as string)}
-                        </ErrorText>
-                      )}
-                    </VStack>
-                  )}
+                  <AnimatePresence initial={false}>
+                    {isProviderOpen && (
+                      <motion.div
+                        key="provider-content"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.2, ease: 'easeInOut' }}
+                        style={{ overflow: 'hidden' }}
+                      >
+                        <VStack gap={8}>
+                          <FilledTextInput
+                            validation={errors.provider ? 'warning' : undefined}
+                            placeholder={t('provider')}
+                            {...register('provider')}
+                          />
+                          {errors.provider && (
+                            <ErrorText color="danger" size={13}>
+                              {formatError(errors.provider?.message as string)}
+                            </ErrorText>
+                          )}
+                        </VStack>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </VStack>
 
                 <ActionFieldDivider />
