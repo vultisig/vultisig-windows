@@ -352,8 +352,11 @@ func (s *Store) GetVaults() ([]*Vault, error) {
 	return vaults, nil
 }
 
-// DeleteVault deletes a vault
+// DeleteVault deletes a vault and its coins
 func (s *Store) DeleteVault(publicKeyECDSA string) error {
+	if _, err := s.db.Exec("DELETE FROM coins WHERE public_key_ecdsa = ?", publicKeyECDSA); err != nil {
+		return fmt.Errorf("could not delete vault coins: %w", err)
+	}
 	_, err := s.db.Exec("DELETE FROM vaults WHERE public_key_ecdsa = ?", publicKeyECDSA)
 	return err
 }

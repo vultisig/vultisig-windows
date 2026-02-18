@@ -31,7 +31,7 @@ export type SignMessageInput =
       sign_message: {
         chain: OtherChain.Solana | OtherChain.Tron
         useTronHeader?: boolean
-        signMessageV2?: boolean
+        isV2?: boolean
         message: string
       }
     }

@@ -26,6 +26,7 @@ export class TronLink {
         const { address } = await requestAccount(Chain.Tron)
         if (address) {
           this.tronWeb.setAddress(address)
+          this.ready = true
           return {
             code: 200,
             message: 'User allowed the request.',

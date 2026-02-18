@@ -1,7 +1,5 @@
 import { VaultBackupOverride } from '@core/ui/vault/import/VaultBackupResult'
-import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 
-export const {
-  provider: VaultBackupOverrideProvider,
-  useValue: useVaultBackupOverride,
-} = getValueProviderSetup<VaultBackupOverride | null>('vaultBackupOverride')
+export const [VaultBackupOverrideProvider, useVaultBackupOverride] =
+  setupValueProvider<VaultBackupOverride | null>('vaultBackupOverride')

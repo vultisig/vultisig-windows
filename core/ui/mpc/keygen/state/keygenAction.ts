@@ -1,6 +1,6 @@
 import { KeygenStep } from '@core/mpc/keygen/KeygenStep'
 import { Vault } from '@core/mpc/vault/Vault'
-import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 
 type KeygenActionInput = {
   onStepChange: (step: KeygenStep) => void
@@ -9,5 +9,5 @@ type KeygenActionInput = {
 
 export type KeygenAction = (input: KeygenActionInput) => Promise<Vault>
 
-export const { useValue: useKeygenAction, provider: KeygenActionProvider } =
-  getValueProviderSetup<KeygenAction>('KeygenAction')
+export const [KeygenActionProvider, useKeygenAction] =
+  setupValueProvider<KeygenAction>('KeygenAction')

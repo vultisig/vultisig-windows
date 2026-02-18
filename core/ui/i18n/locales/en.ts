@@ -61,9 +61,9 @@ export const en = {
   backup: 'Backup',
   backupGuide: 'Backup guide',
   backupVault: 'Backup Vault',
-  backupInCloudTitle: 'Backup in the cloud',
+  backupInCloudTitle: 'Encrypted with your Vault Password',
   backupInCloudDescription:
-    'Back up your vault share securely online. Online storage is recommended and vault shares are designed for this.',
+    'Back up your vault share online using the same vault password you created earlier. Online storage is recommended and safe vault shares are designed for this.',
   backupShare: 'Backup Vault Share',
   backupShare2: 'Backup Share 2',
   backupsTitle: '<highlight>Backups,</highlight> your new recovery method',
@@ -78,8 +78,11 @@ export const en = {
   backupShareWarning: 'This is only 1 share of your vault',
   backupShareWarningRest: ', repeat this process for the other devices.',
   backup_description: 'Back up your Vault Share to a preferred location',
+  backup_email_description: 'Enter the email to receive the vault share.',
   backup_now: 'Get started',
   backup_password: 'Backup Password',
+  backup_password_description:
+    'Enter the password you set when creating this Vault.',
   backup_password_confirmation_title:
     'Do you want to encrypt your backup with a password?',
   backup_password_info_cannot_be_reset:
@@ -266,6 +269,7 @@ export const en = {
   enable_token_instruction:
     'Enable at least one token to view balances and manage positions.',
   encrypting_vault_keyshares: 'Encrypting vault keyshares...',
+  enter: 'Enter',
   enter_address: 'Enter Address',
   enter_address_here: 'Enter address here',
   enter_amount: 'Enter Amount',
@@ -482,6 +486,7 @@ export const en = {
   import_vault_share_description: 'Use a vault share to recover your vault.',
   import_vault_share_supported_files: 'Supported file types: .bak & .vult',
   importing_vault: 'Importing Vault...',
+  incorrect_email: 'Incorrect e-mail, please check',
   incorrect_password: 'Incorrect Password',
   incorrect_url: 'Incorrect URL',
   install_app: 'Install ‘{{title}}’ App',

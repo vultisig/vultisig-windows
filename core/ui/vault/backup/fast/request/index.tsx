@@ -1,5 +1,4 @@
 import { StepTransition } from '@lib/ui/base/StepTransition'
-import { FitPageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { useTranslation } from 'react-i18next'
 
@@ -16,14 +15,12 @@ export const RequestFastVaultBackup = () => {
         title={t('server_backup')}
         primaryControls={<PageHeaderBackButton />}
       />
-      <FitPageContent contentMaxWidth={468}>
-        <StepTransition
-          from={({ onFinish }) => (
-            <RequestFastVaultBackupForm onFinish={onFinish} />
-          )}
-          to={() => <RequestFastVaultBackupSuccess />}
-        />
-      </FitPageContent>
+      <StepTransition
+        from={({ onFinish }) => (
+          <RequestFastVaultBackupForm onFinish={onFinish} />
+        )}
+        to={() => <RequestFastVaultBackupSuccess />}
+      />
     </>
   )
 }
