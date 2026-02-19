@@ -3,6 +3,7 @@ import {
   keygenFastAnimationSource,
   keygenSecureAnimationSource,
   keygenSecurePairedDeviceAnimationSource,
+  type OnboardingMpcAnimationSource,
 } from '@core/ui/mpc/animations/onboardingMpcAnimationSources'
 
 type GetKeygenLoadingAnimationSourceInput = {
@@ -13,7 +14,7 @@ type GetKeygenLoadingAnimationSourceInput = {
 export const getKeygenLoadingAnimationSource = ({
   isInitiatingDevice,
   signers,
-}: GetKeygenLoadingAnimationSourceInput) => {
+}: GetKeygenLoadingAnimationSourceInput): OnboardingMpcAnimationSource => {
   if (hasServer(signers)) {
     return keygenFastAnimationSource
   }

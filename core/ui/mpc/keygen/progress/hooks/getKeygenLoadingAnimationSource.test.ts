@@ -17,6 +17,15 @@ describe('getKeygenLoadingAnimationSource', () => {
     ).toBe(keygenFastAnimationSource)
   })
 
+  it('prioritizes fast animation even when current device initiates', () => {
+    expect(
+      getKeygenLoadingAnimationSource({
+        isInitiatingDevice: true,
+        signers: ['Server-1111', 'Mac-2222'],
+      })
+    ).toBe(keygenFastAnimationSource)
+  })
+
   it('returns paired-device secure animation for non-initiating secure device', () => {
     expect(
       getKeygenLoadingAnimationSource({

@@ -12,6 +12,8 @@ type OnboardingMpcAnimationSource =
   | typeof keygenSecurePairedDeviceAnimationSource
   | typeof searchingDeviceAnimationSource
 
+export type { OnboardingMpcAnimationSource }
+
 export const getOnboardingMpcAnimationPath = (
   source: OnboardingMpcAnimationSource
 ) => `/core/animations/${source}.riv`
