@@ -13,6 +13,7 @@ type ScreenLayoutProps = {
   footer?: ReactNode
   title?: ReactNode
   onBack?: () => void
+  headerRight?: ReactNode
 }
 
 export const ScreenLayout = ({
@@ -20,8 +21,9 @@ export const ScreenLayout = ({
   footer,
   title,
   onBack,
+  headerRight,
 }: ScreenLayoutProps) => {
-  const hasHeader = !!title || !!onBack
+  const hasHeader = !!title || !!onBack || !!headerRight
 
   return (
     <Container>
@@ -39,6 +41,9 @@ export const ScreenLayout = ({
               <HeaderTitle as="span" size={18} weight={500} cropped>
                 {title}
               </HeaderTitle>
+            )}
+            {headerRight && (
+              <HeaderRightWrapper>{headerRight}</HeaderRightWrapper>
             )}
           </HeaderContent>
         </Header>
@@ -76,6 +81,11 @@ const HeaderContent = styled.div`
 const BackButtonWrapper = styled.div`
   position: absolute;
   left: 0;
+`
+
+const HeaderRightWrapper = styled.div`
+  position: absolute;
+  right: 0;
 `
 
 const HeaderTitle = styled(Text)`
