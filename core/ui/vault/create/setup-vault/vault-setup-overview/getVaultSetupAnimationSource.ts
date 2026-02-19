@@ -1,8 +1,8 @@
 const vaultSetupAnimationSources = [
-  'vault_setup_device1',
-  'vault_setup_device2',
-  'vault_setup_device3',
-  'vault_setup_device4',
+  'vault-setup-1device',
+  'vault-setup-2devices',
+  'vault-setup-3devices',
+  'vault-setup-4devices',
 ] as const
 
 type VaultSetupAnimationSource = (typeof vaultSetupAnimationSources)[number]

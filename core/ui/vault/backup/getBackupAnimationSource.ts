@@ -1,8 +1,8 @@
 const backupDeviceAnimationSources = [
-  'backup_device1',
-  'backup_device2',
-  'backup_device3',
-  'backup_device4',
+  'backup-1device',
+  'backup-2devices',
+  'backup-3devices',
+  'backup-4devices',
 ] as const
 
 type BackupDeviceAnimationSource = (typeof backupDeviceAnimationSources)[number]
