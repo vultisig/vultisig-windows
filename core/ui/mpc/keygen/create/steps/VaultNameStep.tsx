@@ -5,26 +5,34 @@ import { ScreenLayout } from '@lib/ui/layout/ScreenLayout/ScreenLayout'
 import { VStack } from '@lib/ui/layout/Stack'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { useState } from 'react'
+import { ReactNode } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { z } from 'zod'
 
 import { ClearableTextInput } from '../components/ClearableTextInput'
-import { ReferralExpandableField } from '../components/ReferralExpandableField'
 import { useGeneratedVaultName } from '../hooks/useGeneratedVaultName'
 import { getVaultNameSchema } from '../utils/getVaultNameSchema'
+import { StepProgressIndicator } from './StepProgressIndicator'
+import { vaultSetupSteps } from './vault-setup-steps'
 
 type VaultNameStepOutput = {
   name: string
-  referral?: string
 }
 
 type VaultNameStepProps = OnFinishProp<VaultNameStepOutput> &
-  Partial<OnBackProp>
+  Partial<OnBackProp> & {
+    stepIndex?: number
+    headerRight?: ReactNode
+  }
 
-export const VaultNameStep = ({ onFinish, onBack }: VaultNameStepProps) => {
+export const VaultNameStep = ({
+  onFinish,
+  onBack,
+  stepIndex,
+  headerRight,
+}: VaultNameStepProps) => {
   const { t } = useTranslation()
   const existingVaultNames = useVaultNames()
   const generatedName = useGeneratedVaultName()
@@ -44,19 +52,16 @@ export const VaultNameStep = ({ onFinish, onBack }: VaultNameStepProps) => {
   })
 
   const name = watch('name')
-  const [referral, setReferral] = useState('')
 
   const handleNext = () => {
     if (!isValid) return
-    onFinish({
-      name,
-      referral: referral || undefined,
-    })
+    onFinish({ name })
   }
 
   return (
     <ScreenLayout
       onBack={onBack}
+      headerRight={headerRight}
       footer={
         <Button
           style={{ width: '100%' }}
@@ -68,6 +73,12 @@ export const VaultNameStep = ({ onFinish, onBack }: VaultNameStepProps) => {
       }
     >
       <Content>
+        {stepIndex !== undefined && (
+          <StepProgressIndicator
+            steps={vaultSetupSteps}
+            currentStepIndex={stepIndex}
+          />
+        )}
         <VStack gap={8}>
           <Title as="h1" size={22} weight={500} color="contrast">
             {t('name_your_vault')}
@@ -91,7 +102,6 @@ export const VaultNameStep = ({ onFinish, onBack }: VaultNameStepProps) => {
             </Text>
           )}
         </VStack>
-        <ReferralExpandableField value={referral} onValueChange={setReferral} />
       </Content>
     </ScreenLayout>
   )

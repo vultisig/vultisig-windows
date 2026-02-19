@@ -1,32 +1,45 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
-import { TextInput } from '@lib/ui/inputs/TextInput'
 import { ScreenLayout } from '@lib/ui/layout/ScreenLayout/ScreenLayout'
 import { VStack } from '@lib/ui/layout/Stack'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { validateEmail } from '@lib/utils/validation/validateEmail'
+import { ReactNode } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { z } from 'zod'
 
-type VaultEmailStepProps = OnFinishProp<string> & OnBackProp
+import { ClearableTextInput } from '../components/ClearableTextInput'
+import { StepProgressIndicator } from './StepProgressIndicator'
+import { vaultSetupSteps } from './vault-setup-steps'
 
-export const VaultEmailStep = ({ onFinish, onBack }: VaultEmailStepProps) => {
+type VaultEmailStepProps = OnFinishProp<string> &
+  OnBackProp & {
+    stepIndex?: number
+    headerRight?: ReactNode
+  }
+
+export const VaultEmailStep = ({
+  onFinish,
+  onBack,
+  stepIndex,
+  headerRight,
+}: VaultEmailStepProps) => {
   const { t } = useTranslation()
 
   const schema = z.object({
     email: z
       .string()
       .min(1, t('email_required'))
-      .refine(val => !validateEmail(val), t('invalid_email')),
+      .refine(val => !validateEmail(val), t('incorrect_email')),
   })
 
   const {
     formState: { errors, isValid },
+    setValue,
     watch,
-    register,
   } = useForm<{ email: string }>({
     defaultValues: { email: '' },
     mode: 'all',
@@ -43,6 +56,7 @@ export const VaultEmailStep = ({ onFinish, onBack }: VaultEmailStepProps) => {
   return (
     <ScreenLayout
       onBack={onBack}
+      headerRight={headerRight}
       footer={
         <Button
           style={{ width: '100%' }}
@@ -54,6 +68,12 @@ export const VaultEmailStep = ({ onFinish, onBack }: VaultEmailStepProps) => {
       }
     >
       <Content>
+        {stepIndex !== undefined && (
+          <StepProgressIndicator
+            steps={vaultSetupSteps}
+            currentStepIndex={stepIndex}
+          />
+        )}
         <VStack gap={8}>
           <Title as="h1" size={22} weight={500} color="contrast">
             {t('enter_your_email')}
@@ -63,10 +83,12 @@ export const VaultEmailStep = ({ onFinish, onBack }: VaultEmailStepProps) => {
           </Text>
         </VStack>
         <VStack gap={8}>
-          <TextInput
-            {...register('email')}
+          <ClearableTextInput
             type="email"
             placeholder={t('email_placeholder')}
+            value={email}
+            onValueChange={v => setValue('email', v, { shouldValidate: true })}
+            onClear={() => setValue('email', '', { shouldValidate: true })}
             validation={
               errors.email ? 'invalid' : isValid ? 'valid' : undefined
             }
