@@ -21,6 +21,11 @@ Last updated: 2026-02-19
 | `61114-36462` | End-of-flow success | `core/ui/mpc/keygen/flow/KeygenFlowSuccess.tsx` |
 | `61114-36867` | End-of-flow success variant/state | `core/ui/mpc/keygen/flow/KeygenFlowSuccess.tsx` |
 
+## Current audit state
+- Source evidence matrix: `docs/onboarding-v3-parity-evidence.md`
+- Node capture source: authenticated Chrome inspect extraction in `docs/onboarding-v3/figma-meta/*.json` (local artifacts, not committed).
+- Current strict parity status: blocked on visual capture proof for final PASS sign-off.
+
 ## Manual smoke matrix
 | Scenario | Expected |
 |---|---|
