@@ -1,3 +1,6 @@
+import { getOnboardingMpcAnimationPath } from '@core/ui/mpc/animations/onboardingMpcAnimationSources'
+import { useMpcSigners } from '@core/ui/mpc/devices/state/signers'
+import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
 import {
   Fit,
   Layout,
@@ -7,7 +10,9 @@ import {
   useViewModelInstanceBoolean,
   useViewModelInstanceNumber,
 } from '@rive-app/react-webgl2'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+
+import { getKeygenLoadingAnimationSource } from './getKeygenLoadingAnimationSource'
 
 type Bounds = {
   width: number
@@ -17,11 +22,18 @@ type Bounds = {
 const stateMachineName = 'State Machine 1'
 
 export const useKeygenLoadingAnimation = () => {
+  const signers = useMpcSigners()
+  const isInitiatingDevice = useIsInitiatingDevice()
+  const animationSource = getKeygenLoadingAnimationSource({
+    isInitiatingDevice,
+    signers,
+  })
+
   const containerRef = useRef<HTMLDivElement>(null)
   const [bounds, setBounds] = useState<Bounds>({ width: 0, height: 0 })
 
   const { rive, RiveComponent } = useRive({
-    src: '/core/animations/keygen_loading.riv',
+    src: getOnboardingMpcAnimationPath(animationSource),
     stateMachines: stateMachineName,
     autoplay: true,
     layout: new Layout({
@@ -104,19 +116,13 @@ export const useKeygenLoadingAnimation = () => {
     return () => window.clearInterval(id)
   }, [rive])
 
-  const setConnected = useCallback(
-    (value: boolean) => {
-      connected?.setValue(value)
-    },
-    [connected]
-  )
+  const setConnected = (value: boolean) => {
+    connected?.setValue(value)
+  }
 
-  const setProgress = useCallback(
-    (value: number) => {
-      progressPercentage?.setValue(value)
-    },
-    [progressPercentage]
-  )
+  const setProgress = (value: number) => {
+    progressPercentage?.setValue(value)
+  }
 
   return {
     RiveComponent,
