@@ -59,6 +59,8 @@ export const useAvailableChainActions = (chain: Chain) => {
         withdraw_ruji_rewards: () => !!findByTicker({ coins, ticker: 'RUJI' }),
         add_cacao_pool: hasCacao,
         remove_cacao_pool: hasCacao,
+        add_thor_lp: () => true,
+        remove_thor_lp: () => true,
       })
     )
   }, [
