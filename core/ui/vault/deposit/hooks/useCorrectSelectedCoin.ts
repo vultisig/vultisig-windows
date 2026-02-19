@@ -87,6 +87,8 @@ export const useCorrectSelectedCoin = () => {
           findByTicker({ coins, ticker: 'CACAO' }),
         add_cacao_pool: () => shouldBePresent(potentialCACAOCoin),
         remove_cacao_pool: () => shouldBePresent(potentialCACAOCoin),
+        add_thor_lp: () => shouldBePresent(potentialRUNECoin),
+        remove_thor_lp: () => shouldBePresent(potentialRUNECoin),
         freeze: () => currentDepositCoin,
         unfreeze: () => currentDepositCoin,
       })

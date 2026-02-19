@@ -911,7 +911,9 @@ export const en = {
   transaction_details: 'Transaction Details',
   transaction_has_risk:
     '{{riskLevel}} risk transaction detected by <provider></provider>',
-  transaction_successful: 'Transaction Successful',
+  transaction_failed: 'Transaction <error>failed</error>',
+  transaction_pending: 'Transaction pending...',
+  transaction_successful: 'Transaction <g>successful</g>',
   transaction_could_not_be_parsed:
     'This transaction could not be parsed. Raw transaction data is shown below.',
   raw_transaction_data: 'Raw Transaction Data',
@@ -1097,6 +1099,11 @@ export const en = {
   withdraw_ruji_rewards: 'Withdraw RUJI Rewards',
   add_cacao_pool: 'Add to CACAO Pool',
   remove_cacao_pool: 'Remove from CACAO Pool',
+  add_thor_lp: 'Add THORChain LP',
+  remove_thor_lp: 'Remove THORChain LP',
+  lp_dust_amount_error:
+    'Insufficient RUNE balance. At least {{amount}} RUNE is required as dust for LP withdrawal.',
+  lp_withdraw_percentage: 'Withdraw percentage',
   wrong_vault_try_again: 'Wrong Vault or Pair Device.',
   you_are_bonding: "You're bonding",
   you_are_unbonding: "You're unbonding",

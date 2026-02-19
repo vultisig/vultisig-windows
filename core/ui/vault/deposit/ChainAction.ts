@@ -23,6 +23,8 @@ export type ChainAction =
   | 'mint'
   | 'redeem'
   | 'withdraw_ruji_rewards'
+  | 'add_thor_lp'
+  | 'remove_thor_lp'
   | CacaoPoolAction
 
 export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
@@ -38,6 +40,8 @@ export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
     'mint',
     'redeem',
     'withdraw_ruji_rewards',
+    'add_thor_lp',
+    'remove_thor_lp',
   ],
   [Chain.MayaChain]: [
     'bond_with_lp',
