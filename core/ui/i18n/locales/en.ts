@@ -813,6 +813,7 @@ export const en = {
   select_destination_chain: 'Select Destination Chain',
   select_n_devices_one: 'Select {{count}} device',
   select_n_devices_other: 'Select {{count}} devices',
+  select_pool: 'Select pool',
   select_token: 'Select token',
   select_vault: 'Select a Vault',
   select_vaults_to_backup: 'Select Vaults to Back Up',
