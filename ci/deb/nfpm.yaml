@@ -1,7 +1,7 @@
 name: "vultisig"
 arch: "amd64"
 platform: "linux"
-version: "1.0.51"
+version: "1.0.52"
 section: "default"
 priority: "extra"
 maintainer: "Vultisig team <dev@vultisig.com>"
