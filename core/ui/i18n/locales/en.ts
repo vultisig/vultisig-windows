@@ -11,6 +11,7 @@ export const en = {
   add_friends_referral: 'Add a Friends Referral',
   add_memo: 'Add MEMO',
   add_new_vault: 'Add New Vault',
+  add_referral: 'Add referral',
   add_referral_code: 'Save referral code',
   add_to_address_book: 'Add to Address Book',
   add_suggested_token: 'Add Suggested Token',
@@ -145,7 +146,7 @@ export const en = {
   chooseSetup: 'Choose Setup',
   choose_a_password: 'Choose a password',
   choose_a_password_description:
-    'This password encrypts your vault backup and is required to recover it',
+    'If you want an extra layer of security, choose a password. <b>Password cannot be recovered.</b>',
   choose_backup_method: 'Choose Backup Method',
   choose_payout_asset: 'Choose payout asset',
   choose_tokens: 'Choose Tokens',
@@ -203,6 +204,7 @@ export const en = {
   create: 'Create',
   create_folder: 'Create Folder',
   create_new_vault: 'Create New Vault',
+  create_vault: 'Create vault',
   create_own_referral:
     'Create your own code and earn <blue>20%</blue> on referred swaps',
   create_referral_form: 'Create referral',
@@ -409,7 +411,14 @@ export const en = {
     hintDescription: 'This will be shown in case you forget your password',
     hintEmpty: 'Hint is empty',
     passwordCannotBeRecovered: 'Password cannot be reset or recovered',
+    passwordTooltip:
+      'This occurs because the password is used to locally encrypt the backup file, similar to how a hard drive is encrypted. In the following step, you have the option to add a hint.',
     preparingVault: 'Preparing Vault',
+    referralModalTitle: 'Referral code',
+    referralModalSubtitle:
+      'Enter your referral code here. <b>Enjoy 10% off every transaction.</b>',
+    applyReferral: 'Apply referral',
+    referralAdded: 'Referral added',
     summary: {
       agreementText: 'I have read and understand what to do',
       ctaText: 'Create your vault',
