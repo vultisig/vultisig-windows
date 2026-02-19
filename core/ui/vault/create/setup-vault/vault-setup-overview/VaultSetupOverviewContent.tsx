@@ -37,8 +37,19 @@ export const VaultSetupOverviewContent = ({
     useVaultSetupAnimation(selectedDeviceCount)
 
   return (
-    <ScreenLayout onBack={onBack}>
-      <OverviewContent>
+    <ScreenLayout
+      footer={
+        <Button
+          style={{ width: '100%' }}
+          onClick={onGetStarted}
+          loading={isLoading}
+        >
+          {t('get_started')}
+        </Button>
+      }
+      onBack={onBack}
+    >
+      <OverviewContent data-testid="vault-setup-overview-content">
         <OverviewHeader>
           <OverviewTitle as="h1" size={22} weight={500} color="contrast">
             {t('vaultSetupOverview.title')}
@@ -49,11 +60,9 @@ export const VaultSetupOverviewContent = ({
             subtitle={t(`vaultSetupOverview.${key}.badgeSubtitle`)}
           />
         </OverviewHeader>
-        <AnimationWrapper>
-          <AnimationContainer>
-            <RiveComponent />
-          </AnimationContainer>
-        </AnimationWrapper>
+        <AnimationContainer>
+          <RiveComponent />
+        </AnimationContainer>
         <BottomSection>
           <VStack gap={16}>
             <FeatureRow>
@@ -96,13 +105,6 @@ export const VaultSetupOverviewContent = ({
               </VStack>
             </FeatureRow>
           </VStack>
-          <Button
-            style={{ width: '100%' }}
-            onClick={onGetStarted}
-            loading={isLoading}
-          >
-            {t('get_started')}
-          </Button>
         </BottomSection>
       </OverviewContent>
     </ScreenLayout>
@@ -112,6 +114,9 @@ export const VaultSetupOverviewContent = ({
 const OverviewContent = styled(VStack)`
   width: 100%;
   gap: 12px;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: flex-start;
 `
 
 const OverviewHeader = styled(VStack)`
@@ -122,15 +127,6 @@ const OverviewHeader = styled(VStack)`
 const OverviewTitle = styled(Text)`
   letter-spacing: -0.36px;
   line-height: 24px;
-`
-
-const AnimationWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: min(350px, 100%);
-  align-self: center;
-  overflow: hidden;
 `
 
 const AnimationContainer = styled.div`

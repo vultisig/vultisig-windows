@@ -59,9 +59,9 @@ const Container = styled.div`
 
 const Header = styled.header`
   ${centeredContentColumn({
-    contentMaxWidth,
+    contentMaxWidth: '100%',
     horizontalMinPadding,
-  })}
+  })};
   flex-shrink: 0;
 `
 
@@ -107,6 +107,6 @@ const Footer = styled.footer`
     horizontalMinPadding,
   })}
   padding-top: 20px;
-  padding-bottom: 24px;
+  padding-bottom: 44px;
   flex-shrink: 0;
 `
