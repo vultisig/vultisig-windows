@@ -1,3 +1,5 @@
+import { getOnboardingV3AnimationPath } from '@core/ui/onboarding/animations/onboardingV3AnimationSources'
+import { onboardingSuccessAnimationSource } from '@core/ui/onboarding/animations/onboardingV3AnimationSources'
 import { Animation } from '@lib/ui/animations/Animation'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -29,7 +31,9 @@ export const CreateVaultSuccessScreen = ({ onFinish }: OnFinishProp) => {
     <Wrapper justifyContent="center" alignItems="center">
       <VStack flexGrow justifyContent="center" alignItems="center">
         <RiveWrapper>
-          <Animation src="/core/animations/vault-created.riv" />
+          <Animation
+            src={getOnboardingV3AnimationPath(onboardingSuccessAnimationSource)}
+          />
         </RiveWrapper>
         <VStack alignItems="center" gap={16}>
           <Text centerHorizontally size={isTabletDeviceAndUp ? 40 : 24}>

@@ -1,6 +1,9 @@
 import { hasServer } from '@core/mpc/devices/localPartyId'
 import { isKeyImportVault } from '@core/mpc/vault/Vault'
+import { getOnboardingV3AnimationPath } from '@core/ui/onboarding/animations/onboardingV3AnimationSources'
+import { reviewDevicesAnimationSource } from '@core/ui/onboarding/animations/onboardingV3AnimationSources'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { Animation } from '@lib/ui/animations/Animation'
 import { Button } from '@lib/ui/buttons/Button'
 import { borderRadius } from '@lib/ui/css/borderRadius'
 import { Divider } from '@lib/ui/divider'
@@ -120,6 +123,13 @@ const SummaryListItem = styled(HStack)<{ showLine?: boolean }>`
   }
 `
 
+const ReviewDevicesAnimationContainer = styled.div`
+  width: 100%;
+  max-width: 460px;
+  aspect-ratio: 460 / 180;
+  margin-inline: auto;
+`
+
 const IconWrapper = styled(VStack)<{ isSecure?: boolean }>`
   justify-content: center;
   width: 24px;
@@ -193,6 +203,11 @@ export const VaultBackupSummaryStep: FC<SetupVaultSummaryStepProps> = ({
                 {isFastVault ? t('fastVault') : t('secureVault')}
               </Text>
             </PillWrapper>
+            <ReviewDevicesAnimationContainer>
+              <Animation
+                src={getOnboardingV3AnimationPath(reviewDevicesAnimationSource)}
+              />
+            </ReviewDevicesAnimationContainer>
             <ContentWrapper isSecure={!isFastVault}>
               <Text variant="h1Regular">{t('backupGuide')}</Text>
               <VStack gap={24}>
