@@ -1,4 +1,5 @@
-import { OtherChain } from '@core/chain/Chain'
+import { Chain, OtherChain } from '@core/chain/Chain'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { rootApiUrl } from '@core/config'
 import { attempt } from '@lib/utils/attempt'
 import { queryUrl } from '@lib/utils/query/queryUrl'
@@ -10,6 +11,7 @@ type TonTransaction = {
     hash: string
   }
   out_msgs: Array<unknown>
+  fee?: string
   description?: {
     aborted?: boolean
     compute_ph?: {
@@ -33,14 +35,14 @@ export const getTonTxStatus: TxStatusResolver<OtherChain.Ton> = async ({
   )
 
   if (error || !response || !response.ok || response.result.length === 0) {
-    return 'pending'
+    return { status: 'pending' }
   }
 
   const tx = response.result[0]
 
   // Check if transaction was aborted
   if (tx.description?.aborted) {
-    return 'error'
+    return { status: 'error' }
   }
 
   // Check compute phase exit code
@@ -48,9 +50,19 @@ export const getTonTxStatus: TxStatusResolver<OtherChain.Ton> = async ({
 
   // Exit code 0 or 1 indicates success
   // If no exit code is present (simple transfers), assume success
-  if (exitCode === undefined || exitCode === 0 || exitCode === 1) {
-    return 'success'
-  }
+  const success = exitCode === undefined || exitCode === 0 || exitCode === 1
+  const status = success ? 'success' : 'error'
 
-  return 'error'
+  const feeCoin = chainFeeCoin[Chain.Ton]
+  const feeStr = tx.fee
+  const receipt =
+    feeStr != null && feeStr !== ''
+      ? {
+          feeAmount: BigInt(feeStr),
+          feeDecimals: feeCoin.decimals,
+          feeTicker: feeCoin.ticker,
+        }
+      : undefined
+
+  return { status, receipt }
 }

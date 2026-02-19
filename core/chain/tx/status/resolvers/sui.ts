@@ -1,5 +1,6 @@
-import { OtherChain } from '@core/chain/Chain'
+import { Chain, OtherChain } from '@core/chain/Chain'
 import { getSuiClient } from '@core/chain/chains/sui/client'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { attempt } from '@lib/utils/attempt'
 
 import { TxStatusResolver } from '../resolver'
@@ -17,18 +18,34 @@ export const getSuiTxStatus: TxStatusResolver<OtherChain.Sui> = async ({
   )
 
   if (error || !data) {
-    return 'pending'
+    return { status: 'pending' }
   }
 
-  const status = data.effects?.status?.status
+  const effectsStatus = data.effects?.status?.status
 
-  if (status === 'success') {
-    return 'success'
+  if (effectsStatus === 'success') {
+    const gasUsed = data.effects?.gasUsed
+    const feeCoin = chainFeeCoin[Chain.Sui]
+    const receipt =
+      gasUsed != null &&
+      typeof gasUsed === 'object' &&
+      'computationCost' in gasUsed &&
+      'storageCost' in gasUsed
+        ? {
+            feeAmount:
+              BigInt(String(gasUsed.computationCost)) +
+              BigInt(String(gasUsed.storageCost)),
+            feeDecimals: feeCoin.decimals,
+            feeTicker: feeCoin.ticker,
+          }
+        : undefined
+
+    return { status: 'success', receipt }
   }
 
-  if (status === 'failure') {
-    return 'error'
+  if (effectsStatus === 'failure') {
+    return { status: 'error' }
   }
 
-  return 'pending'
+  return { status: 'pending' }
 }

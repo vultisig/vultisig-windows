@@ -4,6 +4,7 @@ import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useTxHash } from '@core/ui/chain/state/txHash'
+import { useTxStatusQuery } from '@core/ui/chain/tx/status/useTxStatusQuery'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { useKeysignMessagePayload } from '@core/ui/mpc/keysign/state/keysignMessagePayload'
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
@@ -23,8 +24,8 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { AddToAddressBookButton } from './components/AddToAddressBookButton'
+import { TxActualFeeDisplay } from './components/TxActualFeeDisplay'
 import { TxFeeRow } from './components/TxFeeRow'
-import { KeysignFeeAmount } from './FeeAmount'
 
 export const KeysignTxOverview = () => {
   const { t } = useTranslation()
@@ -45,6 +46,8 @@ export const KeysignTxOverview = () => {
   }, [toAmount, decimals])
 
   const txHash = useTxHash()
+  const txStatusQuery = useTxStatusQuery({ chain, hash: txHash })
+  const receipt = txStatusQuery.data?.receipt
 
   const blockExplorerUrl = getBlockExplorerUrl({
     chain,
@@ -115,9 +118,11 @@ export const KeysignTxOverview = () => {
               <Text>{chain}</Text>
             </HStack>
           </HStack>
-          <TxFeeRow label={t('network_fee')}>
-            <KeysignFeeAmount keysignPayload={keysignPayload} />
-          </TxFeeRow>
+          {receipt && (
+            <TxFeeRow label={t('network_fee')}>
+              <TxActualFeeDisplay chain={chain} receipt={receipt} />
+            </TxFeeRow>
+          )}
         </SeparatedByLine>
       </Panel>
     </>

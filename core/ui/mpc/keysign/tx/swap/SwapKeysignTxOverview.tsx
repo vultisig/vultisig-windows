@@ -6,6 +6,7 @@ import { getKeysignSwapProviderName } from '@core/mpc/keysign/swap/getKeysignSwa
 import { KeysignSwapPayload } from '@core/mpc/keysign/swap/KeysignSwapPayload'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { useTxStatusQuery } from '@core/ui/chain/tx/status/useTxStatusQuery'
 import { SwapCoinItem } from '@core/ui/mpc/keysign/tx/swap/SwapCoinItem'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -28,8 +29,8 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { TxActualFeeDisplay } from '../components/TxActualFeeDisplay'
 import { TxFeeRow } from '../components/TxFeeRow'
-import { KeysignFeeAmount } from '../FeeAmount'
 import { TxStatusTracker } from '../TxStatusTracker'
 import { TrackTxPrompt } from './TrackTxPrompt'
 
@@ -64,6 +65,13 @@ export const SwapKeysignTxOverview = ({
       general: () => sourceChain,
     }
   )
+
+  const mainTxHash = getLastItem(txHashes)
+  const txStatusQuery = useTxStatusQuery({
+    chain: blockExplorerChain,
+    hash: mainTxHash,
+  })
+  const receipt = txStatusQuery.data?.receipt
 
   const trackTransaction = (tx: string) =>
     openUrl(
@@ -153,9 +161,14 @@ export const SwapKeysignTxOverview = ({
               </AddressWrapper>
             </HStack>
           )}
-          <TxFeeRow label={t('network_fee')}>
-            <KeysignFeeAmount keysignPayload={value} />
-          </TxFeeRow>
+          {receipt && (
+            <TxFeeRow label={t('network_fee')}>
+              <TxActualFeeDisplay
+                chain={blockExplorerChain}
+                receipt={receipt}
+              />
+            </TxFeeRow>
+          )}
         </SwapInfoWrapper>
         <HStack gap={8} fullWidth>
           <Button

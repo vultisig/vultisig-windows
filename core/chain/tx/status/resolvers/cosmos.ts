@@ -1,5 +1,7 @@
 import { CosmosChain } from '@core/chain/Chain'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { decodeTxRaw } from '@cosmjs/proto-signing'
 import { attempt } from '@lib/utils/attempt'
 
 import { TxStatusResolver } from '../resolver'
@@ -13,8 +15,37 @@ export const getCosmosTxStatus: TxStatusResolver<CosmosChain> = async ({
   const { data: tx, error } = await attempt(client.getTx(hash))
 
   if (error || !tx) {
-    return 'pending'
+    return { status: 'pending' }
   }
 
-  return tx.code === 0 ? 'success' : 'error'
+  const status = tx.code === 0 ? 'success' : 'error'
+  const feeCoin = chainFeeCoin[chain]
+
+  const receipt = (() => {
+    const gasUsed = tx.gasUsed
+    const gasWanted = tx.gasWanted
+    if (gasUsed == null || gasWanted == null || gasWanted === 0n) {
+      return undefined
+    }
+    try {
+      const decoded = decodeTxRaw(tx.tx)
+      const fee = decoded.authInfo?.fee
+      const maxFeeAmount =
+        fee?.amount?.[0]?.amount != null ? BigInt(fee.amount[0].amount) : 0n
+      const actualFee =
+        maxFeeAmount > 0n ? (maxFeeAmount * gasUsed) / gasWanted : 0n
+      if (actualFee === 0n) {
+        return undefined
+      }
+      return {
+        feeAmount: actualFee,
+        feeDecimals: feeCoin.decimals,
+        feeTicker: feeCoin.ticker,
+      }
+    } catch {
+      return undefined
+    }
+  })()
+
+  return { status, receipt }
 }
