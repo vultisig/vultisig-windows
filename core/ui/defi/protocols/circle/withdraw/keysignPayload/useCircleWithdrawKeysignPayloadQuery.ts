@@ -4,6 +4,7 @@ import {
   BuildCircleWithdrawKeysignPayloadInput,
 } from '@core/mpc/keysign/circleWithdraw/build'
 import { BuildKeysignPayloadError } from '@core/mpc/keysign/error'
+import { toKeysignLibType } from '@core/mpc/types/utils/libType'
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
@@ -40,7 +41,7 @@ export const useCircleWithdrawKeysignPayloadQuery = ({
       vaultId: getVaultId(vault),
       localPartyId: vault.localPartyId,
       publicKey,
-      libType: vault.libType,
+      libType: toKeysignLibType(vault),
       walletCore,
     }),
     [amount, mscaAddress, publicKey, vault, vaultAddress, walletCore]

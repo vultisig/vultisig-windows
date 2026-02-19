@@ -123,7 +123,7 @@ export const useDeleteVaultMutation = () => {
 
   const mutationFn: DeleteVaultFunction = async input => {
     await deleteVault(input)
-    await refetchQueries([StorageKey.vaults, StorageKey.vaultsCoins])
+    await refetchQueries([StorageKey.vaults], [StorageKey.vaultsCoins])
   }
 
   return useMutation({

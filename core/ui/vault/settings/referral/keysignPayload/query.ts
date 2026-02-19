@@ -2,6 +2,7 @@ import {
   buildReferralKeysignPayload,
   BuildReferralKeysignPayloadInput,
 } from '@core/mpc/keysign/referral/build'
+import { toKeysignLibType } from '@core/mpc/types/utils/libType'
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
@@ -35,7 +36,7 @@ export const useReferralKeysignPayloadQuery = ({
       vaultId: getVaultId(vault),
       localPartyId: vault.localPartyId,
       publicKey,
-      libType: vault.libType,
+      libType: toKeysignLibType(vault),
       walletCore,
     }),
     [amount, coin, memo, publicKey, vault, walletCore]
