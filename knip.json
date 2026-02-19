@@ -4,7 +4,8 @@
     "clients/desktop/wailsjs/**",
     "core/ui/providers/ResponsivenessProvider.tsx",
     ".cursor/**",
-    ".yarn/releases/**"
+    ".yarn/releases/**",
+    ".venv/**"
   ],
   "ignoreBinaries": [
     "tsx",
