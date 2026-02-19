@@ -143,6 +143,9 @@ export const en = {
   check_email: 'Check email',
   check_for_update: 'Check for Update',
   chooseSetup: 'Choose Setup',
+  choose_a_password: 'Choose a password',
+  choose_a_password_description:
+    'This password encrypts your vault backup and is required to recover it',
   choose_backup_method: 'Choose Backup Method',
   choose_payout_asset: 'Choose payout asset',
   choose_tokens: 'Choose Tokens',
@@ -263,6 +266,7 @@ export const en = {
   edit_vaults: 'Edit Vaults',
   email: 'Email',
   email_backup: 'Enter your email to receive your backup',
+  email_placeholder: 'Enter your email address',
   email_required: 'Email is required',
   evm_chains: 'EVM Chains',
   enable_dkls: 'Enable DKLS',
@@ -283,6 +287,9 @@ export const en = {
   enter_referral_code_placeholder: 'Enter Referral Code',
   enter_up_to_4_characters_placeholder: 'Enter up to 4 characters',
   enter_vault_name: 'Enter Vault Name',
+  enter_your_email: 'Enter your email',
+  enter_your_email_description:
+    'Your email is used to send you a verification code when backing up your vault',
   enter_your_password: 'Enter your password',
   entity_not_scanned: '{{entity}} not scanned by <provider></provider>',
   entity_scanned: '{{entity}} scanned by <provider></provider>',
