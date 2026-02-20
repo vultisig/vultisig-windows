@@ -17,6 +17,7 @@ const alwaysAutoExecute: Record<string, boolean> = {
   build_send_tx: true,
   build_custom_tx: true,
   sign_tx: true,
+  read_evm_contract: true,
   scan_tx: true,
 }
 

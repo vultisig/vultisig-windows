@@ -54,6 +54,10 @@ export function buildSignTxAction(tx: TxReady): BackendAction {
     sender: tx.sender,
   }
 
+  if (tx.tx_type) {
+    params.tx_type = tx.tx_type
+  }
+
   if (tx.keysign_payload) {
     params.keysign_payload = tx.keysign_payload
   } else {

@@ -16,6 +16,7 @@ import { handleGetCoins } from './handlers/getCoins'
 import { handleGetPortfolio } from './handlers/getPortfolio'
 import { handleListVaults } from './handlers/listVaults'
 import { handleMarketPrice } from './handlers/marketPrice'
+import { handleReadEvmContract } from './handlers/readEvmContract'
 import { handlePluginInstall } from './handlers/pluginInstall'
 import { handlePluginInstalled } from './handlers/pluginInstalled'
 import { handlePluginList } from './handlers/pluginList'
@@ -66,6 +67,7 @@ export const toolHandlers: Record<string, ToolHandler> = {
   asset_lookup: handleAssetLookup,
   policy_generate: handlePolicyGenerate,
   search_token: handleSearchToken,
+  read_evm_contract: handleReadEvmContract,
   scan_tx: handleScanTx,
   sign_tx: handleSignTx,
   build_swap_tx: handleBuildSwapTx,

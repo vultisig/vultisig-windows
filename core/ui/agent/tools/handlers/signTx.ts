@@ -35,6 +35,7 @@ export const handleSignTx: ToolHandler = async (input, context) => {
   }
 
   const conversationId = input.conversation_id as string | undefined
+  const txType = input.tx_type as string | undefined
 
   const payloadBytes = Uint8Array.from(atob(keysignPayloadB64), c =>
     c.charCodeAt(0)
@@ -74,9 +75,7 @@ export const handleSignTx: ToolHandler = async (input, context) => {
     const label =
       encodedInputs.length > 1 && i === 0
         ? 'approval'
-        : encodedInputs.length === 1
-          ? 'transfer'
-          : 'swap'
+        : (txType ?? (encodedInputs.length === 1 ? 'transfer' : 'swap'))
 
     const hashes = getPreSigningHashes({ walletCore, txInputData, chain })
 

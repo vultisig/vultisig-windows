@@ -22,6 +22,16 @@ const statusLabels: Record<string, string> = {
   failed: 'Failed',
 }
 
+const txTypeLabels: Record<string, string> = {
+  transfer: 'transfer',
+  send: 'send',
+  swap: 'swap',
+  approval: 'approval',
+  deposit: 'deposit',
+  evm_contract: 'contract call',
+  wasm_execute: 'contract execute',
+}
+
 const InlineTxStatusMessageComponent: FC<Props> = ({ txStatus }) => {
   const { txHash, chain, status, label } = txStatus
   const indicator = statusIndicators[status] || '\u{26A1}'
@@ -32,7 +42,8 @@ const InlineTxStatusMessageComponent: FC<Props> = ({ txStatus }) => {
     ? getBlockExplorerUrl({ chain: chainEnum, entity: 'tx', value: txHash })
     : null
 
-  const displayLabel = label ? `${label}: ${statusLabel}` : statusLabel
+  const txLabel = label ? (txTypeLabels[label] ?? label) : undefined
+  const displayLabel = txLabel ? `${txLabel}: ${statusLabel}` : statusLabel
 
   return (
     <Line $status={status}>
