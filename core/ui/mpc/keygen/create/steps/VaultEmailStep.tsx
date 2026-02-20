@@ -77,11 +77,17 @@ export const VaultEmailStep = ({
             currentStepIndex={stepIndex}
           />
         )}
-        <VStack gap={8}>
-          <Title as="h1" size={22} weight={500} color="contrast">
+        <VStack alignItems="center" gap={8}>
+          <Title
+            centerHorizontally
+            as="h1"
+            size={22}
+            weight={500}
+            color="contrast"
+          >
             {t('enter_your_email')}
           </Title>
-          <Text color="shy" size={14}>
+          <Text centerHorizontally color="shy" size={14}>
             {t('enter_your_email_description')}
           </Text>
         </VStack>

@@ -90,11 +90,17 @@ export const VaultPasswordStep = ({
           />
         )}
         <VStack gap={8}>
-          <Title as="h1" size={22} weight={500} color="contrast">
+          <Title
+            centerHorizontally
+            as="h1"
+            size={22}
+            weight={500}
+            color="contrast"
+          >
             {t('choose_a_password')}
           </Title>
           <SubtitleRow>
-            <Text color="shy" size={14} as="span">
+            <Text centerHorizontally color="shy" size={14} as="span">
               <Trans
                 i18nKey="choose_a_password_description"
                 components={{
@@ -156,7 +162,7 @@ const SubtitleRow = styled.div`
 const InfoIconTrigger = styled(UnstyledButton)`
   display: inline-flex;
   vertical-align: middle;
-  color: ${getColor('primary')};
+  color: ${getColor('text')};
   font-size: 14px;
   margin-left: 4px;
 `

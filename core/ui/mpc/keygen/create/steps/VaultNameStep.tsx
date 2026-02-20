@@ -80,10 +80,16 @@ export const VaultNameStep = ({
           />
         )}
         <VStack gap={8}>
-          <Title as="h1" size={22} weight={500} color="contrast">
+          <Title
+            centerHorizontally
+            as="h1"
+            size={22}
+            weight={500}
+            color="contrast"
+          >
             {t('name_your_vault')}
           </Title>
-          <Text color="shy" size={14}>
+          <Text centerHorizontally color="shy" size={14}>
             {t('vault_name_description')}
           </Text>
         </VStack>
