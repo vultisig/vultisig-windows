@@ -1,9 +1,9 @@
 import { EmailIcon } from '@lib/ui/icons/EmailIcon'
-import { LockKeyholeIcon } from '@lib/ui/icons/LockKeyholeIcon'
-import { PencilIcon } from '@lib/ui/icons/PenciIcon'
+import { FrameIcon } from '@lib/ui/icons/FrameIcon'
+import { LeafIcon } from '@lib/ui/icons/LeafIcon'
 
 export const vaultSetupSteps = [
-  { icon: PencilIcon },
+  { icon: LeafIcon },
   { icon: EmailIcon },
-  { icon: LockKeyholeIcon },
+  { icon: FrameIcon },
 ] as const
