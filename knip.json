@@ -26,7 +26,6 @@
         "src/background/index.ts",
         "src/content/index.ts",
         "src/inpage/index.ts",
-        "src/pages/index.tsx",
         "src/pages/popup.tsx"
       ],
       "project": [
