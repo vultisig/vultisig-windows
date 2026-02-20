@@ -67,7 +67,12 @@ export const handleSignTx: ToolHandler = async (input, context) => {
   for (let i = 0; i < encodedInputs.length; i++) {
     const txInputData = encodedInputs[i]
 
-    const label = encodedInputs.length > 1 && i === 0 ? 'approval' : `swap`
+    const label =
+      encodedInputs.length > 1 && i === 0
+        ? 'approval'
+        : encodedInputs.length === 1
+          ? 'transfer'
+          : 'swap'
 
     const hashes = getPreSigningHashes({ walletCore, txInputData, chain })
 

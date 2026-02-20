@@ -1,3 +1,5 @@
+import { Chain } from '@core/chain/Chain'
+import { getCoinBalance } from '@core/chain/coin/balance'
 import { v4 as uuidv4 } from 'uuid'
 
 import { verifierUrl } from '../config'
@@ -36,6 +38,7 @@ import {
 import type {
   ActionResult,
   BackendAction,
+  BalanceInfo,
   MessageContext,
   SendMessageRequest,
   SendMessageResponse,
@@ -83,6 +86,25 @@ type OrchestratorDeps = {
   getAddressBookItems: () => Promise<AddressBookItem[]>
   onNavigate: (nav: NavigationData) => void
   onVaultDataChanged: () => void
+}
+
+function formatBalance(raw: bigint, decimals: number, maxDecimals = 6): string {
+  if (raw === 0n) return '0'
+
+  const divisor = 10n ** BigInt(decimals)
+  const whole = raw / divisor
+  const remainder = raw % divisor
+
+  if (remainder === 0n) return whole.toString()
+
+  let remainderStr = remainder.toString().padStart(decimals, '0')
+  remainderStr = remainderStr.replace(/0+$/, '')
+  if (!remainderStr) return whole.toString()
+  if (remainderStr.length > maxDecimals) {
+    remainderStr = remainderStr.slice(0, maxDecimals)
+  }
+
+  return `${whole}.${remainderStr}`
 }
 
 const maxBuildTxAttempts = 2
@@ -340,7 +362,10 @@ export class AgentOrchestrator {
   async signIn(vaultPubKey: string, password: string): Promise<void> {
     if (!password) throw new Error('password required')
 
-    console.log('[agent:signIn] building vault meta for', vaultPubKey.slice(0, 8) + '...')
+    console.log(
+      '[agent:signIn] building vault meta for',
+      vaultPubKey.slice(0, 8) + '...'
+    )
     const vaultMeta = await this.buildVaultMeta(vaultPubKey, password)
     console.log('[agent:signIn] vault meta built:', {
       localPartyId: vaultMeta.localPartyId,
@@ -451,10 +476,13 @@ export class AgentOrchestrator {
       this.deps.getAddressBookItems().catch(() => []),
     ])
 
+    const balances = await this.fetchBalances(coins)
+
     return buildMessageContext({
       vaultPubKey,
       vaultName: vault.name,
       coins,
+      balances,
       addressBookItems,
     })
   }
@@ -487,7 +515,7 @@ export class AgentOrchestrator {
 
     const msgCtx =
       this.takePreloadedContext(vaultPubKey) ??
-      (await this.buildQuickCtx(vaultPubKey))
+      (await this.buildCtx(vaultPubKey))
 
     const req: SendMessageRequest = {
       public_key: vaultPubKey,
@@ -551,13 +579,15 @@ export class AgentOrchestrator {
     )
     const [autoActions, signAction] = filterSignTx(actionsAfterBuild)
 
-    if (buildAction) {
+    if (buildAction && !this.pendingTx.has(convId)) {
+      const isSend = buildAction.type === 'build_send_tx'
       this.buildTxAsync(
         signal,
         convId,
         vaultPubKey,
         token,
-        buildAction.params ?? {}
+        buildAction.params ?? {},
+        isSend ? 'send' : 'swap'
       )
     }
 
@@ -706,8 +736,14 @@ export class AgentOrchestrator {
     convId: string,
     vaultPubKey: string,
     token: string,
-    params: Record<string, unknown>
+    params: Record<string, unknown>,
+    mode: 'swap' | 'send' = 'swap'
   ): Promise<void> {
+    const actionType = mode === 'send' ? 'build_send_tx' : 'build_tx'
+    const toolName = mode === 'send' ? 'build_send_tx' : 'build_swap_tx'
+    const title =
+      mode === 'send' ? 'Build Send Transaction' : 'Build Swap Transaction'
+
     const run = async () => {
       const attempts = (this.buildAttempts.get(convId) ?? 0) + 1
       this.buildAttempts.set(convId, attempts)
@@ -715,7 +751,7 @@ export class AgentOrchestrator {
       if (attempts > maxBuildTxAttempts) {
         this.buildAttempts.delete(convId)
         const result: ActionResult = {
-          action: 'build_tx',
+          action: actionType,
           success: false,
           error: 'transaction build failed after multiple attempts',
         }
@@ -729,18 +765,20 @@ export class AgentOrchestrator {
         return
       }
 
-      await this.preflightSearchToken(
-        signal,
-        convId,
-        vaultPubKey,
-        params,
-        token
-      )
+      if (mode === 'swap') {
+        await this.preflightSearchToken(
+          signal,
+          convId,
+          vaultPubKey,
+          params,
+          token
+        )
+      }
 
       const buildAction: BackendAction = {
         id: `build-tx-${Date.now()}`,
-        type: 'build_swap_tx',
-        title: 'Build Swap Transaction',
+        type: toolName,
+        title,
         params,
         auto_execute: true,
       }
@@ -748,7 +786,7 @@ export class AgentOrchestrator {
       this.events.emit('tool_call', {
         conversationId: convId,
         actionId: buildAction.id,
-        actionType: 'build_tx',
+        actionType,
         title: buildAction.title,
       })
 
@@ -762,7 +800,7 @@ export class AgentOrchestrator {
       this.events.emit('action_result', {
         conversationId: convId,
         actionId: buildAction.id,
-        actionType: 'build_tx',
+        actionType,
         success: toolResult.success,
         data: toolResult.data,
         error: toolResult.error,
@@ -770,7 +808,7 @@ export class AgentOrchestrator {
 
       if (!toolResult.success) {
         const result: ActionResult = {
-          action: 'build_tx',
+          action: actionType,
           success: false,
           error: toolResult.error,
         }
@@ -792,7 +830,7 @@ export class AgentOrchestrator {
       this.pendingTx.set(convId, txReady)
 
       const result: ActionResult = {
-        action: 'build_tx',
+        action: actionType,
         success: true,
         data: buildTxResultSummary(txReady),
       }
@@ -1112,6 +1150,36 @@ export class AgentOrchestrator {
       vaultName: vault.name,
       coins,
     })
+  }
+
+  private async fetchBalances(coins: CoinData[]): Promise<BalanceInfo[]> {
+    const tasks = coins.map(async (coin): Promise<BalanceInfo | null> => {
+      try {
+        const id =
+          !coin.isNativeToken && coin.contractAddress
+            ? coin.contractAddress
+            : undefined
+
+        const raw = await getCoinBalance({
+          chain: coin.chain as Chain,
+          address: coin.address,
+          id,
+        })
+
+        return {
+          chain: coin.chain,
+          asset: coin.contractAddress ?? coin.ticker,
+          symbol: coin.ticker,
+          amount: formatBalance(raw, coin.decimals),
+          decimals: coin.decimals,
+        }
+      } catch {
+        return null
+      }
+    })
+
+    const results = await Promise.all(tasks)
+    return results.filter((b): b is BalanceInfo => b !== null)
   }
 
   private async buildVaultMeta(

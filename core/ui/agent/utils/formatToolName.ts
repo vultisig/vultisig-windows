@@ -10,7 +10,7 @@ const toolDisplayNames: Record<string, string> = {
   transaction_history: 'Transaction History',
   policy_generate: 'Generate Policy',
   initiate_swap: 'Initiate Swap',
-  initiate_send: 'Initiate Send',
+  build_send_tx: 'Build Send Transaction',
   get_balances: 'Get Balances',
   get_coins: 'Get Coins',
   get_chains: 'Get Chains',

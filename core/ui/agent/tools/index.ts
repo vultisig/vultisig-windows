@@ -6,13 +6,13 @@ import {
   handleRemoveAddressBookEntry,
 } from './handlers/addressBook'
 import { handleAssetLookup } from './handlers/assetLookup'
+import { handleBuildSendTx } from './handlers/buildSendTx'
 import { handleBuildSwapTx } from './handlers/buildSwapTx'
 import { handleGetBalances } from './handlers/getBalances'
 import { handleGetChainAddress } from './handlers/getChainAddress'
 import { handleGetChains } from './handlers/getChains'
 import { handleGetCoins } from './handlers/getCoins'
 import { handleGetPortfolio } from './handlers/getPortfolio'
-import { handleInitiateSend } from './handlers/initiateSend'
 import { handleListVaults } from './handlers/listVaults'
 import { handleMarketPrice } from './handlers/marketPrice'
 import { handlePluginInstall } from './handlers/pluginInstall'
@@ -63,10 +63,10 @@ export const toolHandlers: Record<string, ToolHandler> = {
   transaction_history: handleTransactionHistory,
   get_market_price: handleMarketPrice,
   asset_lookup: handleAssetLookup,
-  initiate_send: handleInitiateSend,
   policy_generate: handlePolicyGenerate,
   search_token: handleSearchToken,
   scan_tx: handleScanTx,
   sign_tx: handleSignTx,
   build_swap_tx: handleBuildSwapTx,
+  build_send_tx: handleBuildSendTx,
 }

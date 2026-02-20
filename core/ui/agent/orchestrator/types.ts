@@ -6,9 +6,18 @@ export type SendMessageRequest = {
   action_result?: ActionResult
 }
 
+export type BalanceInfo = {
+  chain: string
+  asset: string
+  symbol: string
+  amount: string
+  decimals: number
+}
+
 export type MessageContext = {
   vault_address?: string
   vault_name?: string
+  balances?: BalanceInfo[]
   addresses?: Record<string, string>
   coins?: BackendCoinInfo[]
   address_book?: AddressBookEntry[]
@@ -56,20 +65,22 @@ export type SendMessageResponse = {
 }
 
 export type TxReady = {
-  provider: string
-  expected_output: string
-  minimum_output: string
-  needs_approval: boolean
+  provider?: string
+  expected_output?: string
+  minimum_output?: string
+  needs_approval?: boolean
   keysign_payload?: string
   approval_tx?: TxData
   swap_tx?: TxData
   from_chain: string
   from_symbol: string
-  to_chain: string
-  to_symbol: string
+  to_chain?: string
+  to_symbol?: string
   amount: string
   sender: string
   destination: string
+  tx_type?: 'swap' | 'send'
+  tx_details?: Record<string, unknown>
 }
 
 export type TxData = {
