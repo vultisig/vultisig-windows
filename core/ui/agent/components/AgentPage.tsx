@@ -39,7 +39,7 @@ export const AgentPage: FC = () => {
       const convs = await getConversations(vaultId)
       setConversations(convs || [])
     } catch {
-      setConversations([])
+      setConversations(prev => (prev.length === 0 ? prev : []))
     }
   }, [vaultId, getConversations])
 

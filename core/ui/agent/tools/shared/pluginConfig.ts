@@ -44,11 +44,5 @@ export function getPluginName(pluginIdOrAlias: string): string {
   return plugin?.name ?? id
 }
 
-export function getPluginServerUrl(pluginIdOrAlias: string): string {
-  const id = resolvePluginId(pluginIdOrAlias)
-  const plugin = knownPlugins.find(p => p.id === id)
-  return plugin?.serverUrl ?? ''
-}
-
 export { knownPlugins }
 export type { PluginInfo }

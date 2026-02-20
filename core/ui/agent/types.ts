@@ -14,18 +14,6 @@ export type Suggestion = {
   description: string
 }
 
-export type PolicyReady = {
-  plugin_id: string
-  configuration: Record<string, unknown>
-  policy_suggest: unknown
-}
-
-export type InstallRequired = {
-  plugin_id: string
-  title: string
-  description: string
-}
-
 export type ToolCallStatus = 'running' | 'success' | 'error'
 
 export type ToolCallInfo = {
@@ -70,42 +58,11 @@ export type LoadingEvent = {
   conversationId: string
 }
 
-export type TxData = {
-  to: string
-  value: string
-  data: string
-  memo?: string
-  nonce: number
-  gas_limit: number
-  chain_id?: string
-}
-
-export type Transaction = {
-  type: string
-  label: string
-  tx_data: TxData
-  metadata?: Record<string, unknown>
-}
-
-export type TxBundle = {
-  transactions: Transaction[]
-  chain: string
-  sender: string
-  metadata?: Record<string, unknown>
-}
-
 export type ResponseEvent = {
   conversationId: string
   message: string
   actions?: Action[]
   suggestions?: Suggestion[]
-  policyReady?: PolicyReady
-  installRequired?: InstallRequired
-}
-
-export type TxBundleEvent = {
-  conversationId: string
-  txBundle: TxBundle
 }
 
 export type ActionResultEvent = {

@@ -1,164 +1,90 @@
-import { useCallback, useState } from 'react'
+import { Chain } from '@core/chain/Chain'
+import { CoinKey } from '@core/chain/coin/Coin'
+import { getVaultId, Vault } from '@core/mpc/vault/Vault'
+import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { CoreView } from '@core/ui/navigation/CoreView'
+import { useCore } from '@core/ui/state/core'
+import { StorageKey } from '@core/ui/storage/StorageKey'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
+import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
+import { useEffect, useRef } from 'react'
 
-import {
+import { AgentOrchestrator } from '../orchestrator'
+import { setStorageContext } from '../tools/shared/storageContext'
+import { setWalletContext } from '../tools/shared/walletContext'
+import type {
   Action,
   Conversation,
   ConversationWithMessages,
   ServiceStatus,
 } from '../types'
 
-declare global {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-  interface Window {
-    go: {
-      agent: {
-        AgentService: {
-          SendMessage: (vaultPubKey: string, message: string) => Promise<string>
-          SendMessageToConversation: (
-            convID: string,
-            vaultPubKey: string,
-            message: string
-          ) => Promise<void>
-          ExecuteAction: (
-            convID: string,
-            vaultPubKey: string,
-            actionJSON: string
-          ) => Promise<void>
-          SelectSuggestion: (
-            convID: string,
-            vaultPubKey: string,
-            suggestionID: string
-          ) => Promise<void>
-          CreateConversation: (vaultPubKey: string) => Promise<string>
-          GetConversations: (vaultPubKey: string) => Promise<Conversation[]>
-          GetConversation: (
-            convID: string,
-            vaultPubKey: string
-          ) => Promise<ConversationWithMessages>
-          DeleteConversation: (
-            convID: string,
-            vaultPubKey: string
-          ) => Promise<void>
-          CancelRequest: () => Promise<void>
-          ProvidePassword: (password: string) => Promise<void>
-          ProvideConfirmation: (confirmed: boolean) => Promise<void>
-          GetVerifierSignInStatus: (vaultPubKey: string) => Promise<boolean>
-          CheckServices: (vaultPubKey: string) => Promise<ServiceStatus>
-          GetCachedAuthToken: (vaultPubKey: string) => Promise<string>
-          SignIn: (vaultPubKey: string, password: string) => Promise<void>
-          GetAuthTokenInfo: (
-            vaultPubKey: string
-          ) => Promise<{ connected: boolean; expiresAt: string }>
-          InvalidateAuthToken: (vaultPubKey: string) => Promise<void>
-          Disconnect: (vaultPubKey: string) => Promise<void>
-          PreloadContext: (vaultPubKey: string) => Promise<void>
-          ProvideDKLSSignature: (
-            requestId: string,
-            r: string,
-            s: string,
-            recoveryId: string,
-            error: string
-          ) => Promise<void>
-          ProvideDKLSReshare: (
-            requestId: string,
-            ecdsaPubKey: string,
-            eddsaPubKey: string,
-            ecdsaKeyshare: string,
-            eddsaKeyshare: string,
-            chaincode: string,
-            error: string
-          ) => Promise<void>
-          ProvideChainAddress: (
-            requestId: string,
-            chain: string,
-            address: string,
-            ticker: string,
-            decimals: number,
-            logo: string,
-            priceProviderId: string,
-            error: string
-          ) => Promise<void>
-          ProvideBalance: (data: string) => Promise<void>
-          ProvidePortfolio: (data: string) => Promise<void>
-          ProvideToolResult: (data: string) => Promise<void>
-        }
-      }
-      storage: {
-        Store: {
-          GetVaults: () => Promise<
-            Array<{
-              name: string
-              publicKeyEcdsa: string
-              [key: string]: unknown
-            }>
-          >
-          GetVault: (pubKey: string) => Promise<{
-            name: string
-            publicKeyEcdsa: string
-            [key: string]: unknown
-          }>
-          GetVaultCoins: (pubKey: string) => Promise<
-            Array<{
-              chain: string
-              ticker: string
-              address: string
-              contractAddress: string
-              decimals: number
-              logo: string
-              priceProviderId: string
-              isNativeToken: boolean
-              id: string
-              [key: string]: unknown
-            }>
-          >
-          GetCoins: () => Promise<
-            Record<
-              string,
-              Array<{
-                chain: string
-                ticker: string
-                address: string
-                contractAddress: string
-                decimals: number
-                logo: string
-                priceProviderId: string
-                isNativeToken: boolean
-                id: string
-                [key: string]: unknown
-              }>
-            >
-          >
-          SaveVault: (vault: {
-            name: string
-            publicKeyEcdsa: string
-            [key: string]: unknown
-          }) => Promise<void>
-          SaveCoin: (pubKey: string, coin: unknown) => Promise<string>
-          DeleteCoin: (pubKey: string, coinId: string) => Promise<void>
-          DeleteCoinsByChain: (pubKey: string, chain: string) => Promise<number>
-          GetAllAddressBookItems: () => Promise<
-            Array<{
-              id: string
-              title: string
-              address: string
-              chain: string
-              order: number
-              [key: string]: unknown
-            }>
-          >
-          SaveAddressBookItem: (item: {
-            id: string
-            title: string
-            address: string
-            chain: string
-            order: number
-            [key: string]: unknown
-          }) => Promise<string>
-          DeleteAddressBookItem: (id: string) => Promise<void>
-        }
-      }
+let orchestratorSingleton: AgentOrchestrator | null = null
+
+function getOrCreateOrchestrator(
+  deps: ConstructorParameters<typeof AgentOrchestrator>[0]
+): AgentOrchestrator {
+  if (!orchestratorSingleton) {
+    orchestratorSingleton = new AgentOrchestrator(deps)
+  }
+  return orchestratorSingleton
+}
+
+type NavigationData = {
+  id: string
+  state?: Record<string, unknown>
+}
+
+function buildCoinKey(coin: { chain: string; id?: string }): CoinKey {
+  const result: { chain: Chain; id?: string } = {
+    chain: coin.chain as Chain,
+  }
+  if (coin.id) {
+    result.id = coin.id
+  }
+  return result
+}
+
+function processNavigation(
+  nav: NavigationData,
+  vault: Vault | undefined
+): CoreView | null {
+  if (nav.id === 'send') {
+    const state = nav.state ?? {}
+    const coin = state.coin as { chain: string; id?: string } | undefined
+    if (!coin) return null
+
+    const coinKey = buildCoinKey(coin)
+    const vaultCoins =
+      (vault as Vault & { coins?: Array<{ chain: string; id?: string }> })
+        ?.coins ?? []
+    const coinExists = vaultCoins.some(
+      vc =>
+        vc.chain === coinKey.chain &&
+        vc.id?.toLowerCase() === coinKey.id?.toLowerCase()
+    )
+    if (!coinExists) return null
+
+    const amountStr = state.amount as string | undefined
+    let amount: bigint | undefined
+    if (amountStr && /^\d+$/.test(String(amountStr))) {
+      amount = BigInt(amountStr)
+    }
+    const hasAllSendParams = amount && state.address
+    return {
+      id: 'send',
+      state: {
+        coin: coinKey,
+        address: state.address as string | undefined,
+        amount,
+        memo: state.memo as string | undefined,
+        skipToVerify: hasAllSendParams ? true : undefined,
+      },
     }
   }
+
+  return null
 }
 
 type UseAgentServiceReturn = {
@@ -185,248 +111,164 @@ type UseAgentServiceReturn = {
     vaultPubKey: string
   ) => Promise<ConversationWithMessages>
   deleteConversation: (convID: string, vaultPubKey: string) => Promise<void>
-  cancelRequest: () => Promise<void>
-  providePassword: (password: string) => Promise<void>
-  provideConfirmation: (confirmed: boolean) => Promise<void>
+  cancelRequest: () => void
+  providePassword: (password: string) => void
+  provideConfirmation: (confirmed: boolean) => void
   checkServices: (vaultPubKey: string) => Promise<ServiceStatus>
-  getVerifierSignInStatus: (vaultPubKey: string) => Promise<boolean>
+  getVerifierSignInStatus: (vaultPubKey: string) => boolean
   signIn: (vaultPubKey: string, password: string) => Promise<void>
+  getConversationStarters: (vaultPubKey: string) => Promise<string[]>
   preloadContext: (vaultPubKey: string) => Promise<void>
-  isLoading: boolean
-  error: string | null
+  orchestrator: AgentOrchestrator
+}
+
+function buildMethods(orch: AgentOrchestrator): UseAgentServiceReturn {
+  return {
+    sendMessage: (vaultPubKey, message) =>
+      orch.sendMessage(vaultPubKey, message),
+    sendMessageToConversation: (convID, vaultPubKey, message) =>
+      orch.sendMessageToConversation(convID, vaultPubKey, message),
+    executeAction: (convID, vaultPubKey, action) =>
+      orch.executeAction(convID, vaultPubKey, action),
+    selectSuggestion: (convID, vaultPubKey, suggestionID) =>
+      orch.selectSuggestion(convID, vaultPubKey, suggestionID),
+    createConversation: vaultPubKey => orch.createConversation(vaultPubKey),
+    getConversations: vaultPubKey => orch.getConversations(vaultPubKey),
+    getConversation: (convID, vaultPubKey) =>
+      orch.getConversation(convID, vaultPubKey),
+    deleteConversation: (convID, vaultPubKey) =>
+      orch.deleteConversation(convID, vaultPubKey),
+    cancelRequest: () => orch.cancelRequest(),
+    providePassword: password => orch.providePassword(password),
+    provideConfirmation: confirmed => orch.provideConfirmation(confirmed),
+    checkServices: vaultPubKey => orch.checkServices(vaultPubKey),
+    getVerifierSignInStatus: vaultPubKey => orch.isSignedIn(vaultPubKey),
+    signIn: (vaultPubKey, password) => orch.signIn(vaultPubKey, password),
+    getConversationStarters: vaultPubKey =>
+      orch.getConversationStarters(vaultPubKey),
+    preloadContext: vaultPubKey => orch.preloadContext(vaultPubKey),
+    orchestrator: orch,
+  }
 }
 
 export const useAgentService = (): UseAgentServiceReturn => {
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const core = useCore()
+  const vault = useCurrentVault()
+  const walletCore = useAssertWalletCore()
+  const navigate = useNavigate<CoreView>()
+  const refetchQueries = useRefetchQueries()
 
-  const sendMessage = useCallback(
-    async (vaultPubKey: string, message: string) => {
-      setIsLoading(true)
-      setError(null)
-      try {
-        const conversationId = await window.go.agent.AgentService.SendMessage(
-          vaultPubKey,
-          message
-        )
-        return conversationId
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : 'Failed to send message'
-        setError(errorMessage)
-        throw err
-      } finally {
-        setIsLoading(false)
-      }
-    },
-    []
-  )
+  const navigateRef = useRef(navigate)
+  navigateRef.current = navigate
+  const vaultRef = useRef(vault)
+  vaultRef.current = vault
+  const refetchRef = useRef(refetchQueries)
+  refetchRef.current = refetchQueries
+  const coreRef = useRef(core)
+  coreRef.current = core
 
-  const sendMessageToConversation = useCallback(
-    async (convID: string, vaultPubKey: string, message: string) => {
-      setIsLoading(true)
-      setError(null)
-      try {
-        await window.go.agent.AgentService.SendMessageToConversation(
-          convID,
-          vaultPubKey,
-          message
-        )
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : 'Failed to send message'
-        setError(errorMessage)
-        throw err
-      } finally {
-        setIsLoading(false)
-      }
-    },
-    []
-  )
+  useEffect(() => {
+    setStorageContext(core)
+    return () => setStorageContext(null)
+  }, [core])
 
-  const executeAction = useCallback(
-    async (convID: string, vaultPubKey: string, action: Action) => {
-      setIsLoading(true)
-      setError(null)
-      try {
-        await window.go.agent.AgentService.ExecuteAction(
-          convID,
-          vaultPubKey,
-          JSON.stringify(action)
-        )
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : 'Failed to execute action'
-        setError(errorMessage)
-        throw err
-      } finally {
-        setIsLoading(false)
-      }
-    },
-    []
-  )
-
-  const selectSuggestion = useCallback(
-    async (convID: string, vaultPubKey: string, suggestionID: string) => {
-      setIsLoading(true)
-      setError(null)
-      try {
-        await window.go.agent.AgentService.SelectSuggestion(
-          convID,
-          vaultPubKey,
-          suggestionID
-        )
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : 'Failed to select suggestion'
-        setError(errorMessage)
-        throw err
-      } finally {
-        setIsLoading(false)
-      }
-    },
-    []
-  )
-
-  const createConversation = useCallback(async (vaultPubKey: string) => {
-    try {
-      return await window.go.agent.AgentService.CreateConversation(vaultPubKey)
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'Failed to create conversation'
-      setError(errorMessage)
-      throw err
+  useEffect(() => {
+    if (vault && walletCore) {
+      setWalletContext({
+        walletCore,
+        vault: {
+          hexChainCode: vault.hexChainCode,
+          publicKeys: vault.publicKeys,
+          chainPublicKeys: vault.chainPublicKeys,
+          localPartyId: vault.localPartyId,
+          libType: vault.libType,
+          publicKeyEcdsa: vault.publicKeys.ecdsa,
+        },
+      })
     }
-  }, [])
+    return () => setWalletContext(null)
+  }, [vault, walletCore])
 
-  const getConversations = useCallback(async (vaultPubKey: string) => {
-    try {
-      return await window.go.agent.AgentService.GetConversations(vaultPubKey)
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'Failed to get conversations'
-      setError(errorMessage)
-      throw err
-    }
-  }, [])
-
-  const getConversation = useCallback(
-    async (convID: string, vaultPubKey: string) => {
-      try {
-        return await window.go.agent.AgentService.GetConversation(
-          convID,
-          vaultPubKey
-        )
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : 'Failed to get conversation'
-        setError(errorMessage)
-        throw err
-      }
-    },
-    []
-  )
-
-  const deleteConversation = useCallback(
-    async (convID: string, vaultPubKey: string) => {
-      try {
-        await window.go.agent.AgentService.DeleteConversation(
-          convID,
-          vaultPubKey
-        )
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : 'Failed to delete conversation'
-        setError(errorMessage)
-        throw err
-      }
-    },
-    []
-  )
-
-  const cancelRequest = useCallback(async () => {
-    try {
-      await window.go.agent.AgentService.CancelRequest()
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'Failed to cancel request'
-      setError(errorMessage)
-      throw err
-    }
-  }, [])
-
-  const providePassword = useCallback(async (password: string) => {
-    try {
-      await window.go.agent.AgentService.ProvidePassword(password)
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'Failed to provide password'
-      setError(errorMessage)
-      throw err
-    }
-  }, [])
-
-  const provideConfirmation = useCallback(async (confirmed: boolean) => {
-    try {
-      await window.go.agent.AgentService.ProvideConfirmation(confirmed)
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'Failed to provide confirmation'
-      setError(errorMessage)
-      throw err
-    }
-  }, [])
-
-  const getVerifierSignInStatus = useCallback(async (vaultPubKey: string) => {
-    try {
-      return await window.go.agent.AgentService.GetVerifierSignInStatus(
-        vaultPubKey
-      )
-    } catch {
-      return false
-    }
-  }, [])
-
-  const signIn = useCallback(async (vaultPubKey: string, password: string) => {
-    try {
-      await window.go.agent.AgentService.SignIn(vaultPubKey, password)
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : 'Failed to sign in'
-      setError(errorMessage)
-      throw err
-    }
-  }, [])
-
-  const preloadContext = useCallback(async (vaultPubKey: string) => {
-    try {
-      await window.go.agent.AgentService.PreloadContext(vaultPubKey)
-    } catch {
-      // preload is best-effort
-    }
-  }, [])
-
-  const checkServices = useCallback(async (vaultPubKey: string) => {
-    return await window.go.agent.AgentService.CheckServices(vaultPubKey)
-  }, [])
-
-  return {
-    sendMessage,
-    sendMessageToConversation,
-    executeAction,
-    selectSuggestion,
-    createConversation,
-    getConversations,
-    getConversation,
-    deleteConversation,
-    cancelRequest,
-    providePassword,
-    provideConfirmation,
-    checkServices,
-    getVerifierSignInStatus,
-    signIn,
-    preloadContext,
-    isLoading,
-    error,
+  const methodsRef = useRef<UseAgentServiceReturn>(null!)
+  if (!methodsRef.current) {
+    const orch = getOrCreateOrchestrator({
+      getVault: async (pubKey: string) => {
+        const current = vaultRef.current
+        if (current && getVaultId(current) === pubKey) {
+          return {
+            name: current.name,
+            publicKeyEcdsa: current.publicKeys.ecdsa,
+            publicKeyEddsa: current.publicKeys.eddsa,
+            hexChainCode: current.hexChainCode,
+            localPartyId: current.localPartyId,
+            resharePrefix: current.resharePrefix ?? '',
+            libType: current.libType,
+            signers: current.signers,
+            keyShares: [
+              {
+                publicKey: current.publicKeys.ecdsa,
+                keyShare: current.keyShares.ecdsa,
+              },
+              {
+                publicKey: current.publicKeys.eddsa,
+                keyShare: current.keyShares.eddsa,
+              },
+            ],
+          }
+        }
+        const vaults = await coreRef.current.getVaults()
+        const v = vaults.find(v => getVaultId(v) === pubKey)
+        if (!v) throw new Error('vault not found')
+        return {
+          name: v.name,
+          publicKeyEcdsa: v.publicKeys.ecdsa,
+          publicKeyEddsa: v.publicKeys.eddsa,
+          hexChainCode: v.hexChainCode,
+          localPartyId: v.localPartyId,
+          resharePrefix: v.resharePrefix ?? '',
+          libType: v.libType,
+          signers: v.signers,
+          keyShares: [
+            { publicKey: v.publicKeys.ecdsa, keyShare: v.keyShares.ecdsa },
+            { publicKey: v.publicKeys.eddsa, keyShare: v.keyShares.eddsa },
+          ],
+        }
+      },
+      getVaultCoins: async (pubKey: string) => {
+        const allCoins = await coreRef.current.getCoins()
+        const coins = allCoins[pubKey] ?? []
+        return coins.map(c => ({
+          chain: c.chain,
+          ticker: c.ticker,
+          address: c.address,
+          contractAddress: c.id,
+          decimals: c.decimals,
+          logo: c.logo,
+          priceProviderId: c.priceProviderId,
+          isNativeToken: !c.id,
+          id: c.id,
+        }))
+      },
+      getAddressBookItems: async () => {
+        const items = await coreRef.current.getAddressBookItems()
+        return items.map(item => ({
+          title: item.title,
+          address: item.address,
+          chain: item.chain,
+        }))
+      },
+      onNavigate: (nav: NavigationData) => {
+        const view = processNavigation(nav, vaultRef.current)
+        if (view) {
+          navigateRef.current(view)
+        }
+      },
+      onVaultDataChanged: () => {
+        refetchRef.current([StorageKey.vaultsCoins], [StorageKey.vaults])
+      },
+    })
+    methodsRef.current = buildMethods(orch)
   }
+
+  return methodsRef.current
 }

@@ -1,45 +1,24 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-import {
-  Action,
+import type { AgentOrchestrator } from '../orchestrator'
+import type {
   ActionResultEvent,
   AuthRequiredEvent,
   ChatMessage,
   CompleteEvent,
   ConfirmationRequiredEvent,
   ErrorEvent,
-  InstallRequired,
   LoadingEvent,
   PasswordRequiredEvent,
-  PolicyReady,
   ResponseEvent,
-  Suggestion,
   ToolCallEvent,
-  TxBundle,
-  TxBundleEvent,
   TxStatusEvent,
   TxStatusInfo,
 } from '../types'
 
-declare global {
-  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-  interface Window {
-    runtime: {
-      EventsOn: (event: string, callback: (data: unknown) => void) => () => void
-      EventsOff: (event: string) => void
-      EventsEmit: (event: string, ...data: unknown[]) => void
-    }
-  }
-}
-
 type AgentEventsState = {
   messages: ChatMessage[]
   isLoading: boolean
-  actions: Action[]
-  suggestions: Suggestion[]
-  policyReady: PolicyReady | null
-  installRequired: InstallRequired | null
-  txBundle: TxBundle | null
   passwordRequired: PasswordRequiredEvent | null
   confirmationRequired: ConfirmationRequiredEvent | null
   authRequired: AuthRequiredEvent | null
@@ -55,7 +34,6 @@ type UseAgentEventsReturn = AgentEventsState & {
   dismissConfirmation: () => void
   dismissAuthRequired: () => void
   dismissError: () => void
-  dismissTxBundle: () => void
   requestAuth: () => void
 }
 
@@ -68,7 +46,8 @@ const normalizeAgentErrorMessage = (error: string) => {
     normalized.includes('context canceled') ||
     normalized.includes('context cancelled') ||
     normalized.includes('user cancelled') ||
-    normalized.includes('user canceled')
+    normalized.includes('user canceled') ||
+    normalized.includes('agent stopped')
   ) {
     return 'agent stopped'
   }
@@ -76,16 +55,12 @@ const normalizeAgentErrorMessage = (error: string) => {
 }
 
 export const useAgentEvents = (
-  conversationId: string | null
+  conversationId: string | null,
+  orchestrator?: AgentOrchestrator
 ): UseAgentEventsReturn => {
   const [state, setState] = useState<AgentEventsState>({
     messages: [],
     isLoading: false,
-    actions: [],
-    suggestions: [],
-    policyReady: null,
-    installRequired: null,
-    txBundle: null,
     passwordRequired: null,
     confirmationRequired: null,
     authRequired: null,
@@ -93,7 +68,10 @@ export const useAgentEvents = (
     isComplete: false,
   })
 
-  const appendAssistantMessage = useCallback((content: string) => {
+  const convIdRef = useRef(conversationId)
+  convIdRef.current = conversationId
+
+  const appendAssistantMessage = (content: string) => {
     if (!content.trim()) return
     const now = Date.now()
     const assistantMessage: ChatMessage = {
@@ -107,287 +85,226 @@ export const useAgentEvents = (
       ...prev,
       messages: [...prev.messages, assistantMessage],
     }))
-  }, [])
+  }
 
   useEffect(() => {
-    if (!window.runtime) return
+    if (!orchestrator) return
 
     const cleanups: (() => void)[] = []
 
-    const onLoading = (data: LoadingEvent) => {
-      if (conversationId && data.conversationId !== conversationId) return
-
-      setState(prev => ({
-        ...prev,
-        isLoading: true,
-        isComplete: false,
-        error: null,
-      }))
-    }
-
-    const onResponse = (data: ResponseEvent) => {
-      if (conversationId && data.conversationId !== conversationId) return
-
-      const now = Date.now()
-      const newMessages: ChatMessage[] = []
-
-      if (data.message?.trim()) {
-        newMessages.push({
-          id: `msg-${now}`,
-          role: 'assistant',
-          content: data.message,
-          actions: data.actions,
-          timestamp: new Date(now).toISOString(),
-        })
-      }
-
-      setState(prev => ({
-        ...prev,
-        messages: [...prev.messages, ...newMessages],
-        isLoading: false,
-        actions: data.actions || [],
-        suggestions: data.suggestions || [],
-        policyReady: data.policyReady || null,
-        installRequired: data.installRequired || null,
-      }))
-    }
-
-    const onTxBundle = (data: TxBundleEvent) => {
-      if (conversationId && data.conversationId !== conversationId) return
-
-      setState(prev => ({
-        ...prev,
-        txBundle: data.txBundle,
-      }))
-    }
-
-    const onToolCall = (data: ToolCallEvent) => {
-      if (conversationId && data.conversationId !== conversationId) return
-
-      const toolCallMessage: ChatMessage = {
-        id: `tool-call-${data.actionId}`,
-        role: 'assistant',
-        content: '',
-        timestamp: new Date().toISOString(),
-        toolCall: {
-          actionType: data.actionType,
-          title: data.title || data.actionType.replace(/_/g, ' '),
-          params: data.params,
-          status: 'running',
-        },
-      }
-
-      setState(prev => ({
-        ...prev,
-        messages: [...prev.messages, toolCallMessage],
-      }))
-    }
-
-    const onActionResult = (data: ActionResultEvent) => {
-      if (conversationId && data.conversationId !== conversationId) return
-
-      const toolCallId = `tool-call-${data.actionId}`
-      const status: 'success' | 'error' = data.success ? 'success' : 'error'
-
-      setState(prev => {
-        const hasToolCall = prev.messages.some(m => m.id === toolCallId)
-
-        const updatedMessages = hasToolCall
-          ? prev.messages.map(m =>
-              m.id === toolCallId
-                ? {
-                    ...m,
-                    toolCall: {
-                      ...m.toolCall!,
-                      status,
-                      resultData: data.data,
-                      error: data.error,
-                    },
-                  }
-                : m
-            )
-          : [
-              ...prev.messages,
-              {
-                id: toolCallId,
-                role: 'assistant' as const,
-                content: '',
-                timestamp: new Date().toISOString(),
-                toolCall: {
-                  actionType: data.actionType,
-                  title: data.actionType.replace(/_/g, ' '),
-                  status,
-                  resultData: data.data,
-                  error: data.error,
-                },
-              },
-            ]
-
-        return {
+    cleanups.push(
+      orchestrator.events.on('loading', (data: LoadingEvent) => {
+        if (convIdRef.current && data.conversationId !== convIdRef.current)
+          return
+        setState(prev => ({
           ...prev,
-          actions: prev.actions.filter(a => a.id !== data.actionId),
-          txBundle: data.actionType === 'sign_tx' ? null : prev.txBundle,
-          messages: updatedMessages,
-        }
+          isLoading: true,
+          isComplete: false,
+          error: null,
+        }))
       })
-    }
+    )
 
-    const onPasswordRequired = (data: PasswordRequiredEvent) => {
-      if (conversationId && data.conversationId !== conversationId) return
-      setState(prev => ({
-        ...prev,
-        passwordRequired: data,
-      }))
-    }
-
-    const onConfirmationRequired = (data: ConfirmationRequiredEvent) => {
-      if (conversationId && data.conversationId !== conversationId) return
-      setState(prev => ({
-        ...prev,
-        confirmationRequired: data,
-      }))
-    }
-
-    const onAuthRequired = (data: AuthRequiredEvent) => {
-      if (conversationId && data.conversationId !== conversationId) return
-      setState(prev => ({
-        ...prev,
-        authRequired: data,
-        isLoading: false,
-      }))
-    }
-
-    const onComplete = (data: CompleteEvent) => {
-      if (conversationId && data.conversationId !== conversationId) return
-
-      setState(prev => ({
-        ...prev,
-        isLoading: false,
-        isComplete: true,
-      }))
-    }
-
-    const onError = (data: ErrorEvent) => {
-      if (conversationId && data.conversationId !== conversationId) return
-
-      const normalizedError = normalizeAgentErrorMessage(data.error)
-      const isStopped = normalizedError === 'agent stopped'
-
-      if (isStopped) {
-        appendAssistantMessage(agentStoppedMessage)
-      }
-
-      setState(prev => ({
-        ...prev,
-        error: isStopped ? null : normalizedError,
-        isLoading: false,
-        passwordRequired: null,
-        confirmationRequired: null,
-      }))
-    }
-
-    const onTxStatus = (data: TxStatusEvent) => {
-      if (conversationId && data.conversationId !== conversationId) return
-      const msgId = `tx-status-${data.txHash}`
-      setState(prev => {
-        const existingIdx = prev.messages.findIndex(m => m.id === msgId)
-        if (existingIdx >= 0) {
-          const updated = prev.messages.map((m, i) =>
-            i === existingIdx
-              ? {
-                  ...m,
-                  txStatus: { ...m.txStatus!, status: data.status },
-                }
-              : m
-          )
-          return { ...prev, messages: updated }
+    cleanups.push(
+      orchestrator.events.on('response', (data: ResponseEvent) => {
+        if (convIdRef.current && data.conversationId !== convIdRef.current)
+          return
+        const now = Date.now()
+        const newMessages: ChatMessage[] = []
+        if (data.message?.trim()) {
+          newMessages.push({
+            id: `msg-${now}`,
+            role: 'assistant',
+            content: data.message,
+            actions: data.actions,
+            timestamp: new Date(now).toISOString(),
+          })
         }
-        const entry: TxStatusInfo = {
-          txHash: data.txHash,
-          chain: data.chain,
-          status: data.status,
-          label: data.label,
-        }
-        const txMsg: ChatMessage = {
-          id: msgId,
+        setState(prev => ({
+          ...prev,
+          messages: [...prev.messages, ...newMessages],
+          isLoading: false,
+        }))
+      })
+    )
+
+    cleanups.push(
+      orchestrator.events.on('tool_call', (data: ToolCallEvent) => {
+        if (convIdRef.current && data.conversationId !== convIdRef.current)
+          return
+        const toolCallMessage: ChatMessage = {
+          id: `tool-call-${data.actionId}`,
           role: 'assistant',
           content: '',
           timestamp: new Date().toISOString(),
-          txStatus: entry,
+          toolCall: {
+            actionType: data.actionType,
+            title: data.title || data.actionType.replace(/_/g, ' '),
+            params: data.params,
+            status: 'running',
+          },
         }
-        return { ...prev, messages: [...prev.messages, txMsg] }
+        setState(prev => ({
+          ...prev,
+          messages: [...prev.messages, toolCallMessage],
+        }))
       })
-    }
+    )
 
     cleanups.push(
-      window.runtime.EventsOn(
-        'agent:loading',
-        onLoading as (data: unknown) => void
+      orchestrator.events.on('action_result', (data: ActionResultEvent) => {
+        if (convIdRef.current && data.conversationId !== convIdRef.current)
+          return
+        const toolCallId = `tool-call-${data.actionId}`
+        const status: 'success' | 'error' = data.success ? 'success' : 'error'
+
+        setState(prev => {
+          const hasToolCall = prev.messages.some(m => m.id === toolCallId)
+          const updatedMessages = hasToolCall
+            ? prev.messages.map(m =>
+                m.id === toolCallId
+                  ? {
+                      ...m,
+                      toolCall: {
+                        ...m.toolCall!,
+                        status,
+                        resultData: data.data,
+                        error: data.error,
+                      },
+                    }
+                  : m
+              )
+            : [
+                ...prev.messages,
+                {
+                  id: toolCallId,
+                  role: 'assistant' as const,
+                  content: '',
+                  timestamp: new Date().toISOString(),
+                  toolCall: {
+                    actionType: data.actionType,
+                    title: data.actionType.replace(/_/g, ' '),
+                    status,
+                    resultData: data.data,
+                    error: data.error,
+                  },
+                },
+              ]
+          return { ...prev, messages: updatedMessages }
+        })
+      })
+    )
+
+    cleanups.push(
+      orchestrator.events.on(
+        'password_required',
+        (data: PasswordRequiredEvent) => {
+          if (convIdRef.current && data.conversationId !== convIdRef.current)
+            return
+          setState(prev => ({ ...prev, passwordRequired: data }))
+        }
       )
     )
+
     cleanups.push(
-      window.runtime.EventsOn(
-        'agent:response',
-        onResponse as (data: unknown) => void
+      orchestrator.events.on(
+        'confirmation_required',
+        (data: ConfirmationRequiredEvent) => {
+          if (convIdRef.current && data.conversationId !== convIdRef.current)
+            return
+          setState(prev => ({ ...prev, confirmationRequired: data }))
+        }
       )
     )
+
     cleanups.push(
-      window.runtime.EventsOn(
-        'agent:tool_call',
-        onToolCall as (data: unknown) => void
-      )
+      orchestrator.events.on('auth_required', (data: AuthRequiredEvent) => {
+        if (convIdRef.current && data.conversationId !== convIdRef.current)
+          return
+        setState(prev => ({
+          ...prev,
+          authRequired: data,
+          isLoading: false,
+        }))
+      })
     )
+
     cleanups.push(
-      window.runtime.EventsOn(
-        'agent:action_result',
-        onActionResult as (data: unknown) => void
-      )
+      orchestrator.events.on('complete', (data: CompleteEvent) => {
+        if (convIdRef.current && data.conversationId !== convIdRef.current)
+          return
+        setState(prev => ({
+          ...prev,
+          isLoading: false,
+          isComplete: true,
+        }))
+      })
     )
+
     cleanups.push(
-      window.runtime.EventsOn(
-        'agent:password_required',
-        onPasswordRequired as (data: unknown) => void
-      )
+      orchestrator.events.on('error', (data: ErrorEvent) => {
+        if (convIdRef.current && data.conversationId !== convIdRef.current)
+          return
+        const normalizedError = normalizeAgentErrorMessage(data.error)
+        const isStopped = normalizedError === 'agent stopped'
+        if (isStopped) {
+          appendAssistantMessage(agentStoppedMessage)
+        }
+        setState(prev => ({
+          ...prev,
+          error: isStopped ? null : normalizedError,
+          isLoading: false,
+          passwordRequired: null,
+          confirmationRequired: null,
+        }))
+      })
     )
+
     cleanups.push(
-      window.runtime.EventsOn(
-        'agent:confirmation_required',
-        onConfirmationRequired as (data: unknown) => void
-      )
+      orchestrator.events.on('title_updated', () => {
+        // title updates are handled in AgentChatPage directly
+      })
     )
+
     cleanups.push(
-      window.runtime.EventsOn(
-        'agent:auth_required',
-        onAuthRequired as (data: unknown) => void
-      )
+      orchestrator.events.on('tx_status', (data: TxStatusEvent) => {
+        if (convIdRef.current && data.conversationId !== convIdRef.current)
+          return
+        const msgId = `tx-status-${data.txHash}`
+        setState(prev => {
+          const existingIdx = prev.messages.findIndex(m => m.id === msgId)
+          if (existingIdx >= 0) {
+            const updated = prev.messages.map((m, i) =>
+              i === existingIdx
+                ? { ...m, txStatus: { ...m.txStatus!, status: data.status } }
+                : m
+            )
+            return { ...prev, messages: updated }
+          }
+          const entry: TxStatusInfo = {
+            txHash: data.txHash,
+            chain: data.chain,
+            status: data.status,
+            label: data.label,
+          }
+          const txMsg: ChatMessage = {
+            id: msgId,
+            role: 'assistant',
+            content: '',
+            timestamp: new Date().toISOString(),
+            txStatus: entry,
+          }
+          return { ...prev, messages: [...prev.messages, txMsg] }
+        })
+      })
     )
-    cleanups.push(
-      window.runtime.EventsOn(
-        'agent:tx_bundle',
-        onTxBundle as (data: unknown) => void
-      )
-    )
-    cleanups.push(
-      window.runtime.EventsOn(
-        'agent:complete',
-        onComplete as (data: unknown) => void
-      )
-    )
-    cleanups.push(
-      window.runtime.EventsOn('agent:error', onError as (data: unknown) => void)
-    )
-    cleanups.push(
-      window.runtime.EventsOn(
-        'agent:tx_status',
-        onTxStatus as (data: unknown) => void
-      )
-    )
+
     return () => {
       cleanups.forEach(cleanup => cleanup())
     }
-  }, [conversationId, appendAssistantMessage])
+  }, [orchestrator])
 
-  const addUserMessage = useCallback((content: string) => {
+  const addUserMessage = (content: string) => {
     const message: ChatMessage = {
       id: `msg-${Date.now()}`,
       role: 'user',
@@ -399,59 +316,47 @@ export const useAgentEvents = (
       messages: [...prev.messages, message],
       isComplete: false,
     }))
-  }, [])
+  }
 
-  const setInitialMessages = useCallback((messages: ChatMessage[]) => {
-    setState(prev => ({
-      ...prev,
-      messages,
-    }))
-  }, [])
+  const setInitialMessages = (messages: ChatMessage[]) => {
+    setState(prev => ({ ...prev, messages }))
+  }
 
-  const clearMessages = useCallback(() => {
+  const clearMessages = () => {
     setState({
       messages: [],
       isLoading: false,
-      actions: [],
-      suggestions: [],
-      policyReady: null,
-      installRequired: null,
-      txBundle: null,
       passwordRequired: null,
       confirmationRequired: null,
       authRequired: null,
       error: null,
       isComplete: false,
     })
-  }, [])
+  }
 
-  const dismissPasswordRequired = useCallback(() => {
+  const dismissPasswordRequired = () => {
     setState(prev => ({ ...prev, passwordRequired: null }))
-  }, [])
+  }
 
-  const dismissConfirmation = useCallback(() => {
+  const dismissConfirmation = () => {
     setState(prev => ({ ...prev, confirmationRequired: null }))
-  }, [])
+  }
 
-  const dismissAuthRequired = useCallback(() => {
+  const dismissAuthRequired = () => {
     setState(prev => ({ ...prev, authRequired: null }))
-  }, [])
+  }
 
-  const dismissError = useCallback(() => {
+  const dismissError = () => {
     setState(prev => ({ ...prev, error: null }))
-  }, [])
+  }
 
-  const dismissTxBundle = useCallback(() => {
-    setState(prev => ({ ...prev, txBundle: null }))
-  }, [])
-
-  const requestAuth = useCallback(() => {
+  const requestAuth = () => {
     setState(prev => ({
       ...prev,
       authRequired: { conversationId: '', vaultPubKey: '' },
       isLoading: false,
     }))
-  }, [])
+  }
 
   return {
     ...state,
@@ -462,7 +367,6 @@ export const useAgentEvents = (
     dismissConfirmation,
     dismissAuthRequired,
     dismissError,
-    dismissTxBundle,
     requestAuth,
   }
 }
