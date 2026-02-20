@@ -1,7 +1,6 @@
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
+import { Button } from '@lib/ui/buttons/Button'
 import { CircleCheckIcon } from '@lib/ui/icons/CircleCheckIcon'
 import { HStack } from '@lib/ui/layout/Stack'
-import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -18,18 +17,17 @@ export const ReferralHeaderButton = ({
   const { t } = useTranslation()
 
   return (
-    <StyledButton onClick={onClick}>
+    <StyledButton size="sm" kind="secondary" onClick={onClick}>
       <HStack alignItems="center" gap={4}>
         {hasReferral && <CheckIcon />}
-        <Text size={14} color="primary" weight={500}>
-          {t('add_referral')}
-        </Text>
+
+        {t('add_referral')}
       </HStack>
     </StyledButton>
   )
 }
 
-const StyledButton = styled(UnstyledButton)`
+const StyledButton = styled(Button)`
   cursor: pointer;
 `
 
