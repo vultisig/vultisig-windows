@@ -1,4 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/naming-convention
 declare const __AGENT_BACKEND_URL__: string | undefined
+// eslint-disable-next-line @typescript-eslint/naming-convention
 declare const __VULTISIG_VERIFIER_URL__: string | undefined
 
 export const agentBackendUrl =
