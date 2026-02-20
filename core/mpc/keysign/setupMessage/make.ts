@@ -17,13 +17,27 @@ export const makeSetupMessage = ({
   message,
   devices,
   signatureAlgorithm,
-}: MakeSetupMessageInput) =>
-  SignSession[signatureAlgorithm].setup(
-    toMpcLibKeyshare({
-      keyShare,
-      signatureAlgorithm,
-    }).keyId(),
+}: MakeSetupMessageInput) => {
+  console.log('[makeSetupMessage] parsing keyshare...')
+  const ks = toMpcLibKeyshare({ keyShare, signatureAlgorithm })
+  console.log('[makeSetupMessage] keyshare parsed, getting keyId...')
+  const keyId = ks.keyId()
+  console.log('[makeSetupMessage] keyId obtained, creating setup message...', {
     chainPath,
-    Buffer.from(message, 'hex'),
-    devices
-  )
+    messageLen: message.length,
+    devices,
+  })
+  try {
+    const result = SignSession[signatureAlgorithm].setup(
+      keyId,
+      chainPath,
+      Buffer.from(message, 'hex'),
+      devices
+    )
+    console.log('[makeSetupMessage] setup message created, length:', result?.length)
+    return result
+  } catch (err) {
+    console.error('[makeSetupMessage] FAILED at SignSession.setup:', err)
+    throw err
+  }
+}

@@ -1,4 +1,6 @@
-const verifierBaseUrl = 'https://verifier.vultisig.com'
+import { verifierUrl } from '../../config'
+
+const verifierBaseUrl = verifierUrl
 
 type ApiResponse<T> = {
   data?: T
@@ -204,12 +206,160 @@ export async function getTransactions(
   )
 }
 
+type PolicySuggest = {
+  rules?: unknown[]
+  rate_limit_window?: number
+  max_txs_per_window?: number
+}
+
+export async function suggestPolicy(
+  pluginId: string,
+  config: Record<string, unknown>
+): Promise<PolicySuggest> {
+  try {
+    return await fetchApi<PolicySuggest>('/plugin/policy/suggest/' + pluginId, {
+      method: 'POST',
+      body: JSON.stringify(config),
+    })
+  } catch {
+    return {}
+  }
+}
+
+type PolicyAddRequest = {
+  pluginId: string
+  publicKey: string
+  pluginVersion: string
+  policyVersion: number
+  signature: string
+  recipe: string
+  billing: unknown[]
+  active: boolean
+}
+
+type PolicyAddResponse = {
+  id: string
+}
+
+export async function addPolicy(
+  req: PolicyAddRequest,
+  authToken: string
+): Promise<PolicyAddResponse> {
+  return fetchApiWithAuth<PolicyAddResponse>('/plugin/policy', authToken, {
+    method: 'POST',
+    body: JSON.stringify({
+      plugin_id: req.pluginId,
+      public_key: req.publicKey,
+      plugin_version: req.pluginVersion,
+      policy_version: req.policyVersion,
+      signature: req.signature,
+      recipe: req.recipe,
+      billing: req.billing,
+      active: req.active,
+    }),
+  })
+}
+
+export async function deletePolicy(
+  policyId: string,
+  signature: string,
+  authToken: string
+): Promise<void> {
+  await fetchApiWithAuth('/plugin/policy/' + policyId, authToken, {
+    method: 'DELETE',
+    body: JSON.stringify({ signature }),
+  })
+}
+
+type VerifierReshareParams = {
+  name: string
+  publicKey: string
+  sessionId: string
+  hexEncryptionKey: string
+  hexChainCode: string
+  localPartyId: string
+  oldParties: string[]
+  oldResharePrefix: string
+  libType: number
+  pluginId: string
+  relayUrl: string
+}
+
+export async function requestVerifierReshare(
+  params: VerifierReshareParams,
+  authToken: string
+): Promise<void> {
+  await fetchApiWithAuth('/vault/reshare', authToken, {
+    method: 'POST',
+    body: JSON.stringify({
+      name: params.name,
+      public_key: params.publicKey,
+      session_id: params.sessionId,
+      hex_encryption_key: params.hexEncryptionKey,
+      hex_chain_code: params.hexChainCode,
+      local_party_id: params.localPartyId,
+      old_parties: params.oldParties,
+      old_reshare_prefix: params.oldResharePrefix,
+      lib_type: params.libType,
+      email: '',
+      plugin_id: params.pluginId,
+      use_vultisig_relay: true,
+      relay_url: params.relayUrl,
+      relay_server: params.relayUrl,
+    }),
+  })
+}
+
+type AuthTokenPairResponse = {
+  access_token: string
+  refresh_token: string
+  expires_in: number
+}
+
+export async function authenticate(
+  publicKey: string,
+  chainCodeHex: string,
+  signature: string,
+  message: string
+): Promise<AuthTokenPairResponse> {
+  return fetchApi<AuthTokenPairResponse>('/auth', {
+    method: 'POST',
+    body: JSON.stringify({
+      message,
+      signature,
+      chain_code_hex: chainCodeHex,
+      public_key: publicKey,
+    }),
+  })
+}
+
+export async function refreshAuthToken(
+  refreshToken: string
+): Promise<AuthTokenPairResponse> {
+  return fetchApi<AuthTokenPairResponse>('/auth/refresh', {
+    method: 'POST',
+    body: JSON.stringify({ refresh_token: refreshToken }),
+  })
+}
+
+export async function validateToken(accessToken: string): Promise<void> {
+  await fetchApiWithAuth('/auth/me', accessToken)
+}
+
+export async function revokeAllTokens(accessToken: string): Promise<void> {
+  await fetchApiWithAuth('/auth/tokens/all', accessToken, {
+    method: 'DELETE',
+    body: JSON.stringify({}),
+  })
+}
+
 export type {
   AppPricing,
   Plugin,
   PluginListResponse,
   Policy,
   PolicyListResponse,
+  PolicySuggest,
   RecipeSpecification,
   Transaction,
   TransactionListResponse,

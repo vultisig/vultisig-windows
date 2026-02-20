@@ -1,34 +1,29 @@
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { StorageKey } from '@core/ui/storage/StorageKey'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ErrorBoundary } from '@lib/ui/errors/ErrorBoundary'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useViewState } from '@lib/ui/navigation/hooks/useViewState'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useAgentEvents } from '../hooks/useAgentEvents'
 import { useAgentService } from '../hooks/useAgentService'
 import { useConversationStarters } from '../hooks/useConversationStarters'
-import { Action, Suggestion, TitleUpdatedEvent } from '../types'
-import { ActionCard } from './ActionCard'
+import { ChatMessage as ChatMessageType, TitleUpdatedEvent } from '../types'
 import { ChatInput } from './ChatInput'
 import { ChatMessage } from './ChatMessage'
 import { ConfirmationPrompt } from './ConfirmationPrompt'
 import { ConnectionButton } from './ConnectionButton'
 import { ConversationStarters } from './ConversationStarters'
 import { PasswordPrompt } from './PasswordPrompt'
-import { SuggestionCard } from './SuggestionCard'
 import { ThinkingIndicator } from './ThinkingIndicator'
-import { TxReviewCard } from './tx-review'
 
 type AgentChatViewState = { conversationId?: string; initialMessage?: string }
 
@@ -47,27 +42,23 @@ export const AgentChatPage: FC = () => {
   const [chatTitle, setChatTitle] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const initialMessageSentRef = useRef(false)
+  const conversationLoadedRef = useRef(false)
 
   const {
     sendMessage,
     sendMessageToConversation,
-    executeAction,
-    selectSuggestion,
     providePassword,
     provideConfirmation,
     cancelRequest,
     getConversation,
     signIn,
     preloadContext,
-    isLoading: serviceLoading,
+    orchestrator,
   } = useAgentService()
 
   const {
     messages,
     isLoading,
-    actions,
-    suggestions,
-    txBundle,
     passwordRequired,
     confirmationRequired,
     authRequired,
@@ -78,33 +69,32 @@ export const AgentChatPage: FC = () => {
     dismissConfirmation,
     dismissAuthRequired,
     dismissError,
-    dismissTxBundle,
     requestAuth,
-  } = useAgentEvents(conversationId)
+  } = useAgentEvents(conversationId, orchestrator)
 
   useEffect(() => {
-    if (initialConversationId) {
-      const vaultId = vault ? getVaultId(vault) : null
-      if (!vaultId) return
-      getConversation(initialConversationId, vaultId)
-        ?.then(conv => {
-          if (conv?.title) {
-            setChatTitle(conv.title)
-          }
-          if (conv?.messages?.length) {
-            const mapped = conv.messages
-              .filter(m => m.content_type !== 'action_result')
-              .map(m => ({
-                id: m.id,
-                role: m.role as 'user' | 'assistant',
-                content: m.content,
-                timestamp: m.created_at,
-              }))
-            setInitialMessages(mapped)
-          }
-        })
-        ?.catch(() => {})
-    }
+    if (!initialConversationId || conversationLoadedRef.current) return
+    const vaultId = vault ? getVaultId(vault) : null
+    if (!vaultId) return
+    conversationLoadedRef.current = true
+    getConversation(initialConversationId, vaultId)
+      ?.then(conv => {
+        if (conv?.title) {
+          setChatTitle(conv.title)
+        }
+        if (conv?.messages?.length) {
+          const mapped: ChatMessageType[] = conv.messages
+            .filter(m => m.content_type !== 'action_result')
+            .map(m => ({
+              id: m.id,
+              role: m.role as 'user' | 'assistant',
+              content: m.content,
+              timestamp: m.created_at,
+            }))
+          setInitialMessages(mapped)
+        }
+      })
+      ?.catch(() => {})
   }, [initialConversationId, vault, getConversation, setInitialMessages])
 
   useEffect(() => {
@@ -124,53 +114,37 @@ export const AgentChatPage: FC = () => {
 
   const queuedMessageRef = useRef<string | null>(null)
 
-  const isProcessing = useMemo(
-    () => Boolean(isLoading || serviceLoading),
-    [isLoading, serviceLoading]
-  )
+  const isProcessing = Boolean(isLoading)
 
-  const doSend = useCallback(
-    async (message: string) => {
-      if (!vaultId) return
-      addUserMessage(message)
-      try {
-        if (conversationId) {
-          await sendMessageToConversation(conversationId, vaultId, message)
-        } else {
-          const id = await sendMessage(vaultId, message)
-          setConversationId(id)
-        }
-      } catch (err) {
-        const errMsg = err instanceof Error ? err.message : String(err)
-        if (errMsg.includes('password required')) {
-          pendingMessageRef.current = message
-          requestAuth()
-          return
-        }
-        console.error('Failed to send message:', err)
+  const doSend = async (message: string) => {
+    if (!vaultId) return
+    addUserMessage(message)
+    try {
+      if (conversationId) {
+        await sendMessageToConversation(conversationId, vaultId, message)
+      } else {
+        const id = await sendMessage(vaultId, message)
+        setConversationId(id)
       }
-    },
-    [
-      vaultId,
-      conversationId,
-      addUserMessage,
-      sendMessage,
-      sendMessageToConversation,
-      requestAuth,
-    ]
-  )
-
-  const handleSend = useCallback(
-    (message: string) => {
-      if (isProcessing) {
-        queuedMessageRef.current = message
-        addUserMessage(message)
+    } catch (err) {
+      const errMsg = err instanceof Error ? err.message : String(err)
+      if (errMsg.includes('password required')) {
+        pendingMessageRef.current = message
+        requestAuth()
         return
       }
-      doSend(message)
-    },
-    [isProcessing, addUserMessage, doSend]
-  )
+      console.error('Failed to send message:', err)
+    }
+  }
+
+  const handleSend = (message: string) => {
+    if (isProcessing) {
+      queuedMessageRef.current = message
+      addUserMessage(message)
+      return
+    }
+    doSend(message)
+  }
 
   useEffect(() => {
     if (!isProcessing && queuedMessageRef.current) {
@@ -207,120 +181,82 @@ export const AgentChatPage: FC = () => {
   }, [initialMessage, vaultId, addUserMessage, sendMessage, setViewState])
 
   useEffect(() => {
-    if (!window.runtime) return
+    if (!orchestrator) return
 
-    const cleanup = window.runtime.EventsOn(
-      'agent:title_updated',
-      (data: unknown) => {
-        const event = data as TitleUpdatedEvent
-        if (conversationId && event.conversationId === conversationId) {
-          setChatTitle(event.title)
+    return orchestrator.events.on(
+      'title_updated',
+      (data: TitleUpdatedEvent) => {
+        if (conversationId && data.conversationId === conversationId) {
+          setChatTitle(data.title)
         }
       }
     )
+  }, [conversationId, orchestrator])
 
-    return cleanup
-  }, [conversationId])
+  const handlePasswordSubmit = async (password: string) => {
+    dismissPasswordRequired()
+    await providePassword(password)
+  }
 
-  const refetchQueries = useRefetchQueries()
-
-  useEffect(() => {
-    if (!window.runtime) return
-
-    const cleanupCoins = window.runtime.EventsOn('vault:coins-changed', () => {
-      refetchQueries([StorageKey.vaultsCoins], [StorageKey.vaults])
-    })
-
-    const cleanupAddressBook = window.runtime.EventsOn(
-      'addressbook:changed',
-      () => {
-        refetchQueries([StorageKey.addressBookItems])
-      }
-    )
-
-    return () => {
-      cleanupCoins()
-      cleanupAddressBook()
-    }
-  }, [refetchQueries])
-
-  const handlePasswordSubmit = useCallback(
-    async (password: string) => {
-      dismissPasswordRequired()
-      await providePassword(password)
-    },
-    [dismissPasswordRequired, providePassword]
-  )
-
-  const handlePasswordCancel = useCallback(() => {
+  const handlePasswordCancel = () => {
     dismissPasswordRequired()
     cancelRequest()
-  }, [dismissPasswordRequired, cancelRequest])
+  }
 
-  const handleConfirmationConfirm = useCallback(async () => {
+  const handleConfirmationConfirm = async () => {
     dismissConfirmation()
     await provideConfirmation(true)
-  }, [dismissConfirmation, provideConfirmation])
+  }
 
-  const handleConfirmationCancel = useCallback(() => {
+  const handleConfirmationCancel = () => {
     dismissConfirmation()
     provideConfirmation(false)
-  }, [dismissConfirmation, provideConfirmation])
+  }
 
   const pendingMessageRef = useRef<string | null>(null)
   const [authSignInError, setAuthSignInError] = useState<string | null>(null)
   const [authSigningIn, setAuthSigningIn] = useState(false)
 
-  const handleAuthSignIn = useCallback(
-    async (password: string) => {
-      if (!vaultId) return
-      setAuthSignInError(null)
-      setAuthSigningIn(true)
-      try {
-        await signIn(vaultId, password)
-        dismissAuthRequired()
-        setAuthSigningIn(false)
-        const pending = pendingMessageRef.current
-        pendingMessageRef.current = null
-        if (pending) {
-          try {
-            if (conversationId) {
-              await sendMessageToConversation(conversationId, vaultId, pending)
-            } else {
-              const id = await sendMessage(vaultId, pending)
-              setConversationId(id)
-            }
-          } catch (err) {
-            console.error('Failed to send pending message:', err)
+  const handleAuthSignIn = async (password: string) => {
+    if (!vaultId) return
+    setAuthSignInError(null)
+    setAuthSigningIn(true)
+    try {
+      await signIn(vaultId, password)
+      dismissAuthRequired()
+      setAuthSigningIn(false)
+      const pending = pendingMessageRef.current
+      pendingMessageRef.current = null
+      if (pending) {
+        try {
+          if (conversationId) {
+            await sendMessageToConversation(conversationId, vaultId, pending)
+          } else {
+            const id = await sendMessage(vaultId, pending)
+            setConversationId(id)
           }
+        } catch (err) {
+          console.error('Failed to send pending message:', err)
         }
-      } catch (err) {
-        setAuthSigningIn(false)
-        const message =
-          err instanceof Error
-            ? err.message
-            : typeof err === 'string'
-              ? err
-              : 'Sign in failed'
-        setAuthSignInError(message)
       }
-    },
-    [
-      vaultId,
-      conversationId,
-      signIn,
-      dismissAuthRequired,
-      sendMessage,
-      sendMessageToConversation,
-    ]
-  )
+    } catch (err) {
+      setAuthSigningIn(false)
+      const message =
+        err instanceof Error
+          ? err.message
+          : typeof err === 'string'
+            ? err
+            : 'Sign in failed'
+      setAuthSignInError(message)
+    }
+  }
 
-  const handleAuthCancel = useCallback(() => {
+  const handleAuthCancel = () => {
     dismissAuthRequired()
     setAuthSignInError(null)
     setAuthSigningIn(false)
     pendingMessageRef.current = null
-  }, [dismissAuthRequired])
+  }
 
   useEffect(() => {
     if (authRequired && messages.length > 0) {
@@ -330,31 +266,6 @@ export const AgentChatPage: FC = () => {
       }
     }
   }, [authRequired, messages])
-
-  const handleActionExecute = useCallback(
-    (action: Action) => {
-      if (!conversationId || !vaultId) return
-      executeAction(conversationId, vaultId, action).catch(err =>
-        console.error('Failed to execute action:', err)
-      )
-    },
-    [conversationId, vaultId, executeAction]
-  )
-
-  const handleBundleCancel = useCallback(() => {
-    dismissTxBundle()
-    doSend('I cancelled the transaction.')
-  }, [dismissTxBundle, doSend])
-
-  const handleSuggestionSelect = useCallback(
-    (suggestion: Suggestion) => {
-      if (!conversationId || !vaultId) return
-      selectSuggestion(conversationId, vaultId, suggestion.id).catch(err =>
-        console.error('Failed to select suggestion:', err)
-      )
-    },
-    [conversationId, vaultId, selectSuggestion]
-  )
 
   return (
     <VStack fullHeight>
@@ -393,37 +304,6 @@ export const AgentChatPage: FC = () => {
             <ChatMessage key={msg.id} message={msg} />
           ))}
           {isLoading && <ThinkingIndicator />}
-          {actions.length > 0 && (
-            <VStack gap={8} style={{ padding: '8px 0' }}>
-              {actions.map(action => (
-                <ActionCard
-                  key={action.id}
-                  action={action}
-                  onExecute={handleActionExecute}
-                />
-              ))}
-            </VStack>
-          )}
-          {suggestions.length > 0 && (
-            <VStack gap={8} style={{ padding: '8px 0' }}>
-              {suggestions.map(suggestion => (
-                <SuggestionCard
-                  key={suggestion.id}
-                  suggestion={suggestion}
-                  onSelect={handleSuggestionSelect}
-                />
-              ))}
-            </VStack>
-          )}
-          {txBundle && (
-            <div style={{ padding: '8px 0' }}>
-              <TxReviewCard
-                txBundle={txBundle}
-                onSign={handleActionExecute}
-                onCancel={handleBundleCancel}
-              />
-            </div>
-          )}
           {error && (
             <ErrorMessage onClick={dismissError}>
               <Text size={14} color="danger">

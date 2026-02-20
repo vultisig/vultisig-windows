@@ -1,11 +1,5 @@
 import buildInfo from '@clients/desktop/build.json'
 import { mpcServerUrl } from '@core/mpc/MpcServerType'
-import { AgentBalanceBridge } from '@core/ui/agent/components/AgentBalanceBridge'
-import { AgentChainBridge } from '@core/ui/agent/components/AgentChainBridge'
-import { AgentDklsBridge } from '@core/ui/agent/components/AgentDklsBridge'
-import { AgentDklsReshareBridge } from '@core/ui/agent/components/AgentDklsReshareBridge'
-import { AgentPortfolioBridge } from '@core/ui/agent/components/AgentPortfolioBridge'
-import { AgentToolBridge } from '@core/ui/agent/components/AgentToolBridge'
 import { CoreApp } from '@core/ui/CoreApp'
 import { useProcessAppError } from '@core/ui/errors/hooks/useProcessAppError'
 import { initialCoreView } from '@core/ui/navigation/CoreView'
@@ -76,12 +70,6 @@ const AppContent = () => {
 
   return (
     <CoreApp coreState={coreState}>
-      <AgentBalanceBridge />
-      <AgentChainBridge />
-      <AgentDklsBridge />
-      <AgentDklsReshareBridge />
-      <AgentPortfolioBridge />
-      <AgentToolBridge />
       <LauncherObserver />
       <ActiveView views={views} />
       <OnboardingResetter />

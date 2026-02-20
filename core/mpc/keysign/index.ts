@@ -51,10 +51,13 @@ export const keysign = async ({
   hexEncryptionKey,
   isInitiatingDevice,
 }: KeysignInput) => {
+  console.log('[keysign] initializing MPC lib for', signatureAlgorithm)
   await initializeMpcLib(signatureAlgorithm)
+  console.log('[keysign] MPC lib initialized')
 
   const messageId = getMessageHash(message)
 
+  console.log('[keysign] ensuring setup message...')
   const setupMessage = await ensureSetupMessage({
     keyShare,
     signatureAlgorithm,
@@ -66,6 +69,7 @@ export const keysign = async ({
     hexEncryptionKey,
     isInitiatingDevice,
   })
+  console.log('[keysign] setup message obtained, creating sign session...')
 
   const session = makeSignSession({
     setupMessage,
@@ -73,6 +77,7 @@ export const keysign = async ({
     keyShare,
     signatureAlgorithm,
   })
+  console.log('[keysign] sign session created, starting message exchange...')
 
   const setupMessageHash = shouldBePresent(
     SignSession[signatureAlgorithm].setupMessageHash(setupMessage),

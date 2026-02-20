@@ -7,14 +7,16 @@ import { getColor } from '@lib/ui/theme/getters'
 import { FC, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
+import { useAgentService } from '../hooks/useAgentService'
 import { useConnectionStatus } from '../hooks/useConnectionStatus'
 import { PasswordPrompt } from './PasswordPrompt'
 
 export const ConnectionButton: FC = () => {
   const vault = useCurrentVault()
   const vaultId = vault ? getVaultId(vault) : null
+  const { orchestrator } = useAgentService()
   const { state, checked, connect, disconnect, error, clearError } =
-    useConnectionStatus(vaultId)
+    useConnectionStatus(vaultId, orchestrator)
   const [showPassword, setShowPassword] = useState(false)
   const autoPromptedRef = useRef(false)
 
