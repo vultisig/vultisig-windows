@@ -23,7 +23,8 @@ export const ReferralModal = ({
   onApply,
 }: ReferralModalProps) => {
   const { t } = useTranslation()
-  const error = useReferralValidation(referralCode)
+  const trimmedReferralCode = referralCode.trim()
+  const error = useReferralValidation(trimmedReferralCode)
 
   return (
     <ResponsiveModal isOpen={isOpen} onClose={onClose} grabbable>
@@ -57,7 +58,7 @@ export const ReferralModal = ({
         </VStack>
         <Button
           style={{ width: '100%' }}
-          disabled={!referralCode || !!error}
+          disabled={!trimmedReferralCode || !!error}
           onClick={onApply}
         >
           {t('fastVaultSetup.applyReferral')}
