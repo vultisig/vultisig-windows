@@ -1,5 +1,4 @@
 import { Chain } from '@core/chain/Chain'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 
 export const thorchainLpChainCode: Partial<Record<Chain, string>> = {
   [Chain.Avalanche]: 'AVAX',
@@ -19,10 +18,6 @@ export const thorchainLpChainCode: Partial<Record<Chain, string>> = {
   [Chain.Arbitrum]: 'ARB',
   [Chain.Zcash]: 'ZEC',
 }
-
-export const thorchainLpSupportedChains = Object.keys(
-  thorchainLpChainCode
-).filter(chain => chain !== Chain.THORChain) as Chain[]
 
 type GetThorchainLpPoolInput = {
   chain: Chain
@@ -45,9 +40,4 @@ export const getThorchainLpPool = ({
   }
 
   return `${chainCode}.${ticker}`
-}
-
-export const getThorchainLpNativePool = (chain: Chain): string => {
-  const coin = chainFeeCoin[chain]
-  return getThorchainLpPool({ chain, ticker: coin.ticker })
 }
