@@ -14,7 +14,6 @@ import { AgentOrchestrator } from '../orchestrator'
 import { setStorageContext } from '../tools/shared/storageContext'
 import { setWalletContext } from '../tools/shared/walletContext'
 import type {
-  Action,
   Conversation,
   ConversationWithMessages,
   ServiceStatus,
@@ -94,16 +93,6 @@ type UseAgentServiceReturn = {
     vaultPubKey: string,
     message: string
   ) => Promise<void>
-  executeAction: (
-    convID: string,
-    vaultPubKey: string,
-    action: Action
-  ) => Promise<void>
-  selectSuggestion: (
-    convID: string,
-    vaultPubKey: string,
-    suggestionID: string
-  ) => Promise<void>
   createConversation: (vaultPubKey: string) => Promise<string>
   getConversations: (vaultPubKey: string) => Promise<Conversation[]>
   getConversation: (
@@ -128,10 +117,6 @@ function buildMethods(orch: AgentOrchestrator): UseAgentServiceReturn {
       orch.sendMessage(vaultPubKey, message),
     sendMessageToConversation: (convID, vaultPubKey, message) =>
       orch.sendMessageToConversation(convID, vaultPubKey, message),
-    executeAction: (convID, vaultPubKey, action) =>
-      orch.executeAction(convID, vaultPubKey, action),
-    selectSuggestion: (convID, vaultPubKey, suggestionID) =>
-      orch.selectSuggestion(convID, vaultPubKey, suggestionID),
     createConversation: vaultPubKey => orch.createConversation(vaultPubKey),
     getConversations: vaultPubKey => orch.getConversations(vaultPubKey),
     getConversation: (convID, vaultPubKey) =>

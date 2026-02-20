@@ -23,13 +23,13 @@ const statusLabels: Record<string, string> = {
 }
 
 const txTypeLabels: Record<string, string> = {
-  transfer: 'transfer',
-  send: 'send',
-  swap: 'swap',
-  approval: 'approval',
-  deposit: 'deposit',
-  evm_contract: 'contract call',
-  wasm_execute: 'contract execute',
+  transfer: 'Transfer',
+  send: 'Send',
+  swap: 'Swap',
+  approval: 'Approval',
+  deposit: 'Deposit',
+  evm_contract: 'Contract Call',
+  wasm_execute: 'Contract Execute',
 }
 
 const InlineTxStatusMessageComponent: FC<Props> = ({ txStatus }) => {

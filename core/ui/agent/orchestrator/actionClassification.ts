@@ -19,6 +19,7 @@ const alwaysAutoExecute: Record<string, boolean> = {
   sign_tx: true,
   read_evm_contract: true,
   scan_tx: true,
+  thorchain_query: true,
 }
 
 function shouldAutoExecute(action: BackendAction): boolean {

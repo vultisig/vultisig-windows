@@ -16,7 +16,6 @@ import { handleGetCoins } from './handlers/getCoins'
 import { handleGetPortfolio } from './handlers/getPortfolio'
 import { handleListVaults } from './handlers/listVaults'
 import { handleMarketPrice } from './handlers/marketPrice'
-import { handleReadEvmContract } from './handlers/readEvmContract'
 import { handlePluginInstall } from './handlers/pluginInstall'
 import { handlePluginInstalled } from './handlers/pluginInstalled'
 import { handlePluginList } from './handlers/pluginList'
@@ -27,12 +26,14 @@ import { handlePolicyDelete } from './handlers/policyDelete'
 import { handlePolicyGenerate } from './handlers/policyGenerate'
 import { handlePolicyList } from './handlers/policyList'
 import { handlePolicyStatus } from './handlers/policyStatus'
+import { handleReadEvmContract } from './handlers/readEvmContract'
 import { handleRemoveChain } from './handlers/removeChain'
 import { handleRemoveCoin } from './handlers/removeCoin'
 import { handleScanTx } from './handlers/scanTx'
 import { handleSearchToken } from './handlers/searchToken'
 import { handleSignInStatus } from './handlers/signInStatus'
 import { handleSignTx } from './handlers/signTx'
+import { handleThorchainQuery } from './handlers/thorchainQuery'
 import { handleTransactionHistory } from './handlers/transactionHistory'
 import { handleVaultInfo } from './handlers/vaultInfo'
 import type { ToolHandler } from './types'
@@ -73,4 +74,5 @@ export const toolHandlers: Record<string, ToolHandler> = {
   build_swap_tx: handleBuildSwapTx,
   build_send_tx: handleBuildSendTx,
   build_custom_tx: handleBuildCustomTx,
+  thorchain_query: handleThorchainQuery,
 }

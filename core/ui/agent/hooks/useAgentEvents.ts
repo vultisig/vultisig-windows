@@ -30,7 +30,6 @@ type AgentEventsState = {
 type UseAgentEventsReturn = AgentEventsState & {
   addUserMessage: (content: string) => void
   setInitialMessages: (messages: ChatMessage[]) => void
-  clearMessages: () => void
   dismissPasswordRequired: () => void
   dismissConfirmation: () => void
   dismissAuthRequired: () => void
@@ -384,18 +383,6 @@ export const useAgentEvents = (
     setState(prev => ({ ...prev, messages }))
   }
 
-  const clearMessages = () => {
-    setState({
-      messages: [],
-      isLoading: false,
-      passwordRequired: null,
-      confirmationRequired: null,
-      authRequired: null,
-      error: null,
-      isComplete: false,
-    })
-  }
-
   const dismissPasswordRequired = () => {
     setState(prev => ({ ...prev, passwordRequired: null }))
   }
@@ -424,7 +411,6 @@ export const useAgentEvents = (
     ...state,
     addUserMessage,
     setInitialMessages,
-    clearMessages,
     dismissPasswordRequired,
     dismissConfirmation,
     dismissAuthRequired,

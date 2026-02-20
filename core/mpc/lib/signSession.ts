@@ -25,7 +25,10 @@ export const makeSignSession = ({
   keyShare,
   signatureAlgorithm,
 }: MakeSignSessionInput) => {
-  console.log('[makeSignSession] creating sign session...', { localPartyId, signatureAlgorithm })
+  console.log('[makeSignSession] creating sign session...', {
+    localPartyId,
+    signatureAlgorithm,
+  })
   try {
     const ks = toMpcLibKeyshare({ keyShare, signatureAlgorithm })
     const session = new SignSession[signatureAlgorithm](

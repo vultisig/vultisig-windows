@@ -5,9 +5,9 @@ import {
   type Abi,
   type AbiFunction,
   type AbiParameter,
-  type Hex,
   decodeFunctionResult,
   encodeFunctionData,
+  type Hex,
 } from 'viem'
 
 import { getChainFromString } from '../../utils/getChainFromString'

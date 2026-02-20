@@ -51,7 +51,7 @@ export const handleBuildSendTx: ToolHandler = async (input, context) => {
   })
 
   const payloadBytes = toBinary(KeysignPayloadSchema, keysignPayload)
-  const keysignPayloadB64 = btoa(String.fromCharCode(...payloadBytes))
+  const keysignPayloadB64 = Buffer.from(payloadBytes).toString('base64')
 
   const txDetails: Record<string, unknown> = {
     to_address: keysignPayload.toAddress,

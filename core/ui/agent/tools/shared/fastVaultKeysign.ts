@@ -84,11 +84,19 @@ async function fastVaultKeysignAttempt(
   const isEcdsa = signatureAlgorithm === 'ecdsa'
   const publicKey = isEcdsa ? vault.publicKeyEcdsa : vault.publicKeyEddsa
 
-  console.log('[fastVaultKeysign] step 1: registerSession', { sessionId: sessionId.slice(0, 8), localPartyId: vault.localPartyId })
+  console.log('[fastVaultKeysign] step 1: registerSession', {
+    sessionId: sessionId.slice(0, 8),
+    localPartyId: vault.localPartyId,
+  })
   await registerSession(relayUrl, sessionId, vault.localPartyId)
   console.log('[fastVaultKeysign] step 1 done')
 
-  console.log('[fastVaultKeysign] step 2: callFastVaultSign', { publicKey: publicKey.slice(0, 12), derivePath, isEcdsa, chain })
+  console.log('[fastVaultKeysign] step 2: callFastVaultSign', {
+    publicKey: publicKey.slice(0, 12),
+    derivePath,
+    isEcdsa,
+    chain,
+  })
   await callFastVaultSign({
     publicKey,
     messages: [messageHash],

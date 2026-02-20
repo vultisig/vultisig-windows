@@ -92,6 +92,7 @@ export const handleAddCoin: ToolHandler = async (input, context) => {
     }
   }
 
+  let feeCoinJustCreated = false
   if (!existingAddress) {
     const { walletCore, vault } = getWalletContext()
 
@@ -116,14 +117,20 @@ export const handleAddCoin: ToolHandler = async (input, context) => {
         priceProviderId: feeCoin.priceProviderId,
       },
     })
+    feeCoinJustCreated = true
   }
 
-  const duplicate = context.coins.some(
-    c =>
-      c.chain.toLowerCase() === chain.toLowerCase() &&
-      c.ticker.toLowerCase() === ticker.toLowerCase() &&
-      (c.contractAddress ?? '').toLowerCase() === contractAddress.toLowerCase()
-  )
+  const isFeeCoin =
+    ticker.toLowerCase() === feeCoin.ticker.toLowerCase() && !contractAddress
+  const duplicate =
+    (feeCoinJustCreated && isFeeCoin) ||
+    context.coins.some(
+      c =>
+        c.chain.toLowerCase() === chain.toLowerCase() &&
+        c.ticker.toLowerCase() === ticker.toLowerCase() &&
+        (c.contractAddress ?? '').toLowerCase() ===
+          contractAddress.toLowerCase()
+    )
   if (duplicate) {
     return {
       data: {

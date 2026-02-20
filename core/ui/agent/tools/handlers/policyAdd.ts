@@ -69,7 +69,7 @@ function buildProtobufRecipe(
   })
 
   const bytes = toBinary(PolicySchema, policy)
-  return btoa(String.fromCharCode(...bytes))
+  return Buffer.from(bytes).toString('base64')
 }
 
 export const handlePolicyAdd: ToolHandler = async (input, context) => {

@@ -12,7 +12,6 @@ import type {
   VaultMeta,
 } from '../tools/types'
 import type {
-  Action,
   Conversation,
   ConversationWithMessages,
   ServiceStatus,
@@ -169,99 +168,6 @@ export class AgentOrchestrator {
     this.abortController = ac
 
     this.processMessageAsync(ac.signal, convId, vaultPubKey, message, token)
-  }
-
-  async executeAction(
-    convId: string,
-    vaultPubKey: string,
-    action: Action
-  ): Promise<void> {
-    if (this.busy) throw new Error('agent is busy processing another request')
-
-    const token = await this.requireAuth(vaultPubKey)
-    this.busy = true
-
-    const ac = new AbortController()
-    this.abortController = ac
-
-    const backendAction: BackendAction = {
-      id: action.id,
-      type: action.type,
-      title: action.title,
-      description: action.description,
-      params: action.params,
-      auto_execute: action.auto_execute,
-    }
-
-    const run = async () => {
-      try {
-        await this.executeAndReport(
-          ac.signal,
-          convId,
-          vaultPubKey,
-          token,
-          backendAction
-        )
-      } finally {
-        this.busy = false
-      }
-    }
-    run()
-  }
-
-  async selectSuggestion(
-    convId: string,
-    vaultPubKey: string,
-    suggestionId: string
-  ): Promise<void> {
-    if (this.busy) throw new Error('agent is busy processing another request')
-
-    const token = await this.requireAuth(vaultPubKey)
-    this.busy = true
-
-    const ac = new AbortController()
-    this.abortController = ac
-
-    const run = async () => {
-      try {
-        this.events.emit('loading', { conversationId: convId })
-
-        const msgCtx =
-          this.takePreloadedContext(vaultPubKey) ??
-          (await this.buildCtx(vaultPubKey))
-
-        const req: SendMessageRequest = {
-          public_key: vaultPubKey,
-          selected_suggestion_id: suggestionId,
-          context: msgCtx,
-        }
-
-        const resp = await this.backendClient.sendMessageStream(
-          convId,
-          req,
-          token,
-          delta =>
-            this.events.emit('text_delta', {
-              conversationId: convId,
-              delta,
-            }),
-          ac.signal
-        )
-
-        await this.handleBackendResponse(
-          ac.signal,
-          convId,
-          vaultPubKey,
-          token,
-          resp
-        )
-      } catch (err) {
-        this.handleError(convId, vaultPubKey, err)
-      } finally {
-        this.busy = false
-      }
-    }
-    run()
   }
 
   async createConversation(vaultPubKey: string): Promise<string> {
@@ -506,7 +412,7 @@ export class AgentOrchestrator {
         this.busy = false
       }
     }
-    run()
+    run().catch(err => this.handleError(convId, vaultPubKey, err))
   }
 
   private async processMessage(
@@ -879,7 +785,7 @@ export class AgentOrchestrator {
       }
       await this.reportActionResult(signal, convId, vaultPubKey, token, result)
     }
-    run()
+    run().catch(err => this.handleError(convId, vaultPubKey, err))
   }
 
   private async scanTxIfEvm(

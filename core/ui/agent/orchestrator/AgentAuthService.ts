@@ -178,7 +178,10 @@ export class AgentAuthService {
       chain: 'Ethereum',
       maxAttempts: 2,
     })
-    console.log('[auth:signIn] keysign completed, sig r:', sig.r?.slice(0, 16) + '...')
+    console.log(
+      '[auth:signIn] keysign completed, sig r:',
+      sig.r?.slice(0, 16) + '...'
+    )
 
     const signature = formatKeysignSignatureHex(sig)
 

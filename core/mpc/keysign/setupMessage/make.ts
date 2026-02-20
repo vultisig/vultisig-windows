@@ -34,7 +34,10 @@ export const makeSetupMessage = ({
       Buffer.from(message, 'hex'),
       devices
     )
-    console.log('[makeSetupMessage] setup message created, length:', result?.length)
+    console.log(
+      '[makeSetupMessage] setup message created, length:',
+      result?.length
+    )
     return result
   } catch (err) {
     console.error('[makeSetupMessage] FAILED at SignSession.setup:', err)

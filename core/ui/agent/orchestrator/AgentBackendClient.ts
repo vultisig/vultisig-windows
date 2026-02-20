@@ -107,7 +107,12 @@ export class AgentBackendClient {
 
     const contentType = resp.headers.get('content-type') ?? ''
     if (!contentType.includes('text/event-stream') || !resp.body) {
-      console.log('[agent:stream] fallback to JSON, content-type:', contentType, 'body:', !!resp.body)
+      console.log(
+        '[agent:stream] fallback to JSON, content-type:',
+        contentType,
+        'body:',
+        !!resp.body
+      )
       const text = await resp.text()
       return JSON.parse(text) as SendMessageResponse
     }
@@ -143,7 +148,7 @@ export class AgentBackendClient {
           continue
         }
         if (line.startsWith('data: ')) {
-          const jsonStr = line.slice(6)
+          const jsonStr = line.slice(6).replace(/\r$/, '')
           this.processSSEEvent(currentEvent, jsonStr, result, onTextDelta)
           currentEvent = ''
           continue
