@@ -14,10 +14,15 @@ type StepProgressIndicatorProps = {
   currentStepIndex: number
 }
 
-const getStepState = (
-  stepIndex: number,
+type GetStepStateInput = {
+  stepIndex: number
   currentStepIndex: number
-): StepState => {
+}
+
+const getStepState = ({
+  stepIndex,
+  currentStepIndex,
+}: GetStepStateInput): StepState => {
   if (stepIndex < currentStepIndex) return 'completed'
   if (stepIndex === currentStepIndex) return 'active'
   return 'upcoming'
@@ -29,7 +34,7 @@ export const StepProgressIndicator = ({
 }: StepProgressIndicatorProps) => (
   <Container>
     {steps.map((step, index) => {
-      const state = getStepState(index, currentStepIndex)
+      const state = getStepState({ stepIndex: index, currentStepIndex })
       const Icon = step.icon
 
       return (
@@ -53,23 +58,35 @@ const Container = styled.div`
 const Row = styled.div`
   display: flex;
   align-items: center;
+  gap: 12px;
 `
 
 const stepCircleSize = 36
 
 const stepStateStyles: Record<StepState, ReturnType<typeof css>> = {
   completed: css`
-    background: ${getColor('foreground')};
-    color: ${getColor('success')};
-  `,
-  active: css`
-    background: transparent;
-    border: 2px solid ${getColor('primary')};
+    background: rgba(19, 200, 157, 0.05);
     color: ${getColor('primary')};
   `,
+  active: css`
+    background: #03132c;
+    color: ${getColor('buttonPrimary')};
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      width: 15.897px;
+      height: 8.026px;
+      background: #0c4eff;
+      filter: blur(9.260643005371094px);
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  `,
   upcoming: css`
-    background: ${getColor('foreground')};
-    color: ${getColor('textShy')};
+    color: rgba(255, 255, 255, 0.15);
   `,
 }
 
@@ -80,15 +97,17 @@ const StepCircle = styled.div<{ $state: StepState }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  font-size: 20px;
   flex-shrink: 0;
-  ${({ $state }) => stepStateStyles[$state]}
+  ${({ $state }) => stepStateStyles[$state]};
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 2.051px 2.051px 0 rgba(0, 0, 0, 0.25) inset;
 `
 
 const Dash = styled.div<{ $active: boolean }>`
   width: 24px;
   height: 2px;
   border-radius: 1px;
-  background: ${({ $active }) =>
-    $active ? getColor('primary') : getColor('foregroundExtra')};
+  background: rgba(255, 255, 255, 0.15);
+  margin-left: 12px;
 `
