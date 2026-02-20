@@ -17,7 +17,7 @@ import { CoinKey } from '@core/chain/coin/Coin'
 import { getDenom } from '@core/chain/coin/utils/getDenom'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import { getKeysignUtxoInfo } from '@core/mpc/keysign/utxo/getKeysignUtxoInfo'
-import { MpcLib } from '@core/mpc/mpcLib'
+import { KeysignLibType } from '@core/mpc/mpcLib'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
@@ -57,7 +57,7 @@ export type BuildDepositKeysignPayloadInput = {
   vaultId: string
   localPartyId: string
   publicKey: PublicKey
-  libType: MpcLib
+  libType: KeysignLibType
   walletCore: WalletCore
 }
 
@@ -271,6 +271,27 @@ export const buildDepositKeysignPayload = async ({
 
       return keysignPayload
     }
+  }
+
+  if (action === 'add_thor_lp') {
+    keysignPayload = create(KeysignPayloadSchema, {
+      ...keysignPayload,
+      contractPayload: { case: undefined },
+      toAddress: '',
+      toAmount: hasAmount && amountUnits ? amountUnits : '0',
+    })
+    return keysignPayload
+  }
+
+  if (action === 'remove_thor_lp') {
+    const dustAmount = toChainAmount(0.02, coin.decimals).toString()
+    keysignPayload = create(KeysignPayloadSchema, {
+      ...keysignPayload,
+      contractPayload: { case: undefined },
+      toAddress: '',
+      toAmount: dustAmount,
+    })
+    return keysignPayload
   }
 
   // TRON freeze/unfreeze: self-transaction with amount in SUN

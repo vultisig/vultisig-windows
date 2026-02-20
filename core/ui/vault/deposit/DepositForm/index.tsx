@@ -143,7 +143,6 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
             <BondForm
               balance={balance}
               errors={errors}
-              isValid={isValid}
               formValues={formValues}
             />
           </DepositDataProvider>
