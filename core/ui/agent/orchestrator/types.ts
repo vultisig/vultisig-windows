@@ -21,6 +21,7 @@ export type MessageContext = {
   addresses?: Record<string, string>
   coins?: BackendCoinInfo[]
   address_book?: AddressBookEntry[]
+  instructions?: string
 }
 
 export type BackendCoinInfo = {
@@ -79,7 +80,7 @@ export type TxReady = {
   amount: string
   sender: string
   destination: string
-  tx_type?: 'swap' | 'send'
+  tx_type?: 'swap' | 'send' | 'deposit' | 'evm_contract' | 'wasm_execute'
   tx_details?: Record<string, unknown>
 }
 

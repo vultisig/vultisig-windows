@@ -6,6 +6,7 @@ import {
   handleRemoveAddressBookEntry,
 } from './handlers/addressBook'
 import { handleAssetLookup } from './handlers/assetLookup'
+import { handleBuildCustomTx } from './handlers/buildCustomTx'
 import { handleBuildSendTx } from './handlers/buildSendTx'
 import { handleBuildSwapTx } from './handlers/buildSwapTx'
 import { handleGetBalances } from './handlers/getBalances'
@@ -69,4 +70,5 @@ export const toolHandlers: Record<string, ToolHandler> = {
   sign_tx: handleSignTx,
   build_swap_tx: handleBuildSwapTx,
   build_send_tx: handleBuildSendTx,
+  build_custom_tx: handleBuildCustomTx,
 }

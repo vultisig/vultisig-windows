@@ -1,4 +1,10 @@
-import type { AddressBookEntry, BackendCoinInfo, MessageContext } from './types'
+import { agentInstructions } from '../config'
+import type {
+  AddressBookEntry,
+  BackendCoinInfo,
+  BalanceInfo,
+  MessageContext,
+} from './types'
 
 type CoinData = {
   chain: string
@@ -19,6 +25,7 @@ type ContextDeps = {
   vaultPubKey: string
   vaultName: string
   coins: CoinData[]
+  balances?: BalanceInfo[]
   addressBookItems?: AddressBookData[]
 }
 
@@ -43,8 +50,10 @@ export function buildMessageContext(deps: ContextDeps): MessageContext {
   const ctx: MessageContext = {
     vault_address: deps.vaultPubKey,
     vault_name: deps.vaultName,
+    balances: deps.balances,
     addresses,
     coins,
+    instructions: agentInstructions,
   }
 
   if (deps.addressBookItems && deps.addressBookItems.length > 0) {

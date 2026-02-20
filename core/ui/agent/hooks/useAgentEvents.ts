@@ -11,6 +11,7 @@ import type {
   LoadingEvent,
   PasswordRequiredEvent,
   ResponseEvent,
+  TextDeltaEvent,
   ToolCallEvent,
   TxStatusEvent,
   TxStatusInfo,
@@ -71,6 +72,8 @@ export const useAgentEvents = (
   const convIdRef = useRef(conversationId)
   convIdRef.current = conversationId
 
+  const streamingMsgIdRef = useRef<string | null>(null)
+
   const appendAssistantMessage = (content: string) => {
     if (!content.trim()) return
     const now = Date.now()
@@ -96,6 +99,7 @@ export const useAgentEvents = (
       orchestrator.events.on('loading', (data: LoadingEvent) => {
         if (convIdRef.current && data.conversationId !== convIdRef.current)
           return
+        streamingMsgIdRef.current = null
         setState(prev => ({
           ...prev,
           isLoading: true,
@@ -106,25 +110,82 @@ export const useAgentEvents = (
     )
 
     cleanups.push(
+      orchestrator.events.on('text_delta', (data: TextDeltaEvent) => {
+        if (convIdRef.current && data.conversationId !== convIdRef.current)
+          return
+        setState(prev => {
+          const existingId = streamingMsgIdRef.current
+          if (existingId) {
+            return {
+              ...prev,
+              messages: prev.messages.map(m =>
+                m.id === existingId
+                  ? { ...m, content: m.content + data.delta }
+                  : m
+              ),
+            }
+          }
+
+          const msgId = `streaming-${Date.now()}`
+          streamingMsgIdRef.current = msgId
+          const streamMsg: ChatMessage = {
+            id: msgId,
+            role: 'assistant',
+            content: data.delta,
+            timestamp: new Date().toISOString(),
+          }
+          return {
+            ...prev,
+            messages: [...prev.messages, streamMsg],
+            isLoading: false,
+          }
+        })
+      })
+    )
+
+    cleanups.push(
       orchestrator.events.on('response', (data: ResponseEvent) => {
         if (convIdRef.current && data.conversationId !== convIdRef.current)
           return
+
+        const streamingId = streamingMsgIdRef.current
+        streamingMsgIdRef.current = null
         const now = Date.now()
-        const newMessages: ChatMessage[] = []
-        if (data.message?.trim()) {
-          newMessages.push({
-            id: `msg-${now}`,
-            role: 'assistant',
-            content: data.message,
-            actions: data.actions,
-            timestamp: new Date(now).toISOString(),
-          })
-        }
-        setState(prev => ({
-          ...prev,
-          messages: [...prev.messages, ...newMessages],
-          isLoading: false,
-        }))
+
+        setState(prev => {
+          if (streamingId && data.message?.trim()) {
+            return {
+              ...prev,
+              messages: prev.messages.map(m =>
+                m.id === streamingId
+                  ? {
+                      ...m,
+                      id: `msg-${now}`,
+                      content: data.message,
+                      actions: data.actions,
+                    }
+                  : m
+              ),
+              isLoading: false,
+            }
+          }
+
+          const newMessages: ChatMessage[] = []
+          if (data.message?.trim()) {
+            newMessages.push({
+              id: `msg-${now}`,
+              role: 'assistant',
+              content: data.message,
+              actions: data.actions,
+              timestamp: new Date(now).toISOString(),
+            })
+          }
+          return {
+            ...prev,
+            messages: [...prev.messages, ...newMessages],
+            isLoading: false,
+          }
+        })
       })
     )
 
@@ -245,6 +306,7 @@ export const useAgentEvents = (
       orchestrator.events.on('error', (data: ErrorEvent) => {
         if (convIdRef.current && data.conversationId !== convIdRef.current)
           return
+        streamingMsgIdRef.current = null
         const normalizedError = normalizeAgentErrorMessage(data.error)
         const isStopped = normalizedError === 'agent stopped'
         if (isStopped) {

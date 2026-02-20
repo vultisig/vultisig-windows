@@ -53,6 +53,20 @@ export const handleBuildSendTx: ToolHandler = async (input, context) => {
   const payloadBytes = toBinary(KeysignPayloadSchema, keysignPayload)
   const keysignPayloadB64 = btoa(String.fromCharCode(...payloadBytes))
 
+  const txDetails: Record<string, unknown> = {
+    to_address: keysignPayload.toAddress,
+    to_amount: keysignPayload.toAmount,
+    memo: keysignPayload.memo,
+  }
+
+  const bs = keysignPayload.blockchainSpecific
+  if (bs.case === 'ethereumSpecific') {
+    txDetails.nonce = bs.value.nonce.toString()
+    txDetails.gas_limit = bs.value.gasLimit
+    txDetails.max_fee_per_gas_wei = bs.value.maxFeePerGasWei
+    txDetails.priority_fee = bs.value.priorityFee
+  }
+
   return {
     data: {
       keysign_payload: keysignPayloadB64,
@@ -62,6 +76,7 @@ export const handleBuildSendTx: ToolHandler = async (input, context) => {
       sender: coin.address,
       destination: address,
       tx_type: 'send',
+      tx_details: txDetails,
     },
   }
 }

@@ -74,7 +74,17 @@ const formatters: Record<string, Formatter> = {
   },
   scan_tx: tc => {
     const chain = getParam(tc.params, 'chain')
-    return chain ? `Scan Tx: ${chain}` : 'Scan Tx'
+    const base = chain ? `Security Scan: ${chain}` : 'Security Scan'
+
+    if (tc.status !== 'success' || !tc.resultData) return base
+
+    const resultType = getParam(tc.resultData, 'result_type')
+    if (resultType === 'benign') return `${base} — Safe`
+    if (resultType === 'warning') return `${base} — Warning`
+    if (resultType === 'malicious') return `${base} — Malicious`
+    if (resultType === 'unsupported') return `${base} — Not Available`
+
+    return base
   },
   list_vaults: () => 'List Vaults',
 }

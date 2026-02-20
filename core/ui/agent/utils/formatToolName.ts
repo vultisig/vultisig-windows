@@ -11,6 +11,7 @@ const toolDisplayNames: Record<string, string> = {
   policy_generate: 'Generate Policy',
   initiate_swap: 'Initiate Swap',
   build_send_tx: 'Build Send Transaction',
+  build_custom_tx: 'Build Custom Transaction',
   get_balances: 'Get Balances',
   get_coins: 'Get Coins',
   get_chains: 'Get Chains',

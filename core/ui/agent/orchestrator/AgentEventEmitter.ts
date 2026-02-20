@@ -7,6 +7,7 @@ import type {
   LoadingEvent,
   PasswordRequiredEvent,
   ResponseEvent,
+  TextDeltaEvent,
   TitleUpdatedEvent,
   ToolCallEvent,
   TxStatusEvent,
@@ -14,6 +15,7 @@ import type {
 
 type AgentEventMap = {
   loading: LoadingEvent
+  text_delta: TextDeltaEvent
   response: ResponseEvent
   tool_call: ToolCallEvent
   action_result: ActionResultEvent
