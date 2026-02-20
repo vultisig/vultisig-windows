@@ -6,7 +6,7 @@ import { ReactNode } from 'react'
 import styled from 'styled-components'
 
 const contentMaxWidth = 500
-const horizontalMinPadding = 24
+const horizontalMinPadding = 16
 
 type ScreenLayoutProps = {
   children: ReactNode
