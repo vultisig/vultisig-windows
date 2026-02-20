@@ -79,7 +79,7 @@ export const fromStorageVault = (
     name: vault.name,
     publicKeys,
     signers: vault.signers,
-    createdAt: new Date(vault.created_at).getTime(),
+    createdAt: new Date(vault.created_at as unknown as string).getTime(),
     hexChainCode: vault.hex_chain_code,
     localPartyId: vault.local_party_id,
     keyShares,

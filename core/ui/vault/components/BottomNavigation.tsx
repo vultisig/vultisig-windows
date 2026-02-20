@@ -5,6 +5,7 @@ import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 import { CoinsAddIcon } from '@lib/ui/icons/CoinsAddIcon'
+import { SparklesIcon } from '@lib/ui/icons/SparklesIcon'
 import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { hStack, vStack } from '@lib/ui/layout/Stack'
 import { pageBottomInsetVar } from '@lib/ui/page/PageContent'
@@ -15,10 +16,10 @@ import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 const bottomNavigationHeight = 66
-const cameraIconSize = 56
+const centerButtonSize = 56
 
 type BottomNavigationProps = {
-  activeTab?: 'wallet' | 'defi'
+  activeTab?: 'wallet' | 'defi' | 'agent'
   isActiveTabRoot?: boolean
 }
 
@@ -46,13 +47,15 @@ export const BottomNavigation = ({
     }
   }, [])
 
-  const handleTabChange = (tab: 'wallet' | 'defi') => {
+  const handleTabChange = (tab: 'wallet' | 'defi' | 'agent') => {
     if (tab === activeTab && isActiveTabRoot) return
 
     if (tab === 'wallet') {
       navigate({ id: 'vault' }, { replace: true })
-    } else {
+    } else if (tab === 'defi') {
       navigate({ id: 'defi', state: {} }, { replace: true })
+    } else if (tab === 'agent') {
+      navigate({ id: 'agent' }, { replace: true })
     }
   }
 
@@ -67,9 +70,6 @@ export const BottomNavigation = ({
           {t('wallet')}
         </Text>
       </TabButton>
-      <CameraButton onClick={() => navigate({ id: 'uploadQr', state: {} })}>
-        <CameraIcon />
-      </CameraButton>
       <TabButton
         isActive={activeTab === 'defi'}
         onClick={() => handleTabChange('defi')}
@@ -77,6 +77,18 @@ export const BottomNavigation = ({
         <CoinsAddIcon />
         <Text as="span" size={10}>
           {t('defi')}
+        </Text>
+      </TabButton>
+      <CenterButton
+        isActive={activeTab === 'agent'}
+        onClick={() => handleTabChange('agent')}
+      >
+        <SparklesIcon />
+      </CenterButton>
+      <TabButton onClick={() => navigate({ id: 'uploadQr', state: {} })}>
+        <CameraIcon />
+        <Text as="span" size={10}>
+          {t('scan_qr')}
         </Text>
       </TabButton>
     </Container>
@@ -104,11 +116,16 @@ const Container = styled.div`
   }
 `
 
-const CameraButton = styled(UnstyledButton)`
+type CenterButtonProps = {
+  isActive?: boolean
+}
+
+const CenterButton = styled(UnstyledButton)<CenterButtonProps>`
   ${round};
-  background: #4879fd;
+  background: ${({ isActive }) =>
+    isActive ? 'linear-gradient(135deg, #33e6bf 0%, #0439c7 100%)' : '#4879fd'};
   ${centerContent};
-  ${sameDimensions(cameraIconSize)};
+  ${sameDimensions(centerButtonSize)};
   font-size: 24px;
   color: ${getColor('text')};
   transition: all 0.2s;
@@ -116,7 +133,10 @@ const CameraButton = styled(UnstyledButton)`
   margin-bottom: 12px;
 
   &:hover {
-    background: #5a8aff;
+    background: ${({ isActive }) =>
+      isActive
+        ? 'linear-gradient(135deg, #33e6bf 0%, #0439c7 100%)'
+        : '#5a8aff'};
   }
 `
 
@@ -126,9 +146,9 @@ type TabButtonProps = {
 }
 
 const TabButton = styled(UnstyledButton)<TabButtonProps>`
-  width: 137px;
+  width: 100px;
   height: 48px;
-  padding: 3px 20px;
+  padding: 3px 12px;
   font-size: 24px;
   border-radius: 99px;
   transition: all 0.2s ease-in-out;
