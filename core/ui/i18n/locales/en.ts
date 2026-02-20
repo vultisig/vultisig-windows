@@ -291,7 +291,7 @@ export const en = {
   enter_vault_name: 'Enter Vault Name',
   enter_your_email: 'Enter your email',
   enter_your_email_description:
-    'Your email is used to send you a verification code when backing up your vault',
+    'This will only be used once to send your backup file, Vultisig doesn’t store any data.',
   enter_your_password: 'Enter your password',
   entity_not_scanned: '{{entity}} not scanned by <provider></provider>',
   entity_scanned: '{{entity}} scanned by <provider></provider>',
