@@ -27,7 +27,7 @@ export const fetchOneInchTokensRaw = async (
   return queryUrl<OneInchTokensResponse>(url)
 }
 
-export const fetchOneInchCoins = async (chain: Chain): Promise<Coin[]> => {
+const fetchOneInchCoins = async (chain: Chain): Promise<Coin[]> => {
   const data = await fetchOneInchTokensRaw(chain as EvmChain)
   const oneInchTokens = Object.values(data.tokens)
 
@@ -37,9 +37,7 @@ export const fetchOneInchCoins = async (chain: Chain): Promise<Coin[]> => {
   })
 }
 
-export const fetchJupiterVerifiedTokens = async (
-  chain: Chain
-): Promise<Coin[]> => {
+const fetchJupiterVerifiedTokens = async (chain: Chain): Promise<Coin[]> => {
   const url = `${baseJupiterTokensUrl}/tag?query=verified`
   const data = await queryUrl<SolanaJupiterToken[]>(url)
 

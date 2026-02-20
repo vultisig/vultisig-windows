@@ -54,5 +54,3 @@ export function formatPluginPricing(pricing: AppPricing[]): string {
 
   return parts.join(', ')
 }
-
-export type { AppPricing }

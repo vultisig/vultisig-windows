@@ -45,4 +45,3 @@ export function getPluginName(pluginIdOrAlias: string): string {
 }
 
 export { knownPlugins }
-export type { PluginInfo }

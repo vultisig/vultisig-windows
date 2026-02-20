@@ -370,14 +370,4 @@ export async function revokeAllTokens(accessToken: string): Promise<void> {
   })
 }
 
-export type {
-  AppPricing,
-  Plugin,
-  PluginListResponse,
-  Policy,
-  PolicyListResponse,
-  PolicySuggest,
-  RecipeSpecification,
-  Transaction,
-  TransactionListResponse,
-}
+export type { AppPricing, Policy }

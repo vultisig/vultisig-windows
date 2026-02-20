@@ -16,7 +16,7 @@ export function resolveAccountCoin(
   return resolveAccountCoinForChain(coins, chain, chainStr, symbol)
 }
 
-export function resolveAccountCoinForChain(
+function resolveAccountCoinForChain(
   coins: CoinInfo[],
   chain: Chain,
   chainStr: string,
