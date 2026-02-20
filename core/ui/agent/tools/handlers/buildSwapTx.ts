@@ -1,63 +1,13 @@
 import { toBinary } from '@bufbuild/protobuf'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
-import type { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { findSwapQuote } from '@core/chain/swap/quote/findSwapQuote'
 import { buildSwapKeysignPayload } from '@core/mpc/keysign/swap/build'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 
-import { getChainFromString } from '../../utils/getChainFromString'
+import { resolveAccountCoin } from '../shared/resolveAccountCoin'
 import { getWalletContext } from '../shared/walletContext'
-import type { CoinInfo, ToolHandler } from '../types'
-
-function resolveAccountCoin(
-  coins: CoinInfo[],
-  chainStr: string,
-  symbol: string
-): AccountCoin | null {
-  const chain = getChainFromString(chainStr)
-  if (!chain) return null
-
-  const upperSymbol = symbol.toUpperCase()
-
-  const feeCoin = chainFeeCoin[chain]
-  if (feeCoin.ticker.toUpperCase() === upperSymbol) {
-    const vaultCoin = coins.find(
-      c => c.chain.toLowerCase() === chainStr.toLowerCase() && c.isNativeToken
-    )
-    if (!vaultCoin) return null
-    return {
-      chain,
-      address: vaultCoin.address,
-      decimals: feeCoin.decimals,
-      ticker: feeCoin.ticker,
-      logo: feeCoin.logo,
-      priceProviderId: feeCoin.priceProviderId,
-    }
-  }
-
-  const vaultCoin = coins.find(
-    c =>
-      c.chain.toLowerCase() === chainStr.toLowerCase() &&
-      c.ticker.toUpperCase() === upperSymbol
-  )
-  if (!vaultCoin) return null
-
-  const nativeCoin = coins.find(
-    c => c.chain.toLowerCase() === chainStr.toLowerCase() && c.isNativeToken
-  )
-
-  return {
-    chain,
-    id: vaultCoin.contractAddress || undefined,
-    address: nativeCoin?.address ?? vaultCoin.address,
-    decimals: vaultCoin.decimals,
-    ticker: vaultCoin.ticker,
-    logo: vaultCoin.logo,
-    priceProviderId: vaultCoin.priceProviderId,
-  }
-}
+import type { ToolHandler } from '../types'
 
 export const handleBuildSwapTx: ToolHandler = async (input, context) => {
   const fromChainStr = String(input.from_chain ?? '').trim()
@@ -136,6 +86,25 @@ export const handleBuildSwapTx: ToolHandler = async (input, context) => {
 
   const hasApproval = !!keysignPayload.erc20ApprovePayload
 
+  const txDetails: Record<string, unknown> = {
+    to_address: keysignPayload.toAddress,
+    to_amount: keysignPayload.toAmount,
+    memo: keysignPayload.memo,
+  }
+
+  const bs = keysignPayload.blockchainSpecific
+  if (bs.case === 'ethereumSpecific') {
+    txDetails.nonce = bs.value.nonce.toString()
+    txDetails.gas_limit = bs.value.gasLimit
+    txDetails.max_fee_per_gas_wei = bs.value.maxFeePerGasWei
+    txDetails.priority_fee = bs.value.priorityFee
+  }
+
+  if (keysignPayload.erc20ApprovePayload) {
+    txDetails.approval_amount = keysignPayload.erc20ApprovePayload.amount
+    txDetails.approval_spender = keysignPayload.erc20ApprovePayload.spender
+  }
+
   return {
     data: {
       provider,
@@ -150,6 +119,7 @@ export const handleBuildSwapTx: ToolHandler = async (input, context) => {
       amount: amountStr,
       sender: fromCoin.address,
       destination: toCoin.address,
+      tx_details: txDetails,
     },
   }
 }

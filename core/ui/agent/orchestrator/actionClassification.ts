@@ -14,6 +14,7 @@ const alwaysAutoExecute: Record<string, boolean> = {
   search_token: true,
   list_vaults: true,
   build_tx: true,
+  build_send_tx: true,
   sign_tx: true,
   scan_tx: true,
 }
@@ -21,13 +22,6 @@ const alwaysAutoExecute: Record<string, boolean> = {
 function shouldAutoExecute(action: BackendAction): boolean {
   if (alwaysAutoExecute[action.type]) {
     return true
-  }
-  if (action.type === 'initiate_send') {
-    const addr =
-      typeof action.params?.address === 'string'
-        ? action.params.address.trim()
-        : ''
-    return addr !== ''
   }
   return action.auto_execute
 }
@@ -48,7 +42,7 @@ export function filterBuildTx(
   let build: BackendAction | null = null
   const remaining: BackendAction[] = []
   for (const a of actions) {
-    if (a.type === 'build_tx') {
+    if (a.type === 'build_tx' || a.type === 'build_send_tx') {
       build = a
     } else {
       remaining.push(a)
@@ -78,6 +72,7 @@ const actionTypeToToolName: Record<string, string> = {
   create_policy: 'policy_add',
   delete_policy: 'policy_delete',
   build_tx: 'build_swap_tx',
+  build_send_tx: 'build_send_tx',
 }
 
 export function resolveToolName(actionType: string): string {
