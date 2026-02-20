@@ -1,7 +1,11 @@
 import { fromBinary } from '@bufbuild/protobuf'
-import { EvmChain } from '@core/chain/Chain'
+import { Chain, CosmosChain, EvmChain } from '@core/chain/Chain'
 import { getChainKind, isChainOfKind } from '@core/chain/ChainKind'
+import { getCosmosClient } from '@core/chain/chains/cosmos/client'
+import { cosmosRpcUrl } from '@core/chain/chains/cosmos/cosmosRpcUrl'
 import { getEvmClient } from '@core/chain/chains/evm/client'
+import { getSolanaClient } from '@core/chain/chains/solana/client'
+import { getBlockchairBaseUrl } from '@core/chain/chains/utxo/client/getBlockchairBaseUrl'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
@@ -102,14 +106,8 @@ export const handleSignTx: ToolHandler = async (input, context) => {
 
     await broadcastTx({ chain, tx: signingOutput })
 
-    if (isChainOfKind(chain, 'evm') && conversationId && emitEvent) {
-      pollEvmReceipt(
-        chain as EvmChain,
-        txHash,
-        conversationId,
-        label,
-        emitEvent
-      )
+    if (conversationId && emitEvent) {
+      pollTxReceipt(chain, txHash, conversationId, label, emitEvent)
     }
 
     txResults.push({ label, tx_hash: txHash })
@@ -126,35 +124,182 @@ export const handleSignTx: ToolHandler = async (input, context) => {
   return { data: result }
 }
 
+type EmitFn = (event: string, data: Record<string, unknown>) => void
+
+function emitTxStatus(
+  emitEvent: EmitFn,
+  conversationId: string,
+  txHash: string,
+  chain: string,
+  status: 'pending' | 'confirmed' | 'failed',
+  label: string
+) {
+  emitEvent('tx_status', { conversationId, txHash, chain, status, label })
+}
+
+function pollTxReceipt(
+  chain: Chain,
+  txHash: string,
+  conversationId: string,
+  label: string,
+  emitEvent: EmitFn
+) {
+  emitTxStatus(emitEvent, conversationId, txHash, chain, 'pending', label)
+
+  if (isChainOfKind(chain, 'evm')) {
+    pollEvmReceipt(chain, txHash, conversationId, label, emitEvent)
+  } else if (isChainOfKind(chain, 'cosmos')) {
+    pollCosmosReceipt(chain, txHash, conversationId, label, emitEvent)
+  } else if (isChainOfKind(chain, 'utxo')) {
+    pollUtxoReceipt(chain, txHash, conversationId, label, emitEvent)
+  } else if (isChainOfKind(chain, 'solana')) {
+    pollSolanaReceipt(txHash, conversationId, label, emitEvent)
+  }
+}
+
 function pollEvmReceipt(
   chain: EvmChain,
   txHash: string,
   conversationId: string,
   label: string,
-  emitEvent: (event: string, data: Record<string, unknown>) => void
+  emitEvent: EmitFn
 ) {
   const client = getEvmClient(chain)
   const hash = txHash as `0x${string}`
-
-  emitEvent('tx_status', {
-    conversationId,
-    txHash,
-    chain,
-    status: 'pending',
-    label,
-  })
 
   client
     .waitForTransactionReceipt({ hash, timeout: 180_000 })
     .then(receipt => {
       const status = receipt.status === 'success' ? 'confirmed' : 'failed'
-      emitEvent('tx_status', {
-        conversationId,
-        txHash,
-        chain,
-        status,
-        label,
-      })
+      emitTxStatus(emitEvent, conversationId, txHash, chain, status, label)
     })
     .catch(() => {})
+}
+
+function pollCosmosReceipt(
+  chain: CosmosChain,
+  txHash: string,
+  conversationId: string,
+  label: string,
+  emitEvent: EmitFn
+) {
+  const isThorMaya = chain === Chain.THORChain || chain === Chain.MayaChain
+  const pollInterval = isThorMaya ? 6_000 : 8_000
+  const maxAttempts = 30
+
+  const poll = async () => {
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      await new Promise(r => setTimeout(r, pollInterval))
+      try {
+        if (isThorMaya) {
+          const prefix = chain === Chain.THORChain ? 'thorchain' : 'mayachain'
+          const url = `${cosmosRpcUrl[chain]}/${prefix}/tx/${txHash}`
+          const resp = await fetch(url)
+          if (resp.ok) {
+            emitTxStatus(
+              emitEvent,
+              conversationId,
+              txHash,
+              chain,
+              'confirmed',
+              label
+            )
+            return
+          }
+        } else {
+          const client = await getCosmosClient(chain)
+          const tx = await client.getTx(txHash)
+          if (tx) {
+            const status = tx.code === 0 ? 'confirmed' : 'failed'
+            emitTxStatus(
+              emitEvent,
+              conversationId,
+              txHash,
+              chain,
+              status,
+              label
+            )
+            return
+          }
+        }
+      } catch {
+        // not indexed yet
+      }
+    }
+  }
+  poll().catch(() => {})
+}
+
+function pollUtxoReceipt(
+  chain: Chain,
+  txHash: string,
+  conversationId: string,
+  label: string,
+  emitEvent: EmitFn
+) {
+  const pollInterval = 15_000
+  const maxAttempts = 12
+
+  const poll = async () => {
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      await new Promise(r => setTimeout(r, pollInterval))
+      try {
+        const url = `${getBlockchairBaseUrl(chain as any)}/dashboards/transaction/${txHash}`
+        const resp = await fetch(url)
+        if (resp.ok) {
+          const body = await resp.json()
+          if (body?.data?.[txHash]) {
+            emitTxStatus(
+              emitEvent,
+              conversationId,
+              txHash,
+              chain,
+              'confirmed',
+              label
+            )
+            return
+          }
+        }
+      } catch {
+        // not confirmed yet
+      }
+    }
+  }
+  poll().catch(() => {})
+}
+
+function pollSolanaReceipt(
+  txHash: string,
+  conversationId: string,
+  label: string,
+  emitEvent: EmitFn
+) {
+  const pollInterval = 5_000
+  const maxAttempts = 36
+
+  const poll = async () => {
+    const client = getSolanaClient()
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      await new Promise(r => setTimeout(r, pollInterval))
+      try {
+        const result = await client.getSignatureStatuses([txHash])
+        const sigStatus = result?.value?.[0]
+        if (sigStatus) {
+          const status = sigStatus.err ? 'failed' : 'confirmed'
+          emitTxStatus(
+            emitEvent,
+            conversationId,
+            txHash,
+            Chain.Solana,
+            status,
+            label
+          )
+          return
+        }
+      } catch {
+        // not confirmed yet
+      }
+    }
+  }
+  poll().catch(() => {})
 }

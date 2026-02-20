@@ -109,6 +109,11 @@ export type TitleUpdatedEvent = {
   title: string
 }
 
+export type TextDeltaEvent = {
+  conversationId: string
+  delta: string
+}
+
 export type ServiceStatus = {
   fastVaultServer: boolean
   verifier: boolean

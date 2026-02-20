@@ -10,3 +10,8 @@ export const verifierUrl =
   typeof __VULTISIG_VERIFIER_URL__ !== 'undefined'
     ? __VULTISIG_VERIFIER_URL__
     : 'https://verifier.vultisig.com'
+
+export const agentInstructions = [
+  'Prefer using your knowledge and conversation context over calling tools. Only call a tool when you are missing information that you cannot answer from context.',
+  'Use markdown formatting for readability.',
+].join(' ')

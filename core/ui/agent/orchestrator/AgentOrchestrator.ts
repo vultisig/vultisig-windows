@@ -1,4 +1,4 @@
-import { Chain } from '@core/chain/Chain'
+import { Chain, EvmChain } from '@core/chain/Chain'
 import { getCoinBalance } from '@core/chain/coin/balance'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -236,10 +236,15 @@ export class AgentOrchestrator {
           context: msgCtx,
         }
 
-        const resp = await this.backendClient.sendMessage(
+        const resp = await this.backendClient.sendMessageStream(
           convId,
           req,
           token,
+          delta =>
+            this.events.emit('text_delta', {
+              conversationId: convId,
+              delta,
+            }),
           ac.signal
         )
 
@@ -525,7 +530,17 @@ export class AgentOrchestrator {
 
     let resp: SendMessageResponse
     try {
-      resp = await this.backendClient.sendMessage(convId, req, token, signal)
+      resp = await this.backendClient.sendMessageStream(
+        convId,
+        req,
+        token,
+        delta =>
+          this.events.emit('text_delta', {
+            conversationId: convId,
+            delta,
+          }),
+        signal
+      )
     } catch (err) {
       this.handleError(convId, vaultPubKey, err)
       return
@@ -580,14 +595,16 @@ export class AgentOrchestrator {
     const [autoActions, signAction] = filterSignTx(actionsAfterBuild)
 
     if (buildAction && !this.pendingTx.has(convId)) {
-      const isSend = buildAction.type === 'build_send_tx'
+      let mode: 'swap' | 'send' | 'custom' = 'swap'
+      if (buildAction.type === 'build_send_tx') mode = 'send'
+      else if (buildAction.type === 'build_custom_tx') mode = 'custom'
       this.buildTxAsync(
         signal,
         convId,
         vaultPubKey,
         token,
         buildAction.params ?? {},
-        isSend ? 'send' : 'swap'
+        mode
       )
     }
 
@@ -737,12 +754,26 @@ export class AgentOrchestrator {
     vaultPubKey: string,
     token: string,
     params: Record<string, unknown>,
-    mode: 'swap' | 'send' = 'swap'
+    mode: 'swap' | 'send' | 'custom' = 'swap'
   ): Promise<void> {
-    const actionType = mode === 'send' ? 'build_send_tx' : 'build_tx'
-    const toolName = mode === 'send' ? 'build_send_tx' : 'build_swap_tx'
+    const actionType =
+      mode === 'send'
+        ? 'build_send_tx'
+        : mode === 'custom'
+          ? 'build_custom_tx'
+          : 'build_tx'
+    const toolName =
+      mode === 'send'
+        ? 'build_send_tx'
+        : mode === 'custom'
+          ? 'build_custom_tx'
+          : 'build_swap_tx'
     const title =
-      mode === 'send' ? 'Build Send Transaction' : 'Build Swap Transaction'
+      mode === 'send'
+        ? 'Build Send Transaction'
+        : mode === 'custom'
+          ? 'Build Custom Transaction'
+          : 'Build Swap Transaction'
 
     const run = async () => {
       const attempts = (this.buildAttempts.get(convId) ?? 0) + 1
@@ -829,14 +860,96 @@ export class AgentOrchestrator {
       const txReady = toolResult.data as unknown as TxReady
       this.pendingTx.set(convId, txReady)
 
+      const summary = buildTxResultSummary(txReady)
+
+      const scanResult = await this.scanTxIfEvm(
+        convId,
+        vaultPubKey,
+        token,
+        txReady
+      )
+      if (scanResult) {
+        summary.security_scan = scanResult
+      }
+
       const result: ActionResult = {
         action: actionType,
         success: true,
-        data: buildTxResultSummary(txReady),
+        data: summary,
       }
       await this.reportActionResult(signal, convId, vaultPubKey, token, result)
     }
     run()
+  }
+
+  private async scanTxIfEvm(
+    convId: string,
+    vaultPubKey: string,
+    token: string,
+    txReady: TxReady
+  ): Promise<Record<string, unknown> | null> {
+    const evmChains = Object.values(EvmChain) as string[]
+    if (!evmChains.includes(txReady.from_chain)) return null
+
+    const details = txReady.tx_details ?? {}
+    const to = (details.to_address as string) || txReady.destination || ''
+
+    const rawValue = (details.to_amount as string) || '0'
+    let value: string
+    try {
+      value = '0x' + BigInt(rawValue).toString(16)
+    } catch {
+      value = '0x0'
+    }
+
+    const rawMemo = (details.memo as string) || ''
+    const data = rawMemo.startsWith('0x') ? rawMemo : '0x'
+
+    if (!to) return null
+
+    const scanAction: BackendAction = {
+      id: `scan-tx-${Date.now()}`,
+      type: 'scan_tx',
+      title: 'Security Scan',
+      params: {
+        chain: txReady.from_chain,
+        from: txReady.sender,
+        to,
+        value,
+        data,
+      },
+      auto_execute: true,
+    }
+
+    this.events.emit('tool_call', {
+      conversationId: convId,
+      actionId: scanAction.id,
+      actionType: 'scan_tx',
+      title: scanAction.title,
+      params: scanAction.params,
+    })
+
+    const result = await this.executeTool(
+      convId,
+      vaultPubKey,
+      token,
+      scanAction
+    )
+
+    this.events.emit('action_result', {
+      conversationId: convId,
+      actionId: scanAction.id,
+      actionType: 'scan_tx',
+      success: result.success,
+      data: result.data,
+      error: result.error,
+    })
+
+    if (result.success && result.data) {
+      return result.data
+    }
+
+    return null
   }
 
   private async preflightSearchToken(
@@ -912,7 +1025,17 @@ export class AgentOrchestrator {
 
     let resp: SendMessageResponse
     try {
-      resp = await this.backendClient.sendMessage(convId, req, token, signal)
+      resp = await this.backendClient.sendMessageStream(
+        convId,
+        req,
+        token,
+        delta =>
+          this.events.emit('text_delta', {
+            conversationId: convId,
+            delta,
+          }),
+        signal
+      )
     } catch (err) {
       this.handleError(convId, vaultPubKey, err)
       return
@@ -939,14 +1062,25 @@ export class AgentOrchestrator {
         context: msgCtx,
       }
 
-      let resp: SendMessageResponse
-      try {
-        resp = await this.backendClient.sendMessage(convId, req, token, signal)
-      } catch {
-        continue
-      }
+      const isLast = i === results.length - 1
 
-      if (i === results.length - 1) {
+      if (isLast) {
+        let resp: SendMessageResponse
+        try {
+          resp = await this.backendClient.sendMessageStream(
+            convId,
+            req,
+            token,
+            delta =>
+              this.events.emit('text_delta', {
+                conversationId: convId,
+                delta,
+              }),
+            signal
+          )
+        } catch {
+          continue
+        }
         await this.handleBackendResponse(
           signal,
           convId,
@@ -954,6 +1088,12 @@ export class AgentOrchestrator {
           token,
           resp
         )
+      } else {
+        try {
+          await this.backendClient.sendMessage(convId, req, token, signal)
+        } catch {
+          continue
+        }
       }
     }
   }
