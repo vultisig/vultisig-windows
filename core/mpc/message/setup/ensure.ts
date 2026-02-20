@@ -32,15 +32,8 @@ export const ensureSetupMessage = async ({
   isInitiatingDevice,
 }: EnsureSetupMessageInput) => {
   const messageId = getMessageHash(message)
-  console.log('[ensureSetupMessage]', {
-    isInitiatingDevice,
-    signatureAlgorithm,
-    chainPath,
-    devices,
-  })
 
   if (isInitiatingDevice) {
-    console.log('[ensureSetupMessage] creating setup message as initiator...')
     const setupMessage = makeSetupMessage({
       keyShare,
       chainPath,
@@ -48,7 +41,6 @@ export const ensureSetupMessage = async ({
       devices,
       signatureAlgorithm,
     })
-    console.log('[ensureSetupMessage] setup message created')
 
     await transformError(
       uploadMpcSetupMessage({

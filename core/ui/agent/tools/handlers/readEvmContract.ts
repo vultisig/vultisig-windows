@@ -82,7 +82,7 @@ const buildAbi = (
 const coerceArg = (param: AbiParam): unknown => {
   const t = param.type.toLowerCase()
   if (t === 'bool') return param.value === 'true'
-  if (t === 'uint256') return BigInt(param.value)
+  if (t.startsWith('uint') || t.startsWith('int')) return BigInt(param.value)
   return param.value
 }
 
@@ -97,7 +97,11 @@ export const handleReadEvmContract: ToolHandler = async input => {
   const chainStr = String(input.chain ?? '').trim()
   const contractAddress = String(input.contract_address ?? '').trim()
   const functionName = String(input.function_name ?? '').trim()
-  const params = (input.params ?? []) as AbiParam[]
+  const rawParams = Array.isArray(input.params) ? input.params : []
+  const params: AbiParam[] = rawParams.map((p: Record<string, unknown>) => ({
+    type: String(p.type ?? ''),
+    value: String(p.value ?? ''),
+  }))
   const outputTypes = (input.output_types ?? ['uint256']) as string[]
 
   if (!chainStr || !contractAddress || !functionName) {

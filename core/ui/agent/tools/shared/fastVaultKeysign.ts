@@ -84,19 +84,8 @@ async function fastVaultKeysignAttempt(
   const isEcdsa = signatureAlgorithm === 'ecdsa'
   const publicKey = isEcdsa ? vault.publicKeyEcdsa : vault.publicKeyEddsa
 
-  console.log('[fastVaultKeysign] step 1: registerSession', {
-    sessionId: sessionId.slice(0, 8),
-    localPartyId: vault.localPartyId,
-  })
   await registerSession(relayUrl, sessionId, vault.localPartyId)
-  console.log('[fastVaultKeysign] step 1 done')
 
-  console.log('[fastVaultKeysign] step 2: callFastVaultSign', {
-    publicKey: publicKey.slice(0, 12),
-    derivePath,
-    isEcdsa,
-    chain,
-  })
   await callFastVaultSign({
     publicKey,
     messages: [messageHash],
@@ -107,30 +96,16 @@ async function fastVaultKeysignAttempt(
     vaultPassword: vault.password,
     chain,
   })
-  console.log('[fastVaultKeysign] step 2 done')
 
-  console.log('[fastVaultKeysign] step 3: waitForParties')
   const parties = await waitForParties(relayUrl, sessionId, 2)
-  console.log('[fastVaultKeysign] step 3 done, parties:', parties)
 
-  console.log('[fastVaultKeysign] step 4: startSession')
   await startSession(relayUrl, sessionId, parties)
-  console.log('[fastVaultKeysign] step 4 done')
 
   const keyShare = getKeyShare(vault, signatureAlgorithm)
   const peers = parties.filter(p => p !== vault.localPartyId)
   const mpcChainPath = derivePath.replaceAll("'", '')
-  console.log('[fastVaultKeysign] step 5: keysign', {
-    keyShareLen: keyShare.length,
-    keySharePrefix: keyShare.slice(0, 20),
-    signatureAlgorithm,
-    messageHash: messageHash.slice(0, 16),
-    derivePath,
-    localPartyId: vault.localPartyId,
-    peers,
-  })
 
-  const result = await keysign({
+  return keysign({
     keyShare,
     signatureAlgorithm,
     message: messageHash,
@@ -142,14 +117,13 @@ async function fastVaultKeysignAttempt(
     hexEncryptionKey,
     isInitiatingDevice: true,
   })
-  console.log('[fastVaultKeysign] step 5 done')
-
-  return result
 }
 
 export function formatKeysignSignatureHex(sig: KeysignSignature): string {
-  const recoveryId = sig.recovery_id || '1b'
-  return '0x' + sig.r + sig.s + recoveryId
+  if (!sig.recovery_id) {
+    throw new Error('recovery_id is required to format keysign signature hex')
+  }
+  return '0x' + sig.r + sig.s + sig.recovery_id
 }
 
 function isRetryable(err: Error): boolean {

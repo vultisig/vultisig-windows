@@ -164,12 +164,9 @@ export class AgentAuthService {
   }
 
   async signIn(vault: VaultMeta): Promise<AuthToken> {
-    console.log('[auth:signIn] generating auth message')
     const authMessage = generateAuthMessage(vault.publicKeyEcdsa)
     const messageHash = ethereumSignHash(authMessage)
-    console.log('[auth:signIn] messageHash:', messageHash.slice(0, 16) + '...')
 
-    console.log('[auth:signIn] calling fastVaultKeysign...')
     const sig = await fastVaultKeysign({
       vault,
       messageHash,
@@ -178,10 +175,6 @@ export class AgentAuthService {
       chain: 'Ethereum',
       maxAttempts: 2,
     })
-    console.log(
-      '[auth:signIn] keysign completed, sig r:',
-      sig.r?.slice(0, 16) + '...'
-    )
 
     const signature = formatKeysignSignatureHex(sig)
 

@@ -29,6 +29,21 @@ function shouldAutoExecute(action: BackendAction): boolean {
   return action.auto_execute
 }
 
+export function filterProtectedActions(
+  actions: BackendAction[]
+): [BackendAction[], BackendAction[]] {
+  const protected_: BackendAction[] = []
+  const rest: BackendAction[] = []
+  for (const a of actions) {
+    if (passwordRequired[a.type] || confirmationRequired[a.type]) {
+      protected_.push(a)
+    } else {
+      rest.push(a)
+    }
+  }
+  return [rest, protected_]
+}
+
 export function filterAutoActions(actions: BackendAction[]): BackendAction[] {
   return actions.filter(shouldAutoExecute)
 }

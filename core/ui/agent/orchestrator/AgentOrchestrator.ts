@@ -20,6 +20,7 @@ import {
   filterAutoActions,
   filterBuildTx,
   filterNonAutoActions,
+  filterProtectedActions,
   filterSignTx,
   needsConfirmation,
   needsPassword,
@@ -283,13 +284,6 @@ export class AgentOrchestrator {
       libType: vaultMeta.libType,
       signers: vaultMeta.signers,
       keyShareCount: vaultMeta.keyShares.length,
-      keyShares: vaultMeta.keyShares.map(ks => ({
-        publicKey: ks.publicKey.slice(0, 12) + '...',
-        keyShareLen: ks.keyShare.length,
-        keySharePrefix: ks.keyShare.slice(0, 20) + '...',
-      })),
-      publicKeyEcdsa: vaultMeta.publicKeyEcdsa.slice(0, 12) + '...',
-      publicKeyEddsa: vaultMeta.publicKeyEddsa.slice(0, 12) + '...',
     })
 
     try {
@@ -470,7 +464,9 @@ export class AgentOrchestrator {
     }
 
     const allActions = resp.actions ?? []
-    const nonAutoActions = filterNonAutoActions(allActions)
+    const [unprotectedActions, protectedActions] =
+      filterProtectedActions(allActions)
+    const nonAutoActions = filterNonAutoActions(unprotectedActions)
 
     this.events.emit('response', {
       conversationId: convId,
@@ -496,7 +492,7 @@ export class AgentOrchestrator {
     }
 
     const [actionsAfterBuild, buildAction] = filterBuildTx(
-      filterAutoActions(allActions)
+      filterAutoActions(unprotectedActions)
     )
     const [autoActions, signAction] = filterSignTx(actionsAfterBuild)
 
@@ -568,6 +564,13 @@ export class AgentOrchestrator {
 
     if (buildAction) return
 
+    for (const action of protectedActions) {
+      if (signal.aborted) return
+      await this.executeAndReport(signal, convId, vaultPubKey, token, action)
+    }
+
+    if (protectedActions.length > 0) return
+
     this.events.emit('complete', {
       conversationId: convId,
       message: resp.message.content,
@@ -619,7 +622,7 @@ export class AgentOrchestrator {
       },
     }
 
-    if (password) {
+    if (password !== undefined) {
       toolCtx.vault = this.buildVaultMetaFromData(vault, password)
     }
 

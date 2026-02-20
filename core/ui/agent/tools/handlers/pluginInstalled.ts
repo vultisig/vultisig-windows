@@ -8,10 +8,15 @@ export const handlePluginInstalled: ToolHandler = async (input, context) => {
 
   const pluginId = resolvePluginId(pluginIdRaw)
   const pluginName = getPluginName(pluginId)
+  if (!context.authToken) {
+    throw new Error(
+      'Vault is not signed in. Please sign in to check plugin status.'
+    )
+  }
   const installed = await checkPluginInstalled(
     pluginId,
     context.vaultPubKey,
-    context.authToken ?? ''
+    context.authToken
   )
 
   return {

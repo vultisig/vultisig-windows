@@ -25,21 +25,6 @@ export const makeSignSession = ({
   keyShare,
   signatureAlgorithm,
 }: MakeSignSessionInput) => {
-  console.log('[makeSignSession] creating sign session...', {
-    localPartyId,
-    signatureAlgorithm,
-  })
-  try {
-    const ks = toMpcLibKeyshare({ keyShare, signatureAlgorithm })
-    const session = new SignSession[signatureAlgorithm](
-      setupMessage,
-      localPartyId,
-      ks
-    )
-    console.log('[makeSignSession] sign session created')
-    return session
-  } catch (err) {
-    console.error('[makeSignSession] FAILED:', err)
-    throw err
-  }
+  const ks = toMpcLibKeyshare({ keyShare, signatureAlgorithm })
+  return new SignSession[signatureAlgorithm](setupMessage, localPartyId, ks)
 }

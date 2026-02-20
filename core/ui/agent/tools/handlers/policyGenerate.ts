@@ -13,7 +13,8 @@ function findVaultAddress(coins: CoinInfo[], chain: string): string {
   )
   if (native) return native.address
   const any = coins.find(c => c.chain.toLowerCase() === lowerChain)
-  return any?.address ?? ''
+  if (!any) throw new Error(`No vault address found for chain "${chain}"`)
+  return any.address
 }
 
 function immediateStartDate(): string {
@@ -86,7 +87,7 @@ function buildSwapConfig(
         address: findVaultAddress(coins, toAsset.chain),
       }
       if (input.to_address) {
-        toObj.address = input.to_address
+        toObj.address = String(input.to_address)
       }
       config.to = toObj
     }

@@ -26,7 +26,11 @@ export const handleBuildSendTx: ToolHandler = async (input, context) => {
     )
   }
 
-  const amount = toChainAmount(parseFloat(amountStr), coin.decimals)
+  const parsedAmount = parseFloat(amountStr)
+  if (Number.isNaN(parsedAmount) || parsedAmount <= 0) {
+    throw new Error(`Invalid amount: ${amountStr}`)
+  }
+  const amount = toChainAmount(parsedAmount, coin.decimals)
 
   const { walletCore, vault } = getWalletContext()
 

@@ -138,14 +138,14 @@ export async function listPlugins(): Promise<PluginListResponse> {
 }
 
 export async function getPlugin(pluginId: string): Promise<Plugin> {
-  return fetchApi<Plugin>('/plugins/' + pluginId)
+  return fetchApi<Plugin>('/plugins/' + encodeURIComponent(pluginId))
 }
 
 export async function getRecipeSpecification(
   pluginId: string
 ): Promise<RecipeSpecification> {
   return fetchApi<RecipeSpecification>(
-    '/plugins/' + pluginId + '/recipe-specification'
+    '/plugins/' + encodeURIComponent(pluginId) + '/recipe-specification'
   )
 }
 
@@ -156,7 +156,10 @@ export async function checkPluginInstalled(
 ): Promise<boolean> {
   try {
     await fetchApiWithAuth(
-      '/vault/exist/' + pluginId + '/' + publicKey,
+      '/vault/exist/' +
+        encodeURIComponent(pluginId) +
+        '/' +
+        encodeURIComponent(publicKey),
       authToken
     )
     return true
@@ -173,7 +176,7 @@ export async function uninstallPlugin(
   pluginId: string,
   authToken: string
 ): Promise<void> {
-  await fetchApiWithAuth('/plugin/' + pluginId, authToken, {
+  await fetchApiWithAuth('/plugin/' + encodeURIComponent(pluginId), authToken, {
     method: 'DELETE',
     body: JSON.stringify({}),
   })
@@ -185,7 +188,11 @@ export async function listPolicies(
   authToken: string,
   active: boolean
 ): Promise<PolicyListResponse> {
-  const url = `/plugin/policies/${pluginId}?public_key=${publicKey}&active=${active}`
+  const params = new URLSearchParams({
+    public_key: publicKey,
+    active: String(active),
+  })
+  const url = `/plugin/policies/${encodeURIComponent(pluginId)}?${params}`
   return fetchApiWithAuth<PolicyListResponse>(url, authToken)
 }
 
@@ -193,7 +200,10 @@ export async function getPolicyFull(
   policyId: string,
   authToken: string
 ): Promise<Policy> {
-  return fetchApiWithAuth<Policy>('/plugin/policy/' + policyId, authToken)
+  return fetchApiWithAuth<Policy>(
+    '/plugin/policy/' + encodeURIComponent(policyId),
+    authToken
+  )
 }
 
 export async function getTransactions(
@@ -201,7 +211,7 @@ export async function getTransactions(
   authToken: string
 ): Promise<TransactionListResponse> {
   return fetchApiWithAuth<TransactionListResponse>(
-    '/plugin/transactions?public_key=' + publicKey,
+    '/plugin/transactions?public_key=' + encodeURIComponent(publicKey),
     authToken
   )
 }
@@ -217,10 +227,13 @@ export async function suggestPolicy(
   config: Record<string, unknown>
 ): Promise<PolicySuggest> {
   try {
-    return await fetchApi<PolicySuggest>('/plugin/policy/suggest/' + pluginId, {
-      method: 'POST',
-      body: JSON.stringify(config),
-    })
+    return await fetchApi<PolicySuggest>(
+      '/plugin/policy/suggest/' + encodeURIComponent(pluginId),
+      {
+        method: 'POST',
+        body: JSON.stringify(config),
+      }
+    )
   } catch {
     return {}
   }
@@ -265,10 +278,14 @@ export async function deletePolicy(
   signature: string,
   authToken: string
 ): Promise<void> {
-  await fetchApiWithAuth('/plugin/policy/' + policyId, authToken, {
-    method: 'DELETE',
-    body: JSON.stringify({ signature }),
-  })
+  await fetchApiWithAuth(
+    '/plugin/policy/' + encodeURIComponent(policyId),
+    authToken,
+    {
+      method: 'DELETE',
+      body: JSON.stringify({ signature }),
+    }
+  )
 }
 
 type VerifierReshareParams = {

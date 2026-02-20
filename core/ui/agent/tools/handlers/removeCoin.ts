@@ -21,7 +21,16 @@ export const handleRemoveCoin: ToolHandler = async (input, context) => {
 
   if (coinId) {
     const parts = coinId.split(':')
-    const coinChain = parts[0] as Chain
+    if (parts.length < 2) {
+      throw new Error(
+        `Invalid coin_id format: "${coinId}". Expected "chain:address" or "chain:id:address"`
+      )
+    }
+    const resolvedChain = getChainFromString(parts[0])
+    if (!resolvedChain) {
+      throw new Error(`Unknown chain in coin_id: "${parts[0]}"`)
+    }
+    const coinChain = resolvedChain
     const coinAddress = parts.length === 3 ? parts[2] : parts[1]
     const coinContractId = parts.length === 3 ? parts[1] : undefined
 

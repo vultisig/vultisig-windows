@@ -1,5 +1,3 @@
-import { Chain } from '@core/chain/Chain'
-
 import { getChainFromString } from '../../utils/getChainFromString'
 import { getStorageContext } from '../shared/storageContext'
 import type { ToolHandler } from '../types'
@@ -36,7 +34,10 @@ export const handleAddAddressBookEntry: ToolHandler = async input => {
     )
   }
 
-  const chain = (getChainFromString(chainRaw) ?? chainRaw) as Chain
+  const chain = getChainFromString(chainRaw)
+  if (!chain) {
+    throw new Error(`Unrecognized chain: "${chainRaw}"`)
+  }
 
   const id = crypto.randomUUID()
   await storage.createAddressBookItem({

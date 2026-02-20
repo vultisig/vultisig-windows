@@ -172,7 +172,9 @@ function pollEvmReceipt(
       const status = receipt.status === 'success' ? 'confirmed' : 'failed'
       emitTxStatus(emitEvent, conversationId, txHash, chain, status, label)
     })
-    .catch(() => {})
+    .catch(() => {
+      emitTxStatus(emitEvent, conversationId, txHash, chain, 'failed', label)
+    })
 }
 
 function pollCosmosReceipt(
@@ -225,6 +227,7 @@ function pollCosmosReceipt(
         // not indexed yet
       }
     }
+    emitTxStatus(emitEvent, conversationId, txHash, chain, 'failed', label)
   }
   poll().catch(() => {})
 }
@@ -263,6 +266,7 @@ function pollUtxoReceipt(
         // not confirmed yet
       }
     }
+    emitTxStatus(emitEvent, conversationId, txHash, chain, 'failed', label)
   }
   poll().catch(() => {})
 }
@@ -299,6 +303,14 @@ function pollSolanaReceipt(
         // not confirmed yet
       }
     }
+    emitTxStatus(
+      emitEvent,
+      conversationId,
+      txHash,
+      Chain.Solana,
+      'failed',
+      label
+    )
   }
   poll().catch(() => {})
 }

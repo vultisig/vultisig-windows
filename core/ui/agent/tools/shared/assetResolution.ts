@@ -1,8 +1,8 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { knownTokensIndex } from '@core/chain/coin/knownTokens/index'
+import { parseUnits } from 'viem'
 
 import { getChainFromString } from '../../utils/getChainFromString'
 
@@ -290,7 +290,7 @@ export function convertToSmallestUnit(
   amount: string,
   decimals: number
 ): string {
-  return toChainAmount(parseFloat(amount), decimals).toString()
+  return parseUnits(amount, decimals).toString()
 }
 
 export function looksLikeAddress(s: string): boolean {

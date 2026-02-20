@@ -111,12 +111,14 @@ async function waitForPluginInstallParties(
 
 function getEcdsaKeyShare(vault: VaultMeta): string {
   const ks = vault.keyShares.find(k => k.publicKey === vault.publicKeyEcdsa)
-  return ks?.keyShare ?? ''
+  if (!ks) throw new Error('ECDSA key share not found in vault')
+  return ks.keyShare
 }
 
 function getEddsaKeyShare(vault: VaultMeta): string {
   const ks = vault.keyShares.find(k => k.publicKey === vault.publicKeyEddsa)
-  return ks?.keyShare ?? ''
+  if (!ks) throw new Error('EdDSA key share not found in vault')
+  return ks.keyShare
 }
 
 export const handlePluginInstall: ToolHandler = async (input, context) => {
@@ -130,7 +132,12 @@ export const handlePluginInstall: ToolHandler = async (input, context) => {
 
   const pluginId = resolvePluginId(pluginIdRaw)
   const pluginName = getPluginName(pluginId)
-  const authToken = context.authToken ?? ''
+  if (!context.authToken) {
+    throw new Error(
+      'Vault is not signed in. Please sign in to install plugins.'
+    )
+  }
+  const authToken = context.authToken
 
   const installed = await checkPluginInstalled(
     pluginId,
