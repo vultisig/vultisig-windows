@@ -33,7 +33,10 @@ export const VaultEmailStep = ({
     email: z
       .string()
       .min(1, t('email_required'))
-      .refine(val => !validateEmail(val), t('incorrect_email')),
+      .refine(val => {
+        const error = validateEmail(val)
+        return !error
+      }, t('incorrect_email')),
   })
 
   const {
