@@ -84,11 +84,10 @@ const StyledInput = styled.input.attrs({ autoComplete: 'off' })`
   outline: none;
   transition: border-color 0.2s;
   background-color: transparent;
-  color: ${getColor('contrast')};
-  font-weight: 700;
+  color: ${getColor('textShy')};
+  font-weight: 500;
 
   &::placeholder {
     color: ${getColor('textShy')};
-    font-weight: 500;
   }
 `
