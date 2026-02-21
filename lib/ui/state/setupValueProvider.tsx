@@ -14,5 +14,9 @@ export function setupValueProvider<T>(contextId: string) {
     )
   }
 
-  return [ValueProvider, createContextHook(ValueContext, contextId)] as const
+  return [
+    ValueProvider,
+    createContextHook(ValueContext, contextId),
+    ValueContext,
+  ] as const
 }
