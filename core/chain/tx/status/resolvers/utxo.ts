@@ -1,4 +1,5 @@
 import { UtxoBasedChain } from '@core/chain/Chain'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { attempt } from '@lib/utils/attempt'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
@@ -11,6 +12,7 @@ type BlockchairTxResponse = {
     {
       transaction: {
         block_id: number | null
+        fee?: number
       }
     }
   >
@@ -28,14 +30,24 @@ export const getUtxoTxStatus: TxStatusResolver<UtxoBasedChain> = async ({
   )
 
   if (error || !response || !response.data[hash]) {
-    return 'pending'
+    return { status: 'pending' }
   }
 
   const tx = response.data[hash].transaction
 
   if (tx.block_id === null || tx.block_id === -1) {
-    return 'pending'
+    return { status: 'pending' }
   }
 
-  return 'success'
+  const feeCoin = chainFeeCoin[chain]
+  const receipt =
+    tx.fee != null && tx.fee >= 0
+      ? {
+          feeAmount: BigInt(tx.fee),
+          feeDecimals: feeCoin.decimals,
+          feeTicker: feeCoin.ticker,
+        }
+      : undefined
+
+  return { status: 'success', receipt }
 }

@@ -13,7 +13,7 @@ export const useTxStatusQuery = ({ chain, hash }: UseTxStatusQueryInput) => {
     queryKey: ['txStatus', chain, hash],
     queryFn: () => getTxStatus({ chain, hash }),
     refetchInterval: query => {
-      const status = query.state.data
+      const status = query.state.data?.status
       if (status === 'success' || status === 'error') {
         return false
       }

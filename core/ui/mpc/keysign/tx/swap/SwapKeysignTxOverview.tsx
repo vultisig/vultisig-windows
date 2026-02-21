@@ -28,8 +28,9 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useTxStatusQuery } from '../../../../chain/tx/status/useTxStatusQuery'
+import { TxActualFeeDisplay } from '../components/TxActualFeeDisplay'
 import { TxFeeRow } from '../components/TxFeeRow'
-import { KeysignFeeAmount } from '../FeeAmount'
 import { TxStatusTracker } from '../TxStatusTracker'
 import { TrackTxPrompt } from './TrackTxPrompt'
 
@@ -64,6 +65,13 @@ export const SwapKeysignTxOverview = ({
       general: () => sourceChain,
     }
   )
+
+  const mainTxHash = getLastItem(txHashes)
+  const txStatusQuery = useTxStatusQuery({
+    chain: blockExplorerChain,
+    hash: mainTxHash,
+  })
+  const receipt = txStatusQuery.data?.receipt
 
   const trackTransaction = (tx: string) =>
     openUrl(
@@ -153,9 +161,14 @@ export const SwapKeysignTxOverview = ({
               </AddressWrapper>
             </HStack>
           )}
-          <TxFeeRow label={t('network_fee')}>
-            <KeysignFeeAmount keysignPayload={value} />
-          </TxFeeRow>
+          {receipt && (
+            <TxFeeRow label={t('network_fee')}>
+              <TxActualFeeDisplay
+                chain={blockExplorerChain}
+                receipt={receipt}
+              />
+            </TxFeeRow>
+          )}
         </SwapInfoWrapper>
         <HStack gap={8} fullWidth>
           <Button
