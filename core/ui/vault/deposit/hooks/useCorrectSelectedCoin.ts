@@ -1,3 +1,4 @@
+import { Chain } from '@core/chain/Chain'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { findByTicker } from '@core/chain/coin/utils/findByTicker'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -42,13 +43,30 @@ export const useCorrectSelectedCoin = () => {
       const potentialRUNECoin = findByTicker({ coins, ticker: 'RUNE' })
       const potentialCACAOCoin = findByTicker({ coins, ticker: 'CACAO' })
 
+      const customCoinSelectors: Partial<Record<Chain, () => AccountCoin>> = {
+        [Chain.THORChain]: () => shouldBePresent(potentialRUNECoin),
+        [Chain.MayaChain]: () => shouldBePresent(potentialCACAOCoin),
+      }
+
+      const selectCustomCoin = () => {
+        const selector = customCoinSelectors[currentDepositCoin.chain]
+
+        if (!selector) {
+          throw new Error(
+            `Custom chain action is not configured for ${currentDepositCoin.chain}`
+          )
+        }
+
+        return selector()
+      }
+
       return match(action, {
         ibc_transfer: () => currentDepositCoin,
         switch: () => currentDepositCoin,
         bond_with_lp: () => shouldBePresent(potentialCACAOCoin),
         unbond_with_lp: () => shouldBePresent(potentialCACAOCoin),
         vote: () => shouldBePresent(potentialRUNECoin),
-        custom: () => currentDepositCoin,
+        custom: selectCustomCoin,
         mint: () => {
           const currentCoin = findByTicker({
             coins: mintOptions,

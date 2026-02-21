@@ -29,7 +29,7 @@ const chainActionConfig: Record<ChainAction, BalanceDisplayConfig> = {
   unmerge: { showBalance: true, balanceLabel: 'shares', showTicker: false },
   unbond: { showBalance: false, showTicker: false },
   leave: { showBalance: false, showTicker: false },
-  custom: { showBalance: true, balanceLabel: 'balance', showTicker: true },
+  custom: { showBalance: false, showTicker: false },
   bond_with_lp: { showBalance: false, showTicker: false },
   unbond_with_lp: { showBalance: false, showTicker: false },
   vote: { showBalance: false, showTicker: false },
