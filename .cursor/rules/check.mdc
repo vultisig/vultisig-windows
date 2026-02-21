@@ -1,0 +1,32 @@
+---
+alwaysApply: true
+---
+
+## Run yarn check after finishing a task
+
+You MUST run `yarn check` after completing the task. This is mandatory and non-negotiable.
+
+`yarn check` is a comprehensive command that runs TypeScript type checking, ESLint (with auto-fix), and Knip (unused code check). You do NOT need to run these commands (e.g., `yarn typecheck`, `yarn eslint`) separately as they are already included.
+
+```bash
+yarn check
+```
+
+**Workflow:**
+
+1. Complete the requested changes
+2. Run `yarn check` immediately
+3. If `yarn check` reports errors, fix them:
+   - **Unused exports/files**: Delete unused exports, functions, or entire files reported by Knip
+   - **TypeScript errors**: Fix type errors
+   - **ESLint errors**: Fix linting issues (auto-fix is already attempted by `yarn check`, but some may require manual fixes)
+4. Rerun `yarn check` until it passes with **no errors or warnings**
+5. Only then consider the task complete
+
+**Important**: When knip reports unused exports or files, you must remove them. This includes:
+
+- Unused exported functions
+- Unused exported types (if the file has no other purpose)
+- Entire unused files
+
+Do not skip this step when `@check.mdc` is mentioned in the user's request.

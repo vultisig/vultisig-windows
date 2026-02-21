@@ -30,7 +30,7 @@ import styled from 'styled-components'
 
 import { TxFeeRow } from '../components/TxFeeRow'
 import { KeysignFeeAmount } from '../FeeAmount'
-import { TxStatusTracker } from '../TxStatusTracker'
+import { TransactionSuccessAnimation } from '../TransactionSuccessAnimation'
 import { TrackTxPrompt } from './TrackTxPrompt'
 
 export const SwapKeysignTxOverview = ({
@@ -75,11 +75,8 @@ export const SwapKeysignTxOverview = ({
     )
 
   return (
-    <VStack gap={36}>
-      <TxStatusTracker
-        chain={blockExplorerChain}
-        hash={getLastItem(txHashes)}
-      />
+    <>
+      <TransactionSuccessAnimation />
       <VStack alignItems="center" gap={8}>
         <VStack gap={8}>
           <Text centerHorizontally color="shy" size={10} height="large">
@@ -167,7 +164,7 @@ export const SwapKeysignTxOverview = ({
           <Button onClick={goHome}>{t('done')}</Button>
         </HStack>
       </VStack>
-    </VStack>
+    </>
   )
 }
 
