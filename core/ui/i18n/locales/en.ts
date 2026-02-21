@@ -1099,11 +1099,6 @@ export const en = {
   withdraw_ruji_rewards: 'Withdraw RUJI Rewards',
   add_cacao_pool: 'Add to CACAO Pool',
   remove_cacao_pool: 'Remove from CACAO Pool',
-  add_thor_lp: 'Add THORChain LP',
-  remove_thor_lp: 'Remove THORChain LP',
-  lp_dust_amount_error:
-    'Insufficient RUNE balance. At least {{amount}} RUNE is required as dust for LP withdrawal.',
-  lp_withdraw_percentage: 'Withdraw percentage',
   wrong_vault_try_again: 'Wrong Vault or Pair Device.',
   you_are_bonding: "You're bonding",
   you_are_unbonding: "You're unbonding",

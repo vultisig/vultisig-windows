@@ -1,17 +1,12 @@
 import { Chain } from '@core/chain/Chain'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
-import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
-import { WithChainIcon } from '@core/ui/chain/coin/icon/WithChainIcon'
-import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import {
   DefiPosition,
   isDefiPositionSelected,
-  lpChainMap,
   useAvailableDefiPositions,
   useDefiPositions,
 } from '@core/ui/storage/defiPositions'
-import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
 import { CircleMinusIcon } from '@lib/ui/icons/CircleMinusIcon'
 import { CirclePlusIcon } from '@lib/ui/icons/CirclePlusIcon'
 import { PercentIcon } from '@lib/ui/icons/PercentIcon'
@@ -24,10 +19,6 @@ import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 import { resolveDefiPositionIcon } from '../config/defiPositionResolver'
-import {
-  LpPositionWithData,
-  useThorchainLpPositionsQuery,
-} from '../queries/useThorchainLpPositionsQuery'
 import { useCurrentDefiChain } from '../useCurrentDefiChain'
 import { DefiPositionEmptyState } from './DefiPositionEmptyState'
 
@@ -144,11 +135,8 @@ const ActionIcon = styled.span<{ variant: 'primary' | 'secondary' }>`
         `}
 `
 
-const formatCryptoAmount = (value: number, decimals = 4) =>
-  value.toLocaleString(undefined, {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: decimals,
-  })
+const formatFiat = (value: number) =>
+  `$${value.toLocaleString(undefined, { maximumFractionDigits: 0 })}`
 
 const getBaseTicker = (chain: Chain) =>
   chain === Chain.MayaChain ? 'CACAO' : 'RUNE'
@@ -158,12 +146,6 @@ const getPairTicker = (position: DefiPosition) => {
   return asset ?? position.ticker
 }
 
-const getAssetChainFromPool = (poolAsset: string): Chain | undefined => {
-  const [chainCode] = poolAsset.split('.')
-  if (!chainCode) return undefined
-  return lpChainMap[chainCode.toUpperCase()]
-}
-
 export const LpPositions = () => {
   const chain = useCurrentDefiChain()
   const { t } = useTranslation()
@@ -171,59 +153,19 @@ export const LpPositions = () => {
   const { positions: availablePositions, isLoading } =
     useAvailableDefiPositions(chain)
   const navigate = useCoreNavigate()
-  const vaultAddresses = useCurrentVaultAddresses()
+
+  const handleAction = (position: DefiPosition, action: 'add' | 'remove') => {
+    navigate({
+      id: 'lpPositionForm',
+      state: { chain, positionId: position.id, action },
+    })
+  }
 
   const selectedPositions = availablePositions.filter(
     position =>
       position.type === 'lp' &&
       isDefiPositionSelected({ position, selectedPositionIds: selectedIds })
   )
-
-  const lpQuery = useThorchainLpPositionsQuery({
-    selectedPositions,
-  })
-
-  const handleAdd = (position: DefiPosition) => {
-    const poolAsset = position.poolAsset
-    if (!poolAsset) return
-
-    const assetChain = getAssetChainFromPool(poolAsset)
-    const pairedAddress = assetChain ? vaultAddresses[assetChain] : undefined
-
-    navigate({
-      id: 'deposit',
-      state: {
-        coin: { chain: Chain.THORChain, id: undefined },
-        action: 'add_thor_lp',
-        form: {
-          pool: poolAsset,
-          pairedAddress: pairedAddress ?? '',
-        },
-        entryPoint: 'defi',
-      },
-    })
-  }
-
-  const handleRemove = (
-    position: DefiPosition,
-    positionData?: LpPositionWithData
-  ) => {
-    const poolAsset = position.poolAsset
-    if (!poolAsset) return
-
-    navigate({
-      id: 'deposit',
-      state: {
-        coin: { chain: Chain.THORChain, id: undefined },
-        action: 'remove_thor_lp',
-        form: {
-          pool: poolAsset,
-          poolUnits: positionData?.poolUnits ?? '0',
-        },
-        entryPoint: 'defi',
-      },
-    })
-  }
 
   if (isLoading && selectedPositions.length === 0) {
     return (
@@ -237,8 +179,6 @@ export const LpPositions = () => {
     return <DefiPositionEmptyState />
   }
 
-  const lpDataMap = new Map((lpQuery.data ?? []).map(d => [d.position.id, d]))
-
   return (
     <VStack gap={12} style={{ marginBottom: 100 }}>
       {selectedPositions.map(position => {
@@ -249,29 +189,18 @@ export const LpPositions = () => {
         const aprDisplay = apr !== undefined ? `${apr.toFixed(2)}%` : '\u2014'
         const hasApr = apr !== undefined
 
-        const positionData = lpDataMap.get(position.id)
-        const runeAmount = positionData?.runeAmount ?? 0
-        const assetAmount = positionData?.assetAmount ?? 0
-        const hasPosition = runeAmount > 0 || assetAmount > 0
-
         return (
           <Card key={position.id}>
             <VStack gap={16}>
               <SectionRow>
                 <HStack gap={12} alignItems="center" fullWidth>
-                  {position.coin && shouldDisplayChainLogo(position.coin) ? (
-                    <WithChainIcon
-                      src={getChainLogoSrc(position.coin.chain)}
-                      style={{ fontSize: 42 }}
-                    >
-                      <ChainEntityIcon value={icon} />
-                    </WithChainIcon>
-                  ) : (
-                    <ChainEntityIcon value={icon} style={{ fontSize: 42 }} />
-                  )}
+                  <ChainEntityIcon value={icon} style={{ fontSize: 42 }} />
                   <VStack gap={4}>
                     <Text size={14} color="shy">
                       {t('defi_lp_pool_title', { pool: position.name })}
+                    </Text>
+                    <Text size={28} weight="700" color="contrast">
+                      {formatFiat(0)}
                     </Text>
                   </VStack>
                 </HStack>
@@ -296,17 +225,14 @@ export const LpPositions = () => {
                   {t('position_label')}
                 </Text>
                 <Text size={16} weight={600} color="contrast">
-                  {lpQuery.isPending
-                    ? '...'
-                    : `${formatCryptoAmount(runeAmount)} ${baseTicker} + ${formatCryptoAmount(assetAmount)} ${pairTicker}`}
+                  {`0 ${baseTicker} + 0 ${pairTicker}`}
                 </Text>
               </VStack>
 
               <ActionsRow>
                 <ActionButton
                   variant="secondary"
-                  disabled={!hasPosition}
-                  onClick={() => handleRemove(position, positionData)}
+                  onClick={() => handleAction(position, 'remove')}
                 >
                   <ActionIcon variant="secondary">
                     <CircleMinusIcon />
@@ -316,7 +242,7 @@ export const LpPositions = () => {
 
                 <ActionButton
                   variant="primary"
-                  onClick={() => handleAdd(position)}
+                  onClick={() => handleAction(position, 'add')}
                 >
                   <ActionIcon variant="primary">
                     <CirclePlusIcon />

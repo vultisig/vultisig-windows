@@ -755,40 +755,5 @@ export const getDepositFormConfig = ({
         ),
       }),
     }),
-    add_thor_lp: () => ({
-      fields: [
-        {
-          name: 'amount',
-          type: 'number',
-          label: t('amount'),
-          required: true,
-        },
-      ],
-      schema: z.object({
-        amount: positiveAmountSchema(totalAmountAvailable, t),
-        pool: z.string().min(1),
-        pairedAddress: z.string().optional(),
-      }),
-    }),
-    remove_thor_lp: () => ({
-      fields: [
-        {
-          name: 'percentage',
-          type: 'number',
-          label: t('percentage'),
-          required: true,
-        },
-      ],
-      schema: z.object({
-        percentage: z.preprocess(
-          toRequiredNumber,
-          z
-            .number()
-            .gt(0, t('amount_must_be_positive'))
-            .max(100, t('percentage_limit'))
-        ),
-        pool: z.string().min(1),
-      }),
-    }),
   })
 }

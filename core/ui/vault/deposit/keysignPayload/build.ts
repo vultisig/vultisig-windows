@@ -273,27 +273,6 @@ export const buildDepositKeysignPayload = async ({
     }
   }
 
-  if (action === 'add_thor_lp') {
-    keysignPayload = create(KeysignPayloadSchema, {
-      ...keysignPayload,
-      contractPayload: { case: undefined },
-      toAddress: '',
-      toAmount: hasAmount && amountUnits ? amountUnits : '0',
-    })
-    return keysignPayload
-  }
-
-  if (action === 'remove_thor_lp') {
-    const dustAmount = toChainAmount(0.02, coin.decimals).toString()
-    keysignPayload = create(KeysignPayloadSchema, {
-      ...keysignPayload,
-      contractPayload: { case: undefined },
-      toAddress: '',
-      toAmount: dustAmount,
-    })
-    return keysignPayload
-  }
-
   // TRON freeze/unfreeze: self-transaction with amount in SUN
   if (isOneOf(action, ['freeze', 'unfreeze'])) {
     keysignPayload = create(KeysignPayloadSchema, {
