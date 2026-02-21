@@ -16,7 +16,6 @@ import { RedeemSpecific } from './MintUnmintSpecific/RedeemSpecific/RedeemSpecif
 import { StakeSpecific } from './StakeSpecific/StakeSpecific'
 import { UnstakeSpecific } from './StakeSpecific/UnstakeSpecific/UnstakeSpecific'
 import { SwitchSpecific } from './SwitchSpecific'
-import { ThorLpSpecific } from './ThorLpSpecific'
 import { UnmergeSpecific } from './UnmergeSpecific/UnmergeSpecific'
 import { WithdrawRujiRewardsSpecific } from './WithdrawRujiRewardsSpecific'
 
@@ -53,7 +52,6 @@ export const DepositActionSpecific = ({ value }: ValueProp<ChainAction>) => {
         freeze: () => <FreezeSpecific />,
         unfreeze: () => <TronUnfreezeSpecific />,
         custom: () => <CustomSpecific />,
-        add_thor_lp: () => <ThorLpSpecific />,
       }}
       else={() => null}
     />

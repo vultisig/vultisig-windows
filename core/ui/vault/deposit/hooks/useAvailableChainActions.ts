@@ -29,11 +29,6 @@ export const useAvailableChainActions = (chain: Chain) => {
 
   const areStakeActionsAvailable = hasStakeableCoins && isStakeableChain(chain)
 
-  const hasThorchainAddress = useMemo(
-    () => coins.some(coin => coin.chain === Chain.THORChain),
-    [coins]
-  )
-
   const allActions = useMemo<ChainAction[]>(
     () =>
       chain ? (chainActionsRecord[chain as DepositEnabledChain] ?? []) : [],
@@ -64,17 +59,14 @@ export const useAvailableChainActions = (chain: Chain) => {
         withdraw_ruji_rewards: () => !!findByTicker({ coins, ticker: 'RUJI' }),
         add_cacao_pool: hasCacao,
         remove_cacao_pool: hasCacao,
-        add_thor_lp: () =>
-          chain === Chain.THORChain ? true : hasThorchainAddress,
+        add_thor_lp: () => true,
         remove_thor_lp: () => true,
       })
     )
   }, [
     areStakeActionsAvailable,
     allActions,
-    chain,
     coins,
-    hasThorchainAddress,
     mergeOptions.length,
     mintOptions.length,
     redeemOptions.length,
