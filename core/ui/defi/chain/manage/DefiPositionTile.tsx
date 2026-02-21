@@ -41,7 +41,6 @@ const PositionIconWrapper = styled.div<IsActiveProp>`
     justifyContent: 'center',
   })};
   position: relative;
-  align-self: stretch;
   border-radius: 24px;
   background: rgba(11, 26, 58, 0.5);
   height: 74px;
