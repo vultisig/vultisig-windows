@@ -16,7 +16,7 @@ export const DeviceSelectionTip = () => {
   return (
     <HStack alignItems="center" gap={8}>
       <StyledLightbulbIcon />
-      <Text size={12} color="shyExtra">
+      <Text size={12} color="contrast">
         {t('seedPhraseImportTip')}
       </Text>
     </HStack>

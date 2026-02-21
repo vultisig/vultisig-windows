@@ -11,7 +11,6 @@ export const en = {
   add_friends_referral: 'Add a Friends Referral',
   add_memo: 'Add MEMO',
   add_new_vault: 'Add New Vault',
-  add_referral: 'Add referral',
   add_referral_code: 'Save referral code',
   add_to_address_book: 'Add to Address Book',
   add_suggested_token: 'Add Suggested Token',
@@ -144,9 +143,6 @@ export const en = {
   check_email: 'Check email',
   check_for_update: 'Check for Update',
   chooseSetup: 'Choose Setup',
-  choose_a_password: 'Choose a password',
-  choose_a_password_description:
-    'If you want an extra layer of security, choose a password. <b>Password cannot be recovered.</b>',
   choose_backup_method: 'Choose Backup Method',
   choose_payout_asset: 'Choose payout asset',
   choose_tokens: 'Choose Tokens',
@@ -204,7 +200,6 @@ export const en = {
   create: 'Create',
   create_folder: 'Create Folder',
   create_new_vault: 'Create New Vault',
-  create_vault: 'Create vault',
   create_own_referral:
     'Create your own code and earn <blue>20%</blue> on referred swaps',
   create_referral_form: 'Create referral',
@@ -268,7 +263,6 @@ export const en = {
   edit_vaults: 'Edit Vaults',
   email: 'Email',
   email_backup: 'Enter your email to receive your backup',
-  email_placeholder: 'Enter your email address',
   email_required: 'Email is required',
   evm_chains: 'EVM Chains',
   enable_dkls: 'Enable DKLS',
@@ -289,9 +283,6 @@ export const en = {
   enter_referral_code_placeholder: 'Enter Referral Code',
   enter_up_to_4_characters_placeholder: 'Enter up to 4 characters',
   enter_vault_name: 'Enter Vault Name',
-  enter_your_email: 'Enter your email',
-  enter_your_email_description:
-    'This will only be used once to send your backup file, Vultisig doesn’t store any data.',
   enter_your_password: 'Enter your password',
   entity_not_scanned: '{{entity}} not scanned by <provider></provider>',
   entity_scanned: '{{entity}} scanned by <provider></provider>',
@@ -411,14 +402,7 @@ export const en = {
     hintDescription: 'This will be shown in case you forget your password',
     hintEmpty: 'Hint is empty',
     passwordCannotBeRecovered: 'Password cannot be reset or recovered',
-    passwordTooltip:
-      'This occurs because the password is used to locally encrypt the backup file, similar to how a hard drive is encrypted. In the following step, you have the option to add a hint.',
     preparingVault: 'Preparing Vault',
-    referralModalTitle: 'Referral code',
-    referralModalSubtitle:
-      'Enter your referral code here. <b>Enjoy 10% off every transaction.</b>',
-    applyReferral: 'Apply referral',
-    referralAdded: 'Referral added',
     summary: {
       agreementText: 'I have read and understand what to do',
       ctaText: 'Create your vault',

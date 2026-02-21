@@ -18,7 +18,7 @@ export const KeygenFlowSuccess = () => {
   const securityType = useCurrentVaultSecurityType()
 
   const { RiveComponent } = useRive({
-    src: `/core/animations/keygen-${securityType}.riv`,
+    src: `/core/animations/${securityType}-vault-keygen-success.riv`,
     stateMachines: 'State Machine 1',
     autoplay: true,
   })

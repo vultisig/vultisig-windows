@@ -58,7 +58,7 @@ export const usePluginReshareStepsAnimations = () => {
   statusRef.current = status
 
   const { rive, RiveComponent } = useRive({
-    src: '/core/animations/app-install-overview.riv',
+    src: '/core/animations/app_install_overview.riv',
     stateMachines: stateMachineName,
     autoplay: true,
     layout: new Layout({

@@ -1,12 +1,16 @@
 import { useRive } from '@rive-app/react-webgl2'
 
-import { getBackupDeviceAnimationSource } from '../getBackupAnimationSource'
+const getBackupAnimationFileName = (userDeviceCount: number): string => {
+  if (userDeviceCount <= 1) return 'backup_device1'
+  if (userDeviceCount >= 4) return 'backup_device4'
+  return `backup_device${userDeviceCount}`
+}
 
 export const useBackupDeviceAnimation = (userDeviceCount: number) => {
-  const animationSource = getBackupDeviceAnimationSource(userDeviceCount)
+  const animationFileName = getBackupAnimationFileName(userDeviceCount)
 
   const { RiveComponent, rive } = useRive({
-    src: `/core/animations/${animationSource}.riv`,
+    src: `/core/animations/${animationFileName}.riv`,
     autoplay: true,
   })
 

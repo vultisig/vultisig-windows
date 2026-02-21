@@ -19,7 +19,7 @@ export const MigrateVaultPrompt = ({
   onDismiss,
 }: MigrateVaultPromptProps = {}) => {
   const { RiveComponent } = useRive({
-    src: '/core/animations/upgrade-animation.riv',
+    src: '/core/animations/upgrade_animation.riv',
     autoplay: true,
   })
 

@@ -1,7 +1,6 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCore } from '@core/ui/state/core'
 import { BackupWarningMessage } from '@core/ui/vault/backup/BackupWarningMessage'
-import { backupSplashAnimationSource } from '@core/ui/vault/backup/getBackupAnimationSource'
 import { Button } from '@lib/ui/buttons/Button'
 import { CloudDownloadIcon } from '@lib/ui/icons/CloudDownloadIcon'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -30,7 +29,7 @@ export const BackupInCloudScreen = ({
   const { t } = useTranslation()
   const { openUrl } = useCore()
   const { RiveComponent } = useRive({
-    src: `/core/animations/${backupSplashAnimationSource}.riv`,
+    src: '/core/animations/backup-vault-splash.riv',
     autoplay: true,
   })
 

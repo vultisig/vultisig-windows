@@ -129,9 +129,7 @@
       "Bash(__NEW_LINE_eaf577e9de76b4b9__ echo \"zh.ts done\")",
       "Bash(/usr/bin/grep:*)",
       "Bash(open:*)",
-      "Bash(wc:*)",
-      "Bash(git clean:*)",
-      "Bash(git mv:*)"
+      "Bash(wc:*)"
     ]
   }
 }

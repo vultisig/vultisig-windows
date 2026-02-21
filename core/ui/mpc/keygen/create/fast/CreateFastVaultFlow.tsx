@@ -8,7 +8,7 @@ import { KeygenActionWrapper } from '../KeygenActionWrapper'
 import { KeygenSessionProviders } from '../KeygenSessionProviders'
 import { VaultCreationInputProvider } from '../state/vaultCreationInput'
 import { FastVaultCreationInput } from '../VaultCreationInput'
-import { FastVaultSetupFlow } from './FastVaultSetupFlow'
+import { VaultSetupForm } from '../VaultSetupForm'
 
 type CreateFastVaultFlowProps = Partial<ChildrenProp> & {
   CreateActionProvider?: ComponentType<ChildrenProp>
@@ -23,7 +23,11 @@ export const CreateFastVaultFlow = ({
   return (
     <ValueTransfer<FastVaultCreationInput>
       from={({ onFinish }) => (
-        <FastVaultSetupFlow onFinish={onFinish} onBack={goBack} />
+        <VaultSetupForm
+          vaultSecurityType="fast"
+          onBack={goBack}
+          onSubmit={onFinish}
+        />
       )}
       to={({ value, onBack }) => (
         <VaultCreationInputProvider value={{ fast: value }}>
