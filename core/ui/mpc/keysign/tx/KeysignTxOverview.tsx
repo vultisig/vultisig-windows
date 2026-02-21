@@ -26,6 +26,7 @@ import styled from 'styled-components'
 import { AddToAddressBookButton } from './components/AddToAddressBookButton'
 import { TxActualFeeDisplay } from './components/TxActualFeeDisplay'
 import { TxFeeRow } from './components/TxFeeRow'
+import { KeysignFeeAmount } from './FeeAmount'
 
 export const KeysignTxOverview = () => {
   const { t } = useTranslation()
@@ -118,11 +119,13 @@ export const KeysignTxOverview = () => {
               <Text>{chain}</Text>
             </HStack>
           </HStack>
-          {receipt && (
-            <TxFeeRow label={t('network_fee')}>
+          <TxFeeRow label={receipt ? t('network_fee') : t('est_network_fee')}>
+            {receipt ? (
               <TxActualFeeDisplay chain={chain} receipt={receipt} />
-            </TxFeeRow>
-          )}
+            ) : (
+              <KeysignFeeAmount keysignPayload={keysignPayload} />
+            )}
+          </TxFeeRow>
         </SeparatedByLine>
       </Panel>
     </>
