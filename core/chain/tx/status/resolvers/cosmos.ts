@@ -27,23 +27,22 @@ export const getCosmosTxStatus: TxStatusResolver<CosmosChain> = async ({
     if (gasUsed == null || gasWanted == null || gasWanted === 0n) {
       return undefined
     }
-    try {
-      const decoded = decodeTxRaw(tx.tx)
-      const fee = decoded.authInfo?.fee
-      const maxFeeAmount =
-        fee?.amount?.[0]?.amount != null ? BigInt(fee.amount[0].amount) : 0n
-      const actualFee =
-        maxFeeAmount > 0n ? (maxFeeAmount * gasUsed) / gasWanted : 0n
-      if (actualFee === 0n) {
-        return undefined
-      }
-      return {
-        feeAmount: actualFee,
-        feeDecimals: feeCoin.decimals,
-        feeTicker: feeCoin.ticker,
-      }
-    } catch {
+    const { data: decoded } = attempt(() => decodeTxRaw(tx.tx))
+    if (!decoded) {
       return undefined
+    }
+    const fee = decoded.authInfo?.fee
+    const maxFeeAmount =
+      fee?.amount?.[0]?.amount != null ? BigInt(fee.amount[0].amount) : 0n
+    const actualFee =
+      maxFeeAmount > 0n ? (maxFeeAmount * gasUsed) / gasWanted : 0n
+    if (actualFee === 0n) {
+      return undefined
+    }
+    return {
+      feeAmount: actualFee,
+      feeDecimals: feeCoin.decimals,
+      feeTicker: feeCoin.ticker,
     }
   })()
 

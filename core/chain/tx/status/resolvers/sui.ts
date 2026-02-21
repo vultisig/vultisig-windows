@@ -30,11 +30,13 @@ export const getSuiTxStatus: TxStatusResolver<OtherChain.Sui> = async ({
       gasUsed != null &&
       typeof gasUsed === 'object' &&
       'computationCost' in gasUsed &&
-      'storageCost' in gasUsed
+      'storageCost' in gasUsed &&
+      'storageRebate' in gasUsed
         ? {
             feeAmount:
               BigInt(String(gasUsed.computationCost)) +
-              BigInt(String(gasUsed.storageCost)),
+              BigInt(String(gasUsed.storageCost)) -
+              BigInt(String(gasUsed.storageRebate)),
             feeDecimals: feeCoin.decimals,
             feeTicker: feeCoin.ticker,
           }
