@@ -21,7 +21,7 @@ export const useKeygenLoadingAnimation = () => {
   const [bounds, setBounds] = useState<Bounds>({ width: 0, height: 0 })
 
   const { rive, RiveComponent } = useRive({
-    src: '/core/animations/keygen_loading.riv',
+    src: '/core/animations/keygen-loading.riv',
     stateMachines: stateMachineName,
     autoplay: true,
     layout: new Layout({

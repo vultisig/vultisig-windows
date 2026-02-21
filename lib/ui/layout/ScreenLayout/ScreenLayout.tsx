@@ -6,13 +6,14 @@ import { ReactNode } from 'react'
 import styled from 'styled-components'
 
 const contentMaxWidth = 500
-const horizontalMinPadding = 24
+const horizontalMinPadding = 16
 
 type ScreenLayoutProps = {
   children: ReactNode
   footer?: ReactNode
   title?: ReactNode
   onBack?: () => void
+  headerRight?: ReactNode
 }
 
 export const ScreenLayout = ({
@@ -20,8 +21,9 @@ export const ScreenLayout = ({
   footer,
   title,
   onBack,
+  headerRight,
 }: ScreenLayoutProps) => {
-  const hasHeader = !!title || !!onBack
+  const hasHeader = !!title || !!onBack || !!headerRight
 
   return (
     <Container>
@@ -39,6 +41,9 @@ export const ScreenLayout = ({
               <HeaderTitle as="span" size={18} weight={500} cropped>
                 {title}
               </HeaderTitle>
+            )}
+            {headerRight && (
+              <HeaderRightWrapper>{headerRight}</HeaderRightWrapper>
             )}
           </HeaderContent>
         </Header>
@@ -59,9 +64,9 @@ const Container = styled.div`
 
 const Header = styled.header`
   ${centeredContentColumn({
-    contentMaxWidth,
+    contentMaxWidth: '100%',
     horizontalMinPadding,
-  })}
+  })};
   flex-shrink: 0;
 `
 
@@ -76,6 +81,11 @@ const HeaderContent = styled.div`
 const BackButtonWrapper = styled.div`
   position: absolute;
   left: 0;
+`
+
+const HeaderRightWrapper = styled.div`
+  position: absolute;
+  right: 0;
 `
 
 const HeaderTitle = styled(Text)`
@@ -107,6 +117,6 @@ const Footer = styled.footer`
     horizontalMinPadding,
   })}
   padding-top: 20px;
-  padding-bottom: 24px;
+  padding-bottom: 44px;
   flex-shrink: 0;
 `
