@@ -1,6 +1,6 @@
 import { Chain } from '@core/chain/Chain'
-import { useTxStatusQuery } from '@core/ui/chain/tx/status/useTxStatusQuery'
 
+import { useTxStatusQuery } from '../../../chain/tx/status/useTxStatusQuery'
 import { TransactionStatusAnimation } from './TransactionStatusAnimation'
 
 type TxStatusTrackerProps = {
