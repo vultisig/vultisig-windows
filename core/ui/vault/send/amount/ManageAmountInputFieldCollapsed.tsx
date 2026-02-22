@@ -1,8 +1,8 @@
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import {
-  SendFormCheckBadge,
-  SendFormIconsWrapper,
-} from '@core/ui/vault/send/addresses/components/SendFormIconsWrapper'
+  ActionFormCheckBadge,
+  ActionFormIconsWrapper,
+} from '@core/ui/vault/components/action-form/ActionFormIconsWrapper'
 import { SendInputContainer } from '@core/ui/vault/send/components/SendInputContainer'
 import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValidationQuery'
 import { useSendAmount } from '@core/ui/vault/send/state/amount'
@@ -43,12 +43,12 @@ export const ManageAmountInputFieldCollapsed = () => {
           {amount === null ? null : fromChainAmount(amount, coin.decimals)}
         </Text>
       </HStack>
-      <SendFormIconsWrapper gap={12}>
+      <ActionFormIconsWrapper gap={12}>
         {isChecked && (
           <>
-            <SendFormCheckBadge>
+            <ActionFormCheckBadge>
               <CheckmarkIcon />
-            </SendFormCheckBadge>
+            </ActionFormCheckBadge>
             {!isOpen && (
               <PencilIconWrapper>
                 <PencilIcon />
@@ -56,7 +56,7 @@ export const ManageAmountInputFieldCollapsed = () => {
             )}
           </>
         )}
-      </SendFormIconsWrapper>
+      </ActionFormIconsWrapper>
     </CollapsedCoinInputContainer>
   )
 }

@@ -6,6 +6,8 @@ import { setStorageValue } from '@lib/extension/storage/set'
 import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
+import { deleteCoinsForVault } from './coins'
+
 const getVaults = async () =>
   getStorageValue(StorageKey.vaults, vaultsInitialValue)
 
@@ -22,6 +24,7 @@ export const vaultsStorage: VaultsStorage = {
   deleteVault: async vaultId => {
     const vaults = await getVaults()
 
+    await deleteCoinsForVault(vaultId)
     await updateVaults(vaults.filter(v => getVaultId(v) !== vaultId))
   },
   updateVault: async ({ vaultId, fields }) => {

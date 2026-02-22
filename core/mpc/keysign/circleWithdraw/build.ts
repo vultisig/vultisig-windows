@@ -5,7 +5,7 @@ import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { usdc } from '@core/chain/coin/knownTokens'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import { toTwAddress } from '@core/mpc/keysign/tw/toTwAddress'
-import { MpcLib } from '@core/mpc/mpcLib'
+import { KeysignLibType } from '@core/mpc/mpcLib'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { WalletCore } from '@trustwallet/wallet-core'
@@ -18,7 +18,7 @@ export type BuildCircleWithdrawKeysignPayloadInput = {
   vaultId: string
   localPartyId: string
   publicKey: PublicKey
-  libType: MpcLib
+  libType: KeysignLibType
   walletCore: WalletCore
 }
 

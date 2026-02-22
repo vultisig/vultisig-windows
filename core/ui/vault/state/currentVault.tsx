@@ -5,7 +5,7 @@ import { hasServer, isServer } from '@core/mpc/devices/localPartyId'
 import { getVaultId, Vault } from '@core/mpc/vault/Vault'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 import { ChildrenProp } from '@lib/ui/props'
-import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 import { useMemo } from 'react'
 
 import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
@@ -16,10 +16,10 @@ import { useVaults } from '../../storage/vaults'
 
 export const currentVaultContextId = 'CurrentVault'
 
-export const { useValue: useCurrentVault, provider: CurrentVaultProvider } =
-  getValueProviderSetup<
-    (Vault & Partial<{ coins: AccountCoin[] }>) | undefined
-  >(currentVaultContextId)
+export const [CurrentVaultProvider, useCurrentVault, CurrentVaultContext] =
+  setupValueProvider<Vault & Partial<{ coins: AccountCoin[] }>>(
+    currentVaultContextId
+  )
 
 export const useCurrentVaultSecurityType = (): VaultSecurityType => {
   const { signers, localPartyId } = useCurrentVault()
@@ -67,7 +67,11 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
     return vault
   }, [vaults, id, passcode])
 
-  return <CurrentVaultProvider value={value}>{children}</CurrentVaultProvider>
+  return (
+    <CurrentVaultContext.Provider value={value}>
+      {children}
+    </CurrentVaultContext.Provider>
+  )
 }
 
 export const useCurrentVaultPublicKey = (chain: Chain) => {

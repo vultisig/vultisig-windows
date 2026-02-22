@@ -1,0 +1,1986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design Patterns Case Study: Vultisig Codebase</title>
+<style>
+  /* ============================================
+     PRINT / PDF STYLES
+     ============================================ */
+  @page {
+    size: A4;
+    margin: 2cm 2.2cm;
+  }
+
+  @media print {
+    body { font-size: 10pt; }
+    .page-break { page-break-before: always; }
+    .no-break { page-break-inside: avoid; }
+    nav { page-break-after: always; }
+    h2 { page-break-after: avoid; }
+    pre { page-break-inside: avoid; }
+  }
+
+  /* ============================================
+     BASE RESET & TYPOGRAPHY
+     ============================================ */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.72;
+    color: #d4d4d8;
+    background-color: #0f0f13;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ============================================
+     COVER / HEADER
+     ============================================ */
+  .cover {
+    text-align: center;
+    padding: 80px 0 48px;
+    border-bottom: 1px solid #27272a;
+    margin-bottom: 48px;
+  }
+
+  .cover h1 {
+    font-size: 34px;
+    font-weight: 800;
+    color: #fafafa;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  .cover .subtitle {
+    font-size: 17px;
+    color: #a1a1aa;
+    font-weight: 400;
+    margin-bottom: 32px;
+  }
+
+  .cover .meta {
+    font-size: 13px;
+    color: #71717a;
+    line-height: 1.8;
+  }
+
+  .cover .meta strong {
+    color: #a1a1aa;
+  }
+
+  .tech-badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 24px;
+  }
+
+  .tech-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    border: 1px solid #3f3f46;
+    color: #a78bfa;
+    background: #1a1a2e;
+  }
+
+  /* ============================================
+     TABLE OF CONTENTS
+     ============================================ */
+  nav {
+    background: #18181b;
+    border: 1px solid #27272a;
+    border-radius: 12px;
+    padding: 32px 36px;
+    margin-bottom: 56px;
+  }
+
+  nav h2 {
+    font-size: 20px;
+    color: #fafafa;
+    margin-bottom: 20px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+
+  nav ol {
+    list-style: none;
+    counter-reset: toc;
+  }
+
+  nav ol li {
+    counter-increment: toc;
+    margin-bottom: 6px;
+  }
+
+  nav ol li::before {
+    content: counter(toc, decimal-leading-zero) ".";
+    color: #a78bfa;
+    font-weight: 700;
+    font-size: 13px;
+    margin-right: 10px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  nav a {
+    color: #d4d4d8;
+    text-decoration: none;
+    font-size: 14.5px;
+    transition: color 0.15s;
+  }
+
+  nav a:hover {
+    color: #a78bfa;
+  }
+
+  /* ============================================
+     SECTION HEADINGS
+     ============================================ */
+  h2.section-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #fafafa;
+    letter-spacing: -0.4px;
+    margin-top: 56px;
+    margin-bottom: 8px;
+    padding-top: 20px;
+    border-top: 1px solid #27272a;
+  }
+
+  h2.section-title .section-number {
+    color: #a78bfa;
+    margin-right: 8px;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #e4e4e7;
+    margin-top: 28px;
+    margin-bottom: 10px;
+  }
+
+  h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #a78bfa;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-top: 24px;
+    margin-bottom: 8px;
+  }
+
+  /* ============================================
+     BODY TEXT
+     ============================================ */
+  p {
+    margin-bottom: 14px;
+    color: #a1a1aa;
+  }
+
+  strong {
+    color: #e4e4e7;
+    font-weight: 600;
+  }
+
+  /* ============================================
+     CODE BLOCKS
+     ============================================ */
+  pre {
+    background: #18181b;
+    border: 1px solid #27272a;
+    border-radius: 10px;
+    padding: 20px 24px;
+    overflow-x: auto;
+    margin: 14px 0 20px;
+    font-size: 13px;
+    line-height: 1.65;
+    tab-size: 2;
+  }
+
+  pre code {
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+    color: #d4d4d8;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+    font-size: 0.88em;
+  }
+
+  /* Inline code */
+  p code, li code, td code {
+    background: #27272a;
+    padding: 2px 7px;
+    border-radius: 5px;
+    color: #c4b5fd;
+    font-size: 0.85em;
+  }
+
+  /* Syntax highlighting classes */
+  .kw  { color: #c084fc; }           /* keyword */
+  .ty  { color: #67e8f9; }           /* type */
+  .fn  { color: #60a5fa; }           /* function */
+  .st  { color: #86efac; }           /* string */
+  .cm  { color: #52525b; font-style: italic; } /* comment */
+  .op  { color: #a1a1aa; }           /* operator / punctuation */
+  .nr  { color: #fbbf24; }           /* number */
+  .pr  { color: #fb923c; }           /* property */
+  .tag { color: #f472b6; }           /* JSX tag */
+  .at  { color: #c084fc; }           /* attribute / decorator */
+  .cn  { color: #fbbf24; }           /* constant */
+
+  /* ============================================
+     FILE PATH BADGES
+     ============================================ */
+  .file-path {
+    display: inline-block;
+    background: #1e1b4b;
+    border: 1px solid #312e81;
+    color: #a78bfa;
+    font-family: 'JetBrains Mono', 'Fira Code', Menlo, monospace;
+    font-size: 12px;
+    padding: 3px 12px;
+    border-radius: 6px;
+    margin: 4px 4px 4px 0;
+  }
+
+  /* ============================================
+     CALLOUT BOXES
+     ============================================ */
+  .callout {
+    background: #1a1a2e;
+    border-left: 4px solid #a78bfa;
+    border-radius: 0 10px 10px 0;
+    padding: 16px 20px;
+    margin: 18px 0 22px;
+  }
+
+  .callout p {
+    margin: 0;
+    color: #c4b5fd;
+    font-size: 14px;
+  }
+
+  .callout-green {
+    background: #0f2a1d;
+    border-left-color: #34d399;
+  }
+
+  .callout-green p {
+    color: #6ee7b7;
+  }
+
+  .callout-amber {
+    background: #27200f;
+    border-left-color: #f59e0b;
+  }
+
+  .callout-amber p {
+    color: #fcd34d;
+  }
+
+  /* ============================================
+     TABLES
+     ============================================ */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0 22px;
+    font-size: 13.5px;
+  }
+
+  th {
+    background: #1e1b4b;
+    color: #c4b5fd;
+    font-weight: 700;
+    text-align: left;
+    padding: 10px 16px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+
+  td {
+    padding: 10px 16px;
+    border-bottom: 1px solid #27272a;
+    color: #a1a1aa;
+  }
+
+  tr:nth-child(even) td {
+    background: #18181b;
+  }
+
+  /* ============================================
+     LISTS
+     ============================================ */
+  ul, ol {
+    margin: 8px 0 16px 24px;
+    color: #a1a1aa;
+  }
+
+  li {
+    margin-bottom: 6px;
+  }
+
+  /* ============================================
+     DIRECTORY TREE
+     ============================================ */
+  .tree {
+    font-family: 'JetBrains Mono', Menlo, monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: #71717a;
+    background: #18181b;
+    border: 1px solid #27272a;
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin: 14px 0 20px;
+  }
+
+  .tree .dir { color: #60a5fa; font-weight: 600; }
+  .tree .desc { color: #52525b; }
+
+  /* ============================================
+     PROGRESSION SECTION
+     ============================================ */
+  .progression-card {
+    background: #18181b;
+    border: 1px solid #27272a;
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin: 16px 0;
+  }
+
+  .progression-card h3 {
+    margin-top: 0;
+    color: #a78bfa;
+    font-size: 15px;
+    margin-bottom: 14px;
+  }
+
+  .skill-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 12px;
+    font-size: 14px;
+  }
+
+  .skill-label {
+    min-width: 50px;
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    text-align: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .skill-label.mid {
+    background: #27200f;
+    color: #fbbf24;
+  }
+
+  .skill-label.senior {
+    background: #1a1a2e;
+    color: #a78bfa;
+  }
+
+  /* ============================================
+     HORIZONTAL RULE
+     ============================================ */
+  hr {
+    border: none;
+    border-top: 1px solid #27272a;
+    margin: 40px 0;
+  }
+
+  /* ============================================
+     FOOTER
+     ============================================ */
+  footer {
+    text-align: center;
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid #27272a;
+    color: #52525b;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ========================================================
+     COVER
+     ======================================================== -->
+<div class="cover">
+  <h1>Design Patterns Case Study</h1>
+  <h1 style="color: #a78bfa; font-size: 28px; font-weight: 700; margin-top: -4px;">Vultisig Codebase</h1>
+  <p class="subtitle">A comprehensive guide to production-grade React/TypeScript patterns</p>
+  <div class="tech-badge-row">
+    <span class="tech-badge">React 19</span>
+    <span class="tech-badge">TypeScript 5.9</span>
+    <span class="tech-badge">Wails (Go)</span>
+    <span class="tech-badge">styled-components</span>
+    <span class="tech-badge">TanStack Query</span>
+    <span class="tech-badge">React Hook Form</span>
+    <span class="tech-badge">Zod</span>
+    <span class="tech-badge">Framer Motion</span>
+    <span class="tech-badge">i18n</span>
+    <span class="tech-badge">React Compiler</span>
+  </div>
+  <div class="meta" style="margin-top: 28px;">
+    <strong>Application:</strong> Multi-chain crypto wallet with MPC key management<br>
+    <strong>Platforms:</strong> Desktop (Wails) &middot; Browser Extension (VultiConnect)<br>
+    <strong>Architecture:</strong> Domain-driven monorepo &middot; Yarn 4.12.0 workspaces
+  </div>
+</div>
+
+<!-- ========================================================
+     TABLE OF CONTENTS
+     ======================================================== -->
+<nav>
+  <h2>Table of Contents</h2>
+  <ol>
+    <li><a href="#s01">Monorepo Architecture &amp; Import Boundaries</a></li>
+    <li><a href="#s02">Resolver Pattern (Chain Abstraction)</a></li>
+    <li><a href="#s03">State Management: Provider Factories</a></li>
+    <li><a href="#s04">Error Handling: attempt() &amp; Result&lt;T,E&gt;</a></li>
+    <li><a href="#s05">Pattern Matching (No Switch/Case)</a></li>
+    <li><a href="#s06">Type Safety &amp; Assertion Utilities</a></li>
+    <li><a href="#s07">Forms: React Hook Form + Zod</a></li>
+    <li><a href="#s08">Styled Components &amp; Theme System</a></li>
+    <li><a href="#s09">CSS-in-JS Layout Utilities</a></li>
+    <li><a href="#s10">Server State: TanStack Query Patterns</a></li>
+    <li><a href="#s11">Animation Patterns (Framer Motion)</a></li>
+    <li><a href="#s12">Internationalization (i18n)</a></li>
+    <li><a href="#s13">One Component Per File</a></li>
+    <li><a href="#s14">Provider / Context Composition</a></li>
+    <li><a href="#s15">Navigation System</a></li>
+    <li><a href="#s16">Utility Patterns</a></li>
+    <li><a href="#s17">Code Quality Tooling</a></li>
+  </ol>
+
+  <h3 style="margin-top: 24px; color: #a78bfa;">Part II &mdash; Architecture Theory &amp; SOLID Principles</h3>
+  <ol start="18">
+    <li><a href="#s18">Clean Architecture (Robert C. Martin)</a></li>
+    <li><a href="#s19">Hexagonal Architecture / Ports &amp; Adapters</a></li>
+    <li><a href="#s20">Onion Architecture &amp; Domain-Driven Design</a></li>
+    <li><a href="#s21">The Dependency Rule (Verified)</a></li>
+    <li><a href="#s22">SOLID: Single Responsibility Principle</a></li>
+    <li><a href="#s23">SOLID: Open/Closed Principle</a></li>
+    <li><a href="#s24">SOLID: Liskov Substitution Principle</a></li>
+    <li><a href="#s25">SOLID: Interface Segregation Principle</a></li>
+    <li><a href="#s26">SOLID: Dependency Inversion Principle</a></li>
+    <li><a href="#s27">Improvement Opportunities</a></li>
+    <li><a href="#s28">From Mid to Senior: Growth Progression</a></li>
+  </ol>
+</nav>
+
+<!-- ========================================================
+     01 — MONOREPO ARCHITECTURE
+     ======================================================== -->
+<h2 class="section-title" id="s01"><span class="section-number">01</span>Monorepo Architecture &amp; Import Boundaries</h2>
+
+<h4>Description</h4>
+<p>Vultisig uses a <strong>three-layer monorepo</strong> managed by Yarn 4.12.0 workspaces. Each layer has a strict dependency direction: <code>lib/</code> (pure reusable code, zero Vultisig dependencies) feeds into <code>core/</code> (shared business logic), which feeds into <code>clients/</code> (platform-specific apps). No package may import "upward" in this hierarchy.</p>
+
+<h4>Why It Matters</h4>
+<p>This architecture enforces <strong>separation of concerns at the package level</strong>, not just at the file level. A developer cannot accidentally couple a generic UI component to Vultisig-specific business logic because the build system itself would reject the import. This makes code genuinely reusable and testable in isolation.</p>
+
+<h4>Directory Structure</h4>
+<div class="tree">
+<span class="dir">lib/</span> <span class="desc">&mdash; Pure reusable code (zero Vultisig dependencies)</span>
+  <span class="dir">utils/</span>    <span class="desc">@lib/utils &mdash; Generic utilities</span>
+  <span class="dir">ui/</span>       <span class="desc">@lib/ui &mdash; Reusable UI components</span>
+  <span class="dir">extension/</span> <span class="desc">@lib/extension &mdash; Browser extension utilities</span>
+  <span class="dir">schnorr/</span>  <span class="desc">Schnorr signature implementation</span>
+  <span class="dir">dkls/</span>    <span class="desc">DKLS cryptography</span>
+
+<span class="dir">core/</span> <span class="desc">&mdash; Vultisig business logic (shared across clients)</span>
+  <span class="dir">chain/</span>    <span class="desc">@core/chain &mdash; Blockchain integrations</span>
+  <span class="dir">mpc/</span>      <span class="desc">@core/mpc &mdash; Multi-party computation</span>
+  <span class="dir">ui/</span>       <span class="desc">@core/ui &mdash; Domain-specific UI &amp; state</span>
+  <span class="dir">config/</span>   <span class="desc">@core/config &mdash; Shared configuration</span>
+
+<span class="dir">clients/</span> <span class="desc">&mdash; Application-specific code per platform</span>
+  <span class="dir">desktop/</span>  <span class="desc">Wails desktop app (Windows/Linux)</span>
+  <span class="dir">extension/</span> <span class="desc">Chrome extension (VultiConnect)</span>
+</div>
+
+<h4>Import Rules</h4>
+<table>
+  <tr><th>Context</th><th>Import Style</th><th>Example</th></tr>
+  <tr><td>Within same package</td><td>Relative paths</td><td><code>./resolver</code>, <code>../Chain</code></td></tr>
+  <tr><td>Cross-package</td><td>Workspace names</td><td><code>@core/chain</code>, <code>@lib/utils</code></td></tr>
+  <tr><td>Traversing boundaries</td><td><strong>Never</strong> with relative paths</td><td>&mdash;</td></tr>
+</table>
+
+<h4>Key Files</h4>
+<span class="file-path">package.json</span>
+<span class="file-path">lib/*/package.json</span>
+<span class="file-path">core/*/package.json</span>
+<span class="file-path">clients/*/package.json</span>
+
+<div class="callout">
+  <p><strong>Principle:</strong> Dependencies flow in one direction only &mdash; <code>lib</code> has no knowledge of <code>core</code>, and <code>core</code> has no knowledge of <code>clients</code>. This guarantees that library code remains universally reusable.</p>
+</div>
+
+
+<!-- ========================================================
+     02 — RESOLVER PATTERN
+     ======================================================== -->
+<div class="page-break"></div>
+<h2 class="section-title" id="s02"><span class="section-number">02</span>Resolver Pattern (Chain Abstraction)</h2>
+
+<h4>Description</h4>
+<p>The resolver pattern is the <strong>backbone of Vultisig's multi-chain architecture</strong>. Instead of using switch statements to branch on chain type, every chain-specific feature follows a consistent structure: a <strong>router</strong> (index.ts) that delegates to chain-specific <strong>resolvers</strong> via a Record lookup keyed by <code>ChainKind</code>.</p>
+
+<h4>Why It Matters</h4>
+<p>Adding support for a new blockchain requires creating exactly one new resolver file, adding one line to the chain kind record, and one entry in the handler map. No switch statements to hunt down, no risk of missing a branch. The compiler enforces exhaustive coverage through the <code>Record&lt;ChainKind, Resolver&gt;</code> type.</p>
+
+<h4>The ChainKind Foundation</h4>
+<p>Every chain in the system is mapped to a <code>ChainKind</code> via a single exhaustive record:</p>
+
+<pre><code><span class="cm">// core/chain/ChainKind.ts</span>
+<span class="kw">import</span> { Chain, CosmosChain, EvmChain, OtherChain, UtxoChain } <span class="kw">from</span> <span class="st">'./Chain'</span>
+
+<span class="kw">const</span> <span class="cn">chainKindRecord</span> <span class="op">=</span> {
+  [EvmChain.Arbitrum]:    <span class="st">'evm'</span>,
+  [EvmChain.Avalanche]:   <span class="st">'evm'</span>,
+  [EvmChain.Base]:        <span class="st">'evm'</span>,
+  [EvmChain.Ethereum]:    <span class="st">'evm'</span>,
+  <span class="cm">// ... all EVM chains</span>
+
+  [UtxoChain.Bitcoin]:      <span class="st">'utxo'</span>,
+  [UtxoChain.BitcoinCash]:  <span class="st">'utxo'</span>,
+  [UtxoChain.Litecoin]:     <span class="st">'utxo'</span>,
+  <span class="cm">// ... all UTXO chains</span>
+
+  [CosmosChain.THORChain]:  <span class="st">'cosmos'</span>,
+  [CosmosChain.Cosmos]:     <span class="st">'cosmos'</span>,
+  <span class="cm">// ... all Cosmos chains</span>
+
+  [OtherChain.Sui]:       <span class="st">'sui'</span>,
+  [OtherChain.Solana]:    <span class="st">'solana'</span>,
+  [OtherChain.Polkadot]:  <span class="st">'polkadot'</span>,
+  [OtherChain.Ton]:       <span class="st">'ton'</span>,
+  [OtherChain.Ripple]:    <span class="st">'ripple'</span>,
+  [OtherChain.Tron]:      <span class="st">'tron'</span>,
+  [OtherChain.Cardano]:   <span class="st">'cardano'</span>,
+} <span class="kw">as const</span>
+
+<span class="kw">export type</span> <span class="ty">ChainKind</span> <span class="op">=</span> (<span class="kw">typeof</span> chainKindRecord)[Chain]
+
+<span class="kw">export function</span> <span class="fn">getChainKind</span><span class="op">&lt;</span><span class="ty">T</span> <span class="kw">extends</span> <span class="ty">Chain</span><span class="op">&gt;</span>(chain: <span class="ty">T</span>): <span class="ty">DeriveChainKind</span><span class="op">&lt;</span><span class="ty">T</span><span class="op">&gt;</span> {
+  <span class="kw">return</span> chainKindRecord[chain] <span class="kw">as</span> <span class="ty">DeriveChainKind</span><span class="op">&lt;</span><span class="ty">T</span><span class="op">&gt;</span>
+}</code></pre>
+
+<h4>Resolver Type Definition</h4>
+<pre><code><span class="cm">// core/chain/tx/hash/resolver.ts</span>
+<span class="kw">import</span> { <span class="ty">Resolver</span> } <span class="kw">from</span> <span class="st">'@lib/utils/types/Resolver'</span>
+
+<span class="kw">export type</span> <span class="ty">TxHashResolver</span><span class="op">&lt;</span><span class="ty">T</span> <span class="kw">extends</span> <span class="ty">Chain</span> <span class="op">=</span> <span class="ty">Chain</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ty">Resolver</span><span class="op">&lt;</span>
+  <span class="ty">SigningOutput</span><span class="op">&lt;</span><span class="ty">T</span><span class="op">&gt;</span>,
+  <span class="ty">Promise</span><span class="op">&lt;</span><span class="ty">string</span><span class="op">&gt;</span> <span class="op">|</span> <span class="ty">string</span>
+<span class="op">&gt;</span></code></pre>
+
+<h4>The Router (Record Lookup, No Switch)</h4>
+<pre><code><span class="cm">// core/chain/tx/hash/index.ts</span>
+<span class="kw">const</span> <span class="cn">hashHandlers</span>: <span class="ty">Record</span><span class="op">&lt;</span><span class="ty">ChainKind</span>, <span class="ty">TxHashResolver</span><span class="op">&lt;</span><span class="kw">any</span><span class="op">&gt;&gt;</span> <span class="op">=</span> {
+  cardano:  getCardanoTxHash,
+  cosmos:   getCosmosTxHash,
+  evm:      getEvmTxHash,
+  polkadot: getPolkadotTxHash,
+  ripple:   getRippleTxHash,
+  solana:   getSolanaTxHash,
+  sui:      getSuiTxHash,
+  ton:      getTonTxHash,
+  utxo:     getUtxoTxHash,
+  tron:     getTronTxHash,
+}
+
+<span class="kw">type</span> <span class="ty">GetTxHashInput</span> <span class="op">=</span> {
+  chain: <span class="ty">Chain</span>
+  tx: <span class="ty">SigningOutput</span><span class="op">&lt;</span><span class="ty">Chain</span><span class="op">&gt;</span>
+}
+
+<span class="kw">export const</span> <span class="fn">getTxHash</span> <span class="op">=</span> (input: <span class="ty">GetTxHashInput</span>) <span class="op">=&gt;</span> {
+  <span class="kw">const</span> { chain, tx } <span class="op">=</span> input
+  <span class="kw">const</span> chainKind <span class="op">=</span> <span class="fn">getChainKind</span>(chain)
+  <span class="kw">const</span> handler <span class="op">=</span> hashHandlers[chainKind]
+  <span class="kw">return</span> <span class="fn">handler</span>(tx)
+}</code></pre>
+
+<h4>Key Files</h4>
+<span class="file-path">core/chain/ChainKind.ts</span>
+<span class="file-path">core/chain/tx/hash/index.ts</span>
+<span class="file-path">core/chain/tx/hash/resolver.ts</span>
+<span class="file-path">core/chain/tx/hash/resolvers/*.ts</span>
+
+<div class="callout-green callout">
+  <p><strong>Adding a new chain:</strong> Create one resolver file (e.g., <code>resolvers/newchain.ts</code>), add the chain to <code>chainKindRecord</code>, and add one entry to the handler record. TypeScript will catch any missing entries at compile time.</p>
+</div>
+
+
+<!-- ========================================================
+     03 — STATE MANAGEMENT
+     ======================================================== -->
+<div class="page-break"></div>
+<h2 class="section-title" id="s03"><span class="section-number">03</span>State Management: Provider Factories</h2>
+
+<h4>Description</h4>
+<p>Rather than creating boilerplate Context + Provider + hook combinations for every piece of state, Vultisig uses <strong>factory functions</strong> that generate type-safe provider/hook tuples in a single call. There are three variants for different use cases.</p>
+
+<h4>Why It Matters</h4>
+<p>Creating a new piece of contextual state is a <strong>single line of code</strong>, not a multi-file ceremony. The factories enforce naming conventions, guarantee type safety, and produce consistent error messages when a hook is used outside its provider.</p>
+
+<h4>setupStateProvider &mdash; Read/Write State</h4>
+<pre><code><span class="cm">// lib/ui/state/setupStateProvider.tsx</span>
+<span class="kw">export function</span> <span class="fn">setupStateProvider</span><span class="op">&lt;</span><span class="ty">T</span><span class="op">&gt;</span>(
+  contextId: <span class="ty">string</span>,
+  initialValue?: <span class="ty">T</span>
+): [
+  (<span class="op">{</span> children, initialValue <span class="op">}</span>: <span class="ty">ChildrenProp</span> <span class="op">&amp;</span> <span class="op">{</span> initialValue?: <span class="ty">T</span> <span class="op">}</span>) <span class="op">=&gt;</span> <span class="ty">JSX.Element</span>,
+  () <span class="op">=&gt;</span> [<span class="ty">T</span>, <span class="ty">Dispatch</span><span class="op">&lt;</span><span class="ty">SetStateAction</span><span class="op">&lt;</span><span class="ty">T</span><span class="op">&gt;&gt;</span>],
+] {
+  <span class="kw">const</span> Context <span class="op">=</span> <span class="fn">createProvidedContext</span><span class="op">&lt;</span><span class="ty">Stateful</span><span class="op">&lt;</span><span class="ty">T</span><span class="op">&gt;&gt;</span>()
+
+  <span class="kw">const</span> <span class="fn">Provider</span> <span class="op">=</span> (<span class="op">{</span> children, initialValue: providerInitialValue <span class="op">}</span>) <span class="op">=&gt;</span> {
+    <span class="kw">const</span> [value, setValue] <span class="op">=</span> <span class="fn">useState</span><span class="op">&lt;</span><span class="ty">T</span><span class="op">&gt;</span>(
+      providerInitialValue <span class="op">!==</span> <span class="kw">undefined</span>
+        <span class="op">?</span> providerInitialValue
+        <span class="op">:</span> <span class="fn">shouldBePresent</span>(initialValue, <span class="st">`${contextId} initialValue`</span>)
+    )
+
+    <span class="kw">return</span> <span class="op">&lt;</span><span class="tag">Context</span> <span class="at">value</span><span class="op">={{ value, setValue }}&gt;</span>{children}<span class="op">&lt;/</span><span class="tag">Context</span><span class="op">&gt;</span>
+  }
+
+  <span class="kw">return</span> [Provider, <span class="fn">createContextHook</span>(Context, contextId, statefulToTuple)] <span class="kw">as const</span>
+}</code></pre>
+
+<h4>setupValueProvider &mdash; Read-Only Context</h4>
+<pre><code><span class="cm">// lib/ui/state/setupValueProvider.tsx</span>
+<span class="kw">export function</span> <span class="fn">setupValueProvider</span><span class="op">&lt;</span><span class="ty">T</span><span class="op">&gt;</span>(contextId: <span class="ty">string</span>) {
+  <span class="kw">const</span> ValueContext <span class="op">=</span> <span class="fn">createContext</span><span class="op">&lt;</span><span class="ty">T</span> <span class="op">|</span> <span class="kw">undefined</span><span class="op">&gt;</span>(<span class="kw">undefined</span>)
+
+  <span class="kw">const</span> <span class="fn">ValueProvider</span> <span class="op">=</span> (<span class="op">{</span> children, value <span class="op">}</span>: <span class="ty">ChildrenProp</span> <span class="op">&amp;</span> <span class="op">{</span> value: <span class="ty">T</span> <span class="op">}</span>) <span class="op">=&gt;</span> (
+    <span class="op">&lt;</span><span class="tag">ValueContext.Provider</span> <span class="at">value</span><span class="op">={</span>value<span class="op">}&gt;</span>{children}<span class="op">&lt;/</span><span class="tag">ValueContext.Provider</span><span class="op">&gt;</span>
+  )
+
+  <span class="kw">return</span> [ValueProvider, <span class="fn">createContextHook</span>(ValueContext, contextId)] <span class="kw">as const</span>
+}</code></pre>
+
+<h4>setupOptionalValueProvider &mdash; No Error If Missing</h4>
+<pre><code><span class="cm">// lib/ui/state/setupOptionalValueProvider.tsx</span>
+<span class="kw">export function</span> <span class="fn">setupOptionalValueProvider</span><span class="op">&lt;</span><span class="ty">T</span><span class="op">&gt;</span>() {
+  <span class="kw">const</span> ValueContext <span class="op">=</span> <span class="fn">createContext</span><span class="op">&lt;</span><span class="ty">T</span> <span class="op">|</span> <span class="kw">undefined</span><span class="op">&gt;</span>(<span class="kw">undefined</span>)
+
+  <span class="kw">const</span> <span class="fn">ValueProvider</span> <span class="op">=</span> (<span class="op">{</span> children, value <span class="op">}</span>: <span class="ty">ChildrenProp</span> <span class="op">&amp;</span> <span class="op">{</span> value: <span class="ty">T</span> <span class="op">}</span>) <span class="op">=&gt;</span> (
+    <span class="op">&lt;</span><span class="tag">ValueContext.Provider</span> <span class="at">value</span><span class="op">={</span>value<span class="op">}&gt;</span>{children}<span class="op">&lt;/</span><span class="tag">ValueContext.Provider</span><span class="op">&gt;</span>
+  )
+
+  <span class="kw">return</span> [ValueProvider, () <span class="op">=&gt;</span> <span class="fn">useContext</span>(ValueContext)] <span class="kw">as const</span>
+}</code></pre>
+
+<h4>Usage</h4>
+<pre><code><span class="cm">// One line creates a fully typed provider + hook pair</span>
+<span class="kw">export const</span> [EmailProvider, useEmail] <span class="op">=</span> <span class="fn">setupStateProvider</span><span class="op">&lt;</span><span class="ty">string</span><span class="op">&gt;</span>(<span class="st">'Email'</span>)
+
+<span class="cm">// In a component</span>
+<span class="kw">const</span> [email, setEmail] <span class="op">=</span> <span class="fn">useEmail</span>()  <span class="cm">// Throws if outside EmailProvider</span></code></pre>
+
+<h4>Key Files</h4>
+<span class="file-path">lib/ui/state/setupStateProvider.tsx</span>
+<span class="file-path">lib/ui/state/setupValueProvider.tsx</span>
+<span class="file-path">lib/ui/state/setupOptionalValueProvider.tsx</span>
+
+
+<!-- ========================================================
+     04 — ERROR HANDLING
+     ======================================================== -->
+<div class="page-break"></div>
+<h2 class="section-title" id="s04"><span class="section-number">04</span>Error Handling: attempt() &amp; Result&lt;T,E&gt;</h2>
+
+<h4>Description</h4>
+<p>Vultisig avoids try-catch for control flow. Instead, the <code>attempt()</code> utility wraps fallible operations and returns a <strong>discriminated union</strong> <code>Result&lt;T, E&gt;</code> that forces callers to handle both success and failure paths explicitly.</p>
+
+<h4>Why It Matters</h4>
+<p>try-catch is invisible in a function's type signature. A caller has no idea which functions can throw. <code>Result&lt;T, E&gt;</code> makes error handling <strong>visible in the type system</strong>, turning forgotten error paths into compile-time errors.</p>
+
+<h4>The Result Type</h4>
+<pre><code><span class="cm">// lib/utils/types/Result.ts</span>
+<span class="kw">type</span> <span class="ty">Success</span><span class="op">&lt;</span><span class="ty">T</span> <span class="op">=</span> <span class="ty">unknown</span><span class="op">&gt;</span> <span class="op">=</span> { data: <span class="ty">T</span>; error<span class="op">?:</span> <span class="kw">never</span> }
+<span class="kw">type</span> <span class="ty">Failure</span><span class="op">&lt;</span><span class="ty">E</span> <span class="op">=</span> <span class="ty">unknown</span><span class="op">&gt;</span> <span class="op">=</span> { data<span class="op">?:</span> <span class="kw">never</span>; error: <span class="ty">E</span> }
+<span class="kw">export type</span> <span class="ty">Result</span><span class="op">&lt;</span><span class="ty">T</span>, <span class="ty">E</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ty">Success</span><span class="op">&lt;</span><span class="ty">T</span><span class="op">&gt;</span> <span class="op">|</span> <span class="ty">Failure</span><span class="op">&lt;</span><span class="ty">E</span><span class="op">&gt;</span></code></pre>
+
+<h4>The attempt() Function</h4>
+<pre><code><span class="cm">// lib/utils/attempt.ts</span>
+<span class="kw">export function</span> <span class="fn">attempt</span><span class="op">&lt;</span><span class="ty">T</span>, <span class="ty">E</span> <span class="op">=</span> <span class="ty">unknown</span><span class="op">&gt;</span>(
+  input: <span class="ty">Promise</span><span class="op">&lt;</span><span class="ty">T</span><span class="op">&gt;</span> <span class="op">|</span> (() <span class="op">=&gt;</span> <span class="ty">T</span>) <span class="op">|</span> (() <span class="op">=&gt;</span> <span class="ty">Promise</span><span class="op">&lt;</span><span class="ty">T</span><span class="op">&gt;</span>)
+): <span class="ty">Result</span><span class="op">&lt;</span><span class="ty">T</span>, <span class="ty">E</span><span class="op">&gt;</span> <span class="op">|</span> <span class="ty">Promise</span><span class="op">&lt;</span><span class="ty">Result</span><span class="op">&lt;</span><span class="ty">T</span>, <span class="ty">E</span><span class="op">&gt;&gt;</span> {
+  <span class="kw">if</span> (<span class="kw">typeof</span> input <span class="op">===</span> <span class="st">'function'</span>) {
+    <span class="kw">try</span> {
+      <span class="kw">const</span> result <span class="op">=</span> <span class="fn">input</span>()
+      <span class="kw">if</span> (<span class="fn">isPromise</span><span class="op">&lt;</span><span class="ty">T</span><span class="op">&gt;</span>(result)) {
+        <span class="kw">return</span> <span class="fn">attempt</span>(result)
+      }
+      <span class="kw">return</span> { data: result }
+    } <span class="kw">catch</span> (error) {
+      <span class="kw">return</span> { error: error <span class="kw">as</span> <span class="ty">E</span> }
+    }
+  } <span class="kw">else</span> {
+    <span class="kw">return</span> input.<span class="fn">then</span>(
+      (data) <span class="op">=&gt;</span> ({ data }),
+      (error) <span class="op">=&gt;</span> ({ error: error <span class="kw">as</span> <span class="ty">E</span> })
+    )
+  }
+}
+
+<span class="kw">export function</span> <span class="fn">withFallback</span><span class="op">&lt;</span><span class="ty">T</span>, <span class="ty">E</span><span class="op">&gt;</span>(result: <span class="ty">Result</span><span class="op">&lt;</span><span class="ty">T</span>, <span class="ty">E</span><span class="op">&gt;</span>, fallback: <span class="ty">T</span>): <span class="ty">T</span> {
+  <span class="kw">if</span> (<span class="st">'error'</span> <span class="kw">in</span> result) <span class="kw">return</span> fallback
+  <span class="kw">return</span> result.data
+}</code></pre>
+
+<h4>Usage Pattern</h4>
+<pre><code><span class="cm">// Sync usage</span>
+<span class="kw">const</span> result <span class="op">=</span> <span class="fn">attempt</span>(() <span class="op">=&gt;</span> <span class="fn">JSON.parse</span>(raw))
+<span class="kw">if</span> (<span class="st">'error'</span> <span class="kw">in</span> result) {
+  <span class="cm">// Handle parse failure &mdash; compiler knows result.error exists</span>
+}
+<span class="cm">// result.data is the parsed object</span>
+
+<span class="cm">// Async usage</span>
+<span class="kw">const</span> result <span class="op">=</span> <span class="kw">await</span> <span class="fn">attempt</span>(<span class="fn">fetchBalance</span>(address))
+<span class="kw">const</span> balance <span class="op">=</span> <span class="fn">withFallback</span>(result, <span class="nr">0</span>)</code></pre>
+
+<h4>Key Files</h4>
+<span class="file-path">lib/utils/attempt.ts</span>
+<span class="file-path">lib/utils/types/Result.ts</span>
+
+<div class="callout-amber callout">
+  <p><strong>Rule:</strong> Only use try-catch directly for user-facing error recovery (e.g., showing a toast) or when you need alternative logic paths. For everything else, use <code>attempt()</code>.</p>
+</div>
+
+
+<!-- ========================================================
+     05 — PATTERN MATCHING
+     ======================================================== -->
+<div class="page-break"></div>
+<h2 class="section-title" id="s05"><span class="section-number">05</span>Pattern Matching (No Switch/Case)</h2>
+
+<h4>Description</h4>
+<p>Vultisig <strong>bans switch/case</strong> entirely. In its place, the codebase provides multiple pattern-matching primitives: <code>Match</code> and <code>match()</code> for exhaustive matching, <code>matchRecordUnion()</code> for discriminated union records, and plain Record lookups for simple dispatch.</p>
+
+<h4>Why It Matters</h4>
+<p>Switch statements do not guarantee exhaustiveness at compile time &mdash; a missing case simply falls through silently. Record-based matching enforces that <strong>every variant is handled</strong> because TypeScript requires all keys to be present in the Record type.</p>
+
+<h4>Match Component (JSX Pattern Matching)</h4>
+<pre><code><span class="cm">// lib/ui/base/Match.tsx</span>
+<span class="kw">type</span> <span class="ty">MatchProps</span><span class="op">&lt;</span><span class="ty">T</span> <span class="kw">extends</span> <span class="ty">string</span> <span class="op">|</span> <span class="ty">number</span> <span class="op">|</span> <span class="ty">symbol</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ty">Record</span><span class="op">&lt;</span>
+  <span class="ty">T</span>,
+  () <span class="op">=&gt;</span> <span class="ty">ReactNode</span>
+<span class="op">&gt;</span> <span class="op">&amp;</span> {
+  value: <span class="ty">T</span>
+}
+
+<span class="kw">export function</span> <span class="fn">Match</span><span class="op">&lt;</span><span class="ty">T</span> <span class="kw">extends</span> <span class="ty">string</span> <span class="op">|</span> <span class="ty">number</span> <span class="op">|</span> <span class="ty">symbol</span><span class="op">&gt;</span>(
+  props: <span class="ty">MatchProps</span><span class="op">&lt;</span><span class="ty">T</span><span class="op">&gt;</span>
+) {
+  <span class="kw">const</span> render <span class="op">=</span> props[props.value]
+  <span class="kw">return</span> <span class="op">&lt;&gt;</span>{<span class="fn">render</span>()}<span class="op">&lt;/&gt;</span>
+}</code></pre>
+
+<h4>match() Function (Functional Pattern Matching)</h4>
+<pre><code><span class="cm">// lib/utils/match.ts</span>
+<span class="kw">export function</span> <span class="fn">match</span><span class="op">&lt;</span><span class="ty">T</span> <span class="kw">extends</span> <span class="ty">string</span> <span class="op">|</span> <span class="ty">number</span> <span class="op">|</span> <span class="ty">symbol</span>, <span class="ty">V</span><span class="op">&gt;</span>(
+  value: <span class="ty">T</span>,
+  handlers: { [key <span class="kw">in</span> <span class="ty">T</span>]: () <span class="op">=&gt;</span> <span class="ty">V</span> }
+): <span class="ty">V</span> {
+  <span class="kw">const</span> handler <span class="op">=</span> handlers[value]
+  <span class="kw">return</span> <span class="fn">handler</span>()
+}</code></pre>
+
+<h4>matchRecordUnion() (Discriminated Union Matching)</h4>
+<pre><code><span class="cm">// lib/utils/matchRecordUnion.ts</span>
+<span class="kw">export function</span> <span class="fn">matchRecordUnion</span><span class="op">&lt;</span><span class="ty">U</span>, <span class="ty">R</span><span class="op">&gt;</span>(
+  value: <span class="ty">U</span>,
+  handlers: { [<span class="ty">K</span> <span class="kw">in</span> <span class="ty">KeyOfUnion</span><span class="op">&lt;</span><span class="ty">U</span><span class="op">&gt;</span>]: (val: <span class="ty">ValueForKey</span><span class="op">&lt;</span><span class="ty">U</span>, <span class="ty">K</span><span class="op">&gt;</span>) <span class="op">=&gt;</span> <span class="ty">R</span> }
+): <span class="ty">R</span> {
+  <span class="kw">const</span> key <span class="op">=</span> <span class="ty">Object</span>.<span class="fn">keys</span>(value)[<span class="nr">0</span>]
+  <span class="kw">return</span> handlers[key](value[key])
+}</code></pre>
+
+<h4>Usage in Components</h4>
+<pre><code><span class="cm">// Exhaustive JSX rendering by variant</span>
+<span class="op">&lt;</span><span class="tag">Match</span>
+  <span class="at">value</span><span class="op">={</span>currentStep<span class="op">}</span>
+  <span class="at">email</span><span class="op">={</span>() <span class="op">=&gt;</span> <span class="op">&lt;</span><span class="tag">EmailStep</span> <span class="op">/&gt;</span><span class="op">}</span>
+  <span class="at">password</span><span class="op">={</span>() <span class="op">=&gt;</span> <span class="op">&lt;</span><span class="tag">PasswordStep</span> <span class="op">/&gt;</span><span class="op">}</span>
+  <span class="at">verify</span><span class="op">={</span>() <span class="op">=&gt;</span> <span class="op">&lt;</span><span class="tag">VerifyStep</span> <span class="op">/&gt;</span><span class="op">}</span>
+<span class="op">/&gt;</span></code></pre>
+
+<h4>Key Files</h4>
+<span class="file-path">lib/ui/base/Match.tsx</span>
+<span class="file-path">lib/utils/match.ts</span>
+<span class="file-path">lib/utils/matchRecordUnion.ts</span>
+
+
+<!-- ========================================================
+     06 — TYPE SAFETY
+     ======================================================== -->
+<h2 class="section-title" id="s06"><span class="section-number">06</span>Type Safety &amp; Assertion Utilities</h2>
+
+<h4>Description</h4>
+<p>Vultisig operates under <strong>TypeScript 5.9 strict mode</strong> with additional conventions: <code>type</code> over <code>interface</code>, no <code>as</code> type assertions, object parameters for multi-arg functions, and discriminated unions with a <code>kind</code> field. Assertion utilities replace unsafe casts.</p>
+
+<h4>shouldBePresent() &mdash; Non-Null Assertion</h4>
+<pre><code><span class="cm">// lib/utils/assert/shouldBePresent/index.ts</span>
+<span class="kw">export function</span> <span class="fn">shouldBePresent</span><span class="op">&lt;</span><span class="ty">T</span><span class="op">&gt;</span>(
+  value: <span class="ty">T</span> <span class="op">|</span> <span class="kw">undefined</span> <span class="op">|</span> <span class="kw">null</span>,
+  valueName: <span class="ty">string</span> <span class="op">=</span> <span class="st">'value'</span>
+): <span class="ty">T</span> {
+  <span class="kw">if</span> (value <span class="op">===</span> <span class="kw">undefined</span> <span class="op">||</span> value <span class="op">===</span> <span class="kw">null</span>) {
+    <span class="kw">throw new</span> <span class="ty">Error</span>(<span class="st">`${valueName} is required`</span>)
+  }
+  <span class="kw">return</span> value
+}</code></pre>
+
+<h4>assertField() &mdash; Field Existence Assertion</h4>
+<pre><code><span class="cm">// lib/utils/record/assertField.ts</span>
+<span class="kw">export function</span> <span class="fn">assertField</span><span class="op">&lt;</span>
+  <span class="ty">T</span> <span class="kw">extends</span> { [key: <span class="ty">string</span>]: <span class="kw">any</span> },
+  <span class="ty">K</span> <span class="kw">extends</span> <span class="kw">keyof</span> <span class="ty">T</span>,
+<span class="op">&gt;</span>(obj: <span class="ty">T</span>, key: <span class="ty">K</span>): <span class="ty">NonNullable</span><span class="op">&lt;</span><span class="ty">T</span>[<span class="ty">K</span>]<span class="op">&gt;</span> {
+  <span class="kw">if</span> (<span class="op">!</span>(key <span class="kw">in</span> obj)) {
+    <span class="kw">throw new</span> <span class="ty">Error</span>(<span class="st">`Missing field '${String(key)}' in the object.`</span>)
+  }
+  <span class="kw">return</span> <span class="fn">shouldBePresent</span>(obj[key])
+}</code></pre>
+
+<h4>Object Parameters Convention</h4>
+<pre><code><span class="cm">// Instead of positional args:</span>
+<span class="cm">// function sendTx(chain: Chain, data: Buffer, gas: number) { ... }</span>
+
+<span class="cm">// Named object params with a dedicated type:</span>
+<span class="kw">type</span> <span class="ty">SendTxInput</span> <span class="op">=</span> {
+  chain: <span class="ty">Chain</span>
+  data: <span class="ty">Buffer</span>
+  gas: <span class="ty">number</span>
+}
+
+<span class="kw">function</span> <span class="fn">sendTx</span>(input: <span class="ty">SendTxInput</span>) { <span class="cm">/* ... */</span> }</code></pre>
+
+<h4>Key Files</h4>
+<span class="file-path">lib/utils/assert/shouldBePresent/index.ts</span>
+<span class="file-path">lib/utils/record/assertField.ts</span>
+
+<div class="callout">
+  <p><strong>Convention:</strong> Use <code>type</code> for all type aliases. Reserve <code>interface</code> exclusively for class contracts that will be implemented by multiple classes.</p>
+</div>
+
+
+<!-- ========================================================
+     07 — FORMS
+     ======================================================== -->
+<div class="page-break"></div>
+<h2 class="section-title" id="s07"><span class="section-number">07</span>Forms: React Hook Form + Zod</h2>
+
+<h4>Description</h4>
+<p>Forms follow a <strong>schema-first</strong> approach. A Zod schema defines the shape and validation rules, <code>zodResolver</code> bridges it to React Hook Form, and the component focuses purely on rendering &mdash; never on validation logic.</p>
+
+<h4>Why It Matters</h4>
+<p>Validation logic is declared once (in the schema) and shared between compile-time types and runtime validation. Changing a field's constraints updates both the type and the runtime check simultaneously &mdash; no drift between the two.</p>
+
+<h4>Schema-First Pattern</h4>
+<pre><code><span class="cm">// 1. Define the schema</span>
+<span class="kw">const</span> schema <span class="op">=</span> z.<span class="fn">object</span>({
+  email: z.<span class="fn">string</span>().<span class="fn">email</span>(<span class="st">'Invalid email'</span>),
+  password: z.<span class="fn">string</span>().<span class="fn">min</span>(<span class="nr">1</span>, <span class="st">'Password is required'</span>),
+})
+
+<span class="cm">// 2. Derive the TypeScript type from the schema</span>
+<span class="kw">type</span> <span class="ty">FormValues</span> <span class="op">=</span> z.<span class="fn">infer</span><span class="op">&lt;</span><span class="kw">typeof</span> schema<span class="op">&gt;</span>
+
+<span class="cm">// 3. Wire it up with zodResolver</span>
+<span class="kw">const</span> { register, handleSubmit, formState: { errors } } <span class="op">=</span>
+  <span class="fn">useForm</span><span class="op">&lt;</span><span class="ty">FormValues</span><span class="op">&gt;</span>({
+    resolver: <span class="fn">zodResolver</span>(schema),
+    mode: <span class="st">'onBlur'</span>,
+  })
+
+<span class="cm">// 4. Use in JSX</span>
+<span class="op">&lt;</span><span class="tag">form</span> <span class="at">onSubmit</span><span class="op">={</span><span class="fn">handleSubmit</span>(onSubmit)<span class="op">}&gt;</span>
+  <span class="op">&lt;</span><span class="tag">input</span> <span class="op">{...</span><span class="fn">register</span>(<span class="st">'email'</span>)<span class="op">}</span> <span class="op">/&gt;</span>
+  {errors.email <span class="op">&amp;&amp;</span> <span class="op">&lt;</span><span class="tag">Error</span><span class="op">&gt;</span>{errors.email.message}<span class="op">&lt;/</span><span class="tag">Error</span><span class="op">&gt;</span>}
+  <span class="op">&lt;</span><span class="tag">input</span> <span class="at">type</span><span class="op">=</span><span class="st">"password"</span> <span class="op">{...</span><span class="fn">register</span>(<span class="st">'password'</span>)<span class="op">}</span> <span class="op">/&gt;</span>
+<span class="op">&lt;/</span><span class="tag">form</span><span class="op">&gt;</span></code></pre>
+
+<h4>Key Files</h4>
+<span class="file-path">clients/desktop/src/**/RequestFastVaultBackupForm.tsx</span>
+
+
+<!-- ========================================================
+     08 — STYLED COMPONENTS
+     ======================================================== -->
+<h2 class="section-title" id="s08"><span class="section-number">08</span>Styled Components &amp; Theme System</h2>
+
+<h4>Description</h4>
+<p>All styling uses styled-components with a centralized theme accessed through the <code>getColor()</code> utility. Styled components are <strong>co-located</strong> in the same file as their React component and are <strong>never exported</strong>. Transient props use the <code>$prefix</code> convention to prevent DOM leakage.</p>
+
+<h4>Why It Matters</h4>
+<p>Co-location ensures styles stay close to the component they style. The <code>$prefix</code> convention prevents React warnings about invalid DOM attributes. The <code>getColor()</code> utility provides type-safe theme access with autocomplete.</p>
+
+<h4>Real Code Example</h4>
+<pre><code><span class="cm">// Styled component co-located with its React component</span>
+<span class="kw">const</span> <span class="cn">Wrapper</span> <span class="op">=</span> styled.div<span class="op">`</span>
+  <span class="op">${</span><span class="fn">vStack</span>({ gap: <span class="nr">12</span>, alignItems: <span class="st">'center'</span> })<span class="op">}</span>
+  padding: <span class="nr">24</span>px;
+  background: <span class="op">${</span><span class="fn">getColor</span>(<span class="st">'background'</span>)<span class="op">}</span>;
+  border-radius: <span class="nr">16</span>px;
+<span class="op">`</span>
+
+<span class="cm">// Transient props &mdash; $active won't pass to the DOM</span>
+<span class="kw">const</span> <span class="cn">Tab</span> <span class="op">=</span> styled.button<span class="op">&lt;</span>{ <span class="pr">$active</span>: <span class="ty">boolean</span> }<span class="op">&gt;`</span>
+  color: <span class="op">${</span>({ <span class="pr">$active</span> }) <span class="op">=&gt;</span>
+    <span class="pr">$active</span> <span class="op">?</span> <span class="fn">getColor</span>(<span class="st">'primary'</span>) <span class="op">:</span> <span class="fn">getColor</span>(<span class="st">'textSoft'</span>)<span class="op">}</span>;
+<span class="op">`</span></code></pre>
+
+<h4>Key Files</h4>
+<span class="file-path">lib/ui/theme/getters.ts</span>
+<span class="file-path">lib/ui/theme/ThemeColors.ts</span>
+
+
+<!-- ========================================================
+     09 — CSS-IN-JS LAYOUT UTILITIES
+     ======================================================== -->
+<div class="page-break"></div>
+<h2 class="section-title" id="s09"><span class="section-number">09</span>CSS-in-JS Layout Utilities</h2>
+
+<h4>Description</h4>
+<p>Instead of repeatedly writing flexbox CSS, Vultisig provides <code>vStack()</code> and <code>hStack()</code> utilities that return CSS strings. These compose with styled-components' template literals and accept typed configuration objects for gap, alignment, padding, and more.</p>
+
+<h4>The Stack Implementation</h4>
+<pre><code><span class="cm">// lib/ui/layout/Stack/index.tsx</span>
+<span class="kw">export const</span> <span class="fn">vStack</span> <span class="op">=</span> (props: <span class="ty">FixedDirectionStackProps</span> <span class="op">=</span> {}) <span class="op">=&gt;</span>
+  <span class="fn">stack</span>({ ...props, direction: <span class="st">'column'</span> })
+
+<span class="kw">export const</span> <span class="fn">hStack</span> <span class="op">=</span> (props: <span class="ty">FixedDirectionStackProps</span> <span class="op">=</span> {}) <span class="op">=&gt;</span>
+  <span class="fn">stack</span>({ ...props, direction: <span class="st">'row'</span> })
+
+<span class="cm">// The stack function generates CSS with conditional properties</span>
+<span class="kw">const</span> <span class="fn">stack</span> <span class="op">=</span> ({ direction, gap, alignItems, <span class="cm">/* ... */</span> }: <span class="ty">StackProps</span>) <span class="op">=&gt;</span> css<span class="op">`</span>
+  display: flex;
+  flex-direction: <span class="op">${</span>direction<span class="op">}</span>;
+  <span class="op">${</span>gap <span class="op">&amp;&amp;</span> css<span class="op">`</span>gap: <span class="op">${</span><span class="fn">toSizeUnit</span>(gap)<span class="op">}</span>;<span class="op">`}</span>
+  <span class="op">${</span>alignItems <span class="op">&amp;&amp;</span> css<span class="op">`</span>align-items: <span class="op">${</span><span class="fn">formatFlexAlignment</span>(alignItems)<span class="op">}</span>;<span class="op">`}</span>
+  <span class="cm">/* ... other conditional properties */</span>
+<span class="op">`</span></code></pre>
+
+<h4>Other Layout Utilities</h4>
+<table>
+  <tr><th>Utility</th><th>Purpose</th></tr>
+  <tr><td><code>toSizeUnit(value)</code></td><td>Converts number to <code>px</code> string, passes strings through</td></tr>
+  <tr><td><code>getColor(key)</code></td><td>Type-safe theme color accessor</td></tr>
+  <tr><td><code>interactive</code></td><td>CSS mixin for clickable elements (cursor, hover states)</td></tr>
+  <tr><td><code>VStack</code>, <code>HStack</code></td><td>Pre-built styled components wrapping the utilities</td></tr>
+</table>
+
+<h4>Key Files</h4>
+<span class="file-path">lib/ui/layout/Stack/index.tsx</span>
+<span class="file-path">lib/ui/css/toSizeUnit.ts</span>
+
+
+<!-- ========================================================
+     10 — TANSTACK QUERY
+     ======================================================== -->
+<h2 class="section-title" id="s10"><span class="section-number">10</span>Server State: TanStack Query Patterns</h2>
+
+<h4>Description</h4>
+<p>Server state is managed with TanStack Query, augmented by two custom abstractions: <code>MatchQuery</code> for rendering different UI per query state, and <code>useStateDependentQuery</code> for queries that should only run when preconditions are met.</p>
+
+<h4>MatchQuery &mdash; Pattern-Match Query States</h4>
+<pre><code><span class="cm">// lib/ui/query/components/MatchQuery.tsx</span>
+<span class="kw">export function</span> <span class="fn">MatchQuery</span><span class="op">&lt;</span><span class="ty">T</span>, <span class="ty">E</span><span class="op">&gt;</span>({
+  value,
+  error <span class="op">=</span> () <span class="op">=&gt;</span> <span class="kw">null</span>,
+  pending <span class="op">=</span> () <span class="op">=&gt;</span> <span class="kw">null</span>,
+  success <span class="op">=</span> () <span class="op">=&gt;</span> <span class="kw">null</span>,
+  inactive <span class="op">=</span> () <span class="op">=&gt;</span> <span class="kw">null</span>,
+}: <span class="ty">MatchQueryProps</span><span class="op">&lt;</span><span class="ty">T</span>, <span class="ty">E</span><span class="op">&gt;</span>) {
+  <span class="kw">if</span> (value.data <span class="op">!==</span> <span class="kw">undefined</span>) <span class="kw">return</span> <span class="op">&lt;&gt;</span>{<span class="fn">success</span>(value.data)}<span class="op">&lt;/&gt;</span>
+  <span class="kw">if</span> (value.error)              <span class="kw">return</span> <span class="op">&lt;&gt;</span>{<span class="fn">error</span>(value.error)}<span class="op">&lt;/&gt;</span>
+  <span class="kw">if</span> (value.isPending)          <span class="kw">return</span> <span class="op">&lt;&gt;</span>{<span class="fn">pending</span>()}<span class="op">&lt;/&gt;</span>
+  <span class="kw">return</span> <span class="op">&lt;&gt;</span>{<span class="fn">inactive</span>()}<span class="op">&lt;/&gt;</span>
+}</code></pre>
+
+<h4>useStateDependentQuery &mdash; Conditional Queries</h4>
+<pre><code><span class="cm">// lib/ui/query/hooks/useStateDependentQuery.ts</span>
+<span class="kw">export const</span> <span class="fn">useStateDependentQuery</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ty">T</span>, <span class="ty">TQueryFnData</span>, <span class="ty">TError</span><span class="op">&gt;</span>(
+  state: <span class="ty">T</span>,
+  getQuery: (state: <span class="ty">WithoutUndefinedFields</span><span class="op">&lt;</span><span class="ty">T</span><span class="op">&gt;</span>) <span class="op">=&gt;</span> <span class="ty">UseQueryOptions</span>
+): <span class="ty">Query</span> <span class="op">=&gt;</span> {
+  <span class="kw">const</span> presentState <span class="op">=</span> <span class="fn">withoutUndefinedFields</span>(state)
+
+  <span class="kw">const</span> [query] <span class="op">=</span> <span class="fn">useQueries</span>({
+    queries: [
+      ...(<span class="fn">areEqualRecords</span>(state, presentState)
+        ? [<span class="fn">getQuery</span>(presentState)]
+        : []),
+    ],
+  })
+
+  <span class="kw">return</span> query <span class="op">??</span> inactiveQuery
+}</code></pre>
+
+<h4>Usage Example</h4>
+<pre><code><span class="cm">// Query only runs when both vaultId and chain are defined</span>
+<span class="kw">const</span> balanceQuery <span class="op">=</span> <span class="fn">useStateDependentQuery</span>(
+  { vaultId, chain },
+  ({ vaultId, chain }) <span class="op">=&gt;</span> ({
+    queryKey: [<span class="st">'balance'</span>, vaultId, chain],
+    queryFn: () <span class="op">=&gt;</span> <span class="fn">fetchBalance</span>({ vaultId, chain }),
+  })
+)
+
+<span class="op">&lt;</span><span class="tag">MatchQuery</span>
+  <span class="at">value</span><span class="op">={</span>balanceQuery<span class="op">}</span>
+  <span class="at">pending</span><span class="op">={</span>() <span class="op">=&gt;</span> <span class="op">&lt;</span><span class="tag">Spinner</span> <span class="op">/&gt;</span><span class="op">}</span>
+  <span class="at">error</span><span class="op">={</span>(err) <span class="op">=&gt;</span> <span class="op">&lt;</span><span class="tag">ErrorView</span> <span class="at">error</span><span class="op">={</span>err<span class="op">}</span> <span class="op">/&gt;</span><span class="op">}</span>
+  <span class="at">success</span><span class="op">={</span>(data) <span class="op">=&gt;</span> <span class="op">&lt;</span><span class="tag">BalanceDisplay</span> <span class="at">balance</span><span class="op">={</span>data<span class="op">}</span> <span class="op">/&gt;</span><span class="op">}</span>
+<span class="op">/&gt;</span></code></pre>
+
+<h4>Key Files</h4>
+<span class="file-path">lib/ui/query/components/MatchQuery.tsx</span>
+<span class="file-path">lib/ui/query/hooks/useStateDependentQuery.ts</span>
+
+
+<!-- ========================================================
+     11 — ANIMATION PATTERNS
+     ======================================================== -->
+<div class="page-break"></div>
+<h2 class="section-title" id="s11"><span class="section-number">11</span>Animation Patterns (Framer Motion)</h2>
+
+<h4>Description</h4>
+<p>Vultisig uses Framer Motion for all animations, with a <strong>consistent expand/collapse pattern</strong> used throughout the application for mount/unmount transitions. <code>AnimatePresence</code> wraps conditionally rendered elements, and <code>motion.div</code> provides the animation configuration.</p>
+
+<h4>Why It Matters</h4>
+<p>A consistent animation vocabulary makes the UI feel cohesive. Users learn one mental model for how elements appear and disappear. Developers copy the same pattern, preventing animation inconsistencies.</p>
+
+<h4>Standard Expand/Collapse Pattern</h4>
+<pre><code><span class="kw">import</span> { AnimatePresence } <span class="kw">from</span> <span class="st">'framer-motion'</span>
+<span class="kw">import</span> { motion } <span class="kw">from</span> <span class="st">'framer-motion'</span>
+
+<span class="op">&lt;</span><span class="tag">AnimatePresence</span> <span class="at">initial</span><span class="op">={</span><span class="kw">false</span><span class="op">}&gt;</span>
+  {isOpen <span class="op">&amp;&amp;</span> (
+    <span class="op">&lt;</span><span class="tag">motion.div</span>
+      <span class="at">initial</span><span class="op">={{</span> opacity: <span class="nr">0</span>, height: <span class="nr">0</span> <span class="op">}}</span>
+      <span class="at">animate</span><span class="op">={{</span> opacity: <span class="nr">1</span>, height: <span class="st">'auto'</span> <span class="op">}}</span>
+      <span class="at">exit</span><span class="op">={{</span> opacity: <span class="nr">0</span>, height: <span class="nr">0</span> <span class="op">}}</span>
+      <span class="at">style</span><span class="op">={{</span> overflow: <span class="st">'hidden'</span> <span class="op">}}</span>
+    <span class="op">&gt;</span>
+      <span class="op">&lt;</span><span class="tag">CollapsibleContent</span> <span class="op">/&gt;</span>
+    <span class="op">&lt;/</span><span class="tag">motion.div</span><span class="op">&gt;</span>
+  )}
+<span class="op">&lt;/</span><span class="tag">AnimatePresence</span><span class="op">&gt;</span></code></pre>
+
+<h4>Common Animation Constants</h4>
+<pre><code><span class="cm">// Reused across the codebase</span>
+<span class="kw">const</span> <span class="cn">expandConfig</span> <span class="op">=</span> {
+  initial: { opacity: <span class="nr">0</span>, height: <span class="nr">0</span> },
+  animate: { opacity: <span class="nr">1</span>, height: <span class="st">'auto'</span> },
+  exit:    { opacity: <span class="nr">0</span>, height: <span class="nr">0</span> },
+}
+
+<span class="cm">// Used in forms, conditional fields, provider sections</span></code></pre>
+
+
+<!-- ========================================================
+     12 — i18n
+     ======================================================== -->
+<h2 class="section-title" id="s12"><span class="section-number">12</span>Internationalization (i18n)</h2>
+
+<h4>Description</h4>
+<p>All user-facing text is rendered through the <code>useTranslation()</code> hook from react-i18next. Translation keys are added <strong>only to the English locale file</strong> (<code>en.ts</code>), and the <code>yarn translate</code> command propagates them to other locales.</p>
+
+<h4>Why It Matters</h4>
+<p>Hardcoded strings are a localization blocker. By enforcing <code>t('key')</code> for all visible text from the start, the codebase is always translation-ready. Adding a new language requires zero code changes.</p>
+
+<h4>Pattern</h4>
+<pre><code><span class="kw">import</span> { useTranslation } <span class="kw">from</span> <span class="st">'react-i18next'</span>
+
+<span class="kw">const</span> <span class="fn">SendConfirmation</span> <span class="op">=</span> () <span class="op">=&gt;</span> {
+  <span class="kw">const</span> { t } <span class="op">=</span> <span class="fn">useTranslation</span>()
+
+  <span class="kw">return</span> (
+    <span class="op">&lt;</span><span class="tag">div</span><span class="op">&gt;</span>
+      <span class="op">&lt;</span><span class="tag">h2</span><span class="op">&gt;</span>{<span class="fn">t</span>(<span class="st">'send_confirm_title'</span>)}<span class="op">&lt;/</span><span class="tag">h2</span><span class="op">&gt;</span>
+      <span class="op">&lt;</span><span class="tag">p</span><span class="op">&gt;</span>{<span class="fn">t</span>(<span class="st">'send_confirm_amount'</span>, { amount: formattedAmount })}<span class="op">&lt;/</span><span class="tag">p</span><span class="op">&gt;</span>
+    <span class="op">&lt;/</span><span class="tag">div</span><span class="op">&gt;</span>
+  )
+}</code></pre>
+
+<h4>Rules</h4>
+<ul>
+  <li>Never hardcode user-facing strings &mdash; always use <code>t('key')</code></li>
+  <li>Add keys only to <code>en.ts</code> &mdash; never edit other locale files</li>
+  <li>Use <code>t('key', { param })</code> for interpolation</li>
+  <li>Run <code>yarn translate</code> to propagate to other locales</li>
+</ul>
+
+
+<!-- ========================================================
+     13 — ONE COMPONENT PER FILE
+     ======================================================== -->
+<div class="page-break"></div>
+<h2 class="section-title" id="s13"><span class="section-number">13</span>One Component Per File</h2>
+
+<h4>Description</h4>
+<p>Every <code>.tsx</code> file exports exactly <strong>one React component</strong>. Styled components that support it are co-located in the same file but are <strong>never exported</strong>. The component name matches the filename.</p>
+
+<h4>Why It Matters</h4>
+<p>This convention makes the codebase navigable by filename alone. Finding a component means finding a file &mdash; no ambiguity, no searching through barrel files. It also enforces small, focused components.</p>
+
+<h4>Correct Structure</h4>
+<pre><code><span class="cm">// VaultCard.tsx &mdash; exports exactly one component</span>
+<span class="kw">import</span> styled <span class="kw">from</span> <span class="st">'styled-components'</span>
+
+<span class="cm">// Internal styled components &mdash; not exported</span>
+<span class="kw">const</span> <span class="cn">Container</span> <span class="op">=</span> styled.div<span class="op">`</span>
+  <span class="op">${</span><span class="fn">vStack</span>({ gap: <span class="nr">8</span> })<span class="op">}</span>
+<span class="op">`</span>
+
+<span class="kw">const</span> <span class="cn">Title</span> <span class="op">=</span> styled.h3<span class="op">`</span>
+  color: <span class="op">${</span><span class="fn">getColor</span>(<span class="st">'text'</span>)<span class="op">}</span>;
+<span class="op">`</span>
+
+<span class="cm">// The single exported component</span>
+<span class="kw">export const</span> <span class="fn">VaultCard</span> <span class="op">=</span> ({ vault }: <span class="ty">VaultCardProps</span>) <span class="op">=&gt;</span> (
+  <span class="op">&lt;</span><span class="tag">Container</span><span class="op">&gt;</span>
+    <span class="op">&lt;</span><span class="tag">Title</span><span class="op">&gt;</span>{vault.name}<span class="op">&lt;/</span><span class="tag">Title</span><span class="op">&gt;</span>
+    <span class="cm">{/* ... */}</span>
+  <span class="op">&lt;/</span><span class="tag">Container</span><span class="op">&gt;</span>
+)</code></pre>
+
+<h4>Violations to Avoid</h4>
+<ul>
+  <li>Multiple exported components in one file</li>
+  <li>Skeleton/error variants in the same file as the main component</li>
+  <li>Exporting styled components for reuse by other files</li>
+</ul>
+
+
+<!-- ========================================================
+     14 — PROVIDER COMPOSITION
+     ======================================================== -->
+<h2 class="section-title" id="s14"><span class="section-number">14</span>Provider / Context Composition</h2>
+
+<h4>Description</h4>
+<p>Providers compose hierarchically to scope state to the portion of the component tree that needs it. A vault page wraps its content in <code>VaultProvider</code>, a chain detail page nests <code>ChainProvider</code> within, and a token view adds <code>TokenProvider</code> inside that. Each provider scopes its state exclusively to its descendants.</p>
+
+<h4>Why It Matters</h4>
+<p>This avoids global state for data that is inherently scoped. When you navigate away from a vault, its provider unmounts and the state is garbage-collected. No manual cleanup, no stale state, no prop drilling.</p>
+
+<h4>Composition Pattern</h4>
+<pre><code><span class="cm">// Page-level composition</span>
+<span class="kw">const</span> <span class="fn">TokenDetailPage</span> <span class="op">=</span> () <span class="op">=&gt;</span> (
+  <span class="op">&lt;</span><span class="tag">VaultProvider</span> <span class="at">initialValue</span><span class="op">={</span>currentVault<span class="op">}&gt;</span>
+    <span class="op">&lt;</span><span class="tag">ChainProvider</span> <span class="at">value</span><span class="op">={</span>chain<span class="op">}&gt;</span>
+      <span class="op">&lt;</span><span class="tag">TokenProvider</span> <span class="at">value</span><span class="op">={</span>token<span class="op">}&gt;</span>
+        <span class="op">&lt;</span><span class="tag">TokenDetail</span> <span class="op">/&gt;</span>
+      <span class="op">&lt;/</span><span class="tag">TokenProvider</span><span class="op">&gt;</span>
+    <span class="op">&lt;/</span><span class="tag">ChainProvider</span><span class="op">&gt;</span>
+  <span class="op">&lt;/</span><span class="tag">VaultProvider</span><span class="op">&gt;</span>
+)
+
+<span class="cm">// Deep inside TokenDetail, any component can access scoped state</span>
+<span class="kw">const</span> <span class="fn">TokenBalance</span> <span class="op">=</span> () <span class="op">=&gt;</span> {
+  <span class="kw">const</span> token <span class="op">=</span> <span class="fn">useToken</span>()      <span class="cm">// from TokenProvider</span>
+  <span class="kw">const</span> chain <span class="op">=</span> <span class="fn">useChain</span>()      <span class="cm">// from ChainProvider</span>
+  <span class="kw">const</span> vault <span class="op">=</span> <span class="fn">useVault</span>()      <span class="cm">// from VaultProvider</span>
+  <span class="cm">// ...</span>
+}</code></pre>
+
+<h4>Feature-Level Scoping</h4>
+<pre><code><span class="cm">// Scoping form state to a feature boundary</span>
+<span class="op">&lt;</span><span class="tag">BackupFormFieldsStateProvider</span> <span class="at">initialValue</span><span class="op">={{</span> field: <span class="st">'email'</span> <span class="op">}}&gt;</span>
+  <span class="op">&lt;</span><span class="tag">FormContent</span> <span class="op">/&gt;</span>
+<span class="op">&lt;/</span><span class="tag">BackupFormFieldsStateProvider</span><span class="op">&gt;</span></code></pre>
+
+
+<!-- ========================================================
+     15 — NAVIGATION SYSTEM
+     ======================================================== -->
+<h2 class="section-title" id="s15"><span class="section-number">15</span>Navigation System</h2>
+
+<h4>Description</h4>
+<p>Navigation is type-safe, with route definitions that include typed parameters. The <code>useCoreNavigate()</code> hook returns a navigate function that enforces correct params for each route at compile time.</p>
+
+<h4>Why It Matters</h4>
+<p>Invalid navigation paths (typos, missing params, wrong param types) are caught at build time instead of manifesting as runtime crashes or blank screens in production.</p>
+
+<h4>Pattern</h4>
+<pre><code><span class="cm">// Type-safe navigation &mdash; compiler catches invalid routes</span>
+<span class="kw">const</span> navigate <span class="op">=</span> <span class="fn">useCoreNavigate</span>()
+
+<span class="cm">// Route params are typed</span>
+<span class="fn">navigate</span>(<span class="st">'vaultDetail'</span>, { vaultId: vault.id })
+<span class="fn">navigate</span>(<span class="st">'tokenDetail'</span>, { chain, tokenId })
+
+<span class="cm">// Compile error: missing required param 'vaultId'</span>
+<span class="cm">// navigate('vaultDetail', {})  // &mdash; TypeScript error</span></code></pre>
+
+
+<!-- ========================================================
+     16 — UTILITY PATTERNS
+     ======================================================== -->
+<div class="page-break"></div>
+<h2 class="section-title" id="s16"><span class="section-number">16</span>Utility Patterns</h2>
+
+<h4>Description</h4>
+<p>The <code>lib/utils/</code> package contains a rich set of pure utility functions for array operations, object manipulation, and formatting. All are pure functions with no side effects and no Vultisig-specific dependencies.</p>
+
+<h4>Why It Matters</h4>
+<p>Pure utilities are trivially testable, infinitely composable, and safe to use anywhere in the stack. They eliminate class after class of common bugs by providing battle-tested implementations for everyday operations.</p>
+
+<h4>Array Utilities</h4>
+<table>
+  <tr><th>Function</th><th>Purpose</th></tr>
+  <tr><td><code>order(items, key, direction)</code></td><td>Sort array by key with direction</td></tr>
+  <tr><td><code>sum(items, selector)</code></td><td>Sum array elements by selector</td></tr>
+  <tr><td><code>without(items, predicate)</code></td><td>Filter out matching elements</td></tr>
+  <tr><td><code>groupItems(items, keyFn)</code></td><td>Group array into Record by key function</td></tr>
+</table>
+
+<h4>Object Utilities</h4>
+<table>
+  <tr><th>Function</th><th>Purpose</th></tr>
+  <tr><td><code>pick(obj, keys)</code></td><td>Select specific keys from object</td></tr>
+  <tr><td><code>omit(obj, keys)</code></td><td>Remove specific keys from object</td></tr>
+  <tr><td><code>recordMap(record, fn)</code></td><td>Map over record values</td></tr>
+  <tr><td><code>withoutUndefinedFields(obj)</code></td><td>Remove undefined fields</td></tr>
+</table>
+
+<h4>Formatting Utilities</h4>
+<table>
+  <tr><th>Function</th><th>Purpose</th></tr>
+  <tr><td><code>toPercents(value)</code></td><td>Convert decimal to percentage string</td></tr>
+  <tr><td><code>formatAmount(value, opts)</code></td><td>Format numeric amounts with locale</td></tr>
+  <tr><td><code>toSizeUnit(value)</code></td><td>Convert number to px, pass string through</td></tr>
+</table>
+
+<h4>Key Location</h4>
+<span class="file-path">lib/utils/array/</span>
+<span class="file-path">lib/utils/record/</span>
+<span class="file-path">lib/utils/format/</span>
+
+
+<!-- ========================================================
+     17 — CODE QUALITY TOOLING
+     ======================================================== -->
+<h2 class="section-title" id="s17"><span class="section-number">17</span>Code Quality Tooling</h2>
+
+<h4>Description</h4>
+<p>Vultisig enforces code quality through a layered toolchain: <strong>React Compiler</strong> for automatic memoization, <strong>TypeScript strict mode</strong> for type safety, <strong>ESLint</strong> for style enforcement, <strong>knip</strong> for dead code detection, and mandatory validation commands.</p>
+
+<h4>Why It Matters</h4>
+<p>Automated tooling removes entire categories of human error. Developers do not need to remember to memoize, clean up unused exports, or sort imports. The tools do it for them. The mandatory <code>yarn check</code> after every change ensures nothing ships without passing all gates.</p>
+
+<h4>Validation Commands</h4>
+<table>
+  <tr><th>Command</th><th>What It Does</th><th>When to Run</th></tr>
+  <tr><td><code>yarn check</code></td><td>typecheck + lint:fix + knip</td><td>After every code change</td></tr>
+  <tr><td><code>yarn check:all</code></td><td>lint + typecheck + test + knip</td><td>Full CI-equivalent validation</td></tr>
+  <tr><td><code>yarn lint:fix</code></td><td>ESLint autofix</td><td>Formatting issues only</td></tr>
+  <tr><td><code>yarn typecheck</code></td><td>TypeScript compilation</td><td>Type errors</td></tr>
+  <tr><td><code>yarn knip</code></td><td>Dead code detection</td><td>Unused exports/files</td></tr>
+</table>
+
+<h4>React Compiler Rule</h4>
+<div class="callout callout-amber">
+  <p><strong>Critical Rule:</strong> NEVER use <code>useMemo</code> or <code>useCallback</code>. The React Compiler handles all memoization automatically. Write natural code and let the compiler optimize.</p>
+</div>
+
+<h4>Development Workflow</h4>
+<pre><code><span class="cm"># Desktop development &mdash; always use Wails dev server</span>
+$ yarn dev:desktop     <span class="cm"># Starts on port 34115</span>
+
+<span class="cm"># After making changes, validate</span>
+$ yarn check           <span class="cm"># typecheck + lint:fix + knip</span>
+
+<span class="cm"># Before pushing, full validation</span>
+$ yarn check:all       <span class="cm"># lint + typecheck + test + knip</span></code></pre>
+
+
+<!-- ========================================================
+     PART II — ARCHITECTURE THEORY & SOLID
+     ======================================================== -->
+<div class="page-break"></div>
+<div class="cover" style="padding: 40px 0 24px;">
+  <h1 style="font-size: 28px; color: #a78bfa;">Part II</h1>
+  <p style="font-size: 18px; color: #a1a1aa;">Architecture Theory &amp; SOLID Principles</p>
+  <p style="font-size: 14px; color: #71717a; margin-top: 8px;">Mapping classic software architecture books to a production React/TypeScript codebase</p>
+</div>
+
+<!-- ========================================================
+     18 — CLEAN ARCHITECTURE
+     ======================================================== -->
+<h2 class="section-title" id="s18"><span class="section-number">18</span>Clean Architecture (Robert C. Martin)</h2>
+
+<div class="callout callout-purple">
+  <p><strong>Book:</strong> "Clean Architecture: A Craftsman's Guide to Software Structure and Design" (2017). The core idea: <strong>source code dependencies must point inward</strong> toward higher-level policies, never outward toward implementation details.</p>
+</div>
+
+<h4>The Four Rings</h4>
+<p>Clean Architecture organizes code into concentric rings. Inner rings know nothing about outer rings. Dependencies always point inward.</p>
+
+<table>
+  <tr><th>Ring</th><th>Clean Architecture</th><th>Vultisig Implementation</th><th>Example</th></tr>
+  <tr><td><strong>1 (Innermost)</strong></td><td>Enterprise Business Rules / Entities</td><td><code>lib/</code> &mdash; Pure, reusable, zero Vultisig deps</td><td><code>Resolver&lt;Input, Output&gt;</code>, <code>Result&lt;T, E&gt;</code>, <code>setupStateProvider</code></td></tr>
+  <tr><td><strong>2</strong></td><td>Application Business Rules / Use Cases</td><td><code>core/</code> &mdash; Vultisig domain logic</td><td><code>Chain</code>, <code>Coin</code>, <code>ChainKind</code>, <code>getCoinBalance()</code></td></tr>
+  <tr><td><strong>3</strong></td><td>Interface Adapters</td><td><code>core/ui/</code> &mdash; React + Query bridge</td><td><code>useBalancesQuery()</code>, <code>CoreApp.tsx</code>, <code>MatchQuery</code></td></tr>
+  <tr><td><strong>4 (Outermost)</strong></td><td>Frameworks &amp; Drivers</td><td><code>clients/</code> &mdash; Wails, Chrome Extension</td><td><code>clients/desktop/App.tsx</code>, Wails runtime bindings</td></tr>
+</table>
+
+<h4>Ring 1: Enterprise Business Rules (lib/)</h4>
+<p>Pure abstractions that could be used in any React project. No Vultisig knowledge.</p>
+<pre><code><span class="cm">// lib/utils/types/Resolver.ts &mdash; Universal abstraction</span>
+<span class="kw">export type</span> <span class="ty">Resolver</span>&lt;<span class="ty">Input</span>, <span class="ty">Output</span>&gt; = (input: <span class="ty">Input</span>) =&gt; <span class="ty">Output</span>
+
+<span class="cm">// lib/utils/types/Result.ts &mdash; Error handling primitive</span>
+<span class="kw">type</span> <span class="ty">Success</span>&lt;T&gt; = { data: T; error?: <span class="kw">never</span> }
+<span class="kw">type</span> <span class="ty">Failure</span>&lt;E&gt; = { data?: <span class="kw">never</span>; error: E }
+<span class="kw">export type</span> <span class="ty">Result</span>&lt;T, E&gt; = <span class="ty">Success</span>&lt;T&gt; | <span class="ty">Failure</span>&lt;E&gt;</code></pre>
+
+<h4>Ring 2: Application Business Rules (core/)</h4>
+<p>Vultisig-specific domain models and use cases. Depends on <code>lib/</code> abstractions.</p>
+<pre><code><span class="cm">// core/chain/Chain.ts &mdash; Domain entity</span>
+<span class="kw">export const</span> <span class="cn">Chain</span> = {
+  ...<span class="cn">EvmChain</span>, ...<span class="cn">UtxoChain</span>, ...<span class="cn">CosmosChain</span>, ...<span class="cn">OtherChain</span>,
+} <span class="kw">as const</span>
+<span class="kw">export type</span> <span class="ty">Chain</span> = (<span class="kw">typeof</span> <span class="cn">Chain</span>)[<span class="kw">keyof typeof</span> <span class="cn">Chain</span>]
+
+<span class="cm">// core/chain/coin/Coin.ts &mdash; Value object</span>
+<span class="kw">export type</span> <span class="ty">CoinKey</span>&lt;T <span class="kw">extends</span> <span class="ty">Chain</span>&gt; = <span class="ty">ChainEntity</span>&lt;T&gt; &amp; { id?: <span class="ty">string</span> }
+<span class="kw">export const</span> <span class="fn">areEqualCoins</span> = (one: <span class="ty">CoinKey</span>, another: <span class="ty">CoinKey</span>): <span class="ty">boolean</span> =&gt;
+  one.chain === another.chain &amp;&amp; one.id?.toLowerCase() === another.id?.toLowerCase()</code></pre>
+
+<h4>Ring 3: Interface Adapters (core/ui/)</h4>
+<pre><code><span class="cm">// core/ui/chain/coin/queries/useBalancesQuery.ts</span>
+<span class="cm">// Bridges domain logic (getCoinBalance) into React Query</span>
+<span class="kw">export const</span> <span class="fn">getBalanceQueryOptions</span> = (input) =&gt; ({
+  queryKey: <span class="fn">getBalanceQueryKey</span>(input),
+  queryFn: <span class="kw">async</span> () =&gt; {
+    <span class="kw">const</span> amount = <span class="kw">await</span> <span class="fn">getCoinBalance</span>(input) <span class="cm">// Ring 2 call</span>
+    <span class="kw">return</span> { [<span class="fn">accountCoinKeyToString</span>(input)]: amount }
+  },
+  ...<span class="cn">persistQueryOptions</span>,
+})</code></pre>
+
+<h4>Ring 4: Frameworks &amp; Drivers (clients/)</h4>
+<pre><code><span class="cm">// clients/desktop/src/App.tsx &mdash; Wails runtime bindings</span>
+<span class="kw">const</span> <span class="cn">baseCoreState</span> = {
+  client: <span class="st">'desktop'</span>,
+  openUrl: <span class="cn">BrowserOpenURL</span>,           <span class="cm">// Wails Go binding</span>
+  saveFile: <span class="kw">async</span> ({ name, blob }) =&gt; { <span class="cm">/* Wails-specific */</span> },
+  getClipboardText: <span class="cn">ClipboardGetText</span>,  <span class="cm">// Wails Go binding</span>
+  getMpcServerUrl: <span class="kw">async</span> ({ serverType, serviceName }) =&gt; {
+    <span class="kw">return</span> <span class="fn">DiscoveryService</span>(serviceName) <span class="cm">// Go backend</span>
+  },
+}</code></pre>
+
+<h4>Key Takeaway</h4>
+<div class="callout callout-green">
+  <p>If React is replaced with Vue, only <code>clients/</code> and <code>core/ui/</code> change. If a new blockchain is added, only <code>core/chain/</code> gets a new resolver file. The inner rings are <strong>immune to outer-ring changes</strong>.</p>
+</div>
+
+<!-- ========================================================
+     19 — HEXAGONAL ARCHITECTURE
+     ======================================================== -->
+<div class="page-break"></div>
+<h2 class="section-title" id="s19"><span class="section-number">19</span>Hexagonal Architecture / Ports &amp; Adapters</h2>
+
+<div class="callout callout-purple">
+  <p><strong>Article:</strong> "Hexagonal Architecture" by Alistair Cockburn (2005). The core defines <strong>ports</strong> (interfaces). The outside world provides <strong>adapters</strong> (implementations). The application is at the center, unaware of the outside world.</p>
+</div>
+
+<h4>How Vultisig Implements Ports &amp; Adapters</h4>
+<p>The resolver pattern is a textbook Port &amp; Adapter implementation:</p>
+
+<table>
+  <tr><th>Concept</th><th>Hexagonal Term</th><th>Vultisig File</th></tr>
+  <tr><td>Interface definition</td><td><strong>Port</strong></td><td><code>core/chain/coin/balance/resolver.ts</code></td></tr>
+  <tr><td>Dispatch logic</td><td><strong>Application Core</strong></td><td><code>core/chain/coin/balance/index.ts</code></td></tr>
+  <tr><td>EVM implementation</td><td><strong>Adapter</strong></td><td><code>core/chain/coin/balance/resolvers/evm.ts</code></td></tr>
+  <tr><td>Cosmos implementation</td><td><strong>Adapter</strong></td><td><code>core/chain/coin/balance/resolvers/cosmos.ts</code></td></tr>
+  <tr><td>Solana implementation</td><td><strong>Adapter</strong></td><td><code>core/chain/coin/balance/resolvers/solana.ts</code></td></tr>
+</table>
+
+<h4>Port: The Contract</h4>
+<pre><code><span class="cm">// core/chain/coin/balance/resolver.ts &mdash; THE PORT</span>
+<span class="kw">export type</span> <span class="ty">CoinBalanceResolver</span>&lt;T <span class="kw">extends</span> <span class="ty">Chain</span> = <span class="ty">Chain</span>&gt; = <span class="ty">Resolver</span>&lt;
+  <span class="ty">CoinBalanceResolverInput</span>&lt;T&gt;,
+  <span class="ty">Promise</span>&lt;<span class="ty">bigint</span>&gt;
+&gt;</code></pre>
+
+<h4>Application Core: The Router</h4>
+<pre><code><span class="cm">// core/chain/coin/balance/index.ts &mdash; THE CORE</span>
+<span class="kw">const</span> <span class="cn">resolvers</span>: <span class="ty">Record</span>&lt;<span class="ty">ChainKind</span>, <span class="ty">CoinBalanceResolver</span>&lt;<span class="kw">any</span>&gt;&gt; = {
+  utxo: <span class="cn">getUtxoCoinBalance</span>,
+  cosmos: <span class="cn">getCosmosCoinBalance</span>,
+  evm: <span class="cn">getEvmCoinBalance</span>,
+  ton: <span class="cn">getTonCoinBalance</span>,
+  ripple: <span class="cn">getRippleCoinBalance</span>,
+  polkadot: <span class="cn">getPolkadotCoinBalance</span>,
+  solana: <span class="cn">getSolanaCoinBalance</span>,
+  tron: <span class="cn">getTronCoinBalance</span>,
+  cardano: <span class="cn">getCardanoCoinBalance</span>,
+  sui: <span class="cn">getSuiCoinBalance</span>,
+}
+
+<span class="kw">export const</span> <span class="fn">getCoinBalance</span>: <span class="ty">CoinBalanceResolver</span> = <span class="kw">async</span> input =&gt;
+  <span class="cn">resolvers</span>[<span class="fn">getChainKind</span>(input.chain)](input)</code></pre>
+
+<h4>Adapter: One Per Chain</h4>
+<pre><code><span class="cm">// core/chain/coin/balance/resolvers/evm.ts &mdash; AN ADAPTER</span>
+<span class="kw">export const</span> <span class="fn">getEvmCoinBalance</span>: <span class="ty">CoinBalanceResolver</span>&lt;<span class="ty">EvmChain</span>&gt; = <span class="kw">async</span> input =&gt; {
+  <span class="kw">return</span> <span class="fn">isFeeCoin</span>(input)
+    ? <span class="fn">getEvmClient</span>(input.chain).<span class="fn">getBalance</span>({ address: input.address })
+    : <span class="fn">getErc20Balance</span>({ chain: input.chain, address: input.id, accountAddress: input.address })
+}</code></pre>
+
+<h4>Why This Matters</h4>
+<ul>
+  <li>Adding Cardano support = 1 new adapter file + 1 record entry. Zero existing code touched.</li>
+  <li>Each adapter is independently testable &mdash; mock the port, verify the adapter.</li>
+  <li>The core router is a 3-line function that never changes.</li>
+</ul>
+
+<!-- ========================================================
+     20 — ONION + DDD
+     ======================================================== -->
+<div class="page-break"></div>
+<h2 class="section-title" id="s20"><span class="section-number">20</span>Onion Architecture &amp; Domain-Driven Design</h2>
+
+<div class="callout callout-purple">
+  <p><strong>Books:</strong> "Domain-Driven Design" by Eric Evans (2003), Onion Architecture by Jeffrey Palermo (2008). The domain model is at the center. Infrastructure wraps around it. Dependencies peel inward like an onion.</p>
+</div>
+
+<h4>Onion Layers in Vultisig</h4>
+<table>
+  <tr><th>Layer</th><th>Onion Term</th><th>Content</th><th>Example Files</th></tr>
+  <tr><td><strong>1 (Core)</strong></td><td>Domain Model</td><td>Pure types, zero deps</td><td><code>Chain.ts</code>, <code>Coin.ts</code>, <code>VaultFolder.ts</code></td></tr>
+  <tr><td><strong>2</strong></td><td>Domain Services</td><td>Business logic on models</td><td><code>ChainKind.ts</code>, <code>areEqualCoins()</code></td></tr>
+  <tr><td><strong>3</strong></td><td>Application Services</td><td>Use cases orchestrating domain + ports</td><td><code>getCoinBalance()</code>, <code>broadcastTx()</code></td></tr>
+  <tr><td><strong>4 (Outer)</strong></td><td>Infrastructure / UI</td><td>React, storage, RPC</td><td><code>useBalancesQuery()</code>, <code>CoreApp.tsx</code></td></tr>
+</table>
+
+<h4>Domain-Driven Design: Bounded Contexts</h4>
+<p>Each package in <code>core/</code> is a <strong>bounded context</strong> with clear language and boundaries:</p>
+
+<pre><code><span class="cm">// Bounded contexts as package boundaries</span>
+@core/chain/      <span class="cm">// Blockchain domain</span>
+  ├── Chain       <span class="cm">// "What chains exist?"</span>
+  ├── Coin        <span class="cm">// "What is a token on a chain?"</span>
+  └── Balance     <span class="cm">// "How much of a coin does an address hold?"</span>
+
+@core/mpc/        <span class="cm">// Multi-Party Computation domain</span>
+  ├── Keygen      <span class="cm">// "Creating a shared key across devices"</span>
+  ├── Keysign     <span class="cm">// "Signing with the shared key"</span>
+  └── MpcDevice   <span class="cm">// "A participant in the MPC ceremony"</span>
+
+@core/ui/         <span class="cm">// User interaction domain</span>
+  ├── vault/      <span class="cm">// "A user's secured wallet"</span>
+  ├── deposit/    <span class="cm">// "Moving funds into a protocol"</span>
+  ├── send/       <span class="cm">// "Sending transactions"</span>
+  └── defi/       <span class="cm">// "Decentralized finance interactions"</span></code></pre>
+
+<h4>Entities vs Value Objects (DDD)</h4>
+<table>
+  <tr><th>DDD Concept</th><th>Has Identity?</th><th>Vultisig Example</th><th>Comparison</th></tr>
+  <tr><td><strong>Entity</strong></td><td>Yes &mdash; identified by ID</td><td><code>VaultFolder { id, name, order }</code></td><td>Two folders with same name are different</td></tr>
+  <tr><td><strong>Value Object</strong></td><td>No &mdash; compared by content</td><td><code>CoinKey { chain, id }</code></td><td><code>areEqualCoins()</code> compares by chain + id</td></tr>
+</table>
+
+<h4>Ubiquitous Language</h4>
+<p>Every domain concept uses consistent naming across the entire codebase:</p>
+<table>
+  <tr><th>Domain Concept</th><th>Code Representation</th><th>Appears In</th></tr>
+  <tr><td>"A user's wallet"</td><td><code>Vault</code></td><td>Types, files, hooks, UI text</td></tr>
+  <tr><td>"Moving funds to a protocol"</td><td><code>Deposit</code></td><td><code>core/ui/vault/deposit/</code></td></tr>
+  <tr><td>"Exchanging tokens"</td><td><code>Swap</code></td><td><code>core/ui/vault/swap/</code></td></tr>
+  <tr><td>"A blockchain network"</td><td><code>Chain</code></td><td><code>core/chain/Chain.ts</code></td></tr>
+  <tr><td>"Creating a shared key"</td><td><code>Keygen</code></td><td><code>core/mpc/keygen/</code></td></tr>
+  <tr><td>"Signing with shared key"</td><td><code>Keysign</code></td><td><code>core/mpc/keysign/</code></td></tr>
+</table>
+
+<!-- ========================================================
+     21 — DEPENDENCY RULE VERIFIED
+     ======================================================== -->
+<div class="page-break"></div>
+<h2 class="section-title" id="s21"><span class="section-number">21</span>The Dependency Rule (Verified)</h2>
+
+<div class="callout callout-purple">
+  <p><strong>The Rule:</strong> Source code dependencies must point <strong>inward</strong>. Nothing in an inner layer can know about something in an outer layer. This is the single rule that makes Clean / Hexagonal / Onion architecture work.</p>
+</div>
+
+<h4>Verified Dependency Direction</h4>
+<table>
+  <tr><th>Package</th><th>Imports From</th><th>Direction</th></tr>
+  <tr><td><code>@lib/utils</code></td><td>External only (<code>long</code>, <code>viem</code>)</td><td style="color: #4ade80;">&#10004; Innermost</td></tr>
+  <tr><td><code>@lib/ui</code></td><td><code>@lib/utils</code></td><td style="color: #4ade80;">&#10004; Inward</td></tr>
+  <tr><td><code>@core/config</code></td><td><code>@lib/utils</code></td><td style="color: #4ade80;">&#10004; Inward</td></tr>
+  <tr><td><code>@core/chain</code></td><td><code>@lib/{utils,dkls,schnorr}</code>, <code>@core/config</code></td><td style="color: #4ade80;">&#10004; Inward</td></tr>
+  <tr><td><code>@core/mpc</code></td><td><code>@lib/*</code>, <code>@core/{chain,config}</code></td><td style="color: #4ade80;">&#10004; Inward</td></tr>
+  <tr><td><code>@core/ui</code></td><td><code>@lib/*</code>, <code>@core/{chain,mpc,config}</code></td><td style="color: #4ade80;">&#10004; Inward</td></tr>
+  <tr><td><code>@clients/desktop</code></td><td><code>@core/*</code>, <code>@lib/*</code></td><td style="color: #4ade80;">&#10004; Outermost</td></tr>
+  <tr><td><code>@clients/extension</code></td><td><code>@core/*</code>, <code>@lib/*</code></td><td style="color: #4ade80;">&#10004; Outermost</td></tr>
+</table>
+
+<h4>Enforcement Mechanisms</h4>
+<ul>
+  <li><strong>Yarn workspaces</strong> &mdash; packages declare deps in <code>package.json</code>; undeclared imports fail</li>
+  <li><strong>TypeScript paths</strong> &mdash; <code>tsconfig.json</code> maps <code>@lib/*</code> and <code>@core/*</code> to specific directories</li>
+  <li><strong>Circular dependency detection</strong> &mdash; <code>vite-plugin-circular-dependency</code> fails the build on cycles</li>
+  <li><strong>No violations found</strong> &mdash; the dependency rule is 100% respected in the codebase</li>
+</ul>
+
+<!-- ========================================================
+     22 — SOLID: SRP
+     ======================================================== -->
+<div class="page-break"></div>
+<h2 class="section-title" id="s22"><span class="section-number">22</span>SOLID: Single Responsibility Principle</h2>
+
+<div class="callout callout-purple">
+  <p><strong>Definition:</strong> "A class/module should have one, and only one, reason to change." &mdash; Robert C. Martin. Each unit of code should do <strong>one thing well</strong>.</p>
+</div>
+
+<h4>Applied: One State Provider = One Concern</h4>
+<span class="file-path">core/ui/mpc/state/mpcServerType.ts</span>
+<pre><code><span class="kw">import</span> { <span class="ty">MpcServerType</span> } <span class="kw">from</span> <span class="st">'@core/mpc/MpcServerType'</span>
+<span class="kw">import</span> { <span class="fn">setupStateProvider</span> } <span class="kw">from</span> <span class="st">'@lib/ui/state/setupStateProvider'</span>
+
+<span class="kw">export const</span> [<span class="cn">MpcServerTypeProvider</span>, <span class="fn">useMpcServerType</span>] =
+  <span class="fn">setupStateProvider</span>&lt;<span class="ty">MpcServerType</span>&gt;(<span class="st">'MpcServerType'</span>)</code></pre>
+<p>This file has <strong>one reason to change</strong>: if the MPC server type concept changes. Two lines. Zero other concerns.</p>
+
+<h4>Applied: One Resolver = One Chain</h4>
+<span class="file-path">core/chain/tx/broadcast/resolvers/evm.ts</span>
+<pre><code><span class="kw">export const</span> <span class="fn">broadcastEvmTx</span>: <span class="ty">BroadcastTxResolver</span>&lt;<span class="ty">EvmChain</span>&gt; = <span class="kw">async</span> ({ chain, tx }) =&gt; {
+  <span class="kw">const</span> client = <span class="fn">getEvmClient</span>(chain)
+  <span class="kw">const</span> { error } = <span class="kw">await</span> <span class="fn">attempt</span>(
+    client.<span class="fn">sendRawTransaction</span>({
+      serializedTransaction: <span class="fn">ensureHexPrefix</span>(<span class="cn">Buffer</span>.from(tx.encoded).toString(<span class="st">'hex'</span>)),
+    })
+  )
+  <span class="kw">if</span> (error &amp;&amp; !<span class="fn">isInError</span>(error, <span class="st">'already known'</span>, <span class="st">'nonce too low'</span>)) {
+    <span class="kw">throw</span> error
+  }
+}</code></pre>
+<p>Handles <strong>only EVM broadcasting</strong>. No mixing with Solana, Cosmos, or UTXO logic.</p>
+
+<h4>Applied: Separated Fetching from Transformation</h4>
+<p>The codebase separates data lifecycle into distinct layers:</p>
+<table>
+  <tr><th>Layer</th><th>Convention</th><th>Responsibility</th></tr>
+  <tr><td>Data fetcher</td><td><code>useXxxQuery()</code></td><td>Fetches data via React Query</td></tr>
+  <tr><td>Data mapper</td><td><code>data/mappers/</code></td><td>Transforms API response to domain type</td></tr>
+  <tr><td>Presentation</td><td><code>Component.tsx</code></td><td>Renders UI, no fetching or transforming</td></tr>
+</table>
+
+<!-- ========================================================
+     23 — SOLID: OCP
+     ======================================================== -->
+<div class="page-break"></div>
+<h2 class="section-title" id="s23"><span class="section-number">23</span>SOLID: Open/Closed Principle</h2>
+
+<div class="callout callout-purple">
+  <p><strong>Definition:</strong> "Software entities should be open for extension, but closed for modification." &mdash; Bertrand Meyer / Robert C. Martin. Add new behavior by writing new code, never by changing existing code.</p>
+</div>
+
+<h4>Applied: Resolver Record Pattern</h4>
+<span class="file-path">core/chain/tx/broadcast/index.ts</span>
+<pre><code><span class="kw">const</span> <span class="cn">resolvers</span>: <span class="ty">Record</span>&lt;<span class="ty">ChainKind</span>, <span class="ty">BroadcastTxResolver</span>&lt;<span class="kw">any</span>&gt;&gt; = {
+  cardano: <span class="cn">broadcastCardanoTx</span>,
+  cosmos: <span class="cn">broadcastCosmosTx</span>,
+  evm: <span class="cn">broadcastEvmTx</span>,
+  polkadot: <span class="cn">broadcastPolkadotTx</span>,
+  ripple: <span class="cn">broadcastRippleTx</span>,
+  solana: <span class="cn">broadcastSolanaTx</span>,
+  sui: <span class="cn">broadcastSuiTx</span>,
+  ton: <span class="cn">broadcastTonTx</span>,
+  utxo: <span class="cn">broadcastUtxoTx</span>,
+  tron: <span class="cn">broadcastTronTx</span>,
+}
+
+<span class="kw">export const</span> <span class="fn">broadcastTx</span>: <span class="ty">BroadcastTxResolver</span> = input =&gt;
+  <span class="cn">resolvers</span>[<span class="fn">getChainKind</span>(input.chain)](input)</code></pre>
+
+<div class="callout callout-green">
+  <p><strong>Closed:</strong> The <code>broadcastTx</code> function and the resolver map never change when adding a chain.<br>
+  <strong>Open:</strong> Add a new chain by: (1) create <code>resolvers/newChain.ts</code>, (2) add one entry to the Record.<br>
+  <strong>Bonus:</strong> <code>Record&lt;ChainKind, ...&gt;</code> gives a compiler error if you forget a chain.</p>
+</div>
+
+<h4>Applied: Generic Factory (setupStateProvider)</h4>
+<pre><code><span class="cm">// Open for extension via type parameter &mdash; closed for modification</span>
+<span class="kw">export const</span> [<span class="cn">EmailProvider</span>, <span class="fn">useEmail</span>] = <span class="fn">setupStateProvider</span>&lt;<span class="ty">string</span>&gt;(<span class="st">'Email'</span>)
+<span class="kw">export const</span> [<span class="cn">AmountProvider</span>, <span class="fn">useAmount</span>] = <span class="fn">setupStateProvider</span>&lt;<span class="ty">number</span>&gt;(<span class="st">'Amount'</span>)
+<span class="kw">export const</span> [<span class="cn">ChainProvider</span>, <span class="fn">useChain</span>] = <span class="fn">setupStateProvider</span>&lt;<span class="ty">Chain</span>&gt;(<span class="st">'Chain'</span>)
+<span class="cm">// The factory itself never needs modifying</span></code></pre>
+
+<!-- ========================================================
+     24 — SOLID: LSP
+     ======================================================== -->
+<h2 class="section-title" id="s24"><span class="section-number">24</span>SOLID: Liskov Substitution Principle</h2>
+
+<div class="callout callout-purple">
+  <p><strong>Definition:</strong> "Objects of a supertype shall be replaceable with objects of its subtypes without altering any desirable property." &mdash; Barbara Liskov. If code expects type <code>A</code>, any subtype of <code>A</code> should work without breaking.</p>
+</div>
+
+<h4>Applied: Interchangeable Chain Resolvers</h4>
+<pre><code><span class="cm">// The port (supertype)</span>
+<span class="kw">export type</span> <span class="ty">BroadcastTxResolver</span>&lt;T <span class="kw">extends</span> <span class="ty">Chain</span> = <span class="ty">Chain</span>&gt; = <span class="ty">Resolver</span>&lt;
+  { chain: T; tx: <span class="ty">SigningOutput</span>&lt;T&gt; },
+  <span class="ty">Promise</span>&lt;<span class="ty">unknown</span>&gt;
+&gt;
+
+<span class="cm">// Subtypes &mdash; all substitutable in the Record</span>
+<span class="kw">export const</span> <span class="fn">broadcastEvmTx</span>:    <span class="ty">BroadcastTxResolver</span>&lt;<span class="ty">EvmChain</span>&gt;          = ...
+<span class="kw">export const</span> <span class="fn">broadcastSolanaTx</span>: <span class="ty">BroadcastTxResolver</span>&lt;<span class="ty">OtherChain.Solana</span>&gt; = ...
+<span class="kw">export const</span> <span class="fn">broadcastUtxoTx</span>:   <span class="ty">BroadcastTxResolver</span>&lt;<span class="ty">UtxoChain</span>&gt;         = ...</code></pre>
+<p>The dispatcher doesn't care which implementation it calls. All resolvers accept the same input shape and return the same output type. <strong>Swappable without breaking contracts.</strong></p>
+
+<h4>Applied: Chain Type Hierarchy</h4>
+<pre><code><span class="cm">// All specific chain types are substitutable for Chain</span>
+<span class="kw">export const</span> <span class="cn">Chain</span> = { ...<span class="cn">EvmChain</span>, ...<span class="cn">UtxoChain</span>, ...<span class="cn">CosmosChain</span>, ...<span class="cn">OtherChain</span> } <span class="kw">as const</span>
+
+<span class="cm">// Code expecting Chain works with any subtype</span>
+<span class="kw">function</span> <span class="fn">getChainName</span>(chain: <span class="ty">Chain</span>): <span class="ty">string</span> { ... }
+<span class="fn">getChainName</span>(<span class="cn">EvmChain</span>.<span class="cn">Ethereum</span>)   <span class="cm">// &#10004; Works</span>
+<span class="fn">getChainName</span>(<span class="cn">UtxoChain</span>.<span class="cn">Bitcoin</span>)   <span class="cm">// &#10004; Works</span>
+<span class="fn">getChainName</span>(<span class="cn">OtherChain</span>.<span class="cn">Solana</span>)   <span class="cm">// &#10004; Works</span></code></pre>
+
+<!-- ========================================================
+     25 — SOLID: ISP
+     ======================================================== -->
+<div class="page-break"></div>
+<h2 class="section-title" id="s25"><span class="section-number">25</span>SOLID: Interface Segregation Principle</h2>
+
+<div class="callout callout-purple">
+  <p><strong>Definition:</strong> "No client should be forced to depend on interfaces it does not use." &mdash; Robert C. Martin. Prefer many small, focused interfaces over one large "god" interface.</p>
+</div>
+
+<h4>Applied: Minimal Prop Types</h4>
+<span class="file-path">lib/ui/props/index.tsx</span>
+<pre><code><span class="kw">export type</span> <span class="ty">OnCloseProp</span>   = { onClose: () =&gt; <span class="kw">void</span> }
+<span class="kw">export type</span> <span class="ty">OnClickProp</span>   = { onClick: () =&gt; <span class="kw">void</span> }
+<span class="kw">export type</span> <span class="ty">ChildrenProp</span>  = { children: <span class="ty">ReactNode</span> }
+<span class="kw">export type</span> <span class="ty">ValueProp</span>&lt;T&gt;  = { value: T }
+<span class="kw">export type</span> <span class="ty">InputProps</span>&lt;T&gt; = { value: T; onChange: (value: T) =&gt; <span class="kw">void</span> }
+<span class="kw">export type</span> <span class="ty">LabelProp</span>     = { label: <span class="ty">ReactNode</span> }
+<span class="kw">export type</span> <span class="ty">IsDisabledProp</span> = { isDisabled?: <span class="ty">boolean</span> | <span class="ty">string</span> }</code></pre>
+<p>Each prop type is <strong>maximally focused</strong>. Components compose only what they need:</p>
+<pre><code><span class="kw">type</span> <span class="ty">MyComponentProps</span> = <span class="ty">ChildrenProp</span> &amp; <span class="ty">ValueProp</span>&lt;<span class="ty">string</span>&gt; &amp; <span class="ty">OnClickProp</span></code></pre>
+
+<h4>Applied: Minimal Resolver Interface</h4>
+<pre><code><span class="cm">// lib/utils/types/Resolver.ts &mdash; 1 line, maximally minimal</span>
+<span class="kw">export type</span> <span class="ty">Resolver</span>&lt;<span class="ty">Input</span>, <span class="ty">Output</span>&gt; = (input: <span class="ty">Input</span>) =&gt; <span class="ty">Output</span></code></pre>
+<p>Any function matching this signature satisfies the contract. No unnecessary methods or properties.</p>
+
+<!-- ========================================================
+     26 — SOLID: DIP
+     ======================================================== -->
+<h2 class="section-title" id="s26"><span class="section-number">26</span>SOLID: Dependency Inversion Principle</h2>
+
+<div class="callout callout-purple">
+  <p><strong>Definition:</strong> "High-level modules should not depend on low-level modules. Both should depend on abstractions." &mdash; Robert C. Martin. This is the "D" in SOLID and the foundation of the Dependency Rule.</p>
+</div>
+
+<h4>Applied: State Provider Abstraction</h4>
+<pre><code><span class="cm">// HIGH-LEVEL (consumer): depends on setupStateProvider abstraction</span>
+<span class="kw">export const</span> [<span class="cn">MpcServerTypeProvider</span>, <span class="fn">useMpcServerType</span>] =
+  <span class="fn">setupStateProvider</span>&lt;<span class="ty">MpcServerType</span>&gt;(<span class="st">'MpcServerType'</span>)
+
+<span class="cm">// LOW-LEVEL (implementation): React Context is hidden inside the factory</span>
+<span class="cm">// Consumers never import createContext or useContext directly</span>
+<span class="cm">// If React Context API changes, only setupStateProvider updates</span></code></pre>
+
+<h4>Applied: Error Handling Abstraction</h4>
+<pre><code><span class="cm">// HIGH-LEVEL: depends on attempt() + Result&lt;T, E&gt; abstraction</span>
+<span class="kw">const</span> { error } = <span class="kw">await</span> <span class="fn">attempt</span>(
+  client.<span class="fn">sendRawTransaction</span>({ serializedTransaction })
+)
+
+<span class="cm">// LOW-LEVEL: try-catch is hidden inside attempt()</span>
+<span class="cm">// If error handling strategy changes, only attempt() is updated</span>
+<span class="cm">// All 100+ call sites are unaffected</span></code></pre>
+
+<h4>Applied: Resolver Pattern Inverts Dependencies</h4>
+<pre><code><span class="cm">// HIGH-LEVEL module (broadcastTx) depends on ABSTRACTION (BroadcastTxResolver)</span>
+<span class="kw">export const</span> <span class="fn">broadcastTx</span>: <span class="ty">BroadcastTxResolver</span> = input =&gt;
+  <span class="cn">resolvers</span>[<span class="fn">getChainKind</span>(input.chain)](input)
+
+<span class="cm">// LOW-LEVEL modules (broadcastEvmTx, etc.) IMPLEMENT the abstraction</span>
+<span class="cm">// Dependency inverted: implementations depend on the interface, not vice versa</span></code></pre>
+
+<h4>Contrast: What a DIP Violation Looks Like</h4>
+<pre><code><span class="cm">// BAD: High-level directly depends on low-level implementations</span>
+<span class="kw">export const</span> <span class="fn">broadcastTx</span> = <span class="kw">async</span> (input) =&gt; {
+  <span class="kw">if</span> (input.chain === <span class="st">'ethereum'</span>) {
+    <span class="kw">const</span> client = <span class="fn">getEvmClient</span>(input.chain) <span class="cm">// direct dependency</span>
+    <span class="kw">await</span> client.<span class="fn">sendRawTransaction</span>(...)
+  } <span class="kw">else if</span> (input.chain === <span class="st">'solana'</span>) {
+    <span class="cm">// ... solana logic directly here</span>
+  }
+}
+<span class="cm">// Adding a chain = modifying this function. Dependencies flow downward.</span></code></pre>
+
+<!-- ========================================================
+     27 — IMPROVEMENT OPPORTUNITIES
+     ======================================================== -->
+<div class="page-break"></div>
+<h2 class="section-title" id="s27"><span class="section-number">27</span>Improvement Opportunities</h2>
+
+<p>While the codebase strongly adheres to these principles, a few areas could benefit from refactoring:</p>
+
+<h4>1. Switch Statements &rarr; Record Maps (OCP)</h4>
+<span class="file-path">core/ui/mpc/keysign/tx/components/SignSolanaDisplay.tsx</span>
+<pre><code><span class="cm">// Current: switch/case violates OCP</span>
+<span class="kw">switch</span> (discriminator) {
+  <span class="kw">case</span> <span class="nr">0</span>: <span class="kw">return</span> <span class="st">'Create Account'</span>
+  <span class="kw">case</span> <span class="nr">2</span>: <span class="kw">return</span> <span class="st">'Transfer (SOL)'</span>
+  <span class="kw">case</span> <span class="nr">3</span>: <span class="kw">return</span> <span class="st">'Assign'</span>
+  <span class="kw">case</span> <span class="nr">9</span>: <span class="kw">return</span> <span class="st">'Transfer With Seed'</span>
+}
+
+<span class="cm">// Better: Record map (add cases without modifying function)</span>
+<span class="kw">const</span> <span class="cn">systemInstructionMap</span>: <span class="ty">Record</span>&lt;<span class="ty">number</span>, <span class="ty">string</span>&gt; = {
+  <span class="nr">0</span>: <span class="st">'Create Account'</span>,
+  <span class="nr">2</span>: <span class="st">'Transfer (SOL)'</span>,
+  <span class="nr">3</span>: <span class="st">'Assign'</span>,
+  <span class="nr">9</span>: <span class="st">'Transfer With Seed'</span>,
+}</code></pre>
+
+<h4>2. God Components &rarr; Composition (SRP)</h4>
+<span class="file-path">core/ui/defi/chain/components/stake/StakeCard.tsx (416 lines, 23 props)</span>
+<pre><code><span class="cm">// Current: 23 flat props &mdash; violates ISP</span>
+<span class="kw">type</span> <span class="ty">StakeCardProps</span> = {
+  coin; title; amount; fiat; apr; estimatedReward; rewards; rewardTicker;
+  nextPayout; canUnstake; unstakeAvailableDate; onStake; onUnstake;
+  onWithdrawRewards; stakeLabel; unstakeLabel; isSkeleton; actionsDisabled;
+  actionsDisabledReason; hideStats; isPendingAction; infoUrl; onTransfer;
+}
+
+<span class="cm">// Better: Segregated prop groups</span>
+<span class="kw">type</span> <span class="ty">StakeCardProps</span> = {
+  summary: <span class="ty">StakeSummary</span>    <span class="cm">// { coin, title, amount, fiat }</span>
+  stats?: <span class="ty">StakeStats</span>       <span class="cm">// { apr, nextPayout, estimatedReward }</span>
+  actions?: <span class="ty">StakeActions</span>   <span class="cm">// { onStake, onUnstake, onWithdrawRewards }</span>
+  ui?: <span class="ty">StakeCardUI</span>         <span class="cm">// { isSkeleton, hideStats, actionsDisabled }</span>
+}</code></pre>
+
+<h4>3. Unnecessary Memoization (React Compiler)</h4>
+<span class="file-path">Multiple deposit form files</span>
+<pre><code><span class="cm">// Found in: StakeForm.tsx, UnbondForm.tsx, defiPositions.tsx</span>
+<span class="kw">const</span> currentPercentage = <span class="fn">useMemo</span>(() =&gt; calculatePercentage(amount), [amount])
+
+<span class="cm">// Fix: Remove useMemo. React Compiler handles this automatically.</span>
+<span class="kw">const</span> currentPercentage = <span class="fn">calculatePercentage</span>(amount)</code></pre>
+
+<h4>4. If-Chains &rarr; Resolver Pattern (OCP)</h4>
+<span class="file-path">core/ui/defi/chain/config/defiPositionResolver.ts</span>
+<pre><code><span class="cm">// Current: if-chain requires modification for new chains</span>
+<span class="kw">if</span> (position.chain === <span class="cn">Chain</span>.<span class="cn">THORChain</span> &amp;&amp; thorPositionCoinByTicker[ticker]) { ... }
+<span class="kw">if</span> (position.chain === <span class="cn">Chain</span>.<span class="cn">MayaChain</span> &amp;&amp; mayaPositionCoinByTicker[ticker]) { ... }
+
+<span class="cm">// Better: Config-driven approach</span>
+<span class="kw">const</span> <span class="cn">coinResolvers</span>: <span class="ty">Record</span>&lt;<span class="ty">Chain</span>, (pos: <span class="ty">DefiPosition</span>) =&gt; <span class="ty">Coin</span> | <span class="kw">null</span>&gt; = {
+  [<span class="cn">Chain</span>.<span class="cn">THORChain</span>]: <span class="fn">resolveThorCoinPosition</span>,
+  [<span class="cn">Chain</span>.<span class="cn">MayaChain</span>]: <span class="fn">resolveMayaPosition</span>,
+}</code></pre>
+
+<h4>5. Ternary Chains &rarr; Discriminated Union (SRP + OCP)</h4>
+<span class="file-path">core/ui/vault/deposit/DepositForm/index.tsx</span>
+<pre><code><span class="cm">// Current: nested ternary for form variant selection</span>
+shouldUseBondRedesign ? &lt;<span class="tag">BondForm</span> /&gt; :
+shouldUseUnbondRedesign ? &lt;<span class="tag">UnbondForm</span> /&gt; :
+shouldUseStakeRedesign ? &lt;<span class="tag">StakeForm</span> /&gt; :
+&lt;<span class="tag">LegacyForm</span> /&gt;
+
+<span class="cm">// Better: Record resolver</span>
+<span class="kw">const</span> <span class="cn">formResolvers</span>: <span class="ty">Record</span>&lt;<span class="ty">FormVariant</span>, <span class="ty">FC</span>&lt;<span class="ty">Props</span>&gt;&gt; = {
+  bond: <span class="cn">BondForm</span>,
+  unbond: <span class="cn">UnbondForm</span>,
+  stake: <span class="cn">StakeForm</span>,
+  legacy: <span class="cn">LegacyForm</span>,
+}
+<span class="kw">const</span> <span class="cn">FormComponent</span> = <span class="cn">formResolvers</span>[<span class="fn">determineVariant</span>(...)]</code></pre>
+
+<h4>Summary of Opportunities</h4>
+<table>
+  <tr><th>Issue</th><th>File</th><th>Principle</th><th>Priority</th></tr>
+  <tr><td>Switch statements</td><td><code>SignSolanaDisplay.tsx</code></td><td>OCP</td><td>Medium</td></tr>
+  <tr><td>23-prop component</td><td><code>StakeCard.tsx</code></td><td>ISP + SRP</td><td>High</td></tr>
+  <tr><td>Unnecessary useMemo</td><td>Multiple deposit files</td><td>Convention</td><td>Low</td></tr>
+  <tr><td>If-chain for chains</td><td><code>defiPositionResolver.ts</code></td><td>OCP</td><td>Medium</td></tr>
+  <tr><td>Ternary form selection</td><td><code>DepositForm/index.tsx</code></td><td>SRP + OCP</td><td>Medium</td></tr>
+</table>
+
+<!-- ========================================================
+     28 — FROM MID TO SENIOR (moved from s18)
+     ======================================================== -->
+<div class="page-break"></div>
+<h2 class="section-title" id="s28"><span class="section-number">28</span>From Mid to Senior: Growth Progression</h2>
+
+<p>This section maps the patterns in this case study to the concepts a mid-level developer would learn by studying this codebase. Each card shows where a mid-level developer typically operates and what the senior-level understanding looks like.</p>
+
+<div class="progression-card no-break">
+  <h3>1. From "Switch Statements" to "Exhaustive Record Matching"</h3>
+  <div class="skill-row">
+    <span class="skill-label mid">Mid</span>
+    <span>Uses switch/case for branching on types, occasionally forgets to add new cases when types expand.</span>
+  </div>
+  <div class="skill-row">
+    <span class="skill-label senior">Senior</span>
+    <span>Uses <code>Record&lt;UnionType, Handler&gt;</code> so the compiler enforces exhaustive coverage. Adding a new variant is a compile error until handled everywhere.</span>
+  </div>
+</div>
+
+<div class="progression-card no-break">
+  <h3>2. From "try-catch Everywhere" to "Result Types"</h3>
+  <div class="skill-row">
+    <span class="skill-label mid">Mid</span>
+    <span>Wraps code in try-catch, catches generic <code>Error</code>, logs and moves on. Error paths are invisible in types.</span>
+  </div>
+  <div class="skill-row">
+    <span class="skill-label senior">Senior</span>
+    <span>Uses <code>attempt()</code> to return <code>Result&lt;T, E&gt;</code>, making error handling explicit in the type system. Callers cannot ignore failure paths.</span>
+  </div>
+</div>
+
+<div class="progression-card no-break">
+  <h3>3. From "Prop Drilling" to "Provider Factory Composition"</h3>
+  <div class="skill-row">
+    <span class="skill-label mid">Mid</span>
+    <span>Passes props through multiple levels, creates ad-hoc contexts when things get unwieldy, each with boilerplate Provider + hook + context file.</span>
+  </div>
+  <div class="skill-row">
+    <span class="skill-label senior">Senior</span>
+    <span>Uses <code>setupStateProvider</code> factory to create typed context/hook pairs in one line. Composes providers hierarchically, scoping state precisely to the subtree that needs it.</span>
+  </div>
+</div>
+
+<div class="progression-card no-break">
+  <h3>4. From "Type Assertions" to "Type Narrowing"</h3>
+  <div class="skill-row">
+    <span class="skill-label mid">Mid</span>
+    <span>Uses <code>as</code> casts to silence TypeScript: <code>const user = data as User</code>. Runtime crashes happen when assumptions are wrong.</span>
+  </div>
+  <div class="skill-row">
+    <span class="skill-label senior">Senior</span>
+    <span>Uses <code>shouldBePresent()</code>, <code>assertField()</code>, and discriminated unions to narrow types safely. The compiler tracks what has been validated.</span>
+  </div>
+</div>
+
+<div class="progression-card no-break">
+  <h3>5. From "Monolithic State" to "Domain-Driven Architecture"</h3>
+  <div class="skill-row">
+    <span class="skill-label mid">Mid</span>
+    <span>Puts everything in a single state management solution (Redux, Zustand), creates a flat folder structure grouped by file type (components/, hooks/, utils/).</span>
+  </div>
+  <div class="skill-row">
+    <span class="skill-label senior">Senior</span>
+    <span>Organizes code by domain (chain, mpc, ui) across layered packages (lib, core, clients) with strict import boundaries enforced by the build system.</span>
+  </div>
+</div>
+
+<div class="progression-card no-break">
+  <h3>6. From "Manual Memoization" to "Compiler-Driven Optimization"</h3>
+  <div class="skill-row">
+    <span class="skill-label mid">Mid</span>
+    <span>Sprinkles <code>useMemo</code> and <code>useCallback</code> based on intuition, often memoizing things that do not need it or missing dependencies.</span>
+  </div>
+  <div class="skill-row">
+    <span class="skill-label senior">Senior</span>
+    <span>Trusts the React Compiler to handle memoization automatically. Writes natural, readable code and lets tooling optimize. Understands when manual optimization is truly needed (never, in this codebase).</span>
+  </div>
+</div>
+
+<div class="progression-card no-break">
+  <h3>7. From "Ad-hoc Validation" to "Schema-First Forms"</h3>
+  <div class="skill-row">
+    <span class="skill-label mid">Mid</span>
+    <span>Validates form fields manually with if-else chains, duplicates validation logic between frontend and types.</span>
+  </div>
+  <div class="skill-row">
+    <span class="skill-label senior">Senior</span>
+    <span>Defines a Zod schema once, derives both the TypeScript type and runtime validation from it via <code>zodResolver</code>. Zero duplication, zero drift.</span>
+  </div>
+</div>
+
+<div class="progression-card no-break">
+  <h3>8. From "Loading Ternaries" to "Query Pattern Matching"</h3>
+  <div class="skill-row">
+    <span class="skill-label mid">Mid</span>
+    <span>Uses nested ternaries: <code>{isLoading ? &lt;Spinner/&gt; : error ? &lt;Error/&gt; : &lt;Data/&gt;}</code>. Hard to read and easy to miss states.</span>
+  </div>
+  <div class="skill-row">
+    <span class="skill-label senior">Senior</span>
+    <span>Uses <code>MatchQuery</code> component to declaratively handle all query states (pending, error, success, inactive) with named render functions. Every state is explicit.</span>
+  </div>
+</div>
+
+<div class="progression-card no-break">
+  <h3>9. From "Feature Folders" to "The Resolver Pattern"</h3>
+  <div class="skill-row">
+    <span class="skill-label mid">Mid</span>
+    <span>Adds chain-specific logic inline with conditionals, leading to growing if-chains as new chains are added.</span>
+  </div>
+  <div class="skill-row">
+    <span class="skill-label senior">Senior</span>
+    <span>Implements the resolver pattern: a typed interface, per-chain resolver files, and a Record-based router. Adding a chain is additive (new file + one record entry), never modifying existing code.</span>
+  </div>
+</div>
+
+<div class="progression-card no-break">
+  <h3>10. From "Works on My Machine" to "Automated Quality Gates"</h3>
+  <div class="skill-row">
+    <span class="skill-label mid">Mid</span>
+    <span>Relies on PR reviews to catch type errors, unused code, and formatting issues. Quality depends on reviewer thoroughness.</span>
+  </div>
+  <div class="skill-row">
+    <span class="skill-label senior">Senior</span>
+    <span>Runs <code>yarn check</code> after every change &mdash; typecheck, lint autofix, and dead code detection. Quality is enforced by tooling, not willpower. Code reviews focus on design, not formatting.</span>
+  </div>
+</div>
+
+<hr>
+
+<footer>
+  <p>Design Patterns Case Study: Vultisig Codebase</p>
+  <p>A comprehensive guide to production-grade React/TypeScript patterns</p>
+  <p style="margin-top: 8px;">Generated from source analysis of the Vultisig monorepo</p>
+</footer>
+
+</body>
+</html>

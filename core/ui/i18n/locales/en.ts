@@ -11,6 +11,7 @@ export const en = {
   add_friends_referral: 'Add a Friends Referral',
   add_memo: 'Add MEMO',
   add_new_vault: 'Add New Vault',
+  add_referral: 'Add referral',
   add_referral_code: 'Save referral code',
   add_to_address_book: 'Add to Address Book',
   add_suggested_token: 'Add Suggested Token',
@@ -61,9 +62,9 @@ export const en = {
   backup: 'Backup',
   backupGuide: 'Backup guide',
   backupVault: 'Backup Vault',
-  backupInCloudTitle: 'Backup in the cloud',
+  backupInCloudTitle: 'Encrypted with your Vault Password',
   backupInCloudDescription:
-    'Back up your vault share securely online. Online storage is recommended and vault shares are designed for this.',
+    'Back up your vault share online using the same vault password you created earlier. Online storage is recommended and safe vault shares are designed for this.',
   backupShare: 'Backup Vault Share',
   backupShare2: 'Backup Share 2',
   backupsTitle: '<highlight>Backups,</highlight> your new recovery method',
@@ -78,8 +79,11 @@ export const en = {
   backupShareWarning: 'This is only 1 share of your vault',
   backupShareWarningRest: ', repeat this process for the other devices.',
   backup_description: 'Back up your Vault Share to a preferred location',
+  backup_email_description: 'Enter the email to receive the vault share.',
   backup_now: 'Get started',
   backup_password: 'Backup Password',
+  backup_password_description:
+    'Enter the password you set when creating this Vault.',
   backup_password_confirmation_title:
     'Do you want to encrypt your backup with a password?',
   backup_password_info_cannot_be_reset:
@@ -140,6 +144,9 @@ export const en = {
   check_email: 'Check email',
   check_for_update: 'Check for Update',
   chooseSetup: 'Choose Setup',
+  choose_a_password: 'Choose a password',
+  choose_a_password_description:
+    'If you want an extra layer of security, choose a password. <b>Password cannot be recovered.</b>',
   choose_backup_method: 'Choose Backup Method',
   choose_payout_asset: 'Choose payout asset',
   choose_tokens: 'Choose Tokens',
@@ -197,6 +204,7 @@ export const en = {
   create: 'Create',
   create_folder: 'Create Folder',
   create_new_vault: 'Create New Vault',
+  create_vault: 'Create vault',
   create_own_referral:
     'Create your own code and earn <blue>20%</blue> on referred swaps',
   create_referral_form: 'Create referral',
@@ -243,7 +251,7 @@ export const en = {
   devices: 'Devices',
   digit_input_error_validation: 'Error verifying code, please re-try',
   digit_input_loading_validation: 'Verifying code, please wait',
-  digit_input_success_validation: 'Verification succesful',
+  digit_input_success_validation: 'Verification successful',
   disconnect_all: 'Disconnect All',
   discord: 'Discord',
   discount: 'Discount',
@@ -260,12 +268,14 @@ export const en = {
   edit_vaults: 'Edit Vaults',
   email: 'Email',
   email_backup: 'Enter your email to receive your backup',
+  email_placeholder: 'Enter your email address',
   email_required: 'Email is required',
   evm_chains: 'EVM Chains',
   enable_dkls: 'Enable DKLS',
   enable_token_instruction:
     'Enable at least one token to view balances and manage positions.',
   encrypting_vault_keyshares: 'Encrypting vault keyshares...',
+  enter: 'Enter',
   enter_address: 'Enter Address',
   enter_address_here: 'Enter address here',
   enter_amount: 'Enter Amount',
@@ -279,6 +289,9 @@ export const en = {
   enter_referral_code_placeholder: 'Enter Referral Code',
   enter_up_to_4_characters_placeholder: 'Enter up to 4 characters',
   enter_vault_name: 'Enter Vault Name',
+  enter_your_email: 'Enter your email',
+  enter_your_email_description:
+    'This will only be used once to send your backup file, Vultisig doesn’t store any data.',
   enter_your_password: 'Enter your password',
   entity_not_scanned: '{{entity}} not scanned by <provider></provider>',
   entity_scanned: '{{entity}} scanned by <provider></provider>',
@@ -398,7 +411,14 @@ export const en = {
     hintDescription: 'This will be shown in case you forget your password',
     hintEmpty: 'Hint is empty',
     passwordCannotBeRecovered: 'Password cannot be reset or recovered',
+    passwordTooltip:
+      'This occurs because the password is used to locally encrypt the backup file, similar to how a hard drive is encrypted. In the following step, you have the option to add a hint.',
     preparingVault: 'Preparing Vault',
+    referralModalTitle: 'Referral code',
+    referralModalSubtitle:
+      'Enter your referral code here. <b>Enjoy 10% off every transaction.</b>',
+    applyReferral: 'Apply referral',
+    referralAdded: 'Referral added',
     summary: {
       agreementText: 'I have read and understand what to do',
       ctaText: 'Create your vault',
@@ -482,18 +502,22 @@ export const en = {
   import_vault_share_description: 'Use a vault share to recover your vault.',
   import_vault_share_supported_files: 'Supported file types: .bak & .vult',
   importing_vault: 'Importing Vault...',
+  incorrect_email: 'Incorrect e-mail, please check',
   incorrect_password: 'Incorrect Password',
   incorrect_url: 'Incorrect URL',
   install_app: 'Install ‘{{title}}’ App',
   install_plugin: 'Install App',
   installation_progress: 'Installation progress: {{progress}}%',
   insufficient_balance: 'Insufficient balance',
+  insufficient_native_balance_for_fee:
+    'Insufficient native token balance to pay for the transaction fee',
   insufficient_gas_limit: 'Insufficient Gas Limit',
   insufficient_gas_limit_description:
     'Estimated gas: {{estimated}}. Gas limit: {{limit}}. The transaction may fail due to insufficient gas.',
   invalid_email: 'Please enter a valid email address',
   invalid_file_format: 'Invalid File Format',
   invalid_node_address: 'Node Address is invalid',
+  incorrect_passcode: 'Incorrect passcode.',
   invalid_passcode: 'Invalid passcode',
   join_keygen: 'Join Keygen',
   join_keygen_slider1_note1: 'Vultisig is',
@@ -650,17 +674,6 @@ export const en = {
   onboarding_description_4:
     'Vultisig is a wallet without seed phrases. It uses easy-to-manage vault shares instead. Every device has its unique vault share that needs a separate backup.',
   onboarding_greeting: 'Say goodbye to <g>seed phrases</g>',
-  onboarding_step_1:
-    'Say hello to <g>vault shares,</g> your new <g>recovery method</g>',
-  onboarding_step_2:
-    "They're <g>split into parts</g> to increase security, <g>removing the single point-of-failure</g>",
-  onboarding_step_3:
-    '<g>Each device</g> in your vault holds <g>one vault share</g>',
-  onboarding_step_4:
-    'Recover your vault even <g>if a device is lost or damaged</g>',
-  onboarding_step_5:
-    '<g>Always backup each vault share</g> separately in a <g>different location</g>',
-  onboarding_step_6: 'These shares collaborate to <g>unlock your vault</g>',
   operator_fee: "Operator's Fee",
   basis_points: 'Basis Points',
   optional: 'optional',
@@ -669,7 +682,7 @@ export const en = {
   other: 'Other',
   overview: 'Overview',
   part: 'part',
-  passcodes_do_not_match: 'Passcodes do not match',
+  passcodes_do_not_match: 'Passcodes do not match.',
   password: 'Password',
   password_backup: 'Protect your vault and fast sign.',
   password_do_not_match: 'Passwords do not match',
@@ -816,6 +829,7 @@ export const en = {
   select_destination_chain: 'Select Destination Chain',
   select_n_devices_one: 'Select {{count}} device',
   select_n_devices_other: 'Select {{count}} devices',
+  select_pool: 'Select pool',
   select_token: 'Select token',
   select_vault: 'Select a Vault',
   select_vaults_to_backup: 'Select Vaults to Back Up',
@@ -914,7 +928,9 @@ export const en = {
   transaction_details: 'Transaction Details',
   transaction_has_risk:
     '{{riskLevel}} risk transaction detected by <provider></provider>',
-  transaction_successful: 'Transaction Successful',
+  transaction_failed: 'Transaction <error>failed</error>',
+  transaction_pending: 'Transaction pending...',
+  transaction_successful: 'Transaction <g>successful</g>',
   transaction_could_not_be_parsed:
     'This transaction could not be parsed. Raw transaction data is shown below.',
   raw_transaction_data: 'Raw Transaction Data',
@@ -1100,6 +1116,11 @@ export const en = {
   withdraw_ruji_rewards: 'Withdraw RUJI Rewards',
   add_cacao_pool: 'Add to CACAO Pool',
   remove_cacao_pool: 'Remove from CACAO Pool',
+  add_thor_lp: 'Add THORChain LP',
+  remove_thor_lp: 'Remove THORChain LP',
+  lp_dust_amount_error:
+    'Insufficient RUNE balance. At least {{amount}} RUNE is required as dust for LP withdrawal.',
+  lp_withdraw_percentage: 'Withdraw percentage',
   wrong_vault_try_again: 'Wrong Vault or Pair Device.',
   you_are_bonding: "You're bonding",
   you_are_unbonding: "You're unbonding",
@@ -1107,6 +1128,60 @@ export const en = {
   you_are_staking: "You're staking",
   you_are_unstaking: "You're unstaking",
   yourVaultShares: 'Your vault has {{shares}} Vault Shares',
+  vaultSetupOverview: {
+    title: 'Your vault setup',
+    fast: {
+      badgeTitle: 'Fast Vault',
+      badgeSubtitle: '2-device setup',
+      feature1Title: '1-Device Signing',
+      feature1Description:
+        'Convenient one-device signing on the go. Perfect for daily transactions or trading smaller amounts.',
+      feature2Title: 'Fast and Secure Setup',
+      feature2Description:
+        'No long setup. Just your email and password, plus two backups.',
+      feature3Title: 'You stay in control',
+      feature3Description:
+        'A co-signer can never initiate transactions; only assists with signing them.',
+    },
+    secure2: {
+      badgeTitle: 'Secure Vault',
+      badgeSubtitle: '2-device vault',
+      feature1Title: '2-Device Signing',
+      feature1Description:
+        'Every transaction needs approvals from both of your devices.',
+      feature2Title: 'No single point of failure',
+      feature2Description:
+        "One device alone can't move funds. If one device is lost or exposed, it can't approve on its own.",
+      feature3Title: 'Ideal for simple cold storage',
+      feature3Description: 'Perfect setup for users with only 2 devices.',
+    },
+    secure3: {
+      badgeTitle: 'Secure Vault',
+      badgeSubtitle: '3-device vault',
+      feature1Title: '2-Device Signing',
+      feature1Description:
+        'Every transaction needs approvals from 2 of your 3 devices.',
+      feature2Title: 'No single point of failure',
+      feature2Description:
+        "One device alone can't move funds. If one device is lost or exposed, it can't approve on its own.",
+      feature3Title: 'Ideal for cold storage',
+      feature3Description:
+        'Perfect balance for most users. 2 signers and 1 backup device. Store assets without stress.',
+    },
+    secure4: {
+      badgeTitle: 'Secure Vault',
+      badgeSubtitle: '4+-device vault',
+      feature1Title: '3-Device or more Signing',
+      feature1Description:
+        'Vaults need 67% of devices to sign a transaction. Have as many signers you want',
+      feature2Title: 'Dynamic device management',
+      feature2Description:
+        'Add as many devices you want and receive institutional grade security.',
+      feature3Title: 'Built for teams and treasuries',
+      feature3Description:
+        'Ideal for teams managing shared funds and higher-value vaults, which require more signers.',
+    },
+  },
   your_friends_referral_code: 'Your friends referral code',
   your_referral_code: 'Your Referral Code',
   your_referrals: 'Your Referrals',

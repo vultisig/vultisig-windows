@@ -1,4 +1,4 @@
-import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
+import { setupStateProvider } from '@lib/ui/state/setupStateProvider'
 
-export const { useState: usePassword, provider: PasswordProvider } =
-  getStateProviderSetup<string>('Password')
+export const [PasswordProvider, usePassword] =
+  setupStateProvider<string>('Password')

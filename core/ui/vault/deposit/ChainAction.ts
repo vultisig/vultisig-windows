@@ -23,6 +23,8 @@ export type ChainAction =
   | 'mint'
   | 'redeem'
   | 'withdraw_ruji_rewards'
+  | 'add_thor_lp'
+  | 'remove_thor_lp'
   | CacaoPoolAction
 
 export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
@@ -38,6 +40,8 @@ export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
     'mint',
     'redeem',
     'withdraw_ruji_rewards',
+    'add_thor_lp',
+    'remove_thor_lp',
   ],
   [Chain.MayaChain]: [
     'bond_with_lp',
@@ -48,8 +52,20 @@ export const chainActionsRecord: Record<DepositEnabledChain, ChainAction[]> = {
   ],
   [Chain.Dydx]: ['vote'],
   [Chain.Ton]: ['stake', 'unstake'],
-  [Chain.Kujira]: ['ibc_transfer'],
+  [Chain.Kujira]: ['ibc_transfer', 'add_thor_lp'],
   [Chain.Osmosis]: ['ibc_transfer'],
-  [Chain.Cosmos]: ['ibc_transfer', 'switch'],
-  [Chain.Tron]: ['freeze', 'unfreeze'],
+  [Chain.Cosmos]: ['ibc_transfer', 'switch', 'add_thor_lp'],
+  [Chain.Tron]: ['freeze', 'unfreeze', 'add_thor_lp'],
+  [Chain.Avalanche]: ['add_thor_lp'],
+  [Chain.Base]: ['add_thor_lp'],
+  [Chain.BitcoinCash]: ['add_thor_lp'],
+  [Chain.BSC]: ['add_thor_lp'],
+  [Chain.Bitcoin]: ['add_thor_lp'],
+  [Chain.Dash]: ['add_thor_lp'],
+  [Chain.Dogecoin]: ['add_thor_lp'],
+  [Chain.Ethereum]: ['add_thor_lp'],
+  [Chain.Litecoin]: ['add_thor_lp'],
+  [Chain.Ripple]: ['add_thor_lp'],
+  [Chain.Arbitrum]: ['add_thor_lp'],
+  [Chain.Zcash]: ['add_thor_lp'],
 }

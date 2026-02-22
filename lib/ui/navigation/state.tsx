@@ -1,9 +1,9 @@
-import { getStateProviderSetup } from '../state/getStateProviderSetup'
+import { setupStateProvider } from '../state/setupStateProvider'
 import { View } from './View'
 
 type NavigationState = {
   history: View[]
 }
 
-export const { useState: useNavigation, provider: NavigationProvider } =
-  getStateProviderSetup<NavigationState>('Navigation')
+export const [NavigationProvider, useNavigation] =
+  setupStateProvider<NavigationState>('Navigation')

@@ -1,7 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
-import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core'
 
 type KeysignActionInput = {
@@ -15,5 +15,5 @@ export type KeysignAction = (
   input: KeysignActionInput
 ) => Promise<KeysignSignature[]>
 
-export const { useValue: useKeysignAction, provider: KeysignActionProvider } =
-  getValueProviderSetup<KeysignAction>('KeysignAction')
+export const [KeysignActionProvider, useKeysignAction] =
+  setupValueProvider<KeysignAction>('KeysignAction')

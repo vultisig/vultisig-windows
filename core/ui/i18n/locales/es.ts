@@ -1103,10 +1103,6 @@ export const es = {
     '<g>Cada dispositivo</g> en su bóveda contiene <g>una parte de la bóveda</g>',
   onboarding_step_4:
     'Recupere su bóveda incluso si un dispositivo se pierde o se daña',
-  onboarding_step_5:
-    '<g>Siempre haga una copia de seguridad de cada recurso compartido de bóveda</g> por separado en una <g>ubicación diferente</g>',
-  onboarding_step_6:
-    'Estas acciones colaboran para <g>desbloquear tu bóveda</g>',
   optional: 'opcional',
   password_backup: 'Protege tu bóveda y firma rápidamente.',
   permissions: 'Permisos',

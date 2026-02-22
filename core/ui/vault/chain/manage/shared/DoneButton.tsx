@@ -6,13 +6,14 @@ import styled from 'styled-components'
 
 type DoneButtonProps = {
   onClick: () => void
+  disabled?: boolean
 }
 
-export const DoneButton = ({ onClick }: DoneButtonProps) => {
+export const DoneButton = ({ onClick, disabled }: DoneButtonProps) => {
   const { t } = useTranslation()
 
   return (
-    <StyledButton onClick={onClick}>
+    <StyledButton onClick={onClick} disabled={disabled}>
       <Text color="primaryAlt" as="span" size={14} weight={400}>
         {t('done')}
       </Text>
