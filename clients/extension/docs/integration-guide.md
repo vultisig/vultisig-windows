@@ -19,6 +19,8 @@
    - [Tron](#tron-windowtronlink-and-windowtronweb)
    - [Polkadot](#polkadot-windowvultisigpolkadot)
    - [Ripple](#ripple-windowvultisigripple)
+   - [MayaChain](#mayachain-windowvultisigmayachain)
+   - [Dash](#dash-windowvultisigdash)
    - [Plugin Provider](#plugin-provider-windowvultisigplugin)
 6. [Wallet Compatibility Layers](#wallet-compatibility-layers)
 7. [Steps to Integrate](#steps-to-integrate-with-vultisig-extension)
@@ -462,9 +464,11 @@ Use `eth_accounts` for EVM chains and `get_accounts` for other chains.
 const accounts = await window.vultisig.ethereum.request({
   method: "eth_accounts",
 });
+```
 
+```javascript
 // Other chains
-const accounts = await window.vultisig[chain].request({
+const chainAccounts = await window.vultisig[chain].request({
   method: "get_accounts",
 });
 ```
