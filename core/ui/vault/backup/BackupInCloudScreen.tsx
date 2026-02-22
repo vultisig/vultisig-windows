@@ -1,13 +1,20 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { useCore } from '@core/ui/state/core'
 import { BackupWarningMessage } from '@core/ui/vault/backup/BackupWarningMessage'
+import { backupSplashAnimationSource } from '@core/ui/vault/backup/getBackupAnimationSource'
 import { Button } from '@lib/ui/buttons/Button'
+import { CloudDownloadIcon } from '@lib/ui/icons/CloudDownloadIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { useRive } from '@rive-app/react-webgl2'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+
+const backupLearnMoreUrl =
+  'https://docs.vultisig.com/getting-started/getting-started/backup-recovery'
 
 type BackupInCloudScreenProps = {
   onContinue: () => void
@@ -21,8 +28,9 @@ export const BackupInCloudScreen = ({
   ctaLoading = false,
 }: BackupInCloudScreenProps) => {
   const { t } = useTranslation()
+  const { openUrl } = useCore()
   const { RiveComponent } = useRive({
-    src: '/core/animations/backup-vault-splash.riv',
+    src: `/core/animations/${backupSplashAnimationSource}.riv`,
     autoplay: true,
   })
 
@@ -49,9 +57,22 @@ export const BackupInCloudScreen = ({
             <Text size={14} centerHorizontally color="shy">
               {t('backupInCloudDescription')}
             </Text>
+            <LearnMoreLink
+              type="button"
+              onClick={() => openUrl(backupLearnMoreUrl)}
+            >
+              <Text size={14} color="shyExtra">
+                {t('learnMore')}
+              </Text>
+            </LearnMoreLink>
             <BackupWarningMessage />
           </VStack>
-          <Button onClick={onContinue} loading={ctaLoading}>
+          <Button
+            icon={<CloudDownloadIcon />}
+            onClick={onContinue}
+            loading={ctaLoading}
+            disabled={ctaLoading}
+          >
             {t('backup_now')}
           </Button>
         </ContentSection>
@@ -93,4 +114,19 @@ const ContentSection = styled(VStack)`
   padding: 0 24px 24px;
   flex-shrink: 0;
   gap: 32px;
+`
+
+const LearnMoreLink = styled.button`
+  align-self: center;
+  background: none;
+  border: none;
+  color: ${getColor('textShyExtra')};
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+
+  &,
+  & * {
+    text-decoration: underline;
+  }
 `

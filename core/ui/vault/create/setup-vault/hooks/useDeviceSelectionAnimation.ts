@@ -8,6 +8,8 @@ import {
 } from '@rive-app/react-webgl2'
 import { useEffect, useRef } from 'react'
 
+import { deviceSelectionAnimationSource } from './deviceSelectionAnimationSource'
+
 const triggerHapticFeedback = () => {
   if ('vibrate' in navigator) {
     navigator.vibrate(10)
@@ -16,7 +18,7 @@ const triggerHapticFeedback = () => {
 
 export const useDeviceSelectionAnimation = () => {
   const { RiveComponent, rive } = useRive({
-    src: '/core/animations/devices-component.riv',
+    src: `/core/animations/${deviceSelectionAnimationSource}.riv`,
     autoplay: true,
     stateMachines: ['State Machine 1'],
     layout: new Layout({

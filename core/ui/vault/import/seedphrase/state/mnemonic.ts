@@ -1,4 +1,4 @@
-import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
+import { setupStateProvider } from '@lib/ui/state/setupStateProvider'
 
-export const { useState: useMnemonic, provider: MnemonicProvider } =
-  getStateProviderSetup<string>('Mnemonic')
+export const [MnemonicProvider, useMnemonic] =
+  setupStateProvider<string>('Mnemonic')

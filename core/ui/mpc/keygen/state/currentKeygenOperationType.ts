@@ -1,7 +1,5 @@
 import { KeygenOperation } from '@core/mpc/keygen/KeygenOperation'
-import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 
-export const {
-  useValue: useKeygenOperation,
-  provider: KeygenOperationProvider,
-} = getValueProviderSetup<KeygenOperation>('KeygenOperation')
+export const [KeygenOperationProvider, useKeygenOperation] =
+  setupValueProvider<KeygenOperation>('KeygenOperation')

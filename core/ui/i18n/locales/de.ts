@@ -1108,10 +1108,6 @@ export const de = {
     '<g>Jedes Gerät</g> in Ihrem Tresor enthält <g>eine Tresorfreigabe</g>',
   onboarding_step_4:
     'Stellen Sie Ihren Tresor auch dann wieder her, wenn ein Gerät verloren geht oder beschädigt wird.',
-  onboarding_step_5:
-    '<g>Sichern Sie jede Tresorfreigabe immer separat</g> an einem <g>anderen Ort</g>',
-  onboarding_step_6:
-    'Diese Aktien arbeiten zusammen, um <g>Ihren Tresor zu öffnen</g>',
   optional: 'optional',
   password_backup:
     'Schützen Sie Ihren Tresor und sichern Sie sich eine schnelle Signatur.',

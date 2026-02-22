@@ -18,7 +18,16 @@ import { useMemo } from 'react'
 import styled from 'styled-components'
 import { css } from 'styled-components'
 
-export const ChainItem = ({ value: coin }: ValueProp<Coin>) => {
+type ChainItemProps = ValueProp<Coin> & {
+  isSelected?: boolean
+  onToggle?: () => void
+}
+
+export const ChainItem = ({
+  value: coin,
+  isSelected: controlledIsSelected,
+  onToggle: controlledOnToggle,
+}: ChainItemProps) => {
   const currentCoins = useCurrentVaultNativeCoins()
   const createCoin = useCreateCoinMutation()
   const deleteCoin = useDeleteCoinMutation()
@@ -27,12 +36,19 @@ export const ChainItem = ({ value: coin }: ValueProp<Coin>) => {
     return currentCoins.find(c => areEqualCoins(c, coin))
   }, [currentCoins, coin])
 
-  const isSelected = !!currentCoin
-  const isLoading = createCoin.isPending || deleteCoin.isPending
+  const isControlled =
+    controlledIsSelected !== undefined && controlledOnToggle !== undefined
+
+  const isSelected = isControlled ? controlledIsSelected : !!currentCoin
+  const isLoading = isControlled
+    ? false
+    : createCoin.isPending || deleteCoin.isPending
 
   const handleClick = () => {
     if (isLoading) return
-    if (currentCoin) {
+    if (isControlled) {
+      controlledOnToggle()
+    } else if (currentCoin) {
       deleteCoin.mutate(extractAccountCoinKey(currentCoin))
     } else {
       createCoin.mutate(coin)
@@ -89,6 +105,7 @@ const ChainIconWrapper = styled.div<IsActiveProp>`
     justifyContent: 'center',
   })};
   position: relative;
+  align-self: stretch;
   border-radius: 24px;
   background: rgba(11, 26, 58, 0.5);
   height: 74px;

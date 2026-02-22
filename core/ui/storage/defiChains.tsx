@@ -51,7 +51,7 @@ export const useDefiChains = () => {
   return resolved.filter(chain => allowedDefiChains.includes(chain))
 }
 
-const useSetDefiChainsMutation = () => {
+export const useSetDefiChainsMutation = () => {
   const { setDefiChains } = useCore()
   const queryClient = useQueryClient()
 
