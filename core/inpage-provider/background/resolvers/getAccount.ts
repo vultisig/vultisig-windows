@@ -3,6 +3,7 @@ import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { getVault } from '@core/extension/storage/vaults'
 import { getWalletCore } from '@core/extension/tw'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
+import { isKeyImportVault } from '@core/mpc/vault/Vault'
 import { assertField } from '@lib/utils/record/assertField'
 
 export const getAccount: BackgroundResolver<'getAccount'> = async ({
@@ -11,6 +12,13 @@ export const getAccount: BackgroundResolver<'getAccount'> = async ({
 }) => {
   const appSession = assertField(context, 'appSession')
   const vault = await getVault(appSession.vaultId)
+
+  if (isKeyImportVault(vault)) {
+    const chainPublicKeys = assertField(vault, 'chainPublicKeys')
+    if (!chainPublicKeys[chain]) {
+      return { address: '', publicKey: '' }
+    }
+  }
 
   const walletCore = await getWalletCore()
 
