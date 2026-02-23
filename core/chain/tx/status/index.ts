@@ -1,7 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { ChainKind, getChainKind } from '@core/chain/ChainKind'
 
-import { TxStatusResolver } from './resolver'
+import { TxReceiptInfo, TxStatusResolver } from './resolver'
 import { getCardanoTxStatus } from './resolvers/cardano'
 import { getCosmosTxStatus } from './resolvers/cosmos'
 import { getEvmTxStatus } from './resolvers/evm'
@@ -39,3 +39,5 @@ export const getTxStatus = (input: GetTxStatusInput) => {
 
   return handler(input)
 }
+
+export type { TxReceiptInfo }

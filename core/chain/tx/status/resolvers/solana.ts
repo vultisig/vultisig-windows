@@ -1,5 +1,6 @@
-import { OtherChain } from '@core/chain/Chain'
+import { Chain, OtherChain } from '@core/chain/Chain'
 import { getSolanaClient } from '@core/chain/chains/solana/client'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { attempt } from '@lib/utils/attempt'
 
 import { TxStatusResolver } from '../resolver'
@@ -9,24 +10,31 @@ export const getSolanaTxStatus: TxStatusResolver<OtherChain.Solana> = async ({
 }) => {
   const client = getSolanaClient()
 
-  const { data, error } = await attempt(client.getSignatureStatus(hash))
+  const { data: tx, error } = await attempt(
+    client.getTransaction(hash, {
+      maxSupportedTransactionVersion: 0,
+    })
+  )
 
-  if (error || !data || !data.value) {
-    return 'pending'
+  if (error || !tx) {
+    return { status: 'pending' }
   }
 
-  const { confirmationStatus, err } = data.value
-
-  if (err) {
-    return 'error'
+  const meta = tx.meta
+  if (!meta) {
+    return { status: 'pending' }
   }
 
-  if (
-    confirmationStatus === 'confirmed' ||
-    confirmationStatus === 'finalized'
-  ) {
-    return 'success'
+  if (meta.err) {
+    return { status: 'error' }
   }
 
-  return 'pending'
+  const feeCoin = chainFeeCoin[Chain.Solana]
+  const receipt = {
+    feeAmount: BigInt(meta.fee),
+    feeDecimals: feeCoin.decimals,
+    feeTicker: feeCoin.ticker,
+  }
+
+  return { status: 'success', receipt }
 }

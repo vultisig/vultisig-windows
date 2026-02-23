@@ -751,6 +751,7 @@ __metadata:
     "@core/mpc": "workspace:^"
     "@cosmjs/amino": "npm:^0.38.1"
     "@cosmjs/encoding": "npm:^0.38.1"
+    "@cosmjs/proto-signing": "npm:^0.38.1"
     "@cosmjs/stargate": "npm:^0.38.1"
     "@lib/utils": "workspace:^"
     "@lifi/sdk": "npm:^3.15.5"
