@@ -120,7 +120,7 @@ type CenterButtonProps = {
   isActive?: boolean
 }
 
-const CenterButton = styled(UnstyledButton) <CenterButtonProps>`
+const CenterButton = styled(UnstyledButton)<CenterButtonProps>`
   flex-shrink: 0;
   ${round};
   background: ${({ isActive, theme }) =>
@@ -137,9 +137,9 @@ const CenterButton = styled(UnstyledButton) <CenterButtonProps>`
 
   &:hover {
     background: ${({ isActive, theme }) =>
-    isActive
-      ? `linear-gradient(135deg, ${theme.colors.primary.toCssValue()} 0%, ${theme.colors.primaryAccentTwo.toCssValue()} 100%)`
-      : theme.colors.buttonHover.toCssValue()};
+      isActive
+        ? `linear-gradient(135deg, ${theme.colors.primary.toCssValue()} 0%, ${theme.colors.primaryAccentTwo.toCssValue()} 100%)`
+        : theme.colors.buttonHover.toCssValue()};
   }
 `
 
@@ -148,7 +148,7 @@ type TabButtonProps = {
   isDisabled?: boolean
 }
 
-const TabButton = styled(UnstyledButton) <TabButtonProps>`
+const TabButton = styled(UnstyledButton)<TabButtonProps>`
   flex: 1 1 0;
   min-width: 0;
   width: 100px;
@@ -160,10 +160,10 @@ const TabButton = styled(UnstyledButton) <TabButtonProps>`
   background: transparent;
 
   ${vStack({
-  gap: 2,
-  justifyContent: 'center',
-  alignItems: 'center',
-})};
+    gap: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  })};
 
   ${({ isActive }) =>
     isActive
