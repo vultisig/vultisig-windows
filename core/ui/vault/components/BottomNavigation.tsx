@@ -6,7 +6,7 @@ import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 import { CoinsAddIcon } from '@lib/ui/icons/CoinsAddIcon'
 import { WalletIcon } from '@lib/ui/icons/WalletIcon'
-import { hStack, vStack } from '@lib/ui/layout/Stack'
+import { vStack } from '@lib/ui/layout/Stack'
 import { pageBottomInsetVar } from '@lib/ui/page/PageContent'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
@@ -89,10 +89,10 @@ const Container = styled.div`
   left: 0;
   right: 0;
   height: ${bottomNavigationHeight}px;
-  ${hStack({
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-  })};
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-end;
   background: rgba(19, 46, 86, 0.6);
   backdrop-filter: blur(32px);
   padding: 8px 12px 10px 12px;
@@ -105,6 +105,7 @@ const Container = styled.div`
 `
 
 const CameraButton = styled(UnstyledButton)`
+  flex-shrink: 0;
   ${round};
   background: #4879fd;
   ${centerContent};
@@ -126,9 +127,10 @@ type TabButtonProps = {
 }
 
 const TabButton = styled(UnstyledButton)<TabButtonProps>`
-  width: 137px;
+  flex: 1 1 0;
+  min-width: 0;
   height: 48px;
-  padding: 3px 20px;
+  padding: 3px 12px;
   font-size: 24px;
   border-radius: 99px;
   transition: all 0.2s ease-in-out;

@@ -7,6 +7,7 @@ import { ReshareFastVault } from '@clients/extension/src/components/settings/res
 import { ReshareSecureVault } from '@clients/extension/src/components/settings/reshare/ReshareSecureVault'
 import { SetupFastVaultPage } from '@clients/extension/src/components/setup/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '@clients/extension/src/components/setup/SetupSecureVaultPage'
+import { ManageSidePanel } from '@clients/extension/src/components/side-panel/ManageSidePanel'
 import { JoinKeygenPage } from '@clients/extension/src/mpc/keygen/join/JoinKeygenPage'
 import { JoinKeysignPage } from '@clients/extension/src/mpc/keysign/join/JoinKeysignPage'
 import { AppViewId } from '@clients/extension/src/navigation/AppView'
@@ -65,6 +66,7 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
       insiderOptions={<ExtensionDeveloperOptions />}
       prioritize={<Prioritize />}
       expandView={<ExpandView />}
+      sidePanel={<ManageSidePanel />}
     />
   ),
   setupFastVault: SetupFastVaultPage,

@@ -54,6 +54,7 @@ type Props = {
   expandView?: ReactNode
   insiderOptions?: ReactNode
   prioritize?: ReactNode
+  sidePanel?: ReactNode
   checkUpdate?: ReactNode
 }
 
@@ -173,6 +174,7 @@ export const SettingsPage: FC<Props> = props => {
               />
             )}
             {client === 'extension' && props.expandView}
+            {client === 'extension' && props.sidePanel}
           </SettingsSection>
           <SettingsSection title={t('security')}>
             <ListItem
