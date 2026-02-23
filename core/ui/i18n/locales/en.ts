@@ -114,6 +114,7 @@ export const en = {
   camera_access_blocked:
     'Camera access is blocked. Please enable it in your browser settings.',
   cancel: 'Cancel',
+  chat: 'Chat',
   chain: 'Chain',
   chainFunctions: {
     amountExceeded: 'Amount exceeds available balance',

@@ -4,6 +4,7 @@ import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
+import { ChatIcon } from '@lib/ui/icons/ChatIcon'
 import { CoinsAddIcon } from '@lib/ui/icons/CoinsAddIcon'
 import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { hStack, vStack } from '@lib/ui/layout/Stack'
@@ -17,8 +18,10 @@ import styled, { css } from 'styled-components'
 const bottomNavigationHeight = 66
 const cameraIconSize = 56
 
+type TabType = 'wallet' | 'defi' | 'chat'
+
 type BottomNavigationProps = {
-  activeTab?: 'wallet' | 'defi'
+  activeTab?: TabType
   isActiveTabRoot?: boolean
 }
 
@@ -46,13 +49,15 @@ export const BottomNavigation = ({
     }
   }, [])
 
-  const handleTabChange = (tab: 'wallet' | 'defi') => {
+  const handleTabChange = (tab: TabType) => {
     if (tab === activeTab && isActiveTabRoot) return
 
     if (tab === 'wallet') {
       navigate({ id: 'vault' }, { replace: true })
-    } else {
+    } else if (tab === 'defi') {
       navigate({ id: 'defi', state: {} }, { replace: true })
+    } else if (tab === 'chat') {
+      navigate({ id: 'chat' }, { replace: true })
     }
   }
 
@@ -77,6 +82,15 @@ export const BottomNavigation = ({
         <CoinsAddIcon />
         <Text as="span" size={10}>
           {t('defi')}
+        </Text>
+      </TabButton>
+      <TabButton
+        isActive={activeTab === 'chat'}
+        onClick={() => handleTabChange('chat')}
+      >
+        <ChatIcon />
+        <Text as="span" size={10}>
+          {t('chat')}
         </Text>
       </TabButton>
     </Container>
@@ -126,10 +140,10 @@ type TabButtonProps = {
 }
 
 const TabButton = styled(UnstyledButton)<TabButtonProps>`
-  width: 137px;
+  width: 90px;
   height: 48px;
-  padding: 3px 20px;
-  font-size: 24px;
+  padding: 3px 12px;
+  font-size: 20px;
   border-radius: 99px;
   transition: all 0.2s ease-in-out;
   background: transparent;

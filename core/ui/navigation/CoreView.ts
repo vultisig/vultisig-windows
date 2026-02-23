@@ -111,6 +111,22 @@ export type CoreView =
   | { id: 'passcodeAutoLock' }
   | { id: 'requestFastVaultBackup' }
   | { id: 'vultDiscount' }
+  | { id: 'chat' }
+  | { id: 'chatAuth' }
+  | {
+      id: 'chatPolicySign'
+      state: {
+        pluginId: string
+        recipe: string
+        signingMessage: string
+        policyId: string
+        publicKey: string
+        policyVersion: number
+        pluginVersion: number
+        accessToken: string
+      }
+    }
+  | { id: 'chatPluginInstall'; state: { pluginId: string } }
 
 export type CoreViewId = CoreView['id']
 
