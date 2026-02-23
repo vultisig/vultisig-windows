@@ -7,7 +7,6 @@ import { ReshareFastVault } from '@clients/extension/src/components/settings/res
 import { ReshareSecureVault } from '@clients/extension/src/components/settings/reshare/ReshareSecureVault'
 import { SetupFastVaultPage } from '@clients/extension/src/components/setup/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '@clients/extension/src/components/setup/SetupSecureVaultPage'
-import { ManageSidePanel } from '@clients/extension/src/components/side-panel/ManageSidePanel'
 import { JoinKeygenPage } from '@clients/extension/src/mpc/keygen/join/JoinKeygenPage'
 import { JoinKeysignPage } from '@clients/extension/src/mpc/keysign/join/JoinKeysignPage'
 import { AppViewId } from '@clients/extension/src/navigation/AppView'
@@ -26,6 +25,8 @@ import { VaultPage } from '@core/ui/vault/page/components/VaultPage'
 import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { Views } from '@lib/ui/navigation/Views'
 import { useEffect } from 'react'
+
+import { ManageSidePanel } from '../components/side-panel/ManageSidePanel'
 
 const ExtensionVaultPage = () => {
   const vaults = useVaults()
