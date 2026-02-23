@@ -13,8 +13,11 @@ export const getAccount: BackgroundResolver<'getAccount'> = async ({
   const appSession = assertField(context, 'appSession')
   const vault = await getVault(appSession.vaultId)
 
-  if (isKeyImportVault(vault) && !vault.chainPublicKeys?.[chain]) {
-    return { address: '', publicKey: '' }
+  if (isKeyImportVault(vault)) {
+    const chainPublicKeys = assertField(vault, 'chainPublicKeys')
+    if (!chainPublicKeys[chain]) {
+      return { address: '', publicKey: '' }
+    }
   }
 
   const walletCore = await getWalletCore()
