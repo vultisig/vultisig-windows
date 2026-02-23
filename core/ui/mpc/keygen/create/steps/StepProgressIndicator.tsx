@@ -5,7 +5,7 @@ import styled, { css } from 'styled-components'
 
 type StepState = 'completed' | 'active' | 'upcoming'
 
-type StepConfig = {
+export type StepConfig = {
   icon: FC<SvgProps>
 }
 

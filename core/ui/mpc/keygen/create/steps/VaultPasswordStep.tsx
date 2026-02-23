@@ -16,8 +16,7 @@ import { Trans, useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { z } from 'zod'
 
-import { StepProgressIndicator } from './StepProgressIndicator'
-import { vaultSetupSteps } from './vault-setup-steps'
+import { StepConfig, StepProgressIndicator } from './StepProgressIndicator'
 
 type VaultPasswordStepOutput = {
   password: string
@@ -25,6 +24,7 @@ type VaultPasswordStepOutput = {
 
 type VaultPasswordStepProps = OnFinishProp<VaultPasswordStepOutput> &
   OnBackProp & {
+    steps?: readonly StepConfig[]
     stepIndex?: number
     headerRight?: ReactNode
   }
@@ -32,6 +32,7 @@ type VaultPasswordStepProps = OnFinishProp<VaultPasswordStepOutput> &
 export const VaultPasswordStep = ({
   onFinish,
   onBack,
+  steps,
   stepIndex,
   headerRight,
 }: VaultPasswordStepProps) => {
@@ -83,11 +84,8 @@ export const VaultPasswordStep = ({
       }
     >
       <Content>
-        {stepIndex !== undefined && (
-          <StepProgressIndicator
-            steps={vaultSetupSteps}
-            currentStepIndex={stepIndex}
-          />
+        {steps && stepIndex !== undefined && (
+          <StepProgressIndicator steps={steps} currentStepIndex={stepIndex} />
         )}
         <VStack gap={8}>
           <Title

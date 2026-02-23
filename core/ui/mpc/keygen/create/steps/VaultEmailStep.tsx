@@ -12,11 +12,11 @@ import styled from 'styled-components'
 import { z } from 'zod'
 
 import { ClearableTextInput } from '../components/ClearableTextInput'
-import { StepProgressIndicator } from './StepProgressIndicator'
-import { vaultSetupSteps } from './vault-setup-steps'
+import { StepConfig, StepProgressIndicator } from './StepProgressIndicator'
 
 type VaultEmailStepProps = OnFinishProp<string> &
   OnBackProp & {
+    steps?: readonly StepConfig[]
     stepIndex?: number
     headerRight?: ReactNode
   }
@@ -24,6 +24,7 @@ type VaultEmailStepProps = OnFinishProp<string> &
 export const VaultEmailStep = ({
   onFinish,
   onBack,
+  steps,
   stepIndex,
   headerRight,
 }: VaultEmailStepProps) => {
@@ -71,11 +72,8 @@ export const VaultEmailStep = ({
       }
     >
       <Content>
-        {stepIndex !== undefined && (
-          <StepProgressIndicator
-            steps={vaultSetupSteps}
-            currentStepIndex={stepIndex}
-          />
+        {steps && stepIndex !== undefined && (
+          <StepProgressIndicator steps={steps} currentStepIndex={stepIndex} />
         )}
         <VStack alignItems="center" gap={8}>
           <Title

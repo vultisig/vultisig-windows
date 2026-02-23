@@ -14,8 +14,7 @@ import { z } from 'zod'
 import { ClearableTextInput } from '../components/ClearableTextInput'
 import { useGeneratedVaultName } from '../hooks/useGeneratedVaultName'
 import { getVaultNameSchema } from '../utils/getVaultNameSchema'
-import { StepProgressIndicator } from './StepProgressIndicator'
-import { vaultSetupSteps } from './vault-setup-steps'
+import { StepConfig, StepProgressIndicator } from './StepProgressIndicator'
 
 type VaultNameStepOutput = {
   name: string
@@ -23,6 +22,7 @@ type VaultNameStepOutput = {
 
 type VaultNameStepProps = OnFinishProp<VaultNameStepOutput> &
   Partial<OnBackProp> & {
+    steps?: readonly StepConfig[]
     stepIndex?: number
     headerRight?: ReactNode
   }
@@ -30,6 +30,7 @@ type VaultNameStepProps = OnFinishProp<VaultNameStepOutput> &
 export const VaultNameStep = ({
   onFinish,
   onBack,
+  steps,
   stepIndex,
   headerRight,
 }: VaultNameStepProps) => {
@@ -73,11 +74,8 @@ export const VaultNameStep = ({
       }
     >
       <Content>
-        {stepIndex !== undefined && (
-          <StepProgressIndicator
-            steps={vaultSetupSteps}
-            currentStepIndex={stepIndex}
-          />
+        {steps && stepIndex !== undefined && (
+          <StepProgressIndicator steps={steps} currentStepIndex={stepIndex} />
         )}
         <VStack gap={8}>
           <Title
