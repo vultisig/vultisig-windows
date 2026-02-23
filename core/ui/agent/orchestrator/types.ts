@@ -166,10 +166,6 @@ export type GetStartersResponse = {
   starters: string[]
 }
 
-export type ErrorResponse = {
-  error: string
-}
-
 export type AuthToken = {
   token: string
   refreshToken: string
