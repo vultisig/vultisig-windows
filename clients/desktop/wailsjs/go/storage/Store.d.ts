@@ -8,6 +8,8 @@ export function DeleteAddressBookItem(arg1:string):Promise<void>;
 
 export function DeleteCoin(arg1:string,arg2:string):Promise<void>;
 
+export function DeleteCoinsByChain(arg1:string,arg2:string):Promise<number>;
+
 export function DeleteVault(arg1:string):Promise<void>;
 
 export function DeleteVaultFolder(arg1:string):Promise<void>;
@@ -19,6 +21,8 @@ export function GetAllAddressBookItems():Promise<Array<storage.AddressBookItem>>
 export function GetCoins():Promise<Record<string, Array<storage.Coin>>>;
 
 export function GetVault(arg1:string):Promise<storage.Vault>;
+
+export function GetVaultCoins(arg1:string):Promise<Array<storage.Coin>>;
 
 export function GetVaultFolder(arg1:string):Promise<storage.VaultFolder>;
 

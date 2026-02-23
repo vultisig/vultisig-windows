@@ -21,7 +21,7 @@ const isTransaction = (tx: unknown): tx is Types.Transaction => {
   return !!tx && typeof tx === 'object' && 'raw_data' in (tx as any)
 }
 
-export class VultisigTronWebTrx extends Trx {
+class VultisigTronWebTrx extends Trx {
   constructor(web: TronWeb) {
     super(web)
   }

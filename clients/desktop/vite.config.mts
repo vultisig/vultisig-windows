@@ -1,4 +1,6 @@
-import { defineConfig } from 'vite'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import { defineConfig, loadEnv } from 'vite'
 import circleDependency from 'vite-plugin-circular-dependency'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 
@@ -6,11 +8,20 @@ import { getCommonPlugins } from '../../core/ui/vite/plugins'
 import { getStaticCopyTargets } from '../../core/ui/vite/staticCopy'
 import * as buildInfo from './build.json'
 
-export default defineConfig(async () => {
+const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
+
+export default defineConfig(async ({ mode }) => {
+  const env = loadEnv(mode, rootDir, '')
   return {
     define: {
       __APP_VERSION__: JSON.stringify(buildInfo.version),
       __APP_BUILD__: JSON.stringify(buildInfo.build),
+      __AGENT_BACKEND_URL__: JSON.stringify(
+        env.AGENT_BACKEND_URL || 'https://agent.vultisig.com'
+      ),
+      __VULTISIG_VERIFIER_URL__: JSON.stringify(
+        env.VULTISIG_VERIFIER_URL || 'https://verifier.vultisig.com'
+      ),
     },
     plugins: [
       ...getCommonPlugins(),
