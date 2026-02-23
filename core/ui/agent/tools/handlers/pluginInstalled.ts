@@ -8,6 +8,9 @@ export const handlePluginInstalled: ToolHandler = async (input, context) => {
 
   const pluginId = resolvePluginId(pluginIdRaw)
   const pluginName = getPluginName(pluginId)
+  if (!context.vaultPubKey) {
+    throw new Error('Vault public key is required to check plugin status.')
+  }
   if (!context.authToken) {
     throw new Error(
       'Vault is not signed in. Please sign in to check plugin status.'

@@ -114,21 +114,21 @@ type UseAgentServiceReturn = {
 function buildMethods(orch: AgentOrchestrator): UseAgentServiceReturn {
   return {
     sendMessage: (vaultPubKey, message) =>
-      orch.sendMessage(vaultPubKey, message),
-    sendMessageToConversation: (convID, vaultPubKey, message) =>
-      orch.sendMessageToConversation(convID, vaultPubKey, message),
+      orch.sendMessage({ vaultPubKey, message }),
+    sendMessageToConversation: (convId, vaultPubKey, message) =>
+      orch.sendMessageToConversation({ convId, vaultPubKey, message }),
     createConversation: vaultPubKey => orch.createConversation(vaultPubKey),
     getConversations: vaultPubKey => orch.getConversations(vaultPubKey),
-    getConversation: (convID, vaultPubKey) =>
-      orch.getConversation(convID, vaultPubKey),
-    deleteConversation: (convID, vaultPubKey) =>
-      orch.deleteConversation(convID, vaultPubKey),
+    getConversation: (convId, vaultPubKey) =>
+      orch.getConversation({ convId, vaultPubKey }),
+    deleteConversation: (convId, vaultPubKey) =>
+      orch.deleteConversation({ convId, vaultPubKey }),
     cancelRequest: () => orch.cancelRequest(),
     providePassword: password => orch.providePassword(password),
     provideConfirmation: confirmed => orch.provideConfirmation(confirmed),
     checkServices: vaultPubKey => orch.checkServices(vaultPubKey),
     getVerifierSignInStatus: vaultPubKey => orch.isSignedIn(vaultPubKey),
-    signIn: (vaultPubKey, password) => orch.signIn(vaultPubKey, password),
+    signIn: (vaultPubKey, password) => orch.signIn({ vaultPubKey, password }),
     getConversationStarters: vaultPubKey =>
       orch.getConversationStarters(vaultPubKey),
     preloadContext: vaultPubKey => orch.preloadContext(vaultPubKey),

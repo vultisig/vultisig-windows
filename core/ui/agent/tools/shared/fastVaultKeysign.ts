@@ -47,6 +47,8 @@ export async function fastVaultKeysign({
   chain = 'Ethereum',
   maxAttempts = 2,
 }: FastVaultKeysignParams): Promise<KeysignSignature> {
+  if (maxAttempts < 1) throw new Error('maxAttempts must be at least 1')
+
   let lastErr: Error | undefined
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {

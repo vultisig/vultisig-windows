@@ -17,6 +17,12 @@ import {
 import type { VaultMeta } from '../tools/types'
 import type { AuthToken } from './types'
 
+type BuildAuthTokenInput = {
+  accessToken: string
+  refreshToken: string
+  expiresIn: number
+}
+
 const authDerivePath = "m/44'/60'/0'/0/0"
 const tokenStoragePrefix = 'vultisig_auth_'
 
@@ -167,11 +173,11 @@ export class AgentAuthService {
       return null
     }
 
-    const newToken = this.buildAuthToken(
-      result.data.access_token,
-      result.data.refresh_token,
-      result.data.expires_in
-    )
+    const newToken = this.buildAuthToken({
+      accessToken: result.data.access_token,
+      refreshToken: result.data.refresh_token,
+      expiresIn: result.data.expires_in,
+    })
     this.tokens.set(vaultPubKey, newToken)
     persistToken(vaultPubKey, newToken)
     return newToken
@@ -203,11 +209,11 @@ export class AgentAuthService {
       throw new Error('authentication returned empty token')
     }
 
-    const token = this.buildAuthToken(
-      resp.access_token,
-      resp.refresh_token,
-      resp.expires_in
-    )
+    const token = this.buildAuthToken({
+      accessToken: resp.access_token,
+      refreshToken: resp.refresh_token,
+      expiresIn: resp.expires_in,
+    })
     this.tokens.set(vault.publicKeyEcdsa, token)
     persistToken(vault.publicKeyEcdsa, token)
 
@@ -256,11 +262,11 @@ export class AgentAuthService {
     }
   }
 
-  private buildAuthToken(
-    accessToken: string,
-    refreshToken: string,
-    expiresIn: number
-  ): AuthToken {
+  private buildAuthToken({
+    accessToken,
+    refreshToken,
+    expiresIn,
+  }: BuildAuthTokenInput): AuthToken {
     let expiresAt = 0
     if (expiresIn > 0) {
       expiresAt = Date.now() + expiresIn * 1000

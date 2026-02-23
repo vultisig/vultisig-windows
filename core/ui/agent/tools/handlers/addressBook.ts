@@ -72,14 +72,21 @@ export const handleRemoveAddressBookEntry: ToolHandler = async input => {
 
     const items = await storage.getAddressBookItems()
     const lowerName = name.toLowerCase()
-    const match = items.find(item => {
+    const matches = items.filter(item => {
       if (item.title.toLowerCase() !== lowerName) return false
       if (chain && item.chain.toLowerCase() !== chain.toLowerCase())
         return false
       return true
     })
-    if (!match) throw new Error(`Address book entry "${name}" not found`)
-    id = match.id
+    if (matches.length === 0)
+      throw new Error(`Address book entry "${name}" not found`)
+    if (matches.length > 1 && !chain) {
+      const chains = matches.map(m => m.chain).join(', ')
+      throw new Error(
+        `Multiple entries named "${name}" found on chains: ${chains}. Specify a chain to disambiguate.`
+      )
+    }
+    id = matches[0].id
   }
 
   await storage.deleteAddressBookItem(id)

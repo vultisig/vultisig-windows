@@ -34,6 +34,27 @@ type OrchestratorDeps = {
   onVaultDataChanged: () => void
 }
 
+type SendMessageInput = {
+  vaultPubKey: string
+  message: string
+}
+
+type SendMessageToConversationInput = {
+  convId: string
+  vaultPubKey: string
+  message: string
+}
+
+type ConversationInput = {
+  convId: string
+  vaultPubKey: string
+}
+
+type SignInInput = {
+  vaultPubKey: string
+  password: string
+}
+
 export class AgentOrchestrator {
   readonly events = new AgentEventEmitter()
   readonly auth = new AgentAuthService()
@@ -86,7 +107,10 @@ export class AgentOrchestrator {
     )
   }
 
-  async sendMessage(vaultPubKey: string, message: string): Promise<string> {
+  async sendMessage({
+    vaultPubKey,
+    message,
+  }: SendMessageInput): Promise<string> {
     if (this.messageProcessor.busy)
       throw new Error('agent is busy processing another request')
 
@@ -120,11 +144,11 @@ export class AgentOrchestrator {
     return conv.id
   }
 
-  async sendMessageToConversation(
-    convId: string,
-    vaultPubKey: string,
-    message: string
-  ): Promise<void> {
+  async sendMessageToConversation({
+    convId,
+    vaultPubKey,
+    message,
+  }: SendMessageToConversationInput): Promise<void> {
     if (this.messageProcessor.busy)
       throw new Error('agent is busy processing another request')
 
@@ -171,10 +195,10 @@ export class AgentOrchestrator {
     }))
   }
 
-  async getConversation(
-    convId: string,
-    vaultPubKey: string
-  ): Promise<ConversationWithMessages> {
+  async getConversation({
+    convId,
+    vaultPubKey,
+  }: ConversationInput): Promise<ConversationWithMessages> {
     const token = await this.requireAuth(vaultPubKey)
     const conv = await this.backendClient.getConversation({
       convId,
@@ -198,7 +222,10 @@ export class AgentOrchestrator {
     }
   }
 
-  async deleteConversation(convId: string, vaultPubKey: string): Promise<void> {
+  async deleteConversation({
+    convId,
+    vaultPubKey,
+  }: ConversationInput): Promise<void> {
     const token = await this.requireAuth(vaultPubKey)
     this.txService.deletePendingTx(convId)
     await this.backendClient.deleteConversation({
@@ -241,7 +268,7 @@ export class AgentOrchestrator {
     this.promptService.provideConfirmation(confirmed)
   }
 
-  async signIn(vaultPubKey: string, password: string): Promise<void> {
+  async signIn({ vaultPubKey, password }: SignInInput): Promise<void> {
     if (!password) throw new Error('password required')
 
     const vaultMeta = await this.contextService.buildVaultMeta(
