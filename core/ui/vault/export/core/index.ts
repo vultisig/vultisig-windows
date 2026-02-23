@@ -5,6 +5,7 @@ export type VaultExport = {
   publicKeyEddsa: string
   hexChainCode: string
   isFastVault: boolean
+  isKeyImportVault: boolean
   localPartyId: string
   parties: string[]
 }
