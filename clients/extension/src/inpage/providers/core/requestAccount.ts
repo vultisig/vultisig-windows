@@ -21,10 +21,6 @@ export const requestAccount = async (
     return data
   }
 
-  if (error === BackgroundError.ChainNotEnabled) {
-    throw new EIP1193Error('ChainNotEnabled')
-  }
-
   if (error === BackgroundError.Unauthorized) {
     const { data, error } = await attempt(
       callPopup({

@@ -9,7 +9,6 @@ type Type =
   | 'InvalidParams'
   | 'InternalError'
   | 'UnrecognizedChain'
-  | 'ChainNotEnabled'
 
 const errors: Record<Type, { code: number; message: string }> = {
   UserRejectedRequest: {
@@ -49,10 +48,6 @@ const errors: Record<Type, { code: number; message: string }> = {
     message: 'Internal error',
   },
   UnrecognizedChain: { code: 4902, message: 'Unrecognized chain ID' },
-  ChainNotEnabled: {
-    code: 4903,
-    message: 'Chain not enabled for this vault',
-  },
 } as const
 
 export class EIP1193Error extends Error {
