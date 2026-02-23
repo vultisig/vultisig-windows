@@ -5,6 +5,7 @@ import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 import { CoinsAddIcon } from '@lib/ui/icons/CoinsAddIcon'
+import { SparklesIcon } from '@lib/ui/icons/SparklesIcon'
 import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { vStack } from '@lib/ui/layout/Stack'
 import { pageBottomInsetVar } from '@lib/ui/page/PageContent'
@@ -15,10 +16,10 @@ import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 const bottomNavigationHeight = 66
-const cameraIconSize = 56
+const centerButtonSize = 56
 
 type BottomNavigationProps = {
-  activeTab?: 'wallet' | 'defi'
+  activeTab?: 'wallet' | 'defi' | 'agent'
   isActiveTabRoot?: boolean
 }
 
@@ -46,13 +47,15 @@ export const BottomNavigation = ({
     }
   }, [])
 
-  const handleTabChange = (tab: 'wallet' | 'defi') => {
+  const handleTabChange = (tab: 'wallet' | 'defi' | 'agent') => {
     if (tab === activeTab && isActiveTabRoot) return
 
     if (tab === 'wallet') {
       navigate({ id: 'vault' }, { replace: true })
-    } else {
+    } else if (tab === 'defi') {
       navigate({ id: 'defi', state: {} }, { replace: true })
+    } else if (tab === 'agent') {
+      navigate({ id: 'agent' }, { replace: true })
     }
   }
 
@@ -67,9 +70,6 @@ export const BottomNavigation = ({
           {t('wallet')}
         </Text>
       </TabButton>
-      <CameraButton onClick={() => navigate({ id: 'uploadQr', state: {} })}>
-        <CameraIcon />
-      </CameraButton>
       <TabButton
         isActive={activeTab === 'defi'}
         onClick={() => handleTabChange('defi')}
@@ -77,6 +77,18 @@ export const BottomNavigation = ({
         <CoinsAddIcon />
         <Text as="span" size={10}>
           {t('defi')}
+        </Text>
+      </TabButton>
+      <CenterButton
+        isActive={activeTab === 'agent'}
+        onClick={() => handleTabChange('agent')}
+      >
+        <SparklesIcon />
+      </CenterButton>
+      <TabButton onClick={() => navigate({ id: 'uploadQr', state: {} })}>
+        <CameraIcon />
+        <Text as="span" size={10}>
+          {t('scan_qr')}
         </Text>
       </TabButton>
     </Container>
@@ -96,7 +108,7 @@ const Container = styled.div`
   background: rgba(19, 46, 86, 0.6);
   backdrop-filter: blur(32px);
   padding: 8px 12px 10px 12px;
-  border-top: 1px solid #1b3f73;
+  border-top: 1px solid ${getColor('foregroundSuper')};
 
   @supports (padding-bottom: calc(0px + env(safe-area-inset-bottom))) {
     height: calc(${bottomNavigationHeight}px + env(safe-area-inset-bottom));
@@ -104,12 +116,19 @@ const Container = styled.div`
   }
 `
 
-const CameraButton = styled(UnstyledButton)`
+type CenterButtonProps = {
+  isActive?: boolean
+}
+
+const CenterButton = styled(UnstyledButton) <CenterButtonProps>`
   flex-shrink: 0;
   ${round};
-  background: #4879fd;
+  background: ${({ isActive, theme }) =>
+    isActive
+      ? `linear-gradient(135deg, ${theme.colors.primary.toCssValue()} 0%, ${theme.colors.primaryAccentTwo.toCssValue()} 100%)`
+      : theme.colors.primaryAccentFour.toCssValue()};
   ${centerContent};
-  ${sameDimensions(cameraIconSize)};
+  ${sameDimensions(centerButtonSize)};
   font-size: 24px;
   color: ${getColor('text')};
   transition: all 0.2s;
@@ -117,7 +136,10 @@ const CameraButton = styled(UnstyledButton)`
   margin-bottom: 12px;
 
   &:hover {
-    background: #5a8aff;
+    background: ${({ isActive, theme }) =>
+    isActive
+      ? `linear-gradient(135deg, ${theme.colors.primary.toCssValue()} 0%, ${theme.colors.primaryAccentTwo.toCssValue()} 100%)`
+      : theme.colors.buttonHover.toCssValue()};
   }
 `
 
@@ -126,9 +148,10 @@ type TabButtonProps = {
   isDisabled?: boolean
 }
 
-const TabButton = styled(UnstyledButton)<TabButtonProps>`
+const TabButton = styled(UnstyledButton) <TabButtonProps>`
   flex: 1 1 0;
   min-width: 0;
+  width: 100px;
   height: 48px;
   padding: 3px 12px;
   font-size: 24px;
@@ -137,10 +160,10 @@ const TabButton = styled(UnstyledButton)<TabButtonProps>`
   background: transparent;
 
   ${vStack({
-    gap: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
-  })};
+  gap: 2,
+  justifyContent: 'center',
+  alignItems: 'center',
+})};
 
   ${({ isActive }) =>
     isActive
