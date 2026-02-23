@@ -104,3 +104,4 @@ task.md
 *storybook.log
 storybook-static
 google-credentials.json
+.mind/

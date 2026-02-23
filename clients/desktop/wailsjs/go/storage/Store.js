@@ -14,6 +14,10 @@ export function DeleteCoin(arg1, arg2) {
   return window['go']['storage']['Store']['DeleteCoin'](arg1, arg2);
 }
 
+export function DeleteCoinsByChain(arg1, arg2) {
+  return window['go']['storage']['Store']['DeleteCoinsByChain'](arg1, arg2);
+}
+
 export function DeleteVault(arg1) {
   return window['go']['storage']['Store']['DeleteVault'](arg1);
 }
@@ -36,6 +40,10 @@ export function GetCoins() {
 
 export function GetVault(arg1) {
   return window['go']['storage']['Store']['GetVault'](arg1);
+}
+
+export function GetVaultCoins(arg1) {
+  return window['go']['storage']['Store']['GetVaultCoins'](arg1);
 }
 
 export function GetVaultFolder(arg1) {
