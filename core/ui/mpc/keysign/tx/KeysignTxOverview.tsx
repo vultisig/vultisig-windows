@@ -22,7 +22,9 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useTxStatusQuery } from '../../../chain/tx/status/useTxStatusQuery'
 import { AddToAddressBookButton } from './components/AddToAddressBookButton'
+import { TxActualFeeDisplay } from './components/TxActualFeeDisplay'
 import { TxFeeRow } from './components/TxFeeRow'
 import { KeysignFeeAmount } from './FeeAmount'
 
@@ -45,6 +47,8 @@ export const KeysignTxOverview = () => {
   }, [toAmount, decimals])
 
   const txHash = useTxHash()
+  const txStatusQuery = useTxStatusQuery({ chain, hash: txHash })
+  const receipt = txStatusQuery.data?.receipt
 
   const blockExplorerUrl = getBlockExplorerUrl({
     chain,
@@ -115,8 +119,12 @@ export const KeysignTxOverview = () => {
               <Text>{chain}</Text>
             </HStack>
           </HStack>
-          <TxFeeRow label={t('network_fee')}>
-            <KeysignFeeAmount keysignPayload={keysignPayload} />
+          <TxFeeRow label={receipt ? t('network_fee') : t('est_network_fee')}>
+            {receipt ? (
+              <TxActualFeeDisplay chain={chain} receipt={receipt} />
+            ) : (
+              <KeysignFeeAmount keysignPayload={keysignPayload} />
+            )}
           </TxFeeRow>
         </SeparatedByLine>
       </Panel>
