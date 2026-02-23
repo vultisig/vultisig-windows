@@ -50,6 +50,7 @@ const Container = styled(HStack)<{ isChecked: boolean }>`
 
   ${interactive}
   position: relative;
+  width: fit-content;
 
   ${({ isChecked }) =>
     !isChecked &&

@@ -131,7 +131,8 @@
       "Bash(open:*)",
       "Bash(wc:*)",
       "Bash(git clean:*)",
-      "Bash(git mv:*)"
+      "Bash(git mv:*)",
+      "Bash(chmod:*)"
     ]
   }
 }
