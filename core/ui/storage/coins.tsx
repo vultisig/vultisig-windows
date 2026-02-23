@@ -7,6 +7,7 @@ import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
+import { assertField } from '@lib/utils/record/assertField'
 import { useMutation } from '@tanstack/react-query'
 
 import { useAssertCurrentVaultId } from './currentVaultId'
@@ -58,10 +59,13 @@ export const useCreateCoinMutation = () => {
   const vaultId = useAssertCurrentVaultId()
 
   const mutationFn = async (coin: Coin) => {
-    if (isKeyImportVault(vault) && !vault.chainPublicKeys?.[coin.chain]) {
-      throw new Error(
-        `Cannot add coin: chain ${coin.chain} is not enabled for this vault`
-      )
+    if (isKeyImportVault(vault)) {
+      const chainPublicKeys = assertField(vault, 'chainPublicKeys')
+      if (!chainPublicKeys[coin.chain]) {
+        throw new Error(
+          `Cannot add coin: chain ${coin.chain} is not enabled for this vault`
+        )
+      }
     }
 
     const publicKey = getPublicKey({

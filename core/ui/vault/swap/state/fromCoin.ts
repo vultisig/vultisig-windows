@@ -1,5 +1,6 @@
 import { CoinKey } from '@core/chain/coin/Coin'
 import { isOneOf } from '@lib/utils/array/isOneOf'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useCallback, useEffect, useMemo } from 'react'
 
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
@@ -8,7 +9,10 @@ import { useCurrentVaultChains } from '../../state/currentVaultCoins'
 export const useSwapFromCoin = () => {
   const [{ fromCoin }, setViewState] = useCoreViewState<'swap'>()
   const chains = useCurrentVaultChains()
-  const [chain] = chains
+  const chain = shouldBePresent(
+    chains[0],
+    'No enabled chains available for swap'
+  )
 
   const value: CoinKey = useMemo(() => {
     if (fromCoin && isOneOf(fromCoin.chain, chains)) {
