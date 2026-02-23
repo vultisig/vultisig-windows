@@ -21,7 +21,7 @@ export const ReferralHeaderButton = ({
       <HStack alignItems="center" gap={4}>
         {hasReferral && <CheckIcon />}
 
-        {t('add_referral')}
+        {hasReferral ? t('fastVaultSetup.referralAdded') : t('add_referral')}
       </HStack>
     </StyledButton>
   )
