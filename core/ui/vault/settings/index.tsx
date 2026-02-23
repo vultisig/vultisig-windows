@@ -5,7 +5,6 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { IconFileEdit } from '@lib/ui/icons/IconFileEdit'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
-import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { ShareAndroidIcon } from '@lib/ui/icons/ShareAndroidIcon'
 import { TrashCanIcon } from '@lib/ui/icons/TrashCanIcon'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -49,22 +48,6 @@ export const VaultSettingsPage = () => {
             }
             onClick={() => navigate({ id: 'vaultDetails' })}
             title={t('details')}
-            hoverable
-            showArrow
-          />
-          <ListItem
-            description={
-              <DescriptionText>
-                {t('vault_details_edit_vault_description')}
-              </DescriptionText>
-            }
-            icon={
-              <ListItemIconWrapper>
-                <PencilIcon />
-              </ListItemIconWrapper>
-            }
-            onClick={() => navigate({ id: 'renameVault' })}
-            title={t('rename')}
             hoverable
             showArrow
           />
