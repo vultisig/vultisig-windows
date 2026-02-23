@@ -5,7 +5,6 @@ import { createContextHook } from './createContextHook'
 
 export function setupValueProvider<T>(contextId: string) {
   const ValueContext = createContext<T | undefined>(undefined)
-
   type Props = ChildrenProp & { value: T }
 
   const ValueProvider = ({ children, value }: Props) => {
@@ -14,5 +13,9 @@ export function setupValueProvider<T>(contextId: string) {
     )
   }
 
-  return [ValueProvider, createContextHook(ValueContext, contextId)] as const
+  return [
+    ValueProvider,
+    createContextHook(ValueContext, contextId),
+    ValueContext,
+  ] as const
 }
