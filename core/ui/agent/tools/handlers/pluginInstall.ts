@@ -242,7 +242,7 @@ export const handlePluginInstall: ToolHandler = async (input, context) => {
     { timeoutMs: 60000 }
   )
 
-  await dklsKeygen.startReshareWithRetry(ecdsaKeyshare || undefined)
+  await dklsKeygen.startReshareWithRetry(ecdsaKeyshare)
 
   const schnorrKeygen = new Schnorr(
     { reshare: 'plugin' },
@@ -257,7 +257,7 @@ export const handlePluginInstall: ToolHandler = async (input, context) => {
     { timeoutMs: 60000 }
   )
 
-  await schnorrKeygen.startReshareWithRetry(eddsaKeyshare || undefined)
+  await schnorrKeygen.startReshareWithRetry(eddsaKeyshare)
 
   await setKeygenComplete({
     serverURL: relayUrl,

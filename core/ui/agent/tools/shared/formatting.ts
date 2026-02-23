@@ -19,7 +19,7 @@ function pricingAssetDecimals(asset: string): number {
 }
 
 export function formatPluginPricing(pricing: AppPricing[]): string {
-  if (!pricing || pricing.length === 0) return ''
+  if (pricing.length === 0) return ''
 
   const pricingSuffix: Record<string, string | ((pr: AppPricing) => string)> = {
     'per-tx': 'per transaction',
@@ -29,16 +29,13 @@ export function formatPluginPricing(pricing: AppPricing[]): string {
 
   const parts: string[] = []
   for (const p of pricing) {
-    const asset = (p.asset || 'USDC').toUpperCase()
+    const asset = p.asset.toUpperCase()
     const decimals = pricingAssetDecimals(asset)
-    let humanAmount = p.amount
-    for (let i = 0; i < decimals; i++) {
-      humanAmount /= 10
-    }
+    const humanAmount = p.amount / 10 ** decimals
 
     if (humanAmount === 0) continue
 
-    let amountStr = `$${humanAmount.toFixed(2)}`
+    let amountStr = humanAmount.toFixed(2)
     amountStr = amountStr.replace(/\.?0+$/, '')
 
     const suffix = pricingSuffix[p.type]

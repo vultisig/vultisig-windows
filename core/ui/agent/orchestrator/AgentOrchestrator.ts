@@ -1,3 +1,5 @@
+import { attempt, withFallback } from '@lib/utils/attempt'
+
 import { toolHandlers } from '../tools'
 import type {
   Conversation,
@@ -207,19 +209,20 @@ export class AgentOrchestrator {
   }
 
   async getConversationStarters(vaultPubKey: string): Promise<string[]> {
-    try {
-      const token = this.auth.getCachedToken(vaultPubKey)
-      if (!token) return []
+    const token = this.auth.getCachedToken(vaultPubKey)
+    if (!token) return []
 
-      const msgCtx = await this.contextService.buildCtx(vaultPubKey)
-      const resp = await this.backendClient.getStarters({
-        req: { public_key: vaultPubKey, context: msgCtx },
-        token: token.token,
-      })
-      return resp.starters ?? []
-    } catch {
-      return []
-    }
+    return withFallback(
+      attempt(async () => {
+        const msgCtx = await this.contextService.buildCtx(vaultPubKey)
+        const resp = await this.backendClient.getStarters({
+          req: { public_key: vaultPubKey, context: msgCtx },
+          token: token.token,
+        })
+        return resp.starters ?? []
+      }),
+      []
+    )
   }
 
   async preloadContext(vaultPubKey: string): Promise<void> {
@@ -245,10 +248,12 @@ export class AgentOrchestrator {
       vaultPubKey,
       password
     )
-    try {
-      await this.auth.signIn(vaultMeta)
-    } catch (err) {
-      const errMsg = err instanceof Error ? err.message : String(err)
+    const result = await attempt(() => this.auth.signIn(vaultMeta))
+    if ('error' in result) {
+      const errMsg =
+        result.error instanceof Error
+          ? result.error.message
+          : String(result.error)
       if (
         errMsg.includes('Fast vault sign failed') ||
         errMsg.includes('fast vault server returned status') ||
@@ -259,7 +264,7 @@ export class AgentOrchestrator {
           'incorrect password or signing failed — please try again'
         )
       }
-      throw err
+      throw result.error
     }
 
     this.events.emit('auth_connected')

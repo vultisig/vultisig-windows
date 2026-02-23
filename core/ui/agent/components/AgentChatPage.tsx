@@ -95,7 +95,9 @@ export const AgentChatPage: FC = () => {
           setInitialMessages(mapped)
         }
       })
-      ?.catch(() => {})
+      ?.catch(() => {
+        // conversation may have been deleted or user lacks access
+      })
   }, [initialConversationId, vault, getConversation, setInitialMessages])
 
   useEffect(() => {
@@ -134,7 +136,7 @@ export const AgentChatPage: FC = () => {
         requestAuth()
         return
       }
-      console.error('Failed to send message:', err)
+      // error events are surfaced via useAgentEvents
     }
   }
 
@@ -153,13 +155,13 @@ export const AgentChatPage: FC = () => {
       queuedMessageRef.current = null
       if (!vaultId) return
       if (conversationId) {
-        sendMessageToConversation(conversationId, vaultId, queued).catch(err =>
-          console.error('Failed to send queued message:', err)
+        sendMessageToConversation(conversationId, vaultId, queued).catch(
+          () => {}
         )
       } else {
         sendMessage(vaultId, queued)
           .then(id => setConversationId(id))
-          .catch(err => console.error('Failed to send queued message:', err))
+          .catch(() => {})
       }
     }
   }, [
@@ -177,7 +179,7 @@ export const AgentChatPage: FC = () => {
       addUserMessage(initialMessage)
       sendMessage(vaultId, initialMessage)
         .then(id => setConversationId(id))
-        .catch(err => console.error('Failed to send initial message:', err))
+        .catch(() => {})
     }
   }, [initialMessage, vaultId, addUserMessage, sendMessage, setViewState])
 
@@ -236,8 +238,8 @@ export const AgentChatPage: FC = () => {
             const id = await sendMessage(vaultId, pending)
             setConversationId(id)
           }
-        } catch (err) {
-          console.error('Failed to send pending message:', err)
+        } catch {
+          // error events are surfaced via useAgentEvents
         }
       }
     } catch (err) {

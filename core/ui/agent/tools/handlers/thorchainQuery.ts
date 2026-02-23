@@ -390,7 +390,7 @@ export const handleThorchainQuery: ToolHandler = async (input, context) => {
     }
   }
 
-  const result = await attempt(() => handler(input, address!, asset))
+  const result = await attempt(() => handler(input, address ?? '', asset))
   if ('error' in result) {
     const message =
       result.error instanceof Error

@@ -11,6 +11,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { attempt } from '@lib/utils/attempt'
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -38,7 +39,7 @@ export const AgentPage: FC = () => {
     if (!vaultId) return
     getConversations(vaultId)
       .then(convs => setConversations(convs || []))
-      .catch(() => setConversations(prev => (prev.length === 0 ? prev : [])))
+      .catch(() => {})
   }, [vaultId, refreshKey, getConversations])
 
   const handleNewChat = (initialMessage?: string) => {
@@ -59,7 +60,10 @@ export const AgentPage: FC = () => {
   ) => {
     e.stopPropagation()
     if (!vaultId) return
-    await deleteConversation(conversationId, vaultId)
+    const result = await attempt(() =>
+      deleteConversation(conversationId, vaultId)
+    )
+    if ('error' in result) return
     setRefreshKey(k => k + 1)
   }
 

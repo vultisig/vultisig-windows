@@ -4,6 +4,7 @@ import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { attempt } from '@lib/utils/attempt'
 import { FC, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -39,11 +40,9 @@ export const ConnectionButton: FC = () => {
   }
 
   const handlePasswordSubmit = async (password: string) => {
-    try {
-      await connect(password)
+    const result = await attempt(() => connect(password))
+    if ('data' in result) {
       setShowPassword(false)
-    } catch {
-      // error is shown inside the modal via the error prop
     }
   }
 
@@ -86,7 +85,8 @@ const StyledButton = styled(UnstyledButton)<{
   padding: 4px 8px;
   border-radius: 6px;
   background: ${getColor('foreground')};
-  color: ${({ $state }) => ($state === 'connected' ? '#33e6bf' : 'inherit')};
+  color: ${({ $state, theme }) =>
+    $state === 'connected' ? theme.colors.success.toCssValue() : 'inherit'};
   font-size: 12px;
   cursor: ${({ $state }) => ($state === 'connecting' ? 'default' : 'pointer')};
 

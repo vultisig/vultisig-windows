@@ -129,7 +129,11 @@ const buildEvmContract: ToolHandler = async (input, context) => {
   const chainStr = String(input.chain ?? '').trim()
   const contractAddress = String(input.contract_address ?? '').trim()
   const functionName = String(input.function_name ?? '').trim()
-  const params = (input.params ?? []) as AbiParam[]
+  const rawParams = Array.isArray(input.params) ? input.params : []
+  const params: AbiParam[] = rawParams.map((p: Record<string, unknown>) => ({
+    type: String(p.type ?? ''),
+    value: String(p.value ?? ''),
+  }))
   const valueStr = String(input.value ?? '0').trim()
 
   if (!chainStr || !contractAddress || !functionName) {
@@ -168,7 +172,13 @@ const buildEvmContract: ToolHandler = async (input, context) => {
         false
       )
     } else if (t === 'uint256') {
-      abiFunc.addParamUInt256(toEvmTwAmount(BigInt(param.value)), false)
+      const str = String(param.value).trim()
+      if (!str || !/^-?\d+$/.test(str)) {
+        throw new Error(
+          `Invalid integer value "${param.value}" for type ${param.type}`
+        )
+      }
+      abiFunc.addParamUInt256(toEvmTwAmount(BigInt(str)), false)
     } else if (t === 'string') {
       abiFunc.addParamString(param.value, false)
     } else if (t === 'bytes') {
@@ -235,10 +245,11 @@ const buildWasmExecute: ToolHandler = async (input, context) => {
   const chainStr = String(input.chain ?? '').trim()
   const contractAddress = String(input.contract_address ?? '').trim()
   const executeMsg = String(input.execute_msg ?? '').trim()
-  const funds = (input.funds ?? []) as Array<{
-    denom: string
-    amount: string
-  }>
+  const rawFunds = Array.isArray(input.funds) ? input.funds : []
+  const funds = rawFunds.map((f: Record<string, unknown>) => ({
+    denom: String(f.denom ?? ''),
+    amount: String(f.amount ?? ''),
+  }))
 
   if (!chainStr || !contractAddress || !executeMsg) {
     throw new Error(

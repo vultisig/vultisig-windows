@@ -26,8 +26,8 @@ const jwtClaimsSchema = z.object({
 
 const authTokenSchema = z.object({
   token: z.string().min(1),
-  refreshToken: z.string(),
-  expiresAt: z.number(),
+  refreshToken: z.string().min(1),
+  expiresAt: z.number().positive(),
 })
 
 function deriveEthereumAddress(compressedPubKeyHex: string): string {

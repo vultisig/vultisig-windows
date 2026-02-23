@@ -25,7 +25,7 @@ export const handlePluginInstalled: ToolHandler = async (input, context) => {
       plugin_name: pluginName,
       installed,
       message: installed
-        ? `Plugin ${pluginName} is installed for this vault`
+        ? `Plugin ${pluginName} is installed for this vault.`
         : `Plugin ${pluginName} is not installed.`,
       ui: {
         title: 'Plugin Status',
