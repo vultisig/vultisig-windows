@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 
 import { ReferralHeaderButton } from '../steps/ReferralHeaderButton'
 import { ReferralModal } from '../steps/ReferralModal'
+import { fastVaultSetupSteps } from '../steps/vault-setup-steps'
 import { VaultEmailStep } from '../steps/VaultEmailStep'
 import { VaultNameStep } from '../steps/VaultNameStep'
 import { VaultPasswordStep } from '../steps/VaultPasswordStep'
@@ -53,6 +54,7 @@ export const FastVaultSetupFlow = ({
           <VaultNameStep
             onFinish={onFinish}
             onBack={onBack}
+            steps={fastVaultSetupSteps}
             stepIndex={0}
             headerRight={headerRight}
           />
@@ -63,6 +65,7 @@ export const FastVaultSetupFlow = ({
               <VaultEmailStep
                 onFinish={onFinish}
                 onBack={goBackToName}
+                steps={fastVaultSetupSteps}
                 stepIndex={1}
                 headerRight={headerRight}
               />
@@ -70,6 +73,7 @@ export const FastVaultSetupFlow = ({
             to={({ value: email, onBack: goBackToEmail }) => (
               <VaultPasswordStep
                 onBack={goBackToEmail}
+                steps={fastVaultSetupSteps}
                 stepIndex={2}
                 headerRight={headerRight}
                 onFinish={({ password }) =>
