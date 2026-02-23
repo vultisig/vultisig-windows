@@ -1,18 +1,12 @@
 import { useRive } from '@rive-app/react-webgl2'
 
-const getVaultSetupAnimationFileName = (
-  selectedDeviceCount: number
-): string => {
-  if (selectedDeviceCount <= 0) return 'vault_setup_device1'
-  if (selectedDeviceCount >= 3) return 'vault_setup_device4'
-  return `vault_setup_device${selectedDeviceCount + 1}`
-}
+import { getVaultSetupAnimationSource } from './getVaultSetupAnimationSource'
 
 export const useVaultSetupAnimation = (selectedDeviceCount: number) => {
-  const animationFileName = getVaultSetupAnimationFileName(selectedDeviceCount)
+  const animationSource = getVaultSetupAnimationSource(selectedDeviceCount)
 
   const { RiveComponent, rive } = useRive({
-    src: `/core/animations/${animationFileName}.riv`,
+    src: `/core/animations/${animationSource}.riv`,
     autoplay: true,
     stateMachines: ['State Machine 1'],
   })

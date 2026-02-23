@@ -104,7 +104,7 @@ const lpBaseTicker: Record<LpSupportedChain, string> = {
   [Chain.MayaChain]: mayaCoin.ticker,
 }
 
-const lpChainMap: Partial<Record<string, Chain>> = {
+export const lpChainMap: Partial<Record<string, Chain>> = {
   AVAX: Chain.Avalanche,
   BASE: Chain.Base,
   BCH: Chain.BitcoinCash,

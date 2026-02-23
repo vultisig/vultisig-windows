@@ -2,10 +2,12 @@ import { create } from '@bufbuild/protobuf'
 import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import { Chain, CosmosChain } from '@core/chain/Chain'
 import { isChainOfKind } from '@core/chain/ChainKind'
+import { getThorchainInboundAddress } from '@core/chain/chains/cosmos/thor/getThorchainInboundAddress'
 import {
   kujiraCoinMigratedToThorChainDestinationId,
   kujiraCoinThorChainMergeContracts,
 } from '@core/chain/chains/cosmos/thor/kujira-merge'
+import { thorchainLpChainCode } from '@core/chain/chains/cosmos/thor/thorchainLp'
 import {
   yieldBearingAssetsAffiliateAddress,
   yieldBearingAssetsAffiliateContract,
@@ -87,6 +89,9 @@ export const buildDepositKeysignPayload = async ({
     ? toChainAmount(shouldBePresent(amount), coin.decimals).toString()
     : undefined
 
+  const isNonThorChainLp =
+    action === 'add_thor_lp' && coin.chain !== Chain.THORChain
+
   let keysignPayload = create(KeysignPayloadSchema, {
     coin: toCommCoin({
       ...coin,
@@ -102,10 +107,39 @@ export const buildDepositKeysignPayload = async ({
     toAmount: hasAmount && amountUnits ? amountUnits : '0',
   })
 
+  if (isNonThorChainLp) {
+    const inboundAddresses = await getThorchainInboundAddress()
+    const chainCode = shouldBePresent(
+      thorchainLpChainCode[coin.chain],
+      `THORChain LP chain code for ${coin.chain}`
+    )
+    const inbound = shouldBePresent(
+      inboundAddresses.find(
+        a => a.chain.toUpperCase() === chainCode.toUpperCase()
+      ),
+      `THORChain inbound address for ${coin.chain}`
+    )
+
+    if (inbound.halted) {
+      throw new Error(`${coin.chain} chain is currently halted on THORChain`)
+    }
+    if (inbound.chain_lp_actions_paused) {
+      throw new Error(
+        `LP actions are currently paused for ${coin.chain} on THORChain`
+      )
+    }
+
+    keysignPayload = create(KeysignPayloadSchema, {
+      ...keysignPayload,
+      toAddress: inbound.address,
+      toAmount: hasAmount && amountUnits ? amountUnits : '0',
+    })
+  }
+
   keysignPayload.blockchainSpecific = await getChainSpecific({
     keysignPayload,
     walletCore,
-    isDeposit: true,
+    isDeposit: !isNonThorChainLp,
     transactionType,
   })
 
@@ -271,6 +305,31 @@ export const buildDepositKeysignPayload = async ({
 
       return keysignPayload
     }
+  }
+
+  if (action === 'add_thor_lp') {
+    if (isNonThorChainLp) {
+      return keysignPayload
+    }
+
+    keysignPayload = create(KeysignPayloadSchema, {
+      ...keysignPayload,
+      contractPayload: { case: undefined },
+      toAddress: '',
+      toAmount: hasAmount && amountUnits ? amountUnits : '0',
+    })
+    return keysignPayload
+  }
+
+  if (action === 'remove_thor_lp') {
+    const dustAmount = toChainAmount(0.02, coin.decimals).toString()
+    keysignPayload = create(KeysignPayloadSchema, {
+      ...keysignPayload,
+      contractPayload: { case: undefined },
+      toAddress: '',
+      toAmount: dustAmount,
+    })
+    return keysignPayload
   }
 
   // TRON freeze/unfreeze: self-transaction with amount in SUN
