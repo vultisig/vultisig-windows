@@ -12,13 +12,13 @@ description: Use ESLint autofix (yarn) to sort imports and resolve lint issues; 
 Run from the repository root:
 
 ```bash
-yarn eslint <path-to-file> --fix
+yarn eslint <path-to-file> --fix --cache --cache-location node_modules/.cache/eslint/
 ```
 
 Example:
 
 ```bash
-yarn eslint clients/extension/src/inpage/providers/ethereum.ts --fix
+yarn eslint clients/extension/src/inpage/providers/ethereum.ts --fix --cache --cache-location node_modules/.cache/eslint/
 ```
 
 ## Multiple files
