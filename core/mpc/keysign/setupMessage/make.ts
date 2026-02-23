@@ -17,13 +17,14 @@ export const makeSetupMessage = ({
   message,
   devices,
   signatureAlgorithm,
-}: MakeSetupMessageInput) =>
-  SignSession[signatureAlgorithm].setup(
-    toMpcLibKeyshare({
-      keyShare,
-      signatureAlgorithm,
-    }).keyId(),
+}: MakeSetupMessageInput) => {
+  const ks = toMpcLibKeyshare({ keyShare, signatureAlgorithm })
+  const keyId = ks.keyId()
+
+  return SignSession[signatureAlgorithm].setup(
+    keyId,
     chainPath,
     Buffer.from(message, 'hex'),
     devices
   )
+}

@@ -1,6 +1,8 @@
 import { AddressBookPage } from '@core/ui/address-book'
 import { CreateAddressBookItemPage } from '@core/ui/address-book/create'
 import { UpdateAddressBookItemPage } from '@core/ui/address-book/update'
+import { AgentChatPage } from '@core/ui/agent/components/AgentChatPage'
+import { AgentPage } from '@core/ui/agent/components/AgentPage'
 import { AddCustomTokenPage } from '@core/ui/chain/coin/addCustomToken/AddCustomTokenPage'
 import { AddressPage } from '@core/ui/chain/coin/address'
 import { DeeplinkPage } from '@core/ui/deeplink/components/DeeplinkPage'
@@ -25,7 +27,6 @@ import { VaultSettingsPage } from '@core/ui/vault/settings'
 import { AirdropRegisterPage } from '@core/ui/vault/settings/airdrop-register'
 import { DeleteVaultPage } from '@core/ui/vault/settings/delete'
 import { VaultDetailsPage } from '@core/ui/vault/settings/details'
-import { VaultRenamePage } from '@core/ui/vault/settings/rename'
 import { SwapPage } from '@core/ui/vault/swap/components/SwapPage'
 import { VaultsPage } from '@core/ui/vaultsOrganisation'
 import { VaultFolderPage } from '@core/ui/vaultsOrganisation/folder'
@@ -53,6 +54,8 @@ import { VultDiscountPage } from '../vult/discount/page'
 
 export type SharedViewId = Extract<
   CoreViewId,
+  | 'agent'
+  | 'agentChat'
   | 'addCustomToken'
   | 'address'
   | 'addressBook'
@@ -74,7 +77,6 @@ export type SharedViewId = Extract<
   | 'manageVaultFolder'
   | 'manageVaults'
   | 'newVault'
-  | 'renameVault'
   | 'reshareVault'
   | 'send'
   | 'signCustomMessage'
@@ -101,6 +103,8 @@ export type SharedViewId = Extract<
 >
 
 export const sharedViews: Views<SharedViewId> = {
+  agent: AgentPage,
+  agentChat: AgentChatPage,
   referral: () => (
     <ReferralsGuard>
       <ReferralPage />
@@ -134,7 +138,6 @@ export const sharedViews: Views<SharedViewId> = {
   manageVaultChainCoins: ManageVaultChainCoinsPage,
   manageVaults: ManageVaultsPage,
   newVault: NewVaultPage,
-  renameVault: VaultRenamePage,
   reshareVault: ReshareVaultPage,
   send: SendPage,
   signCustomMessage: SignCustomMessagePage,
