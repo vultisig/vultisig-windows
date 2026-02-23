@@ -49,6 +49,7 @@ export const ReferralModal = ({
             onValueChange={onReferralCodeChange}
             onClear={() => onReferralCodeChange('')}
             validation={error ? 'invalid' : undefined}
+            maxLength={4}
           />
           {error && (
             <Text color="danger" size={12}>

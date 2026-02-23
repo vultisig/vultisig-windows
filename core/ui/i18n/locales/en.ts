@@ -287,7 +287,7 @@ export const en = {
   enter_number_placeholder: 'Enter a number',
   enter_percentage: 'Enter percentage',
   enter_referral_code_placeholder: 'Enter Referral Code',
-  enter_up_to_4_characters_placeholder: 'Enter up to 4 characters',
+  enter_up_to_4_characters_placeholder: 'Enter 4-digit code',
   enter_vault_name: 'Enter Vault Name',
   enter_your_email: 'Enter your email',
   enter_your_email_description:
