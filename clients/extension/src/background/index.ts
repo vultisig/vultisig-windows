@@ -25,9 +25,10 @@ runInpageProviderBridgeBackgroundAgent()
 runBackgroundEventsAgent()
 
 if (chrome.sidePanel) {
-  const applySidePanelBehavior = async (enabled: boolean) => {
-    await chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: enabled })
-  }
+  const applySidePanelBehavior = (enabled: boolean) =>
+    chrome.sidePanel
+      .setPanelBehavior({ openPanelOnActionClick: enabled })
+      .catch(console.error)
 
   getIsSidePanelEnabled().then(applySidePanelBehavior)
 
