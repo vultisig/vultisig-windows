@@ -3,6 +3,7 @@ import { areEqualCoins, CoinKey } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
+import { isKeyImportVault } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { groupItems } from '@lib/utils/array/groupItems'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -54,6 +55,10 @@ export const useCurrentVaultAddress = (chain: Chain) => {
   return useMemo(() => {
     const existing = addresses[chain]
     if (existing) return existing
+
+    if (isKeyImportVault(vault) && !vault.chainPublicKeys?.[chain]) {
+      return ''
+    }
 
     const publicKey = getPublicKey({
       chain,

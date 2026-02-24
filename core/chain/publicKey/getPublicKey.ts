@@ -32,6 +32,14 @@ export const getPublicKey = ({
 
   const chainPublicKey = chainPublicKeys?.[chain]
 
+  if (
+    chainPublicKeys !== undefined &&
+    Object.keys(chainPublicKeys).length > 0 &&
+    !chainPublicKey
+  ) {
+    throw new Error('Chain public key not found')
+  }
+
   const keysignType = signatureAlgorithms[getChainKind(chain)]
 
   const publicKeyType = getTwPublicKeyType({ walletCore, chain })
