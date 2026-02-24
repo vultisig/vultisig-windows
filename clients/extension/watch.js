@@ -1,58 +1,78 @@
-import { exec } from 'child_process'
-import chokidar from 'chokidar'
+import { rm } from 'fs/promises'
+import { execSync, spawn } from 'child_process'
+import { WebSocketServer } from 'ws'
 
-const capitalizeFirstLetter = str => {
-  return str.charAt(0).toUpperCase() + str.slice(1)
+const WS_PORT = 18732
+
+try {
+  execSync(`lsof -ti:${WS_PORT} | xargs kill -9`, { stdio: 'ignore' })
+} catch {}
+
+const wss = new WebSocketServer({ port: WS_PORT })
+
+let reloadTimeout
+const scheduleReload = () => {
+  clearTimeout(reloadTimeout)
+  reloadTimeout = setTimeout(() => {
+    for (const client of wss.clients) {
+      if (client.readyState === 1) client.send('reload')
+    }
+  }, 300)
 }
 
-const buildProcess = {
-  app: null,
-  background: null,
-  content: null,
-  inpage: null,
-}
+await rm('dist', { recursive: true, force: true })
 
-const build = chunk => {
-  if (buildProcess[chunk]) {
-    console.log(
-      `\x1b[1m\x1b[33mTerminating previous ${capitalizeFirstLetter(chunk)} build...\x1b[0m`
-    )
-    exec(`taskkill /PID ${buildProcess[chunk].pid} /F /T`, error => {
-      if (error) console.error(`Failed to kill ${chunk} process:, error`)
-    })
-  }
+const chunks = [
+  { label: 'App', env: {} },
+  { label: 'Background', env: { CHUNK: 'background' } },
+  { label: 'Content', env: { CHUNK: 'content' } },
+  { label: 'Inpage', env: { CHUNK: 'inpage' } },
+]
 
-  buildProcess[chunk] = exec(`yarn build:${chunk}`, { shell: true })
+const children = []
 
-  buildProcess[chunk].stdout.on('data', data => process.stdout.write(data))
+for (const { label, env } of chunks) {
+  const nodeOptions = [process.env.NODE_OPTIONS, '--max-old-space-size=8192']
+    .filter(Boolean)
+    .join(' ')
 
-  buildProcess[chunk].stderr.on('data', data => process.stderr.write(data))
-
-  buildProcess[chunk].on('close', code => {
-    console.log(
-      `\x1b[1m\x1b[32m${capitalizeFirstLetter(chunk)} build process exited with code ${code}\x1b[0m`
-    )
-    buildProcess[chunk] = null
+  const proc = spawn('vite', ['build', '--watch'], {
+    env: {
+      ...process.env,
+      ...env,
+      VITE_DEV_RELOAD: 'true',
+      NODE_OPTIONS: nodeOptions,
+    },
+    stdio: 'pipe',
+    shell: true,
   })
 
-  console.log(
-    `\x1b[1m\x1b[34m${capitalizeFirstLetter(chunk)} build triggered!\x1b[0m`
-  )
+  children.push(proc)
+
+  proc.stdout.on('data', data => {
+    const text = data.toString()
+    process.stdout.write(text)
+    if (text.includes('built in')) {
+      console.log(`\x1b[32m${label} ready\x1b[0m`)
+      scheduleReload()
+    }
+  })
+
+  proc.stderr.on('data', data => process.stderr.write(data))
+
+  proc.on('exit', code => {
+    if (code) console.error(`\x1b[31m${label} exited with code ${code}\x1b[0m`)
+  })
 }
 
-chokidar
-  .watch('src', {
-    ignored: ['src/background', 'src/content', 'src/inpage'],
-  })
-  .on('change', () => build('app'))
+const cleanup = () => {
+  children.forEach(proc => proc.kill())
+  wss.close()
+  process.exit()
+}
 
-chokidar.watch('src/background').on('change', () => build('background'))
+process.on('SIGINT', cleanup)
+process.on('SIGTERM', cleanup)
 
-chokidar.watch('src/content').on('change', () => build('content'))
-
-chokidar.watch('src/inpage').on('change', () => build('inpage'))
-
-build('app')
-build('background')
-build('content')
-build('inpage')
+console.log(`\x1b[36mWebSocket reload server on ws://localhost:${WS_PORT}\x1b[0m`)
+console.log('\x1b[36mWatching for changes...\x1b[0m')
