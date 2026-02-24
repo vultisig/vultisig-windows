@@ -24,19 +24,21 @@ runInpageProviderBridgeBackgroundAgent()
 
 runBackgroundEventsAgent()
 
-const applySidePanelBehavior = async (enabled: boolean) => {
-  await chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: enabled })
+if (chrome.sidePanel) {
+  const applySidePanelBehavior = async (enabled: boolean) => {
+    await chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: enabled })
+  }
+
+  getIsSidePanelEnabled().then(applySidePanelBehavior)
+
+  chrome.storage.onChanged.addListener((changes, areaName) => {
+    if (areaName !== 'local') return
+    if (!('isSidePanelEnabled' in changes)) return
+
+    const { newValue } = changes.isSidePanelEnabled as { newValue?: boolean }
+    applySidePanelBehavior(newValue ?? false)
+  })
 }
-
-getIsSidePanelEnabled().then(applySidePanelBehavior)
-
-chrome.storage.onChanged.addListener((changes, areaName) => {
-  if (areaName !== 'local') return
-  if (!('isSidePanelEnabled' in changes)) return
-
-  const { newValue } = changes.isSidePanelEnabled as { newValue?: boolean }
-  applySidePanelBehavior(newValue ?? false)
-})
 if (import.meta.env.VITE_DEV_RELOAD) {
   const connect = () => {
     const ws = new WebSocket('ws://localhost:18732')
