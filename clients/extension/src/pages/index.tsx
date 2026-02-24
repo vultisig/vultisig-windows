@@ -15,7 +15,7 @@ const isPopup = isPopupView()
 const ExtensionGlobalStyle = createGlobalStyle`
   body {
     min-height: 600px;
-    min-width: 480px;
+    min-width: ${isPopup ? '480px' : 'min(480px, 100vw)'};
     overflow: hidden;
 
     ${
