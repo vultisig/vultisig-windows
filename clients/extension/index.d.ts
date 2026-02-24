@@ -1,3 +1,5 @@
+/// <reference types="vite/client" />
+
 interface Window {
   bitcoin: any
   bitcoincash: any
