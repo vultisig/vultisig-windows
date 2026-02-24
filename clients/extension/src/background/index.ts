@@ -37,3 +37,11 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
   const { newValue } = changes.isSidePanelEnabled as { newValue?: boolean }
   applySidePanelBehavior(newValue ?? false)
 })
+if (import.meta.env.VITE_DEV_RELOAD) {
+  const connect = () => {
+    const ws = new WebSocket('ws://localhost:18732')
+    ws.onmessage = () => chrome.runtime.reload()
+    ws.onclose = () => setTimeout(connect, 1000)
+  }
+  connect()
+}

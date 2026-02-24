@@ -115,9 +115,6 @@ export type TextDeltaEvent = {
 }
 
 export type ServiceStatus = {
-  fastVaultServer: boolean
-  verifier: boolean
-  agentBackend: boolean
   authenticated: boolean
 }
 
