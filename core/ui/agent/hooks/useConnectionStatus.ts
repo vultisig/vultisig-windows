@@ -130,7 +130,7 @@ export const useConnectionStatus = (
     setState('connecting')
     setError(null)
     try {
-      await orchestrator.signIn({ vaultPubKey: vaultId, password })
+      await orchestrator.signIn(vaultId, password)
       const info = orchestrator.getTokenInfo(vaultId)
       setState('connected')
       if (info.connected) {

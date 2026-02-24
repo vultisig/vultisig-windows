@@ -11,7 +11,6 @@ const alwaysAutoExecute: Record<string, boolean> = {
   get_market_price: true,
   get_balances: true,
   get_portfolio: true,
-  search_token: true,
   list_vaults: true,
   plugin_list: true,
   plugin_spec: true,

@@ -30,7 +30,6 @@ import { handleReadEvmContract } from './handlers/readEvmContract'
 import { handleRemoveChain } from './handlers/removeChain'
 import { handleRemoveCoin } from './handlers/removeCoin'
 import { handleScanTx } from './handlers/scanTx'
-import { handleSearchToken } from './handlers/searchToken'
 import { handleSignInStatus } from './handlers/signInStatus'
 import { handleSignTx } from './handlers/signTx'
 import { handleThorchainQuery } from './handlers/thorchainQuery'
@@ -67,7 +66,6 @@ export const toolHandlers: Record<string, ToolHandler> = {
   get_market_price: handleMarketPrice,
   asset_lookup: handleAssetLookup,
   policy_generate: handlePolicyGenerate,
-  search_token: handleSearchToken,
   read_evm_contract: handleReadEvmContract,
   scan_tx: handleScanTx,
   sign_tx: handleSignTx,

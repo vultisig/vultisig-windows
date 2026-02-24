@@ -14,7 +14,7 @@ import { rootApiUrl } from '@core/config'
 import { hexToNumber } from '@lib/utils/hex/hexToNumber'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
-export const fetchOneInchTokensRaw = async (
+const fetchOneInchTokensRaw = async (
   chain: EvmChain
 ): Promise<OneInchTokensResponse> => {
   const evmChainId = getEvmChainId(chain)
