@@ -1,6 +1,7 @@
 import { runBackgroundEventsAgent } from '@core/inpage-provider/background/events/background'
 import { runInpageProviderBridgeBackgroundAgent } from '@core/inpage-provider/bridge/background'
 
+import { handlePushEvents } from '../notifications/handlePushEvents'
 import { getIsSidePanelEnabled } from '../storage/isSidePanelEnabled'
 
 if (!navigator.userAgent.toLowerCase().includes('firefox')) {
@@ -23,6 +24,8 @@ if (!navigator.userAgent.toLowerCase().includes('firefox')) {
 runInpageProviderBridgeBackgroundAgent()
 
 runBackgroundEventsAgent()
+
+handlePushEvents()
 
 if (chrome.sidePanel) {
   const applySidePanelBehavior = (enabled: boolean) =>

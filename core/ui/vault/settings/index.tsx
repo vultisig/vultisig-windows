@@ -13,13 +13,20 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { FC, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { SettingsSection } from '../../settings/SettingsSection'
 import { VaultSettingsBackup } from './backup'
 
-export const VaultSettingsPage = () => {
+type VaultSettingsPageProps = {
+  extraItems?: ReactNode
+}
+
+export const VaultSettingsPage: FC<VaultSettingsPageProps> = ({
+  extraItems,
+}) => {
   const { t } = useTranslation()
   const vault = useCurrentVault()
   const navigate = useCoreNavigate()
@@ -92,6 +99,7 @@ export const VaultSettingsPage = () => {
             hoverable
             showArrow
           />
+          {extraItems}
         </SettingsSection>
         <DeleteItem
           icon={

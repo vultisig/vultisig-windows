@@ -35,7 +35,7 @@
   "content_security_policy": {
     "extension_pages": "script-src 'self' 'wasm-unsafe-eval' http://localhost;object-src 'self'"
   },
-  "host_permissions": ["https://*/*"],
+  "host_permissions": ["https://*/*", "http://localhost/*"],
   "icons": {
     "16": "icon16.png",
     "32": "icon32.png",
@@ -43,7 +43,7 @@
     "64": "icon64.png",
     "128": "icon128.png"
   },
-  "permissions": ["activeTab", "clipboardRead", "clipboardWrite", "sidePanel", "storage", "windows", "tabs"],
+  "permissions": ["activeTab", "clipboardRead", "clipboardWrite", "notifications", "sidePanel", "storage", "windows", "tabs"],
   "side_panel": {
     "default_path": "index.html"
   },
