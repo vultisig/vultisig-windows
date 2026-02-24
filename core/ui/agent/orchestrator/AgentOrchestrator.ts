@@ -73,7 +73,7 @@ export class AgentOrchestrator {
       getVaultCoins: deps.getVaultCoins,
       getAddressBookItems: deps.getAddressBookItems,
     })
-    this.healthService = new AgentHealthService(this.auth, this.backendClient)
+    this.healthService = new AgentHealthService(this.auth)
     this.promptService = new AgentPromptService(this.events)
     this.toolExecutor = new AgentToolExecutor(
       toolHandlers,
