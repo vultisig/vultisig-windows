@@ -47,31 +47,6 @@ const formatters: Record<string, Formatter> = {
   },
   get_balances: () => 'Get Balances',
   get_portfolio: () => 'Get Portfolio',
-  search_token: tc => {
-    const query = getParam(tc.params, 'query')
-    const base = query ? `Search Token: ${query}` : 'Search Token'
-
-    if (tc.status !== 'success' || !tc.resultData) return base
-
-    const results = tc.resultData.results
-    if (!Array.isArray(results) || results.length === 0) return base
-
-    const top = results[0] as Record<string, unknown>
-    const name = getParam(top, 'name')
-    const chain = getParam(top, 'chain')
-    const price = getParam(top, 'price_usd')
-
-    const parts = [base]
-    if (name || chain) {
-      const detail = [name, chain ? `(${chain})` : ''].filter(Boolean).join(' ')
-      parts.push(detail)
-    }
-    if (price) {
-      parts.push(`$${price}`)
-    }
-
-    return parts.join(' — ')
-  },
   scan_tx: tc => {
     const chain = getParam(tc.params, 'chain')
     const base = chain ? `Security Scan: ${chain}` : 'Security Scan'

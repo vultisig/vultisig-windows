@@ -55,6 +55,37 @@ export type ActionResult = {
   error?: string
 }
 
+export type TokenDeployment = {
+  chain: string
+  contract_address: string
+  decimals?: number
+}
+
+export type TokenSearchResult = {
+  id?: string
+  name: string
+  symbol: string
+  logo?: string
+  logo_url?: string
+  price_usd?: string
+  market_cap_rank?: number
+  deployments: TokenDeployment[]
+}
+
+export type TokenSearchResultWrapper = {
+  tokens: TokenSearchResult[]
+}
+
+export type MpcTransaction = {
+  sequence: number
+  chain: string
+  chain_id: string
+  action: string
+  signing_mode: 'ecdsa_secp256k1' | 'eddsa_ed25519'
+  unsigned_tx_hex: string
+  tx_details: Record<string, string>
+}
+
 export type SendMessageResponse = {
   message: BackendMessage
   title?: string
@@ -63,6 +94,8 @@ export type SendMessageResponse = {
   policy_ready?: PolicyReady
   install_required?: InstallRequired
   tx_ready?: TxReady
+  transactions?: MpcTransaction[]
+  tokens?: TokenSearchResult[]
 }
 
 export type TxReady = {
@@ -164,6 +197,10 @@ export type GetStartersRequest = {
 
 export type GetStartersResponse = {
   starters: string[]
+}
+
+export type ErrorResponse = {
+  error?: string
 }
 
 export type AuthToken = {

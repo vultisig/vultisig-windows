@@ -10,6 +10,7 @@ import type {
   TextDeltaEvent,
   TitleUpdatedEvent,
   ToolCallEvent,
+  TxBundleApprovalEvent,
   TxStatusEvent,
 } from '../types'
 
@@ -21,6 +22,7 @@ type AgentEventMap = {
   action_result: ActionResultEvent
   password_required: PasswordRequiredEvent
   confirmation_required: ConfirmationRequiredEvent
+  tx_bundle_approval: TxBundleApprovalEvent
   auth_required: AuthRequiredEvent
   auth_connected: void
   complete: CompleteEvent

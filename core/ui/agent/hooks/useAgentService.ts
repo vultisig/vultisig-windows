@@ -103,35 +103,67 @@ type UseAgentServiceReturn = {
   cancelRequest: () => void
   providePassword: (password: string) => void
   provideConfirmation: (confirmed: boolean) => void
+  provideBundleApproval: (approved: boolean, autoApprove: boolean) => void
+  setAutoApproveTransactions: (enabled: boolean) => void
   checkServices: (vaultPubKey: string) => Promise<ServiceStatus>
   getVerifierSignInStatus: (vaultPubKey: string) => boolean
   signIn: (vaultPubKey: string, password: string) => Promise<void>
   getConversationStarters: (vaultPubKey: string) => Promise<string[]>
   preloadContext: (vaultPubKey: string) => Promise<void>
+  resetPrimedState: (convId: string) => void
+  addTokenToVault: (
+    vaultPubKey: string,
+    chain: string,
+    symbol: string,
+    contractAddress: string,
+    decimals: number,
+    logo?: string
+  ) => Promise<{ success: boolean; error?: string }>
   orchestrator: AgentOrchestrator
 }
 
 function buildMethods(orch: AgentOrchestrator): UseAgentServiceReturn {
   return {
     sendMessage: (vaultPubKey, message) =>
-      orch.sendMessage({ vaultPubKey, message }),
+      orch.sendMessage(vaultPubKey, message),
     sendMessageToConversation: (convId, vaultPubKey, message) =>
-      orch.sendMessageToConversation({ convId, vaultPubKey, message }),
+      orch.sendMessageToConversation(convId, vaultPubKey, message),
     createConversation: vaultPubKey => orch.createConversation(vaultPubKey),
     getConversations: vaultPubKey => orch.getConversations(vaultPubKey),
     getConversation: (convId, vaultPubKey) =>
-      orch.getConversation({ convId, vaultPubKey }),
+      orch.getConversation(convId, vaultPubKey),
     deleteConversation: (convId, vaultPubKey) =>
-      orch.deleteConversation({ convId, vaultPubKey }),
+      orch.deleteConversation(convId, vaultPubKey),
     cancelRequest: () => orch.cancelRequest(),
     providePassword: password => orch.providePassword(password),
     provideConfirmation: confirmed => orch.provideConfirmation(confirmed),
+    provideBundleApproval: (approved, autoApprove) =>
+      orch.provideBundleApproval(approved, autoApprove),
+    setAutoApproveTransactions: enabled =>
+      orch.setAutoApproveTransactions(enabled),
     checkServices: vaultPubKey => orch.checkServices(vaultPubKey),
     getVerifierSignInStatus: vaultPubKey => orch.isSignedIn(vaultPubKey),
-    signIn: (vaultPubKey, password) => orch.signIn({ vaultPubKey, password }),
+    signIn: (vaultPubKey, password) => orch.signIn(vaultPubKey, password),
     getConversationStarters: vaultPubKey =>
       orch.getConversationStarters(vaultPubKey),
     preloadContext: vaultPubKey => orch.preloadContext(vaultPubKey),
+    resetPrimedState: convId => orch.resetPrimedState(convId),
+    addTokenToVault: (
+      vaultPubKey,
+      chain,
+      symbol,
+      contractAddress,
+      decimals,
+      logo
+    ) =>
+      orch.addTokenToVault(
+        vaultPubKey,
+        chain,
+        symbol,
+        contractAddress,
+        decimals,
+        logo
+      ),
     orchestrator: orch,
   }
 }

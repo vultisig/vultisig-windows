@@ -6,6 +6,7 @@ import type {
   AuthRequiredEvent,
   ChatMessage,
   CompleteEvent,
+  ConfirmationApprovalStatus,
   ConfirmationRequiredEvent,
   ErrorEvent,
   LoadingEvent,
@@ -13,6 +14,7 @@ import type {
   ResponseEvent,
   TextDeltaEvent,
   ToolCallEvent,
+  TxBundleApprovalEvent,
   TxStatusEvent,
   TxStatusInfo,
 } from '../types'
@@ -21,7 +23,7 @@ type AgentEventsState = {
   messages: ChatMessage[]
   isLoading: boolean
   passwordRequired: PasswordRequiredEvent | null
-  confirmationRequired: ConfirmationRequiredEvent | null
+  txBundleApproval: TxBundleApprovalEvent | null
   authRequired: AuthRequiredEvent | null
   error: string | null
   isComplete: boolean
@@ -31,10 +33,14 @@ type UseAgentEventsReturn = AgentEventsState & {
   addUserMessage: (content: string) => void
   setInitialMessages: (messages: ChatMessage[]) => void
   dismissPasswordRequired: () => void
-  dismissConfirmation: () => void
+  dismissTxBundleApproval: () => void
   dismissAuthRequired: () => void
   dismissError: () => void
   requestAuth: () => void
+  resolveConfirmationApproval: (
+    requestId: string,
+    status: ConfirmationApprovalStatus
+  ) => void
 }
 
 const agentStoppedMessage =
@@ -62,7 +68,7 @@ export const useAgentEvents = (
     messages: [],
     isLoading: false,
     passwordRequired: null,
-    confirmationRequired: null,
+    txBundleApproval: null,
     authRequired: null,
     error: null,
     isComplete: false,
@@ -147,6 +153,13 @@ export const useAgentEvents = (
         if (convIdRef.current && data.conversationId !== convIdRef.current)
           return
 
+        if (data.tokenResults?.length) {
+          console.log(
+            '[agent:events] response has tokenResults:',
+            data.tokenResults.length
+          )
+        }
+
         const streamingId = streamingMsgIdRef.current
         streamingMsgIdRef.current = null
         const now = Date.now()
@@ -162,6 +175,7 @@ export const useAgentEvents = (
                       id: `msg-${now}`,
                       content: data.message,
                       actions: data.actions,
+                      tokenResults: data.tokenResults,
                     }
                   : m
               ),
@@ -176,6 +190,7 @@ export const useAgentEvents = (
               role: 'assistant',
               content: data.message,
               actions: data.actions,
+              tokenResults: data.tokenResults,
               timestamp: new Date(now).toISOString(),
             })
           }
@@ -272,7 +287,34 @@ export const useAgentEvents = (
         (data: ConfirmationRequiredEvent) => {
           if (convIdRef.current && data.conversationId !== convIdRef.current)
             return
-          setState(prev => ({ ...prev, confirmationRequired: data }))
+          const confirmationMsg: ChatMessage = {
+            id: `confirmation-${data.requestId}`,
+            role: 'assistant',
+            content: '',
+            timestamp: new Date().toISOString(),
+            confirmationApproval: {
+              action: data.action,
+              details: data.details,
+              actionId: data.actionId,
+              requestId: data.requestId,
+              status: 'pending',
+            },
+          }
+          setState(prev => ({
+            ...prev,
+            messages: [...prev.messages, confirmationMsg],
+          }))
+        }
+      )
+    )
+
+    cleanups.push(
+      orchestrator.events.on(
+        'tx_bundle_approval',
+        (data: TxBundleApprovalEvent) => {
+          if (convIdRef.current && data.conversationId !== convIdRef.current)
+            return
+          setState(prev => ({ ...prev, txBundleApproval: data }))
         }
       )
     )
@@ -316,7 +358,7 @@ export const useAgentEvents = (
           error: isStopped ? null : normalizedError,
           isLoading: false,
           passwordRequired: null,
-          confirmationRequired: null,
+          txBundleApproval: null,
         }))
       })
     )
@@ -387,8 +429,25 @@ export const useAgentEvents = (
     setState(prev => ({ ...prev, passwordRequired: null }))
   }
 
-  const dismissConfirmation = () => {
-    setState(prev => ({ ...prev, confirmationRequired: null }))
+  const resolveConfirmationApproval = (
+    requestId: string,
+    status: ConfirmationApprovalStatus
+  ) => {
+    setState(prev => ({
+      ...prev,
+      messages: prev.messages.map(m =>
+        m.confirmationApproval?.requestId === requestId
+          ? {
+              ...m,
+              confirmationApproval: { ...m.confirmationApproval, status },
+            }
+          : m
+      ),
+    }))
+  }
+
+  const dismissTxBundleApproval = () => {
+    setState(prev => ({ ...prev, txBundleApproval: null }))
   }
 
   const dismissAuthRequired = () => {
@@ -412,9 +471,10 @@ export const useAgentEvents = (
     addUserMessage,
     setInitialMessages,
     dismissPasswordRequired,
-    dismissConfirmation,
+    dismissTxBundleApproval,
     dismissAuthRequired,
     dismissError,
     requestAuth,
+    resolveConfirmationApproval,
   }
 }

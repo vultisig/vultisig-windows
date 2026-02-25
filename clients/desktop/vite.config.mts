@@ -17,7 +17,7 @@ export default defineConfig(async ({ mode }) => {
       __APP_VERSION__: JSON.stringify(buildInfo.version),
       __APP_BUILD__: JSON.stringify(buildInfo.build),
       __AGENT_BACKEND_URL__: JSON.stringify(
-        env.AGENT_BACKEND_URL || 'https://agent.vultisig.com'
+        env.AGENT_BACKEND_URL || 'http://localhost:9998'
       ),
       __VULTISIG_VERIFIER_URL__: JSON.stringify(
         env.VULTISIG_VERIFIER_URL || 'https://verifier.vultisig.com'

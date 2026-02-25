@@ -16,15 +16,16 @@ import styled from 'styled-components'
 import { useAgentEvents } from '../hooks/useAgentEvents'
 import { useAgentService } from '../hooks/useAgentService'
 import { useConversationStarters } from '../hooks/useConversationStarters'
+import { stripSetVaultPrefix } from '../orchestrator/setVaultMessage'
 import { ChatMessage as ChatMessageType, TitleUpdatedEvent } from '../types'
 import { AgentErrorFallback } from './AgentErrorFallback'
 import { ChatInput } from './ChatInput'
 import { ChatMessage } from './ChatMessage'
-import { ConfirmationPrompt } from './ConfirmationPrompt'
 import { ConnectionButton } from './ConnectionButton'
 import { ConversationStarters } from './ConversationStarters'
 import { PasswordPrompt } from './PasswordPrompt'
 import { ThinkingIndicator } from './ThinkingIndicator'
+import { TransactionBundleDrawer } from './TransactionBundleDrawer'
 
 type AgentChatViewState = { conversationId?: string; initialMessage?: string }
 
@@ -50,10 +51,12 @@ export const AgentChatPage: FC = () => {
     sendMessageToConversation,
     providePassword,
     provideConfirmation,
+    provideBundleApproval,
     cancelRequest,
     getConversation,
     signIn,
     preloadContext,
+    addTokenToVault,
     orchestrator,
   } = useAgentService()
 
@@ -61,16 +64,17 @@ export const AgentChatPage: FC = () => {
     messages,
     isLoading,
     passwordRequired,
-    confirmationRequired,
+    txBundleApproval,
     authRequired,
     error,
     addUserMessage,
     setInitialMessages,
     dismissPasswordRequired,
-    dismissConfirmation,
+    dismissTxBundleApproval,
     dismissAuthRequired,
     dismissError,
     requestAuth,
+    resolveConfirmationApproval,
   } = useAgentEvents(conversationId, orchestrator)
 
   useEffect(() => {
@@ -89,7 +93,8 @@ export const AgentChatPage: FC = () => {
             .map(m => ({
               id: m.id,
               role: m.role as 'user' | 'assistant',
-              content: m.content,
+              content:
+                m.role === 'user' ? stripSetVaultPrefix(m.content) : m.content,
               timestamp: m.created_at,
             }))
           setInitialMessages(mapped)
@@ -105,6 +110,12 @@ export const AgentChatPage: FC = () => {
   }, [messages, isLoading])
 
   const vaultId = vault ? getVaultId(vault) : null
+
+  useEffect(() => {
+    if (conversationId) {
+      orchestrator.resetPrimedState(conversationId)
+    }
+  }, [conversationId, orchestrator])
 
   useEffect(() => {
     if (vaultId) {
@@ -206,14 +217,23 @@ export const AgentChatPage: FC = () => {
     cancelRequest()
   }
 
-  const handleConfirmationConfirm = async () => {
-    dismissConfirmation()
-    await provideConfirmation(true)
+  const handleConfirmationApprove = (requestId: string) => {
+    resolveConfirmationApproval(requestId, 'approved')
+    provideConfirmation(true)
   }
 
-  const handleConfirmationCancel = () => {
-    dismissConfirmation()
+  const handleConfirmationReject = (requestId: string) => {
+    resolveConfirmationApproval(requestId, 'rejected')
     provideConfirmation(false)
+  }
+
+  const handleConfirmationRequestChanges = (
+    requestId: string,
+    feedback: string
+  ) => {
+    resolveConfirmationApproval(requestId, 'changes_requested')
+    provideConfirmation(false)
+    handleSend(feedback)
   }
 
   const pendingMessageRef = useRef<string | null>(null)
@@ -252,6 +272,24 @@ export const AgentChatPage: FC = () => {
             : t('agent_sign_in_failed')
       setAuthSignInError(message)
     }
+  }
+
+  const handleAddToken = (
+    chain: string,
+    symbol: string,
+    contractAddress: string,
+    decimals: number,
+    logo?: string
+  ) => {
+    if (!vaultId) return Promise.resolve({ success: false, error: 'No vault' })
+    return addTokenToVault(
+      vaultId,
+      chain,
+      symbol,
+      contractAddress,
+      decimals,
+      logo
+    )
   }
 
   const handleAuthCancel = () => {
@@ -300,7 +338,14 @@ export const AgentChatPage: FC = () => {
             </WelcomeMessage>
           )}
           {messages.map(msg => (
-            <ChatMessage key={msg.id} message={msg} />
+            <ChatMessage
+              key={msg.id}
+              message={msg}
+              onAddToken={handleAddToken}
+              onConfirmationApprove={handleConfirmationApprove}
+              onConfirmationReject={handleConfirmationReject}
+              onConfirmationRequestChanges={handleConfirmationRequestChanges}
+            />
           ))}
           {isLoading && <ThinkingIndicator />}
           {error && (
@@ -325,12 +370,22 @@ export const AgentChatPage: FC = () => {
           onCancel={handlePasswordCancel}
         />
       )}
-      {confirmationRequired && (
-        <ConfirmationPrompt
-          action={confirmationRequired.action}
-          details={confirmationRequired.details}
-          onConfirm={handleConfirmationConfirm}
-          onCancel={handleConfirmationCancel}
+      {txBundleApproval && (
+        <TransactionBundleDrawer
+          transactions={txBundleApproval.transactions}
+          onApprove={(autoApprove: boolean) => {
+            dismissTxBundleApproval()
+            provideBundleApproval(true, autoApprove)
+          }}
+          onReject={() => {
+            dismissTxBundleApproval()
+            provideBundleApproval(false, false)
+          }}
+          onRequestChanges={(feedback: string) => {
+            dismissTxBundleApproval()
+            provideBundleApproval(false, false)
+            handleSend(feedback)
+          }}
         />
       )}
       {authRequired && (

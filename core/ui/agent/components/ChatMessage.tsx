@@ -6,19 +6,61 @@ import { FC, memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-import { ChatMessage as ChatMessageType } from '../types'
+import type { ChatMessage as ChatMessageType, TokenResultInfo } from '../types'
+import { InlineConfirmationCard } from './InlineConfirmationCard'
 import { InlineToolCallMessage } from './InlineToolCallMessage'
 import { InlineTxStatusMessage } from './InlineTxStatusMessage'
 import { MarkdownContent } from './MarkdownContent'
+import { TokenResultsCard } from './TokenResultsCard'
 
 type Props = {
   message: ChatMessageType
+  onAddToken?: (
+    chain: string,
+    symbol: string,
+    contractAddress: string,
+    decimals: number,
+    logo?: string
+  ) => Promise<{ success: boolean; error?: string }>
+  onConfirmationApprove?: (requestId: string) => void
+  onConfirmationReject?: (requestId: string) => void
+  onConfirmationRequestChanges?: (requestId: string, feedback: string) => void
 }
 
-const ChatMessageComponent: FC<Props> = ({ message }) => {
+const ChatMessageComponent: FC<Props> = ({
+  message,
+  onAddToken,
+  onConfirmationApprove,
+  onConfirmationReject,
+  onConfirmationRequestChanges,
+}) => {
   const { t } = useTranslation()
   const isUser = message.role === 'user'
   const hasTextContent = message.content.trim().length > 0
+  const hasTokenResults =
+    message.tokenResults && message.tokenResults.length > 0
+
+  if (message.confirmationApproval) {
+    return (
+      <InlineContainer>
+        <InlineConfirmationCard
+          approval={message.confirmationApproval}
+          onApprove={() =>
+            onConfirmationApprove?.(message.confirmationApproval!.requestId)
+          }
+          onReject={() =>
+            onConfirmationReject?.(message.confirmationApproval!.requestId)
+          }
+          onRequestChanges={fb =>
+            onConfirmationRequestChanges?.(
+              message.confirmationApproval!.requestId,
+              fb
+            )
+          }
+        />
+      </InlineContainer>
+    )
+  }
 
   if (message.toolCall) {
     return (
@@ -37,33 +79,41 @@ const ChatMessageComponent: FC<Props> = ({ message }) => {
   }
 
   return (
-    <Container $isUser={isUser}>
-      <MessageWrapper $isUser={isUser}>
-        {!isUser && (
-          <BotAvatar>
-            <SparklesIcon />
-          </BotAvatar>
-        )}
-        <VStack gap={8}>
+    <>
+      <Container $isUser={isUser}>
+        <MessageWrapper $isUser={isUser}>
           {!isUser && (
-            <Text size={12} color="supporting" weight={600}>
-              {t('vultibot')}
-            </Text>
+            <BotAvatar>
+              <SparklesIcon />
+            </BotAvatar>
           )}
-          {hasTextContent && (
-            <MessageBubble $isUser={isUser}>
-              {isUser ? (
-                <Text size={14} style={{ whiteSpace: 'pre-wrap' }}>
-                  {message.content}
-                </Text>
-              ) : (
-                <MarkdownContent content={message.content} />
-              )}
-            </MessageBubble>
-          )}
-        </VStack>
-      </MessageWrapper>
-    </Container>
+          <VStack gap={8}>
+            {!isUser && (
+              <Text size={12} color="supporting" weight={600}>
+                {t('vultibot')}
+              </Text>
+            )}
+            {hasTextContent && (
+              <MessageBubble $isUser={isUser}>
+                {isUser ? (
+                  <Text size={14} style={{ whiteSpace: 'pre-wrap' }}>
+                    {message.content}
+                  </Text>
+                ) : (
+                  <MarkdownContent content={message.content} />
+                )}
+              </MessageBubble>
+            )}
+          </VStack>
+        </MessageWrapper>
+      </Container>
+      {hasTokenResults && onAddToken && (
+        <TokenResultsCard
+          tokens={message.tokenResults as TokenResultInfo[]}
+          onAddToken={onAddToken}
+        />
+      )}
+    </>
   )
 }
 

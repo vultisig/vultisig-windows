@@ -25,6 +25,36 @@ export type ToolCallInfo = {
   error?: string
 }
 
+export type TokenDeploymentInfo = {
+  chain: string
+  contract_address: string
+  decimals?: number
+}
+
+export type TokenResultInfo = {
+  name: string
+  symbol: string
+  logo?: string
+  logo_url?: string
+  price_usd?: string
+  market_cap_rank?: number
+  deployments: TokenDeploymentInfo[]
+}
+
+export type ConfirmationApprovalStatus =
+  | 'pending'
+  | 'approved'
+  | 'rejected'
+  | 'changes_requested'
+
+export type ConfirmationApproval = {
+  action: string
+  details: string
+  actionId: string
+  requestId: string
+  status: ConfirmationApprovalStatus
+}
+
 export type ChatMessage = {
   id: string
   role: 'user' | 'assistant'
@@ -33,6 +63,8 @@ export type ChatMessage = {
   timestamp: string
   toolCall?: ToolCallInfo
   txStatus?: TxStatusInfo
+  tokenResults?: TokenResultInfo[]
+  confirmationApproval?: ConfirmationApproval
 }
 
 export type Conversation = {
@@ -63,6 +95,7 @@ export type ResponseEvent = {
   message: string
   actions?: Action[]
   suggestions?: Suggestion[]
+  tokenResults?: TokenResultInfo[]
 }
 
 export type ActionResultEvent = {
@@ -139,4 +172,18 @@ export type TxStatusEvent = {
   chain: string
   status: 'pending' | 'confirmed' | 'failed'
   label: string
+}
+
+export type TxBundleApprovalEvent = {
+  conversationId: string
+  transactions: Array<{
+    sequence: number
+    chain: string
+    chain_id: string
+    action: string
+    signing_mode: 'ecdsa_secp256k1' | 'eddsa_ed25519'
+    unsigned_tx_hex: string
+    tx_details: Record<string, string>
+  }>
+  requestId: string
 }
