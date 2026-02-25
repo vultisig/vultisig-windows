@@ -57,6 +57,8 @@ export const KeygenFlow = ({
     return 'reshare' in keygenOperation && keygenOperation.reshare === 'plugin'
   }, [keygenOperation])
 
+  const isCreateOperation = 'create' in keygenOperation
+
   return (
     <MatchQuery
       value={keygenMutationState}
@@ -119,26 +121,26 @@ export const KeygenFlow = ({
       }}
       error={error => (
         <>
-          <PageHeader
-            title={title}
-            hasBorder
-            primaryControls={<PageHeaderBackButton />}
-          />
+          {!isCreateOperation && (
+            <PageHeader
+              title={title}
+              hasBorder
+              primaryControls={<PageHeaderBackButton />}
+            />
+          )}
           <FlowErrorPageContent title={t('keygen_failed')} error={error} />
         </>
       )}
       pending={() => (
         <>
-          {!isPluginReshare ? (
-            <>
-              <PageHeader
-                title={title}
-                hasBorder
-                primaryControls={<PageHeaderBackButton />}
-              />
-              <KeygenPendingState value={step} />
-            </>
-          ) : null}
+          {!isPluginReshare && !isCreateOperation && (
+            <PageHeader
+              title={title}
+              hasBorder
+              primaryControls={<PageHeaderBackButton />}
+            />
+          )}
+          {!isPluginReshare && <KeygenPendingState value={step} />}
         </>
       )}
     />
