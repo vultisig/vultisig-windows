@@ -484,6 +484,7 @@ export const en = {
   ibc_transfer: 'IBC Transfer',
   id: 'ID',
   i_understand: 'I understand',
+  i_understand_save_backup: 'I understand how to save this backup',
   import: 'Import',
   import_key: 'Import Key',
   import_seedphrase: 'Import Seedphrase',
@@ -793,6 +794,12 @@ export const en = {
   save: 'Save',
   save_10_percent_on_swaps: 'Save <blue>10%</blue> on swaps now',
   save_changes: 'Save Changes',
+  save_backup: 'Save backup',
+  save_backup_description:
+    'Export this backup file, then save it to the cloud. It is <b>encrypted</b> with the password set earlier to unlock your Vault.',
+  save_backup_description_2:
+    "Use a different cloud service or account for each backup. When you're finished, delete the file from this device.",
+  save_backup_to_cloud: 'Save backup to the cloud',
   save_code: 'Save code',
   save_swap_fees_with_referral:
     'Save <blue>10%</blue> on swaps - Add a Referral',
