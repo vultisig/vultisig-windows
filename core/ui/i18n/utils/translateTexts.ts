@@ -30,7 +30,7 @@ export const translateTexts = async ({
     const request = {
       parent: `projects/${process.env.GOOGLE_TRANSLATE_PROJECT_ID}/locations/global`,
       contents,
-      mimeType: 'text/plain',
+      mimeType: 'text/html',
       sourceLanguageCode: from,
       targetLanguageCode: to,
     }
