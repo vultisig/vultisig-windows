@@ -66,7 +66,7 @@ export class UTXO extends EventEmitter {
     },
     broadcast: boolean = false
   ) {
-    console.log("signPSBT:", psbt, inputsToSign, broadcast);
+    console.log('signPSBT:', psbt, inputsToSign, broadcast)
 
     const [{ data }] = await callPopup({
       sendTx: {
@@ -93,7 +93,7 @@ export class UTXO extends EventEmitter {
     broadcast?: boolean
     signInputs?: Record<string, number[]>
   }) {
-    console.log("signPsbt input:", psbt, allowedSignHash, broadcast, signInputs);
+    console.log('signPsbt input:', psbt, allowedSignHash, broadcast, signInputs)
     let inputsToSign = undefined
     if (signInputs) {
       inputsToSign = Object.entries(signInputs).map(

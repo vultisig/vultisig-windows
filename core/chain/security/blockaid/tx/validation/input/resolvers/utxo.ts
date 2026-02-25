@@ -8,6 +8,7 @@ import { BlockaidTxValidationInputResolver } from '../resolver'
 export const getUtxoBlockaidTxValidationInput: BlockaidTxValidationInputResolver<
   UtxoChain.Bitcoin
 > = ({ payload, walletCore, chain }) => {
+  console.log('payload in getUtxoBlockaidTxValidationInput', payload)
   const { address } = getKeysignCoin(payload)
 
   const compiledTxs = getCompiledTxsForBlockaidInput({

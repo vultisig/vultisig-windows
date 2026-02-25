@@ -10,6 +10,19 @@ import { match } from '@lib/utils/match'
 import { WalletCore } from '@trustwallet/wallet-core'
 
 import { signatureFormats } from '../../../../signing/SignatureFormat'
+import { getCompiledTxFromPsbt } from './getCompiledTxFromPsbt'
+
+const getPsbtFallbackPubkey = (payload: KeysignPayload): Uint8Array => {
+  const hexFromCoin = payload.coin?.hexPublicKey?.trim()
+  const hexFromVault = payload.vaultPublicKeyEcdsa?.trim()
+  const hex = hexFromCoin || hexFromVault
+  if (!hex) {
+    throw new Error(
+      'PSBT requires coin.hexPublicKey or vaultPublicKeyEcdsa for Blockaid validation'
+    )
+  }
+  return new Uint8Array(Buffer.from(hex, 'hex'))
+}
 
 type Input = {
   payload: KeysignPayload
@@ -20,6 +33,15 @@ export const getCompiledTxsForBlockaidInput = ({
   payload,
   walletCore,
 }: Input) => {
+  if (payload.signData?.case === 'signPsbt') {
+    const fallbackPubkey = getPsbtFallbackPubkey(payload)
+    const compiledTx = getCompiledTxFromPsbt(
+      payload.signData.value.psbt,
+      fallbackPubkey
+    )
+    return [compiledTx]
+  }
+
   const chain = getKeysignChain(payload)
   const chainKind = getChainKind(chain)
 

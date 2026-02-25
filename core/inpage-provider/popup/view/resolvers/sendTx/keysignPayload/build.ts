@@ -28,6 +28,8 @@ import {
   SignAminoSchema,
   SignDirect,
   SignDirectSchema,
+  SignPsbt,
+  SignPsbtSchema,
   SignSolana,
   SignSolanaSchema,
   WasmExecuteContractPayloadSchema,
@@ -404,6 +406,18 @@ export const buildSendTxKeysignPayload = async ({
       psbt: () => undefined,
     }
   )
+  const psbtPayload = matchRecordUnion<CustomTxData, SignPsbt | undefined>(
+    customTxData,
+    {
+      regular: () => undefined,
+      solana: () => undefined,
+      psbt: psbt => {
+        return create(SignPsbtSchema, {
+          psbt: psbt.toBase64(),
+        })
+      },
+    }
+  )
 
   const signData: KeysignPayload['signData'] =
     aminoPayload !== undefined
@@ -412,7 +426,9 @@ export const buildSendTxKeysignPayload = async ({
         ? { case: 'signDirect', value: directPayload }
         : solanaPayload !== undefined
           ? { case: 'signSolana', value: solanaPayload }
-          : { case: undefined, value: undefined }
+          : psbtPayload !== undefined
+            ? { case: 'signPsbt', value: psbtPayload }
+            : { case: undefined, value: undefined }
 
   let keysignPayload = create(KeysignPayloadSchema, {
     toAddress: toAddress ?? '',
@@ -444,7 +460,6 @@ export const buildSendTxKeysignPayload = async ({
     transactionType: getTransactionType(),
     timeoutTimestamp: getTimeoutTimestamp(),
     ...getTronMeta(),
-    psbt: 'psbt' in customTxData ? customTxData.psbt : undefined,
   })
 
   if (isChainOfKind(chain, 'utxo')) {
@@ -455,5 +470,6 @@ export const buildSendTxKeysignPayload = async ({
     })
   }
 
+  console.log('keysignPayload', keysignPayload)
   return keysignPayload
 }
