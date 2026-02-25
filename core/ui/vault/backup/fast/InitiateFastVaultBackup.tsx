@@ -1,5 +1,5 @@
 import { getVaultId } from '@core/mpc/vault/Vault'
-import { BackupInCloudScreen } from '@core/ui/vault/backup/BackupInCloudScreen'
+import { SaveBackupToCloudScreen } from '@core/ui/vault/backup/fast/SaveBackupToCloudScreen'
 import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultMutation'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 
@@ -23,7 +23,7 @@ export const InitiateFastVaultBackup = ({
   })
 
   return (
-    <BackupInCloudScreen
+    <SaveBackupToCloudScreen
       onBack={onBack}
       ctaLoading={isPending}
       onContinue={() => backupVault({ password })}

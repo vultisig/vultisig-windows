@@ -2,7 +2,7 @@ import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useBackupDeviceAnimation } from '@core/ui/vault/backup/hooks/useBackupDeviceAnimation'
 import { Button } from '@lib/ui/buttons/Button'
 import { ArrowSplitIcon } from '@lib/ui/icons/ArrowSplitIcon'
-import { HomeFilledIcon } from '@lib/ui/icons/HomeFilledIcon'
+import { CloudUploadIcon } from '@lib/ui/icons/CloudUploadIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -55,9 +55,16 @@ export const BackupOverviewScreen = ({
         </VStack>
         <VStack gap={16}>
           <BackupOverviewInfoRow
-            icon={<HomeFilledIcon style={{ fontSize: 24 }} />}
+            icon={<CloudUploadIcon style={{ fontSize: 24 }} />}
             title={t('backupEachDevice')}
-            description={t('backupEachDeviceDescription')}
+            description={
+              <Trans
+                i18nKey="backupEachDeviceDescription"
+                components={{
+                  w: <Text as="span" color="contrast" />,
+                }}
+              />
+            }
           />
           <BackupOverviewInfoRow
             icon={<ArrowSplitIcon style={{ fontSize: 24 }} />}

@@ -69,10 +69,10 @@ export const en = {
   backupShare2: 'Backup Share 2',
   backupsTitle: '<highlight>Backups,</highlight> your new recovery method',
   backupsDescription:
-    "Instead of a single seed phrase, your vault is secured by multiple devices. Each device has its own backup. A backup on its own can't move funds. Backups are only for recovery.",
+    "Backups power your vault. Each device has its own backup. A backup alone can't move funds, it's only for recovery. Import and recover any lost device",
   backupEachDevice: 'Your Device is the driver',
   backupEachDeviceDescription:
-    'The Device backup and password are the key. The server only co-signs and backup can be requested.',
+    'The device backup <w>and</w> password are the keys. The server only co-signs, and a backup can be requested.',
   storeBackupsSeparately: 'Store backups separately',
   storeBackupsSeparatelyDescription:
     'Keep each backup in a different place. If one is compromised, your funds stay safe.',
@@ -149,6 +149,7 @@ export const en = {
     'If you want an extra layer of security, choose a password. <b>Password cannot be recovered.</b>',
   choose_backup_method: 'Choose Backup Method',
   choose_payout_asset: 'Choose payout asset',
+  choose_chains: 'Choose chains',
   choose_tokens: 'Choose Tokens',
   deposited: 'Deposited',
   circle: {
@@ -189,6 +190,7 @@ export const en = {
   collected_rewards: 'Collected rewards',
   coming_soon: 'Coming Soon',
   complete: 'Complete',
+  congrats: 'Congrats!',
   confirm: 'Confirm',
   confirm_automation_creation: 'Confirm automation creation',
   confirm_new_passcode: 'Confirm New Passcode',
@@ -464,6 +466,7 @@ export const en = {
   github: 'Github',
   go_back: 'Go Back',
   go_to_vault: 'Go to vault',
+  go_to_wallet: 'Go to wallet',
   gold: 'Gold',
   grant_camera_permission: 'Grant Camera Permission',
   gwei: 'GWEI',
@@ -481,6 +484,7 @@ export const en = {
   ibc_transfer: 'IBC Transfer',
   id: 'ID',
   i_understand: 'I understand',
+  i_understand_save_backup: 'I understand how to save this backup',
   import: 'Import',
   import_key: 'Import Key',
   import_seedphrase: 'Import Seedphrase',
@@ -790,6 +794,12 @@ export const en = {
   save: 'Save',
   save_10_percent_on_swaps: 'Save <blue>10%</blue> on swaps now',
   save_changes: 'Save Changes',
+  save_backup: 'Save backup',
+  save_backup_description:
+    'Export this backup file, then save it to the cloud. It is <b>encrypted</b> with the password set earlier to unlock your Vault.',
+  save_backup_description_2:
+    "Use a different cloud service or account for each backup. When you're finished, delete the file from this device.",
+  save_backup_to_cloud: 'Save backup to the cloud',
   save_code: 'Save code',
   save_swap_fees_with_referral:
     'Save <blue>10%</blue> on swaps - Add a Referral',
@@ -1043,6 +1053,9 @@ export const en = {
   vault_qr_share_not_supported: 'Sharing not supported on this browser.',
   vault_qr_share_text: 'Check out this vault QR code!',
   vault_qr_share_title: 'Vault QR Code',
+  vault_ready_description:
+    "You're all set! You stay in control of every transaction.",
+  vault_ready_to_use: 'Your vault is ready to use',
   vault_register_for_airdrop_list_item_1: 'Save your Vault QR',
   vault_register_for_airdrop_list_item_2_part_1: 'Go to',
   vault_register_for_airdrop_list_item_2_part_2: 'Vultisig Web',
