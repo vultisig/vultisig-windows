@@ -87,6 +87,16 @@ const formatters: Record<string, Formatter> = {
     return base
   },
   list_vaults: () => 'List Vaults',
+  mcp_status: tc => {
+    const original = getParam(tc.params, 'original_action')
+    const label = original
+      ? original
+          .split('_')
+          .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+          .join(' ')
+      : 'MCP'
+    return label
+  },
 }
 
 export const formatInlineToolCall = (toolCall: ToolCallInfo): string => {

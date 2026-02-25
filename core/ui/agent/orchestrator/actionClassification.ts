@@ -20,6 +20,7 @@ const alwaysAutoExecute: Record<string, boolean> = {
   build_swap_tx: true,
   build_send_tx: true,
   build_custom_tx: true,
+  mcp_status: true,
   sign_tx: true,
   read_evm_contract: true,
   scan_tx: true,
