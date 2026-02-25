@@ -19,7 +19,7 @@
     "knip": "knip",
     "check:all": "yarn lint && yarn typecheck && yarn test && yarn knip",
     "knip:fix": "knip --fix --allow-remove-files",
-    "check": "concurrently --kill-others-on-fail \"yarn typecheck\" \"yarn lint:fix\" && yarn knip",
+    "check": "concurrently --kill-others-on-fail \"yarn typecheck\" \"yarn lint:fix\" && yarn knip && (yarn translate || true)",
     "translate": "yarn workspace @core/ui translate",
     "update": "yarn set version latest && yarn dlx npm-check-updates@latest -u --workspaces --root && yarn install"
   },

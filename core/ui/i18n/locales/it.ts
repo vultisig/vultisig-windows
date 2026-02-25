@@ -23,7 +23,6 @@ export const it = {
     optional_validation: 'Opzionale',
   },
   circle: {
-    apy: 'APY',
     banner_text:
       'I fondi rimangono completamente sotto il controllo del tuo caveau. Il rendimento di Circle è generato tramite tesorerie off-chain sicure. Puoi prelevare in qualsiasi momento dopo il regolamento.',
     deposit: 'Depositare',
@@ -31,20 +30,16 @@ export const it = {
       'Deposita i tuoi $USDC su un conto Circle e guadagna. In tutta sicurezza, nel tuo caveau Vultisig.',
     open_account: 'Apri conto',
     withdraw: 'Ritirare',
-    current_rewards: 'Ricompense attuali',
     deposit_header: 'Deposito sul conto Circle',
     verify_deposit: 'Verifica deposito',
-    total_rewards: 'Ricompense totali',
     withdraw_header: 'Ritirarsi dal Cerchio',
     verify_withdraw: 'Verifica Prelievo',
-    yield_details: 'Dettagli sulla resa del cerchio',
+    apy_approx: 'APY (circa)',
+    apy_tooltip: 'I premi vengono accreditati automaticamente sul tuo saldo.',
   },
   fastVaultSetup: {
     backup: {
       backThemUpNow: 'sosteneteli ora',
-      backupConfirmationDescription:
-        'Esegui il backup della condivisione del vault online',
-      backupVault: 'Vault di backup',
       checkEmail: 'Controlla la tua e-mail per verificare',
       codeInfo:
         'Questo codice confermerà che hai ricevuto la tua quota Vault 1 via e-mail',
@@ -53,8 +48,6 @@ export const it = {
         'Inserisci il codice di 4 cifre che ti abbiamo inviato via email',
       heldByServer: 'tenuto dal server',
       online: 'in linea',
-      onlineStorageDescription:
-        "L'archiviazione online è consigliata e sicura: le condivisioni Vault sono progettate per questo scopo.",
       part1: 'La quota 1 delle quote del vault sarà',
       securely: 'in modo sicuro, preferibilmente',
       setNewStandard:
@@ -117,6 +110,14 @@ export const it = {
       'La password non può essere reimpostata o recuperata',
     preparingVault: 'Preparazione del caveau',
     takeMinute: 'Dovrebbe richiedere solo un secondo',
+    addAnOptionalHint: 'Aggiungi un suggerimento facoltativo',
+    passwordTooltip:
+      'Ciò si verifica perché la password viene utilizzata per crittografare localmente il file di backup, in modo simile a come viene crittografato un disco rigido. Nel passaggio successivo, è possibile aggiungere un suggerimento.',
+    referralModalTitle: 'Codice di riferimento',
+    referralModalSubtitle:
+      'Inserisci qui il tuo codice di riferimento. <b>Approfitta del 10% di sconto su ogni transazione.</b>',
+    applyReferral: 'Applica referral',
+    referralAdded: 'Riferimento aggiunto',
   },
   referrals_summary: {
     item_1: {
@@ -444,10 +445,6 @@ export const it = {
   fastVault: 'Deposito veloce',
   secureVault: 'Deposito sicuro',
   fast_sign: 'Segnale veloce',
-  fast_vault_backup_description:
-    "L'archiviazione online è consigliata e sicura: le condivisioni Vault sono progettate per questo scopo.",
-  fast_vault_backup_title:
-    'Esegui il backup della condivisione del vault online utilizzando la stessa password del vault creata in precedenza.',
   fill_the_form: 'Compila il modulo',
   find_custom_token: 'Trova token personalizzato',
   folder_name: 'Nome della cartella',
@@ -691,7 +688,6 @@ export const it = {
   referral_program: 'Programma di segnalazione',
   referral_reg_fee: 'Quota di iscrizione',
   referral_status: 'Stato',
-  referrals_create_page_title: 'Vultisig - Riferimenti',
   referrals_default_title: 'Riferimento',
   register_guide: 'Guida alla registrazione',
   register_your_vaults: 'Registra i tuoi Vault!',
@@ -1094,14 +1090,6 @@ export const it = {
   normal: 'Normale',
   off: 'Spento',
   on: 'SU',
-  onboarding_step_1:
-    'Dai il benvenuto alle <g>condivisioni vault</g>, il tuo nuovo <g>metodo di recupero</g>',
-  onboarding_step_2:
-    'Sono <g>divisi in parti</g> per aumentare la sicurezza, <g>eliminando il singolo punto di errore</g>',
-  onboarding_step_3:
-    '<g>Ogni dispositivo</g> nel tuo vault contiene <g>una condivisione vault</g>',
-  onboarding_step_4:
-    'Recupera il tuo vault anche <g>se un dispositivo è perso o danneggiato</g>',
   optional: 'opzionale',
   password_backup: 'Proteggi il tuo caveau e firma subito.',
   permissions: 'Permessi',
@@ -1126,4 +1114,169 @@ export const it = {
   vault_count_one: '{{count}} Caveau',
   vault_count_other: '{{count}} Vault',
   vult: '$VULT',
+  vaultSetupOverview: {
+    fast: {
+      badgeTitle: 'Deposito veloce',
+      badgeSubtitle: 'Configurazione a 2 dispositivi',
+      feature1Title: 'Firma su 1 dispositivo',
+      feature1Description:
+        'Firma comoda con un unico dispositivo, ovunque ti trovi. Ideale per le transazioni quotidiane o per piccoli importi.',
+      feature2Title: 'Installazione rapida e sicura',
+      feature2Description:
+        'Nessuna lunga configurazione. Solo la tua email e password, più due backup.',
+      feature3Title: 'Mantieni il controllo',
+      feature3Description:
+        'Un cofirmatario non può mai avviare transazioni, ma può solo assistere nella loro firma.',
+    },
+    secure2: {
+      badgeTitle: 'Cassaforte sicura',
+      badgeSubtitle: 'Vault a 2 dispositivi',
+      feature1Title: 'Firma a 2 dispositivi',
+      feature1Description:
+        'Ogni transazione necessita dell&#39;approvazione di entrambi i tuoi dispositivi.',
+      feature2Title: 'Nessun singolo punto di errore',
+      feature2Description:
+        'Un dispositivo da solo non può trasferire fondi. Se un dispositivo viene smarrito o esposto, non può approvare autonomamente.',
+      feature3Title: 'Ideale per una semplice conservazione a freddo',
+      feature3Description:
+        'Configurazione perfetta per gli utenti con solo 2 dispositivi.',
+    },
+    secure3: {
+      badgeTitle: 'Cassaforte sicura',
+      badgeSubtitle: 'Vault a 3 dispositivi',
+      feature1Title: 'Firma a 2 dispositivi',
+      feature1Description:
+        'Ogni transazione necessita dell&#39;approvazione di 2 dei tuoi 3 dispositivi.',
+      feature2Title: 'Nessun singolo punto di errore',
+      feature2Description:
+        'Un dispositivo da solo non può trasferire fondi. Se un dispositivo viene smarrito o esposto, non può approvare autonomamente.',
+      feature3Title: 'Ideale per la conservazione a freddo',
+      feature3Description:
+        'Equilibrio perfetto per la maggior parte degli utenti. 2 firmatari e 1 dispositivo di backup. Archivia le risorse senza stress.',
+    },
+    secure4: {
+      badgeTitle: 'Cassaforte sicura',
+      badgeSubtitle: 'Vault per 4+ dispositivi',
+      feature1Title: 'Firma su 3 o più dispositivi',
+      feature1Description:
+        'I Vault necessitano del 67% di dispositivi per firmare una transazione. Puoi avere tutti i firmatari che vuoi.',
+      feature2Title: 'Gestione dinamica dei dispositivi',
+      feature2Description:
+        'Aggiungi tutti i dispositivi che desideri e ottieni la sicurezza di livello istituzionale.',
+      feature3Title: 'Progettato per team e tesorerie',
+      feature3Description:
+        'Ideale per i team che gestiscono fondi condivisi e caveau di valore più elevato, che richiedono più firmatari.',
+    },
+    title: 'La configurazione del tuo caveau',
+  },
+  add_referral: 'Aggiungi referral',
+  backupVault: 'Vault di backup',
+  backupInCloudTitle: 'Crittografato con la tua password Vault',
+  backupInCloudDescription:
+    'Esegui il backup della condivisione del vault online utilizzando la stessa password del vault creata in precedenza. Si consiglia l&#39;archiviazione online e le condivisioni del vault sicure sono progettate per questo scopo.',
+  backupsTitle:
+    '<highlight>Backup,</highlight> il tuo nuovo metodo di recupero',
+  backupsDescription:
+    'Invece di una singola seed phrase, il tuo vault è protetto da più dispositivi. Ogni dispositivo ha il proprio backup. Un backup da solo non può trasferire fondi. I backup servono solo per il ripristino.',
+  backupEachDevice: 'Eseguire il backup di ogni dispositivo',
+  backupEachDeviceDescription:
+    'Questo è solo un backup del tuo vault, ripeti questo processo per gli altri dispositivi.',
+  storeBackupsSeparately: 'Conservare i backup separatamente',
+  storeBackupsSeparatelyDescription:
+    'Conserva ogni backup in un posto diverso. Se uno viene compromesso, i tuoi fondi rimarranno al sicuro.',
+  backupShareWarning: 'Questa è solo una quota del tuo caveau',
+  backupShareWarningRest:
+    ', ripetere questo procedimento per gli altri dispositivi.',
+  backup_email_description:
+    'Inserisci l&#39;email per ricevere la condivisione del vault.',
+  backup_password_description:
+    'Inserisci la password che hai impostato durante la creazione di questo Vault.',
+  choose_a_password: 'Scegli una password',
+  choose_a_password_description:
+    'Se desideri un ulteriore livello di sicurezza, scegli una password. <b>La password non può essere recuperata.</b>',
+  create_vault: 'Crea un caveau',
+  create_referral_desc:
+    'Crea il tuo codice e guadagna<c> 20%</c> sugli swap segnalati',
+  save_referral: 'Salva il referral',
+  save_referral_desc:
+    'Salva il codice di riferimento di un amico e risparmia<c> 10%</c> sugli swap.',
+  email_placeholder: 'Inserisci il tuo indirizzo email',
+  enter: 'Entra',
+  enter_your_email: 'Inserisci la tua email',
+  enter_your_email_description:
+    'Verrà utilizzato una sola volta per inviare il file di backup, Vultisig non memorizza alcun dato.',
+  seedphrase_duplicate_vault_error:
+    'Questa frase seed è già stata importata come vault &quot;{{vaultName}}&quot;. Importandola nuovamente, il vault esistente verrebbe sostituito.',
+  incorrect_email: 'E-mail errata, controlla',
+  insufficient_native_balance_for_fee:
+    'Saldo token nativo insufficiente per pagare la commissione di transazione',
+  incorrect_passcode: 'Codice di accesso errato.',
+  new_vault_setup: 'Nuova configurazione del Vault',
+  new_vault_setup_disclaimer:
+    'La configurazione è cambiata, esegui un nuovo backup.',
+  manage_referral_title: 'Riferimenti Vultisig',
+  select_pool: 'Seleziona pool',
+  token_not_found_invalid: 'Indirizzo contrattuale non valido',
+  transaction_failed: 'Transazione<error> fallito</error>',
+  transaction_pending: 'Transazione in sospeso...',
+  transaction_could_not_be_parsed:
+    'Impossibile analizzare questa transazione. I dati grezzi della transazione sono riportati di seguito.',
+  raw_transaction_data: 'Dati di transazione grezzi',
+  transaction_instructions_summary:
+    'Riepilogo delle istruzioni per la transazione',
+  instruction: 'Istruzioni',
+  program_id: 'ID programma',
+  accounts: 'Conti',
+  data_length: 'Lunghezza dei dati',
+  bytes: 'byte',
+  add_thor_lp: 'Aggiungi THORChain LP',
+  remove_thor_lp: 'Rimuovi THORChain LP',
+  lp_dust_amount_error:
+    'Saldo RUNE insufficiente. Sono necessarie almeno {{amount}} RUNE come polvere per il prelievo di LP.',
+  lp_withdraw_percentage: 'Percentuale di prelievo',
+  vultibot: 'VultiBot',
+  vultibot_welcome: 'Ciao, sono VultiBot',
+  start_new_chat: 'Avvia una nuova chat',
+  new_chat: 'Nuova chat',
+  messages: 'messaggi',
+  vultibot_description:
+    'Il tuo assistente virtuale basato sull&#39;intelligenza artificiale. Posso scambiare, inviare, automatizzare le polizze, controllare i saldi e gestire il tuo caveau.',
+  api_key_required: 'Chiave API richiesta',
+  api_key_required_description:
+    'Per utilizzare VultiBot, imposta la tua chiave API Anthropic come variabile di ambiente prima di avviare l&#39;app.',
+  type_a_message: 'Scrivi un messaggio...',
+  thinking: 'Pensiero',
+  try_saying: 'Prova a dire',
+  ask_about_plugins_policies: 'Chiedi informazioni su plugin e policy...',
+  signed_in: 'Registrato',
+  password_required_for_operation:
+    'Inserisci la tua password per {{operation}}.',
+  confirm_action: 'Conferma azione',
+  confirm_action_description:
+    'Si prega di confermare che si desidera {{action}}.',
+  agent_chat_render_error:
+    'Si è verificato un problema durante il rendering della chat.',
+  agent_connect_description:
+    'Inserisci la password del tuo vault per connetterti all&#39;agente. La tua password verrà utilizzata per firmare un messaggio di autenticazione.',
+  agent_connect_now: 'Connettiti ora',
+  agent_connected: 'Collegato',
+  agent_connecting: 'Connessione in corso...',
+  agent_operation_sign_in: 'registrazione',
+  agent_session_expired:
+    'La tua sessione è scaduta. Inserisci la password del tuo vault per riconnetterti.',
+  agent_sign_in_failed: 'Accesso non riuscito',
+  agent_signing_in: 'Accesso in corso...',
+  agent_thinking_of_ideas: 'Pensando alle idee...',
+  agent_tool_label: 'Strumento: {{tool}}',
+  agent_tx_confirmed: 'Confermato',
+  agent_tx_failed: 'Fallito',
+  agent_tx_pending: 'In attesa di',
+  agent_tx_type_approval: 'Approvazione',
+  agent_tx_type_contract_call: 'Chiamata contrattuale',
+  agent_tx_type_contract_execute: 'Contratto eseguito',
+  agent_tx_type_deposit: 'Depositare',
+  agent_tx_type_send: 'Inviare',
+  agent_tx_type_swap: 'Scambio',
+  agent_tx_type_transfer: 'Trasferire',
+  agent_tx_view: 'Visualizzazione',
 }
