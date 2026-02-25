@@ -79,15 +79,31 @@ export const useConnectionStatus = (
         const services = await orchestrator.checkServices(vaultId)
         if (cancelled) return
         if (!services.authenticated) {
-          orchestrator.invalidateToken(vaultId)
-          setState('disconnected')
+          const refreshed = await orchestrator.refreshToken(vaultId)
+          if (cancelled) return
+          if (!refreshed) {
+            orchestrator.invalidateToken(vaultId)
+            setState('disconnected')
+            return
+          }
+          const refreshedInfo = orchestrator.getTokenInfo(vaultId)
+          setState('connected')
+          if (refreshedInfo.connected) {
+            scheduleRefreshRef.current(refreshedInfo.expiresAt)
+          }
           return
         }
         setState('connected')
         scheduleRefreshRef.current(info.expiresAt)
       } catch {
         if (!cancelled) {
-          setState('disconnected')
+          const info = orchestrator.getTokenInfo(vaultId)
+          if (info.connected) {
+            setState('connected')
+            scheduleRefreshRef.current(info.expiresAt)
+          } else {
+            setState('disconnected')
+          }
         }
       } finally {
         if (!cancelled) {

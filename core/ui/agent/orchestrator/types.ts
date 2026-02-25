@@ -1,7 +1,13 @@
+export type AppToolDeclaration = {
+  name: string
+  params: string
+}
+
 export type SendMessageRequest = {
   public_key: string
   content?: string
   context?: MessageContext
+  tools?: AppToolDeclaration[]
   selected_suggestion_id?: string
   action_result?: ActionResult
 }
@@ -44,7 +50,6 @@ export type BackendAction = {
   title: string
   description?: string
   params?: Record<string, unknown>
-  auto_execute: boolean
 }
 
 export type ActionResult = {
