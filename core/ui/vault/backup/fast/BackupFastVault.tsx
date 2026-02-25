@@ -55,6 +55,7 @@ export const BackupFastVault = ({
         <BackupOverviewScreen
           userDeviceCount={vault.signers.filter(s => !isServer(s)).length}
           onFinish={toNextStep}
+          onBack={onBack}
         />
       )}
       saveVault={() => (

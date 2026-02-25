@@ -70,9 +70,9 @@ export const en = {
   backupsTitle: '<highlight>Backups,</highlight> your new recovery method',
   backupsDescription:
     "Instead of a single seed phrase, your vault is secured by multiple devices. Each device has its own backup. A backup on its own can't move funds. Backups are only for recovery.",
-  backupEachDevice: 'Back up each device',
+  backupEachDevice: 'Your Device is the driver',
   backupEachDeviceDescription:
-    'This is only 1 backup of your vault, repeat this process for the other devices.',
+    'The Device backup and password are the key. The server only co-signs and backup can be requested.',
   storeBackupsSeparately: 'Store backups separately',
   storeBackupsSeparatelyDescription:
     'Keep each backup in a different place. If one is compromised, your funds stay safe.',
@@ -249,7 +249,7 @@ export const en = {
   device_backup: 'Device Backup',
   device_backup_description: 'Store the vault share of this device.',
   devices: 'Devices',
-  digit_input_error_validation: 'Error verifying code, please re-try',
+  digit_input_error_validation: 'Incorrect code. Try again.',
   digit_input_loading_validation: 'Verifying code, please wait',
   digit_input_success_validation: 'Verification successful',
   disconnect_all: 'Disconnect All',
@@ -368,10 +368,9 @@ export const en = {
     backup: {
       backThemUpNow: 'back them up now',
       checkEmail: 'Check your e-mail to verify',
-      codeInfo:
-        "This code will confirm that you've received your vault share 1 via email",
+      codeInfo: 'This will activate the co-signer',
       completeCustody: 'It is sent to you for complete self-custody!',
-      enterCode: 'Enter the 4 digit code we emailed you',
+      enterCode: '4-digit code received via email',
       heldByServer: 'held by the server',
       online: 'online',
       part1: 'Share 1 of the vault shares will be',
@@ -380,8 +379,8 @@ export const en = {
       shareSecurely: 'to ensure access, preferably',
       vaultShares: 'Your vault holds 2 shares,',
       wellDone: 'Well done',
-      sentTo: 'Sent to {{email}}.',
-      changeEmailAndRestartKeygen: 'Change email and restart keygen',
+      sentTo: 'Send to ({{email}})',
+      changeEmailAndRestartKeygen: 'Use a different email',
     },
     connectingWithServer: 'Connecting with server...',
     createVault: {
@@ -481,6 +480,7 @@ export const en = {
     'IBC Transaction Memo Not Supported',
   ibc_transfer: 'IBC Transfer',
   id: 'ID',
+  i_understand: 'I understand',
   import: 'Import',
   import_key: 'Import Key',
   import_seedphrase: 'Import Seedphrase',
