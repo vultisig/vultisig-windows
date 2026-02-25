@@ -72,7 +72,7 @@ export const en = {
     "Backups power your vault. Each device has its own backup. A backup alone can't move funds, it's only for recovery. Import and recover any lost device",
   backupEachDevice: 'Your Device is the driver',
   backupEachDeviceDescription:
-    'The Device backup <w>and</w> password are the key. The server only co-signs and backup can be requested.',
+    'The device backup <w>and</w> password are the keys. The server only co-signs, and a backup can be requested.',
   storeBackupsSeparately: 'Store backups separately',
   storeBackupsSeparatelyDescription:
     'Keep each backup in a different place. If one is compromised, your funds stay safe.',
