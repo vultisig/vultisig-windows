@@ -17,7 +17,7 @@ const alwaysAutoExecute: Record<string, boolean> = {
   plugin_spec: true,
   plugin_installed: true,
   plugin_uninstall: true,
-  build_tx: true,
+  build_swap_tx: true,
   build_send_tx: true,
   build_custom_tx: true,
   sign_tx: true,
@@ -68,7 +68,7 @@ export function filterBuildTx(
   const remaining: BackendAction[] = []
   for (const a of actions) {
     if (
-      a.type === 'build_tx' ||
+      a.type === 'build_swap_tx' ||
       a.type === 'build_send_tx' ||
       a.type === 'build_custom_tx'
     ) {
@@ -100,7 +100,7 @@ const actionTypeToToolName: Record<string, string> = {
   address_book_remove: 'remove_address_book_entry',
   create_policy: 'policy_add',
   delete_policy: 'policy_delete',
-  build_tx: 'build_swap_tx',
+  build_swap_tx: 'build_swap_tx',
   build_send_tx: 'build_send_tx',
   build_custom_tx: 'build_custom_tx',
 }

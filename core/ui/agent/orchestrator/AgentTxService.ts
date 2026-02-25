@@ -130,7 +130,7 @@ export class AgentTxService {
         title: 'Build Custom Transaction',
       },
       swap: {
-        actionType: 'build_tx',
+        actionType: 'build_swap_tx',
         toolName: 'build_swap_tx',
         title: 'Build Swap Transaction',
       },
