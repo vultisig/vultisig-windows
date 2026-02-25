@@ -27,7 +27,6 @@ type BackupFastVaultProps = OnFinishProp &
   }
 
 export const BackupFastVault = ({
-  onFinish,
   onBack,
   password,
   onChangeEmailAndRestart,
