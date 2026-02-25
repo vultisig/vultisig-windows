@@ -132,21 +132,19 @@ export const nl = {
   choose_tokens: 'Tokens kiezen',
   deposited: 'Gestort',
   circle: {
-    apy: 'APY',
     banner_text:
       'Fondsen blijven volledig onder controle van je kluis. Circle-accounts zijn self-custodial en rendement wordt gegenereerd via veilige off-chain treasuries.',
-    current_rewards: 'Huidige rewards',
     deposit: 'Storten',
     deposit_header: 'Storten naar Circle-account',
     verify_deposit: 'Storting verifiëren',
     introduction:
       'Stort je $USDC in een Circle-account en verdien rendement. Veilig binnen je Vultisig-kluis.',
     open_account: 'Account openen',
-    total_rewards: 'Totale rewards',
     withdraw: 'Opnemen',
     withdraw_header: 'Opnemen van Circle',
     verify_withdraw: 'Opname verifiëren',
-    yield_details: 'Circle Yield-details',
+    apy_approx: 'APY (ongeveer)',
+    apy_tooltip: 'De beloningen worden automatisch aan uw saldo toegevoegd.',
   },
   clear: 'Wissen',
   close: 'Sluiten',
@@ -340,8 +338,6 @@ export const nl = {
     addOptionalHint: 'Een optionele hint toevoegen',
     backup: {
       backThemUpNow: 'nu back-uppen',
-      backupConfirmationDescription: 'Back-up je kluis-share online',
-      backupVault: 'Kluis back-uppen',
       checkEmail: 'Controleer je e-mail om te verifiëren',
       codeInfo:
         'Deze code bevestigt dat je kluis-share 1 via e-mail hebt ontvangen',
@@ -350,8 +346,6 @@ export const nl = {
       enterCode: 'Voer de 4-cijferige code in die we je mailden',
       heldByServer: 'beheerd door de server',
       online: 'online',
-      onlineStorageDescription:
-        'Online opslag wordt aanbevolen en is veilig - kluis-shares zijn hiervoor ontworpen.',
       part1: 'Share 1 van de kluis-shares zal worden',
       securely: 'veilig, bij voorkeur',
       setNewStandard:
@@ -408,12 +402,16 @@ export const nl = {
       title: 'Korte samenvatting',
     },
     takeMinute: 'Dit duurt maar een moment',
+    addAnOptionalHint: 'Voeg een optionele hint toe',
+    passwordTooltip:
+      'Dit gebeurt omdat het wachtwoord wordt gebruikt om het back-upbestand lokaal te versleutelen, net zoals een harde schijf wordt versleuteld. In de volgende stap kunt u een hint toevoegen.',
+    referralModalTitle: 'Verwijzingscode',
+    referralModalSubtitle:
+      'Voer hier uw verwijzingscode in. <b>Profiteer van 10% korting op elke transactie.</b>',
+    applyReferral: 'Verwijzing aanvragen',
+    referralAdded: 'Verwijzing toegevoegd',
   },
   fast_sign: 'Snel ondertekenen',
-  fast_vault_backup_description:
-    'Online opslag wordt aanbevolen en is veilig - kluis-shares zijn hiervoor ontworpen.',
-  fast_vault_backup_title:
-    'Back-up je kluis-share online met hetzelfde kluiswachtwoord dat je eerder hebt gemaakt.',
   fill_the_form: 'Vul het formulier in',
   find_custom_token: 'Aangepaste token zoeken',
   folder_name: 'Mapnaam',
@@ -650,14 +648,6 @@ export const nl = {
   onboarding_description_4:
     'Vultisig is een wallet zonder seed phrases. In plaats daarvan gebruikt het makkelijk te beheren kluis-shares. Elk apparaat heeft een unieke kluis-share die apart geback-upt moet worden.',
   onboarding_greeting: 'Zeg gedag tegen <g>seed phrases</g>',
-  onboarding_step_1:
-    'Zeg hallo tegen <g>kluis-shares,</g> je nieuwe <g>herstelmethode</g>',
-  onboarding_step_2:
-    'Ze worden <g>opgesplitst</g> om de beveiliging te verhogen, <g>waardoor het single point of failure verdwijnt</g>',
-  onboarding_step_3:
-    '<g>Elk apparaat</g> in je kluis houdt <g>één kluis-share</g>',
-  onboarding_step_4:
-    'Herstel je kluis zelfs <g>als een apparaat verloren gaat of beschadigd raakt</g>',
   operator_fee: 'Operatorfee',
   basis_points: 'Basispunten',
   optional: 'optioneel',
@@ -726,7 +716,6 @@ export const nl = {
   referral_program: 'Referralprogramma',
   referral_reg_fee: 'Registratiefee',
   referral_status: 'Status',
-  referrals_create_page_title: 'Vultisig - Referrals',
   referrals_default_title: 'Referral',
   referrals_summary: {
     item_1: {
@@ -1113,4 +1102,155 @@ export const nl = {
     'Voer het in, maak een kluis, kijk nooit meer terug',
   youre_swapping: 'Je bent aan het swappen',
   account: 'Account',
+  vaultSetupOverview: {
+    fast: {
+      badgeTitle: 'Snelle kluis',
+      badgeSubtitle: 'configuratie met 2 apparaten',
+      feature1Title: '1-Apparaatondertekening',
+      feature1Description:
+        'Gemakkelijk ondertekenen met één apparaat, waar je ook bent. Perfect voor dagelijkse transacties of het verhandelen van kleinere bedragen.',
+      feature2Title: 'Snelle en veilige installatie',
+      feature2Description:
+        'Geen ingewikkelde installatie. Alleen je e-mailadres en wachtwoord, plus twee back-ups.',
+      feature3Title: 'Je behoudt de controle.',
+      feature3Description:
+        'Een medeondertekenaar kan nooit transacties initiëren; hij of zij assisteert alleen bij het ondertekenen ervan.',
+    },
+    secure2: {
+      badgeTitle: 'Beveiligde kluis',
+      badgeSubtitle: 'kluis voor 2 apparaten',
+      feature1Title: '2-apparaatondertekening',
+      feature1Description:
+        'Elke transactie vereist goedkeuring van beide apparaten.',
+      feature2Title: 'Geen enkel zwak punt',
+      feature2Description:
+        'Eén apparaat alleen kan geen geld overmaken. Als een apparaat verloren raakt of in gevaar komt, kan het de transactie niet zelfstandig goedkeuren.',
+      feature3Title: 'Ideaal voor eenvoudige koelopslag.',
+      feature3Description:
+        'De ideale configuratie voor gebruikers met slechts twee apparaten.',
+    },
+    secure3: {
+      badgeTitle: 'Beveiligde kluis',
+      badgeSubtitle: 'kluis voor 3 apparaten',
+      feature1Title: '2-apparaatondertekening',
+      feature1Description:
+        'Elke transactie vereist goedkeuring van 2 van uw 3 apparaten.',
+      feature2Title: 'Geen enkel zwak punt',
+      feature2Description:
+        'Eén apparaat alleen kan geen geld overmaken. Als een apparaat verloren raakt of in gevaar komt, kan het de transactie niet zelfstandig goedkeuren.',
+      feature3Title: 'Ideaal voor koelopslag',
+      feature3Description:
+        'De perfecte balans voor de meeste gebruikers. 2 ondertekenaars en 1 back-upapparaat. Bewaar uw gegevens zonder stress.',
+    },
+    secure4: {
+      badgeTitle: 'Beveiligde kluis',
+      badgeSubtitle: 'Kluis voor 4 of meer apparaten',
+      feature1Title: 'Ondertekening door 3 of meer apparaten',
+      feature1Description:
+        'Voor kluizen is 67% van de apparaten nodig om een ​​transactie te ondertekenen. U kunt zoveel ondertekenaars instellen als u wilt.',
+      feature2Title: 'Dynamisch apparaatbeheer',
+      feature2Description:
+        'Voeg zoveel apparaten toe als u wilt en profiteer van beveiliging op institutioneel niveau.',
+      feature3Title: 'Ontworpen voor teams en budgetten.',
+      feature3Description:
+        'Ideaal voor teams die gezamenlijke fondsen en kluizen met een hogere waarde beheren, waarvoor meer tekenbevoegden nodig zijn.',
+    },
+    title: 'Uw kluisinstellingen',
+  },
+  add_referral: 'Voeg een verwijzing toe',
+  applied_discounts: 'Toegepaste kortingen:',
+  backupVault: 'Back-upkluis',
+  backupInCloudTitle: 'Versleuteld met uw kluiswachtwoord',
+  backupInCloudDescription:
+    'Maak online een back-up van uw kluis met hetzelfde kluiswachtwoord dat u eerder hebt aangemaakt. Online opslag wordt aanbevolen en veilige kluisshares zijn hiervoor ontworpen.',
+  backupsTitle: '<highlight>Back-ups,</highlight> jouw nieuwe herstelmethode',
+  backupsDescription:
+    'In plaats van één enkele herstelzin wordt uw kluis beveiligd door meerdere apparaten. Elk apparaat heeft zijn eigen back-up. Een back-up op zich kan geen geld overmaken. Back-ups zijn alleen bedoeld voor herstel.',
+  backupEachDevice: 'Maak een back-up van elk apparaat.',
+  backupEachDeviceDescription:
+    'Dit is slechts één back-up van uw kluis; herhaal dit proces voor de andere apparaten.',
+  storeBackupsSeparately: 'Bewaar back-ups apart.',
+  storeBackupsSeparatelyDescription:
+    'Bewaar elke back-up op een andere locatie. Mocht er één back-up verloren gaan, dan blijven uw gegevens veilig.',
+  backupShareWarning: 'Dit is slechts 1 aandeel in uw kluis.',
+  backupShareWarningRest: 'Herhaal dit proces voor de andere apparaten.',
+  backup_email_description:
+    'Voer het e-mailadres in om de link naar de kluis te ontvangen.',
+  backup_password_description:
+    'Voer het wachtwoord in dat u hebt ingesteld bij het aanmaken van deze kluis.',
+  choose_a_password: 'Kies een wachtwoord',
+  choose_a_password_description:
+    'Wilt u extra beveiliging? Kies dan een wachtwoord. <b>Een wachtwoord kan niet worden hersteld.</b>',
+  create_vault: 'Maak een kluis aan',
+  create_referral_desc:
+    'Maak je eigen code aan en verdien geld.<c> 20%</c> bij doorverwezen swaps',
+  save_referral: 'Verwijzing opslaan',
+  save_referral_desc:
+    'Bewaar de verwijzingscode van een vriend en bespaar geld.<c> 10%</c> bij ruiltransacties.',
+  email_placeholder: 'Voer uw e-mailadres in',
+  enter: 'Binnenkomen',
+  enter_your_email: 'Voer uw e-mailadres in',
+  enter_your_email_description:
+    'Dit wordt slechts eenmalig gebruikt om uw back-upbestand te verzenden; Vultisig slaat geen gegevens op.',
+  seedPhraseImportTip: 'Tip: Je kunt een browser als apparaat gebruiken.',
+  seedphrase_duplicate_vault_error:
+    'Deze seed phrase is al geïmporteerd als kluis &quot;{{vaultName}}&quot;. Als u deze opnieuw importeert, wordt de bestaande kluis vervangen.',
+  incorrect_email: 'Het e-mailadres is onjuist, controleer dit alstublieft.',
+  insufficient_native_balance_for_fee:
+    'Onvoldoende saldo aan native tokens om de transactiekosten te betalen.',
+  incorrect_passcode: 'Onjuiste toegangscode.',
+  manage_referral_title: 'Verwijzingen naar Vultisig',
+  select_pool: 'Selecteer zwembad',
+  token_not_found_invalid: 'Ongeldig contractadres',
+  transaction_failed: 'Transactie<error> mislukt</error>',
+  transaction_pending: 'Transactie in behandeling...',
+  add_thor_lp: 'Voeg THORChain LP toe',
+  remove_thor_lp: 'Verwijder THORChain LP',
+  lp_dust_amount_error:
+    'Onvoldoende RUNE-saldo. Er is minimaal {{amount}} RUNE nodig als stof voor LP-opname.',
+  lp_withdraw_percentage: 'Opnamepercentage',
+  vultibot: 'VultiBot',
+  vultibot_welcome: 'Hallo, ik ben VultiBot',
+  start_new_chat: 'Start een nieuwe chat',
+  new_chat: 'Nieuwe chat',
+  messages: 'berichten',
+  vultibot_description:
+    'Jouw AI-gestuurde kluisassistent. Ik kan geld wisselen, versturen, beleidsregels automatiseren, saldi controleren en je kluis beheren.',
+  api_key_required: 'API-sleutel vereist',
+  api_key_required_description:
+    'Om VultiBot te gebruiken, moet u uw Anthropic API-sleutel als omgevingsvariabele instellen voordat u de app start.',
+  type_a_message: 'Typ een bericht...',
+  thinking: 'Denken',
+  try_saying: 'Probeer eens te zeggen',
+  ask_about_plugins_policies: 'Vraag naar plugins en beleid...',
+  signed_in: 'Ingelogd',
+  password_required_for_operation: 'Voer uw wachtwoord in voor {{operation}}.',
+  confirm_action: 'Bevestig actie',
+  confirm_action_description:
+    'Bevestig alstublieft dat u {{action}} wilt uitvoeren.',
+  agent_chat_render_error:
+    'Er is iets misgegaan bij het weergeven van de chat.',
+  agent_connect_description:
+    'Voer uw kluiswachtwoord in om verbinding te maken met de agent. Uw wachtwoord wordt gebruikt om een ​​authenticatiebericht te ondertekenen.',
+  agent_connect_now: 'Maak nu verbinding',
+  agent_connected: 'Aangesloten',
+  agent_connecting: 'Verbinden...',
+  agent_operation_sign_in: 'inloggen',
+  agent_session_expired:
+    'Je sessie is verlopen. Voer je kluiswachtwoord in om opnieuw verbinding te maken.',
+  agent_sign_in_failed: 'Aanmelden mislukt',
+  agent_signing_in: 'Aanmelden...',
+  agent_thinking_of_ideas: 'Ideeën bedenken...',
+  agent_tool_label: 'Gereedschap: {{tool}}',
+  agent_tx_confirmed: 'Bevestigd',
+  agent_tx_failed: 'Mislukt',
+  agent_tx_pending: 'In behandeling',
+  agent_tx_type_approval: 'Goedkeuring',
+  agent_tx_type_contract_call: 'Contractgesprek',
+  agent_tx_type_contract_execute: 'Contract uitvoeren',
+  agent_tx_type_deposit: 'Borg',
+  agent_tx_type_send: 'Versturen',
+  agent_tx_type_swap: 'Ruil',
+  agent_tx_type_transfer: 'Overdracht',
+  agent_tx_view: 'Weergave',
 }

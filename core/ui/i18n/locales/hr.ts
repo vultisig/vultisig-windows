@@ -23,7 +23,6 @@ export const hr = {
     optional_validation: 'Izborno',
   },
   circle: {
-    apy: 'APY',
     banner_text:
       'Sredstva ostaju u potpunosti pod kontrolom vašeg trezora. Prinos Circlea generira se putem sigurnih izvanmrežnih blagajni. Povucite novac bilo kada nakon namire.',
     deposit: 'Polog',
@@ -31,20 +30,16 @@ export const hr = {
       'Uplatite svoj $USDC na Circle račun i ostvarite prinos. Sigurno unutar vašeg Vultisig trezora.',
     open_account: 'Otvori račun',
     withdraw: 'Povući',
-    current_rewards: 'Trenutne nagrade',
     deposit_header: 'Uplata na Circle račun',
     verify_deposit: 'Potvrdi uplatu',
-    total_rewards: 'Ukupne nagrade',
     withdraw_header: 'Povuci se iz kruga',
     verify_withdraw: 'Potvrdi isplatu',
-    yield_details: 'Detalji prinosa kruga',
+    apy_approx: 'APY (otprilike)',
+    apy_tooltip: 'Nagrade se automatski dodaju na vaš saldo.',
   },
   fastVaultSetup: {
     backup: {
       backThemUpNow: 'napravite im sigurnosnu kopiju sada',
-      backupConfirmationDescription:
-        'Sigurnosno kopirajte svoj trezor putem interneta',
-      backupVault: 'Sigurnosni trezor',
       checkEmail: 'Provjerite svoju e-poštu za potvrdu',
       codeInfo:
         'Ovaj kod će potvrditi da ste primili svoj trezor dijeljenja 1 putem e-pošte',
@@ -52,8 +47,6 @@ export const hr = {
       enterCode: 'Unesite 4-znamenkasti kod koji smo vam poslali e-poštom',
       heldByServer: 'drži poslužitelj',
       online: 'online',
-      onlineStorageDescription:
-        'Preporučuje se i sigurna je online pohrana - dijeljeni trezori su namijenjeni za to.',
       part1: 'Dionica 1 od dionica trezora bit će',
       securely: 'sigurno, po mogućnosti',
       setNewStandard: 'Spremni ste za korištenje novog standarda novčanika.',
@@ -112,6 +105,14 @@ export const hr = {
     passwordCannotBeRecovered: 'Lozinku nije moguće resetirati ili oporaviti',
     preparingVault: 'Priprema trezora',
     takeMinute: 'Ovo bi trebalo trajati samo sekundu',
+    addAnOptionalHint: 'Dodajte neobavezni savjet',
+    passwordTooltip:
+      'To se događa jer se lozinka koristi za lokalno šifriranje datoteke sigurnosne kopije, slično kao što se šifrira tvrdi disk. U sljedećem koraku imate mogućnost dodati podsjetnik.',
+    referralModalTitle: 'Referral kod',
+    referralModalSubtitle:
+      'Unesite svoj referalni kod ovdje. <b>Iskoristite 10% popusta na svaku transakciju.</b>',
+    applyReferral: 'Primijeni preporuku',
+    referralAdded: 'Preporuka dodana',
   },
   referrals_summary: {
     item_1: {
@@ -435,10 +436,6 @@ export const hr = {
   fastVault: 'Brzi trezor',
   secureVault: 'Siguran trezor',
   fast_sign: 'Brzi znak',
-  fast_vault_backup_description:
-    'Preporučuje se i sigurna je online pohrana - dijeljeni trezori su namijenjeni za to.',
-  fast_vault_backup_title:
-    'Napravite sigurnosnu kopiju svog trezora na mreži koristeći istu lozinku za trezor koju ste ranije kreirali.',
   fill_the_form: 'Ispunite obrazac',
   find_custom_token: 'Pronađite prilagođeni token',
   folder_name: 'Naziv mape',
@@ -681,7 +678,6 @@ export const hr = {
   referral_program: 'Program preporuka',
   referral_reg_fee: 'Kotizacija za registraciju',
   referral_status: 'Status',
-  referrals_create_page_title: 'Vultisig - Preporuke',
   referrals_default_title: 'Preporuka',
   register_guide: 'Vodič za registraciju',
   register_your_vaults: 'Registrirajte svoje trezore!',
@@ -1075,14 +1071,6 @@ export const hr = {
   normal: 'Normalan',
   off: 'Isključeno',
   on: 'Na',
-  onboarding_step_1:
-    'Pozdravite <g>dijeljene trezore</g>, vašu novu <g>metodu oporavka</g>',
-  onboarding_step_2:
-    'Podijeljeni su na dijelove kako bi se povećala sigurnost, <g>uklanjajući jedinstvenu točku kvara</g>',
-  onboarding_step_3:
-    '<g>Svaki uređaj</g> u vašem trezoru sadrži <g>jedan udio trezora</g>',
-  onboarding_step_4:
-    'Oporavite svoj trezor čak i <g>ako je uređaj izgubljen ili oštećen</g>',
   optional: 'opcionalno',
   password_backup: 'Zaštitite svoj trezor i brzo se prijavite.',
   permissions: 'Dozvole',
@@ -1107,4 +1095,164 @@ export const hr = {
   vault_count_one: '{{count}} Trezor',
   vault_count_other: '{{count}} Trezora',
   vult: '$VULT',
+  vaultSetupOverview: {
+    fast: {
+      badgeTitle: 'Brzi trezor',
+      badgeSubtitle: 'Postavljanje za 2 uređaja',
+      feature1Title: 'Potpisivanje na 1 uređaju',
+      feature1Description:
+        'Praktično potpisivanje na jednom uređaju u pokretu. Savršeno za dnevne transakcije ili trgovanje manjim iznosima.',
+      feature2Title: 'Brzo i sigurno postavljanje',
+      feature2Description:
+        'Nema dugog postavljanja. Samo vaša e-pošta i lozinka, plus dvije sigurnosne kopije.',
+      feature3Title: 'Vi imate kontrolu',
+      feature3Description:
+        'Supotpisnik nikada ne može inicirati transakcije; samo pomaže u njihovom potpisivanju.',
+    },
+    secure2: {
+      badgeTitle: 'Sigurni trezor',
+      badgeSubtitle: 'Trezor za 2 uređaja',
+      feature1Title: 'Potpisivanje na 2 uređaja',
+      feature1Description:
+        'Svaka transakcija zahtijeva odobrenja s oba vaša uređaja.',
+      feature2Title: 'Nema jedinstvene točke kvara',
+      feature2Description:
+        'Samo jedan uređaj ne može premjestiti sredstva. Ako je jedan uređaj izgubljen ili otkriven, ne može se samostalno odobriti.',
+      feature3Title: 'Idealno za jednostavno skladištenje u hladnoj vodi',
+      feature3Description:
+        'Savršeno podešavanje za korisnike sa samo 2 uređaja.',
+    },
+    secure3: {
+      badgeTitle: 'Sigurni trezor',
+      badgeSubtitle: 'Trezor za 3 uređaja',
+      feature1Title: 'Potpisivanje na 2 uređaja',
+      feature1Description:
+        'Svaka transakcija zahtijeva odobrenja s 2 od vaša 3 uređaja.',
+      feature2Title: 'Nema jedinstvene točke kvara',
+      feature2Description:
+        'Samo jedan uređaj ne može premjestiti sredstva. Ako je jedan uređaj izgubljen ili otkriven, ne može se samostalno odobriti.',
+      feature3Title: 'Idealno za hladno skladištenje',
+      feature3Description:
+        'Savršena ravnoteža za većinu korisnika. 2 potpisnika i 1 uređaj za sigurnosnu kopiju. Pohranite imovinu bez stresa.',
+    },
+    secure4: {
+      badgeTitle: 'Sigurni trezor',
+      badgeSubtitle: 'Trezor za 4+ uređaja',
+      feature1Title: 'Potpisivanje s 3 ili više uređaja',
+      feature1Description:
+        'Trezorima je potrebno 67% uređaja za potpisivanje transakcije. Imate onoliko potpisnika koliko želite.',
+      feature2Title: 'Dinamičko upravljanje uređajima',
+      feature2Description:
+        'Dodajte onoliko uređaja koliko želite i ostvarite sigurnost institucionalne razine.',
+      feature3Title: 'Izgrađeno za timove i blagajne',
+      feature3Description:
+        'Idealno za timove koji upravljaju zajedničkim fondovima i trezorima veće vrijednosti, što zahtijeva više potpisnika.',
+    },
+    title: 'Postavke vašeg trezora',
+  },
+  add_referral: 'Dodaj preporuku',
+  backupVault: 'Sigurnosni trezor',
+  backupInCloudTitle: 'Šifrirano vašom lozinkom za trezor',
+  backupInCloudDescription:
+    'Napravite sigurnosnu kopiju svog trezora na mreži koristeći istu lozinku koju ste ranije kreirali. Preporučuje se online pohrana, a sigurna dijeljenja trezora su namijenjena upravo za to.',
+  backupsTitle:
+    '<highlight>Sigurnosne kopije,</highlight> vaša nova metoda oporavka',
+  backupsDescription:
+    'Umjesto jedne početne fraze, vaš trezor je osiguran s više uređaja. Svaki uređaj ima svoju sigurnosnu kopiju. Sigurnosna kopija sama po sebi ne može premještati sredstva. Sigurnosne kopije služe samo za oporavak.',
+  backupEachDevice: 'Napravite sigurnosnu kopiju svakog uređaja',
+  backupEachDeviceDescription:
+    'Ovo je samo jedna sigurnosna kopija vašeg trezora, ponovite ovaj postupak za ostale uređaje.',
+  storeBackupsSeparately: 'Pohranite sigurnosne kopije odvojeno',
+  storeBackupsSeparatelyDescription:
+    'Svaku sigurnosnu kopiju čuvajte na drugom mjestu. Ako je jedna kompromitirana, vaša sredstva ostaju sigurna.',
+  backupShareWarning: 'Ovo je samo 1 dio tvog trezora',
+  backupShareWarningRest: ', ponovite ovaj postupak za ostale uređaje.',
+  backup_email_description: 'Unesite e-poštu za primanje dijeljenja trezora.',
+  backup_password_description:
+    'Unesite lozinku koju ste postavili prilikom izrade ovog trezora.',
+  choose_a_password: 'Odaberite lozinku',
+  choose_a_password_description:
+    'Ako želite dodatni sloj sigurnosti, odaberite lozinku. <b>Lozinka se ne može oporaviti.</b>',
+  create_vault: 'Izradi trezor',
+  create_referral_desc:
+    'Napravite vlastiti kod i zaradite<c> 20%</c> na preporučenim swapovima',
+  save_referral: 'Spremi preporuku',
+  save_referral_desc:
+    'Spremite referalni kod prijatelja i uštedite<c> 10%</c> na zamjenama.',
+  email_placeholder: 'Unesite svoju adresu e-pošte',
+  enter: 'Unesi',
+  enter_your_email: 'Unesite svoju e-poštu',
+  enter_your_email_description:
+    'Ovo će se koristiti samo jednom za slanje vaše sigurnosne kopije, Vultisig ne pohranjuje nikakve podatke.',
+  seedphrase_duplicate_vault_error:
+    'Ova početna fraza je već uvezena kao trezor &quot;{{vaultName}}&quot;. Ponovnim uvozom zamijenio bi se postojeći trezor.',
+  incorrect_email: 'Netočna e-pošta, molimo provjerite',
+  insufficient_native_balance_for_fee:
+    'Nedovoljan saldo izvornog tokena za plaćanje naknade za transakciju',
+  incorrect_passcode: 'Netočna lozinka.',
+  new_vault_setup: 'Postavljanje novog trezora',
+  new_vault_setup_disclaimer:
+    'Vaša konfiguracija se promijenila, napravite novu sigurnosnu kopiju.',
+  manage_referral_title: 'Vultisig preporuke',
+  select_pool: 'Odaberite bazen',
+  token_not_found_invalid: 'Nevažeća adresa ugovora',
+  transaction_failed: 'Transakcija<error> neuspješno</error>',
+  transaction_pending: 'Transakcija na čekanju...',
+  transaction_could_not_be_parsed:
+    'Ova transakcija nije mogla biti analizirana. Neobrađeni podaci o transakciji prikazani su u nastavku.',
+  raw_transaction_data: 'Sirovi podaci o transakcijama',
+  transaction_instructions_summary: 'Sažetak uputa za transakciju',
+  instruction: 'Upute',
+  program_id: 'ID programa',
+  accounts: 'Računi',
+  data_length: 'Duljina podataka',
+  bytes: 'bajtovi',
+  add_thor_lp: 'Dodaj THORChain LP',
+  remove_thor_lp: 'Uklonite THORChain LP',
+  lp_dust_amount_error:
+    'Nedovoljan saldo RUNE. Za isplatu LP-a potrebno je najmanje {{amount}} RUNE kao prašina.',
+  lp_withdraw_percentage: 'Postotak isplate',
+  vultibot: 'VultiBot',
+  vultibot_welcome: 'Bok, ja sam VultiBot',
+  start_new_chat: 'Započni novi razgovor',
+  new_chat: 'Novi razgovor',
+  messages: 'poruke',
+  vultibot_description:
+    'Vaš asistent za trezor s umjetnom inteligencijom. Mogu mijenjati, slati, automatizirati police, provjeravati stanja i upravljati vašim trezorom.',
+  api_key_required: 'Potreban API ključ',
+  api_key_required_description:
+    'Za korištenje VultiBota, prije pokretanja aplikacije postavite svoj Anthropic API ključ kao varijablu okruženja.',
+  type_a_message: 'Upišite poruku...',
+  thinking: 'Razmišljanje',
+  try_saying: 'Pokušajte reći',
+  ask_about_plugins_policies: 'Pitajte o dodacima i pravilima...',
+  signed_in: 'Prijavljen',
+  password_required_for_operation:
+    'Molimo unesite svoju lozinku za {{operation}}.',
+  confirm_action: 'Potvrdi radnju',
+  confirm_action_description: 'Molimo potvrdite da želite {{action}}.',
+  agent_chat_render_error: 'Došlo je do pogreške prilikom prikazivanja chata.',
+  agent_connect_description:
+    'Unesite lozinku za trezor da biste se povezali s agentom. Vaša se lozinka koristi za potpisivanje poruke za autentifikaciju.',
+  agent_connect_now: 'Poveži se sada',
+  agent_connected: 'Povezano',
+  agent_connecting: 'Povezivanje...',
+  agent_operation_sign_in: 'prijava',
+  agent_session_expired:
+    'Vaša je sesija istekla. Unesite lozinku trezora za ponovno povezivanje.',
+  agent_sign_in_failed: 'Prijava nije uspjela',
+  agent_signing_in: 'Prijava...',
+  agent_thinking_of_ideas: 'Razmišljanje o idejama...',
+  agent_tool_label: 'Alat: {{alat}}',
+  agent_tx_confirmed: 'Potvrđeno',
+  agent_tx_failed: 'Neuspješno',
+  agent_tx_pending: 'Na čekanju',
+  agent_tx_type_approval: 'Odobrenje',
+  agent_tx_type_contract_call: 'Poziv na ugovor',
+  agent_tx_type_contract_execute: 'Izvršenje ugovora',
+  agent_tx_type_deposit: 'Polog',
+  agent_tx_type_send: 'Poslati',
+  agent_tx_type_swap: 'Zamjena',
+  agent_tx_type_transfer: 'Prijenos',
+  agent_tx_view: 'Pogled',
 }

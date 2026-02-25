@@ -23,7 +23,6 @@ export const pt = {
     optional_validation: 'Opcional',
   },
   circle: {
-    apy: 'APY',
     banner_text:
       'Os fundos permanecem totalmente sob o controle do seu cofre. O rendimento do Circle é gerado por meio de tesourarias seguras fora da blockchain. Saque a qualquer momento após a liquidação.',
     deposit: 'Depósito',
@@ -31,20 +30,16 @@ export const pt = {
       'Deposite seus USDC em uma conta Circle e ganhe rendimentos. Tudo em segurança dentro do seu cofre Vultisig.',
     open_account: 'Abrir conta',
     withdraw: 'Retirar',
-    current_rewards: 'Recompensas atuais',
     deposit_header: 'Depósito na conta Circle',
     verify_deposit: 'Verificar depósito',
-    total_rewards: 'Recompensas Totais',
     withdraw_header: 'Retirar-se do Círculo',
     verify_withdraw: 'Verificar Saque',
-    yield_details: 'Detalhes do rendimento circular',
+    apy_approx: 'APY (aprox.)',
+    apy_tooltip: 'As recompensas são creditadas automaticamente em seu saldo.',
   },
   fastVaultSetup: {
     backup: {
       backThemUpNow: 'apoiem-nos agora',
-      backupConfirmationDescription:
-        'Faça backup do seu compartilhamento do cofre online.',
-      backupVault: 'Cofre de backup',
       checkEmail: 'Verifique seu e-mail para confirmar.',
       codeInfo:
         'Este código confirmará que você recebeu sua primeira parcela do cofre por e-mail.',
@@ -52,8 +47,6 @@ export const pt = {
       enterCode: 'Digite o código de 4 dígitos que enviamos por e-mail.',
       heldByServer: 'mantido pelo servidor',
       online: 'on-line',
-      onlineStorageDescription:
-        'O armazenamento online é recomendado e seguro - os cofres compartilhados são projetados para isso.',
       part1: 'A primeira parte das ações do cofre será',
       securely: 'com segurança, de preferência',
       setNewStandard: 'Você está pronto para usar um novo padrão de carteira.',
@@ -112,6 +105,14 @@ export const pt = {
     passwordCannotBeRecovered: 'A senha não pode ser redefinida ou recuperada.',
     preparingVault: 'Preparando o cofre',
     takeMinute: 'Isso deve levar apenas um segundo.',
+    addAnOptionalHint: 'Adicione uma dica opcional',
+    passwordTooltip:
+      'Isso ocorre porque a senha é usada para criptografar localmente o arquivo de backup, de forma semelhante à criptografia de um disco rígido. Na próxima etapa, você terá a opção de adicionar uma dica.',
+    referralModalTitle: 'Código de indicação',
+    referralModalSubtitle:
+      'Insira seu código de indicação aqui. <b>Aproveite 10% de desconto em todas as compras.</b>',
+    applyReferral: 'Aplicar indicação',
+    referralAdded: 'Indicação adicionada',
   },
   referrals_summary: {
     item_1: {
@@ -440,10 +441,6 @@ export const pt = {
   fastVault: 'Cofre Rápido',
   secureVault: 'Cofre Seguro',
   fast_sign: 'Assinatura rápida',
-  fast_vault_backup_description:
-    'O armazenamento online é recomendado e seguro - os cofres compartilhados são projetados para isso.',
-  fast_vault_backup_title:
-    'Faça backup do seu compartilhamento do cofre online usando a mesma senha que você criou anteriormente.',
   fill_the_form: 'Preencha o formulário',
   find_custom_token: 'Encontrar token personalizado',
   folder_name: 'Nome da pasta',
@@ -689,7 +686,6 @@ export const pt = {
   referral_program: 'Programa de Encaminhamento',
   referral_reg_fee: 'Taxa de inscrição',
   referral_status: 'Status',
-  referrals_create_page_title: 'Vultisig - Indicações',
   referrals_default_title: 'Encaminhamento',
   register_guide: 'Guia de Registro',
   register_your_vaults: 'Registre seus cofres!',
@@ -1094,14 +1090,6 @@ export const pt = {
   normal: 'Normal',
   off: 'Desligado',
   on: 'Sobre',
-  onboarding_step_1:
-    'Dê as boas-vindas aos <g>compartilhamentos de cofre</g>, seu novo <g>método de recuperação</g>',
-  onboarding_step_2:
-    'Eles são divididos em partes para aumentar a segurança, eliminando o ponto único de falha.',
-  onboarding_step_3:
-    '<g>Cada dispositivo</g> em seu cofre contém <g>uma participação no cofre</g>',
-  onboarding_step_4:
-    'Recupere seu cofre mesmo se um dispositivo for perdido ou danificado.',
   optional: 'opcional',
   password_backup: 'Proteja seu cofre e assine rapidamente.',
   permissions: 'Permissões',
@@ -1126,4 +1114,167 @@ export const pt = {
   vault_count_one: '{{count}} Cofre',
   vault_count_other: '{{count}} Cofres',
   vult: '$VULT',
+  vaultSetupOverview: {
+    fast: {
+      badgeTitle: 'Cofre Rápido',
+      badgeSubtitle: 'Configuração de 2 dispositivos',
+      feature1Title: 'Assinatura de 1 dispositivo',
+      feature1Description:
+        'Assinatura prática em um único dispositivo, ideal para transações diárias ou negociações de valores menores.',
+      feature2Title: 'Configuração rápida e segura',
+      feature2Description:
+        'Sem configurações demoradas. Basta seu e-mail e senha, além de dois backups.',
+      feature3Title: 'Você mantém o controle',
+      feature3Description:
+        'Um co-signatário nunca pode iniciar transações; apenas auxilia na assinatura delas.',
+    },
+    secure2: {
+      badgeTitle: 'Cofre seguro',
+      badgeSubtitle: 'cofre para 2 dispositivos',
+      feature1Title: 'Assinatura em 2 dispositivos',
+      feature1Description:
+        'Toda transação precisa da aprovação de ambos os dispositivos.',
+      feature2Title: 'Nenhum ponto único de falha',
+      feature2Description:
+        'Um único dispositivo não consegue movimentar fundos. Se um dispositivo for perdido ou exposto, ele não poderá aprovar transações sozinho.',
+      feature3Title:
+        'Ideal para armazenamento simples em câmaras frigoríficas.',
+      feature3Description:
+        'Configuração ideal para usuários com apenas 2 dispositivos.',
+    },
+    secure3: {
+      badgeTitle: 'Cofre seguro',
+      badgeSubtitle: 'cofre para 3 dispositivos',
+      feature1Title: 'Assinatura em 2 dispositivos',
+      feature1Description:
+        'Cada transação precisa da aprovação de 2 dos seus 3 dispositivos.',
+      feature2Title: 'Nenhum ponto único de falha',
+      feature2Description:
+        'Um único dispositivo não consegue movimentar fundos. Se um dispositivo for perdido ou exposto, ele não poderá aprovar transações sozinho.',
+      feature3Title: 'Ideal para armazenamento refrigerado',
+      feature3Description:
+        'Equilíbrio perfeito para a maioria dos usuários. 2 assinaturas e 1 dispositivo de backup. Armazene seus ativos sem estresse.',
+    },
+    secure4: {
+      badgeTitle: 'Cofre seguro',
+      badgeSubtitle: 'cofre para 4 ou mais dispositivos',
+      feature1Title: 'Assinatura em 3 ou mais dispositivos',
+      feature1Description:
+        'Os cofres precisam que 67% dos dispositivos assinem uma transação. Você pode ter quantos signatários quiser.',
+      feature2Title: 'Gerenciamento dinâmico de dispositivos',
+      feature2Description:
+        'Adicione quantos dispositivos desejar e obtenha segurança de nível institucional.',
+      feature3Title: 'Criado para equipes e tesourarias',
+      feature3Description:
+        'Ideal para equipes que gerenciam fundos compartilhados e cofres de alto valor, que exigem mais assinaturas.',
+    },
+    title: 'Configuração do seu cofre',
+  },
+  add_referral: 'Adicionar referência',
+  backupVault: 'Cofre de backup',
+  backupInCloudTitle: 'Criptografado com a sua senha do cofre.',
+  backupInCloudDescription:
+    'Faça backup do seu compartilhamento do cofre online usando a mesma senha que você criou anteriormente. O armazenamento online é recomendado e os compartilhamentos de cofre seguros são projetados para isso.',
+  backupsTitle:
+    '<highlight>Cópias de segurança,</highlight> seu novo método de recuperação',
+  backupsDescription:
+    'Em vez de uma única frase mnemônica, seu cofre é protegido por múltiplos dispositivos. Cada dispositivo possui seu próprio backup. Um backup isolado não pode movimentar fundos. Os backups servem apenas para recuperação.',
+  backupEachDevice: 'Faça backup de cada dispositivo.',
+  backupEachDeviceDescription:
+    'Este é apenas um backup do seu cofre; repita este processo para os outros dispositivos.',
+  storeBackupsSeparately: 'Armazene os backups separadamente.',
+  storeBackupsSeparatelyDescription:
+    'Guarde cada backup em um local diferente. Se um deles for comprometido, seus fundos permanecerão seguros.',
+  backupShareWarning: 'Esta é apenas 1 parte do seu cofre.',
+  backupShareWarningRest: 'Repita esse processo para os outros dispositivos.',
+  backup_email_description:
+    'Insira o endereço de e-mail para receber a partilha do cofre.',
+  backup_password_description:
+    'Digite a senha que você definiu ao criar este cofre.',
+  choose_a_password: 'Escolha uma senha',
+  choose_a_password_description:
+    'Se você deseja uma camada extra de segurança, escolha uma senha. <b>A senha não pode ser recuperada.</b>',
+  create_vault: 'Criar cofre',
+  create_referral_desc:
+    'Crie seu próprio código e ganhe<c> 20%</c> em swaps referidos',
+  save_referral: 'Salvar indicação',
+  save_referral_desc:
+    'Salve o código de indicação de um amigo e economize<c> 10%</c> em trocas.',
+  email_placeholder: 'Insira seu endereço de e-mail',
+  enter: 'Digitar',
+  enter_your_email: 'Insira seu e-mail',
+  enter_your_email_description:
+    'Este serviço será utilizado apenas uma vez para enviar seu arquivo de backup; o Vultisig não armazena nenhum dado.',
+  seedphrase_duplicate_vault_error:
+    'Esta frase-semente já foi importada como cofre &quot;{{vaultName}}&quot;. Importá-la novamente substituiria o cofre existente.',
+  incorrect_email: 'E-mail incorreto, verifique.',
+  insufficient_native_balance_for_fee:
+    'Saldo insuficiente de tokens nativos para pagar a taxa de transação.',
+  incorrect_passcode: 'Senha incorreta.',
+  new_vault_setup: 'Nova configuração do cofre',
+  new_vault_setup_disclaimer:
+    'Sua configuração foi alterada. Faça um novo backup.',
+  manage_referral_title: 'Indicações Vultisig',
+  select_pool: 'Selecione a piscina',
+  token_not_found_invalid: 'Endereço de contrato inválido',
+  transaction_failed: 'Transação<error> fracassado</error>',
+  transaction_pending: 'Transação pendente...',
+  transaction_could_not_be_parsed:
+    'Esta transação não pôde ser analisada. Os dados brutos da transação são mostrados abaixo.',
+  raw_transaction_data: 'Dados brutos de transação',
+  transaction_instructions_summary: 'Resumo das instruções de transação',
+  instruction: 'Instrução',
+  program_id: 'ID do programa',
+  accounts: 'Contas',
+  data_length: 'Comprimento dos dados',
+  bytes: 'bytes',
+  add_thor_lp: 'Adicione THORChain LP',
+  remove_thor_lp: 'Remover THORChain LP',
+  lp_dust_amount_error:
+    'Saldo insuficiente de RUNAS. É necessário pelo menos {{amount}} RUNAS como pó para saque de LP.',
+  lp_withdraw_percentage: 'Percentual de saque',
+  vultibot: 'VultiBot',
+  vultibot_welcome: 'Olá, eu sou o VultiBot.',
+  start_new_chat: 'Iniciar novo bate-papo',
+  new_chat: 'Novo bate-papo',
+  messages: 'mensagens',
+  vultibot_description:
+    'Seu assistente de cofre com inteligência artificial. Posso trocar, enviar, automatizar políticas, verificar saldos e gerenciar seu cofre.',
+  api_key_required: 'Chave de API necessária',
+  api_key_required_description:
+    'Para usar o VultiBot, defina sua chave de API da Anthropic como uma variável de ambiente antes de iniciar o aplicativo.',
+  type_a_message: 'Digite uma mensagem...',
+  thinking: 'Pensamento',
+  try_saying: 'Tente dizer',
+  ask_about_plugins_policies: 'Pergunte sobre plugins e políticas...',
+  signed_in: 'Assinado',
+  password_required_for_operation:
+    'Por favor, insira sua senha para {{operation}}.',
+  confirm_action: 'Confirmar ação',
+  confirm_action_description:
+    'Por favor, confirme que deseja realizar {{action}}.',
+  agent_chat_render_error: 'Ocorreu um erro ao renderizar o chat.',
+  agent_connect_description:
+    'Digite a senha do seu cofre para se conectar ao agente. Sua senha é usada para assinar uma mensagem de autenticação.',
+  agent_connect_now: 'Conecte-se agora',
+  agent_connected: 'Conectado',
+  agent_connecting: 'Conectando...',
+  agent_operation_sign_in: 'entrar',
+  agent_session_expired:
+    'Sua sessão expirou. Digite a senha do seu cofre para se reconectar.',
+  agent_sign_in_failed: 'Falha no login',
+  agent_signing_in: 'Entrando...',
+  agent_thinking_of_ideas: 'Pensando em ideias...',
+  agent_tool_label: 'Ferramenta: {{tool}}',
+  agent_tx_confirmed: 'Confirmado',
+  agent_tx_failed: 'Fracassado',
+  agent_tx_pending: 'Pendente',
+  agent_tx_type_approval: 'Aprovação',
+  agent_tx_type_contract_call: 'Chamada de contrato',
+  agent_tx_type_contract_execute: 'Executar contrato',
+  agent_tx_type_deposit: 'Depósito',
+  agent_tx_type_send: 'Enviar',
+  agent_tx_type_swap: 'Trocar',
+  agent_tx_type_transfer: 'Transferir',
+  agent_tx_view: 'Visualizar',
 }

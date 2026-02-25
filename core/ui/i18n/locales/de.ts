@@ -22,7 +22,6 @@ export const de = {
     optional_validation: 'Optional',
   },
   circle: {
-    apy: 'APY',
     banner_text:
       'Ihre Gelder bleiben vollständig unter Ihrer Kontrolle. Die Circle-Rendite wird über sichere Off-Chain-Treasuries generiert. Sie können Ihr Geld jederzeit nach der Abrechnung abheben.',
     deposit: 'Kaution',
@@ -30,19 +29,17 @@ export const de = {
       'Zahlen Sie Ihre USDC auf ein Circle-Konto ein und erhalten Sie Zinsen. Sicher in Ihrem Vultisig-Tresor.',
     open_account: 'Konto eröffnen',
     withdraw: 'Zurückziehen',
-    current_rewards: 'Aktuelle Prämien',
     deposit_header: 'Einzahlung auf das Circle-Konto',
     verify_deposit: 'Einzahlung prüfen',
-    total_rewards: 'Gesamtprämien',
     withdraw_header: 'Aus dem Kreis austreten',
     verify_withdraw: 'Auszahlung bestätigen',
-    yield_details: 'Kreisausbeute-Details',
+    apy_approx: 'Jahresüberschuss (ca.)',
+    apy_tooltip:
+      'Die Prämien werden Ihrem Guthaben automatisch gutgeschrieben.',
   },
   fastVaultSetup: {
     backup: {
       backThemUpNow: 'Sichern Sie sie jetzt',
-      backupConfirmationDescription: 'Sichern Sie Ihre Tresorfreigabe online',
-      backupVault: 'Backup-Tresor',
       checkEmail: 'Überprüfen Sie Ihre E-Mails zur Bestätigung.',
       codeInfo:
         'Dieser Code bestätigt, dass Sie Ihre Tresorfreigabe 1 per E-Mail erhalten haben.',
@@ -52,8 +49,6 @@ export const de = {
         'Geben Sie den 4-stelligen Code ein, den wir Ihnen per E-Mail zugesendet haben.',
       heldByServer: 'vom Server gespeichert',
       online: 'online',
-      onlineStorageDescription:
-        'Online-Speicher ist empfehlenswert und sicher – Vault-Speicher sind genau dafür konzipiert.',
       part1: 'Teil 1 der Tresoranteile wird sein',
       securely: 'sicher, vorzugsweise',
       setNewStandard:
@@ -114,6 +109,14 @@ export const de = {
       'Das Passwort kann nicht zurückgesetzt oder wiederhergestellt werden.',
     preparingVault: 'Vorbereitung des Tresors',
     takeMinute: 'Das sollte nur eine Sekunde dauern.',
+    addAnOptionalHint: 'Füge einen optionalen Hinweis hinzu',
+    passwordTooltip:
+      'Dies geschieht, weil das Passwort zur lokalen Verschlüsselung der Sicherungsdatei verwendet wird, ähnlich wie bei der Verschlüsselung einer Festplatte. Im nächsten Schritt haben Sie die Möglichkeit, einen Hinweis hinzuzufügen.',
+    referralModalTitle: 'Empfehlungscode',
+    referralModalSubtitle:
+      'Gib hier deinen Empfehlungscode ein. <b>Erhalte 10 % Rabatt auf jede Transaktion.</b>',
+    applyReferral: 'Empfehlung beantragen',
+    referralAdded: 'Empfehlung hinzugefügt',
   },
   referrals_summary: {
     item_1: {
@@ -442,10 +445,6 @@ export const de = {
   fastVault: 'Schneller Tresor',
   secureVault: 'Sicherer Tresor',
   fast_sign: 'Schnelles Zeichen',
-  fast_vault_backup_description:
-    'Online-Speicher ist empfehlenswert und sicher – Vault-Speicher sind genau dafür konzipiert.',
-  fast_vault_backup_title:
-    'Sichern Sie Ihre Tresorfreigabe online mit demselben Tresorpasswort, das Sie zuvor erstellt haben.',
   fill_the_form: 'Füllen Sie das Formular aus.',
   find_custom_token: 'Benutzerdefiniertes Token finden',
   folder_name: 'Ordnername',
@@ -693,7 +692,6 @@ export const de = {
   referral_program: 'Empfehlungsprogramm',
   referral_reg_fee: 'Anmeldegebühr',
   referral_status: 'Status',
-  referrals_create_page_title: 'Vultisig - Überweisungen',
   referrals_default_title: 'Verweisung',
   register_guide: 'Leitfaden zur Registrierung',
   register_your_vaults: 'Registrieren Sie Ihre Tresore!',
@@ -1100,14 +1098,6 @@ export const de = {
   normal: 'Normal',
   off: 'Aus',
   on: 'An',
-  onboarding_step_1:
-    'Lernen Sie <g>Vault-Freigaben</g> kennen, Ihre neue <g>Wiederherstellungsmethode</g>',
-  onboarding_step_2:
-    'Sie sind <g>in Teile aufgeteilt</g>, um die Sicherheit zu erhöhen und den zentralen Fehlerpunkt zu beseitigen</g>',
-  onboarding_step_3:
-    '<g>Jedes Gerät</g> in Ihrem Tresor enthält <g>eine Tresorfreigabe</g>',
-  onboarding_step_4:
-    'Stellen Sie Ihren Tresor auch dann wieder her, wenn ein Gerät verloren geht oder beschädigt wird.',
   optional: 'optional',
   password_backup:
     'Schützen Sie Ihren Tresor und sichern Sie sich eine schnelle Signatur.',
@@ -1132,4 +1122,167 @@ export const de = {
   vault_count_one: '{{count}} Tresor',
   vault_count_other: '{{count}} Tresore',
   vult: '$VULT',
+  vaultSetupOverview: {
+    fast: {
+      badgeTitle: 'Schneller Tresor',
+      badgeSubtitle: '2-Geräte-Setup',
+      feature1Title: '1-Geräte-Signatur',
+      feature1Description:
+        'Bequemes Signieren mit nur einem Gerät unterwegs. Ideal für alltägliche Transaktionen oder den Handel mit kleineren Beträgen.',
+      feature2Title: 'Schnelle und sichere Einrichtung',
+      feature2Description:
+        'Keine lange Einrichtung. Nur Ihre E-Mail-Adresse und Ihr Passwort sowie zwei Backups.',
+      feature3Title: 'Sie behalten die Kontrolle',
+      feature3Description:
+        'Ein Mitunterzeichner kann niemals Transaktionen initiieren; er hilft lediglich bei der Unterzeichnung.',
+    },
+    secure2: {
+      badgeTitle: 'Sicherer Tresor',
+      badgeSubtitle: 'Tresor für 2 Geräte',
+      feature1Title: 'Signierung mit zwei Geräten',
+      feature1Description:
+        'Für jede Transaktion ist die Genehmigung von beiden Geräten erforderlich.',
+      feature2Title: 'Kein einzelner Ausfallpunkt',
+      feature2Description:
+        'Ein einzelnes Gerät kann keine Gelder transferieren. Geht ein Gerät verloren oder wird es beschädigt, kann es Transaktionen nicht selbstständig genehmigen.',
+      feature3Title: 'Ideal für einfache Kühllagerung',
+      feature3Description:
+        'Die perfekte Konfiguration für Benutzer mit nur 2 Geräten.',
+    },
+    secure3: {
+      badgeTitle: 'Sicherer Tresor',
+      badgeSubtitle: 'Tresor für 3 Geräte',
+      feature1Title: 'Signierung mit zwei Geräten',
+      feature1Description:
+        'Für jede Transaktion sind Genehmigungen von 2 Ihrer 3 Geräte erforderlich.',
+      feature2Title: 'Kein einzelner Ausfallpunkt',
+      feature2Description:
+        'Ein einzelnes Gerät kann keine Gelder transferieren. Geht ein Gerät verloren oder wird es beschädigt, kann es Transaktionen nicht selbstständig genehmigen.',
+      feature3Title: 'Ideal für die Kühllagerung',
+      feature3Description:
+        'Die perfekte Balance für die meisten Nutzer. Zwei Signaturgeräte und ein Backup-Gerät. Speichern Sie Ihre Assets stressfrei.',
+    },
+    secure4: {
+      badgeTitle: 'Sicherer Tresor',
+      badgeSubtitle: 'Tresor für 4+ Geräte',
+      feature1Title: 'Signieren mit 3 oder mehr Geräten',
+      feature1Description:
+        'Für die Transaktionsabwicklung benötigen Vaults 67 % der Geräte, um eine Transaktion zu signieren. Sie können beliebig viele Unterzeichner hinzufügen.',
+      feature2Title: 'Dynamisches Gerätemanagement',
+      feature2Description:
+        'Fügen Sie beliebig viele Geräte hinzu und erhalten Sie Sicherheit auf institutionellem Niveau.',
+      feature3Title: 'Entwickelt für Teams und Finanzabteilungen',
+      feature3Description:
+        'Ideal für Teams, die gemeinsam genutzte Gelder und höherwertige Tresore verwalten, für die mehr Unterzeichner erforderlich sind.',
+    },
+    title: 'Ihre Tresorkonfiguration',
+  },
+  add_referral: 'Empfehlung hinzufügen',
+  backupVault: 'Backup-Tresor',
+  backupInCloudTitle: 'Verschlüsselt mit Ihrem Tresorpasswort',
+  backupInCloudDescription:
+    'Sichern Sie Ihre Tresorfreigabe online mit demselben Tresorpasswort, das Sie zuvor erstellt haben. Online-Speicher wird empfohlen, und sichere Tresorfreigaben sind genau dafür konzipiert.',
+  backupsTitle: '<highlight>Backups,</highlight> Ihre neue Genesungsmethode',
+  backupsDescription:
+    'Anstelle einer einzelnen Seed-Phrase wird Ihr Tresor durch mehrere Geräte gesichert. Jedes Gerät verfügt über ein eigenes Backup. Ein Backup allein kann keine Gelder verschieben. Backups dienen ausschließlich der Wiederherstellung.',
+  backupEachDevice: 'Sichern Sie jedes Gerät',
+  backupEachDeviceDescription:
+    'Dies ist nur eine Sicherungskopie Ihres Tresors. Wiederholen Sie diesen Vorgang für die anderen Geräte.',
+  storeBackupsSeparately: 'Backups separat speichern',
+  storeBackupsSeparatelyDescription:
+    'Bewahren Sie jedes Backup an einem anderen Ort auf. Sollte eines davon kompromittiert werden, bleiben Ihre Gelder sicher.',
+  backupShareWarning: 'Dies ist nur 1 Anteil Ihres Tresors.',
+  backupShareWarningRest:
+    'Wiederholen Sie diesen Vorgang für die anderen Geräte.',
+  backup_email_description:
+    'Geben Sie die E-Mail-Adresse ein, um die Tresorfreigabe zu erhalten.',
+  backup_password_description:
+    'Geben Sie das Passwort ein, das Sie beim Erstellen dieses Tresors festgelegt haben.',
+  choose_a_password: 'Wählen Sie ein Passwort',
+  choose_a_password_description:
+    'Für zusätzliche Sicherheit wählen Sie ein Passwort. <b>Das Passwort kann nicht wiederhergestellt werden.</b>',
+  create_vault: 'Tresor erstellen',
+  create_referral_desc:
+    'Erstelle deinen eigenen Code und verdiene!<c> 20%</c> bei vermittelten Swaps',
+  save_referral: 'Empfehlung speichern',
+  save_referral_desc:
+    'Speichere den Empfehlungscode eines Freundes und spare.<c> 10%</c> auf Tauschgeschäften.',
+  email_placeholder: 'Geben Sie Ihre E-Mail-Adresse ein.',
+  enter: 'Eingeben',
+  enter_your_email: 'Geben Sie Ihre E-Mail-Adresse ein',
+  enter_your_email_description:
+    'Dies wird nur einmal zum Senden Ihrer Sicherungsdatei verwendet, Vultisig speichert keine Daten.',
+  seedphrase_duplicate_vault_error:
+    'Diese Seed-Phrase ist bereits als Tresor &quot;{{vaultName}}&quot; importiert. Ein erneuter Import würde den bestehenden Tresor ersetzen.',
+  incorrect_email: 'Falsche E-Mail-Adresse, bitte überprüfen Sie diese.',
+  insufficient_native_balance_for_fee:
+    'Unzureichendes Guthaben an nativen Token zur Bezahlung der Transaktionsgebühr',
+  incorrect_passcode: 'Falsches Passwort.',
+  new_vault_setup: 'Neue Tresoreinrichtung',
+  new_vault_setup_disclaimer:
+    'Ihre Konfiguration hat sich geändert, erstellen Sie ein neues Backup.',
+  manage_referral_title: 'Vultisig-Überweisungen',
+  select_pool: 'Pool auswählen',
+  token_not_found_invalid: 'Ungültige Vertragsadresse',
+  transaction_failed: 'Transaktion<error> fehlgeschlagen</error>',
+  transaction_pending: 'Transaktion ausstehend...',
+  transaction_could_not_be_parsed:
+    'Diese Transaktion konnte nicht analysiert werden. Die Rohdaten der Transaktion werden unten angezeigt.',
+  raw_transaction_data: 'Rohdaten der Transaktion',
+  transaction_instructions_summary:
+    'Zusammenfassung der Transaktionsanweisungen',
+  instruction: 'Anweisung',
+  program_id: 'Programm-ID',
+  accounts: 'Konten',
+  data_length: 'Datenlänge',
+  bytes: 'Bytes',
+  add_thor_lp: 'Füge THORChain LP hinzu',
+  remove_thor_lp: 'THORChain LP entfernen',
+  lp_dust_amount_error:
+    'Unzureichendes RUNE-Guthaben. Mindestens {{amount}} RUNE werden als Staub für die LP-Auszahlung benötigt.',
+  lp_withdraw_percentage: 'Auszahlungsprozentsatz',
+  vultibot: 'VultiBot',
+  vultibot_welcome: 'Hallo, ich bin VultiBot.',
+  start_new_chat: 'Neuen Chat starten',
+  new_chat: 'Neuer Chat',
+  messages: 'Nachrichten',
+  vultibot_description:
+    'Ihr KI-gestützter Tresorassistent. Ich kann Geld tauschen, senden, Richtlinien automatisieren, Kontostände prüfen und Ihren Tresor verwalten.',
+  api_key_required: 'API-Schlüssel erforderlich',
+  api_key_required_description:
+    'Um VultiBot zu verwenden, legen Sie bitte Ihren Anthropic-API-Schlüssel als Umgebungsvariable fest, bevor Sie die App starten.',
+  type_a_message: 'Geben Sie eine Nachricht ein...',
+  thinking: 'Denken',
+  try_saying: 'Versuchen Sie Folgendes zu sagen',
+  ask_about_plugins_policies: 'Fragen Sie nach Plugins und Richtlinien...',
+  signed_in: 'Eingeloggt',
+  password_required_for_operation:
+    'Bitte geben Sie Ihr Passwort für {{operation}} ein.',
+  confirm_action: 'Aktion bestätigen',
+  confirm_action_description:
+    'Bitte bestätigen Sie, dass Sie {{action}} ausführen möchten.',
+  agent_chat_render_error: 'Beim Rendern des Chats ist ein Fehler aufgetreten.',
+  agent_connect_description:
+    'Geben Sie Ihr Tresorpasswort ein, um eine Verbindung zum Agenten herzustellen. Ihr Passwort wird zum Signieren einer Authentifizierungsnachricht verwendet.',
+  agent_connect_now: 'Jetzt verbinden',
+  agent_connected: 'Verbunden',
+  agent_connecting: 'Verbindung wird hergestellt...',
+  agent_operation_sign_in: 'anmelden',
+  agent_session_expired:
+    'Ihre Sitzung ist abgelaufen. Geben Sie Ihr Tresorpasswort ein, um die Verbindung wiederherzustellen.',
+  agent_sign_in_failed: 'Anmeldung fehlgeschlagen',
+  agent_signing_in: 'Anmelden...',
+  agent_thinking_of_ideas: 'Ich denke über Ideen nach...',
+  agent_tool_label: 'Werkzeug: {{tool}}',
+  agent_tx_confirmed: 'Bestätigt',
+  agent_tx_failed: 'Fehlgeschlagen',
+  agent_tx_pending: 'Ausstehend',
+  agent_tx_type_approval: 'Genehmigung',
+  agent_tx_type_contract_call: 'Vertragsanruf',
+  agent_tx_type_contract_execute: 'Vertragsausführung',
+  agent_tx_type_deposit: 'Kaution',
+  agent_tx_type_send: 'Schicken',
+  agent_tx_type_swap: 'Tauschen',
+  agent_tx_type_transfer: 'Überweisen',
+  agent_tx_view: 'Sicht',
 }
