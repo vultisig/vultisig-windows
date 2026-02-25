@@ -1,15 +1,13 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Animation } from '@lib/ui/animations/Animation'
 import { Button } from '@lib/ui/buttons/Button'
-import { Divider } from '@lib/ui/divider'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
-import { OnFinishProp } from '@lib/ui/props'
 import { GradientText, Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-export const VaultCreatedSuccessScreen = ({ onFinish }: OnFinishProp) => {
+export const VaultCreatedSuccessScreen = () => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
 
@@ -31,8 +29,9 @@ export const VaultCreatedSuccessScreen = ({ onFinish }: OnFinishProp) => {
           </Text>
         </VStack>
         <VStack gap={16}>
-          <Button onClick={onFinish}>{t('go_to_wallet')}</Button>
-          <Divider text={t('or').toUpperCase()} />
+          <Button onClick={() => navigate({ id: 'vault' })}>
+            {t('go_to_wallet')}
+          </Button>
           <Button
             kind="secondary"
             onClick={() => navigate({ id: 'manageVaultChains' })}

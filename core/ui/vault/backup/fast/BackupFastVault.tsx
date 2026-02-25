@@ -77,9 +77,7 @@ export const BackupFastVault = ({
           onBack={toPreviousStep}
         />
       )}
-      backupSuccessfulSlideshow={() => (
-        <VaultCreatedSuccessScreen onFinish={onFinish} />
-      )}
+      backupSuccessfulSlideshow={() => <VaultCreatedSuccessScreen />}
     />
   )
 }
