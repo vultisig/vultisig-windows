@@ -69,10 +69,10 @@ export const en = {
   backupShare2: 'Backup Share 2',
   backupsTitle: '<highlight>Backups,</highlight> your new recovery method',
   backupsDescription:
-    "Instead of a single seed phrase, your vault is secured by multiple devices. Each device has its own backup. A backup on its own can't move funds. Backups are only for recovery.",
+    "Backups power your vault. Each device has its own backup. A backup alone can't move funds, it's only for recovery. Import and recover any lost device",
   backupEachDevice: 'Your Device is the driver',
   backupEachDeviceDescription:
-    'The Device backup and password are the key. The server only co-signs and backup can be requested.',
+    'The Device backup <w>and</w> password are the key. The server only co-signs and backup can be requested.',
   storeBackupsSeparately: 'Store backups separately',
   storeBackupsSeparatelyDescription:
     'Keep each backup in a different place. If one is compromised, your funds stay safe.',
