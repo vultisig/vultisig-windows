@@ -4,4 +4,5 @@ export const featureFlags = {
   importSeedphrase: true,
   mayaChain: false,
   defiLpsTab: true,
+  agent: false,
 }
