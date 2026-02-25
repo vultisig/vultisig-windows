@@ -46,6 +46,11 @@ export const useConnectionStatus = (
       const vid = vaultIdRef.current
       if (!vid || !orch) return
       try {
+        const refreshed = await orch.refreshToken(vid)
+        if (!refreshed) {
+          setState('disconnected')
+          return
+        }
         const info = orch.getTokenInfo(vid)
         if (info.connected) {
           setState('connected')

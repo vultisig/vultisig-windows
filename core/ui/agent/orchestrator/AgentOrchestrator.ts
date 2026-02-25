@@ -313,6 +313,11 @@ export class AgentOrchestrator {
     this.auth.invalidateToken(vaultPubKey)
   }
 
+  async refreshToken(vaultPubKey: string): Promise<boolean> {
+    const token = await this.auth.refreshIfNeeded(vaultPubKey)
+    return token !== null
+  }
+
   async checkServices(vaultPubKey: string): Promise<ServiceStatus> {
     return this.healthService.checkServices(vaultPubKey)
   }
