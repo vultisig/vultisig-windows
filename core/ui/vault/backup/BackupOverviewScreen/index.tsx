@@ -1,23 +1,27 @@
+import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useBackupDeviceAnimation } from '@core/ui/vault/backup/hooks/useBackupDeviceAnimation'
 import { Button } from '@lib/ui/buttons/Button'
 import { ArrowSplitIcon } from '@lib/ui/icons/ArrowSplitIcon'
-import { CloudUploadFilledIcon } from '@lib/ui/icons/CloudUploadFilledIcon'
+import { HomeFilledIcon } from '@lib/ui/icons/HomeFilledIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
-import { OnFinishProp } from '@lib/ui/props'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { GradientText, Text } from '@lib/ui/text'
 import { Trans, useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { BackupOverviewInfoRow } from './BackupOverviewInfoRow'
 
-type BackupOverviewScreenProps = OnFinishProp & {
-  userDeviceCount: number
-}
+type BackupOverviewScreenProps = OnFinishProp &
+  Partial<OnBackProp> & {
+    userDeviceCount: number
+  }
 
 export const BackupOverviewScreen = ({
   userDeviceCount,
   onFinish,
+  onBack,
 }: BackupOverviewScreenProps) => {
   const { t } = useTranslation()
 
@@ -25,6 +29,11 @@ export const BackupOverviewScreen = ({
 
   return (
     <Container fullHeight>
+      {onBack && (
+        <PageHeader
+          primaryControls={<PageHeaderBackButton onClick={onBack} />}
+        />
+      )}
       <AnimationWrapper>
         <AnimationContainer>
           <RiveComponent />
@@ -46,7 +55,7 @@ export const BackupOverviewScreen = ({
         </VStack>
         <VStack gap={16}>
           <BackupOverviewInfoRow
-            icon={<CloudUploadFilledIcon style={{ fontSize: 24 }} />}
+            icon={<HomeFilledIcon style={{ fontSize: 24 }} />}
             title={t('backupEachDevice')}
             description={t('backupEachDeviceDescription')}
           />
@@ -57,7 +66,7 @@ export const BackupOverviewScreen = ({
           />
         </VStack>
         <Button onClick={onFinish} loading={isLoading}>
-          {t('continue')}
+          {t('i_understand')}
         </Button>
       </ContentSection>
     </Container>
