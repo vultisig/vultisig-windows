@@ -149,6 +149,7 @@ export const en = {
     'If you want an extra layer of security, choose a password. <b>Password cannot be recovered.</b>',
   choose_backup_method: 'Choose Backup Method',
   choose_payout_asset: 'Choose payout asset',
+  choose_chains: 'Choose chains',
   choose_tokens: 'Choose Tokens',
   deposited: 'Deposited',
   circle: {
@@ -189,6 +190,7 @@ export const en = {
   collected_rewards: 'Collected rewards',
   coming_soon: 'Coming Soon',
   complete: 'Complete',
+  congrats: 'Congrats!',
   confirm: 'Confirm',
   confirm_automation_creation: 'Confirm automation creation',
   confirm_new_passcode: 'Confirm New Passcode',
@@ -464,6 +466,7 @@ export const en = {
   github: 'Github',
   go_back: 'Go Back',
   go_to_vault: 'Go to vault',
+  go_to_wallet: 'Go to wallet',
   gold: 'Gold',
   grant_camera_permission: 'Grant Camera Permission',
   gwei: 'GWEI',
@@ -1043,6 +1046,9 @@ export const en = {
   vault_qr_share_not_supported: 'Sharing not supported on this browser.',
   vault_qr_share_text: 'Check out this vault QR code!',
   vault_qr_share_title: 'Vault QR Code',
+  vault_ready_description:
+    "You're all set! You stay in control of every transaction.",
+  vault_ready_to_use: 'Your vault is ready to use',
   vault_register_for_airdrop_list_item_1: 'Save your Vault QR',
   vault_register_for_airdrop_list_item_2_part_1: 'Go to',
   vault_register_for_airdrop_list_item_2_part_2: 'Vultisig Web',
