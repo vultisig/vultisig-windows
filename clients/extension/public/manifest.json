@@ -43,7 +43,10 @@
     "64": "icon64.png",
     "128": "icon128.png"
   },
-  "permissions": ["activeTab", "clipboardRead", "clipboardWrite", "storage", "windows", "tabs"],
+  "permissions": ["activeTab", "clipboardRead", "clipboardWrite", "sidePanel", "storage", "windows", "tabs"],
+  "side_panel": {
+    "default_path": "index.html"
+  },
   "web_accessible_resources": [
     {
       "matches": ["<all_urls>"],

@@ -26,6 +26,8 @@ import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { Views } from '@lib/ui/navigation/Views'
 import { useEffect } from 'react'
 
+import { ManageSidePanel } from '../components/side-panel/ManageSidePanel'
+
 const ExtensionVaultPage = () => {
   const vaults = useVaults()
   const navigate = useNavigate()
@@ -65,6 +67,7 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
       insiderOptions={<ExtensionDeveloperOptions />}
       prioritize={<Prioritize />}
       expandView={<ExpandView />}
+      sidePanel={<ManageSidePanel />}
     />
   ),
   setupFastVault: SetupFastVaultPage,
