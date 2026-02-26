@@ -1,4 +1,3 @@
-import { accountCoinKeyToString } from '@core/chain/coin/AccountCoin'
 import { CoinsStorage, initialCoinsRecord } from '@core/ui/storage/coins'
 import { recordMap } from '@lib/utils/record/recordMap'
 
@@ -15,7 +14,7 @@ export const coinsStorage: CoinsStorage = {
     await SaveCoin(vaultId, toStorageCoin(coin))
   },
   deleteCoin: async ({ vaultId, coinKey }) => {
-    await DeleteCoin(vaultId, accountCoinKeyToString(coinKey))
+    await DeleteCoin(vaultId, coinKey.chain, coinKey.id ?? '', coinKey.address)
   },
   getCoins: async () => {
     const coins = (await GetCoins()) ?? initialCoinsRecord
