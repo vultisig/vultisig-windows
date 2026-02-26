@@ -161,7 +161,6 @@ export class AgentTxService {
         type: toolName,
         title,
         params,
-        auto_execute: true,
       }
 
       this.events.emit('tool_call', {
@@ -260,7 +259,6 @@ export class AgentTxService {
         value,
         data,
       },
-      auto_execute: true,
     }
 
     this.events.emit('tool_call', {
@@ -312,7 +310,6 @@ export class AgentTxService {
       type: 'search_token',
       title: `Search Token: ${toSymbol}`,
       params: searchParams,
-      auto_execute: true,
     }
 
     this.events.emit('tool_call', {

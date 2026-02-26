@@ -29,6 +29,7 @@ export const toStorageVault = ({
   name: name,
   public_key_ecdsa: publicKeys.ecdsa,
   public_key_eddsa: publicKeys.eddsa,
+  public_key_mldsa: '' as string, // TODO: placeholder, mldsa support is not yet implemented in the vault
   signers: signers,
   created_at: (createdAt ? new Date(createdAt) : new Date()).toISOString(),
   hex_chain_code: hexChainCode,
@@ -54,17 +55,16 @@ export const fromStorageVault = (
   const publicKeys = {
     ecdsa: vault.public_key_ecdsa,
     eddsa: vault.public_key_eddsa,
+    mldsa: vault.public_key_mldsa ?? '',
   }
 
-  const keyShares = recordFromKeys(
-    signingAlgorithms,
-    algorithm =>
-      shouldBePresent(
-        vault.keyshares.find(
-          keyShare => keyShare.public_key === publicKeys[algorithm]
-        )
-      ).keyshare
-  )
+  const keyShares = recordFromKeys(signingAlgorithms, algorithm => {
+    const publicKey = publicKeys[algorithm]
+    if (!publicKey) return ''
+    return shouldBePresent(
+      vault.keyshares.find(keyShare => keyShare.public_key === publicKey)
+    ).keyshare
+  })
 
   const chainPublicKeys = vault.chain_public_keys as
     | Partial<Record<Chain, string>>

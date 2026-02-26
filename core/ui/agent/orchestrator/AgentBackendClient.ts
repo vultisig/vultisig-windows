@@ -64,7 +64,6 @@ const backendActionSchema = z
     title: z.string(),
     description: z.string().optional(),
     params: z.record(z.string(), z.unknown()).optional(),
-    auto_execute: z.boolean(),
   })
   .passthrough()
 
@@ -133,7 +132,7 @@ const sseHandlers: Record<
   actions: (parsed, result) => {
     const validated = z.array(backendActionSchema).safeParse(parsed.actions)
     if (validated.success) {
-      result.actions = validated.data
+      result.actions = [...(result.actions ?? []), ...validated.data]
     }
   },
   suggestions: (parsed, result) => {
@@ -222,9 +221,10 @@ export class AgentBackendClient {
     req: SendMessageRequest
     token: string
     onTextDelta: (delta: string) => void
+    onActions?: (actions: z.infer<typeof backendActionSchema>[]) => void
     signal?: AbortSignal
   }): Promise<SendMessageResponse> {
-    const { convId, req, token, onTextDelta, signal } = params
+    const { convId, req, token, onTextDelta, onActions, signal } = params
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       Accept: 'text/event-stream',
@@ -269,12 +269,13 @@ export class AgentBackendClient {
       return JSON.parse(text) as SendMessageResponse
     }
 
-    return this.readSSEResponse(resp.body, onTextDelta)
+    return this.readSSEResponse(resp.body, onTextDelta, onActions)
   }
 
   private async readSSEResponse(
     body: ReadableStream<Uint8Array>,
-    onTextDelta: (delta: string) => void
+    onTextDelta: (delta: string) => void,
+    onActions?: (actions: z.infer<typeof backendActionSchema>[]) => void
   ): Promise<SendMessageResponse> {
     const reader = body.getReader()
     const decoder = new TextDecoder()
@@ -298,7 +299,13 @@ export class AgentBackendClient {
         }
         if (line.startsWith('data: ')) {
           const jsonStr = line.slice(6).replace(/\r$/, '')
-          this.processSSEEvent(currentEvent, jsonStr, result, onTextDelta)
+          this.processSSEEvent(
+            currentEvent,
+            jsonStr,
+            result,
+            onTextDelta,
+            onActions
+          )
           currentEvent = ''
           continue
         }
@@ -316,7 +323,8 @@ export class AgentBackendClient {
     event: string,
     jsonStr: string,
     result: Partial<SendMessageResponse>,
-    onTextDelta: (delta: string) => void
+    onTextDelta: (delta: string) => void,
+    onActions?: (actions: z.infer<typeof backendActionSchema>[]) => void
   ): void {
     const parseResult = attempt(
       () => JSON.parse(jsonStr) as Record<string, unknown>
@@ -326,6 +334,10 @@ export class AgentBackendClient {
     const handler = sseHandlers[event]
     if (handler) {
       handler(parseResult.data, result, onTextDelta)
+    }
+
+    if (event === 'actions' && onActions && result.actions) {
+      onActions(result.actions)
     }
   }
 
