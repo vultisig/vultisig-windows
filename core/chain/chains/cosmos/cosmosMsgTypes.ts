@@ -7,5 +7,7 @@ export enum CosmosMsgType {
   MSG_SEND_URL = '/cosmos.bank.v1beta1.MsgSend',
   THORCHAIN_MSG_DEPOSIT = 'thorchain/MsgDeposit',
   THORCHAIN_MSG_DEPOSIT_URL = '/types.MsgDeposit',
+  THORCHAIN_MSG_LEAVE_POOL = 'thorchain/MsgLeavePool',
+  THORCHAIN_MSG_LEAVE_POOL_URL = '/thorchain.v1.MsgLeavePool',
   THORCHAIN_MSG_SEND_URL = '/types.MsgSend',
 }
