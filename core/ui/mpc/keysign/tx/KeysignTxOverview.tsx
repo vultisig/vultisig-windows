@@ -7,6 +7,7 @@ import { useTxHash } from '@core/ui/chain/state/txHash'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { useKeysignMessagePayload } from '@core/ui/mpc/keysign/state/keysignMessagePayload'
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
+import { getSignDataTxAction } from '@core/ui/mpc/keysign/tx/utils/getSignDataTxAction'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { IconButton } from '@lib/ui/buttons/IconButton'
@@ -46,6 +47,15 @@ export const KeysignTxOverview = () => {
     return fromChainAmount(BigInt(toAmount), decimals)
   }, [toAmount, decimals])
 
+  const txAction = useMemo(
+    () => getSignDataTxAction(keysignPayload, formattedToAmount ?? 0),
+    [keysignPayload, formattedToAmount]
+  )
+
+  const showAmountOrAction =
+    formattedToAmount !== null ||
+    (txAction !== null && txAction.action !== 'send')
+
   const txHash = useTxHash()
   const txStatusQuery = useTxStatusQuery({ chain, hash: txHash })
   const receipt = txStatusQuery.data?.receipt
@@ -58,8 +68,24 @@ export const KeysignTxOverview = () => {
 
   return (
     <>
-      {formattedToAmount !== null && (
-        <TxOverviewAmount amount={formattedToAmount} value={coin} />
+      {showAmountOrAction && (
+        <TxOverviewAmount
+          amount={
+            txAction && 'amount' in txAction && txAction.amount !== undefined
+              ? txAction.amount
+              : (formattedToAmount ?? 0)
+          }
+          value={coin}
+          actionLabel={
+            txAction?.action !== 'send' ? txAction?.labelKey : undefined
+          }
+          contractAddress={
+            txAction?.action === 'contract_execution' &&
+            'contractAddress' in txAction
+              ? txAction.contractAddress
+              : undefined
+          }
+        />
       )}
       <Panel>
         <SeparatedByLine gap={16}>
