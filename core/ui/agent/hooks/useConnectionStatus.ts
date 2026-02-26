@@ -87,9 +87,12 @@ export const useConnectionStatus = (
             return
           }
           const refreshedInfo = orchestrator.getTokenInfo(vaultId)
-          setState('connected')
           if (refreshedInfo.connected) {
+            setState('connected')
             scheduleRefreshRef.current(refreshedInfo.expiresAt)
+          } else {
+            orchestrator.invalidateToken(vaultId)
+            setState('disconnected')
           }
           return
         }

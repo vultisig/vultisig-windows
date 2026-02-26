@@ -115,20 +115,29 @@ export class AgentMessageProcessor {
     }
 
     if (err instanceof UnauthorizedError) {
-      this.auth.refreshIfNeeded(vaultPubKey).then(refreshed => {
-        if (refreshed) {
-          this.events.emit('error', {
+      this.auth
+        .refreshIfNeeded(vaultPubKey)
+        .then(refreshed => {
+          if (refreshed) {
+            this.events.emit('error', {
+              conversationId: convId,
+              error: 'session refreshed — please resend your message',
+            })
+            return
+          }
+          this.auth.invalidateToken(vaultPubKey)
+          this.events.emit('auth_required', {
             conversationId: convId,
-            error: 'session refreshed — please resend your message',
+            vaultPubKey,
           })
-          return
-        }
-        this.auth.invalidateToken(vaultPubKey)
-        this.events.emit('auth_required', {
-          conversationId: convId,
-          vaultPubKey,
         })
-      })
+        .catch(() => {
+          this.auth.invalidateToken(vaultPubKey)
+          this.events.emit('auth_required', {
+            conversationId: convId,
+            vaultPubKey,
+          })
+        })
       return
     }
 
@@ -229,8 +238,9 @@ export class AgentMessageProcessor {
       this.txService.setPendingTx(ctx.convId, resp.tx_ready)
     }
 
-    const [executableActions, displayOnlyActions] =
-      filterDisplayOnly(filterAutoActions(unprotectedActions))
+    const [executableActions, displayOnlyActions] = filterDisplayOnly(
+      filterAutoActions(unprotectedActions)
+    )
 
     for (const action of displayOnlyActions) {
       this.events.emit('action_result', {
@@ -336,15 +346,17 @@ export class AgentMessageProcessor {
             convId: ctx.convId,
             req,
             token: ctx.token,
-            onTextDelta: () => {},
-            onActions: actions =>
-              this.emitDisplayOnlyToolCalls(ctx, actions),
+            onTextDelta: delta =>
+              this.events.emit('text_delta', {
+                conversationId: ctx.convId,
+                delta,
+              }),
+            onActions: actions => this.emitDisplayOnlyToolCalls(ctx, actions),
             signal: ctx.signal,
           })
         } catch {
           continue
         }
-        resp.message.content = ''
         await this.handleBackendResponse(ctx, resp)
       } else {
         try {

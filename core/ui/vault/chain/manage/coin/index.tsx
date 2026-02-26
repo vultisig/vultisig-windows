@@ -84,9 +84,10 @@ export const ManageVaultChainCoinsPage = () => {
       const newCoin = { ...coin }
 
       if (coin.chain === Chain.Solana && coin.id && !coin.priceProviderId) {
-        newCoin.priceProviderId = await getSolanaCoingeckoId({
-          id: coin.id,
-        })
+        const priceProviderId = await getSolanaCoingeckoId({ id: coin.id })
+        if (priceProviderId) {
+          newCoin.priceProviderId = priceProviderId
+        }
       }
 
       await createCoin.mutateAsync(newCoin)
