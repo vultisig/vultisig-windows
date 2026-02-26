@@ -1,13 +1,14 @@
+import { attempt, withFallback } from '@lib/utils/attempt'
 import { VersionedTransaction } from '@solana/web3.js'
 import { Psbt } from 'bitcoinjs-lib'
 
 export const isPopupView = () => {
-  try {
-    const popups = chrome?.extension?.getViews({ type: 'popup' }) ?? []
-    return popups.some((view: unknown) => view === window)
-  } catch {
-    return false
-  }
+  const popups =
+    withFallback(
+      attempt(() => chrome?.extension?.getViews({ type: 'popup' })),
+      []
+    ) ?? []
+  return popups.some((view: unknown) => view === window)
 }
 
 export function isVersionedTransaction(tx: any): tx is VersionedTransaction {

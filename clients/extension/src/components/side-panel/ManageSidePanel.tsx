@@ -35,21 +35,22 @@ const switchToPopup = async () => {
 export const ManageSidePanel = () => {
   const { t } = useTranslation()
   const { data: isSidePanelEnabled } = useIsSidePanelEnabledQuery()
-  const { mutate: setSidePanelEnabled } = useSetIsSidePanelEnabledMutation()
+  const { mutateAsync: setSidePanelEnabled } =
+    useSetIsSidePanelEnabledMutation()
 
   const handleToggle = async () => {
     if (!isSidePanelEnabled) {
-      setSidePanelEnabled(true)
+      await setSidePanelEnabled(true)
       const result = await attempt(switchToSidePanel)
       const opened = 'data' in result && result.data
       if (!opened) {
-        setSidePanelEnabled(false)
+        await setSidePanelEnabled(false)
         return
       }
       window.close()
     } else {
       await attempt(switchToPopup)
-      setSidePanelEnabled(false)
+      await setSidePanelEnabled(false)
       window.close()
     }
   }
