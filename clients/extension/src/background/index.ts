@@ -57,7 +57,7 @@ if (chrome.sidePanel) {
     const enabled = newValue ?? false
     applySidePanelBehavior(enabled)
 
-    if (chrome.sidePanel.open && chrome.sidePanel.setOptions) {
+    if ('open' in chrome.sidePanel && 'setOptions' in chrome.sidePanel) {
       if (enabled) {
         openSidePanel().catch(console.error)
       } else {
