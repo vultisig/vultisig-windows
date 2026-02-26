@@ -6,6 +6,7 @@ import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import type { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { fromBase64 } from '@cosmjs/encoding'
+import { attempt } from '@lib/utils/attempt'
 import { TW } from '@trustwallet/wallet-core'
 import { MsgSend } from 'cosmjs-types/cosmos/bank/v1beta1/tx'
 import { TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
@@ -91,83 +92,90 @@ const parseSignDirectMessage = (
   chainFeeDenom: string,
   decimals: number
 ): Partial<SignDataTxAction> | null => {
-  try {
-    if (
-      typeUrl === CosmosMsgType.MSG_SEND_URL ||
-      typeUrl === CosmosMsgType.THORCHAIN_MSG_SEND_URL
-    ) {
-      const msg = MsgSend.decode(value)
-      const amount = sumAmountForDenom(msg.amount, chainFeeDenom, decimals)
-      return { action: 'send', labelKey: 'sent', amount }
-    }
-
-    if (
-      typeUrl === CosmosMsgType.MSG_EXECUTE_CONTRACT_URL ||
-      typeUrl === CosmosMsgType.MSG_EXECUTE_CONTRACT
-    ) {
-      const msg = MsgExecuteContract.decode(value)
-      const amount =
-        msg.funds?.length && chainFeeDenom
-          ? sumAmountForDenom(msg.funds, chainFeeDenom, decimals)
-          : undefined
-      return {
-        action: 'contract_execution',
-        labelKey: 'contract_execution',
-        contractAddress: msg.contract ?? '',
-        amount: amount || undefined,
-      }
-    }
-
-    if (typeUrl === CosmosMsgType.MSG_TRANSFER_URL) {
-      const msg = MsgTransfer.decode(value)
-      if (msg.token?.denom === chainFeeDenom) {
-        const amount = fromChainAmount(
-          BigInt(msg.token.amount ?? '0'),
-          decimals
-        )
-        return { action: 'transfer', labelKey: 'transferred', amount }
-      }
-      return { action: 'transfer', labelKey: 'transferred', amount: 0 }
-    }
-
-    if (
-      typeUrl === CosmosMsgType.THORCHAIN_MSG_DEPOSIT_URL ||
-      typeUrl === CosmosMsgType.THORCHAIN_MSG_DEPOSIT
-    ) {
-      const msg = TW.Cosmos.Proto.Message.THORChainDeposit.decode(value)
-      const first = msg.coins?.[0]
-      const amount = first?.amount
-        ? fromChainAmount(BigInt(first.amount), decimals)
-        : 0
-      return { action: 'deposit', labelKey: 'deposited', amount }
-    }
-
-    if (
-      typeUrl === CosmosMsgType.THORCHAIN_MSG_SEND_URL ||
-      typeUrl === CosmosMsgType.THORCHAIN_MSG_SEND
-    ) {
-      const msg = TW.Cosmos.Proto.Message.THORChainSend.decode(value)
-      const amounts = (msg.amounts ?? []).map(a => ({
-        denom: a.denom ?? '',
-        amount: a.amount ?? '0',
-      }))
-      const amount = chainFeeDenom
-        ? sumAmountForDenom(amounts, chainFeeDenom, decimals)
-        : 0
-      return { action: 'send', labelKey: 'sent', amount }
-    }
-
-    if (
-      typeUrl === CosmosMsgType.THORCHAIN_MSG_LEAVE_POOL_URL ||
-      typeUrl === CosmosMsgType.THORCHAIN_MSG_LEAVE_POOL
-    ) {
-      return { action: 'leave_pool', labelKey: 'left_pool' }
-    }
-
-    return null
-  } catch {
-    return null
+  if (
+    typeUrl === CosmosMsgType.MSG_SEND_URL ||
+    typeUrl === CosmosMsgType.THORCHAIN_MSG_SEND_URL
+  ) {
+    const result = attempt(() => MsgSend.decode(value))
+    if ('error' in result) return null
+    const msg = result.data
+    const amount = sumAmountForDenom(msg.amount, chainFeeDenom, decimals)
+    return { action: 'send', labelKey: 'sent', amount }
   }
+
+  if (
+    typeUrl === CosmosMsgType.MSG_EXECUTE_CONTRACT_URL ||
+    typeUrl === CosmosMsgType.MSG_EXECUTE_CONTRACT
+  ) {
+    const result = attempt(() => MsgExecuteContract.decode(value))
+    if ('error' in result) return null
+    const msg = result.data
+    const amount =
+      msg.funds?.length && chainFeeDenom
+        ? sumAmountForDenom(msg.funds, chainFeeDenom, decimals)
+        : undefined
+    return {
+      action: 'contract_execution',
+      labelKey: 'contract_execution',
+      contractAddress: msg.contract ?? '',
+      amount: amount || undefined,
+    }
+  }
+
+  if (typeUrl === CosmosMsgType.MSG_TRANSFER_URL) {
+    const result = attempt(() => MsgTransfer.decode(value))
+    if ('error' in result) return null
+    const msg = result.data
+    if (msg.token?.denom === chainFeeDenom) {
+      const amount = fromChainAmount(BigInt(msg.token.amount ?? '0'), decimals)
+      return { action: 'transfer', labelKey: 'transferred', amount }
+    }
+    return { action: 'transfer', labelKey: 'transferred', amount: 0 }
+  }
+
+  if (
+    typeUrl === CosmosMsgType.THORCHAIN_MSG_DEPOSIT_URL ||
+    typeUrl === CosmosMsgType.THORCHAIN_MSG_DEPOSIT
+  ) {
+    const result = attempt(() =>
+      TW.Cosmos.Proto.Message.THORChainDeposit.decode(value)
+    )
+    if ('error' in result) return null
+    const msg = result.data
+    const first = msg.coins?.[0]
+    const amount = first?.amount
+      ? fromChainAmount(BigInt(first.amount), decimals)
+      : 0
+    return { action: 'deposit', labelKey: 'deposited', amount }
+  }
+
+  if (
+    typeUrl === CosmosMsgType.THORCHAIN_MSG_SEND_URL ||
+    typeUrl === CosmosMsgType.THORCHAIN_MSG_SEND
+  ) {
+    const result = attempt(() =>
+      TW.Cosmos.Proto.Message.THORChainSend.decode(value)
+    )
+    if ('error' in result) return null
+    const msg = result.data
+    const amounts = (msg.amounts ?? []).map(a => ({
+      denom: a.denom ?? '',
+      amount: a.amount ?? '0',
+    }))
+    const amount = chainFeeDenom
+      ? sumAmountForDenom(amounts, chainFeeDenom, decimals)
+      : 0
+    return { action: 'send', labelKey: 'sent', amount }
+  }
+
+  if (
+    typeUrl === CosmosMsgType.THORCHAIN_MSG_LEAVE_POOL_URL ||
+    typeUrl === CosmosMsgType.THORCHAIN_MSG_LEAVE_POOL
+  ) {
+    return { action: 'leave_pool', labelKey: 'left_pool' }
+  }
+
+  return null
 }
 
 const actionPriority: { type: string; action: string; labelKey: string }[] = [
@@ -229,60 +237,60 @@ export const getSignDataTxAction = (
   const decimals = chainFeeCoin[chain].decimals
 
   if (signData.case === 'signDirect') {
-    try {
+    const decodeResult = attempt(() => {
       const bodyBytes = fromBase64(signData.value.bodyBytes)
-      const txBody = TxBody.decode(bodyBytes)
+      return TxBody.decode(bodyBytes)
+    })
+    if ('error' in decodeResult) return null
+    const txBody = decodeResult.data
 
-      let firstSendAmount: number | undefined
+    let firstSendAmount: number | undefined
 
-      for (const msg of txBody.messages) {
-        const typeUrl = msg.typeUrl || ''
-        const result = parseSignDirectMessage(
-          typeUrl,
-          msg.value,
-          chain as CosmosChain,
-          chainFeeDenom,
-          decimals
-        )
-        if (!result) continue
+    for (const msg of txBody.messages) {
+      const typeUrl = msg.typeUrl || ''
+      const result = parseSignDirectMessage(
+        typeUrl,
+        msg.value,
+        chain as CosmosChain,
+        chainFeeDenom,
+        decimals
+      )
+      if (!result) continue
 
-        if (result.action === 'send' && result.amount !== undefined) {
-          if (firstSendAmount === undefined) firstSendAmount = result.amount
-          continue
-        }
-
-        if (
-          result.action === 'contract_execution' &&
-          'contractAddress' in result
-        ) {
-          return result as SignDataTxAction
-        }
-        if (result.action === 'deposit' && result.amount !== undefined) {
-          return {
-            action: 'deposit',
-            labelKey: 'deposited',
-            amount: result.amount,
-          }
-        }
-        if (result.action === 'transfer' && result.amount !== undefined) {
-          return {
-            action: 'transfer',
-            labelKey: 'transferred',
-            amount: result.amount,
-          }
-        }
-        if (result.action === 'leave_pool') {
-          return { action: 'leave_pool', labelKey: 'left_pool' }
-        }
+      if (result.action === 'send' && result.amount !== undefined) {
+        if (firstSendAmount === undefined) firstSendAmount = result.amount
+        continue
       }
 
-      return {
-        action: 'send',
-        labelKey: 'sent',
-        amount: firstSendAmount ?? toAmountFormatted,
+      if (
+        result.action === 'contract_execution' &&
+        'contractAddress' in result
+      ) {
+        return result as SignDataTxAction
       }
-    } catch {
-      return null
+      if (result.action === 'deposit' && result.amount !== undefined) {
+        return {
+          action: 'deposit',
+          labelKey: 'deposited',
+          amount: result.amount,
+        }
+      }
+      if (result.action === 'transfer' && result.amount !== undefined) {
+        return {
+          action: 'transfer',
+          labelKey: 'transferred',
+          amount: result.amount,
+        }
+      }
+      if (result.action === 'leave_pool') {
+        return { action: 'leave_pool', labelKey: 'left_pool' }
+      }
+    }
+
+    return {
+      action: 'send',
+      labelKey: 'sent',
+      amount: firstSendAmount ?? toAmountFormatted,
     }
   }
 
@@ -294,22 +302,20 @@ export const getSignDataTxAction = (
       const match = actionPriority.find(p => p.type === type)
       if (!match) continue
 
+      const parseResult = attempt(
+        () => JSON.parse(msg.value || '{}') as Record<string, unknown>
+      )
+      const value = 'error' in parseResult ? {} : parseResult.data
+
       if (match.action === 'contract_execution') {
-        let contractAddress = ''
-        let amount: number | undefined
-        try {
-          const value = JSON.parse(msg.value || '{}') as Record<string, unknown>
-          contractAddress = (value.contract as string) ?? ''
-          amount = parseAmountFromAminoValue(
-            value,
-            type,
-            chain as CosmosChain,
-            chainFeeDenom,
-            decimals
-          )
-        } catch {
-          // ignore
-        }
+        const contractAddress = (value.contract as string) ?? ''
+        const amount = parseAmountFromAminoValue(
+          value,
+          type,
+          chain as CosmosChain,
+          chainFeeDenom,
+          decimals
+        )
         return {
           action: 'contract_execution',
           labelKey: 'contract_execution',
@@ -319,38 +325,47 @@ export const getSignDataTxAction = (
       }
 
       if (match.action === 'send') {
-        const amount =
+        const result = attempt(() =>
           parseAmountFromAminoValue(
-            JSON.parse(msg.value || '{}'),
+            value,
             type,
             chain as CosmosChain,
             chainFeeDenom,
             decimals
-          ) ?? toAmountFormatted
+          )
+        )
+        const amount =
+          'error' in result
+            ? toAmountFormatted
+            : (result.data ?? toAmountFormatted)
         return { action: 'send', labelKey: 'sent', amount }
       }
 
       if (match.action === 'deposit') {
-        const amount =
+        const result = attempt(() =>
           parseAmountFromAminoValue(
-            JSON.parse(msg.value || '{}'),
+            value,
             type,
             chain as CosmosChain,
             chainFeeDenom,
             decimals
-          ) ?? 0
+          )
+        )
+        const amount = 'error' in result ? 0 : (result.data ?? 0)
         return { action: 'deposit', labelKey: 'deposited', amount }
       }
 
       if (match.action === 'transfer') {
-        const amount =
+        const result = attempt(() =>
           parseAmountFromAminoValue(
-            JSON.parse(msg.value || '{}'),
+            value,
             type,
             chain as CosmosChain,
             chainFeeDenom,
             decimals
-          ) ?? 0
+          )
+        )
+        const amount = 'error' in result ? 0 : (result.data ?? 0)
         return { action: 'transfer', labelKey: 'transferred', amount }
       }
 

@@ -277,6 +277,8 @@ export const buildSendTxKeysignPayload = async ({
           'cosmos-sdk/MsgSend': () => ({ case: undefined }),
           'thorchain/MsgSend': () => ({ case: undefined }),
           'thorchain/MsgDeposit': () => ({ case: undefined }),
+          'thorchain/MsgLeavePool': () => ({ case: undefined }),
+          '/thorchain.v1.MsgLeavePool': () => ({ case: undefined }),
           '/types.MsgSend': () => ({ case: undefined }),
         }
       )
