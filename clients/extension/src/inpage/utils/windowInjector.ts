@@ -48,6 +48,16 @@ export const injectToWindow = () => {
     provider: ethereumProvider as unknown as EIP1193Provider,
   })
 
+  if (!window.tonkeeper) {
+    attempt(() =>
+      Object.defineProperty(window, 'tonkeeper', {
+        value: providers.ton,
+        configurable: true,
+        writable: true,
+      })
+    )
+  }
+
   setupContentScriptMessenger(providers)
 }
 
@@ -90,6 +100,11 @@ async function setupContentScriptMessenger(
       Object.defineProperties(window, {
         tronLink: {
           value: providers.tron,
+          configurable: false,
+          writable: false,
+        },
+        tonkeeper: {
+          value: providers.ton,
           configurable: false,
           writable: false,
         },
