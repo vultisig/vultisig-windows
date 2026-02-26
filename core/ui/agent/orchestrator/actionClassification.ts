@@ -1,49 +1,12 @@
 import type { BackendAction } from './types'
 
-const alwaysAutoExecute: Record<string, boolean> = {
-  add_chain: true,
-  add_coin: true,
-  remove_coin: true,
-  remove_chain: true,
-  address_book_add: true,
-  address_book_remove: true,
-  get_address_book: true,
-  get_market_price: true,
-  get_balances: true,
-  get_portfolio: true,
-  search_token: true,
-  list_vaults: true,
-  plugin_list: true,
-  plugin_spec: true,
-  plugin_installed: true,
-  plugin_uninstall: true,
-  build_swap_tx: true,
-  build_send_tx: true,
-  build_custom_tx: true,
-  mcp_status: true,
-  sign_tx: true,
-  read_evm_contract: true,
-  scan_tx: true,
-  thorchain_query: true,
-}
-
-function shouldAutoExecute(action: BackendAction): boolean {
-  if (alwaysAutoExecute[action.type]) {
-    return true
-  }
-  return action.auto_execute
-}
-
 export function filterProtectedActions(
   actions: BackendAction[]
 ): [BackendAction[], BackendAction[]] {
   const protected_: BackendAction[] = []
   const rest: BackendAction[] = []
   for (const a of actions) {
-    const isProtected =
-      (passwordRequired[a.type] || confirmationRequired[a.type]) &&
-      !alwaysAutoExecute[a.type]
-    if (isProtected) {
+    if (passwordRequired[a.type] || confirmationRequired[a.type]) {
       protected_.push(a)
     } else {
       rest.push(a)
@@ -52,14 +15,29 @@ export function filterProtectedActions(
   return [rest, protected_]
 }
 
+export function filterDisplayOnly(
+  actions: BackendAction[]
+): [BackendAction[], BackendAction[]] {
+  const display: BackendAction[] = []
+  const rest: BackendAction[] = []
+  for (const a of actions) {
+    if (displayOnlyActions[a.type]) {
+      display.push(a)
+    } else {
+      rest.push(a)
+    }
+  }
+  return [rest, display]
+}
+
 export function filterAutoActions(actions: BackendAction[]): BackendAction[] {
-  return actions.filter(shouldAutoExecute)
+  return actions
 }
 
 export function filterNonAutoActions(
-  actions: BackendAction[]
+  _actions: BackendAction[]
 ): BackendAction[] {
-  return actions.filter(a => !shouldAutoExecute(a))
+  return []
 }
 
 export function filterBuildTx(
@@ -129,4 +107,12 @@ export function needsPassword(actionType: string): boolean {
 
 export function needsConfirmation(actionType: string): boolean {
   return confirmationRequired[actionType] === true
+}
+
+const displayOnlyActions: Record<string, boolean> = {
+  mcp_status: true,
+}
+
+export function isDisplayOnly(actionType: string): boolean {
+  return displayOnlyActions[actionType] === true
 }

@@ -483,8 +483,11 @@ func (s *Store) GetAddressBookItem(id string) (*AddressBookItem, error) {
 	return &item, nil
 }
 
-func (s *Store) DeleteCoin(vaultPublicKeyECDSA, coinID string) error {
-	_, err := s.db.Exec("DELETE FROM coins WHERE id = ? AND public_key_ecdsa = ?", coinID, vaultPublicKeyECDSA)
+func (s *Store) DeleteCoin(vaultPublicKeyECDSA, chain, contractAddress, address string) error {
+	_, err := s.db.Exec(
+		"DELETE FROM coins WHERE public_key_ecdsa = ? AND chain = ? AND COALESCE(contract_address, '') = ? AND address = ?",
+		vaultPublicKeyECDSA, chain, contractAddress, address,
+	)
 	return err
 }
 

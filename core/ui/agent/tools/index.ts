@@ -16,7 +16,6 @@ import { handleGetCoins } from './handlers/getCoins'
 import { handleGetPortfolio } from './handlers/getPortfolio'
 import { handleListVaults } from './handlers/listVaults'
 import { handleMarketPrice } from './handlers/marketPrice'
-import { handleMcpStatus } from './handlers/mcpStatus'
 import { handlePluginInstall } from './handlers/pluginInstall'
 import { handlePluginInstalled } from './handlers/pluginInstalled'
 import { handlePluginList } from './handlers/pluginList'
@@ -76,5 +75,4 @@ export const toolHandlers: Record<string, ToolHandler> = {
   build_send_tx: handleBuildSendTx,
   build_custom_tx: handleBuildCustomTx,
   thorchain_query: handleThorchainQuery,
-  mcp_status: handleMcpStatus,
 }
