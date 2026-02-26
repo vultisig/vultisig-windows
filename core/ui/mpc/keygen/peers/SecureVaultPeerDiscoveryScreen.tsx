@@ -7,7 +7,6 @@ import { Animation } from '@lib/ui/animations/Animation'
 import { Match } from '@lib/ui/base/Match'
 import { Button } from '@lib/ui/buttons/Button'
 import { IconButton } from '@lib/ui/buttons/IconButton'
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { ChevronLeftIcon } from '@lib/ui/icons/ChevronLeftIcon'
@@ -19,6 +18,7 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Query } from '@lib/ui/query/Query'
+import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useState } from 'react'
@@ -165,7 +165,7 @@ export const SecureVaultPeerDiscoveryScreen = ({
             <PeersList>
               <PeerCard $status="connected">
                 <StatusIcon $status="connected">
-                  <DeviceIcon />
+                  <ThisDeviceIcon />
                 </StatusIcon>
                 <PeerInfo>
                   <Text color="contrast" size={14} weight={500}>
@@ -240,41 +240,35 @@ export const SecureVaultPeerDiscoveryScreen = ({
                 value={serverType}
                 relay={() => (
                   <>
-                    <Text
-                      color="shy"
-                      size={13}
-                      weight={500}
-                      letterSpacing={0.06}
-                    >
+                    <ModePromptText as="p" color="shy">
                       {t('secureVaultPeerDiscovery.wantToCreateVaultPrivately')}
-                    </Text>
-                    <Button
+                    </ModePromptText>
+                    <ModeToggleButton
                       kind="secondary"
                       size="sm"
                       onClick={onToggleServerType}
                       type="button"
                     >
                       {t('secureVaultPeerDiscovery.useLocalMode')}
-                    </Button>
+                    </ModeToggleButton>
                   </>
                 )}
                 local={() => (
-                  <LocalModeSwitchRow>
-                    <Text
-                      color="shy"
-                      size={13}
-                      weight={500}
-                      letterSpacing={0.06}
-                    >
+                  <>
+                    <ModePromptText as="p" color="shy">
                       {t('secureVaultPeerDiscovery.notWantToUseLocal')}
-                    </Text>
-                    <InlineActionButton
+                    </ModePromptText>
+                    <ModeToggleButton
+                      style={{
+                        backgroundColor: '#0B4EFF',
+                      }}
+                      size="sm"
                       onClick={onToggleServerType}
                       type="button"
                     >
-                      {t('secureVaultPeerDiscovery.switchBack')}
-                    </InlineActionButton>
-                  </LocalModeSwitchRow>
+                      {t('secureVaultPeerDiscovery.useStandardMode')}
+                    </ModeToggleButton>
+                  </>
                 )}
               />
             </ModeSection>
@@ -292,6 +286,23 @@ const Root = styled.div`
   height: 100%;
   position: relative;
 `
+
+const ThisDeviceIcon = () => (
+  <svg
+    fill="none"
+    height="15"
+    viewBox="0 0 10 15"
+    width="10"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      clipRule="evenodd"
+      d="M1.83333 14.6667C0.820813 14.6667 0 13.8459 0 12.8333V1.83333C0 0.820813 0.820813 0 1.83333 0H7.5C8.51253 0 9.33333 0.820813 9.33333 1.83333V12.8333C9.33333 13.8459 8.51253 14.6667 7.5 14.6667H1.83333ZM3.83333 1.66C3.5572 1.66 3.33333 1.88386 3.33333 2.16C3.33333 2.43614 3.5572 2.66 3.83333 2.66H5.5C5.77613 2.66 6 2.43614 6 2.16C6 1.88386 5.77613 1.66 5.5 1.66H3.83333Z"
+      fill="#1DC79B"
+      fillRule="evenodd"
+    />
+  </svg>
+)
 
 const HeaderIconButton = styled(IconButton)`
   && {
@@ -378,8 +389,9 @@ const WaitingTitle = styled.div`
 
 const DotsIndicator = styled.div`
   flex-shrink: 0;
-  height: 20px;
-  width: 20px;
+  height: 12px;
+  width: 12px;
+  align-self: flex-end;
 
   ${animationSize}
 `
@@ -463,22 +475,27 @@ const ModeSection = styled.div`
   flex-direction: column;
   gap: 12px;
   margin-top: auto;
-  padding: 20px 0 8px;
+  padding: 20px 0 12px;
   text-align: center;
+
+  @media ${mediaQuery.tabletDeviceAndUp} {
+    margin-top: revert;
+  }
 `
 
-const LocalModeSwitchRow = styled.div`
-  align-items: center;
-  display: flex;
-  gap: 4px;
-`
-
-const InlineActionButton = styled(UnstyledButton)`
-  color: ${getColor('contrast')};
+const ModePromptText = styled(Text)`
+  text-align: center;
   font-size: 13px;
+  font-style: normal;
   font-weight: 500;
+  line-height: 18px;
   letter-spacing: 0.06px;
-  text-decoration: underline;
+`
+
+const ModeToggleButton = styled(Button)`
+  width: 100%;
+  max-width: fit-content;
+  border-radius: 12px;
 `
 
 const BottomFade = styled.div`
