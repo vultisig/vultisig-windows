@@ -38,10 +38,12 @@ export const ManageSidePanel = () => {
 
   const handleToggle = async () => {
     if (!isSidePanelEnabled) {
-      const opened = await switchToSidePanel()
-      if (!opened) return
-
       setSidePanelEnabled(true)
+      const opened = await switchToSidePanel()
+      if (!opened) {
+        setSidePanelEnabled(false)
+        return
+      }
       window.close()
     } else {
       await switchToPopup()
