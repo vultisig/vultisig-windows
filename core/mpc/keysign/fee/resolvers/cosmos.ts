@@ -14,10 +14,11 @@ const mayaGas = 2000000000n
 const sumFeeAmountForDenom = (
   amounts: readonly { denom: string; amount: string }[],
   chainFeeDenom: string
-): bigint =>
-  amounts
-    .filter(a => a.denom === chainFeeDenom)
-    .reduce((sum, a) => sum + BigInt(a.amount || '0'), 0n)
+): bigint | null => {
+  const matchingAmounts = amounts.filter(a => a.denom === chainFeeDenom)
+  if (matchingAmounts.length === 0) return null
+  return matchingAmounts.reduce((sum, a) => sum + BigInt(a.amount), 0n)
+}
 
 const getCosmosFeeFromSignData = (
   keysignPayload: KeysignPayload,
