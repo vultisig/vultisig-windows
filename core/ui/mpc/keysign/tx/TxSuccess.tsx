@@ -3,6 +3,7 @@ import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
+import { getSignDataTxAction } from '@core/ui/mpc/keysign/tx/utils/getSignDataTxAction'
 import { ClipboardCopyIcon } from '@lib/ui/icons/ClipboardCopyIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { SquareArrowTopRightIcon } from '@lib/ui/icons/SquareArrowTopRightIcon'
@@ -42,6 +43,11 @@ export const TxSuccess = ({
     return fromChainAmount(BigInt(toAmount), coin.decimals)
   }, [toAmount, coin.decimals])
 
+  const txAction = useMemo(
+    () => getSignDataTxAction(value, formattedToAmount),
+    [value, formattedToAmount]
+  )
+
   const blockExplorerUrl = getBlockExplorerUrl({
     chain: coin.chain,
     entity: 'tx',
@@ -52,7 +58,23 @@ export const TxSuccess = ({
     <VStack gap={36}>
       <TxStatusTracker chain={coin.chain} hash={txHash} />
       <VStack gap={8}>
-        <TxOverviewAmount amount={formattedToAmount} value={coin} />
+        <TxOverviewAmount
+          amount={
+            txAction && 'amount' in txAction && txAction.amount !== undefined
+              ? txAction.amount
+              : formattedToAmount
+          }
+          value={coin}
+          actionLabel={
+            txAction?.action !== 'send' ? txAction?.labelKey : undefined
+          }
+          contractAddress={
+            txAction?.action === 'contract_execution' &&
+            'contractAddress' in txAction
+              ? txAction.contractAddress
+              : undefined
+          }
+        />
         {!skipBroadcast && (
           <List>
             <ListItem

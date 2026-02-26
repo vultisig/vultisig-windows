@@ -130,6 +130,12 @@ type MsgPayload =
       }
     }
   | {
+      case:
+        | CosmosMsgType.THORCHAIN_MSG_LEAVE_POOL
+        | CosmosMsgType.THORCHAIN_MSG_LEAVE_POOL_URL
+      value: { signer?: string }
+    }
+  | {
       case: TronMsgType.TRON_TRANSFER_CONTRACT
       value: TronTransferContract
       meta?: TronTxMeta
