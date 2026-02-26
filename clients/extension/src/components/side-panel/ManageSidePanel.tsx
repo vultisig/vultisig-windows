@@ -6,21 +6,22 @@ import { ListItemIconWrapper } from '@core/ui/vault/settings'
 import { PanelRightIcon } from '@lib/ui/icons/PanelRightIcon'
 import { Switch } from '@lib/ui/inputs/switch'
 import { ListItem } from '@lib/ui/list/item'
+import { attempt } from '@lib/utils/attempt'
 import { useTranslation } from 'react-i18next'
 
 const switchToSidePanel = async () => {
   const currentWindow = await chrome.windows.getCurrent()
-  if (currentWindow.id == null) return
+  if (currentWindow.id == null) return false
 
   await chrome.sidePanel.open({ windowId: currentWindow.id })
 
   await new Promise(resolve => setTimeout(resolve, 500))
 
   const contexts = await chrome.runtime.getContexts({
-    contextTypes: ['SIDE_PANEL' as chrome.runtime.ContextType],
+    contextTypes: [chrome.runtime.ContextType.SIDE_PANEL],
   })
 
-  if (contexts.length === 0) return
+  if (contexts.length === 0) return false
 
   await chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
 
@@ -39,14 +40,15 @@ export const ManageSidePanel = () => {
   const handleToggle = async () => {
     if (!isSidePanelEnabled) {
       setSidePanelEnabled(true)
-      const opened = await switchToSidePanel()
+      const result = await attempt(switchToSidePanel)
+      const opened = 'data' in result && result.data
       if (!opened) {
         setSidePanelEnabled(false)
         return
       }
       window.close()
     } else {
-      await switchToPopup()
+      await attempt(switchToPopup)
       setSidePanelEnabled(false)
       window.close()
     }
