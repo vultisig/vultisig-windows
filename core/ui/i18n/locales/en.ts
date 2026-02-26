@@ -824,6 +824,18 @@ export const en = {
       shares: 'Your vault holds {{shares}} shares',
     },
   },
+  secureVaultPeerDiscovery: {
+    addAtLeastMoreDevices_one: 'Add at least {{count}} more device',
+    addAtLeastMoreDevices_other: 'Add at least {{count}} more devices',
+    devicePosition: '{{current}} of {{total}}',
+    localModeWaiting: 'Local mode, waiting on devices',
+    notWantToUseLocal: "Don't want to use local?",
+    switchBack: 'Switch back',
+    useLocalMode: 'Use local mode',
+    waitingForDeviceToJoin: 'Waiting for device to join',
+    waitingForDevicesToConnect: 'Waiting for devices to connect',
+    wantToCreateVaultPrivately: 'Want to create a vault privately?',
+  },
   secureVaultSetupPasswordTooltipContent:
     'This occurs because the password is used to locally encrypt the backup file, similar to how a hard drive is encrypted. In the following step, you have the option to add a hint.',
   security: 'Security',
