@@ -1,5 +1,6 @@
 import { parseLocalPartyId } from '@core/mpc/devices/localPartyId'
 import { KeygenType } from '@core/mpc/keygen/KeygenType'
+import { mpcServerTypes } from '@core/mpc/MpcServerType'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { MpcPeersCorrector } from '@core/ui/mpc/devices/MpcPeersCorrector'
 import { InitiatingDevice } from '@core/ui/mpc/devices/peers/InitiatingDevice'
@@ -34,6 +35,7 @@ import { QueryBasedQrCode } from '@lib/ui/qr/QueryBasedQrCode'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { range } from '@lib/utils/array/range'
 import { without } from '@lib/utils/array/without'
+import { getPairComplement } from '@lib/utils/pair/getPairComplement'
 import { getRecordUnionKey } from '@lib/utils/record/union/getRecordUnionKey'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
@@ -42,6 +44,7 @@ import { useTranslation } from 'react-i18next'
 import { AutoStartKeygen } from './AutoStartKeygen'
 import { minKeygenDevices } from './config'
 import { KeygenDevicesRequirementsInfo } from './KeygenDevicesRequirementsInfo'
+import { SecureVaultPeerDiscoveryScreen } from './SecureVaultPeerDiscoveryScreen'
 
 type KeygenPeerDiscoveryStepProps = OnFinishProp & Partial<OnBackProp>
 
@@ -57,8 +60,8 @@ export const KeygenPeerDiscoveryStep = ({
   onBack,
 }: KeygenPeerDiscoveryStepProps) => {
   const { t } = useTranslation()
-  const { openUrl } = useCore()
-  const [serverType] = useMpcServerType()
+  const { isLocalModeAvailable, openUrl } = useCore()
+  const [serverType, setServerType] = useMpcServerType()
   const selectedPeers = useMpcPeers()
   const peerOptionsQuery = useMpcPeerOptionsQuery()
   const joinUrlQuery = useJoinKeygenUrlQuery()
@@ -149,109 +152,136 @@ export const KeygenPeerDiscoveryStep = ({
     return true
   }, [isMigrate, targetDeviceCount])
 
+  const isSecureTargetFlow = !isMigrate && targetDeviceCount !== undefined
+  const missingDevicesCount =
+    targetDeviceCount === undefined
+      ? 0
+      : Math.max(0, targetDeviceCount - 1 - selectedPeers.length)
+
   return (
     <>
       <MpcPeersCorrector />
       <AutoStartKeygen onFinish={onFinish} />
-      <PageHeader
-        primaryControls={<PageHeaderBackButton onClick={onBack} />}
-        secondaryControls={
-          <MatchQuery
-            value={joinUrlQuery}
-            success={value => (
-              <>
-                <IconButton
-                  onClick={() => {
-                    openUrl(educationUrl[getRecordUnionKey(opertaionType)])
-                  }}
-                >
-                  <InfoIcon />
-                </IconButton>
-                <DownloadKeygenQrCode value={value} />
-              </>
-            )}
-          />
-        }
-        title={t('scan_qr')}
-        hasBorder
-      />
-      <FitPageContent
-        as="form"
-        {...getFormProps({
-          onSubmit: onFinish,
-          isDisabled,
-        })}
-      >
-        <PageFormFrame>
-          <PeersPageContentFrame>
-            <QueryBasedQrCode value={joinUrlQuery} />
-            <PeersManagerFrame>
-              <Match
-                value={serverType}
-                local={() => <MpcLocalServerIndicator />}
-                relay={() =>
-                  isMigrate || targetDeviceCount !== undefined ? null : (
-                    <KeygenDevicesRequirementsInfo />
-                  )
-                }
+      {isSecureTargetFlow ? (
+        <SecureVaultPeerDiscoveryScreen
+          isDisabled={isDisabled}
+          isLocalModeAvailable={isLocalModeAvailable}
+          joinUrlQuery={joinUrlQuery}
+          localPartyId={localPartyId}
+          missingDevicesCount={missingDevicesCount}
+          onBack={onBack}
+          onFinish={onFinish}
+          onToggleServerType={() =>
+            setServerType(getPairComplement(mpcServerTypes, serverType))
+          }
+          peerOptionsQuery={peerOptionsQuery}
+          serverType={serverType}
+          targetDeviceCount={targetDeviceCount}
+        />
+      ) : (
+        <>
+          <PageHeader
+            primaryControls={<PageHeaderBackButton onClick={onBack} />}
+            secondaryControls={
+              <MatchQuery
+                value={joinUrlQuery}
+                success={value => (
+                  <>
+                    <IconButton
+                      onClick={() => {
+                        openUrl(educationUrl[getRecordUnionKey(opertaionType)])
+                      }}
+                    >
+                      <InfoIcon />
+                    </IconButton>
+                    <DownloadKeygenQrCode value={value} />
+                  </>
+                )}
               />
-              <PeersManagerTitle target={devicesTarget} />
-              <PeersContainer>
-                <InitiatingDevice />
-                <MatchQuery
-                  value={peerOptionsQuery}
-                  success={peerOptions => {
-                    const placeholderCount = isMigrate
-                      ? missingPeers.length
-                      : Math.max(0, recommendedPeers - peerOptions.length)
+            }
+            title={t('scan_qr')}
+            hasBorder
+          />
+          <FitPageContent
+            as="form"
+            {...getFormProps({
+              onSubmit: onFinish,
+              isDisabled,
+            })}
+          >
+            <PageFormFrame>
+              <PeersPageContentFrame>
+                <QueryBasedQrCode value={joinUrlQuery} />
+                <PeersManagerFrame>
+                  <Match
+                    value={serverType}
+                    local={() => <MpcLocalServerIndicator />}
+                    relay={() =>
+                      isMigrate || targetDeviceCount !== undefined ? null : (
+                        <KeygenDevicesRequirementsInfo />
+                      )
+                    }
+                  />
+                  <PeersManagerTitle target={devicesTarget} />
+                  <PeersContainer>
+                    <InitiatingDevice />
+                    <MatchQuery
+                      value={peerOptionsQuery}
+                      success={peerOptions => {
+                        const placeholderCount = isMigrate
+                          ? missingPeers.length
+                          : Math.max(0, recommendedPeers - peerOptions.length)
 
-                    return (
-                      <>
-                        {peerOptions.map(value => (
-                          <PeerOption key={value} value={value} />
-                        ))}
-                        {range(placeholderCount).map(index => {
-                          return (
-                            <PeerPlaceholder key={index}>
-                              {isMigrate
-                                ? t('scan_with_device_name', {
-                                    name: parseLocalPartyId(missingPeers[index])
-                                      .deviceName,
-                                  })
-                                : t('scan_with_device_index', {
-                                    index: index + peerOptions.length + 1,
-                                  })}
-                            </PeerPlaceholder>
-                          )
-                        })}
-                        {showOptionalDevice && (
+                        return (
                           <>
-                            {peerOptions.length >= recommendedPeers && (
-                              <PeerPlaceholder>
-                                {t('optionalDevice')}
-                              </PeerPlaceholder>
+                            {peerOptions.map(value => (
+                              <PeerOption key={value} value={value} />
+                            ))}
+                            {range(placeholderCount).map(index => {
+                              return (
+                                <PeerPlaceholder key={index}>
+                                  {isMigrate
+                                    ? t('scan_with_device_name', {
+                                        name: parseLocalPartyId(
+                                          missingPeers[index]
+                                        ).deviceName,
+                                      })
+                                    : t('scan_with_device_index', {
+                                        index: index + peerOptions.length + 1,
+                                      })}
+                                </PeerPlaceholder>
+                              )
+                            })}
+                            {showOptionalDevice && (
+                              <>
+                                {peerOptions.length >= recommendedPeers && (
+                                  <PeerPlaceholder>
+                                    {t('optionalDevice')}
+                                  </PeerPlaceholder>
+                                )}
+                              </>
                             )}
                           </>
-                        )}
-                      </>
-                    )
-                  }}
-                />
-                {targetDeviceCount !== undefined &&
-                  peerOptionsQuery.data === undefined &&
-                  range(recommendedPeers).map(index => (
-                    <PeerPlaceholder key={index}>
-                      {t('scan_with_device_index', {
-                        index: index + 1,
-                      })}
-                    </PeerPlaceholder>
-                  ))}
-              </PeersContainer>
-            </PeersManagerFrame>
-          </PeersPageContentFrame>
-          <PeerDiscoveryFormFooter isDisabled={isDisabled} />
-        </PageFormFrame>
-      </FitPageContent>
+                        )
+                      }}
+                    />
+                    {targetDeviceCount !== undefined &&
+                      peerOptionsQuery.data === undefined &&
+                      range(recommendedPeers).map(index => (
+                        <PeerPlaceholder key={index}>
+                          {t('scan_with_device_index', {
+                            index: index + 1,
+                          })}
+                        </PeerPlaceholder>
+                      ))}
+                  </PeersContainer>
+                </PeersManagerFrame>
+              </PeersPageContentFrame>
+              <PeerDiscoveryFormFooter isDisabled={isDisabled} />
+            </PageFormFrame>
+          </FitPageContent>
+        </>
+      )}
       <KeygenPeerDiscoveryEducation />
     </>
   )
