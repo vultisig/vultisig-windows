@@ -25,20 +25,11 @@ runInpageProviderBridgeBackgroundAgent()
 runBackgroundEventsAgent()
 
 if (chrome.sidePanel) {
-  const applySidePanelBehavior = (enabled: boolean) =>
+  getIsSidePanelEnabled().then(enabled =>
     chrome.sidePanel
       .setPanelBehavior({ openPanelOnActionClick: enabled })
       .catch(console.error)
-
-  getIsSidePanelEnabled().then(applySidePanelBehavior)
-
-  chrome.storage.onChanged.addListener((changes, areaName) => {
-    if (areaName !== 'local') return
-    if (!('isSidePanelEnabled' in changes)) return
-
-    const { newValue } = changes.isSidePanelEnabled as { newValue?: boolean }
-    applySidePanelBehavior(newValue ?? false)
-  })
+  )
 }
 if (import.meta.env.VITE_DEV_RELOAD) {
   const connect = () => {
