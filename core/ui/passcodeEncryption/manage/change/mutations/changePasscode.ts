@@ -33,11 +33,12 @@ export const useChangePasscodeMutation = () => {
 
       const vaultsKeyShares = recordMap(
         recordFromItems(vaults, getVaultId),
-        ({ keyShares, chainKeyShares }) => {
+        ({ keyShares, chainKeyShares, keyShareMldsa }) => {
           const decrypted = decryptVaultAllKeyShares({
             key,
             keyShares,
             chainKeyShares,
+            keyShareMldsa,
           })
           return encryptVaultAllKeyShares({
             ...decrypted,

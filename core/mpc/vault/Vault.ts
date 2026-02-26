@@ -8,6 +8,7 @@ export type VaultKeyShares = Record<SignatureAlgorithm, string>
 export type VaultAllKeyShares = {
   keyShares: VaultKeyShares
   chainKeyShares?: Partial<Record<Chain, string>>
+  keyShareMldsa?: string
 }
 
 export type Vault = {
@@ -27,6 +28,8 @@ export type Vault = {
   lastPasswordVerificationTime?: number
   chainPublicKeys?: Partial<Record<Chain, string>>
   chainKeyShares?: Partial<Record<Chain, string>>
+  publicKeyMldsa?: string
+  keyShareMldsa?: string
 }
 
 export const getVaultId = (vault: Vault): string => vault.publicKeys.ecdsa

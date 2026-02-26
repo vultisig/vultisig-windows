@@ -4,6 +4,7 @@ import {
   setKeygenComplete,
   waitForKeygenComplete,
 } from '@core/mpc/keygenComplete'
+import { MldsaKeygen } from '@core/mpc/mldsa/mldsaKeygen'
 import { MpcLib } from '@core/mpc/mpcLib'
 import { Schnorr } from '@core/mpc/schnorr/schnorrKeygen'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
@@ -11,6 +12,7 @@ import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
+import { useIsMLDSAEnabled } from '@core/ui/storage/mldsaEnabled'
 import { useVaultOrders } from '@core/ui/storage/vaults'
 import { ChildrenProp } from '@lib/ui/props'
 import { without } from '@lib/utils/array/without'
@@ -27,6 +29,7 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
   const vaultName = useKeygenVaultName()
   const localPartyId = useMpcLocalPartyId()
   const isInitiatingDevice = useIsInitiatingDevice()
+  const isMLDSAEnabled = useIsMLDSAEnabled()
 
   const vaultOrders = useVaultOrders()
 
@@ -68,6 +71,25 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
       )
       const schnorrResult = await schnorrKeygen.startKeygenWithRetry()
 
+      let publicKeyMldsa: string | undefined
+      let keyShareMldsa: string | undefined
+
+      if (isMLDSAEnabled) {
+        onStepChange('mldsa')
+
+        const mldsaKeygen = new MldsaKeygen(
+          isInitiatingDevice,
+          serverUrl,
+          sessionId,
+          localPartyId,
+          signers,
+          encryptionKeyHex
+        )
+        const mldsaResult = await mldsaKeygen.startKeygenWithRetry()
+        publicKeyMldsa = mldsaResult.publicKey
+        keyShareMldsa = mldsaResult.keyshare
+      }
+
       const publicKeys = {
         ecdsa: dklsResult.publicKey,
         eddsa: schnorrResult.publicKey,
@@ -84,6 +106,8 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
         createdAt: Date.now(),
         hexChainCode: dklsResult.chaincode,
         keyShares,
+        publicKeyMldsa,
+        keyShareMldsa,
         order: getLastItemOrder(vaultOrders),
         lastPasswordVerificationTime: hasServer(signers)
           ? Date.now()
@@ -108,6 +132,7 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
     [
       encryptionKeyHex,
       isInitiatingDevice,
+      isMLDSAEnabled,
       localPartyId,
       serverUrl,
       sessionId,

@@ -840,6 +840,7 @@ __metadata:
     "@core/config": "workspace:^"
     "@cosmjs/encoding": "npm:^0.38.1"
     "@lib/dkls": "workspace:^"
+    "@lib/mldsa": "workspace:^"
     "@lib/schnorr": "workspace:^"
     "@lib/utils": "workspace:^"
     "@mysten/sui": "npm:^2.3.0"
@@ -1863,7 +1864,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@lib/mldsa@workspace:lib/mldsa":
+"@lib/mldsa@workspace:^, @lib/mldsa@workspace:lib/mldsa":
   version: 0.0.0-use.local
   resolution: "@lib/mldsa@workspace:lib/mldsa"
   languageName: unknown

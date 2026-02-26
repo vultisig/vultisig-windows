@@ -24,30 +24,43 @@ export const toStorageVault = ({
   lastPasswordVerificationTime,
   chainPublicKeys,
   chainKeyShares,
-}: Vault): storage.Vault => ({
-  last_password_verification_time: lastPasswordVerificationTime ?? Date.now(),
-  name: name,
-  public_key_ecdsa: publicKeys.ecdsa,
-  public_key_eddsa: publicKeys.eddsa,
-  public_key_mldsa: '' as string, // TODO: placeholder, mldsa support is not yet implemented in the vault
-  signers: signers,
-  created_at: (createdAt ? new Date(createdAt) : new Date()).toISOString(),
-  hex_chain_code: hexChainCode,
-  keyshares: toEntries(keyShares).map(({ key, value }) => ({
+  publicKeyMldsa,
+  keyShareMldsa,
+}: Vault): storage.Vault => {
+  const keyshares = toEntries(keyShares).map(({ key, value }) => ({
     public_key: publicKeys[key],
     keyshare: value,
-  })),
-  local_party_id: localPartyId,
-  reshare_prefix: resharePrefix ?? '',
-  order,
-  is_backed_up: isBackedUp,
-  coins: [],
-  lib_type: libType,
-  folder_id: folderId,
-  chain_public_keys: chainPublicKeys,
-  chain_key_shares: chainKeyShares,
-  convertValues: () => {},
-})
+  }))
+
+  if (publicKeyMldsa && keyShareMldsa) {
+    keyshares.push({
+      public_key: publicKeyMldsa,
+      keyshare: keyShareMldsa,
+    })
+  }
+
+  return {
+    last_password_verification_time: lastPasswordVerificationTime ?? Date.now(),
+    name: name,
+    public_key_ecdsa: publicKeys.ecdsa,
+    public_key_eddsa: publicKeys.eddsa,
+    public_key_mldsa: publicKeyMldsa ?? '',
+    signers: signers,
+    created_at: (createdAt ? new Date(createdAt) : new Date()).toISOString(),
+    hex_chain_code: hexChainCode,
+    keyshares,
+    local_party_id: localPartyId,
+    reshare_prefix: resharePrefix ?? '',
+    order,
+    is_backed_up: isBackedUp,
+    coins: [],
+    lib_type: libType,
+    folder_id: folderId,
+    chain_public_keys: chainPublicKeys,
+    chain_key_shares: chainKeyShares,
+    convertValues: () => {},
+  }
+}
 
 export const fromStorageVault = (
   vault: Omit<storage.Vault, 'coins' | 'convertValues'>
@@ -55,7 +68,6 @@ export const fromStorageVault = (
   const publicKeys = {
     ecdsa: vault.public_key_ecdsa,
     eddsa: vault.public_key_eddsa,
-    mldsa: vault.public_key_mldsa ?? '',
   }
 
   const keyShares = recordFromKeys(signingAlgorithms, algorithm => {
@@ -65,6 +77,13 @@ export const fromStorageVault = (
       vault.keyshares.find(keyShare => keyShare.public_key === publicKey)
     ).keyshare
   })
+
+  const publicKeyMldsa = vault.public_key_mldsa || undefined
+  let keyShareMldsa: string | undefined
+  if (publicKeyMldsa) {
+    const mldsaKs = vault.keyshares.find(ks => ks.public_key === publicKeyMldsa)
+    keyShareMldsa = mldsaKs?.keyshare
+  }
 
   const chainPublicKeys = vault.chain_public_keys as
     | Partial<Record<Chain, string>>
@@ -90,5 +109,7 @@ export const fromStorageVault = (
     isBackedUp: vault.is_backed_up,
     chainPublicKeys,
     chainKeyShares,
+    publicKeyMldsa,
+    keyShareMldsa,
   }
 }

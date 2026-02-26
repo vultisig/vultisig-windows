@@ -82,11 +82,11 @@ export namespace storage {
 	    chain_public_keys?: Record<string, string>;
 	    chain_key_shares?: Record<string, string>;
 	    public_key_mldsa?: string;
-
+	
 	    static createFrom(source: any = {}) {
 	        return new Vault(source);
 	    }
-
+	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.name = source["name"];

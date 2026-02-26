@@ -85,6 +85,7 @@ export const useBackupVaultMutation = ({
         const decrypted = decryptVaultAllKeyShares({
           keyShares: vault.keyShares,
           chainKeyShares: vault.chainKeyShares,
+          keyShareMldsa: vault.keyShareMldsa,
           key: passcode,
         })
 
