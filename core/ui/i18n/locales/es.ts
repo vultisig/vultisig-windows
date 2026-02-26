@@ -688,8 +688,6 @@ export const es = {
   referral_reg_fee: 'Tarifa de inscripción',
   referral_status: 'Estado',
   referrals_default_title: 'Remisión',
-  register_guide: 'Guía de registro',
-  register_your_vaults: '¡Registre sus Bóvedas!',
   remove_token: 'Eliminar token',
   rename: 'Rebautizar',
   rename_vault: 'Cambiar el nombre de la bóveda',
@@ -939,14 +937,6 @@ export const es = {
     'Compartir no es compatible con este navegador.',
   vault_qr_share_text: '¡Mira este código QR de la bóveda!',
   vault_qr_share_title: 'Código QR de la bóveda',
-  vault_register_for_airdrop_list_item_1: 'Guarda tu código QR de Vault',
-  vault_register_for_airdrop_list_item_2_part_1: 'Ir a',
-  vault_register_for_airdrop_list_item_2_part_2: 'Vultisig Web',
-  vault_register_for_airdrop_list_item_3: 'Sube tu código QR de Vault',
-  vault_register_for_airdrop_list_item_4:
-    '¡Rastrea tus VULTIES (Puntos Airdrop) !',
-  vault_register_for_airdrop_save_vault_QR_button: 'Guardar código QR de Vault',
-  vault_register_for_airdrop_title: 'Bóveda de registro',
   vault_rename_page_header_title: 'Editar el nombre de su bóveda',
   vault_rename_page_name_error:
     'El nombre de la bóveda debe tener entre 1 y 50 caracteres',

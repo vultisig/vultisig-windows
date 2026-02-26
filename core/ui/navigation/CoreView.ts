@@ -21,7 +21,6 @@ export type CoreView =
   | { id: 'address'; state: { address: string } }
   | { id: 'addressBook' }
   | { id: 'faq' }
-  | { id: 'airdropRegister' }
   | {
       id: 'createAddressBookItem'
       state?: { address?: string; chain?: Chain }

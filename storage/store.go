@@ -124,6 +124,7 @@ func (s *Store) SaveVault(vault *Vault) error {
 		"last_password_verification_time",
 		"chain_public_keys",
 		"chain_key_shares",
+		"public_key_mldsa",
 	}
 	query := fmt.Sprintf(`INSERT OR REPLACE INTO vaults (%s) VALUES (%s)`,
 		strings.Join(columns, ", "),
@@ -163,6 +164,7 @@ func (s *Store) SaveVault(vault *Vault) error {
 		vault.LastPasswordVerificationTime,
 		chainPublicKeys,
 		chainKeyShares,
+		vault.PublicKeyMLDSA,
 	)
 	if err != nil {
 		return fmt.Errorf("could not upsert vault, err: %w", err)
@@ -183,7 +185,7 @@ func (s *Store) SaveVault(vault *Vault) error {
 
 func (s *Store) GetVault(publicKeyEcdsa string) (*Vault, error) {
 	query := `SELECT name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code,
-		local_party_id, signers, reshare_prefix, "order", is_backedup, folder_id, lib_type, last_password_verification_time, chain_public_keys, chain_key_shares
+		local_party_id, signers, reshare_prefix, "order", is_backedup, folder_id, lib_type, last_password_verification_time, chain_public_keys, chain_key_shares, public_key_mldsa
 		FROM vaults WHERE public_key_ecdsa = ?`
 	row := s.db.QueryRow(query, publicKeyEcdsa)
 	var signers string
@@ -206,6 +208,7 @@ func (s *Store) GetVault(publicKeyEcdsa string) (*Vault, error) {
 		&vault.LastPasswordVerificationTime,
 		&chainPublicKeys,
 		&chainKeyShares,
+		&vault.PublicKeyMLDSA,
 	)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -289,7 +292,7 @@ func (s *Store) getKeyShares(vaultPublicKeyECDSA string) ([]KeyShare, error) {
 
 func (s *Store) GetVaults() ([]*Vault, error) {
 	query := `SELECT name, public_key_ecdsa, public_key_eddsa, created_at, hex_chain_code,
-	local_party_id, signers, reshare_prefix, "order", is_backedup, folder_id, lib_type, last_password_verification_time, chain_public_keys, chain_key_shares FROM vaults`
+	local_party_id, signers, reshare_prefix, "order", is_backedup, folder_id, lib_type, last_password_verification_time, chain_public_keys, chain_key_shares, public_key_mldsa FROM vaults`
 
 	rows, err := s.db.Query(query)
 	if err != nil {
@@ -319,6 +322,7 @@ func (s *Store) GetVaults() ([]*Vault, error) {
 			&vault.LastPasswordVerificationTime,
 			&chainPublicKeys,
 			&chainKeyShares,
+			&vault.PublicKeyMLDSA,
 		)
 		if err != nil {
 			return nil, fmt.Errorf("could not scan vault, err: %w", err)
@@ -479,8 +483,11 @@ func (s *Store) GetAddressBookItem(id string) (*AddressBookItem, error) {
 	return &item, nil
 }
 
-func (s *Store) DeleteCoin(vaultPublicKeyECDSA, coinID string) error {
-	_, err := s.db.Exec("DELETE FROM coins WHERE id = ? AND public_key_ecdsa = ?", coinID, vaultPublicKeyECDSA)
+func (s *Store) DeleteCoin(vaultPublicKeyECDSA, chain, contractAddress, address string) error {
+	_, err := s.db.Exec(
+		"DELETE FROM coins WHERE public_key_ecdsa = ? AND chain = ? AND COALESCE(contract_address, '') = ? AND address = ?",
+		vaultPublicKeyECDSA, chain, contractAddress, address,
+	)
 	return err
 }
 

@@ -693,8 +693,6 @@ export const de = {
   referral_reg_fee: 'Anmeldegebühr',
   referral_status: 'Status',
   referrals_default_title: 'Verweisung',
-  register_guide: 'Leitfaden zur Registrierung',
-  register_your_vaults: 'Registrieren Sie Ihre Tresore!',
   remove_token: 'Token entfernen',
   rename: 'Umbenennen',
   rename_vault: 'Tresor umbenennen',
@@ -941,14 +939,6 @@ export const de = {
     'Das Teilen von Inhalten wird von diesem Browser nicht unterstützt.',
   vault_qr_share_text: 'Schaut euch diesen Tresor-QR-Code an!',
   vault_qr_share_title: 'Vault QR-Code',
-  vault_register_for_airdrop_list_item_1: 'Speichern Sie Ihren Vault-QR-Code',
-  vault_register_for_airdrop_list_item_2_part_1: 'Gehe zu',
-  vault_register_for_airdrop_list_item_2_part_2: 'Vultisig Web',
-  vault_register_for_airdrop_list_item_3: 'Laden Sie Ihren Vault-QR-Code hoch',
-  vault_register_for_airdrop_list_item_4:
-    'Verfolge deine VULTIES (Airdrop-Punkte)!',
-  vault_register_for_airdrop_save_vault_QR_button: 'Save Vault QR',
-  vault_register_for_airdrop_title: 'Register-Tresor',
   vault_rename_page_header_title: 'Bearbeiten Sie Ihren Tresornamen',
   vault_rename_page_name_error:
     'Der Tresorname muss zwischen 1 und 50 Zeichen lang sein.',

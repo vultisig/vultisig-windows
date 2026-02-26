@@ -4,7 +4,6 @@ export type Action = {
   title: string
   description?: string
   params?: Record<string, unknown>
-  auto_execute: boolean
 }
 
 export type Suggestion = {

@@ -1,21 +1,14 @@
 import { SvgProps } from '@lib/ui/props'
-import { FC } from 'react'
 
-export const CloudUploadIcon: FC<SvgProps> = props => (
+export const CloudUploadIcon = (props: SvgProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="1em"
     height="1em"
-    fill="none"
-    viewBox="0 0 20 20"
+    viewBox="0 0 24 24"
+    fill="currentColor"
     {...props}
   >
-    <path
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth={1.5}
-      d="M10 16.042v-6.25m0 0 2.083 2.084M10 9.792l-2.083 2.084m4.583 4.166h2.604a3.437 3.437 0 1 0-.108-6.873 5 5 0 0 0-9.724-1.841 4.376 4.376 0 0 0 .561 8.714H7.5"
-    />
+    <path d="M5.77996 8.12427C6.80396 5.70153 9.20241 4 12 4C15.5725 4 18.4969 6.77542 18.7344 10.2877C21.1392 10.5876 23 12.639 23 15.125C23 17.8174 20.8174 20 18.125 20H12.75V13.5607L13.9697 14.7803C14.2626 15.0732 14.7374 15.0732 15.0303 14.7803C15.3232 14.4874 15.3232 14.0126 15.0303 13.7197L12.5303 11.2197C12.2374 10.9268 11.7626 10.9268 11.4697 11.2197L8.96967 13.7197C8.67678 14.0126 8.67678 14.4874 8.96967 14.7803C9.26256 15.0732 9.73744 15.0732 10.0303 14.7803L11.25 13.5607V20H7C3.68629 20 1 17.3137 1 14C1 11.1041 3.05102 8.68825 5.77996 8.12427Z" />
   </svg>
 )

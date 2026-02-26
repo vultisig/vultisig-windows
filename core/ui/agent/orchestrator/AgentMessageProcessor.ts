@@ -1,9 +1,11 @@
 import {
   filterAutoActions,
   filterBuildTx,
+  filterDisplayOnly,
   filterNonAutoActions,
   filterProtectedActions,
   filterSignTx,
+  isDisplayOnly,
   needsConfirmation,
   needsPassword,
 } from './actionClassification'
@@ -16,6 +18,7 @@ import type { AgentPromptService } from './AgentPromptService'
 import type { AgentToolExecutor } from './AgentToolExecutor'
 import { buildSignTxAction } from './AgentTxPipeline'
 import type { AgentTxService } from './AgentTxService'
+import { toolManifest } from './toolManifest'
 import type {
   ActionResult,
   BackendAction,
@@ -89,11 +92,8 @@ export class AgentMessageProcessor {
         convId: ctx.convId,
         req,
         token: ctx.token,
-        onTextDelta: delta =>
-          this.events.emit('text_delta', {
-            conversationId: ctx.convId,
-            delta,
-          }),
+        onTextDelta: () => {},
+        onActions: actions => this.emitDisplayOnlyToolCalls(ctx, actions),
         signal: ctx.signal,
       })
     } catch (err) {
@@ -101,6 +101,7 @@ export class AgentMessageProcessor {
       return
     }
 
+    resp.message.content = ''
     await this.handleBackendResponse(ctx, resp)
   }
 
@@ -114,11 +115,29 @@ export class AgentMessageProcessor {
     }
 
     if (err instanceof UnauthorizedError) {
-      this.auth.invalidateToken(vaultPubKey)
-      this.events.emit('auth_required', {
-        conversationId: convId,
-        vaultPubKey,
-      })
+      this.auth
+        .refreshIfNeeded(vaultPubKey)
+        .then(refreshed => {
+          if (refreshed) {
+            this.events.emit('error', {
+              conversationId: convId,
+              error: 'session refreshed — please resend your message',
+            })
+            return
+          }
+          this.auth.invalidateToken(vaultPubKey)
+          this.events.emit('auth_required', {
+            conversationId: convId,
+            vaultPubKey,
+          })
+        })
+        .catch(() => {
+          this.auth.invalidateToken(vaultPubKey)
+          this.events.emit('auth_required', {
+            conversationId: convId,
+            vaultPubKey,
+          })
+        })
       return
     }
 
@@ -140,6 +159,7 @@ export class AgentMessageProcessor {
       public_key: ctx.vaultPubKey,
       content: message,
       context: msgCtx,
+      tools: toolManifest,
     }
 
     let resp: SendMessageResponse
@@ -153,6 +173,7 @@ export class AgentMessageProcessor {
             conversationId: ctx.convId,
             delta,
           }),
+        onActions: actions => this.emitDisplayOnlyToolCalls(ctx, actions),
         signal: ctx.signal,
       })
     } catch (err) {
@@ -161,6 +182,22 @@ export class AgentMessageProcessor {
     }
 
     await this.handleBackendResponse(ctx, resp)
+  }
+
+  private emitDisplayOnlyToolCalls(
+    ctx: ConversationContext,
+    actions: BackendAction[]
+  ): void {
+    for (const action of actions) {
+      if (!isDisplayOnly(action.type)) continue
+      this.events.emit('tool_call', {
+        conversationId: ctx.convId,
+        actionId: action.id,
+        actionType: action.type,
+        title: action.title,
+        params: action.params,
+      })
+    }
   }
 
   private async handleBackendResponse(
@@ -188,7 +225,6 @@ export class AgentMessageProcessor {
         title: a.title,
         description: a.description,
         params: a.params,
-        auto_execute: a.auto_execute,
       })),
       suggestions: resp.suggestions?.map(s => ({
         id: s.id,
@@ -202,9 +238,21 @@ export class AgentMessageProcessor {
       this.txService.setPendingTx(ctx.convId, resp.tx_ready)
     }
 
-    const [actionsAfterBuild, buildAction] = filterBuildTx(
+    const [executableActions, displayOnlyActions] = filterDisplayOnly(
       filterAutoActions(unprotectedActions)
     )
+
+    for (const action of displayOnlyActions) {
+      this.events.emit('action_result', {
+        conversationId: ctx.convId,
+        actionId: action.id,
+        actionType: action.type,
+        success: true,
+        data: action.params ?? {},
+      })
+    }
+
+    const [actionsAfterBuild, buildAction] = filterBuildTx(executableActions)
     const [autoActions, signAction] = filterSignTx(actionsAfterBuild)
 
     if (buildAction && !this.txService.hasPendingTx(ctx.convId)) {
@@ -303,6 +351,7 @@ export class AgentMessageProcessor {
                 conversationId: ctx.convId,
                 delta,
               }),
+            onActions: actions => this.emitDisplayOnlyToolCalls(ctx, actions),
             signal: ctx.signal,
           })
         } catch {

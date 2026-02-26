@@ -1867,6 +1867,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@lib/mldsa@workspace:lib/mldsa":
+  version: 0.0.0-use.local
+  resolution: "@lib/mldsa@workspace:lib/mldsa"
+  languageName: unknown
+  linkType: soft
+
 "@lib/schnorr@workspace:^, @lib/schnorr@workspace:lib/schnorr":
   version: 0.0.0-use.local
   resolution: "@lib/schnorr@workspace:lib/schnorr"

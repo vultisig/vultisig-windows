@@ -689,8 +689,6 @@ export const it = {
   referral_reg_fee: 'Quota di iscrizione',
   referral_status: 'Stato',
   referrals_default_title: 'Riferimento',
-  register_guide: 'Guida alla registrazione',
-  register_your_vaults: 'Registra i tuoi Vault!',
   remove_token: 'Rimuovi token',
   rename: 'Rinominare',
   rename_vault: 'Rinomina Vault',
@@ -936,14 +934,6 @@ export const it = {
     'Condivisione non supportata su questo browser.',
   vault_qr_share_text: "Dai un'occhiata al codice QR di questo caveau!",
   vault_qr_share_title: 'Codice QR del caveau',
-  vault_register_for_airdrop_list_item_1: 'Salva il tuo Vault QR',
-  vault_register_for_airdrop_list_item_2_part_1: 'Vai a',
-  vault_register_for_airdrop_list_item_2_part_2: 'Vultisig Web',
-  vault_register_for_airdrop_list_item_3: 'Carica il tuo codice QR Vault',
-  vault_register_for_airdrop_list_item_4:
-    'Tieni traccia dei tuoi VULTIES (Punti Airdrop)!',
-  vault_register_for_airdrop_save_vault_QR_button: 'Salva Vault QR',
-  vault_register_for_airdrop_title: 'Registra Vault',
   vault_rename_page_header_title: 'Modifica il nome del tuo vault',
   vault_rename_page_name_error:
     'Il nome del vault deve essere compreso tra 1 e 50 caratteri',

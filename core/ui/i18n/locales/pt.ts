@@ -687,8 +687,6 @@ export const pt = {
   referral_reg_fee: 'Taxa de inscrição',
   referral_status: 'Status',
   referrals_default_title: 'Encaminhamento',
-  register_guide: 'Guia de Registro',
-  register_your_vaults: 'Registre seus cofres!',
   remove_token: 'Remover token',
   rename: 'Renomear',
   rename_vault: 'Renomear Cofre',
@@ -935,15 +933,6 @@ export const pt = {
     'O compartilhamento não é compatível com este navegador.',
   vault_qr_share_text: 'Confira este código QR do cofre!',
   vault_qr_share_title: 'Código QR do cofre',
-  vault_register_for_airdrop_list_item_1: 'Salve seu QR Code do Vault',
-  vault_register_for_airdrop_list_item_2_part_1: 'Vá para',
-  vault_register_for_airdrop_list_item_2_part_2: 'Web Vultisig',
-  vault_register_for_airdrop_list_item_3:
-    'Faça o upload do seu código QR do Vault.',
-  vault_register_for_airdrop_list_item_4:
-    'Acompanhe seus VULTIES (Pontos de Airdrop)!',
-  vault_register_for_airdrop_save_vault_QR_button: 'QR Code do Save Vault',
-  vault_register_for_airdrop_title: 'Cofre de Registro',
   vault_rename_page_header_title: 'Edite o nome do seu cofre',
   vault_rename_page_name_error:
     'O nome do cofre deve ter entre 1 e 50 caracteres.',

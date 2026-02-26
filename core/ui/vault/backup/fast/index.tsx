@@ -3,7 +3,7 @@ import { getVaultId } from '@core/mpc/vault/Vault'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { VaultIcon } from '@lib/ui/icons/VaultIcon'
+import { EmailNotificationIcon } from '@lib/ui/icons/EmailNotificationIcon'
 import {
   MultiCharacterInput,
   MultiCharacterInputProps,
@@ -13,7 +13,6 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -80,7 +79,7 @@ export const EmailConfirmation = ({
         <CenteredContent gap={24}>
           <VStack gap={8} alignItems="center">
             <IconWrapper>
-              <VaultIcon style={{ fontSize: 20 }} />
+              <EmailNotificationIcon style={{ fontSize: 20 }} />
             </IconWrapper>
             <Text
               size={22}
@@ -94,7 +93,7 @@ export const EmailConfirmation = ({
               {t('fastVaultSetup.backup.codeInfo')}
             </Text>
           </VStack>
-          <VStack gap={8} alignItems="center">
+          <VStack gap={50} alignItems="center">
             <MultiCharacterInput
               value={input}
               onChange={value => {
@@ -126,14 +125,33 @@ export const EmailConfirmation = ({
 }
 
 const IconWrapper = styled.div`
+  position: relative;
   width: 40px;
   height: 40px;
-  border-radius: 12px;
-  background: ${getColor('primaryAlt')};
+  border-radius: 50%;
+  background: #03132c;
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.25) inset;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${getColor('primary')};
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 8px;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(37, 97, 255, 0.4) 0%,
+      transparent 70%
+    );
+    border-radius: 50%;
+    pointer-events: none;
+  }
 `
 
 const CenteredContent = styled(VStack)`
