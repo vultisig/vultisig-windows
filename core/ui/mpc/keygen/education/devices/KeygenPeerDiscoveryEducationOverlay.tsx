@@ -1,5 +1,5 @@
 import { Button } from '@lib/ui/buttons/Button'
-import { FolderUploadIcon } from '@lib/ui/icons/FolderUploadIcon'
+import { ArrowWallDownIcon } from '@lib/ui/icons/ArrowWallDownIcon'
 import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { OnFinishProp } from '@lib/ui/props'
@@ -10,15 +10,21 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useResponsiveness } from '../../../../providers/ResponsivenessProvider'
+
 export const KeygenPeerDiscoveryEducationOverlay: FC<OnFinishProp> = ({
   onFinish,
 }) => {
   const { t } = useTranslation()
+  const { isTabletOrLarger } = useResponsiveness()
 
   return (
-    <OverlayWrapper alignItems="center" justifyContent="center">
+    <OverlayWrapper
+      alignItems="center"
+      justifyContent={isTabletOrLarger ? 'center' : 'flex-end'}
+    >
       <OverlayContent justifyContent="space-between">
-        <OverlayContentWrapper justifyContent="center" gap={36}>
+        <OverlayContentWrapper flexGrow justifyContent="flex-end" gap={36}>
           <PhonePreview>
             <PhoneMock>
               <PhoneNotch />
@@ -29,7 +35,9 @@ export const KeygenPeerDiscoveryEducationOverlay: FC<OnFinishProp> = ({
                   <span>{t('scan_qr')}</span>
                 </PhoneActionButton>
                 <PhoneActionButton>
-                  <FolderUploadIcon />
+                  <ImportIconBadge>
+                    <ArrowWallDownIcon />
+                  </ImportIconBadge>
                   <span>{t('import')}</span>
                 </PhoneActionButton>
               </PhoneActionsRow>
@@ -37,17 +45,15 @@ export const KeygenPeerDiscoveryEducationOverlay: FC<OnFinishProp> = ({
             </PhoneMock>
           </PhonePreview>
           <VStack gap={12} justifyContent="center">
-            <Text centerHorizontally size={42} weight={500} color="contrast">
-              {t('scanThe')} {t('qrCode')} on your other devices
+            <Text centerHorizontally size={17} weight={500} color="contrast">
+              {t('waiting_for_devices_to_join')}
             </Text>
             <Text centerHorizontally size={14} weight={500} color="shyExtra">
-              On your other device, open the app and tap {`"${t('scan_qr')}"`}{' '}
-              to connect it.
+              {t('waiting_for_devices_to_join_description')}
             </Text>
           </VStack>
-          <OverlayButton onClick={onFinish}>Start scanning</OverlayButton>
+          <OverlayButton onClick={onFinish}>{t('scan_qr')}</OverlayButton>
         </OverlayContentWrapper>
-        <HomeIndicator />
       </OverlayContent>
     </OverlayWrapper>
   )
@@ -55,19 +61,16 @@ export const KeygenPeerDiscoveryEducationOverlay: FC<OnFinishProp> = ({
 
 const OverlayContent = styled(VStack)`
   width: min(92vw, 760px);
-  min-height: 680px;
-  max-height: 92vh;
+  height: 426px;
   border-radius: 44px;
   overflow: hidden;
   background-color: ${getColor('foreground')};
-
-  @media ${mediaQuery.tabletDeviceAndUp} {
-    min-height: 760px;
-  }
 `
 
 const OverlayContentWrapper = styled(VStack)`
   padding: 28px 40px 12px;
+  position: relative;
+  overflow: hidden;
 `
 
 const OverlayWrapper = styled(VStack)`
@@ -80,14 +83,17 @@ const OverlayWrapper = styled(VStack)`
 `
 
 const PhonePreview = styled(VStack)`
-  width: 100%;
   height: 320px;
   border-radius: 36px;
-  background: linear-gradient(180deg, #0a2f62 0%, #062248 100%);
+  background: linear-gradient(180deg, #082956 0%, #041b3d 100%);
   box-shadow:
-    0 1px 6px rgba(255, 255, 255, 0.25) inset,
-    0 -4px 24px rgba(0, 0, 0, 0.2) inset;
-  padding: 22px 24px 24px;
+    0 1px 6px rgba(255, 255, 255, 0.16) inset,
+    0 -10px 28px rgba(0, 0, 0, 0.32) inset;
+  align-self: center;
+  min-width: 300px;
+
+  position: absolute;
+  top: -32%;
 
   @media ${mediaQuery.tabletDeviceAndUp} {
     height: 380px;
@@ -100,11 +106,12 @@ const PhoneMock = styled(VStack)`
   height: 100%;
   align-self: center;
   border-radius: 34px;
-  background-color: #021f46;
-  border: 2px solid rgba(65, 105, 167, 0.55);
+  background-color: #00183d;
+  border: 4px solid rgba(73, 113, 177, 0.62);
   box-shadow:
-    0 -2px 10px rgba(255, 255, 255, 0.14) inset,
-    0 8px 30px rgba(0, 0, 0, 0.28);
+    0 1px 0 rgba(164, 195, 255, 0.06) inset,
+    0 -2px 16px rgba(120, 162, 235, 0.12) inset,
+    0 10px 24px rgba(0, 0, 0, 0.3);
   padding: 20px 22px;
   justify-content: flex-end;
   align-items: center;
@@ -121,8 +128,8 @@ const PhoneNotch = styled.div`
 `
 
 const PhoneAvatar = styled.div`
-  width: 38px;
-  height: 38px;
+  width: 18px;
+  height: 18px;
   border-radius: 999px;
   background-color: rgba(155, 170, 196, 0.85);
 `
@@ -151,8 +158,8 @@ const PhoneActionButton = styled.div<{ $isPrimary?: boolean }>`
   font-weight: 500;
 
   svg {
-    width: 14px;
-    height: 14px;
+    width: 10px;
+    height: 10px;
   }
 
   span {
@@ -160,12 +167,28 @@ const PhoneActionButton = styled.div<{ $isPrimary?: boolean }>`
   }
 `
 
+const ImportIconBadge = styled.span`
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(160, 175, 206, 0.35);
+  color: #0b1630;
+
+  svg {
+    width: 8px;
+    height: 8px;
+  }
+`
+
 const PhoneMainButton = styled.div`
   width: 100%;
   height: 52px;
   border-radius: 999px;
-  background-color: rgba(35, 56, 114, 0.85);
-  color: rgba(110, 130, 178, 0.7);
+  background-color: #1f44ad;
+  color: rgba(198, 214, 255, 0.38);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -180,13 +203,4 @@ const PhoneMainButton = styled.div`
 const OverlayButton = styled(Button)`
   width: min(100%, 360px);
   align-self: center;
-`
-
-const HomeIndicator = styled.div`
-  width: 140px;
-  height: 8px;
-  border-radius: 999px;
-  background-color: rgba(255, 255, 255, 0.95);
-  align-self: center;
-  margin-bottom: 14px;
 `
