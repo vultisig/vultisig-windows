@@ -9,6 +9,7 @@ export const toVaultExport = (vault: Vault): VaultExport => ({
   name: vault.name,
   publicKeyEcdsa: vault.publicKeys.ecdsa,
   publicKeyEddsa: vault.publicKeys.eddsa,
+  publicKeyMldsa: undefined,
   hexChainCode: vault.hexChainCode,
   isFastVault: hasServer(vault.signers),
   isKeyImportVault: isKeyImportVault(vault),

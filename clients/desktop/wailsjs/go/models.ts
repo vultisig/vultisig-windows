@@ -81,11 +81,12 @@ export namespace storage {
 	    last_password_verification_time: number;
 	    chain_public_keys?: Record<string, string>;
 	    chain_key_shares?: Record<string, string>;
-	
+	    public_key_mldsa?: string;
+
 	    static createFrom(source: any = {}) {
 	        return new Vault(source);
 	    }
-	
+
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.name = source["name"];
@@ -105,6 +106,7 @@ export namespace storage {
 	        this.last_password_verification_time = source["last_password_verification_time"];
 	        this.chain_public_keys = source["chain_public_keys"];
 	        this.chain_key_shares = source["chain_key_shares"];
+	        this.public_key_mldsa = source["public_key_mldsa"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
