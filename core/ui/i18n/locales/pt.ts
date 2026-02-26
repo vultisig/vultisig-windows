@@ -727,6 +727,20 @@ export const pt = {
   search: 'Procurar',
   search_field_placeholder: 'Procurar',
   secure: 'Seguro',
+  secureVaultPeerDiscovery: {
+    addAtLeastMoreDevices_one: 'Adicione pelo menos mais {{count}} dispositivo',
+    addAtLeastMoreDevices_other:
+      'Adicione pelo menos mais {{count}} dispositivos',
+    devicePosition: '{{current}} de {{total}}',
+    localModeWaiting: 'Modo local, aguardando dispositivos',
+    notWantToUseLocal: 'Não quer usar o modo local? Volte.',
+    switchBack: 'Voltar',
+    useStandardMode: 'Usar modo padrão',
+    useLocalMode: 'Usar modo local',
+    waitingForDeviceToJoin: 'Aguardando um dispositivo entrar',
+    waitingForDevicesToConnect: 'Aguardando dispositivos se conectarem',
+    wantToCreateVaultPrivately: 'Quer criar um cofre de forma privada?',
+  },
   secureVaultSetupPasswordTooltipContent:
     'Isso ocorre porque a senha é usada para criptografar localmente o arquivo de backup, de forma semelhante à criptografia de um disco rígido. Na próxima etapa, você terá a opção de adicionar uma dica.',
   security: 'Segurança',
