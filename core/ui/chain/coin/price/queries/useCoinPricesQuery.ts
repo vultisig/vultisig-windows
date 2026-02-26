@@ -192,7 +192,16 @@ export function useCoinPricesQuery(
 
   return useCombineQueries({
     queries: [...queryResults, ...staticUnsupportedResults],
-    joinData: data => mergeRecords(...data),
+    joinData: data => {
+      const merged = mergeRecords(...data)
+      for (const coin of coins) {
+        const key = coinKeyToString(coin)
+        if (!(key in merged)) {
+          merged[key] = 0
+        }
+      }
+      return merged
+    },
     eager,
   })
 }
