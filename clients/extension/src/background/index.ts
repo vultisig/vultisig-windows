@@ -30,6 +30,23 @@ if (chrome.sidePanel) {
       .setPanelBehavior({ openPanelOnActionClick: enabled })
       .catch(console.error)
 
+  const openSidePanel = async () => {
+    const [currentWindow] = await chrome.windows.getAll({
+      windowTypes: ['normal'],
+    })
+    if (currentWindow?.id != null) {
+      await chrome.sidePanel.open({ windowId: currentWindow.id })
+    }
+  }
+
+  const closeSidePanel = async () => {
+    await chrome.sidePanel.setOptions({ enabled: false })
+    await chrome.sidePanel.setOptions({
+      enabled: true,
+      path: 'index.html',
+    })
+  }
+
   getIsSidePanelEnabled().then(applySidePanelBehavior)
 
   chrome.storage.onChanged.addListener((changes, areaName) => {
@@ -37,7 +54,16 @@ if (chrome.sidePanel) {
     if (!('isSidePanelEnabled' in changes)) return
 
     const { newValue } = changes.isSidePanelEnabled as { newValue?: boolean }
-    applySidePanelBehavior(newValue ?? false)
+    const enabled = newValue ?? false
+    applySidePanelBehavior(enabled)
+
+    if (chrome.sidePanel.open && chrome.sidePanel.setOptions) {
+      if (enabled) {
+        openSidePanel().catch(console.error)
+      } else {
+        closeSidePanel().catch(console.error)
+      }
+    }
   })
 }
 if (import.meta.env.VITE_DEV_RELOAD) {
