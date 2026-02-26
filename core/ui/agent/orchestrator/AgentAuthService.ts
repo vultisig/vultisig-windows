@@ -169,7 +169,6 @@ export class AgentAuthService {
 
     const result = await attempt(() => refreshAuthToken(token.refreshToken))
     if ('error' in result) {
-      this.invalidateToken(vaultPubKey)
       return null
     }
 
@@ -226,7 +225,6 @@ export class AgentAuthService {
 
     const result = await attempt(() => validateToken(token.token))
     if ('error' in result) {
-      this.invalidateToken(vaultPubKey)
       return false
     }
     return true
