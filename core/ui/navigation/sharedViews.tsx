@@ -24,7 +24,6 @@ import { NewVaultPage } from '@core/ui/vault/new'
 import { VaultPage } from '@core/ui/vault/page'
 import { SendPage } from '@core/ui/vault/send/SendPage'
 import { VaultSettingsPage } from '@core/ui/vault/settings'
-import { AirdropRegisterPage } from '@core/ui/vault/settings/airdrop-register'
 import { DeleteVaultPage } from '@core/ui/vault/settings/delete'
 import { VaultDetailsPage } from '@core/ui/vault/settings/details'
 import { SwapPage } from '@core/ui/vault/swap/components/SwapPage'
@@ -59,7 +58,6 @@ export type SharedViewId = Extract<
   | 'addCustomToken'
   | 'address'
   | 'addressBook'
-  | 'airdropRegister'
   | 'createAddressBookItem'
   | 'createVaultFolder'
   | 'currencySettings'
@@ -113,7 +111,6 @@ export const sharedViews: Views<SharedViewId> = {
   addCustomToken: AddCustomTokenPage,
   address: AddressPage,
   addressBook: AddressBookPage,
-  airdropRegister: AirdropRegisterPage,
   createAddressBookItem: CreateAddressBookItemPage,
   createVaultFolder: CreateVaultFolderPage,
   currencySettings: CurrencyPage,

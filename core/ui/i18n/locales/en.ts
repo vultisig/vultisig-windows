@@ -767,8 +767,6 @@ export const en = {
       title: 'Use Referral code',
     },
   },
-  register_guide: 'Register Guide',
-  register_your_vaults: 'Register your Vaults!',
   remove: 'Remove',
   remove_token: 'Remove Token',
   rename: 'Rename',
@@ -1056,14 +1054,6 @@ export const en = {
   vault_ready_description:
     "You're all set! You stay in control of every transaction.",
   vault_ready_to_use: 'Your vault is ready to use',
-  vault_register_for_airdrop_list_item_1: 'Save your Vault QR',
-  vault_register_for_airdrop_list_item_2_part_1: 'Go to',
-  vault_register_for_airdrop_list_item_2_part_2: 'Vultisig Web',
-  vault_register_for_airdrop_list_item_3: 'Upload your Vault QR Code',
-  vault_register_for_airdrop_list_item_4:
-    'Track your VULTIES (Airdrop Points) !',
-  vault_register_for_airdrop_save_vault_QR_button: 'Save Vault QR',
-  vault_register_for_airdrop_title: 'Register Vault',
   vault_rename_page_header_title: 'Edit your vault name',
   vault_rename_page_name_error:
     'Vault name must be between 1 and 50 characters',
