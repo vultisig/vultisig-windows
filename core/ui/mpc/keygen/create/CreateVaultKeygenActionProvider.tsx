@@ -7,6 +7,7 @@ import {
 import { MldsaKeygen } from '@core/mpc/mldsa/mldsaKeygen'
 import { MpcLib } from '@core/mpc/mpcLib'
 import { Schnorr } from '@core/mpc/schnorr/schnorrKeygen'
+import { featureFlags } from '@core/ui/featureFlags'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
@@ -74,7 +75,7 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
       let publicKeyMldsa: string | undefined
       let keyShareMldsa: string | undefined
 
-      if (isMLDSAEnabled) {
+      if (featureFlags.mldsaKeygen && isMLDSAEnabled) {
         onStepChange('mldsa')
 
         const mldsaKeygen = new MldsaKeygen(
