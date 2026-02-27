@@ -58,9 +58,18 @@ export const toCommVault = (vault: Vault): CommVault =>
           keyshare: value,
         })
       ),
+      ...(vault.publicKeyMldsa && vault.keyShareMldsa
+        ? [
+            create(Vault_KeyShareSchema, {
+              publicKey: vault.publicKeyMldsa,
+              keyshare: vault.keyShareMldsa,
+            }),
+          ]
+        : []),
     ],
     publicKeyEcdsa: vault.publicKeys.ecdsa,
     publicKeyEddsa: vault.publicKeys.eddsa,
+    publicKeyMldsa44: vault.publicKeyMldsa ?? '',
     libType: toLibType({
       libType: vault.libType,
       isKeyImport: isKeyImportVault(vault),
@@ -100,6 +109,12 @@ export const fromCommVault = (vault: CommVault): Vault => {
       ).keyshare
   )
 
+  const publicKeyMldsa = vault.publicKeyMldsa44 || undefined
+  const mldsaKeyShare = publicKeyMldsa
+    ? vault.keyShares.find(ks => ks.publicKey === publicKeyMldsa)
+    : undefined
+  const keyShareMldsa = mldsaKeyShare?.keyshare
+
   const chainKeyShares: Partial<Record<Chain, string>> = {}
   vault.keyShares.forEach(keyShare => {
     const chain = chainByPublicKey.get(keyShare.publicKey)
@@ -122,6 +137,8 @@ export const fromCommVault = (vault: CommVault): Vault => {
       : undefined,
     publicKeys,
     keyShares,
+    publicKeyMldsa,
+    keyShareMldsa,
     chainKeyShares:
       Object.keys(chainKeyShares).length > 0 ? chainKeyShares : undefined,
     chainPublicKeys:

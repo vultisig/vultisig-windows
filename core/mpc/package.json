@@ -19,6 +19,7 @@
     "@core/config": "workspace:^",
     "@cosmjs/encoding": "^0.38.1",
     "@lib/dkls": "workspace:^",
+    "@lib/mldsa": "workspace:^",
     "@lib/schnorr": "workspace:^",
     "@lib/utils": "workspace:^",
     "@mysten/sui": "^2.3.0",

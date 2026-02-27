@@ -5,4 +5,5 @@ export const featureFlags = {
   mayaChain: false,
   defiLpsTab: true,
   agent: false,
+  mldsaKeygen: false,
 }

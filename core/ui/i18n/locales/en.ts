@@ -276,6 +276,7 @@ export const en = {
   email_required: 'Email is required',
   evm_chains: 'EVM Chains',
   enable_dkls: 'Enable DKLS',
+  enable_mldsa: 'Enable MLDSA',
   enable_token_instruction:
     'Enable at least one token to view balances and manage positions.',
   encrypting_vault_keyshares: 'Encrypting vault keyshares...',
@@ -1053,6 +1054,7 @@ export const en = {
   vault_details_page_signer_word: 'Signer',
   vault_details_page_vault_ECDSA: 'ECDSA key',
   vault_details_page_vault_EDDSA: 'EdDSA key',
+  vault_details_page_vault_MLDSA: 'MLDSA key',
   vault_details_page_vault_type: 'Vault Type',
   vault_info: 'Vault Info',
   vault_management: 'Vault Management',
