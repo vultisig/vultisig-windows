@@ -1,7 +1,7 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { Animation } from '@lib/ui/animations/Animation'
 import { Button } from '@lib/ui/buttons/Button'
-import { ShieldCheckFilledIcon } from '@lib/ui/icons/ShieldCheckFilledIcon'
+import { ShieldCheckIcon } from '@lib/ui/icons/ShieldCheckIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { GradientText, Text } from '@lib/ui/text'
@@ -20,7 +20,7 @@ export const VaultCreatedSuccessScreen = () => {
       <ContentSection>
         <VStack gap={8} alignItems="center">
           <IconWrapper>
-            <ShieldCheckFilledIcon style={{ fontSize: 20, color: '#13C89D' }} />
+            <ShieldCheckIcon style={{ fontSize: 20, color: '#13C89D' }} />
           </IconWrapper>
           <GradientText size={22} weight={500}>
             {t('congrats')}
