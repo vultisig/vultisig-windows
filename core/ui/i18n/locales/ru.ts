@@ -776,6 +776,21 @@ export const ru = {
       shares: 'Ваше хранилище содержит {{shares}} доли',
     },
   },
+  secureVaultPeerDiscovery: {
+    addAtLeastMoreDevices_one: 'Добавьте как минимум ещё {{count}} устройство',
+    addAtLeastMoreDevices_other:
+      'Добавьте как минимум ещё {{count}} устройства',
+    devicePosition: '{{current}} из {{total}}',
+    localModeWaiting: 'Локальный режим, ожидание устройств',
+    notWantToUseLocal:
+      'Не хотите использовать локальный режим? Вернуться назад.',
+    switchBack: 'Вернуться назад',
+    useStandardMode: 'Использовать стандартный режим',
+    useLocalMode: 'Использовать локальный режим',
+    waitingForDeviceToJoin: 'Ожидание подключения устройства',
+    waitingForDevicesToConnect: 'Ожидание подключения устройств',
+    wantToCreateVaultPrivately: 'Хотите создать хранилище приватно?',
+  },
   secureVaultSetupPasswordTooltipContent:
     'Это происходит потому, что пароль используется для локального шифрования файла резервной копии, аналогично шифрованию диска. На следующем шаге можно добавить подсказку.',
   security: 'Безопасность',

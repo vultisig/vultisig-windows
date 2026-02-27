@@ -730,6 +730,21 @@ export const de = {
   search: 'Suchen',
   search_field_placeholder: 'Suchen',
   secure: 'Sicher',
+  secureVaultPeerDiscovery: {
+    addAtLeastMoreDevices_one:
+      'Fügen Sie mindestens noch {{count}} Gerät hinzu',
+    addAtLeastMoreDevices_other:
+      'Fügen Sie mindestens noch {{count}} Geräte hinzu',
+    devicePosition: '{{current}} von {{total}}',
+    localModeWaiting: 'Lokaler Modus, warte auf Geräte',
+    notWantToUseLocal: 'Kein lokaler Modus? Zurückschalten.',
+    switchBack: 'Zurückschalten',
+    useStandardMode: 'Standardmodus verwenden',
+    useLocalMode: 'Lokalen Modus verwenden',
+    waitingForDeviceToJoin: 'Warte auf beitretendes Gerät',
+    waitingForDevicesToConnect: 'Warte, bis Geräte verbunden sind',
+    wantToCreateVaultPrivately: 'Möchten Sie einen Tresor privat erstellen?',
+  },
   secureVaultSetupPasswordTooltipContent:
     'Dies geschieht, weil das Passwort zur lokalen Verschlüsselung der Sicherungsdatei verwendet wird, ähnlich wie bei der Verschlüsselung einer Festplatte. Im nächsten Schritt haben Sie die Möglichkeit, einen Hinweis hinzuzufügen.',
   security: 'Sicherheit',

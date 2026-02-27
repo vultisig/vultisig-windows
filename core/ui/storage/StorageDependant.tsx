@@ -20,6 +20,7 @@ import {
 } from './currentVaultId'
 import { useFiatCurrencyQuery } from './fiatCurrency'
 import { useLanguageQuery } from './language'
+import { useIsMLDSAEnabledQuery } from './mldsaEnabled'
 import { useHasFinishedOnboardingQuery } from './onboarding'
 import { usePasscodeAutoLockQuery } from './passcodeAutoLock'
 import { usePasscodeEncryptionQuery } from './passcodeEncryption'
@@ -39,6 +40,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   const passcodeEncryption = usePasscodeEncryptionQuery()
   const passcodeAutoLock = usePasscodeAutoLockQuery()
   const isBlockaidEnabled = useIsBlockaidEnabledQuery()
+  const isMLDSAEnabled = useIsMLDSAEnabledQuery()
 
   const { processError, targetVaultId } = useCore()
 
@@ -55,6 +57,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
     passcodeEncryption,
     passcodeAutoLock,
     isBlockaidEnabled,
+    isMLDSAEnabled,
   })
 
   return (
