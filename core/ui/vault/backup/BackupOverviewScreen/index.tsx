@@ -31,6 +31,7 @@ export const BackupOverviewScreen = ({
     <Container fullHeight>
       {onBack && (
         <PageHeader
+          style={{ alignSelf: 'stretch' }}
           primaryControls={<PageHeaderBackButton onClick={onBack} />}
         />
       )}
@@ -109,7 +110,7 @@ const AnimationContainer = styled.div`
 `
 
 const ContentSection = styled(VStack)`
-  width: min(345px, 100%);
+  width: min(500px, 100%);
   padding: 0 24px 24px;
   flex-shrink: 0;
   gap: 32px;

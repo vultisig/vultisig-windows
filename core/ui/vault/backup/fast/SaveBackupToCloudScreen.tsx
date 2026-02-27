@@ -30,7 +30,7 @@ export const SaveBackupToCloudScreen = ({
   })
 
   return (
-    <VStack fullHeight>
+    <Container>
       <PageHeader
         primaryControls={
           onBack ? <PageHeaderBackButton onClick={onBack} /> : undefined
@@ -42,41 +42,47 @@ export const SaveBackupToCloudScreen = ({
         </AnimationContainer>
       </AnimationWrapper>
       <ContentSection>
-        <VStack gap={16} alignItems="center">
-          <IconWrapper>
-            <CloudUploadIcon style={{ fontSize: 20 }} />
-          </IconWrapper>
-          <Text size={22} weight={500} color="contrast" centerHorizontally>
-            {t('save_backup_to_cloud')}
-          </Text>
-          <Text size={14} color="shy" centerHorizontally>
-            <Trans
-              i18nKey="save_backup_description"
-              components={{
-                b: <Text as="span" size={14} color="contrast" weight={700} />,
-              }}
+        <VStack gap={60}>
+          <VStack gap={24} alignItems="center">
+            <IconWrapper>
+              <CloudUploadIcon style={{ fontSize: 20 }} />
+            </IconWrapper>
+            <VStack alignItems="center">
+              <Text size={22} weight={500} color="contrast" centerHorizontally>
+                {t('save_backup_to_cloud')}
+              </Text>
+              <Text size={14} color="shy" centerHorizontally>
+                <Trans
+                  i18nKey="save_backup_description"
+                  components={{
+                    b: (
+                      <Text as="span" size={14} color="contrast" weight={700} />
+                    ),
+                  }}
+                />
+              </Text>
+              <Text size={14} color="shyExtra" centerHorizontally>
+                {t('save_backup_description_2')}
+              </Text>
+            </VStack>
+          </VStack>
+          <VStack gap={20}>
+            <Checkbox
+              value={isAgreed}
+              onChange={() => setIsAgreed(prev => !prev)}
+              label={t('i_understand_save_backup')}
             />
-          </Text>
-          <Text size={14} color="shy" centerHorizontally>
-            {t('save_backup_description_2')}
-          </Text>
-        </VStack>
-        <VStack gap={16}>
-          <Checkbox
-            value={isAgreed}
-            onChange={() => setIsAgreed(prev => !prev)}
-            label={t('i_understand_save_backup')}
-          />
-          <Button
-            onClick={onContinue}
-            disabled={!isAgreed || ctaLoading}
-            loading={ctaLoading}
-          >
-            {t('save_backup')}
-          </Button>
+            <Button
+              onClick={onContinue}
+              disabled={!isAgreed || ctaLoading}
+              loading={ctaLoading}
+            >
+              {t('save_backup')}
+            </Button>
+          </VStack>
         </VStack>
       </ContentSection>
-    </VStack>
+    </Container>
   )
 }
 
@@ -111,12 +117,17 @@ const IconWrapper = styled.div`
   }
 `
 
+const Container = styled(VStack)`
+  height: 100%;
+  overflow-y: auto;
+`
+
 const AnimationWrapper = styled.div`
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 0;
+  min-height: 200px;
   width: 100%;
   overflow: hidden;
 `
