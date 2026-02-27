@@ -50,11 +50,8 @@ export const it = {
       online: 'in linea',
       part1: 'La quota 1 delle quote del vault sarà',
       securely: 'in modo sicuro, preferibilmente',
-      setNewStandard:
-        'Sei pronto a utilizzare un nuovo standard di portafoglio.',
       shareSecurely: "per garantire l'accesso, preferibilmente",
       vaultShares: 'Il tuo caveau contiene 2 azioni,',
-      wellDone: 'Ben fatto',
       sentTo: 'Inviato a {{email}}.',
       changeEmailAndRestartKeygen: 'Cambia email e riavvia keygen',
     },
