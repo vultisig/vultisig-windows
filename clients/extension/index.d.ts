@@ -32,4 +32,17 @@ interface Window {
   keplrRequestAccountsCallback: any
   tronWeb: any
   tronLink: any
+  tonkeeper?: {
+    tonconnect: {
+      deviceInfo: unknown
+      walletInfo?: unknown
+      protocolVersion: number
+      isWalletBrowser: boolean
+      connect: (protocolVersion: number, message: unknown) => Promise<unknown>
+      restoreConnection: () => Promise<unknown>
+      send: (message: unknown) => Promise<unknown>
+      listen: (callback: (event: unknown) => void) => () => void
+      disconnect: () => void
+    }
+  }
 }
