@@ -15,6 +15,7 @@ import { ParsedTx } from '@core/inpage-provider/popup/view/resolvers/sendTx/core
 import { getGasEstimationQuery } from '@core/inpage-provider/popup/view/resolvers/sendTx/gasEstimation/getGasEstimationQuery'
 import { useSendTxKeysignPayloadQuery } from '@core/inpage-provider/popup/view/resolvers/sendTx/keysignPayload/query'
 import { PendingState } from '@core/inpage-provider/popup/view/resolvers/sendTx/PendingState'
+import { usePsbtTransferInfoQuery } from '@core/inpage-provider/popup/view/resolvers/sendTx/psbt/usePsbtTransferInfoQuery'
 import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
 import { FeeSettings } from '@core/mpc/keysign/chainSpecific/FeeSettings'
 import { getBlockchainSpecificValue } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
@@ -79,6 +80,8 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
     keysignPayloadQuery,
     walletCore,
   })
+
+  const psbtTransferInfoQuery = usePsbtTransferInfoQuery({ parsedTx })
 
   const gasEstimationInput = useTransformQueryData(
     keysignPayloadQuery,
@@ -168,16 +171,21 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                   </VStack>
                 </Panel>
               )}
-              {isChainOfKind(chain, 'evm') ||
-                (chain === Chain.Solana && (
-                  <MatchQuery
-                    value={blockaidSimulationQuery}
-                    error={() => <BlockaidSimulationError />}
-                    success={() => null}
-                    pending={() => null}
-                    inactive={() => null}
-                  />
-                ))}
+              {(isChainOfKind(chain, 'evm') ||
+                chain === Chain.Solana ||
+                (chain === Chain.Bitcoin && 'psbt' in customTxData)) && (
+                <MatchQuery
+                  value={
+                    chain === Chain.Bitcoin && 'psbt' in customTxData
+                      ? psbtTransferInfoQuery
+                      : blockaidSimulationQuery
+                  }
+                  error={() => <BlockaidSimulationError />}
+                  success={() => null}
+                  pending={() => null}
+                  inactive={() => null}
+                />
+              )}
               {hasSwapPayload ? (
                 <>
                   <VStack
@@ -308,6 +316,28 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                     signSolana={keysignPayload.signData.value}
                   />
                 </>
+              ) : chain === Chain.Bitcoin && 'psbt' in customTxData ? (
+                <BlockaidSimulationContent
+                  chain={Chain.Bitcoin}
+                  blockaidSimulationQuery={
+                    psbtTransferInfoQuery as Query<
+                      BlockaidEvmSimulationInfo,
+                      unknown
+                    >
+                  }
+                  keysignPayload={keysignPayload}
+                  address={address}
+                  networkFeeProps={{
+                    keysignPayload,
+                    transactionPayload,
+                    chain,
+                    feeSettings,
+                    setFeeSettings,
+                    walletCore,
+                    publicKey,
+                  }}
+                  getCoin={getCoin}
+                />
               ) : (
                 <>
                   <List>

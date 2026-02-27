@@ -8,6 +8,8 @@ type BitcoinBlockaidScanResponse = {
 
 export const getUtxoTxBlockaidValidation: BlockaidTxValidationResolver =
   async ({ data, chain }) => {
+    console.log('data in getUtxoTxBlockaidValidation', data)
+
     const { validation } = await queryBlockaid<BitcoinBlockaidScanResponse>(
       `/${chain.toLowerCase()}/transaction-raw/scan`,
       data
