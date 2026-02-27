@@ -23,6 +23,7 @@ export const ImportVaultSequence = ({ items }: ImportVaultSequenceProps) => {
   return (
     <VaultBackupOverrideProvider value={currentItem.override ?? null}>
       <ImportVaultResult
+        key={currentIndex}
         item={currentItem}
         onFinish={isLast ? undefined : handleFinish}
       />
