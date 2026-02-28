@@ -1,4 +1,5 @@
-import { Chain } from '@core/chain/Chain'
+import { Chain, EvmChain } from '@core/chain/Chain'
+import type { CustomMessageSupportedChain } from '@core/ui/mpc/keysign/customMessage/chains'
 import { getCustomMessageHex } from '@core/ui/mpc/keysign/customMessage/getCustomMessageHex'
 import { z } from 'zod'
 
@@ -23,8 +24,12 @@ const signTypedDataInputSchema = z.object({
 
 const evmDerivePath = "m/44'/60'/0'/0/0"
 
-const resolveChain = (chain?: string): Chain =>
-  chain && chain in Chain ? (chain as Chain) : Chain.Polygon
+const evmChains = new Set<string>(Object.values(EvmChain))
+
+const resolveChain = (chain?: string): CustomMessageSupportedChain =>
+  chain && evmChains.has(chain)
+    ? (chain as CustomMessageSupportedChain)
+    : Chain.Polygon
 
 export const handleSignTypedData: ToolHandler = async (input, context) => {
   const vault = context.vault
