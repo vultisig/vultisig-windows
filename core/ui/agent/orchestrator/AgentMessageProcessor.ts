@@ -25,7 +25,7 @@ import type {
   TxReady,
 } from './types'
 
-const BUILD_WAIT_TIMEOUT_MS = 10_000
+const buildWaitTimeoutMs = 10_000
 
 export class AgentMessageProcessor {
   private events: AgentEventEmitter
@@ -146,7 +146,7 @@ export class AgentMessageProcessor {
     ctx.signal.addEventListener('abort', onAbort, { once: true })
     pending = await this.txService.waitFor<TxReady>(
       `build:${ctx.convId}`,
-      BUILD_WAIT_TIMEOUT_MS
+      buildWaitTimeoutMs
     )
     ctx.signal.removeEventListener('abort', onAbort)
 
