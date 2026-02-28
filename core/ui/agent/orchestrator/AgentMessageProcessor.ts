@@ -25,6 +25,8 @@ import type {
   TxReady,
 } from './types'
 
+const BUILD_WAIT_TIMEOUT_MS = 10_000
+
 export class AgentMessageProcessor {
   private events: AgentEventEmitter
   private backendClient: AgentBackendClient
@@ -129,6 +131,36 @@ export class AgentMessageProcessor {
         })
       }
     }
+  }
+
+  // Returns the pending tx, null if none available, or undefined if aborted/timed out.
+  private async resolvePendingTx(
+    ctx: ConversationContext
+  ): Promise<TxReady | null | undefined> {
+    let pending = this.txService.popPendingTx(ctx.convId)
+    if (pending) return pending
+
+    if (!this.txService.hasBuildInProgress(ctx.convId)) return null
+
+    const onAbort = () => this.txService.cancelSignals(ctx.convId)
+    ctx.signal.addEventListener('abort', onAbort, { once: true })
+    pending = await this.txService.waitFor<TxReady>(
+      `build:${ctx.convId}`,
+      BUILD_WAIT_TIMEOUT_MS
+    )
+    ctx.signal.removeEventListener('abort', onAbort)
+
+    if (ctx.signal.aborted) return undefined
+    if (!pending) {
+      this.events.emit('error', {
+        conversationId: ctx.convId,
+        error: 'Transaction build timed out',
+      })
+      return undefined
+    }
+    // waitFor resolved with the tx, but setPendingTx also stored it — pop to consume
+    this.txService.popPendingTx(ctx.convId)
+    return pending
   }
 
   handleError(convId: string, vaultPubKey: string, err: unknown): void {
@@ -279,29 +311,10 @@ export class AgentMessageProcessor {
     }
 
     if (signAction) {
-      let pending = this.txService.popPendingTx(ctx.convId)
-      if (!pending && this.txService.hasBuildInProgress(ctx.convId)) {
-        const onAbort = () => this.txService.cancelSignals(ctx.convId)
-        ctx.signal.addEventListener('abort', onAbort, { once: true })
-        pending = await this.txService.waitFor<TxReady>(
-          `build:${ctx.convId}`,
-          10_000
-        )
-        ctx.signal.removeEventListener('abort', onAbort)
-        if (ctx.signal.aborted) return
-        if (!pending) {
-          this.events.emit('error', {
-            conversationId: ctx.convId,
-            error: 'Transaction build timed out',
-          })
-          return
-        }
-        // waitFor resolved with the tx, but setPendingTx also stored it — pop to consume
-        this.txService.popPendingTx(ctx.convId)
-      }
+      const pending = await this.resolvePendingTx(ctx)
+      if (pending === undefined) return
       if (pending) {
-        const fullAction = buildSignTxAction(pending)
-        await this.executeAndReport(ctx, fullAction)
+        await this.executeAndReport(ctx, buildSignTxAction(pending))
         return
       }
     }
@@ -377,25 +390,8 @@ export class AgentMessageProcessor {
     action: BackendAction
   ): Promise<void> {
     if (action.type === 'sign_tx') {
-      let pending = this.txService.popPendingTx(ctx.convId)
-      if (!pending && this.txService.hasBuildInProgress(ctx.convId)) {
-        const onAbort = () => this.txService.cancelSignals(ctx.convId)
-        ctx.signal.addEventListener('abort', onAbort, { once: true })
-        pending = await this.txService.waitFor<TxReady>(
-          `build:${ctx.convId}`,
-          10_000
-        )
-        ctx.signal.removeEventListener('abort', onAbort)
-        if (ctx.signal.aborted) return
-        if (!pending) {
-          this.events.emit('error', {
-            conversationId: ctx.convId,
-            error: 'Transaction build timed out',
-          })
-          return
-        }
-        this.txService.popPendingTx(ctx.convId)
-      }
+      const pending = await this.resolvePendingTx(ctx)
+      if (pending === undefined) return
       if (pending) {
         action = buildSignTxAction(pending)
       }

@@ -1,39 +1,35 @@
 import type { BackendAction } from './types'
 
-const alwaysAutoExecute: Record<string, boolean> = {
-  add_chain: true,
-  add_coin: true,
-  remove_coin: true,
-  remove_chain: true,
-  address_book_add: true,
-  address_book_remove: true,
-  get_address_book: true,
-  get_market_price: true,
-  get_balances: true,
-  get_portfolio: true,
-  search_token: true,
-  list_vaults: true,
-  plugin_list: true,
-  plugin_spec: true,
-  plugin_installed: true,
-  plugin_uninstall: true,
-  build_swap_tx: true,
-  build_send_tx: true,
-  build_custom_tx: true,
-  mcp_status: true,
-  sign_tx: true,
-  sign_typed_data: true,
-  read_evm_contract: true,
-  scan_tx: true,
-  thorchain_query: true,
-}
+const alwaysAutoExecute = new Set([
+  'add_chain',
+  'add_coin',
+  'remove_coin',
+  'remove_chain',
+  'address_book_add',
+  'address_book_remove',
+  'get_address_book',
+  'get_market_price',
+  'get_balances',
+  'get_portfolio',
+  'search_token',
+  'list_vaults',
+  'plugin_list',
+  'plugin_spec',
+  'plugin_installed',
+  'plugin_uninstall',
+  'build_swap_tx',
+  'build_send_tx',
+  'build_custom_tx',
+  'mcp_status',
+  'sign_tx',
+  'sign_typed_data',
+  'read_evm_contract',
+  'scan_tx',
+  'thorchain_query',
+])
 
-function shouldAutoExecute(action: BackendAction): boolean {
-  if (alwaysAutoExecute[action.type]) {
-    return true
-  }
-  return action.auto_execute
-}
+const shouldAutoExecute = (action: BackendAction): boolean =>
+  alwaysAutoExecute.has(action.type) || action.auto_execute
 
 export function filterProtectedActions(
   actions: BackendAction[]
@@ -42,8 +38,8 @@ export function filterProtectedActions(
   const rest: BackendAction[] = []
   for (const a of actions) {
     const isProtected =
-      (passwordRequired[a.type] || confirmationRequired[a.type]) &&
-      !alwaysAutoExecute[a.type]
+      (passwordRequired.has(a.type) || confirmationRequired.has(a.type)) &&
+      !alwaysAutoExecute.has(a.type)
     if (isProtected) {
       protected_.push(a)
     } else {
@@ -111,24 +107,22 @@ export function resolveToolName(actionType: string): string {
   return actionTypeToToolName[actionType] ?? actionType
 }
 
-const passwordRequired: Record<string, boolean> = {
-  plugin_install: true,
-  create_policy: true,
-  delete_policy: true,
-  sign_tx: true,
-  sign_typed_data: true,
-}
+const passwordRequired = new Set([
+  'plugin_install',
+  'create_policy',
+  'delete_policy',
+  'sign_tx',
+  'sign_typed_data',
+])
 
-const confirmationRequired: Record<string, boolean> = {
-  plugin_install: true,
-  create_policy: true,
-  delete_policy: true,
-}
+const confirmationRequired = new Set([
+  'plugin_install',
+  'create_policy',
+  'delete_policy',
+])
 
-export function needsPassword(actionType: string): boolean {
-  return passwordRequired[actionType] === true
-}
+export const needsPassword = (actionType: string): boolean =>
+  passwordRequired.has(actionType)
 
-export function needsConfirmation(actionType: string): boolean {
-  return confirmationRequired[actionType] === true
-}
+export const needsConfirmation = (actionType: string): boolean =>
+  confirmationRequired.has(actionType)
