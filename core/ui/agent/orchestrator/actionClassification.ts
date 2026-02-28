@@ -29,7 +29,7 @@ const alwaysAutoExecute = new Set([
 ])
 
 const shouldAutoExecute = (action: BackendAction): boolean =>
-  alwaysAutoExecute.has(action.type) || action.auto_execute
+  alwaysAutoExecute.has(action.type) || action.auto_execute === true
 
 export function filterProtectedActions(
   actions: BackendAction[]
