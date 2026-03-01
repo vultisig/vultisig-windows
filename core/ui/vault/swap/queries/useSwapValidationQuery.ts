@@ -1,4 +1,5 @@
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
+import { areEqualCoins } from '@core/chain/coin/Coin'
 import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
 import { t } from 'i18next'
 
@@ -7,16 +8,18 @@ import { useCurrentVaultCoin } from '../../state/currentVaultCoins'
 import { useSwapQuoteQuery } from '../queries/useSwapQuoteQuery'
 import { useFromAmount } from '../state/fromAmount'
 import { useSwapFromCoin } from '../state/fromCoin'
+import { useSwapToCoin } from '../state/toCoin'
 
 export const useSwapValidationQuery = () => {
   const [amount] = useFromAmount()
 
   const [fromCoinKey] = useSwapFromCoin()
+  const [toCoinKey] = useSwapToCoin()
   const coin = useCurrentVaultCoin(fromCoinKey)
   const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
   const swapQuoteQuery = useSwapQuoteQuery()
 
-  return useCombineQueries({
+  const combined = useCombineQueries({
     queries: {
       balance: balanceQuery,
       swapQuote: swapQuoteQuery,
@@ -38,4 +41,13 @@ export const useSwapValidationQuery = () => {
     },
     eager: false,
   })
+
+  if (areEqualCoins(fromCoinKey, toCoinKey)) {
+    return {
+      data: t('swap_same_asset'),
+      isPending: false,
+      error: null,
+    }
+  }
+  return combined
 }
