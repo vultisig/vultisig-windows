@@ -33,6 +33,7 @@ import { handleScanTx } from './handlers/scanTx'
 import { handleSearchToken } from './handlers/searchToken'
 import { handleSignInStatus } from './handlers/signInStatus'
 import { handleSignTx } from './handlers/signTx'
+import { handleSignTypedData } from './handlers/signTypedData'
 import { handleThorchainQuery } from './handlers/thorchainQuery'
 import { handleTransactionHistory } from './handlers/transactionHistory'
 import { handleVaultInfo } from './handlers/vaultInfo'
@@ -71,6 +72,7 @@ export const toolHandlers: Record<string, ToolHandler> = {
   read_evm_contract: handleReadEvmContract,
   scan_tx: handleScanTx,
   sign_tx: handleSignTx,
+  sign_typed_data: handleSignTypedData,
   build_swap_tx: handleBuildSwapTx,
   build_send_tx: handleBuildSendTx,
   build_custom_tx: handleBuildCustomTx,
