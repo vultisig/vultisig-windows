@@ -51,11 +51,8 @@ export const de = {
       online: 'online',
       part1: 'Teil 1 der Tresoranteile wird sein',
       securely: 'sicher, vorzugsweise',
-      setNewStandard:
-        'Sie sind bereit, einen neuen Wallet-Standard zu verwenden.',
       shareSecurely: 'um den Zugang zu gewährleisten, vorzugsweise',
       vaultShares: 'Ihr Tresor enthält 2 Aktien.',
-      wellDone: 'Gut gemacht',
       sentTo: 'Gesendet an {{email}}.',
       changeEmailAndRestartKeygen: 'E-Mail ändern und Keygen neu starten',
     },

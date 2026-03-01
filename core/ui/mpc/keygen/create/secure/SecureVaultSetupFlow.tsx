@@ -25,7 +25,8 @@ export const SecureVaultSetupFlow = ({
   ] = useBoolean(false)
   const { addToast } = useToast()
 
-  const handleApplyReferral = () => {
+  const handleApplyReferral = (code: string) => {
+    setReferralCode(code)
     closeReferralModal()
     addToast({ message: t('fastVaultSetup.referralAdded') })
   }
@@ -42,8 +43,7 @@ export const SecureVaultSetupFlow = ({
       <ReferralModal
         isOpen={isReferralModalOpen}
         onClose={closeReferralModal}
-        referralCode={referralCode}
-        onReferralCodeChange={setReferralCode}
+        initialCode={referralCode}
         onApply={handleApplyReferral}
       />
       <VaultNameStep

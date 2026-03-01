@@ -348,11 +348,8 @@ export const nl = {
       online: 'online',
       part1: 'Share 1 van de kluis-shares zal worden',
       securely: 'veilig, bij voorkeur',
-      setNewStandard:
-        'Je bent klaar om een nieuwe wallet-standaard te gebruiken.',
       shareSecurely: 'om toegang te garanderen, bij voorkeur',
       vaultShares: 'Je kluis heeft 2 shares,',
-      wellDone: 'Goed gedaan',
       sentTo: 'Verzonden naar {{email}}.',
       changeEmailAndRestartKeygen: 'E-mail wijzigen en keygen herstarten',
     },
