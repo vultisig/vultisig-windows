@@ -153,7 +153,7 @@ const sseHandlers: Record<
   actions: (parsed, result, _cb) => {
     const validated = z.array(backendActionSchema).safeParse(parsed.actions)
     if (validated.success) {
-      result.actions = validated.data
+      result.actions = [...(result.actions ?? []), ...validated.data]
     }
   },
   suggestions: (parsed, result, _cb) => {

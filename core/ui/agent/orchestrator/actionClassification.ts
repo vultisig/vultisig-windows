@@ -22,7 +22,6 @@ const alwaysAutoExecute = new Set([
   'build_custom_tx',
   'mcp_status',
   'sign_tx',
-  'sign_typed_data',
   'read_evm_contract',
   'scan_tx',
   'thorchain_query',

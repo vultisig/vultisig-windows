@@ -109,11 +109,13 @@ export class AgentMessageProcessor {
   }
 
   private makeToolProgressHandler(convId: string): (p: ToolProgress) => void {
-    const active = new Map<string, string>() // tool name -> action ID
+    const active = new Map<string, string[]>()
     return (p: ToolProgress) => {
       if (p.status === 'running') {
         const actionId = `mcp-${p.tool}-${Date.now()}`
-        active.set(p.tool, actionId)
+        const stack = active.get(p.tool) ?? []
+        stack.push(actionId)
+        active.set(p.tool, stack)
         this.events.emit('tool_call', {
           conversationId: convId,
           actionId,
@@ -121,8 +123,11 @@ export class AgentMessageProcessor {
           title: p.label || p.tool.replace(/_/g, ' '),
         })
       } else if (p.status === 'done') {
-        const actionId = active.get(p.tool) || `mcp-${p.tool}`
-        active.delete(p.tool)
+        const stack = active.get(p.tool) ?? []
+        const actionId = stack.pop() ?? `mcp-${p.tool}`
+        if (stack.length === 0) {
+          active.delete(p.tool)
+        }
         this.events.emit('action_result', {
           conversationId: convId,
           actionId,
@@ -137,7 +142,7 @@ export class AgentMessageProcessor {
   private async resolvePendingTx(
     ctx: ConversationContext
   ): Promise<TxReady | null | undefined> {
-    let pending = this.txService.popPendingTx(ctx.convId)
+    let pending: TxReady | null | false = this.txService.popPendingTx(ctx.convId)
     if (pending) return pending
 
     if (!this.txService.hasBuildInProgress(ctx.convId)) return null
@@ -151,11 +156,14 @@ export class AgentMessageProcessor {
     ctx.signal.removeEventListener('abort', onAbort)
 
     if (ctx.signal.aborted) return undefined
-    if (!pending) {
+    if (pending === false) {
       this.events.emit('error', {
         conversationId: ctx.convId,
         error: 'Transaction build timed out',
       })
+      return undefined
+    }
+    if (pending === null) {
       return undefined
     }
     // waitFor resolved with the tx, but setPendingTx also stored it — pop to consume

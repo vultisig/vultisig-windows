@@ -61,7 +61,7 @@ type ReportCallback = (
 type ErrorCallback = (convId: string, vaultPubKey: string, err: unknown) => void
 
 type SignalEntry<T = unknown> = {
-  resolve: (value: T | null) => void
+  resolve: (value: T | null | false) => void
   timer: ReturnType<typeof setTimeout>
 }
 
@@ -75,7 +75,7 @@ export class AgentTxService {
   private pendingTx = new Map<string, TxReady>()
   private buildAttempts = new Map<string, number>()
   private buildActive = new Set<string>()
-  private signals = new Map<string, SignalEntry>()
+  private signals = new Map<string, SignalEntry[]>()
   private reportCallback: ReportCallback = async () => {}
   private errorCallback: ErrorCallback = () => {}
 
@@ -122,35 +122,50 @@ export class AgentTxService {
     return this.buildActive.has(convId)
   }
 
-  waitFor<T>(key: string, timeoutMs: number): Promise<T | null> {
-    return new Promise<T | null>(resolve => {
+  waitFor<T>(key: string, timeoutMs: number): Promise<T | null | false> {
+    return new Promise<T | null | false>(resolve => {
       const timer = setTimeout(() => {
-        this.signals.delete(key)
-        resolve(null)
+        const entries = this.signals.get(key)
+        if (entries) {
+          const remaining = entries.filter(e => e.timer !== timer)
+          if (remaining.length === 0) {
+            this.signals.delete(key)
+          } else {
+            this.signals.set(key, remaining)
+          }
+        }
+        resolve(false)
       }, timeoutMs)
 
-      this.signals.set(key, {
-        resolve: resolve as (value: unknown | null) => void,
+      const entry: SignalEntry = {
+        resolve: resolve as (value: unknown | null | false) => void,
         timer,
-      })
+      }
+      const existing = this.signals.get(key) ?? []
+      existing.push(entry)
+      this.signals.set(key, existing)
     })
   }
 
   notify(key: string, value: unknown): void {
-    const entry = this.signals.get(key)
-    if (entry) {
-      clearTimeout(entry.timer)
+    const entries = this.signals.get(key)
+    if (entries) {
       this.signals.delete(key)
-      entry.resolve(value)
+      for (const entry of entries) {
+        clearTimeout(entry.timer)
+        entry.resolve(value)
+      }
     }
   }
 
   cancelSignals(convId: string): void {
-    for (const [key, entry] of this.signals) {
+    for (const [key, entries] of this.signals) {
       if (key.endsWith(`:${convId}`)) {
-        clearTimeout(entry.timer)
         this.signals.delete(key)
-        entry.resolve(null)
+        for (const entry of entries) {
+          clearTimeout(entry.timer)
+          entry.resolve(null)
+        }
       }
     }
   }
