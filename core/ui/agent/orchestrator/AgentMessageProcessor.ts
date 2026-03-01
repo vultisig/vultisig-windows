@@ -142,7 +142,9 @@ export class AgentMessageProcessor {
   private async resolvePendingTx(
     ctx: ConversationContext
   ): Promise<TxReady | null | undefined> {
-    let pending: TxReady | null | false = this.txService.popPendingTx(ctx.convId)
+    let pending: TxReady | null | false = this.txService.popPendingTx(
+      ctx.convId
+    )
     if (pending) return pending
 
     if (!this.txService.hasBuildInProgress(ctx.convId)) return null
