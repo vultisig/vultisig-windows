@@ -137,10 +137,15 @@ const sseHandlers: Record<
     }
   },
   tool_progress: (parsed, _result, { onToolProgress }) => {
-    if (onToolProgress && typeof parsed.tool === 'string') {
+    if (
+      onToolProgress &&
+      typeof parsed.tool === 'string' &&
+      typeof parsed.status === 'string' &&
+      (parsed.status === 'running' || parsed.status === 'done')
+    ) {
       onToolProgress({
         tool: parsed.tool,
-        status: parsed.status as 'running' | 'done',
+        status: parsed.status,
         label: typeof parsed.label === 'string' ? parsed.label : undefined,
       })
     }

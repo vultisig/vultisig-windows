@@ -110,9 +110,12 @@ export class AgentMessageProcessor {
 
   private makeToolProgressHandler(convId: string): (p: ToolProgress) => void {
     const active = new Map<string, string[]>()
+    const counters = new Map<string, number>()
     return (p: ToolProgress) => {
       if (p.status === 'running') {
-        const actionId = `mcp-${p.tool}-${Date.now()}`
+        const seq = (counters.get(p.tool) ?? 0) + 1
+        counters.set(p.tool, seq)
+        const actionId = `mcp-${p.tool}-${Date.now()}-${seq}`
         const stack = active.get(p.tool) ?? []
         stack.push(actionId)
         active.set(p.tool, stack)

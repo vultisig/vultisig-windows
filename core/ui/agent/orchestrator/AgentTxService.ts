@@ -197,6 +197,8 @@ export class AgentTxService {
     }
     const { actionType, toolName, title } = buildTxConfig[mode]
 
+    if (this.buildActive.has(ctx.convId)) return
+
     this.buildActive.add(ctx.convId)
 
     const run = async () => {

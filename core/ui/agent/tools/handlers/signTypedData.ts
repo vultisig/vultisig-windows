@@ -15,7 +15,7 @@ const eip712PayloadSchema = z.object({
   domain: z.record(z.string(), z.unknown()),
   types: z.record(z.string(), z.array(z.unknown())),
   message: z.record(z.string(), z.unknown()),
-  chain: z.string().optional(),
+  chain: z.string(),
 })
 
 const signTypedDataInputSchema = z.object({
@@ -26,9 +26,9 @@ const evmDerivePath = "m/44'/60'/0'/0/0"
 
 const evmChains = new Set<string>(Object.values(EvmChain))
 
-const resolveChain = (chain?: string): CustomMessageSupportedChain => {
-  if (!chain || !evmChains.has(chain)) {
-    throw new Error(`Unsupported chain: ${chain ?? 'undefined'}`)
+const resolveChain = (chain: string): CustomMessageSupportedChain => {
+  if (!evmChains.has(chain)) {
+    throw new Error(`Unsupported chain: ${chain}`)
   }
   return chain as CustomMessageSupportedChain
 }
