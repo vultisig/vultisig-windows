@@ -1,12 +1,46 @@
 import type { BackendAction } from './types'
 
+const alwaysAutoExecute = new Set([
+  'add_chain',
+  'add_coin',
+  'remove_coin',
+  'remove_chain',
+  'address_book_add',
+  'address_book_remove',
+  'get_address_book',
+  'get_market_price',
+  'get_balances',
+  'get_portfolio',
+  'search_token',
+  'list_vaults',
+  'plugin_list',
+  'plugin_spec',
+  'plugin_installed',
+  'plugin_uninstall',
+  'build_swap_tx',
+  'build_send_tx',
+  'build_custom_tx',
+  'mcp_status',
+  'sign_tx',
+  'sign_typed_data',
+  'read_evm_contract',
+  'scan_tx',
+  'thorchain_query',
+])
+
+const shouldAutoExecute = (action: BackendAction): boolean =>
+  alwaysAutoExecute.has(action.type) || action.auto_execute === true
+
 export function filterProtectedActions(
   actions: BackendAction[]
 ): [BackendAction[], BackendAction[]] {
   const protected_: BackendAction[] = []
   const rest: BackendAction[] = []
   for (const a of actions) {
-    if (passwordRequired[a.type] || confirmationRequired[a.type]) {
+    const isProtected =
+      (passwordRequired.has(a.type) || confirmationRequired.has(a.type)) &&
+      !alwaysAutoExecute.has(a.type)
+    if (isProtected) {
       protected_.push(a)
     } else {
       rest.push(a)
@@ -15,29 +49,14 @@ export function filterProtectedActions(
   return [rest, protected_]
 }
 
-export function filterDisplayOnly(
-  actions: BackendAction[]
-): [BackendAction[], BackendAction[]] {
-  const display: BackendAction[] = []
-  const rest: BackendAction[] = []
-  for (const a of actions) {
-    if (displayOnlyActions[a.type]) {
-      display.push(a)
-    } else {
-      rest.push(a)
-    }
-  }
-  return [rest, display]
-}
-
 export function filterAutoActions(actions: BackendAction[]): BackendAction[] {
-  return actions
+  return actions.filter(shouldAutoExecute)
 }
 
 export function filterNonAutoActions(
-  _actions: BackendAction[]
+  actions: BackendAction[]
 ): BackendAction[] {
-  return []
+  return actions.filter(a => !shouldAutoExecute(a))
 }
 
 export function filterBuildTx(
@@ -88,31 +107,22 @@ export function resolveToolName(actionType: string): string {
   return actionTypeToToolName[actionType] ?? actionType
 }
 
-const passwordRequired: Record<string, boolean> = {
-  plugin_install: true,
-  create_policy: true,
-  delete_policy: true,
-  sign_tx: true,
-}
+const passwordRequired = new Set([
+  'plugin_install',
+  'create_policy',
+  'delete_policy',
+  'sign_tx',
+  'sign_typed_data',
+])
 
-const confirmationRequired: Record<string, boolean> = {
-  plugin_install: true,
-  create_policy: true,
-  delete_policy: true,
-}
+const confirmationRequired = new Set([
+  'plugin_install',
+  'create_policy',
+  'delete_policy',
+])
 
-export function needsPassword(actionType: string): boolean {
-  return passwordRequired[actionType] === true
-}
+export const needsPassword = (actionType: string): boolean =>
+  passwordRequired.has(actionType)
 
-export function needsConfirmation(actionType: string): boolean {
-  return confirmationRequired[actionType] === true
-}
-
-const displayOnlyActions: Record<string, boolean> = {
-  mcp_status: true,
-}
-
-export function isDisplayOnly(actionType: string): boolean {
-  return displayOnlyActions[actionType] === true
-}
+export const needsConfirmation = (actionType: string): boolean =>
+  confirmationRequired.has(actionType)

@@ -1,16 +1,14 @@
 import {
   filterAutoActions,
   filterBuildTx,
-  filterDisplayOnly,
   filterNonAutoActions,
   filterProtectedActions,
   filterSignTx,
-  isDisplayOnly,
   needsConfirmation,
   needsPassword,
 } from './actionClassification'
 import type { AgentAuthService } from './AgentAuthService'
-import type { AgentBackendClient } from './AgentBackendClient'
+import type { AgentBackendClient, ToolProgress } from './AgentBackendClient'
 import { UnauthorizedError } from './AgentBackendClient'
 import type { AgentContextService } from './AgentContextService'
 import type { AgentEventEmitter } from './AgentEventEmitter'
@@ -18,14 +16,16 @@ import type { AgentPromptService } from './AgentPromptService'
 import type { AgentToolExecutor } from './AgentToolExecutor'
 import { buildSignTxAction } from './AgentTxPipeline'
 import type { AgentTxService } from './AgentTxService'
-import { toolManifest } from './toolManifest'
 import type {
   ActionResult,
   BackendAction,
   ConversationContext,
   SendMessageRequest,
   SendMessageResponse,
+  TxReady,
 } from './types'
+
+const buildWaitTimeoutMs = 10_000
 
 export class AgentMessageProcessor {
   private events: AgentEventEmitter
@@ -92,8 +92,12 @@ export class AgentMessageProcessor {
         convId: ctx.convId,
         req,
         token: ctx.token,
-        onTextDelta: () => {},
-        onActions: actions => this.emitDisplayOnlyToolCalls(ctx, actions),
+        onTextDelta: delta =>
+          this.events.emit('text_delta', {
+            conversationId: ctx.convId,
+            delta,
+          }),
+        onToolProgress: this.makeToolProgressHandler(ctx.convId),
         signal: ctx.signal,
       })
     } catch (err) {
@@ -101,8 +105,62 @@ export class AgentMessageProcessor {
       return
     }
 
-    resp.message.content = ''
     await this.handleBackendResponse(ctx, resp)
+  }
+
+  private makeToolProgressHandler(convId: string): (p: ToolProgress) => void {
+    const active = new Map<string, string>() // tool name -> action ID
+    return (p: ToolProgress) => {
+      if (p.status === 'running') {
+        const actionId = `mcp-${p.tool}-${Date.now()}`
+        active.set(p.tool, actionId)
+        this.events.emit('tool_call', {
+          conversationId: convId,
+          actionId,
+          actionType: p.tool,
+          title: p.label || p.tool.replace(/_/g, ' '),
+        })
+      } else if (p.status === 'done') {
+        const actionId = active.get(p.tool) || `mcp-${p.tool}`
+        active.delete(p.tool)
+        this.events.emit('action_result', {
+          conversationId: convId,
+          actionId,
+          actionType: p.tool,
+          success: true,
+        })
+      }
+    }
+  }
+
+  // Returns the pending tx, null if none available, or undefined if aborted/timed out.
+  private async resolvePendingTx(
+    ctx: ConversationContext
+  ): Promise<TxReady | null | undefined> {
+    let pending = this.txService.popPendingTx(ctx.convId)
+    if (pending) return pending
+
+    if (!this.txService.hasBuildInProgress(ctx.convId)) return null
+
+    const onAbort = () => this.txService.cancelSignals(ctx.convId)
+    ctx.signal.addEventListener('abort', onAbort, { once: true })
+    pending = await this.txService.waitFor<TxReady>(
+      `build:${ctx.convId}`,
+      buildWaitTimeoutMs
+    )
+    ctx.signal.removeEventListener('abort', onAbort)
+
+    if (ctx.signal.aborted) return undefined
+    if (!pending) {
+      this.events.emit('error', {
+        conversationId: ctx.convId,
+        error: 'Transaction build timed out',
+      })
+      return undefined
+    }
+    // waitFor resolved with the tx, but setPendingTx also stored it — pop to consume
+    this.txService.popPendingTx(ctx.convId)
+    return pending
   }
 
   handleError(convId: string, vaultPubKey: string, err: unknown): void {
@@ -115,29 +173,11 @@ export class AgentMessageProcessor {
     }
 
     if (err instanceof UnauthorizedError) {
-      this.auth
-        .refreshIfNeeded(vaultPubKey)
-        .then(refreshed => {
-          if (refreshed) {
-            this.events.emit('error', {
-              conversationId: convId,
-              error: 'session refreshed — please resend your message',
-            })
-            return
-          }
-          this.auth.invalidateToken(vaultPubKey)
-          this.events.emit('auth_required', {
-            conversationId: convId,
-            vaultPubKey,
-          })
-        })
-        .catch(() => {
-          this.auth.invalidateToken(vaultPubKey)
-          this.events.emit('auth_required', {
-            conversationId: convId,
-            vaultPubKey,
-          })
-        })
+      this.auth.invalidateToken(vaultPubKey)
+      this.events.emit('auth_required', {
+        conversationId: convId,
+        vaultPubKey,
+      })
       return
     }
 
@@ -159,7 +199,6 @@ export class AgentMessageProcessor {
       public_key: ctx.vaultPubKey,
       content: message,
       context: msgCtx,
-      tools: toolManifest,
     }
 
     let resp: SendMessageResponse
@@ -173,7 +212,7 @@ export class AgentMessageProcessor {
             conversationId: ctx.convId,
             delta,
           }),
-        onActions: actions => this.emitDisplayOnlyToolCalls(ctx, actions),
+        onToolProgress: this.makeToolProgressHandler(ctx.convId),
         signal: ctx.signal,
       })
     } catch (err) {
@@ -182,22 +221,6 @@ export class AgentMessageProcessor {
     }
 
     await this.handleBackendResponse(ctx, resp)
-  }
-
-  private emitDisplayOnlyToolCalls(
-    ctx: ConversationContext,
-    actions: BackendAction[]
-  ): void {
-    for (const action of actions) {
-      if (!isDisplayOnly(action.type)) continue
-      this.events.emit('tool_call', {
-        conversationId: ctx.convId,
-        actionId: action.id,
-        actionType: action.type,
-        title: action.title,
-        params: action.params,
-      })
-    }
   }
 
   private async handleBackendResponse(
@@ -225,6 +248,7 @@ export class AgentMessageProcessor {
         title: a.title,
         description: a.description,
         params: a.params,
+        auto_execute: a.auto_execute,
       })),
       suggestions: resp.suggestions?.map(s => ({
         id: s.id,
@@ -238,21 +262,9 @@ export class AgentMessageProcessor {
       this.txService.setPendingTx(ctx.convId, resp.tx_ready)
     }
 
-    const [executableActions, displayOnlyActions] = filterDisplayOnly(
+    const [actionsAfterBuild, buildAction] = filterBuildTx(
       filterAutoActions(unprotectedActions)
     )
-
-    for (const action of displayOnlyActions) {
-      this.events.emit('action_result', {
-        conversationId: ctx.convId,
-        actionId: action.id,
-        actionType: action.type,
-        success: true,
-        data: action.params ?? {},
-      })
-    }
-
-    const [actionsAfterBuild, buildAction] = filterBuildTx(executableActions)
     const [autoActions, signAction] = filterSignTx(actionsAfterBuild)
 
     if (buildAction && !this.txService.hasPendingTx(ctx.convId)) {
@@ -299,10 +311,10 @@ export class AgentMessageProcessor {
     }
 
     if (signAction) {
-      const pending = this.txService.popPendingTx(ctx.convId)
+      const pending = await this.resolvePendingTx(ctx)
+      if (pending === undefined) return
       if (pending) {
-        const fullAction = buildSignTxAction(pending)
-        await this.executeAndReport(ctx, fullAction)
+        await this.executeAndReport(ctx, buildSignTxAction(pending))
         return
       }
     }
@@ -351,7 +363,7 @@ export class AgentMessageProcessor {
                 conversationId: ctx.convId,
                 delta,
               }),
-            onActions: actions => this.emitDisplayOnlyToolCalls(ctx, actions),
+            onToolProgress: this.makeToolProgressHandler(ctx.convId),
             signal: ctx.signal,
           })
         } catch {
@@ -378,7 +390,8 @@ export class AgentMessageProcessor {
     action: BackendAction
   ): Promise<void> {
     if (action.type === 'sign_tx') {
-      const pending = this.txService.popPendingTx(ctx.convId)
+      const pending = await this.resolvePendingTx(ctx)
+      if (pending === undefined) return
       if (pending) {
         action = buildSignTxAction(pending)
       }
