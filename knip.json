@@ -5,6 +5,18 @@
     "core/ui/providers/ResponsivenessProvider.tsx",
     "core/ui/transaction-history/**",
     "lib/ui/form/FormCheckBadge.tsx",
+    "core/chain/chains/zcash/birthHeight.ts",
+    "core/chain/chains/zcash/saplingParams.ts",
+    "core/chain/chains/zcash/saplingProver.ts",
+    "core/chain/chains/zcash/getZcashZAddress.ts",
+    "core/chain/chains/zcash/SaplingNote.ts",
+    "core/chain/chains/zcash/isZcashShieldedAddress.ts",
+    "core/chain/chains/zcash/saplingCrypto.ts",
+    "core/chain/chains/zcash/scanner.ts",
+    "core/chain/chains/zcash/scanProgress.ts",
+    "core/chain/chains/zcash/parseSaplingOutputs.ts",
+    "core/chain/chains/zcash/lightwalletd/client.ts",
+    "lib/frozt/**",
     ".claude/**",
     ".cursor/**",
     ".venv/**",
@@ -17,7 +29,8 @@
   "ignoreDependencies": [
     "babel-plugin-react-compiler",
     "@bufbuild/buf",
-    "@bufbuild/protoc-gen-es"
+    "@bufbuild/protoc-gen-es",
+    "@lib/frozt"
   ],
   "workspaces": {
     "clients/desktop": {
