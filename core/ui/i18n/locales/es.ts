@@ -49,11 +49,8 @@ export const es = {
       online: 'en línea',
       part1: 'La acción 1 de las acciones de la bóveda será',
       securely: 'de forma segura, preferiblemente',
-      setNewStandard:
-        'Estás listo para utilizar un nuevo estándar de billetera.',
       shareSecurely: 'para garantizar el acceso, preferiblemente',
       vaultShares: 'Su bóveda contiene 2 acciones,',
-      wellDone: 'Bien hecho',
       sentTo: 'Enviado a {{email}}.',
       changeEmailAndRestartKeygen: 'Cambiar correo y reiniciar keygen',
     },
