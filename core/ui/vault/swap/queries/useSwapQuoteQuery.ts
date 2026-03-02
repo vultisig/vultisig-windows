@@ -1,3 +1,4 @@
+import { areEqualCoins } from '@core/chain/coin/Coin'
 import {
   findSwapQuote,
   FindSwapQuoteInput,
@@ -27,11 +28,14 @@ export const useSwapQuoteQuery = () => {
 
   const vultDiscountTierQuery = useVultDiscountTierQuery()
 
+  const notSameAsset = areEqualCoins(fromCoinKey, toCoinKey) ? undefined : true
+
   return useStateDependentQuery(
     {
       fromAmount: fromAmount || undefined,
       referral: referralQuery.data,
       vultDiscountTier: vultDiscountTierQuery.data,
+      notSameAsset,
     },
     ({ fromAmount, referral, vultDiscountTier }) => {
       const input: FindSwapQuoteInput = {
