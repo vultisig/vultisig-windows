@@ -6,7 +6,6 @@ import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { useRive } from '@rive-app/react-webgl2'
 import { ReactNode, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
@@ -114,20 +113,11 @@ const IconWrapper = styled.div`
   border-radius: 50%;
   background: #03132c;
   border: 1.5px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.25) inset;
+  box-shadow: 0 2.051px 2.051px 0 rgba(0, 0, 0, 0.25) inset;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${getColor('info')};
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: -12px;
-    border-radius: 50%;
-    border: 1px solid rgba(37, 97, 255, 0.12);
-    pointer-events: none;
-  }
+  color: #2460ff;
 
   &::after {
     content: '';
@@ -135,17 +125,13 @@ const IconWrapper = styled.div`
     bottom: -6px;
     left: 50%;
     transform: translateX(-50%);
-    width: 28px;
-    height: 10px;
-    background: radial-gradient(
-      ellipse at center,
-      rgba(37, 97, 255, 0.5) 0%,
-      rgba(37, 97, 255, 0.2) 40%,
-      transparent 70%
-    );
+    width: 24px;
+    height: 8px;
+    background: #0c4eff;
     border-radius: 50%;
     pointer-events: none;
-    filter: blur(2px);
+    filter: blur(8px);
+    opacity: 0.6;
   }
 `
 
