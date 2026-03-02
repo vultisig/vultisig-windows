@@ -36,13 +36,15 @@ const createSchema = ({ t, existingNames, currentName }: CreateSchemaInput) => {
   return z.object({
     name: z
       .string()
+      .trim()
       .min(2, t('vault_rename_page_name_error'))
       .max(50, t('vault_rename_page_name_error'))
       .refine(
         name =>
-          name === currentName ||
+          name.toLowerCase() === currentName.trim().toLowerCase() ||
           !existingNames.some(
-            existingName => existingName.toLowerCase() === name.toLowerCase()
+            existingName =>
+              existingName.trim().toLowerCase() === name.toLowerCase()
           ),
         { message: t('vault_name_already_exists') }
       ),
@@ -101,6 +103,8 @@ export const VaultRenamePage = () => {
           render={() => <TextInput {...register('name')} />}
           action={
             <IconButton
+              type="button"
+              aria-label={t('clear')}
               style={{
                 color: colors.textShy.toCssValue(),
               }}
