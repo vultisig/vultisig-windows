@@ -5,7 +5,6 @@ import {
   getMpcDeviceType,
 } from '@core/mpc/devices/MpcDevice'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { Animation } from '@lib/ui/animations/Animation'
 import { Button } from '@lib/ui/buttons/Button'
 import { BrowserExtensionIcon } from '@lib/ui/icons/BrowserExtensionIcon'
 import { DeviceIcon } from '@lib/ui/icons/DeviceIcon'
@@ -16,7 +15,8 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { OnBackProp, OnFinishProp, SvgProps } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { FC } from 'react'
+import { Fit, Layout, useRive } from '@rive-app/react-webgl2'
+import { FC, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -39,6 +39,25 @@ export const ReviewVaultDevicesScreen = ({
 }: ReviewVaultDevicesScreenProps) => {
   const { t } = useTranslation()
   const vault = useCurrentVault()
+
+  const { rive, RiveComponent } = useRive({
+    src: '/core/animations/review-devices.riv',
+    stateMachines: ['State Machine 1'],
+    autoplay: true,
+    layout: new Layout({ fit: Fit.Layout }),
+  })
+
+  useEffect(() => {
+    if (!rive) return
+    rive.resizeDrawingSurfaceToCanvas()
+
+    const onResize = () => {
+      rive.resizeDrawingSurfaceToCanvas()
+    }
+
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [rive])
 
   const userSigners = vault.signers.filter(s => !isServer(s))
   const deviceItems = userSigners.map((signer, index) => {
@@ -64,9 +83,7 @@ export const ReviewVaultDevicesScreen = ({
   return (
     <Container fullHeight>
       <AnimationWrapper>
-        <AnimationContainer>
-          <Animation src="/core/animations/review-devices.riv" />
-        </AnimationContainer>
+        <RiveComponent />
       </AnimationWrapper>
       <ContentSection>
         <VStack gap={8} alignItems="center">
@@ -113,26 +130,8 @@ const Container = styled(PageContent)`
 
 const AnimationWrapper = styled.div`
   flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   min-height: 0;
   width: 100%;
-  overflow: hidden;
-`
-
-const AnimationContainer = styled.div`
-  width: 100%;
-  max-width: 500px;
-  aspect-ratio: 500 / 350;
-  position: relative;
-  overflow: hidden;
-
-  canvas {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: contain;
-  }
 `
 
 const ContentSection = styled(VStack)`
