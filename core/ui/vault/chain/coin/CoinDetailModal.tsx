@@ -13,6 +13,7 @@ import { IconButton } from '@lib/ui/buttons/IconButton'
 import { ArCubeIcon } from '@lib/ui/icons/ArCubeIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { ModalCloseButton } from '@lib/ui/modal/ModalCloseButton'
 import { ResponsiveModal } from '@lib/ui/modal/ResponsiveModal'
 import { OnCloseProp } from '@lib/ui/props'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
@@ -50,12 +51,16 @@ export const CoinDetailModal = ({ coin, onClose }: CoinDetailModalProps) => {
     >
       <ContentContainer>
         <VStack alignItems="center" fullWidth>
-          <HStack justifyContent="end" fullWidth>
+          <HStack justifyContent="end" fullWidth gap={8}>
             <IconButton onClick={() => openUrl(blockExplorerUrl)}>
               <IconWrapper size={20}>
                 <ArCubeIcon />
               </IconWrapper>
             </IconButton>
+            <ModalCloseButton
+              style={{ color: 'hsl(215, 40%, 85%)', fontSize: 16 }}
+              onClick={onClose}
+            />
           </HStack>
           <HStack alignItems="center" gap={8}>
             <CoinIcon coin={coin} style={{ fontSize: 24 }} />
