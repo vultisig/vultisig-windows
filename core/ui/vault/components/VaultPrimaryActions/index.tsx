@@ -2,9 +2,12 @@ import { banxaSupportedChains } from '@core/chain/banxa'
 import { Chain } from '@core/chain/Chain'
 import { CoinKey, extractCoinKey } from '@core/chain/coin/Coin'
 import { SendPrompt } from '@core/ui/vault/send/SendPrompt'
+import { Opener } from '@lib/ui/base/Opener'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { useCallback, useMemo } from 'react'
 
+import { ZcashSyncModal } from '../../chain/zcashSync/ZcashSyncModal'
+import { ZcashSyncPrompt } from '../../chain/zcashSync/ZcashSyncPrompt'
 import { depositEnabledChains } from '../../deposit/DepositEnabledChain'
 import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
 import { useSwapEnabledChainsForVault } from '../../swap/state/useSwapEnabledChainsForVault'
@@ -33,6 +36,8 @@ export const VaultPrimaryActions = ({
     [coins, potentialCoin]
   )
 
+  const isZcashShielded = potentialCoin?.chain === Chain.ZcashShielded
+
   const getCoin = useCallback(
     (supportedChains: readonly Chain[]) => {
       const coin = (potentialCoin ? [potentialCoin] : coins).find(coin =>
@@ -60,6 +65,12 @@ export const VaultPrimaryActions = ({
       {buyCoin && <BuyPrompt coin={buyCoin} />}
       {onReceive && <ReceivePrompt onClick={onReceive} />}
       {showDepositAction && depositCoin && <DepositPrompt coin={depositCoin} />}
+      {isZcashShielded && (
+        <Opener
+          renderOpener={({ onOpen }) => <ZcashSyncPrompt onClick={onOpen} />}
+          renderContent={({ onClose }) => <ZcashSyncModal onClose={onClose} />}
+        />
+      )}
     </ActionsWrapper>
   )
 }

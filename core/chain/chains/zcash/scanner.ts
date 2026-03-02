@@ -15,9 +15,8 @@ import {
 } from './lightwalletd/client'
 import { CompactBlock } from './lightwalletd/messages'
 import { parseSaplingOutputs } from './parseSaplingOutputs'
-import { computeNullifier } from './saplingCrypto'
 import { loadSaplingNotes, SaplingNote, saveSaplingNotes } from './SaplingNote'
-import { loadScanHeight, saveScanHeight } from './scanProgress'
+import { loadScanHeight, saveScanHeight, saveScanTarget } from './scanProgress'
 
 const batchSize = 500
 
@@ -62,13 +61,15 @@ export const scanBlocks = async ({
   const endHeight = latestBlock.height
 
   let startHeight: number
-  if (savedHeight !== null) {
+  if (savedHeight !== null && savedHeight > 0) {
     startHeight = savedHeight + 1
   } else if (birthHeight !== null) {
     startHeight = birthHeight
   } else {
     startHeight = endHeight
   }
+
+  saveScanTarget(zAddress, endHeight)
 
   if (startHeight > endHeight) return
 
@@ -210,20 +211,20 @@ const storeDecryptedNote = async ({
   const outputFields = saplingOutputs.get(cmuHex)
   if (!outputFields) return
 
-  const noteData = frozt_sapling_decrypt_note_full(
-    state.ivk,
-    new Uint8Array(Buffer.from(cmuHex, 'hex')),
-    outputFields.ephemeralKey,
-    outputFields.encCiphertext,
-    BigInt(block.height)
-  )
+  let noteData: Uint8Array
+  try {
+    noteData = frozt_sapling_decrypt_note_full(
+      state.ivk,
+      new Uint8Array(Buffer.from(cmuHex, 'hex')),
+      outputFields.ephemeralKey,
+      outputFields.encCiphertext,
+      BigInt(block.height)
+    )
+  } catch {
+    return
+  }
 
-  const nullifier = computeNullifier(
-    Buffer.from(state.nk),
-    witnessPosition,
-    Buffer.from(cmuHex, 'hex')
-  )
-  const nullifierHex = nullifier.toString('hex')
+  const nullifierHex = `${toHex(txHash)}:${outputIdx}`
 
   const note: SaplingNote = {
     txid: toHex(txHash),

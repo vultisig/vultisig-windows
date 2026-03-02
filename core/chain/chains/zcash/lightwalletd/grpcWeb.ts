@@ -72,15 +72,78 @@ const checkTrailers = (trailers: string) => {
   }
 }
 
-const grpcWebFetch = async ({
-  baseUrl,
-  service,
-  method,
-  requestBytes,
-}: GrpcWebInput): Promise<Uint8Array> => {
-  const url = `${baseUrl}/${service}/${method}`
-  const body = encodeFrame(requestBytes)
+type GoHttpPostRequest = {
+  url: string
+  headers: Record<string, string>
+  body: string
+}
 
+type GoHttpPostResponse = {
+  statusCode: number
+  headers: Record<string, string>
+  body: string
+}
+
+const uint8ToBase64 = (bytes: Uint8Array): string => {
+  let binary = ''
+  for (let i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i])
+  }
+  return btoa(binary)
+}
+
+const base64ToUint8 = (b64: string): Uint8Array => {
+  const binary = atob(b64)
+  const bytes = new Uint8Array(binary.length)
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i)
+  }
+  return bytes
+}
+
+type GoPostFn = (req: GoHttpPostRequest) => Promise<GoHttpPostResponse>
+
+const getGoHttpPost = (): GoPostFn | null => {
+  try {
+    const fn = (window as any)?.['go']?.['utils']?.['GoHttp']?.['Post']
+    if (typeof fn === 'function') return fn as GoPostFn
+  } catch {
+    // Not in Wails environment
+  }
+  return null
+}
+
+const grpcWebFetchViaGo = async (
+  goPost: GoPostFn,
+  url: string,
+  body: Uint8Array
+): Promise<Uint8Array> => {
+  const response = await goPost({
+    url,
+    headers: {
+      'Content-Type': 'application/grpc',
+      TE: 'trailers',
+    },
+    body: uint8ToBase64(body),
+  })
+
+  if (response.statusCode < 200 || response.statusCode >= 300) {
+    throw new Error(`gRPC-web HTTP error: ${response.statusCode}`)
+  }
+
+  const grpcStatus = response.headers['grpc-status']
+  if (grpcStatus && grpcStatus !== '0') {
+    const grpcMessage = response.headers['grpc-message'] ?? 'Unknown gRPC error'
+    throw new Error(`gRPC error ${grpcStatus}: ${grpcMessage}`)
+  }
+
+  return base64ToUint8(response.body)
+}
+
+const grpcWebFetchViaFetch = async (
+  url: string,
+  body: Uint8Array
+): Promise<Uint8Array> => {
   const response = await fetch(url, {
     method: 'POST',
     headers: {
@@ -104,6 +167,23 @@ const grpcWebFetch = async ({
   return new Uint8Array(await response.arrayBuffer())
 }
 
+const grpcWebFetch = async ({
+  baseUrl,
+  service,
+  method,
+  requestBytes,
+}: GrpcWebInput): Promise<Uint8Array> => {
+  const url = `${baseUrl}/${service}/${method}`
+  const body = encodeFrame(requestBytes)
+
+  const goPost = getGoHttpPost()
+  if (goPost) {
+    return grpcWebFetchViaGo(goPost, url, body)
+  }
+
+  return grpcWebFetchViaFetch(url, body)
+}
+
 export const grpcWebUnary = async (
   input: GrpcWebInput
 ): Promise<Uint8Array> => {
@@ -119,7 +199,27 @@ export const grpcWebUnary = async (
   return data
 }
 
-export const grpcWebServerStream = async (
+export const grpcWebUnaryWithFallback = async (
+  inputs: GrpcWebInput[]
+): Promise<Uint8Array> => {
+  let lastError: Error | null = null
+
+  for (const input of inputs) {
+    try {
+      return await grpcWebUnary(input)
+    } catch (err) {
+      lastError = err instanceof Error ? err : new Error(String(err))
+      console.warn(
+        `lightwalletd ${input.baseUrl}/${input.method} failed:`,
+        lastError.message
+      )
+    }
+  }
+
+  throw lastError ?? new Error('All lightwalletd endpoints failed')
+}
+
+const grpcWebServerStream = async (
   input: GrpcWebInput
 ): Promise<Uint8Array[]> => {
   const responseBuffer = await grpcWebFetch(input)
@@ -128,4 +228,24 @@ export const grpcWebServerStream = async (
   checkTrailers(trailers)
 
   return dataFrames
+}
+
+export const grpcWebServerStreamWithFallback = async (
+  inputs: GrpcWebInput[]
+): Promise<Uint8Array[]> => {
+  let lastError: Error | null = null
+
+  for (const input of inputs) {
+    try {
+      return await grpcWebServerStream(input)
+    } catch (err) {
+      lastError = err instanceof Error ? err : new Error(String(err))
+      console.warn(
+        `lightwalletd ${input.baseUrl}/${input.method} failed:`,
+        lastError.message
+      )
+    }
+  }
+
+  throw lastError ?? new Error('All lightwalletd endpoints failed')
 }

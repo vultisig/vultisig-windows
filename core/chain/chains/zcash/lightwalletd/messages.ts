@@ -273,6 +273,9 @@ const decodeCompactSaplingOutput = (data: Uint8Array): CompactSaplingOutput => {
   return { cmu, ephemeralKey, ciphertext }
 }
 
+// CompactTx proto fields:
+//   1 = index (uint64), 2 = txid (bytes), 3 = fee (uint32),
+//   4 = spends (repeated CompactSaplingSpend), 5 = outputs (repeated CompactSaplingOutput)
 const decodeCompactTx = (data: Uint8Array): CompactTx => {
   let index = 0
   let hash = new Uint8Array(0)
@@ -296,9 +299,9 @@ const decodeCompactTx = (data: Uint8Array): CompactTx => {
       const fieldData = data.slice(offset, offset + length)
       offset += length
       if (fieldNumber === 2) hash = fieldData
-      else if (fieldNumber === 3)
-        spends.push(decodeCompactSaplingSpend(fieldData))
       else if (fieldNumber === 4)
+        spends.push(decodeCompactSaplingSpend(fieldData))
+      else if (fieldNumber === 5)
         outputs.push(decodeCompactSaplingOutput(fieldData))
     }
   }
@@ -306,6 +309,10 @@ const decodeCompactTx = (data: Uint8Array): CompactTx => {
   return { index, hash, spends, outputs }
 }
 
+// CompactBlock proto fields:
+//   1 = protoVersion (uint32), 2 = height (uint64), 3 = hash (bytes),
+//   4 = prevHash (bytes), 5 = time (uint32), 6 = header (bytes),
+//   7 = vtx (repeated CompactTx)
 export const decodeCompactBlock = (data: Uint8Array): CompactBlock => {
   let height = 0
   let hash = new Uint8Array(0)
@@ -322,15 +329,15 @@ export const decodeCompactBlock = (data: Uint8Array): CompactBlock => {
     if (wireType === 0) {
       const { value, bytesRead } = readVarint(data, offset)
       offset += bytesRead
-      if (fieldNumber === 3) height = value
-      else if (fieldNumber === 4) time = value
+      if (fieldNumber === 2) height = value
+      else if (fieldNumber === 5) time = value
     } else if (wireType === 2) {
       const { value: length, bytesRead } = readVarint(data, offset)
       offset += bytesRead
       const fieldData = data.slice(offset, offset + length)
       offset += length
-      if (fieldNumber === 2) hash = fieldData
-      else if (fieldNumber === 6) vtx.push(decodeCompactTx(fieldData))
+      if (fieldNumber === 3) hash = fieldData
+      else if (fieldNumber === 7) vtx.push(decodeCompactTx(fieldData))
     }
   }
 

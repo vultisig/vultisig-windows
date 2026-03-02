@@ -1,5 +1,13 @@
-import { lightwalletdService, zcashLightwalletdUrl } from './config'
-import { grpcWebServerStream, grpcWebUnary } from './grpcWeb'
+import {
+  lightwalletdService,
+  zcashLightwalletdUrl,
+  zcashLightwalletdUrls,
+} from './config'
+import {
+  grpcWebServerStreamWithFallback,
+  grpcWebUnary,
+  grpcWebUnaryWithFallback,
+} from './grpcWeb'
 import {
   BlockID,
   CompactBlock,
@@ -25,26 +33,36 @@ const rpcInput = (method: string, requestBytes: Uint8Array) => ({
   requestBytes,
 })
 
-const rpc = (method: string, requestBytes: Uint8Array) =>
-  grpcWebUnary(rpcInput(method, requestBytes))
+const rpcAllInputs = (method: string, requestBytes: Uint8Array) =>
+  zcashLightwalletdUrls.map(baseUrl => ({
+    baseUrl,
+    service: lightwalletdService,
+    method,
+    requestBytes,
+  }))
 
-const rpcStream = (method: string, requestBytes: Uint8Array) =>
-  grpcWebServerStream(rpcInput(method, requestBytes))
+const rpcWithFallback = (method: string, requestBytes: Uint8Array) =>
+  grpcWebUnaryWithFallback(rpcAllInputs(method, requestBytes))
+
+const rpcStreamWithFallback = (method: string, requestBytes: Uint8Array) =>
+  grpcWebServerStreamWithFallback(rpcAllInputs(method, requestBytes))
 
 export const getLatestBlock = async (): Promise<BlockID> => {
-  const data = await rpc('GetLatestBlock', encodeChainSpec())
+  const data = await rpcWithFallback('GetLatestBlock', encodeChainSpec())
   return decodeBlockID(data)
 }
 
 export const getTreeState = async (height: number): Promise<TreeState> => {
-  const data = await rpc('GetTreeState', encodeBlockHeight(height))
+  const data = await rpcWithFallback('GetTreeState', encodeBlockHeight(height))
   return decodeTreeState(data)
 }
 
 export const sendTransaction = async (
   txData: Uint8Array
 ): Promise<SendResponse> => {
-  const data = await rpc('SendTransaction', encodeRawTransaction(txData))
+  const data = await grpcWebUnary(
+    rpcInput('SendTransaction', encodeRawTransaction(txData))
+  )
   return decodeSendResponse(data)
 }
 
@@ -52,7 +70,7 @@ export const getBlockRange = async (
   startHeight: number,
   endHeight: number
 ): Promise<CompactBlock[]> => {
-  const frames = await rpcStream(
+  const frames = await rpcStreamWithFallback(
     'GetBlockRange',
     encodeBlockRange(startHeight, endHeight)
   )
@@ -62,6 +80,6 @@ export const getBlockRange = async (
 export const getTransaction = async (
   txHash: Uint8Array
 ): Promise<RawTransaction> => {
-  const data = await rpc('GetTransaction', encodeTxFilter(txHash))
+  const data = await rpcWithFallback('GetTransaction', encodeTxFilter(txHash))
   return decodeRawTransaction(data)
 }

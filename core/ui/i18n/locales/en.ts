@@ -100,6 +100,7 @@ export const en = {
   balance: 'Balance',
   balance_available: 'Balance available',
   base_fee: 'Base Fee',
+  blocks_to_go: 'blocks to go',
   blockaid_security_scan: 'Blockaid Security Scan',
   blockaid_simulation_failed: 'Transaction Simulation Failed',
   blockaid_simulation_failed_description:
@@ -579,6 +580,7 @@ export const en = {
   keysign: 'Keysign',
   label: 'Label',
   language: 'Language',
+  latest: 'latest',
   learnMore: 'Learn More',
   leave: 'Leave',
   left_pool: 'Left pool',
@@ -668,6 +670,7 @@ export const en = {
     'Your vaults will appear here. Start by creating one or importing an existing vault',
   node_address: 'Node Address',
   normal: 'Normal',
+  not_synced: 'Not synced',
   not_enough_asset_to_cover_gas_fees: 'Not enough {{asset}} to cover gas fees',
   not_enough_funds: 'Not enough funds',
   nothing_to_add: 'Nothing to add',
@@ -922,6 +925,9 @@ export const en = {
   successfully: 'Successfully',
   support: 'Support',
   swap: 'Swap',
+  sync: 'Sync',
+  synced: 'Synced',
+  syncing: 'Syncing',
   swap_fee: 'Swap fee',
   swap_overview: 'Swap overview',
   swap_terms: {
@@ -1257,4 +1263,10 @@ export const en = {
   agent_tx_type_swap: 'Swap',
   agent_tx_type_transfer: 'Transfer',
   agent_tx_view: 'View',
+  zcash_scan_progress: 'Scan Progress',
+  zcash_sync_status: 'ZCash Shielded Sync',
+  zcash_wallet_birthday: 'Wallet Birthday Height',
+  zcash_wallet_birthday_placeholder: 'e.g. 3256538',
+  zcash_wallet_birthday_hint:
+    'Optional. If provided, the scanner will start from this block to find your transactions. If left empty, only new transactions will be detected.',
 }
