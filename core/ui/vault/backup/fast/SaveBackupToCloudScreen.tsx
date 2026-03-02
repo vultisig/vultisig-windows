@@ -6,8 +6,9 @@ import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { useRive } from '@rive-app/react-webgl2'
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -15,12 +16,16 @@ type SaveBackupToCloudScreenProps = {
   onContinue: () => void
   onBack?: () => void
   ctaLoading?: boolean
+  title?: string
+  description?: ReactNode
 }
 
 export const SaveBackupToCloudScreen = ({
   onContinue,
   onBack,
   ctaLoading = false,
+  title,
+  description,
 }: SaveBackupToCloudScreenProps) => {
   const { t } = useTranslation()
   const [isAgreed, setIsAgreed] = useState(false)
@@ -42,44 +47,60 @@ export const SaveBackupToCloudScreen = ({
         </AnimationContainer>
       </AnimationWrapper>
       <ContentSection>
-        <VStack gap={60}>
-          <VStack gap={24} alignItems="center">
-            <IconWrapper>
-              <CloudUploadIcon style={{ fontSize: 20 }} />
-            </IconWrapper>
-            <VStack alignItems="center">
-              <Text size={22} weight={500} color="contrast" centerHorizontally>
-                {t('save_backup_to_cloud')}
-              </Text>
-              <Text size={14} color="shy" centerHorizontally>
-                <Trans
-                  i18nKey="save_backup_description"
-                  components={{
-                    b: (
-                      <Text as="span" size={14} color="contrast" weight={700} />
-                    ),
-                  }}
-                />
-              </Text>
-              <Text size={14} color="shyExtra" centerHorizontally>
-                {t('save_backup_description_2')}
-              </Text>
-            </VStack>
+        <VStack gap={32} alignItems="center">
+          <IconWrapper>
+            <CloudUploadIcon style={{ fontSize: 20 }} />
+          </IconWrapper>
+          <VStack alignItems="center">
+            <Text size={22} weight={500} color="contrast" centerHorizontally>
+              {title ?? t('save_backup_to_cloud')}
+            </Text>
+            {description ?? (
+              <>
+                <Text size={14} weight={500} color="shy" centerHorizontally>
+                  <Trans
+                    i18nKey="save_backup_description"
+                    components={{
+                      b: (
+                        <Text
+                          as="span"
+                          size={14}
+                          color="contrast"
+                          weight={700}
+                        />
+                      ),
+                    }}
+                  />
+                </Text>
+                <Text
+                  size={14}
+                  weight={500}
+                  color="shyExtra"
+                  centerHorizontally
+                >
+                  {t('save_backup_description_2')}
+                </Text>
+              </>
+            )}
           </VStack>
-          <VStack gap={20}>
-            <Checkbox
-              value={isAgreed}
-              onChange={() => setIsAgreed(prev => !prev)}
-              label={t('i_understand_save_backup')}
-            />
-            <Button
-              onClick={onContinue}
-              disabled={!isAgreed || ctaLoading}
-              loading={ctaLoading}
-            >
-              {t('save_backup')}
-            </Button>
-          </VStack>
+        </VStack>
+        <VStack gap={20}>
+          <Checkbox
+            value={isAgreed}
+            onChange={() => setIsAgreed(prev => !prev)}
+            label={
+              <Text size={13} weight={500} color="contrast">
+                {t('i_understand_save_backup')}
+              </Text>
+            }
+          />
+          <Button
+            onClick={onContinue}
+            disabled={!isAgreed || ctaLoading}
+            loading={ctaLoading}
+          >
+            {t('save_backup')}
+          </Button>
         </VStack>
       </ContentSection>
     </Container>
@@ -97,23 +118,34 @@ const IconWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #2561ff;
+  color: ${getColor('info')};
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -12px;
+    border-radius: 50%;
+    border: 1px solid rgba(37, 97, 255, 0.12);
+    pointer-events: none;
+  }
 
   &::after {
     content: '';
     position: absolute;
-    bottom: -4px;
+    bottom: -6px;
     left: 50%;
     transform: translateX(-50%);
-    width: 24px;
-    height: 8px;
+    width: 28px;
+    height: 10px;
     background: radial-gradient(
       ellipse at center,
-      rgba(37, 97, 255, 0.4) 0%,
+      rgba(37, 97, 255, 0.5) 0%,
+      rgba(37, 97, 255, 0.2) 40%,
       transparent 70%
     );
     border-radius: 50%;
     pointer-events: none;
+    filter: blur(2px);
   }
 `
 
@@ -151,5 +183,5 @@ const ContentSection = styled(VStack)`
   align-self: center;
   padding: 0 24px 24px;
   flex-shrink: 0;
-  gap: 32px;
+  gap: 30px;
 `
