@@ -50,6 +50,7 @@ export type BackendAction = {
   title: string
   description?: string
   params?: Record<string, unknown>
+  auto_execute?: boolean
 }
 
 export type ActionResult = {
