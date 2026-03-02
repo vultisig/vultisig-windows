@@ -51,16 +51,16 @@ export const CoinDetailModal = ({ coin, onClose }: CoinDetailModalProps) => {
     >
       <ContentContainer>
         <VStack alignItems="center" fullWidth>
-          <HStack justifyContent="end" fullWidth gap={8}>
+          <HStack justifyContent="space-between" fullWidth gap={8}>
+            <ModalCloseButton
+              style={{ color: 'hsl(215, 40%, 85%)', fontSize: 16 }}
+              onClick={onClose}
+            />
             <IconButton onClick={() => openUrl(blockExplorerUrl)}>
               <IconWrapper size={20}>
                 <ArCubeIcon />
               </IconWrapper>
             </IconButton>
-            <ModalCloseButton
-              style={{ color: 'hsl(215, 40%, 85%)', fontSize: 16 }}
-              onClick={onClose}
-            />
           </HStack>
           <HStack alignItems="center" gap={8}>
             <CoinIcon coin={coin} style={{ fontSize: 24 }} />
