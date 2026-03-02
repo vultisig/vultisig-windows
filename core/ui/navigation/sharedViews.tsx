@@ -26,6 +26,7 @@ import { SendPage } from '@core/ui/vault/send/SendPage'
 import { VaultSettingsPage } from '@core/ui/vault/settings'
 import { DeleteVaultPage } from '@core/ui/vault/settings/delete'
 import { VaultDetailsPage } from '@core/ui/vault/settings/details'
+import { VaultRenamePage } from '@core/ui/vault/settings/rename'
 import { SwapPage } from '@core/ui/vault/swap/components/SwapPage'
 import { VaultsPage } from '@core/ui/vaultsOrganisation'
 import { VaultFolderPage } from '@core/ui/vaultsOrganisation/folder'
@@ -75,6 +76,7 @@ export type SharedViewId = Extract<
   | 'manageVaultFolder'
   | 'manageVaults'
   | 'newVault'
+  | 'renameVault'
   | 'reshareVault'
   | 'send'
   | 'signCustomMessage'
@@ -135,6 +137,7 @@ export const sharedViews: Views<SharedViewId> = {
   manageVaultChainCoins: ManageVaultChainCoinsPage,
   manageVaults: ManageVaultsPage,
   newVault: NewVaultPage,
+  renameVault: VaultRenamePage,
   reshareVault: ReshareVaultPage,
   send: SendPage,
   signCustomMessage: SignCustomMessagePage,

@@ -117,6 +117,7 @@ export type CoreView =
   | { id: 'vaultChainDetail'; state: { chain: Chain } }
   | { id: 'vaultFolder'; state: { id: string } }
   | { id: 'vaults' }
+  | { id: 'renameVault' }
   | { id: 'vaultSettings' }
   | { id: 'manageVaults' }
   | { id: 'managePasscodeEncryption' }
