@@ -15,6 +15,7 @@ import { VaultBackupPage } from '@core/ui/vault/backup'
 import { SelectVaultsBackupPage } from '@core/ui/vault/backup/select/SelectVaultsBackupPage'
 import { VaultsBackupPage } from '@core/ui/vault/backup/VaultsBackupPage'
 import { ManageVaultChainsPage } from '@core/ui/vault/chain/manage'
+import { AddChainKeysPage } from '@core/ui/vault/chain/manage/addChainKeys/AddChainKeysPage'
 import { ManageVaultChainCoinsPage } from '@core/ui/vault/chain/manage/coin'
 import { VaultChainPage } from '@core/ui/vault/chain/VaultChainPage'
 import { DepositPage } from '@core/ui/vault/deposit/DepositPage'
@@ -53,6 +54,7 @@ import { VultDiscountPage } from '../vult/discount/page'
 
 export type SharedViewId = Extract<
   CoreViewId,
+  | 'addChainKeys'
   | 'agent'
   | 'agentChat'
   | 'addCustomToken'
@@ -101,6 +103,7 @@ export type SharedViewId = Extract<
 >
 
 export const sharedViews: Views<SharedViewId> = {
+  addChainKeys: AddChainKeysPage,
   agent: AgentPage,
   agentChat: AgentChatPage,
   referral: () => (

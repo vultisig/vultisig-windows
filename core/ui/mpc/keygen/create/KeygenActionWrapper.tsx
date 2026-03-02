@@ -1,3 +1,4 @@
+import { AddChainKeysKeygenActionProvider } from '@core/ui/mpc/keygen/addChainKeys/AddChainKeysKeygenActionProvider'
 import { CreateVaultKeygenActionProvider } from '@core/ui/mpc/keygen/create/CreateVaultKeygenActionProvider'
 import { KeyImportKeygenActionProvider } from '@core/ui/mpc/keygen/keyimport/KeyImportKeygenActionProvider'
 import { useKeygenOperation } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
@@ -26,6 +27,11 @@ export const KeygenActionWrapper = ({
       <ReshareVaultKeygenActionProvider>
         {children}
       </ReshareVaultKeygenActionProvider>
+    ),
+    addChainKeys: () => (
+      <AddChainKeysKeygenActionProvider>
+        {children}
+      </AddChainKeysKeygenActionProvider>
     ),
   })
 }

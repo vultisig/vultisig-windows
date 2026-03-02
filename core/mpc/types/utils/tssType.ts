@@ -1,3 +1,4 @@
+import { VaultKeyGroup } from '@core/chain/signing/VaultKeyGroup'
 import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 
@@ -5,7 +6,12 @@ import { KeygenOperation } from '../../keygen/KeygenOperation'
 import { KeygenMessageSchema } from '../vultisig/keygen/v1/keygen_message_pb'
 import { ReshareMessageSchema } from '../vultisig/keygen/v1/reshare_message_pb'
 
-export type TssType = 'Keygen' | 'Reshare' | 'Migrate' | 'KeyImport'
+export type TssType =
+  | 'Keygen'
+  | 'Reshare'
+  | 'Migrate'
+  | 'KeyImport'
+  | 'AddChainKeys'
 
 export const toTssType = (operation: KeygenOperation): TssType => {
   return matchRecordUnion<KeygenOperation, TssType>(operation, {
@@ -18,6 +24,7 @@ export const toTssType = (operation: KeygenOperation): TssType => {
       })
     },
     keyimport: () => 'KeyImport',
+    addChainKeys: () => 'AddChainKeys',
   })
 }
 
@@ -27,6 +34,7 @@ export const fromTssType = (tssType: TssType): KeygenOperation => {
     Migrate: () => ({ reshare: 'migrate' }),
     Reshare: () => ({ reshare: 'regular' }),
     KeyImport: () => ({ keyimport: true }),
+    AddChainKeys: () => ({ addChainKeys: 'frozt' as VaultKeyGroup }),
   })
 }
 
@@ -35,4 +43,5 @@ export const tssMessageSchema = {
   Reshare: ReshareMessageSchema,
   Migrate: ReshareMessageSchema,
   KeyImport: KeygenMessageSchema,
+  AddChainKeys: KeygenMessageSchema,
 } as const

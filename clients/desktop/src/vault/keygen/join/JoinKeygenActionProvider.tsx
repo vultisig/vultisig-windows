@@ -1,5 +1,6 @@
 import { KeygenOperation } from '@core/mpc/keygen/KeygenOperation'
 import { fromLibType } from '@core/mpc/types/utils/libType'
+import { AddChainKeysKeygenActionProvider } from '@core/ui/mpc/keygen/addChainKeys/AddChainKeysKeygenActionProvider'
 import { CreateVaultKeygenActionProvider as DKLSCreateKeygenActionProvider } from '@core/ui/mpc/keygen/create/CreateVaultKeygenActionProvider'
 import { JoinKeyImportKeygenActionProvider } from '@core/ui/mpc/keygen/keyimport/JoinKeyImportKeygenActionProvider'
 import { ReshareVaultKeygenActionProvider as DKLSReshareKeygenActionProvider } from '@core/ui/mpc/keygen/reshare/ReshareVaultKeygenActionProvider'
@@ -68,6 +69,11 @@ export const JoinKeygenActionProvider = ({ children }: ChildrenProp) => {
       <JoinKeyImportKeygenActionProvider>
         {children}
       </JoinKeyImportKeygenActionProvider>
+    ),
+    addChainKeys: () => (
+      <AddChainKeysKeygenActionProvider>
+        {children}
+      </AddChainKeysKeygenActionProvider>
     ),
   })
 }

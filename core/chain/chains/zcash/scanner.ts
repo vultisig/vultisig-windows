@@ -1,7 +1,6 @@
 import {
   frozt_sapling_decrypt_note_full,
-  frozt_sapling_derive_ivk,
-  frozt_sapling_derive_nk,
+  frozt_sapling_derive_keys,
   frozt_sapling_try_decrypt_compact,
   WasmSaplingTree,
   WasmSaplingWitness,
@@ -73,8 +72,9 @@ export const scanBlocks = async ({
 
   if (startHeight > endHeight) return
 
-  const ivk = frozt_sapling_derive_ivk(pubKeyPackage, saplingExtras)
-  const nk = frozt_sapling_derive_nk(saplingExtras)
+  const saplingKeys = frozt_sapling_derive_keys(pubKeyPackage, saplingExtras)
+  const ivk = saplingKeys.ivk
+  const nk = saplingKeys.nk
 
   const treeState = await getTreeState(startHeight - 1)
   const tree = WasmSaplingTree.fromHexState(treeState.saplingTree)

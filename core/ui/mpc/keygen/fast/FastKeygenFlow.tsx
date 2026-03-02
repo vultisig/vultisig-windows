@@ -16,6 +16,7 @@ import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { ComponentType } from 'react'
 
+import { AddChainKeysFastServerActionProvider } from '../addChainKeys/AddChainKeysFastServerActionProvider'
 import { KeyImportFastKeygenServerActionProvider } from '../keyimport/fast/KeyImportFastKeygenServerActionProvider'
 
 type FastKeygenFlowProps = OnBackProp & {
@@ -42,6 +43,7 @@ export const FastKeygenFlow = ({
       })
     },
     keyimport: () => KeyImportFastKeygenServerActionProvider,
+    addChainKeys: () => AddChainKeysFastServerActionProvider,
   })
 
   return (

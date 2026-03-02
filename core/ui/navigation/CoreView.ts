@@ -1,6 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { CoinKey } from '@core/chain/coin/Coin'
 import { ChainWithTokenMetadataDiscovery } from '@core/chain/coin/token/metadata/chains'
+import { VaultKeyGroup } from '@core/chain/signing/VaultKeyGroup'
 import { KeygenOperation } from '@core/mpc/keygen/KeygenOperation'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { KeygenMessage } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
@@ -16,6 +17,10 @@ export type CoreView =
   | {
       id: 'agentChat'
       state: { conversationId?: string; initialMessage?: string }
+    }
+  | {
+      id: 'addChainKeys'
+      state: { keyGroup: VaultKeyGroup; chainsToAdd: Chain[] }
     }
   | { id: 'addCustomToken'; state: { chain: ChainWithTokenMetadataDiscovery } }
   | { id: 'address'; state: { address: string } }

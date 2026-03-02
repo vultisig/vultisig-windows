@@ -1,6 +1,7 @@
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { areEqualCoins, Coin } from '@core/chain/coin/Coin'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import {
   useCreateCoinMutation,
@@ -21,12 +22,14 @@ import { css } from 'styled-components'
 type ChainItemProps = ValueProp<Coin> & {
   isSelected?: boolean
   onToggle?: () => void
+  derivationPath?: string
 }
 
 export const ChainItem = ({
   value: coin,
   isSelected: controlledIsSelected,
   onToggle: controlledOnToggle,
+  derivationPath,
 }: ChainItemProps) => {
   const currentCoins = useCurrentVaultNativeCoins()
   const createCoin = useCreateCoinMutation()
@@ -74,8 +77,13 @@ export const ChainItem = ({
       </ChainIconWrapper>
       <ChainNameWrapper>
         <Text cropped color="contrast" size={12} weight={500}>
-          {coin.chain}
+          {getChainDisplayName(coin.chain)}
         </Text>
+        {derivationPath && (
+          <Text cropped color="shy" size={10}>
+            {derivationPath}
+          </Text>
+        )}
       </ChainNameWrapper>
     </ChainCard>
   )

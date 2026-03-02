@@ -5,7 +5,9 @@ import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useKeygenMutation } from '@core/ui/mpc/keygen/mutations/useKeygenMutation'
 import { KeygenPendingState } from '@core/ui/mpc/keygen/progress/KeygenPendingState'
 import { useKeygenOperation } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
+import { UpdateVaultStep } from '@core/ui/vault/save/UpdateVaultStep'
 import { CurrentVaultProvider } from '@core/ui/vault/state/currentVault'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { StepTransition } from '@lib/ui/base/StepTransition'
@@ -23,6 +25,7 @@ type KeygenFlowProps = OnBackProp &
   Partial<OnFinishProp> & {
     password?: string
     onChangeEmailAndRestart?: () => void
+    chainsToAdd?: string[]
   }
 
 export const KeygenFlow = ({
@@ -38,6 +41,7 @@ export const KeygenFlow = ({
   } = useKeygenMutation()
   useEffect(startKeygen, [startKeygen])
   const { t } = useTranslation()
+  const navigate = useCoreNavigate()
 
   const keygenOperation = useKeygenOperation()
 
@@ -50,6 +54,7 @@ export const KeygenFlow = ({
         regular: () => t('reshare'),
       }),
     keyimport: () => t('import_key'),
+    addChainKeys: () => t('generating_keys'),
   })
 
   const isPluginReshare = useMemo(() => {
@@ -57,6 +62,7 @@ export const KeygenFlow = ({
   }, [keygenOperation])
 
   const isCreateOperation = 'create' in keygenOperation
+  const isAddChainKeys = 'addChainKeys' in keygenOperation
 
   return (
     <MatchQuery
@@ -98,6 +104,18 @@ export const KeygenFlow = ({
           )
         }
 
+        const renderAddChainKeysEnding = () => {
+          return (
+            <UpdateVaultStep
+              title={title}
+              value={vault}
+              chainsToAdd={[]}
+              onFinish={() => navigate({ id: 'vault' })}
+              onBack={onBack}
+            />
+          )
+        }
+
         return (
           <CurrentVaultProvider value={vault}>
             <MatchRecordUnion
@@ -106,6 +124,7 @@ export const KeygenFlow = ({
                 create: renderEnding,
                 reshare: renderEnding,
                 keyimport: renderEnding,
+                addChainKeys: renderAddChainKeysEnding,
               }}
             />
           </CurrentVaultProvider>
@@ -125,7 +144,7 @@ export const KeygenFlow = ({
       )}
       pending={() => (
         <>
-          {!isPluginReshare && !isCreateOperation && (
+          {!isPluginReshare && !isCreateOperation && !isAddChainKeys && (
             <PageHeader
               title={title}
               hasBorder

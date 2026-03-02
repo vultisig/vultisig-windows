@@ -463,6 +463,7 @@ export const en = {
   gas_limit_tooltip_content:
     "The maximum amount of gas you'll pay for. Can be increased if gas limit is not sufficient to send transactions",
   general: 'General',
+  generating_keys: 'Generating Keys',
   generating_ecdsa_key: 'Generating ECDSA Key',
   generating_eddsa_key: 'Generating EdDSA Key',
   get_started: 'Get started',
@@ -569,6 +570,7 @@ export const en = {
   joining_keygen: 'Joining Keygen',
   joining_keysign: 'Joining Keysign',
   joining_session: 'Joining session...',
+  key_generated: 'Key generated',
   keygen: 'Keygen',
   keygen_devices_requirements_info:
     'Scan QR with other device. {{recommended}}-device setup recommended, {{min}} is sufficient.',

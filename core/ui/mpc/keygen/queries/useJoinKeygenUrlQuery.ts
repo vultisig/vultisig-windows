@@ -96,6 +96,18 @@ export const useJoinKeygenUrlQuery = () => {
               })
               return toBinary(KeygenMessageSchema, message)
             },
+            addChainKeys: () => {
+              const message = create(KeygenMessageSchema, {
+                sessionId,
+                hexChainCode,
+                serviceName,
+                encryptionKeyHex: hexEncryptionKey,
+                useVultisigRelay,
+                vaultName,
+                libType,
+              })
+              return toBinary(KeygenMessageSchema, message)
+            },
           }
         )
 
