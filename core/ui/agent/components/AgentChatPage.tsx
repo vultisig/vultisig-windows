@@ -18,12 +18,12 @@ import { useAgentService } from '../hooks/useAgentService'
 import { ChatMessage as ChatMessageType, TitleUpdatedEvent } from '../types'
 import { AgentEmptyState } from './AgentEmptyState'
 import { AgentErrorFallback } from './AgentErrorFallback'
+import { AgentReplyMessage } from './AgentReplyMessage'
 import { ChatInput } from './ChatInput'
 import { ChatMessage } from './ChatMessage'
 import { ConfirmationPrompt } from './ConfirmationPrompt'
 import { ConnectionButton } from './ConnectionButton'
 import { PasswordPrompt } from './PasswordPrompt'
-import { ThinkingIndicator } from './ThinkingIndicator'
 
 type AgentChatViewState = { conversationId?: string; initialMessage?: string }
 
@@ -59,6 +59,7 @@ export const AgentChatPage: FC = () => {
   const {
     messages,
     isLoading,
+    isComplete,
     passwordRequired,
     confirmationRequired,
     authRequired,
@@ -281,10 +282,28 @@ export const AgentChatPage: FC = () => {
           {messages.length === 0 && !isLoading && (
             <AgentEmptyState onSelect={handleSend} />
           )}
-          {messages.map(msg => (
-            <ChatMessage key={msg.id} message={msg} />
-          ))}
-          {isLoading && <ThinkingIndicator />}
+          {(() => {
+            const lastAssistantIdx = messages.reduce(
+              (last, m, idx) =>
+                m.role === 'assistant' && m.content.trim().length > 0
+                  ? idx
+                  : last,
+              -1
+            )
+            return messages.map((msg, i) => (
+              <ChatMessage
+                key={msg.id}
+                message={msg}
+                isAnalyzing={
+                  i === lastAssistantIdx &&
+                  !msg.analysisDuration &&
+                  !isLoading &&
+                  !isComplete
+                }
+              />
+            ))
+          })()}
+          {isLoading && <AgentReplyMessage isAnalyzing content="" />}
           {error && (
             <ErrorMessage onClick={dismissError}>
               <Text size={14} color="danger">

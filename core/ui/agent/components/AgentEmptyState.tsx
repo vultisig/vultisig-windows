@@ -9,7 +9,7 @@ import styled from 'styled-components'
 import { AgentBotPromptIcon } from '../icons/AgentBotPromptIcon'
 import { AgentBtcPromptIcon } from '../icons/AgentBtcPromptIcon'
 import { AgentMoneyPromptIcon } from '../icons/AgentMoneyPromptIcon'
-import { AgentOrbIcon } from '../icons/AgentOrbIcon'
+import { AgentOrb } from '../icons/AgentOrb'
 import { AgentSendPromptIcon } from '../icons/AgentSendPromptIcon'
 
 type PromptVariant = 'blue' | 'green' | 'orange'
@@ -59,7 +59,7 @@ export const AgentEmptyState: FC<Props> = ({ onSelect }) => {
   return (
     <Container>
       <VStack gap={48} alignItems="center">
-        <AgentOrbIcon />
+        <AgentOrb />
         <VStack gap={54} alignItems="center">
           <VStack gap={20} alignItems="center">
             <CenteredText

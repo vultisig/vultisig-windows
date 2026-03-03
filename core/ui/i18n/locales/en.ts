@@ -1277,4 +1277,7 @@ export const en = {
   agent_tx_type_swap: 'Swap',
   agent_tx_type_transfer: 'Transfer',
   agent_tx_view: 'View',
+  agent_analyzing: 'Analyzing...',
+  agent_analyzed_for: 'Analyzed for {{duration}}s',
+  agent_analyzed: 'Analyzed',
 }
