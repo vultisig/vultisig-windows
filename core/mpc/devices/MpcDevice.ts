@@ -59,7 +59,7 @@ export const mpcDeviceFromDeviceName = (
   deviceName: string
 ): MpcDevice | null => {
   const lowerCaseDeviceName = deviceName.toLowerCase()
-  if (lowerCaseDeviceName in mpcDeviceType) {
+  if (Object.hasOwn(mpcDeviceType, lowerCaseDeviceName)) {
     return lowerCaseDeviceName as MpcDevice
   }
 
