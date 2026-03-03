@@ -20,7 +20,7 @@ import { FC, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-const FallbackDeviceIcon: FC<SvgProps> = () => <DeviceIcon />
+const FallbackDeviceIcon: FC<SvgProps> = props => <DeviceIcon {...props} />
 
 const deviceTypeIconRecord: Record<DeviceType, FC<SvgProps>> = {
   phone: SmartphoneIcon,
@@ -115,9 +115,11 @@ export const ReviewVaultDevicesScreen = ({
         </DeviceList>
         <VStack gap={12} alignItems="center">
           <Button onClick={onFinish}>{t('looks_good')}</Button>
-          <Button kind="link" onClick={onBack}>
-            {t('somethings_wrong')}
-          </Button>
+          {onBack && (
+            <Button kind="link" onClick={onBack}>
+              {t('somethings_wrong')}
+            </Button>
+          )}
         </VStack>
       </ContentSection>
     </Container>
