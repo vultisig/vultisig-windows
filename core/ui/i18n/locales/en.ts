@@ -1234,6 +1234,13 @@ export const en = {
   messages: 'messages',
   vultibot_description:
     'Your AI-powered vault assistant. I can swap, send, automate policies, check balances, and manage your vault.',
+  agent_what_to_do: 'What would you like to do?',
+  agent_help_description:
+    'I can help prepare swaps, plugin actions, and automation rules.',
+  agent_prompt_show_plugins: 'Show me plugins and what they can do',
+  agent_prompt_earn_apy: 'I want to earn APY on BTC',
+  agent_prompt_send: 'Send amount to ...',
+  agent_prompt_swap: 'Prepare a swap from ETH to BTC',
   api_key_required: 'API Key Required',
   api_key_required_description:
     'To use Vulti, please set your Anthropic API key as an environment variable before starting the app.',

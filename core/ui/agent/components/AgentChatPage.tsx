@@ -15,14 +15,13 @@ import styled from 'styled-components'
 
 import { useAgentEvents } from '../hooks/useAgentEvents'
 import { useAgentService } from '../hooks/useAgentService'
-import { useConversationStarters } from '../hooks/useConversationStarters'
 import { ChatMessage as ChatMessageType, TitleUpdatedEvent } from '../types'
+import { AgentEmptyState } from './AgentEmptyState'
 import { AgentErrorFallback } from './AgentErrorFallback'
 import { ChatInput } from './ChatInput'
 import { ChatMessage } from './ChatMessage'
 import { ConfirmationPrompt } from './ConfirmationPrompt'
 import { ConnectionButton } from './ConnectionButton'
-import { ConversationStarters } from './ConversationStarters'
 import { PasswordPrompt } from './PasswordPrompt'
 import { ThinkingIndicator } from './ThinkingIndicator'
 
@@ -111,9 +110,6 @@ export const AgentChatPage: FC = () => {
       preloadContext(vaultId)
     }
   }, [vaultId, preloadContext])
-
-  const { starters, isLoading: isLoadingStarters } =
-    useConversationStarters(vaultId)
 
   const queuedMessageRef = useRef<string | null>(null)
 
@@ -283,21 +279,7 @@ export const AgentChatPage: FC = () => {
       <MessagesContainer>
         <ErrorBoundary fallback={AgentErrorFallback}>
           {messages.length === 0 && !isLoading && (
-            <WelcomeMessage>
-              <VStack gap={16} alignItems="center">
-                <Text size={24} weight={600}>
-                  {t('vultibot_welcome')}
-                </Text>
-                <CenteredText size={14} color="supporting">
-                  {t('vultibot_description')}
-                </CenteredText>
-                <ConversationStarters
-                  starters={starters}
-                  isLoading={isLoadingStarters}
-                  onSelect={handleSend}
-                />
-              </VStack>
-            </WelcomeMessage>
+            <AgentEmptyState onSelect={handleSend} />
           )}
           {messages.map(msg => (
             <ChatMessage key={msg.id} message={msg} />
@@ -348,23 +330,10 @@ export const AgentChatPage: FC = () => {
   )
 }
 
-const CenteredText = styled(Text)`
-  text-align: center;
-`
-
 const MessagesContainer = styled(PageContent)`
   flex: 1;
   overflow-y: auto;
   padding: 16px;
-`
-
-const WelcomeMessage = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  padding: 24px;
 `
 
 const ErrorMessage = styled.div`
