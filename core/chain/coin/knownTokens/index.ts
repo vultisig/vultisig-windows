@@ -536,6 +536,7 @@ const leanTokens: Partial<LeanChainTokensRecord> = {
       ticker: 'USDB',
       logo: 'usdb',
       decimals: 18,
+      priceProviderId: 'usdb',
     },
     '0xb1a5700fA2358173Fe465e6eA4Ff52E36e88E2ad': {
       ticker: 'BLAST',
