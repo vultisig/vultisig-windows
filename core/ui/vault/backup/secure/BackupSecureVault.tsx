@@ -27,6 +27,7 @@ export const BackupSecureVault = ({ onFinish }: OnFinishProp) => {
 
   const secureInfoRows = [
     {
+      id: 'backup-each-device',
       icon: <CloudUploadIcon style={{ fontSize: 24 }} />,
       title: t('secure_backup_each_device'),
       description: t('secure_backup_each_device_description', {
@@ -34,6 +35,7 @@ export const BackupSecureVault = ({ onFinish }: OnFinishProp) => {
       }),
     },
     {
+      id: 'store-backups-separately',
       icon: <ArrowSplitIcon style={{ fontSize: 24 }} />,
       title: t('storeBackupsSeparately'),
       description: t('secure_store_backups_separately_description'),
