@@ -69,7 +69,7 @@ export const en = {
   backupShare2: 'Backup Share 2',
   backupsTitle: '<highlight>Backups,</highlight> your new recovery method',
   backupsDescription:
-    "Backups power your vault. Each device has its own backup. A backup alone can't move funds, it's only for recovery. Import and recover any lost device",
+    "Backups power your vault. Each device has its <w>own</w> backup. A backup alone can't move funds, it's only for recovery. Import and recover any lost device",
   backupEachDevice: 'Your Device is the driver',
   backupEachDeviceDescription:
     'The device backup <w>and</w> password are the keys. The server only co-signs, and a backup can be requested.',
@@ -252,6 +252,7 @@ export const en = {
   developer_options: 'Developer Options',
   device_backup: 'Device Backup',
   device_backup_description: 'Store the vault share of this device.',
+  device_n_label: 'Device {{number}} - {{hash}}',
   devices: 'Devices',
   digit_input_error_validation: 'Incorrect code. Try again.',
   digit_input_loading_validation: 'Verifying code, please wait',
@@ -586,6 +587,7 @@ export const en = {
   lock_time: 'Lock Time',
   lock_vultisig_automatically_after: 'Lock Vultisig automatically after...',
   looking_for_server: 'Looking for FastVaultServer...',
+  looks_good: 'Looks good',
   low: 'Low',
   lp_units: 'LP Units',
   m_of_n_vault: '{{m}}-of-{{n}} Vault',
@@ -786,6 +788,9 @@ export const en = {
   reshare_your_vault: 'Reshare your vault',
   resource: 'Resource',
   retry: 'Retry',
+  review_vault_devices_subtitle:
+    "Make sure that these are the correct devices you've added:",
+  review_your_vault_devices: 'Review your vault devices',
   risky_site_detected: 'Malicious site detected',
   risky_transaction_detected: '{{riskLevel}} risk transaction detected',
   risky_tx_warning:
@@ -799,6 +804,10 @@ export const en = {
     'Export this backup file, then save it to the cloud. It is <b>encrypted</b> with the password set earlier to unlock your Vault.',
   save_backup_description_2:
     "Use a different cloud service or account for each backup. When you're finished, delete the file from this device.",
+  save_backup_description_secure:
+    'Export this backup file, then save it to the cloud.',
+  save_backup_n_of_n_to_cloud:
+    'Save backup {{current}} of {{total}} to the cloud',
   save_backup_to_cloud: 'Save backup to the cloud',
   save_code: 'Save code',
   save_swap_fees_with_referral:
@@ -839,6 +848,11 @@ export const en = {
   },
   secureVaultSetupPasswordTooltipContent:
     'This occurs because the password is used to locally encrypt the backup file, similar to how a hard drive is encrypted. In the following step, you have the option to add a hint.',
+  secure_backup_each_device: 'Back up each device',
+  secure_backup_each_device_description:
+    "You'll create {{count}} backups in total. You will do this on each device.",
+  secure_store_backups_separately_description:
+    'Save each backup in a different cloud service or with a different password. If one is exposed, your funds stay safe.',
   security: 'Security',
   select: 'Select',
   select_asset: 'Select asset',
@@ -906,6 +920,7 @@ export const en = {
   skip: 'Skip',
   slippage: 'Slippage',
   something_went_wrong: 'Something went wrong',
+  somethings_wrong: "Something's wrong",
   soon: 'Soon',
   stake: 'Stake',
   staked: 'Staked',
@@ -932,6 +947,7 @@ export const en = {
   terms_of_service: 'Terms of Service',
   terms_required: 'You must agree with the terms',
   this_device: 'This device',
+  this_device_suffix: '(this device)',
   this_vault_only: 'This Vault Only',
   this_vault_share: 'this device vault share',
   thorchain_address: 'THORChain Address',

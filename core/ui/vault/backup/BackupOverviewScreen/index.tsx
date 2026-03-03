@@ -8,20 +8,30 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { GradientText, Text } from '@lib/ui/text'
+import { ReactNode } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { BackupOverviewInfoRow } from './BackupOverviewInfoRow'
 
+type InfoRowData = {
+  id: string
+  icon: ReactNode
+  title: string
+  description: ReactNode
+}
+
 type BackupOverviewScreenProps = OnFinishProp &
   Partial<OnBackProp> & {
     userDeviceCount: number
+    infoRows?: InfoRowData[]
   }
 
 export const BackupOverviewScreen = ({
   userDeviceCount,
   onFinish,
   onBack,
+  infoRows,
 }: BackupOverviewScreenProps) => {
   const { t } = useTranslation()
 
@@ -51,27 +61,45 @@ export const BackupOverviewScreen = ({
             />
           </Text>
           <Text size={13} color="shy">
-            {t('backupsDescription')}
+            <Trans
+              i18nKey="backupsDescription"
+              components={{
+                w: <Text as="span" color="contrast" />,
+              }}
+            />
           </Text>
         </VStack>
         <VStack gap={16}>
-          <BackupOverviewInfoRow
-            icon={<CloudUploadIcon style={{ fontSize: 24 }} />}
-            title={t('backupEachDevice')}
-            description={
-              <Trans
-                i18nKey="backupEachDeviceDescription"
-                components={{
-                  w: <Text as="span" color="contrast" />,
-                }}
+          {infoRows ? (
+            infoRows.map(row => (
+              <BackupOverviewInfoRow
+                key={row.id}
+                icon={row.icon}
+                title={row.title}
+                description={row.description}
               />
-            }
-          />
-          <BackupOverviewInfoRow
-            icon={<ArrowSplitIcon style={{ fontSize: 24 }} />}
-            title={t('storeBackupsSeparately')}
-            description={t('storeBackupsSeparatelyDescription')}
-          />
+            ))
+          ) : (
+            <>
+              <BackupOverviewInfoRow
+                icon={<CloudUploadIcon style={{ fontSize: 24 }} />}
+                title={t('backupEachDevice')}
+                description={
+                  <Trans
+                    i18nKey="backupEachDeviceDescription"
+                    components={{
+                      w: <Text as="span" color="contrast" />,
+                    }}
+                  />
+                }
+              />
+              <BackupOverviewInfoRow
+                icon={<ArrowSplitIcon style={{ fontSize: 24 }} />}
+                title={t('storeBackupsSeparately')}
+                description={t('storeBackupsSeparatelyDescription')}
+              />
+            </>
+          )}
         </VStack>
         <Button onClick={onFinish} loading={isLoading}>
           {t('i_understand')}
