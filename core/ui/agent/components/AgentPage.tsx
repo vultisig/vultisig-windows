@@ -17,8 +17,8 @@ import styled from 'styled-components'
 
 import { useAgentService } from '../hooks/useAgentService'
 import { Conversation } from '../types'
+import { AgentChatInput } from './AgentChatInput'
 import { AgentEmptyState } from './AgentEmptyState'
-import { ChatInput } from './ChatInput'
 import { ConnectionButton } from './ConnectionButton'
 
 export const AgentPage: FC = () => {
@@ -27,6 +27,7 @@ export const AgentPage: FC = () => {
   const vault = useCurrentVault()
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [refreshKey, setRefreshKey] = useState(0)
+  const [inputValue, setInputValue] = useState('')
 
   const { getConversations, deleteConversation } = useAgentService()
 
@@ -108,14 +109,28 @@ export const AgentPage: FC = () => {
           </VStack>
         )}
       </PageContent>
-      <ChatInput
-        onSend={handleNewChat}
-        placeholder={t('ask_about_plugins_policies')}
-      />
+      <ChatInputContainer>
+        <AgentChatInput
+          value={inputValue}
+          onChange={setInputValue}
+          onSubmit={() => {
+            const trimmed = inputValue.trim()
+            if (trimmed) {
+              handleNewChat(trimmed)
+              setInputValue('')
+            }
+          }}
+          placeholder={t('ask_about_plugins_policies')}
+        />
+      </ChatInputContainer>
       <BottomNavigation activeTab="agent" />
     </VStack>
   )
 }
+
+const ChatInputContainer = styled.div`
+  padding: 12px 16px calc(12px + var(--page-bottom-inset, 0px));
+`
 
 const NewChatButton = styled(UnstyledButton)`
   width: 32px;
