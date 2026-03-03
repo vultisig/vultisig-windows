@@ -14,9 +14,15 @@ import { AgentSendPromptIcon } from '../icons/AgentSendPromptIcon'
 
 type PromptVariant = 'blue' | 'green' | 'orange'
 
+type AgentPromptTextKey =
+  | 'agent_prompt_show_plugins'
+  | 'agent_prompt_earn_apy'
+  | 'agent_prompt_send'
+  | 'agent_prompt_swap'
+
 type Prompt = {
   icon: ReactNode
-  textKey: string
+  textKey: AgentPromptTextKey
   variant: PromptVariant
 }
 

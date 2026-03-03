@@ -10,12 +10,7 @@ export const AgentOrbIcon = () => (
       xmlns="http://www.w3.org/2000/svg"
     >
       <g filter="url(#filter0_dddii_orb)">
-        <circle
-          cx="43.35"
-          cy="36.45"
-          r="25"
-          fill="url(#paint0_radial_orb)"
-        />
+        <circle cx="43.35" cy="36.45" r="25" fill="url(#paint0_radial_orb)" />
       </g>
       <defs>
         <filter
