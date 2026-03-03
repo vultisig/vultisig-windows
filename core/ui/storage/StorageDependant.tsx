@@ -1,4 +1,5 @@
 import { ProductLogoBlock } from '@core/ui/product/ProductLogoBlock'
+import { useStartupSplash } from '@core/ui/product/startupSplash'
 import { ErrorBoundary } from '@lib/ui/errors/ErrorBoundary'
 import { ChildrenProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -43,6 +44,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   const isMLDSAEnabled = useIsMLDSAEnabledQuery()
 
   const { processError, targetVaultId } = useCore()
+  const { hasCompletedStartupSplash } = useStartupSplash()
 
   const query = useMergeQueries({
     vaults,
@@ -63,24 +65,30 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   return (
     <MatchQuery
       value={query}
-      success={({ currentVaultId, vaults }) => (
-        <I18nProvider>
-          <ErrorBoundary
-            fallback={RootErrorFallback}
-            processError={processError}
-          >
-            <VaultsProvider value={vaults}>
-              <CurrentVaultIdProvider value={targetVaultId ?? currentVaultId}>
-                <PasscodeProvider initialValue={null}>
-                  <RootCurrentVaultProvider>
-                    {children}
-                  </RootCurrentVaultProvider>
-                </PasscodeProvider>
-              </CurrentVaultIdProvider>
-            </VaultsProvider>
-          </ErrorBoundary>
-        </I18nProvider>
-      )}
+      success={({ currentVaultId, vaults }) => {
+        if (!hasCompletedStartupSplash) {
+          return <ProductLogoBlock />
+        }
+
+        return (
+          <I18nProvider>
+            <ErrorBoundary
+              fallback={RootErrorFallback}
+              processError={processError}
+            >
+              <VaultsProvider value={vaults}>
+                <CurrentVaultIdProvider value={targetVaultId ?? currentVaultId}>
+                  <PasscodeProvider initialValue={null}>
+                    <RootCurrentVaultProvider>
+                      {children}
+                    </RootCurrentVaultProvider>
+                  </PasscodeProvider>
+                </CurrentVaultIdProvider>
+              </VaultsProvider>
+            </ErrorBoundary>
+          </I18nProvider>
+        )
+      }}
       error={error => (
         <FlowErrorPageContent
           title="Failed to load essential data from the storage"
