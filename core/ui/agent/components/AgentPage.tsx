@@ -4,7 +4,6 @@ import { BottomNavigation } from '@core/ui/vault/components/BottomNavigation'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { PlusIcon } from '@lib/ui/icons/PlusIcon'
-import { SparklesIcon } from '@lib/ui/icons/SparklesIcon'
 import { TrashIcon } from '@lib/ui/icons/TrashIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -17,11 +16,10 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useAgentService } from '../hooks/useAgentService'
-import { useConversationStarters } from '../hooks/useConversationStarters'
 import { Conversation } from '../types'
+import { AgentEmptyState } from './AgentEmptyState'
 import { ChatInput } from './ChatInput'
 import { ConnectionButton } from './ConnectionButton'
-import { ConversationStarters } from './ConversationStarters'
 
 export const AgentPage: FC = () => {
   const { t } = useTranslation()
@@ -33,7 +31,6 @@ export const AgentPage: FC = () => {
   const { getConversations, deleteConversation } = useAgentService()
 
   const vaultId = vault ? getVaultId(vault) : null
-  const { starters } = useConversationStarters(vaultId)
 
   useEffect(() => {
     if (!vaultId) return
@@ -83,23 +80,7 @@ export const AgentPage: FC = () => {
       />
       <PageContent>
         {conversations.length === 0 ? (
-          <EmptyState>
-            <VStack gap={20} alignItems="center">
-              <IconWrapper>
-                <SparklesIcon />
-              </IconWrapper>
-              <Text size={20} weight={600}>
-                {t('vultibot_welcome')}
-              </Text>
-              <DescriptionText size={14} color="supporting">
-                {t('vultibot_description')}
-              </DescriptionText>
-              <ConversationStarters
-                starters={starters}
-                onSelect={starter => handleNewChat(starter)}
-              />
-            </VStack>
-          </EmptyState>
+          <AgentEmptyState onSelect={starter => handleNewChat(starter)} />
         ) : (
           <VStack gap={8}>
             {conversations.map(conv => (
@@ -150,36 +131,6 @@ const NewChatButton = styled(UnstyledButton)`
   &:hover {
     background: ${getColor('foregroundExtra')};
   }
-`
-
-const EmptyState = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  padding: 24px;
-`
-
-const DescriptionText = styled(Text)`
-  text-align: center;
-  max-width: 300px;
-`
-
-const IconWrapper = styled.div`
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: linear-gradient(
-    135deg,
-    ${getColor('primary')} 0%,
-    ${getColor('primaryAccentTwo')} 100%
-  );
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  color: ${getColor('contrast')};
 `
 
 const ConversationItem = styled.div`
