@@ -32,4 +32,5 @@ interface Window {
   keplrRequestAccountsCallback: any
   tronWeb: any
   tronLink: any
+  injectedWeb3: Record<string, { enable: (origin?: string) => Promise<any> }>
 }
