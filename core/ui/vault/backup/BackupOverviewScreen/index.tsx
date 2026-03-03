@@ -15,6 +15,7 @@ import styled from 'styled-components'
 import { BackupOverviewInfoRow } from './BackupOverviewInfoRow'
 
 type InfoRowData = {
+  id: string
   icon: ReactNode
   title: string
   description: ReactNode
@@ -72,7 +73,7 @@ export const BackupOverviewScreen = ({
           {infoRows ? (
             infoRows.map(row => (
               <BackupOverviewInfoRow
-                key={row.title}
+                key={row.id}
                 icon={row.icon}
                 title={row.title}
                 description={row.description}
