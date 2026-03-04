@@ -1256,4 +1256,5 @@ export const hr = {
   agent_tx_type_swap: 'Zamjena',
   agent_tx_type_transfer: 'Prijenos',
   agent_tx_view: 'Pogled',
+  open_as_side_panel: 'Otvori kao bočnu ploču',
 }

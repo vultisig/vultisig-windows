@@ -1254,4 +1254,5 @@ export const nl = {
   agent_tx_type_swap: 'Ruil',
   agent_tx_type_transfer: 'Overdracht',
   agent_tx_view: 'Weergave',
+  open_as_side_panel: 'Openen als zijpaneel',
 }
