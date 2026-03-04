@@ -983,6 +983,8 @@ export const hr = {
   you_are_sending: 'Šaljete',
   you_are_staking: 'Stakate',
   you_are_unstaking: 'Povlačite stake',
+  you_are_minting: "You're minting",
+  you_are_redeeming: "You're redeeming",
   yourVaultShares: 'Vaš trezor ima {{shares}} dijeljenih trezora',
   your_friends_referral_code: 'Referral kod tvog prijatelja',
   your_referral_code: 'Vaš referalni kod',

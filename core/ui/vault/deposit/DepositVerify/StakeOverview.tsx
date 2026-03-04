@@ -44,14 +44,18 @@ export const StakeOverview = ({ onBack }: OnBackProp) => {
   const keysignPayloadQuery = useDepositKeysignPayloadQuery()
   const { data: isBlockaidEnabled } = useIsBlockaidEnabledQuery()
 
-  const isUnstake = action === 'unstake'
-  const actionLabel = isUnstake
-    ? (t('you_are_unstaking') as string)
-    : (t('you_are_staking') as string)
+  const actionLabels: Record<string, string> = {
+    stake: t('you_are_staking'),
+    unstake: t('you_are_unstaking'),
+    mint: t('you_are_minting'),
+    redeem: t('you_are_redeeming'),
+  }
 
-  // Check if this is a native TCY unstake - the memo will be like 'tcy-:5000'
-  // In this case, the transaction amount is 0 and the percentage is in the memo
-  const isNativeTcyUnstake = isUnstake && memo?.startsWith('tcy-:')
+  const actionLabel = actionLabels[action] ?? t('you_are_staking')
+
+  // Only real unstake actions can be native TCY unstakes (memo like 'tcy-:5000'),
+  // where the transaction amount is 0 and the percentage is encoded in the memo
+  const isNativeTcyUnstake = action === 'unstake' && memo?.startsWith('tcy-:')
 
   const rawAmount = depositData?.amount
   const amountValue =

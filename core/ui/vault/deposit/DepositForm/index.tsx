@@ -76,7 +76,11 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
   } = useForm<FormData>({
     resolver: zodResolver(schema as any),
     mode: 'onChange',
-    defaultValues: { autoCompound: false, ...(formDefaults ?? {}) },
+    defaultValues: {
+      autoCompound: false,
+      ...(selectedChainAction === 'redeem' ? { slippage: 1 } : {}),
+      ...(formDefaults ?? {}),
+    },
   })
 
   const handleFormSubmit = (data: FieldValues) => {
@@ -87,25 +91,36 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
   const isUnbondAction = selectedChainAction === 'unbond'
   const isStakeAction = selectedChainAction === 'stake'
   const isUnstakeAction = selectedChainAction === 'unstake'
+  const isMintAction = selectedChainAction === 'mint'
+  const isRedeemAction = selectedChainAction === 'redeem'
   const formValues = watch()
   const shouldUseBondRedesign = isBondAction && entryPoint === 'defi'
   const shouldUseUnbondRedesign = isUnbondAction && entryPoint === 'defi'
   const shouldUseStakeRedesign =
-    (isStakeAction || isUnstakeAction) && entryPoint === 'defi'
+    (isStakeAction || isUnstakeAction || isMintAction || isRedeemAction) &&
+    entryPoint === 'defi'
   const shouldUseActionForm =
     shouldUseBondRedesign || shouldUseUnbondRedesign || shouldUseStakeRedesign
 
+  const defiActionPageTitle: Record<string, string> = {
+    bond: t('bond'),
+    unbond: t('unbond'),
+    stake: t('stake'),
+    unstake: t('unstake'),
+    mint: t('mint'),
+    redeem: t('redeem'),
+  }
+
   const getPageTitle = () => {
-    if (shouldUseBondRedesign) {
-      return `${t('bond')} ${coin.ticker ?? ''}`.trim()
+    const defiLabel =
+      entryPoint === 'defi'
+        ? defiActionPageTitle[selectedChainAction]
+        : undefined
+
+    if (defiLabel) {
+      return `${defiLabel} ${coin.ticker ?? ''}`.trim()
     }
-    if (shouldUseUnbondRedesign) {
-      return `${t('unbond')} ${coin.ticker ?? ''}`.trim()
-    }
-    if (shouldUseStakeRedesign) {
-      const actionLabel = isUnstakeAction ? t('unstake') : t('stake')
-      return `${actionLabel} ${coin.ticker ?? ''}`.trim()
-    }
+
     return t('deposit')
   }
 
@@ -161,7 +176,7 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
               balance={balance}
               errors={errors}
               formValues={formValues}
-              isUnstake={isUnstakeAction}
+              isUnstake={isUnstakeAction || isRedeemAction}
             />
           </DepositDataProvider>
         ) : (
