@@ -17,7 +17,7 @@ export const knownCosmosTokens: Record<
     aztec: {
       ticker: 'AZTEC',
       logo: 'aztec.png',
-      decimals: 8,
+      decimals: 4,
     },
   },
   [Chain.TerraClassic]: {
