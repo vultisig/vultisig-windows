@@ -16,14 +16,14 @@ import styled from 'styled-components'
 import { useAgentEvents } from '../hooks/useAgentEvents'
 import { useAgentService } from '../hooks/useAgentService'
 import { ChatMessage as ChatMessageType, TitleUpdatedEvent } from '../types'
+import { AgentChatInput } from './AgentChatInput'
 import { AgentEmptyState } from './AgentEmptyState'
 import { AgentErrorFallback } from './AgentErrorFallback'
-import { ChatInput } from './ChatInput'
+import { AgentReplyMessage } from './AgentReplyMessage'
 import { ChatMessage } from './ChatMessage'
 import { ConfirmationPrompt } from './ConfirmationPrompt'
 import { ConnectionButton } from './ConnectionButton'
 import { PasswordPrompt } from './PasswordPrompt'
-import { ThinkingIndicator } from './ThinkingIndicator'
 
 type AgentChatViewState = { conversationId?: string; initialMessage?: string }
 
@@ -59,6 +59,7 @@ export const AgentChatPage: FC = () => {
   const {
     messages,
     isLoading,
+    isComplete,
     passwordRequired,
     confirmationRequired,
     authRequired,
@@ -213,6 +214,7 @@ export const AgentChatPage: FC = () => {
   }
 
   const pendingMessageRef = useRef<string | null>(null)
+  const [inputValue, setInputValue] = useState('')
   const [authSignInError, setAuthSignInError] = useState<string | null>(null)
   const [authSigningIn, setAuthSigningIn] = useState(false)
 
@@ -281,10 +283,28 @@ export const AgentChatPage: FC = () => {
           {messages.length === 0 && !isLoading && (
             <AgentEmptyState onSelect={handleSend} />
           )}
-          {messages.map(msg => (
-            <ChatMessage key={msg.id} message={msg} />
-          ))}
-          {isLoading && <ThinkingIndicator />}
+          {(() => {
+            const lastAssistantIdx = messages.reduce(
+              (last, m, idx) =>
+                m.role === 'assistant' && m.content.trim().length > 0
+                  ? idx
+                  : last,
+              -1
+            )
+            return messages.map((msg, i) => (
+              <ChatMessage
+                key={msg.id}
+                message={msg}
+                isAnalyzing={
+                  i === lastAssistantIdx &&
+                  !msg.analysisDuration &&
+                  !isLoading &&
+                  !isComplete
+                }
+              />
+            ))
+          })()}
+          {isLoading && <AgentReplyMessage isAnalyzing content="" />}
           {error && (
             <ErrorMessage onClick={dismissError}>
               <Text size={14} color="danger">
@@ -295,10 +315,20 @@ export const AgentChatPage: FC = () => {
         </ErrorBoundary>
         <div ref={messagesEndRef} />
       </MessagesContainer>
-      <ChatInput
-        onSend={handleSend}
-        placeholder={t('ask_about_plugins_policies')}
-      />
+      <ChatInputContainer>
+        <AgentChatInput
+          value={inputValue}
+          onChange={setInputValue}
+          onSubmit={() => {
+            const trimmed = inputValue.trim()
+            if (trimmed) {
+              handleSend(trimmed)
+              setInputValue('')
+            }
+          }}
+          placeholder={t('ask_about_plugins_policies')}
+        />
+      </ChatInputContainer>
       {passwordRequired && (
         <PasswordPrompt
           toolName={passwordRequired.toolName}
@@ -334,6 +364,10 @@ const MessagesContainer = styled(PageContent)`
   flex: 1;
   overflow-y: auto;
   padding: 16px;
+`
+
+const ChatInputContainer = styled.div`
+  padding: 12px 16px;
 `
 
 const ErrorMessage = styled.div`
