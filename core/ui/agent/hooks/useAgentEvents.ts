@@ -65,13 +65,14 @@ export const useAgentEvents = (
     confirmationRequired: null,
     authRequired: null,
     error: null,
-    isComplete: false,
+    isComplete: true,
   })
 
   const convIdRef = useRef(conversationId)
   convIdRef.current = conversationId
 
   const streamingMsgIdRef = useRef<string | null>(null)
+  const loadingStartedAtRef = useRef<number | null>(null)
 
   const appendAssistantMessage = (content: string) => {
     if (!content.trim()) return
@@ -99,6 +100,7 @@ export const useAgentEvents = (
         if (convIdRef.current && data.conversationId !== convIdRef.current)
           return
         streamingMsgIdRef.current = null
+        loadingStartedAtRef.current = Date.now()
         setState(prev => ({
           ...prev,
           isLoading: true,
@@ -293,11 +295,28 @@ export const useAgentEvents = (
       orchestrator.events.on('complete', (data: CompleteEvent) => {
         if (convIdRef.current && data.conversationId !== convIdRef.current)
           return
-        setState(prev => ({
-          ...prev,
-          isLoading: false,
-          isComplete: true,
-        }))
+        const duration = loadingStartedAtRef.current
+          ? Math.round((Date.now() - loadingStartedAtRef.current) / 1000)
+          : undefined
+        loadingStartedAtRef.current = null
+        setState(prev => {
+          const messages = [...prev.messages]
+          for (let i = messages.length - 1; i >= 0; i--) {
+            if (
+              messages[i].role === 'assistant' &&
+              messages[i].content.trim()
+            ) {
+              messages[i] = { ...messages[i], analysisDuration: duration }
+              break
+            }
+          }
+          return {
+            ...prev,
+            messages,
+            isLoading: false,
+            isComplete: true,
+          }
+        })
       })
     )
 
