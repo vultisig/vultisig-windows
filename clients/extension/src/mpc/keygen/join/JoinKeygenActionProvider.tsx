@@ -1,6 +1,7 @@
 import { CreateVaultKeygenActionProvider } from '@core/ui/mpc/keygen/create/CreateVaultKeygenActionProvider'
 import { JoinKeyImportKeygenActionProvider } from '@core/ui/mpc/keygen/keyimport/JoinKeyImportKeygenActionProvider'
 import { ReshareVaultKeygenActionProvider } from '@core/ui/mpc/keygen/reshare/ReshareVaultKeygenActionProvider'
+import { SingleKeygenActionProvider } from '@core/ui/mpc/keygen/singleKeygen/SingleKeygenActionProvider'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { ChildrenProp } from '@lib/ui/props'
@@ -26,6 +27,9 @@ export const JoinKeygenActionProvider = ({ children }: ChildrenProp) => {
           <JoinKeyImportKeygenActionProvider>
             {children}
           </JoinKeyImportKeygenActionProvider>
+        ),
+        singleKeygen: () => (
+          <SingleKeygenActionProvider>{children}</SingleKeygenActionProvider>
         ),
       }}
     />
