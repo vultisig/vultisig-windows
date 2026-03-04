@@ -927,6 +927,8 @@ export const zh = {
   you_are_sending: '您正在发送',
   you_are_staking: '您正在质押',
   you_are_unstaking: '您正在取消质押',
+  you_are_minting: "You're minting",
+  you_are_redeeming: "You're redeeming",
   yourVaultShares: '您的金库拥有 {{shares}} 个金库份额',
   your_friends_referral_code: '你朋友的推荐码',
   your_referral_code: '您的推荐码',
