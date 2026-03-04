@@ -114,7 +114,7 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
 
   const handleSelectVault = (vaultId: string) =>
     mutate(vaultId, {
-      onSuccess: onFinish ?? goBack,
+      onSuccess: onFinish ?? goHome,
     })
 
   return (

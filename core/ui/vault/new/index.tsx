@@ -4,6 +4,7 @@ import { useVaults } from '@core/ui/storage/vaults'
 import { Button } from '@lib/ui/buttons/Button'
 import { UniformColumnGrid } from '@lib/ui/css/uniformColumnGrid'
 import { VStack } from '@lib/ui/layout/Stack'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -51,6 +52,7 @@ const LogoContainer = styled.div`
 export const NewVaultPage = () => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
+  const goBack = useNavigateBack()
   const vaults = useVaults()
 
   return (
@@ -58,9 +60,7 @@ export const NewVaultPage = () => {
       <TopGradient />
       {vaults.length > 0 && (
         <PageHeader
-          primaryControls={
-            <PageHeaderBackButton onClick={() => navigate({ id: 'vaults' })} />
-          }
+          primaryControls={<PageHeaderBackButton onClick={goBack} />}
         />
       )}
       <PageContent>
