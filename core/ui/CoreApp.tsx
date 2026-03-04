@@ -1,5 +1,6 @@
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
 import { PasscodeGuard } from '@core/ui/passcodeEncryption/guard/PasscodeGuard'
+import { StartupSplashProvider } from '@core/ui/product/startupSplash'
 import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProvider'
 import { CoreProvider, CoreState } from '@core/ui/state/core'
 import { StorageDependant } from '@core/ui/storage/StorageDependant'
@@ -54,21 +55,23 @@ export const CoreApp = ({
     <ThemeProvider theme={darkTheme}>
       <GlobalStyle />
       <CoreProvider value={coreState}>
-        <WalletCoreProvider>
-          <Wrap wrap={MigrationsManager}>
-            <StorageDependant>
-              <ToastProvider>
-                <ResponsivenessProvider>
-                  <Container>
-                    {children}
-                    {!isLimited && <VaultDependentContent />}
-                  </Container>
-                  <PasscodeGuard />
-                </ResponsivenessProvider>
-              </ToastProvider>
-            </StorageDependant>
-          </Wrap>
-        </WalletCoreProvider>
+        <StartupSplashProvider>
+          <WalletCoreProvider>
+            <Wrap wrap={MigrationsManager}>
+              <StorageDependant>
+                <ToastProvider>
+                  <ResponsivenessProvider>
+                    <Container>
+                      {children}
+                      {!isLimited && <VaultDependentContent />}
+                    </Container>
+                    <PasscodeGuard />
+                  </ResponsivenessProvider>
+                </ToastProvider>
+              </StorageDependant>
+            </Wrap>
+          </WalletCoreProvider>
+        </StartupSplashProvider>
       </CoreProvider>
     </ThemeProvider>
   )

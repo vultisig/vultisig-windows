@@ -4,16 +4,21 @@ import { defineConfig, loadEnv } from 'vite'
 import circleDependency from 'vite-plugin-circular-dependency'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 
+import { getFeatureFlagDefines } from '../../core/ui/vite/featureFlagDefines'
 import { getCommonPlugins } from '../../core/ui/vite/plugins'
 import { getStaticCopyTargets } from '../../core/ui/vite/staticCopy'
 import * as buildInfo from './build.json'
 
-const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
+const rootDir = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  '../..'
+)
 
 export default defineConfig(async ({ mode }) => {
   const env = loadEnv(mode, rootDir, '')
   return {
     define: {
+      ...getFeatureFlagDefines(env),
       __APP_VERSION__: JSON.stringify(buildInfo.version),
       __APP_BUILD__: JSON.stringify(buildInfo.build),
       __AGENT_BACKEND_URL__: JSON.stringify(
