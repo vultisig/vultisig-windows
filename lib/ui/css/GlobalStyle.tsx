@@ -46,6 +46,13 @@ export const GlobalStyle = createGlobalStyle`
     font-style: italic;
   }
 
+  @font-face {
+    font-family: 'LCDDot TR';
+    src: url('/core/fonts/lcddot_tr.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+  }
+
 
   *, *::before, *::after {
     box-sizing: border-box;

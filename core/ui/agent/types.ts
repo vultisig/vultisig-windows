@@ -32,6 +32,7 @@ export type ChatMessage = {
   timestamp: string
   toolCall?: ToolCallInfo
   txStatus?: TxStatusInfo
+  analysisDuration?: number
 }
 
 export type Conversation = {

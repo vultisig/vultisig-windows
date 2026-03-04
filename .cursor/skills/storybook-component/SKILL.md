@@ -18,6 +18,20 @@ Check the terminals folder before starting any server -- reuse existing sessions
 
 Never start a server if one is already running. Reuse existing browser tabs.
 
+## Workflow Order
+
+For any UI component work (especially from Figma):
+
+1. Fetch design specs (Figma MCP if a link is provided)
+2. Build the component with all states as props
+3. Write the Storybook story -- show all meaningful states in a single story view so the user can review at a glance
+4. Start Storybook (or reuse existing) and verify visuals in the browser
+5. Integrate into the app
+
+Build and verify in Storybook **before** integrating into the app. Storybook is the agent's primary UI verification environment -- it's fast, isolated, and doesn't require authentication or navigation.
+
+For app-level verification after integration: use judgment. If the target view is easy to reach (no auth, simple navigation), verify it yourself. If it requires authentication, multi-step navigation, or device pairing, tell the user the integration is done and ask them to verify in the app.
+
 ## Storybook Location Decision
 
 | Component depends on | Story goes in |
