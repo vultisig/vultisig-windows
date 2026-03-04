@@ -11,6 +11,7 @@ const featureFlagDefaults = {
   defiLpsTab: true,
   agent: false,
   mldsaKeygen: false,
+  transactionHistory: false,
 }
 
 export const featureFlags: FeatureFlags = {
