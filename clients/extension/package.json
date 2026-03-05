@@ -30,6 +30,7 @@
     "@keplr-wallet/provider": "^0.13.3",
     "@lib/extension": "workspace:^",
     "@lib/utils": "workspace:^",
+    "@mysten/wallet-standard": "^0.19.9",
     "@solana/wallet-standard-features": "^1.3.0",
     "@tanstack/react-query": "^5.90.20",
     "@wallet-standard/base": "^1.1.0",
