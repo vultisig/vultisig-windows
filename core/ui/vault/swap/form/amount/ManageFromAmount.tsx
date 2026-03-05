@@ -66,7 +66,9 @@ export const ManageFromAmount = () => {
     [decimals, setValue]
   )
 
-  const suggestions = [0.25, 0.5, isFeeCoinSelected ? 0.75 : 1]
+  const suggestions = isFeeCoinSelected
+    ? [0.25, 0.5, 0.75]
+    : [0.25, 0.5, 0.75, 1]
 
   return (
     <VStack gap={4} alignItems="flex-end">

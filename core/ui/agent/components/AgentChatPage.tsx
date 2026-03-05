@@ -1,5 +1,4 @@
 import { getVaultId } from '@core/mpc/vault/Vault'
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ErrorBoundary } from '@lib/ui/errors/ErrorBoundary'
@@ -15,10 +14,12 @@ import styled from 'styled-components'
 
 import { useAgentEvents } from '../hooks/useAgentEvents'
 import { useAgentService } from '../hooks/useAgentService'
+import { BurgerClosedIcon } from '../icons/BurgerClosedIcon'
 import { ChatMessage as ChatMessageType, TitleUpdatedEvent } from '../types'
 import { AgentChatInput } from './AgentChatInput'
 import { AgentEmptyState } from './AgentEmptyState'
 import { AgentErrorFallback } from './AgentErrorFallback'
+import { AgentHeaderButton } from './AgentHeaderButton'
 import { AgentReplyMessage } from './AgentReplyMessage'
 import { ChatMessage } from './ChatMessage'
 import { ConfirmationPrompt } from './ConfirmationPrompt'
@@ -272,7 +273,9 @@ export const AgentChatPage: FC = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={
-          <PageHeaderBackButton onClick={() => navigate({ id: 'agent' })} />
+          <AgentHeaderButton onClick={() => navigate({ id: 'agent' })}>
+            <BurgerClosedIcon />
+          </AgentHeaderButton>
         }
         title={chatTitle || t('vultibot')}
         hasBorder
