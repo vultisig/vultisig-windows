@@ -31,6 +31,7 @@ import styled from 'styled-components'
 import { useTxStatusQuery } from '../../../../chain/tx/status/useTxStatusQuery'
 import { TxActualFeeDisplay } from '../components/TxActualFeeDisplay'
 import { TxFeeRow } from '../components/TxFeeRow'
+import { KeysignFeeAmount } from '../FeeAmount'
 import { TxStatusTracker } from '../TxStatusTracker'
 import { TrackTxPrompt } from './TrackTxPrompt'
 
@@ -161,14 +162,16 @@ export const SwapKeysignTxOverview = ({
               </AddressWrapper>
             </HStack>
           )}
-          {receipt && (
-            <TxFeeRow label={t('network_fee')}>
+          <TxFeeRow label={receipt ? t('network_fee') : t('est_network_fee')}>
+            {receipt ? (
               <TxActualFeeDisplay
                 chain={blockExplorerChain}
                 receipt={receipt}
               />
-            </TxFeeRow>
-          )}
+            ) : (
+              <KeysignFeeAmount keysignPayload={value} />
+            )}
+          </TxFeeRow>
         </SwapInfoWrapper>
         <HStack gap={8} fullWidth>
           <Button
