@@ -4,7 +4,7 @@ import {
   registerDeviceForPushNotifications,
   unregisterDeviceForPushNotifications,
 } from '@core/ui/notifications/pushNotificationApi'
-import { devPushNotificationServerUrl } from '@core/ui/notifications/pushNotificationServerUrl'
+import { pushNotificationServerUrl } from '@core/ui/notifications/pushNotificationServerUrl'
 import { urlBase64ToUint8Array } from '@core/ui/notifications/urlBase64ToUint8Array'
 
 import { setInitialView } from '../storage/initialView'
@@ -18,6 +18,7 @@ import {
   VaultRegistrationInfo,
 } from './pushNotificationMessages'
 import {
+  clearAllPushNotificationRegistrations,
   getPushNotificationRegistrations,
   getPushServerUrl,
   removePushNotificationRegistration,
@@ -55,7 +56,7 @@ declare const self: {
 }
 
 const getServerUrl = async (): Promise<string> =>
-  (await getPushServerUrl()) ?? devPushNotificationServerUrl
+  (await getPushServerUrl()) ?? pushNotificationServerUrl
 
 const getOrCreatePushSubscription = async (
   serverUrl: string
@@ -106,7 +107,10 @@ const forceRegisterVault = async (
     subscription,
   })
 
-  await setPushNotificationRegistration(vault.vaultId, vault.localPartyId)
+  await setPushNotificationRegistration({
+    vaultId: vault.vaultId,
+    partyName: vault.localPartyId,
+  })
   console.log(
     `[Vultisig Push] Successfully registered vault ${vault.vaultId.slice(0, 12)}...`
   )
@@ -133,19 +137,29 @@ const registerVaults = async (
   const subscription = await getOrCreatePushSubscription(serverUrl)
 
   for (const vault of unregistered) {
-    console.log(
-      `[Vultisig Push] Calling POST ${serverUrl}/register for vault ${vault.vaultId.slice(0, 12)}...`
-    )
-    await registerDeviceForPushNotifications({
-      serverUrl,
-      vaultId: vault.vaultId,
-      partyName: vault.localPartyId,
-      subscription,
-    })
-    await setPushNotificationRegistration(vault.vaultId, vault.localPartyId)
-    console.log(
-      `[Vultisig Push] Registered vault ${vault.vaultId.slice(0, 12)}...`
-    )
+    try {
+      console.log(
+        `[Vultisig Push] Calling POST ${serverUrl}/register for vault ${vault.vaultId.slice(0, 12)}...`
+      )
+      await registerDeviceForPushNotifications({
+        serverUrl,
+        vaultId: vault.vaultId,
+        partyName: vault.localPartyId,
+        subscription,
+      })
+      await setPushNotificationRegistration({
+        vaultId: vault.vaultId,
+        partyName: vault.localPartyId,
+      })
+      console.log(
+        `[Vultisig Push] Registered vault ${vault.vaultId.slice(0, 12)}...`
+      )
+    } catch (error) {
+      console.error(
+        `[Vultisig Push] Failed to register vault ${vault.vaultId.slice(0, 12)}...:`,
+        error
+      )
+    }
   }
 }
 
@@ -246,7 +260,13 @@ export const handlePushEvents = () => {
 
   // Handle incoming push notifications
   self.addEventListener('push', (event: any) => {
-    const data: NotificationData | undefined = event.data?.json()
+    let data: NotificationData | undefined
+    try {
+      data = event.data?.json()
+    } catch (error) {
+      console.error('[Vultisig Push] Failed to parse push payload:', error)
+      return
+    }
     if (!data) return
 
     event.waitUntil(
@@ -296,11 +316,15 @@ export const handlePushEvents = () => {
     )
   })
 
-  // Handle subscription expiry
+  // Handle subscription expiry — clear local state and re-register all vaults
   self.addEventListener('pushsubscriptionchange', (event: any) => {
     event.waitUntil(
       (async () => {
-        console.warn('[Vultisig Push] Push subscription expired')
+        console.warn(
+          '[Vultisig Push] Push subscription changed, re-registering vaults...'
+        )
+        await clearAllPushNotificationRegistrations()
+        await registerVaultsFromStorage()
       })()
     )
   })

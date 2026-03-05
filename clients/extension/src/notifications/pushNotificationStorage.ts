@@ -19,10 +19,15 @@ export const getPushNotificationRegistrations =
   async (): Promise<PushNotificationRegistrations> =>
     getStorageValue<PushNotificationRegistrations>(pushNotificationKey, {})
 
-export const setPushNotificationRegistration = async (
-  vaultId: string,
+type SetPushNotificationRegistrationInput = {
+  vaultId: string
   partyName: string
-): Promise<void> => {
+}
+
+export const setPushNotificationRegistration = async ({
+  vaultId,
+  partyName,
+}: SetPushNotificationRegistrationInput): Promise<void> => {
   const registrations = await getPushNotificationRegistrations()
   registrations[vaultId] = {
     vaultId,
@@ -43,6 +48,11 @@ export const removePushNotificationRegistration = async (
     await setStorageValue(pushNotificationKey, registrations)
   }
 }
+
+export const clearAllPushNotificationRegistrations =
+  async (): Promise<void> => {
+    await removeStorageValue(pushNotificationKey)
+  }
 
 export const isVaultRegisteredForPush = async (
   vaultId: string
