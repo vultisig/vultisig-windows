@@ -11,11 +11,11 @@ const Container = styled.div`
   overflow: hidden;
 `
 
-// Progress values matching iOS implementation (0-100 scale)
 const progressValues: Record<KeygenStep, number> = {
-  prepareVault: 25,
-  ecdsa: 50,
-  eddsa: 75,
+  prepareVault: 20,
+  ecdsa: 40,
+  eddsa: 60,
+  mldsa: 80,
 }
 
 const getProgress = (step: KeygenStep | null): number => {

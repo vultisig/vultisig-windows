@@ -10,8 +10,8 @@ export function DeleteAddressBookItem(arg1) {
   return window['go']['storage']['Store']['DeleteAddressBookItem'](arg1);
 }
 
-export function DeleteCoin(arg1, arg2) {
-  return window['go']['storage']['Store']['DeleteCoin'](arg1, arg2);
+export function DeleteCoin(arg1, arg2, arg3, arg4) {
+  return window['go']['storage']['Store']['DeleteCoin'](arg1, arg2, arg3, arg4);
 }
 
 export function DeleteCoinsByChain(arg1, arg2) {

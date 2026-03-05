@@ -1,23 +1,37 @@
+import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useBackupDeviceAnimation } from '@core/ui/vault/backup/hooks/useBackupDeviceAnimation'
 import { Button } from '@lib/ui/buttons/Button'
 import { ArrowSplitIcon } from '@lib/ui/icons/ArrowSplitIcon'
-import { CloudUploadFilledIcon } from '@lib/ui/icons/CloudUploadFilledIcon'
+import { CloudUploadIcon } from '@lib/ui/icons/CloudUploadIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
-import { OnFinishProp } from '@lib/ui/props'
+import { PageHeader } from '@lib/ui/page/PageHeader'
+import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { GradientText, Text } from '@lib/ui/text'
+import { ReactNode } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { BackupOverviewInfoRow } from './BackupOverviewInfoRow'
 
-type BackupOverviewScreenProps = OnFinishProp & {
-  userDeviceCount: number
+type InfoRowData = {
+  id: string
+  icon: ReactNode
+  title: string
+  description: ReactNode
 }
+
+type BackupOverviewScreenProps = OnFinishProp &
+  Partial<OnBackProp> & {
+    userDeviceCount: number
+    infoRows?: InfoRowData[]
+  }
 
 export const BackupOverviewScreen = ({
   userDeviceCount,
   onFinish,
+  onBack,
+  infoRows,
 }: BackupOverviewScreenProps) => {
   const { t } = useTranslation()
 
@@ -25,6 +39,12 @@ export const BackupOverviewScreen = ({
 
   return (
     <Container fullHeight>
+      {onBack && (
+        <PageHeader
+          style={{ alignSelf: 'stretch' }}
+          primaryControls={<PageHeaderBackButton onClick={onBack} />}
+        />
+      )}
       <AnimationWrapper>
         <AnimationContainer>
           <RiveComponent />
@@ -41,23 +61,48 @@ export const BackupOverviewScreen = ({
             />
           </Text>
           <Text size={13} color="shy">
-            {t('backupsDescription')}
+            <Trans
+              i18nKey="backupsDescription"
+              components={{
+                w: <Text as="span" color="contrast" />,
+              }}
+            />
           </Text>
         </VStack>
         <VStack gap={16}>
-          <BackupOverviewInfoRow
-            icon={<CloudUploadFilledIcon style={{ fontSize: 24 }} />}
-            title={t('backupEachDevice')}
-            description={t('backupEachDeviceDescription')}
-          />
-          <BackupOverviewInfoRow
-            icon={<ArrowSplitIcon style={{ fontSize: 24 }} />}
-            title={t('storeBackupsSeparately')}
-            description={t('storeBackupsSeparatelyDescription')}
-          />
+          {infoRows ? (
+            infoRows.map(row => (
+              <BackupOverviewInfoRow
+                key={row.id}
+                icon={row.icon}
+                title={row.title}
+                description={row.description}
+              />
+            ))
+          ) : (
+            <>
+              <BackupOverviewInfoRow
+                icon={<CloudUploadIcon style={{ fontSize: 24 }} />}
+                title={t('backupEachDevice')}
+                description={
+                  <Trans
+                    i18nKey="backupEachDeviceDescription"
+                    components={{
+                      w: <Text as="span" color="contrast" />,
+                    }}
+                  />
+                }
+              />
+              <BackupOverviewInfoRow
+                icon={<ArrowSplitIcon style={{ fontSize: 24 }} />}
+                title={t('storeBackupsSeparately')}
+                description={t('storeBackupsSeparatelyDescription')}
+              />
+            </>
+          )}
         </VStack>
         <Button onClick={onFinish} loading={isLoading}>
-          {t('continue')}
+          {t('i_understand')}
         </Button>
       </ContentSection>
     </Container>
@@ -93,7 +138,7 @@ const AnimationContainer = styled.div`
 `
 
 const ContentSection = styled(VStack)`
-  width: min(345px, 100%);
+  width: min(500px, 100%);
   padding: 0 24px 24px;
   flex-shrink: 0;
   gap: 32px;

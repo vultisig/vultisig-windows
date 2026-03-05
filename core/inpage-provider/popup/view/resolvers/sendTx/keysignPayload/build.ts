@@ -69,6 +69,8 @@ const cosmosMsgTypeToTransactionType: Record<
   [CosmosMsgType.MSG_EXECUTE_CONTRACT_URL]: TransactionType.GENERIC_CONTRACT,
   [CosmosMsgType.THORCHAIN_MSG_DEPOSIT]: defaultTransactionType,
   [CosmosMsgType.THORCHAIN_MSG_DEPOSIT_URL]: defaultTransactionType,
+  [CosmosMsgType.THORCHAIN_MSG_LEAVE_POOL]: defaultTransactionType,
+  [CosmosMsgType.THORCHAIN_MSG_LEAVE_POOL_URL]: defaultTransactionType,
   [CosmosMsgType.THORCHAIN_MSG_SEND_URL]: defaultTransactionType,
   [TronMsgType.TRON_TRANSFER_CONTRACT]: defaultTransactionType,
   [TronMsgType.TRON_TRIGGER_SMART_CONTRACT]: defaultTransactionType,
@@ -275,6 +277,8 @@ export const buildSendTxKeysignPayload = async ({
           'cosmos-sdk/MsgSend': () => ({ case: undefined }),
           'thorchain/MsgSend': () => ({ case: undefined }),
           'thorchain/MsgDeposit': () => ({ case: undefined }),
+          'thorchain/MsgLeavePool': () => ({ case: undefined }),
+          '/thorchain.v1.MsgLeavePool': () => ({ case: undefined }),
           '/types.MsgSend': () => ({ case: undefined }),
         }
       )

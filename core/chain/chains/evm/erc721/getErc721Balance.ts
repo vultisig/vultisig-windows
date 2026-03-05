@@ -2,7 +2,7 @@ import { EvmChain } from '@core/chain/Chain'
 import { getEvmClient } from '@core/chain/chains/evm/client'
 import { Address, erc721Abi } from 'viem'
 
-export type GetErc721BalanceInput = {
+type GetErc721BalanceInput = {
   chain: EvmChain
   address: Address
   accountAddress: Address

@@ -34,6 +34,7 @@ export default [
       '**/*_pb.ts',
       'lib/dkls',
       'lib/schnorr',
+      'lib/mldsa',
     ],
   },
   ...compat.extends(

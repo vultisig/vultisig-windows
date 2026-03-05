@@ -10,6 +10,7 @@ import { DefiPositionsStorage } from './defiPositions'
 import { DismissedBannersStorage } from './dismissedBanners'
 import { FiatCurrencyStorage } from './fiatCurrency'
 import { LanguageStorage } from './language'
+import { MLDSAEnabledStorage } from './mldsaEnabled'
 import { OnboardingStorage } from './onboarding'
 import { PasscodeAutoLockStorage } from './passcodeAutoLock'
 import { PasscodeEncryptionStorage } from './passcodeEncryption'
@@ -34,4 +35,5 @@ export type CoreStorage = CoinFinderIgnoreStorage &
   ReferralsStorage &
   PasscodeEncryptionStorage &
   PasscodeAutoLockStorage &
-  DismissedBannersStorage
+  DismissedBannersStorage &
+  MLDSAEnabledStorage

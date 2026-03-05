@@ -14,7 +14,19 @@ import { getVaultExportUid } from '../../../vault/export/core/uid'
 
 const prefix = 'VaultKeygenQR'
 
-export const DownloadKeygenQrCode = ({ value }: ValueProp<string>) => {
+type IconButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+type IconButtonKind = 'link' | 'primary' | 'secondary' | 'outlined'
+
+type DownloadKeygenQrCodeProps = ValueProp<string> & {
+  iconButtonKind?: IconButtonKind
+  iconButtonSize?: IconButtonSize
+}
+
+export const DownloadKeygenQrCode = ({
+  value,
+  iconButtonKind = 'link',
+  iconButtonSize = 'md',
+}: DownloadKeygenQrCodeProps) => {
   const { t } = useTranslation()
   const keygenVault = useKeygenVault()
   const vaultName = useKeygenVaultName()
@@ -31,7 +43,11 @@ export const DownloadKeygenQrCode = ({ value }: ValueProp<string>) => {
     <SaveAsImage
       fileName={fileName}
       renderTrigger={({ onClick }) => (
-        <IconButton onClick={onClick}>
+        <IconButton
+          kind={iconButtonKind}
+          onClick={onClick}
+          size={iconButtonSize}
+        >
           <ShareIcon />
         </IconButton>
       )}

@@ -42,6 +42,7 @@ export const VaultEmailStep = ({
 
   const {
     formState: { errors, isValid },
+    handleSubmit,
     setValue,
     watch,
   } = useForm<{ email: string }>({
@@ -52,65 +53,68 @@ export const VaultEmailStep = ({
 
   const email = watch('email')
 
-  const handleNext = () => {
-    if (!isValid) return
+  const onSubmit = () => {
     onFinish(email)
   }
 
   return (
-    <ScreenLayout
-      onBack={onBack}
-      headerRight={headerRight}
-      footer={
-        <Button
-          style={{ width: '100%' }}
-          disabled={!isValid}
-          onClick={handleNext}
-        >
-          {t('next')}
-        </Button>
-      }
-    >
-      <Content>
-        {steps && stepIndex !== undefined && (
-          <StepProgressIndicator steps={steps} currentStepIndex={stepIndex} />
-        )}
-        <VStack alignItems="center" gap={8}>
-          <Title
-            centerHorizontally
-            as="h1"
-            size={22}
-            weight={500}
-            color="contrast"
-          >
-            {t('enter_your_email')}
-          </Title>
-          <Text centerHorizontally color="shy" size={14}>
-            {t('enter_your_email_description')}
-          </Text>
-        </VStack>
-        <VStack gap={8}>
-          <ClearableTextInput
-            type="email"
-            placeholder={t('email_placeholder')}
-            value={email}
-            onValueChange={v => setValue('email', v, { shouldValidate: true })}
-            onClear={() => setValue('email', '', { shouldValidate: true })}
-            validation={
-              errors.email ? 'invalid' : isValid ? 'valid' : undefined
-            }
-            autoFocus
-          />
-          {errors.email?.message && (
-            <Text color="danger" size={12}>
-              {errors.email.message}
-            </Text>
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      <ScreenLayout
+        onBack={onBack}
+        headerRight={headerRight}
+        footer={
+          <Button style={{ width: '100%' }} disabled={!isValid} type="submit">
+            {t('next')}
+          </Button>
+        }
+      >
+        <Content>
+          {steps && stepIndex !== undefined && (
+            <StepProgressIndicator steps={steps} currentStepIndex={stepIndex} />
           )}
-        </VStack>
-      </Content>
-    </ScreenLayout>
+          <VStack alignItems="center" gap={8}>
+            <Title
+              centerHorizontally
+              as="h1"
+              size={22}
+              weight={500}
+              color="contrast"
+            >
+              {t('enter_your_email')}
+            </Title>
+            <Text centerHorizontally color="shy" size={14}>
+              {t('enter_your_email_description')}
+            </Text>
+          </VStack>
+          <VStack gap={8}>
+            <ClearableTextInput
+              type="email"
+              placeholder={t('email_placeholder')}
+              value={email}
+              onValueChange={v =>
+                setValue('email', v, { shouldValidate: true })
+              }
+              onClear={() => setValue('email', '', { shouldValidate: true })}
+              validation={
+                errors.email ? 'invalid' : isValid ? 'valid' : undefined
+              }
+              autoFocus
+            />
+            {errors.email?.message && (
+              <Text color="danger" size={12}>
+                {errors.email.message}
+              </Text>
+            )}
+          </VStack>
+        </Content>
+      </ScreenLayout>
+    </Form>
   )
 }
+
+const Form = styled.form`
+  height: 100%;
+`
 
 const Content = styled(VStack)`
   flex: 1;

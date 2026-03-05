@@ -41,6 +41,7 @@ export const useCreateVaultMutation = (
             const encrypted = encryptVaultAllKeyShares({
               keyShares: vault.keyShares,
               chainKeyShares: vault.chainKeyShares,
+              keyShareMldsa: vault.keyShareMldsa,
               key,
             })
             return {

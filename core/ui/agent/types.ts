@@ -4,7 +4,6 @@ export type Action = {
   title: string
   description?: string
   params?: Record<string, unknown>
-  auto_execute: boolean
 }
 
 export type Suggestion = {
@@ -33,6 +32,7 @@ export type ChatMessage = {
   timestamp: string
   toolCall?: ToolCallInfo
   txStatus?: TxStatusInfo
+  analysisDuration?: number
 }
 
 export type Conversation = {

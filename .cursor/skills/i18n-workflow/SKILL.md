@@ -9,7 +9,18 @@ description: Internationalization workflow for React components. Use when adding
 
 **Add translations ONLY to `core/ui/i18n/locales/en.ts`.**
 
-Other locale files (de.ts, es.ts, it.ts, pt.ts, hr.ts, zh.ts, ru.ts, nl.ts) are auto-updated via script before PR submission. DO NOT manually edit them.
+Other locale files (de.ts, es.ts, it.ts, pt.ts, hr.ts, zh.ts, ru.ts, nl.ts) are auto-translated via Google Translate as part of `yarn check`. No manual editing or extra steps needed — just add keys to en.ts.
+
+## Auto-Translation (part of `yarn check`)
+
+Running `yarn check` automatically syncs missing translations to all locale files using Google Translate. This step is **optional and non-blocking** — if credentials are missing or the API fails, the check command still completes successfully.
+
+Requirements (for translation to run):
+- `GOOGLE_TRANSLATE_PROJECT_ID` env var set
+- `GOOGLE_APPLICATION_CREDENTIALS` env var pointing to a valid credentials file
+- These are typically configured via `.envrc` with direnv
+
+If the environment is not configured, the step is silently skipped.
 
 ## Always Use useTranslation
 
@@ -34,7 +45,7 @@ const { t } = useTranslation()
 
 ## Styled Text
 
-When text needs partial styling (gradient, colors, bold), use the `Trans` component. See the **trans-text-highlight** skill for patterns.
+When text needs partial styling (gradient, colors, bold), use the `Trans` component with inline tags like `<highlight>`, `<b>`, `<g>`. These tags are preserved during auto-translation (sent as `text/html` to Google Translate). See the **trans-text-highlight** skill for patterns.
 
 ## Pluralization
 

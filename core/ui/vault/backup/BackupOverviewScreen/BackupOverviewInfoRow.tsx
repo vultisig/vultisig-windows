@@ -7,7 +7,7 @@ import styled from 'styled-components'
 type BackupOverviewInfoRowProps = {
   icon: ReactNode
   title: string
-  description: string
+  description: ReactNode
 }
 
 export const BackupOverviewInfoRow = ({

@@ -64,7 +64,7 @@ const backendActionSchema = z
     title: z.string(),
     description: z.string().optional(),
     params: z.record(z.string(), z.unknown()).optional(),
-    auto_execute: z.boolean(),
+    auto_execute: z.boolean().optional().default(true),
   })
   .passthrough()
 
@@ -110,33 +110,58 @@ const errorResponseSchema = z
   })
   .passthrough()
 
+export type ToolProgress = {
+  tool: string
+  status: 'running' | 'done'
+  label?: string
+}
+
 type SSEResult = Partial<SendMessageResponse>
+
+type SSECallbacks = {
+  onTextDelta: (d: string) => void
+  onToolProgress?: (p: ToolProgress) => void
+}
 
 const sseHandlers: Record<
   string,
   (
     parsed: Record<string, unknown>,
     result: SSEResult,
-    onTextDelta: (d: string) => void
+    callbacks: SSECallbacks
   ) => void
 > = {
-  text_delta: (parsed, _result, onTextDelta) => {
+  text_delta: (parsed, _result, { onTextDelta }) => {
     if (typeof parsed.delta === 'string') {
       onTextDelta(parsed.delta)
     }
   },
-  title: (parsed, result) => {
+  tool_progress: (parsed, _result, { onToolProgress }) => {
+    if (
+      onToolProgress &&
+      typeof parsed.tool === 'string' &&
+      typeof parsed.status === 'string' &&
+      (parsed.status === 'running' || parsed.status === 'done')
+    ) {
+      onToolProgress({
+        tool: parsed.tool,
+        status: parsed.status,
+        label: typeof parsed.label === 'string' ? parsed.label : undefined,
+      })
+    }
+  },
+  title: (parsed, result, _cb) => {
     if (typeof parsed.title === 'string') {
       result.title = parsed.title
     }
   },
-  actions: (parsed, result) => {
+  actions: (parsed, result, _cb) => {
     const validated = z.array(backendActionSchema).safeParse(parsed.actions)
     if (validated.success) {
-      result.actions = validated.data
+      result.actions = [...(result.actions ?? []), ...validated.data]
     }
   },
-  suggestions: (parsed, result) => {
+  suggestions: (parsed, result, _cb) => {
     const validated = z
       .array(backendSuggestionSchema)
       .safeParse(parsed.suggestions)
@@ -144,25 +169,25 @@ const sseHandlers: Record<
       result.suggestions = validated.data
     }
   },
-  tx_ready: (parsed, result) => {
+  tx_ready: (parsed, result, _cb) => {
     const validated = txReadySchema.safeParse(parsed)
     if (validated.success) {
       result.tx_ready = validated.data
     }
   },
-  policy_ready: (parsed, result) => {
+  policy_ready: (parsed, result, _cb) => {
     const validated = policyReadySchema.safeParse(parsed)
     if (validated.success) {
       result.policy_ready = validated.data
     }
   },
-  install_required: (parsed, result) => {
+  install_required: (parsed, result, _cb) => {
     const validated = installRequiredSchema.safeParse(parsed)
     if (validated.success) {
       result.install_required = validated.data
     }
   },
-  message: (parsed, result) => {
+  message: (parsed, result, _cb) => {
     const validated = backendMessageSchema.safeParse(parsed.message)
     if (validated.success) {
       result.message = validated.data
@@ -222,9 +247,10 @@ export class AgentBackendClient {
     req: SendMessageRequest
     token: string
     onTextDelta: (delta: string) => void
+    onToolProgress?: (progress: ToolProgress) => void
     signal?: AbortSignal
   }): Promise<SendMessageResponse> {
-    const { convId, req, token, onTextDelta, signal } = params
+    const { convId, req, token, onTextDelta, onToolProgress, signal } = params
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       Accept: 'text/event-stream',
@@ -269,12 +295,12 @@ export class AgentBackendClient {
       return JSON.parse(text) as SendMessageResponse
     }
 
-    return this.readSSEResponse(resp.body, onTextDelta)
+    return this.readSSEResponse(resp.body, { onTextDelta, onToolProgress })
   }
 
   private async readSSEResponse(
     body: ReadableStream<Uint8Array>,
-    onTextDelta: (delta: string) => void
+    callbacks: SSECallbacks
   ): Promise<SendMessageResponse> {
     const reader = body.getReader()
     const decoder = new TextDecoder()
@@ -298,7 +324,7 @@ export class AgentBackendClient {
         }
         if (line.startsWith('data: ')) {
           const jsonStr = line.slice(6).replace(/\r$/, '')
-          this.processSSEEvent(currentEvent, jsonStr, result, onTextDelta)
+          this.processSSEEvent(currentEvent, jsonStr, result, callbacks)
           currentEvent = ''
           continue
         }
@@ -316,7 +342,7 @@ export class AgentBackendClient {
     event: string,
     jsonStr: string,
     result: Partial<SendMessageResponse>,
-    onTextDelta: (delta: string) => void
+    callbacks: SSECallbacks
   ): void {
     const parseResult = attempt(
       () => JSON.parse(jsonStr) as Record<string, unknown>
@@ -325,7 +351,7 @@ export class AgentBackendClient {
 
     const handler = sseHandlers[event]
     if (handler) {
-      handler(parseResult.data, result, onTextDelta)
+      handler(parseResult.data, result, callbacks)
     }
   }
 

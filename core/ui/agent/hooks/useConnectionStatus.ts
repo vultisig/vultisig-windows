@@ -46,6 +46,11 @@ export const useConnectionStatus = (
       const vid = vaultIdRef.current
       if (!vid || !orch) return
       try {
+        const refreshed = await orch.refreshToken(vid)
+        if (!refreshed) {
+          setState('disconnected')
+          return
+        }
         const info = orch.getTokenInfo(vid)
         if (info.connected) {
           setState('connected')
@@ -74,15 +79,34 @@ export const useConnectionStatus = (
         const services = await orchestrator.checkServices(vaultId)
         if (cancelled) return
         if (!services.authenticated) {
-          orchestrator.invalidateToken(vaultId)
-          setState('disconnected')
+          const refreshed = await orchestrator.refreshToken(vaultId)
+          if (cancelled) return
+          if (!refreshed) {
+            orchestrator.invalidateToken(vaultId)
+            setState('disconnected')
+            return
+          }
+          const refreshedInfo = orchestrator.getTokenInfo(vaultId)
+          if (refreshedInfo.connected) {
+            setState('connected')
+            scheduleRefreshRef.current(refreshedInfo.expiresAt)
+          } else {
+            orchestrator.invalidateToken(vaultId)
+            setState('disconnected')
+          }
           return
         }
         setState('connected')
         scheduleRefreshRef.current(info.expiresAt)
       } catch {
         if (!cancelled) {
-          setState('disconnected')
+          const info = orchestrator.getTokenInfo(vaultId)
+          if (info.connected) {
+            setState('connected')
+            scheduleRefreshRef.current(info.expiresAt)
+          } else {
+            setState('disconnected')
+          }
         }
       } finally {
         if (!cancelled) {

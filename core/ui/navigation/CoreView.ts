@@ -21,7 +21,6 @@ export type CoreView =
   | { id: 'address'; state: { address: string } }
   | { id: 'addressBook' }
   | { id: 'faq' }
-  | { id: 'airdropRegister' }
   | {
       id: 'createAddressBookItem'
       state?: { address?: string; chain?: Chain }
@@ -118,6 +117,7 @@ export type CoreView =
   | { id: 'vaultChainDetail'; state: { chain: Chain } }
   | { id: 'vaultFolder'; state: { id: string } }
   | { id: 'vaults' }
+  | { id: 'renameVault' }
   | { id: 'vaultSettings' }
   | { id: 'manageVaults' }
   | { id: 'managePasscodeEncryption' }

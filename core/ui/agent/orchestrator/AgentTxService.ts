@@ -60,6 +60,11 @@ type ReportCallback = (
 
 type ErrorCallback = (convId: string, vaultPubKey: string, err: unknown) => void
 
+type SignalEntry<T = unknown> = {
+  resolve: (value: T | null | false) => void
+  timer: ReturnType<typeof setTimeout>
+}
+
 const maxBuildTxAttempts = 2
 
 export class AgentTxService {
@@ -69,6 +74,8 @@ export class AgentTxService {
   private backendClient: AgentBackendClient
   private pendingTx = new Map<string, TxReady>()
   private buildAttempts = new Map<string, number>()
+  private buildActive = new Set<string>()
+  private signals = new Map<string, SignalEntry[]>()
   private reportCallback: ReportCallback = async () => {}
   private errorCallback: ErrorCallback = () => {}
 
@@ -104,10 +111,63 @@ export class AgentTxService {
 
   setPendingTx(convId: string, tx: TxReady): void {
     this.pendingTx.set(convId, tx)
+    this.notify(`build:${convId}`, tx)
   }
 
   deletePendingTx(convId: string): void {
     this.pendingTx.delete(convId)
+  }
+
+  hasBuildInProgress(convId: string): boolean {
+    return this.buildActive.has(convId)
+  }
+
+  waitFor<T>(key: string, timeoutMs: number): Promise<T | null | false> {
+    return new Promise<T | null | false>(resolve => {
+      const timer = setTimeout(() => {
+        const entries = this.signals.get(key)
+        if (entries) {
+          const remaining = entries.filter(e => e.timer !== timer)
+          if (remaining.length === 0) {
+            this.signals.delete(key)
+          } else {
+            this.signals.set(key, remaining)
+          }
+        }
+        resolve(false)
+      }, timeoutMs)
+
+      const entry: SignalEntry = {
+        resolve: resolve as (value: unknown | null | false) => void,
+        timer,
+      }
+      const existing = this.signals.get(key) ?? []
+      existing.push(entry)
+      this.signals.set(key, existing)
+    })
+  }
+
+  notify(key: string, value: unknown): void {
+    const entries = this.signals.get(key)
+    if (entries) {
+      this.signals.delete(key)
+      for (const entry of entries) {
+        clearTimeout(entry.timer)
+        entry.resolve(value)
+      }
+    }
+  }
+
+  cancelSignals(convId: string): void {
+    for (const [key, entries] of this.signals) {
+      if (key.endsWith(`:${convId}`)) {
+        this.signals.delete(key)
+        for (const entry of entries) {
+          clearTimeout(entry.timer)
+          entry.resolve(null)
+        }
+      }
+    }
   }
 
   buildTxAsync(
@@ -130,12 +190,16 @@ export class AgentTxService {
         title: 'Build Custom Transaction',
       },
       swap: {
-        actionType: 'build_tx',
+        actionType: 'build_swap_tx',
         toolName: 'build_swap_tx',
         title: 'Build Swap Transaction',
       },
     }
     const { actionType, toolName, title } = buildTxConfig[mode]
+
+    if (this.buildActive.has(ctx.convId)) return
+
+    this.buildActive.add(ctx.convId)
 
     const run = async () => {
       const attempts = (this.buildAttempts.get(ctx.convId) ?? 0) + 1
@@ -143,6 +207,8 @@ export class AgentTxService {
 
       if (attempts > maxBuildTxAttempts) {
         this.buildAttempts.delete(ctx.convId)
+        this.buildActive.delete(ctx.convId)
+        this.notify(`build:${ctx.convId}`, null)
         const result: ActionResult = {
           action: actionType,
           success: false,
@@ -188,6 +254,8 @@ export class AgentTxService {
       })
 
       if (!toolResult.success) {
+        this.buildActive.delete(ctx.convId)
+        this.notify(`build:${ctx.convId}`, null)
         const result: ActionResult = {
           action: actionType,
           success: false,
@@ -201,8 +269,9 @@ export class AgentTxService {
       }
 
       this.buildAttempts.delete(ctx.convId)
+      this.buildActive.delete(ctx.convId)
       const txReady = txReadySchema.parse(toolResult.data)
-      this.pendingTx.set(ctx.convId, txReady)
+      this.setPendingTx(ctx.convId, txReady)
 
       const summary = buildTxResultSummary(txReady)
 
@@ -223,7 +292,11 @@ export class AgentTxService {
       }
       await this.reportCallback(ctx, result)
     }
-    run().catch(err => this.errorCallback(ctx.convId, ctx.vaultPubKey, err))
+    run().catch(err => {
+      this.buildActive.delete(ctx.convId)
+      this.notify(`build:${ctx.convId}`, null)
+      this.errorCallback(ctx.convId, ctx.vaultPubKey, err)
+    })
   }
 
   private async scanTxIfEvm(

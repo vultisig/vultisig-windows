@@ -3,6 +3,7 @@ import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
 import { ResponsiveModal } from '@lib/ui/modal/ResponsiveModal'
 import { Text } from '@lib/ui/text'
+import { useEffect, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
 import { ClearableTextInput } from '../components/ClearableTextInput'
@@ -10,21 +11,26 @@ import { ClearableTextInput } from '../components/ClearableTextInput'
 type ReferralModalProps = {
   isOpen: boolean
   onClose: () => void
-  referralCode: string
-  onReferralCodeChange: (value: string) => void
-  onApply: () => void
+  initialCode: string
+  onApply: (code: string) => void
 }
 
 export const ReferralModal = ({
   isOpen,
   onClose,
-  referralCode,
-  onReferralCodeChange,
+  initialCode,
   onApply,
 }: ReferralModalProps) => {
   const { t } = useTranslation()
-  const trimmedReferralCode = referralCode.trim()
-  const error = useReferralValidation(trimmedReferralCode)
+  const [inputValue, setInputValue] = useState(initialCode)
+  const trimmedValue = inputValue.trim()
+  const error = useReferralValidation(trimmedValue)
+
+  useEffect(() => {
+    if (isOpen) {
+      setInputValue(initialCode)
+    }
+  }, [isOpen, initialCode])
 
   return (
     <ResponsiveModal isOpen={isOpen} onClose={onClose} grabbable>
@@ -45,9 +51,9 @@ export const ReferralModal = ({
         <VStack gap={8}>
           <ClearableTextInput
             placeholder={t('enter_up_to_4_characters_placeholder')}
-            value={referralCode}
-            onValueChange={onReferralCodeChange}
-            onClear={() => onReferralCodeChange('')}
+            value={inputValue}
+            onValueChange={setInputValue}
+            onClear={() => setInputValue('')}
             validation={error ? 'invalid' : undefined}
             maxLength={4}
           />
@@ -59,8 +65,8 @@ export const ReferralModal = ({
         </VStack>
         <Button
           style={{ width: '100%' }}
-          disabled={!trimmedReferralCode || !!error}
-          onClick={onApply}
+          disabled={!trimmedValue || !!error}
+          onClick={() => onApply(trimmedValue)}
         >
           {t('fastVaultSetup.applyReferral')}
         </Button>

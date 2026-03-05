@@ -132,21 +132,19 @@ export const ru = {
   choose_tokens: 'Выбрать токены',
   deposited: 'Внесено',
   circle: {
-    apy: 'APY',
     banner_text:
       'Средства полностью остаются под контролем вашего хранилища. Аккаунты Circle — self-custodial, а доход формируется через безопасные офчейн-казначейства.',
-    current_rewards: 'Текущие награды',
     deposit: 'Внести',
     deposit_header: 'Внести на аккаунт Circle',
     verify_deposit: 'Подтвердить внесение',
     introduction:
       'Внесите свои $USDC на аккаунт Circle и получайте доход. Безопасно внутри вашего хранилища Vultisig.',
     open_account: 'Открыть аккаунт',
-    total_rewards: 'Всего наград',
     withdraw: 'Вывести',
     withdraw_header: 'Вывести из Circle',
     verify_withdraw: 'Подтвердить вывод',
-    yield_details: 'Детали доходности Circle',
+    apy_approx: 'Годовая доходность (приблизительно)',
+    apy_tooltip: 'Бонусы автоматически зачисляются на ваш баланс.',
   },
   clear: 'Очистить',
   close: 'Закрыть',
@@ -337,9 +335,6 @@ export const ru = {
     addOptionalHint: 'Добавить необязательную подсказку',
     backup: {
       backThemUpNow: 'сделать резервную копию сейчас',
-      backupConfirmationDescription:
-        'Сделайте резервную копию доли хранилища онлайн',
-      backupVault: 'Резервное копирование хранилища',
       checkEmail: 'Проверьте e-mail для подтверждения',
       codeInfo:
         'Этот код подтвердит, что вы получили долю хранилища 1 по e-mail',
@@ -347,14 +342,10 @@ export const ru = {
       enterCode: 'Введите 4-значный код из письма',
       heldByServer: 'хранится на сервере',
       online: 'онлайн',
-      onlineStorageDescription:
-        'Онлайн-хранение рекомендуется и безопасно — доли хранилища для этого и предназначены.',
       part1: 'Доля 1 из долей хранилища будет',
       securely: 'безопасно, желательно',
-      setNewStandard: 'Вы готовы использовать новый стандарт кошелька.',
       shareSecurely: 'чтобы обеспечить доступ, желательно',
       vaultShares: 'Ваше хранилище содержит 2 доли,',
-      wellDone: 'Отлично',
       sentTo: 'Отправлено на {{email}}.',
       changeEmailAndRestartKeygen: 'Изменить e-mail и перезапустить Keygen',
     },
@@ -404,12 +395,16 @@ export const ru = {
       title: 'Краткое резюме',
     },
     takeMinute: 'Это займёт всего секунду',
+    addAnOptionalHint: 'Добавить необязательную подсказку',
+    passwordTooltip:
+      'Это происходит потому, что пароль используется для локального шифрования файла резервной копии, аналогично тому, как шифруется жесткий диск. На следующем шаге у вас есть возможность добавить подсказку.',
+    referralModalTitle: 'Реферальный код',
+    referralModalSubtitle:
+      'Введите здесь свой реферальный код. <b>Получите скидку 10% на каждую покупку.</b>',
+    applyReferral: 'Подать заявку на реферальную программу',
+    referralAdded: 'Добавлен реферальный код',
   },
   fast_sign: 'Быстрая подпись',
-  fast_vault_backup_description:
-    'Онлайн-хранение рекомендуется и безопасно — доли хранилища для этого и предназначены.',
-  fast_vault_backup_title:
-    'Сделайте резервную копию доли хранилища онлайн, используя тот же пароль хранилища, который вы создали ранее.',
   fill_the_form: 'Заполните форму',
   find_custom_token: 'Найти пользовательский токен',
   folder_name: 'Имя папки',
@@ -711,7 +706,6 @@ export const ru = {
   referral_program: 'Реферальная программа',
   referral_reg_fee: 'Регистрационная комиссия',
   referral_status: 'Статус',
-  referrals_create_page_title: 'Vultisig — Referrals',
   referrals_default_title: 'Referral',
   referrals_summary: {
     item_1: {
@@ -732,8 +726,6 @@ export const ru = {
       title: 'Использовать referral-код',
     },
   },
-  register_guide: 'Руководство по регистрации',
-  register_your_vaults: 'Зарегистрируйте ваши хранилища!',
   remove: 'Удалить',
   remove_token: 'Удалить токен',
   rename: 'Переименовать',
@@ -783,6 +775,21 @@ export const ru = {
       eachDeviceNeedsBackup: 'каждому устройству нужна своя резервная копия.',
       shares: 'Ваше хранилище содержит {{shares}} доли',
     },
+  },
+  secureVaultPeerDiscovery: {
+    addAtLeastMoreDevices_one: 'Добавьте как минимум ещё {{count}} устройство',
+    addAtLeastMoreDevices_other:
+      'Добавьте как минимум ещё {{count}} устройства',
+    devicePosition: '{{current}} из {{total}}',
+    localModeWaiting: 'Локальный режим, ожидание устройств',
+    notWantToUseLocal:
+      'Не хотите использовать локальный режим? Вернуться назад.',
+    switchBack: 'Вернуться назад',
+    useStandardMode: 'Использовать стандартный режим',
+    useLocalMode: 'Использовать локальный режим',
+    waitingForDeviceToJoin: 'Ожидание подключения устройства',
+    waitingForDevicesToConnect: 'Ожидание подключения устройств',
+    wantToCreateVaultPrivately: 'Хотите создать хранилище приватно?',
   },
   secureVaultSetupPasswordTooltipContent:
     'Это происходит потому, что пароль используется для локального шифрования файла резервной копии, аналогично шифрованию диска. На следующем шаге можно добавить подсказку.',
@@ -1008,14 +1015,6 @@ export const ru = {
   vault_qr_share_not_supported: 'Поделиться не поддерживается в этом браузере.',
   vault_qr_share_text: 'Посмотрите этот QR-код хранилища!',
   vault_qr_share_title: 'QR-код хранилища',
-  vault_register_for_airdrop_list_item_1: 'Сохраните QR хранилища',
-  vault_register_for_airdrop_list_item_2_part_1: 'Перейдите на',
-  vault_register_for_airdrop_list_item_2_part_2: 'Vultisig Web',
-  vault_register_for_airdrop_list_item_3: 'Загрузите QR-код хранилища',
-  vault_register_for_airdrop_list_item_4:
-    'Отслеживайте VULTIES (Airdrop Points)!',
-  vault_register_for_airdrop_save_vault_QR_button: 'Сохранить QR хранилища',
-  vault_register_for_airdrop_title: 'Зарегистрировать хранилище',
   vault_rename_page_header_title: 'Редактировать имя хранилища',
   vault_rename_page_name_error: 'Имя хранилища должно быть от 1 до 50 символов',
   vault_selected: 'Хранилище выбрано',
@@ -1087,6 +1086,8 @@ export const ru = {
   you_are_sending: 'Вы отправляете',
   you_are_staking: 'Вы выполняете stake',
   you_are_unstaking: 'Вы выполняете unstake',
+  you_are_minting: "You're minting",
+  you_are_redeeming: "You're redeeming",
   yourVaultShares: 'В вашем хранилище {{shares}} доли',
   your_friends_referral_code: 'Реферальный код вашего друга',
   your_referral_code: 'Ваш referral-код',
@@ -1096,4 +1097,157 @@ export const ru = {
     'Введите её, создайте хранилище и не оглядывайтесь назад',
   youre_swapping: 'Вы выполняете своп',
   account: 'Аккаунт',
+  vaultSetupOverview: {
+    fast: {
+      badgeTitle: 'Быстрое хранилище',
+      badgeSubtitle: 'настройка двух устройств',
+      feature1Title: '1. Подписание устройства',
+      feature1Description:
+        'Удобная подпись на одном устройстве в любое время и в любом месте. Идеально подходит для ежедневных транзакций или обмена небольшими суммами.',
+      feature2Title: 'Быстрая и безопасная настройка',
+      feature2Description:
+        'Никакой сложной настройки. Только ваш адрес электронной почты и пароль, а также две резервные копии.',
+      feature3Title: 'Вы сохраняете контроль.',
+      feature3Description:
+        'Поручитель никогда не может инициировать сделки; он лишь помогает их подписать.',
+    },
+    secure2: {
+      badgeTitle: 'Безопасное хранилище',
+      badgeSubtitle: 'хранилище на 2 устройства',
+      feature1Title: 'Подписание двух устройств',
+      feature1Description:
+        'Для каждой транзакции требуется подтверждение с обоих ваших устройств.',
+      feature2Title: 'Отсутствие единой точки отказа',
+      feature2Description:
+        'Одно устройство само по себе не может перемещать средства. Если устройство потеряно или скомпрометировано, оно не сможет подтвердить транзакцию самостоятельно.',
+      feature3Title: 'Идеально подходит для простого хранения в холодильнике.',
+      feature3Description:
+        'Идеальный вариант для пользователей, имеющих всего 2 устройства.',
+    },
+    secure3: {
+      badgeTitle: 'Безопасное хранилище',
+      badgeSubtitle: 'хранилище на 3 устройства',
+      feature1Title: 'Подписание на двух устройствах',
+      feature1Description:
+        'Для каждой транзакции требуется подтверждение от 2 из 3 ваших устройств.',
+      feature2Title: 'Отсутствие единой точки отказа',
+      feature2Description:
+        'Одно устройство само по себе не может перемещать средства. Если устройство потеряно или скомпрометировано, оно не сможет подтвердить транзакцию самостоятельно.',
+      feature3Title: 'Идеально подходит для хранения в холодильнике.',
+      feature3Description:
+        'Идеальный баланс для большинства пользователей. 2 устройства для подписи и 1 резервное устройство. Храните активы без лишних хлопот.',
+    },
+    secure4: {
+      badgeTitle: 'Безопасное хранилище',
+      badgeSubtitle: 'хранилище для 4+ устройств',
+      feature1Title: 'Подписание на 3 или более устройствах',
+      feature1Description:
+        'Для того чтобы хранилище могло подписать транзакцию, необходимо, чтобы 67% устройств имели на нем доступ. Можно указать любое количество подписантов.',
+      feature2Title: 'Динамическое управление устройствами',
+      feature2Description:
+        'Добавьте столько устройств, сколько хотите, и получите безопасность институционального уровня.',
+      feature3Title: 'Создано для команд и казначейств.',
+      feature3Description:
+        'Идеально подходит для команд, управляющих общими фондами и хранилищами с большими суммами, требующими большего количества подписантов.',
+    },
+    title: 'Настройка вашего хранилища',
+  },
+  add_referral: 'Добавить реферал',
+  applied_discounts: 'Примененные скидки:',
+  backupVault: 'Резервное хранилище',
+  backupInCloudTitle: 'Зашифровано с помощью вашего пароля хранилища.',
+  backupInCloudDescription:
+    'Создайте резервную копию общего хранилища в интернете, используя тот же пароль, который вы создали ранее. Рекомендуется использовать онлайн-хранилище, для этого и предназначены безопасные общие хранилища.',
+  backupsTitle:
+    '<highlight>Резервные копии,</highlight> ваш новый метод восстановления',
+  backupsDescription:
+    'Вместо одной сид-фразы ваше хранилище защищено несколькими устройствами. Каждое устройство имеет свою собственную резервную копию. Резервная копия сама по себе не может перемещать средства. Резервные копии предназначены только для восстановления.',
+  backupEachDevice: 'Создайте резервные копии каждого устройства.',
+  backupEachDeviceDescription:
+    'Это всего лишь одна резервная копия вашего хранилища, повторите этот процесс для остальных устройств.',
+  storeBackupsSeparately: 'Храните резервные копии отдельно.',
+  storeBackupsSeparatelyDescription:
+    'Храните каждую резервную копию в отдельном месте. Если одна из них будет скомпрометирована, ваши средства останутся в безопасности.',
+  backupShareWarning: 'Это всего лишь 1 доля вашего хранилища.',
+  backupShareWarningRest: 'Повторите этот процесс для остальных устройств.',
+  backup_email_description:
+    'Введите адрес электронной почты, чтобы получить доступ к хранилищу.',
+  backup_password_description:
+    'Введите пароль, который вы установили при создании этого хранилища.',
+  choose_a_password: 'Выберите пароль',
+  choose_a_password_description:
+    'Если вам нужна дополнительная защита, выберите пароль. <b>Пароль восстановить будет невозможно.</b>',
+  create_vault: 'Создать хранилище',
+  create_referral_desc:
+    'Создайте свой собственный код и зарабатывайте!<c> 20%</c> по референтным свопам',
+  save_referral: 'Сохранить реферальную ссылку',
+  save_referral_desc:
+    'Сохраните реферальный код друга и получите скидку.<c> 10%</c> по свопам.',
+  email_placeholder: 'Введите свой адрес электронной почты',
+  enter: 'Входить',
+  enter_your_email: 'Введите свой адрес электронной почты',
+  enter_your_email_description:
+    'Эта функция будет использована только один раз для отправки файла резервной копии, Vultisig не хранит никаких данных.',
+  seedPhraseImportTip:
+    'Совет: Вы можете использовать браузер в качестве устройства.',
+  seedphrase_duplicate_vault_error:
+    'Эта фраза уже импортирована как хранилище &quot;{{vaultName}}&quot;. Повторный импорт заменит существующее хранилище.',
+  incorrect_email: 'Неверный адрес электронной почты, пожалуйста, проверьте.',
+  insufficient_native_balance_for_fee:
+    'Недостаточно средств на балансе собственных токенов для оплаты комиссии за транзакцию.',
+  incorrect_passcode: 'Неверный пароль.',
+  manage_referral_title: 'Рекомендации Vultisig',
+  select_pool: 'Выберите пул',
+  token_not_found_invalid: 'Неверный адрес договора',
+  transaction_failed: 'Сделка<error> неуспешный</error>',
+  transaction_pending: 'Сделка находится в процессе обработки...',
+  add_thor_lp: 'Добавить THORChain LP',
+  remove_thor_lp: 'Удалить THORChain LP',
+  lp_dust_amount_error:
+    'Недостаточно RUNE на балансе. Для вывода средств с LP требуется как минимум {{amount}} RUNE в виде пыли.',
+  lp_withdraw_percentage: 'Процент вывода средств',
+  vultibot: 'VultiBot',
+  vultibot_welcome: 'Привет, я VultiBot.',
+  start_new_chat: 'Начать новый чат',
+  new_chat: 'Новый чат',
+  messages: 'сообщения',
+  vultibot_description:
+    'Ваш помощник по управлению хранилищем на основе искусственного интеллекта. Я могу обменивать, отправлять, автоматизировать политики, проверять баланс и управлять вашим хранилищем.',
+  api_key_required: 'Требуется ключ API.',
+  api_key_required_description:
+    'Для использования VultiBot, пожалуйста, установите свой API-ключ Anthropic в качестве переменной среды перед запуском приложения.',
+  type_a_message: 'Введите сообщение...',
+  thinking: 'Мышление',
+  try_saying: 'Попробуйте сказать',
+  ask_about_plugins_policies: 'Уточните информацию о плагинах и политиках...',
+  signed_in: 'Вошёл в систему',
+  password_required_for_operation:
+    'Пожалуйста, введите свой пароль для {{operation}}.',
+  confirm_action: 'Подтвердить действие',
+  confirm_action_description:
+    'Пожалуйста, подтвердите, что вы хотите выполнить {{действие}}.',
+  agent_chat_render_error: 'Произошла ошибка при отображении чата.',
+  agent_connect_description:
+    'Введите пароль от хранилища для подключения к агенту. Ваш пароль используется для подписи аутентификационного сообщения.',
+  agent_connect_now: 'Подключиться сейчас',
+  agent_connected: 'Подключено',
+  agent_connecting: 'Подключение...',
+  agent_operation_sign_in: 'войти',
+  agent_session_expired:
+    'Срок действия вашей сессии истек. Введите пароль хранилища для повторного подключения.',
+  agent_sign_in_failed: 'Не удалось войти в систему.',
+  agent_signing_in: 'Вход в систему...',
+  agent_thinking_of_ideas: 'Обдумываю идеи...',
+  agent_tool_label: 'Инструмент: {{tool}}',
+  agent_tx_confirmed: 'Подтвержденный',
+  agent_tx_failed: 'Неуспешный',
+  agent_tx_pending: 'В ожидании',
+  agent_tx_type_approval: 'Одобрение',
+  agent_tx_type_contract_call: 'Контрактное предложение',
+  agent_tx_type_contract_execute: 'Договор исполнить',
+  agent_tx_type_deposit: 'Вклад',
+  agent_tx_type_send: 'Отправлять',
+  agent_tx_type_swap: 'Менять',
+  agent_tx_type_transfer: 'Передача',
+  agent_tx_view: 'Вид',
 }

@@ -44,7 +44,10 @@ export const DepositVerify = ({ onBack }: OnBackProp) => {
     (selectedChainAction === 'bond' || selectedChainAction === 'unbond')
   const shouldUseStakeOverview =
     entryPoint === 'defi' &&
-    (selectedChainAction === 'stake' || selectedChainAction === 'unstake')
+    (selectedChainAction === 'stake' ||
+      selectedChainAction === 'unstake' ||
+      selectedChainAction === 'mint' ||
+      selectedChainAction === 'redeem')
 
   if (shouldUseBondOverview) {
     return <BondOverview onBack={onBack} />

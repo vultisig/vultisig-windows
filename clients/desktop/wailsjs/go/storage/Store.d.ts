@@ -6,7 +6,7 @@ export function Close():Promise<void>;
 
 export function DeleteAddressBookItem(arg1:string):Promise<void>;
 
-export function DeleteCoin(arg1:string,arg2:string):Promise<void>;
+export function DeleteCoin(arg1:string,arg2:string,arg3:string,arg4:string):Promise<void>;
 
 export function DeleteCoinsByChain(arg1:string,arg2:string):Promise<number>;
 

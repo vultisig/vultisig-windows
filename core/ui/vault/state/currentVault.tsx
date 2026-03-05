@@ -49,15 +49,18 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
 
     if (vault && passcode) {
       try {
-        const { keyShares, chainKeyShares } = decryptVaultAllKeyShares({
-          keyShares: vault.keyShares,
-          chainKeyShares: vault.chainKeyShares,
-          key: passcode,
-        })
+        const { keyShares, chainKeyShares, keyShareMldsa } =
+          decryptVaultAllKeyShares({
+            keyShares: vault.keyShares,
+            chainKeyShares: vault.chainKeyShares,
+            keyShareMldsa: vault.keyShareMldsa,
+            key: passcode,
+          })
         return {
           ...vault,
           keyShares,
           chainKeyShares,
+          keyShareMldsa,
         }
       } catch {
         return vault

@@ -84,7 +84,6 @@ export function buildSignTxAction(tx: TxReady): BackendAction {
     type: 'sign_tx',
     title: 'Sign Transaction',
     params,
-    auto_execute: true,
   }
 }
 

@@ -13,7 +13,7 @@ type SaveAsImageProps = ValueProp<ReactNode> & {
 }
 
 const Wrapper = styled.div`
-  position: absolute;
+  position: fixed;
   top: -9999px;
   left: -9999px;
   pointer-events: none;

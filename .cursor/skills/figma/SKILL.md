@@ -33,7 +33,7 @@ For EACH element in the Figma `get_design_context` output, extract:
 - **Colors**: Read the exact color on every element (backgrounds, borders, text, icons). Map each to a codebase semantic color token. Do NOT reuse a "similar" token — use the exact one from the design.
 - **Spacing**: Read the exact `gap`, `padding`, and `margin` pixel values between every pair of adjacent elements. Different gaps between different elements mean nested containers with different gap values — never flatten into a single gap.
 - **Dimensions**: Read exact `height`, `width`, `min-height` values. Cross-reference with codebase component size props (e.g., Button `size="md"` = 46px height).
-- **Typography**: Read the font size, weight, and color. Map to the `Text` component props.
+- **Typography**: Read ALL of: font `size`, `weight`, `line-height`, `letter-spacing`, and `color`. Map each to `Text` component props. Do NOT skip `weight` — the default may differ from the design.
 
 ### 2. Present the mapping table in the plan
 
