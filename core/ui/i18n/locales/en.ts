@@ -194,6 +194,7 @@ export const en = {
   coming_soon: 'Coming Soon',
   complete: 'Complete',
   congrats: 'Congrats!',
+  confirmed: 'Confirmed',
   confirm: 'Confirm',
   confirmed: 'Confirmed',
   confirm_automation_creation: 'Confirm automation creation',
