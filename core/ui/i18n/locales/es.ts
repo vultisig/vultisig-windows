@@ -1277,4 +1277,5 @@ export const es = {
   agent_tx_type_swap: 'Intercambio',
   agent_tx_type_transfer: 'Transferir',
   agent_tx_view: 'Vista',
+  open_as_side_panel: 'Abrir como panel lateral',
 }
