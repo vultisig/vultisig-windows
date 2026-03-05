@@ -11,6 +11,7 @@ import { CoreViewId } from '@core/ui/navigation/CoreView'
 import { CurrencyPage } from '@core/ui/preferences/currency'
 import { LanguagePage } from '@core/ui/preferences/language'
 import { UploadQrPage } from '@core/ui/qr/upload'
+import { TransactionDetailPage } from '@core/ui/transaction-history/detail/TransactionDetailPage'
 import { TransactionHistoryPage } from '@core/ui/transaction-history/TransactionHistoryPage'
 import { VaultBackupPage } from '@core/ui/vault/backup'
 import { SelectVaultsBackupPage } from '@core/ui/vault/backup/select/SelectVaultsBackupPage'
@@ -100,6 +101,7 @@ export type SharedViewId = Extract<
   | 'passcodeAutoLock'
   | 'referral'
   | 'requestFastVaultBackup'
+  | 'transactionDetail'
   | 'transactionHistory'
   | 'faq'
   | 'shareVault'
@@ -170,6 +172,7 @@ export const sharedViews: Views<SharedViewId> = {
   managePasscodeEncryption: ManagePasscodeEncryptionPage,
   passcodeAutoLock: PasscodeAutoLockPage,
   requestFastVaultBackup: RequestFastVaultBackup,
+  transactionDetail: TransactionDetailPage,
   transactionHistory: TransactionHistoryPage,
   faq: FaqVaultPage,
   shareVault: ShareVaultPage,
