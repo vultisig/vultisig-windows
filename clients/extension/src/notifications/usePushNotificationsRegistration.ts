@@ -14,7 +14,6 @@ import {
   isVaultRegisteredForPush,
   removePushNotificationRegistration,
   setPushNotificationRegistration,
-  setPushServerUrl,
 } from './pushNotificationStorage'
 import { subscribeToPush } from './subscribeToPush'
 
@@ -103,10 +102,3 @@ export const useForceRegisterPushNotificationMutation = () => {
   })
 }
 
-export const useSetPushServerUrlMutation = () => {
-  return useMutation({
-    mutationFn: async (url: string) => {
-      await setPushServerUrl(url)
-    },
-  })
-}
