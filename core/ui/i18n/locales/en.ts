@@ -1165,6 +1165,8 @@ export const en = {
   you_are_sending: "You're sending",
   you_are_staking: "You're staking",
   you_are_unstaking: "You're unstaking",
+  you_are_minting: "You're minting",
+  you_are_redeeming: "You're redeeming",
   yourVaultShares: 'Your vault has {{shares}} Vault Shares',
   vaultSetupOverview: {
     title: 'Your vault setup',
