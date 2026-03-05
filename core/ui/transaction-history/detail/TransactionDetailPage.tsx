@@ -187,6 +187,7 @@ const SwapDetailPanel = ({ record }: { record: SwapTransactionRecord }) => {
   )
 }
 
+/** Displays detailed information for a single transaction record, including amounts, addresses, status, and an explorer link. */
 export const TransactionDetailPage = () => {
   const goBack = useNavigateBack()
   const { t, i18n } = useTranslation()
