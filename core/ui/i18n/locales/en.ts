@@ -1266,6 +1266,9 @@ export const en = {
   agent_session_expired:
     'Your session has expired. Enter your vault password to reconnect.',
   agent_sign_in_failed: 'Sign in failed',
+  agent_chat_options: 'Chat options',
+  agent_give_feedback: 'Give Feedback',
+  agent_delete_chat_session: 'Delete Chat Session',
   agent_signing_in: 'Signing in...',
   agent_thinking_of_ideas: 'Thinking of ideas...',
   agent_tool_label: 'Tool: {{tool}}',
