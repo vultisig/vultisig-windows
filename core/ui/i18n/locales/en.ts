@@ -105,6 +105,7 @@ export const en = {
   blockaid_simulation_failed_description:
     'Unable to simulate this transaction. You can still proceed, but we recommend reviewing the transaction details carefully.',
   transaction_scanned_by: 'Transaction scanned by {{provider}}',
+  broadcasted: 'Broadcasted',
   bond: 'Bond',
   bond_with_lp: 'Bond Maya',
   bronze: 'Bronze',
@@ -191,6 +192,7 @@ export const en = {
   coming_soon: 'Coming Soon',
   complete: 'Complete',
   congrats: 'Congrats!',
+  confirmed: 'Confirmed',
   confirm: 'Confirm',
   confirm_automation_creation: 'Confirm automation creation',
   confirm_new_passcode: 'Confirm New Passcode',
@@ -227,6 +229,7 @@ export const en = {
   custom: 'Custom Action',
   custom_token: 'Custom Token',
   customize_chains: 'Customize chains',
+  date: 'Date',
   decrypting_vault_keyshares: 'Decrypting vault keyshares...',
   deeplink: 'Deeplink',
   defi: 'DeFi',
@@ -319,6 +322,7 @@ export const en = {
     'Only DKLS vaults can be imported in extension',
   fallback_swap_warning:
     'We could not simulate this transaction. Proceed with caution.',
+  failed: 'Failed',
   failed_to_connect_with_server: 'Failed to connect with server',
   failed_to_copy_address: 'Failed to copy address',
   failed_to_copy_link: 'Failed to copy link',
@@ -937,6 +941,7 @@ export const en = {
   staked_amount: 'Staked Amount',
   start: 'Start',
   start_reshare: 'Start Reshare',
+  status: 'Status',
   success: 'Success',
   successfully: 'Successfully',
   support: 'Support',
@@ -1145,6 +1150,7 @@ export const en = {
   verify_password_periodic_message_description:
     'We will periodically ask you to verify your fast sign password so you will always remember it',
   version: 'Version',
+  view_on_explorer: 'View on Explorer',
   vote: 'Vote',
   vult: '$VULT',
   vultisig: 'Vultisig',
