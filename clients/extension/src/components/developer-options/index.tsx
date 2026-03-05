@@ -9,10 +9,6 @@ import {
   useSetIsMLDSAEnabledMutation,
 } from '@core/ui/storage/mldsaEnabled'
 import { StorageKey } from '@core/ui/storage/StorageKey'
-import {
-  getPushServerUrl,
-  setPushServerUrl,
-} from '../../notifications/pushNotificationStorage'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
@@ -27,6 +23,11 @@ import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
+
+import {
+  getPushServerUrl,
+  setPushServerUrl,
+} from '../../notifications/pushNotificationStorage'
 
 const getSchema = (t: TFunction) =>
   z.object({

@@ -66,6 +66,10 @@ const pushServerUrlKey = 'pushNotificationServerUrl'
 export const getPushServerUrl = async (): Promise<string | null> =>
   getStorageValue<string | null>(pushServerUrlKey, null)
 
-export const setPushServerUrl = async (url: string): Promise<void> => {
-  await setStorageValue(pushServerUrlKey, url)
+export const setPushServerUrl = async (url: string | null): Promise<void> => {
+  if (!url || url.trim() === '') {
+    await removeStorageValue(pushServerUrlKey)
+  } else {
+    await setStorageValue(pushServerUrlKey, url)
+  }
 }

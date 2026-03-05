@@ -3,16 +3,13 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import {
+  PushForceRegisterVaultMessage,
+  pushForceRegisterVaultType,
   PushUnregisterVaultMessage,
   pushUnregisterVaultType,
 } from './pushNotificationMessages'
 import {
-  PushForceRegisterVaultMessage,
-  pushForceRegisterVaultType,
-} from './pushNotificationMessages'
-import {
   isVaultRegisteredForPush,
-  removePushNotificationRegistration,
   setPushNotificationRegistration,
 } from './pushNotificationStorage'
 import { subscribeToPush } from './subscribeToPush'
@@ -78,8 +75,6 @@ export const useForceRegisterPushNotificationMutation = () => {
 
   return useMutation({
     mutationFn: async () => {
-      await removePushNotificationRegistration(vaultId)
-
       const message: PushForceRegisterVaultMessage = {
         type: pushForceRegisterVaultType,
         vault: { vaultId, localPartyId: vault.localPartyId },
@@ -101,4 +96,3 @@ export const useForceRegisterPushNotificationMutation = () => {
     },
   })
 }
-

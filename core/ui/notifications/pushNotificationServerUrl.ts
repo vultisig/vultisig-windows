@@ -1,3 +1,3 @@
-import { rootApiUrl } from '@core/config'
+import { rootApiUrl } from '../../config'
 
 export const pushNotificationServerUrl = `${rootApiUrl}/push`
