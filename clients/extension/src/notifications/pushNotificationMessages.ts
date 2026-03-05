@@ -1,5 +1,6 @@
 export const pushRegisterVaultsType = 'push_register_vaults' as const
 export const pushForceRegisterVaultType = 'push_force_register_vault' as const
+export const pushUnregisterVaultType = 'push_unregister_vault' as const
 
 export type VaultRegistrationInfo = {
   vaultId: string
@@ -13,5 +14,10 @@ export type PushRegisterVaultsMessage = {
 
 export type PushForceRegisterVaultMessage = {
   type: typeof pushForceRegisterVaultType
+  vault: VaultRegistrationInfo
+}
+
+export type PushUnregisterVaultMessage = {
+  type: typeof pushUnregisterVaultType
   vault: VaultRegistrationInfo
 }

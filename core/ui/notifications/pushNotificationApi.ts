@@ -44,3 +44,33 @@ export const registerDeviceForPushNotifications = async ({
     )
   }
 }
+
+type UnregisterDeviceInput = {
+  serverUrl: string
+  vaultId: string
+  partyName: string
+  token?: string
+}
+
+export const unregisterDeviceForPushNotifications = async ({
+  serverUrl,
+  vaultId,
+  partyName,
+  token,
+}: UnregisterDeviceInput): Promise<void> => {
+  const response = await fetch(`${serverUrl}/unregister`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      vault_id: vaultId,
+      party_name: partyName,
+      token: token ?? '',
+    }),
+  })
+
+  if (!response.ok) {
+    throw new Error(
+      `Failed to unregister device: ${response.status} ${response.statusText}`
+    )
+  }
+}

@@ -2,6 +2,7 @@ import { NotificationData } from '@core/ui/notifications/NotificationChannel'
 import {
   fetchVapidPublicKey,
   registerDeviceForPushNotifications,
+  unregisterDeviceForPushNotifications,
 } from '@core/ui/notifications/pushNotificationApi'
 import { devPushNotificationServerUrl } from '@core/ui/notifications/pushNotificationServerUrl'
 import { urlBase64ToUint8Array } from '@core/ui/notifications/urlBase64ToUint8Array'
@@ -12,11 +13,14 @@ import {
   pushForceRegisterVaultType,
   PushRegisterVaultsMessage,
   pushRegisterVaultsType,
+  PushUnregisterVaultMessage,
+  pushUnregisterVaultType,
   VaultRegistrationInfo,
 } from './pushNotificationMessages'
 import {
   getPushNotificationRegistrations,
   getPushServerUrl,
+  removePushNotificationRegistration,
   setPushNotificationRegistration,
 } from './pushNotificationStorage'
 
@@ -205,6 +209,33 @@ export const handlePushEvents = () => {
         .then(() => sendResponse({ success: true }))
         .catch(error => {
           console.error('[Vultisig Push] Force register failed:', error)
+          sendResponse({ success: false, error: String(error) })
+        })
+      return true
+    }
+
+    if (message.type === pushUnregisterVaultType) {
+      const msg = message as PushUnregisterVaultMessage
+      ;(async () => {
+        const serverUrl = await getServerUrl()
+        const subscription =
+          await self.registration.pushManager.getSubscription()
+        const token = subscription
+          ? JSON.stringify(subscription.toJSON())
+          : undefined
+
+        await unregisterDeviceForPushNotifications({
+          serverUrl,
+          vaultId: msg.vault.vaultId,
+          partyName: msg.vault.localPartyId,
+          token,
+        })
+
+        await removePushNotificationRegistration(msg.vault.vaultId)
+      })()
+        .then(() => sendResponse({ success: true }))
+        .catch(error => {
+          console.error('[Vultisig Push] Unregister failed:', error)
           sendResponse({ success: false, error: String(error) })
         })
       return true

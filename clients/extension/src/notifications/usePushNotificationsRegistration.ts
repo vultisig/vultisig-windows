@@ -3,8 +3,11 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import {
+  PushUnregisterVaultMessage,
+  pushUnregisterVaultType,
+} from './pushNotificationMessages'
+import {
   isVaultRegisteredForPush,
-  removePushNotificationRegistration,
   setPushServerUrl,
 } from './pushNotificationStorage'
 import { subscribeToPush } from './subscribeToPush'
@@ -46,7 +49,14 @@ export const useDisablePushNotificationsMutation = () => {
 
   return useMutation({
     mutationFn: async () => {
-      await removePushNotificationRegistration(vaultId)
+      const message: PushUnregisterVaultMessage = {
+        type: pushUnregisterVaultType,
+        vault: { vaultId, localPartyId: vault.localPartyId },
+      }
+      const response = await chrome.runtime.sendMessage(message)
+      if (!response?.success) {
+        throw new Error(response?.error ?? 'Failed to unregister')
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
