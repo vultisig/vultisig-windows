@@ -797,6 +797,127 @@ func (s *Store) SaveVaultsKeyShares(vaultKeyShares map[string]VaultAllKeyShares)
 	return nil
 }
 
+// SaveTransactionRecord saves a transaction history record
+func (s *Store) SaveTransactionRecord(record TransactionRecord) error {
+	columns := []string{
+		"id",
+		"vault_id",
+		"type",
+		"status",
+		"chain",
+		"timestamp",
+		"tx_hash",
+		"explorer_url",
+		"fiat_value",
+		"data",
+	}
+	query := fmt.Sprintf(`INSERT OR REPLACE INTO transaction_history (%s) VALUES (%s)`,
+		strings.Join(columns, ", "),
+		generatePlaceholders(len(columns)))
+	_, err := s.db.Exec(query,
+		record.ID,
+		record.VaultID,
+		record.Type,
+		record.Status,
+		record.Chain,
+		record.Timestamp,
+		record.TxHash,
+		record.ExplorerURL,
+		record.FiatValue,
+		record.Data,
+	)
+	if err != nil {
+		return fmt.Errorf("could not save transaction record, err: %w", err)
+	}
+	return nil
+}
+
+// GetTransactionRecords retrieves all transaction records for a vault
+func (s *Store) GetTransactionRecords(vaultID string) ([]TransactionRecord, error) {
+	query := `SELECT id, vault_id, type, status, chain, timestamp, tx_hash, explorer_url, fiat_value, data
+		FROM transaction_history WHERE vault_id = ? ORDER BY timestamp DESC`
+	rows, err := s.db.Query(query, vaultID)
+	if err != nil {
+		return nil, fmt.Errorf("could not query transaction records, err: %w", err)
+	}
+	defer s.closeRows(rows)
+
+	var records []TransactionRecord
+	for rows.Next() {
+		var record TransactionRecord
+		if err := rows.Scan(
+			&record.ID,
+			&record.VaultID,
+			&record.Type,
+			&record.Status,
+			&record.Chain,
+			&record.Timestamp,
+			&record.TxHash,
+			&record.ExplorerURL,
+			&record.FiatValue,
+			&record.Data,
+		); err != nil {
+			return nil, fmt.Errorf("could not scan transaction record, err: %w", err)
+		}
+		records = append(records, record)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, fmt.Errorf("error occurred during iteration of rows: %w", err)
+	}
+
+	return records, nil
+}
+
+// GetTransactionRecord retrieves a single transaction record by ID
+func (s *Store) GetTransactionRecord(id string) (*TransactionRecord, error) {
+	query := `SELECT id, vault_id, type, status, chain, timestamp, tx_hash, explorer_url, fiat_value, data
+		FROM transaction_history WHERE id = ?`
+	row := s.db.QueryRow(query, id)
+
+	var record TransactionRecord
+	err := row.Scan(
+		&record.ID,
+		&record.VaultID,
+		&record.Type,
+		&record.Status,
+		&record.Chain,
+		&record.Timestamp,
+		&record.TxHash,
+		&record.ExplorerURL,
+		&record.FiatValue,
+		&record.Data,
+	)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, fmt.Errorf("transaction record not found")
+		}
+		return nil, fmt.Errorf("could not scan transaction record, err: %w", err)
+	}
+
+	return &record, nil
+}
+
+// UpdateTransactionRecord updates a transaction record's status and related fields
+func (s *Store) UpdateTransactionRecord(record TransactionRecord) error {
+	query := `UPDATE transaction_history SET status = ?, explorer_url = ?, fiat_value = ?, data = ? WHERE id = ?`
+	_, err := s.db.Exec(query, record.Status, record.ExplorerURL, record.FiatValue, record.Data, record.ID)
+	if err != nil {
+		return fmt.Errorf("could not update transaction record, err: %w", err)
+	}
+	return nil
+}
+
+// DeleteTransactionRecords deletes all transaction records for a vault
+func (s *Store) DeleteTransactionRecords(vaultID string) error {
+	query := `DELETE FROM transaction_history WHERE vault_id = ?`
+	_, err := s.db.Exec(query, vaultID)
+	if err != nil {
+		return fmt.Errorf("could not delete transaction records, err: %w", err)
+	}
+	return nil
+}
+
 // Close the db connection
 func (s *Store) Close() error {
 	return s.db.Close()
