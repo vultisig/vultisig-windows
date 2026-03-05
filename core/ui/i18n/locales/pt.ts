@@ -1280,4 +1280,5 @@ export const pt = {
   agent_tx_type_swap: 'Trocar',
   agent_tx_type_transfer: 'Transferir',
   agent_tx_view: 'Visualizar',
+  open_as_side_panel: 'Abrir como painel lateral',
 }

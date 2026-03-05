@@ -29,7 +29,7 @@ export type SignMessageInput =
     }
   | {
       sign_message: {
-        chain: OtherChain.Solana | OtherChain.Tron
+        chain: OtherChain.Solana | OtherChain.Tron | OtherChain.Polkadot
         useTronHeader?: boolean
         isV2?: boolean
         message: string

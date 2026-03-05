@@ -32,4 +32,39 @@ interface Window {
   keplrRequestAccountsCallback: any
   tronWeb: any
   tronLink: any
+  injectedWeb3?: Record<
+    string,
+    {
+      enable: (origin?: string) => Promise<{
+        accounts: {
+          get: () => Promise<
+            {
+              address: string
+              genesisHash?: string
+              name?: string
+              type?: string
+            }[]
+          >
+          subscribe: (
+            cb: (
+              accounts: {
+                address: string
+                genesisHash?: string
+                name?: string
+                type?: string
+              }[]
+            ) => void
+          ) => () => void
+        }
+        signer: {
+          signPayload: (
+            payload: Record<string, unknown>
+          ) => Promise<{ id: number; signature: string }>
+          signRaw: (
+            payload: Record<string, unknown>
+          ) => Promise<{ id: number; signature: string }>
+        }
+      }>
+    }
+  >
 }
