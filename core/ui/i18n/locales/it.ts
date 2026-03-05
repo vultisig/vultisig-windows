@@ -999,6 +999,8 @@ export const it = {
   you_are_sending: 'Stai inviando',
   you_are_staking: 'Stai facendo stake',
   you_are_unstaking: 'Stai facendo unstake',
+  you_are_minting: "You're minting",
+  you_are_redeeming: "You're redeeming",
   yourVaultShares: 'Il tuo vault ha {{shares}} condivisioni Vault',
   your_friends_referral_code: 'Codice di riferimento dei tuoi amici',
   your_referral_code: 'Il tuo codice di riferimento',

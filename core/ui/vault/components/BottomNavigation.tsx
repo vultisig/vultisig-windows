@@ -92,7 +92,7 @@ export const BottomNavigation = ({
     } else if (tab === 'defi') {
       navigate({ id: 'defi', state: {} }, { replace: true })
     } else if (tab === 'agent') {
-      navigate({ id: 'agent' }, { replace: true })
+      navigate({ id: 'agentChat', state: {} }, { replace: true })
     }
   }
 

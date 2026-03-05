@@ -1165,6 +1165,8 @@ export const en = {
   you_are_sending: "You're sending",
   you_are_staking: "You're staking",
   you_are_unstaking: "You're unstaking",
+  you_are_minting: "You're minting",
+  you_are_redeeming: "You're redeeming",
   yourVaultShares: 'Your vault has {{shares}} Vault Shares',
   vaultSetupOverview: {
     title: 'Your vault setup',
@@ -1227,6 +1229,7 @@ export const en = {
   your_seedphrase_subtitle: 'Enter it, create a vault, never look back',
   youre_swapping: "You're swapping",
   account: 'Account',
+  session_history: 'Session history',
   vultibot: 'Vulti',
   vultibot_welcome: "Hi, I'm Vulti",
   start_new_chat: 'Start New Chat',

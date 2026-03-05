@@ -1,5 +1,3 @@
-import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
-import { TxOverviewChainDataRow } from '@core/ui/chain/tx/TxOverviewRow'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useKeysignMutation } from '@core/ui/mpc/keysign/action/mutations/useKeysignMutation'
@@ -12,17 +10,23 @@ import { useCore } from '@core/ui/state/core'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { Button } from '@lib/ui/buttons/Button'
-import { VStack } from '@lib/ui/layout/Stack'
+import { IconButton } from '@lib/ui/buttons/IconButton'
+import { ClipboardCopyIcon } from '@lib/ui/icons/ClipboardCopyIcon'
+import { SeparatedByLine } from '@lib/ui/layout/SeparatedByLine'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
+import { Panel } from '@lib/ui/panel/Panel'
 import { OnBackProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
+import { MiddleTruncate } from '@lib/ui/truncate'
 import { getLastItem } from '@lib/utils/array/getLastItem'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useCopyToClipboard } from 'react-use'
 
 import { TxHashProvider } from '../../chain/state/txHash'
 import { useKeysignMessagePayload } from './state/keysignMessagePayload'
@@ -35,6 +39,7 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
   const payload = useKeysignMessagePayload()
   const { mutate: startKeysign, ...mutationStatus } =
     useKeysignMutation(payload)
+  const [, copyToClipboard] = useCopyToClipboard()
 
   useEffect(startKeysign, [startKeysign])
 
@@ -101,22 +106,45 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
                   </TxHashProvider>
                 )
               },
-              custom: payload => (
-                <>
-                  <PageContent scrollable>
-                    <TxOverviewPanel>
-                      <KeysignCustomMessageInfo value={payload} />
-                      <TxOverviewChainDataRow>
-                        <span>{t('signature')}</span>
-                        <span>{getRecordUnionValue(result, 'signature')}</span>
-                      </TxOverviewChainDataRow>
-                    </TxOverviewPanel>
-                  </PageContent>
-                  <PageFooter>
-                    <Button onClick={goHome}>{t('complete')}</Button>
-                  </PageFooter>
-                </>
-              ),
+              custom: payload => {
+                const signature = getRecordUnionValue(result, 'signature')
+
+                return (
+                  <>
+                    <PageContent alignItems="center" scrollable>
+                      <VStack gap={16} maxWidth={576} fullWidth>
+                        <Panel>
+                          <SeparatedByLine gap={16}>
+                            <KeysignCustomMessageInfo value={payload} />
+                            <HStack
+                              alignItems="center"
+                              gap={4}
+                              justifyContent="space-between"
+                            >
+                              <Text color="shy" weight="500">
+                                {t('signature')}
+                              </Text>
+                              <HStack alignItems="center" gap={4}>
+                                <MiddleTruncate text={signature} width={140} />
+                                <IconButton
+                                  onClick={() => copyToClipboard(signature)}
+                                >
+                                  <ClipboardCopyIcon />
+                                </IconButton>
+                              </HStack>
+                            </HStack>
+                          </SeparatedByLine>
+                        </Panel>
+                      </VStack>
+                    </PageContent>
+                    <PageFooter alignItems="center">
+                      <VStack maxWidth={576} fullWidth>
+                        <Button onClick={goHome}>{t('complete')}</Button>
+                      </VStack>
+                    </PageFooter>
+                  </>
+                )
+              },
             }}
           />
         </>
