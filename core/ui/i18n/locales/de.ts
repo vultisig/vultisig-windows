@@ -1007,6 +1007,8 @@ export const de = {
   you_are_sending: 'Du sendest',
   you_are_staking: 'Du stakest',
   you_are_unstaking: 'Du entstakest',
+  you_are_minting: "You're minting",
+  you_are_redeeming: "You're redeeming",
   yourVaultShares: 'Ihr Tresor enthält {{shares}} Tresoranteile',
   your_friends_referral_code: 'Der Empfehlungscode deines Freundes',
   your_referral_code: 'Ihr Empfehlungscode',
@@ -1287,4 +1289,5 @@ export const de = {
   agent_tx_type_swap: 'Tauschen',
   agent_tx_type_transfer: 'Überweisen',
   agent_tx_view: 'Sicht',
+  open_as_side_panel: 'Als Seitenwand öffnen',
 }

@@ -108,3 +108,6 @@ google-credentials.json
 
 # Claude Code local settings (user-specific)
 .claude/settings.local.json
+
+# Local agent config (credentials, secrets)
+.cursor/*.local

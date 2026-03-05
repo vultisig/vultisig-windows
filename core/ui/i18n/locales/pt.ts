@@ -1000,6 +1000,8 @@ export const pt = {
   you_are_sending: 'Você está enviando',
   you_are_staking: 'Você está stakando',
   you_are_unstaking: 'Você está desfazendo stake',
+  you_are_minting: "You're minting",
+  you_are_redeeming: "You're redeeming",
   yourVaultShares: 'Seu cofre possui {{shares}} ações do cofre.',
   your_friends_referral_code: 'Código de indicação do seu amigo',
   your_referral_code: 'Seu código de indicação',
@@ -1278,4 +1280,5 @@ export const pt = {
   agent_tx_type_swap: 'Trocar',
   agent_tx_type_transfer: 'Transferir',
   agent_tx_view: 'Visualizar',
+  open_as_side_panel: 'Abrir como painel lateral',
 }

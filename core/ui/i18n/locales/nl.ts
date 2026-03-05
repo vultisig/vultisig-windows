@@ -1094,6 +1094,8 @@ export const nl = {
   you_are_sending: 'Je bent aan het verzenden',
   you_are_staking: 'Je bent aan het staken',
   you_are_unstaking: 'Je bent aan het unstaken',
+  you_are_minting: "You're minting",
+  you_are_redeeming: "You're redeeming",
   yourVaultShares: 'Je kluis heeft {{shares}} kluis-shares',
   your_friends_referral_code: 'Referralcode van je vriend',
   your_referral_code: 'Jouw referralcode',
@@ -1254,4 +1256,5 @@ export const nl = {
   agent_tx_type_swap: 'Ruil',
   agent_tx_type_transfer: 'Overdracht',
   agent_tx_view: 'Weergave',
+  open_as_side_panel: 'Openen als zijpaneel',
 }

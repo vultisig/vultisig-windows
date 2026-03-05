@@ -1,34 +1,27 @@
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { BottomNavigation } from '@core/ui/vault/components/BottomNavigation'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
-import { PlusIcon } from '@lib/ui/icons/PlusIcon'
-import { TrashIcon } from '@lib/ui/icons/TrashIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { PageContent } from '@lib/ui/page/PageContent'
-import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { attempt } from '@lib/utils/attempt'
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useAgentService } from '../hooks/useAgentService'
+import { BurgerOpenIcon } from '../icons/BurgerOpenIcon'
+import { PencilWaveIcon } from '../icons/PencilWaveIcon'
 import { Conversation } from '../types'
-import { AgentEmptyState } from './AgentEmptyState'
-import { ChatInput } from './ChatInput'
-import { ConnectionButton } from './ConnectionButton'
+import { AgentHeaderButton } from './AgentHeaderButton'
 
 export const AgentPage: FC = () => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
   const vault = useCurrentVault()
   const [conversations, setConversations] = useState<Conversation[]>([])
-  const [refreshKey, setRefreshKey] = useState(0)
 
-  const { getConversations, deleteConversation } = useAgentService()
+  const { getConversations } = useAgentService()
 
   const vaultId = vault ? getVaultId(vault) : null
 
@@ -37,127 +30,77 @@ export const AgentPage: FC = () => {
     getConversations(vaultId)
       .then(convs => setConversations(convs || []))
       .catch(() => {})
-  }, [vaultId, refreshKey, getConversations])
+  }, [vaultId, getConversations])
 
-  const handleNewChat = (initialMessage?: string) => {
-    if (!vaultId) return
-    navigate({
-      id: 'agentChat',
-      state: { initialMessage },
-    })
+  const handleNewChat = () => {
+    navigate({ id: 'agentChat', state: {} })
   }
 
   const handleOpenChat = (conversationId: string) => {
     navigate({ id: 'agentChat', state: { conversationId } })
   }
 
-  const handleDeleteChat = async (
-    e: React.MouseEvent,
-    conversationId: string
-  ) => {
-    e.stopPropagation()
-    if (!vaultId) return
-    const result = await attempt(() =>
-      deleteConversation(conversationId, vaultId)
-    )
-    if ('error' in result) return
-    setRefreshKey(k => k + 1)
-  }
-
   return (
     <VStack fullHeight>
-      <PageHeader
-        title={t('vultibot')}
-        hasBorder
-        secondaryControls={
-          <HStack gap={8} alignItems="center">
-            <ConnectionButton />
-            <NewChatButton onClick={() => handleNewChat()}>
-              <PlusIcon />
-            </NewChatButton>
-          </HStack>
-        }
-      />
-      <PageContent>
-        {conversations.length === 0 ? (
-          <AgentEmptyState onSelect={starter => handleNewChat(starter)} />
-        ) : (
-          <VStack gap={8}>
-            {conversations.map(conv => (
-              <ConversationItem
-                key={conv.id}
-                onClick={() => handleOpenChat(conv.id)}
-              >
-                <HStack
-                  gap={12}
-                  alignItems="center"
-                  justifyContent="space-between"
-                  fullWidth
-                >
-                  <VStack gap={4}>
-                    <Text size={14} weight={500}>
-                      {conv.title || t('new_chat')}
-                    </Text>
-                  </VStack>
-                  <DeleteButton onClick={e => handleDeleteChat(e, conv.id)}>
-                    <TrashIcon />
-                  </DeleteButton>
-                </HStack>
-              </ConversationItem>
-            ))}
-          </VStack>
-        )}
-      </PageContent>
-      <ChatInput
-        onSend={handleNewChat}
-        placeholder={t('ask_about_plugins_policies')}
-      />
-      <BottomNavigation activeTab="agent" />
+      <Header>
+        <HStack gap={14} alignItems="center" fullWidth>
+          <AgentHeaderButton onClick={handleNewChat}>
+            <BurgerOpenIcon />
+          </AgentHeaderButton>
+          <Text
+            style={{ flex: 1 }}
+            size={16}
+            weight={400}
+            height="large"
+            color="contrast"
+          >
+            {t('session_history')}
+          </Text>
+          <AgentHeaderButton onClick={handleNewChat}>
+            <PencilWaveIcon />
+          </AgentHeaderButton>
+        </HStack>
+      </Header>
+      <ConversationList>
+        <VStack gap={14}>
+          {conversations.map(conv => (
+            <ConversationItem
+              key={conv.id}
+              onClick={() => handleOpenChat(conv.id)}
+            >
+              <Text size={16} weight={400} height="large" color="contrast">
+                {conv.title || t('new_chat')}
+              </Text>
+            </ConversationItem>
+          ))}
+        </VStack>
+      </ConversationList>
     </VStack>
   )
 }
 
-const NewChatButton = styled(UnstyledButton)`
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+const Header = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
-  background: ${getColor('foreground')};
-  color: ${getColor('contrast')};
-  font-size: 16px;
-
-  &:hover {
-    background: ${getColor('foregroundExtra')};
-  }
+  min-height: 56px;
+  padding: 12px 16px;
+  border-bottom: 1px solid ${getColor('foregroundExtra')};
 `
 
-const ConversationItem = styled.div`
+const ConversationList = styled.div`
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 16px;
+`
+
+const ConversationItem = styled(UnstyledButton)`
   width: 100%;
-  padding: 16px;
-  border-radius: 12px;
-  background: ${getColor('foreground')};
+  padding: 14px;
+  border-radius: 14px;
   text-align: left;
   cursor: pointer;
 
   &:hover {
-    background: ${getColor('foregroundExtra')};
-  }
-`
-
-const DeleteButton = styled(UnstyledButton)`
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: ${getColor('textShy')};
-  font-size: 16px;
-
-  &:hover {
-    background: ${getColor('foregroundExtra')};
-    color: ${getColor('danger')};
+    background: ${getColor('foreground')};
   }
 `
