@@ -1003,6 +1003,8 @@ export const es = {
   you_are_sending: 'Estás enviando',
   you_are_staking: 'Estás haciendo stake',
   you_are_unstaking: 'Estás haciendo unstake',
+  you_are_minting: "You're minting",
+  you_are_redeeming: "You're redeeming",
   yourVaultShares: 'Su bóveda tiene {{shares}} acciones de bóveda',
   your_friends_referral_code: 'Código de referencia de tus amigos',
   your_referral_code: 'Su código de referencia',
@@ -1275,4 +1277,5 @@ export const es = {
   agent_tx_type_swap: 'Intercambio',
   agent_tx_type_transfer: 'Transferir',
   agent_tx_view: 'Vista',
+  open_as_side_panel: 'Abrir como panel lateral',
 }
