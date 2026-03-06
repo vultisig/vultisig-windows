@@ -91,7 +91,11 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
   const [cachePassword, setCachePassword] = useState(false)
 
   useEffect(() => {
-    if (!withPasswordCache || !showModal) return
+    if (!showModal) return
+
+    setCachePassword(false)
+
+    if (!withPasswordCache) return
 
     const cached = getCachedVaultPassword({ vaultId: getVaultId(vault) })
     if (!cached) return
