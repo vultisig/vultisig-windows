@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Clear Auth</title>
+    <style>
+        body {
+            font-family: system-ui;
+            padding: 40px;
+            background: #1a1a2e;
+            color: #eee;
+        }
+        #status {
+            margin-top: 20px;
+            padding: 20px;
+            background: #16213e;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Clear Authentication Tokens</h1>
+    <div id="status">Processing...</div>
+    <script>
+        const keys = Object.keys(localStorage).filter(k => k.includes('vultisig_auth'));
+        const result = [];
+        keys.forEach(k => {
+            console.log('Removing:', k);
+            localStorage.removeItem(k);
+            result.push(k);
+        });
+        const statusEl = document.getElementById('status');
+        if (result.length > 0) {
+            statusEl.innerHTML = `✅ Cleared ${result.length} auth token(s):<br><br>${result.map(k => `• ${k}`).join('<br>')}`;
+        } else {
+            statusEl.innerHTML = '⚠️ No auth tokens found in localStorage';
+        }
+        console.log('Auth tokens cleared. Navigate back to the Agent tab to test the connection gate.');
+        
+        setTimeout(() => {
+            window.location.href = '/';
+        }, 2000);
+    </script>
+</body>
+</html>

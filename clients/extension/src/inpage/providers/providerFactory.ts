@@ -1,3 +1,4 @@
+import { Cardano } from '@clients/extension/src/inpage/providers/cardano'
 import { Cosmos } from '@clients/extension/src/inpage/providers/cosmos'
 import { Dash } from '@clients/extension/src/inpage/providers/dash'
 import { Ethereum } from '@clients/extension/src/inpage/providers/ethereum'
@@ -23,6 +24,7 @@ export const createProviders = () => {
 
   return {
     bitcoin: new UTXO(UtxoChain.Bitcoin),
+    cardano: Cardano.getInstance(),
     bitcoincash: new UTXO(UtxoChain.BitcoinCash),
     dogecoin: new UTXO(UtxoChain.Dogecoin),
     litecoin: new UTXO(UtxoChain.Litecoin),

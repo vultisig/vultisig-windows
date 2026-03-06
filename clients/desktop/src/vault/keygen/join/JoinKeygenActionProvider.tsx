@@ -3,6 +3,7 @@ import { fromLibType } from '@core/mpc/types/utils/libType'
 import { CreateVaultKeygenActionProvider as DKLSCreateKeygenActionProvider } from '@core/ui/mpc/keygen/create/CreateVaultKeygenActionProvider'
 import { JoinKeyImportKeygenActionProvider } from '@core/ui/mpc/keygen/keyimport/JoinKeyImportKeygenActionProvider'
 import { ReshareVaultKeygenActionProvider as DKLSReshareKeygenActionProvider } from '@core/ui/mpc/keygen/reshare/ReshareVaultKeygenActionProvider'
+import { SingleKeygenActionProvider } from '@core/ui/mpc/keygen/singleKeygen/SingleKeygenActionProvider'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { Match } from '@lib/ui/base/Match'
 import { ChildrenProp } from '@lib/ui/props'
@@ -68,6 +69,9 @@ export const JoinKeygenActionProvider = ({ children }: ChildrenProp) => {
       <JoinKeyImportKeygenActionProvider>
         {children}
       </JoinKeyImportKeygenActionProvider>
+    ),
+    singleKeygen: () => (
+      <SingleKeygenActionProvider>{children}</SingleKeygenActionProvider>
     ),
   })
 }
