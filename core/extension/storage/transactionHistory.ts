@@ -15,10 +15,13 @@ const getAllRecords = async (
 ): Promise<SerializedTransactionRecord[]> =>
   getStorageValue(getRecordsKey(vaultId), initialTransactionRecords)
 
-const setAllRecords = async (
-  vaultId: string,
+type SetAllRecordsInput = {
+  vaultId: string
   records: SerializedTransactionRecord[]
-) => setStorageValue(getRecordsKey(vaultId), records)
+}
+
+const setAllRecords = async ({ vaultId, records }: SetAllRecordsInput) =>
+  setStorageValue(getRecordsKey(vaultId), records)
 
 const writeQueueByVault = new Map<string, Promise<void>>()
 
@@ -49,7 +52,10 @@ export const transactionHistoryStorage: TransactionHistoryStorage = {
       vaultId: record.vaultId,
       task: async () => {
         const records = await getAllRecords(record.vaultId)
-        await setAllRecords(record.vaultId, [...records, record])
+        await setAllRecords({
+          vaultId: record.vaultId,
+          records: [...records, record],
+        })
       },
     })
   },
@@ -58,10 +64,10 @@ export const transactionHistoryStorage: TransactionHistoryStorage = {
       vaultId: record.vaultId,
       task: async () => {
         const records = await getAllRecords(record.vaultId)
-        await setAllRecords(
-          record.vaultId,
-          records.map(r => (r.id === record.id ? record : r))
-        )
+        await setAllRecords({
+          vaultId: record.vaultId,
+          records: records.map(r => (r.id === record.id ? record : r)),
+        })
       },
     })
   },
