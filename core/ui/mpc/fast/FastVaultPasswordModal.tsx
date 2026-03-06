@@ -8,6 +8,7 @@ import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { FocusLockIcon } from '@lib/ui/icons/FocusLockIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Backdrop } from '@lib/ui/modal/Backdrop'
@@ -16,7 +17,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useMutation } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -35,13 +36,17 @@ const createSchema = (t: TFunction) => {
 
 type Schema = z.infer<ReturnType<typeof createSchema>>
 
+type FastVaultPasswordModalResult = {
+  password: string
+  cachePassword: boolean
+}
+
 type FastVaultPasswordModalProps = OnBackProp &
-  OnFinishProp<{
-    password: string
-  }> & {
+  OnFinishProp<FastVaultPasswordModalResult> & {
     title?: string
     description: string
     showModal?: boolean
+    withPasswordCache?: boolean
   }
 
 export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
@@ -50,6 +55,7 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
   onBack,
   title,
   description,
+  withPasswordCache = false,
 }) => {
   const { t } = useTranslation()
   const vault = useCurrentVault()
@@ -60,7 +66,7 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
     mutate,
   } = useMutation({
     mutationFn: getVaultFromServer,
-    onSuccess: onFinish,
+    onSuccess: result => onFinish({ ...result, cachePassword }),
   })
 
   const {
@@ -71,6 +77,8 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
     mode: 'onChange',
     resolver: zodResolver(schema),
   })
+
+  const [cachePassword, setCachePassword] = useState(false)
 
   const onSubmit = ({ password }: Schema) => {
     mutate({ vaultId: getVaultId(vault), password })
@@ -112,6 +120,18 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
             validation={passwordErrorMessage ? 'invalid' : undefined}
             error={passwordErrorMessage}
           />
+
+          {withPasswordCache && (
+            <Checkbox
+              value={cachePassword}
+              onChange={setCachePassword}
+              label={
+                <Text size={12} color="shy">
+                  {t('cache_password_for_5_min')}
+                </Text>
+              }
+            />
+          )}
 
           <ConfirmButton
             disabled={mutationIsPending || !isValid}

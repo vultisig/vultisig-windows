@@ -22,7 +22,12 @@ export const FastVaultPasswordVerification = () => {
     verifyPassword(undefined)
   }
 
-  const handleFinish = ({ password }: { password: string }) => {
+  const handleFinish = ({
+    password,
+  }: {
+    password: string
+    cachePassword: boolean
+  }) => {
     verifyPassword(password)
   }
 
