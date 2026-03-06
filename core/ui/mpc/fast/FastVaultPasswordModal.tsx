@@ -17,11 +17,13 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useMutation } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { z } from 'zod'
+
+import { cacheVaultPassword, getCachedVaultPassword } from './passwordCache'
 
 const createSchema = (t: TFunction) => {
   const message = t('password_pattern_error', passwordLengthConfig)
@@ -66,7 +68,15 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
     mutate,
   } = useMutation({
     mutationFn: getVaultFromServer,
-    onSuccess: result => onFinish({ ...result, cachePassword }),
+    onSuccess: result => {
+      if (cachePassword) {
+        cacheVaultPassword({
+          vaultId: getVaultId(vault),
+          password: result.password,
+        })
+      }
+      onFinish({ ...result, cachePassword })
+    },
   })
 
   const {
@@ -79,6 +89,15 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
   })
 
   const [cachePassword, setCachePassword] = useState(false)
+
+  useEffect(() => {
+    if (!withPasswordCache || !showModal) return
+
+    const cached = getCachedVaultPassword({ vaultId: getVaultId(vault) })
+    if (!cached) return
+
+    onFinish({ password: cached, cachePassword: true })
+  }, [showModal, withPasswordCache, vault, onFinish])
 
   const onSubmit = ({ password }: Schema) => {
     mutate({ vaultId: getVaultId(vault), password })
