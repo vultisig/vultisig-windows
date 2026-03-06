@@ -6,6 +6,7 @@ import {
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
+import { attempt } from '@lib/utils/attempt'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { useCore } from '../state/core'
@@ -33,11 +34,16 @@ export type TransactionHistoryStorage = {
 
 const deserializeRecord = (
   record: SerializedTransactionRecord
-): TransactionRecord =>
-  ({
-    ...record,
-    data: JSON.parse(record.data),
-  }) as TransactionRecord
+): TransactionRecord => {
+  const { data: parsedData, error } = attempt(() => JSON.parse(record.data))
+  if (error) {
+    throw new Error(
+      `Failed to parse transaction data for record ${record.id}`
+    )
+  }
+
+  return { ...record, data: parsedData } as TransactionRecord
+}
 
 const serializeRecord = (
   record: TransactionRecord
