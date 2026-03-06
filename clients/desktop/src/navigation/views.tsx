@@ -11,6 +11,8 @@ import { SecureReshareVaultPage } from '@clients/desktop/src/vault/reshare/secur
 import { SetupFastVaultPage } from '@clients/desktop/src/vault/setup/fast/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '@clients/desktop/src/vault/setup/secure/SetupSecureVaultPage'
 import { SetupVaultPageController } from '@clients/desktop/src/vault/setup/SetupVaultPageController'
+import { SingleKeygenFastPage } from '@clients/desktop/src/vault/singleKeygen/fast/SingleKeygenFastPage'
+import { SingleKeygenSecurePage } from '@clients/desktop/src/vault/singleKeygen/secure/SingleKeygenSecurePage'
 import { CheckUpdatePage } from '@clients/desktop/src/versioning/CheckUpdatePage'
 import { SharedViewId, sharedViews } from '@core/ui/navigation/sharedViews'
 import { OnboardingPage } from '@core/ui/onboarding/components/OnboardingPage'
@@ -37,6 +39,8 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   ),
   reshareVaultFast: FastReshareVaultPage,
   reshareVaultSecure: SecureReshareVaultPage,
+  singleKeygenFast: SingleKeygenFastPage,
+  singleKeygenSecure: SingleKeygenSecurePage,
   settings: () => (
     <SettingsPage
       checkUpdate={<CheckUpdate />}
