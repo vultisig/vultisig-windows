@@ -37,9 +37,7 @@ const deserializeRecord = (
 ): TransactionRecord => {
   const { data: parsedData, error } = attempt(() => JSON.parse(record.data))
   if (error) {
-    throw new Error(
-      `Failed to parse transaction data for record ${record.id}`
-    )
+    throw new Error(`Failed to parse transaction data for record ${record.id}`)
   }
 
   return { ...record, data: parsedData } as TransactionRecord
