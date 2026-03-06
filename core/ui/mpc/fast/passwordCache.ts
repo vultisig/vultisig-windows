@@ -4,6 +4,7 @@ const passwordCacheDurationMs = convertDuration(5, 'min', 'ms')
 
 type CacheEntry = {
   password: string
+  expiresAt: number
   timeoutId: ReturnType<typeof setTimeout>
 }
 
@@ -24,7 +25,11 @@ export const cacheVaultPassword = ({
     cache.delete(vaultId)
   }, passwordCacheDurationMs)
 
-  cache.set(vaultId, { password, timeoutId })
+  cache.set(vaultId, {
+    password,
+    expiresAt: Date.now() + passwordCacheDurationMs,
+    timeoutId,
+  })
 }
 
 type GetCachedVaultPasswordInput = {
@@ -35,7 +40,14 @@ export const getCachedVaultPassword = ({
   vaultId,
 }: GetCachedVaultPasswordInput): string | null => {
   const entry = cache.get(vaultId)
-  return entry?.password ?? null
+  if (!entry) return null
+
+  if (Date.now() > entry.expiresAt) {
+    clearCachedVaultPassword({ vaultId })
+    return null
+  }
+
+  return entry.password
 }
 
 type ClearCachedVaultPasswordInput = {
