@@ -141,6 +141,10 @@ async function setupContentScriptMessenger(
             vultisig: {
               enable: (origin?: string) => providers.polkadot.enable(origin),
             },
+            'polkadot-js': {
+              enable: (origin?: string) => providers.polkadot.enable(origin),
+              version: '0.46.9',
+            },
           },
           configurable: false,
           writable: false,
