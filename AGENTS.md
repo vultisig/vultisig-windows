@@ -38,3 +38,13 @@ yarn check:all   # lint + typecheck + test + knip
 - MPC/TSS bindings — do not modify without review
 - Always test keygen and keysign flows after refactoring
 - Use `useTranslation()` for all user-facing strings
+
+## Knowledge Base
+
+For deeper context beyond this file, see [vultisig-knowledge](https://github.com/vultisig/vultisig-knowledge).
+
+Key docs for this repo:
+- [repos/vultisig-windows.md](https://github.com/vultisig/vultisig-knowledge/blob/main/repos/vultisig-windows.md)
+- [architecture/mpc-tss-explained.md](https://github.com/vultisig/vultisig-knowledge/blob/main/architecture/mpc-tss-explained.md)
+- [coding/gotchas.md](https://github.com/vultisig/vultisig-knowledge/blob/main/coding/gotchas.md)
+- [coding/patterns.md](https://github.com/vultisig/vultisig-knowledge/blob/main/coding/patterns.md)
