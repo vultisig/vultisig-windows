@@ -15,6 +15,7 @@ import { OnboardingStorage } from './onboarding'
 import { PasscodeAutoLockStorage } from './passcodeAutoLock'
 import { PasscodeEncryptionStorage } from './passcodeEncryption'
 import { ReferralsStorage } from './referrals'
+import { TransactionHistoryStorage } from './transactionHistory'
 import { VaultFoldersStorage } from './vaultFolders'
 import { VaultsStorage } from './vaults'
 
@@ -36,4 +37,5 @@ export type CoreStorage = CoinFinderIgnoreStorage &
   PasscodeEncryptionStorage &
   PasscodeAutoLockStorage &
   DismissedBannersStorage &
-  MLDSAEnabledStorage
+  MLDSAEnabledStorage &
+  TransactionHistoryStorage
