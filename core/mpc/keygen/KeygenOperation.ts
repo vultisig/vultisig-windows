@@ -4,3 +4,4 @@ export type KeygenOperation =
   | { create: true }
   | { reshare: ReshareType }
   | { keyimport: true }
+  | { singleKeygen: true }

@@ -50,6 +50,7 @@ export const KeygenFlow = ({
         regular: () => t('reshare'),
       }),
     keyimport: () => t('import_key'),
+    singleKeygen: () => t('post_quantum_keygen'),
   })
 
   const isPluginReshare = useMemo(() => {
@@ -106,6 +107,7 @@ export const KeygenFlow = ({
                 create: renderEnding,
                 reshare: renderEnding,
                 keyimport: renderEnding,
+                singleKeygen: renderEnding,
               }}
             />
           </CurrentVaultProvider>
