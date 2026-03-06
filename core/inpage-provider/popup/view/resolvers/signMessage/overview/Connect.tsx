@@ -40,7 +40,12 @@ export const ConnectOverview: FC<SignMessageOverview> = ({
     return data.message as string
   }, [message])
 
-  const onGetPassword = ({ password }: { password: string }) => {
+  const onGetPassword = ({
+    password,
+  }: {
+    password: string
+    cachePassword: boolean
+  }) => {
     navigate({
       id: 'keysign',
       state: { keysignPayload, securityType: 'fast', password },
@@ -100,6 +105,7 @@ export const ConnectOverview: FC<SignMessageOverview> = ({
         onBack={() => setShowPasswordModal(false)}
         onFinish={onGetPassword}
         description={t('fast_vault_password_start_keysign_description')}
+        withPasswordCache
       />
     </>
   )

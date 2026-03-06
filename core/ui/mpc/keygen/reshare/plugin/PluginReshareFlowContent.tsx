@@ -44,7 +44,7 @@ export const PluginReshareFlowContent = ({
   return (
     <>
       <InstallPluginPendingState />
-      <ValueTransfer<{ password: string }>
+      <ValueTransfer<{ password: string; cachePassword: boolean }>
         key="password"
         from={({ onFinish }) => (
           <PreviewInfo value={plugin} onFinish={onFinish} />
