@@ -842,7 +842,7 @@ func (s *Store) GetTransactionRecords(vaultID string) ([]TransactionRecord, erro
 	}
 	defer s.closeRows(rows)
 
-	var records []TransactionRecord
+	records := make([]TransactionRecord, 0)
 	for rows.Next() {
 		var record TransactionRecord
 		if err := rows.Scan(
