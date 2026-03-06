@@ -278,6 +278,11 @@ export const en = {
   evm_chains: 'EVM Chains',
   enable_dkls: 'Enable DKLS',
   enable_mldsa: 'Enable MLDSA',
+  post_quantum_keygen: 'Post-Quantum Key Generation',
+  post_quantum_keygen_description:
+    'Generate a post-quantum (MLDSA) key for this vault',
+  post_quantum_key_already_generated:
+    'This vault already has a post-quantum key',
   enable_token_instruction:
     'Enable at least one token to view balances and manage positions.',
   encrypting_vault_keyshares: 'Encrypting vault keyshares...',
@@ -1267,6 +1272,9 @@ export const en = {
   agent_session_expired:
     'Your session has expired. Enter your vault password to reconnect.',
   agent_sign_in_failed: 'Sign in failed',
+  agent_chat_options: 'Chat options',
+  agent_give_feedback: 'Give Feedback',
+  agent_delete_chat_session: 'Delete Chat Session',
   agent_signing_in: 'Signing in...',
   agent_thinking_of_ideas: 'Thinking of ideas...',
   agent_tool_label: 'Tool: {{tool}}',
