@@ -5,6 +5,8 @@ import { ExpandViewGuard } from '@clients/extension/src/components/expand-view-g
 import { Prioritize } from '@clients/extension/src/components/prioritize'
 import { ReshareFastVault } from '@clients/extension/src/components/settings/reshare/ReshareFastVault'
 import { ReshareSecureVault } from '@clients/extension/src/components/settings/reshare/ReshareSecureVault'
+import { SingleKeygenFastVault } from '@clients/extension/src/components/settings/singleKeygen/SingleKeygenFastVault'
+import { SingleKeygenSecureVault } from '@clients/extension/src/components/settings/singleKeygen/SingleKeygenSecureVault'
 import { SetupFastVaultPage } from '@clients/extension/src/components/setup/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '@clients/extension/src/components/setup/SetupSecureVaultPage'
 import { JoinKeygenPage } from '@clients/extension/src/mpc/keygen/join/JoinKeygenPage'
@@ -62,6 +64,8 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   ),
   reshareVaultFast: ReshareFastVault,
   reshareVaultSecure: ReshareSecureVault,
+  singleKeygenFast: SingleKeygenFastVault,
+  singleKeygenSecure: SingleKeygenSecureVault,
   settings: () => (
     <SettingsPage
       insiderOptions={<ExtensionDeveloperOptions />}
