@@ -6,6 +6,8 @@ import { toLibType } from '@core/mpc/types/utils/libType'
 import { toTssType } from '@core/mpc/types/utils/tssType'
 import { KeygenMessageSchema } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
 import { ReshareMessageSchema } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
+import { SingleKeygenMessageSchema } from '@core/mpc/types/vultisig/keygen/v1/single_keygen_message_pb'
+import { SingleKeygenType } from '@core/mpc/types/vultisig/keygen/v1/single_keygen_type_pb'
 import { useSevenZipQuery } from '@core/ui/compression/queries/useSevenZipQuery'
 import { useKeygenOperation } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import {
@@ -95,6 +97,24 @@ export const useJoinKeygenUrlQuery = () => {
                 chains,
               })
               return toBinary(KeygenMessageSchema, message)
+            },
+            singleKeygen: () => {
+              const existingVault =
+                'existingVault' in keygenVault
+                  ? keygenVault.existingVault
+                  : undefined
+              const message = create(SingleKeygenMessageSchema, {
+                sessionId,
+                hexChainCode: existingVault?.hexChainCode ?? hexChainCode,
+                serviceName,
+                publicKeyEcdsa: existingVault?.publicKeys.ecdsa ?? '',
+                encryptionKeyHex: hexEncryptionKey,
+                useVultisigRelay,
+                vaultName,
+                libType,
+                singleKeygenType: SingleKeygenType.MLDSA,
+              })
+              return toBinary(SingleKeygenMessageSchema, message)
             },
           }
         )
