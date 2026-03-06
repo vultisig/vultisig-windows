@@ -901,9 +901,16 @@ func (s *Store) GetTransactionRecord(id string) (*TransactionRecord, error) {
 // UpdateTransactionRecord updates a transaction record's status and related fields
 func (s *Store) UpdateTransactionRecord(record TransactionRecord) error {
 	query := `UPDATE transaction_history SET status = ?, explorer_url = ?, fiat_value = ?, data = ? WHERE id = ?`
-	_, err := s.db.Exec(query, record.Status, record.ExplorerURL, record.FiatValue, record.Data, record.ID)
+	result, err := s.db.Exec(query, record.Status, record.ExplorerURL, record.FiatValue, record.Data, record.ID)
 	if err != nil {
 		return fmt.Errorf("could not update transaction record, err: %w", err)
+	}
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("could not check rows affected, err: %w", err)
+	}
+	if rowsAffected == 0 {
+		return fmt.Errorf("transaction record not found: id=%s", record.ID)
 	}
 	return nil
 }
