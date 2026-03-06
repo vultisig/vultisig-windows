@@ -1250,4 +1250,5 @@ export const ru = {
   agent_tx_type_swap: 'Менять',
   agent_tx_type_transfer: 'Передача',
   agent_tx_view: 'Вид',
+  open_as_side_panel: 'Открывается как боковая панель',
 }

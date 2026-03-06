@@ -1186,4 +1186,5 @@ export const zh = {
   agent_tx_type_swap: '交换',
   agent_tx_type_transfer: '转移',
   agent_tx_view: '看法',
+  open_as_side_panel: '打开方式为侧面板',
 }

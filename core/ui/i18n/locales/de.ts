@@ -1289,4 +1289,5 @@ export const de = {
   agent_tx_type_swap: 'Tauschen',
   agent_tx_type_transfer: 'Überweisen',
   agent_tx_view: 'Sicht',
+  open_as_side_panel: 'Als Seitenwand öffnen',
 }

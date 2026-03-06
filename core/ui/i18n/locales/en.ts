@@ -976,6 +976,7 @@ export const en = {
   transaction_could_not_be_parsed:
     'This transaction could not be parsed. Raw transaction data is shown below.',
   raw_transaction_data: 'Raw Transaction Data',
+  transaction_history: 'Transaction History',
   transaction_instructions_summary: 'Transaction Instructions Summary',
   instruction: 'Instruction',
   program_id: 'Program ID',
