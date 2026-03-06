@@ -38,7 +38,7 @@ const createSchema = (t: TFunction) => {
 
 type Schema = z.infer<ReturnType<typeof createSchema>>
 
-type FastVaultPasswordModalResult = {
+export type FastVaultPasswordModalResult = {
   password: string
   cachePassword: boolean
 }

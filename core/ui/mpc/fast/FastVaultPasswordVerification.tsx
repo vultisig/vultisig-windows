@@ -2,7 +2,10 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { convertDuration } from '@lib/utils/time/convertDuration'
 import { useTranslation } from 'react-i18next'
 
-import { FastVaultPasswordModal } from './FastVaultPasswordModal'
+import {
+  FastVaultPasswordModal,
+  FastVaultPasswordModalResult,
+} from './FastVaultPasswordModal'
 import { usePasswordVerification } from './hooks/usePasswordVerification'
 
 const verificationTimeoutMs = convertDuration(15, 'd', 'ms')
@@ -22,12 +25,7 @@ export const FastVaultPasswordVerification = () => {
     verifyPassword(undefined)
   }
 
-  const handleFinish = ({
-    password,
-  }: {
-    password: string
-    cachePassword: boolean
-  }) => {
+  const handleFinish = ({ password }: FastVaultPasswordModalResult) => {
     verifyPassword(password)
   }
 
