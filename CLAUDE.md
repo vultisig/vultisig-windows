@@ -94,3 +94,15 @@ See `.claude/rules/` for detailed rules. Key points:
 - **i18n**: `useTranslation()` for all user-facing text, only edit `en.ts`, run `yarn translate`
 - **Types**: `type` over `interface`, no `as` assertions, derive unions from const arrays
 - **Desktop dev**: always use `yarn dev:desktop` (Wails), never plain Vite
+
+## Knowledge Base
+
+For deeper context, see [vultisig-knowledge](https://github.com/vultisig/vultisig-knowledge). Read only when needed:
+
+| Situation | Read |
+|-----------|------|
+| First time in this repo | [repos/vultisig-windows.md](https://github.com/vultisig/vultisig-knowledge/blob/main/repos/vultisig-windows.md) |
+| Touching crypto/MPC code | [architecture/mpc-tss-explained.md](https://github.com/vultisig/vultisig-knowledge/blob/main/architecture/mpc-tss-explained.md) |
+| Working on agent chat | [repos/agent-backend.md](https://github.com/vultisig/vultisig-knowledge/blob/main/repos/agent-backend.md) |
+| Cross-repo gotchas | [coding/gotchas.md](https://github.com/vultisig/vultisig-knowledge/blob/main/coding/gotchas.md) |
+| Unsure about conventions | [coding/patterns.md](https://github.com/vultisig/vultisig-knowledge/blob/main/coding/patterns.md) |
