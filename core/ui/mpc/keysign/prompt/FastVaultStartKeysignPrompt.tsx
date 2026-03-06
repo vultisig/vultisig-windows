@@ -72,7 +72,7 @@ export const FastVaultStartKeysignPrompt = (props: StartKeysignPromptProps) => {
   )
 
   const onGetPassword = useCallback(
-    ({ password }: { password: string }) => {
+    ({ password }: { password: string; cachePassword: boolean }) => {
       navigate({
         id: 'keysign',
         state: {
@@ -141,6 +141,7 @@ export const FastVaultStartKeysignPrompt = (props: StartKeysignPromptProps) => {
         onBack={() => setShowModal(false)}
         onFinish={onGetPassword}
         description={t('fast_vault_password_start_keysign_description')}
+        withPasswordCache
       />
     </VStack>
   )
