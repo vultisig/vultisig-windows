@@ -20,17 +20,49 @@ const setAllRecords = async (
   records: SerializedTransactionRecord[]
 ) => setStorageValue(getRecordsKey(vaultId), records)
 
+const writeQueueByVault = new Map<string, Promise<void>>()
+
+const enqueueVaultWrite = async ({
+  vaultId,
+  task,
+}: {
+  vaultId: string
+  task: () => Promise<void>
+}) => {
+  const previous = writeQueueByVault.get(vaultId) ?? Promise.resolve()
+  const next = previous.then(task, task)
+  writeQueueByVault.set(
+    vaultId,
+    next.finally(() => {
+      if (writeQueueByVault.get(vaultId) === next) {
+        writeQueueByVault.delete(vaultId)
+      }
+    })
+  )
+  await next
+}
+
 export const transactionHistoryStorage: TransactionHistoryStorage = {
   getTransactionRecords: getAllRecords,
   saveTransactionRecord: async record => {
-    const records = await getAllRecords(record.vaultId)
-    await setAllRecords(record.vaultId, [...records, record])
+    await enqueueVaultWrite({
+      vaultId: record.vaultId,
+      task: async () => {
+        const records = await getAllRecords(record.vaultId)
+        await setAllRecords(record.vaultId, [...records, record])
+      },
+    })
   },
   updateTransactionRecord: async record => {
-    const records = await getAllRecords(record.vaultId)
-    await setAllRecords(
-      record.vaultId,
-      records.map(r => (r.id === record.id ? record : r))
-    )
+    await enqueueVaultWrite({
+      vaultId: record.vaultId,
+      task: async () => {
+        const records = await getAllRecords(record.vaultId)
+        await setAllRecords(
+          record.vaultId,
+          records.map(r => (r.id === record.id ? record : r))
+        )
+      },
+    })
   },
 }
