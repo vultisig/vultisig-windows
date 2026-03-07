@@ -7,6 +7,7 @@ import { MpcPeersSelectionProvider } from '@core/ui/mpc/state/mpcSelectedPeers'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 
+import { TransactionRecorderProvider } from '../../../transaction-history/record/TransactionRecorderProvider'
 import { KeysignMessagePayloadProvider } from '../state/keysignMessagePayload'
 
 export const StartSecureKeysignFlow = ({
@@ -31,7 +32,9 @@ export const StartSecureKeysignFlow = ({
             render={() => (
               <KeysignActionProvider>
                 <KeysignMessagePayloadProvider value={keysignPayload}>
-                  <KeysignSigningStep onBack={onBack} />
+                  <TransactionRecorderProvider>
+                    <KeysignSigningStep onBack={onBack} />
+                  </TransactionRecorderProvider>
                 </KeysignMessagePayloadProvider>
               </KeysignActionProvider>
             )}
