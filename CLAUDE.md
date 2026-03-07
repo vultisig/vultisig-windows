@@ -29,7 +29,7 @@ Vultisig desktop (Wails + React) and browser extension for multi-chain cryptocur
 
 ## Directory Structure
 
-```
+```text
 vultisig-windows/
 ├── clients/
 │   ├── desktop/         # Wails desktop app
