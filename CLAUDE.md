@@ -94,6 +94,7 @@ See `.claude/rules/` for detailed rules. Key points:
 - **i18n**: `useTranslation()` for all user-facing text, only edit `en.ts`, run `yarn translate`
 - **Types**: `type` over `interface`, no `as` assertions, derive unions from const arrays
 - **Desktop dev**: always use `yarn dev:desktop` (Wails), never plain Vite
+- **JSDoc**: `/** ... */` on all exported functions, classes, and type definitions
 
 ## Knowledge Base
 
