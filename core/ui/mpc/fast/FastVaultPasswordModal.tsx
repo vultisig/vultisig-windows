@@ -96,6 +96,8 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
   useEffect(() => {
     if (!showModal) return
 
+    let cancelled = false
+
     setCachePassword(false)
 
     if (!withPasswordCache) return
@@ -104,12 +106,16 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
       const cached = await getCachedVaultPassword({
         vaultId: getVaultId(vault),
       })
-      if (!cached) return
+      if (cancelled || !cached) return
 
       onFinish({ password: cached, cachePassword: true })
     }
 
     checkCache()
+
+    return () => {
+      cancelled = true
+    }
   }, [showModal, withPasswordCache, vault, onFinish])
 
   const onSubmit = ({ password }: Schema) => {
