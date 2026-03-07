@@ -10,6 +10,7 @@ import { currentVaultIdStorage } from './currentVaultId'
 import { defiChainsStorage } from './defiChains'
 import { defiPositionsStorage } from './defiPositions'
 import { dismissedBannersStorage } from './dismissedBanners'
+import { fastVaultPasswordCacheStorage } from './fastVaultPasswordCache'
 import { fiatCurrencyStorage } from './fiatCurrency'
 import { languageStorage } from './language'
 import { mldsaEnabledStorage } from './mldsaEnabled'
@@ -41,5 +42,6 @@ export const storage: CoreStorage = {
   ...referralsStorage,
   ...dismissedBannersStorage,
   ...mldsaEnabledStorage,
+  ...fastVaultPasswordCacheStorage,
   ...transactionHistoryStorage,
 }

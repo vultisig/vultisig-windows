@@ -23,7 +23,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { z } from 'zod'
 
-import { cacheVaultPassword, getCachedVaultPassword } from './passwordCache'
+import { useFastVaultPasswordCache } from './passwordCache'
 
 const createSchema = (t: TFunction) => {
   const message = t('password_pattern_error', passwordLengthConfig)
@@ -61,6 +61,8 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
 }) => {
   const { t } = useTranslation()
   const vault = useCurrentVault()
+  const { cacheVaultPassword, getCachedVaultPassword } =
+    useFastVaultPasswordCache()
   const schema = useMemo(() => createSchema(t), [t])
   const {
     error: mutationError,
@@ -68,9 +70,9 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
     mutate,
   } = useMutation({
     mutationFn: getVaultFromServer,
-    onSuccess: result => {
+    onSuccess: async result => {
       if (cachePassword) {
-        cacheVaultPassword({
+        await cacheVaultPassword({
           vaultId: getVaultId(vault),
           password: result.password,
         })
@@ -97,11 +99,17 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
 
     if (!withPasswordCache) return
 
-    const cached = getCachedVaultPassword({ vaultId: getVaultId(vault) })
-    if (!cached) return
+    const checkCache = async () => {
+      const cached = await getCachedVaultPassword({
+        vaultId: getVaultId(vault),
+      })
+      if (!cached) return
 
-    onFinish({ password: cached, cachePassword: true })
-  }, [showModal, withPasswordCache, vault, onFinish])
+      onFinish({ password: cached, cachePassword: true })
+    }
+
+    checkCache()
+  }, [showModal, withPasswordCache, vault, onFinish, getCachedVaultPassword])
 
   const onSubmit = ({ password }: Schema) => {
     mutate({ vaultId: getVaultId(vault), password })
@@ -116,9 +124,9 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
   }, [mutationError, errors.password, t])
 
   return showModal ? (
-    <Backdrop onClose={onBack}>
+    <Backdrop onClose={mutationIsPending ? undefined : onBack}>
       <ModalWrapper>
-        <CloseButton onClick={onBack}>
+        <CloseButton onClick={onBack} disabled={mutationIsPending}>
           <CrossIcon />
         </CloseButton>
 
