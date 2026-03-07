@@ -15,6 +15,7 @@ import { Backdrop } from '@lib/ui/modal/Backdrop'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { attempt } from '@lib/utils/attempt'
 import { useMutation } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
 import { useEffect, useMemo, useState } from 'react'
@@ -70,10 +71,12 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
     mutationFn: getVaultFromServer,
     onSuccess: async result => {
       if (cachePassword) {
-        await cacheVaultPassword({
-          vaultId: getVaultId(vault),
-          password: result.password,
-        })
+        await attempt(() =>
+          cacheVaultPassword({
+            vaultId: getVaultId(vault),
+            password: result.password,
+          })
+        )
       }
       onFinish({ ...result, cachePassword })
     },
