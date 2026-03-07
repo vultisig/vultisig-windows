@@ -60,8 +60,12 @@ const createSwapData = (payload: KeysignPayload): SwapTransactionData => {
 
   return matchRecordUnion(swapPayload, {
     native: (native): SwapTransactionData => {
-      const from = coinFromCommCoin(shouldBePresent(native.fromCoin))
-      const to = coinFromCommCoin(shouldBePresent(native.toCoin))
+      const from = coinFromCommCoin(
+        shouldBePresent(native.fromCoin, 'native swap fromCoin')
+      )
+      const to = coinFromCommCoin(
+        shouldBePresent(native.toCoin, 'native swap toCoin')
+      )
 
       return {
         fromToken: from.token,
@@ -80,8 +84,12 @@ const createSwapData = (payload: KeysignPayload): SwapTransactionData => {
       }
     },
     general: (general): SwapTransactionData => {
-      const from = coinFromCommCoin(shouldBePresent(general.fromCoin))
-      const to = coinFromCommCoin(shouldBePresent(general.toCoin))
+      const from = coinFromCommCoin(
+        shouldBePresent(general.fromCoin, 'general swap fromCoin')
+      )
+      const to = coinFromCommCoin(
+        shouldBePresent(general.toCoin, 'general swap toCoin')
+      )
 
       return {
         fromToken: from.token,
