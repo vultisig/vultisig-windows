@@ -16,11 +16,7 @@ import { useMutation } from '@tanstack/react-query'
 import { v4 as uuidv4 } from 'uuid'
 
 export const useChangePasscodeMutation = () => {
-  const {
-    setPasscodeEncryption,
-    setFastVaultPasswordCache,
-    updateVaultsKeyShares,
-  } = useCore()
+  const { setPasscodeEncryption, updateVaultsKeyShares } = useCore()
   const refetchQueries = useRefetchQueries()
   const vaults = useVaults()
   const [oldPasscode, setPasscode] = usePasscode()
@@ -53,7 +49,6 @@ export const useChangePasscodeMutation = () => {
 
       await updateVaultsKeyShares(vaultsKeyShares)
       await refetchQueries([StorageKey.vaults])
-      await setFastVaultPasswordCache(null)
 
       setPasscode(newPasscode)
       await setPasscodeEncryption({

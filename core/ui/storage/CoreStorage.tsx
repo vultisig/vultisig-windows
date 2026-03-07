@@ -8,7 +8,6 @@ import { CurrentVaultIdStorage } from './currentVaultId'
 import { DefiChainsStorage } from './defiChains'
 import { DefiPositionsStorage } from './defiPositions'
 import { DismissedBannersStorage } from './dismissedBanners'
-import { FastVaultPasswordCacheStorage } from './fastVaultPasswordCache'
 import { FiatCurrencyStorage } from './fiatCurrency'
 import { LanguageStorage } from './language'
 import { MLDSAEnabledStorage } from './mldsaEnabled'
@@ -39,5 +38,4 @@ export type CoreStorage = CoinFinderIgnoreStorage &
   PasscodeAutoLockStorage &
   DismissedBannersStorage &
   MLDSAEnabledStorage &
-  FastVaultPasswordCacheStorage &
   TransactionHistoryStorage

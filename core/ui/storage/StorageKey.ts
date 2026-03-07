@@ -23,5 +23,4 @@ export enum StorageKey {
   isCircleVisible = 'isCircleVisible',
   isMLDSAEnabled = 'isMLDSAEnabled',
   transactionHistory = 'transactionHistory',
-  fastVaultPasswordCache = 'fastVaultPasswordCache',
 }

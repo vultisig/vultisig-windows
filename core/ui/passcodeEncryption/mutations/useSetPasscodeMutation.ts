@@ -13,11 +13,7 @@ import { encryptVaultAllKeyShares } from '../core/vaultKeyShares'
 import { usePasscode } from '../state/passcode'
 
 export const useSetPasscodeMutation = () => {
-  const {
-    setPasscodeEncryption,
-    setFastVaultPasswordCache,
-    updateVaultsKeyShares,
-  } = useCore()
+  const { setPasscodeEncryption, updateVaultsKeyShares } = useCore()
   const refetchQueries = useRefetchQueries()
   const vaults = useVaults()
   const [, setPasscode] = usePasscode()
@@ -44,7 +40,6 @@ export const useSetPasscodeMutation = () => {
 
       await updateVaultsKeyShares(vaultsKeyShares)
       await refetchQueries([StorageKey.vaults])
-      await setFastVaultPasswordCache(null)
 
       setPasscode(passcode)
       await setPasscodeEncryption({

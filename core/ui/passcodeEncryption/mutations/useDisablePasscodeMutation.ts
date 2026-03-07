@@ -11,11 +11,7 @@ import { recordMap } from '@lib/utils/record/recordMap'
 import { useMutation } from '@tanstack/react-query'
 
 export const useDisablePasscodeMutation = () => {
-  const {
-    setPasscodeEncryption,
-    setFastVaultPasswordCache,
-    updateVaultsKeyShares,
-  } = useCore()
+  const { setPasscodeEncryption, updateVaultsKeyShares } = useCore()
   const refetchQueries = useRefetchQueries()
   const [passcode, setPasscode] = usePasscode()
   const vaults = useVaults()
@@ -37,7 +33,6 @@ export const useDisablePasscodeMutation = () => {
 
       await updateVaultsKeyShares(vaultsKeyShares)
       await refetchQueries([StorageKey.vaults])
-      await setFastVaultPasswordCache(null)
       setPasscode(null)
       await setPasscodeEncryption(null)
       await refetchQueries([StorageKey.passcodeEncryption])

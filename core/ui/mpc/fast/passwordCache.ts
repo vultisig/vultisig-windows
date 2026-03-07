@@ -1,101 +1,76 @@
-import { usePasscode } from '@core/ui/passcodeEncryption/state/passcode'
-import { useCore } from '@core/ui/state/core'
-import { FastVaultPasswordCacheEntry } from '@core/ui/storage/fastVaultPasswordCache'
-import { decryptWithAesGcm } from '@lib/utils/encryption/aesGcm/decryptWithAesGcm'
-import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGcm'
-import {
-  encryptedEncoding,
-  plainTextEncoding,
-} from '@lib/utils/encryption/config'
 import { convertDuration } from '@lib/utils/time/convertDuration'
 
 const cacheDurationMs = convertDuration(5, 'min', 'ms')
+const storageKey = 'fastVaultPasswordCache'
 
-type EncryptPasswordInput = {
+type CacheEntry = {
   password: string
-  passcode: string
+  expiresAt: number
 }
 
-const encryptPassword = ({ password, passcode }: EncryptPasswordInput) =>
-  encryptWithAesGcm({
-    key: Buffer.from(passcode, plainTextEncoding),
-    value: Buffer.from(password, plainTextEncoding),
-  }).toString(encryptedEncoding)
+type CacheData = Record<string, CacheEntry>
 
-type DecryptPasswordInput = {
-  encrypted: string
-  passcode: string
+const hasSessionStorage =
+  typeof chrome !== 'undefined' && !!chrome.storage?.session
+
+const memoryCache = new Map<string, CacheEntry>()
+
+const getCache = async (): Promise<CacheData> => {
+  if (!hasSessionStorage) {
+    return Object.fromEntries(memoryCache)
+  }
+
+  const result = await chrome.storage.session.get(storageKey)
+  return (result[storageKey] as CacheData) ?? {}
 }
 
-const decryptPassword = ({ encrypted, passcode }: DecryptPasswordInput) =>
-  decryptWithAesGcm({
-    key: Buffer.from(passcode, plainTextEncoding),
-    value: Buffer.from(encrypted, encryptedEncoding),
-  }).toString(plainTextEncoding)
+const setCache = async (data: CacheData): Promise<void> => {
+  if (!hasSessionStorage) {
+    memoryCache.clear()
+    for (const [key, value] of Object.entries(data)) {
+      memoryCache.set(key, value)
+    }
+    return
+  }
+
+  await chrome.storage.session.set({ [storageKey]: data })
+}
 
 type CacheVaultPasswordInput = {
   vaultId: string
   password: string
 }
 
+export const cacheVaultPassword = async ({
+  vaultId,
+  password,
+}: CacheVaultPasswordInput) => {
+  const cache = await getCache()
+
+  cache[vaultId] = {
+    password,
+    expiresAt: Date.now() + cacheDurationMs,
+  }
+
+  await setCache(cache)
+}
+
 type GetCachedVaultPasswordInput = {
   vaultId: string
 }
 
-export const useFastVaultPasswordCache = () => {
-  const { getFastVaultPasswordCache, setFastVaultPasswordCache } = useCore()
-  const [passcode] = usePasscode()
+export const getCachedVaultPassword = async ({
+  vaultId,
+}: GetCachedVaultPasswordInput): Promise<string | null> => {
+  const cache = await getCache()
+  const entry = cache[vaultId]
+  if (!entry) return null
 
-  const cacheVaultPassword = async ({
-    vaultId,
-    password,
-  }: CacheVaultPasswordInput) => {
-    const cache = (await getFastVaultPasswordCache()) ?? {}
-
-    const storedPassword = passcode
-      ? encryptPassword({ password, passcode })
-      : password
-
-    cache[vaultId] = {
-      password: storedPassword,
-      expiresAt: Date.now() + cacheDurationMs,
-    }
-
-    await setFastVaultPasswordCache(cache)
+  if (Date.now() > entry.expiresAt) {
+    delete cache[vaultId]
+    await setCache(cache)
+    return null
   }
 
-  const getCachedVaultPassword = async ({
-    vaultId,
-  }: GetCachedVaultPasswordInput): Promise<string | null> => {
-    const cache = await getFastVaultPasswordCache()
-    if (!cache) return null
-
-    const entry: FastVaultPasswordCacheEntry | undefined = cache[vaultId]
-    if (!entry) return null
-
-    const removeCacheEntry = async () => {
-      delete cache[vaultId]
-      await setFastVaultPasswordCache(
-        Object.keys(cache).length > 0 ? cache : null
-      )
-    }
-
-    if (Date.now() > entry.expiresAt) {
-      await removeCacheEntry()
-      return null
-    }
-
-    if (passcode) {
-      try {
-        return decryptPassword({ encrypted: entry.password, passcode })
-      } catch {
-        await removeCacheEntry()
-        return null
-      }
-    }
-
-    return entry.password
-  }
-
-  return { cacheVaultPassword, getCachedVaultPassword }
+  return entry.password
 }

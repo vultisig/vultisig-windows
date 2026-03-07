@@ -23,7 +23,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { z } from 'zod'
 
-import { useFastVaultPasswordCache } from './passwordCache'
+import { cacheVaultPassword, getCachedVaultPassword } from './passwordCache'
 
 const createSchema = (t: TFunction) => {
   const message = t('password_pattern_error', passwordLengthConfig)
@@ -61,8 +61,6 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
 }) => {
   const { t } = useTranslation()
   const vault = useCurrentVault()
-  const { cacheVaultPassword, getCachedVaultPassword } =
-    useFastVaultPasswordCache()
   const schema = useMemo(() => createSchema(t), [t])
   const {
     error: mutationError,
@@ -109,7 +107,7 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
     }
 
     checkCache()
-  }, [showModal, withPasswordCache, vault, onFinish, getCachedVaultPassword])
+  }, [showModal, withPasswordCache, vault, onFinish])
 
   const onSubmit = ({ password }: Schema) => {
     mutate({ vaultId: getVaultId(vault), password })
