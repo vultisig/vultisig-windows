@@ -76,9 +76,8 @@ export class TonConnectBridge {
       }
     }
 
-    try {
-      await fetch(request.manifestUrl)
-    } catch {
+    const manifestResult = await attempt(fetch(request.manifestUrl))
+    if ('error' in manifestResult) {
       return {
         event: 'connect_error',
         id: 0,
@@ -106,11 +105,11 @@ export class TonConnectBridge {
       }
     }
 
-    const account = await callBackground({
-      getAccount: { chain: Chain.Ton },
-    })
+    const { data: account, error: getAccountError } = await attempt(
+      callBackground({ getAccount: { chain: Chain.Ton } })
+    )
 
-    if (!account.address || !account.publicKey) {
+    if (getAccountError || !account?.address || !account?.publicKey) {
       return {
         event: 'connect_error',
         id: 0,
