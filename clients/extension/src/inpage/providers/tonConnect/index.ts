@@ -1,4 +1,3 @@
-import VULTI_ICON_RAW_SVG from '@clients/extension/src/inpage/icon'
 import { Chain } from '@core/chain/Chain'
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
@@ -13,30 +12,17 @@ import type {
 import { CHAIN } from '@tonconnect/protocol'
 
 import { getWalletStateInit } from './getWalletStateInit'
+import {
+  getTonConnectDeviceInfo,
+  getTonConnectWalletInfo,
+} from './walletManifest'
 
 type TonConnectCallback = (event: WalletEvent) => void
 
 export class TonConnectBridge {
-  deviceInfo: DeviceInfo = {
-    platform: 'browser',
-    appName: 'Vultisig',
-    appVersion: '1.0.0',
-    maxProtocolVersion: 2,
-    features: [
-      'SendTransaction',
-      {
-        name: 'SendTransaction',
-        maxMessages: 1,
-        extraCurrencySupported: false,
-      },
-    ],
-  }
+  deviceInfo: DeviceInfo = getTonConnectDeviceInfo()
 
-  walletInfo = {
-    name: 'Vultisig',
-    image: VULTI_ICON_RAW_SVG,
-    about_url: 'https://vultisig.com',
-  }
+  walletInfo = getTonConnectWalletInfo()
 
   protocolVersion = 2
   isWalletBrowser = false
