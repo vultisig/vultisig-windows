@@ -1,12 +1,12 @@
-import { base64Encode } from '@lib/utils/base64Encode'
-
 import {
   KeygenSession,
   KeyImportInitiator,
   KeyImportSession,
   Keyshare,
   QcSession,
-} from '../../../lib/dkls/vs_wasm'
+} from '@lib/dkls/vs_wasm'
+import { base64Encode } from '@lib/utils/base64Encode'
+
 import { getKeygenThreshold } from '../getKeygenThreshold'
 import { getMessageHash } from '../getMessageHash'
 import { KeygenOperation } from '../keygen/KeygenOperation'

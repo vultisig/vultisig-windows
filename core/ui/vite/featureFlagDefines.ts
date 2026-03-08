@@ -10,10 +10,6 @@ export const getFeatureFlagDefines = (env: Record<string, string>) => {
     }
   }
 
-  if (Object.keys(overrides).length > 0) {
-    console.log('[feature-flags] Local overrides:', overrides)
-  }
-
   return {
     __FEATURE_FLAG_OVERRIDES__: JSON.stringify(overrides),
   }

@@ -1,12 +1,12 @@
+import { getFeatureFlagDefines } from '@core/ui/vite/featureFlagDefines'
+import { getCommonPlugins } from '@core/ui/vite/plugins'
+import { getStaticCopyTargets } from '@core/ui/vite/staticCopy'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { defineConfig, loadEnv } from 'vite'
 import circleDependency from 'vite-plugin-circular-dependency'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 
-import { getFeatureFlagDefines } from '../../core/ui/vite/featureFlagDefines'
-import { getCommonPlugins } from '../../core/ui/vite/plugins'
-import { getStaticCopyTargets } from '../../core/ui/vite/staticCopy'
 import * as buildInfo from './build.json'
 
 const rootDir = path.resolve(

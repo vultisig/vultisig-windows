@@ -1,16 +1,16 @@
 ---
-name: reference-native-codebase
-description: USE native iOS/Android repos as reference WHEN porting features TO match behavior in our TypeScript style
+name: reference-codebases
+description: USE sibling repos (iOS, Android, SDK, etc.) as reference WHEN porting features TO match behavior in our TypeScript style
 ---
 
-# Reference Native Codebase
+# Reference Codebases
 
-USE this skill WHEN the user says "port from iOS/Android", "this exists in native", or references native implementation.
+USE this skill WHEN the user says "port from iOS/Android", "reference codebases", or references a sibling repo's implementation.
 
 ## Strategy
 
-1. **Find sibling repos**: Go up one level from the workspace root (`../`) to find native repositories.
-2. **Sync before reading**: Run `git -C ../ios pull --ff-only` (or `../android`) to get latest changes.
+1. **Find sibling repos**: Go up one level from the workspace root (`../`) to find repositories.
+2. **Sync before reading**: Run `git -C ../<repo> pull --ff-only` to get latest changes.
 3. **Explore**: List the parent folder, then use absolute paths to read/search files in the target repo.
 4. **Port**: Match behavior 1:1, but write in our TypeScript style following workspace rules.
 
@@ -37,13 +37,3 @@ USE this skill WHEN the user says "port from iOS/Android", "this exists in nativ
 ## Core Principle
 
 **Same behavior, our style.** Match inputs, outputs, edge cases, and errors exactly. Use our resolver patterns, i18n, and coding conventions.
-
-## Example
-
-**User**: "port the fee estimation from iOS"
-
-1. Sync: `git -C ../ios pull --ff-only`
-2. Find the feature in `ios/VultisigApp/`
-3. Understand inputs, outputs, edge cases
-4. Implement in TypeScript following our patterns
-5. Verify behavior matches native

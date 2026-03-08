@@ -1,6 +1,6 @@
+import { KeygenSession, Keyshare } from '@lib/mldsa/vs_wasm'
 import { base64Encode } from '@lib/utils/base64Encode'
 
-import { KeygenSession, Keyshare } from '../../../lib/mldsa/vs_wasm'
 import { getKeygenThreshold } from '../getKeygenThreshold'
 import { getMessageHash } from '../getMessageHash'
 import { deleteMpcRelayMessage } from '../message/relay/delete'

@@ -1,13 +1,12 @@
+import { getFeatureFlagDefines } from '@core/ui/vite/featureFlagDefines'
+import { getCommonPlugins } from '@core/ui/vite/plugins'
+import { getStaticCopyTargets } from '@core/ui/vite/staticCopy'
 import path from 'path'
 import { defineConfig, loadEnv, PluginOption } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 import topLevelAwait from 'vite-plugin-top-level-await'
 import wasm from 'vite-plugin-wasm'
-
-import { getFeatureFlagDefines } from '../../core/ui/vite/featureFlagDefines'
-import { getCommonPlugins } from '../../core/ui/vite/plugins'
-import { getStaticCopyTargets } from '../../core/ui/vite/staticCopy'
 
 const rootDir = path.resolve(__dirname, '../..')
 

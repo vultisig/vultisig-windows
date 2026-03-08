@@ -1,54 +1,73 @@
 ---
-description: USE attempt utility WHEN handling errors is necessary FOR user feedback or alternative logic, NOT for logging
+description: Prefer attempt and withFallback when converting errors into values
 globs: *.ts,*.tsx
 alwaysApply: false
 ---
 
-# Use attempt Utility Only When Error Handling is Necessary
+# Prefer `attempt` for Value-Producing Error Handling
 
-## Context
+## Use This For
 
-- Applies when handling errors ONLY when you need to show them to users or execute different logic
 - The codebase provides a utility function [attempt.ts](mdc:lib/utils/attempt.ts) from `@lib/utils/attempt`
-- This utility provides a consistent way to handle errors with Result types
-- Do NOT add error handling just to log errors - let errors bubble up naturally
+- It converts thrown errors into `Result`-style values using `'data' in result` and `'error' in result`
+- Use it when failure should become a value such as `null`, `undefined`, a default, or a fallback branch
 
-## Requirements
+## Prefer
 
-- NEVER use try-catch blocks for error handling
-- ONLY use `attempt` utility when you need to show errors to users or execute alternative logic
-- Do NOT wrap functions in attempt just to log errors - let them throw naturally
-- Use pattern matching with 'data' in result or 'error' in result for type-safe error handling
-- Use `withFallback` when a default value is needed in case of error
-- Only use try-finally when resource cleanup is needed (e.g., closing connections)
+- `attempt(() => ...)` or `await attempt(() => ...)` for parsing, decoding, storage, and request fallbacks
+- `'data' in result` or `'error' in result` for type-safe branching
+- `withFallback(...)` when the desired behavior is "return this default on failure"
 
 ## Examples
 
 <example>
-// Good: Using attempt when showing error to user
+// Good: Converting failure into user-facing fallback logic
 import { attempt } from '@lib/utils/attempt'
 
 const result = await attempt(async () => {
-return await saveUserData(data)
+  return await saveUserData(data)
 })
 
 if ('data' in result) {
-showSuccessMessage('Data saved successfully')
+  showSuccessMessage('Data saved successfully')
 } else {
-showErrorToUser(`Failed to save: ${result.error.message}`)
+  showErrorToUser(`Failed to save: ${result.error.message}`)
 }
 
 // Good: Using attempt for alternative logic
 const result = await attempt(() => fetchFromPrimaryAPI())
 const data = 'data' in result
-? result.data
-: await fetchFromBackupAPI() // Different logic on failure
+  ? result.data
+  : await fetchFromBackupAPI()
 
 // Good: Using withFallback for default values
 const userPreferences = withFallback(
-attempt(() => parseStoredPreferences()),
-DEFAULT_PREFERENCES
+  attempt(() => parseStoredPreferences()),
+  DEFAULT_PREFERENCES
 )
+</example>
+
+<example>
+// Good: Narrow local fallback logic can stay try/catch
+try {
+  return fromDatBackupString(value)
+} catch {
+  return null
+}
+
+// Good: try/finally for cleanup
+try {
+  return runSession()
+} finally {
+  closeSession()
+}
+
+// Good: callback isolation boundary
+try {
+  listener(event)
+} catch {
+  // one listener should not break the emitter
+}
 </example>
 
 <example type="invalid">
@@ -61,37 +80,23 @@ if ('error' in result) {
 // Bad: Let it throw naturally instead
 await trackAnalytics(event) // If it fails, let the error bubble up
 
-// Bad: Using try-catch for error handling
-try {
-const data = await fetchData()
-processData(data)
-} catch (error) {
-logError(error) // Just logging - let it throw instead
-}
-
 // Bad: Wrapping everything in attempt unnecessarily
 const result = await attempt(() => internalUtilityFunction())
 if ('error' in result) {
-console.error(result.error) // No user feedback or alternative logic
+  console.error(result.error) // No fallback or user-facing behavior
 }
 </example>
 
-## When NOT to Use Error Handling
+## Do Not Use `attempt` For
 
-- Internal utility functions that should throw on failure
 - Analytics, logging, or telemetry calls
-- Operations where you don't need to show users specific error messages
-- Functions where failure should stop execution (let them throw)
+- Operations where the error should simply propagate
+- Wrappers that only log and continue
+- Cases where no fallback value or alternate branch is needed
 
-## Benefits
+## `try/catch` Is Still Fine For
 
-1. Cleaner code with less unnecessary error handling
-2. Type-safe error handling only where needed
-3. Natural error propagation for debugging
-4. Better user experience with meaningful error messages
-5. Alternative logic paths when primary operations fail
-6. Consistent error handling patterns across the codebase
-7. No need for type casting of errors
-8. Better error propagation
-9. Easier to test and maintain
-10. Eliminates common try-catch pitfalls
+- `try/finally` cleanup
+- Narrow local fallback or probe logic when it is clearer than `attempt`
+- Event and callback isolation boundaries
+- Retry loops or continue-on-failure control flow
