@@ -33,6 +33,8 @@ export default [
       '**/wailsjs',
       '**/*_pb.ts',
       'lib/dkls',
+      'lib/fromt',
+      'lib/frozt',
       'lib/schnorr',
       'lib/mldsa',
     ],

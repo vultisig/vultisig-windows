@@ -1,4 +1,5 @@
 import { Chain } from '@core/chain/Chain'
+import { frostOnlyChains } from '@core/chain/froztChains'
 import { PublicKeys } from '@core/chain/publicKey/PublicKeys'
 import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { MpcLib } from '@core/mpc/mpcLib'
@@ -30,10 +31,17 @@ export type Vault = {
   chainKeyShares?: Partial<Record<Chain, string>>
   publicKeyMldsa?: string
   keyShareMldsa?: string
+  saplingExtras?: string
 }
 
 export const getVaultId = (vault: Vault): string => vault.publicKeys.ecdsa
 
-export const isKeyImportVault = (vault: Vault): boolean =>
-  vault.chainPublicKeys !== undefined &&
-  Object.keys(vault.chainPublicKeys).length > 0
+export const isKeyImportVault = (vault: Vault): boolean => {
+  if (!vault.chainPublicKeys) {
+    return false
+  }
+  const importedChains = Object.keys(vault.chainPublicKeys).filter(
+    k => !frostOnlyChains.includes(k as Chain)
+  )
+  return importedChains.length > 0
+}

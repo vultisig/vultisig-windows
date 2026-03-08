@@ -11,6 +11,7 @@ import { broadcastSuiTx } from './resolvers/sui'
 import { broadcastTonTx } from './resolvers/ton'
 import { broadcastTronTx } from './resolvers/tron'
 import { broadcastUtxoTx } from './resolvers/utxo'
+import { broadcastZcashShieldedTx } from './resolvers/zcashShielded'
 
 const resolvers: Record<ChainKind, BroadcastTxResolver<any>> = {
   cardano: broadcastCardanoTx,
@@ -23,6 +24,10 @@ const resolvers: Record<ChainKind, BroadcastTxResolver<any>> = {
   ton: broadcastTonTx,
   utxo: broadcastUtxoTx,
   tron: broadcastTronTx,
+  zcashShielded: broadcastZcashShieldedTx,
+  monero: async () => {
+    throw new Error('Monero broadcast not yet implemented')
+  },
 }
 
 export const broadcastTx: BroadcastTxResolver = input =>

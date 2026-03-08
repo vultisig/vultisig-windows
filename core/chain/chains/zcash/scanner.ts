@@ -1,10 +1,12 @@
 import {
+  frozt_sapling_build_dfvk,
+  frozt_sapling_compute_nullifier,
   frozt_sapling_decrypt_note_full,
   frozt_sapling_derive_keys,
   frozt_sapling_try_decrypt_compact,
   WasmSaplingTree,
   WasmSaplingWitness,
-} from '@lib/frozt/frozt_wasm'
+} from 'frozt-wasm'
 
 import { loadBirthHeight } from './birthHeight'
 import {
@@ -16,7 +18,14 @@ import {
 import { CompactBlock } from './lightwalletd/messages'
 import { parseSaplingOutputs } from './parseSaplingOutputs'
 import { loadSaplingNotes, SaplingNote, saveSaplingNotes } from './SaplingNote'
-import { loadScanHeight, saveScanHeight, saveScanTarget } from './scanProgress'
+import {
+  clearScanHeight,
+  hasBirthdayScan,
+  loadScanHeight,
+  markBirthdayScan,
+  saveScanHeight,
+  saveScanTarget,
+} from './scanProgress'
 
 const batchSize = 500
 
@@ -41,12 +50,23 @@ type ScanParams = {
 type ScanState = {
   tree: WasmSaplingTree
   ivk: Uint8Array
-  nk: Uint8Array
+  dfvk: Uint8Array
   zAddress: string
   notes: SaplingNote[]
   activeWitnesses: ActiveWitness[]
   nullifierSet: Set<string>
   treePosition: number
+}
+
+export const getSpendableBalance = (zAddress: string): bigint => {
+  const notes = loadSaplingNotes(zAddress)
+  let total = BigInt(0)
+  for (const note of notes) {
+    if (!note.spent) {
+      total += BigInt(note.value)
+    }
+  }
+  return total
 }
 
 export const scanBlocks = async ({
@@ -55,10 +75,21 @@ export const scanBlocks = async ({
   saplingExtras,
   onProgress,
 }: ScanParams): Promise<void> => {
-  const savedHeight = loadScanHeight(zAddress)
+  let savedHeight = loadScanHeight(zAddress)
   const birthHeight = loadBirthHeight(zAddress)
   const latestBlock = await getLatestBlock()
   const endHeight = latestBlock.height
+
+  const needsBirthdayRescan =
+    birthHeight !== null &&
+    !hasBirthdayScan(zAddress) &&
+    (savedHeight === null || savedHeight >= birthHeight)
+
+  if (needsBirthdayRescan && savedHeight !== null) {
+    saveSaplingNotes(zAddress, [])
+    clearScanHeight(zAddress)
+    savedHeight = null
+  }
 
   let startHeight: number
   if (savedHeight !== null && savedHeight > 0) {
@@ -75,7 +106,7 @@ export const scanBlocks = async ({
 
   const saplingKeys = frozt_sapling_derive_keys(pubKeyPackage, saplingExtras)
   const ivk = saplingKeys.ivk
-  const nk = saplingKeys.nk
+  const dfvk = frozt_sapling_build_dfvk(pubKeyPackage, saplingExtras)
 
   const treeState = await getTreeState(startHeight - 1)
   const tree = WasmSaplingTree.fromHexState(treeState.saplingTree)
@@ -102,7 +133,7 @@ export const scanBlocks = async ({
   const state: ScanState = {
     tree,
     ivk,
-    nk,
+    dfvk,
     zAddress,
     notes,
     activeWitnesses,
@@ -120,16 +151,23 @@ export const scanBlocks = async ({
 
     for (const block of compactBlocks) {
       await processBlock(state, block)
-      saveScanHeight(zAddress, block.height)
     }
 
+    flushState(state)
+    saveScanHeight(zAddress, batchEnd)
     onProgress?.(batchEnd, endHeight)
   }
 
+  if (birthHeight !== null) {
+    markBirthdayScan(zAddress)
+  }
+}
+
+const flushState = (state: ScanState): void => {
   for (const aw of state.activeWitnesses) {
     state.notes[aw.noteIndex].witnessData = toHex(aw.witness.serialize())
   }
-  saveSaplingNotes(zAddress, state.notes)
+  saveSaplingNotes(state.zAddress, state.notes)
 }
 
 const processBlock = async (
@@ -224,7 +262,13 @@ const storeDecryptedNote = async ({
     return
   }
 
-  const nullifierHex = `${toHex(txHash)}:${outputIdx}`
+  const nullifier = frozt_sapling_compute_nullifier(
+    state.dfvk,
+    noteData,
+    BigInt(witnessPosition),
+    BigInt(block.height)
+  )
+  const nullifierHex = toHex(nullifier)
 
   const note: SaplingNote = {
     txid: toHex(txHash),

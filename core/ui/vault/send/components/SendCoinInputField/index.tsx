@@ -8,6 +8,7 @@ import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
+import { getChainDisplayName } from '../../../../chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '../../../../chain/metadata/getChainLogoSrc'
 import { CoinBalance } from '../CoinBalance'
 import { CoinWrapper } from './SendCoinInputField.styled'
@@ -48,7 +49,7 @@ export const SendCoinInputField = ({
               alignItems="center"
             >
               <Text weight="500" size={12} color="contrast">
-                {chain}
+                {getChainDisplayName(chain)}
               </Text>
               <ChevronDownIcon />
             </HStack>

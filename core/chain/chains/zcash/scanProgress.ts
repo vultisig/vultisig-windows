@@ -27,3 +27,13 @@ export const loadScanTarget = (zAddress: string): number | null => {
   if (!raw) return null
   return Number(raw)
 }
+
+const getBirthdayScanKey = (zAddress: string): string =>
+  `zcash-birthday-scan-done:${zAddress}`
+
+export const hasBirthdayScan = (zAddress: string): boolean =>
+  localStorage.getItem(getBirthdayScanKey(zAddress)) === '1'
+
+export const markBirthdayScan = (zAddress: string): void => {
+  localStorage.setItem(getBirthdayScanKey(zAddress), '1')
+}

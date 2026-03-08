@@ -1,6 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCoinType } from '@core/chain/coin/coinType'
+import { frostOnlyChains } from '@core/chain/froztChains'
 import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { match } from '@lib/utils/match'
 import { WalletCore } from '@trustwallet/wallet-core'
@@ -30,12 +31,20 @@ export const getPublicKey = ({
     chain,
   })
 
-  const chainPublicKey = chainPublicKeys?.[chain]
+  const chainPublicKey = frostOnlyChains.includes(chain)
+    ? undefined
+    : chainPublicKeys?.[chain]
+
+  const hasKeyImportEntries =
+    chainPublicKeys !== undefined &&
+    Object.keys(chainPublicKeys).some(
+      k => !frostOnlyChains.includes(k as Chain)
+    )
 
   if (
-    chainPublicKeys !== undefined &&
-    Object.keys(chainPublicKeys).length > 0 &&
-    !chainPublicKey
+    hasKeyImportEntries &&
+    !chainPublicKey &&
+    !frostOnlyChains.includes(chain)
   ) {
     throw new Error('Chain public key not found')
   }

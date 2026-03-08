@@ -1,12 +1,15 @@
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useVaults } from '@core/ui/storage/vaults'
 import { Button } from '@lib/ui/buttons/Button'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { TextArea } from '@lib/ui/inputs/TextArea'
-import { VStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
-import { useMemo } from 'react'
+import { getColor } from '@lib/ui/theme/getters'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { seedphraseWordCounts } from './config'
 import { EnterSeedphraseHeader } from './EnterSeedphraseHeader'
@@ -21,22 +24,26 @@ export const EnterSeedphraseStep = () => {
   const [, setStep] = useImportSeedphraseStep()
   const walletCore = useAssertWalletCore()
   const vaults = useVaults()
+  const [validationSkipped, setValidationSkipped] = useState(false)
 
   const cleanedMnemonic = cleanMnemonic(mnemonic)
-  const basicError = validateMnemonic({
+  const validation = validateMnemonic({
     mnemonic: cleanedMnemonic,
     walletCore,
     t,
   })
 
+  const basicError =
+    validation.isSkippable && validationSkipped ? null : validation.error
+
   const duplicateVault = useMemo(() => {
-    if (basicError) return null
+    if (validation.error) return null
     return checkDuplicateMnemonicVault({
       mnemonic: cleanedMnemonic,
       existingVaults: vaults,
       walletCore,
     })
-  }, [cleanedMnemonic, basicError, vaults, walletCore])
+  }, [cleanedMnemonic, validation.error, vaults, walletCore])
 
   const duplicateError = duplicateVault
     ? t('seedphrase_duplicate_vault_error', { vaultName: duplicateVault.name })
@@ -59,7 +66,7 @@ export const EnterSeedphraseStep = () => {
       {...getFormProps({
         onSubmit: () => {
           setMnemonic(cleanedMnemonic)
-          setStep('scan')
+          setStep(validationSkipped ? 'chains' : 'scan')
         },
         isDisabled: !isValid,
       })}
@@ -70,16 +77,29 @@ export const EnterSeedphraseStep = () => {
         <TextArea
           autoFocus
           value={mnemonic}
-          onValueChange={setMnemonic}
+          onValueChange={value => {
+            setMnemonic(value)
+            setValidationSkipped(false)
+          }}
           accessory={accessory}
           validation={isValid ? 'valid' : error ? 'invalid' : undefined}
           placeholder={t('mnemonic_placeholder')}
         />
 
         {error && (
-          <Text size={13} color="danger">
-            {error}
-          </Text>
+          <HStack alignItems="center" gap={8}>
+            <Text size={13} color="danger">
+              {error}
+            </Text>
+            {validation.isSkippable && !validationSkipped && (
+              <SkipButton
+                onClick={() => setValidationSkipped(true)}
+                type="button"
+              >
+                {t('seedphrase_skip_validation')}
+              </SkipButton>
+            )}
+          </HStack>
         )}
       </VStack>
 
@@ -91,3 +111,14 @@ export const EnterSeedphraseStep = () => {
     </VStack>
   )
 }
+
+const SkipButton = styled(UnstyledButton)`
+  color: ${getColor('primary')};
+  font-size: 13px;
+  white-space: nowrap;
+  text-decoration: underline;
+
+  &:hover {
+    opacity: 0.8;
+  }
+`

@@ -29,7 +29,6 @@ export const ScanningChainsStep = () => {
   }, [data, setSelectedChains, setStep, setUsePhantomSolanaPath])
 
   const handleSelectManually = () => {
-    setSelectedChains([])
     setStep('chains')
   }
 

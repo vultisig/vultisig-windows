@@ -1,0 +1,17 @@
+{
+  "name": "frozt-wasm",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "frozt_wasm_bg.wasm",
+    "frozt_wasm.js",
+    "frozt_wasm_bg.js",
+    "frozt_wasm.d.ts"
+  ],
+  "main": "frozt_wasm.js",
+  "types": "frozt_wasm.d.ts",
+  "sideEffects": [
+    "./frozt_wasm.js",
+    "./snippets/*"
+  ]
+}

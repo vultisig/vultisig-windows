@@ -1,12 +1,6 @@
-import {
-  encode_map,
-  frozt_encode_identifier,
-  frozt_sign,
-  frozt_sign_aggregate,
-  frozt_sign_commit,
-  frozt_sign_new_package,
-} from '@lib/frozt/frozt_wasm'
 import { base64Encode } from '@lib/utils/base64Encode'
+import { encodeMap, signing } from '@vultisig/frozt-sdk'
+import { frozt_encode_identifier } from 'frozt-wasm'
 
 import { getMessageHash } from '../getMessageHash'
 import { MpcRelayMessage } from '../message/relay'
@@ -180,7 +174,7 @@ export class FroztKeysign {
     const peerCount = this.signingCommittee.length - 1
     const start = Date.now()
 
-    const commitResult = frozt_sign_commit(keyPackage)
+    const commitResult = signing.commit(keyPackage)
     const nonces: number = commitResult.nonces
     const commitments: Uint8Array = commitResult.commitments
 
@@ -205,9 +199,9 @@ export class FroztKeysign {
         allCommitmentsEntries.push([idBytes, data])
       }
 
-      const commitmentsMap = encode_map(allCommitmentsEntries)
+      const commitmentsMap = encodeMap(allCommitmentsEntries)
 
-      const pkgResult = frozt_sign_new_package(
+      const pkgResult = signing.newPackage(
         message,
         commitmentsMap,
         pubKeyPackage
@@ -228,7 +222,12 @@ export class FroztKeysign {
 
       await this.broadcastMessage(payload, 'frozt-pkg')
 
-      const myShare = frozt_sign(signingPackage, nonces, keyPackage, randomizer)
+      const myShare = signing.sign(
+        signingPackage,
+        nonces,
+        keyPackage,
+        randomizer
+      )
 
       const peerShares = await this.collectMessages(
         'frozt-share',
@@ -245,9 +244,9 @@ export class FroztKeysign {
         sharesEntries.push([idBytes, data])
       }
 
-      const sharesMap = encode_map(sharesEntries)
+      const sharesMap = encodeMap(sharesEntries)
 
-      const finalSignature = frozt_sign_aggregate(
+      const finalSignature = signing.aggregate(
         signingPackage,
         sharesMap,
         pubKeyPackage,
@@ -265,7 +264,7 @@ export class FroztKeysign {
       const signingPackage = payload.slice(4, 4 + spLen)
       const randomizer = payload.slice(4 + spLen)
 
-      const signatureShare = frozt_sign(
+      const signatureShare = signing.sign(
         signingPackage,
         nonces,
         keyPackage,
@@ -313,7 +312,7 @@ export class FroztKeysign {
     const peerCount = this.signingCommittee.length - 1
     const start = Date.now()
 
-    const commitResult = frozt_sign_commit(keyPackage)
+    const commitResult = signing.commit(keyPackage)
     const nonces: number = commitResult.nonces
     const commitments: Uint8Array = commitResult.commitments
 
@@ -338,9 +337,9 @@ export class FroztKeysign {
         allCommitmentsEntries.push([idBytes, data])
       }
 
-      const commitmentsMap = encode_map(allCommitmentsEntries)
+      const commitmentsMap = encodeMap(allCommitmentsEntries)
 
-      const pkgResult = frozt_sign_new_package(
+      const pkgResult = signing.newPackage(
         message,
         commitmentsMap,
         pubKeyPackage
@@ -358,7 +357,7 @@ export class FroztKeysign {
 
       await this.broadcastMessage(payload, 'frozt-pkg')
 
-      const myShare = frozt_sign(signingPackage, nonces, keyPackage, alpha)
+      const myShare = signing.sign(signingPackage, nonces, keyPackage, alpha)
 
       const peerShares = await this.collectMessages(
         'frozt-share',
@@ -375,9 +374,9 @@ export class FroztKeysign {
         sharesEntries.push([idBytes, data])
       }
 
-      const sharesMap = encode_map(sharesEntries)
+      const sharesMap = encodeMap(sharesEntries)
 
-      const finalSignature = frozt_sign_aggregate(
+      const finalSignature = signing.aggregate(
         signingPackage,
         sharesMap,
         pubKeyPackage,
@@ -395,7 +394,7 @@ export class FroztKeysign {
       const signingPackage = payload.slice(4, 4 + spLen)
       const randomizer = payload.slice(4 + spLen)
 
-      const signatureShare = frozt_sign(
+      const signatureShare = signing.sign(
         signingPackage,
         nonces,
         keyPackage,

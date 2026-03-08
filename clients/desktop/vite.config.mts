@@ -3,6 +3,8 @@ import { fileURLToPath } from 'url'
 import { defineConfig, loadEnv } from 'vite'
 import circleDependency from 'vite-plugin-circular-dependency'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
+import topLevelAwait from 'vite-plugin-top-level-await'
+import wasm from 'vite-plugin-wasm'
 
 import { getCommonPlugins } from '../../core/ui/vite/plugins'
 import { getStaticCopyTargets } from '../../core/ui/vite/staticCopy'
@@ -22,8 +24,12 @@ export default defineConfig(async ({ mode }) => {
       __VULTISIG_VERIFIER_URL__: JSON.stringify(
         env.VULTISIG_VERIFIER_URL || 'https://verifier.vultisig.com'
       ),
+      __RELAY_URL__: JSON.stringify(env.RELAY_URL || ''),
+      __FAST_VAULT_URL__: JSON.stringify(env.FAST_VAULT_URL || ''),
     },
     plugins: [
+      wasm(),
+      topLevelAwait(),
       ...getCommonPlugins(),
       viteStaticCopy({
         targets: getStaticCopyTargets(),
@@ -46,7 +52,14 @@ export default defineConfig(async ({ mode }) => {
       assetsDir: 'assets',
     },
     publicDir: 'public',
+    worker: {
+      plugins: () => [wasm(), topLevelAwait()],
+    },
+    optimizeDeps: {
+      exclude: ['fromt-wasm', 'frozt-wasm'],
+    },
     resolve: {
+      dedupe: ['fromt-wasm', 'frozt-wasm'],
       alias: {},
     },
   }

@@ -75,6 +75,8 @@ export enum OtherChain {
   Ripple = 'Ripple',
   Tron = 'Tron',
   Cardano = 'Cardano',
+  ZcashShielded = 'ZcashShielded',
+  Monero = 'Monero',
 }
 
 export const Chain = {

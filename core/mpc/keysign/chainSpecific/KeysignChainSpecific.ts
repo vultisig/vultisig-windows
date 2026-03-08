@@ -57,6 +57,8 @@ export const chainSpecificRecord = {
   [Chain.Tron]: 'tronSpecific',
 
   [Chain.Cardano]: 'cardano',
+  [Chain.ZcashShielded]: 'utxoSpecific',
+  [Chain.Monero]: 'utxoSpecific',
 } as const satisfies Record<Chain, KeysignChainSpecificKey>
 
 export const getBlockchainSpecificValue = <T extends KeysignChainSpecificKey>(

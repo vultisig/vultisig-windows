@@ -1,4 +1,4 @@
-import { frozt_sapling_derive_keys } from '@lib/frozt/frozt_wasm'
+import { frozt_sapling_derive_keys } from 'frozt-wasm'
 
 import { initializeFrozt } from '../../../mpc/frozt/initialize'
 

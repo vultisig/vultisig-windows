@@ -10,6 +10,11 @@ type ValidateMnemonicInput = {
   t: TFunction
 }
 
+type MnemonicValidationResult = {
+  error: string | null
+  isSkippable: boolean
+}
+
 export const cleanMnemonic = (text: string) =>
   text.split(/\s+/).filter(Boolean).join(' ')
 
@@ -17,23 +22,29 @@ export const validateMnemonic = ({
   mnemonic,
   walletCore,
   t,
-}: ValidateMnemonicInput): string | null => {
+}: ValidateMnemonicInput): MnemonicValidationResult => {
   const cleaned = cleanMnemonic(mnemonic)
 
   if (cleaned === '') {
-    return null
+    return { error: null, isSkippable: false }
   }
 
   const words = cleaned.split(' ')
   const count = words.length
 
   if (!isOneOf(count, seedphraseWordCounts)) {
-    return t('seedphrase_word_count_error', { count })
+    return {
+      error: t('seedphrase_word_count_error', { count }),
+      isSkippable: false,
+    }
   }
 
   if (!walletCore.Mnemonic.isValid(cleaned)) {
-    return t('seedphrase_invalid_error')
+    return {
+      error: t('seedphrase_invalid_error'),
+      isSkippable: true,
+    }
   }
 
-  return null
+  return { error: null, isSkippable: false }
 }

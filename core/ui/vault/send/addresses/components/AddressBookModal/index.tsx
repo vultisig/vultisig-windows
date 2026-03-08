@@ -1,3 +1,4 @@
+import { frostOnlyChains } from '@core/chain/froztChains'
 import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { isEvmChain } from '@core/ui/address-book/AddressBookChainType'
@@ -53,7 +54,7 @@ export const AddressBookModal = ({ onSelect, onClose }: Props) => {
 
       if (match?.address) {
         acc.push({ name: vault.name, address: match.address })
-      } else {
+      } else if (!frostOnlyChains.includes(coin.chain)) {
         const publicKey = getPublicKey({
           chain: coin.chain,
           walletCore,

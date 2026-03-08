@@ -1,4 +1,8 @@
+import { Chain } from '@core/chain/Chain'
+import { encodeDERSignature } from '@core/mpc/derSignature'
+import { FroztKeysign } from '@core/mpc/frozt/froztKeysign'
 import { keysign } from '@core/mpc/keysign'
+import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
 import { isKeyImportVault } from '@core/mpc/vault/Vault'
 import { ChildrenProp } from '@lib/ui/props'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -20,6 +24,22 @@ import {
 
 const eddsaPlaceholderChainPath = 'm'
 
+const froztSignatureToKeysignSignature = (
+  signature: Uint8Array,
+  hexMessage: string
+): KeysignSignature => {
+  const r = signature.slice(0, 32)
+  const s = signature.slice(32, 64)
+  const derSig = encodeDERSignature(r, s)
+
+  return {
+    msg: Buffer.from(hexMessage, 'hex').toString('base64'),
+    r: Buffer.from(r).toString('hex'),
+    s: Buffer.from(s).toString('hex'),
+    der_signature: Buffer.from(derSig).toString('hex'),
+  }
+}
+
 export const KeysignActionProvider = ({ children }: ChildrenProp) => {
   const walletCore = useAssertWalletCore()
   const vault = useCurrentVault()
@@ -31,6 +51,39 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
 
   const keysignAction: KeysignAction = useCallback(
     async ({ msgs, signatureAlgorithm, coinType, chain }) => {
+      const usesFrozt = chain === Chain.ZcashShielded
+
+      if (usesFrozt) {
+        const keyPackage = shouldBePresent(
+          vault.chainKeyShares?.[Chain.ZcashShielded],
+          'Frozt keyshare'
+        )
+        const pubKeyPackage = shouldBePresent(
+          vault.chainPublicKeys?.[Chain.ZcashShielded],
+          'Frozt public key package'
+        )
+
+        const froztKeysign = new FroztKeysign(
+          isInitiatingDevice,
+          serverUrl,
+          sessionId,
+          vault.localPartyId,
+          [vault.localPartyId, ...peers],
+          encryptionKeyHex
+        )
+
+        return chainPromises(
+          msgs.map(message => async () => {
+            const rawSig = await froztKeysign.sign(
+              Buffer.from(message, 'hex'),
+              keyPackage,
+              pubKeyPackage
+            )
+            return froztSignatureToKeysignSignature(rawSig, message)
+          })
+        )
+      }
+
       const keyShare = shouldBePresent(
         isKeyImportVault(vault)
           ? vault.chainKeyShares?.[chain]

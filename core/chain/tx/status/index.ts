@@ -24,6 +24,11 @@ const statusHandlers: Record<ChainKind, TxStatusResolver<any>> = {
   ton: getTonTxStatus,
   utxo: getUtxoTxStatus,
   tron: getTronTxStatus,
+  zcashShielded: input =>
+    getUtxoTxStatus({ ...input, chain: Chain.Zcash as any }),
+  monero: async () => {
+    throw new Error('Monero tx status not yet implemented')
+  },
 }
 
 type GetTxStatusInput = {

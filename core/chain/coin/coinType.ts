@@ -49,4 +49,10 @@ export const getCoinType = ({
     [Chain.Mantle]: () => CoinType.mantle,
     [Chain.Hyperliquid]: () => CoinType.ethereum,
     [Chain.Sei]: () => CoinType.ethereum,
+    [Chain.ZcashShielded]: () => CoinType.zcash,
+    [Chain.Monero]: () => {
+      throw new Error(
+        'Monero uses fromt for address derivation, not TrustWallet'
+      )
+    },
   })

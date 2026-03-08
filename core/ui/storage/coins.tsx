@@ -1,3 +1,7 @@
+import { Chain } from '@core/chain/Chain'
+import { getMoneroAddress } from '@core/chain/chains/monero/getMoneroAddress'
+import { getZcashZAddress } from '@core/chain/chains/zcash/getZcashZAddress'
+import { saveScannerKeys } from '@core/chain/chains/zcash/scannerKeys'
 import { AccountCoin, AccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { Coin } from '@core/chain/coin/Coin'
 import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
@@ -7,6 +11,7 @@ import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { assertField } from '@lib/utils/record/assertField'
 import { useMutation } from '@tanstack/react-query'
 
@@ -68,19 +73,36 @@ export const useCreateCoinMutation = () => {
       }
     }
 
-    const publicKey = getPublicKey({
-      chain: coin.chain,
-      walletCore,
-      hexChainCode: vault.hexChainCode,
-      publicKeys: vault.publicKeys,
-      chainPublicKeys: vault.chainPublicKeys,
-    })
+    let address: string
 
-    const address = deriveAddress({
-      chain: coin.chain,
-      publicKey,
-      walletCore,
-    })
+    if (coin.chain === Chain.ZcashShielded) {
+      const pubKeyPackage = shouldBePresent(
+        vault.chainPublicKeys?.[Chain.ZcashShielded],
+        'Frozt public key package'
+      )
+      address = await getZcashZAddress(pubKeyPackage, vault.saplingExtras ?? '')
+      saveScannerKeys(address, pubKeyPackage, vault.saplingExtras ?? '')
+    } else if (coin.chain === Chain.Monero) {
+      const keyShare = shouldBePresent(
+        vault.chainKeyShares?.[Chain.Monero],
+        'Fromt key share'
+      )
+      address = await getMoneroAddress(keyShare)
+    } else {
+      const publicKey = getPublicKey({
+        chain: coin.chain,
+        walletCore,
+        hexChainCode: vault.hexChainCode,
+        publicKeys: vault.publicKeys,
+        chainPublicKeys: vault.chainPublicKeys,
+      })
+
+      address = deriveAddress({
+        chain: coin.chain,
+        publicKey,
+        walletCore,
+      })
+    }
 
     const accountCoin = { ...coin, address }
 

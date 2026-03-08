@@ -2,6 +2,7 @@ import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { useHandleVaultChainItemPress } from '@core/ui/vault/page/components/useHandleVaultChainItemPress'
@@ -95,7 +96,7 @@ export const VaultChainItem = ({ balance }: VaultChainItemProps) => {
           >
             <VStack>
               <Text color="contrast" size={14}>
-                {chain}
+                {getChainDisplayName(chain)}
               </Text>
               <AddressRow
                 alignItems="center"

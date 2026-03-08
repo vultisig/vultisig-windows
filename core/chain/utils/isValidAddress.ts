@@ -1,4 +1,6 @@
 import { Chain } from '@core/chain/Chain'
+import { isMoneroAddress } from '@core/chain/chains/monero/isMoneroAddress'
+import { isZcashShieldedAddress } from '@core/chain/chains/zcash/isZcashShieldedAddress'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { WalletCore } from '@trustwallet/wallet-core'
 
@@ -9,13 +11,21 @@ type Input = {
 }
 
 export const isValidAddress = ({ chain, address, walletCore }: Input) => {
+  if (chain === Chain.Monero) {
+    return isMoneroAddress(address)
+  }
+
+  if (chain === Chain.ZcashShielded || chain === Chain.Zcash) {
+    if (isZcashShieldedAddress(address)) return true
+    if (chain === Chain.ZcashShielded) return false
+  }
+
   const coinType = getCoinType({
     walletCore,
     chain,
   })
 
   if (chain === Chain.MayaChain) {
-    // MayaChain is Cosmos-style Bech32. Accept common account + validator address forms.
     const mayaHrps = [
       'maya',
       'mayavaloper',

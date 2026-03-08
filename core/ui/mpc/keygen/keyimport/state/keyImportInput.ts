@@ -5,6 +5,8 @@ export type KeyImportInput = {
   mnemonic: string
   chains: Chain[]
   usePhantomSolanaPath?: boolean
+  zcashBirthday?: number
+  moneroBirthday?: number
 }
 
 export const [KeyImportInputProvider, useKeyImportInput] =

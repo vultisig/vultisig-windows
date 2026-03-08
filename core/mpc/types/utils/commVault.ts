@@ -74,14 +74,24 @@ export const toCommVault = (vault: Vault): CommVault =>
       libType: vault.libType,
       isKeyImport: isKeyImportVault(vault),
     }),
-    chainPublicKeys: toEntries(vault.chainPublicKeys ?? {}).map(
-      ({ key, value }) =>
+    chainPublicKeys: [
+      ...toEntries(vault.chainPublicKeys ?? {}).map(({ key, value }) =>
         create(Vault_ChainPublicKeySchema, {
           publicKey: value,
           chain: key,
           isEddsa: signatureAlgorithms[getChainKind(key as Chain)] === 'eddsa',
         })
-    ),
+      ),
+      ...(vault.saplingExtras
+        ? [
+            create(Vault_ChainPublicKeySchema, {
+              publicKey: vault.saplingExtras,
+              chain: 'SaplingExtras',
+              isEddsa: false,
+            }),
+          ]
+        : []),
+    ],
   })
 
 export const fromCommVault = (vault: CommVault): Vault => {
@@ -92,8 +102,13 @@ export const fromCommVault = (vault: CommVault): Vault => {
 
   const chainPublicKeys: Partial<Record<Chain, string>> = {}
   const chainByPublicKey = new Map<string, Chain>()
+  let saplingExtras: string | undefined
 
   vault.chainPublicKeys.forEach(cp => {
+    if (cp.chain === 'SaplingExtras') {
+      saplingExtras = cp.publicKey
+      return
+    }
     const chain = cp.chain as Chain
     chainPublicKeys[chain] = cp.publicKey
     chainByPublicKey.set(cp.publicKey, chain)
@@ -143,6 +158,7 @@ export const fromCommVault = (vault: CommVault): Vault => {
       Object.keys(chainKeyShares).length > 0 ? chainKeyShares : undefined,
     chainPublicKeys:
       Object.keys(chainPublicKeys).length > 0 ? chainPublicKeys : undefined,
+    saplingExtras,
     libType: fromLibType(vault.libType),
     isBackedUp: false,
     order: 0,

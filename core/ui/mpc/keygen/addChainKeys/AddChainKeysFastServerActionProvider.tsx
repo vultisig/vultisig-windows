@@ -1,6 +1,5 @@
 import { generateLocalPartyId } from '@core/mpc/devices/localPartyId'
 import { setupVaultWithServer } from '@core/mpc/fast/api/setupVaultWithServer'
-import { toLibType } from '@core/mpc/types/utils/libType'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useEmail } from '@core/ui/state/email'
@@ -10,6 +9,7 @@ import { ChildrenProp } from '@lib/ui/props'
 import { useCallback } from 'react'
 
 import { FastKeygenServerActionProvider } from '../fast/state/fastKeygenServerAction'
+import { useKeygenOperation } from '../state/currentKeygenOperationType'
 
 export const AddChainKeysFastServerActionProvider = ({
   children,
@@ -18,7 +18,11 @@ export const AddChainKeysFastServerActionProvider = ({
   const hexEncryptionKey = useCurrentHexEncryptionKey()
   const [password] = usePassword()
   const [email] = useEmail()
-  const { name, hexChainCode, libType } = useCurrentVault()
+  const { name, hexChainCode } = useCurrentVault()
+  const operation = useKeygenOperation()
+
+  const protocol =
+    'addChainKeys' in operation ? operation.addChainKeys : 'frozt'
 
   const action = useCallback(async () => {
     await setupVaultWithServer({
@@ -29,15 +33,15 @@ export const AddChainKeysFastServerActionProvider = ({
       local_party_id: generateLocalPartyId('server'),
       email,
       hex_encryption_key: hexEncryptionKey,
-      lib_type: toLibType({ libType }),
+      protocols: [protocol],
     })
   }, [
     email,
     hexChainCode,
     hexEncryptionKey,
-    libType,
     name,
     password,
+    protocol,
     sessionId,
   ])
 

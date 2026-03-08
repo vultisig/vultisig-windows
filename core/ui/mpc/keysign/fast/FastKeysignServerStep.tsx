@@ -1,3 +1,4 @@
+import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
@@ -6,6 +7,7 @@ import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { assertChainField } from '@core/chain/utils/assertChainField'
 import { signWithServer } from '@core/mpc/fast/api/signWithServer'
 import { getEncodedSigningInputs } from '@core/mpc/keysign/signingInputs'
+import { getZcashShieldedSignMessages } from '@core/mpc/keysign/signingInputs/zcashShielded'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
@@ -55,28 +57,41 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
         keysign: async keysignPayload => {
           const coin = assertField(keysignPayload, 'coin')
           const { chain } = assertChainField(coin)
-          const publicKey = getPublicKey({
-            chain,
-            walletCore,
-            hexChainCode,
-            publicKeys,
-            chainPublicKeys,
-          })
-          const inputs = getEncodedSigningInputs({
-            keysignPayload,
-            walletCore,
-            publicKey,
-          })
 
-          const messages = inputs
-            .flatMap(txInputData =>
-              getPreSigningHashes({
-                txInputData,
-                walletCore,
-                chain,
-              }).map(value => Buffer.from(value).toString('hex'))
-            )
-            .sort()
+          let messages: string[]
+
+          if (chain === Chain.ZcashShielded) {
+            messages = await getZcashShieldedSignMessages({
+              vault,
+              zAddress: coin.address,
+              toAddress: keysignPayload.toAddress,
+              amount: Number(keysignPayload.toAmount),
+              fee: 10000,
+            })
+          } else {
+            const publicKey = getPublicKey({
+              chain,
+              walletCore,
+              hexChainCode,
+              publicKeys,
+              chainPublicKeys,
+            })
+            const inputs = getEncodedSigningInputs({
+              keysignPayload,
+              walletCore,
+              publicKey,
+            })
+
+            messages = inputs
+              .flatMap(txInputData =>
+                getPreSigningHashes({
+                  txInputData,
+                  walletCore,
+                  chain,
+                }).map(value => Buffer.from(value).toString('hex'))
+              )
+              .sort()
+          }
 
           return signWithServer({
             public_key: publicKeys.ecdsa,

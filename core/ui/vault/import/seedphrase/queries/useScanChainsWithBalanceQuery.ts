@@ -1,5 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { accountCoinKeyToString } from '@core/chain/coin/AccountCoin'
+import { frostOnlyChains } from '@core/chain/froztChains'
 import { deriveAddressFromMnemonic } from '@core/chain/publicKey/address/deriveAddressFromMnemonic'
 import { deriveSolanaAddressWithPhantomPath } from '@core/chain/publicKey/address/deriveSolanaAddressFromMnemonic'
 import { useBalancesQuery } from '@core/ui/chain/coin/queries/useBalancesQuery'
@@ -9,6 +10,10 @@ import { useMemo } from 'react'
 
 import { seedphraseImportSupportedChains } from '../config'
 import { useMnemonic } from '../state/mnemonic'
+
+const scannableChains = seedphraseImportSupportedChains.filter(
+  chain => !frostOnlyChains.includes(chain)
+)
 
 type ScanChainsResult = {
   chains: Chain[]
@@ -21,7 +26,7 @@ export const useScanChainsWithBalanceQuery =
     const [mnemonic] = useMnemonic()
 
     const { trustWalletInputs, phantomSolanaInput } = useMemo(() => {
-      const trustWalletInputs = seedphraseImportSupportedChains.map(chain => ({
+      const trustWalletInputs = scannableChains.map(chain => ({
         chain,
         address: deriveAddressFromMnemonic({ chain, mnemonic, walletCore }),
       }))
@@ -72,15 +77,13 @@ export const useScanChainsWithBalanceQuery =
       const phantomSolanaBalance = balances?.[phantomSolanaKey] ?? 0n
 
       // All queries settled - filter chains with positive balance
-      const chainsWithBalance = seedphraseImportSupportedChains.filter(
-        chain => {
-          const input = trustWalletInputs.find(i => i.chain === chain)
-          if (!input) return false
-          const key = accountCoinKeyToString(input)
-          const balance = balances?.[key]
-          return balance !== undefined && balance > 0n
-        }
-      )
+      const chainsWithBalance = scannableChains.filter(chain => {
+        const input = trustWalletInputs.find(i => i.chain === chain)
+        if (!input) return false
+        const key = accountCoinKeyToString(input)
+        const balance = balances?.[key]
+        return balance !== undefined && balance > 0n
+      })
 
       const usePhantomSolanaPath =
         phantomSolanaBalance > 0n && trustSolanaBalance === 0n

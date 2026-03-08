@@ -502,6 +502,7 @@ export const en = {
     'You entered {{count}} words. Seed phrase must be 12 or 24',
   seedphrase_invalid_error:
     'Seed phrase is not correct, please verify all words.',
+  seedphrase_skip_validation: 'Skip validation',
   seedphrase_duplicate_vault_error:
     'This seed phrase is already imported as vault "{{vaultName}}". Importing it again would replace the existing vault.',
   import_seedphrase_description: 'Enter it, create a vault, never look back.',
@@ -852,6 +853,8 @@ export const en = {
   select_backup_file: 'Import your vault share',
   select_chain: 'Select chain',
   select_chains: 'Select chains',
+  seed_import_chain_warning:
+    'Chain selection is permanent. You cannot add or remove chains after import without re-importing from your seed phrase.',
   select_chains_manually: 'Select chains manually',
   select_positions: 'Select positions',
   select_positions_description:
@@ -1263,6 +1266,12 @@ export const en = {
   agent_tx_type_swap: 'Swap',
   agent_tx_type_transfer: 'Transfer',
   agent_tx_view: 'View',
+  monero_scan_progress: 'Scan Progress',
+  monero_sync_status: 'Monero Sync',
+  monero_wallet_birthday: 'Wallet Birthday Height',
+  monero_wallet_birthday_placeholder: 'e.g. 3000000',
+  monero_wallet_birthday_hint:
+    'Optional. If provided, the scanner will start from this block to find your transactions. If left empty, only new transactions will be detected.',
   zcash_scan_progress: 'Scan Progress',
   zcash_sync_status: 'ZCash Shielded Sync',
   zcash_wallet_birthday: 'Wallet Birthday Height',

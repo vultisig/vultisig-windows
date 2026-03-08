@@ -1,8 +1,18 @@
 import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
+import { groupChainsByDerivationPath } from '@core/chain/derivationPath'
+import { frostOnlyChains } from '@core/chain/froztChains'
 import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { hasServer } from '@core/mpc/devices/localPartyId'
 import { DKLS } from '@core/mpc/dkls/dkls'
+import { parseFromtBundleResult } from '@core/mpc/fromt/fromtSession'
+import { createFromtImportSession } from '@core/mpc/fromt/fromtSessionFactory'
+import {
+  parseFroztBundleResult,
+  runFroztSession,
+} from '@core/mpc/frozt/froztSession'
+import { createFroztImportSession } from '@core/mpc/frozt/froztSessionFactory'
+import { makeStepAdvancer } from '@core/mpc/keygen/KeygenStep'
 import {
   setKeygenComplete,
   waitForKeygenComplete,
@@ -21,7 +31,6 @@ import { ChildrenProp } from '@lib/ui/props'
 import { without } from '@lib/utils/array/without'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
-import { useCallback } from 'react'
 
 import { KeygenAction, KeygenActionProvider } from '../state/keygenAction'
 import { useKeygenVaultName } from '../state/keygenVault'
@@ -29,12 +38,6 @@ import {
   parseKeyImportChains,
   useKeyImportChains,
 } from './state/keyImportChains'
-
-type KeyShareResult = {
-  keyshare: string
-  publicKey: string
-  chaincode: string
-}
 
 export const JoinKeyImportKeygenActionProvider = ({
   children,
@@ -49,155 +52,266 @@ export const JoinKeyImportKeygenActionProvider = ({
   const vaultOrders = useVaultOrders()
   const keyImportChainsRaw = useKeyImportChains()
 
-  const keygenAction: KeygenAction = useCallback(
-    async ({ onStepChange, signers }) => {
-      const chains = parseKeyImportChains(shouldBePresent(keyImportChainsRaw))
+  const keygenAction: KeygenAction = async ({ onStepChange, signers }) => {
+    const chains = parseKeyImportChains(shouldBePresent(keyImportChainsRaw))
+    const advanceStep = makeStepAdvancer(onStepChange)
 
-      const sharedDklsParams = {
-        isInitiateDevice: isInitiatingDevice,
-        serverUrl,
-        sessionId,
-        localPartyId,
-        signers,
-        oldKeygenCommittee: [],
-        hexEncryptionKey: encryptionKeyHex,
-      }
+    advanceStep('prepareVault')
 
-      onStepChange('ecdsa')
-
-      const dklsKeygen = new DKLS(
-        { keyimport: true },
-        sharedDklsParams.isInitiateDevice,
-        sharedDklsParams.serverUrl,
-        sharedDklsParams.sessionId,
-        sharedDklsParams.localPartyId,
-        sharedDklsParams.signers,
-        sharedDklsParams.oldKeygenCommittee,
-        sharedDklsParams.hexEncryptionKey
-      )
-
-      const rootEcdsaResult = await dklsKeygen.startKeyImportWithRetry(
-        '',
-        hexChainCode
-      )
-
-      onStepChange('eddsa')
-
-      const schnorrKeygen = new Schnorr(
-        { keyimport: true },
-        sharedDklsParams.isInitiateDevice,
-        sharedDklsParams.serverUrl,
-        sharedDklsParams.sessionId,
-        sharedDklsParams.localPartyId,
-        sharedDklsParams.signers,
-        sharedDklsParams.oldKeygenCommittee,
-        sharedDklsParams.hexEncryptionKey,
-        new Uint8Array()
-      )
-
-      const rootEddsaResult = await schnorrKeygen.startKeyImportWithRetry(
-        '',
-        hexChainCode
-      )
-
-      const chainPublicKeys: Partial<Record<Chain, string>> = {}
-      const chainKeyShares: Partial<Record<Chain, string>> = {}
-      const keyShares: VaultKeyShares = {
-        ecdsa: rootEcdsaResult.keyshare,
-        eddsa: rootEddsaResult.keyshare,
-      }
-
-      for (const chain of chains) {
-        const chainKind = getChainKind(chain)
-        const algorithm = signatureAlgorithms[chainKind]
-
-        let chainResult: KeyShareResult
-        if (algorithm === 'ecdsa') {
-          const chainDkls = new DKLS(
-            { keyimport: true },
-            sharedDklsParams.isInitiateDevice,
-            sharedDklsParams.serverUrl,
-            sharedDklsParams.sessionId,
-            sharedDklsParams.localPartyId,
-            sharedDklsParams.signers,
-            sharedDklsParams.oldKeygenCommittee,
-            sharedDklsParams.hexEncryptionKey
-          )
-          chainResult = await chainDkls.startKeyImportWithRetry(
-            '',
-            rootEcdsaResult.chaincode,
-            chain
-          )
-        } else {
-          const chainSchnorr = new Schnorr(
-            { keyimport: true },
-            sharedDklsParams.isInitiateDevice,
-            sharedDklsParams.serverUrl,
-            sharedDklsParams.sessionId,
-            sharedDklsParams.localPartyId,
-            sharedDklsParams.signers,
-            sharedDklsParams.oldKeygenCommittee,
-            sharedDklsParams.hexEncryptionKey,
-            new Uint8Array()
-          )
-          chainResult = await chainSchnorr.startKeyImportWithRetry(
-            '',
-            rootEddsaResult.chaincode,
-            chain
-          )
-        }
-
-        chainPublicKeys[chain] = chainResult.publicKey
-        chainKeyShares[chain] = chainResult.keyshare
-      }
-
-      const vault: Vault = {
-        name: vaultName,
-        publicKeys: {
-          ecdsa: rootEcdsaResult.publicKey,
-          eddsa: rootEddsaResult.publicKey,
-        },
-        signers,
-        createdAt: Date.now(),
-        hexChainCode: rootEcdsaResult.chaincode,
-        keyShares,
-        localPartyId,
-        libType: 'DKLS' as MpcLib,
-        isBackedUp: false,
-        order: getLastItemOrder(vaultOrders),
-        lastPasswordVerificationTime: hasServer(signers)
-          ? Date.now()
-          : undefined,
-        chainPublicKeys,
-        chainKeyShares,
-      }
-
-      await setKeygenComplete({
-        serverURL: serverUrl,
-        sessionId,
-        localPartyId,
-      })
-
-      await waitForKeygenComplete({
-        serverURL: serverUrl,
-        sessionId,
-        peers: without(signers, localPartyId),
-      })
-
-      return vault
-    },
-    [
-      encryptionKeyHex,
-      hexChainCode,
-      isInitiatingDevice,
-      keyImportChainsRaw,
-      localPartyId,
+    const sharedDklsParams = {
+      isInitiateDevice: isInitiatingDevice,
       serverUrl,
       sessionId,
-      vaultName,
-      vaultOrders,
-    ]
-  )
+      localPartyId,
+      signers,
+      oldKeygenCommittee: [] as string[],
+      hexEncryptionKey: encryptionKeyHex,
+    }
+
+    const dklsKeygen = new DKLS(
+      { keyimport: true },
+      sharedDklsParams.isInitiateDevice,
+      sharedDklsParams.serverUrl,
+      sharedDklsParams.sessionId,
+      sharedDklsParams.localPartyId,
+      sharedDklsParams.signers,
+      sharedDklsParams.oldKeygenCommittee,
+      sharedDklsParams.hexEncryptionKey
+    )
+
+    const schnorrKeygen = new Schnorr(
+      { keyimport: true },
+      sharedDklsParams.isInitiateDevice,
+      sharedDklsParams.serverUrl,
+      sharedDklsParams.sessionId,
+      sharedDklsParams.localPartyId,
+      sharedDklsParams.signers,
+      sharedDklsParams.oldKeygenCommittee,
+      sharedDklsParams.hexEncryptionKey,
+      new Uint8Array()
+    )
+
+    const hasFrozt = chains.includes(Chain.ZcashShielded)
+    const hasFromt = chains.includes(Chain.Monero)
+
+    const froztSession = hasFrozt
+      ? await createFroztImportSession({
+          serverUrl,
+          sessionId,
+          localPartyId,
+          hexEncryptionKey: encryptionKeyHex,
+          setupMessageId: 'frozt',
+          isInitiatingDevice,
+          signers,
+          seed: new Uint8Array(),
+          accountIndex: 0,
+          birthday: 0,
+        })
+      : null
+
+    const fromtSession = hasFromt
+      ? await createFromtImportSession({
+          serverUrl,
+          sessionId,
+          localPartyId,
+          hexEncryptionKey: encryptionKeyHex,
+          setupMessageId: 'fromt',
+          isInitiatingDevice,
+          signers,
+          seed: new Uint8Array(),
+          birthday: 0,
+        })
+      : null
+
+    const batchStart = Date.now()
+
+    const frostPromises: Promise<Uint8Array | null>[] = []
+
+    if (froztSession) {
+      frostPromises.push(
+        runFroztSession({
+          session: froztSession,
+          messageId: 'p-frozt',
+          serverUrl,
+          sessionId,
+          localPartyId,
+          signers,
+          hexEncryptionKey: encryptionKeyHex,
+        }).then(r => {
+          advanceStep('frozt')
+          return r
+        })
+      )
+    }
+
+    if (fromtSession) {
+      frostPromises.push(
+        runFroztSession({
+          session: fromtSession,
+          messageId: 'p-fromt',
+          serverUrl,
+          sessionId,
+          localPartyId,
+          signers,
+          hexEncryptionKey: encryptionKeyHex,
+        }).then(r => {
+          advanceStep('fromt')
+          return r
+        })
+      )
+    }
+
+    const [rootEcdsaResult, rootEddsaResult, ...frostResults] =
+      await Promise.all([
+        dklsKeygen
+          .startKeyImportWithRetry('', hexChainCode, undefined, 'p-ecdsa')
+          .then(r => {
+            advanceStep('ecdsa')
+            return r
+          }),
+        schnorrKeygen
+          .startKeyImportWithRetry(
+            '',
+            hexChainCode,
+            'eddsa_key_import',
+            'p-eddsa'
+          )
+          .then(r => {
+            advanceStep('eddsa')
+            return r
+          }),
+        ...frostPromises,
+      ])
+
+    console.log(
+      `[key-import-join] root protocols complete in ${Date.now() - batchStart}ms`
+    )
+
+    const chainPublicKeys: Partial<Record<Chain, string>> = {}
+    const chainKeyShares: Partial<Record<Chain, string>> = {}
+    let saplingExtras: string | undefined
+
+    let frostIdx = 0
+    if (hasFrozt) {
+      const froztResult = parseFroztBundleResult(
+        frostResults[frostIdx++] as Uint8Array
+      )
+      chainPublicKeys[Chain.ZcashShielded] = froztResult.pubKeyPackage
+      chainKeyShares[Chain.ZcashShielded] = froztResult.bundle
+      saplingExtras = froztResult.saplingExtras || undefined
+    }
+    if (hasFromt) {
+      const fromtResult = parseFromtBundleResult(
+        frostResults[frostIdx++] as Uint8Array
+      )
+      chainPublicKeys[Chain.Monero] = fromtResult.pubKey
+      chainKeyShares[Chain.Monero] = fromtResult.keyShare
+    }
+    const keyShares: VaultKeyShares = {
+      ecdsa: rootEcdsaResult.keyshare,
+      eddsa: rootEddsaResult.keyshare,
+    }
+
+    const nonFrostChains = chains.filter(c => !frostOnlyChains.includes(c))
+    const groups = groupChainsByDerivationPath(nonFrostChains)
+
+    if (groups.length > 0) {
+      const chainGroupResults = await Promise.all(
+        groups.map(async ({ groupId, chains: groupChains }) => {
+          const representativeChain = groupChains[0]
+          const chainKind = getChainKind(representativeChain)
+          const algorithm = signatureAlgorithms[chainKind]
+
+          const chainCodeToUse =
+            algorithm === 'ecdsa'
+              ? rootEcdsaResult.chaincode
+              : rootEddsaResult.chaincode
+
+          let result
+          if (algorithm === 'ecdsa') {
+            const chainDkls = new DKLS(
+              { keyimport: true },
+              sharedDklsParams.isInitiateDevice,
+              sharedDklsParams.serverUrl,
+              sharedDklsParams.sessionId,
+              sharedDklsParams.localPartyId,
+              sharedDklsParams.signers,
+              sharedDklsParams.oldKeygenCommittee,
+              sharedDklsParams.hexEncryptionKey
+            )
+            result = await chainDkls.startKeyImportWithRetry(
+              '',
+              chainCodeToUse,
+              groupId,
+              `p-${groupId}`
+            )
+          } else {
+            const chainSchnorr = new Schnorr(
+              { keyimport: true },
+              sharedDklsParams.isInitiateDevice,
+              sharedDklsParams.serverUrl,
+              sharedDklsParams.sessionId,
+              sharedDklsParams.localPartyId,
+              sharedDklsParams.signers,
+              sharedDklsParams.oldKeygenCommittee,
+              sharedDklsParams.hexEncryptionKey,
+              new Uint8Array()
+            )
+            result = await chainSchnorr.startKeyImportWithRetry(
+              '',
+              chainCodeToUse,
+              groupId,
+              `p-${groupId}`
+            )
+          }
+
+          advanceStep('chainKeys')
+          return { groupChains, result }
+        })
+      )
+
+      for (const { groupChains, result } of chainGroupResults) {
+        for (const chain of groupChains) {
+          chainPublicKeys[chain] = result.publicKey
+          chainKeyShares[chain] = result.keyshare
+        }
+      }
+    }
+
+    const vault: Vault = {
+      name: vaultName,
+      publicKeys: {
+        ecdsa: rootEcdsaResult.publicKey,
+        eddsa: rootEddsaResult.publicKey,
+      },
+      signers,
+      createdAt: Date.now(),
+      hexChainCode: rootEcdsaResult.chaincode,
+      keyShares,
+      localPartyId,
+      libType: 'DKLS' as MpcLib,
+      isBackedUp: false,
+      order: getLastItemOrder(vaultOrders),
+      lastPasswordVerificationTime: hasServer(signers) ? Date.now() : undefined,
+      chainPublicKeys,
+      chainKeyShares,
+      saplingExtras,
+    }
+
+    await setKeygenComplete({
+      serverURL: serverUrl,
+      sessionId,
+      localPartyId,
+    })
+
+    await waitForKeygenComplete({
+      serverURL: serverUrl,
+      sessionId,
+      peers: without(signers, localPartyId),
+    })
+
+    return vault
+  }
 
   return (
     <KeygenActionProvider value={keygenAction}>{children}</KeygenActionProvider>

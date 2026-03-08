@@ -1,3 +1,7 @@
+import { create } from '@bufbuild/protobuf'
+import { Chain } from '@core/chain/Chain'
+import { UTXOSpecificSchema } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+
 import { getKeysignCoin } from '../utils/getKeysignCoin'
 import {
   chainSpecificRecord,
@@ -40,6 +44,17 @@ export const getChainSpecific = async (
 ): Promise<KeysignChainSpecific> => {
   const { keysignPayload } = input
   const coin = getKeysignCoin(keysignPayload)
+
+  if (coin.chain === Chain.ZcashShielded || coin.chain === Chain.Monero) {
+    return {
+      case: 'utxoSpecific',
+      value: create(UTXOSpecificSchema, {
+        sendMaxAmount: false,
+        byteFee: '1000',
+      }),
+    } as KeysignChainSpecific
+  }
+
   const chainSpecificCase = chainSpecificRecord[coin.chain]
   const value = await resolvers[chainSpecificCase](input)
 

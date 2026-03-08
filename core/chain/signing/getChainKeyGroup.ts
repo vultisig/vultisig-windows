@@ -8,5 +8,9 @@ export const getChainKeyGroup = (chain: Chain): VaultKeyGroup => {
     return 'frozt'
   }
 
+  if (chain === Chain.Monero) {
+    return 'fromt'
+  }
+
   return signatureAlgorithms[getChainKind(chain)]
 }

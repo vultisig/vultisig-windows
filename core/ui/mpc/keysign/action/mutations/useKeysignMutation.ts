@@ -1,14 +1,16 @@
 import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
-import { buildShieldTx } from '@core/chain/chains/zcash/buildShieldTx'
+import { getShieldingUtxos } from '@core/chain/chains/zcash/getShieldingUtxos'
 import { isZcashShieldedAddress } from '@core/chain/chains/zcash/isZcashShieldedAddress'
-import { sendTransaction } from '@core/chain/chains/zcash/lightwalletd/client'
-import { blake2bHash } from '@core/chain/chains/zcash/saplingCrypto'
 import {
-  addSaplingNote,
+  getLatestBlock,
+  sendTransaction,
+} from '@core/chain/chains/zcash/lightwalletd/client'
+import {
   getUnspentNotes,
   markNoteSpent,
 } from '@core/chain/chains/zcash/SaplingNote'
+import { loadSaplingParams } from '@core/chain/chains/zcash/saplingParams'
 import { getSaplingProver } from '@core/chain/chains/zcash/saplingProver'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
@@ -24,12 +26,16 @@ import { generateSignature } from '@core/chain/tx/signature/generateSignature'
 import { FroztKeysign } from '@core/mpc/frozt/froztKeysign'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { KeysignResult } from '@core/mpc/keysign/KeysignResult'
+import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
 import { getEncodedSigningInputs } from '@core/mpc/keysign/signingInputs'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { getKeysignCoin } from '@core/mpc/keysign/utils/getKeysignCoin'
 import { Vault } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import { useKeysignAction } from '@core/ui/mpc/keysign/action/state/keysignAction'
+import {
+  KeysignAction,
+  useKeysignAction,
+} from '@core/ui/mpc/keysign/action/state/keysignAction'
 import { useKeysignMutationListener } from '@core/ui/mpc/keysign/action/state/keysignMutationListener'
 import {
   customMessageDefaultChain,
@@ -41,13 +47,15 @@ import { useMpcPeers } from '@core/ui/mpc/state/mpcPeers'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { frozt_sapling_derive_keys } from '@lib/frozt/frozt_wasm'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { chainPromises } from '@lib/utils/promise/chainPromises'
 import { recordFromItems } from '@lib/utils/record/recordFromItems'
+import { blake2b } from '@noble/hashes/blake2.js'
 import { useMutation } from '@tanstack/react-query'
+import { WalletCore } from '@trustwallet/wallet-core'
+import { frozt_sapling_derive_keys, WasmShieldingTxBuilder } from 'frozt-wasm'
 
 import { getCustomMessageHex } from '../../customMessage/getCustomMessageHex'
 
@@ -78,11 +86,11 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
                 alpha: Uint8Array
               ): Promise<Uint8Array> => {
                 const keyPackage = shouldBePresent(
-                  vault.chainKeyShares?.[Chain.Zcash],
+                  vault.chainKeyShares?.[Chain.ZcashShielded],
                   'Frozt keyshare'
                 )
                 const pubKeyPackage = shouldBePresent(
-                  vault.chainPublicKeys?.[Chain.Zcash],
+                  vault.chainPublicKeys?.[Chain.ZcashShielded],
                   'Frozt public key package'
                 )
                 const froztKeysign = new FroztKeysign(
@@ -104,8 +112,6 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
               return handleUnshield({
                 payload,
                 vault,
-                keysignAction,
-                coinType: getCoinType({ walletCore, chain }),
                 toAddress: payload.toAddress,
                 amount: Number(payload.toAmount),
                 fee: 10000,
@@ -121,10 +127,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
                 payload,
                 vault,
                 keysignAction,
-                coinType: getCoinType({ walletCore, chain }),
-                toAddress: payload.toAddress,
-                amount: Number(payload.toAmount),
-                fee: 10000,
+                walletCore,
               })
             }
 
@@ -238,22 +241,31 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
   })
 }
 
-type ShieldedTxContext = {
+type UnshieldContext = {
   payload: any
   vault: Vault
-  keysignAction: any
-  coinType: any
   toAddress: string
   amount: number
   fee: number
-  froztSignWithAlpha?: (
+  froztSignWithAlpha: (
     message: Uint8Array,
     alpha: Uint8Array
   ) => Promise<Uint8Array>
 }
 
-const buildShieldedTxResult = (rawTx: Buffer): { hash: string; data: any } => {
-  const txHash = blake2bHash(rawTx, 'ZcashTxHa')
+const zcashTxHashPersonalization = (() => {
+  const p = new Uint8Array(16)
+  new TextEncoder().encode('ZcashTxHa').forEach((b, i) => (p[i] = b))
+  return p
+})()
+
+const buildShieldedTxResult = (
+  rawTx: Uint8Array
+): { hash: string; data: any } => {
+  const txHash = blake2b(rawTx, {
+    personalization: zcashTxHashPersonalization,
+    dkLen: 32,
+  })
   const hashHex = Buffer.from(txHash).reverse().toString('hex')
   return {
     hash: hashHex,
@@ -264,54 +276,6 @@ const buildShieldedTxResult = (rawTx: Buffer): { hash: string; data: any } => {
   }
 }
 
-const handleShield = async ({
-  payload,
-  keysignAction,
-  coinType,
-  toAddress,
-  amount,
-  fee,
-}: ShieldedTxContext): Promise<KeysignResult> => {
-  const utxoInputs = (payload.utxoInfo ?? []).map((utxo: any) => ({
-    txid: utxo.hash,
-    vout: Number(utxo.index),
-    scriptPubKey: '',
-    value: Number(utxo.amount),
-  }))
-
-  const shieldResult = buildShieldTx({
-    transparentInputs: utxoInputs,
-    zAddress: toAddress,
-    amount,
-    fee,
-  })
-
-  const sighash = blake2bHash(shieldResult.rawTx, 'ZcashSigH')
-  const hexHash = Buffer.from(sighash).toString('hex')
-
-  await keysignAction({
-    msgs: [hexHash],
-    signatureAlgorithm: 'ecdsa' as const,
-    coinType,
-    chain: Chain.Zcash,
-    toAddress,
-  })
-
-  const txResult = buildShieldedTxResult(shieldResult.rawTx)
-
-  if (!payload.skipBroadcast) {
-    await sendTransaction(shieldResult.rawTx)
-
-    const note = {
-      ...shieldResult.saplingNote,
-      txid: txResult.hash,
-    }
-    addSaplingNote(toAddress, note)
-  }
-
-  return { txs: [txResult] }
-}
-
 const handleUnshield = async ({
   payload,
   vault,
@@ -319,11 +283,7 @@ const handleUnshield = async ({
   amount,
   fee,
   froztSignWithAlpha,
-}: ShieldedTxContext): Promise<KeysignResult> => {
-  if (!froztSignWithAlpha) {
-    throw new Error('froztSignWithAlpha is required for unshield')
-  }
-
+}: UnshieldContext): Promise<KeysignResult> => {
   const senderCoin = getKeysignCoin(payload)
   const zAddress = senderCoin.address
 
@@ -342,7 +302,7 @@ const handleUnshield = async ({
   }
 
   const pubKeyPackageBase64 = shouldBePresent(
-    vault.chainPublicKeys?.[Chain.Zcash],
+    vault.chainPublicKeys?.[Chain.ZcashShielded],
     'Frozt public key package'
   )
   const saplingExtrasBase64 = shouldBePresent(
@@ -376,11 +336,150 @@ const handleUnshield = async ({
   const signature = await froztSignWithAlpha(sighash, alpha)
 
   const rawTx = builder.complete(signature)
-  const txResult = buildShieldedTxResult(Buffer.from(rawTx))
+  const txResult = buildShieldedTxResult(rawTx)
 
   if (!payload.skipBroadcast) {
     await sendTransaction(rawTx)
     markNoteSpent(zAddress, note.nullifier)
+  }
+
+  return { txs: [txResult] }
+}
+
+const shieldingFee = 10000
+
+type ShieldContext = {
+  payload: any
+  vault: Vault
+  keysignAction: KeysignAction
+  walletCore: WalletCore
+}
+
+const reverseTxid = (hexTxid: string): Uint8Array => {
+  const bytes = new Uint8Array(
+    hexTxid.match(/.{2}/g)!.map(b => parseInt(b, 16))
+  )
+  bytes.reverse()
+  return bytes
+}
+
+const packDerSignatures = (signatures: KeysignSignature[]): Uint8Array => {
+  const parts: Uint8Array[] = []
+  for (const sig of signatures) {
+    const der = new Uint8Array(Buffer.from(sig.der_signature, 'hex'))
+    const lenBuf = new Uint8Array(2)
+    new DataView(lenBuf.buffer).setUint16(0, der.length, true)
+    parts.push(lenBuf, der)
+  }
+  const total = parts.reduce((sum, p) => sum + p.length, 0)
+  const result = new Uint8Array(total)
+  let offset = 0
+  for (const p of parts) {
+    result.set(p, offset)
+    offset += p.length
+  }
+  return result
+}
+
+const handleShield = async ({
+  payload,
+  vault,
+  keysignAction,
+  walletCore,
+}: ShieldContext): Promise<KeysignResult> => {
+  const senderCoin = getKeysignCoin(payload)
+  const senderAddress = senderCoin.address
+  const sendAmount = Number(payload.toAmount)
+
+  const utxos = await getShieldingUtxos(senderAddress)
+  if (utxos.length === 0) {
+    throw new Error('No spendable transparent UTXOs found')
+  }
+
+  const totalInput = utxos.reduce((sum, u) => sum + u.value, 0)
+  if (totalInput < sendAmount + shieldingFee) {
+    throw new Error(
+      `Insufficient transparent balance (have: ${totalInput}, need: ${sendAmount + shieldingFee})`
+    )
+  }
+
+  const saplingExtras = Buffer.from(
+    shouldBePresent(vault.saplingExtras, 'Sapling extras'),
+    'base64'
+  )
+
+  const changeAmount = totalInput - sendAmount - shieldingFee
+
+  const [{ output: outputParams }, latestBlock] = await Promise.all([
+    loadSaplingParams(),
+    getLatestBlock(),
+  ])
+
+  const builder = new WasmShieldingTxBuilder(
+    outputParams,
+    saplingExtras,
+    latestBlock.height
+  )
+
+  for (const utxo of utxos) {
+    builder.addInput(
+      reverseTxid(utxo.txHash),
+      utxo.index,
+      utxo.value,
+      new Uint8Array(Buffer.from(utxo.scriptHex, 'hex'))
+    )
+  }
+
+  builder.addOutput(payload.toAddress, sendAmount)
+  if (changeAmount > 0) {
+    builder.addTransparentOutput(senderAddress, changeAmount)
+  }
+  builder.build()
+
+  const sighashBytes = builder.sighashes
+  const numInputs = builder.numInputs
+  const sighashHexes: string[] = []
+  for (let i = 0; i < numInputs; i++) {
+    const chunk = sighashBytes.slice(i * 32, (i + 1) * 32)
+    sighashHexes.push(Buffer.from(chunk).toString('hex'))
+  }
+
+  const coinType = getCoinType({ walletCore, chain: Chain.Zcash })
+  const signatures = await keysignAction({
+    msgs: sighashHexes.sort(),
+    signatureAlgorithm: 'ecdsa',
+    coinType,
+    chain: Chain.Zcash,
+    toAddress: payload.toAddress,
+  })
+
+  const signaturesRecord = recordFromItems(signatures, ({ msg }) =>
+    Buffer.from(msg, 'base64').toString('hex')
+  )
+  const orderedSignatures = sighashHexes.map(hex =>
+    shouldBePresent(signaturesRecord[hex], `Signature for sighash ${hex}`)
+  )
+
+  const ecdsaSigs = packDerSignatures(orderedSignatures)
+
+  const publicKey = getPublicKey({
+    chain: Chain.Zcash,
+    walletCore,
+    hexChainCode: vault.hexChainCode,
+    publicKeys: vault.publicKeys,
+    chainPublicKeys: vault.chainPublicKeys,
+  })
+  const compressedPubkey = new Uint8Array(publicKey.data())
+  const pubkeys = new Uint8Array(numInputs * 33)
+  for (let i = 0; i < numInputs; i++) {
+    pubkeys.set(compressedPubkey, i * 33)
+  }
+
+  const rawTx = builder.complete(ecdsaSigs, pubkeys)
+  const txResult = buildShieldedTxResult(new Uint8Array(rawTx))
+
+  if (!payload.skipBroadcast) {
+    await sendTransaction(new Uint8Array(rawTx))
   }
 
   return { txs: [txResult] }

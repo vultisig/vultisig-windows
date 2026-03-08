@@ -1,5 +1,13 @@
+import { Chain } from '@core/chain/Chain'
 import { hasServer } from '@core/mpc/devices/localPartyId'
 import { DKLS } from '@core/mpc/dkls/dkls'
+import { parseFromtBundleResult } from '@core/mpc/fromt/fromtSession'
+import { createFromtKeygenSession } from '@core/mpc/fromt/fromtSessionFactory'
+import {
+  parseFroztBundleResult,
+  runFroztSession,
+} from '@core/mpc/frozt/froztSession'
+import { createFroztKeygenSession } from '@core/mpc/frozt/froztSessionFactory'
 import {
   setKeygenComplete,
   waitForKeygenComplete,
@@ -18,7 +26,6 @@ import { useVaultOrders } from '@core/ui/storage/vaults'
 import { ChildrenProp } from '@lib/ui/props'
 import { without } from '@lib/utils/array/without'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
-import { useCallback } from 'react'
 
 import { KeygenAction, KeygenActionProvider } from '../state/keygenAction'
 import { useKeygenVaultName } from '../state/keygenVault'
@@ -34,113 +41,157 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
 
   const vaultOrders = useVaultOrders()
 
-  const keygenAction: KeygenAction = useCallback(
-    async ({ onStepChange, signers }) => {
-      onStepChange('ecdsa')
+  const keygenAction: KeygenAction = async ({ onStepChange, signers }) => {
+    onStepChange('ecdsa')
 
-      const sharedFinalVaultFields = {
-        signers,
-        localPartyId,
-        libType: 'DKLS' as MpcLib,
-        isBackedUp: false,
-      }
+    const sharedFinalVaultFields = {
+      signers,
+      localPartyId,
+      libType: 'DKLS' as MpcLib,
+      isBackedUp: false,
+    }
 
-      const dklsKeygen = new DKLS(
-        { create: true },
-        isInitiatingDevice,
-        serverUrl,
-        sessionId,
-        localPartyId,
-        signers,
-        [],
-        encryptionKeyHex
-      )
-      const dklsResult = await dklsKeygen.startKeygenWithRetry()
+    const dklsKeygen = new DKLS(
+      { create: true },
+      isInitiatingDevice,
+      serverUrl,
+      sessionId,
+      localPartyId,
+      signers,
+      [],
+      encryptionKeyHex
+    )
 
-      onStepChange('eddsa')
+    await dklsKeygen.prepareKeygenSetup()
 
-      const schnorrKeygen = new Schnorr(
-        { create: true },
-        isInitiatingDevice,
-        serverUrl,
-        sessionId,
-        localPartyId,
-        signers,
-        [],
-        encryptionKeyHex,
-        dklsKeygen.getSetupMessage()
-      )
-      const schnorrResult = await schnorrKeygen.startKeygenWithRetry()
+    const schnorrKeygen = new Schnorr(
+      { create: true },
+      isInitiatingDevice,
+      serverUrl,
+      sessionId,
+      localPartyId,
+      signers,
+      [],
+      encryptionKeyHex,
+      dklsKeygen.getSetupMessage()
+    )
 
-      let publicKeyMldsa: string | undefined
-      let keyShareMldsa: string | undefined
+    const froztSession = await createFroztKeygenSession({
+      serverUrl,
+      sessionId,
+      localPartyId,
+      hexEncryptionKey: encryptionKeyHex,
+      setupMessageId: 'frozt',
+      isInitiatingDevice,
+      signers,
+      birthday: 0,
+    })
 
-      if (featureFlags.mldsaKeygen && isMLDSAEnabled) {
-        onStepChange('mldsa')
+    const fromtSession = await createFromtKeygenSession({
+      serverUrl,
+      sessionId,
+      localPartyId,
+      hexEncryptionKey: encryptionKeyHex,
+      setupMessageId: 'fromt',
+      isInitiatingDevice,
+      signers,
+      birthday: 0,
+    })
 
-        const mldsaKeygen = new MldsaKeygen(
-          isInitiatingDevice,
+    onStepChange('frozt')
+
+    const [dklsResult, schnorrResult, froztBundle, fromtBundle] =
+      await Promise.all([
+        dklsKeygen.startKeygenWithRetry('p-ecdsa'),
+        schnorrKeygen.startKeygenWithRetry('p-eddsa'),
+        runFroztSession({
+          session: froztSession,
+          messageId: 'p-frozt',
           serverUrl,
           sessionId,
           localPartyId,
           signers,
-          encryptionKeyHex
-        )
-        const mldsaResult = await mldsaKeygen.startKeygenWithRetry()
-        publicKeyMldsa = mldsaResult.publicKey
-        keyShareMldsa = mldsaResult.keyshare
-      }
+          hexEncryptionKey: encryptionKeyHex,
+        }),
+        runFroztSession({
+          session: fromtSession,
+          messageId: 'p-fromt',
+          serverUrl,
+          sessionId,
+          localPartyId,
+          signers,
+          hexEncryptionKey: encryptionKeyHex,
+        }),
+      ])
 
-      const publicKeys = {
-        ecdsa: dklsResult.publicKey,
-        eddsa: schnorrResult.publicKey,
-      }
+    const froztResult = parseFroztBundleResult(froztBundle)
+    const fromtResult = parseFromtBundleResult(fromtBundle)
 
-      const keyShares = {
-        ecdsa: dklsResult.keyshare,
-        eddsa: schnorrResult.keyshare,
-      }
+    let publicKeyMldsa: string | undefined
+    let keyShareMldsa: string | undefined
 
-      const vault = {
-        name: vaultName,
-        publicKeys,
-        createdAt: Date.now(),
-        hexChainCode: dklsResult.chaincode,
-        keyShares,
-        publicKeyMldsa,
-        keyShareMldsa,
-        order: getLastItemOrder(vaultOrders),
-        lastPasswordVerificationTime: hasServer(signers)
-          ? Date.now()
-          : undefined,
-        ...sharedFinalVaultFields,
-      }
+    if (featureFlags.mldsaKeygen && isMLDSAEnabled) {
+      onStepChange('mldsa')
 
-      await setKeygenComplete({
-        serverURL: serverUrl,
-        sessionId: sessionId,
+      const mldsaKeygen = new MldsaKeygen(
+        isInitiatingDevice,
+        serverUrl,
+        sessionId,
         localPartyId,
-      })
+        signers,
+        encryptionKeyHex
+      )
+      const mldsaResult = await mldsaKeygen.startKeygenWithRetry()
+      publicKeyMldsa = mldsaResult.publicKey
+      keyShareMldsa = mldsaResult.keyshare
+    }
 
-      await waitForKeygenComplete({
-        serverURL: serverUrl,
-        sessionId: sessionId,
-        peers: without(signers, localPartyId),
-      })
+    const publicKeys = {
+      ecdsa: dklsResult.publicKey,
+      eddsa: schnorrResult.publicKey,
+    }
 
-      return vault
-    },
-    [
-      encryptionKeyHex,
-      isInitiatingDevice,
-      isMLDSAEnabled,
+    const keyShares = {
+      ecdsa: dklsResult.keyshare,
+      eddsa: schnorrResult.keyshare,
+    }
+
+    const vault = {
+      name: vaultName,
+      publicKeys,
+      createdAt: Date.now(),
+      hexChainCode: dklsResult.chaincode,
+      keyShares,
+      chainPublicKeys: {
+        [Chain.ZcashShielded]: froztResult.pubKeyPackage,
+        [Chain.Monero]: fromtResult.pubKey,
+      },
+      chainKeyShares: {
+        [Chain.ZcashShielded]: froztResult.bundle,
+        [Chain.Monero]: fromtResult.keyShare,
+      },
+      saplingExtras: froztResult.saplingExtras || undefined,
+      publicKeyMldsa,
+      keyShareMldsa,
+      order: getLastItemOrder(vaultOrders),
+      lastPasswordVerificationTime: hasServer(signers) ? Date.now() : undefined,
+      ...sharedFinalVaultFields,
+    }
+
+    await setKeygenComplete({
+      serverURL: serverUrl,
+      sessionId: sessionId,
       localPartyId,
-      serverUrl,
-      sessionId,
-      vaultName,
-      vaultOrders,
-    ]
-  )
+    })
+
+    await waitForKeygenComplete({
+      serverURL: serverUrl,
+      sessionId: sessionId,
+      peers: without(signers, localPartyId),
+    })
+
+    return vault
+  }
 
   return (
     <KeygenActionProvider value={keygenAction}>{children}</KeygenActionProvider>

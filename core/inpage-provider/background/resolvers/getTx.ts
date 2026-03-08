@@ -66,6 +66,12 @@ export const getTx: BackgroundResolver<'getTx'> = async ({
       sui: () => {
         throw new NotImplementedError('Get tx for Sui chain')
       },
+      zcashShielded: () => {
+        throw new NotImplementedError('Get tx for ZcashShielded chain')
+      },
+      monero: () => {
+        throw new NotImplementedError('Get tx for Monero chain')
+      },
     }
   )
 

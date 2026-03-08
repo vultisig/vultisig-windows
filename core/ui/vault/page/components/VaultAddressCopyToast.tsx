@@ -1,4 +1,5 @@
 import { Chain } from '@core/chain/Chain'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { CircleCheckIcon } from '@lib/ui/icons/CircleCheckIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { vStack } from '@lib/ui/layout/Stack'
@@ -15,7 +16,7 @@ export const VaultAddressCopyToast = ({ value: chain }: ValueProp<Chain>) => {
       <IconWrapper size={24} color="primary">
         <CircleCheckIcon />
       </IconWrapper>
-      <Text size={13}>{chain} address copied</Text>
+      <Text size={13}>{getChainDisplayName(chain)} address copied</Text>
     </Wrapper>
   )
 }

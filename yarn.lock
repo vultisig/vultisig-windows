@@ -377,7 +377,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.12.13, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.25.0, @babel/runtime@npm:^7.28.4":
+"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.12.13, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.25.0, @babel/runtime@npm:^7.28.4":
   version: 7.28.6
   resolution: "@babel/runtime@npm:7.28.6"
   checksum: 10c0/358cf2429992ac1c466df1a21c1601d595c46930a13c1d4662fde908d44ee78ec3c183aaff513ecb01ef8c55c3624afe0309eeeb34715672dbfadb7feedb2c0d
@@ -553,7 +553,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bufbuild/protobuf@npm:2.11.0, @bufbuild/protobuf@npm:^2.11.0":
+"@bufbuild/protobuf@npm:2.11.0, @bufbuild/protobuf@npm:^2.0.0, @bufbuild/protobuf@npm:^2.11.0":
   version: 2.11.0
   resolution: "@bufbuild/protobuf@npm:2.11.0"
   checksum: 10c0/d54fffd414660b823999cc321d26bd6c5f18a6e75343fc7d2588bda5be540ec542b557ac1f03d6d4b6e9d3e5596b2016e58cda173cd1858c043f0e846ece453f
@@ -742,6 +742,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@connectrpc/connect-web@npm:^2.0.0":
+  version: 2.1.1
+  resolution: "@connectrpc/connect-web@npm:2.1.1"
+  peerDependencies:
+    "@bufbuild/protobuf": ^2.7.0
+    "@connectrpc/connect": 2.1.1
+  checksum: 10c0/cfbd2557f7f2b6acb9f72296fbecc16c09e4d02915c16cfdac3fa04a60a2d8241cde285ba050d10bd844ea75d13a70f50de7a4a8906301fdbcc26e4abad4d8e3
+  languageName: node
+  linkType: hard
+
 "@core/chain@workspace:^, @core/chain@workspace:core/chain":
   version: 0.0.0-use.local
   resolution: "@core/chain@workspace:core/chain"
@@ -870,6 +880,7 @@ __metadata:
     "@lib/codegen": "workspace:^"
     "@lib/ui": "workspace:^"
     "@lib/utils": "workspace:^"
+    "@noble/hashes": "npm:^2.0.1"
     "@react-spring/web": "npm:^10.0.3"
     "@rive-app/react-webgl2": "npm:^4.26.2"
     "@solana/spl-token": "npm:^0.4.14"
@@ -1603,7 +1614,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@grpc/grpc-js@npm:^1.12.6":
+"@grpc/grpc-js@npm:^1.12.6, @grpc/grpc-js@npm:^1.14.3":
   version: 1.14.3
   resolution: "@grpc/grpc-js@npm:1.14.3"
   dependencies:
@@ -4626,6 +4637,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:^20.6.0":
+  version: 20.19.37
+  resolution: "@types/node@npm:20.19.37"
+  dependencies:
+    undici-types: "npm:~6.21.0"
+  checksum: 10c0/8420353aee776ae5c1e9720058949909a0e908fa2af85501e9db2645bb9f9acd7d767890f8aaee34d375e6f8b5f550a9a169e908d2d8cf7d5daf63dce64092a0
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:^25.2.1":
   version: 25.2.1
   resolution: "@types/node@npm:25.2.1"
@@ -5112,6 +5132,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@vultisig/fromt-sdk@file:/Users/dev/dev/vultisig/frost-zm/packages/fromt-sdk-ts::locator=vultisig-windows%40workspace%3A.":
+  version: 0.1.0
+  resolution: "@vultisig/fromt-sdk@file:/Users/dev/dev/vultisig/frost-zm/packages/fromt-sdk-ts#/Users/dev/dev/vultisig/frost-zm/packages/fromt-sdk-ts::hash=edd114&locator=vultisig-windows%40workspace%3A."
+  dependencies:
+    fromt-wasm: "file:../../pkg/fromt"
+    monero-ts: "npm:^0.11.8"
+  checksum: 10c0/55254d54d1e3983e4e2069879710be7c9c711dff750890166f960ea0986508ad7fc31ed1a01c03bc0d0c7371cb9831f457bd5ec10139294f6d64e26e5ff238e0
+  languageName: node
+  linkType: hard
+
+"@vultisig/frozt-sdk@file:/Users/dev/dev/vultisig/frost-zm/packages/frozt-sdk-ts::locator=vultisig-windows%40workspace%3A.":
+  version: 0.1.0
+  resolution: "@vultisig/frozt-sdk@file:/Users/dev/dev/vultisig/frost-zm/packages/frozt-sdk-ts#/Users/dev/dev/vultisig/frost-zm/packages/frozt-sdk-ts::hash=8caf1c&locator=vultisig-windows%40workspace%3A."
+  dependencies:
+    "@bufbuild/protobuf": "npm:^2.0.0"
+    "@connectrpc/connect-web": "npm:^2.0.0"
+    "@grpc/grpc-js": "npm:^1.14.3"
+    "@grpc/proto-loader": "npm:^0.8.0"
+    frozt-wasm: "file:../../crates/frozt-wasm/pkg"
+  checksum: 10c0/43d9e32b1c4a0f7f65573a61310f8add2751ee6fc8da383d4ec4f2367daae07ffa5421effe2388f6c2705af06845d81cdc8788f83b61168d322e6cb51b28d5fb
+  languageName: node
+  linkType: hard
+
 "@wailsapp/runtime@workspace:^, @wailsapp/runtime@workspace:clients/desktop/wailsjs/runtime":
   version: 0.0.0-use.local
   resolution: "@wailsapp/runtime@workspace:clients/desktop/wailsjs/runtime"
@@ -5286,6 +5329,18 @@ __metadata:
     json-schema-traverse: "npm:^0.4.1"
     uri-js: "npm:^4.2.2"
   checksum: 10c0/41e23642cbe545889245b9d2a45854ebba51cda6c778ebced9649420d9205f2efb39cb43dbc41e358409223b1ea43303ae4839db682c848b891e4811da1a5a71
+  languageName: node
+  linkType: hard
+
+"ajv@npm:^6.12.6":
+  version: 6.14.0
+  resolution: "ajv@npm:6.14.0"
+  dependencies:
+    fast-deep-equal: "npm:^3.1.1"
+    fast-json-stable-stringify: "npm:^2.0.0"
+    json-schema-traverse: "npm:^0.4.1"
+    uri-js: "npm:^4.2.2"
+  checksum: 10c0/a2bc39b0555dc9802c899f86990eb8eed6e366cddbf65be43d5aa7e4f3c4e1a199d5460fd7ca4fb3d864000dbbc049253b72faa83b3b30e641ca52cb29a68c22
   languageName: node
   linkType: hard
 
@@ -5528,6 +5583,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"async@npm:2.6.4":
+  version: 2.6.4
+  resolution: "async@npm:2.6.4"
+  dependencies:
+    lodash: "npm:^4.17.14"
+  checksum: 10c0/0ebb3273ef96513389520adc88e0d3c45e523d03653cc9b66f5c46f4239444294899bfd13d2b569e7dbfde7da2235c35cf5fd3ece9524f935d41bbe4efccdad0
+  languageName: node
+  linkType: hard
+
 "asynckit@npm:^0.4.0":
   version: 0.4.0
   resolution: "asynckit@npm:0.4.0"
@@ -5566,6 +5630,17 @@ __metadata:
     form-data: "npm:^4.0.4"
     proxy-from-env: "npm:^1.1.0"
   checksum: 10c0/80b063e318cf05cd33a4d991cea0162f3573481946f9129efb7766f38fde4c061c34f41a93a9f9521f02b7c9565ccbc197c099b0186543ac84a24580017adfed
+  languageName: node
+  linkType: hard
+
+"axios@npm:^1.7.4":
+  version: 1.13.6
+  resolution: "axios@npm:1.13.6"
+  dependencies:
+    follow-redirects: "npm:^1.15.11"
+    form-data: "npm:^4.0.5"
+    proxy-from-env: "npm:^1.1.0"
+  checksum: 10c0/51fb5af055c3b85662fa97df17d986ae2c37d13bf86d50b6bb36b6b3a2dec6966a1d3a14ab3774b71707b155ae3597ed9b7babdf1a1a863d1a31840cb8e7ec71
   languageName: node
   linkType: hard
 
@@ -6488,6 +6563,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"crypto-js@npm:^4.0.0":
+  version: 4.2.0
+  resolution: "crypto-js@npm:4.2.0"
+  checksum: 10c0/8fbdf9d56f47aea0794ab87b0eb9833baf80b01a7c5c1b0edc7faf25f662fb69ab18dc2199e2afcac54670ff0cd9607a9045a3f7a80336cccd18d77a55b9fdf0
+  languageName: node
+  linkType: hard
+
 "css-color-keywords@npm:^1.0.0":
   version: 1.0.0
   resolution: "css-color-keywords@npm:1.0.0"
@@ -6602,6 +6684,13 @@ __metadata:
     supports-color:
       optional: true
   checksum: 10c0/d79136ec6c83ecbefd0f6a5593da6a9c91ec4d7ddc4b54c883d6e71ec9accb5f67a1a5e96d00a328196b5b5c86d365e98d8a3a70856aaf16b4e7b1985e67f5a6
+  languageName: node
+  linkType: hard
+
+"decimal.js@npm:^10.4.3":
+  version: 10.6.0
+  resolution: "decimal.js@npm:10.6.0"
+  checksum: 10c0/07d69fbcc54167a340d2d97de95f546f9ff1f69d2b45a02fd7a5292412df3cd9eb7e23065e532a318f5474a2e1bccf8392fdf0443ef467f97f3bf8cb0477e5aa
   languageName: node
   linkType: hard
 
@@ -7827,7 +7916,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.15.6":
+"follow-redirects@npm:^1.15.11, follow-redirects@npm:^1.15.6":
   version: 1.15.11
   resolution: "follow-redirects@npm:1.15.11"
   peerDependenciesMeta:
@@ -7856,7 +7945,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"form-data@npm:^4.0.4":
+"form-data@npm:^4.0.4, form-data@npm:^4.0.5":
   version: 4.0.5
   resolution: "form-data@npm:4.0.5"
   dependencies:
@@ -7910,6 +7999,32 @@ __metadata:
   checksum: 10c0/c8b1d628c98763f784a039897727709a1bccfad53d1cf2d58656c3bd2b79934b66d8b41981b0109799cf5c5953812f32027e6bc5748637648e360b1d647583ad
   languageName: node
   linkType: hard
+
+"fromt-wasm@file:../../pkg/fromt::locator=%40vultisig%2Ffromt-sdk%40file%3A%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffromt-sdk-ts%23%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffromt-sdk-ts%3A%3Ahash%3Dedd114%26locator%3Dvultisig-windows%2540workspace%253A.":
+  version: 0.1.0
+  resolution: "fromt-wasm@file:../../pkg/fromt#../../pkg/fromt::hash=85f587&locator=%40vultisig%2Ffromt-sdk%40file%3A%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffromt-sdk-ts%23%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffromt-sdk-ts%3A%3Ahash%3Dedd114%26locator%3Dvultisig-windows%2540workspace%253A."
+  checksum: 10c0/4cff5508a8b6ecf69d436d400b56103ac68f36538be39ca2492106d704452b2cb5d74201abb2b57abd881230890a704a2edbd7ede5ae19f628eb809861b18d54
+  languageName: node
+  linkType: hard
+
+"fromt-wasm@workspace:lib/fromt":
+  version: 0.0.0-use.local
+  resolution: "fromt-wasm@workspace:lib/fromt"
+  languageName: unknown
+  linkType: soft
+
+"frozt-wasm@file:../../crates/frozt-wasm/pkg::locator=%40vultisig%2Ffrozt-sdk%40file%3A%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffrozt-sdk-ts%23%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffrozt-sdk-ts%3A%3Ahash%3D8caf1c%26locator%3Dvultisig-windows%2540workspace%253A.":
+  version: 0.1.0
+  resolution: "frozt-wasm@file:../../crates/frozt-wasm/pkg#../../crates/frozt-wasm/pkg::hash=9a4b68&locator=%40vultisig%2Ffrozt-sdk%40file%3A%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffrozt-sdk-ts%23%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffrozt-sdk-ts%3A%3Ahash%3D8caf1c%26locator%3Dvultisig-windows%2540workspace%253A."
+  checksum: 10c0/05521fca0552c45deec36dfdb2c6634f3be3b78069afd87df826a38657d74c6700f1bd6c7d2f1322ea95a2b4a5dad81913783e3f05182da03d7d79e40db691c6
+  languageName: node
+  linkType: hard
+
+"frozt-wasm@workspace:lib/frozt":
+  version: 0.0.0-use.local
+  resolution: "frozt-wasm@workspace:lib/frozt"
+  languageName: unknown
+  linkType: soft
 
 "fs-minipass@npm:^3.0.0":
   version: 3.0.3
@@ -9378,6 +9493,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash@npm:^4.17.14":
+  version: 4.17.23
+  resolution: "lodash@npm:4.17.23"
+  checksum: 10c0/1264a90469f5bb95d4739c43eb6277d15b6d9e186df4ac68c3620443160fc669e2f14c11e7d8b2ccf078b81d06147c01a8ccced9aab9f9f63d50dcf8cace6bf6
+  languageName: node
+  linkType: hard
+
 "long@npm:^4.0.0":
   version: 4.0.0
   resolution: "long@npm:4.0.0"
@@ -10080,6 +10202,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"monero-ts@npm:^0.11.8":
+  version: 0.11.8
+  resolution: "monero-ts@npm:0.11.8"
+  dependencies:
+    "@babel/runtime": "npm:^7.23.2"
+    "@types/node": "npm:^20.6.0"
+    ajv: "npm:^6.12.6"
+    async: "npm:2.6.4"
+    axios: "npm:^1.7.4"
+    crypto-js: "npm:^4.0.0"
+    decimal.js: "npm:^10.4.3"
+    net: "npm:^1.0.2"
+    promise-throttle: "npm:^1.1.2"
+    serialize-javascript: "npm:^3.1.0"
+    text-encoding: "npm:^0.7.0"
+    tls: "npm:0.0.1"
+    uuid: "npm:3.3.2"
+    web-worker: "npm:1.3.0"
+  checksum: 10c0/a2a4fe203a9d111a2b118d65126e03a9f837eab666f0b66e2ee1c9798220609136186de889afe86f419f34faf98f47885a27f78a3182fb3045cffcaeda6f757d
+  languageName: node
+  linkType: hard
+
 "motion-dom@npm:^12.33.0":
   version: 12.33.0
   resolution: "motion-dom@npm:12.33.0"
@@ -10149,6 +10293,13 @@ __metadata:
   version: 1.0.0
   resolution: "negotiator@npm:1.0.0"
   checksum: 10c0/4c559dd52669ea48e1914f9d634227c561221dd54734070791f999c52ed0ff36e437b2e07d5c1f6e32909fc625fe46491c16e4a8f0572567d4dd15c3a4fda04b
+  languageName: node
+  linkType: hard
+
+"net@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "net@npm:1.0.2"
+  checksum: 10c0/7cf9cf8f9c9a2bdadd9002e85da7bd509216ed84b76315aa903a51f15997e4844e7cb8c742f8af434d8cf431564c868d8565106004bbd9ce4223696c9b13d2fd
   languageName: node
   linkType: hard
 
@@ -10959,6 +11110,13 @@ __metadata:
     err-code: "npm:^2.0.2"
     retry: "npm:^0.12.0"
   checksum: 10c0/9c7045a1a2928094b5b9b15336dcd2a7b1c052f674550df63cc3f36cd44028e5080448175b6f6ca32b642de81150f5e7b1a98b728f15cb069f2dd60ac2616b96
+  languageName: node
+  linkType: hard
+
+"promise-throttle@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "promise-throttle@npm:1.1.2"
+  checksum: 10c0/1f9eab5140b0c2dbb11caba22f2fc7366366c55917067014dd9245c5376ec33568f57c67f33936de18eb8b12c41dea81646790b2b477f6eeed4160a4b7c233b8
   languageName: node
   linkType: hard
 
@@ -11909,6 +12067,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"serialize-javascript@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "serialize-javascript@npm:3.1.0"
+  dependencies:
+    randombytes: "npm:^2.1.0"
+  checksum: 10c0/ca8a6bb29891e524e36451d685827ab7e7f50171e5aebe99504d07ae97308a9faa880e0df0517d75ed8efb09991454eb8cb969cecfad82478fc0591938a3909c
+  languageName: node
+  linkType: hard
+
 "set-function-length@npm:^1.2.2":
   version: 1.2.2
   resolution: "set-function-length@npm:1.2.2"
@@ -12704,6 +12871,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"text-encoding@npm:^0.7.0":
+  version: 0.7.0
+  resolution: "text-encoding@npm:0.7.0"
+  checksum: 10c0/6c20f5d19f996501677cc60b79bc4af550f840b426eacc5f67bd2bd5a7a7a058ab58679f851e0afee879aaaaf7fdb95cfe4de35ab29f9b34f9ce2a7b8de9bacb
+  languageName: node
+  linkType: hard
+
 "throttle-debounce@npm:^3.0.1":
   version: 3.0.1
   resolution: "throttle-debounce@npm:3.0.1"
@@ -12778,6 +12952,13 @@ __metadata:
   version: 4.0.4
   resolution: "tinyspy@npm:4.0.4"
   checksum: 10c0/a8020fc17799251e06a8398dcc352601d2770aa91c556b9531ecd7a12581161fd1c14e81cbdaff0c1306c93bfdde8ff6d1c1a3f9bbe6d91604f0fd4e01e2f1eb
+  languageName: node
+  linkType: hard
+
+"tls@npm:0.0.1":
+  version: 0.0.1
+  resolution: "tls@npm:0.0.1"
+  checksum: 10c0/6bddc0ecb90c84e80b90e14b08be87aabe19adc90a357c98a41eb3af31072eda948da7556acca9697ecd1094291c78637be9a08d3bc73161b89266ed0d1a944d
   languageName: node
   linkType: hard
 
@@ -13088,6 +13269,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"undici-types@npm:~6.21.0":
+  version: 6.21.0
+  resolution: "undici-types@npm:6.21.0"
+  checksum: 10c0/c01ed51829b10aa72fc3ce64b747f8e74ae9b60eafa19a7b46ef624403508a54c526ffab06a14a26b3120d055e1104d7abe7c9017e83ced038ea5cf52f8d5e04
+  languageName: node
+  linkType: hard
+
 "undici-types@npm:~7.16.0":
   version: 7.16.0
   resolution: "undici-types@npm:7.16.0"
@@ -13304,6 +13492,15 @@ __metadata:
   bin:
     uuid: dist/bin/uuid
   checksum: 10c0/eab18c27fe4ab9fb9709a5d5f40119b45f2ec8314f8d4cf12ce27e4c6f4ffa4a6321dc7db6c515068fa373c075b49691ba969f0010bf37f44c37ca40cd6bf7fe
+  languageName: node
+  linkType: hard
+
+"uuid@npm:3.3.2":
+  version: 3.3.2
+  resolution: "uuid@npm:3.3.2"
+  bin:
+    uuid: ./bin/uuid
+  checksum: 10c0/847bd7b389f44d05cf5341134d52803116b616c7344f12c74040effd75280b58273ea3a2bee6ba6e5405688c5edbb0696f4adcbc89e1206dc1d8650bdaece7a6
   languageName: node
   linkType: hard
 
@@ -13633,11 +13830,14 @@ __metadata:
     "@eslint/js": "npm:^9.39.2"
     "@google-cloud/translate": "npm:^9.3.0"
     "@noble/curves": "npm:^1.9.0"
+    "@scure/bip32": "npm:^2.0.1"
     "@types/node": "npm:^25.2.1"
     "@types/react": "npm:^19.2.13"
     "@typescript-eslint/eslint-plugin": "npm:^8.54.0"
     "@typescript-eslint/parser": "npm:^8.54.0"
     "@typescript/native-preview": "npm:^7.0.0-dev.20260219.1"
+    "@vultisig/fromt-sdk": /Users/dev/dev/vultisig/frost-zm/packages/fromt-sdk-ts
+    "@vultisig/frozt-sdk": /Users/dev/dev/vultisig/frost-zm/packages/frozt-sdk-ts
     babel-plugin-react-compiler: "npm:^1.0.0"
     concurrently: "npm:^9.2.1"
     eslint: "npm:^9.39.2"
@@ -13656,6 +13856,8 @@ __metadata:
     prettier: "npm:^3.8.1"
     react-markdown: "npm:^10.1.0"
     typescript: "npm:^5.9.3"
+    vite-plugin-top-level-await: "npm:^1.6.0"
+    vite-plugin-wasm: "npm:^3.5.0"
     vitest: "npm:^4.0.18"
   languageName: unknown
   linkType: soft
@@ -13671,6 +13873,13 @@ __metadata:
   version: 3.3.3
   resolution: "web-streams-polyfill@npm:3.3.3"
   checksum: 10c0/64e855c47f6c8330b5436147db1c75cb7e7474d924166800e8e2aab5eb6c76aac4981a84261dd2982b3e754490900b99791c80ae1407a9fa0dcff74f82ea3a7f
+  languageName: node
+  linkType: hard
+
+"web-worker@npm:1.3.0":
+  version: 1.3.0
+  resolution: "web-worker@npm:1.3.0"
+  checksum: 10c0/bca341b421f07c2d33aa205d463e6a2d3d376fb0628a01052dc343fd88a1d688df58d1c7fe36f631d0d860bbd3060f5014cca67d6f8781634b6c2fae25d1fc70
   languageName: node
   linkType: hard
 

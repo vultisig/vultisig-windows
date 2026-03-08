@@ -9,6 +9,7 @@ type KeysignActionInput = {
   signatureAlgorithm: SignatureAlgorithm
   coinType: CoinType
   chain: Chain
+  toAddress?: string
 }
 
 export type KeysignAction = (

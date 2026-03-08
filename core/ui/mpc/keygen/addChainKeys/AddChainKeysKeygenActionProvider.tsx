@@ -1,9 +1,9 @@
 import { Chain } from '@core/chain/Chain'
-import { saveBirthHeight } from '@core/chain/chains/zcash/birthHeight'
-import { getZcashZAddress } from '@core/chain/chains/zcash/getZcashZAddress'
 import { getLatestBlock } from '@core/chain/chains/zcash/lightwalletd/client'
-import { saveScannerKeys } from '@core/chain/chains/zcash/scannerKeys'
+import { parseFromtBundleResult } from '@core/mpc/fromt/fromtSession'
+import { createFromtKeygenSession } from '@core/mpc/fromt/fromtSessionFactory'
 import { Frozt } from '@core/mpc/frozt/frozt'
+import { runFroztSession } from '@core/mpc/frozt/froztSession'
 import {
   setKeygenComplete,
   waitForKeygenComplete,
@@ -18,6 +18,7 @@ import { ChildrenProp } from '@lib/ui/props'
 import { without } from '@lib/utils/array/without'
 import { useCallback } from 'react'
 
+import { useKeygenOperation } from '../state/currentKeygenOperationType'
 import { KeygenAction, KeygenActionProvider } from '../state/keygenAction'
 
 export const AddChainKeysKeygenActionProvider = ({
@@ -29,9 +30,65 @@ export const AddChainKeysKeygenActionProvider = ({
   const localPartyId = useMpcLocalPartyId()
   const isInitiatingDevice = useIsInitiatingDevice()
   const existingVault = useCurrentVault()
+  const operation = useKeygenOperation()
+
+  const keyGroup =
+    'addChainKeys' in operation ? operation.addChainKeys : 'frozt'
 
   const keygenAction: KeygenAction = useCallback(
     async ({ onStepChange, signers }) => {
+      if (keyGroup === 'fromt') {
+        onStepChange('fromt')
+
+        const fromtSession = await createFromtKeygenSession({
+          serverUrl,
+          sessionId,
+          localPartyId,
+          hexEncryptionKey: encryptionKeyHex,
+          setupMessageId: 'fromt',
+          isInitiatingDevice,
+          signers,
+          birthday: 0,
+        })
+
+        const fromtBundle = await runFroztSession({
+          session: fromtSession,
+          messageId: 'p-fromt',
+          serverUrl,
+          sessionId,
+          localPartyId,
+          signers,
+          hexEncryptionKey: encryptionKeyHex,
+        })
+
+        const fromtResult = parseFromtBundleResult(fromtBundle)
+
+        await setKeygenComplete({
+          serverURL: serverUrl,
+          sessionId,
+          localPartyId,
+        })
+
+        await waitForKeygenComplete({
+          serverURL: serverUrl,
+          sessionId,
+          peers: without(signers, localPartyId),
+        })
+
+        return {
+          ...existingVault,
+          signers,
+          chainPublicKeys: {
+            ...existingVault.chainPublicKeys,
+            [Chain.Monero]: fromtResult.pubKey,
+          },
+          chainKeyShares: {
+            ...existingVault.chainKeyShares,
+            [Chain.Monero]: fromtResult.keyShare,
+          },
+        }
+      }
+
       onStepChange('frozt')
 
       const froztKeygen = new Frozt(
@@ -42,23 +99,10 @@ export const AddChainKeysKeygenActionProvider = ({
         signers,
         encryptionKeyHex
       )
-      const froztResult = await froztKeygen.startKeygenWithRetry()
-
-      try {
-        const zAddress = await getZcashZAddress(
-          froztResult.pubKeyPackage,
-          froztResult.saplingExtras
-        )
-        saveScannerKeys(
-          zAddress,
-          froztResult.pubKeyPackage,
-          froztResult.saplingExtras
-        )
-        const latestBlock = await getLatestBlock()
-        saveBirthHeight(zAddress, latestBlock.height)
-      } catch {
-        // non-critical: don't fail keygen if lightwalletd is unreachable
-      }
+      const latestBlock = await getLatestBlock()
+      const froztResult = await froztKeygen.startKeygenWithRetry(
+        latestBlock.height
+      )
 
       await setKeygenComplete({
         serverURL: serverUrl,
@@ -77,13 +121,11 @@ export const AddChainKeysKeygenActionProvider = ({
         signers,
         chainPublicKeys: {
           ...existingVault.chainPublicKeys,
-          [Chain.Zcash]: froztResult.pubKeyPackage,
           [Chain.ZcashShielded]: froztResult.pubKeyPackage,
         },
         chainKeyShares: {
           ...existingVault.chainKeyShares,
-          [Chain.Zcash]: froztResult.keyshare,
-          [Chain.ZcashShielded]: froztResult.keyshare,
+          [Chain.ZcashShielded]: froztResult.bundle,
         },
         saplingExtras: froztResult.saplingExtras || undefined,
       }
@@ -92,6 +134,7 @@ export const AddChainKeysKeygenActionProvider = ({
       encryptionKeyHex,
       existingVault,
       isInitiatingDevice,
+      keyGroup,
       localPartyId,
       serverUrl,
       sessionId,

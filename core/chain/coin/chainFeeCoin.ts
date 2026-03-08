@@ -194,6 +194,18 @@ const leanChainFeeCoin: Record<Chain, KnownCoinMetadata> = {
     decimals: 18,
     priceProviderId: 'sei-network',
   },
+  [Chain.ZcashShielded]: {
+    ticker: 'ZEC',
+    logo: 'zec-shielded',
+    decimals: 8,
+    priceProviderId: 'zcash',
+  },
+  [Chain.Monero]: {
+    ticker: 'XMR',
+    logo: 'xmr',
+    decimals: 12,
+    priceProviderId: 'monero',
+  },
 }
 
 export const chainFeeCoin: Record<Chain, KnownCoin> = recordMap(

@@ -1,4 +1,5 @@
 import { Chain } from '@core/chain/Chain'
+import { chainGroups, groupedChainSet } from '@core/chain/chainGroups'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin } from '@core/chain/coin/Coin'
@@ -10,6 +11,7 @@ import {
 } from '@core/chain/signing/VaultKeyGroup'
 import { getVaultKeyGroupHasKeys } from '@core/mpc/vault/getVaultKeyGroupHasKeys'
 import { isKeyImportVault } from '@core/mpc/vault/Vault'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
@@ -24,6 +26,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { EmptyState } from '@lib/ui/status/EmptyState'
+import { Text } from '@lib/ui/text'
 import { attempt } from '@lib/utils/attempt'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -58,35 +61,34 @@ export const ManageVaultChainsPage = () => {
     setDraftSelectedChains(new Set(currentCoins.map(c => c.chain)))
   }, [currentCoins])
 
-  const nativeCoins = Object.values(chainFeeCoin).filter(coin =>
-    availableChains.includes(coin.chain)
-  )
+  const coinByChain = new Map<Chain, Coin>()
+  for (const coin of Object.values(chainFeeCoin)) {
+    if (availableChains.includes(coin.chain)) {
+      coinByChain.set(coin.chain, coin)
+    }
+  }
 
   const normalizedSearch = search.toLowerCase()
 
-  const filterBySearch = (coins: Coin[]) => {
-    if (!search) return coins
-    return coins.filter(
-      ({ chain, ticker }) =>
-        chain.toLowerCase().includes(normalizedSearch) ||
-        ticker.toLowerCase().includes(normalizedSearch)
+  const matchesSearch = (coin: Coin) => {
+    if (!search) return true
+    return (
+      coin.chain.toLowerCase().includes(normalizedSearch) ||
+      coin.ticker.toLowerCase().includes(normalizedSearch)
     )
   }
 
-  const groupedCoins: Record<VaultKeyGroup, Coin[]> = {
+  const coinsByKeyGroup: Record<VaultKeyGroup, Coin[]> = {
     ecdsa: [],
     eddsa: [],
     frozt: [],
+    fromt: [],
     mldsa: [],
   }
 
-  for (const coin of nativeCoins) {
+  for (const [, coin] of coinByChain) {
     const group = getChainKeyGroup(coin.chain)
-    groupedCoins[group].push(coin)
-  }
-
-  for (const group of vaultKeyGroups) {
-    groupedCoins[group].sort((a, b) => a.chain.localeCompare(b.chain))
+    coinsByKeyGroup[group].push(coin)
   }
 
   const toggleDraft = (chain: Chain) => {
@@ -114,6 +116,10 @@ export const ManageVaultChainsPage = () => {
         toAdd.some(c => getChainKeyGroup(c) === 'frozt') &&
         !getVaultKeyGroupHasKeys(vault, 'frozt')
 
+      const needsFromtKeygen =
+        toAdd.some(c => getChainKeyGroup(c) === 'fromt') &&
+        !getVaultKeyGroupHasKeys(vault, 'fromt')
+
       for (const coin of toRemove) {
         await deleteCoin.mutateAsync(extractAccountCoinKey(coin))
       }
@@ -135,6 +141,23 @@ export const ManageVaultChainsPage = () => {
         return
       }
 
+      if (needsFromtKeygen) {
+        const nonFromtToAdd = toAdd.filter(c => getChainKeyGroup(c) !== 'fromt')
+        for (const chain of nonFromtToAdd) {
+          const coin = chainFeeCoin[chain]
+          if (coin) await createCoin.mutateAsync(coin)
+        }
+
+        const fromtChainsToAdd = toAdd.filter(
+          c => getChainKeyGroup(c) === 'fromt'
+        )
+        navigate({
+          id: 'addChainKeys',
+          state: { keyGroup: 'fromt', chainsToAdd: fromtChainsToAdd },
+        })
+        return
+      }
+
       for (const chain of toAdd) {
         const coin = chainFeeCoin[chain]
         if (coin) await createCoin.mutateAsync(coin)
@@ -152,10 +175,21 @@ export const ManageVaultChainsPage = () => {
     }
   }
 
+  const renderChainItem = (coin: Coin) => (
+    <ChainItem
+      key={coin.chain}
+      value={coin}
+      isSelected={draftSelectedChains.has(coin.chain)}
+      onToggle={() => toggleDraft(coin.chain)}
+      derivationPath={
+        isKeyImport ? getDerivationPathStub(coin.chain, walletCore) : undefined
+      }
+    />
+  )
+
   const hasAnyVisibleSection = vaultKeyGroups.some(group => {
     if (group === 'mldsa') return false
-    const coins = filterBySearch(groupedCoins[group])
-    return coins.length > 0
+    return coinsByKeyGroup[group].some(matchesSearch)
   })
 
   return (
@@ -179,30 +213,42 @@ export const ManageVaultChainsPage = () => {
         )}
         <SearchInput value={search} onChange={setSearch} />
         {hasAnyVisibleSection ? (
-          vaultKeyGroups.map(group => {
-            const coins = filterBySearch(groupedCoins[group])
-            const hasKeys = getVaultKeyGroupHasKeys(vault, group)
+          vaultKeyGroups.map(keyGroup => {
+            const allCoins = coinsByKeyGroup[keyGroup]
+            const visibleCoins = allCoins.filter(matchesSearch)
+            const hasKeys = getVaultKeyGroupHasKeys(vault, keyGroup)
 
-            if (group === 'mldsa' || coins.length === 0) return null
+            if (keyGroup === 'mldsa' || visibleCoins.length === 0) return null
+
+            const visibleGroups = chainGroups
+              .filter(g => getChainKeyGroup(g.representative) === keyGroup)
+              .map(g => {
+                const coins = g.chains
+                  .map(c => coinByChain.get(c))
+                  .filter((c): c is Coin => c !== undefined)
+                  .filter(matchesSearch)
+                return { ...g, coins }
+              })
+              .filter(g => g.coins.length > 0)
+
+            const individualCoins = visibleCoins
+              .filter(c => !groupedChainSet.has(c.chain))
+              .sort((a, b) => a.chain.localeCompare(b.chain))
 
             return (
-              <VStack key={group} gap={12}>
-                <AlgorithmSectionHeader group={group} hasKeys={hasKeys} />
-                <ItemGrid>
-                  {coins.map(coin => (
-                    <ChainItem
-                      key={coin.chain}
-                      value={coin}
-                      isSelected={draftSelectedChains.has(coin.chain)}
-                      onToggle={() => toggleDraft(coin.chain)}
-                      derivationPath={
-                        isKeyImport
-                          ? getDerivationPathStub(coin.chain, walletCore)
-                          : undefined
-                      }
-                    />
-                  ))}
-                </ItemGrid>
+              <VStack key={keyGroup} gap={12}>
+                <AlgorithmSectionHeader group={keyGroup} hasKeys={hasKeys} />
+                {individualCoins.length > 0 && (
+                  <ItemGrid>{individualCoins.map(renderChainItem)}</ItemGrid>
+                )}
+                {visibleGroups.map(g => (
+                  <VStack key={g.representative} gap={8}>
+                    <Text size={13} color="shy">
+                      {getChainDisplayName(g.representative)}
+                    </Text>
+                    <ItemGrid>{g.coins.map(renderChainItem)}</ItemGrid>
+                  </VStack>
+                ))}
               </VStack>
             )
           })

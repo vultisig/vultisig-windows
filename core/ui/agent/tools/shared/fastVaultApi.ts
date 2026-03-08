@@ -1,4 +1,4 @@
-const fastVaultBaseUrl = 'https://api.vultisig.com'
+import { fastVaultServerUrl } from '@core/mpc/fast/config'
 
 type FastVaultSignParams = {
   publicKey: string
@@ -25,7 +25,7 @@ export async function callFastVaultSign(
     chain: params.chain,
   }
 
-  const resp = await fetch(`${fastVaultBaseUrl}/vault/sign`, {
+  const resp = await fetch(`${fastVaultServerUrl}/sign`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
@@ -70,7 +70,7 @@ export async function requestFastVaultReshare(
     lib_type: params.libType,
   }
 
-  const resp = await fetch(`${fastVaultBaseUrl}/vault/reshare`, {
+  const resp = await fetch(`${fastVaultServerUrl}/reshare`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),

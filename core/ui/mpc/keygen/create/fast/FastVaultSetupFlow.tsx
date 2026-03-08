@@ -2,7 +2,7 @@ import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { useToast } from '@lib/ui/toast/ToastProvider'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { ReferralHeaderButton } from '../steps/ReferralHeaderButton'
@@ -39,6 +39,11 @@ export const FastVaultSetupFlow = ({
       onClick={openReferralModal}
     />
   )
+
+  // DEV: skip setup flow with pre-filled values
+  useEffect(() => {
+    onFinish({ name: 'frosst', email: 'C@G', password: 'p' })
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>

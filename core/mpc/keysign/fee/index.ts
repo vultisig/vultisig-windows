@@ -33,6 +33,8 @@ const resolvers: Record<ChainKind, FeeAmountResolver> = {
   ton: tonFeeAmountResolver,
   utxo: getUtxoFeeAmount,
   tron: getTronFeeAmount,
+  zcashShielded: () => 10000n,
+  monero: () => 0n,
 }
 
 export const getFeeAmount = (input: Input): bigint => {

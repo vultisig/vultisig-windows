@@ -1,0 +1,17 @@
+{
+  "name": "fromt-wasm",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "fromt_wasm_bg.wasm",
+    "fromt_wasm.js",
+    "fromt_wasm_bg.js",
+    "fromt_wasm.d.ts"
+  ],
+  "main": "fromt_wasm.js",
+  "types": "fromt_wasm.d.ts",
+  "sideEffects": [
+    "./fromt_wasm.js",
+    "./snippets/*"
+  ]
+}

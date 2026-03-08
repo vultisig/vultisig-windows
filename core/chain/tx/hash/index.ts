@@ -25,6 +25,10 @@ const hashHandlers: Record<ChainKind, TxHashResolver<any>> = {
   ton: getTonTxHash,
   utxo: getUtxoTxHash,
   tron: getTronTxHash,
+  zcashShielded: getUtxoTxHash,
+  monero: () => {
+    throw new Error('Monero tx hash not yet implemented')
+  },
 }
 
 type GetTxHashInput = {

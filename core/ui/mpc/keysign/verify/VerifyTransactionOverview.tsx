@@ -3,6 +3,7 @@ import { Chain } from '@core/chain/Chain'
 import { CoinKey, CoinMetadata } from '@core/chain/coin/Coin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { KeysignFeeAmount } from '@core/ui/mpc/keysign/tx/FeeAmount'
 import {
@@ -93,7 +94,7 @@ export const VerifyTransactionOverview = ({
               style={{ fontSize: 16 }}
             />
             <Text size={14} weight={500}>
-              {chain}
+              {getChainDisplayName(chain)}
             </Text>
           </HStack>
         }

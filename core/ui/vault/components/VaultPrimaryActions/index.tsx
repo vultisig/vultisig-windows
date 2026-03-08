@@ -6,6 +6,8 @@ import { Opener } from '@lib/ui/base/Opener'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { useCallback, useMemo } from 'react'
 
+import { MoneroSyncModal } from '../../chain/moneroSync/MoneroSyncModal'
+import { MoneroSyncPrompt } from '../../chain/moneroSync/MoneroSyncPrompt'
 import { ZcashSyncModal } from '../../chain/zcashSync/ZcashSyncModal'
 import { ZcashSyncPrompt } from '../../chain/zcashSync/ZcashSyncPrompt'
 import { depositEnabledChains } from '../../deposit/DepositEnabledChain'
@@ -37,6 +39,7 @@ export const VaultPrimaryActions = ({
   )
 
   const isZcashShielded = potentialCoin?.chain === Chain.ZcashShielded
+  const isMonero = potentialCoin?.chain === Chain.Monero
 
   const getCoin = useCallback(
     (supportedChains: readonly Chain[]) => {
@@ -69,6 +72,12 @@ export const VaultPrimaryActions = ({
         <Opener
           renderOpener={({ onOpen }) => <ZcashSyncPrompt onClick={onOpen} />}
           renderContent={({ onClose }) => <ZcashSyncModal onClose={onClose} />}
+        />
+      )}
+      {isMonero && (
+        <Opener
+          renderOpener={({ onOpen }) => <MoneroSyncPrompt onClick={onOpen} />}
+          renderContent={({ onClose }) => <MoneroSyncModal onClose={onClose} />}
         />
       )}
     </ActionsWrapper>

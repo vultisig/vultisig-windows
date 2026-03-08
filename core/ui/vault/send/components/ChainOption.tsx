@@ -1,6 +1,7 @@
 import { Coin } from '@core/chain/coin/Coin'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
+import { getChainDisplayName } from '@core/ui/chain/metadata/getChainDisplayName'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { panel } from '@lib/ui/panel/Panel'
 import { IsActiveProp, OnClickProp, ValueProp } from '@lib/ui/props'
@@ -36,7 +37,7 @@ export const ChainOption = ({
           <CoinIcon coin={value} style={{ fontSize: 32 }} />
           <VStack alignItems="start">
             <Text color="contrast" size={14} weight="500">
-              {chain}
+              {getChainDisplayName(chain)}
             </Text>
           </VStack>
         </HStack>
