@@ -344,10 +344,8 @@ export const ru = {
       online: 'онлайн',
       part1: 'Доля 1 из долей хранилища будет',
       securely: 'безопасно, желательно',
-      setNewStandard: 'Вы готовы использовать новый стандарт кошелька.',
       shareSecurely: 'чтобы обеспечить доступ, желательно',
       vaultShares: 'Ваше хранилище содержит 2 доли,',
-      wellDone: 'Отлично',
       sentTo: 'Отправлено на {{email}}.',
       changeEmailAndRestartKeygen: 'Изменить e-mail и перезапустить Keygen',
     },
@@ -778,6 +776,21 @@ export const ru = {
       shares: 'Ваше хранилище содержит {{shares}} доли',
     },
   },
+  secureVaultPeerDiscovery: {
+    addAtLeastMoreDevices_one: 'Добавьте как минимум ещё {{count}} устройство',
+    addAtLeastMoreDevices_other:
+      'Добавьте как минимум ещё {{count}} устройства',
+    devicePosition: '{{current}} из {{total}}',
+    localModeWaiting: 'Локальный режим, ожидание устройств',
+    notWantToUseLocal:
+      'Не хотите использовать локальный режим? Вернуться назад.',
+    switchBack: 'Вернуться назад',
+    useStandardMode: 'Использовать стандартный режим',
+    useLocalMode: 'Использовать локальный режим',
+    waitingForDeviceToJoin: 'Ожидание подключения устройства',
+    waitingForDevicesToConnect: 'Ожидание подключения устройств',
+    wantToCreateVaultPrivately: 'Хотите создать хранилище приватно?',
+  },
   secureVaultSetupPasswordTooltipContent:
     'Это происходит потому, что пароль используется для локального шифрования файла резервной копии, аналогично шифрованию диска. На следующем шаге можно добавить подсказку.',
   security: 'Безопасность',
@@ -1073,6 +1086,8 @@ export const ru = {
   you_are_sending: 'Вы отправляете',
   you_are_staking: 'Вы выполняете stake',
   you_are_unstaking: 'Вы выполняете unstake',
+  you_are_minting: "You're minting",
+  you_are_redeeming: "You're redeeming",
   yourVaultShares: 'В вашем хранилище {{shares}} доли',
   your_friends_referral_code: 'Реферальный код вашего друга',
   your_referral_code: 'Ваш referral-код',
@@ -1235,4 +1250,5 @@ export const ru = {
   agent_tx_type_swap: 'Менять',
   agent_tx_type_transfer: 'Передача',
   agent_tx_view: 'Вид',
+  open_as_side_panel: 'Открывается как боковая панель',
 }

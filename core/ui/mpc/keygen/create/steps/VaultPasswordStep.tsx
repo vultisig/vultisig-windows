@@ -70,76 +70,82 @@ export const VaultPasswordStep = ({
   }
 
   return (
-    <ScreenLayout
-      onBack={onBack}
-      headerRight={headerRight}
-      footer={
-        <Button
-          style={{ width: '100%' }}
-          disabled={!isValid}
-          onClick={handleSubmit(onSubmit)}
-        >
-          {t('create_vault')}
-        </Button>
-      }
-    >
-      <Content>
-        {steps && stepIndex !== undefined && (
-          <StepProgressIndicator steps={steps} currentStepIndex={stepIndex} />
-        )}
-        <VStack gap={8}>
-          <Title
-            centerHorizontally
-            as="h1"
-            size={22}
-            weight={500}
-            color="contrast"
-          >
-            {t('choose_a_password')}
-          </Title>
-          <SubtitleRow>
-            <Text centerHorizontally color="shy" size={14} as="span">
-              <Trans
-                i18nKey="choose_a_password_description"
-                components={{
-                  b: <Text as="span" weight={600} color="contrast" />,
-                }}
+    <Form onSubmit={handleSubmit(onSubmit)}>
+      <ScreenLayout
+        onBack={onBack}
+        headerRight={headerRight}
+        footer={
+          <Button style={{ width: '100%' }} disabled={!isValid} type="submit">
+            {t('create_vault')}
+          </Button>
+        }
+      >
+        <Content>
+          {steps && stepIndex !== undefined && (
+            <StepProgressIndicator steps={steps} currentStepIndex={stepIndex} />
+          )}
+          <VStack gap={8}>
+            <Title
+              centerHorizontally
+              as="h1"
+              size={22}
+              weight={500}
+              color="contrast"
+            >
+              {t('choose_a_password')}
+            </Title>
+            <SubtitleRow>
+              <Text centerHorizontally color="shy" size={14} as="span">
+                <Trans
+                  i18nKey="choose_a_password_description"
+                  components={{
+                    b: <Text as="span" weight={600} color="contrast" />,
+                  }}
+                />
+              </Text>
+              <Tooltip
+                content={t('fastVaultSetup.passwordTooltip')}
+                placement="top"
+                renderOpener={openerProps => (
+                  <InfoIconTrigger {...openerProps}>
+                    <CircleInfoIcon />
+                  </InfoIconTrigger>
+                )}
               />
-            </Text>
-            <Tooltip
-              content={t('fastVaultSetup.passwordTooltip')}
-              placement="top"
-              renderOpener={openerProps => (
-                <InfoIconTrigger {...openerProps}>
-                  <CircleInfoIcon />
-                </InfoIconTrigger>
-              )}
+            </SubtitleRow>
+          </VStack>
+          <VStack gap={12}>
+            <PasswordInput
+              {...register('password')}
+              error={errors.password?.message}
+              placeholder={t('enter_password')}
+              validation={
+                isValid ? 'valid' : errors.password ? 'invalid' : undefined
+              }
+              autoFocus
             />
-          </SubtitleRow>
-        </VStack>
-        <VStack gap={12}>
-          <PasswordInput
-            {...register('password')}
-            error={errors.password?.message}
-            placeholder={t('enter_password')}
-            validation={
-              isValid ? 'valid' : errors.password ? 'invalid' : undefined
-            }
-            autoFocus
-          />
-          <PasswordInput
-            {...register('confirmPassword')}
-            error={errors.confirmPassword?.message}
-            placeholder={t('verify_password')}
-            validation={
-              isValid ? 'valid' : errors.confirmPassword ? 'invalid' : undefined
-            }
-          />
-        </VStack>
-      </Content>
-    </ScreenLayout>
+            <PasswordInput
+              {...register('confirmPassword')}
+              error={errors.confirmPassword?.message}
+              placeholder={t('verify_password')}
+              validation={
+                isValid
+                  ? 'valid'
+                  : errors.confirmPassword
+                    ? 'invalid'
+                    : undefined
+              }
+            />
+          </VStack>
+        </Content>
+      </ScreenLayout>
+    </Form>
   )
 }
+
+const Form = styled.form`
+  height: 100%;
+`
 
 const Content = styled(VStack)`
   flex: 1;

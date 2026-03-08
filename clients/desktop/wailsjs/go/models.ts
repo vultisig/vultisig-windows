@@ -62,6 +62,36 @@ export namespace storage {
 	        this.keyshare = source["keyshare"];
 	    }
 	}
+	export class TransactionRecord {
+	    id: string;
+	    vault_id: string;
+	    type: string;
+	    status: string;
+	    chain: string;
+	    timestamp: string;
+	    tx_hash: string;
+	    explorer_url: string;
+	    fiat_value: string;
+	    data: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new TransactionRecord(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
+	        this.vault_id = source["vault_id"];
+	        this.type = source["type"];
+	        this.status = source["status"];
+	        this.chain = source["chain"];
+	        this.timestamp = source["timestamp"];
+	        this.tx_hash = source["tx_hash"];
+	        this.explorer_url = source["explorer_url"];
+	        this.fiat_value = source["fiat_value"];
+	        this.data = source["data"];
+	    }
+	}
 	export class Vault {
 	    name: string;
 	    public_key_ecdsa: string;
@@ -82,11 +112,11 @@ export namespace storage {
 	    chain_public_keys?: Record<string, string>;
 	    chain_key_shares?: Record<string, string>;
 	    public_key_mldsa?: string;
-
+	
 	    static createFrom(source: any = {}) {
 	        return new Vault(source);
 	    }
-
+	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.name = source["name"];

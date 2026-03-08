@@ -78,6 +78,12 @@ export const useKeygenLoadingAnimation = () => {
     posXcircles.setValue(bounds.width / 2)
   }, [bounds.width, posXcircles])
 
+  // Mute animation audio
+  useEffect(() => {
+    if (!rive) return
+    Object.assign(rive, { volume: 0 })
+  }, [rive])
+
   // Handle resize for drawing surface
   useEffect(() => {
     if (!rive) return

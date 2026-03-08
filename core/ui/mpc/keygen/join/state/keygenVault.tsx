@@ -18,7 +18,7 @@ import { useCore } from '../../../../state/core'
 export const JoinKeygenVaultProvider: React.FC<ChildrenProp> = ({
   children,
 }) => {
-  const [{ keygenMsg }] = useCoreViewState<'joinKeygen'>()
+  const [{ keygenMsg, keygenOperation }] = useCoreViewState<'joinKeygen'>()
 
   const vaults = useVaults()
 
@@ -33,6 +33,12 @@ export const JoinKeygenVaultProvider: React.FC<ChildrenProp> = ({
   const keygenVault: KeygenVault = useMemo(() => {
     if (existingVault) {
       return { existingVault }
+    }
+
+    if ('singleKeygen' in keygenOperation) {
+      throw new Error(
+        'Post-quantum key generation requires the vault to exist on this device. Import the vault first, then scan the QR again.'
+      )
     }
 
     const vault = {
@@ -56,7 +62,7 @@ export const JoinKeygenVaultProvider: React.FC<ChildrenProp> = ({
     return {
       newVault: vault,
     }
-  }, [existingVault, keygenMsg])
+  }, [existingVault, keygenMsg, keygenOperation])
 
   const { mpcDevice } = useCore()
 

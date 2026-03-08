@@ -1,5 +1,4 @@
 import { getVaultId } from '@core/mpc/vault/Vault'
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ErrorBoundary } from '@lib/ui/errors/ErrorBoundary'
@@ -15,16 +14,18 @@ import styled from 'styled-components'
 
 import { useAgentEvents } from '../hooks/useAgentEvents'
 import { useAgentService } from '../hooks/useAgentService'
-import { useConversationStarters } from '../hooks/useConversationStarters'
+import { useConnectionStatus } from '../hooks/useConnectionStatus'
+import { BurgerClosedIcon } from '../icons/BurgerClosedIcon'
 import { ChatMessage as ChatMessageType, TitleUpdatedEvent } from '../types'
+import { AgentChatInput } from './AgentChatInput'
+import { AgentChatMenu } from './AgentChatMenu'
+import { AgentEmptyState } from './AgentEmptyState'
 import { AgentErrorFallback } from './AgentErrorFallback'
-import { ChatInput } from './ChatInput'
+import { AgentHeaderButton } from './AgentHeaderButton'
+import { AgentReplyMessage } from './AgentReplyMessage'
 import { ChatMessage } from './ChatMessage'
 import { ConfirmationPrompt } from './ConfirmationPrompt'
-import { ConnectionButton } from './ConnectionButton'
-import { ConversationStarters } from './ConversationStarters'
 import { PasswordPrompt } from './PasswordPrompt'
-import { ThinkingIndicator } from './ThinkingIndicator'
 
 type AgentChatViewState = { conversationId?: string; initialMessage?: string }
 
@@ -60,6 +61,7 @@ export const AgentChatPage: FC = () => {
   const {
     messages,
     isLoading,
+    isComplete,
     passwordRequired,
     confirmationRequired,
     authRequired,
@@ -106,14 +108,44 @@ export const AgentChatPage: FC = () => {
 
   const vaultId = vault ? getVaultId(vault) : null
 
+  const {
+    state: connectionState,
+    checked: connectionChecked,
+    connect: connectionConnect,
+    error: connectionError,
+    clearError: clearConnectionError,
+  } = useConnectionStatus(vaultId, orchestrator)
+
+  const [showConnectionGate, setShowConnectionGate] = useState(false)
+
+  useEffect(() => {
+    if (connectionChecked && connectionState === 'disconnected') {
+      setShowConnectionGate(true)
+    } else if (connectionState === 'connected') {
+      setShowConnectionGate(false)
+    }
+  }, [connectionChecked, connectionState])
+
+  const handleConnectionGateSubmit = async (password: string) => {
+    try {
+      await connectionConnect(password)
+      setShowConnectionGate(false)
+    } catch {
+      // error is surfaced via connectionError
+    }
+  }
+
+  const handleConnectionGateCancel = () => {
+    setShowConnectionGate(false)
+    clearConnectionError()
+    navigate({ id: 'vault' })
+  }
+
   useEffect(() => {
     if (vaultId) {
       preloadContext(vaultId)
     }
   }, [vaultId, preloadContext])
-
-  const { starters, isLoading: isLoadingStarters } =
-    useConversationStarters(vaultId)
 
   const queuedMessageRef = useRef<string | null>(null)
 
@@ -138,6 +170,10 @@ export const AgentChatPage: FC = () => {
       }
       // error events are surfaced via useAgentEvents
     }
+  }
+
+  const handleSessionDeleted = () => {
+    navigate({ id: 'agentChat', state: {} })
   }
 
   const handleSend = (message: string) => {
@@ -217,6 +253,7 @@ export const AgentChatPage: FC = () => {
   }
 
   const pendingMessageRef = useRef<string | null>(null)
+  const [inputValue, setInputValue] = useState('')
   const [authSignInError, setAuthSignInError] = useState<string | null>(null)
   const [authSigningIn, setAuthSigningIn] = useState(false)
 
@@ -274,35 +311,46 @@ export const AgentChatPage: FC = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={
-          <PageHeaderBackButton onClick={() => navigate({ id: 'agent' })} />
+          <AgentHeaderButton onClick={() => navigate({ id: 'agent' })}>
+            <BurgerClosedIcon />
+          </AgentHeaderButton>
         }
         title={chatTitle || t('vultibot')}
         hasBorder
-        secondaryControls={<ConnectionButton />}
+        secondaryControls={
+          <AgentChatMenu
+            conversationId={conversationId}
+            onSessionDeleted={handleSessionDeleted}
+          />
+        }
       />
       <MessagesContainer>
         <ErrorBoundary fallback={AgentErrorFallback}>
           {messages.length === 0 && !isLoading && (
-            <WelcomeMessage>
-              <VStack gap={16} alignItems="center">
-                <Text size={24} weight={600}>
-                  {t('vultibot_welcome')}
-                </Text>
-                <CenteredText size={14} color="supporting">
-                  {t('vultibot_description')}
-                </CenteredText>
-                <ConversationStarters
-                  starters={starters}
-                  isLoading={isLoadingStarters}
-                  onSelect={handleSend}
-                />
-              </VStack>
-            </WelcomeMessage>
+            <AgentEmptyState onSelect={handleSend} />
           )}
-          {messages.map(msg => (
-            <ChatMessage key={msg.id} message={msg} />
-          ))}
-          {isLoading && <ThinkingIndicator />}
+          {(() => {
+            const lastAssistantIdx = messages.reduce(
+              (last, m, idx) =>
+                m.role === 'assistant' && m.content.trim().length > 0
+                  ? idx
+                  : last,
+              -1
+            )
+            return messages.map((msg, i) => (
+              <ChatMessage
+                key={msg.id}
+                message={msg}
+                isAnalyzing={
+                  i === lastAssistantIdx &&
+                  !msg.analysisDuration &&
+                  !isLoading &&
+                  !isComplete
+                }
+              />
+            ))
+          })()}
+          {isLoading && <AgentReplyMessage isAnalyzing content="" />}
           {error && (
             <ErrorMessage onClick={dismissError}>
               <Text size={14} color="danger">
@@ -313,10 +361,20 @@ export const AgentChatPage: FC = () => {
         </ErrorBoundary>
         <div ref={messagesEndRef} />
       </MessagesContainer>
-      <ChatInput
-        onSend={handleSend}
-        placeholder={t('ask_about_plugins_policies')}
-      />
+      <ChatInputContainer>
+        <AgentChatInput
+          value={inputValue}
+          onChange={setInputValue}
+          onSubmit={() => {
+            const trimmed = inputValue.trim()
+            if (trimmed) {
+              handleSend(trimmed)
+              setInputValue('')
+            }
+          }}
+          placeholder={t('ask_about_plugins_policies')}
+        />
+      </ChatInputContainer>
       {passwordRequired && (
         <PasswordPrompt
           toolName={passwordRequired.toolName}
@@ -344,13 +402,20 @@ export const AgentChatPage: FC = () => {
           onCancel={handleAuthCancel}
         />
       )}
+      {!authRequired && showConnectionGate && (
+        <PasswordPrompt
+          toolName="sign_in"
+          operation={t('agent_operation_sign_in')}
+          description={t('agent_connect_description')}
+          error={connectionError}
+          isLoading={connectionState === 'connecting'}
+          onSubmit={handleConnectionGateSubmit}
+          onCancel={handleConnectionGateCancel}
+        />
+      )}
     </VStack>
   )
 }
-
-const CenteredText = styled(Text)`
-  text-align: center;
-`
 
 const MessagesContainer = styled(PageContent)`
   flex: 1;
@@ -358,13 +423,8 @@ const MessagesContainer = styled(PageContent)`
   padding: 16px;
 `
 
-const WelcomeMessage = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  padding: 24px;
+const ChatInputContainer = styled.div`
+  padding: 12px 16px;
 `
 
 const ErrorMessage = styled.div`

@@ -22,8 +22,13 @@ export const useDisablePasscodeMutation = () => {
 
       const vaultsKeyShares = recordMap(
         recordFromItems(vaults, getVaultId),
-        ({ keyShares, chainKeyShares }) =>
-          decryptVaultAllKeyShares({ key, keyShares, chainKeyShares })
+        ({ keyShares, chainKeyShares, keyShareMldsa }) =>
+          decryptVaultAllKeyShares({
+            key,
+            keyShares,
+            chainKeyShares,
+            keyShareMldsa,
+          })
       )
 
       await updateVaultsKeyShares(vaultsKeyShares)

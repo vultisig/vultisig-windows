@@ -8,8 +8,8 @@
   "scripts": {
     "lint": "eslint --cache --cache-location node_modules/.cache/eslint/ 'clients/desktop/src/**/*.{js,jsx,ts,tsx}' 'clients/extension/src/**/*.{js,jsx,ts,tsx}' 'core/**/*.{js,jsx,ts,tsx}' 'lib/**/*.{js,jsx,ts,tsx}'",
     "lint:fix": "eslint --cache --cache-location node_modules/.cache/eslint/ 'clients/desktop/src/**/*.{js,jsx,ts,tsx}' 'clients/extension/src/**/*.{js,jsx,ts,tsx}' 'core/**/*.{js,jsx,ts,tsx}' 'lib/**/*.{js,jsx,ts,tsx}' --fix",
-    "dev:desktop": "wails dev",
-    "dev:desktop:vite": "yarn workspace @clients/desktop dev",
+    "dev:desktop": "wails dev -s -skipbindings -m -nosyncgomod",
+    "dev:desktop:full": "wails dev",
     "build:desktop": "yarn workspace @clients/desktop build",
     "build:extension": "yarn workspace @clients/extension build",
     "dev:extension": "yarn workspace @clients/extension dev",
@@ -19,7 +19,7 @@
     "knip": "knip",
     "check:all": "yarn lint && yarn typecheck && yarn test && yarn knip",
     "knip:fix": "knip --fix --allow-remove-files",
-    "check": "concurrently --kill-others-on-fail \"yarn typecheck\" \"yarn lint:fix\" && yarn knip && (yarn translate || true)",
+    "check": "concurrently --kill-others-on-fail \"yarn typecheck\" \"yarn lint:fix\" && yarn knip",
     "translate": "yarn workspace @core/ui translate",
     "update": "yarn set version latest && yarn dlx npm-check-updates@latest -u --workspaces --root && yarn install"
   },

@@ -65,8 +65,8 @@ export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
   // Display error for ReverseSwap button (excludes non-error states like loading/fill_the_form)
   const displayErrorMessage = useMemo(() => {
     if (isPending) return null
-    if (validationErrorMessage === undefined) return null
     if (error) return extractErrorMsg(error)
+    if (validationErrorMessage === undefined) return null
     return validationErrorMessage
   }, [validationErrorMessage, error, isPending])
 

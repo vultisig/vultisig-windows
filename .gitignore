@@ -105,3 +105,9 @@ task.md
 storybook-static
 google-credentials.json
 .mind/
+
+# Claude Code local settings (user-specific)
+.claude/settings.local.json
+
+# Local agent config (credentials, secrets)
+.cursor/*.local

@@ -63,6 +63,7 @@ export const vaultsStorage: VaultsStorage = {
         ...vault,
         keyShares: allKeyShares.keyShares,
         chainKeyShares: allKeyShares.chainKeyShares,
+        keyShareMldsa: allKeyShares.keyShareMldsa,
       }
     })
 

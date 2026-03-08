@@ -69,7 +69,7 @@ export const en = {
   backupShare2: 'Backup Share 2',
   backupsTitle: '<highlight>Backups,</highlight> your new recovery method',
   backupsDescription:
-    "Backups power your vault. Each device has its own backup. A backup alone can't move funds, it's only for recovery. Import and recover any lost device",
+    "Backups power your vault. Each device has its <w>own</w> backup. A backup alone can't move funds, it's only for recovery. Import and recover any lost device",
   backupEachDevice: 'Your Device is the driver',
   backupEachDeviceDescription:
     'The device backup <w>and</w> password are the keys. The server only co-signs, and a backup can be requested.',
@@ -252,6 +252,7 @@ export const en = {
   developer_options: 'Developer Options',
   device_backup: 'Device Backup',
   device_backup_description: 'Store the vault share of this device.',
+  device_n_label: 'Device {{number}} - {{hash}}',
   devices: 'Devices',
   digit_input_error_validation: 'Incorrect code. Try again.',
   digit_input_loading_validation: 'Verifying code, please wait',
@@ -276,6 +277,12 @@ export const en = {
   email_required: 'Email is required',
   evm_chains: 'EVM Chains',
   enable_dkls: 'Enable DKLS',
+  enable_mldsa: 'Enable MLDSA',
+  post_quantum_keygen: 'Post-Quantum Key Generation',
+  post_quantum_keygen_description:
+    'Generate a post-quantum (MLDSA) key for this vault',
+  post_quantum_key_already_generated:
+    'This vault already has a post-quantum key',
   enable_token_instruction:
     'Enable at least one token to view balances and manage positions.',
   encrypting_vault_keyshares: 'Encrypting vault keyshares...',
@@ -379,10 +386,8 @@ export const en = {
       online: 'online',
       part1: 'Share 1 of the vault shares will be',
       securely: 'securely, preferably',
-      setNewStandard: "You're ready to use a new wallet standard.",
       shareSecurely: 'to ensure access, preferably',
       vaultShares: 'Your vault holds 2 shares,',
-      wellDone: 'Well done',
       sentTo: 'Send to ({{email}})',
       changeEmailAndRestartKeygen: 'Use a different email',
     },
@@ -587,6 +592,7 @@ export const en = {
   lock_time: 'Lock Time',
   lock_vultisig_automatically_after: 'Lock Vultisig automatically after...',
   looking_for_server: 'Looking for FastVaultServer...',
+  looks_good: 'Looks good',
   low: 'Low',
   lp_units: 'LP Units',
   m_of_n_vault: '{{m}}-of-{{n}} Vault',
@@ -787,6 +793,9 @@ export const en = {
   reshare_your_vault: 'Reshare your vault',
   resource: 'Resource',
   retry: 'Retry',
+  review_vault_devices_subtitle:
+    "Make sure that these are the correct devices you've added:",
+  review_your_vault_devices: 'Review your vault devices',
   risky_site_detected: 'Malicious site detected',
   risky_transaction_detected: '{{riskLevel}} risk transaction detected',
   risky_tx_warning:
@@ -800,6 +809,10 @@ export const en = {
     'Export this backup file, then save it to the cloud. It is <b>encrypted</b> with the password set earlier to unlock your Vault.',
   save_backup_description_2:
     "Use a different cloud service or account for each backup. When you're finished, delete the file from this device.",
+  save_backup_description_secure:
+    'Export this backup file, then save it to the cloud.',
+  save_backup_n_of_n_to_cloud:
+    'Save backup {{current}} of {{total}} to the cloud',
   save_backup_to_cloud: 'Save backup to the cloud',
   save_code: 'Save code',
   save_swap_fees_with_referral:
@@ -825,8 +838,26 @@ export const en = {
       shares: 'Your vault holds {{shares}} shares',
     },
   },
+  secureVaultPeerDiscovery: {
+    addAtLeastMoreDevices_one: 'Add at least {{count}} more device',
+    addAtLeastMoreDevices_other: 'Add at least {{count}} more devices',
+    devicePosition: '{{current}} of {{total}}',
+    localModeWaiting: 'Local mode, waiting on devices',
+    notWantToUseLocal: 'Not want to use local? Switch back.',
+    switchBack: 'Switch back',
+    useStandardMode: 'Use standard mode',
+    useLocalMode: 'Use local mode',
+    waitingForDeviceToJoin: 'Waiting for device to join',
+    waitingForDevicesToConnect: 'Waiting for devices to connect',
+    wantToCreateVaultPrivately: 'Want to create a vault privately?',
+  },
   secureVaultSetupPasswordTooltipContent:
     'This occurs because the password is used to locally encrypt the backup file, similar to how a hard drive is encrypted. In the following step, you have the option to add a hint.',
+  secure_backup_each_device: 'Back up each device',
+  secure_backup_each_device_description:
+    "You'll create {{count}} backups in total. You will do this on each device.",
+  secure_store_backups_separately_description:
+    'Save each backup in a different cloud service or with a different password. If one is exposed, your funds stay safe.',
   security: 'Security',
   select: 'Select',
   select_asset: 'Select asset',
@@ -894,6 +925,7 @@ export const en = {
   skip: 'Skip',
   slippage: 'Slippage',
   something_went_wrong: 'Something went wrong',
+  somethings_wrong: "Something's wrong",
   soon: 'Soon',
   stake: 'Stake',
   staked: 'Staked',
@@ -908,6 +940,7 @@ export const en = {
   swap: 'Swap',
   swap_fee: 'Swap fee',
   swap_overview: 'Swap overview',
+  swap_same_asset: 'Cannot swap between the same asset',
   swap_terms: {
     input: 'The swap amount is correct',
     output: "I agree with the min. amount I'll receive",
@@ -919,6 +952,7 @@ export const en = {
   terms_of_service: 'Terms of Service',
   terms_required: 'You must agree with the terms',
   this_device: 'This device',
+  this_device_suffix: '(this device)',
   this_vault_only: 'This Vault Only',
   this_vault_share: 'this device vault share',
   thorchain_address: 'THORChain Address',
@@ -947,6 +981,7 @@ export const en = {
   transaction_could_not_be_parsed:
     'This transaction could not be parsed. Raw transaction data is shown below.',
   raw_transaction_data: 'Raw Transaction Data',
+  transaction_history: 'Transaction History',
   transaction_instructions_summary: 'Transaction Instructions Summary',
   instruction: 'Instruction',
   program_id: 'Program ID',
@@ -1040,6 +1075,7 @@ export const en = {
   vault_details_page_signer_word: 'Signer',
   vault_details_page_vault_ECDSA: 'ECDSA key',
   vault_details_page_vault_EDDSA: 'EdDSA key',
+  vault_details_page_vault_MLDSA: 'MLDSA key',
   vault_details_page_vault_type: 'Vault Type',
   vault_info: 'Vault Info',
   vault_management: 'Vault Management',
@@ -1135,6 +1171,8 @@ export const en = {
   you_are_sending: "You're sending",
   you_are_staking: "You're staking",
   you_are_unstaking: "You're unstaking",
+  you_are_minting: "You're minting",
+  you_are_redeeming: "You're redeeming",
   yourVaultShares: 'Your vault has {{shares}} Vault Shares',
   vaultSetupOverview: {
     title: 'Your vault setup',
@@ -1197,6 +1235,7 @@ export const en = {
   your_seedphrase_subtitle: 'Enter it, create a vault, never look back',
   youre_swapping: "You're swapping",
   account: 'Account',
+  session_history: 'Session history',
   vultibot: 'Vulti',
   vultibot_welcome: "Hi, I'm Vulti",
   start_new_chat: 'Start New Chat',
@@ -1204,6 +1243,13 @@ export const en = {
   messages: 'messages',
   vultibot_description:
     'Your AI-powered vault assistant. I can swap, send, automate policies, check balances, and manage your vault.',
+  agent_what_to_do: 'What would you like to do?',
+  agent_help_description:
+    'I can help prepare swaps, plugin actions, and automation rules.',
+  agent_prompt_show_plugins: 'Show me plugins and what they can do',
+  agent_prompt_earn_apy: 'I want to earn APY on BTC',
+  agent_prompt_send: 'Send amount to ...',
+  agent_prompt_swap: 'Prepare a swap from ETH to BTC',
   api_key_required: 'API Key Required',
   api_key_required_description:
     'To use Vulti, please set your Anthropic API key as an environment variable before starting the app.',
@@ -1226,6 +1272,9 @@ export const en = {
   agent_session_expired:
     'Your session has expired. Enter your vault password to reconnect.',
   agent_sign_in_failed: 'Sign in failed',
+  agent_chat_options: 'Chat options',
+  agent_give_feedback: 'Give Feedback',
+  agent_delete_chat_session: 'Delete Chat Session',
   agent_signing_in: 'Signing in...',
   agent_thinking_of_ideas: 'Thinking of ideas...',
   agent_tool_label: 'Tool: {{tool}}',
@@ -1240,4 +1289,7 @@ export const en = {
   agent_tx_type_swap: 'Swap',
   agent_tx_type_transfer: 'Transfer',
   agent_tx_view: 'View',
+  agent_analyzing: 'Analyzing...',
+  agent_analyzed_for: 'Analyzed for {{duration}}s',
+  agent_analyzed: 'Analyzed',
 }

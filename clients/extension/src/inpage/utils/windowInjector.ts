@@ -150,6 +150,20 @@ async function setupContentScriptMessenger(
           configurable: false,
           writable: false,
         },
+        injectedWeb3: {
+          value: {
+            ...(window.injectedWeb3 || {}),
+            vultisig: {
+              enable: (origin?: string) => providers.polkadot.enable(origin),
+            },
+            'polkadot-js': {
+              enable: (origin?: string) => providers.polkadot.enable(origin),
+              version: '0.46.9',
+            },
+          },
+          configurable: false,
+          writable: false,
+        },
       })
     )
   }

@@ -51,11 +51,8 @@ export const de = {
       online: 'online',
       part1: 'Teil 1 der Tresoranteile wird sein',
       securely: 'sicher, vorzugsweise',
-      setNewStandard:
-        'Sie sind bereit, einen neuen Wallet-Standard zu verwenden.',
       shareSecurely: 'um den Zugang zu gewährleisten, vorzugsweise',
       vaultShares: 'Ihr Tresor enthält 2 Aktien.',
-      wellDone: 'Gut gemacht',
       sentTo: 'Gesendet an {{email}}.',
       changeEmailAndRestartKeygen: 'E-Mail ändern und Keygen neu starten',
     },
@@ -733,6 +730,21 @@ export const de = {
   search: 'Suchen',
   search_field_placeholder: 'Suchen',
   secure: 'Sicher',
+  secureVaultPeerDiscovery: {
+    addAtLeastMoreDevices_one:
+      'Fügen Sie mindestens noch {{count}} Gerät hinzu',
+    addAtLeastMoreDevices_other:
+      'Fügen Sie mindestens noch {{count}} Geräte hinzu',
+    devicePosition: '{{current}} von {{total}}',
+    localModeWaiting: 'Lokaler Modus, warte auf Geräte',
+    notWantToUseLocal: 'Kein lokaler Modus? Zurückschalten.',
+    switchBack: 'Zurückschalten',
+    useStandardMode: 'Standardmodus verwenden',
+    useLocalMode: 'Lokalen Modus verwenden',
+    waitingForDeviceToJoin: 'Warte auf beitretendes Gerät',
+    waitingForDevicesToConnect: 'Warte, bis Geräte verbunden sind',
+    wantToCreateVaultPrivately: 'Möchten Sie einen Tresor privat erstellen?',
+  },
   secureVaultSetupPasswordTooltipContent:
     'Dies geschieht, weil das Passwort zur lokalen Verschlüsselung der Sicherungsdatei verwendet wird, ähnlich wie bei der Verschlüsselung einer Festplatte. Im nächsten Schritt haben Sie die Möglichkeit, einen Hinweis hinzuzufügen.',
   security: 'Sicherheit',
@@ -995,6 +1007,8 @@ export const de = {
   you_are_sending: 'Du sendest',
   you_are_staking: 'Du stakest',
   you_are_unstaking: 'Du entstakest',
+  you_are_minting: "You're minting",
+  you_are_redeeming: "You're redeeming",
   yourVaultShares: 'Ihr Tresor enthält {{shares}} Tresoranteile',
   your_friends_referral_code: 'Der Empfehlungscode deines Freundes',
   your_referral_code: 'Ihr Empfehlungscode',
@@ -1275,4 +1289,5 @@ export const de = {
   agent_tx_type_swap: 'Tauschen',
   agent_tx_type_transfer: 'Überweisen',
   agent_tx_view: 'Sicht',
+  open_as_side_panel: 'Als Seitenwand öffnen',
 }

@@ -23,13 +23,14 @@ export const SaveImportedVaultStep = ({
   const initialVaults = useRef(useVaults()).current
 
   const vaultOrders = useVaultOrders()
+  const stableVaultOrders = useRef(vaultOrders).current
 
   const finalValue = useMemo(
     () => ({
       ...(override ? { ...value, ...override } : value),
-      order: getLastItemOrder(vaultOrders),
+      order: getLastItemOrder(stableVaultOrders),
     }),
-    [override, value, vaultOrders]
+    [override, value, stableVaultOrders]
   )
 
   const error = useMemo(() => {

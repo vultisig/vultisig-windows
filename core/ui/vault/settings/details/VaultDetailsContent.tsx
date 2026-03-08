@@ -30,7 +30,8 @@ const TruncatingCol = styled(VStack)`
 
 export const VaultDetailsContent = () => {
   const { t } = useTranslation()
-  const { name, publicKeys, signers, localPartyId, libType } = useCurrentVault()
+  const { name, publicKeys, publicKeyMldsa, signers, localPartyId, libType } =
+    useCurrentVault()
   const totalSigners = signers.length
   const localPartyIndex = signers.indexOf(localPartyId) + 1
   const threshold = getKeygenThreshold(totalSigners)
@@ -94,6 +95,23 @@ export const VaultDetailsContent = () => {
             </IconWrapper>
           </UnstyledButton>
         </Item>
+        {publicKeyMldsa && (
+          <Item>
+            <TruncatingCol flexGrow>
+              <Text size={14}>{t('vault_details_page_vault_MLDSA')}</Text>
+              <Text cropped size={12} color="shyExtra">
+                {publicKeyMldsa}
+              </Text>
+            </TruncatingCol>
+            <UnstyledButton
+              onClick={() => handleCopyToClipboard(publicKeyMldsa)}
+            >
+              <IconWrapper size={20}>
+                <CopyIcon />
+              </IconWrapper>
+            </UnstyledButton>
+          </Item>
+        )}
       </VStack>
       <VStack gap={12}>
         <Text size={12} color="shy">

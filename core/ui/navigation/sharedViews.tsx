@@ -11,6 +11,7 @@ import { CoreViewId } from '@core/ui/navigation/CoreView'
 import { CurrencyPage } from '@core/ui/preferences/currency'
 import { LanguagePage } from '@core/ui/preferences/language'
 import { UploadQrPage } from '@core/ui/qr/upload'
+import { TransactionHistoryPage } from '@core/ui/transaction-history/TransactionHistoryPage'
 import { VaultBackupPage } from '@core/ui/vault/backup'
 import { SelectVaultsBackupPage } from '@core/ui/vault/backup/select/SelectVaultsBackupPage'
 import { VaultsBackupPage } from '@core/ui/vault/backup/VaultsBackupPage'
@@ -26,6 +27,7 @@ import { SendPage } from '@core/ui/vault/send/SendPage'
 import { VaultSettingsPage } from '@core/ui/vault/settings'
 import { DeleteVaultPage } from '@core/ui/vault/settings/delete'
 import { VaultDetailsPage } from '@core/ui/vault/settings/details'
+import { VaultRenamePage } from '@core/ui/vault/settings/rename'
 import { SwapPage } from '@core/ui/vault/swap/components/SwapPage'
 import { VaultsPage } from '@core/ui/vaultsOrganisation'
 import { VaultFolderPage } from '@core/ui/vaultsOrganisation/folder'
@@ -75,6 +77,7 @@ export type SharedViewId = Extract<
   | 'manageVaultFolder'
   | 'manageVaults'
   | 'newVault'
+  | 'renameVault'
   | 'reshareVault'
   | 'send'
   | 'signCustomMessage'
@@ -95,6 +98,7 @@ export type SharedViewId = Extract<
   | 'passcodeAutoLock'
   | 'referral'
   | 'requestFastVaultBackup'
+  | 'transactionHistory'
   | 'faq'
   | 'shareVault'
   | 'vultDiscount'
@@ -135,6 +139,7 @@ export const sharedViews: Views<SharedViewId> = {
   manageVaultChainCoins: ManageVaultChainCoinsPage,
   manageVaults: ManageVaultsPage,
   newVault: NewVaultPage,
+  renameVault: VaultRenamePage,
   reshareVault: ReshareVaultPage,
   send: SendPage,
   signCustomMessage: SignCustomMessagePage,
@@ -162,6 +167,7 @@ export const sharedViews: Views<SharedViewId> = {
   managePasscodeEncryption: ManagePasscodeEncryptionPage,
   passcodeAutoLock: PasscodeAutoLockPage,
   requestFastVaultBackup: RequestFastVaultBackup,
+  transactionHistory: TransactionHistoryPage,
   faq: FaqVaultPage,
   shareVault: ShareVaultPage,
   vultDiscount: VultDiscountPage,
