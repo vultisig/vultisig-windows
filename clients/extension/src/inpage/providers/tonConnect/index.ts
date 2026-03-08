@@ -41,8 +41,13 @@ export class TonConnectBridge {
     this.listeners.forEach(cb => cb(event))
   }
 
-  disconnect(): void {
-    callBackground({ signOut: {} })
+  async disconnect(): Promise<void> {
+    const { error } = await attempt(callBackground({ signOut: {} }))
+
+    if (error) {
+      console.error('Failed to sign out on disconnect:', error)
+    }
+
     this.emit({
       event: 'disconnect',
       id: this.nextEventId++,
@@ -78,6 +83,38 @@ export class TonConnectBridge {
 
     const manifestResult = await attempt(fetch(request.manifestUrl))
     if ('error' in manifestResult) {
+      return {
+        event: 'connect_error',
+        id: 0,
+        payload: { code: 2, message: 'App manifest not found' },
+      }
+    }
+
+    const manifestResponse = manifestResult.data
+
+    if (!manifestResponse.ok) {
+      return {
+        event: 'connect_error',
+        id: 0,
+        payload: { code: 2, message: 'App manifest not found' },
+      }
+    }
+
+    const contentType = manifestResponse.headers.get('content-type')
+    if (contentType && !contentType.includes('application/json')) {
+      return {
+        event: 'connect_error',
+        id: 0,
+        payload: { code: 2, message: 'App manifest not found' },
+      }
+    }
+
+    const manifestJsonResult = await attempt(manifestResponse.json())
+    if (
+      'error' in manifestJsonResult ||
+      !manifestJsonResult.data ||
+      typeof manifestJsonResult.data !== 'object'
+    ) {
       return {
         event: 'connect_error',
         id: 0,

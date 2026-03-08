@@ -41,7 +41,7 @@ interface Window {
       connect: (protocolVersion: number, message: unknown) => Promise<unknown>
       restoreConnection: () => Promise<unknown>
       listen: (callback: (event: unknown) => void) => () => void
-      disconnect: () => void
+      disconnect: () => Promise<void>
     }
   }
   injectedWeb3?: Record<
