@@ -1,7 +1,9 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { SendIcon } from '@lib/ui/icons/SendIcon'
+import { StopCircleIcon } from '@lib/ui/icons/StopCircleIcon'
 import { getColor } from '@lib/ui/theme/getters'
 import { FC, KeyboardEvent, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 type AgentChatInputProps = {
@@ -10,6 +12,8 @@ type AgentChatInputProps = {
   onSubmit: () => void
   placeholder?: string
   disabled?: boolean
+  onStop?: () => void
+  isLoading?: boolean
 }
 
 export const AgentChatInput: FC<AgentChatInputProps> = ({
@@ -18,9 +22,12 @@ export const AgentChatInput: FC<AgentChatInputProps> = ({
   onSubmit,
   placeholder = 'Start typing...',
   disabled = false,
+  onStop,
+  isLoading = false,
 }) => {
+  const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>(null)
-  const canSubmit = value.trim().length > 0 && !disabled
+  const canSubmit = value.trim().length > 0 && !disabled && !isLoading
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && canSubmit) {
@@ -37,16 +44,28 @@ export const AgentChatInput: FC<AgentChatInputProps> = ({
         onChange={e => onChange(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
-        disabled={disabled}
+        $loading={isLoading}
+        disabled={disabled || isLoading}
       />
-      <SendButton
-        $active={canSubmit}
-        onClick={canSubmit ? onSubmit : undefined}
-        disabled={!canSubmit}
-        aria-label="Send message"
-      >
-        <SendIcon style={{ fontSize: 20 }} />
-      </SendButton>
+      {isLoading ? (
+        <ActionButton
+          $active
+          onClick={() => onStop?.()}
+          disabled={false}
+          aria-label={t('cancel')}
+        >
+          <StopCircleIcon style={{ fontSize: 20 }} />
+        </ActionButton>
+      ) : (
+        <ActionButton
+          $active={canSubmit}
+          onClick={canSubmit ? onSubmit : undefined}
+          disabled={!canSubmit}
+          aria-label={t('send')}
+        >
+          <SendIcon style={{ fontSize: 20 }} />
+        </ActionButton>
+      )}
     </Container>
   )
 }
@@ -68,7 +87,7 @@ const Container = styled.div`
     inset 0px 2px 8px 0px rgba(137, 170, 255, 0.1);
 `
 
-const Input = styled.input`
+const Input = styled.input<{ $loading: boolean }>`
   flex: 1;
   min-width: 0;
   border: none;
@@ -86,12 +105,12 @@ const Input = styled.input`
   }
 
   &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+    opacity: ${({ $loading }) => ($loading ? 1 : 0.5)};
+    cursor: ${({ $loading }) => ($loading ? 'default' : 'not-allowed')};
   }
 `
 
-const SendButton = styled(UnstyledButton)<{ $active: boolean }>`
+const ActionButton = styled(UnstyledButton)<{ $active: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;

@@ -441,6 +441,7 @@ export const ru = {
   header_tooltip_title: 'Реферальная программа',
   hide_balance: 'Скрыть баланс',
   hide_defi_balance: 'Скрыть DeFi-баланс',
+  hold: 'Держать',
   hold_for_paired_sign: 'Удерживайте для парной подписи',
   how_it_works: 'Как это работает',
   ibc_transaction_not_supporting_memo_desc:

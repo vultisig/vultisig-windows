@@ -91,6 +91,10 @@ export type CoreView =
       id: 'setupVault'
       state: { type?: VaultSecurityType; keyImportInput?: KeyImportInput }
     }
+  | {
+      id: 'setupVaultOverview'
+      state: { selectedDeviceCount: number; keyImportInput?: KeyImportInput }
+    }
   | { id: 'signCustomMessage' }
   | {
       id: 'swap'
