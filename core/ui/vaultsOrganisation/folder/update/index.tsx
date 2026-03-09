@@ -253,7 +253,7 @@ const ManageFolderVaults = ({
                   <Switch checked onChange={handleRemove} />
                 </SwitchWrapper>
               }
-              disabled
+              disabled={status === 'dragging'}
             />
             {status === 'overlay' && <DnDItemHighlight />}
           </DnDItemContainer>
