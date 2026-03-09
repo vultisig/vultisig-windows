@@ -7,62 +7,17 @@
  * Pre-seeded with SecureVault from SECURE_VAULT_SHARES env.
  */
 
-import { test, expect, type BrowserContext } from '@playwright/test'
-import { chromium } from '@playwright/test'
+import { test, expect } from '../fixtures/extension-loader'
 import { VaultPage } from '../page-objects/VaultPage.po'
 import { SendFlow } from '../page-objects/SendFlow.po'
 import { KeysignProgress } from '../page-objects/KeysignProgress.po'
-import path from 'path'
-
-const extensionPath = path.resolve(__dirname, '../../../../dist')
 
 // SecureVault requires shares from environment
 const SECURE_VAULT_SHARES = process.env.SECURE_VAULT_SHARES
 const SECURE_VAULT_PASSWORD = process.env.SECURE_VAULT_PASSWORD
 
 test.describe('Secure Vault Flows', () => {
-  let context: BrowserContext
-  let extensionId: string
-
-  test.beforeAll(async () => {
-    // Skip entire suite if no secure vault configured
-    if (!SECURE_VAULT_SHARES) {
-      console.log('Skipping SecureVault tests - SECURE_VAULT_SHARES not set')
-      return
-    }
-
-    const userDataDir = path.join(__dirname, '../.test-profile-secure-' + Date.now())
-
-    context = await chromium.launchPersistentContext(userDataDir, {
-      headless: false,
-      args: [
-        `--disable-extensions-except=${extensionPath}`,
-        `--load-extension=${extensionPath}`,
-        '--no-first-run',
-        '--no-default-browser-check',
-        '--disable-default-apps',
-        '--disable-popup-blocking',
-      ],
-    })
-
-    let [background] = context.serviceWorkers()
-    if (!background) {
-      background = await context.waitForEvent('serviceworker', { timeout: 30_000 })
-    }
-    extensionId = background.url().split('/')[2]
-
-    // Import secure vault from shares
-    // This would typically be done through the import flow
-    // For now, we'll test whatever vault is available
-  })
-
-  test.afterAll(async () => {
-    if (context) {
-      await context.close()
-    }
-  })
-
-  test('SecureVault appears in vault list with correct name', async () => {
+  test('SecureVault appears in vault list with correct name', async ({ context, extensionId }) => {
     test.skip(!SECURE_VAULT_SHARES, 'SECURE_VAULT_SHARES not configured')
 
     const page = await context.newPage()
@@ -100,7 +55,7 @@ test.describe('Secure Vault Flows', () => {
     }
   })
 
-  test('balance display works for SecureVault', async () => {
+  test('balance display works for SecureVault', async ({ context, extensionId }) => {
     test.skip(!SECURE_VAULT_SHARES, 'SECURE_VAULT_SHARES not configured')
 
     const page = await context.newPage()
@@ -125,7 +80,7 @@ test.describe('Secure Vault Flows', () => {
     }
   })
 
-  test('send flow reaches "waiting for devices" state and shows QR', async () => {
+  test('send flow reaches "waiting for devices" state and shows QR', async ({ context, extensionId }) => {
     test.skip(!SECURE_VAULT_SHARES, 'SECURE_VAULT_SHARES not configured')
 
     const page = await context.newPage()
@@ -189,7 +144,7 @@ test.describe('Secure Vault Flows', () => {
 
   // Additional SecureVault-specific tests
 
-  test('SecureVault shows correct vault type indicator', async () => {
+  test('SecureVault shows correct vault type indicator', async ({ context, extensionId }) => {
     test.skip(!SECURE_VAULT_SHARES, 'SECURE_VAULT_SHARES not configured')
 
     const page = await context.newPage()
@@ -247,7 +202,7 @@ test.describe('Secure Vault Flows', () => {
     }
   })
 
-  test('SecureVault cannot sign without second device', async () => {
+  test('SecureVault cannot sign without second device', async ({ context, extensionId }) => {
     test.skip(!SECURE_VAULT_SHARES, 'SECURE_VAULT_SHARES not configured')
 
     // This test verifies that the UI correctly shows that

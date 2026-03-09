@@ -10,21 +10,16 @@
  * - window.vultisig and window.phantom.solana also injected
  */
 
-import { test, expect, type BrowserContext, type Page } from '@playwright/test'
-import { chromium } from '@playwright/test'
+import { test, expect, type Page } from '../fixtures/extension-loader'
 import { DAppApproval } from '../page-objects/DAppApproval.po'
 import { TEST_DAPP_HTML } from '../fixtures/dapp-page.fixture'
 import http from 'http'
-import path from 'path'
 
-const extensionPath = path.resolve(__dirname, '../../../../dist')
+// Store DApp server at module level for sharing
+let dappServer: http.Server | null = null
+let dappUrl: string = ''
 
 test.describe('DApp Provider', () => {
-  let context: BrowserContext
-  let extensionId: string
-  let dappServer: http.Server
-  let dappUrl: string
-
   test.beforeAll(async () => {
     // Start DApp server
     dappServer = http.createServer((req, res) => {
@@ -33,44 +28,24 @@ test.describe('DApp Provider', () => {
     })
 
     await new Promise<void>((resolve) => {
-      dappServer.listen(0, '127.0.0.1', () => resolve())
+      dappServer!.listen(0, '127.0.0.1', () => resolve())
     })
 
     const addr = dappServer.address()
     const port = typeof addr === 'object' && addr ? addr.port : 0
     dappUrl = `http://127.0.0.1:${port}`
-
-    // Create browser context
-    const userDataDir = path.join(__dirname, '../.test-profile-dapp-' + Date.now())
-
-    context = await chromium.launchPersistentContext(userDataDir, {
-      headless: false,
-      args: [
-        `--disable-extensions-except=${extensionPath}`,
-        `--load-extension=${extensionPath}`,
-        '--no-first-run',
-        '--no-default-browser-check',
-        '--disable-default-apps',
-        '--disable-popup-blocking',
-      ],
-    })
-
-    let [background] = context.serviceWorkers()
-    if (!background) {
-      background = await context.waitForEvent('serviceworker', { timeout: 30_000 })
-    }
-    extensionId = background.url().split('/')[2]
   })
 
   test.afterAll(async () => {
-    await context.close()
-    dappServer.close()
+    if (dappServer) {
+      dappServer.close()
+    }
   })
 
   /**
    * Helper to wait for and get approval popup
    */
-  async function waitForApprovalPopup(): Promise<Page | null> {
+  async function waitForApprovalPopup(context: any, extensionId: string): Promise<Page | null> {
     // Wait for new page to open (approval popup)
     const popupPromise = context.waitForEvent('page', { timeout: 15000 })
 
@@ -82,13 +57,13 @@ test.describe('DApp Provider', () => {
       // Try finding existing popup
       const pages = context.pages()
       const popup = pages.find(
-        (p) => p.url().includes(`chrome-extension://${extensionId}`)
+        (p: Page) => p.url().includes(`chrome-extension://${extensionId}`)
       )
       return popup || null
     }
   }
 
-  test('window.ethereum injected on test DApp page', async () => {
+  test('window.ethereum injected on test DApp page', async ({ context }) => {
     const page = await context.newPage()
 
     await page.goto(dappUrl)
@@ -112,7 +87,7 @@ test.describe('DApp Provider', () => {
     await page.close()
   })
 
-  test('eth_requestAccounts - popup opens - approve - address returned', async () => {
+  test('eth_requestAccounts - popup opens - approve - address returned', async ({ context, extensionId }) => {
     const page = await context.newPage()
 
     await page.goto(dappUrl)
@@ -124,7 +99,7 @@ test.describe('DApp Provider', () => {
     await connectButton.click()
 
     // Wait for approval popup
-    const popup = await waitForApprovalPopup()
+    const popup = await waitForApprovalPopup(context, extensionId)
 
     if (popup) {
       const approval = new DAppApproval(popup, extensionId)
@@ -157,7 +132,7 @@ test.describe('DApp Provider', () => {
     await page.close()
   })
 
-  test('personal_sign - popup shows message - approve - signature returned', async () => {
+  test('personal_sign - popup shows message - approve - signature returned', async ({ context, extensionId }) => {
     const page = await context.newPage()
 
     await page.goto(dappUrl)
@@ -169,7 +144,7 @@ test.describe('DApp Provider', () => {
     await connectButton.click()
 
     // Handle connect popup
-    let popup = await waitForApprovalPopup()
+    let popup = await waitForApprovalPopup(context, extensionId)
     if (popup && !popup.isClosed()) {
       const approval = new DAppApproval(popup, extensionId)
       try {
@@ -188,7 +163,7 @@ test.describe('DApp Provider', () => {
       await signButton.click()
 
       // Wait for sign popup
-      popup = await waitForApprovalPopup()
+      popup = await waitForApprovalPopup(context, extensionId)
 
       if (popup && !popup.isClosed()) {
         const approval = new DAppApproval(popup, extensionId)
@@ -226,7 +201,7 @@ test.describe('DApp Provider', () => {
     await page.close()
   })
 
-  test('wallet_switchEthereumChain - chainChanged event fires', async () => {
+  test('wallet_switchEthereumChain - chainChanged event fires', async ({ context, extensionId }) => {
     const page = await context.newPage()
 
     await page.goto(dappUrl)
@@ -237,7 +212,7 @@ test.describe('DApp Provider', () => {
     const connectButton = page.locator('[data-testid="connect-wallet"]')
     await connectButton.click()
 
-    let popup = await waitForApprovalPopup()
+    let popup = await waitForApprovalPopup(context, extensionId)
     if (popup && !popup.isClosed()) {
       const approval = new DAppApproval(popup, extensionId)
       try {
@@ -260,7 +235,7 @@ test.describe('DApp Provider', () => {
       await switchButton.click()
 
       // May need approval for switch
-      popup = await waitForApprovalPopup()
+      popup = await waitForApprovalPopup(context, extensionId)
       if (popup && !popup.isClosed()) {
         const approval = new DAppApproval(popup, extensionId)
         try {
@@ -292,7 +267,7 @@ test.describe('DApp Provider', () => {
     await page.close()
   })
 
-  test('reject connection returns UserRejectedRequest error', async () => {
+  test('reject connection returns UserRejectedRequest error', async ({ context, extensionId }) => {
     const page = await context.newPage()
 
     await page.goto(dappUrl)
@@ -304,7 +279,7 @@ test.describe('DApp Provider', () => {
     await connectButton.click()
 
     // Wait for popup and reject
-    const popup = await waitForApprovalPopup()
+    const popup = await waitForApprovalPopup(context, extensionId)
 
     if (popup && !popup.isClosed()) {
       const approval = new DAppApproval(popup, extensionId)
@@ -339,7 +314,7 @@ test.describe('DApp Provider', () => {
     await page.close()
   })
 
-  test('window.vultisig and window.phantom.solana also injected', async () => {
+  test('window.vultisig and window.phantom.solana also injected', async ({ context }) => {
     const page = await context.newPage()
 
     await page.goto(dappUrl)

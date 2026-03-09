@@ -7,15 +7,10 @@
  * - new vault shows on vault page with 0 balance
  */
 
-import { test, expect, type BrowserContext } from '@playwright/test'
+import { test, expect } from '../fixtures/extension-loader'
 import { OnboardingPage } from '../page-objects/OnboardingPage.po'
 import { FastVaultForm } from '../page-objects/FastVaultForm.po'
 import { VaultPage } from '../page-objects/VaultPage.po'
-import path from 'path'
-import fs from 'fs'
-import { chromium } from '@playwright/test'
-
-const extensionPath = path.resolve(__dirname, '../../../../dist')
 
 // Test data
 const TEST_VAULT_NAME = `TestVault-${Date.now()}`
@@ -23,38 +18,7 @@ const TEST_EMAIL = `test-${Date.now()}@example.com`
 const TEST_PASSWORD = 'SecurePass123!'
 
 test.describe('Fast Vault Creation', () => {
-  let context: BrowserContext
-  let extensionId: string
-
-  test.beforeAll(async () => {
-    // Create temp profile directory
-    const userDataDir = path.join(__dirname, '../.test-profile-' + Date.now())
-
-    context = await chromium.launchPersistentContext(userDataDir, {
-      headless: false,
-      args: [
-        `--disable-extensions-except=${extensionPath}`,
-        `--load-extension=${extensionPath}`,
-        '--no-first-run',
-        '--no-default-browser-check',
-        '--disable-default-apps',
-        '--disable-popup-blocking',
-      ],
-    })
-
-    // Get extension ID
-    let [background] = context.serviceWorkers()
-    if (!background) {
-      background = await context.waitForEvent('serviceworker', { timeout: 30_000 })
-    }
-    extensionId = background.url().split('/')[2]
-  })
-
-  test.afterAll(async () => {
-    await context.close()
-  })
-
-  test('fill name + email + password creates vault', async () => {
+  test('fill name + email + password creates vault', async ({ context, extensionId }) => {
     const page = await context.newPage()
     const onboarding = new OnboardingPage(page, extensionId)
     const fastVaultForm = new FastVaultForm(page, extensionId)
@@ -113,7 +77,7 @@ test.describe('Fast Vault Creation', () => {
     await page.close()
   })
 
-  test('email verification step appears', async () => {
+  test('email verification step appears', async ({ context, extensionId }) => {
     const page = await context.newPage()
     const onboarding = new OnboardingPage(page, extensionId)
     const fastVaultForm = new FastVaultForm(page, extensionId)
@@ -171,7 +135,7 @@ test.describe('Fast Vault Creation', () => {
     await page.close()
   })
 
-  test('new vault shows on vault page with 0 balance', async () => {
+  test('new vault shows on vault page with 0 balance', async ({ context, extensionId }) => {
     const page = await context.newPage()
     const vaultPage = new VaultPage(page, extensionId)
 

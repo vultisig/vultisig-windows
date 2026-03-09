@@ -8,14 +8,10 @@
  * - derived addresses match expected
  */
 
-import { test, expect, type BrowserContext } from '@playwright/test'
-import { chromium } from '@playwright/test'
+import { test, expect } from '../fixtures/extension-loader'
 import { OnboardingPage } from '../page-objects/OnboardingPage.po'
 import { SeedphraseWizard } from '../page-objects/SeedphraseWizard.po'
 import { VaultPage } from '../page-objects/VaultPage.po'
-import path from 'path'
-
-const extensionPath = path.resolve(__dirname, '../../../../dist')
 
 // Test mnemonics - using well-known test vectors
 // DO NOT use these for real funds
@@ -34,36 +30,7 @@ const EXPECTED_ADDRESSES: Record<string, string> = {
 }
 
 test.describe('Seedphrase Import', () => {
-  let context: BrowserContext
-  let extensionId: string
-
-  test.beforeAll(async () => {
-    const userDataDir = path.join(__dirname, '../.test-profile-seed-' + Date.now())
-
-    context = await chromium.launchPersistentContext(userDataDir, {
-      headless: false,
-      args: [
-        `--disable-extensions-except=${extensionPath}`,
-        `--load-extension=${extensionPath}`,
-        '--no-first-run',
-        '--no-default-browser-check',
-        '--disable-default-apps',
-        '--disable-popup-blocking',
-      ],
-    })
-
-    let [background] = context.serviceWorkers()
-    if (!background) {
-      background = await context.waitForEvent('serviceworker', { timeout: 30_000 })
-    }
-    extensionId = background.url().split('/')[2]
-  })
-
-  test.afterAll(async () => {
-    await context.close()
-  })
-
-  test('enter valid 12-word mnemonic - chains discovered', async () => {
+  test('enter valid 12-word mnemonic - chains discovered', async ({ context, extensionId }) => {
     const page = await context.newPage()
     const onboarding = new OnboardingPage(page, extensionId)
     const seedphraseWizard = new SeedphraseWizard(page, extensionId)
@@ -116,7 +83,7 @@ test.describe('Seedphrase Import', () => {
     await page.close()
   })
 
-  test('invalid mnemonic shows validation error', async () => {
+  test('invalid mnemonic shows validation error', async ({ context, extensionId }) => {
     const page = await context.newPage()
     const onboarding = new OnboardingPage(page, extensionId)
     const seedphraseWizard = new SeedphraseWizard(page, extensionId)
@@ -165,7 +132,7 @@ test.describe('Seedphrase Import', () => {
     await page.close()
   })
 
-  test('select chains creates fast vault from seedphrase', async () => {
+  test('select chains creates fast vault from seedphrase', async ({ context, extensionId }) => {
     // Skip if no test seedphrase provided
     if (!process.env.TEST_SEEDPHRASE) {
       test.skip()
@@ -222,7 +189,7 @@ test.describe('Seedphrase Import', () => {
     await page.close()
   })
 
-  test('derived addresses match expected', async () => {
+  test('derived addresses match expected', async ({ context, extensionId }) => {
     // Skip if no test seedphrase
     if (!process.env.TEST_SEEDPHRASE) {
       test.skip()

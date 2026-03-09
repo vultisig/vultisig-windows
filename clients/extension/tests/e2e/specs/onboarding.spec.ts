@@ -4,30 +4,15 @@
  * Tests for the initial onboarding experience on a fresh extension.
  */
 
-import { test, expect } from '@playwright/test'
+import { test, expect } from '../fixtures/extension-loader'
 import { OnboardingPage } from '../page-objects/OnboardingPage.po'
 
-// Use ui-isolated project for clean state tests
+// Use fixture-based test that loads the extension properly
 test.describe('Onboarding Flow', () => {
-  let onboardingPage: OnboardingPage
+  test('fresh extension shows onboarding', async ({ context, extensionId }) => {
+    const page = await context.newPage()
+    const onboardingPage = new OnboardingPage(page, extensionId)
 
-  test.beforeEach(async ({ page, context }) => {
-    // Get extension ID from service worker
-    let extensionId = ''
-    const serviceWorkers = context.serviceWorkers()
-    if (serviceWorkers.length > 0) {
-      const url = serviceWorkers[0].url()
-      extensionId = url.split('/')[2]
-    } else {
-      // Fallback: wait for service worker
-      const sw = await context.waitForEvent('serviceworker')
-      extensionId = sw.url().split('/')[2]
-    }
-
-    onboardingPage = new OnboardingPage(page, extensionId)
-  })
-
-  test('fresh extension shows onboarding', async ({ page }) => {
     await onboardingPage.goto()
 
     // Should show onboarding/welcome screen
@@ -37,9 +22,14 @@ test.describe('Onboarding Flow', () => {
     // Should have welcome text or logo
     const welcomeText = onboardingPage.welcomeText
     await expect(welcomeText).toBeVisible({ timeout: 10_000 })
+
+    await page.close()
   })
 
-  test('"Get Started" or "Next" navigates to vault type selection', async ({ page }) => {
+  test('"Get Started" or "Next" navigates to vault type selection', async ({ context, extensionId }) => {
+    const page = await context.newPage()
+    const onboardingPage = new OnboardingPage(page, extensionId)
+
     await onboardingPage.goto()
     await onboardingPage.waitForView()
 
@@ -68,9 +58,14 @@ test.describe('Onboarding Flow', () => {
     const hasSetup = await page.getByText(/set.*up|create|new/i).first().isVisible()
 
     expect(hasFastVault || hasSecureVault || hasImport || hasSetup).toBe(true)
+
+    await page.close()
   })
 
-  test('all 3 vault type options visible after onboarding', async ({ page }) => {
+  test('all 3 vault type options visible after onboarding', async ({ context, extensionId }) => {
+    const page = await context.newPage()
+    const onboardingPage = new OnboardingPage(page, extensionId)
+
     await onboardingPage.goto()
 
     // Skip onboarding
@@ -103,5 +98,7 @@ test.describe('Onboarding Flow', () => {
 
     // Should have at least 2 options (fast, secure, and/or import)
     expect(options.length).toBeGreaterThanOrEqual(2)
+
+    await page.close()
   })
 })

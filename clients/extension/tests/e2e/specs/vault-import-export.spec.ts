@@ -4,7 +4,7 @@
  * Tests for vault backup export and import functionality.
  */
 
-import { test, expect } from '@playwright/test'
+import { test, expect } from '../fixtures/extension-loader'
 import { VaultPage } from '../page-objects/VaultPage.po'
 import { VaultSettings } from '../page-objects/VaultSettings.po'
 import { VaultBackupFlow } from '../page-objects/VaultBackupFlow.po'
@@ -17,30 +17,13 @@ import * as path from 'path'
 const TEST_VAULTS_PATH = '/Users/crusty/vultisig-sdk-bot/credentials/test-vaults'
 
 test.describe('Vault Import/Export', () => {
-  let extensionId: string
-  let vaultPage: VaultPage
-  let vaultSettings: VaultSettings
-  let backupFlow: VaultBackupFlow
-  let importVaultPage: ImportVaultPage
-
-  test.beforeEach(async ({ page, context }) => {
-    // Get extension ID
-    const serviceWorkers = context.serviceWorkers()
-    if (serviceWorkers.length > 0) {
-      extensionId = serviceWorkers[0].url().split('/')[2]
-    } else {
-      const sw = await context.waitForEvent('serviceworker')
-      extensionId = sw.url().split('/')[2]
-    }
-
-    vaultPage = new VaultPage(page, extensionId)
-    vaultSettings = new VaultSettings(page, extensionId)
-    backupFlow = new VaultBackupFlow(page, extensionId)
-    importVaultPage = new ImportVaultPage(page, extensionId)
-  })
-
   test.describe('Export Vault', () => {
-    test.skip('export vault without password downloads .vult file', async ({ page }) => {
+    test.skip('export vault without password downloads .vult file', async ({ context, extensionId }) => {
+      const page = await context.newPage()
+      const vaultPage = new VaultPage(page, extensionId)
+      const vaultSettings = new VaultSettings(page, extensionId)
+      const backupFlow = new VaultBackupFlow(page, extensionId)
+
       await vaultPage.goto()
       await vaultPage.waitForView()
 
@@ -71,9 +54,16 @@ test.describe('Vault Import/Export', () => {
 
       // Cleanup
       fs.unlinkSync(tempPath)
+
+      await page.close()
     })
 
-    test.skip('export vault with password downloads encrypted .vult', async ({ page }) => {
+    test.skip('export vault with password downloads encrypted .vult', async ({ context, extensionId }) => {
+      const page = await context.newPage()
+      const vaultPage = new VaultPage(page, extensionId)
+      const vaultSettings = new VaultSettings(page, extensionId)
+      const backupFlow = new VaultBackupFlow(page, extensionId)
+
       await vaultPage.goto()
       await vaultPage.waitForView()
 
@@ -101,13 +91,18 @@ test.describe('Vault Import/Export', () => {
 
       // Cleanup
       fs.unlinkSync(tempPath)
+
+      await page.close()
     })
   })
 
   test.describe('Import Vault', () => {
-    test.skip('import .vult file without password - vault appears', async ({ page }) => {
-      // Start from fresh state (onboarding)
+    test.skip('import .vult file without password - vault appears', async ({ context, extensionId }) => {
+      const page = await context.newPage()
       const onboardingPage = new OnboardingPage(page, extensionId)
+      const importVaultPage = new ImportVaultPage(page, extensionId)
+
+      // Start from fresh state (onboarding)
       await onboardingPage.goto()
 
       // Skip onboarding
@@ -131,6 +126,7 @@ test.describe('Vault Import/Export', () => {
       // Skip if test file doesn't exist
       if (!fs.existsSync(testVaultFile)) {
         test.skip()
+        await page.close()
         return
       }
 
@@ -143,10 +139,15 @@ test.describe('Vault Import/Export', () => {
       // Should now see vault page
       const isSuccess = await importVaultPage.isImportSuccessful()
       expect(isSuccess).toBe(true)
+
+      await page.close()
     })
 
-    test.skip('import encrypted .vult with wrong password shows error', async ({ page }) => {
+    test.skip('import encrypted .vult with wrong password shows error', async ({ context, extensionId }) => {
+      const page = await context.newPage()
       const onboardingPage = new OnboardingPage(page, extensionId)
+      const importVaultPage = new ImportVaultPage(page, extensionId)
+
       await onboardingPage.goto()
 
       // Skip onboarding
@@ -169,6 +170,7 @@ test.describe('Vault Import/Export', () => {
       // Skip if test file doesn't exist
       if (!fs.existsSync(encryptedVaultFile)) {
         test.skip()
+        await page.close()
         return
       }
 
@@ -187,10 +189,15 @@ test.describe('Vault Import/Export', () => {
       await page.waitForTimeout(1000)
       const hasError = await importVaultPage.hasImportError()
       expect(hasError).toBe(true)
+
+      await page.close()
     })
 
-    test.skip('import encrypted .vult with correct password succeeds', async ({ page }) => {
+    test.skip('import encrypted .vult with correct password succeeds', async ({ context, extensionId }) => {
+      const page = await context.newPage()
       const onboardingPage = new OnboardingPage(page, extensionId)
+      const importVaultPage = new ImportVaultPage(page, extensionId)
+
       await onboardingPage.goto()
 
       // Skip onboarding
@@ -212,6 +219,7 @@ test.describe('Vault Import/Export', () => {
 
       if (!fs.existsSync(encryptedVaultFile)) {
         test.skip()
+        await page.close()
         return
       }
 
@@ -221,6 +229,8 @@ test.describe('Vault Import/Export', () => {
 
       const isSuccess = await importVaultPage.isImportSuccessful()
       expect(isSuccess).toBe(true)
+
+      await page.close()
     })
   })
 })

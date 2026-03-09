@@ -13,58 +13,26 @@
  * - Only swap fees + gas are consumed
  */
 
-import { test, expect, type BrowserContext } from '@playwright/test'
-import { chromium } from '@playwright/test'
+import { test, expect } from '../fixtures/extension-loader'
 import { VaultPage } from '../page-objects/VaultPage.po'
 import { SwapFlow } from '../page-objects/SwapFlow.po'
 import { KeysignProgress } from '../page-objects/KeysignProgress.po'
 import { selectChainsForRun, updateStaleness, SUPPORTED_CHAINS, type ChainId } from '../helpers/chain-rotation'
 import { waitForTxConfirmation } from '../helpers/tx-confirmation'
-import path from 'path'
-
-const extensionPath = path.resolve(__dirname, '../../../../dist')
 
 // Skip if fund-dependent tests not enabled
 const ENABLE_TX_TESTS = process.env.ENABLE_TX_SIGNING_TESTS === 'true'
 
+// Get swap pairs to test this run (outside test context for sharing)
+const { swapPairs } = selectChainsForRun(0, 2)
+const selectedSwapPairs = swapPairs
+
 test.describe('Swap Flow', () => {
-  let context: BrowserContext
-  let extensionId: string
-  let selectedSwapPairs: [ChainId, ChainId][]
-
-  test.beforeAll(async () => {
-    // Get swap pairs to test this run
-    const { swapPairs } = selectChainsForRun(0, 2)
-    selectedSwapPairs = swapPairs
-
+  test.beforeAll(() => {
     console.log('Selected swap pairs for tests:', selectedSwapPairs)
-
-    const userDataDir = path.join(__dirname, '../.test-profile-swap-' + Date.now())
-
-    context = await chromium.launchPersistentContext(userDataDir, {
-      headless: false,
-      args: [
-        `--disable-extensions-except=${extensionPath}`,
-        `--load-extension=${extensionPath}`,
-        '--no-first-run',
-        '--no-default-browser-check',
-        '--disable-default-apps',
-        '--disable-popup-blocking',
-      ],
-    })
-
-    let [background] = context.serviceWorkers()
-    if (!background) {
-      background = await context.waitForEvent('serviceworker', { timeout: 30_000 })
-    }
-    extensionId = background.url().split('/')[2]
   })
 
-  test.afterAll(async () => {
-    await context.close()
-  })
-
-  test('swap pair 1 - quote appears and transaction succeeds', async () => {
+  test('swap pair 1 - quote appears and transaction succeeds', async ({ context, extensionId }) => {
     test.skip(!ENABLE_TX_TESTS, 'TX signing tests disabled')
 
     const pair = selectedSwapPairs[0]
@@ -149,7 +117,7 @@ test.describe('Swap Flow', () => {
     }
   })
 
-  test('swap pair 2 - quote appears and transaction succeeds', async () => {
+  test('swap pair 2 - quote appears and transaction succeeds', async ({ context, extensionId }) => {
     test.skip(!ENABLE_TX_TESTS, 'TX signing tests disabled')
 
     const pair = selectedSwapPairs[1]
@@ -219,7 +187,7 @@ test.describe('Swap Flow', () => {
     }
   })
 
-  test('swap flow shows provider and fees', async () => {
+  test('swap flow shows provider and fees', async ({ context, extensionId }) => {
     const page = await context.newPage()
     const vaultPage = new VaultPage(page, extensionId)
     const swapFlow = new SwapFlow(page, extensionId)
@@ -263,7 +231,7 @@ test.describe('Swap Flow', () => {
     }
   })
 
-  test('destination balance updates after swap', async () => {
+  test('destination balance updates after swap', async ({ context, extensionId }) => {
     test.skip(!ENABLE_TX_TESTS, 'TX signing tests disabled')
 
     const page = await context.newPage()

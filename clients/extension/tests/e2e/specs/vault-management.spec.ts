@@ -5,42 +5,25 @@
  * Pre-seeded with a FastVault for testing.
  */
 
-import { test, expect } from '@playwright/test'
+import { test, expect } from '../fixtures/extension-loader'
 import { VaultPage } from '../page-objects/VaultPage.po'
 import { VaultSettings } from '../page-objects/VaultSettings.po'
 import { DeleteVaultPage } from '../page-objects/DeleteVaultPage.po'
 import { RenameVaultPage } from '../page-objects/RenameVaultPage.po'
 
-// Use ui-seeded project which pre-loads a vault
+// Use fixture-based test that loads the extension properly
 test.describe('Vault Management', () => {
-  let extensionId: string
-  let vaultPage: VaultPage
-  let vaultSettings: VaultSettings
-  let deleteVaultPage: DeleteVaultPage
-  let renameVaultPage: RenameVaultPage
-
-  test.beforeEach(async ({ page, context }) => {
-    // Get extension ID from service worker
-    const serviceWorkers = context.serviceWorkers()
-    if (serviceWorkers.length > 0) {
-      extensionId = serviceWorkers[0].url().split('/')[2]
-    } else {
-      const sw = await context.waitForEvent('serviceworker')
-      extensionId = sw.url().split('/')[2]
-    }
-
-    vaultPage = new VaultPage(page, extensionId)
-    vaultSettings = new VaultSettings(page, extensionId)
-    deleteVaultPage = new DeleteVaultPage(page, extensionId)
-    renameVaultPage = new RenameVaultPage(page, extensionId)
-
-    // Navigate to extension
-    await vaultPage.goto()
-    await page.waitForTimeout(1000)
-  })
-
   test.describe('Rename Vault', () => {
-    test('can rename vault with valid name', async ({ page }) => {
+    test('can rename vault with valid name', async ({ context, extensionId }) => {
+      const page = await context.newPage()
+      const vaultPage = new VaultPage(page, extensionId)
+      const vaultSettings = new VaultSettings(page, extensionId)
+      const renameVaultPage = new RenameVaultPage(page, extensionId)
+
+      // Navigate to extension
+      await vaultPage.goto()
+      await page.waitForTimeout(1000)
+
       // Navigate to settings -> rename
       await vaultPage.navigateToSettings()
       await vaultSettings.waitForView()
@@ -59,9 +42,19 @@ test.describe('Vault Management', () => {
 
       // Should navigate back and vault should have new name
       await page.waitForTimeout(500)
+
+      await page.close()
     })
 
-    test('rename shows validation error for too-short name', async ({ page }) => {
+    test('rename shows validation error for too-short name', async ({ context, extensionId }) => {
+      const page = await context.newPage()
+      const vaultPage = new VaultPage(page, extensionId)
+      const vaultSettings = new VaultSettings(page, extensionId)
+      const renameVaultPage = new RenameVaultPage(page, extensionId)
+
+      await vaultPage.goto()
+      await page.waitForTimeout(1000)
+
       await vaultPage.navigateToSettings()
       await vaultSettings.waitForView()
       await vaultSettings.navigateToRename()
@@ -78,11 +71,21 @@ test.describe('Vault Management', () => {
       // Save should be disabled
       const isEnabled = await renameVaultPage.isSaveEnabled()
       expect(isEnabled).toBe(false)
+
+      await page.close()
     })
   })
 
   test.describe('Delete Vault', () => {
-    test('delete requires all 3 checkboxes', async ({ page }) => {
+    test('delete requires all 3 checkboxes', async ({ context, extensionId }) => {
+      const page = await context.newPage()
+      const vaultPage = new VaultPage(page, extensionId)
+      const vaultSettings = new VaultSettings(page, extensionId)
+      const deleteVaultPage = new DeleteVaultPage(page, extensionId)
+
+      await vaultPage.goto()
+      await page.waitForTimeout(1000)
+
       await vaultPage.navigateToSettings()
       await vaultSettings.waitForView()
       await vaultSettings.navigateToDelete()
@@ -94,9 +97,19 @@ test.describe('Vault Management', () => {
 
       const initialEnabled = await deleteVaultPage.isDeleteEnabled()
       expect(initialEnabled).toBe(false)
+
+      await page.close()
     })
 
-    test('delete button disabled until all checked', async ({ page }) => {
+    test('delete button disabled until all checked', async ({ context, extensionId }) => {
+      const page = await context.newPage()
+      const vaultPage = new VaultPage(page, extensionId)
+      const vaultSettings = new VaultSettings(page, extensionId)
+      const deleteVaultPage = new DeleteVaultPage(page, extensionId)
+
+      await vaultPage.goto()
+      await page.waitForTimeout(1000)
+
       await vaultPage.navigateToSettings()
       await vaultSettings.waitForView()
       await vaultSettings.navigateToDelete()
@@ -116,9 +129,19 @@ test.describe('Vault Management', () => {
       await deleteVaultPage.checkTerm(3)
       isEnabled = await deleteVaultPage.isDeleteEnabled()
       expect(isEnabled).toBe(true)
+
+      await page.close()
     })
 
-    test('unchecking a checkbox disables delete button', async ({ page }) => {
+    test('unchecking a checkbox disables delete button', async ({ context, extensionId }) => {
+      const page = await context.newPage()
+      const vaultPage = new VaultPage(page, extensionId)
+      const vaultSettings = new VaultSettings(page, extensionId)
+      const deleteVaultPage = new DeleteVaultPage(page, extensionId)
+
+      await vaultPage.goto()
+      await page.waitForTimeout(1000)
+
       await vaultPage.navigateToSettings()
       await vaultSettings.waitForView()
       await vaultSettings.navigateToDelete()
@@ -133,11 +156,21 @@ test.describe('Vault Management', () => {
       await deleteVaultPage.uncheckTerm(2)
       isEnabled = await deleteVaultPage.isDeleteEnabled()
       expect(isEnabled).toBe(false)
+
+      await page.close()
     })
 
     // Note: We don't actually delete the vault in tests to preserve test state
     // This test is skipped or should use isolated context
-    test.skip('can delete vault after checking all terms', async ({ page }) => {
+    test.skip('can delete vault after checking all terms', async ({ context, extensionId }) => {
+      const page = await context.newPage()
+      const vaultPage = new VaultPage(page, extensionId)
+      const vaultSettings = new VaultSettings(page, extensionId)
+      const deleteVaultPage = new DeleteVaultPage(page, extensionId)
+
+      await vaultPage.goto()
+      await page.waitForTimeout(1000)
+
       await vaultPage.navigateToSettings()
       await vaultSettings.waitForView()
       await vaultSettings.navigateToDelete()
@@ -150,11 +183,20 @@ test.describe('Vault Management', () => {
       await page.waitForTimeout(500)
       const url = page.url()
       expect(url).toContain('onboarding') // or vault selection
+
+      await page.close()
     })
   })
 
   test.describe('Chain Management', () => {
-    test.skip('can add chain to vault', async ({ page }) => {
+    test.skip('can add chain to vault', async ({ context, extensionId }) => {
+      const page = await context.newPage()
+      const vaultPage = new VaultPage(page, extensionId)
+      const vaultSettings = new VaultSettings(page, extensionId)
+
+      await vaultPage.goto()
+      await page.waitForTimeout(1000)
+
       // Navigate to chain management
       await vaultPage.navigateToSettings()
       await vaultSettings.waitForView()
@@ -172,15 +214,21 @@ test.describe('Vault Management', () => {
         // This would require knowing which chains are not already enabled
         // Implementation depends on specific UI
       }
+
+      await page.close()
     })
 
-    test.skip('can remove chain from vault', async ({ page }) => {
+    test.skip('can remove chain from vault', async ({ context, extensionId }) => {
       // Similar to above, but toggle a chain off
+      const page = await context.newPage()
+      await page.close()
     })
 
-    test.skip('adding chain derives correct address', async ({ page }) => {
+    test.skip('adding chain derives correct address', async ({ context, extensionId }) => {
       // Would need to verify address derivation
       // Requires comparing with expected address from test fixtures
+      const page = await context.newPage()
+      await page.close()
     })
   })
 })

@@ -13,16 +13,12 @@
  * - Tests skip gracefully if chain has insufficient funds
  */
 
-import { test, expect, type BrowserContext } from '@playwright/test'
-import { chromium } from '@playwright/test'
+import { test, expect } from '../fixtures/extension-loader'
 import { VaultPage } from '../page-objects/VaultPage.po'
 import { SendFlow } from '../page-objects/SendFlow.po'
 import { KeysignProgress } from '../page-objects/KeysignProgress.po'
 import { selectChainsForRun, updateStaleness, SUPPORTED_CHAINS, type ChainId } from '../helpers/chain-rotation'
 import { waitForTxConfirmation } from '../helpers/tx-confirmation'
-import path from 'path'
-
-const extensionPath = path.resolve(__dirname, '../../../../dist')
 
 // Skip if fund-dependent tests not enabled
 const ENABLE_TX_TESTS = process.env.ENABLE_TX_SIGNING_TESTS === 'true'
@@ -31,46 +27,17 @@ const ENABLE_TX_TESTS = process.env.ENABLE_TX_SIGNING_TESTS === 'true'
 // The test will get the vault's address for each chain dynamically
 // This ensures funds stay in the wallet and only gas is spent
 
+// Get chains to test this run (outside test context for sharing)
+const { sendChains } = selectChainsForRun(2, 0)
+const selectedChains = sendChains
+
 test.describe('Send Flow', () => {
-  let context: BrowserContext
-  let extensionId: string
-  let selectedChains: ChainId[]
-
-  test.beforeAll(async () => {
-    // Get chains to test this run
-    const { sendChains } = selectChainsForRun(2, 0)
-    selectedChains = sendChains
-
+  test.beforeAll(() => {
     console.log('Selected chains for send tests:', selectedChains)
-
-    // Create context with test vault
-    const userDataDir = path.join(__dirname, '../.test-profile-send-' + Date.now())
-
-    context = await chromium.launchPersistentContext(userDataDir, {
-      headless: false,
-      args: [
-        `--disable-extensions-except=${extensionPath}`,
-        `--load-extension=${extensionPath}`,
-        '--no-first-run',
-        '--no-default-browser-check',
-        '--disable-default-apps',
-        '--disable-popup-blocking',
-      ],
-    })
-
-    let [background] = context.serviceWorkers()
-    if (!background) {
-      background = await context.waitForEvent('serviceworker', { timeout: 30_000 })
-    }
-    extensionId = background.url().split('/')[2]
-  })
-
-  test.afterAll(async () => {
-    await context.close()
   })
 
   // Dynamic tests for each selected chain
-  test('send native token on chain 1 - broadcasts and confirms', async () => {
+  test('send native token on chain 1 - broadcasts and confirms', async ({ context, extensionId }) => {
     test.skip(!ENABLE_TX_TESTS, 'TX signing tests disabled')
 
     const chain = selectedChains[0]
@@ -152,7 +119,7 @@ test.describe('Send Flow', () => {
     }
   })
 
-  test('send native token on chain 2 - broadcasts and confirms', async () => {
+  test('send native token on chain 2 - broadcasts and confirms', async ({ context, extensionId }) => {
     test.skip(!ENABLE_TX_TESTS, 'TX signing tests disabled')
 
     const chain = selectedChains[1]
@@ -220,7 +187,7 @@ test.describe('Send Flow', () => {
     }
   })
 
-  test('send flow shows correct details on verify page', async () => {
+  test('send flow shows correct details on verify page', async ({ context, extensionId }) => {
     const page = await context.newPage()
     const vaultPage = new VaultPage(page, extensionId)
     const sendFlow = new SendFlow(page, extensionId)
@@ -270,7 +237,7 @@ test.describe('Send Flow', () => {
     }
   })
 
-  test('balance updates after successful send', async () => {
+  test('balance updates after successful send', async ({ context, extensionId }) => {
     test.skip(!ENABLE_TX_TESTS, 'TX signing tests disabled')
 
     const page = await context.newPage()
