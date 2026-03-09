@@ -15,6 +15,7 @@ import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -37,6 +38,21 @@ export const TronDefiDashboard = () => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
   const resourcesQuery = useTronAccountResourcesQuery()
+
+  const hasUnfreezingEntries =
+    (resourcesQuery.data?.unfreezingEntries.length ?? 0) > 0
+
+  const [, setTick] = useState(0)
+  useEffect(() => {
+    if (!hasUnfreezingEntries) return
+
+    const withdrawalTickIntervalMs = 15_000
+    const interval = setInterval(
+      () => setTick(prev => prev + 1),
+      withdrawalTickIntervalMs
+    )
+    return () => clearInterval(interval)
+  }, [hasUnfreezingEntries])
 
   const totalFrozenTrx = resourcesQuery.data
     ? sunToTrx(
