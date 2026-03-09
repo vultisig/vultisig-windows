@@ -63,7 +63,7 @@ export const VaultEmailStep = ({
         onBack={onBack}
         headerRight={headerRight}
         footer={
-          <Button style={{ width: '100%' }} disabled={!isValid} type="submit">
+          <Button style={{ width: '100%' }} disabled={!isValid} type="submit" data-testid="vault-email-next">
             {t('next')}
           </Button>
         }
@@ -99,6 +99,7 @@ export const VaultEmailStep = ({
                 errors.email ? 'invalid' : isValid ? 'valid' : undefined
               }
               autoFocus
+              data-testid="vault-email-input"
             />
             {errors.email?.message && (
               <Text color="danger" size={12}>

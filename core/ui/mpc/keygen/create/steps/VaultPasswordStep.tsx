@@ -75,7 +75,7 @@ export const VaultPasswordStep = ({
         onBack={onBack}
         headerRight={headerRight}
         footer={
-          <Button style={{ width: '100%' }} disabled={!isValid} type="submit">
+          <Button style={{ width: '100%' }} disabled={!isValid} type="submit" data-testid="create-vault-button">
             {t('create_vault')}
           </Button>
         }
@@ -123,6 +123,7 @@ export const VaultPasswordStep = ({
                 isValid ? 'valid' : errors.password ? 'invalid' : undefined
               }
               autoFocus
+              data-testid="vault-password-input"
             />
             <PasswordInput
               {...register('confirmPassword')}
@@ -135,6 +136,7 @@ export const VaultPasswordStep = ({
                     ? 'invalid'
                     : undefined
               }
+              data-testid="vault-password-confirm"
             />
           </VStack>
         </Content>

@@ -27,7 +27,7 @@ export const KeygenPendingState = ({ value }: ValueProp<KeygenStep | null>) => {
   const progress = getProgress(value)
 
   return (
-    <Container>
+    <Container data-testid="keygen-progress">
       <KeygenLoadingAnimation
         isConnected={value !== null}
         progress={progress}

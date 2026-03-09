@@ -44,6 +44,7 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
         justifyContent="space-between"
         scrollable
         gap={40}
+        data-testid="send-form"
         {...getFormProps({
           onSubmit: onFinish,
           isDisabled,
@@ -54,7 +55,7 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
           <ManageAddresses />
           <ManageAmount />
         </VStack>
-        <Button disabled={isDisabled} loading={isPending} type="submit">
+        <Button disabled={isDisabled} loading={isPending} type="submit" data-testid="send-continue">
           {t('continue')}
         </Button>
       </ActionForm>

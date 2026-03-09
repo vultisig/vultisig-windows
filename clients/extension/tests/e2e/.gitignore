@@ -1,3 +1,12 @@
 # Never commit actual .env file
 .env
 *.vult
+
+# Test artifacts
+test-results/
+playwright-report/
+.chain-rotation-state.json
+available-chains.json
+
+# Temporary test profiles
+.test-profile-*
