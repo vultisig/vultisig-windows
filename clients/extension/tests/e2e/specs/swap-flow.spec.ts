@@ -5,6 +5,12 @@
  * FUND-DEPENDENT: Requires funded test vault.
  *
  * Uses chain rotation to test 2 swap pairs per run.
+ *
+ * SAFETY MEASURES:
+ * - Swaps go to vault's OWN address on destination chain (no custom recipient)
+ * - Amounts are small: $5-10 range (see chain-rotation.ts minSwap)
+ * - Funds stay in the vault, just converted between tokens
+ * - Only swap fees + gas are consumed
  */
 
 import { test, expect, type BrowserContext } from '@playwright/test'
