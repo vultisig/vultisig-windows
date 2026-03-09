@@ -71,14 +71,20 @@ export const useDefiChainPortfolios = () => {
       let positionsWithBalanceCount = 0
 
       if (tronResourcesQuery.data && tronPricesQuery.data) {
-        const totalFrozenTrx = sunToTrx(
+        const pendingWithdrawalSun =
+          tronResourcesQuery.data.unfreezingEntries.reduce(
+            (acc, entry) => acc + entry.unfreezeAmountSun,
+            0n
+          )
+        const totalLockedTrx = sunToTrx(
           tronResourcesQuery.data.frozenForBandwidthSun +
-            tronResourcesQuery.data.frozenForEnergySun
+            tronResourcesQuery.data.frozenForEnergySun +
+            pendingWithdrawalSun
         )
         const trxKey = coinKeyToString(tronDefiCoins[0])
         const trxPrice = tronPricesQuery.data[trxKey] ?? 0
-        totalFiat = totalFrozenTrx * trxPrice
-        positionsWithBalanceCount = totalFrozenTrx > 0 ? 1 : 0
+        totalFiat = totalLockedTrx * trxPrice
+        positionsWithBalanceCount = totalLockedTrx > 0 ? 1 : 0
       }
 
       portfolios.push({
@@ -110,8 +116,15 @@ export const useDefiChainPortfolios = () => {
     (enabledChains.includes(Chain.Tron) &&
       (tronResourcesQuery.isPending || tronPricesQuery.isPending))
 
+  const isTronEnabled = enabledChains.includes(Chain.Tron)
+
   const error =
-    thorchainQuery.error ?? mayaQuery.error ?? tronResourcesQuery.error ?? null
+    thorchainQuery.error ??
+    mayaQuery.error ??
+    (isTronEnabled
+      ? (tronResourcesQuery.error ?? tronPricesQuery.errors[0])
+      : null) ??
+    null
 
   return {
     isPending,
