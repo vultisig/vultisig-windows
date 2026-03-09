@@ -1,112 +1,141 @@
 /**
  * Vault Seeding Fixture
  *
- * Pre-seeds chrome.storage.local with test vaults:
- * - Reads vault from TEST_VAULT_PATH env var
- * - Writes vault data in extension format
- * - Sets hasFinishedOnboarding: true to skip onboarding
+ * Imports test vaults via the extension UI:
+ * - Reads vault config from TEST_VAULT_PATH/TEST_VAULT_PASSWORD env vars
+ * - Imports via UI flow (mimics real user behavior)
+ * - Handles encrypted .vult files properly
  *
- * Provides 3 vault variants:
- * 1. fastVault — Pre-created FastVault (from .vult file)
- * 2. seedphraseVault — FastVault created from seedphrase
- * 3. secureVault — Pre-created SecureVault (from SECURE_VAULT_SHARES)
+ * Provides fixtures for:
+ * 1. fastVaultImported — Imports FastVault via UI
+ * 2. secureVaultImported — Imports SecureVault via UI
+ * 3. ensureVaultExists — Helper to check/import vault on demand
  */
 
 import { test as base, type BrowserContext, type Page } from '@playwright/test'
 import { test as extensionTest, type ExtensionFixtures } from './extension.fixture'
 import {
-  StorageKey,
-  writeChromeStorageMultiple,
-} from '../helpers/chrome-storage'
-import {
-  VaultData,
-  generateVaultId,
-  loadTestVault,
-  loadSecureVaultShares,
-  createMockFastVault,
-  createMockSecureVault,
-} from '../helpers/vault-factory'
+  importVaultViaUI,
+  ensureVaultExists,
+  isOnVaultPage,
+  getVaultConfigFromEnv,
+  getSecureVaultConfigFromEnv,
+} from '../helpers/vault-import'
 
 /**
  * Vault seeding fixture types
  */
 export interface VaultSeedingFixtures extends ExtensionFixtures {
-  /** Pre-seeded fast vault data */
-  fastVault: VaultData | null
-  /** Pre-seeded secure vault data */
-  secureVault: VaultData | null
-  /** Helper to seed a vault into storage */
-  seedVault: (vault: VaultData) => Promise<void>
-  /** Helper to seed vault and navigate to vault page */
-  seedVaultAndNavigate: (vault: VaultData) => Promise<Page>
+  /** Import fast vault and return page positioned on vault */
+  fastVaultPage: Page | null
+  /** Import secure vault and return page positioned on vault */
+  secureVaultPage: Page | null
+  /** Helper to ensure vault exists (imports if needed) */
+  ensureVault: () => Promise<boolean>
+  /** Helper to import vault via UI */
+  importVaultUI: (vaultPath: string, password: string) => Promise<Page | null>
+  /** Check if we have a vault loaded */
+  hasVault: (page: Page) => Promise<boolean>
 }
 
 /**
  * Extended test with vault seeding fixtures
  */
 export const test = extensionTest.extend<VaultSeedingFixtures>({
-  // Fast vault from TEST_VAULT_PATH or mock
-  fastVault: async ({}, use) => {
-    const vault = loadTestVault()
-    if (vault) {
-      console.log('✅ Loaded fast vault:', vault.name)
-    } else {
-      console.log('ℹ️  No fast vault configured, using mock')
-    }
-    await use(vault)
-  },
+  // Import fast vault and get page
+  fastVaultPage: async ({ context, extensionId }, use) => {
+    const config = getVaultConfigFromEnv()
 
-  // Secure vault from SECURE_VAULT_SHARES or mock
-  secureVault: async ({}, use) => {
-    const shares = loadSecureVaultShares()
-    if (shares.length > 0) {
-      console.log('✅ Loaded secure vault:', shares[0].name)
-      await use(shares[0])
+    if (!config) {
+      console.log('ℹ️  No fast vault configured (TEST_VAULT_PATH not set)')
+      await use(null)
+      return
+    }
+
+    const page = await context.newPage()
+    const imported = await importVaultViaUI(page, {
+      ...config,
+      extensionId,
+    })
+
+    if (imported) {
+      console.log('✅ Fast vault imported via UI')
+      await use(page)
     } else {
-      console.log('ℹ️  No secure vault configured, using mock')
+      console.log('⚠️  Failed to import fast vault')
+      await page.close()
       await use(null)
     }
   },
 
-  // Helper to seed a vault into storage
-  seedVault: async ({ context }, use) => {
-    const seedVault = async (vault: VaultData) => {
-      const vaultId = generateVaultId(vault)
+  // Import secure vault and get page
+  secureVaultPage: async ({ context, extensionId }, use) => {
+    const configs = getSecureVaultConfigFromEnv()
 
-      // Prepare storage data
-      const storageData = {
-        [StorageKey.vaults]: [vault],
-        [StorageKey.currentVaultId]: vaultId,
-        [StorageKey.hasFinishedOnboarding]: true,
-        // Also store in SDK format for VaultBridge compatibility
-        [`vult:${vault.publicKeys.ecdsa}`]: vault,
-      }
-
-      await writeChromeStorageMultiple(context, storageData)
-      console.log(`✅ Seeded vault: ${vault.name} (ID: ${vaultId})`)
+    if (configs.length === 0) {
+      console.log('ℹ️  No secure vault configured (SECURE_VAULT_SHARES not set)')
+      await use(null)
+      return
     }
 
-    await use(seedVault)
+    // Import first share
+    const config = configs[0]
+    const page = await context.newPage()
+    const imported = await importVaultViaUI(page, {
+      ...config,
+      extensionId,
+    })
+
+    if (imported) {
+      console.log('✅ Secure vault imported via UI')
+      await use(page)
+    } else {
+      console.log('⚠️  Failed to import secure vault')
+      await page.close()
+      await use(null)
+    }
   },
 
-  // Helper to seed vault and navigate to vault page
-  seedVaultAndNavigate: async ({ context, extensionId, seedVault }, use) => {
-    const seedVaultAndNavigate = async (vault: VaultData) => {
-      await seedVault(vault)
+  // Helper to ensure vault exists (imports if needed)
+  ensureVault: async ({ context, extensionId }, use) => {
+    const ensureVault = async (): Promise<boolean> => {
+      const config = getVaultConfigFromEnv()
 
-      // Navigate to extension popup
-      const page = await context.newPage()
-      const extensionUrl = `chrome-extension://${extensionId}/index.html`
-      await page.goto(extensionUrl)
-      await page.waitForLoadState('domcontentloaded')
+      if (!config) {
+        console.log('⚠️  No vault config available')
+        return false
+      }
 
-      // Wait for vault page to load (should skip onboarding)
-      await page.waitForTimeout(500) // Brief wait for React to render
-
-      return page
+      return ensureVaultExists(context, extensionId, config.vaultPath, config.password)
     }
 
-    await use(seedVaultAndNavigate)
+    await use(ensureVault)
+  },
+
+  // Helper to import vault via UI
+  importVaultUI: async ({ context, extensionId }, use) => {
+    const importVaultUI = async (vaultPath: string, password: string): Promise<Page | null> => {
+      const page = await context.newPage()
+      const imported = await importVaultViaUI(page, {
+        vaultPath,
+        password,
+        extensionId,
+      })
+
+      if (imported) {
+        return page
+      }
+
+      await page.close()
+      return null
+    }
+
+    await use(importVaultUI)
+  },
+
+  // Helper to check if vault is loaded
+  hasVault: async ({}, use) => {
+    await use(isOnVaultPage)
   },
 })
 
@@ -117,27 +146,65 @@ export const expect = test.expect
  */
 
 /**
- * Test with a pre-seeded fast vault
+ * Test with a pre-imported fast vault
+ * Skips test if vault import fails
  */
 export const testWithFastVault = test.extend<{
-  seededPage: Page
+  vaultPage: Page
 }>({
-  seededPage: async ({ fastVault, seedVaultAndNavigate }, use) => {
-    const vault = fastVault || createMockFastVault()
-    const page = await seedVaultAndNavigate(vault)
-    await use(page)
+  vaultPage: async ({ fastVaultPage }, use, testInfo) => {
+    if (!fastVaultPage) {
+      testInfo.skip(true, 'Fast vault not configured or import failed')
+      return
+    }
+    await use(fastVaultPage)
   },
 })
 
 /**
- * Test with a pre-seeded secure vault
+ * Test with a pre-imported secure vault
+ * Skips test if vault import fails
  */
 export const testWithSecureVault = test.extend<{
-  seededPage: Page
+  vaultPage: Page
 }>({
-  seededPage: async ({ secureVault, seedVaultAndNavigate }, use) => {
-    const vault = secureVault || createMockSecureVault()
-    const page = await seedVaultAndNavigate(vault)
-    await use(page)
+  vaultPage: async ({ secureVaultPage }, use, testInfo) => {
+    if (!secureVaultPage) {
+      testInfo.skip(true, 'Secure vault not configured or import failed')
+      return
+    }
+    await use(secureVaultPage)
+  },
+})
+
+/**
+ * Test that imports vault on demand
+ * Provides ensureVault helper for tests that need conditional vault
+ */
+export const testWithVaultSupport = test.extend<{
+  getVaultPage: () => Promise<Page | null>
+}>({
+  getVaultPage: async ({ context, extensionId }, use) => {
+    const getVaultPage = async (): Promise<Page | null> => {
+      const config = getVaultConfigFromEnv()
+      if (!config) {
+        return null
+      }
+
+      const page = await context.newPage()
+      const imported = await importVaultViaUI(page, {
+        ...config,
+        extensionId,
+      })
+
+      if (imported) {
+        return page
+      }
+
+      await page.close()
+      return null
+    }
+
+    await use(getVaultPage)
   },
 })
