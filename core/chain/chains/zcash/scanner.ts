@@ -8,7 +8,6 @@ import {
   WasmSaplingWitness,
 } from 'frozt-wasm'
 
-import { loadBirthHeight } from './birthHeight'
 import {
   getBlockRange,
   getLatestBlock,
@@ -17,15 +16,8 @@ import {
 } from './lightwalletd/client'
 import { CompactBlock } from './lightwalletd/messages'
 import { parseSaplingOutputs } from './parseSaplingOutputs'
-import { loadSaplingNotes, SaplingNote, saveSaplingNotes } from './SaplingNote'
-import {
-  clearScanHeight,
-  hasBirthdayScan,
-  loadScanHeight,
-  markBirthdayScan,
-  saveScanHeight,
-  saveScanTarget,
-} from './scanProgress'
+import { SaplingNote } from './SaplingNote'
+import { getZcashScanStorage, ZcashScanData } from './zcashScanStorage'
 
 const batchSize = 500
 
@@ -42,6 +34,7 @@ type ActiveWitness = {
 
 type ScanParams = {
   zAddress: string
+  publicKeyEcdsa: string
   pubKeyPackage: Uint8Array
   saplingExtras: Uint8Array
   onProgress?: (current: number, total: number) => void
@@ -58,10 +51,13 @@ type ScanState = {
   treePosition: number
 }
 
-export const getSpendableBalance = (zAddress: string): bigint => {
-  const notes = loadSaplingNotes(zAddress)
+export const getSpendableBalance = async (
+  zAddress: string
+): Promise<bigint> => {
+  const scanData = await getZcashScanStorage().load(zAddress)
+  if (!scanData) return BigInt(0)
   let total = BigInt(0)
-  for (const note of notes) {
+  for (const note of scanData.notes) {
     if (!note.spent) {
       total += BigInt(note.value)
     }
@@ -69,25 +65,53 @@ export const getSpendableBalance = (zAddress: string): bigint => {
   return total
 }
 
+const saveScanData = async (
+  scanData: ZcashScanData,
+  state: ScanState
+): Promise<void> => {
+  for (const aw of state.activeWitnesses) {
+    state.notes[aw.noteIndex].witnessData = toHex(aw.witness.serialize())
+  }
+  await getZcashScanStorage().save({ ...scanData, notes: state.notes })
+}
+
 export const scanBlocks = async ({
   zAddress,
+  publicKeyEcdsa,
   pubKeyPackage,
   saplingExtras,
   onProgress,
 }: ScanParams): Promise<void> => {
-  let savedHeight = loadScanHeight(zAddress)
-  const birthHeight = loadBirthHeight(zAddress)
+  const storage = getZcashScanStorage()
+  let scanData = await storage.load(zAddress)
+
+  if (!scanData) {
+    scanData = {
+      zAddress,
+      publicKeyEcdsa,
+      scanHeight: null,
+      scanTarget: null,
+      birthHeight: null,
+      birthdayScanDone: false,
+      pubKeyPackage: Buffer.from(pubKeyPackage).toString('base64'),
+      saplingExtras: Buffer.from(saplingExtras).toString('base64'),
+      notes: [],
+    }
+  }
+
+  let savedHeight = scanData.scanHeight
+  const birthHeight = scanData.birthHeight
   const latestBlock = await getLatestBlock()
   const endHeight = latestBlock.height
 
   const needsBirthdayRescan =
     birthHeight !== null &&
-    !hasBirthdayScan(zAddress) &&
+    !scanData.birthdayScanDone &&
     (savedHeight === null || savedHeight >= birthHeight)
 
   if (needsBirthdayRescan && savedHeight !== null) {
-    saveSaplingNotes(zAddress, [])
-    clearScanHeight(zAddress)
+    scanData.notes = []
+    scanData.scanHeight = null
     savedHeight = null
   }
 
@@ -100,7 +124,8 @@ export const scanBlocks = async ({
     startHeight = endHeight
   }
 
-  saveScanTarget(zAddress, endHeight)
+  scanData.scanTarget = endHeight
+  await storage.save(scanData)
 
   if (startHeight > endHeight) return
 
@@ -111,7 +136,7 @@ export const scanBlocks = async ({
   const treeState = await getTreeState(startHeight - 1)
   const tree = WasmSaplingTree.fromHexState(treeState.saplingTree)
 
-  const notes = loadSaplingNotes(zAddress)
+  const notes = [...scanData.notes]
   const activeWitnesses: ActiveWitness[] = []
 
   for (let i = 0; i < notes.length; i++) {
@@ -153,21 +178,15 @@ export const scanBlocks = async ({
       await processBlock(state, block)
     }
 
-    flushState(state)
-    saveScanHeight(zAddress, batchEnd)
+    scanData.scanHeight = batchEnd
+    await saveScanData(scanData, state)
     onProgress?.(batchEnd, endHeight)
   }
 
   if (birthHeight !== null) {
-    markBirthdayScan(zAddress)
+    scanData.birthdayScanDone = true
+    await storage.save(scanData)
   }
-}
-
-const flushState = (state: ScanState): void => {
-  for (const aw of state.activeWitnesses) {
-    state.notes[aw.noteIndex].witnessData = toHex(aw.witness.serialize())
-  }
-  saveSaplingNotes(state.zAddress, state.notes)
 }
 
 const processBlock = async (

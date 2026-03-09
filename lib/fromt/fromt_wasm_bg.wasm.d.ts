@@ -32,6 +32,7 @@ export const fromtKeyImportSetupMsgNew: (a: number, b: number, c: number, d: num
 export const fromt_encode_identifier: (a: number) => [number, number, number, number];
 export const fromt_decode_identifier: (a: number, b: number) => [number, number, number];
 export const fromt_encode_map: (a: any) => [number, number, number, number];
+export const fromt_derive_keys_from_seed: (a: number, b: number) => [number, number, number, number];
 export const fromt_derive_view_key: (a: number, b: number) => [number, number, number, number];
 export const fromt_derive_spend_pub_key: (a: number, b: number) => [number, number, number, number];
 export const fromt_derive_address: (a: number, b: number) => [number, number, number, number];
@@ -39,7 +40,7 @@ export const fromt_derive_subaddress: (a: number, b: number, c: number, d: numbe
 export const fromt_compute_key_image: (a: number, b: number, c: number, d: number, e: number, f: number) => [number, number, number, number];
 export const fromt_keyshare_birthday: (a: number, b: number) => [bigint, number, number];
 export const fromt_keyshare_network: (a: number, b: number) => [number, number, number];
-export const fromt_derive_keys_from_seed: (a: number, b: number) => [number, number, number, number];
+export const fromt_handle_free: (a: number) => [number, number];
 export const __wbg_spendpreprocessresult_free: (a: number, b: number) => void;
 export const spendpreprocessresult_handle_id: (a: number) => number;
 export const spendpreprocessresult_preprocess: (a: number) => [number, number];
@@ -48,7 +49,7 @@ export const __wbg_spendsignresult_free: (a: number, b: number) => void;
 export const spendsignresult_share: (a: number) => [number, number];
 export const fromt_spend_sign: (a: number, b: number, c: number) => [number, number, number];
 export const fromt_spend_complete: (a: number, b: number, c: number) => [number, number, number, number];
-export const fromt_handle_free: (a: number) => [number, number];
+export const fromt_build_signable_tx: (a: number, b: number, c: number, d: number, e: bigint, f: bigint, g: bigint, h: number, i: number, j: number, k: number) => [number, number, number, number];
 export const spendsignresult_handle_id: (a: number) => number;
 export const __wbindgen_malloc: (a: number, b: number) => number;
 export const __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;

@@ -18,6 +18,7 @@ export const getMoneroCoinBalance: CoinBalanceResolver = async input => {
     activeScan = (async () => {
       await scanMoneroBlocks({
         keyShareBase64: vaultData.keyShare,
+        publicKeyEcdsa: vaultData.publicKeyEcdsa,
       })
     })()
 

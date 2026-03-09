@@ -5,18 +5,20 @@
     "core/ui/providers/ResponsivenessProvider.tsx",
     "core/ui/transaction-history/**",
     "lib/ui/form/FormCheckBadge.tsx",
-    "core/chain/chains/zcash/birthHeight.ts",
     "core/chain/chains/zcash/saplingParams.ts",
     "core/chain/chains/zcash/saplingProver.ts",
     "core/chain/chains/zcash/getZcashZAddress.ts",
     "core/chain/chains/zcash/SaplingNote.ts",
     "core/chain/chains/zcash/scanner.ts",
-    "core/chain/chains/zcash/scanProgress.ts",
-    "core/chain/chains/zcash/scannerKeys.ts",
+    "core/chain/chains/zcash/zcashScanStorage.ts",
     "core/chain/chains/zcash/parseSaplingOutputs.ts",
     "core/chain/chains/zcash/lightwalletd/client.ts",
+    "core/chain/chains/monero/scanner.ts",
+    "core/chain/chains/monero/moneroScanStorage.ts",
     "lib/fromt/**",
     "lib/frozt/**",
+    "scripts/**",
+    "test-monero-*.mjs",
     ".claude/**",
     ".cursor/**",
     ".venv/**",
@@ -31,7 +33,8 @@
     "@bufbuild/buf",
     "@bufbuild/protoc-gen-es",
     "fromt-wasm",
-    "frozt-wasm"
+    "frozt-wasm",
+    "monero-ts"
   ],
   "workspaces": {
     "clients/desktop": {

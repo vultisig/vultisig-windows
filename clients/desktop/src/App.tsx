@@ -1,4 +1,6 @@
 import buildInfo from '@clients/desktop/build.json'
+import { setMoneroScanStorage } from '@core/chain/chains/monero/moneroScanStorage'
+import { setZcashScanStorage } from '@core/chain/chains/zcash/zcashScanStorage'
 import { mpcServerUrl } from '@core/mpc/MpcServerType'
 import { CoreApp } from '@core/ui/CoreApp'
 import { useProcessAppError } from '@core/ui/errors/hooks/useProcessAppError'
@@ -15,11 +17,16 @@ import { useMemo } from 'react'
 import { SaveFile } from '../wailsjs/go/main/App'
 import { DiscoveryService } from '../wailsjs/go/mediator/Server'
 import { LauncherObserver } from './launcher/components/LauncherObserver'
+import { desktopMoneroScanStorage } from './monero/moneroScanStorage'
 import { useVaultCreationMpcLib } from './mpc/state/vaultCreationMpcLib'
 import { views } from './navigation/views'
 import { OnboardingResetter } from './onboarding/OnboardingResetter'
 import { storage } from './storage'
 import { queriesPersister } from './storage/queriesPersister'
+import { desktopZcashScanStorage } from './zcash/zcashScanStorage'
+
+setMoneroScanStorage(desktopMoneroScanStorage)
+setZcashScanStorage(desktopZcashScanStorage)
 
 const baseCoreState: Omit<
   CoreState,

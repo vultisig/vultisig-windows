@@ -1,4 +1,5 @@
 type MoneroVaultData = {
+  publicKeyEcdsa: string
   keyShare: string
 }
 

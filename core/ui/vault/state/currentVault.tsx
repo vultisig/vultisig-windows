@@ -82,14 +82,22 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
     const pkp = value.chainPublicKeys?.[Chain.ZcashShielded]
     const extras = value.saplingExtras
     if (bundle && pkp && extras) {
-      setZcashVaultData({ bundle, pubKeyPackage: pkp, saplingExtras: extras })
+      setZcashVaultData({
+        publicKeyEcdsa: value.publicKeys.ecdsa,
+        bundle,
+        pubKeyPackage: pkp,
+        saplingExtras: extras,
+      })
     } else {
       setZcashVaultData(null)
     }
 
     const moneroKeyShare = value.chainKeyShares?.[Chain.Monero]
     if (moneroKeyShare) {
-      setMoneroVaultData({ keyShare: moneroKeyShare })
+      setMoneroVaultData({
+        publicKeyEcdsa: value.publicKeys.ecdsa,
+        keyShare: moneroKeyShare,
+      })
     } else {
       setMoneroVaultData(null)
     }

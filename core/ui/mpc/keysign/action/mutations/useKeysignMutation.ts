@@ -1,17 +1,14 @@
 import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
+import { submitRawTx } from '@core/chain/chains/monero/daemonRpc'
 import { getShieldingUtxos } from '@core/chain/chains/zcash/getShieldingUtxos'
 import { isZcashShieldedAddress } from '@core/chain/chains/zcash/isZcashShieldedAddress'
 import {
   getLatestBlock,
   sendTransaction,
 } from '@core/chain/chains/zcash/lightwalletd/client'
-import {
-  getUnspentNotes,
-  markNoteSpent,
-} from '@core/chain/chains/zcash/SaplingNote'
 import { loadSaplingParams } from '@core/chain/chains/zcash/saplingParams'
-import { getSaplingProver } from '@core/chain/chains/zcash/saplingProver'
+import { getZcashScanStorage } from '@core/chain/chains/zcash/zcashScanStorage'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
@@ -23,13 +20,29 @@ import { compileTx } from '@core/chain/tx/compile/compileTx'
 import { getTxHash } from '@core/chain/tx/hash'
 import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { generateSignature } from '@core/chain/tx/signature/generateSignature'
-import { FroztKeysign } from '@core/mpc/frozt/froztKeysign'
+import { runFromtSpendCeremony } from '@core/mpc/fromt/fromtSpendCeremony'
+import { runFroztSession } from '@core/mpc/frozt/froztSession'
+import { createFroztSignSessionWithAlpha } from '@core/mpc/frozt/froztSessionFactory'
+import { initializeFrozt } from '@core/mpc/frozt/initialize'
+import { getMessageHash } from '@core/mpc/getMessageHash'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { KeysignResult } from '@core/mpc/keysign/KeysignResult'
 import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
 import { getEncodedSigningInputs } from '@core/mpc/keysign/signingInputs'
+import { prepareMoneroSpendTx } from '@core/mpc/keysign/signingInputs/moneroSpend'
+import {
+  prepareZcashShieldedTx,
+  ZcashPreparedTx,
+} from '@core/mpc/keysign/signingInputs/zcashShielded'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { getKeysignCoin } from '@core/mpc/keysign/utils/getKeysignCoin'
+import { deleteMpcRelayMessage } from '@core/mpc/message/relay/delete'
+import { getMpcRelayMessages } from '@core/mpc/message/relay/get'
+import { sendMpcRelayMessage } from '@core/mpc/message/relay/send'
+import {
+  fromMpcServerMessage,
+  toMpcServerMessage,
+} from '@core/mpc/message/server'
 import { Vault } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
@@ -41,6 +54,7 @@ import {
   customMessageDefaultChain,
   customMessageSupportedChains,
 } from '@core/ui/mpc/keysign/customMessage/chains'
+import { useZcashPreparedTx } from '@core/ui/mpc/keysign/state/zcashPreparedTx'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
 import { useMpcPeers } from '@core/ui/mpc/state/mpcPeers'
@@ -49,13 +63,15 @@ import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { base64Encode } from '@lib/utils/base64Encode'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { chainPromises } from '@lib/utils/promise/chainPromises'
 import { recordFromItems } from '@lib/utils/record/recordFromItems'
 import { blake2b } from '@noble/hashes/blake2.js'
+import { keccak_256 } from '@noble/hashes/sha3.js'
 import { useMutation } from '@tanstack/react-query'
 import { WalletCore } from '@trustwallet/wallet-core'
-import { frozt_sapling_derive_keys, WasmShieldingTxBuilder } from 'frozt-wasm'
+import { WasmShieldingTxBuilder } from 'frozt-wasm'
 
 import { getCustomMessageHex } from '../../customMessage/getCustomMessageHex'
 
@@ -71,6 +87,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
   const sessionId = useMpcSessionId()
   const encryptionKeyHex = useCurrentHexEncryptionKey()
   const peers = useMpcPeers()
+  const zcashPreparedTx = useZcashPreparedTx()
 
   return useMutation({
     mutationFn: async (): Promise<KeysignResult> => {
@@ -81,32 +98,54 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
             const chain = getKeysignChain(payload)
 
             if (chain === Chain.ZcashShielded) {
+              await initializeFrozt()
+              const { frozt_keyshare_bundle_key_package } =
+                await import('frozt-wasm')
+
+              const bundleBase64 = shouldBePresent(
+                vault.chainKeyShares?.[Chain.ZcashShielded],
+                'Frozt keyshare bundle'
+              )
+              const pubKeyPackageBase64 = shouldBePresent(
+                vault.chainPublicKeys?.[Chain.ZcashShielded],
+                'Frozt public key package'
+              )
+              const bundleBytes = new Uint8Array(
+                Buffer.from(bundleBase64, 'base64')
+              )
+              const keyPackage = frozt_keyshare_bundle_key_package(bundleBytes)
+              const pubKeyPackage = new Uint8Array(
+                Buffer.from(pubKeyPackageBase64, 'base64')
+              )
+              const signers = [vault.localPartyId, ...peers]
+
               const froztSignWithAlpha = async (
                 message: Uint8Array,
-                alpha: Uint8Array
+                alpha: Uint8Array,
+                index: number
               ): Promise<Uint8Array> => {
-                const keyPackage = shouldBePresent(
-                  vault.chainKeyShares?.[Chain.ZcashShielded],
-                  'Frozt keyshare'
-                )
-                const pubKeyPackage = shouldBePresent(
-                  vault.chainPublicKeys?.[Chain.ZcashShielded],
-                  'Frozt public key package'
-                )
-                const froztKeysign = new FroztKeysign(
-                  isInitiatingDevice,
+                const session = await createFroztSignSessionWithAlpha({
                   serverUrl,
                   sessionId,
-                  vault.localPartyId,
-                  [vault.localPartyId, ...peers],
-                  encryptionKeyHex
-                )
-                return froztKeysign.signWithAlpha(
-                  message,
+                  localPartyId: vault.localPartyId,
+                  hexEncryptionKey: encryptionKeyHex,
+                  setupMessageId: `frozt-sign-setup-${index}`,
+                  isInitiatingDevice,
+                  signers,
+                  msgToSign: message,
                   keyPackage,
                   pubKeyPackage,
-                  alpha
-                )
+                  alpha,
+                })
+                return runFroztSession({
+                  session,
+                  messageId: `frozt-sign-${index}`,
+                  serverUrl,
+                  sessionId,
+                  localPartyId: vault.localPartyId,
+                  signers,
+                  hexEncryptionKey: encryptionKeyHex,
+                })
               }
 
               return handleUnshield({
@@ -116,6 +155,19 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
                 amount: Number(payload.toAmount),
                 fee: 10000,
                 froztSignWithAlpha,
+                preparedTx: zcashPreparedTx,
+              })
+            }
+
+            if (chain === Chain.Monero) {
+              return handleMoneroSpend({
+                payload,
+                vault,
+                serverUrl,
+                sessionId,
+                hexEncryptionKey: encryptionKeyHex,
+                isInitiatingDevice,
+                peers,
               })
             }
 
@@ -249,8 +301,10 @@ type UnshieldContext = {
   fee: number
   froztSignWithAlpha: (
     message: Uint8Array,
-    alpha: Uint8Array
+    alpha: Uint8Array,
+    index: number
   ) => Promise<Uint8Array>
+  preparedTx?: ZcashPreparedTx | null
 }
 
 const zcashTxHashPersonalization = (() => {
@@ -283,64 +337,56 @@ const handleUnshield = async ({
   amount,
   fee,
   froztSignWithAlpha,
+  preparedTx,
 }: UnshieldContext): Promise<KeysignResult> => {
-  const senderCoin = getKeysignCoin(payload)
-  const zAddress = senderCoin.address
+  let prepared: ZcashPreparedTx
 
-  const unspentNotes = getUnspentNotes(zAddress)
-  const note = unspentNotes.find(n => n.value >= amount)
-  if (!note) {
-    throw new Error(
-      `No unspent shielded note with sufficient balance (need ${amount} zatoshis)`
-    )
+  if (preparedTx) {
+    prepared = preparedTx
+  } else {
+    const senderCoin = getKeysignCoin(payload)
+    prepared = await prepareZcashShieldedTx({
+      vault,
+      zAddress: senderCoin.address,
+      toAddress,
+      amount,
+      fee,
+    })
   }
 
-  if (!note.noteData || !note.witnessData) {
-    throw new Error(
-      'Note is missing noteData or witnessData. Block scanning is required to populate these fields.'
-    )
+  const { builder, noteNullifiers, zAddress } = prepared
+  const { alphas: alphaHexes, sighash: sighashHex } = prepared.signData.context
+  const sighash = new Uint8Array(Buffer.from(sighashHex, 'hex'))
+
+  const signatures: Uint8Array[] = []
+  for (let i = 0; i < alphaHexes.length; i++) {
+    const alpha = new Uint8Array(Buffer.from(alphaHexes[i], 'hex'))
+    const sig = await froztSignWithAlpha(sighash, alpha, i)
+    signatures.push(sig)
   }
 
-  const pubKeyPackageBase64 = shouldBePresent(
-    vault.chainPublicKeys?.[Chain.ZcashShielded],
-    'Frozt public key package'
-  )
-  const saplingExtrasBase64 = shouldBePresent(
-    vault.saplingExtras,
-    'Sapling extras'
-  )
-
-  const pubKeyPackage = Buffer.from(pubKeyPackageBase64, 'base64')
-  const saplingExtras = Buffer.from(saplingExtrasBase64, 'base64')
-
-  const saplingKeys = frozt_sapling_derive_keys(pubKeyPackage, saplingExtras)
-
-  const noteData = new Uint8Array(Buffer.from(note.noteData, 'hex'))
-  const witnessData = new Uint8Array(Buffer.from(note.witnessData, 'hex'))
-
-  const changeAmount = note.value - amount - fee
-
-  const prover = await getSaplingProver()
-  const builder = prover.createBuilder(pubKeyPackage, saplingExtras, 0)
-
-  const spendAlpha = builder.addSpend(noteData, witnessData)
-  builder.addOutput(toAddress, amount)
-  if (changeAmount > 0) {
-    builder.addOutput(saplingKeys.address, changeAmount)
+  const totalLen = signatures.reduce((sum, s) => sum + s.length, 0)
+  const allSigs = new Uint8Array(totalLen)
+  let offset = 0
+  for (const sig of signatures) {
+    allSigs.set(sig, offset)
+    offset += sig.length
   }
-  builder.build()
 
-  const sighash = builder.sighash
-  const alpha = spendAlpha
-
-  const signature = await froztSignWithAlpha(sighash, alpha)
-
-  const rawTx = builder.complete(signature)
+  const rawTx = builder.complete(allSigs)
   const txResult = buildShieldedTxResult(rawTx)
 
   if (!payload.skipBroadcast) {
     await sendTransaction(rawTx)
-    markNoteSpent(zAddress, note.nullifier)
+    const storage = getZcashScanStorage()
+    const scanData = await storage.load(zAddress)
+    if (scanData) {
+      for (const nullifier of noteNullifiers) {
+        const note = scanData.notes.find(n => n.nullifier === nullifier)
+        if (note) note.spent = true
+      }
+      await storage.save(scanData)
+    }
   }
 
   return { txs: [txResult] }
@@ -483,4 +529,136 @@ const handleShield = async ({
   }
 
   return { txs: [txResult] }
+}
+
+type MoneroSpendContext = {
+  payload: any
+  vault: Vault
+  serverUrl: string
+  sessionId: string
+  hexEncryptionKey: string
+  isInitiatingDevice: boolean
+  peers: string[]
+}
+
+const pollForSignableTx = async ({
+  serverUrl,
+  sessionId,
+  localPartyId,
+  hexEncryptionKey,
+}: {
+  serverUrl: string
+  sessionId: string
+  localPartyId: string
+  hexEncryptionKey: string
+}): Promise<Uint8Array> => {
+  const start = Date.now()
+  const timeoutMs = 120_000
+
+  while (true) {
+    if (Date.now() - start > timeoutMs) {
+      throw new Error('Timeout waiting for Monero signableTx from coordinator')
+    }
+
+    const messages = await getMpcRelayMessages({
+      serverUrl,
+      localPartyId,
+      sessionId,
+      messageId: 'monero-spend-setup',
+    })
+
+    if (messages.length > 0) {
+      const decrypted = fromMpcServerMessage(messages[0].body, hexEncryptionKey)
+      await deleteMpcRelayMessage({
+        serverUrl,
+        localPartyId,
+        sessionId,
+        messageHash: messages[0].hash,
+        messageId: 'monero-spend-setup',
+      })
+      return new Uint8Array(decrypted)
+    }
+
+    await new Promise(resolve => setTimeout(resolve, 500))
+  }
+}
+
+const handleMoneroSpend = async ({
+  payload,
+  vault,
+  serverUrl,
+  sessionId,
+  hexEncryptionKey,
+  isInitiatingDevice,
+  peers,
+}: MoneroSpendContext): Promise<KeysignResult> => {
+  const keyShareBase64 = shouldBePresent(
+    vault.chainKeyShares?.[Chain.Monero],
+    'Monero keyshare'
+  )
+  const keyShare = new Uint8Array(Buffer.from(keyShareBase64, 'base64'))
+  const signers = [vault.localPartyId, ...peers]
+
+  let signableTx: Uint8Array
+
+  if (isInitiatingDevice) {
+    const senderCoin = getKeysignCoin(payload)
+    const prepared = await prepareMoneroSpendTx({
+      vault,
+      senderAddress: senderCoin.address,
+      toAddress: payload.toAddress,
+      amount: Number(payload.toAmount),
+    })
+    signableTx = prepared.signableTx
+
+    const encrypted = toMpcServerMessage(signableTx, hexEncryptionKey)
+    for (const peer of peers) {
+      await sendMpcRelayMessage({
+        serverUrl,
+        sessionId,
+        message: {
+          session_id: sessionId,
+          from: vault.localPartyId,
+          to: [peer],
+          body: encrypted,
+          hash: getMessageHash(base64Encode(signableTx)),
+          sequence_no: 0,
+        },
+        messageId: 'monero-spend-setup',
+      })
+    }
+  } else {
+    signableTx = await pollForSignableTx({
+      serverUrl,
+      sessionId,
+      localPartyId: vault.localPartyId,
+      hexEncryptionKey,
+    })
+  }
+
+  const rawTx = await runFromtSpendCeremony({
+    keyShare,
+    signableTx,
+    signers,
+    localPartyId: vault.localPartyId,
+    serverUrl,
+    sessionId,
+    hexEncryptionKey,
+    isInitiatingDevice,
+  })
+
+  if (!payload.skipBroadcast) {
+    await submitRawTx(Buffer.from(rawTx).toString('hex'))
+  }
+
+  const txHash = Buffer.from(keccak_256(rawTx)).toString('hex')
+
+  return {
+    txs: [
+      {
+        hash: txHash,
+        data: { encoded: rawTx } as any,
+      },
+    ],
+  }
 }

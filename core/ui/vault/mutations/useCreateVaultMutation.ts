@@ -1,7 +1,7 @@
 import { Chain, defaultChains } from '@core/chain/Chain'
 import { getMoneroAddress } from '@core/chain/chains/monero/getMoneroAddress'
 import { getZcashZAddress } from '@core/chain/chains/zcash/getZcashZAddress'
-import { saveScannerKeys } from '@core/chain/chains/zcash/scannerKeys'
+import { getZcashScanStorage } from '@core/chain/chains/zcash/zcashScanStorage'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
@@ -107,7 +107,17 @@ export const useCreateVaultMutation = (
           pubKeyPackage,
           vault.saplingExtras ?? ''
         )
-        saveScannerKeys(address, pubKeyPackage, vault.saplingExtras ?? '')
+        await getZcashScanStorage().save({
+          zAddress: address,
+          publicKeyEcdsa: getVaultId(vault),
+          scanHeight: null,
+          scanTarget: null,
+          birthHeight: null,
+          birthdayScanDone: false,
+          pubKeyPackage,
+          saplingExtras: vault.saplingExtras ?? '',
+          notes: [],
+        })
         coins.push({
           ...chainFeeCoin[Chain.ZcashShielded],
           address,
