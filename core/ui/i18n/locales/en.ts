@@ -482,6 +482,7 @@ export const en = {
   header_tooltip_title: 'Referral Program',
   hide_balance: 'Hide balance',
   hide_defi_balance: 'Hide DeFi balance',
+  hold: 'Hold',
   hold_for_paired_sign: 'Hold for paired sign',
   how_it_works: 'How it works',
   ibc_transaction_not_supporting_memo_desc:
