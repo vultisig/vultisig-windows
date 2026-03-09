@@ -3,18 +3,33 @@ type DateGroup<T> = {
   items: T[]
 }
 
+type DateGroupLabels = {
+  today: string
+  yesterday: string
+}
+
 const toDateKey = (date: Date): string =>
   `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
 
-const formatDateLabel = (date: Date, today: Date): string => {
+type FormatDateLabelInput = {
+  date: Date
+  today: Date
+  labels: DateGroupLabels
+}
+
+const formatDateLabel = ({
+  date,
+  today,
+  labels,
+}: FormatDateLabelInput): string => {
   const todayKey = toDateKey(today)
   const dateKey = toDateKey(date)
 
-  if (dateKey === todayKey) return 'Today'
+  if (dateKey === todayKey) return labels.today
 
   const yesterday = new Date(today)
   yesterday.setDate(yesterday.getDate() - 1)
-  if (dateKey === toDateKey(yesterday)) return 'Yesterday'
+  if (dateKey === toDateKey(yesterday)) return labels.yesterday
 
   return date.toLocaleDateString('en-US', {
     month: 'long',
@@ -26,11 +41,13 @@ const formatDateLabel = (date: Date, today: Date): string => {
 type GroupByDateInput<T> = {
   items: T[]
   getTimestamp: (item: T) => string
+  labels: DateGroupLabels
 }
 
 export const groupByDate = <T>({
   items,
   getTimestamp,
+  labels,
 }: GroupByDateInput<T>): DateGroup<T>[] => {
   const today = new Date()
   const groups = new Map<string, DateGroup<T>>()
@@ -49,7 +66,7 @@ export const groupByDate = <T>({
       existing.items.push(item)
     } else {
       groups.set(key, {
-        label: formatDateLabel(date, today),
+        label: formatDateLabel({ date, today, labels }),
         items: [item],
       })
     }

@@ -968,6 +968,7 @@ export const en = {
   tns_missing_thor_alias: 'Referral code must have a THOR‐chain alias',
   tns_not_found: 'Referral code not found',
   to: 'To',
+  today: 'Today',
   to_asset: 'To Asset',
   token_not_found_description:
     'Possible reasons: wrong contract, unsupported chain, or token removed from registries.',
@@ -1170,6 +1171,7 @@ export const en = {
     'Insufficient RUNE balance. At least {{amount}} RUNE is required as dust for LP withdrawal.',
   lp_withdraw_percentage: 'Withdraw percentage',
   wrong_vault_try_again: 'Wrong Vault or Pair Device.',
+  yesterday: 'Yesterday',
   you_are_bonding: "You're bonding",
   you_are_unbonding: "You're unbonding",
   you_are_sending: "You're sending",

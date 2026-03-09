@@ -34,6 +34,7 @@ export const TransactionHistoryList = ({
   const groups = groupByDate({
     items: records,
     getTimestamp: record => record.timestamp,
+    labels: { today: t('today'), yesterday: t('yesterday') },
   })
 
   return (
