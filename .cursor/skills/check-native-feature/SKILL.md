@@ -78,7 +78,7 @@ Evidence:
 - Off-main signals: <none|branch/PR hints found>
 
 Next step:
-- If implemented: "Use reference-native-codebase skill and port."
+- If implemented: "Use reference-codebases skill and port."
 - If not implemented: "Wait for native implementation."
 ```
 
