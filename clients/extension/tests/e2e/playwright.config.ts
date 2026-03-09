@@ -1,5 +1,6 @@
 import { defineConfig } from '@playwright/test'
 import path from 'path'
+import { fileURLToPath } from 'url'
 
 /**
  * Playwright config for VultiConnect extension E2E tests.
@@ -14,6 +15,9 @@ import path from 'path'
  * NOTE: Chrome extension testing requires headed mode (not headless).
  * The extension is loaded via --load-extension flag.
  */
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 const extensionPath = path.resolve(__dirname, '../../dist')
 

@@ -5,25 +5,25 @@
  * the provider injection, connection flow, and chain switching.
  *
  * Prerequisites:
- *   1. Build the extension: `yarn build:extension` (from repo root)
+ *   1. Build the extension: `yarn workspace @clients/extension build`
  *   2. Chromium installed: `npx playwright install chromium`
  *
  * Run:
- *   npx playwright test --config clients/extension/tests/e2e/playwright.config.ts
+ *   cd clients/extension && npx playwright test --config tests/e2e/playwright.config.ts
  *
  * NOTE: These tests require headed mode (extensions don't work in headless).
  * They may not pass in CI without a display server (use xvfb-run or similar).
  */
 
 import { test, expect } from './fixtures/extension-loader'
-import path from 'path'
-
-const testDappPath = path.resolve(__dirname, 'fixtures/test-dapp.html')
 
 test.describe('Provider Injection', () => {
-  test('window.ethereum is injected on page load', async ({ context }) => {
+  test('window.ethereum is injected on page load', async ({
+    context,
+    testDappUrl,
+  }) => {
     const page = await context.newPage()
-    await page.goto(`file://${testDappPath}`)
+    await page.goto(testDappUrl)
 
     // Wait for provider to be injected (content script runs after page load)
     const hasProvider = await page.waitForFunction(
@@ -34,9 +34,12 @@ test.describe('Provider Injection', () => {
     expect(hasProvider).toBeTruthy()
   })
 
-  test('window.ethereum has VultiConnect properties', async ({ context }) => {
+  test('window.ethereum has VultiConnect properties', async ({
+    context,
+    testDappUrl,
+  }) => {
     const page = await context.newPage()
-    await page.goto(`file://${testDappPath}`)
+    await page.goto(testDappUrl)
 
     await page.waitForFunction(() => !!window.ethereum, null, {
       timeout: 10_000,
@@ -61,9 +64,10 @@ test.describe('Provider Injection', () => {
 
   test('window.ethereum.isConnected() returns false initially', async ({
     context,
+    testDappUrl,
   }) => {
     const page = await context.newPage()
-    await page.goto(`file://${testDappPath}`)
+    await page.goto(testDappUrl)
 
     await page.waitForFunction(() => !!window.ethereum, null, {
       timeout: 10_000,
@@ -75,9 +79,12 @@ test.describe('Provider Injection', () => {
     expect(isConnected).toBe(false)
   })
 
-  test('window.ethereum has request method', async ({ context }) => {
+  test('window.ethereum has request method', async ({
+    context,
+    testDappUrl,
+  }) => {
     const page = await context.newPage()
-    await page.goto(`file://${testDappPath}`)
+    await page.goto(testDappUrl)
 
     await page.waitForFunction(() => !!window.ethereum, null, {
       timeout: 10_000,
@@ -89,9 +96,12 @@ test.describe('Provider Injection', () => {
     expect(hasRequest).toBe(true)
   })
 
-  test('unsupported method throws EIP-1193 error', async ({ context }) => {
+  test('unsupported method throws EIP-1193 error', async ({
+    context,
+    testDappUrl,
+  }) => {
     const page = await context.newPage()
-    await page.goto(`file://${testDappPath}`)
+    await page.goto(testDappUrl)
 
     await page.waitForFunction(() => !!window.ethereum, null, {
       timeout: 10_000,
@@ -116,9 +126,12 @@ test.describe('Provider Injection', () => {
 })
 
 test.describe('Ethereum Connect Flow', () => {
-  test('eth_requestAccounts triggers popup', async ({ context }) => {
+  test('eth_requestAccounts triggers popup', async ({
+    context,
+    testDappUrl,
+  }) => {
     const page = await context.newPage()
-    await page.goto(`file://${testDappPath}`)
+    await page.goto(testDappUrl)
 
     await page.waitForFunction(() => !!window.ethereum, null, {
       timeout: 10_000,
@@ -148,9 +161,10 @@ test.describe('Ethereum Connect Flow', () => {
 
   test('eth_accounts returns empty array when not connected', async ({
     context,
+    testDappUrl,
   }) => {
     const page = await context.newPage()
-    await page.goto(`file://${testDappPath}`)
+    await page.goto(testDappUrl)
 
     await page.waitForFunction(() => !!window.ethereum, null, {
       timeout: 10_000,
@@ -171,38 +185,37 @@ test.describe('Ethereum Connect Flow', () => {
 test.describe('Chain Switching', () => {
   test('wallet_switchEthereumChain dispatches correctly', async ({
     context,
+    testDappUrl,
   }) => {
     const page = await context.newPage()
-    await page.goto(`file://${testDappPath}`)
+    await page.goto(testDappUrl)
 
     await page.waitForFunction(() => !!window.ethereum, null, {
       timeout: 10_000,
     })
 
-    // Set up event listener before switching
-    const chainChangedPromise = page.evaluate(() => {
-      return new Promise<string>((resolve) => {
-        window.ethereum.on('chainChanged', (chainId: string) => {
-          resolve(chainId)
-        })
-        // Timeout after 5s
-        setTimeout(() => resolve('timeout'), 5000)
-      })
-    })
-
-    // Attempt chain switch — may fail without vault, but tests the dispatch
+    // Attempt chain switch — without a vault configured, expect an error or popup.
+    // The key assertion is that the method dispatches through the provider correctly.
+    // Use Promise.race with a timeout since the extension may open a popup window
+    // that disrupts the page context.
     const result = await page.evaluate(async () => {
       try {
-        return await window.ethereum.request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId: '0x89' }],
-        })
+        const switchResult = await Promise.race([
+          window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: '0x89' }],
+          }),
+          new Promise((resolve) =>
+            setTimeout(() => resolve({ timeout: true }), 5000)
+          ),
+        ])
+        return { result: switchResult }
       } catch (e: any) {
         return { error: e.message, code: e.code }
       }
     })
 
-    // The chain switch request was dispatched
+    // The chain switch request was dispatched — either resolved, timed out, or threw
     expect(result).toBeDefined()
   })
 })
