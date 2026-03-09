@@ -18,6 +18,7 @@ import { VaultsBackupPage } from '@core/ui/vault/backup/VaultsBackupPage'
 import { ManageVaultChainsPage } from '@core/ui/vault/chain/manage'
 import { ManageVaultChainCoinsPage } from '@core/ui/vault/chain/manage/coin'
 import { VaultChainPage } from '@core/ui/vault/chain/VaultChainPage'
+import { SetupVaultOverviewPage } from '@core/ui/vault/create/setup-vault/SetupVaultOverviewPage'
 import { DepositPage } from '@core/ui/vault/deposit/DepositPage'
 import { DepositAccessGuard } from '@core/ui/vault/deposit/providers/DepositAccessGuard'
 import { SignCustomMessagePage } from '@core/ui/vault/keysign/custom-message'
@@ -80,6 +81,7 @@ export type SharedViewId = Extract<
   | 'renameVault'
   | 'reshareVault'
   | 'send'
+  | 'setupVaultOverview'
   | 'signCustomMessage'
   | 'swap'
   | 'updateAddressBookItem'
@@ -142,6 +144,7 @@ export const sharedViews: Views<SharedViewId> = {
   renameVault: VaultRenamePage,
   reshareVault: ReshareVaultPage,
   send: SendPage,
+  setupVaultOverview: SetupVaultOverviewPage,
   signCustomMessage: SignCustomMessagePage,
   swap: SwapPage,
   updateAddressBookItem: UpdateAddressBookItemPage,

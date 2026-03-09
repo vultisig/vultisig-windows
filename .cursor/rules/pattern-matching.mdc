@@ -1,36 +1,31 @@
 ---
-description: USE pattern matching WHEN implementing conditional logic TO avoid switch/case statements
+description: PREFER project match helpers for union-style branching
 globs: *.ts,*.tsx
 alwaysApply: false
 ---
 
-# Pattern Matching Rules
+# Conditional Matching
 
-## Context
-- Apply when implementing conditional logic based on discriminated unions, record types, or string literals
-- Prefer pattern matching techniques over traditional switch/case statements
-- Improves type safety, readability, and maintainability
+## Use this when
+- Branching on string-literal unions, discriminated unions, or record unions
+- Rendering one of several React branches from a finite state or value
 
-## Requirements
-- Use Record or match function for simple union types
+## Prefer project utilities
+- Use `match()` for simple literal unions
 - Use Match component for conditional React component rendering
-- Use matchRecordUnion for handling record union types
-- Use matchDiscriminatedUnion for discriminated union patterns
-- Never use switch/case statements when pattern matching alternatives exist
+- Use `matchRecordUnion()` for record union values
+- Use `matchDiscriminatedUnion()` for discriminated unions with explicit keys
+
+## Why this exists
+These are established project utilities. Using them keeps branching consistent and usually improves exhaustiveness and discoverability.
+
+## Do not over-apply
+- `switch` is allowed when it is the clearest fit, especially for numeric discriminators, config/build code, or imperative branching where the match helpers do not improve correctness
+- Do not rewrite existing straightforward code just to avoid `switch`
 
 ## Examples
 
 <example>
-// Using Record for value mapping
-const animalSounds: Record<Animal, string> = {
-  dog: 'woof',
-  cat: 'meow'
-}
-const sound = animalSounds[animal]
-</example>
-
-<example>
-// Using match function
 const sound = match(animal, {
   dog: () => 'woof',
   cat: () => 'meow'
@@ -48,7 +43,6 @@ const sound = match(animal, {
 </example>
 
 <example>
-// Using matchRecordUnion
 matchRecordUnion(shape, {
   circle: (radius) => Math.PI * radius * radius,
   rectangle: ({width, height}) => width * height
@@ -66,16 +60,4 @@ matchDiscriminatedUnion(
     decrement: (amount) => count - amount
   }
 )
-</example>
-
-<example type="invalid">
-// Avoid switch/case statements
-switch (status) {
-  case 'loading':
-    return <Loading />
-  case 'error':
-    return <Error />
-  default:
-    return null
-}
 </example>

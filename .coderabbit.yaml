@@ -18,5 +18,11 @@ reviews:
         Review Guidelines - DO NOT suggest these changes:
         - Undefined/Null Checks: Never suggest adding undefined or null checks when TypeScript types already guarantee the value exists. Trust TypeScript's type system - if a property or variable is typed as non-nullable, do not suggest optional chaining (?.) or null checks.
         - Error Handling: Never suggest wrapping code in try-catch blocks or adding error handling. If the developers chose not to add error handling, respect that decision and do not propose adding it.
+    - path: 'core/mpc/**,tss/**'
+      instructions: |
+        HIGH security area. Flag any changes to cryptographic operations, key handling, or signing logic for maintainer review.
+    - path: 'lib/**'
+      instructions: |
+        This is an upstream mirror. Flag any direct edits — changes should go in the upstream repo.
 chat:
   auto_reply: true
