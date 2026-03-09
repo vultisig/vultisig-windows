@@ -24,6 +24,9 @@ export type ToolCallInfo = {
   error?: string
 }
 
+import type { AgentStep } from './timeline/TimelineEntry'
+export type { AgentStep } from './timeline/TimelineEntry'
+
 export type ChatMessage = {
   id: string
   role: 'user' | 'assistant'
@@ -33,6 +36,7 @@ export type ChatMessage = {
   toolCall?: ToolCallInfo
   txStatus?: TxStatusInfo
   analysisDuration?: number
+  steps?: AgentStep[]
 }
 
 export type Conversation = {

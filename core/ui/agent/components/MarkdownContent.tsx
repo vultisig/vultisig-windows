@@ -3,6 +3,9 @@ import { FC } from 'react'
 import Markdown from 'react-markdown'
 import styled from 'styled-components'
 
+const normalizeMarkdown = (content: string): string =>
+  content.replace(/^[•·‣⁃]\s*/gm, '- ')
+
 type Props = {
   content: string
 }
@@ -10,7 +13,7 @@ type Props = {
 export const MarkdownContent: FC<Props> = ({ content }) => {
   return (
     <Container>
-      <Markdown>{content}</Markdown>
+      <Markdown>{normalizeMarkdown(content)}</Markdown>
     </Container>
   )
 }
