@@ -21,7 +21,20 @@ import { selectChainsForRun, updateStaleness, SUPPORTED_CHAINS, type ChainId } f
 import { waitForTxConfirmation } from '../helpers/tx-confirmation'
 
 // Skip if fund-dependent tests not enabled
+// These tests require:
+// 1. ENABLE_TX_SIGNING_TESTS=true environment variable
+// 2. A pre-seeded vault with funded accounts
 const ENABLE_TX_TESTS = process.env.ENABLE_TX_SIGNING_TESTS === 'true'
+
+// Helper to check if vault exists
+async function vaultExists(page: import('@playwright/test').Page): Promise<boolean> {
+  try {
+    const vaultPage = page.locator('[data-testid="vault-page"]')
+    return await vaultPage.isVisible({ timeout: 5000 }).catch(() => false)
+  } catch {
+    return false
+  }
+}
 
 // SELF-SEND: We send back to our own vault address to recycle funds
 // The test will get the vault's address for each chain dynamically

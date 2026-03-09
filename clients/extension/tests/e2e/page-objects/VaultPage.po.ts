@@ -36,9 +36,15 @@ export class VaultPage extends BasePage {
   }
 
   get settingsButton(): Locator {
-    return (
-      this.page.locator('[data-testid="vault-settings-button"]') ||
-      this.page.getByRole('button', { name: /settings/i })
+    // Settings button is an IconButton with SettingsIcon (gear icon)
+    // It's in the header controls area
+    return this.page.locator('button').filter({
+      has: this.page.locator('svg[class*="settings"], svg path[d*="M19.14"]')
+    }).first().or(
+      this.page.getByRole('button').filter({ hasText: /settings/i })
+    ).or(
+      // Fallback: look for icon button with gear-like icon in header
+      this.page.locator('[data-testid="settings-button"], button:has(svg)').last()
     )
   }
 
@@ -62,9 +68,19 @@ export class VaultPage extends BasePage {
 
   /**
    * Wait for the vault view to be visible
+   * Throws a descriptive error if vault page doesn't appear
    */
   async waitForView(timeout = 15_000): Promise<void> {
-    await this.vaultContainer.waitFor({ state: 'visible', timeout })
+    try {
+      await this.vaultContainer.waitFor({ state: 'visible', timeout })
+    } catch {
+      // Check if we're on onboarding/new vault page instead
+      const onNewVault = await this.page.getByText(/vultisig/i).first().isVisible().catch(() => false)
+      if (onNewVault) {
+        throw new Error('No vault exists - extension is showing onboarding/new vault page. Create or import a vault first.')
+      }
+      throw new Error(`Vault page did not appear within ${timeout}ms. Check if a vault exists.`)
+    }
   }
 
   /**
