@@ -160,7 +160,6 @@ export const CreateVaultFolderPage = () => {
                       </SwitchWrapper>
                     }
                     selected={checked}
-                    dimmed={!checked}
                     onClick={() => toggleVault(vaultId)}
                   />
                 )
