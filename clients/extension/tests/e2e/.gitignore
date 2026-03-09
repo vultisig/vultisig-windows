@@ -1,0 +1,3 @@
+# Never commit actual .env file
+.env
+*.vult

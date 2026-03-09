@@ -5,6 +5,66 @@ or manual user interaction that cannot be automated without a configured vault.
 
 ---
 
+## ✅ Vault Testing Infrastructure (Ready)
+
+The vault testing infrastructure is now set up. To enable vault-dependent tests:
+
+### Quick Start
+
+```bash
+# 1. Copy the example env file
+cp tests/e2e/.env.example tests/e2e/.env
+
+# 2. Edit .env and set your vault path and password
+TEST_VAULT_PATH=/path/to/your/test-vault.vult
+TEST_VAULT_PASSWORD=your-vault-password
+
+# 3. Run vault-dependent tests
+npx playwright test vault-operations.spec.ts
+```
+
+### Files Created
+
+- `tests/e2e/.env.example` — Template for vault configuration (mirrors SDK pattern)
+- `tests/e2e/.gitignore` — Prevents committing .env and .vult files
+- `tests/e2e/helpers/test-vault.ts` — Helper functions for loading test vaults
+- `tests/e2e/vault-operations.spec.ts` — Skipped tests ready for implementation
+
+### Shared Vault with SDK
+
+You can use the same test vault for both SDK and extension E2E tests:
+
+```bash
+# SDK vault location
+packages/sdk/tests/e2e/.env
+
+# Extension vault location  
+clients/extension/tests/e2e/.env
+
+# Point both to the same vault file
+TEST_VAULT_PATH=/path/to/shared/test-vault.vult
+```
+
+### Helper Functions
+
+```typescript
+import { 
+  isTestVaultConfigured,
+  loadTestVaultContent,
+  getTestVaultPassword,
+  isSigningTestsEnabled,
+  TEST_VAULT_CONFIG
+} from './helpers/test-vault'
+
+// Check if vault is available
+if (isTestVaultConfigured()) {
+  const content = loadTestVaultContent()
+  const password = getTestVaultPassword()
+}
+```
+
+---
+
 ## Transaction Signing
 
 ### `test: eth_sendTransaction signs and broadcasts`

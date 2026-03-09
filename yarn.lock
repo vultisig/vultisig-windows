@@ -719,6 +719,7 @@ __metadata:
     bs58: "npm:^6.0.0"
     cosmjs-types: "npm:^0.11.0"
     cross-env: "npm:^10.1.0"
+    dotenv: "npm:^16.4.5"
     eslint: "npm:^9.39.2"
     ethers: "npm:^6.16.0"
     happy-dom: "npm:^16.8.0"
@@ -6857,6 +6858,13 @@ __metadata:
   version: 4.22.0
   resolution: "domain-browser@npm:4.22.0"
   checksum: 10c0/2ef7eda6d2161038fda0c9aa4c9e18cc7a0baa89ea6be975d449527c2eefd4b608425db88508e2859acc472f46f402079274b24bd75e3fb506f28c5dba203129
+  languageName: node
+  linkType: hard
+
+"dotenv@npm:^16.4.5":
+  version: 16.6.1
+  resolution: "dotenv@npm:16.6.1"
+  checksum: 10c0/15ce56608326ea0d1d9414a5c8ee6dcf0fffc79d2c16422b4ac2268e7e2d76ff5a572d37ffe747c377de12005f14b3cc22361e79fc7f1061cce81f77d2c973dc
   languageName: node
   linkType: hard
 

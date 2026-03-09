@@ -1,6 +1,12 @@
 import { defineConfig } from '@playwright/test'
+import { config } from 'dotenv'
 import path from 'path'
 import { fileURLToPath } from 'url'
+
+// Load .env from e2e directory for test vault configuration
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+config({ path: path.resolve(__dirname, '.env') })
 
 /**
  * Playwright config for VultiConnect extension E2E tests.
@@ -15,9 +21,6 @@ import { fileURLToPath } from 'url'
  * NOTE: Chrome extension testing requires headed mode (not headless).
  * The extension is loaded via --load-extension flag.
  */
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
 
 const extensionPath = path.resolve(__dirname, '../../dist')
 
