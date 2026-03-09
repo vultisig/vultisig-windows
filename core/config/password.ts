@@ -1,3 +1,4 @@
+// Password length constraints for vault encryption
 export const passwordLengthConfig = {
   min: 1,
   max: 128,
