@@ -33,7 +33,7 @@ export const BackupFastVault = ({
 }: BackupFastVaultProps) => {
   const { t } = useTranslation()
 
-  const { step, toNextStep, toPreviousStep } = useStepNavigation({
+  const { step, setStep, toNextStep, toPreviousStep } = useStepNavigation({
     steps,
   })
   const vault = useCurrentVault()
@@ -73,7 +73,7 @@ export const BackupFastVault = ({
         <InitiateFastVaultBackup
           password={password}
           onFinish={toNextStep}
-          onBack={toPreviousStep}
+          onBack={() => setStep('backupOverview')}
         />
       )}
       backupSuccessfulSlideshow={() => <VaultCreatedSuccessScreen />}
