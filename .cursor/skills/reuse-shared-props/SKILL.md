@@ -5,71 +5,41 @@ description: USE shared prop types from @lib/ui/props WHEN defining component pr
 
 # Reuse Shared Props
 
-When defining component props, import and reuse shared prop types from `@lib/ui/props` instead of defining custom types for common patterns.
+When defining component props, import and compose shared prop types from `@lib/ui/props` using `&` instead of defining inline equivalents.
 
 ## Available Props
 
-| Prop Type | Fields | Use Case |
-|-----------|--------|----------|
-| `InputProps<T>` | `value: T`, `onChange: (value: T) => void` | Controlled input components |
-| `ValueProp<T>` | `value: T` | Read-only value display |
-| `OnClickProp` | `onClick: () => void` | Clickable elements |
-| `OnFinishProp<T>` | `onFinish: (value: T) => void` | Flow completion callbacks |
-| `OnBackProp` | `onBack: () => void` | Navigation back |
-| `OnCloseProp` | `onClose: () => void` | Modal/dialog close |
-| `TitleProp` | `title: ReactNode` | Title display |
-| `LabelProp` | `label: ReactNode` | Label display |
-| `ChildrenProp` | `children: ReactNode` | Container components |
-| `IconProp` | `icon: ReactNode` | Icon display |
-| `IsDisabledProp` | `isDisabled?: boolean \| string` | Disabled state |
+| Prop Type | Fields |
+|-----------|--------|
+| `InputProps<T>` | `value: T`, `onChange: (value: T) => void` |
+| `ValueProp<T>` | `value: T` |
+| `OptionsProp<T>` | `options: readonly T[]` |
+| `OnClickProp` | `onClick: () => void` |
+| `OnFinishProp<T?, Mode?>` | `onFinish: (value: T) => void` (supports `'optional'` mode) |
+| `OnSuccessProp<T?, Mode?>` | `onSuccess: (value: T) => void` (supports `'optional'` mode) |
+| `OnBackProp` | `onBack: () => void` |
+| `OnCloseProp` | `onClose: () => void` |
+| `OnRemoveProp` | `onRemove: () => void` |
+| `TitleProp` | `title: ReactNode` |
+| `DescriptionProp` | `description: ReactNode` |
+| `LabelProp` | `label: ReactNode` |
+| `MessageProp` | `message: ReactNode` |
+| `ChildrenProp` | `children: ReactNode` |
+| `IconProp` | `icon: ReactNode` |
+| `ActionProp` | `action: ReactNode` |
+| `IsDisabledProp` | `isDisabled?: boolean \| string` |
+| `IsActiveProp` | `isActive?: boolean` |
+| `StatusProp<T>` | `status: T` |
+| `KindProp<T>` | `kind: T` |
+| `UiProps` | `style?: CSSProperties`, `className?: string` |
+| `AsProp<T>` | `as?: T` (polymorphic element type) |
+| `RenderProp<T?>` | `render: (value: T) => ReactNode` |
+| `SvgProps` | `SVGProps<SVGSVGElement>` (see svg-icon-pattern skill) |
 
-## Pattern
+## onChange vs onValueChange
 
-```tsx
-// ✅ Good - reuse shared props, compose with & for additional fields
-import { InputProps } from '@lib/ui/props'
-
-type MyFieldProps = InputProps<string> & {
-  error?: string
-  placeholder?: string
-}
-
-export const MyField = ({ value, onChange, error, placeholder }: MyFieldProps) => {
-  return (
-    <TextInput
-      value={value}
-      onValueChange={onChange}
-      placeholder={placeholder}
-    />
-  )
-}
-
-// ❌ Bad - defining custom props that duplicate shared types
-type MyFieldProps = {
-  value: string
-  onValueChange: (value: string) => void  // duplicates InputProps
-  error?: string
-}
-```
-
-## Composing Multiple Props
+`InputProps` uses `onChange`, but `TextInput` uses `onValueChange`. Map accordingly:
 
 ```tsx
-import { InputProps, LabelProp, IsDisabledProp } from '@lib/ui/props'
-
-type LabeledInputProps = InputProps<number> & LabelProp & IsDisabledProp & {
-  min?: number
-  max?: number
-}
-```
-
-## Note on onChange vs onValueChange
-
-`InputProps` uses `onChange`, but some underlying components (like `TextInput`) use `onValueChange`. Map accordingly:
-
-```tsx
-<TextInput
-  value={value}
-  onValueChange={onChange}  // InputProps.onChange -> TextInput.onValueChange
-/>
+<TextInput value={value} onValueChange={onChange} />
 ```
