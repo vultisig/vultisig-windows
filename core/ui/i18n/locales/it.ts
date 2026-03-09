@@ -478,6 +478,7 @@ export const it = {
   header_tooltip_title: 'Programma di segnalazione',
   hide_balance: 'Nascondi saldo',
   hide_defi_balance: 'Nascondi saldo DeFi',
+  hold: 'Mantieni',
   hold_for_paired_sign: 'Tieni premuto per il segno accoppiato',
   how_it_works: 'Come funziona',
   ibc_transaction_not_supporting_memo_desc:
@@ -1281,4 +1282,5 @@ export const it = {
   agent_tx_type_swap: 'Scambio',
   agent_tx_type_transfer: 'Trasferire',
   agent_tx_view: 'Visualizzazione',
+  open_as_side_panel: 'Apri come pannello laterale',
 }

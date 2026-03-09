@@ -474,6 +474,7 @@ export const es = {
   header_tooltip_title: 'Programa de referencias',
   hide_balance: 'Ocultar saldo',
   hide_defi_balance: 'Ocultar saldo DeFi',
+  hold: 'Mantener',
   hold_for_paired_sign: 'Mantener pulsado para señal emparejada',
   how_it_works: 'Cómo funciona',
   ibc_transaction_not_supporting_memo_desc:
@@ -1277,4 +1278,5 @@ export const es = {
   agent_tx_type_swap: 'Intercambio',
   agent_tx_type_transfer: 'Transferir',
   agent_tx_view: 'Vista',
+  open_as_side_panel: 'Abrir como panel lateral',
 }

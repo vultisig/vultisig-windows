@@ -16,7 +16,7 @@ export const DiscountTierMinBalance = ({
   return (
     <VStack gap={4}>
       <Text size={13} color="shy">
-        {t('stake')}
+        {t('hold')}
       </Text>
       <Text size={14} weight={550}>
         {formatAmount(vultDiscountTierMinBalances[value], {

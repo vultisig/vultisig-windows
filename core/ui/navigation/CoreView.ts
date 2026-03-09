@@ -5,6 +5,7 @@ import { KeygenOperation } from '@core/mpc/keygen/KeygenOperation'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { KeygenMessage } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
 import { ReshareMessage } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
+import { SingleKeygenMessage } from '@core/mpc/types/vultisig/keygen/v1/single_keygen_message_pb'
 import { KeysignMessage } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { DefiProtocol } from '@core/ui/defi/protocols/core'
 import { KeyImportInput } from '@core/ui/mpc/keygen/keyimport/state/keyImportInput'
@@ -45,7 +46,7 @@ export type CoreView =
       id: 'joinKeygen'
       state: {
         keygenOperation: KeygenOperation
-        keygenMsg: KeygenMessage | ReshareMessage
+        keygenMsg: KeygenMessage | ReshareMessage | SingleKeygenMessage
       }
     }
   | {
@@ -68,6 +69,8 @@ export type CoreView =
   | { id: 'reshareVault' }
   | { id: 'reshareVaultFast' }
   | { id: 'reshareVaultSecure' }
+  | { id: 'singleKeygenFast' }
+  | { id: 'singleKeygenSecure' }
   | { id: 'migrateVault' }
   | {
       id: 'send'
@@ -87,6 +90,10 @@ export type CoreView =
   | {
       id: 'setupVault'
       state: { type?: VaultSecurityType; keyImportInput?: KeyImportInput }
+    }
+  | {
+      id: 'setupVaultOverview'
+      state: { selectedDeviceCount: number; keyImportInput?: KeyImportInput }
     }
   | { id: 'signCustomMessage' }
   | {
@@ -110,6 +117,7 @@ export type CoreView =
       id: 'lpPositionForm'
       state: { chain: Chain; positionId: string; action: 'add' | 'remove' }
     }
+  | { id: 'transactionHistory' }
   | { id: 'vaultBackup' }
   | { id: 'vaultsBackup' }
   | { id: 'selectVaultsBackup' }

@@ -113,6 +113,7 @@ export const en = {
   by_vultisig: 'by Vultisig',
   camera_access_blocked:
     'Camera access is blocked. Please enable it in your browser settings.',
+  cache_password_for_5_min: 'Remember password for 5 minutes',
   cancel: 'Cancel',
   chain: 'Chain',
   chainFunctions: {
@@ -278,6 +279,11 @@ export const en = {
   evm_chains: 'EVM Chains',
   enable_dkls: 'Enable DKLS',
   enable_mldsa: 'Enable MLDSA',
+  post_quantum_keygen: 'Post-Quantum Key Generation',
+  post_quantum_keygen_description:
+    'Generate a post-quantum (MLDSA) key for this vault',
+  post_quantum_key_already_generated:
+    'This vault already has a post-quantum key',
   enable_token_instruction:
     'Enable at least one token to view balances and manage positions.',
   encrypting_vault_keyshares: 'Encrypting vault keyshares...',
@@ -479,6 +485,7 @@ export const en = {
   header_tooltip_title: 'Referral Program',
   hide_balance: 'Hide balance',
   hide_defi_balance: 'Hide DeFi balance',
+  hold: 'Hold',
   hold_for_paired_sign: 'Hold for paired sign',
   how_it_works: 'How it works',
   ibc_transaction_not_supporting_memo_desc:
@@ -978,6 +985,7 @@ export const en = {
   transaction_could_not_be_parsed:
     'This transaction could not be parsed. Raw transaction data is shown below.',
   raw_transaction_data: 'Raw Transaction Data',
+  transaction_history: 'Transaction History',
   transaction_instructions_summary: 'Transaction Instructions Summary',
   instruction: 'Instruction',
   program_id: 'Program ID',
@@ -1231,6 +1239,7 @@ export const en = {
   your_seedphrase_subtitle: 'Enter it, create a vault, never look back',
   youre_swapping: "You're swapping",
   account: 'Account',
+  session_history: 'Session history',
   vultibot: 'Vulti',
   vultibot_welcome: "Hi, I'm Vulti",
   start_new_chat: 'Start New Chat',
@@ -1267,6 +1276,9 @@ export const en = {
   agent_session_expired:
     'Your session has expired. Enter your vault password to reconnect.',
   agent_sign_in_failed: 'Sign in failed',
+  agent_chat_options: 'Chat options',
+  agent_give_feedback: 'Give Feedback',
+  agent_delete_chat_session: 'Delete Chat Session',
   agent_signing_in: 'Signing in...',
   agent_thinking_of_ideas: 'Thinking of ideas...',
   agent_tool_label: 'Tool: {{tool}}',

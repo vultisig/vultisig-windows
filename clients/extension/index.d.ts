@@ -32,4 +32,51 @@ interface Window {
   keplrRequestAccountsCallback: any
   tronWeb: any
   tronLink: any
+  tonkeeper?: {
+    tonconnect: {
+      deviceInfo: unknown
+      walletInfo?: unknown
+      protocolVersion: number
+      isWalletBrowser: boolean
+      connect: (protocolVersion: number, message: unknown) => Promise<unknown>
+      restoreConnection: () => Promise<unknown>
+      listen: (callback: (event: unknown) => void) => () => void
+      disconnect: () => Promise<void>
+    }
+  }
+  injectedWeb3?: Record<
+    string,
+    {
+      enable: (origin?: string) => Promise<{
+        accounts: {
+          get: () => Promise<
+            {
+              address: string
+              genesisHash?: string
+              name?: string
+              type?: string
+            }[]
+          >
+          subscribe: (
+            cb: (
+              accounts: {
+                address: string
+                genesisHash?: string
+                name?: string
+                type?: string
+              }[]
+            ) => void
+          ) => () => void
+        }
+        signer: {
+          signPayload: (
+            payload: Record<string, unknown>
+          ) => Promise<{ id: number; signature: string }>
+          signRaw: (
+            payload: Record<string, unknown>
+          ) => Promise<{ id: number; signature: string }>
+        }
+      }>
+    }
+  >
 }

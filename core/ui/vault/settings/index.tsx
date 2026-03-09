@@ -7,6 +7,7 @@ import { IconFileEdit } from '@lib/ui/icons/IconFileEdit'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { ShareAndroidIcon } from '@lib/ui/icons/ShareAndroidIcon'
+import { ShieldIcon } from '@lib/ui/icons/ShieldIcon'
 import { TrashCanIcon } from '@lib/ui/icons/TrashCanIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
@@ -79,6 +80,43 @@ export const VaultSettingsPage: FC<VaultSettingsPageProps> = ({
 
         <SettingsSection title={t('security')}>
           <VaultSettingsBackup />
+          {!vault.publicKeyMldsa && (
+            <ListItem
+              icon={
+                <ListItemIconWrapper>
+                  <ShieldIcon />
+                </ListItemIconWrapper>
+              }
+              description={
+                <DescriptionText>
+                  {t('post_quantum_keygen_description')}
+                </DescriptionText>
+              }
+              onClick={() =>
+                navigate({
+                  id: isFastVault ? 'singleKeygenFast' : 'singleKeygenSecure',
+                })
+              }
+              title={t('post_quantum_keygen')}
+              hoverable
+              showArrow
+            />
+          )}
+          {vault.publicKeyMldsa && (
+            <ListItem
+              icon={
+                <ListItemIconWrapper>
+                  <ShieldIcon />
+                </ListItemIconWrapper>
+              }
+              description={
+                <DescriptionText>
+                  {t('post_quantum_key_already_generated')}
+                </DescriptionText>
+              }
+              title={t('post_quantum_keygen')}
+            />
+          )}
         </SettingsSection>
 
         <SettingsSection title={t('other')}>

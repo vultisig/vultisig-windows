@@ -1,5 +1,4 @@
 import { getVaultId } from '@core/mpc/vault/Vault'
-import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ErrorBoundary } from '@lib/ui/errors/ErrorBoundary'
@@ -15,14 +14,17 @@ import styled from 'styled-components'
 
 import { useAgentEvents } from '../hooks/useAgentEvents'
 import { useAgentService } from '../hooks/useAgentService'
+import { useConnectionStatus } from '../hooks/useConnectionStatus'
+import { BurgerClosedIcon } from '../icons/BurgerClosedIcon'
 import { ChatMessage as ChatMessageType, TitleUpdatedEvent } from '../types'
 import { AgentChatInput } from './AgentChatInput'
+import { AgentChatMenu } from './AgentChatMenu'
 import { AgentEmptyState } from './AgentEmptyState'
 import { AgentErrorFallback } from './AgentErrorFallback'
+import { AgentHeaderButton } from './AgentHeaderButton'
 import { AgentReplyMessage } from './AgentReplyMessage'
 import { ChatMessage } from './ChatMessage'
 import { ConfirmationPrompt } from './ConfirmationPrompt'
-import { ConnectionButton } from './ConnectionButton'
 import { PasswordPrompt } from './PasswordPrompt'
 
 type AgentChatViewState = { conversationId?: string; initialMessage?: string }
@@ -59,7 +61,7 @@ export const AgentChatPage: FC = () => {
   const {
     messages,
     isLoading,
-    isComplete,
+    isRequestActive,
     passwordRequired,
     confirmationRequired,
     authRequired,
@@ -106,6 +108,39 @@ export const AgentChatPage: FC = () => {
 
   const vaultId = vault ? getVaultId(vault) : null
 
+  const {
+    state: connectionState,
+    checked: connectionChecked,
+    connect: connectionConnect,
+    error: connectionError,
+    clearError: clearConnectionError,
+  } = useConnectionStatus(vaultId, orchestrator)
+
+  const [showConnectionGate, setShowConnectionGate] = useState(false)
+
+  useEffect(() => {
+    if (connectionChecked && connectionState === 'disconnected') {
+      setShowConnectionGate(true)
+    } else if (connectionState === 'connected') {
+      setShowConnectionGate(false)
+    }
+  }, [connectionChecked, connectionState])
+
+  const handleConnectionGateSubmit = async (password: string) => {
+    try {
+      await connectionConnect(password)
+      setShowConnectionGate(false)
+    } catch {
+      // error is surfaced via connectionError
+    }
+  }
+
+  const handleConnectionGateCancel = () => {
+    setShowConnectionGate(false)
+    clearConnectionError()
+    navigate({ id: 'vault' })
+  }
+
   useEffect(() => {
     if (vaultId) {
       preloadContext(vaultId)
@@ -113,8 +148,9 @@ export const AgentChatPage: FC = () => {
   }, [vaultId, preloadContext])
 
   const queuedMessageRef = useRef<string | null>(null)
+  const lastSubmittedMessageRef = useRef<string | null>(null)
 
-  const isProcessing = Boolean(isLoading)
+  const isProcessing = isRequestActive
 
   const doSend = async (message: string) => {
     if (!vaultId) return
@@ -137,13 +173,27 @@ export const AgentChatPage: FC = () => {
     }
   }
 
+  const handleSessionDeleted = () => {
+    navigate({ id: 'agentChat', state: {} })
+  }
+
   const handleSend = (message: string) => {
     if (isProcessing) {
       queuedMessageRef.current = message
       addUserMessage(message)
       return
     }
+    lastSubmittedMessageRef.current = message
     doSend(message)
+  }
+
+  const handleStop = () => {
+    const last = lastSubmittedMessageRef.current
+    cancelRequest()
+    queuedMessageRef.current = null
+    if (last != null) {
+      setInputValue(last)
+    }
   }
 
   useEffect(() => {
@@ -173,6 +223,7 @@ export const AgentChatPage: FC = () => {
     if (initialMessage && vaultId && !initialMessageSentRef.current) {
       initialMessageSentRef.current = true
       setViewState(prev => ({ ...prev, initialMessage: undefined }))
+      lastSubmittedMessageRef.current = initialMessage
       addUserMessage(initialMessage)
       sendMessage(vaultId, initialMessage)
         .then(id => setConversationId(id))
@@ -272,11 +323,18 @@ export const AgentChatPage: FC = () => {
     <VStack fullHeight>
       <PageHeader
         primaryControls={
-          <PageHeaderBackButton onClick={() => navigate({ id: 'agent' })} />
+          <AgentHeaderButton onClick={() => navigate({ id: 'agent' })}>
+            <BurgerClosedIcon />
+          </AgentHeaderButton>
         }
         title={chatTitle || t('vultibot')}
         hasBorder
-        secondaryControls={<ConnectionButton />}
+        secondaryControls={
+          <AgentChatMenu
+            conversationId={conversationId}
+            onSessionDeleted={handleSessionDeleted}
+          />
+        }
       />
       <MessagesContainer>
         <ErrorBoundary fallback={AgentErrorFallback}>
@@ -298,8 +356,7 @@ export const AgentChatPage: FC = () => {
                 isAnalyzing={
                   i === lastAssistantIdx &&
                   !msg.analysisDuration &&
-                  !isLoading &&
-                  !isComplete
+                  isRequestActive
                 }
               />
             ))
@@ -327,6 +384,8 @@ export const AgentChatPage: FC = () => {
             }
           }}
           placeholder={t('ask_about_plugins_policies')}
+          isLoading={isProcessing}
+          onStop={handleStop}
         />
       </ChatInputContainer>
       {passwordRequired && (
@@ -354,6 +413,17 @@ export const AgentChatPage: FC = () => {
           isLoading={authSigningIn}
           onSubmit={handleAuthSignIn}
           onCancel={handleAuthCancel}
+        />
+      )}
+      {!authRequired && showConnectionGate && (
+        <PasswordPrompt
+          toolName="sign_in"
+          operation={t('agent_operation_sign_in')}
+          description={t('agent_connect_description')}
+          error={connectionError}
+          isLoading={connectionState === 'connecting'}
+          onSubmit={handleConnectionGateSubmit}
+          onCancel={handleConnectionGateCancel}
         />
       )}
     </VStack>

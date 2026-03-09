@@ -445,6 +445,7 @@ export const nl = {
   header_tooltip_title: 'Referralprogramma',
   hide_balance: 'Saldo verbergen',
   hide_defi_balance: 'DeFi-saldo verbergen',
+  hold: 'Vasthouden',
   hold_for_paired_sign: 'Vasthouden voor gekoppelde handtekening',
   how_it_works: 'Hoe het werkt',
   ibc_transaction_not_supporting_memo_desc:
@@ -1256,4 +1257,5 @@ export const nl = {
   agent_tx_type_swap: 'Ruil',
   agent_tx_type_transfer: 'Overdracht',
   agent_tx_view: 'Weergave',
+  open_as_side_panel: 'Openen als zijpaneel',
 }

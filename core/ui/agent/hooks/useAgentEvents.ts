@@ -20,6 +20,7 @@ import type {
 type AgentEventsState = {
   messages: ChatMessage[]
   isLoading: boolean
+  isRequestActive: boolean
   passwordRequired: PasswordRequiredEvent | null
   confirmationRequired: ConfirmationRequiredEvent | null
   authRequired: AuthRequiredEvent | null
@@ -61,6 +62,7 @@ export const useAgentEvents = (
   const [state, setState] = useState<AgentEventsState>({
     messages: [],
     isLoading: false,
+    isRequestActive: false,
     passwordRequired: null,
     confirmationRequired: null,
     authRequired: null,
@@ -104,6 +106,7 @@ export const useAgentEvents = (
         setState(prev => ({
           ...prev,
           isLoading: true,
+          isRequestActive: true,
           isComplete: false,
           error: null,
         }))
@@ -139,6 +142,7 @@ export const useAgentEvents = (
             ...prev,
             messages: [...prev.messages, streamMsg],
             isLoading: false,
+            isRequestActive: true,
           }
         })
       })
@@ -168,6 +172,7 @@ export const useAgentEvents = (
                   : m
               ),
               isLoading: false,
+              isRequestActive: true,
             }
           }
 
@@ -185,6 +190,7 @@ export const useAgentEvents = (
             ...prev,
             messages: [...prev.messages, ...newMessages],
             isLoading: false,
+            isRequestActive: true,
           }
         })
       })
@@ -263,7 +269,11 @@ export const useAgentEvents = (
         (data: PasswordRequiredEvent) => {
           if (convIdRef.current && data.conversationId !== convIdRef.current)
             return
-          setState(prev => ({ ...prev, passwordRequired: data }))
+          setState(prev => ({
+            ...prev,
+            isRequestActive: false,
+            passwordRequired: data,
+          }))
         }
       )
     )
@@ -274,7 +284,11 @@ export const useAgentEvents = (
         (data: ConfirmationRequiredEvent) => {
           if (convIdRef.current && data.conversationId !== convIdRef.current)
             return
-          setState(prev => ({ ...prev, confirmationRequired: data }))
+          setState(prev => ({
+            ...prev,
+            isRequestActive: false,
+            confirmationRequired: data,
+          }))
         }
       )
     )
@@ -287,6 +301,7 @@ export const useAgentEvents = (
           ...prev,
           authRequired: data,
           isLoading: false,
+          isRequestActive: false,
         }))
       })
     )
@@ -314,6 +329,7 @@ export const useAgentEvents = (
             ...prev,
             messages,
             isLoading: false,
+            isRequestActive: false,
             isComplete: true,
           }
         })
@@ -334,6 +350,7 @@ export const useAgentEvents = (
           ...prev,
           error: isStopped ? null : normalizedError,
           isLoading: false,
+          isRequestActive: false,
           passwordRequired: null,
           confirmationRequired: null,
         }))
@@ -423,6 +440,7 @@ export const useAgentEvents = (
       ...prev,
       authRequired: { conversationId: '', vaultPubKey: '' },
       isLoading: false,
+      isRequestActive: false,
     }))
   }
 

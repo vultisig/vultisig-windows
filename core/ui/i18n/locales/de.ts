@@ -478,6 +478,7 @@ export const de = {
   header_tooltip_title: 'Empfehlungsprogramm',
   hide_balance: 'Gleichgewicht ausblenden',
   hide_defi_balance: 'DeFi-Guthaben ausblenden',
+  hold: 'Halten',
   hold_for_paired_sign: 'Halten Sie für das gepaarte Zeichen',
   how_it_works: 'So funktioniert es',
   ibc_transaction_not_supporting_memo_desc:
@@ -1289,4 +1290,5 @@ export const de = {
   agent_tx_type_swap: 'Tauschen',
   agent_tx_type_transfer: 'Überweisen',
   agent_tx_view: 'Sicht',
+  open_as_side_panel: 'Als Seitenwand öffnen',
 }

@@ -1,6 +1,6 @@
 ---
 name: i18n-workflow
-description: Internationalization workflow for React components. Use when adding user-facing text, creating translations, or working with i18n. CRITICAL - only update en.ts during development.
+description: Internationalization workflow for React components. Use when adding user-facing text, creating translations, styling partial text with Trans, or working with i18n. CRITICAL - only update en.ts during development.
 ---
 
 # i18n Workflow
@@ -43,9 +43,30 @@ const { t } = useTranslation()
 - Be descriptive: `error_network_connection_failed`
 - Group related keys together in en.ts
 
-## Styled Text
+## Styled Text (Trans Component)
 
-When text needs partial styling (gradient, colors, bold), use the `Trans` component with inline tags like `<highlight>`, `<b>`, `<g>`. These tags are preserved during auto-translation (sent as `text/html` to Google Translate). See the **trans-text-highlight** skill for patterns.
+When text needs partial styling (gradient, colors, bold), use the `Trans` component with inline tags. These tags are preserved during auto-translation (sent as `text/html` to Google Translate).
+
+Wrap styled text in short tags like `<g>`, `<highlight>`, `<b>` in the translation string, then map them via the `components` prop:
+
+```ts
+// en.ts
+onboarding_greeting: 'Say goodbye to <g>seed phrases</g>',
+```
+
+```tsx
+<Trans
+  i18nKey="onboarding_greeting"
+  components={{ g: <GradientText as="span" /> }}
+/>
+```
+
+Common mappings:
+- `<g>` / `<highlight>` → `<GradientText as="span" />`
+- `<b>` → `<b />`
+- `<blue>` → `<span style={{ color: primaryAlt.toCssValue() }} />`
+
+**Do not** use `{{variable}}` interpolation for static text that just needs styling. Keep the full sentence in one translation key so translators see the context. Reserve `values` for genuinely dynamic data (counts, names, amounts).
 
 ## Pluralization
 
