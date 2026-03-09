@@ -61,7 +61,7 @@ export const AgentChatPage: FC = () => {
   const {
     messages,
     isLoading,
-    isComplete,
+    isRequestActive,
     passwordRequired,
     confirmationRequired,
     authRequired,
@@ -148,8 +148,9 @@ export const AgentChatPage: FC = () => {
   }, [vaultId, preloadContext])
 
   const queuedMessageRef = useRef<string | null>(null)
+  const lastSubmittedMessageRef = useRef<string | null>(null)
 
-  const isProcessing = Boolean(isLoading)
+  const isProcessing = isRequestActive
 
   const doSend = async (message: string) => {
     if (!vaultId) return
@@ -182,7 +183,17 @@ export const AgentChatPage: FC = () => {
       addUserMessage(message)
       return
     }
+    lastSubmittedMessageRef.current = message
     doSend(message)
+  }
+
+  const handleStop = () => {
+    const last = lastSubmittedMessageRef.current
+    cancelRequest()
+    queuedMessageRef.current = null
+    if (last != null) {
+      setInputValue(last)
+    }
   }
 
   useEffect(() => {
@@ -212,6 +223,7 @@ export const AgentChatPage: FC = () => {
     if (initialMessage && vaultId && !initialMessageSentRef.current) {
       initialMessageSentRef.current = true
       setViewState(prev => ({ ...prev, initialMessage: undefined }))
+      lastSubmittedMessageRef.current = initialMessage
       addUserMessage(initialMessage)
       sendMessage(vaultId, initialMessage)
         .then(id => setConversationId(id))
@@ -344,8 +356,7 @@ export const AgentChatPage: FC = () => {
                 isAnalyzing={
                   i === lastAssistantIdx &&
                   !msg.analysisDuration &&
-                  !isLoading &&
-                  !isComplete
+                  isRequestActive
                 }
               />
             ))
@@ -373,6 +384,8 @@ export const AgentChatPage: FC = () => {
             }
           }}
           placeholder={t('ask_about_plugins_policies')}
+          isLoading={isProcessing}
+          onStop={handleStop}
         />
       </ChatInputContainer>
       {passwordRequired && (
