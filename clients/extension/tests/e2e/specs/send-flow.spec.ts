@@ -5,6 +5,12 @@
  * FUND-DEPENDENT: Requires funded test vault.
  *
  * Uses chain rotation to test 2 chains per run.
+ *
+ * SAFETY MEASURES:
+ * - All sends are SELF-SENDS (to own vault address) to recycle funds
+ * - Amounts are small: $0.50 - $3.50 range (see chain-rotation.ts minSend)
+ * - Only gas is consumed, principal stays in wallet
+ * - Tests skip gracefully if chain has insufficient funds
  */
 
 import { test, expect, type BrowserContext } from '@playwright/test'
@@ -21,18 +27,9 @@ const extensionPath = path.resolve(__dirname, '../../../../dist')
 // Skip if fund-dependent tests not enabled
 const ENABLE_TX_TESTS = process.env.ENABLE_TX_SIGNING_TESTS === 'true'
 
-// Test destination addresses (safe, controlled addresses)
-const TEST_DESTINATIONS: Partial<Record<ChainId, string>> = {
-  ethereum: process.env.TEST_ETH_ADDRESS || '0x000000000000000000000000000000000000dEaD', // Burn address
-  bsc: process.env.TEST_BSC_ADDRESS || '0x000000000000000000000000000000000000dEaD',
-  polygon: process.env.TEST_POLYGON_ADDRESS || '0x000000000000000000000000000000000000dEaD',
-  arbitrum: process.env.TEST_ARB_ADDRESS || '0x000000000000000000000000000000000000dEaD',
-  optimism: process.env.TEST_OP_ADDRESS || '0x000000000000000000000000000000000000dEaD',
-  avalanche: process.env.TEST_AVAX_ADDRESS || '0x000000000000000000000000000000000000dEaD',
-  base: process.env.TEST_BASE_ADDRESS || '0x000000000000000000000000000000000000dEaD',
-  bitcoin: process.env.TEST_BTC_ADDRESS || 'bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4', // Known test address
-  solana: process.env.TEST_SOL_ADDRESS || '11111111111111111111111111111111', // System program (safe)
-}
+// SELF-SEND: We send back to our own vault address to recycle funds
+// The test will get the vault's address for each chain dynamically
+// This ensures funds stay in the wallet and only gas is spent
 
 test.describe('Send Flow', () => {
   let context: BrowserContext
@@ -83,13 +80,6 @@ test.describe('Send Flow', () => {
     }
 
     const chainInfo = SUPPORTED_CHAINS[chain]
-    const destination = TEST_DESTINATIONS[chain]
-
-    if (!destination) {
-      console.log(`No test destination for ${chain}, skipping`)
-      test.skip()
-      return
-    }
 
     const page = await context.newPage()
     const vaultPage = new VaultPage(page, extensionId)
@@ -100,13 +90,22 @@ test.describe('Send Flow', () => {
       await vaultPage.goto()
       await vaultPage.waitForView(15_000)
 
+      // Get own address for this chain (SELF-SEND to recycle funds)
+      const ownAddress = await vaultPage.getChainAddress(chainInfo.symbol)
+      if (!ownAddress) {
+        console.log(`Could not get own address for ${chain}, skipping`)
+        test.skip()
+        return
+      }
+      console.log(`Self-send on ${chain}: ${ownAddress} -> ${ownAddress}`)
+
       // Navigate to send
       await vaultPage.navigateToSend()
       await sendFlow.waitForView()
 
-      // Fill send form
+      // Fill send form (SELF-SEND: sending to own address)
       await sendFlow.selectCoin(chainInfo.symbol)
-      await sendFlow.fillAddress(destination)
+      await sendFlow.fillAddress(ownAddress)  // Self-send!
       await sendFlow.fillAmount(chainInfo.minSend)
 
       // Check fee is displayed
@@ -163,13 +162,6 @@ test.describe('Send Flow', () => {
     }
 
     const chainInfo = SUPPORTED_CHAINS[chain]
-    const destination = TEST_DESTINATIONS[chain]
-
-    if (!destination) {
-      console.log(`No test destination for ${chain}, skipping`)
-      test.skip()
-      return
-    }
 
     const page = await context.newPage()
     const vaultPage = new VaultPage(page, extensionId)
@@ -180,11 +172,21 @@ test.describe('Send Flow', () => {
       await vaultPage.goto()
       await vaultPage.waitForView(15_000)
 
+      // Get own address for this chain (SELF-SEND to recycle funds)
+      const ownAddress = await vaultPage.getChainAddress(chainInfo.symbol)
+      if (!ownAddress) {
+        console.log(`Could not get own address for ${chain}, skipping`)
+        test.skip()
+        return
+      }
+      console.log(`Self-send on ${chain}: ${ownAddress} -> ${ownAddress}`)
+
       await vaultPage.navigateToSend()
       await sendFlow.waitForView()
 
+      // SELF-SEND: sending to own address to recycle funds
       await sendFlow.selectCoin(chainInfo.symbol)
-      await sendFlow.fillAddress(destination)
+      await sendFlow.fillAddress(ownAddress)
       await sendFlow.fillAmount(chainInfo.minSend)
 
       await sendFlow.continue()

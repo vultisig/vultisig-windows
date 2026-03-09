@@ -275,4 +275,64 @@ export class VaultPage extends BasePage {
 
     return vaults
   }
+
+  /**
+   * Get the vault's address for a specific chain symbol
+   * Navigates to chain detail and extracts address, then returns to vault page
+   */
+  async getChainAddress(chainSymbol: string): Promise<string | null> {
+    try {
+      // Find and click on the chain row
+      const chainRow = this.page.locator(`[data-testid="VaultChainItem-Panel"]`).filter({
+        hasText: new RegExp(chainSymbol, 'i'),
+      })
+      
+      if (!(await chainRow.isVisible().catch(() => false))) {
+        console.log(`Chain ${chainSymbol} not visible in vault`)
+        return null
+      }
+
+      await chainRow.click()
+      await this.page.waitForTimeout(500)
+
+      // Look for address in the chain detail page
+      const addressSelectors = [
+        '[data-testid="chain-address"]',
+        '[data-testid="address-display"]',
+        '[data-testid="copy-address"]',
+        '.address',
+        // Common address patterns (truncated or full)
+        'text=/0x[a-fA-F0-9]{6,}/i',
+        'text=/bc1[a-z0-9]{20,}/i',
+        'text=/[a-zA-Z0-9]{32,44}/', // Solana, Cosmos, etc.
+      ]
+
+      let address: string | null = null
+
+      for (const selector of addressSelectors) {
+        const element = this.page.locator(selector).first()
+        if (await element.isVisible().catch(() => false)) {
+          const text = await element.textContent()
+          if (text) {
+            // Extract address pattern
+            const ethMatch = text.match(/0x[a-fA-F0-9]{40}/)
+            const btcMatch = text.match(/bc1[a-z0-9]{25,62}/)
+            const solMatch = text.match(/[1-9A-HJ-NP-Za-km-z]{32,44}/)
+            
+            address = ethMatch?.[0] || btcMatch?.[0] || solMatch?.[0] || text.trim()
+            if (address && address.length > 10) break
+          }
+        }
+      }
+
+      // Go back to vault page
+      await this.goBack()
+      await this.waitForView(5000).catch(() => {})
+
+      return address
+    } catch (error) {
+      console.log(`Failed to get address for ${chainSymbol}:`, error)
+      return null
+    }
+  }
 }
