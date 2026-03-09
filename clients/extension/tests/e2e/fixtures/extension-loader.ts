@@ -22,6 +22,29 @@ const __dirname = path.dirname(__filename)
 const extensionPath = path.resolve(__dirname, '../../../dist')
 const testDappPath = path.resolve(__dirname, 'test-dapp.html')
 
+/**
+ * Helper to wait for window.ethereum to be injected on a page.
+ * Returns the page for chaining.
+ */
+export async function waitForProvider(
+  page: import('@playwright/test').Page,
+  timeout = 10_000
+) {
+  await page.waitForFunction(() => !!window.ethereum, null, { timeout })
+  return page
+}
+
+/**
+ * Helper to wait for window.vultisig to be injected on a page.
+ */
+export async function waitForVultisig(
+  page: import('@playwright/test').Page,
+  timeout = 10_000
+) {
+  await page.waitForFunction(() => !!window.vultisig, null, { timeout })
+  return page
+}
+
 export const test = base.extend<{
   context: BrowserContext
   extensionId: string
@@ -60,7 +83,9 @@ export const test = base.extend<{
   // eslint-disable-next-line no-empty-pattern
   testDappUrl: async ({}, use) => {
     const html = fs.readFileSync(testDappPath, 'utf-8')
-    const server = http.createServer((_req, res) => {
+
+    const server = http.createServer((req, res) => {
+      // Serve the HTML for any path — useful for testing different "tabs"
       res.writeHead(200, { 'Content-Type': 'text/html' })
       res.end(html)
     })
