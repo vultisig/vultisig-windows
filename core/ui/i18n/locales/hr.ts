@@ -470,6 +470,7 @@ export const hr = {
   header_tooltip_title: 'Program preporuka',
   hide_balance: 'Sakrij stanje',
   hide_defi_balance: 'Sakrij DeFi stanje',
+  hold: 'Drži',
   hold_for_paired_sign: 'Držite za upareni znak',
   how_it_works: 'Kako funkcionira',
   ibc_transaction_not_supporting_memo_desc:
