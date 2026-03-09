@@ -1,3 +1,4 @@
+import { FastVaultPasswordModalResult } from '@core/ui/mpc/fast/FastVaultPasswordModal'
 import { FastKeygenServerActionStep } from '@core/ui/mpc/keygen/fast/FastKeygenServerActionStep'
 import { PreviewInfo } from '@core/ui/mpc/keygen/reshare/plugin/PreviewInfo'
 import { PluginReshareFastKeygenServerActionProvider } from '@core/ui/mpc/keygen/reshare/PluginReshareFastKeygenServerActionProvider'
@@ -44,7 +45,7 @@ export const PluginReshareFlowContent = ({
   return (
     <>
       <InstallPluginPendingState />
-      <ValueTransfer<{ password: string }>
+      <ValueTransfer<FastVaultPasswordModalResult>
         key="password"
         from={({ onFinish }) => (
           <PreviewInfo value={plugin} onFinish={onFinish} />

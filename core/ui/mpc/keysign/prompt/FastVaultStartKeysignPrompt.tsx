@@ -10,7 +10,10 @@ import styled from 'styled-components'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { VaultSecurityType } from '../../../vault/VaultSecurityType'
-import { FastVaultPasswordModal } from '../../fast/FastVaultPasswordModal'
+import {
+  FastVaultPasswordModal,
+  FastVaultPasswordModalResult,
+} from '../../fast/FastVaultPasswordModal'
 import { StartKeysignPromptProps } from './StartKeysignPromptProps'
 
 const clickDurationThreshold: Milliseconds = 300
@@ -72,7 +75,7 @@ export const FastVaultStartKeysignPrompt = (props: StartKeysignPromptProps) => {
   )
 
   const onGetPassword = useCallback(
-    ({ password }: { password: string }) => {
+    ({ password }: FastVaultPasswordModalResult) => {
       navigate({
         id: 'keysign',
         state: {
@@ -141,6 +144,7 @@ export const FastVaultStartKeysignPrompt = (props: StartKeysignPromptProps) => {
         onBack={() => setShowModal(false)}
         onFinish={onGetPassword}
         description={t('fast_vault_password_start_keysign_description')}
+        withPasswordCache
       />
     </VStack>
   )

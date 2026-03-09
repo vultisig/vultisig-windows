@@ -113,6 +113,7 @@ export const en = {
   by_vultisig: 'by Vultisig',
   camera_access_blocked:
     'Camera access is blocked. Please enable it in your browser settings.',
+  cache_password_for_5_min: 'Remember password for 5 minutes',
   cancel: 'Cancel',
   chain: 'Chain',
   chainFunctions: {
