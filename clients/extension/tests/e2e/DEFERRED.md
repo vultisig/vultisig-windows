@@ -91,12 +91,23 @@ or manual user interaction that cannot be automated without a configured vault.
 - **What it tests:** Creating a new Secure Vault with QR pairing
 - **What's needed:** Server connectivity, mobile Vultisig app for pairing
 
-### `test: vault import from .vult file`
-- **What it tests:** Importing an existing vault from a backup file
-- **What's needed:** Valid .vult backup file with key shares
+### `test: vault import with valid .vult key shares`
+- **What it tests:** End-to-end import of a real vault from a backup file — vault appears in vault list, keys accessible
+- **What's needed:** Valid .vult backup file with real key shares (2-of-3 or 2-of-2)
+- **Partially covered:** Import page navigation, rendering, file input, format rejection, and back navigation are tested in `import-export.spec.ts` (18 tests). What remains is testing with a real `.vult` file that contains valid protobuf/key data.
+
+### `test: vault import with encrypted .vult file (password flow)`
+- **What it tests:** Importing an encrypted vault backup — password prompt appears, correct password decrypts successfully
+- **What's needed:** Valid encrypted .vult file with known password
+- **Partially covered:** The `.dat` file validation test in `import-export.spec.ts` verifies that files falling through to the encrypted path trigger appropriate behavior (error or password prompt). Full password-entry flow needs a real encrypted vault.
 
 ### `test: vault backup/export produces valid .vult file`
 - **What it tests:** Exporting an active vault to a backup file
+- **What's needed:** Active vault with key shares
+- **Partially covered:** `import-export.spec.ts` verifies that the backup option is NOT accessible without a vault (correct guard behavior). Full export testing needs an active vault loaded.
+
+### `test: vault backup/export with password encryption`
+- **What it tests:** Exporting with password protection enabled — file is encrypted and can be re-imported
 - **What's needed:** Active vault with key shares
 
 ### `test: getVault returns vault info`
@@ -189,5 +200,41 @@ or manual user interaction that cannot be automated without a configured vault.
 
 ---
 
-*Total deferred tests: 32*
+*Total deferred tests: 34*
 *These will become implementable once a test vault fixture is created with pre-generated key shares.*
+
+---
+
+## Now Covered in `import-export.spec.ts` (18 tests)
+
+The following import/export behaviors are tested without real vault data:
+
+### Import Page — Navigation & Rendering (6 tests)
+- New vault page has Import button
+- Import button opens import option modal (with Import Seedphrase + Import vault share options)
+- Import vault page renders with dropzone
+- Import page shows supported file types (.bak, .vult, .dat, .zip)
+- Import page has Continue button (disabled with no file selected)
+- Import page has back navigation (icon-only back button)
+
+### Import Page — File Input (2 tests)
+- Dropzone has a file input element (react-dropzone `<input type="file">`)
+- File input accepts vault backup extensions (.vult, .bak, .dat)
+
+### Import Page — File Validation (5 tests)
+- Empty .vult file shows error on submit (can't parse 0 bytes as protobuf)
+- Garbage binary .vult file shows error on submit (invalid base64/protobuf)
+- Invalid .bak file shows error on submit (garbage base64 → protobuf parse fails)
+- Large 2MB .vult file does not crash the page
+- Invalid .dat structure shows error or triggers password prompt (fallback to encrypted path)
+
+### Import Page — Back Navigation (1 test)
+- Clicking back from import returns to new vault page
+
+### Export / Backup — Without Vault (2 tests)
+- Vault settings (with backup option) is not accessible without a vault
+- No page crash when extension loads without vault
+
+### Dropzone Rejection of Wrong Extensions (2 tests)
+- Dropzone rejects .txt files (Continue button stays disabled, dropzone remains)
+- Dropzone rejects .json files (Continue button stays disabled, dropzone remains)
