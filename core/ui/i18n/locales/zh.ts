@@ -442,6 +442,7 @@ export const zh = {
   header_tooltip_title: '推荐计划',
   hide_balance: '隐藏余额',
   hide_defi_balance: '隐藏DeFi余额',
+  hold: '持有',
   hold_for_paired_sign: '保持配对符号',
   how_it_works: '工作原理',
   ibc_transaction_not_supporting_memo_desc:
