@@ -1,8 +1,10 @@
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { ErrorBoundary } from '@lib/ui/errors/ErrorBoundary'
-import { VStack } from '@lib/ui/layout/Stack'
+import { WalletIcon } from '@lib/ui/icons/WalletIcon'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { useViewState } from '@lib/ui/navigation/hooks/useViewState'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -373,20 +375,32 @@ export const AgentChatPage: FC = () => {
         <div ref={messagesEndRef} />
       </MessagesContainer>
       <ChatInputContainer>
-        <AgentChatInput
-          value={inputValue}
-          onChange={setInputValue}
-          onSubmit={() => {
-            const trimmed = inputValue.trim()
-            if (trimmed) {
-              handleSend(trimmed)
-              setInputValue('')
-            }
-          }}
-          placeholder={t('ask_about_plugins_policies')}
-          isLoading={isProcessing}
-          onStop={handleStop}
-        />
+        <AgentNavBar>
+          <WalletButton
+            onClick={() => navigate({ id: 'vault' })}
+            aria-label={t('wallet')}
+          >
+            <WalletIconWrapper>
+              <WalletIcon />
+            </WalletIconWrapper>
+          </WalletButton>
+          <InputWrapper>
+            <AgentChatInput
+              value={inputValue}
+              onChange={setInputValue}
+              onSubmit={() => {
+                const trimmed = inputValue.trim()
+                if (trimmed) {
+                  handleSend(trimmed)
+                  setInputValue('')
+                }
+              }}
+              placeholder={t('ask_about_plugins_policies')}
+              isLoading={isProcessing}
+              onStop={handleStop}
+            />
+          </InputWrapper>
+        </AgentNavBar>
       </ChatInputContainer>
       {passwordRequired && (
         <PasswordPrompt
@@ -438,6 +452,44 @@ const MessagesContainer = styled(PageContent)`
 
 const ChatInputContainer = styled.div`
   padding: 12px 16px;
+`
+
+const AgentNavBar = styled(HStack)`
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+`
+
+const InputWrapper = styled.div`
+  flex: 1;
+  min-width: 0;
+`
+
+const WalletIconWrapper = styled.span`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+`
+
+const WalletButton = styled(UnstyledButton)`
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: ${getColor('foreground')};
+  border: 1px solid ${getColor('foregroundExtra')};
+  border-radius: 40px;
+  color: ${getColor('textShy')};
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background: ${getColor('foregroundExtra')};
+  }
 `
 
 const ErrorMessage = styled.div`
