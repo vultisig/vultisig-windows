@@ -162,4 +162,117 @@ export class VaultPage extends BasePage {
       return false
     }
   }
+
+  /**
+   * Check if vault is visible (alias for isVaultPageVisible)
+   */
+  async isVaultVisible(): Promise<boolean> {
+    return this.isVaultPageVisible()
+  }
+
+  /**
+   * Get the current vault name
+   */
+  async getVaultName(): Promise<string | null> {
+    // Try different selectors for vault name
+    const nameSelectors = [
+      '[data-testid="vault-name"]',
+      '[data-testid="current-vault-name"]',
+      '[data-testid="vault-selector"] button',
+      '.vault-name',
+    ]
+
+    for (const selector of nameSelectors) {
+      const element = this.page.locator(selector).first()
+      if (await element.isVisible().catch(() => false)) {
+        return (await element.textContent()) || null
+      }
+    }
+
+    // Try to find vault name in header
+    const header = this.page.locator('header, [data-testid="header"]').first()
+    if (await header.isVisible().catch(() => false)) {
+      const headerText = await header.textContent()
+      // Extract vault name (usually the first prominent text)
+      const nameMatch = headerText?.match(/^([A-Za-z0-9\s-]+)/)?.[1]
+      if (nameMatch) return nameMatch.trim()
+    }
+
+    return null
+  }
+
+  /**
+   * Get token balances as an object
+   */
+  async getTokenBalances(): Promise<Record<string, string>> {
+    const balances: Record<string, string> = {}
+
+    // Get all chain items
+    const chainItems = this.page.locator(
+      '[data-testid="VaultChainItem-Panel"], [data-testid^="chain-"], .chain-item'
+    )
+    const count = await chainItems.count()
+
+    for (let i = 0; i < count; i++) {
+      const item = chainItems.nth(i)
+      const text = await item.textContent()
+
+      if (text) {
+        // Extract chain name and balance
+        // Format might be "Ethereum\n0.5 ETH" or "ETH 0.5"
+        const lines = text.split('\n').map((l) => l.trim()).filter(Boolean)
+
+        if (lines.length >= 1) {
+          const chainName = lines[0].toLowerCase()
+          // Look for balance pattern
+          const balanceMatch = text.match(/[\d.,]+\s*[A-Z]{2,5}/)
+          if (balanceMatch) {
+            balances[chainName] = balanceMatch[0]
+          }
+        }
+      }
+    }
+
+    return balances
+  }
+
+  /**
+   * Get vault selector element
+   */
+  get vaultSelector(): Locator {
+    return (
+      this.page.locator('[data-testid="vault-selector"]') ||
+      this.page.locator('[data-testid="vault-dropdown"]')
+    )
+  }
+
+  /**
+   * Open vault selector dropdown
+   */
+  async openVaultSelector(): Promise<void> {
+    if (await this.vaultSelector.isVisible()) {
+      await this.vaultSelector.click()
+      await this.page.waitForTimeout(300)
+    }
+  }
+
+  /**
+   * Get list of available vaults
+   */
+  async getAvailableVaults(): Promise<string[]> {
+    await this.openVaultSelector()
+
+    const vaultOptions = this.page.locator(
+      '[data-testid^="vault-option-"], [data-testid="vault-list-item"]'
+    )
+    const count = await vaultOptions.count()
+    const vaults: string[] = []
+
+    for (let i = 0; i < count; i++) {
+      const text = await vaultOptions.nth(i).textContent()
+      if (text) vaults.push(text.trim())
+    }
+
+    return vaults
+  }
 }
