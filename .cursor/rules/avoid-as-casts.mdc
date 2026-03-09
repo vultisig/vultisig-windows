@@ -5,13 +5,9 @@ description: Prefer type-safe designs over assertions; use `as` only as a last r
 
 ### Safe typing over `as`
 
-- Design APIs and types so consumers don’t need `as`.
-- Route by discriminants and thread precise types (e.g., ChainKind → ChainOfKind<K>), not broad unions.
-- Prefer generics and conditional types to model per-kind inputs/outputs.
-- If a cast is unavoidable, constrain it narrowly at a single routing boundary (never at leaf resolvers or call sites).
+This codebase routes chain-specific logic through discriminant-based generics (`ChainKind`, `ChainOfKind<K>`, `DeriveChainKind<T>`), pattern matching (`matchRecordUnion`, `matchDiscriminatedUnion`, `MatchRecordUnion`), and per-kind resolvers. Design new APIs to follow this pattern:
 
-Guidelines:
-
-- Resolver generics should carry the discriminant kind and specialize inputs/outputs.
-- Avoid optional chaining/fallbacks for non-optional types; assert earlier when needed.
-- Don’t suppress type errors with `as any`; fix the types or localize the cast in the router.
+- Thread the chain kind through generics so inputs/outputs specialize automatically — don't accept a broad `Chain` union and cast at the call site.
+- Use `matchRecordUnion` / `matchDiscriminatedUnion` for exhaustive dispatch; don't switch-case with `as`.
+- If a cast is unavoidable, constrain it to a single routing boundary (see `toChainKindRecordUnion` in `ChainKind.ts` for the canonical example). Never cast at leaf resolvers or call sites.
+- Don't suppress type errors with `as any`; fix the generics or localize the cast in the router.
