@@ -58,3 +58,10 @@ export const mayaCoin: Coin = {
 }
 
 export const mayaDefiCoins: Coin[] = [mayaCoin]
+
+export const tronCoin: Coin = {
+  ...chainFeeCoin[Chain.Tron],
+  chain: Chain.Tron,
+}
+
+export const tronDefiCoins: Coin[] = [tronCoin]

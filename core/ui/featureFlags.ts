@@ -7,7 +7,7 @@ const featureFlagDefaults = {
   circle: true,
   nftTab: false,
   importSeedphrase: true,
-  mayaChain: false,
+  mayaChain: true,
   defiLpsTab: true,
   agent: false,
   mldsaKeygen: false,
