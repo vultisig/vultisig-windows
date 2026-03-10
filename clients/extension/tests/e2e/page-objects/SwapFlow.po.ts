@@ -275,11 +275,34 @@ export class SwapFlow extends BasePage {
   }
 
   /**
-   * Fill swap amount
+   * Fill swap amount using input with proper event simulation
    */
   async fillAmount(amount: string): Promise<void> {
+    // Click to focus first (force to bypass overlay)
+    await this.fromAmountInput.click({ force: true })
+    await this.page.waitForTimeout(100)
+    
+    // Clear existing value
     await this.fromAmountInput.clear()
-    await this.fromAmountInput.fill(amount)
+    
+    // Type character by character (triggers input events)
+    await this.fromAmountInput.pressSequentially(amount, { delay: 50 })
+    
+    // Blur to trigger change event
+    await this.fromAmountInput.blur()
+    await this.page.waitForTimeout(300)
+  }
+
+  /**
+   * Click percentage button to set amount (more reliable than direct input)
+   * @param percent - 25, 50, 75, or 100 (max)
+   */
+  async clickPercentage(percent: 25 | 50 | 75 | 100 = 25): Promise<void> {
+    const btnText = percent === 100 ? 'Max' : `${percent}%`
+    const btn = this.page.locator(`button:has-text("${btnText}")`)
+    await btn.click()
+    await this.page.waitForTimeout(500)
+    console.log(`Clicked ${btnText} button`)
   }
 
   /**
@@ -496,13 +519,17 @@ export class SwapFlow extends BasePage {
 
   /**
    * Prepare a cross-chain native token swap using chain IDs.
-   * Automatically looks up the native token symbol for each chain.
+   * Uses percentage buttons for more reliable quote triggering.
+   * @param percent - 25, 50, 75, or 100 (default 25 for small test amounts)
    */
-  async prepareNativeSwap(fromChainId: string, toChainId: string, amount: string): Promise<void> {
+  async prepareNativeSwap(fromChainId: string, toChainId: string, percent: 25 | 50 | 75 | 100 = 25): Promise<void> {
     const fromSymbol = this.getNativeSymbol(fromChainId)
     const toSymbol = this.getNativeSymbol(toChainId)
-    console.log(`Preparing native swap: ${fromSymbol} (${fromChainId}) → ${toSymbol} (${toChainId})`)
-    await this.prepareSwap(fromSymbol, toSymbol, amount)
+    console.log(`Preparing native swap: ${fromSymbol} (${fromChainId}) → ${toSymbol} (${toChainId}) @ ${percent}%`)
+    await this.selectFromCoin(fromSymbol)
+    await this.selectToCoin(toSymbol)
+    await this.clickPercentage(percent)
+    await this.waitForQuote()
   }
 
   /**
