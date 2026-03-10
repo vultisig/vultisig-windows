@@ -117,6 +117,7 @@ export type CoreView =
       id: 'lpPositionForm'
       state: { chain: Chain; positionId: string; action: 'add' | 'remove' }
     }
+  | { id: 'transactionDetail'; state: { id: string } }
   | { id: 'transactionHistory' }
   | { id: 'vaultBackup' }
   | { id: 'vaultsBackup' }
