@@ -20,7 +20,11 @@ import {
   TopRow,
 } from './styles'
 
-export const transactionHistoryCardStatuses = ['successful', 'error'] as const
+export const transactionHistoryCardStatuses = [
+  'successful',
+  'pending',
+  'error',
+] as const
 export type TransactionHistoryCardStatus =
   (typeof transactionHistoryCardStatuses)[number]
 
@@ -30,7 +34,7 @@ export type TransactionHistoryCardAddressDirection = 'to' | 'from'
 export type TransactionHistoryCardProps = {
   /** Transaction type shown in the tag (send, receive, swap, approve). */
   tagType: TransactionHistoryTagType
-  /** Card state: successful (green label) or error (red label). */
+  /** Card state: successful (green), pending (neutral), or error (red). */
   status: TransactionHistoryCardStatus
   /** USD amount, e.g. "$1,000.54". */
   amountUsd: string
@@ -65,7 +69,12 @@ export const TransactionHistoryCard = ({
   coin,
   icon,
 }: TransactionHistoryCardProps) => {
-  const statusLabel = status === 'successful' ? 'Successful' : 'Error'
+  const statusLabelMap: Record<TransactionHistoryCardStatus, string> = {
+    successful: 'Successful',
+    pending: 'Pending',
+    error: 'Error',
+  }
+  const statusLabel = statusLabelMap[status]
   const prefix = addressDirection === 'to' ? 'to ' : 'from '
   const truncatedAddress = truncateId(address)
   const assetIcon =

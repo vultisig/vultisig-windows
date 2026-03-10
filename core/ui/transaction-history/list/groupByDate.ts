@@ -6,6 +6,7 @@ type DateGroup<T> = {
 type DateGroupLabels = {
   today: string
   yesterday: string
+  locale: string
 }
 
 const toDateKey = (date: Date): string =>
@@ -31,7 +32,7 @@ const formatDateLabel = ({
   yesterday.setDate(yesterday.getDate() - 1)
   if (dateKey === toDateKey(yesterday)) return labels.yesterday
 
-  return date.toLocaleDateString('en-US', {
+  return date.toLocaleDateString(labels.locale, {
     month: 'long',
     day: 'numeric',
     year: date.getFullYear() !== today.getFullYear() ? 'numeric' : undefined,
@@ -44,6 +45,7 @@ type GroupByDateInput<T> = {
   labels: DateGroupLabels
 }
 
+/** Sorts items by timestamp (newest first) and groups them into date buckets with localized labels. */
 export const groupByDate = <T>({
   items,
   getTimestamp,

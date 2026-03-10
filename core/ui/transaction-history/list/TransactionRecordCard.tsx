@@ -12,8 +12,8 @@ const statusToCardStatus: Record<
   TransactionRecordStatus,
   TransactionHistoryCardStatus
 > = {
-  broadcasted: 'successful',
-  pending: 'successful',
+  broadcasted: 'pending',
+  pending: 'pending',
   confirmed: 'successful',
   failed: 'error',
 }

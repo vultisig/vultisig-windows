@@ -16,7 +16,7 @@ type TransactionHistoryListProps = {
 export const TransactionHistoryList = ({
   records,
 }: TransactionHistoryListProps) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   if (records.length === 0) {
     return (
@@ -34,7 +34,11 @@ export const TransactionHistoryList = ({
   const groups = groupByDate({
     items: records,
     getTimestamp: record => record.timestamp,
-    labels: { today: t('today'), yesterday: t('yesterday') },
+    labels: {
+      today: t('today'),
+      yesterday: t('yesterday'),
+      locale: i18n.language,
+    },
   })
 
   return (
