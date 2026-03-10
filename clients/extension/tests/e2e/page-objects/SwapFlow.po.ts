@@ -88,27 +88,134 @@ export class SwapFlow extends BasePage {
   }
 
   /**
-   * Select source coin
+   * Map of coin symbols to chain names for swap selection
    */
-  async selectFromCoin(coin: string): Promise<void> {
-    await this.fromCoinSelector.click()
-    await this.page.waitForTimeout(300)
-
-    const coinOption = this.page.getByText(new RegExp(coin, 'i')).first()
-    await coinOption.click()
-    await this.page.waitForTimeout(300)
+  private static readonly SYMBOL_TO_CHAIN: Record<string, string> = {
+    BTC: 'Bitcoin',
+    ETH: 'Ethereum',
+    BNB: 'BSC',
+    SOL: 'Solana',
+    RUNE: 'THORChain',
+    ATOM: 'Cosmos',
+    MATIC: 'Polygon',
+    AVAX: 'Avalanche',
+    LTC: 'Litecoin',
+    DOGE: 'Dogecoin',
   }
 
   /**
-   * Select destination coin
+   * Select source coin in the swap form.
+   * The swap form pre-selects coins from navigation state.
+   * To change, click on the coin ticker (CoinWrapper with role=button).
+   */
+  async selectFromCoin(coin: string): Promise<void> {
+    const chainName = SwapFlow.SYMBOL_TO_CHAIN[coin.toUpperCase()] || coin
+
+    // Check if already selected (look in the "From" section)
+    const fromSection = this.swapForm.locator('text=/^from$/i').first()
+    const currentTicker = this.swapForm.locator(`text=/${coin}/i`).first()
+    if (await currentTicker.isVisible({ timeout: 1000 }).catch(() => false)) {
+      console.log(`From coin ${coin} already selected`)
+      return
+    }
+
+    // Click the coin ticker in the "From" row to open coin selector
+    // The CoinWrapper has role="button" and contains the ticker text
+    const fromCoinClicked = await this.page.evaluate((targetChain) => {
+      // Find the "From" section by looking for text that starts with "from"
+      const fromText = Array.from(document.querySelectorAll('*')).find(el => {
+        const text = el.textContent?.trim().toLowerCase()
+        return text === 'from'
+      })
+      
+      if (fromText) {
+        // The coin wrapper is a sibling element with role="button" containing the ticker
+        const container = fromText.closest('[class*="Container"]') || fromText.parentElement?.parentElement
+        if (container) {
+          const coinBtn = container.querySelector('[role="button"]:has(svg)')
+          if (coinBtn) {
+            ;(coinBtn as HTMLElement).click()
+            return true
+          }
+        }
+      }
+      return false
+    }, chainName)
+
+    if (fromCoinClicked) {
+      await this.page.waitForTimeout(500)
+
+      // Coin explorer modal should be open - find and click the target chain
+      const chainOption = this.page.getByText(new RegExp(`^${chainName}$`, 'i')).first()
+      if (await chainOption.isVisible({ timeout: 3000 }).catch(() => false)) {
+        await chainOption.click()
+        await this.page.waitForTimeout(500)
+        return
+      }
+
+      // Try symbol
+      const symbolOption = this.page.getByText(new RegExp(`^${coin}$`, 'i')).first()
+      if (await symbolOption.isVisible({ timeout: 1000 }).catch(() => false)) {
+        await symbolOption.click()
+        await this.page.waitForTimeout(500)
+        return
+      }
+    }
+
+    console.log(`Could not select from coin ${coin}`)
+  }
+
+  /**
+   * Select destination coin in the swap form.
    */
   async selectToCoin(coin: string): Promise<void> {
-    await this.toCoinSelector.click()
-    await this.page.waitForTimeout(300)
+    const chainName = SwapFlow.SYMBOL_TO_CHAIN[coin.toUpperCase()] || coin
 
-    const coinOption = this.page.getByText(new RegExp(coin, 'i')).first()
-    await coinOption.click()
-    await this.page.waitForTimeout(300)
+    // Check if already selected
+    const currentTicker = this.swapForm.locator(`text=/${coin}/i`).first()
+    if (await currentTicker.isVisible({ timeout: 1000 }).catch(() => false)) {
+      console.log(`To coin ${coin} might already be selected`)
+    }
+
+    // Click the coin ticker in the "To" row
+    const toCoinClicked = await this.page.evaluate((targetChain) => {
+      const toText = Array.from(document.querySelectorAll('*')).find(el => {
+        const text = el.textContent?.trim().toLowerCase()
+        return text === 'to'
+      })
+      
+      if (toText) {
+        const container = toText.closest('[class*="Container"]') || toText.parentElement?.parentElement
+        if (container) {
+          const coinBtn = container.querySelector('[role="button"]:has(svg)')
+          if (coinBtn) {
+            ;(coinBtn as HTMLElement).click()
+            return true
+          }
+        }
+      }
+      return false
+    }, chainName)
+
+    if (toCoinClicked) {
+      await this.page.waitForTimeout(500)
+
+      const chainOption = this.page.getByText(new RegExp(`^${chainName}$`, 'i')).first()
+      if (await chainOption.isVisible({ timeout: 3000 }).catch(() => false)) {
+        await chainOption.click()
+        await this.page.waitForTimeout(500)
+        return
+      }
+
+      const symbolOption = this.page.getByText(new RegExp(`^${coin}$`, 'i')).first()
+      if (await symbolOption.isVisible({ timeout: 1000 }).catch(() => false)) {
+        await symbolOption.click()
+        await this.page.waitForTimeout(500)
+        return
+      }
+    }
+
+    console.log(`Could not select to coin ${coin}`)
   }
 
   /**
