@@ -910,7 +910,7 @@ export const pt = {
   value: 'Valor',
   vault: 'Cofre',
   vaultCreated: 'Cofre criado',
-  vault_already_exists: 'O Vault já existe.',
+  vault_already_exists: 'O Vault "{{name}}" já existe.',
   vault_backup_page_password_info:
     'Nunca armazene compartilhamentos do Vault de dispositivos diferentes no mesmo local.',
   vault_backup_page_password_protection:
