@@ -1,15 +1,15 @@
 import { getVaultId, Vault } from '@core/mpc/vault/Vault'
+import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { useVaultOrders, useVaults } from '@core/ui/storage/vaults'
 import { useVaultBackupOverride } from '@core/ui/vault/import/state/vaultBackupOverride'
 import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
+import { Button } from '@lib/ui/buttons/Button'
 import { ValueProp } from '@lib/ui/props'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { FlowErrorPageContent } from '../../../flow/FlowErrorPageContent'
 
 export const SaveImportedVaultStep = ({
   value,
@@ -35,7 +35,7 @@ export const SaveImportedVaultStep = ({
 
   const error = useMemo(() => {
     if (initialVaults.find(v => getVaultId(v) === getVaultId(finalValue))) {
-      return t('vault_already_exists')
+      return t('vault_already_exists', { name: finalValue.name })
     }
     if (client === 'extension' && value.libType === 'GG20') {
       return t('extension_vault_import_restriction')
@@ -44,7 +44,13 @@ export const SaveImportedVaultStep = ({
 
   if (error) {
     return (
-      <FlowErrorPageContent title={t('failed_to_save_vault')} error={error} />
+      <FlowErrorPageContent
+        title={t('failed_to_save_vault')}
+        error={error}
+        action={
+          onFinish ? <Button onClick={onFinish}>{t('skip')}</Button> : undefined
+        }
+      />
     )
   }
 
