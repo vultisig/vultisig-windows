@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 
 import type { AgentOrchestrator } from '../orchestrator'
+import {
+  shouldTransitionToSuccess,
+  toolCallToStep,
+} from '../timeline/toolCallToStep'
 import type {
   ActionResultEvent,
   AuthRequiredEvent,
@@ -75,6 +79,7 @@ export const useAgentEvents = (
 
   const streamingMsgIdRef = useRef<string | null>(null)
   const loadingStartedAtRef = useRef<number | null>(null)
+  const responseGroupIdRef = useRef<string | null>(null)
 
   const appendAssistantMessage = (content: string) => {
     if (!content.trim()) return
@@ -103,8 +108,18 @@ export const useAgentEvents = (
           return
         streamingMsgIdRef.current = null
         loadingStartedAtRef.current = Date.now()
+        const groupId = `group-${Date.now()}`
+        responseGroupIdRef.current = groupId
+        const groupMsg: ChatMessage = {
+          id: groupId,
+          role: 'assistant',
+          content: '',
+          timestamp: new Date().toISOString(),
+          steps: [],
+        }
         setState(prev => ({
           ...prev,
+          messages: [...prev.messages, groupMsg],
           isLoading: true,
           isRequestActive: true,
           isComplete: false,
@@ -117,6 +132,18 @@ export const useAgentEvents = (
       orchestrator.events.on('text_delta', (data: TextDeltaEvent) => {
         if (convIdRef.current && data.conversationId !== convIdRef.current)
           return
+        const groupId = responseGroupIdRef.current
+        if (groupId) {
+          streamingMsgIdRef.current = groupId
+          setState(prev => ({
+            ...prev,
+            messages: prev.messages.map(m =>
+              m.id === groupId ? { ...m, content: m.content + data.delta } : m
+            ),
+            isLoading: false,
+          }))
+          return
+        }
         setState(prev => {
           const existingId = streamingMsgIdRef.current
           if (existingId) {
@@ -153,10 +180,30 @@ export const useAgentEvents = (
         if (convIdRef.current && data.conversationId !== convIdRef.current)
           return
 
-        const streamingId = streamingMsgIdRef.current
+        const groupId = responseGroupIdRef.current
         streamingMsgIdRef.current = null
         const now = Date.now()
 
+        if (groupId) {
+          setState(prev => ({
+            ...prev,
+            messages: prev.messages.map(m =>
+              m.id === groupId
+                ? {
+                    ...m,
+                    id: `msg-${now}`,
+                    content: data.message?.trim() ? data.message : m.content,
+                    actions: data.actions,
+                  }
+                : m
+            ),
+            isLoading: false,
+          }))
+          responseGroupIdRef.current = `msg-${now}`
+          return
+        }
+
+        const streamingId = streamingMsgIdRef.current
         setState(prev => {
           if (streamingId && data.message?.trim()) {
             return {
@@ -200,6 +247,21 @@ export const useAgentEvents = (
       orchestrator.events.on('tool_call', (data: ToolCallEvent) => {
         if (convIdRef.current && data.conversationId !== convIdRef.current)
           return
+        const groupId = responseGroupIdRef.current
+        if (groupId) {
+          const step = toolCallToStep(
+            data.actionId,
+            data.actionType,
+            data.title || data.actionType.replace(/_/g, ' ')
+          )
+          setState(prev => ({
+            ...prev,
+            messages: prev.messages.map(m =>
+              m.id === groupId ? { ...m, steps: [...(m.steps ?? []), step] } : m
+            ),
+          }))
+          return
+        }
         const toolCallMessage: ChatMessage = {
           id: `tool-call-${data.actionId}`,
           role: 'assistant',
@@ -223,6 +285,36 @@ export const useAgentEvents = (
       orchestrator.events.on('action_result', (data: ActionResultEvent) => {
         if (convIdRef.current && data.conversationId !== convIdRef.current)
           return
+        const groupId = responseGroupIdRef.current
+        if (groupId) {
+          setState(prev => ({
+            ...prev,
+            messages: prev.messages.map(m => {
+              if (m.id !== groupId) return m
+              const steps = m.steps?.map(s =>
+                s.id === data.actionId
+                  ? {
+                      ...s,
+                      isActive: false,
+                      ...(data.success
+                        ? shouldTransitionToSuccess(s.category)
+                          ? {
+                              category: 'success' as const,
+                              iconType: 'check' as const,
+                            }
+                          : {}
+                        : {
+                            category: 'error' as const,
+                            iconType: 'warning' as const,
+                          }),
+                    }
+                  : s
+              )
+              return { ...m, steps }
+            }),
+          }))
+          return
+        }
         const toolCallId = `tool-call-${data.actionId}`
         const status: 'success' | 'error' = data.success ? 'success' : 'error'
 
@@ -314,15 +406,39 @@ export const useAgentEvents = (
           ? Math.round((Date.now() - loadingStartedAtRef.current) / 1000)
           : undefined
         loadingStartedAtRef.current = null
+        const groupId = responseGroupIdRef.current
+        responseGroupIdRef.current = null
         setState(prev => {
-          const messages = [...prev.messages]
-          for (let i = messages.length - 1; i >= 0; i--) {
-            if (
-              messages[i].role === 'assistant' &&
-              messages[i].content.trim()
-            ) {
-              messages[i] = { ...messages[i], analysisDuration: duration }
-              break
+          const messages = prev.messages.map(m => {
+            if (groupId && m.id === groupId) {
+              return {
+                ...m,
+                analysisDuration: duration,
+                steps: m.steps?.map(s => ({ ...s, isActive: false })),
+              }
+            }
+            return m
+          })
+          if (!groupId) {
+            let found = false
+            return {
+              ...prev,
+              messages: messages.map((m, i, arr) => {
+                if (found) return m
+                const isLastAssistant =
+                  m.role === 'assistant' &&
+                  m.content.trim() &&
+                  !arr
+                    .slice(i + 1)
+                    .some(n => n.role === 'assistant' && n.content.trim())
+                if (isLastAssistant) {
+                  found = true
+                  return { ...m, analysisDuration: duration }
+                }
+                return m
+              }),
+              isLoading: false,
+              isComplete: true,
             }
           }
           return {
@@ -341,6 +457,7 @@ export const useAgentEvents = (
         if (convIdRef.current && data.conversationId !== convIdRef.current)
           return
         streamingMsgIdRef.current = null
+        responseGroupIdRef.current = null
         const normalizedError = normalizeAgentErrorMessage(data.error)
         const isStopped = normalizedError === 'agent stopped'
         if (isStopped) {
