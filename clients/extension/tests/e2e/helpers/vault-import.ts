@@ -13,6 +13,13 @@
 
 import type { Page, BrowserContext } from '@playwright/test'
 import { existsSync } from 'fs'
+import { config } from 'dotenv'
+import { resolve } from 'path'
+import { fileURLToPath } from 'url'
+
+// Load .env from e2e directory
+const __edir = fileURLToPath(new URL('..', import.meta.url))
+config({ path: resolve(__edir, '.env') })
 
 export interface VaultImportConfig {
   vaultPath: string
