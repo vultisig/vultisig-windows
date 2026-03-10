@@ -194,6 +194,7 @@ export const en = {
   complete: 'Complete',
   congrats: 'Congrats!',
   confirm: 'Confirm',
+  confirmed: 'Confirmed',
   confirm_automation_creation: 'Confirm automation creation',
   confirm_new_passcode: 'Confirm New Passcode',
   confirm_passcode: 'Confirm Passcode',
@@ -321,6 +322,7 @@ export const en = {
     'Only DKLS vaults can be imported in extension',
   fallback_swap_warning:
     'We could not simulate this transaction. Proceed with caution.',
+  failed: 'Failed',
   failed_to_connect_with_server: 'Failed to connect with server',
   failed_to_copy_address: 'Failed to copy address',
   failed_to_copy_link: 'Failed to copy link',

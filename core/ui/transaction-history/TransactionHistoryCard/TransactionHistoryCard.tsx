@@ -3,6 +3,7 @@ import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { Text } from '@lib/ui/text'
 import { truncateId } from '@lib/utils/string/truncate'
 import { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import {
   TransactionHistoryTag,
@@ -69,13 +70,15 @@ export const TransactionHistoryCard = ({
   coin,
   icon,
 }: TransactionHistoryCardProps) => {
-  const statusLabelMap: Record<TransactionHistoryCardStatus, string> = {
-    successful: 'Successful',
-    pending: 'Pending',
-    error: 'Error',
+  const { t } = useTranslation()
+
+  const statusLabelKey: Record<TransactionHistoryCardStatus, string> = {
+    successful: t('confirmed'),
+    pending: t('pending'),
+    error: t('failed'),
   }
-  const statusLabel = statusLabelMap[status]
-  const prefix = addressDirection === 'to' ? 'to ' : 'from '
+  const statusLabel = statusLabelKey[status]
+  const prefix = `${t(addressDirection)} `
   const truncatedAddress = truncateId(address)
   const assetIcon =
     coin != null ? <CoinIcon coin={coin} style={{ fontSize: 24 }} /> : icon

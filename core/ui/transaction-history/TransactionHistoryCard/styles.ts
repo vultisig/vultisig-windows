@@ -2,6 +2,8 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { getColor, matchColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
+import type { TransactionHistoryCardStatus } from './TransactionHistoryCard'
+
 /** Card: foreground bg, foregroundExtra border, 16px padding, 16px radius. Figma: surface-1 #061b3a, borders/light #11284a */
 export const Card = styled(VStack).attrs({
   direction: 'vertical',
@@ -28,7 +30,7 @@ export const TopRow = styled(HStack).attrs({
 
 /** Status label: 12px caption. Successful = green, Pending = neutral, Error = red. */
 export const StatusLabel = styled.span<{
-  $status: 'successful' | 'pending' | 'error'
+  $status: TransactionHistoryCardStatus
 }>`
   font-size: 12px;
   font-weight: 500;
