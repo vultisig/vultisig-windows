@@ -912,7 +912,7 @@ export const es = {
   value: 'Valor',
   vault: 'Bóveda',
   vaultCreated: 'Bóveda creada',
-  vault_already_exists: 'La bóveda ya existe',
+  vault_already_exists: 'La bóveda "{{name}}" ya existe',
   vault_backup_page_password_info:
     'Nunca almacene recursos compartidos de Vault de diferentes dispositivos en la misma ubicación',
   vault_backup_page_password_protection:

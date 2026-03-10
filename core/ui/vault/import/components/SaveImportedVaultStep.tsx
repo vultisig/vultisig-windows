@@ -1,5 +1,5 @@
 import { getVaultId, Vault } from '@core/mpc/vault/Vault'
-import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
+import { FlowErrorPageContent } from '../../../flow/FlowErrorPageContent'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { useVaultOrders, useVaults } from '@core/ui/storage/vaults'
@@ -34,8 +34,9 @@ export const SaveImportedVaultStep = ({
   )
 
   const error = useMemo(() => {
-    if (initialVaults.find(v => getVaultId(v) === getVaultId(finalValue))) {
-      return t('vault_already_exists', { name: finalValue.name })
+    const existingVault = initialVaults.find(v => getVaultId(v) === getVaultId(finalValue))
+    if (existingVault) {
+      return t('vault_already_exists', { name: existingVault.name || finalValue.name })
     }
     if (client === 'extension' && value.libType === 'GG20') {
       return t('extension_vault_import_restriction')
