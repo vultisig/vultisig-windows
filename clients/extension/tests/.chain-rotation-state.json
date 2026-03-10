@@ -1,8 +1,8 @@
 {
   "chains": {
     "ethereum": {
-      "lastTested": 1773114019155,
-      "successCount": 2,
+      "lastTested": 1773122443064,
+      "successCount": 3,
       "failureCount": 0
     },
     "bsc": {
@@ -56,8 +56,8 @@
       "failureCount": 1
     },
     "thorchain": {
-      "lastTested": 1773114095226,
-      "successCount": 2,
+      "lastTested": 1773122443064,
+      "successCount": 3,
       "failureCount": 0
     },
     "cosmos": {
@@ -66,5 +66,5 @@
       "failureCount": 0
     }
   },
-  "lastUpdated": 1773114159129
+  "lastUpdated": 1773122443064
 }
