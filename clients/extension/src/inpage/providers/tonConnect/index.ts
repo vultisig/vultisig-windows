@@ -1,0 +1,209 @@
+import { Chain } from '@core/chain/Chain'
+import { callBackground } from '@core/inpage-provider/background'
+import { callPopup } from '@core/inpage-provider/popup'
+import { PopupError } from '@core/inpage-provider/popup/error'
+import { attempt } from '@lib/utils/attempt'
+import type {
+  ConnectEvent,
+  ConnectRequest,
+  DeviceInfo,
+  WalletEvent,
+} from '@tonconnect/protocol'
+import { CHAIN } from '@tonconnect/protocol'
+
+import { getWalletStateInit } from './getWalletStateInit'
+import {
+  getTonConnectDeviceInfo,
+  getTonConnectWalletInfo,
+} from './walletManifest'
+
+type TonConnectCallback = (event: WalletEvent) => void
+
+export class TonConnectBridge {
+  deviceInfo: DeviceInfo = getTonConnectDeviceInfo()
+
+  walletInfo = getTonConnectWalletInfo()
+
+  protocolVersion = 2
+  isWalletBrowser = false
+
+  private listeners: TonConnectCallback[] = []
+  private nextEventId = 1
+
+  listen(callback: TonConnectCallback): () => void {
+    this.listeners.push(callback)
+    return () => {
+      this.listeners = this.listeners.filter(l => l !== callback)
+    }
+  }
+
+  private emit(event: WalletEvent): void {
+    this.listeners.forEach(cb => cb(event))
+  }
+
+  async disconnect(): Promise<void> {
+    const { error } = await attempt(callBackground({ signOut: {} }))
+
+    if (error) {
+      console.error('Failed to sign out on disconnect:', error)
+    }
+
+    this.emit({
+      event: 'disconnect',
+      id: this.nextEventId++,
+      payload: {},
+    })
+  }
+
+  async connect(
+    _protocolVersion: number,
+    request: ConnectRequest
+  ): Promise<ConnectEvent> {
+    const tonAddrRequest = request.items.find(
+      (item: { name: string }) => item.name === 'ton_addr'
+    )
+    if (!tonAddrRequest) {
+      return {
+        event: 'connect_error',
+        id: 0,
+        payload: { code: 1, message: 'ton_addr item is required' },
+      }
+    }
+
+    const tonProofRequest = request.items.find(
+      (item: { name: string }) => item.name === 'ton_proof'
+    )
+    if (tonProofRequest) {
+      return {
+        event: 'connect_error',
+        id: 0,
+        payload: { code: 400, message: 'ton_proof not supported' },
+      }
+    }
+
+    const manifestResult = await attempt(fetch(request.manifestUrl))
+    if ('error' in manifestResult) {
+      return {
+        event: 'connect_error',
+        id: 0,
+        payload: { code: 2, message: 'App manifest not found' },
+      }
+    }
+
+    const manifestResponse = manifestResult.data
+
+    if (!manifestResponse.ok) {
+      return {
+        event: 'connect_error',
+        id: 0,
+        payload: { code: 2, message: 'App manifest not found' },
+      }
+    }
+
+    const contentType = manifestResponse.headers.get('content-type')
+    if (contentType && !contentType.includes('application/json')) {
+      return {
+        event: 'connect_error',
+        id: 0,
+        payload: { code: 2, message: 'App manifest not found' },
+      }
+    }
+
+    const manifestJsonResult = await attempt(manifestResponse.json())
+    if (
+      'error' in manifestJsonResult ||
+      !manifestJsonResult.data ||
+      typeof manifestJsonResult.data !== 'object'
+    ) {
+      return {
+        event: 'connect_error',
+        id: 0,
+        payload: { code: 2, message: 'App manifest not found' },
+      }
+    }
+
+    const { data, error } = await attempt(
+      callPopup({ grantVaultAccess: { preselectFastVault: true } })
+    )
+
+    if (error === PopupError.RejectedByUser) {
+      return {
+        event: 'connect_error',
+        id: 0,
+        payload: { code: 300, message: 'User declined the connection' },
+      }
+    }
+
+    if (!data?.appSession) {
+      return {
+        event: 'connect_error',
+        id: 0,
+        payload: { code: 0, message: 'Failed to connect' },
+      }
+    }
+
+    const { data: account, error: getAccountError } = await attempt(
+      callBackground({ getAccount: { chain: Chain.Ton } })
+    )
+
+    if (getAccountError || !account?.address || !account?.publicKey) {
+      return {
+        event: 'connect_error',
+        id: 0,
+        payload: { code: 0, message: 'Failed to get account' },
+      }
+    }
+
+    const walletStateInit = getWalletStateInit(account.publicKey)
+
+    return {
+      event: 'connect',
+      id: 0,
+      payload: {
+        items: [
+          {
+            name: 'ton_addr',
+            address: account.address,
+            network: CHAIN.MAINNET,
+            publicKey: account.publicKey,
+            walletStateInit,
+          },
+        ],
+        device: this.deviceInfo,
+      },
+    }
+  }
+
+  async restoreConnection(): Promise<ConnectEvent> {
+    const { data, error } = await attempt(
+      callBackground({ getAccount: { chain: Chain.Ton } })
+    )
+
+    if (error || !data?.address || !data?.publicKey) {
+      return {
+        event: 'connect_error',
+        id: 0,
+        payload: { code: 0, message: 'No existing session' },
+      }
+    }
+
+    const walletStateInit = getWalletStateInit(data.publicKey)
+
+    return {
+      event: 'connect',
+      id: 0,
+      payload: {
+        items: [
+          {
+            name: 'ton_addr',
+            address: data.address,
+            network: CHAIN.MAINNET,
+            publicKey: data.publicKey,
+            walletStateInit,
+          },
+        ],
+        device: this.deviceInfo,
+      },
+    }
+  }
+}

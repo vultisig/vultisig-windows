@@ -11,6 +11,7 @@ import { CoreViewId } from '@core/ui/navigation/CoreView'
 import { CurrencyPage } from '@core/ui/preferences/currency'
 import { LanguagePage } from '@core/ui/preferences/language'
 import { UploadQrPage } from '@core/ui/qr/upload'
+import { TransactionDetailPage } from '@core/ui/transaction-history/detail/TransactionDetailPage'
 import { TransactionHistoryPage } from '@core/ui/transaction-history/TransactionHistoryPage'
 import { VaultBackupPage } from '@core/ui/vault/backup'
 import { SelectVaultsBackupPage } from '@core/ui/vault/backup/select/SelectVaultsBackupPage'
@@ -18,6 +19,7 @@ import { VaultsBackupPage } from '@core/ui/vault/backup/VaultsBackupPage'
 import { ManageVaultChainsPage } from '@core/ui/vault/chain/manage'
 import { ManageVaultChainCoinsPage } from '@core/ui/vault/chain/manage/coin'
 import { VaultChainPage } from '@core/ui/vault/chain/VaultChainPage'
+import { SetupVaultOverviewPage } from '@core/ui/vault/create/setup-vault/SetupVaultOverviewPage'
 import { DepositPage } from '@core/ui/vault/deposit/DepositPage'
 import { DepositAccessGuard } from '@core/ui/vault/deposit/providers/DepositAccessGuard'
 import { SignCustomMessagePage } from '@core/ui/vault/keysign/custom-message'
@@ -80,6 +82,7 @@ export type SharedViewId = Extract<
   | 'renameVault'
   | 'reshareVault'
   | 'send'
+  | 'setupVaultOverview'
   | 'signCustomMessage'
   | 'swap'
   | 'updateAddressBookItem'
@@ -98,6 +101,7 @@ export type SharedViewId = Extract<
   | 'passcodeAutoLock'
   | 'referral'
   | 'requestFastVaultBackup'
+  | 'transactionDetail'
   | 'transactionHistory'
   | 'faq'
   | 'shareVault'
@@ -142,6 +146,7 @@ export const sharedViews: Views<SharedViewId> = {
   renameVault: VaultRenamePage,
   reshareVault: ReshareVaultPage,
   send: SendPage,
+  setupVaultOverview: SetupVaultOverviewPage,
   signCustomMessage: SignCustomMessagePage,
   swap: SwapPage,
   updateAddressBookItem: UpdateAddressBookItemPage,
@@ -167,6 +172,7 @@ export const sharedViews: Views<SharedViewId> = {
   managePasscodeEncryption: ManagePasscodeEncryptionPage,
   passcodeAutoLock: PasscodeAutoLockPage,
   requestFastVaultBackup: RequestFastVaultBackup,
+  transactionDetail: TransactionDetailPage,
   transactionHistory: TransactionHistoryPage,
   faq: FaqVaultPage,
   shareVault: ShareVaultPage,

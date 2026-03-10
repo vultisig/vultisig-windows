@@ -10,11 +10,19 @@ import { Solana } from '@clients/extension/src/inpage/providers/solana'
 import { registerWallet } from '@clients/extension/src/inpage/providers/solana/register'
 import { Sui } from '@clients/extension/src/inpage/providers/sui'
 import { THORChain } from '@clients/extension/src/inpage/providers/thorchain'
+import { TonConnectBridge } from '@clients/extension/src/inpage/providers/tonConnect'
 import { UTXO } from '@clients/extension/src/inpage/providers/utxo'
 import { XDEFIKeplrProvider } from '@clients/extension/src/inpage/providers/xdefiKeplr'
 import { UtxoChain } from '@core/chain/Chain'
 
 import { TronLink } from './tronLink'
+
+const createTonProvider = () => {
+  const tonConnectBridge = new TonConnectBridge()
+  return {
+    tonconnect: tonConnectBridge,
+  }
+}
 
 export const createProviders = () => {
   const cosmosProvider = Cosmos.getInstance()
@@ -40,6 +48,7 @@ export const createProviders = () => {
     solana: vultisigSolanaProvider,
     sui: Sui.getInstance(),
     thorchain: THORChain.getInstance(),
+    ton: createTonProvider(),
     tron: new TronLink(),
   }
 }

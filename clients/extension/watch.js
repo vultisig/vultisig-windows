@@ -1,5 +1,5 @@
-import { rm } from 'fs/promises'
 import { execSync, spawn } from 'child_process'
+import { rm } from 'fs/promises'
 import { WebSocketServer } from 'ws'
 
 const WS_PORT = 18732
@@ -74,5 +74,7 @@ const cleanup = () => {
 process.on('SIGINT', cleanup)
 process.on('SIGTERM', cleanup)
 
-console.log(`\x1b[36mWebSocket reload server on ws://localhost:${WS_PORT}\x1b[0m`)
+console.log(
+  `\x1b[36mWebSocket reload server on ws://localhost:${WS_PORT}\x1b[0m`
+)
 console.log('\x1b[36mWatching for changes...\x1b[0m')

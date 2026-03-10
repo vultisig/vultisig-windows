@@ -61,7 +61,7 @@ export const AgentChatPage: FC = () => {
   const {
     messages,
     isLoading,
-    isComplete,
+    isRequestActive,
     passwordRequired,
     confirmationRequired,
     authRequired,
@@ -148,8 +148,9 @@ export const AgentChatPage: FC = () => {
   }, [vaultId, preloadContext])
 
   const queuedMessageRef = useRef<string | null>(null)
+  const lastSubmittedMessageRef = useRef<string | null>(null)
 
-  const isProcessing = Boolean(isLoading)
+  const isProcessing = isRequestActive
 
   const doSend = async (message: string) => {
     if (!vaultId) return
@@ -182,7 +183,17 @@ export const AgentChatPage: FC = () => {
       addUserMessage(message)
       return
     }
+    lastSubmittedMessageRef.current = message
     doSend(message)
+  }
+
+  const handleStop = () => {
+    const last = lastSubmittedMessageRef.current
+    cancelRequest()
+    queuedMessageRef.current = null
+    if (last != null) {
+      setInputValue(last)
+    }
   }
 
   useEffect(() => {
@@ -212,6 +223,7 @@ export const AgentChatPage: FC = () => {
     if (initialMessage && vaultId && !initialMessageSentRef.current) {
       initialMessageSentRef.current = true
       setViewState(prev => ({ ...prev, initialMessage: undefined }))
+      lastSubmittedMessageRef.current = initialMessage
       addUserMessage(initialMessage)
       sendMessage(vaultId, initialMessage)
         .then(id => setConversationId(id))
@@ -332,7 +344,8 @@ export const AgentChatPage: FC = () => {
           {(() => {
             const lastAssistantIdx = messages.reduce(
               (last, m, idx) =>
-                m.role === 'assistant' && m.content.trim().length > 0
+                m.role === 'assistant' &&
+                (m.content.trim().length > 0 || m.steps !== undefined)
                   ? idx
                   : last,
               -1
@@ -344,13 +357,14 @@ export const AgentChatPage: FC = () => {
                 isAnalyzing={
                   i === lastAssistantIdx &&
                   !msg.analysisDuration &&
-                  !isLoading &&
-                  !isComplete
+                  isRequestActive
                 }
               />
             ))
           })()}
-          {isLoading && <AgentReplyMessage isAnalyzing content="" />}
+          {isLoading && !messages.some(m => m.steps !== undefined) && (
+            <AgentReplyMessage isAnalyzing content="" />
+          )}
           {error && (
             <ErrorMessage onClick={dismissError}>
               <Text size={14} color="danger">
@@ -373,6 +387,8 @@ export const AgentChatPage: FC = () => {
             }
           }}
           placeholder={t('ask_about_plugins_policies')}
+          isLoading={isProcessing}
+          onStop={handleStop}
         />
       </ChatInputContainer>
       {passwordRequired && (

@@ -6,6 +6,7 @@ import {
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { attempt } from '@lib/utils/attempt'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
@@ -63,6 +64,12 @@ export const useTransactionRecordsQuery = () => {
     },
     ...noRefetchQueryOptions,
   })
+}
+
+export const useTransactionRecords = () => {
+  const { data } = useTransactionRecordsQuery()
+
+  return shouldBePresent(data, 'transaction records')
 }
 
 export const useSaveTransactionRecordMutation = () => {
