@@ -38,9 +38,17 @@ const statusColor: Record<TransactionRecordStatus, TextColor> = {
   failed: 'danger',
 }
 
-const formatTimestamp = (timestamp: string): string => {
+type FormatTimestampInput = {
+  timestamp: string
+  locale: string
+}
+
+const formatTimestamp = ({
+  timestamp,
+  locale,
+}: FormatTimestampInput): string => {
   const date = new Date(timestamp)
-  return date.toLocaleDateString('en-US', {
+  return date.toLocaleDateString(locale, {
     month: 'long',
     day: 'numeric',
     year: 'numeric',
@@ -72,7 +80,7 @@ const SendAmountDisplay = ({ record }: { record: SendTransactionRecord }) => {
         <CoinIcon
           coin={{
             chain: record.chain,
-            id: data.tokenId ?? '',
+            id: data.tokenId,
             logo: data.tokenLogo,
           }}
           style={{ fontSize: 32 }}
@@ -130,7 +138,7 @@ const SwapAmountDisplay = ({ record }: { record: SwapTransactionRecord }) => {
           <CoinIcon
             coin={{
               chain: data.fromChain,
-              id: data.fromTokenId ?? '',
+              id: data.fromTokenId,
               logo: data.fromTokenLogo,
             }}
             style={{ fontSize: 32 }}
@@ -148,7 +156,7 @@ const SwapAmountDisplay = ({ record }: { record: SwapTransactionRecord }) => {
           <CoinIcon
             coin={{
               chain: data.toChain,
-              id: data.toTokenId ?? '',
+              id: data.toTokenId,
               logo: data.toTokenLogo,
             }}
             style={{ fontSize: 32 }}
@@ -181,7 +189,7 @@ const SwapDetailPanel = ({ record }: { record: SwapTransactionRecord }) => {
 
 export const TransactionDetailPage = () => {
   const goBack = useNavigateBack()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [{ id }] = useCoreViewState<'transactionDetail'>()
   const { openUrl } = useCore()
   const records = useTransactionRecords()
@@ -226,7 +234,12 @@ export const TransactionDetailPage = () => {
               </Text>
             </DetailRow>
             <DetailRow label={t('date')}>
-              <Text>{formatTimestamp(record.timestamp)}</Text>
+              <Text>
+                {formatTimestamp({
+                  timestamp: record.timestamp,
+                  locale: i18n.language,
+                })}
+              </Text>
             </DetailRow>
             <DetailRow label={t('network')}>
               <HStack alignItems="center" gap={4}>
