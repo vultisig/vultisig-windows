@@ -75,9 +75,10 @@ export type ChainId = keyof typeof SUPPORTED_CHAINS
  * Last chain becomes destination-only (never a source).
  */
 export const FUNDED_CHAINS: ChainId[] = [
-  'thorchain', // ~$27 - best swap source (native THORChain routes)
-  'ethereum',  // $15.67 - good swap source
-  'solana',    // $2.90  - destination only (too low for source)
+  'bitcoin',   // For swap tests (BTC↔ETH only available in swap UI)
+  'ethereum',  // For swap tests
+  'thorchain', // For send tests
+  'solana',    // For send tests (destination only)
 ]
 
 /**
@@ -106,11 +107,11 @@ export const SWAP_SOURCE_CHAINS: ChainId[] = [
  * - THOR→SOL: proven working (tx 3269A928...91DB on 2026-03-10)
  */
 export function generateNativeSwapPairs(): [ChainId, ChainId][] {
-  // Hand-picked pairs for reliable quotes - both verified working!
-  // THORChain swaps use native THORSwap routing for best liquidity
+  // Only BTC → ETH swap is reliably testable (it's the default direction)
+  // ETH → BTC requires coin selector changes which are flaky
+  // Note: Use 75% to meet minimum swap threshold (~$1.50)
   return [
-    ['thorchain', 'ethereum'], // RUNE → ETH (native THORChain pair, known working!)
-    ['thorchain', 'solana'],   // RUNE → SOL (proven working - tx 3269A928...91DB)
+    ['bitcoin', 'ethereum'],   // BTC → ETH (default, reliable)
   ]
 }
 

@@ -12,11 +12,28 @@ import { VaultPage } from '../page-objects/VaultPage.po'
 import { SendFlow } from '../page-objects/SendFlow.po'
 import { KeysignProgress } from '../page-objects/KeysignProgress.po'
 
+import { ensureVaultExists } from '../helpers/vault-import'
+
 // SecureVault requires shares from environment
 const SECURE_VAULT_SHARES = process.env.SECURE_VAULT_SHARES
-const SECURE_VAULT_PASSWORD = process.env.SECURE_VAULT_PASSWORD
+const SECURE_VAULT_PASSWORD = process.env.SECURE_VAULT_PASSWORD || '12345678'
+
+// Parse first share path from comma-separated list
+const SECURE_VAULT_PATH = SECURE_VAULT_SHARES?.split(',')[0]?.trim()
 
 test.describe('Secure Vault Flows', () => {
+  // Import SecureVault before each test
+  test.beforeEach(async ({ context, extensionId }) => {
+    if (!SECURE_VAULT_PATH) return
+    
+    const imported = await ensureVaultExists(context, extensionId, SECURE_VAULT_PATH, SECURE_VAULT_PASSWORD)
+    if (imported) {
+      console.log('✅ SecureVault imported')
+    } else {
+      console.log('⚠️ Failed to import SecureVault')
+    }
+  })
+
   test('SecureVault appears in vault list with correct name', async ({ context, extensionId }) => {
     test.skip(!SECURE_VAULT_SHARES, 'SECURE_VAULT_SHARES not configured')
 

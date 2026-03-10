@@ -1,8 +1,8 @@
 {
   "chains": {
     "ethereum": {
-      "lastTested": 1773122443064,
-      "successCount": 3,
+      "lastTested": 1773172231553,
+      "successCount": 10,
       "failureCount": 0
     },
     "bsc": {
@@ -36,8 +36,8 @@
       "failureCount": 0
     },
     "bitcoin": {
-      "lastTested": 1773113824251,
-      "successCount": 0,
+      "lastTested": 1773172210401,
+      "successCount": 4,
       "failureCount": 2
     },
     "litecoin": {
@@ -51,13 +51,13 @@
       "failureCount": 0
     },
     "solana": {
-      "lastTested": 1773114159129,
-      "successCount": 1,
+      "lastTested": 1773171781050,
+      "successCount": 5,
       "failureCount": 1
     },
     "thorchain": {
-      "lastTested": 1773122443064,
-      "successCount": 3,
+      "lastTested": 1773171718485,
+      "successCount": 9,
       "failureCount": 0
     },
     "cosmos": {
@@ -66,5 +66,5 @@
       "failureCount": 0
     }
   },
-  "lastUpdated": 1773122443064
+  "lastUpdated": 1773172231553
 }

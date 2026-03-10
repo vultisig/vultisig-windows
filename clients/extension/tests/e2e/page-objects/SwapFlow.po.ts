@@ -520,15 +520,61 @@ export class SwapFlow extends BasePage {
   /**
    * Prepare a cross-chain native token swap using chain IDs.
    * Uses percentage buttons for more reliable quote triggering.
-   * @param percent - 25, 50, 75, or 100 (default 25 for small test amounts)
+   * @param percent - 25, 50, 75, or 100 (default 75 to meet minimum swap thresholds)
+   * @deprecated Use prepareSwapWithAmount for dynamic amount-based swaps
    */
-  async prepareNativeSwap(fromChainId: string, toChainId: string, percent: 25 | 50 | 75 | 100 = 25): Promise<void> {
+  async prepareNativeSwap(fromChainId: string, toChainId: string, percent: 25 | 50 | 75 | 100 = 75): Promise<void> {
     const fromSymbol = this.getNativeSymbol(fromChainId)
     const toSymbol = this.getNativeSymbol(toChainId)
     console.log(`Preparing native swap: ${fromSymbol} (${fromChainId}) → ${toSymbol} (${toChainId}) @ ${percent}%`)
     await this.selectFromCoin(fromSymbol)
     await this.selectToCoin(toSymbol)
     await this.clickPercentage(percent)
+    await this.waitForQuote()
+  }
+
+  /**
+   * Prepare a swap with an actual token amount (not percentage).
+   * 
+   * Uses the reverse button strategy: the UI defaults to BTC→ETH.
+   * If we want a different direction, we use the reverse button.
+   * 
+   * @param fromChainId - Source chain ID (e.g., 'bitcoin', 'ethereum')
+   * @param toChainId - Destination chain ID
+   * @param amount - Actual token amount to swap (e.g., '0.001')
+   */
+  async prepareSwapWithAmount(fromChainId: string, toChainId: string, amount: string): Promise<void> {
+    const fromSymbol = this.getNativeSymbol(fromChainId)
+    const toSymbol = this.getNativeSymbol(toChainId)
+    console.log(`Preparing swap: ${amount} ${fromSymbol} (${fromChainId}) → ${toSymbol} (${toChainId})`)
+    
+    // Wait for UI to stabilize
+    await this.page.waitForTimeout(500)
+    
+    // Check what's currently selected (default is usually BTC→ETH)
+    const currentFromText = await this.fromCoinSelector.textContent().catch(() => '') || ''
+    const currentToText = await this.toCoinSelector.textContent().catch(() => '') || ''
+    
+    console.log(`Current selection: ${currentFromText} → ${currentToText}`)
+    
+    // If the current selection is the reverse of what we want, click reverse
+    if (currentFromText.toUpperCase().includes(toSymbol) && 
+        currentToText.toUpperCase().includes(fromSymbol)) {
+      console.log('Using reverse button to swap direction')
+      await this.reverse()
+      await this.page.waitForTimeout(500)
+    } else if (!currentFromText.toUpperCase().includes(fromSymbol)) {
+      // Need to select the from coin
+      await this.selectFromCoin(fromSymbol)
+    }
+    
+    // Verify from coin is correct, then select to coin if needed
+    const updatedToText = await this.toCoinSelector.textContent().catch(() => '') || ''
+    if (!updatedToText.toUpperCase().includes(toSymbol)) {
+      await this.selectToCoin(toSymbol)
+    }
+    
+    await this.fillAmount(amount)
     await this.waitForQuote()
   }
 
