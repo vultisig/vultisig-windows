@@ -1,0 +1,70 @@
+{
+  "chains": {
+    "ethereum": {
+      "lastTested": 1773114019155,
+      "successCount": 2,
+      "failureCount": 0
+    },
+    "bsc": {
+      "lastTested": 0,
+      "successCount": 0,
+      "failureCount": 0
+    },
+    "polygon": {
+      "lastTested": 0,
+      "successCount": 0,
+      "failureCount": 0
+    },
+    "arbitrum": {
+      "lastTested": 0,
+      "successCount": 0,
+      "failureCount": 0
+    },
+    "optimism": {
+      "lastTested": 0,
+      "successCount": 0,
+      "failureCount": 0
+    },
+    "avalanche": {
+      "lastTested": 0,
+      "successCount": 0,
+      "failureCount": 0
+    },
+    "base": {
+      "lastTested": 0,
+      "successCount": 0,
+      "failureCount": 0
+    },
+    "bitcoin": {
+      "lastTested": 1773113824251,
+      "successCount": 0,
+      "failureCount": 2
+    },
+    "litecoin": {
+      "lastTested": 0,
+      "successCount": 0,
+      "failureCount": 0
+    },
+    "dogecoin": {
+      "lastTested": 0,
+      "successCount": 0,
+      "failureCount": 0
+    },
+    "solana": {
+      "lastTested": 1773114159129,
+      "successCount": 1,
+      "failureCount": 1
+    },
+    "thorchain": {
+      "lastTested": 1773114095226,
+      "successCount": 2,
+      "failureCount": 0
+    },
+    "cosmos": {
+      "lastTested": 0,
+      "successCount": 0,
+      "failureCount": 0
+    }
+  },
+  "lastUpdated": 1773114159129
+}

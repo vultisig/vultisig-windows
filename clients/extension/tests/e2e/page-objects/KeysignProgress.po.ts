@@ -242,17 +242,79 @@ export class KeysignProgress extends BasePage {
 
   /**
    * Wait for final state (success or error)
+   * 
+   * The keysign flow has multiple phases:
+   * 1. Pending: TransactionStatusAnimation with keysign-pending
+   * 2. Success: TxSuccess component with tx-success (shows tx hash)
+   * 3. Error: FullPageFlowErrorState or keysign-failure
+   * 
+   * We need to wait for either success or error indicators to appear.
    */
   async waitForComplete(timeout = 120_000): Promise<'success' | 'error'> {
-    await Promise.race([
-      this.successScreen.waitFor({ state: 'visible', timeout }),
-      this.errorScreen.waitFor({ state: 'visible', timeout }),
-    ])
-
+    const startTime = Date.now()
+    
+    // Poll for success or error state
+    while (Date.now() - startTime < timeout) {
+      // Check for tx-success (TxSuccess component) - indicates successful send
+      const txSuccess = this.page.locator('[data-testid="tx-success"]')
+      if (await txSuccess.isVisible().catch(() => false)) {
+        console.log('✅ Found tx-success testid')
+        return 'success'
+      }
+      
+      // Check for keysign-success (during success animation phase)
+      if (await this.keysignSuccess.isVisible().catch(() => false)) {
+        console.log('✅ Found keysign-success testid')
+        return 'success'
+      }
+      
+      // Check for "Done" button which appears only on success
+      const doneButton = this.page.locator('[data-testid="tx-success-done"]')
+      if (await doneButton.isVisible().catch(() => false)) {
+        console.log('✅ Found tx-success-done button')
+        return 'success'
+      }
+      
+      // Check for tx hash element which only appears on success
+      const txHashEl = this.page.locator('[data-testid="tx-hash"]')
+      if (await txHashEl.isVisible().catch(() => false)) {
+        console.log('✅ Found tx-hash element')
+        return 'success'
+      }
+      
+      // Check for success text patterns
+      const successText = this.page.locator('text=/sent|success|complete/i').first()
+      if (await successText.isVisible().catch(() => false)) {
+        // Verify it's actually a success screen, not just text in another context
+        const hasDoneBtn = await this.page.locator('button:has-text("Done")').isVisible().catch(() => false)
+        if (hasDoneBtn) {
+          console.log('✅ Found success text with Done button')
+          return 'success'
+        }
+      }
+      
+      // Check for error states
+      if (await this.keysignFailure.isVisible().catch(() => false)) {
+        console.log('❌ Found keysign-failure testid')
+        return 'error'
+      }
+      
+      const errorAlert = this.page.locator('[role="alert"]')
+      if (await errorAlert.isVisible().catch(() => false)) {
+        console.log('❌ Found error alert')
+        return 'error'
+      }
+      
+      // Wait a bit before checking again
+      await this.page.waitForTimeout(500)
+    }
+    
+    // Timeout - check one more time for success
     if (await this.isSuccess()) {
       return 'success'
     }
-
+    
+    console.log('⚠️ Timeout waiting for keysign to complete')
     return 'error'
   }
 }

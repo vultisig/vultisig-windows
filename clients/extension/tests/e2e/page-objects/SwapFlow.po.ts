@@ -6,6 +6,13 @@
 
 import { type Page, type Locator, expect } from '@playwright/test'
 import { BasePage } from './BasePage.po'
+import { 
+  waitForFormReady, 
+  waitForStackedFieldReady, 
+  robustClick,
+  waitForLoadingComplete,
+  debugElementState,
+} from '../helpers/ui-waits'
 
 export class SwapFlow extends BasePage {
   constructor(page: Page, extensionId: string) {
@@ -105,10 +112,11 @@ export class SwapFlow extends BasePage {
   }
 
   /**
-   * Wait for swap form to be visible
+   * Wait for swap form to be fully visible and ready for interaction.
+   * This includes waiting for loading states and animations to complete.
    */
   async waitForView(timeout = 10_000): Promise<void> {
-    await this.swapForm.waitFor({ state: 'visible', timeout })
+    await waitForFormReady(this.page, 'swap-form', timeout)
   }
 
   /**
@@ -134,6 +142,10 @@ export class SwapFlow extends BasePage {
    */
   async selectFromCoin(coin: string): Promise<void> {
     const chainName = SwapFlow.SYMBOL_TO_CHAIN[coin.toUpperCase()] || coin
+
+    // Wait for animations to complete
+    await waitForStackedFieldReady(this.page)
+    await waitForLoadingComplete(this.page)
 
     // Check if already selected (look in the "From" section)
     const fromSection = this.swapForm.locator('text=/^from$/i').first()
@@ -194,6 +206,10 @@ export class SwapFlow extends BasePage {
    */
   async selectToCoin(coin: string): Promise<void> {
     const chainName = SwapFlow.SYMBOL_TO_CHAIN[coin.toUpperCase()] || coin
+
+    // Wait for animations
+    await waitForStackedFieldReady(this.page)
+    await waitForLoadingComplete(this.page)
 
     // Check if already selected
     const currentTicker = this.swapForm.locator(`text=/${coin}/i`).first()
@@ -267,18 +283,55 @@ export class SwapFlow extends BasePage {
   }
 
   /**
-   * Wait for quote to load
+   * Wait for quote to load.
+   * The swap UI fetches quotes from various aggregators (THORChain, 1inch, etc.)
+   * which can take a few seconds. We wait for:
+   * 1. Any loading indicators to disappear
+   * 2. The expected output to appear (or continue button to be enabled)
    */
   async waitForQuote(timeout = 30_000): Promise<void> {
     try {
       // Wait for loading to appear then disappear
-      await this.quoteLoading.waitFor({ state: 'visible', timeout: 5000 })
-      await this.quoteLoading.waitFor({ state: 'hidden', timeout })
+      await this.quoteLoading.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {})
+      await this.quoteLoading.waitFor({ state: 'hidden', timeout }).catch(() => {})
     } catch {
       // Loading might be too fast to catch, which is fine
     }
 
-    // Wait a bit more for quote to fully render
+    // Wait for general loading states to complete
+    await waitForLoadingComplete(this.page, timeout)
+    
+    // Wait for either:
+    // 1. The expected output to show a value
+    // 2. The continue button to be enabled
+    // 3. An error message to appear
+    const startTime = Date.now()
+    while (Date.now() - startTime < timeout) {
+      // Check if we have an output amount
+      const output = await this.getExpectedOutput()
+      if (output && output !== '0' && output !== '') {
+        console.log(`Quote loaded: output = ${output}`)
+        break
+      }
+      
+      // Check if continue is enabled
+      const canContinue = await this.isContinueEnabled().catch(() => false)
+      if (canContinue) {
+        console.log('Quote loaded: continue button is enabled')
+        break
+      }
+      
+      // Check for error state
+      const errorText = this.page.locator('text=/no.route|insufficient|error|failed/i').first()
+      if (await errorText.isVisible().catch(() => false)) {
+        console.log('Quote failed: error message visible')
+        break
+      }
+      
+      await this.page.waitForTimeout(500)
+    }
+
+    // Final wait for UI to settle
     await this.page.waitForTimeout(500)
   }
 
@@ -286,8 +339,9 @@ export class SwapFlow extends BasePage {
    * Click continue to proceed to confirmation
    */
   async continue(): Promise<void> {
-    await expect(this.continueButton).toBeEnabled()
-    await this.continueButton.click()
+    await waitForLoadingComplete(this.page)
+    await expect(this.continueButton).toBeEnabled({ timeout: 10000 })
+    await robustClick(this.continueButton)
     await this.page.waitForTimeout(500)
   }
 
@@ -297,13 +351,17 @@ export class SwapFlow extends BasePage {
    * with an invisible <input> inside a <label>. We click the <label> instead.
    */
   async acceptTerms(): Promise<void> {
+    // Wait for any loading/animations to complete
+    await waitForLoadingComplete(this.page)
+    await this.page.waitForTimeout(300)
+    
     // Primary strategy: Use data-testid terms checkboxes
     const termsCheckboxes = this.termsCheckboxes
     const termsCount = await termsCheckboxes.count()
     
     if (termsCount > 0) {
       for (let i = 0; i < termsCount; i++) {
-        await termsCheckboxes.nth(i).click()
+        await robustClick(termsCheckboxes.nth(i))
         await this.page.waitForTimeout(200)
       }
       return
@@ -319,7 +377,7 @@ export class SwapFlow extends BasePage {
       if (!isChecked) {
         const label = checkbox.locator('xpath=ancestor::label')
         if (await label.count() > 0) {
-          await label.first().click()
+          await label.first().click({ force: true })
         } else {
           await checkbox.click({ force: true })
         }
@@ -334,7 +392,8 @@ export class SwapFlow extends BasePage {
    * For fast vaults, clicking "Fast Sign" opens a password modal.
    */
   async sign(): Promise<void> {
-    await this.signButton.click()
+    await waitForLoadingComplete(this.page)
+    await robustClick(this.signButton)
     await this.page.waitForTimeout(500)
 
     // Check if fast vault password modal appeared (using testid)

@@ -3,6 +3,9 @@
  *
  * Selects chains for testing based on staleness (time since last tested).
  * Ensures fair coverage across all supported chains over time.
+ * 
+ * IMPORTANT: Only chains with known funded status are selected for testing.
+ * Update FUNDED_CHAINS when vault balances change.
  */
 
 import * as fs from 'fs'
@@ -55,6 +58,25 @@ export const SUPPORTED_CHAINS = {
 } as const
 
 export type ChainId = keyof typeof SUPPORTED_CHAINS
+
+/**
+ * Chains that are known to have funds in the test vault.
+ * Update this list when vault balances change!
+ * 
+ * Current balances (as of last update):
+ * - ETH: $15.67
+ * - BTC: $32.85  
+ * - THOR: $5.16
+ * - SOL: $2.90
+ * - BSC: $0 (no funds)
+ * - Polygon: $0 (no funds)
+ */
+export const FUNDED_CHAINS: ChainId[] = [
+  'ethereum',
+  'bitcoin', 
+  'thorchain',
+  'solana',
+]
 
 /**
  * Swap pairs - chains that can be swapped between
@@ -144,26 +166,38 @@ function getStalenessScore(chainState: ChainState): number {
  *
  * @param sendCount - Number of chains to select for send tests (default 2)
  * @param swapPairCount - Number of swap pairs to select (default 2)
+ * @param onlyFunded - Only select chains known to have funds (default true)
  */
 export function selectChainsForRun(
   sendCount = 2,
-  swapPairCount = 2
+  swapPairCount = 2,
+  onlyFunded = true
 ): {
   sendChains: ChainId[]
   swapPairs: [ChainId, ChainId][]
 } {
   const state = loadState()
 
+  // Filter to only funded chains if requested
+  const availableChains = onlyFunded 
+    ? FUNDED_CHAINS 
+    : (Object.keys(SUPPORTED_CHAINS) as ChainId[])
+
   // Sort chains by staleness (most stale first)
-  const sortedChains = (Object.keys(SUPPORTED_CHAINS) as ChainId[]).sort(
+  const sortedChains = availableChains.sort(
     (a, b) => getStalenessScore(state.chains[b]) - getStalenessScore(state.chains[a])
   )
 
   // Select top N chains for send tests
   const sendChains = sortedChains.slice(0, sendCount)
 
+  // Filter swap pairs to only include funded chains if requested
+  const availableSwapPairs = onlyFunded
+    ? SWAP_PAIRS.filter(([a, b]) => FUNDED_CHAINS.includes(a) && FUNDED_CHAINS.includes(b))
+    : SWAP_PAIRS
+
   // Sort swap pairs by combined staleness of both chains
-  const sortedSwapPairs = [...SWAP_PAIRS].sort((a, b) => {
+  const sortedSwapPairs = [...availableSwapPairs].sort((a, b) => {
     const scoreA = getStalenessScore(state.chains[a[0]]) + getStalenessScore(state.chains[a[1]])
     const scoreB = getStalenessScore(state.chains[b[0]]) + getStalenessScore(state.chains[b[1]])
     return scoreB - scoreA

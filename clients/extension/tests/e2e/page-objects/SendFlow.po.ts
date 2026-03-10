@@ -6,6 +6,14 @@
 
 import { type Page, type Locator, expect } from '@playwright/test'
 import { BasePage } from './BasePage.po'
+import { 
+  waitForFormReady, 
+  waitForStackedFieldReady, 
+  robustClick,
+  waitForLoadingComplete,
+  debugElementState,
+  takeDebugScreenshot,
+} from '../helpers/ui-waits'
 
 export class SendFlow extends BasePage {
   constructor(page: Page, extensionId: string) {
@@ -99,10 +107,11 @@ export class SendFlow extends BasePage {
   }
 
   /**
-   * Wait for send form to be visible
+   * Wait for send form to be fully visible and ready for interaction.
+   * This includes waiting for loading states and animations to complete.
    */
   async waitForView(timeout = 10_000): Promise<void> {
-    await this.sendForm.waitFor({ state: 'visible', timeout })
+    await waitForFormReady(this.page, 'send-form', timeout)
   }
 
   /**
@@ -138,6 +147,10 @@ export class SendFlow extends BasePage {
     // Resolve chain name from symbol if needed
     const chainName = SendFlow.SYMBOL_TO_CHAIN[coin.toUpperCase()] || coin
 
+    // Wait for stacked field animations to complete before checking/clicking
+    await waitForStackedFieldReady(this.page)
+    await waitForLoadingComplete(this.page)
+
     // Check if the coin ticker is already visible in the form (collapsed or expanded)
     const currentCoin = this.sendForm.getByText(new RegExp(`^${coin}$`, 'i')).first()
     if (await currentCoin.isVisible({ timeout: 1000 }).catch(() => false)) {
@@ -154,19 +167,24 @@ export class SendFlow extends BasePage {
 
     // Try data-testid coin selector trigger first
     if (await this.coinSelectorTrigger.isVisible({ timeout: 1000 }).catch(() => false)) {
-      await this.coinSelectorTrigger.click()
+      // Debug: log element state if we have issues
+      await debugElementState(this.coinSelectorTrigger, 'coin-selector-trigger').catch(() => {})
+      
+      // Use robust click to handle overlays
+      await robustClick(this.coinSelectorTrigger, { timeout: 10000, maxRetries: 5 })
       await this.page.waitForTimeout(300)
+      
       // Try to click the coin option by testid first
       const coinOptionByTestid = this.getCoinOption(coin.toUpperCase())
       if (await coinOptionByTestid.isVisible({ timeout: 2000 }).catch(() => false)) {
-        await coinOptionByTestid.click()
+        await robustClick(coinOptionByTestid)
         await this.page.waitForTimeout(300)
         return
       }
       // Fallback to text matching
       const coinOption = this.page.getByText(new RegExp(`^${coin}$`, 'i')).first()
       if (await coinOption.isVisible({ timeout: 1000 }).catch(() => false)) {
-        await coinOption.click()
+        await robustClick(coinOption)
         await this.page.waitForTimeout(300)
         return
       }
@@ -270,8 +288,10 @@ export class SendFlow extends BasePage {
    * Click continue to proceed to confirmation
    */
   async continue(): Promise<void> {
-    await expect(this.continueButton).toBeEnabled()
-    await this.continueButton.click()
+    // Wait for any loading to complete before clicking
+    await waitForLoadingComplete(this.page)
+    await expect(this.continueButton).toBeEnabled({ timeout: 10000 })
+    await robustClick(this.continueButton)
     await this.page.waitForTimeout(500)
   }
 
@@ -288,13 +308,17 @@ export class SendFlow extends BasePage {
    * We click the parent <label> instead of the hidden <input>.
    */
   async acceptTerms(): Promise<void> {
+    // Wait for any loading/animations to complete
+    await waitForLoadingComplete(this.page)
+    await this.page.waitForTimeout(300)
+    
     // Primary strategy: Use data-testid terms checkboxes
     const termsCheckboxes = this.termsCheckboxes
     const termsCount = await termsCheckboxes.count()
     
     if (termsCount > 0) {
       for (let i = 0; i < termsCount; i++) {
-        await termsCheckboxes.nth(i).click()
+        await robustClick(termsCheckboxes.nth(i))
         await this.page.waitForTimeout(200)
       }
       return
@@ -311,7 +335,7 @@ export class SendFlow extends BasePage {
         // Click the parent <label> element which is the actual clickable container
         const label = checkbox.locator('xpath=ancestor::label')
         if (await label.count() > 0) {
-          await label.first().click()
+          await label.first().click({ force: true })
         } else {
           // Fallback: force-click the hidden input
           await checkbox.click({ force: true })
@@ -328,7 +352,8 @@ export class SendFlow extends BasePage {
    * We detect the modal, enter the vault password, and click "Confirm".
    */
   async sign(): Promise<void> {
-    await this.signButton.click()
+    await waitForLoadingComplete(this.page)
+    await robustClick(this.signButton)
     await this.page.waitForTimeout(500)
 
     // Check if fast vault password modal appeared (using testid)

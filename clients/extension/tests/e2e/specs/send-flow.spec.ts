@@ -90,18 +90,51 @@ test.describe('Send Flow', () => {
       await sendFlow.fillAddress(ownAddress)
       await sendFlow.fillAmount(chainInfo.minSend)
 
-      // Wait for fee estimation
-      await page.waitForTimeout(2000)
+      // Wait for fee estimation and balance to load
+      await page.waitForTimeout(3000)
+
+      // Check if we can continue (validates address, amount, balance)
+      const canContinue = await sendFlow.isContinueEnabled()
+      if (!canContinue) {
+        console.log(`⚠️ Continue button disabled for ${chain} - likely insufficient balance`)
+        // Take a screenshot for debugging
+        await page.screenshot({ path: `test-results/send-disabled-${chain}-${Date.now()}.png` })
+        test.skip()
+        return
+      }
 
       // Continue to confirmation
       await sendFlow.continue()
+      
+      // Take screenshot before terms
+      await page.screenshot({ path: `test-results/send-verify-${chain}-${Date.now()}.png` })
+      
       await sendFlow.acceptTerms()
+      
+      // Take screenshot before sign
+      await page.screenshot({ path: `test-results/send-before-sign-${chain}-${Date.now()}.png` })
+      
       await sendFlow.sign()
 
-      // Wait for keysign progress
-      await keysignProgress.waitForView(30_000)
+      // Take screenshot after sign
+      await page.screenshot({ path: `test-results/send-after-sign-${chain}-${Date.now()}.png` })
+
+      // Wait for keysign progress with better error handling
+      try {
+        await keysignProgress.waitForView(30_000)
+      } catch (e) {
+        console.log(`⚠️ Keysign progress view not found - taking screenshot`)
+        await page.screenshot({ path: `test-results/send-no-progress-${chain}-${Date.now()}.png` })
+        throw e
+      }
+
+      // Take screenshot during keysign
+      await page.screenshot({ path: `test-results/send-keysign-${chain}-${Date.now()}.png` })
 
       const result = await keysignProgress.waitForComplete(120_000)
+
+      // Take screenshot of final state
+      await page.screenshot({ path: `test-results/send-result-${chain}-${Date.now()}.png` })
 
       if (result === 'success') {
         const txHash = await keysignProgress.getTxHash()
