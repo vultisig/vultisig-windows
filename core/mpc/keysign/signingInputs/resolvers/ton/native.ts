@@ -19,10 +19,23 @@ type BuildNativeTonTransferInput = {
 /** TON cell limit is 1023 bits; comment uses ~32 bits opcode + text. Max ~123 bytes. */
 const tonCommentMaxBytes = 123
 
+const tonCommentTooLongError = `TON memo exceeds ${tonCommentMaxBytes} bytes and would be truncated; reject oversized memos upstream`
+
 export const toSafeComment = (payload: string): string => {
   const bytes = new TextEncoder().encode(payload)
-  if (bytes.length <= tonCommentMaxBytes) return payload
-  return ''
+  if (bytes.length > tonCommentMaxBytes) {
+    throw new Error(tonCommentTooLongError)
+  }
+  return payload
+}
+
+export const validateTonComment = (memo: string): void => {
+  const bytes = new TextEncoder().encode(memo)
+  if (bytes.length > tonCommentMaxBytes) {
+    throw new Error(
+      `TON memo must be at most ${tonCommentMaxBytes} bytes (got ${bytes.length})`
+    )
+  }
 }
 
 export const buildNativeTonTransfer = ({

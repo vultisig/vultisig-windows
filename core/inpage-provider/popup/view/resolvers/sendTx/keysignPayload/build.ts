@@ -10,6 +10,7 @@ import {
   FeeSettingsChainKind,
 } from '@core/mpc/keysign/chainSpecific/FeeSettings'
 import { refineKeysignUtxo } from '@core/mpc/keysign/refine/utxo'
+import { validateTonComment } from '@core/mpc/keysign/signingInputs/resolvers/ton/native'
 import { getKeysignUtxoInfo } from '@core/mpc/keysign/utxo/getKeysignUtxoInfo'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { OneInchSwapPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
@@ -451,6 +452,10 @@ export const buildSendTxKeysignPayload = async ({
                 }),
               }
             : { case: undefined, value: undefined }
+
+  if (chain === Chain.Ton && memo && signTonPayload === undefined) {
+    validateTonComment(memo)
+  }
 
   let keysignPayload = create(KeysignPayloadSchema, {
     toAddress: toAddress ?? '',
