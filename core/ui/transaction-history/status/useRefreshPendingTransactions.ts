@@ -23,22 +23,24 @@ export const useRefreshPendingTransactions = (records: TransactionRecord[]) => {
     const refresh = async () => {
       isRefreshingRef.current = true
 
-      await Promise.all(
-        pendingRecords.map(async record => {
-          const { data: result } = await attempt(() =>
-            getTxStatus({ chain: record.chain, hash: record.txHash })
-          )
+      try {
+        await Promise.all(
+          pendingRecords.map(async record => {
+            const result = await attempt(() =>
+              getTxStatus({ chain: record.chain, hash: record.txHash })
+            )
 
-          if (!result) return
+            if ('error' in result) return
 
-          const newStatus = toRecordStatus[result.status]
-          if (newStatus === record.status) return
+            const newStatus = toRecordStatus[result.data.status]
+            if (newStatus === record.status) return
 
-          updateRecord({ ...record, status: newStatus })
-        })
-      )
-
-      isRefreshingRef.current = false
+            updateRecord({ ...record, status: newStatus })
+          })
+        )
+      } finally {
+        isRefreshingRef.current = false
+      }
     }
 
     refresh()
