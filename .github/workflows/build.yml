@@ -14,7 +14,6 @@ env:
   NODE_OPTIONS: '--max-old-space-size=8192'
   NODE_VERSION: '23.7.0'
   YARN_VERSION: '4.6.0'
-  GO_VERSION: '1.21'
 
 jobs:
   lint:
@@ -105,6 +104,7 @@ jobs:
           path: clients/extension/dist
 
   build:
+    needs: lint
     strategy:
       fail-fast: true
       matrix:
@@ -123,12 +123,6 @@ jobs:
         with:
           submodules: recursive
           fetch-depth: 1
-
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: ${{ env.GO_VERSION }}
-          cache: true
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -159,5 +153,3 @@ jobs:
           build-name: ${{ matrix.build.name }}
           build-platform: ${{ matrix.build.platform }}
           package: false
-          go-version: ${{ env.GO_VERSION }}
-          node-version: ${{ env.NODE_VERSION }}
