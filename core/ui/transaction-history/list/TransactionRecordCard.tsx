@@ -1,4 +1,5 @@
 import { CoinKey } from '@core/chain/coin/Coin'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 
 import { TransactionRecord, TransactionRecordStatus } from '../core'
 import {
@@ -68,18 +69,35 @@ type TransactionRecordCardProps = {
 export const TransactionRecordCard = ({
   record,
 }: TransactionRecordCardProps) => {
+  const navigate = useCoreNavigate()
   const display = getDisplayData(record)
 
+  const handleClick = () =>
+    navigate({ id: 'transactionDetail', state: { id: record.id } })
+
   return (
-    <TransactionHistoryCard
-      tagType={display.tagType}
-      status={statusToCardStatus[record.status]}
-      amountUsd={record.fiatValue || '-'}
-      amountCrypto={display.amountCrypto}
-      symbol={display.symbol}
-      addressDirection={display.addressDirection}
-      address={display.address}
-      coin={display.coin}
-    />
+    <div
+      role="button"
+      tabIndex={0}
+      style={{ cursor: 'pointer' }}
+      onClick={handleClick}
+      onKeyDown={e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          handleClick()
+        }
+      }}
+    >
+      <TransactionHistoryCard
+        tagType={display.tagType}
+        status={statusToCardStatus[record.status]}
+        amountUsd={record.fiatValue || '-'}
+        amountCrypto={display.amountCrypto}
+        symbol={display.symbol}
+        addressDirection={display.addressDirection}
+        address={display.address}
+        coin={display.coin}
+      />
+    </div>
   )
 }
