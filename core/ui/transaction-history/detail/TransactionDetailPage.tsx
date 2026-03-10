@@ -10,6 +10,7 @@ import {
   SwapTransactionRecord,
   TransactionRecordStatus,
 } from '@core/ui/transaction-history/core'
+import { useTransactionStatusPolling } from '@core/ui/transaction-history/status/useTransactionStatusPolling'
 import { TransactionHistoryTag } from '@core/ui/transaction-history/TransactionHistoryTag'
 import { Button } from '@lib/ui/buttons/Button'
 import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIcon'
@@ -199,6 +200,8 @@ export const TransactionDetailPage = () => {
     records.find(r => r.id === id),
     'transaction record for detail view'
   )
+
+  useTransactionStatusPolling(record)
 
   const explorerUrl =
     record.explorerUrl ||

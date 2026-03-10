@@ -13,6 +13,7 @@ import styled, { css } from 'styled-components'
 
 import { TransactionRecord } from './core'
 import { TransactionHistoryList } from './list/TransactionHistoryList'
+import { useRefreshPendingTransactions } from './status/useRefreshPendingTransactions'
 
 const transactionHistoryTabs = ['overview', 'swaps', 'sends'] as const
 type TransactionHistoryTab = (typeof transactionHistoryTabs)[number]
@@ -38,11 +39,50 @@ const FilteredTransactionList = ({
   return <TransactionHistoryList records={filtered} />
 }
 
+const TransactionHistoryContent = ({
+  records,
+}: {
+  records: TransactionRecord[]
+}) => {
+  const { t } = useTranslation()
+  const [activeTab, setActiveTab] = useState<TransactionHistoryTab>('overview')
+
+  useRefreshPendingTransactions(records)
+
+  const tabs: Tab<TransactionHistoryTab>[] = transactionHistoryTabs.map(
+    value => ({
+      value,
+      label: t(value),
+      renderContent: () => (
+        <FilteredTransactionList records={records} tab={value} />
+      ),
+    })
+  )
+
+  return (
+    <Tabs
+      tabs={tabs}
+      value={activeTab}
+      onValueChange={setActiveTab}
+      triggerSlot={({ tab: { label }, isActive }) => (
+        <TabTrigger isActive={isActive}>
+          <Text
+            size={14}
+            as="span"
+            color={isActive ? 'contrast' : 'supporting'}
+          >
+            {label}
+          </Text>
+        </TabTrigger>
+      )}
+    />
+  )
+}
+
 export const TransactionHistoryPage = () => {
   const goBack = useNavigateBack()
   const { t } = useTranslation()
   const query = useTransactionRecordsQuery()
-  const [activeTab, setActiveTab] = useState<TransactionHistoryTab>('overview')
 
   return (
     <ScreenLayout title={t('transaction_history')} onBack={goBack}>
@@ -52,36 +92,7 @@ export const TransactionHistoryPage = () => {
         error={() => (
           <Text color="danger">{t('failed_to_load_transactions')}</Text>
         )}
-        success={records => {
-          const tabs: Tab<TransactionHistoryTab>[] = transactionHistoryTabs.map(
-            value => ({
-              value,
-              label: t(value),
-              renderContent: () => (
-                <FilteredTransactionList records={records} tab={value} />
-              ),
-            })
-          )
-
-          return (
-            <Tabs
-              tabs={tabs}
-              value={activeTab}
-              onValueChange={setActiveTab}
-              triggerSlot={({ tab: { label }, isActive }) => (
-                <TabTrigger isActive={isActive}>
-                  <Text
-                    size={14}
-                    as="span"
-                    color={isActive ? 'contrast' : 'supporting'}
-                  >
-                    {label}
-                  </Text>
-                </TabTrigger>
-              )}
-            />
-          )
-        }}
+        success={records => <TransactionHistoryContent records={records} />}
       />
     </ScreenLayout>
   )
