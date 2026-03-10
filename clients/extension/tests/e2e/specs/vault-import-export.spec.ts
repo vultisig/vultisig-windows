@@ -1,236 +1,219 @@
 /**
  * Vault Import/Export E2E Tests
  *
- * Tests for vault backup export and import functionality.
+ * Tests for vault backup import functionality.
+ * Uses the actual UI flow via importVaultViaUI helper.
  */
 
 import { test, expect } from '../fixtures/extension-loader'
 import { VaultPage } from '../page-objects/VaultPage.po'
-import { VaultSettings } from '../page-objects/VaultSettings.po'
-import { VaultBackupFlow } from '../page-objects/VaultBackupFlow.po'
-import { ImportVaultPage } from '../page-objects/ImportVaultPage.po'
-import { OnboardingPage } from '../page-objects/OnboardingPage.po'
+import { importVaultViaUI, getVaultConfigFromEnv } from '../helpers/vault-import'
 import * as fs from 'fs'
-import * as path from 'path'
 
-// Test vault files location
+// Test vault files
 const TEST_VAULTS_PATH = '/Users/crusty/vultisig-sdk-bot/credentials/test-vaults'
+const FAST_VAULT_FILE = `${TEST_VAULTS_PATH}/SdkFastVault1-extension-7085-share1of2.vult`
+const FAST_VAULT_PASSWORD = 'SHjsd76sa65aLKsdiU$'
+const SECURE_VAULT_FILE = `${TEST_VAULTS_PATH}/SdkSecure1-extension-2318-share1of2.vult`
+const SECURE_VAULT_PASSWORD = '12345678'
 
-test.describe('Vault Import/Export', () => {
-  test.describe('Export Vault', () => {
-    test.skip('export vault without password downloads .vult file', async ({ context, extensionId }) => {
-      const page = await context.newPage()
-      const vaultPage = new VaultPage(page, extensionId)
-      const vaultSettings = new VaultSettings(page, extensionId)
-      const backupFlow = new VaultBackupFlow(page, extensionId)
+test.describe('Vault Import', () => {
+  test('import FastVault .vult file with password succeeds', async ({ context, extensionId }) => {
+    test.skip(!fs.existsSync(FAST_VAULT_FILE), 'FastVault file not found')
 
-      await vaultPage.goto()
-      await vaultPage.waitForView()
+    const page = await context.newPage()
+    const vaultPage = new VaultPage(page, extensionId)
 
-      // Navigate to backup
-      await vaultPage.navigateToSettings()
-      await vaultSettings.waitForView()
-      await vaultSettings.navigateToBackup()
-      await backupFlow.waitForView()
+    try {
+      // Import via UI
+      const result = await importVaultViaUI(page, {
+        extensionId,
+        vaultPath: FAST_VAULT_FILE,
+        password: FAST_VAULT_PASSWORD,
+      })
 
-      // Select device backup
-      await backupFlow.selectDeviceBackup()
+      expect(result).toBe(true)
 
-      // Download without password
-      const download = await backupFlow.downloadBackup()
-      const filename = await backupFlow.getDownloadFilename(download)
-
-      // Verify it's a .vult file
-      expect(filename).toMatch(/\.vult$/)
-
-      // Save to temp location for verification
-      const tempPath = path.join('/tmp', filename)
-      await backupFlow.saveDownload(download, tempPath)
-
-      // Verify file exists and has content
-      expect(fs.existsSync(tempPath)).toBe(true)
-      const stats = fs.statSync(tempPath)
-      expect(stats.size).toBeGreaterThan(0)
-
-      // Cleanup
-      fs.unlinkSync(tempPath)
-
+      // Verify vault page loads (waitForView confirms we're on vault page, not onboarding)
+      await vaultPage.waitForView(15_000)
+      
+      // Verify balance area is visible (confirms vault loaded)
+      const balanceText = await vaultPage.getTotalBalance()
+      console.log('Vault balance:', balanceText)
+      
+      // Verify we can see portfolio/chains (vault is functional)
+      const hasChains = await vaultPage.page.locator('text=/ethereum|bitcoin|solana|portfolio/i').first().isVisible().catch(() => false)
+      console.log('Has chain indicators:', hasChains)
+      expect(hasChains).toBe(true)
+    } finally {
       await page.close()
-    })
-
-    test.skip('export vault with password downloads encrypted .vult', async ({ context, extensionId }) => {
-      const page = await context.newPage()
-      const vaultPage = new VaultPage(page, extensionId)
-      const vaultSettings = new VaultSettings(page, extensionId)
-      const backupFlow = new VaultBackupFlow(page, extensionId)
-
-      await vaultPage.goto()
-      await vaultPage.waitForView()
-
-      // Navigate to backup
-      await vaultPage.navigateToSettings()
-      await vaultSettings.waitForView()
-      await vaultSettings.navigateToBackup()
-      await backupFlow.waitForView()
-
-      // Select device backup
-      await backupFlow.selectDeviceBackup()
-
-      // Download with password
-      const testPassword = 'TestPassword123!'
-      const download = await backupFlow.downloadWithPassword(testPassword)
-      const filename = await backupFlow.getDownloadFilename(download)
-
-      // Verify it's a .vult file
-      expect(filename).toMatch(/\.vult$/)
-
-      // Save and verify
-      const tempPath = path.join('/tmp', filename)
-      await backupFlow.saveDownload(download, tempPath)
-      expect(fs.existsSync(tempPath)).toBe(true)
-
-      // Cleanup
-      fs.unlinkSync(tempPath)
-
-      await page.close()
-    })
+    }
   })
 
-  test.describe('Import Vault', () => {
-    test.skip('import .vult file without password - vault appears', async ({ context, extensionId }) => {
-      const page = await context.newPage()
-      const onboardingPage = new OnboardingPage(page, extensionId)
-      const importVaultPage = new ImportVaultPage(page, extensionId)
+  test('import SecureVault .vult file with password succeeds', async ({ context, extensionId }) => {
+    test.skip(!fs.existsSync(SECURE_VAULT_FILE), 'SecureVault file not found')
 
-      // Start from fresh state (onboarding)
-      await onboardingPage.goto()
+    const page = await context.newPage()
+    const vaultPage = new VaultPage(page, extensionId)
 
-      // Skip onboarding
-      const skipButton = page.getByRole('button', { name: /skip/i })
-      if (await skipButton.isVisible()) {
-        await skipButton.click()
-      }
+    try {
+      // Import via UI
+      const result = await importVaultViaUI(page, {
+        extensionId,
+        vaultPath: SECURE_VAULT_FILE,
+        password: SECURE_VAULT_PASSWORD,
+      })
 
-      // Look for import option
-      const importButton = page.getByText(/import.*vault|vault.*import/i).first()
-      if (await importButton.isVisible()) {
-        await importButton.click()
-        await page.waitForTimeout(300)
-      }
+      expect(result).toBe(true)
 
-      await importVaultPage.waitForView()
+      // Verify vault page loads
+      await vaultPage.waitForView(15_000)
+      
+      // Verify we can see portfolio/chains (vault is functional)
+      const hasChains = await vaultPage.page.locator('text=/ethereum|bitcoin|solana|portfolio/i').first().isVisible().catch(() => false)
+      console.log('SecureVault has chain indicators:', hasChains)
+      expect(hasChains).toBe(true)
+    } finally {
+      await page.close()
+    }
+  })
 
-      // Find test vault file (unencrypted)
-      const testVaultFile = path.join(TEST_VAULTS_PATH, 'test-vault-unencrypted.vult')
+  test('import with wrong password shows error or stays on password page', async ({ context, extensionId }) => {
+    test.skip(!fs.existsSync(FAST_VAULT_FILE), 'FastVault file not found')
 
-      // Skip if test file doesn't exist
-      if (!fs.existsSync(testVaultFile)) {
-        test.skip()
-        await page.close()
-        return
-      }
+    const page = await context.newPage()
 
-      await importVaultPage.uploadFile(testVaultFile)
-      await importVaultPage.import()
-
-      // Wait for import to complete
+    try {
+      // Navigate to extension
+      await page.goto(`chrome-extension://${extensionId}/popup.html`)
       await page.waitForTimeout(2000)
 
-      // Should now see vault page
-      const isSuccess = await importVaultPage.isImportSuccessful()
-      expect(isSuccess).toBe(true)
-
-      await page.close()
-    })
-
-    test.skip('import encrypted .vult with wrong password shows error', async ({ context, extensionId }) => {
-      const page = await context.newPage()
-      const onboardingPage = new OnboardingPage(page, extensionId)
-      const importVaultPage = new ImportVaultPage(page, extensionId)
-
-      await onboardingPage.goto()
-
-      // Skip onboarding
-      const skipButton = page.getByRole('button', { name: /skip/i })
-      if (await skipButton.isVisible()) {
-        await skipButton.click()
-      }
-
-      // Navigate to import
-      const importButton = page.getByText(/import.*vault|vault.*import/i).first()
-      if (await importButton.isVisible()) {
-        await importButton.click()
-      }
-
-      await importVaultPage.waitForView()
-
-      // Find encrypted test vault file
-      const encryptedVaultFile = path.join(TEST_VAULTS_PATH, 'test-vault-encrypted.vult')
-
-      // Skip if test file doesn't exist
-      if (!fs.existsSync(encryptedVaultFile)) {
+      // Check if we're on new vault page or existing vault
+      const pageText = await page.locator('body').textContent() || ''
+      
+      // If extension already has a vault from prior test, skip
+      if (!pageText.toLowerCase().includes('import') && !pageText.toLowerCase().includes('create')) {
+        console.log('Extension already has vault, skipping wrong password test')
         test.skip()
-        await page.close()
         return
       }
 
-      await importVaultPage.uploadFile(encryptedVaultFile)
-
-      // Wait for password prompt
+      // Find Import button
+      const importBtn = page.getByText(/import/i).first()
+      if (!await importBtn.isVisible({ timeout: 5000 }).catch(() => false)) {
+        console.log('Import button not visible, skipping')
+        test.skip()
+        return
+      }
+      
+      await importBtn.click()
       await page.waitForTimeout(500)
 
-      // Enter wrong password
-      if (await importVaultPage.isPasswordRequired()) {
-        await importVaultPage.fillPassword('WrongPassword123!')
-        await importVaultPage.import()
+      // Find "Import vault share" option
+      const importShareOption = page.getByText(/import.*vault.*share|vault.*share/i).first()
+      if (await importShareOption.isVisible({ timeout: 3000 }).catch(() => false)) {
+        await importShareOption.click()
+        await page.waitForTimeout(500)
       }
 
-      // Should show error
-      await page.waitForTimeout(1000)
-      const hasError = await importVaultPage.hasImportError()
-      expect(hasError).toBe(true)
+      // Upload file
+      const fileInput = page.locator('input[type="file"]')
+      await fileInput.waitFor({ state: 'attached', timeout: 5000 })
+      await fileInput.setInputFiles(FAST_VAULT_FILE)
+      await page.waitForTimeout(500)
 
-      await page.close()
-    })
-
-    test.skip('import encrypted .vult with correct password succeeds', async ({ context, extensionId }) => {
-      const page = await context.newPage()
-      const onboardingPage = new OnboardingPage(page, extensionId)
-      const importVaultPage = new ImportVaultPage(page, extensionId)
-
-      await onboardingPage.goto()
-
-      // Skip onboarding
-      const skipButton = page.getByRole('button', { name: /skip/i })
-      if (await skipButton.isVisible()) {
-        await skipButton.click()
+      // Click Continue
+      const continueBtn = page.getByRole('button', { name: /continue/i })
+      if (await continueBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
+        await continueBtn.click()
+        await page.waitForTimeout(500)
       }
 
-      // Navigate to import
-      const importButton = page.getByText(/import.*vault|vault.*import/i).first()
-      if (await importButton.isVisible()) {
-        await importButton.click()
-      }
+      // Enter WRONG password
+      const passwordInput = page.locator('input[type="password"]')
+      if (await passwordInput.isVisible({ timeout: 3000 }).catch(() => false)) {
+        await passwordInput.fill('WrongPassword123!')
+        await page.waitForTimeout(300)
 
-      await importVaultPage.waitForView()
+        // Submit
+        const submitBtn = page.locator('[data-testid="fast-vault-submit"]')
+          .or(page.getByRole('button', { name: /submit|confirm|continue|unlock/i }))
+        await submitBtn.first().click()
+        await page.waitForTimeout(1500)
 
-      const encryptedVaultFile = path.join(TEST_VAULTS_PATH, 'test-vault-encrypted.vult')
-      const correctPassword = 'TestPassword123!' // Same password used in export test
+        // Should show error or stay on password page (not navigate to vault)
+        const stillOnPassword = await passwordInput.isVisible().catch(() => false)
+        const bodyText = await page.locator('body').textContent() || ''
+        const hasErrorText = bodyText.toLowerCase().includes('invalid') ||
+                            bodyText.toLowerCase().includes('wrong') ||
+                            bodyText.toLowerCase().includes('incorrect')
 
-      if (!fs.existsSync(encryptedVaultFile)) {
+        console.log('Still on password page:', stillOnPassword)
+        console.log('Has error text:', hasErrorText)
+        
+        // Either error shown OR still on password page = test passes
+        expect(stillOnPassword || hasErrorText).toBe(true)
+      } else {
+        console.log('Vault does not require password, skipping')
         test.skip()
-        await page.close()
-        return
       }
+    } finally {
+      await page.close()
+    }
+  })
 
-      await importVaultPage.importVaultFile(encryptedVaultFile, correctPassword)
+  test('imported vault persists across page reloads', async ({ context, extensionId }) => {
+    const config = getVaultConfigFromEnv()
+    test.skip(!config, 'No vault config')
 
+    const page = await context.newPage()
+    const vaultPage = new VaultPage(page, extensionId)
+
+    try {
+      // Import vault
+      const result = await importVaultViaUI(page, {
+        extensionId,
+        vaultPath: config!.vaultPath,
+        password: config!.password,
+      })
+      expect(result).toBe(true)
+
+      // Verify vault page loads
+      await vaultPage.waitForView(15_000)
+      
+      // Check for chains before reload
+      const hasChainsBefore = await page.locator('text=/ethereum|bitcoin|solana|portfolio/i').first().isVisible().catch(() => false)
+      console.log('Has chains before reload:', hasChainsBefore)
+
+      // Reload page
+      await page.reload()
       await page.waitForTimeout(2000)
 
-      const isSuccess = await importVaultPage.isImportSuccessful()
-      expect(isSuccess).toBe(true)
-
+      // Vault should still be there (not show onboarding)
+      await vaultPage.waitForView(15_000)
+      
+      // Check for chains after reload
+      const hasChainsAfter = await page.locator('text=/ethereum|bitcoin|solana|portfolio/i').first().isVisible().catch(() => false)
+      console.log('Has chains after reload:', hasChainsAfter)
+      
+      expect(hasChainsAfter).toBe(true)
+    } finally {
       await page.close()
-    })
+    }
+  })
+})
+
+test.describe('Vault Export', () => {
+  // Export tests need more UI exploration - keeping as stubs for now
+  test.skip('export vault without password downloads .vult file', async () => {
+    // TODO: Navigate to Settings > Backup > Device Backup
+    // Download backup without password
+    // Verify .vult file downloaded
+  })
+
+  test.skip('export vault with password downloads encrypted .vult', async () => {
+    // TODO: Navigate to Settings > Backup
+    // Enter password for encrypted backup
+    // Download and verify
   })
 })
