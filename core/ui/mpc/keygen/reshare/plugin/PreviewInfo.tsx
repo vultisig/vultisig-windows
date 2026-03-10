@@ -1,5 +1,8 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { FastVaultPasswordModal } from '@core/ui/mpc/fast/FastVaultPasswordModal'
+import {
+  FastVaultPasswordModal,
+  FastVaultPasswordModalResult,
+} from '@core/ui/mpc/fast/FastVaultPasswordModal'
 import { Plugin } from '@core/ui/plugins/core/get'
 import { Button } from '@lib/ui/buttons/Button'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
@@ -21,7 +24,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 export const PreviewInfo: FC<
-  OnFinishProp<{ password: string }> & ValueProp<Plugin>
+  OnFinishProp<FastVaultPasswordModalResult> & ValueProp<Plugin>
 > = ({ value: { description, logo_url, permissions, title }, onFinish }) => {
   const { t } = useTranslation()
   const [step, setStep] = useState(1)

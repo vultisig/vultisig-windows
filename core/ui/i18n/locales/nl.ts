@@ -445,6 +445,7 @@ export const nl = {
   header_tooltip_title: 'Referralprogramma',
   hide_balance: 'Saldo verbergen',
   hide_defi_balance: 'DeFi-saldo verbergen',
+  hold: 'Vasthouden',
   hold_for_paired_sign: 'Vasthouden voor gekoppelde handtekening',
   how_it_works: 'Hoe het werkt',
   ibc_transaction_not_supporting_memo_desc:

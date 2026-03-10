@@ -474,6 +474,7 @@ export const es = {
   header_tooltip_title: 'Programa de referencias',
   hide_balance: 'Ocultar saldo',
   hide_defi_balance: 'Ocultar saldo DeFi',
+  hold: 'Mantener',
   hold_for_paired_sign: 'Mantener pulsado para señal emparejada',
   how_it_works: 'Cómo funciona',
   ibc_transaction_not_supporting_memo_desc:

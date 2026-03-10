@@ -91,6 +91,10 @@ export type CoreView =
       id: 'setupVault'
       state: { type?: VaultSecurityType; keyImportInput?: KeyImportInput }
     }
+  | {
+      id: 'setupVaultOverview'
+      state: { selectedDeviceCount: number; keyImportInput?: KeyImportInput }
+    }
   | { id: 'signCustomMessage' }
   | {
       id: 'swap'
@@ -113,6 +117,7 @@ export type CoreView =
       id: 'lpPositionForm'
       state: { chain: Chain; positionId: string; action: 'add' | 'remove' }
     }
+  | { id: 'transactionDetail'; state: { id: string } }
   | { id: 'transactionHistory' }
   | { id: 'vaultBackup' }
   | { id: 'vaultsBackup' }
