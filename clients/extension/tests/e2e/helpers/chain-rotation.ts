@@ -79,20 +79,28 @@ export const FUNDED_CHAINS: ChainId[] = [
 ]
 
 /**
- * Swap pairs - chains that can be swapped between
+ * Generate cross-chain native swap pairs from funded chains.
+ * Only swaps native/gas tokens between different chains for better liquidity.
+ * Example: [ETH, BTC, SOL, RUNE] → [ETH→BTC, BTC→SOL, SOL→RUNE, RUNE→ETH]
  */
-export const SWAP_PAIRS: [ChainId, ChainId][] = [
-  ['ethereum', 'bitcoin'],
-  ['ethereum', 'arbitrum'],
-  ['bsc', 'ethereum'],
-  ['polygon', 'ethereum'],
-  ['avalanche', 'ethereum'],
-  ['solana', 'ethereum'],
-  ['thorchain', 'ethereum'],
-  ['bitcoin', 'litecoin'],
-  ['bitcoin', 'dogecoin'],
-  ['cosmos', 'thorchain'],
-]
+export function generateNativeSwapPairs(chains: ChainId[] = FUNDED_CHAINS): [ChainId, ChainId][] {
+  const pairs: [ChainId, ChainId][] = []
+  for (let i = 0; i < chains.length; i++) {
+    // Pair each chain with the next one (circular)
+    const fromChain = chains[i]
+    const toChain = chains[(i + 1) % chains.length]
+    if (fromChain !== toChain) {
+      pairs.push([fromChain, toChain])
+    }
+  }
+  return pairs
+}
+
+/**
+ * Swap pairs - cross-chain native token swaps only.
+ * Generated dynamically from FUNDED_CHAINS.
+ */
+export const SWAP_PAIRS: [ChainId, ChainId][] = generateNativeSwapPairs(FUNDED_CHAINS)
 
 /**
  * Load rotation state from disk

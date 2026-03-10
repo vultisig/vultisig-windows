@@ -136,6 +136,33 @@ export class SwapFlow extends BasePage {
   }
 
   /**
+   * Map chain IDs to their native token symbols.
+   * Used for cross-chain native token swaps.
+   */
+  private static readonly CHAIN_TO_NATIVE: Record<string, string> = {
+    ethereum: 'ETH',
+    bitcoin: 'BTC',
+    solana: 'SOL',
+    thorchain: 'RUNE',
+    bsc: 'BNB',
+    polygon: 'MATIC',
+    avalanche: 'AVAX',
+    arbitrum: 'ETH',
+    optimism: 'ETH',
+    base: 'ETH',
+    litecoin: 'LTC',
+    dogecoin: 'DOGE',
+    cosmos: 'ATOM',
+  }
+
+  /**
+   * Get native token symbol for a chain ID.
+   */
+  getNativeSymbol(chainId: string): string {
+    return SwapFlow.CHAIN_TO_NATIVE[chainId.toLowerCase()] || chainId.toUpperCase()
+  }
+
+  /**
    * Select source coin in the swap form.
    * The swap form pre-selects coins from navigation state.
    * To change, click on the coin ticker (CoinWrapper with role=button).
@@ -476,6 +503,17 @@ export class SwapFlow extends BasePage {
     await this.selectToCoin(toCoin)
     await this.fillAmount(amount)
     await this.waitForQuote()
+  }
+
+  /**
+   * Prepare a cross-chain native token swap using chain IDs.
+   * Automatically looks up the native token symbol for each chain.
+   */
+  async prepareNativeSwap(fromChainId: string, toChainId: string, amount: string): Promise<void> {
+    const fromSymbol = this.getNativeSymbol(fromChainId)
+    const toSymbol = this.getNativeSymbol(toChainId)
+    console.log(`Preparing native swap: ${fromSymbol} (${fromChainId}) → ${toSymbol} (${toChainId})`)
+    await this.prepareSwap(fromSymbol, toSymbol, amount)
   }
 
   /**

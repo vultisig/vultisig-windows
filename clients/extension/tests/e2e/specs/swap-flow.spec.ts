@@ -4,12 +4,18 @@
  * Tests real swap transactions with chain rotation.
  * FUND-DEPENDENT: Requires funded test vault.
  *
- * Uses chain rotation to test 2 swap pairs per run.
+ * NATIVE-TO-NATIVE SWAPS ONLY:
+ * - Swaps native/gas tokens between different chains (ETH↔BTC, SOL↔ETH, etc.)
+ * - Avoids token selection complexity (no ERC-20, SPL tokens)
+ * - Better liquidity = faster quotes
+ * - Simpler UI flow (no "select token within chain" step)
+ *
+ * Uses chain rotation to test 2 swap pairs per run from funded chains.
  *
  * SAFETY MEASURES:
  * - Swaps go to vault's OWN address on destination chain (no custom recipient)
- * - Amounts are small: $5-10 range (see chain-rotation.ts minSwap)
- * - Funds stay in the vault, just converted between tokens
+ * - Amounts are small: $2-5 range (see chain-rotation.ts minSwap)
+ * - Funds stay in the vault, just converted between chains
  * - Only swap fees + gas are consumed
  */
 
@@ -48,7 +54,7 @@ test.describe('Swap Flow', () => {
     }
   })
 
-  test('swap pair 1 - quote appears and transaction succeeds', async ({ context, extensionId }) => {
+  test('swap pair 1 - native-to-native cross-chain swap', async ({ context, extensionId }) => {
     test.skip(!ENABLE_TX_TESTS, 'TX signing tests disabled')
 
     const pair = selectedSwapPairs[0]
@@ -61,7 +67,7 @@ test.describe('Swap Flow', () => {
     const fromInfo = SUPPORTED_CHAINS[fromChain]
     const toInfo = SUPPORTED_CHAINS[toChain]
 
-    console.log(`Testing swap: ${fromChain} (${fromInfo.symbol}) -> ${toChain} (${toInfo.symbol})`)
+    console.log(`🔄 Native swap: ${fromInfo.symbol} (${fromChain}) → ${toInfo.symbol} (${toChain})`)
 
     const page = await context.newPage()
     const vaultPage = new VaultPage(page, extensionId)
@@ -126,7 +132,7 @@ test.describe('Swap Flow', () => {
     }
   })
 
-  test('swap pair 2 - quote appears and transaction succeeds', async ({ context, extensionId }) => {
+  test('swap pair 2 - native-to-native cross-chain swap', async ({ context, extensionId }) => {
     test.skip(!ENABLE_TX_TESTS, 'TX signing tests disabled')
 
     const pair = selectedSwapPairs[1]
@@ -139,7 +145,7 @@ test.describe('Swap Flow', () => {
     const fromInfo = SUPPORTED_CHAINS[fromChain]
     const toInfo = SUPPORTED_CHAINS[toChain]
 
-    console.log(`Testing swap: ${fromChain} (${fromInfo.symbol}) -> ${toChain} (${toInfo.symbol})`)
+    console.log(`🔄 Native swap: ${fromInfo.symbol} (${fromChain}) → ${toInfo.symbol} (${toChain})`)
 
     const page = await context.newPage()
     const vaultPage = new VaultPage(page, extensionId)
