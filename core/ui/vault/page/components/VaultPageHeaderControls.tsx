@@ -15,7 +15,7 @@ export const VaultPageHeaderControls = () => {
     <HStack gap={4} alignItems="center">
       <RefreshVaultBalance />
       {featureFlags.transactionHistory && (
-        <IconButton onClick={() => navigate({ id: 'transactionHistory' })}>
+        <IconButton onClick={() => navigate({ id: 'transactionHistory' })} data-testid="transaction-history-button">
           <IconWrapper size={24}>
             <CalendarClockIcon />
           </IconWrapper>
