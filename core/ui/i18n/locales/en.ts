@@ -2,6 +2,7 @@ export const en = {
   accept_continue: 'Accept & continue',
   action: 'Action',
   active: 'Active',
+  agent: 'Agent',
   active_chains_found_one: 'We found {{count}} active chain',
   active_chains_found_other: 'We found {{count}} active chains',
   active_chains_warning:
@@ -113,6 +114,7 @@ export const en = {
   by_vultisig: 'by Vultisig',
   camera_access_blocked:
     'Camera access is blocked. Please enable it in your browser settings.',
+  cache_password_for_5_min: 'Remember password for 5 minutes',
   cancel: 'Cancel',
   chain: 'Chain',
   chainFunctions: {
@@ -482,6 +484,7 @@ export const en = {
   header_tooltip_title: 'Referral Program',
   hide_balance: 'Hide balance',
   hide_defi_balance: 'Hide DeFi balance',
+  hold: 'Hold',
   hold_for_paired_sign: 'Hold for paired sign',
   how_it_works: 'How it works',
   ibc_transaction_not_supporting_memo_desc:
