@@ -21,7 +21,31 @@ export class SendFlow extends BasePage {
   }
 
   get coinSelector(): Locator {
-    return this.page.locator('[data-testid="send-coin-selector"]')
+    return this.page.locator('[data-testid="coin-selector"]')
+  }
+
+  get coinSelectorTrigger(): Locator {
+    return this.page.locator('[data-testid="coin-selector-trigger"]')
+  }
+
+  getCoinOption(symbol: string): Locator {
+    return this.page.locator(`[data-testid="coin-option-${symbol}"]`)
+  }
+
+  get termsCheckboxes(): Locator {
+    return this.page.locator('[data-testid^="terms-checkbox-"]')
+  }
+
+  get fastVaultPasswordModal(): Locator {
+    return this.page.locator('[data-testid="fast-vault-password-modal"]')
+  }
+
+  get fastVaultPasswordInput(): Locator {
+    return this.page.locator('[data-testid="fast-vault-password-input"]')
+  }
+
+  get fastVaultSubmit(): Locator {
+    return this.page.locator('[data-testid="fast-vault-submit"]')
   }
 
   /**
@@ -128,14 +152,24 @@ export class SendFlow extends BasePage {
       return
     }
 
-    // Try data-testid coin selector first (future-proofing)
-    if (await this.coinSelector.isVisible({ timeout: 1000 }).catch(() => false)) {
-      await this.coinSelector.click()
+    // Try data-testid coin selector trigger first
+    if (await this.coinSelectorTrigger.isVisible({ timeout: 1000 }).catch(() => false)) {
+      await this.coinSelectorTrigger.click()
       await this.page.waitForTimeout(300)
-      const coinOption = this.page.getByText(new RegExp(coin, 'i')).first()
-      await coinOption.click()
-      await this.page.waitForTimeout(300)
-      return
+      // Try to click the coin option by testid first
+      const coinOptionByTestid = this.getCoinOption(coin.toUpperCase())
+      if (await coinOptionByTestid.isVisible({ timeout: 2000 }).catch(() => false)) {
+        await coinOptionByTestid.click()
+        await this.page.waitForTimeout(300)
+        return
+      }
+      // Fallback to text matching
+      const coinOption = this.page.getByText(new RegExp(`^${coin}$`, 'i')).first()
+      if (await coinOption.isVisible({ timeout: 1000 }).catch(() => false)) {
+        await coinOption.click()
+        await this.page.waitForTimeout(300)
+        return
+      }
     }
 
     // The coin section may be collapsed — expand it first by clicking the "Asset" row
@@ -254,6 +288,19 @@ export class SendFlow extends BasePage {
    * We click the parent <label> instead of the hidden <input>.
    */
   async acceptTerms(): Promise<void> {
+    // Primary strategy: Use data-testid terms checkboxes
+    const termsCheckboxes = this.termsCheckboxes
+    const termsCount = await termsCheckboxes.count()
+    
+    if (termsCount > 0) {
+      for (let i = 0; i < termsCount; i++) {
+        await termsCheckboxes.nth(i).click()
+        await this.page.waitForTimeout(200)
+      }
+      return
+    }
+
+    // Fallback: Use input[type="checkbox"] 
     const checkboxes = this.page.locator('input[type="checkbox"]')
     const count = await checkboxes.count()
 
@@ -284,9 +331,21 @@ export class SendFlow extends BasePage {
     await this.signButton.click()
     await this.page.waitForTimeout(500)
 
-    // Check if a password modal appeared (fast vault flow)
+    // Check if fast vault password modal appeared (using testid)
+    if (await this.fastVaultPasswordModal.isVisible({ timeout: 3000 }).catch(() => false)) {
+      const password = process.env.TEST_VAULT_PASSWORD || ''
+      if (password) {
+        await this.fastVaultPasswordInput.fill(password)
+        await this.page.waitForTimeout(300)
+        await this.fastVaultSubmit.click()
+        await this.page.waitForTimeout(500)
+        return
+      }
+    }
+
+    // Fallback: Check for generic password input
     const passwordInput = this.page.locator('input[type="password"], input[placeholder*="password" i]').first()
-    if (await passwordInput.isVisible({ timeout: 3000 }).catch(() => false)) {
+    if (await passwordInput.isVisible({ timeout: 2000 }).catch(() => false)) {
       const password = process.env.TEST_VAULT_PASSWORD || ''
       if (password) {
         await passwordInput.fill(password)

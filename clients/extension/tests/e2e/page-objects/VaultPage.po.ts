@@ -49,17 +49,19 @@ export class VaultPage extends BasePage {
   }
 
   get sendButton(): Locator {
-    return (
-      this.page.locator('[data-testid="send-button"]') ||
-      this.page.getByRole('button', { name: /send/i })
-    )
+    return this.page.locator('[data-testid="vault-action-send"]')
   }
 
   get swapButton(): Locator {
-    return (
-      this.page.locator('[data-testid="swap-button"]') ||
-      this.page.getByRole('button', { name: /swap/i })
-    )
+    return this.page.locator('[data-testid="vault-action-swap"]')
+  }
+
+  get buyButton(): Locator {
+    return this.page.locator('[data-testid="vault-action-buy"]')
+  }
+
+  get receiveButton(): Locator {
+    return this.page.locator('[data-testid="vault-action-receive"]')
   }
 
   get chainList(): Locator {
