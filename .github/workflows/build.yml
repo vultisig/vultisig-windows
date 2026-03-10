@@ -6,86 +6,106 @@ on:
   pull_request:
     branches: ['main']
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
 env:
-  # Necessary for most environments as build failure can occur due to OOM issues
   NODE_OPTIONS: '--max-old-space-size=8192'
+  NODE_VERSION: '23.7.0'
+  YARN_VERSION: '4.6.0'
 
 jobs:
-  setup:
+  lint:
     runs-on: ubuntu-22.04
-    outputs:
-      cache-hit: ${{ steps.cache.outputs.cache-hit }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
+          fetch-depth: 1
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '23.7.0'
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: Enable Corepack
         run: corepack enable
 
       - name: Prepare Yarn
-        run: corepack prepare yarn@4.6.0 --activate
+        run: corepack prepare yarn@${{ env.YARN_VERSION }} --activate
 
       - name: Cache node_modules
-        id: cache
         uses: actions/cache@v4
         with:
-          path: |
-            **/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-node-
+            ${{ runner.os }}-node-modules-
 
       - name: Install dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
         run: yarn install
-  lint:
-    needs: setup
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          submodules: recursive
-      - name: Install dependencies
-        run: yarn install
+
       - name: Validate public files
         run: yarn workspace @core/ui validate-public
+
       - name: Check for unused code
         run: yarn knip
+
       - name: Lint
         run: yarn lint
-      - name: run unit test
+
+      - name: Run unit tests
         run: yarn test
-      - name: run typecheck
+
+      - name: Run typecheck
         run: yarn typecheck
+
   extension:
-    needs: [setup, lint]
+    needs: lint
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           submodules: recursive
+          fetch-depth: 1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Prepare Yarn
+        run: corepack prepare yarn@${{ env.YARN_VERSION }} --activate
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-
+
       - name: Install dependencies
         run: yarn install
+
       - name: Build extension
         run: yarn workspace @clients/extension build
+
       - name: Upload dist to artifacts
         uses: actions/upload-artifact@v4
         with:
           name: extension-dist-${{ github.sha }}
           path: clients/extension/dist
+
   build:
     needs: lint
     strategy:
-      # Failure in one platform build won't impact the others
       fail-fast: true
       matrix:
         build:
@@ -99,19 +119,29 @@ jobs:
     runs-on: ${{ matrix.build.os }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           submodules: recursive
+          fetch-depth: 1
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '23.7.0'
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: Enable Corepack
         run: corepack enable
 
       - name: Prepare Yarn
-        run: corepack prepare yarn@4.6.0 --activate
+        run: corepack prepare yarn@${{ env.YARN_VERSION }} --activate
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-
 
       - name: Install dependencies
         run: yarn install
@@ -123,5 +153,3 @@ jobs:
           build-name: ${{ matrix.build.name }}
           build-platform: ${{ matrix.build.platform }}
           package: false
-          go-version: '1.21'
-          node-version: '23.7.0'
