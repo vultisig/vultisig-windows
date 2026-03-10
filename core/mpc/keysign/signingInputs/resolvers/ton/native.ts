@@ -25,15 +25,6 @@ export const toSafeComment = (payload: string): string => {
   return ''
 }
 
-/**
- * For TonConnect: payload > 123 bytes is likely base64 BOC (swap, contract call).
- * Use customPayload to pass the full BOC; comment is for simple text only.
- */
-const isLargePayload = (payload: string): boolean => {
-  const bytes = new TextEncoder().encode(payload)
-  return bytes.length > tonCommentMaxBytes
-}
-
 export const buildNativeTonTransfer = ({
   keysignPayload,
   bounceable,
@@ -46,8 +37,8 @@ export const buildNativeTonTransfer = ({
     TW.TheOpenNetwork.Proto.SendMode.IGNORE_ACTION_PHASE_ERRORS
 
   const amount = sendMaxAmount
-    ? new Long(0)
-    : new Long(Number(keysignPayload.toAmount))
+    ? Long.ZERO
+    : Long.fromString(keysignPayload.toAmount)
 
   return TW.TheOpenNetwork.Proto.Transfer.create({
     dest: keysignPayload.toAddress,
@@ -68,14 +59,12 @@ export const buildNativeTonTransferFromMessage = ({
     TW.TheOpenNetwork.Proto.SendMode.PAY_FEES_SEPARATELY |
     TW.TheOpenNetwork.Proto.SendMode.IGNORE_ACTION_PHASE_ERRORS
 
-  const hasLargePayload = payload && isLargePayload(payload)
-
   return TW.TheOpenNetwork.Proto.Transfer.create({
     dest: to,
-    amount: Buffer.from(numberToEvenHex(new Long(Number(amount))), 'hex'),
+    amount: Buffer.from(numberToEvenHex(Long.fromString(amount)), 'hex'),
     bounceable,
-    comment: hasLargePayload ? '' : toSafeComment(payload),
-    customPayload: hasLargePayload ? payload : undefined,
+    comment: '',
+    customPayload: payload || undefined,
     mode,
   })
 }
