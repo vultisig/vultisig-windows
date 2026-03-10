@@ -478,6 +478,7 @@ export const it = {
   header_tooltip_title: 'Programma di segnalazione',
   hide_balance: 'Nascondi saldo',
   hide_defi_balance: 'Nascondi saldo DeFi',
+  hold: 'Mantieni',
   hold_for_paired_sign: 'Tieni premuto per il segno accoppiato',
   how_it_works: 'Come funziona',
   ibc_transaction_not_supporting_memo_desc:

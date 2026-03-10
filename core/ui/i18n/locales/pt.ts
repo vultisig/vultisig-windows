@@ -475,6 +475,7 @@ export const pt = {
   header_tooltip_title: 'Programa de Encaminhamento',
   hide_balance: 'Ocultar saldo',
   hide_defi_balance: 'Ocultar saldo DeFi',
+  hold: 'Manter',
   hold_for_paired_sign: 'Aguarde o sinal emparelhado',
   how_it_works: 'Como funciona',
   ibc_transaction_not_supporting_memo_desc:
