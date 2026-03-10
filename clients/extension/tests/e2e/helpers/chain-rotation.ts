@@ -70,37 +70,48 @@ export type ChainId = keyof typeof SUPPORTED_CHAINS
  * - SOL: $2.90
  * - BSC: $0 (no funds)
  * - Polygon: $0 (no funds)
+ * 
+ * NOTE: Order matters for swap pairs! Higher balance chains first.
+ * Last chain becomes destination-only (never a source).
  */
 export const FUNDED_CHAINS: ChainId[] = [
-  'ethereum',
-  'bitcoin', 
-  'thorchain',
-  'solana',
+  'ethereum',  // $15.67 - good swap source
+  'bitcoin',   // $32.85 - good swap source
+  'thorchain', // $5.16  - marginal swap source
+  'solana',    // $2.90  - destination only (too low for source)
 ]
 
 /**
- * Generate cross-chain native swap pairs from funded chains.
- * Only swaps native/gas tokens between different chains for better liquidity.
- * Example: [ETH, BTC, SOL, RUNE] → [ETH→BTC, BTC→SOL, SOL→RUNE, RUNE→ETH]
+ * Chains suitable for being swap source (enough balance for minSwap)
+ * SOL excluded - $2.90 balance too low for reliable swaps
  */
-export function generateNativeSwapPairs(chains: ChainId[] = FUNDED_CHAINS): [ChainId, ChainId][] {
-  const pairs: [ChainId, ChainId][] = []
-  for (let i = 0; i < chains.length; i++) {
-    // Pair each chain with the next one (circular)
-    const fromChain = chains[i]
-    const toChain = chains[(i + 1) % chains.length]
-    if (fromChain !== toChain) {
-      pairs.push([fromChain, toChain])
-    }
-  }
-  return pairs
+export const SWAP_SOURCE_CHAINS: ChainId[] = [
+  'ethereum',
+  'bitcoin',
+  'thorchain',
+]
+
+/**
+ * Generate cross-chain native swap pairs.
+ * Only swaps native/gas tokens between different chains for better liquidity.
+ * Uses SWAP_SOURCE_CHAINS as sources (enough balance) and FUNDED_CHAINS as destinations.
+ * 
+ * Pairs: ETH→BTC, BTC→SOL, THOR→ETH (diverse cross-chain coverage)
+ */
+export function generateNativeSwapPairs(): [ChainId, ChainId][] {
+  // Hand-picked pairs for good coverage and reliable quotes
+  return [
+    ['ethereum', 'bitcoin'],   // ETH → BTC (good liquidity)
+    ['bitcoin', 'solana'],     // BTC → SOL (cross-ecosystem)
+    ['thorchain', 'ethereum'], // RUNE → ETH (native THORChain pair)
+  ]
 }
 
 /**
  * Swap pairs - cross-chain native token swaps only.
  * Generated dynamically from FUNDED_CHAINS.
  */
-export const SWAP_PAIRS: [ChainId, ChainId][] = generateNativeSwapPairs(FUNDED_CHAINS)
+export const SWAP_PAIRS: [ChainId, ChainId][] = generateNativeSwapPairs()
 
 /**
  * Load rotation state from disk
