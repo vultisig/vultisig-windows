@@ -5,7 +5,10 @@ import { Sender } from '@core/inpage-provider/popup/view/resolvers/signMessage/c
 import { SignMessageOverview } from '@core/inpage-provider/popup/view/resolvers/signMessage/overview/Default'
 import { usePopupContext } from '@core/inpage-provider/popup/view/state/context'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { FastVaultPasswordModal } from '@core/ui/mpc/fast/FastVaultPasswordModal'
+import {
+  FastVaultPasswordModal,
+  FastVaultPasswordModalResult,
+} from '@core/ui/mpc/fast/FastVaultPasswordModal'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { Button } from '@lib/ui/buttons/Button'
@@ -40,7 +43,7 @@ export const ConnectOverview: FC<SignMessageOverview> = ({
     return data.message as string
   }, [message])
 
-  const onGetPassword = ({ password }: { password: string }) => {
+  const onGetPassword = ({ password }: FastVaultPasswordModalResult) => {
     navigate({
       id: 'keysign',
       state: { keysignPayload, securityType: 'fast', password },
@@ -100,6 +103,7 @@ export const ConnectOverview: FC<SignMessageOverview> = ({
         onBack={() => setShowPasswordModal(false)}
         onFinish={onGetPassword}
         description={t('fast_vault_password_start_keysign_description')}
+        withPasswordCache
       />
     </>
   )
