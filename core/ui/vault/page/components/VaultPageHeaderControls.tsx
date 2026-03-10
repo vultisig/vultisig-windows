@@ -21,7 +21,7 @@ export const VaultPageHeaderControls = () => {
           </IconWrapper>
         </IconButton>
       )}
-      <IconButton onClick={() => navigate({ id: 'settings' })}>
+      <IconButton onClick={() => navigate({ id: 'settings' })} data-testid="settings-button">
         <IconWrapper size={24}>
           <SettingsIcon />
         </IconWrapper>

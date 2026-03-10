@@ -146,6 +146,7 @@ export const SettingsPage: FC<Props> = props => {
               onClick={() => navigate({ id: 'addressBook' })}
               title={t('address_book')}
               showArrow
+              data-testid="address-book-link"
             />
             {areReferralEnabled && (
               <ListItem
