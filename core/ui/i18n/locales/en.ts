@@ -2,6 +2,7 @@ export const en = {
   accept_continue: 'Accept & continue',
   action: 'Action',
   active: 'Active',
+  agent: 'Agent',
   active_chains_found_one: 'We found {{count}} active chain',
   active_chains_found_other: 'We found {{count}} active chains',
   active_chains_warning:
