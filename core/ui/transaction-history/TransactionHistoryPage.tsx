@@ -1,7 +1,8 @@
 import { useTransactionRecordsQuery } from '@core/ui/storage/transactionHistory'
+import { SearchInput } from '@core/ui/vault/chain/manage/shared/SearchInput'
 import { Tab, Tabs } from '@lib/ui/base/Tabs'
 import { ScreenLayout } from '@lib/ui/layout/ScreenLayout/ScreenLayout'
-import { hStack } from '@lib/ui/layout/Stack'
+import { hStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { IsActiveProp } from '@lib/ui/props'
@@ -14,6 +15,7 @@ import styled, { css } from 'styled-components'
 import { TransactionRecord } from './core'
 import { TransactionHistoryList } from './list/TransactionHistoryList'
 import { useRefreshPendingTransactions } from './status/useRefreshPendingTransactions'
+import { filterTransactionsBySearch } from './utils/filterTransactionsBySearch'
 
 const transactionHistoryTabs = ['overview', 'swaps', 'sends'] as const
 type TransactionHistoryTab = (typeof transactionHistoryTabs)[number]
@@ -46,36 +48,45 @@ const TransactionHistoryContent = ({
 }) => {
   const { t } = useTranslation()
   const [activeTab, setActiveTab] = useState<TransactionHistoryTab>('overview')
+  const [search, setSearch] = useState('')
 
   useRefreshPendingTransactions(records)
+
+  const searchFiltered = filterTransactionsBySearch({
+    records,
+    query: search,
+  })
 
   const tabs: Tab<TransactionHistoryTab>[] = transactionHistoryTabs.map(
     value => ({
       value,
       label: t(value),
       renderContent: () => (
-        <FilteredTransactionList records={records} tab={value} />
+        <FilteredTransactionList records={searchFiltered} tab={value} />
       ),
     })
   )
 
   return (
-    <Tabs
-      tabs={tabs}
-      value={activeTab}
-      onValueChange={setActiveTab}
-      triggerSlot={({ tab: { label }, isActive }) => (
-        <TabTrigger isActive={isActive}>
-          <Text
-            size={14}
-            as="span"
-            color={isActive ? 'contrast' : 'supporting'}
-          >
-            {label}
-          </Text>
-        </TabTrigger>
-      )}
-    />
+    <VStack gap={16}>
+      <SearchInput value={search} onChange={setSearch} />
+      <Tabs
+        tabs={tabs}
+        value={activeTab}
+        onValueChange={setActiveTab}
+        triggerSlot={({ tab: { label }, isActive }) => (
+          <TabTrigger isActive={isActive}>
+            <Text
+              size={14}
+              as="span"
+              color={isActive ? 'contrast' : 'supporting'}
+            >
+              {label}
+            </Text>
+          </TabTrigger>
+        )}
+      />
+    </VStack>
   )
 }
 
