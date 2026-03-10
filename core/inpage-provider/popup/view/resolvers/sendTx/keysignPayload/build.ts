@@ -1,5 +1,6 @@
 import { create } from '@bufbuild/protobuf'
 import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
+import { Chain } from '@core/chain/Chain'
 import { getChainKind, isChainOfKind } from '@core/chain/ChainKind'
 import { CosmosMsgType } from '@core/chain/chains/cosmos/cosmosMsgTypes'
 import { getPsbtTransferInfo } from '@core/chain/chains/utxo/tx/getPsbtTransferInfo'
@@ -30,6 +31,8 @@ import {
   SignDirectSchema,
   SignSolana,
   SignSolanaSchema,
+  SignTonSchema,
+  TonMessageSchema,
   WasmExecuteContractPayloadSchema,
 } from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { attempt } from '@lib/utils/attempt'
@@ -409,6 +412,30 @@ export const buildSendTxKeysignPayload = async ({
     }
   )
 
+  const signTonPayload = matchRecordUnion<
+    CustomTxData,
+    | { tonMessages: Array<{ to: string; amount: string; payload?: string }> }
+    | undefined
+  >(customTxData, {
+    regular: ({ transactionDetails }) => {
+      const tonMessages = transactionDetails.tonMessages
+      if (chain === Chain.Ton && tonMessages && tonMessages.length > 0) {
+        return {
+          tonMessages: tonMessages.map(msg =>
+            create(TonMessageSchema, {
+              to: msg.to,
+              amount: msg.amount,
+              payload: msg.payload,
+            })
+          ),
+        }
+      }
+      return undefined
+    },
+    solana: () => undefined,
+    psbt: () => undefined,
+  })
+
   const signData: KeysignPayload['signData'] =
     aminoPayload !== undefined
       ? { case: 'signAmino', value: aminoPayload }
@@ -416,7 +443,14 @@ export const buildSendTxKeysignPayload = async ({
         ? { case: 'signDirect', value: directPayload }
         : solanaPayload !== undefined
           ? { case: 'signSolana', value: solanaPayload }
-          : { case: undefined, value: undefined }
+          : signTonPayload !== undefined
+            ? {
+                case: 'signTon',
+                value: create(SignTonSchema, {
+                  tonMessages: signTonPayload.tonMessages,
+                }),
+              }
+            : { case: undefined, value: undefined }
 
   let keysignPayload = create(KeysignPayloadSchema, {
     toAddress: toAddress ?? '',

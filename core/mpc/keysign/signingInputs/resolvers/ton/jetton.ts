@@ -7,6 +7,7 @@ import { WalletCore } from '@trustwallet/wallet-core'
 
 import { getKeysignAmount } from '../../../utils/getKeysignAmount'
 import { getKeysignCoin } from '../../../utils/getKeysignCoin'
+import { toSafeComment } from './native'
 
 type BuildJettonTransferInput = {
   keysignPayload: KeysignPayload
@@ -49,7 +50,7 @@ export const buildJettonTransfer = ({
     dest: jettonAddress,
     amount: Buffer.from(numberToEvenHex(tonConfig.jettonAmount), 'hex'),
     bounceable: true,
-    comment: keysignPayload.memo,
+    comment: toSafeComment(keysignPayload.memo ?? ''),
     mode,
     jettonTransfer,
   })
