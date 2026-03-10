@@ -262,59 +262,12 @@ test.describe('Swap Flow', () => {
 
 /**
  * Navigate to the swap page.
- *
- * The VaultPrimaryActions component renders each action as:
- *   <VStack>            ← container div
- *     <Button>          ← styled UnstyledButton with onClick handler + SVG icon
- *     <Text>swap</Text> ← label with NO click handler
- *   </VStack>
- *
- * Clicking the "Swap" text does nothing — we must click the <button> sibling
- * that contains the SVG icon.
+ * Uses the vault action button with testid.
  */
 async function navigateToSwap(page: import('@playwright/test').Page): Promise<void> {
-  // Try data-testid first (in case it gets added later)
-  const swapByTestId = page.locator('[data-testid="swap-button"]')
-  if (await swapByTestId.isVisible({ timeout: 2000 }).catch(() => false)) {
-    await swapByTestId.click()
-    await page.waitForTimeout(500)
-    return
-  }
-
-  // Find the Swap action button by locating the "Swap" text label,
-  // then clicking its sibling <button> element (the icon wrapper with the click handler)
-  const clicked = await page.evaluate(() => {
-    const allElements = document.querySelectorAll('*')
-    for (const el of allElements) {
-      const directText = Array.from(el.childNodes)
-        .filter(n => n.nodeType === Node.TEXT_NODE)
-        .map(n => n.textContent?.trim())
-        .join('')
-
-      if (directText.toLowerCase() === 'swap') {
-        const container = el.parentElement
-        if (container) {
-          // Find the <button> sibling that has an SVG (the icon wrapper)
-          for (const child of container.children) {
-            if (
-              child.tagName === 'BUTTON' &&
-              child.querySelector('svg') &&
-              child !== el
-            ) {
-              ;(child as HTMLElement).click()
-              return true
-            }
-          }
-        }
-      }
-    }
-    return false
-  })
-
-  if (clicked) {
-    await page.waitForTimeout(500)
-    return
-  }
-
-  throw new Error('Could not find swap button')
+  // Use the vault action button testid
+  const swapButton = page.locator('[data-testid="vault-action-swap"]')
+  await swapButton.waitFor({ state: 'visible', timeout: 5000 })
+  await swapButton.click()
+  await page.waitForTimeout(500)
 }

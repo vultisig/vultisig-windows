@@ -52,7 +52,7 @@ export const SUPPORTED_CHAINS = {
   dogecoin: { symbol: 'DOGE', minSend: '1', minSwap: '10' },
 
   // Other chains
-  solana: { symbol: 'SOL', minSend: '0.01', minSwap: '0.1' },
+  solana: { symbol: 'SOL', minSend: '0.01', minSwap: '0.02' },
   thorchain: { symbol: 'RUNE', minSend: '0.1', minSwap: '1' },
   cosmos: { symbol: 'ATOM', minSend: '0.01', minSwap: '0.1' },
 } as const

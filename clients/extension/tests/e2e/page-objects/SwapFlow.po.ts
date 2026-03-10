@@ -28,19 +28,31 @@ export class SwapFlow extends BasePage {
   }
 
   get fromCoinSelector(): Locator {
-    return this.page.locator('[data-testid="coin-selector"]').first()
+    return this.page.locator('[data-testid="swap-from-coin-selector"]')
   }
 
-  get coinSelectorTrigger(): Locator {
-    return this.page.locator('[data-testid="coin-selector-trigger"]')
+  get fromChainSelector(): Locator {
+    return this.page.locator('[data-testid="swap-from-chain-selector"]')
+  }
+
+  get toCoinSelector(): Locator {
+    return this.page.locator('[data-testid="swap-to-coin-selector"]')
+  }
+
+  get toChainSelector(): Locator {
+    return this.page.locator('[data-testid="swap-to-chain-selector"]')
   }
 
   getCoinOption(symbol: string): Locator {
     return this.page.locator(`[data-testid="coin-option-${symbol}"]`)
   }
 
-  get toCoinSelector(): Locator {
-    return this.page.locator('[data-testid="swap-to-coin"], [data-testid="to-coin-select"]').first()
+  getChainOption(chain: string): Locator {
+    return this.page.locator(`[data-testid="swap-chain-option-${chain}"]`)
+  }
+
+  getExplorerChainOption(chain: string): Locator {
+    return this.page.locator(`[data-testid="swap-explorer-chain-${chain}"]`)
   }
 
   get termsCheckboxes(): Locator {
@@ -164,8 +176,14 @@ export class SwapFlow extends BasePage {
 
   /**
    * Select source coin in the swap form.
-   * The swap form pre-selects coins from navigation state.
-   * To change, click on the coin ticker (CoinWrapper with role=button).
+   * Uses data-testid selectors for reliable element targeting.
+   * 
+   * The swap coin explorer has two parts:
+   * 1. Coin options list (showing tokens for the currently selected chain)
+   * 2. Chain carousel at bottom (to switch chains)
+   * 
+   * To select a different chain's native token, we click the chain in the carousel
+   * which both switches the chain AND selects the native token.
    */
   async selectFromCoin(coin: string): Promise<void> {
     const chainName = SwapFlow.SYMBOL_TO_CHAIN[coin.toUpperCase()] || coin
@@ -174,55 +192,33 @@ export class SwapFlow extends BasePage {
     await waitForStackedFieldReady(this.page)
     await waitForLoadingComplete(this.page)
 
-    // Check if already selected (look in the "From" section)
-    const fromSection = this.swapForm.locator('text=/^from$/i').first()
-    const currentTicker = this.swapForm.locator(`text=/${coin}/i`).first()
-    if (await currentTicker.isVisible({ timeout: 1000 }).catch(() => false)) {
+    // Check if this coin is already selected
+    const currentCoin = await this.swapForm.locator('[data-testid="swap-from-coin-selector"]').textContent().catch(() => '')
+    if (currentCoin?.toUpperCase().includes(coin.toUpperCase())) {
       console.log(`From coin ${coin} already selected`)
       return
     }
 
-    // Click the coin ticker in the "From" row to open coin selector
-    // The CoinWrapper has role="button" and contains the ticker text
-    const fromCoinClicked = await this.page.evaluate((targetChain) => {
-      // Find the "From" section by looking for text that starts with "from"
-      const fromText = Array.from(document.querySelectorAll('*')).find(el => {
-        const text = el.textContent?.trim().toLowerCase()
-        return text === 'from'
-      })
-      
-      if (fromText) {
-        // The coin wrapper is a sibling element with role="button" containing the ticker
-        const container = fromText.closest('[class*="Container"]') || fromText.parentElement?.parentElement
-        if (container) {
-          const coinBtn = container.querySelector('[role="button"]:has(svg)')
-          if (coinBtn) {
-            ;(coinBtn as HTMLElement).click()
-            return true
-          }
-        }
-      }
-      return false
-    }, chainName)
+    // Click the from coin selector to open the coin explorer
+    await this.fromCoinSelector.click({ force: true })
+    await this.page.waitForTimeout(800)
 
-    if (fromCoinClicked) {
+    // For native tokens, clicking the chain in the carousel selects both chain and native token
+    const chainOption = this.getExplorerChainOption(chainName)
+    if (await chainOption.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await chainOption.click({ force: true })
       await this.page.waitForTimeout(500)
+      console.log(`Selected ${chainName} from explorer carousel`)
+      return
+    }
 
-      // Coin explorer modal should be open - find and click the target chain
-      const chainOption = this.page.getByText(new RegExp(`^${chainName}$`, 'i')).first()
-      if (await chainOption.isVisible({ timeout: 3000 }).catch(() => false)) {
-        await chainOption.click()
-        await this.page.waitForTimeout(500)
-        return
-      }
-
-      // Try symbol
-      const symbolOption = this.page.getByText(new RegExp(`^${coin}$`, 'i')).first()
-      if (await symbolOption.isVisible({ timeout: 1000 }).catch(() => false)) {
-        await symbolOption.click()
-        await this.page.waitForTimeout(500)
-        return
-      }
+    // Fallback: Look for the coin option directly
+    const coinOption = this.getCoinOption(coin)
+    if (await coinOption.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await coinOption.click({ force: true })
+      await this.page.waitForTimeout(500)
+      console.log(`Selected ${coin} from coin options`)
+      return
     }
 
     console.log(`Could not select from coin ${coin}`)
@@ -230,6 +226,14 @@ export class SwapFlow extends BasePage {
 
   /**
    * Select destination coin in the swap form.
+   * Uses data-testid selectors for reliable element targeting.
+   * 
+   * The swap coin explorer has two parts:
+   * 1. Coin options list (showing tokens for the currently selected chain)
+   * 2. Chain carousel at bottom (to switch chains)
+   * 
+   * To select a different chain's native token, we click the chain in the carousel
+   * which both switches the chain AND selects the native token.
    */
   async selectToCoin(coin: string): Promise<void> {
     const chainName = SwapFlow.SYMBOL_TO_CHAIN[coin.toUpperCase()] || coin
@@ -238,48 +242,33 @@ export class SwapFlow extends BasePage {
     await waitForStackedFieldReady(this.page)
     await waitForLoadingComplete(this.page)
 
-    // Check if already selected
-    const currentTicker = this.swapForm.locator(`text=/${coin}/i`).first()
-    if (await currentTicker.isVisible({ timeout: 1000 }).catch(() => false)) {
-      console.log(`To coin ${coin} might already be selected`)
+    // Check if this coin is already selected
+    const currentCoin = await this.swapForm.locator('[data-testid="swap-to-coin-selector"]').textContent().catch(() => '')
+    if (currentCoin?.toUpperCase().includes(coin.toUpperCase())) {
+      console.log(`To coin ${coin} already selected`)
+      return
     }
 
-    // Click the coin ticker in the "To" row
-    const toCoinClicked = await this.page.evaluate((targetChain) => {
-      const toText = Array.from(document.querySelectorAll('*')).find(el => {
-        const text = el.textContent?.trim().toLowerCase()
-        return text === 'to'
-      })
-      
-      if (toText) {
-        const container = toText.closest('[class*="Container"]') || toText.parentElement?.parentElement
-        if (container) {
-          const coinBtn = container.querySelector('[role="button"]:has(svg)')
-          if (coinBtn) {
-            ;(coinBtn as HTMLElement).click()
-            return true
-          }
-        }
-      }
-      return false
-    }, chainName)
+    // Click the to coin selector to open the coin explorer
+    await this.toCoinSelector.click({ force: true })
+    await this.page.waitForTimeout(800)
 
-    if (toCoinClicked) {
+    // For native tokens, clicking the chain in the carousel selects both chain and native token
+    const chainOption = this.getExplorerChainOption(chainName)
+    if (await chainOption.isVisible({ timeout: 3000 }).catch(() => false)) {
+      await chainOption.click({ force: true })
       await this.page.waitForTimeout(500)
+      console.log(`Selected ${chainName} from explorer carousel (to)`)
+      return
+    }
 
-      const chainOption = this.page.getByText(new RegExp(`^${chainName}$`, 'i')).first()
-      if (await chainOption.isVisible({ timeout: 3000 }).catch(() => false)) {
-        await chainOption.click()
-        await this.page.waitForTimeout(500)
-        return
-      }
-
-      const symbolOption = this.page.getByText(new RegExp(`^${coin}$`, 'i')).first()
-      if (await symbolOption.isVisible({ timeout: 1000 }).catch(() => false)) {
-        await symbolOption.click()
-        await this.page.waitForTimeout(500)
-        return
-      }
+    // Fallback: Look for the coin option directly
+    const coinOption = this.getCoinOption(coin)
+    if (await coinOption.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await coinOption.click({ force: true })
+      await this.page.waitForTimeout(500)
+      console.log(`Selected ${coin} from coin options (to)`)
+      return
     }
 
     console.log(`Could not select to coin ${coin}`)
