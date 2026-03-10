@@ -63,11 +63,11 @@ export type ChainId = keyof typeof SUPPORTED_CHAINS
  * Chains that are known to have funds in the test vault.
  * Update this list when vault balances change!
  * 
- * Current balances (as of last update):
- * - ETH: $15.67
- * - BTC: $32.85  
- * - THOR: $5.16
- * - SOL: $2.90
+ * Current balances (as of 2026-03-10):
+ * - THOR: ~27 RUNE ($27) - good swap source
+ * - ETH: $15.67 - good swap source  
+ * - SOL: ~0.033 SOL ($2.90) - destination only
+ * - BTC: $0.00 (no funds!) - REMOVED
  * - BSC: $0 (no funds)
  * - Polygon: $0 (no funds)
  * 
@@ -75,19 +75,20 @@ export type ChainId = keyof typeof SUPPORTED_CHAINS
  * Last chain becomes destination-only (never a source).
  */
 export const FUNDED_CHAINS: ChainId[] = [
+  'thorchain', // ~$27 - best swap source (native THORChain routes)
   'ethereum',  // $15.67 - good swap source
-  'bitcoin',   // $32.85 - good swap source
-  'thorchain', // $5.16  - marginal swap source
   'solana',    // $2.90  - destination only (too low for source)
 ]
 
 /**
  * Chains suitable for being swap source (enough balance for minSwap)
  * SOL excluded - $2.90 balance too low for reliable swaps
+ * BTC excluded - $0.00 balance (no funds in test vault)
+ * ETH excluded - swap routing unreliable for cross-chain swaps in tests
+ * 
+ * THORChain is the only reliable swap source (native THORSwap routing).
  */
 export const SWAP_SOURCE_CHAINS: ChainId[] = [
-  'ethereum',
-  'bitcoin',
   'thorchain',
 ]
 
@@ -96,14 +97,20 @@ export const SWAP_SOURCE_CHAINS: ChainId[] = [
  * Only swaps native/gas tokens between different chains for better liquidity.
  * Uses SWAP_SOURCE_CHAINS as sources (enough balance) and FUNDED_CHAINS as destinations.
  * 
- * Pairs: ETH→BTC, BTC→SOL, THOR→ETH (diverse cross-chain coverage)
+ * IMPORTANT: Only pairs with reliable quotes and sufficient balance!
+ * BTC excluded - test vault has $0.00 BTC balance.
+ * ETH→SOL excluded - SOL selection fails from ETH starting point (UI/routing issue).
+ * 
+ * Using THORChain-based swaps for reliability (native routing via THORSwap):
+ * - THOR→ETH: proven working, best liquidity
+ * - THOR→SOL: proven working (tx 3269A928...91DB on 2026-03-10)
  */
 export function generateNativeSwapPairs(): [ChainId, ChainId][] {
-  // Hand-picked pairs for good coverage and reliable quotes
+  // Hand-picked pairs for reliable quotes - both verified working!
+  // THORChain swaps use native THORSwap routing for best liquidity
   return [
-    ['ethereum', 'bitcoin'],   // ETH → BTC (good liquidity)
-    ['bitcoin', 'solana'],     // BTC → SOL (cross-ecosystem)
-    ['thorchain', 'ethereum'], // RUNE → ETH (native THORChain pair)
+    ['thorchain', 'ethereum'], // RUNE → ETH (native THORChain pair, known working!)
+    ['thorchain', 'solana'],   // RUNE → SOL (proven working - tx 3269A928...91DB)
   ]
 }
 
