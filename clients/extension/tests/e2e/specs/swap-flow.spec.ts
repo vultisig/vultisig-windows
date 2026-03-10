@@ -19,6 +19,7 @@ import { SwapFlow } from '../page-objects/SwapFlow.po'
 import { KeysignProgress } from '../page-objects/KeysignProgress.po'
 import { selectChainsForRun, updateStaleness, SUPPORTED_CHAINS, type ChainId } from '../helpers/chain-rotation'
 import { waitForTxConfirmation } from '../helpers/tx-confirmation'
+import { ensureVaultExists, getVaultConfigFromEnv } from '../helpers/vault-import'
 
 // Skip if fund-dependent tests not enabled
 const ENABLE_TX_TESTS = process.env.ENABLE_TX_SIGNING_TESTS === 'true'
@@ -28,8 +29,23 @@ const { swapPairs } = selectChainsForRun(0, 2)
 const selectedSwapPairs = swapPairs
 
 test.describe('Swap Flow', () => {
-  test.beforeAll(() => {
+  test.beforeAll(async () => {
     console.log('Selected swap pairs for tests:', selectedSwapPairs)
+  })
+
+  // Import vault before each test (each test gets a fresh browser context)
+  test.beforeEach(async ({ context, extensionId }) => {
+    const config = getVaultConfigFromEnv()
+    if (!config) {
+      console.log('⚠️ No vault config, tests will likely fail')
+      return
+    }
+    const imported = await ensureVaultExists(context, extensionId, config.vaultPath, config.password)
+    if (imported) {
+      console.log('✅ Vault imported for swap test')
+    } else {
+      console.log('⚠️ Failed to import vault')
+    }
   })
 
   test('swap pair 1 - quote appears and transaction succeeds', async ({ context, extensionId }) => {
@@ -57,7 +73,7 @@ test.describe('Swap Flow', () => {
       await vaultPage.waitForView(15_000)
 
       // Navigate to swap
-      await vaultPage.navigateToSwap()
+      await navigateToSwap(page)
       await swapFlow.waitForView()
 
       // Prepare swap
@@ -68,11 +84,8 @@ test.describe('Swap Flow', () => {
       expect(expectedOutput).toBeTruthy()
       console.log(`Quote: ${fromInfo.minSwap} ${fromInfo.symbol} -> ${expectedOutput} ${toInfo.symbol}`)
 
-      // Get swap rate
       const rate = await swapFlow.getSwapRate()
-      if (rate) {
-        console.log(`Rate: ${rate}`)
-      }
+      if (rate) console.log(`Rate: ${rate}`)
 
       // Continue to confirmation
       await swapFlow.continue()
@@ -82,27 +95,23 @@ test.describe('Swap Flow', () => {
       // Wait for keysign
       await keysignProgress.waitForView(30_000)
 
-      const result = await keysignProgress.waitForComplete(180_000) // Swaps can take longer
+      const result = await keysignProgress.waitForComplete(180_000)
 
       if (result === 'success') {
         const txHash = await keysignProgress.getTxHash()
         expect(txHash).toBeTruthy()
 
         if (txHash) {
-          console.log(`${fromChain}->${toChain} swap tx: ${txHash}`)
-
-          // Confirm the initial transaction (swap completion tracked by aggregator)
+          console.log(`✅ ${fromChain}->${toChain} swap tx: ${txHash}`)
           const confirmation = await waitForTxConfirmation(fromChain, txHash, 120_000)
           expect(confirmation.confirmed).toBe(true)
-
           updateStaleness([fromChain, toChain], true)
         }
       } else {
         const error = await keysignProgress.getError()
-        console.log(`Swap failed:`, error)
+        console.log(`❌ Swap failed:`, error)
         updateStaleness([fromChain, toChain], false)
 
-        // Don't fail for insufficient funds or no route
         if (
           !error?.includes('insufficient') &&
           !error?.includes('balance') &&
@@ -141,7 +150,7 @@ test.describe('Swap Flow', () => {
       await vaultPage.goto()
       await vaultPage.waitForView(15_000)
 
-      await vaultPage.navigateToSwap()
+      await navigateToSwap(page)
       await swapFlow.waitForView()
 
       await swapFlow.prepareSwap(fromInfo.symbol, toInfo.symbol, fromInfo.minSwap)
@@ -163,14 +172,14 @@ test.describe('Swap Flow', () => {
         expect(txHash).toBeTruthy()
 
         if (txHash) {
-          console.log(`${fromChain}->${toChain} swap tx: ${txHash}`)
+          console.log(`✅ ${fromChain}->${toChain} swap tx: ${txHash}`)
           const confirmation = await waitForTxConfirmation(fromChain, txHash, 120_000)
           expect(confirmation.confirmed).toBe(true)
           updateStaleness([fromChain, toChain], true)
         }
       } else {
         const error = await keysignProgress.getError()
-        console.log(`Swap failed:`, error)
+        console.log(`❌ Swap failed:`, error)
         updateStaleness([fromChain, toChain], false)
 
         if (
@@ -194,38 +203,32 @@ test.describe('Swap Flow', () => {
 
     try {
       await vaultPage.goto()
-      await page.waitForTimeout(2000)
+      await vaultPage.waitForView(10_000)
 
-      try {
-        await vaultPage.waitForView(10_000)
-        await vaultPage.navigateToSwap()
-        await swapFlow.waitForView(10_000)
+      await navigateToSwap(page)
+      await swapFlow.waitForView(10_000)
 
-        // Select any available coin pair
-        await swapFlow.fillAmount('1')
-        await page.waitForTimeout(500)
+      // Fill some amount to trigger quote
+      await swapFlow.fillAmount('1')
+      await page.waitForTimeout(500)
 
-        // Wait for quote
-        await swapFlow.waitForQuote()
+      // Wait for quote
+      await swapFlow.waitForQuote()
 
-        // Look for provider/aggregator info
-        const providerInfo = page.locator(
-          'text=/thorchain|maya|1inch|jupiter|lifi|provider|aggregator/i'
-        )
-        const feeInfo = page.locator('text=/fee|cost|network fee|gas/i')
-        const slippageInfo = page.locator('text=/slippage|price impact/i')
+      // Look for provider/aggregator info
+      const providerInfo = page.locator(
+        'text=/thorchain|maya|1inch|jupiter|lifi|provider|aggregator/i'
+      )
+      const feeInfo = page.locator('text=/fee|cost|network fee|gas/i')
+      const slippageInfo = page.locator('text=/slippage|price impact/i')
 
-        const hasProvider = await providerInfo.first().isVisible().catch(() => false)
-        const hasFee = await feeInfo.first().isVisible().catch(() => false)
-        const hasSlippage = await slippageInfo.first().isVisible().catch(() => false)
+      const hasProvider = await providerInfo.first().isVisible().catch(() => false)
+      const hasFee = await feeInfo.first().isVisible().catch(() => false)
+      const hasSlippage = await slippageInfo.first().isVisible().catch(() => false)
 
-        // At least one of these should be visible on a proper swap UI
-        console.log(`Provider info: ${hasProvider}, Fee info: ${hasFee}, Slippage: ${hasSlippage}`)
-
-        // Don't fail if swap UI not available
-      } catch (error) {
-        console.log('Could not verify swap provider/fees:', error)
-      }
+      console.log(`Provider info: ${hasProvider}, Fee info: ${hasFee}, Slippage: ${hasSlippage}`)
+    } catch (error) {
+      console.log('Could not verify swap provider/fees:', error)
     } finally {
       await page.close()
     }
@@ -241,15 +244,71 @@ test.describe('Swap Flow', () => {
       await vaultPage.goto()
       await vaultPage.waitForView(15_000)
 
-      // After swap tests, destination token balance should have changed
-      // Get current balances
       const balances = await vaultPage.getTokenBalances()
       console.log('Token balances after swaps:', balances)
 
-      // Verify we can read balances
       expect(typeof balances === 'object').toBe(true)
     } finally {
       await page.close()
     }
   })
 })
+
+/**
+ * Navigate to the swap page.
+ *
+ * The VaultPrimaryActions component renders each action as:
+ *   <VStack>            ← container div
+ *     <Button>          ← styled UnstyledButton with onClick handler + SVG icon
+ *     <Text>swap</Text> ← label with NO click handler
+ *   </VStack>
+ *
+ * Clicking the "Swap" text does nothing — we must click the <button> sibling
+ * that contains the SVG icon.
+ */
+async function navigateToSwap(page: import('@playwright/test').Page): Promise<void> {
+  // Try data-testid first (in case it gets added later)
+  const swapByTestId = page.locator('[data-testid="swap-button"]')
+  if (await swapByTestId.isVisible({ timeout: 2000 }).catch(() => false)) {
+    await swapByTestId.click()
+    await page.waitForTimeout(500)
+    return
+  }
+
+  // Find the Swap action button by locating the "Swap" text label,
+  // then clicking its sibling <button> element (the icon wrapper with the click handler)
+  const clicked = await page.evaluate(() => {
+    const allElements = document.querySelectorAll('*')
+    for (const el of allElements) {
+      const directText = Array.from(el.childNodes)
+        .filter(n => n.nodeType === Node.TEXT_NODE)
+        .map(n => n.textContent?.trim())
+        .join('')
+
+      if (directText.toLowerCase() === 'swap') {
+        const container = el.parentElement
+        if (container) {
+          // Find the <button> sibling that has an SVG (the icon wrapper)
+          for (const child of container.children) {
+            if (
+              child.tagName === 'BUTTON' &&
+              child.querySelector('svg') &&
+              child !== el
+            ) {
+              ;(child as HTMLElement).click()
+              return true
+            }
+          }
+        }
+      }
+    }
+    return false
+  })
+
+  if (clicked) {
+    await page.waitForTimeout(500)
+    return
+  }
+
+  throw new Error('Could not find swap button')
+}

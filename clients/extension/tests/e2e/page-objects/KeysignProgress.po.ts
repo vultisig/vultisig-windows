@@ -25,96 +25,51 @@ export class KeysignProgress extends BasePage {
   }
 
   get signingPhase(): Locator {
-    return (
-      this.page.locator('[data-testid="signing-phase"]') ||
-      this.page.locator('text=/signing|processing|creating.*transaction/i')
-    )
+    return this.page.locator('[data-testid="signing-phase"]').or(this.page.locator('text=/signing|processing|creating.*transaction/i')).first()
   }
 
   get broadcastingPhase(): Locator {
-    return (
-      this.page.locator('[data-testid="broadcasting-phase"]') ||
-      this.page.locator('text=/broadcasting|sending|submitting/i')
-    )
+    return this.page.locator('[data-testid="broadcasting-phase"]').or(this.page.locator('text=/broadcasting|sending|submitting/i')).first()
   }
 
   get waitingForDevices(): Locator {
-    return (
-      this.page.locator('[data-testid="waiting-for-devices"]') ||
-      this.page.locator('text=/waiting.*device|scan.*qr|other.*device/i')
-    )
+    return this.page.locator('[data-testid="waiting-for-devices"]').or(this.page.locator('text=/waiting.*device|scan.*qr|other.*device/i')).first()
   }
 
   get qrCode(): Locator {
-    return (
-      this.page.locator('[data-testid="keysign-qr"]') ||
-      this.page.locator('canvas') ||
-      this.page.locator('svg[data-qr="true"]') ||
-      this.page.locator('.qr-code')
-    )
+    return this.page.locator('[data-testid="keysign-qr"], canvas, svg[data-qr="true"], .qr-code').first()
   }
 
   get successScreen(): Locator {
-    return (
-      this.page.locator('[data-testid="keysign-success"]') ||
-      this.page.locator('[data-testid="tx-success"]') ||
-      this.page.locator('text=/success|complete|sent|confirmed/i')
-    )
+    return this.page.locator('[data-testid="keysign-success"], [data-testid="tx-success"]').or(this.page.locator('text=/success|complete|sent|confirmed/i')).first()
   }
 
   get errorScreen(): Locator {
-    return (
-      this.page.locator('[data-testid="keysign-error"]') ||
-      this.page.locator('[data-testid="tx-error"]') ||
-      this.page.locator('[role="alert"]') ||
-      this.page.locator('text=/error|failed|rejected/i')
-    )
+    return this.page.locator('[data-testid="keysign-error"], [data-testid="tx-error"], [role="alert"]').or(this.page.locator('text=/error|failed|rejected/i')).first()
   }
 
   get txHashDisplay(): Locator {
-    return (
-      this.page.locator('[data-testid="tx-hash"]') ||
-      this.page.locator('[data-testid="transaction-hash"]') ||
-      this.page.locator('text=/0x[a-fA-F0-9]{64}/').first()
-    )
+    return this.page.locator('[data-testid="tx-hash"], [data-testid="transaction-hash"]').first()
   }
 
   get txLink(): Locator {
-    return (
-      this.page.locator('[data-testid="tx-link"]') ||
-      this.page.locator('a[href*="explorer"]') ||
-      this.page.locator('a[href*="etherscan"]') ||
-      this.page.locator('a[href*="mempool"]')
-    )
+    return this.page.locator('[data-testid="tx-link"], a[href*="explorer"], a[href*="etherscan"], a[href*="mempool"]').first()
   }
 
   get errorMessage(): Locator {
-    return (
-      this.page.locator('[data-testid="error-message"]') ||
-      this.page.locator('[role="alert"]')
-    )
+    return this.page.locator('[data-testid="error-message"], [role="alert"]').first()
   }
 
   get retryButton(): Locator {
-    return (
-      this.page.locator('[data-testid="retry-button"]') ||
-      this.page.getByRole('button', { name: /retry|try again/i })
-    )
+    return this.page.locator('[data-testid="retry-button"]').or(this.page.getByRole('button', { name: /retry|try again/i })).first()
   }
 
   get doneButton(): Locator {
-    return (
-      this.page.locator('[data-testid="done-button"]') ||
-      this.page.getByRole('button', { name: /done|close|finish/i })
-    )
+    return this.page.locator('[data-testid="done-button"]').or(this.page.getByRole('button', { name: /done|close|finish/i })).first()
   }
 
   get progressIndicator(): Locator {
-    return (
-      this.page.locator('[data-testid="progress-indicator"]') ||
-      this.page.locator('[role="progressbar"]') ||
-      this.page.locator('.spinner')
-    )
+    return this.page.locator('[data-testid="progress-indicator"], [role="progressbar"], .spinner').first()
   }
 
   get progressSteps(): Locator {

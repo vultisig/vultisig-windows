@@ -21,17 +21,11 @@ export class SwapFlow extends BasePage {
   }
 
   get fromCoinSelector(): Locator {
-    return (
-      this.page.locator('[data-testid="swap-from-coin"]') ||
-      this.page.locator('[data-testid="from-coin-select"]')
-    )
+    return this.page.locator('[data-testid="swap-from-coin"], [data-testid="from-coin-select"]').first()
   }
 
   get toCoinSelector(): Locator {
-    return (
-      this.page.locator('[data-testid="swap-to-coin"]') ||
-      this.page.locator('[data-testid="to-coin-select"]')
-    )
+    return this.page.locator('[data-testid="swap-to-coin"], [data-testid="to-coin-select"]').first()
   }
 
   get fromAmountInput(): Locator {
@@ -47,10 +41,7 @@ export class SwapFlow extends BasePage {
   }
 
   get reverseButton(): Locator {
-    return (
-      this.page.locator('[data-testid="swap-reverse"]') ||
-      this.page.getByRole('button', { name: /reverse|switch/i })
-    )
+    return this.page.locator('[data-testid="swap-reverse"]').or(this.page.getByRole('button', { name: /reverse|switch/i })).first()
   }
 
   get quoteLoading(): Locator {
@@ -65,18 +56,16 @@ export class SwapFlow extends BasePage {
     return this.page.locator('[data-testid="swap-terms-checkbox"], input[type="checkbox"]')
   }
 
+  /**
+   * The sign/keysign button on the verify page.
+   * For fast vaults this shows "Fast Sign", for secure vaults "Sign".
+   */
   get signButton(): Locator {
-    return (
-      this.page.locator('[data-testid="sign-button"]') ||
-      this.page.getByRole('button', { name: /sign|confirm/i })
-    )
+    return this.page.getByRole('button', { name: /fast.sign|sign|confirm/i }).first()
   }
 
   get successScreen(): Locator {
-    return (
-      this.page.locator('[data-testid="swap-success"]') ||
-      this.page.locator('text=/success|swapped|complete/i')
-    )
+    return this.page.locator('[data-testid="swap-success"]').or(this.page.locator('text=/success|swapped|complete/i')).first()
   }
 
   get txHashDisplay(): Locator {
@@ -88,10 +77,7 @@ export class SwapFlow extends BasePage {
   }
 
   get maxButton(): Locator {
-    return (
-      this.page.locator('[data-testid="max-amount"]') ||
-      this.page.getByRole('button', { name: /max/i })
-    )
+    return this.page.locator('[data-testid="max-amount"]').or(this.page.getByRole('button', { name: /max/i })).first()
   }
 
   /**
@@ -175,23 +161,53 @@ export class SwapFlow extends BasePage {
   }
 
   /**
-   * Accept terms if shown
+   * Accept terms if shown.
+   * The verify page may show multiple checkboxes. Each checkbox is a custom component
+   * with an invisible <input> inside a <label>. We click the <label> instead.
    */
   async acceptTerms(): Promise<void> {
-    if (await this.termsCheckbox.isVisible()) {
-      const isChecked = await this.termsCheckbox.isChecked()
+    const checkboxes = this.page.locator('input[type="checkbox"]')
+    const count = await checkboxes.count()
+
+    for (let i = 0; i < count; i++) {
+      const checkbox = checkboxes.nth(i)
+      const isChecked = await checkbox.isChecked().catch(() => false)
       if (!isChecked) {
-        await this.termsCheckbox.click()
+        const label = checkbox.locator('xpath=ancestor::label')
+        if (await label.count() > 0) {
+          await label.first().click()
+        } else {
+          await checkbox.click({ force: true })
+        }
+        await this.page.waitForTimeout(200)
       }
     }
   }
 
   /**
-   * Initiate signing
+   * Initiate signing.
+   *
+   * For fast vaults, clicking "Fast Sign" opens a password modal.
    */
   async sign(): Promise<void> {
     await this.signButton.click()
     await this.page.waitForTimeout(500)
+
+    // Check if a password modal appeared (fast vault flow)
+    const passwordInput = this.page.locator('input[type="password"], input[placeholder*="password" i]').first()
+    if (await passwordInput.isVisible({ timeout: 3000 }).catch(() => false)) {
+      const password = process.env.TEST_VAULT_PASSWORD || ''
+      if (password) {
+        await passwordInput.fill(password)
+        await this.page.waitForTimeout(300)
+
+        const confirmBtn = this.page.getByRole('button', { name: /confirm/i }).first()
+        if (await confirmBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
+          await confirmBtn.click()
+          await this.page.waitForTimeout(500)
+        }
+      }
+    }
   }
 
   /**

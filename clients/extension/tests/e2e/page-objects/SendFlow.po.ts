@@ -21,10 +21,16 @@ export class SendFlow extends BasePage {
   }
 
   get coinSelector(): Locator {
-    return (
-      this.page.locator('[data-testid="send-coin-selector"]') ||
-      this.page.locator('[data-testid="coin-select"]')
-    )
+    return this.page.locator('[data-testid="send-coin-selector"]')
+  }
+
+  /**
+   * The chain selector button within the send form.
+   * Renders as a clickable HStack with the chain name and a ChevronDownIcon.
+   * Located in the "From" row of the coin input field.
+   */
+  get chainSelectorButton(): Locator {
+    return this.sendForm.locator('role=button >> text=/Bitcoin|Ethereum|THORChain|Solana|BSC/i').first()
   }
 
   get addressInput(): Locator {
@@ -43,18 +49,17 @@ export class SendFlow extends BasePage {
     return this.page.locator('[data-testid="send-terms-checkbox"], input[type="checkbox"]')
   }
 
+  /**
+   * The sign/keysign button on the verify page.
+   * For fast vaults this shows "Fast Sign", for secure vaults "Sign".
+   * There's no data-testid, so we match by button role and text.
+   */
   get signButton(): Locator {
-    return (
-      this.page.locator('[data-testid="sign-button"]') ||
-      this.page.getByRole('button', { name: /sign|confirm/i })
-    )
+    return this.page.getByRole('button', { name: /fast.sign|sign|confirm/i }).first()
   }
 
   get successScreen(): Locator {
-    return (
-      this.page.locator('[data-testid="send-success"]') ||
-      this.page.locator('text=/success|sent|complete/i')
-    )
+    return this.page.locator('[data-testid="send-success"]').or(this.page.locator('text=/success|sent|complete/i')).first()
   }
 
   get txHashDisplay(): Locator {
@@ -62,10 +67,7 @@ export class SendFlow extends BasePage {
   }
 
   get maxButton(): Locator {
-    return (
-      this.page.locator('[data-testid="max-amount"]') ||
-      this.page.getByRole('button', { name: /max/i })
-    )
+    return this.page.locator('[data-testid="max-amount"]').or(this.page.getByRole('button', { name: /max/i })).first()
   }
 
   get feeDisplay(): Locator {
@@ -80,16 +82,130 @@ export class SendFlow extends BasePage {
   }
 
   /**
-   * Select coin to send
+   * Map of coin symbols to their chain names as displayed in the UI.
+   * The chain selector modal shows chain names (e.g. "Ethereum"), not symbols (e.g. "ETH").
+   */
+  private static readonly SYMBOL_TO_CHAIN: Record<string, string> = {
+    BTC: 'Bitcoin',
+    ETH: 'Ethereum',
+    BNB: 'BSC',
+    SOL: 'Solana',
+    RUNE: 'THORChain',
+    ATOM: 'Cosmos',
+    MATIC: 'Polygon',
+    AVAX: 'Avalanche',
+    LTC: 'Litecoin',
+    DOGE: 'Dogecoin',
+  }
+
+  /**
+   * Select coin/chain to send.
+   *
+   * The send form pre-selects a coin based on navigation state.
+   * The coin section may start collapsed (showing ticker + pencil icon).
+   * To switch chains we must:
+   *   1. Expand the coin section (click collapsed row)
+   *   2. Click the chain name to open the chain selector modal
+   *   3. Pick the desired chain from the modal
+   *
+   * @param coin - Coin symbol (e.g. 'ETH', 'BTC', 'BNB') or chain name (e.g. 'Ethereum')
    */
   async selectCoin(coin: string): Promise<void> {
-    await this.coinSelector.click()
-    await this.page.waitForTimeout(300)
+    // Resolve chain name from symbol if needed
+    const chainName = SendFlow.SYMBOL_TO_CHAIN[coin.toUpperCase()] || coin
 
-    // Find and click the coin option
-    const coinOption = this.page.getByText(new RegExp(coin, 'i')).first()
-    await coinOption.click()
-    await this.page.waitForTimeout(300)
+    // Check if the coin ticker is already visible in the form (collapsed or expanded)
+    const currentCoin = this.sendForm.getByText(new RegExp(`^${coin}$`, 'i')).first()
+    if (await currentCoin.isVisible({ timeout: 1000 }).catch(() => false)) {
+      console.log(`Coin ${coin} already selected`)
+      return
+    }
+
+    // Also check by chain name
+    const currentChain = this.sendForm.getByText(new RegExp(`^${chainName}$`, 'i')).first()
+    if (await currentChain.isVisible({ timeout: 500 }).catch(() => false)) {
+      console.log(`Chain ${chainName} already selected`)
+      return
+    }
+
+    // Try data-testid coin selector first (future-proofing)
+    if (await this.coinSelector.isVisible({ timeout: 1000 }).catch(() => false)) {
+      await this.coinSelector.click()
+      await this.page.waitForTimeout(300)
+      const coinOption = this.page.getByText(new RegExp(coin, 'i')).first()
+      await coinOption.click()
+      await this.page.waitForTimeout(300)
+      return
+    }
+
+    // The coin section may be collapsed — expand it first by clicking the "Asset" row
+    // The collapsed row shows "Asset [icon] TICKER [checkmark] [pencil]" and is clickable
+    const expandCoin = await this.page.evaluate(() => {
+      const elements = document.querySelectorAll('*')
+      for (const el of elements) {
+        const text = el.textContent?.trim()
+        if (text && /^Asset/.test(text) && el.querySelector('svg')) {
+          const style = window.getComputedStyle(el)
+          if (style.cursor === 'pointer' || el.getAttribute('role') === 'button') {
+            ;(el as HTMLElement).click()
+            return true
+          }
+          const clickable = el.closest('[role="button"], button') as HTMLElement
+          if (clickable) {
+            clickable.click()
+            return true
+          }
+          ;(el as HTMLElement).click()
+          return true
+        }
+      }
+      return false
+    })
+
+    if (expandCoin) {
+      await this.page.waitForTimeout(500)
+    }
+
+    // Now the coin section should be expanded, showing the chain selector
+    // Click the chain name (has role="button" and contains the chain name + ChevronDownIcon)
+    const chainClicked = await this.page.evaluate(() => {
+      const buttons = document.querySelectorAll('[role="button"]')
+      for (const btn of buttons) {
+        if (btn.querySelector('svg') && btn.textContent) {
+          const text = btn.textContent.trim()
+          if (/^(Bitcoin|Ethereum|THORChain|Solana|BSC|Litecoin|Dogecoin|Polygon|Avalanche|Cosmos|Arbitrum|Optimism|Base)$/i.test(text.replace(/\s/g, ''))) {
+            ;(btn as HTMLElement).click()
+            return text
+          }
+        }
+      }
+      return null
+    })
+
+    if (chainClicked) {
+      console.log(`Clicked chain selector (current: ${chainClicked})`)
+      await this.page.waitForTimeout(500)
+
+      // The chain selector modal is open — search for the target chain by name
+      // The modal has a search input and lists chains with ChainOption components
+      const chainOption = this.page.getByText(new RegExp(`^${chainName}$`, 'i')).first()
+      if (await chainOption.isVisible({ timeout: 3000 }).catch(() => false)) {
+        await chainOption.click()
+        await this.page.waitForTimeout(500)
+        console.log(`Selected chain: ${chainName}`)
+        return
+      }
+
+      // Try with the symbol too (in case it's listed differently)
+      const symbolOption = this.page.getByText(new RegExp(`^${coin}$`, 'i')).first()
+      if (await symbolOption.isVisible({ timeout: 1000 }).catch(() => false)) {
+        await symbolOption.click()
+        await this.page.waitForTimeout(500)
+        return
+      }
+    }
+
+    console.log(`Could not find chain selector to switch to ${coin} (${chainName})`)
   }
 
   /**
@@ -126,23 +242,64 @@ export class SendFlow extends BasePage {
   }
 
   /**
-   * Accept terms if shown
+   * Accept terms if shown.
+   * The verify page may show multiple checkboxes (e.g. "The amount is correct",
+   * "I'm sending to the right address"). Each checkbox is a custom component:
+   *   <label>          ← Container (clickable)
+   *     <div>          ← visual Box (circle with checkmark)
+   *     <Text>         ← label text
+   *     <input>        ← InvisibleInput (1px, position absolute, clipped)
+   *   </label>
+   *
+   * We click the parent <label> instead of the hidden <input>.
    */
   async acceptTerms(): Promise<void> {
-    if (await this.termsCheckbox.isVisible()) {
-      const isChecked = await this.termsCheckbox.isChecked()
+    const checkboxes = this.page.locator('input[type="checkbox"]')
+    const count = await checkboxes.count()
+
+    for (let i = 0; i < count; i++) {
+      const checkbox = checkboxes.nth(i)
+      const isChecked = await checkbox.isChecked().catch(() => false)
       if (!isChecked) {
-        await this.termsCheckbox.click()
+        // Click the parent <label> element which is the actual clickable container
+        const label = checkbox.locator('xpath=ancestor::label')
+        if (await label.count() > 0) {
+          await label.first().click()
+        } else {
+          // Fallback: force-click the hidden input
+          await checkbox.click({ force: true })
+        }
+        await this.page.waitForTimeout(200)
       }
     }
   }
 
   /**
-   * Initiate signing
+   * Initiate signing.
+   *
+   * For fast vaults, clicking "Fast Sign" opens a password modal.
+   * We detect the modal, enter the vault password, and click "Confirm".
    */
   async sign(): Promise<void> {
     await this.signButton.click()
     await this.page.waitForTimeout(500)
+
+    // Check if a password modal appeared (fast vault flow)
+    const passwordInput = this.page.locator('input[type="password"], input[placeholder*="password" i]').first()
+    if (await passwordInput.isVisible({ timeout: 3000 }).catch(() => false)) {
+      const password = process.env.TEST_VAULT_PASSWORD || ''
+      if (password) {
+        await passwordInput.fill(password)
+        await this.page.waitForTimeout(300)
+
+        // Click Confirm button in the modal
+        const confirmBtn = this.page.getByRole('button', { name: /confirm/i }).first()
+        if (await confirmBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
+          await confirmBtn.click()
+          await this.page.waitForTimeout(500)
+        }
+      }
+    }
   }
 
   /**
