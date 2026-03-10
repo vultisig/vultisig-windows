@@ -154,40 +154,114 @@ export class KeysignProgress extends BasePage {
 
   /**
    * Get transaction hash from success screen
+   * 
+   * The Vultisig UI displays a truncated hash (e.g., "0x04...b3e9") via MiddleTruncate
+   * component, and provides a copy button that copies the FULL explorer URL 
+   * (e.g., "https://etherscan.io/tx/0x..."). We click the copy button and extract 
+   * the hash from the clipboard URL.
    */
   async getTxHash(): Promise<string | null> {
-    // Try explicit tx hash display first
+    // Strategy 1: Click the copy button next to the tx hash and read from clipboard
+    // This is the most reliable method as the copy button copies the explorer URL
+    // which contains the full tx hash
+    const txHashRow = this.page.locator('text=/transaction.?hash|tx.?hash/i').first()
+    
+    if (await txHashRow.isVisible().catch(() => false)) {
+      try {
+        // Grant clipboard permissions
+        await this.page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
+        
+        // Find the copy button - it's in the parent container of the tx hash label
+        const txHashParent = txHashRow.locator('..').locator('..')
+        const buttonsInRow = txHashParent.locator('[role="button"]')
+        
+        if (await buttonsInRow.count() > 0) {
+          // First button is the copy button (ClipboardCopyIcon)
+          await buttonsInRow.first().click()
+          await this.page.waitForTimeout(300)
+          
+          // Read clipboard
+          const clipboardText = await this.page.evaluate(async () => {
+            try {
+              return await navigator.clipboard.readText()
+            } catch {
+              return null
+            }
+          })
+          
+          if (clipboardText) {
+            // Extract hash from explorer URL (e.g., https://etherscan.io/tx/0x123...)
+            // Supports EVM (0x...), Bitcoin, and other hash formats
+            const hashMatch = clipboardText.match(/0x[a-fA-F0-9]{64}|[a-fA-F0-9]{64}/)
+            if (hashMatch) {
+              return hashMatch[0]
+            }
+          }
+        }
+      } catch {
+        // Clipboard approach failed, try fallbacks
+      }
+    }
+    
+    // Strategy 2: Try to extract from React component props
+    // The MiddleTruncate component receives the full hash as a 'text' prop
+    const hashFromReact = await this.page.evaluate(() => {
+      const findReactFiber = (el: Element): any => {
+        for (const key of Object.keys(el)) {
+          if (key.startsWith('__reactFiber$') || key.startsWith('__reactInternalInstance$')) {
+            return (el as any)[key]
+          }
+        }
+        return null
+      }
+      
+      // Find truncated hash spans and extract full value from React props
+      const spans = document.querySelectorAll('span')
+      for (const span of spans) {
+        const text = span.textContent || ''
+        if (text.match(/0x[a-fA-F0-9]{2,8}\.{3}[a-fA-F0-9]{2,8}/)) {
+          let current: Element | null = span
+          for (let i = 0; i < 10 && current; i++) {
+            const fiber = findReactFiber(current)
+            if (fiber) {
+              let node = fiber
+              for (let j = 0; j < 20 && node; j++) {
+                const props = node.memoizedProps || node.pendingProps || {}
+                if (props.text?.match?.(/^0x[a-fA-F0-9]{64}$/)) return props.text
+                if (props.hash?.match?.(/^0x[a-fA-F0-9]{64}$/)) return props.hash
+                if (props.txHash?.match?.(/^0x[a-fA-F0-9]{64}$/)) return props.txHash
+                node = node.return
+              }
+            }
+            current = current.parentElement
+          }
+        }
+      }
+      
+      // Check data attributes
+      for (const el of document.querySelectorAll('*')) {
+        for (const attr of el.attributes) {
+          const match = attr.value.match(/0x[a-fA-F0-9]{64}/)
+          if (match) return match[0]
+        }
+      }
+      
+      return null
+    })
+    
+    if (hashFromReact) return hashFromReact
+    
+    // Fallback: Try explicit test-id locators
     if (await this.txHashDisplay.isVisible()) {
       const text = await this.txHashDisplay.textContent()
-      if (text) {
-        // Extract hash from text (might be prefixed or formatted)
-        const hashMatch = text.match(/0x[a-fA-F0-9]{64}|[a-fA-F0-9]{64}/)
-        if (hashMatch) {
-          return hashMatch[0]
-        }
-        return text.trim()
-      }
+      const match = text?.match(/0x[a-fA-F0-9]{64}|[a-fA-F0-9]{64}/)
+      if (match) return match[0]
     }
 
-    // Try to get from link
     if (await this.txLink.isVisible()) {
       const href = await this.txLink.getAttribute('href')
-      if (href) {
-        // Extract hash from explorer URL
-        const hashMatch = href.match(/0x[a-fA-F0-9]{64}|[a-fA-F0-9]{64}/)
-        if (hashMatch) {
-          return hashMatch[0]
-        }
-      }
-    }
-
-    // Try to find any hash on the page
-    const pageText = await this.page.textContent('body')
-    if (pageText) {
-      const hashMatch = pageText.match(/0x[a-fA-F0-9]{64}/)
-      if (hashMatch) {
-        return hashMatch[0]
-      }
+      const match = href?.match(/0x[a-fA-F0-9]{64}|[a-fA-F0-9]{64}/)
+      if (match) return match[0]
     }
 
     return null
