@@ -9,7 +9,9 @@
     ".claude/**",
     ".cursor/**",
     ".venv/**",
-    ".yarn/releases/**"
+    ".yarn/releases/**",
+    "clients/extension/tests/e2e/**",
+    "clients/extension/tests/integration/**"
   ],
   "ignoreBinaries": [
     "tsx",
@@ -33,11 +35,11 @@
         "src/inpage/index.ts",
         "src/pages/index.tsx",
         "src/pages/popup.tsx",
-        "tests/**/*.{ts,tsx}"
+        "tests/unit/**/*.{ts,tsx}"
       ],
       "project": [
         "src/**/*.{ts,tsx}",
-        "tests/**/*.{ts,tsx}"
+        "tests/unit/**/*.{ts,tsx}"
       ],
       "ignoreDependencies": [
         "@types/chrome",
@@ -48,7 +50,9 @@
         "@types/express",
         "@types/web-push",
         "express",
-        "web-push"
+        "web-push",
+        "@playwright/test",
+        "playwright"
       ]
     },
     "core/inpage-provider": {
