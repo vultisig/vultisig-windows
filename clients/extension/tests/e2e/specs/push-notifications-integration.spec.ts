@@ -271,6 +271,16 @@ test.describe('Push Notifications E2E Flow', () => {
       const vaultId = registeredVaults[0]
       console.log(`Sending notification to vault: ${vaultId}`)
       
+      // Listen for service worker console logs
+      const swLogs: string[] = []
+      context.on('console', (msg) => {
+        const text = msg.text()
+        if (text.includes('[Vultisig Push]')) {
+          swLogs.push(text)
+          console.log('SW Log:', text)
+        }
+      })
+
       const sent = await mockServer.sendNotification(
         vaultId,
         'Test Notification',
@@ -278,14 +288,19 @@ test.describe('Push Notifications E2E Flow', () => {
       )
       
       if (sent) {
-        console.log('✅ Notification sent successfully!')
+        console.log('✅ Notification sent via Web Push!')
         
-        // Wait a bit for the notification to be processed
-        await page.waitForTimeout(2000)
+        // Wait for the notification to be processed by service worker
+        await page.waitForTimeout(3000)
         
-        // Note: We can't directly verify browser notifications appeared
-        // But we verified the Web Push send was successful
-        // The extension's service worker should have received it
+        // Check if we captured the receipt log
+        const receivedLog = swLogs.find(log => log.includes('Notification received'))
+        if (receivedLog) {
+          console.log('✅ Notification RECEIVED by extension:', receivedLog)
+        } else {
+          console.log('⚠️ No receipt log captured (SW logs may not propagate to page context)')
+          console.log('   Logs captured:', swLogs.length > 0 ? swLogs : 'none')
+        }
       } else {
         console.log('❌ Failed to send notification (subscription may be invalid in test env)')
       }
