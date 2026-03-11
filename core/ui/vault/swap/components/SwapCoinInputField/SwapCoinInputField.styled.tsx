@@ -15,7 +15,7 @@ export const Container = styled(VStack)<{
     size: 16,
     weight: 700,
   })}
-  padding: 16px;
+  padding: clamp(12px, 3.33vw, 16px);
   border-radius: ${({ side }) =>
     side === 'to' ? '12px 12px 24px 24px' : '24px 24px 12px 12px'};
   border: 1px solid ${getColor('foregroundExtra')};
