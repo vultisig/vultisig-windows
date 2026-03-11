@@ -1,10 +1,8 @@
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { ErrorBoundary } from '@lib/ui/errors/ErrorBoundary'
-import { WalletIcon } from '@lib/ui/icons/WalletIcon'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
+import { VStack } from '@lib/ui/layout/Stack'
 import { useViewState } from '@lib/ui/navigation/hooks/useViewState'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -19,7 +17,7 @@ import { useAgentService } from '../hooks/useAgentService'
 import { useConnectionStatus } from '../hooks/useConnectionStatus'
 import { BurgerClosedIcon } from '../icons/BurgerClosedIcon'
 import { ChatMessage as ChatMessageType, TitleUpdatedEvent } from '../types'
-import { AgentChatInput } from './AgentChatInput'
+import { AgentChatFooter } from './AgentChatFooter'
 import { AgentChatMenu } from './AgentChatMenu'
 import { AgentEmptyState } from './AgentEmptyState'
 import { AgentErrorFallback } from './AgentErrorFallback'
@@ -246,16 +244,6 @@ export const AgentChatPage: FC = () => {
     )
   }, [conversationId, orchestrator])
 
-  const handlePasswordSubmit = async (password: string) => {
-    dismissPasswordRequired()
-    await providePassword(password)
-  }
-
-  const handlePasswordCancel = () => {
-    dismissPasswordRequired()
-    cancelRequest()
-  }
-
   const handleConfirmationConfirm = async () => {
     dismissConfirmation()
     await provideConfirmation(true)
@@ -270,6 +258,58 @@ export const AgentChatPage: FC = () => {
   const [inputValue, setInputValue] = useState('')
   const [authSignInError, setAuthSignInError] = useState<string | null>(null)
   const [authSigningIn, setAuthSigningIn] = useState(false)
+
+  const [passwordMode, setPasswordMode] = useState(false)
+  const [passwordError, setPasswordError] = useState<string | null>(null)
+  const [passwordValue, setPasswordValue] = useState('')
+  const passwordSubmittedRef = useRef(false)
+  const messagesAtSubmitRef = useRef(0)
+
+  useEffect(() => {
+    if (passwordRequired) {
+      setPasswordMode(true)
+      setPasswordError(null)
+      setPasswordValue('')
+      passwordSubmittedRef.current = false
+      dismissPasswordRequired()
+    }
+  }, [passwordRequired, dismissPasswordRequired])
+
+  useEffect(() => {
+    if (error && passwordMode) {
+      setPasswordError(error)
+      dismissError()
+    }
+  }, [error, passwordMode, dismissError])
+
+  useEffect(() => {
+    if (
+      passwordMode &&
+      passwordSubmittedRef.current &&
+      messages.length > messagesAtSubmitRef.current
+    ) {
+      setPasswordMode(false)
+      setPasswordValue('')
+      setPasswordError(null)
+      passwordSubmittedRef.current = false
+    }
+  }, [passwordMode, messages.length])
+
+  const handleFooterPasswordSubmit = () => {
+    if (!passwordValue) return
+    setPasswordError(null)
+    passwordSubmittedRef.current = true
+    messagesAtSubmitRef.current = messages.length
+    providePassword(passwordValue)
+  }
+
+  const handleFooterPasswordCancel = () => {
+    setPasswordMode(false)
+    setPasswordError(null)
+    setPasswordValue('')
+    passwordSubmittedRef.current = false
+    cancelRequest()
+  }
 
   const handleAuthSignIn = async (password: string) => {
     if (!vaultId) return
@@ -367,7 +407,7 @@ export const AgentChatPage: FC = () => {
           {isLoading && !messages.some(m => m.steps !== undefined) && (
             <AgentReplyMessage isAnalyzing content="" />
           )}
-          {error && (
+          {error && !passwordMode && (
             <ErrorMessage onClick={dismissError}>
               <Text size={14} color="danger">
                 {error}
@@ -377,40 +417,31 @@ export const AgentChatPage: FC = () => {
         </ErrorBoundary>
         <div ref={messagesEndRef} />
       </MessagesContainer>
-      <ChatInputContainer>
-        <AgentNavBar>
-          <WalletButton
-            onClick={() => navigate({ id: 'vault' })}
-            aria-label={t('wallet')}
-          >
-            <WalletIconWrapper>
-              <WalletIcon />
-            </WalletIconWrapper>
-          </WalletButton>
-          <InputWrapper>
-            <AgentChatInput
-              value={inputValue}
-              onChange={setInputValue}
-              onSubmit={() => {
-                const trimmed = inputValue.trim()
-                if (trimmed) {
-                  handleSend(trimmed)
-                  setInputValue('')
-                }
-              }}
-              placeholder={t('ask_about_plugins_policies')}
-              isLoading={isProcessing}
-              onStop={handleStop}
-            />
-          </InputWrapper>
-        </AgentNavBar>
-      </ChatInputContainer>
-      {passwordRequired && (
-        <PasswordPrompt
-          toolName={passwordRequired.toolName}
-          operation={passwordRequired.operation}
-          onSubmit={handlePasswordSubmit}
-          onCancel={handlePasswordCancel}
+      {passwordMode ? (
+        <AgentChatFooter
+          mode="password"
+          value={passwordValue}
+          onChange={setPasswordValue}
+          onSubmit={handleFooterPasswordSubmit}
+          onCancel={handleFooterPasswordCancel}
+          error={passwordError}
+        />
+      ) : (
+        <AgentChatFooter
+          mode="chat"
+          value={inputValue}
+          onChange={setInputValue}
+          onSubmit={() => {
+            const trimmed = inputValue.trim()
+            if (trimmed) {
+              handleSend(trimmed)
+              setInputValue('')
+            }
+          }}
+          placeholder={t('ask_about_plugins_policies')}
+          isLoading={isProcessing}
+          onStop={handleStop}
+          onWalletClick={() => navigate({ id: 'vault' })}
         />
       )}
       {confirmationRequired && (
@@ -451,48 +482,6 @@ const MessagesContainer = styled(PageContent)`
   flex: 1;
   overflow-y: auto;
   padding: 16px;
-`
-
-const ChatInputContainer = styled.div`
-  padding: 12px 16px;
-`
-
-const AgentNavBar = styled(HStack)`
-  gap: 8px;
-  align-items: center;
-  width: 100%;
-`
-
-const InputWrapper = styled.div`
-  flex: 1;
-  min-width: 0;
-`
-
-const WalletIconWrapper = styled.span`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-`
-
-const WalletButton = styled(UnstyledButton)`
-  flex-shrink: 0;
-  width: 52px;
-  height: 52px;
-  padding: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: ${getColor('foreground')};
-  border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 40px;
-  color: ${getColor('textShy')};
-  cursor: pointer;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background: ${getColor('foregroundExtra')};
-  }
 `
 
 const ErrorMessage = styled.div`
