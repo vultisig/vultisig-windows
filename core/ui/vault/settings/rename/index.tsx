@@ -100,7 +100,9 @@ export const VaultRenamePage = () => {
       />
       <PageContent gap={12} flexGrow scrollable>
         <ActionInsideInteractiveElement
-          render={() => <TextInput {...register('name')} data-testid="rename-vault-input" />}
+          render={() => (
+            <TextInput {...register('name')} data-testid="rename-vault-input" />
+          )}
           action={
             <IconButton
               type="button"

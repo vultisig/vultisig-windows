@@ -30,7 +30,12 @@ export const VaultTotalBalance = () => {
           </HStack>
         )}
         success={value => (
-          <Text color="contrast" size={28} centerVertically data-testid="balance-value">
+          <Text
+            color="contrast"
+            size={28}
+            centerVertically
+            data-testid="balance-value"
+          >
             <BalanceVisibilityAware size="l">
               {formatFiatAmount(value)}
             </BalanceVisibilityAware>

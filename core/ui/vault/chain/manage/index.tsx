@@ -126,7 +126,11 @@ export const ManageVaultChainsPage = () => {
             description={saveError}
           />
         )}
-        <SearchInput value={search} onChange={setSearch} data-testid="chain-search-input" />
+        <SearchInput
+          value={search}
+          onChange={setSearch}
+          data-testid="chain-search-input"
+        />
         {sortedNativeCoins.length > 0 ? (
           <ItemGrid data-testid="chain-grid">
             {sortedNativeCoins.map(coin => (

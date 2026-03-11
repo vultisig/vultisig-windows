@@ -55,7 +55,12 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
           <ManageAddresses />
           <ManageAmount />
         </VStack>
-        <Button disabled={isDisabled} loading={isPending} type="submit" data-testid="send-continue">
+        <Button
+          disabled={isDisabled}
+          loading={isPending}
+          type="submit"
+          data-testid="send-continue"
+        >
           {t('continue')}
         </Button>
       </ActionForm>

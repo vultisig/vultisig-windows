@@ -67,7 +67,12 @@ export const UploadBackupFileStep = ({
             </Text>
           )}
         </VStack>
-        <Button disabled={isDisabled} loading={isPending} type="submit" data-testid="import-continue">
+        <Button
+          disabled={isDisabled}
+          loading={isPending}
+          type="submit"
+          data-testid="import-continue"
+        >
           {t('continue')}
         </Button>
       </PageContent>

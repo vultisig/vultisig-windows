@@ -51,7 +51,12 @@ export const TrackTxPrompt = ({
       <Text weight="500" size={14} color="shy">
         {title}
       </Text>
-      <HStack gap={4} alignItems="center" data-testid="tx-hash" data-hash={value}>
+      <HStack
+        gap={4}
+        alignItems="center"
+        data-testid="tx-hash"
+        data-hash={value}
+      >
         <Text weight="500" size={14} color="contrast">
           {truncateId(value)}
         </Text>

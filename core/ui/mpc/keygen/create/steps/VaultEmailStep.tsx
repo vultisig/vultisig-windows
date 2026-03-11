@@ -63,7 +63,12 @@ export const VaultEmailStep = ({
         onBack={onBack}
         headerRight={headerRight}
         footer={
-          <Button style={{ width: '100%' }} disabled={!isValid} type="submit" data-testid="vault-email-next">
+          <Button
+            style={{ width: '100%' }}
+            disabled={!isValid}
+            type="submit"
+            data-testid="vault-email-next"
+          >
             {t('next')}
           </Button>
         }

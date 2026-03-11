@@ -65,7 +65,12 @@ export const VaultNameStep = ({
         onBack={onBack}
         headerRight={headerRight}
         footer={
-          <Button style={{ width: '100%' }} disabled={!isValid} type="submit" data-testid="vault-name-next">
+          <Button
+            style={{ width: '100%' }}
+            disabled={!isValid}
+            type="submit"
+            data-testid="vault-name-next"
+          >
             {t('next')}
           </Button>
         }

@@ -75,7 +75,12 @@ export const VaultPasswordStep = ({
         onBack={onBack}
         headerRight={headerRight}
         footer={
-          <Button style={{ width: '100%' }} disabled={!isValid} type="submit" data-testid="create-vault-button">
+          <Button
+            style={{ width: '100%' }}
+            disabled={!isValid}
+            type="submit"
+            data-testid="create-vault-button"
+          >
             {t('create_vault')}
           </Button>
         }

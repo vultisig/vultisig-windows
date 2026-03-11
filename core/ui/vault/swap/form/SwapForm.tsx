@@ -108,7 +108,11 @@ export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
             <SwapInfo />
           </VStack>
         </VStack>
-        <Button disabled={!!errorMessage} type="submit" data-testid="swap-continue">
+        <Button
+          disabled={!!errorMessage}
+          type="submit"
+          data-testid="swap-continue"
+        >
           {t('continue')}
         </Button>
       </PageContent>

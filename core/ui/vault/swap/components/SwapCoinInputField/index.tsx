@@ -33,7 +33,12 @@ export const SwapCoinInputField = ({
   const side = useTransferDirection()
 
   return (
-    <Container side={side} justifyContent="center" gap={16} data-testid={`swap-${side}-section`}>
+    <Container
+      side={side}
+      justifyContent="center"
+      gap={16}
+      data-testid={`swap-${side}-section`}
+    >
       <HStack justifyContent="space-between" alignItems="center">
         <HStack gap={6} alignItems="center">
           <Text weight="500" size={12} color="shy">
