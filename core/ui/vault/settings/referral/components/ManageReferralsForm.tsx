@@ -67,8 +67,8 @@ export const ManageReferralsForm = ({ onFinish }: OnFinishProp) => {
     }
   }
 
-  const handleRemoveReferral = () => {
-    setFriendReferral('')
+  const handleRemoveReferral = async () => {
+    await setFriendReferral('')
     setValue('')
   }
 

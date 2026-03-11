@@ -25,15 +25,20 @@ export const useReferralValidation = (
 
   const isPending = !!trimmedInput && isFetching
 
-  const error = tooLong
+  const syncError = tooLong
     ? t('tns_max_4_chars')
     : badChars
       ? t('tns_alnum_only')
-      : trimmedInput && !exists
-        ? t('tns_not_found')
-        : trimmedInput && exists && !hasThorAlias
-          ? t('tns_missing_thor_alias')
-          : undefined
+      : undefined
+
+  const asyncError =
+    trimmedInput && !exists
+      ? t('tns_not_found')
+      : trimmedInput && exists && !hasThorAlias
+        ? t('tns_missing_thor_alias')
+        : undefined
+
+  const error = syncError ?? (isPending ? undefined : asyncError)
 
   return { error, isPending }
 }
