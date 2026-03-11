@@ -982,7 +982,7 @@ export const ru = {
   },
   vaultCreated: 'Хранилище создано',
   vaultOverview: 'Обзор хранилища',
-  vault_already_exists: 'Хранилище уже существует',
+  vault_already_exists: 'Хранилище "{{name}}" уже существует',
   vault_backup_page_password_info:
     'Никогда не храните доли хранилища разных устройств в одном месте',
   vault_backup_page_password_protection:

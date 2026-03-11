@@ -909,7 +909,7 @@ export const it = {
   value: 'Valore',
   vault: 'Volta',
   vaultCreated: 'Vault creato',
-  vault_already_exists: 'Il caveau esiste già',
+  vault_already_exists: 'Il caveau "{{name}}" esiste già',
   vault_backup_page_password_info:
     'Non archiviare mai le condivisioni Vault di dispositivi diversi nella stessa posizione',
   vault_backup_page_password_protection:

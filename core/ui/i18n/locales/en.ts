@@ -1070,7 +1070,7 @@ export const en = {
   },
   vaultCreated: 'Vault created',
   vaultOverview: 'Vault Overview',
-  vault_already_exists: 'Vault already exists',
+  vault_already_exists: 'Vault "{{name}}" already exists',
   vault_backup_page_password_info:
     'Never store Vault Shares from different devices in the same location',
   vault_backup_page_password_protection:

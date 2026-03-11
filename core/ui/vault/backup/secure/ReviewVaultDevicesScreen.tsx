@@ -83,7 +83,9 @@ export const ReviewVaultDevicesScreen = ({
   return (
     <Container fullHeight>
       <AnimationWrapper>
-        <RiveComponent />
+        <AnimationContainer>
+          <RiveComponent />
+        </AnimationContainer>
       </AnimationWrapper>
       <ContentSection>
         <VStack gap={8} alignItems="center">
@@ -132,8 +134,26 @@ const Container = styled(PageContent)`
 
 const AnimationWrapper = styled.div`
   flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   min-height: 0;
   width: 100%;
+  overflow: hidden;
+`
+
+const AnimationContainer = styled.div`
+  width: 100%;
+  max-width: 500px;
+  aspect-ratio: 500 / 350;
+  position: relative;
+  overflow: hidden;
+
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+  }
 `
 
 const ContentSection = styled(VStack)`
