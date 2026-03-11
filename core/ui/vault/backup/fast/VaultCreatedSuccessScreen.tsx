@@ -95,17 +95,13 @@ const AnimationWrapper = styled.div`
 `
 
 const AnimationContainer = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   max-width: 500px;
-  aspect-ratio: 500 / 350;
-  position: relative;
-  overflow: hidden;
-
-  canvas {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: contain;
-  }
+  min-height: 0;
 `
 
 const ContentSection = styled(VStack)`
