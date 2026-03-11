@@ -26,7 +26,13 @@ export const ManagePushNotifications = () => {
           <BellIcon />
         </ListItemIconWrapper>
       }
-      extra={<Switch checked={isRegistered ?? false} disabled={isPending} />}
+      extra={
+        <Switch
+          checked={isRegistered ?? false}
+          disabled={isPending}
+          data-testid="push-notifications-switch"
+        />
+      }
       onClick={() => {
         if (isPending) return
         if (isRegistered) {
@@ -37,6 +43,7 @@ export const ManagePushNotifications = () => {
       }}
       title={t('push_notifications')}
       hoverable
+      data-testid="push-notifications-toggle"
     />
   )
 }

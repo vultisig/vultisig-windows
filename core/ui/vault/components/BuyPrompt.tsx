@@ -28,7 +28,10 @@ export const BuyPrompt = ({ coin }: BuyPromptProps) => {
 
   return (
     <VStack alignItems="center" gap={8}>
-      <SecondaryActionWrapper onClick={() => openUrl(url)}>
+      <SecondaryActionWrapper
+        data-testid="vault-action-buy"
+        onClick={() => openUrl(url)}
+      >
         <DollarIcon />
       </SecondaryActionWrapper>
       <Text color="shyExtra" size={12}>

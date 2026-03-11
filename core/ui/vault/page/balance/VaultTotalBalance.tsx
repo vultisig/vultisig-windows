@@ -19,7 +19,7 @@ export const VaultTotalBalance = () => {
   const { t } = useTranslation()
 
   return (
-    <VStack alignItems="center" gap={12}>
+    <VStack alignItems="center" gap={12} data-testid="vault-total-balance">
       <MatchQuery
         value={query}
         error={() => t('failed_to_load')}
@@ -30,7 +30,12 @@ export const VaultTotalBalance = () => {
           </HStack>
         )}
         success={value => (
-          <Text color="contrast" size={28} centerVertically>
+          <Text
+            color="contrast"
+            size={28}
+            centerVertically
+            data-testid="balance-value"
+          >
             <BalanceVisibilityAware size="l">
               {formatFiatAmount(value)}
             </BalanceVisibilityAware>
