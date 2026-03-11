@@ -61,27 +61,27 @@ test.describe('Push Notifications Integration', () => {
         if (await devModal.isVisible({ timeout: 3000 }).catch(() => false)) {
           console.log('Developer options modal opened')
           
-          // Find push server URL field (first input with empty placeholder)
-          const inputs = await page.locator('input').all()
-          
-          for (const input of inputs) {
-            const placeholder = await input.getAttribute('placeholder')
-            const value = await input.inputValue()
-            console.log(`Input: placeholder="${placeholder}", value="${value}"`)
+          // Find push server URL field by testid
+          const pushUrlInput = page.locator('[data-testid="push-server-url-input"]')
+          if (await pushUrlInput.isVisible({ timeout: 3000 }).catch(() => false)) {
+            await pushUrlInput.fill(serverUrl)
+            console.log(`Set push server URL to: ${serverUrl}`)
             
-            // The push server URL input has "Leave empty for production default" placeholder
-            if (placeholder?.includes('Leave empty') || placeholder?.includes('production')) {
-              await input.fill(serverUrl)
-              console.log(`Set push server URL to: ${serverUrl}`)
-              
-              // Save the settings
-              const saveBtn = page.getByRole('button', { name: /save|apply|ok/i })
-              if (await saveBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
-                await saveBtn.click()
-                await page.waitForTimeout(500)
-                console.log('Saved developer options')
+            // Save the settings
+            const saveBtn = page.locator('[data-testid="save-push-server-url"]')
+            await saveBtn.click()
+            await page.waitForTimeout(500)
+            console.log('Saved push server URL')
+          } else {
+            // Fallback to placeholder-based search
+            const inputs = await page.locator('input').all()
+            for (const input of inputs) {
+              const placeholder = await input.getAttribute('placeholder')
+              if (placeholder?.includes('Leave empty') || placeholder?.includes('production')) {
+                await input.fill(serverUrl)
+                console.log(`Set push server URL to: ${serverUrl}`)
+                break
               }
-              break
             }
           }
         }
@@ -102,18 +102,43 @@ test.describe('Push Notifications Integration', () => {
     const page = await context.newPage()
     const vaultPage = new VaultPage(page, extensionId)
     const mockServer = getMockPushServer()!
+    const serverUrl = mockServer.getUrl()
 
     try {
       await vaultPage.goto()
       await vaultPage.waitForView(15_000)
 
-      // Navigate to settings
+      // STEP 1: Configure push server URL in developer options
       const settingsBtn = page.locator('[data-testid="settings-button"]')
       await settingsBtn.waitFor({ state: 'visible', timeout: 10000 })
       await settingsBtn.click()
-      await page.waitForTimeout(2000)
+      await page.waitForTimeout(1000)
 
-      // Find and click push notifications toggle
+      // Open developer options (triple-click version)
+      const versionText = page.getByText(/VULTISIG.*V\d+\.\d+/i).first()
+      if (await versionText.isVisible({ timeout: 3000 }).catch(() => false)) {
+        await versionText.click({ clickCount: 3 })
+        await page.waitForTimeout(500)
+
+        // Set push server URL
+        const pushUrlInput = page.locator('[data-testid="push-server-url-input"]')
+        if (await pushUrlInput.isVisible({ timeout: 3000 }).catch(() => false)) {
+          await pushUrlInput.fill(serverUrl)
+          console.log(`Configured push server URL: ${serverUrl}`)
+          
+          // Save
+          const saveBtn = page.locator('[data-testid="save-push-server-url"]')
+          await saveBtn.click()
+          await page.waitForTimeout(500)
+          console.log('Saved push server URL')
+        }
+
+        // Close dev options modal
+        await page.keyboard.press('Escape')
+        await page.waitForTimeout(500)
+      }
+
+      // STEP 2: Enable push notifications
       const pushToggle = page.getByText('Push Notifications', { exact: false })
       await pushToggle.waitFor({ state: 'visible', timeout: 10000 })
       
@@ -123,19 +148,18 @@ test.describe('Push Notifications Integration', () => {
       
       // Click the toggle to enable
       await pushToggle.click()
-      await page.waitForTimeout(3000) // Wait for registration
+      await page.waitForTimeout(5000) // Wait longer for registration
       
-      // Check if browser prompted for notification permission
-      // Note: Playwright may auto-grant or block this
       console.log('Clicked push notifications toggle')
       
       // Check registration count
       const finalCount = mockServer.getRegisteredDevices().size
       console.log(`Final registered devices: ${finalCount}`)
       
-      // If registration worked, we'd see an increase
-      // But this requires the extension to be configured to use our mock server
-      // which would need to be done via Developer Options first
+      // Log any registered vaults
+      for (const [vaultId, device] of mockServer.getRegisteredDevices()) {
+        console.log(`  - Registered vault: ${vaultId} (party: ${device.partyName})`)
+      }
       
     } finally {
       await page.close()

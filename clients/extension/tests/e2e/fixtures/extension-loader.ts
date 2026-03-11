@@ -61,6 +61,7 @@ export const test = base.extend<{
         '--no-default-browser-check',
         '--disable-default-apps',
       ],
+      permissions: ['notifications'], // Grant notification permission
     })
     await use(context)
     await context.close()
