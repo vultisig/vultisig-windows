@@ -64,25 +64,20 @@ test.describe('Push Notifications', () => {
       const settingsBtn = page.locator('[data-testid="settings-button"]')
       await settingsBtn.waitFor({ state: 'visible', timeout: 10000 })
       await settingsBtn.click()
-      await page.waitForTimeout(1000)
+      await page.waitForTimeout(2000)
 
-      // Find push notification toggle using testid
-      const pushToggle = page.locator('[data-testid="push-notifications-toggle"]')
-        .or(page.locator('text=/push.*notification/i').first())
+      // Find push notification toggle (use text - most reliable)
+      const pushToggle = page.getByText('Push Notifications', { exact: false })
+      await pushToggle.waitFor({ state: 'visible', timeout: 10000 })
+      console.log('Found Push Notifications toggle')
       
-      if (await pushToggle.isVisible({ timeout: 5000 }).catch(() => false)) {
-        // Click the toggle row
-        await pushToggle.click()
-        await page.waitForTimeout(1000)
-        console.log('Clicked push notification toggle row')
-        
-        // After clicking, either permission dialog appears or state changes
-        // This is as far as we can test without real push permission
-        expect(true).toBe(true)
-      } else {
-        console.log('Push toggle not found')
-        test.skip()
-      }
+      // Click the toggle row
+      await pushToggle.click()
+      await page.waitForTimeout(500)
+      console.log('Clicked push notification toggle')
+      
+      // Success - toggle is visible and clickable
+      expect(true).toBe(true)
     } finally {
       await page.close()
     }
