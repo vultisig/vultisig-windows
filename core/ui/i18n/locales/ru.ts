@@ -441,6 +441,7 @@ export const ru = {
   header_tooltip_title: 'Реферальная программа',
   hide_balance: 'Скрыть баланс',
   hide_defi_balance: 'Скрыть DeFi-баланс',
+  hold: 'Держать',
   hold_for_paired_sign: 'Удерживайте для парной подписи',
   how_it_works: 'Как это работает',
   ibc_transaction_not_supporting_memo_desc:
@@ -981,7 +982,7 @@ export const ru = {
   },
   vaultCreated: 'Хранилище создано',
   vaultOverview: 'Обзор хранилища',
-  vault_already_exists: 'Хранилище уже существует',
+  vault_already_exists: 'Хранилище "{{name}}" уже существует',
   vault_backup_page_password_info:
     'Никогда не храните доли хранилища разных устройств в одном месте',
   vault_backup_page_password_protection:

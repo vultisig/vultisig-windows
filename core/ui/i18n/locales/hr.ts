@@ -470,6 +470,7 @@ export const hr = {
   header_tooltip_title: 'Program preporuka',
   hide_balance: 'Sakrij stanje',
   hide_defi_balance: 'Sakrij DeFi stanje',
+  hold: 'Drži',
   hold_for_paired_sign: 'Držite za upareni znak',
   how_it_works: 'Kako funkcionira',
   ibc_transaction_not_supporting_memo_desc:
@@ -897,7 +898,7 @@ export const hr = {
   value: 'Vrijednost',
   vault: 'Trezor',
   vaultCreated: 'Trezor je kreiran',
-  vault_already_exists: 'Trezor već postoji',
+  vault_already_exists: 'Trezor "{{name}}" već postoji',
   vault_backup_page_password_info:
     'Nikada ne pohranjujte dijeljene datoteke Vaulta s različitih uređaja na istu lokaciju',
   vault_backup_page_password_protection:

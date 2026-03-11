@@ -478,6 +478,7 @@ export const it = {
   header_tooltip_title: 'Programma di segnalazione',
   hide_balance: 'Nascondi saldo',
   hide_defi_balance: 'Nascondi saldo DeFi',
+  hold: 'Mantieni',
   hold_for_paired_sign: 'Tieni premuto per il segno accoppiato',
   how_it_works: 'Come funziona',
   ibc_transaction_not_supporting_memo_desc:
@@ -908,7 +909,7 @@ export const it = {
   value: 'Valore',
   vault: 'Volta',
   vaultCreated: 'Vault creato',
-  vault_already_exists: 'Il caveau esiste già',
+  vault_already_exists: 'Il caveau "{{name}}" esiste già',
   vault_backup_page_password_info:
     'Non archiviare mai le condivisioni Vault di dispositivi diversi nella stessa posizione',
   vault_backup_page_password_protection:
