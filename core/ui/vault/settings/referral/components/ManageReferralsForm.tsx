@@ -41,10 +41,10 @@ export const ManageReferralsForm = ({ onFinish }: OnFinishProp) => {
   const { mutateAsync: setFriendReferral } =
     useSetFriendReferralMutation(vaultId)
   const { getClipboardText } = useCore()
-  const error = useFriendReferralValidation(value)
+  const { error, isPending: isValidating } = useFriendReferralValidation(value)
   const disabled = friendReferral
     ? false
-    : Boolean(error) || value.trim().length === 0
+    : Boolean(error) || isValidating || value.trim().length === 0
 
   const handlePaste = async () => {
     const { data } = await attempt(getClipboardText)
@@ -65,6 +65,11 @@ export const ManageReferralsForm = ({ onFinish }: OnFinishProp) => {
     if (newFriendReferral) {
       setFriendReferral(newFriendReferral)
     }
+  }
+
+  const handleRemoveReferral = () => {
+    setFriendReferral('')
+    setValue('')
   }
 
   useEffect(() => {
@@ -121,16 +126,23 @@ export const ManageReferralsForm = ({ onFinish }: OnFinishProp) => {
               )}
             </VStack>
           </VStack>
-          <SaveReferralButton
-            disabled={disabled}
-            onClick={() => (friendReferral ? onFinish() : handleSave())}
-          >
-            <Text as="span" color="contrast">
-              {friendReferral
-                ? t('edit_friends_referral')
-                : t('add_referral_code')}
-            </Text>
-          </SaveReferralButton>
+          <VStack gap={8}>
+            <SaveReferralButton
+              disabled={disabled}
+              onClick={() => (friendReferral ? onFinish() : handleSave())}
+            >
+              <Text as="span" color="contrast">
+                {friendReferral
+                  ? t('edit_friends_referral')
+                  : t('add_referral_code')}
+              </Text>
+            </SaveReferralButton>
+            {friendReferral && (
+              <Button kind="secondary" onClick={handleRemoveReferral}>
+                {t('remove_friends_referral')}
+              </Button>
+            )}
+          </VStack>
         </VStack>
       </PageContent>
     </>

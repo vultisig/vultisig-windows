@@ -275,6 +275,7 @@ export const en = {
   edit_address: 'Edit Address',
   edit_friends_referral: 'Edit Friend Referral',
   edit_referral: 'Edit Referral',
+  remove_friends_referral: 'Remove Referral',
   edit_vaults: 'Edit Vaults',
   email: 'Email',
   email_backup: 'Enter your email to receive your backup',
