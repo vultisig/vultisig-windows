@@ -12,14 +12,13 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { isRecordEmpty } from '@lib/utils/record/isRecordEmpty'
-import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const SendForm = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
   const { data, error, isPending } = useSendValidationQuery()
 
-  const isDisabled = useMemo(() => {
+  const isDisabled = (() => {
     if (data && !isRecordEmpty(data)) {
       return Object.values(data)[0]
     }
@@ -29,7 +28,7 @@ export const SendForm = ({ onFinish }: OnFinishProp) => {
     }
 
     return isPending
-  }, [data, error, isPending])
+  })()
 
   return (
     <>
