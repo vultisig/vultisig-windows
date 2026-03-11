@@ -178,7 +178,7 @@ test.describe('Concurrent Requests', () => {
       const promises = Array.from({ length: 10 }, () =>
         window.ethereum
           .request({ method: 'eth_chainId', params: [] })
-          .then((r) => ({ result: r }))
+          .then((r: unknown) => ({ result: r }))
           .catch((e: any) => ({ error: { code: e.code, message: e.message } }))
       )
       return Promise.all(promises)
@@ -242,7 +242,7 @@ test.describe('Concurrent Requests', () => {
       const promises = methods.map((method) =>
         window.ethereum
           .request({ method, params: [] })
-          .then((r) => ({ method, result: r }))
+          .then((r: unknown) => ({ method, result: r }))
           .catch((e: any) => ({
             method,
             error: { code: e.code, message: e.message },

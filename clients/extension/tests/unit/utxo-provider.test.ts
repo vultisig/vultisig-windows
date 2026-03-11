@@ -1,5 +1,5 @@
 import EventEmitter from 'events'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest'
 
 import { UTXO } from '@clients/extension/src/inpage/providers/utxo'
 import { UtxoChain } from '@core/chain/Chain'
@@ -7,7 +7,7 @@ import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 
 // Mock dependencies
 const mockRequestAccount = vi.fn()
-const mockSharedHandlers: Record<string, vi.Mock> = {
+const mockSharedHandlers: Record<string, Mock> = {
   getAccounts: vi.fn(),
   signMessage: vi.fn(),
 }
@@ -181,8 +181,8 @@ describe('UTXO', () => {
     })
 
     it('initializes instances map if undefined', () => {
-      // @ts-expect-error - accessing private static for test
-      UTXO.instances = undefined as any
+      // accessing private static for test
+      ;(UTXO as any).instances = undefined
       const instance = UTXO.getInstance(UtxoChain.Bitcoin, 'vultisig')
       expect(instance).toBeInstanceOf(UTXO)
       expect(UTXO.instances).toBeDefined()

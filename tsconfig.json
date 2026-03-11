@@ -16,14 +16,7 @@
     "jsx": "react-jsx"
   },
   "references": [],
-  "exclude": [
-    "node_modules",
-    "**/tests/**",
-    "**/*.test.ts",
-    "**/*.test.tsx",
-    "**/*.spec.ts",
-    "**/*.spec.tsx"
-  ],
+  "exclude": ["node_modules"],
   "include": [
     "next-env.d.ts",
     "**/*.ts",

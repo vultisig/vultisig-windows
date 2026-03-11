@@ -10,7 +10,8 @@
  * - window.vultisig and window.phantom.solana also injected
  */
 
-import { test, expect, type Page } from '../fixtures/extension-loader'
+import { test, expect } from '../fixtures/extension-loader'
+import type { Page } from '@playwright/test'
 import { DAppApproval } from '../page-objects/DAppApproval.po'
 import { TEST_DAPP_HTML } from '../fixtures/dapp-page.fixture'
 import http from 'http'

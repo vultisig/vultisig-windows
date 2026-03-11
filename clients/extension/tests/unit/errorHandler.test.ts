@@ -4,7 +4,7 @@ import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHa
 
 describe('EIP1193Error', () => {
   const errorCases: Array<{
-    type: Parameters<typeof EIP1193Error.prototype.constructor>[0]
+    type: ConstructorParameters<typeof EIP1193Error>[0]
     expectedCode: number
     expectedMessage: string
   }> = [
@@ -23,7 +23,7 @@ describe('EIP1193Error', () => {
   it.each(errorCases)(
     'maps $type → code $expectedCode',
     ({ type, expectedCode, expectedMessage }) => {
-      const error = new EIP1193Error(type as any)
+      const error = new EIP1193Error(type)
 
       expect(error).toBeInstanceOf(Error)
       expect(error).toBeInstanceOf(EIP1193Error)
@@ -33,19 +33,19 @@ describe('EIP1193Error', () => {
   )
 
   it('extends Error and has proper prototype chain', () => {
-    const error = new EIP1193Error('InternalError' as any)
+    const error = new EIP1193Error('InternalError')
     expect(error instanceof Error).toBe(true)
     expect(error.name).toBe('Error')
   })
 
   it('can be caught as Error', () => {
     expect(() => {
-      throw new EIP1193Error('UserRejectedRequest' as any)
+      throw new EIP1193Error('UserRejectedRequest')
     }).toThrow(Error)
   })
 
   it('has a stack trace', () => {
-    const error = new EIP1193Error('MethodNotFound' as any)
+    const error = new EIP1193Error('MethodNotFound')
     expect(error.stack).toBeDefined()
     expect(error.stack!.length).toBeGreaterThan(0)
   })

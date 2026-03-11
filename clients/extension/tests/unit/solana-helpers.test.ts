@@ -129,6 +129,7 @@ describe('isSolanaChain', () => {
   })
 
   it('returns false for empty string', () => {
+    // @ts-expect-error testing invalid input
     expect(isSolanaChain('')).toBe(false)
   })
 
@@ -137,10 +138,12 @@ describe('isSolanaChain', () => {
   })
 
   it('returns false for partial match', () => {
+    // @ts-expect-error testing invalid input
     expect(isSolanaChain('solana')).toBe(false)
   })
 
   it('returns false for mainnet without prefix', () => {
+    // @ts-expect-error testing invalid input
     expect(isSolanaChain('mainnet')).toBe(false)
   })
 })
