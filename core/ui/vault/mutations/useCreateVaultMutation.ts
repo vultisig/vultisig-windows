@@ -81,12 +81,11 @@ export const useCreateVaultMutation = (
         })
       )
 
+      const vaultId = getVaultId(vault)
+
       await Promise.all([
-        setCurrentVaultId(getVaultId(vault)),
-        createCoins({
-          vaultId: getVaultId(vault),
-          coins,
-        }),
+        setCurrentVaultId(vaultId),
+        createCoins({ vaultId, coins }),
       ])
 
       await refetchQueries([StorageKey.vaults])
