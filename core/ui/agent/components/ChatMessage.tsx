@@ -3,10 +3,26 @@ import { getColor } from '@lib/ui/theme/getters'
 import { FC, memo } from 'react'
 import styled from 'styled-components'
 
+import { AgentMessageTimeline } from '../timeline/AgentMessageTimeline'
+import type { AgentStep, TimelineEntry } from '../timeline/TimelineEntry'
 import { ChatMessage as ChatMessageType } from '../types'
 import { AgentReplyMessage } from './AgentReplyMessage'
 import { InlineToolCallMessage } from './InlineToolCallMessage'
 import { InlineTxStatusMessage } from './InlineTxStatusMessage'
+
+function buildTimelineEntries(
+  steps: AgentStep[],
+  content: string
+): TimelineEntry[] {
+  const entries: TimelineEntry[] = steps.map(step => ({
+    kind: 'step' as const,
+    ...step,
+  }))
+  if (content.trim()) {
+    entries.push({ kind: 'content', text: content })
+  }
+  return entries
+}
 
 type Props = {
   message: ChatMessageType
@@ -16,6 +32,17 @@ type Props = {
 const ChatMessageComponent: FC<Props> = ({ message, isAnalyzing = false }) => {
   const isUser = message.role === 'user'
   const hasTextContent = message.content.trim().length > 0
+
+  if (message.steps !== undefined) {
+    const entries = buildTimelineEntries(message.steps, message.content)
+    return (
+      <AgentMessageTimeline
+        entries={entries}
+        isAnalyzing={isAnalyzing}
+        analysisDuration={message.analysisDuration}
+      />
+    )
+  }
 
   if (message.toolCall) {
     return (

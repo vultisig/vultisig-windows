@@ -346,7 +346,8 @@ export const AgentChatPage: FC = () => {
           {(() => {
             const lastAssistantIdx = messages.reduce(
               (last, m, idx) =>
-                m.role === 'assistant' && m.content.trim().length > 0
+                m.role === 'assistant' &&
+                (m.content.trim().length > 0 || m.steps !== undefined)
                   ? idx
                   : last,
               -1
@@ -363,7 +364,9 @@ export const AgentChatPage: FC = () => {
               />
             ))
           })()}
-          {isLoading && <AgentReplyMessage isAnalyzing content="" />}
+          {isLoading && !messages.some(m => m.steps !== undefined) && (
+            <AgentReplyMessage isAnalyzing content="" />
+          )}
           {error && (
             <ErrorMessage onClick={dismissError}>
               <Text size={14} color="danger">

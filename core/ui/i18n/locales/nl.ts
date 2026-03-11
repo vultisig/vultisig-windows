@@ -445,6 +445,7 @@ export const nl = {
   header_tooltip_title: 'Referralprogramma',
   hide_balance: 'Saldo verbergen',
   hide_defi_balance: 'DeFi-saldo verbergen',
+  hold: 'Vasthouden',
   hold_for_paired_sign: 'Vasthouden voor gekoppelde handtekening',
   how_it_works: 'Hoe het werkt',
   ibc_transaction_not_supporting_memo_desc:
@@ -988,7 +989,7 @@ export const nl = {
   },
   vaultCreated: 'Kluis aangemaakt',
   vaultOverview: 'Kluisoverzicht',
-  vault_already_exists: 'Kluis bestaat al',
+  vault_already_exists: 'Kluis "{{name}}" bestaat al',
   vault_backup_page_password_info:
     'Sla kluis-shares van verschillende apparaten nooit op dezelfde locatie op',
   vault_backup_page_password_protection:

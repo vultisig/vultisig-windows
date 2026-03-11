@@ -478,6 +478,7 @@ export const de = {
   header_tooltip_title: 'Empfehlungsprogramm',
   hide_balance: 'Gleichgewicht ausblenden',
   hide_defi_balance: 'DeFi-Guthaben ausblenden',
+  hold: 'Halten',
   hold_for_paired_sign: 'Halten Sie für das gepaarte Zeichen',
   how_it_works: 'So funktioniert es',
   ibc_transaction_not_supporting_memo_desc:
@@ -916,7 +917,7 @@ export const de = {
   value: 'Wert',
   vault: 'Gewölbe',
   vaultCreated: 'Tresor erstellt',
-  vault_already_exists: 'Vault existiert bereits',
+  vault_already_exists: 'Vault "{{name}}" existiert bereits',
   vault_backup_page_password_info:
     'Speichern Sie Vault-Freigaben von verschiedenen Geräten niemals am selben Ort.',
   vault_backup_page_password_protection:

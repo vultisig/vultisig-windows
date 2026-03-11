@@ -11,6 +11,7 @@ import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
+import { TransactionRecorderProvider } from '../../../transaction-history/record/TransactionRecorderProvider'
 import { KeysignMessagePayloadProvider } from '../state/keysignMessagePayload'
 
 const keysignSteps = ['server', 'keysign'] as const
@@ -44,7 +45,9 @@ export const StartFastKeysignFlow = ({
                 render={() => (
                   <KeysignActionProvider>
                     <KeysignMessagePayloadProvider value={keysignPayload}>
-                      <KeysignSigningStep />
+                      <TransactionRecorderProvider>
+                        <KeysignSigningStep />
+                      </TransactionRecorderProvider>
                     </KeysignMessagePayloadProvider>
                   </KeysignActionProvider>
                 )}

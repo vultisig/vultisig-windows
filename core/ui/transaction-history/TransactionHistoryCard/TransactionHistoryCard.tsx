@@ -3,6 +3,7 @@ import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { Text } from '@lib/ui/text'
 import { truncateId } from '@lib/utils/string/truncate'
 import { ReactNode } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import {
   TransactionHistoryTag,
@@ -20,7 +21,11 @@ import {
   TopRow,
 } from './styles'
 
-export const transactionHistoryCardStatuses = ['successful', 'error'] as const
+export const transactionHistoryCardStatuses = [
+  'successful',
+  'pending',
+  'error',
+] as const
 export type TransactionHistoryCardStatus =
   (typeof transactionHistoryCardStatuses)[number]
 
@@ -30,7 +35,7 @@ export type TransactionHistoryCardAddressDirection = 'to' | 'from'
 export type TransactionHistoryCardProps = {
   /** Transaction type shown in the tag (send, receive, swap, approve). */
   tagType: TransactionHistoryTagType
-  /** Card state: successful (green label) or error (red label). */
+  /** Card state: successful (green), pending (neutral), or error (red). */
   status: TransactionHistoryCardStatus
   /** USD amount, e.g. "$1,000.54". */
   amountUsd: string
@@ -65,8 +70,15 @@ export const TransactionHistoryCard = ({
   coin,
   icon,
 }: TransactionHistoryCardProps) => {
-  const statusLabel = status === 'successful' ? 'Successful' : 'Error'
-  const prefix = addressDirection === 'to' ? 'to ' : 'from '
+  const { t } = useTranslation()
+
+  const statusLabelKey: Record<TransactionHistoryCardStatus, string> = {
+    successful: t('confirmed'),
+    pending: t('pending'),
+    error: t('failed'),
+  }
+  const statusLabel = statusLabelKey[status]
+  const prefix = `${t(addressDirection)} `
   const truncatedAddress = truncateId(address)
   const assetIcon =
     coin != null ? <CoinIcon coin={coin} style={{ fontSize: 24 }} /> : icon

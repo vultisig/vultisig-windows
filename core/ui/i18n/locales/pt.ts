@@ -475,6 +475,7 @@ export const pt = {
   header_tooltip_title: 'Programa de Encaminhamento',
   hide_balance: 'Ocultar saldo',
   hide_defi_balance: 'Ocultar saldo DeFi',
+  hold: 'Manter',
   hold_for_paired_sign: 'Aguarde o sinal emparelhado',
   how_it_works: 'Como funciona',
   ibc_transaction_not_supporting_memo_desc:
@@ -909,7 +910,7 @@ export const pt = {
   value: 'Valor',
   vault: 'Cofre',
   vaultCreated: 'Cofre criado',
-  vault_already_exists: 'O Vault já existe.',
+  vault_already_exists: 'O Vault "{{name}}" já existe.',
   vault_backup_page_password_info:
     'Nunca armazene compartilhamentos do Vault de dispositivos diferentes no mesmo local.',
   vault_backup_page_password_protection:

@@ -442,6 +442,7 @@ export const zh = {
   header_tooltip_title: '推荐计划',
   hide_balance: '隐藏余额',
   hide_defi_balance: '隐藏DeFi余额',
+  hold: '持有',
   hold_for_paired_sign: '保持配对符号',
   how_it_works: '工作原理',
   ibc_transaction_not_supporting_memo_desc:
@@ -849,7 +850,7 @@ export const zh = {
   value: '价值',
   vault: '保险库',
   vaultCreated: 'Vault 创建',
-  vault_already_exists: 'Vault 已存在',
+  vault_already_exists: 'Vault "{{name}}" 已存在',
   vault_backup_page_password_info:
     '切勿将来自不同设备的 Vault 共享文件存储在同一位置',
   vault_backup_page_password_protection: '您可以选择为您的保险库设置密码保护。',
