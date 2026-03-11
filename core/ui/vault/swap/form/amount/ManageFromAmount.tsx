@@ -96,7 +96,7 @@ export const ManageFromAmount = () => {
         pending={() => null}
         error={() => null}
         success={amount => (
-          <HStack alignItems="center" gap={4}>
+          <HStack alignItems="center" gap={4} wrap="wrap">
             {suggestions.map(suggestion => (
               <AmountSuggestion
                 onClick={() => {
