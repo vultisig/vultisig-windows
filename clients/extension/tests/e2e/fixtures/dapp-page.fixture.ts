@@ -342,7 +342,7 @@ export interface DAppFixtures {
 export const dappFixture = base.extend<DAppFixtures>({
   // Test DApp server URL
   // eslint-disable-next-line no-empty-pattern
-  testDappUrl: async ({}, use) => {
+  testDappUrl: async (_fixtures, use) => {
     // Create HTTP server
     const server = http.createServer((req, res) => {
       res.writeHead(200, { 'Content-Type': 'text/html' })

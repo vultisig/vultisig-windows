@@ -32,15 +32,23 @@
         "src/content/index.ts",
         "src/inpage/index.ts",
         "src/pages/index.tsx",
-        "src/pages/popup.tsx"
+        "src/pages/popup.tsx",
+        "tests/**/*.{ts,tsx}"
       ],
       "project": [
-        "src/**/*.{ts,tsx}"
+        "src/**/*.{ts,tsx}",
+        "tests/**/*.{ts,tsx}"
       ],
       "ignoreDependencies": [
         "@types/chrome",
         "@fontsource/montserrat",
-        "@fontsource/roboto-mono"
+        "@fontsource/roboto-mono",
+        "@testing-library/jest-dom",
+        "@testing-library/react",
+        "@types/express",
+        "@types/web-push",
+        "express",
+        "web-push"
       ]
     },
     "core/inpage-provider": {

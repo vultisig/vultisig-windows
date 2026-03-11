@@ -13,11 +13,11 @@ yarn vitest run --config clients/extension/tests/integration/vitest.config.ts # 
 yarn test:unit
 yarn test:integration
 yarn test:all
-```
+```text
 
 ## Test Structure
 
-```
+```text
 tests/
 ├── README.md
 ├── unit/
@@ -43,7 +43,7 @@ tests/
     │   ├── extension-loader.ts    # Playwright fixture for unpacked extension
     │   └── test-dapp.html         # Minimal DApp for provider testing
     └── extension.spec.ts          # Provider injection, connect, chain switch
-```
+```text
 
 ## What's Tested
 

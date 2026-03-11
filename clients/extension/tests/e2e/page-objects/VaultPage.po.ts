@@ -29,10 +29,9 @@ export class VaultPage extends BasePage {
   }
 
   get refreshButton(): Locator {
-    return (
-      this.page.locator('[data-testid="refresh-balance"]') ||
-      this.page.getByRole('button', { name: /refresh/i })
-    )
+    return this.page
+      .locator('[data-testid="refresh-balance"]')
+      .or(this.page.getByRole('button', { name: /refresh/i }))
   }
 
   get settingsButton(): Locator {
@@ -258,10 +257,9 @@ export class VaultPage extends BasePage {
    * Get vault selector element
    */
   get vaultSelector(): Locator {
-    return (
-      this.page.locator('[data-testid="vault-selector"]') ||
-      this.page.locator('[data-testid="vault-dropdown"]')
-    )
+    return this.page
+      .locator('[data-testid="vault-selector"]')
+      .or(this.page.locator('[data-testid="vault-dropdown"]'))
   }
 
   /**

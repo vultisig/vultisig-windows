@@ -100,7 +100,7 @@ export const ExtensionDeveloperOptions = () => {
                 label={t('push_notification_server_url')}
                 value={pushServerUrlValue}
                 onValueChange={setPushServerUrlValue}
-                placeholder="Leave empty for production default"
+                placeholder={t('push_notification_server_placeholder')}
                 data-testid="push-server-url-input"
               />
               <Button

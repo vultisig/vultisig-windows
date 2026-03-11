@@ -45,7 +45,9 @@ export const chromeMock = {
       }),
       remove: vi.fn(async (keys: string | string[]) => {
         const arr = Array.isArray(keys) ? keys : [keys]
-        arr.forEach(k => storage.delete(k))
+        arr.forEach(k => {
+          storage.delete(k)
+        })
       }),
       clear: vi.fn(async () => {
         storage.clear()
