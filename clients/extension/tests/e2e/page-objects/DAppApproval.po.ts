@@ -25,24 +25,21 @@ export class DAppApproval extends BasePage {
   }
 
   get dappInfo(): Locator {
-    return (
-      this.page.locator('[data-testid="dapp-info"]') ||
-      this.page.locator('[data-testid="dapp-origin"]')
-    )
+    return this.page
+      .locator('[data-testid="dapp-info"]')
+      .or(this.page.locator('[data-testid="dapp-origin"]'))
   }
 
   get dappUrl(): Locator {
-    return (
-      this.page.locator('[data-testid="dapp-url"]') ||
-      this.page.locator('text=/http|localhost|127\\.0\\.0\\.1/').first()
-    )
+    return this.page
+      .locator('[data-testid="dapp-url"]')
+      .or(this.page.locator('text=/http|localhost|127\\.0\\.0\\.1/').first())
   }
 
   get requestType(): Locator {
-    return (
-      this.page.locator('[data-testid="request-type"]') ||
-      this.page.locator('text=/connect|sign|transaction|switch/i').first()
-    )
+    return this.page
+      .locator('[data-testid="request-type"]')
+      .or(this.page.locator('text=/connect|sign|transaction|switch/i').first())
   }
 
   get permissionsList(): Locator {
@@ -50,40 +47,35 @@ export class DAppApproval extends BasePage {
   }
 
   get messageContent(): Locator {
-    return (
-      this.page.locator('[data-testid="message-content"]') ||
-      this.page.locator('[data-testid="sign-message"]') ||
-      this.page.locator('text=/message|sign/i').first()
-    )
+    return this.page
+      .locator('[data-testid="message-content"]')
+      .or(this.page.locator('[data-testid="sign-message"]'))
+      .or(this.page.locator('text=/message|sign/i').first())
   }
 
   get txDetails(): Locator {
-    return (
-      this.page.locator('[data-testid="tx-details"]') ||
-      this.page.locator('[data-testid="transaction-details"]')
-    )
+    return this.page
+      .locator('[data-testid="tx-details"]')
+      .or(this.page.locator('[data-testid="transaction-details"]'))
   }
 
   get approveButton(): Locator {
-    return (
-      this.page.locator('[data-testid="approve-button"]') ||
-      this.page.getByRole('button', { name: /approve|confirm|connect|sign|allow/i })
-    )
+    return this.page
+      .locator('[data-testid="approve-button"]')
+      .or(this.page.getByRole('button', { name: /approve|confirm|connect|sign|allow/i }))
   }
 
   get rejectButton(): Locator {
-    return (
-      this.page.locator('[data-testid="reject-button"]') ||
-      this.page.getByRole('button', { name: /reject|cancel|deny|close/i })
-    )
+    return this.page
+      .locator('[data-testid="reject-button"]')
+      .or(this.page.getByRole('button', { name: /reject|cancel|deny|close/i }))
   }
 
   get warningMessage(): Locator {
-    return (
-      this.page.locator('[data-testid="warning-message"]') ||
-      this.page.locator('[role="alert"]') ||
-      this.page.locator('.warning')
-    )
+    return this.page
+      .locator('[data-testid="warning-message"]')
+      .or(this.page.locator('[role="alert"]'))
+      .or(this.page.locator('.warning'))
   }
 
   get accountSelector(): Locator {

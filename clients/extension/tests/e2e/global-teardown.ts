@@ -18,7 +18,7 @@ async function globalTeardown(config: FullConfig): Promise<void> {
   console.log('\n🧹 Global Teardown: Cleaning up...\n')
 
   // 1. Update chain rotation state with run timestamp
-  const chainRotationStatePath = path.resolve(__dirname, '.chain-rotation-state.json')
+  const chainRotationStatePath = path.resolve(__dirname, '..', '.chain-rotation-state.json')
   if (existsSync(chainRotationStatePath)) {
     try {
       const state = JSON.parse(readFileSync(chainRotationStatePath, 'utf-8'))

@@ -55,10 +55,11 @@ export abstract class BasePage {
    */
   async goBack(): Promise<void> {
     // Try data-testid first, then aria-label, then generic back button
-    const backButton =
-      this.page.locator('[data-testid="back-button"]').first() ||
-      this.page.getByRole('button', { name: /back/i }).first() ||
-      this.page.locator('button:has-text("Back")').first()
+    const backButton = this.page
+      .locator('[data-testid="back-button"]')
+      .or(this.page.getByRole('button', { name: /back/i }))
+      .or(this.page.locator('button:has-text("Back")'))
+      .first()
 
     if (await backButton.isVisible()) {
       await backButton.click()
@@ -115,17 +116,15 @@ export abstract class BasePage {
   }
 
   get continueButton(): Locator {
-    return (
-      this.page.locator('[data-testid="continue-button"]') ||
-      this.page.getByRole('button', { name: /continue/i })
-    )
+    return this.page
+      .locator('[data-testid="continue-button"]')
+      .or(this.page.getByRole('button', { name: /continue/i }))
   }
 
   get submitButton(): Locator {
-    return (
-      this.page.locator('[data-testid="submit-button"]') ||
-      this.page.getByRole('button', { name: /submit/i })
-    )
+    return this.page
+      .locator('[data-testid="submit-button"]')
+      .or(this.page.getByRole('button', { name: /submit/i }))
   }
 
   /**

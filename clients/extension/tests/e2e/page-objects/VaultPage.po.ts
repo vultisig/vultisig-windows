@@ -343,7 +343,9 @@ export class VaultPage extends BasePage {
 
       // Go back to vault page
       await this.goBack()
-      await this.waitForView(5000).catch(() => {})
+      await this.waitForView(5000).catch(() => {
+        // View may not load if we're already on the vault page
+      })
 
       return address
     } catch (error) {
