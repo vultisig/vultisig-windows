@@ -917,7 +917,7 @@ export const de = {
   value: 'Wert',
   vault: 'Gewölbe',
   vaultCreated: 'Tresor erstellt',
-  vault_already_exists: 'Vault existiert bereits',
+  vault_already_exists: 'Vault "{{name}}" existiert bereits',
   vault_backup_page_password_info:
     'Speichern Sie Vault-Freigaben von verschiedenen Geräten niemals am selben Ort.',
   vault_backup_page_password_protection:

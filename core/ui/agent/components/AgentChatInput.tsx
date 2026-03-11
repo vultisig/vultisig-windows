@@ -74,7 +74,8 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 8px 8px 14px;
+  height: 52px;
+  padding: 0 8px 0 14px;
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
   border-radius: 40px;
@@ -114,7 +115,9 @@ const ActionButton = styled(UnstyledButton)<{ $active: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
   border-radius: 77px;
   flex-shrink: 0;
   transition: background-color 0.2s;

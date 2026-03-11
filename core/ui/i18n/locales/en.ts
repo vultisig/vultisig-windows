@@ -315,6 +315,8 @@ export const en = {
   est_network_fee: 'Est. Network Fee',
   expand_view: 'Expand View',
   open_as_side_panel: 'Open as Side Panel',
+  push_notifications: 'Push Notifications',
+  push_notification_server_url: 'Push Notification Server URL',
   expiration_date: 'Expiration Date',
   expiration_must_extend_by_exactly_one_year:
     'Expiration can only be extended by exactly 1 year',
@@ -1068,7 +1070,7 @@ export const en = {
   },
   vaultCreated: 'Vault created',
   vaultOverview: 'Vault Overview',
-  vault_already_exists: 'Vault already exists',
+  vault_already_exists: 'Vault "{{name}}" already exists',
   vault_backup_page_password_info:
     'Never store Vault Shares from different devices in the same location',
   vault_backup_page_password_protection:
