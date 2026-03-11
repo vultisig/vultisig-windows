@@ -898,7 +898,7 @@ export const hr = {
   value: 'Vrijednost',
   vault: 'Trezor',
   vaultCreated: 'Trezor je kreiran',
-  vault_already_exists: 'Trezor već postoji',
+  vault_already_exists: 'Trezor "{{name}}" već postoji',
   vault_backup_page_password_info:
     'Nikada ne pohranjujte dijeljene datoteke Vaulta s različitih uređaja na istu lokaciju',
   vault_backup_page_password_protection:
