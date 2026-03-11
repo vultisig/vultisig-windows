@@ -54,10 +54,6 @@ export const useCreateVaultMutation = (
         })
       )
 
-      await refetchQueries([StorageKey.vaults])
-
-      await setCurrentVaultId(getVaultId(vault))
-
       const chainsToCreate = isKeyImportVault(vault)
         ? getRecordKeys(shouldBePresent(vault.chainPublicKeys))
         : defaultChains
@@ -85,10 +81,15 @@ export const useCreateVaultMutation = (
         })
       )
 
-      await createCoins({
-        vaultId: getVaultId(vault),
-        coins,
-      })
+      await Promise.all([
+        setCurrentVaultId(getVaultId(vault)),
+        createCoins({
+          vaultId: getVaultId(vault),
+          coins,
+        }),
+      ])
+
+      await refetchQueries([StorageKey.vaults])
 
       return vault
     },
