@@ -42,7 +42,9 @@ export type MessageContext = {
 
 export type ActionResult = {
   action: string
+  action_id?: string
   success: boolean
+  data?: Record<string, unknown>
   error?: string
 }
 
@@ -79,9 +81,19 @@ export type SendMessageRequest = {
   action_result?: ActionResult
 }
 
+export type AgentAction = {
+  id: string
+  type: string
+  title: string
+  description?: string
+  params?: Record<string, unknown>
+  auto_execute: boolean
+}
+
 export type SendMessageResponse = {
   message: Message
   suggestions?: Suggestion[]
+  actions?: AgentAction[]
   policy_ready?: PolicyReady
   install_required?: InstallRequired
 }

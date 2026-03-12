@@ -1,6 +1,7 @@
 import { generateLocalPartyId, hasServer } from '@core/mpc/devices/localPartyId'
 import { reshareWithServer } from '@core/mpc/fast/api/reshareWithServer'
 import { toLibType } from '@core/mpc/types/utils/libType'
+import { isKeyImportVault } from '@core/mpc/vault/Vault'
 import { FastKeygenServerActionProvider } from '@core/ui/mpc/keygen/fast/state/fastKeygenServerAction'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
@@ -22,6 +23,7 @@ export const ChatPluginReshareServerActionProvider = ({
 
   const [password] = usePassword()
 
+  const vault = useCurrentVault()
   const {
     name,
     hexChainCode,
@@ -29,8 +31,7 @@ export const ChatPluginReshareServerActionProvider = ({
     resharePrefix,
     signers,
     libType,
-    chainPublicKeys,
-  } = useCurrentVault()
+  } = vault
 
   const action = useCallback(async () => {
     const localPartyId = generateLocalPartyId('server')
@@ -70,13 +71,13 @@ export const ChatPluginReshareServerActionProvider = ({
       old_reshare_prefix: resharePrefix ?? '',
       lib_type: toLibType({
         libType,
-        chainPublicKeys,
+        isKeyImport: isKeyImportVault(vault),
       }),
       reshare_type: 1,
     })
   }, [
     accessToken,
-    chainPublicKeys,
+    vault,
     hexChainCode,
     hexEncryptionKey,
     libType,

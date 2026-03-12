@@ -31,8 +31,8 @@ import {
   useState,
 } from 'react'
 
-import { verifierUrl } from '../state/chatConfig'
-import { toEip191Hex, toHex } from '../utils/toEip191Hex'
+import { agentBackendUrl } from '../state/chatConfig'
+import { toEip191Hex } from '../utils/toEip191Hex'
 import { setChatAuthToken } from './chatAuthStorage'
 
 type ChatAuthView = { id: 'overview' } | Extract<CoreView, { id: 'keysign' }>
@@ -59,15 +59,8 @@ export const ChatAuthPage = () => {
 }
 
 const getAuthMessage = () => {
-  const randomBuf = new Uint8Array(16)
-  crypto.getRandomValues(randomBuf)
-  const nonce = toHex(randomBuf)
-  const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString()
-  return JSON.stringify({
-    message: 'Vultisig Chat Login',
-    nonce,
-    expiresAt,
-  })
+  const timestamp = Math.floor(Date.now() / 1000)
+  return `Vultisig-Agent-Auth:${timestamp}`
 }
 
 type ChatAuthNavigationWrapperProps = {
@@ -93,30 +86,29 @@ const ChatAuthNavigationWrapper = ({
         setIsPosting(true)
         setError(null)
         try {
-          const response = await fetch(`${verifierUrl}/auth`, {
+          const response = await fetch(`${agentBackendUrl}/auth/token`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               public_key: publicKey,
               message: currentAuthMessage,
               signature: signature.startsWith('0x')
-                ? signature
-                : `0x${signature}`,
+                ? signature.slice(2)
+                : signature,
               chain_code_hex: chainCodeHex,
             }),
           })
           if (!response.ok) {
             const errorBody = await response.json().catch(() => null)
             const errorMsg =
-              errorBody?.error?.message || `Auth failed: ${response.status}`
+              errorBody?.error || `Auth failed: ${response.status}`
             throw new Error(errorMsg)
           }
-          const responseData = await response.json()
-          const tokenData = responseData.data ?? responseData
+          const tokenData = await response.json()
           await setChatAuthToken(publicKey, {
-            accessToken: tokenData.access_token,
-            refreshToken: tokenData.refresh_token,
-            expiresAt: Date.now() + tokenData.expires_in * 1000,
+            accessToken: tokenData.token,
+            refreshToken: '',
+            expiresAt: tokenData.expires_at * 1000,
           })
           await queryClient.invalidateQueries({
             queryKey: ['chatAuth', publicKey],
@@ -196,7 +188,7 @@ function AuthOverview() {
       <PageContent gap={16} scrollable>
         <VStack gap={12} padding={16}>
           <Text size={14} color="contrast" weight={500}>
-            Sign a message to authenticate with the Vultisig verifier.
+            Sign a message to authenticate with the Vultisig agent.
           </Text>
           <Text size={12} color="shy">
             This proves you own this vault and enables chat features.

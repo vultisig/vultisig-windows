@@ -149,6 +149,14 @@ export type CoreView =
       }
     }
   | { id: 'chatPluginInstall'; state: { pluginId: string } }
+  | {
+      id: 'chatActionSign'
+      state: {
+        actionType: string
+        actionId: string
+        actionParams: Record<string, unknown>
+      }
+    }
 
 export type CoreViewId = CoreView['id']
 

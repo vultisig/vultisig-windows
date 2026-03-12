@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import {
   ActionResult,
+  AgentAction,
   InstallRequired,
   Message,
   PolicyReady,
@@ -25,6 +26,7 @@ export const useConversation = ({
   const [installRequired, setInstallRequired] =
     useState<InstallRequired | null>(null)
   const [policyReady, setPolicyReady] = useState<PolicyReady | null>(null)
+  const [pendingActions, setPendingActions] = useState<AgentAction[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -70,6 +72,7 @@ export const useConversation = ({
       setConversationId(conversation.id)
       setMessages([])
       setSuggestions([])
+      setPendingActions([])
       setInstallRequired(null)
       setPolicyReady(null)
     } catch (err) {
@@ -124,6 +127,9 @@ export const useConversation = ({
 
         if (response.suggestions) {
           setSuggestions(response.suggestions)
+        }
+        if (response.actions?.length) {
+          setPendingActions(response.actions)
         }
         if (response.install_required) {
           setInstallRequired(response.install_required)
@@ -185,6 +191,9 @@ export const useConversation = ({
         if (response.suggestions) {
           setSuggestions(response.suggestions)
         }
+        if (response.actions?.length) {
+          setPendingActions(response.actions)
+        }
         if (response.install_required) {
           setInstallRequired(response.install_required)
         }
@@ -224,6 +233,9 @@ export const useConversation = ({
         if (response.suggestions) {
           setSuggestions(response.suggestions)
         }
+        if (response.actions?.length) {
+          setPendingActions(response.actions)
+        }
         if (response.install_required) {
           setInstallRequired(response.install_required)
         }
@@ -241,6 +253,7 @@ export const useConversation = ({
 
   const clearState = useCallback(() => {
     setSuggestions([])
+    setPendingActions([])
     setInstallRequired(null)
     setPolicyReady(null)
     setError(null)
@@ -250,6 +263,7 @@ export const useConversation = ({
     setConversationId(id)
     setMessages([])
     setSuggestions([])
+    setPendingActions([])
     setInstallRequired(null)
     setPolicyReady(null)
     setError(null)
@@ -280,6 +294,7 @@ export const useConversation = ({
       conversationId,
       messages,
       suggestions,
+      pendingActions,
       installRequired,
       policyReady,
       isLoading,
@@ -298,6 +313,7 @@ export const useConversation = ({
       conversationId,
       messages,
       suggestions,
+      pendingActions,
       installRequired,
       policyReady,
       isLoading,

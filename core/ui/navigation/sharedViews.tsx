@@ -40,6 +40,7 @@ import { ManageVaultsPage } from '@core/ui/vaultsOrganisation/manage'
 import { Views } from '@lib/ui/navigation/Views'
 
 import { ChatPage } from '../chat'
+import { ChatActionSignPage } from '../chat/action/ChatActionSignPage'
 import { ChatAuthPage } from '../chat/auth/ChatAuthPage'
 import { ChatPluginInstallPage } from '../chat/install/ChatPluginInstallPage'
 import { ChatPolicySignPage } from '../chat/policy/ChatPolicySignPage'
@@ -67,6 +68,7 @@ export type SharedViewId = Extract<
   | 'address'
   | 'addressBook'
   | 'chat'
+  | 'chatActionSign'
   | 'chatAuth'
   | 'chatPolicySign'
   | 'chatPluginInstall'
@@ -128,6 +130,7 @@ export const sharedViews: Views<SharedViewId> = {
   address: AddressPage,
   addressBook: AddressBookPage,
   chat: ChatPage,
+  chatActionSign: ChatActionSignPage,
   chatAuth: ChatAuthPage,
   chatPolicySign: ChatPolicySignPage,
   chatPluginInstall: ChatPluginInstallPage,

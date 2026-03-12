@@ -10,6 +10,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 
 import { useCoreNavigate } from '../navigation/hooks/useCoreNavigate'
+import { ActionPrompt } from './components/ActionPrompt'
 import { ChatHeader } from './components/ChatHeader'
 import { ChatInput } from './components/ChatInput'
 import { ChatLoader } from './components/ChatLoader'
@@ -21,6 +22,7 @@ import { SuggestionCards } from './components/SuggestionCard'
 import { useAuth } from './hooks/useAuth'
 import { useConversation } from './hooks/useConversation'
 import { encodePolicy } from './policy/policyEncoder'
+import type { AgentAction } from './state/chatTypes'
 
 export const ChatPage = () => {
   const vault = useCurrentVault()
@@ -35,6 +37,7 @@ export const ChatPage = () => {
     conversationId,
     messages,
     suggestions,
+    pendingActions,
     installRequired,
     policyReady,
     isLoading,
@@ -106,6 +109,40 @@ export const ChatPage = () => {
     }
   }, [policyReady, publicKey, accessToken, navigate, reportActionResult])
 
+  const handleActionApprove = useCallback(
+    (action: AgentAction) => {
+      // Actions that require keysign (transaction signing)
+      const signingActions = ['build_send_tx', 'build_custom_tx', 'sign_tx']
+      if (signingActions.includes(action.type) && action.params) {
+        navigate({
+          id: 'chatActionSign',
+          state: {
+            actionType: action.type,
+            actionId: action.id,
+            actionParams: action.params,
+          },
+        })
+        return
+      }
+      reportActionResult({
+        action: action.type,
+        success: true,
+      })
+    },
+    [reportActionResult, navigate]
+  )
+
+  const handleActionReject = useCallback(
+    (action: AgentAction) => {
+      reportActionResult({
+        action: action.type,
+        success: false,
+        error: 'User rejected the action',
+      })
+    },
+    [reportActionResult]
+  )
+
   // Handle action results returned from chatPolicySign/chatPluginInstall pages
   useEffect(() => {
     if (!conversationId) return
@@ -131,7 +168,7 @@ export const ChatPage = () => {
         <Center>
           <Text color="shy">No vault selected</Text>
         </Center>
-        <BottomNavigation activeTab="chat" />
+        <BottomNavigation activeTab="agent" />
       </Wrapper>
     )
   }
@@ -142,7 +179,7 @@ export const ChatPage = () => {
         <Center>
           <Spinner />
         </Center>
-        <BottomNavigation activeTab="chat" />
+        <BottomNavigation activeTab="agent" />
       </Wrapper>
     )
   }
@@ -173,7 +210,7 @@ export const ChatPage = () => {
             </Button>
           </VStack>
         </VStack>
-        <BottomNavigation activeTab="chat" />
+        <BottomNavigation activeTab="agent" />
       </Wrapper>
     )
   }
@@ -223,6 +260,14 @@ export const ChatPage = () => {
               />
             )}
 
+            {pendingActions.length > 0 && !isLoading && (
+              <ActionPrompt
+                actions={pendingActions}
+                onApprove={handleActionApprove}
+                onReject={handleActionReject}
+              />
+            )}
+
             {installRequired && !isLoading && (
               <InstallPrompt
                 installRequired={installRequired}
@@ -253,7 +298,7 @@ export const ChatPage = () => {
       </MessagesContainer>
 
       <ChatInput onSend={handleSend} disabled={isLoading} />
-      <BottomNavigation activeTab="chat" />
+      <BottomNavigation activeTab="agent" />
 
       {showHistory && (
         <ConversationList
