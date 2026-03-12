@@ -1259,6 +1259,12 @@ export const en = {
   start_new_chat: 'Start New Chat',
   new_chat: 'New Chat',
   messages: 'messages',
+  failed_to_load_session_history: 'Failed to load session history',
+  agent_history_load_error_description:
+    'Please try again. If the problem persists, reopen the chat from a moment ago or start a new one.',
+  agent_history_empty_title: 'No chats yet',
+  agent_history_empty_description:
+    'Start a new chat and your recent conversations will appear here.',
   vultibot_description:
     'Your AI-powered vault assistant. I can swap, send, automate policies, check balances, and manage your vault.',
   agent_what_to_do: 'What would you like to do?',
