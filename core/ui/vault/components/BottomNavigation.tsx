@@ -151,8 +151,8 @@ type TabButtonOldProps = {
 const TabButtonOld = styled(UnstyledButton)<TabButtonOldProps>`
   width: 137px;
   height: 48px;
-  padding: 3px 20px;
-  font-size: 24px;
+  padding: 3px 12px;
+  font-size: 20px;
   border-radius: 99px;
   transition: all 0.2s ease-in-out;
   background: transparent;

@@ -117,6 +117,7 @@ export const en = {
     'Camera access is blocked. Please enable it in your browser settings.',
   cache_password_for_5_min: 'Remember password for 5 minutes',
   cancel: 'Cancel',
+  chat: 'Chat',
   chain: 'Chain',
   chainFunctions: {
     amountExceeded: 'Amount exceeds available balance',
