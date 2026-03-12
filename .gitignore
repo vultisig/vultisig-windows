@@ -68,6 +68,9 @@ clients/extension/.parcel-cache/
 .env.test.local
 .env.production.local
 
+# Vault files (never commit credentials)
+*.vult
+
 # Optional: Ignore binary files (uncomment if applicable)
 # myapp.exe
 # myapp

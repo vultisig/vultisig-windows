@@ -1,0 +1,244 @@
+# CI Workflow for Extension E2E Tests
+#
+# To enable: Copy this file to .github/workflows/extension-e2e.yml
+# (Requires a token with workflow scope to push)
+#
+name: Extension E2E Tests
+
+on:
+  push:
+    branches: [main, sdk-migration]
+    paths:
+      - 'clients/extension/**'
+      - 'core/**'
+      - 'lib/**'
+  pull_request:
+    paths:
+      - 'clients/extension/**'
+      - 'core/**'
+      - 'lib/**'
+  schedule:
+    - cron: '0 6 * * *'  # Nightly at 6 AM UTC for fund-dependent tests
+  workflow_dispatch:
+    inputs:
+      test_project:
+        description: 'Test project to run'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - ui-isolated
+          - network
+          - fund-dependent
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  build:
+    name: Build Extension
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build extension
+        run: yarn build:extension
+
+      - name: Upload extension artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: extension-dist
+          path: clients/extension/dist
+          retention-days: 1
+
+  e2e-ui:
+    name: UI Isolated Tests
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event.inputs.test_project == 'all' || github.event.inputs.test_project == 'ui-isolated' || github.event.inputs.test_project == ''
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Download extension artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: extension-dist
+          path: clients/extension/dist
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium
+        working-directory: clients/extension
+
+      - name: Run UI isolated tests
+        run: xvfb-run --auto-servernum -- npx playwright test --project=ui-isolated
+        working-directory: clients/extension
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-ui-results
+          path: |
+            clients/extension/tests/e2e/test-results
+            clients/extension/tests/e2e/playwright-report
+          retention-days: 7
+
+  e2e-network:
+    name: Network Tests
+    needs: [build, e2e-ui]
+    runs-on: ubuntu-latest
+    if: (github.event.inputs.test_project == 'all' || github.event.inputs.test_project == 'network' || github.event.inputs.test_project == '') && always() && needs.e2e-ui.result != 'failure'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Download extension artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: extension-dist
+          path: clients/extension/dist
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium
+        working-directory: clients/extension
+
+      - name: Setup test vault
+        if: env.TEST_VAULT_PATH != ''
+        run: |
+          mkdir -p test-vaults
+          echo "${{ secrets.TEST_VAULT_PATH }}" > test-vaults/test-vault.bak
+        working-directory: clients/extension/tests/e2e
+        env:
+          TEST_VAULT_PATH: ${{ secrets.TEST_VAULT_PATH }}
+
+      - name: Run network tests
+        run: xvfb-run --auto-servernum -- npx playwright test --project=network
+        working-directory: clients/extension
+        env:
+          TEST_VAULT_PATH: ${{ secrets.TEST_VAULT_PATH }}
+          TEST_VAULT_PASSWORD: ${{ secrets.TEST_VAULT_PASSWORD }}
+          TEST_SEEDPHRASE: ${{ secrets.TEST_SEEDPHRASE }}
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-network-results
+          path: |
+            clients/extension/tests/e2e/test-results
+            clients/extension/tests/e2e/playwright-report
+          retention-days: 7
+
+  e2e-fund-dependent:
+    name: Fund-Dependent Tests
+    needs: [build, e2e-network]
+    runs-on: ubuntu-latest
+    # Only run on schedule or manual dispatch with fund-dependent selected
+    if: |
+      github.event_name == 'schedule' ||
+      (github.event_name == 'workflow_dispatch' && (github.event.inputs.test_project == 'all' || github.event.inputs.test_project == 'fund-dependent'))
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Download extension artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: extension-dist
+          path: clients/extension/dist
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium
+        working-directory: clients/extension
+
+      - name: Setup test vault
+        run: |
+          mkdir -p test-vaults
+          echo "${{ secrets.TEST_VAULT_PATH }}" > test-vaults/test-vault.bak
+        working-directory: clients/extension/tests/e2e
+        env:
+          TEST_VAULT_PATH: ${{ secrets.TEST_VAULT_PATH }}
+
+      - name: Run fund-dependent tests
+        run: xvfb-run --auto-servernum -- npx playwright test --project=fund-dependent
+        working-directory: clients/extension
+        env:
+          TEST_VAULT_PATH: ${{ secrets.TEST_VAULT_PATH }}
+          TEST_VAULT_PASSWORD: ${{ secrets.TEST_VAULT_PASSWORD }}
+          SECURE_VAULT_SHARES: ${{ secrets.SECURE_VAULT_SHARES }}
+          SECURE_VAULT_PASSWORD: ${{ secrets.SECURE_VAULT_PASSWORD }}
+          ENABLE_TX_SIGNING_TESTS: 'true'
+        timeout-minutes: 30
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-fund-dependent-results
+          path: |
+            clients/extension/tests/e2e/test-results
+            clients/extension/tests/e2e/playwright-report
+          retention-days: 7
+
+  report:
+    name: Test Report
+    needs: [e2e-ui, e2e-network, e2e-fund-dependent]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Download all test results
+        uses: actions/download-artifact@v4
+        with:
+          pattern: e2e-*-results
+          merge-multiple: true
+
+      - name: Generate summary
+        run: |
+          echo "# E2E Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| UI Isolated | ${{ needs.e2e-ui.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Network | ${{ needs.e2e-network.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Fund-Dependent | ${{ needs.e2e-fund-dependent.result }} |" >> $GITHUB_STEP_SUMMARY
+
+      - name: Check results
+        if: needs.e2e-ui.result == 'failure' || needs.e2e-network.result == 'failure'
+        run: |
+          echo "One or more E2E test jobs failed"
+          exit 1

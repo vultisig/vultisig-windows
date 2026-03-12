@@ -65,7 +65,12 @@ export const VaultNameStep = ({
         onBack={onBack}
         headerRight={headerRight}
         footer={
-          <Button style={{ width: '100%' }} disabled={!isValid} type="submit">
+          <Button
+            style={{ width: '100%' }}
+            disabled={!isValid}
+            type="submit"
+            data-testid="vault-name-next"
+          >
             {t('next')}
           </Button>
         }
@@ -96,6 +101,7 @@ export const VaultNameStep = ({
               onClear={() => setValue('name', '', { shouldValidate: true })}
               validation={errors.name ? 'invalid' : name ? 'valid' : undefined}
               autoFocus
+              data-testid="vault-name-input"
             />
             {errors.name?.message && (
               <Text color="danger" size={12}>
