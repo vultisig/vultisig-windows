@@ -381,6 +381,9 @@ export const en = {
   fast: 'Fast',
   fastVault: 'Fast Vault',
   secureVault: 'Secure Vault',
+  fast_vault_session_conflict: 'Vault Session Conflict',
+  fast_vault_session_conflict_description:
+    'Another device imported the same seed phrase and replaced this vault on the server. Delete this vault and import it again to restore access.',
   fast_vault_password_start_keysign_description:
     'Confirm the transaction by entering the password of your server share.',
   fastVaultSetup: {
