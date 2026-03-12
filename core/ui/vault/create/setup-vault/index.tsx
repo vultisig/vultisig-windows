@@ -5,6 +5,7 @@ import { useDeviceSelectionAnimation } from '@core/ui/vault/create/setup-vault/h
 import { Button } from '@lib/ui/buttons/Button'
 import { ScreenLayout } from '@lib/ui/layout/ScreenLayout/ScreenLayout'
 import { VStack } from '@lib/ui/layout/Stack'
+import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -46,6 +47,7 @@ export const SetupVaultPage = () => {
   const { RiveComponent, selectedDeviceCount } = useDeviceSelectionAnimation()
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
+  const goBack = useNavigateBack()
   const [state] = useCoreViewState<'setupVault'>()
 
   const handleGetStarted = () => {
@@ -62,7 +64,7 @@ export const SetupVaultPage = () => {
     <GradientWrapper>
       <TopGradient />
       <ScreenLayout
-        onBack={() => navigate({ id: 'newVault' })}
+        onBack={goBack}
         footer={
           <VStack gap={16} fullWidth alignItems="center">
             <DeviceSelectionTip />
