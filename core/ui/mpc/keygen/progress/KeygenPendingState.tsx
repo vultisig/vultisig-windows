@@ -11,11 +11,11 @@ const Container = styled.div`
   overflow: hidden;
 `
 
-// Progress values matching iOS implementation (0-100 scale)
 const progressValues: Record<KeygenStep, number> = {
-  prepareVault: 25,
-  ecdsa: 50,
-  eddsa: 75,
+  prepareVault: 20,
+  ecdsa: 40,
+  eddsa: 60,
+  mldsa: 80,
 }
 
 const getProgress = (step: KeygenStep | null): number => {
@@ -27,7 +27,7 @@ export const KeygenPendingState = ({ value }: ValueProp<KeygenStep | null>) => {
   const progress = getProgress(value)
 
   return (
-    <Container>
+    <Container data-testid="keygen-progress">
       <KeygenLoadingAnimation
         isConnected={value !== null}
         progress={progress}

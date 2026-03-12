@@ -40,14 +40,14 @@ export const getVultDiscountTier = ({
     return getLastItem(descendingTiers).key
   }
 
-  const currentTierIndex = descendingTiers.findIndex(
-    ({ key }) => key === baseTier
-  )
   const platinumIndex = descendingTiers.findIndex(
     ({ key }) => key === 'platinum'
   )
+  const currentTierIndex = descendingTiers.findIndex(
+    ({ key }) => key === baseTier
+  )
 
-  if (currentTierIndex > platinumIndex) {
+  if (currentTierIndex <= platinumIndex) {
     return baseTier
   }
 

@@ -29,8 +29,13 @@ export const useSetPasscodeMutation = () => {
 
       const vaultsKeyShares = recordMap(
         recordFromItems(vaults, getVaultId),
-        ({ keyShares, chainKeyShares }) =>
-          encryptVaultAllKeyShares({ keyShares, chainKeyShares, key: passcode })
+        ({ keyShares, chainKeyShares, keyShareMldsa }) =>
+          encryptVaultAllKeyShares({
+            keyShares,
+            chainKeyShares,
+            keyShareMldsa,
+            key: passcode,
+          })
       )
 
       await updateVaultsKeyShares(vaultsKeyShares)

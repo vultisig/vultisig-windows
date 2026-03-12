@@ -36,13 +36,15 @@ const createSchema = ({ t, existingNames, currentName }: CreateSchemaInput) => {
   return z.object({
     name: z
       .string()
+      .trim()
       .min(2, t('vault_rename_page_name_error'))
       .max(50, t('vault_rename_page_name_error'))
       .refine(
         name =>
-          name === currentName ||
+          name.toLowerCase() === currentName.trim().toLowerCase() ||
           !existingNames.some(
-            existingName => existingName.toLowerCase() === name.toLowerCase()
+            existingName =>
+              existingName.trim().toLowerCase() === name.toLowerCase()
           ),
         { message: t('vault_name_already_exists') }
       ),
@@ -98,9 +100,13 @@ export const VaultRenamePage = () => {
       />
       <PageContent gap={12} flexGrow scrollable>
         <ActionInsideInteractiveElement
-          render={() => <TextInput {...register('name')} />}
+          render={() => (
+            <TextInput {...register('name')} data-testid="rename-vault-input" />
+          )}
           action={
             <IconButton
+              type="button"
+              aria-label={t('clear')}
               style={{
                 color: colors.textShy.toCssValue(),
               }}
@@ -115,7 +121,7 @@ export const VaultRenamePage = () => {
           }}
         />
         {typeof errors.name?.message === 'string' && (
-          <Text color="danger" size={12}>
+          <Text color="danger" size={12} data-testid="rename-validation-error">
             {errors.name.message}
           </Text>
         )}
@@ -130,6 +136,7 @@ export const VaultRenamePage = () => {
           disabled={!isValid || !isDirty}
           loading={updateVaultMutation.isPending}
           type="submit"
+          data-testid="rename-vault-save"
         >
           {t('save')}
         </Button>

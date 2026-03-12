@@ -41,6 +41,7 @@ export const CoinOption = ({
       onClick={onClick}
       justifyContent="space-between"
       alignItems="center"
+      data-testid={`coin-option-${ticker}`}
     >
       <HStack alignItems="center" gap={12}>
         <CoinIcon coin={coin} style={{ fontSize: 32 }} />

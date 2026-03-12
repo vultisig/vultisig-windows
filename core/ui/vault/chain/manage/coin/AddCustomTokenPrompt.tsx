@@ -55,6 +55,7 @@ const CustomIconWrapper = styled.div`
     justifyContent: 'center',
   })};
   position: relative;
+  align-self: stretch;
   background: rgba(11, 26, 58, 0.5);
   height: 74px;
   padding: 17px;

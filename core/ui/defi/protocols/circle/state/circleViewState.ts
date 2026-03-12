@@ -1,8 +1,6 @@
-import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
+import { setupStateProvider } from '@lib/ui/state/setupStateProvider'
 
 export type CircleViewState = 'home' | 'deposit' | 'withdraw'
 
-export const {
-  useState: useCircleViewState,
-  provider: CircleViewStateProvider,
-} = getStateProviderSetup<CircleViewState>('CircleViewState')
+export const [CircleViewStateProvider, useCircleViewState] =
+  setupStateProvider<CircleViewState>('CircleViewState')

@@ -1,6 +1,8 @@
 import { AddressBookPage } from '@core/ui/address-book'
 import { CreateAddressBookItemPage } from '@core/ui/address-book/create'
 import { UpdateAddressBookItemPage } from '@core/ui/address-book/update'
+import { AgentChatPage } from '@core/ui/agent/components/AgentChatPage'
+import { AgentPage } from '@core/ui/agent/components/AgentPage'
 import { AddCustomTokenPage } from '@core/ui/chain/coin/addCustomToken/AddCustomTokenPage'
 import { AddressPage } from '@core/ui/chain/coin/address'
 import { DeeplinkPage } from '@core/ui/deeplink/components/DeeplinkPage'
@@ -9,12 +11,15 @@ import { CoreViewId } from '@core/ui/navigation/CoreView'
 import { CurrencyPage } from '@core/ui/preferences/currency'
 import { LanguagePage } from '@core/ui/preferences/language'
 import { UploadQrPage } from '@core/ui/qr/upload'
+import { TransactionDetailPage } from '@core/ui/transaction-history/detail/TransactionDetailPage'
+import { TransactionHistoryPage } from '@core/ui/transaction-history/TransactionHistoryPage'
 import { VaultBackupPage } from '@core/ui/vault/backup'
 import { SelectVaultsBackupPage } from '@core/ui/vault/backup/select/SelectVaultsBackupPage'
 import { VaultsBackupPage } from '@core/ui/vault/backup/VaultsBackupPage'
 import { ManageVaultChainsPage } from '@core/ui/vault/chain/manage'
 import { ManageVaultChainCoinsPage } from '@core/ui/vault/chain/manage/coin'
 import { VaultChainPage } from '@core/ui/vault/chain/VaultChainPage'
+import { SetupVaultOverviewPage } from '@core/ui/vault/create/setup-vault/SetupVaultOverviewPage'
 import { DepositPage } from '@core/ui/vault/deposit/DepositPage'
 import { DepositAccessGuard } from '@core/ui/vault/deposit/providers/DepositAccessGuard'
 import { SignCustomMessagePage } from '@core/ui/vault/keysign/custom-message'
@@ -22,7 +27,6 @@ import { NewVaultPage } from '@core/ui/vault/new'
 import { VaultPage } from '@core/ui/vault/page'
 import { SendPage } from '@core/ui/vault/send/SendPage'
 import { VaultSettingsPage } from '@core/ui/vault/settings'
-import { AirdropRegisterPage } from '@core/ui/vault/settings/airdrop-register'
 import { DeleteVaultPage } from '@core/ui/vault/settings/delete'
 import { VaultDetailsPage } from '@core/ui/vault/settings/details'
 import { VaultRenamePage } from '@core/ui/vault/settings/rename'
@@ -57,10 +61,11 @@ import { VultDiscountPage } from '../vult/discount/page'
 
 export type SharedViewId = Extract<
   CoreViewId,
+  | 'agent'
+  | 'agentChat'
   | 'addCustomToken'
   | 'address'
   | 'addressBook'
-  | 'airdropRegister'
   | 'chat'
   | 'chatAuth'
   | 'chatPolicySign'
@@ -85,6 +90,7 @@ export type SharedViewId = Extract<
   | 'renameVault'
   | 'reshareVault'
   | 'send'
+  | 'setupVaultOverview'
   | 'signCustomMessage'
   | 'swap'
   | 'updateAddressBookItem'
@@ -103,12 +109,16 @@ export type SharedViewId = Extract<
   | 'passcodeAutoLock'
   | 'referral'
   | 'requestFastVaultBackup'
+  | 'transactionDetail'
+  | 'transactionHistory'
   | 'faq'
   | 'shareVault'
   | 'vultDiscount'
 >
 
 export const sharedViews: Views<SharedViewId> = {
+  agent: AgentPage,
+  agentChat: AgentChatPage,
   referral: () => (
     <ReferralsGuard>
       <ReferralPage />
@@ -117,7 +127,6 @@ export const sharedViews: Views<SharedViewId> = {
   addCustomToken: AddCustomTokenPage,
   address: AddressPage,
   addressBook: AddressBookPage,
-  airdropRegister: AirdropRegisterPage,
   chat: ChatPage,
   chatAuth: ChatAuthPage,
   chatPolicySign: ChatPolicySignPage,
@@ -149,6 +158,7 @@ export const sharedViews: Views<SharedViewId> = {
   renameVault: VaultRenamePage,
   reshareVault: ReshareVaultPage,
   send: SendPage,
+  setupVaultOverview: SetupVaultOverviewPage,
   signCustomMessage: SignCustomMessagePage,
   swap: SwapPage,
   updateAddressBookItem: UpdateAddressBookItemPage,
@@ -174,6 +184,8 @@ export const sharedViews: Views<SharedViewId> = {
   managePasscodeEncryption: ManagePasscodeEncryptionPage,
   passcodeAutoLock: PasscodeAutoLockPage,
   requestFastVaultBackup: RequestFastVaultBackup,
+  transactionDetail: TransactionDetailPage,
+  transactionHistory: TransactionHistoryPage,
   faq: FaqVaultPage,
   shareVault: ShareVaultPage,
   vultDiscount: VultDiscountPage,

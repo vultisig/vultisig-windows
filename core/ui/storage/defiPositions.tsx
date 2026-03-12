@@ -8,9 +8,10 @@ import {
   midgardBaseUrl,
 } from '@core/ui/defi/chain/queries/constants'
 import { mayaCoin, runeCoin } from '@core/ui/defi/chain/queries/tokens'
+import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { queryUrl } from '@lib/utils/query/queryUrl'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
 import { useCore } from '../state/core'
@@ -104,7 +105,7 @@ const lpBaseTicker: Record<LpSupportedChain, string> = {
   [Chain.MayaChain]: mayaCoin.ticker,
 }
 
-const lpChainMap: Partial<Record<string, Chain>> = {
+export const lpChainMap: Partial<Record<string, Chain>> = {
   AVAX: Chain.Avalanche,
   BASE: Chain.Base,
   BCH: Chain.BitcoinCash,
@@ -366,12 +367,12 @@ const useAllDefiPositions = (): DefiPositionsRecord => {
 
 const useSetDefiPositionsMutation = () => {
   const { setDefiPositions } = useCore()
-  const queryClient = useQueryClient()
+  const refetchQueries = useRefetchQueries()
 
   return useMutation({
-    mutationFn: setDefiPositions,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [StorageKey.defiPositions] })
+    mutationFn: async (positions: DefiPositionsRecord) => {
+      await setDefiPositions(positions)
+      await refetchQueries([StorageKey.defiPositions])
     },
   })
 }

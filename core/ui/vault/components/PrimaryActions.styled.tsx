@@ -4,7 +4,13 @@ import { getColor } from '@lib/ui/theme/getters'
 import styled from 'styled-components'
 
 export const ActionsWrapper = styled(HStack)`
+  flex-wrap: wrap;
+  justify-content: center;
   padding-inline: 24px;
+
+  @media (max-width: 400px) {
+    padding-inline: 12px;
+  }
 `
 
 const ActionWrapper = styled(UnstyledButton)`

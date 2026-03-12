@@ -48,6 +48,16 @@ export const injectToWindow = () => {
     provider: ethereumProvider as unknown as EIP1193Provider,
   })
 
+  if (!window.tonkeeper) {
+    attempt(() =>
+      Object.defineProperty(window, 'tonkeeper', {
+        value: providers.ton,
+        configurable: true,
+        writable: true,
+      })
+    )
+  }
+
   setupContentScriptMessenger(providers)
 }
 
@@ -93,6 +103,11 @@ async function setupContentScriptMessenger(
           configurable: false,
           writable: false,
         },
+        tonkeeper: {
+          value: providers.ton,
+          configurable: false,
+          writable: false,
+        },
         ethereum: {
           get: () => window.vultiConnectRouter.currentProvider,
           set: newProvider =>
@@ -132,6 +147,20 @@ async function setupContentScriptMessenger(
         },
         keplr: {
           value: providers.keplr,
+          configurable: false,
+          writable: false,
+        },
+        injectedWeb3: {
+          value: {
+            ...(window.injectedWeb3 || {}),
+            vultisig: {
+              enable: (origin?: string) => providers.polkadot.enable(origin),
+            },
+            'polkadot-js': {
+              enable: (origin?: string) => providers.polkadot.enable(origin),
+              version: '0.46.9',
+            },
+          },
           configurable: false,
           writable: false,
         },

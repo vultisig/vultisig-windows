@@ -2,10 +2,10 @@ import {
   PopupInterface,
   PopupMethod,
 } from '@core/inpage-provider/popup/interface'
-import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 
-const { provider: PopupInputProvider, useValue: usePopupInputValue } =
-  getValueProviderSetup<PopupInterface[PopupMethod]['input']>('PopupInput')
+const [PopupInputProvider, usePopupInputValue] =
+  setupValueProvider<PopupInterface[PopupMethod]['input']>('PopupInput')
 
 export { PopupInputProvider }
 

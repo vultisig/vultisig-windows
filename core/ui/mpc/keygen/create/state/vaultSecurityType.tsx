@@ -1,7 +1,5 @@
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
-import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 
-export const {
-  useValue: useVaultSecurityType,
-  provider: VaultSecurityTypeProvider,
-} = getValueProviderSetup<VaultSecurityType>('VaultSecurityType')
+export const [VaultSecurityTypeProvider, useVaultSecurityType] =
+  setupValueProvider<VaultSecurityType>('VaultSecurityType')

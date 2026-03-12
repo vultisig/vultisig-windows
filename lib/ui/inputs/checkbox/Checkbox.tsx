@@ -50,6 +50,7 @@ const Container = styled(HStack)<{ isChecked: boolean }>`
 
   ${interactive}
   position: relative;
+  width: fit-content;
 
   ${({ isChecked }) =>
     !isChecked &&
@@ -58,6 +59,11 @@ const Container = styled(HStack)<{ isChecked: boolean }>`
         background: ${getColor('foregroundSuper')};
       }
     `}
+
+  &:focus-within ${Box} {
+    outline: 2px solid ${getColor('primary')};
+    outline-offset: 2px;
+  }
 `
 
 export const Checkbox = ({

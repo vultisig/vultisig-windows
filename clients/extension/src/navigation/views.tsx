@@ -5,6 +5,8 @@ import { ExpandViewGuard } from '@clients/extension/src/components/expand-view-g
 import { Prioritize } from '@clients/extension/src/components/prioritize'
 import { ReshareFastVault } from '@clients/extension/src/components/settings/reshare/ReshareFastVault'
 import { ReshareSecureVault } from '@clients/extension/src/components/settings/reshare/ReshareSecureVault'
+import { SingleKeygenFastVault } from '@clients/extension/src/components/settings/singleKeygen/SingleKeygenFastVault'
+import { SingleKeygenSecureVault } from '@clients/extension/src/components/settings/singleKeygen/SingleKeygenSecureVault'
 import { SetupFastVaultPage } from '@clients/extension/src/components/setup/SetupFastVaultPage'
 import { SetupSecureVaultPage } from '@clients/extension/src/components/setup/SetupSecureVaultPage'
 import { JoinKeygenPage } from '@clients/extension/src/mpc/keygen/join/JoinKeygenPage'
@@ -18,12 +20,31 @@ import { OnboardingPage } from '@core/ui/onboarding/components/OnboardingPage'
 import { IncompleteOnboardingOnly } from '@core/ui/onboarding/IncompleteOnboardingOnly'
 import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProvider'
 import { SettingsPage } from '@core/ui/settings'
+import { useVaults } from '@core/ui/storage/vaults'
 import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPage'
 import { ImportSeedphrasePage } from '@core/ui/vault/import/seedphrase/ImportSeedphrasePage'
 import { VaultPage } from '@core/ui/vault/page/components/VaultPage'
+import { VaultSettingsPage } from '@core/ui/vault/settings'
+import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { Views } from '@lib/ui/navigation/Views'
+import { useEffect } from 'react'
+
+import { ManagePushNotifications } from '../components/notifications/ManagePushNotifications'
+import { RegisterPushNotificationsButton } from '../components/notifications/RegisterPushNotificationsButton'
+import { ManageSidePanel } from '../components/side-panel/ManageSidePanel'
 
 const ExtensionVaultPage = () => {
+  const vaults = useVaults()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (vaults.length === 0) {
+      navigate({ id: 'newVault' }, { replace: true })
+    }
+  }, [vaults.length, navigate])
+
+  if (vaults.length === 0) return null
+
   return <VaultPage primaryControls={<DappsButton />} />
 }
 
@@ -46,11 +67,15 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   ),
   reshareVaultFast: ReshareFastVault,
   reshareVaultSecure: ReshareSecureVault,
+  singleKeygenFast: SingleKeygenFastVault,
+  singleKeygenSecure: SingleKeygenSecureVault,
   settings: () => (
     <SettingsPage
       insiderOptions={<ExtensionDeveloperOptions />}
       prioritize={<Prioritize />}
       expandView={<ExpandView />}
+      sidePanel={<ManageSidePanel />}
+      pushNotifications={<ManagePushNotifications />}
     />
   ),
   setupFastVault: SetupFastVaultPage,
@@ -67,5 +92,8 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
 export const views: Views<AppViewId> = {
   ...sharedViews,
   ...appCustomViews,
-  vault: ExtensionVaultPage, // Override the shared vault view
+  vault: ExtensionVaultPage,
+  vaultSettings: () => (
+    <VaultSettingsPage extraItems={<RegisterPushNotificationsButton />} />
+  ),
 }

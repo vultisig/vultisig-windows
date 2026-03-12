@@ -3,6 +3,7 @@ import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
+import { getSignDataTxAction } from '@core/ui/mpc/keysign/tx/utils/getSignDataTxAction'
 import { ClipboardCopyIcon } from '@lib/ui/icons/ClipboardCopyIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { SquareArrowTopRightIcon } from '@lib/ui/icons/SquareArrowTopRightIcon'
@@ -21,7 +22,7 @@ import styled from 'styled-components'
 
 import { useTxHash } from '../../../chain/state/txHash'
 import { useCore } from '../../../state/core'
-import { TransactionSuccessAnimation } from './TransactionSuccessAnimation'
+import { TxStatusTracker } from './TxStatusTracker'
 
 export const TxSuccess = ({
   onSeeTxDetails,
@@ -42,6 +43,11 @@ export const TxSuccess = ({
     return fromChainAmount(BigInt(toAmount), coin.decimals)
   }, [toAmount, coin.decimals])
 
+  const txAction = useMemo(
+    () => getSignDataTxAction(value, formattedToAmount),
+    [value, formattedToAmount]
+  )
+
   const blockExplorerUrl = getBlockExplorerUrl({
     chain: coin.chain,
     entity: 'tx',
@@ -49,10 +55,26 @@ export const TxSuccess = ({
   })
 
   return (
-    <>
-      <TransactionSuccessAnimation />
+    <VStack gap={36} data-testid="tx-success">
+      <TxStatusTracker chain={coin.chain} hash={txHash} />
       <VStack gap={8}>
-        <TxOverviewAmount amount={formattedToAmount} value={coin} />
+        <TxOverviewAmount
+          amount={
+            txAction && 'amount' in txAction && txAction.amount !== undefined
+              ? txAction.amount
+              : formattedToAmount
+          }
+          value={coin}
+          actionLabel={
+            txAction?.action !== 'send' ? txAction?.labelKey : undefined
+          }
+          contractAddress={
+            txAction?.action === 'contract_execution' &&
+            'contractAddress' in txAction
+              ? txAction.contractAddress
+              : undefined
+          }
+        />
         {!skipBroadcast && (
           <List>
             <ListItem
@@ -64,7 +86,10 @@ export const TxSuccess = ({
                   gap={8}
                   justifyContent="flex-end"
                 >
-                  <TruncatedTextWrapper>
+                  <TruncatedTextWrapper
+                    data-testid="tx-hash"
+                    data-hash={txHash}
+                  >
                     <Text size={14}>
                       <MiddleTruncate width={85} text={txHash} />
                     </Text>
@@ -94,7 +119,7 @@ export const TxSuccess = ({
           </List>
         )}
       </VStack>
-    </>
+    </VStack>
   )
 }
 

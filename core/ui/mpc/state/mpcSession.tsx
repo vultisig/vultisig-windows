@@ -1,10 +1,10 @@
 import { ChildrenProp } from '@lib/ui/props'
-import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 import { createContext, useMemo } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
-export const { useValue: useMpcSessionId, provider: MpcSessionIdProvider } =
-  getValueProviderSetup<string>('MpcSessionId')
+export const [MpcSessionIdProvider, useMpcSessionId] =
+  setupValueProvider<string>('MpcSessionId')
 
 const ExternalSessionIdContext = createContext<string | null | undefined>(
   undefined

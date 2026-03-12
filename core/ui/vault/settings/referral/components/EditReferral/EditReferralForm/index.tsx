@@ -10,6 +10,7 @@ import { useEffect, useMemo, useRef } from 'react'
 import { useFormState, useWatch } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 
+import { useCoreNavigate } from '../../../../../../navigation/hooks/useCoreNavigate'
 import { useCurrentVaultCoins } from '../../../../../state/currentVaultCoins'
 import { useCanAffordReferral } from '../../../hooks/useCanAffordReferral'
 import { useEditReferralFormData } from '../../../providers/EditReferralFormProvider'
@@ -31,7 +32,7 @@ type Props = {
 
 export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
   const { t } = useTranslation()
-
+  const navigate = useCoreNavigate()
   const { control, setValue } = useEditReferralFormData()
   const { isValid, isSubmitting } = useFormState({ control })
 
@@ -98,7 +99,9 @@ export const EditReferralForm = ({ onFinish, nameDetails }: Props) => {
   return (
     <VStack flexGrow gap={40}>
       <PageHeader
-        primaryControls={<PageHeaderBackButton />}
+        primaryControls={
+          <PageHeaderBackButton onClick={() => navigate({ id: 'referral' })} />
+        }
         title={t('referrals_default_title')}
       />
       <ReferralPageWrapper

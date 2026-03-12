@@ -76,23 +76,21 @@ export const ManageVaultChainCoinsPage = () => {
     if (isLoading) return
     const currentCoin = currentCoins.find(c => areEqualCoins(c, coin))
     if (currentCoin) {
-      addToCoinFinderIgnore.mutate(extractCoinKey(currentCoin), {
-        onSuccess: () => deleteCoin.mutate(extractAccountCoinKey(currentCoin)),
-      })
+      await addToCoinFinderIgnore.mutateAsync(extractCoinKey(currentCoin))
+      await deleteCoin.mutateAsync(extractAccountCoinKey(currentCoin))
     } else {
-      removeFromCoinFinderIgnore.mutate(extractCoinKey(coin), {
-        onSuccess: async () => {
-          const newCoin = { ...coin }
+      await removeFromCoinFinderIgnore.mutateAsync(extractCoinKey(coin))
 
-          if (coin.chain === Chain.Solana && coin.id && !coin.priceProviderId) {
-            newCoin.priceProviderId = await getSolanaCoingeckoId({
-              id: coin.id,
-            })
-          }
+      const newCoin = { ...coin }
 
-          createCoin.mutate(newCoin)
-        },
-      })
+      if (coin.chain === Chain.Solana && coin.id && !coin.priceProviderId) {
+        const priceProviderId = await getSolanaCoingeckoId({ id: coin.id })
+        if (priceProviderId) {
+          newCoin.priceProviderId = priceProviderId
+        }
+      }
+
+      await createCoin.mutateAsync(newCoin)
     }
   }
 

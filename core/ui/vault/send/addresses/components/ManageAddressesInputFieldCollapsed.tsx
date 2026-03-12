@@ -1,7 +1,7 @@
 import {
-  SendFormCheckBadge,
-  SendFormIconsWrapper,
-} from '@core/ui/vault/send/addresses/components/SendFormIconsWrapper'
+  ActionFormCheckBadge,
+  ActionFormIconsWrapper,
+} from '@core/ui/vault/components/action-form/ActionFormIconsWrapper'
 import { SendInputContainer } from '@core/ui/vault/send/components/SendInputContainer'
 import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValidationQuery'
 import { useSendFormFieldState } from '@core/ui/vault/send/state/formFields'
@@ -44,12 +44,12 @@ export const ManageAddressesInputFieldCollapsed = () => {
           <MiddleTruncate text={address} width={250} />
         </Text>
       </HStack>
-      <SendFormIconsWrapper gap={12}>
+      <ActionFormIconsWrapper gap={12}>
         {isChecked && (
           <>
-            <SendFormCheckBadge>
+            <ActionFormCheckBadge>
               <CheckmarkIcon />
-            </SendFormCheckBadge>
+            </ActionFormCheckBadge>
             {!isOpen && (
               <PencilIconWrapper>
                 <PencilIcon />
@@ -57,7 +57,7 @@ export const ManageAddressesInputFieldCollapsed = () => {
             )}
           </>
         )}
-      </SendFormIconsWrapper>
+      </ActionFormIconsWrapper>
     </CollapsedCoinInputContainer>
   )
 }

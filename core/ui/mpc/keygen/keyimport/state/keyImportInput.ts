@@ -1,5 +1,5 @@
 import { Chain } from '@core/chain/Chain'
-import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 
 export type KeyImportInput = {
   mnemonic: string
@@ -7,5 +7,5 @@ export type KeyImportInput = {
   usePhantomSolanaPath?: boolean
 }
 
-export const { useValue: useKeyImportInput, provider: KeyImportInputProvider } =
-  getValueProviderSetup<KeyImportInput>('KeyImportInput')
+export const [KeyImportInputProvider, useKeyImportInput] =
+  setupValueProvider<KeyImportInput>('KeyImportInput')

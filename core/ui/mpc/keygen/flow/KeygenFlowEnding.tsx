@@ -1,12 +1,10 @@
 import { VaultKeygenBackupFlow } from '@core/ui/mpc/keygen/backup/VaultKeygenBackupFlow'
 import { useKeygenOperation } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
-import { Match } from '@lib/ui/base/Match'
-import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
+import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { OnBackProp } from '@lib/ui/props'
 
 import { MigrateSuccess } from '../migrate/MigrateSuccess'
-import { KeygenFlowSuccess } from './KeygenFlowSuccess'
 
 type KeygenFlowEndingProps = OnBackProp & {
   password?: string
@@ -19,34 +17,33 @@ export const KeygenFlowEnding = ({
   onChangeEmailAndRestart,
 }: KeygenFlowEndingProps) => {
   const keygenOperation = useKeygenOperation()
+  const navigate = useCoreNavigate()
+
+  const isMigrateReshare =
+    'reshare' in keygenOperation && keygenOperation.reshare === 'migrate'
+
+  if (isMigrateReshare) {
+    return (
+      <StepTransition
+        from={({ onFinish }) => (
+          <VaultKeygenBackupFlow
+            onFinish={onFinish}
+            onBack={onBack}
+            password={password}
+            onChangeEmailAndRestart={onChangeEmailAndRestart}
+          />
+        )}
+        to={() => <MigrateSuccess />}
+      />
+    )
+  }
 
   return (
-    <StepTransition
-      from={({ onFinish }) => (
-        <VaultKeygenBackupFlow
-          onFinish={onFinish}
-          onBack={onBack}
-          password={password}
-          onChangeEmailAndRestart={onChangeEmailAndRestart}
-        />
-      )}
-      to={() => (
-        <MatchRecordUnion
-          value={keygenOperation}
-          handlers={{
-            create: () => <KeygenFlowSuccess />,
-            reshare: value => (
-              <Match
-                value={value}
-                migrate={() => <MigrateSuccess />}
-                plugin={() => <KeygenFlowSuccess />}
-                regular={() => <KeygenFlowSuccess />}
-              />
-            ),
-            keyimport: () => <KeygenFlowSuccess />, // TODO: Create a KeyImportSuccess component if needed
-          }}
-        />
-      )}
+    <VaultKeygenBackupFlow
+      onFinish={() => navigate({ id: 'vault' })}
+      onBack={onBack}
+      password={password}
+      onChangeEmailAndRestart={onChangeEmailAndRestart}
     />
   )
 }

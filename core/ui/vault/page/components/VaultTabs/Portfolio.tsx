@@ -1,16 +1,11 @@
+import { ChainsEmptyState } from '@core/ui/chain/components/ChainsEmptyState'
 import { useVaultChainsBalancesQuery } from '@core/ui/vault/queries/useVaultChainsBalancesQuery'
 import { Match } from '@lib/ui/base/Match'
-import { Button } from '@lib/ui/buttons/Button'
 import { CryptoIcon } from '@lib/ui/icons/CryptoIcon'
-import { CryptoWalletPenIcon } from '@lib/ui/icons/CryptoWalletPenIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
-import { VStack, vStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
-import { Text } from '@lib/ui/text'
-import { getColor } from '@lib/ui/theme/getters'
 import { useDeferredValue, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
 import { useCoreNavigate } from '../../../../navigation/hooks/useCoreNavigate'
 import { useSearchChain } from '../../state/searchChainProvider'
@@ -55,70 +50,34 @@ export const Portfolio = () => {
     return 'list'
   }, [vaultChainBalances.length, filteredBalances.length, normalizedQuery])
 
+  const handleCustomize = () => navigate({ id: 'manageVaultChains' })
+
   return (
     <Match
       value={viewState}
       noChains={() => (
-        <EmptyWrapper>
-          <VStack gap={12} alignItems="center">
+        <ChainsEmptyState
+          icon={
             <IconWrapper size={24} color="primaryAccentFour">
               <CryptoIcon />
             </IconWrapper>
-            <VStack gap={8}>
-              <Text centerHorizontally size={17} weight="600">
-                {t('no_chains_enabled')}
-              </Text>
-              <Text size={13} color="shy" centerHorizontally>
-                {t('no_chains_enabled_description')}
-              </Text>
-            </VStack>
-          </VStack>
-          <Button
-            onClick={() => navigate({ id: 'manageVaultChains' })}
-            style={{
-              maxWidth: 'fit-content',
-              maxHeight: 32,
-            }}
-            icon={
-              <IconWrapper size={16}>
-                <CryptoWalletPenIcon />
-              </IconWrapper>
-            }
-          >
-            <Text size={12}>{t('customize_chains')}</Text>
-          </Button>
-        </EmptyWrapper>
+          }
+          title={t('no_chains_enabled')}
+          description={t('no_chains_enabled_description')}
+          onCustomize={handleCustomize}
+        />
       )}
       noSearchResults={() => (
-        <EmptyWrapper>
-          <VStack gap={12} alignItems="center">
+        <ChainsEmptyState
+          icon={
             <IconWrapper size={24} color="buttonHover">
               <CryptoIcon />
             </IconWrapper>
-            <VStack gap={8}>
-              <Text centerHorizontally size={17}>
-                {t('no_chains_found')}
-              </Text>
-              <Text size={13} color="shy" centerHorizontally>
-                {t('make_sure_chains')}
-              </Text>
-            </VStack>
-          </VStack>
-          <Button
-            onClick={() => navigate({ id: 'manageVaultChains' })}
-            style={{
-              maxWidth: 'fit-content',
-              maxHeight: 32,
-            }}
-            icon={
-              <IconWrapper size={16}>
-                <CryptoWalletPenIcon />
-              </IconWrapper>
-            }
-          >
-            <Text size={12}>{t('customize_chains')}</Text>
-          </Button>
-        </EmptyWrapper>
+          }
+          title={t('no_chains_found')}
+          description={t('make_sure_chains')}
+          onCustomize={handleCustomize}
+        />
       )}
       list={() => (
         <List>
@@ -130,14 +89,3 @@ export const Portfolio = () => {
     />
   )
 }
-
-const EmptyWrapper = styled.div`
-  ${vStack({
-    gap: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-  })};
-  padding: 32px 40px;
-  border-radius: 16px;
-  background: ${getColor('foreground')};
-`

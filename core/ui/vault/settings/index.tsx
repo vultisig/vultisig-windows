@@ -7,6 +7,7 @@ import { IconFileEdit } from '@lib/ui/icons/IconFileEdit'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { ShareAndroidIcon } from '@lib/ui/icons/ShareAndroidIcon'
+import { ShieldIcon } from '@lib/ui/icons/ShieldIcon'
 import { TrashCanIcon } from '@lib/ui/icons/TrashCanIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
@@ -14,13 +15,20 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { FC, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { SettingsSection } from '../../settings/SettingsSection'
 import { VaultSettingsBackup } from './backup'
 
-export const VaultSettingsPage = () => {
+type VaultSettingsPageProps = {
+  extraItems?: ReactNode
+}
+
+export const VaultSettingsPage: FC<VaultSettingsPageProps> = ({
+  extraItems,
+}) => {
   const { t } = useTranslation()
   const vault = useCurrentVault()
   const navigate = useCoreNavigate()
@@ -72,6 +80,43 @@ export const VaultSettingsPage = () => {
 
         <SettingsSection title={t('security')}>
           <VaultSettingsBackup />
+          {!vault.publicKeyMldsa && (
+            <ListItem
+              icon={
+                <ListItemIconWrapper>
+                  <ShieldIcon />
+                </ListItemIconWrapper>
+              }
+              description={
+                <DescriptionText>
+                  {t('post_quantum_keygen_description')}
+                </DescriptionText>
+              }
+              onClick={() =>
+                navigate({
+                  id: isFastVault ? 'singleKeygenFast' : 'singleKeygenSecure',
+                })
+              }
+              title={t('post_quantum_keygen')}
+              hoverable
+              showArrow
+            />
+          )}
+          {vault.publicKeyMldsa && (
+            <ListItem
+              icon={
+                <ListItemIconWrapper>
+                  <ShieldIcon />
+                </ListItemIconWrapper>
+              }
+              description={
+                <DescriptionText>
+                  {t('post_quantum_key_already_generated')}
+                </DescriptionText>
+              }
+              title={t('post_quantum_keygen')}
+            />
+          )}
         </SettingsSection>
 
         <SettingsSection title={t('other')}>
@@ -109,6 +154,7 @@ export const VaultSettingsPage = () => {
             hoverable
             showArrow
           />
+          {extraItems}
         </SettingsSection>
         <DeleteItem
           icon={

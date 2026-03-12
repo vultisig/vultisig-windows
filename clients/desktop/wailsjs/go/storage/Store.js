@@ -10,8 +10,16 @@ export function DeleteAddressBookItem(arg1) {
   return window['go']['storage']['Store']['DeleteAddressBookItem'](arg1);
 }
 
-export function DeleteCoin(arg1, arg2) {
-  return window['go']['storage']['Store']['DeleteCoin'](arg1, arg2);
+export function DeleteCoin(arg1, arg2, arg3, arg4) {
+  return window['go']['storage']['Store']['DeleteCoin'](arg1, arg2, arg3, arg4);
+}
+
+export function DeleteCoinsByChain(arg1, arg2) {
+  return window['go']['storage']['Store']['DeleteCoinsByChain'](arg1, arg2);
+}
+
+export function DeleteTransactionRecords(arg1) {
+  return window['go']['storage']['Store']['DeleteTransactionRecords'](arg1);
 }
 
 export function DeleteVault(arg1) {
@@ -34,8 +42,20 @@ export function GetCoins() {
   return window['go']['storage']['Store']['GetCoins']();
 }
 
+export function GetTransactionRecord(arg1) {
+  return window['go']['storage']['Store']['GetTransactionRecord'](arg1);
+}
+
+export function GetTransactionRecords(arg1) {
+  return window['go']['storage']['Store']['GetTransactionRecords'](arg1);
+}
+
 export function GetVault(arg1) {
   return window['go']['storage']['Store']['GetVault'](arg1);
+}
+
+export function GetVaultCoins(arg1) {
+  return window['go']['storage']['Store']['GetVaultCoins'](arg1);
 }
 
 export function GetVaultFolder(arg1) {
@@ -66,6 +86,10 @@ export function SaveCoins(arg1, arg2) {
   return window['go']['storage']['Store']['SaveCoins'](arg1, arg2);
 }
 
+export function SaveTransactionRecord(arg1) {
+  return window['go']['storage']['Store']['SaveTransactionRecord'](arg1);
+}
+
 export function SaveVault(arg1) {
   return window['go']['storage']['Store']['SaveVault'](arg1);
 }
@@ -80,4 +104,8 @@ export function SaveVaultsKeyShares(arg1) {
 
 export function UpdateAddressBookItem(arg1) {
   return window['go']['storage']['Store']['UpdateAddressBookItem'](arg1);
+}
+
+export function UpdateTransactionRecord(arg1) {
+  return window['go']['storage']['Store']['UpdateTransactionRecord'](arg1);
 }

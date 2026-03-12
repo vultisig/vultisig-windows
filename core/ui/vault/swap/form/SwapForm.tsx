@@ -12,10 +12,11 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
-import { FC, useMemo } from 'react'
+import { FC, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { RefreshSwap } from '../components/RefreshSwap'
 import { useSwapQuoteQuery } from '../queries/useSwapQuoteQuery'
 import { useSwapValidationQuery } from '../queries/useSwapValidationQuery'
@@ -27,6 +28,8 @@ export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
     isPending,
   } = useSwapValidationQuery()
   const swapQuoteQuery = useSwapQuoteQuery()
+  const [{ autoSubmit }, setViewState] = useCoreViewState<'swap'>()
+  const autoSubmittedRef = useRef(false)
 
   const { t } = useTranslation()
 
@@ -46,11 +49,24 @@ export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
     return validationErrorMessage
   }, [validationErrorMessage, error, isPending, t])
 
+  useEffect(() => {
+    if (
+      autoSubmit &&
+      !autoSubmittedRef.current &&
+      !errorMessage &&
+      swapQuoteQuery.data
+    ) {
+      autoSubmittedRef.current = true
+      setViewState(prev => ({ ...prev, autoSubmit: undefined }))
+      onFinish(swapQuoteQuery.data)
+    }
+  }, [autoSubmit, errorMessage, swapQuoteQuery.data, onFinish, setViewState])
+
   // Display error for ReverseSwap button (excludes non-error states like loading/fill_the_form)
   const displayErrorMessage = useMemo(() => {
     if (isPending) return null
-    if (validationErrorMessage === undefined) return null
     if (error) return extractErrorMsg(error)
+    if (validationErrorMessage === undefined) return null
     return validationErrorMessage
   }, [validationErrorMessage, error, isPending])
 
@@ -72,6 +88,7 @@ export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
       <PageContent
         as="form"
         gap={40}
+        data-testid="swap-form"
         {...getFormProps({
           onSubmit: handleSubmit,
           isDisabled: !!errorMessage,
@@ -91,7 +108,11 @@ export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
             <SwapInfo />
           </VStack>
         </VStack>
-        <Button disabled={!!errorMessage} type="submit">
+        <Button
+          disabled={!!errorMessage}
+          type="submit"
+          data-testid="swap-continue"
+        >
           {t('continue')}
         </Button>
       </PageContent>

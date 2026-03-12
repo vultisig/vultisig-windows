@@ -1,5 +1,6 @@
 import { Chain, UtxoBasedChain } from '@core/chain/Chain'
 import { validateUtxoRequirements } from '@core/chain/chains/utxo/send/validateUtxoRequirements'
+import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { isValidAddress } from '@core/chain/utils/isValidAddress'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
@@ -45,10 +46,12 @@ export const validateSendForm = (
     balance: bigint
     walletCore: WalletCore
     t: TFunction
+    fee?: bigint
+    nativeBalance?: bigint
   }
 ): ValidationResult<SendFormShape> => {
   const { coin, amount, senderAddress, receiverAddress } = values
-  const { balance, walletCore, t } = helpers
+  const { balance, walletCore, t, fee, nativeBalance } = helpers
   const { chain } = coin
   const errors: ValidationResult<SendFormShape> = {}
 
@@ -57,8 +60,21 @@ export const validateSendForm = (
   if (!amount) {
     errors.amount = t('amount_required')
   } else {
-    if (amount > balance) {
+    if (isFeeCoin(coin) && fee != null) {
+      if (amount + fee > balance) {
+        errors.amount = t('insufficient_balance')
+      }
+    } else if (amount > balance) {
       errors.amount = t('insufficient_balance')
+    }
+
+    if (
+      !isFeeCoin(coin) &&
+      nativeBalance != null &&
+      fee != null &&
+      nativeBalance < fee
+    ) {
+      errors.amount = t('insufficient_native_balance_for_fee')
     }
 
     if (isOneOf(chain, Object.values(UtxoBasedChain)) && amount) {

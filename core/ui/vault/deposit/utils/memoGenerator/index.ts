@@ -201,6 +201,21 @@ export const generateMemo = ({
       const basisPoints = Math.floor(pct * 100)
       return `POOL-:${basisPoints}`
     },
+    add_thor_lp: () => {
+      const pool = shouldBePresent(depositFormData.pool as string, 'Pool name')
+      const pairedAddress = depositFormData.pairedAddress as string | undefined
+      if (pairedAddress) {
+        return `+:${pool}:${pairedAddress}`
+      }
+      return `+:${pool}`
+    },
+    remove_thor_lp: () => {
+      const pool = shouldBePresent(depositFormData.pool as string, 'Pool name')
+      const { percentage } = extractFormValues(depositFormData)
+      const pct = shouldBePresent(percentage, 'Percentage')
+      const basisPoints = Math.floor(pct * 100)
+      return `-:${pool}:${basisPoints}`
+    },
   })
 }
 

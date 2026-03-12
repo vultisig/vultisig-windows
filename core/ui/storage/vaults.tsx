@@ -5,7 +5,7 @@ import { useCore } from '@core/ui/state/core'
 import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
-import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -57,8 +57,8 @@ const mergeVaultsWithCoins = ({ vaults, coins }: MergeVaultsWithCoinsInput) => {
   })
 }
 
-export const { useValue: useVaults, provider: VaultsProvider } =
-  getValueProviderSetup<(Vault & { coins: AccountCoin[] })[]>('VaultsProvider')
+export const [VaultsProvider, useVaults] =
+  setupValueProvider<(Vault & { coins: AccountCoin[] })[]>('VaultsProvider')
 
 export const useVaultsQuery = () => {
   const { getVaults, getCoins } = useCore()
@@ -123,7 +123,7 @@ export const useDeleteVaultMutation = () => {
 
   const mutationFn: DeleteVaultFunction = async input => {
     await deleteVault(input)
-    await refetchQueries([StorageKey.vaults])
+    await refetchQueries([StorageKey.vaults], [StorageKey.vaultsCoins])
   }
 
   return useMutation({

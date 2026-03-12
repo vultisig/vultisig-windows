@@ -1,10 +1,10 @@
+import { featureFlags } from '@core/ui/featureFlags'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { centerContent } from '@lib/ui/css/centerContent'
 import { round } from '@lib/ui/css/round'
 import { sameDimensions } from '@lib/ui/css/sameDimensions'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
-import { ChatIcon } from '@lib/ui/icons/ChatIcon'
 import { CoinsAddIcon } from '@lib/ui/icons/CoinsAddIcon'
 import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { hStack, vStack } from '@lib/ui/layout/Stack'
@@ -15,13 +15,13 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
-const bottomNavigationHeight = 66
-const cameraIconSize = 56
+import { AgentBottomNavigationContent } from './AgentBottomNavigationContent'
 
-type TabType = 'wallet' | 'defi' | 'chat'
+const bottomNavigationHeight = 66
+const centerButtonSize = 56
 
 type BottomNavigationProps = {
-  activeTab?: TabType
+  activeTab?: 'wallet' | 'defi' | 'agent'
   isActiveTabRoot?: boolean
 }
 
@@ -49,55 +49,64 @@ export const BottomNavigation = ({
     }
   }, [])
 
-  const handleTabChange = (tab: TabType) => {
+  if (!featureFlags.agent) {
+    const handleTabChangeOld = (tab: 'wallet' | 'defi') => {
+      if (tab === activeTab && isActiveTabRoot) return
+      if (tab === 'wallet') {
+        navigate({ id: 'vault' }, { replace: true })
+      } else {
+        navigate({ id: 'defi', state: {} }, { replace: true })
+      }
+    }
+    return (
+      <ContainerOld>
+        <TabButtonOld
+          isActive={activeTab === 'wallet'}
+          onClick={() => handleTabChangeOld('wallet')}
+        >
+          <WalletIcon />
+          <Text as="span" size={10}>
+            {t('wallet')}
+          </Text>
+        </TabButtonOld>
+        <CameraButton onClick={() => navigate({ id: 'uploadQr', state: {} })}>
+          <CameraIcon />
+        </CameraButton>
+        <TabButtonOld
+          isActive={activeTab === 'defi'}
+          onClick={() => handleTabChangeOld('defi')}
+        >
+          <CoinsAddIcon />
+          <Text as="span" size={10}>
+            {t('defi')}
+          </Text>
+        </TabButtonOld>
+      </ContainerOld>
+    )
+  }
+
+  const handleTabChange = (tab: 'wallet' | 'defi' | 'agent') => {
     if (tab === activeTab && isActiveTabRoot) return
 
     if (tab === 'wallet') {
       navigate({ id: 'vault' }, { replace: true })
     } else if (tab === 'defi') {
       navigate({ id: 'defi', state: {} }, { replace: true })
-    } else if (tab === 'chat') {
-      navigate({ id: 'chat' }, { replace: true })
+    } else if (tab === 'agent') {
+      navigate({ id: 'agentChat', state: {} }, { replace: true })
     }
   }
 
   return (
-    <Container>
-      <TabButton
-        isActive={activeTab === 'wallet'}
-        onClick={() => handleTabChange('wallet')}
-      >
-        <WalletIcon />
-        <Text as="span" size={10}>
-          {t('wallet')}
-        </Text>
-      </TabButton>
-      <CameraButton onClick={() => navigate({ id: 'uploadQr', state: {} })}>
-        <CameraIcon />
-      </CameraButton>
-      <TabButton
-        isActive={activeTab === 'defi'}
-        onClick={() => handleTabChange('defi')}
-      >
-        <CoinsAddIcon />
-        <Text as="span" size={10}>
-          {t('defi')}
-        </Text>
-      </TabButton>
-      <TabButton
-        isActive={activeTab === 'chat'}
-        onClick={() => handleTabChange('chat')}
-      >
-        <ChatIcon />
-        <Text as="span" size={10}>
-          {t('chat')}
-        </Text>
-      </TabButton>
-    </Container>
+    <AgentBottomNavigationContent
+      activeTab={activeTab}
+      onTabChange={handleTabChange}
+      onCameraPress={() => navigate({ id: 'uploadQr', state: {} })}
+    />
   )
 }
 
-const Container = styled.div`
+const ContainerOld = styled.div`
   position: fixed;
   bottom: 0;
   left: 0;
@@ -122,7 +131,7 @@ const CameraButton = styled(UnstyledButton)`
   ${round};
   background: #4879fd;
   ${centerContent};
-  ${sameDimensions(cameraIconSize)};
+  ${sameDimensions(centerButtonSize)};
   font-size: 24px;
   color: ${getColor('text')};
   transition: all 0.2s;
@@ -134,13 +143,13 @@ const CameraButton = styled(UnstyledButton)`
   }
 `
 
-type TabButtonProps = {
+type TabButtonOldProps = {
   isActive?: boolean
   isDisabled?: boolean
 }
 
-const TabButton = styled(UnstyledButton)<TabButtonProps>`
-  width: 90px;
+const TabButtonOld = styled(UnstyledButton)<TabButtonOldProps>`
+  width: 137px;
   height: 48px;
   padding: 3px 12px;
   font-size: 20px;

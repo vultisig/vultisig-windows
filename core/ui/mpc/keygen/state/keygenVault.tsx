@@ -1,6 +1,6 @@
 import { Vault } from '@core/mpc/vault/Vault'
 import { ChildrenProp } from '@lib/ui/props'
-import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { pick } from '@lib/utils/record/pick'
 import { useMemo } from 'react'
@@ -29,8 +29,8 @@ export type KeygenVault =
       }
     }
 
-export const { useValue: useKeygenVault, provider: KeygenVaultProvider } =
-  getValueProviderSetup<KeygenVault>('KeygenVault')
+export const [KeygenVaultProvider, useKeygenVault] =
+  setupValueProvider<KeygenVault>('KeygenVault')
 
 export const useKeygenVaultName = () => {
   const keygenVault = useKeygenVault()

@@ -1,5 +1,5 @@
 import { MpcServerType } from '@core/mpc/MpcServerType'
-import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
+import { setupStateProvider } from '@lib/ui/state/setupStateProvider'
 
-export const { useState: useMpcServerType, provider: MpcServerTypeProvider } =
-  getStateProviderSetup<MpcServerType>('MpcServerType')
+export const [MpcServerTypeProvider, useMpcServerType] =
+  setupStateProvider<MpcServerType>('MpcServerType')

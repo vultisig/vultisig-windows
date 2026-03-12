@@ -68,6 +68,9 @@ clients/extension/.parcel-cache/
 .env.test.local
 .env.production.local
 
+# Vault files (never commit credentials)
+*.vult
+
 # Optional: Ignore binary files (uncomment if applicable)
 # myapp.exe
 # myapp
@@ -104,3 +107,10 @@ task.md
 *storybook.log
 storybook-static
 google-credentials.json
+.mind/
+
+# Claude Code local settings (user-specific)
+.claude/settings.local.json
+
+# Local agent config (credentials, secrets)
+.cursor/*.local

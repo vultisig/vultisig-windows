@@ -5,7 +5,7 @@ import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { TextArea } from '@lib/ui/inputs/TextArea'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { seedphraseWordCounts } from './config'
@@ -21,8 +21,6 @@ export const EnterSeedphraseStep = () => {
   const [, setStep] = useImportSeedphraseStep()
   const walletCore = useAssertWalletCore()
   const vaults = useVaults()
-
-  const [isTouched, setIsTouched] = useState(false)
 
   const cleanedMnemonic = cleanMnemonic(mnemonic)
   const basicError = validateMnemonic({
@@ -73,15 +71,12 @@ export const EnterSeedphraseStep = () => {
           autoFocus
           value={mnemonic}
           onValueChange={setMnemonic}
-          onBlur={() => setIsTouched(true)}
           accessory={accessory}
-          validation={
-            isValid ? 'valid' : isTouched && error ? 'invalid' : undefined
-          }
+          validation={isValid ? 'valid' : error ? 'invalid' : undefined}
           placeholder={t('mnemonic_placeholder')}
         />
 
-        {isTouched && error && (
+        {error && (
           <Text size={13} color="danger">
             {error}
           </Text>
@@ -89,7 +84,7 @@ export const EnterSeedphraseStep = () => {
       </VStack>
 
       <VStack flexGrow justifyContent="flex-end" fullWidth>
-        <Button type="submit" disabled={error || undefined}>
+        <Button type="submit" disabled={!isValid}>
           {t('import')}
         </Button>
       </VStack>

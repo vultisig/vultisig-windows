@@ -1,13 +1,13 @@
 import { banxaSupportedChains } from '@core/chain/banxa'
 import { Chain } from '@core/chain/Chain'
 import { CoinKey, extractCoinKey } from '@core/chain/coin/Coin'
-import { swapEnabledChains } from '@core/chain/swap/swapEnabledChains'
 import { SendPrompt } from '@core/ui/vault/send/SendPrompt'
 import { isOneOf } from '@lib/utils/array/isOneOf'
 import { useCallback, useMemo } from 'react'
 
 import { depositEnabledChains } from '../../deposit/DepositEnabledChain'
 import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
+import { useSwapEnabledChainsForVault } from '../../swap/state/useSwapEnabledChainsForVault'
 import { BuyPrompt } from '../BuyPrompt'
 import { DepositPrompt } from '../DepositPrompt'
 import { ActionsWrapper } from '../PrimaryActions.styled'
@@ -26,6 +26,7 @@ export const VaultPrimaryActions = ({
   showDepositAction = true,
 }: VaultPrimaryActionsProps) => {
   const coins = useCurrentVaultCoins()
+  const swapEnabledChainsForVault = useSwapEnabledChainsForVault()
 
   const sendCoin = useMemo(
     () => potentialCoin || coins[0],
@@ -45,7 +46,10 @@ export const VaultPrimaryActions = ({
     [coins, potentialCoin]
   )
 
-  const swapCoin = useMemo(() => getCoin(swapEnabledChains), [getCoin])
+  const swapCoin = useMemo(
+    () => getCoin(swapEnabledChainsForVault),
+    [getCoin, swapEnabledChainsForVault]
+  )
   const buyCoin = useMemo(() => getCoin(banxaSupportedChains), [getCoin])
   const depositCoin = useMemo(() => getCoin(depositEnabledChains), [getCoin])
 

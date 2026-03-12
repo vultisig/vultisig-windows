@@ -7,6 +7,7 @@ import { FlatCompat } from '@eslint/eslintrc'
 import js from '@eslint/js'
 import typescriptEslint from '@typescript-eslint/eslint-plugin'
 import tsParser from '@typescript-eslint/parser'
+import importPlugin from 'eslint-plugin-import'
 import jsxA11Y from 'eslint-plugin-jsx-a11y'
 import react from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
@@ -34,6 +35,7 @@ export default [
       '**/*_pb.ts',
       'lib/dkls',
       'lib/schnorr',
+      'lib/mldsa',
     ],
   },
   ...compat.extends(
@@ -47,6 +49,7 @@ export default [
   {
     plugins: {
       react,
+      import: importPlugin,
       '@typescript-eslint': typescriptEslint,
       'jsx-a11y': jsxA11Y,
       'react-hooks': fixupPluginRules(reactHooks),
@@ -101,6 +104,7 @@ export default [
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'error',
       'react-compiler/react-compiler': 'error',
+      'import/no-relative-packages': 'error',
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
       '@typescript-eslint/ban-ts-comment': 'off',

@@ -27,6 +27,7 @@ import { Trans } from 'react-i18next'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useCoreNavigate } from '../../../../navigation/hooks/useCoreNavigate'
 import { useFriendReferralValidation } from './EditFriendReferralForm/hooks/useFriendReferralValidation'
 import { FormFieldErrorText } from './Referrals.styled'
 
@@ -34,6 +35,7 @@ export const ManageReferralsForm = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
   const [value, setValue] = useState('')
   const vaultId = useAssertCurrentVaultId()
+  const navigate = useCoreNavigate()
   const { data: friendReferral, isLoading: isFriendReferralLoading } =
     useFriendReferralQuery(vaultId)
   const { mutateAsync: setFriendReferral } =
@@ -72,7 +74,9 @@ export const ManageReferralsForm = ({ onFinish }: OnFinishProp) => {
   return (
     <>
       <PageHeader
-        primaryControls={<PageHeaderBackButton />}
+        primaryControls={
+          <PageHeaderBackButton onClick={() => navigate({ id: 'referral' })} />
+        }
         title={t('manage_referral_title')}
       />
       <PageContent alignItems="center">

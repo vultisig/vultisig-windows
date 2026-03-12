@@ -1,8 +1,6 @@
-import { getOptionalValueProviderSetup } from '@lib/ui/state/getOptionalValueProviderSetup'
+import { setupOptionalValueProvider } from '@lib/ui/state/setupOptionalValueProvider'
 
 import { VaultCreationInput } from '../VaultCreationInput'
 
-export const {
-  useValue: useVaultCreationInput,
-  provider: VaultCreationInputProvider,
-} = getOptionalValueProviderSetup<VaultCreationInput>()
+export const [VaultCreationInputProvider, useVaultCreationInput] =
+  setupOptionalValueProvider<VaultCreationInput>()

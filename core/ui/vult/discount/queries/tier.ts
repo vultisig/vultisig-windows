@@ -1,16 +1,32 @@
+import { Chain, EvmChain } from '@core/chain/Chain'
+import { getErc721Balance } from '@core/chain/chains/evm/erc721/getErc721Balance'
+import { getCoinBalance } from '@core/chain/coin/balance'
+import { vult } from '@core/chain/coin/knownTokens'
 import { getVultDiscountTier } from '@core/chain/swap/affiliate'
-import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
+import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
+import { useQuery } from '@tanstack/react-query'
+import { Address } from 'viem'
 
-import { useVultBalanceQuery } from '../../queries/balance'
-import { useThorguardNftBalanceQuery } from '../../queries/thorguardNftBalance'
+const thorguardNftAddress: Address =
+  '0xa98b29a8f5a247802149c268ecf860b8308b7291'
 
 export const useVultDiscountTierQuery = () => {
-  return useCombineQueries({
-    queries: {
-      vultBalance: useVultBalanceQuery(),
-      thorguardNftBalance: useThorguardNftBalanceQuery(),
+  const address = useCurrentVaultAddress(Chain.Ethereum)
+
+  return useQuery({
+    queryKey: ['vultDiscountTier', address],
+    queryFn: async () => {
+      const [vultBalance, thorguardNftBalance] = await Promise.all([
+        getCoinBalance({ chain: vult.chain, id: vult.id, address }),
+        getErc721Balance({
+          chain: EvmChain.Ethereum,
+          address: thorguardNftAddress,
+          accountAddress: address as Address,
+        }),
+      ])
+      return getVultDiscountTier({ vultBalance, thorguardNftBalance })
     },
-    joinData: getVultDiscountTier,
-    eager: false,
+    enabled: !!address,
+    initialData: address ? undefined : null,
   })
 }

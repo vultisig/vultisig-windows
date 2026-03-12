@@ -4,6 +4,7 @@ import {
   buildSwapKeysignPayload,
   BuildSwapKeysignPayloadInput,
 } from '@core/mpc/keysign/swap/build'
+import { toKeysignLibType } from '@core/mpc/types/utils/libType'
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
@@ -45,7 +46,7 @@ export const useSwapKeysignPayloadQuery = (swapQuote: SwapQuote) => {
       localPartyId: vault.localPartyId,
       fromPublicKey,
       toPublicKey,
-      libType: vault.libType,
+      libType: toKeysignLibType(vault),
       walletCore,
     }),
     [

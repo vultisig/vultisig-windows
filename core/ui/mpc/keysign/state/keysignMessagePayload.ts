@@ -1,7 +1,5 @@
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
-import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 
-export const {
-  useValue: useKeysignMessagePayload,
-  provider: KeysignMessagePayloadProvider,
-} = getValueProviderSetup<KeysignMessagePayload>('KeysignMessagePayload')
+export const [KeysignMessagePayloadProvider, useKeysignMessagePayload] =
+  setupValueProvider<KeysignMessagePayload>('KeysignMessagePayload')

@@ -1,126 +1,109 @@
-# CLAUDE.md
+# Vultisig Windows — Claude Guidelines
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+## Security Tier
 
-## Commands
+STANDARD
 
-### Development
-- `yarn dev:desktop` - Run desktop app in development (uses Wails dev server on port 34115)
-- `yarn dev:extension` - Run extension in development mode
-- `yarn dev:desktop:vite` - Run desktop Vite dev server only (for frontend-only development)
+## Critical Boundaries
 
-### Building
-- `yarn build:desktop` - Build desktop application
-- `yarn build:extension` - Build browser extension
-- `yarn build` - Alias for `yarn build:desktop`
+- `core/mpc/` — MPC/TSS cryptographic operations. Do not modify without explicit review.
+- `tss/` — TSS Go bindings (Wails). Do not modify without explicit review.
+- `lib/` — Upstream mirror. Do not edit directly.
 
-### Testing & Quality
-- `yarn test` - Run tests (vitest)
-- `yarn lint` - Lint TypeScript/JavaScript files across all clients
-- `yarn lint:fix` - Fix linting issues automatically
-- `yarn typecheck` - Run TypeScript type checking
-- `yarn check:all` - Run lint, typecheck, test, and knip together
-- `yarn knip` - Find unused dependencies and exports
-- `yarn knip:fix` - Automatically remove unused dependencies and files
+## Project Overview
 
-### Package Management
-- `yarn sync-packages` - Fix version mismatches across workspaces (syncpack)
+Vultisig desktop (Wails + React) and browser extension for multi-chain cryptocurrency wallet management. TypeScript monorepo with Yarn workspaces.
 
-## Architecture
+## Tech Stack
 
-### Monorepo Structure
+- **Language**: TypeScript (strict)
+- **UI**: React 19 with React Compiler (no manual memoization)
+- **Desktop**: Wails (Go backend + web frontend)
+- **Extension**: Chrome/Brave browser extension
+- **Build**: Vite, Yarn 4 workspaces
+- **Styling**: styled-components
+- **State**: Zustand + React hooks
+- **Testing**: Vitest
+- **Linting**: ESLint
+- **Type checking**: tsgo --noEmit
 
-This is a **yarn workspaces monorepo** with domain-driven organization:
+## Directory Structure
 
-**`lib/`** - Pure, reusable code (zero Vultisig dependencies)
-- `@lib/utils` - Generic utilities and helper functions
-- `@lib/ui` - Reusable UI components
-- `@lib/extension` - Browser extension utilities
-- Other domain-agnostic libraries (schnorr, dkls, codegen)
+```text
+vultisig-windows/
+├── clients/
+│   ├── desktop/         # Wails desktop app
+│   └── extension/       # Browser extension
+├── core/
+│   ├── chain/           # Chain-specific logic (resolver pattern)
+│   ├── config/          # App configuration
+│   ├── extension/       # Extension-specific core
+│   ├── inpage-provider/ # Web3 injected provider
+│   ├── mpc/             # MPC/TSS operations
+│   └── ui/              # Shared UI components, i18n
+├── lib/                 # Upstream mirrors (do not edit)
+├── storage/             # Data persistence
+├── tss/                 # TSS Go bindings
+├── relay/               # Relay server
+├── mediator/            # Mediator service
+├── build/               # Build scripts
+├── ci/                  # CI configuration
+└── utils/               # Shared utilities
+```
 
-**`core/`** - Vultisig business logic shared across clients
-- `@core/chain` - Blockchain integrations and chain-specific logic
-- `@core/mpc` - Multi-party computation protocols
-- `@core/ui` - Domain-specific UI components and state management
-- `@core/extension` - Extension-specific business logic
-- `@core/config` - Shared configuration and constants
-- `@core/inpage-provider` - Web3 provider implementation
+## Quick Commands
 
-**`clients/`** - Application-specific code per platform
-- `clients/desktop/` - Wails-based desktop app for Windows/Linux
-- `clients/extension/` - Chrome extension (VultiConnect)
-- `clients/mobile/` - Mobile app code references
+```bash
+# Validate code (quick)
+yarn check
 
-### Technology Stack
+# Full CI-equivalent validation
+yarn check:all
 
-**Desktop App:**
-- **Wails** - Go + React framework for desktop apps
-- **Vite** - Frontend build tool
-- **React 19** - UI framework
-- **styled-components** - CSS-in-JS styling
-- **TypeScript** - Type safety
+# Lint
+yarn lint
+yarn lint:fix
 
-**Extension:**
-- **Chrome Extension APIs** - Browser integration
-- **React 19** - Popup and content script UI
-- **Vite** - Build system with multiple entry points
-- **Web3 Standards** - Wallet standard compliance
+# Type check
+yarn typecheck
 
-**Shared:**
-- **TanStack Query** - Server state management
-- **React Hook Form** - Form handling
-- **Framer Motion** - Animations
-- **i18next** - Internationalization
-- **Zod** - Runtime type validation
+# Test
+yarn test
 
-### Key Concepts
+# Desktop dev server (Wails, port 34115, UI at 8081)
+yarn dev:desktop
 
-**Multi-Party Computation (MPC)** - Core security model where private keys are split across multiple devices, requiring threshold signatures for transactions.
+# Extension dev
+yarn dev:extension
 
-**Resolver Pattern** - Used throughout for chain-specific logic. Each feature has:
-- `index.ts` - Router that delegates to chain-specific resolvers
-- `resolver.ts` - Type definitions
-- `resolvers/` - Implementation per chain (evm.ts, solana.ts, etc.)
+# Build
+yarn build:desktop
+yarn build:extension
+```
 
-**Chain Abstraction** - Unified interface for different blockchains (EVM, Solana, Cosmos, UTXO, etc.) with chain-specific implementations.
+## Code Conventions
 
-## Development Guidelines
+See `.claude/rules/` for detailed rules. Key points:
 
-### Code Organization
-- **Domain-driven structure** - Group files by business purpose, not technical type
-- **Resolver pattern** - Use for chain-dependent features instead of switch statements
-- **Pattern matching** - Prefer `Record` lookups and `match` functions over switch/case
+- **Validate after every change**: run `yarn check` after modifying code
+- **Resolver pattern**: all chain-specific logic uses resolver pattern (never switch on chain type)
+- **Object params**: functions with >1 parameter use `{FunctionName}Input` object
+- **`attempt()` over try-catch**: only for user-facing errors, not for logging
+- **Imports**: relative within package, workspace names (`@core/chain`, `@lib/utils`) cross-package
+- **React**: one component per file, no `useMemo`/`useCallback` (React Compiler handles it)
+- **i18n**: `useTranslation()` for all user-facing text, only edit `en.ts`, run `yarn translate`
+- **Types**: `type` over `interface`, no `as` assertions, derive unions from const arrays
+- **Desktop dev**: always use `yarn dev:desktop` (Wails), never plain Vite
+- **JSDoc**: `/** ... */` on all exported functions, classes, and type definitions
 
-### TypeScript Rules
-- Use `type` for object definitions, not `interface` (enforced by ESLint)
-- Use `interface` only for class contracts that will be implemented
+## Knowledge Base
 
-### Import Rules
-- **Within same package** - Use relative imports (`./`, `../`)
-- **Cross-package imports** - Use workspace names (`@core/chain`, `@lib/utils`)
-- Never traverse package boundaries with relative paths
+For deeper context, see [vultisig-knowledge](https://github.com/vultisig/vultisig-knowledge). Read only when needed:
 
-### Error Handling
-- Use `attempt()` only for user-facing errors or alternative logic paths
-- Prefer `shouldBePresent()` and `assertField()` over optional chaining for required values
-- Avoid try/catch for logging purposes
-
-### Testing
-- Use Vitest for unit tests
-- Test files should be co-located with source code or in `__tests__` folders
-
-## Important Notes
-
-### Desktop Development
-- Always use the Wails dev server (port 34115), not the Vite dev server directly
-- The Vite server lacks required Wails-injected scripts
-
-### Extension Development
-- Extension builds multiple entry points: app, background, content, inpage
-- Use `yarn dev:extension` which watches all entry points simultaneously
-
-### Blockchain Support
-Current supported chains include EVM-compatible chains, Solana, Cosmos ecosystem, Bitcoin/UTXO, Polkadot, Ripple, Sui, TON, and Tron. Each has specific resolver implementations under the resolver pattern.
-
-### Workspace Dependencies
-Package dependencies use workspace protocol (`workspace:^`) for internal packages. External dependencies are managed at the root level where possible.
+| Situation | Read |
+|-----------|------|
+| First time in this repo | [repos/vultisig-windows.md](https://github.com/vultisig/vultisig-knowledge/blob/main/repos/vultisig-windows.md) |
+| Touching crypto/MPC code | [architecture/mpc-tss-explained.md](https://github.com/vultisig/vultisig-knowledge/blob/main/architecture/mpc-tss-explained.md) |
+| Working on agent chat | [repos/agent-backend.md](https://github.com/vultisig/vultisig-knowledge/blob/main/repos/agent-backend.md) |
+| Cross-repo gotchas | [coding/gotchas.md](https://github.com/vultisig/vultisig-knowledge/blob/main/coding/gotchas.md) |
+| Unsure about conventions | [coding/patterns.md](https://github.com/vultisig/vultisig-knowledge/blob/main/coding/patterns.md) |

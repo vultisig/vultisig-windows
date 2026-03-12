@@ -21,7 +21,7 @@ export const useKeygenLoadingAnimation = () => {
   const [bounds, setBounds] = useState<Bounds>({ width: 0, height: 0 })
 
   const { rive, RiveComponent } = useRive({
-    src: '/core/animations/keygen_loading.riv',
+    src: '/core/animations/keygen-loading.riv',
     stateMachines: stateMachineName,
     autoplay: true,
     layout: new Layout({
@@ -77,6 +77,12 @@ export const useKeygenLoadingAnimation = () => {
     if (bounds.width === 0 || !posXcircles) return
     posXcircles.setValue(bounds.width / 2)
   }, [bounds.width, posXcircles])
+
+  // Mute animation audio
+  useEffect(() => {
+    if (!rive) return
+    Object.assign(rive, { volume: 0 })
+  }, [rive])
 
   // Handle resize for drawing surface
   useEffect(() => {

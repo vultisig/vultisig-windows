@@ -21,6 +21,8 @@ export function useDepositTxType() {
   return useMemo(() => {
     if (action === 'ibc_transfer') return TransactionType.IBC_TRANSFER
     if (action === 'merge') return TransactionType.THOR_MERGE
+    if (action === 'add_thor_lp') return undefined
+    if (action === 'remove_thor_lp') return undefined
     if (action === 'unmerge') return TransactionType.THOR_UNMERGE
 
     const getIsStakeContractFlow = () => {

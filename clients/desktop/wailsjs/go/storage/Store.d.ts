@@ -6,7 +6,11 @@ export function Close():Promise<void>;
 
 export function DeleteAddressBookItem(arg1:string):Promise<void>;
 
-export function DeleteCoin(arg1:string,arg2:string):Promise<void>;
+export function DeleteCoin(arg1:string,arg2:string,arg3:string,arg4:string):Promise<void>;
+
+export function DeleteCoinsByChain(arg1:string,arg2:string):Promise<number>;
+
+export function DeleteTransactionRecords(arg1:string):Promise<void>;
 
 export function DeleteVault(arg1:string):Promise<void>;
 
@@ -18,7 +22,13 @@ export function GetAllAddressBookItems():Promise<Array<storage.AddressBookItem>>
 
 export function GetCoins():Promise<Record<string, Array<storage.Coin>>>;
 
+export function GetTransactionRecord(arg1:string):Promise<storage.TransactionRecord>;
+
+export function GetTransactionRecords(arg1:string):Promise<Array<storage.TransactionRecord>>;
+
 export function GetVault(arg1:string):Promise<storage.Vault>;
+
+export function GetVaultCoins(arg1:string):Promise<Array<storage.Coin>>;
 
 export function GetVaultFolder(arg1:string):Promise<storage.VaultFolder>;
 
@@ -34,6 +44,8 @@ export function SaveCoin(arg1:string,arg2:storage.Coin):Promise<string>;
 
 export function SaveCoins(arg1:string,arg2:Array<storage.Coin>):Promise<Array<string>>;
 
+export function SaveTransactionRecord(arg1:storage.TransactionRecord):Promise<void>;
+
 export function SaveVault(arg1:storage.Vault):Promise<void>;
 
 export function SaveVaultFolder(arg1:storage.VaultFolder):Promise<string>;
@@ -41,3 +53,5 @@ export function SaveVaultFolder(arg1:storage.VaultFolder):Promise<string>;
 export function SaveVaultsKeyShares(arg1:Record<string, storage.VaultAllKeyShares>):Promise<void>;
 
 export function UpdateAddressBookItem(arg1:storage.AddressBookItem):Promise<void>;
+
+export function UpdateTransactionRecord(arg1:storage.TransactionRecord):Promise<void>;

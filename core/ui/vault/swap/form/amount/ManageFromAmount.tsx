@@ -66,7 +66,9 @@ export const ManageFromAmount = () => {
     [decimals, setValue]
   )
 
-  const suggestions = [0.25, 0.5, isFeeCoinSelected ? 0.75 : 1]
+  const suggestions = isFeeCoinSelected
+    ? [0.25, 0.5, 0.75]
+    : [0.25, 0.5, 0.75, 1]
 
   return (
     <VStack gap={4} alignItems="flex-end">
@@ -78,6 +80,7 @@ export const ManageFromAmount = () => {
           onWheel={event => event.currentTarget.blur()}
           value={inputValue}
           onValueChange={handleInputValueChange}
+          data-testid="swap-from-amount-input"
         />
         {value !== null && (
           <SwapFiatAmount
@@ -93,7 +96,7 @@ export const ManageFromAmount = () => {
         pending={() => null}
         error={() => null}
         success={amount => (
-          <HStack alignItems="center" gap={4}>
+          <HStack alignItems="center" gap={4} wrap="wrap">
             {suggestions.map(suggestion => (
               <AmountSuggestion
                 onClick={() => {

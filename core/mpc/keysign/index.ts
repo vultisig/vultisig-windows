@@ -66,14 +66,12 @@ export const keysign = async ({
     hexEncryptionKey,
     isInitiatingDevice,
   })
-
   const session = makeSignSession({
     setupMessage,
     localPartyId,
     keyShare,
     signatureAlgorithm,
   })
-
   const setupMessageHash = shouldBePresent(
     SignSession[signatureAlgorithm].setupMessageHash(setupMessage),
     'Setup message hash'

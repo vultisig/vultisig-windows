@@ -5,6 +5,7 @@ import {
   buildSendKeysignPayload,
   BuildSendKeysignPayloadInput,
 } from '@core/mpc/keysign/send/build'
+import { toKeysignLibType } from '@core/mpc/types/utils/libType'
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
@@ -49,7 +50,7 @@ export const useCircleDepositKeysignPayloadQuery = ({
       vaultId: getVaultId(vault),
       localPartyId: vault.localPartyId,
       publicKey,
-      libType: vault.libType,
+      libType: toKeysignLibType(vault),
       walletCore,
     }),
     [amount, coin, publicKey, receiver, vault, walletCore]

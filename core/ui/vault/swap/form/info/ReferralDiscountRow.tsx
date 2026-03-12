@@ -4,6 +4,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { formatDiscountPercentOfBaseFee } from './discountPercent'
 import { DiscountRow } from './DiscountRow'
 
 const StyledMegaphoneIcon = styled(MegaphoneIcon)`
@@ -13,10 +14,11 @@ const StyledMegaphoneIcon = styled(MegaphoneIcon)`
 export const ReferralDiscountRow = () => {
   const { t } = useTranslation()
   const bps = nativeSwapAffiliateConfig.referrerFeeRateBps
+  const discountPercent = formatDiscountPercentOfBaseFee(bps)
 
   return (
     <DiscountRow icon={<StyledMegaphoneIcon />}>
-      {t('referrals_default_title')} (-{bps} bps)
+      {t('referrals_default_title')}: {discountPercent}
     </DiscountRow>
   )
 }

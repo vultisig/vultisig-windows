@@ -22,7 +22,6 @@ export const es = {
     optional_validation: 'Opcional',
   },
   circle: {
-    apy: 'Tasa de rendimiento anual (APY)',
     banner_text:
       'Los fondos permanecen bajo el control total de su bóveda. El rendimiento de Circle se genera mediante tesorerías seguras fuera de la cadena. Puede retirar sus fondos en cualquier momento después de la liquidación.',
     deposit: 'Depósito',
@@ -30,20 +29,16 @@ export const es = {
       'Deposita tus $USDC en una cuenta Circle y obtén ganancias. De forma segura en tu bóveda de Vultisig.',
     open_account: 'Abrir cuenta',
     withdraw: 'Retirar',
-    current_rewards: 'Recompensas actuales',
     deposit_header: 'Depósito a la cuenta Circle',
     verify_deposit: 'Verificar depósito',
-    total_rewards: 'Recompensas totales',
     withdraw_header: 'Retirarse del Círculo',
     verify_withdraw: 'Verificar Retirar',
-    yield_details: 'Detalles del rendimiento del círculo',
+    apy_approx: 'APY (aprox.)',
+    apy_tooltip: 'Las recompensas se acreditan automáticamente a su saldo.',
   },
   fastVaultSetup: {
     backup: {
       backThemUpNow: 'respaldalos ahora',
-      backupConfirmationDescription:
-        'Realice una copia de seguridad de su bóveda compartida en línea',
-      backupVault: 'Bóveda de respaldo',
       checkEmail: 'Revisa tu correo electrónico para verificar',
       codeInfo:
         'Este código confirmará que has recibido tu recurso compartido de bóveda 1 por correo electrónico.',
@@ -52,15 +47,10 @@ export const es = {
         'Ingrese el código de 4 dígitos que le enviamos por correo electrónico',
       heldByServer: 'retenido por el servidor',
       online: 'en línea',
-      onlineStorageDescription:
-        'Se recomienda el almacenamiento en línea y es seguro: los recursos compartidos de bóveda están diseñados para esto.',
       part1: 'La acción 1 de las acciones de la bóveda será',
       securely: 'de forma segura, preferiblemente',
-      setNewStandard:
-        'Estás listo para utilizar un nuevo estándar de billetera.',
       shareSecurely: 'para garantizar el acceso, preferiblemente',
       vaultShares: 'Su bóveda contiene 2 acciones,',
-      wellDone: 'Bien hecho',
       sentTo: 'Enviado a {{email}}.',
       changeEmailAndRestartKeygen: 'Cambiar correo y reiniciar keygen',
     },
@@ -114,6 +104,14 @@ export const es = {
       'La contraseña no se puede restablecer ni recuperar',
     preparingVault: 'Preparando la bóveda',
     takeMinute: 'Esto sólo debería tomar un segundo.',
+    addAnOptionalHint: 'Añadir una pista opcional',
+    passwordTooltip:
+      'Esto ocurre porque la contraseña se usa para cifrar localmente el archivo de copia de seguridad, de forma similar a como se cifra un disco duro. En el siguiente paso, puede agregar una pista.',
+    referralModalTitle: 'Código de referencia',
+    referralModalSubtitle:
+      'Introduce tu código de referencia aquí. <b>¡Disfruta de un 10% de descuento en cada transacción!</b>',
+    applyReferral: 'Solicitar referencia',
+    referralAdded: 'Referencia añadida',
   },
   referrals_summary: {
     item_1: {
@@ -440,10 +438,6 @@ export const es = {
   fastVault: 'Bóveda rápida',
   secureVault: 'Bóveda segura',
   fast_sign: 'Señal rápida',
-  fast_vault_backup_description:
-    'Se recomienda el almacenamiento en línea y es seguro: los recursos compartidos de bóveda están diseñados para esto.',
-  fast_vault_backup_title:
-    'Realice una copia de seguridad de su recurso compartido de bóveda en línea utilizando la misma contraseña de bóveda que creó anteriormente.',
   fill_the_form: 'Rellene el formulario',
   find_custom_token: 'Encuentra un token personalizado',
   folder_name: 'Nombre de la carpeta',
@@ -480,6 +474,7 @@ export const es = {
   header_tooltip_title: 'Programa de referencias',
   hide_balance: 'Ocultar saldo',
   hide_defi_balance: 'Ocultar saldo DeFi',
+  hold: 'Mantener',
   hold_for_paired_sign: 'Mantener pulsado para señal emparejada',
   how_it_works: 'Cómo funciona',
   ibc_transaction_not_supporting_memo_desc:
@@ -690,10 +685,7 @@ export const es = {
   referral_program: 'Programa de referencias',
   referral_reg_fee: 'Tarifa de inscripción',
   referral_status: 'Estado',
-  referrals_create_page_title: 'Vultisig - Referencias',
   referrals_default_title: 'Remisión',
-  register_guide: 'Guía de registro',
-  register_your_vaults: '¡Registre sus Bóvedas!',
   remove_token: 'Eliminar token',
   rename: 'Rebautizar',
   rename_vault: 'Cambiar el nombre de la bóveda',
@@ -734,6 +726,19 @@ export const es = {
   search: 'Buscar',
   search_field_placeholder: 'Buscar',
   secure: 'Seguro',
+  secureVaultPeerDiscovery: {
+    addAtLeastMoreDevices_one: 'Añade al menos {{count}} dispositivo más',
+    addAtLeastMoreDevices_other: 'Añade al menos {{count}} dispositivos más',
+    devicePosition: '{{current}} de {{total}}',
+    localModeWaiting: 'Modo local, esperando dispositivos',
+    notWantToUseLocal: '¿No quieres usar modo local? Vuelve atrás.',
+    switchBack: 'Volver atrás',
+    useStandardMode: 'Usar modo estándar',
+    useLocalMode: 'Usar modo local',
+    waitingForDeviceToJoin: 'Esperando a que se una un dispositivo',
+    waitingForDevicesToConnect: 'Esperando a que se conecten los dispositivos',
+    wantToCreateVaultPrivately: '¿Quieres crear una bóveda en privado?',
+  },
   secureVaultSetupPasswordTooltipContent:
     'Esto ocurre porque la contraseña se usa para cifrar localmente el archivo de copia de seguridad, de forma similar a como se cifra un disco duro. En el siguiente paso, puede agregar una pista.',
   security: 'Seguridad',
@@ -907,7 +912,7 @@ export const es = {
   value: 'Valor',
   vault: 'Bóveda',
   vaultCreated: 'Bóveda creada',
-  vault_already_exists: 'La bóveda ya existe',
+  vault_already_exists: 'La bóveda "{{name}}" ya existe',
   vault_backup_page_password_info:
     'Nunca almacene recursos compartidos de Vault de diferentes dispositivos en la misma ubicación',
   vault_backup_page_password_protection:
@@ -943,14 +948,6 @@ export const es = {
     'Compartir no es compatible con este navegador.',
   vault_qr_share_text: '¡Mira este código QR de la bóveda!',
   vault_qr_share_title: 'Código QR de la bóveda',
-  vault_register_for_airdrop_list_item_1: 'Guarda tu código QR de Vault',
-  vault_register_for_airdrop_list_item_2_part_1: 'Ir a',
-  vault_register_for_airdrop_list_item_2_part_2: 'Vultisig Web',
-  vault_register_for_airdrop_list_item_3: 'Sube tu código QR de Vault',
-  vault_register_for_airdrop_list_item_4:
-    '¡Rastrea tus VULTIES (Puntos Airdrop) !',
-  vault_register_for_airdrop_save_vault_QR_button: 'Guardar código QR de Vault',
-  vault_register_for_airdrop_title: 'Bóveda de registro',
   vault_rename_page_header_title: 'Editar el nombre de su bóveda',
   vault_rename_page_name_error:
     'El nombre de la bóveda debe tener entre 1 y 50 caracteres',
@@ -1007,6 +1004,8 @@ export const es = {
   you_are_sending: 'Estás enviando',
   you_are_staking: 'Estás haciendo stake',
   you_are_unstaking: 'Estás haciendo unstake',
+  you_are_minting: "You're minting",
+  you_are_redeeming: "You're redeeming",
   yourVaultShares: 'Su bóveda tiene {{shares}} acciones de bóveda',
   your_friends_referral_code: 'Código de referencia de tus amigos',
   your_referral_code: 'Su código de referencia',
@@ -1095,18 +1094,6 @@ export const es = {
   normal: 'Normal',
   off: 'Apagado',
   on: 'En',
-  onboarding_step_1:
-    'Saluda a los recursos compartidos de bóveda, tu nuevo método de recuperación.',
-  onboarding_step_2:
-    'Están <g>divididos en partes</g> para aumentar la seguridad, <g>eliminando el único punto de fallo</g>',
-  onboarding_step_3:
-    '<g>Cada dispositivo</g> en su bóveda contiene <g>una parte de la bóveda</g>',
-  onboarding_step_4:
-    'Recupere su bóveda incluso si un dispositivo se pierde o se daña',
-  onboarding_step_5:
-    '<g>Siempre haga una copia de seguridad de cada recurso compartido de bóveda</g> por separado en una <g>ubicación diferente</g>',
-  onboarding_step_6:
-    'Estas acciones colaboran para <g>desbloquear tu bóveda</g>',
   optional: 'opcional',
   password_backup: 'Protege tu bóveda y firma rápidamente.',
   permissions: 'Permisos',
@@ -1131,4 +1118,165 @@ export const es = {
   vault_count_one: 'Bóveda de {{count}}',
   vault_count_other: '{{count}} Bóvedas',
   vult: '$VULT',
+  vaultSetupOverview: {
+    fast: {
+      badgeTitle: 'Bóveda rápida',
+      badgeSubtitle: 'Configuración de 2 dispositivos',
+      feature1Title: 'Firma de 1 dispositivo',
+      feature1Description:
+        'Firma cómodamente desde un solo dispositivo, estés donde estés. Perfecto para transacciones diarias o para operar con montos pequeños.',
+      feature2Title: 'Configuración rápida y segura',
+      feature2Description:
+        'Sin necesidad de una configuración larga. Solo tu correo electrónico y contraseña, además de dos copias de seguridad.',
+      feature3Title: 'Tú mantienes el control',
+      feature3Description:
+        'Un co-firmante nunca puede iniciar transacciones; sólo ayuda a firmarlas.',
+    },
+    secure2: {
+      badgeTitle: 'Bóveda segura',
+      badgeSubtitle: 'Bóveda de 2 dispositivos',
+      feature1Title: 'Firma de 2 dispositivos',
+      feature1Description:
+        'Cada transacción necesita la aprobación de ambos dispositivos.',
+      feature2Title: 'No hay un único punto de fallo',
+      feature2Description:
+        'Un solo dispositivo no puede transferir fondos. Si un dispositivo se pierde o queda expuesto, no podrá aprobarlo por sí solo.',
+      feature3Title: 'Ideal para almacenamiento en frío simple',
+      feature3Description:
+        'Configuración perfecta para usuarios con solo 2 dispositivos.',
+    },
+    secure3: {
+      badgeTitle: 'Bóveda segura',
+      badgeSubtitle: 'Bóveda de 3 dispositivos',
+      feature1Title: 'Firma de 2 dispositivos',
+      feature1Description:
+        'Cada transacción necesita la aprobación de 2 de sus 3 dispositivos.',
+      feature2Title: 'No hay un único punto de fallo',
+      feature2Description:
+        'Un solo dispositivo no puede transferir fondos. Si un dispositivo se pierde o queda expuesto, no podrá aprobarlo por sí solo.',
+      feature3Title: 'Ideal para almacenamiento en frío',
+      feature3Description:
+        'Equilibrio perfecto para la mayoría de los usuarios. Dos firmantes y un dispositivo de respaldo. Almacene sus archivos sin estrés.',
+    },
+    secure4: {
+      badgeTitle: 'Bóveda segura',
+      badgeSubtitle: 'Bóveda para más de 4 dispositivos',
+      feature1Title: 'Firma de 3 dispositivos o más',
+      feature1Description:
+        'Las bóvedas necesitan el 67 % de los dispositivos para firmar una transacción. Tenga tantos firmantes como desee.',
+      feature2Title: 'Gestión dinámica de dispositivos',
+      feature2Description:
+        'Agregue tantos dispositivos como desee y reciba seguridad de nivel institucional.',
+      feature3Title: 'Creado para equipos y tesorerías',
+      feature3Description:
+        'Ideal para equipos que gestionan fondos compartidos y bóvedas de mayor valor, que requieren más firmantes.',
+    },
+    title: 'La configuración de su bóveda',
+  },
+  add_referral: 'Agregar referencia',
+  backupVault: 'Bóveda de respaldo',
+  backupInCloudTitle: 'Cifrado con su contraseña de bóveda',
+  backupInCloudDescription:
+    'Realice una copia de seguridad de su recurso compartido de bóveda en línea con la misma contraseña que creó anteriormente. Se recomienda el almacenamiento en línea, ya que los recursos compartidos de bóveda seguros están diseñados para ello.',
+  backupsTitle:
+    '<highlight>Copias de seguridad,</highlight> tu nuevo método de recuperación',
+  backupsDescription:
+    'En lugar de una sola frase semilla, su bóveda está protegida por varios dispositivos. Cada dispositivo tiene su propia copia de seguridad. Una copia de seguridad por sí sola no puede transferir fondos. Las copias de seguridad solo sirven para la recuperación.',
+  backupEachDevice: 'Realice una copia de seguridad de cada dispositivo',
+  backupEachDeviceDescription:
+    'Esta es solo una copia de seguridad de su bóveda, repita este proceso para los demás dispositivos.',
+  storeBackupsSeparately: 'Almacenar copias de seguridad por separado',
+  storeBackupsSeparatelyDescription:
+    'Guarda cada copia de seguridad en un lugar diferente. Si una se ve comprometida, tus fondos estarán seguros.',
+  backupShareWarning: 'Esta es solo una parte de su bóveda',
+  backupShareWarningRest: ', repita este proceso para los demás dispositivos.',
+  backup_email_description:
+    'Ingresa el correo electrónico para recibir la bóveda compartida.',
+  backup_password_description:
+    'Introduzca la contraseña que estableció al crear esta Bóveda.',
+  choose_a_password: 'Elije una contraseña',
+  choose_a_password_description:
+    'Si desea una capa adicional de seguridad, elija una contraseña. <b>La contraseña no se puede recuperar.</b>',
+  create_vault: 'Crear bóveda',
+  create_referral_desc:
+    'Crea tu propio código y gana<c> 20%</c> sobre swaps referidos',
+  save_referral: 'Guardar referencia',
+  save_referral_desc:
+    'Guarda el código de referencia de un amigo y ahorra<c> 10%</c> sobre swaps.',
+  email_placeholder: 'Introduzca su dirección de correo electrónico',
+  enter: 'Ingresar',
+  enter_your_email: 'Introduce tu correo electrónico',
+  enter_your_email_description:
+    'Esto solo se usará una vez para enviar su archivo de respaldo, Vultisig no almacena ningún dato.',
+  seedphrase_duplicate_vault_error:
+    'Esta frase inicial ya se importó como bóveda &quot;{{vaultName}}&quot;. Al volver a importarla, se reemplazaría la bóveda existente.',
+  incorrect_email: 'Correo electrónico incorrecto, por favor verifique',
+  insufficient_native_balance_for_fee:
+    'Saldo de token nativo insuficiente para pagar la tarifa de transacción',
+  incorrect_passcode: 'Código de acceso incorrecto.',
+  new_vault_setup: 'Nueva configuración de bóveda',
+  new_vault_setup_disclaimer:
+    'Su configuración cambió, haga una nueva copia de seguridad.',
+  manage_referral_title: 'Referencias de Vultisig',
+  select_pool: 'Seleccionar grupo',
+  token_not_found_invalid: 'Dirección de contrato no válida',
+  transaction_failed: 'Transacción<error> fallido</error>',
+  transaction_pending: 'Transacción pendiente...',
+  transaction_could_not_be_parsed:
+    'No se pudo analizar esta transacción. Los datos sin procesar de la transacción se muestran a continuación.',
+  raw_transaction_data: 'Datos de transacciones sin procesar',
+  transaction_instructions_summary: 'Resumen de instrucciones de transacción',
+  instruction: 'Instrucción',
+  program_id: 'Identificación del programa',
+  accounts: 'Cuentas',
+  data_length: 'Longitud de los datos',
+  bytes: 'bytes',
+  add_thor_lp: 'Añadir THORChain LP',
+  remove_thor_lp: 'Eliminar THORChain LP',
+  lp_dust_amount_error:
+    'Saldo de runas insuficiente. Se requiere al menos {{cantidad}} runas como polvo para retirar LP.',
+  lp_withdraw_percentage: 'Porcentaje de retiro',
+  vultibot: 'VultiBot',
+  vultibot_welcome: 'Hola, soy VultiBot',
+  start_new_chat: 'Iniciar un nuevo chat',
+  new_chat: 'Nuevo chat',
+  messages: 'mensajes',
+  vultibot_description:
+    'Tu asistente de bóveda con IA. Puedo intercambiar, enviar, automatizar pólizas, consultar saldos y administrar tu bóveda.',
+  api_key_required: 'Se requiere clave API',
+  api_key_required_description:
+    'Para utilizar VultiBot, configure su clave API antrópica como una variable de entorno antes de iniciar la aplicación.',
+  type_a_message: 'Escribe un mensaje...',
+  thinking: 'Pensamiento',
+  try_saying: 'Intenta decir',
+  ask_about_plugins_policies: 'Pregunte sobre complementos y políticas...',
+  signed_in: 'Iniciado sesión',
+  password_required_for_operation: 'Ingrese su contraseña para {{operation}}.',
+  confirm_action: 'Confirmar acción',
+  confirm_action_description: 'Por favor, confirma que deseas {{action}}.',
+  agent_chat_render_error: 'Algo salió mal al representar el chat.',
+  agent_connect_description:
+    'Ingrese su contraseña de bóveda para conectarse al agente. Su contraseña se utiliza para firmar un mensaje de autenticación.',
+  agent_connect_now: 'Conéctate ahora',
+  agent_connected: 'Conectado',
+  agent_connecting: 'Conectando...',
+  agent_operation_sign_in: 'iniciar sesión',
+  agent_session_expired:
+    'Tu sesión ha expirado. Introduce la contraseña de tu bóveda para volver a conectarte.',
+  agent_sign_in_failed: 'Error al iniciar sesión',
+  agent_signing_in: 'Iniciando sesión...',
+  agent_thinking_of_ideas: 'Pensando en ideas...',
+  agent_tool_label: 'Herramienta: {{tool}}',
+  agent_tx_confirmed: 'Confirmado',
+  agent_tx_failed: 'Fallido',
+  agent_tx_pending: 'Pendiente',
+  agent_tx_type_approval: 'Aprobación',
+  agent_tx_type_contract_call: 'Llamada de contrato',
+  agent_tx_type_contract_execute: 'Ejecución del contrato',
+  agent_tx_type_deposit: 'Depósito',
+  agent_tx_type_send: 'Enviar',
+  agent_tx_type_swap: 'Intercambio',
+  agent_tx_type_transfer: 'Transferir',
+  agent_tx_view: 'Vista',
+  open_as_side_panel: 'Abrir como panel lateral',
 }

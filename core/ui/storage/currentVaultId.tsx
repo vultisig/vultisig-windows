@@ -3,7 +3,7 @@ import { useCore } from '@core/ui/state/core'
 import { ChildrenProp, ValueProp } from '@lib/ui/props'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
-import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import {
   useMutation,
@@ -28,10 +28,8 @@ export type CurrentVaultIdStorage = {
   setCurrentVaultId: SetCurrentVaultIdFunction
 }
 
-const {
-  useValue: useCurrentVaultId,
-  provider: InternalCurrentVaultIdProvider,
-} = getValueProviderSetup<CurrentVaultId>('CurrentVaultId')
+const [InternalCurrentVaultIdProvider, useCurrentVaultId] =
+  setupValueProvider<CurrentVaultId>('CurrentVaultId')
 
 export { useCurrentVaultId }
 

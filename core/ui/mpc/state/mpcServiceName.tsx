@@ -1,12 +1,12 @@
 import { ChildrenProp } from '@lib/ui/props'
-import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 import { useMemo } from 'react'
 
 import { useCore } from '../../state/core'
 import { generateMpcServiceName } from '../utils/generateMpcServiceName'
 
-export const { useValue: useMpcServiceName, provider: MpcServiceNameProvider } =
-  getValueProviderSetup<string>('MpcServiceName')
+export const [MpcServiceNameProvider, useMpcServiceName] =
+  setupValueProvider<string>('MpcServiceName')
 
 export const GeneratedMpcServiceNameProvider = ({ children }: ChildrenProp) => {
   const { mpcDevice } = useCore()

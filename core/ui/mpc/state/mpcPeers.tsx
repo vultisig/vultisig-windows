@@ -1,4 +1,4 @@
-import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 
-export const { useValue: useMpcPeers, provider: MpcPeersProvider } =
-  getValueProviderSetup<string[]>('MpcPeers')
+export const [MpcPeersProvider, useMpcPeers] =
+  setupValueProvider<string[]>('MpcPeers')

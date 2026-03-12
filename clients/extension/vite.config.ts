@@ -1,15 +1,26 @@
 import path from 'path'
-import { defineConfig, PluginOption } from 'vite'
+import { defineConfig, loadEnv, PluginOption } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 import topLevelAwait from 'vite-plugin-top-level-await'
 import wasm from 'vite-plugin-wasm'
 
+import { getFeatureFlagDefines } from '../../core/ui/vite/featureFlagDefines'
 import { getCommonPlugins } from '../../core/ui/vite/plugins'
 import { getStaticCopyTargets } from '../../core/ui/vite/staticCopy'
 
-export default async () => {
+const rootDir = path.resolve(__dirname, '../..')
+
+export default defineConfig(async ({ mode }) => {
+  const env = loadEnv(mode, rootDir)
+  const featureFlagDefines = getFeatureFlagDefines(env)
+
   const chunk = process.env.CHUNK
+  const isDev = !!process.env.VITE_DEV_RELOAD
+
+  const devBuildOptions = isDev
+    ? { minify: false as const, reportCompressedSize: false }
+    : {}
 
   if (chunk) {
     let format: 'cjs' | 'es' | 'iife' | 'umd' | undefined = undefined
@@ -32,12 +43,14 @@ export default async () => {
         break
     }
 
-    return defineConfig({
+    return {
+      define: featureFlagDefines,
       plugins,
       build: {
         copyPublicDir: false,
         emptyOutDir: false,
         manifest: false,
+        ...devBuildOptions,
         rollupOptions: {
           input: {
             [chunk]: path.resolve(__dirname, `src/${chunk}/index.ts`),
@@ -51,9 +64,10 @@ export default async () => {
           },
         },
       },
-    })
+    }
   } else {
-    return defineConfig({
+    return {
+      define: featureFlagDefines,
       plugins: [
         ...getCommonPlugins(),
         viteStaticCopy({
@@ -63,6 +77,7 @@ export default async () => {
       build: {
         emptyOutDir: false,
         manifest: false,
+        ...devBuildOptions,
         rollupOptions: {
           input: {
             index: path.resolve(__dirname, 'index.html'),
@@ -76,6 +91,6 @@ export default async () => {
           },
         },
       },
-    })
+    }
   }
-}
+})

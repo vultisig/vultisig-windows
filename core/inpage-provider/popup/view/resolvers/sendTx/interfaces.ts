@@ -35,7 +35,7 @@ type TronTransferAssetContract = {
 
 export type RequestInput = {
   method: string
-  params: Record<string, any>[]
+  params: unknown[]
 }
 
 export type ProviderId =
@@ -128,6 +128,12 @@ type MsgPayload =
         fromAddress: string
         toAddress: string
       }
+    }
+  | {
+      case:
+        | CosmosMsgType.THORCHAIN_MSG_LEAVE_POOL
+        | CosmosMsgType.THORCHAIN_MSG_LEAVE_POOL_URL
+      value: { signer?: string }
     }
   | {
       case: TronMsgType.TRON_TRANSFER_CONTRACT

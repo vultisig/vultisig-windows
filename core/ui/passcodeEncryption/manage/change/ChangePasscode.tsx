@@ -1,3 +1,4 @@
+import { passcodeEncryptionConfig } from '@core/ui/passcodeEncryption/core/config'
 import { useChangePasscodeMutation } from '@core/ui/passcodeEncryption/manage/change/mutations/changePasscode'
 import { PasscodeInput } from '@core/ui/passcodeEncryption/manage/PasscodeInput'
 import { usePasscode } from '@core/ui/passcodeEncryption/state/passcode'
@@ -50,6 +51,37 @@ export const ChangePasscode = () => {
     }
   }, [confirmNewPasscode, currentPasscode, newPasscode, passcode, t])
 
+  const currentPasscodeFull =
+    currentPasscode?.length === passcodeEncryptionConfig.passcodeLength
+
+  const currentPasscodeValidation =
+    currentPasscodeFull && currentPasscode !== passcode
+      ? 'invalid'
+      : currentPasscodeFull && currentPasscode === passcode
+        ? 'valid'
+        : undefined
+
+  const newPasscodeFull =
+    newPasscode?.length === passcodeEncryptionConfig.passcodeLength
+  const confirmNewPasscodeFull =
+    confirmNewPasscode?.length === passcodeEncryptionConfig.passcodeLength
+
+  const confirmPasscodeMatch =
+    newPasscodeFull &&
+    confirmNewPasscodeFull &&
+    newPasscode === confirmNewPasscode
+
+  const confirmPasscodeMismatch =
+    newPasscodeFull &&
+    confirmNewPasscodeFull &&
+    newPasscode !== confirmNewPasscode
+
+  const confirmPasscodeValidation = confirmPasscodeMismatch
+    ? 'invalid'
+    : confirmPasscodeMatch
+      ? 'valid'
+      : undefined
+
   return (
     <Opener
       renderOpener={({ onOpen }) => (
@@ -84,6 +116,12 @@ export const ChangePasscode = () => {
               label={t('current_passcode')}
               onChange={setCurrentPasscode}
               value={currentPasscode}
+              validation={currentPasscodeValidation}
+              validationMessages={
+                currentPasscodeValidation === 'invalid'
+                  ? { invalid: t('incorrect_passcode') }
+                  : undefined
+              }
               autoFocus
             />
             <PasscodeInput
@@ -95,6 +133,12 @@ export const ChangePasscode = () => {
               label={t('confirm_new_passcode')}
               onChange={setConfirmNewPasscode}
               value={confirmNewPasscode}
+              validation={confirmPasscodeValidation}
+              validationMessages={
+                confirmPasscodeValidation === 'invalid'
+                  ? { invalid: t('passcodes_do_not_match') }
+                  : undefined
+              }
             />
             {error && <Text color="danger">{extractErrorMsg(error)}</Text>}
           </StackSeparatedBy>

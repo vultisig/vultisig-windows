@@ -7,6 +7,7 @@ import { useTxHash } from '@core/ui/chain/state/txHash'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { useKeysignMessagePayload } from '@core/ui/mpc/keysign/state/keysignMessagePayload'
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
+import { getSignDataTxAction } from '@core/ui/mpc/keysign/tx/utils/getSignDataTxAction'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { IconButton } from '@lib/ui/buttons/IconButton'
@@ -22,7 +23,9 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useTxStatusQuery } from '../../../chain/tx/status/useTxStatusQuery'
 import { AddToAddressBookButton } from './components/AddToAddressBookButton'
+import { TxActualFeeDisplay } from './components/TxActualFeeDisplay'
 import { TxFeeRow } from './components/TxFeeRow'
 import { KeysignFeeAmount } from './FeeAmount'
 
@@ -44,7 +47,18 @@ export const KeysignTxOverview = () => {
     return fromChainAmount(BigInt(toAmount), decimals)
   }, [toAmount, decimals])
 
+  const txAction = useMemo(
+    () => getSignDataTxAction(keysignPayload, formattedToAmount ?? 0),
+    [keysignPayload, formattedToAmount]
+  )
+
+  const showAmountOrAction =
+    formattedToAmount !== null ||
+    (txAction !== null && txAction.action !== 'send')
+
   const txHash = useTxHash()
+  const txStatusQuery = useTxStatusQuery({ chain, hash: txHash })
+  const receipt = txStatusQuery.data?.receipt
 
   const blockExplorerUrl = getBlockExplorerUrl({
     chain,
@@ -54,8 +68,24 @@ export const KeysignTxOverview = () => {
 
   return (
     <>
-      {formattedToAmount !== null && (
-        <TxOverviewAmount amount={formattedToAmount} value={coin} />
+      {showAmountOrAction && (
+        <TxOverviewAmount
+          amount={
+            txAction && 'amount' in txAction && txAction.amount !== undefined
+              ? txAction.amount
+              : (formattedToAmount ?? 0)
+          }
+          value={coin}
+          actionLabel={
+            txAction?.action !== 'send' ? txAction?.labelKey : undefined
+          }
+          contractAddress={
+            txAction?.action === 'contract_execution' &&
+            'contractAddress' in txAction
+              ? txAction.contractAddress
+              : undefined
+          }
+        />
       )}
       <Panel>
         <SeparatedByLine gap={16}>
@@ -115,8 +145,12 @@ export const KeysignTxOverview = () => {
               <Text>{chain}</Text>
             </HStack>
           </HStack>
-          <TxFeeRow label={t('network_fee')}>
-            <KeysignFeeAmount keysignPayload={keysignPayload} />
+          <TxFeeRow label={receipt ? t('network_fee') : t('est_network_fee')}>
+            {receipt ? (
+              <TxActualFeeDisplay chain={chain} receipt={receipt} />
+            ) : (
+              <KeysignFeeAmount keysignPayload={keysignPayload} />
+            )}
           </TxFeeRow>
         </SeparatedByLine>
       </Panel>

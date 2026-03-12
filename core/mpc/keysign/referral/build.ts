@@ -4,7 +4,7 @@ import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { getCoinBalance } from '@core/chain/coin/balance'
 import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
 import { refineKeysignAmount } from '@core/mpc/keysign/refine/amount'
-import { MpcLib } from '@core/mpc/mpcLib'
+import { KeysignLibType } from '@core/mpc/mpcLib'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { WalletCore } from '@trustwallet/wallet-core'
@@ -17,7 +17,7 @@ export type BuildReferralKeysignPayloadInput = {
   vaultId: string
   localPartyId: string
   publicKey: PublicKey
-  libType: MpcLib
+  libType: KeysignLibType
   walletCore: WalletCore
 }
 

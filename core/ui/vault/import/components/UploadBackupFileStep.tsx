@@ -41,6 +41,7 @@ export const UploadBackupFileStep = ({
       />
       <PageContent
         as="form"
+        data-testid="import-vault-form"
         {...getFormProps({
           onSubmit: () => {
             mutate(shouldBePresent(file))
@@ -66,7 +67,12 @@ export const UploadBackupFileStep = ({
             </Text>
           )}
         </VStack>
-        <Button disabled={isDisabled} loading={isPending} type="submit">
+        <Button
+          disabled={isDisabled}
+          loading={isPending}
+          type="submit"
+          data-testid="import-continue"
+        >
           {t('continue')}
         </Button>
       </PageContent>

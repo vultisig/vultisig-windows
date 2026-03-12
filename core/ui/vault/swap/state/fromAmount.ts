@@ -1,4 +1,5 @@
-import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
+import { setupStateProvider } from '@lib/ui/state/setupStateProvider'
 
-export const { useState: useFromAmount, provider: FromAmountProvider } =
-  getStateProviderSetup<bigint | null>('FromAmount')
+export const [FromAmountProvider, useFromAmount] = setupStateProvider<
+  bigint | null
+>('FromAmount')

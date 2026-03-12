@@ -29,7 +29,7 @@ const chainActionConfig: Record<ChainAction, BalanceDisplayConfig> = {
   unmerge: { showBalance: true, balanceLabel: 'shares', showTicker: false },
   unbond: { showBalance: false, showTicker: false },
   leave: { showBalance: false, showTicker: false },
-  custom: { showBalance: false, showTicker: false },
+  custom: { showBalance: true, balanceLabel: 'balance', showTicker: true },
   bond_with_lp: { showBalance: false, showTicker: false },
   unbond_with_lp: { showBalance: false, showTicker: false },
   vote: { showBalance: false, showTicker: false },
@@ -39,6 +39,8 @@ const chainActionConfig: Record<ChainAction, BalanceDisplayConfig> = {
     showTicker: true,
   },
   remove_cacao_pool: { showBalance: false, showTicker: false },
+  add_thor_lp: { showBalance: true, balanceLabel: 'balance', showTicker: true },
+  remove_thor_lp: { showBalance: false, showTicker: false },
   freeze: { showBalance: true, balanceLabel: 'balance', showTicker: true },
   unfreeze: { showBalance: true, balanceLabel: 'balance', showTicker: true },
 }

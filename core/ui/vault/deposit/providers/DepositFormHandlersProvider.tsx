@@ -1,6 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { TronResourceType } from '@core/chain/chains/tron/resources'
-import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
+import { setupStateProvider } from '@lib/ui/state/setupStateProvider'
 import {
   Control,
   UseFormGetValues,
@@ -22,7 +22,5 @@ type DepositFormHandlers = {
   setTronResourceType?: (type: TronResourceType) => void
 }
 
-export const {
-  useState: useDepositFormHandlers,
-  provider: DepositFormHandlersProvider,
-} = getStateProviderSetup<DepositFormHandlers>('DepositFormHandlers')
+export const [DepositFormHandlersProvider, useDepositFormHandlers] =
+  setupStateProvider<DepositFormHandlers>('DepositFormHandlers')

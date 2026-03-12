@@ -30,7 +30,6 @@ import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { ShareTwoIcon } from '@lib/ui/icons/ShareTwoIcon'
 import { ShieldCheckIcon } from '@lib/ui/icons/ShieldCheckIcon'
 import { TwitterIcon } from '@lib/ui/icons/TwitterIcon'
-import { VultisigLeanLogoIcon } from '@lib/ui/icons/VultisigLeanLogoIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -54,10 +53,10 @@ type Props = {
   expandView?: ReactNode
   insiderOptions?: ReactNode
   prioritize?: ReactNode
+  pushNotifications?: ReactNode
+  sidePanel?: ReactNode
   checkUpdate?: ReactNode
 }
-
-const iconSize = 20
 
 export const SettingsPage: FC<Props> = props => {
   const { t } = useTranslation()
@@ -114,17 +113,6 @@ export const SettingsPage: FC<Props> = props => {
               title={`$${vult.ticker} ${t('discount_tiers')}`}
               showArrow
             />
-            <PrimaryListItem
-              icon={
-                <IconWrapper size={iconSize}>
-                  <VultisigLeanLogoIcon />
-                </IconWrapper>
-              }
-              onClick={() => navigate({ id: 'airdropRegister' })}
-              title={t('register_your_vaults')}
-              status="success"
-              showArrow
-            />
           </SettingsSection>
 
           <SettingsSection title={t('general')}>
@@ -159,6 +147,7 @@ export const SettingsPage: FC<Props> = props => {
               onClick={() => navigate({ id: 'addressBook' })}
               title={t('address_book')}
               showArrow
+              data-testid="address-book-link"
             />
             {areReferralEnabled && (
               <ListItem
@@ -173,6 +162,8 @@ export const SettingsPage: FC<Props> = props => {
               />
             )}
             {client === 'extension' && props.expandView}
+            {client === 'extension' && props.sidePanel}
+            {client === 'extension' && props.pushNotifications}
           </SettingsSection>
           <SettingsSection title={t('security')}>
             <ListItem
@@ -301,10 +292,6 @@ export const SettingsPage: FC<Props> = props => {
     </>
   )
 }
-
-const PrimaryListItem = styled(ListItem)`
-  background-color: ${getColor('buttonPrimary')};
-`
 
 const ListItemIconWrapper = styled(IconWrapper)`
   font-size: 20px;

@@ -1,4 +1,5 @@
-import { defaultMpcLib, MpcLib } from '@core/mpc/mpcLib'
+import { defaultMpcLib, MpcLib, mpcLibOptions } from '@core/mpc/mpcLib'
+import { validateOneOf } from '@lib/utils/array/isOneOf'
 
 import {
   PersistentStateKey,
@@ -8,6 +9,7 @@ import {
 export const useVaultCreationMpcLib = () => {
   return usePersistentState<MpcLib>(
     PersistentStateKey.VaultCreationMpcLib,
-    defaultMpcLib
+    defaultMpcLib,
+    validateOneOf(mpcLibOptions)
   )
 }

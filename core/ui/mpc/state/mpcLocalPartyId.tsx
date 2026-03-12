@@ -1,15 +1,13 @@
 import { generateLocalPartyId } from '@core/mpc/devices/localPartyId'
 import { ChildrenProp } from '@lib/ui/props'
-import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 import { useMemo } from 'react'
 
 import { useCore } from '../../state/core'
 import { useCurrentVault } from '../../vault/state/currentVault'
 
-export const {
-  useValue: useMpcLocalPartyId,
-  provider: MpcLocalPartyIdProvider,
-} = getValueProviderSetup<string>('MpcLocalPartyId')
+export const [MpcLocalPartyIdProvider, useMpcLocalPartyId] =
+  setupValueProvider<string>('MpcLocalPartyId')
 
 export const GeneratedMpcLocalPartyIdProvider = ({
   children,

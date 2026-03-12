@@ -4,6 +4,7 @@ import { useCore } from '@core/ui/state/core'
 import { useVaultOrders, useVaults } from '@core/ui/storage/vaults'
 import { useVaultBackupOverride } from '@core/ui/vault/import/state/vaultBackupOverride'
 import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
+import { Button } from '@lib/ui/buttons/Button'
 import { ValueProp } from '@lib/ui/props'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { useMemo, useRef } from 'react'
@@ -23,18 +24,24 @@ export const SaveImportedVaultStep = ({
   const initialVaults = useRef(useVaults()).current
 
   const vaultOrders = useVaultOrders()
+  const stableVaultOrders = useRef(vaultOrders).current
 
   const finalValue = useMemo(
     () => ({
       ...(override ? { ...value, ...override } : value),
-      order: getLastItemOrder(vaultOrders),
+      order: getLastItemOrder(stableVaultOrders),
     }),
-    [override, value, vaultOrders]
+    [override, value, stableVaultOrders]
   )
 
   const error = useMemo(() => {
-    if (initialVaults.find(v => getVaultId(v) === getVaultId(finalValue))) {
-      return t('vault_already_exists')
+    const existingVault = initialVaults.find(
+      v => getVaultId(v) === getVaultId(finalValue)
+    )
+    if (existingVault) {
+      return t('vault_already_exists', {
+        name: existingVault.name || finalValue.name,
+      })
     }
     if (client === 'extension' && value.libType === 'GG20') {
       return t('extension_vault_import_restriction')
@@ -43,7 +50,13 @@ export const SaveImportedVaultStep = ({
 
   if (error) {
     return (
-      <FlowErrorPageContent title={t('failed_to_save_vault')} error={error} />
+      <FlowErrorPageContent
+        title={t('failed_to_save_vault')}
+        error={error}
+        action={
+          onFinish ? <Button onClick={onFinish}>{t('skip')}</Button> : undefined
+        }
+      />
     )
   }
 

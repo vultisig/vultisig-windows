@@ -6,8 +6,8 @@ import { ComponentType } from 'react'
 import { TargetDeviceCountProvider } from '../../state/targetDeviceCount'
 import { VaultCreationInputProvider } from '../state/vaultCreationInput'
 import { SecureVaultCreationInput } from '../VaultCreationInput'
-import { VaultSetupForm } from '../VaultSetupForm'
 import { SecureVaultKeygenFlow } from './SecureVaultKeygenFlow'
+import { SecureVaultSetupFlow } from './SecureVaultSetupFlow'
 
 type CreateSecureVaultFlowProps = Partial<ChildrenProp> & {
   CreateActionProvider?: ComponentType<ChildrenProp>
@@ -24,11 +24,7 @@ export const CreateSecureVaultFlow = ({
   return (
     <ValueTransfer<SecureVaultCreationInput>
       from={({ onFinish }) => (
-        <VaultSetupForm
-          vaultSecurityType="secure"
-          onBack={goBack}
-          onSubmit={onFinish}
-        />
+        <SecureVaultSetupFlow onFinish={onFinish} onBack={goBack} />
       )}
       to={({ value, onBack }) => {
         const content = (

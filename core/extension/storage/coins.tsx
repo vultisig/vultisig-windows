@@ -16,6 +16,13 @@ export const updateCoins = async (coins: CoinsRecord) => {
   await setStorageValue(StorageKey.vaultsCoins, coins)
 }
 
+export const deleteCoinsForVault = async (vaultId: string) => {
+  const coinsRecord = await getCoins()
+  const restCoins = { ...coinsRecord }
+  delete restCoins[vaultId]
+  await updateCoins(restCoins)
+}
+
 const createCoins: CreateCoinsFunction = async ({ vaultId, coins }) => {
   const prevCoinsRecord = await getCoins()
 
@@ -36,10 +43,11 @@ export const coinsStorage: CoinsStorage = {
   },
   deleteCoin: async ({ vaultId, coinKey }) => {
     const coins = await getCoins()
+    const existing = coins[vaultId] ?? []
 
     await updateCoins({
       ...coins,
-      [vaultId]: coins[vaultId].filter(coin => !areEqualCoins(coin, coinKey)),
+      [vaultId]: existing.filter(coin => !areEqualCoins(coin, coinKey)),
     })
   },
   getCoins,

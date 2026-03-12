@@ -1,6 +1,5 @@
 import { CoinKey } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
-import { swapEnabledChains } from '@core/chain/swap/swapEnabledChains'
 import {
   useCurrentVaultCoin,
   useCurrentVaultCoins,
@@ -21,6 +20,7 @@ import { ChainOption } from '../components/ChainOption'
 import { SwapCoinInputField } from '../components/SwapCoinInputField'
 import { useSwapFromCoin } from '../state/fromCoin'
 import { useSwapToCoin } from '../state/toCoin'
+import { useSwapEnabledChainsForVault } from '../state/useSwapEnabledChainsForVault'
 import { useChainSummaries } from './hooks/useChainSummaries'
 import { SwapCoinsExplorer } from './SwapCoinsExplorer'
 
@@ -29,6 +29,7 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
 
   const { t } = useTranslation()
   const coins = useCurrentVaultCoins()
+  const swapEnabledChainsForVault = useSwapEnabledChainsForVault()
   const coin = shouldBePresent(useCurrentVaultCoin(value))
   const [fromCoinKey] = useSwapFromCoin()
   const [currentToCoin] = useSwapToCoin()
@@ -37,8 +38,10 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
 
   const coinOptions = useMemo(
     () =>
-      coins.filter(c => isOneOf(c.chain, swapEnabledChains) && isFeeCoin(c)),
-    [coins]
+      coins.filter(
+        c => isOneOf(c.chain, swapEnabledChainsForVault) && isFeeCoin(c)
+      ),
+    [coins, swapEnabledChainsForVault]
   )
 
   return (

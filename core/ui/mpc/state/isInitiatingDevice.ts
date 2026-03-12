@@ -1,6 +1,4 @@
-import { getValueProviderSetup } from '@lib/ui/state/getValueProviderSetup'
+import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 
-export const {
-  useValue: useIsInitiatingDevice,
-  provider: IsInitiatingDeviceProvider,
-} = getValueProviderSetup<boolean>('IsInitiatingDevice')
+export const [IsInitiatingDeviceProvider, useIsInitiatingDevice] =
+  setupValueProvider<boolean>('IsInitiatingDevice')

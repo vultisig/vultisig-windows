@@ -44,28 +44,21 @@ export const Overview = () => {
   const vault = useCurrentVault()
   const message = matchRecordUnion<SignMessageInput, string>(input, {
     eth_signTypedData_v4: ({ message }) => JSON.stringify(message),
-    sign_message: ({ message, chain, useTronHeader, signMessageV2 }) => {
+    sign_message: ({ message, chain, useTronHeader, isV2 }) => {
       if (chain === Chain.Tron) {
-        // V2 (TIP-191): always dynamic header "\x19TRON Signed Message:\n" + message length in bytes.
-        if (signMessageV2) {
-          const messageBytes = toUtf8Bytes(message)
-          const tronMessageHeader = `\x19TRON Signed Message:\n${messageBytes.length}`
-          const fullBytes = [...toUtf8Bytes(tronMessageHeader), ...messageBytes]
-          return hexlify(new Uint8Array(fullBytes))
+        if (isV2) {
+          const msgBytes = toUtf8Bytes(message)
+          const tip191Header = `\x19TRON Signed Message:\n${msgBytes.length}`
+          const allBytes = [...toUtf8Bytes(tip191Header), ...msgBytes]
+          return hexlify(new Uint8Array(allBytes))
         }
-        // Legacy: useTronHeader true → fixed "\x19TRON Signed Message:\n32" + hex message.
-        if (useTronHeader) {
-          const tronMessageHeader = '\x19TRON Signed Message:\n32'
-          const messageBytes = [
-            ...toUtf8Bytes(tronMessageHeader),
-            ...hexStr2byteArray(message),
-          ]
-          return hexlify(new Uint8Array(messageBytes))
-        }
-        // Legacy without header: deprecated and poorly aligned with our architecture. Not supported.
-        throw new Error(
-          'TRON legacy signMessage without header is not supported. Use tronWeb.trx.signMessageV2 instead.'
-        )
+        const tronMessageHeader = '\x19TRON Signed Message:\n32'
+        const ethMessageHeader = '\x19Ethereum Signed Message:\n32'
+        const messageBytes = [
+          ...toUtf8Bytes(useTronHeader ? tronMessageHeader : ethMessageHeader),
+          ...hexStr2byteArray(message),
+        ]
+        return hexlify(new Uint8Array(messageBytes))
       }
       return message
     },
@@ -92,7 +85,10 @@ export const Overview = () => {
         ? message
         : JSON.stringify(message, null, 2)
     },
-    sign_message: () => message,
+    sign_message: ({ message: rawMessage, isV2 }) => {
+      if (isV2) return rawMessage
+      return message
+    },
     personal_sign: ({ message }) => {
       const bytes =
         message.startsWith('0x') || message.startsWith('0X')

@@ -47,9 +47,7 @@ export const getSolanaSigningInputs: SigningInputsResolver<'solana'> = ({
 
   if (swapPayload) {
     return matchRecordUnion(swapPayload, {
-      native: () => {
-        throw new Error('Native swap not supported')
-      },
+      native: () => [getSolanaSendSigningInput({ keysignPayload, walletCore })],
       general: swapPayload => {
         const tx = shouldBePresent(swapPayload.quote?.tx)
         const { data } = tx

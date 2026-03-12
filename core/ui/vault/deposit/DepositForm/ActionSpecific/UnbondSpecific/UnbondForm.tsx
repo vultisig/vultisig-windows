@@ -7,7 +7,6 @@ import { useDepositCoin } from '@core/ui/vault/deposit/providers/DepositCoinProv
 import { useDepositFormHandlers } from '@core/ui/vault/deposit/providers/DepositFormHandlersProvider'
 import { stepFromDecimals } from '@core/ui/vault/deposit/utils/stepFromDecimals'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
-import { borderRadius } from '@lib/ui/css/borderRadius'
 import { CheckmarkIcon } from '@lib/ui/icons/CheckmarkIcon'
 import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { InputLabel } from '@lib/ui/inputs/InputLabel'
@@ -25,7 +24,10 @@ import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 import { KeysignFeeAmount } from '../../../../../mpc/keysign/tx/FeeAmount'
-import { SendFormIconsWrapper } from '../../../../send/addresses/components/SendFormIconsWrapper'
+import {
+  ActionFormCheckBadge,
+  ActionFormIconsWrapper,
+} from '../../../../components/action-form/ActionFormIconsWrapper'
 import { ErrorText } from '../../DepositForm.styled'
 import { FormData } from '../../types'
 
@@ -149,18 +151,18 @@ export const UnbondForm = ({
                 )}
               </Text>
             </HStack>
-            <SendFormIconsWrapper gap={12}>
+            <ActionFormIconsWrapper gap={12}>
               {isAddressComplete && !isAddressOpen && (
-                <CheckBadge>
+                <ActionFormCheckBadge>
                   <CheckmarkIcon />
-                </CheckBadge>
+                </ActionFormCheckBadge>
               )}
               {!isAddressOpen && (
                 <PencilIconWrapper>
                   <PencilIcon />
                 </PencilIconWrapper>
               )}
-            </SendFormIconsWrapper>
+            </ActionFormIconsWrapper>
           </CollapsedField>
         )}
       />
@@ -249,18 +251,18 @@ export const UnbondForm = ({
                   : t('enter_amount')}
               </Text>
             </HStack>
-            <SendFormIconsWrapper gap={12}>
+            <ActionFormIconsWrapper gap={12}>
               {isAmountComplete && !isAmountOpen && (
-                <CheckBadge>
+                <ActionFormCheckBadge>
                   <CheckmarkIcon />
-                </CheckBadge>
+                </ActionFormCheckBadge>
               )}
               {!isAmountOpen && (
                 <PencilIconWrapper>
                   <PencilIcon />
                 </PencilIconWrapper>
               )}
-            </SendFormIconsWrapper>
+            </ActionFormIconsWrapper>
           </CollapsedField>
         )}
       />
@@ -316,20 +318,6 @@ const SecondaryValue = styled(Text).attrs({ size: 14 })`
 const GasAmountText = styled(Text)`
   ${brockmannMedium};
   color: ${getColor('text')};
-`
-
-const CheckBadge = styled.div`
-  width: 16px;
-  height: 16px;
-  ${borderRadius.l};
-  border-radius: 50%;
-  border: 0.6667px solid #13c89d;
-  background: #042436;
-  color: #13c89d;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
 `
 
 const AmountValueRowWrapper = styled.div`

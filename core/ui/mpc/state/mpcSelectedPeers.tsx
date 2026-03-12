@@ -1,13 +1,11 @@
 import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
 import { ChildrenProp } from '@lib/ui/props'
-import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
+import { setupStateProvider } from '@lib/ui/state/setupStateProvider'
 import { toEntries } from '@lib/utils/record/toEntries'
 import { useMemo } from 'react'
 
-const {
-  useState: useMpcPeersSelectionRecord,
-  provider: MpcPeersSelectionRecordProvider,
-} = getStateProviderSetup<Record<string, boolean>>('MpcPeersSelectionRecord')
+const [MpcPeersSelectionRecordProvider, useMpcPeersSelectionRecord] =
+  setupStateProvider<Record<string, boolean>>('MpcPeersSelectionRecord')
 
 const MpcPeersBasedOnSelectionRecord = ({ children }: ChildrenProp) => {
   const [record] = useMpcPeersSelectionRecord()

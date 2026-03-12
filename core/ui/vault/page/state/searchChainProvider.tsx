@@ -1,4 +1,5 @@
-import { getStateProviderSetup } from '@lib/ui/state/getStateProviderSetup'
+import { setupStateProvider } from '@lib/ui/state/setupStateProvider'
 
-export const { provider: SearchChainProvider, useState: useSearchChain } =
-  getStateProviderSetup<string>('SearchChainProvider')
+export const [SearchChainProvider, useSearchChain] = setupStateProvider<string>(
+  'SearchChainProvider'
+)

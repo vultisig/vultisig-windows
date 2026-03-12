@@ -5,6 +5,7 @@ import { KeygenOperation } from '@core/mpc/keygen/KeygenOperation'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { KeygenMessage } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
 import { ReshareMessage } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
+import { SingleKeygenMessage } from '@core/mpc/types/vultisig/keygen/v1/single_keygen_message_pb'
 import { KeysignMessage } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { DefiProtocol } from '@core/ui/defi/protocols/core'
 import { KeyImportInput } from '@core/ui/mpc/keygen/keyimport/state/keyImportInput'
@@ -12,11 +13,15 @@ import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 
 export type CoreView =
+  | { id: 'agent' }
+  | {
+      id: 'agentChat'
+      state: { conversationId?: string; initialMessage?: string }
+    }
   | { id: 'addCustomToken'; state: { chain: ChainWithTokenMetadataDiscovery } }
   | { id: 'address'; state: { address: string } }
   | { id: 'addressBook' }
   | { id: 'faq' }
-  | { id: 'airdropRegister' }
   | {
       id: 'createAddressBookItem'
       state?: { address?: string; chain?: Chain }
@@ -41,7 +46,7 @@ export type CoreView =
       id: 'joinKeygen'
       state: {
         keygenOperation: KeygenOperation
-        keygenMsg: KeygenMessage | ReshareMessage
+        keygenMsg: KeygenMessage | ReshareMessage | SingleKeygenMessage
       }
     }
   | {
@@ -61,10 +66,11 @@ export type CoreView =
   | { id: 'manageVaultChainCoins'; state: { chain: Chain } }
   | { id: 'newVault' }
   | { id: 'importSeedphrase' }
-  | { id: 'renameVault' }
   | { id: 'reshareVault' }
   | { id: 'reshareVaultFast' }
   | { id: 'reshareVaultSecure' }
+  | { id: 'singleKeygenFast' }
+  | { id: 'singleKeygenSecure' }
   | { id: 'migrateVault' }
   | {
       id: 'send'
@@ -72,6 +78,7 @@ export type CoreView =
         address?: string
         amount?: bigint
         memo?: string
+        skipToVerify?: boolean
       }
     }
   | { id: 'settings' }
@@ -84,8 +91,20 @@ export type CoreView =
       id: 'setupVault'
       state: { type?: VaultSecurityType; keyImportInput?: KeyImportInput }
     }
+  | {
+      id: 'setupVaultOverview'
+      state: { selectedDeviceCount: number; keyImportInput?: KeyImportInput }
+    }
   | { id: 'signCustomMessage' }
-  | { id: 'swap'; state: { fromCoin?: CoinKey; toCoin?: CoinKey } }
+  | {
+      id: 'swap'
+      state: {
+        fromCoin?: CoinKey
+        toCoin?: CoinKey
+        fromAmount?: bigint
+        autoSubmit?: boolean
+      }
+    }
   | { id: 'updateAddressBookItem'; state: { id: string } }
   | { id: 'updateVaultFolder'; state: { id: string } }
   | { id: 'uploadQr'; state: { title?: string } }
@@ -98,6 +117,8 @@ export type CoreView =
       id: 'lpPositionForm'
       state: { chain: Chain; positionId: string; action: 'add' | 'remove' }
     }
+  | { id: 'transactionDetail'; state: { id: string } }
+  | { id: 'transactionHistory' }
   | { id: 'vaultBackup' }
   | { id: 'vaultsBackup' }
   | { id: 'selectVaultsBackup' }
@@ -105,6 +126,7 @@ export type CoreView =
   | { id: 'vaultChainDetail'; state: { chain: Chain } }
   | { id: 'vaultFolder'; state: { id: string } }
   | { id: 'vaults' }
+  | { id: 'renameVault' }
   | { id: 'vaultSettings' }
   | { id: 'manageVaults' }
   | { id: 'managePasscodeEncryption' }
