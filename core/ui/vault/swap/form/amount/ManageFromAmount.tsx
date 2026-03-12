@@ -80,6 +80,7 @@ export const ManageFromAmount = () => {
           onWheel={event => event.currentTarget.blur()}
           value={inputValue}
           onValueChange={handleInputValueChange}
+          data-testid="swap-from-amount-input"
         />
         {value !== null && (
           <SwapFiatAmount

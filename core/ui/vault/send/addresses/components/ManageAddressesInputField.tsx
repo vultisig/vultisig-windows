@@ -161,6 +161,7 @@ export const ManageReceiverAddressInputField = () => {
                   value={value}
                   onValueChange={value => handleUpdateReceiverAddress(value)}
                   onBlur={() => setTouched(true)}
+                  data-testid="send-address-input"
                 />
                 {error && <AnimatedSendFormInputError error={error} />}
               </VStack>

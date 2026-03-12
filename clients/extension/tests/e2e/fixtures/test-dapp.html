@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VultiConnect Test DApp</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #1a1a2e;
+      color: #e0e0e0;
+    }
+    h1 { color: #00d4ff; }
+    .status { padding: 12px; border-radius: 8px; margin: 12px 0; }
+    .success { background: #1b4332; border: 1px solid #2d6a4f; }
+    .error { background: #3d0000; border: 1px solid #6b0000; }
+    .info { background: #1a1a3e; border: 1px solid #2a2a5e; }
+    button {
+      padding: 10px 20px;
+      margin: 6px;
+      border: none;
+      border-radius: 6px;
+      background: #00d4ff;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover { background: #00b8e0; }
+    button:disabled { background: #555; color: #888; cursor: not-allowed; }
+    pre { white-space: pre-wrap; word-break: break-all; font-size: 12px; }
+    #log { max-height: 300px; overflow-y: auto; }
+  </style>
+</head>
+<body>
+  <h1>🔐 VultiConnect Test DApp</h1>
+
+  <div id="provider-status" class="status info">
+    Checking for provider...
+  </div>
+
+  <div>
+    <h2>Provider Properties</h2>
+    <div id="provider-props" class="status info">Not detected yet</div>
+  </div>
+
+  <div>
+    <h2>Actions</h2>
+    <button id="btn-connect" disabled>Connect (eth_requestAccounts)</button>
+    <button id="btn-chain-id" disabled>Get Chain ID</button>
+    <button id="btn-accounts" disabled>Get Accounts</button>
+    <button id="btn-switch-chain" disabled>Switch to Polygon (0x89)</button>
+    <button id="btn-sign" disabled>Sign Message</button>
+  </div>
+
+  <div>
+    <h2>Results</h2>
+    <div id="result" class="status info">No result yet</div>
+  </div>
+
+  <div>
+    <h2>Events</h2>
+    <div id="log" class="status info">No events yet</div>
+  </div>
+
+  <script>
+    const $ = (sel) => document.getElementById(sel)
+    const providerStatus = $('provider-status')
+    const providerProps = $('provider-props')
+    const resultDiv = $('result')
+    const logDiv = $('log')
+    const buttons = ['btn-connect', 'btn-chain-id', 'btn-accounts', 'btn-switch-chain', 'btn-sign'].map($)
+
+    function logEvent(msg) {
+      const time = new Date().toLocaleTimeString()
+      logDiv.innerHTML = `<pre>[${time}] ${msg}</pre>` + logDiv.innerHTML
+    }
+
+    function showResult(data, isError = false) {
+      resultDiv.className = `status ${isError ? 'error' : 'success'}`
+      resultDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`
+    }
+
+    function enableButtons() {
+      buttons.forEach(b => { if (b) b.disabled = false })
+    }
+
+    // Check for provider
+    function detectProvider() {
+      if (window.ethereum) {
+        providerStatus.className = 'status success'
+        providerStatus.textContent = '✅ window.ethereum detected!'
+
+        const props = {
+          isMetaMask: window.ethereum.isMetaMask,
+          isVultiConnect: window.ethereum.isVultiConnect,
+          isXDEFI: window.ethereum.isXDEFI,
+          chainId: window.ethereum.chainId,
+          connected: window.ethereum.connected,
+          isConnected: typeof window.ethereum.isConnected === 'function'
+            ? window.ethereum.isConnected()
+            : window.ethereum.isConnected,
+        }
+        providerProps.innerHTML = `<pre>${JSON.stringify(props, null, 2)}</pre>`
+
+        enableButtons()
+
+        // Listen for events
+        window.ethereum.on('chainChanged', (chainId) => {
+          logEvent(`chainChanged: ${chainId}`)
+        })
+        window.ethereum.on('accountsChanged', (accounts) => {
+          logEvent(`accountsChanged: ${JSON.stringify(accounts)}`)
+        })
+        window.ethereum.on('connect', (info) => {
+          logEvent(`connect: ${JSON.stringify(info)}`)
+        })
+        window.ethereum.on('disconnect', (error) => {
+          logEvent(`disconnect: ${JSON.stringify(error)}`)
+        })
+
+        return true
+      }
+      return false
+    }
+
+    // Try immediately, then retry (provider injection may be async)
+    if (!detectProvider()) {
+      providerStatus.textContent = '⏳ Waiting for provider injection...'
+      let retries = 0
+      const interval = setInterval(() => {
+        if (detectProvider() || retries++ > 50) {
+          clearInterval(interval)
+          if (!window.ethereum) {
+            providerStatus.className = 'status error'
+            providerStatus.textContent = '❌ No provider found after 5 seconds'
+          }
+        }
+      }, 100)
+    }
+
+    // Button handlers
+    $('btn-connect').addEventListener('click', async () => {
+      try {
+        const accounts = await window.ethereum.request({
+          method: 'eth_requestAccounts',
+          params: []
+        })
+        showResult({ accounts })
+        logEvent(`Connected: ${accounts[0]}`)
+      } catch (e) {
+        showResult({ error: e.message, code: e.code }, true)
+      }
+    })
+
+    $('btn-chain-id').addEventListener('click', async () => {
+      try {
+        const chainId = await window.ethereum.request({
+          method: 'eth_chainId',
+          params: []
+        })
+        showResult({ chainId })
+      } catch (e) {
+        showResult({ error: e.message, code: e.code }, true)
+      }
+    })
+
+    $('btn-accounts').addEventListener('click', async () => {
+      try {
+        const accounts = await window.ethereum.request({
+          method: 'eth_accounts',
+          params: []
+        })
+        showResult({ accounts })
+      } catch (e) {
+        showResult({ error: e.message, code: e.code }, true)
+      }
+    })
+
+    $('btn-switch-chain').addEventListener('click', async () => {
+      try {
+        const result = await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: '0x89' }]
+        })
+        showResult({ result, message: 'Switched to Polygon' })
+      } catch (e) {
+        showResult({ error: e.message, code: e.code }, true)
+      }
+    })
+
+    $('btn-sign').addEventListener('click', async () => {
+      try {
+        const accounts = await window.ethereum.request({
+          method: 'eth_accounts',
+          params: []
+        })
+        if (!accounts.length) {
+          showResult({ error: 'Connect first!' }, true)
+          return
+        }
+        const signature = await window.ethereum.request({
+          method: 'personal_sign',
+          params: ['Hello from VultiConnect Test DApp!', accounts[0]]
+        })
+        showResult({ signature })
+      } catch (e) {
+        showResult({ error: e.message, code: e.code }, true)
+      }
+    })
+  </script>
+</body>
+</html>

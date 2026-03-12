@@ -8,9 +8,11 @@ import { StorageKey } from '@core/ui/storage/StorageKey'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
+import { useQueryClient } from '@tanstack/react-query'
 import { useEffect, useRef } from 'react'
 
 import { AgentOrchestrator } from '../orchestrator'
+import { getAgentConversationsQueryKey } from '../queries/queryKeys'
 import { setStorageContext } from '../tools/shared/storageContext'
 import { setWalletContext } from '../tools/shared/walletContext'
 import type {
@@ -111,29 +113,40 @@ type UseAgentServiceReturn = {
   orchestrator: AgentOrchestrator
 }
 
-function buildMethods(orch: AgentOrchestrator): UseAgentServiceReturn {
-  return {
-    sendMessage: (vaultPubKey, message) =>
-      orch.sendMessage({ vaultPubKey, message }),
-    sendMessageToConversation: (convId, vaultPubKey, message) =>
-      orch.sendMessageToConversation({ convId, vaultPubKey, message }),
-    createConversation: vaultPubKey => orch.createConversation(vaultPubKey),
-    getConversations: vaultPubKey => orch.getConversations(vaultPubKey),
-    getConversation: (convId, vaultPubKey) =>
-      orch.getConversation({ convId, vaultPubKey }),
-    deleteConversation: (convId, vaultPubKey) =>
-      orch.deleteConversation({ convId, vaultPubKey }),
-    cancelRequest: () => orch.cancelRequest(),
-    providePassword: password => orch.providePassword(password),
-    provideConfirmation: confirmed => orch.provideConfirmation(confirmed),
-    checkServices: vaultPubKey => orch.checkServices(vaultPubKey),
-    getVerifierSignInStatus: vaultPubKey => orch.isSignedIn(vaultPubKey),
-    signIn: (vaultPubKey, password) => orch.signIn({ vaultPubKey, password }),
-    getConversationStarters: vaultPubKey =>
-      orch.getConversationStarters(vaultPubKey),
-    preloadContext: vaultPubKey => orch.preloadContext(vaultPubKey),
-    orchestrator: orch,
-  }
+const prependConversation = (
+  conversations: Conversation[] | undefined,
+  conversation: Conversation
+): Conversation[] => [
+  conversation,
+  ...(conversations ?? []).filter(item => item.id !== conversation.id),
+]
+
+const touchConversation = (
+  conversations: Conversation[] | undefined,
+  conversationId: string,
+  updatedAt: string
+): Conversation[] | undefined => {
+  if (!conversations) return conversations
+
+  const conversation = conversations.find(item => item.id === conversationId)
+  if (!conversation) return conversations
+
+  return prependConversation(conversations, {
+    ...conversation,
+    updated_at: updatedAt,
+  })
+}
+
+const renameConversation = (
+  conversations: Conversation[] | undefined,
+  conversationId: string,
+  title: string
+): Conversation[] | undefined => {
+  if (!conversations) return conversations
+
+  return conversations.map(item =>
+    item.id === conversationId ? { ...item, title } : item
+  )
 }
 
 export const useAgentService = (): UseAgentServiceReturn => {
@@ -142,6 +155,7 @@ export const useAgentService = (): UseAgentServiceReturn => {
   const walletCore = useAssertWalletCore()
   const navigate = useNavigate<CoreView>()
   const refetchQueries = useRefetchQueries()
+  const queryClient = useQueryClient()
 
   const navigateRef = useRef(navigate)
   navigateRef.current = navigate
@@ -252,8 +266,87 @@ export const useAgentService = (): UseAgentServiceReturn => {
         refetchRef.current([StorageKey.vaultsCoins], [StorageKey.vaults])
       },
     })
-    methodsRef.current = buildMethods(orch)
+    methodsRef.current = {
+      sendMessage: async (vaultPubKey, message) => {
+        const conversationId = await orch.sendMessage({ vaultPubKey, message })
+        const now = new Date().toISOString()
+
+        queryClient.setQueryData<Conversation[]>(
+          getAgentConversationsQueryKey(vaultPubKey),
+          current =>
+            prependConversation(current, {
+              id: conversationId,
+              public_key: vaultPubKey,
+              created_at: now,
+              updated_at: now,
+            })
+        )
+
+        return conversationId
+      },
+      sendMessageToConversation: async (convId, vaultPubKey, message) => {
+        await orch.sendMessageToConversation({ convId, vaultPubKey, message })
+        const now = new Date().toISOString()
+
+        queryClient.setQueryData<Conversation[]>(
+          getAgentConversationsQueryKey(vaultPubKey),
+          current => touchConversation(current, convId, now)
+        )
+      },
+      createConversation: async vaultPubKey => {
+        const conversationId = await orch.createConversation(vaultPubKey)
+        const now = new Date().toISOString()
+
+        queryClient.setQueryData<Conversation[]>(
+          getAgentConversationsQueryKey(vaultPubKey),
+          current =>
+            prependConversation(current, {
+              id: conversationId,
+              public_key: vaultPubKey,
+              created_at: now,
+              updated_at: now,
+            })
+        )
+
+        return conversationId
+      },
+      getConversations: vaultPubKey => orch.getConversations(vaultPubKey),
+      getConversation: (convId, vaultPubKey) =>
+        orch.getConversation({ convId, vaultPubKey }),
+      deleteConversation: async (convId, vaultPubKey) => {
+        await orch.deleteConversation({ convId, vaultPubKey })
+
+        queryClient.setQueryData<Conversation[]>(
+          getAgentConversationsQueryKey(vaultPubKey),
+          current => (current ?? []).filter(item => item.id !== convId)
+        )
+      },
+      cancelRequest: () => orch.cancelRequest(),
+      providePassword: password => orch.providePassword(password),
+      provideConfirmation: confirmed => orch.provideConfirmation(confirmed),
+      checkServices: vaultPubKey => orch.checkServices(vaultPubKey),
+      getVerifierSignInStatus: vaultPubKey => orch.isSignedIn(vaultPubKey),
+      signIn: (vaultPubKey, password) => orch.signIn({ vaultPubKey, password }),
+      getConversationStarters: vaultPubKey =>
+        orch.getConversationStarters(vaultPubKey),
+      preloadContext: vaultPubKey => orch.preloadContext(vaultPubKey),
+      orchestrator: orch,
+    }
   }
+
+  useEffect(() => {
+    const orch = methodsRef.current.orchestrator
+
+    return orch.events.on('title_updated', ({ conversationId, title }) => {
+      const currentVault = vaultRef.current
+      if (!currentVault) return
+
+      queryClient.setQueryData<Conversation[]>(
+        getAgentConversationsQueryKey(getVaultId(currentVault)),
+        current => renameConversation(current, conversationId, title)
+      )
+    })
+  }, [queryClient])
 
   return methodsRef.current
 }
