@@ -80,7 +80,12 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
                             </PageContent>
                             <PageFooter alignItems="center">
                               <VStack maxWidth={576} fullWidth>
-                                <Button onClick={goHome}>{t('done')}</Button>
+                                <Button
+                                  data-testid="tx-success-done"
+                                  onClick={goHome}
+                                >
+                                  {t('done')}
+                                </Button>
                               </VStack>
                             </PageFooter>
                           </>

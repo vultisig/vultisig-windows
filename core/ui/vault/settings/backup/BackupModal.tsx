@@ -38,6 +38,7 @@ export const BackupModal = ({ onClose }: OnCloseProp) => {
             key={option}
             icon={<Icon />}
             onClick={() => navigate(backupOptionView[option])}
+            data-testid={`backup-option-${option}`}
           >
             {t(`${option}_backup_description`)}
           </BackupOption>

@@ -164,6 +164,7 @@ export const SwapCoinsExplorer = ({
                       isActive={isActive}
                       key={chain}
                       data-key={chain}
+                      data-testid={`swap-explorer-chain-${chain}`}
                     >
                       <CoinIcon coin={c} style={{ fontSize: 16 }} />
                       <Text size={12} weight={500}>

@@ -317,6 +317,7 @@ export const en = {
   open_as_side_panel: 'Open as Side Panel',
   push_notifications: 'Push Notifications',
   push_notification_server_url: 'Push Notification Server URL',
+  push_notification_server_placeholder: 'Leave empty for production default',
   expiration_date: 'Expiration Date',
   expiration_must_extend_by_exactly_one_year:
     'Expiration can only be extended by exactly 1 year',

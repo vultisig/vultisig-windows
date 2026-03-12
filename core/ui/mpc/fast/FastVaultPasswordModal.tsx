@@ -132,7 +132,7 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
 
   return showModal ? (
     <Backdrop onClose={mutationIsPending ? undefined : onBack}>
-      <ModalWrapper>
+      <ModalWrapper data-testid="fast-vault-password-modal">
         <CloseButton onClick={onBack} disabled={mutationIsPending}>
           <CrossIcon />
         </CloseButton>
@@ -153,6 +153,7 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
         <VStack as="form" onSubmit={handleSubmit(onSubmit)} gap={16} fullWidth>
           <PasswordInput
             {...register('password')}
+            data-testid="fast-vault-password-input"
             autoFocus
             placeholder={t('enter_password')}
             validation={passwordErrorMessage ? 'invalid' : undefined}
@@ -172,6 +173,7 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
           )}
 
           <ConfirmButton
+            data-testid="fast-vault-submit"
             disabled={mutationIsPending || !isValid}
             loading={mutationIsPending}
             type="submit"
