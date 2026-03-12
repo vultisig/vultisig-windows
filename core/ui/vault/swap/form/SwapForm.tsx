@@ -88,6 +88,7 @@ export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
       <PageContent
         as="form"
         gap={40}
+        data-testid="swap-form"
         {...getFormProps({
           onSubmit: handleSubmit,
           isDisabled: !!errorMessage,
@@ -107,7 +108,11 @@ export const SwapForm: FC<OnFinishProp<SwapQuote>> = ({ onFinish }) => {
             <SwapInfo />
           </VStack>
         </VStack>
-        <Button disabled={!!errorMessage} type="submit">
+        <Button
+          disabled={!!errorMessage}
+          type="submit"
+          data-testid="swap-continue"
+        >
           {t('continue')}
         </Button>
       </PageContent>

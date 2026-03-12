@@ -150,6 +150,7 @@ export const VerifyKeysignStart = ({
             {terms.map((term, index) => (
               <TermItem
                 key={index}
+                data-testid={`terms-checkbox-${index}`}
                 label={<Text size={14}>{term}</Text>}
                 value={termsAccepted[index]}
                 onChange={v =>

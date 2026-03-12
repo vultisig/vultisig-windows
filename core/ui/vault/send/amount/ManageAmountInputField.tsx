@@ -160,6 +160,7 @@ export const ManageAmountInputField = () => {
                                   : toChainAmount(newValue, coin.decimals)
                               )
                             }
+                            data-testid="send-amount-input"
                           />
                         )}
                       />
