@@ -55,7 +55,7 @@ export const TxSuccess = ({
   })
 
   return (
-    <VStack gap={36}>
+    <VStack gap={36} data-testid="tx-success">
       <TxStatusTracker chain={coin.chain} hash={txHash} />
       <VStack gap={8}>
         <TxOverviewAmount
@@ -86,7 +86,10 @@ export const TxSuccess = ({
                   gap={8}
                   justifyContent="flex-end"
                 >
-                  <TruncatedTextWrapper>
+                  <TruncatedTextWrapper
+                    data-testid="tx-hash"
+                    data-hash={txHash}
+                  >
                     <Text size={14}>
                       <MiddleTruncate width={85} text={txHash} />
                     </Text>

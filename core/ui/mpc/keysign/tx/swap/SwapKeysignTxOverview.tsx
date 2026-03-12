@@ -180,7 +180,9 @@ export const SwapKeysignTxOverview = ({
           >
             {t('track')}
           </Button>
-          <Button onClick={goHome}>{t('done')}</Button>
+          <Button data-testid="tx-success-done" onClick={goHome}>
+            {t('done')}
+          </Button>
         </HStack>
       </VStack>
     </VStack>
