@@ -12,7 +12,7 @@ const getTonConnectFeatures = (): Feature[] => [
   'SendTransaction',
   {
     name: 'SendTransaction',
-    maxMessages: 1,
+    maxMessages: 4,
     extraCurrencySupported: false,
   },
 ]

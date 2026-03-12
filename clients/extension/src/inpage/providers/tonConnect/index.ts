@@ -1,13 +1,19 @@
 import { Chain } from '@core/chain/Chain'
+import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
 import { PopupError } from '@core/inpage-provider/popup/error'
+import { ITransactionPayload } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import { attempt } from '@lib/utils/attempt'
 import type {
+  AppRequest,
   ConnectEvent,
   ConnectRequest,
   DeviceInfo,
+  RpcMethod,
+  SEND_TRANSACTION_ERROR_CODES,
   WalletEvent,
+  WalletResponse,
 } from '@tonconnect/protocol'
 import { CHAIN } from '@tonconnect/protocol'
 
@@ -18,6 +24,19 @@ import {
 } from './walletManifest'
 
 type TonConnectCallback = (event: WalletEvent) => void
+type TonConnectMessage = {
+  address: string
+  amount: string
+  payload?: string
+  stateInit?: string
+}
+
+type TonConnectSendTransactionPayload = {
+  valid_until: number
+  network?: string
+  from?: string
+  messages: TonConnectMessage[]
+}
 
 export class TonConnectBridge {
   deviceInfo: DeviceInfo = getTonConnectDeviceInfo()
@@ -205,5 +224,185 @@ export class TonConnectBridge {
         device: this.deviceInfo,
       },
     }
+  }
+
+  async send<T extends RpcMethod>(
+    message: AppRequest<T>
+  ): Promise<WalletResponse<T>> {
+    if (message.method !== 'sendTransaction') {
+      return {
+        id: message.id,
+        error: {
+          code: 400 as SEND_TRANSACTION_ERROR_CODES,
+          message: 'Method not supported',
+        },
+      } as WalletResponse<T>
+    }
+
+    const getBadRequestError = (errorMessage: string): WalletResponse<T> =>
+      ({
+        id: message.id,
+        error: {
+          code: 1 as SEND_TRANSACTION_ERROR_CODES,
+          message: errorMessage,
+        },
+      }) as WalletResponse<T>
+
+    const decodedBodyResult = attempt(
+      () => JSON.parse(message.params[0]) as TonConnectSendTransactionPayload
+    )
+    if ('error' in decodedBodyResult) {
+      return getBadRequestError('Invalid sendTransaction payload')
+    }
+
+    const payload = decodedBodyResult.data
+    if (!payload || typeof payload !== 'object') {
+      return getBadRequestError('Invalid sendTransaction payload')
+    }
+
+    const validUntil =
+      payload.valid_until ?? (payload as { validUntil?: number }).validUntil
+
+    if (
+      typeof validUntil !== 'number' ||
+      !Number.isFinite(validUntil) ||
+      validUntil <= Math.floor(Date.now() / 1000)
+    ) {
+      return getBadRequestError('sendTransaction request expired')
+    }
+
+    if (payload.network && payload.network !== CHAIN.MAINNET) {
+      return getBadRequestError('Unsupported TON network')
+    }
+
+    if (!Array.isArray(payload.messages) || payload.messages.length === 0) {
+      return getBadRequestError('At least one transaction message is required')
+    }
+    const sendTransactionFeature = this.deviceInfo.features.find(
+      feature =>
+        typeof feature !== 'string' && feature.name === 'SendTransaction'
+    )
+    const maxMessages =
+      sendTransactionFeature && 'maxMessages' in sendTransactionFeature
+        ? sendTransactionFeature.maxMessages
+        : 1
+    if (payload.messages.length > maxMessages) {
+      return getBadRequestError(
+        `Only up to ${maxMessages} message(s) are supported`
+      )
+    }
+
+    const tonMessages: Array<{ to: string; amount: string; payload?: string }> =
+      []
+    for (let i = 0; i < payload.messages.length; i++) {
+      const msg = payload.messages[i]
+      if (!msg || typeof msg.address !== 'string' || !msg.address) {
+        return getBadRequestError(
+          `Message ${i + 1}: recipient address is required`
+        )
+      }
+      if (typeof msg.amount !== 'string' || !msg.amount) {
+        return getBadRequestError(`Message ${i + 1}: amount is required`)
+      }
+      const msgAmountResult = attempt(() => BigInt(msg.amount))
+      if ('error' in msgAmountResult || msgAmountResult.data <= 0n) {
+        return getBadRequestError(
+          `Message ${i + 1}: amount must be a positive integer`
+        )
+      }
+      if (msg.stateInit) {
+        return getBadRequestError(
+          `Message ${i + 1}: stateInit is not supported`
+        )
+      }
+      tonMessages.push({
+        to: msg.address,
+        amount: msgAmountResult.data.toString(),
+        payload: msg.payload,
+      })
+    }
+
+    const firstMessage = tonMessages[0]!
+    const { data: account, error: getAccountError } = await attempt(
+      callBackground({ getAccount: { chain: Chain.Ton } })
+    )
+    if (getAccountError || !account?.address) {
+      return {
+        id: message.id,
+        error: {
+          code: 100 as SEND_TRANSACTION_ERROR_CODES,
+          message: 'Failed to get account',
+        },
+      } as WalletResponse<T>
+    }
+    if (
+      payload.from &&
+      payload.from.toLowerCase() !== account.address.toLowerCase()
+    ) {
+      return getBadRequestError(
+        'Requested sender does not match active TON account'
+      )
+    }
+    const transactionPayload: ITransactionPayload = {
+      keysign: {
+        chain: Chain.Ton,
+        transactionDetails: {
+          from: account.address,
+          to: firstMessage.to,
+          asset: {
+            ticker: chainFeeCoin[Chain.Ton].ticker,
+          },
+          amount: {
+            amount: firstMessage.amount,
+            decimals: chainFeeCoin[Chain.Ton].decimals,
+          },
+          data: firstMessage.payload,
+          tonMessages,
+        },
+      },
+    }
+    const { data: txs, error } = await attempt(
+      callPopup(
+        {
+          sendTx: transactionPayload,
+        },
+        {
+          account: account.address,
+        }
+      )
+    )
+    if (error === PopupError.RejectedByUser) {
+      return {
+        id: message.id,
+        error: {
+          code: 300 as SEND_TRANSACTION_ERROR_CODES,
+          message: 'User declined the transaction',
+        },
+      } as WalletResponse<T>
+    }
+    if (error) {
+      return {
+        id: message.id,
+        error: {
+          code: 100 as SEND_TRANSACTION_ERROR_CODES,
+          message: 'Failed to process transaction request',
+        },
+      } as WalletResponse<T>
+    }
+
+    const txHash = txs?.[0]?.hash
+    if (!txHash) {
+      return {
+        id: message.id,
+        error: {
+          code: 100 as SEND_TRANSACTION_ERROR_CODES,
+          message: 'No transaction hash returned',
+        },
+      } as WalletResponse<T>
+    }
+    return {
+      id: message.id,
+      result: txHash,
+    } as WalletResponse<T>
   }
 }

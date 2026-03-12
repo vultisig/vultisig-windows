@@ -40,6 +40,7 @@ interface Window {
       isWalletBrowser: boolean
       connect: (protocolVersion: number, message: unknown) => Promise<unknown>
       restoreConnection: () => Promise<unknown>
+      send: (message: unknown) => Promise<unknown>
       listen: (callback: (event: unknown) => void) => () => void
       disconnect: () => Promise<void>
     }
