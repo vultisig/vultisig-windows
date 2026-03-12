@@ -21,6 +21,7 @@
     "knip:fix": "knip --fix --allow-remove-files",
     "check": "concurrently --kill-others-on-fail \"yarn typecheck\" \"yarn lint:fix\" && yarn knip",
     "translate": "yarn workspace @core/ui translate",
+    "cosign": "tsx core/mpc/keysign/cosigner.ts",
     "update": "yarn set version latest && yarn dlx npm-check-updates@latest -u --workspaces --root && yarn install"
   },
   "devDependencies": {
@@ -49,6 +50,7 @@
     "globals": "^17.3.0",
     "knip": "^5.83.0",
     "prettier": "^3.8.1",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"
   },
