@@ -56,8 +56,11 @@ jobs:
       - name: Lint
         run: yarn lint
 
-      - name: Run unit tests
+      - name: Run unit tests (core/lib)
         run: yarn test
+
+      - name: Run unit tests (extension)
+        run: cd clients/extension && npx vitest run --config tests/unit/vitest.config.ts
 
       - name: Run typecheck
         run: yarn typecheck

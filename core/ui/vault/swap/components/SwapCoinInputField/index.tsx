@@ -33,7 +33,12 @@ export const SwapCoinInputField = ({
   const side = useTransferDirection()
 
   return (
-    <Container side={side} justifyContent="center" gap={16}>
+    <Container
+      side={side}
+      justifyContent="center"
+      gap={16}
+      data-testid={`swap-${side}-section`}
+    >
       <HStack justifyContent="space-between" alignItems="center">
         <HStack gap={6} alignItems="center">
           <Text weight="500" size={12} color="shy">
@@ -51,6 +56,7 @@ export const SwapCoinInputField = ({
               tabIndex={0}
               gap={2}
               alignItems="center"
+              data-testid={`swap-${side}-chain-selector`}
             >
               <Text weight="500" size={12} color="contrast">
                 {chain}
@@ -68,6 +74,7 @@ export const SwapCoinInputField = ({
           onClick={onCoinClick}
           alignItems="center"
           gap={8}
+          data-testid={`swap-${side}-coin-selector`}
         >
           <CoinIcon coin={value} style={{ fontSize: 32 }} />
           <HStack gap={4}>
