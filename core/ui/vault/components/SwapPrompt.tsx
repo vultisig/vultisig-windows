@@ -13,7 +13,10 @@ export const SwapPrompt = (state: CoreViewState<'swap'>) => {
 
   return (
     <VStack alignItems="center" gap={8}>
-      <PrimaryActionWrapper onClick={() => navigate({ id: 'swap', state })}>
+      <PrimaryActionWrapper
+        data-testid="vault-action-swap"
+        onClick={() => navigate({ id: 'swap', state })}
+      >
         <ArrowLeftRightIcon />
       </PrimaryActionWrapper>
       <Text color="shyExtra" size={12}>

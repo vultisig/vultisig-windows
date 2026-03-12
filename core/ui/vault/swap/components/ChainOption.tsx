@@ -30,6 +30,7 @@ export const ChainOption = ({
       tabIndex={0}
       role="button"
       onClick={onClick}
+      data-testid={`swap-chain-option-${chain}`}
     >
       <HStack alignItems="center" justifyContent="space-between">
         <HStack fullWidth alignItems="center" gap={12}>
