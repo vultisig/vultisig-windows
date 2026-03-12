@@ -8,7 +8,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { FC, useEffect, useRef, useState } from 'react'
+import { FC, Fragment, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -17,6 +17,7 @@ import { useAgentService } from '../hooks/useAgentService'
 import { useConnectionStatus } from '../hooks/useConnectionStatus'
 import { BurgerClosedIcon } from '../icons/BurgerClosedIcon'
 import { ChatMessage as ChatMessageType, TitleUpdatedEvent } from '../types'
+import { getDateSections } from '../utils/getDateSections'
 import { AgentChatFooter } from './AgentChatFooter'
 import { AgentChatMenu } from './AgentChatMenu'
 import { AgentEmptyState } from './AgentEmptyState'
@@ -30,7 +31,7 @@ import { PasswordPrompt } from './PasswordPrompt'
 type AgentChatViewState = { conversationId?: string; initialMessage?: string }
 
 export const AgentChatPage: FC = () => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const navigate = useCoreNavigate()
   const vault = useCurrentVault()
   const [viewState, setViewState] = useViewState<
@@ -361,6 +362,19 @@ export const AgentChatPage: FC = () => {
     }
   }, [authRequired, messages])
 
+  const indexedMessages = messages.map((message, index) => ({ message, index }))
+
+  const { sections: messageSections, showLabels: showDateSections } =
+    getDateSections({
+      items: indexedMessages,
+      getTimestamp: ({ message }) => message.timestamp,
+      labels: {
+        today: t('today'),
+        yesterday: t('yesterday'),
+        locale: i18n.language,
+      },
+    })
+
   return (
     <VStack fullHeight>
       <PageHeader
@@ -392,16 +406,27 @@ export const AgentChatPage: FC = () => {
                   : last,
               -1
             )
-            return messages.map((msg, i) => (
-              <ChatMessage
-                key={msg.id}
-                message={msg}
-                isAnalyzing={
-                  i === lastAssistantIdx &&
-                  !msg.analysisDuration &&
-                  isRequestActive
-                }
-              />
+            return messageSections.map(section => (
+              <Fragment key={section.key}>
+                {showDateSections && (
+                  <DateSectionLabel>
+                    <Text variant="caption" color="contrast">
+                      {section.label}
+                    </Text>
+                  </DateSectionLabel>
+                )}
+                {section.items.map(({ message, index }) => (
+                  <ChatMessage
+                    key={message.id}
+                    message={message}
+                    isAnalyzing={
+                      index === lastAssistantIdx &&
+                      !message.analysisDuration &&
+                      isRequestActive
+                    }
+                  />
+                ))}
+              </Fragment>
             ))
           })()}
           {isLoading && !messages.some(m => m.steps !== undefined) && (
@@ -489,4 +514,10 @@ const ErrorMessage = styled.div`
   background: ${getColor('danger')}20;
   border-radius: 8px;
   cursor: pointer;
+`
+
+const DateSectionLabel = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
 `
