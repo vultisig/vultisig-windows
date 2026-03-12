@@ -74,8 +74,8 @@ const TransactionHistoryContent = ({
         tabs={tabs}
         value={activeTab}
         onValueChange={setActiveTab}
-        triggerSlot={({ tab: { label }, isActive }) => (
-          <TabTrigger isActive={isActive}>
+        triggerSlot={({ tab: { label }, isActive, ...triggerProps }) => (
+          <TabTrigger isActive={isActive} {...triggerProps}>
             <Text
               size={14}
               as="span"
@@ -109,7 +109,8 @@ export const TransactionHistoryPage = () => {
   )
 }
 
-const TabTrigger = styled.div<IsActiveProp>`
+const TabTrigger = styled.button<IsActiveProp>`
+  all: unset;
   width: fit-content;
   padding-bottom: 6px;
   cursor: pointer;
