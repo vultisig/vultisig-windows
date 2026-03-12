@@ -38,7 +38,7 @@ export const ManageReferralsForm = ({ onFinish }: OnFinishProp) => {
   const navigate = useCoreNavigate()
   const { data: friendReferral, isLoading: isFriendReferralLoading } =
     useFriendReferralQuery(vaultId)
-  const { mutateAsync: setFriendReferral } =
+  const { mutateAsync: setFriendReferral, isPending: isRemoving } =
     useSetFriendReferralMutation(vaultId)
   const { getClipboardText } = useCore()
   const { error, isPending: isValidating } = useFriendReferralValidation(value)
@@ -138,7 +138,11 @@ export const ManageReferralsForm = ({ onFinish }: OnFinishProp) => {
               </Text>
             </SaveReferralButton>
             {friendReferral && (
-              <Button kind="secondary" onClick={handleRemoveReferral}>
+              <Button
+                kind="secondary"
+                disabled={isRemoving}
+                onClick={handleRemoveReferral}
+              >
                 {t('remove_friends_referral')}
               </Button>
             )}
