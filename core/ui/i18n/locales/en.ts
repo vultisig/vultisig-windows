@@ -1275,6 +1275,8 @@ export const en = {
   thinking: 'Thinking',
   try_saying: 'Try saying',
   ask_about_plugins_policies: 'Ask about plugins and policies...',
+  approve_transaction: 'Approve Transaction',
+  enter_vault_password: 'Enter vault password',
   signed_in: 'Signed in',
   password_required_for_operation:
     'Please enter your password for {{operation}}.',
