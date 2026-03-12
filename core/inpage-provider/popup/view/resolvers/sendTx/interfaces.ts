@@ -35,7 +35,7 @@ type TronTransferAssetContract = {
 
 export type RequestInput = {
   method: string
-  params: Record<string, any>[]
+  params: unknown[]
 }
 
 export type ProviderId =

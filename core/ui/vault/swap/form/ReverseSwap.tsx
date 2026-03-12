@@ -39,6 +39,7 @@ export const ReverseSwap = ({ errorMessage }: ReverseSwapProps) => {
     <Button
       {...props}
       $hasError={hasError}
+      data-testid="swap-reverse"
       onClick={
         hasError
           ? undefined

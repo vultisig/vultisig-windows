@@ -29,7 +29,7 @@ export const ToAmount = () => {
 
   return (
     <AmountContainer gap={6} alignItems="flex-end">
-      <Value>
+      <Value data-testid="swap-to-amount">
         <MatchQuery
           value={query}
           pending={() => (

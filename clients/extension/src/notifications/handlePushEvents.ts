@@ -269,6 +269,8 @@ export const handlePushEvents = () => {
     }
     if (!data) return
 
+    console.log('[Vultisig Push] Notification received:', data.title, data.body)
+
     event.waitUntil(
       self.registration.showNotification(data.title, {
         body: `${data.subtitle}\n${data.body}`,

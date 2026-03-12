@@ -14,7 +14,10 @@ export const ReceivePrompt = ({ onClick }: ReceivePromptProps) => {
 
   return (
     <VStack alignItems="center" gap={8}>
-      <SecondaryActionWrapper onClick={onClick}>
+      <SecondaryActionWrapper
+        data-testid="vault-action-receive"
+        onClick={onClick}
+      >
         <ArrowWallDownIcon />
       </SecondaryActionWrapper>
       <Text color="shyExtra" size={12}>
