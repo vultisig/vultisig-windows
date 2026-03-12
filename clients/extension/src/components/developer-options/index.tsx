@@ -19,10 +19,15 @@ import { Modal } from '@lib/ui/modal'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { Text } from '@lib/ui/text'
 import { TFunction } from 'i18next'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
+
+import {
+  getPushServerUrl,
+  setPushServerUrl,
+} from '../../notifications/pushNotificationStorage'
 
 const getSchema = (t: TFunction) =>
   z.object({
@@ -41,6 +46,13 @@ export const ExtensionDeveloperOptions = () => {
   const refetchQueries = useRefetchQueries()
   const isMLDSAEnabled = useIsMLDSAEnabled()
   const { mutate: setIsMLDSAEnabled } = useSetIsMLDSAEnabledMutation()
+  const [pushServerUrlValue, setPushServerUrlValue] = useState('')
+
+  useEffect(() => {
+    if (visible) {
+      getPushServerUrl().then(url => setPushServerUrlValue(url ?? ''))
+    }
+  }, [visible])
 
   const {
     register,
@@ -83,6 +95,25 @@ export const ExtensionDeveloperOptions = () => {
               label={t('enable_mldsa')}
               onChange={() => setIsMLDSAEnabled(!isMLDSAEnabled)}
             />
+            <VStack gap={4}>
+              <TextInput
+                label={t('push_notification_server_url')}
+                value={pushServerUrlValue}
+                onValueChange={setPushServerUrlValue}
+                placeholder={t('push_notification_server_placeholder')}
+                data-testid="push-server-url-input"
+              />
+              <Button
+                kind="secondary"
+                size="sm"
+                onClick={async () => {
+                  await setPushServerUrl(pushServerUrlValue)
+                }}
+                data-testid="save-push-server-url"
+              >
+                {t('save')}
+              </Button>
+            </VStack>
             <VStack
               as="form"
               gap={16}

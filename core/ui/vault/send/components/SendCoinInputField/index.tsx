@@ -28,7 +28,7 @@ export const SendCoinInputField = ({
   const { t } = useTranslation()
 
   return (
-    <VStack justifyContent="center" gap={16}>
+    <VStack justifyContent="center" gap={16} data-testid="coin-selector">
       <HStack justifyContent="space-between" alignItems="center">
         <HStack gap={6} alignItems="center">
           <Text size={12} color="shy">
@@ -62,6 +62,7 @@ export const SendCoinInputField = ({
           onClick={onCoinClick}
           alignItems="center"
           gap={8}
+          data-testid="coin-selector-trigger"
         >
           <CoinIcon coin={value} style={{ fontSize: 32 }} />
           <HStack gap={4}>

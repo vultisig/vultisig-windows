@@ -22,7 +22,7 @@ export const VaultPage = ({ primaryControls }: VaultPageProps = {}) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null!)
 
   return (
-    <Wrapper justifyContent="space-between" flexGrow>
+    <Wrapper justifyContent="space-between" flexGrow data-testid="vault-page">
       <VStack flexGrow>
         <VaultPageHeader
           vault={vault}

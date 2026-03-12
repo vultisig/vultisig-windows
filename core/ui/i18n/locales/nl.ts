@@ -989,7 +989,7 @@ export const nl = {
   },
   vaultCreated: 'Kluis aangemaakt',
   vaultOverview: 'Kluisoverzicht',
-  vault_already_exists: 'Kluis bestaat al',
+  vault_already_exists: 'Kluis "{{name}}" bestaat al',
   vault_backup_page_password_info:
     'Sla kluis-shares van verschillende apparaten nooit op dezelfde locatie op',
   vault_backup_page_password_protection:

@@ -19,9 +19,20 @@ export const TransactionStatusAnimation = ({
 }: TransactionStatusAnimationProps) => {
   const { t } = useTranslation()
 
+  const testIdMap: Record<TransactionStatus, string> = {
+    pending: 'keysign-pending',
+    success: 'keysign-success',
+    error: 'keysign-failure',
+  }
+
   return (
-    <VStack style={{ height: 220, position: 'relative' }} fullWidth>
-      <AnimationArea>
+    <VStack
+      style={{ height: 220, position: 'relative' }}
+      fullWidth
+      data-testid="keysign-progress"
+      data-status={status}
+    >
+      <AnimationArea data-testid={testIdMap[status]}>
         {match(status, {
           pending: () => (
             <Animation src="/core/animations/transaction-pending.riv" />

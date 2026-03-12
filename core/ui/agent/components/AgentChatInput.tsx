@@ -2,7 +2,7 @@ import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { SendIcon } from '@lib/ui/icons/SendIcon'
 import { StopCircleIcon } from '@lib/ui/icons/StopCircleIcon'
 import { getColor } from '@lib/ui/theme/getters'
-import { FC, KeyboardEvent, useRef } from 'react'
+import { FC, KeyboardEvent, ReactNode, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
@@ -14,6 +14,16 @@ type AgentChatInputProps = {
   disabled?: boolean
   onStop?: () => void
   isLoading?: boolean
+  /** HTML input type — use 'password' for masked entry. */
+  inputType?: 'text' | 'password'
+  /** Override the default container height (52px). */
+  containerHeight?: number
+  /** Override the default container border-radius (40px). */
+  containerBorderRadius?: number
+  /** Custom icon for the action button — replaces the default send/stop icons. */
+  actionIcon?: ReactNode
+  /** Accessible label for the action button when actionIcon is used. */
+  actionAriaLabel?: string
 }
 
 export const AgentChatInput: FC<AgentChatInputProps> = ({
@@ -24,6 +34,11 @@ export const AgentChatInput: FC<AgentChatInputProps> = ({
   disabled = false,
   onStop,
   isLoading = false,
+  inputType = 'text',
+  containerHeight = 52,
+  containerBorderRadius = 40,
+  actionIcon,
+  actionAriaLabel,
 }) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>(null)
@@ -37,9 +52,14 @@ export const AgentChatInput: FC<AgentChatInputProps> = ({
   }
 
   return (
-    <Container onClick={() => inputRef.current?.focus()}>
+    <Container
+      onClick={() => inputRef.current?.focus()}
+      $height={containerHeight}
+      $borderRadius={containerBorderRadius}
+    >
       <Input
         ref={inputRef}
+        type={inputType}
         value={value}
         onChange={e => onChange(e.target.value)}
         onKeyDown={handleKeyDown}
@@ -47,11 +67,19 @@ export const AgentChatInput: FC<AgentChatInputProps> = ({
         $loading={isLoading}
         disabled={disabled || isLoading}
       />
-      {isLoading ? (
+      {actionIcon ? (
+        <ActionButton
+          $active={canSubmit}
+          onClick={canSubmit ? onSubmit : undefined}
+          disabled={!canSubmit}
+          aria-label={actionAriaLabel ?? t('send')}
+        >
+          {actionIcon}
+        </ActionButton>
+      ) : isLoading ? (
         <ActionButton
           $active
           onClick={() => onStop?.()}
-          disabled={false}
           aria-label={t('cancel')}
         >
           <StopCircleIcon style={{ fontSize: 20 }} />
@@ -70,14 +98,15 @@ export const AgentChatInput: FC<AgentChatInputProps> = ({
   )
 }
 
-const Container = styled.div`
+const Container = styled.div<{ $height: number; $borderRadius: number }>`
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 8px 8px 14px;
+  height: ${({ $height }) => $height}px;
+  padding: 0 8px 0 14px;
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 40px;
+  border-radius: ${({ $borderRadius }) => $borderRadius}px;
   cursor: text;
   position: relative;
 
@@ -114,7 +143,9 @@ const ActionButton = styled(UnstyledButton)<{ $active: boolean }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
   border-radius: 77px;
   flex-shrink: 0;
   transition: background-color 0.2s;

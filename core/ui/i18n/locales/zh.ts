@@ -850,7 +850,7 @@ export const zh = {
   value: '价值',
   vault: '保险库',
   vaultCreated: 'Vault 创建',
-  vault_already_exists: 'Vault 已存在',
+  vault_already_exists: 'Vault "{{name}}" 已存在',
   vault_backup_page_password_info:
     '切勿将来自不同设备的 Vault 共享文件存储在同一位置',
   vault_backup_page_password_protection: '您可以选择为您的保险库设置密码保护。',

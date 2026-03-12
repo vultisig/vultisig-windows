@@ -14,6 +14,7 @@ export const SendPrompt = (state: CoreViewState<'send'>) => {
   return (
     <VStack alignItems="center" gap={8}>
       <SecondaryActionWrapper
+        data-testid="vault-action-send"
         onClick={() =>
           navigate({
             id: 'send',

@@ -17,7 +17,7 @@ interface Window {
   vultiConnect: { getVaults: () => Promise<Vault[]> }
   phantom: any
   vultiConnectRouter: {
-    vultisigProvider: EthereumProvider
+    ethereumProvider: EthereumProvider
     lastInjectedProvider?: EthereumProvider
     currentProvider: EthereumProvider
     providers: EthereumProvider[]
