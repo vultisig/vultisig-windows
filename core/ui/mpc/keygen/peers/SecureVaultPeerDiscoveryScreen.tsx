@@ -365,6 +365,7 @@ const QrCodeContainer = styled.div`
   border-radius: 16px;
   overflow: hidden;
   width: 100%;
+  padding: 11px;
 `
 
 const animationSize = css`
