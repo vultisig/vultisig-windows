@@ -38,14 +38,9 @@ const getCacaoPoolMember = (address: string) =>
   })
 
 const getMayaNetwork = () =>
-  queryUrl<MayaNetwork>(`${mayaMidgardBaseUrl}/network`, {
-    headers: { 'X-Client-ID': 'vultisig' },
-  })
+  queryUrl<MayaNetwork>(`${mayaMidgardBaseUrl}/network`)
 
-const getMayaHealth = () =>
-  queryUrl<MayaHealth>(`${mayaMidgardBaseUrl}/health`, {
-    headers: { 'X-Client-ID': 'vultisig' },
-  })
+const getMayaHealth = () => queryUrl<MayaHealth>(`${mayaMidgardBaseUrl}/health`)
 
 const getMayaMimir = () =>
   queryUrl<MayaMimir>(`${mayanodeBaseUrl}/mimir`, {
@@ -77,7 +72,7 @@ export const fetchMayaStakePositions = async ({
   })
 
   let apyPercent = 0
-  let canUnstake = amount === 0n
+  let canUnstake = amount > 0n
   let unstakeAvailableDate: Date | undefined
 
   const enrichmentResult = await attempt(async () => {
@@ -96,7 +91,7 @@ export const fetchMayaStakePositions = async ({
     const blocksSinceDeposit = currentHeight - lastDepositHeight
     const blocksRemaining = maturityBlocks - blocksSinceDeposit
 
-    canUnstake = amount === 0n || blocksRemaining <= 0
+    canUnstake = amount > 0n && blocksRemaining <= 0
     unstakeAvailableDate = canUnstake
       ? undefined
       : new Date(
@@ -105,7 +100,7 @@ export const fetchMayaStakePositions = async ({
   })
 
   if ('error' in enrichmentResult) {
-    canUnstake = amount === 0n
+    canUnstake = amount > 0n
   }
 
   const apr = convertAPYtoAPR(apyPercent)
