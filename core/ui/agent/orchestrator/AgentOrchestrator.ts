@@ -28,6 +28,7 @@ type NavigationData = {
 
 type OrchestratorDeps = {
   getVault: (pubKey: string) => Promise<VaultData>
+  getVaults: () => Promise<VaultData[]>
   getVaultCoins: (pubKey: string) => Promise<CoinData[]>
   getAddressBookItems: () => Promise<AddressBookItem[]>
   onNavigate: (nav: NavigationData) => void
@@ -71,6 +72,7 @@ export class AgentOrchestrator {
   constructor(deps: OrchestratorDeps) {
     this.contextService = new AgentContextService({
       getVault: deps.getVault,
+      getVaults: deps.getVaults,
       getVaultCoins: deps.getVaultCoins,
       getAddressBookItems: deps.getAddressBookItems,
     })
