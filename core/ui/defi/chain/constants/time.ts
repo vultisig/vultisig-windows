@@ -8,4 +8,5 @@ export const secondsInDay = secondsInHour * hoursInDay
 
 export const daysInYear = 365.25
 export const thorchainBlockTimeSeconds = 6
+export const mayachainBlockTimeSeconds = 5
 export const blocksPerDay = secondsInDay / thorchainBlockTimeSeconds

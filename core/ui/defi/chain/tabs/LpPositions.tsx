@@ -11,6 +11,7 @@ import {
   useAvailableDefiPositions,
   useDefiPositions,
 } from '@core/ui/storage/defiPositions'
+import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
 import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins'
 import { CircleMinusIcon } from '@lib/ui/icons/CircleMinusIcon'
 import { CirclePlusIcon } from '@lib/ui/icons/CirclePlusIcon'
@@ -24,10 +25,8 @@ import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
 import { resolveDefiPositionIcon } from '../config/defiPositionResolver'
-import {
-  LpPositionWithData,
-  useThorchainLpPositionsQuery,
-} from '../queries/useThorchainLpPositionsQuery'
+import { useMayaLpPositionsQuery } from '../queries/useMayaLpPositionsQuery'
+import { useThorchainLpPositionsQuery } from '../queries/useThorchainLpPositionsQuery'
 import { useCurrentDefiChain } from '../useCurrentDefiChain'
 import { DefiPositionEmptyState } from './DefiPositionEmptyState'
 
@@ -164,6 +163,29 @@ const getAssetChainFromPool = (poolAsset: string): Chain | undefined => {
   return lpChainMap[chainCode.toUpperCase()]
 }
 
+type LpActionConfig = {
+  addAction: ChainAction
+  removeAction: ChainAction
+}
+
+const lpActionsByChain: Record<string, LpActionConfig> = {
+  [Chain.THORChain]: {
+    addAction: 'add_thor_lp',
+    removeAction: 'remove_thor_lp',
+  },
+  [Chain.MayaChain]: {
+    addAction: 'bond_with_lp',
+    removeAction: 'unbond_with_lp',
+  },
+}
+
+type LpPositionData = {
+  position: DefiPosition
+  runeAmount: number
+  assetAmount: number
+  poolUnits: string
+}
+
 export const LpPositions = () => {
   const chain = useCurrentDefiChain()
   const { t } = useTranslation()
@@ -179,9 +201,17 @@ export const LpPositions = () => {
       isDefiPositionSelected({ position, selectedPositionIds: selectedIds })
   )
 
-  const lpQuery = useThorchainLpPositionsQuery({
-    selectedPositions,
+  const thorLpQuery = useThorchainLpPositionsQuery({
+    selectedPositions: chain === Chain.THORChain ? selectedPositions : [],
   })
+
+  const mayaLpQuery = useMayaLpPositionsQuery({
+    selectedPositions: chain === Chain.MayaChain ? selectedPositions : [],
+  })
+
+  const lpQuery = chain === Chain.MayaChain ? mayaLpQuery : thorLpQuery
+
+  const actions = lpActionsByChain[chain] ?? lpActionsByChain[Chain.THORChain]
 
   const handleAdd = (position: DefiPosition) => {
     const poolAsset = position.poolAsset
@@ -193,8 +223,8 @@ export const LpPositions = () => {
     navigate({
       id: 'deposit',
       state: {
-        coin: { chain: Chain.THORChain, id: undefined },
-        action: 'add_thor_lp',
+        coin: { chain, id: undefined },
+        action: actions.addAction,
         form: {
           pool: poolAsset,
           pairedAddress: pairedAddress ?? '',
@@ -206,7 +236,7 @@ export const LpPositions = () => {
 
   const handleRemove = (
     position: DefiPosition,
-    positionData?: LpPositionWithData
+    positionData?: LpPositionData
   ) => {
     const poolAsset = position.poolAsset
     if (!poolAsset) return
@@ -214,8 +244,8 @@ export const LpPositions = () => {
     navigate({
       id: 'deposit',
       state: {
-        coin: { chain: Chain.THORChain, id: undefined },
-        action: 'remove_thor_lp',
+        coin: { chain, id: undefined },
+        action: actions.removeAction,
         form: {
           pool: poolAsset,
           poolUnits: positionData?.poolUnits ?? '0',
