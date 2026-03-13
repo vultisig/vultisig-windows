@@ -11,10 +11,10 @@
     ".venv/**",
     ".yarn/releases/**",
     "clients/extension/tests/e2e/**",
-    "clients/extension/tests/integration/**"
+    "clients/extension/tests/integration/**",
+    "core/mpc/keysign/cosigner.ts"
   ],
   "ignoreBinaries": [
-    "tsx",
     "wails"
   ],
   "ignoreDependencies": [
@@ -50,9 +50,7 @@
         "@types/express",
         "@types/web-push",
         "express",
-        "web-push",
-        "@playwright/test",
-        "playwright"
+        "web-push"
       ]
     },
     "core/inpage-provider": {
