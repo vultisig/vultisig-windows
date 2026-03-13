@@ -1,11 +1,11 @@
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { ErrorBoundary } from '@lib/ui/errors/ErrorBoundary'
-import { VStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { useViewState } from '@lib/ui/navigation/hooks/useViewState'
 import { PageContent } from '@lib/ui/page/PageContent'
-import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { FC, Fragment, useEffect, useRef, useState } from 'react'
@@ -424,21 +424,24 @@ export const AgentChatPage: FC = () => {
 
   return (
     <VStack fullHeight>
-      <PageHeader
-        primaryControls={
-          <AgentHeaderButton onClick={() => navigate({ id: 'agent' })}>
-            <BurgerClosedIcon />
-          </AgentHeaderButton>
-        }
-        title={chatTitle || t('vultibot')}
-        hasBorder
-        secondaryControls={
-          <AgentChatMenu
-            conversationId={conversationId}
-            onSessionDeleted={handleSessionDeleted}
-          />
-        }
-      />
+      <AgentChatHeader>
+        <AgentChatHeaderRow>
+          <AgentChatHeaderSide>
+            <AgentHeaderButton onClick={() => navigate({ id: 'agent' })}>
+              <BurgerClosedIcon />
+            </AgentHeaderButton>
+          </AgentChatHeaderSide>
+          <AgentChatHeaderTitle variant="bodyM" color="contrast" cropped>
+            {chatTitle || t('vultibot')}
+          </AgentChatHeaderTitle>
+          <AgentChatHeaderSide>
+            <AgentChatMenu
+              conversationId={conversationId}
+              onSessionDeleted={handleSessionDeleted}
+            />
+          </AgentChatHeaderSide>
+        </AgentChatHeaderRow>
+      </AgentChatHeader>
       <MessagesContainer>
         <ErrorBoundary fallback={AgentErrorFallback}>
           {messages.length === 0 && !isLoading && (
@@ -545,10 +548,54 @@ export const AgentChatPage: FC = () => {
   )
 }
 
+/** Matches Figma Agent Header (68514:113082). Used so messages scroll *under* the header for glass effect. */
+const agentChatHeaderHeightPx = 56
+
+const AgentChatHeader = styled.header`
+  position: sticky;
+  top: 0;
+  /* Above scroll content (and any z-index inside it, e.g. orb) so nothing overlays the header. */
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  min-height: ${agentChatHeaderHeightPx}px;
+  padding: 12px 16px;
+  /* Figma: backgrounds/disabled rgba(11,26,58,0.5) — slightly lower opacity so content behind is barely visible (heavy glass) */
+  background: rgba(11, 26, 58, 0.42);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid ${getColor('foregroundExtra')};
+`
+
+const AgentChatHeaderRow = styled(HStack)`
+  flex: 1;
+  min-width: 0;
+  gap: 14px;
+  align-items: center;
+`
+
+const AgentChatHeaderSide = styled.div`
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+`
+
+const AgentChatHeaderTitle = styled(Text)`
+  flex: 1;
+  min-width: 0;
+`
+
+/* Scroll area extends under the sticky header so content passes behind it; backdrop-filter can then blur that content (glass effect). */
+/* z-index: 0 so the header (z-index: 10) always paints on top and nothing in messages (e.g. orb) overlays it. */
 const MessagesContainer = styled(PageContent)`
   flex: 1;
+  min-height: 0;
+  position: relative;
+  z-index: 0;
   overflow-y: auto;
-  padding: 16px;
+  margin-top: -${agentChatHeaderHeightPx}px;
+  padding: ${agentChatHeaderHeightPx}px 16px 16px;
+  ${hideScrollbars};
 `
 
 const ErrorMessage = styled.div`
