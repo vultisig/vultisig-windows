@@ -23,7 +23,7 @@ type ChatModeProps = {
   onWalletClick: () => void
 }
 
-/** Props for the password-entry mode shown during transaction approval. */
+/** Props for the password-entry mode shown during transaction approval or authorization. */
 type PasswordModeProps = {
   mode: 'password'
   value: string
@@ -31,6 +31,9 @@ type PasswordModeProps = {
   onSubmit: () => void
   onCancel: () => void
   error?: string | null
+  /** Custom label above the input — defaults to "Approve Transaction". */
+  label?: string
+  isLoading?: boolean
 }
 
 type AgentChatFooterProps = ChatModeProps | PasswordModeProps
@@ -40,11 +43,12 @@ export const AgentChatFooter: FC<AgentChatFooterProps> = props => {
   const { t } = useTranslation()
 
   if (props.mode === 'password') {
+    const label = props.label ?? t('approve_transaction')
     return (
       <Container>
         <VStack gap={12}>
           <Text variant="caption" color="info" centerHorizontally>
-            {t('approve_transaction')}
+            {label}
           </Text>
           <NavBar>
             <SideButton onClick={props.onCancel} aria-label={t('cancel')}>
@@ -62,7 +66,8 @@ export const AgentChatFooter: FC<AgentChatFooterProps> = props => {
                 containerHeight={70}
                 containerBorderRadius={24}
                 actionIcon={<LockClosedIcon style={{ fontSize: 20 }} />}
-                actionAriaLabel={t('approve_transaction')}
+                actionAriaLabel={label}
+                isLoading={props.isLoading}
               />
             </InputWrapper>
           </NavBar>

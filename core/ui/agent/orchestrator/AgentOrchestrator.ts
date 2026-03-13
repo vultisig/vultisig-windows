@@ -60,6 +60,7 @@ export class AgentOrchestrator {
   readonly events = new AgentEventEmitter()
   readonly auth = new AgentAuthService()
 
+  private cachedPasswords = new Map<string, string>()
   private backendClient = new AgentBackendClient()
   private contextService: AgentContextService
   private healthService: AgentHealthService
@@ -296,7 +297,20 @@ export class AgentOrchestrator {
       throw result.error
     }
 
+    this.cachedPasswords.set(vaultPubKey, password)
     this.events.emit('auth_connected')
+  }
+
+  /** Re-authenticate using the previously cached password. */
+  async reauthorize(vaultPubKey: string): Promise<void> {
+    const password = this.cachedPasswords.get(vaultPubKey)
+    if (!password) throw new Error('no cached password — full sign-in required')
+    await this.signIn({ vaultPubKey, password })
+  }
+
+  /** Whether a cached password is available for silent re-authorization. */
+  hasCachedPassword(vaultPubKey: string): boolean {
+    return this.cachedPasswords.has(vaultPubKey)
   }
 
   isSignedIn(vaultPubKey: string): boolean {
@@ -308,6 +322,7 @@ export class AgentOrchestrator {
   }
 
   async disconnect(vaultPubKey: string): Promise<void> {
+    this.cachedPasswords.delete(vaultPubKey)
     await this.auth.disconnect(vaultPubKey)
   }
 
