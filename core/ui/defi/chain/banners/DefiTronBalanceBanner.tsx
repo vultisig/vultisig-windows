@@ -60,13 +60,18 @@ export const DefiTronBalanceBanner = () => {
   let totalFiat = 0
 
   if (resourcesQuery.data && pricesQuery.data) {
-    const totalFrozenTrx = sunToTrx(
+    const pendingWithdrawalSun = resourcesQuery.data.unfreezingEntries.reduce(
+      (acc, entry) => acc + entry.unfreezeAmountSun,
+      0n
+    )
+    const totalLockedTrx = sunToTrx(
       resourcesQuery.data.frozenForBandwidthSun +
-        resourcesQuery.data.frozenForEnergySun
+        resourcesQuery.data.frozenForEnergySun +
+        pendingWithdrawalSun
     )
     const trxKey = coinKeyToString(tronDefiCoins[0])
     const trxPrice = pricesQuery.data[trxKey] ?? 0
-    totalFiat = totalFrozenTrx * trxPrice
+    totalFiat = totalLockedTrx * trxPrice
   }
 
   return (
