@@ -24,7 +24,7 @@ export const ReferralModal = ({
   const { t } = useTranslation()
   const [inputValue, setInputValue] = useState(initialCode)
   const trimmedValue = inputValue.trim()
-  const error = useReferralValidation(trimmedValue)
+  const { error, isPending } = useReferralValidation(trimmedValue)
 
   useEffect(() => {
     if (isOpen) {
@@ -65,7 +65,7 @@ export const ReferralModal = ({
         </VStack>
         <Button
           style={{ width: '100%' }}
-          disabled={!trimmedValue || !!error}
+          disabled={!trimmedValue || !!error || isPending}
           onClick={() => onApply(trimmedValue)}
         >
           {t('fastVaultSetup.applyReferral')}
