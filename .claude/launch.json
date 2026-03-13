@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "desktop",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["dev:desktop"],
+      "port": 8081
+    }
+  ]
+}
