@@ -1319,4 +1319,12 @@ export const en = {
   agent_analyzing: 'Analyzing...',
   agent_analyzed_for: 'Analyzed for {{duration}}s',
   agent_analyzed: 'Analyzed',
+  welcome_to_vulti_agent: 'Welcome to Vulti Agent',
+  agent_welcome_description:
+    'Your vault can now understand requests, automate actions, and help manage your crypto.',
+  authorize_agent: 'Authorize Agent',
+  reauthorize_vulti_agent: 'Re-authorize Vulti Agent',
+  agent_reauth_description:
+    'For security, authorization expires periodically.\nPlease confirm to continue using Vulti Agent.',
+  authorize: 'Authorize',
 }

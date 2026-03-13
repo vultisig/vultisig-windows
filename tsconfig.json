@@ -16,7 +16,7 @@
     "jsx": "react-jsx"
   },
   "references": [],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "clients/extension/tests/**"],
   "include": [
     "next-env.d.ts",
     "**/*.ts",

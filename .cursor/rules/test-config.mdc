@@ -1,0 +1,17 @@
+---
+description: Where to find test config and how to handle Fast Vault vs Secure Vault testing
+alwaysApply: true
+---
+
+# Test Configuration and Vault Modes
+
+## Test Config
+
+Test configuration (login, vault names, passwords, share paths, chain addresses) is stored in `.cursor/test-config.local` (gitignored). Read this file when you need to authenticate or interact with vaults during testing.
+
+## Fast Vault vs Secure Vault
+
+Vaults operate in one of two modes:
+
+- **Fast Vault**: Single-device vault. You can sign transactions and authenticate by entering the password yourself. Always test in a Fast Vault when possible.
+- **Secure Vault**: Multi-device vault requiring co-signing from another device. Use the `secure-vault-qa` skill to autonomously co-sign transactions via the SDK.

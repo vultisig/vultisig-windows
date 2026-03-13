@@ -1,8 +1,3 @@
----
-description: Where to find test credentials and how to handle Fast World vs Secure World testing
-alwaysApply: true
----
-
 # Test Credentials and Vault Modes
 
 ## Credentials
