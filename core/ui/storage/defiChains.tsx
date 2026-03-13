@@ -14,6 +14,7 @@ import { StorageKey } from './StorageKey'
 export const supportedDefiChains = [
   Chain.THORChain,
   ...(featureFlags.mayaChain ? [Chain.MayaChain] : []),
+  Chain.Tron,
 ] as const satisfies readonly Chain[]
 
 export type SupportedDefiChain = (typeof supportedDefiChains)[number]
