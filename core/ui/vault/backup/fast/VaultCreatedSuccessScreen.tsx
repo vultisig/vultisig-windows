@@ -17,7 +17,10 @@ export const VaultCreatedSuccessScreen = () => {
     <Container fullHeight justifyContent="center" alignItems="center">
       <AnimationWrapper>
         <AnimationContainer>
-          <Animation src="/core/animations/onboarding-success.riv" />
+          <Animation
+            src="/core/animations/onboarding-success.riv"
+            stateMachines="State Machine 1"
+          />
         </AnimationContainer>
       </AnimationWrapper>
       <ContentSection>
