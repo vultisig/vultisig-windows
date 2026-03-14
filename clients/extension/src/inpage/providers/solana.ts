@@ -142,10 +142,10 @@ export class Solana implements Wallet {
       })
     )
 
-    if (data) {
-      const { address } = data
-      this._isConnected = true
+    const address = data?.address
+    if (address) {
       this._publicKey = new PublicKey(address)
+      this._isConnected = true
       const pubkey = this._publicKey.toBytes()
       const account = this.account
       if (
@@ -165,13 +165,11 @@ export class Solana implements Wallet {
     }
   }
 
-  #connect: StandardConnectMethod = async () => {
-    if (!this.account) {
+  #connect: StandardConnectMethod = async ({ silent } = {}) => {
+    if (!silent && !this.account) {
       await this.connect()
     }
-
     await this.#connected()
-
     return { accounts: this.accounts }
   }
 
@@ -203,7 +201,10 @@ export class Solana implements Wallet {
 
   connect = async () => {
     const { address } = await requestAccount(Chain.Solana)
-    this._publicKey = new PublicKey(shouldBePresent(address))
+    if (!address) {
+      return { publicKey: null }
+    }
+    this._publicKey = new PublicKey(address)
     this._isConnected = true
     return { publicKey: this.publicKey }
   }
