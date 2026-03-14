@@ -1,5 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
+import { Coin } from '@core/chain/coin/Coin'
 import { usdc } from '@core/chain/coin/knownTokens'
 import { getCoinPricesQueryKeys } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { getBalanceQueryKey } from '@core/ui/chain/coin/queries/useBalancesQuery'
@@ -16,14 +17,18 @@ import { RefreshCwIcon } from '@lib/ui/icons/RefreshCwIcon'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { QueryKey, useMutation } from '@tanstack/react-query'
 
-import { mayaDefiCoins, thorchainDefiCoins } from './chain/queries/tokens'
+import {
+  mayaDefiCoins,
+  thorchainDefiCoins,
+  tronDefiCoins,
+} from './chain/queries/tokens'
 import {
   getCircleAccountQueryKey,
   useCircleAccountQuery,
 } from './protocols/circle/queries/circleAccount'
 
 type DefiRefreshConfig = {
-  priceCoins: typeof thorchainDefiCoins | typeof mayaDefiCoins
+  priceCoins: Coin[]
   getPositionsQueryKey: (address: string) => QueryKey
   poolQueryKeys: QueryKey[]
 }
@@ -49,6 +54,11 @@ const defiRefreshConfig: Record<SupportedDefiChain, DefiRefreshConfig> = {
     ],
     poolQueryKeys: [['defi', Chain.MayaChain, 'lp', 'pools']],
   },
+  [Chain.Tron]: {
+    priceCoins: tronDefiCoins,
+    getPositionsQueryKey: address => ['tronAccountResources', address],
+    poolQueryKeys: [],
+  },
 }
 
 export const RefreshDefiData = () => {
@@ -56,6 +66,7 @@ export const RefreshDefiData = () => {
   const fiatCurrency = useFiatCurrency()
   const thorchainAddress = useCurrentVaultAddress(Chain.THORChain)
   const mayachainAddress = useCurrentVaultAddress(Chain.MayaChain)
+  const tronAddress = useCurrentVaultAddress(Chain.Tron)
   const ethereumAddress = useCurrentVaultAddress(Chain.Ethereum)
   const circleAccountQuery = useCircleAccountQuery()
   const isCircleVisible = useIsCircleVisible()
@@ -65,6 +76,7 @@ export const RefreshDefiData = () => {
       const addresses: Record<SupportedDefiChain, string> = {
         [Chain.THORChain]: thorchainAddress,
         [Chain.MayaChain]: mayachainAddress,
+        [Chain.Tron]: tronAddress,
       }
 
       const queryKeys = supportedDefiChains.flatMap(chain => {

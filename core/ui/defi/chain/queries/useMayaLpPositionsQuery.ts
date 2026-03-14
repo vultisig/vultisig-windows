@@ -4,28 +4,26 @@ import { useQuery } from '@tanstack/react-query'
 
 import { DefiPosition, useDefiPositions } from '../../../storage/defiPositions'
 import { useCurrentVaultAddress } from '../../../vault/state/currentVaultCoins'
-import {
-  fetchThorchainLpPositions,
-  ThorchainLpPositionData,
-} from './services/thorchainLpService'
-import { runeCoin } from './tokens'
+import { fetchMayachainLpPositions } from './services/mayachainLpService'
+import { ThorchainLpPositionData } from './services/thorchainLpService'
+import { mayaCoin } from './tokens'
 
-type LpPositionWithData = {
+type MayaLpPositionWithData = {
   position: DefiPosition
   runeAmount: number
   assetAmount: number
   poolUnits: string
 }
 
-type UseThorchainLpPositionsQueryInput = {
+type UseMayaLpPositionsQueryInput = {
   selectedPositions: DefiPosition[]
 }
 
-export const useThorchainLpPositionsQuery = ({
+export const useMayaLpPositionsQuery = ({
   selectedPositions,
-}: UseThorchainLpPositionsQueryInput) => {
-  const address = useCurrentVaultAddress(Chain.THORChain)
-  const selectedIds = useDefiPositions(Chain.THORChain)
+}: UseMayaLpPositionsQueryInput) => {
+  const address = useCurrentVaultAddress(Chain.MayaChain)
+  const selectedIds = useDefiPositions(Chain.MayaChain)
 
   const lpPositions = selectedPositions.filter(p => p.type === 'lp')
   const poolAssets = lpPositions
@@ -33,10 +31,13 @@ export const useThorchainLpPositionsQuery = ({
     .filter((a): a is string => Boolean(a))
 
   return useQuery({
-    queryKey: ['thorchain', 'lp', 'positions', address, ...poolAssets],
+    queryKey: ['mayachain', 'lp', 'positions', address, ...poolAssets],
     enabled: Boolean(address) && poolAssets.length > 0,
-    queryFn: async (): Promise<LpPositionWithData[]> => {
-      const apiPositions = await fetchThorchainLpPositions(poolAssets, address)
+    queryFn: async (): Promise<MayaLpPositionWithData[]> => {
+      const apiPositions = await fetchMayachainLpPositions({
+        poolAssets,
+        address,
+      })
 
       return lpPositions
         .map(position => {
@@ -45,11 +46,11 @@ export const useThorchainLpPositionsQuery = ({
           )
 
           const runeAmount = apiData
-            ? Number(apiData.runeRedeemValue) / Math.pow(10, runeCoin.decimals)
+            ? Number(apiData.runeRedeemValue) / Math.pow(10, mayaCoin.decimals)
             : 0
 
           const assetAmount = apiData
-            ? Number(apiData.assetRedeemValue) / Math.pow(10, runeCoin.decimals)
+            ? Number(apiData.assetRedeemValue) / Math.pow(10, mayaCoin.decimals)
             : 0
 
           return {
