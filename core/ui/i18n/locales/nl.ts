@@ -1257,4 +1257,5 @@ export const nl = {
   agent_tx_type_swap: 'Ruil',
   agent_tx_type_transfer: 'Overdracht',
   agent_tx_view: 'Weergave',
+  zcash_notes_found: 'Notes Found',
 }

@@ -8,7 +8,7 @@ import { getVaultId, Vault } from '@core/mpc/vault/Vault'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 import { ChildrenProp } from '@lib/ui/props'
 import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 
 import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
 import { decryptVaultAllKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
@@ -41,6 +41,41 @@ export const useCurrentVaultSecurityType = (): VaultSecurityType => {
   return 'secure'
 }
 
+const syncCurrentVaultChainData = (
+  value: (Vault & Partial<{ coins: AccountCoin[] }>) | undefined
+) => {
+  if (!value) {
+    setZcashVaultData(null)
+    setMoneroVaultData(null)
+    return
+  }
+
+  const bundle = value.chainKeyShares?.[Chain.ZcashSapling]
+  const pubKeyPackage = value.chainPublicKeys?.[Chain.ZcashSapling]
+  const saplingExtras = value.saplingExtras
+
+  if (bundle && pubKeyPackage && saplingExtras) {
+    setZcashVaultData({
+      publicKeyEcdsa: value.publicKeys.ecdsa,
+      bundle,
+      pubKeyPackage,
+      saplingExtras,
+    })
+  } else {
+    setZcashVaultData(null)
+  }
+
+  const moneroKeyShare = value.chainKeyShares?.[Chain.Monero]
+  if (moneroKeyShare) {
+    setMoneroVaultData({
+      publicKeyEcdsa: value.publicKeys.ecdsa,
+      keyShare: moneroKeyShare,
+    })
+  } else {
+    setMoneroVaultData(null)
+  }
+}
+
 export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
   const id = useCurrentVaultId()
   const vaults = useVaults()
@@ -71,37 +106,7 @@ export const RootCurrentVaultProvider = ({ children }: ChildrenProp) => {
 
     return vault
   }, [vaults, id, passcode])
-
-  useEffect(() => {
-    if (!value) {
-      setZcashVaultData(null)
-      setMoneroVaultData(null)
-      return
-    }
-    const bundle = value.chainKeyShares?.[Chain.ZcashShielded]
-    const pkp = value.chainPublicKeys?.[Chain.ZcashShielded]
-    const extras = value.saplingExtras
-    if (bundle && pkp && extras) {
-      setZcashVaultData({
-        publicKeyEcdsa: value.publicKeys.ecdsa,
-        bundle,
-        pubKeyPackage: pkp,
-        saplingExtras: extras,
-      })
-    } else {
-      setZcashVaultData(null)
-    }
-
-    const moneroKeyShare = value.chainKeyShares?.[Chain.Monero]
-    if (moneroKeyShare) {
-      setMoneroVaultData({
-        publicKeyEcdsa: value.publicKeys.ecdsa,
-        keyShare: moneroKeyShare,
-      })
-    } else {
-      setMoneroVaultData(null)
-    }
-  }, [value])
+  syncCurrentVaultChainData(value)
 
   return (
     <CurrentVaultContext.Provider value={value}>

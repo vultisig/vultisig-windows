@@ -7,3 +7,4 @@ export type KeygenOperation =
   | { reshare: ReshareType }
   | { keyimport: true }
   | { addChainKeys: VaultKeyGroup }
+  | { singleKeygen: true }

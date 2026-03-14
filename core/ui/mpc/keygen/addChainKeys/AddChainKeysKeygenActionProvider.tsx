@@ -1,9 +1,13 @@
 import { Chain } from '@core/chain/Chain'
+import { getChainHeight } from '@core/chain/chains/monero/daemonRpc'
 import { getLatestBlock } from '@core/chain/chains/zcash/lightwalletd/client'
 import { parseFromtBundleResult } from '@core/mpc/fromt/fromtSession'
 import { createFromtKeygenSession } from '@core/mpc/fromt/fromtSessionFactory'
-import { Frozt } from '@core/mpc/frozt/frozt'
-import { runFroztSession } from '@core/mpc/frozt/froztSession'
+import {
+  parseFroztBundleResult,
+  runFroztSession,
+} from '@core/mpc/frozt/froztSession'
+import { createFroztKeygenSession } from '@core/mpc/frozt/froztSessionFactory'
 import {
   setKeygenComplete,
   waitForKeygenComplete,
@@ -40,6 +44,13 @@ export const AddChainKeysKeygenActionProvider = ({
       if (keyGroup === 'fromt') {
         onStepChange('fromt')
 
+        let moneroBirthday = 0
+        try {
+          moneroBirthday = await getChainHeight()
+        } catch {
+          // monero daemon unavailable, use 0
+        }
+
         const fromtSession = await createFromtKeygenSession({
           serverUrl,
           sessionId,
@@ -48,7 +59,7 @@ export const AddChainKeysKeygenActionProvider = ({
           setupMessageId: 'fromt',
           isInitiatingDevice,
           signers,
-          birthday: 0,
+          birthday: moneroBirthday,
         })
 
         const fromtBundle = await runFroztSession({
@@ -91,18 +102,29 @@ export const AddChainKeysKeygenActionProvider = ({
 
       onStepChange('frozt')
 
-      const froztKeygen = new Frozt(
+      const latestBlock = await getLatestBlock()
+      const froztSession = await createFroztKeygenSession({
+        serverUrl,
+        sessionId,
+        localPartyId,
+        hexEncryptionKey: encryptionKeyHex,
+        setupMessageId: 'frozt',
         isInitiatingDevice,
+        signers,
+        birthday: latestBlock.height,
+      })
+
+      const froztBundle = await runFroztSession({
+        session: froztSession,
+        messageId: 'p-frozt',
         serverUrl,
         sessionId,
         localPartyId,
         signers,
-        encryptionKeyHex
-      )
-      const latestBlock = await getLatestBlock()
-      const froztResult = await froztKeygen.startKeygenWithRetry(
-        latestBlock.height
-      )
+        hexEncryptionKey: encryptionKeyHex,
+      })
+
+      const froztResult = parseFroztBundleResult(froztBundle)
 
       await setKeygenComplete({
         serverURL: serverUrl,
@@ -121,11 +143,11 @@ export const AddChainKeysKeygenActionProvider = ({
         signers,
         chainPublicKeys: {
           ...existingVault.chainPublicKeys,
-          [Chain.ZcashShielded]: froztResult.pubKeyPackage,
+          [Chain.ZcashSapling]: froztResult.pubKeyPackage,
         },
         chainKeyShares: {
           ...existingVault.chainKeyShares,
-          [Chain.ZcashShielded]: froztResult.bundle,
+          [Chain.ZcashSapling]: froztResult.bundle,
         },
         saplingExtras: froztResult.saplingExtras || undefined,
       }

@@ -1,8 +1,7 @@
-export type MpcLib = 'GG20' | 'DKLS'
+export type MpcLib = 'GG20' | 'DKLS' | 'KeyImport'
 
-/** MpcLib plus KeyImport; used in keysign payloads (protobuf uses string on wire). */
-export type KeysignLibType = MpcLib | 'KeyImport'
+export type KeysignLibType = MpcLib
 
-export const mpcLibOptions = ['GG20', 'DKLS'] as const
+export const mpcLibOptions = ['GG20', 'DKLS', 'KeyImport'] as const
 
 export const defaultMpcLib: MpcLib = 'DKLS'

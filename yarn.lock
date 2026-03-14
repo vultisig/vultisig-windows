@@ -5134,24 +5134,24 @@ __metadata:
 
 "@vultisig/fromt-sdk@file:/Users/dev/dev/vultisig/frost-zm/packages/fromt-sdk-ts::locator=vultisig-windows%40workspace%3A.":
   version: 0.1.0
-  resolution: "@vultisig/fromt-sdk@file:/Users/dev/dev/vultisig/frost-zm/packages/fromt-sdk-ts#/Users/dev/dev/vultisig/frost-zm/packages/fromt-sdk-ts::hash=edd114&locator=vultisig-windows%40workspace%3A."
+  resolution: "@vultisig/fromt-sdk@file:/Users/dev/dev/vultisig/frost-zm/packages/fromt-sdk-ts#/Users/dev/dev/vultisig/frost-zm/packages/fromt-sdk-ts::hash=fa767d&locator=vultisig-windows%40workspace%3A."
   dependencies:
     fromt-wasm: "file:../../pkg/fromt"
     monero-ts: "npm:^0.11.8"
-  checksum: 10c0/55254d54d1e3983e4e2069879710be7c9c711dff750890166f960ea0986508ad7fc31ed1a01c03bc0d0c7371cb9831f457bd5ec10139294f6d64e26e5ff238e0
+  checksum: 10c0/959211143504306539979930ad55cd878a15d89f51395c504c893ddb36ea6851055b8bceaaf15dc6a823ced026f1ff294cd648e3b4f246d1331085534a4eceb8
   languageName: node
   linkType: hard
 
 "@vultisig/frozt-sdk@file:/Users/dev/dev/vultisig/frost-zm/packages/frozt-sdk-ts::locator=vultisig-windows%40workspace%3A.":
   version: 0.1.0
-  resolution: "@vultisig/frozt-sdk@file:/Users/dev/dev/vultisig/frost-zm/packages/frozt-sdk-ts#/Users/dev/dev/vultisig/frost-zm/packages/frozt-sdk-ts::hash=8caf1c&locator=vultisig-windows%40workspace%3A."
+  resolution: "@vultisig/frozt-sdk@file:/Users/dev/dev/vultisig/frost-zm/packages/frozt-sdk-ts#/Users/dev/dev/vultisig/frost-zm/packages/frozt-sdk-ts::hash=038c4b&locator=vultisig-windows%40workspace%3A."
   dependencies:
     "@bufbuild/protobuf": "npm:^2.0.0"
     "@connectrpc/connect-web": "npm:^2.0.0"
     "@grpc/grpc-js": "npm:^1.14.3"
     "@grpc/proto-loader": "npm:^0.8.0"
     frozt-wasm: "file:../../crates/frozt-wasm/pkg"
-  checksum: 10c0/43d9e32b1c4a0f7f65573a61310f8add2751ee6fc8da383d4ec4f2367daae07ffa5421effe2388f6c2705af06845d81cdc8788f83b61168d322e6cb51b28d5fb
+  checksum: 10c0/f78615fd12506907762f0bdd6f9cb4e2753eaee006ab962144a0c81ce031ae5bc42dd96677186582dfb19ec941a427e2b71c5064663655e05470e013908d7e71
   languageName: node
   linkType: hard
 
@@ -8000,10 +8000,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fromt-wasm@file:../../pkg/fromt::locator=%40vultisig%2Ffromt-sdk%40file%3A%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffromt-sdk-ts%23%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffromt-sdk-ts%3A%3Ahash%3Dedd114%26locator%3Dvultisig-windows%2540workspace%253A.":
+"fromt-wasm@file:../../pkg/fromt::locator=%40vultisig%2Ffromt-sdk%40file%3A%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffromt-sdk-ts%23%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffromt-sdk-ts%3A%3Ahash%3Dfa767d%26locator%3Dvultisig-windows%2540workspace%253A.":
   version: 0.1.0
-  resolution: "fromt-wasm@file:../../pkg/fromt#../../pkg/fromt::hash=85f587&locator=%40vultisig%2Ffromt-sdk%40file%3A%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffromt-sdk-ts%23%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffromt-sdk-ts%3A%3Ahash%3Dedd114%26locator%3Dvultisig-windows%2540workspace%253A."
-  checksum: 10c0/4cff5508a8b6ecf69d436d400b56103ac68f36538be39ca2492106d704452b2cb5d74201abb2b57abd881230890a704a2edbd7ede5ae19f628eb809861b18d54
+  resolution: "fromt-wasm@file:../../pkg/fromt#../../pkg/fromt::hash=c6b1b3&locator=%40vultisig%2Ffromt-sdk%40file%3A%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffromt-sdk-ts%23%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffromt-sdk-ts%3A%3Ahash%3Dfa767d%26locator%3Dvultisig-windows%2540workspace%253A."
+  checksum: 10c0/027fa6bfc1c5724346af0c33eb9e214b8a04cd6f6c8315114aa5c8ea003920d0830e197c471c60012c1fbbbca5149a7ad27c10d761a0681513426226463e3a8d
   languageName: node
   linkType: hard
 
@@ -8013,10 +8013,10 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"frozt-wasm@file:../../crates/frozt-wasm/pkg::locator=%40vultisig%2Ffrozt-sdk%40file%3A%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffrozt-sdk-ts%23%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffrozt-sdk-ts%3A%3Ahash%3D8caf1c%26locator%3Dvultisig-windows%2540workspace%253A.":
+"frozt-wasm@file:../../crates/frozt-wasm/pkg::locator=%40vultisig%2Ffrozt-sdk%40file%3A%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffrozt-sdk-ts%23%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffrozt-sdk-ts%3A%3Ahash%3D038c4b%26locator%3Dvultisig-windows%2540workspace%253A.":
   version: 0.1.0
-  resolution: "frozt-wasm@file:../../crates/frozt-wasm/pkg#../../crates/frozt-wasm/pkg::hash=9a4b68&locator=%40vultisig%2Ffrozt-sdk%40file%3A%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffrozt-sdk-ts%23%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffrozt-sdk-ts%3A%3Ahash%3D8caf1c%26locator%3Dvultisig-windows%2540workspace%253A."
-  checksum: 10c0/05521fca0552c45deec36dfdb2c6634f3be3b78069afd87df826a38657d74c6700f1bd6c7d2f1322ea95a2b4a5dad81913783e3f05182da03d7d79e40db691c6
+  resolution: "frozt-wasm@file:../../crates/frozt-wasm/pkg#../../crates/frozt-wasm/pkg::hash=e0f058&locator=%40vultisig%2Ffrozt-sdk%40file%3A%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffrozt-sdk-ts%23%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffrozt-sdk-ts%3A%3Ahash%3D038c4b%26locator%3Dvultisig-windows%2540workspace%253A."
+  checksum: 10c0/7c69b614dc4939c8aa869068b999bf4b955b52674070c9d57ab7fc33f6d84d1f50115460074552f56c274276310d6f5d1a785902d8293ea0ec41a982850caaeb
   languageName: node
   linkType: hard
 
@@ -13853,6 +13853,7 @@ __metadata:
     globals: "npm:^17.3.0"
     knip: "npm:^5.83.0"
     lottie-react: "npm:^2.4.1"
+    monero-ts: "npm:^0.11.8"
     prettier: "npm:^3.8.1"
     react-markdown: "npm:^10.1.0"
     typescript: "npm:^5.9.3"

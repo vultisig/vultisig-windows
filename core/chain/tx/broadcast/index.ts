@@ -4,6 +4,7 @@ import { BroadcastTxResolver } from './resolver'
 import { broadcastCardanoTx } from './resolvers/cardano'
 import { broadcastCosmosTx } from './resolvers/cosmos'
 import { broadcastEvmTx } from './resolvers/evm'
+import { broadcastMoneroTx } from './resolvers/monero'
 import { broadcastPolkadotTx } from './resolvers/polkadot'
 import { broadcastRippleTx } from './resolvers/ripple'
 import { broadcastSolanaTx } from './resolvers/solana'
@@ -11,7 +12,7 @@ import { broadcastSuiTx } from './resolvers/sui'
 import { broadcastTonTx } from './resolvers/ton'
 import { broadcastTronTx } from './resolvers/tron'
 import { broadcastUtxoTx } from './resolvers/utxo'
-import { broadcastZcashShieldedTx } from './resolvers/zcashShielded'
+import { broadcastZcashSaplingTx } from './resolvers/zcashSapling'
 
 const resolvers: Record<ChainKind, BroadcastTxResolver<any>> = {
   cardano: broadcastCardanoTx,
@@ -24,10 +25,8 @@ const resolvers: Record<ChainKind, BroadcastTxResolver<any>> = {
   ton: broadcastTonTx,
   utxo: broadcastUtxoTx,
   tron: broadcastTronTx,
-  zcashShielded: broadcastZcashShieldedTx,
-  monero: async () => {
-    throw new Error('Monero broadcast not yet implemented')
-  },
+  zcashSapling: broadcastZcashSaplingTx,
+  monero: broadcastMoneroTx,
 }
 
 export const broadcastTx: BroadcastTxResolver = input =>

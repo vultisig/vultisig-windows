@@ -5,6 +5,7 @@ import { TxReceiptInfo, TxStatusResolver } from './resolver'
 import { getCardanoTxStatus } from './resolvers/cardano'
 import { getCosmosTxStatus } from './resolvers/cosmos'
 import { getEvmTxStatus } from './resolvers/evm'
+import { getMoneroTxStatus } from './resolvers/monero'
 import { getPolkadotTxStatus } from './resolvers/polkadot'
 import { getRippleTxStatus } from './resolvers/ripple'
 import { getSolanaTxStatus } from './resolvers/solana'
@@ -24,11 +25,9 @@ const statusHandlers: Record<ChainKind, TxStatusResolver<any>> = {
   ton: getTonTxStatus,
   utxo: getUtxoTxStatus,
   tron: getTronTxStatus,
-  zcashShielded: input =>
+  zcashSapling: input =>
     getUtxoTxStatus({ ...input, chain: Chain.Zcash as any }),
-  monero: async () => {
-    throw new Error('Monero tx status not yet implemented')
-  },
+  monero: getMoneroTxStatus,
 }
 
 type GetTxStatusInput = {

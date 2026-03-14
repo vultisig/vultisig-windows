@@ -1,14 +1,16 @@
-import { getMoneroAddress } from '@core/chain/chains/monero/getMoneroAddress'
-import { getMoneroScanStorage } from '@core/chain/chains/monero/moneroScanStorage'
 import { getMoneroVaultData } from '@core/chain/chains/monero/moneroVaultData'
 import { ClockIcon } from '@lib/ui/icons/ClockIcon'
+import { SparklesIcon } from '@lib/ui/icons/SparklesIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Text } from '@lib/ui/text'
-import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { SecondaryActionWrapper } from '../../components/PrimaryActions.styled'
+import {
+  AttentionActionWrapper,
+  SecondaryActionWrapper,
+} from '../../components/PrimaryActions.styled'
+import { useMoneroBalanceScanStatus } from './useMoneroBalanceScanStatus'
 
 type MoneroSyncPromptProps = {
   onClick: () => void
@@ -16,39 +18,37 @@ type MoneroSyncPromptProps = {
 
 export const MoneroSyncPrompt = ({ onClick }: MoneroSyncPromptProps) => {
   const { t } = useTranslation()
-  const [isSyncing, setIsSyncing] = useState(true)
+  const vaultData = getMoneroVaultData()
+  const { isSyncing, requiresFinalise, confirmingOutputs } =
+    useMoneroBalanceScanStatus({
+      publicKeyEcdsa: vaultData?.publicKeyEcdsa,
+    })
 
-  useEffect(() => {
-    let cancelled = false
+  const isConfirming = confirmingOutputs.length > 0
 
-    const check = async () => {
-      const vaultData = getMoneroVaultData()
-      if (!vaultData) return
-
-      const address = await getMoneroAddress(vaultData.keyShare)
-      const data = await getMoneroScanStorage().load(address)
-      if (!cancelled) {
-        setIsSyncing(
-          data?.scanHeight === null || data?.scanHeight === undefined
-        )
-      }
-    }
-
-    check()
-    const id = setInterval(check, 3000)
-    return () => {
-      cancelled = true
-      clearInterval(id)
-    }
-  }, [])
+  const ActionWrapper =
+    requiresFinalise || isConfirming
+      ? AttentionActionWrapper
+      : SecondaryActionWrapper
+  const label = isConfirming
+    ? t('confirming')
+    : requiresFinalise
+      ? t('finalise')
+      : t('sync')
 
   return (
     <VStack alignItems="center" gap={8}>
-      <SecondaryActionWrapper onClick={onClick}>
-        {isSyncing ? <Spinner size={20} /> : <ClockIcon />}
-      </SecondaryActionWrapper>
+      <ActionWrapper onClick={onClick}>
+        {isSyncing || isConfirming ? (
+          <Spinner size={20} />
+        ) : requiresFinalise ? (
+          <SparklesIcon />
+        ) : (
+          <ClockIcon />
+        )}
+      </ActionWrapper>
       <Text color="shyExtra" size={12}>
-        {t('sync')}
+        {label}
       </Text>
     </VStack>
   )

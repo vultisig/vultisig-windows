@@ -4,7 +4,7 @@ import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { VaultKeyGroup } from '@core/chain/signing/VaultKeyGroup'
 
 export const getChainKeyGroup = (chain: Chain): VaultKeyGroup => {
-  if (chain === Chain.ZcashShielded) {
+  if (chain === Chain.ZcashSapling) {
     return 'frozt'
   }
 

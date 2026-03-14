@@ -62,6 +62,66 @@ export namespace storage {
 	        this.keyshare = source["keyshare"];
 	    }
 	}
+	export class MoneroScanData {
+	    address: string;
+	    public_key_ecdsa: string;
+	    scan_height?: number;
+	    scan_target?: number;
+	    birth_height?: number;
+	    birthday_scan_done: boolean;
+	    balance: string;
+	    wallet_keys_data?: string;
+	    wallet_cache_data?: string;
+	    outputs_json: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new MoneroScanData(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.address = source["address"];
+	        this.public_key_ecdsa = source["public_key_ecdsa"];
+	        this.scan_height = source["scan_height"];
+	        this.scan_target = source["scan_target"];
+	        this.birth_height = source["birth_height"];
+	        this.birthday_scan_done = source["birthday_scan_done"];
+	        this.balance = source["balance"];
+	        this.wallet_keys_data = source["wallet_keys_data"];
+	        this.wallet_cache_data = source["wallet_cache_data"];
+	        this.outputs_json = source["outputs_json"];
+	    }
+	}
+	export class TransactionRecord {
+	    id: string;
+	    vault_id: string;
+	    type: string;
+	    status: string;
+	    chain: string;
+	    timestamp: string;
+	    tx_hash: string;
+	    explorer_url: string;
+	    fiat_value: string;
+	    data: string;
+
+	    static createFrom(source: any = {}) {
+	        return new TransactionRecord(source);
+	    }
+
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
+	        this.vault_id = source["vault_id"];
+	        this.type = source["type"];
+	        this.status = source["status"];
+	        this.chain = source["chain"];
+	        this.timestamp = source["timestamp"];
+	        this.tx_hash = source["tx_hash"];
+	        this.explorer_url = source["explorer_url"];
+	        this.fiat_value = source["fiat_value"];
+	        this.data = source["data"];
+	    }
+	}
 	export class Vault {
 	    name: string;
 	    public_key_ecdsa: string;
@@ -141,6 +201,36 @@ export namespace storage {
 	        this.id = source["id"];
 	        this.name = source["name"];
 	        this.order = source["order"];
+	    }
+	}
+	export class ZcashScanData {
+	    z_address: string;
+	    public_key_ecdsa: string;
+	    scan_height?: number;
+	    scan_target?: number;
+	    birth_height?: number;
+	    birthday_scan_done: boolean;
+	    pub_key_package: string;
+	    sapling_extras: string;
+	    notes_json: string;
+	    nullifier_version: number;
+	
+	    static createFrom(source: any = {}) {
+	        return new ZcashScanData(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.z_address = source["z_address"];
+	        this.public_key_ecdsa = source["public_key_ecdsa"];
+	        this.scan_height = source["scan_height"];
+	        this.scan_target = source["scan_target"];
+	        this.birth_height = source["birth_height"];
+	        this.birthday_scan_done = source["birthday_scan_done"];
+	        this.pub_key_package = source["pub_key_package"];
+	        this.sapling_extras = source["sapling_extras"];
+	        this.notes_json = source["notes_json"];
+	        this.nullifier_version = source["nullifier_version"];
 	    }
 	}
 

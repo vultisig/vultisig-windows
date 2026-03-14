@@ -6,6 +6,7 @@ import { KeygenFlow } from '@core/ui/mpc/keygen/flow/KeygenFlow'
 import { MigrateFastKeygenServerActionProvider } from '@core/ui/mpc/keygen/migrate/fast/MigrateFastKeygenServerActionProvider'
 import { PluginReshareFastKeygenServerActionProvider } from '@core/ui/mpc/keygen/reshare/PluginReshareFastKeygenServerActionProvider'
 import { ReshareFastKeygenServerActionProvider } from '@core/ui/mpc/keygen/reshare/ReshareFastKeygenServerActionProvider'
+import { SingleKeygenFastServerActionProvider } from '@core/ui/mpc/keygen/singleKeygen/fast/SingleKeygenFastServerActionProvider'
 import { useKeygenOperation } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { StartMpcSessionFlow } from '@core/ui/mpc/session/StartMpcSessionFlow'
 import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
@@ -44,6 +45,7 @@ export const FastKeygenFlow = ({
     },
     keyimport: () => KeyImportFastKeygenServerActionProvider,
     addChainKeys: () => AddChainKeysFastServerActionProvider,
+    singleKeygen: () => SingleKeygenFastServerActionProvider,
   })
 
   return (

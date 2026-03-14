@@ -6,6 +6,7 @@ import { TxHashResolver } from './resolver'
 import { getCardanoTxHash } from './resolvers/cardano'
 import { getCosmosTxHash } from './resolvers/cosmos'
 import { getEvmTxHash } from './resolvers/evm'
+import { getMoneroTxHash } from './resolvers/monero'
 import { getPolkadotTxHash } from './resolvers/polkadot'
 import { getRippleTxHash } from './resolvers/ripple'
 import { getSolanaTxHash } from './resolvers/solana'
@@ -25,10 +26,8 @@ const hashHandlers: Record<ChainKind, TxHashResolver<any>> = {
   ton: getTonTxHash,
   utxo: getUtxoTxHash,
   tron: getTronTxHash,
-  zcashShielded: getUtxoTxHash,
-  monero: () => {
-    throw new Error('Monero tx hash not yet implemented')
-  },
+  zcashSapling: getUtxoTxHash,
+  monero: getMoneroTxHash,
 }
 
 type GetTxHashInput = {

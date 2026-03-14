@@ -12,7 +12,7 @@ import { getSuiCoinBalance } from './resolvers/sui'
 import { getTonCoinBalance } from './resolvers/ton'
 import { getTronCoinBalance } from './resolvers/tron'
 import { getUtxoCoinBalance } from './resolvers/utxo'
-import { getZcashShieldedCoinBalance } from './resolvers/zcashShielded'
+import { getZcashSaplingCoinBalance } from './resolvers/zcashSapling'
 
 const resolvers: Record<ChainKind, CoinBalanceResolver<any>> = {
   utxo: getUtxoCoinBalance,
@@ -25,7 +25,7 @@ const resolvers: Record<ChainKind, CoinBalanceResolver<any>> = {
   solana: getSolanaCoinBalance,
   tron: getTronCoinBalance,
   cardano: getCardanoCoinBalance,
-  zcashShielded: getZcashShieldedCoinBalance,
+  zcashSapling: getZcashSaplingCoinBalance,
   monero: getMoneroCoinBalance,
 }
 

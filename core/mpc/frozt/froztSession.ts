@@ -2,6 +2,7 @@ import { base64Encode } from '@lib/utils/base64Encode'
 
 import {
   frozt_keyshare_bundle_birthday,
+  frozt_keyshare_bundle_pack,
   frozt_keyshare_bundle_pub_key_package,
   frozt_keyshare_bundle_sapling_extras,
   FroztDkgSession,
@@ -16,8 +17,19 @@ import { getMpcRelayMessages } from '../message/relay/get'
 import { sendMpcRelayMessage } from '../message/relay/send'
 import { fromMpcServerMessage, toMpcServerMessage } from '../message/server'
 import { sleep } from '../sleep'
-import { FroztKeygenResult } from './frozt'
 import { initializeFrozt } from './initialize'
+
+export type FroztKeygenResult = {
+  bundle: string
+  pubKeyPackage: string
+  saplingExtras: string
+  birthday: number
+}
+
+export type FroztReshareResult = {
+  keyPackage: Uint8Array
+  pubKeyPackage: Uint8Array
+}
 
 export type FroztSessionHandle =
   | FroztDkgSession
@@ -41,21 +53,29 @@ type RunFroztSessionParams = {
   localPartyId: string
   signers: string[]
   hexEncryptionKey: string
+  preserveSignerOrder?: boolean
   timeoutMs?: number
 }
 
-function getSortedParties(signers: string[]): string[] {
-  return [...signers].sort()
+function getPartyOrder(
+  signers: string[],
+  preserveSignerOrder = false
+): string[] {
+  return preserveSignerOrder ? [...signers] : [...signers].sort()
 }
 
-function getFrostId(partyId: string, signers: string[]): number {
-  const sorted = getSortedParties(signers)
-  const idx = sorted.indexOf(partyId)
+function getFrostId(
+  partyId: string,
+  signers: string[],
+  preserveSignerOrder = false
+): number {
+  const ordered = getPartyOrder(signers, preserveSignerOrder)
+  const idx = ordered.indexOf(partyId)
+  if (idx === -1) {
+    throw new Error(`Unknown FROZT signer ${partyId}`)
+  }
   return idx + 1
 }
-
-const froztLog = (tag: string, ...args: unknown[]) =>
-  console.log(`[frozt-session][${tag}]`, ...args)
 
 async function drainAndSendOutbound({
   session,
@@ -65,8 +85,9 @@ async function drainAndSendOutbound({
   localPartyId,
   signers,
   hexEncryptionKey,
+  preserveSignerOrder = false,
 }: RunFroztSessionParams): Promise<number> {
-  const sorted = getSortedParties(signers)
+  const orderedSigners = getPartyOrder(signers, preserveSignerOrder)
   let sequenceNo = 0
   let msgCount = 0
 
@@ -77,7 +98,7 @@ async function drainAndSendOutbound({
     const payload = msg.slice(2)
     const encrypted = toMpcServerMessage(payload, hexEncryptionKey)
 
-    for (let i = 0; i < sorted.length; i++) {
+    for (let i = 0; i < orderedSigners.length; i++) {
       const receiver = session.msgReceiver(msg, i)
       if (!receiver) continue
 
@@ -116,6 +137,7 @@ export async function runFroztSession(
     localPartyId,
     signers,
     hexEncryptionKey,
+    preserveSignerOrder = false,
     timeoutMs = 60000,
   } = params
 
@@ -123,17 +145,12 @@ export async function runFroztSession(
   const start = Date.now()
   let finished = false
 
-  froztLog('start', { messageId, localPartyId, signers, timeoutMs })
-
-  let round = 0
   try {
-    const initialSent = await drainAndSendOutbound(params)
-    froztLog('outbound', `initial drain sent ${initialSent} messages`)
+    await drainAndSendOutbound(params)
 
     while (!finished) {
       const elapsed = Date.now() - start
       if (elapsed > timeoutMs) {
-        froztLog('timeout', `${timeoutMs}ms elapsed, ${round} rounds completed`)
         throw new Error(`frozt session timeout after ${timeoutMs}ms`)
       }
 
@@ -149,30 +166,19 @@ export async function runFroztSession(
         continue
       }
 
-      round++
-      froztLog(
-        'inbound',
-        `round ${round}: ${messages.length} messages from relay`
-      )
-
       for (const msg of messages) {
         const cacheKey = `${msg.session_id}-${msg.from}-${msg.hash}`
         if (seen.has(cacheKey)) continue
         seen.add(cacheKey)
 
         const decrypted = fromMpcServerMessage(msg.body, hexEncryptionKey)
-        const senderFrostId = getFrostId(msg.from, signers)
+        const senderFrostId = getFrostId(msg.from, signers, preserveSignerOrder)
         const frame = new Uint8Array(2 + decrypted.length)
         const view = new DataView(frame.buffer)
         view.setUint16(0, senderFrostId, true)
         frame.set(decrypted, 2)
 
-        froztLog(
-          'feed',
-          `from=${msg.from} frostId=${senderFrostId} payloadSize=${decrypted.length}`
-        )
         finished = session.feed(frame)
-        froztLog('feed', `finished=${finished}`)
 
         await deleteMpcRelayMessage({
           serverUrl,
@@ -186,27 +192,14 @@ export async function runFroztSession(
       }
 
       if (!finished) {
-        const sent = await drainAndSendOutbound(params)
-        if (sent > 0) {
-          froztLog('outbound', `round ${round}: sent ${sent} messages`)
-        }
+        await drainAndSendOutbound(params)
         await sleep(100)
       }
     }
 
-    const finalSent = await drainAndSendOutbound(params)
-    if (finalSent > 0) {
-      froztLog('outbound', `final drain sent ${finalSent} messages`)
-    }
+    await drainAndSendOutbound(params)
 
-    froztLog(
-      'done',
-      `completed in ${Date.now() - start}ms after ${round} rounds`
-    )
     return session.result()
-  } catch (error) {
-    froztLog('error', error)
-    throw error
   } finally {
     session.free()
   }
@@ -223,4 +216,19 @@ export function parseFroztBundleResult(bundle: Uint8Array): FroztKeygenResult {
     saplingExtras: base64Encode(saplingExtras),
     birthday,
   }
+}
+
+export function packFroztReshareBundle(
+  result: FroztReshareResult,
+  oldBundle: Uint8Array
+): Uint8Array {
+  const saplingExtras = frozt_keyshare_bundle_sapling_extras(oldBundle)
+  const birthday = frozt_keyshare_bundle_birthday(oldBundle)
+
+  return frozt_keyshare_bundle_pack(
+    result.keyPackage,
+    result.pubKeyPackage,
+    saplingExtras,
+    birthday
+  )
 }

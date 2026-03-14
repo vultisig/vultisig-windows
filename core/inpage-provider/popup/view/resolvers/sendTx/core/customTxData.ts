@@ -3,6 +3,7 @@ import { isChainOfKind } from '@core/chain/ChainKind'
 import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
 import { getEvmContractCallHexSignature } from '@core/chain/chains/evm/contract/call/hexSignature'
 import { getEvmContractCallSignatures } from '@core/chain/chains/evm/contract/call/signatures'
+import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin, CoinKey } from '@core/chain/coin/Coin'
 import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
@@ -39,7 +40,7 @@ export type CustomTxData =
 
 type GetCustomTxDataInput = {
   walletCore: WalletCore
-  vault: Vault
+  vault: Vault & Partial<{ coins: AccountCoin[] }>
   transactionPayload: ITransactionPayload
   getCoin: (coinKey: CoinKey) => Promise<Coin>
   requestOrigin: string
@@ -120,11 +121,15 @@ export const getCustomTxData = ({
           publicKeys: vault.publicKeys,
           chainPublicKeys: vault.chainPublicKeys,
         })
-        const address = deriveAddress({
-          chain,
-          publicKey,
-          walletCore,
-        })
+        const address =
+          chain === Chain.Monero
+            ? vault.coins?.find(coin => coin.chain === Chain.Monero)?.address ||
+              ''
+            : deriveAddress({
+                chain,
+                publicKey,
+                walletCore,
+              })
 
         if (chain === Chain.Bitcoin) {
           const dataBuffer = Buffer.from(data[0], 'base64')

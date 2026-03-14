@@ -1,14 +1,20 @@
 import { CoreViewState } from '../../../navigation/CoreView'
 
-type BaseStartKeysignPromptProps = Omit<
-  CoreViewState<'keysign'>,
-  'securityType' | 'keysignPayload'
+type BaseStartKeysignPromptProps = Partial<
+  Omit<CoreViewState<'keysign'>, 'securityType' | 'keysignPayload'>
 >
 
-export type StartKeysignPromptProps =
-  | BaseStartKeysignPromptProps
-  | (
-      | { disabledMessage: string }
-      | Pick<CoreViewState<'keysign'>, 'keysignPayload'>
-      | {}
-    )
+type StartKeysignPromptActionProps = {
+  disabledMessage?: string
+  keysignPayload?: CoreViewState<'keysign'>['keysignPayload']
+}
+
+type LabelProps = {
+  fastLabel?: string
+  secureLabel?: string
+  holdLabel?: string
+}
+
+export type StartKeysignPromptProps = BaseStartKeysignPromptProps &
+  StartKeysignPromptActionProps &
+  LabelProps

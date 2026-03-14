@@ -12,6 +12,17 @@ export class FromtDkgSession {
     takeMsg(): Uint8Array | undefined;
 }
 
+export class FromtKeyImageSession {
+    private constructor();
+    free(): void;
+    [Symbol.dispose](): void;
+    feed(msg: Uint8Array): boolean;
+    static fromSetup(setup_bytes: Uint8Array, my_party_name: string, key_share: Uint8Array): FromtKeyImageSession;
+    msgReceiver(msg: Uint8Array, index: number): string | undefined;
+    result(): Uint8Array;
+    takeMsg(): Uint8Array | undefined;
+}
+
 export class FromtKeyImportSession {
     private constructor();
     free(): void;
@@ -45,6 +56,14 @@ export class FromtSignSession {
     takeMsg(): Uint8Array | undefined;
 }
 
+export class KeyImagePart1Result {
+    private constructor();
+    free(): void;
+    [Symbol.dispose](): void;
+    readonly handle_id: number;
+    readonly partials: Uint8Array;
+}
+
 export class SpendPreprocessResult {
     private constructor();
     free(): void;
@@ -63,19 +82,30 @@ export class SpendSignResult {
 
 export function fromtDkgSetupMsgNew(max_signers: number, min_signers: number, parties_data: Uint8Array, network: number, birthday: bigint): Uint8Array;
 
+export function fromtKeyImageSetupMsgNew(parties_data: Uint8Array, outputs: Uint8Array): Uint8Array;
+
 export function fromtKeyImportSetupMsgNew(max_signers: number, min_signers: number, parties_data: Uint8Array, network: number, birthday: bigint, seed_holder_id: number, seed: Uint8Array, account_index: number): Uint8Array;
 
 export function fromtReshareSetupMsgNew(max_signers: number, min_signers: number, parties_data: Uint8Array, old_identifiers_data: Uint8Array, expected_vk: Uint8Array): Uint8Array;
 
 export function fromtSignSetupMsgNew(msg_to_sign: Uint8Array, parties_data: Uint8Array): Uint8Array;
 
-export function fromt_build_signable_tx(key_share: Uint8Array, recipient_address: string, amount: bigint, fee_per_weight: bigint, fee_mask: bigint, inputs_data: Uint8Array, decoys_data: Uint8Array): Uint8Array;
+export function fromt_build_signable_tx(key_share: Uint8Array, recipient: string, amount: bigint, fee_per_weight: bigint, fee_mask: bigint, inputs_data: Uint8Array, decoys_data: Uint8Array): Uint8Array;
+
+/**
+ * Check if an output belongs to us. Returns key_offset (32 bytes) if yes, empty vec if no.
+ */
+export function fromt_check_output(view_secret_key: Uint8Array, spend_pub_key: Uint8Array, tx_pub_key: Uint8Array, output_index: bigint, output_key: Uint8Array): Uint8Array;
 
 export function fromt_compute_key_image(key_offset: Uint8Array, output_key: Uint8Array, spend_key: Uint8Array): Uint8Array;
 
 export function fromt_decode_identifier(id_bytes: Uint8Array): number;
 
 export function fromt_derive_address(key_share: Uint8Array): string;
+
+export function fromt_derive_commitment_mask(view_secret_key: Uint8Array, tx_pub_key: Uint8Array, output_index: bigint): Uint8Array;
+
+export function fromt_derive_key_offset(view_secret_key: Uint8Array, tx_pub_key: Uint8Array, output_index: bigint): Uint8Array;
 
 export function fromt_derive_keys_from_seed(seed: Uint8Array): Uint8Array;
 
@@ -89,17 +119,27 @@ export function fromt_encode_identifier(id: number): Uint8Array;
 
 export function fromt_encode_map(entries: any): Uint8Array;
 
+export function fromt_filter_spent_outputs(outputs_data: Uint8Array, spent_flags: Uint8Array): Uint32Array;
+
 export function fromt_handle_free(handle_id: number): void;
+
+export function fromt_key_image_part1(key_share: Uint8Array, outputs: Uint8Array, signer_ids: Uint8Array): KeyImagePart1Result;
+
+export function fromt_key_image_part2(handle_id: number, r1_packages: Uint8Array): Uint8Array;
 
 export function fromt_keyshare_birthday(key_share: Uint8Array): bigint;
 
 export function fromt_keyshare_network(key_share: Uint8Array): number;
+
+export function fromt_outputs_for_key_image(outputs_data: Uint8Array): Uint8Array;
 
 export function fromt_spend_complete(handle_id: number, shares_map: Uint8Array): Uint8Array;
 
 export function fromt_spend_preprocess(key_share: Uint8Array, signable_tx: Uint8Array): SpendPreprocessResult;
 
 export function fromt_spend_sign(handle_id: number, preprocesses_map: Uint8Array): SpendSignResult;
+
+export function fromt_tx_hash(raw_tx: Uint8Array): Uint8Array;
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
 
@@ -129,22 +169,26 @@ export interface InitOutput {
     readonly fromtresharesession_takeMsg: (a: number) => any;
     readonly fromtresharesession_msgReceiver: (a: number, b: number, c: number, d: number) => [number, number];
     readonly fromtresharesession_result: (a: number) => [number, number, number];
+    readonly __wbg_fromtkeyimagesession_free: (a: number, b: number) => void;
+    readonly fromtkeyimagesession_fromSetup: (a: number, b: number, c: number, d: number, e: number, f: number) => [number, number, number];
+    readonly fromtkeyimagesession_feed: (a: number, b: number, c: number) => number;
+    readonly fromtkeyimagesession_takeMsg: (a: number) => any;
+    readonly fromtkeyimagesession_msgReceiver: (a: number, b: number, c: number, d: number) => [number, number];
+    readonly fromtkeyimagesession_result: (a: number) => [number, number, number];
     readonly fromtDkgSetupMsgNew: (a: number, b: number, c: number, d: number, e: number, f: bigint) => [number, number, number];
     readonly fromtSignSetupMsgNew: (a: number, b: number, c: number, d: number) => [number, number, number];
     readonly fromtReshareSetupMsgNew: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number) => [number, number, number];
     readonly fromtKeyImportSetupMsgNew: (a: number, b: number, c: number, d: number, e: number, f: bigint, g: number, h: number, i: number, j: number) => [number, number, number];
+    readonly fromtKeyImageSetupMsgNew: (a: number, b: number, c: number, d: number) => [number, number, number];
     readonly fromt_encode_identifier: (a: number) => [number, number, number, number];
     readonly fromt_decode_identifier: (a: number, b: number) => [number, number, number];
     readonly fromt_encode_map: (a: any) => [number, number, number, number];
-    readonly fromt_derive_keys_from_seed: (a: number, b: number) => [number, number, number, number];
-    readonly fromt_derive_view_key: (a: number, b: number) => [number, number, number, number];
-    readonly fromt_derive_spend_pub_key: (a: number, b: number) => [number, number, number, number];
-    readonly fromt_derive_address: (a: number, b: number) => [number, number, number, number];
-    readonly fromt_derive_subaddress: (a: number, b: number, c: number, d: number) => [number, number, number, number];
-    readonly fromt_compute_key_image: (a: number, b: number, c: number, d: number, e: number, f: number) => [number, number, number, number];
-    readonly fromt_keyshare_birthday: (a: number, b: number) => [bigint, number, number];
-    readonly fromt_keyshare_network: (a: number, b: number) => [number, number, number];
-    readonly fromt_handle_free: (a: number) => [number, number];
+    readonly __wbg_keyimagepart1result_free: (a: number, b: number) => void;
+    readonly keyimagepart1result_handle_id: (a: number) => number;
+    readonly keyimagepart1result_partials: (a: number) => [number, number];
+    readonly fromt_key_image_part1: (a: number, b: number, c: number, d: number, e: number, f: number) => [number, number, number];
+    readonly fromt_key_image_part2: (a: number, b: number, c: number) => [number, number, number, number];
+    readonly fromt_build_signable_tx: (a: number, b: number, c: number, d: number, e: bigint, f: bigint, g: bigint, h: number, i: number, j: number, k: number) => [number, number, number, number];
     readonly __wbg_spendpreprocessresult_free: (a: number, b: number) => void;
     readonly spendpreprocessresult_handle_id: (a: number) => number;
     readonly spendpreprocessresult_preprocess: (a: number) => [number, number];
@@ -153,8 +197,22 @@ export interface InitOutput {
     readonly spendsignresult_share: (a: number) => [number, number];
     readonly fromt_spend_sign: (a: number, b: number, c: number) => [number, number, number];
     readonly fromt_spend_complete: (a: number, b: number, c: number) => [number, number, number, number];
-    readonly fromt_build_signable_tx: (a: number, b: number, c: number, d: number, e: bigint, f: bigint, g: bigint, h: number, i: number, j: number, k: number) => [number, number, number, number];
+    readonly fromt_tx_hash: (a: number, b: number) => [number, number, number, number];
     readonly spendsignresult_handle_id: (a: number) => number;
+    readonly fromt_derive_keys_from_seed: (a: number, b: number) => [number, number, number, number];
+    readonly fromt_derive_view_key: (a: number, b: number) => [number, number, number, number];
+    readonly fromt_derive_spend_pub_key: (a: number, b: number) => [number, number, number, number];
+    readonly fromt_derive_address: (a: number, b: number) => [number, number, number, number];
+    readonly fromt_derive_subaddress: (a: number, b: number, c: number, d: number) => [number, number, number, number];
+    readonly fromt_compute_key_image: (a: number, b: number, c: number, d: number, e: number, f: number) => [number, number, number, number];
+    readonly fromt_derive_key_offset: (a: number, b: number, c: number, d: number, e: bigint) => [number, number, number, number];
+    readonly fromt_check_output: (a: number, b: number, c: number, d: number, e: number, f: number, g: bigint, h: number, i: number) => [number, number, number, number];
+    readonly fromt_outputs_for_key_image: (a: number, b: number) => [number, number, number, number];
+    readonly fromt_filter_spent_outputs: (a: number, b: number, c: number, d: number) => [number, number, number, number];
+    readonly fromt_derive_commitment_mask: (a: number, b: number, c: number, d: number, e: bigint) => [number, number, number, number];
+    readonly fromt_keyshare_birthday: (a: number, b: number) => [bigint, number, number];
+    readonly fromt_keyshare_network: (a: number, b: number) => [number, number, number];
+    readonly fromt_handle_free: (a: number) => [number, number];
     readonly __wbindgen_malloc: (a: number, b: number) => number;
     readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
     readonly __wbindgen_exn_store: (a: number) => void;

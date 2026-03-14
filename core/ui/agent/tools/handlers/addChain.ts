@@ -1,4 +1,6 @@
 import { Chain } from '@core/chain/Chain'
+import { getMoneroAddress } from '@core/chain/chains/monero/getMoneroAddress'
+import { ensureZcashSaplingScanState } from '@core/chain/chains/zcash/vaultSetup'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
@@ -36,15 +38,25 @@ export const handleAddChain: ToolHandler = async (input, context) => {
 
   const { walletCore, vault } = getWalletContext()
 
-  const publicKey = getPublicKey({
-    chain,
-    walletCore,
-    hexChainCode: vault.hexChainCode,
-    publicKeys: vault.publicKeys,
-    chainPublicKeys: vault.chainPublicKeys,
-  })
+  let address: string
+  if (chain === Chain.ZcashSapling) {
+    const setup = await ensureZcashSaplingScanState(vault)
+    address = setup.address
+  } else if (chain === Chain.Monero) {
+    const keyShare = vault.chainKeyShares?.[Chain.Monero]
+    if (!keyShare) throw new Error('Monero keyshare not found in vault')
+    address = await getMoneroAddress(keyShare)
+  } else {
+    const publicKey = getPublicKey({
+      chain,
+      walletCore,
+      hexChainCode: vault.hexChainCode,
+      publicKeys: vault.publicKeys,
+      chainPublicKeys: vault.chainPublicKeys,
+    })
+    address = deriveAddress({ chain, publicKey, walletCore })
+  }
 
-  const address = deriveAddress({ chain, publicKey, walletCore })
   const feeCoin = chainFeeCoin[chain]
 
   await storage.createCoin({

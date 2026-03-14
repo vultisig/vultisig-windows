@@ -11,12 +11,15 @@ import { parseFromtBundleResult } from '@core/mpc/fromt/fromtSession'
 import { createFromtImportSession } from '@core/mpc/fromt/fromtSessionFactory'
 import { mnemonicToMoneroSeed } from '@core/mpc/fromt/mnemonicToMoneroSeed'
 import {
+  isValidMoneroMnemonic,
+  moneroMnemonicToSpendKey,
+} from '@core/mpc/fromt/moneroMnemonic'
+import {
   parseFroztBundleResult,
   runFroztSession,
 } from '@core/mpc/frozt/froztSession'
 import { createFroztImportSession } from '@core/mpc/frozt/froztSessionFactory'
 import { mnemonicToSeed } from '@core/mpc/frozt/mnemonicToSeed'
-import { makeStepAdvancer } from '@core/mpc/keygen/KeygenStep'
 import {
   setKeygenComplete,
   waitForKeygenComplete,
@@ -54,11 +57,21 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
   const walletCore = useAssertWalletCore()
   const keyImportInput = useKeyImportInput()
 
-  const keygenAction: KeygenAction = async ({ onStepChange, signers }) => {
+  const keygenAction: KeygenAction = async ({
+    onStepStart,
+    onStepComplete,
+    signers,
+  }) => {
     const { mnemonic, chains } = keyImportInput
-    const advanceStep = makeStepAdvancer(onStepChange)
+    const hasFromt = chains.includes(Chain.Monero)
+    const hasFrozt = chains.includes(Chain.ZcashSapling)
+    const isBip39Mnemonic = walletCore.Mnemonic.isValid(mnemonic)
+    const isNativeMoneroMnemonic =
+      isInitiatingDevice && hasFromt && !isBip39Mnemonic
+        ? await isValidMoneroMnemonic(mnemonic)
+        : false
 
-    advanceStep('prepareVault')
+    onStepStart('prepareVault')
 
     const needsHdWallet =
       isInitiatingDevice && chains.some(c => !frostOnlyChains.includes(c))
@@ -67,11 +80,25 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
       typeof walletCore.HDWallet.createWithMnemonic
     > | null = null
     if (needsHdWallet) {
-      if (!walletCore.Mnemonic.isValid(mnemonic)) {
+      if (!isBip39Mnemonic) {
         throw new Error('Invalid mnemonic — cannot derive keys')
       }
       hdWallet = walletCore.HDWallet.createWithMnemonic(mnemonic, '')
     }
+
+    if (
+      isNativeMoneroMnemonic &&
+      chains.some(chain => chain !== Chain.Monero)
+    ) {
+      throw new Error(
+        'Native Monero mnemonic import is only supported for Monero-only vaults'
+      )
+    }
+
+    const nativeMoneroSpendKey =
+      isInitiatingDevice && isNativeMoneroMnemonic
+        ? await moneroMnemonicToSpendKey(mnemonic)
+        : null
 
     const sharedDklsParams = {
       isInitiateDevice: isInitiatingDevice,
@@ -96,9 +123,22 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
         rootEddsaPrivateKeyHex = Buffer.from(
           clampThenUniformScalar(eddsaMasterKeyData)
         ).toString('hex')
-      } else {
+      } else if (isBip39Mnemonic) {
         const bip39Seed = mnemonicToSeed(mnemonic)
         const master = HDKey.fromMasterSeed(bip39Seed)
+        rootEcdsaPrivateKeyHex = Buffer.from(master.privateKey!).toString('hex')
+        rootEddsaPrivateKeyHex = Buffer.from(
+          clampThenUniformScalar(master.privateKey!)
+        ).toString('hex')
+      } else if (nativeMoneroSpendKey) {
+        const master = HDKey.fromMasterSeed(nativeMoneroSpendKey)
+        rootEcdsaPrivateKeyHex = Buffer.from(master.privateKey!).toString('hex')
+        rootEddsaPrivateKeyHex = Buffer.from(
+          clampThenUniformScalar(master.privateKey!)
+        ).toString('hex')
+      } else {
+        const rawSeed = mnemonicToSeed(mnemonic)
+        const master = HDKey.fromMasterSeed(rawSeed)
         rootEcdsaPrivateKeyHex = Buffer.from(master.privateKey!).toString('hex')
         rootEddsaPrivateKeyHex = Buffer.from(
           clampThenUniformScalar(master.privateKey!)
@@ -131,15 +171,13 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
 
     const zcashBirthday = keyImportInput.zcashBirthday ?? 0
     const moneroBirthday = keyImportInput.moneroBirthday ?? 0
-    const hasFrozt = chains.includes(Chain.ZcashShielded)
-    const hasFromt = chains.includes(Chain.Monero)
 
     const froztSeed =
       isInitiatingDevice && hasFrozt
         ? mnemonicToSeed(mnemonic)
         : new Uint8Array()
     const fromtSeed =
-      isInitiatingDevice && hasFromt
+      isInitiatingDevice && hasFromt && !nativeMoneroSpendKey
         ? mnemonicToMoneroSeed(mnemonic)
         : new Uint8Array()
 
@@ -168,6 +206,7 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
           isInitiatingDevice,
           signers,
           seed: fromtSeed,
+          spendKey: nativeMoneroSpendKey ?? undefined,
           birthday: moneroBirthday,
         })
       : null
@@ -258,8 +297,6 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
       }
     }
 
-    const batchStart = Date.now()
-
     const chainGroupPromises = preparedGroups.map(
       async ({ groupId, algorithm, chainPrivateKeyHex, instance }) => {
         const result =
@@ -276,7 +313,7 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
                 groupId,
                 `p-${groupId}`
               )
-        advanceStep('chainKeys')
+        onStepComplete('chainKeys')
         return result
       }
     )
@@ -294,7 +331,7 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
           signers,
           hexEncryptionKey: encryptionKeyHex,
         }).then(r => {
-          advanceStep('frozt')
+          onStepComplete('frozt')
           return r
         })
       )
@@ -311,11 +348,18 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
           signers,
           hexEncryptionKey: encryptionKeyHex,
         }).then(r => {
-          advanceStep('fromt')
+          onStepComplete('fromt')
           return r
         })
       )
     }
+
+    onStepComplete('prepareVault')
+    onStepStart('ecdsa')
+    onStepStart('eddsa')
+    if (hasFrozt) onStepStart('frozt')
+    if (hasFromt) onStepStart('fromt')
+    if (preparedGroups.length > 0) onStepStart('chainKeys')
 
     const [rootEcdsaResult, rootEddsaResult, ...restResults] =
       await Promise.all([
@@ -327,7 +371,7 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
             'p-ecdsa'
           )
           .then(r => {
-            advanceStep('ecdsa')
+            onStepComplete('ecdsa')
             return r
           }),
         schnorrKeygen
@@ -338,16 +382,12 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
             'p-eddsa'
           )
           .then(r => {
-            advanceStep('eddsa')
+            onStepComplete('eddsa')
             return r
           }),
         ...frostPromises,
         ...chainGroupPromises,
       ])
-
-    console.log(
-      `[key-import] all protocols complete in ${Date.now() - batchStart}ms`
-    )
 
     const chainPublicKeys: Partial<Record<Chain, string>> = {}
     const chainKeyShares: Partial<Record<Chain, string>> = {}
@@ -358,8 +398,8 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
       const froztResult = parseFroztBundleResult(
         restResults[frostIdx++] as Uint8Array
       )
-      chainPublicKeys[Chain.ZcashShielded] = froztResult.pubKeyPackage
-      chainKeyShares[Chain.ZcashShielded] = froztResult.bundle
+      chainPublicKeys[Chain.ZcashSapling] = froztResult.pubKeyPackage
+      chainKeyShares[Chain.ZcashSapling] = froztResult.bundle
       saplingExtras = froztResult.saplingExtras || undefined
     }
     if (hasFromt) {
@@ -404,7 +444,7 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
       hexChainCode: rootEcdsaResult.chaincode,
       keyShares,
       localPartyId,
-      libType: 'DKLS' as MpcLib,
+      libType: 'KeyImport' as MpcLib,
       isBackedUp: false,
       order: getLastItemOrder(vaultOrders),
       lastPasswordVerificationTime: hasServer(signers) ? Date.now() : undefined,

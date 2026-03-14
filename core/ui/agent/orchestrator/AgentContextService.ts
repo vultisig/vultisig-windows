@@ -16,6 +16,7 @@ export type VaultData = {
   libType: string
   signers: string[]
   keyShares: Array<{ publicKey: string; keyShare: string }>
+  chainKeyShares?: Partial<Record<string, string>>
 }
 
 export type CoinData = {
@@ -141,6 +142,7 @@ export class AgentContextService {
         publicKey: ks.publicKey,
         keyShare: ks.keyShare,
       })),
+      chainKeyShares: vault.chainKeyShares,
     }
   }
 

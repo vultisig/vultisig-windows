@@ -7,13 +7,20 @@ import {
   signatureAlgorithms,
   signingAlgorithms,
 } from '@core/chain/signing/SignatureAlgorithm'
-import { isKeyImportVault, Vault } from '@core/mpc/vault/Vault'
+import { Vault } from '@core/mpc/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { base64Encode } from '@lib/utils/base64Encode'
 import { pick } from '@lib/utils/record/pick'
 import { recordFromKeys } from '@lib/utils/record/recordFromKeys'
 import { toEntries } from '@lib/utils/record/toEntries'
 import { convertDuration } from '@lib/utils/time/convertDuration'
 
+import { fromt_derive_spend_pub_key } from '../../../../lib/fromt/fromt_wasm'
+import {
+  frozt_keyshare_bundle_pub_key_package,
+  frozt_keyshare_bundle_sapling_extras,
+  frozt_pubkeypackage_verifying_key,
+} from '../../../../lib/frozt/frozt_wasm'
 import { hasServer } from '../../devices/localPartyId'
 import {
   Vault as CommVault,
@@ -22,6 +29,17 @@ import {
   VaultSchema,
 } from '../vultisig/vault/v1/vault_pb'
 import { fromLibType, toLibType } from './libType'
+
+type FroztBundleMetadata = {
+  pubKeyPackage: string
+  publicKey: string
+  saplingExtras: string
+}
+
+type FromtBundleMetadata = {
+  chainPublicKey: string
+  publicKey: string
+}
 
 const isoStringToProtoTimestamp = (timestamp: number): Timestamp => {
   const seconds = Math.floor(convertDuration(timestamp, 'ms', 's'))
@@ -33,8 +51,91 @@ const isoStringToProtoTimestamp = (timestamp: number): Timestamp => {
   return create(TimestampSchema, { seconds: BigInt(seconds), nanos })
 }
 
-export const toCommVault = (vault: Vault): CommVault =>
-  create(VaultSchema, {
+const decodeBase64 = (value: string): Uint8Array =>
+  new Uint8Array(Buffer.from(value, 'base64'))
+
+const encodeHex = (value: Uint8Array): string =>
+  Buffer.from(value).toString('hex')
+
+const getFroztBundleMetadata = (
+  bundleBase64: string
+): FroztBundleMetadata | undefined => {
+  try {
+    const bundle = decodeBase64(bundleBase64)
+    const pubKeyPackage = frozt_keyshare_bundle_pub_key_package(bundle)
+
+    return {
+      pubKeyPackage: base64Encode(pubKeyPackage),
+      publicKey: encodeHex(frozt_pubkeypackage_verifying_key(pubKeyPackage)),
+      saplingExtras: base64Encode(frozt_keyshare_bundle_sapling_extras(bundle)),
+    }
+  } catch {
+    return undefined
+  }
+}
+
+const getFromtBundleMetadata = (
+  bundleBase64: string
+): FromtBundleMetadata | undefined => {
+  try {
+    const publicKey = fromt_derive_spend_pub_key(decodeBase64(bundleBase64))
+
+    return {
+      chainPublicKey: base64Encode(publicKey),
+      publicKey: encodeHex(publicKey),
+    }
+  } catch {
+    return undefined
+  }
+}
+
+const getExportedChainPublicKey = ({
+  chain,
+  value,
+  froztMetadata,
+  fromtMetadata,
+}: {
+  chain: Chain
+  value: string
+  froztMetadata?: FroztBundleMetadata
+  fromtMetadata?: FromtBundleMetadata
+}): string => {
+  if (chain === Chain.ZcashSapling) {
+    return froztMetadata?.publicKey ?? value
+  }
+
+  if (chain === Chain.Monero) {
+    return fromtMetadata?.publicKey ?? value
+  }
+
+  return value
+}
+
+export const toCommVault = (vault: Vault): CommVault => {
+  const froztBundle = vault.chainKeyShares?.[Chain.ZcashSapling]
+  const froztMetadata = froztBundle
+    ? getFroztBundleMetadata(froztBundle)
+    : undefined
+
+  const fromtBundle = vault.chainKeyShares?.[Chain.Monero]
+  const fromtMetadata = fromtBundle
+    ? getFromtBundleMetadata(fromtBundle)
+    : undefined
+
+  const uniqueChainKeyShares = new Map<string, string>()
+  toEntries(vault.chainKeyShares ?? {}).forEach(({ key, value }) => {
+    const publicKey = getExportedChainPublicKey({
+      chain: key as Chain,
+      value: shouldBePresent(vault.chainPublicKeys?.[key as Chain]),
+      froztMetadata,
+      fromtMetadata,
+    })
+    if (!uniqueChainKeyShares.has(publicKey)) {
+      uniqueChainKeyShares.set(publicKey, value)
+    }
+  })
+
+  return create(VaultSchema, {
     ...pick(vault, [
       'name',
       'signers',
@@ -52,11 +153,12 @@ export const toCommVault = (vault: Vault): CommVault =>
           keyshare: value,
         })
       ),
-      ...toEntries(vault.chainKeyShares ?? {}).map(({ key, value }) =>
-        create(Vault_KeyShareSchema, {
-          publicKey: shouldBePresent(vault.chainPublicKeys?.[key as Chain]),
-          keyshare: value,
-        })
+      ...Array.from(uniqueChainKeyShares.entries()).map(
+        ([publicKey, keyshare]) =>
+          create(Vault_KeyShareSchema, {
+            publicKey,
+            keyshare,
+          })
       ),
       ...(vault.publicKeyMldsa && vault.keyShareMldsa
         ? [
@@ -70,29 +172,26 @@ export const toCommVault = (vault: Vault): CommVault =>
     publicKeyEcdsa: vault.publicKeys.ecdsa,
     publicKeyEddsa: vault.publicKeys.eddsa,
     publicKeyMldsa44: vault.publicKeyMldsa ?? '',
-    libType: toLibType({
-      libType: vault.libType,
-      isKeyImport: isKeyImportVault(vault),
-    }),
+    publicKeyFrozt: froztMetadata?.publicKey ?? '',
+    publicKeyFromt: fromtMetadata?.publicKey ?? '',
+    libType: toLibType(vault.libType),
     chainPublicKeys: [
-      ...toEntries(vault.chainPublicKeys ?? {}).map(({ key, value }) =>
-        create(Vault_ChainPublicKeySchema, {
-          publicKey: value,
+      ...toEntries(vault.chainPublicKeys ?? {}).map(({ key, value }) => {
+        const chain = key as Chain
+        return create(Vault_ChainPublicKeySchema, {
+          publicKey: getExportedChainPublicKey({
+            chain,
+            value,
+            froztMetadata,
+            fromtMetadata,
+          }),
           chain: key,
-          isEddsa: signatureAlgorithms[getChainKind(key as Chain)] === 'eddsa',
+          isEddsa: signatureAlgorithms[getChainKind(chain)] === 'eddsa',
         })
-      ),
-      ...(vault.saplingExtras
-        ? [
-            create(Vault_ChainPublicKeySchema, {
-              publicKey: vault.saplingExtras,
-              chain: 'SaplingExtras',
-              isEddsa: false,
-            }),
-          ]
-        : []),
+      }),
     ],
   })
+}
 
 export const fromCommVault = (vault: CommVault): Vault => {
   const publicKeys = {
@@ -101,7 +200,7 @@ export const fromCommVault = (vault: CommVault): Vault => {
   }
 
   const chainPublicKeys: Partial<Record<Chain, string>> = {}
-  const chainByPublicKey = new Map<string, Chain>()
+  const chainsByPublicKey = new Map<string, Chain[]>()
   let saplingExtras: string | undefined
 
   vault.chainPublicKeys.forEach(cp => {
@@ -111,7 +210,9 @@ export const fromCommVault = (vault: CommVault): Vault => {
     }
     const chain = cp.chain as Chain
     chainPublicKeys[chain] = cp.publicKey
-    chainByPublicKey.set(cp.publicKey, chain)
+    const chains = chainsByPublicKey.get(cp.publicKey) ?? []
+    chains.push(chain)
+    chainsByPublicKey.set(cp.publicKey, chains)
   })
 
   const keyShares = recordFromKeys(
@@ -131,12 +232,46 @@ export const fromCommVault = (vault: CommVault): Vault => {
   const keyShareMldsa = mldsaKeyShare?.keyshare
 
   const chainKeyShares: Partial<Record<Chain, string>> = {}
+  const keyShareByPublicKey = new Map<string, string>()
   vault.keyShares.forEach(keyShare => {
-    const chain = chainByPublicKey.get(keyShare.publicKey)
-    if (chain) {
+    keyShareByPublicKey.set(keyShare.publicKey, keyShare.keyshare)
+
+    const chains = chainsByPublicKey.get(keyShare.publicKey) ?? []
+    chains.forEach(chain => {
       chainKeyShares[chain] = keyShare.keyshare
-    }
+    })
   })
+
+  const froztKeyShare =
+    chainKeyShares[Chain.ZcashSapling] ??
+    (vault.publicKeyFrozt
+      ? keyShareByPublicKey.get(vault.publicKeyFrozt)
+      : undefined)
+
+  if (froztKeyShare) {
+    const froztMetadata = getFroztBundleMetadata(froztKeyShare)
+    if (froztMetadata) {
+      chainPublicKeys[Chain.ZcashSapling] = froztMetadata.pubKeyPackage
+      if (!saplingExtras) {
+        saplingExtras = froztMetadata.saplingExtras
+      }
+    }
+    chainKeyShares[Chain.ZcashSapling] = froztKeyShare
+  }
+
+  const fromtKeyShare =
+    chainKeyShares[Chain.Monero] ??
+    (vault.publicKeyFromt
+      ? keyShareByPublicKey.get(vault.publicKeyFromt)
+      : undefined)
+
+  if (fromtKeyShare) {
+    const fromtMetadata = getFromtBundleMetadata(fromtKeyShare)
+    if (fromtMetadata) {
+      chainPublicKeys[Chain.Monero] = fromtMetadata.chainPublicKey
+    }
+    chainKeyShares[Chain.Monero] = fromtKeyShare
+  }
 
   return {
     ...pick(vault, [

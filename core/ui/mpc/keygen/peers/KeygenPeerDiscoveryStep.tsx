@@ -55,6 +55,8 @@ const educationUrl: Record<KeygenType, string> = {
   keyimport: 'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault',
   addChainKeys:
     'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault',
+  singleKeygen:
+    'https://docs.vultisig.com/vultisig-user-actions/creating-a-vault',
 }
 
 export const KeygenPeerDiscoveryStep = ({
@@ -84,8 +86,10 @@ export const KeygenPeerDiscoveryStep = ({
     return 'reshare' in opertaionType && opertaionType.reshare === 'migrate'
   }, [opertaionType])
 
+  const isSingleKeygen = 'singleKeygen' in opertaionType
+
   const missingPeers = useMemo(() => {
-    if (isMigrate) {
+    if (isMigrate || isSingleKeygen) {
       const { signers } = getRecordUnionValue(keygenVault, 'existingVault')
       const requiredPeers = without(signers, localPartyId)
 
@@ -93,14 +97,14 @@ export const KeygenPeerDiscoveryStep = ({
     }
 
     return []
-  }, [keygenVault, isMigrate, localPartyId, selectedPeers])
+  }, [keygenVault, isMigrate, isSingleKeygen, localPartyId, selectedPeers])
 
   const devicesTarget = useMemo(() => {
     if (targetDeviceCount !== undefined) {
       return targetDeviceCount
     }
 
-    if (isMigrate) {
+    if (isMigrate || isSingleKeygen) {
       const { signers } = getRecordUnionValue(keygenVault, 'existingVault')
 
       return Math.max(signers.length, selectedPeers.length + 1)
@@ -114,13 +118,14 @@ export const KeygenPeerDiscoveryStep = ({
   }, [
     targetDeviceCount,
     isMigrate,
+    isSingleKeygen,
     keygenVault,
     peerOptionsQuery.data,
     selectedPeers.length,
   ])
 
   const isDisabled = useMemo(() => {
-    if (isMigrate && missingPeers.length > 0) {
+    if ((isMigrate || isSingleKeygen) && missingPeers.length > 0) {
       return `${t('missing_devices_for_migration')}: ${missingPeers.join(', ')}`
     }
 
@@ -145,16 +150,24 @@ export const KeygenPeerDiscoveryStep = ({
     if (!selectedPeers.length) {
       return t('select_n_devices', { count: 1 })
     }
-  }, [isMigrate, missingPeers, selectedPeers.length, t, targetDeviceCount])
+  }, [
+    isMigrate,
+    isSingleKeygen,
+    missingPeers,
+    selectedPeers.length,
+    t,
+    targetDeviceCount,
+  ])
 
   const showOptionalDevice = useMemo(() => {
-    if (isMigrate) return false
+    if (isMigrate || isSingleKeygen) return false
     if (targetDeviceCount !== undefined && targetDeviceCount <= 3) return false
 
     return true
-  }, [isMigrate, targetDeviceCount])
+  }, [isMigrate, isSingleKeygen, targetDeviceCount])
 
-  const isSecureTargetFlow = !isMigrate && targetDeviceCount !== undefined
+  const isSecureTargetFlow =
+    !isMigrate && !isSingleKeygen && targetDeviceCount !== undefined
   const missingDevicesCount =
     targetDeviceCount === undefined
       ? 0
@@ -230,9 +243,10 @@ export const KeygenPeerDiscoveryStep = ({
                     <MatchQuery
                       value={peerOptionsQuery}
                       success={peerOptions => {
-                        const placeholderCount = isMigrate
-                          ? missingPeers.length
-                          : Math.max(0, recommendedPeers - peerOptions.length)
+                        const placeholderCount =
+                          isMigrate || isSingleKeygen
+                            ? missingPeers.length
+                            : Math.max(0, recommendedPeers - peerOptions.length)
 
                         return (
                           <>
@@ -242,7 +256,7 @@ export const KeygenPeerDiscoveryStep = ({
                             {range(placeholderCount).map(index => {
                               return (
                                 <PeerPlaceholder key={index}>
-                                  {isMigrate
+                                  {isMigrate || isSingleKeygen
                                     ? t('scan_with_device_name', {
                                         name: parseLocalPartyId(
                                           missingPeers[index]

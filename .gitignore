@@ -85,6 +85,10 @@ vultisig-win
 clients/desktop/vite.config.ts.timestamp-*
 clients/desktop/vite.config.mts.timestamp-*
 
+# Generated monero-ts bundles (built via scripts/build-monero-bundle.mjs)
+clients/desktop/public/libs/monero-ts/
+clients/extension/public/libs/monero-ts/
+
 .envrc
 credentials.json
 

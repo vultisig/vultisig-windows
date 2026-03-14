@@ -9,6 +9,7 @@ type Input = {
   local_party_id: string
   encryption_password: string
   email: string
+  lib_type: number
   protocols: string[]
   chains: string[]
 }

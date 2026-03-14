@@ -7,13 +7,21 @@ import { useTranslation } from 'react-i18next'
 import { CoreViewState } from '../../navigation/CoreView'
 import { SecondaryActionWrapper } from '../components/PrimaryActions.styled'
 
-export const SendPrompt = (state: CoreViewState<'send'>) => {
+type SendPromptProps = CoreViewState<'send'> & {
+  disabledReason?: string
+}
+
+export const SendPrompt = ({ disabledReason, ...state }: SendPromptProps) => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
 
   return (
     <VStack alignItems="center" gap={8}>
       <SecondaryActionWrapper
+        data-testid="vault-action-send"
+        style={
+          disabledReason ? { opacity: 0.4, pointerEvents: 'none' } : undefined
+        }
         onClick={() =>
           navigate({
             id: 'send',
@@ -23,8 +31,14 @@ export const SendPrompt = (state: CoreViewState<'send'>) => {
       >
         <ArrowUpRightIcon />
       </SecondaryActionWrapper>
-      <Text color="shyExtra" size={12}>
-        {t('send')}
+      <Text
+        color="shyExtra"
+        size={12}
+        style={
+          disabledReason ? { textAlign: 'center', maxWidth: 80 } : undefined
+        }
+      >
+        {disabledReason ?? t('send')}
       </Text>
     </VStack>
   )

@@ -56,14 +56,9 @@ func NewStore() (*Store, error) {
 	// Construct the full path to the database file
 	dbFilePath := filepath.Join(exeDir, DbFileName)
 
-	db, err := sql.Open("sqlite3", dbFilePath+"?_journal_mode=WAL")
+	db, err := sql.Open("sqlite3", dbFilePath+"?_journal_mode=WAL&_foreign_keys=on")
 	if err != nil {
 		return nil, fmt.Errorf("fail to open sqlite db, err: %w", err)
-	}
-
-	_, err = db.Exec("PRAGMA foreign_keys = ON;")
-	if err != nil {
-		return nil, fmt.Errorf("could not enable foreign key constraints: %w", err)
 	}
 
 	return &Store{
@@ -103,32 +98,10 @@ func (s *Store) SaveVault(vault *Vault) error {
 		return fmt.Errorf("invalid vault, public key ecdsa is required")
 	}
 
-	buf, err := json.Marshal(vault.Signers)
+	signersBuf, err := json.Marshal(vault.Signers)
 	if err != nil {
 		return fmt.Errorf("could not marshal signers, err: %w", err)
 	}
-
-	columns := []string{
-		"name",
-		"public_key_ecdsa",
-		"public_key_eddsa",
-		"created_at",
-		"hex_chain_code",
-		"local_party_id",
-		"signers",
-		"reshare_prefix",
-		"\"order\"",
-		"is_backedup",
-		"folder_id",
-		"lib_type",
-		"last_password_verification_time",
-		"chain_public_keys",
-		"chain_key_shares",
-		"public_key_mldsa",
-	}
-	query := fmt.Sprintf(`INSERT OR REPLACE INTO vaults (%s) VALUES (%s)`,
-		strings.Join(columns, ", "),
-		generatePlaceholders(len(columns)))
 
 	var chainPublicKeys interface{}
 	if vault.ChainPublicKeys != nil {
@@ -148,26 +121,79 @@ func (s *Store) SaveVault(vault *Vault) error {
 		chainKeyShares = string(buf)
 	}
 
-	_, err = s.db.Exec(query,
-		vault.Name,
-		vault.PublicKeyECDSA,
-		vault.PublicKeyEdDSA,
-		vault.CreatedAt,
-		vault.HexChainCode,
-		vault.LocalPartyID,
-		string(buf),
-		vault.ResharePrefix,
-		vault.Order,
-		vault.IsBackedUp,
-		vault.FolderID,
-		vault.LibType,
-		vault.LastPasswordVerificationTime,
-		chainPublicKeys,
-		chainKeyShares,
-		vault.PublicKeyMLDSA,
-	)
+	var exists bool
+	err = s.db.QueryRow("SELECT EXISTS(SELECT 1 FROM vaults WHERE public_key_ecdsa = ?)", vault.PublicKeyECDSA).Scan(&exists)
 	if err != nil {
-		return fmt.Errorf("could not upsert vault, err: %w", err)
+		return fmt.Errorf("could not check vault existence, err: %w", err)
+	}
+
+	if exists {
+		query := `UPDATE vaults SET name = ?, public_key_eddsa = ?, created_at = ?, hex_chain_code = ?,
+			local_party_id = ?, signers = ?, reshare_prefix = ?, "order" = ?, is_backedup = ?,
+			folder_id = ?, lib_type = ?, last_password_verification_time = ?,
+			chain_public_keys = ?, chain_key_shares = ?, public_key_mldsa = ?
+			WHERE public_key_ecdsa = ?`
+		_, err = s.db.Exec(query,
+			vault.Name,
+			vault.PublicKeyEdDSA,
+			vault.CreatedAt,
+			vault.HexChainCode,
+			vault.LocalPartyID,
+			string(signersBuf),
+			vault.ResharePrefix,
+			vault.Order,
+			vault.IsBackedUp,
+			vault.FolderID,
+			vault.LibType,
+			vault.LastPasswordVerificationTime,
+			chainPublicKeys,
+			chainKeyShares,
+			vault.PublicKeyMLDSA,
+			vault.PublicKeyECDSA,
+		)
+	} else {
+		columns := []string{
+			"name",
+			"public_key_ecdsa",
+			"public_key_eddsa",
+			"created_at",
+			"hex_chain_code",
+			"local_party_id",
+			"signers",
+			"reshare_prefix",
+			"\"order\"",
+			"is_backedup",
+			"folder_id",
+			"lib_type",
+			"last_password_verification_time",
+			"chain_public_keys",
+			"chain_key_shares",
+			"public_key_mldsa",
+		}
+		query := fmt.Sprintf(`INSERT INTO vaults (%s) VALUES (%s)`,
+			strings.Join(columns, ", "),
+			generatePlaceholders(len(columns)))
+		_, err = s.db.Exec(query,
+			vault.Name,
+			vault.PublicKeyECDSA,
+			vault.PublicKeyEdDSA,
+			vault.CreatedAt,
+			vault.HexChainCode,
+			vault.LocalPartyID,
+			string(signersBuf),
+			vault.ResharePrefix,
+			vault.Order,
+			vault.IsBackedUp,
+			vault.FolderID,
+			vault.LibType,
+			vault.LastPasswordVerificationTime,
+			chainPublicKeys,
+			chainKeyShares,
+			vault.PublicKeyMLDSA,
+		)
+	}
+	if err != nil {
+		return fmt.Errorf("could not save vault, err: %w", err)
 	}
 
 	for _, keyShare := range vault.KeyShares {
@@ -356,12 +382,24 @@ func (s *Store) GetVaults() ([]*Vault, error) {
 	return vaults, nil
 }
 
-// DeleteVault deletes a vault and its coins
+// DeleteVault deletes a vault and all associated data
 func (s *Store) DeleteVault(publicKeyECDSA string) error {
-	if _, err := s.db.Exec("DELETE FROM coins WHERE public_key_ecdsa = ?", publicKeyECDSA); err != nil {
+	_, err := s.db.Exec("DELETE FROM zcash_scan_data WHERE public_key_ecdsa = ?", publicKeyECDSA)
+	if err != nil {
+		return fmt.Errorf("could not delete zcash scan data: %w", err)
+	}
+
+	_, err = s.db.Exec("DELETE FROM monero_scan_data WHERE public_key_ecdsa = ?", publicKeyECDSA)
+	if err != nil {
+		return fmt.Errorf("could not delete monero scan data: %w", err)
+	}
+
+	_, err = s.db.Exec("DELETE FROM coins WHERE public_key_ecdsa = ?", publicKeyECDSA)
+	if err != nil {
 		return fmt.Errorf("could not delete vault coins: %w", err)
 	}
-	_, err := s.db.Exec("DELETE FROM vaults WHERE public_key_ecdsa = ?", publicKeyECDSA)
+
+	_, err = s.db.Exec("DELETE FROM vaults WHERE public_key_ecdsa = ?", publicKeyECDSA)
 	return err
 }
 

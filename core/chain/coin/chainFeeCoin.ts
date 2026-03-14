@@ -194,7 +194,7 @@ const leanChainFeeCoin: Record<Chain, KnownCoinMetadata> = {
     decimals: 18,
     priceProviderId: 'sei-network',
   },
-  [Chain.ZcashShielded]: {
+  [Chain.ZcashSapling]: {
     ticker: 'ZEC',
     logo: 'zec-shielded',
     decimals: 8,

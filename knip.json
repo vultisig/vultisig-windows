@@ -32,9 +32,10 @@
     "babel-plugin-react-compiler",
     "@bufbuild/buf",
     "@bufbuild/protoc-gen-es",
+    "@vultisig/fromt-sdk",
+    "@vultisig/frozt-sdk",
     "fromt-wasm",
-    "frozt-wasm",
-    "monero-ts"
+    "frozt-wasm"
   ],
   "workspaces": {
     "clients/desktop": {

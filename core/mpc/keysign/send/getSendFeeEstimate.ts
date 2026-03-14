@@ -10,6 +10,6 @@ export const getSendFeeEstimate = async (
   return getFeeAmount({
     keysignPayload,
     walletCore: input.walletCore,
-    publicKey: input.publicKey,
+    publicKey: input.publicKey!,
   })
 }

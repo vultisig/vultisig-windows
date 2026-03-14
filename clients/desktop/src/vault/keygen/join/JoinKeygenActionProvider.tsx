@@ -4,6 +4,7 @@ import { AddChainKeysKeygenActionProvider } from '@core/ui/mpc/keygen/addChainKe
 import { CreateVaultKeygenActionProvider as DKLSCreateKeygenActionProvider } from '@core/ui/mpc/keygen/create/CreateVaultKeygenActionProvider'
 import { JoinKeyImportKeygenActionProvider } from '@core/ui/mpc/keygen/keyimport/JoinKeyImportKeygenActionProvider'
 import { ReshareVaultKeygenActionProvider as DKLSReshareKeygenActionProvider } from '@core/ui/mpc/keygen/reshare/ReshareVaultKeygenActionProvider'
+import { SingleKeygenActionProvider } from '@core/ui/mpc/keygen/singleKeygen/SingleKeygenActionProvider'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { Match } from '@lib/ui/base/Match'
 import { ChildrenProp } from '@lib/ui/props'
@@ -24,6 +25,11 @@ export const JoinKeygenActionProvider = ({ children }: ChildrenProp) => {
       <Match
         value={mpcLib}
         DKLS={() => (
+          <DKLSCreateKeygenActionProvider>
+            {children}
+          </DKLSCreateKeygenActionProvider>
+        )}
+        KeyImport={() => (
           <DKLSCreateKeygenActionProvider>
             {children}
           </DKLSCreateKeygenActionProvider>
@@ -56,6 +62,11 @@ export const JoinKeygenActionProvider = ({ children }: ChildrenProp) => {
                 {children}
               </DKLSReshareKeygenActionProvider>
             )}
+            KeyImport={() => (
+              <DKLSReshareKeygenActionProvider>
+                {children}
+              </DKLSReshareKeygenActionProvider>
+            )}
             GG20={() => (
               <GG20ReshareKeygenActionProvider>
                 {children}
@@ -74,6 +85,9 @@ export const JoinKeygenActionProvider = ({ children }: ChildrenProp) => {
       <AddChainKeysKeygenActionProvider>
         {children}
       </AddChainKeysKeygenActionProvider>
+    ),
+    singleKeygen: () => (
+      <SingleKeygenActionProvider>{children}</SingleKeygenActionProvider>
     ),
   })
 }

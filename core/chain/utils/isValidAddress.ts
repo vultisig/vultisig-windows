@@ -1,6 +1,9 @@
 import { Chain } from '@core/chain/Chain'
 import { isMoneroAddress } from '@core/chain/chains/monero/isMoneroAddress'
-import { isZcashShieldedAddress } from '@core/chain/chains/zcash/isZcashShieldedAddress'
+import {
+  isZcashSaplingAddress,
+  isZcashSaplingSpendAddress,
+} from '@core/chain/chains/zcash/isZcashSaplingAddress'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { WalletCore } from '@trustwallet/wallet-core'
 
@@ -15,9 +18,13 @@ export const isValidAddress = ({ chain, address, walletCore }: Input) => {
     return isMoneroAddress(address)
   }
 
-  if (chain === Chain.ZcashShielded || chain === Chain.Zcash) {
-    if (isZcashShieldedAddress(address)) return true
-    if (chain === Chain.ZcashShielded) return false
+  if (chain === Chain.ZcashSapling) {
+    if (isZcashSaplingSpendAddress(address)) return true
+    return false
+  }
+
+  if (chain === Chain.Zcash) {
+    if (isZcashSaplingAddress(address)) return true
   }
 
   const coinType = getCoinType({

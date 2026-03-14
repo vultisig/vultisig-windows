@@ -2,13 +2,20 @@ import { NavigationProvider } from '@clients/extension/src/navigation/Navigation
 import { views } from '@clients/extension/src/navigation/views'
 import { renderExtensionPage } from '@clients/extension/src/pages/core/render'
 import { isPopupView } from '@clients/extension/src/utils/functions'
+import { setMoneroScanStorage } from '@core/chain/chains/monero/moneroScanStorage'
+import { setZcashScanStorage } from '@core/chain/chains/zcash/zcashScanStorage'
 import { ExtensionCoreApp } from '@core/extension/ExtensionCoreApp'
+import { extensionMoneroScanStorage } from '@core/extension/storage/moneroScanStorage'
+import { extensionZcashScanStorage } from '@core/extension/storage/zcashScanStorage'
 import { useProcessAppError } from '@core/ui/errors/hooks/useProcessAppError'
 import { initialCoreView } from '@core/ui/navigation/CoreView'
 import { ActiveView } from '@lib/ui/navigation/ActiveView'
 import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { createGlobalStyle, css } from 'styled-components'
+
+setMoneroScanStorage(extensionMoneroScanStorage)
+setZcashScanStorage(extensionZcashScanStorage)
 
 const isPopup = isPopupView()
 

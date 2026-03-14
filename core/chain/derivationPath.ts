@@ -72,6 +72,6 @@ export const chainDerivationPath: Record<Chain, string> = {
   [Chain.Ripple]: "m/44'/144'/0'/0/0",
   [Chain.Tron]: "m/44'/195'/0'/0/0",
   [Chain.Cardano]: "m/1852'/1815'/0'/0/0",
-  [Chain.ZcashShielded]: "m/32'/133'/0'",
+  [Chain.ZcashSapling]: "m/32'/133'/0'",
   [Chain.Monero]: "m/44'/128'/0'/0/0",
 }

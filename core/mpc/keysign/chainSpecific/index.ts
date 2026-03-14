@@ -1,5 +1,6 @@
 import { create } from '@bufbuild/protobuf'
 import { Chain } from '@core/chain/Chain'
+import { getFeeEstimate } from '@core/chain/chains/monero/daemonRpc'
 import { UTXOSpecificSchema } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 
 import { getKeysignCoin } from '../utils/getKeysignCoin'
@@ -45,7 +46,7 @@ export const getChainSpecific = async (
   const { keysignPayload } = input
   const coin = getKeysignCoin(keysignPayload)
 
-  if (coin.chain === Chain.ZcashShielded || coin.chain === Chain.Monero) {
+  if (coin.chain === Chain.ZcashSapling) {
     return {
       case: 'utxoSpecific',
       value: create(UTXOSpecificSchema, {
@@ -53,6 +54,28 @@ export const getChainSpecific = async (
         byteFee: '1000',
       }),
     } as KeysignChainSpecific
+  }
+
+  if (coin.chain === Chain.Monero) {
+    try {
+      const typicalTxWeight = 1650
+      const feeEstimate = await getFeeEstimate()
+      const feePerWeight = BigInt(feeEstimate.fee)
+      const mask = BigInt(feeEstimate.quantization_mask)
+      const rawFee = feePerWeight * BigInt(typicalTxWeight)
+      const estimatedFee =
+        mask > 0n ? ((rawFee + mask - 1n) / mask) * mask : rawFee
+      return {
+        case: 'utxoSpecific',
+        value: create(UTXOSpecificSchema, {
+          sendMaxAmount: false,
+          byteFee: estimatedFee.toString(),
+        }),
+      } as KeysignChainSpecific
+    } catch (err) {
+      console.error(err)
+      throw err
+    }
   }
 
   const chainSpecificCase = chainSpecificRecord[coin.chain]

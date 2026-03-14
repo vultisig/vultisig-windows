@@ -1,4 +1,5 @@
 import { create } from '@bufbuild/protobuf'
+import { Chain } from '@core/chain/Chain'
 import { isChainOfKind } from '@core/chain/ChainKind'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { getCoinBalance } from '@core/chain/coin/balance'
@@ -20,10 +21,11 @@ export type BuildSendKeysignPayloadInput = {
   memo?: string
   vaultId: string
   localPartyId: string
-  publicKey: PublicKey
+  publicKey: PublicKey | null
   libType: KeysignLibType
   walletCore: WalletCore
   feeSettings?: FeeSettings
+  hexPublicKeyOverride?: string
 }
 
 export const buildSendKeysignPayload = async ({
@@ -37,11 +39,17 @@ export const buildSendKeysignPayload = async ({
   walletCore,
   libType,
   feeSettings,
+  hexPublicKeyOverride,
 }: BuildSendKeysignPayloadInput) => {
+  const hexPublicKey =
+    hexPublicKeyOverride ?? Buffer.from(publicKey!.data()).toString('hex')
+
+  const utxoInfo = await getKeysignUtxoInfo(coin)
+
   let keysignPayload = create(KeysignPayloadSchema, {
     coin: toCommCoin({
       ...coin,
-      hexPublicKey: Buffer.from(publicKey.data()).toString('hex'),
+      hexPublicKey,
     }),
     toAddress: receiver,
     toAmount: amount.toString(),
@@ -49,30 +57,37 @@ export const buildSendKeysignPayload = async ({
     vaultLocalPartyId: localPartyId,
     vaultPublicKeyEcdsa: vaultId,
     libType,
-    utxoInfo: await getKeysignUtxoInfo(coin),
+    utxoInfo,
   })
 
-  keysignPayload.blockchainSpecific = await getChainSpecific({
-    keysignPayload,
-    feeSettings,
-    walletCore,
-  })
+  try {
+    keysignPayload.blockchainSpecific = await getChainSpecific({
+      keysignPayload,
+      feeSettings,
+      walletCore,
+    })
+  } catch (err) {
+    console.error(err)
+    throw err
+  }
 
-  const balance = await getCoinBalance(coin)
+  if (coin.chain !== Chain.Monero) {
+    const balance = await getCoinBalance(coin)
 
-  keysignPayload = refineKeysignAmount({
-    keysignPayload,
-    walletCore,
-    publicKey,
-    balance,
-  })
-
-  if (isChainOfKind(coin.chain, 'utxo')) {
-    keysignPayload = refineKeysignUtxo({
+    keysignPayload = refineKeysignAmount({
       keysignPayload,
       walletCore,
-      publicKey,
+      publicKey: publicKey!,
+      balance,
     })
+
+    if (isChainOfKind(coin.chain, 'utxo')) {
+      keysignPayload = refineKeysignUtxo({
+        keysignPayload,
+        walletCore,
+        publicKey: publicKey!,
+      })
+    }
   }
 
   return keysignPayload

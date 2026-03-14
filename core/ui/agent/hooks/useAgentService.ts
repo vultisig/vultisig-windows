@@ -165,6 +165,7 @@ export const useAgentService = (): UseAgentServiceReturn => {
           hexChainCode: vault.hexChainCode,
           publicKeys: vault.publicKeys,
           chainPublicKeys: vault.chainPublicKeys,
+          chainKeyShares: vault.chainKeyShares,
           localPartyId: vault.localPartyId,
           libType: vault.libType,
           publicKeyEcdsa: vault.publicKeys.ecdsa,
@@ -180,44 +181,16 @@ export const useAgentService = (): UseAgentServiceReturn => {
       getVault: async (pubKey: string) => {
         const current = vaultRef.current
         if (current && getVaultId(current) === pubKey) {
-          return {
-            name: current.name,
-            publicKeyEcdsa: current.publicKeys.ecdsa,
-            publicKeyEddsa: current.publicKeys.eddsa,
-            hexChainCode: current.hexChainCode,
-            localPartyId: current.localPartyId,
-            resharePrefix: current.resharePrefix ?? '',
-            libType: current.libType,
-            signers: current.signers,
-            keyShares: [
-              {
-                publicKey: current.publicKeys.ecdsa,
-                keyShare: current.keyShares.ecdsa,
-              },
-              {
-                publicKey: current.publicKeys.eddsa,
-                keyShare: current.keyShares.eddsa,
-              },
-            ],
-          }
+          return toOrchestratorVaultData(current)
         }
         const vaults = await coreRef.current.getVaults()
         const v = vaults.find(v => getVaultId(v) === pubKey)
         if (!v) throw new Error('vault not found')
-        return {
-          name: v.name,
-          publicKeyEcdsa: v.publicKeys.ecdsa,
-          publicKeyEddsa: v.publicKeys.eddsa,
-          hexChainCode: v.hexChainCode,
-          localPartyId: v.localPartyId,
-          resharePrefix: v.resharePrefix ?? '',
-          libType: v.libType,
-          signers: v.signers,
-          keyShares: [
-            { publicKey: v.publicKeys.ecdsa, keyShare: v.keyShares.ecdsa },
-            { publicKey: v.publicKeys.eddsa, keyShare: v.keyShares.eddsa },
-          ],
-        }
+        return toOrchestratorVaultData(v)
+      },
+      getVaults: async () => {
+        const vaults = await coreRef.current.getVaults()
+        return vaults.map(toOrchestratorVaultData)
       },
       getVaultCoins: async (pubKey: string) => {
         const allCoins = await coreRef.current.getCoins()

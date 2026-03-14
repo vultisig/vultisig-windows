@@ -1,7 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { getMoneroAddress } from '@core/chain/chains/monero/getMoneroAddress'
-import { getZcashZAddress } from '@core/chain/chains/zcash/getZcashZAddress'
-import { getZcashScanStorage } from '@core/chain/chains/zcash/zcashScanStorage'
+import { ensureZcashSaplingScanState } from '@core/chain/chains/zcash/vaultSetup'
 import { AccountCoin, AccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { Coin } from '@core/chain/coin/Coin'
 import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
@@ -75,23 +74,9 @@ export const useCreateCoinMutation = () => {
 
     let address: string
 
-    if (coin.chain === Chain.ZcashShielded) {
-      const pubKeyPackage = shouldBePresent(
-        vault.chainPublicKeys?.[Chain.ZcashShielded],
-        'Frozt public key package'
-      )
-      address = await getZcashZAddress(pubKeyPackage, vault.saplingExtras ?? '')
-      await getZcashScanStorage().save({
-        zAddress: address,
-        publicKeyEcdsa: vault.publicKeys.ecdsa,
-        scanHeight: null,
-        scanTarget: null,
-        birthHeight: null,
-        birthdayScanDone: false,
-        pubKeyPackage,
-        saplingExtras: vault.saplingExtras ?? '',
-        notes: [],
-      })
+    if (coin.chain === Chain.ZcashSapling) {
+      const setup = await ensureZcashSaplingScanState(vault)
+      address = setup.address
     } else if (coin.chain === Chain.Monero) {
       const keyShare = shouldBePresent(
         vault.chainKeyShares?.[Chain.Monero],

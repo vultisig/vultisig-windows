@@ -7,6 +7,7 @@ import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { ComponentType, ReactNode } from 'react'
 
 import { ReshareVaultKeygenActionProvider } from '../reshare/ReshareVaultKeygenActionProvider'
+import { SingleKeygenActionProvider } from '../singleKeygen/SingleKeygenActionProvider'
 
 type KeygenActionWrapperProps = ChildrenProp & {
   CreateActionProvider?: ComponentType<ChildrenProp>
@@ -32,6 +33,9 @@ export const KeygenActionWrapper = ({
       <AddChainKeysKeygenActionProvider>
         {children}
       </AddChainKeysKeygenActionProvider>
+    ),
+    singleKeygen: () => (
+      <SingleKeygenActionProvider>{children}</SingleKeygenActionProvider>
     ),
   })
 }

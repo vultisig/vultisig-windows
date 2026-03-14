@@ -1,4 +1,6 @@
 import { Chain } from '@core/chain/Chain'
+import { getMoneroAddress } from '@core/chain/chains/monero/getMoneroAddress'
+import { ensureZcashSaplingScanState } from '@core/chain/chains/zcash/vaultSetup'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
@@ -70,18 +72,42 @@ export const UpdateVaultStep = ({
       mutate({ vaultId, fields })
 
       const coins = await Promise.all(
-        chainsToAdd.map(async chain => {
-          const publicKey = getPublicKey({
-            chain,
-            walletCore,
-            hexChainCode: vault.hexChainCode,
-            publicKeys: vault.publicKeys,
-            chainPublicKeys: vault.chainPublicKeys,
+        chainsToAdd
+          .filter(
+            chain => chain !== Chain.ZcashSapling && chain !== Chain.Monero
+          )
+          .map(async chain => {
+            const publicKey = getPublicKey({
+              chain,
+              walletCore,
+              hexChainCode: vault.hexChainCode,
+              publicKeys: vault.publicKeys,
+              chainPublicKeys: vault.chainPublicKeys,
+            })
+            const address = deriveAddress({ chain, publicKey, walletCore })
+            return { ...chainFeeCoin[chain], address }
           })
-          const address = deriveAddress({ chain, publicKey, walletCore })
-          return { ...chainFeeCoin[chain], address }
-        })
       )
+
+      if (chainsToAdd.includes(Chain.ZcashSapling)) {
+        const { address } = await ensureZcashSaplingScanState(vault)
+        coins.push({
+          ...chainFeeCoin[Chain.ZcashSapling],
+          address,
+        })
+      }
+
+      if (chainsToAdd.includes(Chain.Monero)) {
+        const keyShare = shouldBePresent(
+          vault.chainKeyShares?.[Chain.Monero],
+          'Fromt key share'
+        )
+        const address = await getMoneroAddress(keyShare)
+        coins.push({
+          ...chainFeeCoin[Chain.Monero],
+          address,
+        })
+      }
 
       await createCoins({ vaultId, coins })
     }

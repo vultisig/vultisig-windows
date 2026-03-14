@@ -3,6 +3,7 @@ import { chainGroups, groupedChainSet } from '@core/chain/chainGroups'
 import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { Coin } from '@core/chain/coin/Coin'
+import { frostOnlyChains } from '@core/chain/froztChains'
 import { getDerivationPathStub } from '@core/chain/publicKey/getDerivationPathStub'
 import { getChainKeyGroup } from '@core/chain/signing/getChainKeyGroup'
 import {
@@ -182,7 +183,9 @@ export const ManageVaultChainsPage = () => {
       isSelected={draftSelectedChains.has(coin.chain)}
       onToggle={() => toggleDraft(coin.chain)}
       derivationPath={
-        isKeyImport ? getDerivationPathStub(coin.chain, walletCore) : undefined
+        isKeyImport && !frostOnlyChains.includes(coin.chain)
+          ? getDerivationPathStub(coin.chain, walletCore)
+          : undefined
       }
     />
   )
@@ -211,7 +214,11 @@ export const ManageVaultChainsPage = () => {
             description={saveError}
           />
         )}
-        <SearchInput value={search} onChange={setSearch} />
+        <SearchInput
+          value={search}
+          onChange={setSearch}
+          data-testid="chain-search-input"
+        />
         {hasAnyVisibleSection ? (
           vaultKeyGroups.map(keyGroup => {
             const allCoins = coinsByKeyGroup[keyGroup]

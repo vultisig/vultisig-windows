@@ -75,7 +75,7 @@ export enum OtherChain {
   Ripple = 'Ripple',
   Tron = 'Tron',
   Cardano = 'Cardano',
-  ZcashShielded = 'ZcashShielded',
+  ZcashSapling = 'ZcashSapling',
   Monero = 'Monero',
 }
 

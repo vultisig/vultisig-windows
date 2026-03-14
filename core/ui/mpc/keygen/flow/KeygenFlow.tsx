@@ -18,8 +18,16 @@ import { match } from '@lib/utils/match'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { KeygenFlowEnding } from './KeygenFlowEnding'
+
+const PendingWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+`
 
 type KeygenFlowProps = OnBackProp &
   Partial<OnFinishProp> & {
@@ -36,6 +44,7 @@ export const KeygenFlow = ({
 }: KeygenFlowProps) => {
   const {
     step,
+    protocolStatuses,
     mutate: startKeygen,
     ...keygenMutationState
   } = useKeygenMutation()
@@ -55,6 +64,7 @@ export const KeygenFlow = ({
       }),
     keyimport: () => t('import_key'),
     addChainKeys: () => t('generating_keys'),
+    singleKeygen: () => t('post_quantum_keygen'),
   })
 
   const isPluginReshare = useMemo(() => {
@@ -125,6 +135,7 @@ export const KeygenFlow = ({
                 reshare: renderEnding,
                 keyimport: renderEnding,
                 addChainKeys: renderAddChainKeysEnding,
+                singleKeygen: renderEnding,
               }}
             />
           </CurrentVaultProvider>
@@ -143,7 +154,7 @@ export const KeygenFlow = ({
         </>
       )}
       pending={() => (
-        <>
+        <PendingWrapper>
           {!isPluginReshare && !isCreateOperation && !isAddChainKeys && (
             <PageHeader
               title={title}
@@ -151,8 +162,13 @@ export const KeygenFlow = ({
               primaryControls={<PageHeaderBackButton />}
             />
           )}
-          {!isPluginReshare && <KeygenPendingState value={step} />}
-        </>
+          {!isPluginReshare && (
+            <KeygenPendingState
+              value={step}
+              protocolStatuses={protocolStatuses}
+            />
+          )}
+        </PendingWrapper>
       )}
     />
   )

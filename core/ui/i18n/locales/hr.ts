@@ -1258,4 +1258,5 @@ export const hr = {
   agent_tx_type_swap: 'Zamjena',
   agent_tx_type_transfer: 'Prijenos',
   agent_tx_view: 'Pogled',
+  zcash_notes_found: 'Notes Found',
 }

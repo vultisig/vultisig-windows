@@ -1,14 +1,16 @@
 import { banxaSupportedChains } from '@core/chain/banxa'
 import { Chain } from '@core/chain/Chain'
+import { getMoneroVaultData } from '@core/chain/chains/monero/moneroVaultData'
+import { getZcashVaultData } from '@core/chain/chains/zcash/zcashVaultData'
 import { CoinKey, extractCoinKey } from '@core/chain/coin/Coin'
 import { SendPrompt } from '@core/ui/vault/send/SendPrompt'
-import { Opener } from '@lib/ui/base/Opener'
 import { isOneOf } from '@lib/utils/array/isOneOf'
-import { useCallback, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { MoneroSyncModal } from '../../chain/moneroSync/MoneroSyncModal'
+import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { MoneroSyncPrompt } from '../../chain/moneroSync/MoneroSyncPrompt'
-import { ZcashSyncModal } from '../../chain/zcashSync/ZcashSyncModal'
+import { useMoneroBalanceScanStatus } from '../../chain/moneroSync/useMoneroBalanceScanStatus'
+import { useZcashBalanceScanStatus } from '../../chain/zcashSync/useZcashBalanceScanStatus'
 import { ZcashSyncPrompt } from '../../chain/zcashSync/ZcashSyncPrompt'
 import { depositEnabledChains } from '../../deposit/DepositEnabledChain'
 import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
@@ -30,54 +32,70 @@ export const VaultPrimaryActions = ({
   onReceive,
   showDepositAction = true,
 }: VaultPrimaryActionsProps) => {
+  const { t } = useTranslation()
   const coins = useCurrentVaultCoins()
   const swapEnabledChainsForVault = useSwapEnabledChainsForVault()
+  const navigate = useCoreNavigate()
 
-  const sendCoin = useMemo(
-    () => potentialCoin || coins[0],
-    [coins, potentialCoin]
-  )
+  const sendCoin = potentialCoin || coins[0]
 
-  const isZcashShielded = potentialCoin?.chain === Chain.ZcashShielded
+  const isZcashSapling = potentialCoin?.chain === Chain.ZcashSapling
   const isMonero = potentialCoin?.chain === Chain.Monero
 
-  const getCoin = useCallback(
-    (supportedChains: readonly Chain[]) => {
-      const coin = (potentialCoin ? [potentialCoin] : coins).find(coin =>
-        isOneOf(coin.chain, supportedChains)
-      )
+  const getCoin = (supportedChains: readonly Chain[]) => {
+    const coin = (potentialCoin ? [potentialCoin] : coins).find(coin =>
+      isOneOf(coin.chain, supportedChains)
+    )
+    if (coin) {
+      return extractCoinKey(coin)
+    }
+  }
 
-      if (coin) {
-        return extractCoinKey(coin)
-      }
-    },
-    [coins, potentialCoin]
-  )
+  const swapCoin = getCoin(swapEnabledChainsForVault)
+  const buyCoin = getCoin(banxaSupportedChains)
+  const depositCoin = getCoin(depositEnabledChains)
 
-  const swapCoin = useMemo(
-    () => getCoin(swapEnabledChainsForVault),
-    [getCoin, swapEnabledChainsForVault]
-  )
-  const buyCoin = useMemo(() => getCoin(banxaSupportedChains), [getCoin])
-  const depositCoin = useMemo(() => getCoin(depositEnabledChains), [getCoin])
+  const moneroVaultData = getMoneroVaultData()
+  const zcashVaultData = getZcashVaultData()
+
+  const {
+    confirmingOutputs: moneroConfirming,
+    confirmationsRemaining: moneroRemaining,
+  } = useMoneroBalanceScanStatus({
+    publicKeyEcdsa: isMonero ? moneroVaultData?.publicKeyEcdsa : undefined,
+  })
+
+  const {
+    confirmingNotes: zcashConfirming,
+    confirmationsRemaining: zcashRemaining,
+  } = useZcashBalanceScanStatus({
+    publicKeyEcdsa: isZcashSapling ? zcashVaultData?.publicKeyEcdsa : undefined,
+  })
+
+  let sendDisabledReason: string | undefined
+  if (isMonero && moneroConfirming.length > 0) {
+    sendDisabledReason = t('send_disabled_confirming', {
+      count: moneroRemaining,
+    })
+  } else if (isZcashSapling && zcashConfirming.length > 0) {
+    sendDisabledReason = t('send_disabled_confirming', {
+      count: zcashRemaining,
+    })
+  }
 
   return (
     <ActionsWrapper justifyContent="center" gap={20}>
       {swapCoin && <SwapPrompt fromCoin={swapCoin} />}
-      <SendPrompt coin={sendCoin} />
+      <SendPrompt coin={sendCoin} disabledReason={sendDisabledReason} />
       {buyCoin && <BuyPrompt coin={buyCoin} />}
       {onReceive && <ReceivePrompt onClick={onReceive} />}
       {showDepositAction && depositCoin && <DepositPrompt coin={depositCoin} />}
-      {isZcashShielded && (
-        <Opener
-          renderOpener={({ onOpen }) => <ZcashSyncPrompt onClick={onOpen} />}
-          renderContent={({ onClose }) => <ZcashSyncModal onClose={onClose} />}
-        />
+      {isZcashSapling && (
+        <ZcashSyncPrompt onClick={() => navigate({ id: 'zcashBalanceScan' })} />
       )}
       {isMonero && (
-        <Opener
-          renderOpener={({ onOpen }) => <MoneroSyncPrompt onClick={onOpen} />}
-          renderContent={({ onClose }) => <MoneroSyncModal onClose={onClose} />}
+        <MoneroSyncPrompt
+          onClick={() => navigate({ id: 'moneroBalanceFinalise' })}
         />
       )}
     </ActionsWrapper>

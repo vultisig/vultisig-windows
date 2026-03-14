@@ -113,6 +113,9 @@ const getGoHttpPost = (): GoPostFn | null => {
   return null
 }
 
+export const isLightwalletdTransportAvailable = (): boolean =>
+  getGoHttpPost() !== null || typeof fetch === 'function'
+
 const grpcWebFetchViaGo = async (
   goPost: GoPostFn,
   url: string,
@@ -210,7 +213,7 @@ export const grpcWebUnaryWithFallback = async (
     } catch (err) {
       lastError = err instanceof Error ? err : new Error(String(err))
       console.warn(
-        `lightwalletd ${input.baseUrl}/${input.method} failed:`,
+        `Lightwalletd ${input.baseUrl}/${input.method} failed:`,
         lastError.message
       )
     }
@@ -241,7 +244,7 @@ export const grpcWebServerStreamWithFallback = async (
     } catch (err) {
       lastError = err instanceof Error ? err : new Error(String(err))
       console.warn(
-        `lightwalletd ${input.baseUrl}/${input.method} failed:`,
+        `Lightwalletd ${input.baseUrl}/${input.method} failed:`,
         lastError.message
       )
     }

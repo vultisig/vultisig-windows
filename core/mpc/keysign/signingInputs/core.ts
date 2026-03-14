@@ -12,7 +12,7 @@ export const signingInputClasses = {
   ton: TW.TheOpenNetwork.Proto.SigningInput,
   tron: TW.Tron.Proto.SigningInput,
   utxo: TW.Bitcoin.Proto.SigningInput,
-  zcashShielded: TW.Bitcoin.Proto.SigningInput,
+  zcashSapling: TW.Bitcoin.Proto.SigningInput,
   monero: TW.Bitcoin.Proto.SigningInput,
 } as const satisfies Record<ChainKind, unknown>
 

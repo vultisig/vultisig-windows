@@ -1,5 +1,7 @@
 import { KeygenStep } from '@core/mpc/keygen/KeygenStep'
 import { KeygenLoadingAnimation } from '@core/ui/mpc/keygen/progress/KeygenLoadingAnimation'
+import { KeygenProtocolStatusList } from '@core/ui/mpc/keygen/progress/KeygenProtocolStatusList'
+import { ProtocolStatuses } from '@core/ui/mpc/keygen/state/keygenAction'
 import { ValueProp } from '@lib/ui/props'
 import styled from 'styled-components'
 
@@ -26,7 +28,23 @@ const getProgress = (step: KeygenStep | null): number => {
   return progressValues[step] ?? 0
 }
 
-export const KeygenPendingState = ({ value }: ValueProp<KeygenStep | null>) => {
+const StatusListWrapper = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding-bottom: 24px;
+  z-index: 1;
+`
+
+type KeygenPendingStateProps = ValueProp<KeygenStep | null> & {
+  protocolStatuses: ProtocolStatuses
+}
+
+export const KeygenPendingState = ({
+  value,
+  protocolStatuses,
+}: KeygenPendingStateProps) => {
   const progress = getProgress(value)
 
   return (
@@ -35,6 +53,9 @@ export const KeygenPendingState = ({ value }: ValueProp<KeygenStep | null>) => {
         isConnected={value !== null}
         progress={progress}
       />
+      <StatusListWrapper>
+        <KeygenProtocolStatusList protocols={protocolStatuses} />
+      </StatusListWrapper>
     </Container>
   )
 }

@@ -1,6 +1,7 @@
 export type SaplingNote = {
   txid: string
   outputIndex: number
+  height?: number
   value: number
   rcm: string
   cmu: string

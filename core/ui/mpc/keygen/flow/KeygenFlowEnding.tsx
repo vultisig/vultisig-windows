@@ -45,6 +45,7 @@ export const KeygenFlowEnding = ({
             ),
             keyimport: () => <KeygenFlowSuccess />,
             addChainKeys: () => <KeygenFlowSuccess />,
+            singleKeygen: () => <KeygenFlowSuccess />,
           }}
         />
       )}

@@ -130,10 +130,10 @@ export const FastVaultStartKeysignPrompt = (props: StartKeysignPromptProps) => {
         color="shy"
         style={{ textAlign: 'center', width: '100%' }}
       >
-        {t('hold_for_paired_sign')}
+        {props.holdLabel ?? t('hold_for_paired_sign')}
       </Text>
       <Container {...buttonProps}>
-        {t('fast_sign')}
+        {props.fastLabel ?? t('fast_sign')}
         {startPressingAt && <Fill />}
       </Container>
       <FastVaultPasswordModal

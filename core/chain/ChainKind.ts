@@ -39,7 +39,7 @@ const chainKindRecord = {
   [OtherChain.Ripple]: 'ripple',
   [OtherChain.Tron]: 'tron',
   [OtherChain.Cardano]: 'cardano',
-  [OtherChain.ZcashShielded]: 'zcashShielded',
+  [OtherChain.ZcashSapling]: 'zcashSapling',
   [OtherChain.Monero]: 'monero',
 } as const
 

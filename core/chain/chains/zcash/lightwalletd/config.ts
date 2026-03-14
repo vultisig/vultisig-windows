@@ -1,4 +1,5 @@
 export const zcashLightwalletdUrls = [
+  'https://zcash-mainnet.chainsafe.dev',
   'https://zec.rocks:443',
   'https://mainnet.lightwalletd.com:9067',
   'https://lightwalletd.electriccoin.co:9067',
