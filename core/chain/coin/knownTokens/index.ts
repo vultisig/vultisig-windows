@@ -26,6 +26,56 @@ export const usdc: Token<CoinKey> & KnownCoinMetadata = {
 }
 
 const leanTokens: Partial<LeanChainTokensRecord> = {
+  [Chain.Ton]: {
+    EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs: {
+      ticker: 'USDT',
+      logo: 'usdt',
+      decimals: 6,
+      priceProviderId: 'tether',
+    },
+    EQAvlWFDxGF2lXm67y4yzC17wYKD9A0guwPkMs1gOsM__NOT: {
+      ticker: 'NOT',
+      logo: 'https://cdn.joincommunity.xyz/clicker/not_logo.png',
+      decimals: 9,
+      priceProviderId: 'notcoin',
+    },
+    EQCvxJy4eG8hyHBFsZ7eePxrRsUQSFE_jpptRAYBmcG_DOGS: {
+      ticker: 'DOGS',
+      logo: 'dogs',
+      decimals: 9,
+      priceProviderId: 'dogs-2',
+    },
+    'EQD-cvR0Nz6XAyRBvbhz-abTrRC6sI5tvHvvpeQraV9UAAD7': {
+      ticker: 'CATI',
+      logo: 'https://catizen.ai/CATI_TOKEN.png',
+      decimals: 9,
+      priceProviderId: 'catizen',
+    },
+    'EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo': {
+      ticker: 'HMSTR',
+      logo: 'hmstr',
+      decimals: 9,
+      priceProviderId: 'hamster-kombat',
+    },
+    EQA2kCVNwVsil2EM2mB0SkXytxCqQjS4mttjDpnXmwG9T6bO: {
+      ticker: 'STON',
+      logo: 'https://static.ston.fi/logo/ston_symbol.png',
+      decimals: 9,
+      priceProviderId: 'ston-2',
+    },
+    'EQDNhy-nxYFgUqzfUzImBEP67JqsyMIcyk2S5_RwNNEYku0k': {
+      ticker: 'stTON',
+      logo: 'https://storage.googleapis.com/milkcreek/tokens/stTON.png',
+      decimals: 9,
+      priceProviderId: 'bemo-staked-ton',
+    },
+    EQC98_qAmNEptUtPc7W6xdHh_ZHrBUFpw5Ft_IzNU20QAJav: {
+      ticker: 'tsTON',
+      logo: 'https://tonstakers.com/jetton/logo.svg',
+      decimals: 9,
+      priceProviderId: 'tonstakers',
+    },
+  },
   [Chain.Tron]: {
     TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t: {
       ticker: 'USDT',

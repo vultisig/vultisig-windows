@@ -1,6 +1,8 @@
 import { rootApiUrl } from '@core/config'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
+import { tonAddressToRaw } from './address'
+
 const tonApiUrl = `${rootApiUrl}/ton`
 
 type JettonWalletResponse = {
@@ -17,15 +19,29 @@ type JettonWalletResponse = {
   >
 }
 
-export const getJettonWalletAddress = async ({
-  ownerAddress,
-  jettonMasterAddress,
-}: {
+type GetJettonWalletInput = {
   ownerAddress: string
   jettonMasterAddress: string
-}): Promise<string> => {
-  const url = `${tonApiUrl}/v3/jetton/wallets?owner_address=${ownerAddress}&jetton_master_address=${jettonMasterAddress}`
-  const response = await queryUrl<JettonWalletResponse>(url)
+}
+
+/** Builds the toncenter v3 jetton wallets query URL, converting addresses to raw format. */
+const getJettonWalletsUrl = ({
+  ownerAddress,
+  jettonMasterAddress,
+}: GetJettonWalletInput): string => {
+  const rawOwner = tonAddressToRaw(ownerAddress)
+  const rawMaster = tonAddressToRaw(jettonMasterAddress)
+
+  return `${tonApiUrl}/v3/jetton/wallets?owner_address=${rawOwner}&jetton_address=${rawMaster}`
+}
+
+/** Resolves the user-friendly jetton wallet address for a given owner and jetton master. */
+export const getJettonWalletAddress = async (
+  input: GetJettonWalletInput
+): Promise<string> => {
+  const response = await queryUrl<JettonWalletResponse>(
+    getJettonWalletsUrl(input)
+  )
 
   const jettonAddress = response.jetton_wallets[0]?.address
   if (!jettonAddress) {
@@ -34,6 +50,18 @@ export const getJettonWalletAddress = async ({
 
   const addressEntry = response.address_book[jettonAddress]
   return addressEntry?.user_friendly || jettonAddress
+}
+
+/** Fetches the balance of a specific jetton for a given owner address. */
+export const getJettonBalance = async (
+  input: GetJettonWalletInput
+): Promise<bigint> => {
+  const response = await queryUrl<JettonWalletResponse>(
+    getJettonWalletsUrl(input)
+  )
+
+  const balance = response.jetton_wallets[0]?.balance
+  return BigInt(balance ?? 0)
 }
 
 type AddressInformationResponse = {
