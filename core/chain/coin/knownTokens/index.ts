@@ -35,7 +35,7 @@ const leanTokens: Partial<LeanChainTokensRecord> = {
     },
     EQAvlWFDxGF2lXm67y4yzC17wYKD9A0guwPkMs1gOsM__NOT: {
       ticker: 'NOT',
-      logo: 'https://cdn.joincommunity.xyz/clicker/not_logo.png',
+      logo: 'not',
       decimals: 9,
       priceProviderId: 'notcoin',
     },
