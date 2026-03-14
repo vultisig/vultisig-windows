@@ -33,9 +33,10 @@ export const SetupVaultOverviewPage = () => {
         )
       : null
 
-  const { data: vaultExistsOnServer } = useVaultExistsOnServerQuery({
-    ecdsaPublicKey,
-  })
+  const { data: vaultExistsOnServer, isLoading: isCheckingVault } =
+    useVaultExistsOnServerQuery({
+      ecdsaPublicKey,
+    })
 
   useEffect(() => {
     if (selectedDeviceCount === undefined) {
@@ -56,6 +57,9 @@ export const SetupVaultOverviewPage = () => {
 
   const handleGetStarted = () => {
     if (isFastVault) {
+      if (ecdsaPublicKey && isCheckingVault) {
+        return
+      }
       if (vaultExistsOnServer) {
         setShowWarning(true)
         return
