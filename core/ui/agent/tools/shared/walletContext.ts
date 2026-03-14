@@ -7,6 +7,7 @@ type WalletContextVault = {
   hexChainCode: string
   publicKeys: PublicKeys
   chainPublicKeys?: Partial<Record<Chain, string>>
+  chainKeyShares?: Partial<Record<Chain, string>>
   localPartyId: string
   libType: MpcLib
   publicKeyEcdsa: string

@@ -1186,4 +1186,5 @@ export const zh = {
   agent_tx_type_swap: '交换',
   agent_tx_type_transfer: '转移',
   agent_tx_view: '看法',
+  zcash_notes_found: 'Notes Found',
 }

@@ -1278,4 +1278,5 @@ export const es = {
   agent_tx_type_swap: 'Intercambio',
   agent_tx_type_transfer: 'Transferir',
   agent_tx_view: 'Vista',
+  zcash_notes_found: 'Notes Found',
 }

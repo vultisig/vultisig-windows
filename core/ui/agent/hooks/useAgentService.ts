@@ -165,6 +165,7 @@ export const useAgentService = (): UseAgentServiceReturn => {
           hexChainCode: vault.hexChainCode,
           publicKeys: vault.publicKeys,
           chainPublicKeys: vault.chainPublicKeys,
+          chainKeyShares: vault.chainKeyShares,
           localPartyId: vault.localPartyId,
           libType: vault.libType,
           publicKeyEcdsa: vault.publicKeys.ecdsa,
@@ -199,6 +200,7 @@ export const useAgentService = (): UseAgentServiceReturn => {
                 keyShare: current.keyShares.eddsa,
               },
             ],
+            chainKeyShares: current.chainKeyShares,
           }
         }
         const vaults = await coreRef.current.getVaults()
@@ -217,6 +219,7 @@ export const useAgentService = (): UseAgentServiceReturn => {
             { publicKey: v.publicKeys.ecdsa, keyShare: v.keyShares.ecdsa },
             { publicKey: v.publicKeys.eddsa, keyShare: v.keyShares.eddsa },
           ],
+          chainKeyShares: v.chainKeyShares,
         }
       },
       getVaultCoins: async (pubKey: string) => {

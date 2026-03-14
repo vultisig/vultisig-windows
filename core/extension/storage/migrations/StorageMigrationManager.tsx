@@ -32,8 +32,6 @@ export const StorageMigrationsManager = ({ children }: ChildrenProp) => {
       const storedVersion = await getExtensionVersion()
 
       if (!storedVersion) {
-        console.warn('Version missing. Clearing storage for migration.')
-        await chrome.storage.local.clear()
         await setLatestMigration(getLastItem(storageMigrationKeys))
       }
 

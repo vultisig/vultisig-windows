@@ -9,7 +9,16 @@ export const getSaplingProver = (): Promise<WasmSaplingProver> => {
     proverPromise = (async () => {
       const params = await loadSaplingParams()
       return new WasmSaplingProver(params.spend, params.output)
-    })()
+    })().catch(error => {
+      proverPromise = null
+      throw error
+    })
   }
   return proverPromise
+}
+
+export const warmSaplingProver = (): void => {
+  void getSaplingProver().catch(error => {
+    console.warn('[sapling-prover] warm-up failed:', error)
+  })
 }

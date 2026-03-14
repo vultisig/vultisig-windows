@@ -49,7 +49,7 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.Mantle]: 'https://explorer.mantle.xyz',
   [Chain.Hyperliquid]: hyperliquidBlockExplorerUrl,
   [Chain.Sei]: 'https://seiscan.io',
-  [Chain.ZcashShielded]: 'https://blockexplorer.one/zcash/mainnet',
+  [Chain.ZcashSapling]: 'https://blockexplorer.one/zcash/mainnet',
   [Chain.Monero]: 'https://xmrchain.net',
 }
 
@@ -98,7 +98,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Mantle]: () => `${baseUrl}/address/${value}`,
         [Chain.Hyperliquid]: () => `${baseUrl}/address/${value}`,
         [Chain.Sei]: () => `${baseUrl}/address/${value}`,
-        [Chain.ZcashShielded]: () => `${baseUrl}/address/${value}`,
+        [Chain.ZcashSapling]: () => `${baseUrl}/address/${value}`,
         [Chain.Monero]: () => `${baseUrl}/search?value=${value}`,
       }),
     tx: () =>
@@ -139,7 +139,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Mantle]: () => `${baseUrl}/tx/${value}`,
         [Chain.Hyperliquid]: () => `${baseUrl}/tx/${value}`,
         [Chain.Sei]: () => `${baseUrl}/tx/${value}`,
-        [Chain.ZcashShielded]: () => `${baseUrl}/tx/${value}`,
+        [Chain.ZcashSapling]: () => `${baseUrl}/tx/${value}`,
         [Chain.Monero]: () => `${baseUrl}/tx/${value}`,
       }),
   })

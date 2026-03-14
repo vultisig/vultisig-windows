@@ -105,6 +105,11 @@ export const VerifyTransactionOverview = ({
           <MatchQuery
             value={keysignPayloadQuery}
             pending={() => <Spinner />}
+            error={err => (
+              <Text size={14} color="danger">
+                {String(err instanceof Error ? err.message : err)}
+              </Text>
+            )}
             success={keysignPayload => (
               <HStack alignItems="center" gap={8}>
                 <KeysignFeeAmount keysignPayload={keysignPayload} />

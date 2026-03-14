@@ -17,7 +17,9 @@ import { VaultsBackupPage } from '@core/ui/vault/backup/VaultsBackupPage'
 import { ManageVaultChainsPage } from '@core/ui/vault/chain/manage'
 import { AddChainKeysPage } from '@core/ui/vault/chain/manage/addChainKeys/AddChainKeysPage'
 import { ManageVaultChainCoinsPage } from '@core/ui/vault/chain/manage/coin'
+import { MoneroBalanceFinalisePage } from '@core/ui/vault/chain/moneroSync/MoneroBalanceFinalisePage'
 import { VaultChainPage } from '@core/ui/vault/chain/VaultChainPage'
+import { ZcashBalanceScanPage } from '@core/ui/vault/chain/zcashSync/ZcashBalanceScanPage'
 import { DepositPage } from '@core/ui/vault/deposit/DepositPage'
 import { DepositAccessGuard } from '@core/ui/vault/deposit/providers/DepositAccessGuard'
 import { SignCustomMessagePage } from '@core/ui/vault/keysign/custom-message'
@@ -76,6 +78,8 @@ export type SharedViewId = Extract<
   | 'manageVaultChains'
   | 'manageVaultFolder'
   | 'manageVaults'
+  | 'moneroBalanceFinalise'
+  | 'zcashBalanceScan'
   | 'newVault'
   | 'reshareVault'
   | 'send'
@@ -137,6 +141,8 @@ export const sharedViews: Views<SharedViewId> = {
   manageVaultChains: ManageVaultChainsPage,
   manageVaultChainCoins: ManageVaultChainCoinsPage,
   manageVaults: ManageVaultsPage,
+  moneroBalanceFinalise: MoneroBalanceFinalisePage,
+  zcashBalanceScan: ZcashBalanceScanPage,
   newVault: NewVaultPage,
   reshareVault: ReshareVaultPage,
   send: SendPage,

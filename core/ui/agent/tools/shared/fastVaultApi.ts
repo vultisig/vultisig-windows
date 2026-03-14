@@ -9,12 +9,13 @@ type FastVaultSignParams = {
   isEcdsa: boolean
   vaultPassword: string
   chain: string
+  signableTx?: string
 }
 
 export async function callFastVaultSign(
   params: FastVaultSignParams
 ): Promise<void> {
-  const body = {
+  const body: Record<string, unknown> = {
     public_key: params.publicKey,
     messages: params.messages,
     session: params.session,
@@ -23,6 +24,9 @@ export async function callFastVaultSign(
     is_ecdsa: params.isEcdsa,
     vault_password: params.vaultPassword,
     chain: params.chain,
+  }
+  if (params.signableTx) {
+    body.signable_tx = params.signableTx
   }
 
   const resp = await fetch(`${fastVaultServerUrl}/sign`, {

@@ -1,3 +1,3 @@
-import { initWasm } from '@vultisig/frozt-sdk'
+import init from 'frozt-wasm'
 
-export const initializeFrozt = initWasm
+export const initializeFrozt = () => init()

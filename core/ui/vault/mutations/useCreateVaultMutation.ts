@@ -1,7 +1,7 @@
 import { Chain, defaultChains } from '@core/chain/Chain'
+import { getDefaultVisibleChains } from '@core/chain/chainGroups'
 import { getMoneroAddress } from '@core/chain/chains/monero/getMoneroAddress'
-import { getZcashZAddress } from '@core/chain/chains/zcash/getZcashZAddress'
-import { getZcashScanStorage } from '@core/chain/chains/zcash/zcashScanStorage'
+import { ensureZcashSaplingScanState } from '@core/chain/chains/zcash/vaultSetup'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
@@ -61,20 +61,16 @@ export const useCreateVaultMutation = (
 
       await setCurrentVaultId(getVaultId(vault))
 
-      const froztChains = vault.chainPublicKeys
-        ? getRecordKeys(vault.chainPublicKeys)
-        : []
       const chainsToCreate = isKeyImportVault(vault)
-        ? getRecordKeys(shouldBePresent(vault.chainPublicKeys))
-        : [
-            ...defaultChains,
-            ...froztChains.filter(c => !(defaultChains as Chain[]).includes(c)),
-          ]
+        ? getDefaultVisibleChains(
+            getRecordKeys(shouldBePresent(vault.chainPublicKeys))
+          )
+        : [...defaultChains]
 
       const coins = await Promise.all(
         chainsToCreate
           .filter(
-            chain => chain !== Chain.ZcashShielded && chain !== Chain.Monero
+            chain => chain !== Chain.ZcashSapling && chain !== Chain.Monero
           )
           .map(async chain => {
             const publicKey = getPublicKey({
@@ -98,28 +94,10 @@ export const useCreateVaultMutation = (
           })
       )
 
-      if (chainsToCreate.includes(Chain.ZcashShielded)) {
-        const pubKeyPackage = shouldBePresent(
-          vault.chainPublicKeys?.[Chain.ZcashShielded],
-          'Frozt public key package'
-        )
-        const address = await getZcashZAddress(
-          pubKeyPackage,
-          vault.saplingExtras ?? ''
-        )
-        await getZcashScanStorage().save({
-          zAddress: address,
-          publicKeyEcdsa: getVaultId(vault),
-          scanHeight: null,
-          scanTarget: null,
-          birthHeight: null,
-          birthdayScanDone: false,
-          pubKeyPackage,
-          saplingExtras: vault.saplingExtras ?? '',
-          notes: [],
-        })
+      if (chainsToCreate.includes(Chain.ZcashSapling)) {
+        const { address } = await ensureZcashSaplingScanState(vault)
         coins.push({
-          ...chainFeeCoin[Chain.ZcashShielded],
+          ...chainFeeCoin[Chain.ZcashSapling],
           address,
         })
       }

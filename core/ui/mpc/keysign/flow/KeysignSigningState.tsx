@@ -4,7 +4,13 @@ import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
-export const KeysignSigningState = () => {
+type KeysignSigningStateProps = {
+  title?: string
+}
+
+export const KeysignSigningState = ({
+  title,
+}: KeysignSigningStateProps = {}) => {
   const { t } = useTranslation()
 
   return (
@@ -12,7 +18,7 @@ export const KeysignSigningState = () => {
       <Wrapper gap={16} alignItems="center" justifyContent="center">
         <Spinner size="2em" />
         <Text color="regular" size={22} weight="500">
-          {t('signing_transaction')}
+          {title ?? t('signing_transaction')}
         </Text>
       </Wrapper>
     </VStack>

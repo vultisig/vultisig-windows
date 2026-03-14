@@ -1,5 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
+import { decodeMoneroPublicKey } from '@core/chain/chains/monero/moneroPublicKey'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { frostOnlyChains } from '@core/chain/froztChains'
 import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
@@ -26,6 +27,15 @@ export const getPublicKey = ({
   publicKeys,
   chainPublicKeys,
 }: Input) => {
+  if (chain === Chain.Monero) {
+    return walletCore.PublicKey.createWithData(
+      decodeMoneroPublicKey(
+        chainPublicKeys?.[Chain.Monero] ?? publicKeys.eddsa
+      ),
+      walletCore.PublicKeyType.ed25519
+    )
+  }
+
   const coinType = getCoinType({
     walletCore,
     chain,

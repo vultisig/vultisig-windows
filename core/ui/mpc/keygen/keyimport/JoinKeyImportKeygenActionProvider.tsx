@@ -12,7 +12,6 @@ import {
   runFroztSession,
 } from '@core/mpc/frozt/froztSession'
 import { createFroztImportSession } from '@core/mpc/frozt/froztSessionFactory'
-import { makeStepAdvancer } from '@core/mpc/keygen/KeygenStep'
 import {
   setKeygenComplete,
   waitForKeygenComplete,
@@ -52,11 +51,14 @@ export const JoinKeyImportKeygenActionProvider = ({
   const vaultOrders = useVaultOrders()
   const keyImportChainsRaw = useKeyImportChains()
 
-  const keygenAction: KeygenAction = async ({ onStepChange, signers }) => {
+  const keygenAction: KeygenAction = async ({
+    onStepStart,
+    onStepComplete,
+    signers,
+  }) => {
     const chains = parseKeyImportChains(shouldBePresent(keyImportChainsRaw))
-    const advanceStep = makeStepAdvancer(onStepChange)
 
-    advanceStep('prepareVault')
+    onStepStart('prepareVault')
 
     const sharedDklsParams = {
       isInitiateDevice: isInitiatingDevice,
@@ -91,7 +93,7 @@ export const JoinKeyImportKeygenActionProvider = ({
       new Uint8Array()
     )
 
-    const hasFrozt = chains.includes(Chain.ZcashShielded)
+    const hasFrozt = chains.includes(Chain.ZcashSapling)
     const hasFromt = chains.includes(Chain.Monero)
 
     const froztSession = hasFrozt
@@ -138,7 +140,7 @@ export const JoinKeyImportKeygenActionProvider = ({
           signers,
           hexEncryptionKey: encryptionKeyHex,
         }).then(r => {
-          advanceStep('frozt')
+          onStepComplete('frozt')
           return r
         })
       )
@@ -155,18 +157,24 @@ export const JoinKeyImportKeygenActionProvider = ({
           signers,
           hexEncryptionKey: encryptionKeyHex,
         }).then(r => {
-          advanceStep('fromt')
+          onStepComplete('fromt')
           return r
         })
       )
     }
+
+    onStepComplete('prepareVault')
+    onStepStart('ecdsa')
+    onStepStart('eddsa')
+    if (hasFrozt) onStepStart('frozt')
+    if (hasFromt) onStepStart('fromt')
 
     const [rootEcdsaResult, rootEddsaResult, ...frostResults] =
       await Promise.all([
         dklsKeygen
           .startKeyImportWithRetry('', hexChainCode, undefined, 'p-ecdsa')
           .then(r => {
-            advanceStep('ecdsa')
+            onStepComplete('ecdsa')
             return r
           }),
         schnorrKeygen
@@ -177,7 +185,7 @@ export const JoinKeyImportKeygenActionProvider = ({
             'p-eddsa'
           )
           .then(r => {
-            advanceStep('eddsa')
+            onStepComplete('eddsa')
             return r
           }),
         ...frostPromises,
@@ -196,8 +204,8 @@ export const JoinKeyImportKeygenActionProvider = ({
       const froztResult = parseFroztBundleResult(
         frostResults[frostIdx++] as Uint8Array
       )
-      chainPublicKeys[Chain.ZcashShielded] = froztResult.pubKeyPackage
-      chainKeyShares[Chain.ZcashShielded] = froztResult.bundle
+      chainPublicKeys[Chain.ZcashSapling] = froztResult.pubKeyPackage
+      chainKeyShares[Chain.ZcashSapling] = froztResult.bundle
       saplingExtras = froztResult.saplingExtras || undefined
     }
     if (hasFromt) {
@@ -216,6 +224,7 @@ export const JoinKeyImportKeygenActionProvider = ({
     const groups = groupChainsByDerivationPath(nonFrostChains)
 
     if (groups.length > 0) {
+      onStepStart('chainKeys')
       const chainGroupResults = await Promise.all(
         groups.map(async ({ groupId, chains: groupChains }) => {
           const representativeChain = groupChains[0]
@@ -265,7 +274,7 @@ export const JoinKeyImportKeygenActionProvider = ({
             )
           }
 
-          advanceStep('chainKeys')
+          onStepComplete('chainKeys')
           return { groupChains, result }
         })
       )
@@ -289,7 +298,7 @@ export const JoinKeyImportKeygenActionProvider = ({
       hexChainCode: rootEcdsaResult.chaincode,
       keyShares,
       localPartyId,
-      libType: 'DKLS' as MpcLib,
+      libType: 'KeyImport' as MpcLib,
       isBackedUp: false,
       order: getLastItemOrder(vaultOrders),
       lastPasswordVerificationTime: hasServer(signers) ? Date.now() : undefined,

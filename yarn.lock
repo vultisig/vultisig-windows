@@ -2391,6 +2391,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@playwright/test@npm:^1.58.2":
+  version: 1.58.2
+  resolution: "@playwright/test@npm:1.58.2"
+  dependencies:
+    playwright: "npm:1.58.2"
+  bin:
+    playwright: cli.js
+  checksum: 10c0/2164c03ad97c3653ff02e8818a71f3b2bbc344ac07924c9d8e31cd57505d6d37596015a41f51396b3ed8de6840f59143eaa9c21bf65515963da20740119811da
+  languageName: node
+  linkType: hard
+
 "@polka/url@npm:^1.0.0-next.24":
   version: 1.0.0-next.29
   resolution: "@polka/url@npm:1.0.0-next.29"
@@ -5134,24 +5145,24 @@ __metadata:
 
 "@vultisig/fromt-sdk@file:/Users/dev/dev/vultisig/frost-zm/packages/fromt-sdk-ts::locator=vultisig-windows%40workspace%3A.":
   version: 0.1.0
-  resolution: "@vultisig/fromt-sdk@file:/Users/dev/dev/vultisig/frost-zm/packages/fromt-sdk-ts#/Users/dev/dev/vultisig/frost-zm/packages/fromt-sdk-ts::hash=edd114&locator=vultisig-windows%40workspace%3A."
+  resolution: "@vultisig/fromt-sdk@file:/Users/dev/dev/vultisig/frost-zm/packages/fromt-sdk-ts#/Users/dev/dev/vultisig/frost-zm/packages/fromt-sdk-ts::hash=01d1bc&locator=vultisig-windows%40workspace%3A."
   dependencies:
     fromt-wasm: "file:../../pkg/fromt"
     monero-ts: "npm:^0.11.8"
-  checksum: 10c0/55254d54d1e3983e4e2069879710be7c9c711dff750890166f960ea0986508ad7fc31ed1a01c03bc0d0c7371cb9831f457bd5ec10139294f6d64e26e5ff238e0
+  checksum: 10c0/706dbd588e8ce895878ca4c608b6128d3b7d222751200fffa6b4aebd99cb03646e208df596d731ecaa379c4f048caa30e35511d1aac68e8e0480d6cd931daef1
   languageName: node
   linkType: hard
 
 "@vultisig/frozt-sdk@file:/Users/dev/dev/vultisig/frost-zm/packages/frozt-sdk-ts::locator=vultisig-windows%40workspace%3A.":
   version: 0.1.0
-  resolution: "@vultisig/frozt-sdk@file:/Users/dev/dev/vultisig/frost-zm/packages/frozt-sdk-ts#/Users/dev/dev/vultisig/frost-zm/packages/frozt-sdk-ts::hash=8caf1c&locator=vultisig-windows%40workspace%3A."
+  resolution: "@vultisig/frozt-sdk@file:/Users/dev/dev/vultisig/frost-zm/packages/frozt-sdk-ts#/Users/dev/dev/vultisig/frost-zm/packages/frozt-sdk-ts::hash=038c4b&locator=vultisig-windows%40workspace%3A."
   dependencies:
     "@bufbuild/protobuf": "npm:^2.0.0"
     "@connectrpc/connect-web": "npm:^2.0.0"
     "@grpc/grpc-js": "npm:^1.14.3"
     "@grpc/proto-loader": "npm:^0.8.0"
     frozt-wasm: "file:../../crates/frozt-wasm/pkg"
-  checksum: 10c0/43d9e32b1c4a0f7f65573a61310f8add2751ee6fc8da383d4ec4f2367daae07ffa5421effe2388f6c2705af06845d81cdc8788f83b61168d322e6cb51b28d5fb
+  checksum: 10c0/f78615fd12506907762f0bdd6f9cb4e2753eaee006ab962144a0c81ce031ae5bc42dd96677186582dfb19ec941a427e2b71c5064663655e05470e013908d7e71
   languageName: node
   linkType: hard
 
@@ -8000,10 +8011,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fromt-wasm@file:../../pkg/fromt::locator=%40vultisig%2Ffromt-sdk%40file%3A%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffromt-sdk-ts%23%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffromt-sdk-ts%3A%3Ahash%3Dedd114%26locator%3Dvultisig-windows%2540workspace%253A.":
+"fromt-wasm@file:../../pkg/fromt::locator=%40vultisig%2Ffromt-sdk%40file%3A%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffromt-sdk-ts%23%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffromt-sdk-ts%3A%3Ahash%3D01d1bc%26locator%3Dvultisig-windows%2540workspace%253A.":
   version: 0.1.0
-  resolution: "fromt-wasm@file:../../pkg/fromt#../../pkg/fromt::hash=85f587&locator=%40vultisig%2Ffromt-sdk%40file%3A%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffromt-sdk-ts%23%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffromt-sdk-ts%3A%3Ahash%3Dedd114%26locator%3Dvultisig-windows%2540workspace%253A."
-  checksum: 10c0/4cff5508a8b6ecf69d436d400b56103ac68f36538be39ca2492106d704452b2cb5d74201abb2b57abd881230890a704a2edbd7ede5ae19f628eb809861b18d54
+  resolution: "fromt-wasm@file:../../pkg/fromt#../../pkg/fromt::hash=9d24a2&locator=%40vultisig%2Ffromt-sdk%40file%3A%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffromt-sdk-ts%23%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffromt-sdk-ts%3A%3Ahash%3D01d1bc%26locator%3Dvultisig-windows%2540workspace%253A."
+  checksum: 10c0/1da158f19b806ba44d8ec50b2c8deb2d11a5b5d1af3e8694e761848e055b0c766ca7564181c342c1e6a6677637b3987090684c2d12180e2ddb67cb24e16e01e1
   languageName: node
   linkType: hard
 
@@ -8013,10 +8024,10 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"frozt-wasm@file:../../crates/frozt-wasm/pkg::locator=%40vultisig%2Ffrozt-sdk%40file%3A%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffrozt-sdk-ts%23%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffrozt-sdk-ts%3A%3Ahash%3D8caf1c%26locator%3Dvultisig-windows%2540workspace%253A.":
+"frozt-wasm@file:../../crates/frozt-wasm/pkg::locator=%40vultisig%2Ffrozt-sdk%40file%3A%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffrozt-sdk-ts%23%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffrozt-sdk-ts%3A%3Ahash%3D038c4b%26locator%3Dvultisig-windows%2540workspace%253A.":
   version: 0.1.0
-  resolution: "frozt-wasm@file:../../crates/frozt-wasm/pkg#../../crates/frozt-wasm/pkg::hash=9a4b68&locator=%40vultisig%2Ffrozt-sdk%40file%3A%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffrozt-sdk-ts%23%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffrozt-sdk-ts%3A%3Ahash%3D8caf1c%26locator%3Dvultisig-windows%2540workspace%253A."
-  checksum: 10c0/05521fca0552c45deec36dfdb2c6634f3be3b78069afd87df826a38657d74c6700f1bd6c7d2f1322ea95a2b4a5dad81913783e3f05182da03d7d79e40db691c6
+  resolution: "frozt-wasm@file:../../crates/frozt-wasm/pkg#../../crates/frozt-wasm/pkg::hash=e0f058&locator=%40vultisig%2Ffrozt-sdk%40file%3A%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffrozt-sdk-ts%23%2FUsers%2Fdev%2Fdev%2Fvultisig%2Ffrost-zm%2Fpackages%2Ffrozt-sdk-ts%3A%3Ahash%3D038c4b%26locator%3Dvultisig-windows%2540workspace%253A."
+  checksum: 10c0/7c69b614dc4939c8aa869068b999bf4b955b52674070c9d57ab7fc33f6d84d1f50115460074552f56c274276310d6f5d1a785902d8293ea0ec41a982850caaeb
   languageName: node
   linkType: hard
 
@@ -8035,12 +8046,31 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fsevents@npm:2.3.2":
+  version: 2.3.2
+  resolution: "fsevents@npm:2.3.2"
+  dependencies:
+    node-gyp: "npm:latest"
+  checksum: 10c0/be78a3efa3e181cda3cf7a4637cb527bcebb0bd0ea0440105a3bb45b86f9245b307dc10a2507e8f4498a7d4ec349d1910f4d73e4d4495b16103106e07eee735b
+  conditions: os=darwin
+  languageName: node
+  linkType: hard
+
 "fsevents@npm:~2.3.2, fsevents@npm:~2.3.3":
   version: 2.3.3
   resolution: "fsevents@npm:2.3.3"
   dependencies:
     node-gyp: "npm:latest"
   checksum: 10c0/a1f0c44595123ed717febbc478aa952e47adfc28e2092be66b8ab1635147254ca6cfe1df792a8997f22716d4cbafc73309899ff7bfac2ac3ad8cf2e4ecc3ec60
+  conditions: os=darwin
+  languageName: node
+  linkType: hard
+
+"fsevents@patch:fsevents@npm%3A2.3.2#optional!builtin<compat/fsevents>":
+  version: 2.3.2
+  resolution: "fsevents@patch:fsevents@npm%3A2.3.2#optional!builtin<compat/fsevents>::version=2.3.2&hash=df0bf1"
+  dependencies:
+    node-gyp: "npm:latest"
   conditions: os=darwin
   languageName: node
   linkType: hard
@@ -10984,6 +11014,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"playwright-core@npm:1.58.2":
+  version: 1.58.2
+  resolution: "playwright-core@npm:1.58.2"
+  bin:
+    playwright-core: cli.js
+  checksum: 10c0/5aa15b2b764e6ffe738293a09081a6f7023847a0dbf4cd05fe10eed2e25450d321baf7482f938f2d2eb330291e197fa23e57b29a5b552b89927ceb791266225b
+  languageName: node
+  linkType: hard
+
+"playwright@npm:1.58.2":
+  version: 1.58.2
+  resolution: "playwright@npm:1.58.2"
+  dependencies:
+    fsevents: "npm:2.3.2"
+    playwright-core: "npm:1.58.2"
+  dependenciesMeta:
+    fsevents:
+      optional: true
+  bin:
+    playwright: cli.js
+  checksum: 10c0/d060d9b7cc124bd8b5dffebaab5e84f6b34654a553758fe7b19cc598dfbee93f6ecfbdc1832b40a6380ae04eade86ef3285ba03aa0b136799e83402246dc0727
+  languageName: node
+  linkType: hard
+
 "pngjs@npm:^7.0.0":
   version: 7.0.0
   resolution: "pngjs@npm:7.0.0"
@@ -13830,6 +13884,7 @@ __metadata:
     "@eslint/js": "npm:^9.39.2"
     "@google-cloud/translate": "npm:^9.3.0"
     "@noble/curves": "npm:^1.9.0"
+    "@playwright/test": "npm:^1.58.2"
     "@scure/bip32": "npm:^2.0.1"
     "@types/node": "npm:^25.2.1"
     "@types/react": "npm:^19.2.13"

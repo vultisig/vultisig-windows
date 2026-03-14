@@ -1,4 +1,5 @@
 import { Chain } from '@core/chain/Chain'
+import { getMoneroAddress } from '@core/chain/chains/monero/getMoneroAddress'
 import { areEqualCoins, CoinKey } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
@@ -7,6 +8,7 @@ import { isKeyImportVault } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { groupItems } from '@lib/utils/array/groupItems'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
 import { useCurrentVault } from './currentVault'
@@ -51,10 +53,22 @@ export const useCurrentVaultAddress = (chain: Chain) => {
   const addresses = useCurrentVaultAddresses()
   const walletCore = useAssertWalletCore()
   const vault = useCurrentVault()
+  const moneroAddressQuery = useQuery({
+    queryKey: ['moneroVaultAddress', vault.publicKeys.ecdsa],
+    queryFn: () =>
+      getMoneroAddress(
+        shouldBePresent(vault.chainKeyShares?.[Chain.Monero], 'Monero keyshare')
+      ),
+    enabled: chain === Chain.Monero && !addresses[chain],
+  })
 
   return useMemo(() => {
     const existing = addresses[chain]
     if (existing) return existing
+
+    if (chain === Chain.Monero) {
+      return moneroAddressQuery.data ?? ''
+    }
 
     if (isKeyImportVault(vault) && !vault.chainPublicKeys?.[chain]) {
       return ''
@@ -69,7 +83,7 @@ export const useCurrentVaultAddress = (chain: Chain) => {
     })
 
     return deriveAddress({ chain, publicKey, walletCore })
-  }, [addresses, chain, walletCore, vault])
+  }, [addresses, chain, moneroAddressQuery.data, walletCore, vault])
 }
 
 export const useCurrentVaultChainCoins = (chain: string) => {

@@ -1,7 +1,7 @@
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { HStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
 export const ActionsWrapper = styled(HStack)`
   flex-wrap: wrap;
@@ -45,5 +45,27 @@ export const SecondaryActionWrapper = styled(ActionWrapper)`
   &:hover {
     background: ${({ theme }) =>
       theme.colors.foregroundExtra.withAlpha(0.7).toCssValue()};
+  }
+`
+
+const attentionPulse = keyframes`
+  0% {
+    box-shadow: 0 0 0 0 rgba(247, 186, 79, 0.32);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(247, 186, 79, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(247, 186, 79, 0);
+  }
+`
+
+export const AttentionActionWrapper = styled(PrimaryActionWrapper)`
+  background: linear-gradient(180deg, #f7ba4f 0%, #f07b3f 100%);
+  color: ${getColor('text')};
+  animation: ${attentionPulse} 1.8s infinite;
+
+  &:hover {
+    background: linear-gradient(180deg, #f7ba4f 0%, #f07b3f 100%);
   }
 `

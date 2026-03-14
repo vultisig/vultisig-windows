@@ -3,6 +3,7 @@ import { groupChainsByDerivationPath } from '@core/chain/derivationPath'
 import { frostOnlyChains } from '@core/chain/froztChains'
 import { generateLocalPartyId } from '@core/mpc/devices/localPartyId'
 import { keyImportWithServer } from '@core/mpc/fast/api/keyImportWithServer'
+import { toLibType } from '@core/mpc/types/utils/libType'
 import { useVaultCreationInput } from '@core/ui/mpc/keygen/create/state/vaultCreationInput'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
@@ -29,7 +30,7 @@ export const KeyImportFastKeygenServerActionProvider = ({
     const chainGroupIds = groups.map(g => g.groupId)
 
     const protocols = ['ecdsa', 'eddsa']
-    if (chains.includes(Chain.ZcashShielded)) protocols.push('frozt')
+    if (chains.includes(Chain.ZcashSapling)) protocols.push('frozt')
     if (chains.includes(Chain.Monero)) protocols.push('fromt')
 
     await keyImportWithServer({
@@ -39,6 +40,7 @@ export const KeyImportFastKeygenServerActionProvider = ({
       local_party_id: generateLocalPartyId('server'),
       email,
       hex_encryption_key: hexEncryptionKey,
+      lib_type: toLibType('KeyImport'),
       protocols,
       chains: chainGroupIds,
     })

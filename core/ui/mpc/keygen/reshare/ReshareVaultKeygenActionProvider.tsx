@@ -1,8 +1,14 @@
 import { Chain } from '@core/chain/Chain'
 import { DKLS } from '@core/mpc/dkls/dkls'
+import {
+  type FromtReshareResult,
+  packFromtReshareBundle,
+} from '@core/mpc/fromt/fromtBundle'
 import { parseFromtBundleResult } from '@core/mpc/fromt/fromtSession'
 import { createFromtReshareSession } from '@core/mpc/fromt/fromtSessionFactory'
 import {
+  type FroztReshareResult,
+  packFroztReshareBundle,
   parseFroztBundleResult,
   runFroztSession,
 } from '@core/mpc/frozt/froztSession'
@@ -24,7 +30,6 @@ import { ChildrenProp } from '@lib/ui/props'
 import { without } from '@lib/utils/array/without'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 
-import { frozt_keyshare_bundle_key_package } from '../../../../../lib/frozt/frozt_wasm'
 import { useKeygenOperation } from '../state/currentKeygenOperationType'
 import { KeygenAction, KeygenActionProvider } from '../state/keygenAction'
 import {
@@ -99,27 +104,13 @@ export const ReshareVaultKeygenActionProvider = ({
         ? keygenVault.existingVault.keyShares.eddsa
         : undefined
 
-    const oldFroztBundle =
+    const oldFroztBundleBase64 =
       'existingVault' in keygenVault
-        ? keygenVault.existingVault.chainKeyShares?.[Chain.ZcashShielded]
+        ? keygenVault.existingVault.chainKeyShares?.[Chain.ZcashSapling]
         : undefined
-
-    const oldFroztPubKeyPackage =
-      'existingVault' in keygenVault
-        ? keygenVault.existingVault.chainPublicKeys?.[Chain.ZcashShielded]
-        : undefined
-
-    let oldKeyPackage = new Uint8Array()
-    if (oldFroztBundle) {
-      const bundleBytes = Buffer.from(oldFroztBundle, 'base64')
-      oldKeyPackage = new Uint8Array(
-        frozt_keyshare_bundle_key_package(bundleBytes)
-      )
-    }
-
-    const oldPubKeyPackage = oldFroztPubKeyPackage
-      ? new Uint8Array(Buffer.from(oldFroztPubKeyPackage, 'base64'))
-      : undefined
+    const oldFroztBundle = oldFroztBundleBase64
+      ? new Uint8Array(Buffer.from(oldFroztBundleBase64, 'base64'))
+      : new Uint8Array()
 
     const froztSession = await createFroztReshareSession({
       serverUrl,
@@ -129,28 +120,17 @@ export const ReshareVaultKeygenActionProvider = ({
       setupMessageId: 'frozt',
       isInitiatingDevice,
       signers,
-      oldKeyPackage,
-      oldPubKeyPackage,
+      oldBundle: oldFroztBundle,
+      oldParties,
     })
 
-    const oldFromtBundle =
+    const oldFromtBundleBase64 =
       'existingVault' in keygenVault
         ? keygenVault.existingVault.chainKeyShares?.[Chain.Monero]
         : undefined
-
-    const oldFromtPubKey =
-      'existingVault' in keygenVault
-        ? keygenVault.existingVault.chainPublicKeys?.[Chain.Monero]
-        : undefined
-
-    let oldFromtKeyPackage = new Uint8Array()
-    if (oldFromtBundle) {
-      oldFromtKeyPackage = new Uint8Array(Buffer.from(oldFromtBundle, 'base64'))
-    }
-
-    const oldFromtPubKeyBytes = oldFromtPubKey
-      ? new Uint8Array(Buffer.from(oldFromtPubKey, 'base64'))
-      : undefined
+    const oldFromtBundle = oldFromtBundleBase64
+      ? new Uint8Array(Buffer.from(oldFromtBundleBase64, 'base64'))
+      : new Uint8Array()
 
     const fromtSession = await createFromtReshareSession({
       serverUrl,
@@ -160,13 +140,13 @@ export const ReshareVaultKeygenActionProvider = ({
       setupMessageId: 'fromt',
       isInitiatingDevice,
       signers,
-      oldKeyPackage: oldFromtKeyPackage,
-      oldPubKey: oldFromtPubKeyBytes,
+      oldKeyShare: oldFromtBundle,
+      oldParties,
     })
 
     onStepChange('frozt')
 
-    const [dklsResult, schnorrResult, froztBundle, fromtBundle] =
+    const [dklsResult, schnorrResult, froztReshareResult, fromtReshareResult] =
       await Promise.all([
         dklsKeygen.startReshareWithRetry(oldEcdsaKeyshare, 'p-ecdsa'),
         schnorrKeygen.startReshareWithRetry(oldEddsaKeyshare, 'p-eddsa'),
@@ -192,6 +172,15 @@ export const ReshareVaultKeygenActionProvider = ({
         }),
       ])
 
+    const froztBundle = packFroztReshareBundle(
+      froztReshareResult as unknown as FroztReshareResult,
+      oldFroztBundle
+    )
+    const fromtBundle = packFromtReshareBundle(
+      fromtReshareResult as unknown as FromtReshareResult,
+      oldFromtBundle
+    )
+
     const froztResult = parseFroztBundleResult(froztBundle)
     const fromtResult = parseFromtBundleResult(fromtBundle)
 
@@ -210,11 +199,11 @@ export const ReshareVaultKeygenActionProvider = ({
       keyShares,
       hexChainCode: dklsResult.chaincode,
       chainPublicKeys: {
-        [Chain.ZcashShielded]: froztResult.pubKeyPackage,
+        [Chain.ZcashSapling]: froztResult.pubKeyPackage,
         [Chain.Monero]: fromtResult.pubKey,
       },
       chainKeyShares: {
-        [Chain.ZcashShielded]: froztResult.bundle,
+        [Chain.ZcashSapling]: froztResult.bundle,
         [Chain.Monero]: fromtResult.keyShare,
       },
       saplingExtras: froztResult.saplingExtras || undefined,

@@ -81,11 +81,15 @@ export const useParsedTxQuery = (): Query<ParsedTx> => {
         chainPublicKeys: vault.chainPublicKeys,
       })
 
-      const address = deriveAddress({
-        chain,
-        publicKey,
-        walletCore,
-      })
+      const address =
+        chain === Chain.Monero
+          ? vault.coins?.find(vaultCoin => vaultCoin.chain === Chain.Monero)
+              ?.address || ''
+          : deriveAddress({
+              chain,
+              publicKey,
+              walletCore,
+            })
 
       return {
         thirdPartyGasLimitEstimation:

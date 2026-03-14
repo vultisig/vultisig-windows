@@ -6,6 +6,7 @@ import {
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
 import { cosmosRpcUrl } from '@core/chain/chains/cosmos/cosmosRpcUrl'
 import { getEvmClient } from '@core/chain/chains/evm/client'
+import { getMoneroDaemonUrl } from '@core/chain/chains/monero/daemonRpc'
 import { getBlockchairBaseUrl } from '@core/chain/chains/utxo/client/getBlockchairBaseUrl'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
 import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
@@ -66,11 +67,20 @@ export const getTx: BackgroundResolver<'getTx'> = async ({
       sui: () => {
         throw new NotImplementedError('Get tx for Sui chain')
       },
-      zcashShielded: () => {
-        throw new NotImplementedError('Get tx for ZcashShielded chain')
+      zcashSapling: () => {
+        throw new NotImplementedError('Get tx for ZcashSapling chain')
       },
-      monero: () => {
-        throw new NotImplementedError('Get tx for Monero chain')
+      monero: async () => {
+        const response = await fetch(
+          `${getMoneroDaemonUrl()}/get_transactions`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ txs_hashes: [hash], decode_as_json: true }),
+          }
+        )
+        const body = await response.json()
+        return body?.txs?.[0] ?? body
       },
     }
   )

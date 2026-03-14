@@ -28,3 +28,31 @@ export const chainGroups: ChainGroup[] = [
 ]
 
 export const groupedChainSet = new Set(chainGroups.flatMap(g => g.chains))
+
+export const getDefaultVisibleChains = (chains: Chain[]): Chain[] => {
+  const availableChains = new Set(chains)
+  const handledChains = new Set<Chain>()
+  const result: Chain[] = []
+
+  chainGroups.forEach(({ representative, chains }) => {
+    const availableGroupChains = chains.filter(chain =>
+      availableChains.has(chain)
+    )
+    if (availableGroupChains.length === 0) return
+
+    result.push(
+      availableGroupChains.includes(representative)
+        ? representative
+        : availableGroupChains[0]
+    )
+
+    availableGroupChains.forEach(chain => handledChains.add(chain))
+  })
+
+  chains.forEach(chain => {
+    if (handledChains.has(chain)) return
+    result.push(chain)
+  })
+
+  return result
+}

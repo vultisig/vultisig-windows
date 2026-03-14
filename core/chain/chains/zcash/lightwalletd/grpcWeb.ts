@@ -113,6 +113,8 @@ const getGoHttpPost = (): GoPostFn | null => {
   return null
 }
 
+export const isNativeGrpcAvailable = (): boolean => getGoHttpPost() !== null
+
 const grpcWebFetchViaGo = async (
   goPost: GoPostFn,
   url: string,

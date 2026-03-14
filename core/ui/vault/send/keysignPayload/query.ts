@@ -1,3 +1,5 @@
+import { Chain } from '@core/chain/Chain'
+import { encodeMoneroPublicKeyHex } from '@core/chain/chains/monero/moneroPublicKey'
 import { FeeSettings } from '@core/mpc/keysign/chainSpecific/FeeSettings'
 import { BuildKeysignPayloadError } from '@core/mpc/keysign/error'
 import {
@@ -37,7 +39,17 @@ export const useSendKeysignPayloadQuery = ({
   const vault = useCurrentVault()
 
   const walletCore = useAssertWalletCore()
-  const publicKey = useCurrentVaultPublicKey(coin.chain)
+
+  const isMonero = coin.chain === Chain.Monero
+  const publicKey = useCurrentVaultPublicKey(
+    isMonero ? Chain.THORChain : coin.chain
+  )
+
+  const hexPublicKeyOverride = isMonero
+    ? encodeMoneroPublicKeyHex(
+        vault.chainPublicKeys?.[Chain.Monero] ?? vault.publicKeys.eddsa
+      )
+    : undefined
 
   const input: BuildSendKeysignPayloadInput = useMemo(
     () => ({
@@ -47,12 +59,24 @@ export const useSendKeysignPayloadQuery = ({
       memo,
       vaultId: getVaultId(vault),
       localPartyId: vault.localPartyId,
-      publicKey,
+      publicKey: isMonero ? null : publicKey,
       libType: toKeysignLibType(vault),
       walletCore,
       feeSettings,
+      hexPublicKeyOverride,
     }),
-    [amount, coin, feeSettings, memo, publicKey, receiver, vault, walletCore]
+    [
+      amount,
+      coin,
+      feeSettings,
+      hexPublicKeyOverride,
+      isMonero,
+      memo,
+      publicKey,
+      receiver,
+      vault,
+      walletCore,
+    ]
   )
 
   return useQuery({

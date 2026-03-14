@@ -38,6 +38,10 @@ export function GetCoins() {
   return window['go']['storage']['Store']['GetCoins']();
 }
 
+export function GetMoneroScanData(arg1) {
+  return window['go']['storage']['Store']['GetMoneroScanData'](arg1);
+}
+
 export function GetVault(arg1) {
   return window['go']['storage']['Store']['GetVault'](arg1);
 }
@@ -58,6 +62,10 @@ export function GetVaults() {
   return window['go']['storage']['Store']['GetVaults']();
 }
 
+export function GetZcashScanData(arg1) {
+  return window['go']['storage']['Store']['GetZcashScanData'](arg1);
+}
+
 export function Migrate() {
   return window['go']['storage']['Store']['Migrate']();
 }
@@ -74,6 +82,10 @@ export function SaveCoins(arg1, arg2) {
   return window['go']['storage']['Store']['SaveCoins'](arg1, arg2);
 }
 
+export function SaveMoneroScanData(arg1) {
+  return window['go']['storage']['Store']['SaveMoneroScanData'](arg1);
+}
+
 export function SaveVault(arg1) {
   return window['go']['storage']['Store']['SaveVault'](arg1);
 }
@@ -84,6 +96,10 @@ export function SaveVaultFolder(arg1) {
 
 export function SaveVaultsKeyShares(arg1) {
   return window['go']['storage']['Store']['SaveVaultsKeyShares'](arg1);
+}
+
+export function SaveZcashScanData(arg1) {
+  return window['go']['storage']['Store']['SaveZcashScanData'](arg1);
 }
 
 export function UpdateAddressBookItem(arg1) {

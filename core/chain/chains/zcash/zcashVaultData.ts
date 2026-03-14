@@ -1,4 +1,5 @@
 type ZcashVaultData = {
+  publicKeyEcdsa: string
   bundle: string
   pubKeyPackage: string
   saplingExtras: string

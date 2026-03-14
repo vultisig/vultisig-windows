@@ -20,6 +20,8 @@ export function GetAllAddressBookItems():Promise<Array<storage.AddressBookItem>>
 
 export function GetCoins():Promise<Record<string, Array<storage.Coin>>>;
 
+export function GetMoneroScanData(arg1:string):Promise<storage.MoneroScanData>;
+
 export function GetVault(arg1:string):Promise<storage.Vault>;
 
 export function GetVaultCoins(arg1:string):Promise<Array<storage.Coin>>;
@@ -30,6 +32,8 @@ export function GetVaultFolders():Promise<Array<storage.VaultFolder>>;
 
 export function GetVaults():Promise<Array<storage.Vault>>;
 
+export function GetZcashScanData(arg1:string):Promise<storage.ZcashScanData>;
+
 export function Migrate():Promise<void>;
 
 export function SaveAddressBookItem(arg1:storage.AddressBookItem):Promise<string>;
@@ -38,10 +42,14 @@ export function SaveCoin(arg1:string,arg2:storage.Coin):Promise<string>;
 
 export function SaveCoins(arg1:string,arg2:Array<storage.Coin>):Promise<Array<string>>;
 
+export function SaveMoneroScanData(arg1:storage.MoneroScanData):Promise<void>;
+
 export function SaveVault(arg1:storage.Vault):Promise<void>;
 
 export function SaveVaultFolder(arg1:storage.VaultFolder):Promise<string>;
 
 export function SaveVaultsKeyShares(arg1:Record<string, storage.VaultAllKeyShares>):Promise<void>;
+
+export function SaveZcashScanData(arg1:storage.ZcashScanData):Promise<void>;
 
 export function UpdateAddressBookItem(arg1:storage.AddressBookItem):Promise<void>;

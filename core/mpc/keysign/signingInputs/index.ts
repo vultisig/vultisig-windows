@@ -34,8 +34,8 @@ const resolvers: Record<ChainKind, SigningInputsResolver<any>> = {
   ton: getTonSigningInputs,
   utxo: getUtxoSigningInputs,
   tron: getTronSigningInputs,
-  zcashShielded: () => {
-    throw new Error('ZcashShielded uses custom signing path')
+  zcashSapling: () => {
+    throw new Error('ZcashSapling uses custom signing path')
   },
   monero: () => {
     throw new Error('Monero uses custom signing path')

@@ -35,5 +35,9 @@ export const SecureVaultStartKeysignPrompt = (
     }
   }, [navigate, props])
 
-  return <Button {...buttonProps}>{t('sign_transaction')}</Button>
+  return (
+    <Button {...buttonProps}>
+      {props.secureLabel ?? t('sign_transaction')}
+    </Button>
+  )
 }

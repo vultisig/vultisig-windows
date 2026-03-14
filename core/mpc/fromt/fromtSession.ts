@@ -3,6 +3,7 @@ import { base64Encode } from '@lib/utils/base64Encode'
 import {
   fromt_derive_spend_pub_key,
   FromtDkgSession,
+  FromtKeyImageSession,
   FromtKeyImportSession,
   FromtReshareSession,
   FromtSignSession,
@@ -10,6 +11,7 @@ import {
 
 export type FromtSessionHandle =
   | FromtDkgSession
+  | FromtKeyImageSession
   | FromtKeyImportSession
   | FromtReshareSession
   | FromtSignSession

@@ -1,4 +1,6 @@
 import { Chain } from '@core/chain/Chain'
+import { getChainHeight } from '@core/chain/chains/monero/daemonRpc'
+import { getLatestBlock } from '@core/chain/chains/zcash/lightwalletd/client'
 import { hasServer } from '@core/mpc/devices/localPartyId'
 import { DKLS } from '@core/mpc/dkls/dkls'
 import { parseFromtBundleResult } from '@core/mpc/fromt/fromtSession'
@@ -41,8 +43,12 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
 
   const vaultOrders = useVaultOrders()
 
-  const keygenAction: KeygenAction = async ({ onStepChange, signers }) => {
-    onStepChange('ecdsa')
+  const keygenAction: KeygenAction = async ({
+    onStepStart,
+    onStepComplete,
+    signers,
+  }) => {
+    onStepStart('prepareVault')
 
     const sharedFinalVaultFields = {
       signers,
@@ -76,6 +82,14 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
       dklsKeygen.getSetupMessage()
     )
 
+    let zcashBirthday = 0
+    try {
+      const latestBlock = await getLatestBlock()
+      zcashBirthday = latestBlock.height
+    } catch {
+      // lightwalletd unavailable, use 0
+    }
+
     const froztSession = await createFroztKeygenSession({
       serverUrl,
       sessionId,
@@ -84,8 +98,15 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
       setupMessageId: 'frozt',
       isInitiatingDevice,
       signers,
-      birthday: 0,
+      birthday: zcashBirthday,
     })
+
+    let moneroBirthday = 0
+    try {
+      moneroBirthday = await getChainHeight()
+    } catch {
+      // monero daemon unavailable, use 0
+    }
 
     const fromtSession = await createFromtKeygenSession({
       serverUrl,
@@ -95,15 +116,25 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
       setupMessageId: 'fromt',
       isInitiatingDevice,
       signers,
-      birthday: 0,
+      birthday: moneroBirthday,
     })
 
-    onStepChange('frozt')
+    onStepComplete('prepareVault')
+    onStepStart('ecdsa')
+    onStepStart('eddsa')
+    onStepStart('frozt')
+    onStepStart('fromt')
 
     const [dklsResult, schnorrResult, froztBundle, fromtBundle] =
       await Promise.all([
-        dklsKeygen.startKeygenWithRetry('p-ecdsa'),
-        schnorrKeygen.startKeygenWithRetry('p-eddsa'),
+        dklsKeygen.startKeygenWithRetry('p-ecdsa').then(r => {
+          onStepComplete('ecdsa')
+          return r
+        }),
+        schnorrKeygen.startKeygenWithRetry('p-eddsa').then(r => {
+          onStepComplete('eddsa')
+          return r
+        }),
         runFroztSession({
           session: froztSession,
           messageId: 'p-frozt',
@@ -112,6 +143,9 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
           localPartyId,
           signers,
           hexEncryptionKey: encryptionKeyHex,
+        }).then(r => {
+          onStepComplete('frozt')
+          return r
         }),
         runFroztSession({
           session: fromtSession,
@@ -121,6 +155,9 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
           localPartyId,
           signers,
           hexEncryptionKey: encryptionKeyHex,
+        }).then(r => {
+          onStepComplete('fromt')
+          return r
         }),
       ])
 
@@ -131,7 +168,7 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
     let keyShareMldsa: string | undefined
 
     if (featureFlags.mldsaKeygen && isMLDSAEnabled) {
-      onStepChange('mldsa')
+      onStepStart('mldsa')
 
       const mldsaKeygen = new MldsaKeygen(
         isInitiatingDevice,
@@ -144,6 +181,7 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
       const mldsaResult = await mldsaKeygen.startKeygenWithRetry()
       publicKeyMldsa = mldsaResult.publicKey
       keyShareMldsa = mldsaResult.keyshare
+      onStepComplete('mldsa')
     }
 
     const publicKeys = {
@@ -163,11 +201,11 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
       hexChainCode: dklsResult.chaincode,
       keyShares,
       chainPublicKeys: {
-        [Chain.ZcashShielded]: froztResult.pubKeyPackage,
+        [Chain.ZcashSapling]: froztResult.pubKeyPackage,
         [Chain.Monero]: fromtResult.pubKey,
       },
       chainKeyShares: {
-        [Chain.ZcashShielded]: froztResult.bundle,
+        [Chain.ZcashSapling]: froztResult.bundle,
         [Chain.Monero]: fromtResult.keyShare,
       },
       saplingExtras: froztResult.saplingExtras || undefined,

@@ -1,6 +1,6 @@
 import {
-  encode_map,
-  frozt_encode_identifier,
+  frozt_keyshare_bundle_key_package,
+  frozt_keyshare_bundle_pub_key_package,
   frozt_pubkeypackage_verifying_key,
   FroztDkgSession,
   froztDkgSetupMsgNew,
@@ -8,6 +8,8 @@ import {
   froztKeyImportSetupMsgNew,
   FroztReshareSession,
   froztReshareSetupMsgNew,
+  FroztSignSession,
+  froztSignSetupMsgNew,
 } from '../../../lib/frozt/frozt_wasm'
 import { getKeygenThreshold } from '../getKeygenThreshold'
 import { fromMpcServerMessage, toMpcServerMessage } from '../message/server'
@@ -29,10 +31,15 @@ type FroztSessionParams = {
   signers: string[]
 }
 
-function encodePartiesData(signers: string[]): Uint8Array {
-  const sorted = [...signers].sort()
+function encodePartiesData(
+  signers: string[],
+  preserveSignerOrder = false
+): Uint8Array {
+  const orderedSigners = preserveSignerOrder
+    ? [...signers]
+    : [...signers].sort()
   const encoder = new TextEncoder()
-  const encodedNames = sorted.map(name => encoder.encode(name))
+  const encodedNames = orderedSigners.map(name => encoder.encode(name))
 
   let totalSize = 2
   for (const name of encodedNames) {
@@ -41,10 +48,10 @@ function encodePartiesData(signers: string[]): Uint8Array {
 
   const buf = new Uint8Array(totalSize)
   const view = new DataView(buf.buffer)
-  view.setUint16(0, sorted.length, true)
+  view.setUint16(0, orderedSigners.length, true)
 
   let offset = 2
-  for (let i = 0; i < sorted.length; i++) {
+  for (let i = 0; i < orderedSigners.length; i++) {
     view.setUint16(offset, i + 1, true)
     offset += 2
     view.setUint16(offset, encodedNames[i].length, true)
@@ -59,6 +66,18 @@ function encodePartiesData(signers: string[]): Uint8Array {
 function getFrostId(localPartyId: string, signers: string[]): number {
   const sorted = [...signers].sort()
   return sorted.indexOf(localPartyId) + 1
+}
+
+function encodeU16List(ids: number[]): Uint8Array {
+  const buf = new Uint8Array(2 + ids.length * 2)
+  const view = new DataView(buf.buffer)
+  view.setUint16(0, ids.length, true)
+  let offset = 2
+  for (const id of ids) {
+    view.setUint16(offset, id, true)
+    offset += 2
+  }
+  return buf
 }
 
 async function uploadSetup(
@@ -168,8 +187,8 @@ export async function createFroztImportSession(
 
 export async function createFroztReshareSession(
   params: FroztSessionParams & {
-    oldKeyPackage: Uint8Array
-    oldPubKeyPackage?: Uint8Array
+    oldBundle: Uint8Array
+    oldParties: string[]
   }
 ): Promise<FroztSessionHandle> {
   await initializeFrozt()
@@ -179,16 +198,17 @@ export async function createFroztReshareSession(
 
   let setupMsg: Uint8Array
   if (params.isInitiatingDevice) {
-    const sorted = [...params.signers].sort()
-    const oldIdEntries = sorted.map((_, i) => ({
-      id: i + 1,
-      value: frozt_encode_identifier(i + 1),
-    }))
-    const oldIdentifiersData = encode_map(oldIdEntries)
+    const sortedOldParties = [...params.oldParties].sort()
+    const signerSet = new Set(params.signers)
+    const oldIdentifiersData = encodeU16List(
+      sortedOldParties.flatMap((party, index) =>
+        signerSet.has(party) ? [index + 1] : []
+      )
+    )
 
-    const expectedVk = params.oldPubKeyPackage
-      ? frozt_pubkeypackage_verifying_key(params.oldPubKeyPackage)
-      : new Uint8Array()
+    const expectedVk = frozt_pubkeypackage_verifying_key(
+      frozt_keyshare_bundle_pub_key_package(params.oldBundle)
+    )
 
     setupMsg = froztReshareSetupMsgNew(
       maxSigners,
@@ -205,6 +225,62 @@ export async function createFroztReshareSession(
   return FroztReshareSession.fromSetup(
     setupMsg,
     params.localPartyId,
-    params.oldKeyPackage
+    frozt_keyshare_bundle_key_package(params.oldBundle)
+  )
+}
+
+export async function createFroztSignSession(
+  params: FroztSessionParams & {
+    msgToSign: Uint8Array
+    keyPackage: Uint8Array
+    pubKeyPackage: Uint8Array
+  }
+): Promise<FroztSessionHandle> {
+  await initializeFrozt()
+  // Sign setup must preserve the key-package identifier mapping from keygen/import.
+  const partiesData = encodePartiesData(params.signers)
+
+  let setupMsg: Uint8Array
+  if (params.isInitiatingDevice) {
+    setupMsg = froztSignSetupMsgNew(params.msgToSign, partiesData)
+    await uploadSetup(setupMsg, params)
+  } else {
+    setupMsg = await fetchSetup(params)
+  }
+
+  return FroztSignSession.fromSetup(
+    setupMsg,
+    params.localPartyId,
+    params.keyPackage,
+    params.pubKeyPackage
+  )
+}
+
+export async function createFroztSignSessionWithAlpha(
+  params: FroztSessionParams & {
+    msgToSign: Uint8Array
+    keyPackage: Uint8Array
+    pubKeyPackage: Uint8Array
+    alpha: Uint8Array
+  }
+): Promise<FroztSessionHandle> {
+  await initializeFrozt()
+  // Sapling alpha changes signing randomness, not signer identifiers.
+  const partiesData = encodePartiesData(params.signers)
+
+  let setupMsg: Uint8Array
+  if (params.isInitiatingDevice) {
+    setupMsg = froztSignSetupMsgNew(params.msgToSign, partiesData)
+    await uploadSetup(setupMsg, params)
+  } else {
+    setupMsg = await fetchSetup(params)
+  }
+
+  return FroztSignSession.fromSetupWithAlpha(
+    setupMsg,
+    params.localPartyId,
+    params.keyPackage,
+    params.pubKeyPackage,
+    params.alpha
   )
 }

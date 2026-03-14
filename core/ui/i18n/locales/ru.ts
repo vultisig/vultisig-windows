@@ -1250,4 +1250,5 @@ export const ru = {
   agent_tx_type_swap: 'Менять',
   agent_tx_type_transfer: 'Передача',
   agent_tx_view: 'Вид',
+  zcash_notes_found: 'Notes Found',
 }

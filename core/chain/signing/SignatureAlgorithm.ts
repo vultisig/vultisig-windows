@@ -15,6 +15,6 @@ export const signatureAlgorithms: Record<ChainKind, SignatureAlgorithm> = {
   ripple: 'ecdsa',
   tron: 'ecdsa',
   cardano: 'eddsa',
-  zcashShielded: 'ecdsa',
+  zcashSapling: 'ecdsa',
   monero: 'eddsa',
 }

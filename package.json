@@ -28,6 +28,7 @@
     "@eslint/eslintrc": "^3.3.3",
     "@eslint/js": "^9.39.2",
     "@google-cloud/translate": "^9.3.0",
+    "@playwright/test": "^1.58.2",
     "@types/node": "^25.2.1",
     "@types/react": "^19.2.13",
     "@typescript-eslint/eslint-plugin": "^8.54.0",

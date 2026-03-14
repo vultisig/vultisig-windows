@@ -25,9 +25,7 @@ type SaplingOutputFields = {
   encCiphertext: Uint8Array
 }
 
-export const parseSaplingOutputs = (
-  rawTx: Uint8Array
-): Map<string, SaplingOutputFields> => {
+const skipToSaplingSection = (rawTx: Uint8Array): number => {
   let offset = 0
 
   // header(4) + versionGroupId(4) + consensusBranchId(4) + lockTime(4) + expiryHeight(4) = 20
@@ -62,6 +60,38 @@ export const parseSaplingOutputs = (
     )
     offset += scriptLenBytes + scriptLen
   }
+
+  return offset
+}
+
+export const parseSaplingSpendNullifiers = (
+  rawTx: Uint8Array
+): Uint8Array[] => {
+  let offset = skipToSaplingSection(rawTx)
+
+  // sapling spends: each = cv(32) + nullifier(32) + rk(32) = 96 bytes
+  const { value: spendCount, bytesRead: spendCountBytes } = readCompactSize(
+    rawTx,
+    offset
+  )
+  offset += spendCountBytes
+
+  const nullifiers: Uint8Array[] = []
+  for (let i = 0; i < spendCount; i++) {
+    offset += 32 // skip cv
+    const nullifier = rawTx.slice(offset, offset + 32)
+    nullifiers.push(new Uint8Array(nullifier))
+    offset += 32 // past nullifier
+    offset += 32 // skip rk
+  }
+
+  return nullifiers
+}
+
+export const parseSaplingOutputs = (
+  rawTx: Uint8Array
+): Map<string, SaplingOutputFields> => {
+  let offset = skipToSaplingSection(rawTx)
 
   // sapling spends: each = cv(32) + nullifier(32) + rk(32) = 96 bytes
   const { value: spendCount, bytesRead: spendCountBytes } = readCompactSize(

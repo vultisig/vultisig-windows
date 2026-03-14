@@ -37,7 +37,7 @@ export const VaultOverview = ({ scrollContainerRef }: VaultOverviewProps) => {
   const { libType } = useCurrentVault()
 
   const banners = [
-    ...(libType !== 'DKLS'
+    ...(libType === 'GG20'
       ? [
           {
             id: 'migrate' as const,

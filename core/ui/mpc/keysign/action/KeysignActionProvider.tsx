@@ -1,9 +1,11 @@
 import { Chain } from '@core/chain/Chain'
 import { encodeDERSignature } from '@core/mpc/derSignature'
-import { FroztKeysign } from '@core/mpc/frozt/froztKeysign'
+import { runFroztSession } from '@core/mpc/frozt/froztSession'
+import { createFroztSignSession } from '@core/mpc/frozt/froztSessionFactory'
 import { keysign } from '@core/mpc/keysign'
 import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
 import { isKeyImportVault } from '@core/mpc/vault/Vault'
+import { withMpcRetry } from '@core/mpc/withMpcRetry'
 import { ChildrenProp } from '@lib/ui/props'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { match } from '@lib/utils/match'
@@ -12,9 +14,9 @@ import { useCallback } from 'react'
 
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
 import { useCurrentVault } from '../../../vault/state/currentVault'
+import { useMpcSigners } from '../../devices/state/signers'
 import { useCurrentHexEncryptionKey } from '../../state/currentHexEncryptionKey'
 import { useIsInitiatingDevice } from '../../state/isInitiatingDevice'
-import { useMpcPeers } from '../../state/mpcPeers'
 import { useMpcServerUrl } from '../../state/mpcServerUrl'
 import { useMpcSessionId } from '../../state/mpcSession'
 import {
@@ -47,38 +49,53 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
   const encryptionKeyHex = useCurrentHexEncryptionKey()
   const serverUrl = useMpcServerUrl()
   const isInitiatingDevice = useIsInitiatingDevice()
-  const peers = useMpcPeers()
+  const signers = useMpcSigners()
 
   const keysignAction: KeysignAction = useCallback(
     async ({ msgs, signatureAlgorithm, coinType, chain }) => {
-      const usesFrozt = chain === Chain.ZcashShielded
+      const usesFrozt = chain === Chain.ZcashSapling
 
       if (usesFrozt) {
-        const keyPackage = shouldBePresent(
-          vault.chainKeyShares?.[Chain.ZcashShielded],
+        const keyPackageBase64 = shouldBePresent(
+          vault.chainKeyShares?.[Chain.ZcashSapling],
           'Frozt keyshare'
         )
-        const pubKeyPackage = shouldBePresent(
-          vault.chainPublicKeys?.[Chain.ZcashShielded],
+        const pubKeyPackageBase64 = shouldBePresent(
+          vault.chainPublicKeys?.[Chain.ZcashSapling],
           'Frozt public key package'
         )
 
-        const froztKeysign = new FroztKeysign(
-          isInitiatingDevice,
-          serverUrl,
-          sessionId,
-          vault.localPartyId,
-          [vault.localPartyId, ...peers],
-          encryptionKeyHex
+        const keyPackage = new Uint8Array(
+          Buffer.from(keyPackageBase64, 'base64')
         )
-
+        const pubKeyPackage = new Uint8Array(
+          Buffer.from(pubKeyPackageBase64, 'base64')
+        )
         return chainPromises(
-          msgs.map(message => async () => {
-            const rawSig = await froztKeysign.sign(
-              Buffer.from(message, 'hex'),
-              keyPackage,
-              pubKeyPackage
-            )
+          msgs.map((message, index) => async () => {
+            const rawSig = await withMpcRetry(async () => {
+              const session = await createFroztSignSession({
+                serverUrl,
+                sessionId,
+                localPartyId: vault.localPartyId,
+                hexEncryptionKey: encryptionKeyHex,
+                setupMessageId: `frozt-sign-setup-${index}`,
+                isInitiatingDevice,
+                signers,
+                msgToSign: new Uint8Array(Buffer.from(message, 'hex')),
+                keyPackage,
+                pubKeyPackage,
+              })
+              return runFroztSession({
+                session,
+                messageId: `frozt-sign-${index}`,
+                serverUrl,
+                sessionId,
+                localPartyId: vault.localPartyId,
+                signers,
+                hexEncryptionKey: encryptionKeyHex,
+              })
+            }, `frozt-sign-${index}`)
             return froztSignatureToKeysignSignature(rawSig, message)
           })
         )
@@ -108,7 +125,7 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
                     eddsa: () => eddsaPlaceholderChainPath,
                   }),
               localPartyId: vault.localPartyId,
-              peers,
+              peers: signers.filter(party => party !== vault.localPartyId),
               serverUrl,
               sessionId,
               hexEncryptionKey: encryptionKeyHex,
@@ -120,9 +137,9 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
     [
       encryptionKeyHex,
       isInitiatingDevice,
-      peers,
       serverUrl,
       sessionId,
+      signers,
       vault,
       walletCore,
     ]

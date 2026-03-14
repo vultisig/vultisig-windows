@@ -22,4 +22,6 @@ export enum StorageKey {
   dismissedBanners = 'dismissedBanners',
   isCircleVisible = 'isCircleVisible',
   isMLDSAEnabled = 'isMLDSAEnabled',
+  moneroScanData = 'moneroScanData',
+  zcashScanData = 'zcashScanData',
 }

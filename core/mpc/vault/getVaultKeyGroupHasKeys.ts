@@ -12,7 +12,7 @@ export const getVaultKeyGroupHasKeys = (
     case 'eddsa':
       return !!vault.publicKeys.eddsa
     case 'frozt':
-      return !!vault.chainPublicKeys?.[Chain.ZcashShielded]
+      return !!vault.chainPublicKeys?.[Chain.ZcashSapling]
     case 'fromt':
       return !!vault.chainKeyShares?.[Chain.Monero]
     case 'mldsa':

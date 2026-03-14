@@ -33,8 +33,14 @@ const resolvers: Record<ChainKind, FeeAmountResolver> = {
   ton: tonFeeAmountResolver,
   utxo: getUtxoFeeAmount,
   tron: getTronFeeAmount,
-  zcashShielded: () => 10000n,
-  monero: () => 0n,
+  zcashSapling: () => 10000n,
+  monero: ({ keysignPayload }) => {
+    const specific = keysignPayload.blockchainSpecific
+    if (specific.case === 'utxoSpecific' && specific.value.byteFee) {
+      return BigInt(specific.value.byteFee)
+    }
+    return 0n
+  },
 }
 
 export const getFeeAmount = (input: Input): bigint => {

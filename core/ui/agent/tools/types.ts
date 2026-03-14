@@ -24,6 +24,7 @@ type VaultMeta = {
   libType: string
   signers: string[]
   keyShares: KeyShareInfo[]
+  chainKeyShares?: Partial<Record<string, string>>
 }
 
 type ToolContext = {

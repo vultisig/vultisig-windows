@@ -1,3 +1,8 @@
+import {
+  formatMoneroAtomicAmount,
+  isMoneroBalanceFinalisePayload,
+  parseMoneroBalanceFinaliseMessage,
+} from '@core/chain/chains/monero/balanceFinaliseMessage'
 import { CustomMessagePayload } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import {
   TxOverviewChainDataRow,
@@ -13,6 +18,14 @@ export const KeysignCustomMessageInfo = ({
 }: ValueProp<CustomMessagePayload>) => {
   const { t } = useTranslation()
 
+  const moneroBalanceFinalise = useMemo(
+    () =>
+      isMoneroBalanceFinalisePayload(value)
+        ? parseMoneroBalanceFinaliseMessage(value.message)
+        : null,
+    [value]
+  )
+
   const formattedMessage = useMemo(
     () =>
       withFallback(
@@ -21,6 +34,21 @@ export const KeysignCustomMessageInfo = ({
       ),
     [value.message]
   )
+
+  if (moneroBalanceFinalise) {
+    return (
+      <>
+        <TxOverviewRow>
+          <span>{t('outputs_found')}</span>
+          {moneroBalanceFinalise.outputCount.toLocaleString()}
+        </TxOverviewRow>
+        <TxOverviewRow>
+          <span>{t('current_scanned_balance')}</span>
+          {formatMoneroAtomicAmount(moneroBalanceFinalise.balanceAtomic)}
+        </TxOverviewRow>
+      </>
+    )
+  }
 
   return (
     <>

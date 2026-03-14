@@ -74,6 +74,8 @@ export type CoreView =
   | { id: 'reshareVaultFast' }
   | { id: 'reshareVaultSecure' }
   | { id: 'migrateVault' }
+  | { id: 'moneroBalanceFinalise' }
+  | { id: 'zcashBalanceScan' }
   | {
       id: 'send'
       state: ({ fromChain: Chain } | { coin: CoinKey }) & {
