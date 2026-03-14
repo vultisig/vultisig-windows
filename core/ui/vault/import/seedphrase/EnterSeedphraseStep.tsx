@@ -5,14 +5,17 @@ import { getFormProps } from '@lib/ui/form/utils/getFormProps'
 import { TextArea } from '@lib/ui/inputs/TextArea'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
+import { attempt, withFallback } from '@lib/utils/attempt'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { seedphraseWordCounts } from './config'
 import { EnterSeedphraseHeader } from './EnterSeedphraseHeader'
+import { useVaultExistsOnServerQuery } from './hooks/useVaultExistsOnServerQuery'
 import { useMnemonic } from './state/mnemonic'
 import { useImportSeedphraseStep } from './state/step'
 import { checkDuplicateMnemonicVault } from './utils/checkDuplicateMnemonicVault'
+import { deriveEcdsaPublicKeyFromMnemonic } from './utils/deriveEcdsaPublicKeyFromMnemonic'
 import { cleanMnemonic, validateMnemonic } from './utils/validateMnemonic'
 
 export const EnterSeedphraseStep = () => {
@@ -44,6 +47,23 @@ export const EnterSeedphraseStep = () => {
 
   const error = basicError || duplicateError
   const isValid = cleanedMnemonic !== '' && !error
+
+  const ecdsaPublicKey = useMemo(() => {
+    if (!isValid) return null
+    return withFallback(
+      attempt(() =>
+        deriveEcdsaPublicKeyFromMnemonic({
+          mnemonic: cleanedMnemonic,
+          walletCore,
+        })
+      ),
+      null
+    )
+  }, [isValid, cleanedMnemonic, walletCore])
+
+  const { data: vaultExistsOnServer } = useVaultExistsOnServerQuery({
+    ecdsaPublicKey,
+  })
 
   const words = cleanedMnemonic.split(' ')
   const wordsCount = cleanedMnemonic === '' ? 0 : words.length
@@ -79,6 +99,12 @@ export const EnterSeedphraseStep = () => {
         {error && (
           <Text size={13} color="danger">
             {error}
+          </Text>
+        )}
+
+        {vaultExistsOnServer && (
+          <Text size={13} color="warning">
+            {t('seedphrase_server_vault_exists_warning')}
           </Text>
         )}
       </VStack>
