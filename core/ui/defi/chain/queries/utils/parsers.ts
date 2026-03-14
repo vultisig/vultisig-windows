@@ -44,22 +44,26 @@ export const toBondStatusLabel = (status?: string) => {
   return bondStatusMap[normalized] ?? 'unknown'
 }
 
+type EstimateNextChurnInput = {
+  nextChurnHeight?: number
+  currentHeight: number
+  referenceTimestamp: number
+  churns: Array<{ height?: string; date?: string }>
+  blockTimeSeconds?: number
+}
+
 export const estimateNextChurn = ({
   nextChurnHeight,
   currentHeight,
   referenceTimestamp,
   churns,
-}: {
-  nextChurnHeight?: number
-  currentHeight: number
-  referenceTimestamp: number
-  churns: Array<{ height?: string; date?: string }>
-}) => {
+  blockTimeSeconds = thorchainBlockTimeSeconds,
+}: EstimateNextChurnInput) => {
   if (!nextChurnHeight || nextChurnHeight <= currentHeight) return undefined
   const deriveAverageBlockTime = (
     entries: Array<{ height?: string; date?: string }>
   ) => {
-    if (!entries || entries.length < 2) return thorchainBlockTimeSeconds
+    if (!entries || entries.length < 2) return blockTimeSeconds
 
     const sorted = entries
       .map(churn => ({
@@ -69,7 +73,7 @@ export const estimateNextChurn = ({
       .filter(entry => entry.height && entry.date)
       .sort((a, b) => b.height - a.height)
 
-    if (sorted.length < 2) return thorchainBlockTimeSeconds
+    if (sorted.length < 2) return blockTimeSeconds
 
     let totalSeconds = 0
     let totalBlocks = 0
@@ -85,9 +89,7 @@ export const estimateNextChurn = ({
       }
     }
 
-    return totalBlocks > 0
-      ? totalSeconds / totalBlocks
-      : thorchainBlockTimeSeconds
+    return totalBlocks > 0 ? totalSeconds / totalBlocks : blockTimeSeconds
   }
 
   const avgBlockTime = deriveAverageBlockTime(churns)

@@ -18,6 +18,7 @@ import { useConnectionStatus } from '../hooks/useConnectionStatus'
 import { BurgerClosedIcon } from '../icons/BurgerClosedIcon'
 import { ChatMessage as ChatMessageType, TitleUpdatedEvent } from '../types'
 import { getDateSections } from '../utils/getDateSections'
+import { AgentAuthorizationView } from './AgentAuthorizationView'
 import { AgentChatFooter } from './AgentChatFooter'
 import { AgentChatMenu } from './AgentChatMenu'
 import { AgentEmptyState } from './AgentEmptyState'
@@ -27,6 +28,7 @@ import { AgentReplyMessage } from './AgentReplyMessage'
 import { ChatMessage } from './ChatMessage'
 import { ConfirmationPrompt } from './ConfirmationPrompt'
 import { PasswordPrompt } from './PasswordPrompt'
+import { ReauthorizeAgentDialog } from './ReauthorizeAgentDialog'
 
 type AgentChatViewState = { conversationId?: string; initialMessage?: string }
 
@@ -312,6 +314,26 @@ export const AgentChatPage: FC = () => {
     cancelRequest()
   }
 
+  const handleReauthorize = async () => {
+    if (!vaultId || !orchestrator) return
+    await orchestrator.reauthorize(vaultId)
+    dismissAuthRequired()
+    const pending = pendingMessageRef.current
+    pendingMessageRef.current = null
+    if (pending) {
+      try {
+        if (conversationId) {
+          await sendMessageToConversation(conversationId, vaultId, pending)
+        } else {
+          const id = await sendMessage(vaultId, pending)
+          setConversationId(id)
+        }
+      } catch {
+        // error events are surfaced via useAgentEvents
+      }
+    }
+  }
+
   const handleAuthSignIn = async (password: string) => {
     if (!vaultId) return
     setAuthSignInError(null)
@@ -374,6 +396,31 @@ export const AgentChatPage: FC = () => {
         locale: i18n.language,
       },
     })
+
+  const hasCachedPassword =
+    vaultId != null && orchestrator?.hasCachedPassword(vaultId)
+
+  if (showConnectionGate) {
+    return (
+      <VStack fullHeight>
+        <PageHeader
+          hasBorder
+          secondaryControls={
+            <AgentChatMenu
+              conversationId={null}
+              onSessionDeleted={handleSessionDeleted}
+            />
+          }
+        />
+        <AgentAuthorizationView
+          onSubmit={handleConnectionGateSubmit}
+          onCancel={handleConnectionGateCancel}
+          error={connectionError}
+          isLoading={connectionState === 'connecting'}
+        />
+      </VStack>
+    )
+  }
 
   return (
     <VStack fullHeight>
@@ -477,7 +524,13 @@ export const AgentChatPage: FC = () => {
           onCancel={handleConfirmationCancel}
         />
       )}
-      {authRequired && (
+      {authRequired && hasCachedPassword && (
+        <ReauthorizeAgentDialog
+          onAuthorize={handleReauthorize}
+          onCancel={handleAuthCancel}
+        />
+      )}
+      {authRequired && !hasCachedPassword && (
         <PasswordPrompt
           toolName="sign_in"
           operation={t('agent_operation_sign_in')}
@@ -486,17 +539,6 @@ export const AgentChatPage: FC = () => {
           isLoading={authSigningIn}
           onSubmit={handleAuthSignIn}
           onCancel={handleAuthCancel}
-        />
-      )}
-      {!authRequired && showConnectionGate && (
-        <PasswordPrompt
-          toolName="sign_in"
-          operation={t('agent_operation_sign_in')}
-          description={t('agent_connect_description')}
-          error={connectionError}
-          isLoading={connectionState === 'connecting'}
-          onSubmit={handleConnectionGateSubmit}
-          onCancel={handleConnectionGateCancel}
         />
       )}
     </VStack>
