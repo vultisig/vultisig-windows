@@ -7,7 +7,6 @@ import { Plugin } from '@clients/extension/src/inpage/providers/plugin'
 import { Polkadot } from '@clients/extension/src/inpage/providers/polkadot'
 import { Ripple } from '@clients/extension/src/inpage/providers/ripple'
 import { Solana } from '@clients/extension/src/inpage/providers/solana'
-import { registerWallet } from '@clients/extension/src/inpage/providers/solana/register'
 import { Sui } from '@clients/extension/src/inpage/providers/sui'
 import { THORChain } from '@clients/extension/src/inpage/providers/thorchain'
 import { TonConnectBridge } from '@clients/extension/src/inpage/providers/tonConnect'
@@ -27,8 +26,6 @@ const createTonProvider = () => {
 export const createProviders = () => {
   const cosmosProvider = Cosmos.getInstance()
   const vultisigSolanaProvider = new Solana('Vultisig')
-
-  registerWallet(vultisigSolanaProvider)
 
   return {
     bitcoin: new UTXO(UtxoChain.Bitcoin),
