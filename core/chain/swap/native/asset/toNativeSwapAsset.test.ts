@@ -1,20 +1,19 @@
-import { describe, expect, it } from 'vitest'
-
 import { Chain } from '@core/chain/Chain'
+import { describe, expect, it } from 'vitest'
 
 import { toNativeSwapAsset } from './toNativeSwapAsset'
 
 describe('toNativeSwapAsset', () => {
   it('returns CHAIN.TICKER for native fee coins', () => {
-    expect(
-      toNativeSwapAsset({ chain: Chain.Ethereum, ticker: 'ETH' })
-    ).toBe('ETH.ETH')
+    expect(toNativeSwapAsset({ chain: Chain.Ethereum, ticker: 'ETH' })).toBe(
+      'ETH.ETH'
+    )
   })
 
   it('returns CHAIN.TICKER for RUNE', () => {
-    expect(
-      toNativeSwapAsset({ chain: Chain.THORChain, ticker: 'RUNE' })
-    ).toBe('THOR.RUNE')
+    expect(toNativeSwapAsset({ chain: Chain.THORChain, ticker: 'RUNE' })).toBe(
+      'THOR.RUNE'
+    )
   })
 
   it('returns denom directly for THORChain secure assets', () => {
