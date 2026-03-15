@@ -332,6 +332,9 @@ export const nl = {
   fast: 'Snel',
   fastVault: 'Fast Vault',
   secureVault: 'Veilige Kluis',
+  fast_vault_session_conflict: 'Kluis moet opnieuw geïmporteerd worden',
+  fast_vault_session_conflict_description:
+    'Dezelfde seed phrase is op een ander apparaat geïmporteerd, waardoor het serveraandeel van deze kluis is vervangen. Om deze kluis opnieuw te gebruiken, verwijder hem en importeer de seed phrase opnieuw.',
   fast_vault_password_start_keysign_description:
     'Bevestig de transactie door het wachtwoord van je server-share in te voeren.',
   fastVaultSetup: {
