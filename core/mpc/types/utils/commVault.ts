@@ -152,9 +152,13 @@ export const fromCommVault = (vault: CommVault): Vault => {
   })
 
   const chainPublicKeysWithKeyShare = toEntries(allChainPublicKeys)
-  const missingPublicKeys = chainPublicKeysWithKeyShare
-    .filter(({ key }) => !(key in chainKeyShares))
-    .map(({ value }) => value)
+  const missingPublicKeys = Array.from(
+    new Set(
+      chainPublicKeysWithKeyShare
+        .filter(({ key }) => !(key in chainKeyShares))
+        .map(({ value }) => value)
+    )
+  )
   if (missingPublicKeys.length > 0) {
     throw new Error(
       `Backup is missing keyshares for public keys: ${missingPublicKeys.join(', ')}`
