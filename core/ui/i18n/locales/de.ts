@@ -441,6 +441,9 @@ export const de = {
   fast: 'Schnell',
   fastVault: 'Schneller Tresor',
   secureVault: 'Sicherer Tresor',
+  fast_vault_session_conflict: 'Tresor muss erneut importiert werden',
+  fast_vault_session_conflict_description:
+    'Dieselbe Seed-Phrase wurde auf einem anderen Gerät importiert, wodurch der Server-Anteil dieses Tresors ersetzt wurde. Um diesen Tresor wieder zu verwenden, löschen Sie ihn und importieren Sie die Seed-Phrase erneut.',
   fast_sign: 'Schnelles Zeichen',
   fill_the_form: 'Füllen Sie das Formular aus.',
   find_custom_token: 'Benutzerdefiniertes Token finden',
