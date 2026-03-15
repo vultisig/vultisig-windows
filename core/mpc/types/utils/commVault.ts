@@ -85,13 +85,13 @@ export const toCommVault = (vault: Vault): CommVault =>
   })
 
 export const fromCommVault = (vault: CommVault): Vault => {
+  const allChainPublicKeys: Partial<Record<Chain, string>> = {}
+  const chainKeyShares: Partial<Record<Chain, string>> = {}
+  const chainsByPublicKey = new Map<string, Chain[]>()
   const publicKeys = {
     ecdsa: vault.publicKeyEcdsa,
     eddsa: vault.publicKeyEddsa,
   }
-
-  const allChainPublicKeys: Partial<Record<Chain, string>> = {}
-  const chainsByPublicKey = new Map<string, Chain[]>()
 
   vault.chainPublicKeys.forEach(cp => {
     const chain = cp.chain as Chain
@@ -112,12 +112,11 @@ export const fromCommVault = (vault: CommVault): Vault => {
   )
 
   const publicKeyMldsa = vault.publicKeyMldsa44 || undefined
-  const mldsaKeyShare = publicKeyMldsa
-    ? vault.keyShares.find(ks => ks.publicKey === publicKeyMldsa)
+  const keyShareMldsa = vault.publicKeyMldsa44
+    ? vault.keyShares.find(ks => ks.publicKey === vault.publicKeyMldsa44)
+        ?.keyshare
     : undefined
-  const keyShareMldsa = mldsaKeyShare?.keyshare
 
-  const chainKeyShares: Partial<Record<Chain, string>> = {}
   vault.keyShares.forEach(keyShare => {
     const chains = chainsByPublicKey.get(keyShare.publicKey)
     if (chains) {
@@ -130,9 +129,12 @@ export const fromCommVault = (vault: CommVault): Vault => {
   const chainPublicKeysWithKeyShare = toEntries(allChainPublicKeys).filter(
     ({ key }) => key in chainKeyShares
   )
-  const chainPublicKeys = Object.fromEntries(
-    chainPublicKeysWithKeyShare.map(({ key, value }) => [key, value])
-  ) as Partial<Record<Chain, string>>
+  const chainPublicKeys = chainPublicKeysWithKeyShare.reduce<
+    Partial<Record<Chain, string>>
+  >((acc, { key, value }) => {
+    acc[key] = value
+    return acc
+  }, {})
 
   return {
     ...pick(vault, [
