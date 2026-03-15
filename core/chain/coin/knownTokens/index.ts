@@ -47,7 +47,7 @@ const leanTokens: Partial<LeanChainTokensRecord> = {
     },
     'EQD-cvR0Nz6XAyRBvbhz-abTrRC6sI5tvHvvpeQraV9UAAD7': {
       ticker: 'CATI',
-      logo: 'https://catizen.ai/CATI_TOKEN.png',
+      logo: 'cati',
       decimals: 9,
       priceProviderId: 'catizen',
     },
@@ -59,7 +59,7 @@ const leanTokens: Partial<LeanChainTokensRecord> = {
     },
     EQA2kCVNwVsil2EM2mB0SkXytxCqQjS4mttjDpnXmwG9T6bO: {
       ticker: 'STON',
-      logo: 'https://static.ston.fi/logo/ston_symbol.png',
+      logo: 'ston',
       decimals: 9,
       priceProviderId: 'ston-2',
     },
@@ -71,7 +71,7 @@ const leanTokens: Partial<LeanChainTokensRecord> = {
     },
     EQC98_qAmNEptUtPc7W6xdHh_ZHrBUFpw5Ft_IzNU20QAJav: {
       ticker: 'tsTON',
-      logo: 'https://tonstakers.com/jetton/logo.svg',
+      logo: 'tston',
       decimals: 9,
       priceProviderId: 'tonstakers',
     },
