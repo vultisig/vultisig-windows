@@ -89,6 +89,7 @@ export const useCreateVaultMutation = (
       ])
 
       await refetchQueries([StorageKey.vaults])
+      await refetchQueries([StorageKey.currentVaultId])
 
       return vault
     },
