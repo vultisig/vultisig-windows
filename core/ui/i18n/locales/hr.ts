@@ -433,6 +433,9 @@ export const hr = {
   fast: 'Brzo',
   fastVault: 'Brzi trezor',
   secureVault: 'Siguran trezor',
+  fast_vault_session_conflict: 'Trezor treba ponovni uvoz',
+  fast_vault_session_conflict_description:
+    'Ista početna fraza uvezena je na drugom uređaju, čime je zamijenjen udio na poslužitelju ovog trezora. Za ponovnu upotrebu ovog trezora, izbrišite ga i ponovo uvezite početnu frazu.',
   fast_sign: 'Brzi znak',
   fill_the_form: 'Ispunite obrazac',
   find_custom_token: 'Pronađite prilagođeni token',
