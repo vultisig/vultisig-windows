@@ -94,10 +94,29 @@ export const fromCommVault = (vault: CommVault): Vault => {
   }
 
   vault.chainPublicKeys.forEach(cp => {
+    if (!(Object.values(Chain) as string[]).includes(cp.chain)) return
     const chain = cp.chain as Chain
+
+    // If this chain was previously mapped to a different public key, remove
+    // the stale association so both maps stay in sync.
+    const previousPublicKey = allChainPublicKeys[chain]
+    if (previousPublicKey !== undefined && previousPublicKey !== cp.publicKey) {
+      const previousChains = chainsByPublicKey.get(previousPublicKey)
+      if (previousChains) {
+        const updated = previousChains.filter(c => c !== chain)
+        if (updated.length > 0) {
+          chainsByPublicKey.set(previousPublicKey, updated)
+        } else {
+          chainsByPublicKey.delete(previousPublicKey)
+        }
+      }
+    }
+
     allChainPublicKeys[chain] = cp.publicKey
     const existing = chainsByPublicKey.get(cp.publicKey) ?? []
-    existing.push(chain)
+    if (!existing.includes(chain)) {
+      existing.push(chain)
+    }
     chainsByPublicKey.set(cp.publicKey, existing)
   })
 
