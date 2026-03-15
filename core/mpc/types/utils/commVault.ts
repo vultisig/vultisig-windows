@@ -23,6 +23,9 @@ import {
 } from '../vultisig/vault/v1/vault_pb'
 import { fromLibType, toLibType } from './libType'
 
+const isChain = (value: unknown): value is Chain =>
+  (Object.values(Chain) as string[]).includes(value as string)
+
 const isoStringToProtoTimestamp = (timestamp: number): Timestamp => {
   const seconds = Math.floor(convertDuration(timestamp, 'ms', 's'))
   const nanos = convertDuration(
@@ -94,8 +97,8 @@ export const fromCommVault = (vault: CommVault): Vault => {
   }
 
   vault.chainPublicKeys.forEach(cp => {
-    if (!(Object.values(Chain) as string[]).includes(cp.chain)) return
-    const chain = cp.chain as Chain
+    if (!isChain(cp.chain)) return
+    const chain = cp.chain
 
     // If this chain was previously mapped to a different public key, remove
     // the stale association so both maps stay in sync.
