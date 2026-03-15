@@ -7,6 +7,7 @@ import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
 import { VerifyTransactionOverview } from '@core/ui/mpc/keysign/verify/VerifyTransactionOverview'
+import { useAddressBookNameForAddress } from '@core/ui/vault/hooks/useAddressBookNameForAddress'
 import { useVaultNameForAddress } from '@core/ui/vault/hooks/useVaultNameForAddress'
 import { useSendKeysignPayloadQuery } from '@core/ui/vault/send/keysignPayload/query'
 import { useSender } from '@core/ui/vault/send/sender/hooks/useSender'
@@ -35,6 +36,10 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const coin = useCurrentSendCoin()
   const sender = useSender()
   const receiverVaultName = useVaultNameForAddress(receiver, coin.chain)
+  const receiverAddressBookName = useAddressBookNameForAddress(
+    receiver,
+    coin.chain
+  )
   const [feeSettings, setFeeSettings] = useState<FeeSettings | undefined>(
     undefined
   )
@@ -68,6 +73,11 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
           senderAddress={sender}
           receiver={receiver}
           receiverVaultName={receiverVaultName ?? undefined}
+          receiverAddressBookName={
+            receiverVaultName !== null
+              ? undefined
+              : (receiverAddressBookName ?? undefined)
+          }
           chain={coin.chain}
           keysignPayloadQuery={keysignPayloadQuery}
           renderFeeExtra={

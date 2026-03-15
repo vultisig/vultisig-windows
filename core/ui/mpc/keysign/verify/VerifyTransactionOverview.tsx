@@ -35,6 +35,11 @@ type VerifyTransactionOverviewProps = {
    * Swap flows intentionally omit this — their receivers are protocol/contract addresses, not user vaults.
    */
   receiverVaultName?: string
+  /**
+   * Optional address book contact name for the receiver. Used when the receiver is not a known
+   * vault but is saved in the address book. Priority: vault name > address book name > raw address.
+   */
+  receiverAddressBookName?: string
   chain: Chain
   keysignPayloadQuery: Query<KeysignPayload>
   renderFeeExtra?: (keysignPayload: KeysignPayload) => ReactNode
@@ -48,6 +53,7 @@ export const VerifyTransactionOverview = ({
   senderAddress,
   receiver,
   receiverVaultName,
+  receiverAddressBookName,
   chain,
   keysignPayloadQuery,
   renderFeeExtra,
@@ -62,6 +68,19 @@ export const VerifyTransactionOverview = ({
         <HStack alignItems="center" gap={8}>
           <Text as="span" size={14} weight={500}>
             {receiverVaultName}
+          </Text>
+          <Text as="span" color="shy" size={14} weight={500}>
+            ({formatWalletAddress(receiver)})
+          </Text>
+        </HStack>
+      )
+    }
+
+    if (receiverAddressBookName !== undefined && typeof receiver === 'string') {
+      return (
+        <HStack alignItems="center" gap={8}>
+          <Text as="span" size={14} weight={500}>
+            {receiverAddressBookName}
           </Text>
           <Text as="span" color="shy" size={14} weight={500}>
             ({formatWalletAddress(receiver)})
