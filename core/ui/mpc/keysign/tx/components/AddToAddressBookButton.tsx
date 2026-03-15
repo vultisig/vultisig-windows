@@ -2,6 +2,7 @@ import { Chain } from '@core/chain/Chain'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { useAddressBookItems } from '@core/ui/storage/addressBook'
+import { useVaultNameForAddress } from '@core/ui/vault/send/hooks/useVaultNameForAddress'
 import { PlusIcon } from '@lib/ui/icons/PlusIcon'
 import { getColor } from '@lib/ui/theme/getters'
 import { FC } from 'react'
@@ -47,12 +48,13 @@ export const AddToAddressBookButton: FC<AddToAddressBookButtonProps> = ({
   const { isLimited } = useCore()
   const navigate = useCoreNavigate()
   const addressBookItems = useAddressBookItems()
+  const vaultName = useVaultNameForAddress(address, chain)
 
   const addressExists = addressBookItems.some(
     item => item.address === address && item.chain === chain
   )
 
-  if (addressExists || isLimited) {
+  if (addressExists || vaultName !== null || isLimited) {
     return null
   }
 

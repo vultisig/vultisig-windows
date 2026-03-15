@@ -9,6 +9,7 @@ import { useKeysignMessagePayload } from '@core/ui/mpc/keysign/state/keysignMess
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
 import { getSignDataTxAction } from '@core/ui/mpc/keysign/tx/utils/getSignDataTxAction'
 import { useCore } from '@core/ui/state/core'
+import { useVaultNameForAddress } from '@core/ui/vault/send/hooks/useVaultNameForAddress'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIcon'
@@ -56,6 +57,7 @@ export const KeysignTxOverview = () => {
     formattedToAmount !== null ||
     (txAction !== null && txAction.action !== 'send')
 
+  const toVaultName = useVaultNameForAddress(toAddress ?? '', chain)
   const txHash = useTxHash()
   const txStatusQuery = useTxStatusQuery({ chain, hash: txHash })
   const receipt = txStatusQuery.data?.receipt
@@ -127,7 +129,19 @@ export const KeysignTxOverview = () => {
                 {t('to')}
               </Text>
               <HStack alignItems="center" gap={8} style={{ minWidth: 0 }}>
-                <AddressWrapper>{toAddress}</AddressWrapper>
+                {toVaultName !== null ? (
+                  <HStack alignItems="center" gap={4}>
+                    <Text>{toVaultName}</Text>
+                    <MiddleTruncate
+                      color="textShy"
+                      text={`(${toAddress})`}
+                      weight={500}
+                      width={80}
+                    />
+                  </HStack>
+                ) : (
+                  <AddressWrapper>{toAddress}</AddressWrapper>
+                )}
                 <AddToAddressBookButton address={toAddress} chain={chain} />
               </HStack>
             </HStack>

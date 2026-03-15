@@ -28,6 +28,7 @@ type VerifyTransactionOverviewProps = {
   senderName: string
   senderAddress: string
   receiver: string | ReactNode
+  receiverVaultName?: string
   chain: Chain
   keysignPayloadQuery: Query<KeysignPayload>
   renderFeeExtra?: (keysignPayload: KeysignPayload) => ReactNode
@@ -40,6 +41,7 @@ export const VerifyTransactionOverview = ({
   senderName,
   senderAddress,
   receiver,
+  receiverVaultName,
   chain,
   keysignPayloadQuery,
   renderFeeExtra,
@@ -47,6 +49,29 @@ export const VerifyTransactionOverview = ({
 }: VerifyTransactionOverviewProps) => {
   const { t } = useTranslation()
   const formattedAmount = fromChainAmount(amount, coin.decimals)
+
+  const receiverDisplay: ReactNode = (() => {
+    if (receiverVaultName !== undefined && typeof receiver === 'string') {
+      return (
+        <HStack alignItems="center" gap={8}>
+          <Text as="span" size={14} weight={500}>
+            {receiverVaultName}
+          </Text>
+          <Text as="span" color="shy" size={14} weight={500}>
+            ({formatWalletAddress(receiver)})
+          </Text>
+        </HStack>
+      )
+    }
+
+    if (typeof receiver === 'string') {
+      return (
+        <MiddleTruncate size={14} text={receiver} weight={500} width={200} />
+      )
+    }
+
+    return receiver
+  })()
 
   return (
     <List border="gradient" radius={16}>
@@ -69,21 +94,7 @@ export const VerifyTransactionOverview = ({
           </HStack>
         }
       />
-      <TransactionOverviewItem
-        label={t('to')}
-        value={
-          typeof receiver === 'string' ? (
-            <MiddleTruncate
-              size={14}
-              text={receiver}
-              weight={500}
-              width={200}
-            />
-          ) : (
-            receiver
-          )
-        }
-      />
+      <TransactionOverviewItem label={t('to')} value={receiverDisplay} />
       <TransactionOverviewItem
         label={t('network')}
         value={
