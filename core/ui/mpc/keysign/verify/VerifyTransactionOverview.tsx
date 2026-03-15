@@ -28,6 +28,12 @@ type VerifyTransactionOverviewProps = {
   senderName: string
   senderAddress: string
   receiver: string | ReactNode
+  /**
+   * Optional vault name for the receiver. When provided and receiver is a string address,
+   * displays "VaultName (addr...addr)" format instead of plain truncated address.
+   * Wired in Send and Circle withdraw flows (receiver is a user vault).
+   * Swap flows intentionally omit this — their receivers are protocol/contract addresses, not user vaults.
+   */
   receiverVaultName?: string
   chain: Chain
   keysignPayloadQuery: Query<KeysignPayload>

@@ -9,7 +9,7 @@ import { useKeysignMessagePayload } from '@core/ui/mpc/keysign/state/keysignMess
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
 import { getSignDataTxAction } from '@core/ui/mpc/keysign/tx/utils/getSignDataTxAction'
 import { useCore } from '@core/ui/state/core'
-import { useVaultNameForAddress } from '@core/ui/vault/send/hooks/useVaultNameForAddress'
+import { useVaultNameForAddress } from '@core/ui/vault/hooks/useVaultNameForAddress'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIcon'
