@@ -329,6 +329,9 @@ export const ru = {
   fast: 'Быстро',
   fastVault: 'Fast Vault',
   secureVault: 'Надёжное Хранилище',
+  fast_vault_session_conflict: 'Хранилище требует повторного импорта',
+  fast_vault_session_conflict_description:
+    'Та же сид-фраза была импортирована на другом устройстве, что заменило серверную долю этого хранилища. Чтобы снова использовать это хранилище, удалите его и повторно импортируйте сид-фразу.',
   fast_vault_password_start_keysign_description:
     'Подтвердите транзакцию, введя пароль вашей серверной доли.',
   fastVaultSetup: {
