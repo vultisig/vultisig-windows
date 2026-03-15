@@ -405,6 +405,9 @@ export const zh = {
   fast: '快速地',
   fastVault: '快速金库',
   secureVault: '安全金库',
+  fast_vault_session_conflict: '保险库需要重新导入',
+  fast_vault_session_conflict_description:
+    '相同的种子短语已在另一台设备上导入，替换了此保险库的服务器份额。要再次使用此保险库，请删除它并重新导入种子短语。',
   fast_sign: '快速签名',
   fill_the_form: '填写表格',
   find_custom_token: '查找自定义令牌',
