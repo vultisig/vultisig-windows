@@ -23,8 +23,9 @@ import {
 } from '../vultisig/vault/v1/vault_pb'
 import { fromLibType, toLibType } from './libType'
 
+const chainValues = new Set<string>(Object.values(Chain))
 const isChain = (value: unknown): value is Chain =>
-  (Object.values(Chain) as string[]).includes(value as string)
+  typeof value === 'string' && chainValues.has(value)
 
 const isoStringToProtoTimestamp = (timestamp: number): Timestamp => {
   const seconds = Math.floor(convertDuration(timestamp, 'ms', 's'))
