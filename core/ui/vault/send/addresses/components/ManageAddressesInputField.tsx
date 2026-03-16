@@ -107,6 +107,10 @@ export const ManageReceiverAddressInputField = () => {
     // which is not an ENS name, so this branch is skipped on the re-fire.
     if (coin.chain !== EvmChain.Ethereum || !isEnsName(debouncedValue)) return
 
+    // Clear stale label before attempting new resolution so a failed lookup
+    // never leaves a ghost label from a previous successful one
+    setReceiverLabel('')
+
     let cancelled = false
 
     attempt(() => resolveEnsName(debouncedValue)).then(result => {
