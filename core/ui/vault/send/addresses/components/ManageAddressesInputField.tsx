@@ -1,3 +1,4 @@
+import { EvmChain } from '@core/chain/Chain'
 import { isEnsName } from '@core/chain/chains/evm/ens/isEnsName'
 import { resolveEnsName } from '@core/chain/chains/evm/ens/resolveEnsName'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
@@ -100,10 +101,11 @@ export const ManageReceiverAddressInputField = () => {
   const debouncedValue = useDebounce(value, 300)
 
   useEffect(() => {
-    // Only attempt ENS resolution if the debounced value looks like an ENS name.
+    // Only attempt ENS resolution on Ethereum mainnet — we support root resolution
+    // on mainnet only (ENSIP-11 multi-chain coin types not supported yet).
     // Loop prevention: after resolution the receiver is set to a raw address
     // which is not an ENS name, so this branch is skipped on the re-fire.
-    if (!isEnsName(debouncedValue)) return
+    if (coin.chain !== EvmChain.Ethereum || !isEnsName(debouncedValue)) return
 
     let cancelled = false
 
@@ -122,7 +124,13 @@ export const ManageReceiverAddressInputField = () => {
     return () => {
       cancelled = true
     }
-  }, [debouncedValue, setValue, setReceiverLabel, setFocusedSendField])
+  }, [
+    coin.chain,
+    debouncedValue,
+    setValue,
+    setReceiverLabel,
+    setFocusedSendField,
+  ])
 
   return (
     <SendInputContainer>
