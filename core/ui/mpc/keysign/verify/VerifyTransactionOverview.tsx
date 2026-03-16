@@ -37,9 +37,14 @@ type VerifyTransactionOverviewProps = {
   receiverVaultName?: string
   /**
    * Optional address book contact name for the receiver. Used when the receiver is not a known
-   * vault but is saved in the address book. Priority: vault name > address book name > raw address.
+   * vault but is saved in the address book. Priority: vault name > address book name > ENS name > raw address.
    */
   receiverAddressBookName?: string
+  /**
+   * Optional ENS name that was typed by the user and resolved to the receiver address.
+   * Displayed as "vitalik.eth (0xd8dA...6045)". Priority: vault name > address book name > ENS name > raw address.
+   */
+  receiverEnsName?: string
   chain: Chain
   keysignPayloadQuery: Query<KeysignPayload>
   renderFeeExtra?: (keysignPayload: KeysignPayload) => ReactNode
@@ -54,6 +59,7 @@ export const VerifyTransactionOverview = ({
   receiver,
   receiverVaultName,
   receiverAddressBookName,
+  receiverEnsName,
   chain,
   keysignPayloadQuery,
   renderFeeExtra,
@@ -81,6 +87,19 @@ export const VerifyTransactionOverview = ({
         <HStack alignItems="center" gap={8}>
           <Text as="span" size={14} weight={500}>
             {receiverAddressBookName}
+          </Text>
+          <Text as="span" color="shy" size={14} weight={500}>
+            ({formatWalletAddress(receiver)})
+          </Text>
+        </HStack>
+      )
+    }
+
+    if (receiverEnsName !== undefined && typeof receiver === 'string') {
+      return (
+        <HStack alignItems="center" gap={8}>
+          <Text as="span" size={14} weight={500}>
+            {receiverEnsName}
           </Text>
           <Text as="span" color="shy" size={14} weight={500}>
             ({formatWalletAddress(receiver)})

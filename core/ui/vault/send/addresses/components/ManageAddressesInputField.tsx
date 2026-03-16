@@ -1,3 +1,5 @@
+import { isEnsName } from '@core/chain/chains/evm/ens/isEnsName'
+import { resolveEnsName } from '@core/chain/chains/evm/ens/resolveEnsName'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { ScanQrView } from '@core/ui/qr/components/ScanQrView'
@@ -13,10 +15,12 @@ import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValid
 import { useSender } from '@core/ui/vault/send/sender/hooks/useSender'
 import { useSendFormFieldState } from '@core/ui/vault/send/state/formFields'
 import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
+import { useSendReceiverLabel } from '@core/ui/vault/send/state/receiverLabel'
 import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Match } from '@lib/ui/base/Match'
 import { borderRadius } from '@lib/ui/css/borderRadius'
+import { useDebounce } from '@lib/ui/hooks/useDebounce'
 import { BookIcon } from '@lib/ui/icons/BookIcon'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 import { SquareBehindSquare4Icon } from '@lib/ui/icons/SquareBehindSquare4Icon'
@@ -28,7 +32,7 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { attempt } from '@lib/utils/attempt'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -41,6 +45,7 @@ export const ManageReceiverAddressInputField = () => {
   const { getClipboardText } = useCore()
   const { name } = useCurrentVault()
   const [value, setValue] = useSendReceiver()
+  const [, setReceiverLabel] = useSendReceiverLabel()
   const [viewState, setViewState] = useState<MangeReceiverViewState>('default')
   const [qrView, setQrView] = useState<'scan' | 'upload'>('scan')
   const [touched, setTouched] = useState(false)
@@ -53,11 +58,16 @@ export const ManageReceiverAddressInputField = () => {
   const error = touched ? data?.receiverAddress : undefined
 
   const handleUpdateReceiverAddress = useCallback(
-    (value: string) => {
+    (newValue: string) => {
       setTouched(true)
-      setValue(value)
+      setValue(newValue)
+      // Clear the ENS label whenever the user provides a raw address directly
+      // (label is set asynchronously by the ENS effect below when applicable)
+      if (!isEnsName(newValue)) {
+        setReceiverLabel('')
+      }
       const receiverError = validateSendReceiver({
-        receiverAddress: value,
+        receiverAddress: newValue,
         chain: coin.chain,
         senderAddress: coin.address,
         walletCore,
@@ -70,7 +80,7 @@ export const ManageReceiverAddressInputField = () => {
         }))
       }
     },
-    [coin, setValue, setFocusedSendField, walletCore, t]
+    [coin, setValue, setReceiverLabel, setFocusedSendField, walletCore, t]
   )
 
   const closeQrModal = useCallback(() => {
@@ -79,12 +89,40 @@ export const ManageReceiverAddressInputField = () => {
   }, [])
 
   const onScanSuccess = useCallback(
-    (address: string) => {
-      handleUpdateReceiverAddress(address)
+    (scannedAddress: string) => {
+      handleUpdateReceiverAddress(scannedAddress)
       closeQrModal()
     },
     [closeQrModal, handleUpdateReceiverAddress]
   )
+
+  // Debounced value used to trigger ENS resolution without firing on every keystroke
+  const debouncedValue = useDebounce(value, 300)
+
+  useEffect(() => {
+    // Only attempt ENS resolution if the debounced value looks like an ENS name.
+    // Loop prevention: after resolution the receiver is set to a raw address
+    // which is not an ENS name, so this branch is skipped on the re-fire.
+    if (!isEnsName(debouncedValue)) return
+
+    let cancelled = false
+
+    attempt(() => resolveEnsName(debouncedValue)).then(result => {
+      if (cancelled) return
+      if (!('error' in result) && result.data) {
+        const resolved = result.data
+        setReceiverLabel(debouncedValue)
+        setValue(resolved)
+        // Advance to amount field since address is now valid
+        setFocusedSendField(state => ({ ...state, field: 'amount' }))
+      }
+      // On failure we simply leave the field as-is (invalid address shows error)
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [debouncedValue, setValue, setReceiverLabel, setFocusedSendField])
 
   return (
     <SendInputContainer>
@@ -146,8 +184,8 @@ export const ManageReceiverAddressInputField = () => {
           addressBook={() => (
             <AddressBookModal
               onClose={() => setViewState('default')}
-              onSelect={address => {
-                handleUpdateReceiverAddress(address)
+              onSelect={selectedAddress => {
+                handleUpdateReceiverAddress(selectedAddress)
                 setViewState('default')
               }}
             />
@@ -159,7 +197,9 @@ export const ManageReceiverAddressInputField = () => {
                   validation={error ? 'warning' : undefined}
                   placeholder={t('enter_address_here')}
                   value={value}
-                  onValueChange={value => handleUpdateReceiverAddress(value)}
+                  onValueChange={newValue =>
+                    handleUpdateReceiverAddress(newValue)
+                  }
                   onBlur={() => setTouched(true)}
                   data-testid="send-address-input"
                 />

@@ -13,6 +13,7 @@ import { useSendKeysignPayloadQuery } from '@core/ui/vault/send/keysignPayload/q
 import { useSender } from '@core/ui/vault/send/sender/hooks/useSender'
 import { useSendMemo } from '@core/ui/vault/send/state/memo'
 import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
+import { useSendReceiverLabel } from '@core/ui/vault/send/state/receiverLabel'
 import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ListItem } from '@lib/ui/list/item'
@@ -32,6 +33,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const { t } = useTranslation()
   const { name } = useCurrentVault()
   const [receiver] = useSendReceiver()
+  const [receiverLabel] = useSendReceiverLabel()
   const [memo] = useSendMemo()
   const coin = useCurrentSendCoin()
   const sender = useSender()
@@ -77,6 +79,11 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
             receiverVaultName !== null
               ? undefined
               : (receiverAddressBookName ?? undefined)
+          }
+          receiverEnsName={
+            receiverVaultName !== null || receiverAddressBookName !== null
+              ? undefined
+              : receiverLabel || undefined
           }
           chain={coin.chain}
           keysignPayloadQuery={keysignPayloadQuery}
