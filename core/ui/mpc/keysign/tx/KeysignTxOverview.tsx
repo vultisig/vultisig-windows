@@ -22,7 +22,6 @@ import { MiddleTruncate } from '@lib/ui/truncate'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
 import { useTxStatusQuery } from '../../../chain/tx/status/useTxStatusQuery'
 import { AddToAddressBookButton } from './components/AddToAddressBookButton'
@@ -145,7 +144,7 @@ export const KeysignTxOverview = ({
                       />
                     </HStack>
                   ) : (
-                    <AddressWrapper>{toAddress}</AddressWrapper>
+                    <MiddleTruncate text={toAddress} weight={500} width={160} />
                   )
                 })()}
               </HStack>
@@ -179,11 +178,3 @@ export const KeysignTxOverview = ({
     </>
   )
 }
-
-const AddressWrapper = styled(Text)`
-  overflow: hidden;
-  text-align: right;
-  width: 125px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`
