@@ -100,10 +100,12 @@ export const ManageReceiverAddressInputField = () => {
   const debouncedValue = useDebounce(value, 300)
 
   useEffect(() => {
-    // Only attempt ENS resolution on Ethereum mainnet — we support root resolution
-    // on mainnet only (ENSIP-11 multi-chain coin types not supported yet).
+    // Only attempt ENS resolution on Ethereum mainnet — two known limitations:
+    // 1. Root .eth names only; ENSIP-11 multi-chain coin types not yet supported.
+    // 2. Custom domains (e.g. fluidkey.id, cb.id) not yet supported; those use
+    //    offchain resolvers (CCIP-Read / EIP-3668) and non-.eth TLDs.
     // Loop prevention: after resolution the receiver is set to a raw address
-    // which is not an ENS name, so this branch is skipped on the re-fire.
+    // which won't match the .eth regex, so this effect is skipped on the re-fire.
     if (
       coin.chain !== EvmChain.Ethereum ||
       !/^.+\.eth$/i.test(debouncedValue.trim())
