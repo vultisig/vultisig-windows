@@ -136,7 +136,6 @@ export const ManageReceiverAddressInputField = () => {
         // Advance to amount field since address is now valid
         setFocusedSendField(state => ({ ...state, field: 'amount' }))
       }
-      // On failure we simply leave the field as-is (invalid address shows error)
     })
 
     return () => {
