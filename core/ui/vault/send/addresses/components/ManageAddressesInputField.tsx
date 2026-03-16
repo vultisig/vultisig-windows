@@ -63,8 +63,8 @@ export const ManageReceiverAddressInputField = () => {
     (value: string) => {
       setTouched(true)
       setValue(value)
-      // Clear the ENS label whenever the user provides a raw address directly
-      // (label is set asynchronously by the ENS effect below when applicable)
+      // Clear the receiver label whenever the user provides a raw address directly
+      // (label is set asynchronously by the name resolution effect below when applicable)
       if (!/^.+\.eth$/i.test(value.trim())) {
         setReceiverLabel('')
       }
