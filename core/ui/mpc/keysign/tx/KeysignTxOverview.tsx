@@ -42,7 +42,9 @@ export const KeysignTxOverview = () => {
   const coin = fromCommCoin(shouldBePresent(potentialCoin))
   const { address, chain, decimals } = shouldBePresent(coin)
 
-  const formattedToAmount = toAmount ? fromChainAmount(BigInt(toAmount), decimals) : null
+  const formattedToAmount = toAmount
+    ? fromChainAmount(BigInt(toAmount), decimals)
+    : null
 
   const txAction = getSignDataTxAction(keysignPayload, formattedToAmount ?? 0)
 

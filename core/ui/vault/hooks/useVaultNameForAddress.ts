@@ -1,4 +1,5 @@
 import { Chain } from '@core/chain/Chain'
+import { isEvmChain } from '@core/ui/address-book/AddressBookChainType'
 import { useVaults } from '@core/ui/storage/vaults'
 
 /**
@@ -6,6 +7,9 @@ import { useVaults } from '@core/ui/storage/vaults'
  *
  * Generic hook — not send-specific. Used across send, keysign, and address book contexts
  * anywhere the UI needs to identify whether an address is a known user vault.
+ *
+ * EVM chains share address space and addresses are normalized to lowercase to handle checksum
+ * differences, matching the behaviour of useAddressBookNameForAddress.
  */
 export const useVaultNameForAddress = (
   address: string,
@@ -15,9 +19,13 @@ export const useVaultNameForAddress = (
 
   const index = new Map(
     vaults.flatMap(vault =>
-      vault.coins.map(coin => [`${coin.chain}:${coin.address}`, vault.name])
+      vault.coins.map(coin => [
+        `${isEvmChain(coin.chain) ? 'evm' : coin.chain}:${coin.address.toLowerCase()}`,
+        vault.name,
+      ])
     )
   )
 
-  return index.get(`${chain}:${address}`) ?? null
+  const key = `${isEvmChain(chain) ? 'evm' : chain}:${address.toLowerCase()}`
+  return index.get(key) ?? null
 }
