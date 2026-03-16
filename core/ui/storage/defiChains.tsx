@@ -3,17 +3,20 @@ import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { useCreateCoinMutation } from '@core/ui/storage/coins'
 import { useCurrentVaultChains } from '@core/ui/vault/state/currentVaultCoins'
 import { useAvailableChains } from '@core/ui/vault/state/useAvailableChains'
+import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
 import { featureFlags } from '../featureFlags'
 import { useCore } from '../state/core'
+import { getDefaultDefiPositionIds } from './defiPositions'
 import { StorageKey } from './StorageKey'
 
 export const supportedDefiChains = [
   Chain.THORChain,
   ...(featureFlags.mayaChain ? [Chain.MayaChain] : []),
+  Chain.Tron,
 ] as const satisfies readonly Chain[]
 
 export type SupportedDefiChain = (typeof supportedDefiChains)[number]
@@ -101,6 +104,20 @@ export const useToggleDefiChainWithAutoEnable = () => {
     useSetDefiChainsMutation()
   const createCoinMutation = useCreateCoinMutation()
   const queryClient = useQueryClient()
+  const { getDefiPositions, setDefiPositions } = useCore()
+  const refetchQueries = useRefetchQueries()
+
+  const autoEnableDefaultPositions = async (chain: Chain) => {
+    const allPositions = (await getDefiPositions()) ?? {}
+    const existing = allPositions[chain] ?? []
+    if (existing.length > 0) return
+
+    const defaultIds = getDefaultDefiPositionIds(chain)
+    if (defaultIds.length === 0) return
+
+    await setDefiPositions({ ...allPositions, [chain]: defaultIds })
+    await refetchQueries([StorageKey.defiPositions])
+  }
 
   const toggleChain = async (chain: Chain) => {
     if (!isSupportedDefiChain(chain)) return
@@ -132,6 +149,8 @@ export const useToggleDefiChainWithAutoEnable = () => {
     if (!currentDefiChains.includes(chain)) {
       setDefiChains([...currentDefiChains, chain])
     }
+
+    await autoEnableDefaultPositions(chain)
   }
 
   return {

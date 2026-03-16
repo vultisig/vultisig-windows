@@ -1,8 +1,9 @@
 import { getVaultId } from '@core/mpc/vault/Vault'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { ErrorBoundary } from '@lib/ui/errors/ErrorBoundary'
-import { VStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { useViewState } from '@lib/ui/navigation/hooks/useViewState'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -18,6 +19,7 @@ import { useConnectionStatus } from '../hooks/useConnectionStatus'
 import { BurgerClosedIcon } from '../icons/BurgerClosedIcon'
 import { ChatMessage as ChatMessageType, TitleUpdatedEvent } from '../types'
 import { getDateSections } from '../utils/getDateSections'
+import { AgentAuthorizationView } from './AgentAuthorizationView'
 import { AgentChatFooter } from './AgentChatFooter'
 import { AgentChatMenu } from './AgentChatMenu'
 import { AgentEmptyState } from './AgentEmptyState'
@@ -27,6 +29,7 @@ import { AgentReplyMessage } from './AgentReplyMessage'
 import { ChatMessage } from './ChatMessage'
 import { ConfirmationPrompt } from './ConfirmationPrompt'
 import { PasswordPrompt } from './PasswordPrompt'
+import { ReauthorizeAgentDialog } from './ReauthorizeAgentDialog'
 
 type AgentChatViewState = { conversationId?: string; initialMessage?: string }
 
@@ -312,6 +315,26 @@ export const AgentChatPage: FC = () => {
     cancelRequest()
   }
 
+  const handleReauthorize = async () => {
+    if (!vaultId || !orchestrator) return
+    await orchestrator.reauthorize(vaultId)
+    dismissAuthRequired()
+    const pending = pendingMessageRef.current
+    pendingMessageRef.current = null
+    if (pending) {
+      try {
+        if (conversationId) {
+          await sendMessageToConversation(conversationId, vaultId, pending)
+        } else {
+          const id = await sendMessage(vaultId, pending)
+          setConversationId(id)
+        }
+      } catch {
+        // error events are surfaced via useAgentEvents
+      }
+    }
+  }
+
   const handleAuthSignIn = async (password: string) => {
     if (!vaultId) return
     setAuthSignInError(null)
@@ -375,23 +398,51 @@ export const AgentChatPage: FC = () => {
       },
     })
 
+  const hasCachedPassword =
+    vaultId != null && orchestrator?.hasCachedPassword(vaultId)
+
+  if (showConnectionGate) {
+    return (
+      <VStack fullHeight>
+        <PageHeader
+          hasBorder
+          secondaryControls={
+            <AgentChatMenu
+              conversationId={null}
+              onSessionDeleted={handleSessionDeleted}
+            />
+          }
+        />
+        <AgentAuthorizationView
+          onSubmit={handleConnectionGateSubmit}
+          onCancel={handleConnectionGateCancel}
+          error={connectionError}
+          isLoading={connectionState === 'connecting'}
+        />
+      </VStack>
+    )
+  }
+
   return (
     <VStack fullHeight>
-      <PageHeader
-        primaryControls={
-          <AgentHeaderButton onClick={() => navigate({ id: 'agent' })}>
-            <BurgerClosedIcon />
-          </AgentHeaderButton>
-        }
-        title={chatTitle || t('vultibot')}
-        hasBorder
-        secondaryControls={
-          <AgentChatMenu
-            conversationId={conversationId}
-            onSessionDeleted={handleSessionDeleted}
-          />
-        }
-      />
+      <AgentChatHeader>
+        <AgentChatHeaderRow>
+          <AgentChatHeaderSide>
+            <AgentHeaderButton onClick={() => navigate({ id: 'agent' })}>
+              <BurgerClosedIcon />
+            </AgentHeaderButton>
+          </AgentChatHeaderSide>
+          <AgentChatHeaderTitle variant="bodyM" color="contrast" cropped>
+            {chatTitle || t('vultibot')}
+          </AgentChatHeaderTitle>
+          <AgentChatHeaderSide>
+            <AgentChatMenu
+              conversationId={conversationId}
+              onSessionDeleted={handleSessionDeleted}
+            />
+          </AgentChatHeaderSide>
+        </AgentChatHeaderRow>
+      </AgentChatHeader>
       <MessagesContainer>
         <ErrorBoundary fallback={AgentErrorFallback}>
           {messages.length === 0 && !isLoading && (
@@ -477,7 +528,13 @@ export const AgentChatPage: FC = () => {
           onCancel={handleConfirmationCancel}
         />
       )}
-      {authRequired && (
+      {authRequired && hasCachedPassword && (
+        <ReauthorizeAgentDialog
+          onAuthorize={handleReauthorize}
+          onCancel={handleAuthCancel}
+        />
+      )}
+      {authRequired && !hasCachedPassword && (
         <PasswordPrompt
           toolName="sign_in"
           operation={t('agent_operation_sign_in')}
@@ -488,25 +545,58 @@ export const AgentChatPage: FC = () => {
           onCancel={handleAuthCancel}
         />
       )}
-      {!authRequired && showConnectionGate && (
-        <PasswordPrompt
-          toolName="sign_in"
-          operation={t('agent_operation_sign_in')}
-          description={t('agent_connect_description')}
-          error={connectionError}
-          isLoading={connectionState === 'connecting'}
-          onSubmit={handleConnectionGateSubmit}
-          onCancel={handleConnectionGateCancel}
-        />
-      )}
     </VStack>
   )
 }
 
+/** Matches Figma Agent Header (68514:113082). Used so messages scroll *under* the header for glass effect. */
+const agentChatHeaderHeightPx = 56
+
+const AgentChatHeader = styled.header`
+  position: sticky;
+  top: 0;
+  /* Above scroll content (and any z-index inside it, e.g. orb) so nothing overlays the header. */
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  min-height: ${agentChatHeaderHeightPx}px;
+  padding: 12px 16px;
+  /* Figma: backgrounds/disabled rgba(11,26,58,0.5) — slightly lower opacity so content behind is barely visible (heavy glass) */
+  background: rgba(11, 26, 58, 0.42);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid ${getColor('foregroundExtra')};
+`
+
+const AgentChatHeaderRow = styled(HStack)`
+  flex: 1;
+  min-width: 0;
+  gap: 14px;
+  align-items: center;
+`
+
+const AgentChatHeaderSide = styled.div`
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+`
+
+const AgentChatHeaderTitle = styled(Text)`
+  flex: 1;
+  min-width: 0;
+`
+
+/* Scroll area extends under the sticky header so content passes behind it; backdrop-filter can then blur that content (glass effect). */
+/* z-index: 0 so the header (z-index: 10) always paints on top and nothing in messages (e.g. orb) overlays it. */
 const MessagesContainer = styled(PageContent)`
   flex: 1;
+  min-height: 0;
+  position: relative;
+  z-index: 0;
   overflow-y: auto;
-  padding: 16px;
+  margin-top: -${agentChatHeaderHeightPx}px;
+  padding: ${agentChatHeaderHeightPx}px 16px 16px;
+  ${hideScrollbars};
 `
 
 const ErrorMessage = styled.div`
