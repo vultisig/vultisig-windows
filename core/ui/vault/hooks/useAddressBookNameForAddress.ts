@@ -8,7 +8,8 @@ import { useAddressBookItemsQuery } from '@core/ui/storage/addressBook'
  *
  * EVM chains share address space — an entry saved under any EVM chain matches any EVM chain.
  * EVM addresses are normalized to lowercase before comparison to handle checksum differences.
- * Mirrors useVaultNameForAddress in structure and semantics.
+ * Structurally similar to useVaultNameForAddress but adds case normalization, which the vault
+ * hook does not perform.
  *
  * @param address - The recipient address to look up
  * @param chain - The chain the transaction is on

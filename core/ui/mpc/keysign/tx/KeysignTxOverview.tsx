@@ -21,7 +21,6 @@ import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
-import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -43,26 +42,16 @@ export const KeysignTxOverview = () => {
   const coin = fromCommCoin(shouldBePresent(potentialCoin))
   const { address, chain, decimals } = shouldBePresent(coin)
 
-  const formattedToAmount = useMemo(() => {
-    if (!toAmount) return null
+  const formattedToAmount = toAmount ? fromChainAmount(BigInt(toAmount), decimals) : null
 
-    return fromChainAmount(BigInt(toAmount), decimals)
-  }, [toAmount, decimals])
-
-  const txAction = useMemo(
-    () => getSignDataTxAction(keysignPayload, formattedToAmount ?? 0),
-    [keysignPayload, formattedToAmount]
-  )
+  const txAction = getSignDataTxAction(keysignPayload, formattedToAmount ?? 0)
 
   const showAmountOrAction =
     formattedToAmount !== null ||
     (txAction !== null && txAction.action !== 'send')
 
   const toVaultName = useVaultNameForAddress(toAddress ?? '', chain)
-  const toAddressBookName = useAddressBookNameForAddress(
-    toAddress ?? '',
-    chain
-  )
+  const toAddressBookName = useAddressBookNameForAddress(toAddress ?? '', chain)
   const txHash = useTxHash()
   const txStatusQuery = useTxStatusQuery({ chain, hash: txHash })
   const receipt = txStatusQuery.data?.receipt
