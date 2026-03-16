@@ -52,6 +52,9 @@ export const AddToAddressBookButton: FC<AddToAddressBookButtonProps> = ({
   const vaultName = useVaultNameForAddress(address, chain)
 
   const isKnownVault = vaultName !== null
+  // EVM chains share address space — an entry saved under any EVM chain (e.g. Ethereum)
+  // matches when sending on any other EVM chain (e.g. Arbitrum), consistent with
+  // useAddressBookNameForAddress which uses the same grouping for label lookups.
   const addressExists = addressBookItems.some(item => {
     const chainMatch = isEvmChain(chain)
       ? isEvmChain(item.chain)
