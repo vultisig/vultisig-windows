@@ -98,7 +98,6 @@ export const ManageReceiverAddressInputField = () => {
     [closeQrModal, handleUpdateReceiverAddress]
   )
 
-  // Debounced value used to trigger ENS resolution without firing on every keystroke
   const debouncedValue = useDebounce(value, 300)
 
   useEffect(() => {
