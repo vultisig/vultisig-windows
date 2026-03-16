@@ -4,7 +4,7 @@ import { getColor } from '@lib/ui/theme/getters'
 import { match } from '@lib/utils/match'
 import styled, { css, DefaultTheme } from 'styled-components'
 
-type TextVariant = 'h1Hero' | 'h1Regular' | 'footnote' | 'caption'
+type TextVariant = 'h1Hero' | 'h1Regular' | 'footnote' | 'caption' | 'bodyM'
 
 const textVariantsRecord: Record<
   TextVariant,
@@ -33,6 +33,11 @@ const textVariantsRecord: Record<
     weight: 500,
     height: 16 / 12,
     letterSpacing: 0.12,
+  },
+  bodyM: {
+    size: 16,
+    weight: 500,
+    height: 1.5,
   },
 }
 
