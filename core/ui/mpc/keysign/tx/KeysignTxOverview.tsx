@@ -149,7 +149,9 @@ export const KeysignTxOverview = ({
                   )
                 })()}
               </HStack>
-              <AddToAddressBookButton address={toAddress} chain={chain} />
+              <HStack justifyContent="flex-end">
+                <AddToAddressBookButton address={toAddress} chain={chain} />
+              </HStack>
             </VStack>
           )}
           {memo && <TxOverviewMemo value={memo} chain={chain} />}
