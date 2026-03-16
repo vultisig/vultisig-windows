@@ -58,6 +58,26 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
     ? coin.chain
     : null
 
+  const { vaultName, addressBookName, addressLabel } = (() => {
+    if (receiverVaultName !== null)
+      return {
+        vaultName: receiverVaultName,
+        addressBookName: undefined,
+        addressLabel: undefined,
+      }
+    if (receiverAddressBookName !== null)
+      return {
+        vaultName: undefined,
+        addressBookName: receiverAddressBookName,
+        addressLabel: undefined,
+      }
+    return {
+      vaultName: undefined,
+      addressBookName: undefined,
+      addressLabel: receiverLabel || undefined,
+    }
+  })()
+
   return (
     <>
       <PageHeader
@@ -67,11 +87,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
       <VerifyKeysignStart
         keysignPayloadQuery={keysignPayloadQuery}
         terms={translatedTerms}
-        toAddressLabel={
-          receiverVaultName !== null || receiverAddressBookName !== null
-            ? undefined
-            : receiverLabel || undefined
-        }
+        toAddressLabel={addressLabel}
       >
         <VerifyTransactionOverview
           coin={coin}
@@ -79,17 +95,9 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
           senderName={name}
           senderAddress={sender}
           receiver={receiver}
-          receiverVaultName={receiverVaultName ?? undefined}
-          receiverAddressBookName={
-            receiverVaultName !== null
-              ? undefined
-              : (receiverAddressBookName ?? undefined)
-          }
-          receiverAddressLabel={
-            receiverVaultName !== null || receiverAddressBookName !== null
-              ? undefined
-              : receiverLabel || undefined
-          }
+          receiverVaultName={vaultName}
+          receiverAddressBookName={addressBookName}
+          receiverAddressLabel={addressLabel}
           chain={coin.chain}
           keysignPayloadQuery={keysignPayloadQuery}
           renderFeeExtra={

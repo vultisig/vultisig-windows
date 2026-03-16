@@ -59,6 +59,7 @@ export const KeysignTxOverview = ({
 
   const toVaultName = useVaultNameForAddress(toAddress ?? '', chain)
   const toAddressBookName = useAddressBookNameForAddress(toAddress ?? '', chain)
+  const toLabel = toVaultName ?? toAddressBookName ?? toAddressLabel ?? null
   const txHash = useTxHash()
   const txStatusQuery = useTxStatusQuery({ chain, hash: txHash })
   const receipt = txStatusQuery.data?.receipt
@@ -130,23 +131,19 @@ export const KeysignTxOverview = ({
                 <Text color="shy" weight="500">
                   {t('to')}
                 </Text>
-                {(() => {
-                  const label =
-                    toVaultName ?? toAddressBookName ?? toAddressLabel ?? null
-                  return label !== null ? (
-                    <HStack alignItems="center" gap={4}>
-                      <Text>{label}</Text>
-                      <MiddleTruncate
-                        color="textShy"
-                        text={`(${toAddress})`}
-                        weight={500}
-                        width={80}
-                      />
-                    </HStack>
-                  ) : (
-                    <MiddleTruncate text={toAddress} weight={500} width={160} />
-                  )
-                })()}
+                {toLabel !== null ? (
+                  <HStack alignItems="center" gap={4}>
+                    <Text>{toLabel}</Text>
+                    <MiddleTruncate
+                      color="textShy"
+                      text={`(${toAddress})`}
+                      weight={500}
+                      width={80}
+                    />
+                  </HStack>
+                ) : (
+                  <MiddleTruncate text={toAddress} weight={500} width={160} />
+                )}
               </HStack>
               <HStack justifyContent="flex-end">
                 <AddToAddressBookButton address={toAddress} chain={chain} />

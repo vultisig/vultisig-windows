@@ -1,5 +1,5 @@
 import { EvmChain } from '@core/chain/Chain'
-import { resolveEnsName } from '@core/chain/chains/evm/ens/resolveEnsName'
+import { getEvmClient } from '@core/chain/chains/evm/client'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { ScanQrView } from '@core/ui/qr/components/ScanQrView'
@@ -35,6 +35,8 @@ import { attempt } from '@lib/utils/attempt'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+import { getAddress } from 'viem'
+import { getEnsAddress, normalize } from 'viem/ens'
 
 type MangeReceiverViewState = 'default' | 'addressBook' | 'scanner'
 
@@ -58,16 +60,16 @@ export const ManageReceiverAddressInputField = () => {
   const error = touched ? data?.receiverAddress : undefined
 
   const handleUpdateReceiverAddress = useCallback(
-    (newValue: string) => {
+    (value: string) => {
       setTouched(true)
-      setValue(newValue)
+      setValue(value)
       // Clear the ENS label whenever the user provides a raw address directly
       // (label is set asynchronously by the ENS effect below when applicable)
-      if (!/^.+\.eth$/i.test(newValue.trim())) {
+      if (!/^.+\.eth$/i.test(value.trim())) {
         setReceiverLabel('')
       }
       const receiverError = validateSendReceiver({
-        receiverAddress: newValue,
+        receiverAddress: value,
         chain: coin.chain,
         senderAddress: coin.address,
         walletCore,
@@ -89,8 +91,8 @@ export const ManageReceiverAddressInputField = () => {
   }, [])
 
   const onScanSuccess = useCallback(
-    (scannedAddress: string) => {
-      handleUpdateReceiverAddress(scannedAddress)
+    (address: string) => {
+      handleUpdateReceiverAddress(address)
       closeQrModal()
     },
     [closeQrModal, handleUpdateReceiverAddress]
@@ -118,7 +120,15 @@ export const ManageReceiverAddressInputField = () => {
 
     let cancelled = false
 
-    attempt(() => resolveEnsName(debouncedValue)).then(result => {
+    attempt(async () => {
+      const client = getEvmClient(EvmChain.Ethereum)
+      const address = await getEnsAddress(client, {
+        name: normalize(debouncedValue),
+      })
+      if (!address)
+        throw new Error(`ENS name "${debouncedValue}" could not be resolved`)
+      return getAddress(address)
+    }).then(result => {
       if (cancelled) return
       if (!('error' in result) && result.data) {
         const resolved = result.data

@@ -50,13 +50,14 @@ export const AddToAddressBookButton: FC<AddToAddressBookButtonProps> = ({
   const addressBookItems = useAddressBookItems()
   const vaultName = useVaultNameForAddress(address, chain)
 
+  const isKnownVault = vaultName !== null
   const addressExists = addressBookItems.some(
     item =>
       item.chain === chain &&
       item.address.toLowerCase() === address.toLowerCase()
   )
 
-  if (addressExists || vaultName !== null || isLimited) {
+  if (addressExists || isKnownVault || isLimited) {
     return null
   }
 
