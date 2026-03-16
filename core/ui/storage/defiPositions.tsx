@@ -100,6 +100,10 @@ const getAvailablePositionsForChain = (chain: Chain): DefiPosition[] => {
   return staticDefiPositions[chain] || []
 }
 
+/** Returns the IDs of all static positions for a chain, used to auto-enable positions when a chain is first toggled on. */
+export const getDefaultDefiPositionIds = (chain: Chain): string[] =>
+  getAvailablePositionsForChain(chain).map(p => p.id)
+
 const lpBaseTicker: Record<LpSupportedChain, string> = {
   [Chain.THORChain]: runeCoin.ticker,
   [Chain.MayaChain]: mayaCoin.ticker,

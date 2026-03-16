@@ -1,594 +1,280 @@
 ---
 name: orchestrate
-description: End-to-end workflow orchestrator. Accepts a GitHub issue number and automates the complete implementation pipeline from planning through PR creation.
+description: God-mode orchestrator. Takes a Linear ticket OR PR and handles the ENTIRE workflow end-to-end — branch creation, implementation, testing, commits, PR creation, Linear updates, OR exhaustive PR review with parallel agents. Use for complete feature delivery or deep PR audits.
+argument-hint: "[ticket-id or PR branch/URL] [--review] [--auto]"
+disable-model-invocation: true
 ---
 
-# Orchestrate Implementation (God Mode)
+# Orchestrator: End-to-End Workflow
 
-## Overview
+Two operating modes:
 
-This skill takes a GitHub issue number and handles the **entire workflow end-to-end**:
-1. Reads the GitHub issue from vultisig organization
-2. Checks if iOS or Android already implemented the feature
-3. Creates a git branch
-4. Plans the implementation strategy
-5. Implements across desktop and/or extension workspaces
-6. Runs quality checks in a loop until passing
-7. Runs tests and fixes failures
-8. Commits with conventional format
-9. Creates a PR with metadata
-10. Updates the GitHub issue
+## Mode A — Feature Delivery (default)
+Takes a Linear ticket ID and handles the entire pipeline:
+1. Fetch and understand the ticket
+2. Create a git branch
+3. Plan implementation
+4. Implement across all files with maximum parallelism
+5. Build-review-fix loop until clean
+6. Smart test generation
+7. Commit, push, create PR
+8. Update Linear ticket
 
-## Invocation
+## Mode B — PR Review (`--review`)
+Takes a PR branch name or URL and performs an exhaustive audit:
+1. Fetch all commits and changed files
+2. Spawn parallel review agents across every domain
+3. Report findings with file:line references and fix suggestions
 
-```bash
-/orchestrate #123
-```
+---
 
-Or with full issue URL:
-```bash
-/orchestrate https://github.com/vultisig/vultisig/issues/123
-```
+## Parallelization Philosophy
 
-## Parallelization Strategy
+**Use as many parallel agents as needed to complete tasks in the fastest, most efficient, and highest-quality way possible.** There is no artificial cap on concurrency — spawn agents aggressively for independent work streams. The goal is perfection at maximum speed.
 
-This orchestrator uses explicit stages to control how many agents work simultaneously. You can optimize for speed, token efficiency, or automated overnight runs.
+### Worker Coordination Protocol
 
-### Parallelization Stages
+When spawning parallel agents:
 
-**Stage 1 — Gather Context (PARALLEL, 3 agents max):**
-- Agent A: Read GitHub issue details
-- Agent B: Check native platforms (iOS/Android/VultiServer) for existing implementation
-- Agent C: Search codebase for related resolver patterns, existing chain logic, etc.
+1. **File-based coordination** — Each agent works on independent files. Never assign two agents to the same file.
+2. **Cross-agent synthesis** — When Agent A produces output that Agent B needs, the orchestrator reads A's deliverables and feeds relevant context to B. Workers never talk directly — the orchestrator is the routing layer.
+3. **Quality gates with push-back** — No agent's work is marked done until deliverables are reviewed. Bad output gets pushed back for fixes.
+4. **Stall detection** — If an agent is stuck (repeated failures, no progress), reassess the approach and push with specific unblocking instructions.
+5. **Convergence criteria** — When parallel agents start producing overlapping concerns (e.g., shared types, cross-module imports), collapse remaining work to sequential. Parallel is for independent work; the moment dependencies emerge, go sequential.
+
+### Parallelization Stages (Feature Delivery)
+
+**Stage 1 — Gather Context (PARALLEL, unlimited agents):**
+- Agent A: Read Linear ticket details + acceptance criteria
+- Agent B: Search codebase for related files, existing patterns, similar implementations
+- Agent C: Read vultisig-knowledge repo docs if touching new domains (MPC, chain logic, etc.)
+- Agent D+: Any additional context gathering needed (e.g., checking upstream lib/ patterns)
 
 **Stage 2 — Plan (SEQUENTIAL):**
 - Synthesize findings from Stage 1
-- Create implementation plan
-- Present plan to user for confirmation (unless --auto flag is used)
-
-**Stage 3 — Implement (PARALLEL, up to 4 agents for large tasks):**
-- Agent A: Core logic (resolvers, chain-specific code)
-- Agent B: Desktop UI (@clients/desktop)
-- Agent C: Extension UI (@clients/extension) — if affected
-- Agent D: Tests + types
-- CRITICAL: Never parallelize work that touches protected boundaries (core/mpc/, tss/, lib/)
-
-**Stage 4 — Validate & Ship (SEQUENTIAL):**
-- Run `yarn check:all` loop until passing
-- Run `yarn dev:desktop` and `yarn dev:extension` for manual testing
-- Commit, create PR, update GitHub issue
-
-### Controlling Parallelism
-
-- **Default**: Moderate parallelism (2-3 concurrent agents)
-- **For maximum speed**: `orchestrate #123 --parallel=max` → uses up to 4 agents in Stage 3
-- **For token conservation**: `orchestrate #123 --sequential` → everything runs sequentially
-- **For overnight automation**: `orchestrate #123 --auto` → skips user confirmation in Stage 2
-
-## Workflow
-
-### Phase 1: Issue Analysis and Validation
-
-**Step 1.1: Extract Issue Number**
-```bash
-# Parse input: accept #123, 123, or full GitHub URL
-ISSUE_NUMBER=$(echo "$INPUT" | grep -oE '[0-9]+' | tail -1)
-```
-
-**Step 1.2: Fetch Issue Details**
-```bash
-gh issue view "$ISSUE_NUMBER" --json title,body,labels,state --repo vultisig/vultisig
-```
-
-Validate:
-- Issue exists and is not `closed`
-- Issue is assigned (if not, return context for user to assign)
-- Issue has clear acceptance criteria
-
-**Step 1.3: Check Native Implementation Status**
-
-Use `/check-native-feature` skill pattern:
-- Extract 2-4 keywords from issue title/description (feature name, symbols, class names)
-- Search iOS and Android main branches for implementations
-- Return status: `implemented in iOS`, `implemented in Android`, `implemented in both`, or `not implemented yet`
-
-**Decision Tree**:
-```
-If implemented in both → Note this, continue (reference only)
-If implemented in one → Flag for cross-platform balance
-If not implemented → Warn user, wait for confirmation to proceed
-```
-
-### Phase 2: Branch and Planning
-
-**Step 2.1: Create Working Branch**
-
-Use `/create-branch` skill pattern:
-```bash
-git checkout main
-git pull
-git checkout -b {ISSUE_NUMBER}-{slugified-title}
-```
-
-Example: Issue #456 "Add TON swap feature" → `456-add-ton-swap-feature`
-
-**Step 2.2: Architecture Planning**
-
-Read the issue description and analyze:
-
-1. **Scope Assessment**
-   - Desktop only? Extension only? Both?
-   - Does it require new APIs or domain logic?
-   - Are protected boundaries involved (core/mpc/, tss/, lib/)?
-
-2. **Integration Points**
-   - Which workspace packages are affected? (@clients/desktop, @clients/extension, @core/*, @lib/*)
-   - Does it need resolver patterns for chain-specific logic?
-   - Does it need state management (Zustand)?
-   - Does it need server state (React Query)?
-
-3. **Design Outline**
-   - Component structure (one component per file)
-   - Styling approach (styled-components)
-   - API/data models required
-   - i18n strings needed (en.ts only initially)
-
-**Step 2.3: Present Plan to User**
-
-Create a summary:
-```markdown
-## Implementation Plan
-
-### Affected Workspaces
-- @clients/desktop: [list affected areas]
-- @clients/extension: [list affected areas]
-- @core/*: [list affected core packages]
-- @lib/*: [list affected lib packages]
-
-### Architecture
-- [Component hierarchy]
-- [State management strategy]
-- [API integration points]
-- [Protected boundaries: AVOID if possible]
-
-### Protected Boundaries (DO NOT EDIT)
-- core/mpc/
-- tss/
-- lib/
-→ Inform user if these are involved
-
-### Key Design Decisions
-- [Resolver patterns for chain logic?]
-- [React Compiler compatible? (no useMemo/useCallback)]
-- [i18n required?]
-- [Styling strategy (styled-components)?]
-```
-
-Wait for user confirmation before proceeding.
-
-### Phase 3: Implementation
-
-**Step 3.1: Create Base Files Structure**
-
-Based on plan, scaffold:
-```
-clients/desktop/src/
-  pages/YourFeature/
-    YourFeature.tsx
-    YourFeature.module.scss (if styled-components not used)
-    YourFeatureContext.ts (if local state)
-
-clients/extension/src/
-  [similar if needed]
-
-core/YourFeature/
-  src/
-    index.ts
-    types.ts
-    resolver.ts (if chain-specific)
-    hooks.ts (if React hooks)
-```
-
-**Step 3.2: Development Cycle**
-
-For each file/feature:
-
-1. **Code Implementation**
-   - Follow workspace patterns (resolver, React Compiler, styled-components, etc.)
-   - NO manual memoization (React Compiler handles it)
-   - NO `as` casts (use resolver patterns with discriminated unions)
-   - Use `type` over `interface`
-   - Use `attempt()` over try-catch for user-facing errors
-   - Use `shouldBePresent()` for required values
-   - One component per file
-   - Workspace imports: relative within package, use workspace names cross-package
-
-2. **Code Quality Validation**
-   - After each file or component set, run quality check
-
-**Step 3.3: Continuous Quality Check Loop**
-
-After initial implementation or significant changes:
-
-```bash
-# Run quality checks in sequence
-yarn typecheck
-yarn lint:fix
-yarn knip
-```
-
-Repeat until all three pass:
-- **typecheck failure**: Fix type errors or use resolver patterns
-- **lint:fix failure**: ESLint will auto-fix most issues; if manual fixes needed, apply them
-- **knip failure**: Fix unused exports/imports
-
-Once passing, run:
-```bash
-yarn test
-```
-
-If tests fail:
-- Review test output
-- Fix implementation or update tests if intentional change
-- Re-run until passing
-
-**Phase 3.4: i18n Setup (if needed)**
-
-If issue requires user-facing strings:
-1. Add strings to `core/ui/src/i18n/en.ts` ONLY
-2. Run `yarn translate` to generate other languages
-3. Never manually edit non-English translation files
-
-### Phase 4: Quality Assurance
-
-**Step 4.1: Full Check Suite**
-
-```bash
-yarn check:all
-```
-
-This runs:
-```bash
-yarn lint && yarn typecheck && yarn test && yarn knip
-```
-
-All must pass before commit.
-
-**Step 4.2: Desktop Dev Test (if desktop changes)**
-
-```bash
-yarn dev:desktop
-```
-
-Manually verify:
-- App starts without errors
-- Feature renders correctly
-- Feature works as described in issue
-- No console errors or warnings
-
-**Step 4.3: Extension Dev Test (if extension changes)**
-
-```bash
-yarn dev:extension
-```
-
-Manually verify on a test extension build.
-
-### Phase 5: Commit and Push
-
-**Step 5.1: Stage Changes**
-
-```bash
-git status
-git diff --stat
-
-# Stage specific files, NEVER use git add . or git add -A
-git add clients/desktop/src/... core/...
-```
-
-**Step 5.2: Create Commit**
-
-Use conventional commit format:
-```bash
-git commit -m "$(cat <<'EOF'
-feat: add [feature name] support
-
-- Describe the feature in detail
-- List key changes
-- Note any important implementation decisions
-
-Co-Authored-By: Claude <noreply@anthropic.com>
-EOF
-)"
-```
-
-Conventional commit types:
-- `feat:` new feature
-- `fix:` bug fix
-- `refactor:` restructure without behavior change
-- `perf:` performance improvement
-- `test:` test additions/updates
-- `docs:` documentation
-- `chore:` maintenance
-
-**Step 5.3: Push Branch**
-
-```bash
-git push -u origin $(git branch --show-current)
-```
-
-### Phase 6: Pull Request
-
-**Step 6.1: Create PR**
-
-Use `/create-pr` skill pattern or manual:
-
-```bash
-gh pr create \
-  --title "feat: add [feature name]" \
-  --body "$(cat <<'EOF'
-## Summary
-- Brief description of implementation
-- Key changes made
-- Architecture patterns used
-
-## Issue
-Closes #123
-
-## Testing
-- [ ] yarn check:all passes
-- [ ] yarn dev:desktop tested
-- [Include manual testing steps]
-- [Include edge cases tested]
-
-## Implementation Notes
-- [Any complex decisions?]
-- [Protected boundaries avoided?]
-- [Resolver patterns used correctly?]
-- [React Compiler compatible?]
-
-### Agent Metadata
-- Orchestrated via `/orchestrate #123` skill
-- Quality checks: ✓ All passing
-- Code review ready
-
-Co-Authored-By: Claude <noreply@anthropic.com>
-EOF
-)"
-```
-
-**Step 6.2: Return PR URL**
-
-Print the created PR URL for user review.
-
-### Phase 7: Issue Update
-
-**Step 7.1: Link PR to Issue**
-
-Once PR is created, add comment to original issue:
-
-```bash
-gh issue comment "$ISSUE_NUMBER" \
-  --body "PR created: [PR URL]
-
-This implementation:
-- Uses resolver patterns for chain-specific logic
-- Follows React Compiler guidelines (no useMemo/useCallback)
-- Includes full test coverage
-- All quality checks passing
-
-Ready for review."
-```
-
-**Step 7.2: Move Issue (if applicable)**
-
-If your workspace has Linear or project board integration, move issue to "In Review" or similar.
-
-## Key Rules and Patterns
-
-### Architecture Patterns
-
-**1. Resolver Pattern (MANDATORY for chain-specific logic)**
-
-NEVER use:
-```typescript
-// BAD: switch on chain type
-if (chain.type === 'bitcoin') { ... }
-```
-
-INSTEAD:
-```typescript
-// GOOD: resolver pattern with generics
-export const myResolver: ChainResolver<ReturnType> = {
-  bitcoin: (chain) => { ... },
-  ethereum: (chain) => { ... },
-  // exhaustive
-}
-
-const result = matchDiscriminatedUnion(chain, 'kind', myResolver)
-```
-
-**2. React Compiler**
-- NO `useMemo`
-- NO `useCallback`
-- NO `React.memo` unless absolutely necessary
-- Write plain expressions and inline functions
-- Compiler optimizes at build time
-
-**3. Typing**
-- `type` over `interface`
-- NO `as` casts except at routing boundaries
-- Use `shouldBePresent()` for required values
-- Use discriminated unions for variants
-
-**4. Error Handling**
-- Use `attempt()` for value-producing errors:
-  ```typescript
-  const result = await attempt(() => fetch())
-  if ('data' in result) { ... }
-  else { handle(result.error) }
-  ```
-- Use try/catch only for cleanup (try/finally) or isolated boundaries
-
-**5. State Management**
-- **Local component state**: `useState`
-- **App state**: Zustand
-- **Server state**: React Query
-- **Styling**: `styled-components`
-
-**6. Imports**
-- Relative imports within same package
-- Workspace names for cross-package: `import { X } from '@core/ui'`
-
-**7. i18n**
-- Only edit `en.ts`
-- Run `yarn translate` to generate others
-- Never manually edit translated files
-
-### File Organization
-
-```
-package/
-  src/
-    index.ts          # exports
-    types.ts          # type definitions
-    components/
-      MyComponent.tsx # one component per file
-    hooks/
-      useMyHook.ts
-    resolvers/        # chain-specific logic
-      myResolver.ts
-    services/         # business logic
-      myService.ts
-    i18n/
-      en.ts           # strings (ONLY edit this)
-  tests/
-    myComponent.test.tsx
-```
-
-### Quality Check Strategy
-
-1. **Incremental checking**: After each major feature, run `yarn check`
-2. **Fix in order**: typecheck → lint:fix → knip
-3. **Test early**: Run `yarn test` alongside implementation
-4. **Full validation**: Before commit, run `yarn check:all`
-
-## Decision Tree for Protected Boundaries
-
-```
-Is the feature in core/mpc/, tss/, or lib/?
-├─ YES → STOP. Inform user this requires core team approval.
-│        Do NOT modify these areas.
-├─ NO → Proceed with implementation.
-
-Does the feature require chain-specific logic?
-├─ YES → Use resolver pattern with discriminated union
-├─ NO → Implement directly in component
-
-Does the feature need component memoization?
-├─ YES (list reasons: many re-renders, expensive computation)
-├─ NO → Rely on React Compiler
-
-Does the feature have user-facing text?
-├─ YES → Add to en.ts, run yarn translate
-├─ NO → Proceed
-```
-
-## Troubleshooting
-
-### `yarn check` fails
-
-**typecheck errors:**
-- Fix type annotations
-- Use resolver patterns for chain variants
-- NO `as any` casts
-- Use `shouldBePresent()` for required values
-
-**lint:fix failures:**
-- Run `yarn lint:fix` again (usually auto-fixes)
-- If manual fixes needed, apply them
-- Common: import sorting, naming conventions
-
-**knip failures:**
-- Remove unused exports: `export const X = ...` that nothing imports
-- Remove unused imports: `import { X } from ...` that code doesn't use
-- Check if file is dead code (not imported by anyone)
-
-### Tests fail
-
-- Review test output for assertion failures
-- Fix implementation logic or update tests if intentional
-- Run `yarn test` to confirm fix
-- Run `yarn check:all` before commit
-
-### Desktop dev server fails
-
-```bash
-yarn dev:desktop
-```
-
-- Check `.env` is loaded (load-envrc.sh runs at session start)
-- Ensure `yarn check` passes first
-- Kill any existing Wails processes: `pkill -f wails`
-- Try full rebuild: `yarn build:desktop` then `yarn dev:desktop`
-
-### PR not created
-
-- Verify branch is pushed: `git push -u origin BRANCH_NAME`
-- Verify GitHub token is valid: `gh auth status`
-- Check repo slug is correct: `vultisig/vultisig`
-
-## Session Integration
-
-This skill assumes:
-- Git user configured: `antoni0dev` / `63366707+antoni0dev@users.noreply.github.com`
-- `.envrc` loaded (SessionStart hook handles this)
-- GitHub token configured for `gh` CLI
-- Node/Yarn installed
-- All yarn dependencies installed
-
-## Notes
-
-- **Deterministic**: Follow the phases in order. Skip only if user confirms.
-- **Verbose output**: Report progress at each phase. Include command outputs.
-- **User confirmation**: Major decisions (protected boundaries, architecture) require approval before proceeding.
-- **Error recovery**: If any command fails, pause and present the error. Ask user for next steps.
-- **Testing**: Emphasize manual testing in dev servers. Don't assume tests cover all edge cases.
+- Create implementation plan with parallelization strategy
+- Present plan to user for confirmation (unless `--auto` flag)
+
+**Stage 3 — Implement (PARALLEL, unlimited agents):**
+- Split implementation across independent modules/files/packages
+- Each agent handles one domain (e.g., Agent A: core logic, Agent B: UI components, Agent C: tests, Agent D: resolver implementations, Agent E: i18n, etc.)
+- ONLY parallelize if files are truly independent (no cross-imports between agents' work)
+- For small tasks (1-3 files), use a single agent sequentially
+
+**Stage 3.5 — Skill Passes:**
+- Run `/simplify` on changed files before self-review
+- Run context-appropriate skills:
+  - UI component → `/storybook-component` (if available)
+  - Pure logic/resolvers → `/simplify` only
+  - Refactor → `/simplify` only
+
+**Stage 4 — Build-Review-Fix Loop (SEQUENTIAL, persistent):**
+- Run `yarn check` → fix → repeat until passing
+- Run `yarn test` → fix failures → repeat until passing
+- Run smart test generation (evaluate what tests are needed, write them)
+- Do NOT stop after reporting failures — keep iterating until ALL gates pass
+
+**Stage 5 — Ship (SEQUENTIAL):**
+- Commit with conventional format
+- Push and run roborev loop
+- Create PR as draft
+- Update Linear ticket
+
+### Parallelization Stages (PR Review)
+
+**Stage 1 — Gather PR Context (PARALLEL):**
+- Agent A: Fetch all commits, diff, and changed file list
+- Agent B: Read project rules and CLAUDE.md for standards reference
+- Agent C: Identify all domains touched (chain logic, UI, state, MPC, etc.)
+
+**Stage 2 — Deep Review (PARALLEL, one agent per domain):**
+Spawn an agent for EACH of these review dimensions across ALL changed files:
+- **Type Safety Agent**: No `as` casts, no unnecessary `?.`/`??`, proper `shouldBePresent()`/`assertField()`, derived types from const arrays, no `any`
+- **Pattern Matching Agent**: No switch/case, use Record lookups and resolver pattern, config arrays for repetitive conditionals, exhaustive discriminated unions
+- **Performance Agent**: Re-render blast radius (colocated state?), time complexity of algorithms (O(n) vs O(n^2)), unnecessary iterations, derived values vs redundant state, React Compiler compliance (no useMemo/useCallback)
+- **Architecture Agent**: Resolver pattern for chain logic, proper import boundaries (relative within package, workspace names cross-package), one component per file, feature-based organization
+- **Code Quality Agent**: DRY violations, magic numbers/strings, readable code over comments, proper error handling (attempt() vs try-catch), shared utility reuse, i18n compliance
+- **Composition Agent**: Children as render optimization, elements-as-props, moving state down, key-based remounting, derive state (never sync via useEffect), error boundary placement
+
+**Stage 3 — Synthesize & Report (SEQUENTIAL):**
+- Merge all agent findings
+- Deduplicate and prioritize: **critical** (breaks at runtime) > **important** (violates standards) > **nitpick** (style preference)
+- Present actionable report with file:line references
+- If `--fix` flag: auto-apply fixes and run `yarn check` to validate
 
 ---
 
-## Quick Reference: Conventional Commits
+## Implementation Standards
+
+**Follow ALL `.claude/rules/` strictly.** The rules are the source of truth for TypeScript, React, pattern matching, styling, file structure, error handling, code quality, and testing.
+
+**Key orchestrate-specific reminders:**
+- Resolver pattern for ALL chain-specific logic (`Record<ChainType, Resolver>`)
+- `shouldBePresent()` / `assertField()` for required runtime values at boundaries
+- Never `useMemo`/`useCallback` — React Compiler handles memoization
+- Never switch/case — Record lookups, `match()`, config arrays
+- Object parameters for >1 arg (`{FunctionName}Input`)
+- `attempt()` over try-catch (only for user-facing errors)
+- Relative imports within package, workspace names cross-package
+- i18n: `useTranslation()`, only edit `en.ts`, run `yarn translate`
+- JSDoc on all exported functions, classes, and type definitions
+- styled-components for styling (use theme tokens, never hardcode)
+- One component per file
+- Never touch `core/mpc/`, `tss/`, or `lib/` without explicit approval
+
+---
+
+## Step-by-Step: Feature Delivery (Mode A)
+
+### Step 1: Fetch Ticket
+
+Call Linear MCP `get_issue`:
+- Extract title, description, status, assignee, git branch name
+- Check for blockers (`blockedBy` relation)
+- Note design references or related tickets
+
+### Step 2: Git Branch Setup
+
+```bash
+git checkout main && git pull
+git checkout -b {branch-name-from-linear}
+```
+
+If branch exists: `git checkout {branch} && git rebase origin/main`
+
+### Step 3: Plan Implementation
+
+1. Understand requirements and acceptance criteria
+2. Map architecture: which packages/modules are affected
+3. Identify files to modify and their dependencies
+4. Create detailed plan with parallelization strategy
+5. Present to user (unless `--auto`)
+
+### Step 4: Implement
+
+Follow ALL `.claude/rules/` + standards above.
+
+### Step 5: Build-Review-Fix Loop
+
+**This is a persistent loop. Do NOT stop until ALL gates pass.**
 
 ```
-feat:      new feature for the user
-fix:       bug fix for the user
-docs:      documentation changes
-style:     changes that don't affect code meaning (whitespace, semicolons)
-refactor:  code change that doesn't fix bug or add feature
-perf:      code change that improves performance
-test:      adding or updating tests
-chore:     changes to build/dependencies/tooling
-ci:        CI/CD configuration changes
+while true:
+  1. Run `yarn check` (typecheck + lint:fix + knip)
+  2. If fails → read output, fix issues, go to 1
+  3. Run `/simplify` on changed files
+  4. If simplify suggests improvements → apply, go to 1
+  5. Run context-appropriate skills
+  6. If issues found → fix, go to 1
+  7. All gates pass → break
 ```
 
-Format:
+### Step 6: Smart Test Generation
+
+After quality checks pass, evaluate what tests are needed:
+
+**Step 6.1 — Evaluate:**
+Analyze what was built and determine test coverage:
+- Pure utility/logic → unit tests (Vitest)
+- React hooks with state → hook integration tests (renderHook)
+- UI components → component integration tests (Testing Library)
+- Resolver implementations → unit tests per chain type
+- User-facing flows → E2E tests (if Playwright available)
+
+**Step 6.2 — Generate Tests (PARALLEL):**
+- **Unit Test Agent**: Pure functions, resolvers, validators, config-driven logic
+- **Integration Test Agent**: Hooks with Zustand, components with user interaction
+- **E2E Test Agent**: Critical user journeys (if applicable)
+
+**Step 6.3 — Run and Fix:**
+```bash
+yarn test  # Run all tests, fix failures, repeat until passing
 ```
-<type>(<scope>): <subject>
 
-<body>
+### Step 7: Commit
 
-<footer>
+```bash
+git add <specific-files>
+git commit -m "$(cat <<'EOF'
+feat(scope): imperative description
+
+- Detail 1
+- Detail 2
+EOF
+)"
 ```
 
-Example:
+Conventional commits enforced. No Co-Authored-By trailer.
+
+### Step 8: Push + Roborev Loop
+
+**This is a persistent loop. Do NOT stop until reviews pass.**
+
+```bash
+git push -u origin {branch-name}
 ```
-feat(wallet): add TRC20 token transfer support
 
-- Implement token transfer resolver for TON chain
-- Add transfer validation and balance check
-- Update wallet balance after successful transfer
-
-Closes #123
-
-Co-Authored-By: Claude <noreply@anthropic.com>
+**Design review first, then code review:**
 ```
+while true:
+  1. /roborev-design-review-branch — catches architectural issues before polishing code
+  2. If design findings → fix structure/approach, yarn check, amend commit, go to 1
+  3. Design passes → /roborev-review-branch — code-level review
+  4. If code findings → /roborev-fix to auto-fix, then yarn check, go to 3
+  5. If still failing after fix → manually address, amend commit, go to 3
+  6. Both reviews pass clean → break
+```
+
+If remaining findings depend on product decisions or external actions after two iterations, stop and surface the blocker to the user.
+
+When branch is already pushed, update with `git push --force-with-lease`.
+
+### Step 9: Create PR
+
+```bash
+gh pr create --title "feat(scope): description" --body "$(cat <<'EOF'
+## Summary
+- What and why
+
+## Test Plan
+- [ ] `yarn check` passes
+- [ ] `yarn test` passes
+- [ ] Tested on desktop dev server (yarn dev:desktop)
+- [ ] Visual verification at http://localhost:8081
+- [ ] `/roborev-review-branch` passes clean
+
+## Related
+- Closes VUL-XXXX
+EOF
+)" --draft
+```
+
+### Step 10: Update Linear
+
+Set status to "In Review", add PR link comment.
+
+---
+
+## Pre-Submit Gate
+
+All items must pass before the branch is considered ready:
+
+- [ ] Ticket fetched and understood
+- [ ] Branch created from Linear ticket
+- [ ] Implementation complete (exhaustive typing + pattern matching)
+- [ ] Performance reviewed (no O(n^2), colocated state, no manual memo)
+- [ ] All files follow resolver pattern where applicable
+- [ ] `/simplify` run on changed files
+- [ ] Context-appropriate skills run
+- [ ] `yarn check` passes
+- [ ] `yarn test` passes (unit + integration)
+- [ ] Smart test evaluation performed — appropriate test types generated
+- [ ] Conventional commit(s) created (no Co-Authored-By)
+- [ ] Branch pushed
+- [ ] `/roborev-design-review-branch` passes clean
+- [ ] `/roborev-review-branch` passes clean (iterate until both pass)
+- [ ] PR created as draft
+- [ ] Linear ticket set to "In Review"
+- [ ] All `.claude/rules/` satisfied
+
+Run with: `/orchestrate VUL-1234` or `/orchestrate antonio/branch-name --review`
