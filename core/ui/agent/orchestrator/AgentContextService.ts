@@ -39,6 +39,7 @@ export type AddressBookItem = {
 
 type ContextDeps = {
   getVault: (pubKey: string) => Promise<VaultData>
+  getVaults: () => Promise<VaultData[]>
   getVaultCoins: (pubKey: string) => Promise<CoinData[]>
   getAddressBookItems: () => Promise<AddressBookItem[]>
 }

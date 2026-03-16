@@ -3,6 +3,7 @@ import { Chain } from '@core/chain/Chain'
 import { tssMessageSchema, TssType } from '@core/mpc/types/utils/tssType'
 import { KeygenMessage } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
 import { ReshareMessage } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
+import { SingleKeygenMessage } from '@core/mpc/types/vultisig/keygen/v1/single_keygen_message_pb'
 import {
   KeysignMessage,
   KeysignMessageSchema,
@@ -36,7 +37,7 @@ type SendDeeplinkParams = {
 }
 
 export type NewVaultData = {
-  keygenMsg: KeygenMessage | ReshareMessage
+  keygenMsg: KeygenMessage | ReshareMessage | SingleKeygenMessage
   tssType: TssType
 }
 

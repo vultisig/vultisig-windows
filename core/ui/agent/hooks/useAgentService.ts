@@ -35,6 +35,29 @@ type NavigationData = {
   state?: Record<string, unknown>
 }
 
+function toOrchestratorVaultData(vault: Vault) {
+  return {
+    name: vault.name,
+    publicKeyEcdsa: vault.publicKeys.ecdsa,
+    publicKeyEddsa: vault.publicKeys.eddsa,
+    hexChainCode: vault.hexChainCode,
+    localPartyId: vault.localPartyId,
+    resharePrefix: vault.resharePrefix ?? '',
+    libType: vault.libType,
+    signers: vault.signers,
+    keyShares: [
+      {
+        publicKey: vault.publicKeys.ecdsa,
+        keyShare: vault.keyShares.ecdsa,
+      },
+      {
+        publicKey: vault.publicKeys.eddsa,
+        keyShare: vault.keyShares.eddsa,
+      },
+    ],
+  }
+}
+
 function buildCoinKey(coin: { chain: string; id?: string }): CoinKey {
   const result: { chain: Chain; id?: string } = {
     chain: coin.chain as Chain,
