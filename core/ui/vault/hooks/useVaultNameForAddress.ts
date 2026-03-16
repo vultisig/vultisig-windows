@@ -20,12 +20,12 @@ export const useVaultNameForAddress = (
   const index = new Map(
     vaults.flatMap(vault =>
       vault.coins.map(coin => [
-        `${isEvmChain(coin.chain) ? 'evm' : coin.chain}:${coin.address.toLowerCase()}`,
+        `${isEvmChain(coin.chain) ? 'evm' : coin.chain}:${isEvmChain(coin.chain) ? coin.address.toLowerCase() : coin.address}`,
         vault.name,
       ])
     )
   )
 
-  const key = `${isEvmChain(chain) ? 'evm' : chain}:${address.toLowerCase()}`
+  const key = `${isEvmChain(chain) ? 'evm' : chain}:${isEvmChain(chain) ? address.toLowerCase() : address}`
   return index.get(key) ?? null
 }

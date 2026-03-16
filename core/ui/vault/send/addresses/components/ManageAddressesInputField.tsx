@@ -32,7 +32,7 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { attempt } from '@lib/utils/attempt'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 import { getAddress } from 'viem'
@@ -100,6 +100,15 @@ export const ManageReceiverAddressInputField = () => {
 
   const debouncedValue = useDebounce(value, 300)
 
+  // Track the latest raw input value so async ENS callbacks can verify the
+  // user hasn't typed something new while the resolution was in-flight.
+  // useRef is intentional here — we need a mutable container that is readable
+  // inside async closures without being a dependency of any effect.
+  const latestValueRef = useRef(value)
+  useEffect(() => {
+    latestValueRef.current = value
+  }, [value])
+
   useEffect(() => {
     // Only attempt ENS resolution on Ethereum mainnet — two known limitations:
     // 1. Root .eth names only; ENSIP-11 multi-chain coin types not yet supported.
@@ -119,19 +128,29 @@ export const ManageReceiverAddressInputField = () => {
 
     let cancelled = false
 
+    // Capture the name this resolution was started for. Used in the callback
+    // to verify the live input still matches before applying the result —
+    // guards against the race where debouncedValue hasn't changed yet but the
+    // user already typed a raw address, making `cancelled` still false.
+    const requestedName = debouncedValue.trim()
+
     attempt(async () => {
       const client = getEvmClient(EvmChain.Ethereum)
       const address = await getEnsAddress(client, {
-        name: normalize(debouncedValue),
+        name: normalize(requestedName),
       })
       if (!address)
-        throw new Error(`ENS name "${debouncedValue}" could not be resolved`)
+        throw new Error(`ENS name "${requestedName}" could not be resolved`)
       return getAddress(address)
     }).then(result => {
       if (cancelled) return
+      // Secondary guard: if the user typed something new while this promise was
+      // in-flight, the live value won't match the name we resolved for — bail
+      // out to avoid overwriting what the user just typed.
+      if (latestValueRef.current.trim() !== requestedName) return
       if (!('error' in result) && result.data) {
         const resolved = result.data
-        setReceiverLabel(debouncedValue)
+        setReceiverLabel(requestedName)
         setValue(resolved)
         // Advance to amount field since address is now valid
         setFocusedSendField(state => ({ ...state, field: 'amount' }))

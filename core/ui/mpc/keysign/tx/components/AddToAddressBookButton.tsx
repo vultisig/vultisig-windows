@@ -59,7 +59,8 @@ export const AddToAddressBookButton: FC<AddToAddressBookButtonProps> = ({
     const chainMatch = isEvmChain(chain)
       ? isEvmChain(item.chain)
       : item.chain === chain
-    return chainMatch && item.address.toLowerCase() === address.toLowerCase()
+    const normalize = (a: string) => (isEvmChain(chain) ? a.toLowerCase() : a)
+    return chainMatch && normalize(item.address) === normalize(address)
   })
 
   if (addressExists || isKnownVault || isLimited) {

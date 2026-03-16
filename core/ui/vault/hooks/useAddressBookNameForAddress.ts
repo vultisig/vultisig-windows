@@ -8,8 +8,8 @@ import { useAddressBookItemsQuery } from '@core/ui/storage/addressBook'
  *
  * EVM chains share address space — an entry saved under any EVM chain matches any EVM chain.
  * EVM addresses are normalized to lowercase before comparison to handle checksum differences.
- * Structurally similar to useVaultNameForAddress but adds case normalization, which the vault
- * hook does not perform.
+ * Non-EVM addresses (Solana base58, Bitcoin bech32, etc.) are compared case-sensitively.
+ * Structurally similar to useVaultNameForAddress.
  *
  * @param address - The recipient address to look up
  * @param chain - The chain the transaction is on
@@ -25,11 +25,11 @@ export const useAddressBookNameForAddress = (
 
   const index = new Map(
     items.map(item => [
-      `${isEvmChain(item.chain) ? 'evm' : item.chain}:${item.address.toLowerCase()}`,
+      `${isEvmChain(item.chain) ? 'evm' : item.chain}:${isEvmChain(item.chain) ? item.address.toLowerCase() : item.address}`,
       item.title,
     ])
   )
 
-  const key = `${isEvmChain(chain) ? 'evm' : chain}:${address.toLowerCase()}`
+  const key = `${isEvmChain(chain) ? 'evm' : chain}:${isEvmChain(chain) ? address.toLowerCase() : address}`
   return index.get(key) ?? null
 }
