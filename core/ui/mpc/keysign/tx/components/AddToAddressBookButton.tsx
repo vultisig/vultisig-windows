@@ -1,4 +1,5 @@
 import { Chain } from '@core/chain/Chain'
+import { isEvmChain } from '@core/ui/address-book/AddressBookChainType'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { useAddressBookItems } from '@core/ui/storage/addressBook'
@@ -51,11 +52,12 @@ export const AddToAddressBookButton: FC<AddToAddressBookButtonProps> = ({
   const vaultName = useVaultNameForAddress(address, chain)
 
   const isKnownVault = vaultName !== null
-  const addressExists = addressBookItems.some(
-    item =>
-      item.chain === chain &&
-      item.address.toLowerCase() === address.toLowerCase()
-  )
+  const addressExists = addressBookItems.some(item => {
+    const chainMatch = isEvmChain(chain)
+      ? isEvmChain(item.chain)
+      : item.chain === chain
+    return chainMatch && item.address.toLowerCase() === address.toLowerCase()
+  })
 
   if (addressExists || isKnownVault || isLimited) {
     return null
