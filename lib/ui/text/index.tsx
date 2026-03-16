@@ -34,10 +34,13 @@ const textVariantsRecord: Record<
     height: 16 / 12,
     letterSpacing: 0.12,
   },
+  /** Body/Body M (Regular): 16px, 400, 24px line-height (150%) */
   bodyM: {
     size: 16,
-    weight: 500,
+    weight: 400,
     height: 1.5,
+    cropped: false,
+    letterSpacing: 0,
   },
 }
 
