@@ -37,14 +37,16 @@ type VerifyTransactionOverviewProps = {
   receiverVaultName?: string
   /**
    * Optional address book contact name for the receiver. Used when the receiver is not a known
-   * vault but is saved in the address book. Priority: vault name > address book name > ENS name > raw address.
+   * vault but is saved in the address book.
+   * Priority: vault name > address book name > address label > raw address.
    */
   receiverAddressBookName?: string
   /**
-   * Optional ENS name that was typed by the user and resolved to the receiver address.
-   * Displayed as "vitalik.eth (0xd8dA...6045)". Priority: vault name > address book name > ENS name > raw address.
+   * Optional human-readable label for the receiver address resolved from a name service
+   * (ENS, SNS, TNS, etc.) or other source. Displayed as "label (0xd8dA...6045)".
+   * Priority: vault name > address book name > address label > raw address.
    */
-  receiverEnsName?: string
+  receiverAddressLabel?: string
   chain: Chain
   keysignPayloadQuery: Query<KeysignPayload>
   renderFeeExtra?: (keysignPayload: KeysignPayload) => ReactNode
@@ -59,7 +61,7 @@ export const VerifyTransactionOverview = ({
   receiver,
   receiverVaultName,
   receiverAddressBookName,
-  receiverEnsName,
+  receiverAddressLabel,
   chain,
   keysignPayloadQuery,
   renderFeeExtra,
@@ -69,11 +71,16 @@ export const VerifyTransactionOverview = ({
   const formattedAmount = fromChainAmount(amount, coin.decimals)
 
   const receiverDisplay: ReactNode = (() => {
-    if (receiverVaultName !== undefined && typeof receiver === 'string') {
+    if (typeof receiver !== 'string') return receiver
+
+    const label =
+      receiverVaultName ?? receiverAddressBookName ?? receiverAddressLabel
+
+    if (label !== undefined) {
       return (
         <HStack alignItems="center" gap={8}>
           <Text as="span" size={14} weight={500}>
-            {receiverVaultName}
+            {label}
           </Text>
           <Text as="span" color="shy" size={14} weight={500}>
             ({formatWalletAddress(receiver)})
@@ -82,39 +89,7 @@ export const VerifyTransactionOverview = ({
       )
     }
 
-    if (receiverAddressBookName !== undefined && typeof receiver === 'string') {
-      return (
-        <HStack alignItems="center" gap={8}>
-          <Text as="span" size={14} weight={500}>
-            {receiverAddressBookName}
-          </Text>
-          <Text as="span" color="shy" size={14} weight={500}>
-            ({formatWalletAddress(receiver)})
-          </Text>
-        </HStack>
-      )
-    }
-
-    if (receiverEnsName !== undefined && typeof receiver === 'string') {
-      return (
-        <HStack alignItems="center" gap={8}>
-          <Text as="span" size={14} weight={500}>
-            {receiverEnsName}
-          </Text>
-          <Text as="span" color="shy" size={14} weight={500}>
-            ({formatWalletAddress(receiver)})
-          </Text>
-        </HStack>
-      )
-    }
-
-    if (typeof receiver === 'string') {
-      return (
-        <MiddleTruncate size={14} text={receiver} weight={500} width={200} />
-      )
-    }
-
-    return receiver
+    return <MiddleTruncate size={14} text={receiver} weight={500} width={200} />
   })()
 
   return (

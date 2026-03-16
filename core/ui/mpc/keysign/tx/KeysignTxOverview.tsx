@@ -30,7 +30,13 @@ import { TxActualFeeDisplay } from './components/TxActualFeeDisplay'
 import { TxFeeRow } from './components/TxFeeRow'
 import { KeysignFeeAmount } from './FeeAmount'
 
-export const KeysignTxOverview = () => {
+type KeysignTxOverviewProps = {
+  toAddressLabel?: string
+}
+
+export const KeysignTxOverview = ({
+  toAddressLabel,
+}: KeysignTxOverviewProps) => {
   const { t } = useTranslation()
   const { openUrl } = useCore()
   const { name } = useCurrentVault()
@@ -125,29 +131,23 @@ export const KeysignTxOverview = () => {
                 {t('to')}
               </Text>
               <HStack alignItems="center" gap={8} style={{ minWidth: 0 }}>
-                {toVaultName !== null ? (
-                  <HStack alignItems="center" gap={4}>
-                    <Text>{toVaultName}</Text>
-                    <MiddleTruncate
-                      color="textShy"
-                      text={`(${toAddress})`}
-                      weight={500}
-                      width={80}
-                    />
-                  </HStack>
-                ) : toAddressBookName !== null ? (
-                  <HStack alignItems="center" gap={4}>
-                    <Text>{toAddressBookName}</Text>
-                    <MiddleTruncate
-                      color="textShy"
-                      text={`(${toAddress})`}
-                      weight={500}
-                      width={80}
-                    />
-                  </HStack>
-                ) : (
-                  <AddressWrapper>{toAddress}</AddressWrapper>
-                )}
+                {(() => {
+                  const label =
+                    toVaultName ?? toAddressBookName ?? toAddressLabel ?? null
+                  return label !== null ? (
+                    <HStack alignItems="center" gap={4}>
+                      <Text>{label}</Text>
+                      <MiddleTruncate
+                        color="textShy"
+                        text={`(${toAddress})`}
+                        weight={500}
+                        width={80}
+                      />
+                    </HStack>
+                  ) : (
+                    <AddressWrapper>{toAddress}</AddressWrapper>
+                  )
+                })()}
                 <AddToAddressBookButton address={toAddress} chain={chain} />
               </HStack>
             </HStack>

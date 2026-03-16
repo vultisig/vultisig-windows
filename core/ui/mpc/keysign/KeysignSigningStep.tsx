@@ -31,9 +31,12 @@ import { useCopyToClipboard } from 'react-use'
 import { TxHashProvider } from '../../chain/state/txHash'
 import { useKeysignMessagePayload } from './state/keysignMessagePayload'
 
-type KeysignSigningStepProps = Partial<OnBackProp>
+type KeysignSigningStepProps = Partial<OnBackProp> & { toAddressLabel?: string }
 
-export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
+export const KeysignSigningStep = ({
+  onBack,
+  toAddressLabel,
+}: KeysignSigningStepProps) => {
   const { t } = useTranslation()
   const { version, goHome } = useCore()
   const payload = useKeysignMessagePayload()
@@ -94,7 +97,9 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
                           <>
                             <PageContent alignItems="center" scrollable>
                               <VStack gap={16} maxWidth={576} fullWidth>
-                                <KeysignTxOverview />
+                                <KeysignTxOverview
+                                  toAddressLabel={toAddressLabel}
+                                />
                               </VStack>
                             </PageContent>
                             <PageFooter alignItems="center">

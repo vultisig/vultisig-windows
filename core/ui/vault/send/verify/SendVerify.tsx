@@ -67,6 +67,11 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
       <VerifyKeysignStart
         keysignPayloadQuery={keysignPayloadQuery}
         terms={translatedTerms}
+        toAddressLabel={
+          receiverVaultName !== null || receiverAddressBookName !== null
+            ? undefined
+            : receiverLabel || undefined
+        }
       >
         <VerifyTransactionOverview
           coin={coin}
@@ -80,7 +85,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
               ? undefined
               : (receiverAddressBookName ?? undefined)
           }
-          receiverEnsName={
+          receiverAddressLabel={
             receiverVaultName !== null || receiverAddressBookName !== null
               ? undefined
               : receiverLabel || undefined

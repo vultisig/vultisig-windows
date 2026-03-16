@@ -31,6 +31,7 @@ type VerifyKeysignStartInput = {
   children: ReactNode
   keysignPayloadQuery: Query<KeysignPayload>
   terms?: string[]
+  toAddressLabel?: string
 }
 
 const TermItem = styled(Checkbox)`
@@ -43,6 +44,7 @@ export const VerifyKeysignStart = ({
   children,
   keysignPayloadQuery,
   terms = [],
+  toAddressLabel,
 }: VerifyKeysignStartInput) => {
   const { t } = useTranslation()
   const isBlockaidEnabled = useIsBlockaidEnabled()
@@ -120,6 +122,7 @@ export const VerifyKeysignStart = ({
 
     return {
       keysignPayload: { keysign },
+      ...(toAddressLabel ? { toAddressLabel } : {}),
     }
   }, [
     keysignPayloadQuery.data,
@@ -127,6 +130,7 @@ export const VerifyKeysignStart = ({
     keysignPayloadQuery.isPending,
     t,
     termsAccepted,
+    toAddressLabel,
     txScanQuery.isPending,
   ])
 
