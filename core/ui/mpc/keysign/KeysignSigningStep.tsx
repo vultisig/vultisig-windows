@@ -7,7 +7,6 @@ import { KeysignSigningState } from '@core/ui/mpc/keysign/flow/KeysignSigningSta
 import { KeysignTxOverview } from '@core/ui/mpc/keysign/tx/KeysignTxOverview'
 import { SwapKeysignTxOverview } from '@core/ui/mpc/keysign/tx/swap/SwapKeysignTxOverview'
 import { TxSuccess } from '@core/ui/mpc/keysign/tx/TxSuccess'
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
@@ -39,14 +38,12 @@ type KeysignSigningStepProps = Partial<OnBackProp>
 
 export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
   const { t } = useTranslation()
-  const { version, goBack, goHome } = useCore()
+  const { version, goHome } = useCore()
   const vault = useCurrentVault()
   const payload = useKeysignMessagePayload()
   const { mutate: startKeysign, ...mutationStatus } =
     useKeysignMutation(payload)
   const [, copyToClipboard] = useCopyToClipboard()
-  const navigate = useCoreNavigate()
-
   useEffect(startKeysign, [startKeysign])
 
   return (
@@ -170,21 +167,6 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
             <FullPageFlowErrorState
               title={t('fast_vault_session_conflict')}
               error={new Error(t('fast_vault_session_conflict_description'))}
-              action={
-                <VStack gap={8} fullWidth>
-                  <Button
-                    status="danger"
-                    onClick={() =>
-                      navigate({ id: 'deleteVault' }, { replace: true })
-                    }
-                  >
-                    {t('vault_delete_page_header_title')}
-                  </Button>
-                  <Button kind="secondary" onClick={goBack}>
-                    {t('back')}
-                  </Button>
-                </VStack>
-              }
             />
           )
         }

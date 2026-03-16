@@ -441,9 +441,9 @@ export const it = {
   fast: 'Veloce',
   fastVault: 'Deposito veloce',
   secureVault: 'Deposito sicuro',
-  fast_vault_session_conflict: 'Il vault deve essere reimportato',
+  fast_vault_session_conflict: 'Mancata corrispondenza della quota del vault',
   fast_vault_session_conflict_description:
-    'La stessa frase seed è stata importata su un altro dispositivo, sostituendo la quota del server di questo vault. Per usare di nuovo questo vault, eliminalo e reimporta la frase seed.',
+    'La quota locale del vault non corrisponde a quella archiviata su Vultiserver. Ciò può verificarsi se la stessa frase seed è stata importata su un altro dispositivo.',
   fast_sign: 'Segnale veloce',
   fill_the_form: 'Compila il modulo',
   find_custom_token: 'Trova token personalizzato',

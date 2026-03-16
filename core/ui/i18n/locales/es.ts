@@ -437,9 +437,9 @@ export const es = {
   fast: 'Rápido',
   fastVault: 'Bóveda rápida',
   secureVault: 'Bóveda segura',
-  fast_vault_session_conflict: 'La bóveda necesita reimportación',
+  fast_vault_session_conflict: 'Discrepancia en la parte de la bóveda',
   fast_vault_session_conflict_description:
-    'La misma frase semilla fue importada en otro dispositivo, lo que reemplazó la parte del servidor de esta bóveda. Para usar esta bóveda de nuevo, elimínela y reimporte la frase semilla.',
+    'Tu parte local de la bóveda no coincide con la almacenada en Vultiserver. Esto puede ocurrir si la misma frase semilla fue importada en otro dispositivo.',
   fast_sign: 'Señal rápida',
   fill_the_form: 'Rellene el formulario',
   find_custom_token: 'Encuentra un token personalizado',

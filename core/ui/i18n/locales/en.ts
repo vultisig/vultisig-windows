@@ -381,9 +381,9 @@ export const en = {
   fast: 'Fast',
   fastVault: 'Fast Vault',
   secureVault: 'Secure Vault',
-  fast_vault_session_conflict: 'Vault Needs Re-import',
+  fast_vault_session_conflict: 'Vault Share Mismatch',
   fast_vault_session_conflict_description:
-    "The same seed phrase was imported on another device, which replaced this vault's server share. To use this vault again, delete it and re-import the seed phrase.",
+    "Your local vault share doesn't match the one stored on Vultiserver. This may happen if the same seed phrase was imported on another device.",
   fast_vault_password_start_keysign_description:
     'Confirm the transaction by entering the password of your server share.',
   fastVaultSetup: {
