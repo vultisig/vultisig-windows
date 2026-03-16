@@ -1,5 +1,4 @@
 import { EvmChain } from '@core/chain/Chain'
-import { isEnsName } from '@core/chain/chains/evm/ens/isEnsName'
 import { resolveEnsName } from '@core/chain/chains/evm/ens/resolveEnsName'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
@@ -64,7 +63,7 @@ export const ManageReceiverAddressInputField = () => {
       setValue(newValue)
       // Clear the ENS label whenever the user provides a raw address directly
       // (label is set asynchronously by the ENS effect below when applicable)
-      if (!isEnsName(newValue)) {
+      if (!/^.+\.eth$/i.test(newValue.trim())) {
         setReceiverLabel('')
       }
       const receiverError = validateSendReceiver({
@@ -105,7 +104,11 @@ export const ManageReceiverAddressInputField = () => {
     // on mainnet only (ENSIP-11 multi-chain coin types not supported yet).
     // Loop prevention: after resolution the receiver is set to a raw address
     // which is not an ENS name, so this branch is skipped on the re-fire.
-    if (coin.chain !== EvmChain.Ethereum || !isEnsName(debouncedValue)) return
+    if (
+      coin.chain !== EvmChain.Ethereum ||
+      !/^.+\.eth$/i.test(debouncedValue.trim())
+    )
+      return
 
     // Clear stale label before attempting new resolution so a failed lookup
     // never leaves a ghost label from a previous successful one
