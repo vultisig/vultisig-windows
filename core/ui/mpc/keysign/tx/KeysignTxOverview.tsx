@@ -15,7 +15,7 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIcon'
 import { SeparatedByLine } from '@lib/ui/layout/SeparatedByLine'
-import { HStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
@@ -121,16 +121,16 @@ export const KeysignTxOverview = ({
             </HStack>
           </HStack>
           {toAddress && (
-            <HStack
-              alignItems="center"
-              gap={8}
-              justifyContent="space-between"
-              wrap="nowrap"
-            >
-              <Text color="shy" weight="500">
-                {t('to')}
-              </Text>
-              <HStack alignItems="center" gap={8} style={{ minWidth: 0 }}>
+            <VStack gap={8}>
+              <HStack
+                alignItems="center"
+                gap={8}
+                justifyContent="space-between"
+                wrap="nowrap"
+              >
+                <Text color="shy" weight="500">
+                  {t('to')}
+                </Text>
                 {(() => {
                   const label =
                     toVaultName ?? toAddressBookName ?? toAddressLabel ?? null
@@ -148,9 +148,9 @@ export const KeysignTxOverview = ({
                     <AddressWrapper>{toAddress}</AddressWrapper>
                   )
                 })()}
-                <AddToAddressBookButton address={toAddress} chain={chain} />
               </HStack>
-            </HStack>
+              <AddToAddressBookButton address={toAddress} chain={chain} />
+            </VStack>
           )}
           {memo && <TxOverviewMemo value={memo} chain={chain} />}
           <HStack alignItems="center" gap={4} justifyContent="space-between">
