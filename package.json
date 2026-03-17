@@ -1,6 +1,6 @@
 {
   "name": "vultisig-windows",
-  "packageManager": "yarn@4.12.0",
+  "packageManager": "yarn@4.13.0",
   "workspaces": [
     "./**",
     "!vendor/**"
@@ -25,15 +25,15 @@
     "update": "yarn set version latest && yarn dlx npm-check-updates@latest -u --workspaces --root && yarn install"
   },
   "devDependencies": {
-    "@eslint/compat": "^2.0.2",
-    "@eslint/eslintrc": "^3.3.3",
+    "@eslint/compat": "^2.0.3",
+    "@eslint/eslintrc": "^3.3.5",
     "@eslint/js": "^9.39.2",
     "@google-cloud/translate": "^9.3.0",
-    "@types/node": "^25.2.1",
-    "@types/react": "^19.2.13",
-    "@typescript-eslint/eslint-plugin": "^8.54.0",
-    "@typescript-eslint/parser": "^8.54.0",
-    "@typescript/native-preview": "^7.0.0-dev.20260219.1",
+    "@types/node": "^25.5.0",
+    "@types/react": "^19.2.14",
+    "@typescript-eslint/eslint-plugin": "^8.57.1",
+    "@typescript-eslint/parser": "^8.57.1",
+    "@typescript/native-preview": "^7.0.0-dev.20260316.1",
     "babel-plugin-react-compiler": "^1.0.0",
     "concurrently": "^9.2.1",
     "eslint": "^9.39.2",
@@ -45,14 +45,14 @@
     "eslint-plugin-react-compiler": "^19.1.0-rc.2",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
-    "eslint-plugin-storybook": "^10.2.7",
-    "eslint-plugin-unused-imports": "^4.3.0",
-    "globals": "^17.3.0",
-    "knip": "^5.83.0",
+    "eslint-plugin-storybook": "^10.2.19",
+    "eslint-plugin-unused-imports": "^4.4.1",
+    "globals": "^17.4.0",
+    "knip": "^5.87.0",
     "prettier": "^3.8.1",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.18"
+    "vitest": "^4.1.0"
   },
   "dependencies": {
     "@noble/curves": "^1.9.0",
