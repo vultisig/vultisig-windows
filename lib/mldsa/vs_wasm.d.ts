@@ -166,13 +166,6 @@ export interface InitOutput {
     readonly signsession_outputMessage: (a: number) => number;
     readonly signsession_inputMessage: (a: number, b: number, c: number) => number;
     readonly signsession_finish: (a: number) => [number, number, number, number];
-    readonly __wbg_keygensession_free: (a: number, b: number) => void;
-    readonly keygensession_new: (a: number, b: number, c: number, d: number) => [number, number, number];
-    readonly keygensession_setup: (a: number, b: number, c: number, d: number, e: number, f: number) => [number, number];
-    readonly keygensession_setupKeyId: (a: number, b: number) => [number, number];
-    readonly keygensession_outputMessage: (a: number) => number;
-    readonly keygensession_inputMessage: (a: number, b: number, c: number) => number;
-    readonly keygensession_finish: (a: number) => [number, number, number];
     readonly __wbg_keyshare_free: (a: number, b: number) => void;
     readonly keyshare_publicKey: (a: number) => [number, number];
     readonly keyshare_keyId: (a: number) => [number, number];
@@ -181,6 +174,13 @@ export interface InitOutput {
     readonly __wbg_message_free: (a: number, b: number) => void;
     readonly message_body: (a: number) => [number, number];
     readonly message_receivers: (a: number) => [number, number];
+    readonly __wbg_keygensession_free: (a: number, b: number) => void;
+    readonly keygensession_new: (a: number, b: number, c: number, d: number) => [number, number, number];
+    readonly keygensession_setup: (a: number, b: number, c: number, d: number, e: number, f: number) => [number, number];
+    readonly keygensession_setupKeyId: (a: number, b: number) => [number, number];
+    readonly keygensession_outputMessage: (a: number) => number;
+    readonly keygensession_inputMessage: (a: number, b: number, c: number) => number;
+    readonly keygensession_finish: (a: number) => [number, number, number];
     readonly __wbindgen_malloc: (a: number, b: number) => number;
     readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
     readonly __wbindgen_exn_store: (a: number) => void;
