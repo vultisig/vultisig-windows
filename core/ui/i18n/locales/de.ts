@@ -441,6 +441,9 @@ export const de = {
   fast: 'Schnell',
   fastVault: 'Schneller Tresor',
   secureVault: 'Sicherer Tresor',
+  fast_vault_session_conflict: 'Tresor-Anteil stimmt nicht überein',
+  fast_vault_session_conflict_description:
+    'Ihr lokaler Tresor-Anteil stimmt nicht mit dem auf Vultiserver gespeicherten überein. Dies kann passieren, wenn dieselbe Seed-Phrase auf einem anderen Gerät importiert wurde.',
   fast_sign: 'Schnelles Zeichen',
   fill_the_form: 'Füllen Sie das Formular aus.',
   find_custom_token: 'Benutzerdefiniertes Token finden',

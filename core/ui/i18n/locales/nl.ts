@@ -332,6 +332,9 @@ export const nl = {
   fast: 'Snel',
   fastVault: 'Fast Vault',
   secureVault: 'Veilige Kluis',
+  fast_vault_session_conflict: 'Kluis-aandeel komt niet overeen',
+  fast_vault_session_conflict_description:
+    'Uw lokale kluis-aandeel komt niet overeen met het aandeel op Vultiserver. Dit kan gebeuren als dezelfde seed phrase op een ander apparaat is geïmporteerd.',
   fast_vault_password_start_keysign_description:
     'Bevestig de transactie door het wachtwoord van je server-share in te voeren.',
   fastVaultSetup: {

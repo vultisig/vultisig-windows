@@ -329,6 +329,9 @@ export const ru = {
   fast: 'Быстро',
   fastVault: 'Fast Vault',
   secureVault: 'Надёжное Хранилище',
+  fast_vault_session_conflict: 'Несоответствие доли хранилища',
+  fast_vault_session_conflict_description:
+    'Ваша локальная доля хранилища не совпадает с той, что хранится на Vultiserver. Это может произойти, если та же сид-фраза была импортирована на другом устройстве.',
   fast_vault_password_start_keysign_description:
     'Подтвердите транзакцию, введя пароль вашей серверной доли.',
   fastVaultSetup: {

@@ -405,6 +405,9 @@ export const zh = {
   fast: '快速地',
   fastVault: '快速金库',
   secureVault: '安全金库',
+  fast_vault_session_conflict: '保险库份额不匹配',
+  fast_vault_session_conflict_description:
+    '您的本地保险库份额与 Vultiserver 上存储的份额不匹配。如果相同的助记词在另一台设备上导入，可能会发生这种情况。',
   fast_sign: '快速签名',
   fill_the_form: '填写表格',
   find_custom_token: '查找自定义令牌',

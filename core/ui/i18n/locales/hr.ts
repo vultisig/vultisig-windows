@@ -433,6 +433,9 @@ export const hr = {
   fast: 'Brzo',
   fastVault: 'Brzi trezor',
   secureVault: 'Siguran trezor',
+  fast_vault_session_conflict: 'Nepodudarnost dijela trezora',
+  fast_vault_session_conflict_description:
+    'Vaš lokalni dio trezora ne odgovara onom pohranjenom na Vultiservu. To se može dogoditi ako je ista početna fraza uvezena na drugom uređaju.',
   fast_sign: 'Brzi znak',
   fill_the_form: 'Ispunite obrazac',
   find_custom_token: 'Pronađite prilagođeni token',

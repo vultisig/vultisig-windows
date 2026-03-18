@@ -438,6 +438,9 @@ export const pt = {
   fast: 'Rápido',
   fastVault: 'Cofre Rápido',
   secureVault: 'Cofre Seguro',
+  fast_vault_session_conflict: 'Incompatibilidade na parte do cofre',
+  fast_vault_session_conflict_description:
+    'Sua parte local do cofre não corresponde à armazenada no Vultiserver. Isso pode acontecer se a mesma frase-semente foi importada em outro dispositivo.',
   fast_sign: 'Assinatura rápida',
   fill_the_form: 'Preencha o formulário',
   find_custom_token: 'Encontrar token personalizado',
