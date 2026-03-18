@@ -8,7 +8,7 @@ export const tendermintRpcUrl: Record<CosmosChain, string> = {
   Terra: 'https://terra-rpc.publicnode.com:443',
   TerraClassic: 'https://terra-classic-rpc.publicnode.com:443',
   Noble: 'https://noble-rpc.polkachu.com/',
-  THORChain: 'https://rpc.ninerealms.com',
+  THORChain: 'https://rpc.thorchain.network',
   MayaChain: 'https://tendermint.mayachain.info',
   Akash: 'https://akash-rpc.publicnode.com:443',
 }
