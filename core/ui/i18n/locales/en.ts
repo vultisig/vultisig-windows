@@ -523,6 +523,11 @@ export const en = {
     'Seed phrase is not correct, please verify all words.',
   seedphrase_duplicate_vault_error:
     'This seed phrase is already imported as vault "{{vaultName}}". Importing it again would replace the existing vault.',
+  fast_vault_exists_warning_title: 'Vault Already Exists',
+  fast_vault_exists_warning_description:
+    'This seed phrase was already imported as a fast vault on another device. Continuing will replace the server share, and the other device will stop working.',
+  fast_vault_exists_warning_hint:
+    'If you want to keep both devices working, use a secure vault instead.',
   import_seedphrase_description: 'Enter it, create a vault, never look back.',
   import_seedphrase_onboarding_title:
     'You are entering a new era, <g>leaving old seed phrases behind.</g> You’ll need:',

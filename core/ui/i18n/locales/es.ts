@@ -1213,6 +1213,11 @@ export const es = {
     'Esto solo se usará una vez para enviar su archivo de respaldo, Vultisig no almacena ningún dato.',
   seedphrase_duplicate_vault_error:
     'Esta frase inicial ya se importó como bóveda &quot;{{vaultName}}&quot;. Al volver a importarla, se reemplazaría la bóveda existente.',
+  fast_vault_exists_warning_title: 'La bóveda ya existe',
+  fast_vault_exists_warning_description:
+    'Esta frase semilla ya fue importada como bóveda rápida en otro dispositivo. Si continúa, se reemplazará la parte del servidor y el otro dispositivo dejará de funcionar.',
+  fast_vault_exists_warning_hint:
+    'Si desea que ambos dispositivos sigan funcionando, use una bóveda segura en su lugar.',
   incorrect_email: 'Correo electrónico incorrecto, por favor verifique',
   insufficient_native_balance_for_fee:
     'Saldo de token nativo insuficiente para pagar la tarifa de transacción',
