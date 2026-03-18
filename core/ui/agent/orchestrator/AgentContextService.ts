@@ -38,6 +38,7 @@ export type AddressBookItem = {
 
 type ContextDeps = {
   getVault: (pubKey: string) => Promise<VaultData>
+  getVaults: () => Promise<VaultData[]>
   getVaultCoins: (pubKey: string) => Promise<CoinData[]>
   getAddressBookItems: () => Promise<AddressBookItem[]>
 }
@@ -94,6 +95,7 @@ export class AgentContextService {
       this.deps.getVaultCoins(vaultPubKey),
       this.deps.getAddressBookItems().catch(() => []),
     ])
+    const allVaults = await this.buildAllVaults(vaultPubKey, coins)
 
     const balances = await this.fetchBalances(coins)
 
@@ -103,19 +105,24 @@ export class AgentContextService {
       coins,
       balances,
       addressBookItems,
+      allVaults,
     })
   }
 
   async buildQuickCtx(vaultPubKey: string): Promise<MessageContext> {
-    const [vault, coins] = await Promise.all([
+    const [vault, coins, addressBookItems] = await Promise.all([
       this.deps.getVault(vaultPubKey),
       this.deps.getVaultCoins(vaultPubKey),
+      this.deps.getAddressBookItems().catch(() => []),
     ])
+    const allVaults = await this.buildAllVaults(vaultPubKey, coins)
 
     return buildMessageContext({
       vaultPubKey,
       vaultName: vault.name,
       coins,
+      addressBookItems,
+      allVaults,
     })
   }
 
@@ -150,6 +157,25 @@ export class AgentContextService {
 
   async getVaultCoins(vaultPubKey: string): Promise<CoinData[]> {
     return this.deps.getVaultCoins(vaultPubKey)
+  }
+
+  private async buildAllVaults(
+    activeVaultPubKey: string,
+    activeVaultCoins: CoinData[]
+  ) {
+    const vaults = await this.deps.getVaults()
+
+    return Promise.all(
+      vaults.map(async vault => ({
+        name: vault.name,
+        publicKeyEcdsa: vault.publicKeyEcdsa,
+        publicKeyEddsa: vault.publicKeyEddsa,
+        coins:
+          vault.publicKeyEcdsa === activeVaultPubKey
+            ? activeVaultCoins
+            : await this.deps.getVaultCoins(vault.publicKeyEcdsa),
+      }))
+    )
   }
 
   private async fetchBalances(coins: CoinData[]): Promise<BalanceInfo[]> {

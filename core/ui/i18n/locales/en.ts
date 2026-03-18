@@ -3,6 +3,8 @@ export const en = {
   action: 'Action',
   active: 'Active',
   agent: 'Agent',
+  agent_nav_tip_description: 'Vulti Agent is available. Tap to set it up.',
+  agent_nav_tip_title: 'New!',
   active_chains_found_one: 'We found {{count}} active chain',
   active_chains_found_other: 'We found {{count}} active chains',
   active_chains_warning:
@@ -275,6 +277,7 @@ export const en = {
   edit_address: 'Edit Address',
   edit_friends_referral: 'Edit Friend Referral',
   edit_referral: 'Edit Referral',
+  remove_friends_referral: 'Remove Referral',
   edit_vaults: 'Edit Vaults',
   email: 'Email',
   email_backup: 'Enter your email to receive your backup',
@@ -1318,4 +1321,12 @@ export const en = {
   agent_analyzing: 'Analyzing...',
   agent_analyzed_for: 'Analyzed for {{duration}}s',
   agent_analyzed: 'Analyzed',
+  welcome_to_vulti_agent: 'Welcome to Vulti Agent',
+  agent_welcome_description:
+    'Your vault can now understand requests, automate actions, and help manage your crypto.',
+  authorize_agent: 'Authorize Agent',
+  reauthorize_vulti_agent: 'Re-authorize Vulti Agent',
+  agent_reauth_description:
+    'For security, authorization expires periodically.\nPlease confirm to continue using Vulti Agent.',
+  authorize: 'Authorize',
 }

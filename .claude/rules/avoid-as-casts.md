@@ -1,0 +1,8 @@
+# Safe Typing Over Type Assertions
+
+This codebase routes chain-specific logic through discriminant-based generics (`ChainKind`, `ChainOfKind<K>`, `DeriveChainKind<T>`), pattern matching (`matchRecordUnion`, `matchDiscriminatedUnion`, `MatchRecordUnion`), and per-kind resolvers. Design new APIs to follow this pattern:
+
+- Thread the chain kind through generics so inputs/outputs specialize automatically — don't accept a broad `Chain` union and cast at the call site.
+- Use `matchRecordUnion` / `matchDiscriminatedUnion` for exhaustive dispatch; don't switch-case with `as`.
+- If a cast is unavoidable, constrain it to a single routing boundary (see `toChainKindRecordUnion` in `ChainKind.ts` for the canonical example). Never cast at leaf resolvers or call sites.
+- Don't suppress type errors with `as any`; fix the generics or localize the cast in the router.

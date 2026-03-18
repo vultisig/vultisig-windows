@@ -2,8 +2,8 @@
 
 ## Validate after every code change
 Run `yarn check` after modifying any code file. Skip for docs-only tasks.
-- Quick validation: `yarn check` (typecheck + lint:fix + knip)
-- Full CI-equivalent: `yarn check:all` (lint + typecheck + test + knip)
+- Quick validation: `yarn check` (typecheck + lint:fix + knip) — use during development
+- Full CI-equivalent: `yarn check:all` (lint + typecheck + test + knip) — use before opening a PR
 
 ## ESLint autofix workflow
 - Use ESLint autofix only for auto-fixable issues (import sorting, etc.)

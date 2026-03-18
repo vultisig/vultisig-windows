@@ -10,7 +10,7 @@ import {
 } from './services/thorchainLpService'
 import { runeCoin } from './tokens'
 
-export type LpPositionWithData = {
+type LpPositionWithData = {
   position: DefiPosition
   runeAmount: number
   assetAmount: number

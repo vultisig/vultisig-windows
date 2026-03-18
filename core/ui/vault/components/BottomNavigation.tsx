@@ -100,6 +100,7 @@ export const BottomNavigation = ({
   return (
     <AgentBottomNavigationContent
       activeTab={activeTab}
+      showAgentCoachmark={isActiveTabRoot}
       onTabChange={handleTabChange}
       onCameraPress={() => navigate({ id: 'uploadQr', state: {} })}
     />
