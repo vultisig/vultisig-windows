@@ -481,9 +481,12 @@ export const it = {
   header_tooltip_title: 'Programma di segnalazione',
   having_trouble_scanning: 'Problemi con la scansione?',
   having_trouble_scanning_desc: 'Se il codice QR non viene scansionato subito:',
-  having_trouble_scanning_tip_1: 'Avvicina o allontana leggermente il telefono dallo schermo',
-  having_trouble_scanning_tip_2: 'Assicurati che lo schermo sia ben illuminato e privo di riflessi',
-  having_trouble_scanning_tip_3: 'Tieni entrambi i dispositivi fermi per un momento',
+  having_trouble_scanning_tip_1:
+    'Avvicina o allontana leggermente il telefono dallo schermo',
+  having_trouble_scanning_tip_2:
+    'Assicurati che lo schermo sia ben illuminato e privo di riflessi',
+  having_trouble_scanning_tip_3:
+    'Tieni entrambi i dispositivi fermi per un momento',
   hide_balance: 'Nascondi saldo',
   hide_defi_balance: 'Nascondi saldo DeFi',
   hold: 'Mantieni',

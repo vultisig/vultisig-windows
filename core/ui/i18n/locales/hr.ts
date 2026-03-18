@@ -473,8 +473,10 @@ export const hr = {
   header_tooltip_title: 'Program preporuka',
   having_trouble_scanning: 'Problemi sa skeniranjem?',
   having_trouble_scanning_desc: 'Ako se QR kod ne skenira odmah:',
-  having_trouble_scanning_tip_1: 'Pomaknite telefon malo blize ili dalje od zaslona',
-  having_trouble_scanning_tip_2: 'Provjerite je li zaslon dobro osvjetljen i bez odsjaja',
+  having_trouble_scanning_tip_1:
+    'Pomaknite telefon malo blize ili dalje od zaslona',
+  having_trouble_scanning_tip_2:
+    'Provjerite je li zaslon dobro osvjetljen i bez odsjaja',
   having_trouble_scanning_tip_3: 'Drzite oba uredaja mirno trenutak',
   hide_balance: 'Sakrij stanje',
   hide_defi_balance: 'Sakrij DeFi stanje',

@@ -481,9 +481,12 @@ export const de = {
   header_tooltip_title: 'Empfehlungsprogramm',
   having_trouble_scanning: 'Probleme beim Scannen?',
   having_trouble_scanning_desc: 'Wenn der QR-Code nicht sofort gescannt wird:',
-  having_trouble_scanning_tip_1: 'Bewegen Sie das Telefon etwas näher oder weiter vom Bildschirm',
-  having_trouble_scanning_tip_2: 'Stellen Sie sicher, dass der Bildschirm gut beleuchtet und blendfrei ist',
-  having_trouble_scanning_tip_3: 'Halten Sie beide Geräte einen Moment lang ruhig',
+  having_trouble_scanning_tip_1:
+    'Bewegen Sie das Telefon etwas näher oder weiter vom Bildschirm',
+  having_trouble_scanning_tip_2:
+    'Stellen Sie sicher, dass der Bildschirm gut beleuchtet und blendfrei ist',
+  having_trouble_scanning_tip_3:
+    'Halten Sie beide Geräte einen Moment lang ruhig',
   hide_balance: 'Gleichgewicht ausblenden',
   hide_defi_balance: 'DeFi-Guthaben ausblenden',
   hold: 'Halten',

@@ -448,8 +448,10 @@ export const nl = {
   header_tooltip_title: 'Referralprogramma',
   having_trouble_scanning: 'Problemen met scannen?',
   having_trouble_scanning_desc: 'Als de QR-code niet meteen scant:',
-  having_trouble_scanning_tip_1: 'Beweeg de telefoon iets dichter bij of verder van het scherm',
-  having_trouble_scanning_tip_2: 'Zorg ervoor dat het scherm goed verlicht en vrij van schittering is',
+  having_trouble_scanning_tip_1:
+    'Beweeg de telefoon iets dichter bij of verder van het scherm',
+  having_trouble_scanning_tip_2:
+    'Zorg ervoor dat het scherm goed verlicht en vrij van schittering is',
   having_trouble_scanning_tip_3: 'Houd beide apparaten even stil',
   hide_balance: 'Saldo verbergen',
   hide_defi_balance: 'DeFi-saldo verbergen',
