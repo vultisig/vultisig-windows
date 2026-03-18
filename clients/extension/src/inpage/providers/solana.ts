@@ -162,6 +162,13 @@ export class Solana implements Wallet {
 
         this.#emit('change', { accounts: this.accounts })
       }
+    } else {
+      this._publicKey = null
+      this._isConnected = false
+      if (this.account) {
+        this.account = null
+        this.#emit('change', { accounts: this.accounts })
+      }
     }
   }
 
@@ -202,6 +209,9 @@ export class Solana implements Wallet {
   connect = async () => {
     const { address } = await requestAccount(Chain.Solana)
     if (!address) {
+      this._publicKey = null
+      this._isConnected = false
+      this.account = null
       return { publicKey: null }
     }
     this._publicKey = new PublicKey(address)
