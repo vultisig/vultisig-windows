@@ -142,36 +142,34 @@ export class Solana implements Wallet {
       })
     )
 
-    if (data) {
-      const { address } = data
-      this._isConnected = true
-      this._publicKey = new PublicKey(address)
-      const pubkey = this._publicKey.toBytes()
-      const account = this.account
-      if (
-        !account ||
-        account.address !== address ||
-        !bytesEqual(account.publicKey, pubkey)
-      ) {
-        this.account = new VultisigSolanaWalletAccount({
-          address,
-          publicKey: pubkey,
-          label: 'Vultisig Extension',
-          icon: this.icon,
-        })
+    const address = data?.address
+    if (!address) return
 
-        this.#emit('change', { accounts: this.accounts })
-      }
+    this._publicKey = new PublicKey(address)
+    this._isConnected = true
+    const pubkey = this._publicKey.toBytes()
+    const account = this.account
+    if (
+      !account ||
+      account.address !== address ||
+      !bytesEqual(account.publicKey, pubkey)
+    ) {
+      this.account = new VultisigSolanaWalletAccount({
+        address,
+        publicKey: pubkey,
+        label: 'Vultisig Extension',
+        icon: this.icon,
+      })
+
+      this.#emit('change', { accounts: this.accounts })
     }
   }
 
-  #connect: StandardConnectMethod = async () => {
-    if (!this.account) {
+  #connect: StandardConnectMethod = async ({ silent } = {}) => {
+    if (!silent && !this.account) {
       await this.connect()
     }
-
     await this.#connected()
-
     return { accounts: this.accounts }
   }
 
@@ -203,7 +201,10 @@ export class Solana implements Wallet {
 
   connect = async () => {
     const { address } = await requestAccount(Chain.Solana)
-    this._publicKey = new PublicKey(shouldBePresent(address))
+    if (!address) {
+      return { publicKey: null }
+    }
+    this._publicKey = new PublicKey(address)
     this._isConnected = true
     return { publicKey: this.publicKey }
   }
