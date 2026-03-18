@@ -1219,6 +1219,11 @@ export const de = {
     'Dies wird nur einmal zum Senden Ihrer Sicherungsdatei verwendet, Vultisig speichert keine Daten.',
   seedphrase_duplicate_vault_error:
     'Diese Seed-Phrase ist bereits als Tresor &quot;{{vaultName}}&quot; importiert. Ein erneuter Import würde den bestehenden Tresor ersetzen.',
+  fast_vault_exists_warning_title: 'Tresor existiert bereits',
+  fast_vault_exists_warning_description:
+    'Diese Seed-Phrase wurde bereits als Fast Vault auf einem anderen Gerät importiert. Wenn Sie fortfahren, wird der Server-Anteil ersetzt und das andere Gerät funktioniert nicht mehr.',
+  fast_vault_exists_warning_hint:
+    'Wenn Sie möchten, dass beide Geräte funktionieren, verwenden Sie stattdessen einen Secure Vault.',
   incorrect_email: 'Falsche E-Mail-Adresse, bitte überprüfen Sie diese.',
   insufficient_native_balance_for_fee:
     'Unzureichendes Guthaben an nativen Token zur Bezahlung der Transaktionsgebühr',

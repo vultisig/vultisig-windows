@@ -1121,7 +1121,12 @@ export const zh = {
   enter_your_email_description:
     '此功能仅用于发送您的备份文件，Vultisig 不会存储任何数据。',
   seedphrase_duplicate_vault_error:
-    '此种子短语已导入为保险库“{{vaultName}}”。再次导入将会替换现有保险库。',
+    '此种子短语已导入为保险库”{{vaultName}}”。再次导入将会替换现有保险库。',
+  fast_vault_exists_warning_title: '保险库已存在',
+  fast_vault_exists_warning_description:
+    '此种子短语已在另一台设备上作为快速保险库导入。继续操作将替换服务器份额，另一台设备将停止工作。',
+  fast_vault_exists_warning_hint:
+    '如果您希望两台设备都能正常使用，请改用安全保险库。',
   incorrect_email: '电子邮件地址有误，请检查',
   insufficient_native_balance_for_fee: '本地代币余额不足以支付交易费用',
   incorrect_passcode: '密码错误。',
