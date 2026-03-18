@@ -1210,6 +1210,11 @@ export const it = {
     'Verrà utilizzato una sola volta per inviare il file di backup, Vultisig non memorizza alcun dato.',
   seedphrase_duplicate_vault_error:
     'Questa frase seed è già stata importata come vault &quot;{{vaultName}}&quot;. Importandola nuovamente, il vault esistente verrebbe sostituito.',
+  fast_vault_exists_warning_title: 'Il vault esiste già',
+  fast_vault_exists_warning_description:
+    "Questa frase seed è già stata importata come vault veloce su un altro dispositivo. Continuando, la quota del server verrà sostituita e l'altro dispositivo smetterà di funzionare.",
+  fast_vault_exists_warning_hint:
+    'Se vuoi che entrambi i dispositivi funzionino, usa invece un vault sicuro.',
   incorrect_email: 'E-mail errata, controlla',
   insufficient_native_balance_for_fee:
     'Saldo token nativo insufficiente per pagare la commissione di transazione',

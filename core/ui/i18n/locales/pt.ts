@@ -1211,6 +1211,11 @@ export const pt = {
     'Este serviço será utilizado apenas uma vez para enviar seu arquivo de backup; o Vultisig não armazena nenhum dado.',
   seedphrase_duplicate_vault_error:
     'Esta frase-semente já foi importada como cofre &quot;{{vaultName}}&quot;. Importá-la novamente substituiria o cofre existente.',
+  fast_vault_exists_warning_title: 'O cofre já existe',
+  fast_vault_exists_warning_description:
+    'Esta frase-semente já foi importada como cofre rápido em outro dispositivo. Se continuar, a parte do servidor será substituída e o outro dispositivo deixará de funcionar.',
+  fast_vault_exists_warning_hint:
+    'Se deseja que ambos os dispositivos continuem funcionando, use um cofre seguro.',
   incorrect_email: 'E-mail incorreto, verifique.',
   insufficient_native_balance_for_fee:
     'Saldo insuficiente de tokens nativos para pagar a taxa de transação.',
