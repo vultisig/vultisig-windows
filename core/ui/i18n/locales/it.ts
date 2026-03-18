@@ -479,6 +479,11 @@ export const it = {
   header_tooltip_content:
     'Il programma di referral si applica agli scambi THORChain e si basa sul principio del "best effort". È necessario registrare un THORName per utilizzare il referral Vultisig. La quota di registrazione è di 10 RUNE e 1 RUNE all\'anno, che viene versata alla rete THORChain.',
   header_tooltip_title: 'Programma di segnalazione',
+  having_trouble_scanning: 'Problemi con la scansione?',
+  having_trouble_scanning_desc: 'Se il codice QR non viene scansionato subito:',
+  having_trouble_scanning_tip_1: 'Avvicina o allontana leggermente il telefono dallo schermo',
+  having_trouble_scanning_tip_2: 'Assicurati che lo schermo sia ben illuminato e privo di riflessi',
+  having_trouble_scanning_tip_3: 'Tieni entrambi i dispositivi fermi per un momento',
   hide_balance: 'Nascondi saldo',
   hide_defi_balance: 'Nascondi saldo DeFi',
   hold: 'Mantieni',

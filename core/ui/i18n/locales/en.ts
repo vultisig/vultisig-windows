@@ -496,6 +496,11 @@ export const en = {
   header_tooltip_content:
     'The referral program is applied on THORChain swaps and is on a best effort basis. You need to register a THORName to use the Vultisig referral. The registration fee is 10 RUNE and 1 RUNE for each year, which is paid to the THORChain network.',
   header_tooltip_title: 'Referral Program',
+  having_trouble_scanning: 'Having trouble scanning?',
+  having_trouble_scanning_desc: 'If the QR code is not scanning right away:',
+  having_trouble_scanning_tip_1: 'Move the phone slightly closer or farther from the screen',
+  having_trouble_scanning_tip_2: 'Make sure the screen is well lit and free of glare',
+  having_trouble_scanning_tip_3: 'Keep both devices steady for a moment',
   hide_balance: 'Hide balance',
   hide_defi_balance: 'Hide DeFi balance',
   hold: 'Hold',
