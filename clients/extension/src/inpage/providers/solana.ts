@@ -143,32 +143,25 @@ export class Solana implements Wallet {
     )
 
     const address = data?.address
-    if (address) {
-      this._publicKey = new PublicKey(address)
-      this._isConnected = true
-      const pubkey = this._publicKey.toBytes()
-      const account = this.account
-      if (
-        !account ||
-        account.address !== address ||
-        !bytesEqual(account.publicKey, pubkey)
-      ) {
-        this.account = new VultisigSolanaWalletAccount({
-          address,
-          publicKey: pubkey,
-          label: 'Vultisig Extension',
-          icon: this.icon,
-        })
+    if (!address) return
 
-        this.#emit('change', { accounts: this.accounts })
-      }
-    } else {
-      this._publicKey = null
-      this._isConnected = false
-      if (this.account) {
-        this.account = null
-        this.#emit('change', { accounts: this.accounts })
-      }
+    this._publicKey = new PublicKey(address)
+    this._isConnected = true
+    const pubkey = this._publicKey.toBytes()
+    const account = this.account
+    if (
+      !account ||
+      account.address !== address ||
+      !bytesEqual(account.publicKey, pubkey)
+    ) {
+      this.account = new VultisigSolanaWalletAccount({
+        address,
+        publicKey: pubkey,
+        label: 'Vultisig Extension',
+        icon: this.icon,
+      })
+
+      this.#emit('change', { accounts: this.accounts })
     }
   }
 
@@ -209,9 +202,6 @@ export class Solana implements Wallet {
   connect = async () => {
     const { address } = await requestAccount(Chain.Solana)
     if (!address) {
-      this._publicKey = null
-      this._isConnected = false
-      this.account = null
       return { publicKey: null }
     }
     this._publicKey = new PublicKey(address)
