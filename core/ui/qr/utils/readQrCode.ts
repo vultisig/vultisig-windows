@@ -11,7 +11,7 @@ const wasmUrl = '/zxing_reader.wasm'
 export const initZxing = memoizeAsync(() => {
   return prepareZXingModule({
     overrides: {
-      locateFile: (path, prefix) =>
+      locateFile: (path: string, prefix: string) =>
         path.endsWith('.wasm') ? wasmUrl : prefix + path,
     },
     fireImmediately: true,
