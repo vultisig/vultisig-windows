@@ -18,7 +18,6 @@ import { useVaultOrders } from '@core/ui/storage/vaults'
 import { ChildrenProp } from '@lib/ui/props'
 import { without } from '@lib/utils/array/without'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
-import { useCallback } from 'react'
 
 import { KeygenAction, KeygenActionProvider } from '../state/keygenAction'
 import { useKeygenVaultName } from '../state/keygenVault'
@@ -34,113 +33,117 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
 
   const vaultOrders = useVaultOrders()
 
-  const keygenAction: KeygenAction = useCallback(
-    async ({ onStepChange, signers }) => {
-      onStepChange('ecdsa')
+  const keygenAction: KeygenAction = async ({
+    onStepStart,
+    onStepComplete,
+    signers,
+  }) => {
+    onStepStart('prepareVault')
 
-      const sharedFinalVaultFields = {
-        signers,
-        localPartyId,
-        libType: 'DKLS' as MpcLib,
-        isBackedUp: false,
-      }
-
-      const dklsKeygen = new DKLS(
-        { create: true },
-        isInitiatingDevice,
-        serverUrl,
-        sessionId,
-        localPartyId,
-        signers,
-        [],
-        encryptionKeyHex
-      )
-      const dklsResult = await dklsKeygen.startKeygenWithRetry()
-
-      onStepChange('eddsa')
-
-      const schnorrKeygen = new Schnorr(
-        { create: true },
-        isInitiatingDevice,
-        serverUrl,
-        sessionId,
-        localPartyId,
-        signers,
-        [],
-        encryptionKeyHex,
-        dklsKeygen.getSetupMessage()
-      )
-      const schnorrResult = await schnorrKeygen.startKeygenWithRetry()
-
-      let publicKeyMldsa: string | undefined
-      let keyShareMldsa: string | undefined
-
-      if (featureFlags.mldsaKeygen && isMLDSAEnabled) {
-        onStepChange('mldsa')
-
-        const mldsaKeygen = new MldsaKeygen(
-          isInitiatingDevice,
-          serverUrl,
-          sessionId,
-          localPartyId,
-          signers,
-          encryptionKeyHex
-        )
-        const mldsaResult = await mldsaKeygen.startKeygenWithRetry()
-        publicKeyMldsa = mldsaResult.publicKey
-        keyShareMldsa = mldsaResult.keyshare
-      }
-
-      const publicKeys = {
-        ecdsa: dklsResult.publicKey,
-        eddsa: schnorrResult.publicKey,
-      }
-
-      const keyShares = {
-        ecdsa: dklsResult.keyshare,
-        eddsa: schnorrResult.keyshare,
-      }
-
-      const vault = {
-        name: vaultName,
-        publicKeys,
-        createdAt: Date.now(),
-        hexChainCode: dklsResult.chaincode,
-        keyShares,
-        publicKeyMldsa,
-        keyShareMldsa,
-        order: getLastItemOrder(vaultOrders),
-        lastPasswordVerificationTime: hasServer(signers)
-          ? Date.now()
-          : undefined,
-        ...sharedFinalVaultFields,
-      }
-
-      await setKeygenComplete({
-        serverURL: serverUrl,
-        sessionId: sessionId,
-        localPartyId,
-      })
-
-      await waitForKeygenComplete({
-        serverURL: serverUrl,
-        sessionId: sessionId,
-        peers: without(signers, localPartyId),
-      })
-
-      return vault
-    },
-    [
-      encryptionKeyHex,
-      isInitiatingDevice,
-      isMLDSAEnabled,
+    const sharedFinalVaultFields = {
+      signers,
       localPartyId,
+      libType: 'DKLS' as MpcLib,
+      isBackedUp: false,
+    }
+
+    const dklsKeygen = new DKLS(
+      { create: true },
+      isInitiatingDevice,
       serverUrl,
       sessionId,
-      vaultName,
-      vaultOrders,
-    ]
-  )
+      localPartyId,
+      signers,
+      [],
+      encryptionKeyHex
+    )
+
+    await dklsKeygen.prepareKeygenSetup()
+
+    const schnorrKeygen = new Schnorr(
+      { create: true },
+      isInitiatingDevice,
+      serverUrl,
+      sessionId,
+      localPartyId,
+      signers,
+      [],
+      encryptionKeyHex,
+      dklsKeygen.getSetupMessage()
+    )
+
+    onStepComplete('prepareVault')
+    onStepStart('ecdsa')
+    onStepStart('eddsa')
+
+    const [dklsResult, schnorrResult] = await Promise.all([
+      dklsKeygen.startKeygenWithRetry('p-ecdsa').then(r => {
+        onStepComplete('ecdsa')
+        return r
+      }),
+      schnorrKeygen.startKeygenWithRetry('p-eddsa').then(r => {
+        onStepComplete('eddsa')
+        return r
+      }),
+    ])
+
+    let publicKeyMldsa: string | undefined
+    let keyShareMldsa: string | undefined
+
+    if (featureFlags.mldsaKeygen && isMLDSAEnabled) {
+      onStepStart('mldsa')
+
+      const mldsaKeygen = new MldsaKeygen(
+        isInitiatingDevice,
+        serverUrl,
+        sessionId,
+        localPartyId,
+        signers,
+        encryptionKeyHex
+      )
+      const mldsaResult = await mldsaKeygen.startKeygenWithRetry()
+      publicKeyMldsa = mldsaResult.publicKey
+      keyShareMldsa = mldsaResult.keyshare
+      onStepComplete('mldsa')
+    }
+
+    const publicKeys = {
+      ecdsa: dklsResult.publicKey,
+      eddsa: schnorrResult.publicKey,
+    }
+
+    const keyShares = {
+      ecdsa: dklsResult.keyshare,
+      eddsa: schnorrResult.keyshare,
+    }
+
+    const vault = {
+      name: vaultName,
+      publicKeys,
+      createdAt: Date.now(),
+      hexChainCode: dklsResult.chaincode,
+      keyShares,
+      publicKeyMldsa,
+      keyShareMldsa,
+      order: getLastItemOrder(vaultOrders),
+      lastPasswordVerificationTime: hasServer(signers) ? Date.now() : undefined,
+      ...sharedFinalVaultFields,
+    }
+
+    await setKeygenComplete({
+      serverURL: serverUrl,
+      sessionId: sessionId,
+      localPartyId,
+    })
+
+    await waitForKeygenComplete({
+      serverURL: serverUrl,
+      sessionId: sessionId,
+      peers: without(signers, localPartyId),
+    })
+
+    return vault
+  }
 
   return (
     <KeygenActionProvider value={keygenAction}>{children}</KeygenActionProvider>

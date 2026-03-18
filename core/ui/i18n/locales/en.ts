@@ -402,7 +402,9 @@ export const en = {
       shareSecurely: 'to ensure access, preferably',
       vaultShares: 'Your vault holds 2 shares,',
       sentTo: 'Send to ({{email}})',
+      setNewStandard: "You're ready to use a new wallet standard.",
       changeEmailAndRestartKeygen: 'Use a different email',
+      wellDone: 'Well done',
     },
     connectingWithServer: 'Connecting with server...',
     createVault: {
@@ -596,6 +598,8 @@ export const en = {
   keygen_devices_requirements_info:
     'Scan QR with other device. {{recommended}}-device setup recommended, {{min}} is sufficient.',
   keygen_failed: 'Key Generation Error. Please try again.',
+  keygen_protocol_done: 'Done',
+  keygen_protocol_running: 'Running',
   keys: 'Keys',
   keysign: 'Keysign',
   label: 'Label',

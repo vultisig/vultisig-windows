@@ -1,7 +1,5 @@
 import { generateLocalPartyId } from '@core/mpc/devices/localPartyId'
 import { setupVaultWithServer } from '@core/mpc/fast/api/setupVaultWithServer'
-import { toLibType } from '@core/mpc/types/utils/libType'
-import { useKeygenOperation } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
@@ -9,7 +7,8 @@ import { ChildrenProp } from '@lib/ui/props'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useCallback } from 'react'
 
-import { useCore } from '../../../../state/core'
+import { featureFlags } from '../../../../featureFlags'
+import { useIsMLDSAEnabled } from '../../../../storage/mldsaEnabled'
 import { FastKeygenServerActionProvider } from '../../fast/state/fastKeygenServerAction'
 import { useVaultCreationInput } from '../state/vaultCreationInput'
 
@@ -22,10 +21,14 @@ export const CreateFastKeygenServerActionProvider = ({
   const sessionId = useMpcSessionId()
   const hexChainCode = useCurrentHexChainCode()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
-  const { vaultCreationMpcLib } = useCore()
-  const keygenOperation = useKeygenOperation()
+  const isMLDSAEnabled = useIsMLDSAEnabled()
 
   const action = useCallback(async () => {
+    const protocols = ['ecdsa', 'eddsa']
+    if (featureFlags.mldsaKeygen && isMLDSAEnabled) {
+      protocols.push('mldsa')
+    }
+
     await setupVaultWithServer({
       name,
       encryption_password: password,
@@ -34,17 +37,13 @@ export const CreateFastKeygenServerActionProvider = ({
       local_party_id: generateLocalPartyId('server'),
       email,
       hex_encryption_key: hexEncryptionKey,
-      lib_type: toLibType({
-        libType: vaultCreationMpcLib,
-        isKeyImport: 'keyimport' in keygenOperation,
-      }),
+      protocols,
     })
   }, [
     email,
     hexChainCode,
     hexEncryptionKey,
-    vaultCreationMpcLib,
-    keygenOperation,
+    isMLDSAEnabled,
     name,
     password,
     sessionId,
