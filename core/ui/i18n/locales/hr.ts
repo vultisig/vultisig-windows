@@ -471,6 +471,7 @@ export const hr = {
   header_tooltip_content:
     'Program preporuka primjenjuje se na THORChain swapove i temelji se na najboljem naporu. Morate registrirati THORNAme da biste koristili Vultisig preporuku. Naknada za registraciju iznosi 10 RUNE i 1 RUNE za svaku godinu, koja se plaća THORChain mreži.',
   header_tooltip_title: 'Program preporuka',
+  having_trouble_scanning_help: 'Pomoc pri skeniranju QR koda',
   having_trouble_scanning: 'Problemi sa skeniranjem?',
   having_trouble_scanning_desc: 'Ako se QR kod ne skenira odmah:',
   having_trouble_scanning_tip_1:

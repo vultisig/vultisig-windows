@@ -476,6 +476,7 @@ export const pt = {
   header_tooltip_content:
     'O programa de indicação é aplicado em swaps THORChain e funciona com base no princípio do melhor esforço. Você precisa registrar um THORName para usar o programa de indicação Vultisig. A taxa de registro é de 10 RUNE e 1 RUNE por ano, paga à rede THORChain.',
   header_tooltip_title: 'Programa de Encaminhamento',
+  having_trouble_scanning_help: 'Ajuda para digitalizar QR',
   having_trouble_scanning: 'Problemas para escanear?',
   having_trouble_scanning_desc:
     'Se o codigo QR nao estiver escaneando imediatamente:',

@@ -475,6 +475,7 @@ export const es = {
   header_tooltip_content:
     'El programa de referidos se aplica a los swaps de THORChain y se basa en el mejor esfuerzo. Necesita registrar un THORName para usar el programa de referidos de Vultisig. La cuota de registro es de 10 RUNE y 1 RUNE por año, que se paga a la red THORChain.',
   header_tooltip_title: 'Programa de referencias',
+  having_trouble_scanning_help: 'Ayuda para escanear QR',
   having_trouble_scanning: 'Problemas para escanear?',
   having_trouble_scanning_desc: 'Si el codigo QR no se escanea de inmediato:',
   having_trouble_scanning_tip_1:

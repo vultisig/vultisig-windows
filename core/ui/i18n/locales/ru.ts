@@ -442,6 +442,7 @@ export const ru = {
   header_tooltip_content:
     'Реферальная программа применяется к свопам THORChain на best-effort основе. Чтобы использовать referral Vultisig, нужно зарегистрировать THORName. Стоимость регистрации — 10 RUNE и 1 RUNE за каждый год, оплачивается сети THORChain.',
   header_tooltip_title: 'Реферальная программа',
+  having_trouble_scanning_help: 'Помощь по сканированию QR',
   having_trouble_scanning: 'Проблемы со сканированием?',
   having_trouble_scanning_desc: 'Если QR-код не сканируется сразу:',
   having_trouble_scanning_tip_1:

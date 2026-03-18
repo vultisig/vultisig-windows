@@ -443,6 +443,7 @@ export const zh = {
   header_tooltip_content:
     '推荐计划适用于 THORChain 代币兑换，并尽力确保成功。您需要注册一个 THORName 才能使用 Vultisig 推荐计划。注册费为 10 RUNE，每年 1 RUNE，这笔费用将支付给 THORChain 网络。',
   header_tooltip_title: '推荐计划',
+  having_trouble_scanning_help: '二维码扫描帮助',
   having_trouble_scanning: '扫描遇到问题？',
   having_trouble_scanning_desc: '如果二维码无法立即扫描：',
   having_trouble_scanning_tip_1: '将手机稍微靠近或远离屏幕',

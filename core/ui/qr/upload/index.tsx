@@ -66,7 +66,7 @@ export const UploadQrPage = () => {
           secondaryControls={
             <Tooltip
               content={
-                <VStack gap={8}>
+                <VStack gap={8} style={{ width: 260 }}>
                   <Text weight="700">{t('having_trouble_scanning')}</Text>
                   <Text>{t('having_trouble_scanning_desc')}</Text>
                   <VStack gap={4}>
@@ -84,7 +84,10 @@ export const UploadQrPage = () => {
                 </VStack>
               }
               renderOpener={props => (
-                <IconButton {...props}>
+                <IconButton
+                  aria-label={t('having_trouble_scanning_help')}
+                  {...props}
+                >
                   <CircleInfoIcon />
                 </IconButton>
               )}

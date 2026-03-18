@@ -446,6 +446,7 @@ export const nl = {
   header_tooltip_content:
     'Het referralprogramma wordt toegepast op THORChain-swaps en gebeurt op best-effort basis. Je moet een THORName registreren om de Vultisig-referral te gebruiken. De registratiefee is 10 RUNE en 1 RUNE per jaar, betaald aan het THORChain-netwerk.',
   header_tooltip_title: 'Referralprogramma',
+  having_trouble_scanning_help: 'Hulp bij QR-scannen',
   having_trouble_scanning: 'Problemen met scannen?',
   having_trouble_scanning_desc: 'Als de QR-code niet meteen scant:',
   having_trouble_scanning_tip_1:
