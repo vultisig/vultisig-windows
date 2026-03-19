@@ -974,7 +974,7 @@ export const ru = {
   upgrade_vault_description:
     'Обновите это хранилище до <b>самого быстрого MPC-протокола в мире</b> и подписывайте быстрее, чем когда-либо',
   upload_file_or_drag_and_drop: 'Загрузите файл или перетащите сюда',
-  upload_qr_code_image: 'Загрузить QR',
+  upload_qr_code_image: 'Загрузить QR-код',
   upload_qr_code_to_join_keysign: 'Загрузить QR-код для Keysign',
   upload_qr_code_with_address: 'Загрузить QR-код с адресом',
   use_referral_code: 'Использовать referral-код',

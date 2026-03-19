@@ -979,7 +979,7 @@ export const nl = {
   upgrade_vault_description:
     'Upgrade deze kluis naar het <b>snelste MPC-protocol ter wereld</b> en onderteken sneller dan ooit',
   upload_file_or_drag_and_drop: 'Upload bestand of sleep en zet hier neer',
-  upload_qr_code_image: 'QR uploaden',
+  upload_qr_code_image: 'QR-code uploaden',
   upload_qr_code_to_join_keysign: 'Upload QR-code om deel te nemen aan Keysign',
   upload_qr_code_with_address: 'Upload QR-code met adres',
   use_referral_code: 'Referralcode gebruiken',

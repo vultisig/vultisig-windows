@@ -914,7 +914,7 @@ export const es = {
   upgrade_vault_description:
     'Actualice esta bóveda al <b>protocolo MPC más rápido del mundo</b> y firme más rápido que nunca.',
   upload_file_or_drag_and_drop: 'Sube el archivo o arrástralo y suéltalo aquí',
-  upload_qr_code_image: 'Subir QR',
+  upload_qr_code_image: 'Subir código QR',
   upload_qr_code_to_join_keysign: 'Sube el código QR para unirte a Keysign',
   upload_qr_code_with_address: 'Subir código QR con dirección',
   use_referral_code: 'Utilice el código de referencia',

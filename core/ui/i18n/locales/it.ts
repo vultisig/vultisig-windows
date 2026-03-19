@@ -911,7 +911,7 @@ export const it = {
   upgrade_vault_description:
     'Aggiorna questo vault al <b>protocollo MPC più veloce al mondo</b> e firma più velocemente che mai',
   upload_file_or_drag_and_drop: 'Carica il file o trascinalo qui',
-  upload_qr_code_image: 'Carica QR',
+  upload_qr_code_image: 'Carica codice QR',
   upload_qr_code_to_join_keysign: 'Carica il codice QR per unirti a Keysign',
   upload_qr_code_with_address: "Carica il codice QR con l'indirizzo",
   use_referral_code: 'Usa il codice di riferimento',

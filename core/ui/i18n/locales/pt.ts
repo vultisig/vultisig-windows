@@ -912,7 +912,7 @@ export const pt = {
     'Atualize este cofre para o <b>protocolo MPC mais rápido do mundo</b> e assine mais rápido do que nunca.',
   upload_file_or_drag_and_drop:
     'Faça o upload do arquivo ou arraste e solte aqui.',
-  upload_qr_code_image: 'Carregar QR',
+  upload_qr_code_image: 'Carregar código QR',
   upload_qr_code_to_join_keysign:
     'Faça o upload do código QR para se juntar ao Keysign.',
   upload_qr_code_with_address: 'Faça o upload do código QR com o endereço.',

@@ -17,6 +17,16 @@ import { useToast } from '@lib/ui/toast/ToastProvider'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { createGlobalStyle } from 'styled-components'
+
+const PageGlobalStyle = createGlobalStyle`
+  body {
+    background-image: url('/core/images/qr-scanner-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    max-width: 100% !important;
+  }
+`
 
 export const UploadQrPage = () => {
   const { t } = useTranslation()
@@ -56,7 +66,8 @@ export const UploadQrPage = () => {
 
   return (
     <>
-      <VStack fullHeight>
+      <PageGlobalStyle />
+      <VStack alignSelf="center" maxWidth={1024} fullHeight fullWidth>
         <PageHeader
           primaryControls={
             <PageHeaderBackButton
@@ -66,7 +77,7 @@ export const UploadQrPage = () => {
           secondaryControls={
             <Tooltip
               content={
-                <VStack gap={8} style={{ width: 260 }}>
+                <VStack gap={8} style={{ width: 300 }}>
                   <Text weight="700">{t('having_trouble_scanning')}</Text>
                   <Text>{t('having_trouble_scanning_desc')}</Text>
                   <VStack gap={4}>
@@ -83,6 +94,7 @@ export const UploadQrPage = () => {
                   </VStack>
                 </VStack>
               }
+              placement="bottom-end"
               renderOpener={props => (
                 <IconButton
                   aria-label={t('having_trouble_scanning_help')}
@@ -94,7 +106,6 @@ export const UploadQrPage = () => {
             />
           }
           title={title}
-          hasBorder
         />
         <Match
           value={view}

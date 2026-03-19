@@ -1070,7 +1070,7 @@ export const en = {
   upgrade_vault_description:
     "Upgrade this vault to the <b>world's fastest MPC protocol</b> and sign faster than ever before",
   upload_file_or_drag_and_drop: 'Upload file or drag & drop here',
-  upload_qr_code_image: 'Upload QR',
+  upload_qr_code_image: 'Upload QR Code',
   upload_qr_code_to_join_keysign: 'Upload QR Code to join Keysign',
   upload_qr_code_with_address: 'Upload QR code with address',
   use_referral_code: 'Use referral Code',
