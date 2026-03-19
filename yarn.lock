@@ -898,7 +898,6 @@ __metadata:
     "@lib/ui": "workspace:^"
     "@lib/utils": "workspace:^"
     "@react-spring/web": "npm:^10.0.3"
-    "@rive-app/react-canvas": "npm:^4.27.2"
     "@rive-app/react-webgl2": "npm:^4.27.2"
     "@solana/spl-token": "npm:^0.4.14"
     "@solana/web3.js": "npm:^1.98.4"
@@ -3664,24 +3663,6 @@ __metadata:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
   checksum: 10c0/cafbf55991d68920e94419b5b081cfb0aea2ddfa193e984861ab53306365bf81152bce2861370f9b26d4027dd714e8acc0dfbd57bd2eda99e827c3212e22a51c
-  languageName: node
-  linkType: hard
-
-"@rive-app/canvas@npm:2.35.3":
-  version: 2.35.3
-  resolution: "@rive-app/canvas@npm:2.35.3"
-  checksum: 10c0/022cb7017409fca6542734cd636c684b77aaf058357281541399fbc8ce5e30626323e470957f891e7246e25d3f3ad5075baa6b0408391fdb06e430314046f469
-  languageName: node
-  linkType: hard
-
-"@rive-app/react-canvas@npm:^4.27.2":
-  version: 4.27.2
-  resolution: "@rive-app/react-canvas@npm:4.27.2"
-  dependencies:
-    "@rive-app/canvas": "npm:2.35.3"
-  peerDependencies:
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0
-  checksum: 10c0/cceefdfbea182cfa60d2388ae7229211eb3e249f1122698417fa163696c68d4a5eafbf48bd4756153a375150d3878b6570a0e746b819986414ec3fab1ab3d9e5
   languageName: node
   linkType: hard
 
