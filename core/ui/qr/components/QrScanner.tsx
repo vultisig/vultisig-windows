@@ -8,9 +8,9 @@ import { attempt } from '@lib/utils/attempt'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { FlowErrorPageContent } from '../../flow/FlowErrorPageContent'
-import styled from 'styled-components'
 
 const Video = styled.video`
   height: 100%;
