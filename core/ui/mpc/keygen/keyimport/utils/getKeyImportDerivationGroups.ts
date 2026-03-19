@@ -73,7 +73,7 @@ export const getKeyImportDerivationGroups = (
     }
   }
 
-  return Array.from(groupMap.values()).map((groupChains) => ({
+  return Array.from(groupMap.values()).map(groupChains => ({
     representativeChain: groupChains[0],
     chains: groupChains,
   }))

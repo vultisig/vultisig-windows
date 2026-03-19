@@ -110,7 +110,10 @@ export const JoinKeyImportKeygenActionProvider = ({
 
       const derivationGroups = getKeyImportDerivationGroups(chains)
 
-      for (const { representativeChain, chains: groupChains } of derivationGroups) {
+      for (const {
+        representativeChain,
+        chains: groupChains,
+      } of derivationGroups) {
         const chainKind = getChainKind(representativeChain)
         const algorithm = signatureAlgorithms[chainKind]
 

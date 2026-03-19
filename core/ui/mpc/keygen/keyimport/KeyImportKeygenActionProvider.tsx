@@ -130,7 +130,10 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
 
       const derivationGroups = getKeyImportDerivationGroups(chains)
 
-      for (const { representativeChain, chains: groupChains } of derivationGroups) {
+      for (const {
+        representativeChain,
+        chains: groupChains,
+      } of derivationGroups) {
         const chainKind = getChainKind(representativeChain)
         const algorithm = signatureAlgorithms[chainKind]
         const coinType = getCoinType({ chain: representativeChain, walletCore })

@@ -1,4 +1,10 @@
-import { Chain, CosmosChain, EvmChain, OtherChain, UtxoChain } from '@core/chain/Chain'
+import {
+  Chain,
+  CosmosChain,
+  EvmChain,
+  OtherChain,
+  UtxoChain,
+} from '@core/chain/Chain'
 import { describe, expect, it } from 'vitest'
 
 import { getKeyImportDerivationGroups } from './getKeyImportDerivationGroups'
@@ -29,10 +35,7 @@ describe('getKeyImportDerivationGroups', () => {
   })
 
   it('groups THORChain and MayaChain together', () => {
-    const chains: Chain[] = [
-      CosmosChain.THORChain,
-      CosmosChain.MayaChain,
-    ]
+    const chains: Chain[] = [CosmosChain.THORChain, CosmosChain.MayaChain]
 
     const groups = getKeyImportDerivationGroups(chains)
 
@@ -59,10 +62,7 @@ describe('getKeyImportDerivationGroups', () => {
   })
 
   it('groups Terra and TerraClassic together', () => {
-    const chains: Chain[] = [
-      CosmosChain.Terra,
-      CosmosChain.TerraClassic,
-    ]
+    const chains: Chain[] = [CosmosChain.Terra, CosmosChain.TerraClassic]
 
     const groups = getKeyImportDerivationGroups(chains)
 
@@ -83,7 +83,7 @@ describe('getKeyImportDerivationGroups', () => {
     const groups = getKeyImportDerivationGroups(chains)
 
     expect(groups).toHaveLength(5)
-    groups.forEach((group) => {
+    groups.forEach(group => {
       expect(group.chains).toHaveLength(1)
       expect(group.representativeChain).toBe(group.chains[0])
     })
@@ -104,32 +104,36 @@ describe('getKeyImportDerivationGroups', () => {
 
     expect(groups).toHaveLength(4)
 
-    const evmGroup = groups.find((g) => g.representativeChain === EvmChain.Ethereum)
+    const evmGroup = groups.find(
+      g => g.representativeChain === EvmChain.Ethereum
+    )
     expect(evmGroup?.chains).toEqual([
       EvmChain.Ethereum,
       EvmChain.BSC,
       EvmChain.Polygon,
     ])
 
-    const thorGroup = groups.find((g) => g.representativeChain === CosmosChain.THORChain)
+    const thorGroup = groups.find(
+      g => g.representativeChain === CosmosChain.THORChain
+    )
     expect(thorGroup?.chains).toEqual([
       CosmosChain.THORChain,
       CosmosChain.MayaChain,
     ])
 
-    const btcGroup = groups.find((g) => g.representativeChain === UtxoChain.Bitcoin)
+    const btcGroup = groups.find(
+      g => g.representativeChain === UtxoChain.Bitcoin
+    )
     expect(btcGroup?.chains).toEqual([UtxoChain.Bitcoin])
 
-    const solGroup = groups.find((g) => g.representativeChain === OtherChain.Solana)
+    const solGroup = groups.find(
+      g => g.representativeChain === OtherChain.Solana
+    )
     expect(solGroup?.chains).toEqual([OtherChain.Solana])
   })
 
   it('uses the first chain in input order as the representative', () => {
-    const chains: Chain[] = [
-      EvmChain.Polygon,
-      EvmChain.Ethereum,
-      EvmChain.BSC,
-    ]
+    const chains: Chain[] = [EvmChain.Polygon, EvmChain.Ethereum, EvmChain.BSC]
 
     const groups = getKeyImportDerivationGroups(chains)
 
@@ -148,14 +152,14 @@ describe('getKeyImportDerivationGroups', () => {
 
     const groups = getKeyImportDerivationGroups(chains)
 
-    const evmGroup = groups.find((g) => g.chains.includes(EvmChain.Ethereum))
+    const evmGroup = groups.find(g => g.chains.includes(EvmChain.Ethereum))
     expect(evmGroup?.chains).toEqual([
       EvmChain.Blast,
       EvmChain.Ethereum,
       EvmChain.Arbitrum,
     ])
 
-    const thorGroup = groups.find((g) => g.chains.includes(CosmosChain.THORChain))
+    const thorGroup = groups.find(g => g.chains.includes(CosmosChain.THORChain))
     expect(thorGroup?.chains).toEqual([
       CosmosChain.THORChain,
       CosmosChain.MayaChain,
