@@ -1,5 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <circle cx="50" cy="50" r="50" fill="#000"/>
-  <circle cx="50" cy="50" r="46" fill="#1a1a2e"/>
-  <text x="50" y="68" text-anchor="middle" font-family="Arial, sans-serif" font-size="52" font-weight="bold" fill="#fff">τ</text>
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 21.6 23.1" style="enable-background:new 0 0 21.6 23.1;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#292929;}
+</style>
+<path class="st0" d="M13.1,17.7V8.3c0-2.4-1.9-4.3-4.3-4.3v15.1c0,2.2,1.7,4,3.9,4c0.1,0,0.1,0,0.2,0c1,0.1,2.1-0.2,2.9-0.9
+	C13.3,22,13.1,20.5,13.1,17.7L13.1,17.7z"/>
+<path class="st0" d="M3.9,0C1.8,0,0,1.8,0,4h17.6c2.2,0,3.9-1.8,3.9-4C21.6,0,3.9,0,3.9,0z"/>
 </svg>
