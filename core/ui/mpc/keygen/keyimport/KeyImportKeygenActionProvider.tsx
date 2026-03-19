@@ -29,6 +29,7 @@ import { useCallback } from 'react'
 import { KeygenAction, KeygenActionProvider } from '../state/keygenAction'
 import { useKeygenVaultName } from '../state/keygenVault'
 import { useKeyImportInput } from './state/keyImportInput'
+import { getKeyImportDerivationGroups } from './utils/getKeyImportDerivationGroups'
 
 type KeyShareResult = {
   keyshare: string
@@ -127,15 +128,18 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
         eddsa: rootEddsaResult.keyshare,
       }
 
-      for (const chain of chains) {
-        const chainKind = getChainKind(chain)
+      const derivationGroups = getKeyImportDerivationGroups(chains)
+
+      for (const { representativeChain, chains: groupChains } of derivationGroups) {
+        const chainKind = getChainKind(representativeChain)
         const algorithm = signatureAlgorithms[chainKind]
-        const coinType = getCoinType({ chain, walletCore })
+        const coinType = getCoinType({ chain: representativeChain, walletCore })
 
         let chainPrivateKeyHex: string | undefined
         if (isInitiatingDevice && hdWallet) {
           const chainKey =
-            chain === Chain.Solana && keyImportInput.usePhantomSolanaPath
+            representativeChain === Chain.Solana &&
+            keyImportInput.usePhantomSolanaPath
               ? hdWallet.getKey(coinType, phantomSolanaPath)
               : hdWallet.getKeyForCoin(coinType)
 
@@ -164,7 +168,7 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
           chainResult = await chainDkls.startKeyImportWithRetry(
             chainPrivateKeyHex ?? '',
             rootEcdsaResult.chaincode,
-            chain
+            representativeChain
           )
         } else {
           const chainSchnorr = new Schnorr(
@@ -181,12 +185,14 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
           chainResult = await chainSchnorr.startKeyImportWithRetry(
             chainPrivateKeyHex ?? '',
             rootEddsaResult.chaincode,
-            chain
+            representativeChain
           )
         }
 
-        chainPublicKeys[chain] = chainResult.publicKey
-        chainKeyShares[chain] = chainResult.keyshare
+        for (const chain of groupChains) {
+          chainPublicKeys[chain] = chainResult.publicKey
+          chainKeyShares[chain] = chainResult.keyshare
+        }
       }
 
       if (hdWallet) {
