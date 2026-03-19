@@ -446,6 +446,14 @@ export const nl = {
   header_tooltip_content:
     'Het referralprogramma wordt toegepast op THORChain-swaps en gebeurt op best-effort basis. Je moet een THORName registreren om de Vultisig-referral te gebruiken. De registratiefee is 10 RUNE en 1 RUNE per jaar, betaald aan het THORChain-netwerk.',
   header_tooltip_title: 'Referralprogramma',
+  having_trouble_scanning_help: 'Hulp bij QR-scannen',
+  having_trouble_scanning: 'Problemen met scannen?',
+  having_trouble_scanning_desc: 'Als de QR-code niet meteen scant:',
+  having_trouble_scanning_tip_1:
+    'Beweeg de telefoon iets dichter bij of verder van het scherm',
+  having_trouble_scanning_tip_2:
+    'Zorg ervoor dat het scherm goed verlicht en vrij van schittering is',
+  having_trouble_scanning_tip_3: 'Houd beide apparaten even stil',
   hide_balance: 'Saldo verbergen',
   hide_defi_balance: 'DeFi-saldo verbergen',
   hold: 'Vasthouden',
@@ -971,7 +979,7 @@ export const nl = {
   upgrade_vault_description:
     'Upgrade deze kluis naar het <b>snelste MPC-protocol ter wereld</b> en onderteken sneller dan ooit',
   upload_file_or_drag_and_drop: 'Upload bestand of sleep en zet hier neer',
-  upload_qr_code_image: 'QR uploaden',
+  upload_qr_code_image: 'QR-code uploaden',
   upload_qr_code_to_join_keysign: 'Upload QR-code om deel te nemen aan Keysign',
   upload_qr_code_with_address: 'Upload QR-code met adres',
   use_referral_code: 'Referralcode gebruiken',

@@ -442,6 +442,15 @@ export const ru = {
   header_tooltip_content:
     'Реферальная программа применяется к свопам THORChain на best-effort основе. Чтобы использовать referral Vultisig, нужно зарегистрировать THORName. Стоимость регистрации — 10 RUNE и 1 RUNE за каждый год, оплачивается сети THORChain.',
   header_tooltip_title: 'Реферальная программа',
+  having_trouble_scanning_help: 'Помощь по сканированию QR',
+  having_trouble_scanning: 'Проблемы со сканированием?',
+  having_trouble_scanning_desc: 'Если QR-код не сканируется сразу:',
+  having_trouble_scanning_tip_1:
+    'Переместите телефон немного ближе или дальше от экрана',
+  having_trouble_scanning_tip_2:
+    'Убедитесь, что экран хорошо освещён и без бликов',
+  having_trouble_scanning_tip_3:
+    'Держите оба устройства неподвижно на мгновение',
   hide_balance: 'Скрыть баланс',
   hide_defi_balance: 'Скрыть DeFi-баланс',
   hold: 'Держать',
@@ -965,7 +974,7 @@ export const ru = {
   upgrade_vault_description:
     'Обновите это хранилище до <b>самого быстрого MPC-протокола в мире</b> и подписывайте быстрее, чем когда-либо',
   upload_file_or_drag_and_drop: 'Загрузите файл или перетащите сюда',
-  upload_qr_code_image: 'Загрузить QR',
+  upload_qr_code_image: 'Загрузить QR-код',
   upload_qr_code_to_join_keysign: 'Загрузить QR-код для Keysign',
   upload_qr_code_with_address: 'Загрузить QR-код с адресом',
   use_referral_code: 'Использовать referral-код',
