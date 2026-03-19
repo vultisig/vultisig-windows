@@ -3,6 +3,7 @@ import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { DeviceSelectionTip } from '@core/ui/vault/create/setup-vault/DeviceSelectionTip'
 import { useDeviceSelectionAnimation } from '@core/ui/vault/create/setup-vault/hooks/useDeviceSelectionAnimation'
 import { Button } from '@lib/ui/buttons/Button'
+import { Stepper } from '@lib/ui/inputs/Stepper'
 import { ScreenLayout } from '@lib/ui/layout/ScreenLayout/ScreenLayout'
 import { VStack } from '@lib/ui/layout/Stack'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
@@ -43,8 +44,14 @@ const AnimationContainer = styled.div`
   aspect-ratio: ${animationMaxWidth} / 600;
 `
 
+const StepperWrapper = styled.div`
+  width: 100%;
+  max-width: ${animationMaxWidth}px;
+`
+
 export const SetupVaultPage = () => {
-  const { RiveComponent, selectedDeviceCount } = useDeviceSelectionAnimation()
+  const { RiveComponent, selectedDeviceCount, setSelectedDeviceCount } =
+    useDeviceSelectionAnimation()
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
   const goBack = useNavigateBack()
@@ -74,10 +81,22 @@ export const SetupVaultPage = () => {
           </VStack>
         }
       >
-        <VStack flexGrow alignItems="center" justifyContent="center">
+        <VStack gap={16} flexGrow alignItems="center" justifyContent="center">
           <AnimationContainer>
             <RiveComponent style={{ width: '100%', height: '100%' }} />
           </AnimationContainer>
+          <StepperWrapper>
+            <Stepper
+              value={selectedDeviceCount + 1}
+              onChange={v => {
+                if (typeof v === 'number') {
+                  setSelectedDeviceCount(v - 1)
+                }
+              }}
+              min={1}
+              max={4}
+            />
+          </StepperWrapper>
         </VStack>
       </ScreenLayout>
     </GradientWrapper>

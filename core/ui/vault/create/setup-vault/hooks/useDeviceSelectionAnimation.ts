@@ -5,8 +5,8 @@ import {
   useViewModel,
   useViewModelInstance,
   useViewModelInstanceNumber,
-} from '@rive-app/react-canvas'
-import { useEffect, useRef } from 'react'
+} from '@rive-app/react-webgl2'
+import { useCallback, useEffect, useState } from 'react'
 
 import { deviceSelectionAnimationSource } from './deviceSelectionAnimationSource'
 
@@ -17,6 +17,8 @@ const triggerHapticFeedback = () => {
 }
 
 export const useDeviceSelectionAnimation = () => {
+  const [selectedDeviceCount, setSelectedDeviceCountState] = useState(0)
+
   const { RiveComponent, rive } = useRive({
     src: `/core/animations/${deviceSelectionAnimationSource}.riv`,
     autoplay: true,
@@ -35,20 +37,11 @@ export const useDeviceSelectionAnimation = () => {
 
   const indexProperty = useViewModelInstanceNumber('Index', viewModelInstance)
 
-  const previousIndexRef = useRef<number | null>(null)
-
   useEffect(() => {
-    const currentIndex = indexProperty?.value ?? 0
-
-    if (
-      previousIndexRef.current !== null &&
-      previousIndexRef.current !== currentIndex
-    ) {
-      triggerHapticFeedback()
+    if (indexProperty) {
+      indexProperty.setValue(selectedDeviceCount)
     }
-
-    previousIndexRef.current = currentIndex
-  }, [indexProperty?.value])
+  }, [selectedDeviceCount, indexProperty])
 
   useEffect(() => {
     if (!rive) return
@@ -62,8 +55,14 @@ export const useDeviceSelectionAnimation = () => {
     return () => window.removeEventListener('resize', onResize)
   }, [rive])
 
+  const setSelectedDeviceCount = useCallback((count: number) => {
+    triggerHapticFeedback()
+    setSelectedDeviceCountState(count)
+  }, [])
+
   return {
     RiveComponent,
-    selectedDeviceCount: indexProperty?.value ?? 0,
+    selectedDeviceCount,
+    setSelectedDeviceCount,
   }
 }
