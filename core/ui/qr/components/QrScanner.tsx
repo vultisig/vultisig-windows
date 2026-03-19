@@ -1,11 +1,5 @@
-import {
-  BorderImageWrapper,
-  Video,
-  VideoWrapper,
-} from '@core/ui/qr/components/styles'
 import { initZxing, readQrCode } from '@core/ui/qr/utils/readQrCode'
 import { Button } from '@lib/ui/buttons/Button'
-import { Image } from '@lib/ui/image/Image'
 import { Center } from '@lib/ui/layout/Center'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { OnFinishProp } from '@lib/ui/props'
@@ -138,14 +132,7 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
   return (
     <MatchQuery
       value={streamMutationState}
-      success={() => (
-        <VideoWrapper>
-          <Video ref={videoRef} muted />
-          <BorderImageWrapper>
-            <Image src="/core/images/borderedWrapper.svg" alt="" />
-          </BorderImageWrapper>
-        </VideoWrapper>
-      )}
+      success={() => <video ref={videoRef} muted />}
       pending={() => (
         <Center>
           <Spinner size="3em" />

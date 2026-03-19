@@ -17,10 +17,11 @@ import styled from 'styled-components'
 
 const GlassContainer = styled(VStack)`
   flex: 1;
-  border-radius: 24px;
   border: 1px solid ${getColor('primaryAccentTwo')};
+  border-radius: 24px;
   background: ${({ theme }) => theme.colors.background.toRgba(0.3)};
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
 `
 
 const UploadButton = styled(Button)`
