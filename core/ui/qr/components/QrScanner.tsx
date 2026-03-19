@@ -1,11 +1,5 @@
-import {
-  BorderImageWrapper,
-  Video,
-  VideoWrapper,
-} from '@core/ui/qr/components/styles'
 import { initZxing, readQrCode } from '@core/ui/qr/utils/readQrCode'
 import { Button } from '@lib/ui/buttons/Button'
-import { Image } from '@lib/ui/image/Image'
 import { Center } from '@lib/ui/layout/Center'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { OnFinishProp } from '@lib/ui/props'
@@ -14,8 +8,15 @@ import { attempt } from '@lib/utils/attempt'
 import { useMutation } from '@tanstack/react-query'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { FlowErrorPageContent } from '../../flow/FlowErrorPageContent'
+
+const Video = styled.video`
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+`
 
 export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
   const { t } = useTranslation()
@@ -138,14 +139,7 @@ export const QrScanner = ({ onFinish }: OnFinishProp<string>) => {
   return (
     <MatchQuery
       value={streamMutationState}
-      success={() => (
-        <VideoWrapper>
-          <Video ref={videoRef} muted />
-          <BorderImageWrapper>
-            <Image src="/core/images/borderedWrapper.svg" alt="" />
-          </BorderImageWrapper>
-        </VideoWrapper>
-      )}
+      success={() => <Video ref={videoRef} muted />}
       pending={() => (
         <Center>
           <Spinner size="3em" />

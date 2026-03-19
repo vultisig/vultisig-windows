@@ -437,6 +437,9 @@ export const es = {
   fast: 'Rápido',
   fastVault: 'Bóveda rápida',
   secureVault: 'Bóveda segura',
+  fast_vault_session_conflict: 'Discrepancia en la parte de la bóveda',
+  fast_vault_session_conflict_description:
+    'Tu parte local de la bóveda no coincide con la almacenada en Vultiserver. Esto puede ocurrir si la misma frase semilla fue importada en otro dispositivo.',
   fast_sign: 'Señal rápida',
   fill_the_form: 'Rellene el formulario',
   find_custom_token: 'Encuentra un token personalizado',
@@ -472,6 +475,15 @@ export const es = {
   header_tooltip_content:
     'El programa de referidos se aplica a los swaps de THORChain y se basa en el mejor esfuerzo. Necesita registrar un THORName para usar el programa de referidos de Vultisig. La cuota de registro es de 10 RUNE y 1 RUNE por año, que se paga a la red THORChain.',
   header_tooltip_title: 'Programa de referencias',
+  having_trouble_scanning_help: 'Ayuda para escanear QR',
+  having_trouble_scanning: 'Problemas para escanear?',
+  having_trouble_scanning_desc: 'Si el codigo QR no se escanea de inmediato:',
+  having_trouble_scanning_tip_1:
+    'Mueva el telefono un poco mas cerca o mas lejos de la pantalla',
+  having_trouble_scanning_tip_2:
+    'Asegurese de que la pantalla este bien iluminada y sin reflejos',
+  having_trouble_scanning_tip_3:
+    'Mantenga ambos dispositivos quietos por un momento',
   hide_balance: 'Ocultar saldo',
   hide_defi_balance: 'Ocultar saldo DeFi',
   hold: 'Mantener',
@@ -902,7 +914,7 @@ export const es = {
   upgrade_vault_description:
     'Actualice esta bóveda al <b>protocolo MPC más rápido del mundo</b> y firme más rápido que nunca.',
   upload_file_or_drag_and_drop: 'Sube el archivo o arrástralo y suéltalo aquí',
-  upload_qr_code_image: 'Subir QR',
+  upload_qr_code_image: 'Subir código QR',
   upload_qr_code_to_join_keysign: 'Sube el código QR para unirte a Keysign',
   upload_qr_code_with_address: 'Subir código QR con dirección',
   use_referral_code: 'Utilice el código de referencia',

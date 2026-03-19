@@ -33,9 +33,7 @@ const fetchThorchainLpPosition = async (
   const url = `${thornodeBaseUrl}/pool/${poolAsset}/liquidity_provider/${address}`
 
   try {
-    const response = await fetch(url, {
-      headers: { 'X-Client-ID': 'vultisig' },
-    })
+    const response = await fetch(url)
 
     if (!response.ok) return null
 

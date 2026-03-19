@@ -441,6 +441,9 @@ export const it = {
   fast: 'Veloce',
   fastVault: 'Deposito veloce',
   secureVault: 'Deposito sicuro',
+  fast_vault_session_conflict: 'Mancata corrispondenza della quota del vault',
+  fast_vault_session_conflict_description:
+    'La quota locale del vault non corrisponde a quella archiviata su Vultiserver. Ciò può verificarsi se la stessa frase seed è stata importata su un altro dispositivo.',
   fast_sign: 'Segnale veloce',
   fill_the_form: 'Compila il modulo',
   find_custom_token: 'Trova token personalizzato',
@@ -476,6 +479,15 @@ export const it = {
   header_tooltip_content:
     'Il programma di referral si applica agli scambi THORChain e si basa sul principio del "best effort". È necessario registrare un THORName per utilizzare il referral Vultisig. La quota di registrazione è di 10 RUNE e 1 RUNE all\'anno, che viene versata alla rete THORChain.',
   header_tooltip_title: 'Programma di segnalazione',
+  having_trouble_scanning_help: 'Aiuto per la scansione QR',
+  having_trouble_scanning: 'Problemi con la scansione?',
+  having_trouble_scanning_desc: 'Se il codice QR non viene scansionato subito:',
+  having_trouble_scanning_tip_1:
+    'Avvicina o allontana leggermente il telefono dallo schermo',
+  having_trouble_scanning_tip_2:
+    'Assicurati che lo schermo sia ben illuminato e privo di riflessi',
+  having_trouble_scanning_tip_3:
+    'Tieni entrambi i dispositivi fermi per un momento',
   hide_balance: 'Nascondi saldo',
   hide_defi_balance: 'Nascondi saldo DeFi',
   hold: 'Mantieni',
@@ -899,7 +911,7 @@ export const it = {
   upgrade_vault_description:
     'Aggiorna questo vault al <b>protocollo MPC più veloce al mondo</b> e firma più velocemente che mai',
   upload_file_or_drag_and_drop: 'Carica il file o trascinalo qui',
-  upload_qr_code_image: 'Carica QR',
+  upload_qr_code_image: 'Carica codice QR',
   upload_qr_code_to_join_keysign: 'Carica il codice QR per unirti a Keysign',
   upload_qr_code_with_address: "Carica il codice QR con l'indirizzo",
   use_referral_code: 'Usa il codice di riferimento',

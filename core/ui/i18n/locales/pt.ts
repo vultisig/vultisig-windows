@@ -438,6 +438,9 @@ export const pt = {
   fast: 'Rápido',
   fastVault: 'Cofre Rápido',
   secureVault: 'Cofre Seguro',
+  fast_vault_session_conflict: 'Incompatibilidade na parte do cofre',
+  fast_vault_session_conflict_description:
+    'Sua parte local do cofre não corresponde à armazenada no Vultiserver. Isso pode acontecer se a mesma frase-semente foi importada em outro dispositivo.',
   fast_sign: 'Assinatura rápida',
   fill_the_form: 'Preencha o formulário',
   find_custom_token: 'Encontrar token personalizado',
@@ -473,6 +476,16 @@ export const pt = {
   header_tooltip_content:
     'O programa de indicação é aplicado em swaps THORChain e funciona com base no princípio do melhor esforço. Você precisa registrar um THORName para usar o programa de indicação Vultisig. A taxa de registro é de 10 RUNE e 1 RUNE por ano, paga à rede THORChain.',
   header_tooltip_title: 'Programa de Encaminhamento',
+  having_trouble_scanning_help: 'Ajuda para digitalizar QR',
+  having_trouble_scanning: 'Problemas para escanear?',
+  having_trouble_scanning_desc:
+    'Se o codigo QR nao estiver escaneando imediatamente:',
+  having_trouble_scanning_tip_1:
+    'Mova o telefone um pouco mais perto ou mais longe da tela',
+  having_trouble_scanning_tip_2:
+    'Certifique-se de que a tela esteja bem iluminada e sem brilho',
+  having_trouble_scanning_tip_3:
+    'Mantenha ambos os dispositivos estaveis por um momento',
   hide_balance: 'Ocultar saldo',
   hide_defi_balance: 'Ocultar saldo DeFi',
   hold: 'Manter',
@@ -899,7 +912,7 @@ export const pt = {
     'Atualize este cofre para o <b>protocolo MPC mais rápido do mundo</b> e assine mais rápido do que nunca.',
   upload_file_or_drag_and_drop:
     'Faça o upload do arquivo ou arraste e solte aqui.',
-  upload_qr_code_image: 'Carregar QR',
+  upload_qr_code_image: 'Carregar código QR',
   upload_qr_code_to_join_keysign:
     'Faça o upload do código QR para se juntar ao Keysign.',
   upload_qr_code_with_address: 'Faça o upload do código QR com o endereço.',

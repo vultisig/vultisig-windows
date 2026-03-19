@@ -1,7 +1,7 @@
 import VULTI_ICON_RAW_SVG from '@clients/extension/src/inpage/icon'
 import { Ethereum } from '@clients/extension/src/inpage/providers/ethereum'
 import { createProviders } from '@clients/extension/src/inpage/providers/providerFactory'
-import { UtxoChain } from '@core/chain/Chain'
+import { Chain, UtxoChain } from '@core/chain/Chain'
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
 import { attempt } from '@lib/utils/attempt'
@@ -65,20 +65,27 @@ async function setupContentScriptMessenger(
   providers: ReturnType<typeof createProviders>
 ) {
   const ethereumProvider = providers.ethereum
+
+  const [vultisigDefaultProvider, hasSolanaResult] = await Promise.all([
+    callBackground({ getIsWalletPrioritized: {} }),
+    attempt(callBackground({ hasChainInVault: { chain: Chain.Solana } })),
+  ])
+  const hasSolana = hasSolanaResult.data ?? false
+
   const phantomProvider = {
     bitcoin: new UTXO(UtxoChain.Bitcoin, 'phantom-override'),
     ethereum: ethereumProvider,
-    solana: providers.solana,
+    ...(hasSolana && { solana: providers.solana }),
   }
 
-  const vultisigDefaultProvider = await callBackground({
-    getIsWalletPrioritized: {},
-  })
+  if (hasSolana) {
+    registerWallet(providers.solana)
+  }
 
   if (vultisigDefaultProvider) {
-    const metaMaskSolanaProvider = new Solana('MetaMask')
-
-    registerWallet(metaMaskSolanaProvider)
+    if (hasSolana) {
+      registerWallet(new Solana('MetaMask'))
+    }
     providers.tron.init()
 
     const providerCopy = Object.create(
