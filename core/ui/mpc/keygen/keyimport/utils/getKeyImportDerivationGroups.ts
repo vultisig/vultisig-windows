@@ -1,4 +1,21 @@
-import { Chain, CosmosChain, EvmChain } from '@core/chain/Chain'
+import {
+  Chain,
+  cosmosChainsByKind,
+  EvmChain,
+  VaultBasedCosmosChain,
+} from '@core/chain/Chain'
+
+const evmChainValues = new Set<Chain>(Object.values(EvmChain))
+
+const ibcCosmosChainValues = new Set<Chain>(
+  Object.values(cosmosChainsByKind.ibcEnabled)
+)
+
+const vaultBasedCosmosChainValues = new Set<Chain>(
+  Object.values(VaultBasedCosmosChain)
+)
+
+const terraChains = new Set<Chain>([Chain.Terra, Chain.TerraClassic])
 
 /**
  * Returns a stable key identifying which derivation path a chain uses.
@@ -8,43 +25,19 @@ import { Chain, CosmosChain, EvmChain } from '@core/chain/Chain'
  * Derivation path groupings (BIP44 coin type):
  * - EVM chains: m/44'/60'/0'/0/0
  * - THORChain + MayaChain: m/44'/931'/0'/0/0
- * - Cosmos-118 chains: m/44'/118'/0'/0/0
+ * - IBC Cosmos chains (excl. Terra): m/44'/118'/0'/0/0
  * - Terra chains: m/44'/330'/0'/0/0
  * - All others: unique per chain
  */
 const getDerivationKey = (chain: Chain): string => {
-  const evmChains: readonly Chain[] = [
-    EvmChain.Ethereum,
-    EvmChain.Arbitrum,
-    EvmChain.Avalanche,
-    EvmChain.Base,
-    EvmChain.CronosChain,
-    EvmChain.BSC,
-    EvmChain.Blast,
-    EvmChain.Optimism,
-    EvmChain.Polygon,
-    EvmChain.Zksync,
-    EvmChain.Mantle,
-    EvmChain.Hyperliquid,
-    EvmChain.Sei,
-  ]
-  if (evmChains.includes(chain)) return 'evm'
+  if (evmChainValues.has(chain)) return 'evm'
 
-  if (chain === CosmosChain.THORChain || chain === CosmosChain.MayaChain)
-    return 'thorchain'
+  if (vaultBasedCosmosChainValues.has(chain)) return 'thorchain'
 
-  const cosmos118Chains: readonly Chain[] = [
-    CosmosChain.Cosmos,
-    CosmosChain.Kujira,
-    CosmosChain.Dydx,
-    CosmosChain.Osmosis,
-    CosmosChain.Noble,
-    CosmosChain.Akash,
-  ]
-  if (cosmos118Chains.includes(chain)) return 'cosmos-118'
-
-  if (chain === CosmosChain.Terra || chain === CosmosChain.TerraClassic)
-    return 'terra-330'
+  if (ibcCosmosChainValues.has(chain)) {
+    if (terraChains.has(chain)) return 'terra-330'
+    return 'cosmos-118'
+  }
 
   return chain
 }
