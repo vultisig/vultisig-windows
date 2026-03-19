@@ -1,3 +1,4 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
@@ -89,7 +90,7 @@ const SendAmountDisplay = ({ record }: { record: SendTransactionRecord }) => {
       )}
       <VStack gap={2}>
         <Text size={20} weight={600}>
-          {data.amount} {data.token}
+          {fromChainAmount(BigInt(data.amount), data.decimals)} {data.token}
         </Text>
         {record.fiatValue && (
           <Text size={14} color="shy">
@@ -146,7 +147,8 @@ const SwapAmountDisplay = ({ record }: { record: SwapTransactionRecord }) => {
           />
         )}
         <Text size={20} weight={600}>
-          {data.fromAmount} {data.fromToken}
+          {fromChainAmount(BigInt(data.fromAmount), data.fromDecimals)}{' '}
+          {data.fromToken}
         </Text>
       </HStack>
       <Text size={14} color="shy">
@@ -164,7 +166,8 @@ const SwapAmountDisplay = ({ record }: { record: SwapTransactionRecord }) => {
           />
         )}
         <Text size={20} weight={600}>
-          {data.toAmount} {data.toToken}
+          {fromChainAmount(BigInt(data.toAmount), data.toDecimals)}{' '}
+              {data.toToken}
         </Text>
       </HStack>
     </VStack>

@@ -1,4 +1,6 @@
+import { decodeBittensorTxInput } from '@core/mpc/keysign/signingInputs/resolvers/bittensor'
 import { getPreSigningOutput } from '@core/mpc/keysign/preSigningOutput'
+import { blake2AsU8a } from '@polkadot/util-crypto'
 import { without } from '@lib/utils/array/without'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { WalletCore } from '@trustwallet/wallet-core'
@@ -16,6 +18,17 @@ export const getPreSigningHashes = ({
   txInputData,
   chain,
 }: Input) => {
+  // Bittensor: custom signing payload with CheckMetadataHash extension
+  if (chain === Chain.Bittensor) {
+    const { payload } = decodeBittensorTxInput(txInputData)
+    console.log('[Bittensor preSigningHashes] payload length:', payload.length)
+    // Substrate: if payload > 256 bytes, hash it; otherwise sign directly
+    const toSign =
+      payload.length > 256 ? blake2AsU8a(payload, 256) : payload
+    console.log('[Bittensor preSigningHashes] toSign:', Buffer.from(toSign).toString('hex'))
+    return [toSign]
+  }
+
   const output = getPreSigningOutput({
     walletCore,
     txInputData,

@@ -167,6 +167,14 @@ async function setupContentScriptMessenger(
               enable: (origin?: string) => providers.polkadot.enable(origin),
               version: '0.46.9',
             },
+            'vultisig-bittensor': {
+              enable: (origin?: string) =>
+                providers.bittensor.enable(origin),
+            },
+            bittensor: {
+              enable: (origin?: string) =>
+                providers.bittensor.enable(origin),
+            },
           },
           configurable: false,
           writable: false,

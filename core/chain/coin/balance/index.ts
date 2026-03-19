@@ -4,6 +4,7 @@ import { CoinBalanceResolver } from './resolver'
 import { getCardanoCoinBalance } from './resolvers/cardano'
 import { getCosmosCoinBalance } from './resolvers/cosmos'
 import { getEvmCoinBalance } from './resolvers/evm'
+import { getBittensorCoinBalance } from './resolvers/bittensor'
 import { getPolkadotCoinBalance } from './resolvers/polkadot'
 import { getRippleCoinBalance } from './resolvers/ripple'
 import { getSolanaCoinBalance } from './resolvers/solana'
@@ -20,6 +21,7 @@ const resolvers: Record<ChainKind, CoinBalanceResolver<any>> = {
   ton: getTonCoinBalance,
   ripple: getRippleCoinBalance,
   polkadot: getPolkadotCoinBalance,
+  bittensor: getBittensorCoinBalance,
   solana: getSolanaCoinBalance,
   tron: getTronCoinBalance,
   cardano: getCardanoCoinBalance,

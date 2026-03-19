@@ -1,3 +1,4 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { CoinKey } from '@core/chain/coin/Coin'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 
@@ -32,7 +33,9 @@ const getDisplayData = (record: TransactionRecord): TransactionDisplayData => {
   if (record.type === 'swap') {
     return {
       tagType: 'swap',
-      amountCrypto: record.data.fromAmount,
+      amountCrypto: String(
+        fromChainAmount(BigInt(record.data.fromAmount), record.data.fromDecimals)
+      ),
       symbol: record.data.fromToken,
       addressDirection: 'to',
       address: record.data.toToken,
@@ -48,7 +51,9 @@ const getDisplayData = (record: TransactionRecord): TransactionDisplayData => {
 
   return {
     tagType: 'send',
-    amountCrypto: record.data.amount,
+    amountCrypto: String(
+      fromChainAmount(BigInt(record.data.amount), record.data.decimals)
+    ),
     symbol: record.data.token,
     addressDirection: 'to',
     address: record.data.toAddress,
