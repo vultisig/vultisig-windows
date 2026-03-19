@@ -27,7 +27,15 @@ export type MessageContext = {
   addresses?: Record<string, string>
   coins?: BackendCoinInfo[]
   address_book?: AddressBookEntry[]
+  all_vaults?: AllVaultInfo[]
   instructions?: string
+}
+
+export type AllVaultInfo = {
+  name: string
+  pubkey_ecdsa: string
+  pubkey_eddsa: string
+  addresses: Record<string, string>
 }
 
 export type BackendCoinInfo = {

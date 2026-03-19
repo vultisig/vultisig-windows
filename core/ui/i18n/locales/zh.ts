@@ -405,6 +405,9 @@ export const zh = {
   fast: '快速地',
   fastVault: '快速金库',
   secureVault: '安全金库',
+  fast_vault_session_conflict: '保险库份额不匹配',
+  fast_vault_session_conflict_description:
+    '您的本地保险库份额与 Vultiserver 上存储的份额不匹配。如果相同的助记词在另一台设备上导入，可能会发生这种情况。',
   fast_sign: '快速签名',
   fill_the_form: '填写表格',
   find_custom_token: '查找自定义令牌',
@@ -440,6 +443,12 @@ export const zh = {
   header_tooltip_content:
     '推荐计划适用于 THORChain 代币兑换，并尽力确保成功。您需要注册一个 THORName 才能使用 Vultisig 推荐计划。注册费为 10 RUNE，每年 1 RUNE，这笔费用将支付给 THORChain 网络。',
   header_tooltip_title: '推荐计划',
+  having_trouble_scanning_help: '二维码扫描帮助',
+  having_trouble_scanning: '扫描遇到问题？',
+  having_trouble_scanning_desc: '如果二维码无法立即扫描：',
+  having_trouble_scanning_tip_1: '将手机稍微靠近或远离屏幕',
+  having_trouble_scanning_tip_2: '确保屏幕光线充足且无眩光',
+  having_trouble_scanning_tip_3: '保持两台设备片刻不动',
   hide_balance: '隐藏余额',
   hide_defi_balance: '隐藏DeFi余额',
   hold: '持有',
@@ -1121,7 +1130,12 @@ export const zh = {
   enter_your_email_description:
     '此功能仅用于发送您的备份文件，Vultisig 不会存储任何数据。',
   seedphrase_duplicate_vault_error:
-    '此种子短语已导入为保险库“{{vaultName}}”。再次导入将会替换现有保险库。',
+    '此种子短语已导入为保险库”{{vaultName}}”。再次导入将会替换现有保险库。',
+  fast_vault_exists_warning_title: '保险库已存在',
+  fast_vault_exists_warning_description:
+    '此种子短语已在另一台设备上作为快速保险库导入。继续操作将替换服务器份额，另一台设备将停止工作。',
+  fast_vault_exists_warning_hint:
+    '如果您希望两台设备都能正常使用，请改用安全保险库。',
   incorrect_email: '电子邮件地址有误，请检查',
   insufficient_native_balance_for_fee: '本地代币余额不足以支付交易费用',
   incorrect_passcode: '密码错误。',

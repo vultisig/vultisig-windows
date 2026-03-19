@@ -1,17 +1,14 @@
 import { coinKeyToString } from '@core/chain/coin/Coin'
 import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
-import {
-  daysInYear,
-  thorchainBlockTimeSeconds,
-} from '@core/ui/defi/chain/constants/time'
+import { mayachainBlockTimeSeconds } from '@core/ui/defi/chain/constants/time'
+import { attempt } from '@lib/utils/attempt'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
-import { mayaMidgardBaseUrl } from '../constants'
+import { mayaMidgardBaseUrl, mayanodeBaseUrl } from '../constants'
 import { mayaCoin } from '../tokens'
 import { ThorchainStakePosition } from '../types'
+import { convertAPYtoAPR } from '../utils/apy'
 import { parseBigint, parseNumber } from '../utils/parsers'
-
-const mayanodeBaseUrl = 'https://mayanode.mayachain.info/mayachain'
 
 type CacaoPoolMember = {
   deposit_amount?: string
@@ -41,14 +38,9 @@ const getCacaoPoolMember = (address: string) =>
   })
 
 const getMayaNetwork = () =>
-  queryUrl<MayaNetwork>(`${mayaMidgardBaseUrl}/network`, {
-    headers: { 'X-Client-ID': 'vultisig' },
-  })
+  queryUrl<MayaNetwork>(`${mayaMidgardBaseUrl}/network`)
 
-const getMayaHealth = () =>
-  queryUrl<MayaHealth>(`${mayaMidgardBaseUrl}/health`, {
-    headers: { 'X-Client-ID': 'vultisig' },
-  })
+const getMayaHealth = () => queryUrl<MayaHealth>(`${mayaMidgardBaseUrl}/health`)
 
 const getMayaMimir = () =>
   queryUrl<MayaMimir>(`${mayanodeBaseUrl}/mimir`, {
@@ -60,38 +52,38 @@ type FetchMayaStakePositionsInput = {
   prices: Record<string, number>
 }
 
+/** Fetches Maya CACAO stake positions for a given address. */
 export const fetchMayaStakePositions = async ({
   address,
   prices,
 }: FetchMayaStakePositionsInput) => {
-  try {
-    const [member, network, health, mimir] = await Promise.all([
-      getCacaoPoolMember(address),
+  const member = await getCacaoPoolMember(address).catch(() => undefined)
+
+  const deposited = parseBigint(member?.deposit_amount)
+  const withdrawn = parseBigint(member?.withdraw_amount)
+  const net = deposited - withdrawn
+  const amount = net > 0n ? net : 0n
+
+  const price = prices[coinKeyToString(mayaCoin)] ?? 0
+  const fiatValue = getCoinValue({
+    amount,
+    decimals: mayaCoin.decimals,
+    price,
+  })
+
+  let apyPercent = 0
+  let canUnstake = amount > 0n
+  let unstakeAvailableDate: Date | undefined
+
+  const enrichmentResult = await attempt(async () => {
+    const [network, health, mimir] = await Promise.all([
       getMayaNetwork(),
       getMayaHealth(),
       getMayaMimir(),
     ])
 
-    const deposited = parseBigint(member?.deposit_amount)
-    const withdrawn = parseBigint(member?.withdraw_amount)
-    const net = deposited - withdrawn
-    const amount = net > 0n ? net : 0n
-
-    const price = prices[coinKeyToString(mayaCoin)] ?? 0
-    const fiatValue = getCoinValue({
-      amount,
-      decimals: mayaCoin.decimals,
-      price,
-    })
-
     const liquidityAPYDecimal = parseNumber(network?.liquidityAPY)
-    const apyPercent = liquidityAPYDecimal * 100
-    const apr =
-      liquidityAPYDecimal > 0
-        ? (Math.pow(1 + liquidityAPYDecimal, 1 / daysInYear) - 1) *
-          daysInYear *
-          100
-        : 0
+    apyPercent = liquidityAPYDecimal * 100
 
     const maturityBlocks = mimir?.CACAOPOOLDEPOSITMATURITYBLOCKS ?? 0
     const currentHeight = health?.lastThorNode?.height ?? 0
@@ -99,33 +91,32 @@ export const fetchMayaStakePositions = async ({
     const blocksSinceDeposit = currentHeight - lastDepositHeight
     const blocksRemaining = maturityBlocks - blocksSinceDeposit
 
-    const canUnstake = amount === 0n || blocksRemaining <= 0
-    const unstakeAvailableDate = canUnstake
+    canUnstake = amount > 0n && blocksRemaining <= 0
+    unstakeAvailableDate = canUnstake
       ? undefined
       : new Date(
-          Date.now() + blocksRemaining * thorchainBlockTimeSeconds * 1000
+          Date.now() + blocksRemaining * mayachainBlockTimeSeconds * 1000
         )
+  })
 
-    const position: ThorchainStakePosition = {
-      id: 'maya-stake-cacao',
-      ticker: mayaCoin.ticker,
-      amount,
-      fiatValue,
-      apr,
-      type: 'stake',
-      canUnstake,
-      unstakeAvailableDate,
-      estimatedReward: undefined,
-      rewards: undefined,
-    }
-
-    // Include APY as APR surrogate if APR is zero but APY present
-    if (position.apr === 0 && apyPercent > 0) {
-      position.apr = apyPercent
-    }
-
-    return { positions: [position] }
-  } catch {
-    return { positions: [] }
+  if ('error' in enrichmentResult) {
+    canUnstake = amount > 0n
   }
+
+  const apr = convertAPYtoAPR(apyPercent)
+
+  const position: ThorchainStakePosition = {
+    id: 'maya-stake-cacao',
+    ticker: mayaCoin.ticker,
+    amount,
+    fiatValue,
+    apr,
+    type: 'stake',
+    canUnstake,
+    unstakeAvailableDate,
+    estimatedReward: undefined,
+    rewards: undefined,
+  }
+
+  return { positions: [position] }
 }

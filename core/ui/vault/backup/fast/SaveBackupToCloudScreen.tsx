@@ -50,36 +50,24 @@ export const SaveBackupToCloudScreen = ({
           <IconWrapper>
             <CloudUploadIcon style={{ fontSize: 20 }} />
           </IconWrapper>
-          <VStack alignItems="center">
+          <VStack gap={12} alignItems="center">
             <Text size={22} weight={500} color="contrast" centerHorizontally>
               {title ?? t('save_backup_to_cloud')}
             </Text>
             {description ?? (
-              <>
-                <Text size={14} weight={500} color="shy" centerHorizontally>
-                  <Trans
-                    i18nKey="save_backup_description"
-                    components={{
-                      b: (
-                        <Text
-                          as="span"
-                          size={14}
-                          color="contrast"
-                          weight={700}
-                        />
-                      ),
-                    }}
-                  />
-                </Text>
-                <Text
-                  size={14}
-                  weight={500}
-                  color="shyExtra"
-                  centerHorizontally
-                >
+              <Text size={14} weight={500} color="shy" centerHorizontally>
+                <Trans
+                  i18nKey="save_backup_description"
+                  components={{
+                    b: (
+                      <Text as="span" size={14} color="contrast" weight={700} />
+                    ),
+                  }}
+                />{' '}
+                <Text as="span" color="shyExtra">
                   {t('save_backup_description_2')}
                 </Text>
-              </>
+              </Text>
             )}
           </VStack>
         </VStack>
@@ -118,11 +106,12 @@ const IconWrapper = styled.div`
   align-items: center;
   justify-content: center;
   color: #2460ff;
+  overflow: hidden;
 
   &::after {
     content: '';
     position: absolute;
-    bottom: -6px;
+    bottom: 0;
     left: 50%;
     transform: translateX(-50%);
     width: 24px;

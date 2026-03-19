@@ -29,7 +29,8 @@ export const EditFriendReferralForm = ({ onFinish }: OnFinishProp) => {
 
   const { t } = useTranslation()
 
-  const error = useFriendReferralValidation(referralName)
+  const { error, isPending: isValidating } =
+    useFriendReferralValidation(referralName)
 
   useEffect(() => {
     if (friendReferral) {
@@ -71,7 +72,7 @@ export const EditFriendReferralForm = ({ onFinish }: OnFinishProp) => {
                   setFriendReferral(referralName)
                   onFinish()
                 }}
-                disabled={Boolean(error)}
+                disabled={Boolean(error) || isValidating}
                 type="submit"
               >
                 {t('save_code')}

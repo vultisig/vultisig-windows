@@ -1,13 +1,17 @@
 import { EvmChain } from '@core/chain/Chain'
 import { getEvmChainId } from '@core/chain/chains/evm/chainInfo'
 import { evmNativeCoinAddress } from '@core/chain/chains/evm/config'
+import { getErc20Balance } from '@core/chain/chains/evm/erc20/getErc20Balance'
+import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { FindCoinsResolver } from '@core/chain/coin/find/resolver'
 import { queryOneInch } from '@core/chain/coin/find/resolvers/evm/queryOneInch'
+import { vult } from '@core/chain/coin/knownTokens'
 import { OneInchToken } from '@core/chain/coin/oneInch/token'
 import { without } from '@lib/utils/array/without'
 import { attempt } from '@lib/utils/attempt'
 import { NoDataError } from '@lib/utils/error/NoDataError'
 import { hexToNumber } from '@lib/utils/hex/hexToNumber'
+import { Address } from 'viem'
 
 export const findEvmCoins: FindCoinsResolver<EvmChain> = async ({
   address,
@@ -35,15 +39,12 @@ export const findEvmCoins: FindCoinsResolver<EvmChain> = async ({
     )
   )
 
-  if ('error' in balanceResult) {
-    if (balanceResult.error instanceof NoDataError) {
-      return []
-    }
-
+  let balanceData: Record<string, string> = {}
+  if ('data' in balanceResult) {
+    balanceData = balanceResult.data ?? {}
+  } else if (!(balanceResult.error instanceof NoDataError)) {
     throw balanceResult.error
   }
-
-  const balanceData = balanceResult.data
 
   // Filter tokens with non-zero balance
   const nonZeroBalanceTokenAddresses = Object.entries(balanceData)
@@ -51,35 +52,60 @@ export const findEvmCoins: FindCoinsResolver<EvmChain> = async ({
     .map(([tokenAddress]) => tokenAddress)
     .filter(tokenAddress => tokenAddress !== evmNativeCoinAddress)
 
-  if (nonZeroBalanceTokenAddresses.length === 0) {
-    return []
+  let discoveredCoins: AccountCoin[] = []
+  if (nonZeroBalanceTokenAddresses.length > 0) {
+    const tokenInfoData = await queryOneInch<Record<string, OneInchToken>>(
+      `/token/v1.2/${oneInchChainId}/custom?addresses=${nonZeroBalanceTokenAddresses.join(',')}`
+    )
+    const tokens = without(
+      nonZeroBalanceTokenAddresses.map(
+        tokenAddress => tokenInfoData[tokenAddress]
+      ),
+      undefined
+    )
+
+    discoveredCoins = without(
+      tokens.map(token => {
+        if (token.logoURI && token.providers.includes('CoinGecko')) {
+          return {
+            chain,
+            id: token.address,
+            decimals: token.decimals,
+            logo: token.logoURI,
+            ticker: token.symbol,
+            address,
+          }
+        }
+      }),
+      undefined
+    )
   }
 
-  // Fetch token information for the non-zero balance tokens using queryOneInch
-  const tokenInfoData = await queryOneInch<Record<string, OneInchToken>>(
-    `/token/v1.2/${oneInchChainId}/custom?addresses=${nonZeroBalanceTokenAddresses.join(',')}`
+  if (
+    chain !== EvmChain.Ethereum ||
+    discoveredCoins.some(
+      coin => coin.id?.toLowerCase() === vult.id.toLowerCase()
+    )
+  ) {
+    return discoveredCoins
+  }
+
+  const vultBalanceResult = await attempt(() =>
+    getErc20Balance({
+      chain,
+      address: vult.id as Address,
+      accountAddress: address as Address,
+    })
   )
 
-  const tokens = without(
-    nonZeroBalanceTokenAddresses.map(
-      tokenAddress => tokenInfoData[tokenAddress]
-    ),
-    undefined
-  )
+  if ('data' in vultBalanceResult && vultBalanceResult.data !== undefined) {
+    if (vultBalanceResult.data > 0n) {
+      discoveredCoins.push({
+        ...vult,
+        address,
+      })
+    }
+  }
 
-  return without(
-    tokens.map(token => {
-      if (token.logoURI && token.providers.includes('CoinGecko')) {
-        return {
-          chain,
-          id: token.address,
-          decimals: token.decimals,
-          logo: token.logoURI,
-          ticker: token.symbol,
-          address,
-        }
-      }
-    }),
-    undefined
-  )
+  return discoveredCoins
 }

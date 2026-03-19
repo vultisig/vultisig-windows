@@ -433,6 +433,9 @@ export const hr = {
   fast: 'Brzo',
   fastVault: 'Brzi trezor',
   secureVault: 'Siguran trezor',
+  fast_vault_session_conflict: 'Nepodudarnost dijela trezora',
+  fast_vault_session_conflict_description:
+    'Vaš lokalni dio trezora ne odgovara onom pohranjenom na Vultiservu. To se može dogoditi ako je ista početna fraza uvezena na drugom uređaju.',
   fast_sign: 'Brzi znak',
   fill_the_form: 'Ispunite obrazac',
   find_custom_token: 'Pronađite prilagođeni token',
@@ -468,6 +471,14 @@ export const hr = {
   header_tooltip_content:
     'Program preporuka primjenjuje se na THORChain swapove i temelji se na najboljem naporu. Morate registrirati THORNAme da biste koristili Vultisig preporuku. Naknada za registraciju iznosi 10 RUNE i 1 RUNE za svaku godinu, koja se plaća THORChain mreži.',
   header_tooltip_title: 'Program preporuka',
+  having_trouble_scanning_help: 'Pomoc pri skeniranju QR koda',
+  having_trouble_scanning: 'Problemi sa skeniranjem?',
+  having_trouble_scanning_desc: 'Ako se QR kod ne skenira odmah:',
+  having_trouble_scanning_tip_1:
+    'Pomaknite telefon malo blize ili dalje od zaslona',
+  having_trouble_scanning_tip_2:
+    'Provjerite je li zaslon dobro osvjetljen i bez odsjaja',
+  having_trouble_scanning_tip_3: 'Drzite oba uredaja mirno trenutak',
   hide_balance: 'Sakrij stanje',
   hide_defi_balance: 'Sakrij DeFi stanje',
   hold: 'Drži',
@@ -1190,6 +1201,11 @@ export const hr = {
     'Ovo će se koristiti samo jednom za slanje vaše sigurnosne kopije, Vultisig ne pohranjuje nikakve podatke.',
   seedphrase_duplicate_vault_error:
     'Ova početna fraza je već uvezena kao trezor &quot;{{vaultName}}&quot;. Ponovnim uvozom zamijenio bi se postojeći trezor.',
+  fast_vault_exists_warning_title: 'Trezor već postoji',
+  fast_vault_exists_warning_description:
+    'Ova početna fraza već je uvezena kao brzi trezor na drugom uređaju. Ako nastavite, zamijenit će se udio na poslužitelju i drugi uređaj će prestati raditi.',
+  fast_vault_exists_warning_hint:
+    'Ako želite da oba uređaja rade, umjesto toga koristite sigurni trezor.',
   incorrect_email: 'Netočna e-pošta, molimo provjerite',
   insufficient_native_balance_for_fee:
     'Nedovoljan saldo izvornog tokena za plaćanje naknade za transakciju',

@@ -8,14 +8,14 @@ export const useFriendReferralValidation = (input: string) => {
   const trimmedInput = (input || '').trim()
 
   const { data: me } = useUserValidThorchainNameQuery()
-  const baseError = useReferralValidation(input)
+  const { error: baseError, isPending } = useReferralValidation(input)
 
   const isOwn =
     !!trimmedInput &&
     !!me?.name &&
     trimmedInput.toLowerCase() === me.name.toLowerCase()
 
-  if (isOwn) return t('used_referral_error')
+  const error = isOwn ? t('used_referral_error') : baseError
 
-  return baseError
+  return { error, isPending }
 }

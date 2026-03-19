@@ -38,6 +38,7 @@ export type BackgroundInterface = {
     CoinMetadata
   >
   getIsWalletPrioritized: Method<{}, boolean>
+  hasChainInVault: Method<{ chain: Chain }, boolean>
 }
 
 export type BackgroundMethod = keyof BackgroundInterface
