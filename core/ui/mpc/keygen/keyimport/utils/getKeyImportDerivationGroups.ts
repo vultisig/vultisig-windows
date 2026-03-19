@@ -17,26 +17,32 @@ const vaultBasedCosmosChainValues = new Set<Chain>(
 
 const terraChains = new Set<Chain>([Chain.Terra, Chain.TerraClassic])
 
+/** BIP44 derivation paths shared by multiple chains. */
+const sharedDerivationPath = {
+  evm: "m/44'/60'/0'/0/0",
+  thorchain: "m/44'/931'/0'/0/0",
+  cosmos118: "m/44'/118'/0'/0/0",
+  terra330: "m/44'/330'/0'/0/0",
+} as const
+
+type DerivationKey =
+  | (typeof sharedDerivationPath)[keyof typeof sharedDerivationPath]
+  | Chain
+
 /**
  * Returns a stable key identifying which derivation path a chain uses.
  * Chains with the same key derive the same private key from a mnemonic,
  * so they can share a single MPC KeyImport session.
- *
- * Derivation path groupings (BIP44 coin type):
- * - EVM chains: m/44'/60'/0'/0/0
- * - THORChain + MayaChain: m/44'/931'/0'/0/0
- * - IBC Cosmos chains (excl. Terra): m/44'/118'/0'/0/0
- * - Terra chains: m/44'/330'/0'/0/0
- * - All others: unique per chain
  */
-const getDerivationKey = (chain: Chain): string => {
-  if (evmChainValues.has(chain)) return 'evm'
+const getDerivationKey = (chain: Chain): DerivationKey => {
+  if (evmChainValues.has(chain)) return sharedDerivationPath.evm
 
-  if (vaultBasedCosmosChainValues.has(chain)) return 'thorchain'
+  if (vaultBasedCosmosChainValues.has(chain))
+    return sharedDerivationPath.thorchain
 
   if (ibcCosmosChainValues.has(chain)) {
-    if (terraChains.has(chain)) return 'terra-330'
-    return 'cosmos-118'
+    if (terraChains.has(chain)) return sharedDerivationPath.terra330
+    return sharedDerivationPath.cosmos118
   }
 
   return chain
