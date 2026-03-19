@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 const GlassContainer = styled(VStack)`
-  flex: 1;
+  flex-grow: 1;
   border: 1px solid ${getColor('primaryAccentTwo')};
   border-radius: 24px;
   background: ${({ theme }) => theme.colors.background.toRgba(0.3)};
