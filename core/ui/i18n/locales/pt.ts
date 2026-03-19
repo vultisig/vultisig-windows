@@ -438,6 +438,9 @@ export const pt = {
   fast: 'Rápido',
   fastVault: 'Cofre Rápido',
   secureVault: 'Cofre Seguro',
+  fast_vault_session_conflict: 'Incompatibilidade na parte do cofre',
+  fast_vault_session_conflict_description:
+    'Sua parte local do cofre não corresponde à armazenada no Vultiserver. Isso pode acontecer se a mesma frase-semente foi importada em outro dispositivo.',
   fast_sign: 'Assinatura rápida',
   fill_the_form: 'Preencha o formulário',
   find_custom_token: 'Encontrar token personalizado',
@@ -1211,6 +1214,11 @@ export const pt = {
     'Este serviço será utilizado apenas uma vez para enviar seu arquivo de backup; o Vultisig não armazena nenhum dado.',
   seedphrase_duplicate_vault_error:
     'Esta frase-semente já foi importada como cofre &quot;{{vaultName}}&quot;. Importá-la novamente substituiria o cofre existente.',
+  fast_vault_exists_warning_title: 'O cofre já existe',
+  fast_vault_exists_warning_description:
+    'Esta frase-semente já foi importada como cofre rápido em outro dispositivo. Se continuar, a parte do servidor será substituída e o outro dispositivo deixará de funcionar.',
+  fast_vault_exists_warning_hint:
+    'Se deseja que ambos os dispositivos continuem funcionando, use um cofre seguro.',
   incorrect_email: 'E-mail incorreto, verifique.',
   insufficient_native_balance_for_fee:
     'Saldo insuficiente de tokens nativos para pagar a taxa de transação.',

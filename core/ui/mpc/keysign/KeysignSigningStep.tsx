@@ -1,3 +1,4 @@
+import { isKeyImportVault } from '@core/mpc/vault/Vault'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useKeysignMutation } from '@core/ui/mpc/keysign/action/mutations/useKeysignMutation'
@@ -7,6 +8,7 @@ import { KeysignTxOverview } from '@core/ui/mpc/keysign/tx/KeysignTxOverview'
 import { SwapKeysignTxOverview } from '@core/ui/mpc/keysign/tx/swap/SwapKeysignTxOverview'
 import { TxSuccess } from '@core/ui/mpc/keysign/tx/TxSuccess'
 import { useCore } from '@core/ui/state/core'
+import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { Button } from '@lib/ui/buttons/Button'
@@ -23,6 +25,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { getLastItem } from '@lib/utils/array/getLastItem'
+import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -36,11 +39,11 @@ type KeysignSigningStepProps = Partial<OnBackProp>
 export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
   const { t } = useTranslation()
   const { version, goHome } = useCore()
+  const vault = useCurrentVault()
   const payload = useKeysignMessagePayload()
   const { mutate: startKeysign, ...mutationStatus } =
     useKeysignMutation(payload)
   const [, copyToClipboard] = useCopyToClipboard()
-
   useEffect(startKeysign, [startKeysign])
 
   return (
@@ -154,9 +157,24 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
           />
         </>
       )}
-      error={error => (
-        <FullPageFlowErrorState error={error} title={t('signing_error')} />
-      )}
+      error={error => {
+        const isSessionConflict =
+          isKeyImportVault(vault) &&
+          extractErrorMsg(error).includes('final_session_id')
+
+        if (isSessionConflict) {
+          return (
+            <FullPageFlowErrorState
+              title={t('fast_vault_session_conflict')}
+              error={new Error(t('fast_vault_session_conflict_description'))}
+            />
+          )
+        }
+
+        return (
+          <FullPageFlowErrorState error={error} title={t('signing_error')} />
+        )
+      }}
       pending={() => (
         <>
           <PageHeader

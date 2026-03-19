@@ -8,9 +8,9 @@
     "format:types": "prettier --write 'types/**/*.ts'"
   },
   "devDependencies": {
-    "@bufbuild/buf": "^1.65.0",
+    "@bufbuild/buf": "^1.66.1",
     "@bufbuild/protoc-gen-es": "^2.11.0",
-    "vitest": "^4.0.18"
+    "vitest": "^4.1.0"
   },
   "dependencies": {
     "7z-wasm": "^1.2.0",
@@ -22,7 +22,7 @@
     "@lib/mldsa": "workspace:^",
     "@lib/schnorr": "workspace:^",
     "@lib/utils": "workspace:^",
-    "@mysten/sui": "^2.3.0",
+    "@mysten/sui": "^2.8.0",
     "@noble/hashes": "^2.0.1",
     "@solana/web3.js": "^1.98.4",
     "@trustwallet/wallet-core": "^4.6.0",
@@ -30,6 +30,6 @@
     "bs58": "^6.0.0",
     "cosmjs-types": "^0.11.0",
     "long": "^5.3.2",
-    "viem": "^2.45.1"
+    "viem": "^2.47.4"
   }
 }

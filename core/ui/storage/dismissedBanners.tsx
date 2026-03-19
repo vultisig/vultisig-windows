@@ -5,7 +5,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'
 
-export type BannerId = 'followOnX' | 'migrate'
+export type BannerId = 'followOnX' | 'migrate' | 'agentNavigationCoachmark'
 
 type GetDismissedBannersFunction = () => Promise<BannerId[]>
 type SetDismissedBannersFunction = (banners: BannerId[]) => Promise<void>
@@ -30,6 +30,7 @@ export const useDismissedBanners = () => {
   const dismissedBanners = new Set(data || [])
 
   return {
+    hasLoaded: data !== undefined,
     isBannerDismissed: (id: BannerId) => dismissedBanners.has(id),
     dismissedBanners,
   }

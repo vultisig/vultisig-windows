@@ -14,6 +14,7 @@ import styled, { css } from 'styled-components'
 
 import { TransactionRecord } from './core'
 import { TransactionHistoryList } from './list/TransactionHistoryList'
+import { useRefreshPendingTransactions } from './status/useRefreshPendingTransactions'
 import { filterTransactionsBySearch } from './utils/filterTransactionsBySearch'
 
 const transactionHistoryTabs = ['overview', 'swaps', 'sends'] as const
@@ -40,12 +41,59 @@ const FilteredTransactionList = ({
   return <TransactionHistoryList records={filtered} />
 }
 
+const TransactionHistoryContent = ({
+  records,
+}: {
+  records: TransactionRecord[]
+}) => {
+  const { t } = useTranslation()
+  const [activeTab, setActiveTab] = useState<TransactionHistoryTab>('overview')
+  const [search, setSearch] = useState('')
+
+  useRefreshPendingTransactions(records)
+
+  const searchFiltered = filterTransactionsBySearch({
+    records,
+    query: search,
+  })
+
+  const tabs: Tab<TransactionHistoryTab>[] = transactionHistoryTabs.map(
+    value => ({
+      value,
+      label: t(value),
+      renderContent: () => (
+        <FilteredTransactionList records={searchFiltered} tab={value} />
+      ),
+    })
+  )
+
+  return (
+    <VStack gap={16}>
+      <SearchInput value={search} onChange={setSearch} />
+      <Tabs
+        tabs={tabs}
+        value={activeTab}
+        onValueChange={setActiveTab}
+        triggerSlot={({ tab: { label }, isActive, ...triggerProps }) => (
+          <TabTrigger isActive={isActive} {...triggerProps}>
+            <Text
+              size={14}
+              as="span"
+              color={isActive ? 'contrast' : 'supporting'}
+            >
+              {label}
+            </Text>
+          </TabTrigger>
+        )}
+      />
+    </VStack>
+  )
+}
+
 export const TransactionHistoryPage = () => {
   const goBack = useNavigateBack()
   const { t } = useTranslation()
   const query = useTransactionRecordsQuery()
-  const [activeTab, setActiveTab] = useState<TransactionHistoryTab>('overview')
-  const [search, setSearch] = useState('')
 
   return (
     <ScreenLayout title={t('transaction_history')} onBack={goBack}>
@@ -55,48 +103,7 @@ export const TransactionHistoryPage = () => {
         error={() => (
           <Text color="danger">{t('failed_to_load_transactions')}</Text>
         )}
-        success={records => {
-          const searchFiltered = filterTransactionsBySearch({
-            records,
-            query: search,
-          })
-
-          const tabs: Tab<TransactionHistoryTab>[] = transactionHistoryTabs.map(
-            value => ({
-              value,
-              label: t(value),
-              renderContent: () => (
-                <FilteredTransactionList records={searchFiltered} tab={value} />
-              ),
-            })
-          )
-
-          return (
-            <VStack gap={16}>
-              <SearchInput value={search} onChange={setSearch} />
-              <Tabs
-                tabs={tabs}
-                value={activeTab}
-                onValueChange={setActiveTab}
-                triggerSlot={({
-                  tab: { label },
-                  isActive,
-                  ...triggerProps
-                }) => (
-                  <TabTrigger isActive={isActive} {...triggerProps}>
-                    <Text
-                      size={14}
-                      as="span"
-                      color={isActive ? 'contrast' : 'supporting'}
-                    >
-                      {label}
-                    </Text>
-                  </TabTrigger>
-                )}
-              />
-            </VStack>
-          )
-        }}
+        success={records => <TransactionHistoryContent records={records} />}
       />
     </ScreenLayout>
   )

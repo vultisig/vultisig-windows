@@ -2,19 +2,11 @@
   "ignore": [
     "core/mpc/types/**",
     "clients/desktop/wailsjs/**",
-    "core/ui/providers/ResponsivenessProvider.tsx",
     "core/ui/transaction-history/**",
-    "core/ui/storage/transactionHistory.tsx",
     "lib/ui/form/FormCheckBadge.tsx",
-    ".claude/**",
-    ".cursor/**",
-    ".venv/**",
-    ".yarn/releases/**",
-    "clients/extension/tests/e2e/**",
-    "clients/extension/tests/integration/**"
+    ".cursor/**"
   ],
   "ignoreBinaries": [
-    "tsx",
     "wails"
   ],
   "ignoreDependencies": [
@@ -33,7 +25,6 @@
         "src/background/index.ts",
         "src/content/index.ts",
         "src/inpage/index.ts",
-        "src/pages/index.tsx",
         "src/pages/popup.tsx",
         "tests/unit/**/*.{ts,tsx}"
       ],
@@ -50,9 +41,7 @@
         "@types/express",
         "@types/web-push",
         "express",
-        "web-push",
-        "@playwright/test",
-        "playwright"
+        "web-push"
       ]
     },
     "core/inpage-provider": {

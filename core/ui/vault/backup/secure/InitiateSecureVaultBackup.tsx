@@ -32,14 +32,12 @@ export const InitiateSecureVaultBackup = ({
         total: userDeviceCount,
       })}
       description={
-        <>
-          <Text size={14} weight={500} color="shy" centerHorizontally>
-            {t('save_backup_description_secure')}
-          </Text>
-          <Text size={14} weight={500} color="shyExtra" centerHorizontally>
+        <Text size={14} weight={500} color="shy" centerHorizontally>
+          {t('save_backup_description_secure')}{' '}
+          <Text as="span" color="shyExtra">
             {t('save_backup_description_2')}
           </Text>
-        </>
+        </Text>
       }
     />
   )

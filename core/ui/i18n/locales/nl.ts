@@ -332,6 +332,9 @@ export const nl = {
   fast: 'Snel',
   fastVault: 'Fast Vault',
   secureVault: 'Veilige Kluis',
+  fast_vault_session_conflict: 'Kluis-aandeel komt niet overeen',
+  fast_vault_session_conflict_description:
+    'Uw lokale kluis-aandeel komt niet overeen met het aandeel op Vultiserver. Dit kan gebeuren als dezelfde seed phrase op een ander apparaat is geïmporteerd.',
   fast_vault_password_start_keysign_description:
     'Bevestig de transactie door het wachtwoord van je server-share in te voeren.',
   fastVaultSetup: {
@@ -1199,6 +1202,11 @@ export const nl = {
   seedPhraseImportTip: 'Tip: Je kunt een browser als apparaat gebruiken.',
   seedphrase_duplicate_vault_error:
     'Deze seed phrase is al geïmporteerd als kluis &quot;{{vaultName}}&quot;. Als u deze opnieuw importeert, wordt de bestaande kluis vervangen.',
+  fast_vault_exists_warning_title: 'Kluis bestaat al',
+  fast_vault_exists_warning_description:
+    'Deze seed phrase is al geïmporteerd als snelle kluis op een ander apparaat. Als u doorgaat, wordt het serveraandeel vervangen en werkt het andere apparaat niet meer.',
+  fast_vault_exists_warning_hint:
+    'Als u wilt dat beide apparaten blijven werken, gebruik dan een beveiligde kluis.',
   incorrect_email: 'Het e-mailadres is onjuist, controleer dit alstublieft.',
   insufficient_native_balance_for_fee:
     'Onvoldoende saldo aan native tokens om de transactiekosten te betalen.',

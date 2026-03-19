@@ -1,0 +1,12 @@
+# Test Credentials and Vault Modes
+
+## Credentials
+
+Test credentials are stored in `.cursor/test-credentials.local` (gitignored). Read this file when you need to authenticate during testing.
+
+## Fast Vault vs Secure Vault
+
+Vaults operate in one of two modes:
+
+- **Fast Vault**: Single-device vault. You can sign transactions and authenticate by entering the password yourself. Always test in a Fast Vault when possible.
+- **Secure Vault**: Multi-device vault requiring co-signing from another device. You cannot complete these flows yourself. If a test requires a Secure Vault, tell the user what to verify and ask them to report back.

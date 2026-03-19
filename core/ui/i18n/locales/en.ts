@@ -3,6 +3,8 @@ export const en = {
   action: 'Action',
   active: 'Active',
   agent: 'Agent',
+  agent_nav_tip_description: 'Vulti Agent is available. Tap to set it up.',
+  agent_nav_tip_title: 'New!',
   active_chains_found_one: 'We found {{count}} active chain',
   active_chains_found_other: 'We found {{count}} active chains',
   active_chains_warning:
@@ -275,6 +277,7 @@ export const en = {
   edit_address: 'Edit Address',
   edit_friends_referral: 'Edit Friend Referral',
   edit_referral: 'Edit Referral',
+  remove_friends_referral: 'Remove Referral',
   edit_vaults: 'Edit Vaults',
   email: 'Email',
   email_backup: 'Enter your email to receive your backup',
@@ -381,6 +384,9 @@ export const en = {
   fast: 'Fast',
   fastVault: 'Fast Vault',
   secureVault: 'Secure Vault',
+  fast_vault_session_conflict: 'Vault Share Mismatch',
+  fast_vault_session_conflict_description:
+    "Your local vault share doesn't match the one stored on Vultiserver. This may happen if the same seed phrase was imported on another device.",
   fast_vault_password_start_keysign_description:
     'Confirm the transaction by entering the password of your server share.',
   fastVaultSetup: {
@@ -517,6 +523,11 @@ export const en = {
     'Seed phrase is not correct, please verify all words.',
   seedphrase_duplicate_vault_error:
     'This seed phrase is already imported as vault "{{vaultName}}". Importing it again would replace the existing vault.',
+  fast_vault_exists_warning_title: 'Vault Already Exists',
+  fast_vault_exists_warning_description:
+    'This seed phrase was already imported as a fast vault on another device. Continuing will replace the server share, and the other device will stop working.',
+  fast_vault_exists_warning_hint:
+    'If you want to keep both devices working, use a secure vault instead.',
   import_seedphrase_description: 'Enter it, create a vault, never look back.',
   import_seedphrase_onboarding_title:
     'You are entering a new era, <g>leaving old seed phrases behind.</g> You’ll need:',
@@ -1318,4 +1329,12 @@ export const en = {
   agent_analyzing: 'Analyzing...',
   agent_analyzed_for: 'Analyzed for {{duration}}s',
   agent_analyzed: 'Analyzed',
+  welcome_to_vulti_agent: 'Welcome to Vulti Agent',
+  agent_welcome_description:
+    'Your vault can now understand requests, automate actions, and help manage your crypto.',
+  authorize_agent: 'Authorize Agent',
+  reauthorize_vulti_agent: 'Re-authorize Vulti Agent',
+  agent_reauth_description:
+    'For security, authorization expires periodically.\nPlease confirm to continue using Vulti Agent.',
+  authorize: 'Authorize',
 }
