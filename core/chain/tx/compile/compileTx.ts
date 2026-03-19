@@ -38,52 +38,37 @@ export const compileTx = ({
 
   // Bittensor: custom extrinsic assembly with CheckMetadataHash
   if (chain === Chain.Bittensor) {
-    try {
-      const hash = hashes[0]
-      const hashHex = Buffer.from(hash).toString('hex')
-      console.log('[Bittensor compileTx] hash:', hashHex)
-      console.log('[Bittensor compileTx] signature keys:', Object.keys(signatures))
+    const hash = hashes[0]
+    const hashHex = Buffer.from(hash).toString('hex')
 
-      const sig = generateSignature({
-        walletCore,
-        signature: signatures[hashHex],
-        signatureFormat,
+    const sig = generateSignature({
+      walletCore,
+      signature: signatures[hashHex],
+      signatureFormat,
+    })
+
+    assertSignature({
+      publicKey,
+      message: hash,
+      signature: sig,
+      signatureFormat,
+    })
+
+    const { callData, signedExtra } = decodeBittensorTxInput(txInputData)
+    const signerPubkey = new Uint8Array(publicKey.data())
+
+    const extrinsic = assembleBittensorExtrinsic(
+      signerPubkey,
+      new Uint8Array(sig),
+      callData,
+      signedExtra
+    )
+
+    return TW.Polkadot.Proto.SigningOutput.encode(
+      TW.Polkadot.Proto.SigningOutput.create({
+        encoded: extrinsic,
       })
-
-      assertSignature({
-        publicKey,
-        message: hash,
-        signature: sig,
-        signatureFormat,
-      })
-
-      const { callData, signedExtra } = decodeBittensorTxInput(txInputData)
-      const signerPubkey = new Uint8Array(publicKey.data())
-
-      console.log('[Bittensor compileTx] callData:', Buffer.from(callData).toString('hex'))
-      console.log('[Bittensor compileTx] signedExtra:', Buffer.from(signedExtra).toString('hex'))
-      console.log('[Bittensor compileTx] signer:', Buffer.from(signerPubkey).toString('hex'))
-
-      const extrinsic = assembleBittensorExtrinsic(
-        signerPubkey,
-        new Uint8Array(sig),
-        callData,
-        signedExtra
-      )
-
-      console.log('[Bittensor compileTx] extrinsic:', Buffer.from(extrinsic).toString('hex'))
-
-      const output = TW.Polkadot.Proto.SigningOutput.encode(
-        TW.Polkadot.Proto.SigningOutput.create({
-          encoded: extrinsic,
-        })
-      ).finish()
-
-      return output
-    } catch (e) {
-      console.error('[Bittensor compileTx] ERROR:', e)
-      throw e
-    }
+    ).finish()
   }
 
   const allSignatures = walletCore.DataVector.create()

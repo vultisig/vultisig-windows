@@ -21,11 +21,9 @@ export const getPreSigningHashes = ({
   // Bittensor: custom signing payload with CheckMetadataHash extension
   if (chain === Chain.Bittensor) {
     const { payload } = decodeBittensorTxInput(txInputData)
-    console.log('[Bittensor preSigningHashes] payload length:', payload.length)
     // Substrate: if payload > 256 bytes, hash it; otherwise sign directly
     const toSign =
       payload.length > 256 ? blake2AsU8a(payload, 256) : payload
-    console.log('[Bittensor preSigningHashes] toSign:', Buffer.from(toSign).toString('hex'))
     return [toSign]
   }
 

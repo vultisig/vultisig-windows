@@ -49,7 +49,6 @@ export const getBittensorChainSpecific: GetChainSpecificResolver<
       refineBittensorChainSpecific({
         keysignPayload,
         chainSpecific,
-        walletCore,
       })
     ),
     chainSpecific

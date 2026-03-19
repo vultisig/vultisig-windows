@@ -9,14 +9,12 @@ import {
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
 import { queryUrl } from '@lib/utils/query/queryUrl'
-import { WalletCore } from '@trustwallet/wallet-core'
 
 import { getKeysignCoin } from '../../../utils/getKeysignCoin'
 
 type RefineBittensorChainSpecificInput = {
   keysignPayload: KeysignPayload
   chainSpecific: PolkadotSpecific
-  walletCore: WalletCore
 }
 
 export const refineBittensorChainSpecific = async ({
