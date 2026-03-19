@@ -5,7 +5,7 @@ import {
   useViewModel,
   useViewModelInstance,
   useViewModelInstanceNumber,
-} from '@rive-app/react-webgl2'
+} from '@rive-app/react-canvas'
 import { useEffect, useRef } from 'react'
 
 import { deviceSelectionAnimationSource } from './deviceSelectionAnimationSource'
