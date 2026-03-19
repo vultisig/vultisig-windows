@@ -218,9 +218,7 @@ type MidgardPool = {
 }
 
 const fetchThorchainPools = () =>
-  queryUrl<MidgardPool[]>(`${midgardBaseUrl}/pools?status=available`, {
-    headers: { 'X-Client-ID': 'vultisig' },
-  })
+  queryUrl<MidgardPool[]>(`${midgardBaseUrl}/pools?status=available`)
 
 const fetchMayachainPools = () =>
   queryUrl<MidgardPool[]>(`${mayaMidgardBaseUrl}/pools?status=available`, {
