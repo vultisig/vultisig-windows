@@ -63,6 +63,12 @@ describe('formatAmount', () => {
       const result = formatAmount(100, { currency: 'eur' })
       expect(result).toContain('100')
     })
+
+    it('should cap currency at 2 decimal places', () => {
+      expect(formatAmount(15.653, { currency: 'usd' })).toBe('$15.65')
+      expect(formatAmount(0.001, { currency: 'usd' })).toBe('$0.00')
+      expect(formatAmount(123.456789, { currency: 'usd' })).toBe('$123.46')
+    })
   })
 
   describe('ticker formatting', () => {
