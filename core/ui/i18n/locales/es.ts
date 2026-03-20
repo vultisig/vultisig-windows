@@ -1309,7 +1309,7 @@ export const es = {
   contract_interaction: 'Interacción contractual',
   date: 'Fecha',
   device_n_label: 'Dispositivo {{number}} - {{hash}}',
-  remove_friends_referral: 'Eliminar la remisión',
+  remove_friends_referral: 'Eliminar referido',
   enable_mldsa: 'Habilitar MLDSA',
   post_quantum_keygen: 'Generación de claves post-cuántica',
   post_quantum_keygen_description:
@@ -1325,7 +1325,7 @@ export const es = {
   go_to_wallet: 'Ir a la cartera',
   i_understand: 'Entiendo',
   i_understand_save_backup: 'Entiendo cómo guardar esta copia de seguridad.',
-  left_pool: 'Piscina izquierda',
+  left_pool: 'Pool abandonado',
   looks_good: 'Se ve bien',
   no_transactions_yet: 'Aún no se han realizado transacciones.',
   review_vault_devices_subtitle:
@@ -1388,7 +1388,7 @@ export const es = {
   welcome_to_vulti_agent: 'Bienvenido a Vulti Agent',
   agent_welcome_description:
     'Ahora tu bóveda puede comprender las solicitudes, automatizar acciones y ayudarte a administrar tus criptomonedas.',
-  authorize_agent: 'Agente autorizado',
+  authorize_agent: 'Autorizar agente',
   reauthorize_vulti_agent: 'Reautorizar Vulti Agent',
   agent_reauth_description:
     'Por motivos de seguridad, la autorización caduca periódicamente. Confirme para continuar utilizando Vulti Agent.',

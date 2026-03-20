@@ -1298,7 +1298,7 @@ export const ru = {
   go_to_wallet: 'Перейти в кошелек',
   i_understand: 'Я понимаю',
   i_understand_save_backup: 'Я понимаю, как сохранить эту резервную копию.',
-  left_pool: 'Левый бассейн',
+  left_pool: 'Покинул пул',
   looks_good: 'Выглядит хорошо.',
   no_transactions_yet: 'Пока нет транзакций.',
   review_vault_devices_subtitle:
@@ -1332,7 +1332,7 @@ export const ru = {
   vault_ready_description:
     'Всё готово! Вы сохраняете контроль над каждой транзакцией.',
   vault_ready_to_use: 'Ваше хранилище готово к использованию.',
-  view_on_explorer: 'Просмотреть в проводнике',
+  view_on_explorer: 'Просмотреть в обозревателе',
   yesterday: 'Вчера',
   session_history: 'История сессий',
   failed_to_load_session_history: 'Не удалось загрузить историю сессий.',
@@ -1360,7 +1360,7 @@ export const ru = {
   welcome_to_vulti_agent: 'Добро пожаловать в Vulti Agent!',
   agent_welcome_description:
     'Теперь ваше хранилище может понимать запросы, автоматизировать действия и помогать управлять вашей криптовалютой.',
-  authorize_agent: 'Уполномоченный агент',
+  authorize_agent: 'Авторизовать агента',
   reauthorize_vulti_agent: 'Повторно авторизовать Vulti Agent',
   agent_reauth_description:
     'В целях безопасности авторизация периодически истекает. Пожалуйста, подтвердите свое согласие, чтобы продолжить использование Vulti Agent.',

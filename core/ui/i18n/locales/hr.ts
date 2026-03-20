@@ -1304,7 +1304,7 @@ export const hr = {
   go_to_wallet: 'Idi na novčanik',
   i_understand: 'Razumijem',
   i_understand_save_backup: 'Razumijem kako spremiti ovu sigurnosnu kopiju',
-  left_pool: 'Lijevi bazen',
+  left_pool: 'Napustio pool',
   looks_good: 'Izgleda dobro',
   no_transactions_yet: 'Još nema transakcija',
   review_vault_devices_subtitle: 'Provjerite jeste li dodali ispravne uređaje:',
@@ -1329,7 +1329,7 @@ export const hr = {
   transferred: 'Preneseno',
   status: 'Status',
   swaps: 'Zamjene',
-  swap_same_asset: 'Nije moguće prebacivati ​​između istih elemenata',
+  swap_same_asset: 'Nije moguće zamijeniti između istih sredstava',
   this_device_suffix: '(ovaj uređaj)',
   today: 'Danas',
   transaction_history: 'Povijest transakcija',
@@ -1364,7 +1364,7 @@ export const hr = {
   welcome_to_vulti_agent: 'Dobrodošli u Vulti Agent',
   agent_welcome_description:
     'Vaš trezor sada može razumjeti zahtjeve, automatizirati radnje i pomoći u upravljanju vašom kriptovalutom.',
-  authorize_agent: 'Ovlašteni agent',
+  authorize_agent: 'Ovlastiti agenta',
   reauthorize_vulti_agent: 'Ponovno autoriziraj Vulti agenta',
   agent_reauth_description:
     'Iz sigurnosnih razloga, autorizacija periodično istječe. Molimo potvrdite kako biste nastavili koristiti Vulti Agenta.',

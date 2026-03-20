@@ -1337,7 +1337,7 @@ export const de = {
   go_to_wallet: 'Gehe zu deiner Brieftasche',
   i_understand: 'Ich verstehe',
   i_understand_save_backup: 'Ich verstehe, wie man dieses Backup speichert.',
-  left_pool: 'Linker Pool',
+  left_pool: 'Pool verlassen',
   looks_good: 'Sieht gut aus',
   no_transactions_yet: 'Bisher keine Transaktionen',
   review_vault_devices_subtitle:
@@ -1399,7 +1399,7 @@ export const de = {
   welcome_to_vulti_agent: 'Willkommen bei Vulti Agent',
   agent_welcome_description:
     'Ihr Tresor kann nun Anfragen verstehen, Aktionen automatisieren und Sie bei der Verwaltung Ihrer Kryptowährungen unterstützen.',
-  authorize_agent: 'Bevollmächtigter Vertreter',
+  authorize_agent: 'Agent autorisieren',
   reauthorize_vulti_agent: 'Vulti-Agent erneut autorisieren',
   agent_reauth_description:
     'Aus Sicherheitsgründen läuft die Autorisierung regelmäßig ab. Bitte bestätigen Sie, dass Sie Vulti Agent weiterhin verwenden möchten.',
