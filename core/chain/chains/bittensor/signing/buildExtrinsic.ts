@@ -17,9 +17,9 @@ import {
   hexToBytes,
 } from './scale'
 
-/** Bittensor transfer_keep_alive call indices */
+/** Bittensor Balances.transfer_allow_death call indices (allows full balance send) */
 const BALANCES_PALLET = 5
-const TRANSFER_KEEP_ALIVE = 3
+const TRANSFER_ALLOW_DEATH = 0
 
 /** MultiAddress::Id prefix */
 const MULTI_ADDRESS_ID = 0x00
@@ -46,7 +46,7 @@ export type BittensorSigningParams = {
 const buildCallData = (toAddress: string, amount: bigint): Uint8Array => {
   const destPubkey = decodeAddress(toAddress)
   return concatBytes(
-    new Uint8Array([BALANCES_PALLET, TRANSFER_KEEP_ALIVE]),
+    new Uint8Array([BALANCES_PALLET, TRANSFER_ALLOW_DEATH]),
     new Uint8Array([MULTI_ADDRESS_ID]),
     destPubkey,
     compactEncode(amount)

@@ -1,12 +1,11 @@
 import { Chain, OtherChain } from '@core/chain/Chain'
+import { bittensorConfig } from '@core/chain/chains/bittensor/config'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { attempt } from '@lib/utils/attempt'
 import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
 import { TxStatusResolver } from '../resolver'
-
-import { bittensorConfig } from '@core/chain/chains/bittensor/config'
 
 const taostatsExtrinsicUrl = `${bittensorConfig.taostatsApiUrl}/extrinsic/v1`
 
@@ -37,7 +36,7 @@ export const getBittensorTxStatus: TxStatusResolver<
     )
   )
 
-  if (error || !response || !response.data || response.data.length === 0) {
+  if (error || !response?.data?.length) {
     return { status: 'pending' }
   }
 

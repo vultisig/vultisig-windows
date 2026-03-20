@@ -22,7 +22,7 @@ export const getBittensorCoinBalance: CoinBalanceResolver = async input => {
     }
   )
 
-  if (!response.data || response.data.length === 0) {
+  if (!response.data?.length) {
     return BigInt(0)
   }
 

@@ -3,11 +3,11 @@ import {
   buildBittensorSigningPayload,
 } from '@core/chain/chains/bittensor/signing/buildExtrinsic'
 import { concatBytes } from '@core/chain/chains/bittensor/signing/scale'
+import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { WalletCore } from '@trustwallet/wallet-core'
 
 import { getBlockchainSpecificValue } from '../../chainSpecific/KeysignChainSpecific'
 import { resolvePolkadotToAddress } from '../../utils/resolvePolkadotToAddress'
-import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { WalletCore } from '@trustwallet/wallet-core'
 
 /**
  * Custom binary format for Bittensor txInputData:
@@ -94,7 +94,5 @@ export const getBittensorSigningInputs = ({
   const { callData, signedExtra, payload } =
     buildBittensorSigningPayload(params)
 
-  // Encode all three components into a single Uint8Array
-  // that getPreSigningHashes and compileTx can decode
   return [encodeBittensorTxInput(callData, signedExtra, payload)]
 }

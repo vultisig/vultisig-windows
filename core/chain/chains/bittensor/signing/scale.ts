@@ -41,7 +41,7 @@ export const encodeMortalEra = (
   period: number
 ): Uint8Array => {
   const calPeriod = Math.min(
-    Math.max(2, Math.pow(2, Math.ceil(Math.log2(period)))),
+    Math.max(4, Math.pow(2, Math.ceil(Math.log2(period)))),
     65536
   )
   const phase = blockNumber % calPeriod
@@ -68,7 +68,6 @@ export const concatBytes = (...arrays: Uint8Array[]): Uint8Array => {
 /** Hex string (with or without 0x) to Uint8Array */
 export const hexToBytes = (hex: string): Uint8Array => {
   const clean = hex.startsWith('0x') ? hex.slice(2) : hex
-  return new Uint8Array(
-    clean.match(/.{1,2}/g)!.map(byte => parseInt(byte, 16))
-  )
+  const matches = clean.match(/.{1,2}/g) ?? []
+  return new Uint8Array(matches.map(byte => parseInt(byte, 16)))
 }
