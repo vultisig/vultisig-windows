@@ -13,6 +13,7 @@ import { useCallback } from 'react'
 
 import { FastKeygenServerActionProvider } from '../../fast/state/fastKeygenServerAction'
 import { useKeyImportInput } from '../state/keyImportInput'
+import { getKeyImportDerivationGroups } from '../utils/getKeyImportDerivationGroups'
 
 export const KeyImportFastKeygenServerActionProvider = ({
   children,
@@ -28,6 +29,11 @@ export const KeyImportFastKeygenServerActionProvider = ({
   const { chains } = useKeyImportInput()
 
   const action = useCallback(async () => {
+    const derivationGroups = getKeyImportDerivationGroups(chains)
+    const representativeChains = derivationGroups.map(
+      group => group.representativeChain
+    )
+
     await keyImportWithServer({
       name,
       encryption_password: password,
@@ -40,7 +46,7 @@ export const KeyImportFastKeygenServerActionProvider = ({
         libType: vaultCreationMpcLib,
         isKeyImport: 'keyimport' in keygenOperation,
       }),
-      chains,
+      chains: representativeChains,
     })
   }, [
     email,
