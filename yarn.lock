@@ -898,7 +898,7 @@ __metadata:
     "@lib/ui": "workspace:^"
     "@lib/utils": "workspace:^"
     "@react-spring/web": "npm:^10.0.3"
-    "@rive-app/react-webgl2": "npm:^4.27.2"
+    "@rive-app/react-webgl2": "npm:4.26.2"
     "@solana/spl-token": "npm:^0.4.14"
     "@solana/web3.js": "npm:^1.98.4"
     "@storybook/addon-docs": "npm:^10.2.19"
@@ -3666,6 +3666,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rive-app/react-webgl2@npm:4.26.2":
+  version: 4.26.2
+  resolution: "@rive-app/react-webgl2@npm:4.26.2"
+  dependencies:
+    "@rive-app/webgl2": "npm:2.34.2"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0
+  checksum: 10c0/d723db4e0a800965528a2527ecd608f24e6f1183a3ff1d90a400fcdd69f06770b546a12e0edc67e75700b9074d498bacd24058518efe3d6a5e0c30ba97602f25
+  languageName: node
+  linkType: hard
+
 "@rive-app/react-webgl2@npm:^4.27.2":
   version: 4.27.2
   resolution: "@rive-app/react-webgl2@npm:4.27.2"
@@ -3674,6 +3685,13 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0
   checksum: 10c0/82ca6508174bf3cb5d34907f146692fcdfcd21e7fb4b75da2b323824b51985932f641934dc62d2895e991f5fe06686109eacc8abd7f93174374a9da2ceb342e7
+  languageName: node
+  linkType: hard
+
+"@rive-app/webgl2@npm:2.34.2":
+  version: 2.34.2
+  resolution: "@rive-app/webgl2@npm:2.34.2"
+  checksum: 10c0/174adac5133c3a7c0cc6083d71b8df42a97b1d7fb74e8714d4a6a2cf32962739913aa8d08f4c68734bf2b3dea9f4f606be6ce5e0aca4b8682bae3669070dc418
   languageName: node
   linkType: hard
 
