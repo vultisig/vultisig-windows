@@ -1,13 +1,14 @@
 import { Chain, OtherChain } from '@core/chain/Chain'
-import { bittensorConfig } from '@core/chain/chains/bittensor/config'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { rootApiUrl } from '@core/config'
 import { attempt } from '@lib/utils/attempt'
 import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
 import { TxStatusResolver } from '../resolver'
 
-const taostatsExtrinsicUrl = `${bittensorConfig.taostatsApiUrl}/extrinsic/v1`
+// Proxied through vultisig API — Johnny adds Taostats API key server-side
+const taostatsExtrinsicUrl = `${rootApiUrl}/tao/extrinsic/v1`
 
 type TaostatsExtrinsicResponse = {
   pagination: { page: number; limit: number; total: number }
@@ -27,12 +28,7 @@ export const getBittensorTxStatus: TxStatusResolver<
 
   const { data: response, error } = await attempt(
     queryUrl<TaostatsExtrinsicResponse>(
-      `${taostatsExtrinsicUrl}?hash=${txHash}`,
-      {
-        headers: {
-          Authorization: bittensorConfig.taostatsApiKey,
-        },
-      }
+      `${taostatsExtrinsicUrl}?hash=${txHash}`
     )
   )
 
