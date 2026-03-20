@@ -49,7 +49,7 @@ export const AddToAddressBookButton: FC<AddToAddressBookButtonProps> = ({
   const { isLimited } = useCore()
   const navigate = useCoreNavigate()
   const addressBookItems = useAddressBookItems()
-  const vaultName = useVaultNameForAddress(address, chain)
+  const vaultName = useVaultNameForAddress({ address, chain })
 
   const isKnownVault = vaultName !== null
   // EVM chains share address space — an entry saved under any EVM chain (e.g. Ethereum)

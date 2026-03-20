@@ -22,7 +22,7 @@ export const CircleWithdrawVerify = ({
   const vaultAddress = useCurrentVaultAddress(Chain.Ethereum)
   const { address: senderAddress } = useCircleAccount()
   const keysignPayloadQuery = useCircleWithdrawKeysignPayloadQuery({ amount })
-  const receiverVaultName = useVaultNameForAddress(vaultAddress, Chain.Ethereum)
+  const receiverVaultName = useVaultNameForAddress({ address: vaultAddress, chain: Chain.Ethereum })
 
   return (
     <>

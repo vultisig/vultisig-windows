@@ -2,6 +2,11 @@ import { Chain } from '@core/chain/Chain'
 import { isEvmChain } from '@core/ui/address-book/AddressBookChainType'
 import { useVaults } from '@core/ui/storage/vaults'
 
+type UseVaultNameForAddressInput = {
+  address: string
+  chain: Chain
+}
+
 /**
  * Returns the vault name if the given address belongs to any vault coin on the given chain, otherwise null.
  *
@@ -11,10 +16,10 @@ import { useVaults } from '@core/ui/storage/vaults'
  * EVM chains share address space and addresses are normalized to lowercase to handle checksum
  * differences, matching the behaviour of useAddressBookNameForAddress.
  */
-export const useVaultNameForAddress = (
-  address: string,
-  chain: Chain
-): string | null => {
+export const useVaultNameForAddress = ({
+  address,
+  chain,
+}: UseVaultNameForAddressInput): string | null => {
   const vaults = useVaults()
 
   const index = new Map(

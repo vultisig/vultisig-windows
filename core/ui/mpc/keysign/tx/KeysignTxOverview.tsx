@@ -57,8 +57,8 @@ export const KeysignTxOverview = ({
     formattedToAmount !== null ||
     (txAction !== null && txAction.action !== 'send')
 
-  const toVaultName = useVaultNameForAddress(toAddress ?? '', chain)
-  const toAddressBookName = useAddressBookNameForAddress(toAddress ?? '', chain)
+  const toVaultName = useVaultNameForAddress({ address: toAddress ?? '', chain })
+  const toAddressBookName = useAddressBookNameForAddress({ address: toAddress ?? '', chain })
   const toLabel = toVaultName ?? toAddressBookName ?? toAddressLabel ?? null
   const txHash = useTxHash()
   const txStatusQuery = useTxStatusQuery({ chain, hash: txHash })
