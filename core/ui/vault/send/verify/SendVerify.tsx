@@ -37,8 +37,14 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const [memo] = useSendMemo()
   const coin = useCurrentSendCoin()
   const sender = useSender()
-  const receiverVaultName = useVaultNameForAddress({ address: receiver, chain: coin.chain })
-  const receiverAddressBookName = useAddressBookNameForAddress({ address: receiver, chain: coin.chain })
+  const receiverVaultName = useVaultNameForAddress({
+    address: receiver,
+    chain: coin.chain,
+  })
+  const receiverAddressBookName = useAddressBookNameForAddress({
+    address: receiver,
+    chain: coin.chain,
+  })
   const [feeSettings, setFeeSettings] = useState<FeeSettings | undefined>(
     undefined
   )
