@@ -4,9 +4,7 @@ import {
   buildBittensorSigningPayload,
 } from '@core/chain/chains/bittensor/signing/buildExtrinsic'
 import { PolkadotSpecific } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
-import {
-  KeysignPayload,
-} from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 

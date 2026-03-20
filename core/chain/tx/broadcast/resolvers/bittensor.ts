@@ -29,8 +29,6 @@ export const broadcastBittensorTx: BroadcastTxResolver<
     if (response.error.message.includes('Already Imported')) {
       return
     }
-    throw new Error(
-      `Bittensor broadcast failed: ${response.error.message}`
-    )
+    throw new Error(`Bittensor broadcast failed: ${response.error.message}`)
   }
 }

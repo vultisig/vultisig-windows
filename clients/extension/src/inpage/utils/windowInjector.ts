@@ -168,12 +168,10 @@ async function setupContentScriptMessenger(
               version: '0.46.9',
             },
             'vultisig-bittensor': {
-              enable: (origin?: string) =>
-                providers.bittensor.enable(origin),
+              enable: (origin?: string) => providers.bittensor.enable(origin),
             },
             bittensor: {
-              enable: (origin?: string) =>
-                providers.bittensor.enable(origin),
+              enable: (origin?: string) => providers.bittensor.enable(origin),
             },
           },
           configurable: false,

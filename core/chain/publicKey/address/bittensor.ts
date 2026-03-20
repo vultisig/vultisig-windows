@@ -9,9 +9,9 @@ type Input = {
   walletCore: WalletCore
 }
 
-const BITTENSOR_SS58_PREFIX = 42
+const bittensorSs58Prefix = 42
 
 export const deriveBittensorAddress = ({ publicKey }: Input) => {
   const pubKeyData = publicKey.data()
-  return encodeAddress(pubKeyData, BITTENSOR_SS58_PREFIX)
+  return encodeAddress(pubKeyData, bittensorSs58Prefix)
 }

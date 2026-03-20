@@ -27,7 +27,13 @@ const encodeBittensorTxInput = (
   const signedExtraLen = new Uint8Array(4)
   new DataView(signedExtraLen.buffer).setUint32(0, signedExtra.length, true)
 
-  return concatBytes(callDataLen, callData, signedExtraLen, signedExtra, payload)
+  return concatBytes(
+    callDataLen,
+    callData,
+    signedExtraLen,
+    signedExtra,
+    payload
+  )
 }
 
 export const decodeBittensorTxInput = (

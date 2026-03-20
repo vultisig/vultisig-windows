@@ -1,8 +1,8 @@
-import { decodeBittensorTxInput } from '@core/mpc/keysign/signingInputs/resolvers/bittensor'
 import { getPreSigningOutput } from '@core/mpc/keysign/preSigningOutput'
-import { blake2AsU8a } from '@polkadot/util-crypto'
+import { decodeBittensorTxInput } from '@core/mpc/keysign/signingInputs/resolvers/bittensor'
 import { without } from '@lib/utils/array/without'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { blake2AsU8a } from '@polkadot/util-crypto'
 import { WalletCore } from '@trustwallet/wallet-core'
 
 import { Chain } from '../../Chain'
@@ -22,8 +22,7 @@ export const getPreSigningHashes = ({
   if (chain === Chain.Bittensor) {
     const { payload } = decodeBittensorTxInput(txInputData)
     // Substrate: if payload > 256 bytes, hash it; otherwise sign directly
-    const toSign =
-      payload.length > 256 ? blake2AsU8a(payload, 256) : payload
+    const toSign = payload.length > 256 ? blake2AsU8a(payload, 256) : payload
     return [toSign]
   }
 

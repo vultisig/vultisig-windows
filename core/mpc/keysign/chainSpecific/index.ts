@@ -39,9 +39,7 @@ const resolvers: Record<
 }
 
 // Chains that share a proto case but need their own resolver
-const chainOverrides: Partial<
-  Record<Chain, GetChainSpecificResolver<any>>
-> = {
+const chainOverrides: Partial<Record<Chain, GetChainSpecificResolver<any>>> = {
   [Chain.Bittensor]: getBittensorChainSpecific,
 }
 

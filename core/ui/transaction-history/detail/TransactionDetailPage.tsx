@@ -167,7 +167,7 @@ const SwapAmountDisplay = ({ record }: { record: SwapTransactionRecord }) => {
         )}
         <Text size={20} weight={600}>
           {fromChainAmount(BigInt(data.toAmount), data.toDecimals)}{' '}
-              {data.toToken}
+          {data.toToken}
         </Text>
       </HStack>
     </VStack>

@@ -1,10 +1,10 @@
 import { ChainKind, getChainKind } from '@core/chain/ChainKind'
 
 import { CoinBalanceResolver } from './resolver'
+import { getBittensorCoinBalance } from './resolvers/bittensor'
 import { getCardanoCoinBalance } from './resolvers/cardano'
 import { getCosmosCoinBalance } from './resolvers/cosmos'
 import { getEvmCoinBalance } from './resolvers/evm'
-import { getBittensorCoinBalance } from './resolvers/bittensor'
 import { getPolkadotCoinBalance } from './resolvers/polkadot'
 import { getRippleCoinBalance } from './resolvers/ripple'
 import { getSolanaCoinBalance } from './resolvers/solana'

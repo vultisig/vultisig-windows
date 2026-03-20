@@ -34,7 +34,10 @@ const getDisplayData = (record: TransactionRecord): TransactionDisplayData => {
     return {
       tagType: 'swap',
       amountCrypto: String(
-        fromChainAmount(BigInt(record.data.fromAmount), record.data.fromDecimals)
+        fromChainAmount(
+          BigInt(record.data.fromAmount),
+          record.data.fromDecimals
+        )
       ),
       symbol: record.data.fromToken,
       addressDirection: 'to',

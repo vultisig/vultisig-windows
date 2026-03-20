@@ -10,7 +10,7 @@ type RpcResponse<T> = {
 }
 
 // System.Account storage key prefix: twox128("System") ++ twox128("Account")
-const SYSTEM_ACCOUNT_PREFIX =
+const systemAccountPrefix =
   '0x26aa394eea5630e07c48ae0c9558cef7b99d880ec681799c0cf30e8886371da9'
 
 export const getBittensorCoinBalance: CoinBalanceResolver = async input => {
@@ -21,7 +21,7 @@ export const getBittensorCoinBalance: CoinBalanceResolver = async input => {
   const pubkey = decodeAddress(input.address)
   const hash = blake2AsHex(pubkey, 128).slice(2) // 16 bytes = 128 bits, remove 0x
   const accountId = Buffer.from(pubkey).toString('hex')
-  const storageKey = SYSTEM_ACCOUNT_PREFIX + hash + accountId
+  const storageKey = systemAccountPrefix + hash + accountId
 
   const { result } = await queryUrl<RpcResponse<string | null>>(
     bittensorRpcUrl,

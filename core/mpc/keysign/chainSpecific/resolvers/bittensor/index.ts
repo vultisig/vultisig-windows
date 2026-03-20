@@ -20,7 +20,7 @@ const rpc = async <T>(method: string, params: unknown[] = []) => {
 
 export const getBittensorChainSpecific: GetChainSpecificResolver<
   'polkadotSpecific'
-> = async ({ keysignPayload, walletCore }) => {
+> = async ({ keysignPayload }) => {
   const { address } = getKeysignCoin(keysignPayload)
 
   const [runtimeVersion, blockHash, nonce, header, genesisHash] =

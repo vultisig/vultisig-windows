@@ -18,15 +18,12 @@ import {
 } from './scale'
 
 /** Bittensor Balances.transfer_allow_death call indices (allows full balance send) */
-const BALANCES_PALLET = 5
-const TRANSFER_ALLOW_DEATH = 0
+const balancesPallet = 5
+const transferAllowDeath = 0
 
-/** MultiAddress::Id prefix */
-const MULTI_ADDRESS_ID = 0x00
-/** MultiSignature::Ed25519 prefix */
-const MULTI_SIGNATURE_ED25519 = 0x00
-/** CheckMetadataHash::Disabled */
-const METADATA_HASH_DISABLED = 0x00
+const multiAddressId = 0x00
+const multiSignatureEd25519 = 0x00
+const metadataHashDisabled = 0x00
 
 export type BittensorSigningParams = {
   toAddress: string
@@ -46,8 +43,8 @@ export type BittensorSigningParams = {
 const buildCallData = (toAddress: string, amount: bigint): Uint8Array => {
   const destPubkey = decodeAddress(toAddress)
   return concatBytes(
-    new Uint8Array([BALANCES_PALLET, TRANSFER_ALLOW_DEATH]),
-    new Uint8Array([MULTI_ADDRESS_ID]),
+    new Uint8Array([balancesPallet, transferAllowDeath]),
+    new Uint8Array([multiAddressId]),
     destPubkey,
     compactEncode(amount)
   )
@@ -67,7 +64,7 @@ const buildSignedExtra = (
     encodeMortalEra(blockNumber, eraPeriod),
     compactEncode(nonce),
     compactEncode(0), // tip = 0
-    new Uint8Array([METADATA_HASH_DISABLED])
+    new Uint8Array([metadataHashDisabled])
   )
 
 /**
@@ -93,7 +90,7 @@ const buildAdditionalSigned = (params: BittensorSigningParams): Uint8Array => {
     txVersionBytes,
     hexToBytes(params.genesisHash),
     hexToBytes(params.blockHash),
-    new Uint8Array([METADATA_HASH_DISABLED]) // CheckMetadataHash additional signed
+    new Uint8Array([metadataHashDisabled]) // CheckMetadataHash additional signed
   )
 }
 
@@ -133,9 +130,9 @@ export const assembleBittensorExtrinsic = (
 ): Uint8Array => {
   const body = concatBytes(
     new Uint8Array([0x84]), // signed extrinsic, version 4
-    new Uint8Array([MULTI_ADDRESS_ID]),
+    new Uint8Array([multiAddressId]),
     signerPubkey,
-    new Uint8Array([MULTI_SIGNATURE_ED25519]),
+    new Uint8Array([multiSignatureEd25519]),
     signature,
     signedExtra,
     callData
