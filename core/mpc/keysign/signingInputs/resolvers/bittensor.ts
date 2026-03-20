@@ -16,7 +16,7 @@ import { resolvePolkadotToAddress } from '../../utils/resolvePolkadotToAddress'
  * This allows compileTx to extract callData and signedExtra to assemble the final extrinsic,
  * while getPreSigningHashes can extract the payload to hash for signing.
  */
-export const encodeBittensorTxInput = (
+const encodeBittensorTxInput = (
   callData: Uint8Array,
   signedExtra: Uint8Array,
   payload: Uint8Array
