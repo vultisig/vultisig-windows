@@ -148,7 +148,7 @@ export const ko = {
   secureVaultPeerDiscovery: {
     addAtLeastMoreDevices_one: '최소 {{count}}개의 기기를 추가하세요',
     addAtLeastMoreDevices_other: '최소 {{count}}개의 기기를 추가하세요',
-    devicePosition: '{{현재}}의 {{총}}',
+    devicePosition: '{{current}}의 {{total}}',
     localModeWaiting: '로컬 모드, 장치 대기 중',
     notWantToUseLocal:
       '로컬 환경을 사용하고 싶지 않으세요? 이전 버전으로 되돌리세요.',
@@ -366,7 +366,7 @@ export const ko = {
   cache_password_for_5_min: '5분 동안 비밀번호를 기억하세요',
   cancel: '취소',
   chain: '체인',
-  chain_message_deposit: '{{체인}} 메시지 입금',
+  chain_message_deposit: '{{chain}} 메시지 입금',
   chains: '쇠사슬',
   change_passcode: '비밀번호 변경',
   change_your_friends_referral: '친구 변경 추천 코드 (교환에 사용)',
@@ -738,7 +738,7 @@ export const ko = {
   joining_session: '세션 참여 중...',
   keygen: '키젠',
   keygen_devices_requirements_info:
-    '다른 기기로 QR 코드를 스캔하세요. {{commended}} 기기 설정이 권장되며, {{min}}이면 충분합니다.',
+    '다른 기기로 QR 코드를 스캔하세요. {{recommended}} 기기 설정이 권장되며, {{min}}이면 충분합니다.',
   keygen_failed: '키 생성 오류입니다. 다시 시도해 주세요.',
   keys: '열쇠',
   keysign: '키사인',
@@ -829,7 +829,7 @@ export const ko = {
   next_churn: '다음 번',
   next_award: '다음 수상',
   percentage_zero: '0%',
-  percentage_value: '{{값}}%',
+  percentage_value: '{{value}}%',
   no_vaults: '아직 금고가 없습니다',
   no_vaults_desc:
     '여기에 사용자 지정 볼트가 표시됩니다. 먼저 볼트를 생성하거나 기존 볼트를 가져오세요.',
