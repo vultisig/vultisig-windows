@@ -29,6 +29,7 @@ import {
   parseKeyImportChains,
   useKeyImportChains,
 } from './state/keyImportChains'
+import { getKeyImportDerivationGroups } from './utils/getKeyImportDerivationGroups'
 
 type KeyShareResult = {
   keyshare: string
@@ -107,8 +108,13 @@ export const JoinKeyImportKeygenActionProvider = ({
         eddsa: rootEddsaResult.keyshare,
       }
 
-      for (const chain of chains) {
-        const chainKind = getChainKind(chain)
+      const derivationGroups = getKeyImportDerivationGroups(chains)
+
+      for (const {
+        representativeChain,
+        chains: groupChains,
+      } of derivationGroups) {
+        const chainKind = getChainKind(representativeChain)
         const algorithm = signatureAlgorithms[chainKind]
 
         let chainResult: KeyShareResult
@@ -126,7 +132,7 @@ export const JoinKeyImportKeygenActionProvider = ({
           chainResult = await chainDkls.startKeyImportWithRetry(
             '',
             rootEcdsaResult.chaincode,
-            chain
+            representativeChain
           )
         } else {
           const chainSchnorr = new Schnorr(
@@ -143,12 +149,14 @@ export const JoinKeyImportKeygenActionProvider = ({
           chainResult = await chainSchnorr.startKeyImportWithRetry(
             '',
             rootEddsaResult.chaincode,
-            chain
+            representativeChain
           )
         }
 
-        chainPublicKeys[chain] = chainResult.publicKey
-        chainKeyShares[chain] = chainResult.keyshare
+        for (const chain of groupChains) {
+          chainPublicKeys[chain] = chainResult.publicKey
+          chainKeyShares[chain] = chainResult.keyshare
+        }
       }
 
       const vault: Vault = {
