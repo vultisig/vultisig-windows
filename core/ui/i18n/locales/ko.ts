@@ -310,7 +310,7 @@ export const ko = {
   before_you_start: '시작하기 전에...',
   backup: '지원',
   backupGuide: '백업 가이드',
-  backupVault: 'Backup Vault',
+  backupVault: '볼트 백업',
   backupInCloudTitle: '금고 비밀번호로 암호화됨',
   backupInCloudDescription:
     '이전에 생성한 동일한 비밀번호를 사용하여 온라인으로 금고 공유 폴더를 백업하십시오. 온라인 저장을 권장하며, 안전한 금고 공유 폴더는 이를 위해 설계되었습니다.',
@@ -672,7 +672,7 @@ export const ko = {
     '들어가서 금고를 만들고, 절대 뒤돌아보지 마세요.',
   import_seedphrase_onboarding_title:
     '당신은 새로운 시대로 접어들고 있습니다.<g> 기존의 핵심 문구들을 뒤로하고.</g> 필요한 준비물:',
-  import_vault: 'Import Vault',
+  import_vault: '볼트 가져오기',
   import_vault_share: '가져오기 볼트 공유',
   import_vault_share_description: '볼트 공유를 사용하여 볼트를 복구하세요.',
   import_vault_share_supported_files: '지원되는 파일 형식: .bak 및 .vult',
@@ -746,7 +746,7 @@ export const ko = {
   language: '언어',
   learnMore: '더 알아보기',
   leave: '떠나다',
-  left_pool: '왼쪽 풀',
+  left_pool: '풀 탈퇴',
   legal: '합법적인',
   link_copied: '링크가 클립보드에 복사되었습니다',
   loading: '로딩 중...',
@@ -1025,7 +1025,7 @@ export const ko = {
   share_app: '앱을 공유하세요',
   share_description:
     '나만의 추천 코드를 공유하여 친구를 초대하세요. 친구는 할인을 받고, 친구가 거래할수록 당신의 수익도 늘어납니다. 수익은 당신의 금고로 바로 지급됩니다.',
-  share_vault_qr: 'Share Vault QR',
+  share_vault_qr: '볼트 QR 공유',
   shares: '주식',
   show_balance: '균형을 보여주세요',
   show_defi_balance: 'DeFi 잔액을 표시합니다.',
@@ -1242,7 +1242,7 @@ export const ko = {
   verify_password_periodic_message_description:
     '빠른 로그인 비밀번호를 기억하실 수 있도록 정기적으로 비밀번호 확인을 요청할 예정입니다.',
   version: '버전',
-  view_on_explorer: '탐색기에서 보기',
+  view_on_explorer: '익스플로러에서 보기',
   vote: '투표',
   vult: '$VULT',
   vultisig: '불티시그',
@@ -1352,7 +1352,7 @@ export const ko = {
   welcome_to_vulti_agent: 'Vulti Agent에 오신 것을 환영합니다.',
   agent_welcome_description:
     '이제 금고는 요청을 이해하고, 작업을 자동화하며, 암호화폐 관리를 지원할 수 있습니다.',
-  authorize_agent: '승인된 에이전트',
+  authorize_agent: '에이전트 승인',
   reauthorize_vulti_agent: 'Vulti 에이전트 재인증',
   agent_reauth_description:
     '보안상의 이유로 인증은 주기적으로 만료됩니다. Vulti Agent를 계속 사용하시려면 확인해 주십시오.',
