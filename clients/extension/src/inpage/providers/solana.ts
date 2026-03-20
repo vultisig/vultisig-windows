@@ -155,13 +155,6 @@ export class Solana implements Wallet {
       })
 
       this.#emit('change', { accounts: [this.account] })
-    } else if (!this.account) {
-      this.account = new VultisigSolanaWalletAccount({
-        address,
-        publicKey: publicKeyBytes,
-        label: 'Vultisig Extension',
-        icon: this.icon,
-      })
     }
   }
 
