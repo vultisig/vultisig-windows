@@ -558,7 +558,7 @@ export const de = {
   joining_session: 'Sitzung wird beigetreten...',
   keygen: 'Keygen',
   keygen_devices_requirements_info:
-    'QR-Code mit einem anderen Gerät scannen. {{recommendended}}-Gerätekonfiguration empfohlen, {{min}} ist ausreichend.',
+    'QR-Code mit einem anderen Gerät scannen. {{recommended}}-Gerätekonfiguration empfohlen, {{min}} ist ausreichend.',
   keygen_failed:
     'Fehler bei der Schlüsselgenerierung. Bitte versuchen Sie es erneut.',
   keys: 'Schlüssel',
@@ -628,7 +628,7 @@ export const de = {
     'Ihre Tresore werden hier angezeigt. Erstellen Sie zunächst einen neuen Tresor oder importieren Sie einen vorhandenen.',
   node_address: 'Knotenadresse',
   not_enough_asset_to_cover_gas_fees:
-    'Nicht genügend {{Vermögen}}, um die Gaskosten zu decken',
+    'Nicht genügend {{asset}}, um die Gaskosten zu decken',
   not_enough_funds: 'Nicht genügend Mittel',
   nothing_to_add: 'Nichts hinzuzufügen',
   nothing_to_add_hint:
@@ -1045,7 +1045,7 @@ export const de = {
   new: 'Neu',
   vulti_node: 'VultiNode',
   percentage_zero: '0 %',
-  percentage_value: '{{Wert}}%',
+  percentage_value: '{{value}}%',
   automation_info: 'Automatisierungsinformationen',
   app_install_timeout: 'Zeitüberschreitung bei der App-Installation (ms)',
   app_install_timeout_invalid: 'Bitte geben Sie eine gültige Nummer ein.',

@@ -1286,7 +1286,7 @@ export const nl = {
   contract_execution: 'Contractuitvoering',
   contract_interaction: 'Contractinteractie',
   date: 'Datum',
-  device_n_label: 'Apparaat {{nummer}} - {{hash}}',
+  device_n_label: 'Apparaat {{number}} - {{hash}}',
   remove_friends_referral: 'Verwijder verwijzing',
   enable_mldsa: 'MLDSA inschakelen',
   post_quantum_keygen: 'Post-kwantum sleutelgeneratie',

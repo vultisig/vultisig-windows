@@ -1036,7 +1036,7 @@ export const it = {
   new: 'Nuovo',
   vulti_node: 'VultiNode',
   percentage_zero: '0%',
-  percentage_value: '{{valore}}%',
+  percentage_value: '{{value}}%',
   automation_info: "Informazioni sull'automazione",
   app_install_timeout: "Timeout di installazione dell'app (ms)",
   app_install_timeout_invalid: 'Inserisci un numero valido.',

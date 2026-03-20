@@ -1039,7 +1039,7 @@ export const pt = {
   new: 'Novo',
   vulti_node: 'VultiNode',
   percentage_zero: '0%',
-  percentage_value: '{{valor}}%',
+  percentage_value: '{{value}}%',
   automation_info: 'Informações sobre automação',
   app_install_timeout: 'Tempo limite de instalação do aplicativo (ms)',
   app_install_timeout_invalid: 'Por favor, insira um número válido.',

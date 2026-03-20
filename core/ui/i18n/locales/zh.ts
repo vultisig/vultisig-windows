@@ -515,7 +515,7 @@ export const zh = {
   joining_session: '加入会议...',
   keygen: '注册机',
   keygen_devices_requirements_info:
-    '使用其他设备扫描二维码。建议进行{{commodended}}设备设置，{{min}}即可。',
+    '使用其他设备扫描二维码。建议进行{{recommended}}设备设置，{{min}}即可。',
   keygen_failed: '密钥生成错误，请重试。',
   keys: '钥匙',
   keysign: 'Keysign',
@@ -962,7 +962,7 @@ export const zh = {
   new: '新的',
   vulti_node: 'VultiNode',
   percentage_zero: '0%',
-  percentage_value: '{{价值}}％',
+  percentage_value: '{{value}}％',
   automation_info: '自动化信息',
   app_install_timeout: '应用安装超时时间（毫秒）',
   app_install_timeout_invalid: '请输入有效号码。',

@@ -371,7 +371,7 @@ export const es = {
   enter_vault_name: 'Ingrese el nombre de la bóveda',
   enter_your_password: 'Ingrese su contraseña',
   entity_not_scanned: '{{entity}} no escaneado por <provider></provider>',
-  entity_scanned: '{{entidad}} escaneada por <proveedor></provider>',
+  entity_scanned: '{{entity}} escaneada por <provider></provider>',
   est_network_fee: 'Tarifa de red estimada',
   expand_view: 'Ampliar vista',
   expiration_date: 'Fecha de expiración',
@@ -555,7 +555,7 @@ export const es = {
   joining_session: 'Uniéndose a la sesión...',
   keygen: 'Generador de claves',
   keygen_devices_requirements_info:
-    'Escanee el código QR con otro dispositivo. Se recomienda la configuración del dispositivo {{recomendado}}, {{min}} es suficiente.',
+    'Escanee el código QR con otro dispositivo. Se recomienda la configuración del dispositivo {{recommended}}, {{min}} es suficiente.',
   keygen_failed: 'Error al generar la clave. Inténtalo de nuevo.',
   keys: 'Llaves',
   keysign: 'Signo de clave',
@@ -1251,7 +1251,7 @@ export const es = {
   add_thor_lp: 'Añadir THORChain LP',
   remove_thor_lp: 'Eliminar THORChain LP',
   lp_dust_amount_error:
-    'Saldo de runas insuficiente. Se requiere al menos {{cantidad}} runas como polvo para retirar LP.',
+    'Saldo de runas insuficiente. Se requiere al menos {{amount}} runas como polvo para retirar LP.',
   lp_withdraw_percentage: 'Porcentaje de retiro',
   vultibot: 'VultiBot',
   vultibot_welcome: 'Hola, soy VultiBot',
