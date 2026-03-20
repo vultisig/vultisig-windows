@@ -1296,4 +1296,101 @@ export const es = {
   agent_tx_type_transfer: 'Transferir',
   agent_tx_view: 'Vista',
   open_as_side_panel: 'Abrir como panel lateral',
+  agent: 'Agente',
+  agent_nav_tip_description:
+    'Vulti Agent está disponible. Toca para configurarlo.',
+  agent_nav_tip_title: '¡Nuevo!',
+  broadcasted: 'Transmitido',
+  cache_password_for_5_min: 'Recuerda la contraseña durante 5 minutos.',
+  choose_chains: 'Elige cadenas',
+  congrats: '¡Felicitaciones!',
+  confirmed: 'Confirmado',
+  contract_execution: 'Ejecución del contrato',
+  contract_interaction: 'Interacción contractual',
+  date: 'Fecha',
+  device_n_label: 'Dispositivo {{number}} - {{hash}}',
+  remove_friends_referral: 'Eliminar la remisión',
+  enable_mldsa: 'Habilitar MLDSA',
+  post_quantum_keygen: 'Generación de claves post-cuántica',
+  post_quantum_keygen_description:
+    'Genera una clave post-cuántica (MLDSA) para esta bóveda.',
+  post_quantum_key_already_generated:
+    'Esta bóveda ya tiene una llave post-cuántica.',
+  push_notifications: 'Notificaciones push',
+  push_notification_server_url: 'URL del servidor de notificaciones push',
+  push_notification_server_placeholder:
+    'Déjelo vacío para la configuración predeterminada de producción.',
+  failed: 'Fallido',
+  failed_to_load_transactions: 'No se pudieron cargar las transacciones',
+  go_to_wallet: 'Ir a la cartera',
+  i_understand: 'Entiendo',
+  i_understand_save_backup: 'Entiendo cómo guardar esta copia de seguridad.',
+  left_pool: 'Piscina izquierda',
+  looks_good: 'Se ve bien',
+  no_transactions_yet: 'Aún no se han realizado transacciones.',
+  review_vault_devices_subtitle:
+    'Asegúrese de que estos son los dispositivos correctos que ha agregado:',
+  review_your_vault_devices: 'Revise sus dispositivos de bóveda',
+  save_backup: 'Guardar copia de seguridad',
+  save_backup_description:
+    'Exporta este archivo de copia de seguridad y guárdalo en la nube. Está <b>cifrado</b> con la contraseña que configuraste previamente para desbloquear tu bóveda.',
+  save_backup_description_2:
+    'Utiliza un servicio o cuenta en la nube diferente para cada copia de seguridad. Cuando termines, elimina el archivo de este dispositivo.',
+  save_backup_description_secure:
+    'Exporta este archivo de copia de seguridad y guárdalo en la nube.',
+  save_backup_n_of_n_to_cloud:
+    'Guarda la copia de seguridad {{current}} de {{total}} en la nube.',
+  save_backup_to_cloud: 'Guarda la copia de seguridad en la nube.',
+  secure_backup_each_device:
+    'Realiza una copia de seguridad de cada dispositivo.',
+  secure_backup_each_device_description:
+    'Crearás {{count}} copias de seguridad en total. Harás esto en cada dispositivo.',
+  secure_store_backups_separately_description:
+    'Guarda cada copia de seguridad en un servicio en la nube diferente o con una contraseña diferente. Si alguna se ve comprometida, tus fondos permanecerán seguros.',
+  sends: 'Envía',
+  somethings_wrong: 'Algo anda mal',
+  transferred: 'Transferido',
+  status: 'Estado',
+  swaps: 'Intercambios',
+  swap_same_asset: 'No se puede intercambiar entre activos iguales.',
+  this_device_suffix: '(este dispositivo)',
+  today: 'Hoy',
+  transaction_history: 'Historial de transacciones',
+  vault_details_page_vault_MLDSA: 'Clave MLDSA',
+  vault_ready_description:
+    '¡Todo listo! Mantienes el control de cada transacción.',
+  vault_ready_to_use: 'Su bóveda está lista para usarse.',
+  view_on_explorer: 'Ver en Explorer',
+  yesterday: 'Ayer',
+  session_history: 'Historial de la sesión',
+  failed_to_load_session_history:
+    'No se pudo cargar el historial de la sesión.',
+  agent_history_load_error_description:
+    'Por favor, inténtalo de nuevo. Si el problema persiste, vuelve a abrir el chat donde estabas hace un momento o inicia uno nuevo.',
+  agent_history_empty_title: 'Aún no hay chats',
+  agent_history_empty_description:
+    'Inicia un nuevo chat y tus conversaciones recientes aparecerán aquí.',
+  agent_what_to_do: '¿Qué te gustaría hacer?',
+  agent_help_description:
+    'Puedo ayudar a preparar intercambios, acciones de complementos y reglas de automatización.',
+  agent_prompt_show_plugins: 'Muéstrame los plugins y lo que pueden hacer.',
+  agent_prompt_earn_apy: 'Quiero obtener APY en BTC',
+  agent_prompt_send: 'Enviar importe a...',
+  agent_prompt_swap: 'Prepara un intercambio de ETH a BTC',
+  approve_transaction: 'Aprobar transacción',
+  enter_vault_password: 'Introduzca la contraseña de la bóveda',
+  agent_chat_options: 'Opciones de chat',
+  agent_give_feedback: 'Enviar comentarios',
+  agent_delete_chat_session: 'Eliminar sesión de chat',
+  agent_analyzing: 'Analizando...',
+  agent_analyzed_for: 'Analizado durante {{duration}}s',
+  agent_analyzed: 'Analizado',
+  welcome_to_vulti_agent: 'Bienvenido a Vulti Agent',
+  agent_welcome_description:
+    'Ahora tu bóveda puede comprender las solicitudes, automatizar acciones y ayudarte a administrar tus criptomonedas.',
+  authorize_agent: 'Agente autorizado',
+  reauthorize_vulti_agent: 'Reautorizar Vulti Agent',
+  agent_reauth_description:
+    'Por motivos de seguridad, la autorización caduca periódicamente. Confirme para continuar utilizando Vulti Agent.',
+  authorize: 'Autorizar',
 }

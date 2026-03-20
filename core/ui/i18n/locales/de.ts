@@ -1308,4 +1308,100 @@ export const de = {
   agent_tx_type_transfer: 'Überweisen',
   agent_tx_view: 'Sicht',
   open_as_side_panel: 'Als Seitenwand öffnen',
+  agent: 'Agent',
+  agent_nav_tip_description:
+    'Vulti Agent ist verfügbar. Tippen Sie hier, um ihn einzurichten.',
+  agent_nav_tip_title: 'Neu!',
+  broadcasted: 'Ausgestrahlt',
+  cache_password_for_5_min: 'Passwort 5 Minuten lang merken',
+  choose_chains: 'Wählen Sie Ketten',
+  congrats: 'Glückwunsch!',
+  confirmed: 'Bestätigt',
+  contract_execution: 'Vertragsabwicklung',
+  contract_interaction: 'Vertragsinteraktion',
+  date: 'Datum',
+  device_n_label: 'Gerät {{number}} - {{hash}}',
+  remove_friends_referral: 'Empfehlung entfernen',
+  enable_mldsa: 'MLDSA aktivieren',
+  post_quantum_keygen: 'Post-Quanten-Schlüsselerzeugung',
+  post_quantum_keygen_description:
+    'Generieren Sie einen Post-Quantum-Schlüssel (MLDSA) für diesen Tresor.',
+  post_quantum_key_already_generated:
+    'Dieser Tresor verfügt bereits über einen Post-Quanten-Schlüssel',
+  push_notifications: 'Push-Benachrichtigungen',
+  push_notification_server_url: 'URL des Push-Benachrichtigungsservers',
+  push_notification_server_placeholder:
+    'Für die Produktionseinstellung leer lassen.',
+  failed: 'Fehlgeschlagen',
+  failed_to_load_transactions: 'Transaktionen konnten nicht geladen werden.',
+  go_to_wallet: 'Gehe zu deiner Brieftasche',
+  i_understand: 'Ich verstehe',
+  i_understand_save_backup: 'Ich verstehe, wie man dieses Backup speichert.',
+  left_pool: 'Linker Pool',
+  looks_good: 'Sieht gut aus',
+  no_transactions_yet: 'Bisher keine Transaktionen',
+  review_vault_devices_subtitle:
+    'Vergewissern Sie sich, dass Sie die richtigen Geräte hinzugefügt haben:',
+  review_your_vault_devices: 'Überprüfen Sie Ihre Tresorgeräte',
+  save_backup: 'Sicherungskopie speichern',
+  save_backup_description:
+    'Exportieren Sie diese Sicherungsdatei und speichern Sie sie anschließend in der Cloud. Sie ist mit dem zuvor festgelegten Passwort zum Entsperren Ihres Tresors <b>verschlüsselt</b> .',
+  save_backup_description_2:
+    'Verwenden Sie für jede Datensicherung einen anderen Cloud-Dienst oder ein anderes Konto. Löschen Sie die Datei anschließend von diesem Gerät.',
+  save_backup_description_secure:
+    'Exportieren Sie diese Sicherungsdatei und speichern Sie sie anschließend in der Cloud.',
+  save_backup_n_of_n_to_cloud:
+    'Sichern Sie {{current}} von {{total}} in der Cloud',
+  save_backup_to_cloud: 'Backup in der Cloud speichern',
+  secure_backup_each_device: 'Sichern Sie jedes Gerät',
+  secure_backup_each_device_description:
+    'Sie erstellen insgesamt {{count}} Backups. Dies führen Sie auf jedem Gerät durch.',
+  secure_store_backups_separately_description:
+    'Speichern Sie jedes Backup in einem anderen Cloud-Speicher oder mit einem anderen Passwort. Sollte eines davon kompromittiert werden, bleiben Ihre Gelder sicher.',
+  sends: 'Sendet',
+  somethings_wrong: 'Irgendetwas stimmt nicht.',
+  transferred: 'Übertragen',
+  status: 'Status',
+  swaps: 'Tauschgeschäfte',
+  swap_same_asset:
+    'Ein Tausch zwischen demselben Vermögenswert ist nicht möglich.',
+  this_device_suffix: '(dieses Gerät)',
+  today: 'Heute',
+  transaction_history: 'Transaktionsverlauf',
+  vault_details_page_vault_MLDSA: 'MLDSA-Schlüssel',
+  vault_ready_description:
+    'Alles ist bereit! Sie behalten die Kontrolle über jede Transaktion.',
+  vault_ready_to_use: 'Ihr Tresor ist einsatzbereit.',
+  view_on_explorer: 'Im Explorer anzeigen',
+  yesterday: 'Gestern',
+  session_history: 'Sitzungsverlauf',
+  failed_to_load_session_history: 'Sitzungsverlauf konnte nicht geladen werden',
+  agent_history_load_error_description:
+    'Bitte versuchen Sie es erneut. Sollte das Problem weiterhin bestehen, öffnen Sie den Chat von vorhin wieder oder starten Sie einen neuen.',
+  agent_history_empty_title: 'Noch keine Chats.',
+  agent_history_empty_description:
+    'Eröffne einen neuen Chat, und deine letzten Unterhaltungen werden hier angezeigt.',
+  agent_what_to_do: 'Was möchten Sie tun?',
+  agent_help_description:
+    'Ich kann bei der Vorbereitung von Tauschvorgängen, Plugin-Aktionen und Automatisierungsregeln helfen.',
+  agent_prompt_show_plugins: 'Zeig mir Plugins und was sie können.',
+  agent_prompt_earn_apy: 'Ich möchte mit BTC eine jährliche Rendite erzielen.',
+  agent_prompt_send: 'Senden Sie den Betrag an ...',
+  agent_prompt_swap: 'Bereiten Sie einen Tausch von ETH zu BTC vor.',
+  approve_transaction: 'Transaktion genehmigen',
+  enter_vault_password: 'Tresorpasswort eingeben',
+  agent_chat_options: 'Chat-Optionen',
+  agent_give_feedback: 'Feedback geben',
+  agent_delete_chat_session: 'Chat-Sitzung löschen',
+  agent_analyzing: 'Analyse läuft...',
+  agent_analyzed_for: 'Analysiert für {{duration}}s',
+  agent_analyzed: 'Analysiert',
+  welcome_to_vulti_agent: 'Willkommen bei Vulti Agent',
+  agent_welcome_description:
+    'Ihr Tresor kann nun Anfragen verstehen, Aktionen automatisieren und Sie bei der Verwaltung Ihrer Kryptowährungen unterstützen.',
+  authorize_agent: 'Bevollmächtigter Vertreter',
+  reauthorize_vulti_agent: 'Vulti-Agent erneut autorisieren',
+  agent_reauth_description:
+    'Aus Sicherheitsgründen läuft die Autorisierung regelmäßig ab. Bitte bestätigen Sie, dass Sie Vulti Agent weiterhin verwenden möchten.',
+  authorize: 'Autorisieren',
 }

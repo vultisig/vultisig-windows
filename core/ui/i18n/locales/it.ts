@@ -1300,4 +1300,100 @@ export const it = {
   agent_tx_type_transfer: 'Trasferire',
   agent_tx_view: 'Visualizzazione',
   open_as_side_panel: 'Apri come pannello laterale',
+  agent: 'Agente',
+  agent_nav_tip_description:
+    'Vulti Agent è disponibile. Tocca per configurarlo.',
+  agent_nav_tip_title: 'Nuovo!',
+  broadcasted: 'Trasmesso',
+  cache_password_for_5_min: 'Ricorda la password per 5 minuti',
+  choose_chains: 'Scegli le catene',
+  congrats: 'Congratulazioni!',
+  confirmed: 'Confermato',
+  contract_execution: 'Esecuzione del contratto',
+  contract_interaction: 'Interazione contrattuale',
+  date: 'Data',
+  device_n_label: 'Dispositivo {{number}} - {{hash}}',
+  remove_friends_referral: 'Rimuovi il riferimento',
+  enable_mldsa: 'Abilitare MLDSA',
+  post_quantum_keygen: 'Generazione di chiavi post-quantistiche',
+  post_quantum_keygen_description:
+    'Genera una chiave post-quantistica (MLDSA) per questo vault',
+  post_quantum_key_already_generated:
+    'Questa cassaforte ha già una chiave post-quantistica',
+  push_notifications: 'Notifiche push',
+  push_notification_server_url: 'URL del server di notifiche push',
+  push_notification_server_placeholder:
+    'Lascia vuoto per le impostazioni predefinite di produzione',
+  failed: 'Fallito',
+  failed_to_load_transactions: 'Impossibile caricare le transazioni',
+  go_to_wallet: 'Vai al portafoglio',
+  i_understand: 'Capisco',
+  i_understand_save_backup: 'Ho capito come salvare questo backup',
+  left_pool: 'Piscina sinistra',
+  looks_good: 'Sembra buono',
+  no_transactions_yet: 'Nessuna transazione ancora',
+  review_vault_devices_subtitle:
+    'Assicurati di aver aggiunto i dispositivi corretti:',
+  review_your_vault_devices: 'Rivedi i dispositivi del tuo caveau',
+  save_backup: 'Salva backup',
+  save_backup_description:
+    'Esporta questo file di backup e salvalo sul cloud. È <b>crittografato</b> con la password impostata in precedenza per sbloccare il tuo Vault.',
+  save_backup_description_2:
+    'Utilizza un servizio cloud o un account diverso per ogni backup. Al termine, elimina il file da questo dispositivo.',
+  save_backup_description_secure:
+    'Esporta questo file di backup, quindi salvalo sul cloud.',
+  save_backup_n_of_n_to_cloud:
+    'Salva il backup {{current}} di {{total}} sul cloud',
+  save_backup_to_cloud: 'Salva il backup sul cloud',
+  secure_backup_each_device: 'Eseguire il backup di ciascun dispositivo',
+  secure_backup_each_device_description:
+    'In totale creerai {{count}} backup. Eseguirai questa operazione su ciascun dispositivo.',
+  secure_store_backups_separately_description:
+    'Salva ogni backup su un servizio cloud diverso o con una password diversa. In questo modo, se uno dei backup viene compromesso, i tuoi fondi rimarranno al sicuro.',
+  sends: 'Invii',
+  somethings_wrong: 'C&#39;è qualcosa che non va',
+  transferred: 'Trasferito',
+  status: 'Stato',
+  swaps: 'Scambi',
+  swap_same_asset: 'Non è possibile scambiare tra lo stesso asset',
+  this_device_suffix: '(questo dispositivo)',
+  today: 'Oggi',
+  transaction_history: 'Cronologia delle transazioni',
+  vault_details_page_vault_MLDSA: 'Chiave MLDSA',
+  vault_ready_description:
+    'È tutto pronto! Avrai sempre il controllo di ogni transazione.',
+  vault_ready_to_use: 'La tua cassaforte è pronta per l&#39;uso.',
+  view_on_explorer: 'Visualizza su Esplora risorse',
+  yesterday: 'Ieri',
+  session_history: 'Cronologia della sessione',
+  failed_to_load_session_history:
+    'Impossibile caricare la cronologia della sessione',
+  agent_history_load_error_description:
+    'Per favore, riprova. Se il problema persiste, riapri la chat di poco fa o avviane una nuova.',
+  agent_history_empty_title: 'Nessuna chat ancora',
+  agent_history_empty_description:
+    'Avvia una nuova chat e le tue conversazioni recenti appariranno qui.',
+  agent_what_to_do: 'Cosa ti piacerebbe fare?',
+  agent_help_description:
+    'Posso aiutarti a preparare scambi, azioni dei plugin e regole di automazione.',
+  agent_prompt_show_plugins: 'Mostrami i plugin e le loro funzionalità.',
+  agent_prompt_earn_apy: 'Voglio guadagnare APY su BTC',
+  agent_prompt_send: 'Invia l&#39;importo a...',
+  agent_prompt_swap: 'Prepara uno scambio da ETH a BTC',
+  approve_transaction: 'Approva la transazione',
+  enter_vault_password: 'Inserisci la password del caveau',
+  agent_chat_options: 'Opzioni di chat',
+  agent_give_feedback: 'Fornisci un feedback',
+  agent_delete_chat_session: 'Elimina sessione di chat',
+  agent_analyzing: 'Analisi in corso...',
+  agent_analyzed_for: 'Analizzato per {{duration}}s',
+  agent_analyzed: 'Analizzato',
+  welcome_to_vulti_agent: 'Benvenuti in Vulti Agent',
+  agent_welcome_description:
+    'Il tuo vault ora è in grado di comprendere le richieste, automatizzare le azioni e aiutarti a gestire le tue criptovalute.',
+  authorize_agent: 'Agente autorizzato',
+  reauthorize_vulti_agent: 'Riautorizza l&#39;agente Vulti',
+  agent_reauth_description:
+    'Per motivi di sicurezza, l&#39;autorizzazione scade periodicamente. Conferma per continuare a utilizzare Vulti Agent.',
+  authorize: 'Autorizzare',
 }
