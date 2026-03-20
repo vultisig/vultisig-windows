@@ -479,6 +479,15 @@ export const de = {
   header_tooltip_content:
     'Das Empfehlungsprogramm gilt für THORChain-Swaps und wird nach bestem Bemühen umgesetzt. Um das Vultisig-Empfehlungsprogramm nutzen zu können, müssen Sie einen THORNamen registrieren. Die Registrierungsgebühr beträgt 10 RUNE und 1 RUNE pro Jahr, die an das THORChain-Netzwerk gezahlt wird.',
   header_tooltip_title: 'Empfehlungsprogramm',
+  having_trouble_scanning_help: 'Hilfe beim QR-Scannen',
+  having_trouble_scanning: 'Probleme beim Scannen?',
+  having_trouble_scanning_desc: 'Wenn der QR-Code nicht sofort gescannt wird:',
+  having_trouble_scanning_tip_1:
+    'Bewegen Sie das Telefon etwas näher oder weiter vom Bildschirm',
+  having_trouble_scanning_tip_2:
+    'Stellen Sie sicher, dass der Bildschirm gut beleuchtet und blendfrei ist',
+  having_trouble_scanning_tip_3:
+    'Halten Sie beide Geräte einen Moment lang ruhig',
   hide_balance: 'Gleichgewicht ausblenden',
   hide_defi_balance: 'DeFi-Guthaben ausblenden',
   hold: 'Halten',
