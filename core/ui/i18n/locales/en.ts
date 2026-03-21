@@ -14,7 +14,7 @@ export const en = {
   add_friends_referral: 'Add a Friends Referral',
   add_memo: 'Add MEMO',
   add_new_vault: 'Add New Vault',
-  add_referral: 'Add referral',
+  add_referral: 'Add Referral',
   add_referral_code: 'Save referral code',
   add_to_address_book: 'Add to Address Book',
   add_suggested_token: 'Add Suggested Token',
