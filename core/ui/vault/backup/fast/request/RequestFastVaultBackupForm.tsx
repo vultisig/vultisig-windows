@@ -10,17 +10,14 @@ import { ErrorBlock } from '@lib/ui/status/ErrorBlock'
 import { isInError } from '@lib/utils/error/isInError'
 import { useMutation } from '@tanstack/react-query'
 import { TFunction } from 'i18next'
-import { useEffect, useMemo, useRef } from 'react'
+import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { z } from 'zod'
 
 import { ManageEmailField } from './components/ManageEmailField'
 import { ManagePasswordField } from './components/ManagePasswordField'
-import {
-  BackupFormFieldsStateProvider,
-  useBackupFormFieldState,
-} from './state/focusedField'
+import { BackupFormFieldsStateProvider } from './state/focusedField'
 
 const getSchema = (t: TFunction) =>
   z.object({
@@ -33,7 +30,6 @@ type Schema = z.infer<ReturnType<typeof getSchema>>
 const RequestFastVaultBackupFormContent = ({ onFinish }: OnFinishProp) => {
   const { t } = useTranslation()
   const vault = useCurrentVault()
-  const [{ field }, setFocusedField] = useBackupFormFieldState()
 
   const schema = useMemo(() => getSchema(t), [t])
 
@@ -59,25 +55,9 @@ const RequestFastVaultBackupFormContent = ({ onFinish }: OnFinishProp) => {
   })
 
   const emailValue = watch('email') ?? ''
-  const hasAutoTransitioned = useRef(false)
 
   const isEmailStructurallyValid =
     !!emailValue && z.string().email().safeParse(emailValue).success
-
-  useEffect(() => {
-    if (
-      field === 'email' &&
-      isEmailStructurallyValid &&
-      !hasAutoTransitioned.current
-    ) {
-      hasAutoTransitioned.current = true
-      setFocusedField(state => ({ ...state, field: 'password' }))
-    }
-
-    if (field === 'email' && !isEmailStructurallyValid) {
-      hasAutoTransitioned.current = false
-    }
-  }, [emailValue, isEmailStructurallyValid, field, setFocusedField])
 
   const errorMessage = useMemo(() => {
     if (!error) return undefined
