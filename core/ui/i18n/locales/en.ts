@@ -651,7 +651,7 @@ export const en = {
   name: 'Name',
   name_your_vault: 'Name your vault',
   network: 'Network',
-  network_fee: 'Network fee',
+  network_fee: 'Network Fee',
   network_rate: 'Network rate',
   network_rate_required: 'Network rate is required',
   never: 'Never',
@@ -972,7 +972,8 @@ export const en = {
   support: 'Support',
   swap: 'Swap',
   swaps: 'Swaps',
-  swap_fee: 'Swap fee',
+  swap_fee: 'Swap Fee',
+  outbound_fee: 'Outbound Fee',
   swap_overview: 'Swap overview',
   swap_same_asset: 'Cannot swap between the same asset',
   swap_terms: {
