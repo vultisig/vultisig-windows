@@ -154,7 +154,7 @@ export const en = {
     'If you want an extra layer of security, choose a password. <b>Password cannot be recovered.</b>',
   choose_backup_method: 'Choose Backup Method',
   choose_payout_asset: 'Choose payout asset',
-  choose_chains: 'Choose chains',
+  choose_chains: 'Choose Chains',
   choose_tokens: 'Choose Tokens',
   deposited: 'Deposited',
   circle: {
