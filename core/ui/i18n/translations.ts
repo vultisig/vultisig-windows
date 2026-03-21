@@ -3,6 +3,7 @@ import { en } from './locales/en'
 import { es } from './locales/es'
 import { hr } from './locales/hr'
 import { it } from './locales/it'
+import { ko } from './locales/ko'
 import { nl } from './locales/nl'
 import { pt } from './locales/pt'
 import { ru } from './locales/ru'
@@ -14,6 +15,7 @@ export const translations = {
   es,
   hr,
   it,
+  ko,
   nl,
   pt,
   ru,

@@ -8,6 +8,7 @@ export const languages = [
   'zh',
   'nl',
   'ru',
+  'ko',
 ] as const
 export type Language = (typeof languages)[number]
 
@@ -23,6 +24,7 @@ export const languageName: Record<Language, string> = {
   zh: '中文',
   nl: 'Nederlands',
   ru: 'Русский',
+  ko: '한국어',
 }
 
 export const languageRegion: Record<Language, string> = {
@@ -35,4 +37,5 @@ export const languageRegion: Record<Language, string> = {
   zh: 'Chinese',
   nl: 'Dutch',
   ru: 'Russian',
+  ko: 'Korean',
 }
