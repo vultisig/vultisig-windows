@@ -39,12 +39,16 @@ export const formatAmount = (
     if ('precision' in options) {
       return options.precision
     }
-    return isCurrency ? 'medium' : 'high'
+    return 'high'
   }
 
-  const formatOptions: Intl.NumberFormatOptions = {
-    maximumFractionDigits: maximumFractionDigitsRecord[getPrecision()],
-  }
+  const formatOptions: Intl.NumberFormatOptions = isCurrency
+    ? {
+        maximumFractionDigits: 2,
+      }
+    : {
+        maximumFractionDigits: maximumFractionDigitsRecord[getPrecision()],
+      }
 
   if (isCurrency) {
     formatOptions.currency = options.currency.toUpperCase()
