@@ -22,7 +22,7 @@ export const ManageEmailField = ({
   isEmailValid,
   email,
 }: ManageEmailFieldProps) => {
-  const [{ field }] = useBackupFormFieldState()
+  const [{ field }, setFocusedField] = useBackupFormFieldState()
 
   return (
     <StackedField
@@ -32,6 +32,9 @@ export const ManageEmailField = ({
           registration={registration}
           onValueChange={onValueChange}
           onClear={onClear}
+          onTabForward={() =>
+            setFocusedField(state => ({ ...state, field: 'password' }))
+          }
           error={error}
           isEmailValid={isEmailValid}
         />
