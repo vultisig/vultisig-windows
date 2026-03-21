@@ -151,7 +151,7 @@ export const en = {
   chooseSetup: 'Choose Setup',
   choose_a_password: 'Choose a password',
   choose_a_password_description:
-    'If you want an extra layer of security, choose a password. <b>Password cannot be recovered.</b>',
+    'If you want an extra layer of security, choose a password. <b>Password cannot be recovered.</b> <info />',
   choose_backup_method: 'Choose Backup Method',
   choose_payout_asset: 'Choose payout asset',
   choose_chains: 'Choose chains',
