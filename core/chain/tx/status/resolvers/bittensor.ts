@@ -7,8 +7,7 @@ import { queryUrl } from '@lib/utils/query/queryUrl'
 
 import { TxStatusResolver } from '../resolver'
 
-// Proxied through vultisig API — Johnny adds Taostats API key server-side
-const taostatsExtrinsicUrl = `${rootApiUrl}/tao/extrinsic/v1`
+const taostatsExtrinsicUrl = `${rootApiUrl}/tao-tx/v1`
 
 type TaostatsExtrinsicResponse = {
   pagination: { page: number; limit: number; total: number }
