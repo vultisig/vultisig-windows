@@ -430,7 +430,7 @@ export const en = {
         descriptionTwo: 'giving complete control over your assets',
       },
     },
-    emailSetupTitle: 'This email is only used to send the server backup',
+    emailSetupTitle: 'This email is used for cloud backup and shared with no third party',
     enterEmail: 'Enter your email',
     enterHint: 'Enter hint',
     hintDescription: 'This will be shown in case you forget your password',
