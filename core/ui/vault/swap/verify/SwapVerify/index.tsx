@@ -80,6 +80,9 @@ export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
                       fromCoin
                     )}
                   </Text>
+                  <Text color="shy" size={13}>
+                    {t('on_chain', { chain: fromCoin.chain })}
+                  </Text>
                   <SwapFiatAmount
                     value={{
                       ...fromCoinKey,
@@ -95,7 +98,7 @@ export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
                 <IconWrapper>
                   <ArrowDownIcon />
                 </IconWrapper>
-                {t('to')}
+                {t('to_min_payout')}
                 <HorizontalLine />
               </HStack>
               <HStack gap={8}>
@@ -115,6 +118,9 @@ export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
                       <VStack>
                         <Text weight="500" size={17} color="contrast">
                           {formatAmount(parseFloat(toAmountDecimal), toCoin)}
+                        </Text>
+                        <Text color="shy" size={13}>
+                          {t('on_chain', { chain: toCoin.chain })}
                         </Text>
                         <SwapFiatAmount
                           value={{

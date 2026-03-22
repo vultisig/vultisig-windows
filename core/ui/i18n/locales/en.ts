@@ -712,6 +712,7 @@ export const en = {
   of: 'of',
   off: 'Off',
   on: 'On',
+  on_chain: 'on {{chain}}',
   onboarding_description_1:
     'Vultisig is a secure, multi-device crypto vault, compatible with all major blockchains and 10,000+ tokens. Vultisig is fully self-custodial.',
   onboarding_description_2:
@@ -1001,6 +1002,7 @@ export const en = {
   tns_missing_thor_alias: 'Referral code must have a THOR‐chain alias',
   tns_not_found: 'Referral code not found',
   to: 'To',
+  to_min_payout: 'min. payout',
   today: 'Today',
   to_asset: 'To Asset',
   token_not_found_description:
