@@ -51,7 +51,7 @@ export const KeysignSigningStep = ({ onBack }: KeysignSigningStepProps) => {
       value={mutationStatus}
       success={result => (
         <>
-          <PageHeader title={t('overview')} hasBorder />
+          <PageHeader title={t('done')} hasBorder />
           <MatchRecordUnion
             value={payload}
             handlers={{
