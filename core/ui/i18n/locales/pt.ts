@@ -859,6 +859,7 @@ export const pt = {
     'O código de referência deve ter um alias de cadeia THOR.',
   tns_not_found: 'Código de indicação não encontrado',
   to: 'Para',
+  to_min_payout: 'pagamento mín.',
   to_asset: 'Para o ativo',
   token_not_found_description:
     'Possíveis motivos: contrato incorreto, blockchain não suportada ou token removido dos registros.',
@@ -1107,6 +1108,7 @@ export const pt = {
   normal: 'Normal',
   off: 'Desligado',
   on: 'Sobre',
+  on_chain: 'em {{chain}}',
   optional: 'opcional',
   password_backup: 'Proteja seu cofre e assine rapidamente.',
   permissions: 'Permissões',

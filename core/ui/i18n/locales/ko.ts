@@ -844,6 +844,7 @@ export const ko = {
   of: '~의',
   off: '끄다',
   on: '~에',
+  on_chain: '{{chain}}에서',
   onboarding_description_1:
     'Vultisig는 모든 주요 블록체인 및 10,000개 이상의 토큰과 호환되는 안전한 다중 기기 암호화폐 보관소입니다. Vultisig는 완전한 자체 보관 방식을 채택하고 있습니다.',
   onboarding_description_2:
@@ -1088,6 +1089,7 @@ export const ko = {
   tns_not_found: '추천 코드를 찾을 수 없습니다.',
   to: '에게',
   today: '오늘',
+  to_min_payout: '최소 지급액',
   to_asset: '자산으로',
   token_not_found_description:
     '가능한 원인: 잘못된 계약, 지원되지 않는 체인 또는 토큰이 레지스트리에서 삭제됨.',

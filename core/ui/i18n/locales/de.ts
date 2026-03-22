@@ -865,6 +865,7 @@ export const de = {
     'Der Empfehlungscode muss einen THOR-Kettenalias haben.',
   tns_not_found: 'Empfehlungscode nicht gefunden',
   to: 'Zu',
+  to_min_payout: 'min. Auszahlung',
   to_asset: 'Zum Vermögenswert',
   token_not_found_description:
     'Mögliche Gründe: falscher Vertrag, nicht unterstützte Blockchain oder Token aus den Registern entfernt.',
@@ -1115,6 +1116,7 @@ export const de = {
   normal: 'Normal',
   off: 'Aus',
   on: 'An',
+  on_chain: 'auf {{chain}}',
   optional: 'optional',
   password_backup:
     'Schützen Sie Ihren Tresor und sichern Sie sich eine schnelle Signatur.',
