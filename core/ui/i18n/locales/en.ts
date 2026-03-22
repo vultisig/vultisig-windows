@@ -976,7 +976,6 @@ export const en = {
   swap: 'Swap',
   swaps: 'Swaps',
   swap_fee: 'Swap Fee',
-  outbound_fee: 'Outbound Fee',
   swap_overview: 'Swap overview',
   swap_same_asset: 'Cannot swap between the same asset',
   swap_terms: {
