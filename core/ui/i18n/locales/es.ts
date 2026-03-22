@@ -862,7 +862,6 @@ export const es = {
     'El código de referencia debe tener un alias de cadena THOR',
   tns_not_found: 'Código de referencia no encontrado',
   to: 'A',
-  to_min_payout: 'pago mín.',
   to_asset: 'Al activo',
   token_not_found_description:
     'Posibles razones: contrato incorrecto, cadena no compatible o token eliminado de los registros.',
@@ -1107,7 +1106,6 @@ export const es = {
   normal: 'Normal',
   off: 'Apagado',
   on: 'En',
-  on_chain: 'en {{chain}}',
   optional: 'opcional',
   password_backup: 'Protege tu bóveda y firma rápidamente.',
   permissions: 'Permisos',

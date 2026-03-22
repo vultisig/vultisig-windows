@@ -846,7 +846,6 @@ export const hr = {
   tns_missing_thor_alias: 'Referalni kod mora imati alias THOR lanca',
   tns_not_found: 'Referral kod nije pronađen',
   to: 'Do',
-  to_min_payout: 'min. isplata',
   to_asset: 'Do imovine',
   token_not_found_description:
     'Mogući razlozi: pogrešan ugovor, nepodržani lanac ili token uklonjen iz registara.',
@@ -1087,7 +1086,6 @@ export const hr = {
   normal: 'Normalan',
   off: 'Isključeno',
   on: 'Na',
-  on_chain: 'na {{chain}}',
   optional: 'opcionalno',
   password_backup: 'Zaštitite svoj trezor i brzo se prijavite.',
   permissions: 'Dozvole',

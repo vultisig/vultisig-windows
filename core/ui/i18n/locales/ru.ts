@@ -642,7 +642,6 @@ export const ru = {
   of: 'из',
   off: 'Выкл',
   on: 'Вкл',
-  on_chain: 'в сети {{chain}}',
   onboarding_description_1:
     'Vultisig — безопасное multi-device криптохранилище, совместимое со всеми основными блокчейнами и 10 000+ токенами. Vultisig полностью self-custodial.',
   onboarding_description_2:
@@ -908,7 +907,6 @@ export const ru = {
   tns_missing_thor_alias: 'Referral-код должен иметь THOR-chain alias',
   tns_not_found: 'Referral-код не найден',
   to: 'Кому',
-  to_min_payout: 'мин. выплата',
   to_asset: 'Актив получения',
   token_not_found_description:
     'Возможные причины: неверный контракт, неподдерживаемая сеть или токен удалён из реестров.',

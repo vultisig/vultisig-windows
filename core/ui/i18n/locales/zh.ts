@@ -800,7 +800,6 @@ export const zh = {
   tns_missing_thor_alias: '推荐码必须具有 THOR 链别名',
   tns_not_found: '未找到推荐码',
   to: '到',
-  to_min_payout: '最低付款',
   to_asset: '资产',
   token_not_found_description:
     '可能的原因：合约错误、链不受支持，或者代币已从注册表中移除。',
@@ -1027,7 +1026,6 @@ export const zh = {
   normal: '普通的',
   off: '离开',
   on: '在',
-  on_chain: '在 {{chain}} 上',
   optional: '选修的',
   password_backup: '保护您的金库并快速签名。',
   permissions: '权限',

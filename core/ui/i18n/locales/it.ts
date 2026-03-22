@@ -859,7 +859,6 @@ export const it = {
     'Il codice di riferimento deve avere un alias della catena THOR',
   tns_not_found: 'Codice di riferimento non trovato',
   to: 'A',
-  to_min_payout: 'pagamento min.',
   to_asset: 'Per asset',
   token_not_found_description:
     'Possibili motivi: contratto errato, catena non supportata o token rimosso dai registri.',
@@ -1106,7 +1105,6 @@ export const it = {
   normal: 'Normale',
   off: 'Spento',
   on: 'SU',
-  on_chain: 'su {{chain}}',
   optional: 'opzionale',
   password_backup: 'Proteggi il tuo caveau e firma subito.',
   permissions: 'Permessi',

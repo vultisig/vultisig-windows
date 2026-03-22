@@ -648,7 +648,6 @@ export const nl = {
   of: 'van',
   off: 'Uit',
   on: 'Aan',
-  on_chain: 'op {{chain}}',
   onboarding_description_1:
     'Vultisig is een veilige, multi-device crypto-kluis, compatibel met alle grote blockchains en 10.000+ tokens. Vultisig is volledig self-custodial.',
   onboarding_description_2:
@@ -913,7 +912,6 @@ export const nl = {
   tns_missing_thor_alias: 'Referralcode moet een THOR-chain alias hebben',
   tns_not_found: 'Referralcode niet gevonden',
   to: 'Naar',
-  to_min_payout: 'min. uitbetaling',
   to_asset: 'Naar-asset',
   token_not_found_description:
     'Mogelijke redenen: verkeerd contract, niet-ondersteunde chain, of token verwijderd uit registries.',
