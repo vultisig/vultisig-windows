@@ -82,7 +82,8 @@ export const en = {
   backupShareWarning: 'This is only 1 share of your vault',
   backupShareWarningRest: ', repeat this process for the other devices.',
   backup_description: 'Back up your Vault Share to a preferred location',
-  backup_email_description: 'This email is used for cloud backup and shared with no third party',
+  backup_email_description:
+    'This email is used for cloud backup and shared with no third party',
   backup_now: 'Get started',
   backup_password: 'Backup Password',
   backup_password_description:
@@ -430,7 +431,8 @@ export const en = {
         descriptionTwo: 'giving complete control over your assets',
       },
     },
-    emailSetupTitle: 'This email is used for cloud backup and shared with no third party',
+    emailSetupTitle:
+      'This email is used for cloud backup and shared with no third party',
     enterEmail: 'Enter your email',
     enterHint: 'Enter hint',
     hintDescription: 'This will be shown in case you forget your password',
