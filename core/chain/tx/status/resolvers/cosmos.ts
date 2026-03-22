@@ -40,9 +40,10 @@ export const getCosmosTxStatus: TxStatusResolver<CosmosChain> = async ({
       fee?.amount,
       chain
     )
-    const maxFeeAmount =
-      matchedNativeFee ??
-      (fee?.amount?.[0]?.amount != null ? BigInt(fee.amount[0].amount) : 0n)
+    if (matchedNativeFee == null) {
+      return undefined
+    }
+    const maxFeeAmount = matchedNativeFee
 
     const gasWanted = tx.gasWanted
     const feeGasLimit = fee?.gasLimit ?? 0n
