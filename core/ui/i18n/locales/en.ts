@@ -53,7 +53,7 @@ export const en = {
   reject: 'Reject',
   applied_discounts: 'Applied Discounts:',
   asset: 'Asset',
-  assets: 'assets',
+  assets: 'Assets',
   at_least_one_device: 'At least one device',
   at_least_one_device_subtitle: 'Any device that can run Vultisig will work.',
   auto: 'auto',
