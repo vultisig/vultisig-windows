@@ -10,7 +10,10 @@ import { storage } from './storage'
 import { getDeveloperOptions } from './storage/developerOptions'
 import { StorageMigrationsManager } from './storage/migrations/StorageMigrationManager'
 
-const baseCoreState: Omit<CoreState, 'goBack' | 'goHome'> = {
+const baseCoreState: Omit<
+  CoreState,
+  'goBack' | 'goHome' | 'popNavigationHistory'
+> = {
   ...storage,
   client: 'extension',
   openUrl: url => window.open(url, '_blank', 'noopener,noreferrer'),
@@ -36,6 +39,7 @@ type ExtensionCoreAppProps = ChildrenProp & {
   processError?: ErrorBoundaryProcessError
   goBack: () => void
   goHome: () => void
+  popNavigationHistory: (steps: number) => void
   targetVaultId?: string
   isLimited?: boolean
 }
@@ -44,6 +48,7 @@ export const ExtensionCoreApp = ({
   children,
   processError,
   goBack,
+  popNavigationHistory,
   targetVaultId,
   goHome,
   isLimited,
@@ -55,9 +60,17 @@ export const ExtensionCoreApp = ({
       targetVaultId,
       goBack,
       goHome,
+      popNavigationHistory,
       isLimited,
     }),
-    [processError, targetVaultId, goBack, goHome, isLimited]
+    [
+      processError,
+      targetVaultId,
+      goBack,
+      goHome,
+      popNavigationHistory,
+      isLimited,
+    ]
   )
 
   return (
