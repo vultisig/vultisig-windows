@@ -1208,7 +1208,7 @@ export const es = {
     'Introduzca la contraseña que estableció al crear esta Bóveda.',
   choose_a_password: 'Elije una contraseña',
   choose_a_password_description:
-    'Si desea una capa adicional de seguridad, elija una contraseña. <b>La contraseña no se puede recuperar.</b>',
+    'Si desea una capa adicional de seguridad, elija una contraseña. <b>La contraseña no se puede recuperar.</b> <info />',
   create_vault: 'Crear bóveda',
   create_referral_desc:
     'Crea tu propio código y gana<c> 20%</c> sobre swaps referidos',

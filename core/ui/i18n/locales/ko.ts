@@ -375,7 +375,7 @@ export const ko = {
   chooseSetup: '설정을 선택하세요',
   choose_a_password: '비밀번호를 선택하세요',
   choose_a_password_description:
-    '보안을 강화하려면 비밀번호를 설정하세요. <b>비밀번호는 복구할 수 없습니다.</b>',
+    '보안을 강화하려면 비밀번호를 설정하세요. <b>비밀번호는 복구할 수 없습니다.</b> <info />',
   choose_backup_method: '백업 방법을 선택하세요',
   choose_payout_asset: '지급 자산을 선택하세요',
   choose_chains: '체인점을 선택하세요',

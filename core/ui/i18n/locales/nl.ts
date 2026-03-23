@@ -1195,7 +1195,7 @@ export const nl = {
     'Voer het wachtwoord in dat u hebt ingesteld bij het aanmaken van deze kluis.',
   choose_a_password: 'Kies een wachtwoord',
   choose_a_password_description:
-    'Wilt u extra beveiliging? Kies dan een wachtwoord. <b>Een wachtwoord kan niet worden hersteld.</b>',
+    'Wilt u extra beveiliging? Kies dan een wachtwoord. <b>Een wachtwoord kan niet worden hersteld.</b> <info />',
   create_vault: 'Maak een kluis aan',
   create_referral_desc:
     'Maak je eigen code aan en verdien geld.<c> 20%</c> bij doorverwezen swaps',

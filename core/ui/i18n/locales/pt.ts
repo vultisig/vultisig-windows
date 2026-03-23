@@ -1210,7 +1210,7 @@ export const pt = {
     'Digite a senha que você definiu ao criar este cofre.',
   choose_a_password: 'Escolha uma senha',
   choose_a_password_description:
-    'Se você deseja uma camada extra de segurança, escolha uma senha. <b>A senha não pode ser recuperada.</b>',
+    'Se você deseja uma camada extra de segurança, escolha uma senha. <b>A senha não pode ser recuperada.</b> <info />',
   create_vault: 'Criar cofre',
   create_referral_desc:
     'Crie seu próprio código e ganhe<c> 20%</c> em swaps referidos',
