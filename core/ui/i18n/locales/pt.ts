@@ -1039,7 +1039,7 @@ export const pt = {
   new: 'Novo',
   vulti_node: 'VultiNode',
   percentage_zero: '0%',
-  percentage_value: '{{valor}}%',
+  percentage_value: '{{value}}%',
   automation_info: 'Informações sobre automação',
   app_install_timeout: 'Tempo limite de instalação do aplicativo (ms)',
   app_install_timeout_invalid: 'Por favor, insira um número válido.',
@@ -1210,7 +1210,7 @@ export const pt = {
     'Digite a senha que você definiu ao criar este cofre.',
   choose_a_password: 'Escolha uma senha',
   choose_a_password_description:
-    'Se você deseja uma camada extra de segurança, escolha uma senha. <b>A senha não pode ser recuperada.</b>',
+    'Se você deseja uma camada extra de segurança, escolha uma senha. <b>A senha não pode ser recuperada.</b> <info />',
   create_vault: 'Criar cofre',
   create_referral_desc:
     'Crie seu próprio código e ganhe<c> 20%</c> em swaps referidos',
@@ -1300,4 +1300,99 @@ export const pt = {
   agent_tx_type_transfer: 'Transferir',
   agent_tx_view: 'Visualizar',
   open_as_side_panel: 'Abrir como painel lateral',
+  agent: 'Agente',
+  agent_nav_tip_description:
+    'O Vulti Agent está disponível. Toque para configurá-lo.',
+  agent_nav_tip_title: 'Novo!',
+  broadcasted: 'Transmitido',
+  cache_password_for_5_min: 'Lembre-se da senha por 5 minutos.',
+  choose_chains: 'Escolha correntes',
+  congrats: 'Parabéns!',
+  confirmed: 'Confirmado',
+  contract_execution: 'Execução de Contrato',
+  contract_interaction: 'Interação contratual',
+  date: 'Data',
+  device_n_label: 'Dispositivo {{number}} - {{hash}}',
+  remove_friends_referral: 'Remover encaminhamento',
+  enable_mldsa: 'Habilitar MLDSA',
+  post_quantum_keygen: 'Geração de chaves pós-quânticas',
+  post_quantum_keygen_description:
+    'Gere uma chave pós-quântica (MLDSA) para este cofre.',
+  post_quantum_key_already_generated:
+    'Este cofre já possui uma chave pós-quântica.',
+  push_notifications: 'Notificações Push',
+  push_notification_server_url: 'URL do servidor de notificações push',
+  push_notification_server_placeholder:
+    'Deixe em branco para o padrão de produção.',
+  failed: 'Fracassado',
+  failed_to_load_transactions: 'Falha ao carregar as transações',
+  go_to_wallet: 'Acesse a carteira',
+  i_understand: 'Eu entendo',
+  i_understand_save_backup: 'Eu sei como salvar esse backup.',
+  left_pool: 'Piscina esquerda',
+  looks_good: 'Parece bom',
+  no_transactions_yet: 'Ainda não há transações.',
+  review_vault_devices_subtitle:
+    'Certifique-se de que adicionou os dispositivos corretos:',
+  review_your_vault_devices: 'Analise seus dispositivos de cofre.',
+  save_backup: 'Salvar backup',
+  save_backup_description:
+    'Exporte este arquivo de backup e salve-o na nuvem. Ele está <b>criptografado</b> com a senha definida anteriormente para desbloquear seu cofre.',
+  save_backup_description_2:
+    'Use um serviço de nuvem ou conta diferente para cada backup. Ao terminar, exclua o arquivo deste dispositivo.',
+  save_backup_description_secure:
+    'Exporte este arquivo de backup e salve-o na nuvem.',
+  save_backup_n_of_n_to_cloud:
+    'Salvar backup de {{current}} de {{total}} na nuvem',
+  save_backup_to_cloud: 'Salvar backup na nuvem',
+  secure_backup_each_device: 'Faça backup de cada dispositivo.',
+  secure_backup_each_device_description:
+    'Você criará {{count}} backups no total. Você fará isso em cada dispositivo.',
+  secure_store_backups_separately_description:
+    'Salve cada backup em um serviço de nuvem diferente ou com uma senha diferente. Se um deles for exposto, seus fundos permanecerão seguros.',
+  sends: 'Envia',
+  somethings_wrong: 'Algo está errado',
+  transferred: 'Transferido',
+  status: 'Status',
+  swaps: 'Trocas',
+  swap_same_asset: 'Não é possível trocar entre ativos do mesmo tipo.',
+  this_device_suffix: '(este dispositivo)',
+  today: 'Hoje',
+  transaction_history: 'Histórico de transações',
+  vault_details_page_vault_MLDSA: 'Chave MLDSA',
+  vault_ready_description:
+    'Está tudo pronto! Você mantém o controle de todas as transações.',
+  vault_ready_to_use: 'Seu cofre está pronto para uso.',
+  view_on_explorer: 'Visualizar no Explorador',
+  yesterday: 'Ontem',
+  session_history: 'Histórico da sessão',
+  failed_to_load_session_history: 'Falha ao carregar o histórico da sessão',
+  agent_history_load_error_description:
+    'Por favor, tente novamente. Se o problema persistir, reabra o chat de onde parou ou inicie um novo.',
+  agent_history_empty_title: 'Ainda não há conversas.',
+  agent_history_empty_description:
+    'Inicie um novo bate-papo e suas conversas recentes aparecerão aqui.',
+  agent_what_to_do: 'O que você gostaria de fazer?',
+  agent_help_description:
+    'Posso ajudar a preparar trocas, ações de plugins e regras de automação.',
+  agent_prompt_show_plugins: 'Mostre-me os plugins e o que eles podem fazer.',
+  agent_prompt_earn_apy: 'Quero ganhar APY com BTC',
+  agent_prompt_send: 'Enviar o valor para ...',
+  agent_prompt_swap: 'Prepare uma troca de ETH por BTC',
+  approve_transaction: 'Aprovar transação',
+  enter_vault_password: 'Digite a senha do cofre',
+  agent_chat_options: 'Opções de bate-papo',
+  agent_give_feedback: 'Dê seu feedback',
+  agent_delete_chat_session: 'Excluir sessão de bate-papo',
+  agent_analyzing: 'Analisando...',
+  agent_analyzed_for: 'Analisado para {{duration}}s',
+  agent_analyzed: 'Analisado',
+  welcome_to_vulti_agent: 'Bem-vindo à Vulti Agent',
+  agent_welcome_description:
+    'Seu cofre agora pode entender solicitações, automatizar ações e ajudar a gerenciar suas criptomoedas.',
+  authorize_agent: 'Agente autorizado',
+  reauthorize_vulti_agent: 'Reautorizar o Agente Vulti',
+  agent_reauth_description:
+    'Por motivos de segurança, a autorização expira periodicamente. Confirme para continuar usando o Vulti Agent.',
+  authorize: 'Autorizar',
 }

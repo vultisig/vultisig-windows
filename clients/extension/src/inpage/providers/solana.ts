@@ -63,7 +63,7 @@ import { createSolanaSignInMessage } from './solana/signIn'
 const frozenChains = Object.freeze([...SolanaChains] as const)
 export class Solana implements Wallet {
   private _publicKey: PublicKey | null = null
-  private _isConnected = false
+  private _connecting = false
   private readonly listeners: {
     [E in StandardEventsNames]?: StandardEventsListeners[E][]
   } = {}
@@ -76,11 +76,11 @@ export class Solana implements Wallet {
   readonly chains = frozenChains as Wallet['chains']
 
   get isConnected() {
-    return this._isConnected
+    return !!this.account
   }
 
   get publicKey() {
-    return this._publicKey
+    return this.account ? new PublicKey(this.account.address) : null
   }
 
   get features(): StandardConnectFeature &
@@ -132,45 +132,114 @@ export class Solana implements Wallet {
     this.name = name
     this.isPhantom = true
     this.isXDEFI = true
-    this.#connected()
+    void this.#syncFromBackground({ emit: false })
   }
 
-  #connected = async () => {
+  #setAccount(address: string) {
+    const publicKey = new PublicKey(address)
+    const publicKeyBytes = publicKey.toBytes()
+
+    const changed =
+      !this.account ||
+      this.account.address !== address ||
+      !bytesEqual(this.account.publicKey, publicKeyBytes)
+
+    this._publicKey = publicKey
+
+    if (changed) {
+      this.account = new VultisigSolanaWalletAccount({
+        address,
+        publicKey: publicKeyBytes,
+        label: 'Vultisig Extension',
+        icon: this.icon,
+      })
+
+      this.#emit('change', { accounts: [this.account] })
+    }
+  }
+
+  #clearAccount(emit = true) {
+    const hadAccount = !!this.account || !!this._publicKey
+
+    this._publicKey = null
+    this.account = null
+
+    if (emit && hadAccount) {
+      this.#emit('change', { accounts: [] })
+    }
+  }
+
+  #syncFromBackground = async ({ emit = true }: { emit?: boolean } = {}) => {
     const { data } = await attempt(
       callBackground({
         getAccount: { chain: Chain.Solana },
       })
     )
 
-    const address = data?.address
-    if (!address) return
+    const address = data?.address ?? null
+
+    if (!address) {
+      if (this._connecting) {
+        return
+      }
+
+      this.#clearAccount(emit)
+      return
+    }
+
+    const previousAddress = this.account?.address ?? null
 
     this._publicKey = new PublicKey(address)
-    this._isConnected = true
-    const pubkey = this._publicKey.toBytes()
-    const account = this.account
-    if (
-      !account ||
-      account.address !== address ||
-      !bytesEqual(account.publicKey, pubkey)
-    ) {
+
+    const publicKeyBytes = this._publicKey.toBytes()
+    const changed =
+      !this.account ||
+      this.account.address !== address ||
+      !bytesEqual(this.account.publicKey, publicKeyBytes)
+
+    if (changed) {
       this.account = new VultisigSolanaWalletAccount({
         address,
-        publicKey: pubkey,
+        publicKey: publicKeyBytes,
         label: 'Vultisig Extension',
         icon: this.icon,
       })
 
-      this.#emit('change', { accounts: this.accounts })
+      if (emit && previousAddress !== address) {
+        this.#emit('change', { accounts: [this.account] })
+      }
     }
   }
 
   #connect: StandardConnectMethod = async ({ silent } = {}) => {
-    if (!silent && !this.account) {
-      await this.connect()
+    if (silent) {
+      await this.#syncFromBackground({ emit: false })
+      return { accounts: this.accounts }
     }
-    await this.#connected()
-    return { accounts: this.accounts }
+
+    if (this.account) {
+      return { accounts: this.accounts }
+    }
+
+    this._connecting = true
+    try {
+      const result = await requestAccount(Chain.Solana)
+      const address = result?.address
+
+      if (!address) {
+        throw new Error(
+          'User rejected connection or no Solana account returned'
+        )
+      }
+
+      this.#setAccount(address)
+
+      await this.#syncFromBackground({ emit: false })
+
+      return { accounts: this.accounts }
+    } finally {
+      this._connecting = false
+    }
   }
 
   public on: StandardEventsOnMethod = (event, listener) => {
@@ -200,22 +269,16 @@ export class Solana implements Wallet {
   }
 
   connect = async () => {
-    const { address } = await requestAccount(Chain.Solana)
-    if (!address) {
-      return { publicKey: null }
-    }
-    this._publicKey = new PublicKey(address)
-    this._isConnected = true
-    return { publicKey: this.publicKey }
+    const result = await this.#connect()
+    return result
   }
 
   disconnect = async () => {
-    this._publicKey = null
     await callBackground({
       signOut: {},
     })
-    this._isConnected = false
-    await Promise.resolve()
+
+    this.#clearAccount(true)
   }
 
   request = async (data: RequestInput, callback?: Callback) => {
@@ -276,7 +339,6 @@ export class Solana implements Wallet {
       ...input,
       address: account.address,
     })
-
     const signature = await callPopup({
       signMessage: {
         sign_message: {
@@ -285,7 +347,6 @@ export class Solana implements Wallet {
         },
       },
     })
-
     return {
       account: account,
       signedMessage: Buffer.from(message),
