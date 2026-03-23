@@ -234,6 +234,19 @@ const runPushVaultIdMigrationIfNeeded = async (): Promise<void> => {
   if (vaults.length > 0) {
     const vaultInfos = await mapStoredVaultsToRegistrationInfos(vaults)
     await registerVaults(vaultInfos)
+
+    if (vaultInfos.length > 0) {
+      const registrations = await getPushNotificationRegistrations()
+      const missing = vaultInfos.filter(v => !(v.vaultId in registrations))
+      if (missing.length > 0) {
+        console.error(
+          '[Vultisig Push] Migration incomplete: push registration failed for',
+          missing.length,
+          'vault(s); will retry on next startup'
+        )
+        return
+      }
+    }
   }
 
   await setPushVaultIdMigrationCompleted()
