@@ -9,13 +9,23 @@ import { getKeysignCoin } from '../../../utils/getKeysignCoin'
 import { GetChainSpecificResolver } from '../../resolver'
 import { refineBittensorChainSpecific } from './refine'
 
-type RpcResponse<T> = { jsonrpc: string; id: number; result: T }
+type RpcResponse<T> = {
+  jsonrpc: string
+  id: number
+  result?: T
+  error?: { code: number; message: string }
+}
 
 const rpc = async <T>(method: string, params: unknown[] = []) => {
-  const { result } = await queryUrl<RpcResponse<T>>(bittensorRpcUrl, {
+  const response = await queryUrl<RpcResponse<T>>(bittensorRpcUrl, {
     body: { jsonrpc: '2.0', method, params, id: 1 },
   })
-  return result
+  if (response.error) {
+    throw new Error(
+      `Bittensor RPC ${method} failed: ${response.error.message ?? `code ${response.error.code}`}`
+    )
+  }
+  return response.result as T
 }
 
 export const getBittensorChainSpecific: GetChainSpecificResolver<

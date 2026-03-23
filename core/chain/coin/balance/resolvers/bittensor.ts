@@ -6,7 +6,8 @@ import { CoinBalanceResolver } from '../resolver'
 type RpcResponse<T> = {
   jsonrpc: string
   id: number
-  result: T
+  result?: T
+  error?: { code: number; message: string }
 }
 
 // System.Account storage key prefix: twox128("System") ++ twox128("Account")
@@ -23,7 +24,7 @@ export const getBittensorCoinBalance: CoinBalanceResolver = async input => {
   const accountId = Buffer.from(pubkey).toString('hex')
   const storageKey = systemAccountPrefix + hash + accountId
 
-  const { result } = await queryUrl<RpcResponse<string | null>>(
+  const response = await queryUrl<RpcResponse<string | null>>(
     bittensorRpcUrl,
     {
       body: {
@@ -35,14 +36,28 @@ export const getBittensorCoinBalance: CoinBalanceResolver = async input => {
     }
   )
 
+  if (response.error) {
+    throw new Error(
+      `Bittensor balance RPC error: ${response.error.message ?? `code ${response.error.code}`}`
+    )
+  }
+
+  const result = response.result
   if (!result) return BigInt(0)
 
   // Parse AccountInfo SCALE: nonce(4) + consumers(4) + providers(4) + sufficients(4) + free(16) + ...
   // free balance starts at byte offset 16 (after 4x u32), encoded as u128 LE
-  const hex = result.slice(2) // remove 0x
+  const hex = result.startsWith('0x') ? result.slice(2) : result
+  // Minimum expected length: 64 hex chars (32 bytes for 4x u32 + u128)
+  if (hex.length < 64 || !/^[0-9a-fA-F]+$/.test(hex)) {
+    throw new Error(`Unexpected storage response format: ${result}`)
+  }
   const freeHex = hex.slice(32, 64) // bytes 16-31 = free balance (u128 LE)
 
   // Convert LE hex to BigInt
-  const bytes = freeHex.match(/.{2}/g)!.reverse().join('')
-  return BigInt('0x' + bytes)
+  const leBytes = freeHex.match(/.{2}/g)
+  if (!leBytes) {
+    throw new Error(`Failed to parse free balance hex: ${freeHex}`)
+  }
+  return BigInt('0x' + leBytes.reverse().join(''))
 }

@@ -37,13 +37,19 @@ export const getBittensorTxStatus: TxStatusResolver<
 
   const extrinsic = response.data[0]
   const feeCoin = chainFeeCoin[Chain.Bittensor]
-  const receipt = extrinsic.fee
-    ? {
+  let receipt: { feeAmount: bigint; feeDecimals: number; feeTicker: string } | undefined
+  if (extrinsic.fee) {
+    try {
+      receipt = {
         feeAmount: BigInt(extrinsic.fee),
         feeDecimals: feeCoin.decimals,
         feeTicker: feeCoin.ticker,
       }
-    : undefined
+    } catch {
+      // If fee string is not a valid integer, skip fee info rather than crash
+      receipt = undefined
+    }
+  }
 
   return {
     status: extrinsic.success ? 'success' : 'error',

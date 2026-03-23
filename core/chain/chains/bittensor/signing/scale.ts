@@ -6,6 +6,9 @@
 /** SCALE compact encoding for unsigned integers */
 export const compactEncode = (value: bigint | number): Uint8Array => {
   const n = BigInt(value)
+  if (n < 0n) {
+    throw new Error(`SCALE compact encoding does not support negative values: ${n}`)
+  }
   if (n < 64n) {
     return new Uint8Array([Number(n) << 2])
   }
@@ -68,6 +71,13 @@ export const concatBytes = (...arrays: Uint8Array[]): Uint8Array => {
 /** Hex string (with or without 0x) to Uint8Array */
 export const hexToBytes = (hex: string): Uint8Array => {
   const clean = hex.startsWith('0x') ? hex.slice(2) : hex
-  const matches = clean.match(/.{1,2}/g) ?? []
+  if (clean.length === 0) {
+    return new Uint8Array(0)
+  }
+  if (!/^[0-9a-fA-F]+$/.test(clean)) {
+    throw new Error(`Invalid hex string: ${hex}`)
+  }
+  const padded = clean.length % 2 === 1 ? '0' + clean : clean
+  const matches = padded.match(/.{2}/g)!
   return new Uint8Array(matches.map(byte => parseInt(byte, 16)))
 }

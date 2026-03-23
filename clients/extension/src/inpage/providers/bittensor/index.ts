@@ -33,8 +33,12 @@ export class Bittensor extends EventEmitter {
   async request(data: RequestInput) {
     const handlers = getSharedHandlers(OtherChain.Bittensor)
 
-    if (data.method in handlers) {
-      return handlers[data.method as keyof typeof handlers](data.params as any)
+    const method = data.method
+    const isHandlerMethod = (
+      key: string
+    ): key is keyof typeof handlers => key in handlers
+    if (isHandlerMethod(method)) {
+      return handlers[method](data.params as Parameters<(typeof handlers)[typeof method]>[0])
     }
 
     throw new NotImplementedError(`Bittensor method ${data.method}`)
@@ -90,9 +94,14 @@ export class Bittensor extends EventEmitter {
       { account: payload.address }
     )
 
+    const output = shouldBePresent(data.output, 'signing output')
+    if (typeof output !== 'string') {
+      throw new Error('Expected signing output to be a string')
+    }
+
     return {
       id: ++signingId,
-      signature: shouldBePresent(data.output, 'signing output') as string,
+      signature: output,
     }
   }
 

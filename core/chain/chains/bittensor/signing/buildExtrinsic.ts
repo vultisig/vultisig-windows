@@ -38,7 +38,7 @@ export type BittensorSigningParams = {
 }
 
 /**
- * Build the call data for balances.transfer_keep_alive(dest, value)
+ * Build the call data for balances.transfer_allow_death(dest, value)
  */
 const buildCallData = (toAddress: string, amount: bigint): Uint8Array => {
   const destPubkey = decodeAddress(toAddress)

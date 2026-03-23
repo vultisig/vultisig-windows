@@ -25,10 +25,11 @@ export const broadcastBittensorTx: BroadcastTxResolver<
   })
 
   if (response.error) {
+    const message = response.error.message ?? ''
     // "Already Imported" means another device already broadcast this tx — not an error
-    if (response.error.message.includes('Already Imported')) {
+    if (message.includes('Already Imported')) {
       return
     }
-    throw new Error(`Bittensor broadcast failed: ${response.error.message}`)
+    throw new Error(`Bittensor broadcast failed: ${message || `code ${response.error.code}`}`)
   }
 }
