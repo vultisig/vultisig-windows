@@ -33,13 +33,8 @@ export class Bittensor extends EventEmitter {
   async request(data: RequestInput) {
     const handlers = getSharedHandlers(OtherChain.Bittensor)
 
-    const method = data.method
-    const isHandlerMethod = (key: string): key is keyof typeof handlers =>
-      key in handlers
-    if (isHandlerMethod(method)) {
-      return handlers[method](
-        data.params as Parameters<(typeof handlers)[typeof method]>[0]
-      )
+    if (data.method in handlers) {
+      return handlers[data.method as keyof typeof handlers](data.params as any)
     }
 
     throw new NotImplementedError(`Bittensor method ${data.method}`)
@@ -89,6 +84,7 @@ export class Bittensor extends EventEmitter {
           serialized: {
             data: [JSON.stringify(payload)],
             chain: OtherChain.Bittensor,
+            skipBroadcast: true,
           },
         },
       },

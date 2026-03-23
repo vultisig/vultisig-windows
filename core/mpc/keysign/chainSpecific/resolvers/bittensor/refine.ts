@@ -47,8 +47,9 @@ export const refineBittensorChainSpecific = async ({
     Buffer.from(dummyExtrinsic).toString('hex')
   )
 
-  const { result } = await queryUrl<{
-    result: { partialFee: string }
+  const response = await queryUrl<{
+    result?: { partialFee: string }
+    error?: { code: number; message: string }
   }>(bittensorRpcUrl, {
     body: {
       jsonrpc: '2.0',
@@ -58,8 +59,14 @@ export const refineBittensorChainSpecific = async ({
     },
   })
 
+  if (!response.result?.partialFee) {
+    throw new Error(
+      `payment_queryInfo failed: ${response.error?.message ?? 'missing partialFee in response'}`
+    )
+  }
+
   return {
     ...chainSpecific,
-    gas: BigInt(result.partialFee),
+    gas: BigInt(response.result.partialFee),
   }
 }

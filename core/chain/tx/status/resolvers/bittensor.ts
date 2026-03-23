@@ -27,7 +27,7 @@ export const getBittensorTxStatus: TxStatusResolver<
 
   const { data: response, error } = await attempt(
     queryUrl<TaostatsExtrinsicResponse>(
-      `${taostatsExtrinsicUrl}?hash=${txHash}`
+      `${taostatsExtrinsicUrl}?${new URLSearchParams({ hash: txHash })}`
     )
   )
 

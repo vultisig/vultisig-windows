@@ -26,6 +26,14 @@ import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
+const safeBigInt = (value: string): bigint => {
+  try {
+    return BigInt(value)
+  } catch {
+    return BigInt(0)
+  }
+}
+
 const statusLabelKey = {
   broadcasted: 'broadcasted',
   pending: 'pending',
@@ -90,7 +98,7 @@ const SendAmountDisplay = ({ record }: { record: SendTransactionRecord }) => {
       )}
       <VStack gap={2}>
         <Text size={20} weight={600}>
-          {fromChainAmount(BigInt(data.amount), data.decimals)} {data.token}
+          {fromChainAmount(safeBigInt(data.amount), data.decimals)} {data.token}
         </Text>
         {record.fiatValue && (
           <Text size={14} color="shy">
@@ -147,7 +155,7 @@ const SwapAmountDisplay = ({ record }: { record: SwapTransactionRecord }) => {
           />
         )}
         <Text size={20} weight={600}>
-          {fromChainAmount(BigInt(data.fromAmount), data.fromDecimals)}{' '}
+          {fromChainAmount(safeBigInt(data.fromAmount), data.fromDecimals)}{' '}
           {data.fromToken}
         </Text>
       </HStack>
@@ -166,7 +174,7 @@ const SwapAmountDisplay = ({ record }: { record: SwapTransactionRecord }) => {
           />
         )}
         <Text size={20} weight={600}>
-          {fromChainAmount(BigInt(data.toAmount), data.toDecimals)}{' '}
+          {fromChainAmount(safeBigInt(data.toAmount), data.toDecimals)}{' '}
           {data.toToken}
         </Text>
       </HStack>
