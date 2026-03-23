@@ -1,3 +1,4 @@
+import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
@@ -24,6 +25,14 @@ import { MiddleTruncate } from '@lib/ui/truncate'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+
+const safeBigInt = (value: string): bigint => {
+  try {
+    return BigInt(value)
+  } catch {
+    return BigInt(0)
+  }
+}
 
 const statusLabelKey = {
   broadcasted: 'broadcasted',
@@ -89,7 +98,7 @@ const SendAmountDisplay = ({ record }: { record: SendTransactionRecord }) => {
       )}
       <VStack gap={2}>
         <Text size={20} weight={600}>
-          {data.amount} {data.token}
+          {fromChainAmount(safeBigInt(data.amount), data.decimals)} {data.token}
         </Text>
         {record.fiatValue && (
           <Text size={14} color="shy">
@@ -146,7 +155,8 @@ const SwapAmountDisplay = ({ record }: { record: SwapTransactionRecord }) => {
           />
         )}
         <Text size={20} weight={600}>
-          {data.fromAmount} {data.fromToken}
+          {fromChainAmount(safeBigInt(data.fromAmount), data.fromDecimals)}{' '}
+          {data.fromToken}
         </Text>
       </HStack>
       <Text size={14} color="shy">
@@ -164,7 +174,8 @@ const SwapAmountDisplay = ({ record }: { record: SwapTransactionRecord }) => {
           />
         )}
         <Text size={20} weight={600}>
-          {data.toAmount} {data.toToken}
+          {fromChainAmount(safeBigInt(data.toAmount), data.toDecimals)}{' '}
+          {data.toToken}
         </Text>
       </HStack>
     </VStack>
