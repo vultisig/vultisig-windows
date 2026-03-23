@@ -37,7 +37,9 @@ export const getBittensorTxStatus: TxStatusResolver<
 
   const extrinsic = response.data[0]
   const feeCoin = chainFeeCoin[Chain.Bittensor]
-  let receipt: { feeAmount: bigint; feeDecimals: number; feeTicker: string } | undefined
+  let receipt:
+    | { feeAmount: bigint; feeDecimals: number; feeTicker: string }
+    | undefined
   if (extrinsic.fee) {
     try {
       receipt = {

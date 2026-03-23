@@ -34,11 +34,12 @@ export class Bittensor extends EventEmitter {
     const handlers = getSharedHandlers(OtherChain.Bittensor)
 
     const method = data.method
-    const isHandlerMethod = (
-      key: string
-    ): key is keyof typeof handlers => key in handlers
+    const isHandlerMethod = (key: string): key is keyof typeof handlers =>
+      key in handlers
     if (isHandlerMethod(method)) {
-      return handlers[method](data.params as Parameters<(typeof handlers)[typeof method]>[0])
+      return handlers[method](
+        data.params as Parameters<(typeof handlers)[typeof method]>[0]
+      )
     }
 
     throw new NotImplementedError(`Bittensor method ${data.method}`)

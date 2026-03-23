@@ -24,17 +24,14 @@ export const getBittensorCoinBalance: CoinBalanceResolver = async input => {
   const accountId = Buffer.from(pubkey).toString('hex')
   const storageKey = systemAccountPrefix + hash + accountId
 
-  const response = await queryUrl<RpcResponse<string | null>>(
-    bittensorRpcUrl,
-    {
-      body: {
-        jsonrpc: '2.0',
-        method: 'state_getStorage',
-        params: [storageKey],
-        id: 1,
-      },
-    }
-  )
+  const response = await queryUrl<RpcResponse<string | null>>(bittensorRpcUrl, {
+    body: {
+      jsonrpc: '2.0',
+      method: 'state_getStorage',
+      params: [storageKey],
+      id: 1,
+    },
+  })
 
   if (response.error) {
     throw new Error(

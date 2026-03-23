@@ -7,7 +7,9 @@
 export const compactEncode = (value: bigint | number): Uint8Array => {
   const n = BigInt(value)
   if (n < 0n) {
-    throw new Error(`SCALE compact encoding does not support negative values: ${n}`)
+    throw new Error(
+      `SCALE compact encoding does not support negative values: ${n}`
+    )
   }
   if (n < 64n) {
     return new Uint8Array([Number(n) << 2])
