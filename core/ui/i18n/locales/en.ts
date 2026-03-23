@@ -82,8 +82,7 @@ export const en = {
   backupShareWarning: 'This is only 1 share of your vault',
   backupShareWarningRest: ', repeat this process for the other devices.',
   backup_description: 'Back up your Vault Share to a preferred location',
-  backup_email_description:
-    'This email is used for cloud backup and shared with no third party',
+  backup_email_description: 'Enter the email to receive the vault share.',
   backup_now: 'Get started',
   backup_password: 'Backup Password',
   backup_password_description:
