@@ -1118,7 +1118,7 @@ export const zh = {
   backup_password_description: '请输入您创建此保险库时设置的密码。',
   choose_a_password: '选择密码',
   choose_a_password_description:
-    '如果您想增加一层安全保障，请选择密码。<b>密码无法找回。</b>',
+    '如果您想增加一层安全保障，请选择密码。<b>密码无法找回。</b> <info />',
   create_vault: '创建保险库',
   create_referral_desc:
     '创建你自己的代码并赚取收益<c>20%</c>关于所提及的互换交易',

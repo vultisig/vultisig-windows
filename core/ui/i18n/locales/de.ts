@@ -1217,7 +1217,7 @@ export const de = {
     'Geben Sie das Passwort ein, das Sie beim Erstellen dieses Tresors festgelegt haben.',
   choose_a_password: 'Wählen Sie ein Passwort',
   choose_a_password_description:
-    'Für zusätzliche Sicherheit wählen Sie ein Passwort. <b>Das Passwort kann nicht wiederhergestellt werden.</b>',
+    'Für zusätzliche Sicherheit wählen Sie ein Passwort. <b>Das Passwort kann nicht wiederhergestellt werden.</b> <info />',
   create_vault: 'Tresor erstellen',
   create_referral_desc:
     'Erstelle deinen eigenen Code und verdiene!<c> 20%</c> bei vermittelten Swaps',

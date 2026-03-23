@@ -1208,7 +1208,7 @@ export const it = {
     'Inserisci la password che hai impostato durante la creazione di questo Vault.',
   choose_a_password: 'Scegli una password',
   choose_a_password_description:
-    'Se desideri un ulteriore livello di sicurezza, scegli una password. <b>La password non può essere recuperata.</b>',
+    'Se desideri un ulteriore livello di sicurezza, scegli una password. <b>La password non può essere recuperata.</b> <info />',
   create_vault: 'Crea un caveau',
   create_referral_desc:
     'Crea il tuo codice e guadagna<c> 20%</c> sugli swap segnalati',
