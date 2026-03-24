@@ -31,6 +31,10 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
 
   const keysignAction: KeysignAction = useCallback(
     async ({ msgs, signatureAlgorithm, coinType, chain }) => {
+      if (signatureAlgorithm === 'mldsa') {
+        throw new Error('MLDSA keysign is not yet implemented')
+      }
+
       const keyShare = shouldBePresent(
         isKeyImportVault(vault)
           ? vault.chainKeyShares?.[chain]
