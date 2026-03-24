@@ -1,4 +1,4 @@
-import { getVaultId } from '@core/mpc/vault/Vault'
+import { getPushNotificationVaultId } from '@core/ui/notifications/computeNotificationVaultId'
 import { useVaults } from '@core/ui/storage/vaults'
 import { useEffect } from 'react'
 
@@ -13,22 +13,34 @@ export const AutoRegisterPushNotifications = () => {
   useEffect(() => {
     if (vaults.length === 0) return
 
-    const message: PushRegisterVaultsMessage = {
-      type: pushRegisterVaultsType,
-      vaults: vaults.map(vault => ({
-        vaultId: getVaultId(vault),
-        localPartyId: vault.localPartyId,
-      })),
-    }
+    let cancelled = false
 
-    chrome.runtime
-      .sendMessage(message)
-      .catch(error =>
-        console.error(
-          '[Vultisig] Failed to send push registration message:',
-          error
+    ;(async () => {
+      const message: PushRegisterVaultsMessage = {
+        type: pushRegisterVaultsType,
+        vaults: await Promise.all(
+          vaults.map(async vault => ({
+            vaultId: await getPushNotificationVaultId(vault),
+            localPartyId: vault.localPartyId,
+          }))
+        ),
+      }
+
+      if (cancelled) return
+
+      chrome.runtime
+        .sendMessage(message)
+        .catch(error =>
+          console.error(
+            '[Vultisig] Failed to send push registration message:',
+            error
+          )
         )
-      )
+    })()
+
+    return () => {
+      cancelled = true
+    }
   }, [vaults])
 
   return null
