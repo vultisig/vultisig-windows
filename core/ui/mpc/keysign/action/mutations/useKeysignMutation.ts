@@ -1,7 +1,10 @@
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
-import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
+import {
+  getSignatureAlgorithm,
+  signatureAlgorithms,
+} from '@core/chain/signing/SignatureAlgorithm'
 import { signatureFormats } from '@core/chain/signing/SignatureFormat'
 import { decodeSigningOutput } from '@core/chain/tw/signingOutput'
 import { Tx } from '@core/chain/tx'
@@ -52,7 +55,6 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
               chainPublicKeys: vault.chainPublicKeys,
             })
 
-            const chainKind = getChainKind(chain)
             const inputs = getEncodedSigningInputs({
               keysignPayload: payload,
               walletCore,
@@ -69,7 +71,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
 
             const msgs = groupedMsgs.flat().sort()
 
-            const signatureAlgorithm = signatureAlgorithms[chainKind]
+            const signatureAlgorithm = getSignatureAlgorithm(chain)
 
             const coinType = getCoinType({ walletCore, chain })
             const signatures = await keysignAction({
