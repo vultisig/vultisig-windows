@@ -3,6 +3,7 @@ import { ChainKind, getChainKind } from '@core/chain/ChainKind'
 
 import { SigningOutput } from '../../tw/signingOutput'
 import { TxHashResolver } from './resolver'
+import { getBittensorTxHash } from './resolvers/bittensor'
 import { getCardanoTxHash } from './resolvers/cardano'
 import { getCosmosTxHash } from './resolvers/cosmos'
 import { getEvmTxHash } from './resolvers/evm'
@@ -15,6 +16,7 @@ import { getTronTxHash } from './resolvers/tron'
 import { getUtxoTxHash } from './resolvers/utxo'
 
 const hashHandlers: Record<ChainKind, TxHashResolver<any>> = {
+  bittensor: getBittensorTxHash,
   cardano: getCardanoTxHash,
   cosmos: getCosmosTxHash,
   evm: getEvmTxHash,
