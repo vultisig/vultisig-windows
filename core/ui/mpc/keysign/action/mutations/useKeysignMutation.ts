@@ -11,7 +11,10 @@ import {
   signatureAlgorithms,
 } from '@core/chain/signing/SignatureAlgorithm'
 import { signatureFormats } from '@core/chain/signing/SignatureFormat'
-import { decodeSigningOutput } from '@core/chain/tw/signingOutput'
+import {
+  decodeSigningOutput,
+  deserializeSigningOutput,
+} from '@core/chain/tw/signingOutput'
 import { Tx } from '@core/chain/tx'
 import { broadcastTx } from '@core/chain/tx/broadcast'
 import { compileTx } from '@core/chain/tx/compile/compileTx'
@@ -26,7 +29,6 @@ import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignM
 import { KeysignResult } from '@core/mpc/keysign/KeysignResult'
 import { getEncodedSigningInputs } from '@core/mpc/keysign/signingInputs'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
-import { CosmosSpecific } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useKeysignAction } from '@core/ui/mpc/keysign/action/state/keysignAction'
 import { useKeysignMutationListener } from '@core/ui/mpc/keysign/action/state/keysignMutationListener'
@@ -63,7 +65,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
               const cosmosSpecific = getBlockchainSpecificValue(
                 payload.blockchainSpecific,
                 chainSpecificRecord[Chain.QBTC]
-              ) as CosmosSpecific
+              )
 
               const msgs = getQBTCPreSignedImageHash({
                 keysignPayload: payload,
@@ -90,7 +92,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
 
               const tx: Tx = {
                 hash: transactionHash,
-                data: { serialized } as unknown as Tx['data'],
+                data: deserializeSigningOutput(chain, { serialized }),
               }
 
               if (!payload.skipBroadcast) {
