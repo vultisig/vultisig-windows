@@ -1,4 +1,9 @@
+import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
+import {
+  getQBTCPreSignedImageHash,
+  getQBTCSignedTransaction,
+} from '@core/chain/chains/cosmos/qbtc/QBTCHelper'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import {
@@ -13,10 +18,15 @@ import { compileTx } from '@core/chain/tx/compile/compileTx'
 import { getTxHash } from '@core/chain/tx/hash'
 import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { generateSignature } from '@core/chain/tx/signature/generateSignature'
+import {
+  chainSpecificRecord,
+  getBlockchainSpecificValue,
+} from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { KeysignResult } from '@core/mpc/keysign/KeysignResult'
 import { getEncodedSigningInputs } from '@core/mpc/keysign/signingInputs'
 import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
+import { CosmosSpecific } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useKeysignAction } from '@core/ui/mpc/keysign/action/state/keysignAction'
 import { useKeysignMutationListener } from '@core/ui/mpc/keysign/action/state/keysignMutationListener'
@@ -47,6 +57,49 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
         {
           keysign: async payload => {
             const chain = getKeysignChain(payload)
+
+            // QBTC uses MLDSA keys — bypass WalletCore entirely
+            if (chain === Chain.QBTC) {
+              const cosmosSpecific = getBlockchainSpecificValue(
+                payload.blockchainSpecific,
+                chainSpecificRecord[Chain.QBTC]
+              ) as CosmosSpecific
+
+              const msgs = getQBTCPreSignedImageHash({
+                keysignPayload: payload,
+                cosmosSpecific,
+              })
+
+              const signatureAlgorithm = getSignatureAlgorithm(chain)
+              const coinType = getCoinType({ walletCore, chain })
+              const signatures = await keysignAction({
+                msgs,
+                signatureAlgorithm,
+                coinType,
+                chain,
+              })
+              const signaturesRecord = recordFromItems(signatures, ({ msg }) =>
+                Buffer.from(msg, 'base64').toString('hex')
+              )
+
+              const { serialized, transactionHash } = getQBTCSignedTransaction({
+                keysignPayload: payload,
+                cosmosSpecific,
+                signatures: signaturesRecord,
+              })
+
+              const tx: Tx = {
+                hash: transactionHash,
+                data: { serialized } as unknown as Tx['data'],
+              }
+
+              if (!payload.skipBroadcast) {
+                await broadcastTx({ chain, tx: tx.data })
+              }
+
+              return { txs: [tx] }
+            }
+
             const publicKey = getPublicKey({
               chain,
               walletCore,
