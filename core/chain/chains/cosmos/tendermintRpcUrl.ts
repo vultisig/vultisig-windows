@@ -11,4 +11,5 @@ export const tendermintRpcUrl: Record<CosmosChain, string> = {
   THORChain: 'https://rpc.thorchain.network',
   MayaChain: 'https://tendermint.mayachain.info',
   Akash: 'https://akash-rpc.publicnode.com:443',
+  QBTC: 'https://api.vultisig.com/qbtc-node',
 }
