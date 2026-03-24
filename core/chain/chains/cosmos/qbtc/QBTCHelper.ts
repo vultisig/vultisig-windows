@@ -264,9 +264,7 @@ const voteOptionValues: Record<string, bigint> = {
 
 const buildMsgVote = (keysignPayload: KeysignPayload): Uint8Array => {
   const coin = shouldBePresent(keysignPayload.coin)
-  const voteStr = (keysignPayload.memo ?? '')
-    .replace('QBTC_VOTE:', '')
-    .replace('DYDX_VOTE:', '')
+  const voteStr = (keysignPayload.memo ?? '').replace('QBTC_VOTE:', '')
   const parts = voteStr.split(':')
   if (parts.length !== 2) {
     throw new Error(
