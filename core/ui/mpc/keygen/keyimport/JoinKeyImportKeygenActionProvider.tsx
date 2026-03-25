@@ -1,6 +1,5 @@
 import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
-import { groupChainsByDerivationPath } from '@core/chain/derivationPath'
 import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { hasServer } from '@core/mpc/devices/localPartyId'
 import { DKLS } from '@core/mpc/dkls/dkls'
@@ -93,14 +92,12 @@ export const JoinKeyImportKeygenActionProvider = ({
         new Uint8Array()
       )
 
-      const groups = groupChainsByDerivationPath(chains)
-
       const includeMldsa = featureFlags.mldsaKeygen && isMLDSAEnabled
 
       onStepComplete('prepareVault')
       onStepStart('ecdsa')
       onStepStart('eddsa')
-      if (groups.length > 0) {
+      if (chains.length > 0) {
         onStepStart('chainKeys')
       }
       if (includeMldsa) {
@@ -115,7 +112,7 @@ export const JoinKeyImportKeygenActionProvider = ({
             localPartyId,
             signers,
             encryptionKeyHex,
-            { messageId: 'p-mldsa' }
+            { messageId: 'p-mldsa', setupMessageId: 'p-mldsa-setup' }
           )
             .startKeygenWithRetry()
             .then(r => {
@@ -124,63 +121,60 @@ export const JoinKeyImportKeygenActionProvider = ({
             })
         : Promise.resolve(undefined)
 
-      const chainGroupPromises = groups.map(
-        async ({ groupId, chains: groupChains }) => {
-          const representativeChain = groupChains[0]
-          const chainKind = getChainKind(representativeChain)
-          const algorithm = signatureAlgorithms[chainKind]
+      const chainPromises = chains.map(async chain => {
+        const chainKind = getChainKind(chain)
+        const algorithm = signatureAlgorithms[chainKind]
 
-          let result
-          if (algorithm === 'ecdsa') {
-            const chainDkls = new DKLS(
-              { keyimport: true },
-              sharedDklsParams.isInitiateDevice,
-              sharedDklsParams.serverUrl,
-              sharedDklsParams.sessionId,
-              sharedDklsParams.localPartyId,
-              sharedDklsParams.signers,
-              sharedDklsParams.oldKeygenCommittee,
-              sharedDklsParams.hexEncryptionKey
-            )
-            result = await chainDkls.startKeyImportWithRetry(
-              '',
-              hexChainCode,
-              groupId,
-              `p-${groupId}`
-            )
-          } else {
-            const chainSchnorr = new Schnorr(
-              { keyimport: true },
-              sharedDklsParams.isInitiateDevice,
-              sharedDklsParams.serverUrl,
-              sharedDklsParams.sessionId,
-              sharedDklsParams.localPartyId,
-              sharedDklsParams.signers,
-              sharedDklsParams.oldKeygenCommittee,
-              sharedDklsParams.hexEncryptionKey,
-              new Uint8Array()
-            )
-            result = await chainSchnorr.startKeyImportWithRetry(
-              '',
-              hexChainCode,
-              groupId,
-              `p-${groupId}`
-            )
-          }
-
-          return { groupChains, result }
+        let result
+        if (algorithm === 'ecdsa') {
+          const chainDkls = new DKLS(
+            { keyimport: true },
+            sharedDklsParams.isInitiateDevice,
+            sharedDklsParams.serverUrl,
+            sharedDklsParams.sessionId,
+            sharedDklsParams.localPartyId,
+            sharedDklsParams.signers,
+            sharedDklsParams.oldKeygenCommittee,
+            sharedDklsParams.hexEncryptionKey
+          )
+          result = await chainDkls.startKeyImportWithRetry(
+            '',
+            hexChainCode,
+            chain,
+            `p-${chain}`
+          )
+        } else {
+          const chainSchnorr = new Schnorr(
+            { keyimport: true },
+            sharedDklsParams.isInitiateDevice,
+            sharedDklsParams.serverUrl,
+            sharedDklsParams.sessionId,
+            sharedDklsParams.localPartyId,
+            sharedDklsParams.signers,
+            sharedDklsParams.oldKeygenCommittee,
+            sharedDklsParams.hexEncryptionKey,
+            new Uint8Array()
+          )
+          result = await chainSchnorr.startKeyImportWithRetry(
+            '',
+            hexChainCode,
+            chain,
+            `p-${chain}`
+          )
         }
-      )
+
+        return { chain, result }
+      })
 
       const chainKeysPromise =
-        chainGroupPromises.length > 0
-          ? Promise.all(chainGroupPromises).then(results => {
+        chainPromises.length > 0
+          ? Promise.all(chainPromises).then(results => {
               onStepComplete('chainKeys')
               return results
             })
           : Promise.resolve([])
 
-      const [rootEcdsaResult, rootEddsaResult, mldsaResult, chainGroupResults] =
+      const [rootEcdsaResult, rootEddsaResult, mldsaResult, chainResults] =
         await Promise.all([
           dklsKeygen
             .startKeyImportWithRetry('', hexChainCode, undefined, 'p-ecdsa')
@@ -210,11 +204,9 @@ export const JoinKeyImportKeygenActionProvider = ({
         eddsa: rootEddsaResult.keyshare,
       }
 
-      for (const { groupChains, result } of chainGroupResults) {
-        for (const chain of groupChains) {
-          chainPublicKeys[chain] = result.publicKey
-          chainKeyShares[chain] = result.keyshare
-        }
+      for (const { chain, result } of chainResults) {
+        chainPublicKeys[chain] = result.publicKey
+        chainKeyShares[chain] = result.keyshare
       }
 
       const vault: Vault = {

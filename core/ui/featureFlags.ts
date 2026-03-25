@@ -10,7 +10,7 @@ const featureFlagDefaults = {
   mayaChain: true,
   defiLpsTab: true,
   agent: false,
-  mldsaKeygen: false,
+  mldsaKeygen: true,
   transactionHistory: true,
 }
 

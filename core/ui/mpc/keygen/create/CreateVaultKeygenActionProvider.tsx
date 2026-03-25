@@ -14,6 +14,7 @@ import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useIsMLDSAEnabled } from '@core/ui/storage/mldsaEnabled'
+import { useIsTssBatchingEnabled } from '@core/ui/storage/tssBatchingEnabled'
 import { useVaultOrders } from '@core/ui/storage/vaults'
 import { ChildrenProp } from '@lib/ui/props'
 import { without } from '@lib/utils/array/without'
@@ -30,16 +31,16 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
   const localPartyId = useMpcLocalPartyId()
   const isInitiatingDevice = useIsInitiatingDevice()
   const isMLDSAEnabled = useIsMLDSAEnabled()
+  const isTssBatchingEnabled = useIsTssBatchingEnabled()
 
   const vaultOrders = useVaultOrders()
 
   const keygenAction: KeygenAction = async ({
+    onStepChange,
     onStepStart,
     onStepComplete,
     signers,
   }) => {
-    onStepStart('prepareVault')
-
     const sharedFinalVaultFields = {
       signers,
       localPartyId,
@@ -47,64 +48,130 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
       isBackedUp: false,
     }
 
-    const dklsKeygen = new DKLS(
-      { create: true },
-      isInitiatingDevice,
-      serverUrl,
-      sessionId,
-      localPartyId,
-      signers,
-      [],
-      encryptionKeyHex
-    )
-
-    await dklsKeygen.prepareKeygenSetup()
-
-    const schnorrKeygen = new Schnorr(
-      { create: true },
-      isInitiatingDevice,
-      serverUrl,
-      sessionId,
-      localPartyId,
-      signers,
-      [],
-      encryptionKeyHex,
-      dklsKeygen.getSetupMessage()
-    )
-
-    onStepComplete('prepareVault')
-    onStepStart('ecdsa')
-    onStepStart('eddsa')
-
-    const [dklsResult, schnorrResult] = await Promise.all([
-      dklsKeygen.startKeygenWithRetry('p-ecdsa').then(r => {
-        onStepComplete('ecdsa')
-        return r
-      }),
-      schnorrKeygen.startKeygenWithRetry('p-eddsa').then(r => {
-        onStepComplete('eddsa')
-        return r
-      }),
-    ])
-
+    let dklsResult: { publicKey: string; keyshare: string; chaincode: string }
+    let schnorrResult: {
+      publicKey: string
+      keyshare: string
+      chaincode: string
+    }
     let publicKeyMldsa: string | undefined
     let keyShareMldsa: string | undefined
 
-    if (featureFlags.mldsaKeygen && isMLDSAEnabled) {
-      onStepStart('mldsa')
+    if (isTssBatchingEnabled) {
+      onStepStart('prepareVault')
 
-      const mldsaKeygen = new MldsaKeygen(
+      const dklsKeygen = new DKLS(
+        { create: true },
         isInitiatingDevice,
         serverUrl,
         sessionId,
         localPartyId,
         signers,
+        [],
         encryptionKeyHex
       )
-      const mldsaResult = await mldsaKeygen.startKeygenWithRetry()
-      publicKeyMldsa = mldsaResult.publicKey
-      keyShareMldsa = mldsaResult.keyshare
-      onStepComplete('mldsa')
+
+      await dklsKeygen.prepareKeygenSetup()
+
+      const schnorrKeygen = new Schnorr(
+        { create: true },
+        isInitiatingDevice,
+        serverUrl,
+        sessionId,
+        localPartyId,
+        signers,
+        [],
+        encryptionKeyHex,
+        dklsKeygen.getSetupMessage()
+      )
+
+      const includeMldsa = featureFlags.mldsaKeygen && isMLDSAEnabled
+
+      onStepComplete('prepareVault')
+      onStepStart('ecdsa')
+      onStepStart('eddsa')
+      if (includeMldsa) {
+        onStepStart('mldsa')
+      }
+
+      const mldsaPromise = includeMldsa
+        ? new MldsaKeygen(
+            isInitiatingDevice,
+            serverUrl,
+            sessionId,
+            localPartyId,
+            signers,
+            encryptionKeyHex,
+            { messageId: 'p-mldsa', setupMessageId: 'p-mldsa-setup' }
+          )
+            .startKeygenWithRetry()
+            .then(r => {
+              onStepComplete('mldsa')
+              return r
+            })
+        : Promise.resolve(undefined)
+
+      const [ecdsaResult, eddsaResult, mldsaResult] = await Promise.all([
+        dklsKeygen.startKeygenWithRetry('p-ecdsa').then(r => {
+          onStepComplete('ecdsa')
+          return r
+        }),
+        schnorrKeygen.startKeygenWithRetry('p-eddsa').then(r => {
+          onStepComplete('eddsa')
+          return r
+        }),
+        mldsaPromise,
+      ])
+
+      dklsResult = ecdsaResult
+      schnorrResult = eddsaResult
+      publicKeyMldsa = mldsaResult?.publicKey
+      keyShareMldsa = mldsaResult?.keyshare
+    } else {
+      onStepChange('ecdsa')
+
+      const dklsKeygen = new DKLS(
+        { create: true },
+        isInitiatingDevice,
+        serverUrl,
+        sessionId,
+        localPartyId,
+        signers,
+        [],
+        encryptionKeyHex
+      )
+      dklsResult = await dklsKeygen.startKeygenWithRetry()
+
+      onStepChange('eddsa')
+
+      const schnorrKeygen = new Schnorr(
+        { create: true },
+        isInitiatingDevice,
+        serverUrl,
+        sessionId,
+        localPartyId,
+        signers,
+        [],
+        encryptionKeyHex,
+        dklsKeygen.getSetupMessage()
+      )
+      schnorrResult = await schnorrKeygen.startKeygenWithRetry()
+
+      if (featureFlags.mldsaKeygen && isMLDSAEnabled) {
+        onStepChange('mldsa')
+
+        const mldsaKeygen = new MldsaKeygen(
+          isInitiatingDevice,
+          serverUrl,
+          sessionId,
+          localPartyId,
+          signers,
+          encryptionKeyHex
+        )
+        const mldsaResult = await mldsaKeygen.startKeygenWithRetry()
+        publicKeyMldsa = mldsaResult.publicKey
+        keyShareMldsa = mldsaResult.keyshare
+      }
     }
 
     const publicKeys = {

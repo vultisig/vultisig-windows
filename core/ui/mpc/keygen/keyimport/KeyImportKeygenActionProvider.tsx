@@ -1,7 +1,6 @@
 import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import { getCoinType } from '@core/chain/coin/coinType'
-import { groupChainsByDerivationPath } from '@core/chain/derivationPath'
 import { phantomSolanaPath } from '@core/chain/publicKey/address/deriveSolanaAddressFromMnemonic'
 import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { hasServer } from '@core/mpc/devices/localPartyId'
@@ -116,31 +115,23 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
           new Uint8Array()
         )
 
-        const groups = groupChainsByDerivationPath(chains)
-
-        type PreparedGroup = {
-          groupId: string
-          groupChains: Chain[]
+        type PreparedChain = {
+          chain: Chain
           algorithm: 'ecdsa' | 'eddsa'
           chainPrivateKeyHex: string
           instance: DKLS | Schnorr
         }
-        const preparedGroups: PreparedGroup[] = []
+        const preparedChains: PreparedChain[] = []
 
-        for (const { groupId, chains: groupChains } of groups) {
-          const representativeChain = groupChains[0]
-          const chainKind = getChainKind(representativeChain)
+        for (const chain of chains) {
+          const chainKind = getChainKind(chain)
           const algorithm = signatureAlgorithms[chainKind]
-          const coinType = getCoinType({
-            chain: representativeChain,
-            walletCore,
-          })
+          const coinType = getCoinType({ chain, walletCore })
 
           let chainPrivateKeyHex = ''
           if (isInitiatingDevice && hdWallet) {
             const chainKey =
-              representativeChain === Chain.Solana &&
-              keyImportInput.usePhantomSolanaPath
+              chain === Chain.Solana && keyImportInput.usePhantomSolanaPath
                 ? hdWallet.getKey(coinType, phantomSolanaPath)
                 : hdWallet.getKeyForCoin(coinType)
 
@@ -168,11 +159,10 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
             await instance.prepareKeyImportSetup(
               chainPrivateKeyHex,
               hexChainCode,
-              groupId
+              chain
             )
-            preparedGroups.push({
-              groupId,
-              groupChains,
+            preparedChains.push({
+              chain,
               algorithm,
               chainPrivateKeyHex,
               instance,
@@ -192,11 +182,10 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
             await instance.prepareKeyImportSetup(
               chainPrivateKeyHex,
               hexChainCode,
-              groupId
+              chain
             )
-            preparedGroups.push({
-              groupId,
-              groupChains,
+            preparedChains.push({
+              chain,
               algorithm,
               chainPrivateKeyHex,
               instance,
@@ -204,42 +193,41 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
           }
         }
 
-        const includeMldsa =
-          featureFlags.mldsaKeygen && isMLDSAEnabled && !hasServer(signers)
+        const includeMldsa = featureFlags.mldsaKeygen && isMLDSAEnabled
 
         onStepComplete('prepareVault')
         onStepStart('ecdsa')
         onStepStart('eddsa')
-        if (preparedGroups.length > 0) {
+        if (preparedChains.length > 0) {
           onStepStart('chainKeys')
         }
         if (includeMldsa) {
           onStepStart('mldsa')
         }
 
-        const chainGroupPromises = preparedGroups.map(
-          async ({ groupId, algorithm, chainPrivateKeyHex, instance }) => {
+        const chainPromises = preparedChains.map(
+          async ({ chain, algorithm, chainPrivateKeyHex, instance }) => {
             const result =
               algorithm === 'ecdsa'
                 ? await (instance as DKLS).startKeyImportWithRetry(
                     chainPrivateKeyHex,
                     hexChainCode,
-                    groupId,
-                    `p-${groupId}`
+                    chain,
+                    `p-${chain}`
                   )
                 : await (instance as Schnorr).startKeyImportWithRetry(
                     chainPrivateKeyHex,
                     hexChainCode,
-                    groupId,
-                    `p-${groupId}`
+                    chain,
+                    `p-${chain}`
                   )
-            return result
+            return { chain, result }
           }
         )
 
         const chainKeysPromise =
-          chainGroupPromises.length > 0
-            ? Promise.all(chainGroupPromises).then(results => {
+          chainPromises.length > 0
+            ? Promise.all(chainPromises).then(results => {
                 onStepComplete('chainKeys')
                 return results
               })
@@ -253,7 +241,7 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
               localPartyId,
               signers,
               encryptionKeyHex,
-              { messageId: 'p-mldsa' }
+              { messageId: 'p-mldsa', setupMessageId: 'p-mldsa-setup' }
             )
               .startKeygenWithRetry()
               .then(r => {
@@ -297,17 +285,9 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
           eddsa: rootEddsaResult.keyshare,
         }
 
-        for (let i = 0; i < preparedGroups.length; i++) {
-          const { groupChains } = preparedGroups[i]
-          const chainResult = chainResults[i] as {
-            keyshare: string
-            publicKey: string
-            chaincode: string
-          }
-          for (const chain of groupChains) {
-            chainPublicKeys[chain] = chainResult.publicKey
-            chainKeyShares[chain] = chainResult.keyshare
-          }
+        for (const { chain, result } of chainResults) {
+          chainPublicKeys[chain] = result.publicKey
+          chainKeyShares[chain] = result.keyshare
         }
 
         const vault: Vault = {
