@@ -28,6 +28,7 @@
     "@tanstack/react-query": "^5.90.21",
     "@tanstack/react-query-persist-client": "^5.90.24",
     "@trustwallet/wallet-core": "^4.6.0",
+    "@vultisig/sdk": "0.7.0",
     "cosmjs-types": "^0.11.0",
     "ethers": "^6.16.0",
     "framer-motion": "^12.37.0",

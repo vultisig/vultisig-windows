@@ -1,3 +1,4 @@
+import { computeNotificationVaultId } from '@core/ui/notifications/computeNotificationVaultId'
 import { NotificationData } from '@core/ui/notifications/NotificationChannel'
 import {
   fetchVapidPublicKey,
@@ -6,6 +7,7 @@ import {
 } from '@core/ui/notifications/pushNotificationApi'
 import { pushNotificationServerUrl } from '@core/ui/notifications/pushNotificationServerUrl'
 import { urlBase64ToUint8Array } from '@core/ui/notifications/urlBase64ToUint8Array'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 
 import { setInitialView } from '../storage/initialView'
 import {
@@ -21,8 +23,10 @@ import {
   clearAllPushNotificationRegistrations,
   getPushNotificationRegistrations,
   getPushServerUrl,
+  getPushVaultIdMigrationCompleted,
   removePushNotificationRegistration,
   setPushNotificationRegistration,
+  setPushVaultIdMigrationCompleted,
 } from './pushNotificationStorage'
 
 declare const self: {
@@ -165,7 +169,87 @@ const registerVaults = async (
 
 type StoredVault = {
   publicKeys: { ecdsa: string }
+  hexChainCode?: string
   localPartyId: string
+}
+
+const mapStoredVaultsToRegistrationInfos = async (
+  vaults: StoredVault[]
+): Promise<VaultRegistrationInfo[]> => {
+  const eligible = vaults.filter(v => {
+    if (!v.hexChainCode) {
+      console.warn(
+        '[Vultisig Push] Vault missing hexChainCode; skipping push registration for party',
+        v.localPartyId
+      )
+      return false
+    }
+    return true
+  })
+
+  return Promise.all(
+    eligible.map(async v => ({
+      vaultId: await computeNotificationVaultId({
+        ecdsaPubKey: v.publicKeys.ecdsa,
+        hexChainCode: shouldBePresent(v.hexChainCode),
+      }),
+      localPartyId: v.localPartyId,
+    }))
+  )
+}
+
+const runPushVaultIdMigrationIfNeeded = async (): Promise<void> => {
+  if (await getPushVaultIdMigrationCompleted()) return
+
+  console.log(
+    '[Vultisig Push] One-time migration: re-registering push with SHA256(ecdsa+chainCode) vault IDs'
+  )
+
+  const serverUrl = await getServerUrl()
+  const subscription = await self.registration.pushManager.getSubscription()
+  const token = subscription ? JSON.stringify(subscription.toJSON()) : undefined
+
+  const result = await chrome.storage.local.get('vaults')
+  const vaults = (result.vaults ?? []) as StoredVault[]
+
+  for (const v of vaults) {
+    if (!v.publicKeys?.ecdsa) continue
+    try {
+      await unregisterDeviceForPushNotifications({
+        serverUrl,
+        vaultId: v.publicKeys.ecdsa,
+        partyName: v.localPartyId,
+        token,
+      })
+    } catch (error) {
+      console.warn(
+        '[Vultisig Push] Unregister pre-migration (legacy vault_id) failed, continuing:',
+        error
+      )
+    }
+  }
+
+  await clearAllPushNotificationRegistrations()
+
+  if (vaults.length > 0) {
+    const vaultInfos = await mapStoredVaultsToRegistrationInfos(vaults)
+    await registerVaults(vaultInfos)
+
+    if (vaultInfos.length > 0) {
+      const registrations = await getPushNotificationRegistrations()
+      const missing = vaultInfos.filter(v => !(v.vaultId in registrations))
+      if (missing.length > 0) {
+        console.error(
+          '[Vultisig Push] Migration incomplete: push registration failed for',
+          missing.length,
+          'vault(s); will retry on next startup'
+        )
+        return
+      }
+    }
+  }
+
+  await setPushVaultIdMigrationCompleted()
 }
 
 const registerVaultsFromStorage = async (): Promise<void> => {
@@ -180,17 +264,17 @@ const registerVaultsFromStorage = async (): Promise<void> => {
     `[Vultisig Push] Found ${vaults.length} vault(s) in storage, checking registration`
   )
 
-  const vaultInfos: VaultRegistrationInfo[] = vaults.map(v => ({
-    vaultId: v.publicKeys.ecdsa,
-    localPartyId: v.localPartyId,
-  }))
-
+  const vaultInfos = await mapStoredVaultsToRegistrationInfos(vaults)
   await registerVaults(vaultInfos)
 }
 
 export const handlePushEvents = () => {
-  // Auto-register all vaults on service worker startup
-  registerVaultsFromStorage().catch(error =>
+  // Run migration (if needed) before normal registration so local registration
+  // keys match the new vault_id scheme before any concurrent UI-driven register.
+  ;(async () => {
+    await runPushVaultIdMigrationIfNeeded()
+    await registerVaultsFromStorage()
+  })().catch(error =>
     console.error('[Vultisig Push] Auto-register on startup failed:', error)
   )
 

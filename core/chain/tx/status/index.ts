@@ -2,6 +2,7 @@ import { Chain } from '@core/chain/Chain'
 import { ChainKind, getChainKind } from '@core/chain/ChainKind'
 
 import { TxReceiptInfo, TxStatusResolver } from './resolver'
+import { getBittensorTxStatus } from './resolvers/bittensor'
 import { getCardanoTxStatus } from './resolvers/cardano'
 import { getCosmosTxStatus } from './resolvers/cosmos'
 import { getEvmTxStatus } from './resolvers/evm'
@@ -14,6 +15,7 @@ import { getTronTxStatus } from './resolvers/tron'
 import { getUtxoTxStatus } from './resolvers/utxo'
 
 const statusHandlers: Record<ChainKind, TxStatusResolver<any>> = {
+  bittensor: getBittensorTxStatus,
   cardano: getCardanoTxStatus,
   cosmos: getCosmosTxStatus,
   evm: getEvmTxStatus,

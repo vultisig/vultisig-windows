@@ -1,6 +1,7 @@
 import { ChainKind, getChainKind } from '@core/chain/ChainKind'
 
 import { CoinBalanceResolver } from './resolver'
+import { getBittensorCoinBalance } from './resolvers/bittensor'
 import { getCardanoCoinBalance } from './resolvers/cardano'
 import { getCosmosCoinBalance } from './resolvers/cosmos'
 import { getEvmCoinBalance } from './resolvers/evm'
@@ -20,6 +21,7 @@ const resolvers: Record<ChainKind, CoinBalanceResolver<any>> = {
   ton: getTonCoinBalance,
   ripple: getRippleCoinBalance,
   polkadot: getPolkadotCoinBalance,
+  bittensor: getBittensorCoinBalance,
   solana: getSolanaCoinBalance,
   tron: getTronCoinBalance,
   cardano: getCardanoCoinBalance,
