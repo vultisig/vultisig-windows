@@ -396,7 +396,7 @@ export class Schnorr {
     console.log('startKeyImport schnorr, attempt:', attempt)
     this.isKeygenComplete = false
     const effectiveSetupId = setupMessageId ?? 'eddsa_key_import'
-    const exchangeMessageId = protocolMessageId ?? setupMessageId
+    const exchangeMessageId = protocolMessageId
     try {
       let session: KeyImportSession | KeyImportInitiator | null = null
       if (this.isInitiateDevice) {

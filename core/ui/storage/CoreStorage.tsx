@@ -16,6 +16,7 @@ import { PasscodeAutoLockStorage } from './passcodeAutoLock'
 import { PasscodeEncryptionStorage } from './passcodeEncryption'
 import { ReferralsStorage } from './referrals'
 import { TransactionHistoryStorage } from './transactionHistory'
+import { TssBatchingEnabledStorage } from './tssBatchingEnabled'
 import { VaultFoldersStorage } from './vaultFolders'
 import { VaultsStorage } from './vaults'
 
@@ -38,4 +39,5 @@ export type CoreStorage = CoinFinderIgnoreStorage &
   PasscodeAutoLockStorage &
   DismissedBannersStorage &
   MLDSAEnabledStorage &
+  TssBatchingEnabledStorage &
   TransactionHistoryStorage

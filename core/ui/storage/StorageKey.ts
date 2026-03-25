@@ -22,5 +22,6 @@ export enum StorageKey {
   dismissedBanners = 'dismissedBanners',
   isCircleVisible = 'isCircleVisible',
   isMLDSAEnabled = 'isMLDSAEnabled',
+  isTssBatchingEnabled = 'isTssBatchingEnabled',
   transactionHistory = 'transactionHistory',
 }

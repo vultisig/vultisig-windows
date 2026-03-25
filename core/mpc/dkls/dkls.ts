@@ -463,7 +463,7 @@ export class DKLS {
   ) {
     console.log('startKeyImport attempt:', attempt)
     this.isKeygenComplete = false
-    const exchangeMessageId = protocolMessageId ?? setupMessageId
+    const exchangeMessageId = protocolMessageId
     try {
       let session: KeyImportInitiator | KeyImportSession | null = null
       if (this.isInitiateDevice) {

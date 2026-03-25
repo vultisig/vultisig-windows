@@ -286,6 +286,7 @@ export const en = {
   evm_chains: 'EVM Chains',
   enable_dkls: 'Enable DKLS',
   enable_mldsa: 'Enable MLDSA',
+  enable_tss_batching: 'Enable TSS Batching',
   post_quantum_keygen: 'Post-Quantum Key Generation',
   post_quantum_keygen_description:
     'Generate a post-quantum (MLDSA) key for this vault',

@@ -11,6 +11,7 @@ import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useCore } from '@core/ui/state/core'
+import { useIsTssBatchingEnabled } from '@core/ui/storage/tssBatchingEnabled'
 import { useVaultOrders } from '@core/ui/storage/vaults'
 import { ChildrenProp } from '@lib/ui/props'
 import { without } from '@lib/utils/array/without'
@@ -38,10 +39,12 @@ export const ReshareVaultKeygenActionProvider = ({
   const operation = useKeygenOperation()
   const { getDeveloperOptions } = useCore()
   const [, setDklsInboundSequenceNo] = useDklsInboundSequenceNoState()
+  const isTssBatchingEnabled = useIsTssBatchingEnabled()
 
   const vaultOrders = useVaultOrders()
 
   const keygenAction: KeygenAction = async ({
+    onStepChange,
     onStepStart,
     onStepComplete,
     signers,
@@ -52,8 +55,6 @@ export const ReshareVaultKeygenActionProvider = ({
       timeoutMs = appInstallTimeout
     }
 
-    onStepStart('ecdsa')
-    onStepStart('eddsa')
     setDklsInboundSequenceNo(0)
 
     const sharedFinalVaultFields = {
@@ -101,18 +102,38 @@ export const ReshareVaultKeygenActionProvider = ({
         ? keygenVault.existingVault.keyShares.eddsa
         : undefined
 
-    const [dklsResult, schnorrResult] = await Promise.all([
-      dklsKeygen.startReshareWithRetry(oldEcdsaKeyshare, 'p-ecdsa').then(r => {
-        onStepComplete('ecdsa')
-        return r
-      }),
-      schnorrKeygen
-        .startReshareWithRetry(oldEddsaKeyshare, 'p-eddsa')
-        .then(r => {
-          onStepComplete('eddsa')
-          return r
-        }),
-    ])
+    let dklsResult: { publicKey: string; keyshare: string; chaincode: string }
+    let schnorrResult: {
+      publicKey: string
+      keyshare: string
+      chaincode: string
+    }
+
+    if (isTssBatchingEnabled) {
+      onStepStart('ecdsa')
+      onStepStart('eddsa')
+      ;[dklsResult, schnorrResult] = await Promise.all([
+        dklsKeygen
+          .startReshareWithRetry(oldEcdsaKeyshare, 'p-ecdsa')
+          .then(r => {
+            onStepComplete('ecdsa')
+            return r
+          }),
+        schnorrKeygen
+          .startReshareWithRetry(oldEddsaKeyshare, 'p-eddsa')
+          .then(r => {
+            onStepComplete('eddsa')
+            return r
+          }),
+      ])
+    } else {
+      onStepChange('ecdsa')
+      dklsResult = await dklsKeygen.startReshareWithRetry(oldEcdsaKeyshare)
+
+      onStepChange('eddsa')
+      schnorrResult =
+        await schnorrKeygen.startReshareWithRetry(oldEddsaKeyshare)
+    }
 
     const publicKeys = {
       ecdsa: dklsResult.publicKey,
