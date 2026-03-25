@@ -90,9 +90,6 @@ export const JoinKeyImportKeygenActionProvider = ({
     onStepComplete('prepareVault')
     onStepStart('ecdsa')
     onStepStart('eddsa')
-    if (groups.length > 0) {
-      onStepStart('chainKeys')
-    }
 
     const [rootEcdsaResult, rootEddsaResult] = await Promise.all([
       dklsKeygen
@@ -122,6 +119,7 @@ export const JoinKeyImportKeygenActionProvider = ({
     }
 
     if (groups.length > 0) {
+      onStepStart('chainKeys')
       const chainGroupResults = await Promise.all(
         groups.map(async ({ groupId, chains: groupChains }) => {
           const representativeChain = groupChains[0]

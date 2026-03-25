@@ -31,6 +31,7 @@ export const useKeygenMutation = () => {
   }
 
   const handleStepStart = (step: KeygenStep) => {
+    setStep(step)
     setProtocolStatuses(prev => ({
       ...prev,
       [step]: { status: 'in_progress' },

@@ -54,259 +54,264 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
     let hdWallet: ReturnType<
       typeof walletCore.HDWallet.createWithMnemonic
     > | null = null
-    if (isInitiatingDevice) {
-      hdWallet = walletCore.HDWallet.createWithMnemonic(mnemonic, '')
-    }
+    try {
+      if (isInitiatingDevice) {
+        hdWallet = walletCore.HDWallet.createWithMnemonic(mnemonic, '')
+      }
 
-    const sharedDklsParams = {
-      isInitiateDevice: isInitiatingDevice,
-      serverUrl,
-      sessionId,
-      localPartyId,
-      signers,
-      oldKeygenCommittee: [] as string[],
-      hexEncryptionKey: encryptionKeyHex,
-    }
+      const sharedDklsParams = {
+        isInitiateDevice: isInitiatingDevice,
+        serverUrl,
+        sessionId,
+        localPartyId,
+        signers,
+        oldKeygenCommittee: [] as string[],
+        hexEncryptionKey: encryptionKeyHex,
+      }
 
-    let rootEcdsaPrivateKeyHex: string | undefined
-    let rootEddsaPrivateKeyHex: string | undefined
-    if (isInitiatingDevice && hdWallet) {
-      const ecdsaMasterKey = hdWallet.getMasterKey(walletCore.Curve.secp256k1)
-      rootEcdsaPrivateKeyHex = Buffer.from(ecdsaMasterKey.data()).toString(
-        'hex'
-      )
-      const eddsaMasterKey = hdWallet.getMasterKey(walletCore.Curve.ed25519)
-      const eddsaMasterKeyData = new Uint8Array(eddsaMasterKey.data())
-      rootEddsaPrivateKeyHex = Buffer.from(
-        clampThenUniformScalar(eddsaMasterKeyData)
-      ).toString('hex')
-    }
-
-    const dklsKeygen = new DKLS(
-      { keyimport: true },
-      sharedDklsParams.isInitiateDevice,
-      sharedDklsParams.serverUrl,
-      sharedDklsParams.sessionId,
-      sharedDklsParams.localPartyId,
-      sharedDklsParams.signers,
-      sharedDklsParams.oldKeygenCommittee,
-      sharedDklsParams.hexEncryptionKey
-    )
-
-    const schnorrKeygen = new Schnorr(
-      { keyimport: true },
-      sharedDklsParams.isInitiateDevice,
-      sharedDklsParams.serverUrl,
-      sharedDklsParams.sessionId,
-      sharedDklsParams.localPartyId,
-      sharedDklsParams.signers,
-      sharedDklsParams.oldKeygenCommittee,
-      sharedDklsParams.hexEncryptionKey,
-      new Uint8Array()
-    )
-
-    const groups = groupChainsByDerivationPath(chains)
-
-    type PreparedGroup = {
-      groupId: string
-      groupChains: Chain[]
-      algorithm: 'ecdsa' | 'eddsa'
-      chainPrivateKeyHex: string
-      instance: DKLS | Schnorr
-    }
-    const preparedGroups: PreparedGroup[] = []
-
-    for (const { groupId, chains: groupChains } of groups) {
-      const representativeChain = groupChains[0]
-      const chainKind = getChainKind(representativeChain)
-      const algorithm = signatureAlgorithms[chainKind]
-      const coinType = getCoinType({ chain: representativeChain, walletCore })
-
-      let chainPrivateKeyHex = ''
+      let rootEcdsaPrivateKeyHex: string | undefined
+      let rootEddsaPrivateKeyHex: string | undefined
       if (isInitiatingDevice && hdWallet) {
-        const chainKey =
-          representativeChain === Chain.Solana &&
-          keyImportInput.usePhantomSolanaPath
-            ? hdWallet.getKey(coinType, phantomSolanaPath)
-            : hdWallet.getKeyForCoin(coinType)
+        const ecdsaMasterKey = hdWallet.getMasterKey(walletCore.Curve.secp256k1)
+        rootEcdsaPrivateKeyHex = Buffer.from(ecdsaMasterKey.data()).toString(
+          'hex'
+        )
+        const eddsaMasterKey = hdWallet.getMasterKey(walletCore.Curve.ed25519)
+        const eddsaMasterKeyData = new Uint8Array(eddsaMasterKey.data())
+        rootEddsaPrivateKeyHex = Buffer.from(
+          clampThenUniformScalar(eddsaMasterKeyData)
+        ).toString('hex')
+      }
 
-        const chainKeyData = new Uint8Array(chainKey.data())
+      const dklsKeygen = new DKLS(
+        { keyimport: true },
+        sharedDklsParams.isInitiateDevice,
+        sharedDklsParams.serverUrl,
+        sharedDklsParams.sessionId,
+        sharedDklsParams.localPartyId,
+        sharedDklsParams.signers,
+        sharedDklsParams.oldKeygenCommittee,
+        sharedDklsParams.hexEncryptionKey
+      )
+
+      const schnorrKeygen = new Schnorr(
+        { keyimport: true },
+        sharedDklsParams.isInitiateDevice,
+        sharedDklsParams.serverUrl,
+        sharedDklsParams.sessionId,
+        sharedDklsParams.localPartyId,
+        sharedDklsParams.signers,
+        sharedDklsParams.oldKeygenCommittee,
+        sharedDklsParams.hexEncryptionKey,
+        new Uint8Array()
+      )
+
+      const groups = groupChainsByDerivationPath(chains)
+
+      type PreparedGroup = {
+        groupId: string
+        groupChains: Chain[]
+        algorithm: 'ecdsa' | 'eddsa'
+        chainPrivateKeyHex: string
+        instance: DKLS | Schnorr
+      }
+      const preparedGroups: PreparedGroup[] = []
+
+      for (const { groupId, chains: groupChains } of groups) {
+        const representativeChain = groupChains[0]
+        const chainKind = getChainKind(representativeChain)
+        const algorithm = signatureAlgorithms[chainKind]
+        const coinType = getCoinType({ chain: representativeChain, walletCore })
+
+        let chainPrivateKeyHex = ''
+        if (isInitiatingDevice && hdWallet) {
+          const chainKey =
+            representativeChain === Chain.Solana &&
+            keyImportInput.usePhantomSolanaPath
+              ? hdWallet.getKey(coinType, phantomSolanaPath)
+              : hdWallet.getKeyForCoin(coinType)
+
+          const chainKeyData = new Uint8Array(chainKey.data())
+
+          if (algorithm === 'ecdsa') {
+            chainPrivateKeyHex = Buffer.from(chainKeyData).toString('hex')
+          } else {
+            const clampedKey = clampThenUniformScalar(chainKeyData)
+            chainPrivateKeyHex = Buffer.from(clampedKey).toString('hex')
+          }
+        }
 
         if (algorithm === 'ecdsa') {
-          chainPrivateKeyHex = Buffer.from(chainKeyData).toString('hex')
+          const instance = new DKLS(
+            { keyimport: true },
+            sharedDklsParams.isInitiateDevice,
+            sharedDklsParams.serverUrl,
+            sharedDklsParams.sessionId,
+            sharedDklsParams.localPartyId,
+            sharedDklsParams.signers,
+            sharedDklsParams.oldKeygenCommittee,
+            sharedDklsParams.hexEncryptionKey
+          )
+          await instance.prepareKeyImportSetup(
+            chainPrivateKeyHex,
+            hexChainCode,
+            groupId
+          )
+          preparedGroups.push({
+            groupId,
+            groupChains,
+            algorithm,
+            chainPrivateKeyHex,
+            instance,
+          })
         } else {
-          const clampedKey = clampThenUniformScalar(chainKeyData)
-          chainPrivateKeyHex = Buffer.from(clampedKey).toString('hex')
+          const instance = new Schnorr(
+            { keyimport: true },
+            sharedDklsParams.isInitiateDevice,
+            sharedDklsParams.serverUrl,
+            sharedDklsParams.sessionId,
+            sharedDklsParams.localPartyId,
+            sharedDklsParams.signers,
+            sharedDklsParams.oldKeygenCommittee,
+            sharedDklsParams.hexEncryptionKey,
+            new Uint8Array()
+          )
+          await instance.prepareKeyImportSetup(
+            chainPrivateKeyHex,
+            hexChainCode,
+            groupId
+          )
+          preparedGroups.push({
+            groupId,
+            groupChains,
+            algorithm,
+            chainPrivateKeyHex,
+            instance,
+          })
         }
       }
 
-      if (algorithm === 'ecdsa') {
-        const instance = new DKLS(
-          { keyimport: true },
-          sharedDklsParams.isInitiateDevice,
-          sharedDklsParams.serverUrl,
-          sharedDklsParams.sessionId,
-          sharedDklsParams.localPartyId,
-          sharedDklsParams.signers,
-          sharedDklsParams.oldKeygenCommittee,
-          sharedDklsParams.hexEncryptionKey
-        )
-        await instance.prepareKeyImportSetup(
-          chainPrivateKeyHex,
-          hexChainCode,
-          groupId
-        )
-        preparedGroups.push({
-          groupId,
-          groupChains,
-          algorithm,
-          chainPrivateKeyHex,
-          instance,
-        })
-      } else {
-        const instance = new Schnorr(
-          { keyimport: true },
-          sharedDklsParams.isInitiateDevice,
-          sharedDklsParams.serverUrl,
-          sharedDklsParams.sessionId,
-          sharedDklsParams.localPartyId,
-          sharedDklsParams.signers,
-          sharedDklsParams.oldKeygenCommittee,
-          sharedDklsParams.hexEncryptionKey,
-          new Uint8Array()
-        )
-        await instance.prepareKeyImportSetup(
-          chainPrivateKeyHex,
-          hexChainCode,
-          groupId
-        )
-        preparedGroups.push({
-          groupId,
-          groupChains,
-          algorithm,
-          chainPrivateKeyHex,
-          instance,
-        })
+      onStepComplete('prepareVault')
+      onStepStart('ecdsa')
+      onStepStart('eddsa')
+      if (preparedGroups.length > 0) {
+        onStepStart('chainKeys')
+      }
+
+      const chainGroupPromises = preparedGroups.map(
+        async ({ groupId, algorithm, chainPrivateKeyHex, instance }) => {
+          const result =
+            algorithm === 'ecdsa'
+              ? await (instance as DKLS).startKeyImportWithRetry(
+                  chainPrivateKeyHex,
+                  hexChainCode,
+                  groupId,
+                  `p-${groupId}`
+                )
+              : await (instance as Schnorr).startKeyImportWithRetry(
+                  chainPrivateKeyHex,
+                  hexChainCode,
+                  groupId,
+                  `p-${groupId}`
+                )
+          return result
+        }
+      )
+
+      const chainKeysPromise =
+        chainGroupPromises.length > 0
+          ? Promise.all(chainGroupPromises).then(results => {
+              onStepComplete('chainKeys')
+              return results
+            })
+          : Promise.resolve([])
+
+      const [rootEcdsaResult, rootEddsaResult, chainResults] =
+        await Promise.all([
+          dklsKeygen
+            .startKeyImportWithRetry(
+              rootEcdsaPrivateKeyHex ?? '',
+              hexChainCode,
+              undefined,
+              'p-ecdsa'
+            )
+            .then(r => {
+              onStepComplete('ecdsa')
+              return r
+            }),
+          schnorrKeygen
+            .startKeyImportWithRetry(
+              rootEddsaPrivateKeyHex ?? '',
+              hexChainCode,
+              'eddsa_key_import',
+              'p-eddsa'
+            )
+            .then(r => {
+              onStepComplete('eddsa')
+              return r
+            }),
+          chainKeysPromise,
+        ])
+
+      const chainPublicKeys: Partial<Record<Chain, string>> = {}
+      const chainKeyShares: Partial<Record<Chain, string>> = {}
+      const keyShares: VaultKeyShares = {
+        ecdsa: rootEcdsaResult.keyshare,
+        eddsa: rootEddsaResult.keyshare,
+      }
+
+      for (let i = 0; i < preparedGroups.length; i++) {
+        const { groupChains } = preparedGroups[i]
+        const chainResult = chainResults[i] as {
+          keyshare: string
+          publicKey: string
+          chaincode: string
+        }
+        for (const chain of groupChains) {
+          chainPublicKeys[chain] = chainResult.publicKey
+          chainKeyShares[chain] = chainResult.keyshare
+        }
+      }
+
+      const vault: Vault = {
+        name: vaultName,
+        publicKeys: {
+          ecdsa: rootEcdsaResult.publicKey,
+          eddsa: rootEddsaResult.publicKey,
+        },
+        signers,
+        createdAt: Date.now(),
+        hexChainCode: rootEcdsaResult.chaincode,
+        keyShares,
+        localPartyId,
+        libType: 'KeyImport' as MpcLib,
+        isBackedUp: false,
+        order: getLastItemOrder(vaultOrders),
+        lastPasswordVerificationTime: hasServer(signers)
+          ? Date.now()
+          : undefined,
+        chainPublicKeys,
+        chainKeyShares,
+      }
+
+      await setKeygenComplete({
+        serverURL: serverUrl,
+        sessionId,
+        localPartyId,
+      })
+
+      await waitForKeygenComplete({
+        serverURL: serverUrl,
+        sessionId,
+        peers: without(signers, localPartyId),
+      })
+
+      return vault
+    } finally {
+      if (hdWallet) {
+        hdWallet.delete()
       }
     }
-
-    onStepComplete('prepareVault')
-    onStepStart('ecdsa')
-    onStepStart('eddsa')
-    if (preparedGroups.length > 0) {
-      onStepStart('chainKeys')
-    }
-
-    const chainGroupPromises = preparedGroups.map(
-      async ({ groupId, algorithm, chainPrivateKeyHex, instance }) => {
-        const result =
-          algorithm === 'ecdsa'
-            ? await (instance as DKLS).startKeyImportWithRetry(
-                chainPrivateKeyHex,
-                hexChainCode,
-                groupId,
-                `p-${groupId}`
-              )
-            : await (instance as Schnorr).startKeyImportWithRetry(
-                chainPrivateKeyHex,
-                hexChainCode,
-                groupId,
-                `p-${groupId}`
-              )
-        return result
-      }
-    )
-
-    const chainKeysPromise =
-      chainGroupPromises.length > 0
-        ? Promise.all(chainGroupPromises).then(results => {
-            onStepComplete('chainKeys')
-            return results
-          })
-        : Promise.resolve([])
-
-    const [rootEcdsaResult, rootEddsaResult, chainResults] = await Promise.all([
-      dklsKeygen
-        .startKeyImportWithRetry(
-          rootEcdsaPrivateKeyHex ?? '',
-          hexChainCode,
-          undefined,
-          'p-ecdsa'
-        )
-        .then(r => {
-          onStepComplete('ecdsa')
-          return r
-        }),
-      schnorrKeygen
-        .startKeyImportWithRetry(
-          rootEddsaPrivateKeyHex ?? '',
-          hexChainCode,
-          'eddsa_key_import',
-          'p-eddsa'
-        )
-        .then(r => {
-          onStepComplete('eddsa')
-          return r
-        }),
-      chainKeysPromise,
-    ])
-
-    const chainPublicKeys: Partial<Record<Chain, string>> = {}
-    const chainKeyShares: Partial<Record<Chain, string>> = {}
-    const keyShares: VaultKeyShares = {
-      ecdsa: rootEcdsaResult.keyshare,
-      eddsa: rootEddsaResult.keyshare,
-    }
-
-    for (let i = 0; i < preparedGroups.length; i++) {
-      const { groupChains } = preparedGroups[i]
-      const chainResult = chainResults[i] as {
-        keyshare: string
-        publicKey: string
-        chaincode: string
-      }
-      for (const chain of groupChains) {
-        chainPublicKeys[chain] = chainResult.publicKey
-        chainKeyShares[chain] = chainResult.keyshare
-      }
-    }
-
-    if (hdWallet) {
-      hdWallet.delete()
-    }
-
-    const vault: Vault = {
-      name: vaultName,
-      publicKeys: {
-        ecdsa: rootEcdsaResult.publicKey,
-        eddsa: rootEddsaResult.publicKey,
-      },
-      signers,
-      createdAt: Date.now(),
-      hexChainCode: rootEcdsaResult.chaincode,
-      keyShares,
-      localPartyId,
-      libType: 'KeyImport' as MpcLib,
-      isBackedUp: false,
-      order: getLastItemOrder(vaultOrders),
-      lastPasswordVerificationTime: hasServer(signers) ? Date.now() : undefined,
-      chainPublicKeys,
-      chainKeyShares,
-    }
-
-    await setKeygenComplete({
-      serverURL: serverUrl,
-      sessionId,
-      localPartyId,
-    })
-
-    await waitForKeygenComplete({
-      serverURL: serverUrl,
-      sessionId,
-      peers: without(signers, localPartyId),
-    })
-
-    return vault
   }
 
   return (

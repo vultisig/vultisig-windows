@@ -27,6 +27,7 @@ const chainGroups: ChainGroup[] = [
   { representative: Chain.Terra, chains: terraChains },
 ]
 
+/** Returns one representative chain per group (e.g. Ethereum for all EVM chains), plus any ungrouped chains. */
 export const getDefaultVisibleChains = (chains: Chain[]): Chain[] => {
   const availableChains = new Set(chains)
   const handledChains = new Set<Chain>()
