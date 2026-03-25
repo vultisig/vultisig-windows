@@ -226,7 +226,11 @@ const buildMsgTransfer = ({
   const sourceChannel = parts[1]
 
   const timeouts = ibcDenomTraces?.latestBlock?.split('_') ?? []
-  const timeout = BigInt(timeouts[timeouts.length - 1] ?? '0')
+  const timeoutStr = timeouts[timeouts.length - 1]
+  if (!timeoutStr || timeoutStr === '0') {
+    throw new Error('QBTC: IBC transfer requires valid timeout timestamp')
+  }
+  const timeout = BigInt(timeoutStr)
 
   const coin = shouldBePresent(keysignPayload.coin)
   const tokenDenom = coin.isNativeToken ? denom : coin.contractAddress
@@ -272,7 +276,13 @@ const buildMsgVote = (keysignPayload: KeysignPayload): Uint8Array => {
     )
   }
 
-  const option = voteOptionValues[parts[0].toUpperCase()] ?? 0n
+  const optionKey = parts[0].toUpperCase()
+  const option = voteOptionValues[optionKey]
+  if (option === undefined) {
+    throw new Error(
+      `QBTC: invalid vote option '${parts[0]}', expected one of: ${Object.keys(voteOptionValues).join(', ')}`
+    )
+  }
   const proposalId = BigInt(parts[1])
 
   return concatBytes(

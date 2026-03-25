@@ -1,5 +1,12 @@
-import { CosmosSpecific } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
-import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { create } from '@bufbuild/protobuf'
+import {
+  CosmosSpecific,
+  CosmosSpecificSchema,
+} from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+import {
+  KeysignPayload,
+  KeysignPayloadSchema,
+} from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { sha256 } from '@noble/hashes/sha2.js'
 import { describe, expect, it } from 'vitest'
 
@@ -8,15 +15,18 @@ import {
   getQBTCSignedTransaction,
 } from './QBTCHelper'
 
-const makeMockPayload = () => {
-  const cosmosSpecific = {
+const makeMockPayload = (): {
+  payload: KeysignPayload
+  cosmosSpecific: CosmosSpecific
+} => {
+  const cosmosSpecific = create(CosmosSpecificSchema, {
     accountNumber: 42n,
     sequence: 5n,
     gas: 2000n,
     transactionType: 0,
-  } as unknown as CosmosSpecific
+  })
 
-  const payload = {
+  const payload = create(KeysignPayloadSchema, {
     coin: {
       ticker: 'QBTC',
       address: 'qbtc1abc123',
@@ -30,7 +40,7 @@ const makeMockPayload = () => {
       case: 'cosmosSpecific',
       value: cosmosSpecific,
     },
-  } as unknown as KeysignPayload
+  })
 
   return { payload, cosmosSpecific }
 }

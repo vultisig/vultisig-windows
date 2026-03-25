@@ -5,6 +5,10 @@
 
 /** Encodes a UInt64 as a protobuf base-128 varint. */
 const encodeVarint = (value: bigint): Uint8Array => {
+  if (value < 0n || value > 0xffff_ffff_ffff_ffffn) {
+    throw new RangeError('encodeVarint expects an unsigned 64-bit integer')
+  }
+
   const bytes: number[] = []
   let v = value
   while (v > 0x7fn) {
