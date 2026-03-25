@@ -17,28 +17,37 @@ export const requestAccount = async (
     })
   )
 
-  if (data) {
+  if (data?.address) {
     return data
   }
 
-  if (error === BackgroundError.Unauthorized) {
-    const { data, error } = await attempt(
+  const openGrantVaultAccess = async () => {
+    const result = await attempt(
       callPopup({
         grantVaultAccess: {
           preselectFastVault: options?.preselectFastVault,
+          chain,
         },
       })
     )
-
-    if (data) {
+    if (result.data?.appSession) {
       return callBackground({
-        getAccount: { chain },
+        getAccount: { chain, appSession: result.data.appSession },
       })
     }
-
-    if (error === PopupError.RejectedByUser) {
+    if (result.error === PopupError.RejectedByUser) {
       throw new EIP1193Error('UserRejectedRequest')
     }
+  }
+
+  if (error === BackgroundError.Unauthorized) {
+    const account = await openGrantVaultAccess()
+    if (account) return account
+  } else if (data !== undefined) {
+    // Authorized but current vault has no account for this chain (e.g. Solana).
+    // Re-prompt so user can select a vault that supports this chain.
+    const account = await openGrantVaultAccess()
+    if (account) return account
   }
 
   throw new EIP1193Error('InternalError')

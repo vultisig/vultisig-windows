@@ -4,6 +4,8 @@ import { setStorageValue } from '@lib/extension/storage/set'
 
 const pushNotificationKey = 'pushNotificationRegistrations'
 
+const pushVaultIdMigratedKey = 'pushVaultIdMigrated'
+
 type PushNotificationRegistration = {
   vaultId: string
   partyName: string
@@ -72,4 +74,11 @@ export const setPushServerUrl = async (url: string | null): Promise<void> => {
   } else {
     await setStorageValue(pushServerUrlKey, url)
   }
+}
+
+export const getPushVaultIdMigrationCompleted = async (): Promise<boolean> =>
+  getStorageValue(pushVaultIdMigratedKey, false)
+
+export const setPushVaultIdMigrationCompleted = async (): Promise<void> => {
+  await setStorageValue(pushVaultIdMigratedKey, true)
 }

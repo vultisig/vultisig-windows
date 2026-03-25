@@ -151,7 +151,7 @@ export const en = {
   chooseSetup: 'Choose Setup',
   choose_a_password: 'Choose a password',
   choose_a_password_description:
-    'If you want an extra layer of security, choose a password. <b>Password cannot be recovered.</b>',
+    'If you want an extra layer of security, choose a password. <b>Password cannot be recovered.</b> <info />',
   choose_backup_method: 'Choose Backup Method',
   choose_payout_asset: 'Choose payout asset',
   choose_chains: 'Choose chains',
@@ -385,6 +385,9 @@ export const en = {
   fast: 'Fast',
   fastVault: 'Fast Vault',
   secureVault: 'Secure Vault',
+  fast_vault_session_conflict: 'Vault Share Mismatch',
+  fast_vault_session_conflict_description:
+    "Your local vault share doesn't match the one stored on Vultiserver. This may happen if the same seed phrase was imported on another device.",
   fast_vault_password_start_keysign_description:
     'Confirm the transaction by entering the password of your server share.',
   fastVaultSetup: {
@@ -496,6 +499,14 @@ export const en = {
   header_tooltip_content:
     'The referral program is applied on THORChain swaps and is on a best effort basis. You need to register a THORName to use the Vultisig referral. The registration fee is 10 RUNE and 1 RUNE for each year, which is paid to the THORChain network.',
   header_tooltip_title: 'Referral Program',
+  having_trouble_scanning_help: 'QR scanning help',
+  having_trouble_scanning: 'Having trouble scanning?',
+  having_trouble_scanning_desc: 'If the QR code is not scanning right away:',
+  having_trouble_scanning_tip_1:
+    'Move the phone slightly closer or farther from the screen',
+  having_trouble_scanning_tip_2:
+    'Make sure the screen is well lit and free of glare',
+  having_trouble_scanning_tip_3: 'Keep both devices steady for a moment',
   hide_balance: 'Hide balance',
   hide_defi_balance: 'Hide DeFi balance',
   hold: 'Hold',
@@ -1064,7 +1075,7 @@ export const en = {
   upgrade_vault_description:
     "Upgrade this vault to the <b>world's fastest MPC protocol</b> and sign faster than ever before",
   upload_file_or_drag_and_drop: 'Upload file or drag & drop here',
-  upload_qr_code_image: 'Upload QR',
+  upload_qr_code_image: 'Upload QR Code',
   upload_qr_code_to_join_keysign: 'Upload QR Code to join Keysign',
   upload_qr_code_with_address: 'Upload QR code with address',
   use_referral_code: 'Use referral Code',

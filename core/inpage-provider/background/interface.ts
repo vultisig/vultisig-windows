@@ -2,6 +2,7 @@ import { Chain } from '@core/chain/Chain'
 import { ChainOfKind } from '@core/chain/ChainKind'
 import { CoinKey, CoinMetadata, Token } from '@core/chain/coin/Coin'
 import { ChainWithTokenMetadataDiscovery } from '@core/chain/coin/token/metadata/chains'
+import { VaultAppSession } from '@core/extension/storage/appSessions'
 import { VaultExport } from '@core/ui/vault/export/core'
 import { Method } from '@lib/utils/types/Method'
 
@@ -16,12 +17,18 @@ export type SetAppChainInput = {
   [K in ActiveChainKind]: { [P in K]: ChainOfKind<P> }
 }[ActiveChainKind]
 
+export type GetAccountInput = {
+  chain: Chain
+  /** When provided (e.g. from grantVaultAccess popup response), used instead of storage lookup to avoid races. */
+  appSession?: VaultAppSession
+}
+
 export type BackgroundInterface = {
   getAppChainId: Method<{ chainKind: ActiveChainKind }, string>
   setAppChain: Method<SetAppChainInput>
   getAppChain: GetAppChainMethod
   setVaultChain: Method<SetAppChainInput>
-  getAccount: Method<{ chain: Chain }, { address: string; publicKey: string }>
+  getAccount: Method<GetAccountInput, { address: string; publicKey: string }>
   signOut: Method<{}>
   evmClientRequest: Method<{ method: string; params?: unknown[] }, unknown>
   exportVault: Method<{}, VaultExport>
@@ -31,6 +38,7 @@ export type BackgroundInterface = {
     CoinMetadata
   >
   getIsWalletPrioritized: Method<{}, boolean>
+  hasChainInVault: Method<{ chain: Chain }, boolean>
 }
 
 export type BackgroundMethod = keyof BackgroundInterface

@@ -14,7 +14,7 @@ import { initializeMldsaLib } from './initializeMldsa'
 
 const mldsaLevel = 44
 
-export type MldsaKeygenResult = {
+type MldsaKeygenResult = {
   keyshare: string
   publicKey: string
 }
