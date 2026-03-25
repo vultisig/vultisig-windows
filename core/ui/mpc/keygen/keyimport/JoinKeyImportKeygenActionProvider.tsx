@@ -90,6 +90,9 @@ export const JoinKeyImportKeygenActionProvider = ({
     onStepComplete('prepareVault')
     onStepStart('ecdsa')
     onStepStart('eddsa')
+    if (groups.length > 0) {
+      onStepStart('chainKeys')
+    }
 
     const [rootEcdsaResult, rootEddsaResult] = await Promise.all([
       dklsKeygen
@@ -178,6 +181,7 @@ export const JoinKeyImportKeygenActionProvider = ({
           chainKeyShares[chain] = result.keyshare
         }
       }
+      onStepComplete('chainKeys')
     }
 
     const vault: Vault = {

@@ -13,6 +13,7 @@ const protocolLabels: Record<KeygenStep, string> = {
   prepareVault: 'Prepare',
   ecdsa: 'ECDSA',
   eddsa: 'EdDSA',
+  chainKeys: 'Chain Keys',
   mldsa: 'MLDSA',
 }
 

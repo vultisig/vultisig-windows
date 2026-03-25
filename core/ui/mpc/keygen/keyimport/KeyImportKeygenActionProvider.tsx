@@ -193,6 +193,9 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
     onStepComplete('prepareVault')
     onStepStart('ecdsa')
     onStepStart('eddsa')
+    if (preparedGroups.length > 0) {
+      onStepStart('chainKeys')
+    }
 
     const chainGroupPromises = preparedGroups.map(
       async ({ groupId, algorithm, chainPrivateKeyHex, instance }) => {
@@ -214,32 +217,39 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
       }
     )
 
-    const [rootEcdsaResult, rootEddsaResult, ...chainResults] =
-      await Promise.all([
-        dklsKeygen
-          .startKeyImportWithRetry(
-            rootEcdsaPrivateKeyHex ?? '',
-            hexChainCode,
-            undefined,
-            'p-ecdsa'
-          )
-          .then(r => {
-            onStepComplete('ecdsa')
-            return r
-          }),
-        schnorrKeygen
-          .startKeyImportWithRetry(
-            rootEddsaPrivateKeyHex ?? '',
-            hexChainCode,
-            'eddsa_key_import',
-            'p-eddsa'
-          )
-          .then(r => {
-            onStepComplete('eddsa')
-            return r
-          }),
-        ...chainGroupPromises,
-      ])
+    const chainKeysPromise =
+      chainGroupPromises.length > 0
+        ? Promise.all(chainGroupPromises).then(results => {
+            onStepComplete('chainKeys')
+            return results
+          })
+        : Promise.resolve([])
+
+    const [rootEcdsaResult, rootEddsaResult, chainResults] = await Promise.all([
+      dklsKeygen
+        .startKeyImportWithRetry(
+          rootEcdsaPrivateKeyHex ?? '',
+          hexChainCode,
+          undefined,
+          'p-ecdsa'
+        )
+        .then(r => {
+          onStepComplete('ecdsa')
+          return r
+        }),
+      schnorrKeygen
+        .startKeyImportWithRetry(
+          rootEddsaPrivateKeyHex ?? '',
+          hexChainCode,
+          'eddsa_key_import',
+          'p-eddsa'
+        )
+        .then(r => {
+          onStepComplete('eddsa')
+          return r
+        }),
+      chainKeysPromise,
+    ])
 
     const chainPublicKeys: Partial<Record<Chain, string>> = {}
     const chainKeyShares: Partial<Record<Chain, string>> = {}

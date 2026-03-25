@@ -6,6 +6,7 @@ import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { isKeyImportVault } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { groupItems } from '@lib/utils/array/groupItems'
+import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMemo } from 'react'
 
@@ -29,11 +30,14 @@ export const useCurrentVaultChains = () => {
   return useMemo(() => nativeCoins.map(coin => coin.chain), [nativeCoins])
 }
 
+const knownChains = Object.values(Chain) as string[]
+
 export const useCurrentVaultCoinsByChain = () => {
   const coins = useCurrentVaultCoins()
 
   return useMemo(() => {
-    return groupItems(coins, coin => coin.chain as Chain)
+    const supported = coins.filter(coin => isOneOf(coin.chain, knownChains))
+    return groupItems(supported, coin => coin.chain as Chain)
   }, [coins])
 }
 

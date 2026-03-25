@@ -14,10 +14,11 @@ const Container = styled.div`
 `
 
 const progressValues: Record<KeygenStep, number> = {
-  prepareVault: 20,
-  ecdsa: 40,
-  eddsa: 60,
-  mldsa: 80,
+  prepareVault: 15,
+  ecdsa: 35,
+  eddsa: 55,
+  chainKeys: 75,
+  mldsa: 85,
 }
 
 const getProgress = (step: KeygenStep | null): number => {
