@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '../../state/currentVault'
-import { DescriptionText, ListItemIconWrapper } from '..'
+import { DescriptionText, ListItemIconWrapper } from '../shared'
 import { BackupModal } from './BackupModal'
 import { backupOptionView } from './routes'
 
