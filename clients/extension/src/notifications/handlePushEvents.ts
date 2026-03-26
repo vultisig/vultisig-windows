@@ -1,4 +1,3 @@
-import { computeNotificationVaultId } from '@core/ui/notifications/computeNotificationVaultId'
 import { NotificationData } from '@core/ui/notifications/NotificationChannel'
 import {
   fetchVapidPublicKey,
@@ -8,6 +7,7 @@ import {
 import { pushNotificationServerUrl } from '@core/ui/notifications/pushNotificationServerUrl'
 import { urlBase64ToUint8Array } from '@core/ui/notifications/urlBase64ToUint8Array'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { computeNotificationVaultId } from '@vultisig/sdk'
 
 import { setInitialView } from '../storage/initialView'
 import {
@@ -189,10 +189,10 @@ const mapStoredVaultsToRegistrationInfos = async (
 
   return Promise.all(
     eligible.map(async v => ({
-      vaultId: await computeNotificationVaultId({
-        ecdsaPubKey: v.publicKeys.ecdsa,
-        hexChainCode: shouldBePresent(v.hexChainCode),
-      }),
+      vaultId: await computeNotificationVaultId(
+        v.publicKeys.ecdsa,
+        shouldBePresent(v.hexChainCode)
+      ),
       localPartyId: v.localPartyId,
     }))
   )
