@@ -6,6 +6,7 @@ import { useCore } from '../../state/core'
 import { SendForm } from './form/SendForm'
 import { SendFormFieldsStateProvider } from './state/formFields'
 import { SendReceiverProvider } from './state/receiver'
+import { SendReceiverLabelProvider } from './state/receiverLabel'
 import { SendVerify } from './verify/SendVerify'
 
 const sendSteps = ['form', 'verify'] as const
@@ -23,11 +24,13 @@ export const SendPage = () => {
   return (
     <SendFormFieldsStateProvider>
       <SendReceiverProvider initialValue={address ?? ''}>
-        <Match
-          value={step}
-          form={() => <SendForm onFinish={toNextStep} />}
-          verify={() => <SendVerify onBack={toPreviousStep} />}
-        />
+        <SendReceiverLabelProvider>
+          <Match
+            value={step}
+            form={() => <SendForm onFinish={toNextStep} />}
+            verify={() => <SendVerify onBack={toPreviousStep} />}
+          />
+        </SendReceiverLabelProvider>
       </SendReceiverProvider>
     </SendFormFieldsStateProvider>
   )
