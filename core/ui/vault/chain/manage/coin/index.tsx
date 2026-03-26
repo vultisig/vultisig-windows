@@ -32,6 +32,38 @@ import { SearchInput } from '../shared/SearchInput'
 import { TokenItem } from '../shared/TokenItem'
 import { AddCustomTokenPrompt } from './AddCustomTokenPrompt'
 
+const strip0xPrefix = (value: string) =>
+  value.startsWith('0x') ? value.slice(2) : value
+
+const coinMatchesTokenSearch = (coin: Coin, normalizedQuery: string) => {
+  if (!normalizedQuery) {
+    return true
+  }
+
+  if (coin.ticker.toLowerCase().includes(normalizedQuery)) {
+    return true
+  }
+
+  if (!coin.id) {
+    return false
+  }
+
+  const id = coin.id.toLowerCase()
+
+  if (id.includes(normalizedQuery) || normalizedQuery.includes(id)) {
+    return true
+  }
+
+  const idCore = strip0xPrefix(id)
+  const queryCore = strip0xPrefix(normalizedQuery)
+
+  if (!queryCore) {
+    return false
+  }
+
+  return idCore.includes(queryCore) || queryCore.includes(idCore)
+}
+
 export const ManageVaultChainCoinsPage = () => {
   const { t } = useTranslation()
   const { goBack } = useCore()
@@ -63,14 +95,21 @@ export const ManageVaultChainCoinsPage = () => {
   }, [currentchain, whitelistedQuery.data])
 
   const filteredCoins = useMemo(() => {
-    if (!search) return coins
+    const normalizedQuery = search.trim().toLowerCase()
 
-    const normalizedSearch = search.toLowerCase()
+    const matching = !normalizedQuery
+      ? coins
+      : coins.filter(coin => coinMatchesTokenSearch(coin, normalizedQuery))
 
-    return coins.filter(({ ticker }) =>
-      ticker.toLowerCase().includes(normalizedSearch)
+    const selected = matching.filter(coin =>
+      currentCoins.some(c => areEqualCoins(c, coin))
     )
-  }, [coins, search])
+    const unselected = matching.filter(
+      coin => !currentCoins.some(c => areEqualCoins(c, coin))
+    )
+
+    return [...selected, ...unselected]
+  }, [coins, search, currentCoins])
 
   const handleToggle = async (coin: Coin) => {
     if (isLoading) return
@@ -109,7 +148,7 @@ export const ManageVaultChainCoinsPage = () => {
           </Text>
           <SearchInput value={search} onChange={setSearch} />
         </VStack>
-        {filteredCoins.length > 0 || !search ? (
+        {filteredCoins.length > 0 || !search.trim() ? (
           <ItemGrid>
             <AddCustomTokenPrompt />
             {filteredCoins.map((coin, index) => (
@@ -123,7 +162,12 @@ export const ManageVaultChainCoinsPage = () => {
             ))}
           </ItemGrid>
         ) : (
-          <EmptyState title={t('no_tokens_found')} />
+          <VStack gap={24} alignItems="center">
+            <EmptyState title={t('no_tokens_found')} />
+            <ItemGrid>
+              <AddCustomTokenPrompt />
+            </ItemGrid>
+          </VStack>
         )}
       </PageContent>
     </VStack>
