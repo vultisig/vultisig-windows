@@ -44,17 +44,6 @@ export const VerifySwapFees: FC<VerifySwapFeesProps> = ({ swapQuote }) => {
           const { ticker, decimals } = chainFeeCoin[fromCoinKey.chain]
           return (
             <>
-              {swap && (
-                <ListItem
-                  extra={
-                    <Text color="shy">
-                      <SwapFeeFiatValue value={[swap]} />
-                    </Text>
-                  }
-                  hoverable={false}
-                  title={t('swap_fee')}
-                />
-              )}
               <ListItem
                 extra={
                   <Text color="shy">
@@ -68,6 +57,17 @@ export const VerifySwapFees: FC<VerifySwapFeesProps> = ({ swapQuote }) => {
                 hoverable={false}
                 title={t('network_fee')}
               />
+              {swap && (
+                <ListItem
+                  extra={
+                    <Text color="shy">
+                      <SwapFeeFiatValue value={[swap]} />
+                    </Text>
+                  }
+                  hoverable={false}
+                  title={t('swap_fee')}
+                />
+              )}
             </>
           )
         }}

@@ -1,13 +1,13 @@
 export const languages = [
   'en',
-  'es',
-  'pt',
-  'it',
   'de',
+  'es',
+  'it',
   'hr',
-  'zh',
-  'nl',
   'ru',
+  'nl',
+  'pt',
+  'zh',
   'ko',
 ] as const
 export type Language = (typeof languages)[number]

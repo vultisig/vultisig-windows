@@ -102,7 +102,7 @@ export const BackupOverviewScreen = ({
           )}
         </VStack>
         <Button onClick={onFinish} loading={isLoading}>
-          {t('i_understand')}
+          {t('continue')}
         </Button>
       </ContentSection>
     </Container>

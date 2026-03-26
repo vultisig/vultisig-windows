@@ -104,8 +104,8 @@ export const ko = {
     addAnOptionalHint: '선택적 힌트를 추가합니다.',
     connectingWithServer: '서버에 연결 중...',
     emailSetupTitle:
-      '이 이메일 주소는 서버 백업 파일을 전송하는 용도로만 사용됩니다.',
-    enterEmail: '이메일 주소를 입력하세요',
+      '이 이메일은 클라우드 백업에 사용되며 제3자와 공유되지 않습니다',
+    enterEmail: '이메일을 입력하세요',
     enterHint: '힌트를 입력하세요',
     hintDescription: '비밀번호를 잊어버린 경우 이 내용이 표시됩니다.',
     hintEmpty: '힌트가 비어 있습니다',
@@ -511,7 +511,7 @@ export const ko = {
   enter_vault_name: '금고 이름을 입력하세요',
   enter_your_email: '이메일 주소를 입력하세요',
   enter_your_email_description:
-    '이 정보는 백업 파일을 전송하는 데 한 번만 사용되며, Vultisig는 어떠한 데이터도 저장하지 않습니다.',
+    '이 이메일은 클라우드 백업에 사용되며 제3자와 공유되지 않습니다',
   enter_your_password: '비밀번호를 입력하세요',
   entity_not_scanned: '{{entity}}는 스캔되지 않았습니다.<provider></provider>',
   entity_scanned: '{{entity}}가 스캔함<provider></provider>',
@@ -844,6 +844,7 @@ export const ko = {
   of: '~의',
   off: '끄다',
   on: '~에',
+  on_chain: '{{chain}}에서',
   onboarding_description_1:
     'Vultisig는 모든 주요 블록체인 및 10,000개 이상의 토큰과 호환되는 안전한 다중 기기 암호화폐 보관소입니다. Vultisig는 완전한 자체 보관 방식을 채택하고 있습니다.',
   onboarding_description_2:
@@ -1087,6 +1088,7 @@ export const ko = {
   tns_missing_thor_alias: '추천 코드에는 THOR 체인 별칭이 있어야 합니다.',
   tns_not_found: '추천 코드를 찾을 수 없습니다.',
   to: '에게',
+  to_min_payout: '최소 지급액',
   today: '오늘',
   to_asset: '자산으로',
   token_not_found_description:
@@ -1190,12 +1192,12 @@ export const ko = {
   vault_details_description: '금고 이름, 부분 및 유형을 확인하세요.',
   vault_details_edit_vault_description: '금고 이름을 수정하세요',
   vault_details_page_signer_word: '서명자',
-  vault_details_page_vault_ECDSA: 'ECDSA 키',
-  vault_details_page_vault_EDDSA: 'EdDSA 키',
+  vault_details_page_vault_ECDSA: 'ECDSA',
+  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_MLDSA: 'MLDSA 키',
   vault_details_page_vault_type: '금고 유형',
   vault_info: '금고 정보',
-  vault_management: '금고 관리',
+  vault_management: '금고',
   vault_name: '금고 이름',
   vault_name_already_exists: '금고 이름은 고유해야 합니다.',
   vault_name_description:
