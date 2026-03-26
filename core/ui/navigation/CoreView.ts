@@ -65,6 +65,7 @@ export type CoreView =
         securityType: VaultSecurityType
         keysignPayload: KeysignMessagePayload
         password?: string
+        toAddressLabel?: string
       }
     }
   | { id: 'languageSettings' }
