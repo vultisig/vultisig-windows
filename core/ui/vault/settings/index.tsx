@@ -4,7 +4,6 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { IconFileEdit } from '@lib/ui/icons/IconFileEdit'
-import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { ShareAndroidIcon } from '@lib/ui/icons/ShareAndroidIcon'
 import { ShieldIcon } from '@lib/ui/icons/ShieldIcon'
@@ -21,6 +20,7 @@ import styled from 'styled-components'
 
 import { SettingsSection } from '../../settings/SettingsSection'
 import { VaultSettingsBackup } from './backup'
+import { DescriptionText, ListItemIconWrapper } from './vaultSettingsListStyles'
 
 type VaultSettingsPageProps = {
   extraItems?: ReactNode
@@ -178,11 +178,6 @@ export const VaultSettingsPage: FC<VaultSettingsPageProps> = ({
   )
 }
 
-export const ListItemIconWrapper = styled(IconWrapper)`
-  font-size: 20px;
-  color: ${getColor('primaryAlt')};
-`
-
 const DeleteButtonIconWrapper = styled(ListItemIconWrapper)`
   color: ${getColor('danger')};
 `
@@ -191,7 +186,4 @@ const DeleteItem = styled(ListItem)`
   border-radius: 12px;
 `
 
-export const DescriptionText = styled(Text)`
-  color: ${getColor('textShyExtra')};
-  font-size: 12px;
-`
+export { ListItemIconWrapper } from './vaultSettingsListStyles'

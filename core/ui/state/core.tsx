@@ -40,6 +40,7 @@ export type CoreState = CoreStorage & {
   targetVaultId?: string
   isLimited?: boolean
   goBack: () => void
+  popNavigationHistory: (steps: number) => void
   goHome: () => void
 }
 

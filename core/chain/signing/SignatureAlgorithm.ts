@@ -11,6 +11,7 @@ export const signatureAlgorithms: Record<ChainKind, SignatureAlgorithm> = {
   sui: 'eddsa',
   solana: 'eddsa',
   polkadot: 'eddsa',
+  bittensor: 'eddsa',
   ton: 'eddsa',
   ripple: 'ecdsa',
   tron: 'ecdsa',

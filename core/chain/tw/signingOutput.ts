@@ -9,6 +9,7 @@ const signingOutputs = {
   solana: TW.Solana.Proto.SigningOutput,
   cosmos: TW.Cosmos.Proto.SigningOutput,
   polkadot: TW.Polkadot.Proto.SigningOutput,
+  bittensor: TW.Polkadot.Proto.SigningOutput,
   sui: TW.Sui.Proto.SigningOutput,
   ton: TW.TheOpenNetwork.Proto.SigningOutput,
   ripple: TW.Ripple.Proto.SigningOutput,

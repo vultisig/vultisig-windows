@@ -8,7 +8,10 @@ import { useProcessAppError } from '@core/ui/errors/hooks/useProcessAppError'
 import { initialCoreView } from '@core/ui/navigation/CoreView'
 import { ActiveView } from '@lib/ui/navigation/ActiveView'
 import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
+import {
+  useNavigateBack,
+  usePopNavigationHistory,
+} from '@lib/ui/navigation/hooks/useNavigateBack'
 import { createGlobalStyle, css } from 'styled-components'
 
 const isPopup = isPopupView()
@@ -33,6 +36,7 @@ const ExtensionGlobalStyle = createGlobalStyle`
 const App = () => {
   const processError = useProcessAppError()
   const goBack = useNavigateBack()
+  const popNavigationHistory = usePopNavigationHistory()
   const navigate = useNavigate()
 
   return (
@@ -40,6 +44,7 @@ const App = () => {
       processError={processError}
       goBack={goBack}
       goHome={() => navigate(initialCoreView)}
+      popNavigationHistory={popNavigationHistory}
     >
       <ActiveView views={views} />
       <AutoRegisterPushNotifications />
