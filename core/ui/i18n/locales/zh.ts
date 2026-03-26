@@ -1129,8 +1129,7 @@ export const zh = {
   email_placeholder: '请输入您的电子邮件地址',
   enter: '进入',
   enter_your_email: '请输入您的电子邮件地址',
-  enter_your_email_description:
-    '此邮箱用于云端备份，不会与任何第三方共享',
+  enter_your_email_description: '此邮箱用于云端备份，不会与任何第三方共享',
   seedphrase_duplicate_vault_error:
     '此种子短语已导入为保险库”{{vaultName}}”。再次导入将会替换现有保险库。',
   fast_vault_exists_warning_title: '保险库已存在',
