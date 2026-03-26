@@ -1,6 +1,6 @@
-import { getPushNotificationVaultId } from '@core/ui/notifications/computeNotificationVaultId'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { computeNotificationVaultId } from '@vultisig/sdk'
 
 import {
   PushForceRegisterVaultMessage,
@@ -26,7 +26,12 @@ export const usePushNotificationStatus = () => {
       vault.hexChainCode,
     ],
     queryFn: async () =>
-      isVaultRegisteredForPush(await getPushNotificationVaultId(vault)),
+      isVaultRegisteredForPush(
+        await computeNotificationVaultId(
+          vault.publicKeys.ecdsa,
+          vault.hexChainCode
+        )
+      ),
   })
 }
 
@@ -37,7 +42,10 @@ export const useEnablePushNotificationsMutation = () => {
 
   return useMutation({
     mutationFn: async () => {
-      const vaultId = await getPushNotificationVaultId(vault)
+      const vaultId = await computeNotificationVaultId(
+        vault.publicKeys.ecdsa,
+        vault.hexChainCode
+      )
       await subscribeToPush({ vaultId, partyName })
     },
     onSuccess: () => {
@@ -58,7 +66,10 @@ export const useDisablePushNotificationsMutation = () => {
 
   return useMutation({
     mutationFn: async () => {
-      const vaultId = await getPushNotificationVaultId(vault)
+      const vaultId = await computeNotificationVaultId(
+        vault.publicKeys.ecdsa,
+        vault.hexChainCode
+      )
       const message: PushUnregisterVaultMessage = {
         type: pushUnregisterVaultType,
         vault: { vaultId, localPartyId: vault.localPartyId },
@@ -86,7 +97,10 @@ export const useForceRegisterPushNotificationMutation = () => {
 
   return useMutation({
     mutationFn: async () => {
-      const vaultId = await getPushNotificationVaultId(vault)
+      const vaultId = await computeNotificationVaultId(
+        vault.publicKeys.ecdsa,
+        vault.hexChainCode
+      )
       const message: PushForceRegisterVaultMessage = {
         type: pushForceRegisterVaultType,
         vault: { vaultId, localPartyId: vault.localPartyId },
