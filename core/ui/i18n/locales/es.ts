@@ -95,7 +95,7 @@ export const es = {
     addOptionalHint: 'Añadir una pista opcional',
     connectingWithServer: 'Conectando con el servidor...',
     emailSetupTitle:
-      'Este correo electrónico solo se utiliza para enviar la copia de seguridad del servidor.',
+      'Este correo se utiliza para respaldo en la nube y no se comparte con terceros',
     enterEmail: 'Introduce tu correo electrónico',
     enterHint: 'Introducir pista',
     hintDescription: 'Esto se mostrará en caso de que olvides tu contraseña',
@@ -210,7 +210,7 @@ export const es = {
   approve: 'Aprobar',
   applied_discounts: 'Descuentos aplicados:',
   asset: 'Activo',
-  assets: 'activos',
+  assets: 'Activos',
   auto_compound_into_label: 'Compuesto automático en {{ticker}}',
   available: 'Disponible',
   back: 'Atrás',
@@ -862,6 +862,7 @@ export const es = {
     'El código de referencia debe tener un alias de cadena THOR',
   tns_not_found: 'Código de referencia no encontrado',
   to: 'A',
+  to_min_payout: 'pago mín.',
   to_asset: 'Al activo',
   token_not_found_description:
     'Posibles razones: contrato incorrecto, cadena no compatible o token eliminado de los registros.',
@@ -941,11 +942,11 @@ export const es = {
   vault_details_description: 'Ver el nombre, la parte y el tipo de bóveda',
   vault_details_edit_vault_description: 'Editar el nombre de su bóveda',
   vault_details_page_signer_word: 'Firmante',
-  vault_details_page_vault_ECDSA: 'Clave ECDSA',
-  vault_details_page_vault_EDDSA: 'Clave EdDSA',
+  vault_details_page_vault_ECDSA: 'ECDSA',
+  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_type: 'Tipo de bóveda',
   vault_info: 'Información de la bóveda',
-  vault_management: 'Administración de bóvedas',
+  vault_management: 'Bóveda',
   vault_name: 'Nombre de la bóveda',
   vault_name_already_exists: 'El nombre de la bóveda debe ser único',
   vault_name_description:
@@ -1106,6 +1107,7 @@ export const es = {
   normal: 'Normal',
   off: 'Apagado',
   on: 'En',
+  on_chain: 'en {{chain}}',
   optional: 'opcional',
   password_backup: 'Protege tu bóveda y firma rápidamente.',
   permissions: 'Permisos',
@@ -1219,7 +1221,7 @@ export const es = {
   enter: 'Ingresar',
   enter_your_email: 'Introduce tu correo electrónico',
   enter_your_email_description:
-    'Esto solo se usará una vez para enviar su archivo de respaldo, Vultisig no almacena ningún dato.',
+    'Este correo se utiliza para respaldo en la nube y no se comparte con terceros',
   seedphrase_duplicate_vault_error:
     'Esta frase inicial ya se importó como bóveda &quot;{{vaultName}}&quot;. Al volver a importarla, se reemplazaría la bóveda existente.',
   fast_vault_exists_warning_title: 'La bóveda ya existe',
