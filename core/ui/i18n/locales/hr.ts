@@ -1187,7 +1187,7 @@ export const hr = {
     'Unesite lozinku koju ste postavili prilikom izrade ovog trezora.',
   choose_a_password: 'Odaberite lozinku',
   choose_a_password_description:
-    'Ako želite dodatni sloj sigurnosti, odaberite lozinku. <b>Lozinka se ne može oporaviti.</b>',
+    'Ako želite dodatni sloj sigurnosti, odaberite lozinku. <b>Lozinka se ne može oporaviti.</b> <info />',
   create_vault: 'Izradi trezor',
   create_referral_desc:
     'Napravite vlastiti kod i zaradite<c> 20%</c> na preporučenim swapovima',

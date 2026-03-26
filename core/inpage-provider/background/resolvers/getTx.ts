@@ -51,6 +51,9 @@ export const getTx: BackgroundResolver<'getTx'> = async ({
       polkadot: () => {
         throw new NotImplementedError('Get tx for Polkadot chain')
       },
+      bittensor: () => {
+        throw new NotImplementedError('Get tx for Bittensor chain')
+      },
       ton: () => {
         throw new NotImplementedError('Get tx for TON chain')
       },
