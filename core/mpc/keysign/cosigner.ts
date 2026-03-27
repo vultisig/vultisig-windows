@@ -58,8 +58,10 @@ import {
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
 import { vaultContainerFromString } from '@core/mpc/vault/utils/vaultContainerFromString'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { decryptWithAesGcm } from '@lib/utils/encryption/aesGcm/decryptWithAesGcm'
 import { fromBase64 } from '@lib/utils/fromBase64'
+import { match } from '@lib/utils/match'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { initWasm } from '@trustwallet/wallet-core'
 import fs from 'fs/promises'
@@ -196,15 +198,14 @@ async function main() {
   )
 
   const signatureAlgorithm = getSignatureAlgorithm(chain)
-  if (signatureAlgorithm === 'mldsa') {
-    throw new Error('MLDSA keysign is not yet implemented')
-  }
 
   const coinType = getCoinType({ walletCore, chain })
-  const chainPath =
-    signatureAlgorithm === 'eddsa'
-      ? eddsaPlaceholderPath
-      : walletCore.CoinTypeExt.derivationPath(coinType).replaceAll("'", '')
+  const chainPath = match(signatureAlgorithm, {
+    ecdsa: () =>
+      walletCore.CoinTypeExt.derivationPath(coinType).replaceAll("'", ''),
+    eddsa: () => eddsaPlaceholderPath,
+    mldsa: () => eddsaPlaceholderPath,
+  })
   console.log(`\n6. Algorithm: ${signatureAlgorithm}, path: ${chainPath}`)
 
   console.log('\n7. Joining relay session...')
@@ -220,8 +221,14 @@ async function main() {
   console.log(`   Started: ${signers.join(', ')}`)
 
   const peers = signers.filter(s => s !== vault.localPartyId)
-  const keyShare =
-    vault.keyShares[signatureAlgorithm === 'ecdsa' ? 'ecdsa' : 'eddsa']
+  const keyShare = shouldBePresent(
+    match(signatureAlgorithm, {
+      ecdsa: () => vault.keyShares.ecdsa,
+      eddsa: () => vault.keyShares.eddsa,
+      mldsa: () => vault.keyShareMldsa,
+    }),
+    'Keyshare'
+  )
 
   console.log(`\n9. Keysigning ${msgs.length} message(s)...`)
   for (let i = 0; i < msgs.length; i++) {
