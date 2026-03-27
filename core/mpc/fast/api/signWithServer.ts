@@ -11,6 +11,7 @@ type Input = {
   is_ecdsa: boolean
   vault_password: string
   chain: string
+  mldsa?: boolean
 }
 
 export const signWithServer = async (input: Input) =>

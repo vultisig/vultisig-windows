@@ -1,9 +1,15 @@
+import { Chain } from '@core/chain/Chain'
+import { getQBTCPreSignedImageHash } from '@core/chain/chains/cosmos/qbtc/QBTCHelper'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { getSignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { assertChainField } from '@core/chain/utils/assertChainField'
 import { signWithServer } from '@core/mpc/fast/api/signWithServer'
+import {
+  chainSpecificRecord,
+  getBlockchainSpecificValue,
+} from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { getEncodedSigningInputs } from '@core/mpc/keysign/signingInputs'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
@@ -17,6 +23,7 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { isOneOf } from '@lib/utils/array/isOneOf'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { assertField } from '@lib/utils/record/assertField'
 import { useMutation } from '@tanstack/react-query'
@@ -54,6 +61,34 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
         keysign: async keysignPayload => {
           const coin = assertField(keysignPayload, 'coin')
           const { chain } = assertChainField(coin)
+          const isMldsa = getSignatureAlgorithm(chain) === 'mldsa'
+
+          if (isMldsa) {
+            const cosmosSpecific = getBlockchainSpecificValue(
+              keysignPayload.blockchainSpecific,
+              chainSpecificRecord[Chain.QBTC]
+            )
+            const messages = getQBTCPreSignedImageHash({
+              keysignPayload,
+              cosmosSpecific,
+            })
+
+            return signWithServer({
+              public_key: shouldBePresent(
+                vault.publicKeyMldsa,
+                'MLDSA public key'
+              ),
+              messages,
+              session: sessionId,
+              hex_encryption_key: hexEncryptionKey,
+              derive_path: 'm',
+              is_ecdsa: false,
+              vault_password: password,
+              chain,
+              mldsa: true,
+            })
+          }
+
           const publicKey = getPublicKey({
             chain,
             walletCore,
