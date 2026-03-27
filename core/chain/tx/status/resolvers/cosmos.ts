@@ -48,15 +48,16 @@ const getCosmosRestTxStatus = async ({
   const feeCoin = chainFeeCoin[chain]
 
   const receipt = (() => {
-    const gasUsed = BigInt(tx_response.gas_used)
-    const gasWanted = BigInt(tx_response.gas_wanted)
+    const gasUsedRaw = tx_response.gas_used
+    const gasWantedRaw = tx_response.gas_wanted
+    const gasUsed = /^\d+$/.test(gasUsedRaw) ? BigInt(gasUsedRaw) : 0n
+    const gasWanted = /^\d+$/.test(gasWantedRaw) ? BigInt(gasWantedRaw) : 0n
     if (gasWanted === 0n) {
       return undefined
     }
+    const maxFeeRaw = tx_response.tx?.auth_info?.fee?.amount?.[0]?.amount
     const maxFeeAmount =
-      tx_response.tx?.auth_info?.fee?.amount?.[0]?.amount != null
-        ? BigInt(tx_response.tx.auth_info.fee.amount[0].amount)
-        : 0n
+      maxFeeRaw != null && /^\d+$/.test(maxFeeRaw) ? BigInt(maxFeeRaw) : 0n
     const actualFee =
       maxFeeAmount > 0n ? (maxFeeAmount * gasUsed) / gasWanted : 0n
     if (actualFee === 0n) {
