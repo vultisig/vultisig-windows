@@ -78,7 +78,9 @@ export const useCreateVaultMutation = (
       const vaultId = getVaultId(vault)
 
       await createCoins({ vaultId, coins })
+
       await refetchQueries([StorageKey.vaults])
+
       await setCurrentVaultId(vaultId)
 
       return vault

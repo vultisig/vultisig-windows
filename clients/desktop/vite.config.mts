@@ -27,6 +27,8 @@ export default defineConfig(async ({ mode }) => {
       __VULTISIG_VERIFIER_URL__: JSON.stringify(
         env.VULTISIG_VERIFIER_URL || 'https://verifier.vultisig.com'
       ),
+      __FAST_VAULT_URL__: JSON.stringify(env.FAST_VAULT_URL || ''),
+      __RELAY_URL__: JSON.stringify(env.RELAY_URL || ''),
     },
     plugins: [
       ...getCommonPlugins(),
