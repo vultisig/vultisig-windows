@@ -1,30 +1,57 @@
-import { TssSignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
-import { SignSession as DklsSignSession } from '@lib/dkls/vs_wasm'
-import { SignSession as SchnorrSignSession } from '@lib/schnorr/vs_schnorr_wasm'
+import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
+import {
+  Keyshare as DklsKeyshare,
+  SignSession as DklsSignSession,
+} from '@lib/dkls/vs_wasm'
+import {
+  Keyshare as MldsaKeyshare,
+  SignSession as MldsaSignSession,
+} from '@lib/mldsa/vs_wasm'
+import {
+  Keyshare as SchnorrKeyshare,
+  SignSession as SchnorrSignSession,
+} from '@lib/schnorr/vs_schnorr_wasm'
+import { match } from '@lib/utils/match'
 
-import { toMpcLibKeyshare } from './keyshare'
-
-export const SignSession: Record<
-  TssSignatureAlgorithm,
-  typeof DklsSignSession | typeof SchnorrSignSession
-> = {
+export const SignSession = {
   ecdsa: DklsSignSession,
   eddsa: SchnorrSignSession,
-}
+  mldsa: MldsaSignSession,
+} satisfies Record<SignatureAlgorithm, unknown>
 
 type MakeSignSessionInput = {
   setupMessage: Uint8Array
   localPartyId: string
   keyShare: string
-  signatureAlgorithm: TssSignatureAlgorithm
+  signatureAlgorithm: SignatureAlgorithm
 }
 
+/** Routing boundary: dispatches to the correct WASM SignSession per algorithm. */
 export const makeSignSession = ({
   setupMessage,
   localPartyId,
   keyShare,
   signatureAlgorithm,
 }: MakeSignSessionInput) => {
-  const ks = toMpcLibKeyshare({ keyShare, signatureAlgorithm })
-  return new SignSession[signatureAlgorithm](setupMessage, localPartyId, ks)
+  const keyShareBytes = Buffer.from(keyShare, 'base64')
+  return match(signatureAlgorithm, {
+    ecdsa: () =>
+      new DklsSignSession(
+        setupMessage,
+        localPartyId,
+        DklsKeyshare.fromBytes(keyShareBytes)
+      ),
+    eddsa: () =>
+      new SchnorrSignSession(
+        setupMessage,
+        localPartyId,
+        SchnorrKeyshare.fromBytes(keyShareBytes)
+      ),
+    mldsa: () =>
+      new MldsaSignSession(
+        setupMessage,
+        localPartyId,
+        MldsaKeyshare.fromBytes(keyShareBytes)
+      ),
+  })
 }
