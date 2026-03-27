@@ -9,6 +9,7 @@ STANDARD
 - `core/mpc/` — MPC/TSS cryptographic operations. Do not modify without explicit review.
 - `tss/` — TSS Go bindings (Wails). Do not modify without explicit review.
 - `lib/` — Upstream mirror. Do not edit directly.
+- `core/chain/chains/cosmos/qbtc/` — QBTC manual protobuf builder. SignDoc encoding must match iOS byte-for-byte for cross-device cosigning.
 
 ## Project Overview
 
@@ -95,6 +96,21 @@ See `.claude/rules/` for detailed rules. Key points:
 - **Types**: `type` over `interface`, no `as` assertions, derive unions from const arrays
 - **Desktop dev**: always use `yarn dev:desktop` (Wails), never plain Vite
 - **JSDoc**: `/** ... */` on all exported functions, classes, and type definitions
+
+## Signature Algorithms
+
+The MPC keysign pipeline supports three signature algorithms:
+
+| Algorithm | Chains | Key type | Library |
+|-----------|--------|----------|---------|
+| ECDSA | EVM, UTXO, Cosmos, etc. | `PublicKey` (WalletCore) | `@lib/dkls/vs_wasm` |
+| EdDSA | Solana, Sui, Polkadot, etc. | `PublicKey` (WalletCore) | `@lib/schnorr/vs_wasm` |
+| MLDSA | QBTC | `vault.publicKeyMldsa` (hex string) | `@lib/mldsa/vs_wasm` |
+
+MLDSA (ML-DSA-44) is a post-quantum algorithm. WalletCore has no MLDSA key type, so MLDSA chains:
+- Return `null` from `useCurrentVaultNullablePublicKey()` and pass the hex key via `hexPublicKeyOverride`
+- Bypass WalletCore's `TransactionCompiler` entirely (manual protobuf in `QBTCHelper.ts`)
+- Use Cosmos REST API (`restOnlyChains` pattern) instead of StargateClient for all node interactions
 
 ## Knowledge Base
 
