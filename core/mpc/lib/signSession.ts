@@ -13,10 +13,23 @@ import {
 } from '@lib/schnorr/vs_schnorr_wasm'
 import { match } from '@lib/utils/match'
 
+const mldsaLevel = 44
+
+/** Wraps MldsaSignSession.setup to match the 4-param signature of DKLS/Schnorr. */
+const MldsaSignSessionWithLevel = {
+  ...MldsaSignSession,
+  setup: (
+    keyId: Uint8Array,
+    chainPath: string,
+    messageHash: Uint8Array | null | undefined,
+    ids: string[]
+  ) => MldsaSignSession.setup(mldsaLevel, keyId, chainPath, messageHash, ids),
+}
+
 export const SignSession = {
   ecdsa: DklsSignSession,
   eddsa: SchnorrSignSession,
-  mldsa: MldsaSignSession,
+  mldsa: MldsaSignSessionWithLevel,
 } satisfies Record<SignatureAlgorithm, unknown>
 
 type MakeSignSessionInput = {
