@@ -1,9 +1,9 @@
 import { Chain } from '@core/chain/Chain'
 import { PublicKeys } from '@core/chain/publicKey/PublicKeys'
-import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
+import { TssSignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { MpcLib } from '@core/mpc/mpcLib'
 
-export type VaultKeyShares = Record<SignatureAlgorithm, string>
+export type VaultKeyShares = Record<TssSignatureAlgorithm, string>
 
 export type VaultAllKeyShares = {
   keyShares: VaultKeyShares

@@ -39,6 +39,7 @@ export const chainSpecificRecord = {
   [Chain.TerraClassic]: 'cosmosSpecific',
   [Chain.Noble]: 'cosmosSpecific',
   [Chain.Akash]: 'cosmosSpecific',
+  [Chain.QBTC]: 'cosmosSpecific',
 
   [Chain.THORChain]: 'thorchainSpecific',
 

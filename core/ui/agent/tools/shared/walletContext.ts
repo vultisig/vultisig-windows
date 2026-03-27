@@ -10,6 +10,7 @@ type WalletContextVault = {
   localPartyId: string
   libType: MpcLib
   publicKeyEcdsa: string
+  publicKeyMldsa?: string
 }
 
 type WalletContext = {

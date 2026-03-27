@@ -1,8 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { areEqualCoins, CoinKey } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
-import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
-import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
+import { getChainAddress } from '@core/chain/publicKey/address/getChainAddress'
 import { isKeyImportVault } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { groupItems } from '@lib/utils/array/groupItems'
@@ -60,15 +59,14 @@ export const useCurrentVaultAddress = (chain: Chain) => {
       return ''
     }
 
-    const publicKey = getPublicKey({
+    return getChainAddress({
       chain,
       walletCore,
       hexChainCode: vault.hexChainCode,
       publicKeys: vault.publicKeys,
+      publicKeyMldsa: vault.publicKeyMldsa,
       chainPublicKeys: vault.chainPublicKeys,
     })
-
-    return deriveAddress({ chain, publicKey, walletCore })
   }, [addresses, chain, walletCore, vault])
 }
 

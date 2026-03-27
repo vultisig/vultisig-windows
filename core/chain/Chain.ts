@@ -43,6 +43,7 @@ export const cosmosChainsByKind = {
     TerraClassic: 'TerraClassic',
     Noble: 'Noble',
     Akash: 'Akash',
+    QBTC: 'QBTC',
   },
   vaultBased: {
     THORChain: 'THORChain',

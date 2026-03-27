@@ -50,6 +50,7 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.Mantle]: 'https://explorer.mantle.xyz',
   [Chain.Hyperliquid]: hyperliquidBlockExplorerUrl,
   [Chain.Sei]: 'https://seiscan.io',
+  [Chain.QBTC]: '',
 }
 
 export const getBlockExplorerUrl = ({
@@ -98,6 +99,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Mantle]: () => `${baseUrl}/address/${value}`,
         [Chain.Hyperliquid]: () => `${baseUrl}/address/${value}`,
         [Chain.Sei]: () => `${baseUrl}/address/${value}`,
+        [Chain.QBTC]: () => '',
       }),
     tx: () =>
       match(chain, {
@@ -138,6 +140,7 @@ export const getBlockExplorerUrl = ({
         [Chain.Mantle]: () => `${baseUrl}/tx/${value}`,
         [Chain.Hyperliquid]: () => `${baseUrl}/tx/${value}`,
         [Chain.Sei]: () => `${baseUrl}/tx/${value}`,
+        [Chain.QBTC]: () => '',
       }),
   })
 }

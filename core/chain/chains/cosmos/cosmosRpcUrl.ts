@@ -13,6 +13,7 @@ export const cosmosRpcUrl: Record<CosmosChain, string> = {
   THORChain: 'https://thornode.thorchain.network',
   MayaChain: 'https://mayanode.mayachain.info',
   Akash: 'https://akash-rest.publicnode.com',
+  QBTC: 'https://api.vultisig.com/qbtc-rpc',
 }
 
 export const getCosmosWasmTokenBalanceUrl = ({

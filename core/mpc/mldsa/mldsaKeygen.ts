@@ -77,7 +77,6 @@ export class MldsaKeygen {
             hash: getMessageHash(base64Encode(message.body)),
             sequence_no: this.sequenceNo,
           },
-          messageId: 'mldsa',
         })
         this.sequenceNo++
       })
@@ -100,7 +99,6 @@ export class MldsaKeygen {
         serverUrl: this.serverURL,
         localPartyId: this.localPartyId,
         sessionId: this.sessionId,
-        messageId: 'mldsa',
       })
 
       if (parsedMessages.length === 0) {
@@ -131,7 +129,6 @@ export class MldsaKeygen {
           localPartyId: this.localPartyId,
           sessionId: this.sessionId,
           messageHash: msg.hash,
-          messageId: 'mldsa',
         })
       }
 
@@ -173,13 +170,11 @@ export class MldsaKeygen {
           serverUrl: this.serverURL,
           message: encryptedSetupMsg,
           sessionId: this.sessionId,
-          messageId: 'mldsa',
         })
       } else {
         const encodedEncryptedSetupMsg = await waitForSetupMessage({
           serverUrl: this.serverURL,
           sessionId: this.sessionId,
-          messageId: 'mldsa',
         })
         this.setupMessage = fromMpcServerMessage(
           encodedEncryptedSetupMsg,
