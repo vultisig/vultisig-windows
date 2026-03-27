@@ -71,6 +71,7 @@ export const VerifyKeysignStart = ({
       [isBlockaidEnabled, walletCore]
     )
   )
+  console.log('txScanInput', txScanInput.data)
 
   const txScanQuery = usePotentialQuery(
     txScanInput.data || undefined,

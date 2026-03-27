@@ -41,6 +41,14 @@ type BlockaidSimulationContentProps =
       networkFeeProps: NetworkFeeSectionProps
       getCoin: (coinKey: CoinKey) => Promise<Coin>
     }
+  | {
+      chain: typeof Chain.Bitcoin
+      blockaidSimulationQuery: Query<BlockaidEvmSimulationInfo, unknown>
+      keysignPayload: KeysignPayload
+      address: string
+      networkFeeProps: NetworkFeeSectionProps
+      getCoin: (coinKey: CoinKey) => Promise<Coin>
+    }
 
 type EnrichedSolanaSimulationInfo =
   | {
@@ -199,13 +207,17 @@ const BlockaidSolanaSimulationContent = ({
   )
 }
 
+type BlockaidTransferSimulationContentProps =
+  | Extract<BlockaidSimulationContentProps, { chain: EvmChain }>
+  | Extract<BlockaidSimulationContentProps, { chain: typeof Chain.Bitcoin }>
+
 const BlockaidEvmSimulationContent = ({
   blockaidSimulationQuery,
   keysignPayload,
   address,
   chain,
   networkFeeProps,
-}: Extract<BlockaidSimulationContentProps, { chain: EvmChain }>) => {
+}: BlockaidTransferSimulationContentProps) => {
   const { t } = useTranslation()
 
   return (

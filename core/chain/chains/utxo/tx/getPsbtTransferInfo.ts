@@ -85,3 +85,11 @@ export const getPsbtTransferInfo = (psbt: Psbt, senderAddress: string) => {
     memo,
   }
 }
+
+export const getPsbtTransferInfoFromBase64 = (
+  psbtBase64: string,
+  senderAddress: string
+) => {
+  const psbt = Psbt.fromBuffer(Buffer.from(psbtBase64, 'base64'))
+  return getPsbtTransferInfo(psbt, senderAddress)
+}

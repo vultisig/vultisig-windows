@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file vultisig/keysign/v1/wasm_execute_contract_payload.proto.
  */
 export const file_vultisig_keysign_v1_wasm_execute_contract_payload: GenFile = /*@__PURE__*/
-  fileDesc("Cjd2dWx0aXNpZy9rZXlzaWduL3YxL3dhc21fZXhlY3V0ZV9jb250cmFjdF9wYXlsb2FkLnByb3RvEhN2dWx0aXNpZy5rZXlzaWduLnYxIisKCkNvc21vc0NvaW4SDQoFZGVub20YASABKAkSDgoGYW1vdW50GAIgASgJIq8BCglDb3Ntb3NGZWUSLwoGYW1vdW50GAEgAygLMh8udnVsdGlzaWcua2V5c2lnbi52MS5Db3Ntb3NDb2luEgsKA2dhcxgCIAEoCRISCgVwYXllchgDIAEoCUgAiAEBEhQKB2dyYW50ZXIYBCABKAlIAYgBARIWCglmZWVfcGF5ZXIYBSABKAlIAogBAUIICgZfcGF5ZXJCCgoIX2dyYW50ZXJCDAoKX2ZlZV9wYXllciIoCglDb3Ntb3NNc2cSDAoEdHlwZRgBIAEoCRINCgV2YWx1ZRgCIAEoCSJmCglTaWduQW1pbm8SKwoDZmVlGAEgASgLMh4udnVsdGlzaWcua2V5c2lnbi52MS5Db3Ntb3NGZWUSLAoEbXNncxgCIAMoCzIeLnZ1bHRpc2lnLmtleXNpZ24udjEuQ29zbW9zTXNnImMKClNpZ25EaXJlY3QSEgoKYm9keV9ieXRlcxgBIAEoCRIXCg9hdXRoX2luZm9fYnl0ZXMYAiABKAkSEAoIY2hhaW5faWQYAyABKAkSFgoOYWNjb3VudF9udW1iZXIYBCABKAkiJgoKU2lnblNvbGFuYRIYChByYXdfdHJhbnNhY3Rpb25zGAEgAygJIpMBChpXYXNtRXhlY3V0ZUNvbnRyYWN0UGF5bG9hZBIWCg5zZW5kZXJfYWRkcmVzcxgBIAEoCRIYChBjb250cmFjdF9hZGRyZXNzGAIgASgJEhMKC2V4ZWN1dGVfbXNnGAMgASgJEi4KBWNvaW5zGAQgAygLMh8udnVsdGlzaWcua2V5c2lnbi52MS5Db3Ntb3NDb2luQlQKE3Z1bHRpc2lnLmtleXNpZ24udjFaOGdpdGh1Yi5jb20vdnVsdGlzaWcvY29tbW9uZGF0YS9nby92dWx0aXNpZy9rZXlzaWduL3YxO3YxugICVlNiBnByb3RvMw");
+  fileDesc("Cjd2dWx0aXNpZy9rZXlzaWduL3YxL3dhc21fZXhlY3V0ZV9jb250cmFjdF9wYXlsb2FkLnByb3RvEhN2dWx0aXNpZy5rZXlzaWduLnYxIisKCkNvc21vc0NvaW4SDQoFZGVub20YASABKAkSDgoGYW1vdW50GAIgASgJIq8BCglDb3Ntb3NGZWUSLwoGYW1vdW50GAEgAygLMh8udnVsdGlzaWcua2V5c2lnbi52MS5Db3Ntb3NDb2luEgsKA2dhcxgCIAEoCRISCgVwYXllchgDIAEoCUgAiAEBEhQKB2dyYW50ZXIYBCABKAlIAYgBARIWCglmZWVfcGF5ZXIYBSABKAlIAogBAUIICgZfcGF5ZXJCCgoIX2dyYW50ZXJCDAoKX2ZlZV9wYXllciIoCglDb3Ntb3NNc2cSDAoEdHlwZRgBIAEoCRINCgV2YWx1ZRgCIAEoCSJmCglTaWduQW1pbm8SKwoDZmVlGAEgASgLMh4udnVsdGlzaWcua2V5c2lnbi52MS5Db3Ntb3NGZWUSLAoEbXNncxgCIAMoCzIeLnZ1bHRpc2lnLmtleXNpZ24udjEuQ29zbW9zTXNnImMKClNpZ25EaXJlY3QSEgoKYm9keV9ieXRlcxgBIAEoCRIXCg9hdXRoX2luZm9fYnl0ZXMYAiABKAkSEAoIY2hhaW5faWQYAyABKAkSFgoOYWNjb3VudF9udW1iZXIYBCABKAkiJgoKU2lnblNvbGFuYRIYChByYXdfdHJhbnNhY3Rpb25zGAEgAygJIhgKCFNpZ25Qc2J0EgwKBHBzYnQYASABKAkikwEKGldhc21FeGVjdXRlQ29udHJhY3RQYXlsb2FkEhYKDnNlbmRlcl9hZGRyZXNzGAEgASgJEhgKEGNvbnRyYWN0X2FkZHJlc3MYAiABKAkSEwoLZXhlY3V0ZV9tc2cYAyABKAkSLgoFY29pbnMYBCADKAsyHy52dWx0aXNpZy5rZXlzaWduLnYxLkNvc21vc0NvaW5CVAoTdnVsdGlzaWcua2V5c2lnbi52MVo4Z2l0aHViLmNvbS92dWx0aXNpZy9jb21tb25kYXRhL2dvL3Z1bHRpc2lnL2tleXNpZ24vdjE7djG6AgJWU2IGcHJvdG8z");
 
 /**
  * @generated from message vultisig.keysign.v1.CosmosCoin
@@ -167,6 +167,25 @@ export const SignSolanaSchema: GenMessage<SignSolana> = /*@__PURE__*/
   messageDesc(file_vultisig_keysign_v1_wasm_execute_contract_payload, 5);
 
 /**
+ * @generated from message vultisig.keysign.v1.SignPsbt
+ */
+export type SignPsbt = Message<"vultisig.keysign.v1.SignPsbt"> & {
+  /**
+   * base64 encoded psbt
+   *
+   * @generated from field: string psbt = 1;
+   */
+  psbt: string;
+};
+
+/**
+ * Describes the message vultisig.keysign.v1.SignPsbt.
+ * Use `create(SignPsbtSchema)` to create a new message.
+ */
+export const SignPsbtSchema: GenMessage<SignPsbt> = /*@__PURE__*/
+  messageDesc(file_vultisig_keysign_v1_wasm_execute_contract_payload, 6);
+
+/**
  * @generated from message vultisig.keysign.v1.WasmExecuteContractPayload
  */
 export type WasmExecuteContractPayload = Message<"vultisig.keysign.v1.WasmExecuteContractPayload"> & {
@@ -196,5 +215,5 @@ export type WasmExecuteContractPayload = Message<"vultisig.keysign.v1.WasmExecut
  * Use `create(WasmExecuteContractPayloadSchema)` to create a new message.
  */
 export const WasmExecuteContractPayloadSchema: GenMessage<WasmExecuteContractPayload> = /*@__PURE__*/
-  messageDesc(file_vultisig_keysign_v1_wasm_execute_contract_payload, 6);
+  messageDesc(file_vultisig_keysign_v1_wasm_execute_contract_payload, 7);
 

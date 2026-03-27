@@ -51,9 +51,12 @@ export const refineKeysignUtxo = (
   // PSBTs already have UTXOs defined - skip refinement logic
   // The PSBT contains all necessary UTXO selection and transaction structure
   // TODO: Re-enable once we work again over psbt support
-  // if (utxoSpecific.psbt) {
-  //   return input.keysignPayload
-  // }
+  if (
+    input.keysignPayload.signData &&
+    input.keysignPayload.signData.case === 'signPsbt'
+  ) {
+    return input.keysignPayload
+  }
 
   const [signingInput] = getUtxoSigningInputs(input)
 
