@@ -1,4 +1,4 @@
-import { TssSignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
+import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { encodeDERSignature } from '@core/mpc/derSignature'
 import { getMessageHash } from '@core/mpc/getMessageHash'
 import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
@@ -26,7 +26,7 @@ import { ensureSetupMessage } from '../message/setup/ensure'
 
 type KeysignInput = {
   keyShare: string
-  signatureAlgorithm: TssSignatureAlgorithm
+  signatureAlgorithm: SignatureAlgorithm
   message: string
   chainPath: string
   localPartyId: string
@@ -182,27 +182,35 @@ export const keysign = async ({
   }
 
   const signature = session.finish()
-  const [rawR, rawS] = [signature.slice(0, 32), signature.slice(32, 64)]
-  const [r, s] = [rawR, rawS]
-    .map(value => Buffer.from(value))
-    .map(value =>
-      match(signatureAlgorithm, {
-        ecdsa: () => value,
-        eddsa: () => value.reverse(),
-      })
-    )
-    .map(value => value.toString('hex'))
 
-  const derSignature = encodeDERSignature(rawR, rawS)
-  const result: KeysignSignature = withoutUndefinedFields({
-    msg: Buffer.from(message, 'hex').toString('base64'),
-    r,
-    s,
-    recovery_id: match(signatureAlgorithm, {
-      ecdsa: () => signature[64].toString(16).padStart(2, '0'),
-      eddsa: () => undefined,
+  const result: KeysignSignature = match(signatureAlgorithm, {
+    mldsa: () => ({
+      msg: Buffer.from(message, 'hex').toString('base64'),
+      r: '',
+      s: '',
+      der_signature: Buffer.from(signature).toString('hex'),
     }),
-    der_signature: Buffer.from(derSignature).toString('hex'),
+    ecdsa: () => {
+      const [rawR, rawS] = [signature.slice(0, 32), signature.slice(32, 64)]
+      const derSignature = encodeDERSignature(rawR, rawS)
+      return withoutUndefinedFields({
+        msg: Buffer.from(message, 'hex').toString('base64'),
+        r: Buffer.from(rawR).toString('hex'),
+        s: Buffer.from(rawS).toString('hex'),
+        recovery_id: signature[64].toString(16).padStart(2, '0'),
+        der_signature: Buffer.from(derSignature).toString('hex'),
+      })
+    },
+    eddsa: () => {
+      const [rawR, rawS] = [signature.slice(0, 32), signature.slice(32, 64)]
+      const derSignature = encodeDERSignature(rawR, rawS)
+      return {
+        msg: Buffer.from(message, 'hex').toString('base64'),
+        r: Buffer.from(rawR).reverse().toString('hex'),
+        s: Buffer.from(rawS).reverse().toString('hex'),
+        der_signature: Buffer.from(derSignature).toString('hex'),
+      }
+    },
   })
 
   ignorePromiseOutcome(
