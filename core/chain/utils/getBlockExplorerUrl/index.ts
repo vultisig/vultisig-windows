@@ -101,7 +101,8 @@ export const getBlockExplorerUrl = ({
         [Chain.Hyperliquid]: () => `${baseUrl}/address/${value}`,
         [Chain.Sei]: () => `${baseUrl}/address/${value}`,
         // TODO: Replace with dedicated QBTC explorer address URL
-        [Chain.QBTC]: () => '',
+        [Chain.QBTC]: () =>
+          `https://api.vultisig.com/qbtc-rpc/cosmos/bank/v1beta1/balances/${value}`,
       }),
     tx: () =>
       match(chain, {
