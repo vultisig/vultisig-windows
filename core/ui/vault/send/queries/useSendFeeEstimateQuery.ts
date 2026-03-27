@@ -6,7 +6,7 @@ import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
   useCurrentVault,
-  useCurrentVaultPublicKey,
+  useCurrentVaultNullablePublicKey,
 } from '@core/ui/vault/state/currentVault'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { omit } from '@lib/utils/record/omit'
@@ -27,7 +27,7 @@ export const useSendFeeEstimateQuery = () => {
 
   const vault = useCurrentVault()
   const walletCore = useAssertWalletCore()
-  const publicKey = useCurrentVaultPublicKey(coin.chain)
+  const publicKey = useCurrentVaultNullablePublicKey(coin.chain)
 
   const input = useMemo(() => {
     if (balance == null) return null
@@ -42,6 +42,7 @@ export const useSendFeeEstimateQuery = () => {
       publicKey,
       libType: vault.libType,
       walletCore,
+      hexPublicKeyOverride: publicKey ? undefined : vault.publicKeyMldsa,
     }
   }, [balance, coin, memo, publicKey, receiver, vault, walletCore])
 
