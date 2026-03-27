@@ -88,6 +88,10 @@ async function fastVaultKeysignAttempt({
   signatureAlgorithm,
   chain,
 }: FastVaultKeysignAttemptInput): Promise<KeysignSignature> {
+  if (signatureAlgorithm === 'mldsa') {
+    throw new Error('MLDSA keysign is not yet implemented')
+  }
+
   const sessionId = uuidv4()
   const hexEncryptionKey = generateEncryptionKey()
   const isEcdsa = signatureAlgorithm === 'ecdsa'

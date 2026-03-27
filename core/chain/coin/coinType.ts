@@ -50,4 +50,5 @@ export const getCoinType = ({
     [Chain.Mantle]: () => CoinType.mantle,
     [Chain.Hyperliquid]: () => CoinType.ethereum,
     [Chain.Sei]: () => CoinType.ethereum,
+    [Chain.QBTC]: () => CoinType.cosmos,
   })

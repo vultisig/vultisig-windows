@@ -204,4 +204,5 @@ export const knownCosmosTokens: Record<
   [Chain.Dydx]: {},
   [Chain.Noble]: {},
   [Chain.Akash]: {},
+  [Chain.QBTC]: {},
 }

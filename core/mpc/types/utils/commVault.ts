@@ -3,9 +3,9 @@ import { Timestamp, TimestampSchema } from '@bufbuild/protobuf/wkt'
 import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import {
-  SignatureAlgorithm,
   signatureAlgorithms,
-  signingAlgorithms,
+  TssSignatureAlgorithm,
+  tssSigningAlgorithms,
 } from '@core/chain/signing/SignatureAlgorithm'
 import { Vault } from '@core/mpc/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -52,7 +52,7 @@ export const toCommVault = (vault: Vault): CommVault =>
     keyShares: [
       ...toEntries(vault.keyShares).map(({ key, value }) =>
         create(Vault_KeyShareSchema, {
-          publicKey: vault.publicKeys[key as SignatureAlgorithm],
+          publicKey: vault.publicKeys[key as TssSignatureAlgorithm],
           keyshare: value,
         })
       ),
@@ -122,7 +122,7 @@ export const fromCommVault = (vault: CommVault): Vault => {
   })
 
   const keyShares = recordFromKeys(
-    signingAlgorithms,
+    tssSigningAlgorithms,
     algorithm =>
       shouldBePresent(
         vault.keyShares.find(

@@ -20,9 +20,7 @@ import styled from 'styled-components'
 
 import { SettingsSection } from '../../settings/SettingsSection'
 import { VaultSettingsBackup } from './backup'
-import { DescriptionText, ListItemIconWrapper } from './shared'
-
-export { ListItemIconWrapper }
+import { DescriptionText, ListItemIconWrapper } from './vaultSettingsListStyles'
 
 type VaultSettingsPageProps = {
   extraItems?: ReactNode
@@ -187,3 +185,5 @@ const DeleteButtonIconWrapper = styled(ListItemIconWrapper)`
 const DeleteItem = styled(ListItem)`
   border-radius: 12px;
 `
+
+export { ListItemIconWrapper } from './vaultSettingsListStyles'

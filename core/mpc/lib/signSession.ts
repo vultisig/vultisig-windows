@@ -1,11 +1,11 @@
-import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
+import { TssSignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { SignSession as DklsSignSession } from '@lib/dkls/vs_wasm'
 import { SignSession as SchnorrSignSession } from '@lib/schnorr/vs_schnorr_wasm'
 
 import { toMpcLibKeyshare } from './keyshare'
 
 export const SignSession: Record<
-  SignatureAlgorithm,
+  TssSignatureAlgorithm,
   typeof DklsSignSession | typeof SchnorrSignSession
 > = {
   ecdsa: DklsSignSession,
@@ -16,7 +16,7 @@ type MakeSignSessionInput = {
   setupMessage: Uint8Array
   localPartyId: string
   keyShare: string
-  signatureAlgorithm: SignatureAlgorithm
+  signatureAlgorithm: TssSignatureAlgorithm
 }
 
 export const makeSignSession = ({

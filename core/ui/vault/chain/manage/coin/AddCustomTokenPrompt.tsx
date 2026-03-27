@@ -19,7 +19,12 @@ export const AddCustomTokenPrompt = () => {
   if (isOneOf(chain, chainsWithTokenMetadataDiscovery)) {
     return (
       <CustomTokenCard
-        onClick={() => navigate({ id: 'addCustomToken', state: { chain } })}
+        onClick={() =>
+          navigate({
+            id: 'addCustomToken',
+            state: { chain, closeParentAfterAdd: true },
+          })
+        }
       >
         <CustomIconWrapper>
           <PlusIcon />

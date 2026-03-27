@@ -1,5 +1,5 @@
-import { getPushNotificationVaultId } from '@core/ui/notifications/computeNotificationVaultId'
 import { useVaults } from '@core/ui/storage/vaults'
+import { computeNotificationVaultId } from '@vultisig/sdk'
 import { useEffect } from 'react'
 
 import {
@@ -20,7 +20,10 @@ export const AutoRegisterPushNotifications = () => {
         type: pushRegisterVaultsType,
         vaults: await Promise.all(
           vaults.map(async vault => ({
-            vaultId: await getPushNotificationVaultId(vault),
+            vaultId: await computeNotificationVaultId(
+              vault.publicKeys.ecdsa,
+              vault.hexChainCode
+            ),
             localPartyId: vault.localPartyId,
           }))
         ),

@@ -1,7 +1,6 @@
 import { Chain } from '@core/chain/Chain'
-import { getChainKind } from '@core/chain/ChainKind'
 import { getCoinType } from '@core/chain/coin/coinType'
-import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
+import { getSignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { match } from '@lib/utils/match'
 import { WalletCore } from '@trustwallet/wallet-core'
 
@@ -40,7 +39,13 @@ export const getPublicKey = ({
     throw new Error('Chain public key not found')
   }
 
-  const keysignType = signatureAlgorithms[getChainKind(chain)]
+  const keysignType = getSignatureAlgorithm(chain)
+
+  if (keysignType === 'mldsa') {
+    throw new Error(
+      `MLDSA chains like ${chain} do not use TrustWallet public key derivation`
+    )
+  }
 
   const publicKeyType = getTwPublicKeyType({ walletCore, chain })
 

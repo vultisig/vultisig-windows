@@ -37,7 +37,8 @@ export default defineConfig(async ({ mode }) => {
       }),
       circleDependency({
         exclude: /node_modules/,
-        circleImportThrowErr: false,
+        // Fail the build so import cycles (e.g. settings ↔ backup) cannot slip back in.
+        circleImportThrowErr: true,
         formatOutModulePath(path) {
           const str = 'Circular dependency detected:'
           return str + path

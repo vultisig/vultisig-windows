@@ -1,6 +1,6 @@
 import { fromBinary } from '@bufbuild/protobuf'
 import { Chain, CosmosChain, EvmChain } from '@core/chain/Chain'
-import { getChainKind, isChainOfKind } from '@core/chain/ChainKind'
+import { isChainOfKind } from '@core/chain/ChainKind'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
 import { cosmosRpcUrl } from '@core/chain/chains/cosmos/cosmosRpcUrl'
 import { getEvmClient } from '@core/chain/chains/evm/client'
@@ -8,7 +8,7 @@ import { getSolanaClient } from '@core/chain/chains/solana/client'
 import { getBlockchairBaseUrl } from '@core/chain/chains/utxo/client/getBlockchairBaseUrl'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
-import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
+import { getSignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { decodeSigningOutput } from '@core/chain/tw/signingOutput'
 import { broadcastTx } from '@core/chain/tx/broadcast'
 import { compileTx } from '@core/chain/tx/compile/compileTx'
@@ -47,8 +47,7 @@ export const handleSignTx: ToolHandler = async (input, context) => {
   const keysignPayload = fromBinary(KeysignPayloadSchema, payloadBytes)
 
   const chain = getKeysignChain(keysignPayload)
-  const chainKind = getChainKind(chain)
-  const algorithm = signatureAlgorithms[chainKind]
+  const algorithm = getSignatureAlgorithm(chain)
 
   const { walletCore, vault: walletVault } = getWalletContext()
 

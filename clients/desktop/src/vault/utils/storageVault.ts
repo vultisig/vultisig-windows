@@ -1,5 +1,5 @@
 import { Chain } from '@core/chain/Chain'
-import { signingAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
+import { tssSigningAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { MpcLib } from '@core/mpc/mpcLib'
 import { Vault } from '@core/mpc/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -74,7 +74,7 @@ export const fromStorageVault = (
     eddsa: vault.public_key_eddsa,
   }
 
-  const keyShares = recordFromKeys(signingAlgorithms, algorithm => {
+  const keyShares = recordFromKeys(tssSigningAlgorithms, algorithm => {
     const publicKey = publicKeys[algorithm]
     if (!publicKey) return ''
     return shouldBePresent(

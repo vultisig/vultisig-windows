@@ -42,10 +42,9 @@ globalThis.fetch = async (
 }
 
 import { fromBinary } from '@bufbuild/protobuf'
-import { getChainKind } from '@core/chain/ChainKind'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
-import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
+import { getSignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { getSevenZip } from '@core/mpc/compression/getSevenZip'
 import { keysign } from '@core/mpc/keysign'
@@ -196,8 +195,11 @@ async function main() {
     `   Hashes (${msgs.length}): ${msgs.map(h => h.slice(0, 20) + '...').join(', ')}`
   )
 
-  const chainKind = getChainKind(chain)
-  const signatureAlgorithm = signatureAlgorithms[chainKind]
+  const signatureAlgorithm = getSignatureAlgorithm(chain)
+  if (signatureAlgorithm === 'mldsa') {
+    throw new Error('MLDSA keysign is not yet implemented')
+  }
+
   const coinType = getCoinType({ walletCore, chain })
   const chainPath =
     signatureAlgorithm === 'eddsa'
