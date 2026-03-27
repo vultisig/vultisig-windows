@@ -2,82 +2,74 @@
 // @generated from file vultisig/keygen/v1/single_keygen_message.proto (package vultisig.keygen.v1, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage } from '@bufbuild/protobuf/codegenv2'
-import { fileDesc, messageDesc } from '@bufbuild/protobuf/codegenv2'
-import type { LibType } from './lib_type_message_pb'
-import { file_vultisig_keygen_v1_lib_type_message } from './lib_type_message_pb'
-import type { SingleKeygenType } from './single_keygen_type_pb'
-import { file_vultisig_keygen_v1_single_keygen_type } from './single_keygen_type_pb'
-import type { Message } from '@bufbuild/protobuf'
+import type { GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
+import { fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
+import type { LibType } from "./lib_type_message_pb";
+import { file_vultisig_keygen_v1_lib_type_message } from "./lib_type_message_pb";
+import type { SingleKeygenType } from "./single_keygen_type_pb";
+import { file_vultisig_keygen_v1_single_keygen_type } from "./single_keygen_type_pb";
+import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file vultisig/keygen/v1/single_keygen_message.proto.
  */
-export const file_vultisig_keygen_v1_single_keygen_message: GenFile =
-  /*@__PURE__*/
-  fileDesc(
-    'Ci52dWx0aXNpZy9rZXlnZW4vdjEvc2luZ2xlX2tleWdlbl9tZXNzYWdlLnByb3RvEhJ2dWx0aXNpZy5rZXlnZW4udjEirgIKE1NpbmdsZUtleWdlbk1lc3NhZ2USEgoKc2Vzc2lvbl9pZBgBIAEoCRIWCg5oZXhfY2hhaW5fY29kZRgCIAEoCRIUCgxzZXJ2aWNlX25hbWUYAyABKAkSGAoQcHVibGljX2tleV9lY2RzYRgEIAEoCRIaChJlbmNyeXB0aW9uX2tleV9oZXgYBiABKAkSGgoSdXNlX3Z1bHRpc2lnX3JlbGF5GAcgASgIEhIKCnZhdWx0X25hbWUYCCABKAkSLQoIbGliX3R5cGUYCSABKA4yGy52dWx0aXNpZy5rZXlnZW4udjEuTGliVHlwZRJAChJzaW5nbGVfa2V5Z2VuX3R5cGUYCiABKA4yJC52dWx0aXNpZy5rZXlnZW4udjEuU2luZ2xlS2V5Z2VuVHlwZUJSChJ2dWx0aXNpZy5rZXlnZW4udjFaN2dpdGh1Yi5jb20vdnVsdGlzaWcvY29tbW9uZGF0YS9nby92dWx0aXNpZy9rZXlnZW4vdjE7djG6AgJWU2IGcHJvdG8z',
-    [
-      file_vultisig_keygen_v1_lib_type_message,
-      file_vultisig_keygen_v1_single_keygen_type,
-    ]
-  )
+export const file_vultisig_keygen_v1_single_keygen_message: GenFile = /*@__PURE__*/
+  fileDesc("Ci52dWx0aXNpZy9rZXlnZW4vdjEvc2luZ2xlX2tleWdlbl9tZXNzYWdlLnByb3RvEhJ2dWx0aXNpZy5rZXlnZW4udjEirgIKE1NpbmdsZUtleWdlbk1lc3NhZ2USEgoKc2Vzc2lvbl9pZBgBIAEoCRIWCg5oZXhfY2hhaW5fY29kZRgCIAEoCRIUCgxzZXJ2aWNlX25hbWUYAyABKAkSGAoQcHVibGljX2tleV9lY2RzYRgEIAEoCRIaChJlbmNyeXB0aW9uX2tleV9oZXgYBiABKAkSGgoSdXNlX3Z1bHRpc2lnX3JlbGF5GAcgASgIEhIKCnZhdWx0X25hbWUYCCABKAkSLQoIbGliX3R5cGUYCSABKA4yGy52dWx0aXNpZy5rZXlnZW4udjEuTGliVHlwZRJAChJzaW5nbGVfa2V5Z2VuX3R5cGUYCiABKA4yJC52dWx0aXNpZy5rZXlnZW4udjEuU2luZ2xlS2V5Z2VuVHlwZUJSChJ2dWx0aXNpZy5rZXlnZW4udjFaN2dpdGh1Yi5jb20vdnVsdGlzaWcvY29tbW9uZGF0YS9nby92dWx0aXNpZy9rZXlnZW4vdjE7djG6AgJWU2IGcHJvdG8z", [file_vultisig_keygen_v1_lib_type_message, file_vultisig_keygen_v1_single_keygen_type]);
 
 /**
  * @generated from message vultisig.keygen.v1.SingleKeygenMessage
  */
-export type SingleKeygenMessage =
-  Message<'vultisig.keygen.v1.SingleKeygenMessage'> & {
-    /**
-     * @generated from field: string session_id = 1;
-     */
-    sessionId: string
+export type SingleKeygenMessage = Message<"vultisig.keygen.v1.SingleKeygenMessage"> & {
+  /**
+   * @generated from field: string session_id = 1;
+   */
+  sessionId: string;
 
-    /**
-     * @generated from field: string hex_chain_code = 2;
-     */
-    hexChainCode: string
+  /**
+   * @generated from field: string hex_chain_code = 2;
+   */
+  hexChainCode: string;
 
-    /**
-     * @generated from field: string service_name = 3;
-     */
-    serviceName: string
+  /**
+   * @generated from field: string service_name = 3;
+   */
+  serviceName: string;
 
-    /**
-     * @generated from field: string public_key_ecdsa = 4;
-     */
-    publicKeyEcdsa: string
+  /**
+   * @generated from field: string public_key_ecdsa = 4;
+   */
+  publicKeyEcdsa: string;
 
-    /**
-     * @generated from field: string encryption_key_hex = 6;
-     */
-    encryptionKeyHex: string
+  /**
+   * @generated from field: string encryption_key_hex = 6;
+   */
+  encryptionKeyHex: string;
 
-    /**
-     * @generated from field: bool use_vultisig_relay = 7;
-     */
-    useVultisigRelay: boolean
+  /**
+   * @generated from field: bool use_vultisig_relay = 7;
+   */
+  useVultisigRelay: boolean;
 
-    /**
-     * @generated from field: string vault_name = 8;
-     */
-    vaultName: string
+  /**
+   * @generated from field: string vault_name = 8;
+   */
+  vaultName: string;
 
-    /**
-     * @generated from field: vultisig.keygen.v1.LibType lib_type = 9;
-     */
-    libType: LibType
+  /**
+   * @generated from field: vultisig.keygen.v1.LibType lib_type = 9;
+   */
+  libType: LibType;
 
-    /**
-     * @generated from field: vultisig.keygen.v1.SingleKeygenType single_keygen_type = 10;
-     */
-    singleKeygenType: SingleKeygenType
-  }
+  /**
+   * @generated from field: vultisig.keygen.v1.SingleKeygenType single_keygen_type = 10;
+   */
+  singleKeygenType: SingleKeygenType;
+};
 
 /**
  * Describes the message vultisig.keygen.v1.SingleKeygenMessage.
  * Use `create(SingleKeygenMessageSchema)` to create a new message.
  */
-export const SingleKeygenMessageSchema: GenMessage<SingleKeygenMessage> =
-  /*@__PURE__*/
-  messageDesc(file_vultisig_keygen_v1_single_keygen_message, 0)
+export const SingleKeygenMessageSchema: GenMessage<SingleKeygenMessage> = /*@__PURE__*/
+  messageDesc(file_vultisig_keygen_v1_single_keygen_message, 0);
+

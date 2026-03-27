@@ -30,10 +30,10 @@ export type Vault = {
   chainKeyShares?: Partial<Record<Chain, string>>
   publicKeyMldsa?: string
   keyShareMldsa?: string
+  saplingExtras?: string
 }
 
 export const getVaultId = (vault: Vault): string => vault.publicKeys.ecdsa
 
 export const isKeyImportVault = (vault: Vault): boolean =>
-  vault.chainPublicKeys !== undefined &&
-  Object.keys(vault.chainPublicKeys).length > 0
+  vault.libType === 'KeyImport'

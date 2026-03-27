@@ -27,6 +27,8 @@ export class MldsaKeygen {
   private readonly keygenCommittee: string[]
   private readonly hexEncryptionKey: string
   private readonly timeoutMs: number
+  private readonly messageId: string
+  private readonly setupMessageId: string
   private isKeygenComplete: boolean = false
   private sequenceNo: number = 0
   private cache: Record<string, string> = {}
@@ -41,6 +43,8 @@ export class MldsaKeygen {
     hexEncryptionKey: string,
     options?: {
       timeoutMs?: number
+      messageId?: string
+      setupMessageId?: string
     }
   ) {
     this.isInitiateDevice = isInitiateDevice
@@ -50,6 +54,8 @@ export class MldsaKeygen {
     this.keygenCommittee = keygenCommittee
     this.hexEncryptionKey = hexEncryptionKey
     this.timeoutMs = options?.timeoutMs ?? 60000
+    this.messageId = options?.messageId ?? 'mldsa'
+    this.setupMessageId = options?.setupMessageId ?? this.messageId
   }
 
   private async processOutbound(session: KeygenSession): Promise<boolean> {
@@ -77,6 +83,7 @@ export class MldsaKeygen {
             hash: getMessageHash(base64Encode(message.body)),
             sequence_no: this.sequenceNo,
           },
+          messageId: this.messageId,
         })
         this.sequenceNo++
       })
@@ -99,6 +106,7 @@ export class MldsaKeygen {
         serverUrl: this.serverURL,
         localPartyId: this.localPartyId,
         sessionId: this.sessionId,
+        messageId: this.messageId,
       })
 
       if (parsedMessages.length === 0) {
@@ -129,6 +137,7 @@ export class MldsaKeygen {
           localPartyId: this.localPartyId,
           sessionId: this.sessionId,
           messageHash: msg.hash,
+          messageId: this.messageId,
         })
       }
 
@@ -170,11 +179,13 @@ export class MldsaKeygen {
           serverUrl: this.serverURL,
           message: encryptedSetupMsg,
           sessionId: this.sessionId,
+          messageId: this.setupMessageId,
         })
       } else {
         const encodedEncryptedSetupMsg = await waitForSetupMessage({
           serverUrl: this.serverURL,
           sessionId: this.sessionId,
+          messageId: this.setupMessageId,
         })
         this.setupMessage = fromMpcServerMessage(
           encodedEncryptedSetupMsg,

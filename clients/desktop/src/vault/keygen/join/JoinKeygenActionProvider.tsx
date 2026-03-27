@@ -28,6 +28,11 @@ export const JoinKeygenActionProvider = ({ children }: ChildrenProp) => {
             {children}
           </DKLSCreateKeygenActionProvider>
         )}
+        KeyImport={() => (
+          <DKLSCreateKeygenActionProvider>
+            {children}
+          </DKLSCreateKeygenActionProvider>
+        )}
         GG20={() => (
           <GG20CreateKeygenActionProvider>
             {children}
@@ -52,6 +57,11 @@ export const JoinKeygenActionProvider = ({ children }: ChildrenProp) => {
           <Match
             value={mpcLib}
             DKLS={() => (
+              <DKLSReshareKeygenActionProvider>
+                {children}
+              </DKLSReshareKeygenActionProvider>
+            )}
+            KeyImport={() => (
               <DKLSReshareKeygenActionProvider>
                 {children}
               </DKLSReshareKeygenActionProvider>
