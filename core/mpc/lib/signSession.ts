@@ -15,15 +15,16 @@ import { match } from '@lib/utils/match'
 
 const mldsaLevel = 44
 
-/** Wraps MldsaSignSession.setup to match the 4-param signature of DKLS/Schnorr. */
+/** Wraps MldsaSignSession statics to match the 4-param setup signature of DKLS/Schnorr. */
 const MldsaSignSessionWithLevel = {
-  ...MldsaSignSession,
   setup: (
     keyId: Uint8Array,
     chainPath: string,
     messageHash: Uint8Array | null | undefined,
     ids: string[]
   ) => MldsaSignSession.setup(mldsaLevel, keyId, chainPath, messageHash, ids),
+  setupMessageHash: (setupMsg: Uint8Array) =>
+    MldsaSignSession.setupMessageHash(setupMsg),
 }
 
 export const SignSession = {
