@@ -7,4 +7,7 @@ export const kyberSwapSlippageTolerance: number = 100
 export const kyberSwapAffiliateConfig = {
   source: 'vultisig-v0',
   referral: '0x8E247a480449c84a5fDD25974A8501f3EFa4ABb9',
+  feeReceiver: '0x8E247a480449c84a5fDD25974A8501f3EFa4ABb9',
+  chargeFeeBy: 'currency_out' as const,
+  isInBps: true,
 }

@@ -10,7 +10,7 @@ import { getKyberSwapBaseUrl } from './baseUrl'
 
 type Input = Record<TransferDirection, AccountCoin<KyberSwapEnabledChain>> & {
   amount: bigint
-  isAffiliate: boolean
+  affiliateBps: number
 }
 
 type KyberSwapRoute = {
@@ -34,17 +34,24 @@ type KyberSwapRouteParams = {
   slippageTolerance: number
   source?: string
   referral?: string
+  feeAmount?: number
+  chargeFeeBy?: string
+  isInBps?: boolean
+  feeReceiver?: string
 }
 
 export const getKyberSwapRoute = async ({
   from,
   to,
   amount,
-  isAffiliate,
+  affiliateBps,
 }: Input): Promise<KyberSwapRoute> => {
   const [tokenIn, tokenOut] = [from, to].map(
     ({ id }) => id || evmNativeCoinAddress
   )
+
+  const { feeReceiver, chargeFeeBy, isInBps, ...trackingConfig } =
+    kyberSwapAffiliateConfig
 
   const routeParams: KyberSwapRouteParams = {
     tokenIn,
@@ -53,7 +60,15 @@ export const getKyberSwapRoute = async ({
     saveGas: true,
     gasInclude: true,
     slippageTolerance: kyberSwapSlippageTolerance,
-    ...(isAffiliate ? kyberSwapAffiliateConfig : {}),
+    ...(affiliateBps > 0
+      ? {
+          ...trackingConfig,
+          feeAmount: affiliateBps,
+          chargeFeeBy,
+          isInBps,
+          feeReceiver,
+        }
+      : {}),
   }
 
   const routeUrl = addQueryParams(
