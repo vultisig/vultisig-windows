@@ -13,7 +13,7 @@ const cosmosGasLimitRecord: Record<CosmosChain, bigint> = {
   [Chain.TerraClassic]: 300000n,
   [Chain.THORChain]: 20000000n,
   [Chain.MayaChain]: 2000000000n,
-  [Chain.QBTC]: 200000n,
+  [Chain.QBTC]: 300000n,
 }
 
 export const getCosmosGasLimit = (coin: CoinKey<CosmosChain>): bigint => {

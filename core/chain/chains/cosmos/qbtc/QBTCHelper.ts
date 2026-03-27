@@ -333,7 +333,7 @@ const buildAuthInfo = ({
     protoString(2, gas.toString())
   )
 
-  const gasLimit = 200000n
+  const gasLimit = 300000n
 
   // Fee: field 1 = amount (repeated Coin), field 2 = gas_limit
   const fee = concatBytes(protoBytes(1, feeCoin), protoVarint(2, gasLimit))
