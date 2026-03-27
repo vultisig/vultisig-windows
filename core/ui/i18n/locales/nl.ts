@@ -49,7 +49,7 @@ export const nl = {
   approve: 'Goedkeuren',
   reject: 'Weigeren',
   asset: 'Asset',
-  assets: 'assets',
+  assets: 'Assets',
   at_least_one_device: 'Minstens één apparaat',
   at_least_one_device_subtitle: 'Elk apparaat dat Vultisig kan draaien werkt.',
   auto: 'auto',
@@ -380,7 +380,7 @@ export const nl = {
       },
     },
     emailSetupTitle:
-      'Deze e-mail wordt alleen gebruikt om de serverback-up te versturen',
+      'Dit e-mailadres wordt gebruikt voor cloudback-up en wordt niet gedeeld met derden',
     enterEmail: 'Voer je e-mail in',
     enterHint: 'Hint invoeren',
     hintDescription: 'Dit wordt getoond als je je wachtwoord vergeet',
@@ -648,6 +648,7 @@ export const nl = {
   of: 'van',
   off: 'Uit',
   on: 'Aan',
+  on_chain: 'op {{chain}}',
   onboarding_description_1:
     'Vultisig is een veilige, multi-device crypto-kluis, compatibel met alle grote blockchains en 10.000+ tokens. Vultisig is volledig self-custodial.',
   onboarding_description_2:
@@ -912,6 +913,7 @@ export const nl = {
   tns_missing_thor_alias: 'Referralcode moet een THOR-chain alias hebben',
   tns_not_found: 'Referralcode niet gevonden',
   to: 'Naar',
+  to_min_payout: 'min. uitbetaling',
   to_asset: 'Naar-asset',
   token_not_found_description:
     'Mogelijke redenen: verkeerd contract, niet-ondersteunde chain, of token verwijderd uit registries.',
@@ -1018,11 +1020,11 @@ export const nl = {
   vault_details_description: 'Bekijk kluisnaam, deel en type',
   vault_details_edit_vault_description: 'Bewerk je kluisnaam',
   vault_details_page_signer_word: 'Ondertekenaar',
-  vault_details_page_vault_ECDSA: 'ECDSA-sleutel',
-  vault_details_page_vault_EDDSA: 'EdDSA-sleutel',
+  vault_details_page_vault_ECDSA: 'ECDSA',
+  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_type: 'Kluistype',
   vault_info: 'Kluisinfo',
-  vault_management: 'Kluisbeheer',
+  vault_management: 'Kluis',
   vault_name: 'Kluisnaam',
   vault_name_already_exists: 'Kluisnaam moet uniek zijn',
   vault_name_description:
@@ -1206,7 +1208,7 @@ export const nl = {
   enter: 'Binnenkomen',
   enter_your_email: 'Voer uw e-mailadres in',
   enter_your_email_description:
-    'Dit wordt slechts eenmalig gebruikt om uw back-upbestand te verzenden; Vultisig slaat geen gegevens op.',
+    'Dit e-mailadres wordt gebruikt voor cloudback-up en wordt niet gedeeld met derden',
   seedPhraseImportTip: 'Tip: Je kunt een browser als apparaat gebruiken.',
   seedphrase_duplicate_vault_error:
     'Deze seed phrase is al geïmporteerd als kluis &quot;{{vaultName}}&quot;. Als u deze opnieuw importeert, wordt de bestaande kluis vervangen.',
