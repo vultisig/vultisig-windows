@@ -82,6 +82,8 @@ export const validateSendForm = (
         amount,
         balance,
         chain,
+        fee: isFeeCoin(coin) ? fee : undefined,
+        skipDustCheck: isFeeCoin(coin) && fee == null,
       })
 
       if (errorMsg) {
