@@ -10,6 +10,7 @@ import { getKeysignUtxoInfo } from '@core/mpc/keysign/utxo/getKeysignUtxoInfo'
 import { KeysignLibType } from '@core/mpc/mpcLib'
 import { toCommCoin } from '@core/mpc/types/utils/commCoin'
 import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 
@@ -20,10 +21,12 @@ export type BuildSendKeysignPayloadInput = {
   memo?: string
   vaultId: string
   localPartyId: string
-  publicKey: PublicKey
+  publicKey: PublicKey | null
   libType: KeysignLibType
   walletCore: WalletCore
   feeSettings?: FeeSettings
+  /** Hex public key override for chains that don't use WalletCore (e.g. MLDSA). */
+  hexPublicKeyOverride?: string
 }
 
 export const buildSendKeysignPayload = async ({
@@ -37,11 +40,16 @@ export const buildSendKeysignPayload = async ({
   walletCore,
   libType,
   feeSettings,
+  hexPublicKeyOverride,
 }: BuildSendKeysignPayloadInput) => {
+  const hexPublicKey =
+    hexPublicKeyOverride ??
+    Buffer.from(shouldBePresent(publicKey, 'PublicKey').data()).toString('hex')
+
   let keysignPayload = create(KeysignPayloadSchema, {
     coin: toCommCoin({
       ...coin,
-      hexPublicKey: Buffer.from(publicKey.data()).toString('hex'),
+      hexPublicKey,
     }),
     toAddress: receiver,
     toAmount: amount.toString(),

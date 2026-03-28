@@ -1,4 +1,7 @@
-import { TssSignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
+import {
+  SignatureAlgorithm,
+  TssSignatureAlgorithm,
+} from '@core/chain/signing/SignatureAlgorithm'
 import { encodeDERSignature } from '@core/mpc/derSignature'
 import { getMessageHash } from '@core/mpc/getMessageHash'
 import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
@@ -26,7 +29,7 @@ import { ensureSetupMessage } from '../message/setup/ensure'
 
 type KeysignInput = {
   keyShare: string
-  signatureAlgorithm: TssSignatureAlgorithm
+  signatureAlgorithm: SignatureAlgorithm
   message: string
   chainPath: string
   localPartyId: string
@@ -35,6 +38,42 @@ type KeysignInput = {
   sessionId: string
   hexEncryptionKey: string
   isInitiatingDevice: boolean
+}
+
+type BuildTssKeysignSignatureInput = {
+  signature: Uint8Array
+  msg: string
+  signatureAlgorithm: TssSignatureAlgorithm
+}
+
+/** Builds a KeysignSignature from ECDSA/EdDSA raw output (R‖S‖[recovery]). */
+const buildTssKeysignSignature = ({
+  signature,
+  msg,
+  signatureAlgorithm,
+}: BuildTssKeysignSignatureInput): KeysignSignature => {
+  const [rawR, rawS] = [signature.slice(0, 32), signature.slice(32, 64)]
+  const [r, s] = [rawR, rawS]
+    .map(value => Buffer.from(value))
+    .map(value =>
+      match(signatureAlgorithm, {
+        ecdsa: () => value,
+        eddsa: () => value.reverse(),
+      })
+    )
+    .map(value => value.toString('hex'))
+
+  const derSignature = encodeDERSignature(rawR, rawS)
+  return withoutUndefinedFields({
+    msg,
+    r,
+    s,
+    recovery_id: match(signatureAlgorithm, {
+      ecdsa: () => signature[64].toString(16).padStart(2, '0'),
+      eddsa: () => undefined,
+    }),
+    der_signature: Buffer.from(derSignature).toString('hex'),
+  })
 }
 
 const maxInboundWaitTime: Minutes = 1
@@ -182,28 +221,22 @@ export const keysign = async ({
   }
 
   const signature = session.finish()
-  const [rawR, rawS] = [signature.slice(0, 32), signature.slice(32, 64)]
-  const [r, s] = [rawR, rawS]
-    .map(value => Buffer.from(value))
-    .map(value =>
-      match(signatureAlgorithm, {
-        ecdsa: () => value,
-        eddsa: () => value.reverse(),
-      })
-    )
-    .map(value => value.toString('hex'))
 
-  const derSignature = encodeDERSignature(rawR, rawS)
-  const result: KeysignSignature = withoutUndefinedFields({
-    msg: Buffer.from(message, 'hex').toString('base64'),
-    r,
-    s,
-    recovery_id: match(signatureAlgorithm, {
-      ecdsa: () => signature[64].toString(16).padStart(2, '0'),
-      eddsa: () => undefined,
-    }),
-    der_signature: Buffer.from(derSignature).toString('hex'),
-  })
+  const msg = Buffer.from(message, 'hex').toString('base64')
+
+  const result: KeysignSignature =
+    signatureAlgorithm === 'mldsa'
+      ? {
+          msg,
+          r: '',
+          s: '',
+          der_signature: Buffer.from(signature).toString('hex'),
+        }
+      : buildTssKeysignSignature({
+          signature,
+          msg,
+          signatureAlgorithm,
+        })
 
   ignorePromiseOutcome(
     transformError(

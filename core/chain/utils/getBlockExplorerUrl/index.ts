@@ -50,7 +50,8 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.Mantle]: 'https://explorer.mantle.xyz',
   [Chain.Hyperliquid]: hyperliquidBlockExplorerUrl,
   [Chain.Sei]: 'https://seiscan.io',
-  [Chain.QBTC]: '',
+  // TODO: Replace with a dedicated QBTC block explorer when one becomes available
+  [Chain.QBTC]: 'https://api.vultisig.com/qbtc-rpc/cosmos/tx/v1beta1/txs',
 }
 
 export const getBlockExplorerUrl = ({
@@ -99,7 +100,9 @@ export const getBlockExplorerUrl = ({
         [Chain.Mantle]: () => `${baseUrl}/address/${value}`,
         [Chain.Hyperliquid]: () => `${baseUrl}/address/${value}`,
         [Chain.Sei]: () => `${baseUrl}/address/${value}`,
-        [Chain.QBTC]: () => '',
+        // TODO: Replace with dedicated QBTC explorer address URL
+        [Chain.QBTC]: () =>
+          `https://api.vultisig.com/qbtc-rpc/cosmos/bank/v1beta1/balances/${value}`,
       }),
     tx: () =>
       match(chain, {
@@ -140,7 +143,8 @@ export const getBlockExplorerUrl = ({
         [Chain.Mantle]: () => `${baseUrl}/tx/${value}`,
         [Chain.Hyperliquid]: () => `${baseUrl}/tx/${value}`,
         [Chain.Sei]: () => `${baseUrl}/tx/${value}`,
-        [Chain.QBTC]: () => '',
+        // TODO: Replace with dedicated QBTC explorer tx URL
+        [Chain.QBTC]: () => `${baseUrl}/${value}`,
       }),
   })
 }

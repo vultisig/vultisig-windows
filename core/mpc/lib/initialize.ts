@@ -1,16 +1,18 @@
-import { TssSignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
+import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import initializeDkls from '@lib/dkls/vs_wasm'
+import initializeMldsa from '@lib/mldsa/vs_wasm'
 import initializeSchnorr from '@lib/schnorr/vs_schnorr_wasm'
 import { prefixErrorWith } from '@lib/utils/error/prefixErrorWith'
 import { transformError } from '@lib/utils/error/transformError'
 import { memoizeAsync } from '@lib/utils/memoizeAsync'
 
-const initialize: Record<TssSignatureAlgorithm, () => Promise<unknown>> = {
+const initialize: Record<SignatureAlgorithm, () => Promise<unknown>> = {
   ecdsa: initializeDkls,
   eddsa: initializeSchnorr,
+  mldsa: initializeMldsa,
 }
 
-export const initializeMpcLib = memoizeAsync((algo: TssSignatureAlgorithm) =>
+export const initializeMpcLib = memoizeAsync((algo: SignatureAlgorithm) =>
   transformError(
     initialize[algo](),
     prefixErrorWith('Failed to initialize MPC lib')
