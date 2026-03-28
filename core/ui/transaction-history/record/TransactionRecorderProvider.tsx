@@ -1,4 +1,7 @@
+import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
+import { getKeysignCoin } from '@core/mpc/keysign/utils/getKeysignCoin'
 import { getVaultId } from '@core/mpc/vault/Vault'
+import { getBalanceQueryKey } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import { KeysignMutationListenerProvider } from '@core/ui/mpc/keysign/action/state/keysignMutationListener'
 import { useSaveTransactionRecordMutation } from '@core/ui/storage/transactionHistory'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -38,7 +41,10 @@ export const TransactionRecorderProvider = ({ children }: ChildrenProp) => {
 
           saveRecord(record)
 
-          queryClient.invalidateQueries({ queryKey: ['coinBalance'] })
+          const coin = getKeysignCoin(keysignPayload)
+          queryClient.invalidateQueries({
+            queryKey: getBalanceQueryKey(extractAccountCoinKey(coin)),
+          })
         },
       }}
     >
