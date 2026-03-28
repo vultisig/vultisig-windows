@@ -1,6 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
+import { getSignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { hasServer, isServer } from '@core/mpc/devices/localPartyId'
 import { getVaultId, Vault } from '@core/mpc/vault/Vault'
 import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
@@ -92,4 +93,24 @@ export const useCurrentVaultPublicKey = (chain: Chain) => {
       }),
     [chain, hexChainCode, publicKeys, walletCore, chainPublicKeys]
   )
+}
+
+/** Returns the WalletCore PublicKey for the given chain, or null for MLDSA chains. */
+export const useCurrentVaultNullablePublicKey = (chain: Chain) => {
+  const walletCore = useAssertWalletCore()
+  const { hexChainCode, publicKeys, chainPublicKeys } = useCurrentVault()
+
+  return useMemo(() => {
+    if (getSignatureAlgorithm(chain) === 'mldsa') {
+      return null
+    }
+
+    return getPublicKey({
+      chain,
+      walletCore,
+      hexChainCode,
+      publicKeys,
+      chainPublicKeys,
+    })
+  }, [chain, hexChainCode, publicKeys, walletCore, chainPublicKeys])
 }

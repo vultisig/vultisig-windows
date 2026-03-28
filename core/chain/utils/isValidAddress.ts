@@ -18,6 +18,10 @@ export const isValidAddress = ({ chain, address, walletCore }: Input) => {
     return walletCore.AnyAddress.isValidSS58(address, coinType, 42)
   }
 
+  if (chain === Chain.QBTC) {
+    return walletCore.AnyAddress.isValidBech32(address.trim(), coinType, 'qbtc')
+  }
+
   if (chain === Chain.MayaChain) {
     // MayaChain is Cosmos-style Bech32. Accept common account + validator address forms.
     const mayaHrps = [
