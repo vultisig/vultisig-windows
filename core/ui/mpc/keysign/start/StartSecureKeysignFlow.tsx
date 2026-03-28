@@ -13,7 +13,7 @@ import { KeysignMessagePayloadProvider } from '../state/keysignMessagePayload'
 export const StartSecureKeysignFlow = ({
   keysignActionProvider: KeysignActionProvider,
 }: KeysignActionProviderProp) => {
-  const [{ keysignPayload }] = useCoreViewState<'keysign'>()
+  const [{ keysignPayload, toAddressLabel }] = useCoreViewState<'keysign'>()
 
   return (
     <ValueTransfer<string[]>
@@ -33,7 +33,10 @@ export const StartSecureKeysignFlow = ({
               <KeysignActionProvider>
                 <KeysignMessagePayloadProvider value={keysignPayload}>
                   <TransactionRecorderProvider>
-                    <KeysignSigningStep onBack={onBack} />
+                    <KeysignSigningStep
+                      onBack={onBack}
+                      toAddressLabel={toAddressLabel}
+                    />
                   </TransactionRecorderProvider>
                 </KeysignMessagePayloadProvider>
               </KeysignActionProvider>

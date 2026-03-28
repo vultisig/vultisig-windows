@@ -9,6 +9,10 @@ import {
   useSetIsMLDSAEnabledMutation,
 } from '@core/ui/storage/mldsaEnabled'
 import { StorageKey } from '@core/ui/storage/StorageKey'
+import {
+  useIsTssBatchingEnabled,
+  useSetIsTssBatchingEnabledMutation,
+} from '@core/ui/storage/tssBatchingEnabled'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
@@ -46,6 +50,9 @@ export const ExtensionDeveloperOptions = () => {
   const refetchQueries = useRefetchQueries()
   const isMLDSAEnabled = useIsMLDSAEnabled()
   const { mutate: setIsMLDSAEnabled } = useSetIsMLDSAEnabledMutation()
+  const isTssBatchingEnabled = useIsTssBatchingEnabled()
+  const { mutate: setIsTssBatchingEnabled } =
+    useSetIsTssBatchingEnabledMutation()
   const [pushServerUrlValue, setPushServerUrlValue] = useState('')
 
   useEffect(() => {
@@ -94,6 +101,11 @@ export const ExtensionDeveloperOptions = () => {
               checked={isMLDSAEnabled}
               label={t('enable_mldsa')}
               onChange={() => setIsMLDSAEnabled(!isMLDSAEnabled)}
+            />
+            <Switch
+              checked={isTssBatchingEnabled}
+              label={t('enable_tss_batching')}
+              onChange={() => setIsTssBatchingEnabled(!isTssBatchingEnabled)}
             />
             <VStack gap={4}>
               <TextInput

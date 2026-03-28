@@ -1,7 +1,6 @@
-import { getChainKind } from '@core/chain/ChainKind'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
-import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
+import { getSignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { assertChainField } from '@core/chain/utils/assertChainField'
 import { signWithServer } from '@core/mpc/fast/api/signWithServer'
@@ -86,7 +85,7 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
             derive_path: walletCore.CoinTypeExt.derivationPath(
               getCoinType({ walletCore, chain })
             ),
-            is_ecdsa: signatureAlgorithms[getChainKind(chain)] === 'ecdsa',
+            is_ecdsa: getSignatureAlgorithm(chain) === 'ecdsa',
             vault_password: password,
             chain,
           })
@@ -113,7 +112,7 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
                 chain,
               })
             ),
-            is_ecdsa: signatureAlgorithms[getChainKind(chain)] === 'ecdsa',
+            is_ecdsa: getSignatureAlgorithm(chain) === 'ecdsa',
             vault_password: password,
             chain,
           })

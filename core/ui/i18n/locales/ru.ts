@@ -376,8 +376,8 @@ export const ru = {
       },
     },
     emailSetupTitle:
-      'Этот e-mail используется только для отправки серверной резервной копии',
-    enterEmail: 'Введите e-mail',
+      'Этот email используется для облачного резервного копирования и не передаётся третьим лицам',
+    enterEmail: 'Введите email',
     enterHint: 'Введите подсказку',
     hintDescription: 'Покажем это, если вы забудете пароль',
     hintEmpty: 'Подсказка пустая',
@@ -642,6 +642,7 @@ export const ru = {
   of: 'из',
   off: 'Выкл',
   on: 'Вкл',
+  on_chain: 'в сети {{chain}}',
   onboarding_description_1:
     'Vultisig — безопасное multi-device криптохранилище, совместимое со всеми основными блокчейнами и 10 000+ токенами. Vultisig полностью self-custodial.',
   onboarding_description_2:
@@ -907,6 +908,7 @@ export const ru = {
   tns_missing_thor_alias: 'Referral-код должен иметь THOR-chain alias',
   tns_not_found: 'Referral-код не найден',
   to: 'Кому',
+  to_min_payout: 'мин. выплата',
   to_asset: 'Актив получения',
   token_not_found_description:
     'Возможные причины: неверный контракт, неподдерживаемая сеть или токен удалён из реестров.',
@@ -1011,11 +1013,11 @@ export const ru = {
   vault_details_description: 'Посмотреть имя хранилища, часть и тип',
   vault_details_edit_vault_description: 'Редактировать имя хранилища',
   vault_details_page_signer_word: 'Подписант',
-  vault_details_page_vault_ECDSA: 'ECDSA-ключ',
-  vault_details_page_vault_EDDSA: 'EdDSA-ключ',
+  vault_details_page_vault_ECDSA: 'ECDSA',
+  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_type: 'Тип хранилища',
   vault_info: 'Информация о хранилище',
-  vault_management: 'Управление хранилищем',
+  vault_management: 'Хранилище',
   vault_name: 'Имя хранилища',
   vault_name_already_exists: 'Имя хранилища должно быть уникальным',
   vault_name_description:
@@ -1189,7 +1191,7 @@ export const ru = {
     'Введите пароль, который вы установили при создании этого хранилища.',
   choose_a_password: 'Выберите пароль',
   choose_a_password_description:
-    'Если вам нужна дополнительная защита, выберите пароль. <b>Пароль восстановить будет невозможно.</b>',
+    'Если вам нужна дополнительная защита, выберите пароль. <b>Пароль восстановить будет невозможно.</b> <info />',
   create_vault: 'Создать хранилище',
   create_referral_desc:
     'Создайте свой собственный код и зарабатывайте!<c> 20%</c> по референтным свопам',
@@ -1200,7 +1202,7 @@ export const ru = {
   enter: 'Входить',
   enter_your_email: 'Введите свой адрес электронной почты',
   enter_your_email_description:
-    'Эта функция будет использована только один раз для отправки файла резервной копии, Vultisig не хранит никаких данных.',
+    'Этот email используется для облачного резервного копирования и не передаётся третьим лицам',
   seedPhraseImportTip:
     'Совет: Вы можете использовать браузер в качестве устройства.',
   seedphrase_duplicate_vault_error:

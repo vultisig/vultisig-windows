@@ -111,7 +111,7 @@ export const ImportSeedphraseIntroStep = () => {
         >
           <ContentArea justifyContent="space-between" gap={40}>
             <ImportSeedphraseIntroRequirements />
-            <Button onClick={() => setStep('input')}>{t('next')}</Button>
+            <Button onClick={() => setStep('input')}>{t('get_started')}</Button>
           </ContentArea>
         </animated.div>
       </animated.div>

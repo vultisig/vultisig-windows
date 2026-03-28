@@ -25,20 +25,16 @@ export const LanguagePage = () => {
       />
       <PageContent flexGrow scrollable>
         <List>
-          {[...languages]
-            .sort((a, b) =>
-              languageName[a].localeCompare(languageName[b], 'en')
-            )
-            .map(key => (
-              <ListItem
-                extra={key === language && <CircleCheckIcon />}
-                key={key}
-                onClick={() => setLanguage.mutate(key)}
-                title={languageName[key]}
-                description={languageRegion[key]}
-                hoverable
-              />
-            ))}
+          {languages.map(key => (
+            <ListItem
+              extra={key === language && <CircleCheckIcon />}
+              key={key}
+              onClick={() => setLanguage.mutate(key)}
+              title={languageName[key]}
+              description={languageRegion[key]}
+              hoverable
+            />
+          ))}
         </List>
       </PageContent>
     </VStack>

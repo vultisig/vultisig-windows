@@ -53,6 +53,7 @@ const Container = styled(UnstyledButton)`
 type SelectableItemProps = InputProps<boolean> & {
   icon: ReactNode
   name: string
+  description?: string
 }
 
 export const SelectableItem = ({
@@ -60,6 +61,7 @@ export const SelectableItem = ({
   onChange,
   icon,
   name,
+  description,
 }: SelectableItemProps) => {
   return (
     <Container onClick={() => onChange(!isSelected)}>
@@ -75,6 +77,11 @@ export const SelectableItem = ({
         <Text cropped color="contrast" size={12} weight={500}>
           {name}
         </Text>
+        {description && (
+          <Text cropped color="shy" size={9}>
+            {description}
+          </Text>
+        )}
       </TextWrapper>
     </Container>
   )

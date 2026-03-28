@@ -42,6 +42,7 @@
     "@ton/crypto": "^3.3.0",
     "@ton/ton": "^16.2.2",
     "@tonconnect/protocol": "^2.4.0",
+    "@vultisig/sdk": "0.8.0",
     "@wallet-standard/base": "^1.1.0",
     "@wallet-standard/features": "^1.1.0",
     "bech32": "^2.0.0",

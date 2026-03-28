@@ -27,6 +27,9 @@ const getExportName = (vault: Vault) => {
     DKLS: () => {
       return `${vault.name}-${vault.localPartyId}-share${localPartyIndex}of${totalSigners}.vult`
     },
+    KeyImport: () => {
+      return `${vault.name}-${vault.localPartyId}-share${localPartyIndex}of${totalSigners}.vult`
+    },
   })
 }
 
@@ -148,9 +151,9 @@ export const useBackupVaultMutation = ({
       await saveFile(file)
 
       await Promise.all(
-        vaults.map(vault =>
+        vaultIds.map(vaultId =>
           updateVault({
-            vaultId: getVaultId(vault),
+            vaultId,
             fields: { isBackedUp: true },
           })
         )

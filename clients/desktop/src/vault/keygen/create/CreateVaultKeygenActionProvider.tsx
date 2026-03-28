@@ -14,6 +14,9 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
       DKLS={() => (
         <DKLSKeygenActionProvider>{children}</DKLSKeygenActionProvider>
       )}
+      KeyImport={() => (
+        <DKLSKeygenActionProvider>{children}</DKLSKeygenActionProvider>
+      )}
       GG20={() => (
         <GG20KeygenActionProvider>{children}</GG20KeygenActionProvider>
       )}

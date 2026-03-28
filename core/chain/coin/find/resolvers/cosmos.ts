@@ -4,6 +4,7 @@ import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom
 import { tcyAutoCompounderConfig } from '@core/chain/chains/cosmos/thor/tcy-autocompound/config'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { FindCoinsResolver } from '@core/chain/coin/find/resolver'
+import { thorchainNativeTokensMetadata } from '@core/chain/coin/knownTokens/thorchain'
 import { getCosmosTokenMetadata } from '@core/chain/coin/token/metadata/resolvers/cosmos'
 import { without } from '@lib/utils/array/without'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -41,12 +42,15 @@ export const findCosmosCoins: FindCoinsResolver<CosmosChain> = async ({
         return
       }
 
+      const knownMeta = thorchainNativeTokensMetadata[denom]
+
       return {
         id: denom,
         chain,
         decimals: chainFeeCoin[chain].decimals,
         ticker: ticker || tickerAttempt.data,
-        logo: tickerAttempt.data.toLowerCase(),
+        logo: knownMeta?.logo ?? tickerAttempt.data.toLowerCase(),
+        priceProviderId: knownMeta?.priceProviderId,
         address,
       }
     }),

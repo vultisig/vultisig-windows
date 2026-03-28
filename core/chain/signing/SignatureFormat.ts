@@ -8,6 +8,7 @@ export const signatureFormats: Record<ChainKind, SignatureFormat> = {
   sui: 'raw',
   solana: 'raw',
   polkadot: 'raw',
+  bittensor: 'raw',
   ton: 'raw',
   utxo: 'der',
   ripple: 'rawWithRecoveryId',

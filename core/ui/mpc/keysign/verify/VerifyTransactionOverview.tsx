@@ -28,6 +28,25 @@ type VerifyTransactionOverviewProps = {
   senderName: string
   senderAddress: string
   receiver: string | ReactNode
+  /**
+   * Optional vault name for the receiver. When provided and receiver is a string address,
+   * displays "VaultName (addr...addr)" format instead of plain truncated address.
+   * Wired in Send and Circle withdraw flows (receiver is a user vault).
+   * Swap flows intentionally omit this — their receivers are protocol/contract addresses, not user vaults.
+   */
+  receiverVaultName?: string
+  /**
+   * Optional address book contact name for the receiver. Used when the receiver is not a known
+   * vault but is saved in the address book.
+   * Priority: vault name > address book name > address label > raw address.
+   */
+  receiverAddressBookName?: string
+  /**
+   * Optional human-readable label for the receiver address resolved from a name service
+   * (ENS, SNS, TNS, etc.) or other source. Displayed as "label (0xd8dA...6045)".
+   * Priority: vault name > address book name > address label > raw address.
+   */
+  receiverAddressLabel?: string
   chain: Chain
   keysignPayloadQuery: Query<KeysignPayload>
   renderFeeExtra?: (keysignPayload: KeysignPayload) => ReactNode
@@ -40,6 +59,9 @@ export const VerifyTransactionOverview = ({
   senderName,
   senderAddress,
   receiver,
+  receiverVaultName,
+  receiverAddressBookName,
+  receiverAddressLabel,
   chain,
   keysignPayloadQuery,
   renderFeeExtra,
@@ -47,6 +69,28 @@ export const VerifyTransactionOverview = ({
 }: VerifyTransactionOverviewProps) => {
   const { t } = useTranslation()
   const formattedAmount = fromChainAmount(amount, coin.decimals)
+
+  const receiverDisplay: ReactNode = (() => {
+    if (typeof receiver !== 'string') return receiver
+
+    const label =
+      receiverVaultName ?? receiverAddressBookName ?? receiverAddressLabel
+
+    if (label !== undefined) {
+      return (
+        <HStack alignItems="center" gap={8}>
+          <Text as="span" size={14} weight={500}>
+            {label}
+          </Text>
+          <Text as="span" color="shy" size={14} weight={500}>
+            ({formatWalletAddress(receiver)})
+          </Text>
+        </HStack>
+      )
+    }
+
+    return <MiddleTruncate size={14} text={receiver} weight={500} width={200} />
+  })()
 
   return (
     <List border="gradient" radius={16}>
@@ -69,21 +113,7 @@ export const VerifyTransactionOverview = ({
           </HStack>
         }
       />
-      <TransactionOverviewItem
-        label={t('to')}
-        value={
-          typeof receiver === 'string' ? (
-            <MiddleTruncate
-              size={14}
-              text={receiver}
-              weight={500}
-              width={200}
-            />
-          ) : (
-            receiver
-          )
-        }
-      />
+      <TransactionOverviewItem label={t('to')} value={receiverDisplay} />
       <TransactionOverviewItem
         label={t('network')}
         value={

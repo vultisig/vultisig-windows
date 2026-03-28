@@ -97,8 +97,8 @@ export const de = {
     addOptionalHint: 'Füge einen optionalen Hinweis hinzu',
     connectingWithServer: 'Verbindung zum Server wird hergestellt...',
     emailSetupTitle:
-      'Diese E-Mail-Adresse wird ausschließlich zum Versenden des Server-Backups verwendet.',
-    enterEmail: 'Geben Sie Ihre E-Mail-Adresse ein',
+      'Diese E-Mail wird für Cloud-Backup verwendet und nicht an Dritte weitergegeben',
+    enterEmail: 'Geben Sie Ihre E-Mail ein',
     enterHint: 'Hinweis eingeben',
     hintDescription: 'Dies wird angezeigt, falls Sie Ihr Passwort vergessen.',
     hintEmpty: 'Hinweis ist leer',
@@ -599,7 +599,7 @@ export const de = {
   more: 'mehr',
   moreInfo: 'Mehr Infos',
   name: 'Name',
-  name_your_vault: 'Benennen Sie Ihren Tresor.',
+  name_your_vault: 'Benennen Sie Ihren Tresor',
   network: 'Netzwerk',
   network_fee: 'Netzwerkgebühr',
   network_rate: 'Netzwerkrate',
@@ -865,6 +865,7 @@ export const de = {
     'Der Empfehlungscode muss einen THOR-Kettenalias haben.',
   tns_not_found: 'Empfehlungscode nicht gefunden',
   to: 'Zu',
+  to_min_payout: 'min. Auszahlung',
   to_asset: 'Zum Vermögenswert',
   token_not_found_description:
     'Mögliche Gründe: falscher Vertrag, nicht unterstützte Blockchain oder Token aus den Registern entfernt.',
@@ -945,11 +946,11 @@ export const de = {
   vault_details_description: 'Tresorname, Teil und Typ anzeigen',
   vault_details_edit_vault_description: 'Bearbeiten Sie Ihren Tresornamen',
   vault_details_page_signer_word: 'Unterzeichner',
-  vault_details_page_vault_ECDSA: 'ECDSA-Schlüssel',
-  vault_details_page_vault_EDDSA: 'EdDSA-Schlüssel',
+  vault_details_page_vault_ECDSA: 'ECDSA',
+  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_type: 'Tresortyp',
   vault_info: 'Tresorinformationen',
-  vault_management: 'Tresorverwaltung',
+  vault_management: 'Tresor',
   vault_name: 'Tresorname',
   vault_name_already_exists: 'Der Tresorname muss eindeutig sein.',
   vault_name_description:
@@ -1115,6 +1116,7 @@ export const de = {
   normal: 'Normal',
   off: 'Aus',
   on: 'An',
+  on_chain: 'auf {{chain}}',
   optional: 'optional',
   password_backup:
     'Schützen Sie Ihren Tresor und sichern Sie sich eine schnelle Signatur.',
@@ -1217,7 +1219,7 @@ export const de = {
     'Geben Sie das Passwort ein, das Sie beim Erstellen dieses Tresors festgelegt haben.',
   choose_a_password: 'Wählen Sie ein Passwort',
   choose_a_password_description:
-    'Für zusätzliche Sicherheit wählen Sie ein Passwort. <b>Das Passwort kann nicht wiederhergestellt werden.</b>',
+    'Für zusätzliche Sicherheit wählen Sie ein Passwort. <b>Das Passwort kann nicht wiederhergestellt werden.</b> <info />',
   create_vault: 'Tresor erstellen',
   create_referral_desc:
     'Erstelle deinen eigenen Code und verdiene!<c> 20%</c> bei vermittelten Swaps',
@@ -1228,7 +1230,7 @@ export const de = {
   enter: 'Eingeben',
   enter_your_email: 'Geben Sie Ihre E-Mail-Adresse ein',
   enter_your_email_description:
-    'Dies wird nur einmal zum Senden Ihrer Sicherungsdatei verwendet, Vultisig speichert keine Daten.',
+    'Diese E-Mail wird für Cloud-Backup verwendet und nicht an Dritte weitergegeben',
   seedphrase_duplicate_vault_error:
     'Diese Seed-Phrase ist bereits als Tresor &quot;{{vaultName}}&quot; importiert. Ein erneuter Import würde den bestehenden Tresor ersetzen.',
   fast_vault_exists_warning_title: 'Tresor existiert bereits',

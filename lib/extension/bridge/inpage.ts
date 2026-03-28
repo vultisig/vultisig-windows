@@ -34,7 +34,7 @@ export const runBridgeInpageAgent = () => {
     const { id, message } = data
 
     const listener = listeners[id]
-    if (listener) {
+    if (typeof listener === 'function') {
       listener(message)
       delete listeners[id]
     }

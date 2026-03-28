@@ -1,6 +1,5 @@
 import { CoinKey } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
-import { swapEnabledChains } from '@core/chain/swap/swapEnabledChains'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { CoinOption } from '@core/ui/chain/coin/inputs/CoinOption'
 import {
@@ -13,7 +12,6 @@ import { SelectItemModal } from '@lib/ui/inputs/SelectItemModal'
 import { HStack } from '@lib/ui/layout/Stack'
 import { InputProps } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { isOneOf } from '@lib/utils/array/isOneOf'
 import { pick } from '@lib/utils/record/pick'
 import { FC } from 'react'
 import { useState } from 'react'
@@ -130,10 +128,7 @@ export const SendCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
                 }
                 setIsChainModalOpen(false)
               }}
-              options={coins.filter(
-                coin =>
-                  isOneOf(coin.chain, swapEnabledChains) && isFeeCoin(coin)
-              )}
+              options={coins.filter(isFeeCoin)}
               filterFunction={(option, query) =>
                 option.chain.toLowerCase().startsWith(query.toLowerCase())
               }

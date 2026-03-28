@@ -18,7 +18,13 @@ export type CoreView =
       id: 'agentChat'
       state: { conversationId?: string; initialMessage?: string }
     }
-  | { id: 'addCustomToken'; state: { chain: ChainWithTokenMetadataDiscovery } }
+  | {
+      id: 'addCustomToken'
+      state: {
+        chain: ChainWithTokenMetadataDiscovery
+        closeParentAfterAdd?: boolean
+      }
+    }
   | { id: 'address'; state: { address: string } }
   | { id: 'addressBook' }
   | { id: 'faq' }
@@ -59,6 +65,7 @@ export type CoreView =
         securityType: VaultSecurityType
         keysignPayload: KeysignMessagePayload
         password?: string
+        toAddressLabel?: string
       }
     }
   | { id: 'languageSettings' }
