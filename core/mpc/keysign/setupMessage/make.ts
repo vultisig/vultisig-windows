@@ -1,4 +1,4 @@
-import { TssSignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
+import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { SignSession } from '@core/mpc/lib/signSession'
 
 import { toMpcLibKeyshare } from '../../lib/keyshare'
@@ -8,7 +8,7 @@ type MakeSetupMessageInput = {
   chainPath: string
   message: string
   devices: string[]
-  signatureAlgorithm: TssSignatureAlgorithm
+  signatureAlgorithm: SignatureAlgorithm
 }
 
 export const makeSetupMessage = ({

@@ -34,14 +34,14 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
     coinType,
     chain,
   }) => {
-    if (signatureAlgorithm === 'mldsa') {
-      throw new Error('MLDSA keysign is not yet implemented')
-    }
-
     const keyShare = shouldBePresent(
       isKeyImportVault(vault)
         ? vault.chainKeyShares?.[chain]
-        : vault.keyShares[signatureAlgorithm],
+        : match(signatureAlgorithm, {
+            ecdsa: () => vault.keyShares.ecdsa,
+            eddsa: () => vault.keyShares.eddsa,
+            mldsa: () => vault.keyShareMldsa,
+          }),
       'Keyshare'
     )
 
@@ -61,6 +61,7 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
                       ''
                     ),
                   eddsa: () => eddsaPlaceholderChainPath,
+                  mldsa: () => eddsaPlaceholderChainPath,
                 }),
             localPartyId: vault.localPartyId,
             peers,
