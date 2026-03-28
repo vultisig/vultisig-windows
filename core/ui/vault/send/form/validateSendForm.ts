@@ -83,7 +83,8 @@ export const validateSendForm = (
         balance,
         chain,
         fee: isFeeCoin(coin) ? fee : undefined,
-        skipDustCheck: chain === Chain.Cardano && isFeeCoin(coin) && fee == null,
+        skipDustCheck:
+          chain === Chain.Cardano && isFeeCoin(coin) && fee == null,
       })
 
       if (errorMsg) {
