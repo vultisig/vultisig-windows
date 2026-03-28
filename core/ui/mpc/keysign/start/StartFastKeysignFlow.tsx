@@ -20,7 +20,8 @@ export const StartFastKeysignFlow = ({
   keysignActionProvider: KeysignActionProvider,
 }: KeysignActionProviderProp) => {
   const { goBack } = useCore()
-  const [{ keysignPayload, password }] = useCoreViewState<'keysign'>()
+  const [{ keysignPayload, password, toAddressLabel }] =
+    useCoreViewState<'keysign'>()
   const { step, toNextStep } = useStepNavigation({
     steps: keysignSteps,
     onExit: goBack,
@@ -46,7 +47,7 @@ export const StartFastKeysignFlow = ({
                   <KeysignActionProvider>
                     <KeysignMessagePayloadProvider value={keysignPayload}>
                       <TransactionRecorderProvider>
-                        <KeysignSigningStep />
+                        <KeysignSigningStep toAddressLabel={toAddressLabel} />
                       </TransactionRecorderProvider>
                     </KeysignMessagePayloadProvider>
                   </KeysignActionProvider>

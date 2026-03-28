@@ -1,7 +1,6 @@
 import { generateLocalPartyId, hasServer } from '@core/mpc/devices/localPartyId'
 import { reshareWithServer } from '@core/mpc/fast/api/reshareWithServer'
 import { toLibType } from '@core/mpc/types/utils/libType'
-import { isKeyImportVault } from '@core/mpc/vault/Vault'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { usePassword } from '@core/ui/state/password'
@@ -34,10 +33,7 @@ export const PluginReshareFastKeygenServerActionProvider = ({
       hex_chain_code: hexChainCode,
       local_party_id: generateLocalPartyId('server'),
       old_reshare_prefix: resharePrefix ?? '',
-      lib_type: toLibType({
-        libType,
-        isKeyImport: isKeyImportVault(vault),
-      }),
+      lib_type: toLibType(libType),
       reshare_type: 1,
     })
   }, [
@@ -50,7 +46,6 @@ export const PluginReshareFastKeygenServerActionProvider = ({
     sessionId,
     signers,
     libType,
-    vault,
   ])
 
   return (

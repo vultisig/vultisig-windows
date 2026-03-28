@@ -1,5 +1,5 @@
 import { Chain } from '@core/chain/Chain'
-import { signingAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
+import { tssSigningAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { MpcLib } from '@core/mpc/mpcLib'
 import { Vault } from '@core/mpc/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -26,6 +26,7 @@ export const toStorageVault = ({
   chainKeyShares,
   publicKeyMldsa,
   keyShareMldsa,
+  saplingExtras,
 }: Vault): storage.Vault => {
   const keyshares = toEntries(keyShares).map(({ key, value }) => ({
     public_key: publicKeys[key],
@@ -56,7 +57,10 @@ export const toStorageVault = ({
     coins: [],
     lib_type: libType,
     folder_id: folderId,
-    chain_public_keys: chainPublicKeys,
+    chain_public_keys: {
+      ...chainPublicKeys,
+      ...(saplingExtras ? { SaplingExtras: saplingExtras } : {}),
+    },
     chain_key_shares: chainKeyShares,
     convertValues: () => {},
   }
@@ -70,7 +74,7 @@ export const fromStorageVault = (
     eddsa: vault.public_key_eddsa,
   }
 
-  const keyShares = recordFromKeys(signingAlgorithms, algorithm => {
+  const keyShares = recordFromKeys(tssSigningAlgorithms, algorithm => {
     const publicKey = publicKeys[algorithm]
     if (!publicKey) return ''
     return shouldBePresent(
@@ -85,9 +89,17 @@ export const fromStorageVault = (
     keyShareMldsa = mldsaKs?.keyshare
   }
 
-  const chainPublicKeys = vault.chain_public_keys as
-    | Partial<Record<Chain, string>>
+  const rawChainPublicKeys = vault.chain_public_keys as
+    | Record<string, string>
     | undefined
+  const saplingExtras = rawChainPublicKeys?.SaplingExtras
+  const chainPublicKeys = rawChainPublicKeys
+    ? (Object.fromEntries(
+        Object.entries(rawChainPublicKeys).filter(
+          ([k]) => k !== 'SaplingExtras'
+        )
+      ) as Partial<Record<Chain, string>>)
+    : undefined
 
   const chainKeyShares = vault.chain_key_shares as
     | Partial<Record<Chain, string>>
@@ -107,9 +119,13 @@ export const fromStorageVault = (
     order: vault.order,
     folderId: vault.folder_id,
     isBackedUp: vault.is_backed_up,
-    chainPublicKeys,
+    chainPublicKeys:
+      chainPublicKeys && Object.keys(chainPublicKeys).length > 0
+        ? chainPublicKeys
+        : undefined,
     chainKeyShares,
     publicKeyMldsa,
     keyShareMldsa,
+    saplingExtras,
   }
 }

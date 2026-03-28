@@ -9,19 +9,19 @@ import { useKeysignMessagePayload } from '@core/ui/mpc/keysign/state/keysignMess
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
 import { getSignDataTxAction } from '@core/ui/mpc/keysign/tx/utils/getSignDataTxAction'
 import { useCore } from '@core/ui/state/core'
+import { useAddressBookNameForAddress } from '@core/ui/vault/hooks/useAddressBookNameForAddress'
+import { useVaultNameForAddress } from '@core/ui/vault/hooks/useVaultNameForAddress'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIcon'
 import { SeparatedByLine } from '@lib/ui/layout/SeparatedByLine'
-import { HStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
-import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import styled from 'styled-components'
 
 import { useTxStatusQuery } from '../../../chain/tx/status/useTxStatusQuery'
 import { AddToAddressBookButton } from './components/AddToAddressBookButton'
@@ -29,7 +29,13 @@ import { TxActualFeeDisplay } from './components/TxActualFeeDisplay'
 import { TxFeeRow } from './components/TxFeeRow'
 import { KeysignFeeAmount } from './FeeAmount'
 
-export const KeysignTxOverview = () => {
+type KeysignTxOverviewProps = {
+  toAddressLabel?: string
+}
+
+export const KeysignTxOverview = ({
+  toAddressLabel,
+}: KeysignTxOverviewProps) => {
   const { t } = useTranslation()
   const { openUrl } = useCore()
   const { name } = useCurrentVault()
@@ -41,21 +47,25 @@ export const KeysignTxOverview = () => {
   const coin = fromCommCoin(shouldBePresent(potentialCoin))
   const { address, chain, decimals } = shouldBePresent(coin)
 
-  const formattedToAmount = useMemo(() => {
-    if (!toAmount) return null
+  const formattedToAmount = toAmount
+    ? fromChainAmount(BigInt(toAmount), decimals)
+    : null
 
-    return fromChainAmount(BigInt(toAmount), decimals)
-  }, [toAmount, decimals])
-
-  const txAction = useMemo(
-    () => getSignDataTxAction(keysignPayload, formattedToAmount ?? 0),
-    [keysignPayload, formattedToAmount]
-  )
+  const txAction = getSignDataTxAction(keysignPayload, formattedToAmount ?? 0)
 
   const showAmountOrAction =
     formattedToAmount !== null ||
     (txAction !== null && txAction.action !== 'send')
 
+  const toVaultName = useVaultNameForAddress({
+    address: toAddress ?? '',
+    chain,
+  })
+  const toAddressBookName = useAddressBookNameForAddress({
+    address: toAddress ?? '',
+    chain,
+  })
+  const toLabel = toVaultName ?? toAddressBookName ?? toAddressLabel ?? null
   const txHash = useTxHash()
   const txStatusQuery = useTxStatusQuery({ chain, hash: txHash })
   const receipt = txStatusQuery.data?.receipt
@@ -117,20 +127,34 @@ export const KeysignTxOverview = () => {
             </HStack>
           </HStack>
           {toAddress && (
-            <HStack
-              alignItems="center"
-              gap={8}
-              justifyContent="space-between"
-              wrap="nowrap"
-            >
-              <Text color="shy" weight="500">
-                {t('to')}
-              </Text>
-              <HStack alignItems="center" gap={8} style={{ minWidth: 0 }}>
-                <AddressWrapper>{toAddress}</AddressWrapper>
+            <VStack gap={8}>
+              <HStack
+                alignItems="center"
+                gap={8}
+                justifyContent="space-between"
+                wrap="nowrap"
+              >
+                <Text color="shy" weight="500">
+                  {t('to')}
+                </Text>
+                {toLabel !== null ? (
+                  <HStack alignItems="center" gap={4}>
+                    <Text>{toLabel}</Text>
+                    <MiddleTruncate
+                      color="textShy"
+                      text={`(${toAddress})`}
+                      weight={500}
+                      width={80}
+                    />
+                  </HStack>
+                ) : (
+                  <MiddleTruncate text={toAddress} weight={500} width={160} />
+                )}
+              </HStack>
+              <HStack justifyContent="flex-end">
                 <AddToAddressBookButton address={toAddress} chain={chain} />
               </HStack>
-            </HStack>
+            </VStack>
           )}
           {memo && <TxOverviewMemo value={memo} chain={chain} />}
           <HStack alignItems="center" gap={4} justifyContent="space-between">
@@ -157,11 +181,3 @@ export const KeysignTxOverview = () => {
     </>
   )
 }
-
-const AddressWrapper = styled(Text)`
-  overflow: hidden;
-  text-align: right;
-  width: 125px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`

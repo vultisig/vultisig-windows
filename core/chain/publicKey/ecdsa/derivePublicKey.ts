@@ -41,7 +41,7 @@ const getDerivePathBytes = (derivePath: string): number[] => {
     if (!segment || segment === 'm') {
       continue
     }
-    const index = parseInt(segment.replace("'", ''), 10)
+    const index = parseInt(segment.replaceAll("'", ''), 10)
     if (isNaN(index) || index < 0 || index > 0xffffffff) {
       throw new Error(`Invalid path segment: ${segment}`)
     }

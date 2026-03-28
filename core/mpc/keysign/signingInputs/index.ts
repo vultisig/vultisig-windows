@@ -6,6 +6,7 @@ import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { getKeysignChain } from '../utils/getKeysignChain'
 import { signingInputClasses } from './core'
 import { SigningInputsResolver } from './resolver'
+import { getBittensorSigningInputs } from './resolvers/bittensor'
 import { getCardanoSigningInputs } from './resolvers/cardano'
 import { getCosmosSigningInputs } from './resolvers/cosmos'
 import { getEvmSigningInputs } from './resolvers/evm'
@@ -24,6 +25,7 @@ type Input = {
 }
 
 const resolvers: Record<ChainKind, SigningInputsResolver<any>> = {
+  bittensor: getBittensorSigningInputs,
   cardano: getCardanoSigningInputs,
   cosmos: getCosmosSigningInputs,
   evm: getEvmSigningInputs,
@@ -41,6 +43,11 @@ export const getEncodedSigningInputs = (input: Input): Uint8Array[] => {
   const chainKind = getChainKind(chain)
 
   const signingInputs = resolvers[chainKind](input as any)
+
+  // Bittensor returns pre-encoded Uint8Array (custom extrinsic builder, not TW proto)
+  if (chainKind === 'bittensor') {
+    return signingInputs as unknown as Uint8Array[]
+  }
 
   return signingInputs.map(signingInput => {
     const SigningInputClass = signingInputClasses[chainKind]

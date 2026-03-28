@@ -1,9 +1,9 @@
-import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
+import { TssSignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { Keyshare as DklsKeyshare } from '@lib/dkls/vs_wasm'
 import { Keyshare as SchnorrKeyshare } from '@lib/schnorr/vs_schnorr_wasm'
 
 const Keyshare: Record<
-  SignatureAlgorithm,
+  TssSignatureAlgorithm,
   typeof DklsKeyshare | typeof SchnorrKeyshare
 > = {
   ecdsa: DklsKeyshare,
@@ -12,7 +12,7 @@ const Keyshare: Record<
 
 type ToMpcLibKeyshareInput = {
   keyShare: string
-  signatureAlgorithm: SignatureAlgorithm
+  signatureAlgorithm: TssSignatureAlgorithm
 }
 
 export const toMpcLibKeyshare = ({

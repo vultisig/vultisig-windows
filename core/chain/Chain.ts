@@ -43,6 +43,7 @@ export const cosmosChainsByKind = {
     TerraClassic: 'TerraClassic',
     Noble: 'Noble',
     Akash: 'Akash',
+    QBTC: 'QBTC',
   },
   vaultBased: {
     THORChain: 'THORChain',
@@ -71,6 +72,7 @@ export enum OtherChain {
   Sui = 'Sui',
   Solana = 'Solana',
   Polkadot = 'Polkadot',
+  Bittensor = 'Bittensor',
   Ton = 'Ton',
   Ripple = 'Ripple',
   Tron = 'Tron',

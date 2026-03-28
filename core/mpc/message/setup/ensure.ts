@@ -1,4 +1,4 @@
-import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
+import { TssSignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { getMessageHash } from '@core/mpc/getMessageHash'
 import { prefixErrorWith } from '@lib/utils/error/prefixErrorWith'
 import { transformError } from '@lib/utils/error/transformError'
@@ -10,7 +10,7 @@ import { uploadMpcSetupMessage } from './upload'
 
 type EnsureSetupMessageInput = {
   keyShare: string
-  signatureAlgorithm: SignatureAlgorithm
+  signatureAlgorithm: TssSignatureAlgorithm
   message: string
   chainPath: string
   devices: string[]

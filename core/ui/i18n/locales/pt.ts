@@ -95,8 +95,8 @@ export const pt = {
     addOptionalHint: 'Adicione uma dica opcional',
     connectingWithServer: 'Conectando com o servidor...',
     emailSetupTitle:
-      'Este e-mail é usado apenas para enviar o backup do servidor.',
-    enterEmail: 'Insira seu e-mail',
+      'Este email é utilizado para backup na nuvem e não é compartilhado com terceiros',
+    enterEmail: 'Insira seu email',
     enterHint: 'Digite a dica',
     hintDescription: 'Esta mensagem será exibida caso você esqueça sua senha.',
     hintEmpty: 'A dica está vazia',
@@ -208,7 +208,7 @@ export const pt = {
   approve: 'Aprovar',
   applied_discounts: 'Descontos aplicados:',
   asset: 'Ativo',
-  assets: 'ativos',
+  assets: 'Ativos',
   auto_compound_into_label: 'Composto automaticamente em {{ticker}}',
   available: 'Disponível',
   back: 'Voltar',
@@ -859,6 +859,7 @@ export const pt = {
     'O código de referência deve ter um alias de cadeia THOR.',
   tns_not_found: 'Código de indicação não encontrado',
   to: 'Para',
+  to_min_payout: 'pagamento mín.',
   to_asset: 'Para o ativo',
   token_not_found_description:
     'Possíveis motivos: contrato incorreto, blockchain não suportada ou token removido dos registros.',
@@ -940,11 +941,11 @@ export const pt = {
   vault_details_description: 'Veja o nome, a peça e o tipo do cofre.',
   vault_details_edit_vault_description: 'Edite o nome do seu cofre',
   vault_details_page_signer_word: 'Signatário',
-  vault_details_page_vault_ECDSA: 'Chave ECDSA',
-  vault_details_page_vault_EDDSA: 'Chave EdDSA',
+  vault_details_page_vault_ECDSA: 'ECDSA',
+  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_type: 'Tipo de cofre',
   vault_info: 'Informações do cofre',
-  vault_management: 'Gerenciamento de cofres',
+  vault_management: 'Cofre',
   vault_name: 'Nome do cofre',
   vault_name_already_exists: 'O nome do cofre deve ser único.',
   vault_name_description:
@@ -1107,6 +1108,7 @@ export const pt = {
   normal: 'Normal',
   off: 'Desligado',
   on: 'Sobre',
+  on_chain: 'em {{chain}}',
   optional: 'opcional',
   password_backup: 'Proteja seu cofre e assine rapidamente.',
   permissions: 'Permissões',
@@ -1210,7 +1212,7 @@ export const pt = {
     'Digite a senha que você definiu ao criar este cofre.',
   choose_a_password: 'Escolha uma senha',
   choose_a_password_description:
-    'Se você deseja uma camada extra de segurança, escolha uma senha. <b>A senha não pode ser recuperada.</b>',
+    'Se você deseja uma camada extra de segurança, escolha uma senha. <b>A senha não pode ser recuperada.</b> <info />',
   create_vault: 'Criar cofre',
   create_referral_desc:
     'Crie seu próprio código e ganhe<c> 20%</c> em swaps referidos',
@@ -1221,7 +1223,7 @@ export const pt = {
   enter: 'Digitar',
   enter_your_email: 'Insira seu e-mail',
   enter_your_email_description:
-    'Este serviço será utilizado apenas uma vez para enviar seu arquivo de backup; o Vultisig não armazena nenhum dado.',
+    'Este email é utilizado para backup na nuvem e não é compartilhado com terceiros',
   seedphrase_duplicate_vault_error:
     'Esta frase-semente já foi importada como cofre &quot;{{vaultName}}&quot;. Importá-la novamente substituiria o cofre existente.',
   fast_vault_exists_warning_title: 'O cofre já existe',

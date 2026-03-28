@@ -1,4 +1,4 @@
-import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
+import { TssSignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { encodeDERSignature } from '@core/mpc/derSignature'
 import { getMessageHash } from '@core/mpc/getMessageHash'
 import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
@@ -26,7 +26,7 @@ import { ensureSetupMessage } from '../message/setup/ensure'
 
 type KeysignInput = {
   keyShare: string
-  signatureAlgorithm: SignatureAlgorithm
+  signatureAlgorithm: TssSignatureAlgorithm
   message: string
   chainPath: string
   localPartyId: string

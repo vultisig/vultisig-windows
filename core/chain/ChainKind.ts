@@ -31,10 +31,12 @@ const chainKindRecord = {
   [CosmosChain.TerraClassic]: 'cosmos',
   [CosmosChain.Noble]: 'cosmos',
   [CosmosChain.Akash]: 'cosmos',
+  [CosmosChain.QBTC]: 'cosmos',
 
   [OtherChain.Sui]: 'sui',
   [OtherChain.Solana]: 'solana',
   [OtherChain.Polkadot]: 'polkadot',
+  [OtherChain.Bittensor]: 'bittensor',
   [OtherChain.Ton]: 'ton',
   [OtherChain.Ripple]: 'ripple',
   [OtherChain.Tron]: 'tron',

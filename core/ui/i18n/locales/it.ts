@@ -97,8 +97,8 @@ export const it = {
     addOptionalHint: 'Aggiungi un suggerimento facoltativo',
     connectingWithServer: 'Connessione con il server...',
     emailSetupTitle:
-      'Questa email viene utilizzata solo per inviare il backup del server',
-    enterEmail: 'Inserisci la tua e-mail',
+      'Questa email viene utilizzata per il backup cloud e non viene condivisa con terze parti',
+    enterEmail: 'Inserisci la tua email',
     enterHint: 'Inserisci suggerimento',
     hintDescription:
       'Questo verrà mostrato nel caso in cui dimenticassi la password',
@@ -213,7 +213,7 @@ export const it = {
   approve: 'Approvare',
   applied_discounts: 'Sconti applicati:',
   asset: 'Risorsa',
-  assets: 'attività',
+  assets: 'Attività',
   auto_compound_into_label: 'Autocomposizione in {{ticker}}',
   available: 'Disponibile',
   back: 'Indietro',
@@ -859,6 +859,7 @@ export const it = {
     'Il codice di riferimento deve avere un alias della catena THOR',
   tns_not_found: 'Codice di riferimento non trovato',
   to: 'A',
+  to_min_payout: 'pagamento min.',
   to_asset: 'Per asset',
   token_not_found_description:
     'Possibili motivi: contratto errato, catena non supportata o token rimosso dai registri.',
@@ -938,11 +939,11 @@ export const it = {
   vault_details_description: 'Visualizza il nome, la parte e il tipo del vault',
   vault_details_edit_vault_description: 'Modifica il nome del tuo vault',
   vault_details_page_signer_word: 'Firmatario',
-  vault_details_page_vault_ECDSA: 'Chiave ECDSA',
-  vault_details_page_vault_EDDSA: 'Chiave EdDSA',
+  vault_details_page_vault_ECDSA: 'ECDSA',
+  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_type: 'Tipo di caveau',
   vault_info: 'Informazioni sul caveau',
-  vault_management: 'Gestione del caveau',
+  vault_management: 'Caveau',
   vault_name: 'Nome del caveau',
   vault_name_already_exists: 'Il nome del vault deve essere univoco',
   vault_name_description:
@@ -1105,6 +1106,7 @@ export const it = {
   normal: 'Normale',
   off: 'Spento',
   on: 'SU',
+  on_chain: 'su {{chain}}',
   optional: 'opzionale',
   password_backup: 'Proteggi il tuo caveau e firma subito.',
   permissions: 'Permessi',
@@ -1208,7 +1210,7 @@ export const it = {
     'Inserisci la password che hai impostato durante la creazione di questo Vault.',
   choose_a_password: 'Scegli una password',
   choose_a_password_description:
-    'Se desideri un ulteriore livello di sicurezza, scegli una password. <b>La password non può essere recuperata.</b>',
+    'Se desideri un ulteriore livello di sicurezza, scegli una password. <b>La password non può essere recuperata.</b> <info />',
   create_vault: 'Crea un caveau',
   create_referral_desc:
     'Crea il tuo codice e guadagna<c> 20%</c> sugli swap segnalati',
@@ -1219,7 +1221,7 @@ export const it = {
   enter: 'Entra',
   enter_your_email: 'Inserisci la tua email',
   enter_your_email_description:
-    'Verrà utilizzato una sola volta per inviare il file di backup, Vultisig non memorizza alcun dato.',
+    'Questa email viene utilizzata per il backup cloud e non viene condivisa con terze parti',
   seedphrase_duplicate_vault_error:
     'Questa frase seed è già stata importata come vault &quot;{{vaultName}}&quot;. Importandola nuovamente, il vault esistente verrebbe sostituito.',
   fast_vault_exists_warning_title: 'Il vault esiste già',

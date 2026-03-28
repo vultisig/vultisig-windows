@@ -25,6 +25,7 @@ import { useIsMLDSAEnabledQuery } from './mldsaEnabled'
 import { useHasFinishedOnboardingQuery } from './onboarding'
 import { usePasscodeAutoLockQuery } from './passcodeAutoLock'
 import { usePasscodeEncryptionQuery } from './passcodeEncryption'
+import { useIsTssBatchingEnabledQuery } from './tssBatchingEnabled'
 import { useVaultFoldersQuery } from './vaultFolders'
 import { useVaultsQuery, VaultsProvider } from './vaults'
 
@@ -42,6 +43,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
   const passcodeAutoLock = usePasscodeAutoLockQuery()
   const isBlockaidEnabled = useIsBlockaidEnabledQuery()
   const isMLDSAEnabled = useIsMLDSAEnabledQuery()
+  const isTssBatchingEnabled = useIsTssBatchingEnabledQuery()
 
   const { processError, targetVaultId } = useCore()
   const { hasCompletedStartupSplash } = useStartupSplash()
@@ -60,6 +62,7 @@ export const StorageDependant = ({ children }: ChildrenProp) => {
     passcodeAutoLock,
     isBlockaidEnabled,
     isMLDSAEnabled,
+    isTssBatchingEnabled,
   })
 
   return (

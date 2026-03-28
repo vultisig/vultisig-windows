@@ -11,4 +11,5 @@ export const cosmosFeeCoinDenom: Record<CosmosChain, string> = {
   [CosmosChain.TerraClassic]: 'uluna',
   [CosmosChain.Noble]: 'uusdc',
   [CosmosChain.Akash]: 'uakt',
+  [CosmosChain.QBTC]: 'qbtc',
 }
