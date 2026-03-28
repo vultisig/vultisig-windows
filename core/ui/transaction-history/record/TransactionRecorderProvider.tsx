@@ -41,8 +41,10 @@ export const TransactionRecorderProvider = ({ children }: ChildrenProp) => {
 
           saveRecord(record)
 
+          if (!keysignPayload.coin) return
+
           const coin = getKeysignCoin(keysignPayload)
-          queryClient.invalidateQueries({
+          void queryClient.invalidateQueries({
             queryKey: getBalanceQueryKey(extractAccountCoinKey(coin)),
           })
         },
