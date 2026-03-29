@@ -3,7 +3,6 @@ import { Chain, EvmChain } from '@core/chain/Chain'
 export const customMessageSupportedChains = [
   ...Object.values(EvmChain),
   Chain.Solana,
-  Chain.Ton,
   Chain.Tron,
 ] as const
 

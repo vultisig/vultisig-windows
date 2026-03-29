@@ -31,7 +31,6 @@ export type SignMessageInput =
       sign_message: {
         chain:
           | OtherChain.Solana
-          | OtherChain.Ton
           | OtherChain.Tron
           | OtherChain.Polkadot
           | OtherChain.Bittensor
