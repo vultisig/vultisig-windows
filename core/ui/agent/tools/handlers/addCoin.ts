@@ -1,8 +1,7 @@
 import { Chain } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { knownTokensIndex } from '@core/chain/coin/knownTokens/index'
-import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
-import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
+import { getChainAddress } from '@core/chain/publicKey/address/getChainAddress'
 
 import { getChainFromString } from '../../utils/getChainFromString'
 import { getStorageContext } from '../shared/storageContext'
@@ -96,15 +95,14 @@ export const handleAddCoin: ToolHandler = async (input, context) => {
   if (!existingAddress) {
     const { walletCore, vault } = getWalletContext()
 
-    const publicKey = getPublicKey({
+    existingAddress = getChainAddress({
       chain,
       walletCore,
       hexChainCode: vault.hexChainCode,
       publicKeys: vault.publicKeys,
+      publicKeyMldsa: vault.publicKeyMldsa,
       chainPublicKeys: vault.chainPublicKeys,
     })
-
-    existingAddress = deriveAddress({ chain, publicKey, walletCore })
 
     await storage.createCoin({
       vaultId: context.vaultPubKey,

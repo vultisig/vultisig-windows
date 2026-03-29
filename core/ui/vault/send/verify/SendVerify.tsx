@@ -7,10 +7,13 @@ import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
 import { VerifyTransactionOverview } from '@core/ui/mpc/keysign/verify/VerifyTransactionOverview'
+import { useAddressBookNameForAddress } from '@core/ui/vault/hooks/useAddressBookNameForAddress'
+import { useVaultNameForAddress } from '@core/ui/vault/hooks/useVaultNameForAddress'
 import { useSendKeysignPayloadQuery } from '@core/ui/vault/send/keysignPayload/query'
 import { useSender } from '@core/ui/vault/send/sender/hooks/useSender'
 import { useSendMemo } from '@core/ui/vault/send/state/memo'
 import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
+import { useSendReceiverLabel } from '@core/ui/vault/send/state/receiverLabel'
 import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ListItem } from '@lib/ui/list/item'
@@ -30,9 +33,18 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
   const { t } = useTranslation()
   const { name } = useCurrentVault()
   const [receiver] = useSendReceiver()
+  const [receiverLabel] = useSendReceiverLabel()
   const [memo] = useSendMemo()
   const coin = useCurrentSendCoin()
   const sender = useSender()
+  const receiverVaultName = useVaultNameForAddress({
+    address: receiver,
+    chain: coin.chain,
+  })
+  const receiverAddressBookName = useAddressBookNameForAddress({
+    address: receiver,
+    chain: coin.chain,
+  })
   const [feeSettings, setFeeSettings] = useState<FeeSettings | undefined>(
     undefined
   )
@@ -49,6 +61,26 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
     ? coin.chain
     : null
 
+  const { vaultName, addressBookName, addressLabel } = (() => {
+    if (receiverVaultName !== null)
+      return {
+        vaultName: receiverVaultName,
+        addressBookName: undefined,
+        addressLabel: undefined,
+      }
+    if (receiverAddressBookName !== null)
+      return {
+        vaultName: undefined,
+        addressBookName: receiverAddressBookName,
+        addressLabel: undefined,
+      }
+    return {
+      vaultName: undefined,
+      addressBookName: undefined,
+      addressLabel: receiverLabel || undefined,
+    }
+  })()
+
   return (
     <>
       <PageHeader
@@ -58,6 +90,7 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
       <VerifyKeysignStart
         keysignPayloadQuery={keysignPayloadQuery}
         terms={translatedTerms}
+        toAddressLabel={addressLabel}
       >
         <VerifyTransactionOverview
           coin={coin}
@@ -65,6 +98,9 @@ export const SendVerify: FC<OnBackProp> = ({ onBack }) => {
           senderName={name}
           senderAddress={sender}
           receiver={receiver}
+          receiverVaultName={vaultName}
+          receiverAddressBookName={addressBookName}
+          receiverAddressLabel={addressLabel}
           chain={coin.chain}
           keysignPayloadQuery={keysignPayloadQuery}
           renderFeeExtra={

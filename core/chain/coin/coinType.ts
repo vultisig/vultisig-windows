@@ -34,6 +34,7 @@ export const getCoinType = ({
     [Chain.Kujira]: () => CoinType.kujira,
     [Chain.Dydx]: () => CoinType.dydx,
     [Chain.Polkadot]: () => CoinType.polkadot,
+    [Chain.Bittensor]: () => CoinType.polkadot,
     [Chain.Sui]: () => CoinType.sui,
     [Chain.Zksync]: () => CoinType.zksync,
     [Chain.Ton]: () => CoinType.ton,
@@ -49,4 +50,5 @@ export const getCoinType = ({
     [Chain.Mantle]: () => CoinType.mantle,
     [Chain.Hyperliquid]: () => CoinType.ethereum,
     [Chain.Sei]: () => CoinType.ethereum,
+    [Chain.QBTC]: () => CoinType.cosmos,
   })

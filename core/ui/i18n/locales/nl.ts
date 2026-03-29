@@ -49,7 +49,7 @@ export const nl = {
   approve: 'Goedkeuren',
   reject: 'Weigeren',
   asset: 'Asset',
-  assets: 'assets',
+  assets: 'Assets',
   at_least_one_device: 'Minstens één apparaat',
   at_least_one_device_subtitle: 'Elk apparaat dat Vultisig kan draaien werkt.',
   auto: 'auto',
@@ -380,7 +380,7 @@ export const nl = {
       },
     },
     emailSetupTitle:
-      'Deze e-mail wordt alleen gebruikt om de serverback-up te versturen',
+      'Dit e-mailadres wordt gebruikt voor cloudback-up en wordt niet gedeeld met derden',
     enterEmail: 'Voer je e-mail in',
     enterHint: 'Hint invoeren',
     hintDescription: 'Dit wordt getoond als je je wachtwoord vergeet',
@@ -648,6 +648,7 @@ export const nl = {
   of: 'van',
   off: 'Uit',
   on: 'Aan',
+  on_chain: 'op {{chain}}',
   onboarding_description_1:
     'Vultisig is een veilige, multi-device crypto-kluis, compatibel met alle grote blockchains en 10.000+ tokens. Vultisig is volledig self-custodial.',
   onboarding_description_2:
@@ -912,6 +913,7 @@ export const nl = {
   tns_missing_thor_alias: 'Referralcode moet een THOR-chain alias hebben',
   tns_not_found: 'Referralcode niet gevonden',
   to: 'Naar',
+  to_min_payout: 'min. uitbetaling',
   to_asset: 'Naar-asset',
   token_not_found_description:
     'Mogelijke redenen: verkeerd contract, niet-ondersteunde chain, of token verwijderd uit registries.',
@@ -1018,11 +1020,11 @@ export const nl = {
   vault_details_description: 'Bekijk kluisnaam, deel en type',
   vault_details_edit_vault_description: 'Bewerk je kluisnaam',
   vault_details_page_signer_word: 'Ondertekenaar',
-  vault_details_page_vault_ECDSA: 'ECDSA-sleutel',
-  vault_details_page_vault_EDDSA: 'EdDSA-sleutel',
+  vault_details_page_vault_ECDSA: 'ECDSA',
+  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_type: 'Kluistype',
   vault_info: 'Kluisinfo',
-  vault_management: 'Kluisbeheer',
+  vault_management: 'Kluis',
   vault_name: 'Kluisnaam',
   vault_name_already_exists: 'Kluisnaam moet uniek zijn',
   vault_name_description:
@@ -1195,7 +1197,7 @@ export const nl = {
     'Voer het wachtwoord in dat u hebt ingesteld bij het aanmaken van deze kluis.',
   choose_a_password: 'Kies een wachtwoord',
   choose_a_password_description:
-    'Wilt u extra beveiliging? Kies dan een wachtwoord. <b>Een wachtwoord kan niet worden hersteld.</b>',
+    'Wilt u extra beveiliging? Kies dan een wachtwoord. <b>Een wachtwoord kan niet worden hersteld.</b> <info />',
   create_vault: 'Maak een kluis aan',
   create_referral_desc:
     'Maak je eigen code aan en verdien geld.<c> 20%</c> bij doorverwezen swaps',
@@ -1206,7 +1208,7 @@ export const nl = {
   enter: 'Binnenkomen',
   enter_your_email: 'Voer uw e-mailadres in',
   enter_your_email_description:
-    'Dit wordt slechts eenmalig gebruikt om uw back-upbestand te verzenden; Vultisig slaat geen gegevens op.',
+    'Dit e-mailadres wordt gebruikt voor cloudback-up en wordt niet gedeeld met derden',
   seedPhraseImportTip: 'Tip: Je kunt een browser als apparaat gebruiken.',
   seedphrase_duplicate_vault_error:
     'Deze seed phrase is al geïmporteerd als kluis &quot;{{vaultName}}&quot;. Als u deze opnieuw importeert, wordt de bestaande kluis vervangen.',
@@ -1274,4 +1276,101 @@ export const nl = {
   agent_tx_type_transfer: 'Overdracht',
   agent_tx_view: 'Weergave',
   open_as_side_panel: 'Openen als zijpaneel',
+  agent: 'Tussenpersoon',
+  agent_nav_tip_description:
+    'Vulti Agent is beschikbaar. Tik om het in te stellen.',
+  agent_nav_tip_title: 'Nieuw!',
+  broadcasted: 'Uitgezonden',
+  cache_password_for_5_min: 'Onthoud het wachtwoord gedurende 5 minuten.',
+  choose_chains: 'Kies kettingen',
+  congrats: 'Gefeliciteerd!',
+  confirmed: 'Bevestigd',
+  contract_execution: 'Contractuitvoering',
+  contract_interaction: 'Contractinteractie',
+  date: 'Datum',
+  device_n_label: 'Apparaat {{number}} - {{hash}}',
+  remove_friends_referral: 'Verwijder verwijzing',
+  enable_mldsa: 'MLDSA inschakelen',
+  post_quantum_keygen: 'Post-kwantum sleutelgeneratie',
+  post_quantum_keygen_description:
+    'Genereer een post-quantum (MLDSA) sleutel voor deze kluis.',
+  post_quantum_key_already_generated:
+    'Deze kluis heeft al een post-kwantumsleutel.',
+  push_notifications: 'Pushmeldingen',
+  push_notification_server_url: 'URL van de pushnotificatieserver',
+  push_notification_server_placeholder:
+    'Laat dit veld leeg voor de standaardinstelling in productie.',
+  failed: 'Mislukt',
+  failed_to_load_transactions: 'Transacties laden mislukt',
+  go_to_wallet: 'Ga naar de portemonnee',
+  i_understand: 'Ik begrijp',
+  i_understand_save_backup: 'Ik begrijp hoe ik deze back-up moet opslaan.',
+  left_pool: 'Linker zwembad',
+  looks_good: 'Ziet er goed uit',
+  no_transactions_yet: 'Nog geen transacties',
+  review_vault_devices_subtitle:
+    'Controleer of dit de juiste apparaten zijn die u hebt toegevoegd:',
+  review_your_vault_devices: 'Controleer uw kluisapparaten.',
+  save_backup: 'Back-up opslaan',
+  save_backup_description:
+    'Exporteer dit back-upbestand en sla het vervolgens op in de cloud. Het is <b>versleuteld</b> met het wachtwoord dat u eerder hebt ingesteld om uw kluis te ontgrendelen.',
+  save_backup_description_2:
+    'Gebruik voor elke back-up een andere cloudservice of een ander account. Verwijder het bestand van dit apparaat zodra u klaar bent.',
+  save_backup_description_secure:
+    'Exporteer dit back-upbestand en sla het vervolgens op in de cloud.',
+  save_backup_n_of_n_to_cloud:
+    'Sla back-up {{current}} van {{total}} op in de cloud',
+  save_backup_to_cloud: 'Sla de back-up op in de cloud.',
+  secure_backup_each_device: 'Maak een back-up van elk apparaat.',
+  secure_backup_each_device_description:
+    'Je maakt in totaal {{count}} back-ups. Je doet dit op elk apparaat.',
+  secure_store_backups_separately_description:
+    'Bewaar elke back-up in een andere cloudservice of met een ander wachtwoord. Mocht er één back-up openbaar worden gemaakt, dan blijven uw gegevens veilig.',
+  sends: 'Verzendt',
+  somethings_wrong: 'Er klopt iets niet.',
+  transferred: 'Overgeplaatst',
+  status: 'Status',
+  swaps: 'Ruilen',
+  swap_same_asset:
+    'Het is niet mogelijk om tussen dezelfde activa te wisselen.',
+  this_device_suffix: '(dit apparaat)',
+  today: 'Vandaag',
+  transaction_history: 'Transactiegeschiedenis',
+  vault_details_page_vault_MLDSA: 'MLDSA-sleutel',
+  vault_ready_description:
+    'Je bent helemaal klaar! Je behoudt de controle over elke transactie.',
+  vault_ready_to_use: 'Uw kluis is klaar voor gebruik.',
+  view_on_explorer: 'Bekijken in Verkenner',
+  yesterday: 'Gisteren',
+  session_history: 'Sessiegeschiedenis',
+  failed_to_load_session_history:
+    'Het laden van de sessiegeschiedenis is mislukt.',
+  agent_history_load_error_description:
+    'Probeer het alstublieft opnieuw. Als het probleem aanhoudt, heropen dan de chat van zojuist of start een nieuwe.',
+  agent_history_empty_title: 'Nog geen chats',
+  agent_history_empty_description:
+    'Start een nieuwe chat en je recente gesprekken verschijnen hier.',
+  agent_what_to_do: 'Wat zou je graag willen doen?',
+  agent_help_description:
+    'Ik kan helpen bij het voorbereiden van swaps, plugin-acties en automatiseringsregels.',
+  agent_prompt_show_plugins: 'Laat me plugins zien en wat ze kunnen doen.',
+  agent_prompt_earn_apy: 'Ik wil rendement (APY) behalen op BTC.',
+  agent_prompt_send: 'Stuur het bedrag naar ...',
+  agent_prompt_swap: 'Bereid een swap voor van ETH naar BTC.',
+  approve_transaction: 'Transactie goedkeuren',
+  enter_vault_password: 'Voer het kluiswachtwoord in',
+  agent_chat_options: 'Chatopties',
+  agent_give_feedback: 'Geef feedback',
+  agent_delete_chat_session: 'Chatsessie verwijderen',
+  agent_analyzing: 'Analyseren...',
+  agent_analyzed_for: 'Geanalyseerd voor {{duration}}s',
+  agent_analyzed: 'Geanalyseerd',
+  welcome_to_vulti_agent: 'Welkom bij Vulti Agent',
+  agent_welcome_description:
+    'Uw kluis kan nu verzoeken begrijpen, acties automatiseren en u helpen bij het beheren van uw cryptovaluta.',
+  authorize_agent: 'Geautoriseerde agent',
+  reauthorize_vulti_agent: 'Vulti Agent opnieuw autoriseren',
+  agent_reauth_description:
+    'Om veiligheidsredenen verloopt de autorisatie periodiek. Bevestig alstublieft dat u Vulti Agent wilt blijven gebruiken.',
+  authorize: 'Autoriseren',
 }

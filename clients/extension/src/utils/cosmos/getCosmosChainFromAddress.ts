@@ -8,6 +8,7 @@ export const getCosmosChainFromAddress = (address: string): string | null => {
     akash: Chain.Akash,
     kujira: Chain.Kujira,
     noble: Chain.Noble,
+    qbtc: Chain.QBTC,
   }
 
   const match = address.match(/^([a-z0-9]+?)1/)

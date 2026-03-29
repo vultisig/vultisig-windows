@@ -4,10 +4,12 @@ import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_mess
 import { useMemo } from 'react'
 
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
-import { useCurrentVaultPublicKey } from '../../../vault/state/currentVault'
+import { useCurrentVaultNullablePublicKey } from '../../../vault/state/currentVault'
 
 export const useKeysignFee = (keysignPayload: KeysignPayload) => {
-  const publicKey = useCurrentVaultPublicKey(getKeysignChain(keysignPayload))
+  const publicKey = useCurrentVaultNullablePublicKey(
+    getKeysignChain(keysignPayload)
+  )
   const walletCore = useAssertWalletCore()
 
   return useMemo(

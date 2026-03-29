@@ -1,3 +1,5 @@
+import { EvmChain } from '@core/chain/Chain'
+import { getEvmClient } from '@core/chain/chains/evm/client'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { ScanQrView } from '@core/ui/qr/components/ScanQrView'
@@ -13,10 +15,12 @@ import { useSendValidationQuery } from '@core/ui/vault/send/queries/useSendValid
 import { useSender } from '@core/ui/vault/send/sender/hooks/useSender'
 import { useSendFormFieldState } from '@core/ui/vault/send/state/formFields'
 import { useSendReceiver } from '@core/ui/vault/send/state/receiver'
+import { useSendReceiverLabel } from '@core/ui/vault/send/state/receiverLabel'
 import { useCurrentSendCoin } from '@core/ui/vault/send/state/sendCoin'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Match } from '@lib/ui/base/Match'
 import { borderRadius } from '@lib/ui/css/borderRadius'
+import { useDebounce } from '@lib/ui/hooks/useDebounce'
 import { BookIcon } from '@lib/ui/icons/BookIcon'
 import { CameraIcon } from '@lib/ui/icons/CameraIcon'
 import { SquareBehindSquare4Icon } from '@lib/ui/icons/SquareBehindSquare4Icon'
@@ -28,9 +32,11 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { attempt } from '@lib/utils/attempt'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+import { getAddress } from 'viem'
+import { getEnsAddress, normalize } from 'viem/ens'
 
 type MangeReceiverViewState = 'default' | 'addressBook' | 'scanner'
 
@@ -41,6 +47,7 @@ export const ManageReceiverAddressInputField = () => {
   const { getClipboardText } = useCore()
   const { name } = useCurrentVault()
   const [value, setValue] = useSendReceiver()
+  const [, setReceiverLabel] = useSendReceiverLabel()
   const [viewState, setViewState] = useState<MangeReceiverViewState>('default')
   const [qrView, setQrView] = useState<'scan' | 'upload'>('scan')
   const [touched, setTouched] = useState(false)
@@ -56,6 +63,11 @@ export const ManageReceiverAddressInputField = () => {
     (value: string) => {
       setTouched(true)
       setValue(value)
+      // Clear the receiver label whenever the user provides a raw address directly
+      // (label is set asynchronously by the name resolution effect below when applicable)
+      if (!/^.+\.eth$/i.test(value.trim())) {
+        setReceiverLabel('')
+      }
       const receiverError = validateSendReceiver({
         receiverAddress: value,
         chain: coin.chain,
@@ -70,7 +82,7 @@ export const ManageReceiverAddressInputField = () => {
         }))
       }
     },
-    [coin, setValue, setFocusedSendField, walletCore, t]
+    [coin, setValue, setReceiverLabel, setFocusedSendField, walletCore, t]
   )
 
   const closeQrModal = useCallback(() => {
@@ -85,6 +97,76 @@ export const ManageReceiverAddressInputField = () => {
     },
     [closeQrModal, handleUpdateReceiverAddress]
   )
+
+  const debouncedValue = useDebounce(value, 300)
+
+  // Track the latest raw input value so async ENS callbacks can verify the
+  // user hasn't typed something new while the resolution was in-flight.
+  // useRef is intentional here — we need a mutable container that is readable
+  // inside async closures without being a dependency of any effect.
+  const latestValueRef = useRef(value)
+  useEffect(() => {
+    latestValueRef.current = value
+  }, [value])
+
+  useEffect(() => {
+    // Only attempt ENS resolution on Ethereum mainnet — two known limitations:
+    // 1. Root .eth names only; ENSIP-11 multi-chain coin types not yet supported.
+    // 2. Custom domains (e.g. fluidkey.id, cb.id) not yet supported; those use
+    //    offchain resolvers (CCIP-Read / EIP-3668) and non-.eth TLDs.
+    // Loop prevention: after resolution the receiver is set to a raw address
+    // which won't match the .eth regex, so this effect is skipped on the re-fire.
+    if (
+      coin.chain !== EvmChain.Ethereum ||
+      !/^.+\.eth$/i.test(debouncedValue.trim())
+    )
+      return
+
+    // Clear stale label before attempting new resolution so a failed lookup
+    // never leaves a ghost label from a previous successful one
+    setReceiverLabel('')
+
+    let cancelled = false
+
+    // Capture the name this resolution was started for. Used in the callback
+    // to verify the live input still matches before applying the result —
+    // guards against the race where debouncedValue hasn't changed yet but the
+    // user already typed a raw address, making `cancelled` still false.
+    const requestedName = debouncedValue.trim()
+
+    attempt(async () => {
+      const client = getEvmClient(EvmChain.Ethereum)
+      const address = await getEnsAddress(client, {
+        name: normalize(requestedName),
+      })
+      if (!address)
+        throw new Error(`ENS name "${requestedName}" could not be resolved`)
+      return getAddress(address)
+    }).then(result => {
+      if (cancelled) return
+      // Secondary guard: if the user typed something new while this promise was
+      // in-flight, the live value won't match the name we resolved for — bail
+      // out to avoid overwriting what the user just typed.
+      if (latestValueRef.current.trim() !== requestedName) return
+      if (!('error' in result) && result.data) {
+        const resolved = result.data
+        setReceiverLabel(requestedName)
+        setValue(resolved)
+        // Advance to amount field since address is now valid
+        setFocusedSendField(state => ({ ...state, field: 'amount' }))
+      }
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [
+    coin.chain,
+    debouncedValue,
+    setValue,
+    setReceiverLabel,
+    setFocusedSendField,
+  ])
 
   return (
     <SendInputContainer>
@@ -146,8 +228,8 @@ export const ManageReceiverAddressInputField = () => {
           addressBook={() => (
             <AddressBookModal
               onClose={() => setViewState('default')}
-              onSelect={address => {
-                handleUpdateReceiverAddress(address)
+              onSelect={selectedAddress => {
+                handleUpdateReceiverAddress(selectedAddress)
                 setViewState('default')
               }}
             />
@@ -159,7 +241,9 @@ export const ManageReceiverAddressInputField = () => {
                   validation={error ? 'warning' : undefined}
                   placeholder={t('enter_address_here')}
                   value={value}
-                  onValueChange={value => handleUpdateReceiverAddress(value)}
+                  onValueChange={newValue =>
+                    handleUpdateReceiverAddress(newValue)
+                  }
                   onBlur={() => setTouched(true)}
                   data-testid="send-address-input"
                 />

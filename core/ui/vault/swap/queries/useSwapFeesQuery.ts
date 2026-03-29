@@ -50,8 +50,9 @@ export const useSwapFeesQuery = (swapQuote: SwapQuote) => {
         },
         general: ({ tx }) => {
           return matchRecordUnion(tx, {
-            evm: () => ({
+            evm: ({ affiliateFee }) => ({
               network,
+              ...(affiliateFee ? { swap: affiliateFee } : {}),
             }),
             solana: ({ networkFee, swapFee }) => ({
               network: {

@@ -11,4 +11,5 @@ export const cosmosGasRecord: Record<IbcEnabledCosmosChain, bigint> = {
   [Chain.TerraClassic]: 100000000n,
   [Chain.Noble]: 30000n,
   [Chain.Akash]: 200000n,
+  [Chain.QBTC]: 2000n,
 }

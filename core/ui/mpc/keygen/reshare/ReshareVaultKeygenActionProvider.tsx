@@ -11,11 +11,11 @@ import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useCore } from '@core/ui/state/core'
+import { useIsTssBatchingEnabled } from '@core/ui/storage/tssBatchingEnabled'
 import { useVaultOrders } from '@core/ui/storage/vaults'
 import { ChildrenProp } from '@lib/ui/props'
 import { without } from '@lib/utils/array/without'
 import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
-import { useCallback } from 'react'
 
 import { useKeygenOperation } from '../state/currentKeygenOperationType'
 import { KeygenAction, KeygenActionProvider } from '../state/keygenAction'
@@ -39,123 +39,145 @@ export const ReshareVaultKeygenActionProvider = ({
   const operation = useKeygenOperation()
   const { getDeveloperOptions } = useCore()
   const [, setDklsInboundSequenceNo] = useDklsInboundSequenceNoState()
+  const isTssBatchingEnabled = useIsTssBatchingEnabled()
 
   const vaultOrders = useVaultOrders()
 
-  const keygenAction: KeygenAction = useCallback(
-    async ({ onStepChange, signers }) => {
-      let timeoutMs = 60000
-      if (getDeveloperOptions) {
-        const { appInstallTimeout } = await getDeveloperOptions()
-        timeoutMs = appInstallTimeout
-      }
-      onStepChange('ecdsa')
-      setDklsInboundSequenceNo(0)
-      const sharedFinalVaultFields = {
-        signers,
-        localPartyId,
-        libType: 'DKLS' as MpcLib,
-        isBackedUp: false,
-      }
-      const { oldParties } = assertKeygenReshareFields(keygenVault)
-      const oldCommittee = oldParties.filter(party => signers.includes(party))
-      const dklsKeygen = new DKLS(
-        operation,
-        isInitiatingDevice,
-        serverUrl,
-        sessionId,
-        localPartyId,
-        signers,
-        oldCommittee,
-        encryptionKeyHex,
-        { timeoutMs, onInboundSequenceNoChange: setDklsInboundSequenceNo }
-      )
-      const oldEcdsaKeyshare =
-        'existingVault' in keygenVault
-          ? keygenVault.existingVault.keyShares.ecdsa
-          : undefined
-      const dklsResult =
-        await dklsKeygen.startReshareWithRetry(oldEcdsaKeyshare)
+  const keygenAction: KeygenAction = async ({
+    onStepChange,
+    onStepStart,
+    onStepComplete,
+    signers,
+  }) => {
+    let timeoutMs = 60000
+    if (getDeveloperOptions) {
+      const { appInstallTimeout } = await getDeveloperOptions()
+      timeoutMs = appInstallTimeout
+    }
 
-      onStepChange('eddsa')
+    setDklsInboundSequenceNo(0)
 
-      const schnorrKeygen = new Schnorr(
-        operation,
-        isInitiatingDevice,
-        serverUrl,
-        sessionId,
-        localPartyId,
-        signers,
-        oldCommittee,
-        encryptionKeyHex,
-        new Uint8Array(0),
-        { timeoutMs }
-      )
-      const oldEddsaKeyshare =
-        'existingVault' in keygenVault
-          ? keygenVault.existingVault.keyShares.eddsa
-          : undefined
-
-      const schnorrResult =
-        await schnorrKeygen.startReshareWithRetry(oldEddsaKeyshare)
-
-      const publicKeys = {
-        ecdsa: dklsResult.publicKey,
-        eddsa: schnorrResult.publicKey,
-      }
-
-      const keyShares = {
-        ecdsa: dklsResult.keyshare,
-        eddsa: schnorrResult.keyshare,
-      }
-
-      const newVaultFields = {
-        publicKeys,
-        keyShares,
-        hexChainCode: dklsResult.chaincode,
-        ...sharedFinalVaultFields,
-      }
-
-      const vault =
-        'existingVault' in keygenVault
-          ? {
-              ...keygenVault.existingVault,
-              ...newVaultFields,
-            }
-          : {
-              ...newVaultFields,
-              name: vaultName,
-              order: getLastItemOrder(vaultOrders),
-            }
-
-      await setKeygenComplete({
-        serverURL: serverUrl,
-        sessionId: sessionId,
-        localPartyId,
-      })
-
-      await waitForKeygenComplete({
-        serverURL: serverUrl,
-        sessionId: sessionId,
-        peers: without(signers, localPartyId),
-      })
-
-      return vault
-    },
-    [
-      encryptionKeyHex,
-      isInitiatingDevice,
-      getDeveloperOptions,
-      keygenVault,
+    const sharedFinalVaultFields = {
+      signers,
       localPartyId,
-      setDklsInboundSequenceNo,
+      libType: 'DKLS' as MpcLib,
+      isBackedUp: false,
+    }
+
+    const { oldParties } = assertKeygenReshareFields(keygenVault)
+    const oldCommittee = oldParties.filter(party => signers.includes(party))
+
+    const dklsKeygen = new DKLS(
+      operation,
+      isInitiatingDevice,
       serverUrl,
       sessionId,
-      vaultName,
-      vaultOrders,
+      localPartyId,
+      signers,
+      oldCommittee,
+      encryptionKeyHex,
+      { timeoutMs, onInboundSequenceNoChange: setDklsInboundSequenceNo }
+    )
+
+    const oldEcdsaKeyshare =
+      'existingVault' in keygenVault
+        ? keygenVault.existingVault.keyShares.ecdsa
+        : undefined
+
+    const schnorrKeygen = new Schnorr(
       operation,
-    ]
-  )
+      isInitiatingDevice,
+      serverUrl,
+      sessionId,
+      localPartyId,
+      signers,
+      oldCommittee,
+      encryptionKeyHex,
+      new Uint8Array(0),
+      { timeoutMs }
+    )
+
+    const oldEddsaKeyshare =
+      'existingVault' in keygenVault
+        ? keygenVault.existingVault.keyShares.eddsa
+        : undefined
+
+    let dklsResult: { publicKey: string; keyshare: string; chaincode: string }
+    let schnorrResult: {
+      publicKey: string
+      keyshare: string
+      chaincode: string
+    }
+
+    if (isTssBatchingEnabled) {
+      onStepStart('ecdsa')
+      onStepStart('eddsa')
+      ;[dklsResult, schnorrResult] = await Promise.all([
+        dklsKeygen
+          .startReshareWithRetry(oldEcdsaKeyshare, 'p-ecdsa')
+          .then(r => {
+            onStepComplete('ecdsa')
+            return r
+          }),
+        schnorrKeygen
+          .startReshareWithRetry(oldEddsaKeyshare, 'p-eddsa')
+          .then(r => {
+            onStepComplete('eddsa')
+            return r
+          }),
+      ])
+    } else {
+      onStepChange('ecdsa')
+      dklsResult = await dklsKeygen.startReshareWithRetry(oldEcdsaKeyshare)
+
+      onStepChange('eddsa')
+      schnorrResult =
+        await schnorrKeygen.startReshareWithRetry(oldEddsaKeyshare)
+    }
+
+    const publicKeys = {
+      ecdsa: dklsResult.publicKey,
+      eddsa: schnorrResult.publicKey,
+    }
+
+    const keyShares = {
+      ecdsa: dklsResult.keyshare,
+      eddsa: schnorrResult.keyshare,
+    }
+
+    const newVaultFields = {
+      publicKeys,
+      keyShares,
+      hexChainCode: dklsResult.chaincode,
+      ...sharedFinalVaultFields,
+    }
+
+    const vault =
+      'existingVault' in keygenVault
+        ? {
+            ...keygenVault.existingVault,
+            ...newVaultFields,
+          }
+        : {
+            ...newVaultFields,
+            name: vaultName,
+            order: getLastItemOrder(vaultOrders),
+          }
+
+    await setKeygenComplete({
+      serverURL: serverUrl,
+      sessionId: sessionId,
+      localPartyId,
+    })
+
+    await waitForKeygenComplete({
+      serverURL: serverUrl,
+      sessionId: sessionId,
+      peers: without(signers, localPartyId),
+    })
+
+    return vault
+  }
 
   return (
     <KeygenActionProvider value={keygenAction}>{children}</KeygenActionProvider>

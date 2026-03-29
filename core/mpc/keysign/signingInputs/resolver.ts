@@ -9,7 +9,7 @@ import { SigningInput } from './core'
 type SigningInputsResolverInput<T extends ChainKind> = {
   keysignPayload: KeysignPayload
   walletCore: WalletCore
-} & (T extends 'utxo' ? { publicKey: PublicKey } : {})
+} & (T extends 'utxo' ? { publicKey: PublicKey | null } : {})
 
 export type SigningInputsResolver<T extends ChainKind> = Resolver<
   SigningInputsResolverInput<T>,

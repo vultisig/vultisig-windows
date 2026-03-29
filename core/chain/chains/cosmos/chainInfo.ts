@@ -12,6 +12,7 @@ const cosmosChainId: Record<CosmosChain, string> = {
   [CosmosChain.TerraClassic]: 'columbus-5',
   [CosmosChain.Noble]: 'noble-1',
   [CosmosChain.Akash]: 'akashnet-2',
+  [CosmosChain.QBTC]: 'qbtc-testnet',
 }
 
 export const getCosmosChainId = (chain: CosmosChain): string => {

@@ -17,7 +17,10 @@ const resolveInitialHistory = async (): Promise<View[]> => {
   const initialView = await getInitialView()
   if (initialView !== null) {
     await removeInitialView()
-    return [initialView]
+    if (initialView.id === initialCoreView.id) {
+      return [initialView]
+    }
+    return [initialCoreView, initialView]
   }
 
   const persistedHistory = await getPersistedHistory()

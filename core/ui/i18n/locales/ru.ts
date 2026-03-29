@@ -376,8 +376,8 @@ export const ru = {
       },
     },
     emailSetupTitle:
-      'Этот e-mail используется только для отправки серверной резервной копии',
-    enterEmail: 'Введите e-mail',
+      'Этот email используется для облачного резервного копирования и не передаётся третьим лицам',
+    enterEmail: 'Введите email',
     enterHint: 'Введите подсказку',
     hintDescription: 'Покажем это, если вы забудете пароль',
     hintEmpty: 'Подсказка пустая',
@@ -642,6 +642,7 @@ export const ru = {
   of: 'из',
   off: 'Выкл',
   on: 'Вкл',
+  on_chain: 'в сети {{chain}}',
   onboarding_description_1:
     'Vultisig — безопасное multi-device криптохранилище, совместимое со всеми основными блокчейнами и 10 000+ токенами. Vultisig полностью self-custodial.',
   onboarding_description_2:
@@ -907,6 +908,7 @@ export const ru = {
   tns_missing_thor_alias: 'Referral-код должен иметь THOR-chain alias',
   tns_not_found: 'Referral-код не найден',
   to: 'Кому',
+  to_min_payout: 'мин. выплата',
   to_asset: 'Актив получения',
   token_not_found_description:
     'Возможные причины: неверный контракт, неподдерживаемая сеть или токен удалён из реестров.',
@@ -1011,11 +1013,11 @@ export const ru = {
   vault_details_description: 'Посмотреть имя хранилища, часть и тип',
   vault_details_edit_vault_description: 'Редактировать имя хранилища',
   vault_details_page_signer_word: 'Подписант',
-  vault_details_page_vault_ECDSA: 'ECDSA-ключ',
-  vault_details_page_vault_EDDSA: 'EdDSA-ключ',
+  vault_details_page_vault_ECDSA: 'ECDSA',
+  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_type: 'Тип хранилища',
   vault_info: 'Информация о хранилище',
-  vault_management: 'Управление хранилищем',
+  vault_management: 'Хранилище',
   vault_name: 'Имя хранилища',
   vault_name_already_exists: 'Имя хранилища должно быть уникальным',
   vault_name_description:
@@ -1189,7 +1191,7 @@ export const ru = {
     'Введите пароль, который вы установили при создании этого хранилища.',
   choose_a_password: 'Выберите пароль',
   choose_a_password_description:
-    'Если вам нужна дополнительная защита, выберите пароль. <b>Пароль восстановить будет невозможно.</b>',
+    'Если вам нужна дополнительная защита, выберите пароль. <b>Пароль восстановить будет невозможно.</b> <info />',
   create_vault: 'Создать хранилище',
   create_referral_desc:
     'Создайте свой собственный код и зарабатывайте!<c> 20%</c> по референтным свопам',
@@ -1200,7 +1202,7 @@ export const ru = {
   enter: 'Входить',
   enter_your_email: 'Введите свой адрес электронной почты',
   enter_your_email_description:
-    'Эта функция будет использована только один раз для отправки файла резервной копии, Vultisig не хранит никаких данных.',
+    'Этот email используется для облачного резервного копирования и не передаётся третьим лицам',
   seedPhraseImportTip:
     'Совет: Вы можете использовать браузер в качестве устройства.',
   seedphrase_duplicate_vault_error:
@@ -1243,7 +1245,7 @@ export const ru = {
     'Пожалуйста, введите свой пароль для {{operation}}.',
   confirm_action: 'Подтвердить действие',
   confirm_action_description:
-    'Пожалуйста, подтвердите, что вы хотите выполнить {{действие}}.',
+    'Пожалуйста, подтвердите, что вы хотите выполнить {{action}}.',
   agent_chat_render_error: 'Произошла ошибка при отображении чата.',
   agent_connect_description:
     'Введите пароль от хранилища для подключения к агенту. Ваш пароль используется для подписи аутентификационного сообщения.',
@@ -1269,4 +1271,100 @@ export const ru = {
   agent_tx_type_transfer: 'Передача',
   agent_tx_view: 'Вид',
   open_as_side_panel: 'Открывается как боковая панель',
+  agent: 'Агент',
+  agent_nav_tip_description:
+    'Vulti Agent доступен. Нажмите, чтобы настроить его.',
+  agent_nav_tip_title: 'Новый!',
+  broadcasted: 'Транслировалось',
+  cache_password_for_5_min: 'Запомнить пароль на 5 минут',
+  choose_chains: 'Выбирайте цепочки',
+  congrats: 'Поздравляю!',
+  confirmed: 'Подтвержденный',
+  contract_execution: 'Исполнение контракта',
+  contract_interaction: 'Взаимодействие по контракту',
+  date: 'Дата',
+  device_n_label: 'Устройство {{number}} - {{hash}}',
+  remove_friends_referral: 'Удалить реферал',
+  enable_mldsa: 'Включить MLDSA',
+  post_quantum_keygen: 'Постквантовая генерация ключей',
+  post_quantum_keygen_description:
+    'Сгенерируйте постквантовый (MLDSA) ключ для этого хранилища.',
+  post_quantum_key_already_generated:
+    'В этом хранилище уже есть постквантовый ключ.',
+  push_notifications: 'Push-уведомления',
+  push_notification_server_url: 'URL сервера push-уведомлений',
+  push_notification_server_placeholder:
+    'Оставьте поле пустым для настроек по умолчанию в производственной среде.',
+  failed: 'Неуспешный',
+  failed_to_load_transactions: 'Не удалось загрузить транзакции.',
+  go_to_wallet: 'Перейти в кошелек',
+  i_understand: 'Я понимаю',
+  i_understand_save_backup: 'Я понимаю, как сохранить эту резервную копию.',
+  left_pool: 'Покинул пул',
+  looks_good: 'Выглядит хорошо.',
+  no_transactions_yet: 'Пока нет транзакций.',
+  review_vault_devices_subtitle:
+    'Убедитесь, что вы добавили именно те устройства, которые вам нужны:',
+  review_your_vault_devices: 'Проверьте свои устройства хранилища.',
+  save_backup: 'Сохраните резервную копию',
+  save_backup_description:
+    'Экспортируйте этот файл резервной копии, а затем сохраните его в облаке. Он <b>зашифрован</b> паролем, установленным ранее для разблокировки вашего хранилища.',
+  save_backup_description_2:
+    'Для каждого резервного копирования используйте отдельный облачный сервис или учетную запись. После завершения удалите файл с этого устройства.',
+  save_backup_description_secure:
+    'Экспортируйте этот файл резервной копии, а затем сохраните его в облаке.',
+  save_backup_n_of_n_to_cloud:
+    'Сохраните резервную копию {{current}} из {{total}} в облако.',
+  save_backup_to_cloud: 'Сохраните резервную копию в облаке.',
+  secure_backup_each_device: 'Создайте резервные копии каждого устройства.',
+  secure_backup_each_device_description:
+    'Всего будет создано {{count}} резервных копий. Это нужно будет сделать на каждом устройстве.',
+  secure_store_backups_separately_description:
+    'Сохраняйте каждую резервную копию в отдельном облачном сервисе или с разным паролем. В случае утечки данных ваши средства останутся в безопасности.',
+  sends: 'Отправляет',
+  somethings_wrong: 'Что-то не так.',
+  transferred: 'Переведено',
+  status: 'Статус',
+  swaps: 'Свопы',
+  swap_same_asset: 'Невозможно обменять один и тот же актив.',
+  this_device_suffix: '(это устройство)',
+  today: 'Сегодня',
+  transaction_history: 'История транзакций',
+  vault_details_page_vault_MLDSA: 'Ключ MLDSA',
+  vault_ready_description:
+    'Всё готово! Вы сохраняете контроль над каждой транзакцией.',
+  vault_ready_to_use: 'Ваше хранилище готово к использованию.',
+  view_on_explorer: 'Просмотреть в обозревателе',
+  yesterday: 'Вчера',
+  session_history: 'История сессий',
+  failed_to_load_session_history: 'Не удалось загрузить историю сессий.',
+  agent_history_load_error_description:
+    'Пожалуйста, попробуйте еще раз. Если проблема не исчезнет, ​​откройте чат, который вы видели минуту назад, или начните новый.',
+  agent_history_empty_title: 'Пока нет чатов',
+  agent_history_empty_description:
+    'Начните новый чат, и ваши последние сообщения отобразятся здесь.',
+  agent_what_to_do: 'Чем бы вы хотели заняться?',
+  agent_help_description:
+    'Я могу помочь с подготовкой обменов, действий плагинов и правил автоматизации.',
+  agent_prompt_show_plugins: 'Покажите мне плагины и на что они способны.',
+  agent_prompt_earn_apy:
+    'Я хочу получать годовую процентную доходность (APY) на BTC.',
+  agent_prompt_send: 'Переведите сумму на ...',
+  agent_prompt_swap: 'Подготовьте обмен из ETH в BTC.',
+  approve_transaction: 'Одобрить транзакцию',
+  enter_vault_password: 'Введите пароль хранилища',
+  agent_chat_options: 'Варианты чата',
+  agent_give_feedback: 'Оставьте отзыв',
+  agent_delete_chat_session: 'Удалить сессию чата',
+  agent_analyzing: 'Анализ...',
+  agent_analyzed_for: 'Проанализировано на {{duration}}s',
+  agent_analyzed: 'Проанализировано',
+  welcome_to_vulti_agent: 'Добро пожаловать в Vulti Agent!',
+  agent_welcome_description:
+    'Теперь ваше хранилище может понимать запросы, автоматизировать действия и помогать управлять вашей криптовалютой.',
+  authorize_agent: 'Авторизовать агента',
+  reauthorize_vulti_agent: 'Повторно авторизовать Vulti Agent',
+  agent_reauth_description:
+    'В целях безопасности авторизация периодически истекает. Пожалуйста, подтвердите свое согласие, чтобы продолжить использование Vulti Agent.',
+  authorize: 'Авторизовать',
 }

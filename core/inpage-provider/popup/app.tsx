@@ -52,6 +52,10 @@ export const PopupApp = () => {
           <ExtensionCoreApp
             goBack={() => window.close()}
             goHome={() => window.close()}
+            popNavigationHistory={() => {
+              // No navigation stack in this popup; ignore steps and close.
+              window.close()
+            }}
             targetVaultId={context?.appSession?.vaultId}
             isLimited={true}
           >

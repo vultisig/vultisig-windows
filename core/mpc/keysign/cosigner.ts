@@ -42,10 +42,9 @@ globalThis.fetch = async (
 }
 
 import { fromBinary } from '@bufbuild/protobuf'
-import { getChainKind } from '@core/chain/ChainKind'
 import { getCoinType } from '@core/chain/coin/coinType'
 import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
-import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
+import { getSignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
 import { getSevenZip } from '@core/mpc/compression/getSevenZip'
 import { keysign } from '@core/mpc/keysign'
@@ -59,8 +58,10 @@ import {
 } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
 import { vaultContainerFromString } from '@core/mpc/vault/utils/vaultContainerFromString'
+import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { decryptWithAesGcm } from '@lib/utils/encryption/aesGcm/decryptWithAesGcm'
 import { fromBase64 } from '@lib/utils/fromBase64'
+import { match } from '@lib/utils/match'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 import { initWasm } from '@trustwallet/wallet-core'
 import fs from 'fs/promises'
@@ -196,13 +197,15 @@ async function main() {
     `   Hashes (${msgs.length}): ${msgs.map(h => h.slice(0, 20) + '...').join(', ')}`
   )
 
-  const chainKind = getChainKind(chain)
-  const signatureAlgorithm = signatureAlgorithms[chainKind]
+  const signatureAlgorithm = getSignatureAlgorithm(chain)
+
   const coinType = getCoinType({ walletCore, chain })
-  const chainPath =
-    signatureAlgorithm === 'eddsa'
-      ? eddsaPlaceholderPath
-      : walletCore.CoinTypeExt.derivationPath(coinType).replaceAll("'", '')
+  const chainPath = match(signatureAlgorithm, {
+    ecdsa: () =>
+      walletCore.CoinTypeExt.derivationPath(coinType).replaceAll("'", ''),
+    eddsa: () => eddsaPlaceholderPath,
+    mldsa: () => eddsaPlaceholderPath,
+  })
   console.log(`\n6. Algorithm: ${signatureAlgorithm}, path: ${chainPath}`)
 
   console.log('\n7. Joining relay session...')
@@ -218,8 +221,14 @@ async function main() {
   console.log(`   Started: ${signers.join(', ')}`)
 
   const peers = signers.filter(s => s !== vault.localPartyId)
-  const keyShare =
-    vault.keyShares[signatureAlgorithm === 'ecdsa' ? 'ecdsa' : 'eddsa']
+  const keyShare = shouldBePresent(
+    match(signatureAlgorithm, {
+      ecdsa: () => vault.keyShares.ecdsa,
+      eddsa: () => vault.keyShares.eddsa,
+      mldsa: () => vault.keyShareMldsa,
+    }),
+    'Keyshare'
+  )
 
   console.log(`\n9. Keysigning ${msgs.length} message(s)...`)
   for (let i = 0; i < msgs.length; i++) {

@@ -97,8 +97,8 @@ export const de = {
     addOptionalHint: 'Füge einen optionalen Hinweis hinzu',
     connectingWithServer: 'Verbindung zum Server wird hergestellt...',
     emailSetupTitle:
-      'Diese E-Mail-Adresse wird ausschließlich zum Versenden des Server-Backups verwendet.',
-    enterEmail: 'Geben Sie Ihre E-Mail-Adresse ein',
+      'Diese E-Mail wird für Cloud-Backup verwendet und nicht an Dritte weitergegeben',
+    enterEmail: 'Geben Sie Ihre E-Mail ein',
     enterHint: 'Hinweis eingeben',
     hintDescription: 'Dies wird angezeigt, falls Sie Ihr Passwort vergessen.',
     hintEmpty: 'Hinweis ist leer',
@@ -558,7 +558,7 @@ export const de = {
   joining_session: 'Sitzung wird beigetreten...',
   keygen: 'Keygen',
   keygen_devices_requirements_info:
-    'QR-Code mit einem anderen Gerät scannen. {{recommendended}}-Gerätekonfiguration empfohlen, {{min}} ist ausreichend.',
+    'QR-Code mit einem anderen Gerät scannen. {{recommended}}-Gerätekonfiguration empfohlen, {{min}} ist ausreichend.',
   keygen_failed:
     'Fehler bei der Schlüsselgenerierung. Bitte versuchen Sie es erneut.',
   keys: 'Schlüssel',
@@ -599,7 +599,7 @@ export const de = {
   more: 'mehr',
   moreInfo: 'Mehr Infos',
   name: 'Name',
-  name_your_vault: 'Benennen Sie Ihren Tresor.',
+  name_your_vault: 'Benennen Sie Ihren Tresor',
   network: 'Netzwerk',
   network_fee: 'Netzwerkgebühr',
   network_rate: 'Netzwerkrate',
@@ -628,7 +628,7 @@ export const de = {
     'Ihre Tresore werden hier angezeigt. Erstellen Sie zunächst einen neuen Tresor oder importieren Sie einen vorhandenen.',
   node_address: 'Knotenadresse',
   not_enough_asset_to_cover_gas_fees:
-    'Nicht genügend {{Vermögen}}, um die Gaskosten zu decken',
+    'Nicht genügend {{asset}}, um die Gaskosten zu decken',
   not_enough_funds: 'Nicht genügend Mittel',
   nothing_to_add: 'Nichts hinzuzufügen',
   nothing_to_add_hint:
@@ -865,6 +865,7 @@ export const de = {
     'Der Empfehlungscode muss einen THOR-Kettenalias haben.',
   tns_not_found: 'Empfehlungscode nicht gefunden',
   to: 'Zu',
+  to_min_payout: 'min. Auszahlung',
   to_asset: 'Zum Vermögenswert',
   token_not_found_description:
     'Mögliche Gründe: falscher Vertrag, nicht unterstützte Blockchain oder Token aus den Registern entfernt.',
@@ -945,11 +946,11 @@ export const de = {
   vault_details_description: 'Tresorname, Teil und Typ anzeigen',
   vault_details_edit_vault_description: 'Bearbeiten Sie Ihren Tresornamen',
   vault_details_page_signer_word: 'Unterzeichner',
-  vault_details_page_vault_ECDSA: 'ECDSA-Schlüssel',
-  vault_details_page_vault_EDDSA: 'EdDSA-Schlüssel',
+  vault_details_page_vault_ECDSA: 'ECDSA',
+  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_type: 'Tresortyp',
   vault_info: 'Tresorinformationen',
-  vault_management: 'Tresorverwaltung',
+  vault_management: 'Tresor',
   vault_name: 'Tresorname',
   vault_name_already_exists: 'Der Tresorname muss eindeutig sein.',
   vault_name_description:
@@ -1045,7 +1046,7 @@ export const de = {
   new: 'Neu',
   vulti_node: 'VultiNode',
   percentage_zero: '0 %',
-  percentage_value: '{{Wert}}%',
+  percentage_value: '{{value}}%',
   automation_info: 'Automatisierungsinformationen',
   app_install_timeout: 'Zeitüberschreitung bei der App-Installation (ms)',
   app_install_timeout_invalid: 'Bitte geben Sie eine gültige Nummer ein.',
@@ -1115,6 +1116,7 @@ export const de = {
   normal: 'Normal',
   off: 'Aus',
   on: 'An',
+  on_chain: 'auf {{chain}}',
   optional: 'optional',
   password_backup:
     'Schützen Sie Ihren Tresor und sichern Sie sich eine schnelle Signatur.',
@@ -1217,7 +1219,7 @@ export const de = {
     'Geben Sie das Passwort ein, das Sie beim Erstellen dieses Tresors festgelegt haben.',
   choose_a_password: 'Wählen Sie ein Passwort',
   choose_a_password_description:
-    'Für zusätzliche Sicherheit wählen Sie ein Passwort. <b>Das Passwort kann nicht wiederhergestellt werden.</b>',
+    'Für zusätzliche Sicherheit wählen Sie ein Passwort. <b>Das Passwort kann nicht wiederhergestellt werden.</b> <info />',
   create_vault: 'Tresor erstellen',
   create_referral_desc:
     'Erstelle deinen eigenen Code und verdiene!<c> 20%</c> bei vermittelten Swaps',
@@ -1228,7 +1230,7 @@ export const de = {
   enter: 'Eingeben',
   enter_your_email: 'Geben Sie Ihre E-Mail-Adresse ein',
   enter_your_email_description:
-    'Dies wird nur einmal zum Senden Ihrer Sicherungsdatei verwendet, Vultisig speichert keine Daten.',
+    'Diese E-Mail wird für Cloud-Backup verwendet und nicht an Dritte weitergegeben',
   seedphrase_duplicate_vault_error:
     'Diese Seed-Phrase ist bereits als Tresor &quot;{{vaultName}}&quot; importiert. Ein erneuter Import würde den bestehenden Tresor ersetzen.',
   fast_vault_exists_warning_title: 'Tresor existiert bereits',
@@ -1308,4 +1310,100 @@ export const de = {
   agent_tx_type_transfer: 'Überweisen',
   agent_tx_view: 'Sicht',
   open_as_side_panel: 'Als Seitenwand öffnen',
+  agent: 'Agent',
+  agent_nav_tip_description:
+    'Vulti Agent ist verfügbar. Tippen Sie hier, um ihn einzurichten.',
+  agent_nav_tip_title: 'Neu!',
+  broadcasted: 'Ausgestrahlt',
+  cache_password_for_5_min: 'Passwort 5 Minuten lang merken',
+  choose_chains: 'Wählen Sie Ketten',
+  congrats: 'Glückwunsch!',
+  confirmed: 'Bestätigt',
+  contract_execution: 'Vertragsabwicklung',
+  contract_interaction: 'Vertragsinteraktion',
+  date: 'Datum',
+  device_n_label: 'Gerät {{number}} - {{hash}}',
+  remove_friends_referral: 'Empfehlung entfernen',
+  enable_mldsa: 'MLDSA aktivieren',
+  post_quantum_keygen: 'Post-Quanten-Schlüsselerzeugung',
+  post_quantum_keygen_description:
+    'Generieren Sie einen Post-Quantum-Schlüssel (MLDSA) für diesen Tresor.',
+  post_quantum_key_already_generated:
+    'Dieser Tresor verfügt bereits über einen Post-Quanten-Schlüssel',
+  push_notifications: 'Push-Benachrichtigungen',
+  push_notification_server_url: 'URL des Push-Benachrichtigungsservers',
+  push_notification_server_placeholder:
+    'Für die Produktionseinstellung leer lassen.',
+  failed: 'Fehlgeschlagen',
+  failed_to_load_transactions: 'Transaktionen konnten nicht geladen werden.',
+  go_to_wallet: 'Gehe zu deiner Brieftasche',
+  i_understand: 'Ich verstehe',
+  i_understand_save_backup: 'Ich verstehe, wie man dieses Backup speichert.',
+  left_pool: 'Pool verlassen',
+  looks_good: 'Sieht gut aus',
+  no_transactions_yet: 'Bisher keine Transaktionen',
+  review_vault_devices_subtitle:
+    'Vergewissern Sie sich, dass Sie die richtigen Geräte hinzugefügt haben:',
+  review_your_vault_devices: 'Überprüfen Sie Ihre Tresorgeräte',
+  save_backup: 'Sicherungskopie speichern',
+  save_backup_description:
+    'Exportieren Sie diese Sicherungsdatei und speichern Sie sie anschließend in der Cloud. Sie ist mit dem zuvor festgelegten Passwort zum Entsperren Ihres Tresors <b>verschlüsselt</b> .',
+  save_backup_description_2:
+    'Verwenden Sie für jede Datensicherung einen anderen Cloud-Dienst oder ein anderes Konto. Löschen Sie die Datei anschließend von diesem Gerät.',
+  save_backup_description_secure:
+    'Exportieren Sie diese Sicherungsdatei und speichern Sie sie anschließend in der Cloud.',
+  save_backup_n_of_n_to_cloud:
+    'Sichern Sie {{current}} von {{total}} in der Cloud',
+  save_backup_to_cloud: 'Backup in der Cloud speichern',
+  secure_backup_each_device: 'Sichern Sie jedes Gerät',
+  secure_backup_each_device_description:
+    'Sie erstellen insgesamt {{count}} Backups. Dies führen Sie auf jedem Gerät durch.',
+  secure_store_backups_separately_description:
+    'Speichern Sie jedes Backup in einem anderen Cloud-Speicher oder mit einem anderen Passwort. Sollte eines davon kompromittiert werden, bleiben Ihre Gelder sicher.',
+  sends: 'Sendet',
+  somethings_wrong: 'Irgendetwas stimmt nicht.',
+  transferred: 'Übertragen',
+  status: 'Status',
+  swaps: 'Tauschgeschäfte',
+  swap_same_asset:
+    'Ein Tausch zwischen demselben Vermögenswert ist nicht möglich.',
+  this_device_suffix: '(dieses Gerät)',
+  today: 'Heute',
+  transaction_history: 'Transaktionsverlauf',
+  vault_details_page_vault_MLDSA: 'MLDSA-Schlüssel',
+  vault_ready_description:
+    'Alles ist bereit! Sie behalten die Kontrolle über jede Transaktion.',
+  vault_ready_to_use: 'Ihr Tresor ist einsatzbereit.',
+  view_on_explorer: 'Im Explorer anzeigen',
+  yesterday: 'Gestern',
+  session_history: 'Sitzungsverlauf',
+  failed_to_load_session_history: 'Sitzungsverlauf konnte nicht geladen werden',
+  agent_history_load_error_description:
+    'Bitte versuchen Sie es erneut. Sollte das Problem weiterhin bestehen, öffnen Sie den Chat von vorhin wieder oder starten Sie einen neuen.',
+  agent_history_empty_title: 'Noch keine Chats.',
+  agent_history_empty_description:
+    'Eröffne einen neuen Chat, und deine letzten Unterhaltungen werden hier angezeigt.',
+  agent_what_to_do: 'Was möchten Sie tun?',
+  agent_help_description:
+    'Ich kann bei der Vorbereitung von Tauschvorgängen, Plugin-Aktionen und Automatisierungsregeln helfen.',
+  agent_prompt_show_plugins: 'Zeig mir Plugins und was sie können.',
+  agent_prompt_earn_apy: 'Ich möchte mit BTC eine jährliche Rendite erzielen.',
+  agent_prompt_send: 'Senden Sie den Betrag an ...',
+  agent_prompt_swap: 'Bereiten Sie einen Tausch von ETH zu BTC vor.',
+  approve_transaction: 'Transaktion genehmigen',
+  enter_vault_password: 'Tresorpasswort eingeben',
+  agent_chat_options: 'Chat-Optionen',
+  agent_give_feedback: 'Feedback geben',
+  agent_delete_chat_session: 'Chat-Sitzung löschen',
+  agent_analyzing: 'Analyse läuft...',
+  agent_analyzed_for: 'Analysiert für {{duration}}s',
+  agent_analyzed: 'Analysiert',
+  welcome_to_vulti_agent: 'Willkommen bei Vulti Agent',
+  agent_welcome_description:
+    'Ihr Tresor kann nun Anfragen verstehen, Aktionen automatisieren und Sie bei der Verwaltung Ihrer Kryptowährungen unterstützen.',
+  authorize_agent: 'Agent autorisieren',
+  reauthorize_vulti_agent: 'Vulti-Agent erneut autorisieren',
+  agent_reauth_description:
+    'Aus Sicherheitsgründen läuft die Autorisierung regelmäßig ab. Bitte bestätigen Sie, dass Sie Vulti Agent weiterhin verwenden möchten.',
+  authorize: 'Autorisieren',
 }

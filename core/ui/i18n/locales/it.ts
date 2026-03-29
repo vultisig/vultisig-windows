@@ -97,8 +97,8 @@ export const it = {
     addOptionalHint: 'Aggiungi un suggerimento facoltativo',
     connectingWithServer: 'Connessione con il server...',
     emailSetupTitle:
-      'Questa email viene utilizzata solo per inviare il backup del server',
-    enterEmail: 'Inserisci la tua e-mail',
+      'Questa email viene utilizzata per il backup cloud e non viene condivisa con terze parti',
+    enterEmail: 'Inserisci la tua email',
     enterHint: 'Inserisci suggerimento',
     hintDescription:
       'Questo verrà mostrato nel caso in cui dimenticassi la password',
@@ -213,7 +213,7 @@ export const it = {
   approve: 'Approvare',
   applied_discounts: 'Sconti applicati:',
   asset: 'Risorsa',
-  assets: 'attività',
+  assets: 'Attività',
   auto_compound_into_label: 'Autocomposizione in {{ticker}}',
   available: 'Disponibile',
   back: 'Indietro',
@@ -859,6 +859,7 @@ export const it = {
     'Il codice di riferimento deve avere un alias della catena THOR',
   tns_not_found: 'Codice di riferimento non trovato',
   to: 'A',
+  to_min_payout: 'pagamento min.',
   to_asset: 'Per asset',
   token_not_found_description:
     'Possibili motivi: contratto errato, catena non supportata o token rimosso dai registri.',
@@ -938,11 +939,11 @@ export const it = {
   vault_details_description: 'Visualizza il nome, la parte e il tipo del vault',
   vault_details_edit_vault_description: 'Modifica il nome del tuo vault',
   vault_details_page_signer_word: 'Firmatario',
-  vault_details_page_vault_ECDSA: 'Chiave ECDSA',
-  vault_details_page_vault_EDDSA: 'Chiave EdDSA',
+  vault_details_page_vault_ECDSA: 'ECDSA',
+  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_type: 'Tipo di caveau',
   vault_info: 'Informazioni sul caveau',
-  vault_management: 'Gestione del caveau',
+  vault_management: 'Caveau',
   vault_name: 'Nome del caveau',
   vault_name_already_exists: 'Il nome del vault deve essere univoco',
   vault_name_description:
@@ -1036,7 +1037,7 @@ export const it = {
   new: 'Nuovo',
   vulti_node: 'VultiNode',
   percentage_zero: '0%',
-  percentage_value: '{{valore}}%',
+  percentage_value: '{{value}}%',
   automation_info: "Informazioni sull'automazione",
   app_install_timeout: "Timeout di installazione dell'app (ms)",
   app_install_timeout_invalid: 'Inserisci un numero valido.',
@@ -1105,6 +1106,7 @@ export const it = {
   normal: 'Normale',
   off: 'Spento',
   on: 'SU',
+  on_chain: 'su {{chain}}',
   optional: 'opzionale',
   password_backup: 'Proteggi il tuo caveau e firma subito.',
   permissions: 'Permessi',
@@ -1208,7 +1210,7 @@ export const it = {
     'Inserisci la password che hai impostato durante la creazione di questo Vault.',
   choose_a_password: 'Scegli una password',
   choose_a_password_description:
-    'Se desideri un ulteriore livello di sicurezza, scegli una password. <b>La password non può essere recuperata.</b>',
+    'Se desideri un ulteriore livello di sicurezza, scegli una password. <b>La password non può essere recuperata.</b> <info />',
   create_vault: 'Crea un caveau',
   create_referral_desc:
     'Crea il tuo codice e guadagna<c> 20%</c> sugli swap segnalati',
@@ -1219,7 +1221,7 @@ export const it = {
   enter: 'Entra',
   enter_your_email: 'Inserisci la tua email',
   enter_your_email_description:
-    'Verrà utilizzato una sola volta per inviare il file di backup, Vultisig non memorizza alcun dato.',
+    'Questa email viene utilizzata per il backup cloud e non viene condivisa con terze parti',
   seedphrase_duplicate_vault_error:
     'Questa frase seed è già stata importata come vault &quot;{{vaultName}}&quot;. Importandola nuovamente, il vault esistente verrebbe sostituito.',
   fast_vault_exists_warning_title: 'Il vault esiste già',
@@ -1300,4 +1302,100 @@ export const it = {
   agent_tx_type_transfer: 'Trasferire',
   agent_tx_view: 'Visualizzazione',
   open_as_side_panel: 'Apri come pannello laterale',
+  agent: 'Agente',
+  agent_nav_tip_description:
+    'Vulti Agent è disponibile. Tocca per configurarlo.',
+  agent_nav_tip_title: 'Nuovo!',
+  broadcasted: 'Trasmesso',
+  cache_password_for_5_min: 'Ricorda la password per 5 minuti',
+  choose_chains: 'Scegli le catene',
+  congrats: 'Congratulazioni!',
+  confirmed: 'Confermato',
+  contract_execution: 'Esecuzione del contratto',
+  contract_interaction: 'Interazione contrattuale',
+  date: 'Data',
+  device_n_label: 'Dispositivo {{number}} - {{hash}}',
+  remove_friends_referral: 'Rimuovi il riferimento',
+  enable_mldsa: 'Abilitare MLDSA',
+  post_quantum_keygen: 'Generazione di chiavi post-quantistiche',
+  post_quantum_keygen_description:
+    'Genera una chiave post-quantistica (MLDSA) per questo vault',
+  post_quantum_key_already_generated:
+    'Questa cassaforte ha già una chiave post-quantistica',
+  push_notifications: 'Notifiche push',
+  push_notification_server_url: 'URL del server di notifiche push',
+  push_notification_server_placeholder:
+    'Lascia vuoto per le impostazioni predefinite di produzione',
+  failed: 'Fallito',
+  failed_to_load_transactions: 'Impossibile caricare le transazioni',
+  go_to_wallet: 'Vai al portafoglio',
+  i_understand: 'Capisco',
+  i_understand_save_backup: 'Ho capito come salvare questo backup',
+  left_pool: 'Piscina sinistra',
+  looks_good: 'Sembra buono',
+  no_transactions_yet: 'Nessuna transazione ancora',
+  review_vault_devices_subtitle:
+    'Assicurati di aver aggiunto i dispositivi corretti:',
+  review_your_vault_devices: 'Rivedi i dispositivi del tuo caveau',
+  save_backup: 'Salva backup',
+  save_backup_description:
+    'Esporta questo file di backup e salvalo sul cloud. È <b>crittografato</b> con la password impostata in precedenza per sbloccare il tuo Vault.',
+  save_backup_description_2:
+    'Utilizza un servizio cloud o un account diverso per ogni backup. Al termine, elimina il file da questo dispositivo.',
+  save_backup_description_secure:
+    'Esporta questo file di backup, quindi salvalo sul cloud.',
+  save_backup_n_of_n_to_cloud:
+    'Salva il backup {{current}} di {{total}} sul cloud',
+  save_backup_to_cloud: 'Salva il backup sul cloud',
+  secure_backup_each_device: 'Eseguire il backup di ciascun dispositivo',
+  secure_backup_each_device_description:
+    'In totale creerai {{count}} backup. Eseguirai questa operazione su ciascun dispositivo.',
+  secure_store_backups_separately_description:
+    'Salva ogni backup su un servizio cloud diverso o con una password diversa. In questo modo, se uno dei backup viene compromesso, i tuoi fondi rimarranno al sicuro.',
+  sends: 'Invii',
+  somethings_wrong: 'C&#39;è qualcosa che non va',
+  transferred: 'Trasferito',
+  status: 'Stato',
+  swaps: 'Scambi',
+  swap_same_asset: 'Non è possibile scambiare tra lo stesso asset',
+  this_device_suffix: '(questo dispositivo)',
+  today: 'Oggi',
+  transaction_history: 'Cronologia delle transazioni',
+  vault_details_page_vault_MLDSA: 'Chiave MLDSA',
+  vault_ready_description:
+    'È tutto pronto! Avrai sempre il controllo di ogni transazione.',
+  vault_ready_to_use: 'La tua cassaforte è pronta per l&#39;uso.',
+  view_on_explorer: 'Visualizza su Esplora risorse',
+  yesterday: 'Ieri',
+  session_history: 'Cronologia della sessione',
+  failed_to_load_session_history:
+    'Impossibile caricare la cronologia della sessione',
+  agent_history_load_error_description:
+    'Per favore, riprova. Se il problema persiste, riapri la chat di poco fa o avviane una nuova.',
+  agent_history_empty_title: 'Nessuna chat ancora',
+  agent_history_empty_description:
+    'Avvia una nuova chat e le tue conversazioni recenti appariranno qui.',
+  agent_what_to_do: 'Cosa ti piacerebbe fare?',
+  agent_help_description:
+    'Posso aiutarti a preparare scambi, azioni dei plugin e regole di automazione.',
+  agent_prompt_show_plugins: 'Mostrami i plugin e le loro funzionalità.',
+  agent_prompt_earn_apy: 'Voglio guadagnare APY su BTC',
+  agent_prompt_send: 'Invia l&#39;importo a...',
+  agent_prompt_swap: 'Prepara uno scambio da ETH a BTC',
+  approve_transaction: 'Approva la transazione',
+  enter_vault_password: 'Inserisci la password del caveau',
+  agent_chat_options: 'Opzioni di chat',
+  agent_give_feedback: 'Fornisci un feedback',
+  agent_delete_chat_session: 'Elimina sessione di chat',
+  agent_analyzing: 'Analisi in corso...',
+  agent_analyzed_for: 'Analizzato per {{duration}}s',
+  agent_analyzed: 'Analizzato',
+  welcome_to_vulti_agent: 'Benvenuti in Vulti Agent',
+  agent_welcome_description:
+    'Il tuo vault ora è in grado di comprendere le richieste, automatizzare le azioni e aiutarti a gestire le tue criptovalute.',
+  authorize_agent: 'Agente autorizzato',
+  reauthorize_vulti_agent: 'Riautorizza l&#39;agente Vulti',
+  agent_reauth_description:
+    'Per motivi di sicurezza, l&#39;autorizzazione scade periodicamente. Conferma per continuare a utilizzare Vulti Agent.',
+  authorize: 'Autorizzare',
 }

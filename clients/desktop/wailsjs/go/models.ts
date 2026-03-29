@@ -201,3 +201,40 @@ export namespace tss {
 
 }
 
+export namespace utils {
+	
+	export class HttpPostRequest {
+	    url: string;
+	    headers: Record<string, string>;
+	    body: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new HttpPostRequest(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.url = source["url"];
+	        this.headers = source["headers"];
+	        this.body = source["body"];
+	    }
+	}
+	export class HttpPostResponse {
+	    statusCode: number;
+	    headers: Record<string, string>;
+	    body: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new HttpPostResponse(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.statusCode = source["statusCode"];
+	        this.headers = source["headers"];
+	        this.body = source["body"];
+	    }
+	}
+
+}
+

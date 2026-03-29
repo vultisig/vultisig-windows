@@ -42,6 +42,7 @@ describe('requestAccount', () => {
 
   it('falls through to popup on BackgroundError.Unauthorized, then retries', async () => {
     const accountData = { address: '0xABCDEF' }
+    const appSession = { vaultId: 'v1', host: 'example.com', url: 'https://example.com' }
 
     // First call: background rejects with Unauthorized
     mockCallBackground
@@ -49,8 +50,8 @@ describe('requestAccount', () => {
       // Second call after popup grants access: succeeds
       .mockResolvedValueOnce(accountData)
 
-    // Popup grants vault access successfully
-    mockCallPopup.mockResolvedValue({ success: true })
+    // Popup grants vault access and returns appSession
+    mockCallPopup.mockResolvedValue({ appSession })
 
     const result = await requestAccount(Chain.Ethereum)
 
@@ -59,32 +60,35 @@ describe('requestAccount', () => {
     // Background should be called twice
     expect(mockCallBackground).toHaveBeenCalledTimes(2)
 
-    // Popup should be called with grantVaultAccess
+    // Popup should be called with grantVaultAccess (including chain)
     expect(mockCallPopup).toHaveBeenCalledWith({
       grantVaultAccess: {
         preselectFastVault: undefined,
+        chain: Chain.Ethereum,
       },
     })
   })
 
   it('passes preselectFastVault option to popup', async () => {
+    const appSession = { vaultId: 'v1', host: 'example.com', url: 'https://example.com' }
     mockCallBackground
       .mockRejectedValueOnce(BackgroundError.Unauthorized)
       .mockResolvedValueOnce({ address: '0x123' })
 
-    mockCallPopup.mockResolvedValue({ success: true })
+    mockCallPopup.mockResolvedValue({ appSession })
 
     await requestAccount(Chain.Ethereum, { preselectFastVault: true })
 
     expect(mockCallPopup).toHaveBeenCalledWith({
       grantVaultAccess: {
         preselectFastVault: true,
+        chain: Chain.Ethereum,
       },
     })
   })
 
   it('throws EIP1193Error(UserRejectedRequest) when user rejects popup', async () => {
-    // Background rejects with Unauthorized
+    // Background rejects with Unauthorized so popup is shown
     mockCallBackground.mockRejectedValueOnce(BackgroundError.Unauthorized)
 
     // User rejects in popup

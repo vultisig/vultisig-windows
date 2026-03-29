@@ -1,11 +1,11 @@
 import { Chain } from '@core/chain/Chain'
 import { areEqualCoins, CoinKey } from '@core/chain/coin/Coin'
 import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
-import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
-import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
+import { getChainAddress } from '@core/chain/publicKey/address/getChainAddress'
 import { isKeyImportVault } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { groupItems } from '@lib/utils/array/groupItems'
+import { isOneOf } from '@lib/utils/array/isOneOf'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMemo } from 'react'
 
@@ -29,11 +29,14 @@ export const useCurrentVaultChains = () => {
   return useMemo(() => nativeCoins.map(coin => coin.chain), [nativeCoins])
 }
 
+const knownChains = Object.values(Chain) as string[]
+
 export const useCurrentVaultCoinsByChain = () => {
   const coins = useCurrentVaultCoins()
 
   return useMemo(() => {
-    return groupItems(coins, coin => coin.chain as Chain)
+    const supported = coins.filter(coin => isOneOf(coin.chain, knownChains))
+    return groupItems(supported, coin => coin.chain as Chain)
   }, [coins])
 }
 
@@ -60,15 +63,14 @@ export const useCurrentVaultAddress = (chain: Chain) => {
       return ''
     }
 
-    const publicKey = getPublicKey({
+    return getChainAddress({
       chain,
       walletCore,
       hexChainCode: vault.hexChainCode,
       publicKeys: vault.publicKeys,
+      publicKeyMldsa: vault.publicKeyMldsa,
       chainPublicKeys: vault.chainPublicKeys,
     })
-
-    return deriveAddress({ chain, publicKey, walletCore })
   }, [addresses, chain, walletCore, vault])
 }
 
