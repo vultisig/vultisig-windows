@@ -8,6 +8,7 @@ import { attempt } from '@lib/utils/attempt'
 import type {
   AppRequest,
   ConnectEvent,
+  ConnectItemReply,
   ConnectRequest,
   DeviceInfo,
   RpcMethod,
@@ -18,6 +19,11 @@ import type {
 import { CHAIN } from '@tonconnect/protocol'
 
 import { getWalletStateInit } from './getWalletStateInit'
+import {
+  buildTonProofPayload,
+  formatTonProofReply,
+  getTonProofHash,
+} from './tonProof'
 import {
   getTonConnectDeviceInfo,
   getTonConnectWalletInfo,
@@ -91,14 +97,7 @@ export class TonConnectBridge {
 
     const tonProofRequest = request.items.find(
       (item: { name: string }) => item.name === 'ton_proof'
-    )
-    if (tonProofRequest) {
-      return {
-        event: 'connect_error',
-        id: 0,
-        payload: { code: 400, message: 'ton_proof not supported' },
-      }
-    }
+    ) as { name: 'ton_proof'; payload: string } | undefined
 
     const manifestResult = await attempt(fetch(request.manifestUrl))
     if ('error' in manifestResult) {
@@ -141,6 +140,8 @@ export class TonConnectBridge {
       }
     }
 
+    const manifest = manifestJsonResult.data as { url?: string }
+
     const { data, error } = await attempt(
       callPopup({ grantVaultAccess: { preselectFastVault: true } })
     )
@@ -175,19 +176,73 @@ export class TonConnectBridge {
 
     const walletStateInit = getWalletStateInit(account.publicKey)
 
+    const replyItems: ConnectItemReply[] = [
+      {
+        name: 'ton_addr',
+        address: account.address,
+        network: CHAIN.MAINNET,
+        publicKey: account.publicKey,
+        walletStateInit,
+      },
+    ]
+
+    if (tonProofRequest) {
+      const domain = manifest.url
+        ? new URL(manifest.url).hostname
+        : new URL(request.manifestUrl).hostname
+      const timestamp = Math.floor(Date.now() / 1000)
+
+      const proofMessage = buildTonProofPayload({
+        address: account.address,
+        domain,
+        timestamp,
+        payload: tonProofRequest.payload,
+      })
+
+      const proofHash = getTonProofHash(proofMessage)
+
+      const { data: signatureHex, error: signError } = await attempt(
+        callPopup({
+          signMessage: {
+            sign_message: {
+              message: `0x${proofHash}`,
+              chain: Chain.Ton,
+            },
+          },
+        })
+      )
+
+      if (signError === PopupError.RejectedByUser) {
+        return {
+          event: 'connect_error',
+          id: 0,
+          payload: { code: 300, message: 'User declined the connection' },
+        }
+      }
+
+      if (signError || !signatureHex) {
+        return {
+          event: 'connect_error',
+          id: 0,
+          payload: { code: 0, message: 'Failed to sign proof' },
+        }
+      }
+
+      replyItems.push(
+        formatTonProofReply({
+          signatureHex: String(signatureHex),
+          timestamp,
+          domain,
+          payload: tonProofRequest.payload,
+        })
+      )
+    }
+
     return {
       event: 'connect',
       id: 0,
       payload: {
-        items: [
-          {
-            name: 'ton_addr',
-            address: account.address,
-            network: CHAIN.MAINNET,
-            publicKey: account.publicKey,
-            walletStateInit,
-          },
-        ],
+        items: replyItems,
         device: this.deviceInfo,
       },
     }
