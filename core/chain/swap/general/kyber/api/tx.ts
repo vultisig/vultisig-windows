@@ -16,11 +16,12 @@ import { getKyberSwapBaseUrl } from './baseUrl'
 
 type GetKyberSwapTxInput = {
   from: AccountCoin<KyberSwapEnabledChain>
+  to: AccountCoin<KyberSwapEnabledChain>
   routeSummary: any
   routerAddress: string
   amount: bigint
   enableGasEstimation: boolean
-  isAffiliate: boolean
+  affiliateBps: number
 }
 
 type KyberSwapBuildResponse = {
@@ -36,12 +37,16 @@ type KyberSwapBuildResponse = {
 
 export const getKyberSwapTx = async ({
   from,
+  to,
   routeSummary,
   routerAddress,
   amount,
   enableGasEstimation,
-  isAffiliate,
+  affiliateBps,
 }: GetKyberSwapTxInput): Promise<GeneralSwapQuote> => {
+  const { feeReceiver, chargeFeeBy, isInBps, ...trackingConfig } =
+    kyberSwapAffiliateConfig
+
   const buildPayload = {
     routeSummary,
     sender: from.address,
@@ -55,7 +60,15 @@ export const getKyberSwapTx = async ({
       )
     ),
     enableGasEstimation,
-    ...(isAffiliate ? kyberSwapAffiliateConfig : {}),
+    ...(affiliateBps > 0
+      ? {
+          ...trackingConfig,
+          feeAmount: affiliateBps,
+          chargeFeeBy,
+          isInBps,
+          feeReceiver,
+        }
+      : {}),
     ignoreCappedSlippage: false,
   }
 
@@ -93,6 +106,16 @@ export const getKyberSwapTx = async ({
 
   const { amountOut, data, gas } = buildResponse.data
 
+  const affiliateFee =
+    affiliateBps > 0
+      ? {
+          chain: to.chain,
+          id: to.id,
+          amount: (BigInt(amountOut) * BigInt(affiliateBps)) / 10000n,
+          decimals: to.decimals,
+        }
+      : undefined
+
   return {
     dstAmount: amountOut,
     provider: 'kyber',
@@ -103,6 +126,7 @@ export const getKyberSwapTx = async ({
         data,
         value: isFeeCoin(from) ? amount.toString() : '0',
         gasLimit: gas ? BigInt(gas) : undefined,
+        affiliateFee,
       },
     },
   }

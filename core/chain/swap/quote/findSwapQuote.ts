@@ -103,10 +103,10 @@ export const findSwapQuote = async ({
             chain: toChain,
           },
           amount: chainAmount,
-          isAffiliate: !!affiliateBps,
+          affiliateBps,
         })
 
-        return { quote: { general }, discounts: [] }
+        return { quote: { general }, discounts: vultDiscount }
       })
     }
 
