@@ -32,6 +32,7 @@ export const getSolanaChainSpecific: GetChainSpecificResolver<
       token: coin.id,
     })
     chainSpecific.fromTokenAssociatedAddress = fromAccount.address
+    chainSpecific.programId = fromAccount.isToken2022
     const { data } = await attempt(
       getSplAssociatedAccount({
         account: receiver,
@@ -40,7 +41,6 @@ export const getSolanaChainSpecific: GetChainSpecificResolver<
     )
     if (data) {
       chainSpecific.toTokenAssociatedAddress = data.address
-      chainSpecific.programId = data.isToken2022
     }
   }
 
