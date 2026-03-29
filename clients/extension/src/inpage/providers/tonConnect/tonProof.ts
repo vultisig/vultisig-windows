@@ -16,7 +16,7 @@ type BuildTonProofPayloadInput = {
  *
  * Layout:
  *   "ton-proof-item-v2/" (18 bytes)
- *   ++ workchain (4 bytes, uint32 big-endian)
+ *   ++ workchain (4 bytes, int32 big-endian)
  *   ++ address hash (32 bytes)
  *   ++ domain length (4 bytes, uint32 little-endian)
  *   ++ domain (UTF-8 bytes)
@@ -32,7 +32,7 @@ export const buildTonProofPayload = ({
   const parsedAddress = Address.parse(address)
 
   const workchainBuf = Buffer.alloc(4)
-  workchainBuf.writeUInt32BE(parsedAddress.workChain, 0)
+  workchainBuf.writeInt32BE(parsedAddress.workChain, 0)
 
   const domainBytes = Buffer.from(domain, 'utf-8')
   const domainLengthBuf = Buffer.alloc(4)

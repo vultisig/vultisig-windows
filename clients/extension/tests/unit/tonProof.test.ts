@@ -46,7 +46,7 @@ describe('buildTonProofPayload', () => {
     offset += 18
 
     const workchainBuf = Buffer.alloc(4)
-    workchainBuf.writeUInt32BE(parsedAddress.workChain, 0)
+    workchainBuf.writeInt32BE(parsedAddress.workChain, 0)
     expect(result.subarray(offset, offset + 4)).toEqual(workchainBuf)
     offset += 4
 

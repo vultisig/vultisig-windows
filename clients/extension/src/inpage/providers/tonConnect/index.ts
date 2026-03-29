@@ -170,9 +170,16 @@ export class TonConnectBridge {
     ]
 
     if (tonProofRequest) {
-      const domain = manifest.url
-        ? new URL(manifest.url).hostname
-        : new URL(request.manifestUrl).hostname
+      const domainUrl = manifest.url ?? request.manifestUrl
+      const domainResult = attempt(() => new URL(domainUrl).hostname)
+      if ('error' in domainResult) {
+        return {
+          event: 'connect_error',
+          id: 0,
+          payload: { code: 2, message: 'App manifest not found' },
+        }
+      }
+      const domain = domainResult.data
       const timestamp = Math.floor(Date.now() / 1000)
 
       const proofMessage = buildTonProofPayload({
