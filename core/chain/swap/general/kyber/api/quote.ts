@@ -10,30 +10,31 @@ import { getKyberSwapTx } from './tx'
 
 type Input = Record<TransferDirection, AccountCoin<KyberSwapEnabledChain>> & {
   amount: bigint
-  isAffiliate: boolean
+  affiliateBps: number
 }
 
 export const getKyberSwapQuote = async ({
   from,
   to,
   amount,
-  isAffiliate,
+  affiliateBps,
 }: Input): Promise<GeneralSwapQuote> => {
   const { routeSummary, routerAddress } = await getKyberSwapRoute({
     from,
     to,
     amount,
-    isAffiliate,
+    affiliateBps,
   })
 
   const tx = await attempt(
     getKyberSwapTx({
       from,
+      to,
       routeSummary,
       routerAddress,
       amount,
       enableGasEstimation: true,
-      isAffiliate,
+      affiliateBps,
     })
   )
 
@@ -42,11 +43,12 @@ export const getKyberSwapQuote = async ({
     if (isInError(error, 'TransferHelper')) {
       return getKyberSwapTx({
         from,
+        to,
         routeSummary,
         routerAddress,
         amount,
         enableGasEstimation: false,
-        isAffiliate,
+        affiliateBps,
       })
     }
 
