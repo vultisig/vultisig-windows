@@ -83,8 +83,8 @@ describe('buildTonProofPayload', () => {
     expect(workchainBytes).toEqual(Buffer.from([0, 0, 0, 0]))
   })
 
-  it('should handle unicode domain names', () => {
-    const unicodeDomain = 'example.xn--e1afmapc'
+  it('should handle multibyte unicode domain names', () => {
+    const unicodeDomain = 'пример.рф'
     const result = buildTonProofPayload({
       address: testAddress,
       domain: unicodeDomain,
@@ -93,10 +93,13 @@ describe('buildTonProofPayload', () => {
     })
 
     const domainBytes = Buffer.from(unicodeDomain, 'utf-8')
+    expect(domainBytes.length).toBeGreaterThan(unicodeDomain.length)
+
     const domainLenSlice = result.subarray(54, 58)
     const domainLenBuf = Buffer.alloc(4)
     domainLenBuf.writeUInt32LE(domainBytes.length, 0)
     expect(domainLenSlice).toEqual(domainLenBuf)
+    expect(result.subarray(58, 58 + domainBytes.length)).toEqual(domainBytes)
   })
 
   it('should handle empty payload', () => {

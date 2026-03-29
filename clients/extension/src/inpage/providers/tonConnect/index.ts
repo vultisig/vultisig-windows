@@ -77,9 +77,15 @@ export class TonConnectBridge {
       }
     }
 
-    const tonProofRequest = request.items.find(
+    const tonProofItem = request.items.find(
       (item: { name: string }) => item.name === 'ton_proof'
-    ) as { name: 'ton_proof'; payload: string } | undefined
+    )
+    const tonProofRequest =
+      tonProofItem &&
+      'payload' in tonProofItem &&
+      typeof tonProofItem.payload === 'string'
+        ? { payload: tonProofItem.payload }
+        : undefined
 
     const manifestResult = await attempt(fetch(request.manifestUrl))
     if ('error' in manifestResult) {
@@ -122,7 +128,11 @@ export class TonConnectBridge {
       }
     }
 
-    const manifest = manifestJsonResult.data as { url?: string }
+    const manifestData = manifestJsonResult.data as Record<string, unknown>
+    const manifestUrl =
+      'url' in manifestData && typeof manifestData.url === 'string'
+        ? manifestData.url
+        : undefined
 
     const { data, error } = await attempt(
       callPopup({ grantVaultAccess: { preselectFastVault: true } })
@@ -157,7 +167,17 @@ export class TonConnectBridge {
     }
 
     const walletStateInit = getWalletStateInit(account.publicKey)
-    const rawAddress = Address.parse(account.address).toRawString()
+    const rawAddressResult = attempt(() =>
+      Address.parse(account.address).toRawString()
+    )
+    if ('error' in rawAddressResult) {
+      return {
+        event: 'connect_error',
+        id: 0,
+        payload: { code: 0, message: 'Failed to get account' },
+      }
+    }
+    const rawAddress = rawAddressResult.data
 
     const replyItems: ConnectItemReply[] = [
       {
@@ -170,7 +190,7 @@ export class TonConnectBridge {
     ]
 
     if (tonProofRequest) {
-      const domainUrl = manifest.url ?? request.manifestUrl
+      const domainUrl = manifestUrl ?? request.manifestUrl
       const domainResult = attempt(() => new URL(domainUrl).hostname)
       if ('error' in domainResult) {
         return {
@@ -252,7 +272,16 @@ export class TonConnectBridge {
     }
 
     const walletStateInit = getWalletStateInit(data.publicKey)
-    const rawAddress = Address.parse(data.address).toRawString()
+    const rawAddressResult = attempt(() =>
+      Address.parse(data.address).toRawString()
+    )
+    if ('error' in rawAddressResult) {
+      return {
+        event: 'connect_error',
+        id: 0,
+        payload: { code: 0, message: 'No existing session' },
+      }
+    }
 
     return {
       event: 'connect',
@@ -261,7 +290,7 @@ export class TonConnectBridge {
         items: [
           {
             name: 'ton_addr',
-            address: rawAddress,
+            address: rawAddressResult.data,
             network: CHAIN.MAINNET,
             publicKey: data.publicKey,
             walletStateInit,
