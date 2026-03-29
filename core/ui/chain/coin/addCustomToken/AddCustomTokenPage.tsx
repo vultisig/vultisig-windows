@@ -1,5 +1,5 @@
 import { isValidAddress } from '@core/chain/utils/isValidAddress'
-import { CustomTokenResult } from '@core/ui/chain/coin/addCustomToken//CustomTokenResult'
+import { CustomTokenResult } from '@core/ui/chain/coin/addCustomToken/CustomTokenResult'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'

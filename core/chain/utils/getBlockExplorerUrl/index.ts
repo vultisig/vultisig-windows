@@ -33,6 +33,7 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.CronosChain]: 'https://cronoscan.com',
   [Chain.Sui]: 'https://suiscan.xyz/mainnet',
   [Chain.Polkadot]: 'https://assethub-polkadot.subscan.io',
+  [Chain.Bittensor]: 'https://taostats.io',
   [Chain.Zksync]: 'https://explorer.zksync.io',
   [Chain.Ton]: 'https://tonviewer.com',
   [Chain.Osmosis]: `${cosmosBlockExplorer}/osmosis`,
@@ -49,6 +50,8 @@ const blockExplorerBaseUrl: Record<Chain, string> = {
   [Chain.Mantle]: 'https://explorer.mantle.xyz',
   [Chain.Hyperliquid]: hyperliquidBlockExplorerUrl,
   [Chain.Sei]: 'https://seiscan.io',
+  // TODO: Replace with a dedicated QBTC block explorer when one becomes available
+  [Chain.QBTC]: 'https://api.vultisig.com/qbtc-rpc/cosmos/tx/v1beta1/txs',
 }
 
 export const getBlockExplorerUrl = ({
@@ -82,6 +85,7 @@ export const getBlockExplorerUrl = ({
         [Chain.CronosChain]: () => `${baseUrl}/address/${value}`,
         [Chain.Sui]: () => `${baseUrl}/address/${value}`,
         [Chain.Polkadot]: () => `${baseUrl}/account/${value}`,
+        [Chain.Bittensor]: () => `${baseUrl}/account/${value}`,
         [Chain.Zksync]: () => `${baseUrl}/address/${value}`,
         [Chain.Ton]: () => `${baseUrl}/${value}`,
         [Chain.Osmosis]: () => `${baseUrl}/address/${value}`,
@@ -96,6 +100,9 @@ export const getBlockExplorerUrl = ({
         [Chain.Mantle]: () => `${baseUrl}/address/${value}`,
         [Chain.Hyperliquid]: () => `${baseUrl}/address/${value}`,
         [Chain.Sei]: () => `${baseUrl}/address/${value}`,
+        // TODO: Replace with dedicated QBTC explorer address URL
+        [Chain.QBTC]: () =>
+          `https://api.vultisig.com/qbtc-rpc/cosmos/bank/v1beta1/balances/${value}`,
       }),
     tx: () =>
       match(chain, {
@@ -121,6 +128,7 @@ export const getBlockExplorerUrl = ({
         [Chain.CronosChain]: () => `${baseUrl}/tx/${value}`,
         [Chain.Sui]: () => `${baseUrl}/tx/${value}`,
         [Chain.Polkadot]: () => `${baseUrl}/extrinsic/${value}`,
+        [Chain.Bittensor]: () => `${baseUrl}/extrinsic/${value}`,
         [Chain.Zksync]: () => `${baseUrl}/tx/${value}`,
         [Chain.Ton]: () => `${baseUrl}/transaction/${value}`,
         [Chain.Osmosis]: () => `${baseUrl}/tx/${value}`,
@@ -135,6 +143,8 @@ export const getBlockExplorerUrl = ({
         [Chain.Mantle]: () => `${baseUrl}/tx/${value}`,
         [Chain.Hyperliquid]: () => `${baseUrl}/tx/${value}`,
         [Chain.Sei]: () => `${baseUrl}/tx/${value}`,
+        // TODO: Replace with dedicated QBTC explorer tx URL
+        [Chain.QBTC]: () => `${baseUrl}/${value}`,
       }),
   })
 }

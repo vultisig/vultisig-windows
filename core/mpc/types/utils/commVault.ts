@@ -3,11 +3,11 @@ import { Timestamp, TimestampSchema } from '@bufbuild/protobuf/wkt'
 import { Chain } from '@core/chain/Chain'
 import { getChainKind } from '@core/chain/ChainKind'
 import {
-  SignatureAlgorithm,
   signatureAlgorithms,
-  signingAlgorithms,
+  TssSignatureAlgorithm,
+  tssSigningAlgorithms,
 } from '@core/chain/signing/SignatureAlgorithm'
-import { isKeyImportVault, Vault } from '@core/mpc/vault/Vault'
+import { Vault } from '@core/mpc/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { pick } from '@lib/utils/record/pick'
 import { recordFromKeys } from '@lib/utils/record/recordFromKeys'
@@ -22,6 +22,10 @@ import {
   VaultSchema,
 } from '../vultisig/vault/v1/vault_pb'
 import { fromLibType, toLibType } from './libType'
+
+const chainValues = new Set<string>(Object.values(Chain))
+const isChain = (value: unknown): value is Chain =>
+  typeof value === 'string' && chainValues.has(value)
 
 const isoStringToProtoTimestamp = (timestamp: number): Timestamp => {
   const seconds = Math.floor(convertDuration(timestamp, 'ms', 's'))
@@ -48,7 +52,7 @@ export const toCommVault = (vault: Vault): CommVault =>
     keyShares: [
       ...toEntries(vault.keyShares).map(({ key, value }) =>
         create(Vault_KeyShareSchema, {
-          publicKey: vault.publicKeys[key as SignatureAlgorithm],
+          publicKey: vault.publicKeys[key as TssSignatureAlgorithm],
           keyshare: value,
         })
       ),
@@ -70,10 +74,7 @@ export const toCommVault = (vault: Vault): CommVault =>
     publicKeyEcdsa: vault.publicKeys.ecdsa,
     publicKeyEddsa: vault.publicKeys.eddsa,
     publicKeyMldsa44: vault.publicKeyMldsa ?? '',
-    libType: toLibType({
-      libType: vault.libType,
-      isKeyImport: isKeyImportVault(vault),
-    }),
+    libType: toLibType(vault.libType),
     chainPublicKeys: toEntries(vault.chainPublicKeys ?? {}).map(
       ({ key, value }) =>
         create(Vault_ChainPublicKeySchema, {
@@ -85,22 +86,43 @@ export const toCommVault = (vault: Vault): CommVault =>
   })
 
 export const fromCommVault = (vault: CommVault): Vault => {
+  const allChainPublicKeys: Partial<Record<Chain, string>> = {}
+  const chainKeyShares: Partial<Record<Chain, string>> = {}
+  const chainsByPublicKey = new Map<string, Chain[]>()
   const publicKeys = {
     ecdsa: vault.publicKeyEcdsa,
     eddsa: vault.publicKeyEddsa,
   }
 
-  const chainPublicKeys: Partial<Record<Chain, string>> = {}
-  const chainByPublicKey = new Map<string, Chain>()
-
   vault.chainPublicKeys.forEach(cp => {
-    const chain = cp.chain as Chain
-    chainPublicKeys[chain] = cp.publicKey
-    chainByPublicKey.set(cp.publicKey, chain)
+    if (!isChain(cp.chain)) return
+    const chain = cp.chain
+
+    // If this chain was previously mapped to a different public key, remove
+    // the stale association so both maps stay in sync.
+    const previousPublicKey = allChainPublicKeys[chain]
+    if (previousPublicKey !== undefined && previousPublicKey !== cp.publicKey) {
+      const previousChains = chainsByPublicKey.get(previousPublicKey)
+      if (previousChains) {
+        const updated = previousChains.filter(c => c !== chain)
+        if (updated.length > 0) {
+          chainsByPublicKey.set(previousPublicKey, updated)
+        } else {
+          chainsByPublicKey.delete(previousPublicKey)
+        }
+      }
+    }
+
+    allChainPublicKeys[chain] = cp.publicKey
+    const existing = chainsByPublicKey.get(cp.publicKey) ?? []
+    if (!existing.includes(chain)) {
+      existing.push(chain)
+    }
+    chainsByPublicKey.set(cp.publicKey, existing)
   })
 
   const keyShares = recordFromKeys(
-    signingAlgorithms,
+    tssSigningAlgorithms,
     algorithm =>
       shouldBePresent(
         vault.keyShares.find(
@@ -110,18 +132,41 @@ export const fromCommVault = (vault: CommVault): Vault => {
   )
 
   const publicKeyMldsa = vault.publicKeyMldsa44 || undefined
-  const mldsaKeyShare = publicKeyMldsa
-    ? vault.keyShares.find(ks => ks.publicKey === publicKeyMldsa)
+  const keyShareMldsa = vault.publicKeyMldsa44
+    ? shouldBePresent(
+        vault.keyShares.find(ks => ks.publicKey === vault.publicKeyMldsa44),
+        `keyshare for MLDSA public key ${vault.publicKeyMldsa44}`
+      ).keyshare
     : undefined
-  const keyShareMldsa = mldsaKeyShare?.keyshare
 
-  const chainKeyShares: Partial<Record<Chain, string>> = {}
   vault.keyShares.forEach(keyShare => {
-    const chain = chainByPublicKey.get(keyShare.publicKey)
-    if (chain) {
-      chainKeyShares[chain] = keyShare.keyshare
+    const chains = chainsByPublicKey.get(keyShare.publicKey)
+    if (chains) {
+      chains.forEach(chain => {
+        chainKeyShares[chain] = keyShare.keyshare
+      })
     }
   })
+
+  const chainPublicKeysWithKeyShare = toEntries(allChainPublicKeys)
+  const missingPublicKeys = Array.from(
+    new Set(
+      chainPublicKeysWithKeyShare
+        .filter(({ key }) => !(key in chainKeyShares))
+        .map(({ value }) => value)
+    )
+  )
+  if (missingPublicKeys.length > 0) {
+    throw new Error(
+      `Backup is missing keyshares for public keys: ${missingPublicKeys.join(', ')}`
+    )
+  }
+  const chainPublicKeys = chainPublicKeysWithKeyShare.reduce<
+    Partial<Record<Chain, string>>
+  >((acc, { key, value }) => {
+    acc[key] = value
+    return acc
+  }, {})
 
   return {
     ...pick(vault, [

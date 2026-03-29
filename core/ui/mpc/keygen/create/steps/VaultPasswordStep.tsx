@@ -100,23 +100,25 @@ export const VaultPasswordStep = ({
               {t('choose_a_password')}
             </Title>
             <SubtitleRow>
-              <Text centerHorizontally color="shy" size={14} as="span">
+              <Text color="shy" size={14} as="span">
                 <Trans
                   i18nKey="choose_a_password_description"
                   components={{
                     b: <Text as="span" weight={600} color="contrast" />,
+                    info: (
+                      <Tooltip
+                        content={t('fastVaultSetup.passwordTooltip')}
+                        placement="top"
+                        renderOpener={openerProps => (
+                          <InfoIconTrigger {...openerProps}>
+                            <CircleInfoIcon />
+                          </InfoIconTrigger>
+                        )}
+                      />
+                    ),
                   }}
                 />
               </Text>
-              <Tooltip
-                content={t('fastVaultSetup.passwordTooltip')}
-                placement="top"
-                renderOpener={openerProps => (
-                  <InfoIconTrigger {...openerProps}>
-                    <CircleInfoIcon />
-                  </InfoIconTrigger>
-                )}
-              />
             </SubtitleRow>
           </VStack>
           <VStack gap={12}>
@@ -166,14 +168,15 @@ const Title = styled(Text)`
 `
 
 const SubtitleRow = styled.div`
-  display: inline;
   line-height: 1.4;
+  text-align: center;
 `
 
 const InfoIconTrigger = styled(UnstyledButton)`
   display: inline-flex;
   vertical-align: middle;
+  align-items: center;
+  justify-content: center;
   color: ${getColor('text')};
-  font-size: 14px;
-  margin-left: 4px;
+  font-size: 16px;
 `

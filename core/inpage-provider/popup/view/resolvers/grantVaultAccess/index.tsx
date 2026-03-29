@@ -1,7 +1,7 @@
 import { useAddVaultAppSessionMutation } from '@core/extension/storage/hooks/appSessions'
 import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
 import { hasServer } from '@core/mpc/devices/localPartyId'
-import { getVaultId } from '@core/mpc/vault/Vault'
+import { getVaultId, isKeyImportVault } from '@core/mpc/vault/Vault'
 import { BlockaidNoScanStatus } from '@core/ui/chain/security/blockaid/scan/BlockaidNoScanStatus'
 import { BlockaidScanning } from '@core/ui/chain/security/blockaid/scan/BlockaidScanning'
 import { BlockaidScanStatusContainer } from '@core/ui/chain/security/blockaid/scan/BlockaidScanStatusContainer'
@@ -36,9 +36,16 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
 }) => {
   const { t } = useTranslation()
   const [vaultId, setVaultId] = useState<string | undefined>(undefined)
-  const vaults = useVaults()
+  const allVaults = useVaults()
   const currentVaultId = useCurrentVaultId()
   const isBlockaidEnabled = useIsBlockaidEnabled()
+
+  const vaults = input.chain
+    ? allVaults.filter(
+        vault =>
+          !isKeyImportVault(vault) || !!vault.chainPublicKeys?.[input.chain!]
+      )
+    : allVaults
 
   const initialVaultId = useMemo(() => {
     if (!input.preselectFastVault) {

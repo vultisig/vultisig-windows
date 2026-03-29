@@ -95,7 +95,7 @@ export const es = {
     addOptionalHint: 'Añadir una pista opcional',
     connectingWithServer: 'Conectando con el servidor...',
     emailSetupTitle:
-      'Este correo electrónico solo se utiliza para enviar la copia de seguridad del servidor.',
+      'Este correo se utiliza para respaldo en la nube y no se comparte con terceros',
     enterEmail: 'Introduce tu correo electrónico',
     enterHint: 'Introducir pista',
     hintDescription: 'Esto se mostrará en caso de que olvides tu contraseña',
@@ -210,7 +210,7 @@ export const es = {
   approve: 'Aprobar',
   applied_discounts: 'Descuentos aplicados:',
   asset: 'Activo',
-  assets: 'activos',
+  assets: 'Activos',
   auto_compound_into_label: 'Compuesto automático en {{ticker}}',
   available: 'Disponible',
   back: 'Atrás',
@@ -371,7 +371,7 @@ export const es = {
   enter_vault_name: 'Ingrese el nombre de la bóveda',
   enter_your_password: 'Ingrese su contraseña',
   entity_not_scanned: '{{entity}} no escaneado por <provider></provider>',
-  entity_scanned: '{{entidad}} escaneada por <proveedor></provider>',
+  entity_scanned: '{{entity}} escaneada por <provider></provider>',
   est_network_fee: 'Tarifa de red estimada',
   expand_view: 'Ampliar vista',
   expiration_date: 'Fecha de expiración',
@@ -437,6 +437,9 @@ export const es = {
   fast: 'Rápido',
   fastVault: 'Bóveda rápida',
   secureVault: 'Bóveda segura',
+  fast_vault_session_conflict: 'Discrepancia en la parte de la bóveda',
+  fast_vault_session_conflict_description:
+    'Tu parte local de la bóveda no coincide con la almacenada en Vultiserver. Esto puede ocurrir si la misma frase semilla fue importada en otro dispositivo.',
   fast_sign: 'Señal rápida',
   fill_the_form: 'Rellene el formulario',
   find_custom_token: 'Encuentra un token personalizado',
@@ -472,6 +475,15 @@ export const es = {
   header_tooltip_content:
     'El programa de referidos se aplica a los swaps de THORChain y se basa en el mejor esfuerzo. Necesita registrar un THORName para usar el programa de referidos de Vultisig. La cuota de registro es de 10 RUNE y 1 RUNE por año, que se paga a la red THORChain.',
   header_tooltip_title: 'Programa de referencias',
+  having_trouble_scanning_help: 'Ayuda para escanear QR',
+  having_trouble_scanning: 'Problemas para escanear?',
+  having_trouble_scanning_desc: 'Si el codigo QR no se escanea de inmediato:',
+  having_trouble_scanning_tip_1:
+    'Mueva el telefono un poco mas cerca o mas lejos de la pantalla',
+  having_trouble_scanning_tip_2:
+    'Asegurese de que la pantalla este bien iluminada y sin reflejos',
+  having_trouble_scanning_tip_3:
+    'Mantenga ambos dispositivos quietos por un momento',
   hide_balance: 'Ocultar saldo',
   hide_defi_balance: 'Ocultar saldo DeFi',
   hold: 'Mantener',
@@ -543,7 +555,7 @@ export const es = {
   joining_session: 'Uniéndose a la sesión...',
   keygen: 'Generador de claves',
   keygen_devices_requirements_info:
-    'Escanee el código QR con otro dispositivo. Se recomienda la configuración del dispositivo {{recomendado}}, {{min}} es suficiente.',
+    'Escanee el código QR con otro dispositivo. Se recomienda la configuración del dispositivo {{recommended}}, {{min}} es suficiente.',
   keygen_failed: 'Error al generar la clave. Inténtalo de nuevo.',
   keys: 'Llaves',
   keysign: 'Signo de clave',
@@ -850,6 +862,7 @@ export const es = {
     'El código de referencia debe tener un alias de cadena THOR',
   tns_not_found: 'Código de referencia no encontrado',
   to: 'A',
+  to_min_payout: 'pago mín.',
   to_asset: 'Al activo',
   token_not_found_description:
     'Posibles razones: contrato incorrecto, cadena no compatible o token eliminado de los registros.',
@@ -902,7 +915,7 @@ export const es = {
   upgrade_vault_description:
     'Actualice esta bóveda al <b>protocolo MPC más rápido del mundo</b> y firme más rápido que nunca.',
   upload_file_or_drag_and_drop: 'Sube el archivo o arrástralo y suéltalo aquí',
-  upload_qr_code_image: 'Subir QR',
+  upload_qr_code_image: 'Subir código QR',
   upload_qr_code_to_join_keysign: 'Sube el código QR para unirte a Keysign',
   upload_qr_code_with_address: 'Subir código QR con dirección',
   use_referral_code: 'Utilice el código de referencia',
@@ -929,11 +942,11 @@ export const es = {
   vault_details_description: 'Ver el nombre, la parte y el tipo de bóveda',
   vault_details_edit_vault_description: 'Editar el nombre de su bóveda',
   vault_details_page_signer_word: 'Firmante',
-  vault_details_page_vault_ECDSA: 'Clave ECDSA',
-  vault_details_page_vault_EDDSA: 'Clave EdDSA',
+  vault_details_page_vault_ECDSA: 'ECDSA',
+  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_type: 'Tipo de bóveda',
   vault_info: 'Información de la bóveda',
-  vault_management: 'Administración de bóvedas',
+  vault_management: 'Bóveda',
   vault_name: 'Nombre de la bóveda',
   vault_name_already_exists: 'El nombre de la bóveda debe ser único',
   vault_name_description:
@@ -1094,6 +1107,7 @@ export const es = {
   normal: 'Normal',
   off: 'Apagado',
   on: 'En',
+  on_chain: 'en {{chain}}',
   optional: 'opcional',
   password_backup: 'Protege tu bóveda y firma rápidamente.',
   permissions: 'Permisos',
@@ -1196,7 +1210,7 @@ export const es = {
     'Introduzca la contraseña que estableció al crear esta Bóveda.',
   choose_a_password: 'Elije una contraseña',
   choose_a_password_description:
-    'Si desea una capa adicional de seguridad, elija una contraseña. <b>La contraseña no se puede recuperar.</b>',
+    'Si desea una capa adicional de seguridad, elija una contraseña. <b>La contraseña no se puede recuperar.</b> <info />',
   create_vault: 'Crear bóveda',
   create_referral_desc:
     'Crea tu propio código y gana<c> 20%</c> sobre swaps referidos',
@@ -1207,9 +1221,14 @@ export const es = {
   enter: 'Ingresar',
   enter_your_email: 'Introduce tu correo electrónico',
   enter_your_email_description:
-    'Esto solo se usará una vez para enviar su archivo de respaldo, Vultisig no almacena ningún dato.',
+    'Este correo se utiliza para respaldo en la nube y no se comparte con terceros',
   seedphrase_duplicate_vault_error:
     'Esta frase inicial ya se importó como bóveda &quot;{{vaultName}}&quot;. Al volver a importarla, se reemplazaría la bóveda existente.',
+  fast_vault_exists_warning_title: 'La bóveda ya existe',
+  fast_vault_exists_warning_description:
+    'Esta frase semilla ya fue importada como bóveda rápida en otro dispositivo. Si continúa, se reemplazará la parte del servidor y el otro dispositivo dejará de funcionar.',
+  fast_vault_exists_warning_hint:
+    'Si desea que ambos dispositivos sigan funcionando, use una bóveda segura en su lugar.',
   incorrect_email: 'Correo electrónico incorrecto, por favor verifique',
   insufficient_native_balance_for_fee:
     'Saldo de token nativo insuficiente para pagar la tarifa de transacción',
@@ -1234,7 +1253,7 @@ export const es = {
   add_thor_lp: 'Añadir THORChain LP',
   remove_thor_lp: 'Eliminar THORChain LP',
   lp_dust_amount_error:
-    'Saldo de runas insuficiente. Se requiere al menos {{cantidad}} runas como polvo para retirar LP.',
+    'Saldo de runas insuficiente. Se requiere al menos {{amount}} runas como polvo para retirar LP.',
   lp_withdraw_percentage: 'Porcentaje de retiro',
   vultibot: 'VultiBot',
   vultibot_welcome: 'Hola, soy VultiBot',
@@ -1279,4 +1298,101 @@ export const es = {
   agent_tx_type_transfer: 'Transferir',
   agent_tx_view: 'Vista',
   open_as_side_panel: 'Abrir como panel lateral',
+  agent: 'Agente',
+  agent_nav_tip_description:
+    'Vulti Agent está disponible. Toca para configurarlo.',
+  agent_nav_tip_title: '¡Nuevo!',
+  broadcasted: 'Transmitido',
+  cache_password_for_5_min: 'Recuerda la contraseña durante 5 minutos.',
+  choose_chains: 'Elige cadenas',
+  congrats: '¡Felicitaciones!',
+  confirmed: 'Confirmado',
+  contract_execution: 'Ejecución del contrato',
+  contract_interaction: 'Interacción contractual',
+  date: 'Fecha',
+  device_n_label: 'Dispositivo {{number}} - {{hash}}',
+  remove_friends_referral: 'Eliminar referido',
+  enable_mldsa: 'Habilitar MLDSA',
+  post_quantum_keygen: 'Generación de claves post-cuántica',
+  post_quantum_keygen_description:
+    'Genera una clave post-cuántica (MLDSA) para esta bóveda.',
+  post_quantum_key_already_generated:
+    'Esta bóveda ya tiene una llave post-cuántica.',
+  push_notifications: 'Notificaciones push',
+  push_notification_server_url: 'URL del servidor de notificaciones push',
+  push_notification_server_placeholder:
+    'Déjelo vacío para la configuración predeterminada de producción.',
+  failed: 'Fallido',
+  failed_to_load_transactions: 'No se pudieron cargar las transacciones',
+  go_to_wallet: 'Ir a la cartera',
+  i_understand: 'Entiendo',
+  i_understand_save_backup: 'Entiendo cómo guardar esta copia de seguridad.',
+  left_pool: 'Pool abandonado',
+  looks_good: 'Se ve bien',
+  no_transactions_yet: 'Aún no se han realizado transacciones.',
+  review_vault_devices_subtitle:
+    'Asegúrese de que estos son los dispositivos correctos que ha agregado:',
+  review_your_vault_devices: 'Revise sus dispositivos de bóveda',
+  save_backup: 'Guardar copia de seguridad',
+  save_backup_description:
+    'Exporta este archivo de copia de seguridad y guárdalo en la nube. Está <b>cifrado</b> con la contraseña que configuraste previamente para desbloquear tu bóveda.',
+  save_backup_description_2:
+    'Utiliza un servicio o cuenta en la nube diferente para cada copia de seguridad. Cuando termines, elimina el archivo de este dispositivo.',
+  save_backup_description_secure:
+    'Exporta este archivo de copia de seguridad y guárdalo en la nube.',
+  save_backup_n_of_n_to_cloud:
+    'Guarda la copia de seguridad {{current}} de {{total}} en la nube.',
+  save_backup_to_cloud: 'Guarda la copia de seguridad en la nube.',
+  secure_backup_each_device:
+    'Realiza una copia de seguridad de cada dispositivo.',
+  secure_backup_each_device_description:
+    'Crearás {{count}} copias de seguridad en total. Harás esto en cada dispositivo.',
+  secure_store_backups_separately_description:
+    'Guarda cada copia de seguridad en un servicio en la nube diferente o con una contraseña diferente. Si alguna se ve comprometida, tus fondos permanecerán seguros.',
+  sends: 'Envía',
+  somethings_wrong: 'Algo anda mal',
+  transferred: 'Transferido',
+  status: 'Estado',
+  swaps: 'Intercambios',
+  swap_same_asset: 'No se puede intercambiar entre activos iguales.',
+  this_device_suffix: '(este dispositivo)',
+  today: 'Hoy',
+  transaction_history: 'Historial de transacciones',
+  vault_details_page_vault_MLDSA: 'Clave MLDSA',
+  vault_ready_description:
+    '¡Todo listo! Mantienes el control de cada transacción.',
+  vault_ready_to_use: 'Su bóveda está lista para usarse.',
+  view_on_explorer: 'Ver en Explorer',
+  yesterday: 'Ayer',
+  session_history: 'Historial de la sesión',
+  failed_to_load_session_history:
+    'No se pudo cargar el historial de la sesión.',
+  agent_history_load_error_description:
+    'Por favor, inténtalo de nuevo. Si el problema persiste, vuelve a abrir el chat donde estabas hace un momento o inicia uno nuevo.',
+  agent_history_empty_title: 'Aún no hay chats',
+  agent_history_empty_description:
+    'Inicia un nuevo chat y tus conversaciones recientes aparecerán aquí.',
+  agent_what_to_do: '¿Qué te gustaría hacer?',
+  agent_help_description:
+    'Puedo ayudar a preparar intercambios, acciones de complementos y reglas de automatización.',
+  agent_prompt_show_plugins: 'Muéstrame los plugins y lo que pueden hacer.',
+  agent_prompt_earn_apy: 'Quiero obtener APY en BTC',
+  agent_prompt_send: 'Enviar importe a...',
+  agent_prompt_swap: 'Prepara un intercambio de ETH a BTC',
+  approve_transaction: 'Aprobar transacción',
+  enter_vault_password: 'Introduzca la contraseña de la bóveda',
+  agent_chat_options: 'Opciones de chat',
+  agent_give_feedback: 'Enviar comentarios',
+  agent_delete_chat_session: 'Eliminar sesión de chat',
+  agent_analyzing: 'Analizando...',
+  agent_analyzed_for: 'Analizado durante {{duration}}s',
+  agent_analyzed: 'Analizado',
+  welcome_to_vulti_agent: 'Bienvenido a Vulti Agent',
+  agent_welcome_description:
+    'Ahora tu bóveda puede comprender las solicitudes, automatizar acciones y ayudarte a administrar tus criptomonedas.',
+  authorize_agent: 'Autorizar agente',
+  reauthorize_vulti_agent: 'Reautorizar Vulti Agent',
+  agent_reauth_description:
+    'Por motivos de seguridad, la autorización caduca periódicamente. Confirme para continuar utilizando Vulti Agent.',
+  authorize: 'Autorizar',
 }

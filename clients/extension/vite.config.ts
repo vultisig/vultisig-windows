@@ -14,6 +14,14 @@ const rootDir = path.resolve(__dirname, '../..')
 export default defineConfig(async ({ mode }) => {
   const env = loadEnv(mode, rootDir)
   const featureFlagDefines = getFeatureFlagDefines(env)
+  const envDefines = {
+    __AGENT_BACKEND_URL__: JSON.stringify(
+      env.AGENT_BACKEND_URL || 'https://agent.vultisig.com'
+    ),
+    __VULTISIG_VERIFIER_URL__: JSON.stringify(
+      env.VULTISIG_VERIFIER_URL || 'https://verifier.vultisig.com'
+    ),
+  }
 
   const chunk = process.env.CHUNK
   const isDev = !!process.env.VITE_DEV_RELOAD
@@ -44,7 +52,7 @@ export default defineConfig(async ({ mode }) => {
     }
 
     return {
-      define: featureFlagDefines,
+      define: { ...featureFlagDefines, ...envDefines },
       plugins,
       build: {
         copyPublicDir: false,
@@ -67,7 +75,7 @@ export default defineConfig(async ({ mode }) => {
     }
   } else {
     return {
-      define: featureFlagDefines,
+      define: { ...featureFlagDefines, ...envDefines },
       plugins: [
         ...getCommonPlugins(),
         viteStaticCopy({

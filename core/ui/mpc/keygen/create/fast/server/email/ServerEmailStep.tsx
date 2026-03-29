@@ -16,7 +16,7 @@ import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { validateEmail } from '@lib/utils/validation/validateEmail'
+import { ValidationHelpers } from '@vultisig/sdk'
 import { TFunction } from 'i18next'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -27,7 +27,7 @@ const getEmailSchema = (t: TFunction) =>
     email: z
       .string()
       .min(1, { message: t('email_required') })
-      .refine(val => !validateEmail(val), {
+      .refine(val => ValidationHelpers.validateEmail(val).valid, {
         message: t('invalid_email'),
       }),
   })

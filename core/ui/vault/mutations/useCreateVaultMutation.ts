@@ -1,7 +1,6 @@
 import { defaultChains } from '@core/chain/Chain'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
-import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
+import { getChainAddress } from '@core/chain/publicKey/address/getChainAddress'
 import { getVaultId, isKeyImportVault, Vault } from '@core/mpc/vault/Vault'
 import { useCore } from '@core/ui/state/core'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
@@ -54,28 +53,19 @@ export const useCreateVaultMutation = (
         })
       )
 
-      await refetchQueries([StorageKey.vaults])
-
-      await setCurrentVaultId(getVaultId(vault))
-
       const chainsToCreate = isKeyImportVault(vault)
         ? getRecordKeys(shouldBePresent(vault.chainPublicKeys))
         : defaultChains
 
       const coins = await Promise.all(
         chainsToCreate.map(async chain => {
-          const publicKey = getPublicKey({
+          const address = getChainAddress({
             chain,
             walletCore,
             hexChainCode: vault.hexChainCode,
             publicKeys: vault.publicKeys,
+            publicKeyMldsa: vault.publicKeyMldsa,
             chainPublicKeys: vault.chainPublicKeys,
-          })
-
-          const address = deriveAddress({
-            chain,
-            publicKey,
-            walletCore,
           })
 
           return {
@@ -85,10 +75,13 @@ export const useCreateVaultMutation = (
         })
       )
 
-      await createCoins({
-        vaultId: getVaultId(vault),
-        coins,
-      })
+      const vaultId = getVaultId(vault)
+
+      await createCoins({ vaultId, coins })
+
+      await refetchQueries([StorageKey.vaults])
+
+      await setCurrentVaultId(vaultId)
 
       return vault
     },

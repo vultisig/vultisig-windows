@@ -283,12 +283,27 @@ export const getCosmosSigningInputs: SigningInputsResolver<'cosmos'> = ({
 
         const isPositive = +/^[0-9]+$/.test(amountStr) && BigInt(amountStr) > 0n
 
+        const isSecuredAsset =
+          chain === Chain.THORChain &&
+          !!coin.id &&
+          !coin.id.startsWith('x/') &&
+          coin.id.includes('-')
+
+        const assetChain = isSecuredAsset
+          ? coin.id!.split('-')[0].toUpperCase()
+          : nativeSwapChainIds[chain as VaultBasedCosmosChain]
+
+        const assetSymbol = isSecuredAsset
+          ? coin.id!.substring(coin.id!.indexOf('-') + 1).toUpperCase()
+          : coin.ticker
+
         const depositCoin = TW.Cosmos.Proto.THORChainCoin.create({
           asset: TW.Cosmos.Proto.THORChainAsset.create({
-            chain: nativeSwapChainIds[chain as VaultBasedCosmosChain],
-            symbol: coin.ticker,
+            chain: assetChain,
+            symbol: assetSymbol,
             ticker: coin.ticker,
             synth: false,
+            secured: isSecuredAsset,
           }),
           ...(isPositive
             ? { amount: amountStr, decimals: new Long(coin.decimals) }

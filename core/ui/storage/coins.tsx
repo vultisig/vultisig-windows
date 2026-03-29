@@ -1,7 +1,6 @@
 import { AccountCoin, AccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { Coin } from '@core/chain/coin/Coin'
-import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
-import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
+import { getChainAddress } from '@core/chain/publicKey/address/getChainAddress'
 import { isKeyImportVault } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useCore } from '@core/ui/state/core'
@@ -68,18 +67,13 @@ export const useCreateCoinMutation = () => {
       }
     }
 
-    const publicKey = getPublicKey({
+    const address = getChainAddress({
       chain: coin.chain,
       walletCore,
       hexChainCode: vault.hexChainCode,
       publicKeys: vault.publicKeys,
+      publicKeyMldsa: vault.publicKeyMldsa,
       chainPublicKeys: vault.chainPublicKeys,
-    })
-
-    const address = deriveAddress({
-      chain: coin.chain,
-      publicKey,
-      walletCore,
     })
 
     const accountCoin = { ...coin, address }

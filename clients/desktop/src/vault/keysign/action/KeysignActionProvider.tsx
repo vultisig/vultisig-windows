@@ -14,6 +14,9 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
       DKLS={() => (
         <DKLSKeysignActionProvider>{children}</DKLSKeysignActionProvider>
       )}
+      KeyImport={() => (
+        <DKLSKeysignActionProvider>{children}</DKLSKeysignActionProvider>
+      )}
       GG20={() => (
         <GG20KeysignActionProvider>{children}</GG20KeysignActionProvider>
       )}

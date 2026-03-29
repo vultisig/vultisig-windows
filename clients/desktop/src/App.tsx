@@ -7,7 +7,10 @@ import { QueryClientProvider } from '@core/ui/query/QueryClientProvider'
 import { CoreState } from '@core/ui/state/core'
 import { ActiveView } from '@lib/ui/navigation/ActiveView'
 import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
-import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
+import {
+  useNavigateBack,
+  usePopNavigationHistory,
+} from '@lib/ui/navigation/hooks/useNavigateBack'
 import { NavigationProvider } from '@lib/ui/navigation/state'
 import { BrowserOpenURL, ClipboardGetText } from '@wailsapp/runtime'
 import { useMemo } from 'react'
@@ -23,7 +26,7 @@ import { queriesPersister } from './storage/queriesPersister'
 
 const baseCoreState: Omit<
   CoreState,
-  'vaultCreationMpcLib' | 'goBack' | 'goHome'
+  'vaultCreationMpcLib' | 'goBack' | 'goHome' | 'popNavigationHistory'
 > = {
   ...storage,
   client: 'desktop',
@@ -55,6 +58,7 @@ const AppContent = () => {
   const [vaultCreationMpcLib] = useVaultCreationMpcLib()
   const processError = useProcessAppError()
   const goBack = useNavigateBack()
+  const popNavigationHistory = usePopNavigationHistory()
   const navigate = useNavigate()
 
   const coreState = useMemo(
@@ -64,8 +68,9 @@ const AppContent = () => {
       processError,
       goBack,
       goHome: () => navigate(initialCoreView),
+      popNavigationHistory,
     }),
-    [vaultCreationMpcLib, processError, goBack, navigate]
+    [vaultCreationMpcLib, processError, goBack, navigate, popNavigationHistory]
   )
 
   return (

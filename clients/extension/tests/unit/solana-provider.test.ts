@@ -29,14 +29,15 @@ vi.mock('@clients/extension/src/inpage/providers/icon', () => ({
   default: 'data:image/png;base64,mockicon',
 }))
 
-// Mock Solana account
+// Mock Solana account (must be a constructor for `new VultisigSolanaWalletAccount(...)`)
 vi.mock('@clients/extension/src/inpage/providers/solana/account', () => ({
-  VultisigSolanaWalletAccount: vi.fn().mockImplementation((opts: any) => ({
-    address: opts.address,
-    publicKey: opts.publicKey,
-    label: opts.label,
-    icon: opts.icon,
-  })),
+  VultisigSolanaWalletAccount: vi.fn().mockImplementation(function (this: { address: string; publicKey: Uint8Array; label: string; icon: string }, opts: { address: string; publicKey: Uint8Array; label?: string; icon?: string }) {
+    this.address = opts.address
+    this.publicKey = opts.publicKey
+    this.label = opts.label ?? ''
+    this.icon = opts.icon ?? ''
+    return this
+  }),
 }))
 
 // Mock Solana chains
@@ -181,7 +182,8 @@ describe('Solana Provider', () => {
       expect(mockRequestAccount).toHaveBeenCalledWith(Chain.Solana)
       expect(sol.isConnected).toBe(true)
       expect(sol.publicKey).toBeTruthy()
-      expect(result).toHaveProperty('publicKey')
+      expect(result).toHaveProperty('accounts')
+      expect(result.accounts).toHaveLength(1)
     })
 
     it('propagates errors from requestAccount', async () => {

@@ -6,6 +6,7 @@ export const signingInputClasses = {
   cosmos: TW.Cosmos.Proto.SigningInput,
   evm: TW.Ethereum.Proto.SigningInput,
   polkadot: TW.Polkadot.Proto.SigningInput,
+  bittensor: TW.Polkadot.Proto.SigningInput,
   ripple: TW.Ripple.Proto.SigningInput,
   solana: TW.Solana.Proto.SigningInput,
   sui: TW.Sui.Proto.SigningInput,

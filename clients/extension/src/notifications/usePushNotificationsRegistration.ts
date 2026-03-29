@@ -1,6 +1,6 @@
-import { getVaultId } from '@core/mpc/vault/Vault'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { computeNotificationVaultId } from '@vultisig/sdk'
 
 import {
   PushForceRegisterVaultMessage,
@@ -18,27 +18,43 @@ const pushRegistrationQueryKey = 'pushNotificationRegistered'
 
 export const usePushNotificationStatus = () => {
   const vault = useCurrentVault()
-  const vaultId = getVaultId(vault)
 
   return useQuery({
-    queryKey: [pushRegistrationQueryKey, vaultId],
-    queryFn: () => isVaultRegisteredForPush(vaultId),
+    queryKey: [
+      pushRegistrationQueryKey,
+      vault.publicKeys.ecdsa,
+      vault.hexChainCode,
+    ],
+    queryFn: async () =>
+      isVaultRegisteredForPush(
+        await computeNotificationVaultId(
+          vault.publicKeys.ecdsa,
+          vault.hexChainCode
+        )
+      ),
   })
 }
 
 export const useEnablePushNotificationsMutation = () => {
   const vault = useCurrentVault()
-  const vaultId = getVaultId(vault)
   const partyName = vault.localPartyId
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: async () => {
+      const vaultId = await computeNotificationVaultId(
+        vault.publicKeys.ecdsa,
+        vault.hexChainCode
+      )
       await subscribeToPush({ vaultId, partyName })
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [pushRegistrationQueryKey, vaultId],
+        queryKey: [
+          pushRegistrationQueryKey,
+          vault.publicKeys.ecdsa,
+          vault.hexChainCode,
+        ],
       })
     },
   })
@@ -46,11 +62,14 @@ export const useEnablePushNotificationsMutation = () => {
 
 export const useDisablePushNotificationsMutation = () => {
   const vault = useCurrentVault()
-  const vaultId = getVaultId(vault)
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: async () => {
+      const vaultId = await computeNotificationVaultId(
+        vault.publicKeys.ecdsa,
+        vault.hexChainCode
+      )
       const message: PushUnregisterVaultMessage = {
         type: pushUnregisterVaultType,
         vault: { vaultId, localPartyId: vault.localPartyId },
@@ -62,7 +81,11 @@ export const useDisablePushNotificationsMutation = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [pushRegistrationQueryKey, vaultId],
+        queryKey: [
+          pushRegistrationQueryKey,
+          vault.publicKeys.ecdsa,
+          vault.hexChainCode,
+        ],
       })
     },
   })
@@ -70,11 +93,14 @@ export const useDisablePushNotificationsMutation = () => {
 
 export const useForceRegisterPushNotificationMutation = () => {
   const vault = useCurrentVault()
-  const vaultId = getVaultId(vault)
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: async () => {
+      const vaultId = await computeNotificationVaultId(
+        vault.publicKeys.ecdsa,
+        vault.hexChainCode
+      )
       const message: PushForceRegisterVaultMessage = {
         type: pushForceRegisterVaultType,
         vault: { vaultId, localPartyId: vault.localPartyId },
@@ -91,7 +117,11 @@ export const useForceRegisterPushNotificationMutation = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [pushRegistrationQueryKey, vaultId],
+        queryKey: [
+          pushRegistrationQueryKey,
+          vault.publicKeys.ecdsa,
+          vault.hexChainCode,
+        ],
       })
     },
   })

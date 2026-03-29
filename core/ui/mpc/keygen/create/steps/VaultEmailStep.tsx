@@ -4,7 +4,7 @@ import { ScreenLayout } from '@lib/ui/layout/ScreenLayout/ScreenLayout'
 import { VStack } from '@lib/ui/layout/Stack'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { validateEmail } from '@lib/utils/validation/validateEmail'
+import { ValidationHelpers } from '@vultisig/sdk'
 import { ReactNode } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -34,10 +34,10 @@ export const VaultEmailStep = ({
     email: z
       .string()
       .min(1, t('email_required'))
-      .refine(val => {
-        const error = validateEmail(val)
-        return !error
-      }, t('incorrect_email')),
+      .refine(
+        val => ValidationHelpers.validateEmail(val).valid,
+        t('incorrect_email')
+      ),
   })
 
   const {

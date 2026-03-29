@@ -8,29 +8,29 @@
     "format": "prettier --write 'src/**/*.{ts,tsx,js,jsx,json,css,scss,md}'",
     "format:wails": "prettier --write 'wailsjs/**/*.{ts,js}'",
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "node --max-old-space-size=8192 ../../node_modules/typescript/bin/tsc && node --max-old-space-size=8192 ../../node_modules/vite/bin/vite.js build",
     "preview": "vite preview",
     "test": "vitest",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@eslint/compat": "^2.0.2",
-    "@eslint/eslintrc": "^3.3.3",
+    "@eslint/compat": "^2.0.3",
+    "@eslint/eslintrc": "^3.3.5",
     "@eslint/js": "^9.39.2",
-    "@types/react": "^19.2.13",
+    "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "eslint": "^9.39.2",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-simple-import-sort": "^12.1.1",
-    "globals": "^17.3.0",
+    "globals": "^17.4.0",
     "prettier": "^3.8.1",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",
     "vite-plugin-circular-dependency": "^0.5.0",
-    "vite-plugin-static-copy": "^3.2.0",
-    "vitest": "^4.0.18"
+    "vite-plugin-static-copy": "^3.3.0",
+    "vitest": "^4.1.0"
   },
   "dependencies": {
     "@core/chain": "workspace:^",
@@ -39,12 +39,12 @@
     "@core/ui": "workspace:^",
     "@lib/ui": "workspace:^",
     "@lib/utils": "workspace:^",
-    "@tanstack/react-query": "^5.90.20",
-    "@tanstack/react-query-persist-client": "^5.90.22",
+    "@tanstack/react-query": "^5.90.21",
+    "@tanstack/react-query-persist-client": "^5.90.24",
     "@wailsapp/runtime": "workspace:^",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "react-i18next": "^16.5.4",
-    "styled-components": "^6.3.8"
+    "react-i18next": "^16.5.8",
+    "styled-components": "^6.3.11"
   }
 }

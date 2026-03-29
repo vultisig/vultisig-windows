@@ -18,6 +18,7 @@ type EmailFieldExpandedProps = {
   registration: UseFormRegisterReturn<'email'>
   onValueChange: (value: string) => void
   onClear: () => void
+  onTabForward: () => void
   error?: string
   isEmailValid: boolean
 }
@@ -26,6 +27,7 @@ export const EmailFieldExpanded = ({
   registration,
   onValueChange,
   onClear,
+  onTabForward,
   error,
   isEmailValid,
 }: EmailFieldExpandedProps) => {
@@ -45,6 +47,12 @@ export const EmailFieldExpanded = ({
               <TextInput
                 {...registration}
                 onValueChange={onValueChange}
+                onKeyDown={e => {
+                  if (e.key === 'Tab' && !e.shiftKey) {
+                    e.preventDefault()
+                    onTabForward()
+                  }
+                }}
                 placeholder={t('email')}
                 validation={
                   isEmailValid ? 'valid' : error ? 'invalid' : undefined

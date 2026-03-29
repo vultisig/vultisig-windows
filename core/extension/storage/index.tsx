@@ -18,6 +18,7 @@ import { passcodeAutoLockStorage } from './passcodeAutoLock'
 import { passcodeEncryptionStorage } from './passcodeEncryption'
 import { referralsStorage } from './referrals'
 import { transactionHistoryStorage } from './transactionHistory'
+import { tssBatchingEnabledStorage } from './tssBatchingEnabled'
 import { vaultFoldersStorage } from './vaultFolders'
 import { vaultsStorage } from './vaults'
 
@@ -41,5 +42,6 @@ export const storage: CoreStorage = {
   ...referralsStorage,
   ...dismissedBannersStorage,
   ...mldsaEnabledStorage,
+  ...tssBatchingEnabledStorage,
   ...transactionHistoryStorage,
 }

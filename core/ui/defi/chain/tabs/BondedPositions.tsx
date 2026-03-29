@@ -106,7 +106,8 @@ export const BondedPositions = () => {
   const createCoin = useCreateCoinMutation()
   const removeFromIgnored = useRemoveFromCoinFinderIgnoreMutation()
 
-  const isBondingDisabledByChain = chain !== Chain.THORChain
+  const isBondingDisabledByChain =
+    chain !== Chain.THORChain && chain !== Chain.MayaChain
   const bondCoin = {
     ...(chainFeeCoin[chain] ?? chainFeeCoin[Chain.THORChain]),
     chain,
@@ -131,7 +132,7 @@ export const BondedPositions = () => {
 
   if (
     !isPending &&
-    chain === Chain.THORChain &&
+    (chain === Chain.THORChain || chain === Chain.MayaChain) &&
     !data?.bond &&
     selectedPositions.length > 0
   ) {

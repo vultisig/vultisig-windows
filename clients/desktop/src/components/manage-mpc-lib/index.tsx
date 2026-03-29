@@ -4,6 +4,10 @@ import {
   useIsMLDSAEnabled,
   useSetIsMLDSAEnabledMutation,
 } from '@core/ui/storage/mldsaEnabled'
+import {
+  useIsTssBatchingEnabled,
+  useSetIsTssBatchingEnabledMutation,
+} from '@core/ui/storage/tssBatchingEnabled'
 import { Opener } from '@lib/ui/base/Opener'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { useClickGate } from '@lib/ui/hooks/useClickGate'
@@ -22,6 +26,9 @@ export const ManageMpcLib = () => {
 
   const isMLDSAEnabled = useIsMLDSAEnabled()
   const { mutate: setIsMLDSAEnabled } = useSetIsMLDSAEnabledMutation()
+  const isTssBatchingEnabled = useIsTssBatchingEnabled()
+  const { mutate: setIsTssBatchingEnabled } =
+    useSetIsTssBatchingEnabledMutation()
 
   return (
     <Opener
@@ -46,6 +53,11 @@ export const ManageMpcLib = () => {
               checked={isMLDSAEnabled}
               label={t('enable_mldsa')}
               onChange={() => setIsMLDSAEnabled(!isMLDSAEnabled)}
+            />
+            <Switch
+              checked={isTssBatchingEnabled}
+              label={t('enable_tss_batching')}
+              onChange={() => setIsTssBatchingEnabled(!isTssBatchingEnabled)}
             />
           </VStack>
         </Modal>

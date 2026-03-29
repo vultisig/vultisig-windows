@@ -40,7 +40,7 @@ const RPC_ENDPOINTS: Record<string, string> = {
 
   // Cosmos chains
   cosmos: 'https://cosmos-rest.publicnode.com',
-  thorchain: 'https://thornode.ninerealms.com',
+  thorchain: 'https://thornode.thorchain.network',
 
   // Solana
   solana: 'https://api.mainnet-beta.solana.com',

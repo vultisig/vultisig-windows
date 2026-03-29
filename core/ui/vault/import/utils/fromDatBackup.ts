@@ -1,4 +1,4 @@
-import { signingAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
+import { tssSigningAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
 import { MpcLib } from '@core/mpc/mpcLib'
 import { Vault } from '@core/mpc/vault/Vault'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -29,7 +29,7 @@ export const fromDatBackup = (backup: DatBackup): Vault => {
   }
 
   const keyShares = recordFromKeys(
-    signingAlgorithms,
+    tssSigningAlgorithms,
     algorithm =>
       shouldBePresent(
         backup.keyshares.find(

@@ -6,7 +6,7 @@ type ResponseType = 'json' | 'text' | 'none'
 type QueryUrlOptions = {
   responseType?: ResponseType
   body?: any
-} & Pick<RequestInit, 'method' | 'headers'>
+} & Pick<RequestInit, 'method' | 'headers' | 'signal'>
 
 const processBody = (body: any) => {
   if (body === undefined) {
@@ -38,7 +38,7 @@ export async function queryUrl<T>(
   url: string | URL,
   options: QueryUrlOptions = {}
 ): Promise<T | string | void> {
-  const { responseType = 'json', body, headers, method } = options
+  const { responseType = 'json', body, headers, method, signal } = options
 
   const response = await fetch(
     url,
@@ -49,6 +49,7 @@ export async function queryUrl<T>(
         'Content-Type': body ? 'application/json' : undefined,
       }),
       body: processBody(body),
+      signal,
     })
   )
 

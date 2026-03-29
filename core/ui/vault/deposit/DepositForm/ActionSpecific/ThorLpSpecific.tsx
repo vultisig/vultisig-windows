@@ -30,9 +30,7 @@ const useThorchainLpPoolsQuery = () =>
   useQuery({
     queryKey: ['thorchain', 'lp', 'availablePools'],
     queryFn: () =>
-      queryUrl<MidgardPool[]>(`${midgardBaseUrl}/pools?status=available`, {
-        headers: { 'X-Client-ID': 'vultisig' },
-      }),
+      queryUrl<MidgardPool[]>(`${midgardBaseUrl}/pools?status=available`),
     ...noRefetchQueryOptions,
   })
 

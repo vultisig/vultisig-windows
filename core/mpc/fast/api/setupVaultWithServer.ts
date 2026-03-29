@@ -10,11 +10,12 @@ type Input = {
   local_party_id: string
   encryption_password: string
   email: string
-  lib_type: number
+  protocols: string[]
+  public_key?: string
 }
 
 export const setupVaultWithServer = async (input: Input) =>
-  queryUrl(`${fastVaultServerUrl}/create`, {
+  queryUrl(`${fastVaultServerUrl}/batch/keygen`, {
     body: input,
     responseType: 'none',
   })

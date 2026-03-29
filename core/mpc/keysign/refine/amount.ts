@@ -13,7 +13,7 @@ import { getKeysignCoin } from '../utils/getKeysignCoin'
 type RefineKeysignAmountInput = {
   keysignPayload: KeysignPayload
   walletCore: WalletCore
-  publicKey: PublicKey
+  publicKey: PublicKey | null
   balance: bigint
 }
 

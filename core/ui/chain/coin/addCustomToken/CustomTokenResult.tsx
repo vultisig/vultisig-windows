@@ -2,6 +2,7 @@ import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { coinKeyToString } from '@core/chain/coin/Coin'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
+import { useCore } from '@core/ui/state/core'
 import {
   useCreateCoinMutation,
   useDeleteCoinMutation,
@@ -22,8 +23,12 @@ import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'
 import { useCurrentVaultChainCoins } from '../../../vault/state/currentVaultCoins'
 import { useTokenMetadataQuery } from './queries/tokenMetadata'
 
+/** Pops add-custom-token then token picker (`manageVaultChainCoins`); result is inline on AddCustomTokenPage. */
+const tokenPickerDepthAfterCustomAdd = 2
+
 export const CustomTokenResult = ({ id }: { id: string }) => {
-  const [{ chain }] = useCoreViewState<'addCustomToken'>()
+  const [{ chain, closeParentAfterAdd }] = useCoreViewState<'addCustomToken'>()
+  const { popNavigationHistory } = useCore()
   const key = { chain, id } as const
 
   const query = useTokenMetadataQuery(key)
@@ -78,7 +83,13 @@ export const CustomTokenResult = ({ id }: { id: string }) => {
           if (currentCoin) {
             deleteCoin.mutate(extractAccountCoinKey(currentCoin))
           } else {
-            createCoin.mutate(coin)
+            createCoin.mutate(coin, {
+              onSuccess: () => {
+                if (closeParentAfterAdd) {
+                  popNavigationHistory(tokenPickerDepthAfterCustomAdd)
+                }
+              },
+            })
           }
         }
 

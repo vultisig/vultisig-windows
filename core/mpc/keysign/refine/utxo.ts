@@ -15,7 +15,7 @@ import { getKeysignAmount } from '../utils/getKeysignAmount'
 type RefineKeysignUtxoInput = {
   keysignPayload: KeysignPayload
   walletCore: WalletCore
-  publicKey: PublicKey
+  publicKey: PublicKey | null
 }
 
 const dustStats = 600n

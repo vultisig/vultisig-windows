@@ -1,3 +1,3 @@
-import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
+import { TssSignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
 
-export type PublicKeys = Record<SignatureAlgorithm, string>
+export type PublicKeys = Record<TssSignatureAlgorithm, string>

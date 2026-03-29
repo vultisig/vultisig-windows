@@ -1,4 +1,4 @@
-import { EvmChain, OtherChain } from '@core/chain/Chain'
+import { Chain, EvmChain, OtherChain } from '@core/chain/Chain'
 import { Coin } from '@core/chain/coin/Coin'
 import { SerializedSigningOutput } from '@core/chain/tw/signingOutput'
 import { Tx } from '@core/chain/tx'
@@ -29,7 +29,11 @@ export type SignMessageInput =
     }
   | {
       sign_message: {
-        chain: OtherChain.Solana | OtherChain.Tron | OtherChain.Polkadot
+        chain:
+          | OtherChain.Solana
+          | OtherChain.Tron
+          | OtherChain.Polkadot
+          | OtherChain.Bittensor
         useTronHeader?: boolean
         isV2?: boolean
         message: string
@@ -38,7 +42,7 @@ export type SignMessageInput =
 
 export type PopupInterface = {
   grantVaultAccess: Method<
-    { preselectFastVault?: boolean },
+    { preselectFastVault?: boolean; chain?: Chain },
     { appSession: VaultAppSession }
   >
   exportVaults: Method<{}, VaultExport[]>

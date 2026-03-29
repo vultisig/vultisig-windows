@@ -10,9 +10,10 @@ export const cosmosRpcUrl: Record<CosmosChain, string> = {
   Terra: 'https://terra-lcd.publicnode.com',
   TerraClassic: 'https://terra-classic-lcd.publicnode.com',
   Noble: 'https://noble-api.polkachu.com',
-  THORChain: 'https://thornode.ninerealms.com',
+  THORChain: 'https://thornode.thorchain.network',
   MayaChain: 'https://mayanode.mayachain.info',
   Akash: 'https://akash-rest.publicnode.com',
+  QBTC: 'https://api.vultisig.com/qbtc-rpc',
 }
 
 export const getCosmosWasmTokenBalanceUrl = ({

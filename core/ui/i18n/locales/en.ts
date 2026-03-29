@@ -3,6 +3,8 @@ export const en = {
   action: 'Action',
   active: 'Active',
   agent: 'Agent',
+  agent_nav_tip_description: 'Vulti Agent is available. Tap to set it up.',
+  agent_nav_tip_title: 'New!',
   active_chains_found_one: 'We found {{count}} active chain',
   active_chains_found_other: 'We found {{count}} active chains',
   active_chains_warning:
@@ -12,7 +14,7 @@ export const en = {
   add_friends_referral: 'Add a Friends Referral',
   add_memo: 'Add MEMO',
   add_new_vault: 'Add New Vault',
-  add_referral: 'Add referral',
+  add_referral: 'Add Referral',
   add_referral_code: 'Save referral code',
   add_to_address_book: 'Add to Address Book',
   add_suggested_token: 'Add Suggested Token',
@@ -51,7 +53,7 @@ export const en = {
   reject: 'Reject',
   applied_discounts: 'Applied Discounts:',
   asset: 'Asset',
-  assets: 'assets',
+  assets: 'Assets',
   at_least_one_device: 'At least one device',
   at_least_one_device_subtitle: 'Any device that can run Vultisig will work.',
   auto: 'auto',
@@ -149,10 +151,10 @@ export const en = {
   chooseSetup: 'Choose Setup',
   choose_a_password: 'Choose a password',
   choose_a_password_description:
-    'If you want an extra layer of security, choose a password. <b>Password cannot be recovered.</b>',
+    'If you want an extra layer of security, choose a password. <b>Password cannot be recovered.</b> <info />',
   choose_backup_method: 'Choose Backup Method',
   choose_payout_asset: 'Choose payout asset',
-  choose_chains: 'Choose chains',
+  choose_chains: 'Choose Chains',
   choose_tokens: 'Choose Tokens',
   deposited: 'Deposited',
   circle: {
@@ -275,6 +277,7 @@ export const en = {
   edit_address: 'Edit Address',
   edit_friends_referral: 'Edit Friend Referral',
   edit_referral: 'Edit Referral',
+  remove_friends_referral: 'Remove Referral',
   edit_vaults: 'Edit Vaults',
   email: 'Email',
   email_backup: 'Enter your email to receive your backup',
@@ -283,6 +286,7 @@ export const en = {
   evm_chains: 'EVM Chains',
   enable_dkls: 'Enable DKLS',
   enable_mldsa: 'Enable MLDSA',
+  enable_tss_batching: 'Enable TSS Batching',
   post_quantum_keygen: 'Post-Quantum Key Generation',
   post_quantum_keygen_description:
     'Generate a post-quantum (MLDSA) key for this vault',
@@ -307,7 +311,7 @@ export const en = {
   enter_vault_name: 'Enter Vault Name',
   enter_your_email: 'Enter your email',
   enter_your_email_description:
-    'This will only be used once to send your backup file, Vultisig doesn’t store any data.',
+    'This email is used for cloud backup and shared with no third party',
   enter_your_password: 'Enter your password',
   entity_not_scanned: '{{entity}} not scanned by <provider></provider>',
   entity_scanned: '{{entity}} scanned by <provider></provider>',
@@ -381,6 +385,9 @@ export const en = {
   fast: 'Fast',
   fastVault: 'Fast Vault',
   secureVault: 'Secure Vault',
+  fast_vault_session_conflict: 'Vault Share Mismatch',
+  fast_vault_session_conflict_description:
+    "Your local vault share doesn't match the one stored on Vultiserver. This may happen if the same seed phrase was imported on another device.",
   fast_vault_password_start_keysign_description:
     'Confirm the transaction by entering the password of your server share.',
   fastVaultSetup: {
@@ -399,7 +406,9 @@ export const en = {
       shareSecurely: 'to ensure access, preferably',
       vaultShares: 'Your vault holds 2 shares,',
       sentTo: 'Send to ({{email}})',
+      setNewStandard: "You're ready to use a new wallet standard.",
       changeEmailAndRestartKeygen: 'Use a different email',
+      wellDone: 'Well done',
     },
     connectingWithServer: 'Connecting with server...',
     createVault: {
@@ -424,8 +433,9 @@ export const en = {
         descriptionTwo: 'giving complete control over your assets',
       },
     },
-    emailSetupTitle: 'This email is only used to send the server backup',
-    enterEmail: 'Enter your e-mail',
+    emailSetupTitle:
+      'This email is used for cloud backup and shared with no third party',
+    enterEmail: 'Enter your email',
     enterHint: 'Enter hint',
     hintDescription: 'This will be shown in case you forget your password',
     hintEmpty: 'Hint is empty',
@@ -490,6 +500,14 @@ export const en = {
   header_tooltip_content:
     'The referral program is applied on THORChain swaps and is on a best effort basis. You need to register a THORName to use the Vultisig referral. The registration fee is 10 RUNE and 1 RUNE for each year, which is paid to the THORChain network.',
   header_tooltip_title: 'Referral Program',
+  having_trouble_scanning_help: 'QR scanning help',
+  having_trouble_scanning: 'Having trouble scanning?',
+  having_trouble_scanning_desc: 'If the QR code is not scanning right away:',
+  having_trouble_scanning_tip_1:
+    'Move the phone slightly closer or farther from the screen',
+  having_trouble_scanning_tip_2:
+    'Make sure the screen is well lit and free of glare',
+  having_trouble_scanning_tip_3: 'Keep both devices steady for a moment',
   hide_balance: 'Hide balance',
   hide_defi_balance: 'Hide DeFi balance',
   hold: 'Hold',
@@ -517,6 +535,11 @@ export const en = {
     'Seed phrase is not correct, please verify all words.',
   seedphrase_duplicate_vault_error:
     'This seed phrase is already imported as vault "{{vaultName}}". Importing it again would replace the existing vault.',
+  fast_vault_exists_warning_title: 'Vault Already Exists',
+  fast_vault_exists_warning_description:
+    'This seed phrase was already imported as a fast vault on another device. Continuing will replace the server share, and the other device will stop working.',
+  fast_vault_exists_warning_hint:
+    'If you want to keep both devices working, use a secure vault instead.',
   import_seedphrase_description: 'Enter it, create a vault, never look back.',
   import_seedphrase_onboarding_title:
     'You are entering a new era, <g>leaving old seed phrases behind.</g> You’ll need:',
@@ -588,6 +611,8 @@ export const en = {
   keygen_devices_requirements_info:
     'Scan QR with other device. {{recommended}}-device setup recommended, {{min}} is sufficient.',
   keygen_failed: 'Key Generation Error. Please try again.',
+  keygen_protocol_done: 'Done',
+  keygen_protocol_running: 'Running',
   keys: 'Keys',
   keysign: 'Keysign',
   label: 'Label',
@@ -630,9 +655,9 @@ export const en = {
   more: 'more',
   moreInfo: 'More Info',
   name: 'Name',
-  name_your_vault: 'Name your Vault',
+  name_your_vault: 'Name your vault',
   network: 'Network',
-  network_fee: 'Network fee',
+  network_fee: 'Network Fee',
   network_rate: 'Network rate',
   network_rate_required: 'Network rate is required',
   never: 'Never',
@@ -691,6 +716,7 @@ export const en = {
   of: 'of',
   off: 'Off',
   on: 'On',
+  on_chain: 'on {{chain}}',
   onboarding_description_1:
     'Vultisig is a secure, multi-device crypto vault, compatible with all major blockchains and 10,000+ tokens. Vultisig is fully self-custodial.',
   onboarding_description_2:
@@ -953,7 +979,7 @@ export const en = {
   support: 'Support',
   swap: 'Swap',
   swaps: 'Swaps',
-  swap_fee: 'Swap fee',
+  swap_fee: 'Swap Fee',
   swap_overview: 'Swap overview',
   swap_same_asset: 'Cannot swap between the same asset',
   swap_terms: {
@@ -966,7 +992,7 @@ export const en = {
   target: 'Target',
   terms_of_service: 'Terms of Service',
   terms_required: 'You must agree with the terms',
-  this_device: 'This device',
+  this_device: 'This Device',
   this_device_suffix: '(this device)',
   this_vault_only: 'This Vault Only',
   this_vault_share: 'this device vault share',
@@ -979,6 +1005,7 @@ export const en = {
   tns_missing_thor_alias: 'Referral code must have a THOR‐chain alias',
   tns_not_found: 'Referral code not found',
   to: 'To',
+  to_min_payout: 'min. payout',
   today: 'Today',
   to_asset: 'To Asset',
   token_not_found_description:
@@ -1051,7 +1078,7 @@ export const en = {
   upgrade_vault_description:
     "Upgrade this vault to the <b>world's fastest MPC protocol</b> and sign faster than ever before",
   upload_file_or_drag_and_drop: 'Upload file or drag & drop here',
-  upload_qr_code_image: 'Upload QR',
+  upload_qr_code_image: 'Upload QR Code',
   upload_qr_code_to_join_keysign: 'Upload QR Code to join Keysign',
   upload_qr_code_with_address: 'Upload QR code with address',
   use_referral_code: 'Use referral Code',
@@ -1089,12 +1116,12 @@ export const en = {
   vault_details_description: 'View vault name, part and type',
   vault_details_edit_vault_description: 'Edit your vault name',
   vault_details_page_signer_word: 'Signer',
-  vault_details_page_vault_ECDSA: 'ECDSA key',
-  vault_details_page_vault_EDDSA: 'EdDSA key',
+  vault_details_page_vault_ECDSA: 'ECDSA',
+  vault_details_page_vault_EDDSA: 'EdDSA',
   vault_details_page_vault_MLDSA: 'MLDSA key',
   vault_details_page_vault_type: 'Vault Type',
   vault_info: 'Vault Info',
-  vault_management: 'Vault Management',
+  vault_management: 'Vault',
   vault_name: 'Vault Name',
   vault_name_already_exists: 'Vault name must be unique',
   vault_name_description:
@@ -1318,4 +1345,12 @@ export const en = {
   agent_analyzing: 'Analyzing...',
   agent_analyzed_for: 'Analyzed for {{duration}}s',
   agent_analyzed: 'Analyzed',
+  welcome_to_vulti_agent: 'Welcome to Vulti Agent',
+  agent_welcome_description:
+    'Your vault can now understand requests, automate actions, and help manage your crypto.',
+  authorize_agent: 'Authorize Agent',
+  reauthorize_vulti_agent: 'Re-authorize Vulti Agent',
+  agent_reauth_description:
+    'For security, authorization expires periodically.\nPlease confirm to continue using Vulti Agent.',
+  authorize: 'Authorize',
 }
