@@ -5,6 +5,7 @@ import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import styled from 'styled-components'
 
+import { useFlowErrorClose } from './FlowErrorCloseContext'
 import {
   FlowErrorPageContent,
   FlowErrorPageContentProps,
@@ -12,13 +13,14 @@ import {
 
 export const FullPageFlowErrorState = (props: FlowErrorPageContentProps) => {
   const navigate = useCoreNavigate()
+  const onClose = useFlowErrorClose()
 
   return (
     <>
       <PageHeader
         primaryControls={<PageHeaderBackButton />}
         secondaryControls={
-          <CloseButton onClick={() => navigate({ id: 'vault' })}>
+          <CloseButton onClick={onClose ?? (() => navigate({ id: 'vault' }))}>
             <CrossIcon />
           </CloseButton>
         }

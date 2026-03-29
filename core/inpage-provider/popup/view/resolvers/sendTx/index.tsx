@@ -1,5 +1,6 @@
 import { StartKeysignView } from '@core/extension/keysign/start/StartKeysignView'
 import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
+import { FlowErrorCloseProvider } from '@core/ui/flow/FlowErrorCloseContext'
 import {
   KeysignMutationListener,
   KeysignMutationListenerProvider,
@@ -47,7 +48,16 @@ export const SendTx: PopupResolver<'sendTx'> = ({ onFinish }) => {
   return (
     <NavigationProvider initialValue={{ history: [{ id: 'overview' }] }}>
       <KeysignMutationListenerProvider value={keysignMutationListener}>
-        <ActiveView views={views} />
+        <FlowErrorCloseProvider
+          value={() =>
+            onFinish({
+              result: { error: new Error('Signing failed') },
+              shouldClosePopup: true,
+            })
+          }
+        >
+          <ActiveView views={views} />
+        </FlowErrorCloseProvider>
       </KeysignMutationListenerProvider>
     </NavigationProvider>
   )
