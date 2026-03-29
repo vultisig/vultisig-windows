@@ -9,7 +9,7 @@ import { getVaultId } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
   useCurrentVault,
-  useCurrentVaultPublicKey,
+  useCurrentVaultNullablePublicKey,
 } from '@core/ui/vault/state/currentVault'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
@@ -37,7 +37,7 @@ export const useSendKeysignPayloadQuery = ({
   const vault = useCurrentVault()
 
   const walletCore = useAssertWalletCore()
-  const publicKey = useCurrentVaultPublicKey(coin.chain)
+  const publicKey = useCurrentVaultNullablePublicKey(coin.chain)
 
   const input: BuildSendKeysignPayloadInput = useMemo(
     () => ({
@@ -51,6 +51,7 @@ export const useSendKeysignPayloadQuery = ({
       libType: toKeysignLibType(vault),
       walletCore,
       feeSettings,
+      hexPublicKeyOverride: publicKey ? undefined : vault.publicKeyMldsa,
     }),
     [amount, coin, feeSettings, memo, publicKey, receiver, vault, walletCore]
   )

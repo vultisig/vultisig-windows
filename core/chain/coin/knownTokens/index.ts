@@ -4,6 +4,7 @@ import { omit } from '@lib/utils/record/omit'
 
 import { CoinKey, KnownCoin, KnownCoinMetadata, Token } from '../Coin'
 import { knownCosmosTokens } from './cosmos'
+import { thorchainNativeTokensMetadata } from './thorchain'
 
 type LeanChainTokensRecord = Record<Chain, Record<string, KnownCoinMetadata>>
 
@@ -650,6 +651,10 @@ const leanTokens: Partial<LeanChainTokensRecord> = {
     },
   },
   ...knownCosmosTokens,
+  [Chain.THORChain]: {
+    ...knownCosmosTokens[Chain.THORChain],
+    ...(thorchainNativeTokensMetadata as Record<string, KnownCoinMetadata>),
+  },
 }
 
 export const knownTokens = makeRecord(Object.values(Chain), chain => {

@@ -6,7 +6,7 @@ import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 type FeeAmountResolverInput = {
   keysignPayload: KeysignPayload
   walletCore: WalletCore
-  publicKey: PublicKey
+  publicKey: PublicKey | null
 }
 
 export type FeeAmountResolver = Resolver<FeeAmountResolverInput, bigint>
