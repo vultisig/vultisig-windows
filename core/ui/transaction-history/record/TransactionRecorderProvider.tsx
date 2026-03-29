@@ -24,7 +24,7 @@ export const TransactionRecorderProvider = ({ children }: ChildrenProp) => {
         onError: error => {
           parentListener.onError?.(error)
         },
-        onSuccess: async result => {
+        onSuccess: result => {
           parentListener.onSuccess?.(result)
 
           if (!('txs' in result)) return
