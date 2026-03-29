@@ -3,6 +3,7 @@ import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
 import { PopupError } from '@core/inpage-provider/popup/error'
 import { attempt } from '@lib/utils/attempt'
+import { Address } from '@ton/core'
 import type {
   ConnectEvent,
   ConnectItemReply,
@@ -156,11 +157,12 @@ export class TonConnectBridge {
     }
 
     const walletStateInit = getWalletStateInit(account.publicKey)
+    const rawAddress = Address.parse(account.address).toRawString()
 
     const replyItems: ConnectItemReply[] = [
       {
         name: 'ton_addr',
-        address: account.address,
+        address: rawAddress,
         network: CHAIN.MAINNET,
         publicKey: account.publicKey,
         walletStateInit,
@@ -243,6 +245,7 @@ export class TonConnectBridge {
     }
 
     const walletStateInit = getWalletStateInit(data.publicKey)
+    const rawAddress = Address.parse(data.address).toRawString()
 
     return {
       event: 'connect',
@@ -251,7 +254,7 @@ export class TonConnectBridge {
         items: [
           {
             name: 'ton_addr',
-            address: data.address,
+            address: rawAddress,
             network: CHAIN.MAINNET,
             publicKey: data.publicKey,
             walletStateInit,
