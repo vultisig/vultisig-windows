@@ -90,40 +90,46 @@ For details on integrating Vultisig Extension with your project, see the [Integr
 
 ## Vultisig SDK
 
-This project depends on [`@vultisig/sdk`](https://github.com/vultisig/vultisig-sdk) published on npm. CI also runs a non-blocking compatibility check against the SDK `main` branch to catch integration issues early.
+This project depends on multiple packages from the [`vultisig-sdk`](https://github.com/vultisig/vultisig-sdk) monorepo, published individually on npm:
+
+- `@vultisig/sdk` — main SDK
+- `@vultisig/core-chain` — blockchain/chain utilities
+- `@vultisig/core-config` — configuration
+- `@vultisig/core-mpc` — multi-party computation
+- `@vultisig/lib-utils` — shared utilities
+
+CI also runs a non-blocking compatibility check against the SDK `main` branch to catch integration issues early.
 
 ### Developing with the latest SDK (unreleased)
 
-To test against the SDK `main` branch locally:
-
-**Option A: Yarn link (recommended)**
+Since vultisig-sdk is a monorepo, you need to clone, build, and link all packages:
 
 ```bash
-# Clone and build the SDK
+# Clone and build the SDK monorepo
 git clone https://github.com/vultisig/vultisig-sdk.git
 cd vultisig-sdk
 yarn install && yarn build
 
-# In vultisig-windows, link to your local SDK build
+# In vultisig-windows, link each SDK package
 cd /path/to/vultisig-windows
-yarn link /path/to/vultisig-sdk
+for pkg in /path/to/vultisig-sdk/packages/*/; do
+  [ -f "$pkg/package.json" ] && yarn link "$pkg"
+done
+for pkg in /path/to/vultisig-sdk/packages/*/*/; do
+  [ -f "$pkg/package.json" ] && yarn link "$pkg"
+done
 ```
 
-**Option B: Git override via `resolutions`**
+To unlink and restore npm versions:
 
-Add a temporary resolution in the root `package.json`:
-
-```json
-"resolutions": {
-  "@vultisig/sdk": "https://github.com/vultisig/vultisig-sdk.git#main"
-}
+```bash
+# Remove the links
+yarn install --refresh-lockfile
 ```
-
-Then run `yarn install`. **Do not commit this change** — it is for local testing only.
 
 ### Releasing
 
-Production builds always use the npm-published SDK version. Before releasing, ensure `package.json` points to a stable npm version (e.g., `"@vultisig/sdk": "0.10.0"`), not a git reference.
+Production builds always use npm-published SDK versions. Before releasing, ensure all `@vultisig/*` dependencies in `package.json` point to stable npm versions, not git references or local links.
 
 ## Development Guidelines
 
