@@ -102,33 +102,15 @@ CI also runs a non-blocking compatibility check against the SDK `main` branch to
 
 ### Developing with the latest SDK (unreleased)
 
-Since vultisig-sdk is a monorepo, `yarn link` won't work due to peer dependency conflicts. Instead, pack the SDK packages into tarballs and override via `resolutions`:
+Since vultisig-sdk is a monorepo, `yarn link` won't work due to peer dependency conflicts. A script is provided that builds the SDK, packs all packages into tarballs, and overrides them via `resolutions`:
 
 ```bash
-# 1. Build the SDK monorepo
-cd /path/to/vultisig-sdk
-yarn install && yarn build:shared && yarn build:all
-
-# 2. Pack all shared packages
-mkdir -p /tmp/sdk-packs
-for dir in packages/sdk packages/core/chain packages/core/config packages/core/mpc packages/lib/utils; do
-  cd /path/to/vultisig-sdk/$dir && npm pack --pack-destination /tmp/sdk-packs
-done
-
-# 3. Add resolutions to vultisig-windows root package.json
-# pointing each @vultisig/* package to its tarball, e.g.:
-#   "resolutions": {
-#     "@vultisig/sdk": "/tmp/sdk-packs/vultisig-sdk-0.10.0.tgz",
-#     "@vultisig/core-chain": "/tmp/sdk-packs/vultisig-core-chain-0.10.0.tgz",
-#     ...
-#   }
-
-# 4. Install with overrides
-cd /path/to/vultisig-windows
-yarn install
+./scripts/use-local-sdk.sh /path/to/vultisig-sdk
 ```
 
-To restore npm versions, remove the `resolutions` block from `package.json` and run:
+This will build the SDK, pack all shared packages, add `resolutions` to `package.json`, and run `yarn install`.
+
+To restore npm versions:
 
 ```bash
 git checkout package.json yarn.lock
