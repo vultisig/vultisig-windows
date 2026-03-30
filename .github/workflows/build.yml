@@ -21,10 +21,7 @@ env:
   YARN_VERSION: '4.6.0'
 
 jobs:
-  quality-static:
-    permissions:
-      contents: read
-      actions: write
+  lint:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
@@ -92,90 +89,16 @@ jobs:
       - name: Lint
         run: yarn lint
 
-  quality-test:
-    permissions:
-      contents: read
-      actions: write
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          fetch-depth: 1
-
-      - name: Setup and install
-        uses: ./.github/actions/setup-yarn-monorepo
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
       - name: Run unit tests (core/lib)
         run: yarn test
-
-  quality-extension-test:
-    permissions:
-      contents: read
-      actions: write
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          fetch-depth: 1
-
-      - name: Setup and install
-        uses: ./.github/actions/setup-yarn-monorepo
-        with:
-          node-version: ${{ env.NODE_VERSION }}
 
       - name: Run unit tests (extension)
         run: yarn exec vitest run --config clients/extension/tests/unit/vitest.config.ts
 
-  quality-typecheck:
-    permissions:
-      contents: read
-      actions: write
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-          fetch-depth: 1
-
-      - name: Setup and install
-        uses: ./.github/actions/setup-yarn-monorepo
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
       - name: Run typecheck
         run: yarn typecheck
 
-  lint:
-    permissions:
-      contents: read
-      actions: write
-    if: always()
-    needs:
-      - quality-static
-      - quality-test
-      - quality-extension-test
-      - quality-typecheck
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Enforce quality gates
-        run: |
-          ok() { [ "$1" = "success" ]; }
-          ok "${{ needs.quality-static.result }}" || { echo "quality-static: ${{ needs.quality-static.result }}"; exit 1; }
-          ok "${{ needs.quality-test.result }}" || { echo "quality-test: ${{ needs.quality-test.result }}"; exit 1; }
-          ok "${{ needs.quality-extension-test.result }}" || { echo "quality-extension-test: ${{ needs.quality-extension-test.result }}"; exit 1; }
-          ok "${{ needs.quality-typecheck.result }}" || { echo "quality-typecheck: ${{ needs.quality-typecheck.result }}"; exit 1; }
-
   extension:
-    permissions:
-      contents: read
-      actions: write
     needs: lint
     runs-on: ubuntu-22.04
     steps:
@@ -239,9 +162,6 @@ jobs:
           path: clients/extension/dist
 
   build:
-    permissions:
-      contents: read
-      actions: write
     needs: lint
     strategy:
       fail-fast: true
