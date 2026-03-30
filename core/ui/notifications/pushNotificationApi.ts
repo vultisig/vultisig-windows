@@ -88,6 +88,8 @@ type NotifyVaultDevicesInput = {
  * Notifies other vault devices to join an in-progress keysign session.
  * POST `{serverUrl}/notify` with iOS-aligned payload and `X-Client-ID: vultisig`.
  */
+const notifyVaultDevicesTimeoutMs = 15_000
+
 export const notifyVaultDevices = async ({
   serverUrl,
   vaultId,
@@ -95,23 +97,41 @@ export const notifyVaultDevices = async ({
   localPartyId,
   qrCodeData,
 }: NotifyVaultDevicesInput): Promise<void> => {
-  const response = await fetch(`${serverUrl}/notify`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Client-ID': 'vultisig',
-    },
-    body: JSON.stringify({
-      vault_id: vaultId,
-      vault_name: vaultName,
-      local_party_id: localPartyId,
-      qr_code_data: qrCodeData,
-    }),
-  })
+  const controller = new AbortController()
+  const timeoutId = setTimeout(
+    () => controller.abort(),
+    notifyVaultDevicesTimeoutMs
+  )
 
-  if (!response.ok) {
-    throw new Error(
-      `Failed to notify vault devices: ${response.status} ${response.statusText}`
-    )
+  try {
+    const response = await fetch(`${serverUrl}/notify`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Client-ID': 'vultisig',
+      },
+      body: JSON.stringify({
+        vault_id: vaultId,
+        vault_name: vaultName,
+        local_party_id: localPartyId,
+        qr_code_data: qrCodeData,
+      }),
+      signal: controller.signal,
+    })
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to notify vault devices: ${response.status} ${response.statusText}`
+      )
+    }
+  } catch (error) {
+    if (error instanceof DOMException && error.name === 'AbortError') {
+      throw new Error(
+        `Failed to notify vault devices: timed out after ${notifyVaultDevicesTimeoutMs}ms`
+      )
+    }
+    throw error
+  } finally {
+    clearTimeout(timeoutId)
   }
 }

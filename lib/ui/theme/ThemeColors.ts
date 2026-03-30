@@ -41,9 +41,6 @@ export type ThemeColors = {
 
   transparent: HSLA
   white: HSLA
-
-  /** Keysign peer discovery “Resend notification” pill (Figma backgrounds/disabled on navy). */
-  keysignResendNotificationBadge: HSLA
 }
 
 export type ThemeColor = keyof ThemeColors

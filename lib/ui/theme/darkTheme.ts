@@ -54,7 +54,5 @@ export const darkTheme: DefaultTheme = {
 
     transparent: new HSLA(0, 0, 0, 0),
     white: new HSLA(0, 0, 100),
-    // #0B1A3A @ 50% — Figma “Resend notification” badge fill
-    keysignResendNotificationBadge: new HSLA(222, 68, 14, 0.5),
   },
 }

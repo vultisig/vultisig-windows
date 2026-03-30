@@ -3,9 +3,13 @@ import { ResendNotificationBellIcon } from '@lib/ui/icons/ResendNotificationBell
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useTranslation } from 'react-i18next'
-import styled, { css } from 'styled-components'
+import styled, { css, DefaultTheme } from 'styled-components'
 
 import { formatResendCooldownTime } from './useKeysignDiscoveryNotify'
+
+/** Figma `backgrounds/disabled` — navy fill without adding tokens to mirrored `lib/ui/theme`. */
+const resendBadgeBackground = ({ theme }: { theme: DefaultTheme }) =>
+  theme.colors.foregroundDark.withAlpha(0.5).toCssValue()
 
 const BadgeButton = styled(UnstyledButton)<{ $interactive: boolean }>`
   display: inline-flex;
@@ -18,7 +22,7 @@ const BadgeButton = styled(UnstyledButton)<{ $interactive: boolean }>`
   border-radius: 12px;
   border: 1px solid
     ${({ theme }) => theme.colors.white.withAlpha(0.03).toCssValue()};
-  background: ${getColor('keysignResendNotificationBadge')};
+  background: ${resendBadgeBackground};
   flex-shrink: 0;
   max-width: 100%;
   cursor: ${({ $interactive }) => ($interactive ? 'pointer' : 'default')};
