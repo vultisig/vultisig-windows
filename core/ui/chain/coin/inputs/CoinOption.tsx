@@ -1,6 +1,3 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
-import { Coin } from '@core/chain/coin/Coin'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
 import {
@@ -14,7 +11,10 @@ import { IsActiveProp, OnClickProp, ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { formatAmount } from '@lib/utils/formatAmount'
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
+import { Coin } from '@vultisig/core-chain/coin/Coin'
+import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import styled from 'styled-components'
 
 import { CoinOptionFiatAmount } from './CoinOptionFiatAmount'

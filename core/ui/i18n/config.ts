@@ -1,4 +1,4 @@
-import { recordMap } from '@lib/utils/record/recordMap'
+import { recordMap } from '@vultisig/lib-utils/record/recordMap'
 import i18n from 'i18next'
 import Backend from 'i18next-http-backend'
 import { initReactI18next } from 'react-i18next'

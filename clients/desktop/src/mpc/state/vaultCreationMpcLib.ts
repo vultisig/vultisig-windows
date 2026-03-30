@@ -1,5 +1,5 @@
-import { defaultMpcLib, MpcLib, mpcLibOptions } from '@core/mpc/mpcLib'
-import { validateOneOf } from '@lib/utils/array/isOneOf'
+import { defaultMpcLib, MpcLib, mpcLibOptions } from '@vultisig/core-mpc/mpcLib'
+import { validateOneOf } from '@vultisig/lib-utils/array/isOneOf'
 
 import {
   PersistentStateKey,

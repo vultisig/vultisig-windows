@@ -1,15 +1,15 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { toChainAmount } from '@core/chain/amount/toChainAmount'
-import { Chain } from '@core/chain/Chain'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import {
   midgardBaseUrl,
   thornodeBaseUrl,
 } from '@core/ui/defi/chain/queries/constants'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
-import { queryUrl } from '@lib/utils/query/queryUrl'
 import { useQuery } from '@tanstack/react-query'
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 // Set to true to use mock data for testing when you don't have bonded RUNE
 const useMockData = false

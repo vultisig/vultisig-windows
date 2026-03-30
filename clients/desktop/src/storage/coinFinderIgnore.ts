@@ -1,4 +1,3 @@
-import { areEqualCoins, CoinKey } from '@core/chain/coin/Coin'
 import {
   AddToCoinFinderIgnoreFunction,
   coinFinderIgnoreInitialValue,
@@ -7,6 +6,7 @@ import {
   RemoveFromCoinFinderIgnoreFunction,
 } from '@core/ui/storage/coinFinderIgnore'
 import { StorageKey } from '@core/ui/storage/StorageKey'
+import { areEqualCoins, CoinKey } from '@vultisig/core-chain/coin/Coin'
 
 import { persistentStorage } from '../state/persistentState'
 

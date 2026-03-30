@@ -1,6 +1,6 @@
-import { checkVaultExistsOnServer } from '@core/mpc/fast/api/checkVaultExistsOnServer'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useQuery } from '@tanstack/react-query'
+import { checkVaultExistsOnServer } from '@vultisig/core-mpc/fast/api/checkVaultExistsOnServer'
 
 type UseVaultExistsOnServerQueryInput = {
   ecdsaPublicKey: string | null

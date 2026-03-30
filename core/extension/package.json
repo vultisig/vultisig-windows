@@ -3,16 +3,16 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@core/chain": "workspace:^",
-    "@core/config": "workspace:^",
-    "@core/mpc": "workspace:^",
     "@core/ui": "workspace:^",
     "@lib/extension": "workspace:^",
     "@lib/ui": "workspace:^",
-    "@lib/utils": "workspace:^",
     "@tanstack/react-query": "^5.90.21",
     "@tanstack/react-query-persist-client": "^5.90.24",
     "@trustwallet/wallet-core": "^4.6.0",
+    "@vultisig/core-chain": "0.10.0",
+    "@vultisig/core-config": "0.9.0",
+    "@vultisig/core-mpc": "0.10.0",
+    "@vultisig/lib-utils": "0.9.0",
     "react": "^19.2.4",
     "react-i18next": "^16.5.8"
   }

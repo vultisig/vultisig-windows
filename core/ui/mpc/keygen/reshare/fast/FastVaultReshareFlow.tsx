@@ -1,4 +1,3 @@
-import { hasServer, isServer } from '@core/mpc/devices/localPartyId'
 import { ServerEmailStep } from '@core/ui/mpc/keygen/create/fast/server/email/ServerEmailStep'
 import { ServerPasswordStep } from '@core/ui/mpc/keygen/create/fast/server/password/ServerPasswordStep'
 import { SetServerPasswordStep } from '@core/ui/mpc/keygen/create/fast/server/password/SetServerPasswordStep'
@@ -6,6 +5,7 @@ import { FastKeygenFlow } from '@core/ui/mpc/keygen/fast/FastKeygenFlow'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
+import { hasServer, isServer } from '@vultisig/core-mpc/devices/localPartyId'
 
 import { PasswordProvider } from '../../../../state/password'
 

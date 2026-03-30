@@ -1,14 +1,14 @@
-import {
-  kujiraCoinMigratedToThorChainDestinationId,
-  kujiraCoinThorChainMergeContracts,
-} from '@core/chain/chains/cosmos/thor/kujira-merge'
-import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { DepositActionOption } from '@core/ui/vault/deposit/DepositForm/DepositActionOption'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { Text } from '@lib/ui/text'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
+import {
+  kujiraCoinMigratedToThorChainDestinationId,
+  kujiraCoinThorChainMergeContracts,
+} from '@vultisig/core-chain/chains/cosmos/thor/kujira-merge'
+import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { mirrorRecord } from '@vultisig/lib-utils/record/mirrorRecord'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 

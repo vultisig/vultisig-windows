@@ -3,7 +3,7 @@ import {
   cosmosChainsByKind,
   EvmChain,
   VaultBasedCosmosChain,
-} from '@core/chain/Chain'
+} from '@vultisig/core-chain/Chain'
 
 const evmChainValues = new Set<Chain>(Object.values(EvmChain))
 

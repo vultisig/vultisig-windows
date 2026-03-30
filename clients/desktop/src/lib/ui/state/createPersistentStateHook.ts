@@ -1,6 +1,6 @@
-import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
-import { attempt } from '@lib/utils/attempt'
-import type { Defined } from '@lib/utils/types/Defined'
+import { shouldBeDefined } from '@vultisig/lib-utils/assert/shouldBeDefined'
+import { attempt } from '@vultisig/lib-utils/attempt'
+import type { Defined } from '@vultisig/lib-utils/types/Defined'
 import { useCallback, useSyncExternalStore } from 'react'
 
 import { PersistentStorage } from './PersistentStorage'

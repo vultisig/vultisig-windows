@@ -1,9 +1,9 @@
-import { Chain } from '@core/chain/Chain'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { hStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
+import { Chain } from '@vultisig/core-chain/Chain'
 import styled from 'styled-components'
 
 const Container = styled.div`

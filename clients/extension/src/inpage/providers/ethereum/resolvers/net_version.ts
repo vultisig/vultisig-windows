@@ -1,4 +1,4 @@
-import { getEvmChainId } from '@core/chain/chains/evm/chainInfo'
+import { getEvmChainId } from '@vultisig/core-chain/chains/evm/chainInfo'
 
 import { getChain } from '../utils'
 

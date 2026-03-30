@@ -1,7 +1,7 @@
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { getStorageValue } from '@lib/extension/storage/get'
 import { setStorageValue } from '@lib/extension/storage/set'
-import { omit } from '@lib/utils/record/omit'
+import { omit } from '@vultisig/lib-utils/record/omit'
 
 type UpdateAppSessionFieldsInput = {
   vaultId: string

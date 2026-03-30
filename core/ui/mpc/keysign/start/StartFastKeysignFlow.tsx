@@ -9,7 +9,7 @@ import { useCore } from '@core/ui/state/core'
 import { Match } from '@lib/ui/base/Match'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 
 import { TransactionRecorderProvider } from '../../../transaction-history/record/TransactionRecorderProvider'
 import { KeysignMessagePayloadProvider } from '../state/keysignMessagePayload'

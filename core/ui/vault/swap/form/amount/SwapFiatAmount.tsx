@@ -1,4 +1,3 @@
-import { CoinKey } from '@core/chain/coin/Coin'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
@@ -6,7 +5,8 @@ import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { text } from '@lib/ui/text'
-import { EntityWithAmount } from '@lib/utils/entities/EntityWithAmount'
+import { CoinKey } from '@vultisig/core-chain/coin/Coin'
+import { EntityWithAmount } from '@vultisig/lib-utils/entities/EntityWithAmount'
 import styled from 'styled-components'
 
 const Container = styled.div`

@@ -1,6 +1,6 @@
 import { useNavigation } from '@lib/ui/navigation/state'
 import { ChildrenProp } from '@lib/ui/props'
-import { getLastItem } from '@lib/utils/array/getLastItem'
+import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
 import { useEffect, useRef } from 'react'
 
 import {

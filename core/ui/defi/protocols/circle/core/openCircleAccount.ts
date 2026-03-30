@@ -1,5 +1,5 @@
-import { productName } from '@core/config'
-import { queryUrl } from '@lib/utils/query/queryUrl'
+import { productName } from '@vultisig/core-config'
+import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 import { circleApiUrl } from './config'
 

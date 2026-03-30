@@ -1,5 +1,3 @@
-import { Chain } from '@core/chain/Chain'
-import { getThorchainLpPool } from '@core/chain/chains/cosmos/thor/thorchainLp'
 import { lpChainMap } from '@core/ui/storage/defiPositions'
 import {
   useCurrentVaultAddress,
@@ -11,8 +9,10 @@ import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { HStack } from '@lib/ui/layout/Stack'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { Text } from '@lib/ui/text'
-import { queryUrl } from '@lib/utils/query/queryUrl'
 import { useQuery } from '@tanstack/react-query'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { getThorchainLpPool } from '@vultisig/core-chain/chains/cosmos/thor/thorchainLp'
+import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 

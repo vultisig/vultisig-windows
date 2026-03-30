@@ -1,4 +1,3 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import {
   midgardBaseUrl,
   thornodeBaseUrl,
@@ -8,8 +7,9 @@ import {
   fetchNetworkInfo,
 } from '@core/ui/defi/chain/queries/services/thorchainBondService'
 import { fetchStakePositions } from '@core/ui/defi/chain/queries/services/thorchainStake'
-import { attempt } from '@lib/utils/attempt'
-import { queryUrl } from '@lib/utils/query/queryUrl'
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { attempt } from '@vultisig/lib-utils/attempt'
+import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 import type { ToolHandler, ToolHandlerResult } from '../types'
 

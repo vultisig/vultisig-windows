@@ -1,8 +1,3 @@
-import {
-  fiatCurrencies,
-  fiatCurrencyNameRecord,
-  fiatCurrencySymbolRecord,
-} from '@core/config/FiatCurrency'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import {
   useFiatCurrency,
@@ -15,6 +10,11 @@ import { ListItem } from '@lib/ui/list/item'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { getColor } from '@lib/ui/theme/getters'
+import {
+  fiatCurrencies,
+  fiatCurrencyNameRecord,
+  fiatCurrencySymbolRecord,
+} from '@vultisig/core-config/FiatCurrency'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 

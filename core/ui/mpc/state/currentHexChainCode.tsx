@@ -1,6 +1,6 @@
-import { generateHexChainCode } from '@core/mpc/utils/generateHexChainCode'
 import { ChildrenProp } from '@lib/ui/props'
 import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
+import { generateHexChainCode } from '@vultisig/core-mpc/utils/generateHexChainCode'
 import { useMemo } from 'react'
 
 import { useCurrentVault } from '../../vault/state/currentVault'

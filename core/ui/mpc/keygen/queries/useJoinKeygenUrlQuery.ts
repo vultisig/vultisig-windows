@@ -1,13 +1,4 @@
 import { create, toBinary } from '@bufbuild/protobuf'
-import { toCompressedString } from '@core/chain/utils/protobuf/toCompressedString'
-import { deepLinkBaseUrl } from '@core/config'
-import { KeygenOperation } from '@core/mpc/keygen/KeygenOperation'
-import { toLibType } from '@core/mpc/types/utils/libType'
-import { toTssType } from '@core/mpc/types/utils/tssType'
-import { KeygenMessageSchema } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
-import { ReshareMessageSchema } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
-import { SingleKeygenMessageSchema } from '@core/mpc/types/vultisig/keygen/v1/single_keygen_message_pb'
-import { SingleKeygenType } from '@core/mpc/types/vultisig/keygen/v1/single_keygen_type_pb'
 import { useSevenZipQuery } from '@core/ui/compression/queries/useSevenZipQuery'
 import { useKeygenOperation } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import {
@@ -21,8 +12,17 @@ import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
 import { useMpcServiceName } from '@core/ui/mpc/state/mpcServiceName'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
-import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
-import { addQueryParams } from '@lib/utils/query/addQueryParams'
+import { toCompressedString } from '@vultisig/core-chain/utils/protobuf/toCompressedString'
+import { deepLinkBaseUrl } from '@vultisig/core-config'
+import { KeygenOperation } from '@vultisig/core-mpc/keygen/KeygenOperation'
+import { toLibType } from '@vultisig/core-mpc/types/utils/libType'
+import { toTssType } from '@vultisig/core-mpc/types/utils/tssType'
+import { KeygenMessageSchema } from '@vultisig/core-mpc/types/vultisig/keygen/v1/keygen_message_pb'
+import { ReshareMessageSchema } from '@vultisig/core-mpc/types/vultisig/keygen/v1/reshare_message_pb'
+import { SingleKeygenMessageSchema } from '@vultisig/core-mpc/types/vultisig/keygen/v1/single_keygen_message_pb'
+import { SingleKeygenType } from '@vultisig/core-mpc/types/vultisig/keygen/v1/single_keygen_type_pb'
+import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
+import { addQueryParams } from '@vultisig/lib-utils/query/addQueryParams'
 import { useCallback } from 'react'
 
 import { useCore } from '../../../state/core'
@@ -54,7 +54,10 @@ export const useJoinKeygenUrlQuery = () => {
             : 'existingVault' in keygenVault
               ? keygenVault.existingVault.libType
               : vaultCreationMpcLib
-        const libType = toLibType(mpcLib)
+        const libType =
+          mpcLib === 'KeyImport'
+            ? toLibType({ libType: 'DKLS', isKeyImport: true })
+            : toLibType({ libType: mpcLib, isKeyImport: false })
 
         const useVultisigRelay = serverType === 'relay'
 

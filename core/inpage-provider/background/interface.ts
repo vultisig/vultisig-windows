@@ -1,10 +1,10 @@
-import { Chain } from '@core/chain/Chain'
-import { ChainOfKind } from '@core/chain/ChainKind'
-import { CoinKey, CoinMetadata, Token } from '@core/chain/coin/Coin'
-import { ChainWithTokenMetadataDiscovery } from '@core/chain/coin/token/metadata/chains'
 import { VaultAppSession } from '@core/extension/storage/appSessions'
 import { VaultExport } from '@core/ui/vault/export/core'
-import { Method } from '@lib/utils/types/Method'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { ChainOfKind } from '@vultisig/core-chain/ChainKind'
+import { CoinKey, CoinMetadata, Token } from '@vultisig/core-chain/coin/Coin'
+import { ChainWithTokenMetadataDiscovery } from '@vultisig/core-chain/coin/token/metadata/chains'
+import { Method } from '@vultisig/lib-utils/types/Method'
 
 import { ActiveChainKind } from '../chain'
 

@@ -1,4 +1,4 @@
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 
 import { useCurrentVaultCoin } from '../../../state/currentVaultCoins'
 

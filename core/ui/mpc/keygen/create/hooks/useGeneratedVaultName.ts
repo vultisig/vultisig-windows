@@ -1,6 +1,6 @@
 import { useVaultSecurityType } from '@core/ui/mpc/keygen/create/state/vaultSecurityType'
 import { useVaultNames } from '@core/ui/storage/vaults'
-import { without } from '@lib/utils/array/without'
+import { without } from '@vultisig/lib-utils/array/without'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 

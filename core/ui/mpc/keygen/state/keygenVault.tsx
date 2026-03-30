@@ -1,8 +1,8 @@
-import { Vault } from '@core/mpc/vault/Vault'
 import { ChildrenProp } from '@lib/ui/props'
 import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
-import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
-import { pick } from '@lib/utils/record/pick'
+import { Vault } from '@vultisig/core-mpc/vault/Vault'
+import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
+import { pick } from '@vultisig/lib-utils/record/pick'
 import { useMemo } from 'react'
 
 import { useCurrentVault } from '../../../vault/state/currentVault'

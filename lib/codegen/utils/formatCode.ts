@@ -1,4 +1,4 @@
-import { match } from '@lib/utils/match'
+import { match } from '@vultisig/lib-utils/match'
 import path from 'path'
 import { format, resolveConfig } from 'prettier'
 

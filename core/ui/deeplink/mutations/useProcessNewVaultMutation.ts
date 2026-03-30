@@ -1,8 +1,8 @@
-import { fromTssType } from '@core/mpc/types/utils/tssType'
-import { LibType } from '@core/mpc/types/vultisig/keygen/v1/lib_type_message_pb'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { useMutation } from '@tanstack/react-query'
+import { fromTssType } from '@vultisig/core-mpc/types/utils/tssType'
+import { LibType } from '@vultisig/core-mpc/types/vultisig/keygen/v1/lib_type_message_pb'
 
 import { NewVaultData } from '../core'
 

@@ -1,4 +1,3 @@
-import { getVaultId } from '@core/mpc/vault/Vault'
 import {
   SerializedTransactionRecord,
   TransactionRecord,
@@ -6,9 +5,10 @@ import {
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { attempt } from '@lib/utils/attempt'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { attempt } from '@vultisig/lib-utils/attempt'
 
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'

@@ -1,4 +1,3 @@
-import { RiskLevel } from '@core/chain/security/blockaid/core/riskLevel'
 import { Button } from '@lib/ui/buttons/Button'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
@@ -7,6 +6,7 @@ import { Modal } from '@lib/ui/modal'
 import { TitleProp } from '@lib/ui/props'
 import { Text, text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { RiskLevel } from '@vultisig/core-chain/security/blockaid/core/riskLevel'
 import { Trans, useTranslation } from 'react-i18next'
 import styled, { useTheme } from 'styled-components'
 

@@ -1,7 +1,7 @@
-import { productName } from '@core/config'
-import { MpcDevice } from '@core/mpc/devices/MpcDevice'
-import { capitalizeFirstLetter } from '@lib/utils/capitalizeFirstLetter'
-import { randomIntegerInRange } from '@lib/utils/randomInRange'
+import { productName } from '@vultisig/core-config'
+import { MpcDevice } from '@vultisig/core-mpc/devices/MpcDevice'
+import { capitalizeFirstLetter } from '@vultisig/lib-utils/capitalizeFirstLetter'
+import { randomIntegerInRange } from '@vultisig/lib-utils/randomInRange'
 
 export const generateMpcServiceName = (device: MpcDevice) =>
   [

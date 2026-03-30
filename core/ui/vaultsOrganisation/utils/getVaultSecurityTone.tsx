@@ -1,7 +1,7 @@
-import { hasServer, isServer } from '@core/mpc/devices/localPartyId'
-import { Vault } from '@core/mpc/vault/Vault'
 import { ShieldIcon } from '@lib/ui/icons/ShieldIcon'
 import { ZapIcon } from '@lib/ui/icons/ZapIcon'
+import { hasServer, isServer } from '@vultisig/core-mpc/devices/localPartyId'
+import { Vault } from '@vultisig/core-mpc/vault/Vault'
 import { ReactNode } from 'react'
 
 type VaultSecurityTone = {

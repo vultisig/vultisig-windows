@@ -1,10 +1,10 @@
-import { migrateWithServer } from '@core/mpc/fast/api/migrateWithServer'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useEmail } from '@core/ui/state/email'
 import { usePassword } from '@core/ui/state/password'
 import { ChildrenProp } from '@lib/ui/props'
-import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
+import { migrateWithServer } from '@vultisig/core-mpc/fast/api/migrateWithServer'
+import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
 import { useCallback } from 'react'
 
 import { FastKeygenServerActionProvider } from '../../fast/state/fastKeygenServerAction'

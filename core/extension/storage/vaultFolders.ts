@@ -1,4 +1,3 @@
-import { getVaultId } from '@core/mpc/vault/Vault'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import {
   GetVaultFoldersFunction,
@@ -8,8 +7,9 @@ import {
 import { VaultFolder } from '@core/ui/vault/VaultFolder'
 import { getStorageValue } from '@lib/extension/storage/get'
 import { setStorageValue } from '@lib/extension/storage/set'
-import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
+import { updateAtIndex } from '@vultisig/lib-utils/array/updateAtIndex'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 
 import { updateVaults, vaultsStorage } from './vaults'
 

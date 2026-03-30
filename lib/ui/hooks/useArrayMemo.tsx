@@ -1,4 +1,4 @@
-import { haveSameContent } from '@lib/utils/array/haveSameContent'
+import { haveSameContent } from '@vultisig/lib-utils/array/haveSameContent'
 import { useMemo, useRef } from 'react'
 
 export const useArrayMemo = (array: any[]) => {

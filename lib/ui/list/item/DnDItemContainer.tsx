@@ -3,7 +3,7 @@ import { borderRadius } from '@lib/ui/css/borderRadius'
 import { DnDItemStatus } from '@lib/ui/dnd/DnDItemStatus'
 import { StatusProp } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
-import { match } from '@lib/utils/match'
+import { match } from '@vultisig/lib-utils/match'
 import styled, { css } from 'styled-components'
 
 export const DnDItemHighlight = styled.div`

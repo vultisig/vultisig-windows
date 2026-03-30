@@ -1,6 +1,3 @@
-import { Chain } from '@core/chain/Chain'
-import { sunToTrx } from '@core/chain/chains/tron/resources'
-import { coinKeyToString } from '@core/chain/coin/Coin'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
@@ -9,6 +6,9 @@ import { useTronAccountResourcesQuery } from '@core/ui/vault/chain/tron/useTronA
 import { SafeImage } from '@lib/ui/images/SafeImage'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { sunToTrx } from '@vultisig/core-chain/chains/tron/resources'
+import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
 import styled from 'styled-components'
 
 import { tronDefiCoins } from '../queries/tokens'

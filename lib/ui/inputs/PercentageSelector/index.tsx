@@ -4,7 +4,7 @@ import { HStack } from '@lib/ui/layout/Stack'
 import { InputProps } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { multiplyBigInt } from '@lib/utils/bigint/bigIntMultiplyByNumber'
+import { multiplyBigInt } from '@vultisig/lib-utils/bigint/bigIntMultiplyByNumber'
 import styled from 'styled-components'
 
 type PercentageSelectorProps = InputProps<bigint | null> & {

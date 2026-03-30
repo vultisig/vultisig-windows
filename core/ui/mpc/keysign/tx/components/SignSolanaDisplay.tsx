@@ -1,4 +1,3 @@
-import { SignSolana } from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
@@ -15,6 +14,7 @@ import {
   Transaction,
   VersionedTransaction,
 } from '@solana/web3.js'
+import { SignSolana } from '@vultisig/core-mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { CSSProperties } from 'styled-components'

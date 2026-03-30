@@ -8,7 +8,7 @@ import {
 } from '@core/inpage-provider/popup/interface'
 import { PopupMessage } from '@core/inpage-provider/popup/resolver'
 import { sendToBackground } from '@lib/extension/bridge/inpage'
-import { Result } from '@lib/utils/types/Result'
+import { Result } from '@vultisig/lib-utils/types/Result'
 
 import { BackgroundMessage } from '../background/resolver'
 import { InpageProviderBridgeMessage } from './message'

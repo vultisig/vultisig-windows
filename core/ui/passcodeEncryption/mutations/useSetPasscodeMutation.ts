@@ -1,8 +1,8 @@
-import { getVaultId } from '@core/mpc/vault/Vault'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
-import { recordFromItems } from '@lib/utils/record/recordFromItems'
-import { recordMap } from '@lib/utils/record/recordMap'
 import { useMutation } from '@tanstack/react-query'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
+import { recordFromItems } from '@vultisig/lib-utils/record/recordFromItems'
+import { recordMap } from '@vultisig/lib-utils/record/recordMap'
 import { v4 as uuidv4 } from 'uuid'
 
 import { useCore } from '../../state/core'

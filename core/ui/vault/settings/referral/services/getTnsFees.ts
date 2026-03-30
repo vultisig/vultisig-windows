@@ -1,5 +1,5 @@
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { queryUrl } from '@lib/utils/query/queryUrl'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 import { blocksPerYear, thorchainNodeBaseUrl } from '../config'
 

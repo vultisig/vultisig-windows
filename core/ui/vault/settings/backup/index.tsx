@@ -1,7 +1,7 @@
-import { hasServer } from '@core/mpc/devices/localPartyId'
 import { Opener } from '@lib/ui/base/Opener'
 import { FolderUploadIcon } from '@lib/ui/icons/FolderUploadIcon'
 import { ListItem } from '@lib/ui/list/item'
+import { hasServer } from '@vultisig/core-mpc/devices/localPartyId'
 import { useTranslation } from 'react-i18next'
 
 import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'

@@ -1,6 +1,6 @@
-import { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
+import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
 
 import { SwapForm } from '../form/SwapForm'
 import { FromAmountProvider } from '../state/fromAmount'

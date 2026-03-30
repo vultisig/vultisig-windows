@@ -1,5 +1,5 @@
-import { EvmChain } from '@core/chain/Chain'
-import { attempt, withFallback } from '@lib/utils/attempt'
+import { EvmChain } from '@vultisig/core-chain/Chain'
+import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 import { z } from 'zod'
 
 import type { AgentBackendClient } from './AgentBackendClient'

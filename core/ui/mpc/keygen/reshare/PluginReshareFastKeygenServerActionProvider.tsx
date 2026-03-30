@@ -1,11 +1,15 @@
-import { generateLocalPartyId, hasServer } from '@core/mpc/devices/localPartyId'
-import { reshareWithServer } from '@core/mpc/fast/api/reshareWithServer'
-import { toLibType } from '@core/mpc/types/utils/libType'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { usePassword } from '@core/ui/state/password'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ChildrenProp } from '@lib/ui/props'
+import {
+  generateLocalPartyId,
+  hasServer,
+} from '@vultisig/core-mpc/devices/localPartyId'
+import { reshareWithServer } from '@vultisig/core-mpc/fast/api/reshareWithServer'
+import { toLibType } from '@vultisig/core-mpc/types/utils/libType'
+import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
 import { useCallback } from 'react'
 
 import { FastKeygenServerActionProvider } from '../fast/state/fastKeygenServerAction'
@@ -33,19 +37,23 @@ export const PluginReshareFastKeygenServerActionProvider = ({
       hex_chain_code: hexChainCode,
       local_party_id: generateLocalPartyId('server'),
       old_reshare_prefix: resharePrefix ?? '',
-      lib_type: toLibType(libType),
+      lib_type: toLibType({
+        libType,
+        isKeyImport: isKeyImportVault(vault),
+      }),
       reshare_type: 1,
     })
   }, [
     hexChainCode,
     hexEncryptionKey,
+    libType,
     name,
     password,
     publicKeys.ecdsa,
     resharePrefix,
     sessionId,
     signers,
-    libType,
+    vault,
   ])
 
   return (

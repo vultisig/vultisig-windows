@@ -1,10 +1,10 @@
-import { isServer } from '@core/mpc/devices/localPartyId'
-import { getVaultId } from '@core/mpc/vault/Vault'
 import { SaveBackupToCloudScreen } from '@core/ui/vault/backup/fast/SaveBackupToCloudScreen'
 import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultMutation'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
+import { isServer } from '@vultisig/core-mpc/devices/localPartyId'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { useTranslation } from 'react-i18next'
 
 type InitiateSecureVaultBackupProps = OnFinishProp & Partial<OnBackProp>

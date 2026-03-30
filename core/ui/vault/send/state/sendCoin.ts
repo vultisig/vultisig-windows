@@ -1,6 +1,6 @@
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { areEqualCoins } from '@core/chain/coin/Coin'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { useMemo } from 'react'
 
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'

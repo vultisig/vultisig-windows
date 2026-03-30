@@ -1,9 +1,9 @@
-import { Chain } from '@core/chain/Chain'
-import { Coin, CoinKey } from '@core/chain/coin/Coin'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { NATIVE_MINT } from '@solana/spl-token'
 import { PublicKey } from '@solana/web3.js'
 import { TW } from '@trustwallet/wallet-core'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { Coin, CoinKey } from '@vultisig/core-chain/coin/Coin'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 
 import { SolanaTxData } from '../../types/types'
 import { readU64LE } from '../../utils'

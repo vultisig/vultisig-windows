@@ -1,9 +1,9 @@
-import { desktopDownloadUrl, extensionDownloadUrl } from '@core/config'
 import { FacebookIcon } from '@lib/ui/icons/FacebookIcon'
 import { LinkedinIcon } from '@lib/ui/icons/LinkedinIcon'
 import { RedditIcon } from '@lib/ui/icons/RedditIcon'
 import { TwitterIcon } from '@lib/ui/icons/TwitterIcon'
 import { WhatsAppIcon } from '@lib/ui/icons/WhatsAppIcon'
+import { desktopDownloadUrl, extensionDownloadUrl } from '@vultisig/core-config'
 
 import { useCore } from '../../../state/core'
 

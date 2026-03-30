@@ -26,7 +26,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { MiddleTruncate } from '@lib/ui/truncate'
-import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
+import { formatWalletAddress } from '@vultisig/lib-utils/formatWalletAddress'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 

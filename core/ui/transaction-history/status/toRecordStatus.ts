@@ -1,4 +1,4 @@
-import { TxStatusResult } from '@core/chain/tx/status/resolver'
+import { TxStatusResult } from '@vultisig/core-chain/tx/status/resolver'
 
 import { TransactionRecordStatus } from '../core'
 

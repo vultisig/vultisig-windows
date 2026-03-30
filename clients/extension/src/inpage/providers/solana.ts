@@ -1,15 +1,7 @@
-import { Chain } from '@core/chain/Chain'
-import {
-  deserializeSigningOutput,
-  SerializedSigningOutput,
-} from '@core/chain/tw/signingOutput'
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
 import { getTransactionAuthority } from '@core/inpage-provider/popup/view/resolvers/sendTx/core/solana/utils'
 import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { attempt } from '@lib/utils/attempt'
-import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
 import {
   SolanaSignAndSendTransaction,
   type SolanaSignAndSendTransactionFeature,
@@ -36,6 +28,14 @@ import {
   TransactionSignature,
   VersionedTransaction,
 } from '@solana/web3.js'
+import { Chain } from '@vultisig/core-chain/Chain'
+import {
+  deserializeSigningOutput,
+  SerializedSigningOutput,
+} from '@vultisig/core-chain/tw/signingOutput'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { attempt } from '@vultisig/lib-utils/attempt'
+import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedError'
 import type { Wallet } from '@wallet-standard/base'
 import {
   StandardConnect,

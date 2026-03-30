@@ -1,10 +1,10 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { toChainAmount } from '@core/chain/amount/toChainAmount'
 import {
   AmountTextInput,
   AmountTextInputProps,
 } from '@lib/ui/inputs/AmountTextInput'
 import { InputProps } from '@lib/ui/props'
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
 import { useMemo, useState } from 'react'
 
 type FiatSendAmountInputProps = Omit<

@@ -1,17 +1,17 @@
-import {
-  AccountCoin,
-  extractAccountCoinKey,
-} from '@core/chain/coin/AccountCoin'
-import { accountCoinKeyToString } from '@core/chain/coin/AccountCoin'
-import { getCoinBalance } from '@core/chain/coin/balance'
-import { areEqualCoins, coinKeyToString } from '@core/chain/coin/Coin'
-import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
-import { getVaultId } from '@core/mpc/vault/Vault'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { useVaults } from '@core/ui/storage/vaults'
 import { persistQueryOptions } from '@lib/ui/query/utils/options'
-import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { useQueries } from '@tanstack/react-query'
+import {
+  AccountCoin,
+  extractAccountCoinKey,
+} from '@vultisig/core-chain/coin/AccountCoin'
+import { accountCoinKeyToString } from '@vultisig/core-chain/coin/AccountCoin'
+import { getCoinBalance } from '@vultisig/core-chain/coin/balance'
+import { areEqualCoins, coinKeyToString } from '@vultisig/core-chain/coin/Coin'
+import { getCoinValue } from '@vultisig/core-chain/coin/utils/getCoinValue'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
+import { withoutDuplicates } from '@vultisig/lib-utils/array/withoutDuplicates'
 import { useMemo } from 'react'
 
 type CoinEntry = {

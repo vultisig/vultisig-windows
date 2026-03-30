@@ -13,7 +13,7 @@ import { THORChain } from '@clients/extension/src/inpage/providers/thorchain'
 import { TonConnectBridge } from '@clients/extension/src/inpage/providers/tonConnect'
 import { UTXO } from '@clients/extension/src/inpage/providers/utxo'
 import { XDEFIKeplrProvider } from '@clients/extension/src/inpage/providers/xdefiKeplr'
-import { UtxoChain } from '@core/chain/Chain'
+import { UtxoChain } from '@vultisig/core-chain/Chain'
 
 import { TronLink } from './tronLink'
 

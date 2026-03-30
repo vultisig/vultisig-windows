@@ -1,6 +1,6 @@
-import { Chain } from '@core/chain/Chain'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
+import { Chain } from '@vultisig/core-chain/Chain'
 
 type MemoSectionProps = {
   memo: string | undefined

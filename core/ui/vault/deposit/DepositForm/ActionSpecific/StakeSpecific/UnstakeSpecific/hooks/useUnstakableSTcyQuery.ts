@@ -1,9 +1,9 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { cosmosRpcUrl } from '@core/chain/chains/cosmos/cosmosRpcUrl'
-import { tcyAutoCompounderConfig } from '@core/chain/chains/cosmos/thor/tcy-autocompound/config'
-import { knownCosmosTokens } from '@core/chain/coin/knownTokens/cosmos'
-import { queryUrl } from '@lib/utils/query/queryUrl'
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { cosmosRpcUrl } from '@vultisig/core-chain/chains/cosmos/cosmosRpcUrl'
+import { tcyAutoCompounderConfig } from '@vultisig/core-chain/chains/cosmos/thor/tcy-autocompound/config'
+import { knownCosmosTokens } from '@vultisig/core-chain/coin/knownTokens/cosmos'
+import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 const bankApiBase = `${cosmosRpcUrl.THORChain}/cosmos/bank/v1beta1`
 

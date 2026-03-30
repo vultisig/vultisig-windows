@@ -1,5 +1,5 @@
-import { Chain } from '@core/chain/Chain'
-import { sum } from '@lib/utils/array/sum'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { sum } from '@vultisig/lib-utils/array/sum'
 
 import { DefiChainPositions } from '../queries/types'
 

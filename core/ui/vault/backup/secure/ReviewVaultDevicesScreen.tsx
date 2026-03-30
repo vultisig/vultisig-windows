@@ -1,9 +1,3 @@
-import { isServer, parseLocalPartyId } from '@core/mpc/devices/localPartyId'
-import {
-  DeviceType,
-  formatMpcDeviceName,
-  getMpcDeviceType,
-} from '@core/mpc/devices/MpcDevice'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
 import { BrowserExtensionIcon } from '@lib/ui/icons/BrowserExtensionIcon'
@@ -16,6 +10,15 @@ import { OnBackProp, OnFinishProp, SvgProps } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { Fit, Layout, useRive } from '@rive-app/react-webgl2'
+import {
+  isServer,
+  parseLocalPartyId,
+} from '@vultisig/core-mpc/devices/localPartyId'
+import {
+  DeviceType,
+  formatMpcDeviceName,
+  getMpcDeviceType,
+} from '@vultisig/core-mpc/devices/MpcDevice'
 import { FC, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'

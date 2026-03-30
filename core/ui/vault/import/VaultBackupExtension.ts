@@ -1,5 +1,5 @@
-import { getLastItem } from '@lib/utils/array/getLastItem'
-import { isOneOf } from '@lib/utils/array/isOneOf'
+import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 
 export const vaultBackupExtensions = ['bak', 'vult', 'dat'] as const
 

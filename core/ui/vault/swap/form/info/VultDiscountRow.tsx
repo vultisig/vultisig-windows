@@ -1,10 +1,10 @@
-import { vult } from '@core/chain/coin/knownTokens'
+import { discountTierIcons } from '@core/ui/vult/discount/tier/icons'
+import { ValueProp } from '@lib/ui/props'
+import { vult } from '@vultisig/core-chain/coin/knownTokens'
 import {
   VultDiscountTier,
   vultDiscountTierBps,
-} from '@core/chain/swap/affiliate/config'
-import { discountTierIcons } from '@core/ui/vult/discount/tier/icons'
-import { ValueProp } from '@lib/ui/props'
+} from '@vultisig/core-chain/swap/affiliate/config'
 import { useTranslation } from 'react-i18next'
 
 import { formatDiscountPercentOfBaseFee } from './discountPercent'

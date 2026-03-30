@@ -1,5 +1,5 @@
-import { addQueryParams } from '@lib/utils/query/addQueryParams'
-import { queryUrl } from '@lib/utils/query/queryUrl'
+import { addQueryParams } from '@vultisig/lib-utils/query/addQueryParams'
+import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 import { circleApiUrl } from './config'
 

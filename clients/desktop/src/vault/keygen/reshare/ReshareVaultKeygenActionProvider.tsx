@@ -16,6 +16,7 @@ export const ReshareVaultKeygenActionProvider = ({
       DKLS={() => (
         <DKLSKeygenActionProvider>{children}</DKLSKeygenActionProvider>
       )}
+      // @ts-expect-error — SDK gap: MpcLib missing KeyImport variant
       KeyImport={() => (
         <DKLSKeygenActionProvider>{children}</DKLSKeygenActionProvider>
       )}

@@ -1,6 +1,6 @@
-import { Chain } from '@core/chain/Chain'
 import { isEvmChain } from '@core/ui/address-book/AddressBookChainType'
 import { useVaults } from '@core/ui/storage/vaults'
+import { Chain } from '@vultisig/core-chain/Chain'
 
 type UseVaultNameForAddressInput = {
   address: string

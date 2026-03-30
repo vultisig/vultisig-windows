@@ -1,13 +1,13 @@
-import {
-  formatTronResourceValue,
-  TronAccountResources,
-} from '@core/chain/chains/tron/resources'
 import { InfoCircleIcon } from '@lib/ui/icons/InfoCircleIcon'
 import { TronBandwidthIcon } from '@lib/ui/icons/TronBandwidthIcon'
 import { TronEnergyIcon } from '@lib/ui/icons/TronEnergyIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import {
+  formatTronResourceValue,
+  TronAccountResources,
+} from '@vultisig/core-chain/chains/tron/resources'
 import { FC, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'

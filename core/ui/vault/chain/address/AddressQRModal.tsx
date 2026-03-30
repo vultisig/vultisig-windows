@@ -1,8 +1,8 @@
-import { Chain } from '@core/chain/Chain'
-import { CoinKey } from '@core/chain/coin/Coin'
 import { ResponsiveModal } from '@lib/ui/modal/ResponsiveModal'
 import { OnCloseProp } from '@lib/ui/props'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { CoinKey } from '@vultisig/core-chain/coin/Coin'
 import styled from 'styled-components'
 
 import { AddressQRCard } from './AddressQRCard'

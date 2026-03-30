@@ -1,16 +1,16 @@
 import { create, toBinary } from '@bufbuild/protobuf'
-import { productName } from '@core/config'
-import { getSevenZip } from '@core/mpc/compression/getSevenZip'
-import { toCommVault } from '@core/mpc/types/utils/commVault'
-import { VaultContainerSchema } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
-import { VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
-import { getVaultId, Vault } from '@core/mpc/vault/Vault'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { attempt } from '@lib/utils/attempt'
-import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGcm'
-import { match } from '@lib/utils/match'
 import { useMutation } from '@tanstack/react-query'
+import { productName } from '@vultisig/core-config'
+import { getSevenZip } from '@vultisig/core-mpc/compression/getSevenZip'
+import { toCommVault } from '@vultisig/core-mpc/types/utils/commVault'
+import { VaultContainerSchema } from '@vultisig/core-mpc/types/vultisig/vault/v1/vault_container_pb'
+import { VaultSchema } from '@vultisig/core-mpc/types/vultisig/vault/v1/vault_pb'
+import { getVaultId, Vault } from '@vultisig/core-mpc/vault/Vault'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { attempt } from '@vultisig/lib-utils/attempt'
+import { encryptWithAesGcm } from '@vultisig/lib-utils/encryption/aesGcm/encryptWithAesGcm'
+import { match } from '@vultisig/lib-utils/match'
 
 import { decryptVaultAllKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
 import { usePasscode } from '../../passcodeEncryption/state/passcode'
@@ -27,6 +27,7 @@ const getExportName = (vault: Vault) => {
     DKLS: () => {
       return `${vault.name}-${vault.localPartyId}-share${localPartyIndex}of${totalSigners}.vult`
     },
+    // @ts-expect-error — SDK gap: MpcLib missing KeyImport variant
     KeyImport: () => {
       return `${vault.name}-${vault.localPartyId}-share${localPartyIndex}of${totalSigners}.vult`
     },

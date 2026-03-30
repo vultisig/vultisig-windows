@@ -1,4 +1,3 @@
-import { Chain } from '@core/chain/Chain'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { shouldDisplayChainLogo } from '@core/ui/chain/coin/icon/utils/shouldDisplayChainLogo'
 import { WithChainIcon } from '@core/ui/chain/coin/icon/WithChainIcon'
@@ -21,6 +20,7 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { Chain } from '@vultisig/core-chain/Chain'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 

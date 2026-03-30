@@ -1,9 +1,9 @@
-import { MpcDevice } from '@core/mpc/devices/MpcDevice'
-import { MpcLib } from '@core/mpc/mpcLib'
-import { MpcServerType } from '@core/mpc/MpcServerType'
 import { ErrorBoundaryProcessError } from '@lib/ui/errors/ErrorBoundary'
 import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
-import { NameProp } from '@lib/utils/entities/props'
+import { MpcDevice } from '@vultisig/core-mpc/devices/MpcDevice'
+import { MpcLib } from '@vultisig/core-mpc/mpcLib'
+import { MpcServerType } from '@vultisig/core-mpc/MpcServerType'
+import { NameProp } from '@vultisig/lib-utils/entities/props'
 
 import { CoreStorage } from '../storage/CoreStorage'
 

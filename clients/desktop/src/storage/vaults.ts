@@ -1,8 +1,8 @@
-import { getVaultId } from '@core/mpc/vault/Vault'
 import { vaultsInitialValue, VaultsStorage } from '@core/ui/storage/vaults'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { recordMap } from '@lib/utils/record/recordMap'
-import { toEntries } from '@lib/utils/record/toEntries'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { recordMap } from '@vultisig/lib-utils/record/recordMap'
+import { toEntries } from '@vultisig/lib-utils/record/toEntries'
 
 import {
   DeleteVault,

@@ -1,4 +1,3 @@
-import { Coin } from '@core/chain/coin/Coin'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -6,6 +5,7 @@ import { panel } from '@lib/ui/panel/Panel'
 import { IsActiveProp, OnClickProp, ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { Coin } from '@vultisig/core-chain/coin/Coin'
 import styled from 'styled-components'
 
 type Props = {

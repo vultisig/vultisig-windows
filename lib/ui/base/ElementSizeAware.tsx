@@ -1,4 +1,4 @@
-import { Dimensions } from '@lib/utils/entities/Dimensions'
+import { Dimensions } from '@vultisig/lib-utils/entities/Dimensions'
 import { ReactNode, useState } from 'react'
 import { useIsomorphicLayoutEffect } from 'react-use'
 

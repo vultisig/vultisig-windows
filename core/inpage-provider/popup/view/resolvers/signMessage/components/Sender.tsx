@@ -7,7 +7,7 @@ import { BadgeCheckIcon } from '@lib/ui/icons/BadgeCheckIcon'
 import { SafeImage } from '@lib/ui/images/SafeImage'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
-import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
+import { getUrlBaseDomain } from '@vultisig/lib-utils/url/baseDomain'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 

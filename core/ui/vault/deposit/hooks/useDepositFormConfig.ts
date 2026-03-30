@@ -1,4 +1,4 @@
-import { TronResourceType } from '@core/chain/chains/tron/resources'
+import { TronResourceType } from '@vultisig/core-chain/chains/tron/resources'
 import { useTranslation } from 'react-i18next'
 
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'

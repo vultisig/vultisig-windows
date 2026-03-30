@@ -1,6 +1,3 @@
-import { keygenSteps } from '@core/mpc/keygen/KeygenStep'
-import { MpcLib } from '@core/mpc/mpcLib'
-import { Vault } from '@core/mpc/vault/Vault'
 import {
   KeygenAction,
   KeygenActionProvider,
@@ -15,9 +12,12 @@ import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useVaultOrders } from '@core/ui/storage/vaults'
+import { getLastItemOrder } from '@core/ui/utils/order/getLastItemOrder'
 import { ChildrenProp } from '@lib/ui/props'
-import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
-import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
+import { keygenSteps } from '@vultisig/core-mpc/keygen/KeygenStep'
+import { MpcLib } from '@vultisig/core-mpc/mpcLib'
+import { Vault } from '@vultisig/core-mpc/vault/Vault'
+import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { EventsOff, EventsOn } from '@wailsapp/runtime'
 import { useCallback } from 'react'
 

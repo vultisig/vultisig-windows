@@ -1,7 +1,7 @@
-import { TronResourceType } from '@core/chain/chains/tron/resources'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { TronResourceType } from '@vultisig/core-chain/chains/tron/resources'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 

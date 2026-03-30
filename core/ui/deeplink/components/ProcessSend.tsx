@@ -1,6 +1,3 @@
-import { toChainAmount } from '@core/chain/amount/toChainAmount'
-import { extractCoinKey } from '@core/chain/coin/Coin'
-import { getVaultId } from '@core/mpc/vault/Vault'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
@@ -10,7 +7,10 @@ import { VaultListItem } from '@core/ui/vaultsOrganisation/components/VaultListI
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { ValueProp } from '@lib/ui/props'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
+import { extractCoinKey } from '@vultisig/core-chain/coin/Coin'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 

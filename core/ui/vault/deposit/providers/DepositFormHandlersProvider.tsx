@@ -1,6 +1,6 @@
-import { Chain } from '@core/chain/Chain'
-import { TronResourceType } from '@core/chain/chains/tron/resources'
 import { setupStateProvider } from '@lib/ui/state/setupStateProvider'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { TronResourceType } from '@vultisig/core-chain/chains/tron/resources'
 import {
   Control,
   UseFormGetValues,

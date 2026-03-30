@@ -1,5 +1,3 @@
-import { KeygenOperation } from '@core/mpc/keygen/KeygenOperation'
-import { fromLibType } from '@core/mpc/types/utils/libType'
 import { CreateVaultKeygenActionProvider as DKLSCreateKeygenActionProvider } from '@core/ui/mpc/keygen/create/CreateVaultKeygenActionProvider'
 import { JoinKeyImportKeygenActionProvider } from '@core/ui/mpc/keygen/keyimport/JoinKeyImportKeygenActionProvider'
 import { ReshareVaultKeygenActionProvider as DKLSReshareKeygenActionProvider } from '@core/ui/mpc/keygen/reshare/ReshareVaultKeygenActionProvider'
@@ -7,7 +5,9 @@ import { SingleKeygenActionProvider } from '@core/ui/mpc/keygen/singleKeygen/Sin
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { Match } from '@lib/ui/base/Match'
 import { ChildrenProp } from '@lib/ui/props'
-import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
+import { KeygenOperation } from '@vultisig/core-mpc/keygen/KeygenOperation'
+import { fromLibType } from '@vultisig/core-mpc/types/utils/libType'
+import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { JSX } from 'react'
 
 import { MigrateVaultKeygenActionProvider } from '../../migrate/MigrateVaultKeygenActionProvider'
@@ -28,6 +28,7 @@ export const JoinKeygenActionProvider = ({ children }: ChildrenProp) => {
             {children}
           </DKLSCreateKeygenActionProvider>
         )}
+        // @ts-expect-error — SDK gap: MpcLib missing KeyImport variant
         KeyImport={() => (
           <DKLSCreateKeygenActionProvider>
             {children}
@@ -61,6 +62,7 @@ export const JoinKeygenActionProvider = ({ children }: ChildrenProp) => {
                 {children}
               </DKLSReshareKeygenActionProvider>
             )}
+            // @ts-expect-error — SDK gap: MpcLib missing KeyImport variant
             KeyImport={() => (
               <DKLSReshareKeygenActionProvider>
                 {children}

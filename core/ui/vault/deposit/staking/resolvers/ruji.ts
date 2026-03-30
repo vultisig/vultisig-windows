@@ -1,9 +1,9 @@
-import { toChainAmount } from '@core/chain/amount/toChainAmount'
-import { CosmosChain } from '@core/chain/Chain'
-import { rujiraStakingConfig } from '@core/chain/chains/cosmos/thor/rujira/config'
-import { CoinKey } from '@core/chain/coin/Coin'
-import { getDenom } from '@core/chain/coin/utils/getDenom'
-import { match } from '@lib/utils/match'
+import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
+import { CosmosChain } from '@vultisig/core-chain/Chain'
+import { rujiraStakingConfig } from '@vultisig/core-chain/chains/cosmos/thor/rujira/config'
+import { CoinKey } from '@vultisig/core-chain/coin/Coin'
+import { getDenom } from '@vultisig/core-chain/coin/utils/getDenom'
+import { match } from '@vultisig/lib-utils/match'
 
 import { RujiPayload, StakeSpecific } from '../types'
 

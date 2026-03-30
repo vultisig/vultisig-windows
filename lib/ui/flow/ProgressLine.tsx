@@ -1,7 +1,7 @@
 import { vStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
-import { toPercents } from '@lib/utils/toPercents'
+import { toPercents } from '@vultisig/lib-utils/toPercents'
 import { FC } from 'react'
 import styled from 'styled-components'
 

@@ -1,4 +1,3 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import {
   ActionFormCheckBadge,
   ActionFormIconsWrapper,
@@ -13,6 +12,7 @@ import { PencilIcon } from '@lib/ui/icons/PenciIcon'
 import { HStack, hStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
