@@ -1,11 +1,14 @@
-import { VaultAllKeyShares, VaultKeyShares } from '@core/mpc/vault/Vault'
-import { decryptWithAesGcm } from '@lib/utils/encryption/aesGcm/decryptWithAesGcm'
-import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGcm'
+import {
+  VaultAllKeyShares,
+  VaultKeyShares,
+} from '@vultisig/core-mpc/vault/Vault'
+import { decryptWithAesGcm } from '@vultisig/lib-utils/encryption/aesGcm/decryptWithAesGcm'
+import { encryptWithAesGcm } from '@vultisig/lib-utils/encryption/aesGcm/encryptWithAesGcm'
 import {
   encryptedEncoding,
   plainTextEncoding,
-} from '@lib/utils/encryption/config'
-import { recordMap } from '@lib/utils/record/recordMap'
+} from '@vultisig/lib-utils/encryption/config'
+import { recordMap } from '@vultisig/lib-utils/record/recordMap'
 
 type Input = {
   keyShares: VaultKeyShares

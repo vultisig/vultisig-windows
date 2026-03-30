@@ -1,13 +1,13 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import {
-  accountCoinKeyToString,
-  extractAccountCoinKey,
-} from '@core/chain/coin/AccountCoin'
-import { Coin, coinKeyToString } from '@core/chain/coin/Coin'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
 import { Query } from '@lib/ui/query/Query'
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import {
+  accountCoinKeyToString,
+  extractAccountCoinKey,
+} from '@vultisig/core-chain/coin/AccountCoin'
+import { Coin, coinKeyToString } from '@vultisig/core-chain/coin/Coin'
+import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { useMemo } from 'react'
 
 import { useBalancesQuery } from '../../../../chain/coin/queries/useBalancesQuery'

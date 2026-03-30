@@ -1,5 +1,5 @@
 import { VStack } from '@lib/ui/layout/Stack'
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { useTranslation } from 'react-i18next'
 
 import { useDisablePasscodeMutation } from '../mutations/useDisablePasscodeMutation'

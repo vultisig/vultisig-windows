@@ -1,14 +1,17 @@
-import { AccountCoin, AccountCoinKey } from '@core/chain/coin/AccountCoin'
-import { Coin } from '@core/chain/coin/Coin'
-import { getChainAddress } from '@core/chain/publicKey/address/getChainAddress'
-import { isKeyImportVault } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useCore } from '@core/ui/state/core'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
-import { assertField } from '@lib/utils/record/assertField'
 import { useMutation } from '@tanstack/react-query'
+import {
+  AccountCoin,
+  AccountCoinKey,
+} from '@vultisig/core-chain/coin/AccountCoin'
+import { Coin } from '@vultisig/core-chain/coin/Coin'
+import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
+import { assertField } from '@vultisig/lib-utils/record/assertField'
 
+import { getChainAddress } from '../utils/getChainAddress'
 import { useAssertCurrentVaultId } from './currentVaultId'
 import { StorageKey } from './StorageKey'
 

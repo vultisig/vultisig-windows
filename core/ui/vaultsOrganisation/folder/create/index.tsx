@@ -1,4 +1,3 @@
-import { getVaultId } from '@core/mpc/vault/Vault'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import {
@@ -29,12 +28,13 @@ import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useCore } from '../../../state/core'
+import { getLastItemOrder } from '../../../utils/order/getLastItemOrder'
 
 export const CreateVaultFolderPage = () => {
   const { t } = useTranslation()

@@ -1,6 +1,6 @@
 import { preventDefault } from '@lib/ui/utils/preventDefault'
 import { stopPropagation } from '@lib/ui/utils/stopPropagation'
-import { withoutUndefinedFields } from '@lib/utils/record/withoutUndefinedFields'
+import { withoutUndefinedFields } from '@vultisig/lib-utils/record/withoutUndefinedFields'
 import { FormEvent, KeyboardEvent } from 'react'
 
 type GetFormPropsInput = {

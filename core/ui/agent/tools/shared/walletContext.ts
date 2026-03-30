@@ -1,7 +1,7 @@
-import type { Chain } from '@core/chain/Chain'
-import type { PublicKeys } from '@core/chain/publicKey/PublicKeys'
-import type { MpcLib } from '@core/mpc/mpcLib'
 import type { WalletCore } from '@trustwallet/wallet-core'
+import type { Chain } from '@vultisig/core-chain/Chain'
+import type { PublicKeys } from '@vultisig/core-chain/publicKey/PublicKeys'
+import type { MpcLib } from '@vultisig/core-mpc/mpcLib'
 
 type WalletContextVault = {
   hexChainCode: string

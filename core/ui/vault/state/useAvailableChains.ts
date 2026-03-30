@@ -1,8 +1,8 @@
-import { Chain } from '@core/chain/Chain'
-import { getSignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
-import { isKeyImportVault } from '@core/mpc/vault/Vault'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { getRecordKeys } from '@lib/utils/record/getRecordKeys'
+import { getSignatureAlgorithm } from '@core/ui/utils/getSignatureAlgorithm'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { getRecordKeys } from '@vultisig/lib-utils/record/getRecordKeys'
 import { useMemo } from 'react'
 
 import { useCurrentVault } from './currentVault'

@@ -1,7 +1,7 @@
-import { Chain } from '@core/chain/Chain'
 import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { ChildrenProp } from '@lib/ui/props'
 import { useToast } from '@lib/ui/toast/ToastProvider'
+import { Chain } from '@vultisig/core-chain/Chain'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 

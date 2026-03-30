@@ -1,11 +1,11 @@
-import { EvmChain } from '@core/chain/Chain'
-import { EvmFeeSettings } from '@core/mpc/keysign/chainSpecific/FeeSettings'
 import { EvmFeeSettingsForm } from '@core/ui/vault/send/fee/settings/evm/EvmFeeSettingsForm'
 import { Opener } from '@lib/ui/base/Opener'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { FuelIcon } from '@lib/ui/icons/FuelIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { InputProps } from '@lib/ui/props'
+import { EvmChain } from '@vultisig/core-chain/Chain'
+import { EvmFeeSettings } from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
 import { useState } from 'react'
 
 type ManageEvmFeeProps = InputProps<EvmFeeSettings> & {

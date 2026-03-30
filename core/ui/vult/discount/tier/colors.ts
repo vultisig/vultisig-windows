@@ -1,5 +1,5 @@
-import { VultDiscountTier } from '@core/chain/swap/affiliate/config'
 import { HSLA } from '@lib/ui/colors/HSLA'
+import { VultDiscountTier } from '@vultisig/core-chain/swap/affiliate/config'
 
 export const discountTierColors: Record<VultDiscountTier, HSLA> = {
   bronze: new HSLA(14, 100, 60, 1),

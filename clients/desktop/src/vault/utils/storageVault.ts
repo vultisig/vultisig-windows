@@ -1,10 +1,10 @@
-import { Chain } from '@core/chain/Chain'
-import { tssSigningAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
-import { MpcLib } from '@core/mpc/mpcLib'
-import { Vault } from '@core/mpc/vault/Vault'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { recordFromKeys } from '@lib/utils/record/recordFromKeys'
-import { toEntries } from '@lib/utils/record/toEntries'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { signingAlgorithms } from '@vultisig/core-chain/signing/SignatureAlgorithm'
+import { MpcLib } from '@vultisig/core-mpc/mpcLib'
+import { Vault } from '@vultisig/core-mpc/vault/Vault'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { recordFromKeys } from '@vultisig/lib-utils/record/recordFromKeys'
+import { toEntries } from '@vultisig/lib-utils/record/toEntries'
 
 import { storage } from '../../../wailsjs/go/models'
 
@@ -26,6 +26,7 @@ export const toStorageVault = ({
   chainKeyShares,
   publicKeyMldsa,
   keyShareMldsa,
+  // @ts-expect-error — SDK gap: Vault type missing saplingExtras field
   saplingExtras,
 }: Vault): storage.Vault => {
   const keyshares = toEntries(keyShares).map(({ key, value }) => ({
@@ -74,7 +75,7 @@ export const fromStorageVault = (
     eddsa: vault.public_key_eddsa,
   }
 
-  const keyShares = recordFromKeys(tssSigningAlgorithms, algorithm => {
+  const keyShares = recordFromKeys(signingAlgorithms, algorithm => {
     const publicKey = publicKeys[algorithm]
     if (!publicKey) return ''
     return shouldBePresent(
@@ -126,6 +127,7 @@ export const fromStorageVault = (
     chainKeyShares,
     publicKeyMldsa,
     keyShareMldsa,
+    // @ts-expect-error — SDK gap: Vault type missing saplingExtras field
     saplingExtras,
   }
 }

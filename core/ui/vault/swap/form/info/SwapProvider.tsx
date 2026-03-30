@@ -1,8 +1,8 @@
-import { getSwapQuoteProviderName } from '@core/chain/swap/quote/getSwapQuoteProviderName'
 import { StrictInfoRow } from '@lib/ui/layout/StrictInfoRow'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
+import { getSwapQuoteProviderName } from '@vultisig/core-chain/swap/quote/getSwapQuoteProviderName'
 import { useTranslation } from 'react-i18next'
 
 import { useSwapQuoteQuery } from '../../queries/useSwapQuoteQuery'

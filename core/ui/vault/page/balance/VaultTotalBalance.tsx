@@ -1,4 +1,3 @@
-import { fiatCurrencySymbolRecord } from '@core/config/FiatCurrency'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
@@ -7,6 +6,7 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
+import { fiatCurrencySymbolRecord } from '@vultisig/core-config/FiatCurrency'
 import { useTranslation } from 'react-i18next'
 
 import { ManageVaultBalanceVisibility } from './visibility/ManageVaultBalanceVisibility'

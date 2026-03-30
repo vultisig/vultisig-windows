@@ -1,18 +1,22 @@
-import { Chain } from '@core/chain/Chain'
-import {
-  accountCoinKeyToString,
-  extractAccountCoinKey,
-} from '@core/chain/coin/AccountCoin'
-import { CoinAmount, CoinKey, coinKeyToString } from '@core/chain/coin/Coin'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { useBalancesQuery } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import { useCurrentVaultChainCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { getResolvedQuery, pendingQuery, Query } from '@lib/ui/query/Query'
-import { without } from '@lib/utils/array/without'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { EntityWithLogo } from '@lib/utils/entities/EntityWithLogo'
-import { EntityWithPrice } from '@lib/utils/entities/EntityWithPrice'
-import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker'
+import { Chain } from '@vultisig/core-chain/Chain'
+import {
+  accountCoinKeyToString,
+  extractAccountCoinKey,
+} from '@vultisig/core-chain/coin/AccountCoin'
+import {
+  CoinAmount,
+  CoinKey,
+  coinKeyToString,
+} from '@vultisig/core-chain/coin/Coin'
+import { without } from '@vultisig/lib-utils/array/without'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { EntityWithLogo } from '@vultisig/lib-utils/entities/EntityWithLogo'
+import { EntityWithPrice } from '@vultisig/lib-utils/entities/EntityWithPrice'
+import { EntityWithTicker } from '@vultisig/lib-utils/entities/EntityWithTicker'
 import { useMemo } from 'react'
 
 export type VaultChainCoin = CoinKey &

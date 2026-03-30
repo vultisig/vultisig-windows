@@ -1,39 +1,39 @@
 import { create } from '@bufbuild/protobuf'
-import { toChainAmount } from '@core/chain/amount/toChainAmount'
-import { Chain, CosmosChain } from '@core/chain/Chain'
-import { isChainOfKind } from '@core/chain/ChainKind'
-import { getThorchainInboundAddress } from '@core/chain/chains/cosmos/thor/getThorchainInboundAddress'
+import { WalletCore } from '@trustwallet/wallet-core'
+import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
+import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
+import { Chain, CosmosChain } from '@vultisig/core-chain/Chain'
+import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
+import { getThorchainInboundAddress } from '@vultisig/core-chain/chains/cosmos/thor/getThorchainInboundAddress'
 import {
   kujiraCoinMigratedToThorChainDestinationId,
   kujiraCoinThorChainMergeContracts,
-} from '@core/chain/chains/cosmos/thor/kujira-merge'
-import { thorchainLpChainCode } from '@core/chain/chains/cosmos/thor/thorchainLp'
+} from '@vultisig/core-chain/chains/cosmos/thor/kujira-merge'
+import { thorchainLpChainCode } from '@vultisig/core-chain/chains/cosmos/thor/thorchainLp'
 import {
   yieldBearingAssetsAffiliateAddress,
   yieldBearingAssetsAffiliateContract,
   yieldBearingTokensIdToContractMap,
   yieldContractsByBaseDenom,
-} from '@core/chain/chains/cosmos/thor/yield-bearing-tokens/config'
-import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { CoinKey } from '@core/chain/coin/Coin'
-import { getDenom } from '@core/chain/coin/utils/getDenom'
-import { getChainSpecific } from '@core/mpc/keysign/chainSpecific'
-import { getKeysignUtxoInfo } from '@core/mpc/keysign/utxo/getKeysignUtxoInfo'
-import { KeysignLibType } from '@core/mpc/mpcLib'
-import { toCommCoin } from '@core/mpc/types/utils/commCoin'
-import { TransactionType } from '@core/mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
-import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+} from '@vultisig/core-chain/chains/cosmos/thor/yield-bearing-tokens/config'
+import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
+import { CoinKey } from '@vultisig/core-chain/coin/Coin'
+import { getDenom } from '@vultisig/core-chain/coin/utils/getDenom'
+import { getChainSpecific } from '@vultisig/core-mpc/keysign/chainSpecific'
+import { getKeysignUtxoInfo } from '@vultisig/core-mpc/keysign/utxo/getKeysignUtxoInfo'
+import { KeysignLibType } from '@vultisig/core-mpc/mpcLib'
+import { toCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
+import { TransactionType } from '@vultisig/core-mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+import { KeysignPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import {
   CosmosCoinSchema,
   WasmExecuteContractPayloadSchema,
-} from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
-import { isOneOf } from '@lib/utils/array/isOneOf'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { attempt, withFallback } from '@lib/utils/attempt'
-import { match } from '@lib/utils/match'
-import { mirrorRecord } from '@lib/utils/record/mirrorRecord'
-import { WalletCore } from '@trustwallet/wallet-core'
-import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
+} from '@vultisig/core-mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
+import { match } from '@vultisig/lib-utils/match'
+import { mirrorRecord } from '@vultisig/lib-utils/record/mirrorRecord'
 import { FieldValues } from 'react-hook-form'
 
 import { ChainAction } from '../ChainAction'

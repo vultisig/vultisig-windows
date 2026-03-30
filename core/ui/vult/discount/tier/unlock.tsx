@@ -1,17 +1,17 @@
-import { extractCoinKey } from '@core/chain/coin/Coin'
-import { vult } from '@core/chain/coin/knownTokens'
-import {
-  VultDiscountTier,
-  vultDiscountTierBps,
-  vultDiscountTierMinBalances,
-} from '@core/chain/swap/affiliate/config'
 import { Button } from '@lib/ui/buttons/Button'
 import { VStack } from '@lib/ui/layout/Stack'
 import { ResponsiveModal } from '@lib/ui/modal/ResponsiveModal'
 import { ValueProp } from '@lib/ui/props'
 import { text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { formatAmount } from '@lib/utils/formatAmount'
+import { extractCoinKey } from '@vultisig/core-chain/coin/Coin'
+import { vult } from '@vultisig/core-chain/coin/knownTokens'
+import {
+  VultDiscountTier,
+  vultDiscountTierBps,
+  vultDiscountTierMinBalances,
+} from '@vultisig/core-chain/swap/affiliate/config'
+import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import styled from 'styled-components'

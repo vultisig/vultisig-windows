@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
 import { Plugin } from '@clients/extension/src/inpage/providers/plugin'
-import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
+import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedError'
 
 import {
   mockPopupResponse,

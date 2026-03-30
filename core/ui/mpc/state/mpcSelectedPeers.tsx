@@ -1,7 +1,7 @@
 import { MpcPeersProvider } from '@core/ui/mpc/state/mpcPeers'
 import { ChildrenProp } from '@lib/ui/props'
 import { setupStateProvider } from '@lib/ui/state/setupStateProvider'
-import { toEntries } from '@lib/utils/record/toEntries'
+import { toEntries } from '@vultisig/lib-utils/record/toEntries'
 import { useMemo } from 'react'
 
 const [MpcPeersSelectionRecordProvider, useMpcPeersSelectionRecord] =

@@ -1,6 +1,6 @@
-import { RecipeSchema } from '@core/mpc/types/plugin/recipe_specification_pb'
-import { queryUrl } from '@lib/utils/query/queryUrl'
-import { toCamelCase } from '@lib/utils/toCamelCase'
+import { RecipeSchema } from '@vultisig/core-mpc/types/plugin/recipe_specification_pb'
+import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
+import { toCamelCase } from '@vultisig/lib-utils/toCamelCase'
 
 type AppPricing = {
   amount: number

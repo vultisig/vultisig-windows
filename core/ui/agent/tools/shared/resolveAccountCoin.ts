@@ -1,6 +1,6 @@
-import type { Chain } from '@core/chain/Chain'
-import type { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import type { Chain } from '@vultisig/core-chain/Chain'
+import type { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 
 import { getChainFromString } from '../../utils/getChainFromString'
 import type { CoinInfo } from '../types'

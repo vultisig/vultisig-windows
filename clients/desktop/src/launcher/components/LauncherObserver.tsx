@@ -1,5 +1,5 @@
-import { deepLinkBaseUrl, deepLinkBaseUrlAt } from '@core/config'
 import { useMutation } from '@tanstack/react-query'
+import { deepLinkBaseUrl, deepLinkBaseUrlAt } from '@vultisig/core-config'
 import { useEffect } from 'react'
 
 import { GetOSArgs } from '../../../wailsjs/go/main/App'

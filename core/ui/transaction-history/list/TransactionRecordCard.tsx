@@ -1,6 +1,6 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { CoinKey } from '@core/chain/coin/Coin'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { CoinKey } from '@vultisig/core-chain/coin/Coin'
 
 import { TransactionRecord, TransactionRecordStatus } from '../core'
 import {

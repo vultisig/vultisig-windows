@@ -1,5 +1,5 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { Chain } from '@core/chain/Chain'
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { Chain } from '@vultisig/core-chain/Chain'
 import { useMemo } from 'react'
 
 import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'

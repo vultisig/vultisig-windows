@@ -1,6 +1,6 @@
-import { Chain } from '@core/chain/Chain'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useQuery } from '@tanstack/react-query'
+import { Chain } from '@vultisig/core-chain/Chain'
 
 import { DefiPosition, useDefiPositions } from '../../../storage/defiPositions'
 import { useCurrentVaultAddress } from '../../../vault/state/currentVaultCoins'

@@ -1,9 +1,9 @@
-import { Chain } from '@core/chain/Chain'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { useDefiPositions } from '@core/ui/storage/defiPositions'
 import { BalanceVisibilityAware } from '@core/ui/vault/balance/visibility/BalanceVisibilityAware'
 import { Image } from '@lib/ui/image/Image'
 import { Spinner } from '@lib/ui/loaders/Spinner'
+import { Chain } from '@vultisig/core-chain/Chain'
 
 import { useDefiChainPositionsQuery } from '../queries/useDefiChainPositionsQuery'
 import { aggregateDefiPositions } from '../services/defiPositionAggregator'

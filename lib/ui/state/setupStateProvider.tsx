@@ -1,5 +1,5 @@
 import { ChildrenProp } from '@lib/ui/props'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { Dispatch, SetStateAction, useState } from 'react'
 
 import { Stateful, statefulToTuple } from './core'

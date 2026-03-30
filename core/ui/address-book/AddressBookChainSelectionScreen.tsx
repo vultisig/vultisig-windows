@@ -1,4 +1,3 @@
-import { Chain, EvmChain } from '@core/chain/Chain'
 import {
   ChainContent,
   ChainItem,
@@ -14,6 +13,7 @@ import { TextInput } from '@lib/ui/inputs/TextInput'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { InputProps, OptionsProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
+import { Chain, EvmChain } from '@vultisig/core-chain/Chain'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 

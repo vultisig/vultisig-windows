@@ -1,10 +1,10 @@
-import { getVaultId, Vault } from '@core/mpc/vault/Vault'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { vaultsInitialValue, VaultsStorage } from '@core/ui/storage/vaults'
 import { getStorageValue } from '@lib/extension/storage/get'
 import { setStorageValue } from '@lib/extension/storage/set'
-import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { getVaultId, Vault } from '@vultisig/core-mpc/vault/Vault'
+import { updateAtIndex } from '@vultisig/lib-utils/array/updateAtIndex'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 
 import { deleteCoinsForVault } from './coins'
 

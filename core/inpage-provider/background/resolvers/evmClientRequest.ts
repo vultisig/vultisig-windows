@@ -1,6 +1,6 @@
-import { EvmChain } from '@core/chain/Chain'
-import { getEvmClient } from '@core/chain/chains/evm/client'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
+import { EvmChain } from '@vultisig/core-chain/Chain'
+import { getEvmClient } from '@vultisig/core-chain/chains/evm/client'
 
 import { getAppChain } from './getAppChain'
 

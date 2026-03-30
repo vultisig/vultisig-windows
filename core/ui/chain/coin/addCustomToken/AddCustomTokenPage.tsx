@@ -1,4 +1,3 @@
-import { isValidAddress } from '@core/chain/utils/isValidAddress'
 import { CustomTokenResult } from '@core/ui/chain/coin/addCustomToken/CustomTokenResult'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
@@ -9,6 +8,7 @@ import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { EmptyState } from '@lib/ui/status/EmptyState'
+import { isValidAddress } from '@vultisig/core-chain/utils/isValidAddress'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 

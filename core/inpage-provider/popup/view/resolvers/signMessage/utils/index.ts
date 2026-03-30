@@ -1,7 +1,7 @@
 import { JsonObject, JsonValue } from '@bufbuild/protobuf'
-import { Chain } from '@core/chain/Chain'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { isOneOf } from '@lib/utils/array/isOneOf'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 
 export type ParsedConfigurationRow = {
   key: string

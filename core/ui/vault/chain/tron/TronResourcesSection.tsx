@@ -1,11 +1,11 @@
-import { TronAccountResources } from '@core/chain/chains/tron/resources'
 import { useBoolean } from '@lib/ui/hooks/useBoolean'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Panel } from '@lib/ui/panel/Panel'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { TronAccountResources } from '@vultisig/core-chain/chains/tron/resources'
+import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 
 import { ResourcesCard } from './ResourcesCard'
 import { TronResourcesInfoModal } from './TronResourcesInfoModal'

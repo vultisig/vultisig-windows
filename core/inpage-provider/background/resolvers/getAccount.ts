@@ -1,10 +1,10 @@
-import { deriveAddress } from '@core/chain/publicKey/address/deriveAddress'
-import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
 import { getVault } from '@core/extension/storage/vaults'
 import { getWalletCore } from '@core/extension/tw'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
-import { isKeyImportVault } from '@core/mpc/vault/Vault'
-import { assertField } from '@lib/utils/record/assertField'
+import { deriveAddress } from '@vultisig/core-chain/publicKey/address/deriveAddress'
+import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
+import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
+import { assertField } from '@vultisig/lib-utils/record/assertField'
 
 export const getAccount: BackgroundResolver<'getAccount'> = async ({
   context,

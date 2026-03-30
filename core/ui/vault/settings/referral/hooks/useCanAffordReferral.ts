@@ -1,6 +1,6 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 
 import { useBalanceQuery } from '../../../../chain/coin/queries/useBalanceQuery'
 import { useCurrentVaultCoin } from '../../../state/currentVaultCoins'

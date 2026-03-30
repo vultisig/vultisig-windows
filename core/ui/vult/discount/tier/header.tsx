@@ -1,7 +1,7 @@
-import { VultDiscountTier } from '@core/chain/swap/affiliate/config'
 import { HStack, hStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
+import { VultDiscountTier } from '@vultisig/core-chain/swap/affiliate/config'
 import { t } from 'i18next'
 import styled from 'styled-components'
 

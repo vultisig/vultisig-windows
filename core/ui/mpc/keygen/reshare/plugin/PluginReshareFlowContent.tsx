@@ -13,7 +13,7 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { VStack } from '@lib/ui/layout/Stack'
 import { OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 

@@ -1,6 +1,6 @@
-import { CoinKey } from '@core/chain/coin/Coin'
-import { isOneOf } from '@lib/utils/array/isOneOf'
-import { without } from '@lib/utils/array/without'
+import { CoinKey } from '@vultisig/core-chain/coin/Coin'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
+import { without } from '@vultisig/lib-utils/array/without'
 import { useCallback, useEffect, useMemo } from 'react'
 
 import { useCoreViewState } from '../../../navigation/hooks/useCoreViewState'

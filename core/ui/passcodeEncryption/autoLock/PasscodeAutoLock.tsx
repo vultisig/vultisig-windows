@@ -1,5 +1,5 @@
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { convertDuration } from '@lib/utils/time/convertDuration'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { convertDuration } from '@vultisig/lib-utils/time/convertDuration'
 import { useCallback, useEffect, useRef } from 'react'
 import { useState } from 'react'
 

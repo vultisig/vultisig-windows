@@ -1,7 +1,7 @@
 import { create, type JsonObject, toBinary } from '@bufbuild/protobuf'
-import { PolicySchema } from '@core/mpc/types/plugin/policy_pb'
-import type { Rule } from '@core/mpc/types/plugin/rule_pb'
-import { attempt } from '@lib/utils/attempt'
+import { PolicySchema } from '@vultisig/core-mpc/types/plugin/policy_pb'
+import type { Rule } from '@vultisig/core-mpc/types/plugin/rule_pb'
+import { attempt } from '@vultisig/lib-utils/attempt'
 import { z } from 'zod'
 
 import { ethereumSignHash } from '../shared/ethereumSigning'

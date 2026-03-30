@@ -1,4 +1,3 @@
-import { joinMpcSession } from '@core/mpc/session/joinMpcSession'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
@@ -11,6 +10,7 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMutation } from '@tanstack/react-query'
+import { joinMpcSession } from '@vultisig/core-mpc/session/joinMpcSession'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 

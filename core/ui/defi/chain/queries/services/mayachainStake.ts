@@ -1,8 +1,8 @@
-import { coinKeyToString } from '@core/chain/coin/Coin'
-import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { mayachainBlockTimeSeconds } from '@core/ui/defi/chain/constants/time'
-import { attempt } from '@lib/utils/attempt'
-import { queryUrl } from '@lib/utils/query/queryUrl'
+import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
+import { getCoinValue } from '@vultisig/core-chain/coin/utils/getCoinValue'
+import { attempt } from '@vultisig/lib-utils/attempt'
+import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 import { mayaMidgardBaseUrl, mayanodeBaseUrl } from '../constants'
 import { mayaCoin } from '../tokens'

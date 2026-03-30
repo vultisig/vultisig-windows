@@ -1,7 +1,7 @@
 import { getCurrentCosmosChainId } from '@core/extension/storage/currentCosmosChainId'
 import { getCurrentEVMChainId } from '@core/extension/storage/currentEvmChainId'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
-import { match } from '@lib/utils/match'
+import { match } from '@vultisig/lib-utils/match'
 
 import { getAppSession } from '../core/appSession'
 

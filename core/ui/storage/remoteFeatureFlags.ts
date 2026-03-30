@@ -1,5 +1,5 @@
-import { attempt } from '@lib/utils/attempt'
 import { useQuery } from '@tanstack/react-query'
+import { attempt } from '@vultisig/lib-utils/attempt'
 
 type RemoteFeatureFlags = Record<string, boolean>
 

@@ -4,7 +4,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { Panel } from '@lib/ui/panel/Panel'
 import { ChildrenProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
+import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { useMemo } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 

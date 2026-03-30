@@ -10,7 +10,6 @@ import {
   Divider,
 } from '@core/inpage-provider/popup/view/resolvers/signMessage/styles'
 import { usePopupContext } from '@core/inpage-provider/popup/view/state/context'
-import { PolicySchema } from '@core/mpc/types/plugin/policy_pb'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import {
   FastVaultPasswordModal,
@@ -30,6 +29,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { StrictText, Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { useQuery } from '@tanstack/react-query'
+import { PolicySchema } from '@vultisig/core-mpc/types/plugin/policy_pb'
 import { isHexString } from 'ethers'
 import { FC, Fragment, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'

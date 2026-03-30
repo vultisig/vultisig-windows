@@ -1,6 +1,6 @@
-import { EvmChain } from '@core/chain/Chain'
-import { getChainKind } from '@core/chain/ChainKind'
-import { getEvmClient } from '@core/chain/chains/evm/client'
+import { EvmChain } from '@vultisig/core-chain/Chain'
+import { getChainKind } from '@vultisig/core-chain/ChainKind'
+import { getEvmClient } from '@vultisig/core-chain/chains/evm/client'
 import {
   type Abi,
   type AbiFunction,

@@ -1,7 +1,7 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { Chain } from '@core/chain/Chain'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { knownTokensIndex } from '@core/chain/coin/knownTokens/index'
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { knownTokensIndex } from '@vultisig/core-chain/coin/knownTokens/index'
 import { parseUnits } from 'viem'
 
 import { getChainFromString } from '../../utils/getChainFromString'

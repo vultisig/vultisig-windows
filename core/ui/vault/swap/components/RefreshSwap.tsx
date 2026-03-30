@@ -3,7 +3,7 @@ import 'react-circular-progressbar/dist/styles.css'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { Seconds } from '@lib/utils/time'
+import { Seconds } from '@vultisig/lib-utils/time'
 import { buildStyles, CircularProgressbar } from 'react-circular-progressbar'
 import styled from 'styled-components'
 

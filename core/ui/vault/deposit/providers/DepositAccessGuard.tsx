@@ -1,4 +1,3 @@
-import { areEqualCoins } from '@core/chain/coin/Coin'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
@@ -10,6 +9,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { ChildrenProp } from '@lib/ui/props'
 import { EmptyState } from '@lib/ui/status/EmptyState'
+import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 

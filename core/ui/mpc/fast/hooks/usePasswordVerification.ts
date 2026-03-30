@@ -1,8 +1,8 @@
-import { getVaultFromServer } from '@core/mpc/fast/api/getVaultFromServer'
-import { getVaultId } from '@core/mpc/vault/Vault'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useMutation } from '@tanstack/react-query'
+import { getVaultFromServer } from '@vultisig/core-mpc/fast/api/getVaultFromServer'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 
 type UsePasswordVerificationInput = {
   onSuccess?: () => void

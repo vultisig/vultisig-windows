@@ -1,4 +1,3 @@
-import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
@@ -6,6 +5,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import styled from 'styled-components'
 
 export const SwapCoinItem = ({

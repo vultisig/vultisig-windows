@@ -1,4 +1,3 @@
-import { UtxoChain } from '@core/chain/Chain'
 import { callPopup } from '@core/inpage-provider/popup'
 import {
   BitcoinAccount,
@@ -6,7 +5,8 @@ import {
   RequestInput,
   XDEFIBitcoinPayloadMethods,
 } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
-import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
+import { UtxoChain } from '@vultisig/core-chain/Chain'
+import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedError'
 import EventEmitter from 'events'
 
 import { rebuildPsbtWithPartialSigsFromWC } from '../../utils/functions'

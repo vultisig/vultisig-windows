@@ -1,13 +1,13 @@
-import {
-  AccountCoin,
-  extractAccountCoinKey,
-} from '@core/chain/coin/AccountCoin'
 import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import {
   MatchQuery,
   MatchQueryProps,
 } from '@lib/ui/query/components/MatchQuery'
+import {
+  AccountCoin,
+  extractAccountCoinKey,
+} from '@vultisig/core-chain/coin/AccountCoin'
 import { useTranslation } from 'react-i18next'
 
 export const SwapCoinBalanceDependant: React.FC<

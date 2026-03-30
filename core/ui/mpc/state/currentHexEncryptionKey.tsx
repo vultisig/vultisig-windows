@@ -1,6 +1,6 @@
-import { generateHexEncryptionKey } from '@core/mpc/utils/generateHexEncryptionKey'
 import { ChildrenProp } from '@lib/ui/props'
 import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
+import { generateHexEncryptionKey } from '@vultisig/core-mpc/utils/generateHexEncryptionKey'
 import { createContext, useMemo } from 'react'
 
 export const [CurrentHexEncryptionKeyProvider, useCurrentHexEncryptionKey] =

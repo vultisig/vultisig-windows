@@ -1,4 +1,3 @@
-import { isServer } from '@core/mpc/devices/localPartyId'
 import { BackupOverviewScreen } from '@core/ui/vault/backup/BackupOverviewScreen'
 import { VaultCreatedSuccessScreen } from '@core/ui/vault/backup/fast/VaultCreatedSuccessScreen'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
@@ -7,6 +6,7 @@ import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { ArrowSplitIcon } from '@lib/ui/icons/ArrowSplitIcon'
 import { CloudUploadIcon } from '@lib/ui/icons/CloudUploadIcon'
 import { OnFinishProp } from '@lib/ui/props'
+import { isServer } from '@vultisig/core-mpc/devices/localPartyId'
 import { useTranslation } from 'react-i18next'
 
 import { InitiateSecureVaultBackup } from './InitiateSecureVaultBackup'

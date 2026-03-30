@@ -1,9 +1,9 @@
-import { OtherChain } from '@core/chain/Chain'
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
 import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
+import { OtherChain } from '@vultisig/core-chain/Chain'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedError'
 import EventEmitter from 'events'
 
 import { requestAccount } from '../core/requestAccount'

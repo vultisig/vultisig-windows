@@ -1,10 +1,3 @@
-import { Chain } from '@core/chain/Chain'
-import {
-  accountCoinKeyToString,
-  extractAccountCoinKey,
-} from '@core/chain/coin/AccountCoin'
-import { coinKeyToString } from '@core/chain/coin/Coin'
-import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { useBalancesQuery } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import {
@@ -12,10 +5,17 @@ import {
   useCurrentVaultCoinsByChain,
 } from '@core/ui/vault/state/currentVaultCoins'
 import { EagerQuery } from '@lib/ui/query/Query'
-import { order } from '@lib/utils/array/order'
-import { sum } from '@lib/utils/array/sum'
-import { recordMap } from '@lib/utils/record/recordMap'
-import { toEntries } from '@lib/utils/record/toEntries'
+import { Chain } from '@vultisig/core-chain/Chain'
+import {
+  accountCoinKeyToString,
+  extractAccountCoinKey,
+} from '@vultisig/core-chain/coin/AccountCoin'
+import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
+import { getCoinValue } from '@vultisig/core-chain/coin/utils/getCoinValue'
+import { order } from '@vultisig/lib-utils/array/order'
+import { sum } from '@vultisig/lib-utils/array/sum'
+import { recordMap } from '@vultisig/lib-utils/record/recordMap'
+import { toEntries } from '@vultisig/lib-utils/record/toEntries'
 import { useMemo } from 'react'
 
 import { VaultChainCoin } from './useVaultChainCoinsQuery'

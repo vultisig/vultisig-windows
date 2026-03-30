@@ -1,8 +1,8 @@
-import { Chain, EthereumL2Chain } from '@core/chain/Chain'
-import { coins } from '@core/chain/coin/coins'
-import { thorchainNativeTokensMetadata } from '@core/chain/coin/knownTokens/thorchain'
-import { getLastItem } from '@lib/utils/array/getLastItem'
-import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
+import { Chain, EthereumL2Chain } from '@vultisig/core-chain/Chain'
+import { coins } from '@vultisig/core-chain/coin/coins'
+import { thorchainNativeTokensMetadata } from '@vultisig/core-chain/coin/knownTokens/thorchain'
+import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
+import { withoutDuplicates } from '@vultisig/lib-utils/array/withoutDuplicates'
 import { readdir } from 'fs/promises'
 import path from 'path'
 import { dirname } from 'path'
@@ -93,6 +93,8 @@ const printValidationSummary = (results: ValidationResult[]) => {
   }
 }
 
+const extraCoinAssets = ['qbtc.svg']
+
 const main = async () => {
   try {
     const [coinFiles, chainFiles] = await Promise.all(
@@ -108,6 +110,7 @@ const main = async () => {
     )
       .map(getCoinLogoSrc)
       .map(logo => getLastItem(logo.split('/')))
+      .concat(extraCoinAssets)
 
     const expectedChains = [...Object.values(EthereumL2Chain), Chain.MayaChain]
       .map(getChainLogoSrc)

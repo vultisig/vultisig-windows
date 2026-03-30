@@ -1,7 +1,7 @@
-import { getTokenMetadata } from '@core/chain/coin/token/metadata'
 import { getIsWalletPrioritized } from '@core/extension/storage/isWalletPrioritized'
 import { BackgroundMethod } from '@core/inpage-provider/background/interface'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
+import { getTokenMetadata } from '@vultisig/core-chain/coin/token/metadata'
 
 import { evmClientRequest } from './evmClientRequest'
 import { exportVault } from './exportVault'

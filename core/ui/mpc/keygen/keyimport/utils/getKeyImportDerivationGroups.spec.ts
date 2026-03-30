@@ -4,7 +4,7 @@ import {
   EvmChain,
   OtherChain,
   UtxoChain,
-} from '@core/chain/Chain'
+} from '@vultisig/core-chain/Chain'
 import { describe, expect, it } from 'vitest'
 
 import { getKeyImportDerivationGroups } from './getKeyImportDerivationGroups'

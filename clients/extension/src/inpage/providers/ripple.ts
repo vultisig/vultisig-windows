@@ -1,6 +1,6 @@
-import { OtherChain } from '@core/chain/Chain'
 import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
-import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
+import { OtherChain } from '@vultisig/core-chain/Chain'
+import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedError'
 import EventEmitter from 'events'
 
 import { getSharedHandlers } from './core/sharedHandlers'

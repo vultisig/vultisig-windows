@@ -1,6 +1,6 @@
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
-import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
 import { useQuery } from '@tanstack/react-query'
+import { shouldBeDefined } from '@vultisig/lib-utils/assert/shouldBeDefined'
 
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'

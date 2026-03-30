@@ -1,4 +1,4 @@
-import { AccountCoin } from '@core/chain/coin/AccountCoin'
+import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 
 import { CustomTxData } from './customTxData'
 

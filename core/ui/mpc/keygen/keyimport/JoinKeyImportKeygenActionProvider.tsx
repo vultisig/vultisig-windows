@@ -1,16 +1,3 @@
-import { Chain } from '@core/chain/Chain'
-import { getChainKind } from '@core/chain/ChainKind'
-import { signatureAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
-import { hasServer } from '@core/mpc/devices/localPartyId'
-import { DKLS } from '@core/mpc/dkls/dkls'
-import {
-  setKeygenComplete,
-  waitForKeygenComplete,
-} from '@core/mpc/keygenComplete'
-import { MldsaKeygen } from '@core/mpc/mldsa/mldsaKeygen'
-import { MpcLib } from '@core/mpc/mpcLib'
-import { Schnorr } from '@core/mpc/schnorr/schnorrKeygen'
-import { Vault, VaultKeyShares } from '@core/mpc/vault/Vault'
 import { featureFlags } from '@core/ui/featureFlags'
 import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
@@ -22,10 +9,23 @@ import { useIsMLDSAEnabled } from '@core/ui/storage/mldsaEnabled'
 import { useIsTssBatchingEnabled } from '@core/ui/storage/tssBatchingEnabled'
 import { useVaultOrders } from '@core/ui/storage/vaults'
 import { ChildrenProp } from '@lib/ui/props'
-import { without } from '@lib/utils/array/without'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { getChainKind } from '@vultisig/core-chain/ChainKind'
+import { signatureAlgorithms } from '@vultisig/core-chain/signing/SignatureAlgorithm'
+import { hasServer } from '@vultisig/core-mpc/devices/localPartyId'
+import { DKLS } from '@vultisig/core-mpc/dkls/dkls'
+import {
+  setKeygenComplete,
+  waitForKeygenComplete,
+} from '@vultisig/core-mpc/keygenComplete'
+import { MldsaKeygen } from '@vultisig/core-mpc/mldsa/mldsaKeygen'
+import { MpcLib } from '@vultisig/core-mpc/mpcLib'
+import { Schnorr } from '@vultisig/core-mpc/schnorr/schnorrKeygen'
+import { Vault, VaultKeyShares } from '@vultisig/core-mpc/vault/Vault'
+import { without } from '@vultisig/lib-utils/array/without'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 
+import { getLastItemOrder } from '../../../utils/order/getLastItemOrder'
 import { KeygenAction, KeygenActionProvider } from '../state/keygenAction'
 import { useKeygenVaultName } from '../state/keygenVault'
 import {
@@ -99,6 +99,7 @@ export const JoinKeyImportKeygenActionProvider = ({
       onStepStart('ecdsa')
       onStepStart('eddsa')
       if (chains.length > 0) {
+        // @ts-expect-error — SDK gap: chainKeys step not in SDK
         onStepStart('chainKeys')
       }
       if (includeMldsa) {
@@ -170,6 +171,7 @@ export const JoinKeyImportKeygenActionProvider = ({
       const chainKeysPromise =
         chainPromises.length > 0
           ? Promise.all(chainPromises).then(results => {
+              // @ts-expect-error — SDK gap: chainKeys step not in SDK
               onStepComplete('chainKeys')
               return results
             })

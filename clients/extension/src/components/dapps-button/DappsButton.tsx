@@ -7,7 +7,7 @@ import { ContainImage } from '@lib/ui/images/ContainImage'
 import { SafeImage } from '@lib/ui/images/SafeImage'
 import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { getColor } from '@lib/ui/theme/getters'
-import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
+import { getUrlBaseDomain } from '@vultisig/lib-utils/url/baseDomain'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 

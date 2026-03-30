@@ -1,5 +1,5 @@
-import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
+import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 
 import { estimateEvmGas } from './estimateEvmGas'
 

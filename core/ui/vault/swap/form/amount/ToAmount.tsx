@@ -3,7 +3,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { text } from '@lib/ui/text'
-import { formatAmount } from '@lib/utils/formatAmount'
+import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import styled from 'styled-components'
 
 import { useSwapOutputAmountQuery } from '../../queries/useSwapOutputAmountQuery'

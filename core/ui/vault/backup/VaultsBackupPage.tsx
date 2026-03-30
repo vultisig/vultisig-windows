@@ -1,7 +1,7 @@
-import { getVaultId } from '@core/mpc/vault/Vault'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useVaults } from '@core/ui/storage/vaults'
 import { VaultBackupFlow } from '@core/ui/vault/backup/VaultBackupFlow'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 
 export const VaultsBackupPage = () => {
   const navigate = useCoreNavigate()

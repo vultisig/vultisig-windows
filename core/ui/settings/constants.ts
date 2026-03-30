@@ -1,4 +1,4 @@
-import { productWebsiteUrl } from '@core/config'
+import { productWebsiteUrl } from '@vultisig/core-config'
 
 export const vultisigWindowsGithubUrl =
   'https://github.com/vultisig/vultisig-windows'

@@ -1,5 +1,5 @@
-import { Chain } from '@core/chain/Chain'
 import { setupOptionalValueProvider } from '@lib/ui/state/setupOptionalValueProvider'
+import { Chain } from '@vultisig/core-chain/Chain'
 
 export const [KeyImportChainsProvider, useKeyImportChains] =
   setupOptionalValueProvider<string[]>()

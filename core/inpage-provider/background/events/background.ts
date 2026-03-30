@@ -1,7 +1,7 @@
 import { storage } from '@core/extension/storage'
 import { VaultsAppSessions } from '@core/extension/storage/appSessions'
 import { StorageKey } from '@core/ui/storage/StorageKey'
-import { without } from '@lib/utils/array/without'
+import { without } from '@vultisig/lib-utils/array/without'
 
 import { sendEventToApp } from './sendEventToApp'
 

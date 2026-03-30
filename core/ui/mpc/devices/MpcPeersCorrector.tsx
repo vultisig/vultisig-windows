@@ -1,5 +1,5 @@
 import { useMpcPeersSelectionRecord } from '@core/ui/mpc/state/mpcSelectedPeers'
-import { omit } from '@lib/utils/record/omit'
+import { omit } from '@vultisig/lib-utils/record/omit'
 import { useEffect } from 'react'
 
 import { useMpcPeerOptionsQuery } from './queries/useMpcPeerOptionsQuery'

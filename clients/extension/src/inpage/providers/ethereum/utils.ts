@@ -1,10 +1,10 @@
 import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
-import { EvmChain } from '@core/chain/Chain'
-import { getEvmChainByChainId } from '@core/chain/chains/evm/chainInfo'
 import { callBackground } from '@core/inpage-provider/background'
 import { BackgroundError } from '@core/inpage-provider/background/error'
-import { attempt } from '@lib/utils/attempt'
-import { ensureHexPrefix } from '@lib/utils/hex/ensureHexPrefix'
+import { EvmChain } from '@vultisig/core-chain/Chain'
+import { getEvmChainByChainId } from '@vultisig/core-chain/chains/evm/chainInfo'
+import { attempt } from '@vultisig/lib-utils/attempt'
+import { ensureHexPrefix } from '@vultisig/lib-utils/hex/ensureHexPrefix'
 import { Signature } from 'ethers'
 
 export const processSignature = (signature: string) => {

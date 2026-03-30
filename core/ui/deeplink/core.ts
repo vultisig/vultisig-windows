@@ -1,17 +1,20 @@
 import { fromBinary } from '@bufbuild/protobuf'
-import { Chain } from '@core/chain/Chain'
-import { tssMessageSchema, TssType } from '@core/mpc/types/utils/tssType'
-import { KeygenMessage } from '@core/mpc/types/vultisig/keygen/v1/keygen_message_pb'
-import { ReshareMessage } from '@core/mpc/types/vultisig/keygen/v1/reshare_message_pb'
-import { SingleKeygenMessage } from '@core/mpc/types/vultisig/keygen/v1/single_keygen_message_pb'
+import { decompressQrPayload } from '@core/ui/qr/utils/decompressQrPayload'
+import { Chain } from '@vultisig/core-chain/Chain'
+import {
+  tssMessageSchema,
+  TssType,
+} from '@vultisig/core-mpc/types/utils/tssType'
+import { KeygenMessage } from '@vultisig/core-mpc/types/vultisig/keygen/v1/keygen_message_pb'
+import { ReshareMessage } from '@vultisig/core-mpc/types/vultisig/keygen/v1/reshare_message_pb'
+import { SingleKeygenMessage } from '@vultisig/core-mpc/types/vultisig/keygen/v1/single_keygen_message_pb'
 import {
   KeysignMessage,
   KeysignMessageSchema,
-} from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { decompressQrPayload } from '@core/ui/qr/utils/decompressQrPayload'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { getRawQueryParams } from '@lib/utils/query/getRawQueryParams'
-import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
+} from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { getRawQueryParams } from '@vultisig/lib-utils/query/getRawQueryParams'
+import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
 
 type DeeplinkType = 'NewVault' | 'SignTransaction' | 'send'
 

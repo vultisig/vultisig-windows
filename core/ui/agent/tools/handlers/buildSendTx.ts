@@ -1,8 +1,8 @@
 import { toBinary } from '@bufbuild/protobuf'
-import { toChainAmount } from '@core/chain/amount/toChainAmount'
-import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
-import { buildSendKeysignPayload } from '@core/mpc/keysign/send/build'
-import { KeysignPayloadSchema } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
+import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
+import { buildSendKeysignPayload } from '@vultisig/core-mpc/keysign/send/build'
+import { KeysignPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 
 import { resolveAccountCoin } from '../shared/resolveAccountCoin'
 import { getWalletContext } from '../shared/walletContext'

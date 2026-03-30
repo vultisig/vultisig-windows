@@ -50,7 +50,7 @@ export const test = base.extend<{
   extensionId: string
   testDappUrl: string
 }>({
-  context: async (_fixtures, use) => {
+  context: async ({}, use) => {
     const context = await chromium.launchPersistentContext('', {
       headless: false,
       args: [
@@ -80,7 +80,7 @@ export const test = base.extend<{
   },
 
   // Serve the test DApp over HTTP so the content script can inject
-  testDappUrl: async (_fixtures, use) => {
+  testDappUrl: async ({}, use) => {
     const html = fs.readFileSync(testDappPath, 'utf-8')
 
     const server = http.createServer((req, res) => {

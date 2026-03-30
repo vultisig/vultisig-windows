@@ -1,11 +1,11 @@
 import type { VaultAppSession } from '@core/extension/storage/appSessions'
 import { runBridgeBackgroundAgent } from '@lib/extension/bridge/background'
-import { isOneOf } from '@lib/utils/array/isOneOf'
-import { attempt } from '@lib/utils/attempt'
-import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
-import { getRecordUnionKey } from '@lib/utils/record/union/getRecordUnionKey'
-import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
-import { Result } from '@lib/utils/types/Result'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
+import { attempt } from '@vultisig/lib-utils/attempt'
+import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
+import { getRecordUnionKey } from '@vultisig/lib-utils/record/union/getRecordUnionKey'
+import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
+import { Result } from '@vultisig/lib-utils/types/Result'
 
 import { authorizeContext } from '../background/core/authorization'
 import {

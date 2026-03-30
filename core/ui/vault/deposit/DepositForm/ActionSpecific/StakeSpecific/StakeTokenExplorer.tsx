@@ -1,4 +1,3 @@
-import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import {
   stakeableAssetsTickers,
   StakeableAssetTicker,
@@ -8,6 +7,7 @@ import { useCurrentVaultChainCoins } from '@core/ui/vault/state/currentVaultCoin
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { Text } from '@lib/ui/text'
+import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 

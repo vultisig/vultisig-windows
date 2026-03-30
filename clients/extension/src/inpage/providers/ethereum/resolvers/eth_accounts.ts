@@ -1,5 +1,5 @@
 import { callBackground } from '@core/inpage-provider/background'
-import { attempt, withFallback } from '@lib/utils/attempt'
+import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 
 import { getChain } from '../utils'
 

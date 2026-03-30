@@ -1,7 +1,7 @@
-import { Chain } from '@core/chain/Chain'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useQuery } from '@tanstack/react-query'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 
 import {
   getCircleAccount,

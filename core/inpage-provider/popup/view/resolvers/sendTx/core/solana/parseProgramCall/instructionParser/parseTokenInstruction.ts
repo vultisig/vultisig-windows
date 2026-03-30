@@ -1,9 +1,9 @@
-import { Chain } from '@core/chain/Chain'
-import { Coin, CoinKey } from '@core/chain/coin/Coin'
-import { rootApiUrl } from '@core/config'
 import { ASSOCIATED_TOKEN_PROGRAM_ID, getAccount } from '@solana/spl-token'
 import { Connection, PublicKey } from '@solana/web3.js'
 import { TW } from '@trustwallet/wallet-core'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { Coin, CoinKey } from '@vultisig/core-chain/coin/Coin'
+import { rootApiUrl } from '@vultisig/core-config'
 
 import { SolanaTxData } from '../../types/types'
 

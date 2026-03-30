@@ -1,8 +1,8 @@
-import { CoinKey } from '@core/chain/coin/Coin'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { CoinKey } from '@vultisig/core-chain/coin/Coin'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'

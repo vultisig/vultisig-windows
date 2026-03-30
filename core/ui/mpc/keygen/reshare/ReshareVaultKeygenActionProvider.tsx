@@ -1,10 +1,3 @@
-import { DKLS } from '@core/mpc/dkls/dkls'
-import {
-  setKeygenComplete,
-  waitForKeygenComplete,
-} from '@core/mpc/keygenComplete'
-import { MpcLib } from '@core/mpc/mpcLib'
-import { Schnorr } from '@core/mpc/schnorr/schnorrKeygen'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
@@ -14,9 +7,16 @@ import { useCore } from '@core/ui/state/core'
 import { useIsTssBatchingEnabled } from '@core/ui/storage/tssBatchingEnabled'
 import { useVaultOrders } from '@core/ui/storage/vaults'
 import { ChildrenProp } from '@lib/ui/props'
-import { without } from '@lib/utils/array/without'
-import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
+import { DKLS } from '@vultisig/core-mpc/dkls/dkls'
+import {
+  setKeygenComplete,
+  waitForKeygenComplete,
+} from '@vultisig/core-mpc/keygenComplete'
+import { MpcLib } from '@vultisig/core-mpc/mpcLib'
+import { Schnorr } from '@vultisig/core-mpc/schnorr/schnorrKeygen'
+import { without } from '@vultisig/lib-utils/array/without'
 
+import { getLastItemOrder } from '../../../utils/order/getLastItemOrder'
 import { useKeygenOperation } from '../state/currentKeygenOperationType'
 import { KeygenAction, KeygenActionProvider } from '../state/keygenAction'
 import {

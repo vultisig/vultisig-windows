@@ -1,18 +1,18 @@
-import { Chain, EvmChain } from '@core/chain/Chain'
-import { getEvmChainId } from '@core/chain/chains/evm/chainInfo'
-import { Coin } from '@core/chain/coin/Coin'
+import { Chain, EvmChain } from '@vultisig/core-chain/Chain'
+import { getEvmChainId } from '@vultisig/core-chain/chains/evm/chainInfo'
+import { Coin } from '@vultisig/core-chain/coin/Coin'
 import {
   fromSolanaJupiterTokens,
   SolanaJupiterToken,
-} from '@core/chain/coin/jupiter/token'
+} from '@vultisig/core-chain/coin/jupiter/token'
 import {
   fromOneInchTokens,
   OneInchTokensResponse,
-} from '@core/chain/coin/oneInch/token'
-import { baseJupiterTokensUrl } from '@core/chain/coin/token/metadata/resolvers/solana'
-import { rootApiUrl } from '@core/config'
-import { hexToNumber } from '@lib/utils/hex/hexToNumber'
-import { queryUrl } from '@lib/utils/query/queryUrl'
+} from '@vultisig/core-chain/coin/oneInch/token'
+import { baseJupiterTokensUrl } from '@vultisig/core-chain/coin/token/metadata/resolvers/solana'
+import { rootApiUrl } from '@vultisig/core-config'
+import { hexToNumber } from '@vultisig/lib-utils/hex/hexToNumber'
+import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 export const fetchOneInchTokensRaw = async (
   chain: EvmChain

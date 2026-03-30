@@ -1,6 +1,6 @@
-import { Chain } from '@core/chain/Chain'
-import { isChainOfKind } from '@core/chain/ChainKind'
 import { ValueProp } from '@lib/ui/props'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 
 import { TxOverviewEvmMemo } from './TxOverviewEvmMemo'
 import { TxOverviewPlainMemo } from './TxOverviewPlainMemo'

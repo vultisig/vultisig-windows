@@ -1,6 +1,6 @@
-import { CoinKey, CoinMetadata } from '@core/chain/coin/Coin'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { UiProps } from '@lib/ui/props'
+import { CoinKey, CoinMetadata } from '@vultisig/core-chain/coin/Coin'
 
 import { getChainLogoSrc } from '../../metadata/getChainLogoSrc'
 import { getCoinLogoSrc } from './utils/getCoinLogoSrc'

@@ -1,9 +1,9 @@
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
-import { isEmpty } from '@lib/utils/array/isEmpty'
-import { queryUrl } from '@lib/utils/query/queryUrl'
 import { useQuery } from '@tanstack/react-query'
+import { isEmpty } from '@vultisig/lib-utils/array/isEmpty'
+import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 export const useMpcSignersQuery = () => {
   const serverUrl = useMpcServerUrl()

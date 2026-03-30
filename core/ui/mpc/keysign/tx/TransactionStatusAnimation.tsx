@@ -2,7 +2,7 @@ import { Animation } from '@lib/ui/animations/Animation'
 import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { VStack } from '@lib/ui/layout/Stack'
 import { GradientText, Text } from '@lib/ui/text'
-import { match } from '@lib/utils/match'
+import { match } from '@vultisig/lib-utils/match'
 import { Trans, useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 

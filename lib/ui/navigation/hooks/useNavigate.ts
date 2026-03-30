@@ -1,4 +1,4 @@
-import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
+import { updateAtIndex } from '@vultisig/lib-utils/array/updateAtIndex'
 import { useCallback } from 'react'
 
 import { useNavigation } from '../state'

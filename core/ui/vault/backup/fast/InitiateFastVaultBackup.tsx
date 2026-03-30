@@ -1,7 +1,7 @@
-import { getVaultId } from '@core/mpc/vault/Vault'
 import { SaveBackupToCloudScreen } from '@core/ui/vault/backup/fast/SaveBackupToCloudScreen'
 import { useBackupVaultMutation } from '@core/ui/vault/mutations/useBackupVaultMutation'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 
 import { useCurrentVault } from '../../state/currentVault'
 

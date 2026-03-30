@@ -1,5 +1,5 @@
-import { isOneOf } from '@lib/utils/array/isOneOf'
 import { WalletCore } from '@trustwallet/wallet-core'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { TFunction } from 'i18next'
 
 import { seedphraseWordCounts } from '../config'
