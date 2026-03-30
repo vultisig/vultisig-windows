@@ -4,6 +4,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { EmptyState } from '@lib/ui/status/EmptyState/EmptyState'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 import { TransactionRecord } from '../core'
 import { groupByDate } from './groupByDate'
@@ -20,14 +21,16 @@ export const TransactionHistoryList = ({
 
   if (records.length === 0) {
     return (
-      <EmptyState
-        icon={
-          <IconWrapper size={24} color="buttonHover">
-            <CalendarClockIcon />
-          </IconWrapper>
-        }
-        title={t('no_transactions_yet')}
-      />
+      <EmptyStateTabPanel>
+        <EmptyState
+          icon={
+            <IconWrapper size={24} color="buttonHover">
+              <CalendarClockIcon />
+            </IconWrapper>
+          }
+          title={t('no_transactions_yet')}
+        />
+      </EmptyStateTabPanel>
     )
   }
 
@@ -58,3 +61,7 @@ export const TransactionHistoryList = ({
     </VStack>
   )
 }
+
+const EmptyStateTabPanel = styled.div`
+  margin-top: 27px;
+`
