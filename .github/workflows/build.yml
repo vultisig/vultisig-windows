@@ -107,6 +107,48 @@ jobs:
           name: extension-dist-${{ github.sha }}
           path: clients/extension/dist
 
+  sdk-compat:
+    needs: lint
+    runs-on: ubuntu-22.04
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Prepare Yarn
+        run: corepack prepare yarn@${{ env.YARN_VERSION }} --activate
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-sdk-compat-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-sdk-compat-
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Override SDK to main branch
+        run: yarn add @vultisig/sdk@https://github.com/vultisig/vultisig-sdk.git#main
+
+      - name: Typecheck
+        run: yarn typecheck
+
+      - name: Test
+        run: yarn test
+
   build:
     needs: lint
     strategy:
