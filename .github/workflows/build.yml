@@ -140,8 +140,26 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Override SDK to main branch
-        run: yarn add @vultisig/sdk@https://github.com/vultisig/vultisig-sdk.git#main
+      - name: Clone and build SDK main
+        run: |
+          git clone --depth 1 https://github.com/vultisig/vultisig-sdk.git /tmp/vultisig-sdk
+          cd /tmp/vultisig-sdk
+          corepack enable
+          yarn install
+          yarn build
+
+      - name: Link SDK packages
+        run: |
+          for pkg in /tmp/vultisig-sdk/packages/*/; do
+            if [ -f "$pkg/package.json" ]; then
+              yarn link "$pkg"
+            fi
+          done
+          for pkg in /tmp/vultisig-sdk/packages/*/*/; do
+            if [ -f "$pkg/package.json" ]; then
+              yarn link "$pkg"
+            fi
+          done
 
       - name: Typecheck
         run: yarn typecheck
