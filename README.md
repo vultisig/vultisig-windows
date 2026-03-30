@@ -88,6 +88,39 @@ yarn build:extension
 
 For details on integrating Vultisig Extension with your project, see the [Integration Guide](clients/extension/docs/integration-guide.md).
 
+## Vultisig SDK
+
+This project depends on multiple packages from the [`vultisig-sdk`](https://github.com/vultisig/vultisig-sdk) monorepo, published individually on npm:
+
+- `@vultisig/sdk` — main SDK
+- `@vultisig/core-chain` — blockchain/chain utilities
+- `@vultisig/core-config` — configuration
+- `@vultisig/core-mpc` — multi-party computation
+- `@vultisig/lib-utils` — shared utilities
+
+CI also runs a non-blocking compatibility check against the SDK `main` branch to catch integration issues early.
+
+### Developing with the latest SDK (unreleased)
+
+Since vultisig-sdk is a monorepo, `yarn link` won't work due to peer dependency conflicts. A script is provided that builds the SDK, packs all packages into tarballs, and overrides them via `resolutions`:
+
+```bash
+./scripts/use-local-sdk.sh /path/to/vultisig-sdk
+```
+
+This will build the SDK, pack all shared packages, add `resolutions` to `package.json`, and run `yarn install`.
+
+To restore npm versions:
+
+```bash
+git checkout package.json yarn.lock
+yarn install
+```
+
+### Releasing
+
+Production builds always use npm-published SDK versions. Before releasing, ensure all `@vultisig/*` dependencies in `package.json` point to stable npm versions, not git references or local links.
+
 ## Development Guidelines
 
 ### Code Organization: Domain-Driven Structure
