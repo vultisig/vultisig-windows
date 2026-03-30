@@ -145,21 +145,35 @@ jobs:
           git clone --depth 1 https://github.com/vultisig/vultisig-sdk.git /tmp/vultisig-sdk
           cd /tmp/vultisig-sdk
           corepack enable
+          corepack prepare yarn@${{ env.YARN_VERSION }} --activate
           yarn install
-          yarn build
+          yarn build:shared
+          yarn build:all
 
-      - name: Link SDK packages
+      - name: Pack and override SDK packages
         run: |
-          for pkg in /tmp/vultisig-sdk/packages/*/; do
-            if [ -f "$pkg/package.json" ]; then
-              yarn link "$pkg"
-            fi
+          mkdir -p /tmp/sdk-packs
+          for dir in packages/sdk packages/core/chain packages/core/config packages/core/mpc packages/lib/utils; do
+            cd /tmp/vultisig-sdk/$dir && npm pack --pack-destination /tmp/sdk-packs
           done
-          for pkg in /tmp/vultisig-sdk/packages/*/*/; do
-            if [ -f "$pkg/package.json" ]; then
-              yarn link "$pkg"
-            fi
-          done
+          cd $GITHUB_WORKSPACE
+          node -e "
+            const fs = require('fs');
+            const path = require('path');
+            const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+            const packs = fs.readdirSync('/tmp/sdk-packs').filter(f => f.endsWith('.tgz'));
+            const resolutions = pkg.resolutions || {};
+            for (const tgz of packs) {
+              const manifest = require('child_process').execSync(
+                'tar -xzf /tmp/sdk-packs/' + tgz + ' -O package/package.json', { encoding: 'utf8' }
+              );
+              const name = JSON.parse(manifest).name;
+              resolutions[name] = '/tmp/sdk-packs/' + tgz;
+            }
+            pkg.resolutions = resolutions;
+            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+          "
+          yarn install
 
       - name: Typecheck
         run: yarn typecheck
