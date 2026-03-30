@@ -1,7 +1,7 @@
-import { mpcServerUrl } from '@core/mpc/MpcServerType'
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
 import { MpcServerUrlProvider } from '@core/ui/mpc/state/mpcServerUrl'
 import { ChildrenProp } from '@lib/ui/props'
+import { mpcServerUrl } from '@vultisig/core-mpc/MpcServerType'
 
 export const ServerUrlDerivedFromServerTypeProvider = ({
   children,

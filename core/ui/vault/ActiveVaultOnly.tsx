@@ -1,5 +1,5 @@
-import { getVaultId } from '@core/mpc/vault/Vault'
 import { ChildrenProp } from '@lib/ui/props'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 
 import { useCurrentVaultId } from '../storage/currentVaultId'
 import { useVaults } from '../storage/vaults'

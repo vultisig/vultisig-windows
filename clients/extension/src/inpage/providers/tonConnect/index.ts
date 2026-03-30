@@ -1,8 +1,6 @@
-import { Chain } from '@core/chain/Chain'
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
 import { PopupError } from '@core/inpage-provider/popup/error'
-import { attempt } from '@lib/utils/attempt'
 import { Address } from '@ton/core'
 import type {
   ConnectEvent,
@@ -12,6 +10,8 @@ import type {
   WalletEvent,
 } from '@tonconnect/protocol'
 import { CHAIN } from '@tonconnect/protocol'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { attempt } from '@vultisig/lib-utils/attempt'
 
 import { getWalletStateInit } from './getWalletStateInit'
 import {

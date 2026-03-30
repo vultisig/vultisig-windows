@@ -1,6 +1,6 @@
-import { nativeSwapAffiliateConfig } from '@core/chain/swap/native/nativeSwapAffiliateConfig'
 import { MegaphoneIcon } from '@lib/ui/icons/MegaphoneIcon'
 import { getColor } from '@lib/ui/theme/getters'
+import { nativeSwapAffiliateConfig } from '@vultisig/core-chain/swap/native/nativeSwapAffiliateConfig'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 

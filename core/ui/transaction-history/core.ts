@@ -1,4 +1,4 @@
-import { Chain } from '@core/chain/Chain'
+import { Chain } from '@vultisig/core-chain/Chain'
 
 export const transactionRecordTypes = ['send', 'swap'] as const
 export type TransactionRecordType = (typeof transactionRecordTypes)[number]

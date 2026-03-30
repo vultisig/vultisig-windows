@@ -1,4 +1,4 @@
-import { baseAffiliateBps } from '@core/chain/swap/affiliate/config'
+import { baseAffiliateBps } from '@vultisig/core-chain/swap/affiliate/config'
 
 const maxFractionDigits = 2
 

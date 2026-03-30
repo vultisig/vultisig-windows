@@ -1,10 +1,13 @@
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { getNativeSwapDecimals } from '@core/chain/swap/native/utils/getNativeSwapDecimals'
-import { SwapQuote, SwapQuoteResult } from '@core/chain/swap/quote/SwapQuote'
-import { SwapFees } from '@core/chain/swap/SwapFee'
-import { getFeeAmount } from '@core/mpc/keysign/fee'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
-import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { getNativeSwapDecimals } from '@vultisig/core-chain/swap/native/utils/getNativeSwapDecimals'
+import {
+  SwapQuote,
+  SwapQuoteResult,
+} from '@vultisig/core-chain/swap/quote/SwapQuote'
+import { SwapFees } from '@vultisig/core-chain/swap/SwapFee'
+import { getFeeAmount } from '@vultisig/core-mpc/keysign/fee'
+import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
 import { useCurrentVaultPublicKey } from '../../state/currentVault'
@@ -50,6 +53,7 @@ export const useSwapFeesQuery = (swapQuote: SwapQuote) => {
         },
         general: ({ tx }) => {
           return matchRecordUnion(tx, {
+            // @ts-expect-error — SDK gap: affiliateFee not in SDK swap type
             evm: ({ affiliateFee }) => ({
               network,
               ...(affiliateFee ? { swap: affiliateFee } : {}),

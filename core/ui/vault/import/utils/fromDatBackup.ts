@@ -1,9 +1,9 @@
-import { tssSigningAlgorithms } from '@core/chain/signing/SignatureAlgorithm'
-import { MpcLib } from '@core/mpc/mpcLib'
-import { Vault } from '@core/mpc/vault/Vault'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { recordFromKeys } from '@lib/utils/record/recordFromKeys'
-import { convertDuration } from '@lib/utils/time/convertDuration'
+import { signingAlgorithms } from '@vultisig/core-chain/signing/SignatureAlgorithm'
+import { MpcLib } from '@vultisig/core-mpc/mpcLib'
+import { Vault } from '@vultisig/core-mpc/vault/Vault'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { recordFromKeys } from '@vultisig/lib-utils/record/recordFromKeys'
+import { convertDuration } from '@vultisig/lib-utils/time/convertDuration'
 
 export type DatBackup = {
   name: string
@@ -28,15 +28,13 @@ export const fromDatBackup = (backup: DatBackup): Vault => {
     eddsa: backup.pubKeyEdDSA,
   }
 
-  const keyShares = recordFromKeys(
-    tssSigningAlgorithms,
-    algorithm =>
-      shouldBePresent(
-        backup.keyshares.find(
-          keyShare => keyShare.pubkey === publicKeys[algorithm]
-        )
-      ).keyshare
-  )
+  const keyShares = recordFromKeys(signingAlgorithms, algorithm => {
+    const publicKey = publicKeys[algorithm]
+    if (!publicKey) return ''
+    return shouldBePresent(
+      backup.keyshares.find(keyShare => keyShare.pubkey === publicKey)
+    ).keyshare
+  })
 
   return {
     name: backup.name,

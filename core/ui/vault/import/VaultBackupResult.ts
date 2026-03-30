@@ -1,5 +1,5 @@
-import { VaultContainer } from '@core/mpc/types/vultisig/vault/v1/vault_container_pb'
-import { Vault } from '@core/mpc/vault/Vault'
+import { VaultContainer } from '@vultisig/core-mpc/types/vultisig/vault/v1/vault_container_pb'
+import { Vault } from '@vultisig/core-mpc/vault/Vault'
 
 export type VaultBackupResult =
   | {

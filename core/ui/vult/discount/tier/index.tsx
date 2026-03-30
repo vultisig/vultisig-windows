@@ -1,9 +1,9 @@
+import { HStack } from '@lib/ui/layout/Stack'
+import { ValueProp } from '@lib/ui/props'
 import {
   VultDiscountTier as VultDiscountTierType,
   vultDiscountTiers,
-} from '@core/chain/swap/affiliate/config'
-import { HStack } from '@lib/ui/layout/Stack'
-import { ValueProp } from '@lib/ui/props'
+} from '@vultisig/core-chain/swap/affiliate/config'
 
 import { ActiveDiscountTierIndicator } from './active-indicator'
 import { DiscountTierContainer } from './container'

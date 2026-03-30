@@ -1,14 +1,14 @@
-import { toKeysignLibType } from '@core/mpc/types/utils/libType'
-import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { getVaultId } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
   useCurrentVault,
   useCurrentVaultPublicKey,
 } from '@core/ui/vault/state/currentVault'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
-import { omit } from '@lib/utils/record/omit'
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
+import { toKeysignLibType } from '@vultisig/core-mpc/types/utils/libType'
+import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
+import { omit } from '@vultisig/lib-utils/record/omit'
 import { useMemo } from 'react'
 
 import { useDepositMemo } from '../hooks/useDepositMemo'

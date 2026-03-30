@@ -1,6 +1,6 @@
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { callPopup } from '@core/inpage-provider/popup'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { ethers } from 'ethers'
 import { type RpcTransactionRequest } from 'viem'
 

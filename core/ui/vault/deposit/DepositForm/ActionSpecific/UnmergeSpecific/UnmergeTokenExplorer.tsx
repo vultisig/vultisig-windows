@@ -1,4 +1,3 @@
-import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { UnmergeExplorerOption } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/UnmergeSpecific/components/UnmergeExplorerOption'
 import { formatUnmergeShares } from '@core/ui/vault/deposit/DepositForm/ActionSpecific/UnmergeSpecific/utils'
 import { useMergeableTokenBalancesQuery } from '@core/ui/vault/deposit/hooks/useMergeableTokenBalancesQuery'
@@ -6,6 +5,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { OnCloseProp, ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
+import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { useTranslation } from 'react-i18next'
 
 import { useDepositCoin } from '../../../providers/DepositCoinProvider'

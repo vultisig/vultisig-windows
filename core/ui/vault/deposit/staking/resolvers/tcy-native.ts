@@ -1,6 +1,6 @@
-import { toChainAmount } from '@core/chain/amount/toChainAmount'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { match } from '@lib/utils/match'
+import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { match } from '@vultisig/lib-utils/match'
 
 import { NativeTcyPayload, StakeSpecific } from '../types'
 

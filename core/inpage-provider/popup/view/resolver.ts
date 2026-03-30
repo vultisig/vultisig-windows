@@ -4,7 +4,7 @@ import {
   PopupMethod,
 } from '@core/inpage-provider/popup/interface'
 import { OnFinishProp } from '@lib/ui/props'
-import { Resolver } from '@lib/utils/types/Resolver'
+import { Resolver } from '@vultisig/lib-utils/types/Resolver'
 import { ReactNode } from 'react'
 
 import { MethodBasedContext } from '../../call/context'

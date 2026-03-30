@@ -1,7 +1,7 @@
-import { CoinKey } from '@core/chain/coin/Coin'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { Text } from '@lib/ui/text'
-import { truncateId } from '@lib/utils/string/truncate'
+import { CoinKey } from '@vultisig/core-chain/coin/Coin'
+import { truncateId } from '@vultisig/lib-utils/string/truncate'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 

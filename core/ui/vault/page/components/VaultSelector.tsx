@@ -1,5 +1,3 @@
-import { hasServer } from '@core/mpc/devices/localPartyId'
-import { Vault } from '@core/mpc/vault/Vault'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { LightningIcon } from '@lib/ui/icons/LightningIcon'
@@ -8,6 +6,8 @@ import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndica
 import { HStack, hStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
+import { hasServer } from '@vultisig/core-mpc/devices/localPartyId'
+import { Vault } from '@vultisig/core-mpc/vault/Vault'
 import styled from 'styled-components'
 
 const Indicator = styled(CollapsableStateIndicator)`

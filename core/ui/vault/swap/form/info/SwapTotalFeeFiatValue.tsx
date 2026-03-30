@@ -1,7 +1,7 @@
-import { SwapFee } from '@core/chain/swap/SwapFee'
 import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { SwapFee } from '@vultisig/core-chain/swap/SwapFee'
 
 import { useSwapFiatFeesQuery } from '../../queries/useSwapFiatFeesQuery'
 

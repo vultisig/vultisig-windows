@@ -1,5 +1,5 @@
 import { ValueProp } from '@lib/ui/props'
-import { Defined } from '@lib/utils/types/Defined'
+import { Defined } from '@vultisig/lib-utils/types/Defined'
 import { ReactNode } from 'react'
 
 import { Query } from '../Query'

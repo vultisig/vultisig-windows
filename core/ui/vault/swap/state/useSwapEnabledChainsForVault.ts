@@ -1,6 +1,6 @@
-import { Chain } from '@core/chain/Chain'
-import { swapEnabledChains } from '@core/chain/swap/swapEnabledChains'
-import { isOneOf } from '@lib/utils/array/isOneOf'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { swapEnabledChains } from '@vultisig/core-chain/swap/swapEnabledChains'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { useMemo } from 'react'
 
 import { useAvailableChains } from '../../state/useAvailableChains'

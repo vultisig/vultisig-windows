@@ -1,7 +1,7 @@
 import { useCore } from '@core/ui/state/core'
 import { OnClickProp, ValueProp } from '@lib/ui/props'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMutation } from '@tanstack/react-query'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { toPng } from 'html-to-image'
 import { useState } from 'react'
 import { ReactNode } from 'react'

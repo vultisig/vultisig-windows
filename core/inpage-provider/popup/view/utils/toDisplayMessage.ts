@@ -1,4 +1,4 @@
-import { attempt } from '@lib/utils/attempt'
+import { attempt } from '@vultisig/lib-utils/attempt'
 import { hexlify } from 'ethers'
 
 const hasBadControl = (s: string): boolean => {

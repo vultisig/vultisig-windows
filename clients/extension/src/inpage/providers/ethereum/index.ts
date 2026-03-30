@@ -6,7 +6,7 @@ import {
 } from '@clients/extension/src/inpage/providers/ethereum/handlers'
 import { addBackgroundEventListener } from '@core/inpage-provider/background/events/inpage'
 import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
-import { validateUrl } from '@lib/utils/validation/url'
+import { validateUrl } from '@vultisig/lib-utils/validation/url'
 import EventEmitter from 'events'
 
 export { processSignature }

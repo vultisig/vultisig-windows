@@ -1,5 +1,5 @@
-import { TronResourceType } from '@core/chain/chains/tron/resources'
 import { ChainAction } from '@core/ui/vault/deposit/ChainAction'
+import { TronResourceType } from '@vultisig/core-chain/chains/tron/resources'
 import { useMemo } from 'react'
 
 import { useDepositCoin } from '../providers/DepositCoinProvider'

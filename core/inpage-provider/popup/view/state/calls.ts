@@ -2,7 +2,7 @@ import { VaultAppSession } from '@core/extension/storage/appSessions'
 import { BridgeContext } from '@lib/extension/bridge/context'
 import { getStorageValue } from '@lib/extension/storage/get'
 import { setStorageValue } from '@lib/extension/storage/set'
-import { omit } from '@lib/utils/record/omit'
+import { omit } from '@vultisig/lib-utils/record/omit'
 
 import { PopupCall } from '../../resolver'
 

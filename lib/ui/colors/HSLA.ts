@@ -1,5 +1,5 @@
-import { degreesInCircle } from '@lib/utils/degreesToRadians'
-import { enforceRange } from '@lib/utils/enforceRange'
+import { degreesInCircle } from '@vultisig/lib-utils/degreesToRadians'
+import { enforceRange } from '@vultisig/lib-utils/enforceRange'
 
 const hslaKeys = ['h', 's', 'l', 'a'] as const
 

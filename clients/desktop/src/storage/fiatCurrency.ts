@@ -1,6 +1,9 @@
-import { defaultFiatCurrency, FiatCurrency } from '@core/config/FiatCurrency'
 import { FiatCurrencyStorage } from '@core/ui/storage/fiatCurrency'
 import { StorageKey } from '@core/ui/storage/StorageKey'
+import {
+  defaultFiatCurrency,
+  FiatCurrency,
+} from '@vultisig/core-config/FiatCurrency'
 
 import { persistentStorage } from '../state/persistentState'
 

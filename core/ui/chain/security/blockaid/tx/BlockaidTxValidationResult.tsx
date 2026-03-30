@@ -1,8 +1,8 @@
-import { BlockaidValidationResult as BlockaidValidationResultType } from '@core/chain/security/blockaid/tx/validation/core'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { ValueProp } from '@lib/ui/props'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
-import { capitalizeFirstLetter } from '@lib/utils/capitalizeFirstLetter'
+import { BlockaidValidationResult as BlockaidValidationResultType } from '@vultisig/core-chain/security/blockaid/tx/validation/core'
+import { capitalizeFirstLetter } from '@vultisig/lib-utils/capitalizeFirstLetter'
 import { Trans, useTranslation } from 'react-i18next'
 import { useTheme } from 'styled-components'
 

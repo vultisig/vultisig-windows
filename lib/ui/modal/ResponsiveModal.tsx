@@ -5,7 +5,7 @@ import {
   useIsTabletDeviceAndUp,
 } from '@lib/ui/responsive/mediaQuery'
 import { getColor } from '@lib/ui/theme/getters'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { ReactNode, useRef, useState } from 'react'
 import styled from 'styled-components'
 

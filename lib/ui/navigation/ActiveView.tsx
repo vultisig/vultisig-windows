@@ -1,4 +1,4 @@
-import { getLastItem } from '@lib/utils/array/getLastItem'
+import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
 import { useRef } from 'react'
 
 import { useNavigation } from './state'

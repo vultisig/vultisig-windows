@@ -1,9 +1,9 @@
-import { ChainOfKind } from '@core/chain/ChainKind'
-import { getCosmosChainByChainId } from '@core/chain/chains/cosmos/chainInfo'
-import { getEvmChainByChainId } from '@core/chain/chains/evm/chainInfo'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { match } from '@lib/utils/match'
+import { ChainOfKind } from '@vultisig/core-chain/ChainKind'
+import { getCosmosChainByChainId } from '@vultisig/core-chain/chains/cosmos/chainInfo'
+import { getEvmChainByChainId } from '@vultisig/core-chain/chains/evm/chainInfo'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { match } from '@vultisig/lib-utils/match'
 
 import { getAppChainId } from './getAppChainId'
 

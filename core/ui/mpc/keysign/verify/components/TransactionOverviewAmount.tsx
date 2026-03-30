@@ -1,6 +1,3 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { CoinKey, CoinMetadata } from '@core/chain/coin/Coin'
-import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ListItem } from '@lib/ui/list/item'
@@ -8,7 +5,10 @@ import { Spinner } from '@lib/ui/loaders/Spinner'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Query } from '@lib/ui/query/Query'
 import { Text } from '@lib/ui/text'
-import { formatAmount } from '@lib/utils/formatAmount'
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { CoinKey, CoinMetadata } from '@vultisig/core-chain/coin/Coin'
+import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { ReactNode } from 'react'
 
 type OverviewCoin = CoinKey & Pick<CoinMetadata, 'decimals' | 'ticker' | 'logo'>

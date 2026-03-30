@@ -1,6 +1,6 @@
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { PublicKey } from '@solana/web3.js'
 import { TW } from '@trustwallet/wallet-core'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 
 import { SolanaTxData } from '../../types/types'
 import { readU64LE } from '../../utils'

@@ -1,4 +1,7 @@
-import { sunToTrx, TronResourceType } from '@core/chain/chains/tron/resources'
+import {
+  sunToTrx,
+  TronResourceType,
+} from '@vultisig/core-chain/chains/tron/resources'
 
 import { useTronAccountResourcesQuery } from '../../chain/tron/useTronAccountResourcesQuery'
 

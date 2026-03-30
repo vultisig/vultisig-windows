@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { Chain } from '@core/chain/Chain'
+import { Chain } from '@vultisig/core-chain/Chain'
 
 // Mock external dependencies
 const mockCallBackground = vi.fn()
@@ -61,24 +61,24 @@ vi.mock('@clients/extension/src/inpage/utils/functions', () => ({
 }))
 
 // Mock chain signing output
-vi.mock('@core/chain/tw/signingOutput', () => ({
+vi.mock('@vultisig/core-chain/tw/signingOutput', () => ({
   deserializeSigningOutput: vi.fn(),
 }))
 
 // Mock shouldBePresent
-vi.mock('@lib/utils/assert/shouldBePresent', () => ({
+vi.mock('@vultisig/lib-utils/assert/shouldBePresent', () => ({
   shouldBePresent: vi.fn((v: unknown) => {
     if (v === null || v === undefined) throw new Error('Expected value to be present')
     return v
   }),
 }))
 
-vi.mock('@lib/utils/attempt', async () => {
-  const actual = await vi.importActual<typeof import('@lib/utils/attempt')>('@lib/utils/attempt')
+vi.mock('@vultisig/lib-utils/attempt', async () => {
+  const actual = await vi.importActual<typeof import('@vultisig/lib-utils/attempt')>('@vultisig/lib-utils/attempt')
   return actual
 })
 
-vi.mock('@lib/utils/error/NotImplementedError', () => ({
+vi.mock('@vultisig/lib-utils/error/NotImplementedError', () => ({
   NotImplementedError: class NotImplementedError extends Error {
     constructor(method: string) {
       super(`Not implemented: ${method}`)

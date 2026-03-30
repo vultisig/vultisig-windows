@@ -3,9 +3,9 @@ import {
   setVaultsAppSessions,
 } from '@core/extension/storage/appSessions'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
-import { omit } from '@lib/utils/record/omit'
-import { recordMap } from '@lib/utils/record/recordMap'
-import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
+import { omit } from '@vultisig/lib-utils/record/omit'
+import { recordMap } from '@vultisig/lib-utils/record/recordMap'
+import { getUrlBaseDomain } from '@vultisig/lib-utils/url/baseDomain'
 
 export const signOut: BackgroundResolver<'signOut'> = async ({
   context: { requestOrigin },

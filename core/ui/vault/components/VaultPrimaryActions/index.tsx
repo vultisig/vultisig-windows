@@ -1,8 +1,8 @@
-import { banxaSupportedChains } from '@core/chain/banxa'
-import { Chain } from '@core/chain/Chain'
-import { CoinKey, extractCoinKey } from '@core/chain/coin/Coin'
 import { SendPrompt } from '@core/ui/vault/send/SendPrompt'
-import { isOneOf } from '@lib/utils/array/isOneOf'
+import { banxaSupportedChains } from '@vultisig/core-chain/banxa'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { CoinKey, extractCoinKey } from '@vultisig/core-chain/coin/Coin'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { useCallback, useMemo } from 'react'
 
 import { depositEnabledChains } from '../../deposit/DepositEnabledChain'

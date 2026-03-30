@@ -1,4 +1,4 @@
-import { Chain } from '@core/chain/Chain'
+import { Chain } from '@vultisig/core-chain/Chain'
 
 export const getChainFromString = (chainStr: string): Chain | null => {
   const found = Object.values(Chain).find(

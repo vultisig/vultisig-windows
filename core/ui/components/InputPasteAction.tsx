@@ -1,7 +1,7 @@
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { PasteIcon } from '@lib/ui/icons/PasteIcon'
 import { UiProps } from '@lib/ui/props'
-import { attempt } from '@lib/utils/attempt'
+import { attempt } from '@vultisig/lib-utils/attempt'
 
 import { useCore } from '../state/core'
 

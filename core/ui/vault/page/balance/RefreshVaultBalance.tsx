@@ -1,4 +1,3 @@
-import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
 import { getCoinPricesQueryKeys } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { getBalanceQueryKey } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
@@ -8,6 +7,7 @@ import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { RefreshCwIcon } from '@lib/ui/icons/RefreshCwIcon'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { useMutation } from '@tanstack/react-query'
+import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 
 export const RefreshVaultBalance = () => {
   const refetchQueries = useRefetchQueries()

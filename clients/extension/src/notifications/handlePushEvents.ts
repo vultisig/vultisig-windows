@@ -6,7 +6,7 @@ import {
 } from '@core/ui/notifications/pushNotificationApi'
 import { pushNotificationServerUrl } from '@core/ui/notifications/pushNotificationServerUrl'
 import { urlBase64ToUint8Array } from '@core/ui/notifications/urlBase64ToUint8Array'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { computeNotificationVaultId } from '@vultisig/sdk'
 
 import { setInitialView } from '../storage/initialView'

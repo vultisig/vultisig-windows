@@ -1,6 +1,6 @@
-import { coinKeyToString } from '@core/chain/coin/Coin'
-import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
-import { queryUrl } from '@lib/utils/query/queryUrl'
+import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
+import { getCoinValue } from '@vultisig/core-chain/coin/utils/getCoinValue'
+import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 import { rujiStakeApiUrl } from '../../constants'
 import { thorchainTokens } from '../../tokens'

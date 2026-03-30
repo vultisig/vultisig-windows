@@ -1,25 +1,25 @@
-import { isChainOfKind } from '@core/chain/ChainKind'
-import { BlockaidSimulationSupportedChain } from '@core/chain/security/blockaid/simulationChains'
-import {
-  BlockaidEVMSimulation,
-  BlockaidSolanaSimulation,
-  parseBlockaidEvmSimulation,
-  parseBlockaidSolanaSimulation,
-} from '@core/chain/security/blockaid/tx/simulation/api/core'
-import {
-  BlockaidEvmSimulationInfo,
-  BlockaidSolanaSimulationInfo,
-} from '@core/chain/security/blockaid/tx/simulation/core'
-import { getBlockaidTxSimulationInput } from '@core/chain/security/blockaid/tx/simulation/input'
-import { BlockaidTxSimulationInput } from '@core/chain/security/blockaid/tx/simulation/resolver'
-import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
-import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { getBlockaidTxSimulationQuery } from '@core/ui/chain/security/blockaid/tx/queries/blockaidTxSimulation'
 import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { Query } from '@lib/ui/query/Query'
 import { UseQueryOptions } from '@tanstack/react-query'
 import { WalletCore } from '@trustwallet/wallet-core'
+import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
+import { BlockaidSimulationSupportedChain } from '@vultisig/core-chain/security/blockaid/simulationChains'
+import {
+  BlockaidEVMSimulation,
+  BlockaidSolanaSimulation,
+  parseBlockaidEvmSimulation,
+  parseBlockaidSolanaSimulation,
+} from '@vultisig/core-chain/security/blockaid/tx/simulation/api/core'
+import {
+  BlockaidEvmSimulationInfo,
+  BlockaidSolanaSimulationInfo,
+} from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
+import { getBlockaidTxSimulationInput } from '@vultisig/core-chain/security/blockaid/tx/simulation/input'
+import { BlockaidTxSimulationInput } from '@vultisig/core-chain/security/blockaid/tx/simulation/resolver'
+import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
+import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import base58 from 'bs58'
 import { useCallback } from 'react'
 

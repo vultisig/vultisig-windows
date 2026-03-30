@@ -3,7 +3,7 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { TitleProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import styled from 'styled-components'
 
 export type ErrorFallbackContentProps = TitleProp & { error?: unknown }

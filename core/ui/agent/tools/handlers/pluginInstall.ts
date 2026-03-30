@@ -1,10 +1,10 @@
-import { DKLS } from '@core/mpc/dkls/dkls'
+import { DKLS } from '@vultisig/core-mpc/dkls/dkls'
 import {
   setKeygenComplete,
   waitForKeygenComplete,
-} from '@core/mpc/keygenComplete'
-import { Schnorr } from '@core/mpc/schnorr/schnorrKeygen'
-import { without } from '@lib/utils/array/without'
+} from '@vultisig/core-mpc/keygenComplete'
+import { Schnorr } from '@vultisig/core-mpc/schnorr/schnorrKeygen'
+import { without } from '@vultisig/lib-utils/array/without'
 import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
 

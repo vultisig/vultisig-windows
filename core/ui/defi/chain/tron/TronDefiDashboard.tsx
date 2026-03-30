@@ -1,10 +1,3 @@
-import { Chain } from '@core/chain/Chain'
-import {
-  formatTronWithdrawalTime,
-  sunToTrx,
-} from '@core/chain/chains/tron/resources'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { extractCoinKey } from '@core/chain/coin/Coin'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { TronResourcesSection } from '@core/ui/vault/chain/tron/TronResourcesSection'
 import { useTronAccountResourcesQuery } from '@core/ui/vault/chain/tron/useTronAccountResourcesQuery'
@@ -15,6 +8,13 @@ import { Skeleton } from '@lib/ui/loaders/Skeleton'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { Chain } from '@vultisig/core-chain/Chain'
+import {
+  formatTronWithdrawalTime,
+  sunToTrx,
+} from '@vultisig/core-chain/chains/tron/resources'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { extractCoinKey } from '@vultisig/core-chain/coin/Coin'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'

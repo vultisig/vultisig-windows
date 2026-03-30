@@ -1,6 +1,6 @@
-import { hasServer } from '@core/mpc/devices/localPartyId'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
+import { hasServer } from '@vultisig/core-mpc/devices/localPartyId'
 
 import { BackupFastVault } from '../../../vault/backup/fast/BackupFastVault'
 import { BackupSecureVault } from '../../../vault/backup/secure/BackupSecureVault'

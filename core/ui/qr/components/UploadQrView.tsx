@@ -7,7 +7,7 @@ import { OnFinishProp } from '@lib/ui/props'
 import { QrImageDropZone } from '@lib/ui/qr/upload/QrImageDropZone'
 import { UploadedQr } from '@lib/ui/qr/upload/UploadedQr'
 import { Text } from '@lib/ui/text'
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 

@@ -13,7 +13,13 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "paths": {
+      "@vultisig/core-chain/*": ["./node_modules/@vultisig/core-chain/dist/*"],
+      "@vultisig/core-mpc/*": ["./node_modules/@vultisig/core-mpc/dist/*"],
+      "@vultisig/core-config/*": ["./node_modules/@vultisig/core-config/dist/*"],
+      "@vultisig/lib-utils/*": ["./node_modules/@vultisig/lib-utils/dist/*"]
+    }
   },
   "references": [],
   "exclude": ["node_modules", "clients/extension/tests/**"],
@@ -23,6 +29,7 @@
     "**/*.tsx",
     "types.d.ts",
     "lib/ui/theme/styled.d.ts",
-    "lib/ui/query/react-query.d.ts"
-, "vitest.config.mts"  ]
+    "lib/ui/query/react-query.d.ts",
+    "vitest.config.mts"
+  ]
 }

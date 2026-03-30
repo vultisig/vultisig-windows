@@ -1,6 +1,6 @@
-import { getTxStatus } from '@core/chain/tx/status'
 import { useUpdateTransactionRecordMutation } from '@core/ui/storage/transactionHistory'
-import { attempt } from '@lib/utils/attempt'
+import { getTxStatus } from '@vultisig/core-chain/tx/status'
+import { attempt } from '@vultisig/lib-utils/attempt'
 import { useEffect, useRef } from 'react'
 
 import { TransactionRecord, TransactionRecordStatus } from '../core'

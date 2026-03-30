@@ -1,6 +1,6 @@
-import { getTxStatus } from '@core/chain/tx/status'
 import { useUpdateTransactionRecordMutation } from '@core/ui/storage/transactionHistory'
 import { useQuery } from '@tanstack/react-query'
+import { getTxStatus } from '@vultisig/core-chain/tx/status'
 import { useRef } from 'react'
 
 import { TransactionRecord, TransactionRecordStatus } from '../core'

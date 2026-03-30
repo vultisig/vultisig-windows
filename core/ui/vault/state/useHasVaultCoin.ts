@@ -1,4 +1,4 @@
-import { areEqualCoins, CoinKey } from '@core/chain/coin/Coin'
+import { areEqualCoins, CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { useMemo } from 'react'
 
 import { useCurrentVaultCoins } from './currentVaultCoins'

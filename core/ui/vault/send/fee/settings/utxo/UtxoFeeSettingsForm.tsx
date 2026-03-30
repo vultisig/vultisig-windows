@@ -1,8 +1,3 @@
-import { feePriorities } from '@core/chain/tx/fee/FeePriority'
-import {
-  byteFeeMultiplier,
-  UtxoFeeSettings,
-} from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
 import { HorizontalLine } from '@core/ui/vault/send/components/HorizontalLine'
 import { Button } from '@lib/ui/buttons/Button'
 import { getFormProps } from '@lib/ui/form/utils/getFormProps'
@@ -13,7 +8,12 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { InputProps, OnCloseProp, OnFinishProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
+import { feePriorities } from '@vultisig/core-chain/tx/fee/FeePriority'
+import {
+  byteFeeMultiplier,
+  UtxoFeeSettings,
+} from '@vultisig/core-chain/tx/fee/utxo/UtxoFeeSettings'
+import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'

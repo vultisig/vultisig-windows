@@ -8,7 +8,7 @@ import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { InfoBlock } from '@lib/ui/status/InfoBlock'
 import { Text } from '@lib/ui/text'
-import { match } from '@lib/utils/match'
+import { match } from '@vultisig/lib-utils/match'
 import { useTranslation } from 'react-i18next'
 
 export const ReshareVaultPage = () => {

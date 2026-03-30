@@ -1,6 +1,6 @@
-import { Chain } from '@core/chain/Chain'
-import { ChainEntity } from '@core/chain/ChainEntity'
-import { groupItems } from '@lib/utils/array/groupItems'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { ChainEntity } from '@vultisig/core-chain/ChainEntity'
+import { groupItems } from '@vultisig/lib-utils/array/groupItems'
 import { describe, expect, it } from 'vitest'
 
 import { groupChainEntities } from '../groupChainEntities'

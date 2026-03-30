@@ -1,5 +1,5 @@
-import { attempt, withFallback } from '@lib/utils/attempt'
 import { secp256k1 } from '@noble/curves/secp256k1'
+import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 import { keccak256, toBytes, toHex } from 'viem'
 import { z } from 'zod'
 

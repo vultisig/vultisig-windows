@@ -1,6 +1,6 @@
-import { generateLocalPartyId } from '@core/mpc/devices/localPartyId'
 import { ChildrenProp } from '@lib/ui/props'
 import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
+import { generateLocalPartyId } from '@vultisig/core-mpc/devices/localPartyId'
 import { useMemo } from 'react'
 
 import { useCore } from '../../state/core'

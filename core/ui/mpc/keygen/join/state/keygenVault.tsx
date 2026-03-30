@@ -1,5 +1,3 @@
-import { generateLocalPartyId } from '@core/mpc/devices/localPartyId'
-import { generateHexChainCode } from '@core/mpc/utils/generateHexChainCode'
 import {
   KeygenVault,
   KeygenVaultProvider,
@@ -9,8 +7,10 @@ import { MpcLocalPartyIdProvider } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useVaults } from '@core/ui/storage/vaults'
 import { ChildrenProp } from '@lib/ui/props'
-import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
-import { pick } from '@lib/utils/record/pick'
+import { generateLocalPartyId } from '@vultisig/core-mpc/devices/localPartyId'
+import { generateHexChainCode } from '@vultisig/core-mpc/utils/generateHexChainCode'
+import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
+import { pick } from '@vultisig/lib-utils/record/pick'
 import { useMemo } from 'react'
 
 import { useCore } from '../../../../state/core'

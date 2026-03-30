@@ -1,5 +1,5 @@
-import { Chain } from '@core/chain/Chain'
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import { Chain } from '@vultisig/core-chain/Chain'
 
 import type { TransactionHistoryTagType } from '../TransactionHistoryTag'
 import { TransactionHistoryCard } from './TransactionHistoryCard'

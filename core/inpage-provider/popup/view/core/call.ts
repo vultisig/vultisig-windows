@@ -1,5 +1,5 @@
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { useMutation } from '@tanstack/react-query'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 
 import { callIdQueryParam } from '../../config'
 import { PopupMethod } from '../../interface'

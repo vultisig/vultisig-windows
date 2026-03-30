@@ -1,6 +1,6 @@
-import { Chain } from '@core/chain/Chain'
-import { getCoinType } from '@core/chain/coin/coinType'
 import { useWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { getCoinType } from '@vultisig/core-chain/coin/coinType'
 import { useCallback } from 'react'
 
 export const useDeriveChainFromWalletAddress = () => {

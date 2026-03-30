@@ -1,8 +1,8 @@
-import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { DepositActionOption } from '@core/ui/vault/deposit/DepositForm/DepositActionOption'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { Text } from '@lib/ui/text'
+import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 

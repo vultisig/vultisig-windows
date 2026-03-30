@@ -1,15 +1,15 @@
-import { getVaultId } from '@core/mpc/vault/Vault'
 import { useCore } from '@core/ui/state/core'
 import { ChildrenProp, ValueProp } from '@lib/ui/props'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import {
   useMutation,
   UseMutationOptions,
   useQuery,
 } from '@tanstack/react-query'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { useEffect, useMemo } from 'react'
 
 import { StorageKey } from './StorageKey'

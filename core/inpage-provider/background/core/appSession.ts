@@ -3,7 +3,7 @@ import {
   AppSession,
   getVaultAppSessions,
 } from '@core/extension/storage/appSessions'
-import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
+import { getUrlBaseDomain } from '@vultisig/lib-utils/url/baseDomain'
 
 export const getAppSession = async (
   requestOrigin: string

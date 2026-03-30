@@ -1,5 +1,5 @@
-import { hasServer } from '@core/mpc/devices/localPartyId'
-import { isKeyImportVault, Vault } from '@core/mpc/vault/Vault'
+import { hasServer } from '@vultisig/core-mpc/devices/localPartyId'
+import { isKeyImportVault, Vault } from '@vultisig/core-mpc/vault/Vault'
 
 import { VaultExport } from '.'
 import { getVaultExportUid } from './uid'

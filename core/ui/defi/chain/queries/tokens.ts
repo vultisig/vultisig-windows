@@ -1,8 +1,8 @@
-import { Chain } from '@core/chain/Chain'
-import { yieldBearingThorChainTokens } from '@core/chain/chains/cosmos/thor/yield-bearing-tokens/yAssetsOnThorChain'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { Coin } from '@core/chain/coin/Coin'
-import { knownCosmosTokens } from '@core/chain/coin/knownTokens/cosmos'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { yieldBearingThorChainTokens } from '@vultisig/core-chain/chains/cosmos/thor/yield-bearing-tokens/yAssetsOnThorChain'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { Coin } from '@vultisig/core-chain/coin/Coin'
+import { knownCosmosTokens } from '@vultisig/core-chain/coin/knownTokens/cosmos'
 
 export const runeCoin: Coin = {
   ...chainFeeCoin[Chain.THORChain],

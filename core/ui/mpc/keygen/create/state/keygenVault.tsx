@@ -1,6 +1,6 @@
 import { KeygenVaultProvider } from '@core/ui/mpc/keygen/state/keygenVault'
 import { ChildrenProp } from '@lib/ui/props'
-import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
+import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
 
 import { useVaultCreationInput } from '../state/vaultCreationInput'
 

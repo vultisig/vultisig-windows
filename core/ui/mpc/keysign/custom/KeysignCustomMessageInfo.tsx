@@ -1,8 +1,8 @@
-import { CustomMessagePayload } from '@core/mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { attempt, withFallback } from '@lib/utils/attempt'
+import { CustomMessagePayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
+import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 

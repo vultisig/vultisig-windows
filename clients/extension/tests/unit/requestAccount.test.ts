@@ -19,7 +19,7 @@ vi.mock('@core/inpage-provider/popup', () => ({
 import { requestAccount } from '@clients/extension/src/inpage/providers/core/requestAccount'
 
 // We need to know the Chain enum value for Solana
-import { Chain } from '@core/chain/Chain'
+import { Chain } from '@vultisig/core-chain/Chain'
 
 describe('requestAccount', () => {
   beforeEach(() => {

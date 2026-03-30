@@ -1,4 +1,3 @@
-import { Coin } from '@core/chain/coin/Coin'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { ChevronDownIcon } from '@lib/ui/icons/ChevronDownIcon'
@@ -6,6 +5,7 @@ import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
+import { Coin } from '@vultisig/core-chain/coin/Coin'
 import { useTranslation } from 'react-i18next'
 
 import { getChainLogoSrc } from '../../../../chain/metadata/getChainLogoSrc'

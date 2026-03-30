@@ -1,9 +1,9 @@
-import { keysign } from '@core/mpc/keysign'
-import { isKeyImportVault } from '@core/mpc/vault/Vault'
 import { ChildrenProp } from '@lib/ui/props'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { match } from '@lib/utils/match'
-import { chainPromises } from '@lib/utils/promise/chainPromises'
+import { keysign } from '@vultisig/core-mpc/keysign'
+import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { match } from '@vultisig/lib-utils/match'
+import { chainPromises } from '@vultisig/lib-utils/promise/chainPromises'
 
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
 import { useCurrentVault } from '../../../vault/state/currentVault'
@@ -50,6 +50,8 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
         message => async () =>
           keysign({
             keyShare,
+            // Published `@vultisig/core-mpc` keysign input omits MLDSA; this provider still resolves MLDSA keyshares.
+            // @ts-expect-error — signatureAlgorithm includes `mldsa` for QBTC; narrow SDK types do not.
             signatureAlgorithm,
             message,
             chainPath: isKeyImportVault(vault)

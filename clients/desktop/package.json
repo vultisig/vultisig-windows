@@ -33,14 +33,14 @@
     "vitest": "^4.1.0"
   },
   "dependencies": {
-    "@core/chain": "workspace:^",
-    "@core/config": "workspace:^",
-    "@core/mpc": "workspace:^",
     "@core/ui": "workspace:^",
     "@lib/ui": "workspace:^",
-    "@lib/utils": "workspace:^",
     "@tanstack/react-query": "^5.90.21",
     "@tanstack/react-query-persist-client": "^5.90.24",
+    "@vultisig/core-chain": "0.10.0",
+    "@vultisig/core-config": "0.9.0",
+    "@vultisig/core-mpc": "0.10.0",
+    "@vultisig/lib-utils": "0.9.0",
     "@wailsapp/runtime": "workspace:^",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",

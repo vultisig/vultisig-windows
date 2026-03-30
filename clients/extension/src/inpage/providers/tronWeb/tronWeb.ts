@@ -1,13 +1,13 @@
-import { Chain } from '@core/chain/Chain'
-import { decodeTrc20TransferData } from '@core/chain/chains/tron/trc20/decodeTrc20TransferData'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { deserializeSigningOutput } from '@core/chain/tw/signingOutput'
 import { callPopup } from '@core/inpage-provider/popup'
 import {
   TransactionDetails,
   TronMsgType,
 } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
-import { match } from '@lib/utils/match'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { decodeTrc20TransferData } from '@vultisig/core-chain/chains/tron/trc20/decodeTrc20TransferData'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { deserializeSigningOutput } from '@vultisig/core-chain/tw/signingOutput'
+import { match } from '@vultisig/lib-utils/match'
 import { TronWeb, Trx, Types } from 'tronweb'
 import { fromHex, isArray } from 'tronweb/utils'
 

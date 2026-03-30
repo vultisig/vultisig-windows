@@ -1,7 +1,7 @@
 import { mergeableInFlightPopupMethods } from '@core/inpage-provider/popup/interface'
-import { withInFlightCoalescer } from '@lib/utils/promise/coalesceInFlight'
-import { addQueryParams } from '@lib/utils/query/addQueryParams'
-import { getRecordUnionKey } from '@lib/utils/record/union/getRecordUnionKey'
+import { withInFlightCoalescer } from '@vultisig/lib-utils/promise/coalesceInFlight'
+import { addQueryParams } from '@vultisig/lib-utils/query/addQueryParams'
+import { getRecordUnionKey } from '@vultisig/lib-utils/record/union/getRecordUnionKey'
 
 import { callIdQueryParam } from '../../config'
 import { PopupError } from '../../error'

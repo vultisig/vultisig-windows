@@ -1,9 +1,9 @@
-import { KeygenStep } from '@core/mpc/keygen/KeygenStep'
 import {
   ProtocolStatuses,
   useKeygenAction,
 } from '@core/ui/mpc/keygen/state/keygenAction'
 import { useMutation } from '@tanstack/react-query'
+import { KeygenStep } from '@vultisig/core-mpc/keygen/KeygenStep'
 import { useRef, useState } from 'react'
 
 import { useMpcSigners } from '../../devices/state/signers'

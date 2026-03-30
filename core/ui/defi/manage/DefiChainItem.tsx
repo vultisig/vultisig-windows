@@ -1,4 +1,3 @@
-import { Chain } from '@core/chain/Chain'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import {
@@ -7,6 +6,7 @@ import {
   useToggleDefiChainWithAutoEnable,
 } from '@core/ui/storage/defiChains'
 import { ValueProp } from '@lib/ui/props'
+import { Chain } from '@vultisig/core-chain/Chain'
 
 import { DefiItem } from './DefiItem'
 

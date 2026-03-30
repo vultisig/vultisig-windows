@@ -1,8 +1,8 @@
-import { Chain } from '@core/chain/Chain'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { Coin } from '@core/chain/coin/Coin'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { Coin } from '@vultisig/core-chain/coin/Coin'
 
 import { DefiPosition } from '../../../storage/defiPositions'
 import { mayaCoin, runeCoin, thorchainTokens } from '../queries/tokens'

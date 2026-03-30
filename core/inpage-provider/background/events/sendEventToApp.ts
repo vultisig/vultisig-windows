@@ -1,5 +1,5 @@
-import { without } from '@lib/utils/array/without'
-import { getUrlBaseDomain } from '@lib/utils/url/baseDomain'
+import { without } from '@vultisig/lib-utils/array/without'
+import { getUrlBaseDomain } from '@vultisig/lib-utils/url/baseDomain'
 
 import { BackgroundEventMessage, backgroundEventMsgType } from './core'
 import { BackgroundEvent, BackgroundEventsInterface } from './interface'

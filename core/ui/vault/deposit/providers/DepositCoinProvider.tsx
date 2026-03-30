@@ -1,6 +1,6 @@
-import { AccountCoin } from '@core/chain/coin/AccountCoin'
 import { ChildrenProp } from '@lib/ui/props'
 import { useStateCorrector } from '@lib/ui/state/useStateCorrector'
+import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import {
   createContext,
   Dispatch,

@@ -1,6 +1,6 @@
-import { Chain } from '@core/chain/Chain'
 import { isEvmChain } from '@core/ui/address-book/AddressBookChainType'
 import { useAddressBookItemsQuery } from '@core/ui/storage/addressBook'
+import { Chain } from '@vultisig/core-chain/Chain'
 
 type UseAddressBookNameForAddressInput = {
   address: string

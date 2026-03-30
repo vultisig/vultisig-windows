@@ -1,9 +1,3 @@
-import { Chain } from '@core/chain/Chain'
-import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
-import { areEqualCoins, Coin, extractCoinKey } from '@core/chain/coin/Coin'
-import { getSolanaCoingeckoId } from '@core/chain/coin/coingecko/getCoingeckoId'
-import { knownTokens } from '@core/chain/coin/knownTokens'
-import { sortCoinsAlphabetically } from '@core/chain/coin/utils/sortCoinsAlphabetically'
 import { useWhitelistedCoinsQuery } from '@core/ui/chain/coin/queries/useWhitelistedCoinsQuery'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCore } from '@core/ui/state/core'
@@ -22,7 +16,17 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { EmptyState } from '@lib/ui/status/EmptyState'
 import { Text } from '@lib/ui/text'
-import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
+import {
+  areEqualCoins,
+  Coin,
+  extractCoinKey,
+} from '@vultisig/core-chain/coin/Coin'
+import { getSolanaCoingeckoId } from '@vultisig/core-chain/coin/coingecko/getCoingeckoId'
+import { knownTokens } from '@vultisig/core-chain/coin/knownTokens'
+import { sortCoinsAlphabetically } from '@vultisig/core-chain/coin/utils/sortCoinsAlphabetically'
+import { withoutDuplicates } from '@vultisig/lib-utils/array/withoutDuplicates'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 

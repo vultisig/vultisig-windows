@@ -1,8 +1,8 @@
-import { cosmosRpcUrl } from '@core/chain/chains/cosmos/cosmosRpcUrl'
-import { tcyAutoCompounderConfig } from '@core/chain/chains/cosmos/thor/tcy-autocompound/config'
-import { coinKeyToString } from '@core/chain/coin/Coin'
-import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
-import { queryUrl } from '@lib/utils/query/queryUrl'
+import { cosmosRpcUrl } from '@vultisig/core-chain/chains/cosmos/cosmosRpcUrl'
+import { tcyAutoCompounderConfig } from '@vultisig/core-chain/chains/cosmos/thor/tcy-autocompound/config'
+import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
+import { getCoinValue } from '@vultisig/core-chain/coin/utils/getCoinValue'
+import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 import { thorchainTokens } from '../../tokens'
 import { ThorchainStakePosition } from '../../types'

@@ -1,10 +1,10 @@
-import { getEvmContractCallInfo } from '@core/chain/chains/evm/contract/call/info'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { useQuery } from '@tanstack/react-query'
+import { getEvmContractCallInfo } from '@vultisig/core-chain/chains/evm/contract/call/info'
 import { useTranslation } from 'react-i18next'
 
 import { TxOverviewPlainMemo } from './TxOverviewPlainMemo'
