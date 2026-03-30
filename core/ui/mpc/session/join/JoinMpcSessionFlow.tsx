@@ -1,7 +1,7 @@
 import { StepTransition } from '@lib/ui/base/StepTransition'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { RenderProp, ValueProp } from '@lib/ui/props'
-import { without } from '@lib/utils/array/without'
+import { without } from '@vultisig/lib-utils/array/without'
 
 import { MpcSignersProvider } from '../../devices/state/signers'
 import { useMpcLocalPartyId } from '../../state/mpcLocalPartyId'

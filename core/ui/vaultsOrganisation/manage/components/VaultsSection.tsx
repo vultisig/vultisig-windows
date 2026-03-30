@@ -1,4 +1,3 @@
-import { getVaultId, Vault } from '@core/mpc/vault/Vault'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { useCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { useFolderlessVaults } from '@core/ui/storage/vaults'
@@ -19,11 +18,13 @@ import {
 } from '@lib/ui/list/item/DnDItemContainer'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
-import { getNewOrder } from '@lib/utils/order/getNewOrder'
+import { getVaultId, Vault } from '@vultisig/core-mpc/vault/Vault'
+import { sortEntitiesWithOrder } from '@vultisig/lib-utils/entities/EntityWithOrder'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
+
+import { getNewOrder } from '../../../utils/order/getNewOrder'
 
 export const VaultsSection = () => {
   const { t } = useTranslation()

@@ -1,15 +1,15 @@
-import {
-  setKeygenComplete,
-  waitForKeygenComplete,
-} from '@core/mpc/keygenComplete'
-import { MldsaKeygen } from '@core/mpc/mldsa/mldsaKeygen'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { ChildrenProp } from '@lib/ui/props'
-import { without } from '@lib/utils/array/without'
+import {
+  setKeygenComplete,
+  waitForKeygenComplete,
+} from '@vultisig/core-mpc/keygenComplete'
+import { MldsaKeygen } from '@vultisig/core-mpc/mldsa/mldsaKeygen'
+import { without } from '@vultisig/lib-utils/array/without'
 import { useCallback } from 'react'
 
 import { KeygenAction, KeygenActionProvider } from '../state/keygenAction'

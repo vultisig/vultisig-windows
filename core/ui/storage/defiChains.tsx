@@ -1,11 +1,11 @@
-import { Chain } from '@core/chain/Chain'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { useCreateCoinMutation } from '@core/ui/storage/coins'
 import { useCurrentVaultChains } from '@core/ui/vault/state/currentVaultCoins'
 import { useAvailableChains } from '@core/ui/vault/state/useAvailableChains'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { useMemo } from 'react'
 
 import { featureFlags } from '../featureFlags'

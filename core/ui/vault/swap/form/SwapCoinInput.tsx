@@ -1,5 +1,3 @@
-import { CoinKey } from '@core/chain/coin/Coin'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import {
   useCurrentVaultCoin,
   useCurrentVaultCoins,
@@ -8,9 +6,11 @@ import { SelectItemModal } from '@lib/ui/inputs/SelectItemModal'
 import { HStack } from '@lib/ui/layout/Stack'
 import { InputProps } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { isOneOf } from '@lib/utils/array/isOneOf'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { pick } from '@lib/utils/record/pick'
+import { CoinKey } from '@vultisig/core-chain/coin/Coin'
+import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { pick } from '@vultisig/lib-utils/record/pick'
 import { FC, useMemo } from 'react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

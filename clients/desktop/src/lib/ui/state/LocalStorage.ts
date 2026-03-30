@@ -1,6 +1,6 @@
-import { attempt, withFallback } from '@lib/utils/attempt'
-import { ValueTransition } from '@lib/utils/entities/ValueTransition'
-import { recordMap } from '@lib/utils/record/recordMap'
+import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
+import { ValueTransition } from '@vultisig/lib-utils/entities/ValueTransition'
+import { recordMap } from '@vultisig/lib-utils/record/recordMap'
 
 import { OnValueChangeListener, PersistentStorage } from './PersistentStorage'
 

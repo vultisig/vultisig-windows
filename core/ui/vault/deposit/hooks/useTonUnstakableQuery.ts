@@ -1,8 +1,8 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { Chain } from '@core/chain/Chain'
-import { getTonBalance } from '@core/chain/chains/ton/account/getTonBalance'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { getTonBalance } from '@vultisig/core-chain/chains/ton/account/getTonBalance'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 
 export const useTonUnstakableQuery = ({
   address,

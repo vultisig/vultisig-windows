@@ -1,4 +1,3 @@
-import { getKeygenThreshold } from '@core/mpc/getKeygenThreshold'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
@@ -7,6 +6,7 @@ import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { hStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { getKeygenThreshold } from '@vultisig/core-mpc/getKeygenThreshold'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 

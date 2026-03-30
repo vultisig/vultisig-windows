@@ -1,8 +1,8 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { usdc } from '@core/chain/coin/knownTokens'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
 import { Query } from '@lib/ui/query/Query'
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { usdc } from '@vultisig/core-chain/coin/knownTokens'
 import { useMemo } from 'react'
 
 import { useCircleAccountUsdcBalanceQuery } from './circleAccountUsdcBalance'

@@ -1,6 +1,6 @@
-import { getVaultId, Vault } from '@core/mpc/vault/Vault'
 import { useCore } from '@core/ui/state/core'
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
+import { getVaultId, Vault } from '@vultisig/core-mpc/vault/Vault'
 
 import { useCreateVaultMutation } from './useCreateVaultMutation'
 

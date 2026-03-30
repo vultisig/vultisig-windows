@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-
-import { Chain } from '../../../../chain/Chain'
-import { getTxStatus } from '../../../../chain/tx/status'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { getTxStatus } from '@vultisig/core-chain/tx/status'
 
 type UseTxStatusQueryInput = {
   chain: Chain

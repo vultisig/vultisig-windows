@@ -1,7 +1,3 @@
-import { Chain } from '@core/chain/Chain'
-import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
-import { Coin } from '@core/chain/coin/Coin'
-import { usdc } from '@core/chain/coin/knownTokens'
 import { getCoinPricesQueryKeys } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { getBalanceQueryKey } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import { useIsCircleVisible } from '@core/ui/storage/circleVisibility'
@@ -16,6 +12,10 @@ import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { RefreshCwIcon } from '@lib/ui/icons/RefreshCwIcon'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { QueryKey, useMutation } from '@tanstack/react-query'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
+import { Coin } from '@vultisig/core-chain/coin/Coin'
+import { usdc } from '@vultisig/core-chain/coin/knownTokens'
 
 import {
   mayaDefiCoins,

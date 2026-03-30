@@ -1,8 +1,8 @@
-import { hasServer } from '@core/mpc/devices/localPartyId'
-import { getVaultId } from '@core/mpc/vault/Vault'
 import { FastVaultPasswordVerification } from '@core/ui/mpc/fast/FastVaultPasswordVerification'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { VStack } from '@lib/ui/layout/Stack'
+import { hasServer } from '@vultisig/core-mpc/devices/localPartyId'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { ReactNode, useRef } from 'react'
 import styled from 'styled-components'
 

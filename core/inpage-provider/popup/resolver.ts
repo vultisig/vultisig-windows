@@ -1,11 +1,11 @@
-import { productName } from '@core/config'
 import {
   AuthorizedPopupMethod,
   PopupInterface,
   PopupMethod,
 } from '@core/inpage-provider/popup/interface'
-import { Resolver } from '@lib/utils/types/Resolver'
-import { Result } from '@lib/utils/types/Result'
+import { productName } from '@vultisig/core-config'
+import { Resolver } from '@vultisig/lib-utils/types/Resolver'
+import { Result } from '@vultisig/lib-utils/types/Result'
 
 import { MethodBasedContext } from '../call/context'
 

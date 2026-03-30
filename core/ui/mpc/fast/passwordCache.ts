@@ -1,4 +1,4 @@
-import { convertDuration } from '@lib/utils/time/convertDuration'
+import { convertDuration } from '@vultisig/lib-utils/time/convertDuration'
 
 const cacheDurationMs = convertDuration(5, 'min', 'ms')
 const storageKey = 'fastVaultPasswordCache'

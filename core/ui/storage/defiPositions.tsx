@@ -1,8 +1,3 @@
-import { Chain } from '@core/chain/Chain'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { Coin } from '@core/chain/coin/Coin'
-import { knownTokens, knownTokensIndex } from '@core/chain/coin/knownTokens'
-import { findByTicker } from '@core/chain/coin/utils/findByTicker'
 import {
   mayaMidgardBaseUrl,
   midgardBaseUrl,
@@ -10,8 +5,16 @@ import {
 import { mayaCoin, runeCoin } from '@core/ui/defi/chain/queries/tokens'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
-import { queryUrl } from '@lib/utils/query/queryUrl'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { Coin } from '@vultisig/core-chain/coin/Coin'
+import {
+  knownTokens,
+  knownTokensIndex,
+} from '@vultisig/core-chain/coin/knownTokens'
+import { findByTicker } from '@vultisig/core-chain/coin/utils/findByTicker'
+import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 import { useMemo } from 'react'
 
 import { useCore } from '../state/core'

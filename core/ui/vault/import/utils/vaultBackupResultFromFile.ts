@@ -1,4 +1,3 @@
-import { getSevenZip } from '@core/mpc/compression/getSevenZip'
 import { isLikelyToBeDklsVaultBackup } from '@core/ui/vault/import/utils/isLikelyToBeDklsVaultBackup'
 import { vaultBackupResultFromFileContent } from '@core/ui/vault/import/utils/vaultBackupResultFromString'
 import {
@@ -12,8 +11,9 @@ import {
   FileBasedVaultBackupResult,
   FileBasedVaultBackupResultItem,
 } from '@core/ui/vault/import/VaultBackupResult'
-import { attempt } from '@lib/utils/attempt'
-import { readFileAsArrayBuffer } from '@lib/utils/file/readFileAsArrayBuffer'
+import { getSevenZip } from '@vultisig/core-mpc/compression/getSevenZip'
+import { attempt } from '@vultisig/lib-utils/attempt'
+import { readFileAsArrayBuffer } from '@vultisig/lib-utils/file/readFileAsArrayBuffer'
 
 const supportedEntryExtensions = new Set<string>(vaultBackupExtensions)
 

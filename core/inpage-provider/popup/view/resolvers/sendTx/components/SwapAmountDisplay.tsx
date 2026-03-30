@@ -1,8 +1,8 @@
-import { Coin } from '@core/chain/coin/Coin'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { round } from '@lib/ui/css/round'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
+import { Coin } from '@vultisig/core-chain/coin/Coin'
 import styled from 'styled-components'
 
 const RoundedCoinIconWrapper = styled.div`

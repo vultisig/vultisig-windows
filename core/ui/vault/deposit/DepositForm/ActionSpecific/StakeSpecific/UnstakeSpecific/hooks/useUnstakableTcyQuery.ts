@@ -1,6 +1,6 @@
-import { cosmosRpcUrl } from '@core/chain/chains/cosmos/cosmosRpcUrl'
-import { queryUrl } from '@lib/utils/query/queryUrl'
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
+import { cosmosRpcUrl } from '@vultisig/core-chain/chains/cosmos/cosmosRpcUrl'
+import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 const tcyStakerApiUrl = `${cosmosRpcUrl.THORChain}/thorchain/tcy_staker`
 

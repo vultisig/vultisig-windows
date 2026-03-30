@@ -1,8 +1,3 @@
-import {
-  FeeSettings,
-  FeeSettingsChain,
-  feeSettingsChains,
-} from '@core/mpc/keysign/chainSpecific/FeeSettings'
 import { TxOverviewMemo } from '@core/ui/chain/tx/TxOverviewMemo'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
@@ -19,8 +14,13 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ListItem } from '@lib/ui/list/item'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnBackProp } from '@lib/ui/props'
-import { isOneOf } from '@lib/utils/array/isOneOf'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import {
+  FeeSettings,
+  FeeSettingsChain,
+  feeSettingsChains,
+} from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 

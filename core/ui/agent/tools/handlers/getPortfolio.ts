@@ -1,7 +1,7 @@
-import { Chain } from '@core/chain/Chain'
-import { getCoinBalance } from '@core/chain/coin/balance'
-import { getCoinPrices } from '@core/chain/coin/price/getCoinPrices'
-import { attempt, withFallback } from '@lib/utils/attempt'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { getCoinBalance } from '@vultisig/core-chain/coin/balance'
+import { getCoinPrices } from '@vultisig/core-chain/coin/price/getCoinPrices'
+import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 
 import type { ToolHandler } from '../types'
 

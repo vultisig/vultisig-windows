@@ -1,13 +1,13 @@
-import { FeeSettings } from '@core/mpc/keysign/chainSpecific/FeeSettings'
-import { getVaultId } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
   useCurrentVault,
   useCurrentVaultPublicKey,
 } from '@core/ui/vault/state/currentVault'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
-import { omit } from '@lib/utils/record/omit'
 import { useQuery } from '@tanstack/react-query'
+import { FeeSettings } from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
+import { omit } from '@vultisig/lib-utils/record/omit'
 import { useMemo } from 'react'
 
 import { ParsedTx } from '../core/parsedTx'

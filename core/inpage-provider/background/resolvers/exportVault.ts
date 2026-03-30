@@ -1,8 +1,8 @@
 import { storage } from '@core/extension/storage'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
-import { getVaultId } from '@core/mpc/vault/Vault'
 import { toVaultExport } from '@core/ui/vault/export/core/toVaultExport'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 
 export const exportVault: BackgroundResolver<'exportVault'> = async ({
   context: { appSession },

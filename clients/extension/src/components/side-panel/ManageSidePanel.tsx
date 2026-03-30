@@ -6,7 +6,7 @@ import { ListItemIconWrapper } from '@core/ui/vault/settings'
 import { PanelRightIcon } from '@lib/ui/icons/PanelRightIcon'
 import { Switch } from '@lib/ui/inputs/switch'
 import { ListItem } from '@lib/ui/list/item'
-import { attempt } from '@lib/utils/attempt'
+import { attempt } from '@vultisig/lib-utils/attempt'
 import { useTranslation } from 'react-i18next'
 
 const switchToSidePanel = async () => {

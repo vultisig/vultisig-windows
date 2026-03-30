@@ -1,5 +1,5 @@
-import { Chain, CosmosChain } from '@core/chain/Chain'
-import { cosmosRpcUrl } from '@core/chain/chains/cosmos/cosmosRpcUrl'
+import { Chain, CosmosChain } from '@vultisig/core-chain/Chain'
+import { cosmosRpcUrl } from '@vultisig/core-chain/chains/cosmos/cosmosRpcUrl'
 
 const mayachainApiBaseUrl = `${cosmosRpcUrl[CosmosChain.MayaChain]}/mayachain`
 export const mayachainPoolsEndpoint = `${mayachainApiBaseUrl}/pools`

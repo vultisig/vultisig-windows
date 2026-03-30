@@ -1,11 +1,11 @@
-import { EvmChain } from '@core/chain/Chain'
-import { queryBlockaid } from '@core/chain/security/blockaid/core/query'
+import { EvmChain } from '@vultisig/core-chain/Chain'
+import { queryBlockaid } from '@vultisig/core-chain/security/blockaid/core/query'
 import {
   blockaidEvmChain,
   BlockaidSupportedEvmChain,
-} from '@core/chain/security/blockaid/evmChains'
-import type { BlockaidValidation } from '@core/chain/security/blockaid/tx/validation/api/core'
-import { productRootDomain } from '@core/config'
+} from '@vultisig/core-chain/security/blockaid/evmChains'
+import type { BlockaidValidation } from '@vultisig/core-chain/security/blockaid/tx/validation/api/core'
+import { productRootDomain } from '@vultisig/core-config'
 
 import type { ToolHandler } from '../types'
 

@@ -1,4 +1,4 @@
-import { Chain } from '@core/chain/Chain'
+import { Chain } from '@vultisig/core-chain/Chain'
 
 import { useTxStatusQuery } from '../../../chain/tx/status/useTxStatusQuery'
 import { TransactionStatusAnimation } from './TransactionStatusAnimation'

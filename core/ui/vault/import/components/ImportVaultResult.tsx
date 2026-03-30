@@ -1,7 +1,7 @@
-import { Vault } from '@core/mpc/vault/Vault'
 import { FileBasedVaultBackupResultItem } from '@core/ui/vault/import/VaultBackupResult'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
+import { Vault } from '@vultisig/core-mpc/vault/Vault'
 
 import { DecryptVaultStep } from './DecryptVaultStep'
 import { ProcessVaultContainer } from './ProcessVaultContainer'

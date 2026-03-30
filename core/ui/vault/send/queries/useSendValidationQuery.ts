@@ -1,7 +1,7 @@
-import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
+import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 

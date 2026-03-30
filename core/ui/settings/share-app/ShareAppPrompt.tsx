@@ -1,4 +1,3 @@
-import { desktopDownloadUrl, extensionDownloadUrl } from '@core/config'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { CopyIcon } from '@lib/ui/icons/CopyIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
@@ -6,6 +5,7 @@ import { hStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useToast } from '@lib/ui/toast/ToastProvider'
+import { desktopDownloadUrl, extensionDownloadUrl } from '@vultisig/core-config'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 

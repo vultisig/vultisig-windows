@@ -1,10 +1,10 @@
-import { Chain, EvmChain } from '@core/chain/Chain'
-import { getErc721Balance } from '@core/chain/chains/evm/erc721/getErc721Balance'
-import { getCoinBalance } from '@core/chain/coin/balance'
-import { vult } from '@core/chain/coin/knownTokens'
-import { getVultDiscountTier } from '@core/chain/swap/affiliate'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { useQuery } from '@tanstack/react-query'
+import { Chain, EvmChain } from '@vultisig/core-chain/Chain'
+import { getErc721Balance } from '@vultisig/core-chain/chains/evm/erc721/getErc721Balance'
+import { getCoinBalance } from '@vultisig/core-chain/coin/balance'
+import { vult } from '@vultisig/core-chain/coin/knownTokens'
+import { getVultDiscountTier } from '@vultisig/core-chain/swap/affiliate'
 import { Address } from 'viem'
 
 const thorguardNftAddress: Address =

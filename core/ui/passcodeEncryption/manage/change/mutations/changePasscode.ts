@@ -1,4 +1,3 @@
-import { getVaultId } from '@core/mpc/vault/Vault'
 import { encryptSample } from '@core/ui/passcodeEncryption/core/sample'
 import {
   decryptVaultAllKeyShares,
@@ -9,10 +8,11 @@ import { useCore } from '@core/ui/state/core'
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { useVaults } from '@core/ui/storage/vaults'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { recordFromItems } from '@lib/utils/record/recordFromItems'
-import { recordMap } from '@lib/utils/record/recordMap'
 import { useMutation } from '@tanstack/react-query'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { recordFromItems } from '@vultisig/lib-utils/record/recordFromItems'
+import { recordMap } from '@vultisig/lib-utils/record/recordMap'
 import { v4 as uuidv4 } from 'uuid'
 
 export const useChangePasscodeMutation = () => {

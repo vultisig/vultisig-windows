@@ -7,8 +7,8 @@ import {
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { getStorageValue } from '@lib/extension/storage/get'
 import { setStorageValue } from '@lib/extension/storage/set'
-import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { updateAtIndex } from '@vultisig/lib-utils/array/updateAtIndex'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 
 const getAddressBookItems: GetAddressBookItemsFunction = async () => {
   return getStorageValue(StorageKey.addressBookItems, initialAddressBookItems)

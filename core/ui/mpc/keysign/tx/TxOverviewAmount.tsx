@@ -1,4 +1,3 @@
-import { Coin } from '@core/chain/coin/Coin'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -7,6 +6,7 @@ import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
+import { Coin } from '@vultisig/core-chain/coin/Coin'
 import { useTranslation } from 'react-i18next'
 
 import { useFormatFiatAmount } from '../../../chain/hooks/useFormatFiatAmount'

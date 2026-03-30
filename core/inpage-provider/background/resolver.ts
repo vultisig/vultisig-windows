@@ -3,7 +3,7 @@ import {
   BackgroundInterface,
   BackgroundMethod,
 } from '@core/inpage-provider/background/interface'
-import { Resolver } from '@lib/utils/types/Resolver'
+import { Resolver } from '@vultisig/lib-utils/types/Resolver'
 
 import { MethodBasedContext } from '../call/context'
 

@@ -1,7 +1,7 @@
-import { Chain } from '@core/chain/Chain'
-import { knownCosmosTokens } from '@core/chain/coin/knownTokens/cosmos'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { knownCosmosTokens } from '@vultisig/core-chain/coin/knownTokens/cosmos'
 import { useTranslation } from 'react-i18next'
 
 import { useCurrentVaultCoins } from '../../state/currentVaultCoins'

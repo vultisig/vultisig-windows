@@ -1,4 +1,4 @@
-import { getVaultId } from '@core/mpc/vault/Vault'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 
 import { getStorageContext } from '../shared/storageContext'
 import type { ToolHandler } from '../types'

@@ -1,4 +1,4 @@
-import { Result } from '@lib/utils/types/Result'
+import { Result } from '@vultisig/lib-utils/types/Result'
 
 import {
   BridgeMessage,

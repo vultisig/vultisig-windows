@@ -1,10 +1,10 @@
-import { SignAmino } from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { ThemeColor } from '@lib/ui/theme/ThemeColors'
+import { SignAmino } from '@vultisig/core-mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { useTranslation } from 'react-i18next'
 import styled, { CSSProperties } from 'styled-components'
 

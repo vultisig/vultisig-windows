@@ -1,5 +1,5 @@
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { convertDuration } from '@lib/utils/time/convertDuration'
+import { convertDuration } from '@vultisig/lib-utils/time/convertDuration'
 import { useTranslation } from 'react-i18next'
 
 import {

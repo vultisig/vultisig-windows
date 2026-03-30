@@ -1,6 +1,6 @@
-import { accountCoinKeyToString } from '@core/chain/coin/AccountCoin'
-import { CoinBalanceResolverInput } from '@core/chain/coin/balance/resolver'
-import { Exact } from '@lib/utils/types/Exact'
+import { accountCoinKeyToString } from '@vultisig/core-chain/coin/AccountCoin'
+import { CoinBalanceResolverInput } from '@vultisig/core-chain/coin/balance/resolver'
+import { Exact } from '@vultisig/lib-utils/types/Exact'
 import { useMemo } from 'react'
 
 import { useBalancesQuery } from './useBalancesQuery'

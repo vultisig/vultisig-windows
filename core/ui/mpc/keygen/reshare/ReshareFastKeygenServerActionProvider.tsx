@@ -1,6 +1,3 @@
-import { generateLocalPartyId, hasServer } from '@core/mpc/devices/localPartyId'
-import { batchReshareWithServer } from '@core/mpc/fast/api/batchReshareWithServer'
-import { reshareWithServer } from '@core/mpc/fast/api/reshareWithServer'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useEmail } from '@core/ui/state/email'
@@ -8,6 +5,12 @@ import { usePassword } from '@core/ui/state/password'
 import { useIsTssBatchingEnabled } from '@core/ui/storage/tssBatchingEnabled'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ChildrenProp } from '@lib/ui/props'
+import {
+  generateLocalPartyId,
+  hasServer,
+} from '@vultisig/core-mpc/devices/localPartyId'
+import { batchReshareWithServer } from '@vultisig/core-mpc/fast/api/batchReshareWithServer'
+import { reshareWithServer } from '@vultisig/core-mpc/fast/api/reshareWithServer'
 
 import { FastKeygenServerActionProvider } from '../fast/state/fastKeygenServerAction'
 

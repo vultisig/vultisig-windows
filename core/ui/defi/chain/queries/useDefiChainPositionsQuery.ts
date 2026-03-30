@@ -1,4 +1,4 @@
-import { Chain } from '@core/chain/Chain'
+import { Chain } from '@vultisig/core-chain/Chain'
 
 import { DefiChainPositions } from './types'
 import { useMayaDefiPositionsQuery } from './useMayaDefiPositionsQuery'

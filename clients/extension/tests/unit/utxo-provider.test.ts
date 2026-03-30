@@ -2,8 +2,8 @@ import EventEmitter from 'events'
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest'
 
 import { UTXO } from '@clients/extension/src/inpage/providers/utxo'
-import { UtxoChain } from '@core/chain/Chain'
-import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
+import { UtxoChain } from '@vultisig/core-chain/Chain'
+import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedError'
 
 // Mock dependencies
 const mockRequestAccount = vi.fn()

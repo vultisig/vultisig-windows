@@ -1,12 +1,12 @@
-import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
-import { getKeysignSwapPayload } from '@core/mpc/keysign/swap/getKeysignSwapPayload'
-import { getKeysignSwapProviderName } from '@core/mpc/keysign/swap/getKeysignSwapProviderName'
-import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
-import { getKeysignCoin } from '@core/mpc/keysign/utils/getKeysignCoin'
-import { fromCommCoin } from '@core/mpc/types/utils/commCoin'
-import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
+import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
+import { getKeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapPayload'
+import { getKeysignSwapProviderName } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapProviderName'
+import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
+import { getKeysignCoin } from '@vultisig/core-mpc/keysign/utils/getKeysignCoin'
+import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
+import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 
 import {
   SendTransactionData,

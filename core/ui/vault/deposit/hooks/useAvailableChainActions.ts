@@ -1,6 +1,6 @@
-import { Chain } from '@core/chain/Chain'
-import { findByTicker } from '@core/chain/coin/utils/findByTicker'
-import { match } from '@lib/utils/match'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { findByTicker } from '@vultisig/core-chain/coin/utils/findByTicker'
+import { match } from '@vultisig/lib-utils/match'
 import { useMemo } from 'react'
 
 import { useCurrentVaultCoins } from '../../state/currentVaultCoins'

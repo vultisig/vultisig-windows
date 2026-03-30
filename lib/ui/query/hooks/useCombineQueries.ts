@@ -1,6 +1,6 @@
-import { isEmpty } from '@lib/utils/array/isEmpty'
-import { without } from '@lib/utils/array/without'
-import { attempt } from '@lib/utils/attempt'
+import { isEmpty } from '@vultisig/lib-utils/array/isEmpty'
+import { without } from '@vultisig/lib-utils/array/without'
+import { attempt } from '@vultisig/lib-utils/attempt'
 import { useMemo } from 'react'
 
 import { EagerQuery, Query } from '../Query'

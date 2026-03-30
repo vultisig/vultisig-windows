@@ -1,6 +1,6 @@
-import { Chain, EthereumL2Chain } from '@core/chain/Chain'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { isOneOf } from '@lib/utils/array/isOneOf'
+import { Chain, EthereumL2Chain } from '@vultisig/core-chain/Chain'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 
 import { getCoinLogoSrc } from '../coin/icon/utils/getCoinLogoSrc'
 

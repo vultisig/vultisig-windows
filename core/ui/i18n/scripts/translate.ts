@@ -4,7 +4,7 @@ import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 import { createTsFile } from '@lib/codegen/utils/createTsFile'
-import { without } from '@lib/utils/array/without'
+import { without } from '@vultisig/lib-utils/array/without'
 
 import { Language, languages, primaryLanguage } from '../Language'
 import { translations } from '../translations'

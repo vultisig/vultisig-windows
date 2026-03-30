@@ -1,5 +1,5 @@
-import { isEmpty } from '@lib/utils/array/isEmpty'
-import { without } from '@lib/utils/array/without'
+import { isEmpty } from '@vultisig/lib-utils/array/isEmpty'
+import { without } from '@vultisig/lib-utils/array/without'
 import { Ref, RefCallback } from 'react'
 
 export const mergeRefs = <T>(

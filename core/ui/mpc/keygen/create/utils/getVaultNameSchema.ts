@@ -1,4 +1,4 @@
-import { vaultConfig } from '@core/config'
+import { vaultConfig } from '@vultisig/core-config'
 import { TFunction } from 'i18next'
 import { z } from 'zod'
 

@@ -1,5 +1,5 @@
-import { Chain } from '@core/chain/Chain'
-import { rootApiUrl } from '@core/config'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { rootApiUrl } from '@vultisig/core-config'
 
 export const circleApiUrl = `${rootApiUrl}/circle`
 

@@ -1,4 +1,3 @@
-import { getKeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { JoinKeysignProviders } from '@core/ui/mpc/keysign/join/JoinKeysignProviders'
 import { JoinKeysignVerifyStep } from '@core/ui/mpc/keysign/join/JoinKeysignVerifyStep'
 import { KeysignSigningStep } from '@core/ui/mpc/keysign/KeysignSigningStep'
@@ -6,6 +5,7 @@ import { KeysignMessagePayloadProvider } from '@core/ui/mpc/keysign/state/keysig
 import { JoinMpcSessionFlow } from '@core/ui/mpc/session/join/JoinMpcSessionFlow'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { StepTransition } from '@lib/ui/base/StepTransition'
+import { getKeysignMessagePayload } from '@vultisig/core-mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { useMemo } from 'react'
 
 import { JoinMpcServerUrlProvider } from '../../../mpc/serverType/JoinMpcServerUrlProvider'

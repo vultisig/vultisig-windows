@@ -1,5 +1,5 @@
-import { getLastItem } from '@lib/utils/array/getLastItem'
-import { updateAtIndex } from '@lib/utils/array/updateAtIndex'
+import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
+import { updateAtIndex } from '@vultisig/lib-utils/array/updateAtIndex'
 import { Dispatch, SetStateAction, useCallback } from 'react'
 
 import { useNavigation } from '../state'

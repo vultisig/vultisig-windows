@@ -1,6 +1,6 @@
 import { AsteriskIcon } from '@lib/ui/icons/AsteriskIcon'
 import { ChildrenProp } from '@lib/ui/props'
-import { range } from '@lib/utils/array/range'
+import { range } from '@vultisig/lib-utils/array/range'
 import styled from 'styled-components'
 
 import { useIsBalanceVisible } from '../../../storage/balanceVisibility'

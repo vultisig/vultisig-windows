@@ -1,9 +1,9 @@
-import { Chain } from '@core/chain/Chain'
-import { isChainOfKind } from '@core/chain/ChainKind'
-import { BlockaidSupportedEvmChain } from '@core/chain/security/blockaid/evmChains'
-import { getTxBlockaidSimulation } from '@core/chain/security/blockaid/tx/simulation'
-import { BlockaidTxSimulationInput } from '@core/chain/security/blockaid/tx/simulation/resolver'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
+import { BlockaidSupportedEvmChain } from '@vultisig/core-chain/security/blockaid/evmChains'
+import { getTxBlockaidSimulation } from '@vultisig/core-chain/security/blockaid/tx/simulation'
+import { BlockaidTxSimulationInput } from '@vultisig/core-chain/security/blockaid/tx/simulation/resolver'
 
 export const getBlockaidTxSimulationQuery = (
   input: BlockaidTxSimulationInput

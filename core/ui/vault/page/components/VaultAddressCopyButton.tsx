@@ -1,4 +1,3 @@
-import { Chain } from '@core/chain/Chain'
 import { VaultAddressCopyToast } from '@core/ui/vault/page/components/VaultAddressCopyToast'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { SquareBehindSquare6Icon } from '@lib/ui/icons/SquareBehindSquare6Icon'
@@ -6,6 +5,7 @@ import { hStack } from '@lib/ui/layout/Stack'
 import { ValueProp } from '@lib/ui/props'
 import { getColor } from '@lib/ui/theme/getters'
 import { useToast } from '@lib/ui/toast/ToastProvider'
+import { Chain } from '@vultisig/core-chain/Chain'
 import styled from 'styled-components'
 
 export const VaultAddressCopyButton = ({

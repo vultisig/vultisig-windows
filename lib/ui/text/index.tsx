@@ -1,7 +1,7 @@
 import { cropText } from '@lib/ui/css/cropText'
 import { toSizeUnit } from '@lib/ui/css/toSizeUnit'
 import { getColor } from '@lib/ui/theme/getters'
-import { match } from '@lib/utils/match'
+import { match } from '@vultisig/lib-utils/match'
 import styled, { css, DefaultTheme } from 'styled-components'
 
 type TextVariant =

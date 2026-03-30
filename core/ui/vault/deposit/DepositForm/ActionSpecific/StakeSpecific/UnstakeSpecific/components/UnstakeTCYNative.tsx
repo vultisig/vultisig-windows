@@ -1,11 +1,11 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { Chain } from '@core/chain/Chain'
 import { ActionInsideInteractiveElement } from '@lib/ui/base/ActionInsideInteractiveElement'
 import { MaxButton, maxButtonOffset } from '@lib/ui/buttons/MaxButton'
 import { AmountTextInput } from '@lib/ui/inputs/AmountTextInput'
 import { InputContainer } from '@lib/ui/inputs/InputContainer'
 import { HStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { Chain } from '@vultisig/core-chain/Chain'
 import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 

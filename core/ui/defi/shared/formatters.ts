@@ -1,4 +1,4 @@
-import { capitalizeFirstLetter } from '@lib/utils/capitalizeFirstLetter'
+import { capitalizeFirstLetter } from '@vultisig/lib-utils/capitalizeFirstLetter'
 
 export const formatStatusLabel = (status?: string | null) => {
   if (!status) return null

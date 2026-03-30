@@ -1,5 +1,5 @@
-import { BlockaidScanEntity } from '@core/chain/security/blockaid/core/entity'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
+import { BlockaidScanEntity } from '@vultisig/core-chain/security/blockaid/core/entity'
 import { Trans, useTranslation } from 'react-i18next'
 
 import { BlockaidLogo } from '../BlockaidLogo'

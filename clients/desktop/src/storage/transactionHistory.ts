@@ -1,5 +1,3 @@
-import { Chain } from '@core/chain/Chain'
-import { assertChainField } from '@core/chain/utils/assertChainField'
 import {
   initialTransactionRecords,
   TransactionHistoryStorage,
@@ -11,7 +9,9 @@ import {
   TransactionRecordType,
   transactionRecordTypes,
 } from '@core/ui/transaction-history/core'
-import { isOneOf } from '@lib/utils/array/isOneOf'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { assertChainField } from '@vultisig/core-chain/utils/assertChainField'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 
 import { storage } from '../../wailsjs/go/models'
 import {

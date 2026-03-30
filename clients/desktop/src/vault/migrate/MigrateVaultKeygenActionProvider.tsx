@@ -1,10 +1,3 @@
-import { DKLS } from '@core/mpc/dkls/dkls'
-import {
-  setKeygenComplete,
-  waitForKeygenComplete,
-} from '@core/mpc/keygenComplete'
-import { MpcLib } from '@core/mpc/mpcLib'
-import { Schnorr } from '@core/mpc/schnorr/schnorrKeygen'
 import {
   KeygenAction,
   KeygenActionProvider,
@@ -17,8 +10,15 @@ import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { ChildrenProp } from '@lib/ui/props'
-import { without } from '@lib/utils/array/without'
-import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
+import { DKLS } from '@vultisig/core-mpc/dkls/dkls'
+import {
+  setKeygenComplete,
+  waitForKeygenComplete,
+} from '@vultisig/core-mpc/keygenComplete'
+import { MpcLib } from '@vultisig/core-mpc/mpcLib'
+import { Schnorr } from '@vultisig/core-mpc/schnorr/schnorrKeygen'
+import { without } from '@vultisig/lib-utils/array/without'
+import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
 import { useCallback } from 'react'
 
 import {

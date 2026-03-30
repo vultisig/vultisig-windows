@@ -1,4 +1,3 @@
-import { areEqualCoins } from '@core/chain/coin/Coin'
 import {
   AddToCoinFinderIgnoreFunction,
   coinFinderIgnoreInitialValue,
@@ -9,6 +8,7 @@ import {
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { getStorageValue } from '@lib/extension/storage/get'
 import { setStorageValue } from '@lib/extension/storage/set'
+import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
 
 const getCoinFinderIgnore: GetCoinFinderIgnoreFunction = async () =>
   getStorageValue(StorageKey.coinFinderIgnore, coinFinderIgnoreInitialValue)

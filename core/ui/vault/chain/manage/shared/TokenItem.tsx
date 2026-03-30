@@ -1,4 +1,3 @@
-import { areEqualCoins, Coin } from '@core/chain/coin/Coin'
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { getCoinLogoSrc } from '@core/ui/chain/coin/icon/utils/getCoinLogoSrc'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
@@ -8,6 +7,7 @@ import { vStack } from '@lib/ui/layout/Stack'
 import { IsActiveProp, ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { areEqualCoins, Coin } from '@vultisig/core-chain/coin/Coin'
 import { useMemo } from 'react'
 import styled, { css } from 'styled-components'
 

@@ -1,14 +1,14 @@
-import { Chain } from '@core/chain/Chain'
-import { getSwapTrackingUrl } from '@core/chain/swap/utils/getSwapTrackingUrl'
-import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
-import { KeysignSwapPayload } from '@core/mpc/keysign/swap/KeysignSwapPayload'
 import { useCore } from '@core/ui/state/core'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIcon'
 import { HStack } from '@lib/ui/layout/Stack'
 import { TitleProp, ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { truncateId } from '@lib/utils/string/truncate'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { getSwapTrackingUrl } from '@vultisig/core-chain/swap/utils/getSwapTrackingUrl'
+import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
+import { KeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/KeysignSwapPayload'
+import { truncateId } from '@vultisig/lib-utils/string/truncate'
 
 type TrackTxPromptProps = TitleProp &
   ValueProp<string> & {

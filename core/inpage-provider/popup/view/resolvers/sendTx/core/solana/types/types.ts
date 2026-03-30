@@ -1,4 +1,4 @@
-import { Coin } from '@core/chain/coin/Coin'
+import { Coin } from '@vultisig/core-chain/coin/Coin'
 
 export type SolanaTxData =
   | {

@@ -1,6 +1,6 @@
-import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
-import { convertDuration } from '@lib/utils/time/convertDuration'
 import { QueryClientConfig } from '@tanstack/query-core'
+import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedError'
+import { convertDuration } from '@vultisig/lib-utils/time/convertDuration'
 
 import { queryKeyHashFn } from './utils/queryKeyHashFn'
 

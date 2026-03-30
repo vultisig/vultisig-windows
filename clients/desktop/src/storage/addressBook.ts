@@ -1,8 +1,8 @@
-import { assertChainField } from '@core/chain/utils/assertChainField'
 import {
   AddressBookStorage,
   initialAddressBookItems,
 } from '@core/ui/storage/addressBook'
+import { assertChainField } from '@vultisig/core-chain/utils/assertChainField'
 
 import {
   DeleteAddressBookItem,

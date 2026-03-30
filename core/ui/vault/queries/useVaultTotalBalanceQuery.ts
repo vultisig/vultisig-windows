@@ -1,15 +1,15 @@
-import {
-  accountCoinKeyToString,
-  extractAccountCoinKey,
-} from '@core/chain/coin/AccountCoin'
-import { coinKeyToString } from '@core/chain/coin/Coin'
-import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { useBalancesQuery } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { getResolvedQuery, pendingQuery, Query } from '@lib/ui/query/Query'
-import { sum } from '@lib/utils/array/sum'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import {
+  accountCoinKeyToString,
+  extractAccountCoinKey,
+} from '@vultisig/core-chain/coin/AccountCoin'
+import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
+import { getCoinValue } from '@vultisig/core-chain/coin/utils/getCoinValue'
+import { sum } from '@vultisig/lib-utils/array/sum'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { useMemo } from 'react'
 
 export const useVaultTotalBalanceQuery = () => {

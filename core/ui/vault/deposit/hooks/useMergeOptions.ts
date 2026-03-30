@@ -1,5 +1,5 @@
-import { Chain } from '@core/chain/Chain'
-import { kujiraCoinsOnThorChain } from '@core/chain/chains/cosmos/thor/kujira-merge/kujiraCoinsOnThorChain'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { kujiraCoinsOnThorChain } from '@vultisig/core-chain/chains/cosmos/thor/kujira-merge/kujiraCoinsOnThorChain'
 import { useMemo } from 'react'
 
 import { useCurrentVaultChainCoins } from '../../state/currentVaultCoins'

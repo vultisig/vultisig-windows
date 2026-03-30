@@ -1,12 +1,12 @@
-import { generateLocalPartyId } from '@core/mpc/devices/localPartyId'
-import { createVaultWithServer } from '@core/mpc/fast/api/createVaultWithServer'
-import { setupVaultWithServer } from '@core/mpc/fast/api/setupVaultWithServer'
-import { toLibType } from '@core/mpc/types/utils/libType'
 import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { ChildrenProp } from '@lib/ui/props'
-import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
+import { generateLocalPartyId } from '@vultisig/core-mpc/devices/localPartyId'
+import { createVaultWithServer } from '@vultisig/core-mpc/fast/api/createVaultWithServer'
+import { setupVaultWithServer } from '@vultisig/core-mpc/fast/api/setupVaultWithServer'
+import { toLibType } from '@vultisig/core-mpc/types/utils/libType'
+import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
 
 import { featureFlags } from '../../../../featureFlags'
 import { useCore } from '../../../../state/core'
@@ -54,7 +54,10 @@ export const CreateFastKeygenServerActionProvider = ({
         local_party_id: generateLocalPartyId('server'),
         email,
         hex_encryption_key: hexEncryptionKey,
-        lib_type: toLibType(vaultCreationMpcLib),
+        lib_type: toLibType({
+          libType: vaultCreationMpcLib,
+          isKeyImport: false,
+        }),
       })
     }
   }

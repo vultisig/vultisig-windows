@@ -1,4 +1,4 @@
-import { getSevenZip } from '@core/mpc/compression/getSevenZip'
+import { getSevenZip } from '@vultisig/core-mpc/compression/getSevenZip'
 
 export const decompressQrPayload = async (
   value: string

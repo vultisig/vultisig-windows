@@ -1,4 +1,4 @@
-import { KeysignResult } from '@core/mpc/keysign/KeysignResult'
+import { KeysignResult } from '@vultisig/core-mpc/keysign/KeysignResult'
 import { createContext, useContext } from 'react'
 
 export type KeysignMutationListener = {

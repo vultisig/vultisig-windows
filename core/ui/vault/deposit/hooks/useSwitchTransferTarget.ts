@@ -1,5 +1,5 @@
-import { getThorchainInboundAddress } from '@core/chain/chains/cosmos/thor/getThorchainInboundAddress'
 import { useQuery } from '@tanstack/react-query'
+import { getThorchainInboundAddress } from '@vultisig/core-chain/chains/cosmos/thor/getThorchainInboundAddress'
 
 export const useSwitchTransferTargetQuery = () =>
   useQuery({

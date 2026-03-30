@@ -1,5 +1,5 @@
-import { usdc } from '@core/chain/coin/knownTokens'
 import { Text } from '@lib/ui/text'
+import { usdc } from '@vultisig/core-chain/coin/knownTokens'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 

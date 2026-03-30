@@ -1,17 +1,17 @@
-import {
-  buildReferralKeysignPayload,
-  BuildReferralKeysignPayloadInput,
-} from '@core/mpc/keysign/referral/build'
-import { toKeysignLibType } from '@core/mpc/types/utils/libType'
-import { getVaultId } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
   useCurrentVault,
   useCurrentVaultPublicKey,
 } from '@core/ui/vault/state/currentVault'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
-import { omit } from '@lib/utils/record/omit'
 import { useQuery } from '@tanstack/react-query'
+import {
+  buildReferralKeysignPayload,
+  BuildReferralKeysignPayloadInput,
+} from '@vultisig/core-mpc/keysign/referral/build'
+import { toKeysignLibType } from '@vultisig/core-mpc/types/utils/libType'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
+import { omit } from '@vultisig/lib-utils/record/omit'
 import { useMemo } from 'react'
 
 import { useReferralCoin } from '../hooks/useReferralCoin'

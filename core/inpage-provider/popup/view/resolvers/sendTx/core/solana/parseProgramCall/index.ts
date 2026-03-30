@@ -1,9 +1,9 @@
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { Coin, CoinKey } from '@core/chain/coin/Coin'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { PublicKey, SystemProgram } from '@solana/web3.js'
 import { TW } from '@trustwallet/wallet-core'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { Coin, CoinKey } from '@vultisig/core-chain/coin/Coin'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 
 import { parseOneInchSwapInstruction } from './instructionParser/parse1inchSwapInstruction'
 import { parseSystemInstruction } from './instructionParser/parseSystemInstruction'

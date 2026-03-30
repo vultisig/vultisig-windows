@@ -1,9 +1,12 @@
-import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { areEqualCoins, coinMetadataFields } from '@core/chain/coin/Coin'
-import { coins } from '@core/chain/coin/coins'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
-import { areEqualRecords } from '@lib/utils/record/areEqualRecords'
-import { pick } from '@lib/utils/record/pick'
+import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
+import {
+  areEqualCoins,
+  coinMetadataFields,
+} from '@vultisig/core-chain/coin/Coin'
+import { coins } from '@vultisig/core-chain/coin/coins'
+import { areEqualRecords } from '@vultisig/lib-utils/record/areEqualRecords'
+import { pick } from '@vultisig/lib-utils/record/pick'
 import { useEffect } from 'react'
 
 import { useCreateCoinsMutation } from '../../../../storage/coins'

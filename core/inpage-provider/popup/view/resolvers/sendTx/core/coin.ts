@@ -1,17 +1,17 @@
-import { Chain } from '@core/chain/Chain'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import {
   areEqualCoins,
   Coin,
   CoinKey,
   coinKeyToString,
-} from '@core/chain/coin/Coin'
-import { knownTokens } from '@core/chain/coin/knownTokens'
-import { thorchainNativeTokensMetadata } from '@core/chain/coin/knownTokens/thorchain'
-import { getTokenMetadata } from '@core/chain/coin/token/metadata'
-import { chainsWithTokenMetadataDiscovery } from '@core/chain/coin/token/metadata/chains'
-import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
-import { isOneOf } from '@lib/utils/array/isOneOf'
+} from '@vultisig/core-chain/coin/Coin'
+import { knownTokens } from '@vultisig/core-chain/coin/knownTokens'
+import { thorchainNativeTokensMetadata } from '@vultisig/core-chain/coin/knownTokens/thorchain'
+import { getTokenMetadata } from '@vultisig/core-chain/coin/token/metadata'
+import { chainsWithTokenMetadataDiscovery } from '@vultisig/core-chain/coin/token/metadata/chains'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { useCallback } from 'react'
 
 export const useGetCoin = () => {

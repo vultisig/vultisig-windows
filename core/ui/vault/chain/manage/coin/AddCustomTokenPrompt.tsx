@@ -1,10 +1,10 @@
-import { chainsWithTokenMetadataDiscovery } from '@core/chain/coin/token/metadata/chains'
 import { UnstyledButton } from '@lib/ui/buttons/UnstyledButton'
 import { PlusIcon } from '@lib/ui/icons/PlusIcon'
 import { vStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { isOneOf } from '@lib/utils/array/isOneOf'
+import { chainsWithTokenMetadataDiscovery } from '@vultisig/core-chain/coin/token/metadata/chains'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 

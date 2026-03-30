@@ -1,5 +1,5 @@
-import { TronResourceType } from '@core/chain/chains/tron/resources'
 import { VStack } from '@lib/ui/layout/Stack'
+import { TronResourceType } from '@vultisig/core-chain/chains/tron/resources'
 import { useEffect } from 'react'
 import { useWatch } from 'react-hook-form'
 

@@ -1,14 +1,18 @@
-import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
-import { getVaultId, Vault, VaultAllKeyShares } from '@core/mpc/vault/Vault'
 import { useCore } from '@core/ui/state/core'
 import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
-import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
-import { sortEntitiesWithOrder } from '@lib/utils/entities/EntityWithOrder'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
+import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
+import {
+  getVaultId,
+  Vault,
+  VaultAllKeyShares,
+} from '@vultisig/core-mpc/vault/Vault'
+import { withoutDuplicates } from '@vultisig/lib-utils/array/withoutDuplicates'
+import { sortEntitiesWithOrder } from '@vultisig/lib-utils/entities/EntityWithOrder'
 import { useMemo } from 'react'
 
 import { StorageKey } from './StorageKey'

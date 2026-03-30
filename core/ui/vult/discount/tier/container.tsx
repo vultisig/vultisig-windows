@@ -1,5 +1,5 @@
-import { VultDiscountTier } from '@core/chain/swap/affiliate/config'
 import { ValueProp } from '@lib/ui/props'
+import { VultDiscountTier } from '@vultisig/core-chain/swap/affiliate/config'
 import styled from 'styled-components'
 
 type TierStyles = {

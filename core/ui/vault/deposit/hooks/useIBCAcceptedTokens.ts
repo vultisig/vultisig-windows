@@ -1,7 +1,7 @@
-import { Chain, IbcEnabledCosmosChain } from '@core/chain/Chain'
-import { knownTokens } from '@core/chain/coin/knownTokens'
 import { useCurrentVaultChainCoins } from '@core/ui/vault/state/currentVaultCoins'
-import { isOneOf } from '@lib/utils/array/isOneOf'
+import { Chain, IbcEnabledCosmosChain } from '@vultisig/core-chain/Chain'
+import { knownTokens } from '@vultisig/core-chain/coin/knownTokens'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { useMemo } from 'react'
 
 import { useDepositCoin } from '../providers/DepositCoinProvider'

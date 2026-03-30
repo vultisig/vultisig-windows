@@ -1,7 +1,7 @@
-import { Chain } from '@core/chain/Chain'
-import { getEvmChainId } from '@core/chain/chains/evm/chainInfo'
 import { getStorageValue } from '@lib/extension/storage/get'
 import { setStorageValue } from '@lib/extension/storage/set'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { getEvmChainId } from '@vultisig/core-chain/chains/evm/chainInfo'
 
 type GetCurrentEVMChainIdFunction = () => Promise<string>
 
