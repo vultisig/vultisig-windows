@@ -93,6 +93,8 @@ const printValidationSummary = (results: ValidationResult[]) => {
   }
 }
 
+const extraCoinAssets = ['qbtc.svg']
+
 const main = async () => {
   try {
     const [coinFiles, chainFiles] = await Promise.all(
@@ -108,6 +110,7 @@ const main = async () => {
     )
       .map(getCoinLogoSrc)
       .map(logo => getLastItem(logo.split('/')))
+      .concat(extraCoinAssets)
 
     const expectedChains = [...Object.values(EthereumL2Chain), Chain.MayaChain]
       .map(getChainLogoSrc)
