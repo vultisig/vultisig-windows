@@ -157,23 +157,27 @@ jobs:
             cd /tmp/vultisig-sdk/$dir && npm pack --pack-destination /tmp/sdk-packs
           done
           cd $GITHUB_WORKSPACE
-          node -e "
+          PACK_DIR=/tmp/sdk-packs node - <<'NODE'
             const fs = require('fs');
             const path = require('path');
+            const { execFileSync } = require('child_process');
+            const packDir = process.env.PACK_DIR;
             const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-            const packs = fs.readdirSync('/tmp/sdk-packs').filter(f => f.endsWith('.tgz'));
+            const packs = fs.readdirSync(packDir).filter(f => f.endsWith('.tgz'));
             const resolutions = pkg.resolutions || {};
             for (const tgz of packs) {
-              const manifest = require('child_process').execSync(
-                'tar -xzf /tmp/sdk-packs/' + tgz + ' -O package/package.json', { encoding: 'utf8' }
+              const manifest = execFileSync(
+                'tar',
+                ['-xzf', path.join(packDir, tgz), '-O', 'package/package.json'],
+                { encoding: 'utf8' }
               );
               const name = JSON.parse(manifest).name;
-              resolutions[name] = '/tmp/sdk-packs/' + tgz;
+              resolutions[name] = path.join(packDir, tgz);
             }
             pkg.resolutions = resolutions;
             fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
-          "
-          yarn install
+          NODE
+          YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn install
 
       - name: Typecheck
         run: yarn typecheck
