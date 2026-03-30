@@ -167,6 +167,9 @@ jobs:
       - name: Test
         run: yarn test
 
+      - name: Test (extension)
+        run: cd clients/extension && npx vitest run --config tests/unit/vitest.config.ts
+
   build:
     needs: lint
     strategy:
