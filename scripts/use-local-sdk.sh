@@ -30,22 +30,26 @@ done
 
 echo "==> Adding resolutions to package.json"
 cd "$WINDOWS_DIR"
-node -e "
+PACK_DIR="$PACK_DIR" node - <<'NODE'
   const fs = require('fs');
   const path = require('path');
+  const { execFileSync } = require('child_process');
+  const packDir = process.env.PACK_DIR;
   const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-  const packs = fs.readdirSync('$PACK_DIR').filter(f => f.endsWith('.tgz'));
+  const packs = fs.readdirSync(packDir).filter(f => f.endsWith('.tgz'));
   const resolutions = pkg.resolutions || {};
   for (const tgz of packs) {
-    const manifest = require('child_process').execSync(
-      'tar -xzf $PACK_DIR/' + tgz + ' -O package/package.json', { encoding: 'utf8' }
+    const manifest = execFileSync(
+      'tar',
+      ['-xzf', path.join(packDir, tgz), '-O', 'package/package.json'],
+      { encoding: 'utf8' }
     );
     const name = JSON.parse(manifest).name;
-    resolutions[name] = '$PACK_DIR/' + tgz;
+    resolutions[name] = path.join(packDir, tgz);
   }
   pkg.resolutions = resolutions;
   fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
-"
+NODE
 
 echo "==> Installing with SDK overrides"
 yarn install
