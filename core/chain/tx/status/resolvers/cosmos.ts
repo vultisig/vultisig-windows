@@ -1,15 +1,80 @@
 import { CosmosChain } from '@core/chain/Chain'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
+import { cosmosRpcUrl } from '@core/chain/chains/cosmos/cosmosRpcUrl'
+import { restOnlyChains } from '@core/chain/chains/cosmos/restOnlyChains'
 import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { decodeTxRaw } from '@cosmjs/proto-signing'
 import { attempt } from '@lib/utils/attempt'
+import { queryUrl } from '@lib/utils/query/queryUrl'
 
 import { TxStatusResolver } from '../resolver'
+
+type RestTxResponse = {
+  tx_response: {
+    code: number
+    gas_used: string
+    gas_wanted: string
+    tx: {
+      auth_info: {
+        fee: {
+          amount: { amount: string }[]
+        }
+      }
+    }
+  }
+}
+
+type GetCosmosRestTxStatusInput = { chain: CosmosChain; hash: string }
+
+/** Queries tx status via Cosmos REST API for chains incompatible with StargateClient. */
+const getCosmosRestTxStatus = async ({
+  chain,
+  hash,
+}: GetCosmosRestTxStatusInput): ReturnType<TxStatusResolver<CosmosChain>> => {
+  const url = `${cosmosRpcUrl[chain]}/cosmos/tx/v1beta1/txs/${hash}`
+  const { data: response, error } = await attempt(() =>
+    queryUrl<RestTxResponse>(url)
+  )
+
+  if (error || !response) {
+    return { status: 'pending' }
+  }
+
+  const { tx_response } = response
+  const status = tx_response.code === 0 ? 'success' : 'error'
+  const feeCoin = chainFeeCoin[chain]
+
+  const gasUsedRaw = tx_response.gas_used
+  const gasWantedRaw = tx_response.gas_wanted
+  const gasUsed = /^\d+$/.test(gasUsedRaw) ? BigInt(gasUsedRaw) : 0n
+  const gasWanted = /^\d+$/.test(gasWantedRaw) ? BigInt(gasWantedRaw) : 0n
+  const maxFeeRaw = tx_response.tx.auth_info.fee.amount[0]?.amount
+  const maxFeeAmount =
+    maxFeeRaw != null && /^\d+$/.test(maxFeeRaw) ? BigInt(maxFeeRaw) : 0n
+  const actualFee =
+    gasWanted > 0n && maxFeeAmount > 0n
+      ? (maxFeeAmount * gasUsed) / gasWanted
+      : 0n
+  const receipt =
+    actualFee > 0n
+      ? {
+          feeAmount: actualFee,
+          feeDecimals: feeCoin.decimals,
+          feeTicker: feeCoin.ticker,
+        }
+      : undefined
+
+  return { status, receipt }
+}
 
 export const getCosmosTxStatus: TxStatusResolver<CosmosChain> = async ({
   chain,
   hash,
 }) => {
+  if (restOnlyChains.includes(chain)) {
+    return getCosmosRestTxStatus({ chain, hash })
+  }
+
   const client = await getCosmosClient(chain)
 
   const { data: tx, error } = await attempt(client.getTx(hash))

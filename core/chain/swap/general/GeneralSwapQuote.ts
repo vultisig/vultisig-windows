@@ -10,6 +10,7 @@ export type GeneralSwapTx =
         data: string
         value: string
         gasLimit?: bigint
+        affiliateFee?: SwapFee
       }
     }
   | {

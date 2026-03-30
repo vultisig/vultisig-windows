@@ -1,9 +1,10 @@
-import { Chain, CosmosChain } from '@core/chain/Chain'
+import { CosmosChain } from '@core/chain/Chain'
 import { getCosmosClient } from '@core/chain/chains/cosmos/client'
 import {
   cosmosRpcUrl,
   getCosmosWasmTokenBalanceUrl,
 } from '@core/chain/chains/cosmos/cosmosRpcUrl'
+import { restOnlyChains } from '@core/chain/chains/cosmos/restOnlyChains'
 import { getDenom } from '@core/chain/coin/utils/getDenom'
 import { queryUrl } from '@lib/utils/query/queryUrl'
 
@@ -36,12 +37,6 @@ const getCosmosRestBalance = async (
   const { balance } = await queryUrl<RestBalanceResponse>(url)
   return BigInt(balance.amount)
 }
-
-/**
- * Chains where StargateClient cannot connect due to incompatible
- * validator pubkey types (e.g. MLDSA). Use REST API instead.
- */
-const restOnlyChains: CosmosChain[] = [Chain.QBTC]
 
 export const getCosmosCoinBalance: CoinBalanceResolver<
   CosmosChain
