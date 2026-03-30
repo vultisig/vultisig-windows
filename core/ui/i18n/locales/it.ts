@@ -54,6 +54,9 @@ export const it = {
       vaultShares: 'Il tuo caveau contiene 2 azioni,',
       sentTo: 'Inviato a {{email}}.',
       changeEmailAndRestartKeygen: 'Cambia email e riavvia keygen',
+      setNewStandard:
+        'Sei pronto a utilizzare un nuovo standard per i portafogli digitali.',
+      wellDone: 'Ben fatto',
     },
     createVault: {
       availablePlatforms: {
@@ -1398,4 +1401,10 @@ export const it = {
   agent_reauth_description:
     'Per motivi di sicurezza, l&#39;autorizzazione scade periodicamente. Conferma per continuare a utilizzare Vulti Agent.',
   authorize: 'Autorizzare',
+  enable_tss_batching: 'Abilita il batching TSS',
+  keygen_protocol_done: 'Fatto',
+  keygen_protocol_running: 'Corsa',
+  notification_sent_successfully: 'Notifica inviata con successo!',
+  resend_notification: 'Reinvia la notifica',
+  resend_notification_in: 'Reinvia la notifica tra {{time}}',
 }

@@ -53,6 +53,8 @@ export const es = {
       vaultShares: 'Su bóveda contiene 2 acciones,',
       sentTo: 'Enviado a {{email}}.',
       changeEmailAndRestartKeygen: 'Cambiar correo y reiniciar keygen',
+      setNewStandard: 'Estás listo para usar un nuevo estándar de billetera.',
+      wellDone: 'Bien hecho',
     },
     createVault: {
       availablePlatforms: {
@@ -1395,4 +1397,10 @@ export const es = {
   agent_reauth_description:
     'Por motivos de seguridad, la autorización caduca periódicamente. Confirme para continuar utilizando Vulti Agent.',
   authorize: 'Autorizar',
+  enable_tss_batching: 'Habilitar el procesamiento por lotes de TSS',
+  keygen_protocol_done: 'Hecho',
+  keygen_protocol_running: 'Correr',
+  notification_sent_successfully: '¡Notificación enviada con éxito!',
+  resend_notification: 'Reenviar notificación',
+  resend_notification_in: 'Reenviar notificación en {{time}}',
 }

@@ -53,6 +53,8 @@ export const pt = {
       vaultShares: 'Seu cofre contém 2 ações.',
       sentTo: 'Enviado para {{email}}.',
       changeEmailAndRestartKeygen: 'Alterar e-mail e reiniciar keygen',
+      setNewStandard: 'Você está pronto para usar um novo padrão de carteira.',
+      wellDone: 'Bom trabalho',
     },
     createVault: {
       availablePlatforms: {
@@ -1397,4 +1399,10 @@ export const pt = {
   agent_reauth_description:
     'Por motivos de segurança, a autorização expira periodicamente. Confirme para continuar usando o Vulti Agent.',
   authorize: 'Autorizar',
+  enable_tss_batching: 'Habilitar o processamento em lote TSS',
+  keygen_protocol_done: 'Feito',
+  keygen_protocol_running: 'Correndo',
+  notification_sent_successfully: 'A notificação foi enviada com sucesso!',
+  resend_notification: 'Reenviar notificação',
+  resend_notification_in: 'Reenviar notificação em {{time}}',
 }
