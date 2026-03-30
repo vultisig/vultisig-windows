@@ -88,6 +88,43 @@ yarn build:extension
 
 For details on integrating Vultisig Extension with your project, see the [Integration Guide](clients/extension/docs/integration-guide.md).
 
+## Vultisig SDK
+
+This project depends on [`@vultisig/sdk`](https://github.com/vultisig/vultisig-sdk) published on npm. CI also runs a non-blocking compatibility check against the SDK `main` branch to catch integration issues early.
+
+### Developing with the latest SDK (unreleased)
+
+To test against the SDK `main` branch locally:
+
+**Option A: Yarn link (recommended)**
+
+```bash
+# Clone and build the SDK
+git clone https://github.com/vultisig/vultisig-sdk.git
+cd vultisig-sdk
+yarn install && yarn build
+
+# In vultisig-windows, link to your local SDK build
+cd /path/to/vultisig-windows
+yarn link /path/to/vultisig-sdk
+```
+
+**Option B: Git override via `resolutions`**
+
+Add a temporary resolution in the root `package.json`:
+
+```json
+"resolutions": {
+  "@vultisig/sdk": "https://github.com/vultisig/vultisig-sdk.git#main"
+}
+```
+
+Then run `yarn install`. **Do not commit this change** — it is for local testing only.
+
+### Releasing
+
+Production builds always use the npm-published SDK version. Before releasing, ensure `package.json` points to a stable npm version (e.g., `"@vultisig/sdk": "0.10.0"`), not a git reference.
+
 ## Development Guidelines
 
 ### Code Organization: Domain-Driven Structure
