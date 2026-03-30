@@ -17,6 +17,7 @@ export const getUtxos = async (account: ChainAccount<UtxoChain>) => {
   const { utxo } = data[account.address]
 
   return utxo
+    .filter(({ block_id }) => account.chain !== UtxoChain.Dash || block_id > 0)
     .filter(({ value }) => value > minUtxo[account.chain])
     .map(({ transaction_hash, value, index }) =>
       create(UtxoInfoSchema, {
