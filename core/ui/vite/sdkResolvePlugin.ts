@@ -2,10 +2,17 @@ import { existsSync } from 'fs'
 import { dirname, resolve } from 'path'
 import type { Plugin } from 'vite'
 
-const sdkPrefix = 'node_modules/@vultisig/'
+const sdkPrefixFwd = 'node_modules/@vultisig/'
+const sdkPrefixWin = 'node_modules\\@vultisig\\'
+
+/** Check whether a file path is inside an `@vultisig/` SDK package. */
+function isInsideSdk(filePath: string): boolean {
+  return filePath.includes(sdkPrefixFwd) || filePath.includes(sdkPrefixWin)
+}
 
 function getNodeModulesDir(filePath: string): string | null {
-  const idx = filePath.lastIndexOf(sdkPrefix)
+  let idx = filePath.lastIndexOf(sdkPrefixFwd)
+  if (idx === -1) idx = filePath.lastIndexOf(sdkPrefixWin)
   if (idx === -1) return null
   return filePath.substring(0, idx + 'node_modules'.length)
 }
@@ -80,7 +87,7 @@ function sdkResolveEsbuildPlugin() {
       build.onResolve(
         { filter: /\.js$/ },
         (args: { path: string; importer: string; resolveDir: string }) => {
-          if (!args.importer?.includes(sdkPrefix)) return null
+          if (!args.importer || !isInsideSdk(args.importer)) return null
 
           const dir = args.resolveDir || dirname(args.importer)
           const base = args.path.replace(/\.js$/, '')
@@ -117,7 +124,7 @@ export function sdkResolvePlugin(): Plugin {
     resolveId: {
       order: 'pre',
       async handler(source, importer, options) {
-        if (importer?.includes(sdkPrefix)) {
+        if (importer && isInsideSdk(importer)) {
           if (source.endsWith('.js')) {
             const resolved = await this.resolve(source, importer, {
               ...options,
