@@ -115,6 +115,15 @@ export function sdkResolvePlugin(): Plugin {
     config() {
       return {
         optimizeDeps: {
+          // vite-plugin-wasm requires WASM-loading packages to be excluded from
+          // dep optimization. When pre-bundled, `new URL('*.wasm', import.meta.url)`
+          // resolves relative to the .vite/deps/ chunk, not the original package
+          // directory, so the WASM fetch returns HTML instead of a binary.
+          exclude: [
+            '@vultisig/lib-dkls',
+            '@vultisig/lib-schnorr',
+            '@vultisig/lib-mldsa',
+          ],
           esbuildOptions: {
             plugins: [sdkResolveEsbuildPlugin()],
           },
