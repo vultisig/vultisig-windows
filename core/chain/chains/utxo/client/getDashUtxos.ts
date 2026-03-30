@@ -31,7 +31,11 @@ export const getDashUtxos = async (address: string) => {
     },
   })
 
-  if (response.error || !response.result) {
+  if (response.error) {
+    throw new Error(`Dash RPC error: ${response.error.message}`)
+  }
+
+  if (!response.result) {
     return []
   }
 
