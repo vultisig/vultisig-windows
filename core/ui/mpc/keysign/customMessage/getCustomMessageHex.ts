@@ -32,6 +32,7 @@ export const getCustomMessageHex = ({
   return match(getChainKind(chain), {
     evm: () => stripHexPrefix(keccak256(bytes)),
     solana: () => Buffer.from(bytes).toString('hex'),
+    ton: () => Buffer.from(bytes).toString('hex'),
     tron: () => stripHexPrefix(keccak256(bytes)),
   })
 }
