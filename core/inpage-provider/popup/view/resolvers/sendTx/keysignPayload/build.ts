@@ -1,8 +1,8 @@
 import { create } from '@bufbuild/protobuf'
-import { validateTonComment } from '@core/core-mpc/keysign/signingInputs/resolvers/ton/native'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { Chain } from '@vultisig/core-chain/Chain'
 import { getChainKind, isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { CosmosMsgType } from '@vultisig/core-chain/chains/cosmos/cosmosMsgTypes'
 import { getPsbtTransferInfo } from '@vultisig/core-chain/chains/utxo/tx/getPsbtTransferInfo'
@@ -12,6 +12,7 @@ import {
   FeeSettingsChainKind,
 } from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
 import { refineKeysignUtxo } from '@vultisig/core-mpc/keysign/refine/utxo'
+import { validateTonComment } from '@vultisig/core-mpc/keysign/signingInputs/resolvers/ton/native'
 import { getKeysignUtxoInfo } from '@vultisig/core-mpc/keysign/utxo/getKeysignUtxoInfo'
 import { toCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { OneInchSwapPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
