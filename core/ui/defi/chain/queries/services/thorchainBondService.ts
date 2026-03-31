@@ -1,13 +1,13 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { toChainAmount } from '@core/chain/amount/toChainAmount'
-import { coinKeyToString } from '@core/chain/coin/Coin'
-import { getCoinValue } from '@core/chain/coin/utils/getCoinValue'
 import {
   daysInYear,
   nanosecondsInSecond,
   secondsInDay,
 } from '@core/ui/defi/chain/constants/time'
-import { queryUrl } from '@lib/utils/query/queryUrl'
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { toChainAmount } from '@vultisig/core-chain/amount/toChainAmount'
+import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
+import { getCoinValue } from '@vultisig/core-chain/coin/utils/getCoinValue'
+import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 import { midgardBaseUrl, thornodeBaseUrl } from '../constants'
 import { runeCoin } from '../tokens'

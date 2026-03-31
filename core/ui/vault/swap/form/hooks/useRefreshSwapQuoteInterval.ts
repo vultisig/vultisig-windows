@@ -1,4 +1,4 @@
-import { Seconds } from '@lib/utils/time'
+import { Seconds } from '@vultisig/lib-utils/time'
 import { useEffect, useState } from 'react'
 
 import { useRefreshSwapQuoteMutation } from '../../mutations/useRefreshSwapQuoteMutation'

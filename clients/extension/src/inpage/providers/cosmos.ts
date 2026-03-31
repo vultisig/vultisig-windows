@@ -1,7 +1,7 @@
-import { getCosmosChainByChainId } from '@core/chain/chains/cosmos/chainInfo'
 import { callBackground } from '@core/inpage-provider/background'
 import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
-import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
+import { getCosmosChainByChainId } from '@vultisig/core-chain/chains/cosmos/chainInfo'
+import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedError'
 
 import { EIP1193Error } from '../../background/handlers/errorHandler'
 import { Callback } from '../constants'

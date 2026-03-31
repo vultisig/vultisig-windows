@@ -1,9 +1,9 @@
-import { Chain } from '@core/chain/Chain'
-import { CosmosMsgType } from '@core/chain/chains/cosmos/cosmosMsgTypes'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { CosmosMsgType } from '@vultisig/core-chain/chains/cosmos/cosmosMsgTypes'
 import {
   CosmosFee,
   CosmosMsg,
-} from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
+} from '@vultisig/core-mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 
 export enum TronMsgType {
   TRON_TRANSFER_CONTRACT = 'TransferContract',
@@ -182,6 +182,7 @@ export type TransactionDetails = {
     accountNumber: string
   }
   skipBroadcast?: boolean
+  tonMessages?: Array<{ to: string; amount: string; payload?: string }>
 }
 
 export type DepositTransactionDetails = {

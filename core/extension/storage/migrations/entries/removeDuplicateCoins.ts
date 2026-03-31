@@ -1,6 +1,6 @@
-import { areEqualCoins } from '@core/chain/coin/Coin'
 import { CoinsRecord } from '@core/ui/storage/coins'
-import { recordMap } from '@lib/utils/record/recordMap'
+import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
+import { recordMap } from '@vultisig/lib-utils/record/recordMap'
 
 import { coinsStorage, updateCoins } from '../../coins'
 

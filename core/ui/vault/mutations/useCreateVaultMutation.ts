@@ -1,13 +1,17 @@
-import { defaultChains } from '@core/chain/Chain'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { getChainAddress } from '@core/chain/publicKey/address/getChainAddress'
-import { getVaultId, isKeyImportVault, Vault } from '@core/mpc/vault/Vault'
 import { useCore } from '@core/ui/state/core'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { pipe } from '@lib/utils/pipe'
-import { getRecordKeys } from '@lib/utils/record/getRecordKeys'
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
+import { defaultChains } from '@vultisig/core-chain/Chain'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { getChainAddress } from '@vultisig/core-chain/publicKey/address/getChainAddress'
+import {
+  getVaultId,
+  isKeyImportVault,
+  Vault,
+} from '@vultisig/core-mpc/vault/Vault'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { pipe } from '@vultisig/lib-utils/pipe'
+import { getRecordKeys } from '@vultisig/lib-utils/record/getRecordKeys'
 
 import { useAssertWalletCore } from '../../chain/providers/WalletCoreProvider'
 import { encryptVaultAllKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'

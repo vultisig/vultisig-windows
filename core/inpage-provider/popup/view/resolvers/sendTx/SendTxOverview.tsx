@@ -1,10 +1,3 @@
-import { Chain } from '@core/chain/Chain'
-import { isChainOfKind } from '@core/chain/ChainKind'
-import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import {
-  BlockaidEvmSimulationInfo,
-  BlockaidSolanaSimulationInfo,
-} from '@core/chain/security/blockaid/tx/simulation/core'
 import { BlockaidSimulationContent } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidSimulationContent'
 import { BlockaidSimulationError } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidSimulationError'
 import { useBlockaidSimulationQuery } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/useBlockaidSimulationQuery'
@@ -16,16 +9,13 @@ import { getGasEstimationQuery } from '@core/inpage-provider/popup/view/resolver
 import { useSendTxKeysignPayloadQuery } from '@core/inpage-provider/popup/view/resolvers/sendTx/keysignPayload/query'
 import { PendingState } from '@core/inpage-provider/popup/view/resolvers/sendTx/PendingState'
 import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
-import { FeeSettings } from '@core/mpc/keysign/chainSpecific/FeeSettings'
-import { getBlockchainSpecificValue } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
-import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
-import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
 import { SignAminoDisplay } from '@core/ui/mpc/keysign/tx/components/SignAminoDisplay'
 import { SignDirectDisplay } from '@core/ui/mpc/keysign/tx/components/SignDirectDisplay'
 import { SignSolanaDisplay } from '@core/ui/mpc/keysign/tx/components/SignSolanaDisplay'
+import { SignTonDisplay } from '@core/ui/mpc/keysign/tx/components/SignTonDisplay'
 import { useCurrentVaultPublicKey } from '@core/ui/vault/state/currentVault'
 import {
   HorizontalLine,
@@ -45,7 +35,18 @@ import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData
 import { Query } from '@lib/ui/query/Query'
 import { WarningBlock } from '@lib/ui/status/WarningBlock'
 import { Text } from '@lib/ui/text'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
+import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
+import {
+  BlockaidEvmSimulationInfo,
+  BlockaidSolanaSimulationInfo,
+} from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
+import { FeeSettings } from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
+import { getBlockchainSpecificValue } from '@vultisig/core-mpc/keysign/chainSpecific/KeysignChainSpecific'
+import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
+import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { formatUnits } from 'ethers'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -307,6 +308,30 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                   <SignSolanaDisplay
                     signSolana={keysignPayload.signData.value}
                   />
+                </>
+              ) : chain === Chain.Ton &&
+                keysignPayload.signData.case === 'signTon' ? (
+                <>
+                  <List>
+                    <ListItem description={address} title={t('from')} />
+                    <ListItem
+                      description={getKeysignChain(keysignPayload)}
+                      title={t('network')}
+                    />
+                  </List>
+                  <SignTonDisplay signTon={keysignPayload.signData.value} />
+                  <MemoSection memo={keysignPayload.memo} chain={chain} />
+                  <VStack bgColor="foreground" radius={16}>
+                    <NetworkFeeSection
+                      keysignPayload={keysignPayload}
+                      transactionPayload={transactionPayload}
+                      chain={chain}
+                      feeSettings={feeSettings}
+                      setFeeSettings={setFeeSettings}
+                      walletCore={walletCore}
+                      publicKey={publicKey}
+                    />
+                  </VStack>
                 </>
               ) : (
                 <>

@@ -9,7 +9,7 @@ import { CoreView } from '@core/ui/navigation/CoreView'
 import { ActiveView } from '@lib/ui/navigation/ActiveView'
 import { NavigationProvider } from '@lib/ui/navigation/state'
 import { Views } from '@lib/ui/navigation/Views'
-import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
+import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
 
 import { VerifyTx } from './VerifyTx'

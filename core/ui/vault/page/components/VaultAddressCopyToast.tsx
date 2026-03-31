@@ -1,4 +1,3 @@
-import { Chain } from '@core/chain/Chain'
 import { CircleCheckIcon } from '@lib/ui/icons/CircleCheckIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { vStack } from '@lib/ui/layout/Stack'
@@ -7,6 +6,7 @@ import { ValueProp } from '@lib/ui/props'
 import { mediaQuery } from '@lib/ui/responsive/mediaQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { Chain } from '@vultisig/core-chain/Chain'
 import styled from 'styled-components'
 
 export const VaultAddressCopyToast = ({ value: chain }: ValueProp<Chain>) => {

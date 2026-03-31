@@ -1,9 +1,9 @@
 import { HStack } from '@lib/ui/layout/Stack'
 import { InputProps } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
-import { bigIntToDecimalString } from '@lib/utils/bigint/bigIntToDecimalString'
-import { decimalStringToBigInt } from '@lib/utils/bigint/decimalStringToBigInt'
-import { formatAmount } from '@lib/utils/formatAmount'
+import { bigIntToDecimalString } from '@vultisig/lib-utils/bigint/bigIntToDecimalString'
+import { decimalStringToBigInt } from '@vultisig/lib-utils/bigint/decimalStringToBigInt'
+import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import {
   useCallback,
   useEffect,

@@ -1,8 +1,8 @@
-import { FiatCurrency } from '@core/config/FiatCurrency'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
-import { shouldBeDefined } from '@lib/utils/assert/shouldBeDefined'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { FiatCurrency } from '@vultisig/core-config/FiatCurrency'
+import { shouldBeDefined } from '@vultisig/lib-utils/assert/shouldBeDefined'
 
 import { useCore } from '../state/core'
 import { StorageKey } from './StorageKey'

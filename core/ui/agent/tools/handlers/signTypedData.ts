@@ -1,6 +1,6 @@
-import { EvmChain } from '@core/chain/Chain'
 import type { CustomMessageSupportedChain } from '@core/ui/mpc/keysign/customMessage/chains'
 import { getCustomMessageHex } from '@core/ui/mpc/keysign/customMessage/getCustomMessageHex'
+import { EvmChain } from '@vultisig/core-chain/Chain'
 import { z } from 'zod'
 
 import {

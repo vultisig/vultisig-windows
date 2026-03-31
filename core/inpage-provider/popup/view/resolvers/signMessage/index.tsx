@@ -14,7 +14,7 @@ import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { NavigationProvider } from '@lib/ui/navigation/state'
 import { Views } from '@lib/ui/navigation/Views'
 import { OnFinishProp } from '@lib/ui/props'
-import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
+import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
 import { useMemo } from 'react'
 
 type SignMessageView =

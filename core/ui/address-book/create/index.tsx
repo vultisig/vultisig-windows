@@ -8,7 +8,7 @@ import {
   useCreateAddressBookItemMutation,
 } from '@core/ui/storage/addressBook'
 import { useNavigation } from '@lib/ui/navigation/state'
-import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
+import { getLastItemOrder } from '@vultisig/lib-utils/order/getLastItemOrder'
 import { useTranslation } from 'react-i18next'
 import { v4 as uuidv4 } from 'uuid'
 

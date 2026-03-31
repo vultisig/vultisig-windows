@@ -1,5 +1,5 @@
 import { CoinsStorage, initialCoinsRecord } from '@core/ui/storage/coins'
-import { recordMap } from '@lib/utils/record/recordMap'
+import { recordMap } from '@vultisig/lib-utils/record/recordMap'
 
 import { GetCoins, SaveCoins } from '../../wailsjs/go/storage/Store'
 import { SaveCoin } from '../../wailsjs/go/storage/Store'

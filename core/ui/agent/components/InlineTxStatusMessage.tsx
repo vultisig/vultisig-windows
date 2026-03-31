@@ -1,5 +1,5 @@
-import { getBlockExplorerUrl } from '@core/chain/utils/getBlockExplorerUrl'
 import { getColor } from '@lib/ui/theme/getters'
+import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 import { FC, memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css, keyframes } from 'styled-components'

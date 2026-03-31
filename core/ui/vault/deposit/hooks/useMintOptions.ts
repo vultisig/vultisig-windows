@@ -1,6 +1,6 @@
-import { Chain } from '@core/chain/Chain'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { makeAccountCoin } from '@core/chain/coin/utils/makeAccountCoin'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { makeAccountCoin } from '@vultisig/core-chain/coin/utils/makeAccountCoin'
 import { useMemo } from 'react'
 
 import {

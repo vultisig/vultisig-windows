@@ -1,10 +1,13 @@
-import { areEqualCoins, coinMetadataFields } from '@core/chain/coin/Coin'
-import { coins } from '@core/chain/coin/coins'
 import { useCreateCoinsMutation } from '@core/ui/storage/coins'
 import { useCoinFinderQuery } from '@core/ui/vault/chain/coin/finder/queries/useCoinFinderQuery'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
-import { isEmpty } from '@lib/utils/array/isEmpty'
-import { pick } from '@lib/utils/record/pick'
+import {
+  areEqualCoins,
+  coinMetadataFields,
+} from '@vultisig/core-chain/coin/Coin'
+import { coins } from '@vultisig/core-chain/coin/coins'
+import { isEmpty } from '@vultisig/lib-utils/array/isEmpty'
+import { pick } from '@vultisig/lib-utils/record/pick'
 import { useEffect } from 'react'
 
 import { useCoinFinderIgnore } from '../../../../storage/coinFinderIgnore'

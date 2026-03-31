@@ -1,6 +1,6 @@
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
 import { useQuery } from '@tanstack/react-query'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 
 import { useCurrentVaultAddress } from '../../../state/currentVaultCoins'
 import { fetchUserValidName } from '../services/getUserValidThorchainName'

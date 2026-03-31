@@ -1,21 +1,21 @@
-import { Chain } from '@core/chain/Chain'
-import {
-  areEqualCoins,
-  Coin,
-  CoinKey,
-  coinKeyToString,
-} from '@core/chain/coin/Coin'
-import { knownTokens } from '@core/chain/coin/knownTokens'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
 import { hideScrollbars } from '@lib/ui/css/hideScrollbars'
 import { SelectItemModal } from '@lib/ui/inputs/SelectItemModal'
 import { hStack, VStack } from '@lib/ui/layout/Stack'
 import { InputProps, IsActiveProp, OnCloseProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { isOneOf } from '@lib/utils/array/isOneOf'
-import { withoutDuplicates } from '@lib/utils/array/withoutDuplicates'
 import { NATIVE_MINT } from '@solana/spl-token'
+import { Chain } from '@vultisig/core-chain/Chain'
+import {
+  areEqualCoins,
+  Coin,
+  CoinKey,
+  coinKeyToString,
+} from '@vultisig/core-chain/coin/Coin'
+import { knownTokens } from '@vultisig/core-chain/coin/knownTokens'
+import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
+import { withoutDuplicates } from '@vultisig/lib-utils/array/withoutDuplicates'
 import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -42,7 +42,7 @@ export const SwapCoinsExplorer = ({
   const side = useTransferDirection()
   const coins = useCurrentVaultCoins()
   const swapEnabledChainsForVault = useSwapEnabledChainsForVault()
-  const { mutate: createCoin } = useCreateCoinMutation()
+  const { mutateAsync: createCoin } = useCreateCoinMutation()
   const currentChain = side === 'from' ? fromCoinKey.chain : currentToCoin.chain
 
   const { data: whitelisted } = useWhitelistedCoinsQuery(currentChain)
@@ -119,9 +119,8 @@ export const SwapCoinsExplorer = ({
           if (coins.some(c => areEqualCoins(c, newValue))) {
             onChange(newValue)
           } else {
-            createCoin(newValue, {
-              onSuccess: () => onChange(newValue),
-            })
+            await createCoin(newValue)
+            onChange(newValue)
           }
         }
         onClose()

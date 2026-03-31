@@ -1,4 +1,4 @@
-import { attempt } from '@lib/utils/attempt'
+import { attempt } from '@vultisig/lib-utils/attempt'
 import { z } from 'zod'
 
 import type {

@@ -1,5 +1,5 @@
-import { attempt, withFallback } from '@lib/utils/attempt'
 import { VersionedTransaction } from '@solana/web3.js'
+import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 import { Psbt } from 'bitcoinjs-lib'
 
 export const isPopupView = () => {

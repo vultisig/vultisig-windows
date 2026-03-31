@@ -1,10 +1,10 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
 import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
-import { formatAmount } from '@lib/utils/formatAmount'
-import { match } from '@lib/utils/match'
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { formatAmount } from '@vultisig/lib-utils/formatAmount'
+import { match } from '@vultisig/lib-utils/match'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { useFormatFiatAmount } from '../../../chain/hooks/useFormatFiatAmount'

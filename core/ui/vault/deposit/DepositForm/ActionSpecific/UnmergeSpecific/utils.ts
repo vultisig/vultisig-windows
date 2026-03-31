@@ -1,6 +1,6 @@
-import { Chain } from '@core/chain/Chain'
-import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 
 // @tony: This is a product requirement, as we need to add coins in a specific format that are not always available in the vault.
 export const makeUnmergeSpecificPlaceholderCoin = (

@@ -1,12 +1,12 @@
-import { areEqualCoins } from '@core/chain/coin/Coin'
-import {
-  findSwapQuote,
-  FindSwapQuoteInput,
-} from '@core/chain/swap/quote/findSwapQuote'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { useVultDiscountTierQuery } from '@core/ui/vult/discount/queries/tier'
 import { useStateDependentQuery } from '@lib/ui/query/hooks/useStateDependentQuery'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
+import {
+  findSwapQuote,
+  FindSwapQuoteInput,
+} from '@vultisig/core-chain/swap/quote/findSwapQuote'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 
 import { useAssertCurrentVaultId } from '../../../storage/currentVaultId'
 import { useFriendReferralQuery } from '../../../storage/referrals'

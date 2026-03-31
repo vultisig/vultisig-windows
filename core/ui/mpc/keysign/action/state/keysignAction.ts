@@ -1,8 +1,8 @@
-import { Chain } from '@core/chain/Chain'
-import { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
-import { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
 import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core'
+import { Chain } from '@vultisig/core-chain/Chain'
+import type { SignatureAlgorithm } from '@vultisig/core-chain/signing/SignatureAlgorithm'
+import { KeysignSignature } from '@vultisig/core-mpc/keysign/KeysignSignature'
 
 type KeysignActionInput = {
   msgs: string[]

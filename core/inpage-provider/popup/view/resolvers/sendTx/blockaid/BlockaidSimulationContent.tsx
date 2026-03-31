@@ -1,9 +1,3 @@
-import { Chain, EvmChain } from '@core/chain/Chain'
-import { Coin, CoinKey } from '@core/chain/coin/Coin'
-import {
-  BlockaidEvmSimulationInfo,
-  BlockaidSolanaSimulationInfo,
-} from '@core/chain/security/blockaid/tx/simulation/core'
 import { BlockaidSwapDisplay } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidSwapDisplay'
 import { BlockaidTransferDisplay } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidTransferDisplay'
 import { MemoSection } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/MemoSection'
@@ -11,15 +5,21 @@ import {
   NetworkFeeSection,
   NetworkFeeSectionProps,
 } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/NetworkFeeSection'
-import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
-import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useQueryDependentQuery } from '@lib/ui/query/hooks/useQueryDependentQuery'
 import { Query } from '@lib/ui/query/Query'
-import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
 import { NATIVE_MINT } from '@solana/spl-token'
+import { Chain, EvmChain } from '@vultisig/core-chain/Chain'
+import { Coin, CoinKey } from '@vultisig/core-chain/coin/Coin'
+import {
+  BlockaidEvmSimulationInfo,
+  BlockaidSolanaSimulationInfo,
+} from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
+import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
+import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { formatUnits } from 'ethers'
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'

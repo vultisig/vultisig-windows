@@ -1,6 +1,6 @@
-import { getPsbtTransferInfo } from '@core/chain/chains/utxo/tx/getPsbtTransferInfo'
-import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
-import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
+import { getPsbtTransferInfo } from '@vultisig/core-chain/chains/utxo/tx/getPsbtTransferInfo'
+import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
+import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
 
 import { CustomTxData } from './customTxData'
 import { ParsedTx } from './parsedTx'

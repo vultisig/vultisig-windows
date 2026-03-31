@@ -1,7 +1,7 @@
-import { Chain, CosmosChain } from '@core/chain/Chain'
+import { Chain, CosmosChain } from '@vultisig/core-chain/Chain'
 
 export const getCosmosChainFromAddress = (address: string): string | null => {
-  const prefixToChain: Record<string, CosmosChain> = {
+  const prefixToChain: Record<string, CosmosChain | typeof Chain.QBTC> = {
     cosmos: Chain.Cosmos,
     osmo: Chain.Osmosis,
     terra: Chain.Terra,

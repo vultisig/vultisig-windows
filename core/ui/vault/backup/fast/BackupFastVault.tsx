@@ -1,4 +1,3 @@
-import { isServer } from '@core/mpc/devices/localPartyId'
 import { useVaultCreationInput } from '@core/ui/mpc/keygen/create/state/vaultCreationInput'
 import { BackupOverviewScreen } from '@core/ui/vault/backup/BackupOverviewScreen'
 import { EmailConfirmation } from '@core/ui/vault/backup/fast'
@@ -7,6 +6,7 @@ import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Match } from '@lib/ui/base/Match'
 import { useStepNavigation } from '@lib/ui/hooks/useStepNavigation'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
+import { isServer } from '@vultisig/core-mpc/devices/localPartyId'
 import { useTranslation } from 'react-i18next'
 
 import { InitiateFastVaultBackup } from './InitiateFastVaultBackup'

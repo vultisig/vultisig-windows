@@ -1,5 +1,4 @@
 import buildInfo from '@clients/desktop/build.json'
-import { mpcServerUrl } from '@core/mpc/MpcServerType'
 import { CoreApp } from '@core/ui/CoreApp'
 import { useProcessAppError } from '@core/ui/errors/hooks/useProcessAppError'
 import { initialCoreView } from '@core/ui/navigation/CoreView'
@@ -12,6 +11,7 @@ import {
   usePopNavigationHistory,
 } from '@lib/ui/navigation/hooks/useNavigateBack'
 import { NavigationProvider } from '@lib/ui/navigation/state'
+import { mpcServerUrl } from '@vultisig/core-mpc/MpcServerType'
 import { BrowserOpenURL, ClipboardGetText } from '@wailsapp/runtime'
 import { useMemo } from 'react'
 

@@ -1,6 +1,6 @@
-import { Chain } from '@core/chain/Chain'
-import { yieldBearingTokensIdToContractMap } from '@core/chain/chains/cosmos/thor/yield-bearing-tokens/config'
-import { makeAccountCoin } from '@core/chain/coin/utils/makeAccountCoin'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { yieldBearingTokensIdToContractMap } from '@vultisig/core-chain/chains/cosmos/thor/yield-bearing-tokens/config'
+import { makeAccountCoin } from '@vultisig/core-chain/coin/utils/makeAccountCoin'
 import { useMemo } from 'react'
 
 import {

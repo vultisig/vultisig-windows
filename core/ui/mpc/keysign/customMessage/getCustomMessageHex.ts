@@ -1,7 +1,7 @@
-import { getChainKind } from '@core/chain/ChainKind'
-import { stripHexPrefix } from '@lib/utils/hex/stripHexPrefix'
-import { match } from '@lib/utils/match'
-import { omit } from '@lib/utils/record/omit'
+import { getChainKind } from '@vultisig/core-chain/ChainKind'
+import { stripHexPrefix } from '@vultisig/lib-utils/hex/stripHexPrefix'
+import { match } from '@vultisig/lib-utils/match'
+import { omit } from '@vultisig/lib-utils/record/omit'
 import { TypedDataEncoder } from 'ethers'
 import { keccak256 } from 'viem'
 
@@ -32,6 +32,7 @@ export const getCustomMessageHex = ({
   return match(getChainKind(chain), {
     evm: () => stripHexPrefix(keccak256(bytes)),
     solana: () => Buffer.from(bytes).toString('hex'),
+    ton: () => Buffer.from(bytes).toString('hex'),
     tron: () => stripHexPrefix(keccak256(bytes)),
   })
 }

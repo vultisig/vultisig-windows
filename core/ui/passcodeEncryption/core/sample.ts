@@ -1,10 +1,10 @@
-import { decryptWithAesGcm } from '@lib/utils/encryption/aesGcm/decryptWithAesGcm'
-import { encryptWithAesGcm } from '@lib/utils/encryption/aesGcm/encryptWithAesGcm'
+import { decryptWithAesGcm } from '@vultisig/lib-utils/encryption/aesGcm/decryptWithAesGcm'
+import { encryptWithAesGcm } from '@vultisig/lib-utils/encryption/aesGcm/encryptWithAesGcm'
 import {
   encryptedEncoding,
   plainTextEncoding,
-} from '@lib/utils/encryption/config'
-import { Entry } from '@lib/utils/entities/Entry'
+} from '@vultisig/lib-utils/encryption/config'
+import { Entry } from '@vultisig/lib-utils/entities/Entry'
 
 export const encryptSample = ({ key, value }: Entry<string, string>) =>
   encryptWithAesGcm({

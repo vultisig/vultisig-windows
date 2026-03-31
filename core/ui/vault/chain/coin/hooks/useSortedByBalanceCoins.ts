@@ -1,10 +1,10 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { Chain } from '@core/chain/Chain'
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { Chain } from '@vultisig/core-chain/Chain'
 import {
   accountCoinKeyToString,
   extractAccountCoinKey,
-} from '@core/chain/coin/AccountCoin'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
+} from '@vultisig/core-chain/coin/AccountCoin'
+import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { useMemo } from 'react'
 
 import { useBalancesQuery } from '../../../../chain/coin/queries/useBalancesQuery'

@@ -1,6 +1,6 @@
-import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
-import { areEqualCoins } from '@core/chain/coin/Coin'
 import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
+import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
+import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
 import { t } from 'i18next'
 
 import { useBalanceQuery } from '../../../chain/coin/queries/useBalanceQuery'

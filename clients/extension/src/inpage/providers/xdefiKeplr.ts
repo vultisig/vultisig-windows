@@ -1,15 +1,6 @@
-import { Chain } from '@core/chain/Chain'
-import { getCosmosChainByChainId } from '@core/chain/chains/cosmos/chainInfo'
-import { CosmosMsgType } from '@core/chain/chains/cosmos/cosmosMsgTypes'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { deserializeSigningOutput } from '@core/chain/tw/signingOutput'
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
 import { TransactionDetails } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
-import {
-  CosmosFee,
-  CosmosMsg,
-} from '@core/mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { AminoMsg, StdFee } from '@cosmjs/amino'
 import {
   CosmJSOfflineSigner,
@@ -28,13 +19,22 @@ import {
   StdSignDoc,
 } from '@keplr-wallet/types'
 import { SignDoc as KeplrSignDoc } from '@keplr-wallet/types/build/cosmjs'
-import { without } from '@lib/utils/array/without'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
-import { hexToBytes } from '@lib/utils/hexToBytes'
-import { match } from '@lib/utils/match'
-import { areLowerCaseEqual } from '@lib/utils/string/areLowerCaseEqual'
 import { TW } from '@trustwallet/wallet-core'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { getCosmosChainByChainId } from '@vultisig/core-chain/chains/cosmos/chainInfo'
+import { CosmosMsgType } from '@vultisig/core-chain/chains/cosmos/cosmosMsgTypes'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { deserializeSigningOutput } from '@vultisig/core-chain/tw/signingOutput'
+import {
+  CosmosFee,
+  CosmosMsg,
+} from '@vultisig/core-mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
+import { without } from '@vultisig/lib-utils/array/without'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedError'
+import { hexToBytes } from '@vultisig/lib-utils/hexToBytes'
+import { match } from '@vultisig/lib-utils/match'
+import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
 import { bech32 } from 'bech32'
 import { MsgSend } from 'cosmjs-types/cosmos/bank/v1beta1/tx'
 import { TxBody, TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'

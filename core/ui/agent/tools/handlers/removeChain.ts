@@ -1,4 +1,4 @@
-import { Chain } from '@core/chain/Chain'
+import { Chain } from '@vultisig/core-chain/Chain'
 
 import { getChainFromString } from '../../utils/getChainFromString'
 import { getStorageContext } from '../shared/storageContext'

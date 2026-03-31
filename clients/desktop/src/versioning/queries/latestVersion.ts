@@ -1,5 +1,5 @@
-import { queryUrl } from '@lib/utils/query/queryUrl'
 import { useQuery } from '@tanstack/react-query'
+import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 import { productReleasesApiUrl } from '../config'
 

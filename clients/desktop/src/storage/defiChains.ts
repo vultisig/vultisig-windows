@@ -1,9 +1,9 @@
-import { Chain } from '@core/chain/Chain'
 import {
   DefiChainsStorage,
   initialDefiChains,
 } from '@core/ui/storage/defiChains'
 import { StorageKey } from '@core/ui/storage/StorageKey'
+import { Chain } from '@vultisig/core-chain/Chain'
 
 import { persistentStorage } from '../state/persistentState'
 

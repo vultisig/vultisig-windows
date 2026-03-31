@@ -1,4 +1,3 @@
-import { Chain } from '@core/chain/Chain'
 import {
   DefiChainsStorage,
   initialDefiChains,
@@ -6,6 +5,7 @@ import {
 import { StorageKey } from '@core/ui/storage/StorageKey'
 import { getStorageValue } from '@lib/extension/storage/get'
 import { setStorageValue } from '@lib/extension/storage/set'
+import { Chain } from '@vultisig/core-chain/Chain'
 
 export const defiChainsStorage: DefiChainsStorage = {
   getDefiChains: async () =>

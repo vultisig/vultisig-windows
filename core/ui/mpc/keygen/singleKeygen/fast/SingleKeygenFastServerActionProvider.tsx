@@ -1,11 +1,11 @@
-import { hasServer } from '@core/mpc/devices/localPartyId'
-import { mldsaWithServer } from '@core/mpc/fast/api/mldsaWithServer'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useEmail } from '@core/ui/state/email'
 import { usePassword } from '@core/ui/state/password'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ChildrenProp } from '@lib/ui/props'
+import { hasServer } from '@vultisig/core-mpc/devices/localPartyId'
+import { mldsaWithServer } from '@vultisig/core-mpc/fast/api/mldsaWithServer'
 import { useCallback } from 'react'
 
 import { FastKeygenServerActionProvider } from '../../fast/state/fastKeygenServerAction'

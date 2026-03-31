@@ -23,6 +23,7 @@
     "**/*.tsx",
     "types.d.ts",
     "lib/ui/theme/styled.d.ts",
-    "lib/ui/query/react-query.d.ts"
-, "vitest.config.mts"  ]
+    "lib/ui/query/react-query.d.ts",
+    "vitest.config.mts"
+  ]
 }

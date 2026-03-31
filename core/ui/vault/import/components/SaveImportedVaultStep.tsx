@@ -1,4 +1,3 @@
-import { getVaultId, Vault } from '@core/mpc/vault/Vault'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useCore } from '@core/ui/state/core'
 import { useVaultOrders, useVaults } from '@core/ui/storage/vaults'
@@ -6,7 +5,8 @@ import { useVaultBackupOverride } from '@core/ui/vault/import/state/vaultBackupO
 import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
 import { Button } from '@lib/ui/buttons/Button'
 import { ValueProp } from '@lib/ui/props'
-import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
+import { getVaultId, Vault } from '@vultisig/core-mpc/vault/Vault'
+import { getLastItemOrder } from '@vultisig/lib-utils/order/getLastItemOrder'
 import { useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 

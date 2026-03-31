@@ -1,4 +1,4 @@
-import { memoizeAsync } from '@lib/utils/memoizeAsync'
+import { memoizeAsync } from '@vultisig/lib-utils/memoizeAsync'
 import { prepareZXingModule, readBarcodes } from 'zxing-wasm/reader'
 
 type Input = {

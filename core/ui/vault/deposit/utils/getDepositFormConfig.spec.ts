@@ -1,11 +1,20 @@
-import { Chain } from '@core/chain/Chain'
-import { isValidAddress } from '@core/chain/utils/isValidAddress'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { isValidAddress } from '@vultisig/core-chain/utils/isValidAddress'
 import { TFunction } from 'i18next'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { getDepositFormConfig } from './getDepositFormConfig'
 
-vi.mock('@core/chain/utils/isValidAddress', () => ({
+/**
+ * @vultisig/core-chain `coin/chainFeeCoin` imports `chains/cosmos/thor/kujira-merge.js`,
+ * but the published package only provides `kujira-merge/index.js`, so the suite fails on
+ * load in Vitest/Node ESM. Mock until the SDK fixes that internal re-export.
+ */
+vi.mock('@vultisig/core-chain/coin/chainFeeCoin', () => ({
+  chainFeeCoin: {},
+}))
+
+vi.mock('@vultisig/core-chain/utils/isValidAddress', () => ({
   isValidAddress: vi.fn(),
 }))
 

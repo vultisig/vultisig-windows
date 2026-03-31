@@ -1,4 +1,4 @@
-import { attempt, withFallback } from '@lib/utils/attempt'
+import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 import { z } from 'zod'
 
 import { verifierUrl } from '../../config'

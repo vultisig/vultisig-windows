@@ -1,6 +1,6 @@
 import { ValueProp } from '@lib/ui/props'
-import { EntityWithTicker } from '@lib/utils/entities/EntityWithTicker'
-import { formatAmount } from '@lib/utils/formatAmount'
+import { EntityWithTicker } from '@vultisig/lib-utils/entities/EntityWithTicker'
+import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 
 import { TxOverviewRow } from './TxOverviewRow'

@@ -1,7 +1,7 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { usdc } from '@core/chain/coin/knownTokens'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { formatAmount } from '@lib/utils/formatAmount'
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { usdc } from '@vultisig/core-chain/coin/knownTokens'
+import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 
 import { useCircleAccountUsdcBalanceQuery } from '../queries/circleAccountUsdcBalance'
 

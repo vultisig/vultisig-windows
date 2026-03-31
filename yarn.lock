@@ -484,121 +484,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bufbuild/buf-darwin-arm64@npm:1.66.1":
-  version: 1.66.1
-  resolution: "@bufbuild/buf-darwin-arm64@npm:1.66.1"
-  conditions: os=darwin & cpu=arm64
-  languageName: node
-  linkType: hard
-
-"@bufbuild/buf-darwin-x64@npm:1.66.1":
-  version: 1.66.1
-  resolution: "@bufbuild/buf-darwin-x64@npm:1.66.1"
-  conditions: os=darwin & cpu=x64
-  languageName: node
-  linkType: hard
-
-"@bufbuild/buf-linux-aarch64@npm:1.66.1":
-  version: 1.66.1
-  resolution: "@bufbuild/buf-linux-aarch64@npm:1.66.1"
-  conditions: os=linux & cpu=arm64
-  languageName: node
-  linkType: hard
-
-"@bufbuild/buf-linux-armv7@npm:1.66.1":
-  version: 1.66.1
-  resolution: "@bufbuild/buf-linux-armv7@npm:1.66.1"
-  conditions: os=linux & cpu=arm
-  languageName: node
-  linkType: hard
-
-"@bufbuild/buf-linux-x64@npm:1.66.1":
-  version: 1.66.1
-  resolution: "@bufbuild/buf-linux-x64@npm:1.66.1"
-  conditions: os=linux & cpu=x64
-  languageName: node
-  linkType: hard
-
-"@bufbuild/buf-win32-arm64@npm:1.66.1":
-  version: 1.66.1
-  resolution: "@bufbuild/buf-win32-arm64@npm:1.66.1"
-  conditions: os=win32 & cpu=arm64
-  languageName: node
-  linkType: hard
-
-"@bufbuild/buf-win32-x64@npm:1.66.1":
-  version: 1.66.1
-  resolution: "@bufbuild/buf-win32-x64@npm:1.66.1"
-  conditions: os=win32 & cpu=x64
-  languageName: node
-  linkType: hard
-
-"@bufbuild/buf@npm:^1.66.1":
-  version: 1.66.1
-  resolution: "@bufbuild/buf@npm:1.66.1"
-  dependencies:
-    "@bufbuild/buf-darwin-arm64": "npm:1.66.1"
-    "@bufbuild/buf-darwin-x64": "npm:1.66.1"
-    "@bufbuild/buf-linux-aarch64": "npm:1.66.1"
-    "@bufbuild/buf-linux-armv7": "npm:1.66.1"
-    "@bufbuild/buf-linux-x64": "npm:1.66.1"
-    "@bufbuild/buf-win32-arm64": "npm:1.66.1"
-    "@bufbuild/buf-win32-x64": "npm:1.66.1"
-  dependenciesMeta:
-    "@bufbuild/buf-darwin-arm64":
-      optional: true
-    "@bufbuild/buf-darwin-x64":
-      optional: true
-    "@bufbuild/buf-linux-aarch64":
-      optional: true
-    "@bufbuild/buf-linux-armv7":
-      optional: true
-    "@bufbuild/buf-linux-x64":
-      optional: true
-    "@bufbuild/buf-win32-arm64":
-      optional: true
-    "@bufbuild/buf-win32-x64":
-      optional: true
-  bin:
-    buf: bin/buf
-    protoc-gen-buf-breaking: bin/protoc-gen-buf-breaking
-    protoc-gen-buf-lint: bin/protoc-gen-buf-lint
-  checksum: 10c0/4cb15ce5ba6d02e5a3c31466e9a3b1252c8873f26b1cdcf0349ad3f6b3e60e5c4d2eaa9222e1c667086941f39444895ecdec383a709a7a8e99ad49657160cea3
-  languageName: node
-  linkType: hard
-
-"@bufbuild/protobuf@npm:2.11.0, @bufbuild/protobuf@npm:^2.11.0":
+"@bufbuild/protobuf@npm:^2.11.0":
   version: 2.11.0
   resolution: "@bufbuild/protobuf@npm:2.11.0"
   checksum: 10c0/d54fffd414660b823999cc321d26bd6c5f18a6e75343fc7d2588bda5be540ec542b557ac1f03d6d4b6e9d3e5596b2016e58cda173cd1858c043f0e846ece453f
-  languageName: node
-  linkType: hard
-
-"@bufbuild/protoc-gen-es@npm:^2.11.0":
-  version: 2.11.0
-  resolution: "@bufbuild/protoc-gen-es@npm:2.11.0"
-  dependencies:
-    "@bufbuild/protobuf": "npm:2.11.0"
-    "@bufbuild/protoplugin": "npm:2.11.0"
-  peerDependencies:
-    "@bufbuild/protobuf": 2.11.0
-  peerDependenciesMeta:
-    "@bufbuild/protobuf":
-      optional: true
-  bin:
-    protoc-gen-es: bin/protoc-gen-es
-  checksum: 10c0/b799655b29372588b77f7fffdb4ce02138903978e5e5dd31d38118439d09fd6d746aa1a777d6b70f4728ae23f551c54d47e699b58d2f1cbbd51a45f70a26f710
-  languageName: node
-  linkType: hard
-
-"@bufbuild/protoplugin@npm:2.11.0":
-  version: 2.11.0
-  resolution: "@bufbuild/protoplugin@npm:2.11.0"
-  dependencies:
-    "@bufbuild/protobuf": "npm:2.11.0"
-    "@typescript/vfs": "npm:^1.6.2"
-    typescript: "npm:5.4.5"
-  checksum: 10c0/e03496562f64ebd17c9d9bb2c53cb1bc9f152f641d4f40953c27b1e1be0fa2655fdb42b80ca6c1630ed31a3d918f2bd610bbe60708f78526a44e0f5d622fbb0b
   languageName: node
   linkType: hard
 
@@ -663,19 +552,19 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@clients/desktop@workspace:clients/desktop"
   dependencies:
-    "@core/chain": "workspace:^"
-    "@core/config": "workspace:^"
-    "@core/mpc": "workspace:^"
     "@core/ui": "workspace:^"
     "@eslint/compat": "npm:^2.0.3"
     "@eslint/eslintrc": "npm:^3.3.5"
     "@eslint/js": "npm:^9.39.2"
     "@lib/ui": "workspace:^"
-    "@lib/utils": "workspace:^"
     "@tanstack/react-query": "npm:^5.90.21"
     "@tanstack/react-query-persist-client": "npm:^5.90.24"
     "@types/react": "npm:^19.2.14"
     "@types/react-dom": "npm:^19.2.3"
+    "@vultisig/core-chain": "npm:1.0.0"
+    "@vultisig/core-config": "npm:0.9.1"
+    "@vultisig/core-mpc": "npm:1.0.0"
+    "@vultisig/lib-utils": "npm:0.9.1"
     "@wailsapp/runtime": "workspace:^"
     eslint: "npm:^9.39.2"
     eslint-plugin-jsx-a11y: "npm:^6.10.2"
@@ -700,10 +589,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@clients/extension@workspace:clients/extension"
   dependencies:
-    "@core/chain": "workspace:^"
     "@core/extension": "workspace:^"
     "@core/inpage-provider": "workspace:^"
-    "@core/mpc": "workspace:^"
     "@core/ui": "workspace:^"
     "@cosmjs/amino": "npm:^0.38.1"
     "@fontsource/montserrat": "npm:^5.2.8"
@@ -713,7 +600,6 @@ __metadata:
     "@keplr-wallet/types": "npm:^0.13.13"
     "@lib/extension": "workspace:^"
     "@lib/ui": "workspace:^"
-    "@lib/utils": "workspace:^"
     "@playwright/test": "npm:^1.58.2"
     "@solana/wallet-standard-features": "npm:^1.3.0"
     "@solana/web3.js": "npm:^1.98.4"
@@ -732,7 +618,10 @@ __metadata:
     "@types/react-dom": "npm:^19.2.3"
     "@types/web-push": "npm:^3"
     "@types/ws": "npm:^8"
-    "@vultisig/sdk": "npm:0.8.0"
+    "@vultisig/core-chain": "npm:1.0.0"
+    "@vultisig/core-mpc": "npm:1.0.0"
+    "@vultisig/lib-utils": "npm:0.9.1"
+    "@vultisig/sdk": "npm:0.11.0"
     "@wallet-standard/base": "npm:^1.1.0"
     "@wallet-standard/features": "npm:^1.1.0"
     bech32: "npm:^2.0.0"
@@ -810,62 +699,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@core/chain@workspace:^, @core/chain@workspace:core/chain":
-  version: 0.0.0-use.local
-  resolution: "@core/chain@workspace:core/chain"
-  dependencies:
-    7z-wasm: "npm:^1.2.0"
-    "@bufbuild/protobuf": "npm:^2.11.0"
-    "@core/config": "workspace:^"
-    "@core/mpc": "workspace:^"
-    "@cosmjs/amino": "npm:^0.38.1"
-    "@cosmjs/encoding": "npm:^0.38.1"
-    "@cosmjs/proto-signing": "npm:^0.38.1"
-    "@cosmjs/stargate": "npm:^0.38.1"
-    "@lib/utils": "workspace:^"
-    "@lifi/sdk": "npm:^3.16.2"
-    "@mysten/sui": "npm:^2.8.0"
-    "@noble/hashes": "npm:^2.0.1"
-    "@polkadot/api": "npm:^16.5.4"
-    "@polkadot/util-crypto": "npm:^14.0.1"
-    "@solana/web3.js": "npm:^1.98.4"
-    "@trustwallet/wallet-core": "npm:^4.6.0"
-    "@vultisig/sdk": "npm:0.8.0"
-    bip32: "npm:^5.0.1"
-    bitcoinjs-lib: "npm:^7.0.1"
-    bs58: "npm:^6.0.0"
-    cbor-x: "npm:^1.6.4"
-    date-fns: "npm:^4.1.0"
-    ethers: "npm:^6.16.0"
-    i18next: "npm:^25.8.18"
-    tiny-secp256k1: "npm:^2.2.4"
-    viem: "npm:^2.47.4"
-    xrpl: "npm:^4.6.0"
-  languageName: unknown
-  linkType: soft
-
-"@core/config@workspace:^, @core/config@workspace:core/config":
-  version: 0.0.0-use.local
-  resolution: "@core/config@workspace:core/config"
-  dependencies:
-    "@vultisig/sdk": "npm:0.8.0"
-  languageName: unknown
-  linkType: soft
-
 "@core/extension@workspace:^, @core/extension@workspace:core/extension":
   version: 0.0.0-use.local
   resolution: "@core/extension@workspace:core/extension"
   dependencies:
-    "@core/chain": "workspace:^"
-    "@core/config": "workspace:^"
-    "@core/mpc": "workspace:^"
     "@core/ui": "workspace:^"
     "@lib/extension": "workspace:^"
     "@lib/ui": "workspace:^"
-    "@lib/utils": "workspace:^"
     "@tanstack/react-query": "npm:^5.90.21"
     "@tanstack/react-query-persist-client": "npm:^5.90.24"
     "@trustwallet/wallet-core": "npm:^4.6.0"
+    "@vultisig/core-chain": "npm:1.0.0"
+    "@vultisig/core-config": "npm:0.9.1"
+    "@vultisig/core-mpc": "npm:1.0.0"
+    "@vultisig/lib-utils": "npm:0.9.1"
     react: "npm:^19.2.4"
     react-i18next: "npm:^16.5.8"
   languageName: unknown
@@ -876,18 +723,18 @@ __metadata:
   resolution: "@core/inpage-provider@workspace:core/inpage-provider"
   dependencies:
     "@bufbuild/protobuf": "npm:^2.11.0"
-    "@core/chain": "workspace:^"
-    "@core/config": "workspace:^"
     "@core/extension": "workspace:^"
-    "@core/mpc": "workspace:^"
     "@core/ui": "workspace:^"
     "@lib/extension": "workspace:^"
     "@lib/ui": "workspace:^"
-    "@lib/utils": "workspace:^"
     "@solana/spl-token": "npm:^0.4.14"
     "@solana/web3.js": "npm:^1.98.4"
     "@tanstack/react-query": "npm:^5.90.21"
     "@trustwallet/wallet-core": "npm:^4.6.0"
+    "@vultisig/core-chain": "npm:1.0.0"
+    "@vultisig/core-config": "npm:0.9.1"
+    "@vultisig/core-mpc": "npm:1.0.0"
+    "@vultisig/lib-utils": "npm:0.9.1"
     bitcoinjs-lib: "npm:^7.0.1"
     bs58: "npm:^6.0.0"
     ethers: "npm:^6.16.0"
@@ -900,48 +747,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@core/mpc@workspace:^, @core/mpc@workspace:core/mpc":
-  version: 0.0.0-use.local
-  resolution: "@core/mpc@workspace:core/mpc"
-  dependencies:
-    7z-wasm: "npm:^1.2.0"
-    "@bufbuild/buf": "npm:^1.66.1"
-    "@bufbuild/protobuf": "npm:^2.11.0"
-    "@bufbuild/protoc-gen-es": "npm:^2.11.0"
-    "@core/chain": "workspace:^"
-    "@core/config": "workspace:^"
-    "@cosmjs/encoding": "npm:^0.38.1"
-    "@lib/dkls": "workspace:^"
-    "@lib/mldsa": "workspace:^"
-    "@lib/schnorr": "workspace:^"
-    "@lib/utils": "workspace:^"
-    "@mysten/sui": "npm:^2.8.0"
-    "@noble/hashes": "npm:^2.0.1"
-    "@solana/web3.js": "npm:^1.98.4"
-    "@trustwallet/wallet-core": "npm:^4.6.0"
-    bitcoinjs-lib: "npm:^7.0.1"
-    bs58: "npm:^6.0.0"
-    cosmjs-types: "npm:^0.11.0"
-    long: "npm:^5.3.2"
-    viem: "npm:^2.47.4"
-    vitest: "npm:^4.1.0"
-  languageName: unknown
-  linkType: soft
-
 "@core/ui@workspace:^, @core/ui@workspace:core/ui":
   version: 0.0.0-use.local
   resolution: "@core/ui@workspace:core/ui"
   dependencies:
     "@bufbuild/protobuf": "npm:^2.11.0"
-    "@core/chain": "workspace:^"
-    "@core/config": "workspace:^"
-    "@core/mpc": "workspace:^"
     "@cosmjs/encoding": "npm:^0.38.1"
     "@floating-ui/react": "npm:^0.27.19"
     "@hookform/resolvers": "npm:^5.2.2"
     "@lib/codegen": "workspace:^"
     "@lib/ui": "workspace:^"
-    "@lib/utils": "workspace:^"
     "@react-spring/web": "npm:^10.0.3"
     "@rive-app/react-webgl2": "npm:4.26.2"
     "@solana/spl-token": "npm:^0.4.14"
@@ -955,7 +770,11 @@ __metadata:
     "@types/react": "npm:^19.2.14"
     "@types/react-dom": "npm:^19.2.3"
     "@vitejs/plugin-react": "npm:^5.1.3"
-    "@vultisig/sdk": "npm:0.8.0"
+    "@vultisig/core-chain": "npm:1.0.0"
+    "@vultisig/core-config": "npm:0.9.1"
+    "@vultisig/core-mpc": "npm:1.0.0"
+    "@vultisig/lib-utils": "npm:0.9.1"
+    "@vultisig/sdk": "npm:0.11.0"
     cosmjs-types: "npm:^0.11.0"
     ethers: "npm:^6.16.0"
     framer-motion: "npm:^12.37.0"
@@ -2255,14 +2074,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@lib/codegen@workspace:lib/codegen"
   dependencies:
-    "@lib/utils": "workspace:^"
+    "@vultisig/lib-utils": "npm:0.9.1"
     prettier: "npm:^3.8.1"
-  languageName: unknown
-  linkType: soft
-
-"@lib/dkls@workspace:^, @lib/dkls@workspace:lib/dkls":
-  version: 0.0.0-use.local
-  resolution: "@lib/dkls@workspace:lib/dkls"
   languageName: unknown
   linkType: soft
 
@@ -2270,19 +2083,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@lib/extension@workspace:lib/extension"
   dependencies:
-    "@lib/utils": "workspace:^"
-  languageName: unknown
-  linkType: soft
-
-"@lib/mldsa@workspace:^, @lib/mldsa@workspace:lib/mldsa":
-  version: 0.0.0-use.local
-  resolution: "@lib/mldsa@workspace:lib/mldsa"
-  languageName: unknown
-  linkType: soft
-
-"@lib/schnorr@workspace:^, @lib/schnorr@workspace:lib/schnorr":
-  version: 0.0.0-use.local
-  resolution: "@lib/schnorr@workspace:lib/schnorr"
+    "@vultisig/lib-utils": "npm:0.9.1"
   languageName: unknown
   linkType: soft
 
@@ -2296,7 +2097,6 @@ __metadata:
     "@dnd-kit/utilities": "npm:^3.2.2"
     "@emotion/is-prop-valid": "npm:^1.4.0"
     "@floating-ui/react": "npm:^0.27.19"
-    "@lib/utils": "workspace:^"
     "@radix-ui/react-roving-focus": "npm:^1.1.11"
     "@radix-ui/react-tabs": "npm:^1.1.13"
     "@react-spring/web": "npm:^10.0.3"
@@ -2312,6 +2112,7 @@ __metadata:
     "@types/react": "npm:^19.2.14"
     "@types/react-dom": "npm:^19.2.3"
     "@vitest/browser": "npm:^4.1.0"
+    "@vultisig/lib-utils": "npm:0.9.1"
     i18next: "npm:^25.8.18"
     lottie-react: "npm:^2.4.1"
     react: "npm:^19.2.4"
@@ -2325,16 +2126,6 @@ __metadata:
     storybook: "npm:^10.2.19"
     styled-components: "npm:^6.3.11"
     vite: "npm:^7.3.1"
-    vitest: "npm:^4.1.0"
-  languageName: unknown
-  linkType: soft
-
-"@lib/utils@workspace:^, @lib/utils@workspace:lib/utils":
-  version: 0.0.0-use.local
-  resolution: "@lib/utils@workspace:lib/utils"
-  dependencies:
-    long: "npm:^5.3.2"
-    viem: "npm:^2.47.4"
     vitest: "npm:^4.1.0"
   languageName: unknown
   linkType: soft
@@ -5787,17 +5578,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript/vfs@npm:^1.6.2":
-  version: 1.6.2
-  resolution: "@typescript/vfs@npm:1.6.2"
-  dependencies:
-    debug: "npm:^4.1.1"
-  peerDependencies:
-    typescript: "*"
-  checksum: 10c0/72e9a551337aa5478e39d6e0568bcf00d30fad68eae456a68b7436d2b5c7a35d78dd1d121242433fb6c8dc02ca618dfb5fe09916de88dabe746b3fb6b224793a
-  languageName: node
-  linkType: hard
-
 "@ungap/structured-clone@npm:^1.0.0":
   version: 1.3.0
   resolution: "@ungap/structured-clone@npm:1.3.0"
@@ -5963,9 +5743,106 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vultisig/sdk@npm:0.8.0":
-  version: 0.8.0
-  resolution: "@vultisig/sdk@npm:0.8.0"
+"@vultisig/core-chain@npm:1.0.0":
+  version: 1.0.0
+  resolution: "@vultisig/core-chain@npm:1.0.0"
+  dependencies:
+    7z-wasm: "npm:^1.2.0"
+    "@bufbuild/protobuf": "npm:^2.11.0"
+    "@cosmjs/amino": "npm:^0.38.1"
+    "@cosmjs/encoding": "npm:^0.38.1"
+    "@cosmjs/proto-signing": "npm:^0.38.1"
+    "@cosmjs/stargate": "npm:^0.38.1"
+    "@lifi/sdk": "npm:^3.16.2"
+    "@mysten/sui": "npm:^2.8.0"
+    "@noble/hashes": "npm:^2.0.1"
+    "@polkadot/api": "npm:^16.5.4"
+    "@polkadot/util-crypto": "npm:^14.0.1"
+    "@solana/web3.js": "npm:^1.98.4"
+    "@trustwallet/wallet-core": "npm:^4.6.0"
+    "@vultisig/core-config": "npm:0.9.1"
+    "@vultisig/lib-utils": "npm:0.9.1"
+    bip32: "npm:^5.0.1"
+    bitcoinjs-lib: "npm:^7.0.1"
+    bs58: "npm:^6.0.0"
+    cbor-x: "npm:^1.6.4"
+    date-fns: "npm:^4.1.0"
+    ethers: "npm:^6.16.0"
+    i18next: "npm:^25.8.18"
+    tiny-secp256k1: "npm:^2.2.4"
+    viem: "npm:^2.47.4"
+    xrpl: "npm:^4.6.0"
+  checksum: 10c0/d1d6f2cb723ab24afa1263dcbcb2ac32bec55bee78989ad39a7b3432a273c7fd0095518e972db443a1720ed54469c6ee6f3589794abe7e0bfb6d97e2c17b0316
+  languageName: node
+  linkType: hard
+
+"@vultisig/core-config@npm:0.9.1":
+  version: 0.9.1
+  resolution: "@vultisig/core-config@npm:0.9.1"
+  checksum: 10c0/3b1570e29c4b0bb78f2bded09b19581b0b6b639e1183cf40e344a66bc619e5d686965c17f751ec7e442b811d3c2e7f5ec1c93cce304c851863ae29bd9e080e25
+  languageName: node
+  linkType: hard
+
+"@vultisig/core-mpc@npm:1.0.0":
+  version: 1.0.0
+  resolution: "@vultisig/core-mpc@npm:1.0.0"
+  dependencies:
+    7z-wasm: "npm:^1.2.0"
+    "@bufbuild/protobuf": "npm:^2.11.0"
+    "@cosmjs/encoding": "npm:^0.38.1"
+    "@mysten/sui": "npm:^2.8.0"
+    "@noble/hashes": "npm:^2.0.1"
+    "@solana/web3.js": "npm:^1.98.4"
+    "@trustwallet/wallet-core": "npm:^4.6.0"
+    "@vultisig/core-chain": "npm:1.0.0"
+    "@vultisig/core-config": "npm:0.9.1"
+    "@vultisig/lib-dkls": "npm:0.9.0"
+    "@vultisig/lib-mldsa": "npm:0.9.0"
+    "@vultisig/lib-schnorr": "npm:0.9.0"
+    "@vultisig/lib-utils": "npm:0.9.1"
+    bitcoinjs-lib: "npm:^7.0.1"
+    bs58: "npm:^6.0.0"
+    cosmjs-types: "npm:^0.11.0"
+    long: "npm:^5.3.2"
+    viem: "npm:^2.47.4"
+  checksum: 10c0/f1aa89d4a732c05d32f9117d94ccc6bc627fbe8da77b3b6a9de26cb3775d15cdc55195710b60b14ed3e0a522fde73198dd24d3aa7ae1ae302b5f495bd1ee6a00
+  languageName: node
+  linkType: hard
+
+"@vultisig/lib-dkls@npm:0.9.0":
+  version: 0.9.0
+  resolution: "@vultisig/lib-dkls@npm:0.9.0"
+  checksum: 10c0/985abb9c4e8a940ae4dd7ce2bf5fcf6ff47bd2b13ba60a7ef97ffa34c8bfef6ddf0a6227e4a8e5001951ec6789c7cb8b90bb66ac8fbb566c6bb793b739d1d94e
+  languageName: node
+  linkType: hard
+
+"@vultisig/lib-mldsa@npm:0.9.0":
+  version: 0.9.0
+  resolution: "@vultisig/lib-mldsa@npm:0.9.0"
+  checksum: 10c0/b060a4af90d766c7ef4e7d4a6374f8254e09dea434650543d46b4bea48447b712f779f6cb01b72cf916704734bb9fa61f3f9aacbfac14ccb3bd1159eb18ef6af
+  languageName: node
+  linkType: hard
+
+"@vultisig/lib-schnorr@npm:0.9.0":
+  version: 0.9.0
+  resolution: "@vultisig/lib-schnorr@npm:0.9.0"
+  checksum: 10c0/813f13345f83bf182ce41d2d64d6cb3a0cfc6b3c104d3f2bde2d34a14590d69cb9bd6754f7f554f5fd4bc5e87921cc31c59c2168ed1d2ccdd0183c75a596760f
+  languageName: node
+  linkType: hard
+
+"@vultisig/lib-utils@npm:0.9.1":
+  version: 0.9.1
+  resolution: "@vultisig/lib-utils@npm:0.9.1"
+  dependencies:
+    long: "npm:^5.3.2"
+    viem: "npm:^2.47.4"
+  checksum: 10c0/8527b4af9b05a62dd9d5e214a038dd26047db3a7440c9acf4d47f34b5654c33a870f003c7a3109178a1f6fac35aafb0fa76027490a41917318303339fdb66ad7
+  languageName: node
+  linkType: hard
+
+"@vultisig/sdk@npm:0.11.0":
+  version: 0.11.0
+  resolution: "@vultisig/sdk@npm:0.11.0"
   dependencies:
     7z-wasm: "npm:^1.2.0"
     "@bufbuild/protobuf": "npm:^2.11.0"
@@ -5979,6 +5856,13 @@ __metadata:
     "@solana/spl-token": "npm:^0.4.14"
     "@solana/web3.js": "npm:^1.98.4"
     "@trustwallet/wallet-core": "npm:^4.6.0"
+    "@vultisig/core-chain": "npm:1.0.0"
+    "@vultisig/core-config": "npm:0.9.1"
+    "@vultisig/core-mpc": "npm:1.0.0"
+    "@vultisig/lib-dkls": "npm:0.9.0"
+    "@vultisig/lib-mldsa": "npm:0.9.0"
+    "@vultisig/lib-schnorr": "npm:0.9.0"
+    "@vultisig/lib-utils": "npm:0.9.1"
     axios: "npm:^1.13.6"
     bip32: "npm:^5.0.1"
     bitcoinjs-lib: "npm:^7.0.1"
@@ -5995,7 +5879,7 @@ __metadata:
     ws: "npm:^8.19.0"
     xrpl: "npm:^4.6.0"
     zod: "npm:^4.3.6"
-  checksum: 10c0/d49f25e541a4d413d8cda3fef7d1ca3149a706f9afe80eefaa2f3f337ba235629df785f641f701d59a279f7168ebeb2ab0ba2b7fb092efc1e81acfc95744d46e
+  checksum: 10c0/e5bf4eec2e4b7377a637e0fcd245fb4a6565b39586bbcad8e778394b8de208d8ef225acb165b53542360993e47cbe62f6a93ee328c95c226b8ae1f2fe06a094c
   languageName: node
   linkType: hard
 
@@ -9490,6 +9374,13 @@ __metadata:
     define-properties: "npm:^1.2.1"
     gopd: "npm:^1.0.1"
   checksum: 10c0/9d156f313af79d80b1566b93e19285f481c591ad6d0d319b4be5e03750d004dde40a39a0f26f7e635f9007a3600802f53ecd85a759b86f109e80a5f705e01846
+  languageName: node
+  linkType: hard
+
+"globrex@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "globrex@npm:0.1.2"
+  checksum: 10c0/a54c029520cf58bda1d8884f72bd49b4cd74e977883268d931fd83bcbd1a9eb96d57c7dbd4ad80148fb9247467ebfb9b215630b2ed7563b2a8de02e1ff7f89d1
   languageName: node
   linkType: hard
 
@@ -14563,6 +14454,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tsconfck@npm:^3.0.3":
+  version: 3.1.6
+  resolution: "tsconfck@npm:3.1.6"
+  peerDependencies:
+    typescript: ^5.0.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  bin:
+    tsconfck: bin/tsconfck.js
+  checksum: 10c0/269c3c513540be44844117bb9b9258fe6f8aeab026d32aeebf458d5299125f330711429dbb556dbf125a0bc25f4a81e6c24ac96de2740badd295c3fb400f66c4
+  languageName: node
+  linkType: hard
+
 "tsconfig-paths@npm:^3.15.0":
   version: 3.15.0
   resolution: "tsconfig-paths@npm:3.15.0"
@@ -14719,16 +14624,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:5.4.5":
-  version: 5.4.5
-  resolution: "typescript@npm:5.4.5"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: 10c0/2954022ada340fd3d6a9e2b8e534f65d57c92d5f3989a263754a78aba549f7e6529acc1921913560a4b816c46dce7df4a4d29f9f11a3dc0d4213bb76d043251e
-  languageName: node
-  linkType: hard
-
 "typescript@npm:^5.9.3":
   version: 5.9.3
   resolution: "typescript@npm:5.9.3"
@@ -14736,16 +14631,6 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 10c0/6bd7552ce39f97e711db5aa048f6f9995b53f1c52f7d8667c1abdc1700c68a76a308f579cd309ce6b53646deb4e9a1be7c813a93baaf0a28ccd536a30270e1c5
-  languageName: node
-  linkType: hard
-
-"typescript@patch:typescript@npm%3A5.4.5#optional!builtin<compat/typescript>":
-  version: 5.4.5
-  resolution: "typescript@patch:typescript@npm%3A5.4.5#optional!builtin<compat/typescript>::version=5.4.5&hash=5adc0c"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: 10c0/db2ad2a16ca829f50427eeb1da155e7a45e598eec7b086d8b4e8ba44e5a235f758e606d681c66992230d3fc3b8995865e5fd0b22a2c95486d0b3200f83072ec9
   languageName: node
   linkType: hard
 
@@ -15254,6 +15139,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"vite-tsconfig-paths@npm:^6.1.1":
+  version: 6.1.1
+  resolution: "vite-tsconfig-paths@npm:6.1.1"
+  dependencies:
+    debug: "npm:^4.1.1"
+    globrex: "npm:^0.1.2"
+    tsconfck: "npm:^3.0.3"
+  peerDependencies:
+    vite: "*"
+  checksum: 10c0/5e61080991418fefa08c5b98995cdcada4931ae01ac97ef9e2ee941051f61b76890a6e7ba48bed3b2a229ec06fef33a06621bba4ce457b3f4233ad31dc0c1d1b
+  languageName: node
+  linkType: hard
+
 "vite@npm:^6.0.0 || ^7.0.0 || ^8.0.0-0":
   version: 8.0.0
   resolution: "vite@npm:8.0.0"
@@ -15478,6 +15376,7 @@ __metadata:
     react-markdown: "npm:^10.1.0"
     tsx: "npm:^4.21.0"
     typescript: "npm:^5.9.3"
+    vite-tsconfig-paths: "npm:^6.1.1"
     vitest: "npm:^4.1.0"
   languageName: unknown
   linkType: soft

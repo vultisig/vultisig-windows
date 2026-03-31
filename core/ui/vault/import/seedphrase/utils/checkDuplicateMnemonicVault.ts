@@ -1,7 +1,7 @@
-import { clampThenUniformScalar } from '@core/mpc/utils/ed25519ScalarClamp'
-import { Vault } from '@core/mpc/vault/Vault'
-import { attempt, withFallback } from '@lib/utils/attempt'
 import { WalletCore } from '@trustwallet/wallet-core'
+import { clampThenUniformScalar } from '@vultisig/core-mpc/utils/ed25519ScalarClamp'
+import { Vault } from '@vultisig/core-mpc/vault/Vault'
+import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 
 type CheckDuplicateMnemonicVaultInput = {
   mnemonic: string

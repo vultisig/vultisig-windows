@@ -1,15 +1,19 @@
-import { defaultMpcLib, MpcLib, mpcLibOptions } from '@core/mpc/mpcLib'
-import { validateOneOf } from '@lib/utils/array/isOneOf'
+import { mpcLibOptions } from '@vultisig/core-mpc/mpcLib'
+import { validateOneOf } from '@vultisig/lib-utils/array/isOneOf'
 
 import {
   PersistentStateKey,
   usePersistentState,
 } from '../../state/persistentState'
 
+type VaultCreationMpcLib = (typeof mpcLibOptions)[number]
+
+const defaultVaultCreationMpcLib: VaultCreationMpcLib = 'DKLS'
+
 export const useVaultCreationMpcLib = () => {
-  return usePersistentState<MpcLib>(
+  return usePersistentState<VaultCreationMpcLib>(
     PersistentStateKey.VaultCreationMpcLib,
-    defaultMpcLib,
+    defaultVaultCreationMpcLib,
     validateOneOf(mpcLibOptions)
   )
 }

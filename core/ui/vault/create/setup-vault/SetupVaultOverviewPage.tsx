@@ -6,7 +6,7 @@ import { VaultSetupOverviewContent } from '@core/ui/vault/create/setup-vault/vau
 import { VaultExistsOnServerWarning } from '@core/ui/vault/create/setup-vault/VaultExistsOnServerWarning'
 import { useVaultExistsOnServerQuery } from '@core/ui/vault/import/seedphrase/hooks/useVaultExistsOnServerQuery'
 import { deriveEcdsaPublicKeyFromMnemonic } from '@core/ui/vault/import/seedphrase/utils/deriveEcdsaPublicKeyFromMnemonic'
-import { attempt, withFallback } from '@lib/utils/attempt'
+import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 import { useEffect, useState } from 'react'
 
 export const SetupVaultOverviewPage = () => {

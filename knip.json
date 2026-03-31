@@ -1,18 +1,14 @@
 {
   "ignore": [
-    "core/mpc/types/**",
     "clients/desktop/wailsjs/**",
     "core/ui/transaction-history/**",
-    "lib/ui/form/FormCheckBadge.tsx",
-    ".cursor/**"
+    "lib/ui/form/FormCheckBadge.tsx"
   ],
   "ignoreBinaries": [
     "wails"
   ],
   "ignoreDependencies": [
-    "babel-plugin-react-compiler",
-    "@bufbuild/buf",
-    "@bufbuild/protoc-gen-es"
+    "babel-plugin-react-compiler"
   ],
   "workspaces": {
     "clients/desktop": {
@@ -71,17 +67,7 @@
         "vite-plugin-static-copy"
       ]
     },
-    "lib/utils": {
-      "project": [
-        "**/*.{ts,tsx}"
-      ]
-    },
     "lib/ui": {
-      "project": [
-        "**/*.{ts,tsx}"
-      ]
-    },
-    "core/chain": {
       "project": [
         "**/*.{ts,tsx}"
       ]

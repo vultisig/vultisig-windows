@@ -1,4 +1,4 @@
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 

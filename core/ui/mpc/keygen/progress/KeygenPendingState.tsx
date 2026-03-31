@@ -1,8 +1,8 @@
-import { KeygenStep } from '@core/mpc/keygen/KeygenStep'
 import { KeygenLoadingAnimation } from '@core/ui/mpc/keygen/progress/KeygenLoadingAnimation'
 import { KeygenProtocolStatusList } from '@core/ui/mpc/keygen/progress/KeygenProtocolStatusList'
 import { ProtocolStatuses } from '@core/ui/mpc/keygen/state/keygenAction'
 import { ValueProp } from '@lib/ui/props'
+import { KeygenStep } from '@vultisig/core-mpc/keygen/KeygenStep'
 import styled from 'styled-components'
 
 const Container = styled.div`

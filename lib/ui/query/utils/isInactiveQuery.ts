@@ -1,4 +1,4 @@
-import { isEmpty } from '@lib/utils/array/isEmpty'
+import { isEmpty } from '@vultisig/lib-utils/array/isEmpty'
 
 import { EagerQuery, Query } from '../Query'
 

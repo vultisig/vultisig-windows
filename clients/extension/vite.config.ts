@@ -4,9 +4,11 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 import topLevelAwait from 'vite-plugin-top-level-await'
 import wasm from 'vite-plugin-wasm'
+import tsconfigPaths from 'vite-tsconfig-paths'
 
 import { getFeatureFlagDefines } from '../../core/ui/vite/featureFlagDefines'
 import { getCommonPlugins } from '../../core/ui/vite/plugins'
+import { sdkResolvePlugin } from '../../core/ui/vite/sdkResolvePlugin'
 import { getStaticCopyTargets } from '../../core/ui/vite/staticCopy'
 
 const rootDir = path.resolve(__dirname, '../..')
@@ -53,7 +55,11 @@ export default defineConfig(async ({ mode }) => {
 
     return {
       define: { ...featureFlagDefines, ...envDefines },
-      plugins,
+      plugins: [
+        sdkResolvePlugin(),
+        tsconfigPaths({ root: rootDir }),
+        ...plugins,
+      ],
       build: {
         copyPublicDir: false,
         emptyOutDir: false,
@@ -77,6 +83,8 @@ export default defineConfig(async ({ mode }) => {
     return {
       define: { ...featureFlagDefines, ...envDefines },
       plugins: [
+        sdkResolvePlugin(),
+        tsconfigPaths({ root: rootDir }),
         ...getCommonPlugins(),
         viteStaticCopy({
           targets: getStaticCopyTargets(),

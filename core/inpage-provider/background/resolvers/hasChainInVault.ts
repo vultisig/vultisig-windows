@@ -1,8 +1,8 @@
 import { storage } from '@core/extension/storage'
 import { getVault } from '@core/extension/storage/vaults'
 import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
-import { isKeyImportVault, Vault } from '@core/mpc/vault/Vault'
-import { attempt } from '@lib/utils/attempt'
+import { isKeyImportVault, Vault } from '@vultisig/core-mpc/vault/Vault'
+import { attempt } from '@vultisig/lib-utils/attempt'
 
 /**
  * Checks if the current vault has keys for the given chain.

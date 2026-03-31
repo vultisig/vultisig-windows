@@ -1,7 +1,7 @@
-import { Vault } from '@core/mpc/vault/Vault'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { Vault } from '@vultisig/core-mpc/vault/Vault'
 
 import { getVaultSecurityTone } from '../utils/getVaultSecurityTone'
 import { LeadingIconBadge, VaultListRow } from './VaultListRow'

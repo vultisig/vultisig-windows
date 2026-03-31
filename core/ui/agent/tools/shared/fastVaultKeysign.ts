@@ -1,6 +1,6 @@
-import type { SignatureAlgorithm } from '@core/chain/signing/SignatureAlgorithm'
-import { keysign } from '@core/mpc/keysign'
-import type { KeysignSignature } from '@core/mpc/keysign/KeysignSignature'
+import type { SignatureAlgorithm } from '@vultisig/core-chain/signing/SignatureAlgorithm'
+import { keysign } from '@vultisig/core-mpc/keysign'
+import type { KeysignSignature } from '@vultisig/core-mpc/keysign/KeysignSignature'
 import { v4 as uuidv4 } from 'uuid'
 
 import { relayUrl } from '../../config'

@@ -1,10 +1,10 @@
 import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
 import { processSignature } from '@clients/extension/src/inpage/providers/ethereum'
-import { Chain } from '@core/chain/Chain'
 import { callPopup } from '@core/inpage-provider/popup'
 import { SignMessageType } from '@core/inpage-provider/popup/interface'
 import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
-import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedError'
 import EventEmitter from 'events'
 
 export class Plugin extends EventEmitter {

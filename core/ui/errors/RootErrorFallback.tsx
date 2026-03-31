@@ -9,7 +9,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text, text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
-import { extractErrorMsg } from '@lib/utils/error/extractErrorMsg'
+import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 

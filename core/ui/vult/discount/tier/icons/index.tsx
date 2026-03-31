@@ -1,5 +1,5 @@
-import { VultDiscountTier } from '@core/chain/swap/affiliate/config'
 import { SvgProps } from '@lib/ui/props'
+import { VultDiscountTier } from '@vultisig/core-chain/swap/affiliate/config'
 
 import { BronzeTierIcon } from './bronze'
 import { DiamondTierIcon } from './diamond'

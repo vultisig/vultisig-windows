@@ -1,11 +1,11 @@
-import { Chain } from '@core/chain/Chain'
-import { usdc } from '@core/chain/coin/knownTokens'
 import { TitleHeader } from '@core/ui/flow/TitleHeader'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
 import { VerifyTransactionOverview } from '@core/ui/mpc/keysign/verify/VerifyTransactionOverview'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { OnBackProp, ValueProp } from '@lib/ui/props'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { usdc } from '@vultisig/core-chain/coin/knownTokens'
 import { useTranslation } from 'react-i18next'
 
 import { useCircleAccount } from '../../queries/circleAccount'

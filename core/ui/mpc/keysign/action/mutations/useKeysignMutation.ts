@@ -1,34 +1,3 @@
-import { Chain } from '@core/chain/Chain'
-import { getChainKind } from '@core/chain/ChainKind'
-import {
-  getQBTCPreSignedImageHash,
-  getQBTCSignedTransaction,
-} from '@core/chain/chains/cosmos/qbtc/QBTCHelper'
-import { getCoinType } from '@core/chain/coin/coinType'
-import { getPublicKey } from '@core/chain/publicKey/getPublicKey'
-import {
-  getSignatureAlgorithm,
-  signatureAlgorithms,
-} from '@core/chain/signing/SignatureAlgorithm'
-import { signatureFormats } from '@core/chain/signing/SignatureFormat'
-import {
-  decodeSigningOutput,
-  deserializeSigningOutput,
-} from '@core/chain/tw/signingOutput'
-import { Tx } from '@core/chain/tx'
-import { broadcastTx } from '@core/chain/tx/broadcast'
-import { compileTx } from '@core/chain/tx/compile/compileTx'
-import { getTxHash } from '@core/chain/tx/hash'
-import { getPreSigningHashes } from '@core/chain/tx/preSigningHashes'
-import { generateSignature } from '@core/chain/tx/signature/generateSignature'
-import {
-  chainSpecificRecord,
-  getBlockchainSpecificValue,
-} from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
-import { KeysignMessagePayload } from '@core/mpc/keysign/keysignPayload/KeysignMessagePayload'
-import { KeysignResult } from '@core/mpc/keysign/KeysignResult'
-import { getEncodedSigningInputs } from '@core/mpc/keysign/signingInputs'
-import { getKeysignChain } from '@core/mpc/keysign/utils/getKeysignChain'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useKeysignAction } from '@core/ui/mpc/keysign/action/state/keysignAction'
 import { useKeysignMutationListener } from '@core/ui/mpc/keysign/action/state/keysignMutationListener'
@@ -37,11 +6,36 @@ import {
   customMessageSupportedChains,
 } from '@core/ui/mpc/keysign/customMessage/chains'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
-import { isOneOf } from '@lib/utils/array/isOneOf'
-import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
-import { chainPromises } from '@lib/utils/promise/chainPromises'
-import { recordFromItems } from '@lib/utils/record/recordFromItems'
 import { useMutation } from '@tanstack/react-query'
+import { getChainKind } from '@vultisig/core-chain/ChainKind'
+import { getCoinType } from '@vultisig/core-chain/coin/coinType'
+import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
+import { getSignatureAlgorithm } from '@vultisig/core-chain/signing/SignatureAlgorithm'
+import { signatureAlgorithms } from '@vultisig/core-chain/signing/SignatureAlgorithm'
+import { signatureFormats } from '@vultisig/core-chain/signing/SignatureFormat'
+import {
+  decodeSigningOutput,
+  deserializeSigningOutput,
+} from '@vultisig/core-chain/tw/signingOutput'
+import { Tx } from '@vultisig/core-chain/tx'
+import { broadcastTx } from '@vultisig/core-chain/tx/broadcast'
+import { getTxHash } from '@vultisig/core-chain/tx/hash'
+import {
+  getQBTCPreSignedImageHash,
+  getQBTCSignedTransaction,
+} from '@vultisig/core-mpc/chains/cosmos/qbtc/QBTCHelper'
+import { getBlockchainSpecificValue } from '@vultisig/core-mpc/keysign/chainSpecific/KeysignChainSpecific'
+import { KeysignMessagePayload } from '@vultisig/core-mpc/keysign/keysignPayload/KeysignMessagePayload'
+import { KeysignResult } from '@vultisig/core-mpc/keysign/KeysignResult'
+import { getEncodedSigningInputs } from '@vultisig/core-mpc/keysign/signingInputs'
+import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
+import { compileTx } from '@vultisig/core-mpc/tx/compile/compileTx'
+import { getPreSigningHashes } from '@vultisig/core-mpc/tx/preSigningHashes'
+import { generateSignature } from '@vultisig/core-mpc/tx/signature/generateSignature'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
+import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
+import { chainPromises } from '@vultisig/lib-utils/promise/chainPromises'
+import { recordFromItems } from '@vultisig/lib-utils/record/recordFromItems'
 
 import { getCustomMessageHex } from '../../customMessage/getCustomMessageHex'
 
@@ -61,16 +55,16 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
             const chain = getKeysignChain(payload)
 
             // QBTC uses MLDSA keys — bypass WalletCore entirely
-            if (chain === Chain.QBTC) {
+            if (chain === 'QBTC') {
               const cosmosSpecific = getBlockchainSpecificValue(
                 payload.blockchainSpecific,
-                chainSpecificRecord[Chain.QBTC]
+                'cosmosSpecific'
               )
 
               const msgs = getQBTCPreSignedImageHash({
                 keysignPayload: payload,
                 cosmosSpecific,
-              })
+              }).map(bytes => Buffer.from(bytes).toString('hex'))
 
               const signatureAlgorithm = getSignatureAlgorithm(chain)
               const coinType = getCoinType({ walletCore, chain })

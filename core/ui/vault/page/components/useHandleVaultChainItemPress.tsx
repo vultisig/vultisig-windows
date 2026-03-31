@@ -1,5 +1,5 @@
-import { Chain } from '@core/chain/Chain'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { Chain } from '@vultisig/core-chain/Chain'
 
 type Input = {
   chain: string

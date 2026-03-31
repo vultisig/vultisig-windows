@@ -1,10 +1,10 @@
-import { Vault } from '@core/mpc/vault/Vault'
 import { useVaults } from '@core/ui/storage/vaults'
 import { useUpdateVaultMutation } from '@core/ui/vault/mutations/useUpdateVaultMutation'
 import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
-import { isEmpty } from '@lib/utils/array/isEmpty'
-import { getLastItemOrder } from '@lib/utils/order/getLastItemOrder'
 import { useMutation } from '@tanstack/react-query'
+import { Vault } from '@vultisig/core-mpc/vault/Vault'
+import { isEmpty } from '@vultisig/lib-utils/array/isEmpty'
+import { getLastItemOrder } from '@vultisig/lib-utils/order/getLastItemOrder'
 
 import { StorageKey } from '../../../storage/StorageKey'
 

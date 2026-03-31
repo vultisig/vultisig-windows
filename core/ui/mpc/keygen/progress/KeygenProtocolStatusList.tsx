@@ -1,4 +1,3 @@
-import { KeygenStep } from '@core/mpc/keygen/KeygenStep'
 import { ProtocolStatuses } from '@core/ui/mpc/keygen/state/keygenAction'
 import { CheckIcon } from '@lib/ui/icons/CheckIcon'
 import { SeparatedByLine } from '@lib/ui/layout/SeparatedByLine'
@@ -6,6 +5,7 @@ import { HStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { KeygenStep } from '@vultisig/core-mpc/keygen/KeygenStep'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 

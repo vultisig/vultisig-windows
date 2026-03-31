@@ -1,15 +1,3 @@
-import { toChainKindRecordUnion } from '@core/chain/ChainKind'
-import {
-  byteFeeMultiplier,
-  UtxoFeeSettings,
-} from '@core/chain/tx/fee/utxo/UtxoFeeSettings'
-import {
-  EvmFeeSettings,
-  FeeSettings,
-  FeeSettingsChain,
-} from '@core/mpc/keysign/chainSpecific/FeeSettings'
-import { getBlockchainSpecificValue } from '@core/mpc/keysign/chainSpecific/KeysignChainSpecific'
-import { KeysignPayload } from '@core/mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { EvmFeeSettingsForm } from '@core/ui/vault/send/fee/settings/evm/EvmFeeSettingsForm'
 import { UtxoFeeSettingsForm } from '@core/ui/vault/send/fee/settings/utxo/UtxoFeeSettingsForm'
 import { ControlledValue } from '@lib/ui/base/ControlledValue'
@@ -18,6 +6,18 @@ import { Opener } from '@lib/ui/base/Opener'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { FuelIcon } from '@lib/ui/icons/FuelIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { toChainKindRecordUnion } from '@vultisig/core-chain/ChainKind'
+import {
+  byteFeeMultiplier,
+  UtxoFeeSettings,
+} from '@vultisig/core-chain/tx/fee/utxo/UtxoFeeSettings'
+import {
+  EvmFeeSettings,
+  FeeSettings,
+  FeeSettingsChain,
+} from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
+import { getBlockchainSpecificValue } from '@vultisig/core-mpc/keysign/chainSpecific/KeysignChainSpecific'
+import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 
 type ManageFeeProps = {
   keysignPayload: KeysignPayload

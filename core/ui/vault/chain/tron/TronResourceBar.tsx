@@ -1,4 +1,4 @@
-import { toPercents } from '@lib/utils/toPercents'
+import { toPercents } from '@vultisig/lib-utils/toPercents'
 import styled from 'styled-components'
 
 type TronResourceBarProps = {

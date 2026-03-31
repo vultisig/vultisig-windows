@@ -1,11 +1,11 @@
-import { CosmosChain } from '@core/chain/Chain'
 import { callPopup } from '@core/inpage-provider/popup'
 import {
   DepositTransactionDetails,
   RequestInput,
   TransactionDetails,
 } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
-import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
+import { CosmosChain } from '@vultisig/core-chain/Chain'
+import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedError'
 
 import { Callback } from '../constants'
 import { BaseCosmosChain } from './baseCosmos'

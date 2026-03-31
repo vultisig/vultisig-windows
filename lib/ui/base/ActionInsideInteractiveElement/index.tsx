@@ -1,5 +1,5 @@
 import { ActionProp } from '@lib/ui/props'
-import { Dimensions } from '@lib/utils/entities/Dimensions'
+import { Dimensions } from '@vultisig/lib-utils/entities/Dimensions'
 import { ComponentProps, CSSProperties, ReactNode, Ref } from 'react'
 import styled from 'styled-components'
 

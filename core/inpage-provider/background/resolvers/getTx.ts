@@ -1,17 +1,17 @@
-import { Chain } from '@core/chain/Chain'
+import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
+import { Chain } from '@vultisig/core-chain/Chain'
 import {
   ChainKindRecordUnion,
   toChainKindRecordUnion,
-} from '@core/chain/ChainKind'
-import { getCosmosClient } from '@core/chain/chains/cosmos/client'
-import { cosmosRpcUrl } from '@core/chain/chains/cosmos/cosmosRpcUrl'
-import { getEvmClient } from '@core/chain/chains/evm/client'
-import { getBlockchairBaseUrl } from '@core/chain/chains/utxo/client/getBlockchairBaseUrl'
-import { BackgroundResolver } from '@core/inpage-provider/background/resolver'
-import { NotImplementedError } from '@lib/utils/error/NotImplementedError'
-import { matchRecordUnion } from '@lib/utils/matchRecordUnion'
-import { queryUrl } from '@lib/utils/query/queryUrl'
-import { toCamelCase } from '@lib/utils/toCamelCase'
+} from '@vultisig/core-chain/ChainKind'
+import { getCosmosClient } from '@vultisig/core-chain/chains/cosmos/client'
+import { cosmosRpcUrl } from '@vultisig/core-chain/chains/cosmos/cosmosRpcUrl'
+import { getEvmClient } from '@vultisig/core-chain/chains/evm/client'
+import { getBlockchairBaseUrl } from '@vultisig/core-chain/chains/utxo/client/getBlockchairBaseUrl'
+import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedError'
+import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
+import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
+import { toCamelCase } from '@vultisig/lib-utils/toCamelCase'
 
 // This resolver replicates the old implementation of the get_transaction_by_hash request.
 // TODO: Double-check whether this request is still in use and consider removing it.
@@ -37,6 +37,9 @@ export const getTx: BackgroundResolver<'getTx'> = async ({
         const client = await getCosmosClient(chain)
 
         return client.getTx(hash)
+      },
+      qbtc: () => {
+        throw new NotImplementedError('Get tx for QBTC chain')
       },
       utxo: async chain => {
         const url = `${getBlockchairBaseUrl(chain)}/dashboards/transaction/${hash}`

@@ -1,11 +1,3 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { SwapQuote } from '@core/chain/swap/quote/SwapQuote'
-import {
-  buildSwapKeysignPayload,
-  BuildSwapKeysignPayloadInput,
-} from '@core/mpc/keysign/swap/build'
-import { toKeysignLibType } from '@core/mpc/types/utils/libType'
-import { getVaultId } from '@core/mpc/vault/Vault'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
   useCurrentVault,
@@ -13,9 +5,17 @@ import {
 } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
-import { omit } from '@lib/utils/record/omit'
 import { useQuery } from '@tanstack/react-query'
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { SwapQuote } from '@vultisig/core-chain/swap/quote/SwapQuote'
+import {
+  buildSwapKeysignPayload,
+  BuildSwapKeysignPayloadInput,
+} from '@vultisig/core-mpc/keysign/swap/build'
+import { toKeysignLibType } from '@vultisig/core-mpc/types/utils/libType'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { omit } from '@vultisig/lib-utils/record/omit'
 import { useMemo } from 'react'
 
 import { useFromAmount } from '../state/fromAmount'

@@ -1,11 +1,11 @@
-import { generateLocalPartyId } from '@core/mpc/devices/localPartyId'
-import { keyImportWithServer } from '@core/mpc/fast/api/keyImportWithServer'
-import { toLibType } from '@core/mpc/types/utils/libType'
 import { useVaultCreationInput } from '@core/ui/mpc/keygen/create/state/vaultCreationInput'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { ChildrenProp } from '@lib/ui/props'
-import { getRecordUnionValue } from '@lib/utils/record/union/getRecordUnionValue'
+import { generateLocalPartyId } from '@vultisig/core-mpc/devices/localPartyId'
+import { keyImportWithServer } from '@vultisig/core-mpc/fast/api/keyImportWithServer'
+import { toLibType } from '@vultisig/core-mpc/types/utils/libType'
+import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordUnionValue'
 import { useCallback } from 'react'
 
 import { FastKeygenServerActionProvider } from '../../fast/state/fastKeygenServerAction'
@@ -35,7 +35,7 @@ export const KeyImportFastKeygenServerActionProvider = ({
       local_party_id: generateLocalPartyId('server'),
       email,
       hex_encryption_key: hexEncryptionKey,
-      lib_type: toLibType('KeyImport'),
+      lib_type: toLibType({ libType: 'DKLS', isKeyImport: true }),
       protocols: ['ecdsa', 'eddsa'],
       chains: representativeChains,
     })

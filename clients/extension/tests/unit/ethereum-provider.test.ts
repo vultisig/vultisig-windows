@@ -15,7 +15,7 @@ vi.mock('@core/inpage-provider/background/events/inpage', () => ({
   addBackgroundEventListener: vi.fn(),
 }))
 
-vi.mock('@lib/utils/validation/url', () => ({
+vi.mock('@vultisig/lib-utils/validation/url', () => ({
   validateUrl: vi.fn(() => undefined), // returns undefined = valid URL
 }))
 

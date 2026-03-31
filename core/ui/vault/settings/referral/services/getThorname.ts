@@ -1,4 +1,4 @@
-import { queryUrl } from '@lib/utils/query/queryUrl'
+import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 import { thorchainNodeBaseUrl } from '../config'
 

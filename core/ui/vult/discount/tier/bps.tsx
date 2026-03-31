@@ -1,8 +1,8 @@
+import { ValueProp } from '@lib/ui/props'
 import {
   VultDiscountTier,
   vultDiscountTierBps,
-} from '@core/chain/swap/affiliate/config'
-import { ValueProp } from '@lib/ui/props'
+} from '@vultisig/core-chain/swap/affiliate/config'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 

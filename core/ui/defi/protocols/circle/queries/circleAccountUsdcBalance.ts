@@ -1,9 +1,9 @@
-import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
-import { usdc } from '@core/chain/coin/knownTokens'
 import { getBalanceQueryOptions } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import { useQueryDependentQuery } from '@lib/ui/query/hooks/useQueryDependentQuery'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { Query } from '@lib/ui/query/Query'
+import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
+import { usdc } from '@vultisig/core-chain/coin/knownTokens'
 
 import { useCircleAccountQuery } from './circleAccount'
 

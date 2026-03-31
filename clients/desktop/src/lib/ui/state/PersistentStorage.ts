@@ -1,4 +1,4 @@
-import { ValueTransition } from '@lib/utils/entities/ValueTransition'
+import { ValueTransition } from '@vultisig/lib-utils/entities/ValueTransition'
 
 export type OnValueChangeListener<T> = (params: ValueTransition<T>) => void
 

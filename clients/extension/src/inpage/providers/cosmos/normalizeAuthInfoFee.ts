@@ -1,6 +1,6 @@
-import type { CosmosChain } from '@core/chain/Chain'
-import { cosmosFeeCoinDenom } from '@core/chain/chains/cosmos/cosmosFeeCoinDenom'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
+import type { CosmosChain } from '@vultisig/core-chain/Chain'
+import { cosmosFeeCoinDenom } from '@vultisig/core-chain/chains/cosmos/cosmosFeeCoinDenom'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { BinaryWriter } from 'cosmjs-types/binary'
 import { AuthInfo } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 

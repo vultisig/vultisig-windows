@@ -1,4 +1,4 @@
-import { getVaultId } from '@core/mpc/vault/Vault'
+import { getBalanceQueryKey } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import {
   KeysignMutationListenerProvider,
   useKeysignMutationListener,
@@ -6,7 +6,11 @@ import {
 import { useSaveTransactionRecordMutation } from '@core/ui/storage/transactionHistory'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ChildrenProp } from '@lib/ui/props'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+import { useQueryClient } from '@tanstack/react-query'
+import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
+import { getKeysignCoin } from '@vultisig/core-mpc/keysign/utils/getKeysignCoin'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 
 import { useKeysignMessagePayload } from '../../mpc/keysign/state/keysignMessagePayload'
 import { createTransactionRecord } from './createTransactionRecord'
@@ -17,6 +21,7 @@ export const TransactionRecorderProvider = ({ children }: ChildrenProp) => {
   const vault = useCurrentVault()
   const vaultId = getVaultId(vault)
   const { mutate: saveRecord } = useSaveTransactionRecordMutation()
+  const queryClient = useQueryClient()
 
   return (
     <KeysignMutationListenerProvider
@@ -44,6 +49,13 @@ export const TransactionRecorderProvider = ({ children }: ChildrenProp) => {
           })
 
           saveRecord(record)
+
+          if (!keysignPayload.coin) return
+
+          const coin = getKeysignCoin(keysignPayload)
+          void queryClient.invalidateQueries({
+            queryKey: getBalanceQueryKey(extractAccountCoinKey(coin)),
+          })
         },
       }}
     >

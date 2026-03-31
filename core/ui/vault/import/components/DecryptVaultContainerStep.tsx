@@ -1,13 +1,13 @@
 import { fromBinary } from '@bufbuild/protobuf'
-import { fromCommVault } from '@core/mpc/types/utils/commVault'
-import { VaultSchema } from '@core/mpc/types/vultisig/vault/v1/vault_pb'
-import { Vault } from '@core/mpc/vault/Vault'
 import { DecryptVaultView } from '@core/ui/vault/import/components/DecryptVaultView'
 import { OnFinishProp, ValueProp } from '@lib/ui/props'
-import { decryptWithAesGcm } from '@lib/utils/encryption/aesGcm/decryptWithAesGcm'
-import { fromBase64 } from '@lib/utils/fromBase64'
-import { pipe } from '@lib/utils/pipe'
 import { useMutation } from '@tanstack/react-query'
+import { fromCommVault } from '@vultisig/core-mpc/types/utils/commVault'
+import { VaultSchema } from '@vultisig/core-mpc/types/vultisig/vault/v1/vault_pb'
+import { Vault } from '@vultisig/core-mpc/vault/Vault'
+import { decryptWithAesGcm } from '@vultisig/lib-utils/encryption/aesGcm/decryptWithAesGcm'
+import { fromBase64 } from '@vultisig/lib-utils/fromBase64'
+import { pipe } from '@vultisig/lib-utils/pipe'
 
 export const DecryptVaultContainerStep = ({
   value,

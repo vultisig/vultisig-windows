@@ -1,6 +1,6 @@
 import { ChildrenProp } from '@lib/ui/props'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
 import { initWasm, WalletCore } from '@trustwallet/wallet-core'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { createContext, useContext, useEffect, useState } from 'react'
 
 import { ProductLogoBlock } from '../../product/ProductLogoBlock'

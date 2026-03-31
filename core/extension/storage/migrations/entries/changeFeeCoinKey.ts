@@ -1,10 +1,10 @@
-import { Chain } from '@core/chain/Chain'
-import { AccountCoin } from '@core/chain/coin/AccountCoin'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
 import { CoinsRecord } from '@core/ui/storage/coins'
-import { haveEqualFields } from '@lib/utils/record/haveEqualFields'
-import { omit } from '@lib/utils/record/omit'
-import { recordMap } from '@lib/utils/record/recordMap'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { haveEqualFields } from '@vultisig/lib-utils/record/haveEqualFields'
+import { omit } from '@vultisig/lib-utils/record/omit'
+import { recordMap } from '@vultisig/lib-utils/record/recordMap'
 
 import { coinsStorage, updateCoins } from '../../coins'
 

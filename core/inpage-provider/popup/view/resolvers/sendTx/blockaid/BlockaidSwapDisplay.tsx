@@ -1,5 +1,3 @@
-import { Chain } from '@core/chain/Chain'
-import { Coin } from '@core/chain/coin/Coin'
 import { MemoSection } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/MemoSection'
 import {
   NetworkFeeSection,
@@ -14,7 +12,9 @@ import {
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
-import { formatAmount } from '@lib/utils/formatAmount'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { Coin } from '@vultisig/core-chain/coin/Coin'
+import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { formatUnits } from 'ethers'
 import { useTranslation } from 'react-i18next'
 

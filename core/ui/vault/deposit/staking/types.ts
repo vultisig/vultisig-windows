@@ -1,5 +1,5 @@
-import type { AccountCoin } from '@core/chain/coin/AccountCoin'
-import type { Resolver } from '@lib/utils/types/Resolver'
+import type { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
+import type { Resolver } from '@vultisig/lib-utils/types/Resolver'
 
 export type StakeKind = 'stake' | 'unstake' | 'claim'
 export type StakeId = 'ruji' | 'native-tcy' | 'stcy'

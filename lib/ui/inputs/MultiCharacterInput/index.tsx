@@ -1,8 +1,8 @@
 import { Button } from '@lib/ui/buttons/Button'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { getColor } from '@lib/ui/theme/getters'
-import { capitalizeFirstLetter } from '@lib/utils/capitalizeFirstLetter'
-import { match } from '@lib/utils/match'
+import { capitalizeFirstLetter } from '@vultisig/lib-utils/capitalizeFirstLetter'
+import { match } from '@vultisig/lib-utils/match'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 

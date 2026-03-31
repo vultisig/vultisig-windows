@@ -1,10 +1,10 @@
-import { Chain } from '@core/chain/Chain'
+import { Chain } from '@vultisig/core-chain/Chain'
 import {
   AccountCoin,
   accountCoinKeyToString,
-} from '@core/chain/coin/AccountCoin'
-import { isFeeCoin } from '@core/chain/coin/utils/isFeeCoin'
-import { shouldBePresent } from '@lib/utils/assert/shouldBePresent'
+} from '@vultisig/core-chain/coin/AccountCoin'
+import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 
 import { storage } from '../../wailsjs/go/models'
 

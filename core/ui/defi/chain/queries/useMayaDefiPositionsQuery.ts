@@ -1,7 +1,7 @@
-import { Chain } from '@core/chain/Chain'
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
 import { useQuery } from '@tanstack/react-query'
+import { Chain } from '@vultisig/core-chain/Chain'
 
 import {
   fetchBondPositions,

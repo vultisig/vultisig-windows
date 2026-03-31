@@ -1,12 +1,15 @@
-import { banxaSupportedChains, getBanxaBuyUrl } from '@core/chain/banxa'
-import { CoinKey } from '@core/chain/coin/Coin'
 import { useCore } from '@core/ui/state/core'
 import { SecondaryActionWrapper } from '@core/ui/vault/components/PrimaryActions.styled'
 import { useCurrentVaultCoin } from '@core/ui/vault/state/currentVaultCoins'
 import { DollarIcon } from '@lib/ui/icons/DollarIcon'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
-import { isOneOf } from '@lib/utils/array/isOneOf'
+import {
+  banxaSupportedChains,
+  getBanxaBuyUrl,
+} from '@vultisig/core-chain/banxa'
+import { CoinKey } from '@vultisig/core-chain/coin/Coin'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { useTranslation } from 'react-i18next'
 
 type BuyPromptProps = {

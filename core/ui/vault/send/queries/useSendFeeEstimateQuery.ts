@@ -1,7 +1,3 @@
-import { extractAccountCoinKey } from '@core/chain/coin/AccountCoin'
-import { BuildKeysignPayloadError } from '@core/mpc/keysign/error'
-import { getSendFeeEstimate } from '@core/mpc/keysign/send/getSendFeeEstimate'
-import { getVaultId } from '@core/mpc/vault/Vault'
 import { useBalanceQuery } from '@core/ui/chain/coin/queries/useBalanceQuery'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
@@ -9,8 +5,13 @@ import {
   useCurrentVaultNullablePublicKey,
 } from '@core/ui/vault/state/currentVault'
 import { noRefetchQueryOptions } from '@lib/ui/query/utils/options'
-import { omit } from '@lib/utils/record/omit'
 import { useQuery } from '@tanstack/react-query'
+import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
+import { BuildKeysignPayloadError } from '@vultisig/core-mpc/keysign/error'
+import { getSendFeeEstimate } from '@vultisig/core-mpc/keysign/send/getSendFeeEstimate'
+import { toKeysignLibType } from '@vultisig/core-mpc/types/utils/libType'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
+import { omit } from '@vultisig/lib-utils/record/omit'
 import { useMemo } from 'react'
 
 import { useSendMemo } from '../state/memo'
@@ -40,7 +41,7 @@ export const useSendFeeEstimateQuery = () => {
       vaultId: getVaultId(vault),
       localPartyId: vault.localPartyId,
       publicKey,
-      libType: vault.libType,
+      libType: toKeysignLibType(vault),
       walletCore,
       hexPublicKeyOverride: publicKey ? undefined : vault.publicKeyMldsa,
     }

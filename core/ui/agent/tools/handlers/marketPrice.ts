@@ -1,8 +1,11 @@
-import { Chain } from '@core/chain/Chain'
-import { chainFeeCoin } from '@core/chain/coin/chainFeeCoin'
-import { knownTokensIndex } from '@core/chain/coin/knownTokens/index'
-import { getCoinPrices } from '@core/chain/coin/price/getCoinPrices'
-import { fiatCurrencies, FiatCurrency } from '@core/config/FiatCurrency'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { knownTokensIndex } from '@vultisig/core-chain/coin/knownTokens'
+import { getCoinPrices } from '@vultisig/core-chain/coin/price/getCoinPrices'
+import {
+  fiatCurrencies,
+  FiatCurrency,
+} from '@vultisig/core-config/FiatCurrency'
 
 import { resolveAsset } from '../shared/assetResolution'
 import type { ToolHandler } from '../types'

@@ -1,5 +1,3 @@
-import { fromChainAmount } from '@core/chain/amount/fromChainAmount'
-import { Coin } from '@core/chain/coin/Coin'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import {
   formatDateShort,
@@ -13,8 +11,10 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { Tooltip } from '@lib/ui/tooltips/Tooltip'
-import { formatAmount } from '@lib/utils/formatAmount'
-import { formatWalletAddress } from '@lib/utils/formatWalletAddress'
+import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { Coin } from '@vultisig/core-chain/coin/Coin'
+import { formatAmount } from '@vultisig/lib-utils/formatAmount'
+import { formatWalletAddress } from '@vultisig/lib-utils/formatWalletAddress'
 import { ButtonHTMLAttributes, CSSProperties, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'

@@ -1,6 +1,6 @@
-import { debounce } from '@lib/utils/debounce'
-import { Dimensions } from '@lib/utils/entities/Dimensions'
-import { pick } from '@lib/utils/record/pick'
+import { debounce } from '@vultisig/lib-utils/debounce'
+import { Dimensions } from '@vultisig/lib-utils/entities/Dimensions'
+import { pick } from '@vultisig/lib-utils/record/pick'
 import { useState } from 'react'
 import { useIsomorphicLayoutEffect } from 'react-use'
 

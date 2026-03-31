@@ -1,9 +1,9 @@
-import { Chain } from '@core/chain/Chain'
 import { callBackground } from '@core/inpage-provider/background'
 import { BackgroundError } from '@core/inpage-provider/background/error'
 import { callPopup } from '@core/inpage-provider/popup'
 import { PopupError } from '@core/inpage-provider/popup/error'
-import { attempt } from '@lib/utils/attempt'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { attempt } from '@vultisig/lib-utils/attempt'
 
 import { EIP1193Error } from '../../../background/handlers/errorHandler'
 
