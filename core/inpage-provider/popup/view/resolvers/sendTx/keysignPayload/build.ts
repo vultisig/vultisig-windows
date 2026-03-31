@@ -2,6 +2,7 @@ import { create } from '@bufbuild/protobuf'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { Chain } from '@vultisig/core-chain/Chain'
 import { getChainKind, isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { CosmosMsgType } from '@vultisig/core-chain/chains/cosmos/cosmosMsgTypes'
 import { getPsbtTransferInfo } from '@vultisig/core-chain/chains/utxo/tx/getPsbtTransferInfo'
@@ -11,6 +12,7 @@ import {
   FeeSettingsChainKind,
 } from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
 import { refineKeysignUtxo } from '@vultisig/core-mpc/keysign/refine/utxo'
+import { validateTonComment } from '@vultisig/core-mpc/keysign/signingInputs/resolvers/ton/native'
 import { getKeysignUtxoInfo } from '@vultisig/core-mpc/keysign/utxo/getKeysignUtxoInfo'
 import { toCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { OneInchSwapPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
@@ -32,6 +34,8 @@ import {
   SignDirectSchema,
   SignSolana,
   SignSolanaSchema,
+  SignTonSchema,
+  TonMessageSchema,
   WasmExecuteContractPayloadSchema,
 } from '@vultisig/core-mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { attempt } from '@vultisig/lib-utils/attempt'
@@ -409,6 +413,30 @@ export const buildSendTxKeysignPayload = async ({
     }
   )
 
+  const signTonPayload = matchRecordUnion<
+    CustomTxData,
+    | { tonMessages: Array<{ to: string; amount: string; payload?: string }> }
+    | undefined
+  >(customTxData, {
+    regular: ({ transactionDetails }) => {
+      const tonMessages = transactionDetails.tonMessages
+      if (chain === Chain.Ton && tonMessages && tonMessages.length > 0) {
+        return {
+          tonMessages: tonMessages.map(msg =>
+            create(TonMessageSchema, {
+              to: msg.to,
+              amount: msg.amount,
+              payload: msg.payload,
+            })
+          ),
+        }
+      }
+      return undefined
+    },
+    solana: () => undefined,
+    psbt: () => undefined,
+  })
+
   const signData: KeysignPayload['signData'] =
     aminoPayload !== undefined
       ? { case: 'signAmino', value: aminoPayload }
@@ -416,7 +444,18 @@ export const buildSendTxKeysignPayload = async ({
         ? { case: 'signDirect', value: directPayload }
         : solanaPayload !== undefined
           ? { case: 'signSolana', value: solanaPayload }
-          : { case: undefined, value: undefined }
+          : signTonPayload !== undefined
+            ? {
+                case: 'signTon',
+                value: create(SignTonSchema, {
+                  tonMessages: signTonPayload.tonMessages,
+                }),
+              }
+            : { case: undefined, value: undefined }
+
+  if (chain === Chain.Ton && memo && signTonPayload === undefined) {
+    validateTonComment(memo)
+  }
 
   let keysignPayload = create(KeysignPayloadSchema, {
     toAddress: toAddress ?? '',

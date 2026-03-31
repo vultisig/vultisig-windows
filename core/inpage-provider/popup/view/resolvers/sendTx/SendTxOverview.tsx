@@ -15,6 +15,7 @@ import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStar
 import { SignAminoDisplay } from '@core/ui/mpc/keysign/tx/components/SignAminoDisplay'
 import { SignDirectDisplay } from '@core/ui/mpc/keysign/tx/components/SignDirectDisplay'
 import { SignSolanaDisplay } from '@core/ui/mpc/keysign/tx/components/SignSolanaDisplay'
+import { SignTonDisplay } from '@core/ui/mpc/keysign/tx/components/SignTonDisplay'
 import { useCurrentVaultPublicKey } from '@core/ui/vault/state/currentVault'
 import {
   HorizontalLine,
@@ -307,6 +308,30 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                   <SignSolanaDisplay
                     signSolana={keysignPayload.signData.value}
                   />
+                </>
+              ) : chain === Chain.Ton &&
+                keysignPayload.signData.case === 'signTon' ? (
+                <>
+                  <List>
+                    <ListItem description={address} title={t('from')} />
+                    <ListItem
+                      description={getKeysignChain(keysignPayload)}
+                      title={t('network')}
+                    />
+                  </List>
+                  <SignTonDisplay signTon={keysignPayload.signData.value} />
+                  <MemoSection memo={keysignPayload.memo} chain={chain} />
+                  <VStack bgColor="foreground" radius={16}>
+                    <NetworkFeeSection
+                      keysignPayload={keysignPayload}
+                      transactionPayload={transactionPayload}
+                      chain={chain}
+                      feeSettings={feeSettings}
+                      setFeeSettings={setFeeSettings}
+                      walletCore={walletCore}
+                      publicKey={publicKey}
+                    />
+                  </VStack>
                 </>
               ) : (
                 <>
