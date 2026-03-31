@@ -2,13 +2,7 @@ import { VStack } from '@lib/ui/layout/Stack'
 import { Modal } from '@lib/ui/modal'
 import { OnFinishProp, OptionsProp, TitleProp } from '@lib/ui/props'
 import { SearchField } from '@lib/ui/search/SearchField'
-import React, {
-  FC,
-  ReactNode,
-  useDeferredValue,
-  useMemo,
-  useState,
-} from 'react'
+import { FC, ReactNode, useMemo, useRef, useState } from 'react'
 import { Virtuoso } from 'react-virtuoso'
 import styled from 'styled-components'
 
@@ -57,17 +51,19 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>(
   } = props
 
   const [searchQuery, setSearchQuery] = useState('')
-  const deferredQuery = useDeferredValue(searchQuery)
 
   const filtered = useMemo(
-    () => options.filter(o => filterFunction(o, deferredQuery)),
-    [options, filterFunction, deferredQuery]
+    () => options.filter(o => filterFunction(o, searchQuery)),
+    [options, filterFunction, searchQuery]
   )
+
+  const onFinishRef = useRef(onFinish)
+  onFinishRef.current = onFinish
 
   const useVirtual = Boolean(virtualizePageSize) && filtered.length > 30
 
   return (
-    <Modal onClose={() => onFinish()} title={title}>
+    <Modal onClose={() => onFinishRef.current()} title={title}>
       <Content gap={8}>
         {options.length > 1 && <SearchField onSearch={setSearchQuery} />}
         {renderListHeader?.() || <div />}
@@ -82,7 +78,10 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>(
                 virtualizePageSize ?? defaultIncreaseViewportForVirtualizedList
               }
               itemContent={(index, item) => (
-                <OptionComponent value={item} onClick={() => onFinish(item)} />
+                <OptionComponent
+                  value={item}
+                  onClick={() => onFinishRef.current(item)}
+                />
               )}
               components={{
                 List: StyledList,
@@ -94,7 +93,7 @@ export const SelectItemModal = <T extends { id?: string; chain?: string }>(
                 <OptionComponent
                   key={getKey?.(option, index) || option?.id || index}
                   value={option}
-                  onClick={() => onFinish(option)}
+                  onClick={() => onFinishRef.current(option)}
                 />
               ))}
             </NonVirtualList>

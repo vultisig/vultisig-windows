@@ -42,7 +42,7 @@ export const SwapCoinsExplorer = ({
   const side = useTransferDirection()
   const coins = useCurrentVaultCoins()
   const swapEnabledChainsForVault = useSwapEnabledChainsForVault()
-  const { mutate: createCoin } = useCreateCoinMutation()
+  const { mutateAsync: createCoin } = useCreateCoinMutation()
   const currentChain = side === 'from' ? fromCoinKey.chain : currentToCoin.chain
 
   const { data: whitelisted } = useWhitelistedCoinsQuery(currentChain)
@@ -119,9 +119,8 @@ export const SwapCoinsExplorer = ({
           if (coins.some(c => areEqualCoins(c, newValue))) {
             onChange(newValue)
           } else {
-            createCoin(newValue, {
-              onSuccess: () => onChange(newValue),
-            })
+            await createCoin(newValue)
+            onChange(newValue)
           }
         }
         onClose()
