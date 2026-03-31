@@ -14,6 +14,7 @@ import {
   setKeygenComplete,
   waitForKeygenComplete,
 } from '@vultisig/core-mpc/keygenComplete'
+import { initializeMpcLib } from '@vultisig/core-mpc/lib/initialize'
 import { MldsaKeygen } from '@vultisig/core-mpc/mldsa/mldsaKeygen'
 import { MpcLib } from '@vultisig/core-mpc/mpcLib'
 import { Schnorr } from '@vultisig/core-mpc/schnorr/schnorrKeygen'
@@ -71,6 +72,7 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
         encryptionKeyHex
       )
 
+      await initializeMpcLib('ecdsa')
       await dklsKeygen.prepareKeygenSetup()
 
       const schnorrKeygen = new Schnorr(
