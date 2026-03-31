@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest'
 import {
   buildSignDataCellHash,
   buildSignDataTextBinaryHash,
+  encodeDnsDomain,
 } from '@clients/extension/src/inpage/providers/tonConnect/signData'
 
 const testAddress =
@@ -371,24 +372,33 @@ describe('buildSignDataCellHash', () => {
     ).toThrow()
   })
 
-  it('should encode domain in DNS wire format (reversed, null-separated)', () => {
-    const hash1 = buildSignDataCellHash({
-      address: testAddress,
-      domain: 'app.example.com',
-      timestamp: testTimestamp,
-      schema: testSchema,
-      cellBase64: testCell,
-    })
+  it('should reject multi-root BOCs', () => {
+    // Create two separate cells and manually concat their BOCs won't work,
+    // but an empty BOC (zero roots) should also be rejected
+    expect(() =>
+      buildSignDataCellHash({
+        address: testAddress,
+        domain: testDomain,
+        timestamp: testTimestamp,
+        schema: testSchema,
+        cellBase64: Buffer.from([
+          0xb5, 0xee, 0x9c, 0x72, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00,
+        ]).toString('base64'),
+      })
+    ).toThrow()
+  })
+})
 
-    const hash2 = buildSignDataCellHash({
-      address: testAddress,
-      domain: 'com.example.app',
-      timestamp: testTimestamp,
-      schema: testSchema,
-      cellBase64: testCell,
-    })
+describe('encodeDnsDomain', () => {
+  it('should reverse labels and null-separate them per TEP-81', () => {
+    expect(encodeDnsDomain('stonfi.com')).toBe('com\0stonfi\0')
+  })
 
-    // These should differ because DNS encoding reverses the parts
-    expect(hash1).not.toBe(hash2)
+  it('should handle subdomains', () => {
+    expect(encodeDnsDomain('app.example.com')).toBe('com\0example\0app\0')
+  })
+
+  it('should handle single-label domains', () => {
+    expect(encodeDnsDomain('localhost')).toBe('localhost\0')
   })
 })

@@ -338,18 +338,32 @@ export class TonConnectBridge {
     })
 
     const decodedResult = attempt(
-      () => JSON.parse(message.params[0]) as SignDataPayload
+      () => JSON.parse(message.params[0]) as Record<string, unknown>
     )
     if ('error' in decodedResult) {
       return getBadRequestError('Invalid signData payload')
     }
 
-    const payload = decodedResult.data
-    if (!payload || typeof payload !== 'object' || !('type' in payload)) {
+    const raw = decodedResult.data
+    if (!raw || typeof raw !== 'object' || typeof raw.type !== 'string') {
       return getBadRequestError('Invalid signData payload')
     }
 
-    if (payload.network && payload.network !== CHAIN.MAINNET) {
+    if (
+      raw.type === 'text'
+        ? typeof raw.text !== 'string'
+        : raw.type === 'binary'
+          ? typeof raw.bytes !== 'string'
+          : raw.type === 'cell'
+            ? typeof raw.schema !== 'string' || typeof raw.cell !== 'string'
+            : true
+    ) {
+      return getBadRequestError('Invalid signData payload')
+    }
+
+    const payload = raw as SignDataPayload
+
+    if (payload.network !== undefined && payload.network !== CHAIN.MAINNET) {
       return getBadRequestError('Unsupported TON network')
     }
 
@@ -367,7 +381,8 @@ export class TonConnectBridge {
     }
 
     if (payload.from) {
-      const fromRaw = attempt(() => Address.parse(payload.from!).toRawString())
+      const { from } = payload
+      const fromRaw = attempt(() => Address.parse(from).toRawString())
       const accountRaw = attempt(() =>
         Address.parse(account.address).toRawString()
       )
@@ -396,6 +411,9 @@ export class TonConnectBridge {
         })
       }
       if (payload.type === 'binary') {
+        if (!/^[A-Za-z0-9+/]*={0,2}$/.test(payload.bytes)) {
+          throw new Error('Invalid base64 in binary payload')
+        }
         return buildSignDataTextBinaryHash({
           address: account.address,
           domain,

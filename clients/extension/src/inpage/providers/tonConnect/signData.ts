@@ -29,7 +29,7 @@ const crc32 = (data: Buffer): number => {
  * Encodes a domain in TON DNS wire format per TEP-81 (reverse order, null-separated).
  * Example: "stonfi.com" -> "com\0stonfi\0"
  */
-const encodeDnsDomain = (domain: string): string =>
+export const encodeDnsDomain = (domain: string): string =>
   domain
     .split('.')
     .reverse()
@@ -116,10 +116,10 @@ export const buildSignDataCellHash = ({
   const dnsDomain = encodeDnsDomain(domain)
 
   const cells = Cell.fromBoc(Buffer.from(cellBase64, 'base64'))
-  const payloadCell = cells[0]
-  if (!payloadCell) {
-    throw new Error('Invalid cell: empty BOC')
+  if (cells.length !== 1) {
+    throw new Error('Invalid cell: expected exactly one root cell')
   }
+  const [payloadCell] = cells
 
   const messageCell = beginCell()
     .storeUint(0x75569022, 32)
