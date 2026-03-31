@@ -11,6 +11,8 @@ import type {
   DeviceInfo,
   RpcMethod,
   SEND_TRANSACTION_ERROR_CODES,
+  SIGN_DATA_ERROR_CODES,
+  SignDataPayload,
   WalletEvent,
   WalletResponse,
 } from '@tonconnect/protocol'
@@ -20,6 +22,7 @@ import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { attempt } from '@vultisig/lib-utils/attempt'
 
 import { getWalletStateInit } from './getWalletStateInit'
+import { buildSignDataCellHash, buildSignDataTextBinaryHash } from './signData'
 import {
   buildTonProofPayload,
   formatTonProofReply,
@@ -320,9 +323,171 @@ export class TonConnectBridge {
     }
   }
 
+  /** Handles the signData RPC method for signing arbitrary data per TonConnect v2 spec. */
+  private async handleSignData(
+    message: AppRequest<'signData'>
+  ): Promise<WalletResponse<'signData'>> {
+    const getBadRequestError = (
+      errorMessage: string
+    ): WalletResponse<'signData'> => ({
+      id: message.id,
+      error: {
+        code: 1 as SIGN_DATA_ERROR_CODES,
+        message: errorMessage,
+      },
+    })
+
+    const decodedResult = attempt(
+      () => JSON.parse(message.params[0]) as SignDataPayload
+    )
+    if ('error' in decodedResult) {
+      return getBadRequestError('Invalid signData payload')
+    }
+
+    const payload = decodedResult.data
+    if (!payload || typeof payload !== 'object' || !('type' in payload)) {
+      return getBadRequestError('Invalid signData payload')
+    }
+
+    if (payload.network && payload.network !== CHAIN.MAINNET) {
+      return getBadRequestError('Unsupported TON network')
+    }
+
+    const { data: account, error: getAccountError } = await attempt(
+      callBackground({ getAccount: { chain: Chain.Ton } })
+    )
+    if (getAccountError || !account?.address) {
+      return {
+        id: message.id,
+        error: {
+          code: 100 as SIGN_DATA_ERROR_CODES,
+          message: 'Failed to get account',
+        },
+      }
+    }
+
+    if (payload.from) {
+      const fromRaw = attempt(() => Address.parse(payload.from!).toRawString())
+      const accountRaw = attempt(() =>
+        Address.parse(account.address).toRawString()
+      )
+      if (
+        'error' in fromRaw ||
+        'error' in accountRaw ||
+        fromRaw.data !== accountRaw.data
+      ) {
+        return getBadRequestError(
+          'Requested sender does not match active TON account'
+        )
+      }
+    }
+
+    const domain = window.location.hostname
+    const timestamp = Math.floor(Date.now() / 1000)
+
+    const hashResult = attempt((): string => {
+      if (payload.type === 'text') {
+        return buildSignDataTextBinaryHash({
+          address: account.address,
+          domain,
+          timestamp,
+          type: 'text',
+          payloadData: Buffer.from(payload.text, 'utf-8'),
+        })
+      }
+      if (payload.type === 'binary') {
+        return buildSignDataTextBinaryHash({
+          address: account.address,
+          domain,
+          timestamp,
+          type: 'binary',
+          payloadData: Buffer.from(payload.bytes, 'base64'),
+        })
+      }
+      if (payload.type === 'cell') {
+        return buildSignDataCellHash({
+          address: account.address,
+          domain,
+          timestamp,
+          schema: payload.schema,
+          cellBase64: payload.cell,
+        })
+      }
+      throw new Error('Unsupported signData payload type')
+    })
+
+    if ('error' in hashResult) {
+      return getBadRequestError('Failed to build signData hash')
+    }
+
+    const hashHex = hashResult.data
+
+    const { data: signatureHex, error: signError } = await attempt(
+      callPopup(
+        {
+          signMessage: {
+            sign_message: {
+              message: `0x${hashHex}`,
+              chain: Chain.Ton,
+            },
+          },
+        },
+        { account: account.address }
+      )
+    )
+
+    if (signError === PopupError.RejectedByUser) {
+      return {
+        id: message.id,
+        error: {
+          code: 300 as SIGN_DATA_ERROR_CODES,
+          message: 'User declined the signing request',
+        },
+      }
+    }
+
+    if (signError || !signatureHex) {
+      return {
+        id: message.id,
+        error: {
+          code: 100 as SIGN_DATA_ERROR_CODES,
+          message: 'Failed to sign data',
+        },
+      }
+    }
+
+    const rawAddressResult = attempt(() =>
+      Address.parse(account.address).toRawString()
+    )
+    if ('error' in rawAddressResult) {
+      return {
+        id: message.id,
+        error: {
+          code: 100 as SIGN_DATA_ERROR_CODES,
+          message: 'Failed to format address',
+        },
+      }
+    }
+
+    return {
+      id: message.id,
+      result: {
+        signature: Buffer.from(String(signatureHex), 'hex').toString('base64'),
+        address: rawAddressResult.data,
+        timestamp,
+        domain,
+        payload,
+      },
+    }
+  }
+
   async send<T extends RpcMethod>(
     message: AppRequest<T>
   ): Promise<WalletResponse<T>> {
+    if (message.method === 'signData') {
+      return this.handleSignData(message) as unknown as WalletResponse<T>
+    }
+
     if (message.method !== 'sendTransaction') {
       return {
         id: message.id,

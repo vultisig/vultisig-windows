@@ -15,6 +15,10 @@ const getTonConnectFeatures = (): Feature[] => [
     maxMessages: 4,
     extraCurrencySupported: false,
   },
+  {
+    name: 'SignData',
+    types: ['text', 'binary', 'cell'],
+  },
 ]
 
 export const getTonConnectDeviceInfo = (): DeviceInfo => ({
