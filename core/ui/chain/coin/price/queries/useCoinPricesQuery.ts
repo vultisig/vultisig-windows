@@ -2,10 +2,11 @@ import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
 import { EagerQuery, Query } from '@lib/ui/query/Query'
 import { persistQueryOptions } from '@lib/ui/query/utils/options'
 import { useQueries } from '@tanstack/react-query'
-import { CosmosChain, EvmChain } from '@vultisig/core-chain/Chain'
+import { Chain, CosmosChain, EvmChain } from '@vultisig/core-chain/Chain'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { fetchNavPerShare } from '@vultisig/core-chain/chains/cosmos/thor/yield-bearing-tokens/services/fetchNavPerShare'
 import { yieldBearingThorChainTokens } from '@vultisig/core-chain/chains/cosmos/thor/yield-bearing-tokens/yAssetsOnThorChain'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { CoinKey, coinKeyToString, Token } from '@vultisig/core-chain/coin/Coin'
 import { getErc20Prices } from '@vultisig/core-chain/coin/price/evm/getErc20Prices'
 import { getCoinPrices } from '@vultisig/core-chain/coin/price/getCoinPrices'
@@ -20,6 +21,11 @@ import { toEntries } from '@vultisig/lib-utils/record/toEntries'
 import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
 
 import { useFiatCurrency } from '../../../../storage/fiatCurrency'
+import { getMayaPoolPrice } from '../maya/getMayaPoolPrice'
+import {
+  MayaPoolPricedTokenId,
+  mayaPoolPricedTokens,
+} from '../maya/mayaPoolPricedTokens'
 
 type GetCoinPricesQueryKeysInput = {
   coins: CoinKey[]
@@ -60,9 +66,22 @@ export function useCoinPricesQuery(
   const coinsWithPriceProviderId: (CoinKey & { priceProviderId: string })[] = []
   const erc20sWithoutPriceProviderId: Token<CoinKey<EvmChain>>[] = []
   const yieldBearingTokens: Token<CoinKey<CosmosChain>>[] = []
+  const mayaPoolTokens: (Token<CoinKey> & {
+    poolTokenId: MayaPoolPricedTokenId
+  })[] = []
 
   coins.forEach(({ id, priceProviderId, chain }) => {
-    if (priceProviderId) {
+    if (
+      chain === Chain.MayaChain &&
+      id &&
+      id.toLowerCase() in mayaPoolPricedTokens
+    ) {
+      mayaPoolTokens.push({
+        id,
+        chain,
+        poolTokenId: id.toLowerCase() as MayaPoolPricedTokenId,
+      })
+    } else if (priceProviderId) {
       coinsWithPriceProviderId.push({ id, priceProviderId, chain })
     } else if (
       id &&
@@ -180,6 +199,51 @@ export function useCoinPricesQuery(
             result[coinKeyToString(coin)] = nav
           }
         }
+        return result
+      },
+      ...persistQueryOptions,
+    })
+  }
+
+  if (!isEmpty(mayaPoolTokens)) {
+    const cacaoPriceProviderId = shouldBePresent(
+      chainFeeCoin[Chain.MayaChain].priceProviderId
+    )
+
+    queries.push({
+      queryKey: [
+        'mayaPoolPrices',
+        mayaPoolTokens.map(c => c.poolTokenId),
+        fiatCurrency,
+      ],
+      queryFn: async () => {
+        const cacaoPrices = await getCoinPrices({
+          ids: [cacaoPriceProviderId],
+          fiatCurrency,
+        })
+        const cacaoPriceUsd = cacaoPrices[cacaoPriceProviderId]
+        if (cacaoPriceUsd == null) return {}
+
+        const result: Record<string, number> = {}
+
+        const prices = await Promise.all(
+          mayaPoolTokens.map(async coin => {
+            const config = mayaPoolPricedTokens[coin.poolTokenId]
+            const price = await getMayaPoolPrice({
+              asset: config.poolAsset,
+              assetDecimals: config.decimals,
+              cacaoPriceUsd,
+            })
+            return { coin, price }
+          })
+        )
+
+        for (const { coin, price } of prices) {
+          if (price != null) {
+            result[coinKeyToString(coin)] = price
+          }
+        }
+
         return result
       },
       ...persistQueryOptions,
