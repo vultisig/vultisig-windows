@@ -69,6 +69,9 @@ export const getTx: BackgroundResolver<'getTx'> = async ({
       sui: () => {
         throw new NotImplementedError('Get tx for Sui chain')
       },
+      qbtc: () => {
+        throw new NotImplementedError('Get tx for QBTC chain')
+      },
     }
   )
 
