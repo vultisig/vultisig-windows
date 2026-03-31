@@ -50,8 +50,6 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
         message => async () =>
           keysign({
             keyShare,
-            // Published `@vultisig/core-mpc` keysign input omits MLDSA; this provider still resolves MLDSA keyshares.
-            // @ts-expect-error — signatureAlgorithm includes `mldsa` for QBTC; narrow SDK types do not.
             signatureAlgorithm,
             message,
             chainPath: isKeyImportVault(vault)

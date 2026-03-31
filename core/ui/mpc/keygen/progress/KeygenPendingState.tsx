@@ -17,7 +17,6 @@ const progressValues: Record<KeygenStep, number> = {
   prepareVault: 15,
   ecdsa: 35,
   eddsa: 55,
-  // @ts-expect-error — SDK gap: chainKeys step not in SDK KeygenStep union
   chainKeys: 75,
   mldsa: 85,
 }

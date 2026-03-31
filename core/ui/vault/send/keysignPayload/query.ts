@@ -39,7 +39,6 @@ export const useSendKeysignPayloadQuery = ({
   const walletCore = useAssertWalletCore()
   const publicKey = useCurrentVaultNullablePublicKey(coin.chain)
 
-  // @ts-expect-error — SDK gap: BuildSendKeysignPayloadInput omits hexPublicKeyOverride and requires non-null PublicKey; Windows supports MLDSA send
   const input: BuildSendKeysignPayloadInput = useMemo(
     () => ({
       coin,

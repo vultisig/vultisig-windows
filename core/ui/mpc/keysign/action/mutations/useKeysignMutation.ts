@@ -55,7 +55,6 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
             const chain = getKeysignChain(payload)
 
             // QBTC uses MLDSA keys — bypass WalletCore entirely
-            // @ts-expect-error — SDK gap: QBTC not in Chain union; runtime keysign still uses this id
             if (chain === 'QBTC') {
               const cosmosSpecific = getBlockchainSpecificValue(
                 payload.blockchainSpecific,

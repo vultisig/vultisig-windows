@@ -13,7 +13,6 @@ const protocolLabels: Record<KeygenStep, string> = {
   prepareVault: 'Prepare',
   ecdsa: 'ECDSA',
   eddsa: 'EdDSA',
-  // @ts-expect-error — SDK gap: chainKeys step not in SDK KeygenStep union
   chainKeys: 'Chain Keys',
   mldsa: 'MLDSA',
 }

@@ -26,7 +26,6 @@ export const toStorageVault = ({
   chainKeyShares,
   publicKeyMldsa,
   keyShareMldsa,
-  // @ts-expect-error — SDK gap: Vault type missing saplingExtras field
   saplingExtras,
 }: Vault): storage.Vault => {
   const keyshares = toEntries(keyShares).map(({ key, value }) => ({
@@ -127,7 +126,6 @@ export const fromStorageVault = (
     chainKeyShares,
     publicKeyMldsa,
     keyShareMldsa,
-    // @ts-expect-error — SDK gap: Vault type missing saplingExtras field
     saplingExtras,
   }
 }
