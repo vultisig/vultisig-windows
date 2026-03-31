@@ -2,7 +2,7 @@ import { fetchOneInchTokensRaw } from '@core/ui/chain/coin/queries/fetchWhitelis
 import { Chain, EvmChain } from '@vultisig/core-chain/Chain'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { SolanaJupiterToken } from '@vultisig/core-chain/coin/jupiter/token'
-import { knownTokensIndex } from '@vultisig/core-chain/coin/knownTokens/index'
+import { knownTokensIndex } from '@vultisig/core-chain/coin/knownTokens'
 import { OneInchTokensResponse } from '@vultisig/core-chain/coin/oneInch/token'
 import { getCoinPrices } from '@vultisig/core-chain/coin/price/getCoinPrices'
 import { baseJupiterTokensUrl } from '@vultisig/core-chain/coin/token/metadata/resolvers/solana'

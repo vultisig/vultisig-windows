@@ -8,8 +8,8 @@ import { Coin, CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { getTxBlockaidSimulation } from '@vultisig/core-chain/security/blockaid/tx/simulation'
 import { parseBlockaidSolanaSimulation } from '@vultisig/core-chain/security/blockaid/tx/simulation/api/core'
 import { BlockaidSolanaSimulationInfo } from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
-import { getBlockaidTxSimulationInput } from '@vultisig/core-chain/security/blockaid/tx/simulation/input'
 import { getChainSpecific } from '@vultisig/core-mpc/keysign/chainSpecific'
+import { getBlockaidTxSimulationInput } from '@vultisig/core-mpc/security/blockaid/tx/simulation/input'
 import {
   OneInchQuoteSchema,
   OneInchSwapPayloadSchema,

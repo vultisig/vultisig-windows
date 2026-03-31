@@ -5,12 +5,12 @@ import {
   customMessageDefaultChain,
   customMessageSupportedChains,
 } from '@core/ui/mpc/keysign/customMessage/chains'
-import { getSignatureAlgorithm } from '@core/ui/utils/getSignatureAlgorithm'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useMutation } from '@tanstack/react-query'
 import { getChainKind } from '@vultisig/core-chain/ChainKind'
 import { getCoinType } from '@vultisig/core-chain/coin/coinType'
 import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
+import { getSignatureAlgorithm } from '@vultisig/core-chain/signing/SignatureAlgorithm'
 import { signatureAlgorithms } from '@vultisig/core-chain/signing/SignatureAlgorithm'
 import { signatureFormats } from '@vultisig/core-chain/signing/SignatureFormat'
 import {
@@ -19,24 +19,24 @@ import {
 } from '@vultisig/core-chain/tw/signingOutput'
 import { Tx } from '@vultisig/core-chain/tx'
 import { broadcastTx } from '@vultisig/core-chain/tx/broadcast'
-import { compileTx } from '@vultisig/core-chain/tx/compile/compileTx'
 import { getTxHash } from '@vultisig/core-chain/tx/hash'
-import { getPreSigningHashes } from '@vultisig/core-chain/tx/preSigningHashes'
-import { generateSignature } from '@vultisig/core-chain/tx/signature/generateSignature'
+import {
+  getQBTCPreSignedImageHash,
+  getQBTCSignedTransaction,
+} from '@vultisig/core-mpc/chains/cosmos/qbtc/QBTCHelper'
 import { getBlockchainSpecificValue } from '@vultisig/core-mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { KeysignMessagePayload } from '@vultisig/core-mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { KeysignResult } from '@vultisig/core-mpc/keysign/KeysignResult'
 import { getEncodedSigningInputs } from '@vultisig/core-mpc/keysign/signingInputs'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
+import { compileTx } from '@vultisig/core-mpc/tx/compile/compileTx'
+import { getPreSigningHashes } from '@vultisig/core-mpc/tx/preSigningHashes'
+import { generateSignature } from '@vultisig/core-mpc/tx/signature/generateSignature'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { chainPromises } from '@vultisig/lib-utils/promise/chainPromises'
 import { recordFromItems } from '@vultisig/lib-utils/record/recordFromItems'
 
-import {
-  getQBTCPreSignedImageHash,
-  getQBTCSignedTransaction,
-} from '../../../../utils/qbtc/QBTCHelper'
 import { getCustomMessageHex } from '../../customMessage/getCustomMessageHex'
 
 export const useKeysignMutation = (payload: KeysignMessagePayload) => {
@@ -64,7 +64,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
               const msgs = getQBTCPreSignedImageHash({
                 keysignPayload: payload,
                 cosmosSpecific,
-              })
+              }).map(bytes => Buffer.from(bytes).toString('hex'))
 
               const signatureAlgorithm = getSignatureAlgorithm(chain)
               const coinType = getCoinType({ walletCore, chain })

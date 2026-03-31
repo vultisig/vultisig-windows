@@ -20,11 +20,10 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { getVaultId, Vault } from '@vultisig/core-mpc/vault/Vault'
 import { sortEntitiesWithOrder } from '@vultisig/lib-utils/entities/EntityWithOrder'
+import { getNewOrder } from '@vultisig/lib-utils/order/getNewOrder'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { getNewOrder } from '../../../utils/order/getNewOrder'
 
 export const VaultsSection = () => {
   const { t } = useTranslation()

@@ -29,12 +29,12 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
+import { getLastItemOrder } from '@vultisig/lib-utils/order/getLastItemOrder'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useCore } from '../../../state/core'
-import { getLastItemOrder } from '../../../utils/order/getLastItemOrder'
 
 export const CreateVaultFolderPage = () => {
   const { t } = useTranslation()

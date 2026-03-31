@@ -52,9 +52,7 @@ export const useSendFeeEstimateQuery = () => {
       'sendFeeEstimate',
       input ? omit(input, 'walletCore', 'publicKey') : null,
     ],
-    queryFn: () => {
-      return getSendFeeEstimate(input!)
-    },
+    queryFn: () => getSendFeeEstimate(input!),
     enabled: !!receiver && balance != null && input != null,
     ...noRefetchQueryOptions,
     retry: (failureCount, error) => {

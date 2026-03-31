@@ -38,6 +38,9 @@ export const getTx: BackgroundResolver<'getTx'> = async ({
 
         return client.getTx(hash)
       },
+      qbtc: () => {
+        throw new NotImplementedError('Get tx for QBTC chain')
+      },
       utxo: async chain => {
         const url = `${getBlockchairBaseUrl(chain)}/dashboards/transaction/${hash}`
 

@@ -24,8 +24,8 @@ import { Schnorr } from '@vultisig/core-mpc/schnorr/schnorrKeygen'
 import { Vault, VaultKeyShares } from '@vultisig/core-mpc/vault/Vault'
 import { without } from '@vultisig/lib-utils/array/without'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { getLastItemOrder } from '@vultisig/lib-utils/order/getLastItemOrder'
 
-import { getLastItemOrder } from '../../../utils/order/getLastItemOrder'
 import { KeygenAction, KeygenActionProvider } from '../state/keygenAction'
 import { useKeygenVaultName } from '../state/keygenVault'
 import {

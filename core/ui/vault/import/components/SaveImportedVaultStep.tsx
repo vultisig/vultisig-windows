@@ -6,11 +6,11 @@ import { SaveVaultStep } from '@core/ui/vault/save/SaveVaultStep'
 import { Button } from '@lib/ui/buttons/Button'
 import { ValueProp } from '@lib/ui/props'
 import { getVaultId, Vault } from '@vultisig/core-mpc/vault/Vault'
+import { getLastItemOrder } from '@vultisig/lib-utils/order/getLastItemOrder'
 import { useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FlowErrorPageContent } from '../../../flow/FlowErrorPageContent'
-import { getLastItemOrder } from '../../../utils/order/getLastItemOrder'
 
 export const SaveImportedVaultStep = ({
   value,

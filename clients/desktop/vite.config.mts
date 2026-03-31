@@ -3,12 +3,12 @@ import { fileURLToPath } from 'url'
 import { defineConfig, loadEnv } from 'vite'
 import circleDependency from 'vite-plugin-circular-dependency'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
+import tsconfigPaths from 'vite-tsconfig-paths'
 
 import { getFeatureFlagDefines } from '../../core/ui/vite/featureFlagDefines'
 import { getCommonPlugins } from '../../core/ui/vite/plugins'
 import { sdkResolvePlugin } from '../../core/ui/vite/sdkResolvePlugin'
 import { getStaticCopyTargets } from '../../core/ui/vite/staticCopy'
-import { tsconfigPathsNormal } from '../../core/ui/vite/tsconfigPathsNormal'
 import * as buildInfo from './build.json'
 
 const rootDir = path.resolve(
@@ -34,7 +34,7 @@ export default defineConfig(async ({ mode }) => {
     },
     plugins: [
       sdkResolvePlugin(),
-      tsconfigPathsNormal({ root: rootDir }),
+      tsconfigPaths({ root: rootDir }),
       ...getCommonPlugins(),
       viteStaticCopy({
         targets: getStaticCopyTargets(),

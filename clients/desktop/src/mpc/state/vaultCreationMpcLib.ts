@@ -6,12 +6,14 @@ import {
   usePersistentState,
 } from '../../state/persistentState'
 
-type SelectableMpcLib = (typeof mpcLibOptions)[number]
+type VaultCreationMpcLib = (typeof mpcLibOptions)[number]
+
+const defaultVaultCreationMpcLib: VaultCreationMpcLib = 'DKLS'
 
 export const useVaultCreationMpcLib = () => {
-  return usePersistentState<SelectableMpcLib>(
+  return usePersistentState<VaultCreationMpcLib>(
     PersistentStateKey.VaultCreationMpcLib,
-    'DKLS' satisfies SelectableMpcLib,
+    defaultVaultCreationMpcLib,
     validateOneOf(mpcLibOptions)
   )
 }
