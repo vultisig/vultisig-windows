@@ -4,9 +4,9 @@ import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { useMutation } from '@tanstack/react-query'
 import { Vault } from '@vultisig/core-mpc/vault/Vault'
 import { isEmpty } from '@vultisig/lib-utils/array/isEmpty'
+import { getLastItemOrder } from '@vultisig/lib-utils/order/getLastItemOrder'
 
 import { StorageKey } from '../../../storage/StorageKey'
-import { getLastItemOrder } from '../../../utils/order/getLastItemOrder'
 
 type AddVaultToFolderInput = {
   vaultId: string

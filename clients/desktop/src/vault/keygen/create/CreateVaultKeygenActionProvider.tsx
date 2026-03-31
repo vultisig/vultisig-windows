@@ -14,10 +14,6 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
       DKLS={() => (
         <DKLSKeygenActionProvider>{children}</DKLSKeygenActionProvider>
       )}
-      // @ts-expect-error — SDK gap: MpcLib missing KeyImport variant
-      KeyImport={() => (
-        <DKLSKeygenActionProvider>{children}</DKLSKeygenActionProvider>
-      )}
       GG20={() => (
         <GG20KeygenActionProvider>{children}</GG20KeygenActionProvider>
       )}

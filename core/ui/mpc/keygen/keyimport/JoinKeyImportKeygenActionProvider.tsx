@@ -24,8 +24,8 @@ import { Schnorr } from '@vultisig/core-mpc/schnorr/schnorrKeygen'
 import { Vault, VaultKeyShares } from '@vultisig/core-mpc/vault/Vault'
 import { without } from '@vultisig/lib-utils/array/without'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { getLastItemOrder } from '@vultisig/lib-utils/order/getLastItemOrder'
 
-import { getLastItemOrder } from '../../../utils/order/getLastItemOrder'
 import { KeygenAction, KeygenActionProvider } from '../state/keygenAction'
 import { useKeygenVaultName } from '../state/keygenVault'
 import {
@@ -99,7 +99,6 @@ export const JoinKeyImportKeygenActionProvider = ({
       onStepStart('ecdsa')
       onStepStart('eddsa')
       if (chains.length > 0) {
-        // @ts-expect-error — SDK gap: chainKeys step not in SDK
         onStepStart('chainKeys')
       }
       if (includeMldsa) {
@@ -171,7 +170,6 @@ export const JoinKeyImportKeygenActionProvider = ({
       const chainKeysPromise =
         chainPromises.length > 0
           ? Promise.all(chainPromises).then(results => {
-              // @ts-expect-error — SDK gap: chainKeys step not in SDK
               onStepComplete('chainKeys')
               return results
             })

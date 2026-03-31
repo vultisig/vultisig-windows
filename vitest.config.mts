@@ -1,10 +1,14 @@
+import path from 'path'
+import { fileURLToPath } from 'url'
+import tsconfigPaths from 'vite-tsconfig-paths'
 import { defineConfig } from 'vitest/config'
 
 import { sdkResolvePlugin } from './core/ui/vite/sdkResolvePlugin'
-import { tsconfigPathsNormal } from './core/ui/vite/tsconfigPathsNormal'
+
+const rootDir = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
-  plugins: [sdkResolvePlugin(), tsconfigPathsNormal()],
+  plugins: [sdkResolvePlugin(), tsconfigPaths({ root: rootDir })],
   test: {
     globals: true,
     environment: 'node',

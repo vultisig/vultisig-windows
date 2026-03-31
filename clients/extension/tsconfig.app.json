@@ -9,12 +9,6 @@
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
-    "paths": {
-      "@vultisig/core-chain/*": ["../../node_modules/@vultisig/core-chain/dist/*"],
-      "@vultisig/core-mpc/*": ["../../node_modules/@vultisig/core-mpc/dist/*"],
-      "@vultisig/core-config/*": ["../../node_modules/@vultisig/core-config/dist/*"],
-      "@vultisig/lib-utils/*": ["../../node_modules/@vultisig/lib-utils/dist/*"]
-    },
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,

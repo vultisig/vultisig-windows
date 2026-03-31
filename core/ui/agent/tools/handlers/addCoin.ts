@@ -1,8 +1,8 @@
 import { Chain } from '@vultisig/core-chain/Chain'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
-import { knownTokensIndex } from '@vultisig/core-chain/coin/knownTokens/index'
+import { knownTokensIndex } from '@vultisig/core-chain/coin/knownTokens'
+import { getChainAddress } from '@vultisig/core-chain/publicKey/address/getChainAddress'
 
-import { getChainAddress } from '../../../utils/getChainAddress'
 import { getChainFromString } from '../../utils/getChainFromString'
 import { getStorageContext } from '../shared/storageContext'
 import { getWalletContext } from '../shared/walletContext'
