@@ -372,9 +372,7 @@ describe('buildSignDataCellHash', () => {
     ).toThrow()
   })
 
-  it('should reject multi-root BOCs', () => {
-    // Create two separate cells and manually concat their BOCs won't work,
-    // but an empty BOC (zero roots) should also be rejected
+  it('should reject empty or malformed BOCs', () => {
     expect(() =>
       buildSignDataCellHash({
         address: testAddress,
