@@ -3,6 +3,7 @@ import { useRefetchQueries } from '@lib/ui/query/hooks/useRefetchQueries'
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
 import { defaultChains } from '@vultisig/core-chain/Chain'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
+import { getChainAddress } from '@vultisig/core-chain/publicKey/address/getChainAddress'
 import {
   getVaultId,
   isKeyImportVault,
@@ -19,7 +20,6 @@ import { useCreateCoinsMutation } from '../../storage/coins'
 import { useSetCurrentVaultIdMutation } from '../../storage/currentVaultId'
 import { useHasPasscodeEncryption } from '../../storage/passcodeEncryption'
 import { StorageKey } from '../../storage/StorageKey'
-import { getChainAddress } from '../../utils/getChainAddress'
 
 export const useCreateVaultMutation = (
   options?: UseMutationOptions<any, any, Vault, unknown>

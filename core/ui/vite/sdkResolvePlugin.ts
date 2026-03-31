@@ -1,3 +1,9 @@
+/**
+ * Vite/esbuild resolution for `@vultisig/*` packages: directory `dist/.../index.js`
+ * vs flat `.js` specifiers, and broken **internal** relative imports (e.g.
+ * `@vultisig/lib-utils` `record/union/getRecordUnionValue.js` → `../getRecordKeys.js`
+ * where the implementation lives under `getRecordKeys/index.js`).
+ */
 import { existsSync } from 'fs'
 import { dirname, resolve } from 'path'
 import type { Plugin } from 'vite'

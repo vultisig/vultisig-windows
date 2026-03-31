@@ -8,10 +8,10 @@ import {
   AccountCoinKey,
 } from '@vultisig/core-chain/coin/AccountCoin'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
+import { getChainAddress } from '@vultisig/core-chain/publicKey/address/getChainAddress'
 import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
 import { assertField } from '@vultisig/lib-utils/record/assertField'
 
-import { getChainAddress } from '../utils/getChainAddress'
 import { useAssertCurrentVaultId } from './currentVaultId'
 import { StorageKey } from './StorageKey'
 

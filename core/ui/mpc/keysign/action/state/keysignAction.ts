@@ -1,12 +1,12 @@
-import type { SignatureAlgorithmWithMldsa } from '@core/ui/utils/getSignatureAlgorithm'
 import { setupValueProvider } from '@lib/ui/state/setupValueProvider'
 import { CoinType } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { Chain } from '@vultisig/core-chain/Chain'
+import type { SignatureAlgorithm } from '@vultisig/core-chain/signing/SignatureAlgorithm'
 import { KeysignSignature } from '@vultisig/core-mpc/keysign/KeysignSignature'
 
 type KeysignActionInput = {
   msgs: string[]
-  signatureAlgorithm: SignatureAlgorithmWithMldsa
+  signatureAlgorithm: SignatureAlgorithm
   coinType: CoinType
   chain: Chain
 }

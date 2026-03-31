@@ -52,10 +52,7 @@ export const useSendFeeEstimateQuery = () => {
       'sendFeeEstimate',
       input ? omit(input, 'walletCore', 'publicKey') : null,
     ],
-    queryFn: () => {
-      // @ts-expect-error — SDK gap: BuildSendKeysignPayloadInput omits hexPublicKeyOverride and requires non-null PublicKey; Windows supports MLDSA send
-      return getSendFeeEstimate(input!)
-    },
+    queryFn: () => getSendFeeEstimate(input!),
     enabled: !!receiver && balance != null && input != null,
     ...noRefetchQueryOptions,
     retry: (failureCount, error) => {

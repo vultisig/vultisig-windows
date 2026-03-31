@@ -27,7 +27,6 @@ const getExportName = (vault: Vault) => {
     DKLS: () => {
       return `${vault.name}-${vault.localPartyId}-share${localPartyIndex}of${totalSigners}.vult`
     },
-    // @ts-expect-error — SDK gap: MpcLib missing KeyImport variant
     KeyImport: () => {
       return `${vault.name}-${vault.localPartyId}-share${localPartyIndex}of${totalSigners}.vult`
     },

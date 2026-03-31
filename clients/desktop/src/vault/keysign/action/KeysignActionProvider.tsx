@@ -14,7 +14,6 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
       DKLS={() => (
         <DKLSKeysignActionProvider>{children}</DKLSKeysignActionProvider>
       )}
-      // @ts-expect-error — SDK gap: MpcLib missing KeyImport variant
       KeyImport={() => (
         <DKLSKeysignActionProvider>{children}</DKLSKeysignActionProvider>
       )}

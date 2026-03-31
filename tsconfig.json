@@ -13,13 +13,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react-jsx",
-    "paths": {
-      "@vultisig/core-chain/*": ["./node_modules/@vultisig/core-chain/dist/*"],
-      "@vultisig/core-mpc/*": ["./node_modules/@vultisig/core-mpc/dist/*"],
-      "@vultisig/core-config/*": ["./node_modules/@vultisig/core-config/dist/*"],
-      "@vultisig/lib-utils/*": ["./node_modules/@vultisig/lib-utils/dist/*"]
-    }
+    "jsx": "react-jsx"
   },
   "references": [],
   "exclude": ["node_modules", "clients/extension/tests/**"],

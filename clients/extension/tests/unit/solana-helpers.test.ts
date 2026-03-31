@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
+import type { IdentifierString } from '@wallet-standard/base'
+
 import { isSolanaChain } from '@clients/extension/src/inpage/providers/solana/chains'
 import { createSolanaSignInMessage } from '@clients/extension/src/inpage/providers/solana/signIn'
 
@@ -129,8 +131,7 @@ describe('isSolanaChain', () => {
   })
 
   it('returns false for empty string', () => {
-    // @ts-expect-error testing invalid input
-    expect(isSolanaChain('')).toBe(false)
+    expect(isSolanaChain('' as IdentifierString)).toBe(false)
   })
 
   it('returns false for random string', () => {
@@ -138,12 +139,10 @@ describe('isSolanaChain', () => {
   })
 
   it('returns false for partial match', () => {
-    // @ts-expect-error testing invalid input
-    expect(isSolanaChain('solana')).toBe(false)
+    expect(isSolanaChain('solana' as IdentifierString)).toBe(false)
   })
 
   it('returns false for mainnet without prefix', () => {
-    // @ts-expect-error testing invalid input
-    expect(isSolanaChain('mainnet')).toBe(false)
+    expect(isSolanaChain('mainnet' as IdentifierString)).toBe(false)
   })
 })

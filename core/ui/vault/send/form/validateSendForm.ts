@@ -1,5 +1,6 @@
 import { WalletCore } from '@trustwallet/wallet-core'
 import { Chain, UtxoBasedChain } from '@vultisig/core-chain/Chain'
+import { validateUtxoRequirements } from '@vultisig/core-chain/chains/utxo/send/validateUtxoRequirements'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { isValidAddress } from '@vultisig/core-chain/utils/isValidAddress'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
@@ -7,7 +8,6 @@ import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
 import { TFunction } from 'i18next'
 
 import { SendFormShape, ValidationResult } from './formShape'
-import { validateUtxoSendRequirements } from './validateUtxoSendRequirements'
 
 type ValidateSendReceiverInput = {
   receiverAddress: string
@@ -78,7 +78,7 @@ export const validateSendForm = (
     }
 
     if (isOneOf(chain, Object.values(UtxoBasedChain)) && amount) {
-      const errorMsg = validateUtxoSendRequirements({
+      const errorMsg = validateUtxoRequirements({
         amount,
         balance,
         chain,
