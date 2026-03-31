@@ -28,7 +28,6 @@ export const JoinKeygenActionProvider = ({ children }: ChildrenProp) => {
             {children}
           </DKLSCreateKeygenActionProvider>
         )}
-        // @ts-expect-error — SDK gap: MpcLib missing KeyImport variant
         KeyImport={() => (
           <DKLSCreateKeygenActionProvider>
             {children}
@@ -62,7 +61,6 @@ export const JoinKeygenActionProvider = ({ children }: ChildrenProp) => {
                 {children}
               </DKLSReshareKeygenActionProvider>
             )}
-            // @ts-expect-error — SDK gap: MpcLib missing KeyImport variant
             KeyImport={() => (
               <DKLSReshareKeygenActionProvider>
                 {children}

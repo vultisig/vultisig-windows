@@ -40,12 +40,12 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { sortEntitiesWithOrder } from '@vultisig/lib-utils/entities/EntityWithOrder'
+import { getNewOrder } from '@vultisig/lib-utils/order/getNewOrder'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
 import { useCore } from '../../../state/core'
-import { getNewOrder } from '../../../utils/order/getNewOrder'
 
 type VaultTotals = ReturnType<typeof useVaultsTotalBalances>['totals']
 

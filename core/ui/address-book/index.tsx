@@ -21,11 +21,10 @@ import { PageFooter } from '@lib/ui/page/PageFooter'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
 import { sortEntitiesWithOrder } from '@vultisig/lib-utils/entities/EntityWithOrder'
+import { getNewOrder } from '@vultisig/lib-utils/order/getNewOrder'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
-
-import { getNewOrder } from '../utils/order/getNewOrder'
 
 export const AddressBookPage = () => {
   const { t } = useTranslation()

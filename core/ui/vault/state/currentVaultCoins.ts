@@ -2,13 +2,13 @@ import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider
 import { Chain } from '@vultisig/core-chain/Chain'
 import { areEqualCoins, CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
+import { getChainAddress } from '@vultisig/core-chain/publicKey/address/getChainAddress'
 import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
 import { groupItems } from '@vultisig/lib-utils/array/groupItems'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { useMemo } from 'react'
 
-import { getChainAddress } from '../../utils/getChainAddress'
 import { useCurrentVault } from './currentVault'
 
 export const useCurrentVaultCoins = () => {

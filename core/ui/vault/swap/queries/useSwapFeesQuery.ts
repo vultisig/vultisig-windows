@@ -53,7 +53,6 @@ export const useSwapFeesQuery = (swapQuote: SwapQuote) => {
         },
         general: ({ tx }) => {
           return matchRecordUnion(tx, {
-            // @ts-expect-error — SDK gap: affiliateFee not in SDK swap type
             evm: ({ affiliateFee }) => ({
               network,
               ...(affiliateFee ? { swap: affiliateFee } : {}),

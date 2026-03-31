@@ -18,8 +18,8 @@ import { MldsaKeygen } from '@vultisig/core-mpc/mldsa/mldsaKeygen'
 import { MpcLib } from '@vultisig/core-mpc/mpcLib'
 import { Schnorr } from '@vultisig/core-mpc/schnorr/schnorrKeygen'
 import { without } from '@vultisig/lib-utils/array/without'
+import { getLastItemOrder } from '@vultisig/lib-utils/order/getLastItemOrder'
 
-import { getLastItemOrder } from '../../../utils/order/getLastItemOrder'
 import { KeygenAction, KeygenActionProvider } from '../state/keygenAction'
 import { useKeygenVaultName } from '../state/keygenVault'
 

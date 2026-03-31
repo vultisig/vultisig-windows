@@ -16,9 +16,9 @@ import {
   BlockaidEvmSimulationInfo,
   BlockaidSolanaSimulationInfo,
 } from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
-import { getBlockaidTxSimulationInput } from '@vultisig/core-chain/security/blockaid/tx/simulation/input'
 import { BlockaidTxSimulationInput } from '@vultisig/core-chain/security/blockaid/tx/simulation/resolver'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
+import { getBlockaidTxSimulationInput } from '@vultisig/core-mpc/security/blockaid/tx/simulation/input'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import base58 from 'bs58'
 import { useCallback } from 'react'

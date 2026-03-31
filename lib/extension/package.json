@@ -3,6 +3,6 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@vultisig/lib-utils": "0.9.0"
+    "@vultisig/lib-utils": "0.9.1"
   }
 }
