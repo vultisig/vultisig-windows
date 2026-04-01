@@ -92,7 +92,6 @@
     "vite": "^7.3.1",
     "vite-plugin-node-polyfills": "^0.25.0",
     "vite-plugin-static-copy": "^3.3.0",
-    "vite-plugin-top-level-await": "^1.6.0",
     "vite-plugin-wasm": "^3.6.0",
     "web-push": "^3.6.7",
     "ws": "^8.19.0"
