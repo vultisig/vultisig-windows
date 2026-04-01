@@ -660,6 +660,7 @@ export const en = {
   network_fee: 'Network Fee',
   network_rate: 'Network rate',
   network_rate_required: 'Network rate is required',
+  notification_sent_successfully: 'Notification was successfully sent!',
   never: 'Never',
   new: 'New',
   next: 'Next',
@@ -822,6 +823,8 @@ export const en = {
   request_from: 'Request from',
   required_field_missing: 'Required field missing',
   required_node_address: 'Node Address is required',
+  resend_notification: 'Resend notification',
+  resend_notification_in: 'Resend notification in {{time}}',
   reshare: 'Reshare',
   reshare_disclaimer:
     'For all Reshare actions the threshold of devices is always required.',

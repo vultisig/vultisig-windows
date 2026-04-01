@@ -51,6 +51,8 @@ export const zh = {
       vaultShares: '您的金库持有2股股票，',
       sentTo: '已发送至 {{email}}。',
       changeEmailAndRestartKeygen: '更改邮箱并重新开始密钥生成',
+      setNewStandard: '您已准备好使用新的钱包标准。',
+      wellDone: '做得好',
     },
     createVault: {
       availablePlatforms: {
@@ -1288,4 +1290,10 @@ export const zh = {
   agent_reauth_description:
     '出于安全考虑，授权会定期过期。请确认以继续使用 Vulti Agent。',
   authorize: '授权',
+  enable_tss_batching: '启用 TSS 批处理',
+  keygen_protocol_done: '完毕',
+  keygen_protocol_running: '跑步',
+  notification_sent_successfully: '通知已成功发送！',
+  resend_notification: '重新发送通知',
+  resend_notification_in: '稍后重新发送通知 {{time}}',
 }
