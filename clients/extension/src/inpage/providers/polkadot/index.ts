@@ -15,6 +15,9 @@ import {
   PolkadotSignerResult,
 } from './types'
 
+/** Ed25519 signature type prefix for Polkadot extrinsics. */
+const ed25519SignaturePrefix = '0x01'
+
 let signingId = 0
 
 export class Polkadot extends EventEmitter {
@@ -90,9 +93,15 @@ export class Polkadot extends EventEmitter {
       { account: payload.address }
     )
 
+    const encodedBase64 = shouldBePresent(
+      data.encoded,
+      'signing output encoded'
+    ) as string
+    const signatureHex = Buffer.from(encodedBase64, 'base64').toString('hex')
+
     return {
       id: ++signingId,
-      signature: shouldBePresent(data.output, 'signing output') as string,
+      signature: ed25519SignaturePrefix + signatureHex,
     }
   }
 
