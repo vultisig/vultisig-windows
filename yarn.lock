@@ -727,6 +727,8 @@ __metadata:
     "@core/ui": "workspace:^"
     "@lib/extension": "workspace:^"
     "@lib/ui": "workspace:^"
+    "@polkadot/util": "npm:^14.0.1"
+    "@polkadot/util-crypto": "npm:^14.0.1"
     "@solana/spl-token": "npm:^0.4.14"
     "@solana/web3.js": "npm:^1.98.4"
     "@tanstack/react-query": "npm:^5.90.21"
@@ -752,6 +754,7 @@ __metadata:
   resolution: "@core/ui@workspace:core/ui"
   dependencies:
     "@bufbuild/protobuf": "npm:^2.11.0"
+    "@core/inpage-provider": "workspace:^"
     "@cosmjs/encoding": "npm:^0.38.1"
     "@floating-ui/react": "npm:^0.27.19"
     "@hookform/resolvers": "npm:^5.2.2"
