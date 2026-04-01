@@ -15,8 +15,8 @@ import {
   PolkadotSignerResult,
 } from './types'
 
-/** Ed25519 signature type prefix for Polkadot extrinsics. */
-const ed25519SignaturePrefix = '0x01'
+/** Ed25519 MultiSignature prefix byte for Polkadot extrinsics (0x00=Ed25519, 0x01=Sr25519, 0x02=Ecdsa). */
+const ed25519SignaturePrefix = '0x00'
 
 let signingId = 0
 
