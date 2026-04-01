@@ -115,6 +115,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
                 txInputData,
                 walletCore,
                 chain,
+                keysignPayload: payload,
               }).map(value => Buffer.from(value).toString('hex'))
             )
 
@@ -140,6 +141,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
                 chain,
                 publicKey,
                 signatures: signaturesRecord,
+                keysignPayload: payload,
               })
             )
 

@@ -30,6 +30,7 @@ import {
   CosmosCoinSchema,
   SignAmino,
   SignAminoSchema,
+  SignBitcoin,
   SignDirect,
   SignDirectSchema,
   SignSolana,
@@ -44,6 +45,8 @@ import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { normalizeNonEmptyString } from '@vultisig/lib-utils/string/normalizeNonEmptyString'
 import { toUtf8String } from 'ethers'
 import { hexToString } from 'viem'
+
+import { buildSignBitcoinFromPsbt } from '@vultisig/core-chain/chains/utxo/tx/buildSignBitcoinFromPsbt'
 
 import { getTxAmount } from '../core/amount'
 import { CustomTxData } from '../core/customTxData'
@@ -437,6 +440,19 @@ export const buildSendTxKeysignPayload = async ({
     psbt: () => undefined,
   })
 
+  const bitcoinPayload = matchRecordUnion<
+    CustomTxData,
+    SignBitcoin | undefined
+  >(customTxData, {
+    regular: () => undefined,
+    solana: () => undefined,
+    psbt: psbt =>
+      buildSignBitcoinFromPsbt({
+        psbt,
+        senderAddress: coin.address,
+      }),
+  })
+
   const signData: KeysignPayload['signData'] =
     aminoPayload !== undefined
       ? { case: 'signAmino', value: aminoPayload }
@@ -451,7 +467,9 @@ export const buildSendTxKeysignPayload = async ({
                   tonMessages: signTonPayload.tonMessages,
                 }),
               }
-            : { case: undefined, value: undefined }
+            : bitcoinPayload !== undefined
+              ? { case: 'signBitcoin', value: bitcoinPayload }
+              : { case: undefined, value: undefined }
 
   if (chain === Chain.Ton && memo && signTonPayload === undefined) {
     validateTonComment(memo)
@@ -490,7 +508,10 @@ export const buildSendTxKeysignPayload = async ({
     psbt: 'psbt' in customTxData ? customTxData.psbt : undefined,
   })
 
-  if (isChainOfKind(chain, 'utxo')) {
+  if (
+    isChainOfKind(chain, 'utxo') &&
+    keysignPayload.signData.case !== 'signBitcoin'
+  ) {
     keysignPayload = refineKeysignUtxo({
       keysignPayload,
       walletCore,

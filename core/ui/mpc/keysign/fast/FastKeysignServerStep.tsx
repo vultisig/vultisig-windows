@@ -73,6 +73,7 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
                 txInputData,
                 walletCore,
                 chain,
+                keysignPayload,
               }).map(value => Buffer.from(value).toString('hex'))
             )
             .sort()
