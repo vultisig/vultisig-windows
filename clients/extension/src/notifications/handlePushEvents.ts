@@ -49,7 +49,7 @@ declare const self: {
       {
         url: string
         focus: () => Promise<void>
-        navigate: (url: string) => void
+        navigate: (url: string) => Promise<{ url: string } | null>
       }[]
     >
     openWindow: (url: string) => Promise<void>
@@ -341,7 +341,7 @@ export const handlePushEvents = () => {
 
         if (existingClient) {
           await existingClient.focus()
-          existingClient.navigate(extensionUrl)
+          await existingClient.navigate(extensionUrl)
           return
         }
 
