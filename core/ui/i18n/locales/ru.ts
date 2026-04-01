@@ -351,6 +351,9 @@ export const ru = {
       vaultShares: 'Ваше хранилище содержит 2 доли,',
       sentTo: 'Отправлено на {{email}}.',
       changeEmailAndRestartKeygen: 'Изменить e-mail и перезапустить Keygen',
+      setNewStandard:
+        'Вы готовы использовать новый стандарт электронных кошельков.',
+      wellDone: 'Отличная работа',
     },
     connectingWithServer: 'Подключение к серверу...',
     createVault: {
@@ -1367,4 +1370,10 @@ export const ru = {
   agent_reauth_description:
     'В целях безопасности авторизация периодически истекает. Пожалуйста, подтвердите свое согласие, чтобы продолжить использование Vulti Agent.',
   authorize: 'Авторизовать',
+  enable_tss_batching: 'Включить пакетную обработку TSS',
+  keygen_protocol_done: 'Сделанный',
+  keygen_protocol_running: 'Бег',
+  notification_sent_successfully: 'Уведомление успешно отправлено!',
+  resend_notification: 'Повторная отправка уведомления',
+  resend_notification_in: 'Повторно отправить уведомление через {{time}}',
 }

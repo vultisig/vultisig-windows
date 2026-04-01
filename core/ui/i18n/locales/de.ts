@@ -55,6 +55,9 @@ export const de = {
       vaultShares: 'Ihr Tresor enthält 2 Aktien.',
       sentTo: 'Gesendet an {{email}}.',
       changeEmailAndRestartKeygen: 'E-Mail ändern und Keygen neu starten',
+      setNewStandard:
+        'Sie sind bereit, einen neuen Wallet-Standard zu verwenden.',
+      wellDone: 'Gut gemacht',
     },
     createVault: {
       availablePlatforms: {
@@ -1406,4 +1409,11 @@ export const de = {
   agent_reauth_description:
     'Aus Sicherheitsgründen läuft die Autorisierung regelmäßig ab. Bitte bestätigen Sie, dass Sie Vulti Agent weiterhin verwenden möchten.',
   authorize: 'Autorisieren',
+  enable_tss_batching: 'TSS-Batching aktivieren',
+  keygen_protocol_done: 'Erledigt',
+  keygen_protocol_running: 'Läuft',
+  notification_sent_successfully:
+    'Die Benachrichtigung wurde erfolgreich versendet!',
+  resend_notification: 'Benachrichtigung erneut senden',
+  resend_notification_in: 'Benachrichtigung in {{time}} erneut senden',
 }
