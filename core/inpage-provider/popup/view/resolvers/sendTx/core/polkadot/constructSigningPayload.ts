@@ -20,7 +20,7 @@ export const constructPolkadotSigningPayload = (
   const method = hexToU8a(payload.method)
   const era = hexToU8a(payload.era)
   const nonce = compactToU8a(parseInt(payload.nonce, 16))
-  const tip = compactToU8a(BigInt(payload.tip))
+  const tip = compactToU8a(payload.tip ? BigInt(payload.tip) : 0n)
 
   const specVersion = new Uint8Array(4)
   new DataView(specVersion.buffer).setUint32(
