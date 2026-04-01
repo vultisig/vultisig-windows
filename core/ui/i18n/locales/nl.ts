@@ -355,6 +355,9 @@ export const nl = {
       vaultShares: 'Je kluis heeft 2 shares,',
       sentTo: 'Verzonden naar {{email}}.',
       changeEmailAndRestartKeygen: 'E-mail wijzigen en keygen herstarten',
+      setNewStandard:
+        'Je bent klaar om een ​​nieuwe portemonneestandaard te gebruiken.',
+      wellDone: 'Goed gedaan',
     },
     connectingWithServer: 'Verbinden met server...',
     createVault: {
@@ -1373,4 +1376,10 @@ export const nl = {
   agent_reauth_description:
     'Om veiligheidsredenen verloopt de autorisatie periodiek. Bevestig alstublieft dat u Vulti Agent wilt blijven gebruiken.',
   authorize: 'Autoriseren',
+  enable_tss_batching: 'TSS-batchverwerking inschakelen',
+  keygen_protocol_done: 'Klaar',
+  keygen_protocol_running: 'Rennen',
+  notification_sent_successfully: 'De melding is succesvol verzonden!',
+  resend_notification: 'Melding opnieuw verzenden',
+  resend_notification_in: 'Melding opnieuw verzenden over {{time}}',
 }

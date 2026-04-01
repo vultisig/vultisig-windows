@@ -63,6 +63,8 @@ export const ko = {
       vaultShares: '귀하의 금고에는 2주가 보관되어 있습니다.',
       sentTo: '({{email}})로 보내세요',
       changeEmailAndRestartKeygen: '다른 이메일을 사용하세요',
+      setNewStandard: '이제 새로운 지갑 표준을 사용할 준비가 되었습니다.',
+      wellDone: '잘하셨어요',
     },
     createVault: {
       availablePlatforms: {
@@ -1359,4 +1361,10 @@ export const ko = {
   agent_reauth_description:
     '보안상의 이유로 인증은 주기적으로 만료됩니다. Vulti Agent를 계속 사용하시려면 확인해 주십시오.',
   authorize: '승인',
+  enable_tss_batching: 'TSS 배치 활성화',
+  keygen_protocol_done: '완료',
+  keygen_protocol_running: '달리기',
+  notification_sent_successfully: '알림이 성공적으로 전송되었습니다!',
+  resend_notification: '알림 재전송',
+  resend_notification_in: '{{time}} 후에 알림을 다시 보내주세요',
 }
