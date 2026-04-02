@@ -5,6 +5,7 @@ import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { getChainKind, isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { CosmosMsgType } from '@vultisig/core-chain/chains/cosmos/cosmosMsgTypes'
+import { polkadotConfig } from '@vultisig/core-chain/chains/polkadot/config'
 import { getPsbtTransferInfo } from '@vultisig/core-chain/chains/utxo/tx/getPsbtTransferInfo'
 import { getChainSpecific } from '@vultisig/core-mpc/keysign/chainSpecific'
 import {
@@ -16,7 +17,10 @@ import { validateTonComment } from '@vultisig/core-mpc/keysign/signingInputs/res
 import { getKeysignUtxoInfo } from '@vultisig/core-mpc/keysign/utxo/getKeysignUtxoInfo'
 import { toCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { OneInchSwapPayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/1inch_swap_payload_pb'
-import { TransactionType } from '@vultisig/core-mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
+import {
+  PolkadotSpecificSchema,
+  TransactionType,
+} from '@vultisig/core-mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import {
   KeysignPayload,
   KeysignPayloadSchema,
@@ -151,6 +155,7 @@ export const buildSendTxKeysignPayload = async ({
         }),
       psbt: psbt =>
         getPsbtTransferInfo(psbt, coin.address).recipient ?? undefined,
+      polkadot: () => undefined,
     }
   )
 
@@ -201,6 +206,7 @@ export const buildSendTxKeysignPayload = async ({
         }
         return undefined
       },
+      polkadot: ({ signerPayload }) => JSON.stringify(signerPayload),
     }
   )
 
@@ -289,6 +295,7 @@ export const buildSendTxKeysignPayload = async ({
     },
     solana: () => ({ case: undefined }),
     psbt: () => ({ case: undefined }),
+    polkadot: () => ({ case: undefined }),
   })
 
   const swapPayload = matchRecordUnion<
@@ -335,6 +342,7 @@ export const buildSendTxKeysignPayload = async ({
         raw: () => ({ case: undefined }),
       }),
     psbt: () => ({ case: undefined }),
+    polkadot: () => ({ case: undefined }),
   })
 
   const aminoPayload = matchRecordUnion<CustomTxData, SignAmino | undefined>(
@@ -361,6 +369,7 @@ export const buildSendTxKeysignPayload = async ({
       },
       solana: () => undefined,
       psbt: () => undefined,
+      polkadot: () => undefined,
     }
   )
 
@@ -385,6 +394,7 @@ export const buildSendTxKeysignPayload = async ({
       },
       solana: () => undefined,
       psbt: () => undefined,
+      polkadot: () => undefined,
     }
   )
 
@@ -410,6 +420,7 @@ export const buildSendTxKeysignPayload = async ({
         return undefined
       },
       psbt: () => undefined,
+      polkadot: () => undefined,
     }
   )
 
@@ -435,6 +446,7 @@ export const buildSendTxKeysignPayload = async ({
     },
     solana: () => undefined,
     psbt: () => undefined,
+    polkadot: () => undefined,
   })
 
   const signData: KeysignPayload['signData'] =
@@ -471,24 +483,41 @@ export const buildSendTxKeysignPayload = async ({
     signData,
   })
 
-  keysignPayload.blockchainSpecific = await getChainSpecific({
-    keysignPayload,
-    walletCore,
-    feeSettings: feeSettings ?? undefined,
-    thirdPartyGasLimitEstimation,
-    isDeposit: matchRecordUnion<CustomTxData, boolean>(customTxData, {
-      regular: ({ transactionDetails, isDeposit }) =>
-        isDeposit ||
-        transactionDetails.msgPayload?.case ===
-          CosmosMsgType.THORCHAIN_MSG_DEPOSIT,
-      solana: () => false,
-      psbt: () => false,
-    }),
-    transactionType: getTransactionType(),
-    timeoutTimestamp: getTimeoutTimestamp(),
-    ...getTronMeta(),
-    psbt: 'psbt' in customTxData ? customTxData.psbt : undefined,
-  })
+  if ('polkadot' in customTxData) {
+    const sp = customTxData.polkadot.signerPayload
+    keysignPayload.blockchainSpecific = {
+      case: 'polkadotSpecific',
+      value: create(PolkadotSpecificSchema, {
+        recentBlockHash: sp.blockHash,
+        nonce: BigInt(parseInt(sp.nonce, 16)),
+        currentBlockNumber: String(parseInt(sp.blockNumber, 16)),
+        specVersion: parseInt(sp.specVersion, 16),
+        transactionVersion: parseInt(sp.transactionVersion, 16),
+        genesisHash: sp.genesisHash,
+        gas: polkadotConfig.fee,
+      }),
+    }
+  } else {
+    keysignPayload.blockchainSpecific = await getChainSpecific({
+      keysignPayload,
+      walletCore,
+      feeSettings: feeSettings ?? undefined,
+      thirdPartyGasLimitEstimation,
+      isDeposit: matchRecordUnion<CustomTxData, boolean>(customTxData, {
+        regular: ({ transactionDetails, isDeposit }) =>
+          isDeposit ||
+          transactionDetails.msgPayload?.case ===
+            CosmosMsgType.THORCHAIN_MSG_DEPOSIT,
+        solana: () => false,
+        psbt: () => false,
+        polkadot: () => false,
+      }),
+      transactionType: getTransactionType(),
+      timeoutTimestamp: getTimeoutTimestamp(),
+      ...getTronMeta(),
+      psbt: 'psbt' in customTxData ? customTxData.psbt : undefined,
+    })
+  }
 
   if (isChainOfKind(chain, 'utxo')) {
     keysignPayload = refineKeysignUtxo({
