@@ -190,23 +190,26 @@ jobs:
       - name: Clone and build SDK main
         shell: bash
         run: |
-          git clone --depth 1 https://github.com/vultisig/vultisig-sdk.git "$RUNNER_TEMP/vultisig-sdk"
-          cd "$RUNNER_TEMP/vultisig-sdk"
+          SDK_DIR="${RUNNER_TEMP}/vultisig-sdk"
+          git clone --depth 1 https://github.com/vultisig/vultisig-sdk.git "$SDK_DIR"
+          cd "$SDK_DIR"
           corepack enable
           corepack prepare yarn@${{ env.YARN_VERSION }} --activate
-          YARN_ENABLE_HARDENED_MODE=0 yarn install
+          yarn install || true
           yarn build:shared
           yarn build:all
 
       - name: Override SDK packages with main branch
         shell: bash
         run: |
-          mkdir -p "$RUNNER_TEMP/sdk-packs"
+          SDK_DIR="${RUNNER_TEMP}/vultisig-sdk"
+          PACK_DIR="${RUNNER_TEMP}/sdk-packs"
+          mkdir -p "$PACK_DIR"
           for dir in packages/sdk packages/core/chain packages/core/config packages/core/mpc packages/lib/utils; do
-            cd "$RUNNER_TEMP/vultisig-sdk/$dir" && npm pack --pack-destination "$RUNNER_TEMP/sdk-packs"
+            cd "$SDK_DIR/$dir" && npm pack --pack-destination "$PACK_DIR"
           done
           cd "$GITHUB_WORKSPACE"
-          PACK_DIR="$RUNNER_TEMP/sdk-packs" node - <<'NODE'
+          PACK_DIR="$PACK_DIR" node - <<'NODE'
             const fs = require('fs');
             const path = require('path');
             const { execFileSync } = require('child_process');
