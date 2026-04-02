@@ -187,6 +187,45 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
+      - name: Clone and build SDK main
+        run: |
+          git clone --depth 1 https://github.com/vultisig/vultisig-sdk.git /tmp/vultisig-sdk
+          cd /tmp/vultisig-sdk
+          corepack enable
+          corepack prepare yarn@${{ env.YARN_VERSION }} --activate
+          yarn install
+          yarn build:shared
+          yarn build:all
+
+      - name: Override SDK packages with main branch
+        run: |
+          mkdir -p /tmp/sdk-packs
+          for dir in packages/sdk packages/core/chain packages/core/config packages/core/mpc packages/lib/utils; do
+            cd /tmp/vultisig-sdk/$dir && npm pack --pack-destination /tmp/sdk-packs
+          done
+          cd $GITHUB_WORKSPACE
+          PACK_DIR=/tmp/sdk-packs node - <<'NODE'
+            const fs = require('fs');
+            const path = require('path');
+            const { execFileSync } = require('child_process');
+            const packDir = process.env.PACK_DIR;
+            const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+            const packs = fs.readdirSync(packDir).filter(f => f.endsWith('.tgz'));
+            const resolutions = pkg.resolutions || {};
+            for (const tgz of packs) {
+              const manifest = execFileSync(
+                'tar',
+                ['-xzf', path.join(packDir, tgz), '-O', 'package/package.json'],
+                { encoding: 'utf8' }
+              );
+              const name = JSON.parse(manifest).name;
+              resolutions[name] = path.join(packDir, tgz);
+            }
+            pkg.resolutions = resolutions;
+            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+          NODE
+          YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn install
+
       - name: Build wails
         uses: dAppServer/wails-build-action@main
         id: build
