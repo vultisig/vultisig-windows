@@ -189,13 +189,17 @@ jobs:
 
       - name: Clone and build SDK main
         shell: bash
+        env:
+          YARN_ENABLE_HARDENED_MODE: '0'
         run: |
           SDK_DIR="${RUNNER_TEMP}/vultisig-sdk"
           git clone --depth 1 https://github.com/vultisig/vultisig-sdk.git "$SDK_DIR"
           cd "$SDK_DIR"
           corepack enable
           corepack prepare yarn@${{ env.YARN_VERSION }} --activate
-          yarn install || true
+          set +e
+          yarn install
+          set -e
           yarn build:shared
           yarn build:all
 
