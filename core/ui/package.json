@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@bufbuild/protobuf": "^2.11.0",
-    "@core/inpage-provider": "workspace:^",
     "@cosmjs/encoding": "^0.38.1",
     "@floating-ui/react": "^0.27.19",
     "@hookform/resolvers": "^5.2.2",

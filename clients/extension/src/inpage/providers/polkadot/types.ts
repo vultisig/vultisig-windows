@@ -1,4 +1,4 @@
-export type { PolkadotSignerPayloadJSON } from '@core/inpage-provider/popup/view/resolvers/sendTx/core/polkadot/PolkadotSignerPayload'
+export type { PolkadotSignerPayloadJSON } from '@vultisig/core-chain/chains/polkadot/dapp/PolkadotSignerPayload'
 
 export type PolkadotInjectedAccount = {
   address: string
