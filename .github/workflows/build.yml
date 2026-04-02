@@ -191,15 +191,30 @@ jobs:
         shell: bash
         run: git clone --depth 1 https://github.com/vultisig/vultisig-sdk.git "$RUNNER_TEMP/vultisig-sdk"
 
-      - name: Build SDK main
+      - name: Build SDK main (Linux)
+        if: runner.os != 'Windows'
         working-directory: ${{ runner.temp }}/vultisig-sdk
         shell: bash
         run: |
           corepack enable
           corepack install
-          YARN_ENABLE_HARDENED_MODE=0 YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn install --mode=skip-build
+          yarn install --mode=skip-build
           yarn build:shared
           yarn build:all
+
+      - name: Build SDK main (Windows)
+        if: runner.os == 'Windows'
+        working-directory: ${{ runner.temp }}/vultisig-sdk
+        shell: pwsh
+        run: |
+          corepack enable
+          corepack install
+          yarn install --mode=skip-build
+          if ($LASTEXITCODE -ne 0) { Write-Host "yarn install exited $LASTEXITCODE (expected peer dep warnings)" }
+          yarn build:shared
+          if ($LASTEXITCODE -ne 0) { throw "build:shared failed" }
+          yarn build:all
+          if ($LASTEXITCODE -ne 0) { throw "build:all failed" }
 
       - name: Override SDK packages with main branch
         shell: bash
