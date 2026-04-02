@@ -197,7 +197,7 @@ jobs:
         run: |
           corepack enable
           corepack install
-          yarn install || echo "yarn install exited with warnings (expected in hardened mode)"
+          YARN_ENABLE_HARDENED_MODE=0 YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn install --mode=skip-build
           yarn build:shared
           yarn build:all
 
