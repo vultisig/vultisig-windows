@@ -194,7 +194,7 @@ jobs:
           cd "$RUNNER_TEMP/vultisig-sdk"
           corepack enable
           corepack prepare yarn@${{ env.YARN_VERSION }} --activate
-          YARN_ENABLE_HARDENED_MODE=0 yarn install
+          yarn install
           yarn build:shared
           yarn build:all
 
