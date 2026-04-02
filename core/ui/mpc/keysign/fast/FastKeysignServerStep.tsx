@@ -1,5 +1,5 @@
-import { constructPolkadotSigningPayload } from '@core/inpage-provider/popup/view/resolvers/sendTx/core/polkadot/constructSigningPayload'
-import { PolkadotSignerPayloadJSON } from '@core/inpage-provider/popup/view/resolvers/sendTx/core/polkadot/PolkadotSignerPayload'
+import { constructPolkadotSigningPayload } from '@vultisig/core-chain/chains/polkadot/dapp/constructSigningPayload'
+import { PolkadotSignerPayloadJSON } from '@vultisig/core-chain/chains/polkadot/dapp/PolkadotSignerPayload'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
