@@ -1,4 +1,5 @@
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
+import { NotificationBannerProvider } from '@core/ui/notifications/NotificationBannerProvider'
 import { PasscodeGuard } from '@core/ui/passcodeEncryption/guard/PasscodeGuard'
 import { StartupSplashProvider } from '@core/ui/product/startupSplash'
 import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProvider'
@@ -60,13 +61,15 @@ export const CoreApp = ({
             <Wrap wrap={MigrationsManager}>
               <StorageDependant>
                 <ToastProvider>
-                  <ResponsivenessProvider>
-                    <Container>
-                      {children}
-                      {!isLimited && <VaultDependentContent />}
-                    </Container>
-                    <PasscodeGuard />
-                  </ResponsivenessProvider>
+                  <NotificationBannerProvider>
+                    <ResponsivenessProvider>
+                      <Container>
+                        {children}
+                        {!isLimited && <VaultDependentContent />}
+                      </Container>
+                      <PasscodeGuard />
+                    </ResponsivenessProvider>
+                  </NotificationBannerProvider>
                 </ToastProvider>
               </StorageDependant>
             </Wrap>

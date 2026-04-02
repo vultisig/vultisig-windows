@@ -1,4 +1,7 @@
 {
+  "ignoreIssues": {
+    "core/ui/notifications/NotificationBannerProvider.tsx": ["types"]
+  },
   "ignore": [
     "clients/desktop/wailsjs/**",
     "core/ui/transaction-history/**",

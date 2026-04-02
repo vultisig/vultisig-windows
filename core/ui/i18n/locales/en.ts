@@ -615,6 +615,7 @@ export const en = {
   keygen_protocol_running: 'Running',
   keys: 'Keys',
   keysign: 'Keysign',
+  keysign_request: 'Keysign Request',
   label: 'Label',
   language: 'Language',
   learnMore: 'Learn More',
