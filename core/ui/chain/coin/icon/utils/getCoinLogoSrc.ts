@@ -1,5 +1,5 @@
 export const getCoinLogoSrc = (logo: string) => {
-  if (logo.startsWith('https://')) {
+  if (logo.startsWith('https://') || logo.startsWith('data:')) {
     return logo
   }
 

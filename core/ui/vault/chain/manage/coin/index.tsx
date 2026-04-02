@@ -86,34 +86,32 @@ export const ManageVaultChainCoinsPage = () => {
     addToCoinFinderIgnore.isPending ||
     removeFromCoinFinderIgnore.isPending
 
-  const coins = useMemo(() => {
-    const currentChainCoins = sortCoinsAlphabetically(knownTokens[currentchain])
-    const whitelistedCoins = sortCoinsAlphabetically(
-      whitelistedQuery.data || []
-    )
-
-    return withoutDuplicates(
-      [...currentChainCoins, ...whitelistedCoins],
-      areEqualCoins
-    )
+  const allCoins = useMemo(() => {
+    const known = sortCoinsAlphabetically(knownTokens[currentchain])
+    const whitelisted = whitelistedQuery.data || []
+    return withoutDuplicates([...known, ...whitelisted], areEqualCoins)
   }, [currentchain, whitelistedQuery.data])
+
+  const maxInitialTokens = 200
 
   const filteredCoins = useMemo(() => {
     const normalizedQuery = search.trim().toLowerCase()
 
-    const matching = !normalizedQuery
-      ? coins
-      : coins.filter(coin => coinMatchesTokenSearch(coin, normalizedQuery))
+    const source = normalizedQuery
+      ? allCoins.filter(coin => coinMatchesTokenSearch(coin, normalizedQuery))
+      : allCoins.slice(0, maxInitialTokens)
 
-    const selected = matching.filter(coin =>
-      currentCoins.some(c => areEqualCoins(c, coin))
+    const selectedSet = new Set(
+      currentCoins.map(c => `${c.chain}:${c.id ?? ''}`)
     )
-    const unselected = matching.filter(
-      coin => !currentCoins.some(c => areEqualCoins(c, coin))
-    )
+    const isSelected = (coin: Coin) =>
+      selectedSet.has(`${coin.chain}:${coin.id ?? ''}`)
+
+    const selected = source.filter(isSelected)
+    const unselected = source.filter(coin => !isSelected(coin))
 
     return [...selected, ...unselected]
-  }, [coins, search, currentCoins])
+  }, [allCoins, search, currentCoins])
 
   const handleToggle = async (coin: Coin) => {
     if (isLoading) return
