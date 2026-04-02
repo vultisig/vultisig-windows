@@ -4,6 +4,10 @@ import { runInpageProviderBridgeBackgroundAgent } from '@core/inpage-provider/br
 import { handlePushEvents } from '../notifications/handlePushEvents'
 import { getIsSidePanelEnabled } from '../storage/isSidePanelEnabled'
 
+// Push / notificationclick / pushsubscriptionchange must register during SW
+// startup; run before other background agents.
+handlePushEvents()
+
 if (!navigator.userAgent.toLowerCase().includes('firefox')) {
   ;[
     Object,
@@ -24,8 +28,6 @@ if (!navigator.userAgent.toLowerCase().includes('firefox')) {
 runInpageProviderBridgeBackgroundAgent()
 
 runBackgroundEventsAgent()
-
-handlePushEvents()
 
 if (chrome.sidePanel) {
   getIsSidePanelEnabled().then(enabled =>
