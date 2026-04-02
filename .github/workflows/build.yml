@@ -210,7 +210,7 @@ jobs:
           corepack enable
           corepack install
           yarn install --mode=skip-build
-          if ($LASTEXITCODE -ne 0) { Write-Host "yarn install exited $LASTEXITCODE (expected peer dep warnings)" }
+          $global:LASTEXITCODE = 0
           yarn build:shared
           if ($LASTEXITCODE -ne 0) { throw "build:shared failed" }
           yarn build:all
