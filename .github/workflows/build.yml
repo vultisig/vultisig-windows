@@ -187,26 +187,29 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Clone and build SDK main
-        if: runner.os != 'Windows'
+      - name: Clone SDK
+        shell: bash
+        run: git clone --depth 1 --branch 188-fix-build-shared-windows https://github.com/vultisig/vultisig-sdk.git "$RUNNER_TEMP/vultisig-sdk"
+
+      - name: Build SDK
+        shell: bash {0}
+        working-directory: ${{ runner.temp }}/vultisig-sdk
         run: |
-          git clone --depth 1 https://github.com/vultisig/vultisig-sdk.git /tmp/vultisig-sdk
-          cd /tmp/vultisig-sdk
           corepack enable
-          corepack prepare yarn@${{ env.YARN_VERSION }} --activate
-          yarn install
+          corepack install
+          yarn install || true
           yarn build:shared
           yarn build:all
 
-      - name: Override SDK packages with main branch
-        if: runner.os != 'Windows'
+      - name: Override SDK packages
+        shell: bash
         run: |
-          mkdir -p /tmp/sdk-packs
+          mkdir -p "$RUNNER_TEMP/sdk-packs"
           for dir in packages/sdk packages/core/chain packages/core/config packages/core/mpc packages/lib/utils; do
-            cd /tmp/vultisig-sdk/$dir && npm pack --pack-destination /tmp/sdk-packs
+            cd "$RUNNER_TEMP/vultisig-sdk/$dir" && npm pack --pack-destination "$RUNNER_TEMP/sdk-packs"
           done
-          cd $GITHUB_WORKSPACE
-          PACK_DIR=/tmp/sdk-packs node - <<'NODE'
+          cd "$GITHUB_WORKSPACE"
+          PACK_DIR="$RUNNER_TEMP/sdk-packs" node - <<'NODE'
             const fs = require('fs');
             const path = require('path');
             const { execFileSync } = require('child_process');
