@@ -187,42 +187,26 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Clone SDK main
-        shell: bash
-        run: git clone --depth 1 https://github.com/vultisig/vultisig-sdk.git "$RUNNER_TEMP/vultisig-sdk"
-
-      - name: Build SDK main (Linux)
+      - name: Clone and build SDK main
         if: runner.os != 'Windows'
-        working-directory: ${{ runner.temp }}/vultisig-sdk
-        shell: bash
         run: |
+          git clone --depth 1 https://github.com/vultisig/vultisig-sdk.git /tmp/vultisig-sdk
+          cd /tmp/vultisig-sdk
           corepack enable
-          corepack install
-          yarn install --mode=skip-build
-          yarn build:shared
-          yarn build:all
-
-      - name: Install and build SDK main (Windows)
-        if: runner.os == 'Windows'
-        working-directory: ${{ runner.temp }}/vultisig-sdk
-        shell: bash {0}
-        run: |
-          set -x
-          corepack enable
-          corepack install
-          yarn install || true
+          corepack prepare yarn@${{ env.YARN_VERSION }} --activate
+          yarn install
           yarn build:shared
           yarn build:all
 
       - name: Override SDK packages with main branch
-        shell: bash
+        if: runner.os != 'Windows'
         run: |
-          mkdir -p "$RUNNER_TEMP/sdk-packs"
+          mkdir -p /tmp/sdk-packs
           for dir in packages/sdk packages/core/chain packages/core/config packages/core/mpc packages/lib/utils; do
-            cd "$RUNNER_TEMP/vultisig-sdk/$dir" && npm pack --pack-destination "$RUNNER_TEMP/sdk-packs"
+            cd /tmp/vultisig-sdk/$dir && npm pack --pack-destination /tmp/sdk-packs
           done
-          cd "$GITHUB_WORKSPACE"
-          PACK_DIR="$RUNNER_TEMP/sdk-packs" node - <<'NODE'
+          cd $GITHUB_WORKSPACE
+          PACK_DIR=/tmp/sdk-packs node - <<'NODE'
             const fs = require('fs');
             const path = require('path');
             const { execFileSync } = require('child_process');
