@@ -220,13 +220,14 @@ jobs:
             const packs = fs.readdirSync(packDir).filter(f => f.endsWith('.tgz'));
             const resolutions = pkg.resolutions || {};
             for (const tgz of packs) {
+              const tgzPath = path.join(packDir, tgz);
               const manifest = execFileSync(
                 'tar',
-                ['-xzf', path.join(packDir, tgz), '-O', 'package/package.json'],
+                ['--force-local', '-xzf', tgzPath, '-O', 'package/package.json'],
                 { encoding: 'utf8' }
               );
               const name = JSON.parse(manifest).name;
-              resolutions[name] = path.join(packDir, tgz);
+              resolutions[name] = tgzPath;
             }
             pkg.resolutions = resolutions;
             fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
