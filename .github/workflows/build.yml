@@ -189,7 +189,7 @@ jobs:
 
       - name: Clone SDK
         shell: bash
-        run: git clone --depth 1 --branch 188-fix-build-shared-windows https://github.com/vultisig/vultisig-sdk.git "$RUNNER_TEMP/vultisig-sdk"
+        run: git clone --depth 1 https://github.com/vultisig/vultisig-sdk.git "$RUNNER_TEMP/vultisig-sdk"
 
       - name: Build SDK
         shell: bash {0}
