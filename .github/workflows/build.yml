@@ -187,6 +187,53 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
+      - name: Clone SDK
+        shell: bash
+        run: git clone --depth 1 https://github.com/vultisig/vultisig-sdk.git "$RUNNER_TEMP/vultisig-sdk"
+
+      - name: Build SDK
+        shell: bash {0}
+        working-directory: ${{ runner.temp }}/vultisig-sdk
+        run: |
+          corepack enable
+          corepack install
+          yarn install || true
+          yarn build:shared
+          if [ "$RUNNER_OS" != "Windows" ]; then
+            yarn build:all
+          fi
+
+      - name: Override SDK packages
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/sdk-packs"
+          for dir in packages/core/chain packages/core/config packages/core/mpc packages/lib/utils; do
+            cd "$RUNNER_TEMP/vultisig-sdk/$dir" && npm pack --pack-destination "$RUNNER_TEMP/sdk-packs"
+          done
+          cd "$GITHUB_WORKSPACE"
+          PACK_DIR="$RUNNER_TEMP/sdk-packs" node - <<'NODE'
+            const fs = require('fs');
+            const path = require('path');
+            const { execFileSync } = require('child_process');
+            const packDir = process.env.PACK_DIR;
+            const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+            const packs = fs.readdirSync(packDir).filter(f => f.endsWith('.tgz'));
+            const resolutions = pkg.resolutions || {};
+            for (const tgz of packs) {
+              const tgzPath = path.join(packDir, tgz);
+              const manifest = execFileSync(
+                'tar',
+                ['--force-local', '-xzf', tgzPath, '-O', 'package/package.json'],
+                { encoding: 'utf8' }
+              );
+              const name = JSON.parse(manifest).name;
+              resolutions[name] = tgzPath;
+            }
+            pkg.resolutions = resolutions;
+            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+          NODE
+          YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn install
+
       - name: Build wails
         uses: dAppServer/wails-build-action@main
         id: build
