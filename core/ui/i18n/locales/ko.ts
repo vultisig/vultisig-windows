@@ -1367,4 +1367,9 @@ export const ko = {
   notification_sent_successfully: '알림이 성공적으로 전송되었습니다!',
   resend_notification: '알림 재전송',
   resend_notification_in: '{{time}} 후에 알림을 다시 보내주세요',
+  desktop_push_notification_enable_failed:
+    '푸시 알림을 활성화할 수 없습니다. 다시 시도해 주세요.',
+  desktop_push_notification_disable_failed:
+    '푸시 알림을 비활성화할 수 없습니다. 다시 시도해 주세요.',
+  keysign_request: '키사인 요청',
 }

@@ -1416,4 +1416,9 @@ export const de = {
     'Die Benachrichtigung wurde erfolgreich versendet!',
   resend_notification: 'Benachrichtigung erneut senden',
   resend_notification_in: 'Benachrichtigung in {{time}} erneut senden',
+  desktop_push_notification_enable_failed:
+    'Push-Benachrichtigungen konnten nicht aktiviert werden. Bitte versuchen Sie es erneut.',
+  desktop_push_notification_disable_failed:
+    'Push-Benachrichtigungen konnten nicht deaktiviert werden. Bitte versuchen Sie es erneut.',
+  keysign_request: 'Schlüsselsignaturanfrage',
 }

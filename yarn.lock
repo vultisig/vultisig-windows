@@ -565,6 +565,7 @@ __metadata:
     "@vultisig/core-config": "npm:0.9.1"
     "@vultisig/core-mpc": "npm:1.0.0"
     "@vultisig/lib-utils": "npm:0.9.1"
+    "@vultisig/sdk": "npm:0.11.0"
     "@wailsapp/runtime": "workspace:^"
     eslint: "npm:^9.39.2"
     eslint-plugin-jsx-a11y: "npm:^6.10.2"

@@ -1296,4 +1296,7 @@ export const zh = {
   notification_sent_successfully: '通知已成功发送！',
   resend_notification: '重新发送通知',
   resend_notification_in: '稍后重新发送通知 {{time}}',
+  desktop_push_notification_enable_failed: '无法启用推送通知。请重试。',
+  desktop_push_notification_disable_failed: '无法禁用推送通知。请重试。',
+  keysign_request: '密钥签名请求',
 }
