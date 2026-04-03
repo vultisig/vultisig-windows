@@ -1403,4 +1403,9 @@ export const es = {
   notification_sent_successfully: '¡Notificación enviada con éxito!',
   resend_notification: 'Reenviar notificación',
   resend_notification_in: 'Reenviar notificación en {{time}}',
+  desktop_push_notification_enable_failed:
+    'No se pudieron habilitar las notificaciones push. Inténtalo de nuevo.',
+  desktop_push_notification_disable_failed:
+    'No se pudieron desactivar las notificaciones push. Inténtalo de nuevo.',
+  keysign_request: 'Solicitud de clave',
 }

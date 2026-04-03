@@ -1382,4 +1382,9 @@ export const nl = {
   notification_sent_successfully: 'De melding is succesvol verzonden!',
   resend_notification: 'Melding opnieuw verzenden',
   resend_notification_in: 'Melding opnieuw verzenden over {{time}}',
+  desktop_push_notification_enable_failed:
+    'Pushmeldingen konden niet worden ingeschakeld. Probeer het opnieuw.',
+  desktop_push_notification_disable_failed:
+    'Pushmeldingen konden niet worden uitgeschakeld. Probeer het opnieuw.',
+  keysign_request: 'Sleutelondertekeningsverzoek',
 }

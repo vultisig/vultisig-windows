@@ -1376,4 +1376,9 @@ export const ru = {
   notification_sent_successfully: 'Уведомление успешно отправлено!',
   resend_notification: 'Повторная отправка уведомления',
   resend_notification_in: 'Повторно отправить уведомление через {{time}}',
+  desktop_push_notification_enable_failed:
+    'Не удалось включить push-уведомления. Пожалуйста, попробуйте еще раз.',
+  desktop_push_notification_disable_failed:
+    'Не удалось отключить push-уведомления. Пожалуйста, попробуйте еще раз.',
+  keysign_request: 'Запрос на подписание ключевого знака',
 }
