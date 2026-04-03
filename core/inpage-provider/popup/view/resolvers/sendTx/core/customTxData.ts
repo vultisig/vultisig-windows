@@ -1,5 +1,5 @@
 import { WalletCore } from '@trustwallet/wallet-core'
-import { Chain } from '@vultisig/core-chain/Chain'
+import { Chain, OtherChain } from '@vultisig/core-chain/Chain'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { cosmosFeeCoinDenom } from '@vultisig/core-chain/chains/cosmos/cosmosFeeCoinDenom'
 import { getEvmContractCallHexSignature } from '@vultisig/core-chain/chains/evm/contract/call/hexSignature'
@@ -17,6 +17,7 @@ import { getUrlBaseDomain } from '@vultisig/lib-utils/url/baseDomain'
 import { Psbt } from 'bitcoinjs-lib'
 
 import { IKeysignTransactionPayload, ITransactionPayload } from '../interfaces'
+import { PolkadotSignerPayloadJSON } from './polkadot/PolkadotSignerPayload'
 import { parseSolanaTx } from './solana/parser'
 import { SolanaTxData } from './solana/types/types'
 import { restrictPsbtToInputs } from './utxo/restrictPsbt'
@@ -24,6 +25,10 @@ import { restrictPsbtToInputs } from './utxo/restrictPsbt'
 type RegularTxData = IKeysignTransactionPayload & {
   isEvmContractCall?: boolean
   coin: Coin
+}
+
+export type PolkadotDappTxData = {
+  signerPayload: PolkadotSignerPayloadJSON
 }
 
 export type CustomTxData =
@@ -35,6 +40,9 @@ export type CustomTxData =
     }
   | {
       psbt: Psbt
+    }
+  | {
+      polkadot: PolkadotDappTxData
     }
 
 type GetCustomTxDataInput = {
@@ -113,6 +121,11 @@ export const getCustomTxData = ({
         }
       },
       serialized: async ({ data, chain, params }) => {
+        if (chain === OtherChain.Polkadot) {
+          const signerPayload = JSON.parse(data[0]) as PolkadotSignerPayloadJSON
+          return { polkadot: { signerPayload } }
+        }
+
         const publicKey = getPublicKey({
           chain,
           walletCore,
