@@ -202,29 +202,17 @@ jobs:
           yarn build:shared
           yarn build:all
 
-      - name: Install SDK dependencies (Windows)
+      - name: Install and build SDK main (Windows)
         if: runner.os == 'Windows'
         working-directory: ${{ runner.temp }}/vultisig-sdk
-        shell: bash
-        continue-on-error: true
+        shell: bash {0}
         run: |
+          set -x
           corepack enable
           corepack install
-          yarn install --mode=skip-build
-
-      - name: Build SDK packages (Windows)
-        if: runner.os == 'Windows'
-        working-directory: ${{ runner.temp }}/vultisig-sdk
-        shell: bash
-        run: |
-          echo "pwd: $(pwd)"
-          echo "ls package.json: $(ls package.json 2>&1)"
-          echo "node version: $(node --version)"
-          corepack enable
-          corepack install
-          echo "yarn version: $(yarn --version 2>&1)"
-          yarn build:shared 2>&1 || echo "build:shared exit code: $?"
-          yarn build:all 2>&1 || echo "build:all exit code: $?"
+          yarn install || true
+          yarn build:shared
+          yarn build:all
 
       - name: Override SDK packages with main branch
         shell: bash
