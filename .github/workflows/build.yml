@@ -199,13 +199,15 @@ jobs:
           corepack install
           yarn install || true
           yarn build:shared
-          yarn build:all
+          if [ "$RUNNER_OS" != "Windows" ]; then
+            yarn build:all
+          fi
 
       - name: Override SDK packages
         shell: bash
         run: |
           mkdir -p "$RUNNER_TEMP/sdk-packs"
-          for dir in packages/sdk packages/core/chain packages/core/config packages/core/mpc packages/lib/utils; do
+          for dir in packages/core/chain packages/core/config packages/core/mpc packages/lib/utils; do
             cd "$RUNNER_TEMP/vultisig-sdk/$dir" && npm pack --pack-destination "$RUNNER_TEMP/sdk-packs"
           done
           cd "$GITHUB_WORKSPACE"
