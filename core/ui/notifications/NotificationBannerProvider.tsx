@@ -5,14 +5,14 @@ import { createContext, useState } from 'react'
 import { NotificationBanner } from './NotificationBanner'
 
 /** Payload shown in {@link NotificationBanner}. */
-export type NotificationBannerData = {
+type NotificationBannerData = {
   title: string
   subtitle: string
   onAction: () => void
 }
 
 /** Context API for controlling the global notification banner. */
-export type NotificationBannerContextValue = {
+type NotificationBannerContextValue = {
   showBanner: (data: NotificationBannerData) => void
   dismissBanner: () => void
 }

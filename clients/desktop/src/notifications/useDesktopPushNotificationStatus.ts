@@ -22,5 +22,6 @@ export const useDesktopPushNotificationStatus = () => {
       )
       return isDesktopVaultRegistered(vaultId)
     },
+    staleTime: Number.POSITIVE_INFINITY,
   })
 }

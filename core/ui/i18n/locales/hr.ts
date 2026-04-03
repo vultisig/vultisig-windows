@@ -1379,4 +1379,9 @@ export const hr = {
   notification_sent_successfully: 'Obavijest je uspješno poslana!',
   resend_notification: 'Ponovno pošalji obavijest',
   resend_notification_in: 'Ponovno pošalji obavijest za {{time}}',
+  desktop_push_notification_enable_failed:
+    'Nije moguće omogućiti push obavijesti. Pokušajte ponovno.',
+  desktop_push_notification_disable_failed:
+    'Nije moguće onemogućiti push obavijesti. Pokušajte ponovno.',
+  keysign_request: 'Zahtjev za ključni znak',
 }

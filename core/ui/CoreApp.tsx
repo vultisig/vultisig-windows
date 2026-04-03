@@ -1,5 +1,4 @@
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
-import { NotificationBannerProvider } from '@core/ui/notifications/NotificationBannerProvider'
 import { PasscodeGuard } from '@core/ui/passcodeEncryption/guard/PasscodeGuard'
 import { StartupSplashProvider } from '@core/ui/product/startupSplash'
 import { ResponsivenessProvider } from '@core/ui/providers/ResponsivenessProvider'
@@ -18,6 +17,8 @@ import { ThemeProvider } from '@lib/ui/theme/ThemeProvider'
 import { ToastProvider } from '@lib/ui/toast/ToastProvider'
 import React from 'react'
 import styled from 'styled-components'
+
+import { NotificationBannerProvider } from './notifications/NotificationBannerProvider'
 
 type CoreAppProps = Partial<ChildrenProp> & {
   coreState: CoreState

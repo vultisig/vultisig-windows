@@ -1,6 +1,8 @@
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { useToast } from '@lib/ui/toast/ToastProvider'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { computeNotificationVaultId } from '@vultisig/sdk'
+import { useTranslation } from 'react-i18next'
 
 import {
   registerDesktopDevice,
@@ -17,6 +19,8 @@ import { getOrCreateDesktopNotificationToken } from './desktopNotificationToken'
 export const useEnableDesktopPushNotificationMutation = () => {
   const vault = useCurrentVault()
   const queryClient = useQueryClient()
+  const { addToast } = useToast()
+  const { t } = useTranslation()
 
   return useMutation({
     mutationFn: async () => {
@@ -52,6 +56,9 @@ export const useEnableDesktopPushNotificationMutation = () => {
         ],
       })
     },
+    onError: () => {
+      addToast({ message: t('desktop_push_notification_enable_failed') })
+    },
   })
 }
 
@@ -59,6 +66,8 @@ export const useEnableDesktopPushNotificationMutation = () => {
 export const useDisableDesktopPushNotificationMutation = () => {
   const vault = useCurrentVault()
   const queryClient = useQueryClient()
+  const { addToast } = useToast()
+  const { t } = useTranslation()
 
   return useMutation({
     mutationFn: async () => {
@@ -83,6 +92,9 @@ export const useDisableDesktopPushNotificationMutation = () => {
           vault.hexChainCode,
         ],
       })
+    },
+    onError: () => {
+      addToast({ message: t('desktop_push_notification_disable_failed') })
     },
   })
 }

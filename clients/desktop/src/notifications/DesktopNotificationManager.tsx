@@ -6,6 +6,7 @@ import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import {
+  desktopNotificationRegistrationsChangedEvent,
   getDesktopNotificationRegistrations,
   isDesktopVaultRegistered,
 } from './desktopNotificationStorage'
@@ -28,7 +29,6 @@ type ManagedDesktopNotificationSocket = {
 
 const initialReconnectDelayMs = 1000
 const maxReconnectDelayMs = 30000
-const registrationSyncIntervalMs = 5000
 
 /** Build the notification WebSocket URL for a registered vault. */
 const buildDesktopNotificationWebSocketUrl = ({
@@ -223,7 +223,9 @@ export const DesktopNotificationManager = () => {
         handleNotificationMessage(notification, ws)
       }
 
-      ws.onerror = () => {}
+      ws.onerror = event => {
+        console.debug('[DesktopNotificationManager] WebSocket error', event)
+      }
 
       ws.onclose = () => {
         const entry = connectionsRef.current.get(vaultId)
@@ -239,10 +241,11 @@ export const DesktopNotificationManager = () => {
 
         const prevDelay =
           reconnectDelayMsRef.current[vaultId] ?? initialReconnectDelayMs
+        const jitterMs = Math.random() * prevDelay * 0.5
         entry.reconnectTimer = setTimeout(() => {
           entry.reconnectTimer = undefined
           connectVault(vaultId, entry.partyName)
-        }, prevDelay)
+        }, prevDelay + jitterMs)
         reconnectDelayMsRef.current[vaultId] = Math.min(
           prevDelay * 2,
           maxReconnectDelayMs
@@ -266,13 +269,20 @@ export const DesktopNotificationManager = () => {
     }
 
     syncRegistrations()
-    const intervalId = setInterval(
-      syncRegistrations,
-      registrationSyncIntervalMs
+
+    const onRegistrationsChanged = () => {
+      syncRegistrations()
+    }
+    window.addEventListener(
+      desktopNotificationRegistrationsChangedEvent,
+      onRegistrationsChanged
     )
 
     return () => {
-      clearInterval(intervalId)
+      window.removeEventListener(
+        desktopNotificationRegistrationsChangedEvent,
+        onRegistrationsChanged
+      )
       const vaultIdsAtUnmount = [...connectionsMap.keys()]
       for (const vaultId of vaultIdsAtUnmount) {
         disconnectVault(vaultId)

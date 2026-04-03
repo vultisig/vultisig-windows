@@ -1407,4 +1407,9 @@ export const it = {
   notification_sent_successfully: 'Notifica inviata con successo!',
   resend_notification: 'Reinvia la notifica',
   resend_notification_in: 'Reinvia la notifica tra {{time}}',
+  desktop_push_notification_enable_failed:
+    'Impossibile abilitare le notifiche push. Riprova.',
+  desktop_push_notification_disable_failed:
+    'Impossibile disattivare le notifiche push. Riprova.',
+  keysign_request: 'Richiesta di firma digitale',
 }

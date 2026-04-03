@@ -322,6 +322,10 @@ export const en = {
   push_notifications: 'Push Notifications',
   push_notification_server_url: 'Push Notification Server URL',
   push_notification_server_placeholder: 'Leave empty for production default',
+  desktop_push_notification_enable_failed:
+    'Could not enable push notifications. Please try again.',
+  desktop_push_notification_disable_failed:
+    'Could not disable push notifications. Please try again.',
   expiration_date: 'Expiration Date',
   expiration_must_extend_by_exactly_one_year:
     'Expiration can only be extended by exactly 1 year',
