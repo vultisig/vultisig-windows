@@ -217,6 +217,8 @@ jobs:
         working-directory: ${{ runner.temp }}/vultisig-sdk
         shell: bash
         run: |
+          corepack enable
+          corepack install
           yarn build:shared
           yarn build:all
 
