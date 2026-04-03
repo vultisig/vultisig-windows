@@ -217,10 +217,14 @@ jobs:
         working-directory: ${{ runner.temp }}/vultisig-sdk
         shell: bash
         run: |
+          echo "pwd: $(pwd)"
+          echo "ls package.json: $(ls package.json 2>&1)"
+          echo "node version: $(node --version)"
           corepack enable
           corepack install
-          yarn build:shared
-          yarn build:all
+          echo "yarn version: $(yarn --version 2>&1)"
+          yarn build:shared 2>&1 || echo "build:shared exit code: $?"
+          yarn build:all 2>&1 || echo "build:all exit code: $?"
 
       - name: Override SDK packages with main branch
         shell: bash
