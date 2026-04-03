@@ -202,19 +202,23 @@ jobs:
           yarn build:shared
           yarn build:all
 
-      - name: Build SDK main (Windows)
+      - name: Install SDK dependencies (Windows)
         if: runner.os == 'Windows'
         working-directory: ${{ runner.temp }}/vultisig-sdk
-        shell: pwsh
+        shell: bash
+        continue-on-error: true
         run: |
-          $ErrorActionPreference = 'Continue'
           corepack enable
           corepack install
-          yarn install --mode=skip-build; $global:LASTEXITCODE = 0
+          yarn install --mode=skip-build
+
+      - name: Build SDK packages (Windows)
+        if: runner.os == 'Windows'
+        working-directory: ${{ runner.temp }}/vultisig-sdk
+        shell: bash
+        run: |
           yarn build:shared
-          if ($LASTEXITCODE -ne 0) { throw "build:shared failed" }
           yarn build:all
-          if ($LASTEXITCODE -ne 0) { throw "build:all failed" }
 
       - name: Override SDK packages with main branch
         shell: bash
