@@ -207,10 +207,10 @@ jobs:
         working-directory: ${{ runner.temp }}/vultisig-sdk
         shell: pwsh
         run: |
+          $ErrorActionPreference = 'Continue'
           corepack enable
           corepack install
-          yarn install --mode=skip-build
-          $global:LASTEXITCODE = 0
+          yarn install --mode=skip-build; $global:LASTEXITCODE = 0
           yarn build:shared
           if ($LASTEXITCODE -ne 0) { throw "build:shared failed" }
           yarn build:all
