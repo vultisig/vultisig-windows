@@ -660,6 +660,12 @@ export const en = {
   more: 'more',
   moreInfo: 'More Info',
   name: 'Name',
+  name_service_no_address_for_chain:
+    'Name "{{name}}" has no address for {{chain}}',
+  name_service_not_found: 'Name "{{name}}" not found',
+  name_service_resolving: 'Resolving {{name}}...',
+  name_service_unsupported_chain:
+    '{{chain}} is not supported by {{suffix}} names',
   name_your_vault: 'Name your vault',
   network: 'Network',
   network_fee: 'Network Fee',
