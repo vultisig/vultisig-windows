@@ -27,7 +27,7 @@ export const parseKeysignWsNotification = (
 }
 
 /** Input for {@link buildKeysignNotificationWebSocketUrl}. */
-export type BuildKeysignNotificationWebSocketUrlInput = {
+type BuildKeysignNotificationWebSocketUrlInput = {
   /** Notification server base URL (https or http). */
   baseUrl?: string
   vaultId: string

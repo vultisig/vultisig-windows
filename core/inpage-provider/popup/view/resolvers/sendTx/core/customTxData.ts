@@ -1,3 +1,4 @@
+import { PolkadotSignerPayloadJSON } from '@core/ui/polkadot/dapp/PolkadotSignerPayload'
 import { WalletCore } from '@trustwallet/wallet-core'
 import { Chain, OtherChain } from '@vultisig/core-chain/Chain'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
@@ -17,7 +18,6 @@ import { getUrlBaseDomain } from '@vultisig/lib-utils/url/baseDomain'
 import { Psbt } from 'bitcoinjs-lib'
 
 import { IKeysignTransactionPayload, ITransactionPayload } from '../interfaces'
-import { PolkadotSignerPayloadJSON } from '@core/ui/polkadot/dapp/PolkadotSignerPayload'
 import { parseSolanaTx } from './solana/parser'
 import { SolanaTxData } from './solana/types/types'
 import { restrictPsbtToInputs } from './utxo/restrictPsbt'

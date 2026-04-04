@@ -1,5 +1,3 @@
-import { constructPolkadotSigningPayload } from '@core/ui/polkadot/dapp/constructSigningPayload'
-import { PolkadotSignerPayloadJSON } from '@core/ui/polkadot/dapp/PolkadotSignerPayload'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useKeysignAction } from '@core/ui/mpc/keysign/action/state/keysignAction'
 import { useKeysignMutationListener } from '@core/ui/mpc/keysign/action/state/keysignMutationListener'
@@ -7,6 +5,8 @@ import {
   customMessageDefaultChain,
   customMessageSupportedChains,
 } from '@core/ui/mpc/keysign/customMessage/chains'
+import { constructPolkadotSigningPayload } from '@core/ui/polkadot/dapp/constructSigningPayload'
+import { PolkadotSignerPayloadJSON } from '@core/ui/polkadot/dapp/PolkadotSignerPayload'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useMutation } from '@tanstack/react-query'
 import { OtherChain } from '@vultisig/core-chain/Chain'
