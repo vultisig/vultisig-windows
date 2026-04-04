@@ -1384,4 +1384,8 @@ export const hr = {
   desktop_push_notification_disable_failed:
     'Nije moguće onemogućiti push obavijesti. Pokušajte ponovno.',
   keysign_request: 'Zahtjev za ključni znak',
+  join_transaction: 'Pridruži se transakciji',
+  foreground_notification_generic: 'Transakcija čeka odobrenje',
+  foreground_notification_send: 'Pošalji {{amount}}',
+  foreground_notification_swap: 'Zamijeni {{from}} → {{to}}',
 }

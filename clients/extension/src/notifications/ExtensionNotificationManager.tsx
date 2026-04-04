@@ -1,4 +1,3 @@
-import { useAppNavigate } from '@clients/desktop/src/navigation/hooks/useAppNavigate'
 import { handleKeysignWsNotification } from '@core/ui/notifications/handleKeysignWsNotification'
 import {
   buildKeysignNotificationWebSocketUrl,
@@ -10,22 +9,22 @@ import {
 import { useNotificationBanner } from '@core/ui/notifications/NotificationBannerProvider'
 import { pushNotificationServerUrl } from '@core/ui/notifications/pushNotificationServerUrl'
 import { useVaults } from '@core/ui/storage/vaults'
+import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { useNavigation } from '@lib/ui/navigation/state'
 import { hasServer } from '@vultisig/core-mpc/devices/localPartyId'
 import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
 import { computeNotificationVaultId } from '@vultisig/sdk'
-import { WindowShow, WindowUnminimise } from '@wailsapp/runtime'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import {
-  desktopNotificationRegistrationsChangedEvent,
-  getDesktopNotificationRegistrations,
-  isDesktopVaultRegistered,
-} from './desktopNotificationStorage'
-import { getOrCreateDesktopNotificationToken } from './desktopNotificationToken'
+  getPushNotificationRegistrations,
+  getPushServerUrl,
+  isVaultRegisteredForPush,
+  pushNotificationRegistrationsStorageKey,
+} from './pushNotificationStorage'
 
-type ManagedDesktopNotificationSocket = {
+type ManagedExtensionNotificationSocket = {
   activeWsUrl: string | null
   partyName: string
   reconnectTimer: ReturnType<typeof setTimeout> | undefined
@@ -33,12 +32,13 @@ type ManagedDesktopNotificationSocket = {
 }
 
 /**
- * Keeps WebSocket connections open for opted-in vaults, shows keysign request
- * banners and OS notifications, and brings the Wails window forward.
+ * WebSocket client for opted-in vaults (same server stream as desktop). Shows the
+ * in-app keysign banner when the extension UI is open; push is still handled by
+ * the service worker when the UI is closed.
  */
-export const DesktopNotificationManager = () => {
+export const ExtensionNotificationManager = () => {
   const { t } = useTranslation()
-  const navigate = useAppNavigate()
+  const navigate = useNavigate()
   const { showBanner } = useNotificationBanner()
   const vaults = useVaults()
   const [{ history }] = useNavigation()
@@ -85,14 +85,23 @@ export const DesktopNotificationManager = () => {
     }
   }, [vaults])
 
-  const connectionsRef = useRef<Map<string, ManagedDesktopNotificationSocket>>(
-    new Map()
-  )
+  const connectionsRef = useRef<
+    Map<string, ManagedExtensionNotificationSocket>
+  >(new Map())
   const reconnectDelayMsRef = useRef<Record<string, number>>({})
 
   useEffect(() => {
     const connectionsMap = connectionsRef.current
-    const token = getOrCreateDesktopNotificationToken()
+
+    const getTokenJson = async (): Promise<string | null> => {
+      try {
+        const registration = await navigator.serviceWorker.ready
+        const sub = await registration.pushManager.getSubscription()
+        return sub ? JSON.stringify(sub.toJSON()) : null
+      } catch {
+        return null
+      }
+    }
 
     const handleNotificationMessage = async (
       msg: NonNullable<ReturnType<typeof parseKeysignWsNotification>>,
@@ -118,8 +127,7 @@ export const DesktopNotificationManager = () => {
         navigateToKeysign,
         showBanner: showBannerRef.current,
         bringAppToFront: () => {
-          WindowUnminimise()
-          WindowShow()
+          window.focus()
         },
         showOsNotification: ({ title, body, onClick }) => {
           if (
@@ -155,7 +163,14 @@ export const DesktopNotificationManager = () => {
       }
     }
 
-    const connectVault = (vaultId: string, partyName: string) => {
+    const connectVault = async (vaultId: string, partyName: string) => {
+      const token = await getTokenJson()
+      if (!token) {
+        return
+      }
+
+      const baseUrl = (await getPushServerUrl()) ?? pushNotificationServerUrl
+
       let managed = connectionsRef.current.get(vaultId)
       if (!managed) {
         managed = {
@@ -174,7 +189,7 @@ export const DesktopNotificationManager = () => {
       }
 
       const url = buildKeysignNotificationWebSocketUrl({
-        baseUrl: pushNotificationServerUrl,
+        baseUrl,
         vaultId,
         partyName: managed.partyName,
         token,
@@ -227,14 +242,14 @@ export const DesktopNotificationManager = () => {
           managed.partyName
         ).catch(error => {
           console.warn(
-            '[DesktopNotificationManager] handle message failed',
+            '[ExtensionNotificationManager] handle message failed',
             error
           )
         })
       }
 
       ws.onerror = event => {
-        console.debug('[DesktopNotificationManager] WebSocket error', event)
+        console.debug('[ExtensionNotificationManager] WebSocket error', event)
       }
 
       ws.onclose = () => {
@@ -245,55 +260,68 @@ export const DesktopNotificationManager = () => {
         entry.ws = null
         entry.activeWsUrl = null
 
-        if (!isDesktopVaultRegistered(vaultId)) {
-          return
-        }
+        void (async () => {
+          const stillRegistered = await isVaultRegisteredForPush(vaultId)
+          if (!stillRegistered) {
+            return
+          }
 
-        const prevDelay =
-          reconnectDelayMsRef.current[vaultId] ??
-          keysignNotificationWsInitialReconnectDelayMs
-        const jitterMs = Math.random() * prevDelay * 0.5
-        entry.reconnectTimer = setTimeout(() => {
-          entry.reconnectTimer = undefined
-          connectVault(vaultId, entry.partyName)
-        }, prevDelay + jitterMs)
-        reconnectDelayMsRef.current[vaultId] = Math.min(
-          prevDelay * 2,
-          keysignNotificationWsMaxReconnectDelayMs
-        )
+          const prevDelay =
+            reconnectDelayMsRef.current[vaultId] ??
+            keysignNotificationWsInitialReconnectDelayMs
+          const jitterMs = Math.random() * prevDelay * 0.5
+          entry.reconnectTimer = setTimeout(() => {
+            entry.reconnectTimer = undefined
+            void connectVault(vaultId, entry.partyName)
+          }, prevDelay + jitterMs)
+          reconnectDelayMsRef.current[vaultId] = Math.min(
+            prevDelay * 2,
+            keysignNotificationWsMaxReconnectDelayMs
+          )
+        })()
       }
     }
 
     const syncRegistrations = () => {
-      const registrations = getDesktopNotificationRegistrations()
-      const activeVaultIds = new Set(Object.keys(registrations))
+      void (async () => {
+        const registrations = await getPushNotificationRegistrations()
+        const activeVaultIds = new Set(Object.keys(registrations))
 
-      for (const vaultId of connectionsRef.current.keys()) {
-        if (!activeVaultIds.has(vaultId)) {
-          disconnectVault(vaultId)
+        for (const vaultId of connectionsRef.current.keys()) {
+          if (!activeVaultIds.has(vaultId)) {
+            disconnectVault(vaultId)
+          }
         }
-      }
 
-      for (const [vaultId, reg] of Object.entries(registrations)) {
-        connectVault(vaultId, reg.partyName)
-      }
+        const token = await getTokenJson()
+        if (!token) {
+          for (const vaultId of connectionsRef.current.keys()) {
+            disconnectVault(vaultId)
+          }
+          return
+        }
+
+        for (const [vaultId, reg] of Object.entries(registrations)) {
+          await connectVault(vaultId, reg.partyName)
+        }
+      })()
     }
 
     syncRegistrations()
 
-    const onRegistrationsChanged = () => {
+    const onChromeStorageChanged = (
+      changes: Record<string, chrome.storage.StorageChange>,
+      area: string
+    ) => {
+      if (area !== 'local') return
+      if (!(pushNotificationRegistrationsStorageKey in changes)) return
       syncRegistrations()
     }
-    window.addEventListener(
-      desktopNotificationRegistrationsChangedEvent,
-      onRegistrationsChanged
-    )
+
+    chrome.storage.onChanged.addListener(onChromeStorageChanged)
 
     return () => {
-      window.removeEventListener(
-        desktopNotificationRegistrationsChangedEvent,
-        onRegistrationsChanged
-      )
+      chrome.storage.onChanged.removeListener(onChromeStorageChanged)
       const vaultIdsAtUnmount = [...connectionsMap.keys()]
       for (const vaultId of vaultIdsAtUnmount) {
         disconnectVault(vaultId)

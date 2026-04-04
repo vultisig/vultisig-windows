@@ -7,7 +7,7 @@
     "validate-public": "npx tsx -r ./scripts/sdkResolvePreload.cjs scripts/validatePublic.ts",
     "i18n:check": "npx tsx i18n/scripts/check-unused.ts",
     "i18n:fix": "npx tsx i18n/scripts/check-unused.ts --fix",
-    "storybook": "storybook dev -p 6007",
+    "storybook": "storybook dev -p 6007 --ci --no-open",
     "build-storybook": "storybook build"
   },
   "dependencies": {
