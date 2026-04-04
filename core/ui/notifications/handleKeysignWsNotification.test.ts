@@ -1,9 +1,10 @@
-import { handleKeysignWsNotification } from '@core/ui/notifications/handleKeysignWsNotification'
-import type { KeysignWsNotification } from '@core/ui/notifications/keysignNotificationWebSocket'
-import { parseKeysignQrForNotificationBanner } from '@core/ui/notifications/parseKeysignQrForNotificationBanner'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-vi.mock('@core/ui/notifications/parseKeysignQrForNotificationBanner')
+import { handleKeysignWsNotification } from './handleKeysignWsNotification'
+import type { KeysignWsNotification } from './keysignNotificationWebSocket'
+import { parseKeysignQrForNotificationBanner } from './parseKeysignQrForNotificationBanner'
+
+vi.mock('./parseKeysignQrForNotificationBanner')
 
 const baseMsg: KeysignWsNotification = {
   type: 'notification',

@@ -25,6 +25,13 @@ import {
 } from './desktopNotificationStorage'
 import { getOrCreateDesktopNotificationToken } from './desktopNotificationToken'
 
+type HandleNotificationMessageInput = {
+  msg: NonNullable<ReturnType<typeof parseKeysignWsNotification>>
+  ws: WebSocket
+  vaultId: string
+  localPartyName: string
+}
+
 type ManagedDesktopNotificationSocket = {
   activeWsUrl: string | null
   partyName: string
@@ -94,12 +101,12 @@ export const DesktopNotificationManager = () => {
     const connectionsMap = connectionsRef.current
     const token = getOrCreateDesktopNotificationToken()
 
-    const handleNotificationMessage = async (
-      msg: NonNullable<ReturnType<typeof parseKeysignWsNotification>>,
-      ws: WebSocket,
-      vaultId: string,
-      localPartyName: string
-    ) => {
+    const handleNotificationMessage = async ({
+      msg,
+      ws,
+      vaultId,
+      localPartyName,
+    }: HandleNotificationMessageInput) => {
       const navigateToKeysign = () => {
         navigateRef.current({
           id: 'deeplink',
@@ -220,12 +227,12 @@ export const DesktopNotificationManager = () => {
           return
         }
 
-        void handleNotificationMessage(
-          notification,
+        void handleNotificationMessage({
+          msg: notification,
           ws,
           vaultId,
-          managed.partyName
-        ).catch(error => {
+          localPartyName: managed.partyName,
+        }).catch(error => {
           console.warn(
             '[DesktopNotificationManager] handle message failed',
             error

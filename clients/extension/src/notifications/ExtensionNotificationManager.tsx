@@ -24,6 +24,23 @@ import {
   pushNotificationRegistrationsStorageKey,
 } from './pushNotificationStorage'
 
+type HandleNotificationMessageInput = {
+  msg: NonNullable<ReturnType<typeof parseKeysignWsNotification>>
+  ws: WebSocket
+  vaultId: string
+  localPartyName: string
+}
+
+type ConnectVaultInput = {
+  vaultId: string
+  partyName: string
+  /**
+   * When set, aborts after awaits if a newer {@code syncRegistrations} run
+   * started (avoids reopening sockets removed by a later sync).
+   */
+  syncGeneration?: number
+}
+
 type ManagedExtensionNotificationSocket = {
   activeWsUrl: string | null
   partyName: string
@@ -92,6 +109,7 @@ export const ExtensionNotificationManager = () => {
 
   useEffect(() => {
     const connectionsMap = connectionsRef.current
+    let syncSessionGeneration = 0
 
     const getTokenJson = async (): Promise<string | null> => {
       try {
@@ -103,12 +121,12 @@ export const ExtensionNotificationManager = () => {
       }
     }
 
-    const handleNotificationMessage = async (
-      msg: NonNullable<ReturnType<typeof parseKeysignWsNotification>>,
-      ws: WebSocket,
-      vaultId: string,
-      localPartyName: string
-    ) => {
+    const handleNotificationMessage = async ({
+      msg,
+      ws,
+      vaultId,
+      localPartyName,
+    }: HandleNotificationMessageInput) => {
       const navigateToKeysign = () => {
         navigateRef.current({
           id: 'deeplink',
@@ -163,13 +181,26 @@ export const ExtensionNotificationManager = () => {
       }
     }
 
-    const connectVault = async (vaultId: string, partyName: string) => {
+    const connectVault = async ({
+      vaultId,
+      partyName,
+      syncGeneration,
+    }: ConnectVaultInput) => {
+      const isStaleSync = () =>
+        syncGeneration !== undefined && syncGeneration !== syncSessionGeneration
+
       const token = await getTokenJson()
+      if (isStaleSync()) {
+        return
+      }
       if (!token) {
         return
       }
 
       const baseUrl = (await getPushServerUrl()) ?? pushNotificationServerUrl
+      if (isStaleSync()) {
+        return
+      }
 
       let managed = connectionsRef.current.get(vaultId)
       if (!managed) {
@@ -235,12 +266,12 @@ export const ExtensionNotificationManager = () => {
           return
         }
 
-        void handleNotificationMessage(
-          notification,
+        void handleNotificationMessage({
+          msg: notification,
           ws,
           vaultId,
-          managed.partyName
-        ).catch(error => {
+          localPartyName: managed.partyName,
+        }).catch(error => {
           console.warn(
             '[ExtensionNotificationManager] handle message failed',
             error
@@ -272,7 +303,7 @@ export const ExtensionNotificationManager = () => {
           const jitterMs = Math.random() * prevDelay * 0.5
           entry.reconnectTimer = setTimeout(() => {
             entry.reconnectTimer = undefined
-            void connectVault(vaultId, entry.partyName)
+            void connectVault({ vaultId, partyName: entry.partyName })
           }, prevDelay + jitterMs)
           reconnectDelayMsRef.current[vaultId] = Math.min(
             prevDelay * 2,
@@ -283,8 +314,12 @@ export const ExtensionNotificationManager = () => {
     }
 
     const syncRegistrations = () => {
+      const myGeneration = ++syncSessionGeneration
       void (async () => {
         const registrations = await getPushNotificationRegistrations()
+        if (myGeneration !== syncSessionGeneration) {
+          return
+        }
         const activeVaultIds = new Set(Object.keys(registrations))
 
         for (const vaultId of connectionsRef.current.keys()) {
@@ -294,6 +329,9 @@ export const ExtensionNotificationManager = () => {
         }
 
         const token = await getTokenJson()
+        if (myGeneration !== syncSessionGeneration) {
+          return
+        }
         if (!token) {
           for (const vaultId of connectionsRef.current.keys()) {
             disconnectVault(vaultId)
@@ -302,7 +340,14 @@ export const ExtensionNotificationManager = () => {
         }
 
         for (const [vaultId, reg] of Object.entries(registrations)) {
-          await connectVault(vaultId, reg.partyName)
+          if (myGeneration !== syncSessionGeneration) {
+            return
+          }
+          await connectVault({
+            vaultId,
+            partyName: reg.partyName,
+            syncGeneration: myGeneration,
+          })
         }
       })()
     }

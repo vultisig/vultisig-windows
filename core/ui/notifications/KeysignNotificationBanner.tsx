@@ -6,6 +6,7 @@ import {
   type PointerEvent as ReactPointerEvent,
   type TransitionEvent,
   useEffect,
+  useId,
   useRef,
   useState,
 } from 'react'
@@ -208,6 +209,10 @@ export const KeysignNotificationBanner = ({
   const dragStartY = useRef<number | null>(null)
   const pointerTotalMove = useRef(0)
 
+  const titleId = useId()
+  const vaultNameId = useId()
+  const descriptionId = useId()
+
   useEffect(() => {
     if (isParentControlled) return
     const id = requestAnimationFrame(() => {
@@ -275,19 +280,31 @@ export const KeysignNotificationBanner = ({
     pointerTotalMove.current = 0
   }
 
+  const cancelPointer = (event: ReactPointerEvent<HTMLDivElement>) => {
+    try {
+      event.currentTarget.releasePointerCapture(event.pointerId)
+    } catch {
+      // ignore if capture already released
+    }
+    setDragOffset(0)
+    dragStartY.current = null
+    pointerTotalMove.current = 0
+  }
+
   return (
     <BannerRoot
       $dragOffset={dragOffset}
       $isShown={isShown}
       $layout={layout}
-      aria-label={title}
+      aria-labelledby={`${titleId} ${vaultNameId} ${descriptionId}`}
+      aria-live={isShown ? 'polite' : 'off'}
       onKeyDown={event => {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault()
           onAction()
         }
       }}
-      onPointerCancel={endPointer}
+      onPointerCancel={cancelPointer}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={endPointer}
@@ -301,7 +318,7 @@ export const KeysignNotificationBanner = ({
       <Content>
         <TitleAndPill>
           <TitleBlock>
-            <Text as="span" color="regular" variant="title3">
+            <Text as="span" color="regular" id={titleId} variant="title3">
               {title}
             </Text>
           </TitleBlock>
@@ -309,12 +326,12 @@ export const KeysignNotificationBanner = ({
             <VaultPillIcon $isFastVault={isFastVault}>
               {isFastVault ? <LightningIcon /> : <ShieldIcon />}
             </VaultPillIcon>
-            <VaultNameText as="span" size={14} weight={500}>
+            <VaultNameText as="span" id={vaultNameId} size={14} weight={500}>
               {vaultName}
             </VaultNameText>
           </VaultPill>
         </TitleAndPill>
-        <BodyText as="span" size={14} weight={500}>
+        <BodyText as="span" id={descriptionId} size={14} weight={500}>
           {description}
         </BodyText>
       </Content>

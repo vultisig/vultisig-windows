@@ -26,6 +26,15 @@ export const parseKeysignWsNotification = (
   }
 }
 
+/** Input for {@link buildKeysignNotificationWebSocketUrl}. */
+export type BuildKeysignNotificationWebSocketUrlInput = {
+  /** Notification server base URL (https or http). */
+  baseUrl?: string
+  vaultId: string
+  partyName: string
+  token: string
+}
+
 /**
  * Builds the notification WebSocket URL for a registered vault (same auth tuple as
  * {@code POST /register}: vault_id, party_name, token).
@@ -35,13 +44,7 @@ export const buildKeysignNotificationWebSocketUrl = ({
   vaultId,
   partyName,
   token,
-}: {
-  /** Notification server base URL (https or http). */
-  baseUrl?: string
-  vaultId: string
-  partyName: string
-  token: string
-}): string => {
+}: BuildKeysignNotificationWebSocketUrlInput): string => {
   const origin = (baseUrl ?? pushNotificationServerUrl).replace(
     /^https?:\/\//,
     m => (m.startsWith('https') ? 'wss://' : 'ws://')

@@ -77,31 +77,38 @@ export const handleKeysignWsNotification = async (
   const allowInAppBanner =
     shouldShowKeysignNotificationBannerForView(topView) && !suppressForInitiator
 
-  if (allowInAppBanner) {
-    showBanner({
-      title: t('join_transaction'),
-      vaultName: msg.vault_name,
-      description: parsed?.description ?? t('foreground_notification_generic'),
-      isFastVault,
-      onAction: navigateToKeysign,
-    })
+  const ack = () => {
+    if (ws.readyState === WebSocket.OPEN) {
+      ws.send(JSON.stringify({ type: 'ack', id: msg.id }))
+    }
   }
 
-  if (!suppressForInitiator) {
-    showOsNotification?.({
-      title: t('join_transaction'),
-      body: `${t('vault')}: ${msg.vault_name}`,
-      onClick: () => {
-        navigateToKeysign()
-      },
-    })
-  }
+  try {
+    if (allowInAppBanner) {
+      showBanner({
+        title: t('join_transaction'),
+        vaultName: msg.vault_name,
+        description:
+          parsed?.description ?? t('foreground_notification_generic'),
+        isFastVault,
+        onAction: navigateToKeysign,
+      })
+    }
 
-  if (!suppressForInitiator) {
-    bringAppToFront?.()
-  }
+    if (!suppressForInitiator) {
+      showOsNotification?.({
+        title: t('join_transaction'),
+        body: `${t('vault')}: ${msg.vault_name}`,
+        onClick: () => {
+          navigateToKeysign()
+        },
+      })
+    }
 
-  if (ws.readyState === WebSocket.OPEN) {
-    ws.send(JSON.stringify({ type: 'ack', id: msg.id }))
+    if (!suppressForInitiator) {
+      bringAppToFront?.()
+    }
+  } finally {
+    ack()
   }
 }
