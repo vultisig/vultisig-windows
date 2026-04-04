@@ -1,6 +1,7 @@
 import { CheckUpdate } from '@clients/desktop/src/components/check-update'
 import { ManageMpcLib } from '@clients/desktop/src/components/manage-mpc-lib'
 import { AppViewId } from '@clients/desktop/src/navigation/AppView'
+import { ManageDesktopPushNotifications } from '@clients/desktop/src/notifications/ManageDesktopPushNotifications'
 import { ImportVaultFromFilePage } from '@clients/desktop/src/vault/import/components/ImportVaultFromFilePage'
 import { JoinKeygenPage } from '@clients/desktop/src/vault/keygen/join/JoinKeygenPage'
 import { JoinKeysignPage } from '@clients/desktop/src/vault/keysign/join/JoinKeysignPage'
@@ -45,6 +46,7 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
     <SettingsPage
       checkUpdate={<CheckUpdate />}
       insiderOptions={<ManageMpcLib />}
+      pushNotifications={<ManageDesktopPushNotifications />}
     />
   ),
   setupFastVault: SetupFastVaultPage,

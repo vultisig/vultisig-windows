@@ -93,7 +93,15 @@ const printValidationSummary = (results: ValidationResult[]) => {
   }
 }
 
-const extraCoinAssets = ['qbtc.svg']
+const extraCoinAssets = [
+  'qbtc.svg',
+  'cati.svg',
+  'dogs.svg',
+  'hmstr.svg',
+  'not.svg',
+  'ston.svg',
+  'tston.svg',
+]
 
 const main = async () => {
   try {

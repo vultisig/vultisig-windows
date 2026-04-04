@@ -10,10 +10,13 @@ import { PeersManagerTitle } from '@core/ui/mpc/devices/peers/PeersManagerTitle'
 import { PeersPageContentFrame } from '@core/ui/mpc/devices/peers/PeersPageContentFrame'
 import { useMpcPeerOptionsQuery } from '@core/ui/mpc/devices/queries/useMpcPeerOptionsQuery'
 import { DownloadKeysignQrCode } from '@core/ui/mpc/keysign/DownloadKeysignQrCode'
+import { KeysignResendNotificationButton } from '@core/ui/mpc/keysign/peers/KeysignResendNotificationButton'
+import { useKeysignDiscoveryNotify } from '@core/ui/mpc/keysign/peers/useKeysignDiscoveryNotify'
 import { useJoinKeysignUrlQuery } from '@core/ui/mpc/keysign/queries/useJoinKeysignUrlQuery'
 import { MpcLocalServerIndicator } from '@core/ui/mpc/server/MpcLocalServerIndicator'
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
+import { VStack } from '@lib/ui/layout/Stack'
 import { FitPageContent } from '@lib/ui/page/PageContent'
 import { PageFormFrame } from '@lib/ui/page/PageFormFrame'
 import { PageHeader } from '@lib/ui/page/PageHeader'
@@ -58,6 +61,10 @@ export const KeysignPeerDiscoveryStep = ({
 
   const joinUrlQuery = useJoinKeysignUrlQuery(payload)
 
+  const { cooldownSec, resendDisabled, onResend } = useKeysignDiscoveryNotify({
+    qrCodeData: joinUrlQuery.data,
+  })
+
   const [serverType] = useMpcServerType()
 
   const requiredSigners = getKeygenThreshold(signers.length)
@@ -80,31 +87,40 @@ export const KeysignPeerDiscoveryStep = ({
             <QueryBasedQrCode value={joinUrlQuery} />
             <PeersManagerFrame>
               {serverType === 'local' && <MpcLocalServerIndicator />}
-              <PeersManagerTitle target={requiredSigners} />
-              <PeersContainer>
-                <InitiatingDevice />
-                <MatchQuery
-                  value={peerOptionsQuery}
-                  success={peerOptions => {
-                    return (
-                      <>
-                        {peerOptions.map(value => (
-                          <PeerOption key={value} value={value} />
-                        ))}
-                        {range(requiredPeers - peerOptions.length).map(
-                          index => (
-                            <PeerPlaceholder key={index}>
-                              {t('scan_with_device_index', {
-                                index: index + peerOptions.length + 1,
-                              })}
-                            </PeerPlaceholder>
-                          )
-                        )}
-                      </>
-                    )
-                  }}
-                />
-              </PeersContainer>
+              <VStack fullWidth alignItems="center" gap={24}>
+                <VStack fullWidth alignItems="center" gap={10} padding="0 12px">
+                  <PeersManagerTitle target={requiredSigners} />
+                  <KeysignResendNotificationButton
+                    cooldownSec={cooldownSec}
+                    disabled={resendDisabled}
+                    onResend={onResend}
+                  />
+                </VStack>
+                <PeersContainer>
+                  <InitiatingDevice />
+                  <MatchQuery
+                    value={peerOptionsQuery}
+                    success={peerOptions => {
+                      return (
+                        <>
+                          {peerOptions.map(value => (
+                            <PeerOption key={value} value={value} />
+                          ))}
+                          {range(requiredPeers - peerOptions.length).map(
+                            index => (
+                              <PeerPlaceholder key={index}>
+                                {t('scan_with_device_index', {
+                                  index: index + peerOptions.length + 1,
+                                })}
+                              </PeerPlaceholder>
+                            )
+                          )}
+                        </>
+                      )
+                    }}
+                  />
+                </PeersContainer>
+              </VStack>
             </PeersManagerFrame>
           </PeersPageContentFrame>
           <PeerDiscoveryFormFooter isDisabled={isDisabled} />

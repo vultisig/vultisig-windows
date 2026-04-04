@@ -18,6 +18,8 @@ import { ToastProvider } from '@lib/ui/toast/ToastProvider'
 import React from 'react'
 import styled from 'styled-components'
 
+import { NotificationBannerProvider } from './notifications/NotificationBannerProvider'
+
 type CoreAppProps = Partial<ChildrenProp> & {
   coreState: CoreState
   migrationsManager?: React.ComponentType<ChildrenProp>
@@ -60,13 +62,15 @@ export const CoreApp = ({
             <Wrap wrap={MigrationsManager}>
               <StorageDependant>
                 <ToastProvider>
-                  <ResponsivenessProvider>
-                    <Container>
-                      {children}
-                      {!isLimited && <VaultDependentContent />}
-                    </Container>
-                    <PasscodeGuard />
-                  </ResponsivenessProvider>
+                  <NotificationBannerProvider>
+                    <ResponsivenessProvider>
+                      <Container>
+                        {children}
+                        {!isLimited && <VaultDependentContent />}
+                      </Container>
+                      <PasscodeGuard />
+                    </ResponsivenessProvider>
+                  </NotificationBannerProvider>
                 </ToastProvider>
               </StorageDependant>
             </Wrap>

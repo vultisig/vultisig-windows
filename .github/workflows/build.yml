@@ -11,6 +11,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
+permissions:
+  contents: read
+  actions: write
+
 env:
   NODE_OPTIONS: '--max-old-space-size=8192'
   NODE_VERSION: '23.7.0'
@@ -26,27 +30,16 @@ jobs:
           submodules: recursive
           fetch-depth: 1
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Setup and install
+        uses: ./.github/actions/setup-yarn-monorepo
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Prepare Yarn
-        run: corepack prepare yarn@${{ env.YARN_VERSION }} --activate
-
-      - name: Cache node_modules
+      - name: Cache ESLint
         uses: actions/cache@v4
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-modules-
-
-      - name: Install dependencies
-        run: yarn install
+          path: node_modules/.cache/eslint
+          key: ${{ runner.os }}-eslint-${{ hashFiles('**/yarn.lock', 'eslint.config.mjs', 'clients/desktop/eslint.config.mjs') }}
 
       - name: Clone and build SDK main
         run: |
@@ -100,7 +93,7 @@ jobs:
         run: yarn test
 
       - name: Run unit tests (extension)
-        run: cd clients/extension && npx vitest run --config tests/unit/vitest.config.ts
+        run: yarn exec vitest run --config clients/extension/tests/unit/vitest.config.ts
 
       - name: Run typecheck
         run: yarn typecheck
@@ -115,27 +108,10 @@ jobs:
           submodules: recursive
           fetch-depth: 1
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Setup and install
+        uses: ./.github/actions/setup-yarn-monorepo
         with:
           node-version: ${{ env.NODE_VERSION }}
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Prepare Yarn
-        run: corepack prepare yarn@${{ env.YARN_VERSION }} --activate
-
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-modules-
-
-      - name: Install dependencies
-        run: yarn install
 
       - name: Clone and build SDK main
         run: |
@@ -206,27 +182,57 @@ jobs:
           submodules: recursive
           fetch-depth: 1
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Setup and install
+        uses: ./.github/actions/setup-yarn-monorepo
         with:
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Enable Corepack
-        run: corepack enable
+      - name: Clone SDK
+        shell: bash
+        run: git clone --depth 1 https://github.com/vultisig/vultisig-sdk.git "$RUNNER_TEMP/vultisig-sdk"
 
-      - name: Prepare Yarn
-        run: corepack prepare yarn@${{ env.YARN_VERSION }} --activate
+      - name: Build SDK
+        shell: bash {0}
+        working-directory: ${{ runner.temp }}/vultisig-sdk
+        run: |
+          corepack enable
+          corepack install
+          yarn install || true
+          yarn build:shared
+          if [ "$RUNNER_OS" != "Windows" ]; then
+            yarn build:all
+          fi
 
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-modules-
-
-      - name: Install dependencies
-        run: yarn install
+      - name: Override SDK packages
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/sdk-packs"
+          for dir in packages/core/chain packages/core/config packages/core/mpc packages/lib/utils; do
+            cd "$RUNNER_TEMP/vultisig-sdk/$dir" && npm pack --pack-destination "$RUNNER_TEMP/sdk-packs"
+          done
+          cd "$GITHUB_WORKSPACE"
+          PACK_DIR="$RUNNER_TEMP/sdk-packs" node - <<'NODE'
+            const fs = require('fs');
+            const path = require('path');
+            const { execFileSync } = require('child_process');
+            const packDir = process.env.PACK_DIR;
+            const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+            const packs = fs.readdirSync(packDir).filter(f => f.endsWith('.tgz'));
+            const resolutions = pkg.resolutions || {};
+            for (const tgz of packs) {
+              const tgzPath = path.join(packDir, tgz);
+              const manifest = execFileSync(
+                'tar',
+                ['--force-local', '-xzf', tgzPath, '-O', 'package/package.json'],
+                { encoding: 'utf8' }
+              );
+              const name = JSON.parse(manifest).name;
+              resolutions[name] = tgzPath;
+            }
+            pkg.resolutions = resolutions;
+            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+          NODE
+          YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn install
 
       - name: Build wails
         uses: dAppServer/wails-build-action@main

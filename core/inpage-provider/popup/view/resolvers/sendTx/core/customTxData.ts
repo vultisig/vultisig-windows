@@ -1,9 +1,10 @@
 import { WalletCore } from '@trustwallet/wallet-core'
-import { Chain } from '@vultisig/core-chain/Chain'
+import { Chain, OtherChain } from '@vultisig/core-chain/Chain'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { cosmosFeeCoinDenom } from '@vultisig/core-chain/chains/cosmos/cosmosFeeCoinDenom'
 import { getEvmContractCallHexSignature } from '@vultisig/core-chain/chains/evm/contract/call/hexSignature'
 import { getEvmContractCallSignatures } from '@vultisig/core-chain/chains/evm/contract/call/signatures'
+import { PolkadotSignerPayloadJSON } from '@vultisig/core-chain/chains/polkadot/dapp/PolkadotSignerPayload'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { Coin, CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { deriveAddress } from '@vultisig/core-chain/publicKey/address/deriveAddress'
@@ -26,6 +27,10 @@ type RegularTxData = IKeysignTransactionPayload & {
   coin: Coin
 }
 
+export type PolkadotDappTxData = {
+  signerPayload: PolkadotSignerPayloadJSON
+}
+
 export type CustomTxData =
   | {
       regular: RegularTxData
@@ -35,6 +40,9 @@ export type CustomTxData =
     }
   | {
       psbt: Psbt
+    }
+  | {
+      polkadot: PolkadotDappTxData
     }
 
 type GetCustomTxDataInput = {
@@ -113,6 +121,11 @@ export const getCustomTxData = ({
         }
       },
       serialized: async ({ data, chain, params }) => {
+        if (chain === OtherChain.Polkadot) {
+          const signerPayload = JSON.parse(data[0]) as PolkadotSignerPayloadJSON
+          return { polkadot: { signerPayload } }
+        }
+
         const publicKey = getPublicKey({
           chain,
           walletCore,

@@ -10,6 +10,9 @@ import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMutation } from '@tanstack/react-query'
+import { OtherChain } from '@vultisig/core-chain/Chain'
+import { constructPolkadotSigningPayload } from '@vultisig/core-chain/chains/polkadot/dapp/constructSigningPayload'
+import { PolkadotSignerPayloadJSON } from '@vultisig/core-chain/chains/polkadot/dapp/PolkadotSignerPayload'
 import { getCoinType } from '@vultisig/core-chain/coin/coinType'
 import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
 import { getSignatureAlgorithm } from '@vultisig/core-chain/signing/SignatureAlgorithm'
@@ -18,6 +21,7 @@ import { signWithServer } from '@vultisig/core-mpc/fast/api/signWithServer'
 import { getEncodedSigningInputs } from '@vultisig/core-mpc/keysign/signingInputs'
 import { getPreSigningHashes } from '@vultisig/core-mpc/tx/preSigningHashes'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
+import { attempt } from '@vultisig/lib-utils/attempt'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { assertField } from '@vultisig/lib-utils/record/assertField'
 import { useEffect } from 'react'
@@ -54,6 +58,38 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
         keysign: async keysignPayload => {
           const coin = assertField(keysignPayload, 'coin')
           const { chain } = assertChainField(coin)
+
+          // Polkadot dApp signPayload — bypass TW, send raw payload hash
+          if (chain === OtherChain.Polkadot && keysignPayload.memo) {
+            const parseResult = attempt(
+              () =>
+                JSON.parse(keysignPayload.memo!) as PolkadotSignerPayloadJSON
+            )
+            if (
+              !('error' in parseResult) &&
+              parseResult.data.method &&
+              parseResult.data.genesisHash
+            ) {
+              const signingBytes = constructPolkadotSigningPayload(
+                parseResult.data
+              )
+              const messages = [Buffer.from(signingBytes).toString('hex')]
+
+              return signWithServer({
+                public_key: publicKeys.ecdsa,
+                messages,
+                session: sessionId,
+                hex_encryption_key: hexEncryptionKey,
+                derive_path: walletCore.CoinTypeExt.derivationPath(
+                  getCoinType({ walletCore, chain })
+                ),
+                is_ecdsa: false,
+                vault_password: password,
+                chain,
+              })
+            }
+          }
+
           const publicKey = getPublicKey({
             chain,
             walletCore,

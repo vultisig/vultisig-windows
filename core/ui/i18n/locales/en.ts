@@ -322,6 +322,10 @@ export const en = {
   push_notifications: 'Push Notifications',
   push_notification_server_url: 'Push Notification Server URL',
   push_notification_server_placeholder: 'Leave empty for production default',
+  desktop_push_notification_enable_failed:
+    'Could not enable push notifications. Please try again.',
+  desktop_push_notification_disable_failed:
+    'Could not disable push notifications. Please try again.',
   expiration_date: 'Expiration Date',
   expiration_must_extend_by_exactly_one_year:
     'Expiration can only be extended by exactly 1 year',
@@ -615,6 +619,7 @@ export const en = {
   keygen_protocol_running: 'Running',
   keys: 'Keys',
   keysign: 'Keysign',
+  keysign_request: 'Keysign Request',
   label: 'Label',
   language: 'Language',
   learnMore: 'Learn More',
@@ -660,6 +665,7 @@ export const en = {
   network_fee: 'Network Fee',
   network_rate: 'Network rate',
   network_rate_required: 'Network rate is required',
+  notification_sent_successfully: 'Notification was successfully sent!',
   never: 'Never',
   new: 'New',
   next: 'Next',
@@ -822,6 +828,8 @@ export const en = {
   request_from: 'Request from',
   required_field_missing: 'Required field missing',
   required_node_address: 'Node Address is required',
+  resend_notification: 'Resend notification',
+  resend_notification_in: 'Resend notification in {{time}}',
   reshare: 'Reshare',
   reshare_disclaimer:
     'For all Reshare actions the threshold of devices is always required.',

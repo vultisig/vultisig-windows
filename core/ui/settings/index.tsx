@@ -163,7 +163,7 @@ export const SettingsPage: FC<Props> = props => {
             )}
             {client === 'extension' && props.expandView}
             {client === 'extension' && props.sidePanel}
-            {client === 'extension' && props.pushNotifications}
+            {props.pushNotifications}
           </SettingsSection>
           <SettingsSection title={t('security')}>
             <ListItem

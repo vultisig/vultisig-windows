@@ -53,6 +53,8 @@ export const hr = {
       vaultShares: 'U vašem trezoru se nalaze 2 dionice,',
       sentTo: 'Poslano na {{email}}.',
       changeEmailAndRestartKeygen: 'Promijeni e-mail i ponovno pokreni keygen',
+      setNewStandard: 'Spremni ste za korištenje novog standarda novčanika.',
+      wellDone: 'Bravo',
     },
     createVault: {
       availablePlatforms: {
@@ -1371,4 +1373,15 @@ export const hr = {
   agent_reauth_description:
     'Iz sigurnosnih razloga, autorizacija periodično istječe. Molimo potvrdite kako biste nastavili koristiti Vulti Agenta.',
   authorize: 'Ovlastiti',
+  enable_tss_batching: 'Omogući grupiranje TSS-a',
+  keygen_protocol_done: 'Gotovo',
+  keygen_protocol_running: 'Trčanje',
+  notification_sent_successfully: 'Obavijest je uspješno poslana!',
+  resend_notification: 'Ponovno pošalji obavijest',
+  resend_notification_in: 'Ponovno pošalji obavijest za {{time}}',
+  desktop_push_notification_enable_failed:
+    'Nije moguće omogućiti push obavijesti. Pokušajte ponovno.',
+  desktop_push_notification_disable_failed:
+    'Nije moguće onemogućiti push obavijesti. Pokušajte ponovno.',
+  keysign_request: 'Zahtjev za ključni znak',
 }

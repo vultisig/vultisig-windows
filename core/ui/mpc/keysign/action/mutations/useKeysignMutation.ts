@@ -7,7 +7,10 @@ import {
 } from '@core/ui/mpc/keysign/customMessage/chains'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useMutation } from '@tanstack/react-query'
+import { OtherChain } from '@vultisig/core-chain/Chain'
 import { getChainKind } from '@vultisig/core-chain/ChainKind'
+import { constructPolkadotSigningPayload } from '@vultisig/core-chain/chains/polkadot/dapp/constructSigningPayload'
+import { PolkadotSignerPayloadJSON } from '@vultisig/core-chain/chains/polkadot/dapp/PolkadotSignerPayload'
 import { getCoinType } from '@vultisig/core-chain/coin/coinType'
 import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
 import { getSignatureAlgorithm } from '@vultisig/core-chain/signing/SignatureAlgorithm'
@@ -33,6 +36,7 @@ import { compileTx } from '@vultisig/core-mpc/tx/compile/compileTx'
 import { getPreSigningHashes } from '@vultisig/core-mpc/tx/preSigningHashes'
 import { generateSignature } from '@vultisig/core-mpc/tx/signature/generateSignature'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
+import { attempt } from '@vultisig/lib-utils/attempt'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { chainPromises } from '@vultisig/lib-utils/promise/chainPromises'
 import { recordFromItems } from '@vultisig/lib-utils/record/recordFromItems'
@@ -94,6 +98,48 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
               }
 
               return { txs: [tx] }
+            }
+
+            // Polkadot dApp signPayload — bypass TW, sign raw payload
+            if (chain === OtherChain.Polkadot && payload.memo) {
+              const parseResult = attempt(
+                () => JSON.parse(payload.memo!) as PolkadotSignerPayloadJSON
+              )
+              if ('error' in parseResult) {
+                // not a dApp payload, fall through to standard flow
+              } else if (
+                parseResult.data.method &&
+                parseResult.data.genesisHash
+              ) {
+                const signerPayload = parseResult.data
+                const signingBytes =
+                  constructPolkadotSigningPayload(signerPayload)
+                const hexMessage = Buffer.from(signingBytes).toString('hex')
+
+                const signatureAlgorithm = getSignatureAlgorithm(chain)
+                const coinType = getCoinType({ walletCore, chain })
+                const [signature] = await keysignAction({
+                  msgs: [hexMessage],
+                  signatureAlgorithm,
+                  coinType,
+                  chain,
+                })
+
+                const signatureBytes = generateSignature({
+                  walletCore,
+                  signature,
+                  signatureFormat: signatureFormats[getChainKind(chain)],
+                })
+
+                const tx: Tx = {
+                  hash: '',
+                  data: deserializeSigningOutput(chain, {
+                    encoded: Buffer.from(signatureBytes).toString('base64'),
+                  }),
+                }
+
+                return { txs: [tx] }
+              }
             }
 
             const publicKey = getPublicKey({
