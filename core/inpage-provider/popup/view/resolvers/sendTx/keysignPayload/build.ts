@@ -5,6 +5,7 @@ import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { getChainKind, isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { CosmosMsgType } from '@vultisig/core-chain/chains/cosmos/cosmosMsgTypes'
+import { buildSignBitcoinFromPsbt } from '@vultisig/core-chain/chains/utxo/tx/buildSignBitcoinFromPsbt'
 import { getPsbtTransferInfo } from '@vultisig/core-chain/chains/utxo/tx/getPsbtTransferInfo'
 import { getChainSpecific } from '@vultisig/core-mpc/keysign/chainSpecific'
 import {
@@ -45,8 +46,6 @@ import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { normalizeNonEmptyString } from '@vultisig/lib-utils/string/normalizeNonEmptyString'
 import { toUtf8String } from 'ethers'
 import { hexToString } from 'viem'
-
-import { buildSignBitcoinFromPsbt } from '@vultisig/core-chain/chains/utxo/tx/buildSignBitcoinFromPsbt'
 
 import { getTxAmount } from '../core/amount'
 import { CustomTxData } from '../core/customTxData'
