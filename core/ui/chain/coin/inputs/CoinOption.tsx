@@ -13,7 +13,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
-import { Coin } from '@vultisig/core-chain/coin/Coin'
+import { areEqualCoins, Coin } from '@vultisig/core-chain/coin/Coin'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import styled from 'styled-components'
 
@@ -24,14 +24,9 @@ export const CoinOption = ({
   value,
   onClick,
 }: ValueProp<Coin> & OnClickProp & IsActiveProp) => {
-  const { chain, ticker, decimals } = value
-  const address = useCurrentVaultAddress(chain)
+  const { chain, ticker } = value
   const coins = useCurrentVaultCoins()
-  const coin = coins.find(c => c.chain === chain && c.id === value.id) ?? {
-    ...value,
-    address,
-  }
-  const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
+  const vaultCoin = coins.find(c => areEqualCoins(c, value))
 
   return (
     <Container
@@ -44,7 +39,7 @@ export const CoinOption = ({
       data-testid={`coin-option-${ticker}`}
     >
       <HStack alignItems="center" gap={12}>
-        <CoinIcon coin={coin} style={{ fontSize: 32 }} />
+        <CoinIcon coin={value} style={{ fontSize: 32 }} />
         <HStack gap={8} alignItems="center">
           <Text color="contrast" size={13} weight="500">
             {ticker}
@@ -65,48 +60,63 @@ export const CoinOption = ({
           height: 50,
         }}
       >
-        <MatchQuery
-          value={balanceQuery}
-          pending={() => (
-            <VStack gap={6} fullHeight fullWidth>
-              <VStack flexGrow>
-                <Skeleton />
-              </VStack>
-              <VStack flexGrow>
-                <Skeleton />
-              </VStack>
-            </VStack>
-          )}
-          success={balance => (
-            <VStack gap={6}>
-              <VStack flexGrow alignItems="flex-end">
-                <Text
-                  style={{
-                    textAlign: 'right',
-                  }}
-                  as="span"
-                  size={12}
-                  color="contrast"
-                  weight={500}
-                >
-                  {formatAmount(fromChainAmount(balance, decimals), { ticker })}
-                </Text>
-              </VStack>
-              <VStack flexGrow alignItems="flex-end">
-                {balance > 0 ? (
-                  <CoinOptionFiatAmount
-                    coin={coin}
-                    amount={fromChainAmount(balance, decimals)}
-                  />
-                ) : (
-                  <CoinOptionFiatValue value={0} />
-                )}
-              </VStack>
-            </VStack>
-          )}
-        />
+        {vaultCoin ? (
+          <VaultCoinBalance value={vaultCoin} />
+        ) : (
+          <CoinOptionFiatValue value={0} />
+        )}
       </VStack>
     </Container>
+  )
+}
+
+const VaultCoinBalance = ({ value }: ValueProp<Coin>) => {
+  const { chain, ticker, decimals } = value
+  const address = useCurrentVaultAddress(chain)
+  const coin = { ...value, address }
+  const balanceQuery = useBalanceQuery(extractAccountCoinKey(coin))
+
+  return (
+    <MatchQuery
+      value={balanceQuery}
+      pending={() => (
+        <VStack gap={6} fullHeight fullWidth>
+          <VStack flexGrow>
+            <Skeleton />
+          </VStack>
+          <VStack flexGrow>
+            <Skeleton />
+          </VStack>
+        </VStack>
+      )}
+      success={balance => (
+        <VStack gap={6}>
+          <VStack flexGrow alignItems="flex-end">
+            <Text
+              style={{
+                textAlign: 'right',
+              }}
+              as="span"
+              size={12}
+              color="contrast"
+              weight={500}
+            >
+              {formatAmount(fromChainAmount(balance, decimals), { ticker })}
+            </Text>
+          </VStack>
+          <VStack flexGrow alignItems="flex-end">
+            {balance > 0 ? (
+              <CoinOptionFiatAmount
+                coin={coin}
+                amount={fromChainAmount(balance, decimals)}
+              />
+            ) : (
+              <CoinOptionFiatValue value={0} />
+            )}
+          </VStack>
+        </VStack>
+      )}
+    />
   )
 }
 

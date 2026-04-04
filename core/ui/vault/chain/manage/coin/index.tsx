@@ -86,34 +86,40 @@ export const ManageVaultChainCoinsPage = () => {
     addToCoinFinderIgnore.isPending ||
     removeFromCoinFinderIgnore.isPending
 
-  const coins = useMemo(() => {
-    const currentChainCoins = sortCoinsAlphabetically(knownTokens[currentchain])
-    const whitelistedCoins = sortCoinsAlphabetically(
-      whitelistedQuery.data || []
-    )
-
-    return withoutDuplicates(
-      [...currentChainCoins, ...whitelistedCoins],
-      areEqualCoins
-    )
+  const allCoins = useMemo(() => {
+    const known = sortCoinsAlphabetically(knownTokens[currentchain])
+    const whitelisted = whitelistedQuery.data || []
+    return withoutDuplicates([...known, ...whitelisted], areEqualCoins)
   }, [currentchain, whitelistedQuery.data])
+
+  const maxInitialTokens = 200
 
   const filteredCoins = useMemo(() => {
     const normalizedQuery = search.trim().toLowerCase()
 
-    const matching = !normalizedQuery
-      ? coins
-      : coins.filter(coin => coinMatchesTokenSearch(coin, normalizedQuery))
+    const coinKey = (c: Coin) => `${c.chain}:${(c.id ?? '').toLowerCase()}`
+    const selectedSet = new Set(currentCoins.map(coinKey))
+    const isSelected = (coin: Coin) => selectedSet.has(coinKey(coin))
 
-    const selected = matching.filter(coin =>
-      currentCoins.some(c => areEqualCoins(c, coin))
+    if (normalizedQuery) {
+      const matching = allCoins.filter(coin =>
+        coinMatchesTokenSearch(coin, normalizedQuery)
+      )
+      const selected = matching.filter(isSelected)
+      const unselected = matching.filter(coin => !isSelected(coin))
+      return [...selected, ...unselected]
+    }
+
+    // Default view: all selected coins + top tokens up to the cap
+    const selected = currentCoins.filter(c =>
+      allCoins.some(ac => areEqualCoins(ac, c))
     )
-    const unselected = matching.filter(
-      coin => !currentCoins.some(c => areEqualCoins(c, coin))
-    )
+    const unselected = allCoins
+      .filter(coin => !isSelected(coin))
+      .slice(0, maxInitialTokens)
 
     return [...selected, ...unselected]
-  }, [coins, search, currentCoins])
+  }, [allCoins, search, currentCoins])
 
   const handleToggle = async (coin: Coin) => {
     if (isLoading) return
