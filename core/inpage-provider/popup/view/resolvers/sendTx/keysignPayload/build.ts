@@ -487,11 +487,14 @@ export const buildSendTxKeysignPayload = async ({
     validateTonComment(memo)
   }
 
+  const needsUtxoInfo =
+    isChainOfKind(chain, 'utxo') && signData.case !== 'signBitcoin'
+
   let keysignPayload = create(KeysignPayloadSchema, {
     toAddress: toAddress ?? '',
     toAmount: getTxAmount(parsedTx).toString(),
     coin: fromCoin,
-    utxoInfo: await getKeysignUtxoInfo(coin),
+    utxoInfo: needsUtxoInfo ? await getKeysignUtxoInfo(coin) : [],
     vaultLocalPartyId: localPartyId,
     vaultPublicKeyEcdsa: vaultId,
     skipBroadcast,
@@ -537,10 +540,7 @@ export const buildSendTxKeysignPayload = async ({
     })
   }
 
-  if (
-    isChainOfKind(chain, 'utxo') &&
-    keysignPayload.signData.case !== 'signBitcoin'
-  ) {
+  if (needsUtxoInfo) {
     keysignPayload = refineKeysignUtxo({
       keysignPayload,
       walletCore,
