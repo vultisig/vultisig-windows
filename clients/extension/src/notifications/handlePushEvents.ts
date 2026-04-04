@@ -6,10 +6,7 @@ import {
 } from '@core/ui/notifications/pushNotificationApi'
 import { pushNotificationServerUrl } from '@core/ui/notifications/pushNotificationServerUrl'
 import { urlBase64ToUint8Array } from '@core/ui/notifications/urlBase64ToUint8Array'
-import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
-import { computeNotificationVaultId } from '@vultisig/sdk'
 
-import { setInitialView } from '../storage/initialView'
 import {
   PushForceRegisterVaultMessage,
   pushForceRegisterVaultType,
@@ -52,7 +49,7 @@ declare const self: {
       {
         url: string
         focus: () => Promise<void>
-        navigate: (url: string) => void
+        navigate: (url: string) => Promise<{ url: string } | null>
       }[]
     >
     openWindow: (url: string) => Promise<void>
@@ -176,6 +173,10 @@ type StoredVault = {
 const mapStoredVaultsToRegistrationInfos = async (
   vaults: StoredVault[]
 ): Promise<VaultRegistrationInfo[]> => {
+  const { computeNotificationVaultId } = await import('@vultisig/sdk')
+  const { shouldBePresent } =
+    await import('@vultisig/lib-utils/assert/shouldBePresent')
+
   const eligible = vaults.filter(v => {
     if (!v.hexChainCode) {
       console.warn(
@@ -269,6 +270,99 @@ const registerVaultsFromStorage = async (): Promise<void> => {
 }
 
 export const handlePushEvents = () => {
+  console.log('[Vultisig Push] Service worker push handler initialized')
+
+  // Register SW events immediately (synchronous). Chrome requires these during
+  // initial worker evaluation — do not defer behind migration, messaging, or
+  // other setup.
+  self.addEventListener('push', (event: any) => {
+    event.waitUntil(
+      (async () => {
+        let data: NotificationData | undefined
+        try {
+          data = event.data?.json()
+        } catch {
+          let raw = '<no data>'
+          try {
+            raw = event.data?.text() ?? '<null>'
+          } catch {
+            raw = '<unreadable>'
+          }
+          console.error(
+            '[Vultisig Push] Failed to parse push payload, raw:',
+            raw
+          )
+        }
+
+        const title = data?.title ?? 'Vultisig'
+        const body = data?.body ?? ''
+        const subtitle = data?.subtitle ?? ''
+
+        console.log('[Vultisig Push] Showing notification:', title, subtitle)
+
+        await self.registration.showNotification(title, {
+          body: subtitle ? `${subtitle}\n${body}` : body || 'Keysign request',
+          icon: 'icon128.png',
+          tag: 'vultisig-keysign',
+          requireInteraction: true,
+          data: { qrCodeData: body },
+        })
+      })()
+    )
+  })
+
+  // Handle notification click — open keysign flow
+  self.addEventListener('notificationclick', (event: any) => {
+    event.notification.close()
+
+    event.waitUntil(
+      (async () => {
+        const qrCodeData: string | undefined =
+          event.notification.data?.qrCodeData
+        if (qrCodeData) {
+          await chrome.storage.local.set({
+            initialView: {
+              id: 'deeplink',
+              state: { url: qrCodeData },
+            },
+          })
+        }
+
+        const extensionUrl = `chrome-extension://${chrome.runtime.id}/index.html`
+
+        const allClients = await self.clients.matchAll({
+          type: 'window',
+          includeUncontrolled: true,
+        })
+
+        const existingClient = allClients.find(client =>
+          client.url.startsWith(extensionUrl)
+        )
+
+        if (existingClient) {
+          await existingClient.focus()
+          await existingClient.navigate(extensionUrl)
+          return
+        }
+
+        await self.clients.openWindow(extensionUrl)
+      })()
+    )
+  })
+
+  // Handle subscription expiry — clear local state and re-register all vaults
+  self.addEventListener('pushsubscriptionchange', (event: any) => {
+    event.waitUntil(
+      (async () => {
+        console.warn(
+          '[Vultisig Push] Push subscription changed, re-registering vaults...'
+        )
+        await clearAllPushNotificationRegistrations()
+        await registerVaultsFromStorage()
+      })()
+    )
+  })
+
   // Run migration (if needed) before normal registration so local registration
   // keys match the new vault_id scheme before any concurrent UI-driven register.
   ;(async () => {
@@ -340,78 +434,5 @@ export const handlePushEvents = () => {
     }
 
     return false
-  })
-
-  // Handle incoming push notifications
-  self.addEventListener('push', (event: any) => {
-    let data: NotificationData | undefined
-    try {
-      data = event.data?.json()
-    } catch (error) {
-      console.error('[Vultisig Push] Failed to parse push payload:', error)
-      return
-    }
-    if (!data) return
-
-    console.log('[Vultisig Push] Notification received:', data.title, data.body)
-
-    event.waitUntil(
-      self.registration.showNotification(data.title, {
-        body: `${data.subtitle}\n${data.body}`,
-        icon: 'icon128.png',
-        tag: 'vultisig-keysign',
-        requireInteraction: true,
-        data: { qrCodeData: data.body },
-      })
-    )
-  })
-
-  // Handle notification click — open keysign flow
-  self.addEventListener('notificationclick', (event: any) => {
-    event.notification.close()
-
-    const qrCodeData: string | undefined = event.notification.data?.qrCodeData
-    if (!qrCodeData) return
-
-    event.waitUntil(
-      (async () => {
-        await setInitialView({
-          id: 'deeplink',
-          state: { url: qrCodeData },
-        })
-
-        const extensionUrl = `chrome-extension://${chrome.runtime.id}/index.html`
-
-        const allClients = await self.clients.matchAll({
-          type: 'window',
-          includeUncontrolled: true,
-        })
-
-        const existingClient = allClients.find(client =>
-          client.url.startsWith(extensionUrl)
-        )
-
-        if (existingClient) {
-          await existingClient.focus()
-          existingClient.navigate(extensionUrl)
-          return
-        }
-
-        await self.clients.openWindow(extensionUrl)
-      })()
-    )
-  })
-
-  // Handle subscription expiry — clear local state and re-register all vaults
-  self.addEventListener('pushsubscriptionchange', (event: any) => {
-    event.waitUntil(
-      (async () => {
-        console.warn(
-          '[Vultisig Push] Push subscription changed, re-registering vaults...'
-        )
-        await clearAllPushNotificationRegistrations()
-        await registerVaultsFromStorage()
-      })()
-    )
   })
 }

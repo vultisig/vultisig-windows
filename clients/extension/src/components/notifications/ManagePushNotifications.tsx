@@ -3,14 +3,10 @@ import {
   useEnablePushNotificationsMutation,
   usePushNotificationStatus,
 } from '@clients/extension/src/notifications/usePushNotificationsRegistration'
-import { ListItemIconWrapper } from '@core/ui/vault/settings'
-import { BellIcon } from '@lib/ui/icons/BellIcon'
-import { Switch } from '@lib/ui/inputs/switch'
-import { ListItem } from '@lib/ui/list/item'
-import { useTranslation } from 'react-i18next'
+import { ManagePushNotificationsView } from '@core/ui/notifications/ManagePushNotificationsView'
 
+/** Extension-specific push notification toggle backed by Web Push registration hooks. */
 export const ManagePushNotifications = () => {
-  const { t } = useTranslation()
   const { data: isRegistered } = usePushNotificationStatus()
   const { mutate: enable, isPending: isEnabling } =
     useEnablePushNotificationsMutation()
@@ -20,30 +16,16 @@ export const ManagePushNotifications = () => {
   const isPending = isEnabling || isDisabling
 
   return (
-    <ListItem
-      icon={
-        <ListItemIconWrapper>
-          <BellIcon />
-        </ListItemIconWrapper>
-      }
-      extra={
-        <Switch
-          checked={isRegistered ?? false}
-          disabled={isPending}
-          data-testid="push-notifications-switch"
-        />
-      }
-      onClick={() => {
-        if (isPending) return
+    <ManagePushNotificationsView
+      isRegistered={isRegistered}
+      isPending={isPending}
+      onToggle={() => {
         if (isRegistered) {
           disable()
         } else {
           enable()
         }
       }}
-      title={t('push_notifications')}
-      hoverable
-      data-testid="push-notifications-toggle"
     />
   )
 }

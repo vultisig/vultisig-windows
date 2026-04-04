@@ -17,4 +17,5 @@ export const getTxAmount = ({ coin, customTxData }: ParsedTx) =>
       const { sendAmount } = getPsbtTransferInfo(psbt, coin.address)
       return sendAmount
     },
+    polkadot: () => BigInt(0),
   })

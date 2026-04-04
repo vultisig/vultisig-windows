@@ -1,0 +1,56 @@
+name: Setup Yarn monorepo
+description: Node, Corepack, dependency caches, and yarn install. Run actions/checkout (with submodules) before this action.
+
+inputs:
+  node-version:
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Enable Corepack and install package manager
+      shell: bash
+      run: corepack enable && corepack install
+
+    - name: Export Yarn Berry cache path (Windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        $p = Join-Path $env:LOCALAPPDATA 'Yarn\Berry\cache'
+        # Do not use YARN_* — Yarn treats those as config keys (breaks yarn install).
+        "BERRY_GLOBAL_CACHE_PATH=$p" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+    - name: Cache node_modules
+      uses: actions/cache@v4
+      with:
+        path: '**/node_modules'
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}
+        restore-keys: |
+          ${{ runner.os }}-node-modules-
+
+    - name: Cache Yarn Berry (Unix)
+      if: runner.os != 'Windows'
+      uses: actions/cache@v4
+      with:
+        path: ~/.yarn/berry/cache
+        key: ${{ runner.os }}-yarn-berry-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-berry-
+
+    - name: Cache Yarn Berry (Windows)
+      if: runner.os == 'Windows'
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.BERRY_GLOBAL_CACHE_PATH }}
+        key: ${{ runner.os }}-yarn-berry-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-berry-
+
+    - name: Install dependencies
+      shell: bash
+      run: yarn install

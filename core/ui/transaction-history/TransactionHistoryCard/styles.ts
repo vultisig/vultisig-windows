@@ -15,7 +15,6 @@ export const Card = styled(VStack).attrs({
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
   width: 100%;
-  max-width: 343px;
   box-sizing: border-box;
 `
 

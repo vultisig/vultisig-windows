@@ -20,6 +20,8 @@ import { DiscoveryService } from '../wailsjs/go/mediator/Server'
 import { LauncherObserver } from './launcher/components/LauncherObserver'
 import { useVaultCreationMpcLib } from './mpc/state/vaultCreationMpcLib'
 import { views } from './navigation/views'
+import { AutoRegisterDesktopNotifications } from './notifications/AutoRegisterDesktopNotifications'
+import { DesktopNotificationManager } from './notifications/DesktopNotificationManager'
 import { OnboardingResetter } from './onboarding/OnboardingResetter'
 import { storage } from './storage'
 import { queriesPersister } from './storage/queriesPersister'
@@ -76,6 +78,8 @@ const AppContent = () => {
   return (
     <CoreApp coreState={coreState}>
       <LauncherObserver />
+      <DesktopNotificationManager />
+      <AutoRegisterDesktopNotifications />
       <ActiveView views={views} />
       <OnboardingResetter />
     </CoreApp>
