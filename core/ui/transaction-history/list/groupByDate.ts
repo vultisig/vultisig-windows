@@ -18,6 +18,13 @@ type FormatDateLabelInput = {
   labels: DateGroupLabels
 }
 
+const formatDateSuffix = (date: Date, locale: string): string =>
+  date.toLocaleDateString(locale, {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  })
+
 const formatDateLabel = ({
   date,
   today,
@@ -25,12 +32,14 @@ const formatDateLabel = ({
 }: FormatDateLabelInput): string => {
   const todayKey = toDateKey(today)
   const dateKey = toDateKey(date)
+  const dateSuffix = formatDateSuffix(date, labels.locale)
 
-  if (dateKey === todayKey) return labels.today
+  if (dateKey === todayKey) return `${labels.today}  ${dateSuffix}`
 
   const yesterday = new Date(today)
   yesterday.setDate(yesterday.getDate() - 1)
-  if (dateKey === toDateKey(yesterday)) return labels.yesterday
+  if (dateKey === toDateKey(yesterday))
+    return `${labels.yesterday}  ${dateSuffix}`
 
   return date.toLocaleDateString(labels.locale, {
     month: 'long',
