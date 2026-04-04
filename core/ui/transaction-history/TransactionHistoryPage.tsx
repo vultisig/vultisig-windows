@@ -5,7 +5,7 @@ import { ScreenLayout } from '@lib/ui/layout/ScreenLayout/ScreenLayout'
 import { hStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
-import { IsActiveProp } from '@lib/ui/props'
+import { ChildrenProp, IsActiveProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { useState } from 'react'
@@ -74,6 +74,7 @@ const TransactionHistoryContent = ({
         tabs={tabs}
         value={activeTab}
         onValueChange={setActiveTab}
+        contentContainer={TabContentContainer}
         triggerSlot={({ tab: { label }, isActive, ...triggerProps }) => (
           <TabTrigger isActive={isActive} {...triggerProps}>
             <Text
@@ -108,6 +109,10 @@ export const TransactionHistoryPage = () => {
     </ScreenLayout>
   )
 }
+
+const TabContentContainer = ({ children }: ChildrenProp) => (
+  <VStack style={{ paddingTop: 16 }}>{children}</VStack>
+)
 
 const TabTrigger = styled.button<IsActiveProp>`
   all: unset;

@@ -81,6 +81,7 @@ const createSwapData = (payload: KeysignPayload): SwapTransactionData => {
         toTokenId: to.tokenId,
         toDecimals: to.decimals,
         provider,
+        route: `${from.token} → ${to.token}`,
       }
     },
     general: (general): SwapTransactionData => {
@@ -105,6 +106,7 @@ const createSwapData = (payload: KeysignPayload): SwapTransactionData => {
         toTokenId: to.tokenId,
         toDecimals: to.decimals,
         provider,
+        route: `${from.token} → ${to.token}`,
       }
     },
   })

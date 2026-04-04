@@ -1,5 +1,7 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
+import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { useCore } from '@core/ui/state/core'
@@ -11,7 +13,12 @@ import {
 } from '@core/ui/transaction-history/core'
 import { useTransactionStatusPolling } from '@core/ui/transaction-history/status/useTransactionStatusPolling'
 import { TransactionHistoryTag } from '@core/ui/transaction-history/TransactionHistoryTag'
+import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { Button } from '@lib/ui/buttons/Button'
+import { centerContent } from '@lib/ui/css/centerContent'
+import { round } from '@lib/ui/css/round'
+import { sameDimensions } from '@lib/ui/css/sameDimensions'
+import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
 import { SquareArrowOutUpRightIcon } from '@lib/ui/icons/SquareArrowOutUpRightIcon'
 import { ScreenLayout } from '@lib/ui/layout/ScreenLayout/ScreenLayout'
 import { SeparatedByLine } from '@lib/ui/layout/SeparatedByLine'
@@ -21,10 +28,17 @@ import { Panel } from '@lib/ui/panel/Panel'
 import { Text, TextColor } from '@lib/ui/text'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import {
+  areEqualCoins,
+  CoinKey,
+  coinKeyToString,
+} from '@vultisig/core-chain/coin/Coin'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 const safeBigInt = (value: string): bigint => {
   try {
@@ -81,11 +95,65 @@ const DetailRow = ({ label, children }: DetailRowProps) => (
   </HStack>
 )
 
+const formatCryptoDisplay = (amount: bigint, decimals: number): string => {
+  const raw = Number(fromChainAmount(amount, decimals))
+  return formatAmount(raw, { precision: 'high' })
+}
+
+type UseFiatFromPriceInput = {
+  coin: CoinKey
+  fiatValue: string
+  cryptoAmount: number
+}
+
+const useFiatFromPrice = ({
+  coin,
+  fiatValue,
+  cryptoAmount,
+}: UseFiatFromPriceInput): string | null => {
+  const formatFiatAmount = useFormatFiatAmount()
+  const vaultCoins = useCurrentVaultCoins()
+  const vaultCoin = vaultCoins.find(c => areEqualCoins(c, coin))
+
+  const priceQuery = useCoinPricesQuery({
+    coins: [
+      {
+        ...coin,
+        priceProviderId: vaultCoin?.priceProviderId,
+      },
+    ],
+    eager: false,
+  })
+
+  if (fiatValue) {
+    const parsed = Number(fiatValue)
+    if (!Number.isNaN(parsed)) return formatFiatAmount(parsed)
+    return fiatValue
+  }
+
+  if (priceQuery.data != null) {
+    const price = priceQuery.data[coinKeyToString(coin)]
+    if (price) {
+      return formatFiatAmount(price * cryptoAmount)
+    }
+  }
+
+  return null
+}
+
 const SendAmountDisplay = ({ record }: { record: SendTransactionRecord }) => {
   const { data } = record
+  const cryptoAmount = Number(
+    fromChainAmount(safeBigInt(data.amount), data.decimals)
+  )
+  const formattedFiat = useFiatFromPrice({
+    coin: { chain: record.chain, id: data.tokenId },
+    fiatValue: record.fiatValue,
+    cryptoAmount,
+  })
 
   return (
-    <HStack alignItems="center" gap={8}>
+    <AmountCard gap={12} alignItems="center">
       {data.tokenLogo && (
         <CoinIcon
           coin={{
@@ -93,20 +161,21 @@ const SendAmountDisplay = ({ record }: { record: SendTransactionRecord }) => {
             id: data.tokenId,
             logo: data.tokenLogo,
           }}
-          style={{ fontSize: 32 }}
+          style={{ fontSize: 48 }}
         />
       )}
-      <VStack gap={2}>
-        <Text size={20} weight={600}>
-          {fromChainAmount(safeBigInt(data.amount), data.decimals)} {data.token}
+      <VStack alignItems="center" gap={2}>
+        <Text size={18} weight={500} centerHorizontally>
+          {formatCryptoDisplay(safeBigInt(data.amount), data.decimals)}{' '}
+          {data.token}
         </Text>
-        {record.fiatValue && (
-          <Text size={14} color="shy">
-            {record.fiatValue}
+        {formattedFiat && (
+          <Text size={14} color="supporting" centerHorizontally>
+            {formattedFiat}
           </Text>
         )}
       </VStack>
-    </HStack>
+    </AmountCard>
   )
 }
 
@@ -140,10 +209,26 @@ const SendDetailPanel = ({ record }: { record: SendTransactionRecord }) => {
 
 const SwapAmountDisplay = ({ record }: { record: SwapTransactionRecord }) => {
   const { data } = record
+  const fromCryptoAmount = Number(
+    fromChainAmount(safeBigInt(data.fromAmount), data.fromDecimals)
+  )
+  const toCryptoAmount = Number(
+    fromChainAmount(safeBigInt(data.toAmount), data.toDecimals)
+  )
+  const fromFiat = useFiatFromPrice({
+    coin: { chain: data.fromChain, id: data.fromTokenId },
+    fiatValue: record.fiatValue,
+    cryptoAmount: fromCryptoAmount,
+  })
+  const toFiat = useFiatFromPrice({
+    coin: { chain: data.toChain, id: data.toTokenId },
+    fiatValue: '',
+    cryptoAmount: toCryptoAmount,
+  })
 
   return (
-    <VStack gap={8} alignItems="center">
-      <HStack alignItems="center" gap={8}>
+    <HStack gap={8} style={{ position: 'relative' }}>
+      <SwapCoinCard gap={12} alignItems="center">
         {data.fromTokenLogo && (
           <CoinIcon
             coin={{
@@ -151,18 +236,32 @@ const SwapAmountDisplay = ({ record }: { record: SwapTransactionRecord }) => {
               id: data.fromTokenId,
               logo: data.fromTokenLogo,
             }}
-            style={{ fontSize: 32 }}
+            style={{ fontSize: 36 }}
           />
         )}
-        <Text size={20} weight={600}>
-          {fromChainAmount(safeBigInt(data.fromAmount), data.fromDecimals)}{' '}
-          {data.fromToken}
-        </Text>
-      </HStack>
-      <Text size={14} color="shy">
-        →
-      </Text>
-      <HStack alignItems="center" gap={8}>
+        <VStack alignItems="center" gap={2}>
+          <Text size={14} weight={500} centerHorizontally>
+            {formatCryptoDisplay(
+              safeBigInt(data.fromAmount),
+              data.fromDecimals
+            )}{' '}
+            {data.fromToken}
+          </Text>
+          {fromFiat && (
+            <Text size={12} color="supporting" centerHorizontally>
+              {fromFiat}
+            </Text>
+          )}
+        </VStack>
+      </SwapCoinCard>
+
+      <SwapChevronWrapper alignItems="center" justifyContent="center">
+        <SwapChevronCircle>
+          <ChevronRightIcon />
+        </SwapChevronCircle>
+      </SwapChevronWrapper>
+
+      <SwapCoinCard gap={12} alignItems="center">
         {data.toTokenLogo && (
           <CoinIcon
             coin={{
@@ -170,30 +269,47 @@ const SwapAmountDisplay = ({ record }: { record: SwapTransactionRecord }) => {
               id: data.toTokenId,
               logo: data.toTokenLogo,
             }}
-            style={{ fontSize: 32 }}
+            style={{ fontSize: 36 }}
           />
         )}
-        <Text size={20} weight={600}>
-          {fromChainAmount(safeBigInt(data.toAmount), data.toDecimals)}{' '}
-          {data.toToken}
-        </Text>
-      </HStack>
-    </VStack>
+        <VStack alignItems="center" gap={2}>
+          <Text size={14} weight={500} centerHorizontally>
+            {formatCryptoDisplay(safeBigInt(data.toAmount), data.toDecimals)}{' '}
+            {data.toToken}
+          </Text>
+          {toFiat && (
+            <Text size={12} color="supporting" centerHorizontally>
+              {toFiat}
+            </Text>
+          )}
+        </VStack>
+      </SwapCoinCard>
+    </HStack>
   )
 }
 
 const SwapDetailPanel = ({ record }: { record: SwapTransactionRecord }) => {
   const { t } = useTranslation()
   const { data } = record
+  const route = data.route || `${data.fromToken} → ${data.toToken}`
 
-  if (!data.provider) return null
+  const hasDetails = data.provider || route
+
+  if (!hasDetails) return null
 
   return (
     <Panel>
       <SeparatedByLine gap={12}>
-        <DetailRow label={t('provider')}>
-          <Text>{data.provider}</Text>
-        </DetailRow>
+        {route && (
+          <DetailRow label={t('route')}>
+            <Text>{route}</Text>
+          </DetailRow>
+        )}
+        {data.provider && (
+          <DetailRow label={t('provider')}>
+            <Text>{data.provider}</Text>
+          </DetailRow>
+        )}
       </SeparatedByLine>
     </Panel>
   )
@@ -224,8 +340,10 @@ export const TransactionDetailPage = () => {
 
   return (
     <ScreenLayout title={t('transaction_details')} onBack={goBack}>
-      <VStack gap={20} alignItems="center">
-        <TransactionHistoryTag type={record.type} />
+      <VStack gap={20} alignItems="stretch">
+        <VStack alignItems="center">
+          <TransactionHistoryTag type={record.type} />
+        </VStack>
 
         {record.type === 'send' && (
           <>
@@ -282,3 +400,39 @@ export const TransactionDetailPage = () => {
     </ScreenLayout>
   )
 }
+
+const AmountCard = styled(VStack)`
+  background-color: ${({ theme }) => theme.colors.foreground.toCssValue()};
+  border: 1px solid ${({ theme }) => theme.colors.foregroundExtra.toCssValue()};
+  border-radius: 16px;
+  padding: 24px 16px;
+  width: 100%;
+`
+
+const SwapCoinCard = styled(VStack)`
+  background-color: ${({ theme }) => theme.colors.foreground.toCssValue()};
+  border: 1px solid ${({ theme }) => theme.colors.foregroundExtra.toCssValue()};
+  border-radius: 16px;
+  flex: 1;
+  padding: 24px 16px;
+`
+
+const SwapChevronWrapper = styled(HStack)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  border-radius: 50%;
+  padding: 7px;
+  background-color: ${({ theme }) => theme.colors.background.toCssValue()};
+`
+
+const SwapChevronCircle = styled.div`
+  ${round};
+  ${sameDimensions(24)};
+  ${centerContent};
+  background: ${({ theme }) => theme.colors.foregroundExtra.toCssValue()};
+  font-size: 16px;
+  color: #718096;
+`

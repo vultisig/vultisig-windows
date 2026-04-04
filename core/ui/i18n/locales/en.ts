@@ -780,6 +780,7 @@ export const en = {
   provide_camera_permission:
     'Please provide camera permission to scan the QR code',
   provider: 'Provider',
+  route: 'Route',
   qrCode: 'QR code',
   receive: 'Receive',
   receivedShare1Email: 'Vault Share 1 received via mail',
