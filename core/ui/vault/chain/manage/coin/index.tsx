@@ -97,18 +97,27 @@ export const ManageVaultChainCoinsPage = () => {
   const filteredCoins = useMemo(() => {
     const normalizedQuery = search.trim().toLowerCase()
 
-    const source = normalizedQuery
-      ? allCoins.filter(coin => coinMatchesTokenSearch(coin, normalizedQuery))
-      : allCoins.slice(0, maxInitialTokens)
+    const coinKey = (c: Coin) =>
+      `${c.chain}:${(c.id ?? '').toLowerCase()}`
+    const selectedSet = new Set(currentCoins.map(coinKey))
+    const isSelected = (coin: Coin) => selectedSet.has(coinKey(coin))
 
-    const selectedSet = new Set(
-      currentCoins.map(c => `${c.chain}:${c.id ?? ''}`)
+    if (normalizedQuery) {
+      const matching = allCoins.filter(coin =>
+        coinMatchesTokenSearch(coin, normalizedQuery)
+      )
+      const selected = matching.filter(isSelected)
+      const unselected = matching.filter(coin => !isSelected(coin))
+      return [...selected, ...unselected]
+    }
+
+    // Default view: all selected coins + top tokens up to the cap
+    const selected = currentCoins.filter(c =>
+      allCoins.some(ac => areEqualCoins(ac, c))
     )
-    const isSelected = (coin: Coin) =>
-      selectedSet.has(`${coin.chain}:${coin.id ?? ''}`)
-
-    const selected = source.filter(isSelected)
-    const unselected = source.filter(coin => !isSelected(coin))
+    const unselected = allCoins
+      .filter(coin => !isSelected(coin))
+      .slice(0, maxInitialTokens)
 
     return [...selected, ...unselected]
   }, [allCoins, search, currentCoins])

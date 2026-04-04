@@ -13,7 +13,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
-import { Coin } from '@vultisig/core-chain/coin/Coin'
+import { areEqualCoins, Coin } from '@vultisig/core-chain/coin/Coin'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import styled from 'styled-components'
 
@@ -26,7 +26,7 @@ export const CoinOption = ({
 }: ValueProp<Coin> & OnClickProp & IsActiveProp) => {
   const { chain, ticker } = value
   const coins = useCurrentVaultCoins()
-  const vaultCoin = coins.find(c => c.chain === chain && c.id === value.id)
+  const vaultCoin = coins.find(c => areEqualCoins(c, value))
 
   return (
     <Container
