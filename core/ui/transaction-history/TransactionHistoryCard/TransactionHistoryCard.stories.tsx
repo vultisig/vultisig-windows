@@ -18,10 +18,6 @@ const meta: Meta<typeof TransactionHistoryCard> = {
       options: ['successful', 'error'],
       control: 'select',
     },
-    addressDirection: {
-      options: ['to', 'from'],
-      control: 'select',
-    },
   },
 }
 export default meta
@@ -54,8 +50,7 @@ export const AllCards: Story = {
         amountUsd="$1,000.54"
         amountCrypto="1,000.12"
         symbol="RUNE"
-        addressDirection="to"
-        address={ethAddress}
+        pill={{ direction: 'to', address: ethAddress }}
         coin={runeCoin}
       />
       <TransactionHistoryCard
@@ -64,8 +59,7 @@ export const AllCards: Story = {
         amountUsd="$12,204.56"
         amountCrypto="200.50"
         symbol="SOL"
-        addressDirection="from"
-        address={solAddress}
+        pill={{ direction: 'from', address: solAddress }}
         coin={solCoin}
       />
       <TransactionHistoryCard
@@ -74,8 +68,7 @@ export const AllCards: Story = {
         amountUsd="$34,752.57"
         amountCrypto="20.50"
         symbol="ETH"
-        addressDirection="from"
-        address={ethAddress}
+        pill={{ providerName: 'THORChain' }}
         coin={ethCoin}
       />
       <TransactionHistoryCard
@@ -84,8 +77,7 @@ export const AllCards: Story = {
         amountUsd="$1,000.54"
         amountCrypto="1,000.12"
         symbol="RUNE"
-        addressDirection="to"
-        address={ethAddress}
+        pill={{ direction: 'to', address: ethAddress }}
         errorMessage="Slippage tolerance exceeded"
         coin={runeCoin}
       />
@@ -95,8 +87,7 @@ export const AllCards: Story = {
         amountUsd="$34,752.57"
         amountCrypto="20.50"
         symbol="ETH"
-        addressDirection="from"
-        address={ethAddress}
+        pill={{ providerName: 'THORChain' }}
         coin={ethCoin}
       />
     </div>
@@ -110,8 +101,7 @@ export const SuccessfulSend: Story = {
     amountUsd: '$1,000.54',
     amountCrypto: '1,000.12',
     symbol: 'RUNE',
-    addressDirection: 'to',
-    address: ethAddress,
+    pill: { direction: 'to' as const, address: ethAddress },
   },
   render: args => <TransactionHistoryCard {...args} coin={runeCoin} />,
 }
@@ -123,8 +113,7 @@ export const ErrorWithMessage: Story = {
     amountUsd: '$1,000.54',
     amountCrypto: '1,000.12',
     symbol: 'RUNE',
-    addressDirection: 'to',
-    address: ethAddress,
+    pill: { direction: 'to' as const, address: ethAddress },
     errorMessage: 'Slippage tolerance exceeded',
   },
   render: args => <TransactionHistoryCard {...args} coin={runeCoin} />,
