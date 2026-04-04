@@ -87,7 +87,7 @@ export const NotificationBannerProvider = ({ children }: ChildrenProp) => {
       setIsOpen(true)
     })
     return () => cancelAnimationFrame(id)
-  }, [showCount])
+  }, [bannerData, showCount])
 
   useEffect(() => {
     if (autoDismissTimer.current !== undefined) {

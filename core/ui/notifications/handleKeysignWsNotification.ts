@@ -5,7 +5,7 @@ import type { NotificationBannerData } from './NotificationBannerProvider'
 import { parseKeysignQrForNotificationBanner } from './parseKeysignQrForNotificationBanner'
 import { shouldShowKeysignNotificationBannerForView } from './shouldShowKeysignNotificationBannerForView'
 
-export type HandleKeysignWsNotificationInput = {
+type HandleKeysignWsNotificationInput = {
   msg: KeysignWsNotification
   ws: WebSocket
   vaultId: string
