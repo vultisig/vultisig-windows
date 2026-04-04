@@ -97,8 +97,7 @@ export const ManageVaultChainCoinsPage = () => {
   const filteredCoins = useMemo(() => {
     const normalizedQuery = search.trim().toLowerCase()
 
-    const coinKey = (c: Coin) =>
-      `${c.chain}:${(c.id ?? '').toLowerCase()}`
+    const coinKey = (c: Coin) => `${c.chain}:${(c.id ?? '').toLowerCase()}`
     const selectedSet = new Set(currentCoins.map(coinKey))
     const isSelected = (coin: Coin) => selectedSet.has(coinKey(coin))
 
