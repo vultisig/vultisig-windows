@@ -74,12 +74,12 @@ const getDisplayData = (record: TransactionRecord): TransactionDisplayData => {
       fromChainAmount(BigInt(record.data.fromAmount), record.data.fromDecimals)
     )
 
-    const pill: TransactionHistoryCardPill = record.data.provider
-      ? getProviderPill({
-          provider: record.data.provider,
-          fromChain: record.data.fromChain,
-        })
-      : { direction: 'to', address: record.data.toToken }
+    const pill: TransactionHistoryCardPill = getProviderPill({
+      provider:
+        record.data.provider ||
+        `${record.data.fromToken} → ${record.data.toToken}`,
+      fromChain: record.data.fromChain,
+    })
 
     return {
       tagType: 'swap',

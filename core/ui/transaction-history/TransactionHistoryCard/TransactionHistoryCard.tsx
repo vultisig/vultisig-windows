@@ -142,7 +142,7 @@ export const TransactionHistoryCard = ({
         <ProviderPill>
           {pill.pillIcon != null && <IconSlot>{pill.pillIcon}</IconSlot>}
           <Text variant="caption" color="shy">
-            via
+            {t('via')}
           </Text>
           <Text variant="caption" color="regular" weight={600}>
             {pill.providerName}

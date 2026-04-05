@@ -1,13 +1,22 @@
 import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
+import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
 import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
+import { WalletIcon } from '@lib/ui/icons/WalletIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
+import {
+  areEqualCoins,
+  CoinKey,
+  coinKeyToString,
+} from '@vultisig/core-chain/coin/Coin'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useTranslation } from 'react-i18next'
@@ -30,6 +39,24 @@ const safeBigInt = (value: string): bigint => {
 
 const chainValues = Object.values(Chain)
 
+const useFiatValue = (coin: CoinKey, cryptoAmount: number) => {
+  const formatFiatAmount = useFormatFiatAmount()
+  const vaultCoins = useCurrentVaultCoins()
+  const vaultCoin = vaultCoins.find(c => areEqualCoins(c, coin))
+
+  const priceQuery = useCoinPricesQuery({
+    coins: [{ ...coin, priceProviderId: vaultCoin?.priceProviderId }],
+    eager: false,
+  })
+
+  if (priceQuery.data != null) {
+    const price = priceQuery.data[coinKeyToString(coin)]
+    if (price) return formatFiatAmount(price * cryptoAmount)
+  }
+
+  return null
+}
+
 /** Renders a send transaction progress card with from-amount. */
 const SendProgressContent = ({ record }: { record: SendTransactionRecord }) => {
   const { t } = useTranslation()
@@ -37,38 +64,60 @@ const SendProgressContent = ({ record }: { record: SendTransactionRecord }) => {
   const cryptoAmount = Number(
     fromChainAmount(safeBigInt(data.amount), data.decimals)
   )
+  const fiat = useFiatValue(
+    { chain: record.chain, id: data.tokenId },
+    cryptoAmount
+  )
+  const truncatedAddress = `${data.toAddress.slice(0, 8)}...${data.toAddress.slice(-6)}`
 
   return (
-    <VStack gap={12}>
-      <HStack alignItems="center" gap={8}>
-        {data.tokenLogo && (
-          <CoinIcon
-            coin={{
-              chain: record.chain,
-              id: data.tokenId,
-              logo: data.tokenLogo,
-            }}
-            style={{ fontSize: 28 }}
-          />
-        )}
-        <Text size={16} weight={600}>
-          {formatAmount(cryptoAmount, { precision: 'high' })} {data.token}
-        </Text>
-      </HStack>
-      <HStack alignItems="center" gap={8}>
-        <StepperIcon>
-          <ArrowDownIcon />
-        </StepperIcon>
-        <Text size={13} color="shy">
-          {t('to')}
-        </Text>
-      </HStack>
-      <HStack alignItems="center" gap={8}>
-        <Text size={13} color="shy">
-          {data.toAddress.slice(0, 8)}...{data.toAddress.slice(-6)}
-        </Text>
-      </HStack>
-    </VStack>
+    <StepperContainer>
+      <StepperLine />
+
+      <VStack gap={16} style={{ position: 'relative' }}>
+        <HStack alignItems="center" gap={8}>
+          {data.tokenLogo && (
+            <CoinIcon
+              coin={{
+                chain: record.chain,
+                id: data.tokenId,
+                logo: data.tokenLogo,
+              }}
+              style={{ fontSize: 28 }}
+            />
+          )}
+          <VStack gap={2}>
+            <Text size={16} weight={600}>
+              {formatAmount(cryptoAmount, { precision: 'high' })} {data.token}
+            </Text>
+            {fiat && (
+              <Text size={12} color="supporting">
+                {fiat}
+              </Text>
+            )}
+          </VStack>
+        </HStack>
+
+        <HStack alignItems="center" gap={8} fullWidth>
+          <StepperIcon>
+            <ArrowDownIcon />
+          </StepperIcon>
+          <Text size={13} color="shy">
+            {t('to')}
+          </Text>
+          <StepperDivider />
+        </HStack>
+
+        <HStack alignItems="center" gap={8}>
+          <DestinationWalletIcon>
+            <WalletIcon />
+          </DestinationWalletIcon>
+          <Text size={14} color="shy">
+            {truncatedAddress}
+          </Text>
+        </HStack>
+      </VStack>
+    </StepperContainer>
   )
 }
 
@@ -81,6 +130,14 @@ const SwapProgressContent = ({ record }: { record: SwapTransactionRecord }) => {
   )
   const toAmount = Number(
     fromChainAmount(safeBigInt(data.toAmount), data.toDecimals)
+  )
+  const fromFiat = useFiatValue(
+    { chain: data.fromChain, id: data.fromTokenId },
+    fromAmount
+  )
+  const toFiat = useFiatValue(
+    { chain: data.toChain, id: data.toTokenId },
+    toAmount
   )
 
   return (
@@ -99,9 +156,16 @@ const SwapProgressContent = ({ record }: { record: SwapTransactionRecord }) => {
               style={{ fontSize: 28 }}
             />
           )}
-          <Text size={16} weight={600}>
-            {formatAmount(fromAmount, { precision: 'high' })} {data.fromToken}
-          </Text>
+          <VStack gap={2}>
+            <Text size={16} weight={600}>
+              {formatAmount(fromAmount, { precision: 'high' })} {data.fromToken}
+            </Text>
+            {fromFiat && (
+              <Text size={12} color="supporting">
+                {fromFiat}
+              </Text>
+            )}
+          </VStack>
         </HStack>
 
         <HStack alignItems="center" gap={8} fullWidth>
@@ -132,6 +196,11 @@ const SwapProgressContent = ({ record }: { record: SwapTransactionRecord }) => {
             <Text size={16} weight={600}>
               {formatAmount(toAmount, { precision: 'high' })} {data.toToken}
             </Text>
+            {toFiat && (
+              <Text size={12} color="supporting">
+                {toFiat}
+              </Text>
+            )}
           </VStack>
         </HStack>
       </VStack>
@@ -142,6 +211,7 @@ const SwapProgressContent = ({ record }: { record: SwapTransactionRecord }) => {
 }
 
 const SwapProviderPill = ({ provider }: { provider: string }) => {
+  const { t } = useTranslation()
   const logoChain = isOneOf(provider, chainValues) ? provider : null
 
   return (
@@ -155,7 +225,7 @@ const SwapProviderPill = ({ provider }: { provider: string }) => {
         </ProviderIconSlot>
       )}
       <Text variant="caption" color="shy">
-        via
+        {t('via')}
       </Text>
       <Text variant="caption" color="regular" weight={600}>
         {provider}
@@ -292,4 +362,17 @@ const StepperDivider = styled.div`
   flex: 1;
   height: 1px;
   border-top: 1px dashed ${getColor('foregroundExtra')};
+`
+
+const DestinationWalletIcon = styled.div`
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: ${getColor('foregroundExtra')};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 16px;
+  color: ${getColor('textShy')};
 `

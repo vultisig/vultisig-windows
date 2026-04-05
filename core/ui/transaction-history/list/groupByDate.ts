@@ -18,7 +18,12 @@ type FormatDateLabelInput = {
   labels: DateGroupLabels
 }
 
-const formatDateSuffix = (date: Date, locale: string): string =>
+type FormatDateSuffixInput = {
+  date: Date
+  locale: string
+}
+
+const formatDateSuffix = ({ date, locale }: FormatDateSuffixInput): string =>
   date.toLocaleDateString(locale, {
     month: 'short',
     day: 'numeric',
@@ -32,7 +37,7 @@ const formatDateLabel = ({
 }: FormatDateLabelInput): string => {
   const todayKey = toDateKey(today)
   const dateKey = toDateKey(date)
-  const dateSuffix = formatDateSuffix(date, labels.locale)
+  const dateSuffix = formatDateSuffix({ date, locale: labels.locale })
 
   if (dateKey === todayKey) return `${labels.today}  ${dateSuffix}`
 

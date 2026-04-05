@@ -1194,6 +1194,7 @@ export const en = {
   verify_password_periodic_message_description:
     'We will periodically ask you to verify your fast sign password so you will always remember it',
   version: 'Version',
+  via: 'via',
   view_on_explorer: 'View on Explorer',
   vote: 'Vote',
   vult: '$VULT',

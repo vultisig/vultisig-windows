@@ -291,20 +291,18 @@ const SwapAmountDisplay = ({ record }: { record: SwapTransactionRecord }) => {
 const SwapDetailPanel = ({ record }: { record: SwapTransactionRecord }) => {
   const { t } = useTranslation()
   const { data } = record
-  const route = data.route || `${data.fromToken} → ${data.toToken}`
-
-  const hasDetails = data.provider || route
+  const hasDetails = data.provider || data.route
 
   if (!hasDetails) return null
+
+  const route = data.route || `${data.fromToken} → ${data.toToken}`
 
   return (
     <Panel>
       <SeparatedByLine gap={12}>
-        {route && (
-          <DetailRow label={t('route')}>
-            <Text>{route}</Text>
-          </DetailRow>
-        )}
+        <DetailRow label={t('route')}>
+          <Text>{route}</Text>
+        </DetailRow>
         {data.provider && (
           <DetailRow label={t('provider')}>
             <Text>{data.provider}</Text>
