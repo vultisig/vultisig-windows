@@ -212,9 +212,7 @@ const SwapAmountDisplay = ({ record }: { record: SwapTransactionRecord }) => {
   const fromCryptoAmount = Number(
     fromChainAmount(safeBigInt(data.fromAmount), data.fromDecimals)
   )
-  const toCryptoAmount = Number(
-    fromChainAmount(safeBigInt(data.toAmount), data.toDecimals)
-  )
+  const toCryptoAmount = parseFloat(data.toAmount)
   const fromFiat = useFiatFromPrice({
     coin: { chain: data.fromChain, id: data.fromTokenId },
     fiatValue: record.fiatValue,
@@ -274,8 +272,7 @@ const SwapAmountDisplay = ({ record }: { record: SwapTransactionRecord }) => {
         )}
         <VStack alignItems="center" gap={2}>
           <Text size={14} weight={500} centerHorizontally>
-            {formatCryptoDisplay(safeBigInt(data.toAmount), data.toDecimals)}{' '}
-            {data.toToken}
+            {formatAmount(toCryptoAmount, { precision: 'high' })} {data.toToken}
           </Text>
           {toFiat && (
             <Text size={12} color="supporting" centerHorizontally>

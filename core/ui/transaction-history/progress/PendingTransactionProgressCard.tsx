@@ -128,9 +128,7 @@ const SwapProgressContent = ({ record }: { record: SwapTransactionRecord }) => {
   const fromAmount = Number(
     fromChainAmount(safeBigInt(data.fromAmount), data.fromDecimals)
   )
-  const toAmount = Number(
-    fromChainAmount(safeBigInt(data.toAmount), data.toDecimals)
-  )
+  const toAmount = parseFloat(data.toAmount)
   const fromFiat = useFiatValue(
     { chain: data.fromChain, id: data.fromTokenId },
     fromAmount
