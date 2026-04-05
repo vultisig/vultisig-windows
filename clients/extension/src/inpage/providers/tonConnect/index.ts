@@ -612,13 +612,20 @@ export class TonConnectBridge {
         },
       } as WalletResponse<T>
     }
-    if (
-      payload.from &&
-      payload.from.toLowerCase() !== account.address.toLowerCase()
-    ) {
-      return getBadRequestError(
-        'Requested sender does not match active TON account'
+    if (payload.from) {
+      const fromRaw = attempt(() => Address.parse(payload.from!).toRawString())
+      const accountRaw = attempt(() =>
+        Address.parse(account.address).toRawString()
       )
+      if (
+        'error' in fromRaw ||
+        'error' in accountRaw ||
+        fromRaw.data !== accountRaw.data
+      ) {
+        return getBadRequestError(
+          'Requested sender does not match active TON account'
+        )
+      }
     }
     const transactionPayload: ITransactionPayload = {
       keysign: {
