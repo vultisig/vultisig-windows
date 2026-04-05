@@ -104,13 +104,14 @@ const SwapProgressContent = ({ record }: { record: SwapTransactionRecord }) => {
           </Text>
         </HStack>
 
-        <HStack alignItems="center" gap={8}>
+        <HStack alignItems="center" gap={8} fullWidth>
           <StepperIcon>
             <ArrowDownIcon />
           </StepperIcon>
           <Text size={13} color="shy">
             {t('to')}
           </Text>
+          <StepperDivider />
         </HStack>
 
         <HStack alignItems="center" gap={8}>
@@ -230,8 +231,9 @@ const TopRow = styled(HStack).attrs({
 const InProgressBadge = styled.div`
   padding: 6px 12px;
   border-radius: 99px;
-  background: ${getColor('buttonSecondary')};
-  border: 1px solid ${getColor('foregroundSuper')};
+  background: ${({ theme }) =>
+    theme.colors.foregroundExtra.withAlpha(0.5).toCssValue()};
+  border: 1px solid ${getColor('foregroundExtra')};
 `
 
 const StepperContainer = styled.div`
@@ -284,4 +286,10 @@ const ProviderIconSlot = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`
+
+const StepperDivider = styled.div`
+  flex: 1;
+  height: 1px;
+  border-top: 1px dashed ${getColor('foregroundExtra')};
 `
