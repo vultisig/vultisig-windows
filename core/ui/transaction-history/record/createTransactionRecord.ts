@@ -1,6 +1,8 @@
+import { Chain } from '@vultisig/core-chain/Chain'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 import { getKeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapPayload'
 import { getKeysignSwapProviderName } from '@vultisig/core-mpc/keysign/swap/getKeysignSwapProviderName'
+import { KeysignSwapPayload } from '@vultisig/core-mpc/keysign/swap/KeysignSwapPayload'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
 import { getKeysignCoin } from '@vultisig/core-mpc/keysign/utils/getKeysignCoin'
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
@@ -112,26 +114,42 @@ const createSwapData = (payload: KeysignPayload): SwapTransactionData => {
   })
 }
 
+/** Returns the chain whose explorer should be used for the transaction hash. */
+const getSwapExplorerChain = (
+  swapPayload: KeysignSwapPayload,
+  sourceChain: Chain
+): Chain =>
+  matchRecordUnion(swapPayload, {
+    native: ({ chain }) => chain,
+    general: () => sourceChain,
+  })
+
 export const createTransactionRecord = ({
   payload,
   txHash,
   vaultId,
 }: CreateTransactionRecordInput): TransactionRecord => {
-  const chain = getKeysignChain(payload)
-  const explorerUrl = getBlockExplorerUrl({
-    chain,
-    entity: 'tx',
-    value: txHash,
-  })
+  const sourceChain = getKeysignChain(payload)
   const timestamp = new Date().toISOString()
   const id = `${txHash}-${timestamp}`
 
-  const isSwapTx = payload.swapPayload?.case && payload.swapPayload.value
+  const swapPayload = getKeysignSwapPayload(payload)
+  const isSwapTx = swapPayload != null
+
+  const explorerChain = isSwapTx
+    ? getSwapExplorerChain(swapPayload, sourceChain)
+    : sourceChain
+
+  const explorerUrl = getBlockExplorerUrl({
+    chain: explorerChain,
+    entity: 'tx',
+    value: txHash,
+  })
 
   const base = {
     id,
     vaultId,
-    chain,
+    chain: explorerChain,
     timestamp,
     txHash,
     explorerUrl,
