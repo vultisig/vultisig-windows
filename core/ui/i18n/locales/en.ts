@@ -748,6 +748,7 @@ export const en = {
     'Password must be between {{min}} and {{max}} characters',
   password_required: 'Password is required',
   paste: 'Paste',
+  in_progress: 'In progress...',
   pending: 'Pending',
   percentage: 'Percentage',
   percentage_limit: 'Percentage must be 0-100',

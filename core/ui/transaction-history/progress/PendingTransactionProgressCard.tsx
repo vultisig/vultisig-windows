@@ -1,31 +1,24 @@
+import { ChainEntityIcon } from '@core/ui/chain/coin/icon/ChainEntityIcon'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
-import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
-import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
+import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
-import { centerContent } from '@lib/ui/css/centerContent'
-import { round } from '@lib/ui/css/round'
-import { sameDimensions } from '@lib/ui/css/sameDimensions'
-import { ChevronRightIcon } from '@lib/ui/icons/ChevronRightIcon'
+import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { Spinner } from '@lib/ui/loaders/Spinner'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
-import {
-  areEqualCoins,
-  CoinKey,
-  coinKeyToString,
-} from '@vultisig/core-chain/coin/Coin'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useTranslation } from 'react-i18next'
-import styled, { keyframes } from 'styled-components'
+import styled from 'styled-components'
 
 import {
   SendTransactionRecord,
   SwapTransactionRecord,
   TransactionRecord,
 } from '../core'
+import { TransactionHistoryTag } from '../TransactionHistoryTag'
 
 const safeBigInt = (value: string): bigint => {
   try {
@@ -35,41 +28,19 @@ const safeBigInt = (value: string): bigint => {
   }
 }
 
-const useFiatValue = (coin: CoinKey, cryptoAmount: number) => {
-  const formatFiatAmount = useFormatFiatAmount()
-  const vaultCoins = useCurrentVaultCoins()
-  const vaultCoin = vaultCoins.find(c => areEqualCoins(c, coin))
+const chainValues = Object.values(Chain)
 
-  const priceQuery = useCoinPricesQuery({
-    coins: [{ ...coin, priceProviderId: vaultCoin?.priceProviderId }],
-    eager: false,
-  })
-
-  if (priceQuery.data != null) {
-    const price = priceQuery.data[coinKeyToString(coin)]
-    if (price) return formatFiatAmount(price * cryptoAmount)
-  }
-
-  return null
-}
-
-/** Renders a send transaction progress card with spinning indicator and amount. */
+/** Renders a send transaction progress card with from-amount. */
 const SendProgressContent = ({ record }: { record: SendTransactionRecord }) => {
+  const { t } = useTranslation()
   const { data } = record
   const cryptoAmount = Number(
     fromChainAmount(safeBigInt(data.amount), data.decimals)
   )
-  const fiat = useFiatValue(
-    { chain: record.chain, id: data.tokenId },
-    cryptoAmount
-  )
 
   return (
-    <ProgressCardInner gap={16} alignItems="center">
-      <ProgressIndicator>
-        <Spinner />
-      </ProgressIndicator>
-      <HStack alignItems="center" gap={8} justifyContent="center">
+    <VStack gap={12}>
+      <HStack alignItems="center" gap={8}>
         {data.tokenLogo && (
           <CoinIcon
             coin={{
@@ -80,23 +51,30 @@ const SendProgressContent = ({ record }: { record: SendTransactionRecord }) => {
             style={{ fontSize: 28 }}
           />
         )}
-        <VStack gap={2}>
-          <Text size={16} weight={600}>
-            {formatAmount(cryptoAmount, { precision: 'high' })} {data.token}
-          </Text>
-          {fiat && (
-            <Text size={12} color="supporting">
-              {fiat}
-            </Text>
-          )}
-        </VStack>
+        <Text size={16} weight={600}>
+          {formatAmount(cryptoAmount, { precision: 'high' })} {data.token}
+        </Text>
       </HStack>
-    </ProgressCardInner>
+      <HStack alignItems="center" gap={8}>
+        <StepperIcon>
+          <ArrowDownIcon />
+        </StepperIcon>
+        <Text size={13} color="shy">
+          {t('to')}
+        </Text>
+      </HStack>
+      <HStack alignItems="center" gap={8}>
+        <Text size={13} color="shy">
+          {data.toAddress.slice(0, 8)}...{data.toAddress.slice(-6)}
+        </Text>
+      </HStack>
+    </VStack>
   )
 }
 
-/** Renders a swap transaction progress card with side-by-side coin cards. */
+/** Renders a swap transaction progress card with from → to vertical stepper. */
 const SwapProgressContent = ({ record }: { record: SwapTransactionRecord }) => {
+  const { t } = useTranslation()
   const { data } = record
   const fromAmount = Number(
     fromChainAmount(safeBigInt(data.fromAmount), data.fromDecimals)
@@ -104,22 +82,13 @@ const SwapProgressContent = ({ record }: { record: SwapTransactionRecord }) => {
   const toAmount = Number(
     fromChainAmount(safeBigInt(data.toAmount), data.toDecimals)
   )
-  const fromFiat = useFiatValue(
-    { chain: data.fromChain, id: data.fromTokenId },
-    fromAmount
-  )
-  const toFiat = useFiatValue(
-    { chain: data.toChain, id: data.toTokenId },
-    toAmount
-  )
 
   return (
-    <ProgressCardInner gap={12} alignItems="center">
-      <ProgressIndicator>
-        <Spinner />
-      </ProgressIndicator>
-      <HStack gap={8} style={{ position: 'relative', width: '100%' }}>
-        <SwapCoinCard gap={8} alignItems="center">
+    <StepperContainer>
+      <StepperLine />
+
+      <VStack gap={16} style={{ position: 'relative' }}>
+        <HStack alignItems="center" gap={8}>
           {data.fromTokenLogo && (
             <CoinIcon
               coin={{
@@ -130,25 +99,21 @@ const SwapProgressContent = ({ record }: { record: SwapTransactionRecord }) => {
               style={{ fontSize: 28 }}
             />
           )}
-          <VStack alignItems="center" gap={2}>
-            <Text size={12} weight={500} centerHorizontally>
-              {formatAmount(fromAmount, { precision: 'high' })} {data.fromToken}
-            </Text>
-            {fromFiat && (
-              <Text size={10} color="supporting" centerHorizontally>
-                {fromFiat}
-              </Text>
-            )}
-          </VStack>
-        </SwapCoinCard>
+          <Text size={16} weight={600}>
+            {formatAmount(fromAmount, { precision: 'high' })} {data.fromToken}
+          </Text>
+        </HStack>
 
-        <ChevronWrapper alignItems="center" justifyContent="center">
-          <ChevronCircle>
-            <ChevronRightIcon />
-          </ChevronCircle>
-        </ChevronWrapper>
+        <HStack alignItems="center" gap={8}>
+          <StepperIcon>
+            <ArrowDownIcon />
+          </StepperIcon>
+          <Text size={13} color="shy">
+            {t('to')}
+          </Text>
+        </HStack>
 
-        <SwapCoinCard gap={8} alignItems="center">
+        <HStack alignItems="center" gap={8}>
           {data.toTokenLogo && (
             <CoinIcon
               coin={{
@@ -159,19 +124,42 @@ const SwapProgressContent = ({ record }: { record: SwapTransactionRecord }) => {
               style={{ fontSize: 28 }}
             />
           )}
-          <VStack alignItems="center" gap={2}>
-            <Text size={12} weight={500} centerHorizontally>
+          <VStack gap={2}>
+            <Text size={11} color="shy">
+              {t('to_min_payout')}
+            </Text>
+            <Text size={16} weight={600}>
               {formatAmount(toAmount, { precision: 'high' })} {data.toToken}
             </Text>
-            {toFiat && (
-              <Text size={10} color="supporting" centerHorizontally>
-                {toFiat}
-              </Text>
-            )}
           </VStack>
-        </SwapCoinCard>
-      </HStack>
-    </ProgressCardInner>
+        </HStack>
+      </VStack>
+
+      {data.provider && <SwapProviderPill provider={data.provider} />}
+    </StepperContainer>
+  )
+}
+
+const SwapProviderPill = ({ provider }: { provider: string }) => {
+  const logoChain = isOneOf(provider, chainValues) ? provider : null
+
+  return (
+    <ProviderPill>
+      {logoChain && (
+        <ProviderIconSlot>
+          <ChainEntityIcon
+            value={getChainLogoSrc(logoChain)}
+            style={{ fontSize: 16 }}
+          />
+        </ProviderIconSlot>
+      )}
+      <Text variant="caption" color="shy">
+        via
+      </Text>
+      <Text variant="caption" color="regular" weight={600}>
+        {provider}
+      </Text>
+    </ProviderPill>
   )
 }
 
@@ -190,7 +178,7 @@ export const PendingTransactionProgressCard = ({
     navigate({ id: 'transactionDetail', state: { id: record.id } })
 
   return (
-    <ProgressCardWrapper
+    <ProgressCard
       role="button"
       tabIndex={0}
       onClick={handleClick}
@@ -201,67 +189,99 @@ export const PendingTransactionProgressCard = ({
         }
       }}
     >
-      <Text size={12} color="supporting" weight={500} centerHorizontally>
-        {t('pending')}
-      </Text>
+      <TopRow>
+        <TransactionHistoryTag type={record.type} />
+        <InProgressBadge>
+          <Text variant="caption" color="shy">
+            {t('in_progress')}
+          </Text>
+        </InProgressBadge>
+      </TopRow>
+
       {record.type === 'send' ? (
         <SendProgressContent record={record} />
       ) : (
         <SwapProgressContent record={record} />
       )}
-    </ProgressCardWrapper>
+    </ProgressCard>
   )
 }
 
-const pulse = keyframes`
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
-`
-
-const ProgressCardWrapper = styled.div`
+const ProgressCard = styled.div`
   padding: 16px;
   border-radius: 16px;
   background: ${getColor('foreground')};
   border: 1px solid ${getColor('foregroundExtra')};
   cursor: pointer;
-  animation: ${pulse} 2s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 `
 
-const ProgressCardInner = styled(VStack)`
+const TopRow = styled(HStack).attrs({
+  alignItems: 'center',
+  justifyContent: 'space-between',
+})`
   width: 100%;
 `
 
-const ProgressIndicator = styled.div`
+const InProgressBadge = styled.div`
+  padding: 6px 12px;
+  border-radius: 99px;
+  background: ${getColor('buttonSecondary')};
+  border: 1px solid ${getColor('foregroundSuper')};
+`
+
+const StepperContainer = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`
+
+const StepperLine = styled.div`
+  position: absolute;
+  left: 14px;
+  top: 32px;
+  bottom: 24px;
+  width: 1px;
+  background: ${getColor('foregroundExtra')};
+`
+
+const StepperIcon = styled.div`
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: ${getColor('foregroundExtra')};
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
-`
-
-const SwapCoinCard = styled(VStack)`
-  background-color: ${getColor('foreground')};
-  border: 1px solid ${getColor('foregroundExtra')};
-  border-radius: 12px;
-  flex: 1;
-  padding: 16px 12px;
-`
-
-const ChevronWrapper = styled(HStack)`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1;
-  border-radius: 50%;
-  padding: 5px;
-  background-color: ${getColor('background')};
-`
-
-const ChevronCircle = styled.div`
-  ${round};
-  ${sameDimensions(20)};
-  ${centerContent};
-  background: ${getColor('foregroundExtra')};
+  flex-shrink: 0;
   font-size: 14px;
-  color: #718096;
+  z-index: 1;
+`
+
+const ProviderPill = styled(HStack).attrs({
+  alignItems: 'center',
+  gap: 6,
+})`
+  padding: 8px 12px;
+  border-radius: 12px 0 16px 0;
+  background: ${getColor('buttonSecondary')};
+  border-top: 1px solid ${getColor('foregroundSuper')};
+  border-left: 1px solid ${getColor('foregroundSuper')};
+  position: absolute;
+  right: -16px;
+  bottom: -16px;
+`
+
+const ProviderIconSlot = styled.div`
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
