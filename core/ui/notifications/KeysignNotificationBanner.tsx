@@ -294,9 +294,13 @@ export const KeysignNotificationBanner = ({
       $dragOffset={dragOffset}
       $isShown={isShown}
       $layout={layout}
+      aria-hidden={!isShown}
       aria-labelledby={`${titleId} ${vaultNameId} ${descriptionId}`}
       aria-live={isShown ? 'polite' : 'off'}
       onKeyDown={event => {
+        if (!isShown) {
+          return
+        }
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault()
           onAction()
@@ -308,7 +312,7 @@ export const KeysignNotificationBanner = ({
       onPointerUp={endPointer}
       onTransitionEnd={handleTransitionEnd}
       role="button"
-      tabIndex={0}
+      tabIndex={isShown ? 0 : -1}
     >
       <MagicPatternLayer aria-hidden>
         <MagicPatternImage />
