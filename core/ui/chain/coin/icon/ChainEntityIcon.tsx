@@ -29,7 +29,7 @@ export const ChainEntityIcon = ({ value, ...rest }: ChainEntityIconProps) => {
   return (
     <SafeImage
       src={value}
-      render={props => <Icon {...props} {...rest} />}
+      render={props => <Icon loading="lazy" {...props} {...rest} />}
       fallback={
         <Fallback {...rest}>
           <PictureIcon />

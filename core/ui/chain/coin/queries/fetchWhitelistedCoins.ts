@@ -41,10 +41,14 @@ const fetchJupiterVerifiedTokens = async (chain: Chain): Promise<Coin[]> => {
   const url = `${baseJupiterTokensUrl}/tag?query=verified`
   const data = await queryUrl<SolanaJupiterToken[]>(url)
 
-  return fromSolanaJupiterTokens({
+  const coins = fromSolanaJupiterTokens({
     tokens: data,
     chain,
   })
+
+  return coins.map(coin =>
+    coin.logo?.startsWith('data:') ? { ...coin, logo: '' } : coin
+  )
 }
 
 export const fetchWhitelistedCoins = async (chain: Chain): Promise<Coin[]> => {
