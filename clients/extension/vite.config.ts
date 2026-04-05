@@ -2,6 +2,7 @@ import path from 'path'
 import { defineConfig, loadEnv, PluginOption } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
+import topLevelAwait from 'vite-plugin-top-level-await'
 import wasm from 'vite-plugin-wasm'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
@@ -37,7 +38,7 @@ export default defineConfig(async ({ mode }) => {
 
     switch (chunk) {
       case 'background':
-        plugins = [nodePolyfills({ exclude: ['fs'] }), wasm()]
+        plugins = [nodePolyfills({ exclude: ['fs'] }), wasm(), topLevelAwait()]
         break
       case 'inpage':
         format = 'iife'
