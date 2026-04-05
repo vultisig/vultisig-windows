@@ -1408,4 +1408,8 @@ export const es = {
   desktop_push_notification_disable_failed:
     'No se pudieron desactivar las notificaciones push. Inténtalo de nuevo.',
   keysign_request: 'Solicitud de clave',
+  join_transaction: 'Unirse a la transacción',
+  foreground_notification_generic: 'Transacción pendiente de aprobación',
+  foreground_notification_send: 'Enviar {{amount}}',
+  foreground_notification_swap: 'Intercambiar {{from}} → {{to}}',
 }
