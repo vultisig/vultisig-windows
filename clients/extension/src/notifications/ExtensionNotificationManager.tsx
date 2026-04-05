@@ -297,12 +297,19 @@ export const ExtensionNotificationManager = () => {
             return
           }
 
+          if (connectionsRef.current.get(vaultId) !== entry) {
+            return
+          }
+
           const prevDelay =
             reconnectDelayMsRef.current[vaultId] ??
             keysignNotificationWsInitialReconnectDelayMs
           const jitterMs = Math.random() * prevDelay * 0.5
           entry.reconnectTimer = setTimeout(() => {
             entry.reconnectTimer = undefined
+            if (connectionsRef.current.get(vaultId) !== entry) {
+              return
+            }
             void connectVault({ vaultId, partyName: entry.partyName })
           }, prevDelay + jitterMs)
           reconnectDelayMsRef.current[vaultId] = Math.min(
@@ -366,6 +373,7 @@ export const ExtensionNotificationManager = () => {
     chrome.storage.onChanged.addListener(onChromeStorageChanged)
 
     return () => {
+      syncSessionGeneration += 1
       chrome.storage.onChanged.removeListener(onChromeStorageChanged)
       const vaultIdsAtUnmount = [...connectionsMap.keys()]
       for (const vaultId of vaultIdsAtUnmount) {
