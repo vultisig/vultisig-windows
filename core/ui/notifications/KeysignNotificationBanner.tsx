@@ -249,9 +249,7 @@ export const KeysignNotificationBanner = ({
     const delta = event.clientY - dragStartY.current
     pointerTotalMove.current +=
       Math.abs(event.movementY) + Math.abs(event.movementX)
-    if (delta < 0) {
-      setDragOffset(delta)
-    }
+    setDragOffset(delta < 0 ? delta : 0)
   }
 
   const startDismiss = () => {
