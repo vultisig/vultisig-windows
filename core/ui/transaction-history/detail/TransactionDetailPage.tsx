@@ -297,9 +297,11 @@ const SwapDetailPanel = ({ record }: { record: SwapTransactionRecord }) => {
   return (
     <Panel>
       <SeparatedByLine gap={12}>
-        <DetailRow label={t('route')}>
-          <Text>{route}</Text>
-        </DetailRow>
+        {data.route && (
+          <DetailRow label={t('route')}>
+            <Text>{route}</Text>
+          </DetailRow>
+        )}
         {data.provider && (
           <DetailRow label={t('provider')}>
             <Text>{data.provider}</Text>
