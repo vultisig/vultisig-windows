@@ -1414,4 +1414,7 @@ export const pt = {
   foreground_notification_generic: 'Transação pendente de aprovação.',
   foreground_notification_send: 'Enviar {{amount}}',
   foreground_notification_swap: 'Trocar {{from}} → {{to}}',
+  in_progress: 'Em andamento...',
+  route: 'Rota',
+  via: 'via',
 }

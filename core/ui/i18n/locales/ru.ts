@@ -1385,4 +1385,7 @@ export const ru = {
   foreground_notification_generic: 'Сделка ожидает одобрения.',
   foreground_notification_send: 'Отправить {{amount}}',
   foreground_notification_swap: 'Поменять местами {{from}} → {{to}}',
+  in_progress: 'В ходе выполнения...',
+  route: 'Маршрут',
+  via: 'с помощью',
 }
