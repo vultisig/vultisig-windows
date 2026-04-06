@@ -5,12 +5,12 @@ import {
   customMessageDefaultChain,
   customMessageSupportedChains,
 } from '@core/ui/mpc/keysign/customMessage/chains'
+import { constructPolkadotSigningPayload } from '@core/ui/polkadot/dapp/constructSigningPayload'
+import { PolkadotSignerPayloadJSON } from '@core/ui/polkadot/dapp/PolkadotSignerPayload'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useMutation } from '@tanstack/react-query'
 import { OtherChain } from '@vultisig/core-chain/Chain'
 import { getChainKind } from '@vultisig/core-chain/ChainKind'
-import { constructPolkadotSigningPayload } from '@vultisig/core-chain/chains/polkadot/dapp/constructSigningPayload'
-import { PolkadotSignerPayloadJSON } from '@vultisig/core-chain/chains/polkadot/dapp/PolkadotSignerPayload'
 import { getCoinType } from '@vultisig/core-chain/coin/coinType'
 import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
 import { getSignatureAlgorithm } from '@vultisig/core-chain/signing/SignatureAlgorithm'

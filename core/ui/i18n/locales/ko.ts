@@ -1372,4 +1372,8 @@ export const ko = {
   desktop_push_notification_disable_failed:
     '푸시 알림을 비활성화할 수 없습니다. 다시 시도해 주세요.',
   keysign_request: '키사인 요청',
+  join_transaction: '참여 거래',
+  foreground_notification_generic: '승인 대기 중인 거래',
+  foreground_notification_send: '{{amount}}을 보내주세요',
+  foreground_notification_swap: '{{from}} → {{to}}로 교환',
 }

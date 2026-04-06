@@ -2,7 +2,11 @@ import { getStorageValue } from '@lib/extension/storage/get'
 import { removeStorageValue } from '@lib/extension/storage/remove'
 import { setStorageValue } from '@lib/extension/storage/set'
 
-const pushNotificationKey = 'pushNotificationRegistrations'
+/** Chrome storage key; also used by {@link ExtensionNotificationManager} listeners. */
+export const pushNotificationRegistrationsStorageKey =
+  'pushNotificationRegistrations'
+
+const pushNotificationKey = pushNotificationRegistrationsStorageKey
 
 const pushVaultIdMigratedKey = 'pushVaultIdMigrated'
 

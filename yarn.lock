@@ -758,6 +758,8 @@ __metadata:
     "@hookform/resolvers": "npm:^5.2.2"
     "@lib/codegen": "workspace:^"
     "@lib/ui": "workspace:^"
+    "@polkadot/util": "npm:^14.0.1"
+    "@polkadot/util-crypto": "npm:^14.0.1"
     "@react-spring/web": "npm:^10.0.3"
     "@rive-app/react-webgl2": "npm:4.26.2"
     "@solana/spl-token": "npm:^0.4.14"
