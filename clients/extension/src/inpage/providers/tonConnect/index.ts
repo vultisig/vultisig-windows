@@ -667,19 +667,19 @@ export class TonConnectBridge {
       } as WalletResponse<T>
     }
 
-    const txHash = txs?.[0]?.hash
-    if (!txHash) {
+    const boc = txs?.[0]?.data?.encoded
+    if (typeof boc !== 'string' || !boc) {
       return {
         id: message.id,
         error: {
           code: 100 as SEND_TRANSACTION_ERROR_CODES,
-          message: 'No transaction hash returned',
+          message: 'No signed BOC returned',
         },
       } as WalletResponse<T>
     }
     return {
       id: message.id,
-      result: txHash,
+      result: boc,
     } as WalletResponse<T>
   }
 }

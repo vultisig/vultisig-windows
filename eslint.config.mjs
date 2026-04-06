@@ -33,6 +33,7 @@ export default [
       '**/dist',
       '**/wailsjs',
       '**/*_pb.ts',
+      '**/storybook-static',
       'lib/dkls',
       'lib/schnorr',
       'lib/mldsa',

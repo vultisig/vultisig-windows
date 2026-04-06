@@ -1421,4 +1421,8 @@ export const de = {
   desktop_push_notification_disable_failed:
     'Push-Benachrichtigungen konnten nicht deaktiviert werden. Bitte versuchen Sie es erneut.',
   keysign_request: 'Schlüsselsignaturanfrage',
+  join_transaction: 'Beitrittstransaktion',
+  foreground_notification_generic: 'Transaktion vorbehaltlich der Genehmigung',
+  foreground_notification_send: 'Senden Sie {{amount}}',
+  foreground_notification_swap: 'Tausche {{from}} → {{to}}',
 }

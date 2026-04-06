@@ -1387,4 +1387,9 @@ export const nl = {
   desktop_push_notification_disable_failed:
     'Pushmeldingen konden niet worden uitgeschakeld. Probeer het opnieuw.',
   keysign_request: 'Sleutelondertekeningsverzoek',
+  join_transaction: 'Deelnemen aan transactie',
+  foreground_notification_generic:
+    'Transactie onder voorbehoud van goedkeuring',
+  foreground_notification_send: 'Verzend {{amount}}',
+  foreground_notification_swap: 'Wissel {{from}} → {{to}}',
 }
