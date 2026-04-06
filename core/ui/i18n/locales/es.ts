@@ -1412,4 +1412,7 @@ export const es = {
   foreground_notification_generic: 'Transacción pendiente de aprobación',
   foreground_notification_send: 'Enviar {{amount}}',
   foreground_notification_swap: 'Intercambiar {{from}} → {{to}}',
+  in_progress: 'En curso...',
+  route: 'Ruta',
+  via: 'a través de',
 }

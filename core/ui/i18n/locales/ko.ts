@@ -1376,4 +1376,7 @@ export const ko = {
   foreground_notification_generic: '승인 대기 중인 거래',
   foreground_notification_send: '{{amount}}을 보내주세요',
   foreground_notification_swap: '{{from}} → {{to}}로 교환',
+  in_progress: '진행 중...',
+  route: '노선',
+  via: '~을 통해',
 }
