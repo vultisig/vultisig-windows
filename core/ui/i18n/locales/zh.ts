@@ -1299,4 +1299,8 @@ export const zh = {
   desktop_push_notification_enable_failed: '无法启用推送通知。请重试。',
   desktop_push_notification_disable_failed: '无法禁用推送通知。请重试。',
   keysign_request: '密钥签名请求',
+  join_transaction: '加入交易',
+  foreground_notification_generic: '交易待审批',
+  foreground_notification_send: '发送 {{amount}}',
+  foreground_notification_swap: '交换 {{from}} → {{to}}',
 }
