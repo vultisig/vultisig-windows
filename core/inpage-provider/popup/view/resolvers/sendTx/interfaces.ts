@@ -182,7 +182,12 @@ export type TransactionDetails = {
     accountNumber: string
   }
   skipBroadcast?: boolean
-  tonMessages?: Array<{ to: string; amount: string; payload?: string }>
+  tonMessages?: Array<{
+    to: string
+    amount: string
+    payload?: string
+    stateInit?: string
+  }>
 }
 
 export type DepositTransactionDetails = {
