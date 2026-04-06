@@ -1412,4 +1412,8 @@ export const it = {
   desktop_push_notification_disable_failed:
     'Impossibile disattivare le notifiche push. Riprova.',
   keysign_request: 'Richiesta di firma digitale',
+  join_transaction: 'Partecipa alla transazione',
+  foreground_notification_generic: 'Transazione in attesa di approvazione',
+  foreground_notification_send: 'Invia {{amount}}',
+  foreground_notification_swap: 'Scambia {{from}} → {{to}}',
 }

@@ -1381,4 +1381,8 @@ export const ru = {
   desktop_push_notification_disable_failed:
     'Не удалось отключить push-уведомления. Пожалуйста, попробуйте еще раз.',
   keysign_request: 'Запрос на подписание ключевого знака',
+  join_transaction: 'Присоединиться к транзакции',
+  foreground_notification_generic: 'Сделка ожидает одобрения.',
+  foreground_notification_send: 'Отправить {{amount}}',
+  foreground_notification_swap: 'Поменять местами {{from}} → {{to}}',
 }
