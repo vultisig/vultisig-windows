@@ -1303,4 +1303,7 @@ export const zh = {
   foreground_notification_generic: '交易待审批',
   foreground_notification_send: '发送 {{amount}}',
   foreground_notification_swap: '交换 {{from}} → {{to}}',
+  in_progress: '进行中...',
+  route: '路线',
+  via: '通过',
 }
