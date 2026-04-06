@@ -171,7 +171,7 @@ export const ExtensionNotificationManager = () => {
             }
             teardown()
             window.focus()
-            onClick()
+            onClick?.()
           }
           chrome.notifications.onClicked.addListener(handleClick)
           chrome.notifications.onClosed.addListener(handleClosed)
