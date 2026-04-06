@@ -27,7 +27,7 @@ describe('groupByDate', () => {
     const result = groupByDate({ items, getTimestamp, labels })
 
     expect(result).toHaveLength(1)
-    expect(result[0].label).toBe('Today')
+    expect(result[0].label).toBe('Today  Mar 11, 2026')
     expect(result[0].items).toHaveLength(1)
   })
 
@@ -36,7 +36,7 @@ describe('groupByDate', () => {
     const result = groupByDate({ items, getTimestamp, labels })
 
     expect(result).toHaveLength(1)
-    expect(result[0].label).toBe('Yesterday')
+    expect(result[0].label).toBe('Yesterday  Mar 10, 2026')
   })
 
   it('uses locale-formatted date for older items', () => {
@@ -64,7 +64,7 @@ describe('groupByDate', () => {
     const result = groupByDate({ items, getTimestamp, labels })
 
     expect(result).toHaveLength(1)
-    expect(result[0].label).toBe('Today')
+    expect(result[0].label).toBe('Today  Mar 11, 2026')
     expect(result[0].items).toHaveLength(3)
   })
 
@@ -90,8 +90,8 @@ describe('groupByDate', () => {
     const result = groupByDate({ items, getTimestamp, labels })
 
     expect(result).toHaveLength(3)
-    expect(result[0].label).toBe('Today')
-    expect(result[1].label).toBe('Yesterday')
+    expect(result[0].label).toBe('Today  Mar 11, 2026')
+    expect(result[1].label).toBe('Yesterday  Mar 10, 2026')
     expect(result[2].label).toBe('March 9')
   })
 

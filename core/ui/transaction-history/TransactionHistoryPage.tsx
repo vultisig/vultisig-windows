@@ -5,17 +5,20 @@ import { ScreenLayout } from '@lib/ui/layout/ScreenLayout/ScreenLayout'
 import { hStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { useNavigateBack } from '@lib/ui/navigation/hooks/useNavigateBack'
-import { IsActiveProp } from '@lib/ui/props'
+import { ChildrenProp, IsActiveProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled, { css } from 'styled-components'
 
-import { TransactionRecord } from './core'
+import { TransactionRecord, TransactionRecordStatus } from './core'
 import { TransactionHistoryList } from './list/TransactionHistoryList'
+import { PendingTransactionProgressCard } from './progress/PendingTransactionProgressCard'
 import { useRefreshPendingTransactions } from './status/useRefreshPendingTransactions'
 import { filterTransactionsBySearch } from './utils/filterTransactionsBySearch'
+
+const pendingStatuses: TransactionRecordStatus[] = ['broadcasted', 'pending']
 
 const transactionHistoryTabs = ['overview', 'swaps', 'sends'] as const
 type TransactionHistoryTab = (typeof transactionHistoryTabs)[number]
@@ -37,8 +40,18 @@ const FilteredTransactionList = ({
   tab: TransactionHistoryTab
 }) => {
   const filterFn = tabFilter[tab]
-  const filtered = filterFn ? records.filter(filterFn) : records
-  return <TransactionHistoryList records={filtered} />
+  const tabFiltered = filterFn ? records.filter(filterFn) : records
+  const pending = tabFiltered.filter(r => pendingStatuses.includes(r.status))
+  const completed = tabFiltered.filter(r => !pendingStatuses.includes(r.status))
+
+  return (
+    <VStack gap={16}>
+      {pending.map(record => (
+        <PendingTransactionProgressCard key={record.id} record={record} />
+      ))}
+      <TransactionHistoryList records={completed} />
+    </VStack>
+  )
 }
 
 const TransactionHistoryContent = ({
@@ -74,6 +87,7 @@ const TransactionHistoryContent = ({
         tabs={tabs}
         value={activeTab}
         onValueChange={setActiveTab}
+        contentContainer={TabContentContainer}
         triggerSlot={({ tab: { label }, isActive, ...triggerProps }) => (
           <TabTrigger isActive={isActive} {...triggerProps}>
             <Text
@@ -108,6 +122,10 @@ export const TransactionHistoryPage = () => {
     </ScreenLayout>
   )
 }
+
+const TabContentContainer = ({ children }: ChildrenProp) => (
+  <VStack style={{ paddingTop: 16 }}>{children}</VStack>
+)
 
 const TabTrigger = styled.button<IsActiveProp>`
   all: unset;

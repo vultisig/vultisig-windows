@@ -1,5 +1,5 @@
 export type {
-  TransactionHistoryCardAddressDirection,
+  TransactionHistoryCardPill,
   TransactionHistoryCardProps,
   TransactionHistoryCardStatus,
 } from './TransactionHistoryCard'

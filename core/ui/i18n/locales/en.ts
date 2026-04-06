@@ -752,6 +752,7 @@ export const en = {
     'Password must be between {{min}} and {{max}} characters',
   password_required: 'Password is required',
   paste: 'Paste',
+  in_progress: 'In progress...',
   pending: 'Pending',
   percentage: 'Percentage',
   percentage_limit: 'Percentage must be 0-100',
@@ -784,6 +785,7 @@ export const en = {
   provide_camera_permission:
     'Please provide camera permission to scan the QR code',
   provider: 'Provider',
+  route: 'Route',
   qrCode: 'QR code',
   receive: 'Receive',
   receivedShare1Email: 'Vault Share 1 received via mail',
@@ -1196,6 +1198,7 @@ export const en = {
   verify_password_periodic_message_description:
     'We will periodically ask you to verify your fast sign password so you will always remember it',
   version: 'Version',
+  via: 'via',
   view_on_explorer: 'View on Explorer',
   vote: 'Vote',
   vult: '$VULT',
