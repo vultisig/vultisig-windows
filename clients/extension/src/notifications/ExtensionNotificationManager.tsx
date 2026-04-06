@@ -110,6 +110,7 @@ export const ExtensionNotificationManager = () => {
   useEffect(() => {
     const connectionsMap = connectionsRef.current
     let syncSessionGeneration = 0
+    const activeNotificationTeardowns = new Set<() => void>()
 
     const getTokenJson = async (): Promise<string | null> => {
       try {
@@ -148,17 +149,43 @@ export const ExtensionNotificationManager = () => {
           window.focus()
         },
         showOsNotification: ({ title, body, onClick }) => {
-          if (
-            typeof Notification === 'undefined' ||
-            Notification.permission !== 'granted'
-          ) {
+          if (typeof chrome === 'undefined' || !chrome.notifications) {
             return
           }
-          const osNotification = new Notification(title, { body })
-          osNotification.onclick = () => {
+          const notificationId = `vultisig-keysign-${crypto.randomUUID()}`
+          function teardown() {
+            activeNotificationTeardowns.delete(teardown)
+            chrome.notifications.onClicked.removeListener(handleClick)
+            chrome.notifications.onClosed.removeListener(handleClosed)
+          }
+          activeNotificationTeardowns.add(teardown)
+          function handleClosed(closedId: string) {
+            if (closedId !== notificationId) {
+              return
+            }
+            teardown()
+          }
+          function handleClick(clickedId: string) {
+            if (clickedId !== notificationId) {
+              return
+            }
+            teardown()
             window.focus()
             onClick()
           }
+          chrome.notifications.onClicked.addListener(handleClick)
+          chrome.notifications.onClosed.addListener(handleClosed)
+          void chrome.notifications
+            .create(notificationId, {
+              type: 'basic',
+              iconUrl: chrome.runtime.getURL('icon128.png'),
+              title,
+              message: body,
+              requireInteraction: true,
+            })
+            .catch(() => {
+              teardown()
+            })
         },
       })
     }
@@ -373,6 +400,9 @@ export const ExtensionNotificationManager = () => {
     chrome.storage.onChanged.addListener(onChromeStorageChanged)
 
     return () => {
+      for (const teardown of [...activeNotificationTeardowns]) {
+        teardown()
+      }
       syncSessionGeneration += 1
       chrome.storage.onChanged.removeListener(onChromeStorageChanged)
       const vaultIdsAtUnmount = [...connectionsMap.keys()]
