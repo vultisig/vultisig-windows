@@ -1425,4 +1425,7 @@ export const de = {
   foreground_notification_generic: 'Transaktion vorbehaltlich der Genehmigung',
   foreground_notification_send: 'Senden Sie {{amount}}',
   foreground_notification_swap: 'Tausche {{from}} → {{to}}',
+  in_progress: 'Im Gange...',
+  route: 'Route',
+  via: 'über',
 }

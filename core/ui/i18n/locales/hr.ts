@@ -1388,4 +1388,7 @@ export const hr = {
   foreground_notification_generic: 'Transakcija čeka odobrenje',
   foreground_notification_send: 'Pošalji {{amount}}',
   foreground_notification_swap: 'Zamijeni {{from}} → {{to}}',
+  in_progress: 'U tijeku...',
+  route: 'Ruta',
+  via: 'preko',
 }
