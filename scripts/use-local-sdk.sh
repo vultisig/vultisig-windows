@@ -14,6 +14,8 @@ SHARED_PACKAGES=(
   packages/core/chain
   packages/core/config
   packages/core/mpc
+  packages/mpc-types
+  packages/mpc-wasm
   packages/lib/utils
 )
 
