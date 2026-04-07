@@ -7,7 +7,7 @@ import {
   useViewModelInstanceBoolean,
   useViewModelInstanceNumber,
 } from '@rive-app/react-webgl2'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 type Bounds = {
   width: number
@@ -88,6 +88,8 @@ export const useRiveLoadingAnimation = ({
 
   useEffect(() => {
     if (!rive) return
+    // Object.assign is used (instead of `rive.volume = 0`) to bypass
+    // react-compiler's mutation rule for values returned from hooks.
     Object.assign(rive, { volume: 0 })
   }, [rive])
 
@@ -115,19 +117,13 @@ export const useRiveLoadingAnimation = ({
     return () => window.clearInterval(id)
   }, [rive])
 
-  const setConnected = useCallback(
-    (value: boolean) => {
-      connected?.setValue(value)
-    },
-    [connected]
-  )
+  const setConnected = (value: boolean) => {
+    connected?.setValue(value)
+  }
 
-  const setProgress = useCallback(
-    (value: number) => {
-      progressPercentage?.setValue(value)
-    },
-    [progressPercentage]
-  )
+  const setProgress = (value: number) => {
+    progressPercentage?.setValue(value)
+  }
 
   return {
     RiveComponent,

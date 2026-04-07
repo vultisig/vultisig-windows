@@ -15,6 +15,14 @@ type KeysignLoadingAnimationProps = {
   progress?: number
 }
 
+/**
+ * Full-bleed Rive animation displayed during the MPC keysign signing phase.
+ *
+ * @param isConnected - Whether the relay/peer connection is established;
+ *   forwarded to the Rive `Connected` ViewModel input.
+ * @param progress - Optional signing progress percentage (0–100); forwarded to
+ *   the Rive `progessPercentage` ViewModel input. Defaults to 0.
+ */
 export const KeysignLoadingAnimation = ({
   isConnected,
   progress = 0,

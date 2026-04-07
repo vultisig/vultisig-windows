@@ -4,6 +4,11 @@ import styled from 'styled-components'
 
 import { KeysignLoadingAnimation } from './KeysignLoadingAnimation'
 
+/**
+ * Full-screen signing state shown while an MPC keysign is in progress.
+ * Renders the chain-aware Rive animation with the localized
+ * "signing transaction" label overlaid at the bottom.
+ */
 export const KeysignSigningState = () => {
   const { t } = useTranslation()
 
