@@ -54,7 +54,7 @@ jobs:
       - name: Override SDK packages with main branch
         run: |
           mkdir -p /tmp/sdk-packs
-          for dir in packages/sdk packages/core/chain packages/core/config packages/core/mpc packages/lib/utils; do
+          for dir in packages/sdk packages/core/chain packages/core/config packages/core/mpc packages/mpc-types packages/mpc-wasm packages/lib/utils; do
             cd /tmp/vultisig-sdk/$dir && npm pack --pack-destination /tmp/sdk-packs
           done
           cd $GITHUB_WORKSPACE
