@@ -15,6 +15,8 @@ SHARED_PACKAGES=(
   packages/core/config
   packages/core/mpc
   packages/lib/utils
+  packages/mpc-types
+  packages/mpc-wasm
 )
 
 echo "==> Building SDK at $SDK_DIR"
