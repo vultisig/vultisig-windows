@@ -1392,4 +1392,7 @@ export const nl = {
     'Transactie onder voorbehoud van goedkeuring',
   foreground_notification_send: 'Verzend {{amount}}',
   foreground_notification_swap: 'Wissel {{from}} → {{to}}',
+  in_progress: 'Bezig...',
+  route: 'Route',
+  via: 'via',
 }
