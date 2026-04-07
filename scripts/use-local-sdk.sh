@@ -40,16 +40,24 @@ PACK_DIR="$PACK_DIR" node - <<'NODE'
   const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
   const packs = fs.readdirSync(packDir).filter(f => f.endsWith('.tgz'));
   const resolutions = pkg.resolutions || {};
+  const dependencies = pkg.dependencies || {};
   for (const tgz of packs) {
+    const tgzPath = path.join(packDir, tgz);
     const manifest = execFileSync(
       'tar',
-      ['-xzf', path.join(packDir, tgz), '-O', 'package/package.json'],
+      ['-xzf', tgzPath, '-O', 'package/package.json'],
       { encoding: 'utf8' }
     );
     const name = JSON.parse(manifest).name;
-    resolutions[name] = path.join(packDir, tgz);
+    resolutions[name] = tgzPath;
+    // Also add as a root dependency so packages that aren't declared by any
+    // workspace (e.g. @vultisig/mpc-types, which @vultisig/core-mpc imports
+    // without declaring) still get installed. Resolutions only override
+    // existing deps; they don't introduce new ones.
+    dependencies[name] = tgzPath;
   }
   pkg.resolutions = resolutions;
+  pkg.dependencies = dependencies;
   fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
 NODE
 
