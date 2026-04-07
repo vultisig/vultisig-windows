@@ -40,16 +40,26 @@ PACK_DIR="$PACK_DIR" node - <<'NODE'
   const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
   const packs = fs.readdirSync(packDir).filter(f => f.endsWith('.tgz'));
   const resolutions = pkg.resolutions || {};
+  const dependencies = pkg.dependencies || {};
+  const NEW_ROOT_DEPS = new Set([
+    '@vultisig/mpc-types',
+    '@vultisig/mpc-wasm',
+  ]);
   for (const tgz of packs) {
+    const tgzPath = path.join(packDir, tgz);
     const manifest = execFileSync(
       'tar',
-      ['-xzf', path.join(packDir, tgz), '-O', 'package/package.json'],
+      ['-xzf', tgzPath, '-O', 'package/package.json'],
       { encoding: 'utf8' }
     );
     const name = JSON.parse(manifest).name;
-    resolutions[name] = path.join(packDir, tgz);
+    resolutions[name] = tgzPath;
+    if (NEW_ROOT_DEPS.has(name)) {
+      dependencies[name] = tgzPath;
+    }
   }
   pkg.resolutions = resolutions;
+  pkg.dependencies = dependencies;
   fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
 NODE
 
