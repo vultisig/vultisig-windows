@@ -22,7 +22,8 @@ type HandleKeysignWsNotificationInput = {
   showOsNotification?: (input: {
     title: string
     body: string
-    onClick: () => void
+    /** Extension: used for chrome.notifications click. Desktop: native toast has no click hook. */
+    onClick?: () => void
   }) => void
 }
 
