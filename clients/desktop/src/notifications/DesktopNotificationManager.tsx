@@ -18,6 +18,7 @@ import { WindowShow, WindowUnminimise } from '@wailsapp/runtime'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { ShowNotification } from '../../wailsjs/go/main/App'
 import {
   desktopNotificationRegistrationsChangedEvent,
   getDesktopNotificationRegistrations,
@@ -128,18 +129,16 @@ export const DesktopNotificationManager = () => {
           WindowUnminimise()
           WindowShow()
         },
-        showOsNotification: ({ title, body, onClick }) => {
-          if (
-            typeof Notification === 'undefined' ||
-            Notification.permission !== 'granted'
-          ) {
-            return
-          }
-          const osNotification = new Notification(title, { body })
-          osNotification.onclick = () => {
-            window.focus()
-            onClick()
-          }
+        showOsNotification: ({ title, body }) => {
+          // Native shell notifications (osascript/PowerShell/notify-send) do not
+          // support click callbacks. Navigation on click is handled by the in-app
+          // banner; bringAppToFront already foregrounds the window.
+          ShowNotification(title, body).catch(error => {
+            console.debug(
+              '[DesktopNotificationManager] ShowNotification failed',
+              error
+            )
+          })
         },
       })
     }
