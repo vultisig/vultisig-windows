@@ -42,6 +42,8 @@ jobs:
           key: ${{ runner.os }}-eslint-${{ hashFiles('**/yarn.lock', 'eslint.config.mjs', 'clients/desktop/eslint.config.mjs') }}
 
       - name: Clone and build SDK main
+        env:
+          GIT_LFS_SKIP_SMUDGE: '1'
         run: |
           git clone --depth 1 https://github.com/vultisig/vultisig-sdk.git /tmp/vultisig-sdk
           cd /tmp/vultisig-sdk
@@ -126,6 +128,8 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Clone and build SDK main
+        env:
+          GIT_LFS_SKIP_SMUDGE: '1'
         run: |
           git clone --depth 1 https://github.com/vultisig/vultisig-sdk.git /tmp/vultisig-sdk
           cd /tmp/vultisig-sdk
@@ -212,6 +216,8 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Clone SDK
+        env:
+          GIT_LFS_SKIP_SMUDGE: '1'
         shell: bash
         run: git clone --depth 1 https://github.com/vultisig/vultisig-sdk.git "$RUNNER_TEMP/vultisig-sdk"
 
