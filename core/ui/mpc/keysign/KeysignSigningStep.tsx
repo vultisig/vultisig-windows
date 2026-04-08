@@ -187,9 +187,7 @@ export const KeysignSigningStep = ({
             title={t('keysign')}
             hasBorder
           />
-          <PageContent scrollable>
-            <KeysignSigningState />
-          </PageContent>
+          <KeysignSigningState />
           <PageFooter alignItems="center">
             <Text color="shy" size={12}>
               {t('version')} {version}
