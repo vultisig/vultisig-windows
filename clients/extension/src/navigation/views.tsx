@@ -29,7 +29,7 @@ import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { Views } from '@lib/ui/navigation/Views'
 import { useEffect } from 'react'
 
-import { ManagePushNotifications } from '../components/notifications/ManagePushNotifications'
+import { ExtensionNotificationSettingsPage } from '../components/notifications/ExtensionNotificationSettingsPage'
 import { RegisterPushNotificationsButton } from '../components/notifications/RegisterPushNotificationsButton'
 import { ManageSidePanel } from '../components/side-panel/ManageSidePanel'
 
@@ -60,6 +60,7 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   joinKeysign: JoinKeysignPage,
   keysign: StartKeysignView,
   migrateVault: () => null,
+  notificationSettings: ExtensionNotificationSettingsPage,
   onboarding: () => (
     <IncompleteOnboardingOnly>
       <OnboardingPage />
@@ -75,7 +76,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
       prioritize={<Prioritize />}
       expandView={<ExpandView />}
       sidePanel={<ManageSidePanel />}
-      pushNotifications={<ManagePushNotifications />}
     />
   ),
   setupFastVault: SetupFastVaultPage,

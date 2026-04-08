@@ -22,6 +22,7 @@ import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { LanguagesIcon } from '@lib/ui/icons/LanguagesIcon'
 import { LockKeyholeIcon } from '@lib/ui/icons/LockKeyholeIcon'
 import { MegaphoneIcon } from '@lib/ui/icons/MegaphoneIcon'
+import { NotificationBubbleIcon } from '@lib/ui/icons/NotificationBubbleIcon'
 import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
 import { ShareTwoIcon } from '@lib/ui/icons/ShareTwoIcon'
@@ -53,7 +54,6 @@ type Props = {
   expandView?: ReactNode
   insiderOptions?: ReactNode
   prioritize?: ReactNode
-  pushNotifications?: ReactNode
   sidePanel?: ReactNode
   checkUpdate?: ReactNode
 }
@@ -117,6 +117,17 @@ export const SettingsPage: FC<Props> = props => {
 
           <SettingsSection title={t('general')}>
             <ListItem
+              data-testid="notifications-settings-link"
+              icon={
+                <ListItemIconWrapper>
+                  <NotificationBubbleIcon />
+                </ListItemIconWrapper>
+              }
+              onClick={() => navigate({ id: 'notificationSettings' })}
+              title={t('notifications')}
+              showArrow
+            />
+            <ListItem
               extra={languageName[language]}
               icon={
                 <ListItemIconWrapper>
@@ -163,7 +174,6 @@ export const SettingsPage: FC<Props> = props => {
             )}
             {client === 'extension' && props.expandView}
             {client === 'extension' && props.sidePanel}
-            {props.pushNotifications}
           </SettingsSection>
           <SettingsSection title={t('security')}>
             <ListItem
