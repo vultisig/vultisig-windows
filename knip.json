@@ -8,7 +8,9 @@
     "wails"
   ],
   "ignoreDependencies": [
-    "babel-plugin-react-compiler"
+    "babel-plugin-react-compiler",
+    "@vultisig/mpc-types",
+    "@vultisig/mpc-wasm"
   ],
   "workspaces": {
     "clients/desktop": {

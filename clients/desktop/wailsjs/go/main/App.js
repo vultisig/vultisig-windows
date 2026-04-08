@@ -17,3 +17,7 @@ export function ReadTextFile(arg1) {
 export function SaveFile(arg1, arg2) {
   return window['go']['main']['App']['SaveFile'](arg1, arg2);
 }
+
+export function ShowNotification(arg1, arg2) {
+  return window['go']['main']['App']['ShowNotification'](arg1, arg2);
+}

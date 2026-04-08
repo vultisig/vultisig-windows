@@ -42,6 +42,8 @@ jobs:
           key: ${{ runner.os }}-eslint-${{ hashFiles('**/yarn.lock', 'eslint.config.mjs', 'clients/desktop/eslint.config.mjs') }}
 
       - name: Clone and build SDK main
+        env:
+          GIT_LFS_SKIP_SMUDGE: '1'
         run: |
           git clone --depth 1 https://github.com/vultisig/vultisig-sdk.git /tmp/vultisig-sdk
           cd /tmp/vultisig-sdk
@@ -54,7 +56,7 @@ jobs:
       - name: Override SDK packages with main branch
         run: |
           mkdir -p /tmp/sdk-packs
-          for dir in packages/sdk packages/core/chain packages/core/config packages/core/mpc packages/lib/utils; do
+          for dir in packages/sdk packages/core/chain packages/core/config packages/core/mpc packages/lib/utils packages/mpc-types packages/mpc-wasm; do
             cd /tmp/vultisig-sdk/$dir && npm pack --pack-destination /tmp/sdk-packs
           done
           cd $GITHUB_WORKSPACE
@@ -66,16 +68,28 @@ jobs:
             const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
             const packs = fs.readdirSync(packDir).filter(f => f.endsWith('.tgz'));
             const resolutions = pkg.resolutions || {};
+            const dependencies = pkg.dependencies || {};
+            // Packages not declared by any workspace; resolutions can't
+            // introduce new deps so they must be added at the root.
+            const NEW_ROOT_DEPS = new Set([
+              '@vultisig/mpc-types',
+              '@vultisig/mpc-wasm',
+            ]);
             for (const tgz of packs) {
+              const tgzPath = path.join(packDir, tgz);
               const manifest = execFileSync(
                 'tar',
-                ['-xzf', path.join(packDir, tgz), '-O', 'package/package.json'],
+                ['-xzf', tgzPath, '-O', 'package/package.json'],
                 { encoding: 'utf8' }
               );
               const name = JSON.parse(manifest).name;
-              resolutions[name] = path.join(packDir, tgz);
+              resolutions[name] = tgzPath;
+              if (NEW_ROOT_DEPS.has(name)) {
+                dependencies[name] = tgzPath;
+              }
             }
             pkg.resolutions = resolutions;
+            pkg.dependencies = dependencies;
             fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
           NODE
           YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn install
@@ -114,6 +128,8 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Clone and build SDK main
+        env:
+          GIT_LFS_SKIP_SMUDGE: '1'
         run: |
           git clone --depth 1 https://github.com/vultisig/vultisig-sdk.git /tmp/vultisig-sdk
           cd /tmp/vultisig-sdk
@@ -126,7 +142,7 @@ jobs:
       - name: Override SDK packages with main branch
         run: |
           mkdir -p /tmp/sdk-packs
-          for dir in packages/sdk packages/core/chain packages/core/config packages/core/mpc packages/lib/utils; do
+          for dir in packages/sdk packages/core/chain packages/core/config packages/core/mpc packages/lib/utils packages/mpc-types packages/mpc-wasm; do
             cd /tmp/vultisig-sdk/$dir && npm pack --pack-destination /tmp/sdk-packs
           done
           cd $GITHUB_WORKSPACE
@@ -138,16 +154,28 @@ jobs:
             const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
             const packs = fs.readdirSync(packDir).filter(f => f.endsWith('.tgz'));
             const resolutions = pkg.resolutions || {};
+            const dependencies = pkg.dependencies || {};
+            // Packages not declared by any workspace; resolutions can't
+            // introduce new deps so they must be added at the root.
+            const NEW_ROOT_DEPS = new Set([
+              '@vultisig/mpc-types',
+              '@vultisig/mpc-wasm',
+            ]);
             for (const tgz of packs) {
+              const tgzPath = path.join(packDir, tgz);
               const manifest = execFileSync(
                 'tar',
-                ['-xzf', path.join(packDir, tgz), '-O', 'package/package.json'],
+                ['-xzf', tgzPath, '-O', 'package/package.json'],
                 { encoding: 'utf8' }
               );
               const name = JSON.parse(manifest).name;
-              resolutions[name] = path.join(packDir, tgz);
+              resolutions[name] = tgzPath;
+              if (NEW_ROOT_DEPS.has(name)) {
+                dependencies[name] = tgzPath;
+              }
             }
             pkg.resolutions = resolutions;
+            pkg.dependencies = dependencies;
             fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
           NODE
           YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn install
@@ -188,6 +216,8 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Clone SDK
+        env:
+          GIT_LFS_SKIP_SMUDGE: '1'
         shell: bash
         run: git clone --depth 1 https://github.com/vultisig/vultisig-sdk.git "$RUNNER_TEMP/vultisig-sdk"
 
@@ -207,7 +237,7 @@ jobs:
         shell: bash
         run: |
           mkdir -p "$RUNNER_TEMP/sdk-packs"
-          for dir in packages/core/chain packages/core/config packages/core/mpc packages/lib/utils; do
+          for dir in packages/core/chain packages/core/config packages/core/mpc packages/lib/utils packages/mpc-types packages/mpc-wasm; do
             cd "$RUNNER_TEMP/vultisig-sdk/$dir" && npm pack --pack-destination "$RUNNER_TEMP/sdk-packs"
           done
           cd "$GITHUB_WORKSPACE"
@@ -219,6 +249,11 @@ jobs:
             const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
             const packs = fs.readdirSync(packDir).filter(f => f.endsWith('.tgz'));
             const resolutions = pkg.resolutions || {};
+            const dependencies = pkg.dependencies || {};
+            const NEW_ROOT_DEPS = new Set([
+              '@vultisig/mpc-types',
+              '@vultisig/mpc-wasm',
+            ]);
             for (const tgz of packs) {
               const tgzPath = path.join(packDir, tgz);
               const manifest = execFileSync(
@@ -228,8 +263,12 @@ jobs:
               );
               const name = JSON.parse(manifest).name;
               resolutions[name] = tgzPath;
+              if (NEW_ROOT_DEPS.has(name)) {
+                dependencies[name] = tgzPath;
+              }
             }
             pkg.resolutions = resolutions;
+            pkg.dependencies = dependencies;
             fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
           NODE
           YARN_ENABLE_IMMUTABLE_INSTALLS=false yarn install
