@@ -54,10 +54,7 @@ export const useJoinKeygenUrlQuery = () => {
             : 'existingVault' in keygenVault
               ? keygenVault.existingVault.libType
               : vaultCreationMpcLib
-        const libType =
-          mpcLib === 'KeyImport'
-            ? toLibType({ libType: 'DKLS', isKeyImport: true })
-            : toLibType({ libType: mpcLib, isKeyImport: false })
+        const libType = toLibType(mpcLib)
 
         const useVultisigRelay = serverType === 'relay'
 
