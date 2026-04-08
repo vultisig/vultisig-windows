@@ -50,10 +50,22 @@ export const AmountTextInput = ({
   const valueAsString = value?.toString() ?? ''
   const [inputValue, setInputValue] = useState<string>(valueAsString)
 
-  // Sync internal state with prop value
+  // Sync internal state with prop value, but preserve the user's in-progress
+  // string when it already parses to the same numeric value (e.g. "0.0" vs "0").
+  // Otherwise editing decimal digits would reset the field as the parent
+  // re-emits a normalized value.
   useEffect(() => {
-    setInputValue(valueAsString)
-  }, [valueAsString])
+    const parse = shouldBeInteger ? parseInt : parseFloat
+    const currentParsed = inputValue === '' ? null : parse(inputValue)
+    const isSameNumeric =
+      currentParsed === value ||
+      (currentParsed !== null &&
+        !isNaN(currentParsed) &&
+        currentParsed === value)
+    if (!isSameNumeric) {
+      setInputValue(valueAsString)
+    }
+  }, [valueAsString, value, shouldBeInteger, inputValue])
 
   return (
     <Input
@@ -78,6 +90,10 @@ export const AmountTextInput = ({
       onValueChange={(value: string) => {
         if (shouldBePositive) {
           value = value.replace(/-/g, '')
+        }
+
+        if (value.startsWith('.')) {
+          value = `0${value}`
         }
 
         if (value === '') {

@@ -278,6 +278,7 @@ const InputWrapper = styled.div`
 `
 
 const StyledInputWrapper = styled(motion.div)`
+  padding-left: 40px;
   padding-right: 40px;
 `
 
