@@ -159,6 +159,7 @@ export const NotificationSettingsContent = ({
                 </VaultRowLeft>
                 <Switch
                   checked={vault.enabled}
+                  disabled={isPending}
                   onChange={enabled => {
                     onVaultToggle(vault.id, enabled)
                   }}

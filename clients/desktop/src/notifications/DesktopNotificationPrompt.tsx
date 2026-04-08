@@ -19,7 +19,7 @@ export const DesktopNotificationPrompt = () => {
   return (
     <EnableNotificationsPromptSheet
       onClose={markSeen}
-      onDismiss={() => {}}
+      onDismiss={markSeen}
       onEnable={async () => {
         await setHasSeen(true)
         navigate({ id: 'chooseVaults' })

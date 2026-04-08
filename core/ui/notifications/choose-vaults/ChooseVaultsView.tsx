@@ -8,6 +8,7 @@ import { useState } from 'react'
 export const ChooseVaultsView = () => {
   const navigate = useCoreNavigate()
   const storedVaults = useVaults()
+  // TODO: persist per-vault notification choices before leaving (currently in-memory only).
   const [enabledById, setEnabledById] = useState<Record<string, boolean>>({})
 
   const vaults = toVaultNotificationItems(storedVaults, enabledById)
