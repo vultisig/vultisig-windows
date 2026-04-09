@@ -6,10 +6,14 @@ import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { useState } from 'react'
 
 /**
- * Fallback choose-vaults view with in-memory state.
- * Desktop and extension override this in their navigation views
- * with client-specific implementations that persist state and
- * register/unregister with the notification server.
+ * Default choose-vaults view for shared `core` navigation only (`sharedViews`).
+ * It keeps toggle state in memory because `core` has no push-registration storage.
+ *
+ * **Shipping clients do not use this component:** `clients/desktop` and
+ * `clients/extension` replace `chooseVaults` with `DesktopChooseVaultsView` and
+ * `ExtensionChooseVaultsView`, which read/write real registration state via the
+ * notification service. Any “persist before Done” requirement applies there, not
+ * here.
  */
 export const ChooseVaultsView = () => {
   const navigate = useCoreNavigate()
