@@ -209,8 +209,6 @@ const runPushVaultIdMigrationIfNeeded = async (): Promise<void> => {
   )
 
   const serverUrl = await getServerUrl()
-  const subscription = await self.registration.pushManager.getSubscription()
-  const token = subscription ? JSON.stringify(subscription.toJSON()) : undefined
 
   const result = await chrome.storage.local.get('vaults')
   const vaults = (result.vaults ?? []) as StoredVault[]
@@ -222,13 +220,9 @@ const runPushVaultIdMigrationIfNeeded = async (): Promise<void> => {
         serverUrl,
         vaultId: v.publicKeys.ecdsa,
         partyName: v.localPartyId,
-        token,
       })
-    } catch (error) {
-      console.warn(
-        '[Vultisig Push] Unregister pre-migration (legacy vault_id) failed, continuing:',
-        error
-      )
+    } catch {
+      // Network errors are non-fatal — retry next startup.
     }
   }
 
@@ -263,8 +257,6 @@ const runOptInMigrationIfNeeded = async (): Promise<void> => {
   )
 
   const serverUrl = await getServerUrl()
-  const subscription = await self.registration.pushManager.getSubscription()
-  const token = subscription ? JSON.stringify(subscription.toJSON()) : undefined
 
   const registrations = await getPushNotificationRegistrations()
 
@@ -274,13 +266,9 @@ const runOptInMigrationIfNeeded = async (): Promise<void> => {
         serverUrl,
         vaultId: reg.vaultId,
         partyName: reg.partyName,
-        token,
       })
-    } catch (error) {
-      console.warn(
-        '[Vultisig Push] Opt-in migration: unregister failed for vault, continuing:',
-        error
-      )
+    } catch {
+      // Network errors are non-fatal for migration — retry next startup.
     }
   }
 
@@ -447,17 +435,13 @@ export const handlePushEvents = () => {
       const msg = message as PushUnregisterVaultMessage
       ;(async () => {
         const serverUrl = await getServerUrl()
-        const subscription =
-          await self.registration.pushManager.getSubscription()
-        const token = subscription
-          ? JSON.stringify(subscription.toJSON())
-          : undefined
 
+        // Token-less unregister (like iOS): removes ALL registrations for this
+        // vault+party regardless of which push subscription was used originally.
         await unregisterDeviceForPushNotifications({
           serverUrl,
           vaultId: msg.vault.vaultId,
           partyName: msg.vault.localPartyId,
-          token,
         })
 
         await removePushNotificationRegistration(msg.vault.vaultId)

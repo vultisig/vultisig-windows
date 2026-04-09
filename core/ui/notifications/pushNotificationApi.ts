@@ -10,6 +10,11 @@ export const fetchVapidPublicKey = async ({
   serverUrl,
 }: FetchVapidKeyInput): Promise<string> => {
   const response = await fetch(`${serverUrl}/vapid-public-key`)
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch VAPID public key: ${response.status} ${response.statusText}`
+    )
+  }
   const data: FetchVapidKeyResult = await response.json()
   return data.public_key
 }
@@ -58,19 +63,28 @@ export const unregisterDeviceForPushNotifications = async ({
   partyName,
   token,
 }: UnregisterDeviceInput): Promise<void> => {
-  const response = await fetch(`${serverUrl}/unregister`, {
-    method: 'DELETE',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      vault_id: vaultId,
-      party_name: partyName,
-      token: token ?? '',
-    }),
-  })
+  let response: Response
+  try {
+    response = await fetch(`${serverUrl}/unregister`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        vault_id: vaultId,
+        party_name: partyName,
+        token: token ?? '',
+      }),
+    })
+  } catch (fetchError) {
+    console.warn(
+      `[Vultisig Push] Unregister fetch failed for vault ${vaultId.slice(0, 12)}… — treating as success:`,
+      fetchError
+    )
+    return
+  }
 
   if (!response.ok) {
-    throw new Error(
-      `Failed to unregister device: ${response.status} ${response.statusText}`
+    console.warn(
+      `[Vultisig Push] Unregister returned ${response.status} for vault ${vaultId.slice(0, 12)}… — treating as success`
     )
   }
 }
