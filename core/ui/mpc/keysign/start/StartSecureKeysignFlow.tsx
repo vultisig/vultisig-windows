@@ -1,3 +1,4 @@
+import { KeysignConnectingState } from '@core/ui/mpc/keysign/flow/KeysignConnectingState'
 import { KeysignSigningStep } from '@core/ui/mpc/keysign/KeysignSigningStep'
 import { KeysignPeerDiscoveryStep } from '@core/ui/mpc/keysign/peers/KeysignPeerDiscoveryStep'
 import { KeysignActionProviderProp } from '@core/ui/mpc/keysign/start/KeysignActionProviderProp'
@@ -9,6 +10,8 @@ import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 
 import { TransactionRecorderProvider } from '../../../transaction-history/record/TransactionRecorderProvider'
 import { KeysignMessagePayloadProvider } from '../state/keysignMessagePayload'
+
+const renderConnecting = () => <KeysignConnectingState />
 
 export const StartSecureKeysignFlow = ({
   keysignActionProvider: KeysignActionProvider,
@@ -29,6 +32,7 @@ export const StartSecureKeysignFlow = ({
         <MpcPeersProvider value={value}>
           <StartMpcSessionFlow
             value="keysign"
+            renderPending={renderConnecting}
             render={() => (
               <KeysignActionProvider>
                 <KeysignMessagePayloadProvider value={keysignPayload}>

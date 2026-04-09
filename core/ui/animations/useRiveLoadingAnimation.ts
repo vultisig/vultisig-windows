@@ -132,5 +132,6 @@ export const useRiveLoadingAnimation = ({
     setProgress,
     isLoading: !rive,
     bounds,
+    viewModelInstance,
   }
 }
