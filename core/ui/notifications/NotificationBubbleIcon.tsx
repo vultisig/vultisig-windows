@@ -1,5 +1,11 @@
 import { SvgProps } from '@lib/ui/props'
 
+/**
+ * Bell-with-badge icon for notifications in settings and nav.
+ *
+ * @param props — forwarded to the root SVG (`SvgProps`).
+ * @returns The SVG element.
+ */
 export function NotificationBubbleIcon(props: SvgProps) {
   return (
     <svg

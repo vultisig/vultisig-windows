@@ -6,6 +6,7 @@ import { useVaults } from '@core/ui/storage/vaults'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { useTranslation } from 'react-i18next'
 
 import { useDesktopAllVaultsNotificationStates } from './useDesktopAllVaultsNotificationStates'
@@ -18,6 +19,7 @@ export const DesktopNotificationSettingsPage = () => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
   const storedVaults = useVaults()
+  const vaultsWithChain = storedVaults.filter(v => v.hexChainCode)
   const { data: enabledById = {} } = useDesktopAllVaultsNotificationStates()
 
   const { mutate: toggleVault, isPending: isTogglingVault } =
@@ -26,7 +28,7 @@ export const DesktopNotificationSettingsPage = () => {
     useDesktopToggleAllVaultsNotificationMutation()
   const isPending = isTogglingVault || isTogglingAll
 
-  const vaults = toVaultNotificationItems(storedVaults, enabledById)
+  const vaults = toVaultNotificationItems(vaultsWithChain, enabledById)
   const anyEnabled = vaults.some(v => v.enabled)
 
   return (
@@ -49,7 +51,7 @@ export const DesktopNotificationSettingsPage = () => {
           onToggle={enabled => {
             if (isPending) return
             toggleAll({
-              vaults: storedVaults.map(v => ({
+              vaults: vaultsWithChain.map(v => ({
                 ecdsa: v.publicKeys.ecdsa,
                 hexChainCode: v.hexChainCode,
                 localPartyId: v.localPartyId,
@@ -59,7 +61,7 @@ export const DesktopNotificationSettingsPage = () => {
           }}
           onVaultToggle={(vaultId, enabled) => {
             if (isPending) return
-            const vault = storedVaults.find(v => v.publicKeys.ecdsa === vaultId)
+            const vault = vaultsWithChain.find(v => getVaultId(v) === vaultId)
             if (!vault) return
 
             toggleVault({

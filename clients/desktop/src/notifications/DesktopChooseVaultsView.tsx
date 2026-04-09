@@ -2,6 +2,7 @@ import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { ChooseVaultsPage } from '@core/ui/notifications/choose-vaults/ChooseVaultsPage'
 import { toVaultNotificationItems } from '@core/ui/notifications/settings/toVaultNotificationItems'
 import { useVaults } from '@core/ui/storage/vaults'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 
 import { useDesktopAllVaultsNotificationStates } from './useDesktopAllVaultsNotificationStates'
 import {
@@ -9,9 +10,11 @@ import {
   useDesktopToggleVaultNotificationMutation,
 } from './useDesktopVaultNotificationMutations'
 
+/** Desktop choose-vaults screen: toggles push per vault via notification registration APIs. */
 export const DesktopChooseVaultsView = () => {
   const navigate = useCoreNavigate()
   const storedVaults = useVaults()
+  const vaultsWithChain = storedVaults.filter(v => v.hexChainCode)
   const { data: enabledById = {} } = useDesktopAllVaultsNotificationStates()
   const { mutate: toggleVault, isPending: isTogglingVault } =
     useDesktopToggleVaultNotificationMutation()
@@ -19,7 +22,7 @@ export const DesktopChooseVaultsView = () => {
     useDesktopToggleAllVaultsNotificationMutation()
   const isPending = isTogglingVault || isTogglingAll
 
-  const vaults = toVaultNotificationItems(storedVaults, enabledById)
+  const vaults = toVaultNotificationItems(vaultsWithChain, enabledById)
   const allEnabled = vaults.length > 0 && vaults.every(v => v.enabled)
 
   const goBack = () => {
@@ -34,7 +37,7 @@ export const DesktopChooseVaultsView = () => {
       onEnableAll={enabled => {
         if (isPending) return
         toggleAll({
-          vaults: storedVaults.map(v => ({
+          vaults: vaultsWithChain.map(v => ({
             ecdsa: v.publicKeys.ecdsa,
             hexChainCode: v.hexChainCode,
             localPartyId: v.localPartyId,
@@ -44,7 +47,7 @@ export const DesktopChooseVaultsView = () => {
       }}
       onVaultToggle={(vaultId, enabled) => {
         if (isPending) return
-        const vault = storedVaults.find(v => v.publicKeys.ecdsa === vaultId)
+        const vault = vaultsWithChain.find(v => getVaultId(v) === vaultId)
         if (!vault) return
 
         toggleVault({

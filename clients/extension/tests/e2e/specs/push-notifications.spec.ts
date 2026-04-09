@@ -10,11 +10,16 @@
  * (requires user gesture in real browser). These tests verify UI presence.
  */
 
-import { test, expect } from '../fixtures/extension-loader'
+import { expect, test } from '../fixtures/extension-loader'
+import {
+  ensureVaultExists,
+  getVaultConfigFromEnv,
+} from '../helpers/vault-import'
 import { VaultPage } from '../page-objects/VaultPage.po'
-import { ensureVaultExists, getVaultConfigFromEnv } from '../helpers/vault-import'
 
-async function navigateToNotificationSettings(page: import('@playwright/test').Page) {
+async function navigateToNotificationSettings(
+  page: import('@playwright/test').Page
+) {
   const settingsBtn = page.locator('[data-testid="settings-button"]')
   await settingsBtn.waitFor({ state: 'visible', timeout: 10000 })
   await settingsBtn.click()
@@ -31,10 +36,18 @@ test.describe('Push Notifications', () => {
     const config = getVaultConfigFromEnv()
     if (!config) return
 
-    await ensureVaultExists(context, extensionId, config.vaultPath, config.password)
+    await ensureVaultExists(
+      context,
+      extensionId,
+      config.vaultPath,
+      config.password
+    )
   })
 
-  test('notifications item appears in settings', async ({ context, extensionId }) => {
+  test('notifications item appears in settings', async ({
+    context,
+    extensionId,
+  }) => {
     const page = await context.newPage()
     const vaultPage = new VaultPage(page, extensionId)
 
@@ -48,7 +61,9 @@ test.describe('Push Notifications', () => {
       await page.waitForTimeout(1000)
 
       const notificationsItem = page.getByText('Notifications', { exact: true })
-      const hasNotifications = await notificationsItem.isVisible({ timeout: 5000 }).catch(() => false)
+      const hasNotifications = await notificationsItem
+        .isVisible({ timeout: 5000 })
+        .catch(() => false)
       console.log('Notifications item visible in settings:', hasNotifications)
 
       expect(hasNotifications).toBe(true)
@@ -57,7 +72,10 @@ test.describe('Push Notifications', () => {
     }
   })
 
-  test('push notification toggle appears on notifications page', async ({ context, extensionId }) => {
+  test('push notification toggle appears on notifications page', async ({
+    context,
+    extensionId,
+  }) => {
     const page = await context.newPage()
     const vaultPage = new VaultPage(page, extensionId)
 
@@ -68,7 +86,9 @@ test.describe('Push Notifications', () => {
       await navigateToNotificationSettings(page)
 
       const pushToggle = page.getByText('Push Notifications', { exact: false })
-      const hasPushToggle = await pushToggle.isVisible({ timeout: 5000 }).catch(() => false)
+      const hasPushToggle = await pushToggle
+        .isVisible({ timeout: 5000 })
+        .catch(() => false)
       console.log('Push notifications toggle visible:', hasPushToggle)
 
       expect(hasPushToggle).toBe(true)
@@ -77,7 +97,15 @@ test.describe('Push Notifications', () => {
     }
   })
 
-  test('push notification toggle is clickable', async ({ context, extensionId }) => {
+  test('push notification toggle is clickable', async ({
+    context,
+    extensionId,
+  }) => {
+    test.skip(
+      !getVaultConfigFromEnv(),
+      'Requires E2E vault env so notifications page has vault rows and toggle state can change'
+    )
+
     const page = await context.newPage()
     const vaultPage = new VaultPage(page, extensionId)
 
@@ -87,21 +115,29 @@ test.describe('Push Notifications', () => {
 
       await navigateToNotificationSettings(page)
 
-      const pushToggle = page.getByText('Push Notifications', { exact: false })
-      await pushToggle.waitFor({ state: 'visible', timeout: 10000 })
-      console.log('Found Push Notifications toggle')
+      const row = page.getByTestId('push-notifications-row')
+      const probe = page.getByTestId('push-notifications-is-enabled')
+      const before = await probe.getAttribute('data-enabled')
 
-      await pushToggle.click()
+      const pushSwitch = row.locator('[tabindex="0"]').first()
+      await pushSwitch.waitFor({ state: 'visible', timeout: 10000 })
+      console.log('Found push notifications switch')
+
+      await pushSwitch.click()
       await page.waitForTimeout(500)
-      console.log('Clicked push notification toggle')
+      console.log('Clicked push notification switch')
 
-      expect(true).toBe(true)
+      const after = await probe.getAttribute('data-enabled')
+      expect(after).not.toBe(before)
     } finally {
       await page.close()
     }
   })
 
-  test('developer options shows push server URL', async ({ context, extensionId }) => {
+  test('developer options shows push server URL', async ({
+    context,
+    extensionId,
+  }) => {
     const page = await context.newPage()
     const vaultPage = new VaultPage(page, extensionId)
 
@@ -121,12 +157,22 @@ test.describe('Push Notifications', () => {
         await versionText.click()
         await page.waitForTimeout(500)
 
-        const devOptionsModal = page.locator('text=/developer.*options|push.*server/i').first()
-        const hasDevOptions = await devOptionsModal.isVisible({ timeout: 3000 }).catch(() => false)
+        const devOptionsModal = page
+          .locator('text=/developer.*options|push.*server/i')
+          .first()
+        const hasDevOptions = await devOptionsModal
+          .isVisible({ timeout: 3000 })
+          .catch(() => false)
 
         if (hasDevOptions) {
-          const pushServerField = page.locator('input[placeholder*="push"], input[name*="push"], text=/push.*server.*url/i').first()
-          const hasPushServerField = await pushServerField.isVisible({ timeout: 3000 }).catch(() => false)
+          const pushServerField = page
+            .locator(
+              'input[placeholder*="push"], input[name*="push"], text=/push.*server.*url/i'
+            )
+            .first()
+          const hasPushServerField = await pushServerField
+            .isVisible({ timeout: 3000 })
+            .catch(() => false)
 
           console.log('Developer options modal visible:', hasDevOptions)
           console.log('Push server URL field visible:', hasPushServerField)

@@ -114,25 +114,36 @@ export const NotificationSettingsContent = ({
   return (
     <VStack fullWidth alignItems="stretch" gap={0}>
       <PushSection>
-        <HStack alignItems="center" gap={4} fullWidth>
-          <LeftColumn>
-            <VStack alignItems="start" gap={4}>
-              <Text size={16} weight={500} color="regular">
-                {t('push_notifications')}
-              </Text>
-              <DescriptionMaxWidth>
-                <Text variant="caption" color="shyExtra">
-                  {t('push_notifications_description')}
+        <div
+          data-testid="push-notifications-row"
+          style={{ display: 'contents' }}
+        >
+          <HStack alignItems="center" gap={4} fullWidth>
+            <span
+              aria-hidden
+              data-enabled={isEnabled ? 'true' : 'false'}
+              data-testid="push-notifications-is-enabled"
+              style={{ display: 'none' }}
+            />
+            <LeftColumn>
+              <VStack alignItems="start" gap={4}>
+                <Text size={16} weight={500} color="regular">
+                  {t('push_notifications')}
                 </Text>
-              </DescriptionMaxWidth>
-            </VStack>
-          </LeftColumn>
-          <Switch
-            checked={isEnabled}
-            disabled={isPending}
-            onChange={onToggle}
-          />
-        </HStack>
+                <DescriptionMaxWidth>
+                  <Text variant="caption" color="shyExtra">
+                    {t('push_notifications_description')}
+                  </Text>
+                </DescriptionMaxWidth>
+              </VStack>
+            </LeftColumn>
+            <Switch
+              checked={isEnabled}
+              disabled={isPending}
+              onChange={onToggle}
+            />
+          </HStack>
+        </div>
       </PushSection>
       {isEnabled && showVaultList && (
         <VaultSection>

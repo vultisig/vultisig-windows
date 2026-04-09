@@ -75,16 +75,18 @@ export const unregisterDeviceForPushNotifications = async ({
       }),
     })
   } catch (fetchError) {
-    console.warn(
-      `[Vultisig Push] Unregister fetch failed for vault ${vaultId.slice(0, 12)}… — treating as success:`,
-      fetchError
+    throw new Error(
+      `Unregister fetch failed for vault ${vaultId.slice(0, 12)}…`,
+      { cause: fetchError }
     )
-    return
   }
 
   if (!response.ok) {
-    console.warn(
-      `[Vultisig Push] Unregister returned ${response.status} for vault ${vaultId.slice(0, 12)}… — treating as success`
+    if (response.status === 404) {
+      return
+    }
+    throw new Error(
+      `Failed to unregister device: ${response.status} ${response.statusText}`
     )
   }
 }

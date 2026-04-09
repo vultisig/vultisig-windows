@@ -29,15 +29,22 @@ type ToggleAllVaultsNotificationInput = {
   enabled: boolean
 }
 
-const requestNotificationPermissionIfNeeded = async () => {
-  if (
-    typeof Notification !== 'undefined' &&
+const requestNotificationPermissionIfNeeded = async (): Promise<void> => {
+  if (typeof Notification === 'undefined') {
+    throw new Error('Notifications are unavailable')
+  }
+
+  const permission =
     Notification.permission === 'default'
-  ) {
-    await Notification.requestPermission()
+      ? await Notification.requestPermission()
+      : Notification.permission
+
+  if (permission !== 'granted') {
+    throw new Error(`Notification permission not granted: ${permission}`)
   }
 }
 
+/** Toggle push registration for a single vault on desktop (Wails). */
 export const useDesktopToggleVaultNotificationMutation = () => {
   const queryClient = useQueryClient()
   const { addToast } = useToast()
@@ -88,6 +95,7 @@ export const useDesktopToggleVaultNotificationMutation = () => {
   })
 }
 
+/** Enable or disable push for every vault passed in (batch). */
 export const useDesktopToggleAllVaultsNotificationMutation = () => {
   const queryClient = useQueryClient()
   const { addToast } = useToast()

@@ -5,6 +5,7 @@ import {
   useHasSeenNotificationPromptQuery,
 } from '@core/ui/storage/hasSeenNotificationPrompt'
 
+/** Extension entry prompt to enable push notifications and open choose-vaults. */
 export const ExtensionNotificationPrompt = () => {
   const { isFetched } = useHasSeenNotificationPromptQuery()
   const [hasSeen, setHasSeen] = useHasSeenNotificationPrompt()

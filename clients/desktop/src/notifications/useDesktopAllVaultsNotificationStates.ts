@@ -1,5 +1,6 @@
 import { useVaults } from '@core/ui/storage/vaults'
 import { useQuery } from '@tanstack/react-query'
+import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { computeNotificationVaultId } from '@vultisig/sdk'
 
 import { desktopPushRegistrationQueryKey } from './desktopNotificationQueryKeys'
@@ -7,7 +8,7 @@ import { isDesktopVaultRegistered } from './desktopNotificationStorage'
 
 /**
  * Query returning per-vault notification registration state for all vaults.
- * Keyed by ECDSA public key (the vault's identity used in UI item lists).
+ * Keys match `getVaultId` / `toVaultNotificationItems` row ids.
  */
 export const useDesktopAllVaultsNotificationStates = () => {
   const vaults = useVaults()
@@ -16,7 +17,7 @@ export const useDesktopAllVaultsNotificationStates = () => {
     queryKey: [
       desktopPushRegistrationQueryKey,
       'allVaults',
-      ...vaults.map(v => v.publicKeys.ecdsa),
+      ...vaults.map(v => `${v.publicKeys.ecdsa}:${v.hexChainCode ?? ''}`),
     ],
     queryFn: async () => {
       const result: Record<string, boolean> = {}
@@ -27,8 +28,7 @@ export const useDesktopAllVaultsNotificationStates = () => {
           vault.publicKeys.ecdsa,
           vault.hexChainCode
         )
-        result[vault.publicKeys.ecdsa] =
-          isDesktopVaultRegistered(notificationId)
+        result[getVaultId(vault)] = isDesktopVaultRegistered(notificationId)
       }
       return result
     },

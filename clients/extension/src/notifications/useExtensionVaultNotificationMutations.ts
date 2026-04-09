@@ -25,10 +25,15 @@ type ToggleAllVaultsNotificationInput = {
   enabled: boolean
 }
 
-const unregisterExtensionVault = async (
-  vaultId: string,
+type UnregisterExtensionVaultInput = {
+  vaultId: string
   localPartyId: string
-): Promise<void> => {
+}
+
+const unregisterExtensionVault = async ({
+  vaultId,
+  localPartyId,
+}: UnregisterExtensionVaultInput): Promise<void> => {
   const message: PushUnregisterVaultMessage = {
     type: pushUnregisterVaultType,
     vault: { vaultId, localPartyId },
@@ -39,6 +44,7 @@ const unregisterExtensionVault = async (
   }
 }
 
+/** Toggle push registration for one vault via the extension service worker. */
 export const useExtensionToggleVaultNotificationMutation = () => {
   const queryClient = useQueryClient()
   const { addToast } = useToast()
@@ -56,7 +62,7 @@ export const useExtensionToggleVaultNotificationMutation = () => {
       if (enabled) {
         await subscribeToPush({ vaultId, partyName: localPartyId })
       } else {
-        await unregisterExtensionVault(vaultId, localPartyId)
+        await unregisterExtensionVault({ vaultId, localPartyId })
       }
     },
     onSettled: () => {
@@ -74,6 +80,7 @@ export const useExtensionToggleVaultNotificationMutation = () => {
   })
 }
 
+/** Enable or disable push for each vault in the batch. */
 export const useExtensionToggleAllVaultsNotificationMutation = () => {
   const queryClient = useQueryClient()
   const { addToast } = useToast()
@@ -99,7 +106,10 @@ export const useExtensionToggleAllVaultsNotificationMutation = () => {
               partyName: vault.localPartyId,
             })
           } else {
-            await unregisterExtensionVault(vaultId, vault.localPartyId)
+            await unregisterExtensionVault({
+              vaultId,
+              localPartyId: vault.localPartyId,
+            })
           }
         } catch {
           failedCount++
