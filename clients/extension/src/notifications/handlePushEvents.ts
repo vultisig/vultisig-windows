@@ -18,10 +18,12 @@ import {
 } from './pushNotificationMessages'
 import {
   clearAllPushNotificationRegistrations,
+  getOptInMigrationCompleted,
   getPushNotificationRegistrations,
   getPushServerUrl,
   getPushVaultIdMigrationCompleted,
   removePushNotificationRegistration,
+  setOptInMigrationCompleted,
   setPushNotificationRegistration,
   setPushVaultIdMigrationCompleted,
 } from './pushNotificationStorage'
@@ -253,20 +255,66 @@ const runPushVaultIdMigrationIfNeeded = async (): Promise<void> => {
   await setPushVaultIdMigrationCompleted()
 }
 
-const registerVaultsFromStorage = async (): Promise<void> => {
-  const result = await chrome.storage.local.get('vaults')
-  const vaults = (result.vaults ?? []) as StoredVault[]
-  if (vaults.length === 0) {
-    console.log('[Vultisig Push] No vaults in storage, skipping auto-register')
+const runOptInMigrationIfNeeded = async (): Promise<void> => {
+  if (await getOptInMigrationCompleted()) return
+
+  console.log(
+    '[Vultisig Push] One-time migration: clearing pre-opt-in auto-registrations'
+  )
+
+  const serverUrl = await getServerUrl()
+  const subscription = await self.registration.pushManager.getSubscription()
+  const token = subscription ? JSON.stringify(subscription.toJSON()) : undefined
+
+  const registrations = await getPushNotificationRegistrations()
+
+  for (const reg of Object.values(registrations)) {
+    try {
+      await unregisterDeviceForPushNotifications({
+        serverUrl,
+        vaultId: reg.vaultId,
+        partyName: reg.partyName,
+        token,
+      })
+    } catch (error) {
+      console.warn(
+        '[Vultisig Push] Opt-in migration: unregister failed for vault, continuing:',
+        error
+      )
+    }
+  }
+
+  await clearAllPushNotificationRegistrations()
+  await setOptInMigrationCompleted()
+  console.log('[Vultisig Push] Opt-in migration completed')
+}
+
+const reRegisterOptedInVaults = async (): Promise<void> => {
+  const registrations = await getPushNotificationRegistrations()
+  const vaultInfos = Object.values(registrations).map(r => ({
+    vaultId: r.vaultId,
+    localPartyId: r.partyName,
+  }))
+
+  if (vaultInfos.length === 0) {
+    console.log('[Vultisig Push] No opted-in vaults, skipping re-registration')
     return
   }
 
   console.log(
-    `[Vultisig Push] Found ${vaults.length} vault(s) in storage, checking registration`
+    `[Vultisig Push] Re-registering ${vaultInfos.length} opted-in vault(s) for push`
   )
 
-  const vaultInfos = await mapStoredVaultsToRegistrationInfos(vaults)
-  await registerVaults(vaultInfos)
+  for (const vault of vaultInfos) {
+    try {
+      await forceRegisterVault(vault)
+    } catch (error) {
+      console.error(
+        `[Vultisig Push] Failed to re-register vault ${vault.vaultId.slice(0, 12)}...:`,
+        error
+      )
+    }
+  }
 }
 
 export const handlePushEvents = () => {
@@ -350,15 +398,13 @@ export const handlePushEvents = () => {
     )
   })
 
-  // Handle subscription expiry — clear local state and re-register all vaults
   self.addEventListener('pushsubscriptionchange', (event: any) => {
     event.waitUntil(
       (async () => {
         console.warn(
           '[Vultisig Push] Push subscription changed, re-registering vaults...'
         )
-        await clearAllPushNotificationRegistrations()
-        await registerVaultsFromStorage()
+        await reRegisterOptedInVaults()
       })()
     )
   })
@@ -367,20 +413,11 @@ export const handlePushEvents = () => {
   // keys match the new vault_id scheme before any concurrent UI-driven register.
   ;(async () => {
     await runPushVaultIdMigrationIfNeeded()
-    await registerVaultsFromStorage()
+    await runOptInMigrationIfNeeded()
+    await reRegisterOptedInVaults()
   })().catch(error =>
-    console.error('[Vultisig Push] Auto-register on startup failed:', error)
+    console.error('[Vultisig Push] Startup push re-registration failed:', error)
   )
-
-  // Re-check when vaults change in storage (e.g. vault created/imported)
-  chrome.storage.onChanged.addListener((changes, areaName) => {
-    if (areaName !== 'local') return
-    if (!('vaults' in changes)) return
-
-    registerVaultsFromStorage().catch(error =>
-      console.error('[Vultisig Push] Auto-register on change failed:', error)
-    )
-  })
 
   // Handle messages from the UI
   chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
