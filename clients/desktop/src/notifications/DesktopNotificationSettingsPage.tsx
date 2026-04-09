@@ -6,30 +6,28 @@ import { useVaults } from '@core/ui/storage/vaults'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useDesktopAllVaultsNotificationStates } from './useDesktopAllVaultsNotificationStates'
 import {
-  useDisableDesktopPushNotificationMutation,
-  useEnableDesktopPushNotificationMutation,
-} from './useDesktopPushNotificationMutations'
-import { useDesktopPushNotificationStatus } from './useDesktopPushNotificationStatus'
+  useDesktopToggleAllVaultsNotificationMutation,
+  useDesktopToggleVaultNotificationMutation,
+} from './useDesktopVaultNotificationMutations'
 
 export const DesktopNotificationSettingsPage = () => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
-  const { data: isRegistered } = useDesktopPushNotificationStatus()
-  const { mutate: enable, isPending: isEnabling } =
-    useEnableDesktopPushNotificationMutation()
-  const { mutate: disable, isPending: isDisabling } =
-    useDisableDesktopPushNotificationMutation()
-  const isPending = isEnabling || isDisabling
   const storedVaults = useVaults()
-  const [vaultEnabledById, setVaultEnabledById] = useState<
-    Record<string, boolean>
-  >({})
+  const { data: enabledById = {} } = useDesktopAllVaultsNotificationStates()
 
-  const vaults = toVaultNotificationItems(storedVaults, vaultEnabledById)
+  const { mutate: toggleVault, isPending: isTogglingVault } =
+    useDesktopToggleVaultNotificationMutation()
+  const { mutate: toggleAll, isPending: isTogglingAll } =
+    useDesktopToggleAllVaultsNotificationMutation()
+  const isPending = isTogglingVault || isTogglingAll
+
+  const vaults = toVaultNotificationItems(storedVaults, enabledById)
+  const anyEnabled = vaults.some(v => v.enabled)
 
   return (
     <VStack fullHeight>
@@ -46,18 +44,30 @@ export const DesktopNotificationSettingsPage = () => {
       />
       <PageContent flexGrow gap={14} scrollable>
         <NotificationSettingsContent
-          isEnabled={isRegistered ?? false}
+          isEnabled={anyEnabled}
           isPending={isPending}
           onToggle={enabled => {
             if (isPending) return
-            if (enabled) {
-              enable()
-            } else {
-              disable()
-            }
+            toggleAll({
+              vaults: storedVaults.map(v => ({
+                ecdsa: v.publicKeys.ecdsa,
+                hexChainCode: v.hexChainCode,
+                localPartyId: v.localPartyId,
+              })),
+              enabled,
+            })
           }}
           onVaultToggle={(vaultId, enabled) => {
-            setVaultEnabledById(prev => ({ ...prev, [vaultId]: enabled }))
+            if (isPending) return
+            const vault = storedVaults.find(v => v.publicKeys.ecdsa === vaultId)
+            if (!vault) return
+
+            toggleVault({
+              ecdsa: vault.publicKeys.ecdsa,
+              hexChainCode: vault.hexChainCode,
+              localPartyId: vault.localPartyId,
+              enabled,
+            })
           }}
           vaults={vaults}
         />

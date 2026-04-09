@@ -5,10 +5,15 @@ import { useVaults } from '@core/ui/storage/vaults'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { useState } from 'react'
 
+/**
+ * Fallback choose-vaults view with in-memory state.
+ * Desktop and extension override this in their navigation views
+ * with client-specific implementations that persist state and
+ * register/unregister with the notification server.
+ */
 export const ChooseVaultsView = () => {
   const navigate = useCoreNavigate()
   const storedVaults = useVaults()
-  // TODO: persist per-vault notification choices before leaving (currently in-memory only).
   const [enabledById, setEnabledById] = useState<Record<string, boolean>>({})
 
   const vaults = toVaultNotificationItems(storedVaults, enabledById)
