@@ -37,7 +37,7 @@ export const NotificationSettingsPage = () => {
         <NotificationSettingsContent
           isEnabled={pushEnabled}
           onToggle={setPushEnabled}
-          onVaultToggle={(vaultId, enabled) => {
+          onVaultToggle={({ vaultId, enabled }) => {
             setVaultEnabledById(prev => ({ ...prev, [vaultId]: enabled }))
           }}
           vaults={vaults}

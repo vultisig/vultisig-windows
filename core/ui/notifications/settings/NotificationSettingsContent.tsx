@@ -1,4 +1,3 @@
-import { VaultSecurityType } from '@core/ui/vault/VaultSecurityType'
 import { LightningIcon } from '@lib/ui/icons/LightningIcon'
 import { ShieldIcon } from '@lib/ui/icons/ShieldIcon'
 import { Switch } from '@lib/ui/inputs/switch'
@@ -9,6 +8,8 @@ import { match } from '@vultisig/lib-utils/match'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { VaultSecurityType } from '../../vault/VaultSecurityType'
+
 type VaultNotificationItem = {
   id: string
   name: string
@@ -16,11 +17,16 @@ type VaultNotificationItem = {
   enabled: boolean
 }
 
+type OnVaultToggleInput = {
+  vaultId: string
+  enabled: boolean
+}
+
 type NotificationSettingsContentProps = {
   isEnabled: boolean
   onToggle: (enabled: boolean) => void
   vaults: VaultNotificationItem[]
-  onVaultToggle: (vaultId: string, enabled: boolean) => void
+  onVaultToggle: (input: OnVaultToggleInput) => void
   /** When false, vault rows are omitted (e.g. dedicated Choose vaults screen). */
   showVaultList?: boolean
   isPending?: boolean
@@ -101,6 +107,17 @@ const LeftColumn = styled.div`
   min-width: 0;
 `
 
+/**
+ * Push notification settings block: master toggle plus optional per-vault rows.
+ *
+ * @param props.isEnabled — Whether any vault is registered for push (master row).
+ * @param props.onToggle — Enables or disables push for all vaults shown.
+ * @param props.vaults — Rows for per-vault toggles when the list is visible.
+ * @param props.onVaultToggle — Called when a vault row switch changes.
+ * @param props.showVaultList — When false, per-vault rows are hidden.
+ * @param props.isPending — Disables switches while mutations run.
+ * @returns The settings layout.
+ */
 export const NotificationSettingsContent = ({
   isEnabled,
   onToggle,
@@ -172,7 +189,7 @@ export const NotificationSettingsContent = ({
                   checked={vault.enabled}
                   disabled={isPending}
                   onChange={enabled => {
-                    onVaultToggle(vault.id, enabled)
+                    onVaultToggle({ vaultId: vault.id, enabled })
                   }}
                 />
               </VaultRow>

@@ -213,6 +213,8 @@ const runPushVaultIdMigrationIfNeeded = async (): Promise<void> => {
   const result = await chrome.storage.local.get('vaults')
   const vaults = (result.vaults ?? []) as StoredVault[]
 
+  let legacyUnregisterFailed = false
+
   for (const v of vaults) {
     if (!v.publicKeys?.ecdsa) continue
     try {
@@ -222,8 +224,15 @@ const runPushVaultIdMigrationIfNeeded = async (): Promise<void> => {
         partyName: v.localPartyId,
       })
     } catch {
-      // Network errors are non-fatal — retry next startup.
+      legacyUnregisterFailed = true
     }
+  }
+
+  if (legacyUnregisterFailed) {
+    console.warn(
+      '[Vultisig Push] Vault ID migration: legacy unregister failed for one or more vaults; will retry on next startup'
+    )
+    return
   }
 
   await clearAllPushNotificationRegistrations()
@@ -249,8 +258,13 @@ const runPushVaultIdMigrationIfNeeded = async (): Promise<void> => {
   await setPushVaultIdMigrationCompleted()
 }
 
-const runOptInMigrationIfNeeded = async (): Promise<void> => {
-  if (await getOptInMigrationCompleted()) return
+/**
+ * Clears pre-opt-in server registrations and local state when possible.
+ * @returns Whether it is safe to run follow-up re-registration (no partial
+ *   unregister that would be undone by re-registering).
+ */
+const runOptInMigrationIfNeeded = async (): Promise<boolean> => {
+  if (await getOptInMigrationCompleted()) return true
 
   console.log(
     '[Vultisig Push] One-time migration: clearing pre-opt-in auto-registrations'
@@ -277,12 +291,13 @@ const runOptInMigrationIfNeeded = async (): Promise<void> => {
     console.warn(
       '[Vultisig Push] Opt-in migration: unregister failed for one or more vaults; keeping local registrations for retry'
     )
-    return
+    return false
   }
 
   await clearAllPushNotificationRegistrations()
   await setOptInMigrationCompleted()
   console.log('[Vultisig Push] Opt-in migration completed')
+  return true
 }
 
 const reRegisterOptedInVaults = async (): Promise<void> => {
@@ -320,6 +335,22 @@ const reRegisterOptedInVaults = async (): Promise<void> => {
  */
 export const handlePushEvents = () => {
   console.log('[Vultisig Push] Service worker push handler initialized')
+
+  // Run migrations before UI-driven registration or subscription-change recovery.
+  const pushStartupPromise = (async () => {
+    try {
+      await runPushVaultIdMigrationIfNeeded()
+      const optInMigrationOk = await runOptInMigrationIfNeeded()
+      if (optInMigrationOk) {
+        await reRegisterOptedInVaults()
+      }
+    } catch (error) {
+      console.error(
+        '[Vultisig Push] Startup push re-registration failed:',
+        error
+      )
+    }
+  })()
 
   // Register SW events immediately (synchronous). Chrome requires these during
   // initial worker evaluation — do not defer behind migration, messaging, or
@@ -405,25 +436,13 @@ export const handlePushEvents = () => {
         console.warn(
           '[Vultisig Push] Push subscription changed, re-registering vaults...'
         )
-        await reRegisterOptedInVaults()
+        await pushStartupPromise
+        if (await getOptInMigrationCompleted()) {
+          await reRegisterOptedInVaults()
+        }
       })()
     )
   })
-
-  // Run migration (if needed) before normal registration so local registration
-  // keys match the new vault_id scheme before any concurrent UI-driven register.
-  const pushStartupPromise = (async () => {
-    try {
-      await runPushVaultIdMigrationIfNeeded()
-      await runOptInMigrationIfNeeded()
-      await reRegisterOptedInVaults()
-    } catch (error) {
-      console.error(
-        '[Vultisig Push] Startup push re-registration failed:',
-        error
-      )
-    }
-  })()
 
   // Handle messages from the UI
   chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {

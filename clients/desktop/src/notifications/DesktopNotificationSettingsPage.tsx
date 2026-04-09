@@ -59,7 +59,7 @@ export const DesktopNotificationSettingsPage = () => {
               enabled,
             })
           }}
-          onVaultToggle={(vaultId, enabled) => {
+          onVaultToggle={({ vaultId, enabled }) => {
             if (isPending) return
             const vault = vaultsWithChain.find(v => getVaultId(v) === vaultId)
             if (!vault) return
