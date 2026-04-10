@@ -15,6 +15,8 @@ import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorer
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { useQuery } from '@tanstack/react-query'
+import { getEvmContractCallInfo } from '@vultisig/core-chain/chains/evm/contract/call/info'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useCopyToClipboard } from 'react-use'
@@ -48,6 +50,19 @@ export const TxSuccess = ({
     [value, formattedToAmount]
   )
 
+  const isContractExecution = txAction?.action === 'contract_execution'
+  const memo = value.memo
+
+  const functionQuery = useQuery({
+    queryKey: ['evmContractCallInfo', memo],
+    queryFn: () => getEvmContractCallInfo(memo!),
+    enabled: isContractExecution && !!memo && memo.length > 2,
+    staleTime: Infinity,
+  })
+
+  const resolvedLabel =
+    functionQuery.data?.functionSignature?.split('(')[0] ?? undefined
+
   const blockExplorerUrl = getBlockExplorerUrl({
     chain: coin.chain,
     entity: 'tx',
@@ -69,11 +84,11 @@ export const TxSuccess = ({
             txAction?.action !== 'send' ? txAction?.labelKey : undefined
           }
           contractAddress={
-            txAction?.action === 'contract_execution' &&
-            'contractAddress' in txAction
+            isContractExecution && 'contractAddress' in txAction
               ? txAction.contractAddress
               : undefined
           }
+          resolvedLabel={resolvedLabel}
         />
         {!skipBroadcast && (
           <List>

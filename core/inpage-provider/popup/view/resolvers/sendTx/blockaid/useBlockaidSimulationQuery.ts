@@ -50,7 +50,7 @@ const getBlockaidSimulationQueryWithParsing = (
             input.chain
           )
         }
-        return null
+        return { balanceChanges: [] }
       }
 
       if (isChainOfKind(input.chain, 'solana')) {

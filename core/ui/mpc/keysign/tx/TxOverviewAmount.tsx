@@ -20,6 +20,7 @@ type TxActionLabelKey =
 type TxOverviewAmountProps = ValueProp<Coin> & {
   amount: number
   actionLabel?: TxActionLabelKey
+  resolvedLabel?: string
   contractAddress?: string
 }
 
@@ -27,6 +28,7 @@ export const TxOverviewAmount = ({
   amount,
   value,
   actionLabel,
+  resolvedLabel,
   contractAddress,
 }: TxOverviewAmountProps) => {
   const priceQuery = useCoinPriceQuery({ coin: value })
@@ -36,7 +38,11 @@ export const TxOverviewAmount = ({
   const isActionDisplay = !!actionLabel
   const showAmountWithAction = actionLabel && amount > 0
 
-  const mainLabel = actionLabel ? (t(actionLabel) as string) : t('sent')
+  const mainLabel = resolvedLabel
+    ? resolvedLabel
+    : actionLabel
+      ? (t(actionLabel) as string)
+      : t('sent')
   const mainContent = showAmountWithAction
     ? `${mainLabel} ${amount} ${value.ticker}`
     : actionLabel

@@ -1,17 +1,23 @@
 import { BlockaidSwapDisplay } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidSwapDisplay'
 import { BlockaidTransferDisplay } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidTransferDisplay'
+import { Collapse } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Collapse'
 import { MemoSection } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/MemoSection'
 import {
   NetworkFeeSection,
   NetworkFeeSectionProps,
 } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/NetworkFeeSection'
+import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useQueryDependentQuery } from '@lib/ui/query/hooks/useQueryDependentQuery'
 import { Query } from '@lib/ui/query/Query'
+import { Text } from '@lib/ui/text'
 import { NATIVE_MINT } from '@solana/spl-token'
+import { useQuery } from '@tanstack/react-query'
 import { Chain, EvmChain } from '@vultisig/core-chain/Chain'
+import { getEvmContractCallInfo } from '@vultisig/core-chain/chains/evm/contract/call/info'
 import { Coin, CoinKey } from '@vultisig/core-chain/coin/Coin'
 import {
   BlockaidEvmSimulationInfo,
@@ -205,45 +211,15 @@ const BlockaidEvmSimulationContent = ({
   address,
   chain,
   networkFeeProps,
+  getCoin,
 }: Extract<BlockaidSimulationContentProps, { chain: EvmChain }>) => {
   const { t } = useTranslation()
 
   return (
     <MatchQuery
       value={blockaidSimulationQuery}
-      success={(blockaidSimulationInfo: BlockaidEvmSimulationInfo) => {
-        if (blockaidSimulationInfo === null) {
-          return (
-            <>
-              <List>
-                <ListItem description={address} title={t('from')} />
-                {keysignPayload.toAddress && (
-                  <ListItem
-                    description={keysignPayload.toAddress}
-                    title={t('to')}
-                  />
-                )}
-                {keysignPayload.toAmount && (
-                  <ListItem
-                    description={`${formatUnits(
-                      keysignPayload.toAmount,
-                      keysignPayload.coin?.decimals
-                    )} ${keysignPayload.coin?.ticker}`}
-                    title={t('amount')}
-                  />
-                )}
-                <ListItem
-                  description={getKeysignChain(keysignPayload)}
-                  title={t('network')}
-                />
-              </List>
-              <MemoSection memo={keysignPayload.memo} chain={chain} />
-              <NetworkFeeSection {...networkFeeProps} />
-            </>
-          )
-        }
-
-        return matchRecordUnion(blockaidSimulationInfo, {
+      success={(blockaidSimulationInfo: BlockaidEvmSimulationInfo) =>
+        matchRecordUnion(blockaidSimulationInfo, {
           swap: swap => (
             <BlockaidSwapDisplay
               swap={swap}
@@ -262,11 +238,219 @@ const BlockaidEvmSimulationContent = ({
               networkFeeProps={networkFeeProps}
             />
           ),
+          balanceChanges: balanceChanges => {
+            if (balanceChanges.length === 0) {
+              return (
+                <EvmCalldataFallback
+                  keysignPayload={keysignPayload}
+                  address={address}
+                  chain={chain}
+                  networkFeeProps={networkFeeProps}
+                  getCoin={getCoin}
+                />
+              )
+            }
+            return (
+              <>
+                <List>
+                  {balanceChanges.map((change, i) => (
+                    <ListItem
+                      key={i}
+                      icon={<CoinIcon coin={change.coin} />}
+                      title={t(
+                        change.direction === 'send' ? 'you_send' : 'you_receive'
+                      )}
+                      description={`${formatUnits(change.amount, change.coin.decimals)} ${change.coin.ticker}`}
+                    />
+                  ))}
+                </List>
+                <MemoSection memo={keysignPayload.memo} chain={chain} />
+                <NetworkFeeSection {...networkFeeProps} />
+              </>
+            )
+          },
         })
-      }}
-      error={() => null}
+      }
+      error={() => (
+        <EvmCalldataFallback
+          keysignPayload={keysignPayload}
+          address={address}
+          chain={chain}
+          networkFeeProps={networkFeeProps}
+          getCoin={getCoin}
+        />
+      )}
       pending={() => null}
       inactive={() => null}
     />
+  )
+}
+
+type EvmCalldataFallbackProps = {
+  keysignPayload: KeysignPayload
+  address: string
+  chain: EvmChain
+  networkFeeProps: NetworkFeeSectionProps
+  getCoin: (coinKey: CoinKey) => Promise<Coin>
+}
+
+// Functions where the first (address, uint256) pair is (token, amount).
+// For transfer/approve/transferFrom, the first address is recipient/spender — NOT a token.
+const TOKEN_AMOUNT_FUNCTIONS = new Set([
+  'supply',
+  'supplyWithPermit',
+  'deposit',
+  'withdraw',
+  'repay',
+  'repayWithPermit',
+  'borrow',
+  'stake',
+  'unstake',
+  'addLiquidity',
+  'removeLiquidity',
+  'mint',
+  'redeem',
+])
+
+const extractTokenAndAmount = (
+  signature: string,
+  argsJson: string
+): { tokenAddress: string; rawAmount: string } | null => {
+  const funcName = signature.split('(')[0]
+  if (!TOKEN_AMOUNT_FUNCTIONS.has(funcName)) return null
+
+  const paramTypes = signature
+    .slice(signature.indexOf('(') + 1, signature.lastIndexOf(')'))
+    .split(',')
+    .map(s => s.trim())
+
+  let args: string[]
+  try {
+    args = JSON.parse(argsJson)
+  } catch {
+    return null
+  }
+
+  const addressIdx = paramTypes.indexOf('address')
+  const uint256Idx = paramTypes.indexOf('uint256')
+  if (addressIdx === -1 || uint256Idx === -1) return null
+  if (addressIdx >= args.length || uint256Idx >= args.length) return null
+
+  const tokenAddress = args[addressIdx]
+  const rawAmount = args[uint256Idx]
+  if (!tokenAddress || !rawAmount) return null
+
+  return { tokenAddress, rawAmount }
+}
+
+const EvmCalldataFallback = ({
+  keysignPayload,
+  address,
+  chain,
+  networkFeeProps,
+  getCoin,
+}: EvmCalldataFallbackProps) => {
+  const { t } = useTranslation()
+  const contractCallQuery = useQuery({
+    queryKey: ['evmContractCallInfo', keysignPayload.memo],
+    queryFn: () => getEvmContractCallInfo(keysignPayload.memo!),
+    enabled: !!keysignPayload.memo,
+    staleTime: Infinity,
+  })
+
+  const tokenPair = contractCallQuery.data
+    ? extractTokenAndAmount(
+        contractCallQuery.data.functionSignature,
+        contractCallQuery.data.functionArguments
+      )
+    : null
+
+  const tokenQuery = useQuery({
+    queryKey: ['resolveToken', tokenPair?.tokenAddress, chain],
+    queryFn: () =>
+      getCoin({ id: tokenPair!.tokenAddress, chain }),
+    enabled: !!tokenPair,
+    staleTime: Infinity,
+  })
+
+  const functionName = contractCallQuery.data?.functionSignature.split('(')[0]
+
+  const amountItem = keysignPayload.toAmount ? (
+    <ListItem
+      description={`${formatUnits(
+        keysignPayload.toAmount,
+        keysignPayload.coin?.decimals
+      )} ${keysignPayload.coin?.ticker}`}
+      title={t('amount')}
+    />
+  ) : null
+
+  return (
+    <>
+      <List>
+        <ListItem description={address} title={t('from')} />
+        {keysignPayload.toAddress && (
+          <ListItem description={keysignPayload.toAddress} title={t('to')} />
+        )}
+        {tokenQuery.data && tokenPair ? (
+          <ListItem
+            icon={<CoinIcon coin={tokenQuery.data} />}
+            title={functionName || t('contract_execution')}
+            description={`${formatUnits(
+              BigInt(tokenPair.rawAmount),
+              tokenQuery.data.decimals
+            )} ${tokenQuery.data.ticker}`}
+          />
+        ) : contractCallQuery.data ? (
+          <ListItem
+            title={functionName || t('contract_execution')}
+            description={keysignPayload.toAddress}
+          />
+        ) : (
+          amountItem
+        )}
+        <ListItem
+          description={getKeysignChain(keysignPayload)}
+          title={t('network')}
+        />
+      </List>
+      <MatchQuery
+        value={contractCallQuery}
+        success={info =>
+          info ? (
+            <Collapse
+              title={t('transaction_details')}
+            >
+              <VStack gap={4}>
+                <Text color="shy" size={12}>
+                  {t('function_signature')}
+                </Text>
+                <Text color="primary" family="mono" size={14} weight="700">
+                  {info.functionSignature}
+                </Text>
+              </VStack>
+              <VStack gap={4}>
+                <Text color="shy" size={12}>
+                  {t('function_arguments')}
+                </Text>
+                <Text
+                  color="primary"
+                  family="mono"
+                  size={14}
+                  weight="700"
+                  style={{ wordBreak: 'break-all' }}
+                >
+                  {info.functionArguments}
+                </Text>
+              </VStack>
+            </Collapse>
+          ) : null
+        }
+        error={() => null}
+        pending={() => null}
+        inactive={() => null}
+      />
+      <NetworkFeeSection {...networkFeeProps} />
+    </>
   )
 }
