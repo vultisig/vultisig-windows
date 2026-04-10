@@ -1,5 +1,7 @@
+import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
 import { getSignDataTxAction } from '@core/ui/mpc/keysign/tx/utils/getSignDataTxAction'
+import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { ClipboardCopyIcon } from '@lib/ui/icons/ClipboardCopyIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { SquareArrowTopRightIcon } from '@lib/ui/icons/SquareArrowTopRightIcon'
@@ -10,13 +12,13 @@ import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { MiddleTruncate } from '@lib/ui/truncate'
+import { useQuery } from '@tanstack/react-query'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { getEvmContractCallInfo } from '@vultisig/core-chain/chains/evm/contract/call/info'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
-import { useQuery } from '@tanstack/react-query'
-import { getEvmContractCallInfo } from '@vultisig/core-chain/chains/evm/contract/call/info'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useCopyToClipboard } from 'react-use'
@@ -63,6 +65,35 @@ export const TxSuccess = ({
   const resolvedLabel =
     functionQuery.data?.functionSignature?.split('(')[0] ?? undefined
 
+  const vaultCoins = useCurrentVaultCoins()
+
+  const resolvedToken = useMemo(() => {
+    if (!functionQuery.data) return null
+    const pair = extractTokenAndAmount(
+      functionQuery.data.functionSignature,
+      functionQuery.data.functionArguments,
+      value.toAddress
+    )
+    if (!pair) return null
+    const vaultCoin = vaultCoins.find(
+      c =>
+        c.chain === coin.chain &&
+        c.id?.toLowerCase() === pair.tokenAddress.toLowerCase()
+    )
+    if (!vaultCoin) return null
+    return {
+      coin: vaultCoin,
+      amount: fromChainAmount(BigInt(pair.rawAmount), vaultCoin.decimals),
+    }
+  }, [functionQuery.data, vaultCoins, coin.chain, value.toAddress])
+
+  const displayCoin = resolvedToken?.coin ?? coin
+  const displayAmount =
+    resolvedToken?.amount ??
+    (txAction && 'amount' in txAction && txAction.amount !== undefined
+      ? txAction.amount
+      : formattedToAmount)
+
   const blockExplorerUrl = getBlockExplorerUrl({
     chain: coin.chain,
     entity: 'tx',
@@ -74,12 +105,8 @@ export const TxSuccess = ({
       <TxStatusTracker chain={coin.chain} hash={txHash} />
       <VStack gap={8}>
         <TxOverviewAmount
-          amount={
-            txAction && 'amount' in txAction && txAction.amount !== undefined
-              ? txAction.amount
-              : formattedToAmount
-          }
-          value={coin}
+          amount={displayAmount}
+          value={displayCoin}
           actionLabel={
             txAction?.action !== 'send' ? txAction?.labelKey : undefined
           }

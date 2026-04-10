@@ -1,12 +1,13 @@
 import { BlockaidSwapDisplay } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidSwapDisplay'
 import { BlockaidTransferDisplay } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidTransferDisplay'
-import { Collapse } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Collapse'
 import { MemoSection } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/MemoSection'
 import {
   NetworkFeeSection,
   NetworkFeeSectionProps,
 } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/NetworkFeeSection'
+import { Collapse } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Collapse'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
 import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
@@ -294,55 +295,6 @@ type EvmCalldataFallbackProps = {
   getCoin: (coinKey: CoinKey) => Promise<Coin>
 }
 
-// Functions where the first (address, uint256) pair is (token, amount).
-// For transfer/approve/transferFrom, the first address is recipient/spender — NOT a token.
-const TOKEN_AMOUNT_FUNCTIONS = new Set([
-  'supply',
-  'supplyWithPermit',
-  'deposit',
-  'withdraw',
-  'repay',
-  'repayWithPermit',
-  'borrow',
-  'stake',
-  'unstake',
-  'addLiquidity',
-  'removeLiquidity',
-  'mint',
-  'redeem',
-])
-
-const extractTokenAndAmount = (
-  signature: string,
-  argsJson: string
-): { tokenAddress: string; rawAmount: string } | null => {
-  const funcName = signature.split('(')[0]
-  if (!TOKEN_AMOUNT_FUNCTIONS.has(funcName)) return null
-
-  const paramTypes = signature
-    .slice(signature.indexOf('(') + 1, signature.lastIndexOf(')'))
-    .split(',')
-    .map(s => s.trim())
-
-  let args: string[]
-  try {
-    args = JSON.parse(argsJson)
-  } catch {
-    return null
-  }
-
-  const addressIdx = paramTypes.indexOf('address')
-  const uint256Idx = paramTypes.indexOf('uint256')
-  if (addressIdx === -1 || uint256Idx === -1) return null
-  if (addressIdx >= args.length || uint256Idx >= args.length) return null
-
-  const tokenAddress = args[addressIdx]
-  const rawAmount = args[uint256Idx]
-  if (!tokenAddress || !rawAmount) return null
-
-  return { tokenAddress, rawAmount }
-}
-
 const EvmCalldataFallback = ({
   keysignPayload,
   address,
@@ -351,24 +303,25 @@ const EvmCalldataFallback = ({
   getCoin,
 }: EvmCalldataFallbackProps) => {
   const { t } = useTranslation()
+  const memo = keysignPayload.memo
   const contractCallQuery = useQuery({
-    queryKey: ['evmContractCallInfo', keysignPayload.memo],
-    queryFn: () => getEvmContractCallInfo(keysignPayload.memo!),
-    enabled: !!keysignPayload.memo,
+    queryKey: ['evmContractCallInfo', memo],
+    queryFn: () => getEvmContractCallInfo(memo!),
+    enabled: !!memo && memo.startsWith('0x') && memo.length > 2,
     staleTime: Infinity,
   })
 
   const tokenPair = contractCallQuery.data
     ? extractTokenAndAmount(
         contractCallQuery.data.functionSignature,
-        contractCallQuery.data.functionArguments
+        contractCallQuery.data.functionArguments,
+        keysignPayload.toAddress
       )
     : null
 
   const tokenQuery = useQuery({
     queryKey: ['resolveToken', tokenPair?.tokenAddress, chain],
-    queryFn: () =>
-      getCoin({ id: tokenPair!.tokenAddress, chain }),
+    queryFn: () => getCoin({ id: tokenPair!.tokenAddress, chain }),
     enabled: !!tokenPair,
     staleTime: Infinity,
   })
@@ -418,9 +371,7 @@ const EvmCalldataFallback = ({
         value={contractCallQuery}
         success={info =>
           info ? (
-            <Collapse
-              title={t('transaction_details')}
-            >
+            <Collapse title={t('transaction_details')}>
               <VStack gap={4}>
                 <Text color="shy" size={12}>
                   {t('function_signature')}
