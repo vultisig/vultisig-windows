@@ -75,10 +75,11 @@ export const unregisterDeviceForPushNotifications = async ({
       }),
     })
   } catch (fetchError) {
-    throw new Error(
-      `Unregister fetch failed for vault ${vaultId.slice(0, 12)}…`,
-      { cause: fetchError }
+    const err = new Error(
+      `Unregister fetch failed for vault ${vaultId.slice(0, 12)}…`
     )
+    Object.assign(err, { cause: fetchError })
+    throw err
   }
 
   if (!response.ok) {
