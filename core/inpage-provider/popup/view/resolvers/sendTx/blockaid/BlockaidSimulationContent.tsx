@@ -26,6 +26,7 @@ import {
 } from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
+import { capitalizeFirstLetter } from '@vultisig/lib-utils/capitalizeFirstLetter'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
 import { formatUnits } from 'ethers'
 import { useCallback } from 'react'
@@ -326,7 +327,11 @@ const EvmCalldataFallback = ({
     staleTime: Infinity,
   })
 
-  const functionName = contractCallQuery.data?.functionSignature.split('(')[0]
+  const rawFunctionName =
+    contractCallQuery.data?.functionSignature.split('(')[0]
+  const functionName = rawFunctionName
+    ? capitalizeFirstLetter(rawFunctionName)
+    : undefined
 
   const amountItem = keysignPayload.toAmount ? (
     <ListItem
@@ -371,7 +376,7 @@ const EvmCalldataFallback = ({
         value={contractCallQuery}
         success={info =>
           info ? (
-            <Collapse title={t('transaction_details')}>
+            <Collapse title={t('transaction_details')} transparent>
               <VStack gap={4}>
                 <Text color="shy" size={12}>
                   {t('function_signature')}

@@ -32,7 +32,7 @@ export const TxOverviewEvmMemo = ({ value }: ValueProp<string>) => {
         const { functionSignature, functionArguments } = info
 
         return (
-          <Collapse title={t('transaction_details')}>
+          <Collapse title={t('transaction_details')} transparent>
             <VStack gap={4}>
               <Text color="shy" size={12}>
                 {t('function_signature')}

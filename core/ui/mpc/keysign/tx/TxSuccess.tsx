@@ -15,10 +15,13 @@ import { MiddleTruncate } from '@lib/ui/truncate'
 import { useQuery } from '@tanstack/react-query'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { getEvmContractCallInfo } from '@vultisig/core-chain/chains/evm/contract/call/info'
+import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
+import { knownTokensIndex } from '@vultisig/core-chain/coin/knownTokens'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { capitalizeFirstLetter } from '@vultisig/lib-utils/capitalizeFirstLetter'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useCopyToClipboard } from 'react-use'
@@ -62,8 +65,11 @@ export const TxSuccess = ({
     staleTime: Infinity,
   })
 
-  const resolvedLabel =
+  const rawFunctionName =
     functionQuery.data?.functionSignature?.split('(')[0] ?? undefined
+  const resolvedLabel = rawFunctionName
+    ? capitalizeFirstLetter(rawFunctionName)
+    : undefined
 
   const vaultCoins = useCurrentVaultCoins()
 
@@ -75,15 +81,19 @@ export const TxSuccess = ({
       value.toAddress
     )
     if (!pair) return null
-    const vaultCoin = vaultCoins.find(
-      c =>
-        c.chain === coin.chain &&
-        c.id?.toLowerCase() === pair.tokenAddress.toLowerCase()
-    )
-    if (!vaultCoin) return null
+
+    const tokenKey = { chain: coin.chain, id: pair.tokenAddress }
+
+    // Check vault first (user has added it), then known tokens registry.
+    const vaultCoin = vaultCoins.find(c => areEqualCoins(c, tokenKey))
+    const knownCoin =
+      vaultCoin ??
+      knownTokensIndex[coin.chain]?.[pair.tokenAddress.toLowerCase()]
+    if (!knownCoin) return null
+
     return {
-      coin: vaultCoin,
-      amount: fromChainAmount(BigInt(pair.rawAmount), vaultCoin.decimals),
+      coin: knownCoin,
+      amount: fromChainAmount(BigInt(pair.rawAmount), knownCoin.decimals),
     }
   }, [functionQuery.data, vaultCoins, coin.chain, value.toAddress])
 
@@ -109,11 +119,6 @@ export const TxSuccess = ({
           value={displayCoin}
           actionLabel={
             txAction?.action !== 'send' ? txAction?.labelKey : undefined
-          }
-          contractAddress={
-            isContractExecution && 'contractAddress' in txAction
-              ? txAction.contractAddress
-              : undefined
           }
           resolvedLabel={resolvedLabel}
         />
