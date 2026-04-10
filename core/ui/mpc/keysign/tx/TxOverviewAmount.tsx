@@ -20,6 +20,9 @@ type TxOverviewAmountProps = ValueProp<Coin> & {
   amount: number
   actionLabel?: TxActionLabelKey
   resolvedLabel?: string
+  /** When set, render this string instead of `{amount} {ticker}` and hide fiat.
+   *  Used for "Unlimited" approvals where the numeric value is meaningless. */
+  amountOverride?: string
 }
 
 export const TxOverviewAmount = ({
@@ -27,6 +30,7 @@ export const TxOverviewAmount = ({
   value,
   actionLabel,
   resolvedLabel,
+  amountOverride,
 }: TxOverviewAmountProps) => {
   const priceQuery = useCoinPriceQuery({ coin: value })
   const formatFiatAmount = useFormatFiatAmount()
@@ -41,8 +45,9 @@ export const TxOverviewAmount = ({
   // Hide the "0 ETH" line for contract calls where we couldn't resolve the
   // actual token being moved (e.g. Uniswap V4 execute, multicalls). The
   // function label alone is more informative than a misleading zero amount.
-  const showAmount = amount > 0 || !resolvedLabel
-  const amountContent = `${amount} ${value.ticker}`
+  const showAmount = !!amountOverride || amount > 0 || !resolvedLabel
+  const amountContent = amountOverride ?? `${amount} ${value.ticker}`
+  const showFiat = !amountOverride && amount > 0
 
   return (
     <Panel>
@@ -52,7 +57,7 @@ export const TxOverviewAmount = ({
         </Text>
         {value && <CoinIcon coin={value} style={{ fontSize: 32 }} />}
         {showAmount && <Text size={18}>{amountContent}</Text>}
-        {amount > 0 && (
+        {showFiat && (
           <MatchQuery
             value={priceQuery}
             success={price => (

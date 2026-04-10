@@ -8,6 +8,7 @@ import {
 import { Collapse } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Collapse'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
+import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
 import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
@@ -354,10 +355,13 @@ const EvmCalldataFallback = ({
           <ListItem
             icon={<CoinIcon coin={tokenQuery.data} />}
             title={functionName || t('contract_execution')}
-            description={`${formatUnits(
-              BigInt(tokenPair.rawAmount),
-              tokenQuery.data.decimals
-            )} ${tokenQuery.data.ticker}`}
+            description={`${
+              formatTokenAmount(
+                BigInt(tokenPair.rawAmount),
+                tokenQuery.data.decimals,
+                rawFunctionName
+              ).display
+            } ${tokenQuery.data.ticker}`}
           />
         ) : contractCallQuery.data ? (
           <ListItem

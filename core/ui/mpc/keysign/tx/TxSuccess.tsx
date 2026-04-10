@@ -1,4 +1,5 @@
 import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
+import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
 import { getSignDataTxAction } from '@core/ui/mpc/keysign/tx/utils/getSignDataTxAction'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
@@ -91,11 +92,26 @@ export const TxSuccess = ({
       knownTokensIndex[coin.chain]?.[pair.tokenAddress.toLowerCase()]
     if (!knownCoin) return null
 
+    const formatted = formatTokenAmount(
+      BigInt(pair.rawAmount),
+      knownCoin.decimals,
+      rawFunctionName
+    )
+
     return {
       coin: knownCoin,
-      amount: fromChainAmount(BigInt(pair.rawAmount), knownCoin.decimals),
+      amount: formatted.numericValue,
+      amountOverride: formatted.isSentinel
+        ? `${formatted.display} ${knownCoin.ticker}`
+        : undefined,
     }
-  }, [functionQuery.data, vaultCoins, coin.chain, value.toAddress])
+  }, [
+    functionQuery.data,
+    vaultCoins,
+    coin.chain,
+    value.toAddress,
+    rawFunctionName,
+  ])
 
   const displayCoin = resolvedToken?.coin ?? coin
   const displayAmount =
@@ -103,6 +119,7 @@ export const TxSuccess = ({
     (txAction && 'amount' in txAction && txAction.amount !== undefined
       ? txAction.amount
       : formattedToAmount)
+  const displayAmountOverride = resolvedToken?.amountOverride
 
   const blockExplorerUrl = getBlockExplorerUrl({
     chain: coin.chain,
@@ -121,6 +138,7 @@ export const TxSuccess = ({
             txAction?.action !== 'send' ? txAction?.labelKey : undefined
           }
           resolvedLabel={resolvedLabel}
+          amountOverride={displayAmountOverride}
         />
         {!skipBroadcast && (
           <List>
