@@ -38,6 +38,10 @@ export const TxOverviewAmount = ({
       ? (t(actionLabel) as string)
       : t('sent')
 
+  // Hide the "0 ETH" line for contract calls where we couldn't resolve the
+  // actual token being moved (e.g. Uniswap V4 execute, multicalls). The
+  // function label alone is more informative than a misleading zero amount.
+  const showAmount = amount > 0 || !resolvedLabel
   const amountContent = `${amount} ${value.ticker}`
 
   return (
@@ -47,7 +51,7 @@ export const TxOverviewAmount = ({
           {topLabel}
         </Text>
         {value && <CoinIcon coin={value} style={{ fontSize: 32 }} />}
-        <Text size={18}>{amountContent}</Text>
+        {showAmount && <Text size={18}>{amountContent}</Text>}
         {amount > 0 && (
           <MatchQuery
             value={priceQuery}
