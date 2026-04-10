@@ -1391,4 +1391,17 @@ export const hr = {
   in_progress: 'U tijeku...',
   route: 'Ruta',
   via: 'preko',
+  enable: 'Omogućiti',
+  enable_all: 'Omogući sve',
+  push_notifications_description:
+    'Primajte obavijesti kada je potreban vaš potpis ili kada uređaj zatraži pristup.',
+  notifications: 'Obavijesti',
+  not_now: 'Ne sada',
+  secure_notifications_are_here: 'Sigurne obavijesti su ovdje',
+  secure_notifications_description:
+    'Primajte upozorenja kada drugi uređaj zatraži pridruživanje vašem trezoru ili kada je potreban vaš potpis.',
+  vault_notifications: 'Obavijesti o trezoru',
+  choose_vaults: 'Odaberite trezore',
+  manage_notifications_in_settings:
+    'Obavijestima možete upravljati u postavkama sustava.',
 }

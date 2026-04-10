@@ -8,6 +8,7 @@ import { AddressPage } from '@core/ui/chain/coin/address'
 import { DeeplinkPage } from '@core/ui/deeplink/components/DeeplinkPage'
 import { ReshareVaultPage } from '@core/ui/mpc/keygen/reshare/ReshareVaultPage'
 import { CoreViewId } from '@core/ui/navigation/CoreView'
+import { ChooseVaultsView } from '@core/ui/notifications/choose-vaults/ChooseVaultsView'
 import { CurrencyPage } from '@core/ui/preferences/currency'
 import { LanguagePage } from '@core/ui/preferences/language'
 import { UploadQrPage } from '@core/ui/qr/upload'
@@ -64,6 +65,7 @@ export type SharedViewId = Extract<
   | 'addressBook'
   | 'createAddressBookItem'
   | 'createVaultFolder'
+  | 'chooseVaults'
   | 'currencySettings'
   | 'deeplink'
   | 'defi'
@@ -121,6 +123,7 @@ export const sharedViews: Views<SharedViewId> = {
   addressBook: AddressBookPage,
   createAddressBookItem: CreateAddressBookItemPage,
   createVaultFolder: CreateVaultFolderPage,
+  chooseVaults: ChooseVaultsView,
   currencySettings: CurrencyPage,
   deeplink: DeeplinkPage,
   defi: DefiPage,

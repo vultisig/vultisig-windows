@@ -1,6 +1,5 @@
 import { NavigationProvider } from '@clients/extension/src/navigation/NavigationProvider'
 import { views } from '@clients/extension/src/navigation/views'
-import { AutoRegisterPushNotifications } from '@clients/extension/src/notifications/AutoRegisterPushNotifications'
 import { ExtensionNotificationManager } from '@clients/extension/src/notifications/ExtensionNotificationManager'
 import { renderExtensionPage } from '@clients/extension/src/pages/core/render'
 import { isPopupView } from '@clients/extension/src/utils/functions'
@@ -48,7 +47,6 @@ const App = () => {
       popNavigationHistory={popNavigationHistory}
     >
       <ActiveView views={views} />
-      <AutoRegisterPushNotifications />
       <ExtensionNotificationManager />
     </ExtensionCoreApp>
   )

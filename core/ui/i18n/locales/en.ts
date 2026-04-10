@@ -156,6 +156,7 @@ export const en = {
   choose_payout_asset: 'Choose payout asset',
   choose_chains: 'Choose Chains',
   choose_tokens: 'Choose Tokens',
+  choose_vaults: 'Choose vaults',
   deposited: 'Deposited',
   circle: {
     banner_text:
@@ -284,6 +285,8 @@ export const en = {
   email_placeholder: 'Enter your email address',
   email_required: 'Email is required',
   evm_chains: 'EVM Chains',
+  enable: 'Enable',
+  enable_all: 'Enable all',
   enable_dkls: 'Enable DKLS',
   enable_mldsa: 'Enable MLDSA',
   enable_tss_batching: 'Enable TSS Batching',
@@ -320,6 +323,8 @@ export const en = {
   expand_view: 'Expand View',
   open_as_side_panel: 'Open as Side Panel',
   push_notifications: 'Push Notifications',
+  push_notifications_description:
+    'Get notified when your signature is required or a device requests access.',
   push_notification_server_url: 'Push Notification Server URL',
   push_notification_server_placeholder: 'Leave empty for production default',
   desktop_push_notification_enable_failed:
@@ -643,6 +648,8 @@ export const en = {
   m_of_n_vault: '{{m}}-of-{{n}} Vault',
   make_sure_chains: 'Make sure that the chain you’re looking for is enabled.',
   manage_chains: 'Manage Chains',
+  manage_notifications_in_settings:
+    'You can manage notifications in system settings.',
   max: 'Max',
   max_4_characters: 'Max 4 characters',
   max_total_fees: 'Max. Total Fee',
@@ -670,6 +677,8 @@ export const en = {
   network_rate: 'Network rate',
   network_rate_required: 'Network rate is required',
   notification_sent_successfully: 'Notification was successfully sent!',
+  notifications: 'Notifications',
+  not_now: 'Not now',
   never: 'Never',
   new: 'New',
   next: 'Next',
@@ -910,6 +919,9 @@ export const en = {
     "You'll create {{count}} backups in total. You will do this on each device.",
   secure_store_backups_separately_description:
     'Save each backup in a different cloud service or with a different password. If one is exposed, your funds stay safe.',
+  secure_notifications_are_here: 'Secure Notifications are here',
+  secure_notifications_description:
+    'Receive alerts when another device requests to join your vault or when your signature is required.',
   security: 'Security',
   select: 'Select',
   select_asset: 'Select asset',
@@ -1142,6 +1154,7 @@ export const en = {
     'You can always rename your vault later in the settings',
   vault_name_max_length_error: 'Vault name must be less than 50 characters',
   vault_name_required: 'Vault name is required',
+  vault_notifications: 'Vault Notifications',
   vault_part: 'Vault Share',
   vault_password: 'Vault Password',
   vault_qr_share: 'Share',

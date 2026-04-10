@@ -24,6 +24,8 @@ import {
   pushNotificationRegistrationsStorageKey,
 } from './pushNotificationStorage'
 
+const maxConsecutiveWsFailures = 5
+
 type HandleNotificationMessageInput = {
   msg: NonNullable<ReturnType<typeof parseKeysignWsNotification>>
   ws: WebSocket
@@ -106,6 +108,7 @@ export const ExtensionNotificationManager = () => {
     Map<string, ManagedExtensionNotificationSocket>
   >(new Map())
   const reconnectDelayMsRef = useRef<Record<string, number>>({})
+  const failureCountRef = useRef<Record<string, number>>({})
 
   useEffect(() => {
     const connectionsMap = connectionsRef.current
@@ -199,6 +202,7 @@ export const ExtensionNotificationManager = () => {
       }
       connectionsRef.current.delete(vaultId)
       delete reconnectDelayMsRef.current[vaultId]
+      delete failureCountRef.current[vaultId]
       if (managed.ws) {
         const ws = managed.ws
         clearWebSocketHandlers(ws)
@@ -277,6 +281,7 @@ export const ExtensionNotificationManager = () => {
       ws.onopen = () => {
         reconnectDelayMsRef.current[vaultId] =
           keysignNotificationWsInitialReconnectDelayMs
+        failureCountRef.current[vaultId] = 0
       }
 
       ws.onmessage = event => {
@@ -325,6 +330,17 @@ export const ExtensionNotificationManager = () => {
           }
 
           if (connectionsRef.current.get(vaultId) !== entry) {
+            return
+          }
+
+          const failures = (failureCountRef.current[vaultId] ?? 0) + 1
+          failureCountRef.current[vaultId] = failures
+
+          if (failures >= maxConsecutiveWsFailures) {
+            console.warn(
+              `[ExtensionNotificationManager] Stopping reconnection for vault ${vaultId.slice(0, 12)}... after ${failures} consecutive failures`
+            )
+            disconnectVault(vaultId)
             return
           }
 
