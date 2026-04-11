@@ -1,6 +1,5 @@
 import { WaitForServerStep } from '@core/ui/mpc/fast/WaitForServerStep'
 import { FastKeysignServerStep } from '@core/ui/mpc/keysign/fast/FastKeysignServerStep'
-import { KeysignConnectingState } from '@core/ui/mpc/keysign/flow/KeysignConnectingState'
 import { KeysignSigningStep } from '@core/ui/mpc/keysign/KeysignSigningStep'
 import { KeysignActionProviderProp } from '@core/ui/mpc/keysign/start/KeysignActionProviderProp'
 import { StartMpcSessionFlow } from '@core/ui/mpc/session/StartMpcSessionFlow'
@@ -16,8 +15,6 @@ import { TransactionRecorderProvider } from '../../../transaction-history/record
 import { KeysignMessagePayloadProvider } from '../state/keysignMessagePayload'
 
 const keysignSteps = ['server', 'keysign'] as const
-
-const renderConnecting = () => <KeysignConnectingState />
 
 export const StartFastKeysignFlow = ({
   keysignActionProvider: KeysignActionProvider,
@@ -41,12 +38,7 @@ export const StartFastKeysignFlow = ({
       )}
       keysign={() => (
         <ValueTransfer<string[]>
-          from={({ onFinish }) => (
-            <WaitForServerStep
-              onFinish={onFinish}
-              renderPending={renderConnecting}
-            />
-          )}
+          from={({ onFinish }) => <WaitForServerStep onFinish={onFinish} />}
           key="peers"
           to={({ value }) => (
             <MpcPeersProvider value={value}>
@@ -61,7 +53,6 @@ export const StartFastKeysignFlow = ({
                   </KeysignActionProvider>
                 )}
                 value="keysign"
-                renderPending={renderConnecting}
               />
             </MpcPeersProvider>
           )}

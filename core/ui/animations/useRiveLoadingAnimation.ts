@@ -16,6 +16,7 @@ type Bounds = {
 
 type UseRiveLoadingAnimationInput = {
   src: string
+  initialConnected?: boolean
 }
 
 const stateMachineName = 'State Machine 1'
@@ -26,12 +27,20 @@ const stateMachineName = 'State Machine 1'
  *
  * The ViewModel input names match the iOS implementation byte-for-byte,
  * including the `progessPercentage` typo from the original Rive file.
+ *
+ * @param initialConnected - The initial value for the `Connected` ViewModel
+ *   boolean. Set to `false` to start in the Connecting state. Defaults to
+ *   `true` (Signing/Generating state). When `false`, the Rive instance is
+ *   reset so the state machine evaluates `Connected=false` from its first
+ *   frame.
  */
 export const useRiveLoadingAnimation = ({
   src,
+  initialConnected = true,
 }: UseRiveLoadingAnimationInput) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const [bounds, setBounds] = useState<Bounds>({ width: 0, height: 0 })
+  const hasReset = useRef(initialConnected)
 
   const { rive, RiveComponent } = useRive({
     src,
@@ -41,6 +50,33 @@ export const useRiveLoadingAnimation = ({
       fit: Fit.Layout,
     }),
   })
+
+  // When initialConnected is false, the .riv default (Connected=true)
+  // causes the state machine to immediately enter the Signing state.
+  // To start in the Connecting state we must reset the Rive instance,
+  // create a ViewModel instance with Connected=false, bind it, and
+  // replay the state machine — all before the first rendered frame.
+  useEffect(() => {
+    if (!rive || hasReset.current) return
+    hasReset.current = true
+
+    const vm = rive.defaultViewModel()
+    if (!vm) return
+    const vmi = vm.defaultInstance()
+    if (!vmi) return
+
+    const prop = vmi.boolean('Connected')
+    if (prop) {
+      prop.value = false
+    }
+
+    rive.reset({
+      stateMachines: stateMachineName,
+      autoplay: false,
+    })
+    rive.bindViewModelInstance(vmi)
+    rive.play(stateMachineName)
+  }, [rive])
 
   const viewModel = useViewModel(rive, { useDefault: true })
 

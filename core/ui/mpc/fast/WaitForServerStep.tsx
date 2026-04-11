@@ -1,20 +1,13 @@
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { useMpcPeerOptionsQuery } from '@core/ui/mpc/devices/queries/useMpcPeerOptionsQuery'
-import { FlowPendingPageContent } from '@lib/ui/flow/FlowPendingPageContent'
+import { KeygenConnectingAnimation } from '@core/ui/mpc/keygen/progress/KeygenConnectingAnimation'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { FC, ReactNode, useEffect } from 'react'
+import { FC, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-type WaitForServerStepProps = OnFinishProp<string[]> & {
-  renderPending?: () => ReactNode
-}
-
-export const WaitForServerStep: FC<WaitForServerStepProps> = ({
-  onFinish,
-  renderPending,
-}) => {
+export const WaitForServerStep: FC<OnFinishProp<string[]>> = ({ onFinish }) => {
   const { t } = useTranslation()
   const peersQuery = useMpcPeerOptionsQuery()
 
@@ -33,16 +26,7 @@ export const WaitForServerStep: FC<WaitForServerStepProps> = ({
             error={error}
           />
         )}
-        pending={() =>
-          renderPending ? (
-            renderPending()
-          ) : (
-            <FlowPendingPageContent
-              title={`${t('connecting_to_server')}...`}
-              message={t('fastVaultSetup.takeMinute')}
-            />
-          )
-        }
+        pending={() => <KeygenConnectingAnimation />}
       />
     </>
   )

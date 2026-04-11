@@ -19,12 +19,9 @@ type KeysignLoadingAnimationProps = {
 /**
  * Full-bleed Rive animation displayed during the MPC keysign flow.
  *
- * @param isConnected - Whether the relay/peer connection is established;
- *   forwarded to the Rive `Connected` ViewModel input.
- * @param progress - Optional signing progress percentage (0–100); forwarded to
- *   the Rive `progessPercentage` ViewModel input. Defaults to 0.
- * @param chainLogoSrc - Optional chain logo URL to display inside the
- *   Rive animation via the `fromLogo` ViewModel image input.
+ * The `.riv` file defaults to the Connecting state (`Connected=false`).
+ * When `isConnected` is true, the animation transitions to the Signing
+ * state with progress tracking and chain logo display.
  */
 export const KeysignLoadingAnimation = ({
   isConnected,

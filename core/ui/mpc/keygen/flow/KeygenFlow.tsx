@@ -41,7 +41,6 @@ export const KeygenFlow = ({
 }: KeygenFlowProps) => {
   const {
     step,
-    protocolStatuses,
     mutate: startKeygen,
     ...keygenMutationState
   } = useKeygenMutation()
@@ -143,12 +142,7 @@ export const KeygenFlow = ({
               primaryControls={<PageHeaderBackButton />}
             />
           )}
-          {!isPluginReshare && (
-            <KeygenPendingState
-              value={step}
-              protocolStatuses={protocolStatuses}
-            />
-          )}
+          {!isPluginReshare && <KeygenPendingState value={step} />}
         </PendingWrapper>
       )}
     />
