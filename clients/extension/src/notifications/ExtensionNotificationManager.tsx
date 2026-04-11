@@ -28,6 +28,22 @@ import {
 
 const maxConsecutiveWsFailures = 5
 
+type OpenKeysignFromPushMessage = {
+  type: typeof openKeysignFromPushNotificationType
+  url: string
+}
+
+const isOpenKeysignFromPushMessage = (
+  value: unknown
+): value is OpenKeysignFromPushMessage => {
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+  const type = Reflect.get(value, 'type')
+  const url = Reflect.get(value, 'url')
+  return type === openKeysignFromPushNotificationType && typeof url === 'string'
+}
+
 type HandleNotificationMessageInput = {
   msg: NonNullable<ReturnType<typeof parseKeysignWsNotification>>
   ws: WebSocket
@@ -73,20 +89,12 @@ export const ExtensionNotificationManager = () => {
       _sender: chrome.runtime.MessageSender,
       sendResponse: (response: { ok: boolean }) => void
     ) => {
-      if (
-        typeof message === 'object' &&
-        message !== null &&
-        'type' in message &&
-        (message as { type: unknown }).type ===
-          openKeysignFromPushNotificationType &&
-        'url' in message &&
-        typeof (message as { url: unknown }).url === 'string'
-      ) {
+      if (isOpenKeysignFromPushMessage(message)) {
         void (async () => {
           try {
             navigateRef.current({
               id: 'deeplink',
-              state: { url: (message as { url: string }).url },
+              state: { url: message.url },
             })
             void window.focus()
             await removeInitialView()
