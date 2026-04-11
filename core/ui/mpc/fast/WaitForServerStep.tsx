@@ -1,6 +1,6 @@
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { useMpcPeerOptionsQuery } from '@core/ui/mpc/devices/queries/useMpcPeerOptionsQuery'
-import { FlowPendingPageContent } from '@lib/ui/flow/FlowPendingPageContent'
+import { KeygenConnectingAnimation } from '@core/ui/mpc/keygen/progress/KeygenConnectingAnimation'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -26,12 +26,7 @@ export const WaitForServerStep: FC<OnFinishProp<string[]>> = ({ onFinish }) => {
             error={error}
           />
         )}
-        pending={() => (
-          <FlowPendingPageContent
-            title={`${t('connecting_to_server')}...`}
-            message={t('fastVaultSetup.takeMinute')}
-          />
-        )}
+        pending={() => <KeygenConnectingAnimation />}
       />
     </>
   )

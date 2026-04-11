@@ -2,10 +2,11 @@ import { useRiveLoadingAnimation } from '../../../../animations/useRiveLoadingAn
 
 /**
  * Hook for the Rive loading animation shown during MPC key generation.
- *
- * @returns The result of {@link useRiveLoadingAnimation} configured with the
- *   keygen animation source, including `RiveComponent`, `containerRef`,
- *   `setConnected`, and `setProgress`.
+ * Starts in Connecting state (`initialConnected: false`) and transitions
+ * to Generating state when `setConnected(true)` is called.
  */
 export const useKeygenLoadingAnimation = () =>
-  useRiveLoadingAnimation({ src: '/core/animations/keygen-loading.riv' })
+  useRiveLoadingAnimation({
+    src: '/core/animations/keygen-loading.riv',
+    initialConnected: false,
+  })
