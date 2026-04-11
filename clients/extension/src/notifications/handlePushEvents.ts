@@ -8,6 +8,7 @@ import { pushNotificationServerUrl } from '@core/ui/notifications/pushNotificati
 import { urlBase64ToUint8Array } from '@core/ui/notifications/urlBase64ToUint8Array'
 
 import {
+  openKeysignFromPushNotificationType,
   PushForceRegisterVaultMessage,
   pushForceRegisterVaultType,
   PushRegisterVaultsMessage,
@@ -328,16 +329,260 @@ const reRegisterOptedInVaults = async (): Promise<void> => {
   }
 }
 
+const extensionIndexPageUrl = (extensionId: string) =>
+  `chrome-extension://${extensionId}/index.html`
+
 /**
- * Registers the extension service worker push, notification click, and
- * messaging handlers; runs startup migrations before processing UI registration
- * messages.
+ * Focus an open extension tab and reload so {@link NavigationProvider} consumes
+ * {@code initialView} from storage. Returns false if no matching tab exists.
  */
-export const handlePushEvents = () => {
+const focusReloadExtensionTab = async (
+  extensionId: string
+): Promise<boolean> => {
+  const tabs = await chrome.tabs.query({
+    url: `chrome-extension://${extensionId}/*`,
+  })
+  if (tabs.length === 0) {
+    return false
+  }
+  const preferredUrl = extensionIndexPageUrl(extensionId)
+  const tab = tabs.find(t => t.url?.startsWith(preferredUrl)) ?? tabs[0]
+  if (tab?.id === undefined) {
+    return false
+  }
+  await chrome.tabs.update(tab.id, { active: true })
+  if (tab.windowId !== undefined) {
+    await chrome.windows.update(tab.windowId, { focused: true })
+  }
+  await chrome.tabs.reload(tab.id)
+  return true
+}
+
+/**
+ * Opens or focuses the extension after the user taps a Web Push keysign
+ * notification. Prefer {@code chrome.tabs.reload} so initial navigation state
+ * is re-read; fall back to runtime messaging (side panel) and then
+ * {@code clients} / {@code tabs.create}.
+ */
+const openExtensionFromPushNotificationClick = async (input: {
+  qrCodeData: string | undefined
+}): Promise<void> => {
+  const { qrCodeData } = input
+  const extensionId = chrome.runtime.id
+  const extensionUrl = extensionIndexPageUrl(extensionId)
+
+  if (qrCodeData) {
+    await chrome.storage.local.set({
+      initialView: {
+        id: 'deeplink',
+        state: { url: qrCodeData },
+      },
+    })
+  }
+
+  if (await focusReloadExtensionTab(extensionId)) {
+    return
+  }
+
+  if (qrCodeData) {
+    try {
+      const response: unknown = await chrome.runtime.sendMessage({
+        type: openKeysignFromPushNotificationType,
+        url: qrCodeData,
+      })
+      if (
+        typeof response === 'object' &&
+        response !== null &&
+        'ok' in response &&
+        Reflect.get(response, 'ok') === true
+      ) {
+        return
+      }
+    } catch {
+      // No extension page had a listener (e.g. every surface closed).
+    }
+  }
+
+  const controlled = await self.clients.matchAll({
+    type: 'window',
+    includeUncontrolled: false,
+  })
+  const extensionClient = controlled.find(
+    client =>
+      client.url.startsWith(extensionUrl) ||
+      client.url.startsWith(`chrome-extension://${extensionId}/`)
+  )
+  if (extensionClient) {
+    try {
+      await extensionClient.focus()
+      const navigated = await extensionClient.navigate(extensionUrl)
+      if (navigated !== null) {
+        return
+      }
+    } catch (error) {
+      console.warn('[Vultisig Push] client.focus/navigate failed:', error)
+    }
+  }
+
+  await chrome.tabs.create({ url: extensionUrl })
+}
+
+/** Set in {@link initPushExtensionRuntime}; used by {@link handlePushSubscriptionChangeEvent}. */
+let pushStartupWork: Promise<void> = Promise.resolve()
+
+/** Chrome `chrome.notifications` body length limit — full payload lives in session storage. */
+const chromeNotificationMessageMaxLen = 240
+
+/** Invoked from {@link ./pushServiceWorkerBindings} via dynamic import. */
+export const handlePushEvent = async (event: any): Promise<void> => {
+  let data: NotificationData | undefined
+  try {
+    data = event.data?.json()
+  } catch {
+    let raw = '<no data>'
+    try {
+      raw = event.data?.text() ?? '<null>'
+    } catch {
+      raw = '<unreadable>'
+    }
+    console.error('[Vultisig Push] Failed to parse push payload, raw:', raw)
+  }
+
+  const title = data?.title ?? 'Vultisig'
+  const body = data?.body ?? ''
+  const subtitle = data?.subtitle ?? ''
+
+  console.log('[Vultisig Push] Showing notification:', title, subtitle)
+
+  // macOS + Chrome often does not fire service worker `notificationclick` for
+  // `registration.showNotification` (especially expanded banners). Use
+  // `chrome.notifications` + `onClicked` so taps open the extension reliably.
+  if (typeof chrome !== 'undefined' && chrome.notifications) {
+    const notificationId = `vultisig-push-${crypto.randomUUID()}`
+    const payloadKey = `vultisigPushQr:${notificationId}`
+    await chrome.storage.session.set({ [payloadKey]: body })
+
+    const fullMessage = subtitle
+      ? `${subtitle}\n${body}`
+      : body || 'Keysign request'
+    const message =
+      fullMessage.length > chromeNotificationMessageMaxLen
+        ? `${fullMessage.slice(0, chromeNotificationMessageMaxLen)}…`
+        : fullMessage
+
+    try {
+      await chrome.notifications.create(notificationId, {
+        type: 'basic',
+        iconUrl: chrome.runtime.getURL('icon128.png'),
+        title,
+        message,
+        requireInteraction: true,
+      })
+    } catch (error) {
+      await chrome.storage.session.remove(payloadKey)
+      console.error(
+        '[Vultisig Push] chrome.notifications.create failed:',
+        error
+      )
+      await self.registration.showNotification(title, {
+        body: subtitle ? `${subtitle}\n${body}` : body || 'Keysign request',
+        icon: 'icon128.png',
+        tag: `vultisig-keysign-${crypto.randomUUID()}`,
+        requireInteraction: true,
+        data: { qrCodeData: body },
+      })
+    }
+    return
+  }
+
+  const notificationTag = `vultisig-keysign-${crypto.randomUUID()}`
+
+  await self.registration.showNotification(title, {
+    body: subtitle ? `${subtitle}\n${body}` : body || 'Keysign request',
+    icon: 'icon128.png',
+    tag: notificationTag,
+    requireInteraction: true,
+    data: { qrCodeData: body },
+  })
+}
+
+/** Invoked from {@link ./pushServiceWorkerBindings} via dynamic import. */
+export const handleNotificationClickEvent = async (
+  event: any
+): Promise<void> => {
+  event.notification.close()
+
+  try {
+    const qrCodeData: string | undefined = event.notification.data?.qrCodeData
+    await openExtensionFromPushNotificationClick({ qrCodeData })
+  } catch (error) {
+    console.error('[Vultisig Push] notificationclick failed:', error)
+  }
+}
+
+/** Invoked from {@link ./pushServiceWorkerBindings} via dynamic import. */
+export const handlePushSubscriptionChangeEvent = async (
+  _event: any
+): Promise<void> => {
+  console.warn(
+    '[Vultisig Push] Push subscription changed, re-registering vaults...'
+  )
+  await pushStartupWork
+  if (await getOptInMigrationCompleted()) {
+    await reRegisterOptedInVaults()
+  }
+}
+
+const pushChromeNotificationIdPrefix = 'vultisig-push-'
+
+const pushChromeNotificationPayloadKey = (notificationId: string) =>
+  `vultisigPushQr:${notificationId}`
+
+const handlePushChromeNotificationClicked = (notificationId: string) => {
+  if (!notificationId.startsWith(pushChromeNotificationIdPrefix)) {
+    return
+  }
+
+  const key = pushChromeNotificationPayloadKey(notificationId)
+  void chrome.storage.session.get(key).then(async result => {
+    const raw = result[key]
+    await chrome.storage.session.remove(key)
+    const qrCodeData = typeof raw === 'string' ? raw : undefined
+    try {
+      await openExtensionFromPushNotificationClick({ qrCodeData })
+    } catch (error) {
+      console.error('[Vultisig Push] chrome.notifications click failed:', error)
+    }
+  })
+}
+
+const handlePushChromeNotificationClosed = (notificationId: string) => {
+  if (!notificationId.startsWith(pushChromeNotificationIdPrefix)) {
+    return
+  }
+  void chrome.storage.session.remove(
+    pushChromeNotificationPayloadKey(notificationId)
+  )
+}
+
+/**
+ * Migrations, re-registration, and {@code chrome.runtime.onMessage} for push.
+ * Push / notification listeners are registered in {@link ./pushServiceWorkerBindings}
+ * and must load before this runs.
+ */
+export const initPushExtensionRuntime = () => {
   console.log('[Vultisig Push] Service worker push handler initialized')
 
-  // Run migrations before UI-driven registration or subscription-change recovery.
-  const pushStartupPromise = (async () => {
+  if (typeof chrome !== 'undefined' && chrome.notifications) {
+    chrome.notifications.onClicked.addListener(
+      handlePushChromeNotificationClicked
+    )
+    chrome.notifications.onClosed.addListener(
+      handlePushChromeNotificationClosed
+    )
+  }
+
+  pushStartupWork = (async () => {
     try {
       await runPushVaultIdMigrationIfNeeded()
       const optInMigrationOk = await runOptInMigrationIfNeeded()
@@ -352,103 +597,10 @@ export const handlePushEvents = () => {
     }
   })()
 
-  // Register SW events immediately (synchronous). Chrome requires these during
-  // initial worker evaluation — do not defer behind migration, messaging, or
-  // other setup.
-  self.addEventListener('push', (event: any) => {
-    event.waitUntil(
-      (async () => {
-        let data: NotificationData | undefined
-        try {
-          data = event.data?.json()
-        } catch {
-          let raw = '<no data>'
-          try {
-            raw = event.data?.text() ?? '<null>'
-          } catch {
-            raw = '<unreadable>'
-          }
-          console.error(
-            '[Vultisig Push] Failed to parse push payload, raw:',
-            raw
-          )
-        }
-
-        const title = data?.title ?? 'Vultisig'
-        const body = data?.body ?? ''
-        const subtitle = data?.subtitle ?? ''
-
-        console.log('[Vultisig Push] Showing notification:', title, subtitle)
-
-        await self.registration.showNotification(title, {
-          body: subtitle ? `${subtitle}\n${body}` : body || 'Keysign request',
-          icon: 'icon128.png',
-          tag: 'vultisig-keysign',
-          requireInteraction: true,
-          data: { qrCodeData: body },
-        })
-      })()
-    )
-  })
-
-  // Handle notification click — open keysign flow
-  self.addEventListener('notificationclick', (event: any) => {
-    event.notification.close()
-
-    event.waitUntil(
-      (async () => {
-        const qrCodeData: string | undefined =
-          event.notification.data?.qrCodeData
-        if (qrCodeData) {
-          await chrome.storage.local.set({
-            initialView: {
-              id: 'deeplink',
-              state: { url: qrCodeData },
-            },
-          })
-        }
-
-        const extensionUrl = `chrome-extension://${chrome.runtime.id}/index.html`
-
-        const allClients = await self.clients.matchAll({
-          type: 'window',
-          includeUncontrolled: true,
-        })
-
-        const existingClient = allClients.find(client =>
-          client.url.startsWith(extensionUrl)
-        )
-
-        if (existingClient) {
-          await existingClient.focus()
-          await existingClient.navigate(extensionUrl)
-          return
-        }
-
-        await self.clients.openWindow(extensionUrl)
-      })()
-    )
-  })
-
-  self.addEventListener('pushsubscriptionchange', (event: any) => {
-    event.waitUntil(
-      (async () => {
-        console.warn(
-          '[Vultisig Push] Push subscription changed, re-registering vaults...'
-        )
-        await pushStartupPromise
-        if (await getOptInMigrationCompleted()) {
-          await reRegisterOptedInVaults()
-        }
-      })()
-    )
-  })
-
-  // Handle messages from the UI
   chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     if (message.type === pushRegisterVaultsType) {
       const msg = message as PushRegisterVaultsMessage
-      void pushStartupPromise
+      void pushStartupWork
         .then(() => registerVaults(msg.vaults))
         .then(() => sendResponse({ success: true }))
         .catch(error => {
@@ -460,7 +612,7 @@ export const handlePushEvents = () => {
 
     if (message.type === pushForceRegisterVaultType) {
       const msg = message as PushForceRegisterVaultMessage
-      void pushStartupPromise
+      void pushStartupWork
         .then(() => forceRegisterVault(msg.vault))
         .then(() => sendResponse({ success: true }))
         .catch(error => {
@@ -472,7 +624,7 @@ export const handlePushEvents = () => {
 
     if (message.type === pushUnregisterVaultType) {
       const msg = message as PushUnregisterVaultMessage
-      void pushStartupPromise
+      void pushStartupWork
         .then(async () => {
           const serverUrl = await getServerUrl()
 

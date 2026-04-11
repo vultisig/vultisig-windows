@@ -17,6 +17,8 @@ import { computeNotificationVaultId } from '@vultisig/sdk'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { removeInitialView } from '../storage/initialView'
+import { openKeysignFromPushNotificationType } from './pushNotificationMessages'
 import {
   getPushNotificationRegistrations,
   getPushServerUrl,
@@ -64,6 +66,44 @@ export const ExtensionNotificationManager = () => {
 
   const navigateRef = useRef(navigate)
   navigateRef.current = navigate
+
+  useEffect(() => {
+    const onOpenKeysignFromPush = (
+      message: unknown,
+      _sender: chrome.runtime.MessageSender,
+      sendResponse: (response: { ok: boolean }) => void
+    ) => {
+      if (
+        typeof message === 'object' &&
+        message !== null &&
+        'type' in message &&
+        (message as { type: unknown }).type ===
+          openKeysignFromPushNotificationType &&
+        'url' in message &&
+        typeof (message as { url: unknown }).url === 'string'
+      ) {
+        void (async () => {
+          try {
+            navigateRef.current({
+              id: 'deeplink',
+              state: { url: (message as { url: string }).url },
+            })
+            void window.focus()
+            await removeInitialView()
+            sendResponse({ ok: true })
+          } catch {
+            sendResponse({ ok: false })
+          }
+        })()
+        return true
+      }
+      return false
+    }
+    chrome.runtime.onMessage.addListener(onOpenKeysignFromPush)
+    return () => {
+      chrome.runtime.onMessage.removeListener(onOpenKeysignFromPush)
+    }
+  }, [])
 
   const showBannerRef = useRef(showBanner)
   showBannerRef.current = showBanner
