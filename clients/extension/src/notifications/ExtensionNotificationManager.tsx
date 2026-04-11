@@ -17,6 +17,8 @@ import { computeNotificationVaultId } from '@vultisig/sdk'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { removeInitialView } from '../storage/initialView'
+import { openKeysignFromPushNotificationType } from './pushNotificationMessages'
 import {
   getPushNotificationRegistrations,
   getPushServerUrl,
@@ -25,6 +27,22 @@ import {
 } from './pushNotificationStorage'
 
 const maxConsecutiveWsFailures = 5
+
+type OpenKeysignFromPushMessage = {
+  type: typeof openKeysignFromPushNotificationType
+  url: string
+}
+
+const isOpenKeysignFromPushMessage = (
+  value: unknown
+): value is OpenKeysignFromPushMessage => {
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+  const type = Reflect.get(value, 'type')
+  const url = Reflect.get(value, 'url')
+  return type === openKeysignFromPushNotificationType && typeof url === 'string'
+}
 
 type HandleNotificationMessageInput = {
   msg: NonNullable<ReturnType<typeof parseKeysignWsNotification>>
@@ -64,6 +82,36 @@ export const ExtensionNotificationManager = () => {
 
   const navigateRef = useRef(navigate)
   navigateRef.current = navigate
+
+  useEffect(() => {
+    const onOpenKeysignFromPush = (
+      message: unknown,
+      _sender: chrome.runtime.MessageSender,
+      sendResponse: (response: { ok: boolean }) => void
+    ) => {
+      if (isOpenKeysignFromPushMessage(message)) {
+        void (async () => {
+          try {
+            navigateRef.current({
+              id: 'deeplink',
+              state: { url: message.url },
+            })
+            void window.focus()
+            await removeInitialView()
+            sendResponse({ ok: true })
+          } catch {
+            sendResponse({ ok: false })
+          }
+        })()
+        return true
+      }
+      return false
+    }
+    chrome.runtime.onMessage.addListener(onOpenKeysignFromPush)
+    return () => {
+      chrome.runtime.onMessage.removeListener(onOpenKeysignFromPush)
+    }
+  }, [])
 
   const showBannerRef = useRef(showBanner)
   showBannerRef.current = showBanner

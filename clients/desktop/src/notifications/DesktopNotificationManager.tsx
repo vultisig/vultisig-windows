@@ -130,9 +130,12 @@ export const DesktopNotificationManager = () => {
           WindowShow()
         },
         showOsNotification: ({ title, body }) => {
-          // Native shell notifications (osascript/PowerShell/notify-send) do not
-          // support click callbacks. Navigation on click is handled by the in-app
-          // banner; bringAppToFront already foregrounds the window.
+          // Desktop OS toasts are best-effort alerts only:
+          // - macOS dev: osascript → Script Editor–style banner (not the app icon).
+          // - Windows: WinRT toast titled under “Vultisig”, but no click → keysign.
+          // - Linux: notify-send, same limitation.
+          // Parity with iOS / extension tap-to-keysign is via bringAppToFront +
+          // in-app KeysignNotificationBanner (and deeplink when the user acts there).
           ShowNotification(title, body).catch(error => {
             console.debug(
               '[DesktopNotificationManager] ShowNotification failed',
