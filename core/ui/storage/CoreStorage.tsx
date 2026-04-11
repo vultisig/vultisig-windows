@@ -9,6 +9,7 @@ import { DefiChainsStorage } from './defiChains'
 import { DefiPositionsStorage } from './defiPositions'
 import { DismissedBannersStorage } from './dismissedBanners'
 import { FiatCurrencyStorage } from './fiatCurrency'
+import { HasSeenNotificationPromptStorage } from './hasSeenNotificationPrompt'
 import { LanguageStorage } from './language'
 import { MLDSAEnabledStorage } from './mldsaEnabled'
 import { OnboardingStorage } from './onboarding'
@@ -25,6 +26,7 @@ export type CoreStorage = CoinFinderIgnoreStorage &
   DefiChainsStorage &
   DefiPositionsStorage &
   FiatCurrencyStorage &
+  HasSeenNotificationPromptStorage &
   CurrentVaultIdStorage &
   VaultsStorage &
   VaultFoldersStorage &

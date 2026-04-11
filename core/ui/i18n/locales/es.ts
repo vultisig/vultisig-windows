@@ -1415,4 +1415,17 @@ export const es = {
   in_progress: 'En curso...',
   route: 'Ruta',
   via: 'a través de',
+  enable: 'Permitir',
+  enable_all: 'Habilitar todo',
+  push_notifications_description:
+    'Reciba notificaciones cuando se requiera su firma o cuando un dispositivo solicite acceso.',
+  notifications: 'Notificaciones',
+  not_now: 'Ahora no',
+  secure_notifications_are_here: 'Las notificaciones seguras están aquí.',
+  secure_notifications_description:
+    'Reciba alertas cuando otro dispositivo solicite unirse a su bóveda o cuando se requiera su firma.',
+  vault_notifications: 'Notificaciones de la bóveda',
+  choose_vaults: 'Elegir bóvedas',
+  manage_notifications_in_settings:
+    'Puedes gestionar las notificaciones en la configuración del sistema.',
 }

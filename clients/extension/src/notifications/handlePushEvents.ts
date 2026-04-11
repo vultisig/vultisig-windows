@@ -18,10 +18,12 @@ import {
 } from './pushNotificationMessages'
 import {
   clearAllPushNotificationRegistrations,
+  getOptInMigrationCompleted,
   getPushNotificationRegistrations,
   getPushServerUrl,
   getPushVaultIdMigrationCompleted,
   removePushNotificationRegistration,
+  setOptInMigrationCompleted,
   setPushNotificationRegistration,
   setPushVaultIdMigrationCompleted,
 } from './pushNotificationStorage'
@@ -207,11 +209,11 @@ const runPushVaultIdMigrationIfNeeded = async (): Promise<void> => {
   )
 
   const serverUrl = await getServerUrl()
-  const subscription = await self.registration.pushManager.getSubscription()
-  const token = subscription ? JSON.stringify(subscription.toJSON()) : undefined
 
   const result = await chrome.storage.local.get('vaults')
   const vaults = (result.vaults ?? []) as StoredVault[]
+
+  let legacyUnregisterFailed = false
 
   for (const v of vaults) {
     if (!v.publicKeys?.ecdsa) continue
@@ -220,14 +222,17 @@ const runPushVaultIdMigrationIfNeeded = async (): Promise<void> => {
         serverUrl,
         vaultId: v.publicKeys.ecdsa,
         partyName: v.localPartyId,
-        token,
       })
-    } catch (error) {
-      console.warn(
-        '[Vultisig Push] Unregister pre-migration (legacy vault_id) failed, continuing:',
-        error
-      )
+    } catch {
+      legacyUnregisterFailed = true
     }
+  }
+
+  if (legacyUnregisterFailed) {
+    console.warn(
+      '[Vultisig Push] Vault ID migration: legacy unregister failed for one or more vaults; will retry on next startup'
+    )
+    return
   }
 
   await clearAllPushNotificationRegistrations()
@@ -253,24 +258,99 @@ const runPushVaultIdMigrationIfNeeded = async (): Promise<void> => {
   await setPushVaultIdMigrationCompleted()
 }
 
-const registerVaultsFromStorage = async (): Promise<void> => {
-  const result = await chrome.storage.local.get('vaults')
-  const vaults = (result.vaults ?? []) as StoredVault[]
-  if (vaults.length === 0) {
-    console.log('[Vultisig Push] No vaults in storage, skipping auto-register')
+/**
+ * Clears pre-opt-in server registrations and local state when possible.
+ * @returns Whether it is safe to run follow-up re-registration (no partial
+ *   unregister that would be undone by re-registering).
+ */
+const runOptInMigrationIfNeeded = async (): Promise<boolean> => {
+  if (await getOptInMigrationCompleted()) return true
+
+  console.log(
+    '[Vultisig Push] One-time migration: clearing pre-opt-in auto-registrations'
+  )
+
+  const serverUrl = await getServerUrl()
+
+  const registrations = await getPushNotificationRegistrations()
+  let unregisterFailed = false
+
+  for (const reg of Object.values(registrations)) {
+    try {
+      await unregisterDeviceForPushNotifications({
+        serverUrl,
+        vaultId: reg.vaultId,
+        partyName: reg.partyName,
+      })
+    } catch {
+      unregisterFailed = true
+    }
+  }
+
+  if (unregisterFailed) {
+    console.warn(
+      '[Vultisig Push] Opt-in migration: unregister failed for one or more vaults; keeping local registrations for retry'
+    )
+    return false
+  }
+
+  await clearAllPushNotificationRegistrations()
+  await setOptInMigrationCompleted()
+  console.log('[Vultisig Push] Opt-in migration completed')
+  return true
+}
+
+const reRegisterOptedInVaults = async (): Promise<void> => {
+  const registrations = await getPushNotificationRegistrations()
+  const vaultInfos = Object.values(registrations).map(r => ({
+    vaultId: r.vaultId,
+    localPartyId: r.partyName,
+  }))
+
+  if (vaultInfos.length === 0) {
+    console.log('[Vultisig Push] No opted-in vaults, skipping re-registration')
     return
   }
 
   console.log(
-    `[Vultisig Push] Found ${vaults.length} vault(s) in storage, checking registration`
+    `[Vultisig Push] Re-registering ${vaultInfos.length} opted-in vault(s) for push`
   )
 
-  const vaultInfos = await mapStoredVaultsToRegistrationInfos(vaults)
-  await registerVaults(vaultInfos)
+  for (const vault of vaultInfos) {
+    try {
+      await forceRegisterVault(vault)
+    } catch (error) {
+      console.error(
+        `[Vultisig Push] Failed to re-register vault ${vault.vaultId.slice(0, 12)}...:`,
+        error
+      )
+    }
+  }
 }
 
+/**
+ * Registers the extension service worker push, notification click, and
+ * messaging handlers; runs startup migrations before processing UI registration
+ * messages.
+ */
 export const handlePushEvents = () => {
   console.log('[Vultisig Push] Service worker push handler initialized')
+
+  // Run migrations before UI-driven registration or subscription-change recovery.
+  const pushStartupPromise = (async () => {
+    try {
+      await runPushVaultIdMigrationIfNeeded()
+      const optInMigrationOk = await runOptInMigrationIfNeeded()
+      if (optInMigrationOk) {
+        await reRegisterOptedInVaults()
+      }
+    } catch (error) {
+      console.error(
+        '[Vultisig Push] Startup push re-registration failed:',
+        error
+      )
+    }
+  })()
 
   // Register SW events immediately (synchronous). Chrome requires these during
   // initial worker evaluation — do not defer behind migration, messaging, or
@@ -350,35 +430,17 @@ export const handlePushEvents = () => {
     )
   })
 
-  // Handle subscription expiry — clear local state and re-register all vaults
   self.addEventListener('pushsubscriptionchange', (event: any) => {
     event.waitUntil(
       (async () => {
         console.warn(
           '[Vultisig Push] Push subscription changed, re-registering vaults...'
         )
-        await clearAllPushNotificationRegistrations()
-        await registerVaultsFromStorage()
+        await pushStartupPromise
+        if (await getOptInMigrationCompleted()) {
+          await reRegisterOptedInVaults()
+        }
       })()
-    )
-  })
-
-  // Run migration (if needed) before normal registration so local registration
-  // keys match the new vault_id scheme before any concurrent UI-driven register.
-  ;(async () => {
-    await runPushVaultIdMigrationIfNeeded()
-    await registerVaultsFromStorage()
-  })().catch(error =>
-    console.error('[Vultisig Push] Auto-register on startup failed:', error)
-  )
-
-  // Re-check when vaults change in storage (e.g. vault created/imported)
-  chrome.storage.onChanged.addListener((changes, areaName) => {
-    if (areaName !== 'local') return
-    if (!('vaults' in changes)) return
-
-    registerVaultsFromStorage().catch(error =>
-      console.error('[Vultisig Push] Auto-register on change failed:', error)
     )
   })
 
@@ -386,7 +448,8 @@ export const handlePushEvents = () => {
   chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     if (message.type === pushRegisterVaultsType) {
       const msg = message as PushRegisterVaultsMessage
-      registerVaults(msg.vaults)
+      void pushStartupPromise
+        .then(() => registerVaults(msg.vaults))
         .then(() => sendResponse({ success: true }))
         .catch(error => {
           console.error('[Vultisig Push] Register vaults failed:', error)
@@ -397,7 +460,8 @@ export const handlePushEvents = () => {
 
     if (message.type === pushForceRegisterVaultType) {
       const msg = message as PushForceRegisterVaultMessage
-      forceRegisterVault(msg.vault)
+      void pushStartupPromise
+        .then(() => forceRegisterVault(msg.vault))
         .then(() => sendResponse({ success: true }))
         .catch(error => {
           console.error('[Vultisig Push] Force register failed:', error)
@@ -408,23 +472,20 @@ export const handlePushEvents = () => {
 
     if (message.type === pushUnregisterVaultType) {
       const msg = message as PushUnregisterVaultMessage
-      ;(async () => {
-        const serverUrl = await getServerUrl()
-        const subscription =
-          await self.registration.pushManager.getSubscription()
-        const token = subscription
-          ? JSON.stringify(subscription.toJSON())
-          : undefined
+      void pushStartupPromise
+        .then(async () => {
+          const serverUrl = await getServerUrl()
 
-        await unregisterDeviceForPushNotifications({
-          serverUrl,
-          vaultId: msg.vault.vaultId,
-          partyName: msg.vault.localPartyId,
-          token,
+          // Token-less unregister (like iOS): removes ALL registrations for this
+          // vault+party regardless of which push subscription was used originally.
+          await unregisterDeviceForPushNotifications({
+            serverUrl,
+            vaultId: msg.vault.vaultId,
+            partyName: msg.vault.localPartyId,
+          })
+
+          await removePushNotificationRegistration(msg.vault.vaultId)
         })
-
-        await removePushNotificationRegistration(msg.vault.vaultId)
-      })()
         .then(() => sendResponse({ success: true }))
         .catch(error => {
           console.error('[Vultisig Push] Unregister failed:', error)

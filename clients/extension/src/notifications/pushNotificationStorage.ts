@@ -10,6 +10,8 @@ const pushNotificationKey = pushNotificationRegistrationsStorageKey
 
 const pushVaultIdMigratedKey = 'pushVaultIdMigrated'
 
+const optInMigrationKey = 'pushOptInMigrationCompleted'
+
 type PushNotificationRegistration = {
   vaultId: string
   partyName: string
@@ -85,4 +87,11 @@ export const getPushVaultIdMigrationCompleted = async (): Promise<boolean> =>
 
 export const setPushVaultIdMigrationCompleted = async (): Promise<void> => {
   await setStorageValue(pushVaultIdMigratedKey, true)
+}
+
+export const getOptInMigrationCompleted = async (): Promise<boolean> =>
+  getStorageValue(optInMigrationKey, false)
+
+export const setOptInMigrationCompleted = async (): Promise<void> => {
+  await setStorageValue(optInMigrationKey, true)
 }

@@ -1428,4 +1428,17 @@ export const de = {
   in_progress: 'Im Gange...',
   route: 'Route',
   via: 'über',
+  enable: 'Aktivieren',
+  enable_all: 'Alle aktivieren',
+  push_notifications_description:
+    'Lassen Sie sich benachrichtigen, wenn Ihre Unterschrift erforderlich ist oder ein Gerät Zugriff anfordert.',
+  notifications: 'Benachrichtigungen',
+  not_now: 'Nicht jetzt.',
+  secure_notifications_are_here: 'Sichere Benachrichtigungen sind hier.',
+  secure_notifications_description:
+    'Sie erhalten Benachrichtigungen, wenn ein anderes Gerät versucht, Ihrem Tresor beizutreten oder wenn Ihre Unterschrift erforderlich ist.',
+  vault_notifications: 'Tresorbenachrichtigungen',
+  choose_vaults: 'Tresore auswählen',
+  manage_notifications_in_settings:
+    'Sie können Benachrichtigungen in den Systemeinstellungen verwalten.',
 }
