@@ -21,7 +21,12 @@ export const rasterizeImage = (
       ctx.drawImage(img, 0, 0, size, size)
       canvas.toBlob(blob => {
         if (!blob) return reject(new Error('Failed to rasterize image'))
-        blob.arrayBuffer().then(buf => resolve(new Uint8Array(buf)))
+        blob
+          .arrayBuffer()
+          .then(buf => resolve(new Uint8Array(buf)))
+          .catch(() =>
+            reject(new Error('Failed to read rasterized image bytes'))
+          )
       }, 'image/png')
     }
     img.onerror = () => reject(new Error(`Failed to load image: ${url}`))

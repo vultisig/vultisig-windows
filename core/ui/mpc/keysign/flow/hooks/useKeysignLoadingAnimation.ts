@@ -1,4 +1,5 @@
 import { decodeImage, useViewModelInstanceImage } from '@rive-app/react-webgl2'
+import { attempt } from '@vultisig/lib-utils/attempt'
 import { useEffect } from 'react'
 
 import { useRiveLoadingAnimation } from '../../../../animations/useRiveLoadingAnimation'
@@ -34,13 +35,19 @@ export const useKeysignLoadingAnimation = ({
 
     let cancelled = false
     const load = async () => {
-      const bytes = await rasterizeImage(chainLogoSrc)
-      if (cancelled) return
-      const riveImage = await decodeImage(bytes)
-      if (cancelled) return
-      fromLogo.setValue(riveImage)
+      const result = await attempt(async () => {
+        const bytes = await rasterizeImage(chainLogoSrc)
+        if (cancelled) return null
+        const riveImage = await decodeImage(bytes)
+        if (cancelled) return null
+        return riveImage
+      })
+
+      if ('data' in result && result.data) {
+        fromLogo.setValue(result.data)
+      }
     }
-    load()
+    void load()
 
     return () => {
       cancelled = true
