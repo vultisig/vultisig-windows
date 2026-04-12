@@ -4,6 +4,14 @@ import { setStorageValue } from '@lib/extension/storage/set'
 import { omit } from '@vultisig/lib-utils/record/omit'
 import { recordMap } from '@vultisig/lib-utils/record/recordMap'
 
+let appSessionsMutationChain: Promise<unknown> = Promise.resolve()
+
+const serializeAppSessionsMutation = <T>(fn: () => Promise<T>): Promise<T> => {
+  const next = appSessionsMutationChain.then(fn, fn)
+  appSessionsMutationChain = next.catch(() => undefined)
+  return next
+}
+
 type UpdateAppSessionFieldsInput = {
   vaultId: string
   host: string
@@ -41,73 +49,71 @@ export const getVaultAppSessions = async (
   return allSessions[vaultId] ?? {}
 }
 
-export const updateAppSession = async ({
+export const updateAppSession = ({
   vaultId,
   host,
   fields,
-}: UpdateAppSessionFieldsInput): Promise<AppSession> => {
-  const allSessions = await getVaultsAppSessions()
-  const vaultSessions = allSessions[vaultId] ?? {}
-  const existing = vaultSessions[host]
+}: UpdateAppSessionFieldsInput): Promise<AppSession> =>
+  serializeAppSessionsMutation(async () => {
+    const allSessions = await getVaultsAppSessions()
+    const vaultSessions = allSessions[vaultId] ?? {}
+    const existing = vaultSessions[host]
 
-  if (!existing) {
-    throw new Error(`No session found for host: ${host}`)
-  }
+    if (!existing) {
+      throw new Error(`No session found for host: ${host}`)
+    }
 
-  const updatedSession: AppSession = {
-    ...existing,
-    ...fields,
-  }
+    const updatedSession: AppSession = {
+      ...existing,
+      ...fields,
+    }
 
-  const updatedVaultSessions = {
-    ...vaultSessions,
-    [host]: updatedSession,
-  }
+    await setVaultsAppSessions({
+      ...allSessions,
+      [vaultId]: {
+        ...vaultSessions,
+        [host]: updatedSession,
+      },
+    })
+    return updatedSession
+  })
 
-  const updatedAll = {
-    ...allSessions,
-    [vaultId]: updatedVaultSessions,
-  }
-
-  await setVaultsAppSessions(updatedAll)
-  return updatedSession
-}
-
-export const setExclusiveVaultAppSession = async ({
+export const setExclusiveVaultAppSession = ({
   vaultId,
   ...session
-}: VaultAppSession): Promise<void> => {
-  const allSessions = await getVaultsAppSessions()
-  const sessionsWithoutHost = recordMap(allSessions, vaultSessions =>
-    omit(vaultSessions, session.host)
-  )
+}: VaultAppSession): Promise<void> =>
+  serializeAppSessionsMutation(async () => {
+    const allSessions = await getVaultsAppSessions()
+    const sessionsWithoutHost = recordMap(allSessions, vaultSessions =>
+      omit(vaultSessions, session.host)
+    )
 
-  await setVaultsAppSessions({
-    ...sessionsWithoutHost,
-    [vaultId]: {
-      ...sessionsWithoutHost[vaultId],
-      [session.host]: session,
-    },
+    await setVaultsAppSessions({
+      ...sessionsWithoutHost,
+      [vaultId]: {
+        ...sessionsWithoutHost[vaultId],
+        [session.host]: session,
+      },
+    })
   })
-}
 
 export type VaultAppSessionKey = Pick<VaultAppSession, 'vaultId' | 'host'>
 
-export const removeVaultAppSession = async ({
+export const removeVaultAppSession = ({
   vaultId,
   host,
-}: VaultAppSessionKey): Promise<void> => {
-  const allSessions = await getVaultsAppSessions()
+}: VaultAppSessionKey): Promise<void> =>
+  serializeAppSessionsMutation(async () => {
+    const allSessions = await getVaultsAppSessions()
 
-  await setVaultsAppSessions({
-    ...allSessions,
-    [vaultId]: omit(allSessions[vaultId], host),
+    await setVaultsAppSessions({
+      ...allSessions,
+      [vaultId]: omit(allSessions[vaultId], host),
+    })
   })
-}
 
-export const removeAllVaultAppSessions = async (
-  vaultId: string
-): Promise<void> => {
-  const allSessions = await getVaultsAppSessions()
-  await setVaultsAppSessions(omit(allSessions, vaultId))
-}
+export const removeAllVaultAppSessions = (vaultId: string): Promise<void> =>
+  serializeAppSessionsMutation(async () => {
+    const allSessions = await getVaultsAppSessions()
+    await setVaultsAppSessions(omit(allSessions, vaultId))
+  })

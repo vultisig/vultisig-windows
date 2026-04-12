@@ -86,7 +86,8 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
   const allVaults = useVaults()
   const currentVaultId = useCurrentVaultId()
   const isBlockaidEnabled = useIsBlockaidEnabled()
-  const domain = getUrlBaseDomain(requestOrigin)
+  const hostKey = getUrlHost(requestOrigin)
+  const displayDomain = getUrlBaseDomain(requestOrigin)
 
   const chainFilter = input.chain
   const eligibleVaults = chainFilter
@@ -96,15 +97,23 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
       )
     : allVaults
 
-  const [selectedVaultId, setSelectedVaultId] = useState<string | undefined>(
-    () =>
-      pickDefaultVaultId({
-        eligibleVaults,
-        currentVaultId,
-        preferFast: !!input.preselectFastVault,
-      })
-  )
+  const defaultVaultId = pickDefaultVaultId({
+    eligibleVaults,
+    currentVaultId,
+    preferFast: !!input.preselectFastVault,
+  })
+
+  const [userSelectedVaultId, setUserSelectedVaultId] = useState<
+    string | undefined
+  >(undefined)
   const [view, setView] = useState<ConnectView>('connect')
+
+  const userSelectionStillEligible =
+    userSelectedVaultId !== undefined &&
+    eligibleVaults.some(vault => getVaultId(vault) === userSelectedVaultId)
+  const selectedVaultId = userSelectionStillEligible
+    ? userSelectedVaultId
+    : defaultVaultId
 
   const { mutateAsync: setExclusiveSession } =
     useSetExclusiveVaultAppSessionMutation()
@@ -115,8 +124,8 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
       const [appSession] = await Promise.all([
         setExclusiveSession({
           vaultId,
-          host: domain,
-          url: getUrlHost(requestOrigin),
+          host: hostKey,
+          url: hostKey,
           icon: requestFavicon,
         }),
         setCurrentVaultId(vaultId),
@@ -146,6 +155,7 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
 
   const canConnect =
     !isPending && !siteScanQuery.isPending && selectedVaultId !== undefined
+  const pickerLocked = isPending || siteScanQuery.isPending
 
   const header = (
     <PageHeader
@@ -182,12 +192,12 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
                   title={vault.name}
                   extra={<VaultSigners vault={vault} />}
                   showArrow
-                  hoverable={!isPending}
+                  hoverable={!pickerLocked}
                   onClick={
-                    isPending
+                    pickerLocked
                       ? undefined
                       : () => {
-                          setSelectedVaultId(itemId)
+                          setUserSelectedVaultId(itemId)
                           connect(itemId)
                         }
                   }
@@ -210,7 +220,7 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
             render={props => <DappFavicon {...props} />}
           />
           <Text color="contrast" size={22} weight={500}>
-            {domain}
+            {displayDomain}
           </Text>
           <Text color="supporting" size={14}>
             {t('connect_website_subtitle')}
