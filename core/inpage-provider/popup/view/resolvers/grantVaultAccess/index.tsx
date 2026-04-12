@@ -1,4 +1,4 @@
-import { useAddVaultAppSessionMutation } from '@core/extension/storage/hooks/appSessions'
+import { useSetExclusiveVaultAppSessionMutation } from '@core/extension/storage/hooks/appSessions'
 import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
 import { BlockaidNoScanStatus } from '@core/ui/chain/security/blockaid/scan/BlockaidNoScanStatus'
 import { BlockaidScanning } from '@core/ui/chain/security/blockaid/scan/BlockaidScanning'
@@ -10,9 +10,13 @@ import { useIsBlockaidEnabled } from '@core/ui/storage/blockaid'
 import { useSetCurrentVaultIdMutation } from '@core/ui/storage/currentVaultId'
 import { useCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { useVaults } from '@core/ui/storage/vaults'
+import { VaultSigners } from '@core/ui/vault/signers'
 import { Button } from '@lib/ui/buttons/Button'
-import { Switch } from '@lib/ui/inputs/switch'
-import { VStack } from '@lib/ui/layout/Stack'
+import { round } from '@lib/ui/css/round'
+import { sameDimensions } from '@lib/ui/css/sameDimensions'
+import { ContainImage } from '@lib/ui/images/ContainImage'
+import { SafeImage } from '@lib/ui/images/SafeImage'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { PageContent } from '@lib/ui/page/PageContent'
@@ -23,11 +27,55 @@ import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
 import { Text } from '@lib/ui/text'
 import { useMutation } from '@tanstack/react-query'
 import { hasServer } from '@vultisig/core-mpc/devices/localPartyId'
-import { getVaultId, isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
+import {
+  getVaultId,
+  isKeyImportVault,
+  Vault,
+} from '@vultisig/core-mpc/vault/Vault'
 import { getUrlBaseDomain } from '@vultisig/lib-utils/url/baseDomain'
 import { getUrlHost } from '@vultisig/lib-utils/url/host'
-import { useEffect, useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
+
+type ConnectView = 'connect' | 'picker'
+
+const DappFavicon = styled(ContainImage)`
+  ${sameDimensions(64)};
+  ${round};
+  border: 1px solid rgba(255, 255, 255, 0.1);
+`
+
+const pickDefaultVaultId = ({
+  eligibleVaults,
+  currentVaultId,
+  preferFast,
+}: {
+  eligibleVaults: Vault[]
+  currentVaultId: string | null
+  preferFast: boolean
+}): string | undefined => {
+  const currentVault = currentVaultId
+    ? eligibleVaults.find(vault => getVaultId(vault) === currentVaultId)
+    : undefined
+
+  if (preferFast) {
+    if (currentVault && hasServer(currentVault.signers)) {
+      return getVaultId(currentVault)
+    }
+    const firstFast = eligibleVaults.find(vault => hasServer(vault.signers))
+    if (firstFast) {
+      return getVaultId(firstFast)
+    }
+  }
+
+  if (currentVault) {
+    return getVaultId(currentVault)
+  }
+
+  const [firstEligible] = eligibleVaults
+  return firstEligible ? getVaultId(firstEligible) : undefined
+}
 
 export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
   input,
@@ -35,55 +83,53 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
   context: { requestOrigin, requestFavicon },
 }) => {
   const { t } = useTranslation()
-  const [vaultId, setVaultId] = useState<string | undefined>(undefined)
   const allVaults = useVaults()
   const currentVaultId = useCurrentVaultId()
   const isBlockaidEnabled = useIsBlockaidEnabled()
+  const hostKey = getUrlHost(requestOrigin)
+  const displayDomain = getUrlBaseDomain(requestOrigin)
 
-  const vaults = input.chain
+  const chainFilter = input.chain
+  const eligibleVaults = chainFilter
     ? allVaults.filter(
         vault =>
-          !isKeyImportVault(vault) || !!vault.chainPublicKeys?.[input.chain!]
+          !isKeyImportVault(vault) || !!vault.chainPublicKeys?.[chainFilter]
       )
     : allVaults
 
-  const initialVaultId = useMemo(() => {
-    if (!input.preselectFastVault) {
-      return undefined
-    }
+  const defaultVaultId = pickDefaultVaultId({
+    eligibleVaults,
+    currentVaultId,
+    preferFast: !!input.preselectFastVault,
+  })
 
-    const currentVault = currentVaultId
-      ? vaults.find(vault => getVaultId(vault) === currentVaultId)
-      : undefined
+  const [userSelectedVaultId, setUserSelectedVaultId] = useState<
+    string | undefined
+  >(undefined)
+  const [view, setView] = useState<ConnectView>('connect')
 
-    if (currentVault && hasServer(currentVault.signers)) {
-      return currentVaultId
-    }
+  const userSelectionStillEligible =
+    userSelectedVaultId !== undefined &&
+    eligibleVaults.some(vault => getVaultId(vault) === userSelectedVaultId)
+  const selectedVaultId = userSelectionStillEligible
+    ? userSelectedVaultId
+    : defaultVaultId
 
-    const firstFastVault = vaults.find(vault => hasServer(vault.signers))
-    return firstFastVault ? getVaultId(firstFastVault) : undefined
-  }, [input.preselectFastVault, currentVaultId, vaults])
-
-  useEffect(() => {
-    if (initialVaultId !== undefined) {
-      setVaultId(initialVaultId ?? undefined)
-    }
-  }, [initialVaultId])
-
-  const { mutateAsync: addAppSession } = useAddVaultAppSessionMutation()
+  const { mutateAsync: setExclusiveSession } =
+    useSetExclusiveVaultAppSessionMutation()
   const { mutateAsync: setCurrentVaultId } = useSetCurrentVaultIdMutation()
-  const { mutate: sumbit, isPending } = useMutation({
+
+  const { mutate: connect, isPending } = useMutation({
     mutationFn: async (vaultId: string) => {
       const [appSession] = await Promise.all([
-        addAppSession({
+        setExclusiveSession({
           vaultId,
-          host: getUrlBaseDomain(requestOrigin),
-          url: getUrlHost(requestOrigin),
+          host: hostKey,
+          url: hostKey,
           icon: requestFavicon,
         }),
         setCurrentVaultId(vaultId),
       ])
-
       return appSession
     },
     onSuccess: appSession => {
@@ -96,61 +142,123 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
     getBlockaidSiteScanQuery
   )
 
-  const submitButtonProps = useMemo(() => {
-    if (isPending) {
-      return { loading: true }
-    }
+  const handleReject = () => {
+    onFinish({
+      result: { error: new Error('User rejected the request') },
+      shouldClosePopup: true,
+    })
+  }
 
-    if (siteScanQuery.isPending || !vaultId) {
-      return { disabled: true }
-    }
+  const selectedVault = selectedVaultId
+    ? eligibleVaults.find(vault => getVaultId(vault) === selectedVaultId)
+    : undefined
 
-    return {
-      onClick: () => {
-        sumbit(vaultId)
-      },
-    }
-  }, [isPending, sumbit, vaultId, siteScanQuery.isPending])
+  const canConnect =
+    !isPending && !siteScanQuery.isPending && selectedVaultId !== undefined
+  const pickerLocked = isPending || siteScanQuery.isPending
+
+  const header = (
+    <PageHeader
+      primaryControls={
+        view === 'picker' ? (
+          <PageHeaderBackButton onClick={() => setView('connect')} />
+        ) : (
+          <PageHeaderBackButton onClick={handleReject} />
+        )
+      }
+      title={
+        <Text color="contrast" size={18} weight={500}>
+          {t('connect_dapp')}
+        </Text>
+      }
+      hasBorder
+    />
+  )
+
+  if (view === 'picker') {
+    return (
+      <VStack fullHeight>
+        {header}
+        <PageContent gap={12} flexGrow scrollable>
+          <Text color="supporting" size={12} weight={500}>
+            {t('select_vault')}
+          </Text>
+          <List>
+            {eligibleVaults.map(vault => {
+              const itemId = getVaultId(vault)
+              return (
+                <ListItem
+                  key={itemId}
+                  title={vault.name}
+                  extra={<VaultSigners vault={vault} />}
+                  showArrow
+                  hoverable={!pickerLocked}
+                  onClick={
+                    pickerLocked
+                      ? undefined
+                      : () => {
+                          setUserSelectedVaultId(itemId)
+                          connect(itemId)
+                        }
+                  }
+                />
+              )
+            })}
+          </List>
+        </PageContent>
+      </VStack>
+    )
+  }
 
   return (
     <VStack fullHeight>
-      <PageHeader
-        secondaryControls={<PageHeaderBackButton />}
-        title={
-          <Text color="contrast" size={18} weight={500}>
-            {t('connect_to_site', { site: getUrlBaseDomain(requestOrigin) })}
-          </Text>
-        }
-        hasBorder
-      />
+      {header}
       <PageContent gap={24} flexGrow scrollable>
-        {isBlockaidEnabled && (
-          <MatchQuery
-            value={siteScanQuery}
-            success={value => <BlockaidSiteScanResult value={value} />}
-            pending={() => <BlockaidScanning />}
-            error={() => <BlockaidNoScanStatus entity="site" />}
-            inactive={() => <BlockaidScanStatusContainer />}
+        <VStack alignItems="center" gap={12}>
+          <SafeImage
+            src={requestFavicon}
+            render={props => <DappFavicon {...props} />}
           />
+          <Text color="contrast" size={22} weight={500}>
+            {displayDomain}
+          </Text>
+          <Text color="supporting" size={14}>
+            {t('connect_website_subtitle')}
+          </Text>
+          {isBlockaidEnabled && (
+            <MatchQuery
+              value={siteScanQuery}
+              success={value => <BlockaidSiteScanResult value={value} />}
+              pending={() => <BlockaidScanning />}
+              error={() => <BlockaidNoScanStatus entity="site" />}
+              inactive={() => <BlockaidScanStatusContainer />}
+            />
+          )}
+        </VStack>
+        {selectedVault && (
+          <List>
+            <ListItem
+              title={selectedVault.name}
+              extra={<VaultSigners vault={selectedVault} />}
+              showArrow
+              onClick={() => setView('picker')}
+            />
+          </List>
         )}
-        <List>
-          {vaults.map(item => {
-            const itemId = getVaultId(item)
-
-            return (
-              <ListItem
-                extra={<Switch checked={itemId === vaultId} />}
-                key={itemId}
-                title={item.name}
-                onClick={() => setVaultId(itemId)}
-                hoverable
-              />
-            )
-          })}
-        </List>
       </PageContent>
       <PageFooter>
-        <Button {...submitButtonProps}>{t('connect')}</Button>
+        <HStack gap={12} fullWidth>
+          <Button onClick={handleReject} kind="secondary">
+            {t('cancel')}
+          </Button>
+          <Button
+            onClick={() => selectedVaultId && connect(selectedVaultId)}
+            loading={isPending}
+            disabled={!canConnect}
+          >
+            {t('connect')}
+          </Button>
+        </HStack>
       </PageFooter>
     </VStack>
   )
