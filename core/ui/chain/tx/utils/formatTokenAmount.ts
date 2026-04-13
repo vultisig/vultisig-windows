@@ -1,11 +1,12 @@
 import { formatUnits } from 'ethers'
 
 // 2^256 - 1 — the standard max-value sentinel used across DeFi.
-// Its meaning is CONTEXTUAL:
-//  - approve / permit / increaseAllowance → "Unlimited" approval
-//  - withdraw / redeem / repay / repayWithATokens → "Max" (all available)
 const maxUint256 = 2n ** 256n - 1n
 
+// Functions where MAX_UINT256 means "unlimited approval" — the only case where
+// a sentinel label makes sense. For withdraw/repay MAX_UINT256 means "all
+// available" but the exact amount depends on on-chain state, so we return null
+// and let the caller skip the amount display.
 const unlimitedApprovalFunctions = new Set([
   'approve',
   'increaseAllowance',
@@ -15,19 +16,11 @@ const unlimitedApprovalFunctions = new Set([
   'permitBatch',
 ])
 
-const maxAvailableFunctions = new Set([
-  'withdraw',
-  'withdrawTo',
-  'redeem',
-  'repay',
-  'repayWithPermit',
-  'repayWithATokens',
-])
-
 export type FormattedTokenAmount = {
-  /** Human-readable display string (without ticker). "1.234", "Unlimited",
-   *  or "Max" depending on the value and function context. */
-  display: string
+  /** Human-readable display string (without ticker). "1.234" or "Unlimited".
+   *  `null` when MAX_UINT256 is used in a non-approval context (withdraw/repay)
+   *  where the exact amount depends on on-chain state. */
+  display: string | null
   /** True when the raw amount is MAX_UINT256 — the UI should treat this as a
    *  sentinel (no numeric fiat, no chart). */
   isSentinel: boolean
@@ -46,17 +39,10 @@ const capDecimalPlaces = (decimalStr: string, max: number): string => {
   return decimalStr.slice(0, dotIndex + 1 + max)
 }
 
-const sentinelLabel = (functionName?: string): string => {
-  if (!functionName) return 'Unlimited'
-  if (unlimitedApprovalFunctions.has(functionName)) return 'Unlimited'
-  if (maxAvailableFunctions.has(functionName)) return 'Max'
-  return 'Unlimited'
-}
-
 /**
  * Format a raw on-chain token amount for user display. Detects the MAX_UINT256
- * sentinel and returns a contextual label ("Unlimited" for approvals, "Max"
- * for withdrawals) instead of an absurdly long number.
+ * sentinel and returns "Unlimited" for approvals, or `null` for non-approval
+ * functions (withdraw/repay) where the exact amount depends on on-chain state.
  */
 export const formatTokenAmount = (
   rawAmount: bigint,
@@ -64,8 +50,10 @@ export const formatTokenAmount = (
   functionName?: string
 ): FormattedTokenAmount => {
   if (rawAmount === maxUint256) {
+    const isApproval =
+      !!functionName && unlimitedApprovalFunctions.has(functionName)
     return {
-      display: sentinelLabel(functionName),
+      display: isApproval ? 'Unlimited' : null,
       isSentinel: true,
       numericValue: 0,
     }

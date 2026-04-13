@@ -355,13 +355,16 @@ const EvmCalldataFallback = ({
           <ListItem
             icon={<CoinIcon coin={tokenQuery.data} />}
             title={functionName || t('contract_execution')}
-            description={`${
-              formatTokenAmount(
+            description={(() => {
+              const fmt = formatTokenAmount(
                 BigInt(tokenPair.rawAmount),
                 tokenQuery.data.decimals,
                 rawFunctionName
-              ).display
-            } ${tokenQuery.data.ticker}`}
+              )
+              return fmt.display
+                ? `${fmt.display} ${tokenQuery.data.ticker}`
+                : tokenQuery.data.ticker
+            })()}
           />
         ) : contractCallQuery.data ? (
           <ListItem

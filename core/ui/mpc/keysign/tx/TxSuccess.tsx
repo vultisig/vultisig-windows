@@ -98,10 +98,14 @@ export const TxSuccess = ({
       rawFunctionName
     )
 
+    // For non-approval sentinels (withdraw/repay) display is null — the exact
+    // amount depends on on-chain state so we skip the amount display entirely.
+    if (formatted.isSentinel && !formatted.display) return null
+
     return {
       coin: knownCoin,
       amount: formatted.numericValue,
-      amountOverride: formatted.isSentinel
+      amountOverride: formatted.isSentinel && formatted.display
         ? `${formatted.display} ${knownCoin.ticker}`
         : undefined,
     }
