@@ -39,7 +39,7 @@ export const TxOverviewAmount = ({
   const topLabel = resolvedLabel
     ? resolvedLabel
     : actionLabel
-      ? (t(actionLabel) as string)
+      ? t(actionLabel)
       : t('sent')
 
   // Hide the "0 ETH" line for contract calls where we couldn't resolve the

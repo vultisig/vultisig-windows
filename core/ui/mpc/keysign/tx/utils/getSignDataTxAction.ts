@@ -380,7 +380,8 @@ export const getSignDataTxAction = (
   if (
     keysignPayload.memo &&
     keysignPayload.memo.length > 2 &&
-    keysignPayload.memo.startsWith('0x')
+    /^0x[0-9a-fA-F]+$/.test(keysignPayload.memo) &&
+    keysignPayload.memo.length % 2 === 0
   ) {
     return {
       action: 'contract_execution',

@@ -334,15 +334,16 @@ const EvmCalldataFallback = ({
     ? capitalizeFirstLetter(rawFunctionName)
     : undefined
 
-  const amountItem = keysignPayload.toAmount ? (
-    <ListItem
-      description={`${formatUnits(
-        keysignPayload.toAmount,
-        keysignPayload.coin?.decimals
-      )} ${keysignPayload.coin?.ticker}`}
-      title={t('amount')}
-    />
-  ) : null
+  const amountItem =
+    keysignPayload.toAmount && keysignPayload.coin ? (
+      <ListItem
+        description={`${formatUnits(
+          keysignPayload.toAmount,
+          keysignPayload.coin.decimals
+        )} ${keysignPayload.coin.ticker}`}
+        title={t('amount')}
+      />
+    ) : null
 
   return (
     <>

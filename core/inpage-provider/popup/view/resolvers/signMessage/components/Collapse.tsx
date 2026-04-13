@@ -36,7 +36,19 @@ export const Collapse: FC<CollapseProps> = ({
   const Wrapper = transparent ? OutlineSection : Section
 
   return (
-    <Wrapper onClick={() => setIsOpen(!isOpen)} style={{ cursor: 'pointer' }}>
+    <Wrapper
+      onClick={() => setIsOpen(!isOpen)}
+      onKeyDown={event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault()
+          setIsOpen(prev => !prev)
+        }
+      }}
+      role="button"
+      tabIndex={0}
+      aria-expanded={isOpen}
+      style={{ cursor: 'pointer' }}
+    >
       <HStack alignItems="center" justifyContent="space-between" padding={24}>
         <Text as="span" size={14} weight={500}>
           {title}
