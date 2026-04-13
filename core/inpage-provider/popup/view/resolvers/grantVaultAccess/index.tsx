@@ -124,7 +124,7 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
         setExclusiveSession({
           vaultId,
           host: hostKey,
-          url: hostKey,
+          url: requestOrigin,
           icon: requestFavicon,
         }),
         setCurrentVaultId(vaultId),
