@@ -54,10 +54,7 @@ export const CreateFastKeygenServerActionProvider = ({
         local_party_id: generateLocalPartyId('server'),
         email,
         hex_encryption_key: hexEncryptionKey,
-        lib_type: toLibType({
-          libType: vaultCreationMpcLib,
-          isKeyImport: false,
-        }),
+        lib_type: toLibType(vaultCreationMpcLib),
       })
     }
   }
