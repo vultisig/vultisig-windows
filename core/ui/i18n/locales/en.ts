@@ -800,7 +800,6 @@ export const en = {
   qbtc_claim_title: 'QBTC Claim',
   qbtc_claim_txid: 'TXID',
   qbtc_claim_btc_amount: 'BTC Amount',
-  qbtc_claim_entitled_amount: 'Claimable',
   qbtc_claim_no_claimable_utxos: 'No claimable UTXOs found for this address.',
   qbtc_claim_disabled_notice:
     'Claiming is currently disabled on the QBTC chain.',
