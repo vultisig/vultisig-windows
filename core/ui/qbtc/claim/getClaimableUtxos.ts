@@ -1,19 +1,32 @@
-import { qbtcRestUrl } from '@vultisig/core-chain/chains/cosmos/qbtc/tendermintRpcUrl'
-import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { getUtxoAddressInfo } from '@vultisig/core-chain/chains/utxo/client/getUtxoAddressInfo'
 
-import { QbtcUtxo, QbtcUtxosResponse } from './types'
+import { ClaimableUtxo } from './types'
 
 type GetClaimableUtxosInput = {
   btcAddress: string
 }
 
-/** Fetches claimable UTXOs from the QBTC chain for the given Bitcoin address. */
+/**
+ * Fetches Bitcoin UTXOs for the given address via Blockchair and returns them
+ * as claimable candidates on the QBTC chain.
+ *
+ * Note: this does not cross-check with the QBTC chain to filter
+ * already-claimed UTXOs — see btcq-org/qbtc#134.
+ */
 export const getClaimableUtxos = async ({
   btcAddress,
-}: GetClaimableUtxosInput): Promise<QbtcUtxo[]> => {
-  const url = `${qbtcRestUrl}/qbtc/v1/utxos/${btcAddress}`
+}: GetClaimableUtxosInput): Promise<ClaimableUtxo[]> => {
+  const response = await getUtxoAddressInfo({
+    address: btcAddress,
+    chain: Chain.Bitcoin,
+  })
 
-  const { utxos } = await queryUrl<QbtcUtxosResponse>(url)
+  const { utxo } = response.data[btcAddress]
 
-  return utxos.filter(utxo => BigInt(utxo.entitled_amount) > 0n)
+  return utxo.map(({ transaction_hash, index, value }) => ({
+    txid: transaction_hash,
+    vout: index,
+    amount: value,
+  }))
 }
