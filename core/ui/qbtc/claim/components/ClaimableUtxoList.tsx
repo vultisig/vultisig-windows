@@ -3,11 +3,11 @@ import { List } from '@lib/ui/list'
 import { Text } from '@lib/ui/text'
 import { useTranslation } from 'react-i18next'
 
-import { QbtcUtxo } from '../types'
+import { ClaimableUtxo } from '../types'
 import { ClaimableUtxoItem } from './ClaimableUtxoItem'
 
 type ClaimableUtxoListProps = {
-  utxos: QbtcUtxo[]
+  utxos: ClaimableUtxo[]
 }
 
 /** Renders a list of claimable QBTC UTXOs or an empty-state message. */
