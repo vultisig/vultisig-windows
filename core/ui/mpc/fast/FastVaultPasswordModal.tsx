@@ -47,6 +47,7 @@ export type FastVaultPasswordModalResult = {
 type FastVaultPasswordModalProps = OnBackProp &
   OnFinishProp<FastVaultPasswordModalResult> & {
     title?: string
+    subtitle?: string
     description: string
     showModal?: boolean
     withPasswordCache?: boolean
@@ -57,6 +58,7 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
   onFinish,
   onBack,
   title,
+  subtitle,
   description,
   withPasswordCache = false,
 }) => {
@@ -145,6 +147,11 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
           <Text size={17} weight={500} centerHorizontally>
             {title ?? t('enter_your_password')}
           </Text>
+          {subtitle && (
+            <Text size={22} weight={700} centerHorizontally>
+              {subtitle}
+            </Text>
+          )}
           <Text size={12} color="shy" centerHorizontally>
             {description}
           </Text>
