@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-
-import { getClaimableUtxos } from '../getClaimableUtxos'
+import { getClaimableUtxos } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/getClaimableUtxos'
 
 type UseClaimableUtxosQueryInput = {
   btcAddress: string

@@ -1,9 +1,9 @@
 import { VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { Text } from '@lib/ui/text'
+import { ClaimableUtxo } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/ClaimableUtxo'
 import { useTranslation } from 'react-i18next'
 
-import { ClaimableUtxo } from '../types'
 import { ClaimableUtxoItem } from './ClaimableUtxoItem'
 
 type ClaimableUtxoListProps = {

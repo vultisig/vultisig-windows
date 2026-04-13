@@ -2,10 +2,9 @@ import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
 import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
+import { ClaimableUtxo } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/ClaimableUtxo'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useTranslation } from 'react-i18next'
-
-import { ClaimableUtxo } from '../types'
 
 const btcDecimals = 8
 
