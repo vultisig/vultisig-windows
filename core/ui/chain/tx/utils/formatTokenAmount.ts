@@ -19,7 +19,7 @@ const unlimitedApprovalFunctions = new Set([
   'permitBatch',
 ])
 
-export type FormattedTokenAmount = {
+type FormattedTokenAmount = {
   /** Human-readable display string (without ticker). "1.234" or "Unlimited".
    *  `null` when MAX_UINT256 is used in a non-approval context (withdraw/repay)
    *  where the exact amount depends on on-chain state. */
