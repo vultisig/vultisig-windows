@@ -45,7 +45,7 @@ jobs:
         env:
           GIT_LFS_SKIP_SMUDGE: '1'
         run: |
-          git clone --depth 1 -b fix/noble-hashes-v2-sha256-compat https://github.com/vultisig/vultisig-sdk.git /tmp/vultisig-sdk
+          git clone --depth 1 https://github.com/vultisig/vultisig-sdk.git /tmp/vultisig-sdk
           cd /tmp/vultisig-sdk
           corepack enable
           corepack prepare yarn@${{ env.YARN_VERSION }} --activate
@@ -131,7 +131,7 @@ jobs:
         env:
           GIT_LFS_SKIP_SMUDGE: '1'
         run: |
-          git clone --depth 1 -b fix/noble-hashes-v2-sha256-compat https://github.com/vultisig/vultisig-sdk.git /tmp/vultisig-sdk
+          git clone --depth 1 https://github.com/vultisig/vultisig-sdk.git /tmp/vultisig-sdk
           cd /tmp/vultisig-sdk
           corepack enable
           corepack prepare yarn@${{ env.YARN_VERSION }} --activate
