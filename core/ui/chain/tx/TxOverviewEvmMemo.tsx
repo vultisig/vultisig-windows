@@ -1,3 +1,4 @@
+import { AnimatedVisibility } from '@lib/ui/layout/AnimatedVisibility'
 import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndicator'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -7,8 +8,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useQuery } from '@tanstack/react-query'
 import { getEvmContractCallInfo } from '@vultisig/core-chain/chains/evm/contract/call/info'
-import { AnimatePresence, motion } from 'framer-motion'
-import { FC, ReactNode, useEffect, useRef, useState } from 'react'
+import { FC, ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -25,26 +25,17 @@ type CollapseProps = {
   title: string
 }
 
-// Local collapse for the decoded EVM memo section. Kept in-file so this core/ui
-// module doesn't take a workspace dep on core/inpage-provider — the same visual
-// treatment lives there too, but promoting it to a shared location was out of
-// scope for this PR.
 const Collapse: FC<CollapseProps> = ({ children, title }) => {
   const [isOpen, setIsOpen] = useState(false)
-  const [height, setHeight] = useState(0)
-  const ref = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (ref.current) setHeight(ref.current.scrollHeight)
-  }, [isOpen])
+  const toggle = () => setIsOpen(prev => !prev)
 
   return (
     <CollapseWrapper
-      onClick={() => setIsOpen(prev => !prev)}
+      onClick={toggle}
       onKeyDown={event => {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault()
-          setIsOpen(prev => !prev)
+          toggle()
         }
       }}
       role="button"
@@ -57,19 +48,11 @@ const Collapse: FC<CollapseProps> = ({ children, title }) => {
         </Text>
         <CollapsableStateIndicator isOpen={isOpen} />
       </HStack>
-      <AnimatePresence initial={false}>
-        <motion.div
-          initial={{ height: 0 }}
-          animate={{ height: isOpen ? height : 0 }}
-          exit={{ height: 0 }}
-          transition={{ duration: 0.3 }}
-          style={{ overflow: 'hidden' }}
-        >
-          <VStack gap={12} padding="0 24px 24px" ref={ref}>
-            {children}
-          </VStack>
-        </motion.div>
-      </AnimatePresence>
+      <AnimatedVisibility isOpen={isOpen} animationConfig="exitToTop">
+        <VStack gap={12} padding="0 24px 24px">
+          {children}
+        </VStack>
+      </AnimatedVisibility>
     </CollapseWrapper>
   )
 }
