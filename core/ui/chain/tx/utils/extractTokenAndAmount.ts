@@ -1,3 +1,6 @@
+// TODO: move to the SDK. This is pure chain-level parsing with no React or
+// UI dependencies, so the CLI agent and other SDK consumers could use it too.
+
 export type TokenAndAmount = {
   tokenAddress: string
   rawAmount: string

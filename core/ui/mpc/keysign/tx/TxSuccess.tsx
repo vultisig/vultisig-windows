@@ -92,8 +92,19 @@ export const TxSuccess = ({
       knownTokensIndex[coin.chain]?.[pair.tokenAddress.toLowerCase()]
     if (!knownCoin) return null
 
+    // BigInt() throws on any non-numeric string. This runs inside render via
+    // useMemo, so an uncaught throw would crash the whole success screen —
+    // far worse than a missing decoded-amount row. Swallow and fall back to
+    // the native amount in that case.
+    let rawAmount: bigint
+    try {
+      rawAmount = BigInt(pair.rawAmount)
+    } catch {
+      return null
+    }
+
     const formatted = formatTokenAmount(
-      BigInt(pair.rawAmount),
+      rawAmount,
       knownCoin.decimals,
       rawFunctionName
     )
@@ -105,9 +116,10 @@ export const TxSuccess = ({
     return {
       coin: knownCoin,
       amount: formatted.numericValue,
-      amountOverride: formatted.isSentinel && formatted.display
-        ? `${formatted.display} ${knownCoin.ticker}`
-        : undefined,
+      amountOverride:
+        formatted.isSentinel && formatted.display
+          ? `${formatted.display} ${knownCoin.ticker}`
+          : undefined,
     }
   }, [
     functionQuery.data,

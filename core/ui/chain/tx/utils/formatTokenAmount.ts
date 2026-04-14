@@ -1,3 +1,6 @@
+// TODO: move to the SDK. This is pure chain-level formatting with no React or
+// UI dependencies, so the CLI agent and other SDK consumers could use it too.
+
 import { formatUnits } from 'ethers'
 
 // 2^256 - 1 — the standard max-value sentinel used across DeFi.
