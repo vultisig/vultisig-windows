@@ -219,7 +219,7 @@ jobs:
         env:
           GIT_LFS_SKIP_SMUDGE: '1'
         shell: bash
-        run: git clone --depth 1 https://github.com/vultisig/vultisig-sdk.git "$RUNNER_TEMP/vultisig-sdk"
+        run: git clone --depth 1 -b fix/noble-hashes-v2-sha256-compat https://github.com/vultisig/vultisig-sdk.git "$RUNNER_TEMP/vultisig-sdk"
 
       - name: Build SDK
         shell: bash {0}
