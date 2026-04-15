@@ -21,7 +21,7 @@ import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChai
 import { getBlockaidTxSimulationInput } from '@vultisig/core-mpc/security/blockaid/tx/simulation/input'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import base58 from 'bs58'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 
 type UseBlockaidSimulationQueryInput = {
   keysignPayloadQuery: Query<KeysignPayload>
@@ -69,6 +69,40 @@ const getBlockaidSimulationQueryWithParsing = (
   }
 }
 
+const getBlockaidPayloadSimulationInput = ({
+  payload,
+  walletCore,
+}: {
+  payload: KeysignPayload
+  walletCore: WalletCore
+}) => {
+  const chain = getKeysignChain(payload)
+  if (
+    payload.signData &&
+    payload.signData.case === 'signSolana' &&
+    payload.signData.value.rawTransactions &&
+    payload.signData.value.rawTransactions.length > 0
+  ) {
+    const rawTransactionsBase58 = payload.signData.value.rawTransactions.map(
+      base64Tx => base58.encode(Buffer.from(base64Tx, 'base64'))
+    )
+    return getBlockaidTxSimulationInput({
+      payload,
+      walletCore,
+      raw: rawTransactionsBase58,
+    })
+  }
+
+  if (!isChainOfKind(chain, 'evm')) {
+    return null
+  }
+
+  return getBlockaidTxSimulationInput({
+    payload,
+    walletCore,
+  })
+}
+
 export const useBlockaidSimulationQuery = ({
   keysignPayloadQuery,
   walletCore,
@@ -76,46 +110,40 @@ export const useBlockaidSimulationQuery = ({
   const blockaidTxSimulationInput = useTransformQueryData(
     keysignPayloadQuery,
     useCallback(
-      payload => {
-        const chain = getKeysignChain(payload)
-        if (
-          payload.signData &&
-          payload.signData.case === 'signSolana' &&
-          payload.signData.value.rawTransactions &&
-          payload.signData.value.rawTransactions.length > 0
-        ) {
-          const rawTransactionsBase58 =
-            payload.signData.value.rawTransactions.map(base64Tx =>
-              base58.encode(Buffer.from(base64Tx, 'base64'))
-            )
-          return getBlockaidTxSimulationInput({
-            payload,
-            walletCore,
-            raw: rawTransactionsBase58,
-          })
-        }
-
-        if (!isChainOfKind(chain, 'evm')) {
-          return null
-        }
-
-        const input = getBlockaidTxSimulationInput({
-          payload,
-          walletCore,
-        })
-
-        if (input) {
-          return input
-        }
-
-        return null
-      },
+      payload => getBlockaidPayloadSimulationInput({ payload, walletCore }),
       [walletCore]
     )
   )
 
   return usePotentialQuery(
     blockaidTxSimulationInput.data || undefined,
+    getBlockaidSimulationQueryWithParsing
+  ) as Query<
+    BlockaidEvmSimulationInfo | BlockaidSolanaSimulationInfo | null,
+    unknown
+  >
+}
+
+export const useBlockaidPayloadSimulationQuery = ({
+  keysignPayload,
+  walletCore,
+}: {
+  keysignPayload?: KeysignPayload
+  walletCore: WalletCore
+}) => {
+  const blockaidTxSimulationInput = useMemo(() => {
+    if (!keysignPayload) {
+      return null
+    }
+
+    return getBlockaidPayloadSimulationInput({
+      payload: keysignPayload,
+      walletCore,
+    })
+  }, [keysignPayload, walletCore])
+
+  return usePotentialQuery(
+    blockaidTxSimulationInput || undefined,
     getBlockaidSimulationQueryWithParsing
   ) as Query<
     BlockaidEvmSimulationInfo | BlockaidSolanaSimulationInfo | null,

@@ -1,3 +1,5 @@
+import { useBlockaidPayloadSimulationQuery } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/useBlockaidSimulationQuery'
+import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
 import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
@@ -23,6 +25,7 @@ import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { capitalizeFirstLetter } from '@vultisig/lib-utils/capitalizeFirstLetter'
+import { formatUnits } from 'ethers'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useCopyToClipboard } from 'react-use'
@@ -41,6 +44,7 @@ export const TxSuccess = ({
   const { t } = useTranslation()
   const { coin: potentialCoin, toAmount, skipBroadcast } = value
   const coin = fromCommCoin(shouldBePresent(potentialCoin))
+  const walletCore = useAssertWalletCore()
   const txHash = useTxHash()
   const [, copyToClipboard] = useCopyToClipboard()
   const { openUrl } = useCore()
@@ -58,6 +62,10 @@ export const TxSuccess = ({
 
   const isContractExecution = txAction?.action === 'contract_execution'
   const memo = value.memo
+  const blockaidSimulationQuery = useBlockaidPayloadSimulationQuery({
+    keysignPayload: value,
+    walletCore,
+  })
 
   const functionQuery = useQuery({
     queryKey: ['evmContractCallInfo', memo],
@@ -74,7 +82,7 @@ export const TxSuccess = ({
 
   const vaultCoins = useCurrentVaultCoins()
 
-  const resolvedToken = useMemo(() => {
+  const resolvedToken = (() => {
     if (!functionQuery.data) return null
     const pair = extractTokenAndAmount(
       functionQuery.data.functionSignature,
@@ -121,21 +129,33 @@ export const TxSuccess = ({
           ? `${formatted.display} ${knownCoin.ticker}`
           : undefined,
     }
-  }, [
-    functionQuery.data,
-    vaultCoins,
-    coin.chain,
-    value.toAddress,
-    rawFunctionName,
-  ])
+  })()
 
-  const displayCoin = resolvedToken?.coin ?? coin
+  const simulationBalanceChange =
+    blockaidSimulationQuery.data &&
+    'balanceChanges' in blockaidSimulationQuery.data &&
+    blockaidSimulationQuery.data.balanceChanges.length > 0
+      ? blockaidSimulationQuery.data.balanceChanges.find(
+          change => change.direction === 'send'
+        ) ?? blockaidSimulationQuery.data.balanceChanges[0]
+      : null
+
+  const displayCoin = simulationBalanceChange?.coin ?? resolvedToken?.coin ?? coin
   const displayAmount =
+    (simulationBalanceChange
+      ? Number(
+          formatUnits(
+            simulationBalanceChange.amount,
+            simulationBalanceChange.coin.decimals
+          )
+        )
+      : undefined) ??
     resolvedToken?.amount ??
     (txAction && 'amount' in txAction && txAction.amount !== undefined
       ? txAction.amount
       : formattedToAmount)
-  const displayAmountOverride = resolvedToken?.amountOverride
+  const displayAmountOverride =
+    simulationBalanceChange ? undefined : resolvedToken?.amountOverride
 
   const blockExplorerUrl = getBlockExplorerUrl({
     chain: coin.chain,
