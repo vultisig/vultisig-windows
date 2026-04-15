@@ -21,6 +21,7 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { StrictText } from '@lib/ui/text'
 import { useQuery } from '@tanstack/react-query'
 import { Chain } from '@vultisig/core-chain/Chain'
+import { getChainKind } from '@vultisig/core-chain/ChainKind'
 import { CustomMessagePayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { shouldBeDefined } from '@vultisig/lib-utils/assert/shouldBeDefined'
@@ -118,16 +119,18 @@ export const Overview = () => {
     queryFn: getDeveloperOptions,
   })
 
+  const keysignChain = getChainKind(chain) === 'evm' ? Chain.Ethereum : chain
+
   const keysignMessagePayload = useMemo(
     () => ({
       custom: create(CustomMessagePayloadSchema, {
         method,
         message,
-        chain,
+        chain: keysignChain,
         vaultPublicKeyEcdsa: getVaultId(vault),
       }),
     }),
-    [method, message, chain, vault]
+    [method, message, keysignChain, vault]
   )
 
   return (
