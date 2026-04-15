@@ -1,5 +1,5 @@
-import { useBlockaidPayloadSimulationQuery } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/useBlockaidSimulationQuery'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { useBlockaidPayloadSimulationQuery } from '@core/ui/chain/security/blockaid/tx/queries/blockaidPayloadSimulation'
 import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
 import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
