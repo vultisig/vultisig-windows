@@ -11,13 +11,20 @@ type UseQbtcClaimSignMutationInput = {
 }
 
 type QbtcClaimSignResult = {
-  /** r-component of the ECDSA signature as a hex string. */
+  /** r-component of the ECDSA signature, 48 hex chars (24 bytes). */
   r: string
-  /** s-component of the ECDSA signature as a hex string. */
+  /** s-component of the ECDSA signature, 64 hex chars (32 bytes). */
   s: string
   /** Compressed Bitcoin public key as a hex string. */
   compressedPubkeyHex: string
 }
+
+const proofServiceRBytes = 24
+const proofServiceSBytes = 32
+
+/** Pads a hex string to the expected byte width for the proof service. */
+const normalizeSignatureHex = (hex: string, bytes: number): string =>
+  hex.toLowerCase().replace(/^0x/, '').padStart(bytes * 2, '0')
 
 /**
  * Signs a QBTC claim MessageHash using TSS/MPC with the vault's Bitcoin ECDSA key.
@@ -46,14 +53,15 @@ export const useQbtcClaimSignMutation = ({
         walletCore,
         hexChainCode: vault.hexChainCode,
         publicKeys: vault.publicKeys,
+        chainPublicKeys: vault.chainPublicKeys,
         chain: Chain.Bitcoin,
       })
 
       const compressedPubkeyHex = Buffer.from(publicKey.data()).toString('hex')
 
       return {
-        r: signature.r,
-        s: signature.s,
+        r: normalizeSignatureHex(signature.r, proofServiceRBytes),
+        s: normalizeSignatureHex(signature.s, proofServiceSBytes),
         compressedPubkeyHex,
       }
     },
