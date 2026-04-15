@@ -37,10 +37,7 @@ export const PluginReshareFastKeygenServerActionProvider = ({
       hex_chain_code: hexChainCode,
       local_party_id: generateLocalPartyId('server'),
       old_reshare_prefix: resharePrefix ?? '',
-      lib_type: toLibType({
-        libType,
-        isKeyImport: isKeyImportVault(vault),
-      }),
+      lib_type: toLibType(isKeyImportVault(vault) ? 'KeyImport' : libType),
       reshare_type: 1,
     })
   }, [

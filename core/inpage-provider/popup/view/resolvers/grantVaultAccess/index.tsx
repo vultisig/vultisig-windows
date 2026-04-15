@@ -33,7 +33,6 @@ import {
   Vault,
 } from '@vultisig/core-mpc/vault/Vault'
 import { getUrlBaseDomain } from '@vultisig/lib-utils/url/baseDomain'
-import { getUrlHost } from '@vultisig/lib-utils/url/host'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -86,8 +85,8 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
   const allVaults = useVaults()
   const currentVaultId = useCurrentVaultId()
   const isBlockaidEnabled = useIsBlockaidEnabled()
-  const hostKey = getUrlHost(requestOrigin)
-  const displayDomain = getUrlBaseDomain(requestOrigin)
+  const hostKey = getUrlBaseDomain(requestOrigin)
+  const displayDomain = hostKey
 
   const chainFilter = input.chain
   const eligibleVaults = chainFilter
@@ -125,7 +124,7 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
         setExclusiveSession({
           vaultId,
           host: hostKey,
-          url: hostKey,
+          url: requestOrigin,
           icon: requestFavicon,
         }),
         setCurrentVaultId(vaultId),
