@@ -8,7 +8,7 @@ import {
 } from './FastVaultPasswordModal'
 import { usePasswordVerification } from './hooks/usePasswordVerification'
 
-const verificationTimeoutMs = convertDuration(14, 'd', 'ms')
+const verificationTimeoutMs = convertDuration(15, 'd', 'ms')
 
 export const FastVaultPasswordVerification = () => {
   const { t } = useTranslation()
