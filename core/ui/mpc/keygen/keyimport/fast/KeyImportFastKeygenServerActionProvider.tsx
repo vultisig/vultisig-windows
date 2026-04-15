@@ -40,7 +40,7 @@ export const KeyImportFastKeygenServerActionProvider = ({
         local_party_id: generateLocalPartyId('server'),
         email,
         hex_encryption_key: hexEncryptionKey,
-        lib_type: toLibType({ libType: 'DKLS', isKeyImport: true }),
+        lib_type: toLibType('KeyImport'),
         protocols: ['ecdsa', 'eddsa'],
         chains: representativeChains,
       })
@@ -53,7 +53,7 @@ export const KeyImportFastKeygenServerActionProvider = ({
         email,
         hex_encryption_key: hexEncryptionKey,
         hex_chain_code: hexChainCode,
-        lib_type: toLibType({ libType: 'DKLS', isKeyImport: true }),
+        lib_type: toLibType('KeyImport'),
         chains: representativeChains,
       })
     }
