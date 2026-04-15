@@ -1217,8 +1217,9 @@ export const en = {
   vaults: 'Vaults',
   verify: 'Verify',
   verify_password: 'Verify Password',
+  verify_password_for: 'Verify your password for:',
   verify_password_periodic_message_description:
-    'We will periodically ask you to verify your fast sign password so you will always remember it',
+    "We periodically ask for a verification so you don't forget your password.",
   version: 'Version',
   via: 'via',
   view_on_explorer: 'View on Explorer',
