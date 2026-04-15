@@ -1,4 +1,5 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { QbtcClaimSection } from '@core/ui/qbtc/claim/components/QbtcClaimSection'
 import { useCore } from '@core/ui/state/core'
 import { BottomNavigation } from '@core/ui/vault/components/BottomNavigation'
 import { VaultHeader } from '@core/ui/vault/components/VaultHeader'
@@ -53,6 +54,7 @@ export const VaultChainPage = () => {
         <StyledPageContent scrollable gap={32} flexGrow>
           <VaultChainOverview />
           {chain === Chain.Tron && <TronResourcesSection />}
+          {chain === Chain.QBTC && <QbtcClaimSection />}
           <VaultChainTabs />
         </StyledPageContent>
       </VStack>

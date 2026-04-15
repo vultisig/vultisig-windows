@@ -47,6 +47,7 @@ import { ManageDefiChainsPage } from '../defi/manage/ManageDefiChainsPage'
 import { DefiPage } from '../defi/page/DefiPage'
 import { PasscodeAutoLockPage } from '../passcodeEncryption/autoLock/PasscodeAutoLockPage'
 import { ManagePasscodeEncryptionPage } from '../passcodeEncryption/manage/ManagePasscodeEncryptionPage'
+import { QbtcClaimPage } from '../qbtc/claim/components/QbtcClaimPage'
 import { RequestFastVaultBackup } from '../vault/backup/fast/request'
 import { DepositActionProvider } from '../vault/deposit/providers/DepositActionProvider'
 import { DepositCoinProvider } from '../vault/deposit/providers/DepositCoinProvider'
@@ -108,6 +109,7 @@ export type SharedViewId = Extract<
   | 'faq'
   | 'shareVault'
   | 'vultDiscount'
+  | 'qbtcClaim'
 >
 
 export const sharedViews: Views<SharedViewId> = {
@@ -180,4 +182,5 @@ export const sharedViews: Views<SharedViewId> = {
   faq: FaqVaultPage,
   shareVault: ShareVaultPage,
   vultDiscount: VultDiscountPage,
+  qbtcClaim: QbtcClaimPage,
 }

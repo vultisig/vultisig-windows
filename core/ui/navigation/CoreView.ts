@@ -142,6 +142,7 @@ export type CoreView =
   | { id: 'passcodeAutoLock' }
   | { id: 'requestFastVaultBackup' }
   | { id: 'vultDiscount' }
+  | { id: 'qbtcClaim' }
 
 export type CoreViewId = CoreView['id']
 
