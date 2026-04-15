@@ -19,10 +19,10 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useCopyToClipboard } from 'react-use'
 import styled from 'styled-components'
-
 import { useTxHash } from '../../../chain/state/txHash'
 import { useCore } from '../../../state/core'
 import { TxStatusTracker } from './TxStatusTracker'
+
 
 export const TxSuccess = ({
   onSeeTxDetails,
