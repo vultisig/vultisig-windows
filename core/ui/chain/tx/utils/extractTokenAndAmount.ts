@@ -42,6 +42,10 @@ const strategyRegistry: Record<string, ExtractionStrategy> = {
   approve: { kind: 'contractIsToken' },
   increaseAllowance: { kind: 'contractIsToken' },
   decreaseAllowance: { kind: 'contractIsToken' },
+  // ERC-2612 permit — token contract is the `to` address, amount is the
+  // `value` uint256 param. Permit2 variants use tuple params so they need
+  // dedicated parsing and stay as follow-up work.
+  permit: { kind: 'contractIsToken' },
 }
 
 // Split a param list on top-level commas only, respecting nested parentheses

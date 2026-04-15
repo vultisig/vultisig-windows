@@ -9,15 +9,22 @@ const maxUint256 = 2n ** 256n - 1n
 // Functions where MAX_UINT256 means "unlimited approval" — the only case where
 // a sentinel label makes sense. For withdraw/repay MAX_UINT256 means "all
 // available" but the exact amount depends on on-chain state, so we return null
-// and let the caller skip the amount display.
+// and let the caller skip the amount display. `increaseAllowance` /
+// `decreaseAllowance` are excluded because the amount is a delta, not the
+// final allowance — labeling `MAX_UINT256` as "Unlimited" there would misstate
+// what the user is about to sign.
 const unlimitedApprovalFunctions = new Set([
   'approve',
-  'increaseAllowance',
-  'decreaseAllowance',
   'permit',
   'permitSingle',
   'permitBatch',
 ])
+
+type FormatTokenAmountInput = {
+  rawAmount: bigint
+  decimals: number
+  functionName?: string
+}
 
 type FormattedTokenAmount = {
   /** Human-readable display string (without ticker). "1.234" or "Unlimited".
@@ -47,11 +54,11 @@ const capDecimalPlaces = (decimalStr: string, max: number): string => {
  * sentinel and returns "Unlimited" for approvals, or `null` for non-approval
  * functions (withdraw/repay) where the exact amount depends on on-chain state.
  */
-export const formatTokenAmount = (
-  rawAmount: bigint,
-  decimals: number,
-  functionName?: string
-): FormattedTokenAmount => {
+export const formatTokenAmount = ({
+  rawAmount,
+  decimals,
+  functionName,
+}: FormatTokenAmountInput): FormattedTokenAmount => {
   if (rawAmount === maxUint256) {
     const isApproval =
       !!functionName && unlimitedApprovalFunctions.has(functionName)

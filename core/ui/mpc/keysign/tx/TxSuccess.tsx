@@ -103,11 +103,11 @@ export const TxSuccess = ({
       return null
     }
 
-    const formatted = formatTokenAmount(
+    const formatted = formatTokenAmount({
       rawAmount,
-      knownCoin.decimals,
-      rawFunctionName
-    )
+      decimals: knownCoin.decimals,
+      functionName: rawFunctionName,
+    })
 
     // For non-approval sentinels (withdraw/repay) display is null — the exact
     // amount depends on on-chain state so we skip the amount display entirely.
