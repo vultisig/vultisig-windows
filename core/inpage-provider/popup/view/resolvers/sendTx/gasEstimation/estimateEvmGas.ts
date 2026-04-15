@@ -10,6 +10,7 @@ type EstimateEvmGasInput = {
   keysignPayload: KeysignPayload
 }
 
+/** Estimates the gas limit for an EVM transaction, returning null for native swaps. */
 export const estimateEvmGas = async ({
   keysignPayload,
 }: EstimateEvmGasInput): Promise<bigint | null> => {
