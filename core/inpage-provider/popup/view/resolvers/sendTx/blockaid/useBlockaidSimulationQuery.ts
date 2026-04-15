@@ -128,19 +128,17 @@ export const useBlockaidPayloadSimulationQuery = ({
   keysignPayload,
   walletCore,
 }: {
-  keysignPayload?: KeysignPayload
+  keysignPayload: KeysignPayload
   walletCore: WalletCore
 }) => {
-  const blockaidTxSimulationInput = useMemo(() => {
-    if (!keysignPayload) {
-      return null
-    }
-
-    return getBlockaidPayloadSimulationInput({
-      payload: keysignPayload,
-      walletCore,
-    })
-  }, [keysignPayload, walletCore])
+  const blockaidTxSimulationInput = useMemo(
+    () =>
+      getBlockaidPayloadSimulationInput({
+        payload: keysignPayload,
+        walletCore,
+      }),
+    [keysignPayload, walletCore]
+  )
 
   return usePotentialQuery(
     blockaidTxSimulationInput || undefined,

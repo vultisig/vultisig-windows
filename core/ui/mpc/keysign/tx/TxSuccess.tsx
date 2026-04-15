@@ -82,7 +82,7 @@ export const TxSuccess = ({
 
   const vaultCoins = useCurrentVaultCoins()
 
-  const resolvedToken = (() => {
+  const resolvedToken = useMemo(() => {
     if (!functionQuery.data) return null
     const pair = extractTokenAndAmount(
       functionQuery.data.functionSignature,
@@ -93,17 +93,15 @@ export const TxSuccess = ({
 
     const tokenKey = { chain: coin.chain, id: pair.tokenAddress }
 
-    // Check vault first (user has added it), then known tokens registry.
     const vaultCoin = vaultCoins.find(c => areEqualCoins(c, tokenKey))
     const knownCoin =
       vaultCoin ??
       knownTokensIndex[coin.chain]?.[pair.tokenAddress.toLowerCase()]
     if (!knownCoin) return null
 
-    // BigInt() throws on any non-numeric string. This runs inside render via
-    // useMemo, so an uncaught throw would crash the whole success screen —
-    // far worse than a missing decoded-amount row. Swallow and fall back to
-    // the native amount in that case.
+    // BigInt() throws on non-numeric strings; an uncaught throw here would
+    // crash the whole success screen, so swallow and fall back to the native
+    // amount.
     let rawAmount: bigint
     try {
       rawAmount = BigInt(pair.rawAmount)
@@ -117,8 +115,6 @@ export const TxSuccess = ({
       functionName: rawFunctionName,
     })
 
-    // For non-approval sentinels (withdraw/repay) display is null — the exact
-    // amount depends on on-chain state so we skip the amount display entirely.
     if (formatted.isSentinel && !formatted.display) return null
 
     return {
@@ -129,33 +125,45 @@ export const TxSuccess = ({
           ? `${formatted.display} ${knownCoin.ticker}`
           : undefined,
     }
-  })()
+  }, [
+    functionQuery.data,
+    vaultCoins,
+    coin.chain,
+    value.toAddress,
+    rawFunctionName,
+  ])
 
-  const simulationBalanceChange =
-    blockaidSimulationQuery.data &&
-    'balanceChanges' in blockaidSimulationQuery.data &&
-    blockaidSimulationQuery.data.balanceChanges.length > 0
-      ? blockaidSimulationQuery.data.balanceChanges.find(
-          change => change.direction === 'send'
-        ) ?? blockaidSimulationQuery.data.balanceChanges[0]
-      : null
+  const simulationBalanceChange = useMemo(() => {
+    const data = blockaidSimulationQuery.data
+    if (
+      !data ||
+      !('balanceChanges' in data) ||
+      data.balanceChanges.length === 0
+    ) {
+      return null
+    }
+    return (
+      data.balanceChanges.find(change => change.direction === 'send') ??
+      data.balanceChanges[0]
+    )
+  }, [blockaidSimulationQuery.data])
 
-  const displayCoin = simulationBalanceChange?.coin ?? resolvedToken?.coin ?? coin
-  const displayAmount =
-    (simulationBalanceChange
-      ? Number(
-          formatUnits(
-            simulationBalanceChange.amount,
-            simulationBalanceChange.coin.decimals
-          )
+  const displayCoin =
+    simulationBalanceChange?.coin ?? resolvedToken?.coin ?? coin
+  const displayAmount = simulationBalanceChange
+    ? Number(
+        formatUnits(
+          simulationBalanceChange.amount,
+          simulationBalanceChange.coin.decimals
         )
-      : undefined) ??
-    resolvedToken?.amount ??
-    (txAction && 'amount' in txAction && txAction.amount !== undefined
-      ? txAction.amount
-      : formattedToAmount)
-  const displayAmountOverride =
-    simulationBalanceChange ? undefined : resolvedToken?.amountOverride
+      )
+    : (resolvedToken?.amount ??
+      (txAction && 'amount' in txAction && txAction.amount !== undefined
+        ? txAction.amount
+        : formattedToAmount))
+  const displayAmountOverride = simulationBalanceChange
+    ? undefined
+    : resolvedToken?.amountOverride
 
   const blockExplorerUrl = getBlockExplorerUrl({
     chain: coin.chain,
