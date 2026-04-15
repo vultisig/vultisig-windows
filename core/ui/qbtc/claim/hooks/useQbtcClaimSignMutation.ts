@@ -22,9 +22,23 @@ type QbtcClaimSignResult = {
 const proofServiceRBytes = 24
 const proofServiceSBytes = 32
 
-/** Pads a hex string to the expected byte width for the proof service. */
-const normalizeSignatureHex = (hex: string, bytes: number): string =>
-  hex.toLowerCase().replace(/^0x/, '').padStart(bytes * 2, '0')
+/** Validates and pads a hex string to the expected byte width for the proof service. */
+const normalizeSignatureHex = (hex: string, bytes: number): string => {
+  const normalized = hex.toLowerCase().replace(/^0x/, '')
+  const expectedLength = bytes * 2
+
+  if (!/^[0-9a-f]+$/.test(normalized)) {
+    throw new Error('Invalid signature component: non-hex characters detected')
+  }
+
+  if (normalized.length > expectedLength) {
+    throw new Error(
+      `Invalid signature component length: expected <= ${expectedLength} hex chars`
+    )
+  }
+
+  return normalized.padStart(expectedLength, '0')
+}
 
 /**
  * Signs a QBTC claim MessageHash using TSS/MPC with the vault's Bitcoin ECDSA key.
