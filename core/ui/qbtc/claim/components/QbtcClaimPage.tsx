@@ -41,7 +41,11 @@ export const QbtcClaimPage = () => {
   const [pendingUtxos, setPendingUtxos] = useState<ClaimableUtxo[] | null>(null)
   const [error, setError] = useState<Error | null>(null)
 
-  const claimDisabled = disabledQuery.data === true
+  // Fail closed — stay disabled until the kill-switch query has resolved.
+  const claimDisabled =
+    disabledQuery.isPending ||
+    disabledQuery.isError ||
+    disabledQuery.data === true
   const isFastVault = securityType === 'fast'
 
   const handleConfirm = (utxos: ClaimableUtxo[]) => {
