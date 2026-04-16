@@ -18,6 +18,7 @@ type ClaimSignRoundProps = {
   chain: Chain
   password: string
   onFinish: (signature: KeysignSignature) => void
+  onError: (error: Error) => void
 }
 
 /**
@@ -31,6 +32,7 @@ export const ClaimSignRound = ({
   chain,
   password,
   onFinish,
+  onError,
 }: ClaimSignRoundProps) => (
   <StartKeysignProviders>
     <StepTransition
@@ -41,6 +43,7 @@ export const ClaimSignRound = ({
           chain={chain}
           password={password}
           onFinish={onServerKickoff}
+          onError={onError}
         />
       )}
       to={() => (
@@ -59,6 +62,7 @@ export const ClaimSignRound = ({
                       signatureAlgorithm={signatureAlgorithm}
                       chain={chain}
                       onFinish={onFinish}
+                      onError={onError}
                     />
                   </KeysignActionProvider>
                 )}

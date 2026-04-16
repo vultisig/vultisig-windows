@@ -1,12 +1,10 @@
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
 import { WaitForServerLoader } from '@core/ui/mpc/keygen/create/fast/server/components/WaitForServerLoader'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnFinishProp } from '@lib/ui/props'
-import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { useMutation } from '@tanstack/react-query'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { getCoinType } from '@vultisig/core-chain/coin/coinType'
@@ -20,13 +18,15 @@ type FastClaimServerStepProps = OnFinishProp & {
   signatureAlgorithm: SignatureAlgorithm
   chain: Chain
   password: string
+  onError: (error: Error) => void
 }
 
 /**
  * Kicks off fast-vault server signing for a raw message hash used by the
  * QBTC claim flow. Mirrors FastKeysignServerStep but sidesteps
  * KeysignMessagePayload since the claim signs two different hashes
- * (BTC ECDSA + MLDSA) across separate sessions.
+ * (BTC ECDSA + MLDSA) across separate sessions. Failures bubble up via
+ * onError so the top-level page can return to selection.
  */
 export const FastClaimServerStep = ({
   messageHashHex,
@@ -34,6 +34,7 @@ export const FastClaimServerStep = ({
   chain,
   password,
   onFinish,
+  onError,
 }: FastClaimServerStepProps) => {
   const { t } = useTranslation()
   const vault = useCurrentVault()
@@ -41,7 +42,7 @@ export const FastClaimServerStep = ({
   const hexEncryptionKey = useCurrentHexEncryptionKey()
   const walletCore = useAssertWalletCore()
 
-  const { mutate, ...state } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: async () => {
       const coinType = getCoinType({ walletCore, chain })
       const derivePath = walletCore.CoinTypeExt.derivationPath(coinType)
@@ -59,33 +60,15 @@ export const FastClaimServerStep = ({
       })
     },
     onSuccess: onFinish,
+    onError,
   })
 
   useEffect(mutate, [mutate])
 
-  const header = <PageHeader title={t('fast_sign')} hasBorder />
-
   return (
-    <MatchQuery
-      value={state}
-      pending={() => (
-        <>
-          {header}
-          <WaitForServerLoader />
-        </>
-      )}
-      success={() => (
-        <>
-          {header}
-          <WaitForServerLoader />
-        </>
-      )}
-      error={error => (
-        <FullPageFlowErrorState
-          title={t('failed_to_connect_with_server')}
-          error={error}
-        />
-      )}
-    />
+    <>
+      <PageHeader title={t('fast_sign')} hasBorder />
+      <WaitForServerLoader />
+    </>
   )
 }

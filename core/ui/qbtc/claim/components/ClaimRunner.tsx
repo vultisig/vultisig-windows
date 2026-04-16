@@ -109,6 +109,7 @@ export const ClaimRunner = ({
                 },
               })
             }
+            onError={onError}
           />
         ),
         preparingTx: ({ btcSig, compressedPubkeyHex }) => (
@@ -149,6 +150,7 @@ export const ClaimRunner = ({
                 },
               })
             }
+            onError={onError}
           />
         ),
         broadcasting: ({ bodyBytes, authInfoBytes, mldsaSig }) => (
