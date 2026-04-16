@@ -1,5 +1,7 @@
+import { FastVaultPasswordModal } from '@core/ui/mpc/fast/FastVaultPasswordModal'
+import { useCurrentVaultSecurityType } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
-import { Match } from '@lib/ui/base/Match'
+import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { ScreenLayout } from '@lib/ui/layout/ScreenLayout/ScreenLayout'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -14,12 +16,15 @@ import { useTranslation } from 'react-i18next'
 
 import { useClaimableUtxosQuery } from '../hooks/useClaimableUtxosQuery'
 import { useClaimWithProofDisabledQuery } from '../hooks/useClaimWithProofDisabledQuery'
-import { ClaimPhase, useQbtcClaimMutation } from '../hooks/useQbtcClaimMutation'
-import { ClaimProgress } from './ClaimProgress'
+import { QbtcClaimResultData } from './ClaimBroadcastingPhase'
 import { ClaimResult } from './ClaimResult'
+import { ClaimRunner } from './ClaimRunner'
 import { ClaimUtxoSelection } from './ClaimUtxoSelection'
 
-type ClaimStep = 'select' | 'progress' | 'result'
+type ClaimStep =
+  | { select: null }
+  | { claiming: { utxos: ClaimableUtxo[]; password: string } }
+  | { result: { data: QbtcClaimResultData } }
 
 /** Page that drives the QBTC claim flow end-to-end. */
 export const QbtcClaimPage = () => {
@@ -29,76 +34,107 @@ export const QbtcClaimPage = () => {
   const btcAddress = useCurrentVaultAddress(Chain.Bitcoin)
   const utxosQuery = useClaimableUtxosQuery({ btcAddress })
   const disabledQuery = useClaimWithProofDisabledQuery()
+  const securityType = useCurrentVaultSecurityType()
 
-  const [step, setStep] = useState<ClaimStep>('select')
-  const [phase, setPhase] = useState<ClaimPhase>('idle')
+  const [step, setStep] = useState<ClaimStep>({ select: null })
   const [selected, setSelected] = useState<Set<string>>(new Set())
-  const claimMutation = useQbtcClaimMutation({ setPhase })
-
-  const handleConfirm = (utxos: ClaimableUtxo[]) => {
-    setStep('progress')
-    claimMutation.mutate(utxos, {
-      onSuccess: () => {
-        setStep('result')
-        setSelected(new Set())
-      },
-      onError: () => setStep('select'),
-    })
-  }
+  const [pendingUtxos, setPendingUtxos] = useState<ClaimableUtxo[] | null>(null)
+  const [error, setError] = useState<Error | null>(null)
 
   const claimDisabled = disabledQuery.data === true
+  const isFastVault = securityType === 'fast'
+
+  const handleConfirm = (utxos: ClaimableUtxo[]) => {
+    setError(null)
+    setPendingUtxos(utxos)
+  }
+
+  const handlePasswordFinish = ({ password }: { password: string }) => {
+    if (!pendingUtxos) return
+    setStep({ claiming: { utxos: pendingUtxos, password } })
+    setPendingUtxos(null)
+  }
+
+  const handlePasswordCancel = () => setPendingUtxos(null)
+
+  const handleRunnerSuccess = (data: QbtcClaimResultData) => {
+    setSelected(new Set())
+    setStep({ result: { data } })
+  }
+
+  const handleRunnerError = (err: Error) => {
+    setError(err)
+    setStep({ select: null })
+  }
 
   return (
-    <ScreenLayout title={t('qbtc_claim_title')} onBack={goBack}>
-      <VStack gap={16}>
-        {claimDisabled && (
-          <WarningBlock>{t('qbtc_claim_disabled_notice')}</WarningBlock>
-        )}
-
-        {claimMutation.isError && (
-          <WarningBlock>
-            {claimMutation.error instanceof Error
-              ? claimMutation.error.message
-              : t('qbtc_claim_failed')}
-          </WarningBlock>
-        )}
-
-        <Match
-          value={step}
-          select={() => (
-            <MatchQuery
-              value={utxosQuery}
-              pending={() => <Spinner />}
-              error={() => (
-                <Text color="danger">{t('qbtc_claim_failed_to_load')}</Text>
+    <MatchRecordUnion
+      value={step}
+      handlers={{
+        select: () => (
+          <ScreenLayout title={t('qbtc_claim_title')} onBack={goBack}>
+            <VStack gap={16}>
+              {claimDisabled && (
+                <WarningBlock>
+                  {t('qbtc_claim_disabled_notice')}
+                </WarningBlock>
               )}
-              success={utxos => (
-                <ClaimUtxoSelection
-                  utxos={utxos}
-                  selected={selected}
-                  onSelectedChange={setSelected}
-                  disabled={claimDisabled}
-                  onConfirm={handleConfirm}
-                />
+              {!isFastVault && (
+                <WarningBlock>{t('qbtc_claim_fast_vault_only')}</WarningBlock>
               )}
-            />
-          )}
-          progress={() => <ClaimProgress phase={phase} />}
-          result={() =>
-            claimMutation.data ? (
-              <ClaimResult
-                totalAmountClaimed={claimMutation.data.totalAmountClaimed}
-                utxosClaimed={claimMutation.data.utxosClaimed}
-                utxosSkipped={claimMutation.data.utxosSkipped}
-                txHash={claimMutation.data.txHash}
-                onDone={goBack}
+              {error && (
+                <WarningBlock>
+                  {error.message || t('qbtc_claim_failed')}
+                </WarningBlock>
+              )}
+
+              <MatchQuery
+                value={utxosQuery}
+                pending={() => <Spinner />}
+                error={() => (
+                  <Text color="danger">{t('qbtc_claim_failed_to_load')}</Text>
+                )}
+                success={utxos => (
+                  <ClaimUtxoSelection
+                    utxos={utxos}
+                    selected={selected}
+                    onSelectedChange={setSelected}
+                    disabled={claimDisabled || !isFastVault}
+                    onConfirm={handleConfirm}
+                  />
+                )}
               />
-            ) : (
-              <Spinner />
-            )
-          }
-        />
-      </VStack>
-    </ScreenLayout>
+            </VStack>
+
+            <FastVaultPasswordModal
+              showModal={pendingUtxos !== null}
+              onBack={handlePasswordCancel}
+              onFinish={handlePasswordFinish}
+              description={t('qbtc_claim_password_description')}
+              withPasswordCache
+            />
+          </ScreenLayout>
+        ),
+        claiming: ({ utxos, password }) => (
+          <ClaimRunner
+            utxos={utxos}
+            password={password}
+            onSuccess={handleRunnerSuccess}
+            onError={handleRunnerError}
+          />
+        ),
+        result: ({ data }) => (
+          <ScreenLayout title={t('qbtc_claim_title')} onBack={goBack}>
+            <ClaimResult
+              totalAmountClaimed={data.totalAmountClaimed}
+              utxosClaimed={data.utxosClaimed}
+              utxosSkipped={data.utxosSkipped}
+              txHash={data.txHash}
+              onDone={goBack}
+            />
+          </ScreenLayout>
+        ),
+      }}
+    />
   )
 }

@@ -817,6 +817,10 @@ export const en = {
   qbtc_claim_tx_hash: 'Transaction hash',
   qbtc_claim_done: 'Done',
   qbtc_claim_failed: 'Claim failed. Please try again.',
+  qbtc_claim_fast_vault_only:
+    'Claiming currently requires a Fast Vault. Secure Vault support is on the way.',
+  qbtc_claim_password_description:
+    'Enter your Fast Vault password to co-sign the claim transaction.',
   qrCode: 'QR code',
   receive: 'Receive',
   receivedShare1Email: 'Vault Share 1 received via mail',
