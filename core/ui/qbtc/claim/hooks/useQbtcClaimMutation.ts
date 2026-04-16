@@ -2,7 +2,7 @@ import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider
 import { useKeysignAction } from '@core/ui/mpc/keysign/action/state/keysignAction'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
-import { sha256 } from '@noble/hashes/sha256'
+import { sha256 } from '@noble/hashes/sha2.js'
 import { useMutation } from '@tanstack/react-query'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { broadcastClaimTx } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/broadcastClaimTx'
