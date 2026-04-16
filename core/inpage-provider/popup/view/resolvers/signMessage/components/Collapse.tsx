@@ -2,19 +2,28 @@ import { Section } from '@core/inpage-provider/popup/view/resolvers/signMessage/
 import { CollapsableStateIndicator } from '@lib/ui/layout/CollapsableStateIndicator'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
 import { AnimatePresence, motion } from 'framer-motion'
 import { FC, ReactNode, useEffect, useRef, useState } from 'react'
+import styled from 'styled-components'
 
 type CollapseProps = {
   children: ReactNode
   collapsed?: boolean
   title: string
+  transparent?: boolean
 }
+
+const OutlineSection = styled(VStack)`
+  border: 1px solid ${getColor('foregroundExtra')};
+  border-radius: 16px;
+`
 
 export const Collapse: FC<CollapseProps> = ({
   children,
   collapsed = false,
   title,
+  transparent = false,
 }) => {
   const [isOpen, setIsOpen] = useState(collapsed)
   const [height, setHeight] = useState(0)
@@ -24,8 +33,22 @@ export const Collapse: FC<CollapseProps> = ({
     if (ref.current) setHeight(ref.current.scrollHeight)
   }, [isOpen])
 
+  const Wrapper = transparent ? OutlineSection : Section
+
   return (
-    <Section onClick={() => setIsOpen(!isOpen)} style={{ cursor: 'pointer' }}>
+    <Wrapper
+      onClick={() => setIsOpen(!isOpen)}
+      onKeyDown={event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault()
+          setIsOpen(prev => !prev)
+        }
+      }}
+      role="button"
+      tabIndex={0}
+      aria-expanded={isOpen}
+      style={{ cursor: 'pointer' }}
+    >
       <HStack alignItems="center" justifyContent="space-between" padding={24}>
         <Text as="span" size={14} weight={500}>
           {title}
@@ -45,6 +68,6 @@ export const Collapse: FC<CollapseProps> = ({
           </VStack>
         </motion.div>
       </AnimatePresence>
-    </Section>
+    </Wrapper>
   )
 }

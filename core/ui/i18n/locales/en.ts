@@ -1249,6 +1249,8 @@ export const en = {
   lp_withdraw_percentage: 'Withdraw percentage',
   wrong_vault_try_again: 'Wrong Vault or Pair Device.',
   yesterday: 'Yesterday',
+  you_send: 'You Send',
+  you_receive: 'You Receive',
   you_are_bonding: "You're bonding",
   you_are_unbonding: "You're unbonding",
   you_are_sending: "You're sending",
