@@ -1,6 +1,7 @@
+import { getChainLogoSrc } from '@core/ui/chain/metadata/getChainLogoSrc'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useKeysignAction } from '@core/ui/mpc/keysign/action/state/keysignAction'
-import { KeysignSigningState } from '@core/ui/mpc/keysign/flow/KeysignSigningState'
+import { KeysignLoadingAnimation } from '@core/ui/mpc/keysign/flow/KeysignLoadingAnimation'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { useMutation } from '@tanstack/react-query'
 import { Chain } from '@vultisig/core-chain/Chain'
@@ -9,6 +10,7 @@ import type { SignatureAlgorithm } from '@vultisig/core-chain/signing/SignatureA
 import { KeysignSignature } from '@vultisig/core-mpc/keysign/KeysignSignature'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import styled from 'styled-components'
 
 type ClaimSignRunnerProps = {
   messageHashHex: string
@@ -56,7 +58,20 @@ export const ClaimSignRunner = ({
   return (
     <>
       <PageHeader title={t('keysign')} hasBorder />
-      <KeysignSigningState />
+      <AnimationContainer>
+        <KeysignLoadingAnimation
+          isConnected
+          chainLogoSrc={getChainLogoSrc(chain)}
+        />
+      </AnimationContainer>
     </>
   )
 }
+
+const AnimationContainer = styled.div`
+  position: relative;
+  flex-grow: 1;
+  width: 100%;
+  min-height: 0;
+  overflow: hidden;
+`
