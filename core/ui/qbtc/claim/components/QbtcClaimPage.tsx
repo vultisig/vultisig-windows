@@ -75,9 +75,7 @@ export const QbtcClaimPage = () => {
           <ScreenLayout title={t('qbtc_claim_title')} onBack={goBack}>
             <VStack gap={16}>
               {claimDisabled && (
-                <WarningBlock>
-                  {t('qbtc_claim_disabled_notice')}
-                </WarningBlock>
+                <WarningBlock>{t('qbtc_claim_disabled_notice')}</WarningBlock>
               )}
               {!isFastVault && (
                 <WarningBlock>{t('qbtc_claim_fast_vault_only')}</WarningBlock>

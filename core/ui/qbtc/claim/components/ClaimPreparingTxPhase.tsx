@@ -26,7 +26,7 @@ const padSigHex = (hex: string, bytes: number) =>
     .replace(/^0x/, '')
     .padStart(bytes * 2, '0')
 
-export type ClaimPreparingTxResult = {
+type ClaimPreparingTxResult = {
   proof: ClaimProofResult
   bodyBytes: Uint8Array
   authInfoBytes: Uint8Array

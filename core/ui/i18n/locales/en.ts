@@ -806,8 +806,6 @@ export const en = {
   qbtc_claim_failed_to_load: 'Failed to load claimable UTXOs.',
   qbtc_claim_selected_count: '{{count}} of {{max}} selected',
   qbtc_claim_confirm: 'Claim selected',
-  qbtc_claim_preparing: 'Preparing claim…',
-  qbtc_claim_signing: 'Signing with Bitcoin key…',
   qbtc_claim_proving: 'Generating proof…',
   qbtc_claim_proving_hint: 'This can take several minutes.',
   qbtc_claim_broadcasting: 'Broadcasting claim…',
