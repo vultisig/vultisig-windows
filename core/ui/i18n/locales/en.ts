@@ -804,6 +804,8 @@ export const en = {
   qbtc_claim_disabled_notice:
     'Claiming is currently disabled on the QBTC chain.',
   qbtc_claim_failed_to_load: 'Failed to load claimable UTXOs.',
+  qbtc_claim_selected_count: '{{count}} of {{max}} selected',
+  qbtc_claim_confirm: 'Claim selected',
   qrCode: 'QR code',
   receive: 'Receive',
   receivedShare1Email: 'Vault Share 1 received via mail',
