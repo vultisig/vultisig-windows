@@ -41,11 +41,10 @@ export const QbtcClaimPage = () => {
   const [pendingUtxos, setPendingUtxos] = useState<ClaimableUtxo[] | null>(null)
   const [error, setError] = useState<Error | null>(null)
 
-  // Fail closed — stay disabled until the kill-switch query has resolved.
-  const claimDisabled =
-    disabledQuery.isPending ||
-    disabledQuery.isError ||
-    disabledQuery.data === true
+  const claimExplicitlyDisabled = disabledQuery.data === true
+  // Fail closed — keep the CTA off until the kill-switch query resolves.
+  const claimGateClosed =
+    disabledQuery.isPending || disabledQuery.isError || claimExplicitlyDisabled
   const isFastVault = securityType === 'fast'
 
   const handleConfirm = (utxos: ClaimableUtxo[]) => {
@@ -78,7 +77,7 @@ export const QbtcClaimPage = () => {
         select: () => (
           <ScreenLayout title={t('qbtc_claim_title')} onBack={goBack}>
             <VStack gap={16}>
-              {claimDisabled && (
+              {claimExplicitlyDisabled && (
                 <WarningBlock>{t('qbtc_claim_disabled_notice')}</WarningBlock>
               )}
               {!isFastVault && (
@@ -101,7 +100,7 @@ export const QbtcClaimPage = () => {
                     utxos={utxos}
                     selected={selected}
                     onSelectedChange={setSelected}
-                    disabled={claimDisabled || !isFastVault}
+                    disabled={claimGateClosed || !isFastVault}
                     onConfirm={handleConfirm}
                   />
                 )}
