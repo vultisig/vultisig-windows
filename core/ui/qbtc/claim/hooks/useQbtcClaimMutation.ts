@@ -20,6 +20,7 @@ import {
   assembleClaimTxRaw,
   buildClaimPreSignHash,
 } from '../utils/buildClaimSignDoc'
+import { useQbtcClaimSignMutation } from './useQbtcClaimSignMutation'
 
 /**
  * Distinct phases of the claim pipeline. Useful for rendering
@@ -60,6 +61,7 @@ export const useQbtcClaimMutation = ({
   const keysignAction = useKeysignAction()
   const btcAddress = useCurrentVaultAddress(Chain.Bitcoin)
   const qbtcAddress = useCurrentVaultAddress(Chain.QBTC)
+  const signBtc = useQbtcClaimSignMutation()
 
   return useMutation({
     mutationFn: async (utxos: ClaimableUtxo[]): Promise<ClaimResult> => {
@@ -71,7 +73,6 @@ export const useQbtcClaimMutation = ({
         chain: Chain.Bitcoin,
       })
       const compressedPubkey = btcPublicKey.data()
-      const compressedPubkeyHex = Buffer.from(compressedPubkey).toString('hex')
 
       const { messageHash } = computeAllClaimHashes({
         btcAddress,
@@ -82,18 +83,14 @@ export const useQbtcClaimMutation = ({
       const messageHashHex = Buffer.from(messageHash).toString('hex')
 
       setPhase('signing')
-      const btcCoinType = getCoinType({ walletCore, chain: Chain.Bitcoin })
-      const [btcSignature] = await keysignAction({
-        msgs: [messageHashHex],
-        signatureAlgorithm: 'ecdsa',
-        coinType: btcCoinType,
-        chain: Chain.Bitcoin,
+      const { r, s, compressedPubkeyHex } = await signBtc.mutateAsync({
+        messageHashHex,
       })
 
       setPhase('provingProof')
       const proofResult = await generateClaimProof({
-        signatureR: btcSignature.r.padStart(48, '0'),
-        signatureS: btcSignature.s.padStart(64, '0'),
+        signatureR: r,
+        signatureS: s,
         publicKey: compressedPubkeyHex,
         utxos: utxos.map(({ txid, vout }) => ({ txid, vout })),
         claimerAddress: qbtcAddress,

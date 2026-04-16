@@ -6,7 +6,8 @@ import { Chain } from '@vultisig/core-chain/Chain'
 import { getCoinType } from '@vultisig/core-chain/coin/coinType'
 import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
 
-type UseQbtcClaimSignMutationInput = {
+type QbtcClaimSignInput = {
+  /** SHA256 claim MessageHash encoded as hex. */
   messageHashHex: string
 }
 
@@ -45,15 +46,15 @@ const normalizeSignatureHex = (hex: string, bytes: number): string => {
  * Returns the `(r, s)` signature components and the compressed public key
  * needed by the proof service.
  */
-export const useQbtcClaimSignMutation = ({
-  messageHashHex,
-}: UseQbtcClaimSignMutationInput) => {
+export const useQbtcClaimSignMutation = () => {
   const walletCore = useAssertWalletCore()
   const vault = useCurrentVault()
   const keysignAction = useKeysignAction()
 
   return useMutation({
-    mutationFn: async (): Promise<QbtcClaimSignResult> => {
+    mutationFn: async ({
+      messageHashHex,
+    }: QbtcClaimSignInput): Promise<QbtcClaimSignResult> => {
       const coinType = getCoinType({ walletCore, chain: Chain.Bitcoin })
 
       const [signature] = await keysignAction({
