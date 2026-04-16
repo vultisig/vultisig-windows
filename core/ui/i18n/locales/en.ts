@@ -816,6 +816,7 @@ export const en = {
   qbtc_claim_utxos_skipped: 'UTXOs skipped',
   qbtc_claim_tx_hash: 'Transaction hash',
   qbtc_claim_done: 'Done',
+  qbtc_claim_failed: 'Claim failed. Please try again.',
   qrCode: 'QR code',
   receive: 'Receive',
   receivedShare1Email: 'Vault Share 1 received via mail',

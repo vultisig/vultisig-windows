@@ -17,6 +17,7 @@
     "@hookform/resolvers": "^5.2.2",
     "@lib/codegen": "workspace:^",
     "@lib/ui": "workspace:^",
+    "@noble/hashes": "^1.8.0",
     "@polkadot/util": "^14.0.1",
     "@polkadot/util-crypto": "^14.0.1",
     "@react-spring/web": "^10.0.3",

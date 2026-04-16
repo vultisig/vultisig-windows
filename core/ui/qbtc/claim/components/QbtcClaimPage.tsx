@@ -1,4 +1,5 @@
 import { useCurrentVaultAddress } from '@core/ui/vault/state/currentVaultCoins'
+import { Match } from '@lib/ui/base/Match'
 import { ScreenLayout } from '@lib/ui/layout/ScreenLayout/ScreenLayout'
 import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
@@ -7,13 +8,20 @@ import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { WarningBlock } from '@lib/ui/status/WarningBlock'
 import { Text } from '@lib/ui/text'
 import { Chain } from '@vultisig/core-chain/Chain'
+import { ClaimableUtxo } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/ClaimableUtxo'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useClaimableUtxosQuery } from '../hooks/useClaimableUtxosQuery'
 import { useClaimWithProofDisabledQuery } from '../hooks/useClaimWithProofDisabledQuery'
-import { ClaimableUtxoList } from './ClaimableUtxoList'
+import { ClaimPhase, useQbtcClaimMutation } from '../hooks/useQbtcClaimMutation'
+import { ClaimProgress } from './ClaimProgress'
+import { ClaimResult } from './ClaimResult'
+import { ClaimUtxoSelection } from './ClaimUtxoSelection'
 
-/** Page that displays claimable QBTC UTXOs for the current vault's Bitcoin address. */
+type ClaimStep = 'select' | 'progress' | 'result'
+
+/** Page that drives the QBTC claim flow end-to-end. */
 export const QbtcClaimPage = () => {
   const goBack = useNavigateBack()
   const { t } = useTranslation()
@@ -22,20 +30,67 @@ export const QbtcClaimPage = () => {
   const utxosQuery = useClaimableUtxosQuery({ btcAddress })
   const disabledQuery = useClaimWithProofDisabledQuery()
 
+  const [step, setStep] = useState<ClaimStep>('select')
+  const [phase, setPhase] = useState<ClaimPhase>('idle')
+  const claimMutation = useQbtcClaimMutation({ setPhase })
+
+  const handleConfirm = (utxos: ClaimableUtxo[]) => {
+    setStep('progress')
+    claimMutation.mutate(utxos, {
+      onSuccess: () => setStep('result'),
+      onError: () => setStep('select'),
+    })
+  }
+
+  const claimDisabled = disabledQuery.data === true
+
   return (
     <ScreenLayout title={t('qbtc_claim_title')} onBack={goBack}>
       <VStack gap={16}>
-        {disabledQuery.data === true && (
+        {claimDisabled && (
           <WarningBlock>{t('qbtc_claim_disabled_notice')}</WarningBlock>
         )}
 
-        <MatchQuery
-          value={utxosQuery}
-          pending={() => <Spinner />}
-          error={() => (
-            <Text color="danger">{t('qbtc_claim_failed_to_load')}</Text>
+        {claimMutation.isError && (
+          <WarningBlock>
+            {claimMutation.error instanceof Error
+              ? claimMutation.error.message
+              : t('qbtc_claim_failed')}
+          </WarningBlock>
+        )}
+
+        <Match
+          value={step}
+          select={() => (
+            <MatchQuery
+              value={utxosQuery}
+              pending={() => <Spinner />}
+              error={() => (
+                <Text color="danger">{t('qbtc_claim_failed_to_load')}</Text>
+              )}
+              success={utxos => (
+                <ClaimUtxoSelection
+                  utxos={utxos}
+                  disabled={claimDisabled}
+                  onConfirm={handleConfirm}
+                />
+              )}
+            />
           )}
-          success={utxos => <ClaimableUtxoList utxos={utxos} />}
+          progress={() => <ClaimProgress phase={phase} />}
+          result={() =>
+            claimMutation.data ? (
+              <ClaimResult
+                totalAmountClaimed={claimMutation.data.totalAmountClaimed}
+                utxosClaimed={claimMutation.data.utxosClaimed}
+                utxosSkipped={claimMutation.data.utxosSkipped}
+                txHash={claimMutation.data.txHash}
+                onDone={goBack}
+              />
+            ) : (
+              <Spinner />
+            )
+          }
         />
       </VStack>
     </ScreenLayout>
