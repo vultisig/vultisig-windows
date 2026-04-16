@@ -44,7 +44,7 @@ type BlockaidSimulationContentProps =
     }
   | {
       chain: typeof Chain.Solana
-      blockaidSimulationQuery: Query<BlockaidSolanaSimulationInfo, unknown>
+      blockaidSimulationQuery: Query<BlockaidSolanaSimulationInfo | null, unknown>
       keysignPayload: KeysignPayload
       address: string
       networkFeeProps: NetworkFeeSectionProps
@@ -140,14 +140,16 @@ const BlockaidSolanaSimulationContent = ({
   const enrichedSolanaSimulationQuery = useQueryDependentQuery(
     blockaidSimulationQuery,
     useCallback(
-      (simulationInfo: BlockaidSolanaSimulationInfo) => {
+      (simulationInfo: BlockaidSolanaSimulationInfo | null) => {
         return {
           queryKey: ['blockaid-solana-simulation-enriched', simulationInfo],
-          queryFn: async () =>
-            enrichSolanaSimulationInfo({
+          queryFn: async () => {
+            if (!simulationInfo) return null
+            return enrichSolanaSimulationInfo({
               simulationInfo,
               getCoin,
-            }),
+            })
+          },
         }
       },
       [getCoin]
@@ -157,7 +159,9 @@ const BlockaidSolanaSimulationContent = ({
   return (
     <MatchQuery
       value={blockaidSimulationQuery}
-      success={(_blockaidSimulationInfo: BlockaidSolanaSimulationInfo) => {
+      success={(
+        _blockaidSimulationInfo: BlockaidSolanaSimulationInfo | null
+      ) => {
         return (
           <MatchQuery
             value={enrichedSolanaSimulationQuery}
@@ -216,13 +220,24 @@ const BlockaidEvmSimulationContent = ({
   networkFeeProps,
   getCoin,
 }: Extract<BlockaidSimulationContentProps, { chain: EvmChain }>) => {
-  const { t } = useTranslation()
+  const fallback = (
+    <EvmCalldataFallback
+      keysignPayload={keysignPayload}
+      address={address}
+      chain={chain}
+      networkFeeProps={networkFeeProps}
+      getCoin={getCoin}
+    />
+  )
 
   return (
     <MatchQuery
       value={blockaidSimulationQuery}
-      success={(blockaidSimulationInfo: BlockaidEvmSimulationInfo) =>
-        matchRecordUnion(blockaidSimulationInfo, {
+      success={(blockaidSimulationInfo: BlockaidEvmSimulationInfo) => {
+        if (!blockaidSimulationInfo) {
+          return fallback
+        }
+        return matchRecordUnion(blockaidSimulationInfo, {
           swap: swap => (
             <BlockaidSwapDisplay
               swap={swap}
@@ -241,48 +256,9 @@ const BlockaidEvmSimulationContent = ({
               networkFeeProps={networkFeeProps}
             />
           ),
-          balanceChanges: balanceChanges => {
-            if (balanceChanges.length === 0) {
-              return (
-                <EvmCalldataFallback
-                  keysignPayload={keysignPayload}
-                  address={address}
-                  chain={chain}
-                  networkFeeProps={networkFeeProps}
-                  getCoin={getCoin}
-                />
-              )
-            }
-            return (
-              <>
-                <List>
-                  {balanceChanges.map((change, i) => (
-                    <ListItem
-                      key={i}
-                      icon={<CoinIcon coin={change.coin} />}
-                      title={t(
-                        change.direction === 'send' ? 'you_send' : 'you_receive'
-                      )}
-                      description={`${formatUnits(change.amount, change.coin.decimals)} ${change.coin.ticker}`}
-                    />
-                  ))}
-                </List>
-                <MemoSection memo={keysignPayload.memo} chain={chain} />
-                <NetworkFeeSection {...networkFeeProps} />
-              </>
-            )
-          },
         })
-      }
-      error={() => (
-        <EvmCalldataFallback
-          keysignPayload={keysignPayload}
-          address={address}
-          chain={chain}
-          networkFeeProps={networkFeeProps}
-          getCoin={getCoin}
-        />
-      )}
+      }}
+      error={() => fallback}
       pending={() => null}
       inactive={() => null}
     />

@@ -44,7 +44,7 @@ export const getBlockaidSimulationQueryWithParsing = (
             input.chain
           )
         }
-        return { balanceChanges: [] }
+        return null
       }
 
       if (isChainOfKind(input.chain, 'solana')) {

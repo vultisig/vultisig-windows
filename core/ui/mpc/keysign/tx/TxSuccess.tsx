@@ -133,35 +133,26 @@ export const TxSuccess = ({
     rawFunctionName,
   ])
 
-  const simulationBalanceChange = useMemo(() => {
+  const simulationSend = useMemo(() => {
     const data = blockaidSimulationQuery.data
-    if (
-      !data ||
-      !('balanceChanges' in data) ||
-      data.balanceChanges.length === 0
-    ) {
-      return null
+    if (!data) return null
+    if ('swap' in data && 'fromCoin' in data.swap) {
+      return { coin: data.swap.fromCoin, amount: data.swap.fromAmount }
     }
-    return (
-      data.balanceChanges.find(change => change.direction === 'send') ??
-      data.balanceChanges[0]
-    )
+    if ('transfer' in data && 'fromCoin' in data.transfer) {
+      return { coin: data.transfer.fromCoin, amount: data.transfer.fromAmount }
+    }
+    return null
   }, [blockaidSimulationQuery.data])
 
-  const displayCoin =
-    simulationBalanceChange?.coin ?? resolvedToken?.coin ?? coin
-  const displayAmount = simulationBalanceChange
-    ? Number(
-        formatUnits(
-          simulationBalanceChange.amount,
-          simulationBalanceChange.coin.decimals
-        )
-      )
+  const displayCoin = simulationSend?.coin ?? resolvedToken?.coin ?? coin
+  const displayAmount = simulationSend
+    ? Number(formatUnits(simulationSend.amount, simulationSend.coin.decimals))
     : (resolvedToken?.amount ??
       (txAction && 'amount' in txAction && txAction.amount !== undefined
         ? txAction.amount
         : formattedToAmount))
-  const displayAmountOverride = simulationBalanceChange
+  const displayAmountOverride = simulationSend
     ? undefined
     : resolvedToken?.amountOverride
 
