@@ -6,6 +6,7 @@ import { verticalPadding } from '@lib/ui/css/verticalPadding'
 import { Checkbox } from '@lib/ui/inputs/checkbox/Checkbox'
 import { VStack } from '@lib/ui/layout/Stack'
 import { PageContent } from '@lib/ui/page/PageContent'
+import { PageFooter } from '@lib/ui/page/PageFooter'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
@@ -164,16 +165,10 @@ export const VerifyKeysignStart = ({
             ))}
           </VStack>
         )}
-
-        <VStack
-          style={{
-            marginTop: 'auto',
-          }}
-          gap={20}
-        >
-          <StartKeysignPrompt {...startKeysignPromptProps} />
-        </VStack>
       </PageContent>
+      <PageFooter>
+        <StartKeysignPrompt {...startKeysignPromptProps} />
+      </PageFooter>
     </>
   )
 }

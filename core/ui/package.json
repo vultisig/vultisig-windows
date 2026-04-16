@@ -31,6 +31,7 @@
     "@vultisig/core-mpc": "1.0.0",
     "@vultisig/lib-utils": "0.9.1",
     "@vultisig/sdk": "0.11.0",
+    "bs58": "^6.0.0",
     "cosmjs-types": "^0.11.0",
     "ethers": "^6.16.0",
     "framer-motion": "^12.37.0",
