@@ -32,12 +32,16 @@ export const QbtcClaimPage = () => {
 
   const [step, setStep] = useState<ClaimStep>('select')
   const [phase, setPhase] = useState<ClaimPhase>('idle')
+  const [selected, setSelected] = useState<Set<string>>(new Set())
   const claimMutation = useQbtcClaimMutation({ setPhase })
 
   const handleConfirm = (utxos: ClaimableUtxo[]) => {
     setStep('progress')
     claimMutation.mutate(utxos, {
-      onSuccess: () => setStep('result'),
+      onSuccess: () => {
+        setStep('result')
+        setSelected(new Set())
+      },
       onError: () => setStep('select'),
     })
   }
@@ -71,6 +75,8 @@ export const QbtcClaimPage = () => {
               success={utxos => (
                 <ClaimUtxoSelection
                   utxos={utxos}
+                  selected={selected}
+                  onSelectedChange={setSelected}
                   disabled={claimDisabled}
                   onConfirm={handleConfirm}
                 />
