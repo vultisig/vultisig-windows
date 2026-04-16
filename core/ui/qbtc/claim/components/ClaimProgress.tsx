@@ -21,7 +21,13 @@ type ClaimProgressProps = {
 export const ClaimProgress = ({ phase }: ClaimProgressProps) => {
   const { t } = useTranslation()
 
-  const activeIndex = Math.max(progressPhases.indexOf(phase), 0)
+  const progressValue = match(phase, {
+    idle: () => 0,
+    signing: () => 1,
+    provingProof: () => 2,
+    broadcasting: () => 3,
+    done: () => 3,
+  })
   const label = match(phase, {
     idle: () => t('qbtc_claim_preparing'),
     signing: () => t('qbtc_claim_signing'),
@@ -35,7 +41,7 @@ export const ClaimProgress = ({ phase }: ClaimProgressProps) => {
     <VStack alignItems="center" gap={16} style={{ paddingTop: 32 }}>
       <Spinner />
       <MultistepProgressIndicator
-        value={activeIndex}
+        value={progressValue}
         steps={progressPhases.length}
         variant="bars"
         markPreviousStepsAsCompleted
