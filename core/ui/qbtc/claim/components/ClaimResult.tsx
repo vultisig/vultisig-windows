@@ -1,10 +1,13 @@
 import { Button } from '@lib/ui/buttons/Button'
+import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CircleCheckIcon } from '@lib/ui/icons/CircleCheckIcon'
+import { ClipboardCopyIcon } from '@lib/ui/icons/ClipboardCopyIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
 import { Text } from '@lib/ui/text'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useTranslation } from 'react-i18next'
+import { useCopyToClipboard } from 'react-use'
 
 const btcDecimals = 8
 
@@ -25,6 +28,7 @@ export const ClaimResult = ({
   onDone,
 }: ClaimResultProps) => {
   const { t } = useTranslation()
+  const [, copyToClipboard] = useCopyToClipboard()
 
   const totalBtc = Number(totalAmountClaimed) / 10 ** btcDecimals
   const truncatedHash = `${txHash.slice(0, 10)}…${txHash.slice(-8)}`
@@ -61,13 +65,21 @@ export const ClaimResult = ({
               {utxosSkipped}
             </Text>
           </HStack>
-          <HStack fullWidth justifyContent="space-between">
+          <HStack fullWidth alignItems="center" justifyContent="space-between">
             <Text color="supporting" size={12}>
               {t('qbtc_claim_tx_hash')}
             </Text>
-            <Text color="contrast" size={12} family="mono">
-              {truncatedHash}
-            </Text>
+            <HStack alignItems="center" gap={4}>
+              <Text color="contrast" size={12} family="mono">
+                {truncatedHash}
+              </Text>
+              <IconButton
+                title={t('qbtc_claim_copy_tx_hash')}
+                onClick={() => copyToClipboard(txHash)}
+              >
+                <ClipboardCopyIcon />
+              </IconButton>
+            </HStack>
           </HStack>
         </VStack>
       </Panel>

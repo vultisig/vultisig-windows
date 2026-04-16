@@ -43,7 +43,10 @@ export const ClaimBroadcastingPhase = ({
       const txHash = Buffer.from(sha256(txRaw)).toString('hex').toUpperCase()
       return broadcastClaimTx({ txBytesBase64, txHash })
     },
-    onSuccess,
+    onSuccess: result => {
+      console.log('[qbtc] claim broadcast succeeded', result)
+      onSuccess(result)
+    },
     onError,
   })
 

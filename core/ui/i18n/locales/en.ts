@@ -813,6 +813,7 @@ export const en = {
   qbtc_claim_utxos_claimed: 'UTXOs claimed',
   qbtc_claim_utxos_skipped: 'UTXOs skipped',
   qbtc_claim_tx_hash: 'Transaction hash',
+  qbtc_claim_copy_tx_hash: 'Copy transaction hash',
   qbtc_claim_done: 'Done',
   qbtc_claim_failed: 'Claim failed. Please try again.',
   qbtc_claim_fast_vault_only:
