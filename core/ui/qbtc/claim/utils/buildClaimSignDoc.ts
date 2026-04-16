@@ -14,6 +14,9 @@ import {
  * The claim tx is gas-free, so fee coins are omitted. A single MLDSA signer
  * (the claimer) authenticates the Cosmos transaction; BTC ownership is proven
  * separately by the ZK proof inside the message body.
+ *
+ * TODO: move to @vultisig/core-mpc as QBTCClaimHelper so iOS/Android can
+ * reuse it. Tracked in vultisig/vultisig-sdk#282.
  */
 
 const pubKeyTypeURL = '/cosmos.crypto.mldsa.PubKey'
