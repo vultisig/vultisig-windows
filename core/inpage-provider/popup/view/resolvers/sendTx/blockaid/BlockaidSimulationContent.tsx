@@ -1,6 +1,5 @@
 import { BlockaidSwapDisplay } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidSwapDisplay'
 import { BlockaidTransferDisplay } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidTransferDisplay'
-import { MemoSection } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/MemoSection'
 import {
   NetworkFeeSection,
   NetworkFeeSectionProps,
@@ -44,7 +43,10 @@ type BlockaidSimulationContentProps =
     }
   | {
       chain: typeof Chain.Solana
-      blockaidSimulationQuery: Query<BlockaidSolanaSimulationInfo | null, unknown>
+      blockaidSimulationQuery: Query<
+        BlockaidSolanaSimulationInfo | null,
+        unknown
+      >
       keysignPayload: KeysignPayload
       address: string
       networkFeeProps: NetworkFeeSectionProps
