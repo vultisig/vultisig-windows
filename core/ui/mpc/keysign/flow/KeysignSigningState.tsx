@@ -2,19 +2,19 @@ import styled from 'styled-components'
 
 import { useKeysignMessagePayload } from '../state/keysignMessagePayload'
 import { KeysignLoadingAnimation } from './KeysignLoadingAnimation'
-import { getKeysignPayloadChainLogoSrc } from './utils/getKeysignPayloadChainLogoSrc'
+import { getKeysignPayloadCoinLogoSrc } from './utils/getKeysignPayloadChainLogoSrc'
 
 /**
  * Full-screen signing state shown while an MPC keysign is in progress.
- * Renders the chain-aware Rive animation with chain icon.
+ * Renders the coin-aware Rive animation with coin/token logo.
  */
 export const KeysignSigningState = () => {
   const payload = useKeysignMessagePayload()
-  const chainLogoSrc = getKeysignPayloadChainLogoSrc(payload)
+  const coinLogoSrc = getKeysignPayloadCoinLogoSrc(payload)
 
   return (
     <Container>
-      <KeysignLoadingAnimation isConnected chainLogoSrc={chainLogoSrc} />
+      <KeysignLoadingAnimation isConnected coinLogoSrc={coinLogoSrc} />
     </Container>
   )
 }
