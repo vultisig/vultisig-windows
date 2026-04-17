@@ -22,6 +22,7 @@ import {
   setKeygenComplete,
   waitForKeygenComplete,
 } from '@vultisig/core-mpc/keygenComplete'
+import { initializeMpcLib } from '@vultisig/core-mpc/lib/initialize'
 import { MldsaKeygen } from '@vultisig/core-mpc/mldsa/mldsaKeygen'
 import { MpcLib } from '@vultisig/core-mpc/mpcLib'
 import { Schnorr } from '@vultisig/core-mpc/schnorr/schnorrKeygen'
@@ -560,6 +561,13 @@ async function runBatchKeyImport({
   onStepComplete,
 }: BatchKeyImportInput): Promise<Vault> {
   onStepStart('prepareVault')
+
+  // Warm up the WASM engine BEFORE starting parallel tracks. `initializeMpcLib`
+  // uses `memoizeAsync` which only caches on completion — concurrent calls before
+  // the first one finishes will double-instantiate the WASM modules and corrupt
+  // pointers inside Rust sessions ("memory access out of bounds" on outputMessage).
+  await initializeMpcLib('ecdsa')
+  await initializeMpcLib('eddsa')
 
   const ecdsaGroups = derivationGroups.filter(
     ({ representativeChain }) =>
