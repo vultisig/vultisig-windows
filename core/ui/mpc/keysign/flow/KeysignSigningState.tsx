@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 import { useKeysignMessagePayload } from '../state/keysignMessagePayload'
 import { KeysignLoadingAnimation } from './KeysignLoadingAnimation'
-import { getKeysignPayloadCoinLogoSrc } from './utils/getKeysignPayloadChainLogoSrc'
+import { getKeysignPayloadLogoSrc } from './utils/getKeysignPayloadLogoSrc'
 
 /**
  * Full-screen signing state shown while an MPC keysign is in progress.
@@ -10,7 +10,7 @@ import { getKeysignPayloadCoinLogoSrc } from './utils/getKeysignPayloadChainLogo
  */
 export const KeysignSigningState = () => {
   const payload = useKeysignMessagePayload()
-  const coinLogoSrc = getKeysignPayloadCoinLogoSrc(payload)
+  const coinLogoSrc = getKeysignPayloadLogoSrc(payload)
 
   return (
     <Container>
