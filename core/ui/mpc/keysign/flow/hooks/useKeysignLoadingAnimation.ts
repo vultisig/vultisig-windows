@@ -6,37 +6,37 @@ import { useRiveLoadingAnimation } from '../../../../animations/useRiveLoadingAn
 import { rasterizeImage } from '../../../../animations/utils/rasterizeImage'
 
 type UseKeysignLoadingAnimationInput = {
-  chainLogoSrc?: string
+  logoSrc?: string
 }
 
 /**
  * Hook for the Rive loading animation shown during MPC keysign signing.
  *
- * @param chainLogoSrc - Optional URL of the chain logo to display inside
- *   the Rive animation via the `fromLogo` ViewModel image input.
+ * @param logoSrc - Optional URL of the logo (coin or chain) to display inside
+ *   the Rive animation via the `toToken` ViewModel image input.
  * @returns The result of {@link useRiveLoadingAnimation} configured with the
  *   keysign animation source, including `RiveComponent`, `containerRef`,
  *   `setConnected`, and `setProgress`.
  */
 export const useKeysignLoadingAnimation = ({
-  chainLogoSrc,
+  logoSrc,
 }: UseKeysignLoadingAnimationInput = {}) => {
   const animation = useRiveLoadingAnimation({
     src: '/core/animations/keysign-animation-v2.riv',
   })
 
-  const fromLogo = useViewModelInstanceImage(
-    'fromLogo',
+  const toToken = useViewModelInstanceImage(
+    'toToken',
     animation.viewModelInstance
   )
 
   useEffect(() => {
-    if (!chainLogoSrc || !fromLogo) return
+    if (!logoSrc || !toToken) return
 
     let cancelled = false
     const load = async () => {
       const result = await attempt(async () => {
-        const bytes = await rasterizeImage(chainLogoSrc)
+        const bytes = await rasterizeImage(logoSrc)
         if (cancelled) return null
         const riveImage = await decodeImage(bytes)
         if (cancelled) return null
@@ -44,7 +44,7 @@ export const useKeysignLoadingAnimation = ({
       })
 
       if ('data' in result && result.data) {
-        fromLogo.setValue(result.data)
+        toToken.setValue(result.data)
       }
     }
     void load()
@@ -52,7 +52,7 @@ export const useKeysignLoadingAnimation = ({
     return () => {
       cancelled = true
     }
-  }, [chainLogoSrc, fromLogo])
+  }, [logoSrc, toToken])
 
   return animation
 }
