@@ -284,7 +284,7 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
         hexChainCode: rootEcdsaResult.chaincode,
         keyShares,
         localPartyId,
-        libType: 'DKLS' as MpcLib,
+        libType: 'DKLS' satisfies MpcLib,
         isBackedUp: false,
         order: getLastItemOrder(vaultOrders),
         lastPasswordVerificationTime: hasServer(signers)
@@ -744,7 +744,7 @@ async function runBatchKeyImport({
     hexChainCode: rootEcdsaResult.chaincode,
     keyShares,
     localPartyId,
-    libType: 'KeyImport' as MpcLib,
+    libType: 'KeyImport' satisfies MpcLib,
     isBackedUp: false,
     order: getLastItemOrder(vaultOrders),
     lastPasswordVerificationTime: hasServer(signers) ? Date.now() : undefined,
