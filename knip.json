@@ -2,8 +2,7 @@
   "ignore": [
     "clients/desktop/wailsjs/**",
     "core/ui/transaction-history/**",
-    "lib/ui/form/FormCheckBadge.tsx",
-    "core/ui/qbtc/claim/hooks/useQbtcClaimSignMutation.ts"
+    "lib/ui/form/FormCheckBadge.tsx"
   ],
   "ignoreBinaries": [
     "wails"
