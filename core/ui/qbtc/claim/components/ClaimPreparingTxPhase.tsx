@@ -19,15 +19,7 @@ import { buildClaimPreSignHash } from '../utils/buildClaimSignDoc'
 const qbtcChainId = 'qbtc-testnet'
 const proofServiceRBytes = 24
 const proofServiceSBytes = 32
-
-/**
- * Optional override for the proof service URL at build time. The SDK default
- * (`https://proof.qbtc.network`) isn't live yet — set `VITE_QBTC_PROOF_SERVICE_URL`
- * to a reachable endpoint when building locally.
- */
-const proofServiceUrlOverride = import.meta.env.VITE_QBTC_PROOF_SERVICE_URL as
-  | string
-  | undefined
+const proofServiceBaseUrl = 'https://api.vultisig.com/qbtc-proof'
 
 const padSigHex = (hex: string, bytes: number) =>
   hex
@@ -77,7 +69,7 @@ export const ClaimPreparingTxPhase = ({
         utxos: utxos.map(({ txid, vout }) => ({ txid, vout })),
         claimerAddress: qbtcAddress,
         chainId: qbtcChainId,
-        baseUrl: proofServiceUrlOverride,
+        baseUrl: proofServiceBaseUrl,
       })
 
       const bodyBytes = buildClaimTxBody({
