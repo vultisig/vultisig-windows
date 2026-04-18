@@ -1,6 +1,7 @@
 // Must be first: Chrome requires push / notificationclick / pushsubscriptionchange
 // listeners during initial synchronous service worker evaluation.
 import '../notifications/pushServiceWorkerBindings'
+import '@core/ui/mpc/bootstrapMpcEngine'
 
 import { runBackgroundEventsAgent } from '@core/inpage-provider/background/events/background'
 import { runInpageProviderBridgeBackgroundAgent } from '@core/inpage-provider/bridge/background'
