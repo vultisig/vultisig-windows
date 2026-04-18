@@ -129,6 +129,13 @@ export function sdkResolvePlugin(): Plugin {
             '@vultisig/lib-dkls',
             '@vultisig/lib-schnorr',
             '@vultisig/lib-mldsa',
+            // MPC engine singleton lives in @vultisig/mpc-types. If Vite pre-bundles
+            // these, @vultisig/core-mpc ends up with its own inlined copy of mpc-types
+            // while the SDK platform entry writes to a different copy, and
+            // getMpcEngine() throws "MPC engine not configured" at runtime.
+            '@vultisig/mpc-types',
+            '@vultisig/mpc-wasm',
+            '@vultisig/core-mpc',
           ],
           esbuildOptions: {
             plugins: [sdkResolveEsbuildPlugin()],

@@ -776,6 +776,8 @@ __metadata:
     "@vultisig/core-config": "npm:0.9.1"
     "@vultisig/core-mpc": "npm:1.0.0"
     "@vultisig/lib-utils": "npm:0.9.1"
+    "@vultisig/mpc-types": "npm:^0.1.0"
+    "@vultisig/mpc-wasm": "npm:^0.1.0"
     "@vultisig/sdk": "npm:0.11.0"
     bs58: "npm:^6.0.0"
     cosmjs-types: "npm:^0.11.0"
@@ -5840,6 +5842,22 @@ __metadata:
     long: "npm:^5.3.2"
     viem: "npm:^2.47.4"
   checksum: 10c0/8527b4af9b05a62dd9d5e214a038dd26047db3a7440c9acf4d47f34b5654c33a870f003c7a3109178a1f6fac35aafb0fa76027490a41917318303339fdb66ad7
+  languageName: node
+  linkType: hard
+
+"@vultisig/mpc-types@npm:0.1.2, @vultisig/mpc-types@npm:^0.1.0":
+  version: 0.1.2
+  resolution: "@vultisig/mpc-types@npm:0.1.2"
+  checksum: 10c0/65e7c8e712ff0e8143fe41c43b830bc0efbe85051668a5fc4a1a849fd1fd72844afd7f71c6638f14eab7301ffb45591c74ce4115ae031310383ee6a611898251
+  languageName: node
+  linkType: hard
+
+"@vultisig/mpc-wasm@npm:^0.1.0":
+  version: 0.1.1
+  resolution: "@vultisig/mpc-wasm@npm:0.1.1"
+  dependencies:
+    "@vultisig/mpc-types": "npm:0.1.2"
+  checksum: 10c0/85307a580a6d8d80065e7f901415a8378809272d0919e2b14d7d26f5e79df1dddfcb6417a4e7b21113e321158e52745dab90a97d84db628da8866e53a365f443
   languageName: node
   linkType: hard
 

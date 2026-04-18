@@ -30,6 +30,8 @@
     "@vultisig/core-config": "0.9.1",
     "@vultisig/core-mpc": "1.0.0",
     "@vultisig/lib-utils": "0.9.1",
+    "@vultisig/mpc-types": "^0.1.0",
+    "@vultisig/mpc-wasm": "^0.1.0",
     "@vultisig/sdk": "0.11.0",
     "bs58": "^6.0.0",
     "cosmjs-types": "^0.11.0",
