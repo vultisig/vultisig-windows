@@ -1,5 +1,3 @@
-import '@core/ui/mpc/bootstrapMpcEngine'
-
 import { Buffer } from 'buffer'
 import { createRoot } from 'react-dom/client'
 

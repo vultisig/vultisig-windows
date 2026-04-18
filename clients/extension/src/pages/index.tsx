@@ -1,5 +1,3 @@
-import '@core/ui/mpc/bootstrapMpcEngine'
-
 import { NavigationProvider } from '@clients/extension/src/navigation/NavigationProvider'
 import { views } from '@clients/extension/src/navigation/views'
 import { ExtensionNotificationManager } from '@clients/extension/src/notifications/ExtensionNotificationManager'
