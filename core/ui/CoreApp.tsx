@@ -1,4 +1,4 @@
-import '@core/ui/mpc/configureMpcEngine'
+import './mpc/configureMpcEngine'
 
 import { WalletCoreProvider } from '@core/ui/chain/providers/WalletCoreProvider'
 import { PasscodeGuard } from '@core/ui/passcodeEncryption/guard/PasscodeGuard'
