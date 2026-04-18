@@ -126,6 +126,9 @@ export function sdkResolvePlugin(): Plugin {
           // resolves relative to the .vite/deps/ chunk, not the original package
           // directory, so the WASM fetch returns HTML instead of a binary.
           exclude: [
+            // Do **not** add `@vultisig/sdk` here — dev black screen / huge unoptimized graph.
+            // Pre-bundled `@vultisig_sdk.js` WASM URLs are rewritten by
+            // `fixSdkPrebundleWasmUrlsPlugin` in `core/ui/vite/plugins.ts`.
             '@vultisig/lib-dkls',
             '@vultisig/lib-schnorr',
             '@vultisig/lib-mldsa',
@@ -133,6 +136,8 @@ export function sdkResolvePlugin(): Plugin {
             // these, @vultisig/core-mpc ends up with its own inlined copy of mpc-types
             // while the SDK platform entry writes to a different copy, and
             // getMpcEngine() throws "MPC engine not configured" at runtime.
+            // @vultisig/mpc-wasm must stay out of `.vite/deps/` so `import.meta.url`
+            // for `.wasm` resolves next to the real package (otherwise fetch returns HTML).
             '@vultisig/mpc-types',
             '@vultisig/mpc-wasm',
             '@vultisig/core-mpc',
