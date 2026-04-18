@@ -25,9 +25,7 @@ runs:
         corepack prepare yarn@${{ inputs.yarn-version }} --activate
         yarn install
         yarn build:shared
-        if [ "${RUNNER_OS:-}" != "Windows" ]; then
-          yarn build:all
-        fi
+        yarn build:all
 
     - name: Override @vultisig/* with packed SDK (patch package.json)
       shell: bash
