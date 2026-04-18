@@ -4,6 +4,8 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import topLevelAwait from 'vite-plugin-top-level-await'
 import wasm from 'vite-plugin-wasm'
 
+import { fixSdkPrebundleWasmUrlsPlugin } from './fixSdkPrebundleWasmUrlsPlugin'
+
 export const getCommonPlugins = (): PluginOption[] => [
   react({
     babel: {
@@ -13,4 +15,5 @@ export const getCommonPlugins = (): PluginOption[] => [
   nodePolyfills({ exclude: ['fs'] }),
   wasm(),
   topLevelAwait(),
+  fixSdkPrebundleWasmUrlsPlugin(),
 ]
