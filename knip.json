@@ -59,7 +59,8 @@
     "core/ui": {
       "entry": [
         "vite/plugins.ts",
-        "vite/staticCopy.ts"
+        "vite/staticCopy.ts",
+        "mpc/bootstrapMpcEngine.ts"
       ],
       "project": [
         "**/*.{ts,tsx}"
