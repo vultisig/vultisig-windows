@@ -1,8 +1,11 @@
 // Must be first: Chrome requires push / notificationclick / pushsubscriptionchange
 // listeners during initial synchronous service worker evaluation.
 import '../notifications/pushServiceWorkerBindings'
-import '@core/ui/mpc/bootstrapMpcEngine'
 
+// Do NOT import '@core/ui/mpc/bootstrapMpcEngine' here. The SW never calls
+// getMpcEngine() (see #3761); importing it drags @vultisig/mpc-wasm in and
+// vite-plugin-top-level-await wraps the whole chunk in an async IIFE, so the
+// bridge onMessage listener registers too late and every dApp call hangs.
 import { runBackgroundEventsAgent } from '@core/inpage-provider/background/events/background'
 import { runInpageProviderBridgeBackgroundAgent } from '@core/inpage-provider/bridge/background'
 
