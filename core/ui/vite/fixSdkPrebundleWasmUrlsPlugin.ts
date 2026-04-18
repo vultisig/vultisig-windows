@@ -9,7 +9,14 @@ function toPosix(p: string): string {
 function findSdkDistLibDir(startDir: string): string {
   let dir = startDir
   for (let i = 0; i < 32; i++) {
-    const lib = path.join(dir, 'node_modules', '@vultisig', 'sdk', 'dist', 'lib')
+    const lib = path.join(
+      dir,
+      'node_modules',
+      '@vultisig',
+      'sdk',
+      'dist',
+      'lib'
+    )
     if (existsSync(path.join(lib, 'dkls', 'vs_wasm_bg.wasm'))) {
       return lib
     }
@@ -38,7 +45,10 @@ export function fixSdkPrebundleWasmUrlsPlugin(): Plugin {
       if (!cleanId.includes(viteDepsMarker)) {
         return null
       }
-      if (!cleanId.endsWith(`${path.sep}@vultisig_sdk.js`) && !cleanId.endsWith('/@vultisig_sdk.js')) {
+      if (
+        !cleanId.endsWith(`${path.sep}@vultisig_sdk.js`) &&
+        !cleanId.endsWith('/@vultisig_sdk.js')
+      ) {
         return null
       }
 
@@ -46,7 +56,11 @@ export function fixSdkPrebundleWasmUrlsPlugin(): Plugin {
       const libRoot = findSdkDistLibDir(depsDir)
       const dklsWasm = path.join(libRoot, 'dkls', 'vs_wasm_bg.wasm')
       const mldsaWasm = path.join(libRoot, 'mldsa', 'vs_wasm_bg.wasm')
-      const schnorrWasm = path.join(libRoot, 'schnorr', 'vs_schnorr_wasm_bg.wasm')
+      const schnorrWasm = path.join(
+        libRoot,
+        'schnorr',
+        'vs_schnorr_wasm_bg.wasm'
+      )
       const dklsRel = toPosix(path.relative(depsDir, dklsWasm))
       const mldsaRel = toPosix(path.relative(depsDir, mldsaWasm))
       const schnorrRel = toPosix(path.relative(depsDir, schnorrWasm))
