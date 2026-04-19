@@ -1,13 +1,21 @@
+import { useCore } from '@core/ui/state/core'
 import { Button } from '@lib/ui/buttons/Button'
-import { IconButton } from '@lib/ui/buttons/IconButton'
 import { CircleCheckIcon } from '@lib/ui/icons/CircleCheckIcon'
 import { ClipboardCopyIcon } from '@lib/ui/icons/ClipboardCopyIcon'
-import { HStack, VStack } from '@lib/ui/layout/Stack'
-import { Panel } from '@lib/ui/panel/Panel'
+import { IconWrapper } from '@lib/ui/icons/IconWrapper'
+import { SquareArrowTopRightIcon } from '@lib/ui/icons/SquareArrowTopRightIcon'
+import { HStack, hStack, VStack } from '@lib/ui/layout/Stack'
+import { List } from '@lib/ui/list'
+import { ListItem } from '@lib/ui/list/item'
 import { Text } from '@lib/ui/text'
+import { getColor } from '@lib/ui/theme/getters'
+import { MiddleTruncate } from '@lib/ui/truncate'
+import { Chain } from '@vultisig/core-chain/Chain'
+import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { useTranslation } from 'react-i18next'
 import { useCopyToClipboard } from 'react-use'
+import styled from 'styled-components'
 
 const btcDecimals = 8
 
@@ -29,12 +37,21 @@ export const ClaimResult = ({
 }: ClaimResultProps) => {
   const { t } = useTranslation()
   const [, copyToClipboard] = useCopyToClipboard()
+  const { openUrl } = useCore()
 
   const totalBtc = Number(totalAmountClaimed) / 10 ** btcDecimals
-  const truncatedHash = `${txHash.slice(0, 10)}…${txHash.slice(-8)}`
+  const blockExplorerUrl = getBlockExplorerUrl({
+    chain: Chain.QBTC,
+    entity: 'tx',
+    value: txHash,
+  })
 
   return (
-    <VStack gap={24} alignItems="center" style={{ paddingTop: 24 }}>
+    <VStack
+      gap={36}
+      style={{ paddingTop: 24 }}
+      data-testid="qbtc-claim-success"
+    >
       <VStack alignItems="center" gap={12}>
         <Text color="primary" style={{ fontSize: 48 }}>
           <CircleCheckIcon />
@@ -47,42 +64,54 @@ export const ClaimResult = ({
         </Text>
       </VStack>
 
-      <Panel style={{ width: '100%' }}>
-        <VStack gap={12}>
-          <HStack fullWidth justifyContent="space-between">
-            <Text color="supporting" size={12}>
+      <List>
+        <ListItem
+          title={
+            <Text size={14} color="shy">
               {t('qbtc_claim_utxos_claimed')}
             </Text>
-            <Text color="contrast" size={12}>
-              {utxosClaimed}
-            </Text>
-          </HStack>
-          <HStack fullWidth justifyContent="space-between">
-            <Text color="supporting" size={12}>
+          }
+          extra={<Text size={14}>{utxosClaimed}</Text>}
+        />
+        <ListItem
+          title={
+            <Text size={14} color="shy">
               {t('qbtc_claim_utxos_skipped')}
             </Text>
-            <Text color="contrast" size={12}>
-              {utxosSkipped}
+          }
+          extra={<Text size={14}>{utxosSkipped}</Text>}
+        />
+        <ListItem
+          hoverable
+          title={
+            <Text size={14} color="shy">
+              {t('tx_hash')}
             </Text>
-          </HStack>
-          <HStack fullWidth alignItems="center" justifyContent="space-between">
-            <Text color="supporting" size={12}>
-              {t('qbtc_claim_tx_hash')}
-            </Text>
-            <HStack alignItems="center" gap={4}>
-              <Text color="contrast" size={12} family="mono">
-                {truncatedHash}
-              </Text>
-              <IconButton
-                title={t('qbtc_claim_copy_tx_hash')}
-                onClick={() => copyToClipboard(txHash)}
+          }
+          extra={
+            <HStack
+              flexGrow
+              alignItems="center"
+              gap={8}
+              justifyContent="flex-end"
+            >
+              <TruncatedTextWrapper data-hash={txHash}>
+                <Text size={14}>
+                  <MiddleTruncate width={85} text={txHash} />
+                </Text>
+              </TruncatedTextWrapper>
+              <TxRowIconButton
+                onClick={() => copyToClipboard(blockExplorerUrl)}
               >
                 <ClipboardCopyIcon />
-              </IconButton>
+              </TxRowIconButton>
+              <TxRowIconButton onClick={() => openUrl(blockExplorerUrl)}>
+                <SquareArrowTopRightIcon />
+              </TxRowIconButton>
             </HStack>
-          </HStack>
-        </VStack>
-      </Panel>
+          }
+        />
+      </List>
 
       <Button kind="primary" onClick={onDone}>
         {t('qbtc_claim_done')}
@@ -90,3 +119,26 @@ export const ClaimResult = ({
     </VStack>
   )
 }
+
+const TxRowIconButton = styled(IconWrapper).attrs({
+  role: 'button',
+  tabIndex: 0,
+})`
+  cursor: pointer;
+  font-size: 16px;
+  outline: none;
+
+  &:hover {
+    color: ${getColor('textShy')};
+  }
+
+  &:focus-visible {
+    color: ${getColor('textShy')};
+  }
+`
+
+const TruncatedTextWrapper = styled.div`
+  ${hStack({
+    justifyContent: 'flex-end',
+  })};
+`
