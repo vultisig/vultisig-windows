@@ -5,6 +5,7 @@ export const customMessageSupportedChains = [
   Chain.Solana,
   Chain.Ton,
   Chain.Tron,
+  Chain.Cardano,
 ] as const
 
 export type CustomMessageSupportedChain =
