@@ -1,6 +1,8 @@
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
+import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageHeader } from '@lib/ui/page/PageHeader'
+import { Text } from '@lib/ui/text'
 import { sha256 } from '@noble/hashes/sha2.js'
 import { useMutation } from '@tanstack/react-query'
 import { broadcastClaimTx } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/broadcastClaimTx'
@@ -64,7 +66,19 @@ export const ClaimBroadcastingPhase = ({
   return (
     <>
       <PageHeader title={t('qbtc_claim_broadcasting')} hasBorder />
-      <Spinner />
+      <VStack
+        flexGrow
+        fullWidth
+        alignItems="center"
+        justifyContent="center"
+        gap={24}
+        style={{ padding: '0 24px' }}
+      >
+        <Spinner size={56} />
+        <Text color="contrast" size={16} weight="600">
+          {t('qbtc_claim_broadcasting')}
+        </Text>
+      </VStack>
     </>
   )
 }

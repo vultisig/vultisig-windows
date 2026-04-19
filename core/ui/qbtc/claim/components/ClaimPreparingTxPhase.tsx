@@ -1,4 +1,5 @@
 import { FullPageFlowErrorState } from '@core/ui/flow/FullPageFlowErrorState'
+import { VStack } from '@lib/ui/layout/Stack'
 import { Spinner } from '@lib/ui/loaders/Spinner'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { Text } from '@lib/ui/text'
@@ -115,14 +116,28 @@ export const ClaimPreparingTxPhase = ({
   return (
     <>
       <PageHeader title={t('qbtc_claim_proving')} hasBorder />
-      <Spinner />
-      <Text
-        color="supporting"
-        size={12}
-        style={{ textAlign: 'center', padding: '0 16px' }}
+      <VStack
+        flexGrow
+        fullWidth
+        alignItems="center"
+        justifyContent="center"
+        gap={24}
+        style={{ padding: '0 24px' }}
       >
-        {t('qbtc_claim_proving_hint')}
-      </Text>
+        <Spinner size={56} />
+        <VStack alignItems="center" gap={8}>
+          <Text color="contrast" size={16} weight="600">
+            {t('qbtc_claim_proving')}
+          </Text>
+          <Text
+            color="supporting"
+            size={13}
+            style={{ textAlign: 'center', maxWidth: 320 }}
+          >
+            {t('qbtc_claim_proving_hint')}
+          </Text>
+        </VStack>
+      </VStack>
     </>
   )
 }
