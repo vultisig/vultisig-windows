@@ -26,6 +26,8 @@ const mockBuildCoseSign1 = vi.fn()
 const mockBuildCoseKey = vi.fn()
 const mockGetCardanoExtendedUtxos = vi.fn()
 const mockSubmitCardanoCbor = vi.fn()
+const mockDecodeCardanoAmountValue = vi.fn()
+const mockSelectCardanoUtxosByLovelace = vi.fn()
 
 vi.mock('@core/inpage-provider/background', () => ({
   callBackground: (...args: unknown[]) => mockCallBackground(...args),
@@ -97,6 +99,22 @@ vi.mock(
 vi.mock('@vultisig/core-chain/chains/cardano/submit/submitCardanoCbor', () => ({
   submitCardanoCbor: (...args: unknown[]) => mockSubmitCardanoCbor(...args),
 }))
+
+vi.mock(
+  '@vultisig/core-chain/chains/cardano/cip30/decodeCardanoAmountValue',
+  () => ({
+    decodeCardanoAmountValue: (...args: unknown[]) =>
+      mockDecodeCardanoAmountValue(...args),
+  })
+)
+
+vi.mock(
+  '@vultisig/core-chain/chains/cardano/cip30/selectCardanoUtxosByLovelace',
+  () => ({
+    selectCardanoUtxosByLovelace: (...args: unknown[]) =>
+      mockSelectCardanoUtxosByLovelace(...args),
+  })
+)
 
 import { createCardanoCip30InitialApi } from '@clients/extension/src/inpage/providers/cardanoCip30'
 
@@ -407,6 +425,84 @@ describe('CIP-30 full API', () => {
           maxSize: 1,
         })
       }
+    })
+
+    describe('coin selection when `amount` is provided', () => {
+      const allUtxos = [
+        { hash: 'h1', index: 0, amount: 1_000_000n, assets: [] },
+        { hash: 'h2', index: 1, amount: 5_000_000n, assets: [] },
+        { hash: 'h3', index: 2, amount: 2_000_000n, assets: [] },
+      ]
+
+      it('returns only the UTXOs selected to cover a lovelace-only amount', async () => {
+        mockGetCardanoExtendedUtxos.mockResolvedValueOnce(allUtxos)
+        mockDecodeCardanoAmountValue.mockReturnValueOnce({
+          lovelace: 4_000_000n,
+          hasAssets: false,
+        })
+        const picked = [allUtxos[1]] // 5_000_000 >= 4_000_000
+        mockSelectCardanoUtxosByLovelace.mockReturnValueOnce(picked)
+        mockEncodeCardanoUnspentOutput.mockReturnValueOnce(
+          new Uint8Array([0xaa])
+        )
+
+        const api = await enableApi()
+        const result = await api.getUtxos('1a003d0900') // hex-encoded CBOR amount
+
+        expect(result).toEqual(['aa'])
+        expect(mockDecodeCardanoAmountValue).toHaveBeenCalledWith('1a003d0900')
+        expect(mockSelectCardanoUtxosByLovelace).toHaveBeenCalledWith({
+          utxos: allUtxos,
+          targetLovelace: 4_000_000n,
+        })
+        expect(mockEncodeCardanoUnspentOutput).toHaveBeenCalledTimes(1)
+      })
+
+      it('returns null when the wallet balance is insufficient to cover the amount', async () => {
+        mockGetCardanoExtendedUtxos.mockResolvedValueOnce(allUtxos)
+        mockDecodeCardanoAmountValue.mockReturnValueOnce({
+          lovelace: 100_000_000n,
+          hasAssets: false,
+        })
+        mockSelectCardanoUtxosByLovelace.mockReturnValueOnce(null)
+
+        const api = await enableApi()
+        await expect(api.getUtxos('1a05f5e100')).resolves.toBeNull()
+        // Must not try to encode any UTXO when selection failed.
+        expect(mockEncodeCardanoUnspentOutput).not.toHaveBeenCalled()
+      })
+
+      it('falls back to returning all UTXOs when the amount has multi-asset requirements', async () => {
+        mockGetCardanoExtendedUtxos.mockResolvedValueOnce(allUtxos)
+        mockDecodeCardanoAmountValue.mockReturnValueOnce({
+          lovelace: 1_500_000n,
+          hasAssets: true,
+        })
+        mockEncodeCardanoUnspentOutput.mockImplementation(
+          () => new Uint8Array([0xff])
+        )
+
+        const api = await enableApi()
+        const result = await api.getUtxos('82...')
+
+        expect(result).toEqual(['ff', 'ff', 'ff'])
+        // Coin selection is skipped for multi-asset requirements.
+        expect(mockSelectCardanoUtxosByLovelace).not.toHaveBeenCalled()
+      })
+
+      it('falls back to returning all UTXOs when the amount fails to decode', async () => {
+        mockGetCardanoExtendedUtxos.mockResolvedValueOnce(allUtxos)
+        mockDecodeCardanoAmountValue.mockReturnValueOnce(null)
+        mockEncodeCardanoUnspentOutput.mockImplementation(
+          () => new Uint8Array([0x77])
+        )
+
+        const api = await enableApi()
+        const result = await api.getUtxos('deadbeef')
+
+        expect(result).toEqual(['77', '77', '77'])
+        expect(mockSelectCardanoUtxosByLovelace).not.toHaveBeenCalled()
+      })
     })
   })
 

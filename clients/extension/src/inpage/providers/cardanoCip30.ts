@@ -20,8 +20,10 @@ import {
 } from '@vultisig/core-chain/chains/cardano/cip30/buildCoseStructures'
 import { cardanoAddressBytes } from '@vultisig/core-chain/chains/cardano/cip30/cardanoAddressBytes'
 import { cardanoTxBodyHash } from '@vultisig/core-chain/chains/cardano/cip30/cardanoTxBodyHash'
+import { decodeCardanoAmountValue } from '@vultisig/core-chain/chains/cardano/cip30/decodeCardanoAmountValue'
 import { encodeCardanoUnspentOutput } from '@vultisig/core-chain/chains/cardano/cip30/encodeCardanoUnspentOutput'
 import { encodeCardanoValue } from '@vultisig/core-chain/chains/cardano/cip30/encodeCardanoValue'
+import { selectCardanoUtxosByLovelace } from '@vultisig/core-chain/chains/cardano/cip30/selectCardanoUtxosByLovelace'
 import { submitCardanoCbor } from '@vultisig/core-chain/chains/cardano/submit/submitCardanoCbor'
 import { getCardanoExtendedUtxos } from '@vultisig/core-chain/chains/cardano/utxo/getCardanoExtendedUtxos'
 import { attempt } from '@vultisig/lib-utils/attempt'
@@ -192,12 +194,35 @@ const createCardanoCip30FullApi = ({
     },
 
     getUtxos: async (
-      _amount?: string,
+      amount?: string,
       paginate?: Paginate
     ): Promise<string[] | null> => {
       const utxos = await fetchUtxos()
       if (utxos.length === 0) return null
-      return paginateArray(utxos, paginate).map(utxo =>
+
+      // CIP-30: when `amount` is provided, return a subset whose combined
+      // value covers it, or null if impossible. We only coin-select by
+      // lovelace; if the request has multi-asset requirements we fall back
+      // to returning all UTXOs (a CIP-30-allowed superset) so the dApp can
+      // pick the specific native tokens it needs.
+      let selected = utxos
+      if (amount) {
+        const requirement = decodeCardanoAmountValue(amount)
+        if (requirement) {
+          if (requirement.hasAssets) {
+            selected = utxos
+          } else {
+            const picked = selectCardanoUtxosByLovelace({
+              utxos,
+              targetLovelace: requirement.lovelace,
+            })
+            if (picked === null) return null
+            selected = picked
+          }
+        }
+      }
+
+      return paginateArray(selected, paginate).map(utxo =>
         toHex(
           encodeCardanoUnspentOutput({ utxo, addressBytes: addressRawBytes })
         )
