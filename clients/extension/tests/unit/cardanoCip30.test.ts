@@ -3,6 +3,14 @@ import { PopupError } from '@core/inpage-provider/popup/error'
 import { OtherChain } from '@vultisig/core-chain/Chain'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
+const hasInfo = (value: unknown): value is { info: string } =>
+  typeof value === 'object' &&
+  value !== null &&
+  'info' in value &&
+  typeof value.info === 'string'
+
+const errInfo = (err: unknown): string => (hasInfo(err) ? err.info : '')
+
 const mockCallBackground = vi.fn()
 const mockCallPopup = vi.fn()
 const mockRequestAccount = vi.fn()
@@ -189,7 +197,7 @@ describe('createCardanoCip30InitialApi', () => {
           code: -2,
           info: expect.stringContaining('enable failed'),
         })
-        expect((err as { info: string }).info).toContain('background crashed')
+        expect(errInfo(err)).toContain('background crashed')
       }
     })
 
@@ -311,7 +319,7 @@ describe('CIP-30 full API', () => {
           code: -2,
           info: expect.stringContaining('Failed to fetch UTXOs'),
         })
-        expect((err as { info: string }).info).toContain('network down')
+        expect(errInfo(err)).toContain('network down')
       }
     })
   })
@@ -362,6 +370,25 @@ describe('CIP-30 full API', () => {
       const page = await api.getUtxos(undefined, { page: 1, limit: 2 })
 
       expect(page).toEqual(['02', '03'])
+    })
+
+    it('rejects non-integer or negative pagination inputs', async () => {
+      const utxos = [{ hash: 'h', index: 0, amount: 1n, assets: [] }]
+      mockGetCardanoExtendedUtxos.mockResolvedValue(utxos)
+
+      const api = await enableApi()
+
+      await expect(
+        api.getUtxos(undefined, { page: -1, limit: 1 })
+      ).rejects.toMatchObject({ code: 1, info: 'Invalid pagination' })
+
+      await expect(
+        api.getUtxos(undefined, { page: 0, limit: 0 })
+      ).rejects.toMatchObject({ code: 1, info: 'Invalid pagination' })
+
+      await expect(
+        api.getUtxos(undefined, { page: 1.5, limit: 1 })
+      ).rejects.toMatchObject({ code: 1, info: 'Invalid pagination' })
     })
 
     it('throws a CIP-30 pagination error when the page is out of range', async () => {
@@ -432,7 +459,7 @@ describe('CIP-30 full API', () => {
           code: 1,
           info: expect.stringContaining('signTx failed'),
         })
-        expect((err as { info: string }).info).toContain('bad cbor')
+        expect(errInfo(err)).toContain('bad cbor')
       }
     })
 
@@ -527,7 +554,7 @@ describe('CIP-30 full API', () => {
           code: 1,
           info: expect.stringContaining('signData failed'),
         })
-        expect((err as { info: string }).info).toContain('bad header')
+        expect(errInfo(err)).toContain('bad header')
       }
     })
 
@@ -544,6 +571,24 @@ describe('CIP-30 full API', () => {
       } catch (err) {
         expect(err).toEqual({ code: 3, info: 'User declined signing' })
       }
+    })
+
+    it('throws CIP-30 DataSignError(AddressNotPK=2) when addr does not match the connected account', async () => {
+      const api = await enableApi()
+
+      try {
+        await api.signData('aabbccdd', '00')
+        expect.fail('signData should have thrown')
+      } catch (err) {
+        expect(err).toMatchObject({
+          code: 2,
+          info: expect.stringContaining('does not match'),
+        })
+      }
+
+      // Should never reach the signing popup for a mismatched address.
+      expect(mockBuildProtectedHeaderBytes).not.toHaveBeenCalled()
+      expect(mockCallPopup).not.toHaveBeenCalled()
     })
   })
 
@@ -613,7 +658,7 @@ describe('CIP-30 full API', () => {
           code: -2,
           info: expect.stringContaining('submitTx failed'),
         })
-        expect((err as { info: string }).info).toContain('network down')
+        expect(errInfo(err)).toContain('network down')
       }
     })
   })

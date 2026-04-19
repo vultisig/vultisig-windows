@@ -45,6 +45,7 @@ const TxSignErrorCode = {
 
 const DataSignErrorCode = {
   ProofGeneration: 1,
+  AddressNotPK: 2,
   UserDeclined: 3,
 } as const
 
@@ -61,6 +62,14 @@ type Paginate = { page: number; limit: number }
 const paginateArray = <T>(items: T[], paginate?: Paginate): T[] => {
   if (!paginate) return items
   const { page, limit } = paginate
+  if (
+    !Number.isInteger(page) ||
+    page < 0 ||
+    !Number.isInteger(limit) ||
+    limit <= 0
+  ) {
+    throw { code: 1, info: 'Invalid pagination', maxSize: items.length }
+  }
   const maxPage = Math.max(0, Math.ceil(items.length / limit) - 1)
   if (page > maxPage) {
     throw { code: 1, info: 'Page out of range', maxSize: items.length }
@@ -90,12 +99,16 @@ const signWithCardanoKey = async (bytesToSign: Uint8Array): Promise<string> => {
 
 // ========================= API =========================
 
+type CardanoCip30Extension = { cip: number }
+
+const supportedCip30Extensions: CardanoCip30Extension[] = []
+
 /** CIP-30 initial API injected at `window.cardano.vultisig`. */
 export const createCardanoCip30InitialApi = () => ({
   name: 'Vultisig',
   icon: VULTI_ICON_RAW_SVG,
   apiVersion: '1.0.0',
-  supportedExtensions: [] as Array<{ cip: number }>,
+  supportedExtensions: supportedCip30Extensions,
 
   isEnabled: async (): Promise<boolean> => {
     const result = await attempt(async () => {
@@ -123,14 +136,22 @@ export const createCardanoCip30InitialApi = () => ({
     if (!address) {
       throw apiError(APIErrorCode.Refused, 'User refused connection')
     }
-    return createCardanoCip30FullApi(address, publicKey)
+    return createCardanoCip30FullApi({ address, publicKeyHex: publicKey })
   },
 })
 
 type CardanoCip30Api = ReturnType<typeof createCardanoCip30FullApi>
 
+type CreateCardanoCip30FullApiInput = {
+  address: string
+  publicKeyHex: string
+}
+
 /** CIP-30 full API returned by `enable()`. */
-const createCardanoCip30FullApi = (address: string, publicKeyHex: string) => {
+const createCardanoCip30FullApi = ({
+  address,
+  publicKeyHex,
+}: CreateCardanoCip30FullApiInput) => {
   const addressRawBytes = cardanoAddressBytes(address)
   const addressHex = toHex(addressRawBytes)
   // WalletCore returns the extended Ed25519Cardano key (128 bytes).
@@ -149,7 +170,8 @@ const createCardanoCip30FullApi = (address: string, publicKeyHex: string) => {
   }
 
   return {
-    getExtensions: async (): Promise<Array<{ cip: number }>> => [],
+    getExtensions: async (): Promise<CardanoCip30Extension[]> =>
+      supportedCip30Extensions,
 
     getNetworkId: async (): Promise<number> => 1, // mainnet
 
@@ -208,6 +230,12 @@ const createCardanoCip30FullApi = (address: string, publicKeyHex: string) => {
       addr: string,
       payload: string
     ): Promise<{ signature: string; key: string }> => {
+      if (addr.replace(/^0x/i, '').toLowerCase() !== addressHex.toLowerCase()) {
+        throw apiError(
+          DataSignErrorCode.AddressNotPK,
+          'signData address does not match the connected account'
+        )
+      }
       const result = await attempt(async () => {
         const addrBytes = fromHex(addr)
         const payloadBytes = fromHex(payload)
