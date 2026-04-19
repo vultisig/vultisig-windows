@@ -85,10 +85,7 @@ export const ClaimMldsaSignRunner = ({
     <>
       <PageHeader title={t('keysign')} hasBorder />
       <AnimationContainer>
-        <KeysignLoadingAnimation
-          isConnected
-          chainLogoSrc={getChainLogoSrc(chain)}
-        />
+        <KeysignLoadingAnimation isConnected logoSrc={getChainLogoSrc(chain)} />
       </AnimationContainer>
     </>
   )

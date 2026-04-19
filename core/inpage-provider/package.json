@@ -17,7 +17,6 @@
     "@vultisig/core-mpc": "1.1.0",
     "@vultisig/lib-utils": "0.9.1",
     "bitcoinjs-lib": "^7.0.1",
-    "bs58": "^6.0.0",
     "ethers": "^6.16.0",
     "framer-motion": "^12.37.0",
     "react": "^19.2.4",

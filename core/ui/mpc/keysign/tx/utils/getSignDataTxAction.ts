@@ -377,5 +377,18 @@ export const getSignDataTxAction = (
     return { action: 'send', labelKey: 'sent', amount: toAmountFormatted }
   }
 
+  if (
+    keysignPayload.memo &&
+    keysignPayload.memo.length > 2 &&
+    /^0x[0-9a-fA-F]+$/.test(keysignPayload.memo) &&
+    keysignPayload.memo.length % 2 === 0
+  ) {
+    return {
+      action: 'contract_execution',
+      labelKey: 'contract_execution',
+      contractAddress: keysignPayload.toAddress,
+    }
+  }
+
   return null
 }

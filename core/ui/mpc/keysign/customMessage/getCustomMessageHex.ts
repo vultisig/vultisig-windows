@@ -34,5 +34,6 @@ export const getCustomMessageHex = ({
     solana: () => Buffer.from(bytes).toString('hex'),
     ton: () => Buffer.from(bytes).toString('hex'),
     tron: () => stripHexPrefix(keccak256(bytes)),
+    polkadot: () => Buffer.from(bytes).toString('hex'),
   })
 }

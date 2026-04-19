@@ -89,12 +89,6 @@ export const KeysignTxOverview = ({
           actionLabel={
             txAction?.action !== 'send' ? txAction?.labelKey : undefined
           }
-          contractAddress={
-            txAction?.action === 'contract_execution' &&
-            'contractAddress' in txAction
-              ? txAction.contractAddress
-              : undefined
-          }
         />
       )}
       <Panel>

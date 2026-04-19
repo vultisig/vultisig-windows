@@ -19,6 +19,14 @@ const rootDir = path.resolve(
 export default defineConfig(async ({ mode }) => {
   const env = loadEnv(mode, rootDir, '')
   return {
+    // Crawl the desktop navigation barrel during the *first* dep-optimization pass so
+    // `@vultisig/*` deep imports are known before the dev server serves modules. Without
+    // this, the first navigation discovers hundreds of new specifiers, invalidates the
+    // metadata hash, and Vite forces a full reload — Wails' proxy then drops in-flight
+    // fetches and the UI never stabilizes.
+    optimizeDeps: {
+      entries: ['index.html', 'src/navigation/views.tsx'],
+    },
     define: {
       ...getFeatureFlagDefines(env),
       __APP_VERSION__: JSON.stringify(buildInfo.version),
@@ -52,6 +60,19 @@ export default defineConfig(async ({ mode }) => {
     server: {
       port: 5173,
       strictPort: true,
+      // Pre-transform the full desktop navigation graph up front. Otherwise Vite can
+      // discover hundreds of `@vultisig/*` deep imports on first navigation, run a new
+      // `optimizeDeps` pass, emit `optimized dependencies changed. reloading`, and abort
+      // every in-flight module fetch — Wails' dev proxy then floods `request has been stopped`
+      // and the webview never recovers (looks like the app "doesn't run").
+      warmup: {
+        clientFiles: [
+          './index.html',
+          './src/main.tsx',
+          './src/App.tsx',
+          './src/navigation/views.tsx',
+        ],
+      },
     },
     build: {
       outDir: 'dist',

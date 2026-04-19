@@ -1,5 +1,6 @@
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { Chain } from '@vultisig/core-chain/Chain'
+import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
 import { areEqualCoins, CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { getChainAddress } from '@vultisig/core-chain/publicKey/address/getChainAddress'
@@ -11,10 +12,14 @@ import { useMemo } from 'react'
 
 import { useCurrentVault } from './currentVault'
 
+// Stable empty fallback so downstream `useMemo` hooks don't bust every render
+// when the vault is loaded but its coins list is still undefined.
+const emptyCoins: AccountCoin[] = []
+
 export const useCurrentVaultCoins = () => {
   const { coins } = useCurrentVault()
 
-  return coins ?? []
+  return coins ?? emptyCoins
 }
 
 export const useCurrentVaultNativeCoins = () => {

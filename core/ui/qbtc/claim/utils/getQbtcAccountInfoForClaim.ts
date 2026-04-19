@@ -1,6 +1,4 @@
 import { qbtcRestUrl } from '@vultisig/core-chain/chains/cosmos/qbtc/tendermintRpcUrl'
-import { attempt } from '@vultisig/lib-utils/attempt'
-import { HttpResponseError } from '@vultisig/lib-utils/fetch/HttpResponseError'
 import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
 type AccountResponse = {
@@ -36,6 +34,9 @@ type QbtcAccountInfoForClaim = {
  * on-chain until its first transaction — which for most claimers IS the
  * claim tx.
  *
+ * Uses a raw `fetch` for the account endpoint so a 404 can be branched on
+ * `response.status` directly instead of relying on a typed error class.
+ *
  * TODO: fold this behaviour back into the SDK's `getQbtcAccountInfo` once
  * iOS/Android agree on the fallback semantics.
  */
@@ -44,28 +45,28 @@ export const getQbtcAccountInfoForClaim = async ({
 }: {
   address: string
 }): Promise<QbtcAccountInfoForClaim> => {
-  const [accountResult, blockData] = await Promise.all([
-    attempt(() =>
-      queryUrl<AccountResponse>(
-        `${qbtcRestUrl}/cosmos/auth/v1beta1/accounts/${address}`
-      )
-    ),
+  const accountUrl = `${qbtcRestUrl}/cosmos/auth/v1beta1/accounts/${address}`
+
+  const [accountResponse, blockData] = await Promise.all([
+    fetch(accountUrl),
     queryUrl<BlockResponse>(
       `${qbtcRestUrl}/cosmos/base/tendermint/v1beta1/blocks/latest`
     ),
   ])
 
-  const { accountNumber, sequence } = (() => {
-    if ('error' in accountResult) {
-      const { error } = accountResult
-      if (error instanceof HttpResponseError && error.status === 404) {
-        return { accountNumber: 0, sequence: 0 }
-      }
-      throw error
+  const { accountNumber, sequence } = await (async () => {
+    if (accountResponse.status === 404) {
+      return { accountNumber: 0, sequence: 0 }
     }
+    if (!accountResponse.ok) {
+      throw new Error(
+        `Failed to fetch QBTC account (${accountResponse.status}): ${accountResponse.statusText}`
+      )
+    }
+    const data: AccountResponse = await accountResponse.json()
     return {
-      accountNumber: Number(accountResult.data.account.account_number),
-      sequence: Number(accountResult.data.account.sequence),
+      accountNumber: Number(data.account.account_number),
+      sequence: Number(data.account.sequence),
     }
   })()
 

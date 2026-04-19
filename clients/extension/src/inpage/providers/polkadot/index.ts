@@ -108,7 +108,7 @@ export class Polkadot extends EventEmitter {
   async signRaw(
     payload: PolkadotSignerPayloadRaw
   ): Promise<PolkadotSignerResult> {
-    const signature = await callPopup(
+    const signatureHex = await callPopup(
       {
         signMessage: {
           sign_message: {
@@ -122,7 +122,7 @@ export class Polkadot extends EventEmitter {
 
     return {
       id: ++signingId,
-      signature,
+      signature: ed25519SignaturePrefix + signatureHex,
     }
   }
 }

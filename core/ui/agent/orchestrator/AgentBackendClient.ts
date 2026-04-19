@@ -348,11 +348,44 @@ export class AgentBackendClient {
       () => JSON.parse(jsonStr) as Record<string, unknown>
     )
     if ('error' in parseResult) return
+    const parsed = parseResult.data
 
-    const handler = sseHandlers[event]
+    // Vercel UI Message Stream v1: no `event:` line, type is inside the JSON.
+    // Map v1 types to legacy handler names and unwrap nested `data` payloads.
+    const resolvedEvent = event || this.resolveV1EventType(parsed)
+    const payload = event ? parsed : this.unwrapV1Payload(resolvedEvent, parsed)
+
+    const handler = sseHandlers[resolvedEvent]
     if (handler) {
-      handler(parseResult.data, result, callbacks)
+      handler(payload, result, callbacks)
     }
+  }
+
+  /** Map Vercel UI Message Stream v1 `type` field to legacy SSE event names. */
+  private resolveV1EventType(parsed: Record<string, unknown>): string {
+    const type = parsed.type as string | undefined
+    if (!type) return ''
+    if (type === 'text-delta') return 'text_delta'
+    if (type === 'finish') return 'done'
+    if (type === 'error') return 'error'
+    if (type.startsWith('data-')) return type.slice(5) // data-title → title, data-message → message, etc.
+    return type
+  }
+
+  /** Unwrap v1 nested payloads so handlers see the same shape as legacy events. */
+  private unwrapV1Payload(
+    event: string,
+    parsed: Record<string, unknown>
+  ): Record<string, unknown> {
+    // text-delta: {type, id, delta} → handler expects {delta}
+    if (event === 'text_delta') return parsed
+    // error: {type, errorText} → handler expects {error}
+    if (event === 'error') return { error: parsed.errorText ?? parsed.error }
+    // data-* events: {type, data: {...}} → handler expects the inner data
+    if (typeof parsed.data === 'object' && parsed.data !== null) {
+      return parsed.data as Record<string, unknown>
+    }
+    return parsed
   }
 
   async listConversations(params: {

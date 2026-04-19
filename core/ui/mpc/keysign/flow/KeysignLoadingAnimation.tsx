@@ -13,7 +13,7 @@ const AnimationContainer = styled.div`
 type KeysignLoadingAnimationProps = {
   isConnected: boolean
   progress?: number
-  chainLogoSrc?: string
+  logoSrc?: string
 }
 
 /**
@@ -21,15 +21,15 @@ type KeysignLoadingAnimationProps = {
  *
  * The `.riv` file defaults to the Connecting state (`Connected=false`).
  * When `isConnected` is true, the animation transitions to the Signing
- * state with progress tracking and chain logo display.
+ * state with progress tracking and token/chain logo display.
  */
 export const KeysignLoadingAnimation = ({
   isConnected,
   progress = 0,
-  chainLogoSrc,
+  logoSrc,
 }: KeysignLoadingAnimationProps) => {
   const { RiveComponent, containerRef, setConnected, setProgress } =
-    useKeysignLoadingAnimation({ chainLogoSrc })
+    useKeysignLoadingAnimation({ logoSrc })
 
   useEffect(() => {
     setConnected(isConnected)
