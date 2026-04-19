@@ -109,7 +109,7 @@ async function setupContentScriptMessenger(
     }
     providers.tron.init()
 
-    if (window.cardano) {
+    if (window.cardano && !window.cardano.lace) {
       attempt(() =>
         Object.defineProperty(window.cardano, 'lace', {
           value: createCardanoCip30InitialApi(),

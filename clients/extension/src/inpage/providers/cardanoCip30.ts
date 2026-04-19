@@ -9,6 +9,7 @@
 import VULTI_ICON_RAW_SVG from '@clients/extension/src/inpage/icon'
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
+import { PopupError } from '@core/inpage-provider/popup/error'
 import { OtherChain } from '@vultisig/core-chain/Chain'
 import { buildCardanoWitnessSet } from '@vultisig/core-chain/chains/cardano/cip30/buildCardanoWitnessSet'
 import {
@@ -26,6 +27,7 @@ import { getCardanoExtendedUtxos } from '@vultisig/core-chain/chains/cardano/utx
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 
+import { EIP1193Error } from '../../background/handlers/errorHandler'
 import { requestAccount } from './core/requestAccount'
 
 // ========================= CIP-30 error factories =========================
@@ -66,9 +68,15 @@ const paginateArray = <T>(items: T[], paginate?: Paginate): T[] => {
   return items.slice(page * limit, page * limit + limit)
 }
 
-/** Ask the extension to MPC-sign raw bytes with the Cardano Ed25519 key. */
+/**
+ * Ask the extension to MPC-sign raw bytes with the Cardano Ed25519 key.
+ *
+ * The `0x` prefix tells `getCustomMessageHex` to hex-decode these bytes rather
+ * than UTF-8-encode the hex string — otherwise the ASCII of the hex digits
+ * would be signed instead of the actual tx-body hash / COSE Sig_structure.
+ */
 const signWithCardanoKey = async (bytesToSign: Uint8Array): Promise<string> => {
-  const hexMessage = toHex(bytesToSign)
+  const hexMessage = `0x${toHex(bytesToSign)}`
   const signature = await callPopup({
     signMessage: {
       sign_message: {
@@ -101,7 +109,17 @@ export const createCardanoCip30InitialApi = () => ({
   },
 
   enable: async (): Promise<CardanoCip30Api> => {
-    const { address, publicKey } = await requestAccount(OtherChain.Cardano)
+    const result = await attempt(() => requestAccount(OtherChain.Cardano))
+    if ('error' in result) {
+      if (result.error instanceof EIP1193Error && result.error.code === 4001) {
+        throw apiError(APIErrorCode.Refused, 'User refused connection')
+      }
+      throw apiError(
+        APIErrorCode.InternalError,
+        `enable failed: ${extractErrorMsg(result.error)}`
+      )
+    }
+    const { address, publicKey } = result.data
     if (!address) {
       throw apiError(APIErrorCode.Refused, 'User refused connection')
     }
@@ -175,6 +193,9 @@ const createCardanoCip30FullApi = (address: string, publicKeyHex: string) => {
         return toHex(witnessSet)
       })
       if ('error' in result) {
+        if (result.error === PopupError.RejectedByUser) {
+          throw apiError(TxSignErrorCode.UserDeclined, 'User declined signing')
+        }
         throw apiError(
           TxSignErrorCode.ProofGeneration,
           `signTx failed: ${extractErrorMsg(result.error)}`
@@ -202,6 +223,12 @@ const createCardanoCip30FullApi = (address: string, publicKeyHex: string) => {
         return { signature: toHex(coseSign1), key: toHex(coseKey) }
       })
       if ('error' in result) {
+        if (result.error === PopupError.RejectedByUser) {
+          throw apiError(
+            DataSignErrorCode.UserDeclined,
+            'User declined signing'
+          )
+        }
         throw apiError(
           DataSignErrorCode.ProofGeneration,
           `signData failed: ${extractErrorMsg(result.error)}`
@@ -211,7 +238,14 @@ const createCardanoCip30FullApi = (address: string, publicKeyHex: string) => {
     },
 
     submitTx: async (tx: string): Promise<string> => {
-      const { txHash, errorMessage } = await submitCardanoCbor(tx)
+      const result = await attempt(() => submitCardanoCbor(tx))
+      if ('error' in result) {
+        throw apiError(
+          APIErrorCode.InternalError,
+          `submitTx failed: ${extractErrorMsg(result.error)}`
+        )
+      }
+      const { txHash, errorMessage } = result.data
       if (txHash) return txHash
       throw apiError(
         APIErrorCode.InternalError,

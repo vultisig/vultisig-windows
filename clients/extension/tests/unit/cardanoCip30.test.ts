@@ -1,3 +1,5 @@
+import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
+import { PopupError } from '@core/inpage-provider/popup/error'
 import { OtherChain } from '@vultisig/core-chain/Chain'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -161,11 +163,10 @@ describe('createCardanoCip30InitialApi', () => {
   })
 
   describe('enable', () => {
-    it('throws CIP-30 APIError(Refused=-3) when the user refuses connection', async () => {
-      mockRequestAccount.mockResolvedValueOnce({
-        address: '',
-        publicKey: publicKeyHex,
-      })
+    it('throws CIP-30 APIError(Refused=-3) when the user rejects the connect popup', async () => {
+      mockRequestAccount.mockRejectedValueOnce(
+        new EIP1193Error('UserRejectedRequest')
+      )
 
       try {
         await createCardanoCip30InitialApi().enable()
@@ -175,6 +176,21 @@ describe('createCardanoCip30InitialApi', () => {
       }
 
       expect(mockRequestAccount).toHaveBeenCalledWith(OtherChain.Cardano)
+    })
+
+    it('throws CIP-30 APIError(InternalError=-2) on other connect failures', async () => {
+      mockRequestAccount.mockRejectedValueOnce(new Error('background crashed'))
+
+      try {
+        await createCardanoCip30InitialApi().enable()
+        expect.fail('enable() should have thrown')
+      } catch (err) {
+        expect(err).toMatchObject({
+          code: -2,
+          info: expect.stringContaining('enable failed'),
+        })
+        expect((err as { info: string }).info).toContain('background crashed')
+      }
     })
 
     it('returns the full API when a vault is connected', async () => {
@@ -388,7 +404,7 @@ describe('CIP-30 full API', () => {
       expect(mockCallPopup).toHaveBeenCalledWith({
         signMessage: {
           sign_message: {
-            message: Buffer.from(bodyHash).toString('hex'),
+            message: `0x${Buffer.from(bodyHash).toString('hex')}`,
             chain: OtherChain.Cardano,
           },
         },
@@ -417,6 +433,20 @@ describe('CIP-30 full API', () => {
           info: expect.stringContaining('signTx failed'),
         })
         expect((err as { info: string }).info).toContain('bad cbor')
+      }
+    })
+
+    it('throws CIP-30 TxSignError(UserDeclined=2) when the signing popup is cancelled', async () => {
+      mockCardanoTxBodyHash.mockReturnValueOnce(new Uint8Array([0x01]))
+      mockCallPopup.mockRejectedValueOnce(PopupError.RejectedByUser)
+
+      const api = await enableApi()
+
+      try {
+        await api.signTx('00')
+        expect.fail('signTx should have thrown')
+      } catch (err) {
+        expect(err).toEqual({ code: 2, info: 'User declined signing' })
       }
     })
   })
@@ -452,7 +482,7 @@ describe('CIP-30 full API', () => {
       expect(mockCallPopup).toHaveBeenCalledWith({
         signMessage: {
           sign_message: {
-            message: Buffer.from(sigStructure).toString('hex'),
+            message: `0x${Buffer.from(sigStructure).toString('hex')}`,
             chain: OtherChain.Cardano,
           },
         },
@@ -498,6 +528,21 @@ describe('CIP-30 full API', () => {
           info: expect.stringContaining('signData failed'),
         })
         expect((err as { info: string }).info).toContain('bad header')
+      }
+    })
+
+    it('throws CIP-30 DataSignError(UserDeclined=3) when the signing popup is cancelled', async () => {
+      mockBuildProtectedHeaderBytes.mockReturnValueOnce(new Uint8Array([0x10]))
+      mockBuildSigStructure.mockReturnValueOnce(new Uint8Array([0x20]))
+      mockCallPopup.mockRejectedValueOnce(PopupError.RejectedByUser)
+
+      const api = await enableApi()
+
+      try {
+        await api.signData(addressHex, '00')
+        expect.fail('signData should have thrown')
+      } catch (err) {
+        expect(err).toEqual({ code: 3, info: 'User declined signing' })
       }
     })
   })
@@ -552,6 +597,23 @@ describe('CIP-30 full API', () => {
           code: -2,
           info: expect.stringContaining('unknown broadcast failure'),
         })
+      }
+    })
+
+    it('wraps thrown broadcast errors in APIError(InternalError=-2)', async () => {
+      mockSubmitCardanoCbor.mockRejectedValueOnce(new Error('network down'))
+
+      const api = await enableApi()
+
+      try {
+        await api.submitTx('deadbeef')
+        expect.fail('submitTx should have thrown')
+      } catch (err) {
+        expect(err).toMatchObject({
+          code: -2,
+          info: expect.stringContaining('submitTx failed'),
+        })
+        expect((err as { info: string }).info).toContain('network down')
       }
     })
   })
