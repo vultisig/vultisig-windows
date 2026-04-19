@@ -10,12 +10,12 @@ import {
   type ClaimProofResult,
   generateClaimProof,
 } from '@vultisig/core-chain/chains/cosmos/qbtc/claim/proofService'
-import { getQbtcAccountInfo } from '@vultisig/core-chain/chains/cosmos/qbtc/getQbtcAccountInfo'
 import { KeysignSignature } from '@vultisig/core-mpc/keysign/KeysignSignature'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { buildClaimPreSignHash } from '../utils/buildClaimSignDoc'
+import { getQbtcAccountInfoForClaim } from '../utils/getQbtcAccountInfoForClaim'
 
 const qbtcChainId = 'qbtc-testnet'
 const proofServiceRBytes = 24
@@ -82,7 +82,9 @@ export const ClaimPreparingTxPhase = ({
         qbtcAddressHash: proof.qbtc_address_hash,
       })
 
-      const accountInfo = await getQbtcAccountInfo({ address: qbtcAddress })
+      const accountInfo = await getQbtcAccountInfoForClaim({
+        address: qbtcAddress,
+      })
       const { hash, authInfoBytes } = buildClaimPreSignHash({
         bodyBytes,
         chainId: qbtcChainId,
