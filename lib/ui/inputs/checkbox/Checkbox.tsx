@@ -28,17 +28,13 @@ const Box = styled.div<{ isChecked: boolean }>`
   padding: 2px;
 
   ${({ isChecked }) =>
-    isChecked
-      ? css`
-          border: 1px solid ${getColor('primary')};
-        `
-      : css`
-          &:hover {
-            background: ${getColor('foregroundSuper')};
-          }
-          border: 1px solid ${getColor('foregroundSuper')};
-          background: ${getColor('foregroundExtra')};
-        `};
+    !isChecked &&
+    css`
+      &:hover {
+        background: ${getColor('foregroundSuper')};
+      }
+      background: ${getColor('foregroundExtra')};
+    `};
 `
 
 const Container = styled(HStack)<{ isChecked: boolean }>`
