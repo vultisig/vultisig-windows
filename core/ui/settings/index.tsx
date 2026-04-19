@@ -2,6 +2,7 @@ import { ManageBlockaid } from '@core/ui/chain/security/blockaid/ManageBlockaid'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { languageName } from '@core/ui/i18n/Language'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { NotificationBubbleIcon } from '@core/ui/notifications/NotificationBubbleIcon'
 import { SettingsSection } from '@core/ui/settings/SettingsSection'
 import { useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
@@ -53,7 +54,6 @@ type Props = {
   expandView?: ReactNode
   insiderOptions?: ReactNode
   prioritize?: ReactNode
-  pushNotifications?: ReactNode
   sidePanel?: ReactNode
   checkUpdate?: ReactNode
 }
@@ -117,6 +117,17 @@ export const SettingsPage: FC<Props> = props => {
 
           <SettingsSection title={t('general')}>
             <ListItem
+              data-testid="notifications-settings-link"
+              icon={
+                <ListItemIconWrapper>
+                  <NotificationBubbleIcon />
+                </ListItemIconWrapper>
+              }
+              onClick={() => navigate({ id: 'notificationSettings' })}
+              title={t('notifications')}
+              showArrow
+            />
+            <ListItem
               extra={languageName[language]}
               icon={
                 <ListItemIconWrapper>
@@ -163,7 +174,6 @@ export const SettingsPage: FC<Props> = props => {
             )}
             {client === 'extension' && props.expandView}
             {client === 'extension' && props.sidePanel}
-            {props.pushNotifications}
           </SettingsSection>
           <SettingsSection title={t('security')}>
             <ListItem

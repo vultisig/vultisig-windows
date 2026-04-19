@@ -1,23 +1,21 @@
-import { Text } from '@lib/ui/text'
-import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useKeysignMessagePayload } from '../state/keysignMessagePayload'
 import { KeysignLoadingAnimation } from './KeysignLoadingAnimation'
+import { getKeysignPayloadLogoSrc } from './utils/getKeysignPayloadLogoSrc'
 
 /**
  * Full-screen signing state shown while an MPC keysign is in progress.
- * Renders the chain-aware Rive animation with the localized
- * "signing transaction" label overlaid at the bottom.
+ * Renders the Rive animation with the signing coin's logo (falling back to
+ * the chain logo when no coin logo is available).
  */
 export const KeysignSigningState = () => {
-  const { t } = useTranslation()
+  const payload = useKeysignMessagePayload()
+  const logoSrc = getKeysignPayloadLogoSrc(payload)
 
   return (
     <Container>
-      <KeysignLoadingAnimation isConnected />
-      <Label color="regular" size={22} weight="500">
-        {t('signing_transaction')}
-      </Label>
+      <KeysignLoadingAnimation isConnected logoSrc={logoSrc} />
     </Container>
   )
 }
@@ -28,13 +26,4 @@ const Container = styled.div`
   width: 100%;
   min-height: 0;
   overflow: hidden;
-`
-
-const Label = styled(Text)`
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 48px;
-  text-align: center;
-  z-index: 1;
 `

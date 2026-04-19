@@ -17,12 +17,32 @@ import { computeNotificationVaultId } from '@vultisig/sdk'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { removeInitialView } from '../storage/initialView'
+import { openKeysignFromPushNotificationType } from './pushNotificationMessages'
 import {
   getPushNotificationRegistrations,
   getPushServerUrl,
   isVaultRegisteredForPush,
   pushNotificationRegistrationsStorageKey,
 } from './pushNotificationStorage'
+
+const maxConsecutiveWsFailures = 5
+
+type OpenKeysignFromPushMessage = {
+  type: typeof openKeysignFromPushNotificationType
+  url: string
+}
+
+const isOpenKeysignFromPushMessage = (
+  value: unknown
+): value is OpenKeysignFromPushMessage => {
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+  const type = Reflect.get(value, 'type')
+  const url = Reflect.get(value, 'url')
+  return type === openKeysignFromPushNotificationType && typeof url === 'string'
+}
 
 type HandleNotificationMessageInput = {
   msg: NonNullable<ReturnType<typeof parseKeysignWsNotification>>
@@ -62,6 +82,36 @@ export const ExtensionNotificationManager = () => {
 
   const navigateRef = useRef(navigate)
   navigateRef.current = navigate
+
+  useEffect(() => {
+    const onOpenKeysignFromPush = (
+      message: unknown,
+      _sender: chrome.runtime.MessageSender,
+      sendResponse: (response: { ok: boolean }) => void
+    ) => {
+      if (isOpenKeysignFromPushMessage(message)) {
+        void (async () => {
+          try {
+            navigateRef.current({
+              id: 'deeplink',
+              state: { url: message.url },
+            })
+            void window.focus()
+            await removeInitialView()
+            sendResponse({ ok: true })
+          } catch {
+            sendResponse({ ok: false })
+          }
+        })()
+        return true
+      }
+      return false
+    }
+    chrome.runtime.onMessage.addListener(onOpenKeysignFromPush)
+    return () => {
+      chrome.runtime.onMessage.removeListener(onOpenKeysignFromPush)
+    }
+  }, [])
 
   const showBannerRef = useRef(showBanner)
   showBannerRef.current = showBanner
@@ -106,6 +156,7 @@ export const ExtensionNotificationManager = () => {
     Map<string, ManagedExtensionNotificationSocket>
   >(new Map())
   const reconnectDelayMsRef = useRef<Record<string, number>>({})
+  const failureCountRef = useRef<Record<string, number>>({})
 
   useEffect(() => {
     const connectionsMap = connectionsRef.current
@@ -199,6 +250,7 @@ export const ExtensionNotificationManager = () => {
       }
       connectionsRef.current.delete(vaultId)
       delete reconnectDelayMsRef.current[vaultId]
+      delete failureCountRef.current[vaultId]
       if (managed.ws) {
         const ws = managed.ws
         clearWebSocketHandlers(ws)
@@ -277,6 +329,7 @@ export const ExtensionNotificationManager = () => {
       ws.onopen = () => {
         reconnectDelayMsRef.current[vaultId] =
           keysignNotificationWsInitialReconnectDelayMs
+        failureCountRef.current[vaultId] = 0
       }
 
       ws.onmessage = event => {
@@ -325,6 +378,17 @@ export const ExtensionNotificationManager = () => {
           }
 
           if (connectionsRef.current.get(vaultId) !== entry) {
+            return
+          }
+
+          const failures = (failureCountRef.current[vaultId] ?? 0) + 1
+          failureCountRef.current[vaultId] = failures
+
+          if (failures >= maxConsecutiveWsFailures) {
+            console.warn(
+              `[ExtensionNotificationManager] Stopping reconnection for vault ${vaultId.slice(0, 12)}... after ${failures} consecutive failures`
+            )
+            disconnectVault(vaultId)
             return
           }
 

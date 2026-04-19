@@ -1,12 +1,14 @@
+// Must be first: Chrome requires push / notificationclick / pushsubscriptionchange
+// listeners during initial synchronous service worker evaluation.
+import '../notifications/pushServiceWorkerBindings'
+
 import { runBackgroundEventsAgent } from '@core/inpage-provider/background/events/background'
 import { runInpageProviderBridgeBackgroundAgent } from '@core/inpage-provider/bridge/background'
 
-import { handlePushEvents } from '../notifications/handlePushEvents'
+import { initPushExtensionRuntime } from '../notifications/handlePushEvents'
 import { getIsSidePanelEnabled } from '../storage/isSidePanelEnabled'
 
-// Push / notificationclick / pushsubscriptionchange must register during SW
-// startup; run before other background agents.
-handlePushEvents()
+initPushExtensionRuntime()
 
 if (!navigator.userAgent.toLowerCase().includes('firefox')) {
   ;[

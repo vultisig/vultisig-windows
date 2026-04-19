@@ -270,6 +270,7 @@ export const KeysignNotificationBanner = ({
     if (dragOffset < -swipeDismissThresholdPx) {
       startDismiss()
     } else if (pointerTotalMove.current < 12 && dragStartY.current !== null) {
+      startDismiss()
       onAction()
     }
 
@@ -298,11 +299,12 @@ export const KeysignNotificationBanner = ({
       aria-labelledby={`${titleId} ${vaultNameId} ${descriptionId}`}
       aria-live={isShown ? 'polite' : 'off'}
       onKeyDown={event => {
-        if (!isShown) {
+        if (!isShown || event.repeat) {
           return
         }
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault()
+          startDismiss()
           onAction()
         }
       }}

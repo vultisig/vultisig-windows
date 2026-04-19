@@ -8,6 +8,14 @@ import (
 	"os/exec"
 )
 
+// ShowNotification shows a WinRT toast via PowerShell. The notifier display
+// name is “Vultisig”. There is no activation handler: clicking the toast does
+// not invoke Go or the webview (unlike iOS UNUserNotificationCenter or the
+// extension’s chrome.notifications.onClicked). When a keysign message arrives,
+// DesktopNotificationManager already calls WindowShow / WindowUnminimise and
+// shows the in-app banner — that is the supported path to open keysign on
+// desktop. A future improvement would be in-process toast APIs so activation
+// can call runtime.EventsEmit with a deeplink payload.
 func (a *App) ShowNotification(title, body string) error {
 	encodedTitle := base64.StdEncoding.EncodeToString([]byte(title))
 	encodedBody := base64.StdEncoding.EncodeToString([]byte(body))

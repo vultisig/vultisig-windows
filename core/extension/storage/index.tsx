@@ -11,6 +11,7 @@ import { defiChainsStorage } from './defiChains'
 import { defiPositionsStorage } from './defiPositions'
 import { dismissedBannersStorage } from './dismissedBanners'
 import { fiatCurrencyStorage } from './fiatCurrency'
+import { hasSeenNotificationPromptStorage } from './hasSeenNotificationPrompt'
 import { languageStorage } from './language'
 import { mldsaEnabledStorage } from './mldsaEnabled'
 import { onboardingStorage } from './onboarding'
@@ -37,6 +38,7 @@ export const storage: CoreStorage = {
   ...balanceVisibilityStorage,
   ...blockaidStorage,
   ...onboardingStorage,
+  ...hasSeenNotificationPromptStorage,
   ...passcodeEncryptionStorage,
   ...passcodeAutoLockStorage,
   ...referralsStorage,

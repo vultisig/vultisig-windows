@@ -1,6 +1,6 @@
 import {
-  PushRegisterVaultsMessage,
-  pushRegisterVaultsType,
+  PushForceRegisterVaultMessage,
+  pushForceRegisterVaultType,
 } from './pushNotificationMessages'
 
 type SubscribeToPushInput = {
@@ -12,9 +12,9 @@ export const subscribeToPush = async ({
   vaultId,
   partyName,
 }: SubscribeToPushInput): Promise<void> => {
-  const message: PushRegisterVaultsMessage = {
-    type: pushRegisterVaultsType,
-    vaults: [{ vaultId, localPartyId: partyName }],
+  const message: PushForceRegisterVaultMessage = {
+    type: pushForceRegisterVaultType,
+    vault: { vaultId, localPartyId: partyName },
   }
 
   const response = await chrome.runtime.sendMessage(message)
