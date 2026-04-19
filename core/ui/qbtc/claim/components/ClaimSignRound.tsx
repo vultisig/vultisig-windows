@@ -9,6 +9,7 @@ import { Chain } from '@vultisig/core-chain/Chain'
 import type { SignatureAlgorithm } from '@vultisig/core-chain/signing/SignatureAlgorithm'
 import { KeysignSignature } from '@vultisig/core-mpc/keysign/KeysignSignature'
 
+import { ClaimMldsaSignRunner } from './ClaimMldsaSignRunner'
 import { ClaimSignRunner } from './ClaimSignRunner'
 import { FastClaimServerStep } from './FastClaimServerStep'
 
@@ -55,17 +56,26 @@ export const ClaimSignRound = ({
             <MpcPeersProvider value={peers}>
               <StartMpcSessionFlow
                 value="keysign"
-                render={() => (
-                  <KeysignActionProvider>
-                    <ClaimSignRunner
+                render={() =>
+                  signatureAlgorithm === 'mldsa' ? (
+                    <ClaimMldsaSignRunner
                       messageHashHex={messageHashHex}
-                      signatureAlgorithm={signatureAlgorithm}
                       chain={chain}
                       onFinish={onFinish}
                       onError={onError}
                     />
-                  </KeysignActionProvider>
-                )}
+                  ) : (
+                    <KeysignActionProvider>
+                      <ClaimSignRunner
+                        messageHashHex={messageHashHex}
+                        signatureAlgorithm={signatureAlgorithm}
+                        chain={chain}
+                        onFinish={onFinish}
+                        onError={onError}
+                      />
+                    </KeysignActionProvider>
+                  )
+                }
               />
             </MpcPeersProvider>
           )}
