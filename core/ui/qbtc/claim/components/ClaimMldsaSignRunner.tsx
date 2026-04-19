@@ -66,7 +66,7 @@ export const ClaimMldsaSignRunner = ({
         isInitiatingDevice,
       })
 
-      const [result] = await mldsaKeysign.startKeysign()
+      const [result] = await mldsaKeysign.startKeysignWithRetry()
       const { msg, signature } = shouldBePresent(result, 'MLDSA signature')
       return {
         msg: Buffer.from(msg, 'hex').toString('base64'),
