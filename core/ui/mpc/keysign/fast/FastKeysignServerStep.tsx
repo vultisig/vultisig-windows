@@ -27,6 +27,7 @@ import { assertField } from '@vultisig/lib-utils/record/assertField'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { getKeyImportRepresentativeChain } from '../../keygen/keyimport/utils/getKeyImportRepresentativeChain'
 import {
   customMessageDefaultChain,
   customMessageSupportedChains,
@@ -85,7 +86,7 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
                 ),
                 is_ecdsa: false,
                 vault_password: password,
-                chain,
+                chain: getKeyImportRepresentativeChain({ vault, chain }),
               })
             }
           }
@@ -123,7 +124,7 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
             ),
             is_ecdsa: getSignatureAlgorithm(chain) === 'ecdsa',
             vault_password: password,
-            chain,
+            chain: getKeyImportRepresentativeChain({ vault, chain }),
           })
         },
         custom: async ({
@@ -150,7 +151,7 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
             ),
             is_ecdsa: getSignatureAlgorithm(chain) === 'ecdsa',
             vault_password: password,
-            chain,
+            chain: getKeyImportRepresentativeChain({ vault, chain }),
           })
         },
       })

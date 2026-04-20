@@ -11,7 +11,7 @@
     "dev:desktop": "wails dev -s -skipbindings -m -nosyncgomod",
     "dev:desktop:full": "wails dev",
     "build:desktop": "NODE_OPTIONS=--max-old-space-size=8192 yarn workspace @clients/desktop build",
-    "build:extension": "yarn workspace @clients/extension build",
+    "build:extension": "NODE_OPTIONS=--max-old-space-size=8192 yarn workspace @clients/extension build",
     "dev:extension": "yarn workspace @clients/extension dev",
     "build": "NODE_OPTIONS=--max-old-space-size=8192 yarn workspace @clients/desktop build",
     "typecheck": "tsgo --noEmit",
