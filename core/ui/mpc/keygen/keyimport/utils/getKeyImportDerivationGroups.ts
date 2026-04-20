@@ -34,7 +34,7 @@ type DerivationKey =
  * Chains with the same key derive the same private key from a mnemonic,
  * so they can share a single MPC KeyImport session.
  */
-const getDerivationKey = (chain: Chain): DerivationKey => {
+export const getDerivationKey = (chain: Chain): DerivationKey => {
   if (evmChainValues.has(chain)) return sharedDerivationPath.evm
 
   if (vaultBasedCosmosChainValues.has(chain))

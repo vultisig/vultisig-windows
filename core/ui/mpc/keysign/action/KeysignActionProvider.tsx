@@ -7,6 +7,7 @@ import { chainPromises } from '@vultisig/lib-utils/promise/chainPromises'
 
 import { useAssertWalletCore } from '../../../chain/providers/WalletCoreProvider'
 import { useCurrentVault } from '../../../vault/state/currentVault'
+import { getKeyImportRepresentativeChain } from '../../keygen/keyimport/utils/getKeyImportRepresentativeChain'
 import { useCurrentHexEncryptionKey } from '../../state/currentHexEncryptionKey'
 import { useIsInitiatingDevice } from '../../state/isInitiatingDevice'
 import { useMpcPeers } from '../../state/mpcPeers'
@@ -36,7 +37,9 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
   }) => {
     const keyShare = shouldBePresent(
       isKeyImportVault(vault)
-        ? vault.chainKeyShares?.[chain]
+        ? vault.chainKeyShares?.[
+            getKeyImportRepresentativeChain({ vault, chain })
+          ]
         : match(signatureAlgorithm, {
             ecdsa: () => vault.keyShares.ecdsa,
             eddsa: () => vault.keyShares.eddsa,
