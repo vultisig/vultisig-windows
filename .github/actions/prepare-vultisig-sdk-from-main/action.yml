@@ -36,7 +36,7 @@ runs:
         SDK_CLONE_DIR="${RUNNER_TEMP:-/tmp}/vultisig-sdk"
         PACK_DIR="${RUNNER_TEMP:-/tmp}/sdk-packs"
         mkdir -p "$PACK_DIR"
-        for dir in packages/sdk packages/core/chain packages/core/config packages/core/mpc packages/lib/utils packages/mpc-types packages/mpc-wasm; do
+        for dir in packages/sdk packages/core/chain packages/core/config packages/core/mpc packages/lib/utils packages/lib/dkls packages/lib/mldsa packages/lib/schnorr packages/mpc-types packages/mpc-wasm; do
           cd "$SDK_CLONE_DIR/$dir" && npm pack --pack-destination "$PACK_DIR"
         done
         cd "$GITHUB_WORKSPACE"
