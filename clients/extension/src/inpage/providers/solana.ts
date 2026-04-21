@@ -269,8 +269,8 @@ export class Solana implements Wallet {
   }
 
   connect = async () => {
-    const result = await this.#connect()
-    return result
+    await this.#connect()
+    return { publicKey: shouldBePresent(this.publicKey) }
   }
 
   disconnect = async () => {
