@@ -9,7 +9,9 @@
     "wails"
   ],
   "ignoreDependencies": [
-    "babel-plugin-react-compiler"
+    "babel-plugin-react-compiler",
+    "@vultisig/mpc-types",
+    "@vultisig/mpc-wasm"
   ],
   "workspaces": {
     "clients/desktop": {
@@ -59,8 +61,7 @@
     "core/ui": {
       "entry": [
         "vite/plugins.ts",
-        "vite/staticCopy.ts",
-        "mpc/bootstrapMpcEngine.ts"
+        "vite/staticCopy.ts"
       ],
       "project": [
         "**/*.{ts,tsx}"
