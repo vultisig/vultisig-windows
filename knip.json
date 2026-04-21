@@ -12,12 +12,6 @@
     "babel-plugin-react-compiler"
   ],
   "workspaces": {
-    ".": {
-      "ignoreDependencies": [
-        "@vultisig/mpc-types",
-        "@vultisig/mpc-wasm"
-      ]
-    },
     "clients/desktop": {
       "project": [
         "**/*.{ts,tsx}"
