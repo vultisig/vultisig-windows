@@ -1,4 +1,5 @@
 import VULTI_ICON_RAW_SVG from '@clients/extension/src/inpage/icon'
+import { createCardanoCip30InitialApi } from '@clients/extension/src/inpage/providers/cardanoCip30'
 import { Ethereum } from '@clients/extension/src/inpage/providers/ethereum'
 import { createProviders } from '@clients/extension/src/inpage/providers/providerFactory'
 import { callBackground } from '@core/inpage-provider/background'
@@ -48,6 +49,26 @@ export const injectToWindow = () => {
     provider: ethereumProvider as unknown as EIP1193Provider,
   })
 
+  // CIP-30 Cardano dApp-Wallet Web Bridge
+  if (!window.cardano) {
+    attempt(() =>
+      Object.defineProperty(window, 'cardano', {
+        value: {},
+        configurable: true,
+        writable: true,
+      })
+    )
+  }
+  if (window.cardano) {
+    attempt(() =>
+      Object.defineProperty(window.cardano, 'vultisig', {
+        value: createCardanoCip30InitialApi(),
+        configurable: false,
+        writable: false,
+      })
+    )
+  }
+
   if (!window.tonkeeper) {
     attempt(() =>
       Object.defineProperty(window, 'tonkeeper', {
@@ -87,6 +108,16 @@ async function setupContentScriptMessenger(
       registerWallet(new Solana('MetaMask'))
     }
     providers.tron.init()
+
+    if (window.cardano && !window.cardano.lace) {
+      attempt(() =>
+        Object.defineProperty(window.cardano, 'lace', {
+          value: createCardanoCip30InitialApi(),
+          configurable: false,
+          writable: false,
+        })
+      )
+    }
 
     const providerCopy = Object.create(
       Object.getPrototypeOf(ethereumProvider),
