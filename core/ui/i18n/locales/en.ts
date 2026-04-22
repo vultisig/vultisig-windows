@@ -1086,6 +1086,7 @@ export const en = {
     'Turn your vault into a rewards machine. Create your referral now and start earning.',
   twitter: 'Twitter',
   tx_hash: 'Transaction hash',
+  type: 'Type',
   type_here: 'Type Here',
   unbond: 'Unbond',
   unbond_with_lp: 'Unbond Maya',
