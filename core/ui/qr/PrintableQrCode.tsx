@@ -6,6 +6,7 @@ import { Fragment, ReactNode } from 'react'
 import QRCode from 'react-qr-code'
 import styled, { useTheme } from 'styled-components'
 
+/** Metadata row displayed inside the printable QR info card. */
 export type PrintableQrCodeRow = {
   label: string
   value: ReactNode
@@ -88,6 +89,11 @@ const BrandLogoSquare = styled.div`
   font-size: 22px;
 `
 
+/**
+ * Renders a printable QR card that matches the Share-QR Figma spec.
+ * Used as the PNG source when the user saves a Join Keygen/Keysign/address QR.
+ * The info card is hidden when `rows` is empty.
+ */
 export const PrintableQrCode = ({
   value,
   title,
