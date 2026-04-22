@@ -22,10 +22,18 @@ type UseUniversalRouterSwapInput = {
 
 const evmChains = Object.values(EvmChain)
 
-const decodeForEvm = (
-  memo: string | undefined,
+type DecodeForEvmInput = {
+  memo: string | undefined
   chain: Chain
-): { intent: UniversalRouterSwapIntent; chain: EvmChain } | null => {
+}
+
+const decodeForEvm = ({
+  memo,
+  chain,
+}: DecodeForEvmInput): {
+  intent: UniversalRouterSwapIntent
+  chain: EvmChain
+} | null => {
   if (!memo || !memo.startsWith('0x') || memo.length < 10) return null
   if (!isOneOf(chain, evmChains)) return null
   const intent = decodeUniversalRouterExecute(memo)
@@ -49,15 +57,13 @@ export const useUniversalRouterSwap = ({
 } => {
   const getCoin = useGetCoin()
 
-  const decoded = decodeForEvm(memo, chain)
+  const decoded = decodeForEvm({ memo, chain })
 
   const query = useQuery({
-    queryKey: [
-      'universalRouterSwap',
-      chain,
-      decoded?.intent.fromToken,
-      decoded?.intent.toToken,
-    ],
+    // Key on the memo itself — it deterministically produces the decoded
+    // intent (tokens + amounts + exact-in/out), so two different swaps never
+    // share a cache entry even when they reuse the same token pair.
+    queryKey: ['universalRouterSwap', chain, memo],
     queryFn: async (): Promise<ResolvedUniversalRouterSwap | null> => {
       if (!decoded) return null
       const { intent, chain: evmChain } = decoded

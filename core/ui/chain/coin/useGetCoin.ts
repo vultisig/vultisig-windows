@@ -16,9 +16,9 @@ import { useCallback } from 'react'
 
 /**
  * Async coin resolver that walks every available metadata source in order:
- * the current vault's coins, `knownTokens`, the THORChain native map, and
- * finally on-chain metadata discovery (RPC) for chains that support it.
- * Throws if none of those produce a result.
+ * `chainFeeCoin` (when no token id is supplied), `knownTokens`, the THORChain
+ * native map, the current vault's coins, and finally on-chain metadata
+ * discovery (RPC) for chains that support it. Throws if none produce a result.
  */
 export const useGetCoin = () => {
   const coins = useCurrentVaultCoins()
