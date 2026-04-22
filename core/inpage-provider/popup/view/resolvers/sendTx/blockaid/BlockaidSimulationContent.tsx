@@ -8,6 +8,7 @@ import { Collapse } from '@core/inpage-provider/popup/view/resolvers/signMessage
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
 import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
+import { useUniversalRouterSwap } from '@core/ui/chain/tx/utils/useUniversalRouterSwap'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
@@ -285,10 +286,19 @@ const EvmCalldataFallback = ({
 }: EvmCalldataFallbackProps) => {
   const { t } = useTranslation()
   const memo = keysignPayload.memo
+
+  const { data: universalRouterSwap, isPending: isUniversalRouterPending } =
+    useUniversalRouterSwap({ memo, chain })
+
   const contractCallQuery = useQuery({
     queryKey: ['evmContractCallInfo', memo],
     queryFn: () => getEvmContractCallInfo(memo!),
-    enabled: !!memo && memo.startsWith('0x') && memo.length > 2,
+    enabled:
+      !isUniversalRouterPending &&
+      !universalRouterSwap &&
+      !!memo &&
+      memo.startsWith('0x') &&
+      memo.length > 2,
     staleTime: Infinity,
   })
 
@@ -323,6 +333,22 @@ const EvmCalldataFallback = ({
         title={t('amount')}
       />
     ) : null
+
+  if (universalRouterSwap) {
+    return (
+      <BlockaidSwapDisplay
+        swap={{
+          fromCoin: universalRouterSwap.fromCoin,
+          fromAmount: universalRouterSwap.fromAmount,
+          toCoin: universalRouterSwap.toCoin,
+          toAmount: universalRouterSwap.toAmount,
+        }}
+        memo={memo}
+        chain={chain}
+        networkFeeProps={networkFeeProps}
+      />
+    )
+  }
 
   return (
     <>

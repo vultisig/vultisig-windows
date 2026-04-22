@@ -14,6 +14,12 @@ import { chainsWithTokenMetadataDiscovery } from '@vultisig/core-chain/coin/toke
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { useCallback } from 'react'
 
+/**
+ * Async coin resolver that walks every available metadata source in order:
+ * the current vault's coins, `knownTokens`, the THORChain native map, and
+ * finally on-chain metadata discovery (RPC) for chains that support it.
+ * Throws if none of those produce a result.
+ */
 export const useGetCoin = () => {
   const coins = useCurrentVaultCoins()
 
