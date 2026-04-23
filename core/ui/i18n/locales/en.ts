@@ -147,7 +147,7 @@ export const en = {
   change_passcode: 'Change Passcode',
   change_your_friends_referral: 'Change friends Referral Code used for swaps',
   check_email: 'Check email',
-  check_for_update: 'Check for Update',
+  check_for_update: 'Check for Updates',
   chooseSetup: 'Choose Setup',
   choose_a_password: 'Choose a password',
   choose_a_password_description:
@@ -971,7 +971,7 @@ export const en = {
   settings: 'Settings',
   share: 'Share',
   share2StoredByYou: 'Vault Share 2 stored by you',
-  share_app: 'Share the app',
+  share_app: 'Share The App',
   share_description:
     'Share your unique referral code to invite friends. They get a discount and the more they trade, the more you earn — directly delivered to your vault.',
   share_vault_qr: 'Share Vault QR',
@@ -1084,7 +1084,7 @@ export const en = {
   try_again: 'Try Again',
   turn_your_vault_into_rewards_machine:
     'Turn your vault into a rewards machine. Create your referral now and start earning.',
-  twitter: 'Twitter',
+  twitter: 'X (Twitter)',
   tx_hash: 'Transaction hash',
   type: 'Type',
   type_here: 'Type Here',
@@ -1228,6 +1228,7 @@ export const en = {
   vult: '$VULT',
   vultisig: 'Vultisig',
   vultisig_community: 'Vultisig Community',
+  vultisig_education: 'Vultisig Education',
   vultisig_website: 'Vultisig Website',
   waitingOnDevices: 'Waiting on devices...',
   waiting_for_devices_to_join: 'Waiting for other devices to join',
