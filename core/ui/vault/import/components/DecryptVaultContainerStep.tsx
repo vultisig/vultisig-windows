@@ -1,6 +1,6 @@
 import { fromBinary } from '@bufbuild/protobuf'
 import { DecryptVaultView } from '@core/ui/vault/import/components/DecryptVaultView'
-import { ensureMasterKeyShares } from '@core/ui/vault/import/utils/ensureMasterKeyShares'
+import { normalizeImportedCommVault } from '@core/ui/vault/import/utils/normalizeImportedCommVault'
 import { VaultBackupPasswordError } from '@core/ui/vault/import/utils/VaultBackupPasswordError'
 import { OnFinishProp, ValueProp } from '@lib/ui/props'
 import { useMutation } from '@tanstack/react-query'
@@ -25,7 +25,7 @@ export const DecryptVaultContainerStep = ({
         throw new VaultBackupPasswordError()
       }
 
-      const commVault = ensureMasterKeyShares(
+      const commVault = normalizeImportedCommVault(
         fromBinary(VaultSchema, plaintext)
       )
       return { ...fromCommVault(commVault), isBackedUp: true }

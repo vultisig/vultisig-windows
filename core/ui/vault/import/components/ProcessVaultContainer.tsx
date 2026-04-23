@@ -1,6 +1,6 @@
 import { fromBinary } from '@bufbuild/protobuf'
 import { DecryptVaultContainerStep } from '@core/ui/vault/import/components/DecryptVaultContainerStep'
-import { ensureMasterKeyShares } from '@core/ui/vault/import/utils/ensureMasterKeyShares'
+import { normalizeImportedCommVault } from '@core/ui/vault/import/utils/normalizeImportedCommVault'
 import { ValueTransfer } from '@lib/ui/base/ValueTransfer'
 import { ValueProp } from '@lib/ui/props'
 import { fromCommVault } from '@vultisig/core-mpc/types/utils/commVault'
@@ -32,7 +32,7 @@ export const ProcessVaultContainer = ({
     )
   }
 
-  const commVault = ensureMasterKeyShares(
+  const commVault = normalizeImportedCommVault(
     fromBinary(VaultSchema, new Uint8Array(fromBase64(vaultAsBase64String)))
   )
   const vault = { ...fromCommVault(commVault), isBackedUp: true }
