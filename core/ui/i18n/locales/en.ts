@@ -804,6 +804,22 @@ export const en = {
   qbtc_claim_disabled_notice:
     'Claiming is currently disabled on the QBTC chain.',
   qbtc_claim_failed_to_load: 'Failed to load claimable UTXOs.',
+  qbtc_claim_selected_count: '{{count}} of {{max}} selected',
+  qbtc_claim_confirm: 'Claim selected',
+  qbtc_claim_proving: 'Generating proof…',
+  qbtc_claim_proving_hint: 'This can take several minutes.',
+  qbtc_claim_broadcasting: 'Broadcasting claim…',
+  qbtc_claim_success_title: 'Claim successful',
+  qbtc_claim_utxos_claimed: 'UTXOs claimed',
+  qbtc_claim_utxos_skipped: 'UTXOs skipped',
+  qbtc_claim_tx_hash: 'Transaction hash',
+  qbtc_claim_copy_tx_hash: 'Copy transaction hash',
+  qbtc_claim_done: 'Done',
+  qbtc_claim_failed: 'Claim failed. Please try again.',
+  qbtc_claim_fast_vault_only:
+    'Claiming currently requires a Fast Vault. Secure Vault support is on the way.',
+  qbtc_claim_password_description:
+    'Enter your Fast Vault password to co-sign the claim transaction.',
   qrCode: 'QR code',
   receive: 'Receive',
   receivedShare1Email: 'Vault Share 1 received via mail',
