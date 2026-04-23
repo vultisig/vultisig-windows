@@ -561,6 +561,7 @@ export const en = {
   importing_vault: 'Importing Vault...',
   incorrect_email: 'Incorrect e-mail, please check',
   incorrect_password: 'Incorrect Password',
+  vault_import_failed: 'Could not import vault: {{message}}',
   incorrect_url: 'Incorrect URL',
   install_app: 'Install ‘{{title}}’ App',
   install_plugin: 'Install App',
