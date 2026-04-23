@@ -3,11 +3,15 @@ import {
   useKeygenVault,
   useKeygenVaultName,
 } from '@core/ui/mpc/keygen/state/keygenVault'
-import { PrintableQrCode } from '@core/ui/qr/PrintableQrCode'
+import { useTargetDeviceCount } from '@core/ui/mpc/keygen/state/targetDeviceCount'
+import {
+  PrintableQrCode,
+  PrintableQrCodeRow,
+} from '@core/ui/qr/PrintableQrCode'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { ShareIcon } from '@lib/ui/icons/ShareIcon'
 import { ValueProp } from '@lib/ui/props'
-import { useMemo } from 'react'
+import { getKeygenThreshold } from '@vultisig/core-mpc/getKeygenThreshold'
 import { useTranslation } from 'react-i18next'
 
 import { getVaultExportUid } from '../../../vault/export/core/uid'
@@ -30,14 +34,30 @@ export const DownloadKeygenQrCode = ({
   const { t } = useTranslation()
   const keygenVault = useKeygenVault()
   const vaultName = useKeygenVaultName()
-  const fileName = useMemo(() => {
-    if ('existingVault' in keygenVault) {
-      const uid = getVaultExportUid(keygenVault.existingVault)
-      return [prefix, keygenVault.existingVault.name, uid.slice(-3)].join('-')
-    }
+  const targetDeviceCount = useTargetDeviceCount()
 
-    return [prefix, vaultName].join('-')
-  }, [keygenVault, vaultName])
+  const fileName =
+    'existingVault' in keygenVault
+      ? [
+          prefix,
+          keygenVault.existingVault.name,
+          getVaultExportUid(keygenVault.existingVault).slice(-3),
+        ].join('-')
+      : [prefix, vaultName].join('-')
+
+  const totalSigners =
+    'existingVault' in keygenVault
+      ? keygenVault.existingVault.signers.length
+      : targetDeviceCount
+
+  const rows: PrintableQrCodeRow[] = [{ label: t('vault'), value: vaultName }]
+
+  if (totalSigners !== undefined) {
+    rows.push({
+      label: t('type'),
+      value: `${getKeygenThreshold(totalSigners)}-${totalSigners}`,
+    })
+  }
 
   return (
     <SaveAsImage
@@ -55,7 +75,8 @@ export const DownloadKeygenQrCode = ({
         <PrintableQrCode
           value={value}
           title={t('join_keygen')}
-          description={t('scan_with_devices')}
+          brandLabel={t('vultisig')}
+          rows={rows}
         />
       }
     />
