@@ -40,22 +40,26 @@ const synthesizeMasterKeyShares = (commVault: Vault): Vault_KeyShare[] => {
     if (!masterKey) return []
     if (commVault.keyShares.some(ks => ks.publicKey === masterKey)) return []
 
+    // Prefer a chain share that uses the same signing algorithm.
     const chainEntry = commVault.chainPublicKeys.find(
       chainPublicKey =>
         isChain(chainPublicKey.chain) &&
         signatureAlgorithms[getChainKind(chainPublicKey.chain)] === algorithm
     )
-    if (!chainEntry) return []
+    const sourceKeyShare = chainEntry
+      ? commVault.keyShares.find(ks => ks.publicKey === chainEntry.publicKey)
+      : undefined
 
-    const sourceKeyShare = commVault.keyShares.find(
-      keyShare => keyShare.publicKey === chainEntry.publicKey
-    )
-    if (!sourceKeyShare) return []
-
+    // Fallback: iOS still populates publicKeyEcdsa / publicKeyEddsa from the
+    // seed's root even when the user selected no chains of that algorithm,
+    // so there is no chain share to clone from. fromCommVault still requires
+    // a master-keyed entry, so emit an empty placeholder. For KeyImport
+    // vaults the extension signs via chainKeyShares, never via the master
+    // entry, so this placeholder is never exercised at sign time.
     return [
       create(Vault_KeyShareSchema, {
         publicKey: masterKey,
-        keyshare: sourceKeyShare.keyshare,
+        keyshare: sourceKeyShare?.keyshare ?? '',
       }),
     ]
   })
