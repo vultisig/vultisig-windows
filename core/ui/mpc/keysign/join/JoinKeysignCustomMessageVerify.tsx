@@ -10,7 +10,7 @@ import { Chain } from '@vultisig/core-chain/Chain'
 import { CustomMessagePayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { AnimatePresence, motion } from 'framer-motion'
-import { FC, ReactNode, useEffect, useMemo, useRef, useState } from 'react'
+import { FC, ReactNode, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
@@ -81,12 +81,14 @@ const JoinSignMessageCollapse: FC<{
   )
 }
 
-const knownChains = Object.values(Chain) as string[]
+const knownChains: readonly Chain[] = Object.values(Chain)
 
-const resolveChain = (chain: string | undefined): Chain =>
-  chain && isOneOf(chain, knownChains)
-    ? (chain as Chain)
-    : customMessageDefaultChain
+const resolveChain = (chain: string | undefined): Chain => {
+  if (chain && isOneOf(chain, knownChains)) {
+    return chain
+  }
+  return customMessageDefaultChain
+}
 
 export const JoinKeysignCustomMessageVerify = ({
   value,
@@ -95,14 +97,13 @@ export const JoinKeysignCustomMessageVerify = ({
   const chain = resolveChain(value.chain)
   const address = useCurrentVaultAddress(chain)
 
-  const formattedMessage = useMemo(() => {
+  const formattedMessage = ((): string | null => {
     try {
-      const parsed = JSON.parse(value.message)
-      return JSON.stringify(parsed, null, 2)
+      return JSON.stringify(JSON.parse(value.message), null, 2)
     } catch {
       return null
     }
-  }, [value.message])
+  })()
 
   const showMethod = value.method.trim() !== ''
 
