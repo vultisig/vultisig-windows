@@ -20,7 +20,6 @@ import { assertChainField } from '@vultisig/core-chain/utils/assertChainField'
 import { signWithServer } from '@vultisig/core-mpc/fast/api/signWithServer'
 import { getEncodedSigningInputs } from '@vultisig/core-mpc/keysign/signingInputs'
 import { getPreSigningHashes } from '@vultisig/core-mpc/tx/preSigningHashes'
-import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
@@ -28,6 +27,7 @@ import { assertField } from '@vultisig/lib-utils/record/assertField'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { getKeyImportServerChains } from '../../keygen/keyimport/utils/keyImportServerChains'
 import {
   customMessageDefaultChain,
   customMessageSupportedChains,
@@ -54,9 +54,10 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
 
   const walletCore = useAssertWalletCore()
 
+  const serverChains = getKeyImportServerChains(vault)
   const toServerChain = (chain: Chain): Chain =>
-    isKeyImportVault(vault)
-      ? resolveServerChainForKeyImport({ chain, chainPublicKeys })
+    serverChains
+      ? resolveServerChainForKeyImport({ chain, serverChains })
       : chain
 
   const { mutate, ...state } = useMutation({
