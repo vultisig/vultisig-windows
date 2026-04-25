@@ -40,15 +40,21 @@ const synthesizeMasterKeyShares = (commVault: Vault): Vault_KeyShare[] => {
     if (!masterKey) return []
     if (commVault.keyShares.some(ks => ks.publicKey === masterKey)) return []
 
-    // Prefer a chain share that uses the same signing algorithm.
-    const chainEntry = commVault.chainPublicKeys.find(
-      chainPublicKey =>
-        isChain(chainPublicKey.chain) &&
-        signatureAlgorithms[getChainKind(chainPublicKey.chain)] === algorithm
-    )
-    const sourceKeyShare = chainEntry
-      ? commVault.keyShares.find(ks => ks.publicKey === chainEntry.publicKey)
-      : undefined
+    // Prefer a chain share that uses the same signing algorithm. Scan every
+    // matching chainPublicKey rather than stopping at the first — iOS may
+    // list the algorithm under multiple chains and only some entries have a
+    // corresponding keyShare to clone from.
+    const sourceKeyShare = commVault.chainPublicKeys.reduce<
+      Vault_KeyShare | undefined
+    >((found, chainPublicKey) => {
+      if (found) return found
+      if (!isChain(chainPublicKey.chain)) return found
+      if (signatureAlgorithms[getChainKind(chainPublicKey.chain)] !== algorithm)
+        return found
+      return commVault.keyShares.find(
+        ks => ks.publicKey === chainPublicKey.publicKey
+      )
+    }, undefined)
 
     // Fallback: iOS still populates publicKeyEcdsa / publicKeyEddsa from the
     // seed's root even when the user selected no chains of that algorithm,
