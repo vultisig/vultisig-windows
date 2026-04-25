@@ -1385,4 +1385,20 @@ export const ru = {
   foreground_notification_generic: 'Сделка ожидает одобрения.',
   foreground_notification_send: 'Отправить {{amount}}',
   foreground_notification_swap: 'Поменять местами {{from}} → {{to}}',
+  in_progress: 'В ходе выполнения...',
+  route: 'Маршрут',
+  via: 'с помощью',
+  enable: 'Давать возможность',
+  enable_all: 'Включить все',
+  push_notifications_description:
+    'Получайте уведомления, когда потребуется ваша подпись или устройство запросит доступ.',
+  notifications: 'Уведомления',
+  not_now: 'Не сейчас',
+  secure_notifications_are_here: 'Защищенные уведомления находятся здесь.',
+  secure_notifications_description:
+    'Получайте оповещения, когда другое устройство запрашивает подключение к вашему хранилищу или когда требуется ваша подпись.',
+  vault_notifications: 'Уведомления хранилища',
+  choose_vaults: 'Выберите хранилища',
+  manage_notifications_in_settings:
+    'Управлять уведомлениями можно в системных настройках.',
 }

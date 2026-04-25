@@ -4,6 +4,9 @@ description: Node, Corepack, dependency caches, and yarn install. Run actions/ch
 inputs:
   node-version:
     required: true
+  immutable-install:
+    description: When false, sets YARN_ENABLE_IMMUTABLE_INSTALLS=false for yarn install
+    default: 'true'
 
 runs:
   using: composite
@@ -53,4 +56,8 @@ runs:
 
     - name: Install dependencies
       shell: bash
-      run: yarn install
+      run: |
+        if [ "${{ inputs.immutable-install }}" != "true" ]; then
+          export YARN_ENABLE_IMMUTABLE_INSTALLS=false
+        fi
+        yarn install

@@ -269,7 +269,15 @@ export const UpdateVaultFolderPage = () => {
   const [name, setName] = useState<string>(currentName)
   const { goBack } = useCore()
   const folders = useVaultFolders()
-  const { totals, isPending: isTotalsPending } = useVaultsTotalBalances()
+  // The two child sections only ever render folderless vaults + vaults
+  // belonging to this folder. Scoping the totals to that union prevents us
+  // from fetching balances for vaults in other folders that we'll never
+  // display on this screen.
+  const folderlessVaults = useFolderlessVaults()
+  const folderVaults = useFolderVaults(id)
+  const { totals, isPending: isTotalsPending } = useVaultsTotalBalances({
+    vaults: [...folderlessVaults, ...folderVaults],
+  })
 
   const names = useMemo(
     () => folders.filter(folder => folder.id !== id).map(({ name }) => name),

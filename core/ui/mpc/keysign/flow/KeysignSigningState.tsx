@@ -1,41 +1,29 @@
-import { VStack } from '@lib/ui/layout/Stack'
-import { Spinner } from '@lib/ui/loaders/Spinner'
-import { Text } from '@lib/ui/text'
-import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
 
+import { useKeysignMessagePayload } from '../state/keysignMessagePayload'
+import { KeysignLoadingAnimation } from './KeysignLoadingAnimation'
+import { getKeysignPayloadLogoSrc } from './utils/getKeysignPayloadLogoSrc'
+
+/**
+ * Full-screen signing state shown while an MPC keysign is in progress.
+ * Renders the Rive animation with the signing coin's logo (falling back to
+ * the chain logo when no coin logo is available).
+ */
 export const KeysignSigningState = () => {
-  const { t } = useTranslation()
+  const payload = useKeysignMessagePayload()
+  const logoSrc = getKeysignPayloadLogoSrc(payload)
 
   return (
-    <VStack flexGrow alignItems="center" justifyContent="center">
-      <Wrapper gap={16} alignItems="center" justifyContent="center">
-        <Spinner size="2em" />
-        <Text color="regular" size={22} weight="500">
-          {t('signing_transaction')}
-        </Text>
-      </Wrapper>
-    </VStack>
+    <Container>
+      <KeysignLoadingAnimation isConnected logoSrc={logoSrc} />
+    </Container>
   )
 }
 
-const Wrapper = styled(VStack)`
-  width: 100%;
-  height: 500px;
-  border-radius: 50%;
+const Container = styled.div`
   position: relative;
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      82deg,
-      rgba(51, 230, 191, 0.15) 8.02%,
-      rgba(4, 57, 199, 0.15) 133.75%
-    );
-    filter: blur(100px);
-    opacity: 0.5;
-    z-index: -1;
-  }
+  flex-grow: 1;
+  width: 100%;
+  min-height: 0;
+  overflow: hidden;
 `

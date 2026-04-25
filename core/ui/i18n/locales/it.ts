@@ -1416,4 +1416,20 @@ export const it = {
   foreground_notification_generic: 'Transazione in attesa di approvazione',
   foreground_notification_send: 'Invia {{amount}}',
   foreground_notification_swap: 'Scambia {{from}} → {{to}}',
+  in_progress: 'In corso...',
+  route: 'Itinerario',
+  via: 'via',
+  enable: 'Abilitare',
+  enable_all: 'Abilita tutto',
+  push_notifications_description:
+    "Ricevi una notifica quando è richiesta la tua firma o quando un dispositivo richiede l'accesso.",
+  notifications: 'Notifiche',
+  not_now: 'Non adesso',
+  secure_notifications_are_here: 'Le notifiche sicure sono qui',
+  secure_notifications_description:
+    'Ricevi notifiche quando un altro dispositivo richiede di accedere al tuo vault o quando è richiesta la tua firma.',
+  vault_notifications: 'Notifiche del Vault',
+  choose_vaults: 'Scegliete i caveau',
+  manage_notifications_in_settings:
+    'È possibile gestire le notifiche nelle impostazioni di sistema.',
 }

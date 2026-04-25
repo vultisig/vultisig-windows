@@ -16,6 +16,8 @@ export const Card = styled(VStack).attrs({
   border: 1px solid ${getColor('foregroundExtra')};
   width: 100%;
   box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
 `
 
 /** Row 1: tag (left) + status (right). Space-between, align center. */
@@ -100,4 +102,20 @@ export const ErrorMessageRow = styled(HStack).attrs({
   justifyContent: 'flex-end',
 })`
   width: 100%;
+`
+
+/** Provider pill: anchored to the bottom-right corner of the card with asymmetric border radius. */
+export const ProviderPill = styled(HStack).attrs({
+  direction: 'horizontal',
+  alignItems: 'center',
+  gap: 6,
+})`
+  padding: 8px 12px;
+  border-radius: 12px 0 16px 0;
+  background: ${getColor('buttonSecondary')};
+  border-top: 1px solid ${getColor('foregroundSuper')};
+  border-left: 1px solid ${getColor('foregroundSuper')};
+  position: absolute;
+  right: 0;
+  bottom: 0;
 `

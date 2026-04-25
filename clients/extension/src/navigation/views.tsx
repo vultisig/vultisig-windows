@@ -29,7 +29,9 @@ import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { Views } from '@lib/ui/navigation/Views'
 import { useEffect } from 'react'
 
-import { ManagePushNotifications } from '../components/notifications/ManagePushNotifications'
+import { ExtensionChooseVaultsView } from '../components/notifications/ExtensionChooseVaultsView'
+import { ExtensionNotificationPrompt } from '../components/notifications/ExtensionNotificationPrompt'
+import { ExtensionNotificationSettingsPage } from '../components/notifications/ExtensionNotificationSettingsPage'
 import { RegisterPushNotificationsButton } from '../components/notifications/RegisterPushNotificationsButton'
 import { ManageSidePanel } from '../components/side-panel/ManageSidePanel'
 
@@ -45,7 +47,12 @@ const ExtensionVaultPage = () => {
 
   if (vaults.length === 0) return null
 
-  return <VaultPage primaryControls={<DappsButton />} />
+  return (
+    <>
+      <ExtensionNotificationPrompt />
+      <VaultPage primaryControls={<DappsButton />} />
+    </>
+  )
 }
 
 const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
@@ -60,6 +67,7 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   joinKeysign: JoinKeysignPage,
   keysign: StartKeysignView,
   migrateVault: () => null,
+  notificationSettings: ExtensionNotificationSettingsPage,
   onboarding: () => (
     <IncompleteOnboardingOnly>
       <OnboardingPage />
@@ -75,7 +83,6 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
       prioritize={<Prioritize />}
       expandView={<ExpandView />}
       sidePanel={<ManageSidePanel />}
-      pushNotifications={<ManagePushNotifications />}
     />
   ),
   setupFastVault: SetupFastVaultPage,
@@ -89,10 +96,18 @@ const appCustomViews: Views<Exclude<AppViewId, SharedViewId>> = {
   ),
 }
 
+const extensionSharedViewOverrides: Pick<
+  Views<AppViewId>,
+  'vault' | 'chooseVaults'
+> = {
+  chooseVaults: ExtensionChooseVaultsView,
+  vault: ExtensionVaultPage,
+}
+
 export const views: Views<AppViewId> = {
   ...sharedViews,
   ...appCustomViews,
-  vault: ExtensionVaultPage,
+  ...extensionSharedViewOverrides,
   vaultSettings: () => (
     <VaultSettingsPage extraItems={<RegisterPushNotificationsButton />} />
   ),

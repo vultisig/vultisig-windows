@@ -16,6 +16,7 @@ import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { deriveAddress } from '@vultisig/core-chain/publicKey/address/deriveAddress'
 import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
+import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import styled from 'styled-components'
@@ -54,6 +55,10 @@ export const AddressBookModal = ({ onSelect, onClose }: Props) => {
       if (match?.address) {
         acc.push({ name: vault.name, address: match.address })
       } else {
+        if (isKeyImportVault(vault) && !vault.chainPublicKeys?.[coin.chain]) {
+          return acc
+        }
+
         const publicKey = getPublicKey({
           chain: coin.chain,
           walletCore,

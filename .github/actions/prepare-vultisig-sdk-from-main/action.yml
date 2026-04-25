@@ -1,0 +1,72 @@
+name: Clone vultisig-sdk main, build, pack, patch root package.json
+description: >
+  Run after actions/setup-node and checkout. Packs @vultisig/* from vultisig-sdk main
+  and writes file resolutions into the repo root package.json. The next yarn install
+  must use YARN_ENABLE_IMMUTABLE_INSTALLS=false.
+
+inputs:
+  yarn-version:
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Clone and build SDK main
+      shell: bash
+      env:
+        GIT_LFS_SKIP_SMUDGE: '1'
+      run: |
+        set -euo pipefail
+        SDK_CLONE_DIR="${RUNNER_TEMP:-/tmp}/vultisig-sdk"
+        rm -rf "$SDK_CLONE_DIR"
+        git clone --depth 1 https://github.com/vultisig/vultisig-sdk.git "$SDK_CLONE_DIR"
+        cd "$SDK_CLONE_DIR"
+        corepack enable
+        corepack prepare yarn@${{ inputs.yarn-version }} --activate
+        yarn install
+        yarn build:shared
+        if [ "${RUNNER_OS:-}" != "Windows" ]; then
+          yarn build:all
+        fi
+
+    - name: Override @vultisig/* with packed SDK (patch package.json)
+      shell: bash
+      run: |
+        set -euo pipefail
+        SDK_CLONE_DIR="${RUNNER_TEMP:-/tmp}/vultisig-sdk"
+        PACK_DIR="${RUNNER_TEMP:-/tmp}/sdk-packs"
+        mkdir -p "$PACK_DIR"
+        for dir in packages/sdk packages/core/chain packages/core/config packages/core/mpc packages/lib/utils packages/lib/dkls packages/lib/mldsa packages/lib/schnorr packages/mpc-types packages/mpc-wasm; do
+          cd "$SDK_CLONE_DIR/$dir" && npm pack --pack-destination "$PACK_DIR"
+        done
+        cd "$GITHUB_WORKSPACE"
+        PACK_DIR="$PACK_DIR" node - <<'NODE'
+        const fs = require('fs');
+        const path = require('path');
+        const { execFileSync } = require('child_process');
+        const packDir = process.env.PACK_DIR;
+        const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+        const packs = fs.readdirSync(packDir).filter(f => f.endsWith('.tgz'));
+        const resolutions = pkg.resolutions || {};
+        const dependencies = pkg.dependencies || {};
+        const NEW_ROOT_DEPS = new Set([
+          '@vultisig/mpc-types',
+          '@vultisig/mpc-wasm',
+        ]);
+        for (const tgz of packs) {
+          const tgzPath = path.join(packDir, tgz);
+          const tarArgs =
+            process.platform === 'win32'
+              ? ['--force-local', '-xzf', tgzPath, '-O', 'package/package.json']
+              : ['-xzf', tgzPath, '-O', 'package/package.json'];
+          const manifest = execFileSync('tar', tarArgs, { encoding: 'utf8' });
+          const name = JSON.parse(manifest).name;
+          resolutions[name] = tgzPath;
+          if (NEW_ROOT_DEPS.has(name)) {
+            dependencies[name] = tgzPath;
+          }
+        }
+        pkg.resolutions = resolutions;
+        pkg.dependencies = dependencies;
+        fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+        NODE

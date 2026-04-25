@@ -63,6 +63,7 @@ export const useTransactionRecordsQuery = () => {
       return records.map(deserializeRecord)
     },
     ...noRefetchQueryOptions,
+    refetchOnMount: true,
     refetchOnWindowFocus: true,
   })
 }

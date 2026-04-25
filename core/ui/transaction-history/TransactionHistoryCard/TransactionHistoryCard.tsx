@@ -17,6 +17,7 @@ import {
   DetailsRow,
   ErrorMessageRow,
   IconSlot,
+  ProviderPill,
   StatusLabel,
   TopRow,
 } from './styles'
@@ -32,6 +33,21 @@ export type TransactionHistoryCardStatus =
 /** Direction for address: "to" (send) or "from" (receive/swap). */
 export type TransactionHistoryCardAddressDirection = 'to' | 'from'
 
+/** Content displayed in the pill area of the card. */
+export type TransactionHistoryCardPill =
+  | {
+      /** Prefix label like "to" or "from". */
+      direction: TransactionHistoryCardAddressDirection
+      /** Full address; displayed truncated via truncateId. */
+      address: string
+    }
+  | {
+      /** Provider name displayed in the pill, e.g. "THORChain". */
+      providerName: string
+      /** Optional icon shown before the label. */
+      pillIcon?: ReactNode
+    }
+
 export type TransactionHistoryCardProps = {
   /** Transaction type shown in the tag (send, receive, swap, approve). */
   tagType: TransactionHistoryTagType
@@ -43,10 +59,8 @@ export type TransactionHistoryCardProps = {
   amountCrypto: string
   /** Symbol, e.g. "RUNE", "SOL", "ETH". */
   symbol: string
-  /** Address direction: "to" (send) or "from" (receive/swap). */
-  addressDirection: TransactionHistoryCardAddressDirection
-  /** Full address; displayed truncated (6 chars + "..." + 4 chars) via truncateId. */
-  address: string
+  /** Content for the info pill. */
+  pill: TransactionHistoryCardPill
   /** Optional error message shown below details when status is "error" (aligned right). */
   errorMessage?: string
   /**
@@ -64,8 +78,7 @@ export const TransactionHistoryCard = ({
   amountUsd,
   amountCrypto,
   symbol,
-  addressDirection,
-  address,
+  pill,
   errorMessage,
   coin,
   icon,
@@ -78,10 +91,10 @@ export const TransactionHistoryCard = ({
     error: t('failed'),
   }
   const statusLabel = statusLabelKey[status]
-  const prefix = `${t(addressDirection)} `
-  const truncatedAddress = truncateId(address)
   const assetIcon =
     coin != null ? <CoinIcon coin={coin} style={{ fontSize: 24 }} /> : icon
+
+  const isProviderPill = 'providerName' in pill
 
   return (
     <Card>
@@ -95,24 +108,26 @@ export const TransactionHistoryCard = ({
           {assetIcon != null && <IconSlot>{assetIcon}</IconSlot>}
           <AmountTextStack>
             <Text variant="footnote" color="regular">
-              {amountUsd}
-            </Text>
-            <Text variant="footnote" color="regular">
               {amountCrypto}{' '}
               <Text as="span" variant="footnote" color="shy">
                 {symbol}
               </Text>
             </Text>
+            <Text variant="footnote" color="shy">
+              {amountUsd}
+            </Text>
           </AmountTextStack>
         </AmountBlock>
-        <AddressPill>
-          <Text variant="caption" color="shy">
-            {prefix}
-          </Text>
-          <Text variant="caption" color="regular">
-            {truncatedAddress}
-          </Text>
-        </AddressPill>
+        {'direction' in pill && (
+          <AddressPill>
+            <Text variant="caption" color="shy">
+              {`${t(pill.direction)} `}
+            </Text>
+            <Text variant="caption" color="regular">
+              {truncateId(pill.address)}
+            </Text>
+          </AddressPill>
+        )}
       </DetailsRow>
 
       {status === 'error' && errorMessage != null && errorMessage !== '' && (
@@ -121,6 +136,18 @@ export const TransactionHistoryCard = ({
             {errorMessage}
           </Text>
         </ErrorMessageRow>
+      )}
+
+      {isProviderPill && (
+        <ProviderPill>
+          {pill.pillIcon != null && <IconSlot>{pill.pillIcon}</IconSlot>}
+          <Text variant="caption" color="shy">
+            {t('via')}
+          </Text>
+          <Text variant="caption" color="regular" weight={600}>
+            {pill.providerName}
+          </Text>
+        </ProviderPill>
       )}
     </Card>
   )

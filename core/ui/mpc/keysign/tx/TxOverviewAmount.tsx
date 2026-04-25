@@ -1,11 +1,11 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
-import { VStack } from '@lib/ui/layout/Stack'
+import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
 import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { Text } from '@lib/ui/text'
-import { MiddleTruncate } from '@lib/ui/truncate'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
 import { useTranslation } from 'react-i18next'
 
@@ -20,43 +20,54 @@ type TxActionLabelKey =
 type TxOverviewAmountProps = ValueProp<Coin> & {
   amount: number
   actionLabel?: TxActionLabelKey
-  contractAddress?: string
+  resolvedLabel?: string
+  /** When set, render this string instead of `{amount} {ticker}` and hide fiat.
+   *  Used for "Unlimited" approvals where the numeric value is meaningless. */
+  amountOverride?: string
 }
 
 export const TxOverviewAmount = ({
   amount,
   value,
   actionLabel,
-  contractAddress,
+  resolvedLabel,
+  amountOverride,
 }: TxOverviewAmountProps) => {
   const priceQuery = useCoinPriceQuery({ coin: value })
   const formatFiatAmount = useFormatFiatAmount()
   const { t } = useTranslation()
 
-  const isActionDisplay = !!actionLabel
-  const showAmountWithAction = actionLabel && amount > 0
-
-  const mainLabel = actionLabel ? (t(actionLabel) as string) : t('sent')
-  const mainContent = showAmountWithAction
-    ? `${mainLabel} ${amount} ${value.ticker}`
+  const topLabel = resolvedLabel
+    ? resolvedLabel
     : actionLabel
-      ? mainLabel
-      : `${amount} ${value.ticker}`
+      ? t(actionLabel)
+      : t('sent')
+
+  // Hide the "0 ETH" line for contract calls where we couldn't resolve the
+  // actual token being moved (e.g. Uniswap V4 execute, multicalls). The
+  // function label alone is more informative than a misleading zero amount.
+  const showAmount = !!amountOverride || amount > 0 || !resolvedLabel
+  const showFiat = !amountOverride && amount > 0
 
   return (
     <Panel>
       <VStack alignItems="center" gap={12}>
         <Text size={10} color="supporting">
-          {isActionDisplay ? t('action') : t('sent')}
+          {topLabel}
         </Text>
         {value && <CoinIcon coin={value} style={{ fontSize: 32 }} />}
-        <Text size={18}>{mainContent}</Text>
-        {contractAddress && (
-          <Text color="supporting" size={12}>
-            <MiddleTruncate text={contractAddress} width={140} />
-          </Text>
-        )}
-        {amount > 0 && (
+        {showAmount &&
+          (amountOverride ? (
+            <HStack alignItems="center" gap={6}>
+              <Text as={TriangleAlertIcon} color="warning" size={18} />
+              <Text size={18} color="warning">
+                {amountOverride}
+              </Text>
+            </HStack>
+          ) : (
+            <Text size={18}>{`${amount} ${value.ticker}`}</Text>
+          ))}
+        {showFiat && (
           <MatchQuery
             value={priceQuery}
             success={price => (

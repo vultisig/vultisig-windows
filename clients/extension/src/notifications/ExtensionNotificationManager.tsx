@@ -17,12 +17,32 @@ import { computeNotificationVaultId } from '@vultisig/sdk'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { removeInitialView } from '../storage/initialView'
+import { openKeysignFromPushNotificationType } from './pushNotificationMessages'
 import {
   getPushNotificationRegistrations,
   getPushServerUrl,
   isVaultRegisteredForPush,
   pushNotificationRegistrationsStorageKey,
 } from './pushNotificationStorage'
+
+const maxConsecutiveWsFailures = 5
+
+type OpenKeysignFromPushMessage = {
+  type: typeof openKeysignFromPushNotificationType
+  url: string
+}
+
+const isOpenKeysignFromPushMessage = (
+  value: unknown
+): value is OpenKeysignFromPushMessage => {
+  if (typeof value !== 'object' || value === null) {
+    return false
+  }
+  const type = Reflect.get(value, 'type')
+  const url = Reflect.get(value, 'url')
+  return type === openKeysignFromPushNotificationType && typeof url === 'string'
+}
 
 type HandleNotificationMessageInput = {
   msg: NonNullable<ReturnType<typeof parseKeysignWsNotification>>
@@ -62,6 +82,36 @@ export const ExtensionNotificationManager = () => {
 
   const navigateRef = useRef(navigate)
   navigateRef.current = navigate
+
+  useEffect(() => {
+    const onOpenKeysignFromPush = (
+      message: unknown,
+      _sender: chrome.runtime.MessageSender,
+      sendResponse: (response: { ok: boolean }) => void
+    ) => {
+      if (isOpenKeysignFromPushMessage(message)) {
+        void (async () => {
+          try {
+            navigateRef.current({
+              id: 'deeplink',
+              state: { url: message.url },
+            })
+            void window.focus()
+            await removeInitialView()
+            sendResponse({ ok: true })
+          } catch {
+            sendResponse({ ok: false })
+          }
+        })()
+        return true
+      }
+      return false
+    }
+    chrome.runtime.onMessage.addListener(onOpenKeysignFromPush)
+    return () => {
+      chrome.runtime.onMessage.removeListener(onOpenKeysignFromPush)
+    }
+  }, [])
 
   const showBannerRef = useRef(showBanner)
   showBannerRef.current = showBanner
@@ -106,10 +156,12 @@ export const ExtensionNotificationManager = () => {
     Map<string, ManagedExtensionNotificationSocket>
   >(new Map())
   const reconnectDelayMsRef = useRef<Record<string, number>>({})
+  const failureCountRef = useRef<Record<string, number>>({})
 
   useEffect(() => {
     const connectionsMap = connectionsRef.current
     let syncSessionGeneration = 0
+    const activeNotificationTeardowns = new Set<() => void>()
 
     const getTokenJson = async (): Promise<string | null> => {
       try {
@@ -148,17 +200,43 @@ export const ExtensionNotificationManager = () => {
           window.focus()
         },
         showOsNotification: ({ title, body, onClick }) => {
-          if (
-            typeof Notification === 'undefined' ||
-            Notification.permission !== 'granted'
-          ) {
+          if (typeof chrome === 'undefined' || !chrome.notifications) {
             return
           }
-          const osNotification = new Notification(title, { body })
-          osNotification.onclick = () => {
-            window.focus()
-            onClick()
+          const notificationId = `vultisig-keysign-${crypto.randomUUID()}`
+          function teardown() {
+            activeNotificationTeardowns.delete(teardown)
+            chrome.notifications.onClicked.removeListener(handleClick)
+            chrome.notifications.onClosed.removeListener(handleClosed)
           }
+          activeNotificationTeardowns.add(teardown)
+          function handleClosed(closedId: string) {
+            if (closedId !== notificationId) {
+              return
+            }
+            teardown()
+          }
+          function handleClick(clickedId: string) {
+            if (clickedId !== notificationId) {
+              return
+            }
+            teardown()
+            window.focus()
+            onClick?.()
+          }
+          chrome.notifications.onClicked.addListener(handleClick)
+          chrome.notifications.onClosed.addListener(handleClosed)
+          void chrome.notifications
+            .create(notificationId, {
+              type: 'basic',
+              iconUrl: chrome.runtime.getURL('icon128.png'),
+              title,
+              message: body,
+              requireInteraction: true,
+            })
+            .catch(() => {
+              teardown()
+            })
         },
       })
     }
@@ -172,6 +250,7 @@ export const ExtensionNotificationManager = () => {
       }
       connectionsRef.current.delete(vaultId)
       delete reconnectDelayMsRef.current[vaultId]
+      delete failureCountRef.current[vaultId]
       if (managed.ws) {
         const ws = managed.ws
         clearWebSocketHandlers(ws)
@@ -250,6 +329,7 @@ export const ExtensionNotificationManager = () => {
       ws.onopen = () => {
         reconnectDelayMsRef.current[vaultId] =
           keysignNotificationWsInitialReconnectDelayMs
+        failureCountRef.current[vaultId] = 0
       }
 
       ws.onmessage = event => {
@@ -298,6 +378,17 @@ export const ExtensionNotificationManager = () => {
           }
 
           if (connectionsRef.current.get(vaultId) !== entry) {
+            return
+          }
+
+          const failures = (failureCountRef.current[vaultId] ?? 0) + 1
+          failureCountRef.current[vaultId] = failures
+
+          if (failures >= maxConsecutiveWsFailures) {
+            console.warn(
+              `[ExtensionNotificationManager] Stopping reconnection for vault ${vaultId.slice(0, 12)}... after ${failures} consecutive failures`
+            )
+            disconnectVault(vaultId)
             return
           }
 
@@ -373,6 +464,9 @@ export const ExtensionNotificationManager = () => {
     chrome.storage.onChanged.addListener(onChromeStorageChanged)
 
     return () => {
+      for (const teardown of [...activeNotificationTeardowns]) {
+        teardown()
+      }
       syncSessionGeneration += 1
       chrome.storage.onChanged.removeListener(onChromeStorageChanged)
       const vaultIdsAtUnmount = [...connectionsMap.keys()]

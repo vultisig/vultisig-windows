@@ -24,4 +24,5 @@ export enum StorageKey {
   isMLDSAEnabled = 'isMLDSAEnabled',
   isTssBatchingEnabled = 'isTssBatchingEnabled',
   transactionHistory = 'transactionHistory',
+  hasSeenNotificationPrompt = 'hasSeenNotificationPrompt',
 }

@@ -18,6 +18,7 @@ import { WindowShow, WindowUnminimise } from '@wailsapp/runtime'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { ShowNotification } from '../../wailsjs/go/main/App'
 import {
   desktopNotificationRegistrationsChangedEvent,
   getDesktopNotificationRegistrations,
@@ -128,18 +129,19 @@ export const DesktopNotificationManager = () => {
           WindowUnminimise()
           WindowShow()
         },
-        showOsNotification: ({ title, body, onClick }) => {
-          if (
-            typeof Notification === 'undefined' ||
-            Notification.permission !== 'granted'
-          ) {
-            return
-          }
-          const osNotification = new Notification(title, { body })
-          osNotification.onclick = () => {
-            window.focus()
-            onClick()
-          }
+        showOsNotification: ({ title, body }) => {
+          // Desktop OS toasts are best-effort alerts only:
+          // - macOS dev: osascript → Script Editor–style banner (not the app icon).
+          // - Windows: WinRT toast titled under “Vultisig”, but no click → keysign.
+          // - Linux: notify-send, same limitation.
+          // Parity with iOS / extension tap-to-keysign is via bringAppToFront +
+          // in-app KeysignNotificationBanner (and deeplink when the user acts there).
+          ShowNotification(title, body).catch(error => {
+            console.debug(
+              '[DesktopNotificationManager] ShowNotification failed',
+              error
+            )
+          })
         },
       })
     }

@@ -428,7 +428,14 @@ export const buildSendTxKeysignPayload = async ({
 
   const signTonPayload = matchRecordUnion<
     CustomTxData,
-    | { tonMessages: Array<{ to: string; amount: string; payload?: string }> }
+    | {
+        tonMessages: Array<{
+          to: string
+          amount: string
+          payload?: string
+          stateInit?: string
+        }>
+      }
     | undefined
   >(customTxData, {
     regular: ({ transactionDetails }) => {

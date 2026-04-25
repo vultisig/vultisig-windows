@@ -2,6 +2,7 @@ import { ManageBlockaid } from '@core/ui/chain/security/blockaid/ManageBlockaid'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { languageName } from '@core/ui/i18n/Language'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
+import { NotificationBubbleIcon } from '@core/ui/notifications/NotificationBubbleIcon'
 import { SettingsSection } from '@core/ui/settings/SettingsSection'
 import { useCore } from '@core/ui/state/core'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
@@ -11,6 +12,7 @@ import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins
 import { Opener } from '@lib/ui/base/Opener'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { BookIcon } from '@lib/ui/icons/BookIcon'
+import { BooksIcon } from '@lib/ui/icons/BooksIcon'
 import { BubbleQuestionIcon } from '@lib/ui/icons/BubbleQuestionIcon'
 import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
 import { CoinsIcon } from '@lib/ui/icons/CoinsIcon'
@@ -24,7 +26,7 @@ import { LockKeyholeIcon } from '@lib/ui/icons/LockKeyholeIcon'
 import { MegaphoneIcon } from '@lib/ui/icons/MegaphoneIcon'
 import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
-import { ShareTwoIcon } from '@lib/ui/icons/ShareTwoIcon'
+import { ShareAndroidIcon } from '@lib/ui/icons/ShareAndroidIcon'
 import { ShieldCheckIcon } from '@lib/ui/icons/ShieldCheckIcon'
 import { TwitterIcon } from '@lib/ui/icons/TwitterIcon'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -42,6 +44,7 @@ import styled from 'styled-components'
 
 import {
   discordReferralUrl,
+  vultisigEducationUrl,
   vultisigPrivacyPolicyUrl,
   vultisigTermsOfServiceUrl,
   vultisigTwitterUrl,
@@ -53,7 +56,6 @@ type Props = {
   expandView?: ReactNode
   insiderOptions?: ReactNode
   prioritize?: ReactNode
-  pushNotifications?: ReactNode
   sidePanel?: ReactNode
   checkUpdate?: ReactNode
 }
@@ -117,6 +119,29 @@ export const SettingsPage: FC<Props> = props => {
 
           <SettingsSection title={t('general')}>
             <ListItem
+              data-testid="notifications-settings-link"
+              icon={
+                <ListItemIconWrapper>
+                  <NotificationBubbleIcon />
+                </ListItemIconWrapper>
+              }
+              onClick={() => navigate({ id: 'notificationSettings' })}
+              title={t('notifications')}
+              showArrow
+            />
+            {areReferralEnabled && (
+              <ListItem
+                icon={
+                  <ListItemIconWrapper>
+                    <MegaphoneIcon />
+                  </ListItemIconWrapper>
+                }
+                onClick={() => navigate({ id: 'referral' })}
+                title={t('referral_code')}
+                showArrow
+              />
+            )}
+            <ListItem
               extra={languageName[language]}
               icon={
                 <ListItemIconWrapper>
@@ -149,21 +174,8 @@ export const SettingsPage: FC<Props> = props => {
               showArrow
               data-testid="address-book-link"
             />
-            {areReferralEnabled && (
-              <ListItem
-                icon={
-                  <ListItemIconWrapper>
-                    <MegaphoneIcon />
-                  </ListItemIconWrapper>
-                }
-                onClick={() => navigate({ id: 'referral' })}
-                title={t('referral_code')}
-                showArrow
-              />
-            )}
             {client === 'extension' && props.expandView}
             {client === 'extension' && props.sidePanel}
-            {props.pushNotifications}
           </SettingsSection>
           <SettingsSection title={t('security')}>
             <ListItem
@@ -202,12 +214,22 @@ export const SettingsPage: FC<Props> = props => {
               showArrow
             />
             {client === 'desktop' && props.checkUpdate}
+            <ListItem
+              icon={
+                <ListItemIconWrapper>
+                  <BooksIcon />
+                </ListItemIconWrapper>
+              }
+              onClick={() => openUrl(vultisigEducationUrl)}
+              title={t('vultisig_education')}
+              showArrow
+            />
             <Opener
               renderOpener={({ onOpen }) => (
                 <ListItem
                   icon={
                     <ListItemIconWrapper>
-                      <ShareTwoIcon />
+                      <ShareAndroidIcon />
                     </ListItemIconWrapper>
                   }
                   onClick={onOpen}

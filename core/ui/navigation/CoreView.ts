@@ -71,6 +71,8 @@ export type CoreView =
   | { id: 'languageSettings' }
   | { id: 'manageVaultChains' }
   | { id: 'manageVaultChainCoins'; state: { chain: Chain } }
+  | { id: 'notificationSettings' }
+  | { id: 'chooseVaults' }
   | { id: 'newVault' }
   | { id: 'importSeedphrase' }
   | { id: 'reshareVault' }
@@ -140,6 +142,7 @@ export type CoreView =
   | { id: 'passcodeAutoLock' }
   | { id: 'requestFastVaultBackup' }
   | { id: 'vultDiscount' }
+  | { id: 'qbtcClaim' }
 
 export type CoreViewId = CoreView['id']
 

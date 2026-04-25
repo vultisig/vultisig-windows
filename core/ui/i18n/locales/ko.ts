@@ -1376,4 +1376,20 @@ export const ko = {
   foreground_notification_generic: '승인 대기 중인 거래',
   foreground_notification_send: '{{amount}}을 보내주세요',
   foreground_notification_swap: '{{from}} → {{to}}로 교환',
+  in_progress: '진행 중...',
+  route: '노선',
+  via: '~을 통해',
+  enable: '할 수 있게 하다',
+  enable_all: '모두 활성화',
+  push_notifications_description:
+    '서명이 필요하거나 기기에서 접근 권한을 요청할 때 알림을 받으세요.',
+  notifications: '알림',
+  not_now: '지금은 안 돼',
+  secure_notifications_are_here: '보안 알림이 여기에 있습니다.',
+  secure_notifications_description:
+    '다른 기기에서 금고 접속을 요청하거나 서명이 필요할 때 알림을 받으세요.',
+  vault_notifications: '금고 알림',
+  choose_vaults: '금고를 선택하세요',
+  manage_notifications_in_settings:
+    '시스템 설정에서 알림을 관리할 수 있습니다.',
 }

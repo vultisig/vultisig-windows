@@ -1303,4 +1303,19 @@ export const zh = {
   foreground_notification_generic: '交易待审批',
   foreground_notification_send: '发送 {{amount}}',
   foreground_notification_swap: '交换 {{from}} → {{to}}',
+  in_progress: '进行中...',
+  route: '路线',
+  via: '通过',
+  enable: '使能够',
+  enable_all: '全部启用',
+  push_notifications_description:
+    '当需要您签名或设备请求访问权限时，您将收到通知。',
+  notifications: '通知',
+  not_now: '现在不要',
+  secure_notifications_are_here: '安全通知就在这里',
+  secure_notifications_description:
+    '当有其他设备请求加入您的保险库或需要您签名时，您将收到提醒。',
+  vault_notifications: '保险库通知',
+  choose_vaults: '选择保险库',
+  manage_notifications_in_settings: '您可以在系统设置中管理通知。',
 }

@@ -1,7 +1,7 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
-import { useDeleteVaultMutation } from '@core/ui/storage/vaults'
+import { useDeleteVaultMutation, useVaults } from '@core/ui/storage/vaults'
 import { useVaultTotalBalanceQuery } from '@core/ui/vault/queries/useVaultTotalBalanceQuery'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { Button } from '@lib/ui/buttons/Button'
@@ -34,12 +34,14 @@ export const DeleteVaultPage = () => {
   const navigate = useCoreNavigate()
   const currency = useFiatCurrency()
   const vault = useCurrentVault()
+  const vaults = useVaults()
   const isDisabled = !termsAccepted.every(Boolean)
 
   const handleConfirm = () => {
     if (!isDisabled && !isPending) {
+      const isLastVault = vaults.length <= 1
       deleteVault(getVaultId(vault), {
-        onSuccess: () => navigate({ id: 'vault' }),
+        onSuccess: () => navigate({ id: isLastVault ? 'newVault' : 'vault' }),
       })
     }
   }

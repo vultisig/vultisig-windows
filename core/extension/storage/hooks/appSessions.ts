@@ -1,8 +1,8 @@
 import {
-  addVaultAppSession,
   getVaultsAppSessions,
   removeAllVaultAppSessions,
   removeVaultAppSession,
+  setExclusiveVaultAppSession,
   VaultAppSession,
   VaultAppSessionKey,
 } from '@core/extension/storage/appSessions'
@@ -31,14 +31,14 @@ export const useCurrentVaultAppSessionsQuery = () => {
   )
 }
 
-export const useAddVaultAppSessionMutation = (
+export const useSetExclusiveVaultAppSessionMutation = (
   options: Partial<OnSuccessProp<VaultAppSession>> = {}
 ) => {
   const refetch = useRefetchQueries()
 
   return useMutation({
     mutationFn: async (session: VaultAppSession) => {
-      await addVaultAppSession(session)
+      await setExclusiveVaultAppSession(session)
       await refetch(queryKey)
 
       return session

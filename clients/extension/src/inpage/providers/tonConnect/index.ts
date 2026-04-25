@@ -502,18 +502,13 @@ export class TonConnectBridge {
   async send<T extends RpcMethod>(
     message: AppRequest<T>
   ): Promise<WalletResponse<T>> {
-    if (message.method === 'signData') {
-      return this.handleSignData(message) as unknown as WalletResponse<T>
+    if (message.method === 'disconnect') {
+      await this.disconnect()
+      return { id: message.id, result: '' } as WalletResponse<T>
     }
 
-    if (message.method !== 'sendTransaction') {
-      return {
-        id: message.id,
-        error: {
-          code: 400 as SEND_TRANSACTION_ERROR_CODES,
-          message: 'Method not supported',
-        },
-      } as WalletResponse<T>
+    if (message.method === 'signData') {
+      return this.handleSignData(message) as unknown as WalletResponse<T>
     }
 
     const getBadRequestError = (errorMessage: string): WalletResponse<T> =>
@@ -569,8 +564,12 @@ export class TonConnectBridge {
       )
     }
 
-    const tonMessages: Array<{ to: string; amount: string; payload?: string }> =
-      []
+    const tonMessages: Array<{
+      to: string
+      amount: string
+      payload?: string
+      stateInit?: string
+    }> = []
     for (let i = 0; i < payload.messages.length; i++) {
       const msg = payload.messages[i]
       if (!msg || typeof msg.address !== 'string' || !msg.address) {
@@ -587,15 +586,11 @@ export class TonConnectBridge {
           `Message ${i + 1}: amount must be a positive integer`
         )
       }
-      if (msg.stateInit) {
-        return getBadRequestError(
-          `Message ${i + 1}: stateInit is not supported`
-        )
-      }
       tonMessages.push({
         to: msg.address,
         amount: msgAmountResult.data.toString(),
         payload: msg.payload,
+        stateInit: msg.stateInit,
       })
     }
 
@@ -612,13 +607,20 @@ export class TonConnectBridge {
         },
       } as WalletResponse<T>
     }
-    if (
-      payload.from &&
-      payload.from.toLowerCase() !== account.address.toLowerCase()
-    ) {
-      return getBadRequestError(
-        'Requested sender does not match active TON account'
+    if (payload.from) {
+      const fromRaw = attempt(() => Address.parse(payload.from!).toRawString())
+      const accountRaw = attempt(() =>
+        Address.parse(account.address).toRawString()
       )
+      if (
+        'error' in fromRaw ||
+        'error' in accountRaw ||
+        fromRaw.data !== accountRaw.data
+      ) {
+        return getBadRequestError(
+          'Requested sender does not match active TON account'
+        )
+      }
     }
     const transactionPayload: ITransactionPayload = {
       keysign: {

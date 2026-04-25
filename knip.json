@@ -2,13 +2,16 @@
   "ignore": [
     "clients/desktop/wailsjs/**",
     "core/ui/transaction-history/**",
-    "lib/ui/form/FormCheckBadge.tsx"
+    "lib/ui/form/FormCheckBadge.tsx",
+    "core/ui/qbtc/claim/hooks/useQbtcClaimSignMutation.ts"
   ],
   "ignoreBinaries": [
     "wails"
   ],
   "ignoreDependencies": [
-    "babel-plugin-react-compiler"
+    "babel-plugin-react-compiler",
+    "@vultisig/mpc-types",
+    "@vultisig/mpc-wasm"
   ],
   "workspaces": {
     "clients/desktop": {

@@ -1,5 +1,10 @@
+import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { useBlockaidPayloadSimulationQuery } from '@core/ui/chain/security/blockaid/tx/queries/blockaidPayloadSimulation'
+import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
+import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
 import { getSignDataTxAction } from '@core/ui/mpc/keysign/tx/utils/getSignDataTxAction'
+import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { ClipboardCopyIcon } from '@lib/ui/icons/ClipboardCopyIcon'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { SquareArrowTopRightIcon } from '@lib/ui/icons/SquareArrowTopRightIcon'
@@ -10,11 +15,17 @@ import { ValueProp } from '@lib/ui/props'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { MiddleTruncate } from '@lib/ui/truncate'
+import { useQuery } from '@tanstack/react-query'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { getEvmContractCallInfo } from '@vultisig/core-chain/chains/evm/contract/call/info'
+import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
+import { knownTokensIndex } from '@vultisig/core-chain/coin/knownTokens'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { capitalizeFirstLetter } from '@vultisig/lib-utils/capitalizeFirstLetter'
+import { formatUnits } from 'ethers'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useCopyToClipboard } from 'react-use'
@@ -33,6 +44,7 @@ export const TxSuccess = ({
   const { t } = useTranslation()
   const { coin: potentialCoin, toAmount, skipBroadcast } = value
   const coin = fromCommCoin(shouldBePresent(potentialCoin))
+  const walletCore = useAssertWalletCore()
   const txHash = useTxHash()
   const [, copyToClipboard] = useCopyToClipboard()
   const { openUrl } = useCore()
@@ -48,6 +60,102 @@ export const TxSuccess = ({
     [value, formattedToAmount]
   )
 
+  const isContractExecution = txAction?.action === 'contract_execution'
+  const memo = value.memo
+  const blockaidSimulationQuery = useBlockaidPayloadSimulationQuery({
+    keysignPayload: value,
+    walletCore,
+  })
+
+  const functionQuery = useQuery({
+    queryKey: ['evmContractCallInfo', memo],
+    queryFn: () => getEvmContractCallInfo(memo!),
+    enabled: isContractExecution && !!memo && memo.length > 2,
+    staleTime: Infinity,
+  })
+
+  const rawFunctionName =
+    functionQuery.data?.functionSignature?.split('(')[0] ?? undefined
+  const resolvedLabel = rawFunctionName
+    ? capitalizeFirstLetter(rawFunctionName)
+    : undefined
+
+  const vaultCoins = useCurrentVaultCoins()
+
+  const resolvedToken = useMemo(() => {
+    if (!functionQuery.data) return null
+    const pair = extractTokenAndAmount(
+      functionQuery.data.functionSignature,
+      functionQuery.data.functionArguments,
+      value.toAddress
+    )
+    if (!pair) return null
+
+    const tokenKey = { chain: coin.chain, id: pair.tokenAddress }
+
+    const vaultCoin = vaultCoins.find(c => areEqualCoins(c, tokenKey))
+    const knownCoin =
+      vaultCoin ??
+      knownTokensIndex[coin.chain]?.[pair.tokenAddress.toLowerCase()]
+    if (!knownCoin) return null
+
+    // BigInt() throws on non-numeric strings; an uncaught throw here would
+    // crash the whole success screen, so swallow and fall back to the native
+    // amount.
+    let rawAmount: bigint
+    try {
+      rawAmount = BigInt(pair.rawAmount)
+    } catch {
+      return null
+    }
+
+    const formatted = formatTokenAmount({
+      rawAmount,
+      decimals: knownCoin.decimals,
+      functionName: rawFunctionName,
+    })
+
+    if (formatted.isSentinel && !formatted.display) return null
+
+    return {
+      coin: knownCoin,
+      amount: formatted.numericValue,
+      amountOverride:
+        formatted.isSentinel && formatted.display
+          ? `${formatted.display} ${knownCoin.ticker}`
+          : undefined,
+    }
+  }, [
+    functionQuery.data,
+    vaultCoins,
+    coin.chain,
+    value.toAddress,
+    rawFunctionName,
+  ])
+
+  const simulationSend = useMemo(() => {
+    const data = blockaidSimulationQuery.data
+    if (!data) return null
+    if ('swap' in data && 'fromCoin' in data.swap) {
+      return { coin: data.swap.fromCoin, amount: data.swap.fromAmount }
+    }
+    if ('transfer' in data && 'fromCoin' in data.transfer) {
+      return { coin: data.transfer.fromCoin, amount: data.transfer.fromAmount }
+    }
+    return null
+  }, [blockaidSimulationQuery.data])
+
+  const displayCoin = simulationSend?.coin ?? resolvedToken?.coin ?? coin
+  const displayAmount = simulationSend
+    ? Number(formatUnits(simulationSend.amount, simulationSend.coin.decimals))
+    : (resolvedToken?.amount ??
+      (txAction && 'amount' in txAction && txAction.amount !== undefined
+        ? txAction.amount
+        : formattedToAmount))
+  const displayAmountOverride = simulationSend
+    ? undefined
+    : resolvedToken?.amountOverride
+
   const blockExplorerUrl = getBlockExplorerUrl({
     chain: coin.chain,
     entity: 'tx',
@@ -59,21 +167,13 @@ export const TxSuccess = ({
       <TxStatusTracker chain={coin.chain} hash={txHash} />
       <VStack gap={8}>
         <TxOverviewAmount
-          amount={
-            txAction && 'amount' in txAction && txAction.amount !== undefined
-              ? txAction.amount
-              : formattedToAmount
-          }
-          value={coin}
+          amount={displayAmount}
+          value={displayCoin}
           actionLabel={
             txAction?.action !== 'send' ? txAction?.labelKey : undefined
           }
-          contractAddress={
-            txAction?.action === 'contract_execution' &&
-            'contractAddress' in txAction
-              ? txAction.contractAddress
-              : undefined
-          }
+          resolvedLabel={resolvedLabel}
+          amountOverride={displayAmountOverride}
         />
         {!skipBroadcast && (
           <List>

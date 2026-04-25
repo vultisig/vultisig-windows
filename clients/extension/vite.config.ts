@@ -1,3 +1,4 @@
+import vultisigSdk from '@vultisig/sdk/vite'
 import path from 'path'
 import { defineConfig, loadEnv, PluginOption } from 'vite'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
@@ -8,7 +9,6 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 
 import { getFeatureFlagDefines } from '../../core/ui/vite/featureFlagDefines'
 import { getCommonPlugins } from '../../core/ui/vite/plugins'
-import { sdkResolvePlugin } from '../../core/ui/vite/sdkResolvePlugin'
 import { getStaticCopyTargets } from '../../core/ui/vite/staticCopy'
 
 const rootDir = path.resolve(__dirname, '../..')
@@ -55,11 +55,7 @@ export default defineConfig(async ({ mode }) => {
 
     return {
       define: { ...featureFlagDefines, ...envDefines },
-      plugins: [
-        sdkResolvePlugin(),
-        tsconfigPaths({ root: rootDir }),
-        ...plugins,
-      ],
+      plugins: [vultisigSdk(), tsconfigPaths({ root: rootDir }), ...plugins],
       build: {
         copyPublicDir: false,
         emptyOutDir: false,
@@ -83,7 +79,6 @@ export default defineConfig(async ({ mode }) => {
     return {
       define: { ...featureFlagDefines, ...envDefines },
       plugins: [
-        sdkResolvePlugin(),
         tsconfigPaths({ root: rootDir }),
         ...getCommonPlugins(),
         viteStaticCopy({

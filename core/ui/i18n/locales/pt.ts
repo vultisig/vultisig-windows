@@ -1414,4 +1414,20 @@ export const pt = {
   foreground_notification_generic: 'Transação pendente de aprovação.',
   foreground_notification_send: 'Enviar {{amount}}',
   foreground_notification_swap: 'Trocar {{from}} → {{to}}',
+  in_progress: 'Em andamento...',
+  route: 'Rota',
+  via: 'via',
+  enable: 'Habilitar',
+  enable_all: 'Ativar tudo',
+  push_notifications_description:
+    'Receba notificações quando sua assinatura for necessária ou quando um dispositivo solicitar acesso.',
+  notifications: 'Notificações',
+  not_now: 'Agora não',
+  secure_notifications_are_here: 'As notificações seguras estão aqui.',
+  secure_notifications_description:
+    'Receba alertas quando outro dispositivo solicitar acesso ao seu cofre ou quando sua assinatura for necessária.',
+  vault_notifications: 'Notificações do Vault',
+  choose_vaults: 'Escolha cofres',
+  manage_notifications_in_settings:
+    'Você pode gerenciar as notificações nas configurações do sistema.',
 }

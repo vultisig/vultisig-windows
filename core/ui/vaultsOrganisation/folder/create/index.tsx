@@ -46,7 +46,7 @@ export const CreateVaultFolderPage = () => {
   const folders = useVaultFolders()
   const vaults = useFolderlessVaults()
   const { totals: vaultTotals, isPending: isTotalsPending } =
-    useVaultsTotalBalances()
+    useVaultsTotalBalances({ vaults })
   const formatFiatAmount = useFormatFiatAmount()
 
   const names = useMemo(() => folders.map(({ name }) => name), [folders])

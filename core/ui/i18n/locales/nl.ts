@@ -1392,4 +1392,20 @@ export const nl = {
     'Transactie onder voorbehoud van goedkeuring',
   foreground_notification_send: 'Verzend {{amount}}',
   foreground_notification_swap: 'Wissel {{from}} → {{to}}',
+  in_progress: 'Bezig...',
+  route: 'Route',
+  via: 'via',
+  enable: 'Inschakelen',
+  enable_all: 'Alles inschakelen',
+  push_notifications_description:
+    'Ontvang een melding wanneer uw handtekening vereist is of wanneer een apparaat toegang aanvraagt.',
+  notifications: 'Meldingen',
+  not_now: 'Nu niet',
+  secure_notifications_are_here: 'Beveiligde meldingen zijn hier beschikbaar.',
+  secure_notifications_description:
+    'Ontvang meldingen wanneer een ander apparaat toegang tot uw kluis aanvraagt ​​of wanneer uw handtekening vereist is.',
+  vault_notifications: 'Kluismeldingen',
+  choose_vaults: 'Kies kluizen',
+  manage_notifications_in_settings:
+    'Je kunt meldingen beheren in de systeeminstellingen.',
 }

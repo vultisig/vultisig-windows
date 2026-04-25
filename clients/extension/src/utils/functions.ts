@@ -3,6 +3,12 @@ import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 import { Psbt } from 'bitcoinjs-lib'
 
 export const isPopupView = () => {
+  const hasPopupMarker = withFallback(
+    attempt(() => new URLSearchParams(window.location.search).get('view')),
+    null
+  )
+  if (hasPopupMarker === 'popup') return true
+
   const popups =
     withFallback(
       attempt(() => chrome?.extension?.getViews({ type: 'popup' })),

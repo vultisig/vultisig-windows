@@ -68,9 +68,9 @@ export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
               </Text>
             </VStack>
             <VStack gap={16}>
-              <HStack gap={8}>
-                <CoinIcon coin={fromCoin} style={{ fontSize: 24 }} />
-                <VStack>
+              <HStack gap={12} alignItems="center">
+                <CoinIcon coin={fromCoin} style={{ fontSize: 32 }} />
+                <VStack gap={2}>
                   <Text weight="500" size={17} color="contrast">
                     {formatAmount(
                       fromChainAmount(
@@ -79,9 +79,6 @@ export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
                       ),
                       fromCoin
                     )}
-                  </Text>
-                  <Text color="shy" size={13}>
-                    {t('on_chain', { chain: fromCoin.chain })}
                   </Text>
                   <SwapFiatAmount
                     value={{
@@ -101,8 +98,8 @@ export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
                 {t('to_min_payout')}
                 <HorizontalLine />
               </HStack>
-              <HStack gap={8}>
-                <CoinIcon coin={toCoin} style={{ fontSize: 24 }} />
+              <HStack gap={12} alignItems="center">
+                <CoinIcon coin={toCoin} style={{ fontSize: 32 }} />
                 <MatchQuery
                   value={keysignPayloadQuery}
                   error={() => t('failed_to_load')}
@@ -115,12 +112,9 @@ export const SwapVerify = ({ swapQuote, onBack }: SwapVerifyProps) => {
                     const { toAmountDecimal } = getRecordUnionValue(swapPayload)
 
                     return (
-                      <VStack>
+                      <VStack gap={2}>
                         <Text weight="500" size={17} color="contrast">
                           {formatAmount(parseFloat(toAmountDecimal), toCoin)}
-                        </Text>
-                        <Text color="shy" size={13}>
-                          {t('on_chain', { chain: toCoin.chain })}
                         </Text>
                         <SwapFiatAmount
                           value={{

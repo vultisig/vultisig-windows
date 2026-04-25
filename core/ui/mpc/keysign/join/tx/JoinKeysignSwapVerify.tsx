@@ -57,9 +57,9 @@ export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
             {t('youre_swapping')}
           </Text>
           <VStack gap={16}>
-            <HStack gap={8}>
-              <CoinIcon coin={fromCoin} style={{ fontSize: 24 }} />
-              <VStack>
+            <HStack gap={12} alignItems="center">
+              <CoinIcon coin={fromCoin} style={{ fontSize: 32 }} />
+              <VStack gap={2}>
                 <Text weight="500" size={17} color="contrast">
                   {formatAmount(fromAmountDecimal, fromCoin)}
                 </Text>
@@ -73,13 +73,13 @@ export const JoinKeysignSwapVerify = ({ value }: ValueProp<KeysignPayload>) => {
               <IconWrapper>
                 <ArrowDownIcon />
               </IconWrapper>
-              {t('to')}
+              {t('to_min_payout')}
               <HorizontalLine />
             </HStack>
             {toCoin && (
-              <HStack gap={8}>
-                <CoinIcon coin={toCoin} style={{ fontSize: 24 }} />
-                <VStack>
+              <HStack gap={12} alignItems="center">
+                <CoinIcon coin={toCoin} style={{ fontSize: 32 }} />
+                <VStack gap={2}>
                   <Text weight="500" size={17} color="contrast">
                     {formatAmount(toAmount, toCoin)}
                   </Text>

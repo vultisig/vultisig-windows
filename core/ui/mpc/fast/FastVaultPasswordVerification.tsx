@@ -12,7 +12,7 @@ const verificationTimeoutMs = convertDuration(15, 'd', 'ms')
 
 export const FastVaultPasswordVerification = () => {
   const { t } = useTranslation()
-  const { lastPasswordVerificationTime } = useCurrentVault()
+  const { lastPasswordVerificationTime, name } = useCurrentVault()
   const now = Date.now()
 
   const shouldShowModal =
@@ -33,6 +33,8 @@ export const FastVaultPasswordVerification = () => {
 
   return (
     <FastVaultPasswordModal
+      title={t('verify_password_for')}
+      subtitle={name}
       description={t('verify_password_periodic_message_description')}
       onBack={handleBack}
       onFinish={handleFinish}

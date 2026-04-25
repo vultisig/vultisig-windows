@@ -35,6 +35,7 @@ export type SignMessageInput =
           | OtherChain.Tron
           | OtherChain.Polkadot
           | OtherChain.Bittensor
+          | OtherChain.Cardano
         useTronHeader?: boolean
         isV2?: boolean
         message: string
