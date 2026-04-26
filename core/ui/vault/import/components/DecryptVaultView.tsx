@@ -1,4 +1,5 @@
 import { FlowPageHeader } from '@core/ui/flow/FlowPageHeader'
+import { VaultBackupPasswordError } from '@core/ui/vault/import/utils/VaultBackupPasswordError'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@lib/ui/buttons/Button'
 import { PasswordInput } from '@lib/ui/inputs/PasswordInput'
@@ -73,7 +74,9 @@ export const DecryptVaultView = ({ mutation }: DecryptVaultViewProps) => {
         </Button>
         {error && (
           <Text color="danger" size={12}>
-            {t('incorrect_password')}
+            {error instanceof VaultBackupPasswordError
+              ? t('incorrect_password')
+              : t('vault_import_failed', { message: error.message })}
           </Text>
         )}
       </PageFooter>
