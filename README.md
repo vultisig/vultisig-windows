@@ -198,3 +198,11 @@ Inside each feature or domain folder, organize files by their technical purpose:
 - File names don't need the full hook name (e.g., `changePasscode.ts` instead of `useChangePasscodeMutation.ts`)
 
 **Note:** No `/components` folder needed - most files are already components, and non-component code goes into the folders above.
+
+## 💰 Bounty Contribution
+
+- **Task:** feat: Full ABI parameter decoding for mobile (Phase 2)
+- **Reward:** $500
+- **Source:** GitHub-Paid
+- **Date:** 2026-04-27
+
