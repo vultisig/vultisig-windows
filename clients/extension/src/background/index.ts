@@ -2,6 +2,10 @@
 // listeners during initial synchronous service worker evaluation.
 import '../notifications/pushServiceWorkerBindings'
 
+import { registerFreshInstallStorageClear } from './registerFreshInstallStorageClear'
+
+registerFreshInstallStorageClear()
+
 // MPC note — see vultisig/vultisig-windows#3777.
 // This service-worker chunk intentionally does NOT import @core/ui/mpc/bootstrapMpcEngine.
 // The background worker does not call getMpcEngine() today; bootstrapping here

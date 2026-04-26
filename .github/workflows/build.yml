@@ -149,4 +149,68 @@ jobs:
         with:
           build-name: ${{ matrix.build.name }}
           build-platform: ${{ matrix.build.platform }}
-          package: false
+          package: ${{ matrix.build.os == 'windows-latest' }}
+
+      - name: Smoke test Windows installer
+        if: matrix.build.os == 'windows-latest'
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+
+          $installer = Get-ChildItem -Path . -Filter '*installer.exe' -Recurse |
+            Where-Object { $_.FullName -notmatch '\\node_modules\\' } |
+            Sort-Object LastWriteTime -Descending |
+            Select-Object -First 1
+          if (-not $installer) {
+            throw 'Windows installer was not produced.'
+          }
+
+          $install = Start-Process -FilePath $installer.FullName -ArgumentList '/S' -Wait -PassThru
+          if ($install.ExitCode -ne 0) {
+            throw "Installer failed with exit code $($install.ExitCode)."
+          }
+
+          $installDir = Join-Path $env:ProgramFiles 'Vultisig\Vultisig'
+          $uninstaller = Join-Path $installDir 'uninstall.exe'
+          if (-not (Test-Path $uninstaller)) {
+            throw "Uninstaller was not created at $uninstaller."
+          }
+
+          $appData = [Environment]::GetFolderPath('ApplicationData')
+          $localAppData = [Environment]::GetFolderPath('LocalApplicationData')
+          $sentinelFiles = @(
+            (Join-Path $installDir 'vultisig.db'),
+            (Join-Path $installDir 'vultisig.db-wal'),
+            (Join-Path $installDir 'vultisig.db-shm'),
+            (Join-Path $localAppData 'VirtualStore\Program Files\Vultisig\Vultisig\vultisig.db'),
+            (Join-Path $localAppData 'VirtualStore\Program Files\Vultisig\Vultisig\vultisig.db-wal'),
+            (Join-Path $localAppData 'VirtualStore\Program Files\Vultisig\Vultisig\vultisig.db-shm'),
+            (Join-Path $localAppData 'VirtualStore\Program Files (x86)\Vultisig\Vultisig\vultisig.db'),
+            (Join-Path $localAppData 'VirtualStore\Program Files (x86)\Vultisig\Vultisig\vultisig.db-wal'),
+            (Join-Path $localAppData 'VirtualStore\Program Files (x86)\Vultisig\Vultisig\vultisig.db-shm')
+          )
+          $sentinelDirs = @(
+            (Join-Path $appData 'Vultisig'),
+            (Join-Path $appData 'Vultisig.exe'),
+            (Join-Path $localAppData 'Vultisig'),
+            (Join-Path $localAppData 'Vultisig.exe')
+          )
+
+          foreach ($path in $sentinelFiles) {
+            New-Item -ItemType Directory -Force -Path (Split-Path $path) | Out-Null
+            New-Item -ItemType File -Force -Path $path | Out-Null
+          }
+          foreach ($path in $sentinelDirs) {
+            New-Item -ItemType Directory -Force -Path $path | Out-Null
+            New-Item -ItemType File -Force -Path (Join-Path $path 'sentinel.txt') | Out-Null
+          }
+
+          $uninstall = Start-Process -FilePath $uninstaller -ArgumentList '/S' -Wait -PassThru
+          if ($uninstall.ExitCode -ne 0) {
+            throw "Uninstaller failed with exit code $($uninstall.ExitCode)."
+          }
+
+          $leftovers = @(($sentinelFiles + $sentinelDirs) | Where-Object { Test-Path $_ })
+          if ($leftovers.Count -gt 0) {
+            throw "Uninstaller left app data behind: $($leftovers -join ', ')"
+          }

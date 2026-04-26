@@ -12,6 +12,8 @@
   "frontend:dev:serverUrl": "auto",
   "description": "Vultisig for Windows",
   "info": {
+    "companyName": "Vultisig",
+    "productName": "Vultisig",
     "fileAssociations": [
       {
         "ext": "vult",
