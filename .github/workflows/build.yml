@@ -143,6 +143,12 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           immutable-install: ${{ matrix.build.os == 'windows-latest' && 'true' || 'false' }}
 
+      # Wails NSIS packaging requires makensis on PATH (not preinstalled on windows-latest).
+      - name: Install NSIS
+        if: matrix.build.os == 'windows-latest'
+        shell: pwsh
+        run: choco install nsis -y --no-progress
+
       - name: Build wails
         uses: dAppServer/wails-build-action@main
         id: build
