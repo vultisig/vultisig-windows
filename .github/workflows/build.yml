@@ -147,7 +147,16 @@ jobs:
       - name: Install NSIS
         if: matrix.build.os == 'windows-latest'
         shell: pwsh
-        run: choco install nsis -y --no-progress
+        run: |
+          choco install nsis -y --no-progress
+          $nsisDir = Join-Path ${env:ProgramFiles(x86)} 'NSIS'
+          if (-not (Test-Path (Join-Path $nsisDir 'makensis.exe'))) {
+            $nsisDir = Join-Path $env:ProgramFiles 'NSIS'
+          }
+          if (-not (Test-Path (Join-Path $nsisDir 'makensis.exe'))) {
+            throw 'makensis.exe not found after choco install nsis'
+          }
+          Add-Content -Path $env:GITHUB_PATH -Value $nsisDir
 
       - name: Build wails
         uses: dAppServer/wails-build-action@main
