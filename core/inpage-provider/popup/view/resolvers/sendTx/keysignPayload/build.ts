@@ -4,6 +4,7 @@ import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { getChainKind, isChainOfKind } from '@vultisig/core-chain/ChainKind'
+import { bittensorConfig } from '@vultisig/core-chain/chains/bittensor/config'
 import { CosmosMsgType } from '@vultisig/core-chain/chains/cosmos/cosmosMsgTypes'
 import { polkadotConfig } from '@vultisig/core-chain/chains/polkadot/config'
 import { getPsbtTransferInfo } from '@vultisig/core-chain/chains/utxo/tx/getPsbtTransferInfo'
@@ -491,7 +492,7 @@ export const buildSendTxKeysignPayload = async ({
   })
 
   if ('polkadot' in customTxData) {
-    const sp = customTxData.polkadot.signerPayload
+    const { chain: polkadotChain, signerPayload: sp } = customTxData.polkadot
     keysignPayload.blockchainSpecific = {
       case: 'polkadotSpecific',
       value: create(PolkadotSpecificSchema, {
@@ -501,7 +502,10 @@ export const buildSendTxKeysignPayload = async ({
         specVersion: parseInt(sp.specVersion, 16),
         transactionVersion: parseInt(sp.transactionVersion, 16),
         genesisHash: sp.genesisHash,
-        gas: polkadotConfig.fee,
+        gas:
+          polkadotChain === Chain.Bittensor
+            ? bittensorConfig.fee
+            : polkadotConfig.fee,
       }),
     }
   } else {

@@ -28,6 +28,7 @@ type RegularTxData = IKeysignTransactionPayload & {
 }
 
 export type PolkadotDappTxData = {
+  chain: OtherChain.Polkadot | OtherChain.Bittensor
   signerPayload: PolkadotSignerPayloadJSON
 }
 
@@ -121,9 +122,9 @@ export const getCustomTxData = ({
         }
       },
       serialized: async ({ data, chain, params }) => {
-        if (chain === OtherChain.Polkadot) {
+        if (chain === OtherChain.Polkadot || chain === OtherChain.Bittensor) {
           const signerPayload = JSON.parse(data[0]) as PolkadotSignerPayloadJSON
-          return { polkadot: { signerPayload } }
+          return { polkadot: { chain, signerPayload } }
         }
 
         const publicKey = getPublicKey({
