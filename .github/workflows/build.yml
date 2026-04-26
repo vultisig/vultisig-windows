@@ -149,7 +149,9 @@ jobs:
         with:
           build-name: ${{ matrix.build.name }}
           build-platform: ${{ matrix.build.platform }}
+          # package = upload build/bin artifacts; nsis = pass -nsis to wails build (Windows installer).
           package: ${{ matrix.build.os == 'windows-latest' }}
+          nsis: ${{ matrix.build.os == 'windows-latest' }}
 
       - name: Smoke test Windows installer
         if: matrix.build.os == 'windows-latest'
