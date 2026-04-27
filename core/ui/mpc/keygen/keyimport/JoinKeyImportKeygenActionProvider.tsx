@@ -33,6 +33,7 @@ import {
   useKeyImportChains,
 } from './state/keyImportChains'
 import { getKeyImportDerivationGroups } from './utils/getKeyImportDerivationGroups'
+import { withKeyImportServerChains } from './utils/keyImportServerChains'
 
 export const JoinKeyImportKeygenActionProvider = ({
   children,
@@ -210,7 +211,7 @@ export const JoinKeyImportKeygenActionProvider = ({
         chainKeyShares[chain] = result.keyshare
       }
 
-      const vault: Vault = {
+      const baseVault: Vault = {
         name: vaultName,
         publicKeys: {
           ecdsa: rootEcdsaResult.publicKey,
@@ -232,6 +233,10 @@ export const JoinKeyImportKeygenActionProvider = ({
         publicKeyMldsa: mldsaResult?.publicKey,
         keyShareMldsa: mldsaResult?.keyshare,
       }
+      const vault = withKeyImportServerChains(
+        baseVault,
+        getKeyImportDerivationGroups(chains).map(g => g.representativeChain)
+      )
 
       await setKeygenComplete({
         serverURL: serverUrl,
@@ -364,7 +369,7 @@ export const JoinKeyImportKeygenActionProvider = ({
         keyShareMldsa = seqMldsaResult.keyshare
       }
 
-      const vault: Vault = {
+      const baseVault: Vault = {
         name: vaultName,
         publicKeys: {
           ecdsa: rootEcdsaResult.publicKey,
@@ -386,6 +391,10 @@ export const JoinKeyImportKeygenActionProvider = ({
         publicKeyMldsa,
         keyShareMldsa,
       }
+      const vault = withKeyImportServerChains(
+        baseVault,
+        derivationGroups.map(g => g.representativeChain)
+      )
 
       await setKeygenComplete({
         serverURL: serverUrl,

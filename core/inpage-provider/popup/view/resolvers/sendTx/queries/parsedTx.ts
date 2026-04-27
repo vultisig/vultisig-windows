@@ -1,3 +1,4 @@
+import { useGetCoin } from '@core/ui/chain/coin/useGetCoin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { useCombineQueries } from '@lib/ui/query/hooks/useCombineQueries'
@@ -15,7 +16,6 @@ import { useMemo } from 'react'
 
 import { usePopupContext } from '../../../state/context'
 import { usePopupInput } from '../../../state/input'
-import { useGetCoin } from '../core/coin'
 import { CustomTxData, getCustomTxData } from '../core/customTxData'
 import { ParsedTx } from '../core/parsedTx'
 import { getThirdPartyGasLimitEstimation } from '../core/thirdPartyGasLimitEstimation'

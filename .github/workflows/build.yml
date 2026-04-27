@@ -132,7 +132,6 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Prepare vultisig-sdk from main (patch package.json)
-        if: matrix.build.os != 'windows-latest'
         uses: ./.github/actions/prepare-vultisig-sdk-from-main
         with:
           yarn-version: ${{ env.YARN_VERSION }}
@@ -141,7 +140,7 @@ jobs:
         uses: ./.github/actions/setup-yarn-monorepo
         with:
           node-version: ${{ env.NODE_VERSION }}
-          immutable-install: ${{ matrix.build.os == 'windows-latest' && 'true' || 'false' }}
+          immutable-install: 'false'
 
       # Wails NSIS packaging requires makensis on PATH (not preinstalled on windows-latest).
       - name: Install NSIS
