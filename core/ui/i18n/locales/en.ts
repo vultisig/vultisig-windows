@@ -984,6 +984,8 @@ export const en = {
   signDirect: 'Direct Sign',
   signPrivately: 'Want to sign privately?',
   sign_custom_message_description: 'Sign custom message',
+  sign_custom_message_unavailable_imported_no_ethereum:
+    'This vault was imported without Ethereum. Custom message signing needs Ethereum, and imported vaults cannot add chains that were skipped at import.',
   sign_faster: 'Sign faster than ever before',
   sign_message: 'Sign message',
   sign_transaction: 'Sign Transaction',
