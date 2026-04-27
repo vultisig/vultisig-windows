@@ -80,7 +80,12 @@ export const handleSignTx: ToolHandler = async (input, context) => {
         ? 'approval'
         : (txType ?? (encodedInputs.length === 1 ? 'transfer' : 'swap'))
 
-    const hashes = getPreSigningHashes({ walletCore, txInputData, chain })
+    const hashes = getPreSigningHashes({
+      walletCore,
+      txInputData,
+      chain,
+      keysignPayload,
+    })
 
     const signatures: Record<string, KeysignSignature> = {}
     for (const hash of hashes) {
@@ -101,6 +106,7 @@ export const handleSignTx: ToolHandler = async (input, context) => {
       signatures,
       chain,
       walletCore,
+      keysignPayload,
     })
 
     const signingOutput = decodeSigningOutput(chain, compiled)
