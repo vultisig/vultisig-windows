@@ -6,6 +6,7 @@ import { Chain } from '@vultisig/core-chain/Chain'
 import { getChainKind, isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { CosmosMsgType } from '@vultisig/core-chain/chains/cosmos/cosmosMsgTypes'
 import { polkadotConfig } from '@vultisig/core-chain/chains/polkadot/config'
+import { buildSignBitcoinFromPsbt } from '@vultisig/core-chain/chains/utxo/tx/buildSignBitcoinFromPsbt'
 import { getPsbtTransferInfo } from '@vultisig/core-chain/chains/utxo/tx/getPsbtTransferInfo'
 import { getChainSpecific } from '@vultisig/core-mpc/keysign/chainSpecific'
 import {
@@ -34,6 +35,7 @@ import {
   CosmosCoinSchema,
   SignAmino,
   SignAminoSchema,
+  SignBitcoin,
   SignDirect,
   SignDirectSchema,
   SignSolana,
@@ -456,6 +458,20 @@ export const buildSendTxKeysignPayload = async ({
     polkadot: () => undefined,
   })
 
+  const bitcoinPayload = matchRecordUnion<
+    CustomTxData,
+    SignBitcoin | undefined
+  >(customTxData, {
+    regular: () => undefined,
+    solana: () => undefined,
+    psbt: psbt =>
+      buildSignBitcoinFromPsbt({
+        psbt,
+        senderAddress: coin.address,
+      }),
+    polkadot: () => undefined,
+  })
+
   const signData: KeysignPayload['signData'] =
     aminoPayload !== undefined
       ? { case: 'signAmino', value: aminoPayload }
@@ -470,17 +486,22 @@ export const buildSendTxKeysignPayload = async ({
                   tonMessages: signTonPayload.tonMessages,
                 }),
               }
-            : { case: undefined, value: undefined }
+            : bitcoinPayload !== undefined
+              ? { case: 'signBitcoin', value: bitcoinPayload }
+              : { case: undefined, value: undefined }
 
   if (chain === Chain.Ton && memo && signTonPayload === undefined) {
     validateTonComment(memo)
   }
 
+  const needsUtxoInfo =
+    isChainOfKind(chain, 'utxo') && signData.case !== 'signBitcoin'
+
   let keysignPayload = create(KeysignPayloadSchema, {
     toAddress: toAddress ?? '',
     toAmount: getTxAmount(parsedTx).toString(),
     coin: fromCoin,
-    utxoInfo: await getKeysignUtxoInfo(coin),
+    utxoInfo: needsUtxoInfo ? await getKeysignUtxoInfo(coin) : [],
     vaultLocalPartyId: localPartyId,
     vaultPublicKeyEcdsa: vaultId,
     skipBroadcast,
@@ -526,7 +547,7 @@ export const buildSendTxKeysignPayload = async ({
     })
   }
 
-  if (isChainOfKind(chain, 'utxo')) {
+  if (needsUtxoInfo) {
     keysignPayload = refineKeysignUtxo({
       keysignPayload,
       walletCore,
