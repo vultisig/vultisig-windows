@@ -61,7 +61,12 @@ const tonTicker = chainFeeCoin[Chain.Ton].ticker
 const formatTon = (amount: bigint | string): string =>
   `${formatUnits(amount, tonDecimals)} ${tonTicker}`
 
-const formatSwapAmount = (amount: bigint, coin: Coin) =>
+type FormatSwapAmountInput = {
+  amount: bigint
+  coin: Coin
+}
+
+const formatSwapAmount = ({ amount, coin }: FormatSwapAmountInput) =>
   formatAmount(Number(formatUnits(amount, coin.decimals)), coin)
 
 const normalizeTonAddress = (address?: string) => {
@@ -74,7 +79,12 @@ const normalizeTonAddress = (address?: string) => {
   }
 }
 
-const operationTitle = (decoded: DecodedTonMessage, t: TFunction): string => {
+type OperationTitleInput = {
+  decoded: DecodedTonMessage
+  t: TFunction
+}
+
+const operationTitle = ({ decoded, t }: OperationTitleInput): string => {
   if (decoded.swapIntent) return t('swap')
   if (decoded.intent?.kind === 'jettonTransfer') return t('jetton_transfer')
   if (decoded.intent?.kind === 'nftTransfer') return t('nft_transfer')
@@ -129,7 +139,7 @@ const TonSwapAmount = ({
         <CoinIcon coin={coin} style={{ fontSize: 24 }} />
       </RoundedCoinIconWrapper>
       <Text color="contrast" size={17} weight="500">
-        {formatSwapAmount(amount, coin)}
+        {formatSwapAmount({ amount, coin })}
       </Text>
     </HStack>
   ) : (
@@ -213,7 +223,7 @@ const TonMessageItem = ({ decoded }: { decoded: DecodedTonMessage }) => {
         <ListItem description={intent.destination} title={t('to')} />
         <ListItem description={amountLabel} title={t('amount')} />
         <ListItem
-          description={formatTon(message.amount)}
+          description={formatTon(intent.forwardTonAmount)}
           title={t('forward_ton_amount')}
         />
       </List>
@@ -225,7 +235,7 @@ const TonMessageItem = ({ decoded }: { decoded: DecodedTonMessage }) => {
       <List>
         <ListItem description={intent.newOwner} title={t('to')} />
         <ListItem
-          description={formatTon(message.amount)}
+          description={formatTon(intent.forwardAmount)}
           title={t('forward_ton_amount')}
         />
       </List>
@@ -240,10 +250,15 @@ const TonMessageItem = ({ decoded }: { decoded: DecodedTonMessage }) => {
   )
 }
 
-const isSwapSidecarTransfer = (
-  entry: DecodedTonMessage,
+type IsSwapSidecarTransferInput = {
+  entry: DecodedTonMessage
   fromAddress?: string
-) => {
+}
+
+const isSwapSidecarTransfer = ({
+  entry,
+  fromAddress,
+}: IsSwapSidecarTransferInput) => {
   if (entry.swapIntent) return false
 
   const from = normalizeTonAddress(fromAddress)
@@ -291,7 +306,7 @@ export const SignTonDisplay = ({
       : hasSwap
         ? decoded.filter(
             entry =>
-              entry.swapIntent || !isSwapSidecarTransfer(entry, fromAddress)
+              entry.swapIntent || !isSwapSidecarTransfer({ entry, fromAddress })
           )
         : decoded
 
@@ -313,7 +328,7 @@ export const SignTonDisplay = ({
           <Panel key={index}>
             <VStack gap={12}>
               <StyledTitle color="text" fontSize={14}>
-                {operationTitle(entry, t)}
+                {operationTitle({ decoded: entry, t })}
               </StyledTitle>
               <TonMessageItem decoded={entry} />
               <RawPayloadDetails payload={entry.message.payload} />

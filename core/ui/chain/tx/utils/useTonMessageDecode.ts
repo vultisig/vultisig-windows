@@ -19,17 +19,26 @@ import { TonMessage } from '@vultisig/core-mpc/types/vultisig/keysign/v1/wasm_ex
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { queryUrl } from '@vultisig/lib-utils/query/queryUrl'
 
+/**
+ * A `TonMessage` paired with the intent decoded from its BOC payload, plus
+ * resolved coin metadata for any jetton wallets the intent references.
+ *
+ * - `intent`: structured representation of the message body (`null` when the
+ *   payload is empty, unparseable, or carries an opcode this decoder doesn't
+ *   recognize).
+ * - `swapIntent`: narrowed view of `intent` when the body decodes as a swap.
+ * - `swapOutputCoin`: target coin for swap intents that encode a target
+ *   token wallet, resolved against the same registry as `jettonCoin`.
+ * - `jettonCoin`: coin matching the jetton wallet in `message.to` for jetton
+ *   transfers and jetton-backed swaps. Resolution does not require the token
+ *   to be enabled in the vault; enabled custom tokens are only used as a
+ *   fallback when the token is not in the known-token registry.
+ */
 export type DecodedTonMessage = {
   message: TonMessage
   intent: TonMessageBodyIntent | null
   swapIntent: TonSwapIntent | null
   swapOutputCoin: Coin | null
-  /**
-   * Coin matching the jetton wallet in `message.to` for jetton transfers and
-   * jetton-backed swaps. Resolution does not require the token to be enabled in
-   * the vault; enabled custom tokens are only used as a fallback when the token
-   * is not in the known-token registry.
-   */
   jettonCoin: Coin | null
 }
 
@@ -193,22 +202,26 @@ const isTonTokenCoin = (
 const getKnownTonCoin = (address: string): Coin | null =>
   knownTokensIndex[Chain.Ton]?.[address.toLowerCase()] ?? null
 
+type GetVaultTonCoinInput = {
+  address: string
+  tonTokens: TonTokenCoin[]
+}
+
 const getVaultTonCoin = ({
   address,
   tonTokens,
-}: {
-  address: string
-  tonTokens: TonTokenCoin[]
-}): Coin | null =>
+}: GetVaultTonCoinInput): Coin | null =>
   tonTokens.find(coin => normalizeTonAddress(coin.id) === address) ?? null
+
+type GetTonCoinByJettonWalletAddressInput = {
+  walletAddress: string
+  tonTokens: TonTokenCoin[]
+}
 
 const getTonCoinByJettonWalletAddress = async ({
   walletAddress,
   tonTokens,
-}: {
-  walletAddress: string
-  tonTokens: TonTokenCoin[]
-}): Promise<Coin | null> => {
+}: GetTonCoinByJettonWalletAddressInput): Promise<Coin | null> => {
   const masterAddress = normalizeTonAddress(
     await getJettonMasterAddressByWalletAddress(walletAddress)
   )
