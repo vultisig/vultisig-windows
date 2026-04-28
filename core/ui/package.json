@@ -25,6 +25,7 @@
     "@solana/web3.js": "^1.98.4",
     "@tanstack/react-query": "^5.90.21",
     "@tanstack/react-query-persist-client": "^5.90.24",
+    "@ton/core": "^0.63.1",
     "@trustwallet/wallet-core": "^4.6.0",
     "@vultisig/core-chain": "1.2.2",
     "@vultisig/core-config": "0.9.1",
