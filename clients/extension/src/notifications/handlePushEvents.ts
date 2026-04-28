@@ -216,11 +216,12 @@ const resolvePushSubscription = async (
   return subscription
 }
 
-let pendingPushSubscription: Promise<PushSubscription> | undefined
+const pendingPushSubscriptions = new Map<string, Promise<PushSubscription>>()
 
 const getOrCreatePushSubscription = async (
   serverUrl: string
 ): Promise<PushSubscription> => {
+  const pendingPushSubscription = pendingPushSubscriptions.get(serverUrl)
   if (pendingPushSubscription) {
     console.log(
       '[Vultisig Push] Waiting for in-flight push subscription request'
@@ -228,11 +229,14 @@ const getOrCreatePushSubscription = async (
     return pendingPushSubscription
   }
 
-  pendingPushSubscription = resolvePushSubscription(serverUrl).finally(() => {
-    pendingPushSubscription = undefined
-  })
+  const nextPushSubscription = resolvePushSubscription(serverUrl).finally(
+    () => {
+      pendingPushSubscriptions.delete(serverUrl)
+    }
+  )
 
-  return pendingPushSubscription
+  pendingPushSubscriptions.set(serverUrl, nextPushSubscription)
+  return nextPushSubscription
 }
 
 const forceRegisterVault = async (
