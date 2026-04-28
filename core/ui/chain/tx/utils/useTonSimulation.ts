@@ -46,6 +46,11 @@ type TonApiEvent = {
   actions: TonApiAction[]
 }
 
+/**
+ * Result of a TonAPI emulation. Currently only surfaces detected jetton swaps.
+ * `null` when the emulation succeeded but no swap action was found, or when
+ * no emulation was performed.
+ */
 export type TonSimulationInfo = {
   swap: {
     fromAmount: bigint
@@ -58,6 +63,12 @@ export type TonSimulationInfo = {
 type UseTonSimulationInput = {
   enabled: boolean
   fromAddress?: string
+  keysignPayload: KeysignPayload
+  signTon: SignTon
+}
+
+type CreateTonWalletV4ExternalMessageBocInput = {
+  fromAddress: string
   keysignPayload: KeysignPayload
   signTon: SignTon
 }
@@ -135,11 +146,7 @@ const createTonWalletV4ExternalMessageBoc = ({
   fromAddress,
   keysignPayload,
   signTon,
-}: {
-  fromAddress: string
-  keysignPayload: KeysignPayload
-  signTon: SignTon
-}) => {
+}: CreateTonWalletV4ExternalMessageBocInput) => {
   const tonSpecific = getBlockchainSpecificValue(
     keysignPayload.blockchainSpecific,
     'tonSpecific'
@@ -185,6 +192,12 @@ const createTonWalletV4ExternalMessageBoc = ({
     .toString('base64')
 }
 
+/**
+ * Calls TonAPI's `/v2/events/emulate` to detect whether a TON Connect
+ * transaction performs a jetton swap, so the keysign UI can surface the
+ * resulting swap quote (input/output amounts and coins) instead of the raw
+ * outgoing messages. Disabled when a swap intent is already decoded locally.
+ */
 export const useTonSimulation = ({
   enabled,
   fromAddress,

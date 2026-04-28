@@ -258,6 +258,13 @@ const isSwapSidecarTransfer = (
   }
 }
 
+/**
+ * Renders the keysign verify/done view for a TON transaction. Decodes each
+ * outgoing TON message body, resolves jetton metadata, and either displays a
+ * TonAPI-simulated swap card or per-message details (jetton transfer, NFT
+ * transfer, gas refund, or generic). The raw BOC payload is always available
+ * under a collapsible details section.
+ */
 export const SignTonDisplay = ({
   signTon,
   fromAddress,

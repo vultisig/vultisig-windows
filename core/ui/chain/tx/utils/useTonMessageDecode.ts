@@ -80,16 +80,22 @@ const getJettonMasterAddressByWalletAddress = async (
 const isObjectRecord = (value: unknown): value is object =>
   !!value && typeof value === 'object' && !Array.isArray(value)
 
-const findStringValue = (
-  value: unknown,
-  keys: string[],
-  depth = 0
-): string | null => {
+type FindStringValueInput = {
+  value: unknown
+  keys: string[]
+  depth?: number
+}
+
+const findStringValue = ({
+  value,
+  keys,
+  depth = 0,
+}: FindStringValueInput): string | null => {
   if (depth > 3) return null
 
   if (Array.isArray(value)) {
     for (const item of value) {
-      const result = findStringValue(item, keys, depth + 1)
+      const result = findStringValue({ value: item, keys, depth: depth + 1 })
       if (result) return result
     }
 
@@ -108,11 +114,15 @@ const findStringValue = (
   for (const [, candidate] of entries) {
     if (Array.isArray(candidate)) {
       for (const item of candidate) {
-        const result = findStringValue(item, keys, depth + 1)
+        const result = findStringValue({ value: item, keys, depth: depth + 1 })
         if (result) return result
       }
     } else {
-      const result = findStringValue(candidate, keys, depth + 1)
+      const result = findStringValue({
+        value: candidate,
+        keys,
+        depth: depth + 1,
+      })
       if (result) return result
     }
   }
@@ -141,10 +151,16 @@ const getTonJettonCoinByMasterAddress = async (
   if (!master) return null
 
   const sources = getTonJettonMetadataSources(response)
-  const ticker = findStringValue(sources, ['symbol', 'ticker'])
+  const ticker = findStringValue({
+    value: sources,
+    keys: ['symbol', 'ticker'],
+  })
   if (!ticker) return null
 
-  const decimalsValue = findStringValue(sources, ['decimals'])
+  const decimalsValue = findStringValue({
+    value: sources,
+    keys: ['decimals'],
+  })
   const decimals = decimalsValue ? Number.parseInt(decimalsValue, 10) : 9
   const normalizedAddress =
     normalizeTonAddress(
@@ -158,7 +174,9 @@ const getTonJettonCoinByMasterAddress = async (
     id: normalizedAddress,
     ticker,
     decimals: Number.isFinite(decimals) ? decimals : 9,
-    logo: findStringValue(sources, ['image', 'image_data']) ?? undefined,
+    logo:
+      findStringValue({ value: sources, keys: ['image', 'image_data'] }) ??
+      undefined,
   }
 }
 
