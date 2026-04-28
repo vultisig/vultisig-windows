@@ -766,6 +766,7 @@ __metadata:
     "@storybook/react-vite": "npm:^10.2.19"
     "@tanstack/react-query": "npm:^5.90.21"
     "@tanstack/react-query-persist-client": "npm:^5.90.24"
+    "@ton/core": "npm:^0.63.1"
     "@trustwallet/wallet-core": "npm:^4.6.0"
     "@types/node": "npm:^25.5.0"
     "@types/react": "npm:^19.2.14"
