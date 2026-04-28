@@ -24,7 +24,6 @@ import { useVaults } from '@core/ui/storage/vaults'
 import { ImportVaultPage } from '@core/ui/vault/import/components/ImportVaultPage'
 import { ImportSeedphrasePage } from '@core/ui/vault/import/seedphrase/ImportSeedphrasePage'
 import { VaultPage } from '@core/ui/vault/page/components/VaultPage'
-import { VaultSettingsPage } from '@core/ui/vault/settings'
 import { useNavigate } from '@lib/ui/navigation/hooks/useNavigate'
 import { Views } from '@lib/ui/navigation/Views'
 import { useEffect } from 'react'
@@ -32,7 +31,6 @@ import { useEffect } from 'react'
 import { ExtensionChooseVaultsView } from '../components/notifications/ExtensionChooseVaultsView'
 import { ExtensionNotificationPrompt } from '../components/notifications/ExtensionNotificationPrompt'
 import { ExtensionNotificationSettingsPage } from '../components/notifications/ExtensionNotificationSettingsPage'
-import { RegisterPushNotificationsButton } from '../components/notifications/RegisterPushNotificationsButton'
 import { ManageSidePanel } from '../components/side-panel/ManageSidePanel'
 
 const ExtensionVaultPage = () => {
@@ -108,7 +106,4 @@ export const views: Views<AppViewId> = {
   ...sharedViews,
   ...appCustomViews,
   ...extensionSharedViewOverrides,
-  vaultSettings: () => (
-    <VaultSettingsPage extraItems={<RegisterPushNotificationsButton />} />
-  ),
 }
