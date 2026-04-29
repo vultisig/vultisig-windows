@@ -57,8 +57,8 @@
   },
   "resolutions": {
     "@noble/hashes": "1.8.0",
-    "@vultisig/mpc-types": "0.2.0",
-    "@vultisig/mpc-wasm": "0.1.2",
+    "@vultisig/mpc-types": "0.2.1",
+    "@vultisig/mpc-wasm": "0.1.3",
     "tar": ">=7.5.11",
     "minimatch@^3.1.2": ">=3.1.3",
     "minimatch@^9.0.0": ">=9.0.7",

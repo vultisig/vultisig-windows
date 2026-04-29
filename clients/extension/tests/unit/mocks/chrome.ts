@@ -53,7 +53,10 @@ type MessageListener = (
   sendResponse: (response?: unknown) => void
 ) => void
 
+type InstalledListener = (details: { reason: string }) => void
+
 const messageListeners: MessageListener[] = []
+const installedListeners: InstalledListener[] = []
 
 export const chromeMock = {
   storage: {
@@ -72,6 +75,18 @@ export const chromeMock = {
       }),
       hasListener: vi.fn((listener: MessageListener) =>
         messageListeners.includes(listener)
+      ),
+    },
+    onInstalled: {
+      addListener: vi.fn((listener: InstalledListener) => {
+        installedListeners.push(listener)
+      }),
+      removeListener: vi.fn((listener: InstalledListener) => {
+        const idx = installedListeners.indexOf(listener)
+        if (idx >= 0) installedListeners.splice(idx, 1)
+      }),
+      hasListener: vi.fn((listener: InstalledListener) =>
+        installedListeners.includes(listener)
       ),
     },
     getURL: vi.fn((path: string) => `chrome-extension://mock-id/${path}`),
@@ -94,9 +109,14 @@ export function resetChromeMock() {
   localStorage.clear()
   sessionStorage.clear()
   messageListeners.length = 0
+  installedListeners.length = 0
   vi.clearAllMocks()
 }
 
 export function getMessageListeners() {
   return messageListeners
+}
+
+export function getInstalledListeners() {
+  return installedListeners
 }
