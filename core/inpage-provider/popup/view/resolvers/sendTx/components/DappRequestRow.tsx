@@ -1,7 +1,7 @@
 import { usePopupContext } from '@core/inpage-provider/popup/view/state/context'
 import { BrowserExtensionIcon } from '@lib/ui/icons/BrowserExtensionIcon'
 import { SafeImage } from '@lib/ui/images/SafeImage'
-import { HStack } from '@lib/ui/layout/Stack'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { attempt } from '@vultisig/lib-utils/attempt'
@@ -35,7 +35,9 @@ const getHostname = (origin: string) => {
 }
 
 export const DappRequestRow = () => {
-  const { requestFavicon, requestOrigin } = usePopupContext<'sendTx'>()
+  const { requestFavicon, requestName, requestOrigin } =
+    usePopupContext<'sendTx'>()
+  const hostname = getHostname(requestOrigin)
 
   return (
     <HStack alignItems="center" gap={12}>
@@ -48,9 +50,16 @@ export const DappRequestRow = () => {
         }
         render={props => <Image alt="" {...props} />}
       />
-      <Text size={16} weight={500}>
-        {getHostname(requestOrigin)}
-      </Text>
+      <VStack gap={2}>
+        {requestName && (
+          <Text size={16} weight={500}>
+            {requestName}
+          </Text>
+        )}
+        <Text color="shy" size={requestName ? 13 : 16} weight={500}>
+          {hostname}
+        </Text>
+      </VStack>
     </HStack>
   )
 }
