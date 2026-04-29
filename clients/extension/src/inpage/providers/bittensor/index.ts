@@ -4,6 +4,7 @@ import { RequestInput } from '@core/inpage-provider/popup/view/resolvers/sendTx/
 import { OtherChain } from '@vultisig/core-chain/Chain'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedError'
+import { Buffer } from 'buffer'
 import EventEmitter from 'events'
 
 import { requestAccount } from '../core/requestAccount'
@@ -16,6 +17,7 @@ import {
 } from '../polkadot/types'
 
 let signingId = 0
+const ed25519SignaturePrefix = '0x00'
 
 export class Bittensor extends EventEmitter {
   public static instance: Bittensor | null = null
@@ -91,14 +93,15 @@ export class Bittensor extends EventEmitter {
       { account: payload.address }
     )
 
-    const output = shouldBePresent(data.output, 'signing output')
-    if (typeof output !== 'string') {
-      throw new Error('Expected signing output to be a string')
-    }
+    const encodedBase64 = shouldBePresent(
+      data.encoded,
+      'signing output encoded'
+    ) as string
+    const signatureHex = Buffer.from(encodedBase64, 'base64').toString('hex')
 
     return {
       id: ++signingId,
-      signature: output,
+      signature: ed25519SignaturePrefix + signatureHex,
     }
   }
 
@@ -119,7 +122,7 @@ export class Bittensor extends EventEmitter {
 
     return {
       id: ++signingId,
-      signature,
+      signature: ed25519SignaturePrefix + signature,
     }
   }
 }

@@ -100,8 +100,11 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
               return { txs: [tx] }
             }
 
-            // Polkadot dApp signPayload — bypass TW, sign raw payload
-            if (chain === OtherChain.Polkadot && payload.memo) {
+            // Substrate dApp signPayload — bypass TW, sign raw payload
+            if (
+              isOneOf(chain, [OtherChain.Polkadot, OtherChain.Bittensor]) &&
+              payload.memo
+            ) {
               const parseResult = attempt(
                 () => JSON.parse(payload.memo!) as PolkadotSignerPayloadJSON
               )
