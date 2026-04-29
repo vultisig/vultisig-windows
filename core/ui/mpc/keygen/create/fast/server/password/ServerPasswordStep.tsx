@@ -49,7 +49,9 @@ export const ServerPasswordStep: React.FC<ServerPasswordStepProps> = ({
 
   const { error, isPending, mutate } = useMutation({
     mutationFn: getVaultFromServer,
-    onSuccess: onFinish,
+    onSuccess: (_data, variables) => {
+      onFinish({ password: variables.password })
+    },
   })
 
   const {
