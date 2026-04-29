@@ -3,6 +3,10 @@ import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
+const keygenOperationState = vi.hoisted(() => ({
+  value: { create: true } as Record<string, unknown>,
+}))
+
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (k: string) => k }),
 }))
@@ -12,7 +16,7 @@ vi.mock('@core/ui/mpc/keygen/mutations/useKeygenMutation', () => ({
 }))
 
 vi.mock('@core/ui/mpc/keygen/state/currentKeygenOperationType', () => ({
-  useKeygenOperation: () => ({ create: true }),
+  useKeygenOperation: () => keygenOperationState.value,
 }))
 
 vi.mock('@core/ui/vault/save/SaveVaultStep', () => ({
@@ -46,6 +50,7 @@ const createMinimalVault = (input: {
 
 describe('KeygenFlow save ordering before backup', () => {
   beforeEach(() => {
+    keygenOperationState.value = { create: true }
     vi.mocked(useKeygenMutation).mockReset()
   })
 
@@ -112,5 +117,64 @@ describe('KeygenFlow save ordering before backup', () => {
     const html = renderToStaticMarkup(<KeygenFlow onBack={() => {}} />)
 
     expect(html).toContain('data-testid="save-vault-step"')
+  })
+
+  it.each([
+    ['create', { create: true }],
+    ['regular reshare', { reshare: 'regular' }],
+    ['migrate reshare', { reshare: 'migrate' }],
+    ['key import', { keyimport: true }],
+    ['single keygen', { singleKeygen: true }],
+  ])(
+    'runs SaveVaultStep for imported server-share holder during %s',
+    (_, operation) => {
+      keygenOperationState.value = operation
+      const vault = createMinimalVault({
+        signers: ['Mac-6001', 'Server-6002'],
+        localPartyId: 'Server-6002',
+      })
+      vi.mocked(useKeygenMutation).mockReturnValue({
+        step: null,
+        protocolStatuses: {},
+        mutate: vi.fn(),
+        data: vault,
+        isPending: false,
+        isError: false,
+        isSuccess: true,
+        error: null,
+      } as unknown as ReturnType<typeof useKeygenMutation>)
+
+      const html = renderToStaticMarkup(<KeygenFlow onBack={() => {}} />)
+
+      expect(html).toContain('data-testid="save-vault-step"')
+      expect(html).not.toContain('data-testid="keygen-flow-ending"')
+    }
+  )
+
+  it('finishes plugin reshare without rendering save or backup ending', () => {
+    keygenOperationState.value = { reshare: 'plugin' }
+    const vault = createMinimalVault({
+      signers: ['Mac-6001', 'Server-6002'],
+      localPartyId: 'Server-6002',
+    })
+    const onFinish = vi.fn()
+    vi.mocked(useKeygenMutation).mockReturnValue({
+      step: null,
+      protocolStatuses: {},
+      mutate: vi.fn(),
+      data: vault,
+      isPending: false,
+      isError: false,
+      isSuccess: true,
+      error: null,
+    } as unknown as ReturnType<typeof useKeygenMutation>)
+
+    const html = renderToStaticMarkup(
+      <KeygenFlow onBack={() => {}} onFinish={onFinish} />
+    )
+
+    expect(onFinish).toHaveBeenCalledOnce()
+    expect(html).not.toContain('data-testid="save-vault-step"')
+    expect(html).not.toContain('data-testid="keygen-flow-ending"')
   })
 })
