@@ -56,6 +56,7 @@
     "vitest": "^4.1.0"
   },
   "resolutions": {
+    "viem": "npm:2.47.4",
     "@noble/hashes": "1.8.0",
     "@vultisig/mpc-types": "0.2.1",
     "@vultisig/mpc-wasm": "0.1.3",
