@@ -29,6 +29,7 @@ export const runBridgeBackgroundAgent = <
         message: message as TMessage,
         context: {
           requestFavicon: tab?.favIconUrl,
+          requestName: tab?.title,
           requestOrigin: origin,
         },
         reply: (response: TResponse) => {
