@@ -67,24 +67,19 @@ export type BuildSendTxKeysignPayloadInput = {
 
 const defaultTransactionType = TransactionType.UNSPECIFIED
 
-const cosmosMsgTypeToTransactionType: Record<
-  CosmosMsgType | TronMsgType,
-  TransactionType
-> = {
-  [CosmosMsgType.MSG_SEND]: defaultTransactionType,
-  [CosmosMsgType.THORCHAIN_MSG_SEND]: defaultTransactionType,
-  [CosmosMsgType.MSG_SEND_URL]: defaultTransactionType,
-  [CosmosMsgType.MSG_TRANSFER_URL]: TransactionType.IBC_TRANSFER,
-  [CosmosMsgType.MSG_EXECUTE_CONTRACT]: TransactionType.GENERIC_CONTRACT,
-  [CosmosMsgType.MSG_EXECUTE_CONTRACT_URL]: TransactionType.GENERIC_CONTRACT,
-  [CosmosMsgType.THORCHAIN_MSG_DEPOSIT]: defaultTransactionType,
-  [CosmosMsgType.THORCHAIN_MSG_DEPOSIT_URL]: defaultTransactionType,
-  [CosmosMsgType.THORCHAIN_MSG_LEAVE_POOL]: defaultTransactionType,
-  [CosmosMsgType.THORCHAIN_MSG_LEAVE_POOL_URL]: defaultTransactionType,
-  [CosmosMsgType.THORCHAIN_MSG_SEND_URL]: defaultTransactionType,
-  [TronMsgType.TRON_TRANSFER_CONTRACT]: defaultTransactionType,
-  [TronMsgType.TRON_TRIGGER_SMART_CONTRACT]: defaultTransactionType,
-  [TronMsgType.TRON_TRANSFER_ASSET_CONTRACT]: defaultTransactionType,
+/** Maps proto `msgPayload.case` to keysign transaction type. Uses `default` so new `CosmosMsgType` values from SDK stay covered without an exhaustive object (CI packs SDK `main`). */
+const getTransactionTypeForMsgCase = (
+  msgCase: CosmosMsgType | TronMsgType
+): TransactionType => {
+  switch (msgCase) {
+    case CosmosMsgType.MSG_TRANSFER_URL:
+      return TransactionType.IBC_TRANSFER
+    case CosmosMsgType.MSG_EXECUTE_CONTRACT:
+    case CosmosMsgType.MSG_EXECUTE_CONTRACT_URL:
+      return TransactionType.GENERIC_CONTRACT
+    default:
+      return defaultTransactionType
+  }
 }
 
 export const buildSendTxKeysignPayload = async ({
@@ -105,7 +100,7 @@ export const buildSendTxKeysignPayload = async ({
       const { transactionDetails } = regular
       const { msgPayload } = transactionDetails
       return msgPayload?.case
-        ? cosmosMsgTypeToTransactionType[msgPayload.case]
+        ? getTransactionTypeForMsgCase(msgPayload.case)
         : defaultTransactionType
     }
   }
