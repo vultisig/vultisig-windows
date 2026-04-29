@@ -257,7 +257,10 @@ export const useTonMessageDecode = ({
 
   const decodedMessages = tonMessages.map(message => ({
     message,
-    intent: decodeTonMessageBody(tonPayloadToBase64(message.payload)),
+    intent: decodeTonMessageBody({
+      payload: tonPayloadToBase64(message.payload),
+      outerDestination: message.to,
+    }),
   }))
 
   const inputJettonWalletAddresses = decodedMessages
