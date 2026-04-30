@@ -1,5 +1,6 @@
 import { ChildrenProp } from '@lib/ui/props'
 import { keysign } from '@vultisig/core-mpc/keysign'
+import { MldsaKeysign } from '@vultisig/core-mpc/mldsa/mldsaKeysign'
 import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { match } from '@vultisig/lib-utils/match'
@@ -45,6 +46,36 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
       'Keyshare'
     )
 
+    const chainPath = isKeyImportVault(vault)
+      ? eddsaPlaceholderChainPath
+      : match(signatureAlgorithm, {
+          ecdsa: () =>
+            walletCore.CoinTypeExt.derivationPath(coinType).replaceAll("'", ''),
+          eddsa: () => eddsaPlaceholderChainPath,
+          mldsa: () => eddsaPlaceholderChainPath,
+        })
+
+    if (signatureAlgorithm === 'mldsa') {
+      const mldsaKeysign = new MldsaKeysign({
+        keysignCommittee: [vault.localPartyId, ...peers],
+        serverURL: serverUrl,
+        sessionId,
+        localPartyId: vault.localPartyId,
+        messagesToSign: msgs,
+        keyShareBase64: keyShare,
+        hexEncryptionKey: encryptionKeyHex,
+        chainPath,
+        isInitiatingDevice,
+      })
+      const results = await mldsaKeysign.startKeysignWithRetry()
+      return results.map(({ msg, signature }) => ({
+        msg: Buffer.from(msg, 'hex').toString('base64'),
+        r: '',
+        s: '',
+        der_signature: signature,
+      }))
+    }
+
     return chainPromises(
       msgs.map(
         message => async () =>
@@ -52,17 +83,7 @@ export const KeysignActionProvider = ({ children }: ChildrenProp) => {
             keyShare,
             signatureAlgorithm,
             message,
-            chainPath: isKeyImportVault(vault)
-              ? eddsaPlaceholderChainPath
-              : match(signatureAlgorithm, {
-                  ecdsa: () =>
-                    walletCore.CoinTypeExt.derivationPath(coinType).replaceAll(
-                      "'",
-                      ''
-                    ),
-                  eddsa: () => eddsaPlaceholderChainPath,
-                  mldsa: () => eddsaPlaceholderChainPath,
-                }),
+            chainPath,
             localPartyId: vault.localPartyId,
             peers,
             serverUrl,

@@ -756,6 +756,7 @@ __metadata:
     "@hookform/resolvers": "npm:^5.2.2"
     "@lib/codegen": "workspace:^"
     "@lib/ui": "workspace:^"
+    "@noble/hashes": "npm:^2.0.1"
     "@polkadot/util": "npm:^14.0.1"
     "@polkadot/util-crypto": "npm:^14.0.1"
     "@react-spring/web": "npm:^10.0.3"
