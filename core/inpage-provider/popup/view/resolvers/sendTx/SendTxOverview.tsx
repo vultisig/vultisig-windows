@@ -318,8 +318,11 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                       title={t('network')}
                     />
                   </List>
-                  <SignTonDisplay signTon={keysignPayload.signData.value} />
-                  <MemoSection memo={keysignPayload.memo} chain={chain} />
+                  <SignTonDisplay
+                    fromAddress={address}
+                    keysignPayload={keysignPayload}
+                    signTon={keysignPayload.signData.value}
+                  />
                   <VStack bgColor="foreground" radius={16}>
                     <NetworkFeeSection
                       keysignPayload={keysignPayload}
