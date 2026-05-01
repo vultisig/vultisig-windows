@@ -6,6 +6,7 @@ import { Chain } from '@vultisig/core-chain/Chain'
 import { getChainKind, isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { CosmosMsgType } from '@vultisig/core-chain/chains/cosmos/cosmosMsgTypes'
 import { polkadotConfig } from '@vultisig/core-chain/chains/polkadot/config'
+import { buildSignBitcoinFromPsbt } from '@vultisig/core-chain/chains/utxo/tx/buildSignBitcoinFromPsbt'
 import { getPsbtTransferInfo } from '@vultisig/core-chain/chains/utxo/tx/getPsbtTransferInfo'
 import { getChainSpecific } from '@vultisig/core-mpc/keysign/chainSpecific'
 import {
@@ -34,6 +35,7 @@ import {
   CosmosCoinSchema,
   SignAmino,
   SignAminoSchema,
+  SignBitcoin,
   SignDirect,
   SignDirectSchema,
   SignSolana,
@@ -65,24 +67,19 @@ export type BuildSendTxKeysignPayloadInput = {
 
 const defaultTransactionType = TransactionType.UNSPECIFIED
 
-const cosmosMsgTypeToTransactionType: Record<
-  CosmosMsgType | TronMsgType,
-  TransactionType
-> = {
-  [CosmosMsgType.MSG_SEND]: defaultTransactionType,
-  [CosmosMsgType.THORCHAIN_MSG_SEND]: defaultTransactionType,
-  [CosmosMsgType.MSG_SEND_URL]: defaultTransactionType,
-  [CosmosMsgType.MSG_TRANSFER_URL]: TransactionType.IBC_TRANSFER,
-  [CosmosMsgType.MSG_EXECUTE_CONTRACT]: TransactionType.GENERIC_CONTRACT,
-  [CosmosMsgType.MSG_EXECUTE_CONTRACT_URL]: TransactionType.GENERIC_CONTRACT,
-  [CosmosMsgType.THORCHAIN_MSG_DEPOSIT]: defaultTransactionType,
-  [CosmosMsgType.THORCHAIN_MSG_DEPOSIT_URL]: defaultTransactionType,
-  [CosmosMsgType.THORCHAIN_MSG_LEAVE_POOL]: defaultTransactionType,
-  [CosmosMsgType.THORCHAIN_MSG_LEAVE_POOL_URL]: defaultTransactionType,
-  [CosmosMsgType.THORCHAIN_MSG_SEND_URL]: defaultTransactionType,
-  [TronMsgType.TRON_TRANSFER_CONTRACT]: defaultTransactionType,
-  [TronMsgType.TRON_TRIGGER_SMART_CONTRACT]: defaultTransactionType,
-  [TronMsgType.TRON_TRANSFER_ASSET_CONTRACT]: defaultTransactionType,
+/** Maps proto `msgPayload.case` to keysign transaction type. Uses `default` so new `CosmosMsgType` values from SDK stay covered without an exhaustive object (CI packs SDK `main`). */
+const getTransactionTypeForMsgCase = (
+  msgCase: CosmosMsgType | TronMsgType
+): TransactionType => {
+  switch (msgCase) {
+    case CosmosMsgType.MSG_TRANSFER_URL:
+      return TransactionType.IBC_TRANSFER
+    case CosmosMsgType.MSG_EXECUTE_CONTRACT:
+    case CosmosMsgType.MSG_EXECUTE_CONTRACT_URL:
+      return TransactionType.GENERIC_CONTRACT
+    default:
+      return defaultTransactionType
+  }
 }
 
 export const buildSendTxKeysignPayload = async ({
@@ -103,7 +100,7 @@ export const buildSendTxKeysignPayload = async ({
       const { transactionDetails } = regular
       const { msgPayload } = transactionDetails
       return msgPayload?.case
-        ? cosmosMsgTypeToTransactionType[msgPayload.case]
+        ? getTransactionTypeForMsgCase(msgPayload.case)
         : defaultTransactionType
     }
   }
@@ -456,6 +453,20 @@ export const buildSendTxKeysignPayload = async ({
     polkadot: () => undefined,
   })
 
+  const bitcoinPayload = matchRecordUnion<
+    CustomTxData,
+    SignBitcoin | undefined
+  >(customTxData, {
+    regular: () => undefined,
+    solana: () => undefined,
+    psbt: psbt =>
+      buildSignBitcoinFromPsbt({
+        psbt,
+        senderAddress: coin.address,
+      }),
+    polkadot: () => undefined,
+  })
+
   const signData: KeysignPayload['signData'] =
     aminoPayload !== undefined
       ? { case: 'signAmino', value: aminoPayload }
@@ -470,17 +481,22 @@ export const buildSendTxKeysignPayload = async ({
                   tonMessages: signTonPayload.tonMessages,
                 }),
               }
-            : { case: undefined, value: undefined }
+            : bitcoinPayload !== undefined
+              ? { case: 'signBitcoin', value: bitcoinPayload }
+              : { case: undefined, value: undefined }
 
   if (chain === Chain.Ton && memo && signTonPayload === undefined) {
     validateTonComment(memo)
   }
 
+  const needsUtxoInfo =
+    isChainOfKind(chain, 'utxo') && signData.case !== 'signBitcoin'
+
   let keysignPayload = create(KeysignPayloadSchema, {
     toAddress: toAddress ?? '',
     toAmount: getTxAmount(parsedTx).toString(),
     coin: fromCoin,
-    utxoInfo: await getKeysignUtxoInfo(coin),
+    utxoInfo: needsUtxoInfo ? await getKeysignUtxoInfo(coin) : [],
     vaultLocalPartyId: localPartyId,
     vaultPublicKeyEcdsa: vaultId,
     skipBroadcast,
@@ -526,7 +542,7 @@ export const buildSendTxKeysignPayload = async ({
     })
   }
 
-  if (isChainOfKind(chain, 'utxo')) {
+  if (needsUtxoInfo) {
     keysignPayload = refineKeysignUtxo({
       keysignPayload,
       walletCore,

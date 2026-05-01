@@ -12,6 +12,11 @@ vendor/
 build/bin
 build/darwin
 build/windows
+!build/windows/
+build/windows/*
+!build/windows/installer/
+build/windows/installer/*
+!build/windows/installer/project.nsi
 dist/
 bin/
 

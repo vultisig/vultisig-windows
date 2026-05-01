@@ -62,7 +62,127 @@ declare const self: {
 const getServerUrl = async (): Promise<string> =>
   (await getPushServerUrl()) ?? pushNotificationServerUrl
 
-const getOrCreatePushSubscription = async (
+const pushSubscribeRetryDelaysMs = [500, 1_500, 3_000]
+
+const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+
+const getErrorName = (error: unknown): string =>
+  error instanceof Error ? error.name : typeof error
+
+const getErrorMessage = (error: unknown): string =>
+  error instanceof Error ? error.message : String(error)
+
+const getNotificationPermission = (): string =>
+  typeof Notification === 'undefined' ? 'unavailable' : Notification.permission
+
+type SubscribeDiagnosticsInput = {
+  serverUrl: string
+  vapidPublicKey: string
+  applicationServerKey: ArrayBuffer
+}
+
+const getSubscribeDiagnostics = ({
+  serverUrl,
+  vapidPublicKey,
+  applicationServerKey,
+}: SubscribeDiagnosticsInput) => ({
+  serverUrl,
+  extensionId: chrome.runtime.id,
+  notificationPermission: getNotificationPermission(),
+  online: typeof navigator === 'undefined' ? 'unknown' : navigator.onLine,
+  vapidPublicKeyLength: vapidPublicKey.length,
+  applicationServerKeyBytes: applicationServerKey.byteLength,
+})
+
+const isRetryablePushSubscribeError = (error: unknown): boolean =>
+  getErrorName(error) === 'AbortError'
+
+const toTightArrayBuffer = (bytes: Uint8Array): ArrayBuffer => {
+  const buffer = new ArrayBuffer(bytes.byteLength)
+  new Uint8Array(buffer).set(bytes)
+  return buffer
+}
+
+const createPushSubscribeError = ({
+  error,
+  attempt,
+  diagnostics,
+}: {
+  error: unknown
+  attempt: number
+  diagnostics: ReturnType<typeof getSubscribeDiagnostics>
+}): Error => {
+  const message = [
+    `Push subscription failed after ${attempt} attempt(s):`,
+    `${getErrorName(error)}: ${getErrorMessage(error)}.`,
+    'This happened inside Chrome/FCM before Vultisig server registration.',
+    'Check chrome://gcm-internals, notification permission, VPN/proxy, and Chrome profile registration limits.',
+  ].join(' ')
+  const result = new Error(message)
+  Object.assign(result, { cause: error, diagnostics })
+  return result
+}
+
+const subscribeToPushManager = async ({
+  serverUrl,
+  vapidPublicKey,
+  applicationServerKey,
+}: SubscribeDiagnosticsInput): Promise<PushSubscription> => {
+  const diagnostics = getSubscribeDiagnostics({
+    serverUrl,
+    vapidPublicKey,
+    applicationServerKey,
+  })
+  const maxAttempts = pushSubscribeRetryDelaysMs.length + 1
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      if (attempt > 1) {
+        const existing = await self.registration.pushManager.getSubscription()
+        if (existing) {
+          console.log(
+            '[Vultisig Push] Push subscription appeared after retry wait; using it'
+          )
+          return existing
+        }
+      }
+
+      console.log(
+        `[Vultisig Push] Subscribing to push manager (attempt ${attempt}/${maxAttempts})...`
+      )
+      return await self.registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey,
+      })
+    } catch (error) {
+      console.error('[Vultisig Push] pushManager.subscribe failed:', {
+        attempt,
+        maxAttempts,
+        errorName: getErrorName(error),
+        errorMessage: getErrorMessage(error),
+        diagnostics,
+      })
+
+      const retryDelayMs = pushSubscribeRetryDelaysMs[attempt - 1]
+      if (
+        attempt === maxAttempts ||
+        retryDelayMs === undefined ||
+        !isRetryablePushSubscribeError(error)
+      ) {
+        throw createPushSubscribeError({ error, attempt, diagnostics })
+      }
+
+      console.warn(
+        `[Vultisig Push] Retrying push subscribe in ${retryDelayMs}ms...`
+      )
+      await wait(retryDelayMs)
+    }
+  }
+
+  throw new Error('Push subscription failed unexpectedly')
+}
+
+const resolvePushSubscription = async (
   serverUrl: string
 ): Promise<PushSubscription> => {
   console.log('[Vultisig Push] Checking existing push subscription...')
@@ -79,16 +199,44 @@ const getOrCreatePushSubscription = async (
   console.log(
     `[Vultisig Push] Got VAPID key: ${vapidPublicKey.slice(0, 20)}...`
   )
-  const applicationServerKey = urlBase64ToUint8Array(vapidPublicKey)
-    .buffer as ArrayBuffer
+  const applicationServerKey = toTightArrayBuffer(
+    urlBase64ToUint8Array(vapidPublicKey)
+  )
 
-  console.log('[Vultisig Push] Subscribing to push manager...')
-  const subscription = await self.registration.pushManager.subscribe({
-    userVisibleOnly: true,
+  console.log('[Vultisig Push] Prepared VAPID application server key:', {
+    vapidPublicKeyLength: vapidPublicKey.length,
+    applicationServerKeyBytes: applicationServerKey.byteLength,
+  })
+  const subscription = await subscribeToPushManager({
+    serverUrl,
+    vapidPublicKey,
     applicationServerKey,
   })
   console.log('[Vultisig Push] Push subscription created successfully')
   return subscription
+}
+
+const pendingPushSubscriptions = new Map<string, Promise<PushSubscription>>()
+
+const getOrCreatePushSubscription = async (
+  serverUrl: string
+): Promise<PushSubscription> => {
+  const pendingPushSubscription = pendingPushSubscriptions.get(serverUrl)
+  if (pendingPushSubscription) {
+    console.log(
+      '[Vultisig Push] Waiting for in-flight push subscription request'
+    )
+    return pendingPushSubscription
+  }
+
+  const nextPushSubscription = resolvePushSubscription(serverUrl).finally(
+    () => {
+      pendingPushSubscriptions.delete(serverUrl)
+    }
+  )
+
+  pendingPushSubscriptions.set(serverUrl, nextPushSubscription)
+  return nextPushSubscription
 }
 
 const forceRegisterVault = async (
