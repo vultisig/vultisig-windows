@@ -36,6 +36,7 @@ import { KeygenAction, KeygenActionProvider } from '../state/keygenAction'
 import { useKeygenVaultName } from '../state/keygenVault'
 import { useKeyImportInput } from './state/keyImportInput'
 import { getKeyImportDerivationGroups } from './utils/getKeyImportDerivationGroups'
+import { withKeyImportServerChains } from './utils/keyImportServerChains'
 
 type KeyShareResult = {
   keyshare: string
@@ -273,7 +274,7 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
         hdWallet.delete()
       }
 
-      const vault: Vault = {
+      const baseVault: Vault = {
         name: vaultName,
         publicKeys: {
           ecdsa: rootEcdsaResult.publicKey,
@@ -293,6 +294,10 @@ export const KeyImportKeygenActionProvider = ({ children }: ChildrenProp) => {
         chainPublicKeys,
         chainKeyShares,
       }
+      const vault = withKeyImportServerChains(
+        baseVault,
+        derivationGroups.map(g => g.representativeChain)
+      )
 
       await setKeygenComplete({
         serverURL: serverUrl,
@@ -733,7 +738,7 @@ async function runBatchKeyImport({
     }
   }
 
-  const vault: Vault = {
+  const baseVault: Vault = {
     name: vaultName,
     publicKeys: {
       ecdsa: rootEcdsaResult.publicKey,
@@ -753,6 +758,10 @@ async function runBatchKeyImport({
     publicKeyMldsa: mldsaResult?.publicKey,
     keyShareMldsa: mldsaResult?.keyshare,
   }
+  const vault = withKeyImportServerChains(
+    baseVault,
+    derivationGroups.map(g => g.representativeChain)
+  )
 
   await setKeygenComplete({
     serverURL: serverUrl,

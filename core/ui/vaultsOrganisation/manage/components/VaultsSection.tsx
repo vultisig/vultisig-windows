@@ -32,7 +32,7 @@ export const VaultsSection = () => {
   const currentVaultId = useCurrentVaultId()
   const [items, setItems] = useState<Vault[]>(vaults)
   const { totals: vaultTotals, isPending: isTotalsPending } =
-    useVaultsTotalBalances()
+    useVaultsTotalBalances({ vaults })
   const formatFiatAmount = useFormatFiatAmount()
 
   useEffect(() => setItems(vaults), [vaults])

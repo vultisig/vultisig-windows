@@ -9,10 +9,12 @@ import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { FC, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { UAParser } from 'ua-parser-js'
 
 import { useOpenInExpandedViewMutation } from '../../expanded-view/mutations/openInExpandedView'
 import { AppView } from '../../navigation/AppView'
+
+const isWindowsOs = () =>
+  typeof navigator !== 'undefined' && /Windows/i.test(navigator.userAgent)
 
 export const ExpandViewGuard: FC<ChildrenProp> = ({ children }) => {
   const { t } = useTranslation()
@@ -29,10 +31,7 @@ export const ExpandViewGuard: FC<ChildrenProp> = ({ children }) => {
       return true
     }
 
-    const parser = new UAParser()
-    const parserResult = parser.getResult()
-
-    return parserResult.os.name !== 'Windows' && isPopup
+    return !isWindowsOs() && isPopup
   }, [currentView.id])
 
   useEffect(() => {

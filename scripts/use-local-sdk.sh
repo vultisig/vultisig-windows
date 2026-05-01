@@ -15,6 +15,9 @@ SHARED_PACKAGES=(
   packages/core/config
   packages/core/mpc
   packages/lib/utils
+  packages/lib/dkls
+  packages/lib/mldsa
+  packages/lib/schnorr
   packages/mpc-types
   packages/mpc-wasm
 )

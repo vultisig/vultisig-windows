@@ -29,11 +29,13 @@ import { assertField } from '@vultisig/lib-utils/record/assertField'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { getKeyImportServerChains } from '../../keygen/keyimport/utils/keyImportServerChains'
 import {
   customMessageDefaultChain,
   customMessageSupportedChains,
 } from '../customMessage/chains'
 import { getCustomMessageHex } from '../customMessage/getCustomMessageHex'
+import { resolveServerChainForKeyImport } from './utils/resolveServerChainForKeyImport'
 
 type FastKeysignServerStepProps = OnFinishProp & {
   password: string
@@ -53,6 +55,12 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
   const [{ keysignPayload }] = useCoreViewState<'keysign'>()
 
   const walletCore = useAssertWalletCore()
+
+  const serverChains = getKeyImportServerChains(vault)
+  const toServerChain = (chain: Chain): Chain =>
+    serverChains
+      ? resolveServerChainForKeyImport({ chain, serverChains })
+      : chain
 
   const { mutate, ...state } = useMutation({
     mutationFn: async () => {
@@ -114,7 +122,7 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
                 ),
                 is_ecdsa: false,
                 vault_password: password,
-                chain,
+                chain: toServerChain(chain),
               })
             }
           }
@@ -138,6 +146,7 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
                 txInputData,
                 walletCore,
                 chain,
+                keysignPayload,
               }).map(value => Buffer.from(value).toString('hex'))
             )
             .sort()
@@ -152,7 +161,7 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
             ),
             is_ecdsa: getSignatureAlgorithm(chain) === 'ecdsa',
             vault_password: password,
-            chain,
+            chain: toServerChain(chain),
           })
         },
         custom: async ({
@@ -179,7 +188,7 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
             ),
             is_ecdsa: getSignatureAlgorithm(chain) === 'ecdsa',
             vault_password: password,
-            chain,
+            chain: toServerChain(chain),
           })
         },
       })

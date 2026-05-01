@@ -2,6 +2,8 @@ import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider
 import { useBlockaidPayloadSimulationQuery } from '@core/ui/chain/security/blockaid/tx/queries/blockaidPayloadSimulation'
 import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
 import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
+import { useUniversalRouterSwap } from '@core/ui/chain/tx/utils/useUniversalRouterSwap'
+import { UniversalRouterSwapSummary } from '@core/ui/mpc/keysign/tx/swap/UniversalRouterSwapSummary'
 import { TxOverviewAmount } from '@core/ui/mpc/keysign/tx/TxOverviewAmount'
 import { getSignDataTxAction } from '@core/ui/mpc/keysign/tx/utils/getSignDataTxAction'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
@@ -67,10 +69,23 @@ export const TxSuccess = ({
     walletCore,
   })
 
+  const vaultCoins = useCurrentVaultCoins()
+
+  const { data: universalRouterSwap, isPending: isUniversalRouterPending } =
+    useUniversalRouterSwap({
+      memo: isContractExecution ? memo : undefined,
+      chain: coin.chain,
+    })
+
   const functionQuery = useQuery({
     queryKey: ['evmContractCallInfo', memo],
     queryFn: () => getEvmContractCallInfo(memo!),
-    enabled: isContractExecution && !!memo && memo.length > 2,
+    enabled:
+      isContractExecution &&
+      !isUniversalRouterPending &&
+      !universalRouterSwap &&
+      !!memo &&
+      memo.length > 2,
     staleTime: Infinity,
   })
 
@@ -79,8 +94,6 @@ export const TxSuccess = ({
   const resolvedLabel = rawFunctionName
     ? capitalizeFirstLetter(rawFunctionName)
     : undefined
-
-  const vaultCoins = useCurrentVaultCoins()
 
   const resolvedToken = useMemo(() => {
     if (!functionQuery.data) return null
@@ -162,19 +175,34 @@ export const TxSuccess = ({
     value: txHash,
   })
 
+  // Prefer Blockaid simulation data (it covers more routers and accounts for
+  // on-chain state), then our local Universal Router decode, then the 4byte +
+  // single-token fallback. The UR decoder fills the gap Phase 2A left when
+  // Blockaid is offline or skips the request.
+  const showUniversalRouterSwap = !simulationSend && !!universalRouterSwap
+
   return (
     <VStack gap={36} data-testid="tx-success">
       <TxStatusTracker chain={coin.chain} hash={txHash} />
       <VStack gap={8}>
-        <TxOverviewAmount
-          amount={displayAmount}
-          value={displayCoin}
-          actionLabel={
-            txAction?.action !== 'send' ? txAction?.labelKey : undefined
-          }
-          resolvedLabel={resolvedLabel}
-          amountOverride={displayAmountOverride}
-        />
+        {showUniversalRouterSwap ? (
+          <UniversalRouterSwapSummary
+            fromCoin={universalRouterSwap.fromCoin}
+            fromAmount={universalRouterSwap.fromAmount}
+            toCoin={universalRouterSwap.toCoin}
+            toAmount={universalRouterSwap.toAmount}
+          />
+        ) : (
+          <TxOverviewAmount
+            amount={displayAmount}
+            value={displayCoin}
+            actionLabel={
+              txAction?.action !== 'send' ? txAction?.labelKey : undefined
+            }
+            resolvedLabel={resolvedLabel}
+            amountOverride={displayAmountOverride}
+          />
+        )}
         {!skipBroadcast && (
           <List>
             <ListItem

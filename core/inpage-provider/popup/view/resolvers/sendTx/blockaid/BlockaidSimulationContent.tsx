@@ -8,7 +8,9 @@ import { Collapse } from '@core/inpage-provider/popup/view/resolvers/signMessage
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
 import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
-import { VStack } from '@lib/ui/layout/Stack'
+import { useUniversalRouterSwap } from '@core/ui/chain/tx/utils/useUniversalRouterSwap'
+import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -284,10 +286,19 @@ const EvmCalldataFallback = ({
 }: EvmCalldataFallbackProps) => {
   const { t } = useTranslation()
   const memo = keysignPayload.memo
+
+  const { data: universalRouterSwap, isPending: isUniversalRouterPending } =
+    useUniversalRouterSwap({ memo, chain })
+
   const contractCallQuery = useQuery({
     queryKey: ['evmContractCallInfo', memo],
     queryFn: () => getEvmContractCallInfo(memo!),
-    enabled: !!memo && memo.startsWith('0x') && memo.length > 2,
+    enabled:
+      !isUniversalRouterPending &&
+      !universalRouterSwap &&
+      !!memo &&
+      memo.startsWith('0x') &&
+      memo.length > 2,
     staleTime: Infinity,
   })
 
@@ -323,6 +334,22 @@ const EvmCalldataFallback = ({
       />
     ) : null
 
+  if (universalRouterSwap) {
+    return (
+      <BlockaidSwapDisplay
+        swap={{
+          fromCoin: universalRouterSwap.fromCoin,
+          fromAmount: universalRouterSwap.fromAmount,
+          toCoin: universalRouterSwap.toCoin,
+          toAmount: universalRouterSwap.toAmount,
+        }}
+        memo={memo}
+        chain={chain}
+        networkFeeProps={networkFeeProps}
+      />
+    )
+  }
+
   return (
     <>
       <List>
@@ -331,20 +358,38 @@ const EvmCalldataFallback = ({
           <ListItem description={keysignPayload.toAddress} title={t('to')} />
         )}
         {tokenQuery.data && tokenPair ? (
-          <ListItem
-            icon={<CoinIcon coin={tokenQuery.data} />}
-            title={functionName || t('contract_execution')}
-            description={(() => {
-              const fmt = formatTokenAmount({
-                rawAmount: BigInt(tokenPair.rawAmount),
-                decimals: tokenQuery.data.decimals,
-                functionName: rawFunctionName,
-              })
-              return fmt.display
-                ? `${fmt.display} ${tokenQuery.data.ticker}`
-                : tokenQuery.data.ticker
-            })()}
-          />
+          (() => {
+            const fmt = formatTokenAmount({
+              rawAmount: BigInt(tokenPair.rawAmount),
+              decimals: tokenQuery.data.decimals,
+              functionName: rawFunctionName,
+            })
+            const ticker = tokenQuery.data.ticker
+            const isUnlimited = fmt.isSentinel && !!fmt.display
+            return (
+              <ListItem
+                icon={
+                  <CoinIcon coin={tokenQuery.data} style={{ fontSize: 24 }} />
+                }
+                title={functionName || t('contract_execution')}
+                status={isUnlimited ? 'warning' : 'default'}
+                description={
+                  isUnlimited ? (
+                    <HStack alignItems="center" gap={6}>
+                      <Text as={TriangleAlertIcon} color="warning" size={14} />
+                      <Text color="warning" size={12} weight={500}>
+                        {`${fmt.display} ${ticker}`}
+                      </Text>
+                    </HStack>
+                  ) : fmt.display ? (
+                    `${fmt.display} ${ticker}`
+                  ) : (
+                    ticker
+                  )
+                }
+              />
+            )
+          })()
         ) : contractCallQuery.data ? (
           <ListItem
             title={functionName || t('contract_execution')}

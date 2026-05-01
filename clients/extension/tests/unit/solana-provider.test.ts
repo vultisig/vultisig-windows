@@ -182,8 +182,8 @@ describe('Solana Provider', () => {
       expect(mockRequestAccount).toHaveBeenCalledWith(Chain.Solana)
       expect(sol.isConnected).toBe(true)
       expect(sol.publicKey).toBeTruthy()
-      expect(result).toHaveProperty('accounts')
-      expect(result.accounts).toHaveLength(1)
+      expect(result).toHaveProperty('publicKey')
+      expect(result.publicKey.toString()).toBe('SoLaNaAddr123')
     })
 
     it('propagates errors from requestAccount', async () => {

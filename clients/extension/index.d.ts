@@ -3,6 +3,7 @@
 interface Window {
   bitcoin: any
   bitcoincash: any
+  cardano: any
   cosmos: any
   dash: any
   dogecoin: any

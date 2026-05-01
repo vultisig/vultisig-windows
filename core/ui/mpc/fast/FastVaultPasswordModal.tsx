@@ -71,16 +71,19 @@ export const FastVaultPasswordModal: React.FC<FastVaultPasswordModalProps> = ({
     mutate,
   } = useMutation({
     mutationFn: getVaultFromServer,
-    onSuccess: async result => {
+    onSuccess: async (_result, variables) => {
       if (cachePassword) {
         await attempt(() =>
           cacheVaultPassword({
             vaultId: getVaultId(vault),
-            password: result.password,
+            password: variables.password,
           })
         )
       }
-      onFinish({ ...result, cachePassword })
+      onFinish({
+        password: variables.password,
+        cachePassword,
+      })
     },
   })
 

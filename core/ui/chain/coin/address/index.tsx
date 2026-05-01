@@ -29,7 +29,14 @@ export const AddressPage = () => {
                 <FileUpIcon />
               </IconButton>
             )}
-            value={<PrintableQrCode title={address} value={address} />}
+            value={
+              <PrintableQrCode
+                title={t('address')}
+                brandLabel={t('vultisig')}
+                value={address}
+                rows={[{ label: t('address'), value: address }]}
+              />
+            }
           />
         }
         title={t('address')}

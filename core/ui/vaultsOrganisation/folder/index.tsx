@@ -42,7 +42,7 @@ export const VaultFolderPage = () => {
   const currentVaultId = useCurrentVaultId()
 
   const { totals: vaultTotals, isPending: isTotalsPending } =
-    useVaultsTotalBalances()
+    useVaultsTotalBalances({ vaults })
   const formatFiatAmount = useFormatFiatAmount()
 
   const folderTotal = useMemo(() => {

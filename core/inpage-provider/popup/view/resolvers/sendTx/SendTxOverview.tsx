@@ -9,6 +9,7 @@ import { getGasEstimationQuery } from '@core/inpage-provider/popup/view/resolver
 import { useSendTxKeysignPayloadQuery } from '@core/inpage-provider/popup/view/resolvers/sendTx/keysignPayload/query'
 import { PendingState } from '@core/inpage-provider/popup/view/resolvers/sendTx/PendingState'
 import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
+import { useGetCoin } from '@core/ui/chain/coin/useGetCoin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
@@ -50,8 +51,6 @@ import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { formatUnits } from 'ethers'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { useGetCoin } from './core/coin'
 
 type SendTxOverviewProps = {
   parsedTx: ParsedTx

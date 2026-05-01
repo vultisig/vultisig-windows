@@ -2,6 +2,51 @@ type FetchVapidKeyInput = {
   serverUrl: string
 }
 
+const pushNotificationApiTimeoutMs = 15_000
+
+type FetchWithTimeoutInput = {
+  url: string
+  options?: RequestInit
+  errorContext: string
+}
+
+const fetchWithTimeout = async ({
+  url,
+  options,
+  errorContext,
+}: FetchWithTimeoutInput): Promise<Response> => {
+  const controller = new AbortController()
+  const timeoutId = setTimeout(
+    () => controller.abort(),
+    pushNotificationApiTimeoutMs
+  )
+
+  try {
+    return await fetch(url, {
+      ...options,
+      signal: controller.signal,
+    })
+  } catch (error) {
+    if (error instanceof DOMException && error.name === 'AbortError') {
+      throw new Error(
+        `${errorContext}: timed out after ${pushNotificationApiTimeoutMs}ms`
+      )
+    }
+    throw error
+  } finally {
+    clearTimeout(timeoutId)
+  }
+}
+
+const getResponseErrorBody = async (response: Response): Promise<string> => {
+  try {
+    const body = await response.text()
+    return body ? `: ${body.slice(0, 300)}` : ''
+  } catch {
+    return ''
+  }
+}
+
 type FetchVapidKeyResult = {
   public_key: string
 }
@@ -9,14 +54,22 @@ type FetchVapidKeyResult = {
 export const fetchVapidPublicKey = async ({
   serverUrl,
 }: FetchVapidKeyInput): Promise<string> => {
-  const response = await fetch(`${serverUrl}/vapid-public-key`)
+  const response = await fetchWithTimeout({
+    url: `${serverUrl}/vapid-public-key`,
+    errorContext: 'Failed to fetch VAPID public key',
+  })
   if (!response.ok) {
     throw new Error(
-      `Failed to fetch VAPID public key: ${response.status} ${response.statusText}`
+      `Failed to fetch VAPID public key: ${response.status} ${response.statusText}${await getResponseErrorBody(response)}`
     )
   }
   const data: FetchVapidKeyResult = await response.json()
-  return data.public_key
+  const publicKey =
+    typeof data.public_key === 'string' ? data.public_key.trim() : ''
+  if (!publicKey) {
+    throw new Error('Failed to fetch VAPID public key: response was empty')
+  }
+  return publicKey
 }
 
 type RegisterDeviceInput = {
@@ -32,20 +85,25 @@ export const registerDeviceForPushNotifications = async ({
   partyName,
   subscription,
 }: RegisterDeviceInput): Promise<void> => {
-  const response = await fetch(`${serverUrl}/register`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      vault_id: vaultId,
-      party_name: partyName,
-      token: JSON.stringify(subscription.toJSON()),
-      device_type: 'web',
-    }),
+  const token = JSON.stringify(subscription.toJSON())
+  const response = await fetchWithTimeout({
+    url: `${serverUrl}/register`,
+    errorContext: 'Failed to register device',
+    options: {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        vault_id: vaultId,
+        party_name: partyName,
+        token,
+        device_type: 'web',
+      }),
+    },
   })
 
   if (!response.ok) {
     throw new Error(
-      `Failed to register device: ${response.status} ${response.statusText}`
+      `Failed to register device: ${response.status} ${response.statusText}${await getResponseErrorBody(response)} (subscription token length: ${token.length})`
     )
   }
 }
@@ -65,14 +123,18 @@ export const unregisterDeviceForPushNotifications = async ({
 }: UnregisterDeviceInput): Promise<void> => {
   let response: Response
   try {
-    response = await fetch(`${serverUrl}/unregister`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        vault_id: vaultId,
-        party_name: partyName,
-        token: token ?? '',
-      }),
+    response = await fetchWithTimeout({
+      url: `${serverUrl}/unregister`,
+      errorContext: 'Failed to unregister device',
+      options: {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          vault_id: vaultId,
+          party_name: partyName,
+          token: token ?? '',
+        }),
+      },
     })
   } catch (fetchError) {
     const err = new Error(
@@ -87,7 +149,7 @@ export const unregisterDeviceForPushNotifications = async ({
       return
     }
     throw new Error(
-      `Failed to unregister device: ${response.status} ${response.statusText}`
+      `Failed to unregister device: ${response.status} ${response.statusText}${await getResponseErrorBody(response)}`
     )
   }
 }

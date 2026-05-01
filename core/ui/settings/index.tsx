@@ -12,6 +12,7 @@ import { useCurrentVaultAddresses } from '@core/ui/vault/state/currentVaultCoins
 import { Opener } from '@lib/ui/base/Opener'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { BookIcon } from '@lib/ui/icons/BookIcon'
+import { BooksIcon } from '@lib/ui/icons/BooksIcon'
 import { BubbleQuestionIcon } from '@lib/ui/icons/BubbleQuestionIcon'
 import { CircleDollarSignIcon } from '@lib/ui/icons/CircleDollarSignIcon'
 import { CoinsIcon } from '@lib/ui/icons/CoinsIcon'
@@ -25,7 +26,7 @@ import { LockKeyholeIcon } from '@lib/ui/icons/LockKeyholeIcon'
 import { MegaphoneIcon } from '@lib/ui/icons/MegaphoneIcon'
 import { QrCodeIcon } from '@lib/ui/icons/QrCodeIcon'
 import { SettingsIcon } from '@lib/ui/icons/SettingsIcon'
-import { ShareTwoIcon } from '@lib/ui/icons/ShareTwoIcon'
+import { ShareAndroidIcon } from '@lib/ui/icons/ShareAndroidIcon'
 import { ShieldCheckIcon } from '@lib/ui/icons/ShieldCheckIcon'
 import { TwitterIcon } from '@lib/ui/icons/TwitterIcon'
 import { VStack } from '@lib/ui/layout/Stack'
@@ -43,6 +44,7 @@ import styled from 'styled-components'
 
 import {
   discordReferralUrl,
+  vultisigEducationUrl,
   vultisigPrivacyPolicyUrl,
   vultisigTermsOfServiceUrl,
   vultisigTwitterUrl,
@@ -127,6 +129,18 @@ export const SettingsPage: FC<Props> = props => {
               title={t('notifications')}
               showArrow
             />
+            {areReferralEnabled && (
+              <ListItem
+                icon={
+                  <ListItemIconWrapper>
+                    <MegaphoneIcon />
+                  </ListItemIconWrapper>
+                }
+                onClick={() => navigate({ id: 'referral' })}
+                title={t('referral_code')}
+                showArrow
+              />
+            )}
             <ListItem
               extra={languageName[language]}
               icon={
@@ -160,18 +174,6 @@ export const SettingsPage: FC<Props> = props => {
               showArrow
               data-testid="address-book-link"
             />
-            {areReferralEnabled && (
-              <ListItem
-                icon={
-                  <ListItemIconWrapper>
-                    <MegaphoneIcon />
-                  </ListItemIconWrapper>
-                }
-                onClick={() => navigate({ id: 'referral' })}
-                title={t('referral_code')}
-                showArrow
-              />
-            )}
             {client === 'extension' && props.expandView}
             {client === 'extension' && props.sidePanel}
           </SettingsSection>
@@ -212,12 +214,22 @@ export const SettingsPage: FC<Props> = props => {
               showArrow
             />
             {client === 'desktop' && props.checkUpdate}
+            <ListItem
+              icon={
+                <ListItemIconWrapper>
+                  <BooksIcon />
+                </ListItemIconWrapper>
+              }
+              onClick={() => openUrl(vultisigEducationUrl)}
+              title={t('vultisig_education')}
+              showArrow
+            />
             <Opener
               renderOpener={({ onOpen }) => (
                 <ListItem
                   icon={
                     <ListItemIconWrapper>
-                      <ShareTwoIcon />
+                      <ShareAndroidIcon />
                     </ListItemIconWrapper>
                   }
                   onClick={onOpen}

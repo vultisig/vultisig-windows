@@ -10,8 +10,8 @@ import tsParser from '@typescript-eslint/parser'
 import importPlugin from 'eslint-plugin-import'
 import jsxA11Y from 'eslint-plugin-jsx-a11y'
 import react from 'eslint-plugin-react'
-import reactHooks from 'eslint-plugin-react-hooks'
 import reactCompiler from 'eslint-plugin-react-compiler'
+import reactHooks from 'eslint-plugin-react-hooks'
 import simpleImportSort from 'eslint-plugin-simple-import-sort'
 import storybook from 'eslint-plugin-storybook'
 import unusedImportsPlugin from 'eslint-plugin-unused-imports'
@@ -126,6 +126,45 @@ export default [
     files: ['**/*.d.ts'],
     rules: {
       '@typescript-eslint/consistent-type-definitions': 'off',
+    },
+  },
+  // MPC engine chunk isolation — see vultisig/vultisig-windows#3777.
+  // The extension service worker and inpage chunks must not pull @vultisig/core-mpc
+  // (or related MPC packages) into their bundles unless they also import
+  // '@core/ui/mpc/bootstrapMpcEngine' at the entrypoint. Today neither chunk calls
+  // getMpcEngine(); this rule prevents a future refactor from silently shipping
+  // "MPC engine not configured" at runtime or bloating the SW/inpage bundle with
+  // DKLS/Schnorr WASM. Protobuf types under @vultisig/core-mpc/types/** are allowed
+  // (no engine calls, used by the inpage cosmos provider).
+  {
+    files: [
+      'clients/extension/src/background/**/*.{ts,tsx}',
+      'clients/extension/src/inpage/**/*.{ts,tsx}',
+    ],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              regex: '^@vultisig/core-mpc(?!/types($|/)).*$',
+              message:
+                'This chunk must not import runtime code from @vultisig/core-mpc (only @vultisig/core-mpc/types/** is allowed). If MPC is truly needed here, import "@core/ui/mpc/bootstrapMpcEngine" at the top of the entry file and update the eslint override plus the chunk header comment. See vultisig/vultisig-windows#3777.',
+            },
+            {
+              group: [
+                '@vultisig/mpc-types',
+                '@vultisig/mpc-wasm',
+                '@vultisig/lib-dkls',
+                '@vultisig/lib-schnorr',
+                '@vultisig/lib-mldsa',
+              ],
+              message:
+                'This chunk must not import MPC engine packages. If MPC is truly needed here, import "@core/ui/mpc/bootstrapMpcEngine" at the top of the entry file and update the eslint override plus the chunk header comment. See vultisig/vultisig-windows#3777.',
+            },
+          ],
+        },
+      ],
     },
   },
   ...storybook.configs['flat/recommended'],

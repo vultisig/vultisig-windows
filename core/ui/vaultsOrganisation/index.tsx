@@ -6,7 +6,7 @@ import {
   useSetCurrentVaultIdMutation,
 } from '@core/ui/storage/currentVaultId'
 import { useVaultFolders } from '@core/ui/storage/vaultFolders'
-import { useVaults } from '@core/ui/storage/vaults'
+import { useFolderlessVaults, useVaults } from '@core/ui/storage/vaults'
 import { DoneButton } from '@core/ui/vault/chain/manage/shared/DoneButton'
 import {
   LeadingIconBadge,
@@ -40,6 +40,16 @@ type FolderEntry = {
   activeVaultName?: string
 }
 
+// Gate the batched balance fetch behind a size threshold. Issue #3785 reports
+// UI lag that scales with `vaults * coins-per-vault` — each vault's coins fan
+// out into independent RPCs against `getCoinBalance`. For small lists the
+// batched total is useful UX; past these thresholds we skip the cumulative
+// total entirely to keep the switcher snappy. Either signal alone warrants
+// skipping because DOM/re-render cost only scales with vault count while
+// network cost scales with vault coins.
+const heavyBalanceCoinBudget = 100
+const heavyBalanceVaultCountThreshold = 30
+
 export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
   const { t } = useTranslation()
   const { goHome } = useCore()
@@ -50,6 +60,7 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
   const currentVaultId = useCurrentVaultId()
   const folders = useVaultFolders()
   const vaults = useVaults()
+  const folderlessVaults = useFolderlessVaults()
 
   const folderEntries = useMemo<FolderEntry[]>(() => {
     return folders.map(folder => {
@@ -68,13 +79,24 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
     })
   }, [folders, vaults, currentVaultId])
 
-  const folderlessVaults = useMemo(
-    () => vaults.filter(vault => !vault.folderId),
-    [vaults]
+  const totalCoinCount = vaults.reduce(
+    (sum, vault) => sum + vault.coins.length,
+    0
   )
+  const skipBalanceFetch =
+    vaults.length > heavyBalanceVaultCountThreshold ||
+    totalCoinCount > heavyBalanceCoinBudget
 
+  // Pass every stored vault (folderless + in folders) so the cumulative
+  // subtitle, which is labelled with `vault_count` across all vaults, actually
+  // sums the same set. Per-row rendering below only uses the folderless
+  // subset, but the shared cache means folder vaults' balances are ready when
+  // the user drills into a folder.
   const { totals: vaultTotals, isPending: isTotalsPending } =
-    useVaultsTotalBalances()
+    useVaultsTotalBalances({
+      vaults,
+      enabled: !skipBalanceFetch,
+    })
   const formatFiatAmount = useFormatFiatAmount()
 
   const totalVaultsCount = vaults.length
@@ -87,8 +109,12 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
 
     const parts = [vaultCountLabel]
 
-    // Only show cumulative balance if there's more than 1 vault
-    if (totalVaultsCount > 1 && !isTotalsPending && vaultTotals) {
+    if (
+      totalVaultsCount > 1 &&
+      !skipBalanceFetch &&
+      !isTotalsPending &&
+      vaultTotals
+    ) {
       const totalBalance = Object.values(vaultTotals).reduce(
         (sum, value) => sum + value,
         0
@@ -101,6 +127,7 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
   }, [
     formatFiatAmount,
     isTotalsPending,
+    skipBalanceFetch,
     t,
     totalVaultsCount,
     vaultCountLabel,
@@ -203,7 +230,9 @@ export const VaultsPage = ({ onFinish }: Partial<OnFinishProp>) => {
               {folderlessVaults.map(vault => {
                 const vaultId = getVaultId(vault)
                 const value =
-                  !isTotalsPending && vaultTotals?.[vaultId] !== undefined
+                  !skipBalanceFetch &&
+                  !isTotalsPending &&
+                  vaultTotals?.[vaultId] !== undefined
                     ? vaultTotals[vaultId]
                     : undefined
 

@@ -7,7 +7,6 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 
 import { getFeatureFlagDefines } from '../../core/ui/vite/featureFlagDefines'
 import { getCommonPlugins } from '../../core/ui/vite/plugins'
-import { sdkResolvePlugin } from '../../core/ui/vite/sdkResolvePlugin'
 import { getStaticCopyTargets } from '../../core/ui/vite/staticCopy'
 import * as buildInfo from './build.json'
 
@@ -41,7 +40,6 @@ export default defineConfig(async ({ mode }) => {
       __RELAY_URL__: JSON.stringify(env.RELAY_URL || ''),
     },
     plugins: [
-      sdkResolvePlugin(),
       tsconfigPaths({ root: rootDir }),
       ...getCommonPlugins(),
       viteStaticCopy({

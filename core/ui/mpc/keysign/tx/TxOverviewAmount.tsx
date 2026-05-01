@@ -1,6 +1,7 @@
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import { useCoinPriceQuery } from '@core/ui/chain/coin/price/queries/useCoinPriceQuery'
-import { VStack } from '@lib/ui/layout/Stack'
+import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
+import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Panel } from '@lib/ui/panel/Panel'
 import { ValueProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
@@ -46,7 +47,6 @@ export const TxOverviewAmount = ({
   // actual token being moved (e.g. Uniswap V4 execute, multicalls). The
   // function label alone is more informative than a misleading zero amount.
   const showAmount = !!amountOverride || amount > 0 || !resolvedLabel
-  const amountContent = amountOverride ?? `${amount} ${value.ticker}`
   const showFiat = !amountOverride && amount > 0
 
   return (
@@ -56,7 +56,17 @@ export const TxOverviewAmount = ({
           {topLabel}
         </Text>
         {value && <CoinIcon coin={value} style={{ fontSize: 32 }} />}
-        {showAmount && <Text size={18}>{amountContent}</Text>}
+        {showAmount &&
+          (amountOverride ? (
+            <HStack alignItems="center" gap={6}>
+              <Text as={TriangleAlertIcon} color="warning" size={18} />
+              <Text size={18} color="warning">
+                {amountOverride}
+              </Text>
+            </HStack>
+          ) : (
+            <Text size={18}>{`${amount} ${value.ticker}`}</Text>
+          ))}
         {showFiat && (
           <MatchQuery
             value={priceQuery}

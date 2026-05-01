@@ -35,5 +35,6 @@ export const getCustomMessageHex = ({
     ton: () => Buffer.from(bytes).toString('hex'),
     tron: () => stripHexPrefix(keccak256(bytes)),
     polkadot: () => Buffer.from(bytes).toString('hex'),
+    cardano: () => Buffer.from(bytes).toString('hex'),
   })
 }

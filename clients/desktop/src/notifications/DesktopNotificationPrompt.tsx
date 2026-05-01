@@ -22,7 +22,7 @@ export const DesktopNotificationPrompt = () => {
       onDismiss={markSeen}
       onEnable={async () => {
         await setHasSeen(true)
-        navigate({ id: 'chooseVaults' })
+        navigate({ id: 'vaults' })
       }}
     />
   )
