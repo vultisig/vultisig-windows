@@ -9,13 +9,10 @@ import {
   getCosmosChainId,
 } from '@vultisig/core-chain/chains/cosmos/chainInfo'
 import { cosmosFeeCoinDenom } from '@vultisig/core-chain/chains/cosmos/cosmosFeeCoinDenom'
+import { CosmosMsgType } from '@vultisig/core-chain/chains/cosmos/cosmosMsgTypes'
 import { cosmosRpcUrl } from '@vultisig/core-chain/chains/cosmos/cosmosRpcUrl'
 import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
-import {
-  CosmosFee,
-  CosmosMsg,
-} from '@vultisig/core-mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedError'
 import { validateUrl } from '@vultisig/lib-utils/validation/url'
@@ -169,12 +166,25 @@ const stationNetworkChangeEvent = 'station_network_change'
  * (`window.station` / `window.terra`) on top of {@link XDEFIKeplrProvider}.
  *
  * Terra dApps detect Vultisig as a Station-compatible wallet and sign or
- * post via `window.station.sign(...)` / `window.station.post(...)`
- * (proto-direct messages are normalized to amino in
- * {@link stationMsgToAmino}), or via the cosmjs / Keplr path through
- * `window.station.keplr.*`. All routes flow through the same Vultisig MPC
- * keysign pipeline; `post` differs from `sign` only in leaving
- * `skipBroadcast` unset so the popup also broadcasts.
+ * post via `window.station.sign(...)` / `window.station.post(...)`, or use
+ * the cosmjs / Keplr path through `window.station.keplr.*`.
+ *
+ * The two write paths differ:
+ *
+ * - `sign` keeps the amino path: messages are normalized to amino in
+ *   {@link stationMsgToAmino}, signed via `XDEFIKeplrProvider.signAmino`,
+ *   and the amino-shaped response is returned to the dApp (which
+ *   broadcasts itself).
+ * - `post` routes through the popup's protobuf signing path
+ *   (`msgPayload`/`wasmExecuteContractGeneric`). The popup signs in
+ *   `SIGN_MODE_DIRECT` and broadcasts via Vultisig's standard Cosmos
+ *   broadcast resolver. Going through amino here would emit the signed
+ *   tx into TW's `output.json` field, which the broadcast resolver does
+ *   not consume — see issue investigation in PR review.
+ *
+ * `post` is currently limited to single-message `wasm/MsgExecuteContract`
+ * txs (covers Astroport, Skip, etc.); other shapes throw and the dApp
+ * should fall back to `sign`.
  *
  * `signBytes`, `signArbitrary`, and `switchNetwork` are surfaced for
  * detection but throw `NotImplementedError` — arbitrary-bytes signing has
@@ -200,6 +210,11 @@ export class Station {
     }
   }
 
+  /**
+   * Singleton accessor — Terra dApps expect `window.station` and `window.terra`
+   * to share the same provider, and the constructor wires a single
+   * `disconnect` listener that must not be duplicated on re-injection.
+   */
   static getInstance(keplrProvider: XDEFIKeplrProvider): Station {
     if (!Station.instance) {
       Station.instance = new Station(keplrProvider)
@@ -207,18 +222,30 @@ export class Station {
     return Station.instance
   }
 
+  /** Dispatches the Station wallet-change event so dApps re-read the active account. */
   emitWalletChange(): void {
     window.dispatchEvent(new CustomEvent(stationWalletChangeEvent))
   }
 
+  /** Dispatches the Station network-change event so dApps re-read network state. */
   emitNetworkChange(): void {
     window.dispatchEvent(new CustomEvent(stationNetworkChangeEvent))
   }
 
+  /**
+   * Returns the Terra chain registry (Terra v2 + Terra Classic) in Station's
+   * `InfoResponse` shape — dApps call this before connecting to discover
+   * supported chains, gas prices, and explorer URLs.
+   */
   async info(): Promise<InfoResponse> {
     return terraInfo
   }
 
+  /**
+   * Requests the active Terra account and returns it in Station's
+   * `ConnectResponse` shape, mapping the same address under every supported
+   * Terra chain ID (one Terra address works for both phoenix-1 and columbus-5).
+   */
   async connect(): Promise<ConnectResponse> {
     const account = await requestAccount(Chain.Terra)
     const vault = await callBackground({ exportVault: {} })
@@ -239,14 +266,23 @@ export class Station {
     }
   }
 
+  /** Legacy Station alias for {@link connect} — kept for older `@terra-money/wallet-kit` versions that probe `getPublicKey`. */
   async getPublicKey(): Promise<ConnectResponse> {
     return this.connect()
   }
 
+  /** Returns the theme hint used by the Station UI overlay; Vultisig is always dark. */
   async theme(): Promise<string> {
     return 'dark'
   }
 
+  /**
+   * Signs a Station tx in amino (legacy) mode and returns the signed envelope
+   * — does NOT broadcast (matches Station's `sign` contract). Messages are
+   * normalized via {@link stationMsgToAmino}, signed through the MPC keysign
+   * popup, then repackaged into Station's response shape (`auth_info`,
+   * `body`, `signatures`). The dApp is responsible for broadcasting.
+   */
   async sign(tx: StationTxRequest): Promise<StationSignResponse> {
     const chain = shouldBePresent(
       getCosmosChainByChainId(tx.chainID),
@@ -303,44 +339,84 @@ export class Station {
     }
   }
 
+  /**
+   * Signs and broadcasts a single-message `wasm/MsgExecuteContract` tx. The
+   * popup signs in `SIGN_MODE_DIRECT` (via `wasmExecuteContractGeneric`) so
+   * TW emits a properly-formed protobuf `TxRaw`, which Vultisig's standard
+   * Cosmos broadcast resolver consumes. Returns Station's `PostResponse`
+   * shape with the broadcast tx hash.
+   *
+   * Throws for non-wasm or multi-message txs — those should use {@link sign}
+   * and broadcast on the dApp side, since the protobuf TW path here only
+   * wires up the contract-execute message type.
+   */
   async post(tx: StationTxRequest): Promise<StationPostResponse> {
     const chain = shouldBePresent(
       getCosmosChainByChainId(tx.chainID),
       `Station post: unrecognized chainID ${tx.chainID}`
     )
 
-    const msgs = tx.msgs.map(msg => stationMsgToAmino(msg, chain))
-    const fee = tx.fee ? stationFeeToAmino(tx.fee) : { amount: [], gas: '0' }
-    const memo = tx.memo ?? ''
+    if (tx.msgs.length !== 1) {
+      throw new Error(
+        `Station post: only single-message txs are supported (got ${tx.msgs.length}); use sign() and broadcast yourself for multi-msg txs.`
+      )
+    }
+
+    const [aminoMsg] = tx.msgs.map(msg => stationMsgToAmino(msg, chain))
+
+    if (aminoMsg.type !== 'wasm/MsgExecuteContract') {
+      throw new Error(
+        `Station post: msg type "${aminoMsg.type}" not supported. Only wasm/MsgExecuteContract can be broadcast; use sign() and broadcast yourself.`
+      )
+    }
+
+    const wasmValue = aminoMsg.value as {
+      sender: string
+      contract: string
+      funds?: Array<{ denom: string; amount: string }>
+      msg: unknown
+    }
 
     const account = await requestAccount(chain)
 
-    // Mirrors `aminoHandler` in xdefiKeplr.ts but with `skipBroadcast` left
-    // unset so the keysign popup signs *and* broadcasts. The msgs/fee cast
-    // matches the existing routing boundary — values are JSON-stringified
-    // downstream in `keysignPayload/build.ts`.
-    const firstMsgValue = (msgs[0]?.value ?? {}) as {
-      funds?: Array<{ denom: string; amount: string }>
-      sender?: string
-      from_address?: string
-      to_address?: string
-      contract?: string
-    }
+    // Proto MsgExecuteContract.msg is `bytes` (utf-8 of JSON). The keysign
+    // pipeline accepts this as a string and TW serializes it into the proto
+    // bytes via `wasmExecuteContractGeneric.executeMsg`.
+    const executeMsg =
+      typeof wasmValue.msg === 'string'
+        ? wasmValue.msg
+        : JSON.stringify(wasmValue.msg)
+
+    const funds = wasmValue.funds ?? []
+
+    // Surface the dApp's fee for display only — cosmos chainSpecific does not
+    // currently honor `gasSettings.gasLimit`, so the popup falls back to its
+    // built-in gas record. Astroport-style swaps may need follow-up to plumb
+    // the dApp's gasLimit through the cosmos signing input.
+    const stationFee = tx.fee ? stationFeeToAmino(tx.fee) : undefined
 
     const transactionDetails: TransactionDetails = {
       asset: {
-        ticker: firstMsgValue.funds?.[0]?.denom ?? chainFeeCoin[chain].ticker,
+        ticker: funds[0]?.denom ?? chainFeeCoin[chain].ticker,
       },
       amount: {
-        amount: firstMsgValue.funds?.[0]?.amount ?? '0',
+        amount: funds[0]?.amount ?? '0',
         decimals: chainFeeCoin[chain].decimals,
       },
       from: account.address,
-      to: firstMsgValue.contract ?? firstMsgValue.to_address,
-      data: memo,
-      aminoPayload: {
-        msgs: msgs as unknown as CosmosMsg[],
-        fee: fee as CosmosFee,
+      to: wasmValue.contract,
+      data: tx.memo,
+      gasSettings: stationFee?.gas
+        ? { gasLimit: String(stationFee.gas) }
+        : undefined,
+      msgPayload: {
+        case: CosmosMsgType.MSG_EXECUTE_CONTRACT,
+        value: {
+          sender: wasmValue.sender,
+          contract: wasmValue.contract,
+          funds,
+          msg: executeMsg,
+        },
       },
     }
 
