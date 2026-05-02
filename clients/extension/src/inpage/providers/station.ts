@@ -148,6 +148,11 @@ export class Station {
     }
   }
 
+  /**
+   * Singleton accessor — Terra dApps expect `window.station` and `window.terra`
+   * to point at the same provider, and the constructor wires a single
+   * `disconnect` listener that must not be duplicated on re-injection.
+   */
   static getInstance(keplrProvider: XDEFIKeplrProvider): Station {
     if (!Station.instance) {
       Station.instance = new Station(keplrProvider)
@@ -155,18 +160,31 @@ export class Station {
     return Station.instance
   }
 
+  /** Dispatches the Station wallet-change event so dApps re-read the active account. */
   emitWalletChange(): void {
     window.dispatchEvent(new CustomEvent(stationWalletChangeEvent))
   }
 
+  /** Dispatches the Station network-change event so dApps re-read network state. */
   emitNetworkChange(): void {
     window.dispatchEvent(new CustomEvent(stationNetworkChangeEvent))
   }
 
+  /**
+   * Returns the Terra chain registry (Terra v2 + Terra Classic) in Station's
+   * `InfoResponse` shape — dApps call this before connecting to discover
+   * supported chains, gas prices, and explorer URLs.
+   */
   async info(): Promise<InfoResponse> {
     return terraInfo
   }
 
+  /**
+   * Requests the active Terra account from the Vultisig vault and returns it
+   * in Station's `ConnectResponse` shape, mapping the same address under every
+   * supported Terra chain ID (one Terra address works for both phoenix-1 and
+   * columbus-5).
+   */
   async connect(): Promise<ConnectResponse> {
     const account = await requestAccount(Chain.Terra)
     const vault = await callBackground({ exportVault: {} })
@@ -187,22 +205,37 @@ export class Station {
     }
   }
 
+  /** Legacy Station alias for {@link connect} — kept for older `@terra-money/wallet-kit` versions that probe `getPublicKey`. */
   async getPublicKey(): Promise<ConnectResponse> {
     return this.connect()
   }
 
+  /** Returns the theme hint used by the Station UI overlay; Vultisig is always dark. */
   async theme(): Promise<string> {
     return 'dark'
   }
 
+  /**
+   * Station tx signing — surfaced for dApp detection but not yet implemented.
+   * The proto-direct → amino conversion and MPC keysign routing land in a
+   * follow-up; until then dApps should fall back to `station.keplr.*`.
+   */
   async sign(_tx: unknown): Promise<never> {
     throw new NotImplementedError('Station sign')
   }
 
+  /**
+   * Station tx broadcast — surfaced for detection but not yet implemented
+   * (see {@link Station.sign}).
+   */
   async post(_tx: unknown): Promise<never> {
     throw new NotImplementedError('Station post')
   }
 
+  /**
+   * Arbitrary-bytes signing — surfaced for detection but not implemented; the
+   * underlying {@link XDEFIKeplrProvider} doesn't ship `signArbitrary` either.
+   */
   async signBytes(
     _bytes: string,
     _chainId?: string,
@@ -211,6 +244,7 @@ export class Station {
     throw new NotImplementedError('Station signBytes')
   }
 
+  /** Alias of {@link signBytes} kept for parity with Station's API surface. */
   async signArbitrary(
     _bytes: string,
     _chainId?: string,
@@ -219,6 +253,11 @@ export class Station {
     throw new NotImplementedError('Station signArbitrary')
   }
 
+  /**
+   * Network switching — surfaced for detection but not implemented; Vultisig
+   * binds Terra to mainnet (phoenix-1 / columbus-5) and does not expose
+   * testnet or localterra.
+   */
   async switchNetwork(
     _network: NetworkName,
     _purgeQueue = true
@@ -226,6 +265,7 @@ export class Station {
     throw new NotImplementedError('Station switchNetwork')
   }
 
+  /** Returns the amino-only `OfflineSigner` from the underlying Keplr provider — Terra dApps that build txs via cosmjs use this to sign locally. */
   getOfflineSigner(chainId: string) {
     return this.keplr.getOfflineSignerOnlyAmino(chainId)
   }
