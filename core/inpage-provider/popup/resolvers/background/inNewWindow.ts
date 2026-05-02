@@ -28,103 +28,13 @@ const getPopupPosition = async (): Promise<
   return { left, top }
 }
 
-const findExistingPopupWindow = async (): Promise<number | null> => {
-  const allWindows = await chrome.windows.getAll({ windowTypes: ['popup'] })
-  const runtimeUrl = chrome.runtime.getURL('popup.html')
-
-  for (const window of allWindows) {
-    if (!window.id) continue
-
-    const tabs = await chrome.tabs.query({ windowId: window.id })
-    const matchingTab = tabs.find(tab => {
-      const tabUrl = tab.url
-      return tabUrl?.startsWith(runtimeUrl.split('?')[0])
-    })
-
-    if (matchingTab) {
-      return window.id
-    }
-  }
-
-  return null
-}
+let popupQueue: Promise<unknown> = Promise.resolve()
 
 export const inNewWindow = async <T>({
   url,
   execute,
 }: Input<T>): Promise<T> => {
-  // Check if there's an existing popup window we can reuse
-  const existingWindowId = await findExistingPopupWindow()
-
-  let windowId: number | undefined
-  if (existingWindowId !== null) {
-    // Reuse existing window by updating its tab URL and focusing it
-    windowId = existingWindowId
-    const tabs = await chrome.tabs.query({ windowId })
-
-    if (tabs.length === 0) {
-      windowId = undefined // Fall back to creating new window
-    } else {
-      const tabId = tabs[0].id
-      if (!tabId) {
-        windowId = undefined // Fall back to creating new window
-      } else {
-        const tabUpdateResult = await attempt(
-          chrome.tabs.update(tabId, { url })
-        )
-        if ('error' in tabUpdateResult) {
-          windowId = undefined // Fall back to creating new window
-        }
-
-        if (windowId !== undefined) {
-          const focusResult = await attempt(
-            chrome.windows.update(windowId, { focused: true })
-          )
-          if ('error' in focusResult) {
-            // Best-effort fallback: try to create a new focused window
-            const position = await getPopupPosition()
-            const fallbackResult = await attempt(
-              new Promise<chrome.windows.Window | undefined>(resolve =>
-                chrome.windows.create(
-                  {
-                    url,
-                    type: 'popup',
-                    height: windowHeight,
-                    width: windowWidth,
-                    focused: true,
-                    ...(position ?? {}),
-                  },
-                  resolve
-                )
-              )
-            )
-            const popupWindow = fallbackResult.data
-            if (popupWindow?.id) {
-              windowId = popupWindow.id
-              if (
-                position &&
-                popupWindow.state !== 'fullscreen' &&
-                (popupWindow.left !== position.left ||
-                  popupWindow.top !== position.top)
-              ) {
-                await chrome.windows.update(windowId, {
-                  left: position.left,
-                  top: position.top,
-                })
-              }
-            } else {
-              throw new Error(
-                `Failed to reuse or create popup window: ${focusResult.error instanceof Error ? focusResult.error.message : String(focusResult.error)}`
-              )
-            }
-          }
-        }
-      }
-    }
-  }
-
-  // Create a new window if we couldn't reuse an existing one
-  if (existingWindowId === null || windowId === undefined) {
+  const run = async (): Promise<T> => {
     const position = await getPopupPosition()
     const newWindow = await new Promise<chrome.windows.Window | undefined>(
       resolve =>
@@ -139,14 +49,12 @@ export const inNewWindow = async <T>({
           resolve
         )
     )
-    const id = newWindow?.id
-    if (!id) {
+    const windowId = newWindow?.id
+    if (!windowId) {
       throw new Error('Failed to create new window')
     }
-    windowId = id
     // Firefox ignores left/top on create; apply via update
     if (
-      newWindow &&
       position &&
       newWindow.state !== 'fullscreen' &&
       (newWindow.left !== position.left || newWindow.top !== position.top)
@@ -156,26 +64,30 @@ export const inNewWindow = async <T>({
         top: position.top,
       })
     }
-  }
 
-  const controller = new AbortController()
-  const handleRemoved = (removedId: number) => {
-    if (removedId === windowId) {
+    const controller = new AbortController()
+    const handleRemoved = (removedId: number) => {
+      if (removedId === windowId) {
+        chrome.windows.onRemoved.removeListener(handleRemoved)
+        controller.abort()
+      }
+    }
+    chrome.windows.onRemoved.addListener(handleRemoved)
+
+    try {
+      return await execute({
+        abortSignal: controller.signal,
+        close: () => {
+          chrome.windows.onRemoved.removeListener(handleRemoved)
+          chrome.windows.remove(windowId)
+        },
+      })
+    } finally {
       chrome.windows.onRemoved.removeListener(handleRemoved)
-      controller.abort()
     }
   }
-  chrome.windows.onRemoved.addListener(handleRemoved)
 
-  try {
-    return await execute({
-      abortSignal: controller.signal,
-      close: () => {
-        chrome.windows.onRemoved.removeListener(handleRemoved)
-        chrome.windows.remove(windowId)
-      },
-    })
-  } finally {
-    chrome.windows.onRemoved.removeListener(handleRemoved)
-  }
+  const next = popupQueue.then(run, run)
+  popupQueue = next.catch(() => {})
+  return next
 }
