@@ -95,7 +95,7 @@ export const DeleteVaultPage = () => {
           <HStack gap={12} alignItems="center">
             <VItem>
               <Text size={13} weight={500}>
-                {t('vault_part')}:
+                {t('vault_delete_page_vault_part')}:
               </Text>
               <Text size={14} weight={500}>
                 {`${t('share')} ${vault.signers.indexOf(vault.localPartyId) + 1}-${t('of')}-${vault.signers.length}`}
@@ -113,7 +113,7 @@ export const DeleteVaultPage = () => {
           <HStack gap={12} alignItems="center">
             <VItem>
               <Text size={13} weight={500}>
-                {t('vault_details_page_vault_ECDSA')}:
+                {t('vault_delete_page_ecdsa_key')}:
               </Text>
               <Text cropped size={14} weight={500} color="shy">
                 {vault.publicKeys.ecdsa}
@@ -121,7 +121,7 @@ export const DeleteVaultPage = () => {
             </VItem>
             <VItem>
               <Text size={13} weight={500}>
-                {t('vault_details_page_vault_EDDSA')}:
+                {t('vault_delete_page_eddsa_key')}:
               </Text>
               <Text cropped size={14} weight={500} color="shy">
                 {vault.publicKeys.eddsa}
@@ -154,7 +154,7 @@ export const DeleteVaultPage = () => {
           status="danger"
           data-testid="delete-vault-button"
         >
-          {t('delete')}
+          {t('vault_delete_page_button')}
         </Button>
       </PageFooter>
     </VStack>
