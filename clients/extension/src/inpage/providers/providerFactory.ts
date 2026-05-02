@@ -8,6 +8,7 @@ import { Plugin } from '@clients/extension/src/inpage/providers/plugin'
 import { Polkadot } from '@clients/extension/src/inpage/providers/polkadot'
 import { Ripple } from '@clients/extension/src/inpage/providers/ripple'
 import { Solana } from '@clients/extension/src/inpage/providers/solana'
+import { Station } from '@clients/extension/src/inpage/providers/station'
 import { Sui } from '@clients/extension/src/inpage/providers/sui'
 import { THORChain } from '@clients/extension/src/inpage/providers/thorchain'
 import { TonConnectBridge } from '@clients/extension/src/inpage/providers/tonConnect'
@@ -27,6 +28,7 @@ const createTonProvider = () => {
 export const createProviders = () => {
   const cosmosProvider = Cosmos.getInstance()
   const vultisigSolanaProvider = new Solana('Vultisig')
+  const keplrProvider = XDEFIKeplrProvider.getInstance(cosmosProvider)
 
   return {
     bittensor: Bittensor.getInstance(),
@@ -39,12 +41,13 @@ export const createProviders = () => {
     cosmos: cosmosProvider,
     dash: new Dash(),
     ethereum: new Ethereum(),
-    keplr: XDEFIKeplrProvider.getInstance(cosmosProvider),
+    keplr: keplrProvider,
     mayachain: MAYAChain.getInstance(),
     plugin: new Plugin(),
     polkadot: Polkadot.getInstance(),
     ripple: Ripple.getInstance(),
     solana: vultisigSolanaProvider,
+    station: Station.getInstance(keplrProvider),
     sui: Sui.getInstance(),
     thorchain: THORChain.getInstance(),
     ton: createTonProvider(),
