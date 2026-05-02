@@ -16,7 +16,7 @@ export const runBridgeBackgroundAgent = <
   handleRequest: (input: BackgroundRequestHandler<TMessage, TResponse>) => void
 }) => {
   chrome.runtime.onMessage.addListener(
-    (request, { origin, tab }, sendResponse) => {
+    (request, { frameId, origin, tab }, sendResponse) => {
       if (!origin) return
 
       if (!isBridgeMessage(request, 'inpage')) {
@@ -25,10 +25,12 @@ export const runBridgeBackgroundAgent = <
 
       const { id, message } = request
 
+      const isTopFrame = frameId === 0
       handleRequest({
         message: message as TMessage,
         context: {
-          requestFavicon: tab?.favIconUrl,
+          requestFavicon: isTopFrame ? tab?.favIconUrl : undefined,
+          requestName: isTopFrame ? tab?.title : undefined,
           requestOrigin: origin,
         },
         reply: (response: TResponse) => {

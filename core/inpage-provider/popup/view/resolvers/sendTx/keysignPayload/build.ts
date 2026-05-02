@@ -23,6 +23,7 @@ import {
   TransactionType,
 } from '@vultisig/core-mpc/types/vultisig/keysign/v1/blockchain_specific_pb'
 import {
+  DAppMetadata,
   KeysignPayload,
   KeysignPayloadSchema,
 } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
@@ -63,6 +64,7 @@ export type BuildSendTxKeysignPayloadInput = {
   walletCore: WalletCore
   vaultId: string
   localPartyId: string
+  dappMetadata?: DAppMetadata
 }
 
 const defaultTransactionType = TransactionType.UNSPECIFIED
@@ -89,6 +91,7 @@ export const buildSendTxKeysignPayload = async ({
   publicKey,
   walletCore,
   localPartyId,
+  dappMetadata,
 }: BuildSendTxKeysignPayloadInput) => {
   const { coin, customTxData, skipBroadcast, thirdPartyGasLimitEstimation } =
     parsedTx
@@ -504,6 +507,7 @@ export const buildSendTxKeysignPayload = async ({
     contractPayload,
     swapPayload,
     signData,
+    dappMetadata,
   })
 
   if ('polkadot' in customTxData) {

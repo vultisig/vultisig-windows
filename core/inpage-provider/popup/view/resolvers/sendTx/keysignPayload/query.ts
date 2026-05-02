@@ -1,3 +1,4 @@
+import { usePopupContext } from '@core/inpage-provider/popup/view/state/context'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import {
   useCurrentVault,
@@ -10,6 +11,7 @@ import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { omit } from '@vultisig/lib-utils/record/omit'
 import { useMemo } from 'react'
 
+import { buildDappMetadata } from '../../../utils/buildDappMetadata'
 import { ParsedTx } from '../core/parsedTx'
 import {
   buildSendTxKeysignPayload,
@@ -26,6 +28,8 @@ export const useSendTxKeysignPayloadQuery = ({
   const vault = useCurrentVault()
   const walletCore = useAssertWalletCore()
   const publicKey = useCurrentVaultPublicKey(parsedTx.coin.chain)
+  const { requestFavicon, requestName, requestOrigin } =
+    usePopupContext<'sendTx'>()
 
   const input: BuildSendTxKeysignPayloadInput = useMemo(
     () => ({
@@ -36,8 +40,22 @@ export const useSendTxKeysignPayloadQuery = ({
       vaultId: getVaultId(vault),
       localPartyId: vault.localPartyId,
       publicKey,
+      dappMetadata: buildDappMetadata({
+        requestFavicon,
+        requestName,
+        requestOrigin,
+      }),
     }),
-    [feeSettings, parsedTx, publicKey, vault, walletCore]
+    [
+      feeSettings,
+      parsedTx,
+      publicKey,
+      vault,
+      walletCore,
+      requestFavicon,
+      requestName,
+      requestOrigin,
+    ]
   )
 
   return useQuery({
