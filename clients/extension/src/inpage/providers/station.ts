@@ -1,14 +1,27 @@
 import { callBackground } from '@core/inpage-provider/background'
 import { addBackgroundEventListener } from '@core/inpage-provider/background/events/inpage'
+import { callPopup } from '@core/inpage-provider/popup'
+import { TransactionDetails } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
+import { StdFee } from '@cosmjs/amino'
 import { Chain, CosmosChain } from '@vultisig/core-chain/Chain'
-import { getCosmosChainId } from '@vultisig/core-chain/chains/cosmos/chainInfo'
+import {
+  getCosmosChainByChainId,
+  getCosmosChainId,
+} from '@vultisig/core-chain/chains/cosmos/chainInfo'
 import { cosmosFeeCoinDenom } from '@vultisig/core-chain/chains/cosmos/cosmosFeeCoinDenom'
 import { cosmosRpcUrl } from '@vultisig/core-chain/chains/cosmos/cosmosRpcUrl'
+import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
+import {
+  CosmosFee,
+  CosmosMsg,
+} from '@vultisig/core-mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedError'
 import { validateUrl } from '@vultisig/lib-utils/validation/url'
 
 import { requestAccount } from './core/requestAccount'
+import { stationFeeToAmino, stationMsgToAmino } from './stationProtoAmino'
 import { XDEFIKeplrProvider } from './xdefiKeplr'
 
 type ChainID = string
@@ -45,6 +58,41 @@ type ConnectResponse = {
     '330': string
     '118'?: string
   }
+}
+
+type StationTxRequest = {
+  chainID: string
+  msgs: unknown[]
+  fee?: unknown
+  memo?: string
+}
+
+type StationSignResponse = {
+  auth_info: {
+    signer_infos: Array<{
+      public_key: { type_url: string; key: string }
+      mode_info: { single: { mode: string } }
+      sequence: string
+    }>
+    fee: StdFee
+  }
+  body: {
+    messages: unknown[]
+    memo: string
+    timeout_height: string
+    extension_options: unknown[]
+    non_critical_extension_options: unknown[]
+  }
+  signatures: string[]
+  fee: StdFee
+}
+
+type StationPostResponse = {
+  height: string
+  raw_log: string
+  txhash: string
+  code: number
+  codespace?: string
 }
 
 type TerraStationOverrides = {
@@ -120,13 +168,17 @@ const stationNetworkChangeEvent = 'station_network_change'
  * Adapter exposing the Terra Station injected-API surface
  * (`window.station` / `window.terra`) on top of {@link XDEFIKeplrProvider}.
  *
- * Lets Terra dApps detect Vultisig as a Station-compatible wallet and use
- * the cosmjs / Keplr signing path via `window.station.keplr.*`.
+ * Terra dApps detect Vultisig as a Station-compatible wallet and sign or
+ * post via `window.station.sign(...)` / `window.station.post(...)`
+ * (proto-direct messages are normalized to amino in
+ * {@link stationMsgToAmino}), or via the cosmjs / Keplr path through
+ * `window.station.keplr.*`. All routes flow through the same Vultisig MPC
+ * keysign pipeline; `post` differs from `sign` only in leaving
+ * `skipBroadcast` unset so the popup also broadcasts.
  *
- * `sign`, `post`, `signBytes`, `signArbitrary`, and `switchNetwork` are
- * surfaced for detection but currently throw `NotImplementedError` — the
- * full Station tx pipeline (proto → amino conversion, broadcast) is tracked
- * as a follow-up.
+ * `signBytes`, `signArbitrary`, and `switchNetwork` are surfaced for
+ * detection but throw `NotImplementedError` — arbitrary-bytes signing has
+ * not shipped in {@link XDEFIKeplrProvider} either.
  */
 export class Station {
   static instance: Station | null = null
@@ -195,12 +247,114 @@ export class Station {
     return 'dark'
   }
 
-  async sign(_tx: unknown): Promise<never> {
-    throw new NotImplementedError('Station sign')
+  async sign(tx: StationTxRequest): Promise<StationSignResponse> {
+    const chain = shouldBePresent(
+      getCosmosChainByChainId(tx.chainID),
+      `Station sign: unrecognized chainID ${tx.chainID}`
+    )
+
+    const msgs = tx.msgs.map(msg => stationMsgToAmino(msg, chain))
+    const fee = tx.fee ? stationFeeToAmino(tx.fee) : { amount: [], gas: '0' }
+    const memo = tx.memo ?? ''
+
+    const account = await requestAccount(chain)
+
+    // account_number / sequence are not consumed by Vultisig's keysign popup
+    // (it re-queries the chain). Pass placeholders to satisfy the StdSignDoc
+    // shape required by `XDEFIKeplrProvider.signAmino`.
+    const aminoResponse = await this.keplr.signAmino(
+      tx.chainID,
+      account.address,
+      {
+        chain_id: tx.chainID,
+        account_number: '0',
+        sequence: '0',
+        msgs,
+        fee,
+        memo,
+      }
+    )
+
+    const { signature: aminoSignature, signed } = aminoResponse
+
+    return {
+      auth_info: {
+        signer_infos: [
+          {
+            public_key: {
+              type_url: '/cosmos.crypto.secp256k1.PubKey',
+              key: aminoSignature.pub_key.value,
+            },
+            mode_info: { single: { mode: 'SIGN_MODE_LEGACY_AMINO_JSON' } },
+            sequence: signed.sequence,
+          },
+        ],
+        fee: signed.fee,
+      },
+      body: {
+        messages: [...signed.msgs],
+        memo: signed.memo,
+        timeout_height: '0',
+        extension_options: [],
+        non_critical_extension_options: [],
+      },
+      signatures: [aminoSignature.signature],
+      fee: signed.fee,
+    }
   }
 
-  async post(_tx: unknown): Promise<never> {
-    throw new NotImplementedError('Station post')
+  async post(tx: StationTxRequest): Promise<StationPostResponse> {
+    const chain = shouldBePresent(
+      getCosmosChainByChainId(tx.chainID),
+      `Station post: unrecognized chainID ${tx.chainID}`
+    )
+
+    const msgs = tx.msgs.map(msg => stationMsgToAmino(msg, chain))
+    const fee = tx.fee ? stationFeeToAmino(tx.fee) : { amount: [], gas: '0' }
+    const memo = tx.memo ?? ''
+
+    const account = await requestAccount(chain)
+
+    // Mirrors `aminoHandler` in xdefiKeplr.ts but with `skipBroadcast` left
+    // unset so the keysign popup signs *and* broadcasts. The msgs/fee cast
+    // matches the existing routing boundary — values are JSON-stringified
+    // downstream in `keysignPayload/build.ts`.
+    const firstMsgValue = (msgs[0]?.value ?? {}) as {
+      funds?: Array<{ denom: string; amount: string }>
+      sender?: string
+      from_address?: string
+      to_address?: string
+      contract?: string
+    }
+
+    const transactionDetails: TransactionDetails = {
+      asset: {
+        ticker: firstMsgValue.funds?.[0]?.denom ?? chainFeeCoin[chain].ticker,
+      },
+      amount: {
+        amount: firstMsgValue.funds?.[0]?.amount ?? '0',
+        decimals: chainFeeCoin[chain].decimals,
+      },
+      from: account.address,
+      to: firstMsgValue.contract ?? firstMsgValue.to_address,
+      data: memo,
+      aminoPayload: {
+        msgs: msgs as unknown as CosmosMsg[],
+        fee: fee as CosmosFee,
+      },
+    }
+
+    const [{ hash }] = await callPopup(
+      { sendTx: { keysign: { transactionDetails, chain } } },
+      { account: account.address }
+    )
+
+    return {
+      txhash: hash,
+      height: '0',
+      raw_log: '',
+      code: 0,
+    }
   }
 
   async signBytes(
