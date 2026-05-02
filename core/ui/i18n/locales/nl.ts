@@ -1013,13 +1013,19 @@ export const nl = {
   vault_backup_page_submit_loading_button_text: 'Opslaan...',
   vault_count_one: '{{count}} kluis',
   vault_count_other: '{{count}} kluizen',
+  vault_delete_page_button: 'Kluis verwijderen',
   vault_delete_page_device_id: 'Apparaat-ID',
-  vault_delete_page_header_subtitle: 'Je verwijdert je kluis permanent',
+  vault_delete_page_ecdsa_key: 'ECDSA-sleutel',
+  vault_delete_page_eddsa_key: 'EdDSA-sleutel',
+  vault_delete_page_header_subtitle:
+    'Je verwijdert je kluisdeel permanent uit deze app',
   vault_delete_page_header_title: 'Kluis verwijderen',
   vault_delete_page_term_1:
     'Ik ben me ervan bewust dat de kluis permanent wordt verwijderd',
   vault_delete_page_term_2: 'Ik ben me ervan bewust dat ik funds kan verliezen',
-  vault_delete_page_term_3: 'Ik heb een kluisback-up gemaakt',
+  vault_delete_page_term_3:
+    'Ik heb een kluisback-up gemaakt om later te kunnen herstellen',
+  vault_delete_page_vault_part: 'Kluisdeel',
   vault_details_description: 'Bekijk kluisnaam, deel en type',
   vault_details_edit_vault_description: 'Bewerk je kluisnaam',
   vault_details_page_signer_word: 'Ondertekenaar',
