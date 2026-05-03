@@ -594,6 +594,9 @@ __metadata:
     "@core/inpage-provider": "workspace:^"
     "@core/ui": "workspace:^"
     "@cosmjs/amino": "npm:^0.38.1"
+    "@cosmjs/cosmwasm-stargate": "npm:^0.38.1"
+    "@cosmjs/proto-signing": "npm:^0.38.1"
+    "@cosmjs/stargate": "npm:^0.38.1"
     "@fontsource/montserrat": "npm:^5.2.8"
     "@fontsource/roboto-mono": "npm:^5.2.8"
     "@hookform/resolvers": "npm:^5.2.2"
@@ -827,6 +830,32 @@ __metadata:
     "@cosmjs/math": "npm:^0.38.1"
     "@cosmjs/utils": "npm:^0.38.1"
   checksum: 10c0/addf40d6970e9fffa18fc5f17cb6c91c45b5627409474478dcdc63f578f56adad5988413815c5f27a9c88847e4787f7a5b160f454923cc62a6b9adf0d9a52aef
+  languageName: node
+  linkType: hard
+
+"@cosmjs/cosmwasm-stargate@npm:^0.38.1":
+  version: 0.38.1
+  resolution: "@cosmjs/cosmwasm-stargate@npm:0.38.1"
+  dependencies:
+    "@cosmjs/cosmwasm": "npm:^0.38.1"
+  checksum: 10c0/f8857715914ac91c2b4f72ac632d1dfaef090c229cdd88abe9c077cf09e314fc028bcc8238874406208254922ac47cd3030578004aa0516107db73bcd5a99afd
+  languageName: node
+  linkType: hard
+
+"@cosmjs/cosmwasm@npm:^0.38.1":
+  version: 0.38.1
+  resolution: "@cosmjs/cosmwasm@npm:0.38.1"
+  dependencies:
+    "@cosmjs/amino": "npm:^0.38.1"
+    "@cosmjs/crypto": "npm:^0.38.1"
+    "@cosmjs/encoding": "npm:^0.38.1"
+    "@cosmjs/math": "npm:^0.38.1"
+    "@cosmjs/proto-signing": "npm:^0.38.1"
+    "@cosmjs/stargate": "npm:^0.38.1"
+    "@cosmjs/tendermint-rpc": "npm:^0.38.1"
+    "@cosmjs/utils": "npm:^0.38.1"
+    cosmjs-types: "npm:^0.11.0"
+  checksum: 10c0/dac01c52de85d24b8601dd6d508231f9f97be626a213f248c3d0044cd1c393b9f7edc5cd35d0ffea03f4ea3e375dd4886c50fccad2682895aa09b5b444fbc07d
   languageName: node
   linkType: hard
 

@@ -1,8 +1,6 @@
 import { callBackground } from '@core/inpage-provider/background'
 import { addBackgroundEventListener } from '@core/inpage-provider/background/events/inpage'
-import { callPopup } from '@core/inpage-provider/popup'
-import { TransactionDetails } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
-import { StdFee } from '@cosmjs/amino'
+import { AminoMsg, StdFee } from '@cosmjs/amino'
 import { Chain, CosmosChain } from '@vultisig/core-chain/Chain'
 import { getCosmosAccountInfo } from '@vultisig/core-chain/chains/cosmos/account/getCosmosAccountInfo'
 import {
@@ -11,8 +9,6 @@ import {
 } from '@vultisig/core-chain/chains/cosmos/chainInfo'
 import { cosmosFeeCoinDenom } from '@vultisig/core-chain/chains/cosmos/cosmosFeeCoinDenom'
 import { cosmosRpcUrl } from '@vultisig/core-chain/chains/cosmos/cosmosRpcUrl'
-import { parseCosmosSerialized } from '@vultisig/core-chain/chains/cosmos/utils/parseCosmosSerialized'
-import { chainFeeCoin } from '@vultisig/core-chain/coin/chainFeeCoin'
 import { deserializeSigningOutput } from '@vultisig/core-chain/tw/signingOutput'
 import { broadcastTx } from '@vultisig/core-chain/tx/broadcast'
 import { getTxHash } from '@vultisig/core-chain/tx/hash'
@@ -25,11 +21,9 @@ import { validateUrl } from '@vultisig/lib-utils/validation/url'
 import { requestAccount } from './core/requestAccount'
 import { stationFeeToAmino, stationMsgToAmino } from './stationProtoAmino'
 import {
-  assertWasmExecuteTxRaw,
-  encodeAuthInfo,
-  encodeTxBody,
-  encodeWasmExecuteAny,
-} from './stationProtoEncode'
+  assertAminoMsgsMatch,
+  buildLegacyAminoTxRawBytes,
+} from './stationTxAssembly'
 import { XDEFIKeplrProvider } from './xdefiKeplr'
 
 type ChainID = string
@@ -176,22 +170,20 @@ const stationNetworkChangeEvent = 'station_network_change'
  * Adapter exposing the Terra Station injected-API surface
  * (`window.station` / `window.terra`) on top of {@link XDEFIKeplrProvider}.
  *
- * The two write paths use different signing modes by design:
+ * Both write paths use the amino legacy signing flow so the popup shows the
+ * verbose amino body and dApps that probe `signed.msgs` get back the same
+ * shape they submitted:
  *
- * - `sign` keeps the amino legacy path (matches Station's `sign` contract):
- *   messages normalized via {@link stationMsgToAmino}, signed through MPC
- *   keysign, repackaged in Station's response shape, returned to the dApp
- *   to broadcast.
- * - `post` is `SIGN_MODE_DIRECT` only: we encode `MsgExecuteContract` proto
- *   bytes ourselves (see {@link stationProtoEncode}) and pass them via
- *   `directPayload` so TW signs the bytes verbatim. After the popup signs,
- *   we **decode the resulting `TxRaw` and assert** `messages[0].typeUrl`
- *   matches the wasm execute we built before broadcasting — defense in
- *   depth so a re-encoded message type cannot be broadcast.
- *
- * `post` is currently limited to single-message `wasm/MsgExecuteContract`
- * txs; other shapes throw and the dApp
- * should fall back to `sign`.
+ * - `sign` matches Station's `sign` contract: messages normalized via
+ *   {@link stationMsgToAmino}, signed through MPC keysign, repackaged in
+ *   Station's response shape, returned to the dApp (which broadcasts).
+ * - `post` extends the same flow into a broadcast: after signing, the amino
+ *   payload is assembled into a protobuf `TxRaw` with
+ *   `SIGN_MODE_LEGACY_AMINO_JSON` (see {@link stationTxAssembly}) and pushed
+ *   through Vultisig's standard Cosmos broadcast resolver. Per-message-type
+ *   encoding is delegated to cosmjs's `AminoTypes` and `Registry`, so any
+ *   bank / staking / distribution / gov / ibc / wasm message and any
+ *   number of messages per tx are supported with no per-type code here.
  *
  * `signBytes`, `signArbitrary`, and `switchNetwork` are surfaced for
  * detection but throw `NotImplementedError` — arbitrary-bytes signing has
@@ -347,17 +339,25 @@ export class Station {
   }
 
   /**
-   * Signs and broadcasts a single-message `wasm/MsgExecuteContract` tx via
-   * `SIGN_MODE_DIRECT`. The body / authInfo bytes are encoded by us in
-   * {@link stationProtoEncode}; the popup signs verbatim, and we
-   * {@link assertWasmExecuteTxRaw}-check the resulting `TxRaw` before
-   * broadcasting via the standard Cosmos broadcast resolver. Returns
-   * Station's `PostResponse` shape with the broadcast tx hash.
+   * Signs and broadcasts an arbitrary Cosmos tx using `SIGN_MODE_LEGACY_AMINO_JSON`.
    *
-   * Throws for non-wasm or multi-message txs — those should use {@link sign}
-   * and broadcast on the dApp side. Also throws if the dApp didn't supply a
-   * non-zero gas limit (we don't substitute a default for a contract execute,
-   * since under-billed gas can fail mid-execution and burn fees).
+   * Routes the dApp's msgs through the same amino popup flow as {@link sign}
+   * (so the user sees the verbose amino body), then assembles a protobuf
+   * `TxRaw` with the amino signature embedded under the legacy mode. The
+   * chain reconstructs the StdSignDoc from the proto-encoded body and
+   * verifies against the amino signature — same hash, different wire format.
+   *
+   * Per-message-type encoding is delegated to cosmjs's `AminoTypes` and
+   * `Registry` (default + wasm converters), so this method covers every
+   * standard cosmos / ibc / cosmwasm msg type out of the box and supports
+   * multi-message txs without per-type code here.
+   *
+   * Safety:
+   * - Asserts the amino msgs returned by the signer match the msgs we
+   *   submitted (so no in-flight rewrite slips through).
+   * - `aminoTypes.fromAmino` throws on unknown types — failure mode is a
+   *   clear error pre-broadcast, never a silent fallback to a different
+   *   msg type.
    */
   async post(tx: StationTxRequest): Promise<StationPostResponse> {
     const chain = shouldBePresent(
@@ -365,31 +365,15 @@ export class Station {
       `Station post: unrecognized chainID ${tx.chainID}`
     )
 
-    if (tx.msgs.length !== 1) {
+    const requestMsgs = tx.msgs.map(msg => stationMsgToAmino(msg, chain))
+    const fee = tx.fee ? stationFeeToAmino(tx.fee) : { amount: [], gas: '0' }
+    const memo = tx.memo ?? ''
+
+    if (BigInt(fee.gas) === 0n) {
       throw new Error(
-        `Station post: only single-message txs are supported (got ${tx.msgs.length}); use sign() and broadcast yourself for multi-msg txs.`
+        'Station post: dApp did not provide a fee with a non-zero `gas` field. Refusing to broadcast — without a gas limit the chain would either reject or silently underbill the execution.'
       )
     }
-
-    const [aminoMsg] = tx.msgs.map(msg => stationMsgToAmino(msg, chain))
-
-    if (aminoMsg.type !== 'wasm/MsgExecuteContract') {
-      throw new Error(
-        `Station post: msg type "${aminoMsg.type}" not supported. Only wasm/MsgExecuteContract can be broadcast; use sign() and broadcast yourself.`
-      )
-    }
-
-    const wasmValue = aminoMsg.value as {
-      sender: string
-      contract: string
-      funds?: Array<{ denom: string; amount: string }>
-      msg: unknown
-    }
-    const funds = wasmValue.funds ?? []
-    const executeMsg =
-      typeof wasmValue.msg === 'string'
-        ? wasmValue.msg
-        : JSON.stringify(wasmValue.msg)
 
     const account = await requestAccount(chain)
     const accountInfo = await getCosmosAccountInfo({
@@ -397,86 +381,47 @@ export class Station {
       address: account.address,
     })
 
-    // Build the proto-direct bodyBytes / authInfoBytes ourselves. The popup's
-    // signDirect path passes these to TW verbatim — TW signs them and emits a
-    // TxRaw containing the same bytes, so what we encode here is what the
-    // chain executes. The post-sign assertion below is defense in depth.
-    const bodyBytes = encodeTxBody({
-      messages: [
-        encodeWasmExecuteAny({
-          sender: wasmValue.sender,
-          contract: wasmValue.contract,
-          msg: executeMsg,
-          funds,
-        }),
-      ],
-      memo: tx.memo ?? '',
-    })
+    // Sign via the standard amino popup. account_number / sequence here are
+    // the values we believe the chain has at this moment; the signer's
+    // chainSpecific resolver re-queries on the popup side, so a small race
+    // window exists. If the queries diverge, broadcast fails with a chain
+    // sequence-mismatch error (not silent — user retries).
+    const aminoResponse = await this.keplr.signAmino(
+      tx.chainID,
+      account.address,
+      {
+        chain_id: tx.chainID,
+        account_number: String(accountInfo.accountNumber),
+        sequence: String(accountInfo.sequence),
+        msgs: requestMsgs,
+        fee,
+        memo,
+      }
+    )
 
-    const stationFee = tx.fee ? stationFeeToAmino(tx.fee) : undefined
-    const feeAmount: Array<{ denom: string; amount: string }> = stationFee
-      ? stationFee.amount.map(c => ({ denom: c.denom, amount: c.amount }))
-      : []
-    const gasLimit = stationFee?.gas ? BigInt(stationFee.gas) : 0n
-    if (gasLimit === 0n) {
-      throw new Error(
-        'Station post: dApp did not provide a fee with a non-zero `gas` field. Refusing to broadcast — without a gas limit the chain would either reject or silently underbill the contract execution.'
-      )
-    }
+    const { signed, signature: aminoSignature } = aminoResponse
+    // Keplr types declare `signed.msgs` as `readonly Msg[]` (distinct
+    // declaration of the same shape as `AminoMsg`). Materialize a mutable
+    // copy so the assembler's typed inputs accept it without an `as` cast.
+    const signedMsgs = [...signed.msgs] as AminoMsg[]
 
-    const authInfoBytes = encodeAuthInfo({
+    // Round-trip safety: what we asked to sign must equal what got signed.
+    assertAminoMsgsMatch({ expected: requestMsgs, actual: signedMsgs })
+
+    const txRawBytes = buildLegacyAminoTxRawBytes({
+      aminoMsgs: signedMsgs,
+      fee: signed.fee,
+      memo: signed.memo,
+      sequence: BigInt(signed.sequence),
       publicKey: hexToBytes(account.publicKey),
-      sequence: BigInt(accountInfo.sequence ?? 0),
-      fee: {
-        amount: feeAmount,
-        gasLimit,
-        payer: stationFee?.payer,
-        granter: stationFee?.granter,
-      },
+      signature: aminoSignature.signature,
     })
 
-    const transactionDetails: TransactionDetails = {
-      asset: {
-        ticker: funds[0]?.denom ?? chainFeeCoin[chain].ticker,
-      },
-      amount: {
-        amount: funds[0]?.amount ?? '0',
-        decimals: chainFeeCoin[chain].decimals,
-      },
-      from: account.address,
-      to: wasmValue.contract,
-      data: tx.memo,
-      directPayload: {
-        bodyBytes: Buffer.from(bodyBytes).toString('base64'),
-        authInfoBytes: Buffer.from(authInfoBytes).toString('base64'),
-        chainId: tx.chainID,
-        accountNumber: String(accountInfo.accountNumber ?? 0),
-      },
-      // Sign only — we broadcast manually below after verifying the signed
-      // body actually contains the wasm execute we encoded.
-      skipBroadcast: true,
-    }
-
-    const [{ data }] = await callPopup(
-      { sendTx: { keysign: { transactionDetails, chain } } },
-      { account: account.address }
-    )
-
-    const signingOutput = deserializeSigningOutput(chain, data)
-    const { tx_bytes } = parseCosmosSerialized(
-      'serialized' in signingOutput ? signingOutput.serialized : undefined
-    )
-    const txRawBytes = Buffer.from(tx_bytes, 'base64')
-
-    // CRITICAL safety check — verify the bytes about to be broadcast actually
-    // encode our wasm execute, not something else (e.g. a MsgSend fallback).
-    // Throws if the body was rewritten or empty.
-    assertWasmExecuteTxRaw({
-      txRawBytes,
-      expected: {
-        sender: wasmValue.sender,
-        contract: wasmValue.contract,
-      },
+    const signingOutput = deserializeSigningOutput(chain, {
+      serialized: JSON.stringify({
+        tx_bytes: Buffer.from(txRawBytes).toString('base64'),
+        mode: 'BROADCAST_MODE_SYNC',
+      }),
     })
 
     await broadcastTx({ chain, tx: signingOutput })
