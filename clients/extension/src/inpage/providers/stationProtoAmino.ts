@@ -90,6 +90,50 @@ export const stationMsgToAmino = (rawMsg: unknown, chain: Chain): AminoMsg => {
   return { type: aminoType, value }
 }
 
+type RawFee = {
+  amount?: unknown
+  gas?: unknown
+  gas_limit?: unknown
+  payer?: unknown
+  granter?: unknown
+}
+
+const isCoinEntry = (
+  value: unknown
+): value is { denom: string; amount: string | number } =>
+  typeof value === 'object' &&
+  value !== null &&
+  typeof (value as Record<string, unknown>).denom === 'string' &&
+  (typeof (value as Record<string, unknown>).amount === 'string' ||
+    typeof (value as Record<string, unknown>).amount === 'number')
+
+const normalizeFeeAmount = (
+  amount: unknown
+): Array<{ denom: string; amount: string }> => {
+  if (amount === undefined || amount === null) {
+    return []
+  }
+  if (!Array.isArray(amount) || !amount.every(isCoinEntry)) {
+    throw new Error(
+      `Station sign: invalid fee.amount — got ${JSON.stringify(amount).slice(0, 120)}`
+    )
+  }
+  return amount.map(entry => ({
+    denom: entry.denom,
+    amount: String(entry.amount),
+  }))
+}
+
+const optionalString = (value: unknown, field: string): string | undefined => {
+  if (value === undefined || value === null) {
+    return undefined
+  }
+  if (typeof value !== 'string') {
+    throw new Error(`Station sign: invalid fee.${field} — expected string`)
+  }
+  return value
+}
+
 /**
  * Converts a Terra Station tx fee into an amino `StdFee`.
  *
@@ -106,23 +150,22 @@ export const stationFeeToAmino = (rawFee: unknown): StdFee => {
     )
   }
 
-  const fee = parsed as {
-    amount?: Array<{ denom: string; amount: string }>
-    gas?: string | number
-    gas_limit?: string | number
-    payer?: string
-    granter?: string
-  }
+  const fee: RawFee = parsed
 
   const gas = fee.gas ?? fee.gas_limit
   if (gas === undefined) {
     throw new Error('Station sign: fee missing `gas` / `gas_limit`')
   }
+  if (typeof gas !== 'string' && typeof gas !== 'number') {
+    throw new Error(
+      `Station sign: invalid fee.gas — expected string or number, got ${typeof gas}`
+    )
+  }
 
   return {
-    amount: fee.amount ?? [],
+    amount: normalizeFeeAmount(fee.amount),
     gas: String(gas),
-    payer: fee.payer,
-    granter: fee.granter,
+    payer: optionalString(fee.payer, 'payer'),
+    granter: optionalString(fee.granter, 'granter'),
   }
 }
