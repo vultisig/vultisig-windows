@@ -1184,13 +1184,19 @@ export const ko = {
   vault_backup_page_submit_loading_button_text: '절약...',
   vault_count_one: '{{count}} 볼트',
   vault_count_other: '{{count}} 금고',
+  vault_delete_page_button: '금고 삭제',
   vault_delete_page_device_id: '기기 ID',
-  vault_delete_page_header_subtitle: '금고를 영구적으로 삭제합니다.',
+  vault_delete_page_ecdsa_key: 'ECDSA 키',
+  vault_delete_page_eddsa_key: 'EdDSA 키',
+  vault_delete_page_header_subtitle:
+    '이 앱에서 금고 지분을 영구적으로 삭제합니다.',
   vault_delete_page_header_title: '금고 삭제',
   vault_delete_page_term_1:
     '저는 해당 저장소가 영구적으로 삭제될 것임을 알고 있습니다.',
   vault_delete_page_term_2: '저는 자금을 잃을 수 있다는 것을 알고 있습니다.',
-  vault_delete_page_term_3: '저는 볼트 백업을 만들었습니다.',
+  vault_delete_page_term_3:
+    '저는 나중에 복원하기 위해 볼트 백업을 만들었습니다.',
+  vault_delete_page_vault_part: '금고 지분',
   vault_details_description: '금고 이름, 부분 및 유형을 확인하세요.',
   vault_details_edit_vault_description: '금고 이름을 수정하세요',
   vault_details_page_signer_word: '서명자',

@@ -918,13 +918,19 @@ export const hr = {
   vault_backup_page_password_protection:
     'Opcionalna zaštita vašeg trezora lozinkom',
   vault_backup_page_submit_loading_button_text: 'Spremanje...',
+  vault_delete_page_button: 'Izbriši trezor',
   vault_delete_page_device_id: 'ID uređaja',
-  vault_delete_page_header_subtitle: 'Trajno brišete svoj trezor',
+  vault_delete_page_ecdsa_key: 'ECDSA ključ',
+  vault_delete_page_eddsa_key: 'EdDSA ključ',
+  vault_delete_page_header_subtitle:
+    'Trajno brišete svoj dio trezora iz ove aplikacije',
   vault_delete_page_header_title: 'Izbriši trezor',
   vault_delete_page_term_1:
     'Svjestan/svjesna sam da će sef biti trajno izbrisan',
   vault_delete_page_term_2: 'Svjestan/svjesna sam da mogu izgubiti sredstva',
-  vault_delete_page_term_3: 'Napravio/la sam sigurnosnu kopiju trezora',
+  vault_delete_page_term_3:
+    'Napravio/la sam sigurnosnu kopiju trezora radi kasnije obnove',
+  vault_delete_page_vault_part: 'Dio trezora',
   vault_details_description: 'Prikaži naziv, dio i vrstu trezora',
   vault_details_edit_vault_description: 'Uredite naziv svog trezora',
   vault_details_page_signer_word: 'Potpisnik',
