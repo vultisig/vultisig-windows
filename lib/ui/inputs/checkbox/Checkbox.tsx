@@ -21,6 +21,7 @@ type CheckboxProps = {
 const Box = styled.div<{ isChecked: boolean }>`
   ${sameDimensions(20)}
   ${centerContent};
+  box-sizing: border-box;
   border-radius: 100%;
   color: ${getColor('primary')};
   background: ${getColor('foregroundExtra')};
@@ -28,13 +29,16 @@ const Box = styled.div<{ isChecked: boolean }>`
   padding: 2px;
 
   ${({ isChecked }) =>
-    !isChecked &&
-    css`
-      &:hover {
-        background: ${getColor('foregroundSuper')};
-      }
-      background: ${getColor('foregroundExtra')};
-    `};
+    isChecked
+      ? css`
+          border: 1.5px solid ${getColor('primary')};
+        `
+      : css`
+          &:hover {
+            background: ${getColor('foregroundSuper')};
+          }
+          background: ${getColor('foregroundExtra')};
+        `};
 `
 
 const Container = styled(HStack)<{ isChecked: boolean }>`
@@ -56,7 +60,7 @@ const Container = styled(HStack)<{ isChecked: boolean }>`
       }
     `}
 
-  &:focus-within ${Box} {
+  &:has(:focus-visible) ${Box} {
     outline: 2px solid ${getColor('primary')};
     outline-offset: 2px;
   }

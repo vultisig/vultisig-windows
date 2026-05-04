@@ -939,13 +939,19 @@ export const de = {
   vault_backup_page_password_protection:
     'Optionaler Passwortschutz für Ihren Tresor',
   vault_backup_page_submit_loading_button_text: 'Speichern...',
+  vault_delete_page_button: 'Tresor löschen',
   vault_delete_page_device_id: 'Geräte-ID',
-  vault_delete_page_header_subtitle: 'Sie löschen Ihren Tresor endgültig.',
+  vault_delete_page_ecdsa_key: 'ECDSA-Schlüssel',
+  vault_delete_page_eddsa_key: 'EdDSA-Schlüssel',
+  vault_delete_page_header_subtitle:
+    'Sie löschen Ihren Tresor-Anteil aus dieser App endgültig.',
   vault_delete_page_header_title: 'Tresor löschen',
   vault_delete_page_term_1:
     'Mir ist bewusst, dass der Tresor endgültig gelöscht wird.',
   vault_delete_page_term_2: 'Mir ist bewusst, dass ich Geld verlieren kann.',
-  vault_delete_page_term_3: 'Ich habe ein Backup im Tresor erstellt.',
+  vault_delete_page_term_3:
+    'Ich habe ein Tresor-Backup erstellt, um es später wiederherzustellen.',
+  vault_delete_page_vault_part: 'Tresor-Anteil',
   vault_details_description: 'Tresorname, Teil und Typ anzeigen',
   vault_details_edit_vault_description: 'Bearbeiten Sie Ihren Tresornamen',
   vault_details_page_signer_word: 'Unterzeichner',
