@@ -23,7 +23,7 @@ const getDappFeeAmounts = (
   return undefined
 }
 
-export type ApplyCosmosFeeFromSignDataInput = {
+type ApplyCosmosFeeFromSignDataInput = {
   keysignPayload: KeysignPayload
   chain: CosmosChain
 }
