@@ -278,6 +278,9 @@ const BlockaidEvmSimulationContent = ({
         if (!blockaidSimulationInfo) {
           return fallback
         }
+        if (blockaidSimulationInfo.changes.length === 0) {
+          return fallback
+        }
         const shape = classifyEvmChanges(blockaidSimulationInfo.changes)
         if (shape.kind === 'transfer') {
           return (
