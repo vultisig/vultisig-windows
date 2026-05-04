@@ -48,7 +48,7 @@ When spawning parallel agents:
 - Agent A: Read Linear ticket details + acceptance criteria
 - Agent B: Search codebase for related files, existing patterns, similar implementations
 - Agent C: Read vultisig-knowledge repo docs if touching new domains (MPC, chain logic, etc.)
-- Agent D+: Any additional context gathering needed (e.g., checking upstream lib/ patterns)
+- Agent D+: Any additional context gathering needed (e.g., `@lib/*` patterns in this repo)
 
 **Stage 2 — Plan (SEQUENTIAL):**
 - Synthesize findings from Stage 1
