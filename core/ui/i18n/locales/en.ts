@@ -102,6 +102,7 @@ export const en = {
   backup_without_password: 'Backup without password',
   balance: 'Balance',
   balance_available: 'Balance available',
+  balance_changes: 'Balance Changes',
   base_fee: 'Base Fee',
   blockaid_security_scan: 'Blockaid Security Scan',
   blockaid_simulation_failed: 'Transaction Simulation Failed',

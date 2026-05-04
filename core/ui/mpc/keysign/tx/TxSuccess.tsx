@@ -148,14 +148,10 @@ export const TxSuccess = ({
 
   const simulationSend = useMemo(() => {
     const data = blockaidSimulationQuery.data
-    if (!data) return null
-    if ('swap' in data && 'fromCoin' in data.swap) {
-      return { coin: data.swap.fromCoin, amount: data.swap.fromAmount }
-    }
-    if ('transfer' in data && 'fromCoin' in data.transfer) {
-      return { coin: data.transfer.fromCoin, amount: data.transfer.fromAmount }
-    }
-    return null
+    if (!data || !('changes' in data)) return null
+    const sendChange = data.changes.find(c => c.direction === 'send')
+    if (!sendChange) return null
+    return { coin: sendChange.coin, amount: sendChange.amount }
   }, [blockaidSimulationQuery.data])
 
   const displayCoin = simulationSend?.coin ?? resolvedToken?.coin ?? coin
