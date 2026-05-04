@@ -2293,7 +2293,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@lib/codegen@workspace:lib/codegen"
   dependencies:
-    "@vultisig/lib-utils": "npm:0.10.1"
+    "@vultisig/lib-utils": "npm:0.9.3"
     prettier: "npm:^3.8.1"
   languageName: unknown
   linkType: soft
@@ -2302,7 +2302,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@lib/extension@workspace:lib/extension"
   dependencies:
-    "@vultisig/lib-utils": "npm:0.10.1"
+    "@vultisig/lib-utils": "npm:0.9.3"
   languageName: unknown
   linkType: soft
 
@@ -2331,7 +2331,7 @@ __metadata:
     "@types/react": "npm:^19.2.14"
     "@types/react-dom": "npm:^19.2.3"
     "@vitest/browser": "npm:^4.1.0"
-    "@vultisig/lib-utils": "npm:0.10.1"
+    "@vultisig/lib-utils": "npm:0.9.3"
     i18next: "npm:^25.8.18"
     lottie-react: "npm:^2.4.1"
     react: "npm:^19.2.4"
