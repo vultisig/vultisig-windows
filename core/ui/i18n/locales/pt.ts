@@ -932,14 +932,19 @@ export const pt = {
   vault_backup_page_password_protection:
     'Proteção opcional por senha do seu cofre',
   vault_backup_page_submit_loading_button_text: 'Salvando...',
+  vault_delete_page_button: 'Excluir cofre',
   vault_delete_page_device_id: 'ID do dispositivo',
+  vault_delete_page_ecdsa_key: 'Chave ECDSA',
+  vault_delete_page_eddsa_key: 'Chave EdDSA',
   vault_delete_page_header_subtitle:
-    'Você está excluindo permanentemente seu cofre.',
+    'Você está excluindo permanentemente sua parte do cofre deste aplicativo.',
   vault_delete_page_header_title: 'Excluir cofre',
   vault_delete_page_term_1:
     'Estou ciente de que o cofre será excluído permanentemente.',
   vault_delete_page_term_2: 'Tenho consciência de que posso perder fundos.',
-  vault_delete_page_term_3: 'Eu fiz um backup do cofre.',
+  vault_delete_page_term_3:
+    'Eu fiz um backup do cofre para restaurar mais tarde.',
+  vault_delete_page_vault_part: 'Parte do cofre',
   vault_details_description: 'Veja o nome, a peça e o tipo do cofre.',
   vault_details_edit_vault_description: 'Edite o nome do seu cofre',
   vault_details_page_signer_word: 'Signatário',
