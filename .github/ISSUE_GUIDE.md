@@ -28,7 +28,7 @@ _How to fill the Vultisig issue template so agents AND humans produce great resu
 
 ## Key Rules for This Repo
 
-- **DO NOT** edit `lib/` — those are upstream mirrors
+- **`lib/**`** — shared workspace packages (`@lib/*`); edit here when needed (same workflow as `core/`)
 - **DO NOT** modify `core/mpc/` or `tss/` without explicit review approval
 - Use resolver pattern for chain-specific logic (never switch on chain type)
 - Only edit `en.ts` for translations, run `yarn translate` to propagate
