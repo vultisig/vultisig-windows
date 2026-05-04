@@ -17,7 +17,7 @@ yarn check:all   # lint + typecheck + test + knip
 
 1. Run `yarn check` after every code change
 2. If touching `core/mpc/` or `tss/`: extra caution — affects signing across all platforms
-3. If touching `lib/`: that's an upstream mirror — do not edit directly
+3. `lib/` holds shared workspace packages (`@lib/ui`, `@lib/codegen`, `@lib/extension`) maintained in this repo like `core/`. Published `@vultisig/*` SDK packages come from npm when you bump dependencies.
 4. If adding user-facing text: only edit `en.ts`, run `yarn translate`
 5. Chain-specific logic: use resolver pattern (never switch on chain type directly)
 

@@ -1,6 +1,6 @@
 import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { KeysignCustomMessageInfo } from '@core/ui/mpc/keysign/custom/KeysignCustomMessageInfo'
+import { JoinKeysignCustomMessageVerify } from '@core/ui/mpc/keysign/join/JoinKeysignCustomMessageVerify'
 import { JoinKeysignSwapVerify } from '@core/ui/mpc/keysign/join/tx/JoinKeysignSwapVerify'
 import { JoinKeysignTxPrimaryInfo } from '@core/ui/mpc/keysign/join/tx/JoinKeysignTxPrimaryInfo'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
@@ -43,11 +43,7 @@ export const JoinKeysignVerifyStep = ({ onFinish }: OnFinishProp) => {
                     <JoinKeysignTxPrimaryInfo value={payload} />
                   </TxOverviewPanel>
                 ),
-              custom: value => (
-                <TxOverviewPanel>
-                  <KeysignCustomMessageInfo value={value} />
-                </TxOverviewPanel>
-              ),
+              custom: value => <JoinKeysignCustomMessageVerify value={value} />,
             }}
           />
         </WithProgressIndicator>
