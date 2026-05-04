@@ -1,14 +1,29 @@
 import { callBackground } from '@core/inpage-provider/background'
 import { addBackgroundEventListener } from '@core/inpage-provider/background/events/inpage'
+import { AminoMsg, StdFee } from '@cosmjs/amino'
 import { Chain, CosmosChain } from '@vultisig/core-chain/Chain'
-import { getCosmosChainId } from '@vultisig/core-chain/chains/cosmos/chainInfo'
+import { getCosmosAccountInfo } from '@vultisig/core-chain/chains/cosmos/account/getCosmosAccountInfo'
+import {
+  getCosmosChainByChainId,
+  getCosmosChainId,
+} from '@vultisig/core-chain/chains/cosmos/chainInfo'
 import { cosmosFeeCoinDenom } from '@vultisig/core-chain/chains/cosmos/cosmosFeeCoinDenom'
 import { cosmosRpcUrl } from '@vultisig/core-chain/chains/cosmos/cosmosRpcUrl'
+import { deserializeSigningOutput } from '@vultisig/core-chain/tw/signingOutput'
+import { broadcastTx } from '@vultisig/core-chain/tx/broadcast'
+import { getTxHash } from '@vultisig/core-chain/tx/hash'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
+import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedError'
+import { hexToBytes } from '@vultisig/lib-utils/hexToBytes'
 import { validateUrl } from '@vultisig/lib-utils/validation/url'
 
 import { requestAccount } from './core/requestAccount'
+import { stationFeeToAmino, stationMsgToAmino } from './stationProtoAmino'
+import {
+  assertAminoMsgsMatch,
+  buildLegacyAminoTxRawBytes,
+} from './stationTxAssembly'
 import { XDEFIKeplrProvider } from './xdefiKeplr'
 
 type ChainID = string
@@ -45,6 +60,41 @@ type ConnectResponse = {
     '330': string
     '118'?: string
   }
+}
+
+type StationTxRequest = {
+  chainID: string
+  msgs: unknown[]
+  fee?: unknown
+  memo?: string
+}
+
+type StationSignResponse = {
+  auth_info: {
+    signer_infos: Array<{
+      public_key: { type_url: string; key: string }
+      mode_info: { single: { mode: string } }
+      sequence: string
+    }>
+    fee: StdFee
+  }
+  body: {
+    messages: unknown[]
+    memo: string
+    timeout_height: string
+    extension_options: unknown[]
+    non_critical_extension_options: unknown[]
+  }
+  signatures: string[]
+  fee: StdFee
+}
+
+type StationPostResponse = {
+  height: string
+  raw_log: string
+  txhash: string
+  code: number
+  codespace?: string
 }
 
 type TerraStationOverrides = {
@@ -120,13 +170,24 @@ const stationNetworkChangeEvent = 'station_network_change'
  * Adapter exposing the Terra Station injected-API surface
  * (`window.station` / `window.terra`) on top of {@link XDEFIKeplrProvider}.
  *
- * Lets Terra dApps detect Vultisig as a Station-compatible wallet and use
- * the cosmjs / Keplr signing path via `window.station.keplr.*`.
+ * Both write paths use the amino legacy signing flow so the popup shows the
+ * verbose amino body and dApps that probe `signed.msgs` get back the same
+ * shape they submitted:
  *
- * `sign`, `post`, `signBytes`, `signArbitrary`, and `switchNetwork` are
- * surfaced for detection but currently throw `NotImplementedError` — the
- * full Station tx pipeline (proto → amino conversion, broadcast) is tracked
- * as a follow-up.
+ * - `sign` matches Station's `sign` contract: messages normalized via
+ *   {@link stationMsgToAmino}, signed through MPC keysign, repackaged in
+ *   Station's response shape, returned to the dApp (which broadcasts).
+ * - `post` extends the same flow into a broadcast: after signing, the amino
+ *   payload is assembled into a protobuf `TxRaw` with
+ *   `SIGN_MODE_LEGACY_AMINO_JSON` (see {@link stationTxAssembly}) and pushed
+ *   through Vultisig's standard Cosmos broadcast resolver. Per-message-type
+ *   encoding is delegated to cosmjs's `AminoTypes` and `Registry`, so any
+ *   bank / staking / distribution / gov / ibc / wasm message and any
+ *   number of messages per tx are supported with no per-type code here.
+ *
+ * `signBytes`, `signArbitrary`, and `switchNetwork` are surfaced for
+ * detection but throw `NotImplementedError` — arbitrary-bytes signing has
+ * not shipped in {@link XDEFIKeplrProvider} either.
  */
 export class Station {
   static instance: Station | null = null
@@ -150,7 +211,7 @@ export class Station {
 
   /**
    * Singleton accessor — Terra dApps expect `window.station` and `window.terra`
-   * to point at the same provider, and the constructor wires a single
+   * to share the same provider, and the constructor wires a single
    * `disconnect` listener that must not be duplicated on re-injection.
    */
   static getInstance(keplrProvider: XDEFIKeplrProvider): Station {
@@ -180,10 +241,9 @@ export class Station {
   }
 
   /**
-   * Requests the active Terra account from the Vultisig vault and returns it
-   * in Station's `ConnectResponse` shape, mapping the same address under every
-   * supported Terra chain ID (one Terra address works for both phoenix-1 and
-   * columbus-5).
+   * Requests the active Terra account and returns it in Station's
+   * `ConnectResponse` shape, mapping the same address under every supported
+   * Terra chain ID (one Terra address works for both phoenix-1 and columbus-5).
    */
   async connect(): Promise<ConnectResponse> {
     const account = await requestAccount(Chain.Terra)
@@ -216,20 +276,163 @@ export class Station {
   }
 
   /**
-   * Station tx signing — surfaced for dApp detection but not yet implemented.
-   * The proto-direct → amino conversion and MPC keysign routing land in a
-   * follow-up; until then dApps should fall back to `station.keplr.*`.
+   * Signs a Station tx in amino legacy mode and returns the signed envelope —
+   * does NOT broadcast (matches Station's `sign` contract). Messages are
+   * normalized via {@link stationMsgToAmino}, signed through the MPC keysign
+   * popup, then repackaged into Station's response shape (`auth_info`,
+   * `body`, `signatures`). The dApp is responsible for broadcasting.
    */
-  async sign(_tx: unknown): Promise<never> {
-    throw new NotImplementedError('Station sign')
+  async sign(tx: StationTxRequest): Promise<StationSignResponse> {
+    const chain = shouldBePresent(
+      getCosmosChainByChainId(tx.chainID),
+      `Station sign: unrecognized chainID ${tx.chainID}`
+    )
+
+    const msgs = tx.msgs.map(msg => stationMsgToAmino(msg, chain))
+    const fee = tx.fee ? stationFeeToAmino(tx.fee) : { amount: [], gas: '0' }
+    const memo = tx.memo ?? ''
+
+    const account = await requestAccount(chain)
+
+    // account_number / sequence are not consumed by Vultisig's keysign popup
+    // (it re-queries the chain). Pass placeholders to satisfy the StdSignDoc
+    // shape required by `XDEFIKeplrProvider.signAmino`.
+    const aminoResponse = await this.keplr.signAmino(
+      tx.chainID,
+      account.address,
+      {
+        chain_id: tx.chainID,
+        account_number: '0',
+        sequence: '0',
+        msgs,
+        fee,
+        memo,
+      }
+    )
+
+    const { signature: aminoSignature, signed } = aminoResponse
+
+    return {
+      auth_info: {
+        signer_infos: [
+          {
+            public_key: {
+              type_url: '/cosmos.crypto.secp256k1.PubKey',
+              key: aminoSignature.pub_key.value,
+            },
+            mode_info: { single: { mode: 'SIGN_MODE_LEGACY_AMINO_JSON' } },
+            sequence: signed.sequence,
+          },
+        ],
+        fee: signed.fee,
+      },
+      body: {
+        messages: [...signed.msgs],
+        memo: signed.memo,
+        timeout_height: '0',
+        extension_options: [],
+        non_critical_extension_options: [],
+      },
+      signatures: [aminoSignature.signature],
+      fee: signed.fee,
+    }
   }
 
   /**
-   * Station tx broadcast — surfaced for detection but not yet implemented
-   * (see {@link Station.sign}).
+   * Signs and broadcasts an arbitrary Cosmos tx using `SIGN_MODE_LEGACY_AMINO_JSON`.
+   *
+   * Routes the dApp's msgs through the same amino popup flow as {@link sign}
+   * (so the user sees the verbose amino body), then assembles a protobuf
+   * `TxRaw` with the amino signature embedded under the legacy mode. The
+   * chain reconstructs the StdSignDoc from the proto-encoded body and
+   * verifies against the amino signature — same hash, different wire format.
+   *
+   * Per-message-type encoding is delegated to cosmjs's `AminoTypes` and
+   * `Registry` (default + wasm converters), so this method covers every
+   * standard cosmos / ibc / cosmwasm msg type out of the box and supports
+   * multi-message txs without per-type code here.
+   *
+   * Safety:
+   * - Asserts the amino msgs returned by the signer match the msgs we
+   *   submitted (so no in-flight rewrite slips through).
+   * - `aminoTypes.fromAmino` throws on unknown types — failure mode is a
+   *   clear error pre-broadcast, never a silent fallback to a different
+   *   msg type.
    */
-  async post(_tx: unknown): Promise<never> {
-    throw new NotImplementedError('Station post')
+  async post(tx: StationTxRequest): Promise<StationPostResponse> {
+    const chain = shouldBePresent(
+      getCosmosChainByChainId(tx.chainID),
+      `Station post: unrecognized chainID ${tx.chainID}`
+    )
+
+    const requestMsgs = tx.msgs.map(msg => stationMsgToAmino(msg, chain))
+    const fee = tx.fee ? stationFeeToAmino(tx.fee) : { amount: [], gas: '0' }
+    const memo = tx.memo ?? ''
+
+    if (BigInt(fee.gas) === 0n) {
+      throw new Error(
+        'Station post: dApp did not provide a fee with a non-zero `gas` field. Refusing to broadcast — without a gas limit the chain would either reject or silently underbill the execution.'
+      )
+    }
+
+    const account = await requestAccount(chain)
+    const accountInfo = await getCosmosAccountInfo({
+      chain,
+      address: account.address,
+    })
+
+    // Sign via the standard amino popup. account_number / sequence here are
+    // the values we believe the chain has at this moment; the signer's
+    // chainSpecific resolver re-queries on the popup side, so a small race
+    // window exists. If the queries diverge, broadcast fails with a chain
+    // sequence-mismatch error (not silent — user retries).
+    const aminoResponse = await this.keplr.signAmino(
+      tx.chainID,
+      account.address,
+      {
+        chain_id: tx.chainID,
+        account_number: String(accountInfo.accountNumber),
+        sequence: String(accountInfo.sequence),
+        msgs: requestMsgs,
+        fee,
+        memo,
+      }
+    )
+
+    const { signed, signature: aminoSignature } = aminoResponse
+    // Keplr types declare `signed.msgs` as `readonly Msg[]` (distinct
+    // declaration of the same shape as `AminoMsg`). Materialize a mutable
+    // copy so the assembler's typed inputs accept it without an `as` cast.
+    const signedMsgs = [...signed.msgs] as AminoMsg[]
+
+    // Round-trip safety: what we asked to sign must equal what got signed.
+    assertAminoMsgsMatch({ expected: requestMsgs, actual: signedMsgs })
+
+    const txRawBytes = buildLegacyAminoTxRawBytes({
+      aminoMsgs: signedMsgs,
+      fee: signed.fee,
+      memo: signed.memo,
+      sequence: BigInt(signed.sequence),
+      publicKey: hexToBytes(account.publicKey),
+      signature: aminoSignature.signature,
+    })
+
+    const signingOutput = deserializeSigningOutput(chain, {
+      serialized: JSON.stringify({
+        tx_bytes: Buffer.from(txRawBytes).toString('base64'),
+        mode: 'BROADCAST_MODE_SYNC',
+      }),
+    })
+
+    await broadcastTx({ chain, tx: signingOutput })
+    const hash = await getTxHash({ chain, tx: signingOutput })
+
+    return {
+      txhash: hash,
+      height: '0',
+      raw_log: '',
+      code: 0,
+    }
   }
 
   /**
