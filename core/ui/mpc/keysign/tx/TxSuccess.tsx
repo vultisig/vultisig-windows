@@ -1,4 +1,5 @@
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { hasBlockaidEvmChangesForSummary } from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationNormalize'
 import { useBlockaidPayloadSimulationQuery } from '@core/ui/chain/security/blockaid/tx/queries/blockaidPayloadSimulation'
 import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
 import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
@@ -20,7 +21,7 @@ import { MiddleTruncate } from '@lib/ui/truncate'
 import { useQuery } from '@tanstack/react-query'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { getEvmContractCallInfo } from '@vultisig/core-chain/chains/evm/contract/call/info'
-import { areEqualCoins, type Coin } from '@vultisig/core-chain/coin/Coin'
+import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
 import { knownTokensIndex } from '@vultisig/core-chain/coin/knownTokens'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
@@ -148,13 +149,10 @@ export const TxSuccess = ({
 
   const simulationSend = useMemo(() => {
     const data = blockaidSimulationQuery.data
-    if (!data || typeof data !== 'object' || !('changes' in data)) {
+    if (!hasBlockaidEvmChangesForSummary(data)) {
       return null
     }
-    const { changes } = data as {
-      changes: { direction: string; coin: Coin; amount: bigint }[]
-    }
-    if (!Array.isArray(changes)) return null
+    const { changes } = data
     // Only adopt the simulation's send leg as the success hero when there's
     // exactly one — multi-send shapes (e.g. multicalls that send several
     // tokens) can't be summarised by a single coin/amount, so let the

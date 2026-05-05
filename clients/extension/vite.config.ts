@@ -14,11 +14,11 @@ import { getStaticCopyTargets } from '../../core/ui/vite/staticCopy'
 const rootDir = path.resolve(__dirname, '../..')
 
 /** One physical copy of MPC entry + types across chunks (vultisig-windows#3831 / #3777). */
-const vultisigMpcDedupe = [
+const vultisigMpcDedupe: readonly string[] = [
   '@vultisig/sdk',
   '@vultisig/mpc-types',
   '@vultisig/mpc-wasm',
-] as const
+]
 
 export default defineConfig(async ({ mode }) => {
   const env = loadEnv(mode, rootDir)
