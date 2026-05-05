@@ -20,7 +20,7 @@ import { MiddleTruncate } from '@lib/ui/truncate'
 import { useQuery } from '@tanstack/react-query'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { getEvmContractCallInfo } from '@vultisig/core-chain/chains/evm/contract/call/info'
-import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
+import { areEqualCoins, type Coin } from '@vultisig/core-chain/coin/Coin'
 import { knownTokensIndex } from '@vultisig/core-chain/coin/knownTokens'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 import { fromCommCoin } from '@vultisig/core-mpc/types/utils/commCoin'
@@ -148,12 +148,18 @@ export const TxSuccess = ({
 
   const simulationSend = useMemo(() => {
     const data = blockaidSimulationQuery.data
-    if (!data || !('changes' in data)) return null
+    if (!data || typeof data !== 'object' || !('changes' in data)) {
+      return null
+    }
+    const { changes } = data as {
+      changes: { direction: string; coin: Coin; amount: bigint }[]
+    }
+    if (!Array.isArray(changes)) return null
     // Only adopt the simulation's send leg as the success hero when there's
     // exactly one — multi-send shapes (e.g. multicalls that send several
     // tokens) can't be summarised by a single coin/amount, so let the
     // fallbacks (resolved token, txAction) handle them.
-    const sendChanges = data.changes.filter(c => c.direction === 'send')
+    const sendChanges = changes.filter(c => c.direction === 'send')
     if (sendChanges.length !== 1) return null
     const [sendChange] = sendChanges
     return { coin: sendChange.coin, amount: sendChange.amount }

@@ -565,7 +565,7 @@ __metadata:
     "@vultisig/core-config": "npm:0.9.1"
     "@vultisig/core-mpc": "npm:1.2.2"
     "@vultisig/lib-utils": "npm:0.10.1"
-    "@vultisig/sdk": "npm:0.22.1"
+    "@vultisig/sdk": "npm:0.22.2"
     "@wailsapp/runtime": "workspace:^"
     eslint: "npm:^9.39.2"
     eslint-plugin-jsx-a11y: "npm:^6.10.2"
@@ -625,7 +625,7 @@ __metadata:
     "@vultisig/core-chain": "npm:1.5.0"
     "@vultisig/core-mpc": "npm:1.2.2"
     "@vultisig/lib-utils": "npm:0.10.1"
-    "@vultisig/sdk": "npm:0.22.1"
+    "@vultisig/sdk": "npm:0.22.2"
     "@wallet-standard/base": "npm:^1.1.0"
     "@wallet-standard/features": "npm:^1.1.0"
     bech32: "npm:^2.0.0"
@@ -781,7 +781,7 @@ __metadata:
     "@vultisig/core-config": "npm:0.9.1"
     "@vultisig/core-mpc": "npm:1.2.2"
     "@vultisig/lib-utils": "npm:0.10.1"
-    "@vultisig/sdk": "npm:0.22.1"
+    "@vultisig/sdk": "npm:0.22.2"
     bs58: "npm:^6.0.0"
     cosmjs-types: "npm:^0.11.0"
     ethers: "npm:^6.16.0"
@@ -6429,21 +6429,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vultisig/mpc-types@npm:0.2.2":
-  version: 0.2.2
-  resolution: "@vultisig/mpc-types@npm:0.2.2"
+"@vultisig/mpc-types@npm:0.2.3":
+  version: 0.2.3
+  resolution: "@vultisig/mpc-types@npm:0.2.3"
   peerDependencies:
-    "@vultisig/mpc-wasm": ">=0.1.4"
+    "@vultisig/mpc-wasm": ">=0.1.5"
   peerDependenciesMeta:
     "@vultisig/mpc-wasm":
       optional: true
-  checksum: 10c0/01543b1e9a97b559b69e42f6d502e431c0e73549b4a9337fcafa6e67b629e2efff277945bc23c94397ba9c91aeaa4489b68ac246a606d622c1e44d90d3850127
+  checksum: 10c0/5e9c7f612bac8ba5516704134168487117042cff3043d798926907c6b69228aa1364a8380d63c95cbb9716157690289e01c771f10690170cf79c99b457989bda
   languageName: node
   linkType: hard
 
-"@vultisig/sdk@npm:0.22.1":
-  version: 0.22.1
-  resolution: "@vultisig/sdk@npm:0.22.1"
+"@vultisig/sdk@npm:0.22.2":
+  version: 0.22.2
+  resolution: "@vultisig/sdk@npm:0.22.2"
   dependencies:
     7z-wasm: "npm:^1.2.0"
     "@bufbuild/protobuf": "npm:^2.11.0"
@@ -6466,7 +6466,7 @@ __metadata:
     "@vultisig/lib-dkls": "npm:0.9.0"
     "@vultisig/lib-mldsa": "npm:0.9.0"
     "@vultisig/lib-schnorr": "npm:0.9.0"
-    "@vultisig/mpc-types": "npm:0.2.2"
+    "@vultisig/mpc-types": "npm:0.2.3"
     axios: "npm:^1.8.3"
     bip32: "npm:^5.0.0"
     bitcoinjs-lib: "npm:^7.0.0"
@@ -6511,7 +6511,7 @@ __metadata:
       optional: true
     vite:
       optional: true
-  checksum: 10c0/4494c61401634b2ecde3bfb753ea7cf1f43599fa997ea2f3c7e4ff74028c11fa562b8d2d1abe89d25125d56cccc4266617da309458223f37a15087d5fe5bdc7a
+  checksum: 10c0/334e21ab5bdb2965317c2ea90369edd50e261f5689ff7699da9692dc76b218230d5c3e9f4d92d33dbb72cd185fe69bf9f1c5a1dd24ec70f1ccde664c7adfd4e0
   languageName: node
   linkType: hard
 

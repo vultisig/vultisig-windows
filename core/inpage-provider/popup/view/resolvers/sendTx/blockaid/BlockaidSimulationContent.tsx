@@ -1,4 +1,3 @@
-import { BlockaidBalanceChanges } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidBalanceChanges'
 import { BlockaidSwapDisplay } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidSwapDisplay'
 import { BlockaidTransferDisplay } from '@core/inpage-provider/popup/view/resolvers/sendTx/blockaid/BlockaidTransferDisplay'
 import {
@@ -24,7 +23,6 @@ import { Chain, EvmChain } from '@vultisig/core-chain/Chain'
 import { getEvmContractCallInfo } from '@vultisig/core-chain/chains/evm/contract/call/info'
 import { Coin, CoinKey } from '@vultisig/core-chain/coin/Coin'
 import {
-  BlockaidEvmBalanceChange,
   BlockaidEvmSimulationInfo,
   BlockaidSolanaSimulationInfo,
 } from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
@@ -218,41 +216,6 @@ const BlockaidSolanaSimulationContent = ({
   )
 }
 
-type EvmDisplayShape =
-  | { kind: 'transfer'; change: BlockaidEvmBalanceChange }
-  | {
-      kind: 'swap'
-      from: BlockaidEvmBalanceChange
-      to: BlockaidEvmBalanceChange
-    }
-  | { kind: 'complex'; changes: BlockaidEvmBalanceChange[] }
-
-// Pick the right hero/list display from the net balance changes. The simple
-// shapes (single send → transfer, exactly one send + one receive of distinct
-// assets → swap) keep the Phase 1 hero card styling that users are used to;
-// anything else (multicall, multi-asset DeFi, receive-only) renders as a
-// compact balance-changes list.
-const classifyEvmChanges = (
-  changes: BlockaidEvmBalanceChange[]
-): EvmDisplayShape => {
-  if (changes.length === 1 && changes[0].direction === 'send') {
-    return { kind: 'transfer', change: changes[0] }
-  }
-  if (changes.length === 2) {
-    const [first, second] = changes
-    const send = first.direction === 'send' ? first : second
-    const receive = first.direction === 'receive' ? first : second
-    if (send.direction === 'send' && receive.direction === 'receive') {
-      const sendId = send.coin.id?.toLowerCase()
-      const receiveId = receive.coin.id?.toLowerCase()
-      if (sendId !== receiveId) {
-        return { kind: 'swap', from: send, to: receive }
-      }
-    }
-  }
-  return { kind: 'complex', changes }
-}
-
 const BlockaidEvmSimulationContent = ({
   blockaidSimulationQuery,
   keysignPayload,
@@ -278,48 +241,26 @@ const BlockaidEvmSimulationContent = ({
         if (!blockaidSimulationInfo) {
           return fallback
         }
-        if (blockaidSimulationInfo.changes.length === 0) {
-          return fallback
-        }
-        const shape = classifyEvmChanges(blockaidSimulationInfo.changes)
-        if (shape.kind === 'transfer') {
-          return (
+        return matchRecordUnion(blockaidSimulationInfo, {
+          swap: swap => (
+            <BlockaidSwapDisplay
+              swap={swap}
+              memo={keysignPayload.memo}
+              chain={chain}
+              networkFeeProps={networkFeeProps}
+            />
+          ),
+          transfer: transfer => (
             <BlockaidTransferDisplay
-              transfer={{
-                fromCoin: shape.change.coin,
-                fromAmount: shape.change.amount,
-              }}
+              transfer={transfer}
               fromAddress={address}
               toAddress={keysignPayload.toAddress}
               memo={keysignPayload.memo}
               chain={chain}
               networkFeeProps={networkFeeProps}
             />
-          )
-        }
-        if (shape.kind === 'swap') {
-          return (
-            <BlockaidSwapDisplay
-              swap={{
-                fromCoin: shape.from.coin,
-                fromAmount: shape.from.amount,
-                toCoin: shape.to.coin,
-                toAmount: shape.to.amount,
-              }}
-              memo={keysignPayload.memo}
-              chain={chain}
-              networkFeeProps={networkFeeProps}
-            />
-          )
-        }
-        return (
-          <BlockaidBalanceChanges
-            changes={shape.changes}
-            memo={keysignPayload.memo}
-            chain={chain}
-            networkFeeProps={networkFeeProps}
-          />
-        )
+          ),
+        })
       }}
       error={() => fallback}
       pending={() => null}
