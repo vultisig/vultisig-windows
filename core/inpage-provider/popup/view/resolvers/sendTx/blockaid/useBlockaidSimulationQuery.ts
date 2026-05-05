@@ -1,3 +1,4 @@
+import { BlockaidEvmSimulationView } from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationView'
 import {
   getBlockaidPayloadSimulationInput,
   getBlockaidSimulationQueryWithParsing,
@@ -6,10 +7,7 @@ import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { Query } from '@lib/ui/query/Query'
 import { WalletCore } from '@trustwallet/wallet-core'
-import {
-  BlockaidEvmSimulationInfo,
-  BlockaidSolanaSimulationInfo,
-} from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
+import { BlockaidSolanaSimulationInfo } from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { useCallback } from 'react'
 
@@ -34,7 +32,7 @@ export const useBlockaidSimulationQuery = ({
     blockaidTxSimulationInput.data || undefined,
     getBlockaidSimulationQueryWithParsing
   ) as Query<
-    BlockaidEvmSimulationInfo | BlockaidSolanaSimulationInfo | null,
+    BlockaidEvmSimulationView | BlockaidSolanaSimulationInfo | null,
     unknown
   >
 }

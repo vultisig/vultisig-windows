@@ -16,6 +16,7 @@ import { PendingState } from '@core/inpage-provider/popup/view/resolvers/sendTx/
 import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
 import { useGetCoin } from '@core/ui/chain/coin/useGetCoin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { BlockaidEvmSimulationView } from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationView'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
 import { SignAminoDisplay } from '@core/ui/mpc/keysign/tx/components/SignAminoDisplay'
@@ -44,10 +45,7 @@ import { Text } from '@lib/ui/text'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
-import {
-  BlockaidEvmSimulationInfo,
-  BlockaidSolanaSimulationInfo,
-} from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
+import { BlockaidSolanaSimulationInfo } from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
 import { FeeSettings } from '@vultisig/core-mpc/keysign/chainSpecific/FeeSettings'
 import { getBlockchainSpecificValue } from '@vultisig/core-mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
@@ -273,7 +271,7 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                       chain={chain}
                       blockaidSimulationQuery={
                         blockaidSimulationQuery as Query<
-                          BlockaidEvmSimulationInfo,
+                          BlockaidEvmSimulationView,
                           unknown
                         >
                       }
