@@ -5,14 +5,19 @@ import type {
   BlockaidEvmSimulationView,
 } from './blockaidEvmSimulationView'
 
-const read = (o: object, k: string): unknown => Reflect.get(o, k)
+type ReadInput = {
+  o: object
+  k: string
+}
+
+const read = ({ o, k }: ReadInput): unknown => Reflect.get(o, k)
 
 const isCoinLike = (v: unknown): v is Coin => {
   if (v === null || typeof v !== 'object') return false
   return (
-    typeof read(v, 'decimals') === 'number' &&
-    typeof read(v, 'ticker') === 'string' &&
-    typeof read(v, 'chain') === 'string'
+    typeof read({ o: v, k: 'decimals' }) === 'number' &&
+    typeof read({ o: v, k: 'ticker' }) === 'string' &&
+    typeof read({ o: v, k: 'chain' }) === 'string'
   )
 }
 
@@ -20,13 +25,13 @@ const isBlockaidEvmBalanceChange = (
   v: unknown
 ): v is BlockaidEvmBalanceChange => {
   if (v === null || typeof v !== 'object') return false
-  const direction = read(v, 'direction')
-  const amount = read(v, 'amount')
-  const coin = read(v, 'coin')
+  const direction = read({ o: v, k: 'direction' })
+  const amount = read({ o: v, k: 'amount' })
+  const coin = read({ o: v, k: 'coin' })
   if (direction !== 'send' && direction !== 'receive') return false
   if (typeof amount !== 'bigint') return false
   if (!isCoinLike(coin)) return false
-  const usd = read(v, 'usdValue')
+  const usd = read({ o: v, k: 'usdValue' })
   if (usd !== undefined && typeof usd !== 'number') return false
   return true
 }
@@ -41,24 +46,24 @@ const isSwapPayload = (
     toAmount: bigint
   }
 } => {
-  const swap = read(v, 'swap')
+  const swap = read({ o: v, k: 'swap' })
   if (swap === null || typeof swap !== 'object') return false
   return (
-    isCoinLike(read(swap, 'fromCoin')) &&
-    typeof read(swap, 'fromAmount') === 'bigint' &&
-    isCoinLike(read(swap, 'toCoin')) &&
-    typeof read(swap, 'toAmount') === 'bigint'
+    isCoinLike(read({ o: swap, k: 'fromCoin' })) &&
+    typeof read({ o: swap, k: 'fromAmount' }) === 'bigint' &&
+    isCoinLike(read({ o: swap, k: 'toCoin' })) &&
+    typeof read({ o: swap, k: 'toAmount' }) === 'bigint'
   )
 }
 
 const isTransferPayload = (
   v: object
 ): v is { transfer: { fromCoin: Coin; fromAmount: bigint } } => {
-  const transfer = read(v, 'transfer')
+  const transfer = read({ o: v, k: 'transfer' })
   if (transfer === null || typeof transfer !== 'object') return false
   return (
-    isCoinLike(read(transfer, 'fromCoin')) &&
-    typeof read(transfer, 'fromAmount') === 'bigint'
+    isCoinLike(read({ o: transfer, k: 'fromCoin' })) &&
+    typeof read({ o: transfer, k: 'fromAmount' }) === 'bigint'
   )
 }
 
@@ -72,7 +77,7 @@ export const normalizeBlockaidEvmParsed = (
   if (parsed === null) return null
   if (typeof parsed !== 'object') return null
 
-  const changesRaw = read(parsed, 'changes')
+  const changesRaw = read({ o: parsed, k: 'changes' })
   if (changesRaw !== undefined) {
     if (!Array.isArray(changesRaw)) return null
     const changes: BlockaidEvmBalanceChange[] = []
@@ -99,7 +104,7 @@ export const hasBlockaidEvmChangesForSummary = (
   data: unknown
 ): data is { changes: BlockaidEvmBalanceChange[] } => {
   if (data === null || typeof data !== 'object') return false
-  const changes = read(data, 'changes')
+  const changes = read({ o: data, k: 'changes' })
   if (!Array.isArray(changes)) return false
   return changes.every(isBlockaidEvmBalanceChange)
 }
