@@ -13,6 +13,25 @@ import { Solana } from '../providers/solana'
 import { registerWallet } from '../providers/solana/register'
 import { UTXO } from '../providers/utxo'
 
+// Wallet-picker descriptor pushed to `window.terraWallets` /
+// `window.interchainWallets`. Mirrors the `STATION_INFO` shape the official
+// Station extension uses — Terra dApps iterate these arrays to discover
+// installed Station-compatible wallets.
+const vultisigStationInfo = {
+  name: 'Vultisig',
+  identifier: 'vultisig',
+  icon: `data:image/svg+xml;utf8,${encodeURIComponent(VULTI_ICON_RAW_SVG)}`,
+}
+
+const pushToWalletArray = (key: 'terraWallets' | 'interchainWallets') => {
+  const existing = window[key]
+  if (Array.isArray(existing)) {
+    existing.push(vultisigStationInfo)
+  } else {
+    window[key] = [vultisigStationInfo]
+  }
+}
+
 export const injectToWindow = () => {
   const providers = createProviders()
   const ethereumProvider = providers.ethereum
@@ -198,6 +217,19 @@ async function setupContentScriptMessenger(
           configurable: false,
           writable: false,
         },
+        // Detection flags Terra dApps probe before showing Station in the
+        // wallet picker — both legacy (`isTerraExtensionAvailable`) and the
+        // newer interchain alias (`isStationExtensionAvailable`).
+        isTerraExtensionAvailable: {
+          value: true,
+          configurable: false,
+          writable: false,
+        },
+        isStationExtensionAvailable: {
+          value: true,
+          configurable: false,
+          writable: false,
+        },
         injectedWeb3: {
           value: {
             ...(window.injectedWeb3 || {}),
@@ -215,5 +247,12 @@ async function setupContentScriptMessenger(
         },
       })
     )
+
+    // Register Vultisig in the Station-style wallet-picker arrays. dApps
+    // iterate these to enumerate installed Station-compatible wallets, so
+    // missing this entry hides Vultisig from the picker even when
+    // `window.station` is present.
+    attempt(() => pushToWalletArray('terraWallets'))
+    attempt(() => pushToWalletArray('interchainWallets'))
   }
 }

@@ -17,6 +17,14 @@ interface Window {
   keplr: any
   station: any
   terra: any
+  isTerraExtensionAvailable?: boolean
+  isStationExtensionAvailable?: boolean
+  terraWallets?: Array<{ name: string; identifier: string; icon: string }>
+  interchainWallets?: Array<{
+    name: string
+    identifier: string
+    icon: string
+  }>
   vultiConnect: { getVaults: () => Promise<Vault[]> }
   phantom: any
   vultiConnectRouter: {

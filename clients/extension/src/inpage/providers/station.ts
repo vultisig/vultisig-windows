@@ -51,13 +51,23 @@ type InfoResponse = Record<ChainID, ChainInfo>
 
 type NetworkName = 'mainnet' | 'testnet' | 'classic' | 'localterra'
 
+// `@terra-money/station-connector`'s `.d.ts` omits `address`, but the
+// official Station extension's contentScript ships the full `wallet` storage
+// object — which DOES include a top-level `address` (the primary chain's
+// account). wallet-kit / TFM read `connectedWallet.address` as the primary
+// identity; omitting it leaves the dApp rendering an empty "connected" state.
+//
+// Both `pubkey` coinTypes are optional (the official `.d.ts` requires `'330'`).
+// A Cosmos-only vault without Terra still needs to expose `'118'` for
+// cosmos-kit's `StationClient.getAccount`, which keys lookup by coinType.
 type ConnectResponse = {
+  address: string
   addresses: Record<ChainID, string>
   ledger: boolean
   name: string
   network: NetworkName
   pubkey?: {
-    '330': string
+    '330'?: string
     '118'?: string
   }
 }
@@ -97,17 +107,32 @@ type StationPostResponse = {
   codespace?: string
 }
 
-type TerraStationOverrides = {
-  name: string
-  icon: string
-  gasAdjustment: number
-  gasPrices: Record<string, number>
-  isClassic?: boolean
+type SupportedStationChain = typeof Chain.Terra | typeof Chain.TerraClassic
+type SupportedNetworkName = 'mainnet' | 'classic'
+
+// Per-network chain set. Terra v2 (phoenix-1) and Terra Classic (columbus-5)
+// both use the bech32 prefix `terra` — wallet-kit / cosmos-kit reject
+// duplicate prefixes within a single network's chain set, so they live in
+// different network buckets the same way the official Station extension
+// partitions its `networks` storage. `switchNetwork('classic')` toggles to
+// Terra Classic.
+const stationChainsByNetwork: Record<
+  SupportedNetworkName,
+  SupportedStationChain
+> = {
+  mainnet: Chain.Terra,
+  classic: Chain.TerraClassic,
 }
 
-const terraStationOverrides: Record<
-  typeof Chain.Terra | typeof Chain.TerraClassic,
-  TerraStationOverrides
+const stationChainOverrides: Record<
+  SupportedStationChain,
+  {
+    name: string
+    icon: string
+    gasAdjustment: number
+    gasPrices: Record<string, number>
+    isClassic?: boolean
+  }
 > = {
   [Chain.Terra]: {
     name: 'Terra',
@@ -129,9 +154,7 @@ const stationExplorerUrl = (
   entity: 'address' | 'tx'
 ): string => getBlockExplorerUrl({ chain, entity, value: '{}' })
 
-const buildTerraChainInfo = (
-  chain: typeof Chain.Terra | typeof Chain.TerraClassic
-): ChainInfo => {
+const buildStationChainInfo = (chain: SupportedStationChain): ChainInfo => {
   const chainId = getCosmosChainId(chain)
   const addressUrl = stationExplorerUrl(chain, 'address')
   const txUrl = stationExplorerUrl(chain, 'tx')
@@ -147,20 +170,19 @@ const buildTerraChainInfo = (
     },
     lcd: cosmosRpcUrl[chain],
     prefix: 'terra',
-    ...terraStationOverrides[chain],
+    ...stationChainOverrides[chain],
   }
 }
 
-const terraInfo: InfoResponse = {
-  [getCosmosChainId(Chain.Terra)]: buildTerraChainInfo(Chain.Terra),
-  [getCosmosChainId(Chain.TerraClassic)]: buildTerraChainInfo(
-    Chain.TerraClassic
-  ),
-}
+const isSupportedNetwork = (
+  network: NetworkName
+): network is SupportedNetworkName => network in stationChainsByNetwork
 
-const terraChainByCosmosChainId: Record<string, Chain> = {
-  [getCosmosChainId(Chain.Terra)]: Chain.Terra,
-  [getCosmosChainId(Chain.TerraClassic)]: Chain.TerraClassic,
+const buildStationInfoForNetwork = (
+  network: SupportedNetworkName
+): InfoResponse => {
+  const chain = stationChainsByNetwork[network]
+  return { [getCosmosChainId(chain)]: buildStationChainInfo(chain) }
 }
 
 const stationWalletChangeEvent = 'station_wallet_change'
@@ -185,7 +207,9 @@ const stationNetworkChangeEvent = 'station_network_change'
  *   bank / staking / distribution / gov / ibc / wasm message and any
  *   number of messages per tx are supported with no per-type code here.
  *
- * `signBytes`, `signArbitrary`, and `switchNetwork` are surfaced for
+ * `switchNetwork` toggles between `mainnet` (Terra v2 + sister Cosmos chains)
+ * and `classic` (Terra Classic) and emits `station_network_change` so dApps
+ * re-read {@link connect}. `signBytes` / `signArbitrary` are surfaced for
  * detection but throw `NotImplementedError` — arbitrary-bytes signing has
  * not shipped in {@link XDEFIKeplrProvider} either.
  */
@@ -197,6 +221,12 @@ export class Station {
   debugMode = false
 
   readonly keplr: XDEFIKeplrProvider
+
+  // Active Station network. Drives which chains `connect()` reports and
+  // which slice of `info()` cosmos-kit / wallet-kit sees. Mutated only by
+  // `switchNetwork()`, which emits `station_network_change` so dApps
+  // re-read the active state.
+  private currentNetwork: SupportedNetworkName = 'mainnet'
 
   private constructor(keplrProvider: XDEFIKeplrProvider) {
     this.keplr = keplrProvider
@@ -232,33 +262,43 @@ export class Station {
   }
 
   /**
-   * Returns the Terra chain registry (Terra v2 + Terra Classic) in Station's
-   * `InfoResponse` shape — dApps call this before connecting to discover
-   * supported chains, gas prices, and explorer URLs.
+   * Returns the chains in the currently active network as a flat
+   * `Record<ChainID, ChainInfo>` — the exact shape produced by the official
+   * `@terra-money/station-connector`. Mainnet exposes Cosmos Hub, Osmosis,
+   * dYdX, Kujira, Terra v2, Noble, and Akash; classic exposes Terra Classic.
+   * Terra v2 and Terra Classic share the `terra` bech32 prefix and cannot
+   * appear together in one network — call {@link switchNetwork}('classic')
+   * to access Terra Classic.
    */
   async info(): Promise<InfoResponse> {
-    return terraInfo
+    return buildStationInfoForNetwork(this.currentNetwork)
   }
 
   /**
-   * Requests the active Terra account and returns it in Station's
-   * `ConnectResponse` shape, mapping the same address under every supported
-   * Terra chain ID (one Terra address works for both phoenix-1 and columbus-5).
+   * Returns Station's `ConnectResponse` for the currently active network.
+   * cosmos-kit's `StationClient.getSimpleAccount(chainId)` requires an entry
+   * per configured chain — a missing chain throws and TFM/Leap silently
+   * mark the wallet as not-connected.
+   *
+   * The official station-connector `.d.ts` omits `address`, but the official
+   * Station extension's contentScript ships the full `wallet` storage object
+   * including `address` (the primary chain's account). wallet-kit / TFM read
+   * `connectedWallet.address` as the primary identity; omitting it leaves
+   * the dApp rendering an empty "connected" state.
    */
   async connect(): Promise<ConnectResponse> {
-    const account = await requestAccount(Chain.Terra)
+    const chain = stationChainsByNetwork[this.currentNetwork]
+    const account = await requestAccount(chain)
     const vault = await callBackground({ exportVault: {} })
 
-    const addresses: Record<ChainID, string> = {}
-    for (const chainId of Object.keys(terraChainByCosmosChainId)) {
-      addresses[chainId] = account.address
-    }
-
     return {
-      addresses,
+      address: account.address,
+      addresses: {
+        [getCosmosChainId(chain)]: account.address,
+      },
       ledger: false,
       name: vault.name,
-      network: 'mainnet',
+      network: this.currentNetwork,
       pubkey: {
         '330': Buffer.from(account.publicKey, 'hex').toString('base64'),
       },
@@ -457,15 +497,32 @@ export class Station {
   }
 
   /**
-   * Network switching — surfaced for detection but not implemented; Vultisig
-   * binds Terra to mainnet (phoenix-1 / columbus-5) and does not expose
-   * testnet or localterra.
+   * Switches the active Station network and emits `station_network_change`
+   * (plus `station_wallet_change`) so wallet-kit / dApps re-call
+   * {@link connect} and re-read the active chain set. Only `mainnet`
+   * (Cosmos-118 chains + Terra v2) and `classic` (Terra Classic) are
+   * supported — `testnet` and `localterra` reject because Vultisig does not
+   * derive testnet accounts.
+   *
+   * No-op if the requested network is already active.
    */
   async switchNetwork(
-    _network: NetworkName,
+    network: NetworkName,
     _purgeQueue = true
-  ): Promise<never> {
-    throw new NotImplementedError('Station switchNetwork')
+  ): Promise<{ success: true; network: NetworkName }> {
+    if (!isSupportedNetwork(network)) {
+      throw new Error(
+        `Station switchNetwork: unsupported network '${network}' — Vultisig only exposes 'mainnet' and 'classic'.`
+      )
+    }
+
+    if (network !== this.currentNetwork) {
+      this.currentNetwork = network
+      this.emitNetworkChange()
+      this.emitWalletChange()
+    }
+
+    return { success: true, network: this.currentNetwork }
   }
 
   /** Returns the amino-only `OfflineSigner` from the underlying Keplr provider — Terra dApps that build txs via cosmjs use this to sign locally. */
