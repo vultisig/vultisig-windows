@@ -14,7 +14,6 @@ import { broadcastTx } from '@vultisig/core-chain/tx/broadcast'
 import { getTxHash } from '@vultisig/core-chain/tx/hash'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
-import { attempt } from '@vultisig/lib-utils/attempt'
 import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedError'
 import { hexToBytes } from '@vultisig/lib-utils/hexToBytes'
 import { validateUrl } from '@vultisig/lib-utils/validation/url'
@@ -410,32 +409,23 @@ export class Station {
 
     const primaryAccount = await requestAccount(primaryChain)
 
+    // Phase 2: fetch every other chain silently via the authorized
+    // background call. Background `getAccount` returns an empty address
+    // for key-import vaults that don't have the chain — skip those rather
+    // than re-prompting. Real errors (transport, auth) propagate so
+    // connect() fails loudly rather than silently producing a partial map.
     const otherChains = chains.filter(chain => chain !== primaryChain)
-    const otherAccountResults = await Promise.all(
-      otherChains.map(async chain => {
-        const result = await attempt(callBackground({ getAccount: { chain } }))
-        if ('error' in result) return { chain, account: null }
-        if (!result.data.address) return { chain, account: null }
-        return { chain, account: result.data }
-      })
+    const otherAccounts = await Promise.all(
+      otherChains.map(async chain => ({
+        chain,
+        account: await callBackground({ getAccount: { chain } }),
+      }))
     )
 
-    const accounts: Array<{
-      chain: SupportedStationChain
-      account: { address: string; publicKey: string }
-    }> = [
+    const accounts = [
       { chain: primaryChain, account: primaryAccount },
-      ...otherAccountResults
-        .filter(
-          (
-            r
-          ): r is {
-            chain: SupportedStationChain
-            account: { address: string; publicKey: string }
-          } => r.account !== null
-        )
-        .map(r => ({ chain: r.chain, account: r.account })),
-    ]
+      ...otherAccounts,
+    ].filter(({ account }) => !!account.address)
 
     const addresses: Record<ChainID, string> = {}
     for (const { chain, account } of accounts) {
@@ -446,8 +436,14 @@ export class Station {
 
     const vault = await callBackground({ exportVault: {} })
 
+    // Top-level `address` is the primary chain's account when derivable; for
+    // key-import vaults that can't derive the primary, fall back to the
+    // first chain that did yield an account so the dApp still has an
+    // identity to render.
+    const address = primaryAccount.address || accounts[0]?.account.address || ''
+
     return {
-      address: primaryAccount.address,
+      address,
       addresses,
       ledger: false,
       name: vault.name,
