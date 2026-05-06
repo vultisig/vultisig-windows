@@ -931,14 +931,19 @@ export const it = {
   vault_backup_page_password_protection:
     'Protezione facoltativa con password del tuo Vault',
   vault_backup_page_submit_loading_button_text: 'Risparmio...',
+  vault_delete_page_button: 'Elimina il vault',
   vault_delete_page_device_id: 'ID dispositivo',
+  vault_delete_page_ecdsa_key: 'Chiave ECDSA',
+  vault_delete_page_eddsa_key: 'Chiave EdDSA',
   vault_delete_page_header_subtitle:
-    'Stai eliminando definitivamente il tuo vault',
+    'Stai eliminando definitivamente la tua parte del vault da questa app',
   vault_delete_page_header_title: 'Elimina il caveau',
   vault_delete_page_term_1:
     'Sono consapevole che il vault verrà eliminato definitivamente',
   vault_delete_page_term_2: 'Sono consapevole che potrei perdere fondi',
-  vault_delete_page_term_3: 'Ho effettuato un backup del vault',
+  vault_delete_page_term_3:
+    'Ho effettuato un backup del vault per ripristinarlo in seguito',
+  vault_delete_page_vault_part: 'Parte del vault',
   vault_details_description: 'Visualizza il nome, la parte e il tipo del vault',
   vault_details_edit_vault_description: 'Modifica il nome del tuo vault',
   vault_details_page_signer_word: 'Firmatario',

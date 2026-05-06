@@ -8,6 +8,7 @@ import { PageContent } from '@lib/ui/page/PageContent'
 import { PageFooter } from '@lib/ui/page/PageFooter'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
+import { Chain } from '@vultisig/core-chain/Chain'
 import { CustomMessagePayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
 import { useMemo, useState } from 'react'
@@ -17,6 +18,7 @@ import styled from 'styled-components'
 import { StartKeysignPrompt } from '../../../mpc/keysign/prompt/StartKeysignPrompt'
 import { StartKeysignPromptProps } from '../../../mpc/keysign/prompt/StartKeysignPromptProps'
 import { useCurrentVault } from '../../state/currentVault'
+import { useCurrentVaultAddress } from '../../state/currentVaultCoins'
 
 const steps = ['form', 'verify'] as const
 
@@ -29,13 +31,17 @@ export const SignCustomMessagePage = () => {
   const [method, setMethod] = useState('')
   const [message, setMessage] = useState('')
   const vault = useCurrentVault()
+  const ethereumAddress = useCurrentVaultAddress(Chain.Ethereum)
 
   const isFillingForm = step === 'form'
 
   const isDisabled = useMemo(() => {
+    if (!ethereumAddress.trim()) {
+      return t('sign_custom_message_unavailable_imported_no_ethereum')
+    }
     if (!method) return t('method_required')
     if (!message) return t('message_required')
-  }, [method, message, t])
+  }, [ethereumAddress, method, message, t])
 
   const keysignPayload = useMemo(() => {
     return {

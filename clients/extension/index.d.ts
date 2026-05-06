@@ -15,6 +15,8 @@ interface Window {
   providers: EthereumProvider[]
   vultisig: any
   keplr: any
+  station: any
+  terra: any
   vultiConnect: { getVaults: () => Promise<Vault[]> }
   phantom: any
   vultiConnectRouter: {

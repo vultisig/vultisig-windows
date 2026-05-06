@@ -188,6 +188,16 @@ async function setupContentScriptMessenger(
           configurable: false,
           writable: false,
         },
+        station: {
+          value: providers.station,
+          configurable: false,
+          writable: false,
+        },
+        terra: {
+          value: providers.station,
+          configurable: false,
+          writable: false,
+        },
         injectedWeb3: {
           value: {
             ...(window.injectedWeb3 || {}),

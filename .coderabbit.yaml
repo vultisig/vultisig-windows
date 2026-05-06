@@ -23,6 +23,6 @@ reviews:
         HIGH security area. Flag any changes to cryptographic operations, key handling, or signing logic for maintainer review.
     - path: 'lib/**'
       instructions: |
-        This is an upstream mirror. Flag any direct edits — changes should go in the upstream repo.
+        `lib/` contains first-class workspace packages in this repository (`@lib/ui`, `@lib/codegen`, `@lib/extension`), not a copy of another source tree. Edits here are normal. Bumping `@vultisig/*` (or other) versions in `lib/**/package.json` during a monorepo dependency / SDK sync is expected—do not report it as "drift" or require an "upstream" change.
 chat:
   auto_reply: true
