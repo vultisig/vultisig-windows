@@ -10,7 +10,6 @@ import {
 import { coinKeyToString } from '@vultisig/core-chain/coin/Coin'
 import { getCoinValue } from '@vultisig/core-chain/coin/utils/getCoinValue'
 import { groupItems } from '@vultisig/lib-utils/array/groupItems'
-import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { order } from '@vultisig/lib-utils/array/order'
 import { sum } from '@vultisig/lib-utils/array/sum'
 import { recordMap } from '@vultisig/lib-utils/record/recordMap'
@@ -19,7 +18,9 @@ import { useMemo } from 'react'
 
 import { VaultChainCoin } from './useVaultChainCoinsQuery'
 
-const knownChains = Object.values(Chain) as string[]
+const chainRegistry = new Set<string>(Object.values(Chain))
+
+const isKnownChain = (value: string): value is Chain => chainRegistry.has(value)
 
 export type VaultChainBalance = {
   chain: Chain
@@ -40,10 +41,12 @@ export const useVaultChainsBalancesQuery = (): EagerQuery<
   return useMemo(() => {
     const isPending = pricesQuery.isPending || balancesQuery.isPending
 
-    const groupedCoins = groupItems(
-      coins.filter(coin => isOneOf(coin.chain, knownChains)),
-      coin => coin.chain as Chain
+    const coinsWithKnownChain = coins.filter(
+      (coin): coin is (typeof coins)[number] & { chain: Chain } =>
+        isKnownChain(coin.chain)
     )
+
+    const groupedCoins = groupItems(coinsWithKnownChain, coin => coin.chain)
 
     const balancesByChain = recordMap(groupedCoins, chainCoins => {
       return chainCoins.map(coin => {
