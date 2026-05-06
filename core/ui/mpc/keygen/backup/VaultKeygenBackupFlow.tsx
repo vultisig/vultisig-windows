@@ -1,9 +1,9 @@
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
-import { hasServer } from '@vultisig/core-mpc/devices/localPartyId'
 
 import { BackupFastVault } from '../../../vault/backup/fast/BackupFastVault'
 import { BackupSecureVault } from '../../../vault/backup/secure/BackupSecureVault'
+import { willUsePostKeygenFastBackupPath } from './willUsePostKeygenFastBackupPath'
 
 type VaultKeygenBackupFlowProps = OnFinishProp &
   OnBackProp & {
@@ -19,7 +19,7 @@ export const VaultKeygenBackupFlow = ({
 }: VaultKeygenBackupFlowProps) => {
   const vault = useCurrentVault()
 
-  if (hasServer(vault.signers)) {
+  if (willUsePostKeygenFastBackupPath(vault)) {
     return (
       <BackupFastVault
         password={password}

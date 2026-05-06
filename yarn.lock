@@ -594,6 +594,9 @@ __metadata:
     "@core/inpage-provider": "workspace:^"
     "@core/ui": "workspace:^"
     "@cosmjs/amino": "npm:^0.38.1"
+    "@cosmjs/cosmwasm-stargate": "npm:^0.38.1"
+    "@cosmjs/proto-signing": "npm:^0.38.1"
+    "@cosmjs/stargate": "npm:^0.38.1"
     "@fontsource/montserrat": "npm:^5.2.8"
     "@fontsource/roboto-mono": "npm:^5.2.8"
     "@hookform/resolvers": "npm:^5.2.2"
@@ -611,7 +614,7 @@ __metadata:
     "@ton/crypto": "npm:^3.3.0"
     "@ton/ton": "npm:^16.2.2"
     "@tonconnect/protocol": "npm:^2.4.0"
-    "@trustwallet/wallet-core": "npm:^4.6.0"
+    "@trustwallet/wallet-core": "npm:^4.6.7"
     "@types/chrome": "npm:^0.1.38"
     "@types/express": "npm:^5.0.6"
     "@types/node": "npm:^25.5.0"
@@ -708,7 +711,7 @@ __metadata:
     "@lib/ui": "workspace:^"
     "@tanstack/react-query": "npm:^5.90.21"
     "@tanstack/react-query-persist-client": "npm:^5.90.24"
-    "@trustwallet/wallet-core": "npm:^4.6.0"
+    "@trustwallet/wallet-core": "npm:^4.6.7"
     "@vultisig/core-chain": "npm:1.5.0"
     "@vultisig/core-config": "npm:0.9.1"
     "@vultisig/core-mpc": "npm:1.2.2"
@@ -725,17 +728,19 @@ __metadata:
     "@bufbuild/protobuf": "npm:^2.11.0"
     "@core/extension": "workspace:^"
     "@core/ui": "workspace:^"
+    "@cosmjs/encoding": "npm:^0.38.1"
     "@lib/extension": "workspace:^"
     "@lib/ui": "workspace:^"
     "@solana/spl-token": "npm:^0.4.14"
     "@solana/web3.js": "npm:^1.98.4"
     "@tanstack/react-query": "npm:^5.90.21"
-    "@trustwallet/wallet-core": "npm:^4.6.0"
+    "@trustwallet/wallet-core": "npm:^4.6.7"
     "@vultisig/core-chain": "npm:1.5.0"
     "@vultisig/core-config": "npm:0.9.1"
     "@vultisig/core-mpc": "npm:1.2.2"
     "@vultisig/lib-utils": "npm:0.10.1"
     bitcoinjs-lib: "npm:^7.0.1"
+    cosmjs-types: "npm:^0.11.0"
     ethers: "npm:^6.16.0"
     framer-motion: "npm:^12.37.0"
     react: "npm:^19.2.4"
@@ -768,7 +773,7 @@ __metadata:
     "@tanstack/react-query": "npm:^5.90.21"
     "@tanstack/react-query-persist-client": "npm:^5.90.24"
     "@ton/core": "npm:^0.63.1"
-    "@trustwallet/wallet-core": "npm:^4.6.0"
+    "@trustwallet/wallet-core": "npm:^4.6.7"
     "@types/node": "npm:^25.5.0"
     "@types/react": "npm:^19.2.14"
     "@types/react-dom": "npm:^19.2.3"
@@ -828,6 +833,32 @@ __metadata:
     "@cosmjs/math": "npm:^0.38.1"
     "@cosmjs/utils": "npm:^0.38.1"
   checksum: 10c0/addf40d6970e9fffa18fc5f17cb6c91c45b5627409474478dcdc63f578f56adad5988413815c5f27a9c88847e4787f7a5b160f454923cc62a6b9adf0d9a52aef
+  languageName: node
+  linkType: hard
+
+"@cosmjs/cosmwasm-stargate@npm:^0.38.1":
+  version: 0.38.1
+  resolution: "@cosmjs/cosmwasm-stargate@npm:0.38.1"
+  dependencies:
+    "@cosmjs/cosmwasm": "npm:^0.38.1"
+  checksum: 10c0/f8857715914ac91c2b4f72ac632d1dfaef090c229cdd88abe9c077cf09e314fc028bcc8238874406208254922ac47cd3030578004aa0516107db73bcd5a99afd
+  languageName: node
+  linkType: hard
+
+"@cosmjs/cosmwasm@npm:^0.38.1":
+  version: 0.38.1
+  resolution: "@cosmjs/cosmwasm@npm:0.38.1"
+  dependencies:
+    "@cosmjs/amino": "npm:^0.38.1"
+    "@cosmjs/crypto": "npm:^0.38.1"
+    "@cosmjs/encoding": "npm:^0.38.1"
+    "@cosmjs/math": "npm:^0.38.1"
+    "@cosmjs/proto-signing": "npm:^0.38.1"
+    "@cosmjs/stargate": "npm:^0.38.1"
+    "@cosmjs/tendermint-rpc": "npm:^0.38.1"
+    "@cosmjs/utils": "npm:^0.38.1"
+    cosmjs-types: "npm:^0.11.0"
+  checksum: 10c0/dac01c52de85d24b8601dd6d508231f9f97be626a213f248c3d0044cd1c393b9f7edc5cd35d0ffea03f4ea3e375dd4886c50fccad2682895aa09b5b444fbc07d
   languageName: node
   linkType: hard
 
@@ -5362,12 +5393,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@trustwallet/wallet-core@npm:^4.6.0":
-  version: 4.6.0
-  resolution: "@trustwallet/wallet-core@npm:4.6.0"
+"@trustwallet/wallet-core@npm:4.6.7":
+  version: 4.6.7
+  resolution: "@trustwallet/wallet-core@npm:4.6.7"
   dependencies:
     protobufjs: "npm:>=6.11.3"
-  checksum: 10c0/744bb80249d1f1601514dbdc246aaaf3aa060ca1dddb5dc60e20b3224fb2b31c0094514f7ad2fcec82c9e5d47fe8d454b039e26d1849119d72159e9b0d22faf1
+  checksum: 10c0/f77613ecfd6a6483ad241c6a9d5a500117dd7523ee78109b2284e1f4b1f289086a9285fa36c2528bc7c1b39ec89834f30a44cfe8f166b3ca2bdb495e8b0dd834
   languageName: node
   linkType: hard
 

@@ -148,14 +148,15 @@ export const TxSuccess = ({
 
   const simulationSend = useMemo(() => {
     const data = blockaidSimulationQuery.data
-    if (!data) return null
-    if ('swap' in data && 'fromCoin' in data.swap) {
-      return { coin: data.swap.fromCoin, amount: data.swap.fromAmount }
-    }
-    if ('transfer' in data && 'fromCoin' in data.transfer) {
-      return { coin: data.transfer.fromCoin, amount: data.transfer.fromAmount }
-    }
-    return null
+    if (!data || !('changes' in data)) return null
+    // Only adopt the simulation's send leg as the success hero when there's
+    // exactly one — multi-send shapes (e.g. multicalls that send several
+    // tokens) can't be summarised by a single coin/amount, so let the
+    // fallbacks (resolved token, txAction) handle them.
+    const sendChanges = data.changes.filter(c => c.direction === 'send')
+    if (sendChanges.length !== 1) return null
+    const [sendChange] = sendChanges
+    return { coin: sendChange.coin, amount: sendChange.amount }
   }, [blockaidSimulationQuery.data])
 
   const displayCoin = simulationSend?.coin ?? resolvedToken?.coin ?? coin

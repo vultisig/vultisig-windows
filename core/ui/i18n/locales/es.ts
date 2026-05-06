@@ -933,14 +933,19 @@ export const es = {
   vault_backup_page_password_protection:
     'Protección con contraseña opcional de su bóveda',
   vault_backup_page_submit_loading_button_text: 'Ahorro...',
+  vault_delete_page_button: 'Eliminar bóveda',
   vault_delete_page_device_id: 'ID del dispositivo',
+  vault_delete_page_ecdsa_key: 'Clave ECDSA',
+  vault_delete_page_eddsa_key: 'Clave EdDSA',
   vault_delete_page_header_subtitle:
-    'Estás eliminando permanentemente tu bóveda',
+    'Estás eliminando permanentemente tu parte de la bóveda de esta aplicación',
   vault_delete_page_header_title: 'Eliminar bóveda',
   vault_delete_page_term_1:
     'Soy consciente de que la bóveda se eliminará de forma permanente.',
   vault_delete_page_term_2: 'Soy consciente de que puedo perder fondos.',
-  vault_delete_page_term_3: 'He hecho una copia de seguridad de la bóveda',
+  vault_delete_page_term_3:
+    'He hecho una copia de seguridad de la bóveda para restaurarla más tarde',
+  vault_delete_page_vault_part: 'Parte de la bóveda',
   vault_details_description: 'Ver el nombre, la parte y el tipo de bóveda',
   vault_details_edit_vault_description: 'Editar el nombre de su bóveda',
   vault_details_page_signer_word: 'Firmante',

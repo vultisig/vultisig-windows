@@ -1,5 +1,6 @@
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { willUsePostKeygenFastBackupPath } from '@core/ui/mpc/keygen/backup/willUsePostKeygenFastBackupPath'
 import { useKeygenMutation } from '@core/ui/mpc/keygen/mutations/useKeygenMutation'
 import { KeygenPendingState } from '@core/ui/mpc/keygen/progress/KeygenPendingState'
 import { useKeygenOperation } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
@@ -10,7 +11,6 @@ import { StepTransition } from '@lib/ui/base/StepTransition'
 import { PageHeader } from '@lib/ui/page/PageHeader'
 import { OnBackProp, OnFinishProp } from '@lib/ui/props'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
-import { hasServer } from '@vultisig/core-mpc/devices/localPartyId'
 import { KeygenOperation } from '@vultisig/core-mpc/keygen/KeygenOperation'
 import { match } from '@vultisig/lib-utils/match'
 import { matchRecordUnion } from '@vultisig/lib-utils/matchRecordUnion'
@@ -76,7 +76,7 @@ export const KeygenFlow = ({
             onFinish()
             return null
           }
-          if (hasServer(vault.signers)) {
+          if (willUsePostKeygenFastBackupPath(vault)) {
             return (
               <KeygenFlowEnding
                 onBack={onBack}
