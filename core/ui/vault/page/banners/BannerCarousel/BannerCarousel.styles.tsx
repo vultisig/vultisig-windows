@@ -35,26 +35,40 @@ export const PaginationContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
-  height: 4px;
 `
 
 export const PaginationDot = styled(UnstyledButton)<{ $isActive: boolean }>`
-  width: ${({ $isActive }) => ($isActive ? 20 : 4)}px;
-  height: 4px;
-  border-radius: 99px;
-  border: none;
-  background: ${({ $isActive, theme }) =>
-    $isActive
-      ? theme.colors.textShyExtra.toCssValue()
-      : getColor('foregroundExtra')({ theme })};
-  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
   padding: 0;
-  transition:
-    width 0.2s,
-    background 0.2s,
-    opacity 0.2s;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  &:hover {
+  &::before {
+    content: '';
+    display: block;
+    width: ${({ $isActive }) => ($isActive ? 20 : 4)}px;
+    height: 4px;
+    border-radius: 99px;
+    background: ${({ $isActive, theme }) =>
+      $isActive
+        ? theme.colors.textShyExtra.toCssValue()
+        : getColor('foregroundExtra')({ theme })};
+    transition:
+      width 0.2s,
+      background 0.2s,
+      opacity 0.2s;
+  }
+
+  &:hover::before {
     opacity: 0.82;
   }
 `

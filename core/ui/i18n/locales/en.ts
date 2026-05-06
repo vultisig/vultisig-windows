@@ -484,6 +484,7 @@ export const en = {
   folder_name_required: 'Folder name is required',
   folder_at_least_one_vault_required: 'At least one vault is required',
   folders: 'Folders',
+  banner_carousel_go_to_banner: 'Go to banner {{number}}',
   buy_vult_banner_cta: 'Buy $VULT',
   buy_vult_banner_subtitle: 'And save on swap fees',
   buy_vult_banner_title: 'Buy $VULT',

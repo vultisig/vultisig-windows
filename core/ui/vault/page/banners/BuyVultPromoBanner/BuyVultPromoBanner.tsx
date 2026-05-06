@@ -1,18 +1,10 @@
 import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
-import { useCore } from '@core/ui/state/core'
 import { useCreateCoinMutation } from '@core/ui/storage/coins'
-import {
-  useCurrentVaultAddress,
-  useCurrentVaultChains,
-  useCurrentVaultCoins,
-} from '@core/ui/vault/state/currentVaultCoins'
+import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { CrossIcon } from '@lib/ui/icons/CrossIcon'
 import { Text } from '@lib/ui/text'
-import { getBanxaBuyUrl } from '@vultisig/core-chain/banxa'
-import { Chain } from '@vultisig/core-chain/Chain'
 import { areEqualCoins, extractCoinKey } from '@vultisig/core-chain/coin/Coin'
 import { vult } from '@vultisig/core-chain/coin/knownTokens'
-import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { useTranslation } from 'react-i18next'
 
 import { BannerPromoCtaButton } from '../shared/BannerPromoCtaButton.styles'
@@ -34,36 +26,12 @@ type BuyVultPromoBannerProps = {
 export const BuyVultPromoBanner = ({ onDismiss }: BuyVultPromoBannerProps) => {
   const { t } = useTranslation()
   const navigate = useCoreNavigate()
-  const { openUrl } = useCore()
   const { mutate: createCoin, isPending } = useCreateCoinMutation()
   const vaultCoins = useCurrentVaultCoins()
-  const vaultChains = useCurrentVaultChains()
-  const ethereumAddress = useCurrentVaultAddress(Chain.Ethereum)
 
   const existingVultCoin = vaultCoins.find(coin => areEqualCoins(coin, vult))
-  const canSwapToVult = isOneOf(Chain.Ethereum, vaultChains)
-
-  const openExternalBuy = () => {
-    if (!ethereumAddress) {
-      navigate({ id: 'vultDiscount' })
-      return
-    }
-
-    openUrl(
-      getBanxaBuyUrl({
-        address: ethereumAddress,
-        chain: Chain.Ethereum,
-        ticker: vult.ticker,
-      })
-    )
-  }
 
   const openSwapToVult = () => {
-    if (!canSwapToVult) {
-      openExternalBuy()
-      return
-    }
-
     if (existingVultCoin) {
       navigate({
         id: 'swap',
@@ -79,7 +47,9 @@ export const BuyVultPromoBanner = ({ onDismiss }: BuyVultPromoBannerProps) => {
           state: { toCoin: extractCoinKey(coin) },
         })
       },
-      onError: openExternalBuy,
+      onError: () => {
+        navigate({ id: 'swap', state: {} })
+      },
     })
   }
 

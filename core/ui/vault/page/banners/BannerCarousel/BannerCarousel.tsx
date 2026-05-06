@@ -4,6 +4,7 @@ import {
   useDismissedBanners,
 } from '@core/ui/storage/dismissedBanners'
 import { ReactNode, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import {
   CarouselContainer,
@@ -24,7 +25,8 @@ type BannerCarouselProps = {
 }
 
 export const BannerCarousel = ({ banners }: BannerCarouselProps) => {
-  const { isBannerDismissed } = useDismissedBanners()
+  const { t } = useTranslation()
+  const { hasLoaded, isBannerDismissed } = useDismissedBanners()
   const dismissBanner = useDismissBanner()
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isHoverPaused, setIsHoverPaused] = useState(false)
@@ -51,7 +53,7 @@ export const BannerCarousel = ({ banners }: BannerCarouselProps) => {
     return () => window.clearInterval(interval)
   }, [activeBanners.length, isPaused])
 
-  if (activeBanners.length === 0) {
+  if (!hasLoaded || activeBanners.length === 0) {
     return null
   }
 
@@ -118,7 +120,9 @@ export const BannerCarousel = ({ banners }: BannerCarouselProps) => {
               key={banner.id}
               $isActive={index === safeIndex}
               onClick={() => setCurrentIndex(index)}
-              aria-label={`Go to banner ${index + 1}`}
+              aria-label={t('banner_carousel_go_to_banner', {
+                number: index + 1,
+              })}
               aria-current={index === safeIndex ? 'true' : undefined}
             />
           ))}
