@@ -137,10 +137,18 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
     (universalRouterSwap.isPending ||
       (!universalRouterSwap.data && contractCallQuery.isPending))
 
-  const extraPendingMessage =
-    gasEstimationDataQuery.isPending || isContractDecodingPending
-      ? t('loading')
-      : undefined
+  const isContractDecodingFailed =
+    isContractMemo && !universalRouterSwap.data && !!contractCallQuery.error
+
+  const extraPendingMessage = (() => {
+    if (gasEstimationDataQuery.isPending || isContractDecodingPending) {
+      return t('loading')
+    }
+    if (gasEstimationDataQuery.error || isContractDecodingFailed) {
+      return t('failed_to_process_transaction')
+    }
+    return undefined
+  })()
 
   return (
     <VerifyKeysignStart
