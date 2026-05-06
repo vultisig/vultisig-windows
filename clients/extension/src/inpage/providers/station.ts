@@ -14,6 +14,7 @@ import { broadcastTx } from '@vultisig/core-chain/tx/broadcast'
 import { getTxHash } from '@vultisig/core-chain/tx/hash'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { attempt } from '@vultisig/lib-utils/attempt'
 import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedError'
 import { hexToBytes } from '@vultisig/lib-utils/hexToBytes'
 import { validateUrl } from '@vultisig/lib-utils/validation/url'
@@ -107,46 +108,107 @@ type StationPostResponse = {
   codespace?: string
 }
 
-type SupportedStationChain = typeof Chain.Terra | typeof Chain.TerraClassic
+// All Vultisig-supported IBC-enabled Cosmos chains the Station provider
+// exposes. cosmos-kit dApps (TFM, Leap, etc.) call
+// `getSimpleAccount(chainId)` per chain configured in their modal — any
+// chain missing from `connect().addresses` makes the dApp silently mark the
+// wallet as not connected (no console error, modal stays open).
+type SupportedStationChain =
+  | typeof Chain.Cosmos
+  | typeof Chain.Osmosis
+  | typeof Chain.Dydx
+  | typeof Chain.Kujira
+  | typeof Chain.Terra
+  | typeof Chain.TerraClassic
+  | typeof Chain.Noble
+  | typeof Chain.Akash
+
 type SupportedNetworkName = 'mainnet' | 'classic'
 
-// Per-network chain set. Terra v2 (phoenix-1) and Terra Classic (columbus-5)
-// both use the bech32 prefix `terra` — wallet-kit / cosmos-kit reject
-// duplicate prefixes within a single network's chain set, so they live in
-// different network buckets the same way the official Station extension
-// partitions its `networks` storage. `switchNetwork('classic')` toggles to
-// Terra Classic.
+// Per-network chain set. Terra v2 (phoenix-1) and Terra Classic
+// (columbus-5) both use the bech32 prefix `terra` — wallet-kit /
+// cosmos-kit reject duplicate prefixes within a single network's chain
+// set, so they live in different network buckets the same way the
+// official Station extension partitions its `networks` storage.
+// `switchNetwork('classic')` toggles to Terra Classic.
 const stationChainsByNetwork: Record<
   SupportedNetworkName,
-  SupportedStationChain
+  readonly SupportedStationChain[]
 > = {
-  mainnet: Chain.Terra,
-  classic: Chain.TerraClassic,
+  mainnet: [
+    Chain.Cosmos,
+    Chain.Osmosis,
+    Chain.Dydx,
+    Chain.Kujira,
+    Chain.Terra,
+    Chain.Noble,
+    Chain.Akash,
+  ],
+  classic: [Chain.TerraClassic],
 }
 
-const stationChainOverrides: Record<
+// Bech32 HRP per chain. Hard-coded rather than derived from a sample
+// address because we need the prefix in `info()` BEFORE we've fetched any
+// account.
+const stationChainPrefix: Record<SupportedStationChain, string> = {
+  Cosmos: 'cosmos',
+  Osmosis: 'osmo',
+  Dydx: 'dydx',
+  Kujira: 'kujira',
+  Terra: 'terra',
+  TerraClassic: 'terra',
+  Noble: 'noble',
+  Akash: 'akash',
+}
+
+// BIP44 coinType per chain. Cosmos-style chains use 118; Terra-family
+// uses the legacy LUNA coinType 330. Drives `pubkey['330'|'118']` lookup
+// in cosmos-kit's `StationClient.getAccount()`.
+const stationChainCoinType: Record<SupportedStationChain, '330' | '118'> = {
+  Cosmos: '118',
+  Osmosis: '118',
+  Dydx: '118',
+  Kujira: '118',
+  Terra: '330',
+  TerraClassic: '330',
+  Noble: '118',
+  Akash: '118',
+}
+
+const stationChainGasPrices: Record<
   SupportedStationChain,
-  {
-    name: string
-    icon: string
-    gasAdjustment: number
-    gasPrices: Record<string, number>
-    isClassic?: boolean
-  }
+  Record<string, number>
 > = {
-  [Chain.Terra]: {
-    name: 'Terra',
-    icon: 'https://assets.terra.dev/icon/svg/Terra.svg',
-    gasAdjustment: 1.75,
-    gasPrices: { uluna: 0.015 },
-  },
-  [Chain.TerraClassic]: {
-    name: 'Terra Classic',
-    icon: 'https://assets.terra.dev/icon/svg/LUNC.svg',
-    gasAdjustment: 2,
-    gasPrices: { uluna: 28.325 },
-    isClassic: true,
-  },
+  Cosmos: { uatom: 0.025 },
+  Osmosis: { uosmo: 0.025 },
+  Dydx: { adydx: 12500000000 },
+  Kujira: { ukuji: 0.0034 },
+  Terra: { uluna: 0.015 },
+  TerraClassic: { uluna: 28.325 },
+  Noble: { uusdc: 0.025 },
+  Akash: { uakt: 0.025 },
+}
+
+const stationChainGasAdjustment: Record<SupportedStationChain, number> = {
+  Cosmos: 1.5,
+  Osmosis: 1.5,
+  Dydx: 1.5,
+  Kujira: 1.5,
+  Terra: 1.75,
+  TerraClassic: 2,
+  Noble: 1.5,
+  Akash: 1.5,
+}
+
+const stationChainDisplayName: Record<SupportedStationChain, string> = {
+  Cosmos: 'Cosmos Hub',
+  Osmosis: 'Osmosis',
+  Dydx: 'dYdX',
+  Kujira: 'Kujira',
+  Terra: 'Terra',
+  TerraClassic: 'Terra Classic',
+  Noble: 'Noble',
+  Akash: 'Akash',
 }
 
 const stationExplorerUrl = (
@@ -161,16 +223,20 @@ const buildStationChainInfo = (chain: SupportedStationChain): ChainInfo => {
   return {
     baseAsset: cosmosFeeCoinDenom[chain],
     chainID: chainId,
-    coinType: '330',
+    coinType: stationChainCoinType[chain],
     explorer: {
       address: addressUrl,
       block: addressUrl,
       tx: txUrl,
       validator: addressUrl,
     },
+    gasAdjustment: stationChainGasAdjustment[chain],
+    gasPrices: stationChainGasPrices[chain],
+    icon: '',
     lcd: cosmosRpcUrl[chain],
-    prefix: 'terra',
-    ...stationChainOverrides[chain],
+    name: stationChainDisplayName[chain],
+    prefix: stationChainPrefix[chain],
+    ...(chain === Chain.TerraClassic ? { isClassic: true } : {}),
   }
 }
 
@@ -181,8 +247,42 @@ const isSupportedNetwork = (
 const buildStationInfoForNetwork = (
   network: SupportedNetworkName
 ): InfoResponse => {
-  const chain = stationChainsByNetwork[network]
-  return { [getCosmosChainId(chain)]: buildStationChainInfo(chain) }
+  const info: InfoResponse = {}
+  for (const chain of stationChainsByNetwork[network]) {
+    info[getCosmosChainId(chain)] = buildStationChainInfo(chain)
+  }
+  return info
+}
+
+// First chain to request via `requestAccount` (which surfaces the popup
+// once). Subsequent chains in the same network are fetched silently via
+// `callBackground({ getAccount })` — they piggyback on the same dApp
+// authorization, no extra popups even for normal multi-chain vaults.
+const networkPrimaryChain: Record<SupportedNetworkName, SupportedStationChain> =
+  {
+    mainnet: Chain.Cosmos,
+    classic: Chain.TerraClassic,
+  }
+
+// Builds the `pubkey` field for ConnectResponse — base64-encoded pubkeys
+// keyed by the chain's BIP44 coinType. cosmos-kit's
+// `StationClient.getAccount` looks up `pubkeys[info.coinType]`; missing
+// the coinType the dApp expects throws "requested account is not
+// available". Picks the first account fetched per coinType, since both
+// 118-coinType chains derive from the same HD path (and likewise for 330).
+const buildStationPubkeyMap = (
+  accounts: ReadonlyArray<{
+    chain: SupportedStationChain
+    account: { address: string; publicKey: string }
+  }>
+): { '330'?: string; '118'?: string } | undefined => {
+  const pubkey: { '330'?: string; '118'?: string } = {}
+  for (const { chain, account } of accounts) {
+    const coinType = stationChainCoinType[chain]
+    if (pubkey[coinType]) continue
+    pubkey[coinType] = Buffer.from(account.publicKey, 'hex').toString('base64')
+  }
+  return pubkey['118'] || pubkey['330'] ? pubkey : undefined
 }
 
 const stationWalletChangeEvent = 'station_wallet_change'
@@ -275,33 +375,84 @@ export class Station {
   }
 
   /**
-   * Returns Station's `ConnectResponse` for the currently active network.
-   * cosmos-kit's `StationClient.getSimpleAccount(chainId)` requires an entry
-   * per configured chain — a missing chain throws and TFM/Leap silently
-   * mark the wallet as not-connected.
+   * Returns Station's `ConnectResponse` for the currently active network,
+   * with `addresses` covering every Cosmos chain Vultisig exposes for that
+   * network. cosmos-kit's `StationClient.getSimpleAccount(chainId)` requires
+   * an entry per configured chain — a missing chain throws and TFM/Leap
+   * silently mark the wallet as not-connected.
    *
-   * The official station-connector `.d.ts` omits `address`, but the official
-   * Station extension's contentScript ships the full `wallet` storage object
-   * including `address` (the primary chain's account). wallet-kit / TFM read
-   * `connectedWallet.address` as the primary identity; omitting it leaves
-   * the dApp rendering an empty "connected" state.
+   * Account fetching is two-phase to avoid stacked grant popups:
+   * 1. The network's primary chain (Cosmos Hub for mainnet, Terra Classic
+   *    for classic) goes through {@link requestAccount}, which surfaces the
+   *    grant-vault popup on first connect.
+   * 2. Every other chain is fetched silently via `getAccount` background
+   *    call. Once the dApp is authorized in step 1, normal multi-chain
+   *    vaults derive every chain from the shared seed, so no further popups
+   *    are needed. Chains the vault can't derive (key-import vaults missing
+   *    the chain) are skipped instead of re-prompting.
+   *
+   * `pubkey` is populated under both BIP44 coinTypes — `'118'` from the
+   * first non-Terra account fetched, `'330'` from a Terra-family account.
+   * cosmos-kit's `StationClient.getAccount` looks up
+   * `pubkeys[info.coinType]`, so missing the coinType the dApp's chain
+   * expects throws "requested account is not available".
+   *
+   * The official station-connector `.d.ts` omits `address`, but the
+   * official Station extension's contentScript ships the full `wallet`
+   * storage object including `address` (the primary chain's account).
+   * wallet-kit / TFM read `connectedWallet.address` as the primary
+   * identity; omitting it leaves the dApp rendering an empty "connected"
+   * state.
    */
   async connect(): Promise<ConnectResponse> {
-    const chain = stationChainsByNetwork[this.currentNetwork]
-    const account = await requestAccount(chain)
+    const chains = stationChainsByNetwork[this.currentNetwork]
+    const primaryChain = networkPrimaryChain[this.currentNetwork]
+
+    const primaryAccount = await requestAccount(primaryChain)
+
+    const otherChains = chains.filter(chain => chain !== primaryChain)
+    const otherAccountResults = await Promise.all(
+      otherChains.map(async chain => {
+        const result = await attempt(callBackground({ getAccount: { chain } }))
+        if ('error' in result) return { chain, account: null }
+        if (!result.data.address) return { chain, account: null }
+        return { chain, account: result.data }
+      })
+    )
+
+    const accounts: Array<{
+      chain: SupportedStationChain
+      account: { address: string; publicKey: string }
+    }> = [
+      { chain: primaryChain, account: primaryAccount },
+      ...otherAccountResults
+        .filter(
+          (
+            r
+          ): r is {
+            chain: SupportedStationChain
+            account: { address: string; publicKey: string }
+          } => r.account !== null
+        )
+        .map(r => ({ chain: r.chain, account: r.account })),
+    ]
+
+    const addresses: Record<ChainID, string> = {}
+    for (const { chain, account } of accounts) {
+      addresses[getCosmosChainId(chain)] = account.address
+    }
+
+    const pubkey = buildStationPubkeyMap(accounts)
+
     const vault = await callBackground({ exportVault: {} })
 
     return {
-      address: account.address,
-      addresses: {
-        [getCosmosChainId(chain)]: account.address,
-      },
+      address: primaryAccount.address,
+      addresses,
       ledger: false,
       name: vault.name,
       network: this.currentNetwork,
-      pubkey: {
-        '330': Buffer.from(account.publicKey, 'hex').toString('base64'),
-      },
+      pubkey,
     }
   }
 
