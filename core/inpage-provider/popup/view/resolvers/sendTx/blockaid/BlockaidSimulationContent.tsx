@@ -7,6 +7,10 @@ import {
 } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/NetworkFeeSection'
 import { Collapse } from '@core/inpage-provider/popup/view/resolvers/signMessage/components/Collapse'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import type {
+  BlockaidEvmBalanceChange,
+  BlockaidEvmSimulationInfo,
+} from '@core/ui/chain/security/blockaid/tx/blockaidEvmExtendedSimulation'
 import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
 import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
 import { useUniversalRouterSwap } from '@core/ui/chain/tx/utils/useUniversalRouterSwap'
@@ -23,11 +27,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Chain, EvmChain } from '@vultisig/core-chain/Chain'
 import { getEvmContractCallInfo } from '@vultisig/core-chain/chains/evm/contract/call/info'
 import { Coin, CoinKey } from '@vultisig/core-chain/coin/Coin'
-import {
-  BlockaidEvmBalanceChange,
-  BlockaidEvmSimulationInfo,
-  BlockaidSolanaSimulationInfo,
-} from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
+import { BlockaidSolanaSimulationInfo } from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { capitalizeFirstLetter } from '@vultisig/lib-utils/capitalizeFirstLetter'
@@ -276,6 +276,9 @@ const BlockaidEvmSimulationContent = ({
       value={blockaidSimulationQuery}
       success={(blockaidSimulationInfo: BlockaidEvmSimulationInfo) => {
         if (!blockaidSimulationInfo) {
+          return fallback
+        }
+        if (!('changes' in blockaidSimulationInfo)) {
           return fallback
         }
         if (blockaidSimulationInfo.changes.length === 0) {
