@@ -13,6 +13,7 @@ import type {
 } from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationView'
 import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
 import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
+import { useEvmContractCallInfoQuery } from '@core/ui/chain/tx/utils/useEvmContractCallInfoQuery'
 import { useUniversalRouterSwap } from '@core/ui/chain/tx/utils/useUniversalRouterSwap'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -25,7 +26,6 @@ import { Text } from '@lib/ui/text'
 import { NATIVE_MINT } from '@solana/spl-token'
 import { useQuery } from '@tanstack/react-query'
 import { Chain, EvmChain } from '@vultisig/core-chain/Chain'
-import { getEvmContractCallInfo } from '@vultisig/core-chain/chains/evm/contract/call/info'
 import { Coin, CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { BlockaidSolanaSimulationInfo } from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
@@ -369,16 +369,9 @@ const EvmCalldataFallback = ({
   const { data: universalRouterSwap, isPending: isUniversalRouterPending } =
     useUniversalRouterSwap({ memo, chain })
 
-  const contractCallQuery = useQuery({
-    queryKey: ['evmContractCallInfo', memo],
-    queryFn: () => getEvmContractCallInfo(memo!),
-    enabled:
-      !isUniversalRouterPending &&
-      !universalRouterSwap &&
-      !!memo &&
-      memo.startsWith('0x') &&
-      memo.length > 2,
-    staleTime: Infinity,
+  const contractCallQuery = useEvmContractCallInfoQuery({
+    memo,
+    enabled: !isUniversalRouterPending && !universalRouterSwap,
   })
 
   const tokenPair = contractCallQuery.data
