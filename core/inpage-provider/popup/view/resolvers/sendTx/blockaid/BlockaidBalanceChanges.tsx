@@ -4,7 +4,7 @@ import {
   NetworkFeeSectionProps,
 } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/NetworkFeeSection'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
-import type { BlockaidEvmBalanceChange } from '@core/ui/chain/security/blockaid/tx/blockaidEvmExtendedSimulation'
+import type { BlockaidEvmBalanceChange } from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationView'
 import { ArrowUpRightIcon } from '@lib/ui/icons/ArrowUpRightIcon'
 import { TransactionReceiveIcon } from '@lib/ui/icons/TransactionReceiveIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'

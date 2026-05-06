@@ -31,7 +31,7 @@
     "@vultisig/core-config": "0.9.1",
     "@vultisig/core-mpc": "1.2.2",
     "@vultisig/lib-utils": "0.10.1",
-    "@vultisig/sdk": "0.22.1",
+    "@vultisig/sdk": "0.22.2",
     "bs58": "^6.0.0",
     "cosmjs-types": "^0.11.0",
     "ethers": "^6.16.0",

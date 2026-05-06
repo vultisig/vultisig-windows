@@ -1,4 +1,5 @@
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
+import { hasBlockaidEvmChangesForSummary } from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationNormalize'
 import { useBlockaidPayloadSimulationQuery } from '@core/ui/chain/security/blockaid/tx/queries/blockaidPayloadSimulation'
 import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
 import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
@@ -148,12 +149,15 @@ export const TxSuccess = ({
 
   const simulationSend = useMemo(() => {
     const data = blockaidSimulationQuery.data
-    if (!data || !('changes' in data)) return null
+    if (!hasBlockaidEvmChangesForSummary(data)) {
+      return null
+    }
+    const { changes } = data
     // Only adopt the simulation's send leg as the success hero when there's
     // exactly one — multi-send shapes (e.g. multicalls that send several
     // tokens) can't be summarised by a single coin/amount, so let the
     // fallbacks (resolved token, txAction) handle them.
-    const sendChanges = data.changes.filter(c => c.direction === 'send')
+    const sendChanges = changes.filter(c => c.direction === 'send')
     if (sendChanges.length !== 1) return null
     const [sendChange] = sendChanges
     return { coin: sendChange.coin, amount: sendChange.amount }

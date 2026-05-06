@@ -9,8 +9,8 @@ import { Collapse } from '@core/inpage-provider/popup/view/resolvers/signMessage
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
 import type {
   BlockaidEvmBalanceChange,
-  BlockaidEvmSimulationInfo,
-} from '@core/ui/chain/security/blockaid/tx/blockaidEvmExtendedSimulation'
+  BlockaidEvmSimulationView,
+} from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationView'
 import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
 import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
 import { useUniversalRouterSwap } from '@core/ui/chain/tx/utils/useUniversalRouterSwap'
@@ -39,7 +39,7 @@ import { useTranslation } from 'react-i18next'
 type BlockaidSimulationContentProps =
   | {
       chain: EvmChain
-      blockaidSimulationQuery: Query<BlockaidEvmSimulationInfo, unknown>
+      blockaidSimulationQuery: Query<BlockaidEvmSimulationView, unknown>
       keysignPayload: KeysignPayload
       address: string
       networkFeeProps: NetworkFeeSectionProps
@@ -227,11 +227,6 @@ type EvmDisplayShape =
     }
   | { kind: 'complex'; changes: BlockaidEvmBalanceChange[] }
 
-// Pick the right hero/list display from the net balance changes. The simple
-// shapes (single send → transfer, exactly one send + one receive of distinct
-// assets → swap) keep the Phase 1 hero card styling that users are used to;
-// anything else (multicall, multi-asset DeFi, receive-only) renders as a
-// compact balance-changes list.
 const classifyEvmChanges = (
   changes: BlockaidEvmBalanceChange[]
 ): EvmDisplayShape => {
@@ -274,24 +269,68 @@ const BlockaidEvmSimulationContent = ({
   return (
     <MatchQuery
       value={blockaidSimulationQuery}
-      success={(blockaidSimulationInfo: BlockaidEvmSimulationInfo) => {
+      success={(blockaidSimulationInfo: BlockaidEvmSimulationView) => {
         if (!blockaidSimulationInfo) {
           return fallback
         }
-        if (!('changes' in blockaidSimulationInfo)) {
-          return fallback
+        if ('changes' in blockaidSimulationInfo) {
+          if (blockaidSimulationInfo.changes.length === 0) {
+            return fallback
+          }
+          const shape = classifyEvmChanges(blockaidSimulationInfo.changes)
+          if (shape.kind === 'transfer') {
+            return (
+              <BlockaidTransferDisplay
+                transfer={{
+                  fromCoin: shape.change.coin,
+                  fromAmount: shape.change.amount,
+                }}
+                fromAddress={address}
+                toAddress={keysignPayload.toAddress}
+                memo={keysignPayload.memo}
+                chain={chain}
+                networkFeeProps={networkFeeProps}
+              />
+            )
+          }
+          if (shape.kind === 'swap') {
+            return (
+              <BlockaidSwapDisplay
+                swap={{
+                  fromCoin: shape.from.coin,
+                  fromAmount: shape.from.amount,
+                  toCoin: shape.to.coin,
+                  toAmount: shape.to.amount,
+                }}
+                memo={keysignPayload.memo}
+                chain={chain}
+                networkFeeProps={networkFeeProps}
+              />
+            )
+          }
+          return (
+            <BlockaidBalanceChanges
+              changes={shape.changes}
+              memo={keysignPayload.memo}
+              chain={chain}
+              networkFeeProps={networkFeeProps}
+            />
+          )
         }
-        if (blockaidSimulationInfo.changes.length === 0) {
-          return fallback
+        if ('swap' in blockaidSimulationInfo) {
+          return (
+            <BlockaidSwapDisplay
+              swap={blockaidSimulationInfo.swap}
+              memo={keysignPayload.memo}
+              chain={chain}
+              networkFeeProps={networkFeeProps}
+            />
+          )
         }
-        const shape = classifyEvmChanges(blockaidSimulationInfo.changes)
-        if (shape.kind === 'transfer') {
+        if ('transfer' in blockaidSimulationInfo) {
           return (
             <BlockaidTransferDisplay
-              transfer={{
-                fromCoin: shape.change.coin,
-                fromAmount: shape.change.amount,
-              }}
+              transfer={blockaidSimulationInfo.transfer}
               fromAddress={address}
               toAddress={keysignPayload.toAddress}
               memo={keysignPayload.memo}
@@ -300,29 +339,7 @@ const BlockaidEvmSimulationContent = ({
             />
           )
         }
-        if (shape.kind === 'swap') {
-          return (
-            <BlockaidSwapDisplay
-              swap={{
-                fromCoin: shape.from.coin,
-                fromAmount: shape.from.amount,
-                toCoin: shape.to.coin,
-                toAmount: shape.to.amount,
-              }}
-              memo={keysignPayload.memo}
-              chain={chain}
-              networkFeeProps={networkFeeProps}
-            />
-          )
-        }
-        return (
-          <BlockaidBalanceChanges
-            changes={shape.changes}
-            memo={keysignPayload.memo}
-            chain={chain}
-            networkFeeProps={networkFeeProps}
-          />
-        )
+        return fallback
       }}
       error={() => fallback}
       pending={() => null}

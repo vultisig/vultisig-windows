@@ -13,6 +13,13 @@ import { getStaticCopyTargets } from '../../core/ui/vite/staticCopy'
 
 const rootDir = path.resolve(__dirname, '../..')
 
+/** One physical copy of MPC entry + types across chunks (vultisig-windows#3831 / #3777). */
+const vultisigMpcDedupe: readonly string[] = [
+  '@vultisig/sdk',
+  '@vultisig/mpc-types',
+  '@vultisig/mpc-wasm',
+]
+
 export default defineConfig(async ({ mode }) => {
   const env = loadEnv(mode, rootDir)
   const featureFlagDefines = getFeatureFlagDefines(env)
@@ -55,6 +62,7 @@ export default defineConfig(async ({ mode }) => {
 
     return {
       define: { ...featureFlagDefines, ...envDefines },
+      resolve: { dedupe: [...vultisigMpcDedupe] },
       plugins: [vultisigSdk(), tsconfigPaths({ root: rootDir }), ...plugins],
       build: {
         copyPublicDir: false,
@@ -78,6 +86,7 @@ export default defineConfig(async ({ mode }) => {
   } else {
     return {
       define: { ...featureFlagDefines, ...envDefines },
+      resolve: { dedupe: [...vultisigMpcDedupe] },
       plugins: [
         tsconfigPaths({ root: rootDir }),
         ...getCommonPlugins(),

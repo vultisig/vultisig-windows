@@ -16,7 +16,7 @@ import { PendingState } from '@core/inpage-provider/popup/view/resolvers/sendTx/
 import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
 import { useGetCoin } from '@core/ui/chain/coin/useGetCoin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import type { BlockaidEvmSimulationInfo } from '@core/ui/chain/security/blockaid/tx/blockaidEvmExtendedSimulation'
+import { BlockaidEvmSimulationView } from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationView'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
 import { SignAminoDisplay } from '@core/ui/mpc/keysign/tx/components/SignAminoDisplay'
@@ -271,7 +271,7 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
                       chain={chain}
                       blockaidSimulationQuery={
                         blockaidSimulationQuery as Query<
-                          BlockaidEvmSimulationInfo,
+                          BlockaidEvmSimulationView,
                           unknown
                         >
                       }
