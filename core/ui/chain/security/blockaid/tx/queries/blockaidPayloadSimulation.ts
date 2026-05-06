@@ -1,3 +1,4 @@
+import type { BlockaidEvmSimulationInfo } from '@core/ui/chain/security/blockaid/tx/blockaidEvmExtendedSimulation'
 import { getBlockaidTxSimulationQuery } from '@core/ui/chain/security/blockaid/tx/queries/blockaidTxSimulation'
 import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
 import { Query } from '@lib/ui/query/Query'
@@ -11,10 +12,7 @@ import {
   parseBlockaidEvmSimulation,
   parseBlockaidSolanaSimulation,
 } from '@vultisig/core-chain/security/blockaid/tx/simulation/api/core'
-import {
-  BlockaidEvmSimulationInfo,
-  BlockaidSolanaSimulationInfo,
-} from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
+import { BlockaidSolanaSimulationInfo } from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
 import { BlockaidTxSimulationInput } from '@vultisig/core-chain/security/blockaid/tx/simulation/resolver'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
 import { getBlockaidTxSimulationInput } from '@vultisig/core-mpc/security/blockaid/tx/simulation/input'

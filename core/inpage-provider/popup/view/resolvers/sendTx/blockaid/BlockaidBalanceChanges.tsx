@@ -4,12 +4,12 @@ import {
   NetworkFeeSectionProps,
 } from '@core/inpage-provider/popup/view/resolvers/sendTx/components/NetworkFeeSection'
 import { CoinIcon } from '@core/ui/chain/coin/icon/CoinIcon'
+import type { BlockaidEvmBalanceChange } from '@core/ui/chain/security/blockaid/tx/blockaidEvmExtendedSimulation'
 import { ArrowUpRightIcon } from '@lib/ui/icons/ArrowUpRightIcon'
 import { TransactionReceiveIcon } from '@lib/ui/icons/TransactionReceiveIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
 import { Text } from '@lib/ui/text'
 import { Chain } from '@vultisig/core-chain/Chain'
-import { BlockaidEvmBalanceChange } from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
 import { formatAmount } from '@vultisig/lib-utils/formatAmount'
 import { match } from '@vultisig/lib-utils/match'
 import { formatUnits } from 'ethers'
