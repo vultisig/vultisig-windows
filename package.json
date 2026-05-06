@@ -56,6 +56,7 @@
     "vitest": "^4.1.0"
   },
   "resolutions": {
+    "@trustwallet/wallet-core": "4.6.7",
     "viem": "npm:2.47.4",
     "@noble/hashes": "1.8.0",
     "@vultisig/mpc-types": "0.2.3",

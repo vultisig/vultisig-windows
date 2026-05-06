@@ -76,7 +76,7 @@
     "@solana/web3.js": "^1.98.4",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
-    "@trustwallet/wallet-core": "^4.6.0",
+    "@trustwallet/wallet-core": "^4.6.7",
     "@types/chrome": "^0.1.38",
     "@types/express": "^5.0.6",
     "@types/node": "^25.5.0",
