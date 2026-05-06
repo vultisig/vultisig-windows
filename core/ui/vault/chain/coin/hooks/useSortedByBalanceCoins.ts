@@ -1,3 +1,4 @@
+import { usePortfolioVaultChainCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
 import {
@@ -8,10 +9,9 @@ import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { useMemo } from 'react'
 
 import { useBalancesQuery } from '../../../../chain/coin/queries/useBalancesQuery'
-import { useCurrentVaultChainCoins } from '../../../state/currentVaultCoins'
 
 export const useSortedByBalanceCoins = (chain: Chain) => {
-  const coinsInSelectedChain = useCurrentVaultChainCoins(chain)
+  const coinsInSelectedChain = usePortfolioVaultChainCoins(chain)
 
   const { data: balances } = useBalancesQuery(
     coinsInSelectedChain.map(extractAccountCoinKey)

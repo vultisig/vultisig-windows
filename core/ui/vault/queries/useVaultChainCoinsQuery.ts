@@ -1,6 +1,6 @@
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { useBalancesQuery } from '@core/ui/chain/coin/queries/useBalancesQuery'
-import { useCurrentVaultChainCoins } from '@core/ui/vault/state/currentVaultCoins'
+import { usePortfolioVaultChainCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { getResolvedQuery, pendingQuery, Query } from '@lib/ui/query/Query'
 import { Chain } from '@vultisig/core-chain/Chain'
 import {
@@ -26,7 +26,7 @@ export type VaultChainCoin = CoinKey &
   Partial<EntityWithPrice>
 
 export const useVaultChainCoinsQuery = (chain: Chain) => {
-  const coins = useCurrentVaultChainCoins(chain)
+  const coins = usePortfolioVaultChainCoins(chain)
 
   const pricesQuery = useCoinPricesQuery({
     coins,

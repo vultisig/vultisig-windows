@@ -1,6 +1,6 @@
 import { useCoinPricesQuery } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { useFormatFiatAmount } from '@core/ui/chain/hooks/useFormatFiatAmount'
-import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
+import { usePortfolioVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { useTransformQueryData } from '@lib/ui/query/hooks/useTransformQueryData'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { areEqualCoins, coinKeyToString } from '@vultisig/core-chain/coin/Coin'
@@ -11,7 +11,7 @@ import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { useCallback, useMemo } from 'react'
 
 export const useSwapFiatFeesQuery = (value: SwapFee[]) => {
-  const vaultCoins = useCurrentVaultCoins()
+  const vaultCoins = usePortfolioVaultCoins()
   const coins = useMemo(
     () =>
       withoutDuplicates(

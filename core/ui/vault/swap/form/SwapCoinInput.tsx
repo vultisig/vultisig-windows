@@ -1,6 +1,6 @@
 import {
   useCurrentVaultCoin,
-  useCurrentVaultCoins,
+  usePortfolioVaultCoins,
 } from '@core/ui/vault/state/currentVaultCoins'
 import { SelectItemModal } from '@lib/ui/inputs/SelectItemModal'
 import { HStack } from '@lib/ui/layout/Stack'
@@ -28,7 +28,7 @@ export const SwapCoinInput: FC<InputProps<CoinKey>> = ({ value, onChange }) => {
   const [opened, setOpened] = useState<null | 'coin' | 'chain'>(null)
 
   const { t } = useTranslation()
-  const coins = useCurrentVaultCoins()
+  const coins = usePortfolioVaultCoins()
   const swapEnabledChainsForVault = useSwapEnabledChainsForVault()
   const coin = shouldBePresent(useCurrentVaultCoin(value))
   const [fromCoinKey] = useSwapFromCoin()
