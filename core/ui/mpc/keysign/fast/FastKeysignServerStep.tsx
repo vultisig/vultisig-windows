@@ -17,7 +17,9 @@ import { getCoinType } from '@vultisig/core-chain/coin/coinType'
 import { getPublicKey } from '@vultisig/core-chain/publicKey/getPublicKey'
 import { getSignatureAlgorithm } from '@vultisig/core-chain/signing/SignatureAlgorithm'
 import { assertChainField } from '@vultisig/core-chain/utils/assertChainField'
+import { getQBTCPreSignedImageHash } from '@vultisig/core-mpc/chains/cosmos/qbtc/QBTCHelper'
 import { signWithServer } from '@vultisig/core-mpc/fast/api/signWithServer'
+import { getBlockchainSpecificValue } from '@vultisig/core-mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { getEncodedSigningInputs } from '@vultisig/core-mpc/keysign/signingInputs'
 import { getPreSigningHashes } from '@vultisig/core-mpc/tx/preSigningHashes'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
@@ -66,6 +68,33 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
         keysign: async keysignPayload => {
           const coin = assertField(keysignPayload, 'coin')
           const { chain } = assertChainField(coin)
+
+          // QBTC uses MLDSA — bypass WalletCore pubkey derivation and
+          // build messages directly from the manual protobuf helper.
+          if (chain === Chain.QBTC) {
+            const cosmosSpecific = getBlockchainSpecificValue(
+              keysignPayload.blockchainSpecific,
+              'cosmosSpecific'
+            )
+            const messages = getQBTCPreSignedImageHash({
+              keysignPayload,
+              cosmosSpecific,
+            }).map(bytes => Buffer.from(bytes).toString('hex'))
+
+            return signWithServer({
+              public_key: publicKeys.ecdsa,
+              messages,
+              session: sessionId,
+              hex_encryption_key: hexEncryptionKey,
+              derive_path: walletCore.CoinTypeExt.derivationPath(
+                getCoinType({ walletCore, chain })
+              ),
+              is_ecdsa: false,
+              mldsa: true,
+              vault_password: password,
+              chain,
+            })
+          }
 
           // Polkadot dApp signPayload — bypass TW, send raw payload hash
           if (chain === OtherChain.Polkadot && keysignPayload.memo) {

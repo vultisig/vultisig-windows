@@ -6,6 +6,7 @@ import {
 } from '@vultisig/core-chain/ChainKind'
 import { getCosmosClient } from '@vultisig/core-chain/chains/cosmos/client'
 import { cosmosRpcUrl } from '@vultisig/core-chain/chains/cosmos/cosmosRpcUrl'
+import { qbtcRestUrl } from '@vultisig/core-chain/chains/cosmos/qbtc/tendermintRpcUrl'
 import { getEvmClient } from '@vultisig/core-chain/chains/evm/client'
 import { getBlockchairBaseUrl } from '@vultisig/core-chain/chains/utxo/client/getBlockchairBaseUrl'
 import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedError'
@@ -38,9 +39,7 @@ export const getTx: BackgroundResolver<'getTx'> = async ({
 
         return client.getTx(hash)
       },
-      qbtc: () => {
-        throw new NotImplementedError('Get tx for QBTC chain')
-      },
+      qbtc: () => queryUrl(`${qbtcRestUrl}/cosmos/tx/v1beta1/txs/${hash}`),
       utxo: async chain => {
         const url = `${getBlockchairBaseUrl(chain)}/dashboards/transaction/${hash}`
 
