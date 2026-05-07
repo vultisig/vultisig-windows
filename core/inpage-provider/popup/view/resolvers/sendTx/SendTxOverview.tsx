@@ -17,6 +17,8 @@ import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
 import { useGetCoin } from '@core/ui/chain/coin/useGetCoin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { BlockaidEvmSimulationView } from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationView'
+import { useEvmContractCallInfoQuery } from '@core/ui/chain/tx/utils/useEvmContractCallInfoQuery'
+import { useUniversalRouterSwap } from '@core/ui/chain/tx/utils/useUniversalRouterSwap'
 import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
 import { SignAminoDisplay } from '@core/ui/mpc/keysign/tx/components/SignAminoDisplay'
@@ -115,8 +117,44 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
     eager: false,
   })
 
+  const memo = keysignPayloadQuery.data?.memo
+  const isEvm = isChainOfKind(chain, 'evm')
+  const isContractMemo =
+    !!memo && memo.startsWith('0x') && memo.length > 2 && isEvm
+
+  const universalRouterSwap = useUniversalRouterSwap({ memo, chain })
+
+  const contractCallQuery = useEvmContractCallInfoQuery({
+    memo,
+    enabled:
+      isContractMemo &&
+      !universalRouterSwap.isPending &&
+      !universalRouterSwap.data,
+  })
+
+  const isContractDecodingPending =
+    isContractMemo &&
+    (universalRouterSwap.isPending ||
+      (!universalRouterSwap.data && contractCallQuery.isPending))
+
+  const isContractDecodingFailed =
+    isContractMemo && !universalRouterSwap.data && !!contractCallQuery.error
+
+  const extraPendingMessage = (() => {
+    if (gasEstimationDataQuery.isPending || isContractDecodingPending) {
+      return t('loading')
+    }
+    if (gasEstimationDataQuery.error || isContractDecodingFailed) {
+      return t('failed_to_process_transaction')
+    }
+    return undefined
+  })()
+
   return (
-    <VerifyKeysignStart keysignPayloadQuery={keysignPayloadQuery}>
+    <VerifyKeysignStart
+      keysignPayloadQuery={keysignPayloadQuery}
+      extraPendingMessage={extraPendingMessage}
+    >
       <MatchQuery
         value={gasEstimationDataQuery}
         pending={() => <PendingState />}
