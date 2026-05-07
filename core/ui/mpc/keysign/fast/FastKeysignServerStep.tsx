@@ -20,7 +20,7 @@ import { assertChainField } from '@vultisig/core-chain/utils/assertChainField'
 import { getQBTCPreSignedImageHash } from '@vultisig/core-mpc/chains/cosmos/qbtc/QBTCHelper'
 import { signWithServer } from '@vultisig/core-mpc/fast/api/signWithServer'
 import { getBlockchainSpecificValue } from '@vultisig/core-mpc/keysign/chainSpecific/KeysignChainSpecific'
-import { getEncodedSigningInputs } from '@vultisig/core-mpc/keysign/signingInputs'
+import { getEncodedSigningInputsAsync } from '@vultisig/core-mpc/keysign/signingInputs'
 import { getPreSigningHashes } from '@vultisig/core-mpc/tx/preSigningHashes'
 import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { attempt } from '@vultisig/lib-utils/attempt'
@@ -134,7 +134,7 @@ export const FastKeysignServerStep: React.FC<FastKeysignServerStepProps> = ({
             publicKeys,
             chainPublicKeys,
           })
-          const inputs = getEncodedSigningInputs({
+          const inputs = await getEncodedSigningInputsAsync({
             keysignPayload,
             walletCore,
             publicKey,

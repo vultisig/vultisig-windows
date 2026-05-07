@@ -13,7 +13,7 @@ import { decodeSigningOutput } from '@vultisig/core-chain/tw/signingOutput'
 import { broadcastTx } from '@vultisig/core-chain/tx/broadcast'
 import { getTxHash } from '@vultisig/core-chain/tx/hash'
 import type { KeysignSignature } from '@vultisig/core-mpc/keysign/KeysignSignature'
-import { getEncodedSigningInputs } from '@vultisig/core-mpc/keysign/signingInputs'
+import { getEncodedSigningInputsAsync } from '@vultisig/core-mpc/keysign/signingInputs'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
 import { compileTx } from '@vultisig/core-mpc/tx/compile/compileTx'
 import { getPreSigningHashes } from '@vultisig/core-mpc/tx/preSigningHashes'
@@ -62,7 +62,7 @@ export const handleSignTx: ToolHandler = async (input, context) => {
   const coinType = getCoinType({ walletCore, chain })
   const derivePath = walletCore.CoinTypeExt.derivationPath(coinType)
 
-  const encodedInputs = getEncodedSigningInputs({
+  const encodedInputs = await getEncodedSigningInputsAsync({
     keysignPayload,
     walletCore,
     publicKey,

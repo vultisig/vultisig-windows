@@ -30,7 +30,7 @@ import {
 import { getBlockchainSpecificValue } from '@vultisig/core-mpc/keysign/chainSpecific/KeysignChainSpecific'
 import { KeysignMessagePayload } from '@vultisig/core-mpc/keysign/keysignPayload/KeysignMessagePayload'
 import { KeysignResult } from '@vultisig/core-mpc/keysign/KeysignResult'
-import { getEncodedSigningInputs } from '@vultisig/core-mpc/keysign/signingInputs'
+import { getEncodedSigningInputsAsync } from '@vultisig/core-mpc/keysign/signingInputs'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
 import { compileTx } from '@vultisig/core-mpc/tx/compile/compileTx'
 import { getPreSigningHashes } from '@vultisig/core-mpc/tx/preSigningHashes'
@@ -150,7 +150,7 @@ export const useKeysignMutation = (payload: KeysignMessagePayload) => {
               chainPublicKeys: vault.chainPublicKeys,
             })
 
-            const inputs = getEncodedSigningInputs({
+            const inputs = await getEncodedSigningInputsAsync({
               keysignPayload: payload,
               walletCore,
               publicKey,
