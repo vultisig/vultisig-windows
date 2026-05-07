@@ -3,13 +3,14 @@ import {
   useDismissBanner,
   useDismissedBanners,
 } from '@core/ui/storage/dismissedBanners'
-import { AnimatePresence, motion } from 'framer-motion'
-import { ReactNode, useEffect, useMemo, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import {
   CarouselContainer,
+  CarouselSlide,
   CarouselTrack,
-  NavigationButton,
+  CarouselViewport,
   PaginationContainer,
   PaginationDot,
 } from './BannerCarousel.styles'
@@ -24,25 +25,35 @@ type BannerCarouselProps = {
 }
 
 export const BannerCarousel = ({ banners }: BannerCarouselProps) => {
-  const { isBannerDismissed } = useDismissedBanners()
+  const { t } = useTranslation()
+  const { hasLoaded, isBannerDismissed } = useDismissedBanners()
   const dismissBanner = useDismissBanner()
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [isHoverPaused, setIsHoverPaused] = useState(false)
+  const [isFocusPaused, setIsFocusPaused] = useState(false)
 
-  // Filter out dismissed banners
-  const activeBanners = useMemo(
-    () => banners.filter(banner => !isBannerDismissed(banner.id)),
-    [banners, isBannerDismissed]
-  )
+  const activeBanners = banners.filter(banner => !isBannerDismissed(banner.id))
+  const isPaused = isHoverPaused || isFocusPaused
 
-  // Adjust current index if it's out of bounds
   useEffect(() => {
     if (currentIndex >= activeBanners.length && activeBanners.length > 0) {
       setCurrentIndex(Math.max(0, activeBanners.length - 1))
     }
   }, [activeBanners.length, currentIndex])
 
-  // If all banners are dismissed, return null
-  if (activeBanners.length === 0) {
+  useEffect(() => {
+    if (isPaused || activeBanners.length < 2) {
+      return
+    }
+
+    const interval = window.setInterval(() => {
+      setCurrentIndex(prev => (prev + 1) % activeBanners.length)
+    }, 5000)
+
+    return () => window.clearInterval(interval)
+  }, [activeBanners.length, isPaused])
+
+  if (!hasLoaded || activeBanners.length === 0) {
     return null
   }
 
@@ -57,70 +68,65 @@ export const BannerCarousel = ({ banners }: BannerCarouselProps) => {
     }
   }
 
-  const goToNext = () => {
-    setCurrentIndex(prev => (prev + 1) % activeBanners.length)
-  }
-
-  const goToPrevious = () => {
-    setCurrentIndex(prev => (prev === 0 ? activeBanners.length - 1 : prev - 1))
-  }
-
   const safeIndex = Math.min(
     currentIndex,
     Math.max(0, activeBanners.length - 1)
   )
-  const currentBanner = activeBanners[safeIndex]
-  const showNavigation = activeBanners.length > 1
+  const showPagination = activeBanners.length > 1
 
   return (
-    <CarouselContainer>
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={currentBanner.id}
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
-          transition={{ duration: 0.3 }}
-          style={{ width: '100%' }}
+    <CarouselContainer
+      onMouseEnter={() => setIsHoverPaused(true)}
+      onMouseLeave={() => setIsHoverPaused(false)}
+      onFocusCapture={() => setIsFocusPaused(true)}
+      onBlurCapture={event => {
+        const nextTarget = event.relatedTarget
+
+        if (
+          nextTarget instanceof Node &&
+          event.currentTarget.contains(nextTarget)
+        ) {
+          return
+        }
+
+        setIsFocusPaused(false)
+      }}
+    >
+      <CarouselViewport>
+        <CarouselTrack
+          animate={{ x: `${safeIndex * -100}%` }}
+          transition={{ type: 'spring', stiffness: 260, damping: 32 }}
         >
-          <CarouselTrack>
-            {typeof currentBanner.component === 'function'
-              ? currentBanner.component({
-                  onDismiss: () => handleDismiss(currentBanner.id),
-                })
-              : currentBanner.component}
-          </CarouselTrack>
-        </motion.div>
-      </AnimatePresence>
+          {activeBanners.map((banner, index) => (
+            <CarouselSlide
+              key={banner.id}
+              aria-hidden={index !== safeIndex}
+              inert={index === safeIndex ? undefined : true}
+            >
+              {typeof banner.component === 'function'
+                ? banner.component({
+                    onDismiss: () => handleDismiss(banner.id),
+                  })
+                : banner.component}
+            </CarouselSlide>
+          ))}
+        </CarouselTrack>
+      </CarouselViewport>
 
-      {showNavigation && (
-        <>
-          <NavigationButton
-            onClick={goToPrevious}
-            position="left"
-            aria-label="Previous banner"
-          >
-            ‹
-          </NavigationButton>
-          <NavigationButton
-            onClick={goToNext}
-            position="right"
-            aria-label="Next banner"
-          >
-            ›
-          </NavigationButton>
-
-          <PaginationContainer>
-            {activeBanners.map((banner, index) => (
-              <PaginationDot
-                key={banner.id}
-                isActive={index === currentIndex}
-                onClick={() => setCurrentIndex(index)}
-                aria-label={`Go to banner ${index + 1}`}
-              />
-            ))}
-          </PaginationContainer>
-        </>
+      {showPagination && (
+        <PaginationContainer>
+          {activeBanners.map((banner, index) => (
+            <PaginationDot
+              key={banner.id}
+              $isActive={index === safeIndex}
+              onClick={() => setCurrentIndex(index)}
+              aria-label={t('banner_carousel_go_to_banner', {
+                number: index + 1,
+              })}
+              aria-current={index === safeIndex ? 'true' : undefined}
+            />
+          ))}
+        </PaginationContainer>
       )}
     </CarouselContainer>
   )
