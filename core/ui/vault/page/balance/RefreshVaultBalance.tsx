@@ -1,7 +1,7 @@
 import { getCoinPricesQueryKeys } from '@core/ui/chain/coin/price/queries/useCoinPricesQuery'
 import { getBalanceQueryKey } from '@core/ui/chain/coin/queries/useBalancesQuery'
 import { useFiatCurrency } from '@core/ui/storage/fiatCurrency'
-import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
+import { usePortfolioVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
 import { IconButton } from '@lib/ui/buttons/IconButton'
 import { IconWrapper } from '@lib/ui/icons/IconWrapper'
 import { RefreshCwIcon } from '@lib/ui/icons/RefreshCwIcon'
@@ -12,7 +12,7 @@ import { extractAccountCoinKey } from '@vultisig/core-chain/coin/AccountCoin'
 export const RefreshVaultBalance = () => {
   const refetchQueries = useRefetchQueries()
 
-  const coins = useCurrentVaultCoins()
+  const coins = usePortfolioVaultCoins()
 
   const fiatCurrency = useFiatCurrency()
 

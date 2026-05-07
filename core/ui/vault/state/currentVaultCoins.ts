@@ -1,3 +1,4 @@
+import { withoutRujiStakingReceiptCoins } from '@core/ui/chain/coin/thorchain/isRujiStakingReceiptCoin'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { AccountCoin } from '@vultisig/core-chain/coin/AccountCoin'
@@ -5,8 +6,6 @@ import { areEqualCoins, CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { getChainAddress } from '@vultisig/core-chain/publicKey/address/getChainAddress'
 import { isKeyImportVault } from '@vultisig/core-mpc/vault/Vault'
-import { groupItems } from '@vultisig/lib-utils/array/groupItems'
-import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { useMemo } from 'react'
 
@@ -22,6 +21,19 @@ export const useCurrentVaultCoins = () => {
   return coins ?? emptyCoins
 }
 
+/**
+ * {@link useCurrentVaultCoins} minus THORChain RUJI staking receipt (sRUJI).
+ * Use for portfolio UX: balances, fiat totals, swap/send pickers, refresh.
+ * Keep {@link useCurrentVaultCoins} for storage-accurate flows (manage tokens,
+ * CoinFinder dedupe, resolving a send `coin` key that may still reference a
+ * legacy receipt row).
+ */
+export const usePortfolioVaultCoins = () =>
+  withoutRujiStakingReceiptCoins(useCurrentVaultCoins())
+
+export const usePortfolioVaultChainCoins = (chain: string) =>
+  usePortfolioVaultCoins().filter(coin => coin.chain === chain)
+
 export const useCurrentVaultNativeCoins = () => {
   const coins = useCurrentVaultCoins()
 
@@ -32,17 +44,6 @@ export const useCurrentVaultChains = () => {
   const nativeCoins = useCurrentVaultNativeCoins()
 
   return useMemo(() => nativeCoins.map(coin => coin.chain), [nativeCoins])
-}
-
-const knownChains = Object.values(Chain) as string[]
-
-export const useCurrentVaultCoinsByChain = () => {
-  const coins = useCurrentVaultCoins()
-
-  return useMemo(() => {
-    const supported = coins.filter(coin => isOneOf(coin.chain, knownChains))
-    return groupItems(supported, coin => coin.chain as Chain)
-  }, [coins])
 }
 
 export const useCurrentVaultAddresses = () => {

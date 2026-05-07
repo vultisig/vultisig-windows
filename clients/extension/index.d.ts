@@ -15,6 +15,9 @@ interface Window {
   providers: EthereumProvider[]
   vultisig: any
   keplr: any
+  getOfflineSigner: any
+  getOfflineSignerOnlyAmino: any
+  getOfflineSignerAuto: any
   station: any
   terra: any
   isTerraExtensionAvailable?: boolean

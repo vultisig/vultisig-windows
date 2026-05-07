@@ -6,7 +6,7 @@ import { isOneOf } from '@vultisig/lib-utils/array/isOneOf'
 import { useCallback, useMemo } from 'react'
 
 import { depositEnabledChains } from '../../deposit/DepositEnabledChain'
-import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
+import { usePortfolioVaultCoins } from '../../state/currentVaultCoins'
 import { useSwapEnabledChainsForVault } from '../../swap/state/useSwapEnabledChainsForVault'
 import { BuyPrompt } from '../BuyPrompt'
 import { DepositPrompt } from '../DepositPrompt'
@@ -25,7 +25,7 @@ export const VaultPrimaryActions = ({
   onReceive,
   showDepositAction = true,
 }: VaultPrimaryActionsProps) => {
-  const coins = useCurrentVaultCoins()
+  const coins = usePortfolioVaultCoins()
   const swapEnabledChainsForVault = useSwapEnabledChainsForVault()
 
   const sendCoin = useMemo(

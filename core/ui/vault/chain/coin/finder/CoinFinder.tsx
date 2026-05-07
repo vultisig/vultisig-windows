@@ -1,3 +1,4 @@
+import { withoutRujiStakingReceiptCoins } from '@core/ui/chain/coin/thorchain/isRujiStakingReceiptCoin'
 import { useCreateCoinsMutation } from '@core/ui/storage/coins'
 import { useCoinFinderQuery } from '@core/ui/vault/chain/coin/finder/queries/useCoinFinderQuery'
 import { useCurrentVaultCoins } from '@core/ui/vault/state/currentVaultCoins'
@@ -27,7 +28,7 @@ export const CoinFinder = () => {
   useEffect(() => {
     if (!data) return
 
-    const newCoins = data
+    const newCoins = withoutRujiStakingReceiptCoins(data)
       .filter(coin => !coinFinderIgnore.some(c => areEqualCoins(c, coin)))
       .map(coin => {
         const existingCoinInfo = coins.find(c => areEqualCoins(c, coin))

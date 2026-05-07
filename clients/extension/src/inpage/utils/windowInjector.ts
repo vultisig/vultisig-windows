@@ -207,6 +207,23 @@ async function setupContentScriptMessenger(
           configurable: false,
           writable: false,
         },
+        getOfflineSigner: {
+          value: providers.keplr.getOfflineSigner.bind(providers.keplr),
+          configurable: false,
+          writable: false,
+        },
+        getOfflineSignerOnlyAmino: {
+          value: providers.keplr.getOfflineSignerOnlyAmino.bind(
+            providers.keplr
+          ),
+          configurable: false,
+          writable: false,
+        },
+        getOfflineSignerAuto: {
+          value: providers.keplr.getOfflineSignerAuto.bind(providers.keplr),
+          configurable: false,
+          writable: false,
+        },
         station: {
           value: providers.station,
           configurable: false,
