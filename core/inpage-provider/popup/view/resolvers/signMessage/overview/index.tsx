@@ -1,6 +1,7 @@
 import { create } from '@bufbuild/protobuf'
 import { getDeveloperOptions } from '@core/extension/storage/developerOptions'
 import {
+  Eip712V4Payload,
   SignMessageInput,
   SignMessageType,
 } from '@core/inpage-provider/popup/interface'
@@ -20,7 +21,7 @@ import { useViewState } from '@lib/ui/navigation/hooks/useViewState'
 import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
 import { StrictText } from '@lib/ui/text'
 import { useQuery } from '@tanstack/react-query'
-import { Chain } from '@vultisig/core-chain/Chain'
+import { Chain, EvmChain } from '@vultisig/core-chain/Chain'
 import { getChainKind } from '@vultisig/core-chain/ChainKind'
 import { CustomMessagePayloadSchema } from '@vultisig/core-mpc/types/vultisig/keysign/v1/custom_message_payload_pb'
 import { getVaultId } from '@vultisig/core-mpc/vault/Vault'
@@ -105,6 +106,15 @@ export const Overview = () => {
     personal_sign: ({ type }) => type,
   })
 
+  const typedData = matchRecordUnion<
+    SignMessageInput,
+    { chain: EvmChain; payload: Eip712V4Payload } | undefined
+  >(input, {
+    eth_signTypedData_v4: ({ chain, message }) => ({ chain, payload: message }),
+    sign_message: () => undefined,
+    personal_sign: () => undefined,
+  })
+
   const pluginId = matchRecordUnion<SignMessageInput, string | undefined>(
     input,
     {
@@ -152,6 +162,7 @@ export const Overview = () => {
           message={displayMessage}
           method={method}
           signature={signature}
+          typedData={typedData}
         />
       )}
       policy={() => (
