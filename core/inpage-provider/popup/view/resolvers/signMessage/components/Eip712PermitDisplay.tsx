@@ -45,7 +45,7 @@ const isArrayOfRecords = (v: unknown): v is Record<string, unknown>[] =>
 
 const toBigInt = (v: unknown): bigint | undefined => {
   if (typeof v === 'bigint') return v
-  if (typeof v === 'number' && Number.isFinite(v)) return BigInt(v)
+  if (typeof v === 'number' && Number.isInteger(v)) return BigInt(v)
   if (typeof v === 'string' && v.length > 0) {
     try {
       return BigInt(v)
