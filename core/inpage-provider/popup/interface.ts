@@ -17,6 +17,35 @@ export type Eip712V4Payload = {
   message: Record<string, unknown>
 }
 
+export const isEip712V4Payload = (value: unknown): value is Eip712V4Payload => {
+  if (typeof value !== 'object' || value === null) return false
+  if (!('primaryType' in value) || typeof value.primaryType !== 'string') {
+    return false
+  }
+  if (
+    !('domain' in value) ||
+    typeof value.domain !== 'object' ||
+    value.domain === null
+  ) {
+    return false
+  }
+  if (
+    !('types' in value) ||
+    typeof value.types !== 'object' ||
+    value.types === null
+  ) {
+    return false
+  }
+  if (
+    !('message' in value) ||
+    typeof value.message !== 'object' ||
+    value.message === null
+  ) {
+    return false
+  }
+  return true
+}
+
 export type SignMessageInput =
   | { eth_signTypedData_v4: { chain: EvmChain; message: Eip712V4Payload } }
   | {
