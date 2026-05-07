@@ -11,6 +11,7 @@ import { TypedDataDomain, TypedDataField } from 'ethers'
 export type SignMessageType = 'connect' | 'default' | 'policy'
 
 export type Eip712V4Payload = {
+  primaryType: string
   domain: TypedDataDomain
   types: Record<string, Array<TypedDataField>>
   message: Record<string, unknown>
