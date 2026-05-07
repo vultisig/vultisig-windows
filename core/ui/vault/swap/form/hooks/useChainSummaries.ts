@@ -11,7 +11,7 @@ import { isFeeCoin } from '@vultisig/core-chain/coin/utils/isFeeCoin'
 import { useMemo } from 'react'
 
 import { useBalancesQuery } from '../../../../chain/coin/queries/useBalancesQuery'
-import { useCurrentVaultCoins } from '../../../state/currentVaultCoins'
+import { usePortfolioVaultCoins } from '../../../state/currentVaultCoins'
 
 type ChainSummary = {
   feeCoinAmount: number
@@ -21,7 +21,7 @@ type ChainSummary = {
 export const useChainSummaries = (): Query<
   Record<Coin['chain'], ChainSummary>
 > => {
-  const coins = useCurrentVaultCoins()
+  const coins = usePortfolioVaultCoins()
   const balancesQuery = useBalancesQuery(coins.map(extractAccountCoinKey))
   const pricesQuery = useCoinPricesQuery({ coins })
 

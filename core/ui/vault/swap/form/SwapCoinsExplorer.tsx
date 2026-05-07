@@ -26,7 +26,7 @@ import { useWhitelistedCoinsQuery } from '../../../chain/coin/queries/useWhiteli
 import { useTransferDirection } from '../../../state/transferDirection'
 import { useCreateCoinMutation } from '../../../storage/coins'
 import { useSortedByBalanceCoins } from '../../chain/coin/hooks/useSortedByBalanceCoins'
-import { useCurrentVaultCoins } from '../../state/currentVaultCoins'
+import { usePortfolioVaultCoins } from '../../state/currentVaultCoins'
 import { SwapHorizontalDivider } from '../components/SwapHorizontalDivider'
 import { useSwapFromCoin } from '../state/fromCoin'
 import { useSwapToCoin } from '../state/toCoin'
@@ -40,7 +40,7 @@ export const SwapCoinsExplorer = ({
   const [fromCoinKey] = useSwapFromCoin()
   const [currentToCoin] = useSwapToCoin()
   const side = useTransferDirection()
-  const coins = useCurrentVaultCoins()
+  const coins = usePortfolioVaultCoins()
   const swapEnabledChainsForVault = useSwapEnabledChainsForVault()
   const { mutateAsync: createCoin } = useCreateCoinMutation()
   const currentChain = side === 'from' ? fromCoinKey.chain : currentToCoin.chain
