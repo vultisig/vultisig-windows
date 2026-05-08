@@ -82,6 +82,22 @@ export class VaultPage extends BasePage {
       }
       throw new Error(`Vault page did not appear within ${timeout}ms. Check if a vault exists.`)
     }
+    await this.dismissPromptSheets()
+  }
+
+  /**
+   * Dismiss any modal PromptSheet (e.g. EnableNotificationsPromptSheet shown
+   * once after first vault load). The PromptSheet renders as a fixed Overlay
+   * with z-index 1 that intercepts pointer events on header buttons. Pressing
+   * Escape triggers its useKeyDown handler, which calls onClose and persists
+   * hasSeenNotificationPrompt so subsequent loads skip it.
+   */
+  async dismissPromptSheets(): Promise<void> {
+    const dialog = this.page.locator('[role="dialog"][aria-modal="true"]').first()
+    const visible = await dialog.isVisible({ timeout: 1000 }).catch(() => false)
+    if (!visible) return
+    await this.page.keyboard.press('Escape')
+    await dialog.waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {})
   }
 
   /**
