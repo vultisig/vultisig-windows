@@ -38,6 +38,8 @@ export const ManageSidePanel = () => {
   const { mutateAsync: setSidePanelEnabled } =
     useSetIsSidePanelEnabledMutation()
 
+  if (typeof chrome === 'undefined' || !chrome.sidePanel) return null
+
   const handleToggle = async () => {
     if (!isSidePanelEnabled) {
       await setSidePanelEnabled(true)
