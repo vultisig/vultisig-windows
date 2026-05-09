@@ -15,9 +15,7 @@ const rootDir = path.resolve(__dirname, '../..')
 const extensionNodePolyfills = (isFirefoxBuild = false) =>
   nodePolyfills({
     exclude: ['fs'],
-    globals: {
-      process: isFirefoxBuild ? 'build' : false,
-    },
+    ...(isFirefoxBuild ? { globals: { process: 'build' as const } } : {}),
   })
 const extensionVultisigSdk = () => vultisigSdk({ browserGlobals: false })
 
@@ -101,9 +99,9 @@ export default defineConfig(async ({ mode }) => {
         plugins = [
           nodePolyfills({
             exclude: ['fs'],
-            globals: {
-              process: isFirefoxBuild ? 'build' : true,
-            },
+            ...(isFirefoxBuild
+              ? { globals: { process: 'build' as const } }
+              : {}),
             protocolImports: true,
           }),
         ]
