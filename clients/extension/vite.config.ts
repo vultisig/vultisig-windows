@@ -12,6 +12,8 @@ import { getCommonPlugins } from '../../core/ui/vite/plugins'
 import { getStaticCopyTargets } from '../../core/ui/vite/staticCopy'
 
 const rootDir = path.resolve(__dirname, '../..')
+const extensionNodePolyfills = () => nodePolyfills({ exclude: ['fs'] })
+const extensionVultisigSdk = () => vultisigSdk({ browserGlobals: false })
 
 /** One physical copy of MPC entry + types across chunks (vultisig-windows#3831 / #3777). */
 const vultisigMpcDedupe: readonly string[] = [
@@ -45,7 +47,7 @@ export default defineConfig(async ({ mode }) => {
 
     switch (chunk) {
       case 'background':
-        plugins = [nodePolyfills({ exclude: ['fs'] }), wasm(), topLevelAwait()]
+        plugins = [extensionNodePolyfills(), wasm(), topLevelAwait()]
         break
       case 'inpage':
         format = 'iife'
@@ -63,7 +65,11 @@ export default defineConfig(async ({ mode }) => {
     return {
       define: { ...featureFlagDefines, ...envDefines },
       resolve: { dedupe: [...vultisigMpcDedupe] },
-      plugins: [vultisigSdk(), tsconfigPaths({ root: rootDir }), ...plugins],
+      plugins: [
+        extensionVultisigSdk(),
+        tsconfigPaths({ root: rootDir }),
+        ...plugins,
+      ],
       build: {
         copyPublicDir: false,
         emptyOutDir: false,
@@ -89,7 +95,10 @@ export default defineConfig(async ({ mode }) => {
       resolve: { dedupe: [...vultisigMpcDedupe] },
       plugins: [
         tsconfigPaths({ root: rootDir }),
-        ...getCommonPlugins(),
+        ...getCommonPlugins({
+          nodePolyfills: extensionNodePolyfills(),
+          vultisigSdk: extensionVultisigSdk(),
+        }),
         viteStaticCopy({
           targets: getStaticCopyTargets(),
         }),
