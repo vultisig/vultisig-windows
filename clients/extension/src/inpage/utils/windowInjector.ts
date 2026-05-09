@@ -105,35 +105,38 @@ export const injectToWindow = () => {
   // this behind the async `setupContentScriptMessenger` path raced page
   // refreshes and left users in a stuck "Connect Wallet does nothing"
   // state. The `!window.keplr` guard preserves the existing wallet if
-  // another Keplr-compatible extension already injected one.
+  // another Keplr-compatible extension already injected one. Each
+  // helper is set behind its own existence check so a preexisting
+  // non-configurable global on one of them can't prevent the others
+  // from being defined.
   if (!window.keplr) {
-    attempt(() =>
-      Object.defineProperties(window, {
-        keplr: {
-          value: providers.keplr,
-          configurable: false,
-          writable: false,
-        },
-        getOfflineSigner: {
-          value: providers.keplr.getOfflineSigner.bind(providers.keplr),
-          configurable: false,
-          writable: false,
-        },
-        getOfflineSignerOnlyAmino: {
-          value: providers.keplr.getOfflineSignerOnlyAmino.bind(
-            providers.keplr
-          ),
-          configurable: false,
-          writable: false,
-        },
-        getOfflineSignerAuto: {
-          value: providers.keplr.getOfflineSignerAuto.bind(providers.keplr),
-          configurable: false,
-          writable: false,
-        },
+    Object.defineProperty(window, 'keplr', {
+      value: providers.keplr,
+      configurable: false,
+      writable: false,
+    })
+    if (!window.getOfflineSigner) {
+      Object.defineProperty(window, 'getOfflineSigner', {
+        value: providers.keplr.getOfflineSigner.bind(providers.keplr),
+        configurable: false,
+        writable: false,
       })
-    )
-    attempt(() => installKeplrProxyBridge(providers.keplr))
+    }
+    if (!window.getOfflineSignerOnlyAmino) {
+      Object.defineProperty(window, 'getOfflineSignerOnlyAmino', {
+        value: providers.keplr.getOfflineSignerOnlyAmino.bind(providers.keplr),
+        configurable: false,
+        writable: false,
+      })
+    }
+    if (!window.getOfflineSignerAuto) {
+      Object.defineProperty(window, 'getOfflineSignerAuto', {
+        value: providers.keplr.getOfflineSignerAuto.bind(providers.keplr),
+        configurable: false,
+        writable: false,
+      })
+    }
+    installKeplrProxyBridge(providers.keplr)
   }
 
   setupContentScriptMessenger(providers)
