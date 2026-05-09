@@ -10,7 +10,7 @@ export const useOpenInExpandedViewMutation = () => {
   return useMutation({
     mutationFn: async (view: AppView) => {
       await setInitialView(view)
-      openUrl(`chrome-extension://${chrome.runtime.id}/index.html`)
+      openUrl(chrome.runtime.getURL('index.html'))
     },
   })
 }
