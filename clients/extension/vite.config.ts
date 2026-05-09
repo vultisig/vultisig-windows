@@ -12,13 +12,7 @@ import { getCommonPlugins } from '../../core/ui/vite/plugins'
 import { getStaticCopyTargets } from '../../core/ui/vite/staticCopy'
 
 const rootDir = path.resolve(__dirname, '../..')
-const extensionNodePolyfills = () =>
-  nodePolyfills({
-    exclude: ['fs'],
-    globals: {
-      process: false,
-    },
-  })
+const extensionNodePolyfills = () => nodePolyfills({ exclude: ['fs'] })
 const extensionVultisigSdk = () => vultisigSdk({ browserGlobals: false })
 
 /** One physical copy of MPC entry + types across chunks (vultisig-windows#3831 / #3777). */
