@@ -44,6 +44,7 @@ interface Window {
   isCtrl: boolean
   windowKeplr: any
   keplrRequestAccountsCallback: any
+  keplrRequestMetaIdSupport?: unknown
   tronWeb: any
   tronLink: any
   tonkeeper?: {

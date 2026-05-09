@@ -1,6 +1,7 @@
 import VULTI_ICON_RAW_SVG from '@clients/extension/src/inpage/icon'
 import { createCardanoCip30InitialApi } from '@clients/extension/src/inpage/providers/cardanoCip30'
 import { Ethereum } from '@clients/extension/src/inpage/providers/ethereum'
+import { installKeplrProxyBridge } from '@clients/extension/src/inpage/providers/keplrProxyBridge'
 import { createProviders } from '@clients/extension/src/inpage/providers/providerFactory'
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
@@ -96,6 +97,43 @@ export const injectToWindow = () => {
         writable: true,
       })
     )
+  }
+
+  // Keplr injection has to be synchronous. cosmos-kit dApps run an
+  // auto-reconnect effect on first render that reads `window.keplr` and
+  // clears their persisted wallet state if it's missing — so deferring
+  // this behind the async `setupContentScriptMessenger` path raced page
+  // refreshes and left users in a stuck "Connect Wallet does nothing"
+  // state. The `!window.keplr` guard preserves the existing wallet if
+  // another Keplr-compatible extension already injected one.
+  if (!window.keplr) {
+    attempt(() =>
+      Object.defineProperties(window, {
+        keplr: {
+          value: providers.keplr,
+          configurable: false,
+          writable: false,
+        },
+        getOfflineSigner: {
+          value: providers.keplr.getOfflineSigner.bind(providers.keplr),
+          configurable: false,
+          writable: false,
+        },
+        getOfflineSignerOnlyAmino: {
+          value: providers.keplr.getOfflineSignerOnlyAmino.bind(
+            providers.keplr
+          ),
+          configurable: false,
+          writable: false,
+        },
+        getOfflineSignerAuto: {
+          value: providers.keplr.getOfflineSignerAuto.bind(providers.keplr),
+          configurable: false,
+          writable: false,
+        },
+      })
+    )
+    attempt(() => installKeplrProxyBridge(providers.keplr))
   }
 
   setupContentScriptMessenger(providers)
@@ -199,28 +237,6 @@ async function setupContentScriptMessenger(
         },
         phantom: {
           value: phantomProvider,
-          configurable: false,
-          writable: false,
-        },
-        keplr: {
-          value: providers.keplr,
-          configurable: false,
-          writable: false,
-        },
-        getOfflineSigner: {
-          value: providers.keplr.getOfflineSigner.bind(providers.keplr),
-          configurable: false,
-          writable: false,
-        },
-        getOfflineSignerOnlyAmino: {
-          value: providers.keplr.getOfflineSignerOnlyAmino.bind(
-            providers.keplr
-          ),
-          configurable: false,
-          writable: false,
-        },
-        getOfflineSignerAuto: {
-          value: providers.keplr.getOfflineSignerAuto.bind(providers.keplr),
           configurable: false,
           writable: false,
         },
