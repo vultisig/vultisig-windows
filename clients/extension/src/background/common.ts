@@ -6,6 +6,11 @@ import { registerFreshInstallStorageClear } from './registerFreshInstallStorageC
 
 registerFreshInstallStorageClear()
 
+/**
+ * Bootstraps the extension background: locks down built-in prototypes (non-Firefox),
+ * starts the inpage-provider bridge and background event agents, applies the persisted
+ * side panel behavior on Chromium, and wires the dev WebSocket reload when enabled.
+ */
 export const initExtensionBackground = () => {
   if (!__IS_FIREFOX_EXTENSION_BUILD__) {
     ;[
