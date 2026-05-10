@@ -9,6 +9,7 @@ import { Text } from '@lib/ui/text'
 import { useMutation } from '@tanstack/react-query'
 import { getLastItem } from '@vultisig/lib-utils/array/getLastItem'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { attempt, withFallback } from '@vultisig/lib-utils/attempt'
 import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -16,6 +17,12 @@ import { useTranslation } from 'react-i18next'
 const initialViewStorageKey = 'initialView'
 
 const isExtensionPopupView = () => {
+  const viewParam = withFallback(
+    attempt(() => new URLSearchParams(window.location.search).get('view')),
+    null
+  )
+  if (viewParam === 'popup') return true
+
   if (typeof chrome === 'undefined') {
     return false
   }
@@ -26,7 +33,7 @@ const isExtensionPopupView = () => {
   }
 
   try {
-    return getViews({ type: 'popup' }).length > 0
+    return getViews({ type: 'popup' }).some(view => view === window)
   } catch {
     return false
   }
@@ -85,14 +92,7 @@ export const CameraPermission = () => {
   })
 
   const openExpandedView = useCallback(async () => {
-    if (typeof chrome === 'undefined') {
-      openUrl(location.href)
-      return
-    }
-
-    const runtimeId = chrome.runtime?.id
-
-    if (!runtimeId) {
+    if (typeof chrome === 'undefined' || !chrome.runtime?.id) {
       openUrl(location.href)
       return
     }
@@ -101,7 +101,7 @@ export const CameraPermission = () => {
       console.error('Failed to persist initial view before expanding', error)
     })
 
-    openUrl(`chrome-extension://${runtimeId}/index.html`)
+    openUrl(chrome.runtime.getURL('index.html'))
   }, [currentView, openUrl])
 
   return (
