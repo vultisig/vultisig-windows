@@ -8,6 +8,9 @@ const insertInpageScript = () => {
   const script = document.createElement('script')
   script.src = chrome.runtime.getURL('inpage.js')
   script.id = 'inpage'
+  if (__IS_FIREFOX_EXTENSION_BUILD__) {
+    script.type = 'module'
+  }
   script.onload = () => script.remove()
   script.onerror = error => {
     console.error('Failed to load inpage script:', error)
