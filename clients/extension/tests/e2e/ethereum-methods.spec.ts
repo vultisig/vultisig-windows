@@ -92,8 +92,12 @@ test.describe('Ethereum JSON-RPC Methods', () => {
 
       if (res.result !== undefined) {
         expect(res.result).toEqual([])
+      } else if (res.error) {
+        expect(res.error.code).not.toBe(4200)
       } else {
-        expect(res.error!.code).not.toBe(4200)
+        throw new Error(
+          `eth_accounts: expected [] or error, got ${JSON.stringify(res)}`
+        )
       }
     })
 

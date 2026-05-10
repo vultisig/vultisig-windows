@@ -142,7 +142,7 @@ If you modify source files (e.g., adding `data-testid`), rebuild before testing:
 ```bash
 cd clients/extension
 yarn build
-npx playwright test specs/your-test.spec.ts
+yarn test:e2e tests/e2e/specs/your-test.spec.ts
 ```
 
 ## Funded Chains
