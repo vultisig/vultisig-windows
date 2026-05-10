@@ -137,7 +137,7 @@ export default defineConfig(async ({ mode }) => {
             entryFileNames: '[name].js',
             format,
             manualChunks: isFirefoxBuild
-              ? id => getFirefoxManualChunk(chunk, id)
+              ? (id: string) => getFirefoxManualChunk(chunk, id)
               : undefined,
           },
         },
@@ -172,7 +172,7 @@ export default defineConfig(async ({ mode }) => {
             chunkFileNames: 'assets/[name].js',
             entryFileNames: '[name].js',
             manualChunks: isFirefoxBuild
-              ? id => getFirefoxManualChunk('app', id)
+              ? (id: string) => getFirefoxManualChunk('app', id)
               : undefined,
           },
         },

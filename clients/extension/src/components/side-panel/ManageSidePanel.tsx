@@ -9,67 +9,44 @@ import { ListItem } from '@lib/ui/list/item'
 import { attempt } from '@vultisig/lib-utils/attempt'
 import { useTranslation } from 'react-i18next'
 
-type ChromeSidePanel = {
-  open: (options: { windowId: number }) => Promise<void>
-  setPanelBehavior: (options: {
-    openPanelOnActionClick: boolean
-  }) => Promise<void>
-}
-
-type ChromeRuntimeWithContexts = typeof chrome.runtime & {
-  ContextType?: { SIDE_PANEL: string }
-  getContexts?: (options: { contextTypes: string[] }) => Promise<unknown[]>
-}
-
-const getSidePanel = (): ChromeSidePanel | undefined =>
-  (chrome as unknown as { sidePanel?: ChromeSidePanel }).sidePanel
-
-const getRuntimeWithContexts = (): ChromeRuntimeWithContexts =>
-  chrome.runtime as ChromeRuntimeWithContexts
-
 const switchToSidePanel = async () => {
-  const sidePanel = getSidePanel()
-  if (!sidePanel) return false
+  if (!chrome.sidePanel) return false
 
   const currentWindow = await chrome.windows.getCurrent()
   if (currentWindow.id == null) return false
 
-  await sidePanel.open({ windowId: currentWindow.id })
+  await chrome.sidePanel.open({ windowId: currentWindow.id })
 
   await new Promise(resolve => setTimeout(resolve, 500))
 
-  const runtime = getRuntimeWithContexts()
-  const sidePanelContextType = runtime.ContextType?.SIDE_PANEL
-  const getContexts = (
-    runtime as {
-      getContexts?: (options: { contextTypes: string[] }) => Promise<unknown[]>
-    }
-  ).getContexts
-  const contexts =
-    getContexts && sidePanelContextType
-      ? await getContexts({
-          contextTypes: [sidePanelContextType],
-        })
-      : []
+  if (!chrome.runtime.getContexts) return false
+
+  const contexts = await chrome.runtime.getContexts({
+    contextTypes: [chrome.runtime.ContextType.SIDE_PANEL],
+  })
 
   if (contexts.length === 0) return false
 
-  await sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
+  await chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true })
 
   return true
 }
 
 const switchToPopup = async () => {
-  await getSidePanel()?.setPanelBehavior({ openPanelOnActionClick: false })
+  await chrome.sidePanel?.setPanelBehavior({ openPanelOnActionClick: false })
 }
 
+/**
+ * Settings toggle that switches the extension between popup and side panel modes.
+ * Returns null when the side panel API is unavailable (e.g. on Firefox).
+ */
 export const ManageSidePanel = () => {
   const { t } = useTranslation()
   const { data: isSidePanelEnabled } = useIsSidePanelEnabledQuery()
   const { mutateAsync: setSidePanelEnabled } =
     useSetIsSidePanelEnabledMutation()
 
-  if (typeof chrome === 'undefined' || !getSidePanel()) return null
+  if (typeof chrome === 'undefined' || !chrome.sidePanel) return null
 
   const handleToggle = async () => {
     if (!isSidePanelEnabled) {

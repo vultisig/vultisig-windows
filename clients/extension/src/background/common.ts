@@ -7,7 +7,7 @@ import { registerFreshInstallStorageClear } from './registerFreshInstallStorageC
 registerFreshInstallStorageClear()
 
 export const initExtensionBackground = () => {
-  if (!navigator.userAgent.toLowerCase().includes('firefox')) {
+  if (!__IS_FIREFOX_EXTENSION_BUILD__) {
     ;[
       Object,
       Object.prototype,
@@ -29,11 +29,11 @@ export const initExtensionBackground = () => {
   runBackgroundEventsAgent()
 
   if (!__IS_FIREFOX_EXTENSION_BUILD__ && chrome.sidePanel) {
-    getIsSidePanelEnabled().then(enabled =>
-      chrome.sidePanel
-        .setPanelBehavior({ openPanelOnActionClick: enabled })
-        .catch(console.error)
-    )
+    getIsSidePanelEnabled()
+      .then(enabled =>
+        chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: enabled })
+      )
+      .catch(console.error)
   }
 
   if (import.meta.env.VITE_DEV_RELOAD) {

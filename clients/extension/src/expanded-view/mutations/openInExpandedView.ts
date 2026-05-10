@@ -4,6 +4,9 @@ import { useMutation } from '@tanstack/react-query'
 import { AppView } from '../../navigation/AppView'
 import { setInitialView } from '../../storage/initialView'
 
+/**
+ * Mutation hook that persists the target view and opens the extension in an expanded tab.
+ */
 export const useOpenInExpandedViewMutation = () => {
   const { openUrl } = useCore()
 
