@@ -38,4 +38,10 @@ describe('parseThorLpMemo', () => {
     expect(parseThorLpMemo('-:ETH.USDC:not-a-number')).toBeNull()
     expect(parseThorLpMemo('-:ETH.USDC')).toBeNull()
   })
+
+  it('rejects out-of-range or non-integer basis points', () => {
+    expect(parseThorLpMemo('-:ETH.USDC:-100')).toBeNull()
+    expect(parseThorLpMemo('-:ETH.USDC:10001')).toBeNull()
+    expect(parseThorLpMemo('-:ETH.USDC:50.5')).toBeNull()
+  })
 })

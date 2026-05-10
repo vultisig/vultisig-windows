@@ -15,6 +15,10 @@ type Props = ValueProp<KeysignPayload> & {
   lp: ThorLpMemo
 }
 
+/**
+ * Joiner verify view for THORChain LP add/remove deposits. Renders Pool and
+ * (when present) Paired Address rows alongside the standard transaction info.
+ */
 export const JoinKeysignLpVerify = ({ value, lp }: Props) => {
   const { t } = useTranslation()
 
