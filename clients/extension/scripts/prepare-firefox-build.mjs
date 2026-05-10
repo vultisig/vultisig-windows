@@ -42,7 +42,7 @@ manifest.web_accessible_resources = manifest.web_accessible_resources.map(
 manifest.browser_specific_settings = {
   gecko: {
     id: 'vultisig-extension@vultisig.com',
-    strict_min_version: '142.0',
+    strict_min_version: '139.0',
     data_collection_permissions: {
       required: ['financialAndPaymentInfo', 'websiteActivity'],
     },
