@@ -16,8 +16,11 @@ test.describe('Address Book', () => {
   // Import vault before each test
   test.beforeEach(async ({ context, extensionId }) => {
     const config = getVaultConfigFromEnv()
-    if (!config) return
-    
+    if (!config) {
+      test.skip()
+      return
+    }
+
     await ensureVaultExists(context, extensionId, config.vaultPath, config.password)
   })
 

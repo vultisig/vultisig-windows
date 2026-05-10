@@ -14,7 +14,7 @@
     "build:background": "tsc -b && cross-env CHUNK=background vite build",
     "build:content": "tsc -b && cross-env CHUNK=content vite build",
     "build:inpage": "tsc -b && cross-env CHUNK=inpage vite build",
-    "build": "npm-run-all --serial build:app build:background build:content build:inpage",
+    "build": "cross-env NODE_OPTIONS=--max-old-space-size=8192 npm-run-all --serial build:app build:background build:content build:inpage",
     "dev": "node watch.js",
     "lint": "eslint .",
     "preview": "vite preview",
