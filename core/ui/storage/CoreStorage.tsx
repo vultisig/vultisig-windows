@@ -15,6 +15,7 @@ import { MLDSAEnabledStorage } from './mldsaEnabled'
 import { OnboardingStorage } from './onboarding'
 import { PasscodeAutoLockStorage } from './passcodeAutoLock'
 import { PasscodeEncryptionStorage } from './passcodeEncryption'
+import { PasscodeUnlockSessionStorage } from './passcodeUnlockSession'
 import { ReferralsStorage } from './referrals'
 import { TransactionHistoryStorage } from './transactionHistory'
 import { TssBatchingEnabledStorage } from './tssBatchingEnabled'
@@ -39,6 +40,7 @@ export type CoreStorage = CoinFinderIgnoreStorage &
   ReferralsStorage &
   PasscodeEncryptionStorage &
   PasscodeAutoLockStorage &
+  PasscodeUnlockSessionStorage &
   DismissedBannersStorage &
   MLDSAEnabledStorage &
   TssBatchingEnabledStorage &
