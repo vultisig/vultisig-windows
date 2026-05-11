@@ -159,8 +159,14 @@ export const SendTxOverview = ({
 
   useEffect(() => {
     onSendTxOverviewErrorChange?.(isSendTxOverviewError)
-    return () => onSendTxOverviewErrorChange?.(false)
   }, [isSendTxOverviewError, onSendTxOverviewErrorChange])
+
+  useEffect(
+    () => () => {
+      onSendTxOverviewErrorChange?.(false)
+    },
+    [onSendTxOverviewErrorChange]
+  )
 
   const extraPendingMessage = (() => {
     if (isSendTxOverviewError) {
