@@ -19,17 +19,19 @@ import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider
 import { BlockaidEvmSimulationView } from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationView'
 import { useEvmContractCallInfoQuery } from '@core/ui/chain/tx/utils/useEvmContractCallInfoQuery'
 import { useUniversalRouterSwap } from '@core/ui/chain/tx/utils/useUniversalRouterSwap'
-import { FlowErrorPageContent } from '@core/ui/flow/FlowErrorPageContent'
 import { VerifyKeysignStart } from '@core/ui/mpc/keysign/start/VerifyKeysignStart'
 import { SignAminoDisplay } from '@core/ui/mpc/keysign/tx/components/SignAminoDisplay'
 import { SignDirectDisplay } from '@core/ui/mpc/keysign/tx/components/SignDirectDisplay'
 import { SignSolanaDisplay } from '@core/ui/mpc/keysign/tx/components/SignSolanaDisplay'
 import { SignTonDisplay } from '@core/ui/mpc/keysign/tx/components/SignTonDisplay'
+import { useCore } from '@core/ui/state/core'
 import { useCurrentVaultPublicKey } from '@core/ui/vault/state/currentVault'
 import {
   HorizontalLine,
   IconWrapper,
 } from '@core/ui/vault/swap/verify/SwapVerify/SwapVerify.styled'
+import { Button } from '@lib/ui/buttons/Button'
+import { ErrorFallbackContent } from '@lib/ui/flow/ErrorFallbackContent'
 import { ArrowDownIcon } from '@lib/ui/icons/ArrowDownIcon'
 import { CircleInfoIcon } from '@lib/ui/icons/CircleInfoIcon'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
@@ -54,14 +56,23 @@ import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChai
 import { KeysignPayload } from '@vultisig/core-mpc/types/vultisig/keysign/v1/keysign_message_pb'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { formatUnits } from 'ethers'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import {
+  getTransactionErrorMessage,
+  isSendTxOverviewErrorQuery,
+} from './sendTxOverviewError'
 
 type SendTxOverviewProps = {
   parsedTx: ParsedTx
+  onSendTxOverviewErrorChange?: (isActive: boolean) => void
 }
 
-export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
+export const SendTxOverview = ({
+  parsedTx,
+  onSendTxOverviewErrorChange,
+}: SendTxOverviewProps) => {
   const { coin, customTxData } = parsedTx
   const walletCore = useAssertWalletCore()
   const publicKey = useCurrentVaultPublicKey(coin.chain)
@@ -70,6 +81,8 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
   const transactionPayload = usePopupInput<'sendTx'>()
 
   const { chain, address } = coin
+
+  const { goBack } = useCore()
 
   const [feeSettings, setFeeSettings] = useState<FeeSettings<'evm'> | null>(
     null
@@ -140,11 +153,23 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
   const isContractDecodingFailed =
     isContractMemo && !universalRouterSwap.data && !!contractCallQuery.error
 
+  const isSendTxOverviewError = isSendTxOverviewErrorQuery(
+    gasEstimationDataQuery
+  )
+
+  useEffect(() => {
+    onSendTxOverviewErrorChange?.(isSendTxOverviewError)
+    return () => onSendTxOverviewErrorChange?.(false)
+  }, [isSendTxOverviewError, onSendTxOverviewErrorChange])
+
   const extraPendingMessage = (() => {
+    if (isSendTxOverviewError) {
+      return undefined
+    }
     if (gasEstimationDataQuery.isPending || isContractDecodingPending) {
       return t('loading')
     }
-    if (gasEstimationDataQuery.error || isContractDecodingFailed) {
+    if (isContractDecodingFailed) {
       return t('failed_to_process_transaction')
     }
     return undefined
@@ -154,13 +179,18 @@ export const SendTxOverview = ({ parsedTx }: SendTxOverviewProps) => {
     <VerifyKeysignStart
       keysignPayloadQuery={keysignPayloadQuery}
       extraPendingMessage={extraPendingMessage}
+      footer={
+        isSendTxOverviewError ? (
+          <Button onClick={goBack}>{t('back')}</Button>
+        ) : undefined
+      }
     >
       <MatchQuery
         value={gasEstimationDataQuery}
         pending={() => <PendingState />}
         error={error => (
-          <FlowErrorPageContent
-            error={error}
+          <ErrorFallbackContent
+            error={getTransactionErrorMessage(error)}
             title={t('failed_to_process_transaction')}
           />
         )}
