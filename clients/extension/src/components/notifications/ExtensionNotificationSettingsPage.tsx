@@ -1,5 +1,4 @@
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
-import { useCoreNavigate } from '@core/ui/navigation/hooks/useCoreNavigate'
 import { NotificationSettingsContent } from '@core/ui/notifications/settings/NotificationSettingsContent'
 import { toVaultNotificationItems } from '@core/ui/notifications/settings/toVaultNotificationItems'
 import { useVaults } from '@core/ui/storage/vaults'
@@ -18,7 +17,6 @@ import {
 /** Extension settings page for per-vault push notification toggles. */
 export const ExtensionNotificationSettingsPage = () => {
   const { t } = useTranslation()
-  const navigate = useCoreNavigate()
   const storedVaults = useVaults()
   const vaultsWithChain = storedVaults.filter(v => v.hexChainCode)
   const { data: enabledById = {} } = useExtensionAllVaultsNotificationStates()
@@ -36,13 +34,7 @@ export const ExtensionNotificationSettingsPage = () => {
     <VStack fullHeight>
       <PageHeader
         hasBorder
-        primaryControls={
-          <PageHeaderBackButton
-            onClick={() => {
-              navigate({ id: 'settings' })
-            }}
-          />
-        }
+        primaryControls={<PageHeaderBackButton />}
         title={t('notifications')}
       />
       <PageContent flexGrow gap={14} scrollable>
