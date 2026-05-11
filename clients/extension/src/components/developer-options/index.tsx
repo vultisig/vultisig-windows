@@ -91,7 +91,9 @@ export const ExtensionDeveloperOptions = () => {
   return (
     <>
       <UnstyledButton onClick={handleClick}>
-        {`VULTISIG EXTENSION V${version}`}
+        <Text size={12} color="shy">
+          {`VULTISIG EXTENSION V${version}`}
+        </Text>
       </UnstyledButton>
 
       {visible && (

@@ -21,6 +21,7 @@
     "clients/extension": {
       "entry": [
         "src/background/index.ts",
+        "src/background/firefox.ts",
         "src/content/index.ts",
         "src/inpage/index.ts",
         "src/pages/popup.tsx",

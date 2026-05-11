@@ -23,7 +23,7 @@ export const VaultPage = ({ primaryControls }: VaultPageProps = {}) => {
 
   return (
     <Wrapper justifyContent="space-between" flexGrow data-testid="vault-page">
-      <VStack flexGrow>
+      <Content flexGrow>
         <VaultPageHeader
           vault={vault}
           scrollContainerRef={scrollContainerRef}
@@ -31,7 +31,7 @@ export const VaultPage = ({ primaryControls }: VaultPageProps = {}) => {
         />
         <VaultOverview scrollContainerRef={scrollContainerRef} />
         {isFastVault && <FastVaultPasswordVerification key={vaultId} />}
-      </VStack>
+      </Content>
       <BottomNavigation />
     </Wrapper>
   )
@@ -39,4 +39,9 @@ export const VaultPage = ({ primaryControls }: VaultPageProps = {}) => {
 
 const Wrapper = styled(VStack)`
   position: relative;
+  min-height: 0;
+`
+
+const Content = styled(VStack)`
+  min-height: 0;
 `
