@@ -29,13 +29,13 @@ const insertInpageScript = () => {
   ;(document.head || document.documentElement).appendChild(script)
 }
 
+if (__IS_FIREFOX_EXTENSION_BUILD__) {
+  insertInpageScript()
+}
+
 try {
   runBridgeContentAgent()
   runBackgroundEventsContentAgent()
-
-  if (__IS_FIREFOX_EXTENSION_BUILD__) {
-    insertInpageScript()
-  }
 } catch (error) {
   console.error('Error setting up extension communications:', error)
 }

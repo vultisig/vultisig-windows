@@ -1,6 +1,6 @@
-import { InjectedKeplr, Keplr } from '@keplr-wallet/provider'
+import { InjectedKeplr } from '@keplr-wallet/provider'
 
-type ProxyMessage = { type?: unknown }
+type StartProxyKeplr = Parameters<typeof InjectedKeplr.startProxy>[0]
 
 /**
  * Sets up the Keplr `proxy-request` postMessage bridge so cosmos-kit dApps
@@ -22,24 +22,17 @@ type ProxyMessage = { type?: unknown }
  * and rewrites the type to the legacy form. The dApp's response listener
  * filters by message id, not type, so the round-trip still resolves.
  */
-export const installKeplrProxyBridge = (keplr: Keplr): void => {
-  ;(
-    window as Window & { keplrRequestMetaIdSupport?: unknown }
-  ).keplrRequestMetaIdSupport = true
+export const installKeplrProxyBridge = (keplr: StartProxyKeplr): void => {
+  window.keplrRequestMetaIdSupport = true
 
   const parseMessage = (data: unknown): unknown => {
-    if (!data || typeof data !== 'object') return data
-    const { type } = data as ProxyMessage
+    if (!data || typeof data !== 'object' || !('type' in data)) return data
+    const { type } = data
     if (typeof type !== 'string') return data
     if (!type.startsWith('proxy-request-')) return data
     if (type.startsWith('proxy-request-response')) return data
-    return { ...(data as object), type: 'proxy-request' }
+    return { ...data, type: 'proxy-request' }
   }
 
-  InjectedKeplr.startProxy(
-    keplr as Parameters<typeof InjectedKeplr.startProxy>[0],
-    undefined,
-    undefined,
-    parseMessage
-  )
+  InjectedKeplr.startProxy(keplr, undefined, undefined, parseMessage)
 }
