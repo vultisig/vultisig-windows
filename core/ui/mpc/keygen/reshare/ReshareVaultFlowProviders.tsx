@@ -4,11 +4,13 @@ import {
   GeneratedHexEncryptionKeyProvider,
 } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
+import { IsTssBatchingProvider } from '@core/ui/mpc/state/isTssBatching'
 import {
   ExternalSessionIdProvider,
   GeneratedMpcSessionIdProvider,
   MpcSessionIdProvider,
 } from '@core/ui/mpc/state/mpcSession'
+import { useIsTssBatchingEnabled } from '@core/ui/storage/tssBatchingEnabled'
 import { ChildrenProp } from '@lib/ui/props'
 
 import { CurrentVaultHexChainCodeProvider } from '../../state/currentHexChainCode'
@@ -69,6 +71,7 @@ export const ReshareVaultFlowProviders = ({
   externalEncryptionKey,
   externalSessionId,
 }: ReshareVaultFlowProvidersProps) => {
+  const isTssBatchingEnabled = useIsTssBatchingEnabled()
   return (
     <SessionIdProviderWrapper externalSessionId={externalSessionId}>
       <EncryptionKeyProviderWrapper
@@ -81,13 +84,15 @@ export const ReshareVaultFlowProviders = ({
                 <ServerUrlDerivedFromServerTypeProvider>
                   <CurrentVaultHexChainCodeProvider>
                     <IsInitiatingDeviceProvider value={true}>
-                      <GeneratedMpcServiceNameProvider>
-                        <KeyImportChainsProvider value={[]}>
-                          <MpcPeersSelectionProvider>
-                            {children}
-                          </MpcPeersSelectionProvider>
-                        </KeyImportChainsProvider>
-                      </GeneratedMpcServiceNameProvider>
+                      <IsTssBatchingProvider value={isTssBatchingEnabled}>
+                        <GeneratedMpcServiceNameProvider>
+                          <KeyImportChainsProvider value={[]}>
+                            <MpcPeersSelectionProvider>
+                              {children}
+                            </MpcPeersSelectionProvider>
+                          </KeyImportChainsProvider>
+                        </GeneratedMpcServiceNameProvider>
+                      </IsTssBatchingProvider>
                     </IsInitiatingDeviceProvider>
                   </CurrentVaultHexChainCodeProvider>
                 </ServerUrlDerivedFromServerTypeProvider>

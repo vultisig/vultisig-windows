@@ -1,8 +1,8 @@
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
+import { useIsTssBatching } from '@core/ui/mpc/state/isTssBatching'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useEmail } from '@core/ui/state/email'
 import { usePassword } from '@core/ui/state/password'
-import { useIsTssBatchingEnabled } from '@core/ui/storage/tssBatchingEnabled'
 import { useCurrentVault } from '@core/ui/vault/state/currentVault'
 import { ChildrenProp } from '@lib/ui/props'
 import {
@@ -26,7 +26,7 @@ export const ReshareFastKeygenServerActionProvider = ({
     useCurrentVault()
 
   const [email] = useEmail()
-  const isTssBatchingEnabled = useIsTssBatchingEnabled()
+  const isTssBatchingEnabled = useIsTssBatching()
 
   const action = async () => {
     if (isTssBatchingEnabled) {

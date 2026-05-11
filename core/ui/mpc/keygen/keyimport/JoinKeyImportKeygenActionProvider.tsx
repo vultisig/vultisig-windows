@@ -2,11 +2,11 @@ import { featureFlags } from '@core/ui/featureFlags'
 import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
+import { useIsTssBatching } from '@core/ui/mpc/state/isTssBatching'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useIsMLDSAEnabled } from '@core/ui/storage/mldsaEnabled'
-import { useIsTssBatchingEnabled } from '@core/ui/storage/tssBatchingEnabled'
 import { useVaultOrders } from '@core/ui/storage/vaults'
 import { ChildrenProp } from '@lib/ui/props'
 import { Chain } from '@vultisig/core-chain/Chain'
@@ -47,7 +47,7 @@ export const JoinKeyImportKeygenActionProvider = ({
   const isInitiatingDevice = useIsInitiatingDevice()
   const vaultOrders = useVaultOrders()
   const keyImportChainsRaw = useKeyImportChains()
-  const isTssBatchingEnabled = useIsTssBatchingEnabled()
+  const isTssBatchingEnabled = useIsTssBatching()
   const isMLDSAEnabled = useIsMLDSAEnabled()
 
   const keygenAction: KeygenAction = async ({
