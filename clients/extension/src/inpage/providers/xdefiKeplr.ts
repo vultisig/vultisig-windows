@@ -10,6 +10,8 @@ import {
 import {
   AccountData,
   AminoSignResponse,
+  ChainInfo,
+  ChainInfoWithoutEndpoints,
   DirectSignResponse,
   KeplrMode,
   KeplrSignOptions,
@@ -47,6 +49,7 @@ import { getCosmosChainFromAddress } from '../../utils/cosmos/getCosmosChainFrom
 import { requestAccount } from './core/requestAccount'
 import { Cosmos } from './cosmos'
 import { normalizeCosmosAuthInfoFee } from './cosmos/normalizeAuthInfoFee'
+import { getKeplrCosmosChainInfos } from './keplrChainInfo'
 
 const aminoHandler = (
   signDoc: StdSignDoc,
@@ -289,6 +292,23 @@ class SimpleMutex {
     return result
   }
 }
+// Destructure-and-discard the four endpoint fields — we only expose Cosmos
+// chains, so `evm` is always absent at runtime, but ChainInfo's optional
+// `evm` is incompatible with `ChainInfoWithoutEndpoints`'s stripped variant
+// and TypeScript can't narrow it through a spread.
+const stripEndpoints = ({
+  rpc: _rpc,
+  rest: _rest,
+  nodeProvider: _nodeProvider,
+  evm: _evm,
+  ...rest
+}: ChainInfo): ChainInfoWithoutEndpoints => ({
+  ...rest,
+  rpc: undefined,
+  rest: undefined,
+  nodeProvider: undefined,
+})
+
 class XDEFIMessageRequester {
   constructor() {
     this.sendMessage = this.sendMessage.bind(this)
@@ -369,7 +389,40 @@ export class XDEFIKeplrProvider extends Keplr {
       undefined
     )
 
-    await Promise.all(chains.map(chain => requestAccount(chain)))
+    if (chains.length === 0) return
+
+    // Serialize the first chain through `requestAccount` so the
+    // grant-vault popup surfaces exactly once. Running every chain
+    // through `requestAccount` in parallel raced multiple popups against
+    // each other — only one would win, the others returned no
+    // `appSession` and the dApp got back `EIP1193Error('InternalError')`.
+    // Subsequent chains piggyback on the same dApp authorization via
+    // `getAccount`, which is silent (no popup) once the host is granted.
+    const [primary, ...rest] = chains
+    await requestAccount(primary)
+    await Promise.all(
+      rest.map(chain => callBackground({ getAccount: { chain } }))
+    )
+  }
+
+  /**
+   * Keplr-shaped chain list for every Cosmos chain Vultisig exposes natively.
+   * cosmos-kit dApps (Skeletonswap, etc.) probe this BEFORE showing their
+   * connect modal — the base implementation forwards to a sidecar background
+   * handler we don't run, so it resolves with `undefined` and the dApp throws
+   * on `q.chainInfos`.
+   */
+  async getChainInfosWithoutEndpoints(): Promise<ChainInfoWithoutEndpoints[]> {
+    return getKeplrCosmosChainInfos().map(stripEndpoints)
+  }
+
+  async getChainInfoWithoutEndpoints(
+    chainId: string
+  ): Promise<ChainInfoWithoutEndpoints> {
+    const info = getKeplrCosmosChainInfos().find(c => c.chainId === chainId)
+    return stripEndpoints(
+      shouldBePresent(info, `Keplr chain not supported: ${chainId}`)
+    )
   }
 
   getOfflineSigner(
