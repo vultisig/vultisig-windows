@@ -1280,6 +1280,8 @@ export const en = {
   remove_cacao_pool: 'Remove from CACAO Pool',
   add_thor_lp: 'Add THORChain LP',
   remove_thor_lp: 'Remove THORChain LP',
+  pool: 'Pool',
+  paired_address: 'Paired Address',
   lp_dust_amount_error:
     'Insufficient RUNE balance. At least {{amount}} RUNE is required as dust for LP withdrawal.',
   lp_withdraw_percentage: 'Withdraw percentage',

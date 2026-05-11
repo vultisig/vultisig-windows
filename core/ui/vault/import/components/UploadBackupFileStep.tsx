@@ -15,15 +15,12 @@ import { extractErrorMsg } from '@vultisig/lib-utils/error/extractErrorMsg'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useCoreNavigate } from '../../../navigation/hooks/useCoreNavigate'
-
 export const UploadBackupFileStep = ({
   onFinish,
 }: OnFinishProp<FileBasedVaultBackupResult>) => {
   const { t } = useTranslation()
   const [file, setFile] = useState<File | null>(null)
   const [error, setError] = useState<Error | null>(null)
-  const navigate = useCoreNavigate()
 
   const { mutate, isPending } = useMutation({
     mutationFn: vaultBackupResultFromFile,
@@ -35,10 +32,7 @@ export const UploadBackupFileStep = ({
 
   return (
     <>
-      <FlowPageHeader
-        title={t('import_vault')}
-        onBack={() => navigate({ id: 'newVault' })}
-      />
+      <FlowPageHeader title={t('import_vault')} />
       <PageContent
         as="form"
         data-testid="import-vault-form"
