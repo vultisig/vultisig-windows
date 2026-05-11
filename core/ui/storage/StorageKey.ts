@@ -25,4 +25,5 @@ export enum StorageKey {
   isTssBatchingEnabled = 'isTssBatchingEnabled',
   transactionHistory = 'transactionHistory',
   hasSeenNotificationPrompt = 'hasSeenNotificationPrompt',
+  keplrSuggestedChains = 'keplrSuggestedChains',
 }

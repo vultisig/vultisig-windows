@@ -7,6 +7,7 @@
     "@core/extension": "workspace:^",
     "@core/ui": "workspace:^",
     "@cosmjs/encoding": "^0.38.1",
+    "@keplr-wallet/types": "^0.13.13",
     "@lib/extension": "workspace:^",
     "@lib/ui": "workspace:^",
     "@solana/spl-token": "^0.4.14",

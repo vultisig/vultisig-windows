@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@core/ui": "workspace:^",
+    "@keplr-wallet/types": "^0.13.13",
     "@lib/extension": "workspace:^",
     "@lib/ui": "workspace:^",
     "@tanstack/react-query": "^5.90.21",
