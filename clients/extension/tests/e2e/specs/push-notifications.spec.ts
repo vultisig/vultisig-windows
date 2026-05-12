@@ -34,7 +34,10 @@ async function navigateToNotificationSettings(
 test.describe('Push Notifications', () => {
   test.beforeEach(async ({ context, extensionId }) => {
     const config = getVaultConfigFromEnv()
-    if (!config) return
+    if (!config) {
+      test.skip()
+      return
+    }
 
     await ensureVaultExists(
       context,

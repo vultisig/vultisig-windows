@@ -11,7 +11,7 @@
     "@trustwallet/wallet-core": "^4.6.7",
     "@vultisig/core-chain": "1.5.2",
     "@vultisig/core-config": "0.9.1",
-    "@vultisig/core-mpc": "1.2.5",
+    "@vultisig/core-mpc": "1.2.10",
     "@vultisig/lib-utils": "0.10.1",
     "react": "^19.2.4",
     "react-i18next": "^16.5.8"
