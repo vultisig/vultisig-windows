@@ -1,4 +1,5 @@
 import { callBackground } from '@core/inpage-provider/background'
+import { addBackgroundEventListener } from '@core/inpage-provider/background/events/inpage'
 import { callPopup } from '@core/inpage-provider/popup'
 import { PopupError } from '@core/inpage-provider/popup/error'
 import { TransactionDetails } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
@@ -19,6 +20,8 @@ import {
   Key,
   OfflineAminoSigner,
   OfflineDirectSigner,
+  SettledResponses,
+  StdSignature,
   StdSignDoc,
 } from '@keplr-wallet/types'
 import { SignDoc as KeplrSignDoc } from '@keplr-wallet/types/build/cosmjs'
@@ -34,10 +37,10 @@ import {
 } from '@vultisig/core-mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { attempt } from '@vultisig/lib-utils/attempt'
-import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedError'
 import { hexToBytes } from '@vultisig/lib-utils/hexToBytes'
 import { match } from '@vultisig/lib-utils/match'
 import { areLowerCaseEqual } from '@vultisig/lib-utils/string/areLowerCaseEqual'
+import { validateUrl } from '@vultisig/lib-utils/validation/url'
 import { bech32 } from 'bech32'
 import { MsgSend } from 'cosmjs-types/cosmos/bank/v1beta1/tx'
 import { TxBody, TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
@@ -394,15 +397,29 @@ const stripEndpoints = ({
   nodeProvider: undefined,
 })
 
+// Every method on the inherited Keplr base class that we don't explicitly
+// override routes through this requester (the base wraps calls in
+// `sendSimpleMessage(this.requester, ...)`). The previous no-op silently
+// resolved `undefined`, which let any unhandled method "succeed" with a
+// nonsense value — dApps then exploded on `q.chainInfos` or similar with
+// no path back to the root cause.
+//
+// Throwing here makes unhandled methods fail loudly and uniformly. dApps
+// can catch and fall back; bugs in our override coverage surface at the
+// call site instead of three layers downstream. For the methods cosmos-kit
+// actually exercises (`getKeysSettled`, `getKey`, `enable`, ...) we
+// override on `XDEFIKeplrProvider`, so this requester is reached only by
+// truly unhandled paths.
 class XDEFIMessageRequester {
   constructor() {
     this.sendMessage = this.sendMessage.bind(this)
   }
-  // Expected for Ctrl
-  public async sendMessage(_message: any, _params: any): Promise<void> {
-    return new Promise(resolve => {
-      resolve()
-    })
+  public async sendMessage(message: any, params: any): Promise<void> {
+    const method =
+      (params && (params.type ?? params.method)) ??
+      (message && (message.type ?? message.method)) ??
+      'unknown'
+    throw new Error(`Keplr method '${method}' is not supported by Vultisig`)
   }
 }
 
@@ -446,6 +463,20 @@ export class XDEFIKeplrProvider extends Keplr {
     window.ctrlKeplrProviders = {}
     window.ctrlKeplrProviders['Ctrl Wallet'] = this
     this.cosmosProvider = cosmosProvider
+
+    // `keplr_keystorechange` is Keplr's stale-key signal — dApps re-fetch
+    // `getKey` when they see it. The background fires `disconnect` when
+    // the host's appSession is removed (either via our `disable` /
+    // `signOut` flow or because the user revoked the dApp grant). Until
+    // now, the dispatch lived on the Station provider's constructor, so
+    // dApps that loaded only `window.keplr` (no Terra Station) never
+    // saw the event. Skip on the wallet's own UI to avoid wiring the
+    // listener inside the extension popup.
+    if (!validateUrl(window.location.href)) {
+      addBackgroundEventListener('disconnect', () => {
+        this.emitAccountsChanged()
+      })
+    }
   }
 
   private async runWithChain<T>(
@@ -516,6 +547,22 @@ export class XDEFIKeplrProvider extends Keplr {
   }
 
   /**
+   * Revokes the dApp's permission to query the wallet, mirroring Keplr's
+   * `disable`. Subsequent `enable` / `getKey` / `getOfflineSigner` calls
+   * will surface the grant-vault popup again.
+   *
+   * Vultisig's `appSession` is host-keyed (not host+chain-keyed), so we
+   * can't selectively revoke a single chain — `disable(['cosmoshub-4'])`
+   * has the same effect as `disable()`. The `chainIds` argument is
+   * accepted for API compatibility but otherwise ignored. Most dApps
+   * that call this only care about the all-chains "log out" outcome.
+   */
+  async disable(_chainIds?: string | string[]): Promise<void> {
+    await callBackground({ signOut: {} })
+    this.emitAccountsChanged()
+  }
+
+  /**
    * Keplr-shaped chain list for every Cosmos chain Vultisig exposes natively
    * plus any chains a dApp has registered via `experimentalSuggestChain`.
    * cosmos-kit dApps probe this BEFORE showing their
@@ -569,9 +616,31 @@ export class XDEFIKeplrProvider extends Keplr {
     return cosmSigner as OfflineAminoSigner
   }
 
+  /**
+   * Keplr's reference implementation returns the amino-only signer when
+   * the active key is on a hardware Ledger (Ledger can't sign protobuf
+   * direct payloads) and the combined amino+direct signer otherwise.
+   * Vultisig is an MPC wallet — there is no Ledger in the signing path
+   * (`getKey` hardcodes `isNanoLedger: false`), so always return the
+   * combined signer. Overriding the inherited base — which would call
+   * `XDEFIMessageRequester.sendMessage` and silently resolve `undefined`
+   * — makes the cosmos-kit pre-connect probe see a usable signer.
+   */
+  async getOfflineSignerAuto(
+    chainId: string,
+    signOptions?: KeplrSignOptions
+  ): Promise<OfflineAminoSigner | OfflineDirectSigner> {
+    return this.getOfflineSigner(chainId, signOptions)
+  }
+
   async sendTx(): Promise<Uint8Array> {
-    // This method accepts a transaction of type StdTx | Uint8Array; however, the previous implementation did not support handling this type.
-    throw new NotImplementedError('Keplr sendTx method')
+    // Keplr's `sendTx` broadcasts a fully signed transaction via Keplr's
+    // background relay. Vultisig has no equivalent relay — dApps that
+    // need to broadcast should do so via their own RPC client after
+    // `signAmino` / `signDirect`. Throwing here (instead of resolving
+    // `undefined` from the inherited base requester) gives the dApp a
+    // deterministic signal to fall back to its own broadcast.
+    throw new Error('Keplr.sendTx is not supported by Vultisig')
   }
   async sendMessage() {}
 
@@ -726,6 +795,71 @@ export class XDEFIKeplrProvider extends Keplr {
   }
 
   /**
+   * ADR-36 arbitrary-message signing — used by Leap-style "sign-in-with-
+   * cosmos" auth flows and several governance dApps.
+   *
+   * Not yet implemented: ADR-36 signs the canonical JSON of a
+   * `StdSignDoc{MsgSignData}` directly, which doesn't fit Vultisig's
+   * existing keysign pipeline (TW.Cosmos signs transaction sign-docs,
+   * not raw amino bytes). Wiring this requires a new MPC primitive that
+   * signs raw bytes with the Cosmos-Hub secp256k1 key.
+   *
+   * Throwing here (instead of resolving `undefined` from the inherited
+   * base requester) gives dApps a deterministic signal to fall back to
+   * alternative auth methods.
+   */
+  async signArbitrary(
+    _chainId: string,
+    _signer: string,
+    _data: string | Uint8Array
+  ): Promise<StdSignature> {
+    throw new Error('Keplr.signArbitrary is not supported by Vultisig')
+  }
+
+  /**
+   * Paired with `signArbitrary`. Pure signature verification could be
+   * implemented standalone (it's just secp256k1 against the ADR-36
+   * canonical sign-doc), but verifying a signature we can't produce has
+   * limited utility — defer until `signArbitrary` lands.
+   */
+  async verifyArbitrary(
+    _chainId: string,
+    _signer: string,
+    _data: string | Uint8Array,
+    _signature: StdSignature
+  ): Promise<boolean> {
+    throw new Error('Keplr.verifyArbitrary is not supported by Vultisig')
+  }
+
+  /**
+   * EIP-712-typed-data Cosmos signing for Evmos / Injective / dymension and
+   * other Ethermint-style chains, which derive their signer from a secp256k1
+   * Ethereum key and sign amino docs wrapped in an EIP-712 envelope.
+   *
+   * Not yet implemented: needs (a) an Ethermint-aware key derivation path
+   * since Vultisig's Cosmos signer assumes coinType-118 secp256k1 and (b)
+   * an EIP-712 hashing pass on top of the amino doc. Throwing here gives
+   * Evmos/Injective dApps a deterministic signal to fall back to
+   * `signAmino` (which several of them do) instead of resolving `undefined`
+   * from the inherited base requester.
+   */
+  async experimentalSignEIP712CosmosTx_v0(
+    _chainId: string,
+    _signer: string,
+    _eip712: {
+      types: Record<string, { name: string; type: string }[] | undefined>
+      domain: Record<string, unknown>
+      primaryType: string
+    },
+    _signDoc: StdSignDoc,
+    _signOptions?: KeplrSignOptions
+  ): Promise<AminoSignResponse> {
+    throw new Error(
+      'Keplr.experimentalSignEIP712CosmosTx_v0 is not supported by Vultisig'
+    )
+  }
+
+  /**
    * Registers a Cosmos chain that the dApp has asked the wallet to support.
    *
    * - Validates the ChainInfo shape and rejects malformed input with a
@@ -811,5 +945,29 @@ export class XDEFIKeplrProvider extends Keplr {
       name: vault.name,
       algo,
     }
+  }
+
+  /**
+   * Batch variant of {@link getKey} — cosmos-kit's pre-connect probe calls
+   * this with the full chain set instead of N serial `getKey` calls, so an
+   * unhandled implementation routed through the inherited base (and our
+   * now-throwing requester) would explode the whole probe. Mirror Keplr's
+   * `Promise.allSettled`-shaped result so unknown chains surface as
+   * per-entry `rejected` instead of failing the whole batch.
+   */
+  async getKeysSettled(chainIds: string[]): Promise<SettledResponses<Key>> {
+    return Promise.all(
+      chainIds.map(async chainId => {
+        const result = await attempt(() => this.getKey(chainId))
+        if ('error' in result) {
+          const reason =
+            result.error instanceof Error
+              ? result.error
+              : new Error(String(result.error))
+          return { status: 'rejected', reason } as const
+        }
+        return { status: 'fulfilled', value: result.data } as const
+      })
+    )
   }
 }
