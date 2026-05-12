@@ -1,6 +1,7 @@
 import { VaultAppSession } from '@core/extension/storage/appSessions'
 import { ITransactionPayload } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import { VaultExport } from '@core/ui/vault/export/core'
+import { ChainInfo } from '@keplr-wallet/types'
 import { Chain, EvmChain, OtherChain } from '@vultisig/core-chain/Chain'
 import { Coin } from '@vultisig/core-chain/coin/Coin'
 import { SerializedSigningOutput } from '@vultisig/core-chain/tw/signingOutput'
@@ -62,6 +63,7 @@ export type PopupInterface = {
     (Omit<Tx, 'data'> & { data: SerializedSigningOutput })[]
   >
   watchAsset: Method<Coin<EvmChain>, boolean>
+  suggestKeplrChain: Method<{ chainInfo: ChainInfo }, boolean>
 }
 
 export type PopupMethod = keyof PopupInterface

@@ -1,5 +1,6 @@
 import { callBackground } from '@core/inpage-provider/background'
 import { callPopup } from '@core/inpage-provider/popup'
+import { PopupError } from '@core/inpage-provider/popup/error'
 import { TransactionDetails } from '@core/inpage-provider/popup/view/resolvers/sendTx/interfaces'
 import { AminoMsg, StdFee } from '@cosmjs/amino'
 import {
@@ -31,8 +32,8 @@ import {
   CosmosFee,
   CosmosMsg,
 } from '@vultisig/core-mpc/types/vultisig/keysign/v1/wasm_execute_contract_payload_pb'
-import { without } from '@vultisig/lib-utils/array/without'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
+import { attempt } from '@vultisig/lib-utils/attempt'
 import { NotImplementedError } from '@vultisig/lib-utils/error/NotImplementedError'
 import { hexToBytes } from '@vultisig/lib-utils/hexToBytes'
 import { match } from '@vultisig/lib-utils/match'
@@ -49,7 +50,10 @@ import { getCosmosChainFromAddress } from '../../utils/cosmos/getCosmosChainFrom
 import { requestAccount } from './core/requestAccount'
 import { Cosmos } from './cosmos'
 import { normalizeCosmosAuthInfoFee } from './cosmos/normalizeAuthInfoFee'
-import { getKeplrCosmosChainInfos } from './keplrChainInfo'
+import {
+  getKeplrCosmosChainInfos,
+  isNativeKeplrChainId,
+} from './keplrChainInfo'
 
 const aminoHandler = (
   signDoc: StdSignDoc,
@@ -264,10 +268,53 @@ const directHandler = (
   } as TransactionDetails
 }
 
+const standardCosmosCoinType = 118
+
+// Signing flows require Vultisig native support for the chain (transaction
+// encoding, fee handling, broadcast). Suggested-but-not-native chains can do
+// read-only `getKey` via the Cosmos Hub key + bech32-prefix swap, but signing
+// has no fallback — surface a Keplr-shaped error so dApps display a clear
+// "chain not supported" message instead of our generic assertion throw.
+const assertNativeChainForSigning = (chainId: string): void => {
+  if (!getCosmosChainByChainId(chainId)) {
+    throw new Error(`Chain ${chainId} is not supported for signing`)
+  }
+}
+
 const getAccounts = async (chainId: string): Promise<AccountData[]> => {
-  const { publicKey, address } = await requestAccount(
-    shouldBePresent(getCosmosChainByChainId(chainId))
+  const nativeChain = getCosmosChainByChainId(chainId)
+  if (nativeChain) {
+    const { publicKey, address } = await requestAccount(nativeChain)
+    return [
+      {
+        algo: 'secp256k1',
+        address,
+        pubkey: hexToBytes(publicKey),
+      },
+    ]
+  }
+
+  // Suggested-but-not-native Cosmos chain (dungeon-1, etc.). Standard
+  // secp256k1 / coinType-118 chains share their derivation with Cosmos Hub,
+  // so we reuse the Hub's pubkey and re-encode the same 20-byte address
+  // payload with the suggested chain's bech32 prefix. Non-118 coinTypes
+  // (Injective coinType 60, Terra coinType 330, etc.) need a different key
+  // derivation we don't support yet — reject with a Keplr-shaped error.
+  const suggested = await callBackground({ getKeplrSuggestedChains: {} })
+  const info = suggested[chainId]
+  if (!info) {
+    throw new Error(`There is no chain info for ${chainId}`)
+  }
+  const prefix = info.bech32Config?.bech32PrefixAccAddr
+  if (info.bip44.coinType !== standardCosmosCoinType || !prefix) {
+    throw new Error(`There is no chain info for ${chainId}`)
+  }
+
+  const { publicKey, address: cosmosAddress } = await requestAccount(
+    Chain.Cosmos
   )
+  const { words } = bech32.decode(cosmosAddress)
+  const address = bech32.encode(prefix, words)
 
   return [
     {
@@ -292,6 +339,44 @@ class SimpleMutex {
     return result
   }
 }
+// Minimal `experimentalSuggestChain` schema check. Keplr's reference
+// implementation validates a long list of fields with bech32 parsing and
+// regex constraints — we just enforce the ones cosmos-kit dApps depend on
+// (chainId, chainName, rpc/rest, bech32 prefix, at least one currency).
+// Anything malformed gets a Keplr-shaped throw so the dApp can surface a
+// useful error to the user instead of silently failing later.
+const validateSuggestedChainInfo = (info: unknown): void => {
+  if (!info || typeof info !== 'object') {
+    throw new Error('chainInfo must be an object')
+  }
+  const ci = info as Partial<ChainInfo>
+  const requireString = (key: keyof ChainInfo): void => {
+    const value = ci[key]
+    if (typeof value !== 'string' || value.length === 0) {
+      throw new Error(`chainInfo.${String(key)} must be a non-empty string`)
+    }
+  }
+  requireString('chainId')
+  requireString('chainName')
+  requireString('rpc')
+  requireString('rest')
+  if (
+    !ci.bech32Config ||
+    typeof ci.bech32Config.bech32PrefixAccAddr !== 'string'
+  ) {
+    throw new Error('chainInfo.bech32Config.bech32PrefixAccAddr is required')
+  }
+  if (!Array.isArray(ci.currencies) || ci.currencies.length === 0) {
+    throw new Error('chainInfo.currencies must be a non-empty array')
+  }
+  if (!Array.isArray(ci.feeCurrencies) || ci.feeCurrencies.length === 0) {
+    throw new Error('chainInfo.feeCurrencies must be a non-empty array')
+  }
+  if (!ci.bip44 || typeof ci.bip44.coinType !== 'number') {
+    throw new Error('chainInfo.bip44.coinType must be a number')
+  }
+}
+
 // Destructure-and-discard the four endpoint fields — we only expose Cosmos
 // chains, so `evm` is always absent at runtime, but ChainInfo's optional
 // `evm` is incompatible with `ChainInfoWithoutEndpoints`'s stripped variant
@@ -327,6 +412,12 @@ export class XDEFIKeplrProvider extends Keplr {
   isVulticonnect: boolean
   cosmosProvider: Cosmos
   mutex = new SimpleMutex()
+  // Serializes suggest-chain popups so cosmos-kit dApps that
+  // fire `experimentalSuggestChain` for many chains in parallel only see one
+  // popup at a time. Combined with the per-chainId `suggestInFlight` map
+  // below, duplicate calls for the same chain share a single promise.
+  private suggestMutex = new SimpleMutex()
+  private suggestInFlight = new Map<string, Promise<void>>()
   public static getInstance(cosmosProvider: Cosmos): XDEFIKeplrProvider {
     if (!XDEFIKeplrProvider.instance) {
       XDEFIKeplrProvider.instance = new XDEFIKeplrProvider(
@@ -382,14 +473,33 @@ export class XDEFIKeplrProvider extends Keplr {
   }
 
   async enable(_chainIds: string | string[]): Promise<void> {
-    const chains = without(
-      (Array.isArray(_chainIds) ? _chainIds : [_chainIds]).map(
-        getCosmosChainByChainId
-      ),
-      undefined
-    )
+    const requested = Array.isArray(_chainIds) ? _chainIds : [_chainIds]
+    if (requested.length === 0) return
 
-    if (chains.length === 0) return
+    // Keplr's `enable` throws a Keplr-shaped error for chains it doesn't
+    // know about — cosmos-kit / graz wallet adapters regex on
+    // `"no chain info"` to surface a useful "add this chain" UX. Our
+    // previous silent-filter behavior let the dApp think enable succeeded
+    // and then exploded inside `getKey` with a non-Keplr-shaped throw.
+    //
+    // A chain is "known" if it's natively supported OR has been registered
+    // via `experimentalSuggestChain`. Suggested-but-not-native chains pass
+    // the known check but won't actually grant a vault session (Vultisig
+    // can't sign for them yet) — downstream `getKey` will still error.
+    const suggested = await callBackground({ getKeplrSuggestedChains: {} })
+    const nativeChains: Chain[] = []
+    for (const chainId of requested) {
+      const chain = getCosmosChainByChainId(chainId)
+      if (chain) {
+        nativeChains.push(chain)
+        continue
+      }
+      if (!suggested[chainId]) {
+        throw new Error(`There is no chain info for ${chainId}`)
+      }
+    }
+
+    if (nativeChains.length === 0) return
 
     // Serialize the first chain through `requestAccount` so the
     // grant-vault popup surfaces exactly once. Running every chain
@@ -398,7 +508,7 @@ export class XDEFIKeplrProvider extends Keplr {
     // `appSession` and the dApp got back `EIP1193Error('InternalError')`.
     // Subsequent chains piggyback on the same dApp authorization via
     // `getAccount`, which is silent (no popup) once the host is granted.
-    const [primary, ...rest] = chains
+    const [primary, ...rest] = nativeChains
     await requestAccount(primary)
     await Promise.all(
       rest.map(chain => callBackground({ getAccount: { chain } }))
@@ -406,22 +516,25 @@ export class XDEFIKeplrProvider extends Keplr {
   }
 
   /**
-   * Keplr-shaped chain list for every Cosmos chain Vultisig exposes natively.
-   * cosmos-kit dApps (Skeletonswap, etc.) probe this BEFORE showing their
+   * Keplr-shaped chain list for every Cosmos chain Vultisig exposes natively
+   * plus any chains a dApp has registered via `experimentalSuggestChain`.
+   * cosmos-kit dApps probe this BEFORE showing their
    * connect modal — the base implementation forwards to a sidecar background
    * handler we don't run, so it resolves with `undefined` and the dApp throws
    * on `q.chainInfos`.
    */
   async getChainInfosWithoutEndpoints(): Promise<ChainInfoWithoutEndpoints[]> {
-    return getKeplrCosmosChainInfos().map(stripEndpoints)
+    const infos = await getKeplrCosmosChainInfos()
+    return infos.map(stripEndpoints)
   }
 
   async getChainInfoWithoutEndpoints(
     chainId: string
   ): Promise<ChainInfoWithoutEndpoints> {
-    const info = getKeplrCosmosChainInfos().find(c => c.chainId === chainId)
+    const infos = await getKeplrCosmosChainInfos()
+    const info = infos.find(c => c.chainId === chainId)
     return stripEndpoints(
-      shouldBePresent(info, `Keplr chain not supported: ${chainId}`)
+      shouldBePresent(info, `There is no chain info for ${chainId}`)
     )
   }
 
@@ -431,19 +544,8 @@ export class XDEFIKeplrProvider extends Keplr {
   ): OfflineAminoSigner & OfflineDirectSigner {
     const cosmSigner = new CosmJSOfflineSigner(chainId, this, _signOptions)
 
-    cosmSigner.getAccounts = async (): Promise<AccountData[]> => {
-      const { publicKey, address } = await requestAccount(
-        shouldBePresent(getCosmosChainByChainId(chainId))
-      )
-
-      return [
-        {
-          algo: 'secp256k1',
-          address,
-          pubkey: hexToBytes(publicKey),
-        },
-      ]
-    }
+    cosmSigner.getAccounts = async (): Promise<AccountData[]> =>
+      getAccounts(chainId)
 
     return cosmSigner as OfflineAminoSigner & OfflineDirectSigner
   }
@@ -479,6 +581,7 @@ export class XDEFIKeplrProvider extends Keplr {
     signDoc: StdSignDoc,
     _signOptions?: KeplrSignOptions
   ): Promise<AminoSignResponse> {
+    assertNativeChainForSigning(chainId)
     return this.runWithChain(chainId, async () => {
       const [account] = await getAccounts(chainId)
       if (!areLowerCaseEqual(signer, account.address)) {
@@ -556,6 +659,7 @@ export class XDEFIKeplrProvider extends Keplr {
     },
     _signOptions: KeplrSignOptions
   ): Promise<DirectSignResponse> {
+    assertNativeChainForSigning(chainId)
     return this.runWithChain(chainId, async () => {
       const [account] = await getAccounts(chainId)
       if (!areLowerCaseEqual(signer, account.address)) {
@@ -621,8 +725,62 @@ export class XDEFIKeplrProvider extends Keplr {
     })
   }
 
-  async experimentalSuggestChain(_chainInfo: any) {
-    return
+  /**
+   * Registers a Cosmos chain that the dApp has asked the wallet to support.
+   *
+   * - Validates the ChainInfo shape and rejects malformed input with a
+   *   Keplr-shaped error so dApps can surface a useful message.
+   * - Idempotent: subsequent calls for an already-known `chainId` (native or
+   *   previously suggested) resolve silently with no popup.
+   * - On first call for a new chainId, opens the suggest-chain approval
+   *   popup. If the user approves, the entry is persisted via
+   *   `addKeplrSuggestedChain` and survives browser restarts. If the user
+   *   rejects, the promise rejects with a Keplr-shaped error.
+   * - cosmos-kit / graz dApps that target a chain not in our hardcoded list
+   *   call this before `enable` to bootstrap the chain into the wallet;
+   *   without it `enable` fails with `"There is no chain info for ${chainId}"`.
+   *
+   * Note: suggested chains that Vultisig cannot natively sign for are
+   * accepted into the registry for introspection (and for `enable` to stop
+   * rejecting), but `getKey` / `signAmino` / `signDirect` will still throw
+   * until native support for the chain is added.
+   */
+  async experimentalSuggestChain(chainInfo: ChainInfo): Promise<void> {
+    validateSuggestedChainInfo(chainInfo)
+
+    if (isNativeKeplrChainId(chainInfo.chainId)) return
+
+    // Coalesce concurrent calls for the same chainId
+    const inFlight = this.suggestInFlight.get(chainInfo.chainId)
+    if (inFlight) return inFlight
+
+    const work = this.suggestMutex
+      .runExclusive(async () => {
+        // Re-check inside the lock: a prior parallel call for this chain (or
+        // a previous session) may have already persisted it. The same lock
+        // also serializes popups for different chains so the user sees them
+        // one at a time instead of N stacked windows.
+        const existing = await callBackground({ getKeplrSuggestedChains: {} })
+        if (existing[chainInfo.chainId]) return
+
+        const { error } = await attempt(
+          callPopup({ suggestKeplrChain: { chainInfo } })
+        )
+        if (error === PopupError.RejectedByUser) {
+          throw new Error(`Request rejected by user`)
+        }
+        if (error) {
+          throw error
+        }
+
+        await callBackground({ addKeplrSuggestedChain: { chainInfo } })
+      })
+      .finally(() => {
+        this.suggestInFlight.delete(chainInfo.chainId)
+      })
+
+    this.suggestInFlight.set(chainInfo.chainId, work)
+    return work
   }
   async sendSimpleMessage(
     _type: string,
