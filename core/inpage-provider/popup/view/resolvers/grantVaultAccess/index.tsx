@@ -1,6 +1,12 @@
 import { useSetExclusiveVaultAppSessionMutation } from '@core/extension/storage/hooks/appSessions'
 import { PopupResolver } from '@core/inpage-provider/popup/view/resolver'
+import { BlockaidNoScanStatus } from '@core/ui/chain/security/blockaid/scan/BlockaidNoScanStatus'
+import { BlockaidScanning } from '@core/ui/chain/security/blockaid/scan/BlockaidScanning'
+import { BlockaidScanStatusContainer } from '@core/ui/chain/security/blockaid/scan/BlockaidScanStatusContainer'
+import { BlockaidSiteScanResult } from '@core/ui/chain/security/blockaid/site/BlockaidSiteScanResult'
+import { getBlockaidSiteScanQuery } from '@core/ui/chain/security/blockaid/site/queries/blockaidSiteScan'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
+import { useIsBlockaidEnabled } from '@core/ui/storage/blockaid'
 import { useSetCurrentVaultIdMutation } from '@core/ui/storage/currentVaultId'
 import { useCurrentVaultId } from '@core/ui/storage/currentVaultId'
 import { useVaults } from '@core/ui/storage/vaults'
@@ -16,6 +22,8 @@ import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
 import { PageContent } from '@lib/ui/page/PageContent'
 import { PageHeader } from '@lib/ui/page/PageHeader'
+import { MatchQuery } from '@lib/ui/query/components/MatchQuery'
+import { usePotentialQuery } from '@lib/ui/query/hooks/usePotentialQuery'
 import { Text } from '@lib/ui/text'
 import { getColor } from '@lib/ui/theme/getters'
 import { useMutation } from '@tanstack/react-query'
@@ -122,6 +130,7 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
   const { t } = useTranslation()
   const allVaults = useVaults()
   const currentVaultId = useCurrentVaultId()
+  const isBlockaidEnabled = useIsBlockaidEnabled()
   const hostKey = getUrlBaseDomain(requestOrigin)
   const displayDomain = hostKey
 
@@ -173,6 +182,11 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
     },
   })
 
+  const siteScanQuery = usePotentialQuery(
+    isBlockaidEnabled ? requestOrigin : undefined,
+    getBlockaidSiteScanQuery
+  )
+
   const handleReject = () => {
     onFinish({
       result: { error: new Error('User rejected the request') },
@@ -184,7 +198,9 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
     ? eligibleVaults.find(vault => getVaultId(vault) === selectedVaultId)
     : undefined
 
-  const canConnect = !isPending && selectedVaultId !== undefined
+  const canConnect =
+    !isPending && !siteScanQuery.isPending && selectedVaultId !== undefined
+  const pickerLocked = isPending || siteScanQuery.isPending
 
   const header = (
     <PageHeader
@@ -221,9 +237,9 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
                   title={vault.name}
                   extra={<VaultSigners vault={vault} />}
                   showArrow
-                  hoverable={!isPending}
+                  hoverable={!pickerLocked}
                   onClick={
-                    isPending
+                    pickerLocked
                       ? undefined
                       : () => {
                           setUserSelectedVaultId(itemId)
@@ -254,6 +270,15 @@ export const GrantVaultAccess: PopupResolver<'grantVaultAccess'> = ({
           <Text color="supporting" size={14}>
             {t('connect_website_subtitle')}
           </Text>
+          {isBlockaidEnabled && (
+            <MatchQuery
+              value={siteScanQuery}
+              success={value => <BlockaidSiteScanResult value={value} />}
+              pending={() => <BlockaidScanning />}
+              error={() => <BlockaidNoScanStatus entity="site" />}
+              inactive={() => <BlockaidScanStatusContainer />}
+            />
+          )}
         </VStack>
         {selectedVault && (
           <List radius={12}>
