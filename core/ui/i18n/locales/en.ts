@@ -145,6 +145,7 @@ export const en = {
   },
   chain_message_deposit: '{{chain}} message deposit',
   chains: 'Chains',
+  change: 'Change',
   change_passcode: 'Change Passcode',
   change_your_friends_referral: 'Change friends Referral Code used for swaps',
   check_email: 'Check email',
