@@ -1,7 +1,9 @@
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
 import { hasBlockaidEvmChangesForSummary } from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationNormalize'
 import { useBlockaidPayloadSimulationQuery } from '@core/ui/chain/security/blockaid/tx/queries/blockaidPayloadSimulation'
+import { extractApprovalCounterparty } from '@core/ui/chain/tx/utils/extractApprovalCounterparty'
 import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
+import { formatLabeledEvmAddress } from '@core/ui/chain/tx/utils/formatLabeledEvmAddress'
 import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
 import { useUniversalRouterSwap } from '@core/ui/chain/tx/utils/useUniversalRouterSwap'
 import { UniversalRouterSwapSummary } from '@core/ui/mpc/keysign/tx/swap/UniversalRouterSwapSummary'
@@ -20,7 +22,9 @@ import { getColor } from '@lib/ui/theme/getters'
 import { MiddleTruncate } from '@lib/ui/truncate'
 import { useQuery } from '@tanstack/react-query'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
+import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
 import { getEvmContractCallInfo } from '@vultisig/core-chain/chains/evm/contract/call/info'
+import { lookupKnownEvmContract } from '@vultisig/core-chain/chains/evm/contract/knownContracts'
 import { areEqualCoins } from '@vultisig/core-chain/coin/Coin'
 import { knownTokensIndex } from '@vultisig/core-chain/coin/knownTokens'
 import { getBlockExplorerUrl } from '@vultisig/core-chain/utils/getBlockExplorerUrl'
@@ -186,6 +190,19 @@ export const TxSuccess = ({
   // Blockaid is offline or skips the request.
   const showUniversalRouterSwap = !simulationSend && !!universalRouterSwap
 
+  // Done-screen parity with the verify screen: surface the labeled `tx.to`
+  // contract (when it's a recognized router/protocol) and the spender/operator
+  // for approval calls. Keeps the post-sign confirmation aligned with what
+  // the user just approved on the verify screen.
+  const evmChain = isChainOfKind(coin.chain, 'evm') ? coin.chain : null
+  const knownContract = evmChain
+    ? lookupKnownEvmContract(value.toAddress, { chain: evmChain })
+    : null
+  const approvalCounterparty =
+    evmChain && functionQuery.data
+      ? extractApprovalCounterparty(functionQuery.data)
+      : null
+
   return (
     <VStack gap={36} data-testid="tx-success">
       <TxStatusTracker chain={coin.chain} hash={txHash} />
@@ -207,6 +224,28 @@ export const TxSuccess = ({
             resolvedLabel={resolvedLabel}
             amountOverride={displayAmountOverride}
           />
+        )}
+        {evmChain && (knownContract || approvalCounterparty) && (
+          <List>
+            {knownContract && (
+              <ListItem
+                description={formatLabeledEvmAddress({
+                  address: value.toAddress,
+                  chain: evmChain,
+                })}
+                title={t('contract')}
+              />
+            )}
+            {approvalCounterparty && (
+              <ListItem
+                description={formatLabeledEvmAddress({
+                  address: approvalCounterparty.address,
+                  chain: evmChain,
+                })}
+                title={t(approvalCounterparty.labelKey)}
+              />
+            )}
+          </List>
         )}
         {!skipBroadcast && (
           <List>
