@@ -44,7 +44,7 @@
     "@ton/ton": "^16.2.2",
     "@tonconnect/protocol": "^2.4.0",
     "@vultisig/core-chain": "1.5.2",
-    "@vultisig/core-mpc": "1.2.5",
+    "@vultisig/core-mpc": "1.2.10",
     "@vultisig/lib-utils": "0.10.1",
     "@vultisig/sdk": "0.22.2",
     "@wallet-standard/base": "^1.1.0",
