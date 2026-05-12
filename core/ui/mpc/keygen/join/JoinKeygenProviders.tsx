@@ -1,6 +1,7 @@
 import { KeygenOperationProvider } from '@core/ui/mpc/keygen/state/currentKeygenOperationType'
 import { CurrentHexEncryptionKeyProvider } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { IsInitiatingDeviceProvider } from '@core/ui/mpc/state/isInitiatingDevice'
+import { IsTssBatchingProvider } from '@core/ui/mpc/state/isTssBatching'
 import { MpcServerTypeProvider } from '@core/ui/mpc/state/mpcServerType'
 import { MpcServiceNameProvider } from '@core/ui/mpc/state/mpcServiceName'
 import { MpcSessionIdProvider } from '@core/ui/mpc/state/mpcSession'
@@ -21,25 +22,31 @@ export const JoinKeygenProviders = ({ children }: ChildrenProp) => {
 
   const keyImportChains = 'chains' in keygenMsg ? keygenMsg.chains : []
 
+  // Joiner respects the initiator's choice carried on the QR. SingleKeygenMessage
+  // has no batching path, so missing field defaults to false.
+  const isTssBatch = 'isTssBatch' in keygenMsg ? keygenMsg.isTssBatch : false
+
   return (
     <IsInitiatingDeviceProvider value={false}>
-      <MpcServiceNameProvider value={serviceName}>
-        <MpcServerTypeProvider initialValue={serverType}>
-          <MpcSessionIdProvider value={sessionId}>
-            <KeygenOperationProvider value={keygenOperation}>
-              <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
-                <KeyImportChainsProvider value={keyImportChains}>
-                  <DklsInboundSequenceNoProvider initialValue={0}>
-                    <JoinKeygenVaultProvider>
-                      {children}
-                    </JoinKeygenVaultProvider>
-                  </DklsInboundSequenceNoProvider>
-                </KeyImportChainsProvider>
-              </CurrentHexEncryptionKeyProvider>
-            </KeygenOperationProvider>
-          </MpcSessionIdProvider>
-        </MpcServerTypeProvider>
-      </MpcServiceNameProvider>
+      <IsTssBatchingProvider value={isTssBatch}>
+        <MpcServiceNameProvider value={serviceName}>
+          <MpcServerTypeProvider initialValue={serverType}>
+            <MpcSessionIdProvider value={sessionId}>
+              <KeygenOperationProvider value={keygenOperation}>
+                <CurrentHexEncryptionKeyProvider value={encryptionKeyHex}>
+                  <KeyImportChainsProvider value={keyImportChains}>
+                    <DklsInboundSequenceNoProvider initialValue={0}>
+                      <JoinKeygenVaultProvider>
+                        {children}
+                      </JoinKeygenVaultProvider>
+                    </DklsInboundSequenceNoProvider>
+                  </KeyImportChainsProvider>
+                </CurrentHexEncryptionKeyProvider>
+              </KeygenOperationProvider>
+            </MpcSessionIdProvider>
+          </MpcServerTypeProvider>
+        </MpcServiceNameProvider>
+      </IsTssBatchingProvider>
     </IsInitiatingDeviceProvider>
   )
 }

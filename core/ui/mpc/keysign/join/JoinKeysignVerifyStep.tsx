@@ -1,8 +1,6 @@
-import { TxOverviewPanel } from '@core/ui/chain/tx/TxOverviewPanel'
 import { PageHeaderBackButton } from '@core/ui/flow/PageHeaderBackButton'
 import { JoinKeysignCustomMessageVerify } from '@core/ui/mpc/keysign/join/JoinKeysignCustomMessageVerify'
-import { JoinKeysignSwapVerify } from '@core/ui/mpc/keysign/join/tx/JoinKeysignSwapVerify'
-import { JoinKeysignTxPrimaryInfo } from '@core/ui/mpc/keysign/join/tx/JoinKeysignTxPrimaryInfo'
+import { JoinKeysignTransactionVerify } from '@core/ui/mpc/keysign/join/tx/JoinKeysignTransactionVerify'
 import { useCoreViewState } from '@core/ui/navigation/hooks/useCoreViewState'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { Button } from '@lib/ui/buttons/Button'
@@ -35,14 +33,9 @@ export const JoinKeysignVerifyStep = ({ onFinish }: OnFinishProp) => {
           <MatchRecordUnion
             value={keysignPayload}
             handlers={{
-              keysign: payload =>
-                payload.swapPayload?.value ? (
-                  <JoinKeysignSwapVerify value={payload} />
-                ) : (
-                  <TxOverviewPanel>
-                    <JoinKeysignTxPrimaryInfo value={payload} />
-                  </TxOverviewPanel>
-                ),
+              keysign: payload => (
+                <JoinKeysignTransactionVerify value={payload} />
+              ),
               custom: value => <JoinKeysignCustomMessageVerify value={value} />,
             }}
           />

@@ -1,11 +1,11 @@
 import { featureFlags } from '@core/ui/featureFlags'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
+import { useIsTssBatching } from '@core/ui/mpc/state/isTssBatching'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useIsMLDSAEnabled } from '@core/ui/storage/mldsaEnabled'
-import { useIsTssBatchingEnabled } from '@core/ui/storage/tssBatchingEnabled'
 import { useVaultOrders } from '@core/ui/storage/vaults'
 import { ChildrenProp } from '@lib/ui/props'
 import { hasServer } from '@vultisig/core-mpc/devices/localPartyId'
@@ -32,7 +32,7 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
   const localPartyId = useMpcLocalPartyId()
   const isInitiatingDevice = useIsInitiatingDevice()
   const isMLDSAEnabled = useIsMLDSAEnabled()
-  const isTssBatchingEnabled = useIsTssBatchingEnabled()
+  const isTssBatchingEnabled = useIsTssBatching()
 
   const vaultOrders = useVaultOrders()
 
@@ -73,7 +73,19 @@ export const CreateVaultKeygenActionProvider = ({ children }: ChildrenProp) => {
       )
 
       await initializeMpcLib('ecdsa')
-      await dklsKeygen.prepareKeygenSetup()
+      // Cross-platform setup-message namespaces: different peers look for the
+      // shared DKLS setup under different `message_id` headers depending on
+      // their platform/version.
+      //   - default (no header): Android, pre-#4246 iOS, Windows extension
+      //   - "p-ecdsa": post-#4246 iOS DKLS task
+      //   - "p-eddsa": post-#4246 iOS Schnorr task (looks here because its
+      //     messenger.messageID is "p-eddsa" and #4246 folds that into setup
+      //     headers — without us writing here, iOS Schnorr throws after retries
+      //     and tears down the peer DKLS task, leaving our message poll
+      //     returning [] forever)
+      // The extension publishes (initiator) and back-fills (joiner) all three
+      // so any peer combination interops.
+      await dklsKeygen.prepareKeygenSetup(undefined, ['p-ecdsa', 'p-eddsa'])
 
       const schnorrKeygen = new Schnorr(
         { create: true },
