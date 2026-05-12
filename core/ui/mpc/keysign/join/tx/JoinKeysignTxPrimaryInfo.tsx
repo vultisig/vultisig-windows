@@ -94,10 +94,11 @@ export const JoinKeysignTxPrimaryInfo = ({
           // MAX_UINT256 in a non-approval (withdraw/repay) — exact amount
           // depends on on-chain state, so skip the row entirely.
           if (!fmt.display) return null
+          const amountLabel = fmt.isSentinel ? t('unlimited') : fmt.display
           return {
             coin: tokenQuery.data,
             functionName: capitalizeFirstLetter(rawFunctionName),
-            display: `${fmt.display} ${tokenQuery.data.ticker}`,
+            display: `${amountLabel} ${tokenQuery.data.ticker}`,
             isUnlimited: fmt.isSentinel,
           }
         })()

@@ -140,7 +140,7 @@ export const TxSuccess = ({
       amount: formatted.numericValue,
       amountOverride:
         formatted.isSentinel && formatted.display
-          ? `${formatted.display} ${knownCoin.ticker}`
+          ? `${t('unlimited')} ${knownCoin.ticker}`
           : undefined,
     }
   }, [
@@ -149,6 +149,7 @@ export const TxSuccess = ({
     coin.chain,
     value.toAddress,
     rawFunctionName,
+    t,
   ])
 
   const simulationSend = useMemo(() => {
