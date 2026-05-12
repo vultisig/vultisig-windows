@@ -1,3 +1,4 @@
+import { callBackground } from '@core/inpage-provider/background'
 import { ChainInfo } from '@keplr-wallet/types'
 import { CosmosChain } from '@vultisig/core-chain/Chain'
 import { getCosmosChainId } from '@vultisig/core-chain/chains/cosmos/chainInfo'
@@ -10,8 +11,7 @@ type SupportedKeplrChain = (typeof supportedKeplrChains)[number]
 // Terra Classic (columbus-5) deliberately omitted: it shares the `terra`
 // bech32 prefix with Terra v2 (phoenix-1), and cosmos-kit / wallet-kit
 // reject duplicate prefixes within a single chain set — including both
-// makes dApps see Terra as "not in wallet" (Skeletonswap renders the
-// red dot + "must add it to your wallet" hint). Terra Classic is still
+// makes dApps see Terra as "not in wallet". Terra Classic is still
 // reachable through the Station provider's `switchNetwork('classic')`.
 const supportedKeplrChains = [
   CosmosChain.Cosmos,
@@ -120,11 +120,27 @@ const buildKeplrChainInfo = (chain: SupportedKeplrChain): ChainInfo => {
   }
 }
 
+const nativeChainIds = new Set(
+  supportedKeplrChains.map(chain => getCosmosChainId(chain))
+)
+
+/** True if `chainId` is one of Vultisig's hardcoded Cosmos chains. */
+export const isNativeKeplrChainId = (chainId: string): boolean =>
+  nativeChainIds.has(chainId)
+
 /**
  * Returns Keplr-shaped {@link ChainInfo} for every Cosmos chain Vultisig
- * natively signs for. Used by `getChainInfosWithoutEndpoints` so dApps that
- * probe the wallet's chain list (Skeletonswap and other cosmos-kit dApps)
- * get a non-empty answer before they show their connect modal.
+ * natively signs for plus any persisted experimentally-suggested chains.
+ * Used by `getChainInfosWithoutEndpoints` so dApps that probe the wallet's
+ * chain list get a non-empty answer before
+ * showing their connect modal — and so chains a dApp registered via
+ * `experimentalSuggestChain` reappear after browser restart.
  */
-export const getKeplrCosmosChainInfos = (): ChainInfo[] =>
-  supportedKeplrChains.map(buildKeplrChainInfo)
+export const getKeplrCosmosChainInfos = async (): Promise<ChainInfo[]> => {
+  const suggested = await callBackground({ getKeplrSuggestedChains: {} })
+  const native = supportedKeplrChains.map(buildKeplrChainInfo)
+  const additions = Object.values(suggested).filter(
+    info => !nativeChainIds.has(info.chainId)
+  )
+  return [...native, ...additions]
+}
