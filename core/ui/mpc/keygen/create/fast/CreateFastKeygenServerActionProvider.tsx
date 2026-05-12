@@ -1,5 +1,6 @@
 import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
+import { useIsTssBatching } from '@core/ui/mpc/state/isTssBatching'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { ChildrenProp } from '@lib/ui/props'
 import { generateLocalPartyId } from '@vultisig/core-mpc/devices/localPartyId'
@@ -11,7 +12,6 @@ import { getRecordUnionValue } from '@vultisig/lib-utils/record/union/getRecordU
 import { featureFlags } from '../../../../featureFlags'
 import { useCore } from '../../../../state/core'
 import { useIsMLDSAEnabled } from '../../../../storage/mldsaEnabled'
-import { useIsTssBatchingEnabled } from '../../../../storage/tssBatchingEnabled'
 import { FastKeygenServerActionProvider } from '../../fast/state/fastKeygenServerAction'
 import { useVaultCreationInput } from '../state/vaultCreationInput'
 
@@ -25,7 +25,7 @@ export const CreateFastKeygenServerActionProvider = ({
   const hexChainCode = useCurrentHexChainCode()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
   const isMLDSAEnabled = useIsMLDSAEnabled()
-  const isTssBatchingEnabled = useIsTssBatchingEnabled()
+  const isTssBatchingEnabled = useIsTssBatching()
   const { vaultCreationMpcLib } = useCore()
 
   const action = async () => {
