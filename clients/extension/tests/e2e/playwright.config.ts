@@ -89,7 +89,7 @@ export default defineConfig({
         '**/onboarding.spec.ts',
         '**/vault-management.spec.ts',
         '**/vault-import-export.spec.ts',
-        '**/balance-display.spec.ts',
+        '**/transaction-history.spec.ts',
         '**/address-book.spec.ts',
         '**/visual-regression.spec.ts',
       ],
@@ -115,6 +115,8 @@ export default defineConfig({
         '**/events.spec.ts',
         '**/multi-provider.spec.ts',
         '**/router.spec.ts',
+        '**/push-notifications.spec.ts',
+        '**/push-notifications-integration.spec.ts',
       ],
       use: {
         launchOptions: {

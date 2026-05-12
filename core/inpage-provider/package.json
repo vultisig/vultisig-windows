@@ -15,7 +15,7 @@
     "@trustwallet/wallet-core": "^4.6.7",
     "@vultisig/core-chain": "1.5.2",
     "@vultisig/core-config": "0.9.1",
-    "@vultisig/core-mpc": "1.2.5",
+    "@vultisig/core-mpc": "1.2.10",
     "@vultisig/lib-utils": "0.10.1",
     "bitcoinjs-lib": "^7.0.1",
     "cosmjs-types": "^0.11.0",
