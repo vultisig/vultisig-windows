@@ -196,7 +196,7 @@ export const TxSuccess = ({
   // the user just approved on the verify screen.
   const evmChain = isChainOfKind(coin.chain, 'evm') ? coin.chain : null
   const knownContract = evmChain
-    ? lookupKnownEvmContract(value.toAddress, { chain: evmChain })
+    ? lookupKnownEvmContract({ address: value.toAddress, chain: evmChain })
     : null
   const approvalCounterparty =
     evmChain && functionQuery.data

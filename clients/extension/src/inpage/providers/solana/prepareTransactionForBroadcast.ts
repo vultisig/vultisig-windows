@@ -265,6 +265,13 @@ const prepareVersionedTransactionForBroadcast = async (
   return new VersionedTransaction(compiled)
 }
 
+/**
+ * Refreshes blockhash and compute-budget instructions so a legacy or v0
+ * transaction is safe to broadcast. Returns `transaction` unchanged when it
+ * already has signatures, on error, or after preparation failure.
+ *
+ * @template T - `Transaction` or `VersionedTransaction`
+ */
 export const prepareTransactionForBroadcast = async <
   T extends Transaction | VersionedTransaction,
 >(

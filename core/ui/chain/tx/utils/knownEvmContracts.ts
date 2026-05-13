@@ -22,10 +22,19 @@ const registry: Partial<
   },
 }
 
-export const lookupKnownEvmContract = (
-  address: string,
-  { chain }: { chain: EvmChain }
-): KnownEvmContractEntry | null => {
+type LookupKnownEvmContractInput = {
+  address: string
+  chain: EvmChain
+}
+
+/**
+ * Returns registry metadata for a known protocol/router contract on `chain`,
+ * or `null` when the address is unknown.
+ */
+export const lookupKnownEvmContract = ({
+  address,
+  chain,
+}: LookupKnownEvmContractInput): KnownEvmContractEntry | null => {
   const chainEntries = registry[chain]
   if (!chainEntries) {
     return null

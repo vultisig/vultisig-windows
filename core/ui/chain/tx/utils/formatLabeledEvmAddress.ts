@@ -31,7 +31,7 @@ export const formatLabeledEvmAddress = ({
   address,
   chain,
 }: FormatLabeledEvmAddressInput): string => {
-  const known = lookupKnownEvmContract(address, { chain })
+  const known = lookupKnownEvmContract({ address, chain })
   if (!known) return address
   return `${known.label} (${truncateMiddle(address)})`
 }
