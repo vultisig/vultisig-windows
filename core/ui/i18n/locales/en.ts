@@ -1139,6 +1139,7 @@ export const en = {
   unmerge: 'Unmerge',
   unfreeze: 'Unfreeze',
   unknown: 'Unknown',
+  unlimited: 'Unlimited',
   unstake: 'Unstake',
   unstake_share_token_label: 'Unstake {{ticker}}',
   upgrade: 'Upgrade',
