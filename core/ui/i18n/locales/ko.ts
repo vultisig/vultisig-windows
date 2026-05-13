@@ -370,6 +370,7 @@ export const ko = {
   chain: '체인',
   chain_message_deposit: '{{chain}} 메시지 입금',
   chains: '쇠사슬',
+  change: '변경',
   change_passcode: '비밀번호 변경',
   change_your_friends_referral: '친구 변경 추천 코드 (교환에 사용)',
   check_email: '이메일을 확인하세요',

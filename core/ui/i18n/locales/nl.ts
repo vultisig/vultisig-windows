@@ -121,6 +121,7 @@ export const nl = {
   },
   chain_message_deposit: '{{chain}}-berichtdeposit',
   chains: 'Chains',
+  change: 'Wijzigen',
   change_passcode: 'Pincode wijzigen',
   change_your_friends_referral:
     'Gebruikte referralcode van vriend wijzigen voor swaps',
