@@ -236,6 +236,7 @@ export const zh = {
   chain: '链',
   chain_message_deposit: '{{chain}} 消息存款',
   chains: '链条',
+  change: '更改',
   change_passcode: '更改密码',
   change_your_friends_referral: '更改好友推荐码，用于交换。',
   check_email: '查看电子邮件',

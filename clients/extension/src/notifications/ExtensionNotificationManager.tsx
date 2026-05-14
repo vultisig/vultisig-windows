@@ -18,6 +18,7 @@ import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { removeInitialView } from '../storage/initialView'
+import { getOrCreateFirefoxNotificationToken } from './firefoxNotificationToken'
 import { openKeysignFromPushNotificationType } from './pushNotificationMessages'
 import {
   getPushNotificationRegistrations,
@@ -164,6 +165,12 @@ export const ExtensionNotificationManager = () => {
     const activeNotificationTeardowns = new Set<() => void>()
 
     const getTokenJson = async (): Promise<string | null> => {
+      // Firefox MV3 has no extension service worker: `navigator.serviceWorker.ready`
+      // never resolves, so use the locally generated device token (same one used
+      // to register with the server).
+      if (__IS_FIREFOX_EXTENSION_BUILD__) {
+        return getOrCreateFirefoxNotificationToken()
+      }
       try {
         const registration = await navigator.serviceWorker.ready
         const sub = await registration.pushManager.getSubscription()

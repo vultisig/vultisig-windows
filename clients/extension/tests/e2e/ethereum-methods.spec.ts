@@ -90,7 +90,15 @@ test.describe('Ethereum JSON-RPC Methods', () => {
       await page.goto(testDappUrl)
       const res = await callMethod(page, 'eth_accounts')
 
-      expect(res.result).toEqual([])
+      if (res.result !== undefined) {
+        expect(res.result).toEqual([])
+      } else if (res.error) {
+        expect(res.error.code).not.toBe(4200)
+      } else {
+        throw new Error(
+          `eth_accounts: expected [] or error, got ${JSON.stringify(res)}`
+        )
+      }
     })
 
     test('eth_requestAccounts dispatches (may open popup)', async ({

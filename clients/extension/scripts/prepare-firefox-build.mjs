@@ -22,6 +22,14 @@ manifest.permissions = manifest.permissions.filter(
   permission => !['sidePanel', 'windows'].includes(permission)
 )
 
+// Firefox cannot load code-split ES module `inpage.js` as a manifest
+// content_script (content_scripts run as classic scripts). The content
+// script falls back to dynamic injection for Firefox builds, so drop the
+// declarative entry to avoid a console error on every page load.
+manifest.content_scripts = manifest.content_scripts.filter(
+  entry => !(entry.js?.length === 1 && entry.js[0] === 'inpage.js')
+)
+
 delete manifest.version_name
 delete manifest.side_panel
 

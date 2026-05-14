@@ -333,7 +333,6 @@ export class Station {
     if (!validateUrl(window.location.href)) {
       addBackgroundEventListener('disconnect', () => {
         this.emitWalletChange()
-        this.keplr.emitAccountsChanged()
       })
     }
   }

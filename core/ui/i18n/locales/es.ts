@@ -250,6 +250,7 @@ export const es = {
   chain: 'Cadena',
   chain_message_deposit: 'Depósito de mensajes de {{chain}}',
   chains: 'Cadenas',
+  change: 'Cambiar',
   change_passcode: 'Cambiar contraseña',
   change_your_friends_referral:
     'Cambiar amigos Código de referencia utilizado para intercambios',
