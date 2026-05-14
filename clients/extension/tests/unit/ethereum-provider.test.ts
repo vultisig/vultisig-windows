@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
+import { PopupError } from '@core/inpage-provider/popup/error'
 
 // Mock all external dependencies before importing the Ethereum provider
 vi.mock('@core/inpage-provider/background', () => ({
@@ -165,6 +166,64 @@ describe('Ethereum Provider', () => {
       const result = await eth.request({ method: 'eth_accounts', params: ['arg1'] })
       expect(result).toEqual(['0xabc'])
       expect(mockedHandlers.eth_accounts).toHaveBeenCalledWith(['arg1'])
+    })
+
+    it('translates PopupError.RejectedByUser to EIP1193Error(UserRejectedRequest) (code 4001)', async () => {
+      const eth = new Ethereum()
+      mockedHandlers.eth_requestAccounts.mockRejectedValue(PopupError.RejectedByUser)
+
+      try {
+        await eth.request({ method: 'eth_requestAccounts', params: [] })
+        expect.fail('Should have thrown')
+      } catch (error) {
+        expect(error).toBeInstanceOf(EIP1193Error)
+        expect((error as EIP1193Error).code).toBe(4001)
+        expect((error as EIP1193Error).message).toBe('User rejected the request')
+      }
+    })
+
+    it('passes existing EIP1193Error through unchanged', async () => {
+      const eth = new Ethereum()
+      const original = new EIP1193Error('UnrecognizedChain')
+      mockedHandlers.eth_chainId.mockRejectedValue(original)
+
+      try {
+        await eth.request({ method: 'eth_chainId', params: [] })
+        expect.fail('Should have thrown')
+      } catch (error) {
+        expect(error).toBe(original)
+        expect((error as EIP1193Error).code).toBe(4902)
+      }
+    })
+
+    it('preserves ProviderRpcError-shaped plain objects with code+message', async () => {
+      const eth = new Ethereum()
+      mockedHandlers.eth_accounts.mockRejectedValue({
+        code: -32000,
+        message: 'upstream node error',
+      })
+
+      try {
+        await eth.request({ method: 'eth_accounts', params: [] })
+        expect.fail('Should have thrown')
+      } catch (error) {
+        expect(error).toBeInstanceOf(EIP1193Error)
+        expect((error as EIP1193Error).code).toBe(-32000)
+        expect((error as EIP1193Error).message).toBe('upstream node error')
+      }
+    })
+
+    it('falls back to EIP1193Error(InternalError) for unknown thrown shapes', async () => {
+      const eth = new Ethereum()
+      mockedHandlers.eth_accounts.mockRejectedValue('some unexpected string')
+
+      try {
+        await eth.request({ method: 'eth_accounts', params: [] })
+        expect.fail('Should have thrown')
+      } catch (error) {
+        expect(error).toBeInstanceOf(EIP1193Error)
+        expect((error as EIP1193Error).code).toBe(-32603)
+      }
     })
   })
 

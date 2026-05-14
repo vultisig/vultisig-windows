@@ -1,4 +1,5 @@
 import { EIP1193Error } from '@clients/extension/src/background/handlers/errorHandler'
+import { toEip1193Error } from '@clients/extension/src/inpage/providers/ethereum/eip1193Translate'
 import { EthereumProviderEvents } from '@clients/extension/src/inpage/providers/ethereum/events'
 import {
   ethereumHandlers,
@@ -73,9 +74,18 @@ export class Ethereum extends EventEmitter<EthereumProviderEvents> {
 
   async request(data: RequestInput) {
     if (data.method in ethereumHandlers) {
-      return ethereumHandlers[data.method as keyof typeof ethereumHandlers](
-        data.params as never
-      )
+      try {
+        return await ethereumHandlers[
+          data.method as keyof typeof ethereumHandlers
+        ](data.params as never)
+      } catch (error) {
+        // EIP-1193 §5.4 mandates `ProviderRpcError`-shaped rejections.
+        // Resolvers that call `callPopup` reject with the raw
+        // `PopupError.RejectedByUser` string when the user dismisses
+        // the approval popup — translate here so dApps can rely on
+        // `error.code === 4001`.
+        throw toEip1193Error(error)
+      }
     }
 
     throw new EIP1193Error('UnsupportedMethod')
