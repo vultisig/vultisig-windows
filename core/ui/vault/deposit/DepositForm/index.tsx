@@ -147,7 +147,7 @@ export const DepositForm: FC<DepositFormProps> = ({ onSubmit }) => {
           hasBorder
         />
         {shouldUseActionForm ? (
-          <ActionForm flexGrow>
+          <ActionForm flexGrow scrollable>
             {shouldUseBondRedesign ? (
               <DepositDataProvider value={formValues}>
                 <BondForm
