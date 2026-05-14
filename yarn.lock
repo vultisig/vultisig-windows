@@ -656,6 +656,7 @@ __metadata:
     vite-plugin-static-copy: "npm:^3.3.0"
     vite-plugin-top-level-await: "npm:^1.6.0"
     vite-plugin-wasm: "npm:^3.6.0"
+    vitest: "npm:^4.1.0"
     web-push: "npm:^3.6.7"
     ws: "npm:^8.19.0"
     zod: "npm:^4.3.6"
