@@ -58,6 +58,7 @@ import { requestAccount } from './core/requestAccount'
 import { getSharedHandlers } from './core/sharedHandlers'
 import { VultisigSolanaWalletAccount } from './solana/account'
 import { isSolanaChain, SolanaChain, SolanaChains } from './solana/chains'
+import { prepareTransactionForBroadcast } from './solana/prepareTransactionForBroadcast'
 import { createSolanaSignInMessage } from './solana/signIn'
 
 const frozenChains = Object.freeze([...SolanaChains] as const)
@@ -398,7 +399,15 @@ export class Solana implements Wallet {
     transactions: T[],
     skipBroadcast: boolean
   ): Promise<T[]> {
-    const serialized = transactions.map(tx => this.serializeTransaction(tx))
+    const toSerialize = skipBroadcast
+      ? transactions
+      : await Promise.all(
+          transactions.map(
+            tx => prepareTransactionForBroadcast(tx) as Promise<T>
+          )
+        )
+
+    const serialized = toSerialize.map(tx => this.serializeTransaction(tx))
     const authority = serialized.find(s => s.authority)?.authority
 
     const result = await callPopup(
@@ -424,7 +433,7 @@ export class Solana implements Wallet {
 
     return result.map(
       (txResult, i) =>
-        this.deserializeSignedTransaction(txResult.data, transactions[i]) as T
+        this.deserializeSignedTransaction(txResult.data, toSerialize[i]) as T
     )
   }
 
