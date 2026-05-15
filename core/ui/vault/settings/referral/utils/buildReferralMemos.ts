@@ -9,7 +9,13 @@ export function buildCreateReferralMemo({
   thorAliasAddress,
   preferredAsset,
 }: CreateArgs) {
-  const parts = ['~', name.toUpperCase(), 'THOR', thorAliasAddress, thorAliasAddress]
+  const parts = [
+    '~',
+    name.toUpperCase(),
+    'THOR',
+    thorAliasAddress,
+    thorAliasAddress,
+  ]
   if (preferredAsset) parts.push(preferredAsset)
   return parts.join(':')
 }
