@@ -4,10 +4,13 @@ import { computeNotificationVaultId } from '@vultisig/sdk'
 import { useTranslation } from 'react-i18next'
 
 import { extensionPushRegistrationQueryKey } from './extensionPushRegistrationQueryKey'
+import { unregisterFirefoxDevice } from './firefoxNotificationApi'
+import { getOrCreateFirefoxNotificationToken } from './firefoxNotificationToken'
 import {
   PushUnregisterVaultMessage,
   pushUnregisterVaultType,
 } from './pushNotificationMessages'
+import { removePushNotificationRegistration } from './pushNotificationStorage'
 import { subscribeToPush } from './subscribeToPush'
 
 type VaultNotificationTarget = {
@@ -34,6 +37,17 @@ const unregisterExtensionVault = async ({
   vaultId,
   localPartyId,
 }: UnregisterExtensionVaultInput): Promise<void> => {
+  if (__IS_FIREFOX_EXTENSION_BUILD__) {
+    const token = await getOrCreateFirefoxNotificationToken()
+    await unregisterFirefoxDevice({
+      vaultId,
+      partyName: localPartyId,
+      token,
+    })
+    await removePushNotificationRegistration(vaultId)
+    return
+  }
+
   const message: PushUnregisterVaultMessage = {
     type: pushUnregisterVaultType,
     vault: { vaultId, localPartyId },

@@ -459,6 +459,7 @@ const EvmCalldataFallback = ({
             })
             const ticker = tokenQuery.data.ticker
             const isUnlimited = fmt.isSentinel && !!fmt.display
+            const amountLabel = isUnlimited ? t('unlimited') : fmt.display
             return (
               <ListItem
                 icon={
@@ -471,11 +472,11 @@ const EvmCalldataFallback = ({
                     <HStack alignItems="center" gap={6}>
                       <Text as={TriangleAlertIcon} color="warning" size={14} />
                       <Text color="warning" size={12} weight={500}>
-                        {`${fmt.display} ${ticker}`}
+                        {`${amountLabel} ${ticker}`}
                       </Text>
                     </HStack>
-                  ) : fmt.display ? (
-                    `${fmt.display} ${ticker}`
+                  ) : amountLabel ? (
+                    `${amountLabel} ${ticker}`
                   ) : (
                     ticker
                   )

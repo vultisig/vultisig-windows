@@ -121,6 +121,7 @@ export const ru = {
   },
   chain_message_deposit: 'Депозит сообщения {{chain}}',
   chains: 'Сети',
+  change: 'Изменить',
   change_passcode: 'Изменить пин-код',
   change_your_friends_referral:
     'Изменить реферальный код друга, используемый для свопов',
