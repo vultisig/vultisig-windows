@@ -248,6 +248,7 @@ export const pt = {
   chain: 'Corrente',
   chain_message_deposit: 'depósito de mensagem {{chain}}',
   chains: 'Correntes',
+  change: 'Alterar',
   change_passcode: 'Alterar código de acesso',
   change_your_friends_referral:
     'Alterar amigos Código de indicação usado para trocas',
