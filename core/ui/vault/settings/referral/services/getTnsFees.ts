@@ -16,16 +16,11 @@ export const getTnsFees = async (years: number) => {
   const perBlock = BigInt(tns_fee_per_block_rune)
   const factor = 10 ** chainFeeCoin.THORChain.decimals
   const perYearFee = Number(perBlock * BigInt(blocksPerYear)) / factor
-  const baseExtra = Number(perBlock) / factor
-
-  const additionalYears = Math.max(0, years - 1)
-  const amount =
-    Number(register) / factor + baseExtra + perYearFee * additionalYears
+  const amount = Number(register) / factor + perYearFee * years
 
   return {
     runeFee: amount,
     registerFee: Number(register) / factor,
-    baseExtra,
     perYearFee,
   }
 }
