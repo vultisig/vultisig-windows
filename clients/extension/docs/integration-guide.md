@@ -21,6 +21,7 @@
    - [Ripple](#ripple-windowvultisigripple)
    - [MayaChain](#mayachain-windowvultisigmayachain)
    - [Dash](#dash-windowvultisigdash)
+   - [QBTC](#qbtc-windowvultisigqbtc)
    - [Plugin Provider](#plugin-provider-windowvultisigplugin)
 6. [Wallet Compatibility Layers](#wallet-compatibility-layers)
 7. [Steps to Integrate](#steps-to-integrate-with-vultisig-extension)
@@ -42,6 +43,7 @@ The extension provides:
 - **`window.vultisig.ethereum`** for Ethereum and EVM chain integrations.
 - **`window.vultisig.thorchain`** and **`window.thorchain`** for THORChain support.
 - **`window.vultisig.solana`** and **`window.solana`** for Solana support via the Wallet Standard.
+- **`window.vultisig.qbtc`** for QBTC (post-quantum ML-DSA-44) integration.
 - **`window.tronLink`** and **`window.tronWeb`** for Tron/TronLink compatibility.
 - **`window.keplr`** for Keplr-compatible Cosmos chain integration.
 - **`window.phantom`** for Phantom wallet compatibility (Bitcoin, Ethereum, Solana).
@@ -65,6 +67,7 @@ The extension provides:
 | MayaChain   | `MayaChain-1`         | Cosmos        |
 | Osmosis     | `osmosis-1`           | Cosmos        |
 | Polkadot    | `Polkadot_polkadot`   | Custom        |
+| QBTC        | `QBTC_qbtc`           | Custom (MLDSA)|
 | Ripple      | `Ripple_ripple`       | Custom        |
 | Solana      | `Solana_mainnet-beta` | Solana        |
 | THORChain   | `Thorchain_thorchain` | Cosmos        |
@@ -331,6 +334,28 @@ Supports TRC20 token transfers with automatic decoding and contract interaction.
 - `send_transaction`
 - `get_transaction_by_hash`
 
+### QBTC (`window.vultisig.qbtc`)
+
+QBTC is a post-quantum Cosmos SDK chain that signs with **ML-DSA-44** rather than secp256k1/ed25519, so it cannot use the Keplr provider shape. Vultisig exposes a dedicated QBTC provider with QBTC-native methods.
+
+**Account Management:**
+- `request_accounts` -- connect and return the QBTC bech32 address
+- `get_accounts` -- return the currently authorized QBTC address (or `[]`)
+
+**Transaction Management:**
+- `send_transaction` -- sign and broadcast a QBTC transaction; returns the tx hash
+- `get_transaction_by_hash`
+
+**Vault requirement (important):** QBTC requires the user's vault to carry an ML-DSA public key (`vault.publicKeyMldsa`). MLDSA keygen is gated by the `Enable MLDSA` toggle in Vultisig Developer Options at vault creation time -- vaults created with the toggle off cannot use QBTC. If a dApp calls `request_accounts` against a vault without MLDSA support, the provider rejects with:
+
+```text
+EIP1193Error: QBTC requires an MLDSA-enabled vault. Enable MLDSA in
+Vultisig Developer Options and create a new vault.
+code: 4100 (Unauthorized)
+```
+
+**Public key shape:** Unlike other chains, the `publicKey` returned for QBTC is the raw ML-DSA-44 hex public key (~1312 bytes), not a 33-byte compressed secp256k1 key. dApps verifying signatures must use ML-DSA-44 verification, not standard Cosmos secp256k1 verification.
+
 ### Plugin Provider (`window.vultisig.plugin`)
 
 For Vultisig Marketplace plugin developers:
@@ -452,6 +477,44 @@ const connectChain = async (chain) => {
     const accounts = await provider.request({ method: "request_accounts" });
     console.log(`Connected to ${chain}:`, accounts);
   }
+};
+```
+
+#### QBTC
+
+```javascript
+const connectQbtc = async () => {
+  const provider = window.vultisig?.qbtc;
+  if (!provider) {
+    console.error("Vultisig QBTC provider not available");
+    return;
+  }
+
+  try {
+    const [address] = await provider.request({ method: "request_accounts" });
+    console.log("Connected QBTC address:", address);
+  } catch (error) {
+    if (error.code === 4100) {
+      // Unauthorized -- most commonly: vault has no ML-DSA key.
+      // Tell the user to enable MLDSA in Developer Options and create
+      // a new vault.
+      alert(error.message);
+    } else if (error.code === 4001) {
+      console.log("User rejected the QBTC connection");
+    } else {
+      throw error;
+    }
+  }
+};
+
+// Send a QBTC transaction
+const sendQbtc = async ({ from, to, value, memo }) => {
+  const hash = await window.vultisig.qbtc.request({
+    method: "send_transaction",
+    params: [{ from, to, value, memo }],
+  });
+  console.log("QBTC tx hash:", hash);
+  return hash;
 };
 ```
 
