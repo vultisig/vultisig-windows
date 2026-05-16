@@ -156,7 +156,6 @@ export const BondedPositions = () => {
     0n
   )
   const totalFiat = sum(positions.map(position => position.fiatValue))
-  const canUnbond = Boolean(data?.bond?.canUnbond)
   const availableNodes = data?.bond?.availableNodes ?? []
 
   const navigateToBond = async (overrides?: { nodeAddress?: string }) => {
@@ -254,7 +253,7 @@ export const BondedPositions = () => {
                     onUnbond={() =>
                       navigateToUnbond(position.nodeAddress, position.amount)
                     }
-                    canUnbond={canUnbond}
+                    canUnbond={position.canUnbond}
                     fiatValue={position.fiatValue}
                     isBondingDisabled={isBondingDisabled}
                   />

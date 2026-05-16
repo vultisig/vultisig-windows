@@ -7,6 +7,7 @@ export type ThorchainBondPosition = {
   nextChurn?: Date
   status: string
   fiatValue: number
+  canUnbond: boolean
 }
 
 export type ThorchainStakePosition = {
@@ -29,7 +30,6 @@ export type DefiChainPositions = {
     totalBonded: bigint
     positions: ThorchainBondPosition[]
     availableNodes: string[]
-    canUnbond: boolean
   }
   stake?: {
     positions: ThorchainStakePosition[]
