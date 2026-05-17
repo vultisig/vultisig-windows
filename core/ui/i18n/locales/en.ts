@@ -299,7 +299,6 @@ export const en = {
   enable: 'Enable',
   enable_all: 'Enable all',
   enable_dkls: 'Enable DKLS',
-  enable_mldsa: 'Enable MLDSA',
   enable_tss_batching: 'Enable TSS Batching',
   post_quantum_keygen: 'Post-Quantum Key Generation',
   post_quantum_keygen_description:
