@@ -1,10 +1,11 @@
 import { ManageEvmFee } from '@core/inpage-provider/popup/view/resolvers/sendTx/ManageEvmFee'
 import { usePopupInput } from '@core/inpage-provider/popup/view/state/input'
 import { useAssertWalletCore } from '@core/ui/chain/providers/WalletCoreProvider'
-import { useCurrentVaultPublicKey } from '@core/ui/vault/state/currentVault'
+import { useCurrentVaultNullablePublicKey } from '@core/ui/vault/state/currentVault'
 import { MatchRecordUnion } from '@lib/ui/base/MatchRecordUnion'
 import { List } from '@lib/ui/list'
 import { ListItem } from '@lib/ui/list/item'
+import { PublicKey } from '@trustwallet/wallet-core/dist/src/wallet-core'
 import { fromChainAmount } from '@vultisig/core-chain/amount/fromChainAmount'
 import { Chain } from '@vultisig/core-chain/Chain'
 import { isChainOfKind } from '@vultisig/core-chain/ChainKind'
@@ -24,7 +25,7 @@ export type NetworkFeeSectionProps = {
   feeSettings: FeeSettings<'evm'> | null
   setFeeSettings: (settings: FeeSettings<'evm'> | null) => void
   walletCore: ReturnType<typeof useAssertWalletCore>
-  publicKey: ReturnType<typeof useCurrentVaultPublicKey>
+  publicKey: ReturnType<typeof useCurrentVaultNullablePublicKey>
 }
 
 export const NetworkFeeSection = ({
@@ -43,10 +44,13 @@ export const NetworkFeeSection = ({
       value={transactionPayload}
       handlers={{
         keysign: transactionPayload => {
+          // MLDSA chains (QBTC) have no WalletCore `PublicKey`. Their fee
+          // resolver doesn't read this field — `getQbtcFeeAmount` returns
+          // `cosmosSpecific.gas` directly — so the cast is safe at runtime.
           const feeAmount = getFeeAmount({
             keysignPayload,
             walletCore,
-            publicKey,
+            publicKey: publicKey as PublicKey,
           })
 
           const getEvmValues = () => {
