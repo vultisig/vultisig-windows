@@ -48,6 +48,7 @@ const StyledButton = styled(UnstyledButton)<{
             font-size: 12px;
             font-weight: 500;
             height: 26px;
+            min-height: 26px;
             min-width: 26px;
             ${horizontalPadding(4)}
           `,
@@ -56,6 +57,7 @@ const StyledButton = styled(UnstyledButton)<{
             font-size: 14px;
             font-weight: 500;
             height: 28px;
+            min-height: 28px;
             min-width: 28px;
             ${horizontalPadding(4)}
           `,
@@ -82,6 +84,7 @@ const StyledButton = styled(UnstyledButton)<{
             font-size: 12px;
             font-weight: 500;
             height: 36px;
+            min-height: 36px;
             min-width: 36px;
             ${horizontalPadding(16)}
           `,
@@ -90,6 +93,7 @@ const StyledButton = styled(UnstyledButton)<{
             font-size: 14px;
             font-weight: 500;
             height: 46px;
+            min-height: 46px;
             min-width: 46px;
             ${horizontalPadding(24)}
           `,
@@ -146,6 +150,7 @@ const StyledButton = styled(UnstyledButton)<{
             font-size: 12px;
             font-weight: 500;
             height: 36px;
+            min-height: 36px;
             min-width: 36px;
             ${horizontalPadding(16)}
           `,
@@ -154,6 +159,7 @@ const StyledButton = styled(UnstyledButton)<{
             font-size: 14px;
             font-weight: 500;
             height: 46px;
+            min-height: 46px;
             min-width: 46px;
             ${horizontalPadding(24)}
           `,
@@ -183,6 +189,7 @@ const StyledButton = styled(UnstyledButton)<{
             font-size: 12px;
             font-weight: 500;
             height: 36px;
+            min-height: 36px;
             min-width: 36px;
             ${horizontalPadding(16)}
           `,
@@ -191,6 +198,7 @@ const StyledButton = styled(UnstyledButton)<{
             font-size: 14px;
             font-weight: 500;
             height: 46px;
+            min-height: 46px;
             min-width: 46px;
             ${horizontalPadding(24)}
           `,
