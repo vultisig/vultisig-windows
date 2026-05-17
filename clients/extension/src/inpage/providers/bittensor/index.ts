@@ -96,7 +96,10 @@ export class Bittensor extends EventEmitter {
     const encodedBase64 = shouldBePresent(
       data.encoded,
       'signing output encoded'
-    ) as string
+    )
+    if (typeof encodedBase64 !== 'string') {
+      throw new Error('signing output encoded must be a base64 string')
+    }
     const signatureHex = Buffer.from(encodedBase64, 'base64').toString('hex')
 
     return {
