@@ -81,6 +81,7 @@ export const ClaimPreparingTxPhase = ({
         addressHash: proof.address_hash,
         qbtcAddressHash: proof.qbtc_address_hash,
         pubKeyHashSha256: proof.pub_key_hash_sha256,
+        broadcaster: qbtcAddress,
       })
 
       const accountInfo = await getQbtcAccountInfoForClaim({
