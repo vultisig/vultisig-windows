@@ -15,6 +15,7 @@ describe('extension queriesPersister', () => {
               data: {
                 'Bittensor:5C4hrfjw9DjXZTzV3MwzrrAr9P1MJhSrvWGWqi1eSuyUpnhM':
                   723598828n,
+                delta: -123n,
               },
             },
           },

@@ -11,7 +11,7 @@ const serialize = (data: unknown) =>
 
 const deserialize = (json: string) =>
   JSON.parse(json, (_, value) => {
-    if (typeof value === 'string' && /^\d+n$/.test(value)) {
+    if (typeof value === 'string' && /^-?\d+n$/.test(value)) {
       return BigInt(value.substring(0, value.length - 1))
     }
     return value
