@@ -1,3 +1,5 @@
+import '../polyfills/installFirefoxProcessGlobal'
+
 // MPC note — see vultisig/vultisig-windows#3777.
 // This inpage (dapp page) chunk intentionally does NOT import
 // @core/ui/mpc/bootstrapMpcEngine. The inpage script runs in a dapp's realm

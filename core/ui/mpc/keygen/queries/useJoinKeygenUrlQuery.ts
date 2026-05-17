@@ -8,6 +8,7 @@ import {
 } from '@core/ui/mpc/keygen/state/keygenVault'
 import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
+import { useIsTssBatching } from '@core/ui/mpc/state/isTssBatching'
 import { useMpcServerType } from '@core/ui/mpc/state/mpcServerType'
 import { useMpcServiceName } from '@core/ui/mpc/state/mpcServiceName'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
@@ -41,6 +42,8 @@ export const useJoinKeygenUrlQuery = () => {
 
   const keygenVault = useKeygenVault()
 
+  const isTssBatch = useIsTssBatching()
+
   const { vaultCreationMpcLib } = useCore()
 
   return useTransformQueryData(
@@ -70,6 +73,7 @@ export const useJoinKeygenUrlQuery = () => {
                 useVultisigRelay,
                 vaultName,
                 libType,
+                isTssBatch,
               })
               return toBinary(KeygenMessageSchema, message)
             },
@@ -82,6 +86,7 @@ export const useJoinKeygenUrlQuery = () => {
                 vaultName,
                 ...assertKeygenReshareFields(keygenVault),
                 libType,
+                isTssBatch,
               })
               return toBinary(ReshareMessageSchema, message)
             },
@@ -95,6 +100,7 @@ export const useJoinKeygenUrlQuery = () => {
                 vaultName,
                 libType,
                 chains,
+                isTssBatch,
               })
               return toBinary(KeygenMessageSchema, message)
             },
@@ -132,6 +138,7 @@ export const useJoinKeygenUrlQuery = () => {
       [
         hexChainCode,
         hexEncryptionKey,
+        isTssBatch,
         keygenOperation,
         keygenVault,
         keyImportChains,

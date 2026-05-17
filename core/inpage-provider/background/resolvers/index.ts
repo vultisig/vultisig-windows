@@ -10,6 +10,10 @@ import { getAppChain } from './getAppChain'
 import { getAppChainId } from './getAppChainId'
 import { getTx } from './getTx'
 import { hasChainInVault } from './hasChainInVault'
+import {
+  addKeplrSuggestedChain,
+  getKeplrSuggestedChains,
+} from './keplrSuggestedChains'
 import { setAppChain } from './setAppChain'
 import { setVaultChain } from './setVaultChain'
 import { signOut } from './signOut'
@@ -31,4 +35,6 @@ export const backgroundResolvers: BackgroundResolvers = {
   getTokenMetadata: ({ input }) => getTokenMetadata(input),
   getIsWalletPrioritized: () => getIsWalletPrioritized(),
   hasChainInVault,
+  getKeplrSuggestedChains,
+  addKeplrSuggestedChain,
 }

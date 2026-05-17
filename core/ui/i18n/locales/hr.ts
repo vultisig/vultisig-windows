@@ -247,6 +247,7 @@ export const hr = {
   chain: 'Lanac',
   chain_message_deposit: '{{chain}} polog poruke',
   chains: 'Lanci',
+  change: 'Promijeni',
   change_passcode: 'Promjena lozinke',
   change_your_friends_referral:
     'Promjena referalnog koda prijatelja koji se koristi za zamjene',

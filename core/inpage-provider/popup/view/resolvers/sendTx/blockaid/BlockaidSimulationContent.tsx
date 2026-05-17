@@ -11,8 +11,11 @@ import type {
   BlockaidEvmBalanceChange,
   BlockaidEvmSimulationView,
 } from '@core/ui/chain/security/blockaid/tx/blockaidEvmSimulationView'
+import { extractApprovalCounterparty } from '@core/ui/chain/tx/utils/extractApprovalCounterparty'
 import { extractTokenAndAmount } from '@core/ui/chain/tx/utils/extractTokenAndAmount'
+import { formatLabeledEvmAddress } from '@core/ui/chain/tx/utils/formatLabeledEvmAddress'
 import { formatTokenAmount } from '@core/ui/chain/tx/utils/formatTokenAmount'
+import { useEvmContractCallInfoQuery } from '@core/ui/chain/tx/utils/useEvmContractCallInfoQuery'
 import { useUniversalRouterSwap } from '@core/ui/chain/tx/utils/useUniversalRouterSwap'
 import { TriangleAlertIcon } from '@lib/ui/icons/TriangleAlertIcon'
 import { HStack, VStack } from '@lib/ui/layout/Stack'
@@ -25,7 +28,6 @@ import { Text } from '@lib/ui/text'
 import { NATIVE_MINT } from '@solana/spl-token'
 import { useQuery } from '@tanstack/react-query'
 import { Chain, EvmChain } from '@vultisig/core-chain/Chain'
-import { getEvmContractCallInfo } from '@vultisig/core-chain/chains/evm/contract/call/info'
 import { Coin, CoinKey } from '@vultisig/core-chain/coin/Coin'
 import { BlockaidSolanaSimulationInfo } from '@vultisig/core-chain/security/blockaid/tx/simulation/core'
 import { getKeysignChain } from '@vultisig/core-mpc/keysign/utils/getKeysignChain'
@@ -369,16 +371,9 @@ const EvmCalldataFallback = ({
   const { data: universalRouterSwap, isPending: isUniversalRouterPending } =
     useUniversalRouterSwap({ memo, chain })
 
-  const contractCallQuery = useQuery({
-    queryKey: ['evmContractCallInfo', memo],
-    queryFn: () => getEvmContractCallInfo(memo!),
-    enabled:
-      !isUniversalRouterPending &&
-      !universalRouterSwap &&
-      !!memo &&
-      memo.startsWith('0x') &&
-      memo.length > 2,
-    staleTime: Infinity,
+  const contractCallQuery = useEvmContractCallInfoQuery({
+    memo,
+    enabled: !isUniversalRouterPending && !universalRouterSwap,
   })
 
   const tokenPair = contractCallQuery.data
@@ -401,6 +396,10 @@ const EvmCalldataFallback = ({
   const functionName = rawFunctionName
     ? capitalizeFirstLetter(rawFunctionName)
     : undefined
+
+  const approvalCounterparty = contractCallQuery.data
+    ? extractApprovalCounterparty(contractCallQuery.data)
+    : null
 
   const amountItem =
     keysignPayload.toAmount && keysignPayload.coin ? (
@@ -434,7 +433,22 @@ const EvmCalldataFallback = ({
       <List>
         <ListItem description={address} title={t('from')} />
         {keysignPayload.toAddress && (
-          <ListItem description={keysignPayload.toAddress} title={t('to')} />
+          <ListItem
+            description={formatLabeledEvmAddress({
+              address: keysignPayload.toAddress,
+              chain,
+            })}
+            title={t('to')}
+          />
+        )}
+        {approvalCounterparty && (
+          <ListItem
+            description={formatLabeledEvmAddress({
+              address: approvalCounterparty.address,
+              chain,
+            })}
+            title={t(approvalCounterparty.labelKey)}
+          />
         )}
         {tokenQuery.data && tokenPair ? (
           (() => {
@@ -445,6 +459,7 @@ const EvmCalldataFallback = ({
             })
             const ticker = tokenQuery.data.ticker
             const isUnlimited = fmt.isSentinel && !!fmt.display
+            const amountLabel = isUnlimited ? t('unlimited') : fmt.display
             return (
               <ListItem
                 icon={
@@ -457,11 +472,11 @@ const EvmCalldataFallback = ({
                     <HStack alignItems="center" gap={6}>
                       <Text as={TriangleAlertIcon} color="warning" size={14} />
                       <Text color="warning" size={12} weight={500}>
-                        {`${fmt.display} ${ticker}`}
+                        {`${amountLabel} ${ticker}`}
                       </Text>
                     </HStack>
-                  ) : fmt.display ? (
-                    `${fmt.display} ${ticker}`
+                  ) : amountLabel ? (
+                    `${amountLabel} ${ticker}`
                   ) : (
                     ticker
                   )

@@ -33,6 +33,7 @@ type VerifyKeysignStartInput = {
   keysignPayloadQuery: Query<KeysignPayload>
   terms?: string[]
   toAddressLabel?: string
+  extraPendingMessage?: string
 }
 
 const TermItem = styled(Checkbox)`
@@ -46,6 +47,7 @@ export const VerifyKeysignStart = ({
   keysignPayloadQuery,
   terms = [],
   toAddressLabel,
+  extraPendingMessage,
 }: VerifyKeysignStartInput) => {
   const { t } = useTranslation()
   const isBlockaidEnabled = useIsBlockaidEnabled()
@@ -97,6 +99,12 @@ export const VerifyKeysignStart = ({
       }
     }
 
+    if (extraPendingMessage) {
+      return {
+        disabledMessage: extraPendingMessage,
+      }
+    }
+
     if (keysignPayloadQuery.error) {
       if (keysignPayloadQuery.error instanceof BuildKeysignPayloadError) {
         return {
@@ -126,6 +134,7 @@ export const VerifyKeysignStart = ({
       ...(toAddressLabel ? { toAddressLabel } : {}),
     }
   }, [
+    extraPendingMessage,
     keysignPayloadQuery.data,
     keysignPayloadQuery.error,
     keysignPayloadQuery.isPending,

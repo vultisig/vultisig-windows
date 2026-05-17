@@ -14,6 +14,7 @@ import { mayaCoin } from '../tokens'
 import { ThorchainBondPosition } from '../types'
 import { toDecimalFactor } from '../utils/decimals'
 import {
+  canUnbondNode,
   estimateNextChurn,
   parseBigint,
   parseNumber,
@@ -149,7 +150,6 @@ export const fetchBondPositions = async ({
       positions: [],
       totalBonded: 0n,
       availableNodes: [],
-      canUnbond: true,
     }
   }
 
@@ -194,6 +194,7 @@ export const fetchBondPositions = async ({
       nextChurn,
       status: metrics.status,
       fiatValue,
+      canUnbond: canUnbondNode(metrics.status),
     })
   }
 
@@ -228,6 +229,5 @@ export const fetchBondPositions = async ({
     positions,
     totalBonded,
     availableNodes,
-    canUnbond: true,
   }
 }

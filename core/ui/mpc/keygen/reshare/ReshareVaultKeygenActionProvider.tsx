@@ -1,10 +1,10 @@
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
 import { useIsInitiatingDevice } from '@core/ui/mpc/state/isInitiatingDevice'
+import { useIsTssBatching } from '@core/ui/mpc/state/isTssBatching'
 import { useMpcLocalPartyId } from '@core/ui/mpc/state/mpcLocalPartyId'
 import { useMpcServerUrl } from '@core/ui/mpc/state/mpcServerUrl'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
 import { useCore } from '@core/ui/state/core'
-import { useIsTssBatchingEnabled } from '@core/ui/storage/tssBatchingEnabled'
 import { useVaultOrders } from '@core/ui/storage/vaults'
 import { ChildrenProp } from '@lib/ui/props'
 import { DKLS } from '@vultisig/core-mpc/dkls/dkls'
@@ -39,7 +39,7 @@ export const ReshareVaultKeygenActionProvider = ({
   const operation = useKeygenOperation()
   const { getDeveloperOptions } = useCore()
   const [, setDklsInboundSequenceNo] = useDklsInboundSequenceNoState()
-  const isTssBatchingEnabled = useIsTssBatchingEnabled()
+  const isTssBatchingEnabled = useIsTssBatching()
 
   const vaultOrders = useVaultOrders()
 
@@ -112,9 +112,13 @@ export const ReshareVaultKeygenActionProvider = ({
     if (isTssBatchingEnabled) {
       onStepStart('ecdsa')
       onStepStart('eddsa')
+      // Match iOS's setup-message namespacing in batched parallel reshare:
+      // each protocol uploads/downloads its own setup at the same key as its
+      // exchange channel, so DKLS uses 'p-ecdsa' and Schnorr uses 'p-eddsa'
+      // for both setup and exchange.
       ;[dklsResult, schnorrResult] = await Promise.all([
         dklsKeygen
-          .startReshareWithRetry(oldEcdsaKeyshare, 'p-ecdsa')
+          .startReshareWithRetry(oldEcdsaKeyshare, 'p-ecdsa', 'p-ecdsa')
           .then(r => {
             onStepComplete('ecdsa')
             return r

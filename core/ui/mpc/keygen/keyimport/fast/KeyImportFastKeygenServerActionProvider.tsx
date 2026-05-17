@@ -1,8 +1,8 @@
 import { useVaultCreationInput } from '@core/ui/mpc/keygen/create/state/vaultCreationInput'
 import { useCurrentHexChainCode } from '@core/ui/mpc/state/currentHexChainCode'
 import { useCurrentHexEncryptionKey } from '@core/ui/mpc/state/currentHexEncryptionKey'
+import { useIsTssBatching } from '@core/ui/mpc/state/isTssBatching'
 import { useMpcSessionId } from '@core/ui/mpc/state/mpcSession'
-import { useIsTssBatchingEnabled } from '@core/ui/storage/tssBatchingEnabled'
 import { ChildrenProp } from '@lib/ui/props'
 import { generateLocalPartyId } from '@vultisig/core-mpc/devices/localPartyId'
 import { keyImportWithServer } from '@vultisig/core-mpc/fast/api/keyImportWithServer'
@@ -24,7 +24,7 @@ export const KeyImportFastKeygenServerActionProvider = ({
   const hexChainCode = useCurrentHexChainCode()
   const hexEncryptionKey = useCurrentHexEncryptionKey()
   const { chains } = useKeyImportInput()
-  const isTssBatchingEnabled = useIsTssBatchingEnabled()
+  const isTssBatchingEnabled = useIsTssBatching()
 
   const action = async () => {
     const derivationGroups = getKeyImportDerivationGroups(chains)

@@ -14,14 +14,17 @@ yarn install
 # Build the extension (required before running tests)
 yarn build
 
-# Run all E2E tests
-npx playwright test tests/e2e/specs/
+# Run all E2E tests (uses playwright.config.ts projects: ui-isolated → network → fund-dependent)
+yarn test:e2e
+
+# Run a subset of projects (faster local verification without signing tests)
+yarn test:e2e --project=ui-isolated --project=network
 
 # Run a specific test file
-npx playwright test specs/swap-flow.spec.ts
+yarn test:e2e tests/e2e/specs/swap-flow.spec.ts
 
 # Run with visible browser (headed mode)
-npx playwright test specs/swap-flow.spec.ts --headed
+yarn test:e2e tests/e2e/specs/swap-flow.spec.ts --headed
 ```
 
 ## Environment Setup
@@ -63,6 +66,10 @@ TEST_SEEDPHRASE=lobster convince mouse school cotton absorb trap blanket muscle 
 | **Transaction History** | `transaction-history.spec.ts` | UI + vault | Feature-flagged (behind `transactionHistory`) |
 | **Visual Regression** | `visual-regression.spec.ts` | Screenshots | Baseline screenshot comparison |
 | **Fast Vault Creation** | `fast-vault-creation.spec.ts` | UI-only | Creation form flow (no email verification) |
+| **Push Notifications** | `push-notifications.spec.ts` | UI + vault | Settings → Notifications UI presence |
+| **Push Notifications (integration)** | `push-notifications-integration.spec.ts` | UI + vault + mock server | Developer URL + mock registration server |
+
+Without `tests/e2e/.env`, vault-dependent rows above **skip** (suite still exits successfully).
 
 💰 = Requires `ENABLE_TX_SIGNING_TESTS=true` and funded vault
 
@@ -135,7 +142,7 @@ If you modify source files (e.g., adding `data-testid`), rebuild before testing:
 ```bash
 cd clients/extension
 yarn build
-npx playwright test specs/your-test.spec.ts
+yarn test:e2e tests/e2e/specs/your-test.spec.ts
 ```
 
 ## Funded Chains

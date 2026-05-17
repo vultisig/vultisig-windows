@@ -9,7 +9,7 @@ import { VaultSchema } from '@vultisig/core-mpc/types/vultisig/vault/v1/vault_pb
 import { getVaultId, Vault } from '@vultisig/core-mpc/vault/Vault'
 import { shouldBePresent } from '@vultisig/lib-utils/assert/shouldBePresent'
 import { attempt } from '@vultisig/lib-utils/attempt'
-import { encryptWithAesGcm } from '@vultisig/lib-utils/encryption/aesGcm/encryptWithAesGcm'
+import { encryptVaultBackupWithPassword } from '@vultisig/lib-utils/encryption/vaultBackup/encryptVaultBackupWithPassword'
 import { match } from '@vultisig/lib-utils/match'
 
 import { decryptVaultAllKeyShares } from '../../passcodeEncryption/core/vaultKeyShares'
@@ -44,10 +44,10 @@ const createBackup = (vault: Vault, password?: string) => {
 
   if (password) {
     vaultContainer.isEncrypted = true
-    const encryptedVault = encryptWithAesGcm({
-      key: password,
-      value: Buffer.from(vaultData),
-    })
+    const encryptedVault = encryptVaultBackupWithPassword(
+      password,
+      Buffer.from(vaultData)
+    )
     vaultContainer.vault = encryptedVault.toString('base64')
   } else {
     vaultContainer.isEncrypted = false

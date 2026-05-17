@@ -32,6 +32,13 @@ config({ path: path.resolve(__dirname, '.env') })
 const extensionPath = path.resolve(__dirname, '../../dist')
 
 // Common launch args for extension loading
+// PLAYWRIGHT_OFFSCREEN=1 pushes Chrome windows off-screen so local runs don't
+// steal focus while you work. Extension tests can't run headless, so this is
+// the closest equivalent. CI keeps default positioning.
+const offscreenArgs = process.env.PLAYWRIGHT_OFFSCREEN === '1'
+  ? ['--window-position=-3000,-3000', '--window-size=480,600']
+  : []
+
 const extensionLaunchArgs = [
   `--disable-extensions-except=${extensionPath}`,
   `--load-extension=${extensionPath}`,
@@ -39,6 +46,7 @@ const extensionLaunchArgs = [
   '--no-default-browser-check',
   '--disable-default-apps',
   '--disable-popup-blocking',
+  ...offscreenArgs,
 ]
 
 export default defineConfig({
@@ -81,7 +89,7 @@ export default defineConfig({
         '**/onboarding.spec.ts',
         '**/vault-management.spec.ts',
         '**/vault-import-export.spec.ts',
-        '**/balance-display.spec.ts',
+        '**/transaction-history.spec.ts',
         '**/address-book.spec.ts',
         '**/visual-regression.spec.ts',
       ],
@@ -107,6 +115,8 @@ export default defineConfig({
         '**/events.spec.ts',
         '**/multi-provider.spec.ts',
         '**/router.spec.ts',
+        '**/push-notifications.spec.ts',
+        '**/push-notifications-integration.spec.ts',
       ],
       use: {
         launchOptions: {

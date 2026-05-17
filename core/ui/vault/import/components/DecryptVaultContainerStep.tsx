@@ -8,7 +8,7 @@ import { fromCommVault } from '@vultisig/core-mpc/types/utils/commVault'
 import { VaultSchema } from '@vultisig/core-mpc/types/vultisig/vault/v1/vault_pb'
 import { Vault } from '@vultisig/core-mpc/vault/Vault'
 import { attempt } from '@vultisig/lib-utils/attempt'
-import { decryptWithAesGcm } from '@vultisig/lib-utils/encryption/aesGcm/decryptWithAesGcm'
+import { decryptVaultBackupWithPassword } from '@vultisig/lib-utils/encryption/vaultBackup/decryptVaultBackupWithPassword'
 import { fromBase64 } from '@vultisig/lib-utils/fromBase64'
 
 export const DecryptVaultContainerStep = ({
@@ -19,7 +19,7 @@ export const DecryptVaultContainerStep = ({
     mutationFn: async (password: string) => {
       const ciphertext = fromBase64(value)
       const decrypted = attempt(() =>
-        decryptWithAesGcm({ key: password, value: ciphertext })
+        decryptVaultBackupWithPassword(password, ciphertext)
       )
       if ('error' in decrypted) {
         throw new VaultBackupPasswordError()

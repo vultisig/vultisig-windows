@@ -7,6 +7,7 @@ import styled from 'styled-components'
 export const PageFooter = styled(VStack)`
   ${horizontalPadding(pageConfig.horizontalPadding)};
   ${verticalPadding(pageConfig.verticalPadding)};
+  flex-shrink: 0;
 
   @media (min-width: 1024px) {
     ${horizontalPadding(32)};

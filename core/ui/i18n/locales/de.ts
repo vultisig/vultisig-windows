@@ -252,6 +252,7 @@ export const de = {
   chain: 'Kette',
   chain_message_deposit: '{{chain}} Nachrichteneinzahlung',
   chains: 'Ketten',
+  change: 'Ändern',
   change_passcode: 'Passcode ändern',
   change_your_friends_referral:
     'Freunde-Empfehlungscode für Tauschgeschäfte verwenden',
